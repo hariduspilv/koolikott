@@ -21,6 +21,18 @@ public class EmbeddedJetty {
     private static final int DEFAULT_PORT = 8080;
 
     private Server server;
+    private static EmbeddedJetty instance;
+
+    private EmbeddedJetty() {
+    }
+
+    public static EmbeddedJetty instance() {
+        if (instance == null) {
+            instance = new EmbeddedJetty();
+        }
+
+        return instance;
+    }
 
     public void start() throws Exception {
         start(DEFAULT_PORT);
