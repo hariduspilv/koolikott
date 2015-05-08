@@ -38,6 +38,19 @@ public class ApplicationManager {
         }
     }
 
+    public static boolean isApplicationRunning() {
+        boolean isRunning = false;
+
+        try (Socket socket = new Socket()) {
+            socket.connect(new InetSocketAddress(InetAddress.getLoopbackAddress(), REMOTE_PORT), 10000);
+            isRunning = true;
+        } catch (Exception ce) {
+            logger.info("Application is not running.");
+        }
+
+        return isRunning;
+    }
+
     private static void write(String data, BufferedWriter writer) throws IOException {
         writer.write(data);
         writer.flush();

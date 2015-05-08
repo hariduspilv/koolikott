@@ -18,7 +18,7 @@ import com.google.inject.servlet.GuiceFilter;
 public class EmbeddedJetty {
     private static final Logger logger = LoggerFactory.getLogger(EmbeddedJetty.class);
 
-    private static final int DEFAULT_PORT = 8080;
+    public static final int DEFAULT_PORT = 8080;
 
     private Server server;
     private static EmbeddedJetty instance;

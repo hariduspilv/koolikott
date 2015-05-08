@@ -9,10 +9,14 @@ public class ApplicationLauncher {
 
     private static final Logger logger = LoggerFactory.getLogger(ApplicationLauncher.class);
 
-    public static void startApplication() {
-        startServer();
-        addShutdownHook();
-        startCommandListener();
+    public static void startApplication(int port) {
+        if (ApplicationManager.isApplicationRunning()) {
+            logger.warn("Enable to start. Application is already running.");
+        } else {
+            startServer(port);
+            addShutdownHook();
+            startCommandListener();
+        }
     }
 
     private static void addShutdownHook() {
@@ -24,10 +28,10 @@ public class ApplicationLauncher {
         }, "shutdown-hook"));
     }
 
-    private static void startServer() {
+    private static void startServer(int port) {
         try {
             logger.info("Starting application server");
-            EmbeddedJetty.instance().start();
+            EmbeddedJetty.instance().start(port);
         } catch (Exception e) {
             logger.error("Error inicializing Jetty Server. Existing application.", e);
             System.exit(1);
@@ -51,10 +55,17 @@ public class ApplicationLauncher {
     }
 
     public static void main(String[] args) throws Exception {
-        if (args.length == 1 && "stop".equalsIgnoreCase(args[0])) {
+        if (args.length == 0 || "start".equalsIgnoreCase(args[0])) {
+            int port = EmbeddedJetty.DEFAULT_PORT;
+            if (args.length > 1) {
+                port = Integer.parseInt(args[1]);
+            }
+
+            startApplication(port);
+        } else if ("stop".equalsIgnoreCase(args[0])) {
             ApplicationManager.stop();
         } else {
-            startApplication();
+            logger.warn("Command does not exist. Use: start, stop or no command (default is start).");
         }
     }
 }
