@@ -1,5 +1,7 @@
 package ee.hm.dop.guice.provider;
 
+import static java.lang.String.format;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -29,30 +31,32 @@ public class EntityManagerFactoryProvider implements Provider<EntityManagerFacto
     public synchronized EntityManagerFactory get() {
 
         if (emf == null) {
-        	Map<String, String> properties = getDatabaseProperties();
-        	logger.info(String.format("Initializing EntityManagerFactory properties [%s]", properties));
+            Map<String, String> properties = getDatabaseProperties();
+            logger.info(String.format("Initializing EntityManagerFactory properties [%s]", properties));
 
-        	try {
-        		emf = Persistence.createEntityManagerFactory("dop", properties);
+            try {
+                emf = Persistence.createEntityManagerFactory("dop", properties);
             } catch (Exception e) {
-                throw new RuntimeException(String.format("Unable to initialize EntityManagerFactory [%s]!", properties), e);
+                throw new RuntimeException(
+                        format("Unable to initialize EntityManagerFactory [%s]!", properties), e);
             }
         }
-        
+
         return emf;
     }
-    
+
     private Map<String, String> getDatabaseProperties() {
-    	Map<String, String> properties = new HashMap<>();
+        Map<String, String> properties = new HashMap<>();
         properties.put("hibernate.connection.driver_class", "com.mysql.jdbc.Driver");
         properties.put("hibernate.dialect", "org.hibernate.dialect.MySQLDialect");
-        properties.put("hibernate.show-sql", "true");
-        
+        properties.put("hibernate.show_sql", "true");
+        properties.put("hibernate.hbm2ddl.auto", "create");
+
         // Configurable options
         properties.put("hibernate.connection.url", configuration.getString("db.url"));
         properties.put("hibernate.connection.username", configuration.getString("db.username"));
         properties.put("hibernate.connection.password", configuration.getString("db.password"));
-                
+
         return properties;
     }
 }
