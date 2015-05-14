@@ -27,6 +27,12 @@
 			<artifactId>guice-servlet</artifactId>
 			<version>3.0</version>
 		</dependency>
+		<dependency>
+			<groupId>org.glassfish.jersey.media</groupId>
+			<artifactId>jersey-media-json-jackson</artifactId>
+			<version>2.17</version>
+		</dependency>
+		
 		
 		<!-- Embedded Jetty -->
 		
@@ -40,8 +46,23 @@
 			<artifactId>jetty-webapp</artifactId>
 			<version>9.2.10.v20150310</version>
 		</dependency>
+		
+		<!-- MySQL Database connector -->
+		<dependency>
+			<groupId>mysql</groupId>
+			<artifactId>mysql-connector-java</artifactId>
+			<version>5.1.35</version>
+		</dependency>
+
+		
+		<!-- Hibernate ORM for JPA -->
+		<dependency>
+		   <groupId>org.hibernate</groupId>
+		   <artifactId>hibernate-entitymanager</artifactId>
+		   <version>4.3.9.Final</version>
+		</dependency>
         
-        <!-- Loggin -->
+        <!-- Logging -->
         
         <dependency>
 			<groupId>org.slf4j</groupId>
@@ -54,13 +75,24 @@
 			<version>${slf4j.version}</version>
 		</dependency>
 		
-		<!-- Others -->
+		<!-- Commons -->
 		
 		<dependency>
 			<groupId>commons-io</groupId>
 			<artifactId>commons-io</artifactId>
 			<version>2.4</version>
 		</dependency>
+		<dependency>
+	      <groupId>commons-configuration</groupId>
+	      <artifactId>commons-configuration</artifactId>
+	      <version>1.10</version>
+	    </dependency>
+	    <dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-dbcp2</artifactId>
+			<version>2.1</version>
+		</dependency>
+	    
 		
 		<!-- Testing -->
 		
