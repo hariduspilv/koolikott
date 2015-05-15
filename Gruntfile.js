@@ -17,7 +17,7 @@ module.exports = function(grunt) {
             },
             dist: {
                 src: ['bower_components/requirejs/require.js', 'bower_components/jquery/dist/jquery.min.js', 'bower_components/angular/angular.min.js', 'bower_components/angular-route/angular-route.min.js', 'bower_components/bootstrap-sass/assets/javascripts/bootstrap.min.js'],
-                dest: '<%= project.assets %>/js/build.js',
+                dest: '<%= project.assets %>/js/dop.js',
             }
         },
         uglify: {
@@ -25,7 +25,7 @@ module.exports = function(grunt) {
             },
             my_target: {
                 files: {
-                    '<%= project.assets %>/js/build.min.js': ['<%= project.assets %>/js/build.js']
+                    '<%= project.assets %>/js/dop.min.js': ['<%= project.assets %>/js/dop.js']
                 }
             }
         },
