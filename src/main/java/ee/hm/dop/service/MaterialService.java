@@ -13,6 +13,6 @@ public class MaterialService {
 	MaterialDAO materialDao;
 	
     public List<Material> getAllMaterials() {
-    	return materialDao.getAllMaterials();
+    	return materialDao.findAll();
     }
 }
