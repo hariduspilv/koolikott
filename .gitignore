@@ -1,0 +1,6 @@
+/node_modules/
+/bower_components/
+/.sass-cache/
+/app/assets/css/
+/app/assets/js/
+/.project
