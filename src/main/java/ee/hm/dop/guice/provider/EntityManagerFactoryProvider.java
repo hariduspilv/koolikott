@@ -14,10 +14,12 @@ import org.slf4j.LoggerFactory;
 
 import com.google.inject.Inject;
 import com.google.inject.Provider;
+import com.google.inject.Singleton;
 
 /**
- * Guice provider of data source.
+ * Guice provider of Entity Manager Factory.
  */
+@Singleton
 public class EntityManagerFactoryProvider implements Provider<EntityManagerFactory> {
 
     private Logger logger = LoggerFactory.getLogger(getClass());
@@ -37,8 +39,7 @@ public class EntityManagerFactoryProvider implements Provider<EntityManagerFacto
             try {
                 emf = Persistence.createEntityManagerFactory("dop", properties);
             } catch (Exception e) {
-                throw new RuntimeException(
-                        format("Unable to initialize EntityManagerFactory [%s]!", properties), e);
+                throw new RuntimeException(format("Unable to initialize EntityManagerFactory [%s]!", properties), e);
             }
         }
 

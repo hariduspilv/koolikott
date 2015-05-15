@@ -15,6 +15,8 @@ import org.slf4j.LoggerFactory;
 
 import com.google.inject.servlet.GuiceFilter;
 
+import ee.hm.dop.config.DOPApplication;
+
 public class EmbeddedJetty {
     private static final Logger logger = LoggerFactory.getLogger(EmbeddedJetty.class);
 
@@ -67,7 +69,7 @@ public class EmbeddedJetty {
 
     private void configureDynamicContentServlet(ServletContextHandler servletContextHandler) {
         ServletHolder servlet = new ServletHolder(new ServletContainer());
-        servlet.setInitParameter("javax.ws.rs.Application", "ee.hm.dop.config.DOPApplication");
+        servlet.setInitParameter("javax.ws.rs.Application", DOPApplication.class.getCanonicalName());
         servletContextHandler.addServlet(servlet, "/rest/*");
     }
 
