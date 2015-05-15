@@ -8,8 +8,8 @@ module.exports = function(grunt) {
 
         project: {
             app: ['app'],
-            assets: ['<%= project.app %>/assets'],
-            css: ['<%= project.assets %>/sass/style.scss']
+            assets: ['assets'],
+            css: ['sass/style.scss']
         },
         concat: {
             options: {
@@ -42,7 +42,7 @@ module.exports = function(grunt) {
         },
         watch: {
             sass: {
-                files: '<%= project.assets %>/sass/{,*/}*.{scss,sass}',
+                files: 'sass/{,*/}*.{scss,sass}',
                 tasks: ['sass:dev']
             }
         }
