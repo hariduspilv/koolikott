@@ -1,0 +1,17 @@
+{
+  "name": "dop",
+  "version": "0",
+  "authors": [
+    "silvermuru <silx99@gmail.com>"
+  ],
+  "description": "project",
+  "main": "index.html",
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
