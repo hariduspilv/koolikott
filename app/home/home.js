@@ -4,7 +4,7 @@ angular.module('dop.home', ['ngRoute'])
 
 .config(['$routeProvider', function($routeProvider) {
   $routeProvider.when('/', {
-    templateUrl: 'js/app/home/home.html',
+    templateUrl: 'app/home/home.html',
     controller: 'HomeController'
   });
 }])
