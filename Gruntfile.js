@@ -16,7 +16,7 @@ module.exports = function(grunt) {
                 separator: ';\n'
             },
             dist: {
-                src: ['<%= project.app %>/bower_components/requirejs/require.js', '<%= project.app %>/bower_components/jquery/dist/jquery.min.js', '<%= project.app %>/bower_components/angular/angular.min.js', '<%= project.app %>/bower_components/angular-route/angular-route.min.js', '<%= project.app %>/bower_components/bootstrap-sass/assets/javascripts/bootstrap.min.js'],
+                src: ['bower_components/requirejs/require.js', 'bower_components/jquery/dist/jquery.min.js', 'bower_components/angular/angular.min.js', 'bower_components/angular-route/angular-route.min.js', 'bower_components/bootstrap-sass/assets/javascripts/bootstrap.min.js'],
                 dest: '<%= project.assets %>/js/build.js',
             }
         },
