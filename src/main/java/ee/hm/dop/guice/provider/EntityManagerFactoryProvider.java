@@ -46,7 +46,7 @@ public class EntityManagerFactoryProvider implements Provider<EntityManagerFacto
         return emf;
     }
 
-    private Map<String, String> getDatabaseProperties() {
+    protected Map<String, String> getDatabaseProperties() {
         Map<String, String> properties = new HashMap<>();
         properties.put("hibernate.connection.driver_class", "com.mysql.jdbc.Driver");
         properties.put("hibernate.dialect", "org.hibernate.dialect.MySQLDialect");

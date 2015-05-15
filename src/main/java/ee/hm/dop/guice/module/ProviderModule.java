@@ -7,10 +7,12 @@ import org.apache.commons.configuration.Configuration;
 
 import com.google.inject.AbstractModule;
 
+import ee.hm.dop.guice.GuiceInjector.Module;
 import ee.hm.dop.guice.provider.ConfigurationProvider;
 import ee.hm.dop.guice.provider.EntityManagerFactoryProvider;
 import ee.hm.dop.guice.provider.EntityManagerProvider;
 
+@Module
 public class ProviderModule extends AbstractModule {
 
     @Override

@@ -10,7 +10,7 @@ import ee.hm.dop.model.Material;
 public class MaterialDAO {
 
     @Inject
-    protected EntityManager entityManager;
+    private EntityManager entityManager;
 
     public List<Material> findAll() {
         return entityManager.createQuery("from Material", Material.class).getResultList();
