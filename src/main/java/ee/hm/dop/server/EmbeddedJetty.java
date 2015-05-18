@@ -6,7 +6,6 @@ import java.util.EnumSet;
 import javax.servlet.DispatcherType;
 
 import org.eclipse.jetty.server.Server;
-import org.eclipse.jetty.servlet.DefaultServlet;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
 import org.glassfish.jersey.servlet.ServletContainer;
@@ -57,14 +56,7 @@ public class EmbeddedJetty {
 
         addFilters(servletContextHandler);
         configureDynamicContentServlet(servletContextHandler);
-        configureStaticContentServlet(servletContextHandler);
         return servletContextHandler;
-    }
-
-    private void configureStaticContentServlet(ServletContextHandler servletContextHandler) {
-        servletContextHandler.addServlet(DefaultServlet.class, "/");
-        servletContextHandler.setResourceBase(getClass().getClassLoader().getResource("webapp").toExternalForm());
-        servletContextHandler.setInitParameter("org.eclipse.jetty.servlet.Default.dirAllowed", "false");
     }
 
     private void configureDynamicContentServlet(ServletContextHandler servletContextHandler) {

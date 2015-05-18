@@ -179,23 +179,6 @@
 	            </executions>
 		      </plugin>
         </plugins>
-        
-        <resources>
-	   	  <resource>
-	        <directory>src/main/resources</directory>
-	        <targetPath>${project.basedir}/target/classes</targetPath>
-	        <filtering>true</filtering>
-	      </resource>
-	      <resource>
-	        <directory>src/test/resources</directory>
-	        <targetPath>${project.basedir}/target/test-classes</targetPath>
-	        <filtering>true</filtering>
-	      </resource>
-	      <resource>
-	        <directory>src/main/webapp</directory>
-	        <targetPath>${project.basedir}/target/classes/webapp</targetPath>
-	      </resource>
-	    </resources>
     </build>
     
     <profiles>
