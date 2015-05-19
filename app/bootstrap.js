@@ -1,31 +1,16 @@
 require.config({
     baseUrl: 'app',
     paths: {
-		'angular': '../bower_components/angular/angular',
-		'angular-route': '../bower_components/angular-route/angular-route',
-		'bootstrap': '../bower_components/bootstrap-sass/assets/javascripts/bootstrap.min',
-		'jquery': '../bower_components/jquery/dist/jquery'
+    	'dop': '../assets/js/dop.min',
+        'modernizr': '../assets/js/modernizr.min',
     },
 	shim: {
 		'app': {
-			deps: ['angular', 'angular-route', 'bootstrap']
-		},
-		'angular-route': {
-			deps: ['angular']
-		},
-		'bootstrap': {
-			deps: ['jquery']
+			deps: ['dop', 'modernizr']
 		}
 	}
 });
 
-require
-(
-    [
-        'app'
-    ],
-    function(app)
-    {
+require(['app'], function(app) {
         angular.bootstrap(document, ['app']);
-    }
-);
+});

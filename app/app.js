@@ -1,4 +1,4 @@
-define(['routes','services/dependencyResolverFor'], function(config, dependencyResolverFor)
+define(['routes','services/dependencyResolver'], function(config, dependencyResolver)
 {
     var app = angular.module('app', ['ngRoute']);
 
@@ -19,14 +19,11 @@ define(['routes','services/dependencyResolverFor'], function(config, dependencyR
 	        app.factory    = $provide.factory;
 	        app.service    = $provide.service;
 
-            $locationProvider.html5Mode(true);
-
             if(config.routes !== undefined)
             {
                 angular.forEach(config.routes, function(route, path)
                 {
-                    //$routeProvider.when(path, {templateUrl:route.templateUrl, resolve:dependencyResolverFor(route.dependencies)});
-                    $routeProvider.when(path, {templateUrl:route.templateUrl, controller:route.controller, resolve:dependencyResolverFor(route.dependencies)});
+                    $routeProvider.when(path, {templateUrl:route.templateUrl, controller:route.controller, resolve:dependencyResolver(route.dependencies)});
                 });
             }
 

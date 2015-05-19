@@ -7,7 +7,7 @@ define([], function()
                 templateUrl: 'app/home/home.html',
                 controller: 'homeController',
                 dependencies: [
-                    'home/homeController'
+                    'home/home'
                 ]
             }
         }
