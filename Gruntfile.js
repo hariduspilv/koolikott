@@ -57,7 +57,7 @@ module.exports = function(grunt) {
     		      archive: 'dop.tar.gz',
     		      mode: 'tgz'
     		    },
-    		    src: ['assets/**/*']
+    		    src: ['app/**/*', 'assets/**/*', 'index.html']
     		  }
     		}
     });
