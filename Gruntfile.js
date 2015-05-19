@@ -16,8 +16,8 @@ module.exports = function(grunt) {
                 separator: ';\n'
             },
             dist: {
-                src: ['bower_components/requirejs/require.js', 'bower_components/jquery/dist/jquery.min.js', 'bower_components/angular/angular.min.js', 'bower_components/angular-route/angular-route.min.js', 'bower_components/bootstrap-sass/assets/javascripts/bootstrap.min.js'],
-                dest: '<%= project.assets %>/js/dop.js',
+                src: ['bower_components/jquery/dist/jquery.min.js', 'bower_components/angular/angular.min.js', 'bower_components/angular-route/angular-route.min.js', 'bower_components/modernizr/modernizr.js', 'bower_components/bootstrap-sass/assets/javascripts/bootstrap.min.js', 'bower_components/shufflejs/dist/jquery.shuffle.min.js'],
+                dest: '<%= project.assets %>/js/dop.min.js',
             }
         },
         uglify: {
@@ -25,7 +25,7 @@ module.exports = function(grunt) {
             },
             my_target: {
                 files: {
-                    '<%= project.assets %>/js/dop.min.js': ['<%= project.assets %>/js/dop.js']
+                    '<%= project.assets %>/js/dop.min.js': ['<%= project.assets %>/js/dop.min.js']
                 }
             }
         },
@@ -33,10 +33,12 @@ module.exports = function(grunt) {
             dev: {
                 options: {
                     style: 'expanded',
-                    compass: false
+                    compass: false,
+                    sourcemap: 'none'
+                    
                 },
                 files: {
-                    '<%= project.assets %>/css/dop.css':'<%= project.css %>'
+                    '<%= project.assets %>/css/dop.min.css':'<%= project.css %>'
                 }
             }
         },
