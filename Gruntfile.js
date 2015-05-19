@@ -49,14 +49,27 @@ module.exports = function(grunt) {
                 files: 'sass/{,*/}*.{scss,sass}',
                 tasks: ['sass:dev']
             }
-        }
+        },
+        clean: ["assets", "dop.tar.gz"],
+    	compress: {
+    		  main: {
+    		    options: {
+    		      archive: 'dop.tar.gz',
+    		      mode: 'tgz'
+    		    },
+    		    src: ['assets/**/*']
+    		  }
+    		}
     });
 
     grunt.loadNpmTasks('grunt-contrib-sass');
     grunt.loadNpmTasks('grunt-contrib-watch');
     grunt.loadNpmTasks('grunt-contrib-concat');
     grunt.loadNpmTasks('grunt-contrib-uglify');
+    grunt.loadNpmTasks('grunt-contrib-clean');
+    grunt.loadNpmTasks('grunt-contrib-compress');
 
-    grunt.registerTask('default', ['watch', 'concat', 'uglify']);
+    grunt.registerTask('build', ['clean', 'concat', 'uglify', 'sass']);
+    grunt.registerTask('package', ['build', 'compress']);
 
 };
