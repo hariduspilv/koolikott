@@ -18,7 +18,7 @@ By default, application will run at port 8080. The rest API is available under c
 
 The custom configuration file can be placed anywhere visible to the application and may have any name.
 
-	jave -jar -Dconfig="/path/to/custom.properties"
+	java -jar -Dconfig="/path/to/custom.properties"
 
 # Configuration
 
