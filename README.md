@@ -1,43 +1,51 @@
+# Tools
+
 To build the project you need to have installed on your machine NodeJS, NPM, Bower, Grunt, Ruby and SASS.
 
-All commands in this page are for Ubuntu 14.10
+## Bower installation
 
-Download project dependencies
+	npm install -g bower
+	
+## Grunt installation
+
+	npm install -g grunt-cli
+
+
+# Build
+
+Run commands from project root directory.
+
+## Download project dependencies
 
 	npm install
 	bower install
 
-Those commands will download all necessary packages.
+## Building
 
-Build
-
-Run from project root directory:
+Generates project artifacts.
 
 	grunt build
-	
-This command generates the project artifacts.
 
-Package
+## Package
 
-To generate project deliverable artifact run this command from project root directory:
+Generates project deliverable artifact. builds the project (grunt build) and create dop.tar.gz file which contains the project artifacts.
 
 	grunt package
-	
-This command will build the project (grunt build) and create dop.tar.gz file which contains the project artifacts.
 
-Integrate front end with back end
+# Front and Back end integration
 
-To have and usable application is needed to connect to back end server. For that we use Apache2.
+To have and usable application is needed to connect to back end server. For that we use Apache2. All commands in this page are for Ubuntu 14.10
 
-Install Apache2
+## Installing Apache2
 
 	sudo apt-get install apache2
 	
-Install proxy http module to redirect rest calls to back end servlet
+## Installing proxy http module to redirect rest calls to back end servlet
 
 	sudo a2enmod proxy_http
 	
-Configuring Apache
+## Configuring Apache
+### Serving project files
 
 To have the ability to develop Front End without copying files to Apache2 directory every time you change something, we have to configure DocumentRoot to point to project root directory.
 
@@ -59,6 +67,8 @@ Also add those lines to the configuration just bellow DocumentRoot
         Allow from all
     </Directory>
 
+### Proxy configuration
+
 Configure proxy to forward rest request to Back End servlet
 
 	ProxyRequests Off
@@ -67,4 +77,4 @@ Configure proxy to forward rest request to Back End servlet
 	ProxyPass /rest http://127.0.0.1:8080/rest
 	ProxyPassReverse /rest http://127.0.0.1:8080/rest
 
-Now you should be able to run the whole application. Make sure to change Back End address to the one you are using, if not localhost. 
+You should be able to run the whole application. Make sure to change Back End address to the one you are using, if not localhost. 
