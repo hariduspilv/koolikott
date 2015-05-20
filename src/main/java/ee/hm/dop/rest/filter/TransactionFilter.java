@@ -33,10 +33,12 @@ public class TransactionFilter implements ContainerRequestFilter, ContainerRespo
     public void filter(ContainerRequestContext requestContext, ContainerResponseContext responseContext)
             throws IOException {
         EntityTransaction transaction = getTransaction();
-        if (transaction.getRollbackOnly()) {
-            transaction.rollback();
-        } else {
-            transaction.commit();
+        if (transaction.isActive()) {
+            if (transaction.getRollbackOnly()) {
+                transaction.rollback();
+            } else {
+                transaction.commit();
+            }
         }
     }
 }
