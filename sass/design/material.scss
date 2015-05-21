@@ -1,0 +1,8 @@
+.material {
+    
+    .block {background: #FFF; @include border-radius(3px); overflow: hidden;
+    
+        .description {padding: 15px 10px}
+        
+    }
+}
