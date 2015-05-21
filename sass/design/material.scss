@@ -2,7 +2,13 @@
     
     .block {background: #FFF; @include border-radius(3px); overflow: hidden;
     
-        .description {padding: 15px 10px; font-size: 17px}
+        .description {padding: 15px 10px;
         
+            .title {font-size: 17px; 
+            
+                a {font-size: 17px; color: $font-color-blue}
+            }
+        
+        }
     }
 }
