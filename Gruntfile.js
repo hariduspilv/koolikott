@@ -34,7 +34,7 @@ module.exports = function(grunt) {
         sass: {
             dev: {
                 options: {
-                    style: 'expanded',
+                    style: 'compressed',
                     compass: false,
                     sourcemap: 'none'
                     
@@ -52,14 +52,14 @@ module.exports = function(grunt) {
         },
         clean: ["assets", "dop.tar.gz"],
     	compress: {
-    		main: {
-    			options: {
-    				archive: 'dop.tar.gz',
-    				mode: 'tgz'
-    			},
-    			src: ['app/**/*', 'assets/**/*', 'index.html']
-    		}
-		}
+            main: {
+                options: {
+                    archive: 'dop.tar.gz',
+                    mode: 'tgz'
+                },
+                src: ['app/**/*', 'assets/**/*', 'index.html']
+            }
+        }
     });
 
     grunt.loadNpmTasks('grunt-contrib-sass');
