@@ -4,6 +4,6 @@
 
 @import 'bower_components/bootstrap-sass/assets/stylesheets/bootstrap';
 
-$body-bg: #F4F4F4 !default;
+@import 'design/main';
 
-$navbar-default-bg: #222 !default;
+@import 'design/navbar';
