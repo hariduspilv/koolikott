@@ -2,12 +2,14 @@
     
     .block {background: #FFF; @include border-radius(3px); overflow: hidden;
     
-        .description {padding: 15px 10px;
+        .description {padding: 15px 10px; color: $font-color-grey;
         
-            .title {font-size: 17px; 
+            .title {height: 70px; padding-bottom: 10px; line-height: 21px; font-size: 17px; 
             
-                a {font-size: 17px; color: $font-color-blue}
-            }
+                a {font-size: 17px}
+            };
+            
+            .authors {}
         
         }
     }

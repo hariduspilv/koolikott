@@ -9,6 +9,20 @@ define([], function()
                 dependencies: [
                     'home/home'
                 ]
+            },
+            '/search/result': {
+                templateUrl: 'app/search/result/searchResult.html',
+                controller: 'searchResultController',
+                dependencies: [
+                    'search/result/searchResult'
+                ]
+            },
+            '/material': {
+                templateUrl: 'app/material/material.html',
+                controller: 'materialController',
+                dependencies: [
+                    'material/material'
+                ]
             }
         }
     };
