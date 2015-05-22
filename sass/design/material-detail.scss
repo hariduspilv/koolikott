@@ -1,16 +1,29 @@
 .material-detail {
                   
-    .description {border-right: 1px solid #DDD;
+    .description {
+        margin-bottom: 30px; border-right: 1px solid #DDD;
                   
-        .category {padding-bottom: 15px;
-            .separator {display: inline-block; padding: 0 10px}
+        .category {
+            padding-bottom: 15px;
+            
+            .separator {
+                display: inline-block; padding: 0 10px
+            }
         }
     
-        .heading {padding-bottom: 15px;
-            h1 {margin: 0; padding: 0}
+        .heading {
+            padding-bottom: 15px;
+            
+            h1 {
+                margin: 0; padding: 0
+            }
         };
-        .authors {padding-bottom: 15px;
-            a {display: inline-block; margin-right: 15px}
+        .authors {
+            padding-bottom: 15px;
+            
+            a {
+                display: inline-block; margin-right: 15px
+            }
         }
         
     }
@@ -21,6 +34,16 @@
         };
         dd {
             margin-left: 100px
+        }
+    };
+    .preview {
+        @include border-radius(3px); background: #FFF; overflow: hidden; 
+        
+        header {
+            padding: 20px 40px; background: #F4F4F4
+        }; 
+        article {
+            padding: 45px 40px
         }
     }
 }
