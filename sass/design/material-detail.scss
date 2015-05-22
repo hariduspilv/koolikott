@@ -1,10 +1,26 @@
 .material-detail {
-   .dl-horizontal {
+                  
+    .description {border-right: 1px solid #DDD;
+                  
+        .category {padding-bottom: 15px;
+            .separator {display: inline-block; padding: 0 10px}
+        }
+    
+        .heading {padding-bottom: 15px;
+            h1 {margin: 0; padding: 0}
+        };
+        .authors {padding-bottom: 15px;
+            a {display: inline-block; margin-right: 15px}
+        }
+        
+    }
+    
+    .dl-horizontal {
         dt {
-            width: 100px; font-weight: normal
+            width: 90px; font-weight: normal
         };
         dd {
-            margin-left: 120px
+            margin-left: 100px
         }
     }
 }
