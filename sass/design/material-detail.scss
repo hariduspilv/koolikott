@@ -37,7 +37,7 @@
         }
     };
     .preview {
-        @include border-radius(3px); background: #FFF; overflow: hidden; 
+        @include border-radius(3px); @include box-shadow(0, 0, 2px, 0, #999); background: #FFF; overflow: hidden; 
         
         header {
             padding: 20px 40px; background: #F4F4F4

@@ -1,6 +1,6 @@
 .material {
     
-    .block {@include border-radius(3px); background: #FFF; overflow: hidden;
+    .block {@include border-radius(3px); @include box-shadow(0, 0, 2px, 0, #999); background: #FFF; overflow: hidden;
     
         .description {padding: 15px 10px; color: $font-color-grey;
         
