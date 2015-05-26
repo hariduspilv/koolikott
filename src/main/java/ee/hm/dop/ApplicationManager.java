@@ -1,5 +1,6 @@
 package ee.hm.dop;
 
+import static ee.hm.dop.utils.ConfigurationProperties.COMMAND_LISTENER_PORT;
 import static java.lang.String.format;
 
 import java.io.BufferedReader;
@@ -25,7 +26,6 @@ public class ApplicationManager {
     private static final Logger logger = LoggerFactory.getLogger(ApplicationManager.class);
 
     private static final int DEFAULT_REMOTE_PORT = 9999;
-    private static final String COMMAND_LISTENER_PORT_PROPERTY = "command.listener.port";
 
     private static final String STOP_COMMAND = "stop";
 
@@ -50,7 +50,7 @@ public class ApplicationManager {
     }
 
     private static int getRemotePort() {
-        return configuration.getInt(COMMAND_LISTENER_PORT_PROPERTY, DEFAULT_REMOTE_PORT);
+        return configuration.getInt(COMMAND_LISTENER_PORT, DEFAULT_REMOTE_PORT);
     }
 
     public static boolean isApplicationRunning() {

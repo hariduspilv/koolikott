@@ -1,5 +1,6 @@
 package ee.hm.dop;
 
+import static ee.hm.dop.utils.ConfigurationProperties.SERVER_PORT;
 import static java.lang.String.format;
 
 import javax.inject.Inject;
@@ -53,7 +54,7 @@ public class ApplicationLauncher {
 
     private static void startServer() {
         try {
-            int port = configuration.getInt("server.port", DEFAULT_SERVER_PORT);
+            int port = configuration.getInt(SERVER_PORT, DEFAULT_SERVER_PORT);
             logger.info(format("Starting application server on port [%s]", port));
             EmbeddedJetty.instance().start(port);
         } catch (Exception e) {
