@@ -1,22 +1,45 @@
 package ee.hm.dop;
 
+import static java.lang.String.format;
+
+import javax.inject.Inject;
+
+import org.apache.commons.configuration.Configuration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.inject.Singleton;
+
+import ee.hm.dop.guice.GuiceInjector;
 import ee.hm.dop.server.EmbeddedJetty;
 
+@Singleton
 public class ApplicationLauncher {
 
     private static final Logger logger = LoggerFactory.getLogger(ApplicationLauncher.class);
 
-    public static void startApplication(int port) {
+    private static final int DEFAULT_SERVER_PORT = 8080;
+
+    @Inject
+    private static Configuration configuration;
+
+    public static void startApplication() {
+        GuiceInjector.init();
+
         if (ApplicationManager.isApplicationRunning()) {
-            logger.warn("Enable to start. Application is already running.");
+            logger.warn("Unable to start. Application is already running.");
         } else {
-            startServer(port);
+            startServer();
             addShutdownHook();
             startCommandListener();
         }
+    }
+
+    private static void startCommandListener() {
+        Thread commandListener = new Thread(new ApplicationManager.CommandListener());
+        commandListener.setName("command-listener");
+        commandListener.setDaemon(true);
+        commandListener.start();
     }
 
     private static void addShutdownHook() {
@@ -28,9 +51,10 @@ public class ApplicationLauncher {
         }, "shutdown-hook"));
     }
 
-    private static void startServer(int port) {
+    private static void startServer() {
         try {
-            logger.info("Starting application server");
+            int port = configuration.getInt("server.port", DEFAULT_SERVER_PORT);
+            logger.info(format("Starting application server on port [%s]", port));
             EmbeddedJetty.instance().start(port);
         } catch (Exception e) {
             logger.error("Error inicializing Jetty Server. Existing application.", e);
@@ -47,23 +71,16 @@ public class ApplicationLauncher {
         }
     }
 
-    private static void startCommandListener() {
-        Thread commandListener = new Thread(new ApplicationManager.CommandListener());
-        commandListener.setName("command-listener");
-        commandListener.setDaemon(true);
-        commandListener.start();
+    public static void stopApplication() throws Exception {
+        GuiceInjector.init();
+        ApplicationManager.stopApplication();
     }
 
     public static void main(String[] args) throws Exception {
         if (args.length == 0 || "start".equalsIgnoreCase(args[0])) {
-            int port = EmbeddedJetty.DEFAULT_PORT;
-            if (args.length > 1) {
-                port = Integer.parseInt(args[1]);
-            }
-
-            startApplication(port);
+            startApplication();
         } else if ("stop".equalsIgnoreCase(args[0])) {
-            ApplicationManager.stop();
+            stopApplication();
         } else {
             logger.warn("Command does not exist. Use: start, stop or no command (default is start).");
         }

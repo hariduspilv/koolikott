@@ -2,7 +2,11 @@ package ee.hm.dop.server;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
+import ee.hm.dop.common.test.GuiceTestRunner;
+
+@RunWith(GuiceTestRunner.class)
 public class EmbeddedJettyTest {
 
     // Port 0 tells Jetty to use any available port

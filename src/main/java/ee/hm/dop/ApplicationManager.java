@@ -22,7 +22,7 @@ public class ApplicationManager {
     private static final int REMOTE_PORT = 9999;
     private static final String STOP_COMMAND = "stop";
 
-    public static void stop() throws Exception {
+    public static void stopApplication() throws Exception {
 
         BufferedWriter writer = null;
         try (Socket socket = new Socket()) {

@@ -31,3 +31,7 @@ The available properties are:
 * **db.url** - the database url
 * **db.username** - the database username
 * **db.password** - the database password for given username 
+
+### Server
+
+* **server.port** - the port that server starts.

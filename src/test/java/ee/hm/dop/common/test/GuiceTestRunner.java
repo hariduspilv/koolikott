@@ -5,6 +5,8 @@ import static ee.hm.dop.guice.GuiceInjector.getInjector;
 import org.junit.runners.BlockJUnit4ClassRunner;
 import org.junit.runners.model.InitializationError;
 
+import ee.hm.dop.guice.GuiceInjector;
+
 /**
  * JUnit test runner that initialize Guice.
  * 
@@ -14,6 +16,8 @@ public class GuiceTestRunner extends BlockJUnit4ClassRunner {
 
     public GuiceTestRunner(Class<?> klass) throws InitializationError {
         super(klass);
+        
+        GuiceInjector.init();
     }
 
     @Override

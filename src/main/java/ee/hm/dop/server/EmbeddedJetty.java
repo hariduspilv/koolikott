@@ -19,8 +19,6 @@ import ee.hm.dop.config.DOPApplication;
 public class EmbeddedJetty {
     private static final Logger logger = LoggerFactory.getLogger(EmbeddedJetty.class);
 
-    public static final int DEFAULT_PORT = 8080;
-
     private Server server;
     private static EmbeddedJetty instance;
 
@@ -33,10 +31,6 @@ public class EmbeddedJetty {
         }
 
         return instance;
-    }
-
-    public void start() throws Exception {
-        start(DEFAULT_PORT);
     }
 
     public void start(int port) throws Exception {

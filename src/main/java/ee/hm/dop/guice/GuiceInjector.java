@@ -26,17 +26,13 @@ public class GuiceInjector {
 
     private static Injector injector;
 
-    private static void init() {
+    public static void init() {
         if (injector == null) {
             injector = Guice.createInjector(getModules());
         }
     }
 
     public static Injector getInjector() {
-        if (injector == null) {
-            init();
-        }
-
         return injector;
     }
 
