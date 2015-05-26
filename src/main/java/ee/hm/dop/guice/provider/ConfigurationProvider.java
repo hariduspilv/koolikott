@@ -20,7 +20,8 @@ import com.google.inject.Singleton;
 @Singleton
 public class ConfigurationProvider implements Provider<Configuration> {
 
-    private static Logger logger = LoggerFactory.getLogger(ConfigurationProvider.class);
+    private Logger logger = LoggerFactory.getLogger(getClass());
+
     private static String DEFAULT_CONFIGURATION_FILE_NAME = "default.properties";
 
     private CompositeConfiguration configuration;
@@ -71,7 +72,7 @@ public class ConfigurationProvider implements Provider<Configuration> {
         Configuration configuration;
 
         try {
-            URL resource = getClass().getClassLoader().getResource(DEFAULT_CONFIGURATION_FILE_NAME);
+            URL resource = getClass().getClassLoader().getResource(getConfigurationFileName());
             configuration = new PropertiesConfiguration(resource);
             logger.info(String.format("Default configuration loaded from [%s]", resource.toExternalForm()));
 
@@ -80,5 +81,9 @@ public class ConfigurationProvider implements Provider<Configuration> {
         }
 
         return configuration;
+    }
+
+    protected String getConfigurationFileName() {
+        return DEFAULT_CONFIGURATION_FILE_NAME;
     }
 }
