@@ -13,11 +13,12 @@ define(['routes','services/dependencyResolver'], function(config, dependencyReso
 
         function($routeProvider, $locationProvider, $controllerProvider, $compileProvider, $filterProvider, $provide)
         {
-	        app.controller = $controllerProvider.register;
-	        app.directive  = $compileProvider.directive;
-	        app.filter     = $filterProvider.register;
-	        app.factory    = $provide.factory;
-	        app.service    = $provide.service;
+            app.controller = $controllerProvider.register;
+            app.directive  = $compileProvider.directive;
+            app.filter     = $filterProvider.register;
+            app.factory    = $provide.factory;
+            app.service    = $provide.service;
+                
 
             if(config.routes !== undefined)
             {
@@ -33,6 +34,10 @@ define(['routes','services/dependencyResolver'], function(config, dependencyReso
             }
         }
     ]);
+    
+    app.config(function($logProvider){
+    $logProvider.debugEnabled(true);
+});
 
    return app;
 });

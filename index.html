@@ -8,29 +8,7 @@
         <title>DOP</title>
     </head>
     <body>
-        <nav class="navbar navbar-default">
-            <div class="container">
-                <div class="navbar-header">
-                    <button data-target="#bs-example-navbar-collapse-2" data-toggle="collapse" class="navbar-toggle collapsed" type="button">
-                        <span class="sr-only">Toggle navigation</span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                    </button>
-                    <a href="#" class="navbar-brand">Brand</a>
-                </div>
-                
-                <ul class="nav navbar-nav navbar-right">
-                    <li><a href="#"><i class="fa fa-lock"></i> Login</a></li>
-                </ul>
-                <form role="search" class="navbar-form navbar-right">
-                    <div class="form-group">
-                        <input type="text" placeholder="Search" class="form-control">
-                    </div>
-                    <button class="btn btn-default" type="submit"><i class="fa fa-search"></i></button>
-                </form>
-            </div>
-        </nav>
+        <div id="navmenu" data-ng-include="'app/directives/header/header.html'"></div>
         
         <div data-ng-view></div>
         
