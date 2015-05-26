@@ -1,5 +1,7 @@
 package ee.hm.dop;
 
+import static java.lang.String.format;
+
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
@@ -11,6 +13,9 @@ import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 
+import javax.inject.Inject;
+
+import org.apache.commons.configuration.Configuration;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,14 +24,20 @@ public class ApplicationManager {
 
     private static final Logger logger = LoggerFactory.getLogger(ApplicationManager.class);
 
-    private static final int REMOTE_PORT = 9999;
+    private static final int DEFAULT_REMOTE_PORT = 9999;
+    private static final String COMMAND_LISTENER_PORT_PROPERTY = "command.listener.port";
+
     private static final String STOP_COMMAND = "stop";
 
+    @Inject
+    private static Configuration configuration;
+
     public static void stopApplication() throws Exception {
+        logger.info(format("Stopping application on port [%s]", getRemotePort()));
 
         BufferedWriter writer = null;
         try (Socket socket = new Socket()) {
-            socket.connect(new InetSocketAddress(InetAddress.getLoopbackAddress(), REMOTE_PORT), 10000);
+            socket.connect(new InetSocketAddress(InetAddress.getLoopbackAddress(), getRemotePort()), 10000);
             writer = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
             write(STOP_COMMAND + "\n\r", writer);
             logger.info("Stop command sent to application");
@@ -38,11 +49,15 @@ public class ApplicationManager {
         }
     }
 
+    private static int getRemotePort() {
+        return configuration.getInt(COMMAND_LISTENER_PORT_PROPERTY, DEFAULT_REMOTE_PORT);
+    }
+
     public static boolean isApplicationRunning() {
         boolean isRunning = false;
 
         try (Socket socket = new Socket()) {
-            socket.connect(new InetSocketAddress(InetAddress.getLoopbackAddress(), REMOTE_PORT), 10000);
+            socket.connect(new InetSocketAddress(InetAddress.getLoopbackAddress(), getRemotePort()), 10000);
             isRunning = true;
         } catch (Exception ce) {
             logger.info("Application is not running.");
@@ -65,8 +80,9 @@ public class ApplicationManager {
 
             try {
                 synchronized (this) {
-                    serverSocket = new ServerSocket(REMOTE_PORT, 10, InetAddress.getLoopbackAddress());
+                    serverSocket = new ServerSocket(getRemotePort(), 10, InetAddress.getLoopbackAddress());
                     serverSocket.setSoTimeout(0);
+                    logger.info(format("Command listener started on port [%s]", getRemotePort()));
                 }
             } catch (Exception e) {
                 logger.error("Error starting command listener!", e);
