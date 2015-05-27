@@ -1,7 +1,7 @@
 <nav class="navbar navbar-default">
     <div class="container">
         <div class="navbar-header">
-            <button data-target="#bs-example-navbar-collapse-2" data-toggle="collapse" class="navbar-toggle collapsed" type="button">
+            <button data-target="#navbar-links" data-toggle="collapse" class="navbar-toggle collapsed" type="button">
                 <span class="sr-only">Toggle navigation</span>
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
@@ -9,20 +9,22 @@
             </button>
             <a href="#" class="navbar-brand">Brand</a>
         </div>
-
-        <ul class="nav navbar-nav navbar-right">
-            <li><a href="#"><span>EST <i class="fa fa-caret-down"></i></span></a></li>
-            <li><a href="#"><i class="fa fa-lock"></i> Login</a></li>
-        </ul>
-        <div role="search" class="navbar-form navbar-right">
-            <div class="form-group">
-                <div class="input-group">
-                    <input type="text" placeholder="Search" class="form-control">
-                    <span class="input-group-btn">
-                        <button class="btn btn-default" type="submit"><i class="fa fa-search"></i></button>
-                    </span>
+        
+        <div class="navbar-collapse collapse" id="navbar-links">
+            <ul class="nav navbar-nav navbar-right">
+                <li><a href="#"><span>EST <i class="fa fa-caret-down"></i></span></a></li>
+                <li><a href="#"><i class="fa fa-lock"></i> Login</a></li>
+            </ul>
+            <form role="search" class="navbar-form">
+                <div class="form-group">
+                    <div class="input-group">
+                        <input type="text" placeholder="Search" class="form-control">
+                        <span class="input-group-btn">
+                            <button class="btn btn-default" type="submit"><i class="fa fa-search"></i></button>
+                        </span>
+                    </div>
                 </div>
-            </div>
+            </form>
         </div>
     </div>
 </nav>

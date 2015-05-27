@@ -1,7 +1,5 @@
-$navbar-height: 70px !default;
+.navbar-form .form-group {display: inline}
 
-$navbar-border-radius: 0;
+.navbar-form .input-group {display: table}
 
-$navbar-default-bg: #222 !default;
-
-.navbar-form .input-group > .form-control {width: 400%}
+.navbar-form .input-group .form-control {width: 100%}
