@@ -34,10 +34,6 @@ define(['routes','services/dependencyResolver'], function(config, dependencyReso
             }
         }
     ]);
-    
-    app.config(function($logProvider){
-    $logProvider.debugEnabled(true);
-});
 
    return app;
 });
