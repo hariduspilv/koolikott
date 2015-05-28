@@ -1,15 +1,21 @@
+.row-material {padding-left: 5px; padding-right: 5px;
+    
+    .col-md-3 {padding-left: 10px; padding-right: 10px}
+    
+}
+
 .material {
     
-    .block {@include border-radius(3px); @include box-shadow(0, 0, 2px, 0, #999); background: #FFF; overflow: hidden;
+    .block {margin-bottom: 20px; @include border-radius(3px); @include box-shadow(0, 0, 2px, 0, #999); background: #FFF; overflow: hidden;
     
-        .description {padding: 15px 10px; color: $font-color-grey;
+        .description {padding: 15px 10px; font-size: 13px; color: $font-color-grey;
         
             .title {height: 70px; padding-bottom: 10px; line-height: 21px; font-size: 17px; 
             
                 a {font-size: 17px}
             };
             
-            .authors {padding-bottom: 10px}
+            .authors {height: 50px; padding-bottom: 10px}
         
         }
     }
