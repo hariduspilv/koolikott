@@ -8,13 +8,11 @@
 
 @import 'design/variables';
 
-@import 'design/mixins';
-
 @import 'design/typography';
 
-@import 'design/main';
+@import 'design/mixins';
 
-@import 'design/navbar';
+@import 'design/main';
 
 @import 'design/material-list';
 
@@ -24,4 +22,5 @@
 
 @import 'bower_components/bootstrap-sass/assets/stylesheets/bootstrap';
 
+@import 'design/navbar';
 
