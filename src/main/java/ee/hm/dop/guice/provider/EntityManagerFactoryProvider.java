@@ -54,7 +54,7 @@ public class EntityManagerFactoryProvider implements Provider<EntityManagerFacto
         properties.put("hibernate.connection.driver_class", "com.mysql.jdbc.Driver");
         properties.put("hibernate.dialect", "org.hibernate.dialect.MySQLDialect");
         properties.put("hibernate.show_sql", "true");
-        properties.put("hibernate.hbm2ddl.auto", "create");
+        properties.put("hibernate.hbm2ddl.auto", "validate");
 
         // Configurable options
         properties.put("hibernate.connection.url", configuration.getString(DATABASE_URL));
