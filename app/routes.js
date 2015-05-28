@@ -14,7 +14,9 @@ define([], function()
                 templateUrl: 'app/search/result/searchResult.html',
                 controller: 'searchResultController',
                 dependencies: [
-                    'search/result/searchResult'
+                    'search/result/searchResult',
+                    'services/serverCallService',
+                    'utils/commons'
                 ]
             },
             '/material': {
