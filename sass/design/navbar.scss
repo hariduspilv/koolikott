@@ -1,5 +1,24 @@
-.navbar-form .form-group {display: inline}
+.navbar-form {
+    
+    .form-group {display: inline !important}
+}
 
-.navbar-form .input-group {display: table}
+.navbar-form {
+    
+    .input-group {display: table !important}
+    
+}
 
-.navbar-form .input-group .form-control {width: 100%}
+.navbar {
+    
+    .navbar-form {
+
+        .input-group {
+
+            .form-control {width: 100% !important};
+            
+            .input-group-btn {width: 1% !important}
+        }
+    }
+    
+}

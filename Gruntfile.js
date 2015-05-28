@@ -34,7 +34,7 @@ module.exports = function(grunt) {
         sass: {
             dev: {
                 options: {
-                    style: 'none',
+                    style: 'compressed',
                     compass: false,
                     sourcemap: 'none'
                     
