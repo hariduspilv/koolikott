@@ -16,7 +16,7 @@ define(['app'], function(app)
     	function getAllMaterialFail(data, status) {
             console.log('Session search failed.')
     	}
-        $scope.showDetails = function(detainee) {
+        $scope.showDetails = function(material) {
             $location.path('/material');
         }
     }]);
