@@ -2,7 +2,7 @@
 
 # Installation
 
-Check out the project and build the application using **maven** and run the dop.jar at **/target** folfer.
+Check out the project and build the application using **maven** and run the dop.jar at **/target** folder.
 
 	mvn clean package
 
