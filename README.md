@@ -22,6 +22,16 @@ The custom configuration file can be placed anywhere visible to the application 
 
 	java -jar -Dconfig="/path/to/custom.properties" dop.jar
 
+# Stop application
+
+To stop the application just run the command:
+
+	java -jar dop.jar stop
+	
+If you started the application using a **custom configuration** file, use the same configuration to stop the application.
+
+	java -jar -Dconfig="/path/to/custom.properties" dop.jar stop
+
 # Configuration
 
 The application can be configured using a custom properties file. It can be placed anywhere visible to the application and may have any name.
