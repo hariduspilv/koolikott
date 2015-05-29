@@ -2,7 +2,9 @@
 
 # Installation
 
-No need to install, just download dop.jar and you are ready to go!
+Check out the project and build the application using **maven** and run the dop.jar at **/target** folfer.
+
+	mvn clean package
 
 # Start application
 
@@ -27,6 +29,8 @@ The application can be configured using a custom properties file. It can be plac
 The available properties are:
 
 ### Database
+
+DOP uses **MariaDB** database. Click [here](https://mariadb.com/kb/en/mariadb/getting-installing-and-upgrading-mariadb/) for how to install it.
 
 * **db.url** - the database url
 * **db.username** - the database username
