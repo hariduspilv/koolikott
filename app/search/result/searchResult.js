@@ -1,6 +1,6 @@
 define(['app'], function(app)
 {
-    app.controller('searchResultController', ['$scope', "serverCallService", '$location', function($scope, serverCallService, $location) {
+    app.controller('searchResultController', ['$scope', "serverCallService", function($scope, serverCallService) {
     	var params = {};
     	serverCallService.makeGet("/rest/material/getAll", params, getAllMaterialSuccess, getAllMaterialFail);
     	
@@ -16,8 +16,5 @@ define(['app'], function(app)
     	function getAllMaterialFail(data, status) {
             console.log('Session search failed.')
     	}
-        $scope.showDetails = function(material) {
-            $location.path('/material');
-        }
     }]);
 });
