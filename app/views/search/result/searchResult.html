@@ -3,31 +3,33 @@
         <div class="col-md-9">
             <div class="row">
                 <div data-ng-repeat="material in materials" class="col-md-3 material">
-                    <div class="block">
-                        <div class="illustration">
-                            <figure>
-                                <img src="img/material.jpg" class="img-responsive">
-                            </figure>
-                        </div>
-                        <div class="description">
-                            <div class="title">
-                                <a data-ng-href="/#/material">{{material.title}}</a>
+                    <a data-ng-href="/#/material">
+                        <div class="block">
+                            <div class="illustration">
+                                <figure>
+                                    <img src="img/material.jpg" class="img-responsive">
+                                </figure>
                             </div>
-                            <div class="authors">
-                                <span data-ng-repeat="author in material.authors">
-                                	{{author.name}} {{author.surname}}{{$index < material.authors.length - 1 ? ', ' : ''}}
-                                </span>
-                            </div>
-                            <div class="clearfix">
-                                <div class="pull-left">
-                                    18.05.2014
+                            <div class="description">
+                                <div class="title">
+                                    {{material.title}}
+                                </div>
+                                <div class="authors">
+                                    <span data-ng-repeat="author in material.authors">
+                                        {{author.name}} {{author.surname}}{{$index < material.authors.length - 1 ? ', ' : ''}}
+                                    </span>
+                                </div>
+                                <div class="clearfix">
+                                    <div class="pull-left">
+                                        18.05.2014
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="">
+                            <div class="">
 
+                            </div>
                         </div>
-                    </div>
+                    </a>
                 </div>
             </div>
 		</div>

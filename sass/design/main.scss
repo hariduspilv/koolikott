@@ -10,4 +10,8 @@ $font-size-h3: floor(($font-size-base * 2.1)) !default;
 
 $font-family-sans-serif: "Roboto", "Helvetica Neue", Helvetica, Arial, sans-serif !default;
 
+$link-hover-decoration: none;
+
 body {font-weight: 400}
+
+a:hover {cursor: pointer}
