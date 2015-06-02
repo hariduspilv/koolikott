@@ -27,7 +27,7 @@ public class MaterialDAOTest {
         List<Material> materials = materialDAO.findAll();
         assertEquals(8, materials.size());
 
-        // Verify if all fields are loaded
+        // Verify if all required fields are loaded
         for (int i = 0; i < materials.size(); i++) {
             Material material = materials.get(i);
             assertEquals(i + 1, material.getId());

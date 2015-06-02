@@ -10,6 +10,14 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 
+import org.joda.time.LocalDate;
+
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+
+import ee.hm.dop.rest.jackson.map.LocalDateDeserializer;
+import ee.hm.dop.rest.jackson.map.LocalDateSerializer;
+
 @Entity
 public class Material {
 
@@ -26,6 +34,15 @@ public class Material {
             joinColumns = { @JoinColumn(name = "material") },
             inverseJoinColumns = { @JoinColumn(name = "author") })
     private List<Author> authors;
+
+    @Column
+    private Short day;
+
+    @Column
+    private Short month;
+
+    @Column
+    private Integer year;
 
     public long getId() {
         return id;
@@ -49,5 +66,23 @@ public class Material {
 
     public void setAuthors(List<Author> authors) {
         this.authors = authors;
+    }
+
+    @JsonDeserialize(using = LocalDateDeserializer.class)
+    public void setIssueDate(LocalDate date) {
+        if (date != null) {
+            year = date.getYear();
+            month = (short) date.getMonthOfYear();
+            day = (short) date.getDayOfMonth();
+        }
+    }
+
+    @JsonSerialize(using = LocalDateSerializer.class)
+    public LocalDate getIssueDate() {
+        if (year == null || month == null || day == null) {
+            return null;
+        }
+
+        return new LocalDate(year, month, day);
     }
 }

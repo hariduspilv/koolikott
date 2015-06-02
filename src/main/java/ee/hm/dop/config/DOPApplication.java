@@ -9,6 +9,7 @@ import org.jvnet.hk2.guice.bridge.api.GuiceBridge;
 import org.jvnet.hk2.guice.bridge.api.GuiceIntoHK2Bridge;
 
 import ee.hm.dop.guice.GuiceInjector;
+import ee.hm.dop.guice.provider.ObjectMapperProvider;
 
 public class DOPApplication extends ResourceConfig {
 
@@ -23,5 +24,6 @@ public class DOPApplication extends ResourceConfig {
         guiceBridge.bridgeGuiceInjector(GuiceInjector.getInjector());
 
         register(JacksonFeature.class);
+        register(ObjectMapperProvider.class);
     }
 }

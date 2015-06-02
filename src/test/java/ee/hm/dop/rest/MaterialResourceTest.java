@@ -8,6 +8,7 @@ import java.util.List;
 import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.Response;
 
+import org.joda.time.LocalDate;
 import org.junit.Test;
 
 import ee.hm.dop.common.test.ResourceIntegrationTestBase;
@@ -28,6 +29,7 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
         Material material = materials.get(1);
         assertEquals(2, material.getId());
         assertEquals("Mathematics textbook for 8th grade", material.getTitle());
+        assertEquals(new LocalDate(-983, 1, 27), material.getIssueDate());
         List<Author> authors = material.getAuthors();
         assertEquals(2, authors.size());
 
