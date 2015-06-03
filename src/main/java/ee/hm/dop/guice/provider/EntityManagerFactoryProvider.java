@@ -56,6 +56,8 @@ public class EntityManagerFactoryProvider implements Provider<EntityManagerFacto
         properties.put("hibernate.show_sql", "true");
         properties.put("hibernate.hbm2ddl.auto", "validate");
 
+        properties.put("hibernate.c3p0.min_size", "5");
+        properties.put("hibernate.c3p0.max_size", "100");
         properties.put("hibernate.c3p0.timeout", "300");
         properties.put("hibernate.c3p0.max_statements", "50");
         properties.put("hibernate.c3p0.idle_test_period", "1000");

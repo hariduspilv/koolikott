@@ -8,6 +8,7 @@
 	
 	<properties>
 		<slf4j.version>1.7.12</slf4j.version>
+		<hibernate.version>4.3.10.Final</hibernate.version>
 	</properties>
 	
 	<dependencies>
@@ -58,7 +59,12 @@
 		<dependency>
 		   <groupId>org.hibernate</groupId>
 		   <artifactId>hibernate-entitymanager</artifactId>
-		   <version>4.3.9.Final</version>
+		   <version>${hibernate.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-c3p0</artifactId>
+			<version>${hibernate.version}</version>
 		</dependency>
         
         <!-- Logging -->
