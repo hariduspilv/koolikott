@@ -1,6 +1,6 @@
-define(['routes','services/dependencyResolver'], function(config, dependencyResolver)
+define(['routes','services/dependencyResolver', '../bower_components/angular-translate-loader-url/angular-translate-loader-url.min'], function(config, dependencyResolver)
 {
-    var app = angular.module('app', ['ngRoute']);
+    var app = angular.module('app', ['ngRoute', 'pascalprecht.translate']);
 
     app.config(
     [
@@ -10,8 +10,9 @@ define(['routes','services/dependencyResolver'], function(config, dependencyReso
         '$compileProvider',
         '$filterProvider',
         '$provide',
+        '$translateProvider',
 
-        function($routeProvider, $locationProvider, $controllerProvider, $compileProvider, $filterProvider, $provide)
+        function($routeProvider, $locationProvider, $controllerProvider, $compileProvider, $filterProvider, $provide, $translateProvider)
         {
             app.controller = $controllerProvider.register;
             app.directive  = $compileProvider.directive;
@@ -24,7 +25,7 @@ define(['routes','services/dependencyResolver'], function(config, dependencyReso
             {
                 angular.forEach(config.routes, function(route, path)
                 {
-                    $routeProvider.when(path, {templateUrl:route.templateUrl, controller:route.controller, resolve:dependencyResolver(route.dependencies)});
+                    $routeProvider.when(path, {templateUrl:route.templateUrl, controller:route.controller, resolve:dependencyResolver(concatDependencies(route.dependencies))});
                 });
             }
 
@@ -32,8 +33,23 @@ define(['routes','services/dependencyResolver'], function(config, dependencyReso
             {
                 $routeProvider.otherwise({redirectTo:config.defaultRoutePath});
             }
+
+            $translateProvider.useUrlLoader('/rest/languages');
+            $translateProvider.preferredLanguage('en');
+            $translateProvider.useSanitizeValueStrategy('escaped');
         }
     ]);
+
+    function concatDependencies(dependencies) {
+        return getServicesAndUtilsDependencies().concat(dependencies);
+    }
+
+    function getServicesAndUtilsDependencies() { 
+        return [
+            'services/serverCallService',
+            'utils/commons'
+        ];
+    }
 
    return app;
 });
