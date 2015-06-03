@@ -57,7 +57,7 @@ module.exports = function(grunt) {
                 tasks: ['sass:dev']
             }
         },
-        clean: ["assets", "dop.tar.gz"],
+        clean: ["lib", "assets", "dop.tar.gz"],
     	compress: {
             main: {
                 options: {
@@ -66,6 +66,9 @@ module.exports = function(grunt) {
                 },
                 src: ['app/**/*', 'assets/**/*', 'img/**/*', 'index.html']
             }
+        },
+        bower: {
+        	install: {}
         }
     });
 
@@ -75,8 +78,9 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-contrib-clean');
     grunt.loadNpmTasks('grunt-contrib-compress');
+    grunt.loadNpmTasks('grunt-bower-task');
 
-    grunt.registerTask('build', ['clean', 'concat', 'uglify', 'sass']);
+    grunt.registerTask('build', ['bower', 'clean', 'concat', 'uglify', 'sass']);
     grunt.registerTask('package', ['build', 'compress']);
 
 };
