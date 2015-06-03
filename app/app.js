@@ -1,4 +1,4 @@
-define(['routes','services/dependencyResolver', '../bower_components/angular-translate-loader-url/angular-translate-loader-url.min'], function(config, dependencyResolver)
+define(['routes','services/dependencyResolver'], function(config, dependencyResolver)
 {
     var app = angular.module('app', ['ngRoute', 'pascalprecht.translate']);
 
@@ -34,7 +34,7 @@ define(['routes','services/dependencyResolver', '../bower_components/angular-tra
                 $routeProvider.otherwise({redirectTo:config.defaultRoutePath});
             }
 
-            $translateProvider.useUrlLoader('/rest/languages');
+            //$translateProvider.useUrlLoader('/rest/languages');
             $translateProvider.preferredLanguage('en');
             $translateProvider.useSanitizeValueStrategy('escaped');
         }
