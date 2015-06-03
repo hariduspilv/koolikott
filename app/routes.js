@@ -4,24 +4,24 @@ define([], function()
         defaultRoutePath: '/',
         routes: {
             '/': {
-                templateUrl: 'app/home/home.html',
+                templateUrl: 'app/views/home/home.html',
                 controller: 'homeController',
                 dependencies: [
-                    'home/home'
+                    'views/home/home'
                 ]
             },
             '/search/result': {
-                templateUrl: 'app/search/result/searchResult.html',
+                templateUrl: 'app/views/search/result/searchResult.html',
                 controller: 'searchResultController',
                 dependencies: [
                     'search/result/searchResult'
                 ]
             },
             '/material': {
-                templateUrl: 'app/material/material.html',
+                templateUrl: 'app/views/material/material.html',
                 controller: 'materialController',
                 dependencies: [
-                    'material/material'
+                    'views/material/material'
                 ]
             }
         }
