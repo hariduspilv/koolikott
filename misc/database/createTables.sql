@@ -2,6 +2,7 @@
 
 DROP TABLE IF EXISTS Material_Author;
 DROP TABLE IF EXISTS Material;
+DROP TABLE IF EXISTS IssueDate;
 DROP TABLE IF EXISTS Author;
 
 -- Create tables
@@ -12,12 +13,21 @@ CREATE TABLE Author (
 	surname varchar(255) NOT NULL
 );
 
-CREATE TABLE Material (
+CREATE TABLE IssueDate (
 	id BIGINT AUTO_INCREMENT PRIMARY KEY,
-	title VARCHAR(255) NOT NULL,
 	day SMALLINT,
 	month SMALLINT,
 	year INTEGER
+);
+
+CREATE TABLE Material (
+	id BIGINT AUTO_INCREMENT PRIMARY KEY,
+	title VARCHAR(255) NOT NULL,
+	issueDate BIGINT,
+	
+	FOREIGN KEY (issueDate)
+        REFERENCES IssueDate(id)
+        ON DELETE RESTRICT
 );
 
 CREATE TABLE Material_Author (

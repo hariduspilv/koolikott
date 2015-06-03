@@ -30,7 +30,7 @@ public class MaterialDAOTest {
         // Verify if all required fields are loaded
         for (int i = 0; i < materials.size(); i++) {
             Material material = materials.get(i);
-            assertEquals(i + 1, material.getId());
+            assertEquals(Long.valueOf(i + 1), material.getId());
             assertFalse(isBlank(material.getTitle()));
             List<Author> authors = material.getAuthors();
             assertNotNull(authors);

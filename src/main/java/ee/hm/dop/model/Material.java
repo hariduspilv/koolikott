@@ -9,21 +9,14 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
-
-import org.joda.time.LocalDate;
-
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-
-import ee.hm.dop.rest.jackson.map.LocalDateDeserializer;
-import ee.hm.dop.rest.jackson.map.LocalDateSerializer;
+import javax.persistence.OneToOne;
 
 @Entity
 public class Material {
 
     @Id
     @GeneratedValue
-    private long id;
+    private Long id;
 
     @Column(nullable = false)
     private String title;
@@ -35,20 +28,15 @@ public class Material {
             inverseJoinColumns = { @JoinColumn(name = "author") })
     private List<Author> authors;
 
-    @Column
-    private Short day;
+    @OneToOne
+    @JoinColumn(name = "issueDate")
+    private IssueDate issueDate;
 
-    @Column
-    private Short month;
-
-    @Column
-    private Integer year;
-
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -68,21 +56,11 @@ public class Material {
         this.authors = authors;
     }
 
-    @JsonDeserialize(using = LocalDateDeserializer.class)
-    public void setIssueDate(LocalDate date) {
-        if (date != null) {
-            year = date.getYear();
-            month = (short) date.getMonthOfYear();
-            day = (short) date.getDayOfMonth();
-        }
+    public IssueDate getIssueDate() {
+        return issueDate;
     }
 
-    @JsonSerialize(using = LocalDateSerializer.class)
-    public LocalDate getIssueDate() {
-        if (year == null || month == null || day == null) {
-            return null;
-        }
-
-        return new LocalDate(year, month, day);
+    public void setIssueDate(IssueDate issueDate) {
+        this.issueDate = issueDate;
     }
 }

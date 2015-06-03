@@ -8,11 +8,11 @@ import java.util.List;
 import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.Response;
 
-import org.joda.time.LocalDate;
 import org.junit.Test;
 
 import ee.hm.dop.common.test.ResourceIntegrationTestBase;
 import ee.hm.dop.model.Author;
+import ee.hm.dop.model.IssueDate;
 import ee.hm.dop.model.Material;
 
 public class MaterialResourceTest extends ResourceIntegrationTestBase {
@@ -27,9 +27,9 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
 
         // Verify if all fields are loaded
         Material material = materials.get(1);
-        assertEquals(2, material.getId());
+        assertEquals(Long.valueOf(2), material.getId());
         assertEquals("Mathematics textbook for 8th grade", material.getTitle());
-        assertEquals(new LocalDate(-983, 1, 27), material.getIssueDate());
+        assertEquals(new IssueDate((short) 27, (short) 1, -983), material.getIssueDate());
         List<Author> authors = material.getAuthors();
         assertEquals(2, authors.size());
 
