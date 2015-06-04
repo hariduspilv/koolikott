@@ -10,7 +10,7 @@ define(['app'], function(app)
 	        
                 $scope.languageSelectClick = function() {
                     $scope.showLanguageSelection = !$scope.showLanguageSelection; 
-	        };
+                };
 
             }
         };
