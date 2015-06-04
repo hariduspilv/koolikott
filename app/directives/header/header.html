@@ -12,7 +12,16 @@
         
         <div class="navbar-collapse collapse" id="navbar-links">
             <ul class="nav navbar-nav navbar-right">
-                <li><a data-ng-click="changeLanguage('ru')"><span>EST <i class="fa fa-caret-down"></i></span></a></li>
+                <li><a data-ng-click="languageSelectClick()" id="languageselectclick"><span>EST <i class="fa fa-caret-down"></i></span></a>
+                    <ul data-ng-show="showLanguageSelection" id="languageselect" click-outside="closeThis()" outside-if-not="languageselectclick">
+                        <li>
+                            <a>EST <i class="fa fa-caret-up"></i></a>
+                        </li>
+                        <li>
+                            <a>RUS</a>
+                        </li>
+                    </ul>
+                </li>
                 <li><a href="#"><i class="fa fa-lock"></i> Login</a></li>
             </ul>
             <div role="search" class="navbar-form" id="search-form-main">

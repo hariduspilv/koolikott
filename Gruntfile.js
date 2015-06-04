@@ -22,7 +22,8 @@ module.exports = function(grunt) {
                     'bower_components/angular-route/angular-route.min.js',
                     'bower_components/bootstrap-sass/assets/javascripts/bootstrap.min.js',
                     'bower_components/angular-translate/angular-translate.min.js',
-                    'bower_components/angular-translate-loader-url/angular-translate-loader-url.min.js'
+                    'bower_components/angular-translate-loader-url/angular-translate-loader-url.min.js',
+                    'bower_components/angular-click-outside/clickoutside.directive.js'
                 ],
                 dest: '<%= project.assets %>/js/dop.min.js',
             }
