@@ -7,8 +7,10 @@ define(['app'], function(app)
             templateUrl: 'app/directives/header/header.html',
             controller: function ($scope) {
                 $scope.showLanguageSelection = false;
-	        $scope.languageSelectClick = function(){
+	        $scope.languageSelectClick = function() {
+                    
                     $scope.showLanguageSelection = !$scope.showLanguageSelection;
+                    
 	        };
 
             }
