@@ -11,6 +11,8 @@ import javax.ws.rs.container.ContainerResponseContext;
 import javax.ws.rs.container.ContainerResponseFilter;
 import javax.ws.rs.ext.Provider;
 
+import ee.hm.dop.utils.DbUtils;
+
 /**
  * Manage database transactions.
  */
@@ -40,5 +42,7 @@ public class TransactionFilter implements ContainerRequestFilter, ContainerRespo
                 transaction.commit();
             }
         }
+
+        DbUtils.clearEntityManager();
     }
 }

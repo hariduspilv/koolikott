@@ -8,6 +8,14 @@ import javax.persistence.EntityTransaction;
 public class DbUtils {
 
     public static EntityTransaction getTransaction() {
-        return getInjector().getInstance(EntityManager.class).getTransaction();
+        return getEntityManager().getTransaction();
+    }
+
+    public static EntityManager getEntityManager() {
+        return getInjector().getInstance(EntityManager.class);
+    }
+
+    public static void clearEntityManager() {
+        getEntityManager().clear();
     }
 }

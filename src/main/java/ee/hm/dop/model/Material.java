@@ -1,5 +1,7 @@
 package ee.hm.dop.model;
 
+import static javax.persistence.FetchType.EAGER;
+
 import java.util.List;
 
 import javax.persistence.Column;
@@ -21,7 +23,7 @@ public class Material {
     @Column(nullable = false)
     private String title;
 
-    @ManyToMany
+    @ManyToMany(fetch = EAGER)
     @JoinTable(
             name = "Material_Author",
             joinColumns = { @JoinColumn(name = "material") },
