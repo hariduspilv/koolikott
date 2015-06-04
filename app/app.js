@@ -1,6 +1,6 @@
 define(['routes','services/dependencyResolver'], function(config, dependencyResolver)
 {
-    var app = angular.module('app', ['ngRoute', 'pascalprecht.translate']);
+    var app = angular.module('app', ['ngRoute', 'pascalprecht.translate', 'mouse.utils']);
 
     app.config(
     [

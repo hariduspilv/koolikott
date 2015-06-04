@@ -12,6 +12,11 @@ define(['app'], function(app)
                     $scope.showLanguageSelection = !$scope.showLanguageSelection; 
                 };
 
+                $scope.closeLanguageSelection = function () {
+                	$scope.$apply(function() {
+	                	$scope.showLanguageSelection = false;
+                	});
+                }
             }
         };
     });
