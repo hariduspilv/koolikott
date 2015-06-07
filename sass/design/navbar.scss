@@ -23,9 +23,42 @@
     
 }
 
-
-.navbar-submenu {position: absolute; top: 14.5px; padding: 10px 15px; @include border-radius(3px); @include box-shadow(0, 0, 2px, 0, #999); background: $navbar-light-bg; list-style: none;
-
-    a {color: $font-color-grey}
+.navbar-nav {margin-left: 20px;
     
+    .navbar-lang {
+        
+        > a {padding-bottom: 18.5px; 
+             
+             > span {padding-bottom: 5px}
+        
+        }
+        
+        a {padding-left: 10px; padding-right: 10px;
+            
+            span {display: inline-block; border-bottom: 1px solid #444;
+            
+                .fa {margin-left: 25px}
+            }
+        }
+        
+        
+    }
+    
+    .navbar-submenu {position: absolute; top: 12.5px; padding: 12px 0; @include border-radius(3px); @include box-shadow(0, 0, 2px, 0, #999); background: $navbar-light-bg; list-style: none;
+        
+        > li:first-child {
+            
+            a {margin-bottom: 10px;
+                
+               span {display: inline-block; padding-bottom: 5px; border-bottom: 1px solid #777;
+                
+                    .fa {margin-left: 25px}
+                    
+                }
+            }
+        }
+                     
+        a {display: inline-block; color: $font-color-grey}
+
+    }
 }
