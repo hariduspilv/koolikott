@@ -47,19 +47,33 @@ define(['app'], function(app)
     		return year < 0 ? year * -1 : year; 
     	}
 
-        $scope.formatName = function(name){
-            var array = name.split(" ");
+        $scope.formatName = function(name) {
+            return arrayToInitials(name.split(" "));
+        }
+
+        function arrayToInitials(array) {
             var res = "";
-            for(var i = 0; i < array.length; i++) res += (array[i].charAt(0).toUpperCase() + ". ");
-            return res;
+            for(var i = 0; i < array.length; i++) {
+                res += wordToInitial(array[i]) + " ";
+            }
+
+            return res.trim();
+        }
+
+        function wordToInitial(name){
+            return name.charAt(0).toUpperCase() + ".";
         }
 
         $scope.formatSurname = function(surname){
             var array = surname.split(" ");
+            var last = array.length - 1;
             var res = "";
-            console.log(array)
-            for(var i = 0; i < array.length - 1; i++) res += (array[i].charAt(0).toUpperCase() + ". ");
-            res += array[array.length - 1];
+
+            if (last > 0) {
+                res = arrayToInitials(array.slice(0, last)) + " ";
+            }
+
+            res += array[last];
             return res;
         }
     }]);
