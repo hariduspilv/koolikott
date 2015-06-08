@@ -12,11 +12,11 @@
                             </div>
                             <div class="description">
                                 <div class="title">
-                                    {{material.title}}
+                                   {{material.title}}
                                 </div>
                                 <div class="authors">
                                     <span data-ng-repeat="author in material.authors">
-                                        {{author.name}} {{author.surname}}{{$index < material.authors.length - 1 ? ', ' : ''}}
+                                        {{formatName(author.name)}}{{ formatSurname(author.surname) }}{{$index < material.authors.length - 1 ? ', ' : ''}}
                                     </span>
                                 </div>
                                 <div class="clearfix">

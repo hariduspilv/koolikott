@@ -46,5 +46,21 @@ define(['app'], function(app)
     	function formatYear(year) {
     		return year < 0 ? year * -1 : year; 
     	}
+
+        $scope.formatName = function(name){
+            var array = name.split(" ");
+            var res = "";
+            for(var i = 0; i < array.length; i++) res += (array[i].charAt(0).toUpperCase() + ". ");
+            return res;
+        }
+
+        $scope.formatSurname = function(surname){
+            var array = surname.split(" ");
+            var res = "";
+            console.log(array)
+            for(var i = 0; i < array.length - 1; i++) res += (array[i].charAt(0).toUpperCase() + ". ");
+            res += array[array.length - 1];
+            return res;
+        }
     }]);
 });

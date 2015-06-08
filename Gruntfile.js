@@ -43,9 +43,7 @@ module.exports = function(grunt) {
             dev: {
                 options: {
                     style: 'compressed',
-                    compass: false,
-                    sourcemap: 'false'
-                    
+                    compass: false
                 },
                 files: {
                     '<%= project.assets %>/css/dop.min.css':'<%= project.css %>'
