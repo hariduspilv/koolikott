@@ -13,11 +13,13 @@
                             <div class="description">
                                 <div class="title">
                                    {{material.title}}
+                                   <i class="line-fade"></i>
                                 </div>
                                 <div class="authors">
                                     <span data-ng-repeat="author in material.authors">
                                         {{formatName(author.name)}} {{formatSurname(author.surname) }}{{$index < material.authors.length - 1 ? ', ' : ''}}
                                     </span>
+                                    <i class="line-fade"></i>
                                 </div>
                                 <div class="clearfix">
                                     <div data-ng-if="material.issueDate.year >= 100" class="pull-left">{{formatIssueDate(material.issueDate)}}</div>

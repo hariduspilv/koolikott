@@ -15,7 +15,11 @@
                 a {font-size: 17px}
             };
             
-            .authors {height: 50px; padding-bottom: 10px}
+            .authors {height: 50px; padding-bottom: 10px;
+            
+                .fade-line {}
+            
+            }
         
         }
     }
