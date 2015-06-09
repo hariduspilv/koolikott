@@ -27,9 +27,14 @@ public class EntityManagerProvider implements Provider<EntityManager> {
     public synchronized EntityManager get() {
         EntityManager entityManager = ENTITY_MANAGER_CACHE.get();
         if (entityManager == null) {
-            ENTITY_MANAGER_CACHE.set(entityManager = emf.createEntityManager());
+            entityManager = emf.createEntityManager();
+            ENTITY_MANAGER_CACHE.set(entityManager);
+            logger.info(String.format("Initializing EntityManager [%s]", entityManager));
+        } else if (!entityManager.isOpen()) {
+            logger.info(String.format("EntityManager [%s] is closed, removing from cache.", entityManager));
+            ENTITY_MANAGER_CACHE.remove();
+            return get();
         }
-        logger.info(String.format("Initializing EntityManager [%s]", entityManager));
 
         return entityManager;
     }

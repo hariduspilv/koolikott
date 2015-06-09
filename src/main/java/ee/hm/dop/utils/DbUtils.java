@@ -15,7 +15,7 @@ public class DbUtils {
         return getInjector().getInstance(EntityManager.class);
     }
 
-    public static void clearEntityManager() {
-        getEntityManager().clear();
+    public static void closeEntityManager() {
+        getInjector().getInstance(EntityManager.class).close();
     }
 }

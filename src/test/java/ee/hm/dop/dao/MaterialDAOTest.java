@@ -4,6 +4,8 @@ import ee.hm.dop.common.test.GuiceTestRunner;
 import ee.hm.dop.model.Author;
 import ee.hm.dop.model.LanguageDescription;
 import ee.hm.dop.model.Material;
+import ee.hm.dop.utils.DbUtils;
+import org.junit.After;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -13,11 +15,17 @@ import java.util.List;
 import static org.apache.commons.lang3.StringUtils.isBlank;
 import static org.junit.Assert.*;
 
+
 @RunWith(GuiceTestRunner.class)
 public class MaterialDAOTest {
 
     @Inject
     private MaterialDAO materialDAO;
+
+    @After
+    public void closeEntityManager() {
+        DbUtils.closeEntityManager();
+    }
 
     @Test
     public void findAll() {
