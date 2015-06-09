@@ -1,5 +1,6 @@
 package ee.hm.dop.rest.filter;
 
+import static ee.hm.dop.utils.DbUtils.closeEntityManager;
 import static ee.hm.dop.utils.DbUtils.getTransaction;
 
 import java.io.IOException;
@@ -10,8 +11,6 @@ import javax.ws.rs.container.ContainerRequestFilter;
 import javax.ws.rs.container.ContainerResponseContext;
 import javax.ws.rs.container.ContainerResponseFilter;
 import javax.ws.rs.ext.Provider;
-
-import ee.hm.dop.utils.DbUtils;
 
 /**
  * Manage database transactions.
@@ -43,6 +42,6 @@ public class TransactionFilter implements ContainerRequestFilter, ContainerRespo
             }
         }
 
-        DbUtils.clearEntityManager();
+        closeEntityManager();
     }
 }

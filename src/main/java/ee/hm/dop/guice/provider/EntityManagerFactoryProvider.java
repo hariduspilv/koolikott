@@ -58,6 +58,8 @@ public class EntityManagerFactoryProvider implements Provider<EntityManagerFacto
 
         properties.put("hibernate.c3p0.min_size", "5");
         properties.put("hibernate.c3p0.max_size", "100");
+        properties.put("hibernate.c3p0.initialpoolsize", "5");
+        properties.put("hibernate.c3p0.acquire_increment", "1");
         properties.put("hibernate.c3p0.timeout", "300");
         properties.put("hibernate.c3p0.max_statements", "50");
         properties.put("hibernate.c3p0.idle_test_period", "400");
