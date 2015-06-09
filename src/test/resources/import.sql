@@ -21,8 +21,8 @@ insert into Material(id, title, issueDate) values(8, 'The Capital', 7);
 
 -- Authors
 
-insert into Author(id, name, surname) values(1, 'Isaac', 'Newton');
-insert into Author(id, name, surname) values(2, 'Karl', 'Marx');
+insert into Author(id, name, surname) values(1, 'Isaac mart', 'samjang Newton');
+insert into Author(id, name, surname) values(2, 'Karl voldemar meelis', 'jaanus albert Marx');
 insert into Author(id, name, surname) values(3, 'Leonardo', 'Fibonacci');
 
 -- Material_Authors
@@ -36,3 +36,8 @@ insert into Material_Author(material, author) values(5, 3);
 insert into Material_Author(material, author) values(6, 3);
 insert into Material_Author(material, author) values(7, 3);
 insert into Material_Author(material, author) values(8, 2);
+
+-- LanguageDescription
+
+insert into LanguageDescription(id, descriptionLanguage, description, material) values (1, 'EST', 'lorem ipsum', 1);
+insert into LanguageDescription(id, descriptionLanguage, description, material) values (2, 'RUS', 'test', 2);

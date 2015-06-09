@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component name="dataSourceStorage">
+  <data-source name="MySQL - dop@localhost" uuid="626efac7-03b5-44ce-8eaa-3be41e7575b3">
+    <database-info product="MySQL" version="5.5.5-10.0.19-MariaDB" jdbc-version="4.0" driver-name="MySQL Connector Java" driver-version="mysql-connector-java-5.1.35 ( Revision: 5fb9c5849535c13917c2cf9baaece6ef9693ef27 )">
+      <extra-name-characters>#@</extra-name-characters>
+      <identifier-quote-string>`</identifier-quote-string>
+    </database-info>
+    <case-sensitivity plain-identifiers="lower" quoted-identifiers="lower"/>
+    <schema name="" catalog="dop"/>
+    <table name="author" schema="" catalog="dop" type="TABLE">
+      <column name="id" sqlType="BIGINT" precision="19" scale="0" nullable="false" jdbcType="-5" autoIncrement="true"/>
+      <column name="name" sqlType="VARCHAR" precision="255" scale="0" nullable="false" jdbcType="12"/>
+      <column name="surname" sqlType="VARCHAR" precision="255" scale="0" nullable="false" jdbcType="12"/>
+      <primary-key name="PRIMARY" columns="id"/>
+      <exported-key name="material_author_ibfk_2" table="material_author" schema="" catalog="dop" columns="author"/>
+    </table>
+    <table name="issuedate" schema="" catalog="dop" type="TABLE">
+      <column name="id" sqlType="BIGINT" precision="19" scale="0" nullable="false" jdbcType="-5" autoIncrement="true"/>
+      <column name="day" sqlType="SMALLINT" precision="5" scale="0" nullable="true" jdbcType="5"/>
+      <column name="month" sqlType="SMALLINT" precision="5" scale="0" nullable="true" jdbcType="5"/>
+      <column name="year" sqlType="INT" precision="10" scale="0" nullable="true" jdbcType="4"/>
+      <primary-key name="PRIMARY" columns="id"/>
+      <exported-key name="material_ibfk_1" table="material" schema="" catalog="dop" columns="issueDate"/>
+    </table>
+    <table name="languagedescription" schema="" catalog="dop" type="TABLE">
+      <column name="id" sqlType="BIGINT" precision="19" scale="0" nullable="false" jdbcType="-5" autoIncrement="true"/>
+      <column name="descriptionLanguage" sqlType="TEXT" precision="65535" scale="0" nullable="false" jdbcType="-1"/>
+      <column name="description" sqlType="TEXT" precision="65535" scale="0" nullable="true" jdbcType="-1"/>
+      <column name="material" sqlType="BIGINT" precision="19" scale="0" nullable="true" jdbcType="-5"/>
+      <primary-key name="PRIMARY" columns="id"/>
+      <foreign-key name="languagedescription_ibfk_1" columns="material" ref-table="material" ref-schema="" ref-catalog="dop" ref-columns="id" update-rule="3" delete-rule="3" deferrability="2"/>
+    </table>
+    <table name="material" schema="" catalog="dop" type="TABLE">
+      <column name="id" sqlType="BIGINT" precision="19" scale="0" nullable="false" jdbcType="-5" autoIncrement="true"/>
+      <column name="title" sqlType="VARCHAR" precision="255" scale="0" nullable="false" jdbcType="12"/>
+      <column name="issueDate" sqlType="BIGINT" precision="19" scale="0" nullable="true" jdbcType="-5"/>
+      <primary-key name="PRIMARY" columns="id"/>
+      <foreign-key name="material_ibfk_1" columns="issueDate" ref-table="issuedate" ref-schema="" ref-catalog="dop" ref-columns="id" update-rule="3" delete-rule="3" deferrability="2"/>
+      <exported-key name="languagedescription_ibfk_1" table="languagedescription" schema="" catalog="dop" columns="material"/>
+      <exported-key name="material_author_ibfk_1" table="material_author" schema="" catalog="dop" columns="material"/>
+    </table>
+    <table name="material_author" schema="" catalog="dop" type="TABLE">
+      <column name="material" sqlType="BIGINT" precision="19" scale="0" nullable="false" jdbcType="-5"/>
+      <column name="author" sqlType="BIGINT" precision="19" scale="0" nullable="false" jdbcType="-5"/>
+      <foreign-key name="material_author_ibfk_1" columns="material" ref-table="material" ref-schema="" ref-catalog="dop" ref-columns="id" update-rule="3" delete-rule="3" deferrability="2"/>
+      <foreign-key name="material_author_ibfk_2" columns="author" ref-table="author" ref-schema="" ref-catalog="dop" ref-columns="id" update-rule="3" delete-rule="3" deferrability="2"/>
+    </table>
+  </data-source>
+</component>
