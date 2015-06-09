@@ -10,17 +10,19 @@
     
         .description {padding: 15px 10px; font-size: 13px; color: $font-color-grey;
         
-            .title {height: 70px; padding-bottom: 10px; line-height: 21px; font-size: 17px; 
+            .title {position: relative; height: 70px; padding-bottom: 10px; line-height: 21px; font-size: 17px; overflow: hidden;
             
                 a {font-size: 17px}
             };
             
-            .authors {height: 50px; padding-bottom: 10px;
+            .authors {position: relative; height: 50px; padding-bottom: 10px; overflow: hidden;
             
                 .fade-line {}
             
             }
         
         }
+        
+        .line-fade {}
     }
 }
