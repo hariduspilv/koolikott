@@ -9,18 +9,25 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import org.junit.After;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import ee.hm.dop.common.test.GuiceTestRunner;
 import ee.hm.dop.model.Author;
 import ee.hm.dop.model.Material;
+import ee.hm.dop.utils.DbUtils;
 
 @RunWith(GuiceTestRunner.class)
 public class MaterialDAOTest {
 
     @Inject
     private MaterialDAO materialDAO;
+
+    @After
+    public void closeEntityManager() {
+        DbUtils.closeEntityManager();
+    }
 
     @Test
     public void findAll() {
