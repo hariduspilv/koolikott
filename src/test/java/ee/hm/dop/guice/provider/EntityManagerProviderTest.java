@@ -35,6 +35,9 @@ public class EntityManagerProviderTest {
         expect(entityManager1.isOpen()).andReturn(true).times(repeat);
         expect(entityManager1.isOpen()).andReturn(false);
 
+        // This is needed to remove mock from cache when other tests are running
+        expect(entityManager2.isOpen()).andReturn(false).anyTimes();
+
         replay(emf, entityManager1, entityManager2);
 
         for (int i = 0; i <= repeat; i++) {
