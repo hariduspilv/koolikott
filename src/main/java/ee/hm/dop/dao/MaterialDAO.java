@@ -1,11 +1,10 @@
 package ee.hm.dop.dao;
 
-import java.util.List;
+import ee.hm.dop.model.Material;
 
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
-
-import ee.hm.dop.model.Material;
+import java.util.List;
 
 public class MaterialDAO {
 
@@ -15,4 +14,9 @@ public class MaterialDAO {
     public List<Material> findAll() {
         return entityManager.createQuery("from Material", Material.class).getResultList();
     }
+
+    public Material find(long materialId) {
+        return entityManager.find(Material.class, materialId);
+    }
+
 }

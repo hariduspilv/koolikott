@@ -1,11 +1,10 @@
 package ee.hm.dop.service;
 
-import java.util.List;
-
-import javax.inject.Inject;
-
 import ee.hm.dop.dao.MaterialDAO;
 import ee.hm.dop.model.Material;
+
+import javax.inject.Inject;
+import java.util.List;
 
 public class MaterialService {
 
@@ -15,4 +14,8 @@ public class MaterialService {
     public List<Material> getAllMaterials() {
     	return materialDao.findAll();
     }
+
+	public Material find(long materialId) {
+		return materialDao.find(materialId);
+	}
 }
