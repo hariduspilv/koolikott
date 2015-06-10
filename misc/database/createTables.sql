@@ -1,10 +1,10 @@
 -- Drop tables
 
 DROP TABLE IF EXISTS Material_Author;
+DROP TABLE IF EXISTS LanguageDescription;
 DROP TABLE IF EXISTS Material;
 DROP TABLE IF EXISTS IssueDate;
 DROP TABLE IF EXISTS Author;
-DROP TABLE IF EXISTS LanguageDescription;
 
 -- Create tables
 
@@ -38,8 +38,8 @@ CREATE TABLE LanguageDescription (
 	material BIGINT,
 
 	FOREIGN KEY (material)
-	REFERENCES Material(id)
-		ON DELETE RESTRICT
+        REFERENCES Material(id)
+        ON DELETE RESTRICT
 );
 
 CREATE TABLE Material_Author (
