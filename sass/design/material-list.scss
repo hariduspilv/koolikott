@@ -10,12 +10,19 @@
     
         .description {padding: 15px 10px; font-size: 13px; color: $font-color-grey;
         
-            .title {height: 70px; padding-bottom: 10px; line-height: 21px; font-size: 17px; 
+            .title {position: relative; height: 65px; margin-bottom: 15px; line-height: 21px; font-size: 17px; overflow: hidden;
             
                 a {font-size: 17px}
+                
+                &:after {position: absolute; bottom: 0; right: 0; dislay: block; content: ""; width: 30px; height: 25px; @include gradient-horizontal-to-transparent($start-color: rgba(255, 255, 255, 1), $end-color: rgba(255, 255, 255, 0)); pointer-events: none}
+             
             };
             
-            .authors {height: 50px; padding-bottom: 10px}
+            .authors {position: relative; height: 20px; margin-bottom: 15px; white-space: nowrap; overflow: hidden;
+                      
+                &:after {position: absolute; bottom: 0; right: 0; dislay: block; content: ""; width: 30px; height: 80%; @include gradient-horizontal-to-transparent($start-color: rgba(255, 255, 255, 1), $end-color: rgba(255, 255, 255, 0)); pointer-events: none}
+            
+            }
         
         }
     }
