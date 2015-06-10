@@ -1,9 +1,18 @@
 package ee.hm.dop.model;
 
-import javax.persistence.*;
+import static javax.persistence.FetchType.EAGER;
+
 import java.util.List;
 
-import static javax.persistence.FetchType.EAGER;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 
 @Entity
 public class Material {
@@ -27,7 +36,7 @@ public class Material {
     private IssueDate issueDate;
 
     @OneToMany(fetch = EAGER)
-    @JoinColumn(name="material")
+    @JoinColumn(name = "material")
     private List<LanguageDescription> descriptions;
 
     public Long getId() {
@@ -70,4 +79,3 @@ public class Material {
         this.descriptions = descriptions;
     }
 }
-

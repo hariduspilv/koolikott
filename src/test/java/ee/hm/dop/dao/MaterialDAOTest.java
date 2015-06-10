@@ -1,20 +1,23 @@
 package ee.hm.dop.dao;
 
+import static org.apache.commons.lang3.StringUtils.isBlank;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+
+import java.util.List;
+
+import javax.inject.Inject;
+
+import org.junit.After;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+
 import ee.hm.dop.common.test.GuiceTestRunner;
 import ee.hm.dop.model.Author;
 import ee.hm.dop.model.LanguageDescription;
 import ee.hm.dop.model.Material;
 import ee.hm.dop.utils.DbUtils;
-import org.junit.After;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-
-import javax.inject.Inject;
-import java.util.List;
-
-import static org.apache.commons.lang3.StringUtils.isBlank;
-import static org.junit.Assert.*;
-
 
 @RunWith(GuiceTestRunner.class)
 public class MaterialDAOTest {
@@ -48,7 +51,7 @@ public class MaterialDAOTest {
             List<LanguageDescription> descriptions = material.getDescriptions();
             assertNotNull(descriptions);
 
-            for(LanguageDescription languageDescription : descriptions){
+            for (LanguageDescription languageDescription : descriptions) {
                 assertNotNull(languageDescription.getId());
                 assertFalse(isBlank(languageDescription.getDescriptionLanguage()));
                 assertFalse(isBlank(languageDescription.getDescription()));

@@ -1,15 +1,16 @@
 package ee.hm.dop.rest.filter;
 
+import static ee.hm.dop.utils.DbUtils.closeEntityManager;
+import static ee.hm.dop.utils.DbUtils.getTransaction;
+
+import java.io.IOException;
+
 import javax.persistence.EntityTransaction;
 import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.container.ContainerRequestFilter;
 import javax.ws.rs.container.ContainerResponseContext;
 import javax.ws.rs.container.ContainerResponseFilter;
 import javax.ws.rs.ext.Provider;
-import java.io.IOException;
-
-import static ee.hm.dop.utils.DbUtils.closeEntityManager;
-import static ee.hm.dop.utils.DbUtils.getTransaction;
 
 /**
  * Manage database transactions.
