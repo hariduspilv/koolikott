@@ -39,5 +39,5 @@ insert into Material_Author(material, author) values(8, 2);
 
 -- LanguageDescription
 
-insert into LanguageDescription(id, descriptionLanguage, description, material) values (1, 'EST', 'lorem ipsum', 1);
-insert into LanguageDescription(id, descriptionLanguage, description, material) values (2, 'RUS', 'test', 2);
+insert into LanguageString(id, lang, description, material) values (1, 'EST', 'test description in estonian', 1);
+insert into LanguageString(id, lang, description, material) values (2, 'RUS', 'test description in russian', 2);

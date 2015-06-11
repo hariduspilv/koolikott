@@ -2,15 +2,16 @@ package ee.hm.dop.dao;
 
 import ee.hm.dop.common.test.GuiceTestRunner;
 import ee.hm.dop.model.Author;
-import ee.hm.dop.model.LanguageDescription;
+import ee.hm.dop.model.LanguageString;
 import ee.hm.dop.model.Material;
 import ee.hm.dop.utils.DbUtils;
 import org.junit.After;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import javax.inject.Inject;
 import java.util.List;
+
+import javax.inject.Inject;
 
 import static org.apache.commons.lang3.StringUtils.isBlank;
 import static org.junit.Assert.*;
@@ -44,12 +45,12 @@ public class MaterialDAOTest {
                 assertFalse(isBlank(author.getName()));
                 assertFalse(isBlank(author.getSurname()));
             }
-            List<LanguageDescription> descriptions = material.getDescriptions();
+            List<LanguageString> descriptions = material.getDescriptions();
             assertNotNull(descriptions);
 
-            for (LanguageDescription languageDescription : descriptions) {
+            for (LanguageString languageDescription : descriptions) {
                 assertNotNull(languageDescription.getId());
-                assertFalse(isBlank(languageDescription.getDescriptionLanguage()));
+                assertFalse(isBlank(languageDescription.getlanguage()));
                 assertFalse(isBlank(languageDescription.getDescription()));
             }
         }
@@ -60,6 +61,6 @@ public class MaterialDAOTest {
         Material material = materialDAO.find(a);
 
         assertEquals("Mathematics textbook for 9th grade", material.getTitle());
-        assertEquals("EST", material.getDescriptions().get(0).getDescriptionLanguage());
+        assertEquals("EST", material.getDescriptions().get(0).getlanguage());
     }
 }

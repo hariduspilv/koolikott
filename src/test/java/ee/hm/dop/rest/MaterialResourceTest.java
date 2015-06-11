@@ -1,20 +1,19 @@
 package ee.hm.dop.rest;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import ee.hm.dop.common.test.ResourceIntegrationTestBase;
+import ee.hm.dop.model.Author;
+import ee.hm.dop.model.IssueDate;
+import ee.hm.dop.model.LanguageString;
+import ee.hm.dop.model.Material;
+import org.junit.Test;
 
 import java.util.List;
 
 import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.Response;
 
-import org.junit.Test;
-
-import ee.hm.dop.common.test.ResourceIntegrationTestBase;
-import ee.hm.dop.model.Author;
-import ee.hm.dop.model.IssueDate;
-import ee.hm.dop.model.LanguageDescription;
-import ee.hm.dop.model.Material;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class MaterialResourceTest extends ResourceIntegrationTestBase {
 
@@ -57,14 +56,14 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
         });
         Material material = materials.get(0);
 
-        List<LanguageDescription> descriptions = material.getDescriptions();
+        List<LanguageString> descriptions = material.getDescriptions();
         assertEquals(1, descriptions.size());
-        for (LanguageDescription l : descriptions) {
+        for (LanguageString l : descriptions) {
             if (l.getId() == 1) {
-                assertEquals("EST", l.getDescriptionLanguage());
+                assertEquals("EST", l.getlanguage());
                 assertEquals("lorem ipsum", l.getDescription());
             } else if (l.getId() == 2) {
-                assertEquals("RUS", l.getDescriptionLanguage());
+                assertEquals("RUS", l.getlanguage());
                 assertEquals("test", l.getDescription());
 
             }

@@ -6,16 +6,16 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
 /**
- * Created by mart.laus on 9.06.2015.
+ * Created by mart.laus on 10.06.2015.
  */
 @Entity
-public class LanguageDescription {
+public class LanguageString {
     @Id
     @GeneratedValue
     private Long id;
 
-    @Column(nullable = false)
-    private String descriptionLanguage;
+    @Column(nullable = false, name = "lang")
+    private String language;
 
     @Column(columnDefinition = "TEXT")
     private String description;
@@ -28,12 +28,12 @@ public class LanguageDescription {
         this.id = id;
     }
 
-    public String getDescriptionLanguage() {
-        return descriptionLanguage;
+    public String getlanguage() {
+        return language;
     }
 
-    public void setDescriptionLanguage(String descriptionLanguage) {
-        this.descriptionLanguage = descriptionLanguage;
+    public void setlanguage(String language) {
+        this.language = language;
     }
 
     public String getDescription() {
@@ -43,4 +43,5 @@ public class LanguageDescription {
     public void setDescription(String description) {
         this.description = description;
     }
+
 }

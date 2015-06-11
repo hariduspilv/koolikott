@@ -1,7 +1,7 @@
 -- Drop tables
 
 DROP TABLE IF EXISTS Material_Author;
-DROP TABLE IF EXISTS LanguageDescription;
+DROP TABLE IF EXISTS LanguageString;
 DROP TABLE IF EXISTS Material;
 DROP TABLE IF EXISTS IssueDate;
 DROP TABLE IF EXISTS Author;
@@ -31,9 +31,9 @@ CREATE TABLE Material (
         ON DELETE RESTRICT
 );
 
-CREATE TABLE LanguageDescription (
+CREATE TABLE LanguageString (
 	id BIGINT AUTO_INCREMENT PRIMARY KEY,
-	descriptionLanguage VARCHAR(255) NOT NULL,
+	lang VARCHAR(255) NOT NULL,
 	description TEXT,
 	material BIGINT,
 
