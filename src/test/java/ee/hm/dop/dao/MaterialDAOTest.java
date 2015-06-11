@@ -1,20 +1,23 @@
 package ee.hm.dop.dao;
 
-import ee.hm.dop.common.test.GuiceTestRunner;
-import ee.hm.dop.model.Author;
-import ee.hm.dop.model.LanguageString;
-import ee.hm.dop.model.Material;
-import ee.hm.dop.utils.DbUtils;
-import org.junit.After;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import static org.apache.commons.lang3.StringUtils.isBlank;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
 
 import java.util.List;
 
 import javax.inject.Inject;
 
-import static org.apache.commons.lang3.StringUtils.isBlank;
-import static org.junit.Assert.*;
+import org.junit.After;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+
+import ee.hm.dop.common.test.GuiceTestRunner;
+import ee.hm.dop.model.Author;
+import ee.hm.dop.model.LanguageString;
+import ee.hm.dop.model.Material;
+import ee.hm.dop.utils.DbUtils;
 
 @RunWith(GuiceTestRunner.class)
 public class MaterialDAOTest {
@@ -56,7 +59,8 @@ public class MaterialDAOTest {
         }
     }
 
-    @Test public void find() {
+    @Test
+    public void find() {
         long a = 1;
         Material material = materialDAO.find(a);
 
