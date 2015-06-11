@@ -1,5 +1,6 @@
 define(['app'], function(app)
 {
+    
     app.directive('dopHeader', function(translationService) {
         return {
             scope: true,

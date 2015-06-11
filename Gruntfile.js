@@ -91,8 +91,9 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-compress');
     grunt.loadNpmTasks('grunt-bower-task');
     grunt.loadNpmTasks('grunt-contrib-copy');
+    grunt.loadNpmTasks('grunt-npm-install');
 
-    grunt.registerTask('build', ['bower', 'clean', 'copy', 'concat', 'uglify', 'sass']);
+    grunt.registerTask('build', ['npm-install', 'bower', 'clean', 'copy', 'concat', 'uglify', 'sass']);
     grunt.registerTask('package', ['build', 'compress']);
 
 };

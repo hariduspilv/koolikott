@@ -44,6 +44,10 @@ define(['routes','services/dependencyResolver'], function(config, dependencyReso
         $translateProvider.useSanitizeValueStrategy('escaped');
     }
 
+    app.run(function ($rootScope) {
+    $rootScope.language = "EST";
+    });
+
     function concatDependencies(dependencies) {
         return getServicesAndUtilsDependencies().concat(dependencies);
     }
@@ -56,4 +60,6 @@ define(['routes','services/dependencyResolver'], function(config, dependencyReso
     }
 
    return app;
+
+
 });
