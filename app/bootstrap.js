@@ -3,11 +3,15 @@ require.config({
     paths: {
         'dop': '../assets/js/dop.min',
         'modernizr': '../assets/js/modernizr.min',
-        'dopHeader': 'directives/header/header'
+        'dopHeader': 'directives/header/header',
+        'translateUrlLoader': '../assets/js/angular-translate-loader-url.min'
     },
     shim: {
         'app': {
-            deps: ['dop', 'modernizr']
+            deps: ['dop', 'modernizr', 'translateUrlLoader']
+        },
+        'translateUrlLoader': {
+            deps: ['dop']
         }
     }
 });
