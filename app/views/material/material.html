@@ -7,13 +7,11 @@
                         Subject: Biology   <span class="separator">|</span>   Type: Workbook   <span class="separator">|</span>   Ages: 12-15
                     </div>
                     <div class="heading">
-                        <h1>Microbiology for Middle School, Part 1</h1>
+                        <h1>{{material.title}}</h1>
                     </div>
-                    <div class="authors">
-                        <a href="#">Ashton Author</a>
-                        <a href="#">Kalle Kaasik</a> 
-                        <a href="#">Oliver Oja</a>
-                    </div>
+                    <span class="authors" data-ng-repeat="author in material.authors">
+                        <a href="#">{{author.name}} {{author.surname}}{{$index < material.authors.length - 1 ? ', ' : ''}}</a>
+                    </span>
                     <div class="">
                         {{description}}
                     </div>
