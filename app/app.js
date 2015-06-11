@@ -34,11 +34,15 @@ define(['routes','services/dependencyResolver'], function(config, dependencyReso
                 $routeProvider.otherwise({redirectTo:config.defaultRoutePath});
             }
 
-            //$translateProvider.useUrlLoader('/rest/languages');
-            $translateProvider.preferredLanguage('en');
-            $translateProvider.useSanitizeValueStrategy('escaped');
+            configureTranslationService($translateProvider);
         }
     ]);
+    
+    function configureTranslationService($translateProvider) {    	  
+    	$translateProvider.useUrlLoader('/rest/languages');
+        $translateProvider.preferredLanguage('est');
+        $translateProvider.useSanitizeValueStrategy('escaped');
+    }
 
     function concatDependencies(dependencies) {
         return getServicesAndUtilsDependencies().concat(dependencies);

@@ -11,6 +11,19 @@ module.exports = function(grunt) {
             assets: ['assets'],
             css: ['sass/style.scss']
         },
+        /*
+         * Copy the files that cannot be included in dop.min.js and are already minified to assets folder.  
+         */
+        copy: {
+        	main: {
+        		src: [
+                	'bower_components/angular-translate-loader-url/angular-translate-loader-url.min.js'
+                ],
+                dest: '<%= project.assets %>/js/',
+                flatten: true,
+                expand: true
+        	}
+        },
         concat: {
             options: {
                 separator: ';\n'
@@ -22,7 +35,6 @@ module.exports = function(grunt) {
                     'bower_components/angular-route/angular-route.min.js',
                     'bower_components/bootstrap-sass/assets/javascripts/bootstrap.min.js',
                     'bower_components/angular-translate/angular-translate.min.js',
-                    'bower_components/angular-translate-loader-url/angular-translate-loader-url.min.js',
                     'bower_components/angular-click-outside/clickoutside.directive.js'
                 ],
                 dest: '<%= project.assets %>/js/dop.min.js',
@@ -78,8 +90,9 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-clean');
     grunt.loadNpmTasks('grunt-contrib-compress');
     grunt.loadNpmTasks('grunt-bower-task');
+    grunt.loadNpmTasks('grunt-contrib-copy');
 
-    grunt.registerTask('build', ['bower', 'clean', 'concat', 'uglify', 'sass']);
+    grunt.registerTask('build', ['bower', 'clean', 'copy', 'concat', 'uglify', 'sass']);
     grunt.registerTask('package', ['build', 'compress']);
 
 };
