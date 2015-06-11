@@ -1,24 +1,27 @@
 define(['app'], function(app)
 {
-    app.controller('materialController', ['$scope', "serverCallService", "$filter", '$route',
-    		 function($scope, serverCallService, $filter, $route) {
-    	console.log($route.current.params);
+    app.controller('materialController', ['$scope', "serverCallService", "$filter", '$route', '$rootScope', 
+    		 function($scope, serverCallService, $filter, $route, $rootScope) {
     	var materialId = $route.current.params.materialId;
         var params = {};
-    	serverCallService.makeGet("rest/material/find?materialId=" + materialId, params, getAllMaterialSuccess, getAllMaterialFail);
+    	serverCallService.makeGet("rest/material/find?materialId=" + materialId, params, getMaterialSuccess, getMaterialFail);
 
-    	function getAllMaterialSuccess(data) {
+    	function getMaterialSuccess(data) {
 
             if (isEmpty(data)) {
                 log('No data returned by session search.');
                 } else {
-                        $scope.material = data;
-                        console.log(data);
+                    $scope.material = data;
+                    for(var i = 0; i < data.descriptions.length; i++) {
+                        if(data.descriptions[i].language === $rootScope.language) {
+                            $scope.description =  data.descriptions[i].description;
+                        }
+                    }
                 }
     	}
     	
-    	function getAllMaterialFail(data, status) {
+    	function getMaterialFail(data, status) {
             console.log('Session search failed.')
-    	}
+    	}	
     }]);
 });
