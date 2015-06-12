@@ -63,11 +63,30 @@ public class MaterialDAOTest extends DatabaseTestBase {
         long a = 1;
         Material material = materialDAO.find(a);
 
-        assertEquals("Matemaatika �pik �heksandale klassile", material.getTitle());
+        assertEquals("Matemaatika õpik üheksandale klassile", material.getTitle());
         Language language = material.getDescriptions().get(0).getLanguage();
         assertNotNull(language);
         assertEquals("est", language.getCode());
         assertEquals("Estonian", language.getName());
         assertEquals("et", language.getCodes().get(0));
+    }
+
+    @Test
+    public void testAuthorAndDesc() {
+        Material material = materialDAO.find(1);
+        assertEquals(1, material.getAuthors().size());
+        assertEquals("Isaac mart", material.getAuthors().get(0).getName());
+        assertEquals("samjang Newton", material.getAuthors().get(0).getSurname());
+        assertEquals("test description in estonian", material.getDescriptions().get(0).getText());
+    }
+
+    @Test
+    public void testAuthors() {
+        Material material = materialDAO.find(2);
+        assertEquals(2, material.getAuthors().size());
+        assertEquals("Isaac mart", material.getAuthors().get(0).getName());
+        assertEquals("samjang Newton", material.getAuthors().get(0).getSurname());
+        assertEquals("Leonardo", material.getAuthors().get(1).getName());
+        assertEquals("Fibonacci", material.getAuthors().get(1).getSurname());
     }
 }

@@ -1,4 +1,4 @@
--- Material issue dates
+-- IssueDate
 
 insert into IssueDate(id, day, month, year) values(1, 2, 2, 1983);
 insert into IssueDate(id, day, month, year) values(2, 27, 1, -983);
@@ -10,9 +10,9 @@ insert into IssueDate(id, month, year) values(7, 3, 1991);
 
 -- Materials
 
-insert into Material(id, title, lang, issueDate) values(1, 'Matemaatika �pik �heksandale klassile', 'est', 1);
-insert into Material(id, title, lang, issueDate) values(2, '?????????? ??????? ??? 8-?? ??????', 'rus', 2);
-insert into Material(id, title, lang, issueDate) values(3, '8???????? ????? ???????? ???? 6', 'ara', 3);
+insert into Material(id, title, lang, issueDate) values(1, 'Matemaatika õpik üheksandale klassile', 'est', 1);
+insert into Material(id, title, lang, issueDate) values(2, 'Математика учебник для 8-го класса', 'rus', 2);
+insert into Material(id, title, lang, issueDate) values(3, 'الرياضيات الكتب المدرسية للصف 7', 'ara', 3);
 insert into Material(id, title, lang, issueDate) values(4, 'Mathematics textbook for 6th grade', 'eng', 4);
 insert into Material(id, title, lang,issueDate) values(5, 'Mathematics textbook for 5th grade', 'eng', 5);
 insert into Material(id, title) values(6, 'Mathematics textbook for 4th grade');

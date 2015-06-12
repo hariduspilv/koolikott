@@ -1,11 +1,6 @@
 package ee.hm.dop.model;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+import javax.persistence.*;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
@@ -22,7 +17,7 @@ public class LanguageString {
     @GeneratedValue
     private Long id;
 
-    @ManyToOne
+    @OneToOne
     @JoinColumn(name = "lang")
     private Language language;
 

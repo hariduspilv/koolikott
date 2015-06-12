@@ -29,7 +29,7 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
         // Verify if all fields are loaded
         Material material = materials.get(1);
         assertEquals(Long.valueOf(2), material.getId());
-        assertEquals("?????????? ??????? ??? 8-?? ??????", material.getTitle());
+        assertEquals("Математика учебник для 8-го класса", material.getTitle());
         assertEquals(new IssueDate((short) 27, (short) 1, -983), material.getIssueDate());
         List<Author> authors = material.getAuthors();
         assertEquals(2, authors.size());

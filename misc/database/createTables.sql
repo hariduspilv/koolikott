@@ -69,6 +69,8 @@ CREATE TABLE LanguageString (
 CREATE TABLE Material_Author (
 	material BIGINT NOT NULL,
 	author BIGINT NOT NULL,
+
+	PRIMARY KEY (material, author),
 	
 	FOREIGN KEY (material) 
         REFERENCES Material(id)
