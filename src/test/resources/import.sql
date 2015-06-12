@@ -10,7 +10,7 @@ insert into IssueDate(id, month, year) values(7, 3, 1991);
 
 -- Materials
 
-insert into Material(id, title, lang, issueDate) values(1, 'Matemaatika �pik �heksandale klassile', 'est', 1);
+insert into Material(id, title, lang, issueDate) values(1, 'Matemaatika �pik �heksandale klassile', 'est', 1);
 insert into Material(id, title, lang, issueDate) values(2, '?????????? ??????? ??? 8-?? ??????', 'rus', 2);
 insert into Material(id, title, lang, issueDate) values(3, '8???????? ????? ???????? ???? 6', 'ara', 3);
 insert into Material(id, title, lang, issueDate) values(4, 'Mathematics textbook for 6th grade', 'eng', 4);
@@ -59,3 +59,20 @@ insert into LanguageString(id, lang, textValue, material) values (2, 2, 'test de
 insert into LanguageString(id, lang, textValue, material) values (3, 2, 'test description in russian', 1);
 insert into LanguageString(id, lang, textValue, material) values (4, 5, 'test description in english', 3);
 insert into LanguageString(id, lang, textValue, material) values (5, 4, 'test description in arabic', 3);
+
+-- TranslationGroup
+
+insert into TranslationGroup(id, lang) values (1, 1);
+insert into TranslationGroup(id, lang) values (2, 2);
+
+-- Translation
+
+-- Estonian
+insert into Translation(translationGroup, translationKey, translation) values (1, 'FOO', 'FOO sõnum');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'Estonian', 'Eesti keeles');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'Russian', 'Vene keel');
+
+-- Russian
+insert into Translation(translationGroup, translationKey, translation) values (2, 'FOO', 'FOO сообщение');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'Estonian', 'Эстонский язык');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'Russian', 'русский язык');

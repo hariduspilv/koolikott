@@ -1,5 +1,7 @@
 -- Drop tables
 
+DROP TABLE IF EXISTS Translation;
+DROP TABLE IF EXISTS TranslationGroup;
 DROP TABLE IF EXISTS Material_Author;
 DROP TABLE IF EXISTS LanguageString;
 DROP TABLE IF EXISTS LanguageKeyCodes;
@@ -74,6 +76,27 @@ CREATE TABLE Material_Author (
 	
 	FOREIGN KEY (author)
         REFERENCES Author(id)
+        ON DELETE RESTRICT
+);
+
+CREATE TABLE TranslationGroup (
+	id BIGINT AUTO_INCREMENT PRIMARY KEY,
+	lang BIGINT NOT NULL,
+	
+	FOREIGN KEY (lang)
+        REFERENCES LanguageTable(id)
+        ON DELETE RESTRICT
+);
+
+CREATE TABLE Translation (
+	translationGroup BIGINT,
+	translationKey VARCHAR(255),
+	translation TEXT not null,
+	
+	primary key (translationGroup, translationKey),
+	
+	FOREIGN KEY (translationGroup)
+        REFERENCES TranslationGroup(id)
         ON DELETE RESTRICT
 );
 
