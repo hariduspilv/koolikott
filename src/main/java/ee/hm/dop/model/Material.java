@@ -16,6 +16,9 @@ public class Material {
     @Column(nullable = false)
     private String title;
 
+    @Column(name = "lang")
+    private String language;
+
     @ManyToMany(fetch = EAGER)
     @JoinTable(
             name = "Material_Author",
@@ -69,5 +72,13 @@ public class Material {
 
     public void setDescriptions(List<LanguageString> descriptions) {
         this.descriptions = descriptions;
+    }
+
+    public String getLanguage() {
+        return language;
+    }
+
+    public void setLanguage(String language) {
+        this.language = language;
     }
 }

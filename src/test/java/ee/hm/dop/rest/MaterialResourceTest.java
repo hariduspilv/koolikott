@@ -28,7 +28,7 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
         // Verify if all fields are loaded
         Material material = materials.get(1);
         assertEquals(Long.valueOf(2), material.getId());
-        assertEquals("Mathematics textbook for 8th grade", material.getTitle());
+        assertEquals("?????????? ??????? ??? 8-?? ??????", material.getTitle());
         assertEquals(new IssueDate((short) 27, (short) 1, -983), material.getIssueDate());
         List<Author> authors = material.getAuthors();
         assertEquals(2, authors.size());
@@ -57,14 +57,14 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
         Material material = materials.get(0);
 
         List<LanguageString> descriptions = material.getDescriptions();
-        assertEquals(1, descriptions.size());
-        for (LanguageString l : descriptions) {
-            if (l.getId() == 1) {
-                assertEquals("est", l.getLanguage());
-                assertEquals("test description in estonian", l.getText());
-            } else if (l.getId() == 2) {
-                assertEquals("est", l.getLanguage());
-                assertEquals("test description in russian", l.getText());
+        assertEquals(2, descriptions.size());
+        for (LanguageString languageString : descriptions) {
+            if (languageString.getId() == 1) {
+                assertEquals("est", languageString.getLanguage());
+                assertEquals("test description in estonian", languageString.getText());
+            } else if (languageString.getId() == 2) {
+                assertEquals("est", languageString.getLanguage());
+                assertEquals("test description in russian", languageString.getText());
 
             }
         }
