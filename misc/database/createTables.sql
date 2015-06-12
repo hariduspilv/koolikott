@@ -2,6 +2,8 @@
 
 DROP TABLE IF EXISTS Material_Author;
 DROP TABLE IF EXISTS LanguageString;
+DROP TABLE IF EXISTS LanguageKeyCodes;
+DROP TABLE IF EXISTS LanguageTable;
 DROP TABLE IF EXISTS Material;
 DROP TABLE IF EXISTS IssueDate;
 DROP TABLE IF EXISTS Author;
@@ -31,11 +33,30 @@ CREATE TABLE Material (
         ON DELETE RESTRICT
 );
 
+CREATE TABLE LanguageTable (
+	id BIGINT AUTO_INCREMENT PRIMARY KEY,
+	name VARCHAR(255) NOT NULL,
+	code VARCHAR(255) NOT NULL
+);
+
+CREATE TABLE LanguageKeyCodes (
+	lang BIGINT NOT NULL,
+	code VARCHAR(255) NOT NULL,
+
+	FOREIGN KEY (lang)
+        REFERENCES LanguageTable(id)
+        ON DELETE RESTRICT
+);
+
 CREATE TABLE LanguageString (
 	id BIGINT AUTO_INCREMENT PRIMARY KEY,
-	lang VARCHAR(255) NOT NULL,
+	lang BIGINT NOT NULL,
 	description TEXT,
 	material BIGINT,
+	
+	FOREIGN KEY (lang)
+        REFERENCES LanguageTable(id)
+        ON DELETE RESTRICT,
 
 	FOREIGN KEY (material)
         REFERENCES Material(id)

@@ -4,6 +4,8 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 
 /**
  * Created by mart.laus on 10.06.2015.
@@ -14,8 +16,9 @@ public class LanguageString {
     @GeneratedValue
     private Long id;
 
-    @Column(nullable = false, name = "lang")
-    private String language;
+    @ManyToOne
+    @JoinColumn(nullable = false, name = "lang")
+    private Language language;
 
     @Column(columnDefinition = "TEXT")
     private String description;
@@ -28,11 +31,11 @@ public class LanguageString {
         this.id = id;
     }
 
-    public String getlanguage() {
+    public Language getLanguage() {
         return language;
     }
 
-    public void setlanguage(String language) {
+    public void setLanguage(Language language) {
         this.language = language;
     }
 

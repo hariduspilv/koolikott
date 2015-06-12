@@ -15,6 +15,7 @@ import org.junit.runner.RunWith;
 
 import ee.hm.dop.common.test.GuiceTestRunner;
 import ee.hm.dop.model.Author;
+import ee.hm.dop.model.Language;
 import ee.hm.dop.model.LanguageString;
 import ee.hm.dop.model.Material;
 import ee.hm.dop.utils.DbUtils;
@@ -53,7 +54,7 @@ public class MaterialDAOTest {
 
             for (LanguageString languageDescription : descriptions) {
                 assertNotNull(languageDescription.getId());
-                assertFalse(isBlank(languageDescription.getlanguage()));
+                assertNotNull(languageDescription.getLanguage());
                 assertFalse(isBlank(languageDescription.getDescription()));
             }
         }
@@ -65,6 +66,10 @@ public class MaterialDAOTest {
         Material material = materialDAO.find(a);
 
         assertEquals("Mathematics textbook for 9th grade", material.getTitle());
-        assertEquals("EST", material.getDescriptions().get(0).getlanguage());
+        Language language = material.getDescriptions().get(0).getLanguage();
+        assertNotNull(language);
+        assertEquals("est", language.getCode());
+        assertEquals("Estonian", language.getName());
+        assertEquals("et", language.getCodes().get(0));
     }
 }

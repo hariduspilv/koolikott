@@ -37,7 +37,20 @@ insert into Material_Author(material, author) values(6, 3);
 insert into Material_Author(material, author) values(7, 3);
 insert into Material_Author(material, author) values(8, 2);
 
+-- LanguageTable
+
+insert into LanguageTable(id, name, code) values (1, 'Estonian', 'est');
+insert into LanguageTable(id, name, code) values (2, 'Russian', 'rus');
+insert into LanguageTable(id, name, code) values (3, 'Portuguese', 'por');
+
+-- LanguageKeyCodes
+
+insert into LanguageKeyCodes(lang, code) values (1, 'et');
+insert into LanguageKeyCodes(lang, code) values (2, 'ru');
+insert into LanguageKeyCodes(lang, code) values (3, 'pt');
+insert into LanguageKeyCodes(lang, code) values (3, 'pt-br');
+
 -- LanguageDescription
 
-insert into LanguageString(id, lang, description, material) values (1, 'EST', 'test description in estonian', 1);
-insert into LanguageString(id, lang, description, material) values (2, 'RUS', 'test description in russian', 2);
+insert into LanguageString(id, lang, description, material) values (1, 1, 'test description in estonian', 1);
+insert into LanguageString(id, lang, description, material) values (2, 2, 'test description in russian', 2);
