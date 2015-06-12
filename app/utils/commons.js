@@ -109,7 +109,7 @@ Array.prototype.indexOfWithComparator = function (obj, comparator) {
 function getUserDefinedLanguageString(values, userLanguage, materialLanguage) {
 	if (values.length === 1) {
 		return values[0].text;
-	} else if (values[0]) {
+	} else if (values[0] && userLanguage) {
 		if (getLanguageString(values, userLanguage)) {
             return getLanguageString(values, userLanguage);
         } else if (getLanguageString(values, materialLanguage)) {
