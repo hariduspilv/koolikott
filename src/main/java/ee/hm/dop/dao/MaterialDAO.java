@@ -1,10 +1,11 @@
 package ee.hm.dop.dao;
 
-import ee.hm.dop.model.Material;
+import java.util.List;
 
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
-import java.util.List;
+
+import ee.hm.dop.model.Material;
 
 public class MaterialDAO {
 

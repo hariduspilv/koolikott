@@ -16,7 +16,7 @@ public class GuiceTestRunner extends BlockJUnit4ClassRunner {
 
     public GuiceTestRunner(Class<?> klass) throws InitializationError {
         super(klass);
-        
+
         GuiceInjector.init();
     }
 
