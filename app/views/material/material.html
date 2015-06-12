@@ -9,9 +9,12 @@
                     <div class="heading">
                         <h1>{{material.title}}</h1>
                     </div>
-                    <span class="authors" data-ng-repeat="author in material.authors">
-                        <a href="#">{{author.name}} {{author.surname}}{{$index < material.authors.length - 1 ? ', ' : ''}}</a>
-                    </span>
+                    <div class="authors">
+                        <span data-ng-repeat="author in material.authors" >
+                            <a href="#">{{author.name}} {{author.surname}}</a>
+                        </span>
+                    </div>
+                    
                     <div class="">
                         {{getCorrectLanguageString(material.descriptions)}}
                     </div>
