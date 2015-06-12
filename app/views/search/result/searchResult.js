@@ -1,7 +1,7 @@
 define(['app'], function(app)
 {
-    app.controller('searchResultController', ['$scope', "serverCallService", "$filter", 
-             function($scope, serverCallService, $filter) {
+    app.controller('searchResultController', ['$scope', "serverCallService", "$filter", '$rootScope',
+             function($scope, serverCallService, $filter, $rootScope) {
     	var params = {};
     	serverCallService.makeGet("rest/material/getAll", params, getAllMaterialSuccess, getAllMaterialFail);
     	
@@ -75,6 +75,10 @@ define(['app'], function(app)
 
             res += array[last];
             return res;
+        }
+
+        $scope.saveMaterial = function(material) {
+            $rootScope.savedMaterial = material;
         }
     }]);
 });

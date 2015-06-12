@@ -1,27 +1,31 @@
 define(['app'], function(app)
 {
-    app.controller('materialController', ['$scope', "serverCallService", "$filter", '$route', '$rootScope', 
-    		 function($scope, serverCallService, $filter, $route, $rootScope) {
-    	var materialId = $route.current.params.materialId;
-        var params = {};
-    	serverCallService.makeGet("rest/material/find?materialId=" + materialId, params, getMaterialSuccess, getMaterialFail);
+    app.controller('materialController', ['$scope', 'serverCallService', '$route', 'translationService', '$rootScope',
+    		 function($scope, serverCallService, $route, translationService, $rootScope) {
+        if($rootScope.savedMaterial){
+            $scope.material = $rootScope.savedMaterial;
+        } else {
+            var materialId = $route.current.params.materialId;
+            var params = {};
+            serverCallService.makeGet("rest/material?materialId=" + materialId, params, getMaterialSuccess, getMaterialFail); 
+        }
 
-    	function getMaterialSuccess(data) {
-
-            if (isEmpty(data)) {
-                log('No data returned by session search.');
+    	function getMaterialSuccess(material) {
+            if (isEmpty(material)) {
+                log('No data returned by getting material');
                 } else {
-                    $scope.material = data;
-                    for(var i = 0; i < data.descriptions.length; i++) {
-                        if(data.descriptions[i].language === $rootScope.language) {
-                            $scope.description =  data.descriptions[i].description;
-                        }
-                    }
+                    $scope.material = material;
                 }
     	}
     	
-    	function getMaterialFail(data, status) {
-            console.log('Session search failed.')
-    	}	
+    	function getMaterialFail(material, status) {
+            log('Getting materials failed.');
+    	}
+
+        $scope.getCorrectLanguageString = function(languageStringList) {
+            if(languageStringList) {
+               return getUserDefinedLanguageString(languageStringList, translationService.getLanguage());
+            }
+        }	
     }]);
 });
