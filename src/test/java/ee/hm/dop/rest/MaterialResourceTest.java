@@ -1,19 +1,20 @@
 package ee.hm.dop.rest;
 
-import ee.hm.dop.common.test.ResourceIntegrationTestBase;
-import ee.hm.dop.model.Author;
-import ee.hm.dop.model.IssueDate;
-import ee.hm.dop.model.LanguageString;
-import ee.hm.dop.model.Material;
-import org.junit.Test;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import java.util.List;
 
 import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.Response;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import org.junit.Test;
+
+import ee.hm.dop.common.test.ResourceIntegrationTestBase;
+import ee.hm.dop.model.Author;
+import ee.hm.dop.model.IssueDate;
+import ee.hm.dop.model.LanguageString;
+import ee.hm.dop.model.Material;
 
 public class MaterialResourceTest extends ResourceIntegrationTestBase {
 

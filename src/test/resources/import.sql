@@ -43,7 +43,7 @@ insert into LanguageTable(id, name, code) values (1, 'Estonian', 'est');
 insert into LanguageTable(id, name, code) values (2, 'Russian', 'rus');
 insert into LanguageTable(id, name, code) values (3, 'Portuguese', 'por');
 insert into LanguageTable(id, name, code) values (4, 'Arabic', 'ara');
-insert into LanguageTable(id, name, code) values (5, 'English', 'ara');
+insert into LanguageTable(id, name, code) values (5, 'English', 'eng');
 
 -- LanguageKeyCodes
 
