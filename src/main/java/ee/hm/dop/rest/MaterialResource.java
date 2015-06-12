@@ -1,5 +1,8 @@
 package ee.hm.dop.rest;
 
+import ee.hm.dop.model.Material;
+import ee.hm.dop.service.MaterialService;
+
 import java.util.List;
 
 import javax.inject.Inject;
@@ -8,9 +11,6 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
-
-import ee.hm.dop.model.Material;
-import ee.hm.dop.service.MaterialService;
 
 @Path("material")
 public class MaterialResource {
@@ -27,7 +27,7 @@ public class MaterialResource {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public Material find(@QueryParam("materialId") long materialId) {
-        return materialService.find(materialId);
+    public Material get(@QueryParam("materialId") long materialId) {
+        return materialService.get(materialId);
     }
 }
