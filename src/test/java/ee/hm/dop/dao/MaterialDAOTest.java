@@ -50,8 +50,8 @@ public class MaterialDAOTest {
 
             for (LanguageString languageDescription : descriptions) {
                 assertNotNull(languageDescription.getId());
-                assertFalse(isBlank(languageDescription.getlanguage()));
-                assertFalse(isBlank(languageDescription.getDescription()));
+                assertFalse(isBlank(languageDescription.getLanguage()));
+                assertFalse(isBlank(languageDescription.getText()));
             }
         }
     }
@@ -61,6 +61,6 @@ public class MaterialDAOTest {
         Material material = materialDAO.find(a);
 
         assertEquals("Mathematics textbook for 9th grade", material.getTitle());
-        assertEquals("EST", material.getDescriptions().get(0).getlanguage());
+        assertEquals("est", material.getDescriptions().get(0).getLanguage());
     }
 }

@@ -14,11 +14,11 @@ public class LanguageString {
     @GeneratedValue
     private Long id;
 
-    @Column(nullable = false, name = "lang")
+    @Column(name = "lang")
     private String language;
 
-    @Column(columnDefinition = "TEXT")
-    private String description;
+    @Column(nullable = false, columnDefinition = "TEXT", name = "textValue")
+    private String text;
 
     public Long getId() {
         return id;
@@ -28,20 +28,20 @@ public class LanguageString {
         this.id = id;
     }
 
-    public String getlanguage() {
+    public String getLanguage() {
         return language;
     }
 
-    public void setlanguage(String language) {
+    public void setLanguage(String language) {
         this.language = language;
     }
 
-    public String getDescription() {
-        return description;
+    public String getText() {
+        return text;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public void setText(String text) {
+        this.text = text;
     }
 
 }

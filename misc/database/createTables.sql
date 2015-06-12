@@ -34,7 +34,7 @@ CREATE TABLE Material (
 CREATE TABLE LanguageString (
 	id BIGINT AUTO_INCREMENT PRIMARY KEY,
 	lang VARCHAR(255) NOT NULL,
-	description TEXT,
+	textValue TEXT,
 	material BIGINT,
 
 	FOREIGN KEY (material)

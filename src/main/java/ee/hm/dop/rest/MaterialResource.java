@@ -26,7 +26,6 @@ public class MaterialResource {
     }
 
     @GET
-    @Path("find")
     @Produces(MediaType.APPLICATION_JSON)
     public Material find(@QueryParam("materialId") long materialId) {
         return materialService.find(materialId);

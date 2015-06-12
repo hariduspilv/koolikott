@@ -60,11 +60,11 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
         assertEquals(1, descriptions.size());
         for (LanguageString l : descriptions) {
             if (l.getId() == 1) {
-                assertEquals("EST", l.getlanguage());
-                assertEquals("test description in estonian", l.getDescription());
+                assertEquals("est", l.getLanguage());
+                assertEquals("test description in estonian", l.getText());
             } else if (l.getId() == 2) {
-                assertEquals("RUS", l.getlanguage());
-                assertEquals("test description in russian", l.getDescription());
+                assertEquals("est", l.getLanguage());
+                assertEquals("test description in russian", l.getText());
 
             }
         }
