@@ -17,11 +17,11 @@ public class LanguageString {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(nullable = false, name = "lang")
+    @JoinColumn(name = "lang")
     private Language language;
 
-    @Column(columnDefinition = "TEXT")
-    private String description;
+    @Column(nullable = false, columnDefinition = "TEXT", name = "textValue")
+    private String text;
 
     public Long getId() {
         return id;
@@ -39,12 +39,12 @@ public class LanguageString {
         this.language = language;
     }
 
-    public String getDescription() {
-        return description;
+    public String getText() {
+        return text;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public void setText(String text) {
+        this.text = text;
     }
 
 }

@@ -55,7 +55,7 @@ public class MaterialDAOTest {
             for (LanguageString languageDescription : descriptions) {
                 assertNotNull(languageDescription.getId());
                 assertNotNull(languageDescription.getLanguage());
-                assertFalse(isBlank(languageDescription.getDescription()));
+                assertFalse(isBlank(languageDescription.getText()));
             }
         }
     }

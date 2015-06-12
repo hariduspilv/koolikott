@@ -52,5 +52,5 @@ insert into LanguageKeyCodes(lang, code) values (3, 'pt-br');
 
 -- LanguageDescription
 
-insert into LanguageString(id, lang, description, material) values (1, 1, 'test description in estonian', 1);
-insert into LanguageString(id, lang, description, material) values (2, 2, 'test description in russian', 2);
+insert into LanguageString(id, lang, textValue, material) values (1, 1, 'test description in estonian', 1);
+insert into LanguageString(id, lang, textValue, material) values (2, 2, 'test description in russian', 2);

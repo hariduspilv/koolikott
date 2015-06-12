@@ -50,8 +50,8 @@ CREATE TABLE LanguageKeyCodes (
 
 CREATE TABLE LanguageString (
 	id BIGINT AUTO_INCREMENT PRIMARY KEY,
-	lang BIGINT NOT NULL,
-	description TEXT,
+	lang BIGINT,
+	textValue TEXT NOT NULL,
 	material BIGINT,
 	
 	FOREIGN KEY (lang)
