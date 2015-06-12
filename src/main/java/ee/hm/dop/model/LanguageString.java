@@ -4,6 +4,14 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+
+import ee.hm.dop.rest.jackson.map.LanguageDeserializer;
+import ee.hm.dop.rest.jackson.map.LanguageSerializer;
 
 /**
  * Created by mart.laus on 10.06.2015.
@@ -14,8 +22,9 @@ public class LanguageString {
     @GeneratedValue
     private Long id;
 
-    @Column(name = "lang")
-    private String language;
+    @ManyToOne
+    @JoinColumn(name = "lang")
+    private Language language;
 
     @Column(nullable = false, columnDefinition = "TEXT", name = "textValue")
     private String text;
@@ -28,11 +37,13 @@ public class LanguageString {
         this.id = id;
     }
 
-    public String getLanguage() {
+    @JsonSerialize(using = LanguageSerializer.class)
+    public Language getLanguage() {
         return language;
     }
 
-    public void setLanguage(String language) {
+    @JsonDeserialize(using = LanguageDeserializer.class)
+    public void setLanguage(Language language) {
         this.language = language;
     }
 
