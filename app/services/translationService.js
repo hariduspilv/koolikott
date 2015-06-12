@@ -7,7 +7,7 @@ define(['app'], function(app) {
 			},
 			
 	        getLanguage : function() {
-	        	return $translate.use() || $translate.preferredLanguage();
+	        	return $translate.use() || $translate.proposedLanguage();
 	        }
 	    };
 	}]);
