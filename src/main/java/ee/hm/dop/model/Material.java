@@ -1,10 +1,10 @@
 package ee.hm.dop.model;
 
+import static javax.persistence.FetchType.EAGER;
+
 import java.util.List;
 
 import javax.persistence.*;
-
-import static javax.persistence.FetchType.EAGER;
 
 @Entity
 public class Material {
@@ -23,7 +23,8 @@ public class Material {
     @JoinTable(
             name = "Material_Author",
             joinColumns = { @JoinColumn(name = "material") },
-            inverseJoinColumns = { @JoinColumn(name = "author") })
+            inverseJoinColumns = { @JoinColumn(name = "author") },
+            uniqueConstraints = @UniqueConstraint(columnNames = { "material", "author" }))
     private List<Author> authors;
 
     @OneToOne
