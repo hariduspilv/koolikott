@@ -2,7 +2,7 @@ define(['app'], function(app)
 {
     app.controller('materialController', ['$scope', 'serverCallService', '$route', 'translationService', '$rootScope',
     		 function($scope, serverCallService, $route, translationService, $rootScope) {
-        if($rootScope.savedMaterial){
+        if ($rootScope.savedMaterial){
             $scope.material = $rootScope.savedMaterial;
         } else {
             var materialId = $route.current.params.materialId;
@@ -22,9 +22,9 @@ define(['app'], function(app)
             log('Getting materials failed.');
     	}
 
-        $scope.getCorrectLanguageString = function(languageStringList) {
-            if(languageStringList) {
-               return getUserDefinedLanguageString(languageStringList, translationService.getLanguage());
+        $scope.getCorrectLanguageString = function(languageStringList, materialLanguage) {
+            if (languageStringList) {
+               return getUserDefinedLanguageString(languageStringList, translationService.getLanguage(), materialLanguage);
             }
         }	
     }]);
