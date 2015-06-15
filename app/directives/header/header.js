@@ -21,7 +21,7 @@ define(['app'], function(app)
                 
                 $scope.setLanguage = function(language) {
                     translationService.setLanguage(language);
-                    $scope.selectedLanguage = translationService.getLanguage();
+                    $scope.selectedLanguage = language;
                     $scope.showLanguageSelection = false;
                 }
             }
