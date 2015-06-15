@@ -17,6 +17,6 @@ public class MaterialService {
     }
 
     public Material get(long materialId) {
-        return materialDao.find(materialId);
+        return materialDao.findById(materialId);
     }
 }

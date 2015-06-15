@@ -39,9 +39,10 @@ public class MaterialDAOTest extends DatabaseTestBase {
             Material material = materials.get(i);
             assertEquals(Long.valueOf(i + 1), material.getId());
             assertFalse(isBlank(material.getTitle()));
+            assertFalse(isBlank(material.getSource()));
+
             List<Author> authors = material.getAuthors();
             assertNotNull(authors);
-
             for (Author author : authors) {
                 assertNotNull(author.getId());
                 assertFalse(isBlank(author.getName()));
@@ -61,7 +62,7 @@ public class MaterialDAOTest extends DatabaseTestBase {
     @Test
     public void find() {
         long a = 1;
-        Material material = materialDAO.find(a);
+        Material material = materialDAO.findById(a);
 
         assertEquals("Matemaatika õpik üheksandale klassile", material.getTitle());
         Language language = material.getDescriptions().get(0).getLanguage();
@@ -73,20 +74,29 @@ public class MaterialDAOTest extends DatabaseTestBase {
 
     @Test
     public void testAuthorAndDesc() {
-        Material material = materialDAO.find(1);
+        Material material = materialDAO.findById(1);
         assertEquals(1, material.getAuthors().size());
-        assertEquals("Isaac mart", material.getAuthors().get(0).getName());
-        assertEquals("samjang Newton", material.getAuthors().get(0).getSurname());
-        assertEquals("test description in estonian", material.getDescriptions().get(0).getText());
+        assertEquals("Isaac", material.getAuthors().get(0).getName());
+        assertEquals("John Newton", material.getAuthors().get(0).getSurname());
+        assertEquals("Test description in estonian. (Russian available)", material.getDescriptions().get(0).getText());
     }
 
     @Test
     public void testAuthors() {
-        Material material = materialDAO.find(2);
+        Material material = materialDAO.findById(2);
         assertEquals(2, material.getAuthors().size());
-        assertEquals("Isaac mart", material.getAuthors().get(0).getName());
-        assertEquals("samjang Newton", material.getAuthors().get(0).getSurname());
+        assertEquals("Isaac", material.getAuthors().get(0).getName());
+        assertEquals("John Newton", material.getAuthors().get(0).getSurname());
         assertEquals("Leonardo", material.getAuthors().get(1).getName());
         assertEquals("Fibonacci", material.getAuthors().get(1).getSurname());
+    }
+
+    @Test
+    public void testMaterialLanguage() {
+        Material material1 = materialDAO.find(2);
+        assertEquals("rus", material1.getLanguage().getCode());
+
+        Material material2 = materialDAO.find(1);
+        assertEquals("est", material2.getLanguage().getCode());
     }
 }

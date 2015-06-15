@@ -4,9 +4,27 @@ import static javax.persistence.FetchType.EAGER;
 
 import java.util.List;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
+import javax.persistence.UniqueConstraint;
+
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+
+import ee.hm.dop.rest.jackson.map.LanguageDeserializer;
+import ee.hm.dop.rest.jackson.map.LanguageSerializer;
 
 @Entity
+@NamedQueries({ @NamedQuery(name = "Material.findById", query = "SELECT m FROM Material m WHERE m.id = :id") })
 public class Material {
 
     @Id
@@ -16,15 +34,13 @@ public class Material {
     @Column(nullable = false)
     private String title;
 
-    @Column(name = "lang")
-    private String language;
+    @OneToOne
+    @JoinColumn(name = "lang")
+    private Language language;
 
     @ManyToMany(fetch = EAGER)
-    @JoinTable(
-            name = "Material_Author",
-            joinColumns = { @JoinColumn(name = "material") },
-            inverseJoinColumns = { @JoinColumn(name = "author") },
-            uniqueConstraints = @UniqueConstraint(columnNames = { "material", "author" }))
+    @JoinTable(name = "Material_Author", joinColumns = { @JoinColumn(name = "material") }, inverseJoinColumns = { @JoinColumn(name = "author") }, uniqueConstraints = @UniqueConstraint(columnNames = {
+            "material", "author" }))
     private List<Author> authors;
 
     @OneToOne
@@ -34,6 +50,9 @@ public class Material {
     @OneToMany(fetch = EAGER)
     @JoinColumn(name = "material")
     private List<LanguageString> descriptions;
+
+    @Column(nullable = false, columnDefinition = "TEXT")
+    private String source;
 
     public Long getId() {
         return id;
@@ -75,11 +94,21 @@ public class Material {
         this.descriptions = descriptions;
     }
 
-    public String getLanguage() {
+    @JsonSerialize(using = LanguageSerializer.class)
+    public Language getLanguage() {
         return language;
     }
 
-    public void setLanguage(String language) {
+    @JsonDeserialize(using = LanguageDeserializer.class)
+    public void setLanguage(Language language) {
         this.language = language;
+    }
+
+    public String getSource() {
+        return source;
+    }
+
+    public void setSource(String source) {
+        this.source = source;
     }
 }
