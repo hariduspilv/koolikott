@@ -51,6 +51,7 @@ insert into LanguageKeyCodes(lang, code) values (1, 'et');
 insert into LanguageKeyCodes(lang, code) values (2, 'ru');
 insert into LanguageKeyCodes(lang, code) values (3, 'pt');
 insert into LanguageKeyCodes(lang, code) values (3, 'pt-br');
+insert into LanguageKeyCodes(lang, code) values (5, 'en');
 
 -- LanguageDescription
 
@@ -68,6 +69,7 @@ insert into LanguageString(id, lang, material, textValue) values (8, 3, 7, 'Test
 
 insert into TranslationGroup(id, lang) values (1, 1);
 insert into TranslationGroup(id, lang) values (2, 2);
+insert into TranslationGroup(id, lang) values (3, 5);
 
 -- Translation
 
@@ -80,3 +82,8 @@ insert into Translation(translationGroup, translationKey, translation) values (1
 insert into Translation(translationGroup, translationKey, translation) values (2, 'FOO', 'FOO сообщение');
 insert into Translation(translationGroup, translationKey, translation) values (2, 'Estonian', 'Эстонский язык');
 insert into Translation(translationGroup, translationKey, translation) values (2, 'Russian', 'русский язык');
+
+-- English
+insert into Translation(translationGroup, translationKey, translation) values (3, 'FOO', 'FOO message');
+insert into Translation(translationGroup, translationKey, translation) values (3, 'Estonian', 'Estonian');
+insert into Translation(translationGroup, translationKey, translation) values (3, 'Russian', 'Russian');
