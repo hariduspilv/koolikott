@@ -4,7 +4,16 @@ import static javax.persistence.FetchType.EAGER;
 
 import java.util.List;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
+import javax.persistence.UniqueConstraint;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
@@ -41,6 +50,9 @@ public class Material {
     @OneToMany(fetch = EAGER)
     @JoinColumn(name = "material")
     private List<LanguageString> descriptions;
+
+    @Column(nullable = false, columnDefinition = "TEXT")
+    private String source;
 
     public Long getId() {
         return id;
@@ -90,5 +102,13 @@ public class Material {
     @JsonDeserialize(using = LanguageDeserializer.class)
     public void setLanguage(Language language) {
         this.language = language;
+    }
+
+    public String getSource() {
+        return source;
+    }
+
+    public void setSource(String source) {
+        this.source = source;
     }
 }

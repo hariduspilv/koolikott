@@ -36,14 +36,15 @@ CREATE TABLE Material (
 	title VARCHAR(255) NOT NULL,
 	lang BIGINT,
 	issueDate BIGINT,
+    source TEXT NOT NULL,
 
 	FOREIGN KEY (lang)
-	REFERENCES LanguageTable (id)
-		ON DELETE RESTRICT,
+	REFERENCES LanguageTable(id)
+        ON DELETE RESTRICT,
 
 	FOREIGN KEY (issueDate)
-	REFERENCES IssueDate (id)
-		ON DELETE RESTRICT
+	REFERENCES IssueDate(id)
+        ON DELETE RESTRICT
 );
 
 CREATE TABLE LanguageKeyCodes (

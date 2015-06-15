@@ -1,7 +1,9 @@
 package ee.hm.dop.dao;
 
 import static org.apache.commons.lang3.StringUtils.isBlank;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
 
 import java.util.List;
 
@@ -37,9 +39,10 @@ public class MaterialDAOTest extends DatabaseTestBase {
             Material material = materials.get(i);
             assertEquals(Long.valueOf(i + 1), material.getId());
             assertFalse(isBlank(material.getTitle()));
+            assertFalse(isBlank(material.getSource()));
+
             List<Author> authors = material.getAuthors();
             assertNotNull(authors);
-
             for (Author author : authors) {
                 assertNotNull(author.getId());
                 assertFalse(isBlank(author.getName()));

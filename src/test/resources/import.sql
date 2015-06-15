@@ -18,14 +18,14 @@ insert into LanguageTable(id, name, code) values (5, 'English', 'eng');
 
 -- Materials
 
-insert into Material(id, title, lang, issueDate) values(1, 'Matemaatika õpik üheksandale klassile', 1, 1);
-insert into Material(id, title, lang, issueDate) values(2, 'Математика учебник для 8-го класса', 2, 2);
-insert into Material(id, title, lang, issueDate) values(3, 'الرياضيات الكتب المدرسية للصف 7', 4, 3);
-insert into Material(id, title, lang, issueDate) values(4, 'Mathematics textbook for 6th grade', 5, 4);
-insert into Material(id, title, lang,issueDate) values(5, 'Mathematics textbook for 5th grade', 5, 5);
-insert into Material(id, title) values(6, 'Mathematics textbook for 4th grade');
-insert into Material(id, title, lang, issueDate) values(7, 'Mathematics textbook for 3th grade', 4, 6);
-insert into Material(id, title, lang, issueDate) values(8, 'The Capital', 5, 7);
+insert into Material(id, title, lang, issueDate, source) values(1, 'Matemaatika õpik üheksandale klassile', 1, 1, 'https://www.youtube.com/watch?v=gSWbx3CvVUk');
+insert into Material(id, title, lang, issueDate, source) values(2, 'Математика учебник для 8-го класса', 2, 2, 'https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes');
+insert into Material(id, title, lang, issueDate, source) values(3, 'الرياضيات الكتب المدرسية للصف 7', 4, 3, 'http://eloquentjavascript.net/Eloquent_JavaScript.pdf');
+insert into Material(id, title, lang, issueDate, source) values(4, 'Mathematics textbook for 6th grade', 5, 4, 'https://en.wikipedia.org/wiki/Power_Architecture');
+insert into Material(id, title, lang, issueDate, source) values(5, 'Mathematics textbook for 5th grade', 5, 5, 'https://en.wikipedia.org/wiki/Power_Architecture');
+insert into Material(id, title, lang, issueDate, source) values(6, 'Mathematics textbook for 4th grade', null, null, 'http://www.planalto.gov.br/ccivil_03/Constituicao/Constituicao.htm');
+insert into Material(id, title, lang, issueDate, source) values(7, 'Mathematics textbook for 3th grade', 4, 6, 'https://president.ee/en/republic-of-estonia/the-constitution/index.html');
+insert into Material(id, title, lang, issueDate, source) values(8, 'The Capital', 5, 7, 'http://www.palmeiras.com.br/historia/titulos');
 
 -- Authors
 
