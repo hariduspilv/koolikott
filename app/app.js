@@ -39,7 +39,7 @@ define(['routes','services/dependencyResolver'], function(config, dependencyReso
     ]);
     
     function configureTranslationService($translateProvider) {    	  
-    	$translateProvider.useUrlLoader('/rest/translation');
+    	$translateProvider.useUrlLoader('rest/translation');
         $translateProvider.preferredLanguage('est');
         $translateProvider.useSanitizeValueStrategy('escaped');
     }
