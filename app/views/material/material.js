@@ -22,9 +22,9 @@ define(['app'], function(app)
             log('Getting materials failed.');
     	}
 
-        $scope.getCorrectLanguageString = function(languageStringList, materialLanguage) {
+        $scope.getCorrectLanguageString = function(languageStringList) {
             if (languageStringList) {
-               return getUserDefinedLanguageString(languageStringList, translationService.getLanguage(), materialLanguage);
+               return getUserDefinedLanguageString(languageStringList, translationService.getLanguage(), $scope.material.language);
             }
         }	
     }]);
