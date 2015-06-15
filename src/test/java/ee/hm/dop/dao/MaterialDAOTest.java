@@ -1,9 +1,7 @@
 package ee.hm.dop.dao;
 
 import static org.apache.commons.lang3.StringUtils.isBlank;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.*;
 
 import java.util.List;
 
@@ -75,18 +73,27 @@ public class MaterialDAOTest extends DatabaseTestBase {
     public void testAuthorAndDesc() {
         Material material = materialDAO.find(1);
         assertEquals(1, material.getAuthors().size());
-        assertEquals("Isaac mart", material.getAuthors().get(0).getName());
-        assertEquals("samjang Newton", material.getAuthors().get(0).getSurname());
-        assertEquals("test description in estonian", material.getDescriptions().get(0).getText());
+        assertEquals("Isaac", material.getAuthors().get(0).getName());
+        assertEquals("John Newton", material.getAuthors().get(0).getSurname());
+        assertEquals("Test description in estonian. (Russian available)", material.getDescriptions().get(0).getText());
     }
 
     @Test
     public void testAuthors() {
         Material material = materialDAO.find(2);
         assertEquals(2, material.getAuthors().size());
-        assertEquals("Isaac mart", material.getAuthors().get(0).getName());
-        assertEquals("samjang Newton", material.getAuthors().get(0).getSurname());
+        assertEquals("Isaac", material.getAuthors().get(0).getName());
+        assertEquals("John Newton", material.getAuthors().get(0).getSurname());
         assertEquals("Leonardo", material.getAuthors().get(1).getName());
         assertEquals("Fibonacci", material.getAuthors().get(1).getSurname());
+    }
+
+    @Test
+    public void testMaterialLanguage() {
+        Material material1 = materialDAO.find(2);
+        assertEquals("rus", material1.getLanguage().getCode());
+
+        Material material2 = materialDAO.find(1);
+        assertEquals("est", material2.getLanguage().getCode());
     }
 }

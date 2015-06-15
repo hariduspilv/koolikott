@@ -37,8 +37,8 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
         boolean newton = false, fibonacci = false;
         for (Author author : authors) {
             if (author.getId() == 1) {
-                assertEquals("Isaac mart", author.getName());
-                assertEquals("samjang Newton", author.getSurname());
+                assertEquals("Isaac", author.getName());
+                assertEquals("John Newton", author.getSurname());
                 newton = true;
             } else if (author.getId() == 3) {
                 assertEquals("Leonardo", author.getName());
@@ -62,10 +62,11 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
         for (LanguageString languageString : descriptions) {
             if (languageString.getId() == 1) {
                 assertEquals("est", languageString.getLanguage().getCode());
-                assertEquals("test description in estonian", languageString.getText());
+                assertEquals("Test description in estonian. (Russian available)", languageString.getText());
             } else if (languageString.getId() == 2) {
                 assertEquals("est", languageString.getLanguage());
-                assertEquals("test description in russian", languageString.getText());
+                assertEquals("Test description in russian, which is the only language available.",
+                        languageString.getText());
 
             }
         }
