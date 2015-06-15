@@ -93,10 +93,10 @@ public class MaterialDAOTest extends DatabaseTestBase {
 
     @Test
     public void testMaterialLanguage() {
-        Material material1 = materialDAO.find(2);
+        Material material1 = materialDAO.findById(2);
         assertEquals("rus", material1.getLanguage().getCode());
 
-        Material material2 = materialDAO.find(1);
+        Material material2 = materialDAO.findById(1);
         assertEquals("est", material2.getLanguage().getCode());
     }
 }
