@@ -23,8 +23,8 @@ define(['app'], function(app)
     	}
 
         $scope.getCorrectLanguageString = function(languageStringList) {
-            if (languageStringList) {
-               return getUserDefinedLanguageString(languageStringList, translationService.getLanguage(), $scope.material.language);
+            if (languageStringList && $scope.material.language) {
+               return getUserDefinedLanguageString(languageStringList, translationService.getLanguage(), $scope.material.language.code);
             }
         }	
     }]);
