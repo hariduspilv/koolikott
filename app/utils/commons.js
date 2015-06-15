@@ -103,28 +103,36 @@ Array.prototype.indexOfWithComparator = function (obj, comparator) {
 }
 
 /**
- * Gets the string in the correct language
+ * Gets the string in the correct language 
  * @return the string in the correct language
  */
 function getUserDefinedLanguageString(values, userLanguage, materialLanguage) {
+	if (!values || values.length === 0) {
+		return;
+	} 
+
+	var languageStringValue;
+
 	if (values.length === 1) {
-		return values[0].text;
-	} else if (values[0] && userLanguage) {
-		if (getLanguageString(values, userLanguage)) {
-            return getLanguageString(values, userLanguage);
-        } else if (getLanguageString(values, materialLanguage)) {
-        	return getLanguageString(values, materialLanguage);
-        } else {
-        	return values[0].text;
-        }
-	}
+		languageStringValue = values[0].text;
+	} else {
+		languageStringValue = getLanguageString(values, userLanguage);
+		if (!languageStringValue) {
+        	languageStringValue = getLanguageString(values, materialLanguage);
+			if (!languageStringValue) {
+				languageStringValue = values[0].text;
+			}
+    	}
+    }
+
+    return languageStringValue;
 }
 
 /**
  * Gets the text if it exists in the specified language.
  * @return the queryed text.
  */
-function getLanguageString(values, language) {
+function getLanguageString(values, language) {	
 	for (var i = 0; i < values.length; i++) {
         if (values[i].language === language) {
             return values[i].text;

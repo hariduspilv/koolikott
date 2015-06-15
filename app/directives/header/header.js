@@ -14,15 +14,15 @@ define(['app'], function(app)
                 };
 
                 $scope.closeLanguageSelection = function () {
-                	$scope.$apply(function() {
-	                	$scope.showLanguageSelection = false;
-                	});
+                    $scope.$apply(function() {
+                        $scope.showLanguageSelection = false;
+                    });
                 }
                 
                 $scope.setLanguage = function(language) {
-                	translationService.setLanguage(language);
-                	$scope.selectedLanguage = translationService.getLanguage();
-                	$scope.showLanguageSelection = false;
+                    translationService.setLanguage(language);
+                    $scope.selectedLanguage = translationService.getLanguage();
+                    $scope.showLanguageSelection = false;
                 }
             }
         };

@@ -4,7 +4,14 @@
             <div class="row">
                 <div class="col-md-9 description">
                     <div class="category text-grey">
-                        Subject: Biology   <span class="separator">|</span>   Type: Workbook   <span class="separator">|</span>   Ages: 12-15
+                       <span data-translate="SUBJECT"></span>
+                       <span>: </span>Biology 
+                       <span class="separator">|</span>
+                       <span data-translate="TYPE"></span>
+                       <span>: </span> Workbook
+                       <span class="separator">|</span>
+                       <span data-translate="EDUCATIONAL_CONTEXT"></span>
+                       <span>: </span>12-15
                     </div>
                     <div class="heading">
                         <h1>{{material.title}}</h1>
@@ -16,34 +23,34 @@
                     </div>
                     
                     <div class="">
-                        {{getCorrectLanguageString(material.descriptions, material.language)}}
+                        {{getCorrectLanguageString(material.descriptions)}}
                     </div>
                 </div>
                 <div class="col-md-3">
                     <dl class="dl-horizontal">
                         <dt class="text-grey">
-                            Updated:
+                            <span data-translate="UPDATED"></span><span>:</span>
                         </dt>
                         <dd class="text-right">
                             14.05.2015
                         </dd>
                         <dt class="text-grey">
-                            Added:
+                           <span data-translate="ADDED"></span><span>:</span>
                         </dt>
                         <dd class="text-right text-grey">
                             14.05.2015
                         </dd>
                         <dt class="text-grey">
-                            Created:
+                            <span data-translate="CREATED"></span><span>:</span>
                         </dt>
                         <dd class="text-right text-grey">
                             22.02.2015
                         </dd>
                     </dl>
                     
-                    <div class="text-right">Repository Number Five</div>
+                    <div class="text-right"><span data-translate="REPOSITORY_NUMBER"></span> Five</div>
                     <div class="text-right text-grey"><small>Repository</small></div>
-                    <div class="text-right">All rights reserved</div>
+                    <div class="text-right" data-translate="ALL_RIGHTS_RESERVED">All rights reserved</div>
                     <div class="text-right text-grey"><small>Licence</small></div>
                 </div>
             </div>
@@ -55,7 +62,7 @@
                             
                         </header>
                         <article>
-                            <img src="img/material-video-preview.jpg">
+                            <a data-ng-href="{{material.source}}" target="_blank">{{material.source}}</a>
                         </article>
                     </section>
                 </div>
