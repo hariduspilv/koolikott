@@ -13,16 +13,23 @@
         <div class="navbar-collapse collapse" id="navbar-links">
             <ul class="nav navbar-nav navbar-right">
                 <li class="navbar-lang">
-                    <a data-ng-if="selectedLanguage === 'est'" data-ng-click="languageSelectClick()" id="languageSelectClose"><span>EST <i class="fa fa-caret-down"></i></span></a>
-                    <a data-ng-if="selectedLanguage === 'rus'" data-ng-click="languageSelectClick()" id="languageSelectClose"><span>РУС <i class="fa fa-caret-down"></i></span></a>
+                    <a data-ng-if="selectedLanguage === 'est'" data-ng-click="languageSelectClick()" id="languageSelectClose"><span>ET <i class="fa fa-caret-down"></i></span></a>
+                    <a data-ng-if="selectedLanguage === 'rus'" data-ng-click="languageSelectClick()" id="languageSelectClose"><span>RU <i class="fa fa-caret-down"></i></span></a>
+                    <a data-ng-if="selectedLanguage === 'eng'" data-ng-click="languageSelectClick()" id="languageSelectClose"><span>EN <i class="fa fa-caret-down"></i></span></a>
                     <ul data-ng-show="showLanguageSelection" data-click-outside="closeLanguageSelection()" data-outside-if-not="languageSelectClose" id="languageSelectOpen" class="navbar-submenu">
                         <li>
-                            <a data-ng-if="selectedLanguage === 'est'" data-ng-click="setLanguage('est')"><span>EST <i class="fa fa-caret-up"></i></span></a>
-                            <a data-ng-if="selectedLanguage === 'rus'" data-ng-click="setLanguage('rus')"><span>РУС <i class="fa fa-caret-up"></i></span></a>
+                            <a data-ng-if="selectedLanguage === 'est'" data-ng-click="setLanguage('est')"><span>ET <i class="fa fa-caret-up"></i></span></a>
+                            <a data-ng-if="selectedLanguage === 'rus'" data-ng-click="setLanguage('rus')"><span>RU <i class="fa fa-caret-up"></i></span></a>
+                            <a data-ng-if="selectedLanguage === 'eng'" data-ng-click="setLanguage('eng')"><span>EN <i class="fa fa-caret-up"></i></span></a>
                         </li>
-                        <li>
-                            <a data-ng-if="selectedLanguage !== 'rus'" data-ng-click="setLanguage('rus')"><span>РУС</span></a>
-                            <a data-ng-if="selectedLanguage !== 'est'" data-ng-click="setLanguage('est')"><span>EST</span></a>
+                        <li data-ng-if="selectedLanguage !== 'est'">
+                            <a data-ng-click="setLanguage('est')"><span>ET</span></a>
+                        </li>
+                        <li data-ng-if="selectedLanguage !== 'rus'">
+                            <a data-ng-click="setLanguage('rus')"><span>RU</span></a>
+                        </li>
+                        <li data-ng-if="selectedLanguage !== 'eng'">
+                            <a data-ng-click="setLanguage('eng')"><span>EN</span></a>
                         </li>
                     </ul>
                 </li>
