@@ -6,6 +6,12 @@ import java.util.List;
 
 import javax.persistence.*;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+
+import ee.hm.dop.rest.jackson.map.LanguageDeserializer;
+import ee.hm.dop.rest.jackson.map.LanguageSerializer;
+
 @Entity
 public class Material {
 
@@ -76,10 +82,12 @@ public class Material {
         this.descriptions = descriptions;
     }
 
+    @JsonSerialize(using = LanguageSerializer.class)
     public Language getLanguage() {
         return language;
     }
 
+    @JsonDeserialize(using = LanguageDeserializer.class)
     public void setLanguage(Language language) {
         this.language = language;
     }
