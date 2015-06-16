@@ -54,6 +54,10 @@ public class Material {
     @Column(nullable = false, columnDefinition = "TEXT")
     private String source;
 
+    @OneToMany(fetch = EAGER)
+    @JoinColumn(name = "material")
+    private List<ResourceType> resourceTypes;
+
     public Long getId() {
         return id;
     }
@@ -110,5 +114,13 @@ public class Material {
 
     public void setSource(String source) {
         this.source = source;
+    }
+
+    public List<ResourceType> getResourceTypes() {
+        return resourceTypes;
+    }
+
+    public void setResourceTypes(List<ResourceType> resourceTypes) {
+        this.resourceTypes = resourceTypes;
     }
 }

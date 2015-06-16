@@ -3,6 +3,7 @@
 DROP TABLE IF EXISTS Translation;
 DROP TABLE IF EXISTS TranslationGroup;
 DROP TABLE IF EXISTS Material_Author;
+DROP TABLE IF EXISTS ResourceType;
 DROP TABLE IF EXISTS LanguageString;
 DROP TABLE IF EXISTS LanguageKeyCodes;
 DROP TABLE IF EXISTS Material;
@@ -65,6 +66,16 @@ CREATE TABLE LanguageString (
 	FOREIGN KEY (lang)
         REFERENCES LanguageTable(id)
         ON DELETE RESTRICT,
+
+	FOREIGN KEY (material)
+	REFERENCES Material (id)
+		ON DELETE RESTRICT
+);
+
+CREATE TABLE ResourceType (
+	id           BIGINT AUTO_INCREMENT PRIMARY KEY,
+	resourceType VARCHAR(255) NOT NULL,
+	material     BIGINT,
 
 	FOREIGN KEY (material)
         REFERENCES Material(id)
