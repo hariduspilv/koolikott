@@ -39,8 +39,11 @@ public class Material {
     private Language language;
 
     @ManyToMany(fetch = EAGER)
-    @JoinTable(name = "Material_Author", joinColumns = { @JoinColumn(name = "material") }, inverseJoinColumns = { @JoinColumn(name = "author") }, uniqueConstraints = @UniqueConstraint(columnNames = {
-            "material", "author" }))
+    @JoinTable(
+            name = "Material_Author",
+            joinColumns = { @JoinColumn(name = "material") },
+            inverseJoinColumns = { @JoinColumn(name = "author") },
+            uniqueConstraints = @UniqueConstraint(columnNames = { "material", "author" }))
     private List<Author> authors;
 
     @OneToOne
