@@ -1,5 +1,5 @@
 -- Estonian translations
-insert into Translation(translationGroup, translationKey, translation) values (1, 'Login', 'Login');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'Login', 'Logi sisse');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'SUBJECT', 'Teema');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'TYPE', 'Tüüp');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'EDUCATIONAL_CONTEXT', 'Vanuserühmadele');
