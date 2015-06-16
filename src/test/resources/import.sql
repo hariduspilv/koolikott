@@ -18,14 +18,14 @@ insert into LanguageTable(id, name, code) values (5, 'English', 'eng');
 
 -- Materials
 
-insert into Material(id, title, lang, issueDate, source) values(1, 'Matemaatika õpik üheksandale klassile', 1, 1, 'https://www.youtube.com/watch?v=gSWbx3CvVUk');
-insert into Material(id, title, lang, issueDate, source) values(2, 'Математика учебник для 8-го класса', 2, 2, 'https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes');
-insert into Material(id, title, lang, issueDate, source) values(3, 'الرياضيات الكتب المدرسية للصف 7', 4, 3, 'http://eloquentjavascript.net/Eloquent_JavaScript.pdf');
-insert into Material(id, title, lang, issueDate, source) values(4, 'Mathematics textbook for 6th grade', 5, 4, 'https://en.wikipedia.org/wiki/Power_Architecture');
-insert into Material(id, title, lang, issueDate, source) values(5, 'Mathematics textbook for 5th grade', 5, 5, 'https://en.wikipedia.org/wiki/Power_Architecture');
-insert into Material(id, title, lang, issueDate, source) values(6, 'Mathematics textbook for 4th grade', null, null, 'http://www.planalto.gov.br/ccivil_03/Constituicao/Constituicao.htm');
-insert into Material(id, title, lang, issueDate, source) values(7, 'Mathematics textbook for 3th grade', 4, 6, 'https://president.ee/en/republic-of-estonia/the-constitution/index.html');
-insert into Material(id, title, lang, issueDate, source) values(8, 'The Capital', 5, 7, 'http://www.palmeiras.com.br/historia/titulos');
+insert into Material(id, lang, issueDate, source) values(1, 1, 1, 'https://www.youtube.com/watch?v=gSWbx3CvVUk');
+insert into Material(id, lang, issueDate, source) values(2, 2, 2, 'https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes');
+insert into Material(id, lang, issueDate, source) values(3, 4, 3, 'http://eloquentjavascript.net/Eloquent_JavaScript.pdf');
+insert into Material(id, lang, issueDate, source) values(4, 5, 4, 'https://en.wikipedia.org/wiki/Power_Architecture');
+insert into Material(id, lang, issueDate, source) values(5, 5, 5, 'https://en.wikipedia.org/wiki/Power_Architecture');
+insert into Material(id, lang, issueDate, source) values(6, null, null, 'http://www.planalto.gov.br/ccivil_03/Constituicao/Constituicao.htm');
+insert into Material(id, lang, issueDate, source) values(7, 4, 6, 'https://president.ee/en/republic-of-estonia/the-constitution/index.html');
+insert into Material(id, lang, issueDate, source) values(8, 5, 7, 'http://www.palmeiras.com.br/historia/titulos');
 
 -- Authors
 
@@ -53,17 +53,45 @@ insert into LanguageKeyCodes(lang, code) values (3, 'pt');
 insert into LanguageKeyCodes(lang, code) values (3, 'pt-br');
 insert into LanguageKeyCodes(lang, code) values (5, 'en');
 
--- LanguageDescription
+-- Material Descriptions
 
-insert into LanguageString(id, lang, material, textValue) values (1, 1, 1, 'Test description in estonian. (Russian available)');
-insert into LanguageString(id, lang, material, textValue) values (2, 2, 2, 'Test description in russian, which is the only language available.');
-insert into LanguageString(id, lang, material, textValue) values (3, 2, 1, 'Test description in russian. (Estonian available)');
-insert into LanguageString(id, lang, material, textValue) values (4, 3, 4, 'Test description in portugese, as the material language (english) not available.');
-insert into LanguageString(id, lang, material, textValue) values (5, 4, 3, 'Test description in arabic (material language). No estonian or russian available.');
-insert into LanguageString(id, lang, material, textValue) values (6, 5, 5, 'Test description in english, which is the material language.');
-insert into LanguageString(id, lang, material, textValue) values (7, 5, 7, 'Test description in english, which is not the material language. Others are also available, but arent estonian or russian.');
-insert into LanguageString(id, lang, material, textValue) values (8, 3, 7, 'Test description in portugese, english also available.');
+insert into LanguageString(id, lang, textValue) values (1, 1, 'Test description in estonian. (Russian available)');
+insert into LanguageString(id, lang, textValue) values (2, 2, 'Test description in russian, which is the only language available.');
+insert into LanguageString(id, lang, textValue) values (3, 2, 'Test description in russian. (Estonian available)');
+insert into LanguageString(id, lang, textValue) values (4, 3, 'Test description in portugese, as the material language (english) not available.');
+insert into LanguageString(id, lang, textValue) values (5, 4, 'Test description in arabic (material language). No estonian or russian available.');
+insert into LanguageString(id, lang, textValue) values (6, 5, 'Test description in english, which is the material language.');
+insert into LanguageString(id, lang, textValue) values (7, 5, 'Test description in english, which is not the material language. Others are also available, but arent estonian or russian.');
+insert into LanguageString(id, lang, textValue) values (8, 3, 'Test description in portugese, english also available.');
 
+insert into Material_Description(description, material) values(1, 1);
+insert into Material_Description(description, material) values(2, 2);
+insert into Material_Description(description, material) values(3, 1);
+insert into Material_Description(description, material) values(4, 4);
+insert into Material_Description(description, material) values(5, 3);
+insert into Material_Description(description, material) values(6, 5);
+insert into Material_Description(description, material) values(7, 7);
+insert into Material_Description(description, material) values(8, 7);
+
+-- Material Titles
+
+insert into LanguageString(id, lang, textValue) values (9, 1, 'Test title in estonian. (Russian available)');
+insert into LanguageString(id, lang, textValue) values (10, 2, 'Test title in russian, which is the only language available.');
+insert into LanguageString(id, lang, textValue) values (11, 2, 'Test title in russian. (Estonian available)');
+insert into LanguageString(id, lang, textValue) values (12, 3, 'Test title in portugese, as the material language (english) not available.');
+insert into LanguageString(id, lang, textValue) values (13, 4, 'Test title in arabic (material language). No estonian or russian available.');
+insert into LanguageString(id, lang, textValue) values (14, 5, 'Test title in english, which is the material language.');
+insert into LanguageString(id, lang, textValue) values (15, 5, 'Test title in english, which is not the material language. Others are also available, but arent estonian or russian.');
+insert into LanguageString(id, lang, textValue) values (16, 3, 'Test title in portugese, english also available.');
+
+insert into Material_Title(title, material) values(9, 1);
+insert into Material_Title(title, material) values(10, 2);
+insert into Material_Title(title, material) values(11, 1);
+insert into Material_Title(title, material) values(12, 4);
+insert into Material_Title(title, material) values(13, 3);
+insert into Material_Title(title, material) values(14, 5);
+insert into Material_Title(title, material) values(15, 7);
+insert into Material_Title(title, material) values(16, 7);
 
 -- TranslationGroup
 

@@ -33,7 +33,6 @@ CREATE TABLE LanguageTable (
 
 CREATE TABLE Material (
 	id BIGINT AUTO_INCREMENT PRIMARY KEY,
-	title VARCHAR(255) NOT NULL,
 	lang BIGINT,
 	issueDate BIGINT,
     source TEXT NOT NULL,
@@ -83,6 +82,36 @@ CREATE TABLE Material_Author (
 	
 	FOREIGN KEY (author)
         REFERENCES Author(id)
+        ON DELETE RESTRICT
+);
+
+CREATE TABLE Material_Title (
+	material BIGINT NOT NULL,
+	title BIGINT NOT NULL,
+
+	PRIMARY KEY (material, title),
+	
+	FOREIGN KEY (material) 
+        REFERENCES Material(id)
+        ON DELETE RESTRICT,
+	
+	FOREIGN KEY (title)
+        REFERENCES LanguageString(id)
+        ON DELETE RESTRICT
+);
+
+CREATE TABLE Material_Description (
+	material BIGINT NOT NULL,
+	description BIGINT NOT NULL,
+
+	PRIMARY KEY (material, description),
+	
+	FOREIGN KEY (material) 
+        REFERENCES Material(id)
+        ON DELETE RESTRICT,
+	
+	FOREIGN KEY (description)
+        REFERENCES LanguageString(id)
         ON DELETE RESTRICT
 );
 

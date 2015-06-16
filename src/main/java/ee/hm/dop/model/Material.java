@@ -13,7 +13,6 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.UniqueConstraint;
 
@@ -31,8 +30,10 @@ public class Material {
     @GeneratedValue
     private Long id;
 
-    @Column(nullable = false)
-    private String title;
+    @ManyToMany(fetch = EAGER)
+    @JoinTable(name = "Material_Title", joinColumns = { @JoinColumn(name = "material") }, inverseJoinColumns = { @JoinColumn(name = "title") }, uniqueConstraints = @UniqueConstraint(columnNames = {
+            "material", "title" }))
+    private List<LanguageString> titles;
 
     @OneToOne
     @JoinColumn(name = "lang")
@@ -47,8 +48,9 @@ public class Material {
     @JoinColumn(name = "issueDate")
     private IssueDate issueDate;
 
-    @OneToMany(fetch = EAGER)
-    @JoinColumn(name = "material")
+    @ManyToMany(fetch = EAGER)
+    @JoinTable(name = "Material_Description", joinColumns = { @JoinColumn(name = "material") }, inverseJoinColumns = { @JoinColumn(name = "description") }, uniqueConstraints = @UniqueConstraint(columnNames = {
+            "material", "description" }))
     private List<LanguageString> descriptions;
 
     @Column(nullable = false, columnDefinition = "TEXT")
@@ -62,12 +64,12 @@ public class Material {
         this.id = id;
     }
 
-    public String getTitle() {
-        return title;
+    public List<LanguageString> getTitles() {
+        return titles;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
+    public void setTitles(List<LanguageString> titles) {
+        this.titles = titles;
     }
 
     public List<Author> getAuthors() {

@@ -38,7 +38,6 @@ public class MaterialDAOTest extends DatabaseTestBase {
         for (int i = 0; i < materials.size(); i++) {
             Material material = materials.get(i);
             assertEquals(Long.valueOf(i + 1), material.getId());
-            assertFalse(isBlank(material.getTitle()));
             assertFalse(isBlank(material.getSource()));
 
             List<Author> authors = material.getAuthors();
@@ -56,6 +55,15 @@ public class MaterialDAOTest extends DatabaseTestBase {
                 assertNotNull(languageDescription.getLanguage());
                 assertFalse(isBlank(languageDescription.getText()));
             }
+
+            List<LanguageString> titles = material.getTitles();
+            assertNotNull(titles);
+
+            for (LanguageString title : titles) {
+                assertNotNull(title.getId());
+                assertNotNull(title.getLanguage());
+                assertFalse(isBlank(title.getText()));
+            }
         }
     }
 
@@ -64,7 +72,10 @@ public class MaterialDAOTest extends DatabaseTestBase {
         long a = 1;
         Material material = materialDAO.findById(a);
 
-        assertEquals("Matemaatika õpik üheksandale klassile", material.getTitle());
+        assertEquals(2, material.getTitles().size());
+        assertEquals("Test title in estonian. (Russian available)", material.getTitles().get(0).getText());
+        assertEquals(2, material.getDescriptions().size());
+        assertEquals("Test description in estonian. (Russian available)", material.getDescriptions().get(0).getText());
         Language language = material.getDescriptions().get(0).getLanguage();
         assertNotNull(language);
         assertEquals("est", language.getCode());
