@@ -62,7 +62,8 @@
                             
                         </header>
                         <article>
-                            <a data-ng-href="{{material.source}}" target="_blank">{{material.source}}</a>
+                            <youtube-video data-ng-if="isYoutubeVideo(material.source)" video-url="material.source" player-width="'768px'" player-height="'432px'"></youtube-video>
+                            <a data-ng-if="!isYoutubeVideo(material.source)" data-ng-href="{{material.source}}" target="_blank">{{material.source}}</a>
                         </article>
                     </section>
                 </div>

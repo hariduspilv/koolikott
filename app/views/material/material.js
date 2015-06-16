@@ -26,5 +26,9 @@ define(['app'], function(app)
                return getUserDefinedLanguageString(languageStringList, translationService.getLanguage(), $scope.material.language);
             }
         }
+        
+        $scope.isYoutubeVideo = function(source) {
+            return source && source.match(/^((http:\/\/)|(https:\/\/)){0,1}(www\.){0,1}youtube\.com/);
+        }
     }]);
 });
