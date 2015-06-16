@@ -1,7 +1,7 @@
 define(['app'], function(app)
 {
-    app.controller('searchResultController', ['$scope', "serverCallService", "$filter", '$rootScope',
-             function($scope, serverCallService, $filter, $rootScope) {
+    app.controller('searchResultController', ['$scope', "serverCallService", "$filter", '$rootScope', 'translationService',
+             function($scope, serverCallService, $filter, $rootScope, translationService) {
     	var params = {};
     	serverCallService.makeGet("rest/material/getAll", params, getAllMaterialSuccess, getAllMaterialFail);
     	
@@ -79,6 +79,18 @@ define(['app'], function(app)
 
         $scope.saveMaterial = function(material) {
             $rootScope.savedMaterial = material;
+        }
+
+        $scope.getCorrectLanguageTitle = function(material) {
+            if (material && material.language && material.titles) {
+                return getCorrectLanguageString(material.titles, material.language);
+            }
+        }
+
+        function getCorrectLanguageString(languageStringList, materialLanguage) {
+            if (languageStringList && materialLanguage) {
+               return getUserDefinedLanguageString(languageStringList, translationService.getLanguage(), materialLanguage);
+            }
         }
     }]);
 });
