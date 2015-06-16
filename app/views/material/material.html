@@ -8,13 +8,13 @@
                        <span>: </span>Biology 
                        <span class="separator">|</span>
                        <span data-translate="TYPE"></span>
-                       <span>: </span> Workbook
+                       <span>: </span><span ng-bind="material.resourceTypes[0].name"></span>
                        <span class="separator">|</span>
                        <span data-translate="EDUCATIONAL_CONTEXT"></span>
                        <span>: </span>12-15
                     </div>
                     <div class="heading">
-                        <h1>{{material.title}}</h1>
+                        <h1 ng-bind="material.title"></h1>
                     </div>
                     <div class="authors">
                         <span data-ng-repeat="author in material.authors" >
