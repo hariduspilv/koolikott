@@ -40,8 +40,11 @@ public class Material {
     private Language language;
 
     @ManyToMany(fetch = EAGER)
-    @JoinTable(name = "Material_Author", joinColumns = { @JoinColumn(name = "material") }, inverseJoinColumns = { @JoinColumn(name = "author") }, uniqueConstraints = @UniqueConstraint(columnNames = {
-            "material", "author" }))
+    @JoinTable(
+            name = "Material_Author",
+            joinColumns = { @JoinColumn(name = "material") },
+            inverseJoinColumns = { @JoinColumn(name = "author") },
+            uniqueConstraints = @UniqueConstraint(columnNames = { "material", "author" }))
     private List<Author> authors;
 
     @OneToOne
@@ -55,6 +58,14 @@ public class Material {
 
     @Column(nullable = false, columnDefinition = "TEXT")
     private String source;
+
+    @ManyToMany(fetch = EAGER)
+    @JoinTable(
+            name = "Material_ResourceType",
+            joinColumns = { @JoinColumn(name = "material") },
+            inverseJoinColumns = { @JoinColumn(name = "resourceType") },
+            uniqueConstraints = @UniqueConstraint(columnNames = { "material", "resourceType" }))
+    private List<ResourceType> resourceTypes;
 
     public Long getId() {
         return id;
@@ -112,5 +123,13 @@ public class Material {
 
     public void setSource(String source) {
         this.source = source;
+    }
+
+    public List<ResourceType> getResourceTypes() {
+        return resourceTypes;
+    }
+
+    public void setResourceTypes(List<ResourceType> resourceTypes) {
+        this.resourceTypes = resourceTypes;
     }
 }

@@ -12,9 +12,9 @@ insert into IssueDate(id, month, year) values(7, 3, 1991);
 
 insert into LanguageTable(id, name, code) values (1, 'Estonian', 'est');
 insert into LanguageTable(id, name, code) values (2, 'Russian', 'rus');
-insert into LanguageTable(id, name, code) values (3, 'Portuguese', 'por');
+insert into LanguageTable(id, name, code) values (3, 'English', 'eng');
 insert into LanguageTable(id, name, code) values (4, 'Arabic', 'ara');
-insert into LanguageTable(id, name, code) values (5, 'English', 'eng');
+insert into LanguageTable(id, name, code) values (5, 'Portuguese', 'por');
 
 -- Materials
 
@@ -93,11 +93,41 @@ insert into Material_Title(title, material) values(14, 5);
 insert into Material_Title(title, material) values(15, 7);
 insert into Material_Title(title, material) values(16, 7);
 
+-- LanguageString
+
+insert into LanguageString(id, lang, material, textValue) values (1, 1, 1, 'Test description in estonian. (Russian available)');
+insert into LanguageString(id, lang, material, textValue) values (2, 2, 2, 'Test description in russian, which is the only language available.');
+insert into LanguageString(id, lang, material, textValue) values (3, 2, 1, 'Test description in russian. (Estonian available)');
+insert into LanguageString(id, lang, material, textValue) values (4, 3, 4, 'Test description in portugese, as the material language (english) not available.');
+insert into LanguageString(id, lang, material, textValue) values (5, 4, 3, 'Test description in arabic (material language). No estonian or russian available.');
+insert into LanguageString(id, lang, material, textValue) values (6, 5, 5, 'Test description in english, which is the material language.');
+insert into LanguageString(id, lang, material, textValue) values (7, 5, 7, 'Test description in english, which is not the material language. Others are also available, but arent estonian or russian.');
+insert into LanguageString(id, lang, material, textValue) values (8, 3, 7, 'Test description in portugese, english also available.');
+
+-- ResourceType
+
+insert into ResourceType(id, resourceType) values (1001, 'textbook');
+insert into ResourceType(id, resourceType) values (1002, 'experiment');
+insert into ResourceType(id, resourceType) values (1003, 'simulation');
+insert into ResourceType(id, resourceType) values (1004, 'glossary');
+insert into ResourceType(id, resourceType) values (1005, 'role play');
+
+-- Material_ResourceType
+
+insert into Material_ResourceType(material, resourceType) values (1, 1001);
+insert into Material_ResourceType(material, resourceType) values (1, 1002);
+insert into Material_ResourceType(material, resourceType) values (2, 1003);
+insert into Material_ResourceType(material, resourceType) values (3, 1004);
+insert into Material_ResourceType(material, resourceType) values (4, 1005);
+insert into Material_ResourceType(material, resourceType) values (5, 1003);
+insert into Material_ResourceType(material, resourceType) values (6, 1002);
+insert into Material_ResourceType(material, resourceType) values (7, 1004);
+
 -- TranslationGroup
 
 insert into TranslationGroup(id, lang) values (1, 1);
 insert into TranslationGroup(id, lang) values (2, 2);
-insert into TranslationGroup(id, lang) values (3, 5);
+insert into TranslationGroup(id, lang) values (3, 3);
 
 -- Translation
 

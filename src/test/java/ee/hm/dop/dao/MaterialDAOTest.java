@@ -9,7 +9,6 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import org.junit.After;
 import org.junit.Test;
 
 import ee.hm.dop.common.test.DatabaseTestBase;
@@ -17,17 +16,11 @@ import ee.hm.dop.model.Author;
 import ee.hm.dop.model.Language;
 import ee.hm.dop.model.LanguageString;
 import ee.hm.dop.model.Material;
-import ee.hm.dop.utils.DbUtils;
 
 public class MaterialDAOTest extends DatabaseTestBase {
 
     @Inject
     private MaterialDAO materialDAO;
-
-    @After
-    public void closeEntityManager() {
-        DbUtils.closeEntityManager();
-    }
 
     @Test
     public void findAll() {
@@ -109,5 +102,14 @@ public class MaterialDAOTest extends DatabaseTestBase {
 
         Material material2 = materialDAO.findById(1);
         assertEquals("est", material2.getLanguage().getCode());
+    }
+
+    @Test
+    public void testMaterialResourceType() {
+        Material material1 = materialDAO.findById(1);
+        assertEquals("textbook", material1.getResourceTypes().get(0).getName());
+
+        Material material2 = materialDAO.findById(1);
+        assertEquals("experiment", material2.getResourceTypes().get(1).getName());
     }
 }
