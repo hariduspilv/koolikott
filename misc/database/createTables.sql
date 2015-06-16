@@ -64,8 +64,8 @@ CREATE TABLE LanguageString (
 	material BIGINT,
 	
 	FOREIGN KEY (lang)
-        REFERENCES LanguageTable(id)
-        ON DELETE RESTRICT,
+	REFERENCES LanguageTable (id)
+		ON DELETE RESTRICT,
 
 	FOREIGN KEY (material)
 	REFERENCES Material (id)
