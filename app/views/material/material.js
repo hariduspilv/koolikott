@@ -4,6 +4,7 @@ define(['app'], function(app)
     		 function($scope, serverCallService, $route, translationService, $rootScope) {
         if ($rootScope.savedMaterial){
             $scope.material = $rootScope.savedMaterial;
+            setSourceType();
         } else {
             var materialId = $route.current.params.materialId;
             var params = {};
@@ -14,6 +15,7 @@ define(['app'], function(app)
                 log('No data returned by getting material');
                 } else {
                     $scope.material = material;
+                    setSourceType();
                 }
     	}
     	
@@ -27,8 +29,18 @@ define(['app'], function(app)
             }
         }
         
-        $scope.isYoutubeVideo = function(source) {
-            return source && source.match(/^((http:\/\/)|(https:\/\/)){0,1}(www\.){0,1}youtube\.com/);
+        function isYoutubeVideo(url) {
+        	// regex taken from http://stackoverflow.com/questions/2964678/jquery-youtube-url-validation-with-regex #ULTIMATE YOUTUBE REGEX
+        	var youtubeUrlRegex = /^(?:https?:\/\/)?(?:www\.)?(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))((\w|-){11})(?:\S+)?$/;
+            return url && url.match(youtubeUrlRegex);
+        }
+        
+        function setSourceType() {
+        	if (isYoutubeVideo($scope.material.source)) {
+        		$scope.sourceType = 'YOUTUBE';
+        	} else {
+        		$scope.sourceType = 'LINK';
+        	}
         }
     }]);
 });
