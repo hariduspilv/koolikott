@@ -3,6 +3,8 @@
 DROP TABLE IF EXISTS Translation;
 DROP TABLE IF EXISTS TranslationGroup;
 DROP TABLE IF EXISTS Material_ResourceType;
+DROP TABLE IF EXISTS Material_Description;
+DROP TABLE IF EXISTS Material_Title;
 DROP TABLE IF EXISTS Material_Author;
 DROP TABLE IF EXISTS LanguageString;
 DROP TABLE IF EXISTS LanguageKeyCodes;
