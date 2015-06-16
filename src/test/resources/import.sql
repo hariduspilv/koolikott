@@ -73,7 +73,10 @@ insert into TranslationGroup(id, lang) values (3, 5);
 
 -- Translation
 
---Estonian in separate file
+--Estonian
+insert into Translation(translationGroup, translationKey, translation) values (1, 'FOO', 'FOO sõnum');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'Estonian', 'Eesti keeles');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'Russian', 'Vene keel');
 
 -- Russian
 insert into Translation(translationGroup, translationKey, translation) values (2, 'FOO', 'FOO сообщение');
