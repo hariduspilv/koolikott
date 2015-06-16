@@ -11,12 +11,10 @@
                                 </figure>
                             </div>
                             <div class="description">
-                                <div class="title">
-                                   {{material.title}}
-                                </div>
+                                <div ng-bind="material.title" class="title"></div>
                                 <div class="authors">
                                     <span data-ng-repeat="author in material.authors">
-                                        {{formatName(author.name)}} {{formatSurname(author.surname) }}{{$index < material.authors.length - 1 ? ', ' : ''}}
+                                        <span ng-bind="formatName(author.name)"></span><span ng-bind="formatSurname(author.surname)"></span><span ng-bind="$index < material.authors.length - 1 ? ', ' : ''"></span>
                                     </span>
                                 </div>
                                 <div class="clearfix">
