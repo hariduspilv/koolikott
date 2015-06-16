@@ -9,7 +9,6 @@ define(['app'], function(app)
             var params = {};
             serverCallService.makeGet("rest/material?materialId=" + materialId, params, getMaterialSuccess, getMaterialFail); 
         }
-
     	function getMaterialSuccess(material) {
             if (isEmpty(material)) {
                 log('No data returned by getting material');
@@ -26,6 +25,6 @@ define(['app'], function(app)
             if (languageStringList && $scope.material.language) {
                return getUserDefinedLanguageString(languageStringList, translationService.getLanguage(), $scope.material.language);
             }
-        }	
+        }
     }]);
 });

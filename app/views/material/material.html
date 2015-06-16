@@ -8,23 +8,22 @@
                        <span>: </span>Biology 
                        <span class="separator">|</span>
                        <span data-translate="TYPE"></span>
-                       <span>: </span> Workbook
+                       <span>: </span><span data-translate="{{material.resourceTypes[0].name.toUpperCase()}}"></span>
                        <span class="separator">|</span>
                        <span data-translate="EDUCATIONAL_CONTEXT"></span>
                        <span>: </span>12-15
                     </div>
                     <div class="heading">
-                        <h1>{{getCorrectLanguageString(material.titles)}}</h1>
+                        <h1 ng-bind="getCorrectLanguageString(material.title)"></h1>
                     </div>
                     <div class="authors">
                         <span data-ng-repeat="author in material.authors" >
-                            <a href="#">{{author.name}} {{author.surname}}</a>
+                            <a href="#"><span ng-bind="author.name"></span><span ng-bind="author.surname"></span></a>
                         </span>
                     </div>
                     
-                    <div class="">
-                        {{getCorrectLanguageString(material.descriptions)}}
-                    </div>
+                    <div ng-bind="getCorrectLanguageString(material.descriptions)" class="description"></div>
+
                 </div>
                 <div class="col-md-3">
                     <dl class="dl-horizontal">
@@ -62,7 +61,7 @@
                             
                         </header>
                         <article>
-                            <a data-ng-href="{{material.source}}" target="_blank">{{material.source}}</a>
+                            <a data-ng-href="{{material.source}}" ng-bind="material.source" target="_blank"></a>
                         </article>
                     </section>
                 </div>
