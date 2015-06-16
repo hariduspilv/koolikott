@@ -8,6 +8,7 @@ import javax.servlet.DispatcherType;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
+import org.eclipse.jetty.util.component.AbstractLifeCycle;
 import org.glassfish.jersey.servlet.ServletContainer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -70,7 +71,7 @@ public class EmbeddedJetty {
                 return;
             }
 
-            if (server.getState() != Server.STOPPED) {
+            if (server.getState() != AbstractLifeCycle.STOPPED) {
                 server.stop();
             }
 
