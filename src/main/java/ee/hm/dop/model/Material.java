@@ -57,8 +57,12 @@ public class Material {
     @Column(nullable = false, columnDefinition = "TEXT")
     private String source;
 
-    @OneToMany(fetch = EAGER)
-    @JoinColumn(name = "material")
+    @ManyToMany(fetch = EAGER)
+    @JoinTable(
+            name = "Material_ResourceType",
+            joinColumns = { @JoinColumn(name = "material") },
+            inverseJoinColumns = { @JoinColumn(name = "resourceType") },
+            uniqueConstraints = @UniqueConstraint(columnNames = { "material", "resourceType" }))
     private List<ResourceType> resourceTypes;
 
     public Long getId() {

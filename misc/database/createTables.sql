@@ -2,13 +2,14 @@
 
 DROP TABLE IF EXISTS Translation;
 DROP TABLE IF EXISTS TranslationGroup;
+DROP TABLE IF EXISTS Material_ResourceType;
 DROP TABLE IF EXISTS Material_Author;
-DROP TABLE IF EXISTS ResourceType;
 DROP TABLE IF EXISTS LanguageString;
 DROP TABLE IF EXISTS LanguageKeyCodes;
 DROP TABLE IF EXISTS Material;
 DROP TABLE IF EXISTS LanguageTable;
 DROP TABLE IF EXISTS IssueDate;
+DROP TABLE IF EXISTS ResourceType;
 DROP TABLE IF EXISTS Author;
 
 -- Create tables
@@ -17,6 +18,11 @@ CREATE TABLE Author(
   id      BIGINT AUTO_INCREMENT PRIMARY KEY,
   name    VARCHAR(255) NOT NULL,
   surname VARCHAR(255) NOT NULL
+);
+
+CREATE TABLE ResourceType (
+  id           BIGINT AUTO_INCREMENT PRIMARY KEY,
+  resourceType VARCHAR(255) NOT NULL UNIQUE
 );
 
 CREATE TABLE IssueDate (
@@ -72,16 +78,6 @@ CREATE TABLE LanguageString (
     ON DELETE RESTRICT
 );
 
-CREATE TABLE ResourceType (
-  id           BIGINT AUTO_INCREMENT PRIMARY KEY,
-  resourceType VARCHAR(255) NOT NULL,
-  material     BIGINT,
-
-  FOREIGN KEY (material)
-        REFERENCES Material(id)
-        ON DELETE RESTRICT
-);
-
 CREATE TABLE Material_Author (
   material BIGINT NOT NULL,
   author   BIGINT NOT NULL,
@@ -95,6 +91,21 @@ CREATE TABLE Material_Author (
   FOREIGN KEY (author)
         REFERENCES Author(id)
         ON DELETE RESTRICT
+);
+
+CREATE TABLE Material_ResourceType (
+  material     BIGINT NOT NULL,
+  resourceType BIGINT NOT NULL,
+
+  PRIMARY KEY (material, resourceType),
+
+  FOREIGN KEY (material)
+  REFERENCES Material (id)
+    ON DELETE RESTRICT,
+
+  FOREIGN KEY (resourceType)
+  REFERENCES ResourceType (id)
+    ON DELETE RESTRICT
 );
 
 CREATE TABLE TranslationGroup (
