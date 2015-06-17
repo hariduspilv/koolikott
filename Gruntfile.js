@@ -69,9 +69,13 @@ module.exports = function(grunt) {
                 tasks: ['sass:dev']
             }
         },
-        clean: ["lib", "assets", "dop.tar.gz"],
+        clean: {
+            build: ["lib", "assets", "dop.tar.gz"],
+            sourcemap: ["assets/css/dop.min.css.map"]
+        }, 
     	compress: {
             main: {
+                clean: ["assets/css/dop.min.css.map"],
                 options: {
                     archive: 'dop.tar.gz',
                     mode: 'tgz'
@@ -94,7 +98,7 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-copy');
     grunt.loadNpmTasks('grunt-npm-install');
 
-    grunt.registerTask('build', ['npm-install', 'bower', 'clean', 'copy', 'concat', 'uglify', 'sass']);
-    grunt.registerTask('package', ['build', 'compress']);
+    grunt.registerTask('build', ['npm-install', 'bower', 'clean:build', 'copy', 'concat', 'uglify', 'sass']);
+    grunt.registerTask('package', ['build', 'clean:sourcemap', 'compress']);
 
 };
