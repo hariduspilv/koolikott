@@ -68,7 +68,6 @@ CREATE TABLE LanguageString (
   id        BIGINT AUTO_INCREMENT PRIMARY KEY,
   lang      BIGINT,
   textValue TEXT NOT NULL,
-  material  BIGINT,
 
   FOREIGN KEY (lang)
   REFERENCES LanguageTable (id)
