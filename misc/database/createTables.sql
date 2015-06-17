@@ -71,10 +71,6 @@ CREATE TABLE LanguageString (
 
   FOREIGN KEY (lang)
   REFERENCES LanguageTable (id)
-    ON DELETE RESTRICT,
-
-  FOREIGN KEY (material)
-  REFERENCES Material (id)
     ON DELETE RESTRICT
 );
 
