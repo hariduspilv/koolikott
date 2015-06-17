@@ -24,7 +24,7 @@ define(['app'], function(app)
     	}
 
         $scope.getCorrectLanguageString = function(languageStringList) {
-            if (languageStringList && $scope.material.language) {
+            if (languageStringList) {
                return getUserDefinedLanguageString(languageStringList, translationService.getLanguage(), $scope.material.language);
             }
         }

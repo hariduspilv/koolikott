@@ -82,13 +82,13 @@ define(['app'], function(app)
         }
 
         $scope.getCorrectLanguageTitle = function(material) {
-            if (material && material.language && material.titles) {
+            if (material) {
                 return getCorrectLanguageString(material.titles, material.language);
             }
         }
 
         function getCorrectLanguageString(languageStringList, materialLanguage) {
-            if (languageStringList && materialLanguage) {
+            if (languageStringList) {
                return getUserDefinedLanguageString(languageStringList, translationService.getLanguage(), materialLanguage);
             }
         }
