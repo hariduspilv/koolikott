@@ -29,8 +29,7 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
         // Verify if all fields are loaded
         Material material = materials.get(1);
         assertEquals(Long.valueOf(2), material.getId());
-        assertEquals("Test title in russian, which is the only language available.", material.getTitles().get(0)
-                .getText());
+        assertEquals("Математика учебник для 8-го класса", material.getTitles().get(0).getText());
         assertEquals(new IssueDate((short) 27, (short) 1, -983), material.getIssueDate());
         List<Author> authors = material.getAuthors();
         assertEquals(2, authors.size());
