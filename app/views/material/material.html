@@ -17,8 +17,8 @@
                         <h1 ng-bind="getCorrectLanguageString(material.titles)"></h1>
                     </div>
                     <div class="authors">
-                        <span data-ng-repeat="author in material.authors" >
-                            <a href="#"><span ng-bind="author.name"></span><span ng-bind="author.surname"></span></a>
+                        <span data-ng-repeat="author in material.authors" class="item">
+                            <a href="#"><span ng-bind="author.name"></span> <span ng-bind="author.surname"></span></a>
                         </span>
                     </div>
                     
