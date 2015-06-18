@@ -16,6 +16,8 @@ import javax.persistence.NamedQuery;
 import javax.persistence.OneToOne;
 import javax.persistence.UniqueConstraint;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
@@ -23,6 +25,7 @@ import ee.hm.dop.rest.jackson.map.LanguageDeserializer;
 import ee.hm.dop.rest.jackson.map.LanguageSerializer;
 
 @Entity
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id", scope = Material.class)
 @NamedQueries({ @NamedQuery(name = "Material.findById", query = "SELECT m FROM Material m WHERE m.id = :id") })
 public class Material {
 
@@ -66,6 +69,15 @@ public class Material {
             inverseJoinColumns = { @JoinColumn(name = "resourceType") },
             uniqueConstraints = @UniqueConstraint(columnNames = { "material", "resourceType" }))
     private List<ResourceType> resourceTypes;
+
+    @ManyToMany(fetch = EAGER)
+    @JoinTable(
+            name = "Material_Classification",
+            joinColumns = { @JoinColumn(name = "material") },
+            inverseJoinColumns = { @JoinColumn(name = "classification") },
+            uniqueConstraints = @UniqueConstraint(columnNames = { "material", "classification" }))
+    private List<Classification> classifications;
+
 
     public Long getId() {
         return id;
@@ -131,5 +143,13 @@ public class Material {
 
     public void setResourceTypes(List<ResourceType> resourceTypes) {
         this.resourceTypes = resourceTypes;
+    }
+
+    public List<Classification> getClassifications() {
+        return classifications;
+    }
+
+    public void setClassifications(List<Classification> classifications) {
+        this.classifications = classifications;
     }
 }

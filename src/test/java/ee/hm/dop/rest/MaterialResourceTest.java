@@ -21,6 +21,7 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
     @Test
     public void getAllMaterials() {
         Response response = doGet("material/getAll");
+
         List<Material> materials = response.readEntity(new GenericType<List<Material>>() {
         });
 
@@ -70,5 +71,16 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
 
             }
         }
+    }
+
+    @Test
+    public void getMaterialClassifications() {
+        Response response = doGet("material/getAll");
+        List<Material> materials = response.readEntity(new GenericType<List<Material>>() {
+        });
+        Material material = materials.get(0);
+
+        assertEquals("Plants", material.getClassifications().get(0).getChildren().get(0).getName());
+
     }
 }

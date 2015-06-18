@@ -107,9 +107,21 @@ public class MaterialDAOTest extends DatabaseTestBase {
     @Test
     public void testMaterialResourceType() {
         Material material1 = materialDAO.findById(1);
-        assertEquals("textbook", material1.getResourceTypes().get(0).getName());
+        assertEquals("TEXTBOOK", material1.getResourceTypes().get(0).getName());
 
         Material material2 = materialDAO.findById(1);
-        assertEquals("experiment", material2.getResourceTypes().get(1).getName());
+        assertEquals("EXPERIMENT", material2.getResourceTypes().get(1).getName());
+    }
+
+    @Test
+    public void testMaterialClassification() {
+        Material material1 = materialDAO.findById(1);
+        assertEquals("Biology", material1.getClassifications().get(0).getName());
+        assertEquals("Plants", material1.getClassifications().get(0).getChildren().get(0).getName());
+
+        Material material2 = materialDAO.findById(5);
+
+        assertEquals("Algebra", material2.getClassifications().get(0).getParent().getName());
+
     }
 }

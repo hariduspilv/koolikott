@@ -1,5 +1,5 @@
 -- Russian translations
-insert into Translation(translationGroup, translationKey, translation) values (2, 'Login', 'Войти');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'LOGIN', 'Войти');
 insert into Translation(translationGroup, translationKey, translation) values (2, 'SUBJECT', 'Тема');
 insert into Translation(translationGroup, translationKey, translation) values (2, 'TYPE', 'Тип');
 insert into Translation(translationGroup, translationKey, translation) values (2, 'EDUCATIONAL_CONTEXT', 'Возрастные группы');
