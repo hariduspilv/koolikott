@@ -75,23 +75,28 @@ insert into Material_Description(description, material) values(8, 7);
 
 -- Material Titles
 
-insert into LanguageString(id, lang, textValue) values (9, 1, 'Test title in estonian. (Russian available)');
-insert into LanguageString(id, lang, textValue) values (10, 2, 'Test title in russian, which is the only language available.');
-insert into LanguageString(id, lang, textValue) values (11, 2, 'Test title in russian. (Estonian available)');
-insert into LanguageString(id, lang, textValue) values (12, 3, 'Test title in portugese, as the material language (english) not available.');
-insert into LanguageString(id, lang, textValue) values (13, 4, 'Test title in arabic (material language). No estonian or russian available.');
-insert into LanguageString(id, lang, textValue) values (14, 5, 'Test title in english, which is the material language.');
-insert into LanguageString(id, lang, textValue) values (15, 5, 'Test title in english, which is not the material language. Others are also available, but arent estonian or russian.');
-insert into LanguageString(id, lang, textValue) values (16, 3, 'Test title in portugese, english also available.');
+insert into LanguageString(id, lang, textValue) values (9, 1, 'Matemaatika õpik üheksandale klassile');
+insert into LanguageString(id, lang, textValue) values (10, 2, 'Математика учебник для 9-го класса');
+insert into LanguageString(id, lang, textValue) values (11, 2, 'Математика учебник для 8-го класса');
+insert into LanguageString(id, lang, textValue) values (12, 5, 'Test title in portugese: manual de instruções, as the material language (english) not available.');
+insert into LanguageString(id, lang, textValue) values (13, 4, 'الرياضيات الكتب المدرسية للصف 7');
+insert into LanguageString(id, lang, textValue) values (14, 3, 'The Capital.');
+insert into LanguageString(id, lang, textValue) values (15, 3, 'Test title in english, which is not the material language. Others are also available, but arent estonian or russian.');
+insert into LanguageString(id, lang, textValue) values (16, 5, 'Test title in portugese, english also available.');
+insert into LanguageString(id, lang, textValue) values (17, 1, 'Eesti keele õpik üheksandale klassile');
+insert into LanguageString(id, lang, textValue) values (18, 1, 'Aabits 123');
+
 
 insert into Material_Title(title, material) values(9, 1);
-insert into Material_Title(title, material) values(10, 2);
-insert into Material_Title(title, material) values(11, 1);
+insert into Material_Title(title, material) values(10, 1);
+insert into Material_Title(title, material) values(11, 2);
 insert into Material_Title(title, material) values(12, 4);
 insert into Material_Title(title, material) values(13, 3);
 insert into Material_Title(title, material) values(14, 5);
 insert into Material_Title(title, material) values(15, 7);
 insert into Material_Title(title, material) values(16, 7);
+insert into Material_Title(title, material) values(17, 6);
+insert into Material_Title(title, material) values(18, 8);
 
 -- ResourceType
 

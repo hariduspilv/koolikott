@@ -66,7 +66,7 @@ public class MaterialDAOTest extends DatabaseTestBase {
         Material material = materialDAO.findById(a);
 
         assertEquals(2, material.getTitles().size());
-        assertEquals("Test title in estonian. (Russian available)", material.getTitles().get(0).getText());
+        assertEquals("Matemaatika õpik üheksandale klassile", material.getTitles().get(0).getText());
         assertEquals(2, material.getDescriptions().size());
         assertEquals("Test description in estonian. (Russian available)", material.getDescriptions().get(0).getText());
         Language language = material.getDescriptions().get(0).getLanguage();
