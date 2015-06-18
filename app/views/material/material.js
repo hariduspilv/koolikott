@@ -16,6 +16,7 @@ define(['app'], function(app)
                 } else {
                     $scope.material = material;
                     setSourceType();
+                    log(material.classifications);
                 }
     	}
     	
