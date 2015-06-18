@@ -43,7 +43,10 @@
                             <span data-translate="CREATED"></span><span>:</span>
                         </dt>
                         <dd class="text-right text-grey">
-                            22.02.2015
+                            <span data-ng-if="material.issueDate.year >= 100" class="pull-right">{{formatIssueDate(material.issueDate)}}</span>
+                            <span data-ng-if="material.issueDate.year > 0 && material.issueDate.year < 100" class="pull-right">{{formatIssueDate(material.issueDate)}} AD</span>
+                            <span data-ng-if="material.issueDate.year < 0" class="pull-right">{{formatIssueDate(material.issueDate)}} BC</span>
+                            <span data-ng-if="!material.issueDate.year" class="pull-right">Unkown</span>
                         </dd>
                     </dl>
                     
