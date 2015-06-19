@@ -61,7 +61,9 @@
                             
                         </header>
                         <article>
-                            <youtube-video data-ng-if="sourceType === 'YOUTUBE'" video-url="material.source" player-width="'768px'" player-height="'432px'"></youtube-video>
+                            <div data-ng-if="sourceType === 'YOUTUBE'" class="embed-responsive embed-responsive-16by9">
+                                <youtube-video video-url="material.source" player-width="'768'" player-height="'432'" class="embed-responsive-item"></youtube-video>
+                            <div>
                             <a data-ng-if="sourceType === 'LINK'" data-ng-href="{{material.source}}" target="_blank" data-ng-bind="material.source"></a>
                         </article>
                     </section>
