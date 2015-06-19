@@ -4,8 +4,6 @@ define(['app'], function(app)
     		 function($scope, serverCallService, $route, translationService, $rootScope) {
         if ($rootScope.savedMaterial){
             $scope.material = $rootScope.savedMaterial;
-                                log($scope.material.classifications)
-
             setSourceType();
         } else {
             var materialId = $route.current.params.materialId;
@@ -18,7 +16,6 @@ define(['app'], function(app)
                 } else {
                     $scope.material = material;
                     setSourceType();
-                    log(material.classifications)
                 }
     	}
     	
