@@ -5,13 +5,13 @@
                 <div class="col-md-9 description">
                     <div class="category text-grey">
                        <span data-translate="SUBJECT"></span>
-                       <span>: </span>Biology 
+                       <span>: </span><span ng-bind="material.classifications[0].name"></span>
                        <span class="separator">|</span>
                        <span data-translate="TYPE"></span>
                        <span>: </span><span data-translate="{{material.resourceTypes[0].name.toUpperCase()}}"></span>
                        <span class="separator">|</span>
                        <span data-translate="EDUCATIONAL_CONTEXT"></span>
-                       <span>: </span>12-15
+                       <span>: </span><span data-translate="{{material.educationalContexts[0].name.toUpperCase()}}"></span>
                     </div>
                     <div class="heading">
                         <h1 ng-bind="getCorrectLanguageString(material.titles)"></h1>
@@ -43,7 +43,10 @@
                             <span data-translate="CREATED"></span><span>:</span>
                         </dt>
                         <dd class="text-right text-grey">
-                            22.02.2015
+                            <span data-ng-if="material.issueDate.year >= 100" class="pull-right">{{formatIssueDate(material.issueDate)}}</span>
+                            <span data-ng-if="material.issueDate.year > 0 && material.issueDate.year < 100" class="pull-right">{{formatIssueDate(material.issueDate)}} AD</span>
+                            <span data-ng-if="material.issueDate.year < 0" class="pull-right">{{formatIssueDate(material.issueDate)}} BC</span>
+                            <span data-ng-if="!material.issueDate.year" class="pull-right">Unkown</span>
                         </dd>
                     </dl>
                     

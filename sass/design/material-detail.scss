@@ -34,7 +34,11 @@
             width: 90px; font-weight: normal
         };
         dd {
-            margin-left: 100px
+            margin-left: 100px;
+
+            span {
+                white-space: nowrap
+            }
         }
     };
     .preview {
