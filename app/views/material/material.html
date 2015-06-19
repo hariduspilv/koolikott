@@ -5,7 +5,7 @@
                 <div class="col-md-9 description">
                     <div class="category text-grey">
                        <span data-translate="SUBJECT"></span>
-                       <span>: </span><span ng-bind="material.classifications[0].name"></span>
+                       <span>: </span><span ng-bind="getClassification(material.classifications)"></span>
                        <span class="separator">|</span>
                        <span data-translate="TYPE"></span>
                        <span>: </span><span data-translate="{{material.resourceTypes[0].name.toUpperCase()}}"></span>

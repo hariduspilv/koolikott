@@ -1,6 +1,6 @@
 define(['routes','services/dependencyResolver'], function(config, dependencyResolver)
 {
-    var app = angular.module('app', ['ngRoute', 'pascalprecht.translate', 'mouse.utils', 'youtube-embed']);
+    var app = angular.module('app', ['ngRoute', 'pascalprecht.translate', 'mouse.utils', 'youtube-embed', 'ngResource']);
 
     app.config(
     [
@@ -11,8 +11,9 @@ define(['routes','services/dependencyResolver'], function(config, dependencyReso
         '$filterProvider',
         '$provide',
         '$translateProvider',
+        '$httpProvider',
 
-        function($routeProvider, $locationProvider, $controllerProvider, $compileProvider, $filterProvider, $provide, $translateProvider)
+        function($routeProvider, $locationProvider, $controllerProvider, $compileProvider, $filterProvider, $provide, $translateProvider, $httpProvider)
         {
             app.controller = $controllerProvider.register;
             app.directive  = $compileProvider.directive;
@@ -35,8 +36,18 @@ define(['routes','services/dependencyResolver'], function(config, dependencyReso
             }
 
             configureTranslationService($translateProvider);
+
+            $httpProvider.defaults.transformResponse.splice(0, 0, parseJSONResponse);
         }
     ]);
+
+     function parseJSONResponse(data, headersGetter) {
+        if (data && (headersGetter()['content-type'] === 'application/json')) {
+            return JSOG.parse(data);
+        } else {
+            return data;
+        }
+    } 
     
     function configureTranslationService($translateProvider) {    	  
     	$translateProvider.useUrlLoader('rest/translation');

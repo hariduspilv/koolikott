@@ -71,5 +71,20 @@ define(['app'], function(app)
         function formatYear(year) {
             return year < 0 ? year * -1 : year; 
         }
+
+        $scope.getClassification = function(classifications) {
+            if (classifications && classifications[0]) {
+                var res = findParentObject(classifications[0]);
+                return res.name;
+            }
+        }
+
+        function findParentObject (classification) {
+            if (!classification.parent) {
+                return classification;
+            }
+            return findParentObject(classification.parent);
+        }
+
     }]);
 });

@@ -36,7 +36,9 @@ module.exports = function(grunt) {
                     'bower_components/bootstrap-sass/assets/javascripts/bootstrap.min.js',
                     'bower_components/angular-translate/angular-translate.min.js',
                     'bower_components/angular-click-outside/clickoutside.directive.js',
-                    'bower_components/angular-youtube-mb/dist/angular-youtube-embed.min.js'
+                    'bower_components/angular-youtube-mb/dist/angular-youtube-embed.min.js',
+                    'bower_components/jsog/lib/JSOG.js',
+                    'bower_components/angular-resource/angular-resource.min.js',
                 ],
                 dest: '<%= project.assets %>/js/dop.min.js',
             }
