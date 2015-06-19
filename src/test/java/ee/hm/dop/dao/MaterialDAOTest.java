@@ -124,4 +124,12 @@ public class MaterialDAOTest extends DatabaseTestBase {
         assertEquals("Algebra", material2.getClassifications().get(0).getParent().getName());
 
     }
+
+    @Test
+    public void testMaterialEducationalContext() {
+        Material material1 = materialDAO.findById(1);
+        assertEquals("PRESCHOOL", material1.getEducationalContexts().get(0).getName());
+        assertEquals("COMPULSORYEDUCATION", material1.getEducationalContexts().get(1).getName());
+
+    }
 }

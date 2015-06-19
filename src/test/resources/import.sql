@@ -138,6 +138,29 @@ insert into Material_ResourceType(material, resourceType) values (5, 1003);
 insert into Material_ResourceType(material, resourceType) values (6, 1002);
 insert into Material_ResourceType(material, resourceType) values (7, 1004);
 
+-- EducationalContext
+
+insert into EducationalContext(id, educationalContext) values (1001, 'PRESCHOOL');
+insert into EducationalContext(id, educationalContext) values (1002, 'COMPULSORYEDUCATION');
+insert into EducationalContext(id, educationalContext) values (1003, 'VOCATIONALEDUCATION');
+insert into EducationalContext(id, educationalContext) values (1004, 'HIGHEREDUCATION');
+insert into EducationalContext(id, educationalContext) values (1005, 'CONTINUINGEDUCATION');
+insert into EducationalContext(id, educationalContext) values (1006, 'PROFESSIONALDEVELOPMENT');
+insert into EducationalContext(id, educationalContext) values (1007, 'SPECIALEDUCATION');
+insert into EducationalContext(id, educationalContext) values (1008, 'OTHER');
+
+
+-- EducationalContext
+
+insert into Material_EducationalContext(material, educationalContext) values (1, 1001);
+insert into Material_EducationalContext(material, educationalContext) values (1, 1002);
+insert into Material_EducationalContext(material, educationalContext) values (2, 1003);
+insert into Material_EducationalContext(material, educationalContext) values (3, 1004);
+insert into Material_EducationalContext(material, educationalContext) values (4, 1005);
+insert into Material_EducationalContext(material, educationalContext) values (5, 1003);
+insert into Material_EducationalContext(material, educationalContext) values (6, 1002);
+insert into Material_EducationalContext(material, educationalContext) values (7, 1004);
+
 -- TranslationGroup
 
 insert into TranslationGroup(id, lang) values (1, 1);

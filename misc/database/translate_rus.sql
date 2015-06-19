@@ -44,6 +44,13 @@ insert into Translation(translationgroup, translationkey, translation) values (2
 insert into Translation(translationgroup, translationkey, translation) values (2, 'VIDEOSHARINGPLATFORM', 'видеопортал платформа');
 insert into Translation(translationgroup, translationkey, translation) values (2, 'WEBLOG', 'сайт вход');
 insert into Translation(translationgroup, translationkey, translation) values (2, 'WIKI', 'энциклопедия');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'PRESCHOOL', 'ДОШКОЛЬНОЕ');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'COMPULSORYEDUCATION', 'обязательное обучение');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'VOCATIONALEDUCATION', 'профессионального образования');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'HIGHEREDUCATION', 'высшее образование');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'CONTINUINGEDUCATION', 'Непрерывное образование');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'PROFESSIONALDEVELOPMENT', 'профессиональное развитие');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'SPECIALEDUCATION', 'специальное образование');
 
 
 

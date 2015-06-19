@@ -83,4 +83,14 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
         assertEquals("Plants", material.getClassifications().get(0).getChildren().get(0).getName());
 
     }
+
+    @Test
+    public void getMaterialEducationalContext() {
+        Response response = doGet("material/getAll");
+        List<Material> materials = response.readEntity(new GenericType<List<Material>>() {
+        });
+        Material material = materials.get(0);
+
+        assertEquals("PRESCHOOL", material.getEducationalContexts().get(0).getName());
+    }
 }
