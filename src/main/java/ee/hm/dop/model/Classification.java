@@ -11,15 +11,17 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.voodoodyne.jackson.jsog.JSOGGenerator;
 
 /**
  * Created by mart.laus on 17.06.2015.
  */
 
 @Entity
-//@JsonIdentityInfo(generator=ObjectIdGenerators.PropertyGenerator.class, property="id", scope = Classification.class) wont work with getAll somehow
+@JsonIdentityInfo(generator = JSOGGenerator.class)
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Classification {
 
     @Id
@@ -30,11 +32,11 @@ public class Classification {
     private String name;
 
     @OneToMany(mappedBy = "parent", fetch = FetchType.EAGER)
-    @JsonManagedReference
+    //@JsonManagedReference
     private List<Classification> children;
 
     @ManyToOne
-    @JsonBackReference
+    //@JsonBackReference
     @JoinColumn(name = "parent")
     private Classification parent;
 
