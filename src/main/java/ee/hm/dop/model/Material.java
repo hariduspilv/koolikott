@@ -11,6 +11,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToOne;
@@ -85,6 +86,10 @@ public class Material {
             inverseJoinColumns = { @JoinColumn(name = "educationalContext") },
             uniqueConstraints = @UniqueConstraint(columnNames = { "material", "educationalContext" }))
     private List<EducationalContext> educationalContexts;
+
+    @ManyToOne
+    @JoinColumn(name = "licenseType")
+    private LicenseType licenseType;
 
     public Long getId() {
         return id;
@@ -166,5 +171,13 @@ public class Material {
 
     public void setEducationalContexts(List<EducationalContext> educationalContexts) {
         this.educationalContexts = educationalContexts;
+    }
+
+    public LicenseType getLicenseType() {
+        return licenseType;
+    }
+
+    public void setLicenseType(LicenseType licenseType) {
+        this.licenseType = licenseType;
     }
 }

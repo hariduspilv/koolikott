@@ -16,16 +16,22 @@ insert into LanguageTable(id, name, code) values (3, 'English', 'eng');
 insert into LanguageTable(id, name, code) values (4, 'Arabic', 'ara');
 insert into LanguageTable(id, name, code) values (5, 'Portuguese', 'por');
 
+-- License Type
+
+insert into LicenseType(id, text) values (1, 'CCBY');
+insert into LicenseType(id, text) values (2, 'CCBYSA');
+insert into LicenseType(id, text) values (3, 'CCBYND');
+
 -- Materials
 
-insert into Material(id, lang, issueDate, source) values(1, 1, 1, 'https://www.youtube.com/watch?v=gSWbx3CvVUk');
-insert into Material(id, lang, issueDate, source) values(2, 2, 2, 'https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes');
-insert into Material(id, lang, issueDate, source) values(3, 4, 3, 'http://eloquentjavascript.net/Eloquent_JavaScript.pdf');
-insert into Material(id, lang, issueDate, source) values(4, 5, 4, 'https://en.wikipedia.org/wiki/Power_Architecture');
-insert into Material(id, lang, issueDate, source) values(5, 5, 5, 'https://en.wikipedia.org/wiki/Power_Architecture');
-insert into Material(id, lang, issueDate, source) values(6, null, null, 'http://www.planalto.gov.br/ccivil_03/Constituicao/Constituicao.htm');
-insert into Material(id, lang, issueDate, source) values(7, 4, 6, 'https://president.ee/en/republic-of-estonia/the-constitution/index.html');
-insert into Material(id, lang, issueDate, source) values(8, 5, 7, 'http://www.palmeiras.com.br/historia/titulos');
+insert into Material(id, lang, issueDate, licenseType, source) values(1, 1, 1, 1, 'https://www.youtube.com/watch?v=gSWbx3CvVUk');
+insert into Material(id, lang, issueDate, licenseType, source) values(2, 2, 2, 2, 'https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes');
+insert into Material(id, lang, issueDate, licenseType, source) values(3, 4, 3, 3,  'http://eloquentjavascript.net/Eloquent_JavaScript.pdf');
+insert into Material(id, lang, issueDate, licenseType, source) values(4, 5, 4, 1,  'https://en.wikipedia.org/wiki/Power_Architecture');
+insert into Material(id, lang, issueDate, licenseType, source) values(5, 5, 5, 2,  'https://en.wikipedia.org/wiki/Power_Architecture');
+insert into Material(id, lang, issueDate, licenseType, source) values(6, null, null, null, 'http://www.planalto.gov.br/ccivil_03/Constituicao/Constituicao.htm');
+insert into Material(id, lang, issueDate, licenseType, source) values(7, 4, 6, 3, 'https://president.ee/en/republic-of-estonia/the-constitution/index.html');
+insert into Material(id, lang, issueDate, licenseType, source) values(8, 5, 7, 1, 'http://www.palmeiras.com.br/historia/titulos');
 
 -- Authors
 

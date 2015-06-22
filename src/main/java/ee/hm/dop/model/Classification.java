@@ -32,11 +32,9 @@ public class Classification {
     private String name;
 
     @OneToMany(mappedBy = "parent", fetch = FetchType.EAGER)
-    //@JsonManagedReference
     private List<Classification> children;
 
     @ManyToOne
-    //@JsonBackReference
     @JoinColumn(name = "parent")
     private Classification parent;
 

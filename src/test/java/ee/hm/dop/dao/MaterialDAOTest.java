@@ -132,4 +132,10 @@ public class MaterialDAOTest extends DatabaseTestBase {
         assertEquals("COMPULSORYEDUCATION", material1.getEducationalContexts().get(1).getName());
 
     }
+
+    @Test
+    public void testMaterialLicense() {
+        Material material = materialDAO.findById(1);
+        assertEquals("CCBY", material.getLicenseType().getText());
+    }
 }

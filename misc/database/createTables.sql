@@ -11,6 +11,7 @@ DROP TABLE IF EXISTS Material_Author;
 DROP TABLE IF EXISTS LanguageString;
 DROP TABLE IF EXISTS LanguageKeyCodes;
 DROP TABLE IF EXISTS Material;
+DROP TABLE IF EXISTS LicenseType;
 DROP TABLE IF EXISTS LanguageTable;
 DROP TABLE IF EXISTS IssueDate;
 DROP TABLE IF EXISTS Classification;
@@ -59,10 +60,16 @@ CREATE TABLE LanguageTable (
   code VARCHAR(255) NOT NULL
 );
 
+CREATE TABLE LicenseType (
+  id   BIGINT AUTO_INCREMENT PRIMARY KEY,
+  text VARCHAR(255) NOT NULL
+);
+
 CREATE TABLE Material (
 	id BIGINT AUTO_INCREMENT PRIMARY KEY,
 	lang BIGINT,
 	issueDate BIGINT,
+  licenseType BIGINT,
   source TEXT NOT NULL,
 
   FOREIGN KEY (lang)

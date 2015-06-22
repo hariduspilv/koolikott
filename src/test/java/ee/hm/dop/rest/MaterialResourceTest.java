@@ -93,4 +93,14 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
 
         assertEquals("PRESCHOOL", material.getEducationalContexts().get(0).getName());
     }
+
+    @Test
+    public void getMaterialLicenseType() {
+        Response response = doGet("material/getAll");
+        List<Material> materials = response.readEntity(new GenericType<List<Material>>() {
+        });
+        Material material = materials.get(0);
+
+        assertEquals("CCBY", material.getLicenseType().getText());
+    }
 }
