@@ -66,8 +66,10 @@
                         <article>
                             <div data-ng-if="sourceType === 'YOUTUBE'" class="embed-responsive embed-responsive-16by9">
                                 <youtube-video video-url="material.source" player-width="'768'" player-height="'432'" class="embed-responsive-item"></youtube-video>
-                            <div>
-                            <a data-ng-if="sourceType === 'LINK'" data-ng-href="{{material.source}}" target="_blank" data-ng-bind="material.source"></a>
+                            </div>
+                            <a data-ng-if="sourceType === 'LINK'" data-ng-href="{{material.source}}" target="_blank" data-ng-bind="material.source">Link</a>
+                            
+                            <a href="#" class="material-type material-type-link pull-left hidden"><i class="fa fa-link"></i> <span class="item-label">Link õppematerjalile</span><span class="item-link">https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes</span></a>
                         </article>
                     </section>
                 </div>

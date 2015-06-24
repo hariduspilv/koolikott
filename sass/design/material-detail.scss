@@ -48,7 +48,17 @@
             padding: 20px 40px; background: #F4F4F4
         }; 
         article {
-            padding: 45px 40px
+            padding: 45px 40px;
+            
+            .material-type-link {position: relative; padding-left: 25px;
+                
+                .fa-link {position: absolute; top: 5px; left: 0; font-size: 20px}
+                
+                .item-label {display: block; font-size: 17px}
+                
+                .item-link {display: block; font-size: 13px; color: $font-color-grey-light}
+                
+            }
         }
     }
 }
