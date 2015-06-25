@@ -18,9 +18,9 @@
                                     </span>
                                 </div>
                                 <div class="clearfix">
-                                    <div data-ng-if="material.issueDate.year >= 100" class="pull-left">{{formatIssueDate(material.issueDate)}}</div>
-                                    <div data-ng-if="material.issueDate.year > 0 && material.issueDate.year < 100" class="pull-left">{{formatIssueDate(material.issueDate)}} AD</div>
-                                    <div data-ng-if="material.issueDate.year < 0" class="pull-left">{{formatIssueDate(material.issueDate)}} BC</div>
+                                    <div data-ng-if="material.issueDate.year >= 100" class="pull-left">{{formatMaterialIssueDate(material.issueDate)}}</div>
+                                    <div data-ng-if="material.issueDate.year > 0 && material.issueDate.year < 100" class="pull-left">{{formatMaterialIssueDate(material.issueDate)}} AD</div>
+                                    <div data-ng-if="material.issueDate.year < 0" class="pull-left">{{formatMaterialIssueDate(material.issueDate)}} BC</div>
                                     <div data-ng-if="!material.issueDate.year" class="pull-left">Unkown</div>
                                 </div>
                             </div>

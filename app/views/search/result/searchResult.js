@@ -17,35 +17,11 @@ define(['app'], function(app)
     	function getAllMaterialFail(data, status) {
             console.log('Session search failed.')
     	}
-    	
-    	$scope.formatIssueDate = function(issueDate) {
-    		if (!issueDate) {
-    			return;
-    		}
-    		
-    		if (issueDate.day && issueDate.month && issueDate.year) {
-    			// full date
-    			return formatDay(issueDate.day) + "." + formatMonth(issueDate.month) + "." + formatYear(issueDate.year); 
-    		} else if (issueDate.month && issueDate.year) {
-    			// month date
-    			return formatMonth(issueDate.month) + "." + formatYear(issueDate.year); 
-    		} else if (issueDate.year) {
-    			// year date
-    			return formatYear(issueDate.year); 
-    		}
-    	}
-    	
-    	function formatDay(day) {
-    		return day > 9 ? "" + day : "0" + day; 
-    	}
-    	
-    	function formatMonth(month) {
-    		return month > 9 ? "" + month : "0" + month; 
-    	}
-    	
-    	function formatYear(year) {
-    		return year < 0 ? year * -1 : year; 
-    	}
+
+        $scope.formatMaterialIssueDate = function(issueDate) {
+            return formatIssueDate(issueDate);
+            
+        }
 
         $scope.formatName = function(name) {
             return arrayToInitials(name.split(" "));
