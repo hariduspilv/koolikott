@@ -107,9 +107,42 @@ public class MaterialDAOTest extends DatabaseTestBase {
     @Test
     public void testMaterialResourceType() {
         Material material1 = materialDAO.findById(1);
-        assertEquals("textbook", material1.getResourceTypes().get(0).getName());
+        assertEquals("TEXTBOOK", material1.getResourceTypes().get(0).getName());
 
         Material material2 = materialDAO.findById(1);
-        assertEquals("experiment", material2.getResourceTypes().get(1).getName());
+        assertEquals("EXPERIMENT", material2.getResourceTypes().get(1).getName());
+    }
+
+    @Test
+    public void testMaterialClassification() {
+        Material material1 = materialDAO.findById(1);
+        assertEquals("Biology", material1.getClassifications().get(0).getName());
+        assertEquals("Plants", material1.getClassifications().get(0).getChildren().get(0).getName());
+
+        Material material2 = materialDAO.findById(5);
+
+        assertEquals("Algebra", material2.getClassifications().get(0).getParent().getName());
+
+    }
+
+    @Test
+    public void testMaterialEducationalContext() {
+        Material material1 = materialDAO.findById(1);
+        assertEquals("PRESCHOOL", material1.getEducationalContexts().get(0).getName());
+        assertEquals("COMPULSORYEDUCATION", material1.getEducationalContexts().get(1).getName());
+
+    }
+
+    @Test
+    public void testMaterialLicense() {
+        Material material = materialDAO.findById(1);
+        assertEquals("CCBY", material.getLicenseType().getText());
+    }
+
+    @Test
+    public void testMaterialPublisher() {
+        Material material = materialDAO.findById(1);
+        assertEquals("Koolibri", material.getPublishers().get(0).getText());
+        assertEquals("http://www.pegasus.ee", material.getPublishers().get(1).getWebsite());
     }
 }

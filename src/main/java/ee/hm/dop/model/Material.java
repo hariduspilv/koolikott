@@ -11,11 +11,14 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToOne;
 import javax.persistence.UniqueConstraint;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
@@ -23,6 +26,7 @@ import ee.hm.dop.rest.jackson.map.LanguageDeserializer;
 import ee.hm.dop.rest.jackson.map.LanguageSerializer;
 
 @Entity
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id", scope = Material.class)
 @NamedQueries({ @NamedQuery(name = "Material.findById", query = "SELECT m FROM Material m WHERE m.id = :id") })
 public class Material {
 
@@ -66,6 +70,34 @@ public class Material {
             inverseJoinColumns = { @JoinColumn(name = "resourceType") },
             uniqueConstraints = @UniqueConstraint(columnNames = { "material", "resourceType" }))
     private List<ResourceType> resourceTypes;
+
+    @ManyToMany(fetch = EAGER)
+    @JoinTable(
+            name = "Material_Classification",
+            joinColumns = { @JoinColumn(name = "material") },
+            inverseJoinColumns = { @JoinColumn(name = "classification") },
+            uniqueConstraints = @UniqueConstraint(columnNames = { "material", "classification" }))
+    private List<Classification> classifications;
+
+    @ManyToMany(fetch = EAGER)
+    @JoinTable(
+            name = "Material_EducationalContext",
+            joinColumns = { @JoinColumn(name = "material") },
+            inverseJoinColumns = { @JoinColumn(name = "educationalContext") },
+            uniqueConstraints = @UniqueConstraint(columnNames = { "material", "educationalContext" }))
+    private List<EducationalContext> educationalContexts;
+
+    @ManyToOne
+    @JoinColumn(name = "licenseType")
+    private LicenseType licenseType;
+
+    @ManyToMany(fetch = EAGER)
+    @JoinTable(
+            name = "Material_Publisher",
+            joinColumns = { @JoinColumn(name = "material") },
+            inverseJoinColumns = { @JoinColumn(name = "publisher") },
+            uniqueConstraints = @UniqueConstraint(columnNames = { "material", "publisher" }))
+    private List<Publisher> publishers;
 
     public Long getId() {
         return id;
@@ -131,5 +163,37 @@ public class Material {
 
     public void setResourceTypes(List<ResourceType> resourceTypes) {
         this.resourceTypes = resourceTypes;
+    }
+
+    public List<Classification> getClassifications() {
+        return classifications;
+    }
+
+    public void setClassifications(List<Classification> classifications) {
+        this.classifications = classifications;
+    }
+
+    public List<EducationalContext> getEducationalContexts() {
+        return educationalContexts;
+    }
+
+    public void setEducationalContexts(List<EducationalContext> educationalContexts) {
+        this.educationalContexts = educationalContexts;
+    }
+
+    public LicenseType getLicenseType() {
+        return licenseType;
+    }
+
+    public void setLicenseType(LicenseType licenseType) {
+        this.licenseType = licenseType;
+    }
+
+    public List<Publisher> getPublishers() {
+        return publishers;
+    }
+
+    public void setPublishers(List<Publisher> publishers) {
+        this.publishers = publishers;
     }
 }
