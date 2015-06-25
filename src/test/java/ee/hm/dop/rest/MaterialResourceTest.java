@@ -103,4 +103,15 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
 
         assertEquals("CCBY", material.getLicenseType().getText());
     }
+
+    @Test
+    public void getMaterialPublisher() {
+        Response response = doGet("material/getAll");
+        List<Material> materials = response.readEntity(new GenericType<List<Material>>() {
+        });
+        Material material = materials.get(0);
+
+        assertEquals("Koolibri", material.getPublishers().get(0).getText());
+
+    }
 }

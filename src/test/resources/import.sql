@@ -167,6 +167,19 @@ insert into Material_EducationalContext(material, educationalContext) values (5,
 insert into Material_EducationalContext(material, educationalContext) values (6, 1002);
 insert into Material_EducationalContext(material, educationalContext) values (7, 1004);
 
+-- Publishers
+
+insert into Publisher(id, text, website) values (1, 'Koolibri', 'http://www.koolibri.ee');
+insert into Publisher(id, text, website) values (2, 'Pegasus', 'http://www.pegasus.ee');
+insert into Publisher(id, text, website) values (3, 'Varrak', 'http://www.varrak.ee');
+
+-- MaterialPublisher
+
+insert into Material_Publisher(material, publisher) values (1, 1);
+insert into Material_Publisher(material, publisher) values (1, 2);
+insert into Material_Publisher(material, publisher) values (2, 2);
+insert into Material_Publisher(material, publisher) values (3, 3);
+
 -- TranslationGroup
 
 insert into TranslationGroup(id, lang) values (1, 1);

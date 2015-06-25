@@ -6,6 +6,7 @@ DROP TABLE IF EXISTS Material_EducationalContext;
 DROP TABLE IF EXISTS Material_ResourceType;
 DROP TABLE IF EXISTS Material_Description;
 DROP TABLE IF EXISTS Material_Title;
+DROP TABLE IF EXISTS Material_Publisher;
 DROP TABLE IF EXISTS Material_Classification;
 DROP TABLE IF EXISTS Material_Author;
 DROP TABLE IF EXISTS LanguageString;
@@ -14,6 +15,7 @@ DROP TABLE IF EXISTS Material;
 DROP TABLE IF EXISTS LicenseType;
 DROP TABLE IF EXISTS LanguageTable;
 DROP TABLE IF EXISTS IssueDate;
+DROP TABLE IF EXISTS Publisher;
 DROP TABLE IF EXISTS Classification;
 DROP TABLE IF EXISTS EducationalContext;
 DROP TABLE IF EXISTS ResourceType;
@@ -45,6 +47,12 @@ CREATE TABLE Classification (
   FOREIGN KEY (parent)
   REFERENCES Classification (id)
     ON DELETE RESTRICT
+);
+
+CREATE TABLE Publisher (
+  id      BIGINT AUTO_INCREMENT PRIMARY KEY,
+  text    VARCHAR(255) NOT NULL UNIQUE,
+  website VARCHAR(255) NOT NULL UNIQUE
 );
 
 CREATE TABLE IssueDate (
@@ -129,7 +137,21 @@ CREATE TABLE Material_Classification (
   REFERENCES Material (id)
     ON DELETE RESTRICT
 
+);
 
+CREATE TABLE Material_Publisher (
+  material  BIGINT NOT NULL,
+  publisher BIGINT NOT NULL,
+
+  PRIMARY KEY (material, publisher),
+
+  FOREIGN KEY (publisher)
+  REFERENCES Publisher (id)
+    ON DELETE RESTRICT,
+
+  FOREIGN KEY (material)
+  REFERENCES Material (id)
+    ON DELETE RESTRICT
 );
 
 CREATE TABLE Material_Title (

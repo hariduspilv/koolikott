@@ -91,6 +91,14 @@ public class Material {
     @JoinColumn(name = "licenseType")
     private LicenseType licenseType;
 
+    @ManyToMany(fetch = EAGER)
+    @JoinTable(
+            name = "Material_Publisher",
+            joinColumns = { @JoinColumn(name = "material") },
+            inverseJoinColumns = { @JoinColumn(name = "publisher") },
+            uniqueConstraints = @UniqueConstraint(columnNames = { "material", "publisher" }))
+    private List<Publisher> publishers;
+
     public Long getId() {
         return id;
     }
@@ -179,5 +187,13 @@ public class Material {
 
     public void setLicenseType(LicenseType licenseType) {
         this.licenseType = licenseType;
+    }
+
+    public List<Publisher> getPublishers() {
+        return publishers;
+    }
+
+    public void setPublishers(List<Publisher> publishers) {
+        this.publishers = publishers;
     }
 }
