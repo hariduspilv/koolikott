@@ -18,9 +18,9 @@ insert into LanguageTable(id, name, code) values (5, 'Portuguese', 'por');
 
 -- License Type
 
-insert into LicenseType(id, text) values (1, 'CCBY');
-insert into LicenseType(id, text) values (2, 'CCBYSA');
-insert into LicenseType(id, text) values (3, 'CCBYND');
+insert into LicenseType(id, name) values (1, 'CCBY');
+insert into LicenseType(id, name) values (2, 'CCBYSA');
+insert into LicenseType(id, name) values (3, 'CCBYND');
 
 -- Materials
 
@@ -169,9 +169,9 @@ insert into Material_EducationalContext(material, educationalContext) values (7,
 
 -- Publishers
 
-insert into Publisher(id, text, website) values (1, 'Koolibri', 'http://www.koolibri.ee');
-insert into Publisher(id, text, website) values (2, 'Pegasus', 'http://www.pegasus.ee');
-insert into Publisher(id, text, website) values (3, 'Varrak', 'http://www.varrak.ee');
+insert into Publisher(id, name, website) values (1, 'Koolibri', 'http://www.koolibri.ee');
+insert into Publisher(id, name, website) values (2, 'Pegasus', 'http://www.pegasus.ee');
+insert into Publisher(id, name, website) values (3, 'Varrak', 'http://www.varrak.ee');
 
 -- MaterialPublisher
 

@@ -101,7 +101,7 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
         });
         Material material = materials.get(0);
 
-        assertEquals("CCBY", material.getLicenseType().getText());
+        assertEquals("CCBY", material.getLicenseType().getName());
     }
 
     @Test
@@ -111,7 +111,7 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
         });
         Material material = materials.get(0);
 
-        assertEquals("Koolibri", material.getPublishers().get(0).getText());
+        assertEquals("Koolibri", material.getPublishers().get(0).getName());
 
     }
 }

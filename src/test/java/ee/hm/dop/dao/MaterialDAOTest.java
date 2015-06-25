@@ -136,13 +136,13 @@ public class MaterialDAOTest extends DatabaseTestBase {
     @Test
     public void testMaterialLicense() {
         Material material = materialDAO.findById(1);
-        assertEquals("CCBY", material.getLicenseType().getText());
+        assertEquals("CCBY", material.getLicenseType().getName());
     }
 
     @Test
     public void testMaterialPublisher() {
         Material material = materialDAO.findById(1);
-        assertEquals("Koolibri", material.getPublishers().get(0).getText());
+        assertEquals("Koolibri", material.getPublishers().get(0).getName());
         assertEquals("http://www.pegasus.ee", material.getPublishers().get(1).getWebsite());
     }
 }
