@@ -13,9 +13,9 @@ insert into EducationalContext(id, educationalContext) values (1008, 'OTHER');
 
 -- License Type
 
-insert into LicenseType(id, text) values (1, 'CCBY');
-insert into LicenseType(id, text) values (2, 'CCBYSA');
-insert into LicenseType(id, text) values (3, 'CCBYND');
+insert into LicenseType(id, name) values (1, 'CCBY');
+insert into LicenseType(id, name) values (2, 'CCBYSA');
+insert into LicenseType(id, name) values (3, 'CCBYND');
 
 -- Classifications
 
