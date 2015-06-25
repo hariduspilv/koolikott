@@ -21,8 +21,8 @@ insert into LanguageTable(id, name, code) values (5, 'Portuguese', 'por');
 insert into Material(id, lang, issueDate, source) values(1, 1, 1, 'https://www.youtube.com/watch?v=gSWbx3CvVUk');
 insert into Material(id, lang, issueDate, source) values(2, 2, 2, 'https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes');
 insert into Material(id, lang, issueDate, source) values(3, 4, 3, 'http://eloquentjavascript.net/Eloquent_JavaScript.pdf');
-insert into Material(id, lang, issueDate, source) values(4, 5, 4, 'https://en.wikipedia.org/wiki/Power_Architecture');
-insert into Material(id, lang, issueDate, source) values(5, 5, 5, 'https://en.wikipedia.org/wiki/Power_Architecture');
+insert into Material(id, lang, issueDate, source) values(4, 3, 4, 'https://en.wikipedia.org/wiki/Power_Architecture');
+insert into Material(id, lang, issueDate, source) values(5, 3, 5, 'https://en.wikipedia.org/wiki/Power_Architecture');
 insert into Material(id, lang, issueDate, source) values(6, null, null, 'http://www.planalto.gov.br/ccivil_03/Constituicao/Constituicao.htm');
 insert into Material(id, lang, issueDate, source) values(7, 4, 6, 'https://president.ee/en/republic-of-estonia/the-constitution/index.html');
 insert into Material(id, lang, issueDate, source) values(8, 5, 7, 'http://www.palmeiras.com.br/historia/titulos');
@@ -49,20 +49,20 @@ insert into Material_Author(material, author) values(8, 2);
 
 insert into LanguageKeyCodes(lang, code) values (1, 'et');
 insert into LanguageKeyCodes(lang, code) values (2, 'ru');
-insert into LanguageKeyCodes(lang, code) values (3, 'pt');
-insert into LanguageKeyCodes(lang, code) values (3, 'pt-br');
-insert into LanguageKeyCodes(lang, code) values (5, 'en');
+insert into LanguageKeyCodes(lang, code) values (3, 'en');
+insert into LanguageKeyCodes(lang, code) values (5, 'pt');
+insert into LanguageKeyCodes(lang, code) values (5, 'pt-br');
 
 -- Material Descriptions
 
 insert into LanguageString(id, lang, textValue) values (1, 1, 'Test description in estonian. (Russian available)');
 insert into LanguageString(id, lang, textValue) values (2, 2, 'Test description in russian, which is the only language available.');
 insert into LanguageString(id, lang, textValue) values (3, 2, 'Test description in russian. (Estonian available)');
-insert into LanguageString(id, lang, textValue) values (4, 3, 'Test description in portugese, as the material language (english) not available.');
+insert into LanguageString(id, lang, textValue) values (4, 5, 'Test description in portugese, as the material language (english) not available.');
 insert into LanguageString(id, lang, textValue) values (5, 4, 'Test description in arabic (material language). No estonian or russian available.');
-insert into LanguageString(id, lang, textValue) values (6, 5, 'Test description in english, which is the material language.');
-insert into LanguageString(id, lang, textValue) values (7, 5, 'Test description in english, which is not the material language. Others are also available, but arent estonian or russian.');
-insert into LanguageString(id, lang, textValue) values (8, 3, 'Test description in portugese, english also available.');
+insert into LanguageString(id, lang, textValue) values (6, 3, 'Test description in english, which is the material language.');
+insert into LanguageString(id, lang, textValue) values (7, 3, 'Test description in english, which is not the material language. Others are also available, but arent estonian or russian.');
+insert into LanguageString(id, lang, textValue) values (8, 5, 'Test description in portugese, english also available.');
 
 insert into Material_Description(description, material) values(1, 1);
 insert into Material_Description(description, material) values(2, 2);
