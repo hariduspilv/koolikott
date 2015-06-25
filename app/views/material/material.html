@@ -51,7 +51,12 @@
                     </dl>
                     
                     <div class="text-right"><span data-translate="REPOSITORY_NUMBER"></span> Five</div>
-                    <div class="text-right text-grey"><small>Repository</small></div>
+
+                    <div class="text-right text-grey">
+                        <div data-ng-repeat="publisher in material.publishers">
+                            <a data-ng-href="{{publisher.website}}" target="_blank"><small ng-bind="publisher.text"></small></a>
+                        </div>
+                    </div>
                     <div class="text-right" data-translate="ALL_RIGHTS_RESERVED">All rights reserved</div>
                     <div class="text-right text-grey"><small ng-bind="material.licenseType.text"></small></div>
                 </div>
