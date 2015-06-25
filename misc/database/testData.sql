@@ -125,24 +125,16 @@ insert into Material_Classification(classification, material) values(1,4);
 insert into Material_Classification(classification, material) values(5,4);
 insert into Material_Classification(classification, material) values(7,5);
 
--- ResourceType
-
-insert into ResourceType(id, resourceType) values (1001, 'TEXTBOOK1');
-insert into ResourceType(id, resourceType) values (1002, 'EXPERIMENT1');
-insert into ResourceType(id, resourceType) values (1003, 'SIMULATION1');
-insert into ResourceType(id, resourceType) values (1004, 'GLOSSARY1');
-insert into ResourceType(id, resourceType) values (1005, 'ROLEPLAY1');
-
 -- Material_ResourceType
 
-insert into Material_ResourceType(material, resourceType) values (1, 1001);
-insert into Material_ResourceType(material, resourceType) values (1, 1002);
-insert into Material_ResourceType(material, resourceType) values (2, 1003);
-insert into Material_ResourceType(material, resourceType) values (3, 1004);
-insert into Material_ResourceType(material, resourceType) values (4, 1005);
-insert into Material_ResourceType(material, resourceType) values (5, 1003);
-insert into Material_ResourceType(material, resourceType) values (6, 1002);
-insert into Material_ResourceType(material, resourceType) values (7, 1004);
+insert into Material_ResourceType(material, resourceType) values (1, 1);
+insert into Material_ResourceType(material, resourceType) values (1, 2);
+insert into Material_ResourceType(material, resourceType) values (2, 3);
+insert into Material_ResourceType(material, resourceType) values (3, 4);
+insert into Material_ResourceType(material, resourceType) values (4, 5);
+insert into Material_ResourceType(material, resourceType) values (5, 3);
+insert into Material_ResourceType(material, resourceType) values (6, 2);
+insert into Material_ResourceType(material, resourceType) values (7, 4);
 
 -- EducationalContext
 
