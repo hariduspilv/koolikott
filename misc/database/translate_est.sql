@@ -51,7 +51,7 @@ insert into Translation(translationGroup, translationKey, translation) values (1
 insert into Translation(translationGroup, translationKey, translation) values (1, 'CONTINUINGEDUCATION', 'Täiendõpe');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'PROFESSIONALDEVELOPMENT', 'Erialana areng');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'SPECIALEDUCATION', 'Eripdagoogika');
-
+insert into Translation(translationGroup, translationKey, translation) values (1, 'MATERIAL_VIEW_LINK_TO_MATERIAL', 'Ava õppematerjal');
 
 
 
