@@ -18,7 +18,7 @@
              
             };
             
-            .authors {position: relative; height: 20px; margin-bottom: 15px; white-space: nowrap; overflow: hidden;
+            .authors {position: relative; height: 20px; margin-bottom: 15px; overflow: hidden;
                       
                 &:after {position: absolute; bottom: 0; right: 0; dislay: block; content: ""; width: 30px; height: 100%; @include gradient-horizontal-to-transparent($start-color: rgba(255, 255, 255, 1), $end-color: rgba(255, 255, 255, 0)); pointer-events: none}
             

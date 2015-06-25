@@ -27,10 +27,10 @@
                 </div>
                 <div class="col-md-3">
                     <dl class="dl-horizontal">
-                        <dt class="text-grey">
+                        <dt class="text-grey text-big">
                             <span data-translate="UPDATED"></span><span>:</span>
                         </dt>
-                        <dd class="text-right">
+                        <dd class="text-right text-big">
                             14.05.2015
                         </dd>
                         <dt class="text-grey">
@@ -71,8 +71,14 @@
                         <article>
                             <div data-ng-if="sourceType === 'YOUTUBE'" class="embed-responsive embed-responsive-16by9">
                                 <youtube-video video-url="material.source" player-width="'768'" player-height="'432'" class="embed-responsive-item"></youtube-video>
-                            <div>
-                            <a data-ng-if="sourceType === 'LINK'" data-ng-href="{{material.source}}" target="_blank" data-ng-bind="material.source"></a>
+                            </div>
+                            
+                            <div data-ng-if="sourceType === 'LINK'" class="clearfix">
+                                <a data-ng-href="{{material.source}}" target="_blank" class="material-type material-type-link pull-left">
+                                    <i class="fa fa-link"></i> <span class="item-label" data-translate="MATERIAL_VIEW_LINK_TO_MATERIAL">Open material</span>
+                                    <span class="item-link" data-ng-bind="material.source"></span>
+                                </a>
+                            </div>
                         </article>
                     </section>
                 </div>
