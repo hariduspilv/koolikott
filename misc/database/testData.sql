@@ -1,3 +1,36 @@
+-- Those should be in separate files with complete data
+
+-- EducationalContext
+
+insert into EducationalContext(id, educationalContext) values (1001, 'PRESCHOOL');
+insert into EducationalContext(id, educationalContext) values (1002, 'COMPULSORYEDUCATION');
+insert into EducationalContext(id, educationalContext) values (1003, 'VOCATIONALEDUCATION');
+insert into EducationalContext(id, educationalContext) values (1004, 'HIGHEREDUCATION');
+insert into EducationalContext(id, educationalContext) values (1005, 'CONTINUINGEDUCATION');
+insert into EducationalContext(id, educationalContext) values (1006, 'PROFESSIONALDEVELOPMENT');
+insert into EducationalContext(id, educationalContext) values (1007, 'SPECIALEDUCATION');
+insert into EducationalContext(id, educationalContext) values (1008, 'OTHER');
+
+-- License Type
+
+insert into LicenseType(id, text) values (1, 'CCBY');
+insert into LicenseType(id, text) values (2, 'CCBYSA');
+insert into LicenseType(id, text) values (3, 'CCBYND');
+
+-- Classifications
+
+insert into Classification(id, classificationName, parent) values (1, 'Biology', null);
+insert into Classification(id, classificationName, parent) values(2, 'Plants', 1);
+insert into Classification(id, classificationName, parent) values(3, 'Trees', 2);
+insert into Classification(id, classificationName, parent) values (4, 'Math', null);
+insert into Classification(id, classificationName, parent) values(5, 'Algebra', 4);
+insert into Classification(id, classificationName, parent) values(6, 'Linear', 5);
+insert into Classification(id, classificationName, parent) values(7, 'Quadratic', 5);
+
+
+
+-- Start of test data
+
 -- IssueDate
 
 insert into IssueDate(id, day, month, year) values(1, 2, 2, 1983);
@@ -7,20 +40,6 @@ insert into IssueDate(id, day, month, year) values(4, 31, 3, 1923);
 insert into IssueDate(id, day, month, year) values(5, 9, 12, 1978);
 insert into IssueDate(id, day, month, year) values(6, 27, 1, 1986);
 insert into IssueDate(id, month, year) values(7, 3, 1991);
-
--- LanguageTable
-
-insert into LanguageTable(id, name, code) values (1, 'Estonian', 'est');
-insert into LanguageTable(id, name, code) values (2, 'Russian', 'rus');
-insert into LanguageTable(id, name, code) values (3, 'English', 'eng');
-insert into LanguageTable(id, name, code) values (4, 'Arabic', 'ara');
-insert into LanguageTable(id, name, code) values (5, 'Portuguese', 'por');
-
--- License Type
-
-insert into LicenseType(id, text) values (1, 'CCBY');
-insert into LicenseType(id, text) values (2, 'CCBYSA');
-insert into LicenseType(id, text) values (3, 'CCBYND');
 
 -- Materials
 
@@ -50,14 +69,6 @@ insert into Material_Author(material, author) values(5, 3);
 insert into Material_Author(material, author) values(6, 3);
 insert into Material_Author(material, author) values(7, 3);
 insert into Material_Author(material, author) values(8, 2);
-
--- LanguageKeyCodes
-
-insert into LanguageKeyCodes(lang, code) values (1, 'et');
-insert into LanguageKeyCodes(lang, code) values (2, 'ru');
-insert into LanguageKeyCodes(lang, code) values (3, 'en');
-insert into LanguageKeyCodes(lang, code) values (5, 'pt');
-insert into LanguageKeyCodes(lang, code) values (5, 'pt-br');
 
 -- Material Descriptions
 
@@ -104,17 +115,6 @@ insert into Material_Title(title, material) values(16, 7);
 insert into Material_Title(title, material) values(17, 6);
 insert into Material_Title(title, material) values(18, 8);
 
--- Classifications
-
-insert into Classification(id, classificationName, parent) values (1, 'Biology', null);
-insert into Classification(id, classificationName, parent) values(2, 'Plants', 1);
-insert into Classification(id, classificationName, parent) values(3, 'Trees', 2);
-insert into Classification(id, classificationName, parent) values (4, 'Math', null);
-insert into Classification(id, classificationName, parent) values(5, 'Algebra', 4);
-insert into Classification(id, classificationName, parent) values(6, 'Linear', 5);
-insert into Classification(id, classificationName, parent) values(7, 'Quadratic', 5);
-
-
 -- Material classifications
 
 insert into Material_Classification(classification, material) values(1,1);
@@ -136,19 +136,7 @@ insert into Material_ResourceType(material, resourceType) values (5, 3);
 insert into Material_ResourceType(material, resourceType) values (6, 2);
 insert into Material_ResourceType(material, resourceType) values (7, 4);
 
--- EducationalContext
-
-insert into EducationalContext(id, educationalContext) values (1001, 'PRESCHOOL');
-insert into EducationalContext(id, educationalContext) values (1002, 'COMPULSORYEDUCATION');
-insert into EducationalContext(id, educationalContext) values (1003, 'VOCATIONALEDUCATION');
-insert into EducationalContext(id, educationalContext) values (1004, 'HIGHEREDUCATION');
-insert into EducationalContext(id, educationalContext) values (1005, 'CONTINUINGEDUCATION');
-insert into EducationalContext(id, educationalContext) values (1006, 'PROFESSIONALDEVELOPMENT');
-insert into EducationalContext(id, educationalContext) values (1007, 'SPECIALEDUCATION');
-insert into EducationalContext(id, educationalContext) values (1008, 'OTHER');
-
-
--- EducationalContext
+-- Material_EducationalContext
 
 insert into Material_EducationalContext(material, educationalContext) values (1, 1001);
 insert into Material_EducationalContext(material, educationalContext) values (1, 1002);
@@ -171,26 +159,3 @@ insert into Material_Publisher(material, publisher) values (1, 1);
 insert into Material_Publisher(material, publisher) values (1, 2);
 insert into Material_Publisher(material, publisher) values (2, 2);
 insert into Material_Publisher(material, publisher) values (3, 3);
-
--- TranslationGroup
-
-insert into TranslationGroup(id, lang) values (1, 1);
-insert into TranslationGroup(id, lang) values (2, 2);
-insert into TranslationGroup(id, lang) values (3, 3);
-
--- Translation
-
--- Estonian
-insert into Translation(translationGroup, translationKey, translation) values (1, 'FOO', 'FOO sõnum');
-insert into Translation(translationGroup, translationKey, translation) values (1, 'Estonian', 'Eesti keeles');
-insert into Translation(translationGroup, translationKey, translation) values (1, 'Russian', 'Vene keel');
-
--- Russian
-insert into Translation(translationGroup, translationKey, translation) values (2, 'FOO', 'FOO сообщение');
-insert into Translation(translationGroup, translationKey, translation) values (2, 'Estonian', 'Эстонский язык');
-insert into Translation(translationGroup, translationKey, translation) values (2, 'Russian', 'русский язык');
-
--- English
-insert into Translation(translationGroup, translationKey, translation) values (3, 'FOO', 'FOO message');
-insert into Translation(translationGroup, translationKey, translation) values (3, 'Estonian', 'Estonian');
-insert into Translation(translationGroup, translationKey, translation) values (3, 'Russian', 'Russian');
