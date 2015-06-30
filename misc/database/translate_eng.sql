@@ -2,7 +2,7 @@
 insert into Translation(translationGroup, translationKey, translation) values (3, 'LOGIN', 'Login');
 insert into Translation(translationGroup, translationKey, translation) values (3, 'SUBJECT', 'Subject');
 insert into Translation(translationGroup, translationKey, translation) values (3, 'MATERIAL_VIEW_RESOURCE_TYPE', 'Type');
-insert into Translation(translationGroup, translationKey, translation) values (3, 'EDUCATIONAL_CONTEXT', 'Educational context');
+insert into Translation(translationGroup, translationKey, translation) values (3, 'MATERIAL_VIEW_EDUCATIONAL_CONTEXT', 'Educational context');
 insert into Translation(translationGroup, translationKey, translation) values (3, 'UPDATED', 'Updated');
 insert into Translation(translationGroup, translationKey, translation) values (3, 'ADDED', 'Added');
 insert into Translation(translationGroup, translationKey, translation) values (3, 'CREATED', 'Created');

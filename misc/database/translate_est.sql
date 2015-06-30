@@ -2,7 +2,7 @@
 insert into Translation(translationGroup, translationKey, translation) values (1, 'LOGIN', 'Logi sisse');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'SUBJECT', 'Teema');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'MATERIAL_VIEW_RESOURCE_TYPE', 'Tüüp');
-insert into Translation(translationGroup, translationKey, translation) values (1, 'EDUCATIONAL_CONTEXT', 'Vanuserühmadele');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'MATERIAL_VIEW_EDUCATIONAL_CONTEXT', 'Vanuserühmadele');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'UPDATED', 'Uuendatud');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'ADDED', 'Lisatud');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'CREATED', 'Loodud');
