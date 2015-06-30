@@ -4,23 +4,29 @@ define(['app'], function(app)
     		 function($scope, serverCallService, $route, translationService, $rootScope) {
         if ($rootScope.savedMaterial){
             $scope.material = $rootScope.savedMaterial;
-            setSourceType();
+            init();
         } else {
             var materialId = $route.current.params.materialId;
             var params = {};
             serverCallService.makeGet("rest/material?materialId=" + materialId, params, getMaterialSuccess, getMaterialFail); 
         }
-    	function getMaterialSuccess(material) {
+    	
+        function getMaterialSuccess(material) {
             if (isEmpty(material)) {
                 log('No data returned by getting material');
                 } else {
                     $scope.material = material;
-                    setSourceType();
+                    init();
                 }
     	}
     	
     	function getMaterialFail(material, status) {
             log('Getting materials failed.');
+    	}
+    	
+    	function init() {
+            setSourceType();
+            $scope.materialSubjects = getSubjectList()
     	}
 
         $scope.getCorrectLanguageString = function(languageStringList) {
@@ -47,19 +53,34 @@ define(['app'], function(app)
             return formatIssueDate(issueDate);
             
         }
+        
+        /**
+         *  Gets the list of unique material subjects
+         */
+        function getSubjectList() {
+        	var subjects = [];
 
-        $scope.getClassification = function(classifications) {
-            if (classifications && classifications[0]) {
-                var res = findParentObject(classifications[0]);
-                return res.name;
+        	var classifications = $scope.material.classifications;
+        	if (classifications) {
+            	for (var i = 0; i < classifications.length; i++) {
+            		subject = getClassificationSubject(classifications[i]);
+            		if (subjects.indexOf(subject) < 0) {
+            			subjects[subjects.length] = subject;
+            		}
+            	}
             }
+        	
+        	return subjects;
         }
 
-        function findParentObject (classification) {
+        /**
+         * Subject is the root classification 
+         */
+        function getClassificationSubject (classification) {
             if (!classification.parent) {
-                return classification;
+                return classification.name;
             }
-            return findParentObject(classification.parent);
+            return getClassificationSubject(classification.parent);
         }
 
     }]);
