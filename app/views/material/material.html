@@ -22,7 +22,9 @@
                             <div class="label">
                                 <span data-translate="EDUCATIONAL_CONTEXT"></span>:
                             </div>
-                            <span data-translate="{{material.educationalContexts[0].name.toUpperCase()}}"></span>
+                            <span data-ng-repeat="educationalContext in material.educationalContexts">
+                                <span data-translate="{{educationalContext.name.toUpperCase()}}"></span><span data-ng-bind="$index < material.educationalContexts.length - 1 ? ', ' : ''"></span>
+                            </span>
                         </div>
                     </div>
                     <div class="heading">
