@@ -1,6 +1,6 @@
 -- Russian translations
 insert into Translation(translationGroup, translationKey, translation) values (2, 'LOGIN', 'Войти');
-insert into Translation(translationGroup, translationKey, translation) values (2, 'SUBJECT', 'Тема');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'MATERIAL_VIEW_SUBJECT', 'Тема');
 insert into Translation(translationGroup, translationKey, translation) values (2, 'MATERIAL_VIEW_RESOURCE_TYPE', 'Тип');
 insert into Translation(translationGroup, translationKey, translation) values (2, 'MATERIAL_VIEW_EDUCATIONAL_CONTEXT', 'Возрастные группы');
 insert into Translation(translationGroup, translationKey, translation) values (2, 'UPDATED', 'Новый');
