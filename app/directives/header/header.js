@@ -5,7 +5,7 @@ define(['app'], function(app)
         return {
             scope: true,
             templateUrl: 'app/directives/header/header.html',
-            controller: function ($scope) {
+            controller: function ($scope, $location) {
                 $scope.showLanguageSelection = false;
                 $scope.selectedLanguage = translationService.getLanguage();
 	        
@@ -23,6 +23,12 @@ define(['app'], function(app)
                     translationService.setLanguage(language);
                     $scope.selectedLanguage = language;
                     $scope.showLanguageSelection = false;
+                }
+                
+                $scope.search = function() {
+                	if (!isEmpty($scope.searchQuery)) {
+                		$location.url("search/result?q=" + $scope.searchQuery)
+                	}
                 }
             }
         };
