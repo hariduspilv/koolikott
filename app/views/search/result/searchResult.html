@@ -11,10 +11,10 @@
                                 </figure>
                             </div>
                             <div class="description">
-                                <div ng-bind="getCorrectLanguageTitle(material)" class="title"></div>
+                                <div data-ng-bind="getCorrectLanguageTitle(material)" class="title"></div>
                                 <div class="authors text-nowrap">
                                     <span data-ng-repeat="author in material.authors">
-                                        <span ng-bind="formatName(author.name)"></span><span ng-bind="formatSurname(author.surname)"></span><span ng-bind="$index < material.authors.length - 1 ? ', ' : ''"></span>
+                                        <span data-ng-bind="formatName(author.name)"></span><span data-ng-bind="formatSurname(author.surname)"></span><span data-ng-bind="$index < material.authors.length - 1 ? ', ' : ''"></span>
                                     </span>
                                 </div>
                                 <div class="clearfix">
