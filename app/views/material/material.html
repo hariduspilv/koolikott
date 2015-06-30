@@ -8,7 +8,7 @@
                             <div class="label">
                                 <span data-translate="SUBJECT"></span>:
                             </div>
-                            <span ng-bind="getClassification(material.classifications)"></span>
+                            <span data-ng-bind="getClassification(material.classifications)"></span>
                         </div>
                         <div class="item pull-left">
                             <div class="label">
@@ -26,15 +26,15 @@
                         </div>
                     </div>
                     <div class="heading">
-                        <h1 ng-bind="getCorrectLanguageString(material.titles)"></h1>
+                        <h1 data-ng-bind="getCorrectLanguageString(material.titles)"></h1>
                     </div>
                     <div class="authors">
                         <span data-ng-repeat="author in material.authors" class="item">
-                            <span ng-bind="author.name"></span> <span ng-bind="author.surname"></span>
+                            <span data-ng-bind="author.name"></span> <span data-ng-bind="author.surname"></span>
                         </span>
                     </div>
                     
-                    <div ng-bind="getCorrectLanguageString(material.descriptions)"></div>
+                    <div data-ng-bind="getCorrectLanguageString(material.descriptions)"></div>
 
                 </div>
                 <div class="col-md-3">
@@ -71,7 +71,7 @@
                         </div>
                     </div>
                     <div class="text-right" data-translate="ALL_RIGHTS_RESERVED">All rights reserved</div>
-                    <div class="text-right text-grey"><small ng-bind="material.licenseType.name"></small></div>
+                    <div class="text-right text-grey"><small data-ng-bind="material.licenseType.name"></small></div>
                 </div>
             </div>
             
