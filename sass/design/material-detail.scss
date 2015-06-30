@@ -6,8 +6,8 @@
         .category {
             padding-bottom: 15px;
             
-            .separator {
-                display: inline-block; padding: 0 10px
+            .label {
+                font-size: 13px;
             }
         }
     
@@ -33,6 +33,7 @@
         dt {
             width: 90px; font-weight: normal
         };
+        
         dd {
             margin-left: 100px;
 

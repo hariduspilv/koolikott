@@ -3,15 +3,25 @@
         <div class="col-md-9 material-detail">
             <div class="row">
                 <div class="col-md-9 description">
-                    <div class="category text-grey">
-                       <span data-translate="SUBJECT"></span>
-                       <span>: </span><span ng-bind="getClassification(material.classifications)"></span>
-                       <span class="separator">|</span>
-                       <span data-translate="MATERIAL_VIEW_RESOURCE_TYPE"></span>
-                       <span>: </span><span data-translate="{{material.resourceTypes[0].name.toUpperCase()}}"></span>
-                       <span class="separator">|</span>
-                       <span data-translate="EDUCATIONAL_CONTEXT"></span>
-                       <span>: </span><span data-translate="{{material.educationalContexts[0].name.toUpperCase()}}"></span>
+                    <div class="category text-grey clearfix">
+                       <div class="item pull-left">
+                            <div class="label">
+                                <span data-translate="SUBJECT"></span>:
+                            </div>
+                            <span ng-bind="getClassification(material.classifications)"></span>
+                        </div>
+                        <div class="item pull-left">
+                            <div class="label">
+                                <span data-translate="MATERIAL_VIEW_RESOURCE_TYPE"></span>:
+                            </div>
+                            <span data-translate="{{material.resourceTypes[0].name.toUpperCase()}}"></span>
+                        </div>
+                        <div class="item pull-left">
+                            <div class="label">
+                                <span data-translate="EDUCATIONAL_CONTEXT"></span>:
+                            </div>
+                            <span data-translate="{{material.educationalContexts[0].name.toUpperCase()}}"></span>
+                        </div>
                     </div>
                     <div class="heading">
                         <h1 ng-bind="getCorrectLanguageString(material.titles)"></h1>
