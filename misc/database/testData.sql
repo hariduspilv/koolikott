@@ -27,6 +27,32 @@ insert into Classification(id, classificationName, parent) values(5, 'Algebra', 
 insert into Classification(id, classificationName, parent) values(6, 'Linear', 5);
 insert into Classification(id, classificationName, parent) values(7, 'Quadratic', 5);
 
+-- Translation for Classifications. It must be in the translation files when we have the final Classification tree
+
+insert into Translation(translationGroup, translationKey, translation) values (1, 'CLASSIFICATION_BIOLOGY', 'Bioloogia');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'CLASSIFICATION_PLANTS', 'Taimed');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'CLASSIFICATION_TREES', 'Puud');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'CLASSIFICATION_MATH', 'Math');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'CLASSIFICATION_ALGEBRA', 'Algebra');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'CLASSIFICATION_LINEAR', 'Sirgjooneline');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'CLASSIFICATION_QUADRATIC', 'Quadratic');
+
+insert into Translation(translationGroup, translationKey, translation) values (2, 'CLASSIFICATION_BIOLOGY', 'биология');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'CLASSIFICATION_PLANTS', 'растения');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'CLASSIFICATION_TREES', 'деревья');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'CLASSIFICATION_MATH', 'математический');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'CLASSIFICATION_ALGEBRA', 'алгебра');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'CLASSIFICATION_LINEAR', 'линейный');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'CLASSIFICATION_QUADRATIC', 'квадратный');
+
+insert into Translation(translationGroup, translationKey, translation) values (3, 'CLASSIFICATION_BIOLOGY', 'Biology');
+insert into Translation(translationGroup, translationKey, translation) values (3, 'CLASSIFICATION_PLANTS', 'Plants');
+insert into Translation(translationGroup, translationKey, translation) values (3, 'CLASSIFICATION_TREES', 'Trees');
+insert into Translation(translationGroup, translationKey, translation) values (3, 'CLASSIFICATION_MATH', 'Math');
+insert into Translation(translationGroup, translationKey, translation) values (3, 'CLASSIFICATION_ALGEBRA', 'Algebra');
+insert into Translation(translationGroup, translationKey, translation) values (3, 'CLASSIFICATION_LINEAR', 'Linear');
+insert into Translation(translationGroup, translationKey, translation) values (3, 'CLASSIFICATION_QUADRATIC', 'Quadratic');
+
 
 
 -- Start of test data
