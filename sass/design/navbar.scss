@@ -1,19 +1,10 @@
-.navbar-form {
-    
-    .form-group {display: inline}
-}
-
-.navbar-form {
-    
-    .input-group {display: table}
-    
-}
-
-.navbar {
+.navbar {border: 0; @include box-shadow(0, -2px, 2px, -2px, #3f7b8f, true);
     
     .navbar-form {
+        
+        .form-group {display: inline}
 
-        .input-group {
+        .input-group {display: table;
 
             .form-control {width: 100%};
             
@@ -23,7 +14,7 @@
     
 }
 
-.navbar-nav {margin-left: 20px;
+.navbar-nav {margin-left: 20px !important;
     
     .navbar-lang {
         

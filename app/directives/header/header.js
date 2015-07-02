@@ -27,7 +27,7 @@ define(['app'], function(app)
                 
                 $scope.search = function() {
                     if (!isEmpty($scope.searchQuery)) {
-                            $location.url("search/result?q=" + $scope.searchQuery)
+                        $location.url("search/result?q=" + $scope.searchQuery)
                     }
                 }
             }
