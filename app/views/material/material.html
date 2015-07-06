@@ -28,6 +28,7 @@
                             <span data-ng-repeat="educationalContext in material.educationalContexts">
                                 <span data-translate="{{educationalContext.name.toUpperCase()}}"></span><span data-ng-bind="$index < material.educationalContexts.length - 1 ? ', ' : ''"></span>
                             </span>
+                            <span data-ng-hide="material.educationalContexts.length" data-translate="UNKNOWN">Unknown</span>
                         </div>
                     </div>
                     <div class="heading">
