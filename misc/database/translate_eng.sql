@@ -55,5 +55,5 @@ insert into Translation(translationGroup, translationKey, translation) values (3
 insert into Translation(translationGroup, translationKey, translation) values (3, 'PUBLISHER', 'Publisher');
 insert into Translation(translationGroup, translationKey, translation) values (3, 'PUBLISHERS', 'Publishers');
 insert into Translation(translationGroup, translationKey, translation) values (3, 'SEARCH', 'Search');
-
+insert into Translation(translationGroup, translationKey, translation) values (3, 'UNKNOWN', 'Unknown');
 
