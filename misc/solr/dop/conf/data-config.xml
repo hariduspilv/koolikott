@@ -1,0 +1,11 @@
+<dataConfig>
+    <dataSource driver="com.mysql.jdbc.Driver" url="jdbc:mysql://127.0.0.1/dop" user="root" password="root" readOnly="true" />
+    <document>
+        <entity name="Material" query="select id from Material">
+        	<entity name="Material_Title" query="select title as title_id from Material_Title where material='${Material.id}'">
+                <entity name="LanguageString" query="select textValue as title from LanguageString where id = '${Material_Title.title_id}'">
+                </entity>
+            </entity>
+        </entity>
+    </document>
+</dataConfig>
