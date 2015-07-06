@@ -12,6 +12,7 @@
                             <span data-ng-repeat="subject in materialSubjects">
                                 <span data-translate="{{'CLASSIFICATION_' + subject.toUpperCase()}}"></span><span data-ng-bind="$index < materialSubjects.length - 1 ? ', ' : ''"></span>
                             </span>
+                            <span data-ng-hide="materialSubjects.length" data-translate="UNKNOWN">Unknown</span>
                         </div>
                         <div class="item pull-left">
                             <div class="label">
