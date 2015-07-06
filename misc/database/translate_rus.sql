@@ -54,6 +54,7 @@ insert into Translation(translationGroup, translationKey, translation) values (2
 insert into Translation(translationGroup, translationKey, translation) values (2, 'MATERIAL_VIEW_LINK_TO_MATERIAL', 'Открытый материал');
 insert into Translation(translationGroup, translationKey, translation) values (2, 'PUBLISHER', 'Издатель');
 insert into Translation(translationGroup, translationKey, translation) values (2, 'PUBLISHERS', 'Издатели');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'SEARCH', 'поиск');
 
 
 

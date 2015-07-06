@@ -54,5 +54,6 @@ insert into Translation(translationGroup, translationKey, translation) values (3
 insert into Translation(translationGroup, translationKey, translation) values (3, 'MATERIAL_VIEW_LINK_TO_MATERIAL', 'Open material');
 insert into Translation(translationGroup, translationKey, translation) values (3, 'PUBLISHER', 'Publisher');
 insert into Translation(translationGroup, translationKey, translation) values (3, 'PUBLISHERS', 'Publishers');
+insert into Translation(translationGroup, translationKey, translation) values (3, 'SEARCH', 'Search');
 
 
