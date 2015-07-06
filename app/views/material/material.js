@@ -58,19 +58,19 @@ define(['app'], function(app)
          *  Gets the list of unique material subjects
          */
         function getSubjectList() {
-        	var subjects = [];
+            var subjects = [];
 
-        	var classifications = $scope.material.classifications;
-        	if (classifications) {
-            	for (var i = 0; i < classifications.length; i++) {
-            		subject = getClassificationSubject(classifications[i]);
-            		if (subjects.indexOf(subject) < 0) {
-            			subjects[subjects.length] = subject;
-            		}
+            var classifications = $scope.material.classifications;
+            if (classifications) {
+                for (var i = 0; i < classifications.length; i++) {
+                subject = getClassificationSubject(classifications[i]);
+                if (subjects.indexOf(subject) < 0) {
+                    subjects[subjects.length] = subject;
+                    }
             	}
             }
         	
-        	return subjects;
+            return subjects;
         }
 
         /**
