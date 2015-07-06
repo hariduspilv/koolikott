@@ -1,4 +1,20 @@
-.navbar {border: 0; @include box-shadow(0, -2px, 2px, -2px, #3f7b8f, true)}
+.navbar {border: 0 !important; @include box-shadow(0, -2px, 2px, -2px, #3f7b8f, true);
+    
+    .navbar-form {margin-top: 17px !important; margin-bottom: 18px !important; 
+
+        .input-group {padding: 10px 13px; @include border-radius(5px); background: #FFF;
+
+            .form-control {width: 300px; margin: 0; border: 0; border-bottom: 1px solid #92c8d9}; @include box-shadow(none, none, none, none, none);
+            
+            .input-group-btn {border-bottom: 1px solid #92c8d9;
+                
+                button {padding: 4px 12px; border: 0; font-size: 18px; color: $navbar-default-bg}
+            
+            }
+        }
+    }
+    
+}
 
 .navbar-nav {margin-left: 20px !important;
     
