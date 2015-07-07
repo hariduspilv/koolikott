@@ -79,6 +79,7 @@ CREATE TABLE Material (
 	issueDate BIGINT,
   licenseType BIGINT,
   source TEXT NOT NULL,
+  added TIMESTAMP NOT NULL,
 
   FOREIGN KEY (lang)
   REFERENCES LanguageTable (id)

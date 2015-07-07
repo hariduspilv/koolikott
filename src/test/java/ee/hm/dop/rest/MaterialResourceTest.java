@@ -8,6 +8,7 @@ import java.util.List;
 import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.Response;
 
+import org.joda.time.DateTime;
 import org.junit.Test;
 
 import ee.hm.dop.common.test.ResourceIntegrationTestBase;
@@ -112,6 +113,34 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
         Material material = materials.get(0);
 
         assertEquals("Koolibri", material.getPublishers().get(0).getName());
+    }
+
+    @Test
+    public void getMaterialAddedDate() {
+        Response response = doGet("material/getAll");
+        List<Material> materials = response.readEntity(new GenericType<List<Material>>() {
+        });
+        Material material = materials.get(0);
+        assertEquals(new DateTime("1999-01-01T02:00:01.000+02:00"), material.getAdded());
+    }
+
+    @Test
+    public void GetNewestMaterials() {
+        Response response = doGet("material/getNewestMaterials?numberOfMaterials=8");
+
+        List<Material> materials = response.readEntity(new GenericType<List<Material>>() {
+        });
+
+        assertEquals(8, materials.size());
+
+        Material material = materials.get(0);
+        assertEquals(Long.valueOf(8), material.getId());
+        assertEquals("Aabits 123", material.getTitles().get(0).getText());
+
+        List<Author> authors = material.getAuthors();
+        assertEquals(1, authors.size());
+        assertEquals("Karl Simon Ben", material.getAuthors().get(0).getName());
+        assertEquals("Tom Oliver Marx", material.getAuthors().get(0).getSurname());
 
     }
 }
