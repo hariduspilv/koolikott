@@ -66,6 +66,8 @@ public class DateTimeDeserializerTest {
         }
 
         verify(jp);
+        System.out.println(expected.getMillis() + "  " + result.getMillis());
+        System.out.println(expected.getChronology() + "  " + result.getChronology());
 
         assertEquals(expected, result);
     }
