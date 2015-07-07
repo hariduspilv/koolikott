@@ -1,1 +1,36 @@
-<p data-translate="FOO"></p>
+<div class="container">
+    <div class="row row-material">
+        <div class="col-md-9">
+            <div class="row">
+                <div data-ng-repeat="material in materials" class="col-md-3 material">
+                    <a ng-click="saveMaterial(material)" data-ng-href="#/material?materialId={{material.id}}">
+                        <div class="block">
+                            <div class="illustration">
+                                <figure>
+                                    <img src="img/material.jpg" class="img-responsive">
+                                </figure>
+                            </div>
+                            <div class="description">
+                                <div data-ng-bind="getCorrectLanguageTitle(material)" class="title"></div>
+                                <div class="authors text-nowrap">
+                                    <span data-ng-repeat="author in material.authors">
+                                        <span data-ng-bind="formatName(author.name)"></span><span data-ng-bind="formatSurname(author.surname)"></span><span data-ng-bind="$index < material.authors.length - 1 ? ', ' : ''"></span>
+                                    </span>
+                                </div>
+                                <div class="clearfix">
+                                    <div data-ng-if="material.issueDate.year >= 100" class="pull-left">{{formatMaterialIssueDate(material.issueDate)}}</div>
+                                    <div data-ng-if="material.issueDate.year > 0 && material.issueDate.year < 100" class="pull-left">{{formatMaterialIssueDate(material.issueDate)}} AD</div>
+                                    <div data-ng-if="material.issueDate.year < 0" class="pull-left">{{formatMaterialIssueDate(material.issueDate)}} BC</div>
+                                    <div data-ng-if="!material.issueDate.year" class="pull-left">Unkown</div>
+                                </div>
+                            </div>
+                            <div class="">
+
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+		</div>
+    </div>
+</div>
