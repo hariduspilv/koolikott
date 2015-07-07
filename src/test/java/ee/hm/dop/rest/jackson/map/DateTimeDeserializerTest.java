@@ -35,8 +35,9 @@ public class DateTimeDeserializerTest {
      */
     @Test
     public void deserializeMidnight() {
-        DateTime expected = new DateTime(2015, 3, 27, 23, 0, 0, 0, DateTimeZone.forID("Europe/Helsinki"));
-        deserialize("2015-03-27T21:00:00.000Z", expected);
+        String testDate = "2015-03-27T21:00:00.000Z";
+        DateTime expected = new DateTime(testDate).withZone(DateTimeZone.getDefault());
+        deserialize(testDate, expected);
     }
 
     /**
@@ -44,8 +45,9 @@ public class DateTimeDeserializerTest {
      */
     @Test
     public void deserialize3AM() {
-        deserialize("2015-03-27T00:00:00.000Z",
-                new DateTime(2015, 3, 27, 2, 0, 0, 0, DateTimeZone.forID("Europe/Helsinki")));
+        String testDate = "2015-03-27T00:00:00.000Z";
+        DateTime expected = new DateTime(testDate).withZone(DateTimeZone.getDefault());
+        deserialize(testDate, expected);
     }
 
     private void deserialize(String date, DateTime expected) {
