@@ -1,4 +1,4 @@
-.navbar {border: 0 !important; @include box-shadow(0, -2px, 2px, -2px, #3f7b8f, true);
+.navbar {border: 0 !important;
     
     .navbar-form {margin-top: 17px !important; margin-bottom: 18px !important; 
 
@@ -21,6 +21,8 @@
     }
     
 }
+
+.navbar-default {@include box-shadow(0, -2px, 2px, -2px, #3f7b8f, true)}
 
 .navbar-nav {margin-left: 20px !important;
     
