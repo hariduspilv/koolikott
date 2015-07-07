@@ -74,7 +74,7 @@ insert into Material(id, lang, issueDate, licenseType, source, added) values(2, 
 insert into Material(id, lang, issueDate, licenseType, source, added) values(3, 4, 3, 3,  'http://eloquentjavascript.net/Eloquent_JavaScript.pdf', '2009-01-01 00:00:01');
 insert into Material(id, lang, issueDate, licenseType, source, added) values(4, 3, 4, 1,  'https://en.wikipedia.org/wiki/Power_Architecture', '2012-01-01 00:00:01');
 insert into Material(id, lang, issueDate, licenseType, source, added) values(5, 3, 5, 2,  'https://en.wikipedia.org/wiki/Power_Architecture', '2011-09-01 00:00:01');
-insert into Material(id, lang, issueDate, licenseType, source, added) values(6, null, null, null, 'http://www.planalto.gov.br/ccivil_03/Constituicao/Constituicao.htm', '1911-09-01 00:00:01');
+insert into Material(id, lang, issueDate, licenseType, source, added) values(6, null, null, null, 'http://www.planalto.gov.br/ccivil_03/Constituicao/Constituicao.htm', '1971-09-01 00:00:01');
 insert into Material(id, lang, issueDate, licenseType, source, added) values(7, 4, 6, 3, 'https://president.ee/en/republic-of-estonia/the-constitution/index.html', '2001-07-01 00:00:01');
 insert into Material(id, lang, issueDate, licenseType, source, added) values(8, 5, 7, 1, 'http://www.palmeiras.com.br/historia/titulos', '2014-06-01 00:00:01');
 
