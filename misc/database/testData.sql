@@ -11,12 +11,6 @@ insert into EducationalContext(id, educationalContext) values (1006, 'PROFESSION
 insert into EducationalContext(id, educationalContext) values (1007, 'SPECIALEDUCATION');
 insert into EducationalContext(id, educationalContext) values (1008, 'OTHER');
 
--- License Type
-
-insert into LicenseType(id, name) values (1, 'CCBY');
-insert into LicenseType(id, name) values (2, 'CCBYSA');
-insert into LicenseType(id, name) values (3, 'CCBYND');
-
 -- Classifications
 
 insert into Classification(id, classificationName, parent) values (1, 'Biology', null);
