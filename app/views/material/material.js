@@ -93,5 +93,11 @@ define(['app'], function(app)
         	return false;
         }
 
+        $scope.formatMaterialAddedDate = function(added) {
+            if (added) {
+                var array = added.split(/-|T/);
+                return array[2] + '.' + array[1] + '.' + array[0];
+            } 
+        }
     }]);
 });
