@@ -23,6 +23,13 @@ define([], function()
                 dependencies: [
                     'views/material/material'
                 ]
+            },
+            '/ekoolikott': {
+                templateUrl: 'app/views/ekoolikott/ekoolikott.html',
+                controller: 'ekoolikottController',
+                dependencies: [
+                    'views/ekoolikott/ekoolikott'
+                ]
             }
         }
     };
