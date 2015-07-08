@@ -58,7 +58,7 @@ insert into Translation(translationGroup, translationKey, translation) values (2
 insert into Translation(translationGroup, translationKey, translation) values (2, 'UNKNOWN', 'Неизвестный');
 insert into Translation(translationGroup, translationKey, translation) values (2, 'ABOUT', 'Что eKoolikott?');
 insert into Translation(translationGroup, translationKey, translation) values (2, 'HELP', 'Как использовать eKoolikott');
-
+insert into Translation(translationGroup, translationKey, translation) values (2, 'NEWEST', 'Новые');
 
 
 
