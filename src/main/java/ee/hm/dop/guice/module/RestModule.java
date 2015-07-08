@@ -4,6 +4,7 @@ import com.google.inject.servlet.ServletModule;
 
 import ee.hm.dop.guice.GuiceInjector.Module;
 import ee.hm.dop.service.MaterialService;
+import ee.hm.dop.service.PageService;
 import ee.hm.dop.service.SearchService;
 import ee.hm.dop.service.TranslationService;
 
@@ -15,5 +16,6 @@ public class RestModule extends ServletModule {
         bind(MaterialService.class);
         bind(TranslationService.class);
         bind(SearchService.class);
+        bind(PageService.class);
     }
 }
