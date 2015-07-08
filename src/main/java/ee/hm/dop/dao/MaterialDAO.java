@@ -30,4 +30,11 @@ public class MaterialDAO {
 
         return material;
     }
+
+    public List<Material> findNewestMaterials(int numberOfMaterials) {
+
+        return entityManager.createQuery("from Material order by added desc", Material.class)
+                .setMaxResults(numberOfMaterials).getResultList();
+    }
+
 }
