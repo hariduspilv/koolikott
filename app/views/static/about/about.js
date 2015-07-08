@@ -1,7 +1,7 @@
 define(['app'], function(app)
 {
-    app.controller('aboutController', ['$scope', "serverCallService", "$filter", '$rootScope', 'translationService',
-    		function($scope, serverCallService, $filter, $rootScope, translationService) {
+    app.controller('aboutController', ['$scope', "serverCallService", "$filter", '$rootScope', 'translationService', '$sce', 
+    		function($scope, serverCallService, $filter, $rootScope, translationService, $sce) {
         var pageName = "about";
         var pageLanguage = translationService.getLanguage();
 
@@ -14,8 +14,8 @@ define(['app'], function(app)
             if (isEmpty(data)) {
                 log('No data returned by session search.');
                 } else {
-                        $scope.materials = data;
-                        console.log("data received");
+                        $scope.pageContent = $sce.trustAsHtml(data.content);
+                        console.log("data recieved");
                 }
     	}
     	
