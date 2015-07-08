@@ -1,8 +1,8 @@
 define(['app'], function(app)
 {
-    app.controller('ekoolikottController', ['$scope', "serverCallService", "$filter", '$rootScope', 'translationService', '$route',
-    		function($scope, serverCallService, $filter, $rootScope, translationService, $route) {
-        var pageName = $route.current.params.pageName;
+    app.controller('aboutController', ['$scope', "serverCallService", "$filter", '$rootScope', 'translationService',
+    		function($scope, serverCallService, $filter, $rootScope, translationService) {
+        var pageName = "about";
         var pageLanguage = translationService.getLanguage();
 
         var params = {};

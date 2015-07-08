@@ -24,11 +24,18 @@ define([], function()
                     'views/material/material'
                 ]
             },
-            '/ekoolikott': {
-                templateUrl: 'app/views/ekoolikott/ekoolikott.html',
-                controller: 'ekoolikottController',
+            '/help': {
+                templateUrl: 'app/views/static/help/help.html',
+                controller: 'helpController',
                 dependencies: [
-                    'views/ekoolikott/ekoolikott'
+                    'views/static/help/help'
+                ]
+            },
+            '/about': {
+                templateUrl: 'app/views/static/about/about.html',
+                controller: 'aboutController',
+                dependencies: [
+                    'views/static/about/about'
                 ]
             }
         }
