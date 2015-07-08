@@ -15,7 +15,7 @@ define(['app'], function(app)
                 log('No data returned by session search.');
                 } else {
                         $scope.materials = data;
-                        console.log("data recieved");
+                        console.log("data received");
                 }
     	}
     	
