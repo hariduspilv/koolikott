@@ -1,5 +1,6 @@
 -- Drop tables
 
+DROP TABLE IF EXISTS Page;
 DROP TABLE IF EXISTS Translation;
 DROP TABLE IF EXISTS TranslationGroup;
 DROP TABLE IF EXISTS Material_EducationalContext;
@@ -234,5 +235,20 @@ CREATE TABLE Translation (
   FOREIGN KEY (translationGroup)
         REFERENCES TranslationGroup(id)
         ON DELETE RESTRICT
+);
+
+CREATE TABLE Page (
+  id   		BIGINT AUTO_INCREMENT,
+  pageName  VARCHAR(255) NOT NULL,
+  content   TEXT NOT NULL,
+  language	BIGINT NOT NULL,
+  
+  PRIMARY KEY (id), 
+  
+  UNIQUE KEY (pageName, language), 
+  
+  FOREIGN KEY (language)
+  		REFERENCES LanguageTable(id)
+  		ON DELETE RESTRICT
 );
 
