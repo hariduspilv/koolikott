@@ -84,13 +84,7 @@ define(['app'], function(app)
         }
         
         $scope.isNullOrZeroLength = function (arg) {
-        	if (typeof arg === 'undefined') {
-        		return true;
-        	} 
-        	if (arg.length === 0) {
-        		return true;
-        	}
-        	return false;
+        	return !arg || !arg.length;
         }
 
     }]);
