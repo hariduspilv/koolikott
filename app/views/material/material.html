@@ -21,7 +21,7 @@
                             <span data-ng-repeat="resourceType in material.resourceTypes">
                                 <span data-translate="{{resourceType.name.toUpperCase()}}"></span><span data-ng-bind="$index < material.resourceTypes.length - 1 ? ', ' : ''"></span>
                             </span>
-                            <span data-ng-if="!material.resourceTypes.length" data-translate="UNKNOWN">Unknown</span>
+                            <span data-ng-if="isNullOrZeroLength(material.resourceTypes)" data-translate="UNKNOWN">Unknown</span>
                         </div>
                         <div class="item pull-left">
                             <div class="label">
