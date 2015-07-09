@@ -75,12 +75,12 @@ CREATE TABLE LicenseType (
 );
 
 CREATE TABLE Material (
-	id BIGINT AUTO_INCREMENT PRIMARY KEY,
-	lang BIGINT,
-	issueDate BIGINT,
+  id BIGINT AUTO_INCREMENT PRIMARY KEY,
+  lang BIGINT,
+  issueDate BIGINT,
   licenseType BIGINT,
   source TEXT NOT NULL,
-  added TIMESTAMP NOT NULL,
+  added TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
   FOREIGN KEY (lang)
   REFERENCES LanguageTable (id)
@@ -238,17 +238,15 @@ CREATE TABLE Translation (
 );
 
 CREATE TABLE Page (
-  id   		BIGINT AUTO_INCREMENT,
+  id        BIGINT AUTO_INCREMENT PRIMARY KEY,
   pageName  VARCHAR(255) NOT NULL,
   content   TEXT NOT NULL,
-  language	BIGINT NOT NULL,
-  
-  PRIMARY KEY (id), 
+  language  BIGINT NOT NULL,
   
   UNIQUE KEY (pageName, language), 
   
   FOREIGN KEY (language)
-  		REFERENCES LanguageTable(id)
-  		ON DELETE RESTRICT
+        REFERENCES LanguageTable(id)
+        ON DELETE RESTRICT
 );
 

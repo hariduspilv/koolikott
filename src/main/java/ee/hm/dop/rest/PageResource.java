@@ -7,6 +7,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
+import ee.hm.dop.dao.LanguageDAO;
 import ee.hm.dop.model.Page;
 import ee.hm.dop.service.PageService;
 
@@ -16,10 +17,12 @@ public class PageResource {
     @Inject
     private PageService pageService;
 
+    @Inject
+    LanguageDAO languageDao;
+
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Page get(@QueryParam("pageName") String pageName, @QueryParam("pageLanguage") String languageCode) {
-
-        return pageService.get(pageName, languageCode);
+        return pageService.getPage(pageName, languageDao.findByCode(languageCode));
     }
 }
