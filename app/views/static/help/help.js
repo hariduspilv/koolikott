@@ -2,25 +2,36 @@ define(['app'], function(app)
 {
     app.controller('helpController', ['$scope', "serverCallService", "$filter", '$rootScope', 'translationService', '$sce',
     		function($scope, serverCallService, $filter, $rootScope, translationService, $sce) {
-        var pageName = "help";
-        var pageLanguage = translationService.getLanguage();
-
-        var params = {};
-        var url = "rest/page?pageName=" + pageName + "&pageLanguage=" + pageLanguage;
-    	serverCallService.makeGet(url, params, getAllMaterialSuccess, getAllMaterialFail);
     	
-    	function getAllMaterialSuccess(data) {
+    	$rootScope.isStaticPage = true;
+    	
+    	$rootScope.getPage = function (pageLanguage) {
+	        var pageName = "help";
+	
+	        var params = {};
+	        var url = "rest/page?pageName=" + pageName + "&pageLanguage=" + pageLanguage;
+	    	serverCallService.makeGet(url, params, getPageSuccess, getPageFail);
+	    	console.log("loading " + pageLanguage);
+    	}
+    	
+    	$scope.getPage(translationService.getLanguage());
+    	
+    	function getPageSuccess(data) {
 
             if (isEmpty(data)) {
-                log('No data returned by session search.');
+            	console.log('No data returned.');
                 } else {
 	                    $scope.pageContent = $sce.trustAsHtml(data.content);
                         console.log("data recieved");
                 }
     	}
     	
-    	function getAllMaterialFail(data, status) {
-            console.log('Session search failed.')
+    	function getPageFail(data, status) {
+            console.log('Getting page failed.')
     	}
+    	
+    	$scope.$on("$destroy", function() {
+    		$rootScope.isStaticPage = false;
+        });
     }]);
 });
