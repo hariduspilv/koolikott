@@ -30,4 +30,17 @@ public class MaterialDAO {
 
         return material;
     }
+
+    /**
+     * finds all materials contained in the idList. There is no guarantee about
+     * in which order the materials will be in the result list.
+     * 
+     * @param idList
+     *            the list with materials id
+     * @return a list of materials specified by idList
+     */
+    public List<Material> findAllById(List<Long> idList) {
+        TypedQuery<Material> findAllByIdList = entityManager.createNamedQuery("Material.findAllById", Material.class);
+        return findAllByIdList.setParameter("idList", idList).getResultList();
+    }
 }

@@ -27,7 +27,8 @@ import ee.hm.dop.rest.jackson.map.LanguageSerializer;
 
 @Entity
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id", scope = Material.class)
-@NamedQueries({ @NamedQuery(name = "Material.findById", query = "SELECT m FROM Material m WHERE m.id = :id") })
+@NamedQueries({ @NamedQuery(name = "Material.findById", query = "SELECT m FROM Material m WHERE m.id = :id"),
+        @NamedQuery(name = "Material.findAllById", query = "SELECT m FROM Material m WHERE m.id in :idList") })
 public class Material {
 
     @Id
@@ -35,8 +36,11 @@ public class Material {
     private Long id;
 
     @ManyToMany(fetch = EAGER)
-    @JoinTable(name = "Material_Title", joinColumns = { @JoinColumn(name = "material") }, inverseJoinColumns = { @JoinColumn(name = "title") }, uniqueConstraints = @UniqueConstraint(columnNames = {
-            "material", "title" }))
+    @JoinTable(
+            name = "Material_Title",
+            joinColumns = { @JoinColumn(name = "material") },
+            inverseJoinColumns = { @JoinColumn(name = "title") },
+            uniqueConstraints = @UniqueConstraint(columnNames = { "material", "title" }))
     private List<LanguageString> titles;
 
     @OneToOne
@@ -56,8 +60,11 @@ public class Material {
     private IssueDate issueDate;
 
     @ManyToMany(fetch = EAGER)
-    @JoinTable(name = "Material_Description", joinColumns = { @JoinColumn(name = "material") }, inverseJoinColumns = { @JoinColumn(name = "description") }, uniqueConstraints = @UniqueConstraint(columnNames = {
-            "material", "description" }))
+    @JoinTable(
+            name = "Material_Description",
+            joinColumns = { @JoinColumn(name = "material") },
+            inverseJoinColumns = { @JoinColumn(name = "description") },
+            uniqueConstraints = @UniqueConstraint(columnNames = { "material", "description" }))
     private List<LanguageString> descriptions;
 
     @Column(nullable = false, columnDefinition = "TEXT")
