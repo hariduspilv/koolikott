@@ -25,17 +25,19 @@ define([], function()
                 ]
             },
             '/help': {
-                templateUrl: 'app/views/static/help/help.html',
+                templateUrl: 'app/views/static/abstractStaticPage.html',
                 controller: 'helpController',
                 dependencies: [
-                    'views/static/help/help'
+                    'views/static/help/help',
+                    'views/static/abstractStaticPage'
                 ]
             },
             '/about': {
-                templateUrl: 'app/views/static/about/about.html',
+                templateUrl: 'app/views/static/abstractStaticPage.html',
                 controller: 'aboutController',
                 dependencies: [
-                    'views/static/about/about'
+                    'views/static/about/about',
+                    'views/static/abstractStaticPage'
                 ]
             }
         }
