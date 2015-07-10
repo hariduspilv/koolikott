@@ -26,7 +26,7 @@ insert into Classification(id, classificationName, parent) values(7, 'Quadratic'
 insert into Translation(translationGroup, translationKey, translation) values (1, 'CLASSIFICATION_BIOLOGY', 'Bioloogia');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'CLASSIFICATION_PLANTS', 'Taimed');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'CLASSIFICATION_TREES', 'Puud');
-insert into Translation(translationGroup, translationKey, translation) values (1, 'CLASSIFICATION_MATH', 'Matemaatika');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'CLASSIFICATION_MATHEMATICS', 'Matemaatika');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'CLASSIFICATION_ALGEBRA', 'Algebra');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'CLASSIFICATION_LINEAR', 'Sirgjooneline');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'CLASSIFICATION_QUADRATIC', 'Quadratic');
@@ -34,7 +34,7 @@ insert into Translation(translationGroup, translationKey, translation) values (1
 insert into Translation(translationGroup, translationKey, translation) values (2, 'CLASSIFICATION_BIOLOGY', 'биология');
 insert into Translation(translationGroup, translationKey, translation) values (2, 'CLASSIFICATION_PLANTS', 'растения');
 insert into Translation(translationGroup, translationKey, translation) values (2, 'CLASSIFICATION_TREES', 'деревья');
-insert into Translation(translationGroup, translationKey, translation) values (2, 'CLASSIFICATION_MATH', 'математический');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'CLASSIFICATION_MATHEMATICS', 'математический');
 insert into Translation(translationGroup, translationKey, translation) values (2, 'CLASSIFICATION_ALGEBRA', 'алгебра');
 insert into Translation(translationGroup, translationKey, translation) values (2, 'CLASSIFICATION_LINEAR', 'линейный');
 insert into Translation(translationGroup, translationKey, translation) values (2, 'CLASSIFICATION_QUADRATIC', 'квадратный');
