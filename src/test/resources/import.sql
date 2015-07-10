@@ -24,14 +24,14 @@ insert into LicenseType(id, name) values (3, 'CCBYND');
 
 -- Materials
 
-insert into Material(id, lang, issueDate, licenseType, source) values(1, 1, 1, 1, 'https://www.youtube.com/watch?v=gSWbx3CvVUk');
-insert into Material(id, lang, issueDate, licenseType, source) values(2, 2, 2, 2, 'https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes');
-insert into Material(id, lang, issueDate, licenseType, source) values(3, 4, 3, 3,  'http://eloquentjavascript.net/Eloquent_JavaScript.pdf');
-insert into Material(id, lang, issueDate, licenseType, source) values(4, 3, 4, 1,  'https://en.wikipedia.org/wiki/Power_Architecture');
-insert into Material(id, lang, issueDate, licenseType, source) values(5, 3, 5, 2,  'https://en.wikipedia.org/wiki/Power_Architecture');
-insert into Material(id, lang, issueDate, licenseType, source) values(6, null, null, null, 'http://www.planalto.gov.br/ccivil_03/Constituicao/Constituicao.htm');
-insert into Material(id, lang, issueDate, licenseType, source) values(7, 4, 6, 3, 'https://president.ee/en/republic-of-estonia/the-constitution/index.html');
-insert into Material(id, lang, issueDate, licenseType, source) values(8, 5, 7, 1, 'http://www.palmeiras.com.br/historia/titulos');
+insert into Material(id, lang, issueDate, licenseType, source, added) values(1, 1, 1, 1, 'https://www.youtube.com/watch?v=gSWbx3CvVUk', '1999-01-01 00:00:01');
+insert into Material(id, lang, issueDate, licenseType, source, added) values(2, 2, 2, 2, 'https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes', '1970-01-01 00:00:01');
+insert into Material(id, lang, issueDate, licenseType, source, added) values(3, 4, 3, 3,  'http://eloquentjavascript.net/Eloquent_JavaScript.pdf', '2009-01-01 00:00:01');
+insert into Material(id, lang, issueDate, licenseType, source, added) values(4, 3, 4, 1,  'https://en.wikipedia.org/wiki/Power_Architecture', '2012-01-01 00:00:01');
+insert into Material(id, lang, issueDate, licenseType, source, added) values(5, 3, 5, 2,  'https://en.wikipedia.org/wiki/Power_Architecture', '2011-09-01 00:00:01');
+insert into Material(id, lang, issueDate, licenseType, source, added) values(6, null, null, null, 'http://www.planalto.gov.br/ccivil_03/Constituicao/Constituicao.htm', '1911-09-01 00:00:01');
+insert into Material(id, lang, issueDate, licenseType, source, added) values(7, 4, 6, 3, 'https://president.ee/en/republic-of-estonia/the-constitution/index.html', '2001-07-01 00:00:01');
+insert into Material(id, lang, issueDate, licenseType, source, added) values(8, 5, 7, 1, 'http://www.palmeiras.com.br/historia/titulos', '2014-06-01 00:00:01');
 
 -- Authors
 
@@ -202,3 +202,18 @@ insert into Translation(translationGroup, translationKey, translation) values (2
 insert into Translation(translationGroup, translationKey, translation) values (3, 'FOO', 'FOO message');
 insert into Translation(translationGroup, translationKey, translation) values (3, 'Estonian', 'Estonian');
 insert into Translation(translationGroup, translationKey, translation) values (3, 'Russian', 'Russian');
+
+-- Page
+
+-- Estonian
+insert into Page(id, pageName, content, language) VALUES (1, 'About', '<h1>Meist</h1><p>Tekst siin</p>', 1);
+insert into Page(id, pageName, content, language) VALUES (2, 'Help', '<h1>Abi</h1><p>ekst siine</p>', 1);
+
+-- Russian
+insert into Page(id, pageName, content, language) VALUES (3, 'About', '<h1>О нас</h1><p>Текст здесь.</p>', 2);
+insert into Page(id, pageName, content, language) VALUES (4, 'Help', '<h1>Помощь</h1><p>Текст здесь.</p>', 2);
+
+-- English
+insert into Page(id, pageName, content, language) VALUES (5, 'About', '<h1>About us</h1><p>Text here</p>', 3);
+insert into Page(id, pageName, content, language) VALUES (6, 'Help', '<h1>Help</h1><p>Text here</p>', 3);
+

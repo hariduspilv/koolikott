@@ -56,7 +56,9 @@ insert into Translation(translationGroup, translationKey, translation) values (1
 insert into Translation(translationGroup, translationKey, translation) values (1, 'PUBLISHERS', 'Kirjastajad');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'SEARCH', 'Otsi');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'UNKNOWN', 'Teadmata');
-
+insert into Translation(translationGroup, translationKey, translation) values (1, 'ABOUT', 'Mis see on?');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'HELP', 'Kuidas eKoolikotti kasutada?');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'NEWEST', 'Uusimad');
 
 
 

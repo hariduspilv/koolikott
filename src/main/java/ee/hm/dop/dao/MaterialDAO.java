@@ -43,4 +43,10 @@ public class MaterialDAO {
         TypedQuery<Material> findAllByIdList = entityManager.createNamedQuery("Material.findAllById", Material.class);
         return findAllByIdList.setParameter("idList", idList).getResultList();
     }
+
+    public List<Material> findNewestMaterials(int numberOfMaterials) {
+
+        return entityManager.createQuery("from Material order by added desc", Material.class)
+                .setMaxResults(numberOfMaterials).getResultList();
+    }
 }

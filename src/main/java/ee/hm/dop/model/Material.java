@@ -17,11 +17,16 @@ import javax.persistence.NamedQuery;
 import javax.persistence.OneToOne;
 import javax.persistence.UniqueConstraint;
 
+import org.hibernate.annotations.Type;
+import org.joda.time.DateTime;
+
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
+import ee.hm.dop.rest.jackson.map.DateTimeDeserializer;
+import ee.hm.dop.rest.jackson.map.DateTimeSerializer;
 import ee.hm.dop.rest.jackson.map.LanguageDeserializer;
 import ee.hm.dop.rest.jackson.map.LanguageSerializer;
 
@@ -105,6 +110,10 @@ public class Material {
             inverseJoinColumns = { @JoinColumn(name = "publisher") },
             uniqueConstraints = @UniqueConstraint(columnNames = { "material", "publisher" }))
     private List<Publisher> publishers;
+
+    @Column(nullable = false)
+    @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
+    private DateTime added;
 
     public Long getId() {
         return id;
@@ -203,4 +212,17 @@ public class Material {
     public void setPublishers(List<Publisher> publishers) {
         this.publishers = publishers;
     }
+
+    @JsonSerialize(using = DateTimeSerializer.class)
+    public DateTime getAdded() {
+        return added;
+    }
+
+    @JsonDeserialize(using = DateTimeDeserializer.class)
+    public void setAdded(DateTime added) {
+        this.added = added;
+    }
+
+
+
 }

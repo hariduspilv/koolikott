@@ -11,6 +11,7 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import org.joda.time.DateTime;
 import org.junit.Test;
 
 import ee.hm.dop.common.test.DatabaseTestBase;
@@ -79,7 +80,23 @@ public class MaterialDAOTest extends DatabaseTestBase {
     }
 
     @Test
-    public void testAuthorAndDesc() {
+    public void findNewestMaterials() {
+        List<Material> materials = materialDAO.findNewestMaterials(8);
+        assertEquals(8, materials.size());
+        Material last = null;
+        for (Material material : materials) {
+            if (last != null) {
+
+                // Check that the materials are in the newest to oldest order
+                assertTrue(last.getAdded().compareTo(material.getAdded()) == 1);
+            }
+            last = material;
+            assertNotNull(material.getAdded());
+        }
+    }
+
+    @Test
+    public void AuthorAndDesc() {
         Material material = materialDAO.findById(1);
         assertEquals(1, material.getAuthors().size());
         assertEquals("Isaac", material.getAuthors().get(0).getName());
@@ -88,7 +105,7 @@ public class MaterialDAOTest extends DatabaseTestBase {
     }
 
     @Test
-    public void testAuthors() {
+    public void Authors() {
         Material material = materialDAO.findById(2);
         assertEquals(2, material.getAuthors().size());
         assertEquals("Isaac", material.getAuthors().get(0).getName());
@@ -98,7 +115,7 @@ public class MaterialDAOTest extends DatabaseTestBase {
     }
 
     @Test
-    public void testMaterialLanguage() {
+    public void MaterialLanguage() {
         Material material1 = materialDAO.findById(2);
         assertEquals("rus", material1.getLanguage().getCode());
 
@@ -107,7 +124,7 @@ public class MaterialDAOTest extends DatabaseTestBase {
     }
 
     @Test
-    public void testMaterialResourceType() {
+    public void MaterialResourceType() {
         Material material1 = materialDAO.findById(1);
         assertEquals("TEXTBOOK1", material1.getResourceTypes().get(0).getName());
 
@@ -116,7 +133,7 @@ public class MaterialDAOTest extends DatabaseTestBase {
     }
 
     @Test
-    public void testMaterialClassification() {
+    public void MaterialClassification() {
         Material material1 = materialDAO.findById(1);
         assertEquals("Biology", material1.getClassifications().get(0).getName());
         assertEquals("Plants", material1.getClassifications().get(0).getChildren().get(0).getName());
@@ -127,20 +144,20 @@ public class MaterialDAOTest extends DatabaseTestBase {
     }
 
     @Test
-    public void testMaterialEducationalContext() {
+    public void MaterialEducationalContext() {
         Material material1 = materialDAO.findById(1);
         assertEquals("PRESCHOOL", material1.getEducationalContexts().get(0).getName());
         assertEquals("COMPULSORYEDUCATION", material1.getEducationalContexts().get(1).getName());
     }
 
     @Test
-    public void testMaterialLicense() {
+    public void MaterialLicense() {
         Material material = materialDAO.findById(1);
         assertEquals("CCBY", material.getLicenseType().getName());
     }
 
     @Test
-    public void testMaterialPublisher() {
+    public void MaterialPublisher() {
         Material material = materialDAO.findById(1);
         assertEquals("Koolibri", material.getPublishers().get(0).getName());
         assertEquals("http://www.pegasus.ee", material.getPublishers().get(1).getWebsite());
@@ -184,5 +201,10 @@ public class MaterialDAOTest extends DatabaseTestBase {
 
         assertNotNull(result);
         assertEquals(0, result.size());
+    }
+
+    public void MaterialAddedDate() {
+        Material material = materialDAO.findById(1);
+        assertEquals(new DateTime("1999-01-01T02:00:01.000+02:00"), material.getAdded());
     }
 }
