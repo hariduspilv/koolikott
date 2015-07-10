@@ -1,7 +1,7 @@
 -- Page
 
 -- Estonian
-insert into Page(id, pageName, content, language) VALUES (4, 'Help', '<h1>Kuidas eKoolikotti kasutada?</h1>
+insert into Page(id, name, content, language) VALUES (4, 'Help', '<h1>Kuidas eKoolikotti kasutada?</h1>
 <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque congue tempus urna. 
 Morbi non diam ac dui molestie auctor sed at erat. Suspendisse potenti. Integer volutpat tellus 
 eu mauris porta dapibus id ac dolor. Etiam interdum ut lorem in gravida. Morbi scelerisque augue 
@@ -43,7 +43,7 @@ eu mauris porta dapibus id ac dolor.
 ', 1);
 
 -- Russian
-insert into Page(id, pageName, content, language) VALUES (5, 'Help', '<h1>Как использовать eKoolikott?</h1>
+insert into Page(id, name, content, language) VALUES (5, 'Help', '<h1>Как использовать eKoolikott?</h1>
 <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque congue tempus urna. 
 Morbi non diam ac dui molestie auctor sed at erat. Suspendisse potenti. Integer volutpat tellus 
 eu mauris porta dapibus id ac dolor. Etiam interdum ut lorem in gravida. Morbi scelerisque augue 
@@ -85,7 +85,7 @@ eu mauris porta dapibus id ac dolor.
 ', 2);
 
 -- English
-insert into Page(id, pageName, content, language) VALUES (6, 'Help', '<h1>How to use eKoolikott?</h1>
+insert into Page(id, name, content, language) VALUES (6, 'Help', '<h1>How to use eKoolikott?</h1>
 <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque congue tempus urna. 
 Morbi non diam ac dui molestie auctor sed at erat. Suspendisse potenti. Integer volutpat tellus 
 eu mauris porta dapibus id ac dolor. Etiam interdum ut lorem in gravida. Morbi scelerisque augue 

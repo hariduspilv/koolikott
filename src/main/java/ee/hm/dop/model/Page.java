@@ -12,17 +12,17 @@ import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
 @Entity
-@Table(uniqueConstraints = @UniqueConstraint(columnNames = { "pageName", "language" }) )
+@Table(uniqueConstraints = @UniqueConstraint(columnNames = { "name", "language" }) )
 @NamedQueries({ @NamedQuery(
-        name = "Page.findByNameAndLang",
-        query = "SELECT p FROM Page p WHERE p.name = :pageName AND p.language = :language") })
+        name = "Page.findByNameAndLanguage",
+        query = "SELECT p FROM Page p WHERE p.name = :name AND p.language = :language") })
 public class Page {
 
     @Id
     @GeneratedValue
     private Long id;
 
-    @Column(nullable = false, name = "pageName")
+    @Column(nullable = false)
     private String name;
 
     @Column(nullable = false, columnDefinition = "TEXT")

@@ -9,12 +9,9 @@ import ee.hm.dop.model.Page;
 public class PageService {
 
     @Inject
-    PageDAO pageDao;
+    private PageDAO pageDao;
 
     public Page getPage(String name, Language language) {
-        if (name == null || language == null) {
-            return null;
-        }
-        return pageDao.findByNameAndLang(name, language);
+        return pageDao.findByNameAndLanguage(name, language);
     }
 }

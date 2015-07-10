@@ -18,7 +18,7 @@ public class PageResourceTest extends ResourceIntegrationTestBase {
     public void getAboutPageInEstonian() {
         String name = "About";
         String languageCode = "est";
-        Response response = doGet("page?pageName=" + name + "&pageLanguage=" + languageCode);
+        Response response = doGet("page?name=" + name + "&language=" + languageCode);
         Map<String, Object> page = response.readEntity(new GenericType<Map<String, Object>>() {
         });
 
@@ -35,7 +35,7 @@ public class PageResourceTest extends ResourceIntegrationTestBase {
     public void getHelpPageInEnglish() {
         String name = "Help";
         String languageCode = "eng";
-        Response response = doGet("page?pageName=" + name + "&pageLanguage=" + languageCode);
+        Response response = doGet("page?name=" + name + "&language=" + languageCode);
         Map<String, Object> page = response.readEntity(new GenericType<Map<String, Object>>() {
         });
 
@@ -51,19 +51,31 @@ public class PageResourceTest extends ResourceIntegrationTestBase {
     @Test
     public void getPageWithoutParam() {
         Response response = doGet("page");
-        assertEquals(Status.NO_CONTENT.getStatusCode(), response.getStatus());
+        assertEquals(Status.BAD_REQUEST.getStatusCode(), response.getStatus());
     }
 
     @Test
     public void getNotExistingPage() {
-        Response response = doGet("page?page=doesnotExist&lang=eng");
+        Response response = doGet("page?name=doesnotExist&language=eng");
         assertEquals(Status.NO_CONTENT.getStatusCode(), response.getStatus());
     }
 
     @Test
     public void getPageWithNotSupportedLanguage() {
-        Response response = doGet("page?page=About&lang=notSupported");
-        assertEquals(Status.NO_CONTENT.getStatusCode(), response.getStatus());
+        Response response = doGet("page?name=About&language=notSupported");
+        assertEquals(Status.BAD_REQUEST.getStatusCode(), response.getStatus());
+    }
+
+    @Test
+    public void getPageWithBlankName() {
+        Response response = doGet("page?name=&language=eng");
+        assertEquals(Status.BAD_REQUEST.getStatusCode(), response.getStatus());
+    }
+
+    @Test
+    public void getPageWithBlankLanguage() {
+        Response response = doGet("page?name=About&language=");
+        assertEquals(Status.BAD_REQUEST.getStatusCode(), response.getStatus());
     }
 
 }

@@ -3,6 +3,7 @@ package ee.hm.dop.guice.module;
 import com.google.inject.servlet.ServletModule;
 
 import ee.hm.dop.guice.GuiceInjector.Module;
+import ee.hm.dop.service.LanguageService;
 import ee.hm.dop.service.MaterialService;
 import ee.hm.dop.service.PageService;
 import ee.hm.dop.service.SearchService;
@@ -17,5 +18,6 @@ public class RestModule extends ServletModule {
         bind(TranslationService.class);
         bind(SearchService.class);
         bind(PageService.class);
+        bind(LanguageService.class);
     }
 }

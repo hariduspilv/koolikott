@@ -206,14 +206,14 @@ insert into Translation(translationGroup, translationKey, translation) values (3
 -- Page
 
 -- Estonian
-insert into Page(id, pageName, content, language) VALUES (1, 'About', '<h1>Meist</h1><p>Tekst siin</p>', 1);
-insert into Page(id, pageName, content, language) VALUES (2, 'Help', '<h1>Abi</h1><p>ekst siine</p>', 1);
+insert into Page(id, name, content, language) VALUES (1, 'About', '<h1>Meist</h1><p>Tekst siin</p>', 1);
+insert into Page(id, name, content, language) VALUES (2, 'Help', '<h1>Abi</h1><p>ekst siine</p>', 1);
 
 -- Russian
-insert into Page(id, pageName, content, language) VALUES (3, 'About', '<h1>О нас</h1><p>Текст здесь.</p>', 2);
-insert into Page(id, pageName, content, language) VALUES (4, 'Help', '<h1>Помощь</h1><p>Текст здесь.</p>', 2);
+insert into Page(id, name, content, language) VALUES (3, 'About', '<h1>О нас</h1><p>Текст здесь.</p>', 2);
+insert into Page(id, name, content, language) VALUES (4, 'Help', '<h1>Помощь</h1><p>Текст здесь.</p>', 2);
 
 -- English
-insert into Page(id, pageName, content, language) VALUES (5, 'About', '<h1>About us</h1><p>Text here</p>', 3);
-insert into Page(id, pageName, content, language) VALUES (6, 'Help', '<h1>Help</h1><p>Text here</p>', 3);
+insert into Page(id, name, content, language) VALUES (5, 'About', '<h1>About us</h1><p>Text here</p>', 3);
+insert into Page(id, name, content, language) VALUES (6, 'Help', '<h1>Help</h1><p>Text here</p>', 3);
 
