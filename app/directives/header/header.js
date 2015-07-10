@@ -23,12 +23,6 @@ define(['app'], function(app)
                     translationService.setLanguage(language);
                     $scope.selectedLanguage = language;
                     $scope.showLanguageSelection = false;
-
-                    // get different translation for about or help page
-                    if ($scope.isStaticPage) {
-                    	console.log("setlanguage " + language);
-                    	$scope.getPage(language); 
-                    }
                 }
                 
                 $scope.search = function() {
