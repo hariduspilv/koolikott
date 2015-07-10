@@ -16,7 +16,7 @@ insert into EducationalContext(id, educationalContext) values (1008, 'OTHER');
 insert into Classification(id, classificationName, parent) values (1, 'Biology', null);
 insert into Classification(id, classificationName, parent) values(2, 'Plants', 1);
 insert into Classification(id, classificationName, parent) values(3, 'Trees', 2);
-insert into Classification(id, classificationName, parent) values (4, 'Math', null);
+insert into Classification(id, classificationName, parent) values (4, 'Mathematics', null);
 insert into Classification(id, classificationName, parent) values(5, 'Algebra', 4);
 insert into Classification(id, classificationName, parent) values(6, 'Linear', 5);
 insert into Classification(id, classificationName, parent) values(7, 'Quadratic', 5);
@@ -26,7 +26,7 @@ insert into Classification(id, classificationName, parent) values(7, 'Quadratic'
 insert into Translation(translationGroup, translationKey, translation) values (1, 'CLASSIFICATION_BIOLOGY', 'Bioloogia');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'CLASSIFICATION_PLANTS', 'Taimed');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'CLASSIFICATION_TREES', 'Puud');
-insert into Translation(translationGroup, translationKey, translation) values (1, 'CLASSIFICATION_MATH', 'Math');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'CLASSIFICATION_MATH', 'Matemaatika');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'CLASSIFICATION_ALGEBRA', 'Algebra');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'CLASSIFICATION_LINEAR', 'Sirgjooneline');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'CLASSIFICATION_QUADRATIC', 'Quadratic');
