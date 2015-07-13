@@ -59,4 +59,11 @@ insert into Translation(translationGroup, translationKey, translation) values (3
 insert into Translation(translationGroup, translationKey, translation) values (3, 'ABOUT_PAGE_LINK_TITLE', 'What is eKoolikott?');
 insert into Translation(translationGroup, translationKey, translation) values (3, 'HELP_PAGE_LINK_TITLE', 'How to use eKoolikott');
 insert into Translation(translationGroup, translationKey, translation) values (3, 'LANDING_PAGE_TITLE_NEWEST', 'Newest');
+insert into Translation(translationGroup, translationKey, translation) values (3, 'LICENSETYPE_ALLRIGHTSRESERVED', 'All rights reserved');
+insert into Translation(translationGroup, translationKey, translation) values (3, 'LICENSETYPE_CCBY', 'CC BY');
+insert into Translation(translationGroup, translationKey, translation) values (3, 'LICENSETYPE_CCBYSA', 'CC BY-SA');
+insert into Translation(translationGroup, translationKey, translation) values (3, 'LICENSETYPE_CCBYND', 'CC BY-ND');
+insert into Translation(translationGroup, translationKey, translation) values (3, 'LICENSETYPE_CCBYNC', 'CC BY-NC');
+insert into Translation(translationGroup, translationKey, translation) values (3, 'LICENSETYPE_CCBYNCSA', 'CC BY-NC-SA');
+insert into Translation(translationGroup, translationKey, translation) values (3, 'LICENSETYPE_CCBYNCND', 'CC BY-NC-ND');
 insert into Translation(translationGroup, translationKey, translation) values (3, 'LICENSETYPE_OTHER', 'Other');
