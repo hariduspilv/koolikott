@@ -13,14 +13,13 @@ public class PageDAO {
     @Inject
     private EntityManager entityManager;
 
-    public Page findByNameAndLang(String pageName, Language pageLanguage) {
+    public Page findByNameAndLanguage(String name, Language language) {
 
-        TypedQuery<Page> findByNameAndLang = entityManager.createNamedQuery("Page.findByNameAndLang", Page.class);
+        TypedQuery<Page> findByNameAndLanguage = entityManager.createNamedQuery("Page.findByNameAndLanguage", Page.class);
 
         Page page = null;
         try {
-            page = findByNameAndLang.setParameter("pageName", pageName).setParameter("language", pageLanguage)
-                    .getSingleResult();
+            page = findByNameAndLanguage.setParameter("name", name).setParameter("language", language).getSingleResult();
         } catch (NoResultException ex) {
             // ignore
         }

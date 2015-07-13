@@ -6,6 +6,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -86,7 +87,7 @@ public class MaterialDAOTest extends DatabaseTestBase {
         for (Material material : materials) {
             if (last != null) {
 
-                //Check that the materials are in the newest to oldest order
+                // Check that the materials are in the newest to oldest order
                 assertTrue(last.getAdded().compareTo(material.getAdded()) == 1);
             }
             last = material;
@@ -140,7 +141,6 @@ public class MaterialDAOTest extends DatabaseTestBase {
         Material material2 = materialDAO.findById(5);
 
         assertEquals("Algebra", material2.getClassifications().get(0).getParent().getName());
-
     }
 
     @Test
@@ -148,7 +148,6 @@ public class MaterialDAOTest extends DatabaseTestBase {
         Material material1 = materialDAO.findById(1);
         assertEquals("PRESCHOOL", material1.getEducationalContexts().get(0).getName());
         assertEquals("COMPULSORYEDUCATION", material1.getEducationalContexts().get(1).getName());
-
     }
 
     @Test
@@ -165,9 +164,47 @@ public class MaterialDAOTest extends DatabaseTestBase {
     }
 
     @Test
+    public void findAllById() {
+        List<Long> idList = new ArrayList<>();
+        idList.add((long) 5);
+        idList.add((long) 7);
+        idList.add((long) 3);
+
+        List<Long> idListCopy = new ArrayList<>(idList);
+
+        List<Material> result = materialDAO.findAllById(idList);
+
+        assertNotNull(result);
+        assertEquals(3, result.size());
+
+        for (Material material : result) {
+            idListCopy.remove(material.getId());
+        }
+
+        assertTrue(idListCopy.isEmpty());
+    }
+
+    @Test
+    public void findAllByIdNoResult() {
+        List<Long> idList = new ArrayList<>();
+        idList.add((long) 1155);
+
+        List<Material> result = materialDAO.findAllById(idList);
+
+        assertNotNull(result);
+        assertEquals(0, result.size());
+    }
+
+    @Test
+    public void findAllByIdEmptyList() {
+        List<Material> result = materialDAO.findAllById(new ArrayList<>());
+
+        assertNotNull(result);
+        assertEquals(0, result.size());
+    }
+
     public void MaterialAddedDate() {
         Material material = materialDAO.findById(1);
         assertEquals(new DateTime("1999-01-01T02:00:01.000+02:00"), material.getAdded());
     }
-
 }

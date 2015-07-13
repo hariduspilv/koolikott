@@ -25,7 +25,7 @@ public class PageDAOTest extends DatabaseTestBase {
         String pageLanguageCode = "eng";
         Language pageLanguage = languageDAO.findByCode(pageLanguageCode);
 
-        Page page = pageDAO.findByNameAndLang(pageName, pageLanguage);
+        Page page = pageDAO.findByNameAndLanguage(pageName, pageLanguage);
 
         assertEquals(Long.valueOf(6), page.getId());
         assertEquals(Long.valueOf(3), page.getLanguage().getId());
@@ -40,7 +40,7 @@ public class PageDAOTest extends DatabaseTestBase {
         String pageLanguageCode = "eng";
         Language pageLanguage = languageDAO.findByCode(pageLanguageCode);
 
-        assertNull(pageDAO.findByNameAndLang(pageName, pageLanguage));
+        assertNull(pageDAO.findByNameAndLanguage(pageName, pageLanguage));
     }
 
     @Test
@@ -49,7 +49,7 @@ public class PageDAOTest extends DatabaseTestBase {
         String pageLanguageCode = "eng";
         Language pageLanguage = languageDAO.findByCode(pageLanguageCode);
 
-        assertNull(pageDAO.findByNameAndLang(pageName, pageLanguage));
+        assertNull(pageDAO.findByNameAndLanguage(pageName, pageLanguage));
     }
 
 }

@@ -11,29 +11,25 @@ import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
-
 @Entity
-@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id", scope = Material.class)
-@Table(uniqueConstraints = @UniqueConstraint(columnNames = { "pageName", "language" }) )
+@Table(uniqueConstraints = @UniqueConstraint(columnNames = { "name", "language" }) )
 @NamedQueries({ @NamedQuery(
-        name = "Page.findByNameAndLang",
-        query = "SELECT p FROM Page p WHERE p.name = :pageName AND p.language = :language") })
+        name = "Page.findByNameAndLanguage",
+        query = "SELECT p FROM Page p WHERE p.name = :name AND p.language = :language") })
 public class Page {
 
     @Id
     @GeneratedValue
     private Long id;
 
-    @Column(nullable = false, name = "pageName")
+    @Column(nullable = false)
     private String name;
 
     @Column(nullable = false, columnDefinition = "TEXT")
     private String content;
 
     @ManyToOne
-    @JoinColumn(name = "language")
+    @JoinColumn(nullable = false, name = "language")
     private Language language;
 
     public Long getId() {
