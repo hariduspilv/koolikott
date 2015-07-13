@@ -79,7 +79,11 @@
                         </div>
                     </div>
                     <div class="text-right" data-translate="ALL_RIGHTS_RESERVED">All rights reserved</div>
-                    <div class="text-right text-grey"><small data-ng-bind="material.licenseType.name"></small></div>
+                    <div class="text-right text-grey">
+                    	<small data-ng-if="material.licenseType.id > 1 && material.licenseType.id < 8" data-ng-bind="material.licenseType.name"></small>
+                    	<small data-ng-if="material.licenseType.id == 1" data-translate="ALL_RIGHTS_RESERVED"></small>
+                    	<small data-ng-if="material.licenseType.id == 8" data-translate="LICENSETYPE_OTHER"></small>
+                    </div>
                 </div>
             </div>
             
