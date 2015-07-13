@@ -8,19 +8,18 @@ import java.util.List;
 import javax.inject.Inject;
 
 import ee.hm.dop.dao.MaterialDAO;
-import ee.hm.dop.dao.SearchDAO;
 import ee.hm.dop.model.Material;
 
 public class SearchService {
 
     @Inject
-    private SearchDAO searchDAO;
+    private SearchEngineService searchEngineService;
 
     @Inject
     private MaterialDAO materialDAO;
 
     public List<Material> search(String query) {
-        List<Long> searchResult = searchDAO.search(query);
+        List<Long> searchResult = searchEngineService.search(query);
 
         List<Material> materials = Collections.emptyList();
         if (!searchResult.isEmpty()) {

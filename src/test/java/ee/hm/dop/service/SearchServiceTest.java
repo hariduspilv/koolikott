@@ -16,14 +16,13 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import ee.hm.dop.dao.MaterialDAO;
-import ee.hm.dop.dao.SearchDAO;
 import ee.hm.dop.model.Material;
 
 @RunWith(EasyMockRunner.class)
 public class SearchServiceTest {
 
     @Mock
-    private SearchDAO searchDAO;
+    private SearchEngineService searchEngineService;
 
     @Mock
     private MaterialDAO materialDAO;
@@ -51,7 +50,7 @@ public class SearchServiceTest {
         materials.add(material4);
         materials.add(material7);
 
-        expect(searchDAO.search(query)).andReturn(searchResult);
+        expect(searchEngineService.search(query)).andReturn(searchResult);
         expect(materialDAO.findAllById(searchResult)).andReturn(materials);
 
         replayAll();
@@ -85,7 +84,7 @@ public class SearchServiceTest {
         materials.add(material4);
         materials.add(material7);
 
-        expect(searchDAO.search(query)).andReturn(searchResult);
+        expect(searchEngineService.search(query)).andReturn(searchResult);
         expect(materialDAO.findAllById(searchResult)).andReturn(materials);
 
         replayAll();
@@ -104,7 +103,7 @@ public class SearchServiceTest {
         String query = "people";
         List<Long> searchResult = new ArrayList<>();
 
-        expect(searchDAO.search(query)).andReturn(searchResult);
+        expect(searchEngineService.search(query)).andReturn(searchResult);
 
         replayAll();
 
@@ -116,11 +115,11 @@ public class SearchServiceTest {
     }
 
     private void replayAll() {
-        replay(searchDAO, materialDAO);
+        replay(searchEngineService, materialDAO);
     }
 
     private void verifyAll() {
-        verify(searchDAO, materialDAO);
+        verify(searchEngineService, materialDAO);
     }
 
 }

@@ -1,4 +1,4 @@
-package ee.hm.dop.dao;
+package ee.hm.dop.service;
 
 import static ee.hm.dop.utils.ConfigurationProperties.SEARCH_SERVER;
 import static java.lang.String.format;
@@ -21,9 +21,8 @@ import ee.hm.dop.model.SearchResponse;
 import ee.hm.dop.model.SearchResponse.Document;
 import ee.hm.dop.model.SearchResponse.Response;
 
-// Can be singleton because does not use Entity Manager
 @Singleton
-public class SearchDAO {
+public class SolrService implements SearchEngineService {
 
     private static final String SEARCH_PATH = "select?q=%s&wt=json";
 
@@ -33,6 +32,7 @@ public class SearchDAO {
     @Inject
     private Configuration configuration;
 
+    @Override
     public List<Long> search(String query) {
         SearchResponse searchResponse = getTarget(format(SEARCH_PATH, encodeQuery(query))).request(
                 MediaType.APPLICATION_JSON).get(SearchResponse.class);
