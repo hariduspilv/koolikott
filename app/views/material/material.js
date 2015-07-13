@@ -86,12 +86,5 @@ define(['app'], function(app)
         $scope.isNullOrZeroLength = function (arg) {
         	return !arg || !arg.length;
         }
-
-        $scope.formatMaterialAddedDate = function(added) {
-            if (added) {
-                var array = added.split(/-|T/);
-                return array[2] + '.' + array[1] + '.' + array[0];
-            } 
-        }
     }]);
 });
