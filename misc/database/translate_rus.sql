@@ -58,7 +58,7 @@ insert into Translation(translationGroup, translationKey, translation) values (2
 insert into Translation(translationGroup, translationKey, translation) values (2, 'UNKNOWN', 'Неизвестный');
 insert into Translation(translationGroup, translationKey, translation) values (2, 'ABOUT_PAGE_LINK_TITLE', 'Что eKoolikott?');
 insert into Translation(translationGroup, translationKey, translation) values (2, 'HELP_PAGE_LINK_TITLE', 'Как использовать eKoolikott');
-insert into Translation(translationGroup, translationKey, translation) values (2, 'NEWEST', 'Новые');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'LANDING_PAGE_TITLE_NEWEST', 'Новые');
 
 
 

@@ -58,7 +58,7 @@ insert into Translation(translationGroup, translationKey, translation) values (1
 insert into Translation(translationGroup, translationKey, translation) values (1, 'UNKNOWN', 'Teadmata');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'ABOUT_PAGE_LINK_TITLE', 'Mis see on?');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'HELP_PAGE_LINK_TITLE', 'Kuidas eKoolikotti kasutada?');
-insert into Translation(translationGroup, translationKey, translation) values (1, 'NEWEST', 'Uusimad');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'LANDING_PAGE_TITLE_NEWEST', 'Uusimad');
 
 
 
