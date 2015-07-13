@@ -63,16 +63,15 @@ insert into IssueDate(id, month, year) values(7, 3, 1991);
 
 -- Materials
 
-insert into Material(id, lang, issueDate, licenseType, source, added) values(1, 1, 1, 1, 'https://www.youtube.com/watch?v=gSWbx3CvVUk', '1999-01-01 00:00:01');
-insert into Material(id, lang, issueDate, licenseType, source, added) values(2, 2, 2, 2, 'https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes', '1992-01-01 00:00:01');
-insert into Material(id, lang, issueDate, licenseType, source, added) values(3, 4, 3, 3,  'http://eloquentjavascript.net/Eloquent_JavaScript.pdf', '2009-01-01 00:00:01');
-insert into Material(id, lang, issueDate, licenseType, source, added) values(4, 3, 4, 1,  'https://en.wikipedia.org/wiki/Power_Architecture', '2012-01-01 00:00:01');
-insert into Material(id, lang, issueDate, licenseType, source, added) values(5, 3, 5, 2,  'https://en.wikipedia.org/wiki/Power_Architecture', '2011-09-01 00:00:01');
-insert into Material(id, lang, issueDate, licenseType, source, added) values(6, null, null, null, 'http://www.planalto.gov.br/ccivil_03/Constituicao/Constituicao.htm', '1971-09-01 00:00:01');
-insert into Material(id, lang, issueDate, licenseType, source, added) values(7, 4, 6, 3, 'https://president.ee/en/republic-of-estonia/the-constitution/index.html', '2001-07-01 00:00:01');
-insert into Material(id, lang, issueDate, licenseType, source, added) values(8, 5, 7, 1, 'http://www.palmeiras.com.br/historia/titulos', '2014-06-01 00:00:01');
-insert into Material(id, lang, issueDate, licenseType, source, added) values(9, null, null, null, 'http://EmptyFileds.test.ee', '2015-06-01 00:00:01');
-insert into Material(id, lang, issueDate, licenseType, source, added) values(10, 1, 2, 3, 'http://automated.test.ee', '2015-06-01 00:00:01');
+insert into Material(id, lang, issueDate, licenseType, source, added) values(1, 1, 1, 1, 'https://www.youtube.com/watch?v=gSWbx3CvVUk', '1999-02-02 06:00:01');
+insert into Material(id, lang, issueDate, licenseType, source, added) values(2, 2, 2, 2, 'https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes', '1992-02-03 06:00:01');
+insert into Material(id, lang, issueDate, licenseType, source, added) values(3, 4, 3, 3,  'http://eloquentjavascript.net/Eloquent_JavaScript.pdf', '2009-02-17 08:00:01');
+insert into Material(id, lang, issueDate, licenseType, source, added) values(4, 3, 4, 1,  'https://en.wikipedia.org/wiki/Power_Architecture', '2012-02-02 09:00:01');
+insert into Material(id, lang, issueDate, licenseType, source, added) values(5, 3, 5, 2,  'https://en.wikipedia.org/wiki/Power_Architecture', '2011-09-15 08:00:01');
+insert into Material(id, lang, issueDate, licenseType, source, added) values(6, null, null, null, 'http://www.planalto.gov.br/ccivil_03/Constituicao/Constituicao.htm', '1971-09-22 08:00:01');
+insert into Material(id, lang, issueDate, licenseType, source, added) values(7, 4, 6, 3, 'https://president.ee/en/republic-of-estonia/the-constitution/index.html', '2001-07-16 06:00:01');
+insert into Material(id, lang, issueDate, licenseType, source, added) values(9, null, null, null, 'http://EmptyFileds.test.ee', '2015-06-08 08:00:01');
+insert into Material(id, lang, issueDate, licenseType, source, added) values(10, 1, 2, 3, 'http://automated.test.ee', '2015-06-09 08:00:01');
 
 -- Authors
 
