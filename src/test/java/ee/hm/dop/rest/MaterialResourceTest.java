@@ -7,6 +7,7 @@ import java.util.List;
 
 import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status;
 
 import org.joda.time.DateTime;
 import org.junit.Test;
@@ -35,6 +36,7 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
         assertEquals(new IssueDate((short) 27, (short) 1, -983), material.getIssueDate());
         List<Author> authors = material.getAuthors();
         assertEquals(2, authors.size());
+        assertEquals(Long.valueOf(200), material.getViews());
 
         boolean newton = false, fibonacci = false;
         for (Author author : authors) {
@@ -151,5 +153,17 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
         assertEquals("Karl Simon Ben", material.getAuthors().get(0).getName());
         assertEquals("Tom Oliver Marx", material.getAuthors().get(0).getSurname());
 
+    }
+
+    @Test
+    public void countView() {
+        Response response = doGet("material/countView?materialId=2");
+        assertEquals(Status.OK.getStatusCode(), response.getStatus());
+    }
+
+    @Test
+    public void countViewNotExistingMaterial() {
+        Response response = doGet("material/countView?materialId=9999");
+        assertEquals(Status.BAD_REQUEST.getStatusCode(), response.getStatus());
     }
 }

@@ -60,6 +60,8 @@ public class MaterialDAOTest extends DatabaseTestBase {
                 assertNotNull(title.getLanguage());
                 assertFalse(isBlank(title.getText()));
             }
+
+            assertNotNull(material.getViews());
         }
     }
 
@@ -164,6 +166,12 @@ public class MaterialDAOTest extends DatabaseTestBase {
     }
 
     @Test
+    public void MaterialViews() {
+        Material material = materialDAO.findById(3);
+        assertEquals(Long.valueOf(300), material.getViews());
+    }
+
+    @Test
     public void findAllById() {
         List<Long> idList = new ArrayList<>();
         idList.add((long) 5);
@@ -203,14 +211,25 @@ public class MaterialDAOTest extends DatabaseTestBase {
         assertEquals(0, result.size());
     }
 
+    @Test
     public void MaterialAddedDate() {
         Material material = materialDAO.findById(1);
         assertEquals(new DateTime("1999-01-01T02:00:01.000+02:00"), material.getAdded());
     }
 
+    @Test
     public void MaterialUpdatedDate() {
         Material material = materialDAO.findById(2);
         assertEquals(new DateTime("1995-07-12T09:00:01.000+00:00"), material.getUpdated());
+    }
+
+    @Test
+    public void increaseViews() {
+        long materialId = 1;
+        Material material = materialDAO.findById(materialId);
+        long views = material.getViews();
+        assertTrue(materialDAO.increaseViews(materialId));
+        assertEquals(Long.valueOf(views + 1), material.getViews());
     }
 
 }

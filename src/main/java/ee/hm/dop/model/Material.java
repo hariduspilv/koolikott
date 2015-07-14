@@ -118,6 +118,9 @@ public class Material {
     @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
     private DateTime updated;
 
+    @Column(nullable = false)
+    private Long views;
+
     public Long getId() {
         return id;
     }
@@ -234,6 +237,14 @@ public class Material {
     @JsonDeserialize(using = DateTimeDeserializer.class)
     public void setUpdated(DateTime updated) {
         this.updated = updated;
+    }
+
+    public Long getViews() {
+        return views;
+    }
+
+    public void setViews(Long views) {
+        this.views = views;
     }
 
 }

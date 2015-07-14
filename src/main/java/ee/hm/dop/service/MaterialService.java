@@ -23,4 +23,8 @@ public class MaterialService {
     public List<Material> getNewestMaterials(int numberOfMaterials) {
         return materialDao.findNewestMaterials(numberOfMaterials);
     }
+
+    public boolean increaseViews(long materialId) {
+        return materialDao.increaseViews(materialId);
+    }
 }
