@@ -32,6 +32,17 @@ If you started the application using a **custom configuration** file, use the sa
 
 	java -jar -Dconfig="/path/to/custom.properties" dop.jar stop
 
+# Search engine
+
+The application uses Solr as search engine and Solr must be available and configured.
+
+To install Solr in the production environment see
+[Taking Solr to Production](https://cwiki.apache.org/confluence/display/solr/Taking+Solr+to+Production "Solr installation guide").
+
+To install Solr in the development environment see
+[Installing Solr](https://cwiki.apache.org/confluence/display/solr/Installing+Solr "Solr installation guide").
+
+
 # Configuration
 
 The application can be configured using a custom properties file. It can be placed anywhere visible to the application and may have any name.
