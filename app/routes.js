@@ -7,14 +7,16 @@ define([], function()
                 templateUrl: 'app/views/home/home.html',
                 controller: 'homeController',
                 dependencies: [
-                    'views/home/home'
+                    'views/home/home',
+                    'directives/materialBox/materialBox'
                 ]
             },
             '/search/result': {
                 templateUrl: 'app/views/search/result/searchResult.html',
                 controller: 'searchResultController',
                 dependencies: [
-                    'views/search/result/searchResult'
+                    'views/search/result/searchResult',
+                    'directives/materialBox/materialBox'
                 ]
             },
             '/material': {

@@ -2,7 +2,9 @@
     <div class="row row-material">
         <div class="col-md-9">
             <div class="row">
-                <div data-dop-material-box></div>
+                <div data-ng-repeat="material in materials" class="col-md-3 material">
+                    <div data-dop-material-box material="material"></div>
+                </div>
             </div>
 		</div>
     </div>

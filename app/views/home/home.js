@@ -1,7 +1,7 @@
 define(['app'], function(app)
 {
-    app.controller('homeController', ['$scope', "serverCallService", "$filter", '$rootScope', 'translationService',
-    		function($scope, serverCallService, $filter, $rootScope, translationService) {
+    app.controller('homeController', ['$scope', "serverCallService", 'translationService',
+    		function($scope, serverCallService, translationService) {
         var params = {};
     	serverCallService.makeGet("rest/material/getNewestMaterials?numberOfMaterials=8", params, getAllMaterialSuccess, getAllMaterialFail);
     	
@@ -17,56 +17,5 @@ define(['app'], function(app)
     	function getAllMaterialFail(data, status) {
             console.log('Session search failed.')
     	}
-
-    	$scope.formatMaterialIssueDate = function(issueDate) {
-            return formatIssueDate(issueDate);
-            
-        }
-
-        $scope.formatName = function(name) {
-            return arrayToInitials(name.split(" "));
-        }
-
-        function arrayToInitials(array) {
-            var res = "";
-            for(var i = 0; i < array.length; i++) {
-                res += wordToInitial(array[i]) + " ";
-            }
-
-            return res.trim();
-        }
-
-        function wordToInitial(name){
-            return name.charAt(0).toUpperCase() + ".";
-        }
-
-        $scope.formatSurname = function(surname){
-            var array = surname.split(" ");
-            var last = array.length - 1;
-            var res = "";
-
-            if (last > 0) {
-                res = arrayToInitials(array.slice(0, last)) + " ";
-            }
-
-            res += array[last];
-            return res;
-        }
-
-        $scope.saveMaterial = function(material) {
-            $rootScope.savedMaterial = material;
-        }
-
-        $scope.getCorrectLanguageTitle = function(material) {
-            if (material) {
-                return getCorrectLanguageString(material.titles, material.language);
-            }
-        }
-
-        function getCorrectLanguageString(languageStringList, materialLanguage) {
-            if (languageStringList) {
-               return getUserDefinedLanguageString(languageStringList, translationService.getLanguage(), materialLanguage);
-            }
-        }
     }]);
 });
