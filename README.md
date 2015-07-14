@@ -61,3 +61,7 @@ DOP uses **MariaDB** database. Click [here](https://mariadb.com/kb/en/mariadb/ge
 
 * **server.port** - the port that server starts.
 * **command.listener.port** - the port used to listening for commands to be executed on server. Currently only shutdown command is available.
+
+### Search Engine
+
+* **search.server** - the URL for the search engine. Currently only Solr is supported. Default value is **http://localhost:8983/solr/dop/**
