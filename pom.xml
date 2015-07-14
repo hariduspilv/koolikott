@@ -126,8 +126,9 @@
             <artifactId>usertype.core</artifactId>
             <version>3.2.0.GA</version>
         </dependency>
-		
-		<!-- Testing -->
+
+
+        <!-- Testing -->
 		
 		<dependency>
 			<groupId>junit</groupId>

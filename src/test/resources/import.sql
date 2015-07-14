@@ -24,14 +24,14 @@ insert into LicenseType(id, name) values (3, 'CCBYND');
 
 -- Materials
 
-insert into Material(id, lang, issueDate, licenseType, source, added) values(1, 1, 1, 1, 'https://www.youtube.com/watch?v=gSWbx3CvVUk', '1999-01-01 00:00:01');
-insert into Material(id, lang, issueDate, licenseType, source, added) values(2, 2, 2, 2, 'https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes', '1970-01-01 00:00:01');
-insert into Material(id, lang, issueDate, licenseType, source, added) values(3, 4, 3, 3,  'http://eloquentjavascript.net/Eloquent_JavaScript.pdf', '2009-01-01 00:00:01');
-insert into Material(id, lang, issueDate, licenseType, source, added) values(4, 3, 4, 1,  'https://en.wikipedia.org/wiki/Power_Architecture', '2012-01-01 00:00:01');
-insert into Material(id, lang, issueDate, licenseType, source, added) values(5, 3, 5, 2,  'https://en.wikipedia.org/wiki/Power_Architecture', '2011-09-01 00:00:01');
-insert into Material(id, lang, issueDate, licenseType, source, added) values(6, null, null, null, 'http://www.planalto.gov.br/ccivil_03/Constituicao/Constituicao.htm', '1911-09-01 00:00:01');
-insert into Material(id, lang, issueDate, licenseType, source, added) values(7, 4, 6, 3, 'https://president.ee/en/republic-of-estonia/the-constitution/index.html', '2001-07-01 00:00:01');
-insert into Material(id, lang, issueDate, licenseType, source, added) values(8, 5, 7, 1, 'http://www.palmeiras.com.br/historia/titulos', '2014-06-01 00:00:01');
+insert into Material(id, lang, issueDate, licenseType, source, added, updated) values(1, 1, 1, 1, 'https://www.youtube.com/watch?v=gSWbx3CvVUk', '1999-01-01 00:00:01', '2000-03-01 07:00:01');
+insert into Material(id, lang, issueDate, licenseType, source, added, updated) values(2, 2, 2, 2, 'https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes', '1970-01-01 00:00:01', '1995-07-12 09:00:01');
+insert into Material(id, lang, issueDate, licenseType, source, added, updated) values(3, 4, 3, 3,  'http://eloquentjavascript.net/Eloquent_JavaScript.pdf', '2009-01-01 00:00:01', '2011-01-10 19:00:01');
+insert into Material(id, lang, issueDate, licenseType, source, added, updated) values(4, 3, 4, 1,  'https://en.wikipedia.org/wiki/Power_Architecture', '2012-01-01 00:00:01', '2012-08-28 22:40:01');
+insert into Material(id, lang, issueDate, licenseType, source, added, updated) values(5, 3, 5, 2,  'https://en.wikipedia.org/wiki/Power_Architecture', '2011-09-01 00:00:01', '2012-11-04 09:30:01');
+insert into Material(id, lang, issueDate, licenseType, source, added, updated) values(6, null, null, null, 'http://www.planalto.gov.br/ccivil_03/Constituicao/Constituicao.htm', '1911-09-01 00:00:01', null);
+insert into Material(id, lang, issueDate, licenseType, source, added, updated) values(7, 4, 6, 3, 'https://president.ee/en/republic-of-estonia/the-constitution/index.html', '2001-07-01 00:00:01', null);
+insert into Material(id, lang, issueDate, licenseType, source, added, updated) values(8, 5, 7, 1, 'http://www.palmeiras.com.br/historia/titulos', '2014-06-01 00:00:01', null);
 
 -- Authors
 

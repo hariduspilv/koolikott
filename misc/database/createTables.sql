@@ -81,6 +81,7 @@ CREATE TABLE Material (
   licenseType BIGINT,
   source TEXT NOT NULL,
   added TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updated TIMESTAMP NULL DEFAULT NULL,
 
   FOREIGN KEY (lang)
   REFERENCES LanguageTable (id)

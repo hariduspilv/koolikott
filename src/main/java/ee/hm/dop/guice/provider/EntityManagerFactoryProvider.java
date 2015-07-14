@@ -41,7 +41,6 @@ public class EntityManagerFactoryProvider implements Provider<EntityManagerFacto
 
             try {
                 emf = Persistence.createEntityManagerFactory("dop", properties);
-
             } catch (Exception e) {
                 throw new RuntimeException(format("Unable to initialize EntityManagerFactory [%s]!", properties), e);
             }

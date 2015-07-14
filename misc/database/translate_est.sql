@@ -4,10 +4,9 @@ insert into Translation(translationGroup, translationKey, translation) values (1
 insert into Translation(translationGroup, translationKey, translation) values (1, 'MATERIAL_VIEW_RESOURCE_TYPE', 'Tüüp');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'MATERIAL_VIEW_EDUCATIONAL_CONTEXT', 'Vanuserühmadele');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'UPDATED', 'Uuendatud');
-insert into Translation(translationGroup, translationKey, translation) values (1, 'ADDED', 'Lisatud');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'CREATED', 'Loodud');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'REPOSITORY_NUMBER', 'Repositooriumi number');
-insert into Translation(translationGroup, translationKey, translation) values (1, 'ALL_RIGHTS_RESERVED', 'Kõik õigused kaitstud');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'MATERIAL_VIEW_LICENSE_TYPE', 'Litsentsi tüüp');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'AUDIO', 'Audio');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'DATA', 'Andmed');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'IMAGE', 'Pilt');
@@ -56,9 +55,17 @@ insert into Translation(translationGroup, translationKey, translation) values (1
 insert into Translation(translationGroup, translationKey, translation) values (1, 'PUBLISHERS', 'Kirjastajad');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'SEARCH', 'Otsi');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'UNKNOWN', 'Teadmata');
-insert into Translation(translationGroup, translationKey, translation) values (1, 'ABOUT', 'Mis see on?');
-insert into Translation(translationGroup, translationKey, translation) values (1, 'HELP', 'Kuidas eKoolikotti kasutada?');
-insert into Translation(translationGroup, translationKey, translation) values (1, 'NEWEST', 'Uusimad');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'ABOUT_PAGE_LINK_TITLE', 'Mis see on?');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'HELP_PAGE_LINK_TITLE', 'Kuidas eKoolikotti kasutada?');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'LANDING_PAGE_TITLE_NEWEST', 'Uusimad');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'LICENSETYPE_ALLRIGHTSRESERVED', 'Kõik õigused kaitstud');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'LICENSETYPE_CCBY', 'CC BY');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'LICENSETYPE_CCBYSA', 'CC BY-SA');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'LICENSETYPE_CCBYND', 'CC BY-ND');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'LICENSETYPE_CCBYNC', 'CC BY-NC');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'LICENSETYPE_CCBYNCSA', 'CC BY-NC-SA');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'LICENSETYPE_CCBYNCND', 'CC BY-NC-ND');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'LICENSETYPE_OTHER', 'Muu');
 
 
 

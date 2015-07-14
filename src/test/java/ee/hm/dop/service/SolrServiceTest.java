@@ -1,4 +1,4 @@
-package ee.hm.dop.dao;
+package ee.hm.dop.service;
 
 import static ee.hm.dop.utils.ConfigurationProperties.SEARCH_SERVER;
 import static org.easymock.EasyMock.eq;
@@ -26,9 +26,10 @@ import org.junit.runner.RunWith;
 import ee.hm.dop.model.SearchResponse;
 import ee.hm.dop.model.SearchResponse.Document;
 import ee.hm.dop.model.SearchResponse.Response;
+import ee.hm.dop.service.SolrService;
 
 @RunWith(EasyMockRunner.class)
-public class SearchDAOTest {
+public class SolrServiceTest {
 
     @Mock
     private Client client;
@@ -37,7 +38,7 @@ public class SearchDAOTest {
     private Configuration configuration;
 
     @TestSubject
-    private SearchDAO searchDao = new SearchDAO();
+    private SolrService solrService = new SolrService();
 
     @Mock
     private WebTarget target;
@@ -68,7 +69,7 @@ public class SearchDAOTest {
 
         replayAll();
 
-        List<Long> result = searchDao.search(query);
+        List<Long> result = solrService.search(query);
 
         verifyAll();
 
@@ -127,7 +128,7 @@ public class SearchDAOTest {
 
         replayAll();
 
-        List<Long> result = searchDao.search(query);
+        List<Long> result = solrService.search(query);
 
         verifyAll();
 
@@ -140,7 +141,7 @@ public class SearchDAOTest {
 
         replayAll();
 
-        List<Long> result = searchDao.search(query);
+        List<Long> result = solrService.search(query);
 
         verifyAll();
 

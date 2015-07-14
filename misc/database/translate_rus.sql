@@ -4,10 +4,9 @@ insert into Translation(translationGroup, translationKey, translation) values (2
 insert into Translation(translationGroup, translationKey, translation) values (2, 'MATERIAL_VIEW_RESOURCE_TYPE', 'Тип');
 insert into Translation(translationGroup, translationKey, translation) values (2, 'MATERIAL_VIEW_EDUCATIONAL_CONTEXT', 'Возрастные группы');
 insert into Translation(translationGroup, translationKey, translation) values (2, 'UPDATED', 'Новый');
-insert into Translation(translationGroup, translationKey, translation) values (2, 'ADDED', 'Добавленной');
 insert into Translation(translationGroup, translationKey, translation) values (2, 'CREATED', 'Созданный');
 insert into Translation(translationGroup, translationKey, translation) values (2, 'REPOSITORY_NUMBER', 'Количество хранилище');
-insert into Translation(translationGroup, translationKey, translation) values (2, 'ALL_RIGHTS_RESERVED', 'Все права защищены');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'MATERIAL_VIEW_LICENSE_TYPE', 'Тип лицензии');
 insert into Translation(translationgroup, translationkey, translation) values (2, 'AUDIO', 'аудио');
 insert into Translation(translationgroup, translationkey, translation) values (2, 'DATA', 'данные');
 insert into Translation(translationgroup, translationkey, translation) values (2, 'IMAGE', 'имидж');
@@ -56,9 +55,17 @@ insert into Translation(translationGroup, translationKey, translation) values (2
 insert into Translation(translationGroup, translationKey, translation) values (2, 'PUBLISHERS', 'Издатели');
 insert into Translation(translationGroup, translationKey, translation) values (2, 'SEARCH', 'Поиск');
 insert into Translation(translationGroup, translationKey, translation) values (2, 'UNKNOWN', 'Неизвестный');
-insert into Translation(translationGroup, translationKey, translation) values (2, 'ABOUT', 'Что eKoolikott?');
-insert into Translation(translationGroup, translationKey, translation) values (2, 'HELP', 'Как использовать eKoolikott');
-insert into Translation(translationGroup, translationKey, translation) values (2, 'NEWEST', 'Новые');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'ABOUT_PAGE_LINK_TITLE', 'Что eKoolikott?');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'HELP_PAGE_LINK_TITLE', 'Как использовать eKoolikott');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'LANDING_PAGE_TITLE_NEWEST', 'Новые');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'LICENSETYPE_ALLRIGHTSRESERVED', 'Все права защищены');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'LICENSETYPE_CCBY', 'CC BY');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'LICENSETYPE_CCBYSA', 'CC BY-SA');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'LICENSETYPE_CCBYND', 'CC BY-ND');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'LICENSETYPE_CCBYNC', 'CC BY-NC');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'LICENSETYPE_CCBYNCSA', 'CC BY-NC-SA');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'LICENSETYPE_CCBYNCND', 'CC BY-NC-ND');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'LICENSETYPE_OTHER', 'Другой');
 
 
 

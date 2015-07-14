@@ -125,6 +125,15 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
     }
 
     @Test
+    public void getMaterialUpdatedDate() {
+        Response response = doGet("material/getAll");
+        List<Material> materials = response.readEntity(new GenericType<List<Material>>() {
+        });
+        Material material = materials.get(1);
+        assertEquals(new DateTime("1995-07-12T09:00:01.000+00:00"), material.getUpdated());
+    }
+
+    @Test
     public void GetNewestMaterials() {
         Response response = doGet("material/getNewestMaterials?numberOfMaterials=8");
 

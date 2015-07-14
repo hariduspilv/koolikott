@@ -207,4 +207,10 @@ public class MaterialDAOTest extends DatabaseTestBase {
         Material material = materialDAO.findById(1);
         assertEquals(new DateTime("1999-01-01T02:00:01.000+02:00"), material.getAdded());
     }
+
+    public void MaterialUpdatedDate() {
+        Material material = materialDAO.findById(2);
+        assertEquals(new DateTime("1995-07-12T09:00:01.000+00:00"), material.getUpdated());
+    }
+
 }
