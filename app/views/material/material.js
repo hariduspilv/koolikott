@@ -2,14 +2,20 @@ define(['app'], function(app)
 {
     app.controller('materialController', ['$scope', 'serverCallService', '$route', 'translationService', '$rootScope',
     		 function($scope, serverCallService, $route, translationService, $rootScope) {
+    	
+    	var materialId = $route.current.params.materialId;
+        var params = {};
         if ($rootScope.savedMaterial){
             $scope.material = $rootScope.savedMaterial;
             init();
         } else {
-            var materialId = $route.current.params.materialId;
-            var params = {};
             serverCallService.makeGet("rest/material?materialId=" + materialId, params, getMaterialSuccess, getMaterialFail); 
         }
+        serverCallService.makeGet("rest/material/countView?materialId=" + materialId, params, countViewSuccess, countViewFail); 
+        
+        function countViewSuccess(data) { }
+        
+        function countViewFail(data, status) { }
     	
         function getMaterialSuccess(material) {
             if (isEmpty(material)) {
