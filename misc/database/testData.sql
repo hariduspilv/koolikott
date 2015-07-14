@@ -42,7 +42,7 @@ insert into Translation(translationGroup, translationKey, translation) values (2
 insert into Translation(translationGroup, translationKey, translation) values (3, 'CLASSIFICATION_BIOLOGY', 'Biology');
 insert into Translation(translationGroup, translationKey, translation) values (3, 'CLASSIFICATION_PLANTS', 'Plants');
 insert into Translation(translationGroup, translationKey, translation) values (3, 'CLASSIFICATION_TREES', 'Trees');
-insert into Translation(translationGroup, translationKey, translation) values (3, 'CLASSIFICATION_MATH', 'Math');
+insert into Translation(translationGroup, translationKey, translation) values (3, 'CLASSIFICATION_MATHEMATICS', 'Mathematics');
 insert into Translation(translationGroup, translationKey, translation) values (3, 'CLASSIFICATION_ALGEBRA', 'Algebra');
 insert into Translation(translationGroup, translationKey, translation) values (3, 'CLASSIFICATION_LINEAR', 'Linear');
 insert into Translation(translationGroup, translationKey, translation) values (3, 'CLASSIFICATION_QUADRATIC', 'Quadratic');
