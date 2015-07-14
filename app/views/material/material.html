@@ -51,7 +51,8 @@
                             <span data-translate="UPDATED"></span><span>:</span>
                         </dt>
                         <dd class="text-right text-big">
-                            14.05.2015
+                        	<span data-ng-if="material.updated" class="pull-right">{{formatMaterialUpdatedDate(material.updated)}}</span>
+                        	<span data-ng-if="!material.updated" class="pull-right" data-translate="UNKNOWN">Unknown</span>
                         </dd>
                         <dt class="text-grey">
                             <span data-translate="CREATED"></span><span>:</span>

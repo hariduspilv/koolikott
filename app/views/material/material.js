@@ -54,6 +54,11 @@ define(['app'], function(app)
             
         }
         
+        $scope.formatMaterialUpdatedDate = function(updatedDate) {
+            var updated = new Date(updatedDate);
+            return formatDay(updated.getDate()) + "." + formatMonth(updated.getMonth() + 1) + "." + updated.getFullYear();
+        }
+        
         /**
          *  Gets the list of unique material subjects
          */
@@ -86,5 +91,6 @@ define(['app'], function(app)
         $scope.isNullOrZeroLength = function (arg) {
         	return !arg || !arg.length;
         }
+        
     }]);
 });
