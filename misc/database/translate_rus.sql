@@ -6,7 +6,7 @@ insert into Translation(translationGroup, translationKey, translation) values (2
 insert into Translation(translationGroup, translationKey, translation) values (2, 'UPDATED', 'Новый');
 insert into Translation(translationGroup, translationKey, translation) values (2, 'CREATED', 'Созданный');
 insert into Translation(translationGroup, translationKey, translation) values (2, 'REPOSITORY_NUMBER', 'Количество хранилище');
-insert into Translation(translationGroup, translationKey, translation) values (2, 'ALL_RIGHTS_RESERVED', 'Все права защищены');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'MATERIAL_VIEW_LICENSE_TYPE', 'Тип лицензии');
 insert into Translation(translationgroup, translationkey, translation) values (2, 'AUDIO', 'аудио');
 insert into Translation(translationgroup, translationkey, translation) values (2, 'DATA', 'данные');
 insert into Translation(translationgroup, translationkey, translation) values (2, 'IMAGE', 'имидж');

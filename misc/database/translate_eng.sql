@@ -6,7 +6,7 @@ insert into Translation(translationGroup, translationKey, translation) values (3
 insert into Translation(translationGroup, translationKey, translation) values (3, 'UPDATED', 'Updated');
 insert into Translation(translationGroup, translationKey, translation) values (3, 'CREATED', 'Created');
 insert into Translation(translationGroup, translationKey, translation) values (3, 'REPOSITORY_NUMBER', 'Repository number');
-insert into Translation(translationGroup, translationKey, translation) values (3, 'ALL_RIGHTS_RESERVED', 'All rights reserved');
+insert into Translation(translationGroup, translationKey, translation) values (3, 'MATERIAL_VIEW_LICENSE_TYPE', 'License type');
 insert into Translation(translationGroup, translationKey, translation) values (3, 'AUDIO', 'Audio');
 insert into Translation(translationGroup, translationKey, translation) values (3, 'DATA', 'Data');
 insert into Translation(translationGroup, translationKey, translation) values (3, 'IMAGE', 'Image');
