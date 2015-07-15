@@ -124,6 +124,7 @@
 
    <!-- Material -->
    <field name="title" type="text_general" indexed="true" stored="false" multiValued="true"/>
+   <field name="description" type="text_general" indexed="true" stored="false" multiValued="true"/>
 
    <!-- catchall field, containing all other searchable text fields (implemented
         via copyField further on in this schema  -->
@@ -144,6 +145,7 @@
         or to add multiple fields to the same field for easier/faster searching.  -->
 
    <copyField source="title" dest="text"/>
+   <copyField source="description" dest="text"/>
 
    <!-- Above, multiple source fields are copied to the [text] field.
 	  Another way to map multiple source fields to the same

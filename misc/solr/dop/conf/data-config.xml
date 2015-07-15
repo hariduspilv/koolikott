@@ -3,8 +3,10 @@
     <document>
         <entity name="Material" query="select id from Material">
         	<entity name="Material_Title" query="select title as title_id from Material_Title where material='${Material.id}'">
-                <entity name="LanguageString" query="select textValue as title from LanguageString where id = '${Material_Title.title_id}'">
-                </entity>
+                <entity name="LanguageString" query="select textValue as title from LanguageString where id = '${Material_Title.title_id}'" />
+            </entity>
+            <entity name="Material_Description" query="select description as description_id from Material_Description where material='${Material.id}'">
+                <entity name="LanguageString" query="select textValue as description from LanguageString where id = '${Material_Description.description_id}'" />
             </entity>
         </entity>
     </document>
