@@ -9,8 +9,7 @@ import ee.hm.dop.model.Material;
 
 public class MaterialService {
 
-    @Inject
-    MaterialDAO materialDao;
+    @Inject private MaterialDAO materialDao;
 
     public List<Material> getAllMaterials() {
         return materialDao.findAll();

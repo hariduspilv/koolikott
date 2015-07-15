@@ -126,6 +126,16 @@
             <artifactId>usertype.core</artifactId>
             <version>3.2.0.GA</version>
         </dependency>
+        <dependency>
+            <groupId>org.dspace</groupId>
+            <artifactId>oclc-harvester2</artifactId>
+            <version>0.1.12</version>
+        </dependency>
+        <dependency>
+            <groupId>xalan</groupId>
+            <artifactId>xalan</artifactId>
+            <version>2.7.2</version>
+        </dependency>
 
 
         <!-- Testing -->

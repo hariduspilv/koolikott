@@ -34,8 +34,8 @@ public class DateTimeSerializerTest {
 
     @Test
     public void serializeDatetime() {
-        serialize("2015-06-02T20:00:00.000Z",
-                new DateTime(2015, 6, 2, 23, 0, 0, 0, DateTimeZone.forID("Europe/Helsinki")));
+        serialize("1991-11-30T20:00:00.000Z",
+                new DateTime(1991, 11, 30, 22, 0, 0, 0, DateTimeZone.forID("Europe/Helsinki")));
     }
 
     private void serialize(String expected, DateTime date) {
