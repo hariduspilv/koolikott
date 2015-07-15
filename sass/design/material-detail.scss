@@ -32,6 +32,7 @@
     }
     
     .dl-horizontal {
+        
         dt {
             width: 90px; font-weight: normal
         };
@@ -45,12 +46,18 @@
         }
     };
     .preview {
+        
         @include border-radius(3px); @include box-shadow(0, 0, 2px, 0, #999); background: #FFF; overflow: hidden; 
         
         header {
-            padding: 20px 40px; background: #F4F4F4
+            
+            padding: 20px 40px; background: #F4F4F4;
+            
+            .fa {margin-right: 2px}
+            
         }; 
         article {
+            
             padding: 45px 40px;
             
             .material-type-link {position: relative; padding-left: 25px;

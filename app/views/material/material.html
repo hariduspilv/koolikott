@@ -83,8 +83,10 @@
             <div class="row">
                 <div class="col-md-12">
                     <section class="preview">
-                        <header class="text-right text-grey">
-                        	<span data-ng-bind="material.views"></span>
+                        <header class="clearfix">
+                            <div class="pull-right text-grey">
+                                <i class="fa fa-eye"></i> <span data-ng-bind="material.views"></span>
+                            </div>
                         </header>
                         <article>
                             <div data-ng-if="sourceType === 'YOUTUBE'" class="embed-responsive embed-responsive-16by9">
