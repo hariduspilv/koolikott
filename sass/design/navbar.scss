@@ -28,15 +28,15 @@
     
     .navbar-lang {
         
-        > a {width: 90px; padding-bottom: 18.5px; 
+        > a {width: 90px; padding-top: 26.5px; padding-bottom: 18.5px; 
              
-             > span {padding-bottom: 5px}
+             > span {padding-bottom: 4px; border-bottom: 1px solid #92c8d9}
         
         }
         
         a {padding-left: 10px; padding-right: 10px; font-size: 17px;
             
-            span {display: inline-block; border-bottom: 1px solid #92c8d9;
+            span {display: inline-block;
             
                 .fa {margin-left: 25px}
             }
@@ -45,13 +45,13 @@
         
     }
     
-    .navbar-submenu {position: absolute; top: 12.5px; padding: 12px 0; @include border-radius(3px); @include box-shadow(0, 0, 2px, 0, #999); background: $navbar-light-bg; list-style: none;
+    .navbar-submenu {position: absolute; top: 16.5px; padding: 8px 0; @include border-radius(3px); @include box-shadow(0, 0, 2px, 0, rgba(0, 0, 0, 0.12)); background: #2d7085; list-style: none;
         
         > li:first-child {
             
             a {margin-bottom: 10px;
                 
-               span {display: inline-block; padding-bottom: 5px; border-bottom: 1px solid #777;
+               span {display: inline-block; padding-bottom: 3px; border-bottom: 1px solid #92c8d9;
                 
                     .fa {margin-left: 25px}
                     
@@ -59,7 +59,7 @@
             }
         }
                      
-        a {display: inline-block; color: $font-color-grey}
+        a {display: inline-block; color: #FFF}
 
     }
 }
