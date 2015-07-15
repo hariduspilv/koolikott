@@ -45,7 +45,7 @@
         
     }
     
-    .navbar-submenu {position: absolute; top: 16.5px; padding: 8px 0; @include border-radius(3px); @include box-shadow(0, 0, 2px, 0, rgba(0, 0, 0, 0.12)); background: #2d7085; list-style: none;
+    .navbar-submenu {position: absolute; top: 16.5px; padding: 8px 0; @include border-radius(3px); @include box-shadow(0, 0, 2px, 0, rgba(0, 0, 0, 0.12)); background: #2d7085; list-style: none; z-index: 10;
         
         > li:first-child {
             
