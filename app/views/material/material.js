@@ -11,7 +11,6 @@ define(['app'], function(app)
         } else {
             serverCallService.makeGet("rest/material?materialId=" + materialId, params, getMaterialSuccess, getMaterialFail); 
         }
-        serverCallService.makeGet("rest/material/countView?materialId=" + materialId, params, countViewSuccess, countViewFail); 
         
         function countViewSuccess(data) { }
         
@@ -33,6 +32,8 @@ define(['app'], function(app)
     	function init() {
             setSourceType();
             $scope.materialSubjects = getSubjectList()
+            
+            serverCallService.makePost("rest/material/increaseViewCount", $scope.material.id, countViewSuccess, countViewFail); 
     	}
 
         $scope.getCorrectLanguageString = function(languageStringList) {
