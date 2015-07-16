@@ -224,11 +224,12 @@ public class MaterialDAOTest extends DatabaseTestBase {
     }
 
     @Test
-    public void increaseViews() {
+    public void update() {
         long materialId = 1;
         Material material = materialDAO.findById(materialId);
         long views = material.getViews();
-        assertTrue(materialDAO.increaseViews(materialId));
+        material.setViews(views + 1);
+        materialDAO.update(material);
         assertEquals(Long.valueOf(views + 1), material.getViews());
     }
 

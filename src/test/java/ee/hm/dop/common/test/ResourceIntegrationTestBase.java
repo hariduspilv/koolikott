@@ -5,6 +5,7 @@ import static java.lang.String.format;
 
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
+import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.MediaType;
@@ -56,6 +57,19 @@ public abstract class ResourceIntegrationTestBase extends IntegrationTestBase {
 
     protected static Response doGet(String url, MediaType mediaType) {
         Response response = getTarget(url).request().accept(mediaType).get(Response.class);
+        return response;
+    }
+
+    /*
+     * POST
+     */
+
+    protected static Response doPost(String url, Entity<?> requestEntity) {
+        return doPost(url, requestEntity, MediaType.APPLICATION_JSON_TYPE);
+    }
+
+    protected static Response doPost(String url, Entity<?> requestEntity, MediaType mediaType) {
+        Response response = getTarget(url).request().accept(mediaType).post(requestEntity);
         return response;
     }
 
