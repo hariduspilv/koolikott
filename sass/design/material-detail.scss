@@ -1,17 +1,17 @@
 .material-detail {
                   
-    .description {
-        margin-bottom: 30px; border-right: 1px solid #DDD;
-                  
-        .category {
-            padding-bottom: 15px;
-            
-            .item {padding-right: 25px;
-                .label {
-                    display: block; padding: 0; text-align: left; font-size: 11px; font-weight: normal; color: $font-color-grey-light;
-                }
+    .category {
+        padding-bottom: 15px;
+
+        .item {padding-right: 25px;
+            .label {
+                display: block; padding: 0; text-align: left; font-size: 11px; font-weight: normal; color: $font-color-grey-light;
             }
         }
+    }
+    
+    .description {
+        margin-bottom: 30px; border-right: 1px solid #DDD;
     
         .heading {
             padding-bottom: 15px;
@@ -71,4 +71,13 @@
             }
         }
     }
+    
+    .keywords {padding-top: 20px;
+               
+        a, .item {
+            display: inline-block; margin-right: 15px
+        }
+    
+    }
+    
 }
