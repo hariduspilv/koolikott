@@ -71,7 +71,7 @@ insert into Material(id, lang, issueDate, licenseType, source, added, updated) v
 insert into Material(id, lang, issueDate, licenseType, source, added, updated) values(6, null, null, null, 'http://www.planalto.gov.br/ccivil_03/Constituicao/Constituicao.htm', '1971-09-22 08:00:01', null);
 insert into Material(id, lang, issueDate, licenseType, source, added, updated) values(7, 4, 6, 3, 'https://president.ee/en/republic-of-estonia/the-constitution/index.html', '2001-07-16 06:00:01', null);
 insert into Material(id, lang, issueDate, licenseType, source, added, updated) values(8, 5, 7, 1, 'http://www.palmeiras.com.br/historia/titulos', '2014-06-01 09:00:01', null);
-insert into Material(id, lang, issueDate, licenseType, source, added, updated) values(9, null, null, null, 'http://EmptyFileds.test.ee', '2015-06-08 08:00:01', null);
+insert into Material(id, lang, issueDate, licenseType, source, added, updated, views) values(9, null, null, null, 'http://EmptyFileds.test.ee', '2015-06-08 08:00:01', null, '98765432');
 insert into Material(id, lang, issueDate, licenseType, source, added, updated) values(10, 1, 2, 3, 'http://automated.test.ee', '2015-06-09 08:00:01', null);
 insert into Material(id, lang, issueDate, licenseType, source, added, updated) values(11, 1, 2, 3, 'http://performance.test.ee', '2015-06-09 08:00:01', null);
 
