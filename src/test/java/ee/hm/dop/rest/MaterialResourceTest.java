@@ -158,15 +158,35 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
 
     @Test
     public void increaseViewCount() {
-        Response response = doPost("material/increaseViewCount",
-                Entity.entity(new Long(5), MediaType.APPLICATION_JSON));
+        long materialId = 5;
+
+        Response response = doGet("material?materialId=" + materialId);
+        Material material = response.readEntity(new GenericType<Material>() {
+        });
+        Long previousViewCount = material.getViews();
+
+        response = doPost("material/increaseViewCount", Entity.entity(materialId, MediaType.APPLICATION_JSON));
         assertEquals(Status.OK.getStatusCode(), response.getStatus());
+
+        response = doGet("material?materialId=" + materialId);
+        material = response.readEntity(new GenericType<Material>() {
+        });
+        Long newViewCount = material.getViews();
+
+        assertEquals(Long.valueOf(previousViewCount + 1), newViewCount);
     }
 
     @Test
     public void increaseViewCountNotExistingMaterial() {
-        Response response = doPost("material/increaseViewCount",
-                Entity.entity(new Long(999), MediaType.APPLICATION_JSON));
+        long materialId = 999;
+
+        Response response = doGet("material?materialId=" + materialId);
+        assertEquals(Status.NO_CONTENT.getStatusCode(), response.getStatus());
+
+        response = doPost("material/increaseViewCount", Entity.entity(materialId, MediaType.APPLICATION_JSON));
         assertEquals(Status.BAD_REQUEST.getStatusCode(), response.getStatus());
+
+        response = doGet("material?materialId=" + materialId);
+        assertEquals(Status.NO_CONTENT.getStatusCode(), response.getStatus());
     }
 }

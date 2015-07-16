@@ -223,14 +223,4 @@ public class MaterialDAOTest extends DatabaseTestBase {
         assertEquals(new DateTime("1995-07-12T09:00:01.000+00:00"), material.getUpdated());
     }
 
-    @Test
-    public void update() {
-        long materialId = 1;
-        Material material = materialDAO.findById(materialId);
-        long views = material.getViews();
-        material.setViews(views + 1);
-        materialDAO.update(material);
-        assertEquals(Long.valueOf(views + 1), material.getViews());
-    }
-
 }
