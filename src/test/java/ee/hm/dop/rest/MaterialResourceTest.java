@@ -138,6 +138,28 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
     }
 
     @Test
+    public void getMaterialKeywords() {
+        long materialId = 1;
+        Response response = doGet("material?materialId=" + materialId);
+        Material material = response.readEntity(new GenericType<Material>() {
+        });
+
+        assertEquals(5, material.getKeywords().size());
+
+        assertEquals("matemaatika", material.getKeywords().get(0).getText());
+        assertEquals("põhikool", material.getKeywords().get(1).getText());
+        assertEquals("õpik", material.getKeywords().get(2).getText());
+        assertEquals("mathematics", material.getKeywords().get(3).getText());
+        assertEquals("book", material.getKeywords().get(4).getText());
+
+        assertEquals("est", material.getKeywords().get(0).getLanguage().getCode());
+        assertEquals("est", material.getKeywords().get(1).getLanguage().getCode());
+        assertEquals("est", material.getKeywords().get(2).getLanguage().getCode());
+        assertEquals("eng", material.getKeywords().get(3).getLanguage().getCode());
+        assertEquals("eng", material.getKeywords().get(4).getLanguage().getCode());
+    }
+
+    @Test
     public void GetNewestMaterials() {
         Response response = doGet("material/getNewestMaterials?numberOfMaterials=8");
 

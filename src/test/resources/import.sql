@@ -180,6 +180,27 @@ insert into Material_Publisher(material, publisher) values (1, 2);
 insert into Material_Publisher(material, publisher) values (2, 2);
 insert into Material_Publisher(material, publisher) values (3, 3);
 
+-- Material Keywords
+
+insert into LanguageString(id, lang, textValue) values (23, 1, 'matemaatika');
+insert into LanguageString(id, lang, textValue) values (24, 1, 'põhikool');
+insert into LanguageString(id, lang, textValue) values (25, 1, 'õpik');
+insert into LanguageString(id, lang, textValue) values (26, 3, 'mathematics');
+insert into LanguageString(id, lang, textValue) values (27, 3, 'book');
+insert into LanguageString(id, lang, textValue) values (28, 2, 'Математика');
+insert into LanguageString(id, lang, textValue) values (29, 2, 'учебник');
+
+insert into Material_Keyword(keyword, material) values(23, 1);
+insert into Material_Keyword(keyword, material) values(23, 2);
+insert into Material_Keyword(keyword, material) values(24, 1);
+insert into Material_Keyword(keyword, material) values(25, 1);
+insert into Material_Keyword(keyword, material) values(26, 1);
+insert into Material_Keyword(keyword, material) values(26, 2);
+insert into Material_Keyword(keyword, material) values(27, 1);
+insert into Material_Keyword(keyword, material) values(28, 2);
+insert into Material_Keyword(keyword, material) values(29, 2);
+
+
 -- TranslationGroup
 
 insert into TranslationGroup(id, lang) values (1, 1);
