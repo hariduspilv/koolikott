@@ -3,6 +3,7 @@
 DROP TABLE IF EXISTS Page;
 DROP TABLE IF EXISTS Translation;
 DROP TABLE IF EXISTS TranslationGroup;
+DROP TABLE IF EXISTS Material_Keyword;
 DROP TABLE IF EXISTS Material_EducationalContext;
 DROP TABLE IF EXISTS Material_ResourceType;
 DROP TABLE IF EXISTS Material_Description;
@@ -215,6 +216,21 @@ CREATE TABLE Material_EducationalContext (
 
   FOREIGN KEY (educationalContext)
   REFERENCES EducationalContext (id)
+    ON DELETE RESTRICT
+);
+
+CREATE TABLE Material_Keyword (
+  material BIGINT NOT NULL,
+  keyword BIGINT NOT NULL,
+
+  PRIMARY KEY (material, keyword),
+	
+  FOREIGN KEY (material) 
+    REFERENCES Material(id)
+    ON DELETE RESTRICT,
+	
+  FOREIGN KEY (keyword)
+    REFERENCES LanguageString(id)
     ON DELETE RESTRICT
 );
 

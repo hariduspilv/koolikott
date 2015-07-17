@@ -201,3 +201,41 @@ insert into Material_Publisher(material, publisher) values (2, 2);
 insert into Material_Publisher(material, publisher) values (3, 3);
 insert into Material_Publisher(material, publisher) values (10, 2);
 insert into Material_Publisher(material, publisher) values (11, 2);
+
+-- Material Keywords
+
+insert into LanguageString(id, lang, textValue) values (23, 1, 'matemaatika');
+insert into LanguageString(id, lang, textValue) values (24, 1, 'põhikool');
+insert into LanguageString(id, lang, textValue) values (25, 1, 'õpik');
+insert into LanguageString(id, lang, textValue) values (26, 3, 'mathematics');
+insert into LanguageString(id, lang, textValue) values (27, 3, 'book');
+insert into LanguageString(id, lang, textValue) values (28, 2, 'Математика');
+insert into LanguageString(id, lang, textValue) values (29, 2, 'учебник');
+insert into LanguageString(id, lang, textValue) values (30, 10, 'لرياضيات');
+insert into LanguageString(id, lang, textValue) values (31, 10, 'لكتب');
+insert into LanguageString(id, lang, textValue) values (32, 3, 'test');
+insert into LanguageString(id, lang, textValue) values (33, 3, 'material');
+
+insert into Material_Keyword(keyword, material) values(23, 1);
+insert into Material_Keyword(keyword, material) values(23, 2);
+insert into Material_Keyword(keyword, material) values(24, 1);
+insert into Material_Keyword(keyword, material) values(25, 1);
+insert into Material_Keyword(keyword, material) values(26, 1);
+insert into Material_Keyword(keyword, material) values(26, 2);
+insert into Material_Keyword(keyword, material) values(26, 5);
+insert into Material_Keyword(keyword, material) values(27, 1);
+insert into Material_Keyword(keyword, material) values(27, 5);
+insert into Material_Keyword(keyword, material) values(28, 2);
+insert into Material_Keyword(keyword, material) values(29, 2);
+insert into Material_Keyword(keyword, material) values(30, 3);
+insert into Material_Keyword(keyword, material) values(31, 3);
+insert into Material_Keyword(keyword, material) values(32, 4);
+insert into Material_Keyword(keyword, material) values(32, 5);
+insert into Material_Keyword(keyword, material) values(32, 6);
+insert into Material_Keyword(keyword, material) values(32, 7);
+insert into Material_Keyword(keyword, material) values(32, 8);
+insert into Material_Keyword(keyword, material) values(33, 4);
+insert into Material_Keyword(keyword, material) values(33, 5);
+insert into Material_Keyword(keyword, material) values(33, 6);
+insert into Material_Keyword(keyword, material) values(33, 7);
+insert into Material_Keyword(keyword, material) values(33, 8);

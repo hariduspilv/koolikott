@@ -121,6 +121,14 @@ public class Material {
     @Column(nullable = false)
     private Long views;
 
+    @ManyToMany(fetch = EAGER)
+    @JoinTable(
+            name = "Material_Keyword",
+            joinColumns = { @JoinColumn(name = "material") },
+            inverseJoinColumns = { @JoinColumn(name = "keyword") },
+            uniqueConstraints = @UniqueConstraint(columnNames = { "material", "keyword" }))
+    private List<LanguageString> keywords;
+
     public Long getId() {
         return id;
     }
@@ -245,6 +253,14 @@ public class Material {
 
     public void setViews(Long views) {
         this.views = views;
+    }
+
+    public List<LanguageString> getKeywords() {
+        return keywords;
+    }
+
+    public void setKeywords(List<LanguageString> keywords) {
+        this.keywords = keywords;
     }
 
 }

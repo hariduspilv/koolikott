@@ -43,25 +43,25 @@ public class MaterialDAOTest extends DatabaseTestBase {
                 assertFalse(isBlank(author.getName()));
                 assertFalse(isBlank(author.getSurname()));
             }
-            List<LanguageString> descriptions = material.getDescriptions();
-            assertNotNull(descriptions);
 
-            for (LanguageString languageDescription : descriptions) {
-                assertNotNull(languageDescription.getId());
-                assertNotNull(languageDescription.getLanguage());
-                assertFalse(isBlank(languageDescription.getText()));
-            }
+            verifyLanguageStrings(material.getDescriptions());
 
-            List<LanguageString> titles = material.getTitles();
-            assertNotNull(titles);
-
-            for (LanguageString title : titles) {
-                assertNotNull(title.getId());
-                assertNotNull(title.getLanguage());
-                assertFalse(isBlank(title.getText()));
-            }
+            verifyLanguageStrings(material.getTitles());
 
             assertNotNull(material.getViews());
+
+            verifyLanguageStrings(material.getKeywords());
+
+        }
+    }
+
+    private void verifyLanguageStrings(List<LanguageString> languageStringList) {
+        assertNotNull(languageStringList);
+
+        for (LanguageString languageString : languageStringList) {
+            assertNotNull(languageString.getId());
+            assertNotNull(languageString.getLanguage());
+            assertFalse(isBlank(languageString.getText()));
         }
     }
 
@@ -221,6 +221,22 @@ public class MaterialDAOTest extends DatabaseTestBase {
     public void MaterialUpdatedDate() {
         Material material = materialDAO.findById(2);
         assertEquals(new DateTime("1995-07-12T09:00:01.000+00:00"), material.getUpdated());
+    }
+
+    @Test
+    public void MaterialKeywords() {
+        Material material = materialDAO.findById(2);
+
+        assertEquals(4, material.getKeywords().size());
+        assertEquals("matemaatika", material.getKeywords().get(0).getText());
+        assertEquals("mathematics", material.getKeywords().get(1).getText());
+        assertEquals("Математика", material.getKeywords().get(2).getText());
+        assertEquals("учебник", material.getKeywords().get(3).getText());
+
+        assertEquals("est", material.getKeywords().get(0).getLanguage().getCode());
+        assertEquals("eng", material.getKeywords().get(1).getLanguage().getCode());
+        assertEquals("rus", material.getKeywords().get(2).getLanguage().getCode());
+        assertEquals("rus", material.getKeywords().get(3).getLanguage().getCode());
     }
 
 }
