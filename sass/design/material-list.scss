@@ -10,7 +10,7 @@
     
     .block {margin-bottom: 20px; @include border-radius(3px); @include box-shadow(0, 0, 2px, 0, #999); background: #FFF; overflow: hidden;
     
-        .description {padding: 15px 10px; font-size: 13px; color: $font-color-grey;
+        .description {padding: 15px 10px 10px; font-size: 13px; color: $font-color-grey;
         
             .title {position: relative; height: 65px; margin-bottom: 15px; line-height: 21px; font-size: 17px; overflow: hidden;
             
@@ -25,6 +25,12 @@
                 &:after {position: absolute; bottom: 0; right: 0; dislay: block; content: ""; width: 30px; height: 100%; @include gradient-horizontal-to-transparent($start-color: rgba(255, 255, 255, 1), $end-color: rgba(255, 255, 255, 0)); pointer-events: none}
             
             }
+        
+        }
+        
+        .statistic {padding: 10px; background: $background-color-grey-medium; font-size: 11px; color: $font-color-grey;
+        
+            a {color: $font-color-grey}
         
         }
     }
