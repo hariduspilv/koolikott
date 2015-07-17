@@ -9,7 +9,8 @@ import ee.hm.dop.model.Material;
 
 public class MaterialService {
 
-    @Inject private MaterialDAO materialDao;
+    @Inject
+    private MaterialDAO materialDao;
 
     public List<Material> getAllMaterials() {
         return materialDao.findAll();
@@ -23,7 +24,8 @@ public class MaterialService {
         return materialDao.findNewestMaterials(numberOfMaterials);
     }
 
-    public boolean increaseViews(long materialId) {
-        return materialDao.increaseViews(materialId);
+    public void increaseViewCount(Material material) {
+        material.setViews(material.getViews() + 1);
+        materialDao.update(material);
     }
 }

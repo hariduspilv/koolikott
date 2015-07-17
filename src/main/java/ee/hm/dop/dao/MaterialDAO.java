@@ -50,13 +50,7 @@ public class MaterialDAO {
                 .setMaxResults(numberOfMaterials).getResultList();
     }
 
-    public boolean increaseViews(long materialId) {
-        Material targetMaterial = findById(materialId);
-        if (targetMaterial != null) {
-            targetMaterial.setViews(targetMaterial.getViews() + 1);
-            entityManager.persist(targetMaterial);
-            return true;
-        }
-        return false;
+    public void update(Material material) {
+        entityManager.persist(material);
     }
 }

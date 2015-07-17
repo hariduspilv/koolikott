@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.inject.Inject;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
@@ -40,13 +41,15 @@ public class MaterialResource {
         return materialService.getNewestMaterials(numberOfMaterials);
     }
 
-    @GET
-    @Path("countView")
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response countView(@QueryParam("materialId") long materialId) {
-        if (materialService.increaseViews(materialId)) {
-            return Response.status(HttpURLConnection.HTTP_OK).build();
+    @POST
+    @Path("increaseViewCount")
+    public Response increaseViewCount(Long materialId) {
+        Material material = materialService.get(materialId);
+        if (material == null) {
+            return Response.status(HttpURLConnection.HTTP_BAD_REQUEST).entity("Invalid material").build();
         }
-        return Response.status(HttpURLConnection.HTTP_BAD_REQUEST).build();
+
+        materialService.increaseViewCount(material);
+        return Response.status(HttpURLConnection.HTTP_OK).build();
     }
 }

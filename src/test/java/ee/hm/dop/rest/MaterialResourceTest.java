@@ -5,7 +5,9 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.List;
 
+import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.GenericType;
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
@@ -152,18 +154,39 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
         assertEquals(1, authors.size());
         assertEquals("Karl Simon Ben", material.getAuthors().get(0).getName());
         assertEquals("Tom Oliver Marx", material.getAuthors().get(0).getSurname());
-
     }
 
     @Test
-    public void countView() {
-        Response response = doGet("material/countView?materialId=2");
+    public void increaseViewCount() {
+        long materialId = 5;
+
+        Response response = doGet("material?materialId=" + materialId);
+        Material material = response.readEntity(new GenericType<Material>() {
+        });
+        Long previousViewCount = material.getViews();
+
+        response = doPost("material/increaseViewCount", Entity.entity(materialId, MediaType.APPLICATION_JSON));
         assertEquals(Status.OK.getStatusCode(), response.getStatus());
+
+        response = doGet("material?materialId=" + materialId);
+        material = response.readEntity(new GenericType<Material>() {
+        });
+        Long newViewCount = material.getViews();
+
+        assertEquals(Long.valueOf(previousViewCount + 1), newViewCount);
     }
 
     @Test
-    public void countViewNotExistingMaterial() {
-        Response response = doGet("material/countView?materialId=9999");
+    public void increaseViewCountNotExistingMaterial() {
+        long materialId = 999;
+
+        Response response = doGet("material?materialId=" + materialId);
+        assertEquals(Status.NO_CONTENT.getStatusCode(), response.getStatus());
+
+        response = doPost("material/increaseViewCount", Entity.entity(materialId, MediaType.APPLICATION_JSON));
         assertEquals(Status.BAD_REQUEST.getStatusCode(), response.getStatus());
+
+        response = doGet("material?materialId=" + materialId);
+        assertEquals(Status.NO_CONTENT.getStatusCode(), response.getStatus());
     }
 }

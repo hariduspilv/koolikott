@@ -71,8 +71,10 @@ insert into Material(id, lang, issueDate, licenseType, source, added, updated) v
 insert into Material(id, lang, issueDate, licenseType, source, added, updated) values(6, null, null, null, 'http://www.planalto.gov.br/ccivil_03/Constituicao/Constituicao.htm', '1971-09-22 08:00:01', null);
 insert into Material(id, lang, issueDate, licenseType, source, added, updated) values(7, 4, 6, 3, 'https://president.ee/en/republic-of-estonia/the-constitution/index.html', '2001-07-16 06:00:01', null);
 insert into Material(id, lang, issueDate, licenseType, source, added, updated) values(8, 5, 7, 1, 'http://www.palmeiras.com.br/historia/titulos', '2014-06-01 09:00:01', null);
-insert into Material(id, lang, issueDate, licenseType, source, added, updated) values(9, null, null, null, 'http://EmptyFileds.test.ee', '2015-06-08 08:00:01', null);
+insert into Material(id, lang, issueDate, licenseType, source, added, updated, views) values(9, null, null, null, 'http://EmptyFileds.test.ee', '2015-06-08 08:00:01', null, '98765432');
 insert into Material(id, lang, issueDate, licenseType, source, added, updated) values(10, 1, 2, 3, 'http://automated.test.ee', '2015-06-09 08:00:01', null);
+insert into Material(id, lang, issueDate, licenseType, source, added, updated) values(11, 1, 2, 3, 'http://performance.test.ee', '2015-06-09 08:00:01', null);
+
 
 -- Authors
 
@@ -93,6 +95,7 @@ insert into Material_Author(material, author) values(6, 3);
 insert into Material_Author(material, author) values(7, 3);
 insert into Material_Author(material, author) values(8, 2);
 insert into Material_Author(material, author) values(10, 4);
+insert into Material_Author(material, author) values(11, 4);
 
 -- Material Descriptions
 
@@ -105,7 +108,7 @@ insert into LanguageString(id, lang, textValue) values (6, 3, 'Test description 
 insert into LanguageString(id, lang, textValue) values (7, 3, 'Test description in english, which is not the material language. Others are also available, but arent estonian or russian.');
 insert into LanguageString(id, lang, textValue) values (8, 5, 'Test description in portugese, english also available.');
 insert into LanguageString(id, lang, textValue) values (19, 1, 'Automated test resource description. DO NOT TOUCH!!!! material language Estonian, Description Estonian');
-
+insert into LanguageString(id, lang, textValue) values (21, 1, 'Performance test resource description. DO NOT TOUCH!!!!');
 
 insert into Material_Description(description, material) values(1, 1);
 insert into Material_Description(description, material) values(2, 2);
@@ -116,6 +119,7 @@ insert into Material_Description(description, material) values(6, 5);
 insert into Material_Description(description, material) values(7, 7);
 insert into Material_Description(description, material) values(8, 7);
 insert into Material_Description(description, material) values(19, 10);
+insert into Material_Description(description, material) values(21, 11);
 
 -- Material Titles
 
@@ -130,7 +134,7 @@ insert into LanguageString(id, lang, textValue) values (16, 5, 'Test title in po
 insert into LanguageString(id, lang, textValue) values (17, 1, 'Eesti keele õpik üheksandale klassile');
 insert into LanguageString(id, lang, textValue) values (18, 1, 'Aabits 123');
 insert into LanguageString(id, lang, textValue) values (20, 1, 'Automated test resource title. DO NOT TOUCH!!! Title in estonian');
-
+insert into LanguageString(id, lang, textValue) values (22, 1, 'Performance test resource title. DO NOT TOUCH!!!');
 
 insert into Material_Title(title, material) values(9, 1);
 insert into Material_Title(title, material) values(10, 1);
@@ -143,6 +147,7 @@ insert into Material_Title(title, material) values(16, 7);
 insert into Material_Title(title, material) values(17, 6);
 insert into Material_Title(title, material) values(18, 8);
 insert into Material_Title(title, material) values(20, 10);
+insert into Material_Title(title, material) values(22, 11);
 
 -- Material classifications
 
@@ -154,6 +159,7 @@ insert into Material_Classification(classification, material) values(1,4);
 insert into Material_Classification(classification, material) values(5,4);
 insert into Material_Classification(classification, material) values(7,5);
 insert into Material_Classification(classification, material) values(4,10);
+insert into Material_Classification(classification, material) values(4,11);
 
 -- Material_ResourceType
 
@@ -166,6 +172,7 @@ insert into Material_ResourceType(material, resourceType) values (5, 3);
 insert into Material_ResourceType(material, resourceType) values (6, 2);
 insert into Material_ResourceType(material, resourceType) values (7, 4);
 insert into Material_ResourceType(material, resourceType) values (10, 1);
+insert into Material_ResourceType(material, resourceType) values (11, 1);
 
 -- Material_EducationalContext
 
@@ -178,6 +185,7 @@ insert into Material_EducationalContext(material, educationalContext) values (5,
 insert into Material_EducationalContext(material, educationalContext) values (6, 1002);
 insert into Material_EducationalContext(material, educationalContext) values (7, 1004);
 insert into Material_EducationalContext(material, educationalContext) values (10, 1001);
+insert into Material_EducationalContext(material, educationalContext) values (11, 1001);
 
 -- Publishers
 
@@ -192,3 +200,4 @@ insert into Material_Publisher(material, publisher) values (1, 2);
 insert into Material_Publisher(material, publisher) values (2, 2);
 insert into Material_Publisher(material, publisher) values (3, 3);
 insert into Material_Publisher(material, publisher) values (10, 2);
+insert into Material_Publisher(material, publisher) values (11, 2);

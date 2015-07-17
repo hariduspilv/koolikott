@@ -66,3 +66,4 @@ insert into Translation(translationGroup, translationKey, translation) values (3
 insert into Translation(translationGroup, translationKey, translation) values (3, 'LICENSETYPE_CCBYNCSA', 'CC BY-NC-SA');
 insert into Translation(translationGroup, translationKey, translation) values (3, 'LICENSETYPE_CCBYNCND', 'CC BY-NC-ND');
 insert into Translation(translationGroup, translationKey, translation) values (3, 'LICENSETYPE_OTHER', 'Other');
+insert into Translation(translationGroup, translationKey, translation) values (3, 'MATERIAL_VIEW_KEYWORDS', 'Keywords');
