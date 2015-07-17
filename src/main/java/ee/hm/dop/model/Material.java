@@ -123,11 +123,11 @@ public class Material {
 
     @ManyToMany(fetch = EAGER)
     @JoinTable(
-            name = "Material_Keyword",
+            name = "Material_Tag",
             joinColumns = { @JoinColumn(name = "material") },
-            inverseJoinColumns = { @JoinColumn(name = "keyword") },
-            uniqueConstraints = @UniqueConstraint(columnNames = { "material", "keyword" }))
-    private List<LanguageString> keywords;
+            inverseJoinColumns = { @JoinColumn(name = "tag") },
+            uniqueConstraints = @UniqueConstraint(columnNames = { "material", "tag" }))
+    private List<Tag> tags;
 
     public Long getId() {
         return id;
@@ -255,12 +255,12 @@ public class Material {
         this.views = views;
     }
 
-    public List<LanguageString> getKeywords() {
-        return keywords;
+    public List<Tag> getTags() {
+        return tags;
     }
 
-    public void setKeywords(List<LanguageString> keywords) {
-        this.keywords = keywords;
+    public void setTags(List<Tag> tags) {
+        this.tags = tags;
     }
 
 }

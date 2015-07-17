@@ -3,7 +3,7 @@
 DROP TABLE IF EXISTS Page;
 DROP TABLE IF EXISTS Translation;
 DROP TABLE IF EXISTS TranslationGroup;
-DROP TABLE IF EXISTS Material_Keyword;
+DROP TABLE IF EXISTS Material_Tag;
 DROP TABLE IF EXISTS Material_EducationalContext;
 DROP TABLE IF EXISTS Material_ResourceType;
 DROP TABLE IF EXISTS Material_Description;
@@ -18,6 +18,7 @@ DROP TABLE IF EXISTS LicenseType;
 DROP TABLE IF EXISTS LanguageTable;
 DROP TABLE IF EXISTS IssueDate;
 DROP TABLE IF EXISTS Publisher;
+DROP TABLE IF EXISTS Tag;
 DROP TABLE IF EXISTS Classification;
 DROP TABLE IF EXISTS EducationalContext;
 DROP TABLE IF EXISTS ResourceType;
@@ -49,6 +50,11 @@ CREATE TABLE Classification (
   FOREIGN KEY (parent)
   REFERENCES Classification (id)
     ON DELETE RESTRICT
+);
+
+CREATE TABLE Tag (
+  id   BIGINT AUTO_INCREMENT PRIMARY KEY,
+  name VARCHAR(255) NOT NULL UNIQUE
 );
 
 CREATE TABLE Publisher (
@@ -219,18 +225,18 @@ CREATE TABLE Material_EducationalContext (
     ON DELETE RESTRICT
 );
 
-CREATE TABLE Material_Keyword (
+CREATE TABLE Material_Tag (
   material BIGINT NOT NULL,
-  keyword BIGINT NOT NULL,
+  tag BIGINT NOT NULL,
 
-  PRIMARY KEY (material, keyword),
+  PRIMARY KEY (material, tag),
 	
   FOREIGN KEY (material) 
     REFERENCES Material(id)
     ON DELETE RESTRICT,
 	
-  FOREIGN KEY (keyword)
-    REFERENCES LanguageString(id)
+  FOREIGN KEY (tag)
+    REFERENCES Tag(id)
     ON DELETE RESTRICT
 );
 

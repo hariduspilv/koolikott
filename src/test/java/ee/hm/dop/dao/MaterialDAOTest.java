@@ -19,6 +19,7 @@ import ee.hm.dop.model.Author;
 import ee.hm.dop.model.Language;
 import ee.hm.dop.model.LanguageString;
 import ee.hm.dop.model.Material;
+import ee.hm.dop.model.Tag;
 
 public class MaterialDAOTest extends DatabaseTestBase {
 
@@ -50,7 +51,12 @@ public class MaterialDAOTest extends DatabaseTestBase {
 
             assertNotNull(material.getViews());
 
-            verifyLanguageStrings(material.getKeywords());
+            List<Tag> tags = material.getTags();
+            assertNotNull(tags);
+            for (Tag tag : tags) {
+                assertNotNull(tag.getId());
+                assertFalse(isBlank(tag.getName()));
+            }
 
         }
     }
@@ -224,19 +230,15 @@ public class MaterialDAOTest extends DatabaseTestBase {
     }
 
     @Test
-    public void MaterialKeywords() {
+    public void MaterialTags() {
         Material material = materialDAO.findById(2);
 
-        assertEquals(4, material.getKeywords().size());
-        assertEquals("matemaatika", material.getKeywords().get(0).getText());
-        assertEquals("mathematics", material.getKeywords().get(1).getText());
-        assertEquals("Математика", material.getKeywords().get(2).getText());
-        assertEquals("учебник", material.getKeywords().get(3).getText());
+        assertEquals(4, material.getTags().size());
+        assertEquals("matemaatika", material.getTags().get(0).getName());
+        assertEquals("mathematics", material.getTags().get(1).getName());
+        assertEquals("Математика", material.getTags().get(2).getName());
+        assertEquals("учебник", material.getTags().get(3).getName());
 
-        assertEquals("est", material.getKeywords().get(0).getLanguage().getCode());
-        assertEquals("eng", material.getKeywords().get(1).getLanguage().getCode());
-        assertEquals("rus", material.getKeywords().get(2).getLanguage().getCode());
-        assertEquals("rus", material.getKeywords().get(3).getLanguage().getCode());
     }
 
 }
