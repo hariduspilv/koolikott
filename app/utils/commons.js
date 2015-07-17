@@ -144,6 +144,72 @@ function getLanguageString(values, language) {
      }
 }
 
+/**
+ * Gets all the strings in the correct language.
+ * @param values - language strings
+ * @param languagePreferenceList - array of languages in order of preference
+ * @return all the strings in the correct language
+ */
+function getAllUserDefinedLanguageStrings(values, languagePreferenceList) {
+    if (!values || values.length === 0) {
+        return;
+    }
+
+    var languageStringValues = [];
+
+    if (values.length === 1) {
+        languageStringValues.push(values[0].text);
+    } else {
+
+    	// Look for keywords according to language preferences
+        for (var i = 0; i < languagePreferenceList.length; i++) {
+            languageStringValues = getAllLanguageStrings(values, languagePreferenceList[i]);
+            if (languageStringValues && languageStringValues.length) {
+                break;
+            }
+        }
+		
+        if (!languageStringValues || !languageStringValues.length) {
+            // Get all strings in the first existing language
+            var firstLanguage;
+            languageStringValues = [];
+            
+            for (var i = 0; i < values.length; i++) {
+                if (!firstLanguage) {
+                    firstLanguage = values[i].language;						
+                }
+
+                if (values[i].language === firstLanguage) {
+                    languageStringValues.push(values[i].text);				
+                }
+            }
+        }
+		
+    }
+
+    return languageStringValues;
+}
+
+/**
+ * Gets all texts in the specified language.
+ * @return the queried texts.
+ */
+function getAllLanguageStrings(values, language) {
+    if (!language) {
+        return null;
+    }
+	
+    var results = [];
+	
+    for (var i = 0; i < values.length; i++) {
+        if (values[i].language === language) {
+             results.push(values[i].text);
+        }
+    }
+	
+    return results;
+}
+
 function formatIssueDate(issueDate) {
 	if (!issueDate) {
         return;

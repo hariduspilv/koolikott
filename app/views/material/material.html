@@ -110,8 +110,10 @@
                         <div class="item">
                             <div class="label">
                                 <span data-translate="MATERIAL_VIEW_KEYWORDS"></span>:
-                            </div>
-                            <a href="#">Material</a> <a href="#">Vihik</a> <a href="#">Töövihik</a> <a href="#">Eesti</a> <a href="#">Kool</a>
+                            </div>	
+                        	<span data-ng-repeat="keyword in getAllCorrectLanguageStrings(material.keywords)">
+                            	<a href="#"><span data-ng-bind="keyword"></span></a>
+                        	</span>
                         </div>
                     </div>
                 </div>

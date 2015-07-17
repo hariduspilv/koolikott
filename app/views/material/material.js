@@ -42,6 +42,13 @@ define(['app'], function(app)
             }
         }
         
+        $scope.getAllCorrectLanguageStrings = function(languageStringList) {
+            if (languageStringList) {
+            	var languagePreferenceList = [translationService.getLanguage(), "est", "rus", $scope.material.language];
+                return getAllUserDefinedLanguageStrings(languageStringList, languagePreferenceList);
+            }
+        }
+        
         function isYoutubeVideo(url) {
         	// regex taken from http://stackoverflow.com/questions/2964678/jquery-youtube-url-validation-with-regex #ULTIMATE YOUTUBE REGEX
         	var youtubeUrlRegex = /^(?:https?:\/\/)?(?:www\.)?(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))((\w|-){11})(?:\S+)?$/;

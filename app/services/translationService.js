@@ -13,7 +13,7 @@ define(['app'], function(app) {
 			},
 			
 	        getLanguage : function() {
-	        	return $translate.use() || $translate.proposedLanguage() || $translate.preferredLanguage();
+	        	return $translate.proposedLanguage() || $translate.use() || $translate.preferredLanguage();
 	        },
 			
 			setLanguageChangeListener : function(callback) {
