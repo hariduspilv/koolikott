@@ -109,10 +109,10 @@
                     <div class="category keywords text-grey clearfix">
                         <div class="item">
                             <div class="label">
-                                <span data-translate="MATERIAL_VIEW_KEYWORDS"></span>:
+                                <span data-translate="MATERIAL_VIEW_TAGS"></span>:
                             </div>	
-                        	<span data-ng-repeat="keyword in getAllCorrectLanguageStrings(material.keywords)">
-                            	<a href="#"><span data-ng-bind="keyword"></span></a>
+                        	<span data-ng-repeat="tag in material.tags">
+                            	<a href="#"><span data-ng-bind="tag.name"></span></a>
                         	</span>
                         </div>
                     </div>
