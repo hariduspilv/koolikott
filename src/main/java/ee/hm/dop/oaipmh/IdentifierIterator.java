@@ -10,9 +10,6 @@ import org.w3c.dom.NodeList;
 
 import ORG.oclc.oai.harvester2.verb.ListIdentifiers;
 
-/**
- * Created by mart.laus on 15.07.2015.
- */
 public class IdentifierIterator implements Iterator<Node> {
 
     private static final org.slf4j.Logger logger = LoggerFactory.getLogger(IdentifierIterator.class);
@@ -22,21 +19,13 @@ public class IdentifierIterator implements Iterator<Node> {
     private String resumptionToken;
     private int index;
 
-    /**
-     * Protected for test purpose.
-     *
-     * @param headers
-     * @param baseURL
-     * @param resumptionToken
-     * @throws Exception
-     */
-    protected IdentifierIterator(NodeList headers, String baseURL, String resumptionToken) throws Exception {
+    public IdentifierIterator(NodeList headers, String baseURL, String resumptionToken) throws Exception {
         this.baseURL = baseURL;
         this.resumptionToken = resumptionToken;
         setHeaders(headers);
     }
 
-    private static NodeList getHeaders(ListIdentifiers listIdentifiers) {
+    private NodeList getHeaders(ListIdentifiers listIdentifiers) {
         Document doc = listIdentifiers.getDocument();
         doc.getDocumentElement().normalize();
         return doc.getElementsByTagName("header");
@@ -88,20 +77,5 @@ public class IdentifierIterator implements Iterator<Node> {
 
     protected ListIdentifiers newListIdentifier(String baseURL, String resumptionToken) throws Exception {
         return new ListIdentifiers(baseURL, resumptionToken);
-    }
-
-    public static class IdentifierIteratorBuilder {
-
-        public Iterator<Node> build(String baseURL, String metadataPrefix) throws Exception {
-            ListIdentifiers listIdentifiers = newListIdentifier(baseURL, metadataPrefix);
-            NodeList headers = getHeaders(listIdentifiers);
-            String resumptionToken = listIdentifiers.getResumptionToken();
-
-            return new IdentifierIterator(headers, baseURL, resumptionToken);
-        }
-
-        protected ListIdentifiers newListIdentifier(String baseURL, String metadataPrefix) throws Exception {
-            return new ListIdentifiers(baseURL, null, null, null, metadataPrefix);
-        }
     }
 }

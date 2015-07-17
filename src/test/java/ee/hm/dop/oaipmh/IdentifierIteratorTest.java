@@ -5,7 +5,6 @@ import static org.easymock.EasyMock.createMockBuilder;
 import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
@@ -13,11 +12,9 @@ import static org.junit.Assert.fail;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
-import java.util.Iterator;
 import java.util.NoSuchElementException;
 
 import org.easymock.EasyMockRunner;
-import org.easymock.Mock;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.w3c.dom.Document;
@@ -26,134 +23,9 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import ORG.oclc.oai.harvester2.verb.ListIdentifiers;
-import ee.hm.dop.oaipmh.IdentifierIterator.IdentifierIteratorBuilder;
 
 @RunWith(EasyMockRunner.class)
 public class IdentifierIteratorTest {
-
-    @Mock
-    private ListIdentifiers firstListIdentifiers;
-
-    @Mock
-    private ListIdentifiers withTokenListIdentifiers;
-
-    @Test
-    public void build() throws Exception {
-        IdentifierIteratorBuilder builder = getIdentifierIteratorBuilder();
-
-        Element element = createMock(Element.class);
-        element.normalize();
-
-        Node node = createMock(Node.class);
-
-        NodeList nodeList = createMock(NodeList.class);
-        expect(nodeList.item(0)).andReturn(node);
-
-        Document document = createMock(Document.class);
-        expect(document.getDocumentElement()).andReturn(element);
-        expect(document.getElementsByTagName("header")).andReturn(nodeList);
-
-        expect(firstListIdentifiers.getResumptionToken()).andReturn("resumptionToken");
-        expect(firstListIdentifiers.getDocument()).andReturn(document);
-
-        String baseURL = "hostUrl";
-        String metadataPrefix = "metadataPrefix";
-        expect(builder.newListIdentifier(baseURL, metadataPrefix)).andReturn(firstListIdentifiers);
-
-        replay(builder, firstListIdentifiers, element, document, nodeList, node);
-
-        Iterator<Node> result = builder.build(baseURL, metadataPrefix);
-        // This is needed to verify that correct parameters were passed to IdentifierIterator constructor
-        Node next = result.next();
-
-        verify(builder, firstListIdentifiers, element, document, nodeList, node);
-
-        assertTrue(result instanceof IdentifierIterator);
-        assertSame(node, next);
-    }
-
-    @Test
-    public void buildFailedConnectingToRepository() throws Exception {
-        IdentifierIteratorBuilder builder = getIdentifierIteratorBuilder();
-
-        String errorMessage = "Failed to connect to repository";
-        String baseURL = "hostUrl";
-        String metadataPrefix = "metadataPrefix";
-        expect(builder.newListIdentifier(baseURL, metadataPrefix)).andThrow(new RuntimeException(errorMessage));
-
-        replay(builder);
-
-        try {
-            builder.build(baseURL, metadataPrefix);
-            fail("Exception expected.");
-        } catch (RuntimeException e) {
-            assertEquals(errorMessage, e.getMessage());
-        }
-
-        verify(builder);
-    }
-
-    @Test
-    public void buildMetadataPrefixNull() throws Exception {
-        IdentifierIteratorBuilder builder = getIdentifierIteratorBuilder();
-
-        Element element = createMock(Element.class);
-        element.normalize();
-
-        Node node = createMock(Node.class);
-
-        NodeList nodeList = createMock(NodeList.class);
-        expect(nodeList.item(0)).andReturn(node);
-
-        Document document = createMock(Document.class);
-        expect(document.getDocumentElement()).andReturn(element);
-        expect(document.getElementsByTagName("header")).andReturn(nodeList);
-
-        expect(firstListIdentifiers.getResumptionToken()).andReturn("resumptionToken");
-        expect(firstListIdentifiers.getDocument()).andReturn(document);
-
-        String baseURL = "hostUrl";
-        String metadataPrefix = null;
-        expect(builder.newListIdentifier(baseURL, metadataPrefix)).andReturn(firstListIdentifiers);
-
-        replay(builder, firstListIdentifiers, element, document, nodeList, node);
-
-        Iterator<Node> result = builder.build(baseURL, metadataPrefix);
-        // This is needed to verify that correct parameters were passed to IdentifierIterator constructor
-        Node next = result.next();
-
-        verify(builder, firstListIdentifiers, element, document, nodeList, node);
-
-        assertTrue(result instanceof IdentifierIterator);
-        assertSame(node, next);
-    }
-
-    @Test
-    public void buildBaseUrlNull() throws Exception {
-        IdentifierIteratorBuilder builder = getIdentifierIteratorBuilder();
-
-        String errorMessage = "Malformed URL";
-        String baseURL = null;
-        String metadataPrefix = "metadataPrefix";
-        expect(builder.newListIdentifier(baseURL, metadataPrefix)).andThrow(new RuntimeException(errorMessage));
-
-        replay(builder);
-
-        try {
-            builder.build(baseURL, metadataPrefix);
-            fail("Exception expected.");
-        } catch (RuntimeException e) {
-            assertEquals(errorMessage, e.getMessage());
-        }
-
-        verify(builder);
-    }
-
-    private IdentifierIteratorBuilder getIdentifierIteratorBuilder() throws NoSuchMethodException {
-        Method newListIdentifier = IdentifierIteratorBuilder.class
-                .getDeclaredMethod("newListIdentifier", String.class, String.class);
-        return createMockBuilder(IdentifierIteratorBuilder.class).addMockedMethod(newListIdentifier).createMock();
-    }
 
     private IdentifierIterator getIdentifierIterator(NodeList headers, String baseURL, String resumptionToken)
             throws NoSuchMethodException {
@@ -241,18 +113,19 @@ public class IdentifierIteratorTest {
         expect(document.getDocumentElement()).andReturn(element);
         expect(document.getElementsByTagName("header")).andReturn(nodeList2);
 
-        expect(withTokenListIdentifiers.getDocument()).andReturn(document);
+        ListIdentifiers listIdentifiers = createMock(ListIdentifiers.class);
+        expect(listIdentifiers.getDocument()).andReturn(document);
 
         IdentifierIterator identifierIterator = getIdentifierIterator(nodeList1, baseURL, resumptionToken);
-        expect(identifierIterator.newListIdentifier(baseURL, resumptionToken)).andReturn(withTokenListIdentifiers);
+        expect(identifierIterator.newListIdentifier(baseURL, resumptionToken)).andReturn(listIdentifiers);
 
-        replay(nodeList1, nodeList2, node, element, document, withTokenListIdentifiers, identifierIterator);
+        replay(nodeList1, nodeList2, node, element, document, listIdentifiers, identifierIterator);
 
         boolean result = identifierIterator.hasNext();
         // This is needed to verify that correct parameters were passed to IdentifierIterator constructor
         Node next = identifierIterator.next();
 
-        verify(nodeList1, nodeList2, node, element, document, withTokenListIdentifiers, identifierIterator);
+        verify(nodeList1, nodeList2, node, element, document, listIdentifiers, identifierIterator);
 
         assertTrue(result);
         assertSame(node, next);
@@ -296,16 +169,17 @@ public class IdentifierIteratorTest {
         expect(document.getDocumentElement()).andReturn(element);
         expect(document.getElementsByTagName("header")).andReturn(nodeList2);
 
-        expect(withTokenListIdentifiers.getDocument()).andReturn(document);
+        ListIdentifiers listIdentifiers = createMock(ListIdentifiers.class);
+        expect(listIdentifiers.getDocument()).andReturn(document);
 
         IdentifierIterator identifierIterator = getIdentifierIterator(nodeList1, baseURL, resumptionToken);
-        expect(identifierIterator.newListIdentifier(baseURL, resumptionToken)).andReturn(withTokenListIdentifiers);
+        expect(identifierIterator.newListIdentifier(baseURL, resumptionToken)).andReturn(listIdentifiers);
 
-        replay(nodeList1, nodeList2, element, document, withTokenListIdentifiers, identifierIterator);
+        replay(nodeList1, nodeList2, element, document, listIdentifiers, identifierIterator);
 
         boolean result = identifierIterator.hasNext();
 
-        verify(nodeList1, nodeList2, element, document, withTokenListIdentifiers, identifierIterator);
+        verify(nodeList1, nodeList2, element, document, listIdentifiers, identifierIterator);
 
         assertFalse(result);
     }
@@ -341,18 +215,19 @@ public class IdentifierIteratorTest {
         expect(document.getDocumentElement()).andReturn(element);
         expect(document.getElementsByTagName("header")).andReturn(nodeList2);
 
-        expect(withTokenListIdentifiers.getDocument()).andReturn(document);
+        ListIdentifiers listIdentifiers = createMock(ListIdentifiers.class);
+        expect(listIdentifiers.getDocument()).andReturn(document);
 
         IdentifierIterator identifierIterator = getIdentifierIterator(nodeList1, baseURL, resumptionToken);
-        expect(identifierIterator.newListIdentifier(baseURL, resumptionToken)).andReturn(withTokenListIdentifiers);
+        expect(identifierIterator.newListIdentifier(baseURL, resumptionToken)).andReturn(listIdentifiers);
         expect(identifierIterator.newListIdentifier(baseURL, resumptionToken)).andReturn(null);
 
-        replay(nodeList1, nodeList2, node, element, document, withTokenListIdentifiers, identifierIterator);
+        replay(nodeList1, nodeList2, node, element, document, listIdentifiers, identifierIterator);
 
         while (identifierIterator.hasNext()) {
             identifierIterator.next();
         }
 
-        verify(nodeList1, nodeList2, node, element, document, withTokenListIdentifiers, identifierIterator);
+        verify(nodeList1, nodeList2, node, element, document, listIdentifiers, identifierIterator);
     }
 }
