@@ -5,7 +5,7 @@ define(['app'], function(app)
         return {
             scope: true,
             templateUrl: 'app/directives/header/header.html',
-            controller: function ($scope, $location) {
+            controller: function ($scope, $location, $rootScope) {
                 $scope.showLanguageSelection = false;
                 $scope.selectedLanguage = translationService.getLanguage();
 	        
@@ -25,11 +25,14 @@ define(['app'], function(app)
                     $scope.showLanguageSelection = false;
                 }
                 
+                $rootScope.searchFields = {};
+                
                 $scope.search = function() {
-                    if (!isEmpty($scope.searchQuery)) {
-                        $location.url("search/result?q=" + $scope.searchQuery)
-                    }
+                	 if (!isEmpty($rootScope.searchFields.searchQuery)) {
+                         $location.url("search/result?q=" + $rootScope.searchFields.searchQuery)
+                     }
                 }
+
             }
         };
     });
