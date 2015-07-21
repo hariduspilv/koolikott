@@ -28,9 +28,9 @@ define(['app'], function(app)
                 $rootScope.searchFields = {};
                 
                 $scope.search = function() {
-                	 if (!isEmpty($rootScope.searchFields.searchQuery)) {
-                         $location.url("search/result?q=" + $rootScope.searchFields.searchQuery)
-                     }
+                    if (!isEmpty($rootScope.searchFields.searchQuery)) {
+                        $location.url("search/result?q=" + $rootScope.searchFields.searchQuery)
+                    }
                 }
 
             }
