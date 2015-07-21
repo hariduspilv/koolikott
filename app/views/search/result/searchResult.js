@@ -1,7 +1,7 @@
 define(['app'], function(app)
 {
-    app.controller('searchResultController', ['$scope', "serverCallService", 'translationService', '$location',
-             function($scope, serverCallService, translationService, $location) {
+    app.controller('searchResultController', ['$scope', "serverCallService", 'translationService', '$location', '$rootScope',
+             function($scope, serverCallService, translationService, $location, $rootScope) {
     	var searchObject = $location.search();
 
     	if (searchObject.q) {
@@ -9,6 +9,7 @@ define(['app'], function(app)
             $scope.searchQuery = searchObject.q;
 	    	var params = {'q': searchObject.q};
 	    	serverCallService.makeGet("rest/search", params, getAllMaterialSuccess, getAllMaterialFail);
+	    	$rootScope.searchFields.searchQuery = searchObject.q;
     	}
     	
     	function getAllMaterialSuccess(data) {
@@ -24,5 +25,10 @@ define(['app'], function(app)
             console.log('Session search failed.')
             $scope.searching = false;
     	}
+    	
+    	$scope.$on("$destroy", function() {
+    		$rootScope.searchFields.searchQuery = "";
+        });
+    	
     }]);
 });

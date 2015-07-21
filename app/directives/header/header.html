@@ -37,7 +37,7 @@
             <div role="search" class="navbar-form navbar-right" id="search-form-main">
                 <div class="form-group">
                     <div class="input-group">
-                        <input data-ng-keydown="$event.which === 13 && search()" data-ng-model="searchQuery" type="text" placeholder="{{'SEARCH' | translate}}" class="form-control">
+                        <input data-ng-keydown="$event.which === 13 && search()" data-ng-model="searchFields.searchQuery" type="text" placeholder="{{'SEARCH' | translate}}" class="form-control">
                         <span class="input-group-btn">
                             <button data-ng-click="search()" class="btn btn-default" type="submit"><i class="fa fa-search"></i></button>
                         </span>

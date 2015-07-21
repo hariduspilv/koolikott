@@ -47,11 +47,11 @@
                 </div>
                 <div class="col-md-3">
                     <dl class="dl-horizontal">
-                        <dt class="text-grey text-big">
+                        <dt data-ng-if="material.updated" class="text-grey text-big">
                             <span data-translate="UPDATED"></span><span>:</span>
                         </dt>
-                        <dd class="text-right text-big">
-                        	<span data-ng-if="material.updated" class="pull-right">{{formatMaterialUpdatedDate(material.updated)}}</span>
+                        <dd data-ng-if="material.updated" class="text-right text-big">
+                            <span class="pull-right">{{formatMaterialUpdatedDate(material.updated)}}</span>
                         </dd>
                         <dt class="text-grey">
                             <span data-translate="CREATED"></span><span>:</span>
