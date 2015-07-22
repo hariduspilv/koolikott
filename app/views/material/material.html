@@ -113,6 +113,7 @@
                         <span data-ng-repeat="tag in material.tags">
                             <span data-ng-bind="tag.name" class="item"></span>
                         </span>
+                        <span data-ng-if="isNullOrZeroLength(material.tags)" data-translate="UNKNOWN">Unknown</span>
                     </div>
                 </div>
             </div>
