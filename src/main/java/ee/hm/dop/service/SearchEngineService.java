@@ -4,5 +4,7 @@ import java.util.List;
 
 public interface SearchEngineService {
 
-    public List<Long> search(String query);
+    public List<Long> search(String query, long start);
+    
+    public long countResults(String query);
 }

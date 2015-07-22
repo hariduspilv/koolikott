@@ -75,7 +75,32 @@ insert into Material(id, lang, issueDate, licenseType, source, added, updated, v
 insert into Material(id, lang, issueDate, licenseType, source, added, updated) values(10, 1, 2, 3, 'http://automated.test.ee', '2015-06-09 08:00:01', null);
 insert into Material(id, lang, issueDate, licenseType, source, added, updated) values(11, 1, 2, 3, 'http://performance.test.ee', '2015-06-09 08:00:01', null);
 
+insert into Material(id, lang, issueDate, licenseType, source, added, updated) values(12, 1, 1, 1, 'https://en.wikipedia.org/wiki/Main_Page', '1999-02-02 06:00:01', '2000-03-01 07:00:01');
+insert into Material(id, lang, issueDate, licenseType, source, added, updated) values(13, 2, 2, 2, 'https://en.wikipedia.org/wiki/New_Zealand_flag_debate', '1992-02-03 06:00:01', '1995-07-12 09:00:01');
+insert into Material(id, lang, issueDate, licenseType, source, added, updated) values(14, 4, 3, 3,  'https://en.wikipedia.org/wiki/2015_Indian_heat_wave', '2009-02-17 08:00:01', '2011-01-10 19:00:01');
+insert into Material(id, lang, issueDate, licenseType, source, added, updated) values(15, 3, 4, 1,  'https://en.wikipedia.org/wiki/Second_Libyan_Civil_War', '2002-02-02 09:00:01', '2012-08-28 22:40:01');
+insert into Material(id, lang, issueDate, licenseType, source, added, updated) values(16, 3, 5, 2,  'https://en.wikipedia.org/wiki/United_States', '2001-09-15 08:00:01', '2012-11-04 09:30:01');
+insert into Material(id, lang, issueDate, licenseType, source, added, updated) values(17, null, null, null, 'https://en.wikipedia.org/wiki/2015_Cajon_Pass_wildfire', '1971-09-22 08:00:01', null);
+insert into Material(id, lang, issueDate, licenseType, source, added, updated) values(18, 4, 6, 3, 'https://en.wikipedia.org/wiki/India', '2001-07-16 06:00:01', null);
+insert into Material(id, lang, issueDate, licenseType, source, added, updated) values(19, 5, 7, 1, 'https://en.wikipedia.org/wiki/Japan', '2002-06-01 09:00:01', null);
 
+insert into Material(id, lang, issueDate, licenseType, source, added, updated) values(20, 1, 1, 1, 'https://en.wikipedia.org/wiki/Mexican_Drug_War', '1999-02-02 06:00:01', '2000-03-01 07:00:01');
+insert into Material(id, lang, issueDate, licenseType, source, added, updated) values(21, 2, 2, 2, 'https://en.wikipedia.org/wiki/War_in_Darfur', '1992-02-03 06:00:01', '1995-07-12 09:00:01');
+insert into Material(id, lang, issueDate, licenseType, source, added, updated) values(22, 4, 3, 3,  'https://en.wikipedia.org/wiki/Somalia', '2009-02-17 08:00:01', '2011-01-10 19:00:01');
+insert into Material(id, lang, issueDate, licenseType, source, added, updated) values(23, 3, 4, 1,  'https://en.wikipedia.org/wiki/Libya', '2002-02-02 09:00:01', '2012-08-28 22:40:01');
+insert into Material(id, lang, issueDate, licenseType, source, added, updated) values(24, 3, 5, 2,  'https://en.wikipedia.org/wiki/Democratic_Republic_of_Congo', '2001-09-15 08:00:01', '2012-11-04 09:30:01');
+insert into Material(id, lang, issueDate, licenseType, source, added, updated) values(25, null, null, null, 'https://en.wikipedia.org/wiki/Turkey-PKK_conflict', '1971-09-22 08:00:01', null);
+insert into Material(id, lang, issueDate, licenseType, source, added, updated) values(26, 4, 6, 3, 'https://en.wikipedia.org/wiki/Houthi_insurgency_in_Yemen', '2001-07-16 06:00:01', null);
+insert into Material(id, lang, issueDate, licenseType, source, added, updated) values(27, 5, 7, 1, 'https://en.wikipedia.org/wiki/Estonia', '2002-06-01 09:00:01', null);
+
+insert into Material(id, lang, issueDate, licenseType, source, added, updated) values(28, 1, 1, 1, 'https://en.wikipedia.org/wiki/Latvia', '1999-02-02 06:00:01', '2000-03-01 07:00:01');
+insert into Material(id, lang, issueDate, licenseType, source, added, updated) values(29, 2, 2, 2, 'https://en.wikipedia.org/wiki/Sweded', '1992-02-03 06:00:01', '1995-07-12 09:00:01');
+insert into Material(id, lang, issueDate, licenseType, source, added, updated) values(30, 4, 3, 3,  'https://en.wikipedia.org/wiki/Germany', '2009-02-17 08:00:01', '2011-01-10 19:00:01');
+insert into Material(id, lang, issueDate, licenseType, source, added, updated) values(31, 3, 4, 1,  'https://en.wikipedia.org/wiki/Russia', '2002-02-02 09:00:01', '2012-08-28 22:40:01');
+insert into Material(id, lang, issueDate, licenseType, source, added, updated) values(32, 3, 5, 2,  'https://en.wikipedia.org/wiki/Lithuania', '2001-09-15 08:00:01', '2012-11-04 09:30:01');
+insert into Material(id, lang, issueDate, licenseType, source, added, updated) values(33, null, null, null, 'https://en.wikipedia.org/wiki/Poland', '1971-09-22 08:00:01', null);
+insert into Material(id, lang, issueDate, licenseType, source, added, updated) values(34, 4, 6, 3, 'https://en.wikipedia.org/wiki/France', '2001-07-16 06:00:01', null);
+insert into Material(id, lang, issueDate, licenseType, source, added, updated) values(35, 5, 7, 1, 'https://en.wikipedia.org/wiki/Austria', '2002-06-01 09:00:01', null);
 -- Authors
 
 insert into Author(id, name, surname) values(1, 'Isaac', 'John Newton');
@@ -109,6 +134,7 @@ insert into LanguageString(id, lang, textValue) values (7, 3, 'Test description 
 insert into LanguageString(id, lang, textValue) values (8, 5, 'Test description in portugese, english also available.');
 insert into LanguageString(id, lang, textValue) values (19, 1, 'Automated test resource description. DO NOT TOUCH!!!! material language Estonian, Description Estonian');
 insert into LanguageString(id, lang, textValue) values (21, 1, 'Performance test resource description. DO NOT TOUCH!!!!');
+insert into LanguageString(id, lang, textValue) values (39, 3, 'Test description');
 
 insert into Material_Description(description, material) values(1, 1);
 insert into Material_Description(description, material) values(2, 2);
@@ -120,6 +146,33 @@ insert into Material_Description(description, material) values(7, 7);
 insert into Material_Description(description, material) values(8, 7);
 insert into Material_Description(description, material) values(19, 10);
 insert into Material_Description(description, material) values(21, 11);
+
+insert into Material_Description(description, material) values(39, 12);
+insert into Material_Description(description, material) values(39, 13);
+insert into Material_Description(description, material) values(39, 14);
+insert into Material_Description(description, material) values(39, 15);
+insert into Material_Description(description, material) values(39, 16);
+insert into Material_Description(description, material) values(39, 17);
+insert into Material_Description(description, material) values(39, 18);
+insert into Material_Description(description, material) values(39, 19);
+
+insert into Material_Description(description, material) values(39, 20);
+insert into Material_Description(description, material) values(39, 21);
+insert into Material_Description(description, material) values(39, 22);
+insert into Material_Description(description, material) values(39, 23);
+insert into Material_Description(description, material) values(39, 24);
+insert into Material_Description(description, material) values(39, 25);
+insert into Material_Description(description, material) values(39, 26);
+insert into Material_Description(description, material) values(39, 27);
+
+insert into Material_Description(description, material) values(39, 28);
+insert into Material_Description(description, material) values(39, 29);
+insert into Material_Description(description, material) values(39, 30);
+insert into Material_Description(description, material) values(39, 31);
+insert into Material_Description(description, material) values(39, 32);
+insert into Material_Description(description, material) values(39, 33);
+insert into Material_Description(description, material) values(39, 34);
+insert into Material_Description(description, material) values(39, 35);
 
 -- Material Titles
 
@@ -136,6 +189,33 @@ insert into LanguageString(id, lang, textValue) values (18, 1, 'Aabits 123');
 insert into LanguageString(id, lang, textValue) values (20, 1, 'Automated test resource title. DO NOT TOUCH!!! Title in estonian');
 insert into LanguageString(id, lang, textValue) values (22, 1, 'Performance test resource title. DO NOT TOUCH!!!');
 
+insert into LanguageString(id, lang, textValue) values (23, 3, 'Main Page of Wikipedia');
+insert into LanguageString(id, lang, textValue) values (24, 3, 'New Zealand flag debate');
+insert into LanguageString(id, lang, textValue) values (25, 3, '2015 Indian heat wave');
+insert into LanguageString(id, lang, textValue) values (26, 3, 'Second Libyan Civil War');
+insert into LanguageString(id, lang, textValue) values (27, 3, 'United States');
+insert into LanguageString(id, lang, textValue) values (28, 3, '2015 Cajon Pass wildfire');
+insert into LanguageString(id, lang, textValue) values (29, 3, 'India');
+insert into LanguageString(id, lang, textValue) values (30, 3, 'Japan');
+
+insert into LanguageString(id, lang, textValue) values (31, 3, 'Mexican Drug War');
+insert into LanguageString(id, lang, textValue) values (32, 3, 'War in Darfur');
+insert into LanguageString(id, lang, textValue) values (33, 3, 'Somalia');
+insert into LanguageString(id, lang, textValue) values (34, 3, 'Libya');
+insert into LanguageString(id, lang, textValue) values (35, 3, 'Democratic Republic of Congo');
+insert into LanguageString(id, lang, textValue) values (36, 3, 'Turkey-PKK conflict');
+insert into LanguageString(id, lang, textValue) values (37, 3, 'Houthi insurgency in Yemen');
+insert into LanguageString(id, lang, textValue) values (38, 3, 'Estonia');
+
+insert into LanguageString(id, lang, textValue) values (40, 3, 'Latvia');
+insert into LanguageString(id, lang, textValue) values (41, 3, 'Sweden');
+insert into LanguageString(id, lang, textValue) values (42, 3, 'Germany');
+insert into LanguageString(id, lang, textValue) values (43, 3, 'Russia');
+insert into LanguageString(id, lang, textValue) values (44, 3, 'Lithuania');
+insert into LanguageString(id, lang, textValue) values (45, 3, 'Poland');
+insert into LanguageString(id, lang, textValue) values (46, 3, 'France');
+insert into LanguageString(id, lang, textValue) values (47, 3, 'Austria');
+
 insert into Material_Title(title, material) values(9, 1);
 insert into Material_Title(title, material) values(10, 1);
 insert into Material_Title(title, material) values(11, 2);
@@ -148,6 +228,33 @@ insert into Material_Title(title, material) values(17, 6);
 insert into Material_Title(title, material) values(18, 8);
 insert into Material_Title(title, material) values(20, 10);
 insert into Material_Title(title, material) values(22, 11);
+
+insert into Material_Title(title, material) values(23, 12);
+insert into Material_Title(title, material) values(24, 13);
+insert into Material_Title(title, material) values(25, 14);
+insert into Material_Title(title, material) values(26, 15);
+insert into Material_Title(title, material) values(27, 16);
+insert into Material_Title(title, material) values(28, 17);
+insert into Material_Title(title, material) values(29, 18);
+insert into Material_Title(title, material) values(30, 19);
+
+insert into Material_Title(title, material) values(31, 20);
+insert into Material_Title(title, material) values(32, 21);
+insert into Material_Title(title, material) values(33, 22);
+insert into Material_Title(title, material) values(34, 23);
+insert into Material_Title(title, material) values(35, 24);
+insert into Material_Title(title, material) values(36, 25);
+insert into Material_Title(title, material) values(37, 26);
+insert into Material_Title(title, material) values(38, 27);
+
+insert into Material_Title(title, material) values(40, 28);
+insert into Material_Title(title, material) values(41, 29);
+insert into Material_Title(title, material) values(42, 30);
+insert into Material_Title(title, material) values(43, 31);
+insert into Material_Title(title, material) values(44, 32);
+insert into Material_Title(title, material) values(45, 33);
+insert into Material_Title(title, material) values(46, 34);
+insert into Material_Title(title, material) values(47, 35);
 
 -- Material classifications
 

@@ -14,6 +14,8 @@ import ee.hm.dop.model.Material;
 
 public class SearchResourceTest extends ResourceIntegrationTestBase {
 
+    private static final int RESULTS_PER_PAGE = 3;
+    
     @Test
     public void search() {
         String query = "المدرسية";
@@ -24,6 +26,21 @@ public class SearchResourceTest extends ResourceIntegrationTestBase {
         assertEquals(1, materials.size());
         assertEquals(new Long("3"), materials.get(0).getId());
     }
+    
+    @Test
+    public void searchGetSecondPage() {
+        String query = "thishasmanyresults";
+        int start = RESULTS_PER_PAGE;
+        Response response = doGet("search?q=" + query + "&start=" + start);
+        List<Material> materials = response.readEntity(new GenericType<List<Material>>() {
+        });
+        
+        assertEquals(RESULTS_PER_PAGE, materials.size());
+        
+        for (int i = 0; i < RESULTS_PER_PAGE; i++) {
+            assertEquals(Long.valueOf(i + start), materials.get(i).getId());
+        }
+    }
 
     @Test
     public void searchNoResult() {
@@ -33,5 +50,15 @@ public class SearchResourceTest extends ResourceIntegrationTestBase {
         });
 
         assertEquals(0, materials.size());
+    }
+    
+    @Test
+    public void countResults() {
+        String query = "thishasmanyresults";
+        Response response = doGet("search/countResults?q=" + query);
+        long result = response.readEntity(new GenericType<Long>() {
+        });
+
+        assertEquals(8, result);
     }
 }

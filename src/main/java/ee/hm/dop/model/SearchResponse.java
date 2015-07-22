@@ -23,6 +23,9 @@ public class SearchResponse {
 
         @JsonProperty("docs")
         private List<Document> documents;
+        
+        @JsonProperty("numFound")
+        private long numFound;
 
         public List<Document> getDocuments() {
             return documents;
@@ -30,6 +33,14 @@ public class SearchResponse {
 
         public void setDocuments(List<Document> documents) {
             this.documents = documents;
+        }
+        
+        public long getNumFound() {
+            return numFound;
+        }
+        
+        public void setNumFound(long numFound) {
+            this.numFound = numFound;
         }
 
     }

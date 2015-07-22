@@ -18,8 +18,8 @@ public class SearchService {
     @Inject
     private MaterialDAO materialDAO;
 
-    public List<Material> search(String query) {
-        List<Long> searchResult = searchEngineService.search(query);
+    public List<Material> search(String query, long start) {
+        List<Long> searchResult = searchEngineService.search(query, start);
 
         List<Material> materials = Collections.emptyList();
         if (!searchResult.isEmpty()) {
@@ -43,5 +43,9 @@ public class SearchService {
         // indexList
         sortedList.removeIf(material -> material == null);
         return sortedList;
+    }
+    
+    public long countResults(String query) {
+        return searchEngineService.countResults(query);
     }
 }

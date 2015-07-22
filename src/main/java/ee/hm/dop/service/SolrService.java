@@ -24,7 +24,8 @@ import ee.hm.dop.model.SearchResponse.Response;
 @Singleton
 public class SolrService implements SearchEngineService {
 
-    private static final String SEARCH_PATH = "select?q=%s&wt=json";
+    private static final int RESULTS_PER_PAGE = 24;
+    private static final String SEARCH_PATH = "select?q=%s&wt=json&start=%d&rows=" + RESULTS_PER_PAGE;
 
     @Inject
     private Client client;
@@ -33,8 +34,8 @@ public class SolrService implements SearchEngineService {
     private Configuration configuration;
 
     @Override
-    public List<Long> search(String query) {
-        SearchResponse searchResponse = getTarget(format(SEARCH_PATH, encodeQuery(query))).request(
+    public List<Long> search(String query, long start) {
+        SearchResponse searchResponse = getTarget(format(SEARCH_PATH, encodeQuery(query), start)).request(
                 MediaType.APPLICATION_JSON).get(SearchResponse.class);
 
         List<Long> result = new ArrayList<>();
@@ -47,6 +48,16 @@ public class SolrService implements SearchEngineService {
         }
 
         return result;
+    }
+    
+    @Override
+    public long countResults(String query) {
+        SearchResponse searchResponse = getTarget(format(SEARCH_PATH, encodeQuery(query), 0)).request(
+                MediaType.APPLICATION_JSON).get(SearchResponse.class);
+
+        Response response = searchResponse.getResponse();
+        
+        return response.getNumFound();
     }
 
     private WebTarget getTarget(String path) {

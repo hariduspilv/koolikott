@@ -47,10 +47,13 @@ public class SolrServiceTest {
     private Builder builder;
 
     private final String serverUrl = "server/url/";
+    
+    private static final int RESULTS_PER_PAGE = 24;
 
     @Test
     public void search() {
-        String urlQuery = "select?q=math&wt=json";
+        int start = 0;
+        String urlQuery = "select?q=math&wt=json&start=" + start + "&rows=" + RESULTS_PER_PAGE;
         String query = "math";
 
         Document doc1 = new Document();
@@ -69,7 +72,7 @@ public class SolrServiceTest {
 
         replayAll();
 
-        List<Long> result = solrService.search(query);
+        List<Long> result = solrService.search(query, start);
 
         verifyAll();
 
@@ -80,10 +83,36 @@ public class SolrServiceTest {
         assertEquals(Long.valueOf(1), result.get(2));
         assertEquals(Long.valueOf(2), result.get(3));
     }
+    
+    @Test
+    public void searchGetSecondPage() {      
+        int start = RESULTS_PER_PAGE;
+        String urlQuery = "select?q=math&wt=json&start=" + start + "&rows=" + RESULTS_PER_PAGE;
+        String query = "math";
+
+        Document doc1 = new Document();
+        doc1.setId("1");
+
+        Document doc2 = new Document();
+        doc2.setId("2");
+
+        setUpSearch(urlQuery, doc2, doc1);
+
+        replayAll();
+
+        List<Long> result = solrService.search(query, start);
+
+        verifyAll();
+
+        assertNotNull(result);
+        assertEquals(2, result.size());
+        assertEquals(Long.valueOf(2), result.get(0));
+        assertEquals(Long.valueOf(1), result.get(1));
+    }
 
     @Test
     public void searchNoResult() {
-        String urlQuery = "select?q=math&wt=json";
+        String urlQuery = "select?q=math&wt=json&start=0&rows=" + RESULTS_PER_PAGE;
         String query = "math";
 
         noResultSearch(urlQuery, query);
@@ -91,7 +120,7 @@ public class SolrServiceTest {
 
     @Test
     public void searchURLEncodingQuotes() {
-        String urlQuery = "select?q=%22&wt=json";
+        String urlQuery = "select?q=%22&wt=json&start=0&rows=" + RESULTS_PER_PAGE;
         String query = "\"";
 
         noResultSearch(urlQuery, query);
@@ -99,7 +128,7 @@ public class SolrServiceTest {
 
     @Test
     public void searchURLEncodingQuotesAndSpace() {
-        String urlQuery = "select?q=%22this+search%22&wt=json";
+        String urlQuery = "select?q=%22this+search%22&wt=json&start=0&rows=" + RESULTS_PER_PAGE;
         String query = "\"this search\"";
 
         noResultSearch(urlQuery, query);
@@ -107,7 +136,7 @@ public class SolrServiceTest {
 
     @Test
     public void searchURLEncodingPlusAndMinus() {
-        String urlQuery = "select?q=%2Bmath+-port&wt=json";
+        String urlQuery = "select?q=%2Bmath+-port&wt=json&start=0&rows=" + RESULTS_PER_PAGE;
         String query = "+math -port";
 
         noResultSearch(urlQuery, query);
@@ -115,7 +144,7 @@ public class SolrServiceTest {
 
     @Test
     public void searchErrorInSearch() {
-        String urlQuery = "select?q=%2Bmath+-port&wt=json";
+        String urlQuery = "select?q=%2Bmath+-port&wt=json&start=0&rows=" + RESULTS_PER_PAGE;
         String query = "+math -port";
 
         SearchResponse searchResponse = new SearchResponse();
@@ -128,12 +157,31 @@ public class SolrServiceTest {
 
         replayAll();
 
-        List<Long> result = solrService.search(query);
+        List<Long> result = solrService.search(query, 0);
 
         verifyAll();
 
         assertNotNull(result);
         assertEquals(0, result.size());
+    }
+    
+    @Test
+    public void countResults() {
+        String urlQuery = "select?q=math&wt=json&start=0&rows=" + RESULTS_PER_PAGE;
+        String query = "math";
+        long resultCount = 10;
+        
+        setUpCountResults(urlQuery, resultCount);
+
+        replayAll();
+
+        long result = solrService.countResults(query);
+
+        verifyAll();
+
+        assertNotNull(result);
+        assertEquals(resultCount, result);
+        
     }
 
     private void noResultSearch(String urlQuery, String query) {
@@ -141,7 +189,7 @@ public class SolrServiceTest {
 
         replayAll();
 
-        List<Long> result = solrService.search(query);
+        List<Long> result = solrService.search(query, 0);
 
         verifyAll();
 
@@ -158,6 +206,20 @@ public class SolrServiceTest {
 
         Response response = new Response();
         response.setDocuments(documents);
+
+        SearchResponse searchResponse = new SearchResponse();
+        searchResponse.setResponse(response);
+
+        expect(configuration.getString(SEARCH_SERVER)).andReturn(serverUrl);
+
+        expect(client.target(serverUrl + urlQuery)).andReturn(target);
+        expect(target.request(MediaType.APPLICATION_JSON)).andReturn(builder);
+        expect(builder.get(eq(SearchResponse.class))).andReturn(searchResponse);
+    }
+    
+    private void setUpCountResults(String urlQuery, long resultCount) {
+        Response response = new Response();
+        response.setNumFound(resultCount);
 
         SearchResponse searchResponse = new SearchResponse();
         searchResponse.setResponse(response);

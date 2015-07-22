@@ -50,12 +50,12 @@ public class SearchServiceTest {
         materials.add(material4);
         materials.add(material7);
 
-        expect(searchEngineService.search(query)).andReturn(searchResult);
+        expect(searchEngineService.search(query, 0)).andReturn(searchResult);
         expect(materialDAO.findAllById(searchResult)).andReturn(materials);
 
         replayAll();
 
-        List<Material> result = searchService.search(query);
+        List<Material> result = searchService.search(query, 0);
 
         verifyAll();
 
@@ -84,12 +84,12 @@ public class SearchServiceTest {
         materials.add(material4);
         materials.add(material7);
 
-        expect(searchEngineService.search(query)).andReturn(searchResult);
+        expect(searchEngineService.search(query, 0)).andReturn(searchResult);
         expect(materialDAO.findAllById(searchResult)).andReturn(materials);
 
         replayAll();
 
-        List<Material> result = searchService.search(query);
+        List<Material> result = searchService.search(query, 0);
 
         verifyAll();
 
@@ -103,15 +103,31 @@ public class SearchServiceTest {
         String query = "people";
         List<Long> searchResult = new ArrayList<>();
 
-        expect(searchEngineService.search(query)).andReturn(searchResult);
+        expect(searchEngineService.search(query, 0)).andReturn(searchResult);
 
         replayAll();
 
-        List<Material> result = searchService.search(query);
+        List<Material> result = searchService.search(query, 0);
 
         verifyAll();
 
         assertEquals(0, result.size());
+    }
+    
+    @Test
+    public void countResults() {
+        String query = "people";
+        long countResult = 7;
+
+        expect(searchEngineService.countResults(query)).andReturn(countResult);
+
+        replayAll();
+
+        long result = searchService.countResults(query);
+
+        verifyAll();
+
+        assertEquals(countResult, result);
     }
 
     private void replayAll() {
