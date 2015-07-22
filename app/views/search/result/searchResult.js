@@ -7,8 +7,16 @@ define(['app'], function(app)
     	if (searchObject.q) {
             $scope.searching = true;
             $scope.searchQuery = searchObject.q;
-	    	var params = {'q': searchObject.q};
+            var start = 0;
+            if (searchObject.start) {
+            	start = searchObject.start;
+            }
+	    	var params = {
+	    	    'q': searchObject.q,
+	    	    'start': start
+	    	};
 	    	serverCallService.makeGet("rest/search", params, getAllMaterialSuccess, getAllMaterialFail);
+	    	serverCallService.makeGet("rest/search/countResults", params, getResultCountSuccess, getResultCountFail);
 	    	$rootScope.searchFields.searchQuery = searchObject.q;
     	}
     	
@@ -25,10 +33,26 @@ define(['app'], function(app)
             console.log('Session search failed.')
             $scope.searching = false;
     	}
+    	
+    	function getResultCountSuccess(data) {
+            if (isEmpty(data)) {
+                log('No result count returned.');
+            } else {
+                $scope.resultCount = data;
+            }
+    	}
+    	
+    	function getResultCountFail(data, status) {
+            console.log('Failed to get result count');
+    	}
 
         $scope.getNumberOfResults = function() {
             if (!$scope.materials) {
                 return 0;
+            }
+            
+            if ($scope.resultCount) {
+            	return $scope.resultCount;
             }
 
             return $scope.materials.length;
