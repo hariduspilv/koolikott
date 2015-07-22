@@ -1,5 +1,11 @@
 <div class="container">
-	<h2 class="searchResult light" data-ng-cloak data-ng-show="!searching && !materials.length">Otsingule <span class="strong" data-ng-bind="searchQuery"></span> leidus <span class="strong">0</span> vastet.</h2>
+	<h2 class="searchResult light" data-ng-cloak data-ng-if="!searching && !materials.length">
+        <span data-translate="SEARCH_RESULT_PART_1"></span>
+        <span class="strong" data-ng-bind="searchQuery"></span>
+        <span data-translate="SEARCH_RESULT_PART_2"></span>
+        <span class="strong">0</span>
+        <span data-translate="SEARCH_RESULT_PART_3"></span>
+    </h2>
     <div class="row row-material">
         <div class="col-md-9">
             <div class="row">
