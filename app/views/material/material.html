@@ -106,15 +106,13 @@
             
             <div class="row">
                 <div class="col-md-12">
-                    <div class="category keywords text-grey clearfix">
-                        <div class="item">
-                            <div class="label">
-                                <span data-translate="MATERIAL_VIEW_TAGS"></span>:
-                            </div>	
-                        	<span data-ng-repeat="tag in material.tags">
-                            	<a href="#"><span data-ng-bind="tag.name"></span></a>
-                        	</span>
-                        </div>
+                    <div class="keywords text-grey clearfix">
+                        <div class="label">
+                            <span data-translate="MATERIAL_VIEW_TAGS"></span>:
+                        </div>	
+                        <span data-ng-repeat="tag in material.tags">
+                            <span data-ng-bind="tag.name" class="item"></span>
+                        </span>
                     </div>
                 </div>
             </div>
