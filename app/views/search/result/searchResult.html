@@ -1,9 +1,9 @@
 <div class="container">
-	<h2 class="searchResult light" data-ng-cloak data-ng-if="!searching && !materials.length">
+	<h2 class="searchResult light" data-ng-if="!searching">
         <span data-translate="SEARCH_RESULT_PART_1"></span>
         <span class="strong" data-ng-bind="searchQuery"></span>
         <span data-translate="SEARCH_RESULT_PART_2"></span>
-        <span class="strong">0</span>
+        <span class="strong" data-ng-bind="getNumberOfResults()"></span>
         <span data-translate="SEARCH_RESULT_PART_3"></span>
     </h2>
     <div class="row row-material">

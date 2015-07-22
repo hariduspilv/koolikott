@@ -25,6 +25,14 @@ define(['app'], function(app)
             console.log('Session search failed.')
             $scope.searching = false;
     	}
+
+        $scope.getNumberOfResults = function() {
+            if (!$scope.materials) {
+                return 0;
+            }
+
+            return $scope.materials.length;
+        }
     	
     	$scope.$on("$destroy", function() {
     		$rootScope.searchFields.searchQuery = "";
