@@ -19,6 +19,15 @@
             }
         }
     }
+
+    .navbar-brand {
+        img {
+            width: 140px;
+            &:hover {
+                opacity: 0.8;
+            }
+        }
+    }
     
 }
 
