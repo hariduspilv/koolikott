@@ -28,4 +28,10 @@ public class MaterialService {
         material.setViews(material.getViews() + 1);
         materialDao.update(material);
     }
+
+    public void persistMaterial(Material material) {
+        materialDao.persistMaterial(material);
+    }
+
+
 }

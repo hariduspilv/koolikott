@@ -7,10 +7,14 @@ import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.TypedQuery;
 
+import org.slf4j.LoggerFactory;
+
 import ee.hm.dop.model.Material;
+import ee.hm.dop.oaipmh.IdentifierIterator;
 
 public class MaterialDAO {
 
+    private static final org.slf4j.Logger logger = LoggerFactory.getLogger(IdentifierIterator.class);
     @Inject
     private EntityManager entityManager;
 
@@ -34,9 +38,8 @@ public class MaterialDAO {
     /**
      * finds all materials contained in the idList. There is no guarantee about
      * in which order the materials will be in the result list.
-     * 
-     * @param idList
-     *            the list with materials id
+     *
+     * @param idList the list with materials id
      * @return a list of materials specified by idList
      */
     public List<Material> findAllById(List<Long> idList) {
@@ -52,5 +55,20 @@ public class MaterialDAO {
 
     public void update(Material material) {
         entityManager.persist(material);
+    }
+
+    public void persistMaterial(Material material) {
+        if (!entityManager.getTransaction().isActive()) {
+            entityManager.getTransaction().begin();
+
+        }
+        try {
+            entityManager.persist(material);
+            entityManager.getTransaction().commit();
+        } catch (Exception e) {
+            entityManager.getTransaction().rollback();
+            logger.error("Could not persist a material.");
+        }
+
     }
 }

@@ -17,28 +17,25 @@ import javax.persistence.NamedQuery;
 /**
  * This is a mapping for ISO 639. For more information @see <a
  * href="http://en.wikipedia.org/wiki/List_of_ISO_639-1_codes" >wikipedia</a>
- * 
- * @author Jordan Silva
  *
+ * @author Jordan Silva
  */
 @Entity(name = "LanguageTable")
-@NamedQueries({ @NamedQuery(name = "Language.findByCode", query = "SELECT l FROM LanguageTable l WHERE l.code = :code") })
+@NamedQueries({
+        @NamedQuery(name = "Language.findByCode", query = "select l from LanguageTable l join l.codes c where l.code = :code or c = :code") })
 public class Language {
-
-    @Id
-    @GeneratedValue
-    private Long id;
-
-    @Column(unique = true, nullable = false)
-    private String name;
-
-    @Column(unique = true, nullable = false)
-    private String code;
 
     @ElementCollection(fetch = EAGER)
     @CollectionTable(name = "LanguageKeyCodes", joinColumns = @JoinColumn(name = "lang"))
     @Column(name = "code")
     List<String> codes;
+    @Id
+    @GeneratedValue
+    private Long id;
+    @Column(unique = true, nullable = false)
+    private String name;
+    @Column(unique = true, nullable = false)
+    private String code;
 
     public Long getId() {
         return id;

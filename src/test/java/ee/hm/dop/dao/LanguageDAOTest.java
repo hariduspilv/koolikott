@@ -18,14 +18,22 @@ public class LanguageDAOTest extends DatabaseTestBase {
 
     @Test
     public void findByCode() {
-        Language language = languageDAO.findByCode("est");
+        Language language1 = languageDAO.findByCode("est");
 
-        assertNotNull(language);
-        assertEquals(new Long(1), language.getId());
-        assertEquals("est", language.getCode());
-        assertEquals("Estonian", language.getName());
-        assertEquals(1, language.getCodes().size());
-        assertEquals("et", language.getCodes().get(0));
+        assertNotNull(language1);
+        assertEquals(new Long(1), language1.getId());
+        assertEquals("est", language1.getCode());
+        assertEquals("Estonian", language1.getName());
+        assertEquals(1, language1.getCodes().size());
+        assertEquals("et", language1.getCodes().get(0));
+
+        Language language2 = languageDAO.findByCode("fr");
+        assertNotNull(language2);
+        assertEquals(new Long(6), language2.getId());
+        assertEquals("fre", language2.getCode());
+        assertEquals("French", language2.getName());
+        assertEquals(1, language2.getCodes().size());
+        assertEquals("fr", language2.getCodes().get(0));
     }
 
     @Test

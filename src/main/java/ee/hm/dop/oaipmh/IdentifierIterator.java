@@ -67,7 +67,6 @@ public class IdentifierIterator implements Iterator<Node> {
         try {
             return newListIdentifier(baseURL, resumptionToken);
         } catch (Exception e) {
-            e.printStackTrace();
             String msg = "Error in getting more identifiers from repo %s with token %s";
             logger.error(String.format(msg, baseURL, resumptionToken), e);
         }
