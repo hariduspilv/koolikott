@@ -70,4 +70,5 @@ insert into Translation(translationGroup, translationKey, translation) values (2
 insert into Translation(translationGroup, translationKey, translation) values (2, 'SEARCH_RESULT_PART_1', 'Поиск ');
 insert into Translation(translationGroup, translationKey, translation) values (2, 'SEARCH_RESULT_PART_2', ' найдено ');
 insert into Translation(translationGroup, translationKey, translation) values (2, 'SEARCH_RESULT_PART_3', ' результата.');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'COPYRIGHT_FOOTER', '© 2016 Все права защищены. Министерство образования и науки');
 
