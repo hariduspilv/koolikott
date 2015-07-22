@@ -67,6 +67,8 @@ insert into Translation(translationGroup, translationKey, translation) values (2
 insert into Translation(translationGroup, translationKey, translation) values (2, 'LICENSETYPE_CCBYNCND', 'CC BY-NC-ND');
 insert into Translation(translationGroup, translationKey, translation) values (2, 'LICENSETYPE_OTHER', 'Другой');
 insert into Translation(translationGroup, translationKey, translation) values (2, 'MATERIAL_VIEW_TAGS', 'Ключевые слова');
-
-
+insert into Translation(translationGroup, translationKey, translation) values (2, 'SEARCH_RESULT_PART_1', 'Поиск ');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'SEARCH_RESULT_PART_2', ' найдено ');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'SEARCH_RESULT_PART_3', ' результата.');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'COPYRIGHT_FOOTER', '© 2016 Все права защищены. Министерство образования и науки');
 
