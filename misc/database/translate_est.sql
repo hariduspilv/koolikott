@@ -67,5 +67,7 @@ insert into Translation(translationGroup, translationKey, translation) values (1
 insert into Translation(translationGroup, translationKey, translation) values (1, 'LICENSETYPE_CCBYNCND', 'CC BY-NC-ND');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'LICENSETYPE_OTHER', 'Muu');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'MATERIAL_VIEW_TAGS', 'Võtmesõnad');
-
+insert into Translation(translationGroup, translationKey, translation) values (1, 'SEARCH_RESULT_PART_1', 'Otsingule ');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'SEARCH_RESULT_PART_2', ' leidus ');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'SEARCH_RESULT_PART_3', ' vastet.');
 
