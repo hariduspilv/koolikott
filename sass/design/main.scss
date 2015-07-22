@@ -12,6 +12,14 @@ $font-family-sans-serif: "Roboto", "Helvetica Neue", Helvetica, Arial, sans-seri
 
 $link-hover-decoration: none;
 
-body {font-weight: 400}
+html {
+	position: relative;
+	min-height: 100%;
+}
+
+body {
+	font-weight: 400;
+	margin-bottom: 60px !important;
+}
 
 a:hover {cursor: pointer}
