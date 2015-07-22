@@ -23,6 +23,10 @@
     .navbar-brand {
         img {
             width: 140px;
+            -webkit-transition: all 0.4s;
+            -moz-transition:    all 0.4s;
+            -o-transition:      all 0.4s;
+            transition:         all 0.4s;
             &:hover {
                 opacity: 0.8;
             }
