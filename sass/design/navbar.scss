@@ -25,14 +25,13 @@
             }
         }
     }
+    
+    .navbar-toggle {float: left}
 
     .navbar-brand {
-        img {
-            width: 140px;
-            @include transition(all 0.4s);
-            &:hover {
-                opacity: 0.8;
-            }
+        img {width: 140px; @include transition(all 0.4s); 
+             
+             &:hover {opacity: 0.8}
         }
     }
     
