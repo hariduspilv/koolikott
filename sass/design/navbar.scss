@@ -1,6 +1,6 @@
 .navbar {
     
-    border: 0 !important;
+    margin-bottom: 0; border: 0 !important;
     
     @media screen and (max-width: $screen-tablet) {
         height: 60px
@@ -37,7 +37,7 @@
     
 }
 
-.navbar-default {@include box-shadow(0, -2px, 2px, -2px, #3f7b8f, true)}
+.navbar-default {@include box-shadow(0, -3px, 2px, -3px, #3f7b8f, true)}
 
 .navbar-nav {margin-left: 20px !important;
     
