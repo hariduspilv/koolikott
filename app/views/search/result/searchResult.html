@@ -1,45 +1,57 @@
-<div class="container">
-    <div class="row">
-        <div class="col-md-9">
-            <div class="row row-material">
-                <div class="heading">
-                    <h1 data-ng-if="!searching">
-                        <span data-translate="SEARCH_RESULT_PART_1"></span>
-                        <strong><span data-ng-bind="searchQuery"></span></strong>
-                        <span data-translate="SEARCH_RESULT_PART_2"></span>
-                        <strong><span data-ng-bind="getNumberOfResults()"></span></strong>
-                        <span data-translate="SEARCH_RESULT_PART_3"></span>
-                    </h1>
+<div class="main">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-9">
+                <div class="row row-material">
+                    <div class="heading">
+                        <h1 data-ng-if="!searching">
+                            <span data-translate="SEARCH_RESULT_PART_1"></span>
+                            <strong><span data-ng-bind="searchQuery"></span></strong>
+                            <span data-translate="SEARCH_RESULT_PART_2"></span>
+                            <strong><span data-ng-bind="getNumberOfResults()"></span></strong>
+                            <span data-translate="SEARCH_RESULT_PART_3"></span>
+                        </h1>
+                    </div>
+
+                    <div data-ng-repeat="material in materials" class="col-md-3 material">
+                        <div data-dop-material-box material="material"></div>
+                    </div>
                 </div>
-                
-                <div data-ng-repeat="material in materials" class="col-md-3 material">
-                    <div data-dop-material-box material="material"></div>
-                </div>
-            </div>
-            
-            <div class="row row-material">
-                <div class="clearfix text-center">
-                    <nav>
-                        <ul class="pagination">
+
+                <div class="row row-material">
+                    <div class="clearfix text-center">
+                        <nav>
+                            <ul class="pagination">
                             <li>
                                 <a href="#" aria-label="Previous" class="btn" disabled="disabled">
                                     <span aria-hidden="true">Previous</span>
                                 </a>
                             </li>
-                            <li class="active"><a href="#">1</a></li>
-                            <li><a href="#">2</a></li>
-                            <li><a href="#">3</a></li>
-                            <li><a href="#">4</a></li>
-                            <li><a href="#">5</a></li>
+                            <li data-ng-repeat="page in paging.before">
+                                <a href="#" data-ng-bind="page"></a>
+                            </li>
+
+                            <li class="active"><span data-ng-bind="paging.thisPage"></span></li>
+
+                            <li data-ng-repeat="page in paging.after">
+                                <a href="#" data-ng-bind="page"></a>
+                            </li>
+
+                            <li data-ng-if="paging.last.length"><a href="#">...</a></li>
+
+                            <li data-ng-repeat="page in paging.last">
+                                <a href="#" data-ng-bind="page"></a>
+                            </li>
                             <li>
                                 <a href="#" aria-label="Next" class="btn">
                                     <span aria-hidden="true">Next</span>
                                 </a>
                             </li>
-                        </ul>
-                    </nav>
+                            </ul>
+                        </nav>
+                    </div>
                 </div>
             </div>
-		</div>
+        </div>
     </div>
 </div>
