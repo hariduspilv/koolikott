@@ -1,119 +1,121 @@
-<div class="container">
-    <div class="row">
-        <div class="col-md-9 material-detail">
-            <div class="row">
-                <div class="col-md-9 description">
-                    <div class="category text-grey clearfix">
-                       <div class="item pull-left">
-                            <div class="label">
-                                <span data-translate="MATERIAL_VIEW_SUBJECT"></span>:
+<div class="main">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-9 material-detail">
+                <div class="row">
+                    <div class="col-md-9 description">
+                        <div class="category text-grey clearfix">
+                           <div class="item pull-left">
+                                <div class="label">
+                                    <span data-translate="MATERIAL_VIEW_SUBJECT"></span>:
+                                </div>
+                                <span data-ng-bind="subject"></span>
+                                <span data-ng-repeat="subject in materialSubjects">
+                                    <span data-translate="{{'CLASSIFICATION_' + subject.toUpperCase()}}"></span><span data-ng-bind="$index < materialSubjects.length - 1 ? ', ' : ''"></span>
+                                </span>
+                                <span data-ng-if="!materialSubjects.length" data-translate="UNKNOWN">Unknown</span>
                             </div>
-                            <span data-ng-bind="subject"></span>
-                            <span data-ng-repeat="subject in materialSubjects">
-                                <span data-translate="{{'CLASSIFICATION_' + subject.toUpperCase()}}"></span><span data-ng-bind="$index < materialSubjects.length - 1 ? ', ' : ''"></span>
-                            </span>
-                            <span data-ng-if="!materialSubjects.length" data-translate="UNKNOWN">Unknown</span>
-                        </div>
-                        <div class="item pull-left">
-                            <div class="label">
-                                <span data-translate="MATERIAL_VIEW_RESOURCE_TYPE"></span>:
+                            <div class="item pull-left">
+                                <div class="label">
+                                    <span data-translate="MATERIAL_VIEW_RESOURCE_TYPE"></span>:
+                                </div>
+                                <span data-ng-repeat="resourceType in material.resourceTypes">
+                                    <span data-translate="{{resourceType.name.toUpperCase()}}"></span><span data-ng-bind="$index < material.resourceTypes.length - 1 ? ', ' : ''"></span>
+                                </span>
+                                <span data-ng-if="isNullOrZeroLength(material.resourceTypes)" data-translate="UNKNOWN">Unknown</span>
                             </div>
-                            <span data-ng-repeat="resourceType in material.resourceTypes">
-                                <span data-translate="{{resourceType.name.toUpperCase()}}"></span><span data-ng-bind="$index < material.resourceTypes.length - 1 ? ', ' : ''"></span>
-                            </span>
-                            <span data-ng-if="isNullOrZeroLength(material.resourceTypes)" data-translate="UNKNOWN">Unknown</span>
-                        </div>
-                        <div class="item pull-left">
-                            <div class="label">
-                                <span data-translate="MATERIAL_VIEW_EDUCATIONAL_CONTEXT"></span>:
+                            <div class="item pull-left">
+                                <div class="label">
+                                    <span data-translate="MATERIAL_VIEW_EDUCATIONAL_CONTEXT"></span>:
+                                </div>
+                                <span data-ng-repeat="educationalContext in material.educationalContexts">
+                                    <span data-translate="{{educationalContext.name.toUpperCase()}}"></span><span data-ng-bind="$index < material.educationalContexts.length - 1 ? ', ' : ''"></span>
+                                </span>
+                                <span data-ng-if="isNullOrZeroLength(material.educationalContexts)" data-translate="UNKNOWN">Unknown</span>
                             </div>
-                            <span data-ng-repeat="educationalContext in material.educationalContexts">
-                                <span data-translate="{{educationalContext.name.toUpperCase()}}"></span><span data-ng-bind="$index < material.educationalContexts.length - 1 ? ', ' : ''"></span>
-                            </span>
-                            <span data-ng-if="isNullOrZeroLength(material.educationalContexts)" data-translate="UNKNOWN">Unknown</span>
                         </div>
-                    </div>
-                    <div class="heading">
-                        <h1 data-ng-bind="getCorrectLanguageString(material.titles)"></h1>
-                    </div>
-                    <div class="authors">
-                        <span data-ng-repeat="author in material.authors" class="item">
-                            <span data-ng-bind="author.name"></span> <span data-ng-bind="author.surname"></span>
-                        </span>
-                    </div>
-                    
-                    <div data-ng-bind="getCorrectLanguageString(material.descriptions)"></div>
+                        <div class="heading">
+                            <h1 data-ng-bind="getCorrectLanguageString(material.titles)"></h1>
+                        </div>
+                        <div class="authors">
+                            <span data-ng-repeat="author in material.authors" class="item">
+                                <span data-ng-bind="author.name"></span> <span data-ng-bind="author.surname"></span>
+                            </span>
+                        </div>
 
-                </div>
-                <div class="col-md-3">
-                    <dl class="dl-horizontal">
-                        <dt data-ng-if="material.updated" class="text-grey text-big">
-                            <span data-translate="UPDATED"></span><span>:</span>
-                        </dt>
-                        <dd data-ng-if="material.updated" class="text-right text-big">
-                            <span class="pull-right">{{formatMaterialUpdatedDate(material.updated)}}</span>
-                        </dd>
-                        <dt class="text-grey">
-                            <span data-translate="CREATED"></span><span>:</span>
-                        </dt>
-                        <dd class="text-right text-grey">
-                            <span data-ng-if="material.issueDate.year >= 100" class="pull-right">{{formatMaterialIssueDate(material.issueDate)}}</span>
-                            <span data-ng-if="material.issueDate.year > 0 && material.issueDate.year < 100" class="pull-right">{{formatMaterialIssueDate(material.issueDate)}} AD</span>
-                            <span data-ng-if="material.issueDate.year < 0" class="pull-right">{{formatMaterialIssueDate(material.issueDate)}} BC</span>
-                            <span data-ng-if="!material.issueDate.year" class="pull-right"><span data-translate="UNKNOWN"></span></span>
-                        </dd>
-                    </dl>
-                    
-                    <div data-ng-if="material.publishers && material.publishers.length === 1" class="text-right" data-translate="PUBLISHER">Publisher</div>
-                    <div data-ng-if="material.publishers && material.publishers.length > 1"class="text-right" data-translate="PUBLISHERS">Publishers</div>
+                        <div data-ng-bind="getCorrectLanguageString(material.descriptions)"></div>
 
-                    <div data-ng-if="material.publishers" class="text-right text-grey">
-                        <div data-ng-repeat="publisher in material.publishers">
-                            <small data-ng-bind="publisher.name"></small>
+                    </div>
+                    <div class="col-md-3">
+                        <dl class="dl-horizontal">
+                            <dt data-ng-if="material.updated" class="text-grey text-big">
+                                <span data-translate="UPDATED"></span><span>:</span>
+                            </dt>
+                            <dd data-ng-if="material.updated" class="text-right text-big">
+                                <span class="pull-right">{{formatMaterialUpdatedDate(material.updated)}}</span>
+                            </dd>
+                            <dt class="text-grey">
+                                <span data-translate="CREATED"></span><span>:</span>
+                            </dt>
+                            <dd class="text-right text-grey">
+                                <span data-ng-if="material.issueDate.year >= 100" class="pull-right">{{formatMaterialIssueDate(material.issueDate)}}</span>
+                                <span data-ng-if="material.issueDate.year > 0 && material.issueDate.year < 100" class="pull-right">{{formatMaterialIssueDate(material.issueDate)}} AD</span>
+                                <span data-ng-if="material.issueDate.year < 0" class="pull-right">{{formatMaterialIssueDate(material.issueDate)}} BC</span>
+                                <span data-ng-if="!material.issueDate.year" class="pull-right"><span data-translate="UNKNOWN"></span></span>
+                            </dd>
+                        </dl>
+
+                        <div data-ng-if="material.publishers && material.publishers.length === 1" class="text-right" data-translate="PUBLISHER">Publisher</div>
+                        <div data-ng-if="material.publishers && material.publishers.length > 1"class="text-right" data-translate="PUBLISHERS">Publishers</div>
+
+                        <div data-ng-if="material.publishers" class="text-right text-grey">
+                            <div data-ng-repeat="publisher in material.publishers">
+                                <small data-ng-bind="publisher.name"></small>
+                            </div>
+                        </div>
+                        <div class="text-right" data-translate="MATERIAL_VIEW_LICENSE_TYPE">License type</div>
+                        <div class="text-right text-grey">
+                            <small data-ng-if="material.licenseType" data-translate="LICENSETYPE_{{material.licenseType.name.toUpperCase()}}"></small>
+                            <small data-ng-if="!material.licenseType" data-translate="LICENSETYPE_ALLRIGHTSRESERVED"></small>
                         </div>
                     </div>
-                    <div class="text-right" data-translate="MATERIAL_VIEW_LICENSE_TYPE">License type</div>
-                    <div class="text-right text-grey">
-                    	<small data-ng-if="material.licenseType" data-translate="LICENSETYPE_{{material.licenseType.name.toUpperCase()}}"></small>
-                    	<small data-ng-if="!material.licenseType" data-translate="LICENSETYPE_ALLRIGHTSRESERVED"></small>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <section class="preview">
+                            <header class="clearfix">
+                                <div class="pull-right text-grey">
+                                    <i class="fa fa-eye"></i> <span data-ng-bind="material.views"></span>
+                                </div>
+                            </header>
+                            <article>
+                                <div data-ng-if="sourceType === 'YOUTUBE'" class="embed-responsive embed-responsive-16by9">
+                                    <youtube-video video-url="material.source" player-width="'768'" player-height="'432'" class="embed-responsive-item"></youtube-video>
+                                </div>
+
+                                <div data-ng-if="sourceType === 'LINK'" class="clearfix">
+                                    <a data-ng-href="{{material.source}}" target="_blank" class="material-type material-type-link pull-left">
+                                        <i class="fa fa-link"></i> <span class="item-label" data-translate="MATERIAL_VIEW_LINK_TO_MATERIAL">Open material</span>
+                                        <span class="item-link" data-ng-bind="material.source"></span>
+                                    </a>
+                                </div>
+                            </article>
+                        </section>
                     </div>
                 </div>
-            </div>
-            
-            <div class="row">
-                <div class="col-md-12">
-                    <section class="preview">
-                        <header class="clearfix">
-                            <div class="pull-right text-grey">
-                                <i class="fa fa-eye"></i> <span data-ng-bind="material.views"></span>
-                            </div>
-                        </header>
-                        <article>
-                            <div data-ng-if="sourceType === 'YOUTUBE'" class="embed-responsive embed-responsive-16by9">
-                                <youtube-video video-url="material.source" player-width="'768'" player-height="'432'" class="embed-responsive-item"></youtube-video>
-                            </div>
-                            
-                            <div data-ng-if="sourceType === 'LINK'" class="clearfix">
-                                <a data-ng-href="{{material.source}}" target="_blank" class="material-type material-type-link pull-left">
-                                    <i class="fa fa-link"></i> <span class="item-label" data-translate="MATERIAL_VIEW_LINK_TO_MATERIAL">Open material</span>
-                                    <span class="item-link" data-ng-bind="material.source"></span>
-                                </a>
-                            </div>
-                        </article>
-                    </section>
-                </div>
-            </div>
-            
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="keywords text-grey clearfix">
-                        <div class="label">
-                            <span data-translate="MATERIAL_VIEW_TAGS"></span>:
-                        </div>	
-                        <span data-ng-repeat="tag in material.tags">
-                            <span data-ng-bind="tag.name" class="item"></span>
-                        </span>
-                        <span data-ng-if="isNullOrZeroLength(material.tags)" data-translate="UNKNOWN">Unknown</span>
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="keywords text-grey clearfix">
+                            <div class="label">
+                                <span data-translate="MATERIAL_VIEW_TAGS"></span>:
+                            </div>	
+                            <span data-ng-repeat="tag in material.tags">
+                                <span data-ng-bind="tag.name" class="item"></span>
+                            </span>
+                            <span data-ng-if="isNullOrZeroLength(material.tags)" data-translate="UNKNOWN">Unknown</span>
+                        </div>
                     </div>
                 </div>
             </div>
