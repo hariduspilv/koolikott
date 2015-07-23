@@ -1,18 +1,23 @@
 <div class="container">
-	<h1 class="searchResult" data-ng-if="!searching">
-        <span data-translate="SEARCH_RESULT_PART_1"></span>
-        <strong><span data-ng-bind="searchQuery"></span></strong>
-        <span data-translate="SEARCH_RESULT_PART_2"></span>
-        <strong><span data-ng-bind="getNumberOfResults()"></span></strong>
-        <span data-translate="SEARCH_RESULT_PART_3"></span>
-    </h1>
-    <div class="row row-material">
+    <div class="row">
         <div class="col-md-9">
-            <div class="row">
+            <div class="row row-material">
+                <div class="heading">
+                    <h1 data-ng-if="!searching">
+                        <span data-translate="SEARCH_RESULT_PART_1"></span>
+                        <strong><span data-ng-bind="searchQuery"></span></strong>
+                        <span data-translate="SEARCH_RESULT_PART_2"></span>
+                        <strong><span data-ng-bind="getNumberOfResults()"></span></strong>
+                        <span data-translate="SEARCH_RESULT_PART_3"></span>
+                    </h1>
+                </div>
+                
                 <div data-ng-repeat="material in materials" class="col-md-3 material">
                     <div data-dop-material-box material="material"></div>
                 </div>
-                
+            </div>
+            
+            <div class="row row-material">
                 <div class="clearfix text-center">
                     <nav>
                         <ul class="pagination">
