@@ -1,11 +1,11 @@
 <div class="container">
-	<h2 class="searchResult light" data-ng-if="!searching">
+	<h1 class="searchResult" data-ng-if="!searching">
         <span data-translate="SEARCH_RESULT_PART_1"></span>
-        <span class="strong" data-ng-bind="searchQuery"></span>
+        <strong><span data-ng-bind="searchQuery"></span></strong>
         <span data-translate="SEARCH_RESULT_PART_2"></span>
-        <span class="strong" data-ng-bind="getNumberOfResults()"></span>
+        <strong><span data-ng-bind="getNumberOfResults()"></span></strong>
         <span data-translate="SEARCH_RESULT_PART_3"></span>
-    </h2>
+    </h1>
     <div class="row row-material">
         <div class="col-md-9">
             <div class="row">
