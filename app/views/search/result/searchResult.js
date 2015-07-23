@@ -18,7 +18,9 @@ define(['app'], function(app)
 	    	serverCallService.makeGet("rest/search", params, getAllMaterialSuccess, getAllMaterialFail);
 	    	serverCallService.makeGet("rest/search/countResults", params, getResultCountSuccess, getResultCountFail);
 	    	$rootScope.searchFields.searchQuery = searchObject.q;
-    	}
+    	} else {
+            $location.url('/');
+        }
     	
     	function getAllMaterialSuccess(data) {
             if (isEmpty(data)) {
