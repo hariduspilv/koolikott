@@ -57,7 +57,7 @@ public class SolrService implements SearchEngineService {
 
         Response response = searchResponse.getResponse();
         
-        return response.getNumFound();
+        return response.getResultCount();
     }
 
     private WebTarget getTarget(String path) {

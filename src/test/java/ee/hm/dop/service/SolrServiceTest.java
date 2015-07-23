@@ -219,7 +219,7 @@ public class SolrServiceTest {
     
     private void setUpCountResults(String urlQuery, long resultCount) {
         Response response = new Response();
-        response.setNumFound(resultCount);
+        response.setResultCount(resultCount);
 
         SearchResponse searchResponse = new SearchResponse();
         searchResponse.setResponse(response);
