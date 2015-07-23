@@ -4,9 +4,15 @@
 
 @import 'http://fonts.googleapis.com/css?family=Roboto:100,300,300italic,400,400italic,500italic,500,700,700italic&subset=latin,cyrillic-ext,cyrillic';
 
-/* design */
+/* variables */
 
 @import 'design/variables';
+
+/* bootstrap */
+
+@import '../bower_components/bootstrap-sass/assets/stylesheets/bootstrap';
+
+/* design */
 
 @import 'design/typography';
 
@@ -26,7 +32,4 @@
 
 @import 'design/footer';
 
-/* bootstrap */
-
-@import '../bower_components/bootstrap-sass/assets/stylesheets/bootstrap';
 

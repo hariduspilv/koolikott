@@ -1,3 +1,17 @@
+$body-bg: #F4F4F4 !default;
+
+$brand-primary: #0090db;
+
+$font-size-base: 15px;
+
+$font-size-h1: floor(($font-size-base * 2.1)) !default;
+
+$font-size-h3: floor(($font-size-base * 2.1)) !default;
+
+$font-family-sans-serif: "Roboto", "Helvetica Neue", Helvetica, Arial, sans-serif !default;
+
+$link-hover-decoration: none;
+
 $font-color-grey: #777;
 
 $font-color-grey-light: #AAA;

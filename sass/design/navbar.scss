@@ -1,4 +1,10 @@
-.navbar {border: 0 !important;
+.navbar {
+    
+    border: 0 !important;
+    
+    @media screen and (max-width: $screen-tablet) {
+        height: 60px
+    }
     
     .navbar-form {margin-top: 17px !important; margin-bottom: 18px !important; 
 
