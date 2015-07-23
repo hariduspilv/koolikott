@@ -4,11 +4,12 @@ define(['app'], function(app)
              function($scope, serverCallService, translationService, $location, $rootScope) {
     	var searchObject = $location.search();
         $scope.paging = [];
+        var RESULTS_PER_PAGE = 24;
+        var start = 0;
 
-    	if (searchObject.q) {
+        if (searchObject.q) {
             $scope.searching = true;
             $scope.searchQuery = searchObject.q;
-            var start = 0;
             if (searchObject.start) {
             	start = searchObject.start;
             }
@@ -80,7 +81,6 @@ define(['app'], function(app)
                 return;
             }
 
-            var RESULTS_PER_PAGE = 24;
             var pageCount = Math.ceil($scope.resultCount / RESULTS_PER_PAGE);
 
             var start = 0;
@@ -128,7 +128,26 @@ define(['app'], function(app)
 
             }
         }
-    	
+
+        $scope.isPreviousButtonDisabled = function() {
+            if (start == 0) {
+                return "disabled";
+            } else {
+                return "";
+            }
+        }
+
+        $scope.isNextButtonDisabled = function() {
+            var pageCount = Math.ceil($scope.resultCount / RESULTS_PER_PAGE);
+            var thisPage = (start / RESULTS_PER_PAGE) + 1;
+
+            if (thisPage >= pageCount) {
+                return "disabled";
+            } else {
+                return "";
+            }
+        }
+
     	$scope.$on("$destroy", function() {
     		$rootScope.searchFields.searchQuery = "";
         });

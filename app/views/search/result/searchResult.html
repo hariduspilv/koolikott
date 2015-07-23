@@ -23,28 +23,28 @@
                         <nav>
                             <ul class="pagination">
                             <li>
-                                <a href="#" aria-label="Previous" class="btn" disabled="disabled">
-                                    <span aria-hidden="true">Previous</span>
+                                <a href="" aria-label="{{'SEARCH_RESULT_PREVIOUS' | translate}}" class="btn {{isPreviousButtonDisabled()}}">
+                                    <span aria-hidden="true"><span data-translate="SEARCH_RESULT_PREVIOUS"></span></span>
                                 </a>
                             </li>
                             <li data-ng-repeat="page in paging.before">
-                                <a href="#" data-ng-bind="page"></a>
+                                <a href="" data-ng-bind="page"></a>
                             </li>
 
                             <li class="active"><span data-ng-bind="paging.thisPage"></span></li>
 
                             <li data-ng-repeat="page in paging.after">
-                                <a href="#" data-ng-bind="page"></a>
+                                <a href="" data-ng-bind="page"></a>
                             </li>
 
-                            <li data-ng-if="paging.last.length"><a href="#">...</a></li>
+                            <li data-ng-if="paging.last.length"><a href="">...</a></li>
 
                             <li data-ng-repeat="page in paging.last">
-                                <a href="#" data-ng-bind="page"></a>
+                                <a href="" data-ng-bind="page"></a>
                             </li>
                             <li>
-                                <a href="#" aria-label="Next" class="btn">
-                                    <span aria-hidden="true">Next</span>
+                                <a href="" aria-label="{{'SEARCH_RESULT_NEXT' | translate}}" class="btn {{isNextButtonDisabled()}}">
+                                    <span aria-hidden="true"><span data-translate="SEARCH_RESULT_NEXT"></span></span>
                                 </a>
                             </li>
                             </ul>
