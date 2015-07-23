@@ -71,4 +71,5 @@ insert into Translation(translationGroup, translationKey, translation) values (1
 insert into Translation(translationGroup, translationKey, translation) values (1, 'SEARCH_RESULT_PART_2', ' leidus ');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'SEARCH_RESULT_PART_3', ' vastet.');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'COPYRIGHT_FOOTER', '© 2016 Kõik õigused kaitstud. Haridus- ja teadusministeerium');
-
+insert into Translation(translationGroup, translationKey, translation) values (1, 'SEARCH_RESULT_PREVIOUS', 'Eelmine');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'SEARCH_RESULT_NEXT', 'Järgmine');

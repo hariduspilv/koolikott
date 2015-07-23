@@ -71,3 +71,5 @@ insert into Translation(translationGroup, translationKey, translation) values (3
 insert into Translation(translationGroup, translationKey, translation) values (3, 'SEARCH_RESULT_PART_2', ' returned ');
 insert into Translation(translationGroup, translationKey, translation) values (3, 'SEARCH_RESULT_PART_3', ' results.');
 insert into Translation(translationGroup, translationKey, translation) values (3, 'COPYRIGHT_FOOTER', '© 2016 All rights reserved. Ministry of Education and Research');
+insert into Translation(translationGroup, translationKey, translation) values (3, 'SEARCH_RESULT_PREVIOUS', 'Previous');
+insert into Translation(translationGroup, translationKey, translation) values (3, 'SEARCH_RESULT_NEXT', 'Next');
