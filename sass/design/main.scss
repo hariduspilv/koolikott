@@ -11,3 +11,5 @@ body {
 }
 
 a:hover {cursor: pointer}
+
+.main {padding-top: 80px; @include box-shadow(0, 30px, 50px, -30px, #3f7b8f, true)}
