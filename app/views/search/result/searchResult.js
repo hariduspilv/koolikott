@@ -1,7 +1,7 @@
 define(['app'], function(app)
 {
-    app.controller('searchResultController', ['$scope', "serverCallService", 'translationService', '$location', '$rootScope',
-             function($scope, serverCallService, translationService, $location, $rootScope) {
+    app.controller('searchResultController', ['$scope', "serverCallService", 'translationService', '$location', '$rootScope', '$anchorScroll', 
+             function($scope, serverCallService, translationService, $location, $rootScope, $anchorScroll) {
     	var searchObject = $location.search();
         $scope.paging = [];
         var RESULTS_PER_PAGE = 24;
@@ -10,8 +10,8 @@ define(['app'], function(app)
         if (searchObject.q) {
             $scope.searching = true;
             $scope.searchQuery = searchObject.q;
-            if (searchObject.start) {
-            	start = searchObject.start;
+            if (searchObject.start && searchObject.start >= 0) {
+            	start = Math.floor(searchObject.start);
             }
 	    	
 	    	doSearch($scope.searchQuery, start);
@@ -29,12 +29,20 @@ define(['app'], function(app)
             serverCallService.makeGet("rest/search", params, getAllMaterialSuccess, getAllMaterialFail);
             serverCallService.makeGet("rest/search/countResults", params, getResultCountSuccess, getResultCountFail);
         }
+
+        function scrollToTarget(target) {
+            var old = $location.hash();
+            $location.hash(target);
+            $anchorScroll();
+            $location.hash(old);
+        }
     	
     	function getAllMaterialSuccess(data) {
             if (isEmpty(data)) {
                 log('No data returned by session search.');
             } else {
                 $scope.materials = data;
+                scrollToTarget('navmenu');
             }
             $scope.searching = false;
     	}
@@ -47,6 +55,7 @@ define(['app'], function(app)
     	function getResultCountSuccess(data) {
             if (isEmpty(data)) {
                 log('No result count returned.');
+                $scope.resultCount = 0;
             } else {
                 $scope.resultCount = data;
                 $scope.calculatePaging();
@@ -133,19 +142,11 @@ define(['app'], function(app)
         }
 
         $scope.isPreviousButtonDisabled = function() {
-            if (start == 0) {
-                return "disabled";
-            }
-            return "";
+            return (start == 0) ? "disabled" : "";
         }
 
         $scope.isNextButtonDisabled = function() {
-            var thisPage = (start / RESULTS_PER_PAGE) + 1;
-
-            if (thisPage >= $scope.paging.pageCount) {
-                return "disabled";
-            } 
-            return "";
+            return ($scope.paging.thisPage >= $scope.paging.pageCount) ? "disabled" : "";
         }
 
         $scope.getPage = function(pageNumber) {
