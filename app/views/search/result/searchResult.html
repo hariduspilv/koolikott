@@ -23,27 +23,27 @@
                         <nav>
                             <ul class="pagination">
                             <li>
-                                <a href="" aria-label="{{'SEARCH_RESULT_PREVIOUS' | translate}}" class="btn {{isPreviousButtonDisabled()}}">
+                                <a href="" aria-label="{{'SEARCH_RESULT_PREVIOUS' | translate}}" class="btn {{isPreviousButtonDisabled()}}" data-ng-click="getPage(paging.thisPage - 1)">
                                     <span aria-hidden="true"><span data-translate="SEARCH_RESULT_PREVIOUS"></span></span>
                                 </a>
                             </li>
                             <li data-ng-repeat="page in paging.before">
-                                <a href="" data-ng-bind="page"></a>
+                                <a href="" data-ng-bind="page" data-ng-click="getPage(page)"></a>
                             </li>
 
                             <li class="active"><span data-ng-bind="paging.thisPage"></span></li>
 
                             <li data-ng-repeat="page in paging.after">
-                                <a href="" data-ng-bind="page"></a>
+                                <a href="" data-ng-bind="page" data-ng-click="getPage(page)"></a>
                             </li>
 
                             <li data-ng-if="paging.last.length"><a href="">...</a></li>
 
                             <li data-ng-repeat="page in paging.last">
-                                <a href="" data-ng-bind="page"></a>
+                                <a href="" data-ng-bind="page" data-ng-click="getPage(page)"></a>
                             </li>
                             <li>
-                                <a href="" aria-label="{{'SEARCH_RESULT_NEXT' | translate}}" class="btn {{isNextButtonDisabled()}}">
+                                <a href="" aria-label="{{'SEARCH_RESULT_NEXT' | translate}}" class="btn {{isNextButtonDisabled()}}"  data-ng-click="getPage(paging.thisPage + 1)">
                                     <span aria-hidden="true"><span data-translate="SEARCH_RESULT_NEXT"></span></span>
                                 </a>
                             </li>

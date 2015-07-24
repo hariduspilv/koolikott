@@ -13,15 +13,21 @@ define(['app'], function(app)
             if (searchObject.start) {
             	start = searchObject.start;
             }
-	    	var params = {
-	    	    'q': searchObject.q,
-	    	    'start': start
-	    	};
-	    	serverCallService.makeGet("rest/search", params, getAllMaterialSuccess, getAllMaterialFail);
-	    	serverCallService.makeGet("rest/search/countResults", params, getResultCountSuccess, getResultCountFail);
+	    	
+	    	doSearch($scope.searchQuery, start);
 	    	$rootScope.searchFields.searchQuery = searchObject.q;
     	} else {
             $location.url('/');
+        }
+
+        function doSearch(q, startFrom) {
+            start = startFrom;
+            var params = {
+                'q': q,
+                'start': startFrom
+            };
+            serverCallService.makeGet("rest/search", params, getAllMaterialSuccess, getAllMaterialFail);
+            serverCallService.makeGet("rest/search/countResults", params, getResultCountSuccess, getResultCountFail);
         }
     	
     	function getAllMaterialSuccess(data) {
@@ -83,10 +89,6 @@ define(['app'], function(app)
 
             var pageCount = Math.ceil($scope.resultCount / RESULTS_PER_PAGE);
 
-            var start = 0;
-            if (searchObject.start) {
-                start = searchObject.start;
-            }
             var thisPage = (start / RESULTS_PER_PAGE) + 1;
             if (thisPage > pageCount) {
                 thisPage = pageCount;
@@ -146,6 +148,10 @@ define(['app'], function(app)
             } else {
                 return "";
             }
+        }
+
+        $scope.getPage = function(pageNumber) {
+            doSearch($scope.searchQuery, (pageNumber - 1) * RESULTS_PER_PAGE); 
         }
 
     	$scope.$on("$destroy", function() {
