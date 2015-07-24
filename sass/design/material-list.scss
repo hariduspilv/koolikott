@@ -14,9 +14,31 @@
         
         > li {
             
+            &:first-child {
+            
+                a {margin-right: 30px}
+            
+            }
+
+            &:last-child {
+
+                a {margin-left: 30px}
+
+            }
+            
             &.disabled {
                 
                 > a.btn-default {border-color: $pagination-disabled-border; background-color: $pagination-disabled-bg; color: $pagination-disabled-color}
+                
+            }
+            
+            &.active {
+                
+                span {position: relative;
+                    
+                    &:after {position: absolute; left: 0; bottom: -8px; display: inline-block; width: 100%; content: "\f0d8"; font-family: FontAwesome}
+                    
+                }
                 
             }
             
