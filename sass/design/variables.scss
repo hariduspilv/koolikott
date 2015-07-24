@@ -1,6 +1,9 @@
+$brand-primary: #0090db;
+
 $body-bg: #F4F4F4 !default;
 
-$brand-primary: #0090db;
+$text-color: #444;
+
 
 $font-size-base: 15px;
 
@@ -20,19 +23,66 @@ $background-color-grey-medium: #F4F4F4;
 
 $input-bg: none;
 
+
 $navbar-height: 80px !default;
 
 $navbar-border-radius: 0;
 
 $navbar-default-color: #FFF;
 
+$navbar-default-bg: #488da3 !default;
+
+$navbar-light-bg: #444;
+
+// Navbar links
+
 $navbar-default-link-color: #FFF !default;
 
 $navbar-default-link-hover-color: #FFF !default;
 
-$navbar-default-bg: #488da3 !default;
+// Navbar toggle
 
-$navbar-light-bg: #444;
+$navbar-default-toggle-hover-bg: #ddd !default;
+
+$navbar-default-toggle-icon-bar-bg: #FFF !default;
+
+$navbar-default-toggle-border-color: $navbar-default-bg !default;
+
+//== Pagination 
+
+$pagination-color: $brand-primary;
+
+$pagination-bg: $body-bg !default;
+
+$pagination-border: $body-bg !default;
+
+$pagination-hover-color: #000;
+
+$pagination-hover-bg: $body-bg !default;
+
+$pagination-hover-border: $body-bg !default;
+
+$pagination-active-color: $text-color !default;
+
+$pagination-active-bg: $body-bg !default;
+
+$pagination-active-border: $body-bg !default;
+
+$pagination-disabled-color: #DDD !default;
+
+$pagination-disabled-bg: #AAA !default;
+
+$pagination-disabled-border: #AAA !default;
+
+
+
+
+$btn-default-color: #FFF !default;
+
+$btn-default-bg: #444 !default;
+
+$btn-default-border: #444 !default;
+
 
 $input-border-radius: 0;
 
