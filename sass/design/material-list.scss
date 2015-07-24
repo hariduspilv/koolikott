@@ -10,6 +10,22 @@
     
     }
     
+    .pagination {
+        
+        > li {
+            
+            &.disabled {
+                
+                > a.btn-default {border-color: $pagination-disabled-border; background-color: $pagination-disabled-bg; color: $pagination-disabled-color}
+                
+            }
+            
+            > a.btn-default {border-color: $btn-default-border; background-color: $btn-default-bg; color: #FFF}
+        
+        }
+        
+    }
+    
 }
 
 .material {
