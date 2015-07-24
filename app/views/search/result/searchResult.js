@@ -88,6 +88,7 @@ define(['app'], function(app)
             }
 
             var pageCount = Math.ceil($scope.resultCount / RESULTS_PER_PAGE);
+            $scope.paging.pageCount = pageCount;
 
             var thisPage = (start / RESULTS_PER_PAGE) + 1;
             if (thisPage > pageCount) {
@@ -134,24 +135,23 @@ define(['app'], function(app)
         $scope.isPreviousButtonDisabled = function() {
             if (start == 0) {
                 return "disabled";
-            } else {
-                return "";
             }
+            return "";
         }
 
         $scope.isNextButtonDisabled = function() {
-            var pageCount = Math.ceil($scope.resultCount / RESULTS_PER_PAGE);
             var thisPage = (start / RESULTS_PER_PAGE) + 1;
 
-            if (thisPage >= pageCount) {
+            if (thisPage >= $scope.paging.pageCount) {
                 return "disabled";
-            } else {
-                return "";
-            }
+            } 
+            return "";
         }
 
         $scope.getPage = function(pageNumber) {
-            doSearch($scope.searchQuery, (pageNumber - 1) * RESULTS_PER_PAGE); 
+            if (pageNumber >= 1 && pageNumber <= $scope.paging.pageCount) {
+                doSearch($scope.searchQuery, (pageNumber - 1) * RESULTS_PER_PAGE); 
+            }
         }
 
     	$scope.$on("$destroy", function() {
