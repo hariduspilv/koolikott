@@ -1,15 +1,9 @@
 define(['app'], function(app)
 {
-<<<<<<< HEAD
-    app.controller('searchResultController', ['$scope', "serverCallService", 'translationService', '$location', '$anchorScroll', 
-             function($scope, serverCallService, translationService, $location, $anchorScroll) {
-    	var searchObject = $location.search();
-=======
-    app.controller('searchResultController', ['$scope', "serverCallService", 'translationService', '$location', '$rootScope', 
-             function($scope, serverCallService, translationService, $location, $rootScope) {
+    app.controller('searchResultController', ['$scope', "serverCallService", 'translationService', '$location', 
+             function($scope, serverCallService, translationService, $location) {
     	
         // pagination variables
->>>>>>> 4d92349ecfbe60054871722d9157f70bbc8e4c1d
         $scope.paging = [];
         $scope.paging.before = [];
         $scope.paging.thisPage = 1;
@@ -21,33 +15,21 @@ define(['app'], function(app)
         var MAX_PAGES = PAGES_BEFORE_THIS_PAGE + 1 + PAGES_AFTER_THIS_PAGE;
         var start = 0;
 
-<<<<<<< HEAD
-        if (searchObject.q) {
-            $scope.searching = true;
-            $scope.searchQuery = searchObject.q;
-            if (searchObject.start && searchObject.start >= 0) {
-            	start = Math.floor(searchObject.start);
-            }
-	    	doSearch($scope.searchQuery, start);
-    	} else {
-            $location.url('/');
-=======
         var searchObject = $location.search();
 
         if (searchObject.page && searchObject.page >= 1) {
             $scope.paging.thisPage = parseInt(searchObject.page);
             start = RESULTS_PER_PAGE * ($scope.paging.thisPage - 1);
->>>>>>> 4d92349ecfbe60054871722d9157f70bbc8e4c1d
         }
 
         if (searchObject.q) {
+            $scope.searchQuery = searchObject.q;
             $scope.searching = true;
             var params = {
                 'q': searchObject.q,
                 'start': start
             };
             serverCallService.makeGet("rest/search", params, getAllMaterialSuccess, getAllMaterialFail);
-	    	$rootScope.searchFields.searchQuery = searchObject.q;
     	} else {
             $location.url('/');
         }
