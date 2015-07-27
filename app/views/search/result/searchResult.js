@@ -1,7 +1,7 @@
 define(['app'], function(app)
 {
-    app.controller('searchResultController', ['$scope', "serverCallService", 'translationService', '$location', '$rootScope', '$anchorScroll', 
-             function($scope, serverCallService, translationService, $location, $rootScope, $anchorScroll) {
+    app.controller('searchResultController', ['$scope', "serverCallService", 'translationService', '$location', '$anchorScroll', 
+             function($scope, serverCallService, translationService, $location, $anchorScroll) {
     	var searchObject = $location.search();
         $scope.paging = [];
         var RESULTS_PER_PAGE = 24;
@@ -13,9 +13,7 @@ define(['app'], function(app)
             if (searchObject.start && searchObject.start >= 0) {
             	start = Math.floor(searchObject.start);
             }
-	    	
 	    	doSearch($scope.searchQuery, start);
-	    	$rootScope.searchFields.searchQuery = searchObject.q;
     	} else {
             $location.url('/');
         }
@@ -154,10 +152,6 @@ define(['app'], function(app)
                 doSearch($scope.searchQuery, (pageNumber - 1) * RESULTS_PER_PAGE); 
             }
         }
-
-    	$scope.$on("$destroy", function() {
-    		$rootScope.searchFields.searchQuery = "";
-        });
     	
     }]);
 });
