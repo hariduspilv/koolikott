@@ -36,22 +36,22 @@
                         <nav>
                             <ul class="pagination">
                             <li class="{{isPreviousButtonDisabled()}}">
-                                <a href="" aria-label="{{'SEARCH_RESULT_PREVIOUS' | translate}}" class="btn btn-default">
+                                <a href="" aria-label="{{'SEARCH_RESULT_PREVIOUS' | translate}}" class="btn btn-default" data-ng-click="goToPage(paging.thisPage - 1)">
                                     <span aria-hidden="true"><span data-translate="SEARCH_RESULT_PREVIOUS"></span></span>
                                 </a>
                             </li>
                             <li data-ng-repeat="page in paging.before">
-                                <a href="" data-ng-bind="page"></a>
+                                <a href="{{getPageLink(page)}}" data-ng-bind="page"></a>
                             </li>
 
                             <li class="active"><span data-ng-bind="paging.thisPage"></span></li>
 
                             <li data-ng-repeat="page in paging.after">
-                                <a href="" data-ng-bind="page"></a>
+                                <a href="{{getPageLink(page)}}" data-ng-bind="page"></a>
                             </li>
 
                             <li class="{{isNextButtonDisabled()}}">
-                                <a href="" aria-label="{{'SEARCH_RESULT_NEXT' | translate}}" class="btn btn-default">
+                                <a href="" aria-label="{{'SEARCH_RESULT_NEXT' | translate}}" class="btn btn-default" data-ng-click="goToPage(paging.thisPage + 1)">
                                     <span aria-hidden="true"><span data-translate="SEARCH_RESULT_NEXT"></span></span>
                                 </a>
                             </li>
