@@ -31,7 +31,9 @@ public class RepositoryResource {
     @Produces(MediaType.APPLICATION_JSON)
     public Response updateResources() {
         List<Repository> repositories = repositoryService.getAllRepositorys();
-        repositories.forEach(repositoryService::updateRepository);
+        for (Repository repository : repositories) {
+            repositoryService.updateRepository(repository);
+        }
 
         return Response.status(HttpURLConnection.HTTP_OK).build();
     }

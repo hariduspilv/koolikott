@@ -276,9 +276,9 @@ CREATE TABLE Page (
 );
 
 CREATE TABLE Repository (
-  id                  BIGINT                   AUTO_INCREMENT PRIMARY KEY,
+  id                  BIGINT         AUTO_INCREMENT PRIMARY KEY,
   baseURL             VARCHAR(255) UNIQUE NOT NULL,
-  lastSynchronization TIMESTAMP           NULL DEFAULT NULL,
+  lastSynchronization TIMESTAMP NULL DEFAULT NULL,
   schemaName          VARCHAR(255) UNIQUE NOT NULL
 );
 
