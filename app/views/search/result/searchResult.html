@@ -5,11 +5,20 @@
                 <div class="row row-material">
                     <div class="heading">
                         <h1 data-ng-if="!searching">
-                            <span data-translate="SEARCH_RESULT_PART_1"></span>
-                            <strong><span data-ng-bind="searchQuery"></span></strong>
-                            <span data-translate="SEARCH_RESULT_PART_2"></span>
-                            <strong><span data-ng-bind="getNumberOfResults()"></span></strong>
-                            <span data-translate="SEARCH_RESULT_PART_3"></span>
+                            <span data-ng-if="getNumberOfResults() === 1">
+                                <span data-translate="SEARCH_RESULT_1_RESULT_PART_1"></span>
+                                <strong><span data-ng-bind="searchQuery"></span></strong>
+                                <span data-translate="SEARCH_RESULT_1_RESULT_PART_2"></span>
+                                <strong><span data-ng-bind="getNumberOfResults()"></span></strong>
+                                <span data-translate="SEARCH_RESULT_1_RESULT_PART_3"></span>
+                            </span>
+                            <span data-ng-if="getNumberOfResults() > 1">
+                                <span data-translate="SEARCH_RESULT_PART_1"></span>
+                                <strong><span data-ng-bind="searchQuery"></span></strong>
+                                <span data-translate="SEARCH_RESULT_PART_2"></span>
+                                <strong><span data-ng-bind="getNumberOfResults()"></span></strong>
+                                <span data-translate="SEARCH_RESULT_PART_3"></span>
+                            </span>
                         </h1>
                     </div>
 
