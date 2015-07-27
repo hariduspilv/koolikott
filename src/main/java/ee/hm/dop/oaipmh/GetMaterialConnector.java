@@ -1,59 +1,71 @@
 package ee.hm.dop.oaipmh;
 
-import java.io.IOException;
+import static java.lang.String.format;
 
 import javax.xml.transform.TransformerException;
 
+import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import ORG.oclc.oai.harvester2.verb.GetRecord;
+import ee.hm.dop.model.Repository;
 
-/**
- * Created by mart.laus on 17.07.2015.
- */
 public class GetMaterialConnector {
-    private static final org.slf4j.Logger logger = LoggerFactory.getLogger(IdentifierIterator.class);
+    private static final Logger logger = LoggerFactory.getLogger(GetMaterialConnector.class);
 
-    public Document getMaterial(String baseURL, String identifier, String metadataPrefix) throws Exception {
-        GetRecord getRecord = null;
+    public Document getMaterial(Repository repository, String identifier, String metadataPrefix) throws Exception {
+        String logMessage = "Getting material with identifier: %s from repo: %s and metadataPrefix: %s";
+        logger.info(format(logMessage, identifier, repository.getBaseURL(), metadataPrefix));
 
+        GetRecord getRecord;
         try {
-            getRecord = new GetRecord(baseURL, identifier, metadataPrefix);
-        } catch (IOException e) {
-            String msg = "Repository has identifier %s in ListIdentifiers but no content at that path, moving on to next one.";
-            logger.error(String.format(msg, identifier));
+            getRecord = newGetRecord(repository, identifier, metadataPrefix);
+        } catch (Exception e) {
+            String errorMessage = "Unexpected error while getting material from repository (url: %s)";
+            throw new RuntimeException(format(errorMessage, repository.getBaseURL()));
         }
 
         return getDocument(getRecord);
-
     }
 
     private Document getDocument(GetRecord getRecord) throws TransformerException {
-        Document doc = null;
-        if (getRecord != null) {
-            NodeList errors = getRecord.getErrors();
-            if (!checkForErrors(errors, getRecord)) {
-                doc = getRecord.getDocument();
-            }
+        if (hasErrors(getRecord)) {
+            String message = "No document found in repository response.";
+            throw new RuntimeException(message);
         }
-        return doc;
+
+        return getRecord.getDocument();
     }
 
-    private boolean checkForErrors(NodeList errors, GetRecord getRecord) {
+    private boolean hasErrors(GetRecord getRecord) throws TransformerException {
+        boolean hasError = false;
+
+        NodeList errors = getRecord.getErrors();
         if (errors != null && errors.getLength() > 0) {
-            logger.error("Found errors when getting one material from repository, errors are:");
-            int length = errors.getLength();
-            for (int i = 0; i < length; ++i) {
-                Node item = errors.item(i);
-                logger.error(item.toString());
-            }
-            logger.error("Error material: " + getRecord.toString());
-            return true;
-        } else {
-            return false;
+            hasError = true;
+            logErrors(errors);
         }
+
+        return hasError;
+    }
+
+    private void logErrors(NodeList errors) {
+        StringBuilder builder = new StringBuilder();
+        builder.append("Found errors when getting one material from repository, errors are: ");
+
+        for (int i = 0; i < errors.getLength(); ++i) {
+            Node item = errors.item(i);
+            builder.append("\n");
+            builder.append(item.toString());
+        }
+
+        logger.error(builder.toString());
+    }
+
+    protected GetRecord newGetRecord(Repository repository, String identifier, String metadataPrefix) throws Exception {
+        return new GetRecord(repository.getBaseURL(), identifier, metadataPrefix);
     }
 }

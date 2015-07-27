@@ -18,7 +18,7 @@ public class GenericExceptionMapper implements ExceptionMapper<Throwable> {
 
     @Override
     public Response toResponse(Throwable error) {
-        logger.debug("Handling error", error);
+        logger.error("Handling error", error);
 
         setTransactionRollbackOnly();
         return getResponse(error);

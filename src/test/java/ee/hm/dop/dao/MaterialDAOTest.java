@@ -4,6 +4,7 @@ import static org.apache.commons.lang3.StringUtils.isBlank;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
@@ -241,4 +242,23 @@ public class MaterialDAOTest extends DatabaseTestBase {
 
     }
 
+    @Test
+    public void updateMaterial() {
+        Material material = new Material();
+        material.setSource("asd");
+        material.setAdded(new DateTime());
+        material.setViews((long) 123);
+
+        int size = materialDAO.findAll().size();
+
+        materialDAO.update(material);
+
+        Material newMaterial = materialDAO.findById(material.getId());
+
+        assertEquals(material.getSource(), newMaterial.getSource());
+        assertEquals(material.getAdded(), newMaterial.getAdded());
+        assertEquals(material.getViews(), newMaterial.getViews());
+        assertEquals(size + 1, materialDAO.findAll().size());
+        assertSame(material, materialDAO.findById(material.getId()));
+    }
 }

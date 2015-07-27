@@ -7,14 +7,10 @@ import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.TypedQuery;
 
-import org.slf4j.LoggerFactory;
-
 import ee.hm.dop.model.Material;
-import ee.hm.dop.oaipmh.IdentifierIterator;
 
 public class MaterialDAO {
 
-    private static final org.slf4j.Logger logger = LoggerFactory.getLogger(IdentifierIterator.class);
     @Inject
     private EntityManager entityManager;
 
@@ -54,21 +50,6 @@ public class MaterialDAO {
     }
 
     public void update(Material material) {
-        entityManager.persist(material);
-    }
-
-    public void persistMaterial(Material material) {
-        if (!entityManager.getTransaction().isActive()) {
-            entityManager.getTransaction().begin();
-
-        }
-        try {
             entityManager.persist(material);
-            entityManager.getTransaction().commit();
-        } catch (Exception e) {
-            entityManager.getTransaction().rollback();
-            logger.error("Could not persist a material.");
-        }
-
     }
 }

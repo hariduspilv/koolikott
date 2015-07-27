@@ -41,17 +41,16 @@ public class IdentifierIteratorTest {
 
     @Test
     public void next() throws Exception {
-        Node node = createMock(Node.class);
-
+        Element element = createMock(Element.class);
         NodeList nodeList = createMock(NodeList.class);
-        expect(nodeList.item(0)).andReturn(node);
+        expect(nodeList.item(0)).andReturn(element);
 
-        replay(node, nodeList);
+        replay(element, nodeList);
 
         Node next = getIdentifierIterator(nodeList, null, null).next();
 
-        verify(node, nodeList);
-        assertSame(node, next);
+        verify(element, nodeList);
+        assertSame(element, next);
     }
 
     @Test
@@ -99,13 +98,12 @@ public class IdentifierIteratorTest {
         NodeList nodeList1 = createMock(NodeList.class);
         expect(nodeList1.getLength()).andReturn(0); // same as index == headers.length()
 
-        Node node = createMock(Node.class);
+        Element element = createMock(Element.class);
 
         NodeList nodeList2 = createMock(NodeList.class);
         expect(nodeList2.getLength()).andReturn(1);
-        expect(nodeList2.item(0)).andReturn(node);
+        expect(nodeList2.item(0)).andReturn(element);
 
-        Element element = createMock(Element.class);
         element.normalize();
 
         Document document = createMock(Document.class);
@@ -118,16 +116,16 @@ public class IdentifierIteratorTest {
         IdentifierIterator identifierIterator = getIdentifierIterator(nodeList1, baseURL, resumptionToken);
         expect(identifierIterator.newListIdentifier(baseURL, resumptionToken)).andReturn(listIdentifiers);
 
-        replay(nodeList1, nodeList2, node, element, document, listIdentifiers, identifierIterator);
+        replay(nodeList1, nodeList2, element, document, listIdentifiers, identifierIterator);
 
         boolean result = identifierIterator.hasNext();
         // This is needed to verify that correct parameters were passed to IdentifierIterator constructor
-        Node next = identifierIterator.next();
+        Element next = identifierIterator.next();
 
-        verify(nodeList1, nodeList2, node, element, document, listIdentifiers, identifierIterator);
+        verify(nodeList1, nodeList2, element, document, listIdentifiers, identifierIterator);
 
         assertTrue(result);
-        assertSame(node, next);
+        assertSame(element, next);
     }
 
     @Test
@@ -194,20 +192,19 @@ public class IdentifierIteratorTest {
         String baseURL = "repositoryURL";
         String resumptionToken = "token";
 
-        Node node = createMock(Node.class);
+        Element element = createMock(Element.class);
 
         NodeList nodeList1 = createMock(NodeList.class);
         expect(nodeList1.getLength()).andReturn(3).times(4);
-        expect(nodeList1.item(0)).andReturn(node);
-        expect(nodeList1.item(1)).andReturn(node);
-        expect(nodeList1.item(2)).andReturn(node);
+        expect(nodeList1.item(0)).andReturn(element);
+        expect(nodeList1.item(1)).andReturn(element);
+        expect(nodeList1.item(2)).andReturn(element);
 
         NodeList nodeList2 = createMock(NodeList.class);
         expect(nodeList2.getLength()).andReturn(2).times(4);
-        expect(nodeList2.item(0)).andReturn(node);
-        expect(nodeList2.item(1)).andReturn(node);
+        expect(nodeList2.item(0)).andReturn(element);
+        expect(nodeList2.item(1)).andReturn(element);
 
-        Element element = createMock(Element.class);
         element.normalize();
 
         Document document = createMock(Document.class);
@@ -221,12 +218,12 @@ public class IdentifierIteratorTest {
         expect(identifierIterator.newListIdentifier(baseURL, resumptionToken)).andReturn(listIdentifiers);
         expect(identifierIterator.newListIdentifier(baseURL, resumptionToken)).andReturn(null);
 
-        replay(nodeList1, nodeList2, node, element, document, listIdentifiers, identifierIterator);
+        replay(nodeList1, nodeList2, element, document, listIdentifiers, identifierIterator);
 
         while (identifierIterator.hasNext()) {
             identifierIterator.next();
         }
 
-        verify(nodeList1, nodeList2, node, element, document, listIdentifiers, identifierIterator);
+        verify(nodeList1, nodeList2, element, document, listIdentifiers, identifierIterator);
     }
 }

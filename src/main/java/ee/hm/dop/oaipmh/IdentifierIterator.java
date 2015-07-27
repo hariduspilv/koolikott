@@ -3,16 +3,17 @@ package ee.hm.dop.oaipmh;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
+import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
-import org.w3c.dom.Node;
+import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
 import ORG.oclc.oai.harvester2.verb.ListIdentifiers;
 
-public class IdentifierIterator implements Iterator<Node> {
+public class IdentifierIterator implements Iterator<Element> {
 
-    private static final org.slf4j.Logger logger = LoggerFactory.getLogger(IdentifierIterator.class);
+    private static final Logger logger = LoggerFactory.getLogger(IdentifierIterator.class);
 
     private String baseURL;
     private NodeList headers;
@@ -55,9 +56,9 @@ public class IdentifierIterator implements Iterator<Node> {
     }
 
     @Override
-    public Node next() {
+    public Element next() {
         try {
-            return headers.item(index++);
+            return (Element) headers.item(index++);
         } catch (Exception e) {
             throw new NoSuchElementException();
         }

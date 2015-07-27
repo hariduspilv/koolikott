@@ -3,7 +3,7 @@ package ee.hm.dop.oaipmh;
 import java.util.Iterator;
 
 import org.w3c.dom.Document;
-import org.w3c.dom.Node;
+import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
 import ORG.oclc.oai.harvester2.verb.ListIdentifiers;
@@ -22,7 +22,7 @@ public class ListIdentifiersConnector {
         return this;
     }
 
-    public Iterator<Node> iterator() throws Exception {
+    public Iterator<Element> iterator() throws Exception {
         return new IdentifierIterator(headers, baseURL, resumptionToken);
     }
 

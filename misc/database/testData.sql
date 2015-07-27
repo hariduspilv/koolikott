@@ -346,3 +346,7 @@ insert into Material_Tag(tag, material) values(11, 5);
 insert into Material_Tag(tag, material) values(11, 6);
 insert into Material_Tag(tag, material) values(11, 7);
 insert into Material_Tag(tag, material) values(11, 8);
+
+--Repositories
+
+insert into Repository(id, baseURL, lastSynchronization, schemaName) values (1, 'http://koolitaja.eenet.ee:57219/Waramu3Web/OAIHandler', '1970-01-12 13:46:39', 'waramu');

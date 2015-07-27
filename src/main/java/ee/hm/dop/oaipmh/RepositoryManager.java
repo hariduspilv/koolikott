@@ -1,48 +1,39 @@
 package ee.hm.dop.oaipmh;
 
-import javax.inject.Inject;
+import static java.lang.String.format;
 
-import org.slf4j.LoggerFactory;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-
-import ee.hm.dop.model.Material;
-import ee.hm.dop.service.MaterialService;
+import ee.hm.dop.guice.GuiceInjector;
+import ee.hm.dop.model.Repository;
+import ee.hm.dop.oaipmh.waramu.MaterialParserWaramu;
 
 /**
  * Created by mart.laus on 14.07.2015.
  */
 public class RepositoryManager {
 
-    private static final org.slf4j.Logger logger = LoggerFactory.getLogger(IdentifierIterator.class);
-    String metadataPrefix = "oai_lom";
-    @Inject
-    private MaterialParser materialParser;
-    @Inject
-    private MaterialService materialService;
+    private static final String WARAMU_PARSER = "waramu";
 
-    public void getMaterials(String baseURL) throws Exception {
-        ListIdentifiersConnector listIdentifiersConnector = new ListIdentifiersConnector();
-        GetMaterialConnector getMaterialConnector = new GetMaterialConnector();
-        IdentifierIterator identifierIterator = (IdentifierIterator) listIdentifiersConnector
-                .connect(baseURL, metadataPrefix).iterator();
+    public MaterialIterator getMaterialsFrom(Repository repository) throws Exception {
+        MaterialIterator materialIterator = GuiceInjector.getInjector().getInstance(MaterialIterator.class);
 
-        while (identifierIterator.hasNext()) {
-            Node header = identifierIterator.next();
+        MaterialParser materialParser = getParser(repository);
+        materialIterator.setParser(materialParser);
+        materialIterator.connect(repository);
 
-            if (header.getNodeType() == Node.ELEMENT_NODE) {
-                Element eElement = (Element) header;
-                String identifier = eElement.getElementsByTagName("identifier").item(0).getTextContent();
-                Document doc = getMaterialConnector.getMaterial(baseURL, identifier, metadataPrefix);
-                Material material = null;
-                if (doc != null) {
-                    material = materialParser.parseXMLtoMaterial(doc);
-                }
-                if (material != null) {
-                    materialService.persistMaterial(material);
-                }
-            }
+        return materialIterator;
+    }
+
+    private MaterialParser getParser(Repository repository) {
+        MaterialParser parser;
+
+        switch (repository.getSchema()) {
+        case WARAMU_PARSER:
+            parser = GuiceInjector.getInjector().getInstance(MaterialParserWaramu.class);
+            break;
+        default:
+            throw new RuntimeException(format("No parser for schema %s", repository.getSchema()));
         }
+
+        return parser;
     }
 }

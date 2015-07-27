@@ -18,7 +18,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import ORG.oclc.oai.harvester2.verb.ListIdentifiers;
@@ -30,16 +29,16 @@ public class ListIdentifiersConnectorTest {
     public void iterator() throws Exception {
         ListIdentifiersConnector builder = getListIdentifiersConnector();
 
-        Element element = createMock(Element.class);
-        element.normalize();
+        Element element1 = createMock(Element.class);
+        element1.normalize();
 
-        Node node = createMock(Node.class);
+        Element element2 = createMock(Element.class);
 
         NodeList nodeList = createMock(NodeList.class);
-        expect(nodeList.item(0)).andReturn(node);
+        expect(nodeList.item(0)).andReturn(element2);
 
         Document document = createMock(Document.class);
-        expect(document.getDocumentElement()).andReturn(element);
+        expect(document.getDocumentElement()).andReturn(element1);
         expect(document.getElementsByTagName("header")).andReturn(nodeList);
 
         ListIdentifiers firstListIdentifiers = createMock(ListIdentifiers.class);
@@ -50,16 +49,16 @@ public class ListIdentifiersConnectorTest {
         String metadataPrefix = "metadataPrefix";
         expect(builder.newListIdentifier(baseURL, metadataPrefix)).andReturn(firstListIdentifiers);
 
-        replay(builder, firstListIdentifiers, element, document, nodeList, node);
+        replay(builder, firstListIdentifiers, element1, document, nodeList, element2);
 
-        Iterator<Node> result = builder.connect(baseURL, metadataPrefix).iterator();
+        Iterator<Element> result = builder.connect(baseURL, metadataPrefix).iterator();
         // This is needed to verify that correct parameters were passed to IdentifierIterator constructor
-        Node next = result.next();
+        Element next = result.next();
 
-        verify(builder, firstListIdentifiers, element, document, nodeList, node);
+        verify(builder, firstListIdentifiers, element1, document, nodeList, element2);
 
         assertTrue(result instanceof IdentifierIterator);
-        assertSame(node, next);
+        assertSame(element2, next);
     }
 
     @Test

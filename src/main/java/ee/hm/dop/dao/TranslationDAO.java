@@ -25,5 +25,5 @@ public class TranslationDAO {
         }
 
         return translationGroup;
-    };
+    }
 }

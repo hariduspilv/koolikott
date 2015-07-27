@@ -18,4 +18,20 @@ public class DbUtils {
     public static void closeEntityManager() {
         getInjector().getInstance(EntityManager.class).close();
     }
+
+    /**
+     * Rollsback transaction if transaction is marked as rollback only. Commit otherwise.
+     * <p>
+     * If transaction is not active anymore, nothing is done.
+     */
+    public static void closeTransaction() {
+        EntityTransaction transaction = getTransaction();
+        if (transaction.isActive()) {
+            if (transaction.getRollbackOnly()) {
+                transaction.rollback();
+            } else {
+                transaction.commit();
+            }
+        }
+    }
 }
