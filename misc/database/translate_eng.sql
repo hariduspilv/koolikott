@@ -67,6 +67,7 @@ insert into Translation(translationGroup, translationKey, translation) values (3
 insert into Translation(translationGroup, translationKey, translation) values (3, 'LICENSETYPE_CCBYNCND', 'CC BY-NC-ND');
 insert into Translation(translationGroup, translationKey, translation) values (3, 'LICENSETYPE_OTHER', 'Other');
 insert into Translation(translationGroup, translationKey, translation) values (3, 'MATERIAL_VIEW_TAGS', 'Tags');
+insert into Translation(translationGroup, translationKey, translation) values (3, 'SEARCH_RESULT_NO_RESULT', 'No result found for ');
 insert into Translation(translationGroup, translationKey, translation) values (3, 'SEARCH_RESULT_PART_1', 'Searching for ');
 insert into Translation(translationGroup, translationKey, translation) values (3, 'SEARCH_RESULT_PART_2', ' returned ');
 insert into Translation(translationGroup, translationKey, translation) values (3, 'SEARCH_RESULT_PART_3', ' results.');
