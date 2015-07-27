@@ -1,12 +1,18 @@
 <nav class="navbar navbar-default">
     <div class="container">
+        
         <div class="navbar-header">
-            <button data-target="#navbar-links" data-toggle="collapse" class="navbar-toggle collapsed" type="button">
+            <button data-target="#navbar-links" data-toggle="collapse" aria-expanded="false" aria-controls="navbar" class="navbar-toggle collapsed pull-left" type="button">
                 <span class="sr-only">Toggle navigation</span>
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
+            
+            <a href="#" class="visible-xs-block pull-right">
+                <i class="fa fa-search"></i>
+            </a>
+            
             <a data-ng-href="#/" class="navbar-brand"><img src="img/logo_white.svg"></a>
         </div>
         
@@ -34,7 +40,8 @@
                     </ul>
                 </li>
             </ul>
-            <div role="search" class="navbar-form navbar-right" id="search-form-main">
+            
+            <div role="search" class="navbar-form navbar-right hidden-xs hidden-sm" id="search-form-main">
                 <div class="form-group">
                     <div class="input-group">
                         <input data-ng-keydown="$event.which === 13 && search()" data-ng-model="searchQuery" type="text" placeholder="{{'SEARCH' | translate}}" class="form-control">
