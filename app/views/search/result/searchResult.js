@@ -1,48 +1,50 @@
 define(['app'], function(app)
 {
-    app.controller('searchResultController', ['$scope', "serverCallService", 'translationService', '$location', '$rootScope', '$anchorScroll', 
-             function($scope, serverCallService, translationService, $location, $rootScope, $anchorScroll) {
-    	var searchObject = $location.search();
+    app.controller('searchResultController', ['$scope', "serverCallService", 'translationService', '$location', 
+             function($scope, serverCallService, translationService, $location) {
+    	
+        // pagination variables
         $scope.paging = [];
+        $scope.paging.before = [];
+        $scope.paging.thisPage = 1;
+        $scope.paging.after = [];
+
         var RESULTS_PER_PAGE = 24;
+        var PAGES_BEFORE_THIS_PAGE = 5;
+        var PAGES_AFTER_THIS_PAGE = 4;
+        var MAX_PAGES = PAGES_BEFORE_THIS_PAGE + 1 + PAGES_AFTER_THIS_PAGE;
         var start = 0;
 
-        if (searchObject.q) {
-            $scope.searching = true;
-            $scope.searchQuery = searchObject.q;
-            if (searchObject.start && searchObject.start >= 0) {
-            	start = Math.floor(searchObject.start);
-            }
-	    	
-	    	doSearch($scope.searchQuery, start);
-	    	$rootScope.searchFields.searchQuery = searchObject.q;
-    	} else {
-            $location.url('/');
+        var searchObject = $location.search();
+
+        if (searchObject.page && searchObject.page >= 1) {
+            $scope.paging.thisPage = parseInt(searchObject.page);
+            start = RESULTS_PER_PAGE * ($scope.paging.thisPage - 1);
         }
 
-        function doSearch(q, startFrom) {
-            start = startFrom;
+        if (searchObject.q) {
+            $scope.searchQuery = searchObject.q;
+            $scope.searching = true;
             var params = {
-                'q': q,
-                'start': startFrom
+                'q': searchObject.q,
+                'start': start
             };
             serverCallService.makeGet("rest/search", params, getAllMaterialSuccess, getAllMaterialFail);
-            serverCallService.makeGet("rest/search/countResults", params, getResultCountSuccess, getResultCountFail);
-        }
-
-        function scrollToTarget(target) {
-            var old = $location.hash();
-            $location.hash(target);
-            $anchorScroll();
-            $location.hash(old);
+    	} else {
+            $location.url('/');
         }
     	
     	function getAllMaterialSuccess(data) {
             if (isEmpty(data)) {
                 log('No data returned by session search.');
             } else {
-                $scope.materials = data;
-                scrollToTarget('navmenu');
+                $scope.materials = data.materials;
+                $scope.totalResults = data.totalResults;
+                $scope.paging.totalPages = Math.ceil($scope.totalResults / RESULTS_PER_PAGE);
+                if ($scope.paging.thisPage > $scope.paging.totalPages) {
+                    $scope.paging.thisPage = $scope.paging.totalPages;
+                }
+                $scope.calculatePaging();
             }
             $scope.searching = false;
     	}
@@ -51,28 +53,14 @@ define(['app'], function(app)
             console.log('Session search failed.')
             $scope.searching = false;
     	}
-    	
-    	function getResultCountSuccess(data) {
-            if (isEmpty(data)) {
-                log('No result count returned.');
-                $scope.resultCount = 0;
-            } else {
-                $scope.resultCount = data;
-                $scope.calculatePaging();
-            }
-    	}
-    	
-    	function getResultCountFail(data, status) {
-            console.log('Failed to get result count');
-    	}
 
         $scope.getNumberOfResults = function() {
             if (!$scope.materials) {
                 return 0;
             }
             
-            if ($scope.resultCount) {
-            	return $scope.resultCount;
+            if ($scope.totalResults) {
+            	return $scope.totalResults;
             }
 
             return $scope.materials.length;
@@ -86,58 +74,34 @@ define(['app'], function(app)
         }
 
         $scope.calculatePaging = function() {
-            $scope.paging = [];
-            $scope.paging.before = [];
-            $scope.paging.thisPage = 1;
-            $scope.paging.after = [];
-            $scope.paging.last = [];
-
-            if (!$scope.resultCount) {
+            if (!$scope.totalResults) {
                 return;
             }
 
-            var pageCount = Math.ceil($scope.resultCount / RESULTS_PER_PAGE);
-            $scope.paging.pageCount = pageCount;
+            totalPages = $scope.paging.totalPages;
+            thisPage = $scope.paging.thisPage;
 
-            var thisPage = (start / RESULTS_PER_PAGE) + 1;
-            if (thisPage > pageCount) {
-                thisPage = pageCount;
-            }
-            $scope.paging.thisPage = thisPage;
-
-            var MAX_PAGES_BEFORE_DOTS = 6;
-            var MAX_PAGES_AFTER_DOTS = 3;
-            var OPTIMAL_PAGES_BEFORE_THIS_PAGE = 2;
-            var MAX_PAGES = MAX_PAGES_BEFORE_DOTS + MAX_PAGES_AFTER_DOTS + 1;
-
-            var pagesBeforeDots = 0;
-
-            if (pageCount <= MAX_PAGES) {
+            if (totalPages <= MAX_PAGES) {
                 // Display all page numbers
                 pushPageNumbers($scope.paging.before, 1, thisPage);
-                pushPageNumbers($scope.paging.after, thisPage + 1, pageCount + 1);
-
-            } else if (pageCount - (thisPage - OPTIMAL_PAGES_BEFORE_THIS_PAGE) < MAX_PAGES) {
-                // Display the last MAX_PAGES amount of pages
-                var pagesBeforeThisPage = MAX_PAGES - (pageCount - thisPage) - 1;
+                pushPageNumbers($scope.paging.after, thisPage + 1, totalPages + 1);
+            } else if (totalPages - (thisPage - PAGES_BEFORE_THIS_PAGE) < MAX_PAGES) {
+                // Display the last MAX_PAGES amount of page numbers
+                var pagesBeforeThisPage = MAX_PAGES - (totalPages - thisPage) - 1;
                 var pagesAfterThisPage = MAX_PAGES - pagesBeforeThisPage - 1;
 
                 pushPageNumbers($scope.paging.before, thisPage - pagesBeforeThisPage, thisPage);
                 pushPageNumbers($scope.paging.after, thisPage + 1, thisPage + 1 + pagesAfterThisPage);
-
             } else {
-                // Display pages, dots and more pages
-                if (thisPage <= OPTIMAL_PAGES_BEFORE_THIS_PAGE) {
-                    pagesBeforeDots += pushPageNumbers($scope.paging.before, 1, thisPage);
+                var pagesBefore = 0;
+                if (thisPage > PAGES_BEFORE_THIS_PAGE) {
+                    // Display PAGES_BEFORE_THIS_PAGE amount of page numbers, this page number and PAGES_AFTER_THIS_PAGE amount of page numbers
+                    pagesBefore += pushPageNumbers($scope.paging.before, thisPage - PAGES_BEFORE_THIS_PAGE, thisPage);
                 } else {
-                    pagesBeforeDots += pushPageNumbers($scope.paging.before, thisPage - OPTIMAL_PAGES_BEFORE_THIS_PAGE, thisPage);
+                    // Display less than PAGES_BEFORE_THIS_PAGE amount of page numbers before this page
+                    pagesBefore += pushPageNumbers($scope.paging.before, 1, thisPage);
                 }
-
-                var pagesAfterThisPage = MAX_PAGES_BEFORE_DOTS - (pagesBeforeDots + 1);
-
-                pushPageNumbers($scope.paging.after, thisPage + 1, thisPage + 1 + pagesAfterThisPage);
-                pushPageNumbers($scope.paging.last,  pageCount + 1 - MAX_PAGES_AFTER_DOTS, pageCount + 1);
-
+                pushPageNumbers($scope.paging.after, thisPage + 1, thisPage + 1 + PAGES_AFTER_THIS_PAGE + (PAGES_BEFORE_THIS_PAGE - pagesBefore));
             }
         }
 
@@ -146,18 +110,8 @@ define(['app'], function(app)
         }
 
         $scope.isNextButtonDisabled = function() {
-            return ($scope.paging.thisPage >= $scope.paging.pageCount) ? "disabled" : "";
+            return ($scope.paging.thisPage >= $scope.paging.totalPages) ? "disabled" : "";
         }
-
-        $scope.getPage = function(pageNumber) {
-            if (pageNumber >= 1 && pageNumber <= $scope.paging.pageCount) {
-                doSearch($scope.searchQuery, (pageNumber - 1) * RESULTS_PER_PAGE); 
-            }
-        }
-
-    	$scope.$on("$destroy", function() {
-    		$rootScope.searchFields.searchQuery = "";
-        });
     	
     }]);
 });
