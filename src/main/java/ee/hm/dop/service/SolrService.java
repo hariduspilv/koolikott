@@ -6,8 +6,6 @@ import static java.nio.charset.StandardCharsets.UTF_8;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
-import java.util.ArrayList;
-import java.util.List;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -17,9 +15,7 @@ import javax.ws.rs.core.MediaType;
 
 import org.apache.commons.configuration.Configuration;
 
-import ee.hm.dop.model.SearchResponse;
-import ee.hm.dop.model.SearchResponse.Document;
-import ee.hm.dop.model.SearchResponse.Response;
+import ee.hm.dop.model.solr.SearchResponse;
 
 @Singleton
 public class SolrService implements SearchEngineService {
@@ -34,30 +30,11 @@ public class SolrService implements SearchEngineService {
     private Configuration configuration;
 
     @Override
-    public List<Long> search(String query, long start) {
-        SearchResponse searchResponse = getTarget(format(SEARCH_PATH, encodeQuery(query), start)).request(
-                MediaType.APPLICATION_JSON).get(SearchResponse.class);
+    public SearchResponse search(String query, long start) {
+        SearchResponse searchResponse = getTarget(format(SEARCH_PATH, encodeQuery(query), start))
+                .request(MediaType.APPLICATION_JSON).get(SearchResponse.class);
 
-        List<Long> result = new ArrayList<>();
-
-        Response response = searchResponse.getResponse();
-        if (response != null) {
-            for (Document document : response.getDocuments()) {
-                result.add(document.getId());
-            }
-        }
-
-        return result;
-    }
-    
-    @Override
-    public long countResults(String query) {
-        SearchResponse searchResponse = getTarget(format(SEARCH_PATH, encodeQuery(query), 0)).request(
-                MediaType.APPLICATION_JSON).get(SearchResponse.class);
-
-        Response response = searchResponse.getResponse();
-        
-        return response.getResultCount();
+        return searchResponse;
     }
 
     private WebTarget getTarget(String path) {

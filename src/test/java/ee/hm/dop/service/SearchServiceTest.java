@@ -7,6 +7,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertSame;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.easymock.EasyMockRunner;
@@ -17,6 +18,10 @@ import org.junit.runner.RunWith;
 
 import ee.hm.dop.dao.MaterialDAO;
 import ee.hm.dop.model.Material;
+import ee.hm.dop.model.solr.Document;
+import ee.hm.dop.model.solr.Response;
+import ee.hm.dop.model.solr.SearchResponse;
+import ee.hm.dop.model.solr.SearchResult;
 
 @RunWith(EasyMockRunner.class)
 public class SearchServiceTest {
@@ -33,10 +38,10 @@ public class SearchServiceTest {
     @Test
     public void search() {
         String query = "people";
-        List<Long> searchResult = new ArrayList<>();
-        searchResult.add((long) 7);
-        searchResult.add((long) 1);
-        searchResult.add((long) 4);
+        long start = 0;
+
+        List<Long> documentIds = Arrays.asList(7L, 1L, 4L);
+        SearchResponse searchResponse = createSearchResponseWithDocuments(documentIds);
 
         Material material7 = new Material();
         material7.setId((long) 7);
@@ -50,19 +55,22 @@ public class SearchServiceTest {
         materials.add(material4);
         materials.add(material7);
 
-        expect(searchEngineService.search(query, 0)).andReturn(searchResult);
-        expect(materialDAO.findAllById(searchResult)).andReturn(materials);
+        expect(searchEngineService.search(query, start)).andReturn(searchResponse);
+        expect(materialDAO.findAllById(documentIds)).andReturn(materials);
 
         replayAll();
 
-        List<Material> result = searchService.search(query, 0);
+        SearchResult result = searchService.search(query, start);
 
         verifyAll();
 
-        assertEquals(3, result.size());
-        assertSame(material7, result.get(0));
-        assertSame(material1, result.get(1));
-        assertSame(material4, result.get(2));
+        assertEquals(3, result.getMaterials().size());
+        assertSame(material7, result.getMaterials().get(0));
+        assertSame(material1, result.getMaterials().get(1));
+        assertSame(material4, result.getMaterials().get(2));
+        assertEquals(3, result.getTotalResults());
+        assertEquals(start, result.getStart());
+
     }
 
     // To test asynchronous problems that may occur when search returns deleted
@@ -70,10 +78,10 @@ public class SearchServiceTest {
     @Test
     public void searchWhenDatabaseReturnsLessValuesThanSearch() {
         String query = "people";
-        List<Long> searchResult = new ArrayList<>();
-        searchResult.add((long) 7);
-        searchResult.add((long) 1);
-        searchResult.add((long) 4);
+        long start = 0;
+
+        List<Long> documentIds = Arrays.asList(7L, 1L, 4L);
+        SearchResponse searchResponse = createSearchResponseWithDocuments(documentIds);
 
         Material material7 = new Material();
         material7.setId((long) 7);
@@ -84,50 +92,54 @@ public class SearchServiceTest {
         materials.add(material4);
         materials.add(material7);
 
-        expect(searchEngineService.search(query, 0)).andReturn(searchResult);
-        expect(materialDAO.findAllById(searchResult)).andReturn(materials);
+        expect(searchEngineService.search(query, start)).andReturn(searchResponse);
+        expect(materialDAO.findAllById(documentIds)).andReturn(materials);
 
         replayAll();
 
-        List<Material> result = searchService.search(query, 0);
+        SearchResult result = searchService.search(query, start);
 
         verifyAll();
 
-        assertEquals(2, result.size());
-        assertSame(material7, result.get(0));
-        assertSame(material4, result.get(1));
+        assertEquals(2, result.getMaterials().size());
+        assertSame(material7, result.getMaterials().get(0));
+        assertSame(material4, result.getMaterials().get(1));
+        assertEquals(3, result.getTotalResults());
+        assertEquals(start, result.getStart());
     }
 
     @Test
     public void searchNoResult() {
         String query = "people";
-        List<Long> searchResult = new ArrayList<>();
 
-        expect(searchEngineService.search(query, 0)).andReturn(searchResult);
+        SearchResponse searchResponse = createSearchResponseWithDocuments(new ArrayList<>());
+
+        expect(searchEngineService.search(query, 0)).andReturn(searchResponse);
 
         replayAll();
 
-        List<Material> result = searchService.search(query, 0);
+        List<Material> result = searchService.search(query).getMaterials();
 
         verifyAll();
 
         assertEquals(0, result.size());
     }
-    
-    @Test
-    public void countResults() {
-        String query = "people";
-        long countResult = 7;
 
-        expect(searchEngineService.countResults(query)).andReturn(countResult);
+    private SearchResponse createSearchResponseWithDocuments(List<Long> documentIds) {
+        List<Document> documents = new ArrayList<>();
+        for (Long id : documentIds) {
+            Document newDocument = new Document();
+            newDocument.setId(Long.toString(id));
+            documents.add(newDocument);
+        }
 
-        replayAll();
+        Response response = new Response();
+        response.setDocuments(documents);
+        response.setTotalResults(documents.size());
+        SearchResponse searchResponse = new SearchResponse();
+        searchResponse.setResponse(response);
 
-        long result = searchService.countResults(query);
-
-        verifyAll();
-
-        assertEquals(countResult, result);
+        return searchResponse;
     }
 
     private void replayAll() {

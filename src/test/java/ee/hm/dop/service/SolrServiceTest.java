@@ -23,10 +23,9 @@ import org.easymock.TestSubject;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import ee.hm.dop.model.SearchResponse;
-import ee.hm.dop.model.SearchResponse.Document;
-import ee.hm.dop.model.SearchResponse.Response;
-import ee.hm.dop.service.SolrService;
+import ee.hm.dop.model.solr.Document;
+import ee.hm.dop.model.solr.Response;
+import ee.hm.dop.model.solr.SearchResponse;
 
 @RunWith(EasyMockRunner.class)
 public class SolrServiceTest {
@@ -47,12 +46,12 @@ public class SolrServiceTest {
     private Builder builder;
 
     private final String serverUrl = "server/url/";
-    
+
     private static final int RESULTS_PER_PAGE = 24;
 
     @Test
     public void search() {
-        int start = 0;
+        long start = 0;
         String urlQuery = "select?q=math&wt=json&start=" + start + "&rows=" + RESULTS_PER_PAGE;
         String query = "math";
 
@@ -68,24 +67,27 @@ public class SolrServiceTest {
         Document doc4 = new Document();
         doc4.setId("4");
 
-        setUpSearch(urlQuery, doc3, doc4, doc1, doc2);
+        setUpSearch(urlQuery, 4L, start, doc3, doc4, doc1, doc2);
 
         replayAll();
 
-        List<Long> result = solrService.search(query, start);
+        SearchResponse searchResponse = solrService.search(query, 0);
+        List<Document> result = searchResponse.getResponse().getDocuments();
 
         verifyAll();
 
         assertNotNull(result);
         assertEquals(4, result.size());
-        assertEquals(Long.valueOf(3), result.get(0));
-        assertEquals(Long.valueOf(4), result.get(1));
-        assertEquals(Long.valueOf(1), result.get(2));
-        assertEquals(Long.valueOf(2), result.get(3));
+        assertEquals(Long.valueOf(3), Long.valueOf(result.get(0).getId()));
+        assertEquals(Long.valueOf(4), Long.valueOf(result.get(1).getId()));
+        assertEquals(Long.valueOf(1), Long.valueOf(result.get(2).getId()));
+        assertEquals(Long.valueOf(2), Long.valueOf(result.get(3).getId()));
+        assertEquals(Long.valueOf(4), Long.valueOf(searchResponse.getResponse().getTotalResults()));
+        assertEquals(Long.valueOf(start), Long.valueOf(searchResponse.getResponse().getStart()));
     }
-    
+
     @Test
-    public void searchGetSecondPage() {      
+    public void searchGetSecondPage() {
         int start = RESULTS_PER_PAGE;
         String urlQuery = "select?q=math&wt=json&start=" + start + "&rows=" + RESULTS_PER_PAGE;
         String query = "math";
@@ -96,18 +98,21 @@ public class SolrServiceTest {
         Document doc2 = new Document();
         doc2.setId("2");
 
-        setUpSearch(urlQuery, doc2, doc1);
+        setUpSearch(urlQuery, 2L, Long.valueOf(start), doc2, doc1);
 
         replayAll();
 
-        List<Long> result = solrService.search(query, start);
+        SearchResponse searchResponse = solrService.search(query, start);
+        List<Document> result = searchResponse.getResponse().getDocuments();
 
         verifyAll();
 
         assertNotNull(result);
         assertEquals(2, result.size());
-        assertEquals(Long.valueOf(2), result.get(0));
-        assertEquals(Long.valueOf(1), result.get(1));
+        assertEquals(Long.valueOf(2), Long.valueOf(result.get(0).getId()));
+        assertEquals(Long.valueOf(1), Long.valueOf(result.get(1).getId()));
+        assertEquals(Long.valueOf(2), Long.valueOf(searchResponse.getResponse().getTotalResults()));
+        assertEquals(Long.valueOf(start), Long.valueOf(searchResponse.getResponse().getStart()));
     }
 
     @Test
@@ -115,7 +120,7 @@ public class SolrServiceTest {
         String urlQuery = "select?q=math&wt=json&start=0&rows=" + RESULTS_PER_PAGE;
         String query = "math";
 
-        noResultSearch(urlQuery, query);
+        noResultSearch(urlQuery, query, 0L);
     }
 
     @Test
@@ -123,7 +128,7 @@ public class SolrServiceTest {
         String urlQuery = "select?q=%22&wt=json&start=0&rows=" + RESULTS_PER_PAGE;
         String query = "\"";
 
-        noResultSearch(urlQuery, query);
+        noResultSearch(urlQuery, query, 0L);
     }
 
     @Test
@@ -131,7 +136,7 @@ public class SolrServiceTest {
         String urlQuery = "select?q=%22this+search%22&wt=json&start=0&rows=" + RESULTS_PER_PAGE;
         String query = "\"this search\"";
 
-        noResultSearch(urlQuery, query);
+        noResultSearch(urlQuery, query, 0L);
     }
 
     @Test
@@ -139,7 +144,7 @@ public class SolrServiceTest {
         String urlQuery = "select?q=%2Bmath+-port&wt=json&start=0&rows=" + RESULTS_PER_PAGE;
         String query = "+math -port";
 
-        noResultSearch(urlQuery, query);
+        noResultSearch(urlQuery, query, 0L);
     }
 
     @Test
@@ -157,39 +162,21 @@ public class SolrServiceTest {
 
         replayAll();
 
-        List<Long> result = solrService.search(query, 0);
+        SearchResponse resultResponse = solrService.search(query, 0);
 
         verifyAll();
 
-        assertNotNull(result);
-        assertEquals(0, result.size());
+        assertNotNull(resultResponse);
+
     }
-    
-    @Test
-    public void countResults() {
-        String urlQuery = "select?q=math&wt=json&start=0&rows=" + RESULTS_PER_PAGE;
-        String query = "math";
-        long resultCount = 10;
-        
-        setUpCountResults(urlQuery, resultCount);
+
+    private void noResultSearch(String urlQuery, String query, Long start) {
+        setUpSearch(urlQuery, 0L, start);
 
         replayAll();
 
-        long result = solrService.countResults(query);
-
-        verifyAll();
-
-        assertNotNull(result);
-        assertEquals(resultCount, result);
-        
-    }
-
-    private void noResultSearch(String urlQuery, String query) {
-        setUpSearch(urlQuery);
-
-        replayAll();
-
-        List<Long> result = solrService.search(query, 0);
+        SearchResponse searchResponse = solrService.search(query, 0);
+        List<Document> result = searchResponse.getResponse().getDocuments();
 
         verifyAll();
 
@@ -197,7 +184,7 @@ public class SolrServiceTest {
         assertEquals(0, result.size());
     }
 
-    private void setUpSearch(String urlQuery, Document... docs) {
+    private void setUpSearch(String urlQuery, Long totalResults, Long start, Document... docs) {
         List<Document> documents = new ArrayList<>();
 
         for (Document document : docs) {
@@ -206,20 +193,8 @@ public class SolrServiceTest {
 
         Response response = new Response();
         response.setDocuments(documents);
-
-        SearchResponse searchResponse = new SearchResponse();
-        searchResponse.setResponse(response);
-
-        expect(configuration.getString(SEARCH_SERVER)).andReturn(serverUrl);
-
-        expect(client.target(serverUrl + urlQuery)).andReturn(target);
-        expect(target.request(MediaType.APPLICATION_JSON)).andReturn(builder);
-        expect(builder.get(eq(SearchResponse.class))).andReturn(searchResponse);
-    }
-    
-    private void setUpCountResults(String urlQuery, long resultCount) {
-        Response response = new Response();
-        response.setResultCount(resultCount);
+        response.setTotalResults(totalResults);
+        response.setStart(start);
 
         SearchResponse searchResponse = new SearchResponse();
         searchResponse.setResponse(response);

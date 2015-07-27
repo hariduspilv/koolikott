@@ -9,6 +9,10 @@ import javax.inject.Inject;
 
 import ee.hm.dop.dao.MaterialDAO;
 import ee.hm.dop.model.Material;
+import ee.hm.dop.model.solr.Document;
+import ee.hm.dop.model.solr.Response;
+import ee.hm.dop.model.solr.SearchResponse;
+import ee.hm.dop.model.solr.SearchResult;
 
 public class SearchService {
 
@@ -18,16 +22,39 @@ public class SearchService {
     @Inject
     private MaterialDAO materialDAO;
 
-    public List<Material> search(String query, long start) {
-        List<Long> searchResult = searchEngineService.search(query, start);
+    public SearchResult search(String query) {
+        return search(query, 0);
+    }
 
-        List<Material> materials = Collections.emptyList();
-        if (!searchResult.isEmpty()) {
-            List<Material> unsortedMaterials = materialDAO.findAllById(searchResult);
-            materials = sortMaterials(searchResult, unsortedMaterials);
+    public SearchResult search(String query, long start) {
+        SearchResponse searchResponse = searchEngineService.search(query, start);
+
+        List<Long> materialIds = new ArrayList<>();
+
+        Response response = searchResponse.getResponse();
+        if (response != null) {
+            for (Document document : response.getDocuments()) {
+                materialIds.add(document.getId());
+            }
         }
 
-        return materials;
+        List<Material> materials = Collections.emptyList();
+        if (!materialIds.isEmpty()) {
+            List<Material> unsortedMaterials = materialDAO.findAllById(materialIds);
+            materials = sortMaterials(materialIds, unsortedMaterials);
+        }
+
+        SearchResult searchResult = new SearchResult();
+        searchResult.setMaterials(materials);
+        if (response != null) {
+            searchResult.setTotalResults(response.getTotalResults());
+            searchResult.setStart(response.getStart());
+        } else {
+            searchResult.setTotalResults(0);
+            searchResult.setStart(0);
+        }
+
+        return searchResult;
     }
 
     private List<Material> sortMaterials(List<Long> indexList, List<Material> unsortedMaterials) {
@@ -44,8 +71,5 @@ public class SearchService {
         sortedList.removeIf(material -> material == null);
         return sortedList;
     }
-    
-    public long countResults(String query) {
-        return searchEngineService.countResults(query);
-    }
+
 }

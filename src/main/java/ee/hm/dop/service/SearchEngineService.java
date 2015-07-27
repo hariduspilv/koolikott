@@ -1,10 +1,9 @@
 package ee.hm.dop.service;
 
-import java.util.List;
+import ee.hm.dop.model.solr.SearchResponse;
 
 public interface SearchEngineService {
 
-    public List<Long> search(String query, long start);
-    
-    public long countResults(String query);
+    public SearchResponse search(String query, long start);
+
 }

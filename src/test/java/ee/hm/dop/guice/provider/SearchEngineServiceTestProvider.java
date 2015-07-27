@@ -1,7 +1,6 @@
 package ee.hm.dop.guice.provider;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -9,6 +8,9 @@ import java.util.Map;
 import com.google.inject.Provider;
 import com.google.inject.Singleton;
 
+import ee.hm.dop.model.solr.Document;
+import ee.hm.dop.model.solr.Response;
+import ee.hm.dop.model.solr.SearchResponse;
 import ee.hm.dop.service.SearchEngineService;
 
 /**
@@ -25,38 +27,37 @@ public class SearchEngineServiceTestProvider implements Provider<SearchEngineSer
 
 class SearchEngineServiceMock implements SearchEngineService {
 
-    private static final Map<String, List<Long>> searchResults;
-    
+    private static final Map<String, List<Document>> searchResponses;
+
     private static final int RESULTS_PER_PAGE = 3;
 
     @Override
-    public List<Long> search(String query, long start) {
-        if (!searchResults.containsKey(query)) {
-            return Collections.emptyList();
+    public SearchResponse search(String query, long start) {
+        if (!searchResponses.containsKey(query)) {
+            return new SearchResponse();
         }
 
-        List<Long> allResults = searchResults.get(query);
-        List<Long> selectedResults = new ArrayList<>();
-        for (int i = 0; i < allResults.size(); i++) {
+        List<Document> allDocuments = searchResponses.get(query);
+        List<Document> selectedDocuments = new ArrayList<>();
+        for (int i = 0; i < allDocuments.size(); i++) {
             if (i >= start && i < start + RESULTS_PER_PAGE) {
-                selectedResults.add(allResults.get(i));
+                selectedDocuments.add(allDocuments.get(i));
             }
         }
-        
-        return selectedResults;
-    }
-    
-    @Override 
-    public long countResults(String query) {
-        if (!searchResults.containsKey(query)) {
-            return 0;
-        }
 
-        return searchResults.get(query).size(); 
+        Response response = new Response();
+        response.setDocuments(selectedDocuments);
+        response.setStart(start);
+        response.setTotalResults(selectedDocuments.size());
+
+        SearchResponse searchResponse = new SearchResponse();
+        searchResponse.setResponse(response);
+
+        return searchResponse;
     }
 
     static {
-        searchResults = new HashMap<>();
+        searchResponses = new HashMap<>();
 
         addArabicQuery();
         addBigQuery();
@@ -64,19 +65,23 @@ class SearchEngineServiceMock implements SearchEngineService {
 
     private static void addArabicQuery() {
         String arabicQuery = "المدرسية";
-        ArrayList<Long> arabicSearchResult = new ArrayList<>();
-        arabicSearchResult.add((long) 3);
+        ArrayList<Document> arabicSearchResult = new ArrayList<>();
+        Document newDocument = new Document();
+        newDocument.setId("3");
+        arabicSearchResult.add(newDocument);
 
-        searchResults.put(arabicQuery, arabicSearchResult);
+        searchResponses.put(arabicQuery, arabicSearchResult);
     }
-    
+
     private static void addBigQuery() {
         String bigQuery = "thishasmanyresults";
-        ArrayList<Long> bigSearchResults = new ArrayList<>();
+        ArrayList<Document> bigQueryDocuments = new ArrayList<>();
         for (long i = 0; i < 8; i++) {
-            bigSearchResults.add(i);
+            Document newDocument = new Document();
+            newDocument.setId(Long.toString(i));
+            bigQueryDocuments.add(newDocument);
         }
-        
-        searchResults.put(bigQuery, bigSearchResults);
+
+        searchResponses.put(bigQuery, bigQueryDocuments);
     }
 }

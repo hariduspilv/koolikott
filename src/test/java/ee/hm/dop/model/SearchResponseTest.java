@@ -14,7 +14,8 @@ import org.junit.runner.RunWith;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import ee.hm.dop.common.test.GuiceTestRunner;
-import ee.hm.dop.model.SearchResponse.Document;
+import ee.hm.dop.model.solr.Document;
+import ee.hm.dop.model.solr.SearchResponse;
 
 /**
  * Tests JSON deserialization
@@ -80,6 +81,8 @@ public class SearchResponseTest {
         assertEquals(3, documents.get(5).getId());
         assertEquals(7, documents.get(6).getId());
         assertEquals(8, documents.get(7).getId());
+        assertEquals(8, searchResponse.getResponse().getTotalResults());
+        assertEquals(0, searchResponse.getResponse().getStart());
     }
 
     @Test
@@ -107,21 +110,16 @@ public class SearchResponseTest {
         assertNotNull(searchResponse.getResponse());
         assertNotNull(searchResponse.getResponse().getDocuments());
         assertEquals(0, searchResponse.getResponse().getDocuments().size());
+        assertEquals(0, searchResponse.getResponse().getTotalResults());
+        assertEquals(0, searchResponse.getResponse().getStart());
     }
 
     @Test
     public void deserializeErrorResponse() throws Exception {
-        String searchResult = "{\n"
-                + "        \"responseHeader\": {\n"
-                + "          \"status\": 400,\n"
-                + "          \"QTime\": 1,\n"
-                + "          \"params\": {\n"
-                + "            \"q\": \"\\\"\",\n"
-                + "            \"wt\": \"json\",\n"
-                + "            \"_\": \"1435934978154\"\n"
-                + "          }\n"
-                + "        },\n"
-                + "        \"error\": {\n"
+        String searchResult = "{\n" + "        \"responseHeader\": {\n" + "          \"status\": 400,\n"
+                + "          \"QTime\": 1,\n" + "          \"params\": {\n" + "            \"q\": \"\\\"\",\n"
+                + "            \"wt\": \"json\",\n" + "            \"_\": \"1435934978154\"\n" + "          }\n"
+                + "        },\n" + "        \"error\": {\n"
                 + "          \"msg\": \"org.apache.solr.search.SyntaxError: Cannot parse '\\\"': Lexical error at line 1, column 2.  Encountered: <EOF> after : \\\"\\\"\",\n"
                 + "          \"code\": 400\n" + "        }\n" + "      }";
 
