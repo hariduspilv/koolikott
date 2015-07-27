@@ -2,8 +2,8 @@ define(['app'], function(app)
 {
     app.controller('searchResultController', ['$scope', "serverCallService", 'translationService', '$location', '$rootScope', 
              function($scope, serverCallService, translationService, $location, $rootScope) {
-    	
-        // pagination variables
+        
+        // Pagination variables
         $scope.paging = [];
         $scope.paging.before = [];
         $scope.paging.thisPage = 1;
@@ -17,11 +17,13 @@ define(['app'], function(app)
 
         var searchObject = $location.search();
 
+        // Get current page
         if (searchObject.page && searchObject.page >= 1) {
             $scope.paging.thisPage = parseInt(searchObject.page);
             start = RESULTS_PER_PAGE * ($scope.paging.thisPage - 1);
         }
 
+        // Get search results
         if (searchObject.q) {
             $scope.searching = true;
             var params = {
@@ -29,12 +31,12 @@ define(['app'], function(app)
                 'start': start
             };
             serverCallService.makeGet("rest/search", params, getAllMaterialSuccess, getAllMaterialFail);
-	    	$rootScope.searchFields.searchQuery = searchObject.q;
-    	} else {
+            $rootScope.searchFields.searchQuery = searchObject.q;
+        } else {
             $location.url('/');
         }
-    	
-    	function getAllMaterialSuccess(data) {
+        
+        function getAllMaterialSuccess(data) {
             if (isEmpty(data)) {
                 log('No data returned by session search.');
             } else {
@@ -47,12 +49,12 @@ define(['app'], function(app)
                 $scope.calculatePaging();
             }
             $scope.searching = false;
-    	}
-    	
-    	function getAllMaterialFail(data, status) {
+        }
+        
+        function getAllMaterialFail(data, status) {
             console.log('Session search failed.')
             $scope.searching = false;
-    	}
+        }
 
         $scope.getNumberOfResults = function() {
             if (!$scope.materials) {
@@ -60,7 +62,7 @@ define(['app'], function(app)
             }
             
             if ($scope.totalResults) {
-            	return $scope.totalResults;
+                return $scope.totalResults;
             }
 
             return $scope.materials.length;
@@ -105,6 +107,13 @@ define(['app'], function(app)
             }
         }
 
+        $scope.getPageLink = function(page) {
+            if (page >= 1 && page <= $scope.paging.totalPages) {
+                return "/#/search/result?q=" + searchObject.q + "&page=" + page;
+            }
+            return "";
+        }
+
         $scope.isPreviousButtonDisabled = function() {
             return (start == 0) ? "disabled" : "";
         }
@@ -113,9 +122,19 @@ define(['app'], function(app)
             return ($scope.paging.thisPage >= $scope.paging.totalPages) ? "disabled" : "";
         }
 
-    	$scope.$on("$destroy", function() {
-    		$rootScope.searchFields.searchQuery = "";
+        $scope.goToPage = function(page) {
+            if (page >= 1 && page <= $scope.paging.totalPages) {
+                var params = {
+                    'q': searchObject.q,
+                    'page': page
+                };
+                $location.url("/search/result").search(params);
+            }
+        }
+
+        $scope.$on("$destroy", function() {
+            $rootScope.searchFields.searchQuery = "";
         });
-    	
+        
     }]);
 });
