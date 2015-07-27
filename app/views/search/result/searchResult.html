@@ -5,6 +5,10 @@
                 <div class="row row-material">
                     <div class="heading">
                         <h1 data-ng-if="!searching">
+                            <span data-ng-if="getNumberOfResults() < 1">
+                                <span data-translate="SEARCH_RESULT_NO_RESULT"></span>
+                                <strong><span data-ng-bind="searchQuery"></span></strong>.
+                            </span>
                             <span data-ng-if="getNumberOfResults() === 1">
                                 <span data-translate="SEARCH_RESULT_1_RESULT_PART_1"></span>
                                 <strong><span data-ng-bind="searchQuery"></span></strong>
