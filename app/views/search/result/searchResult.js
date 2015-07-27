@@ -1,8 +1,8 @@
 define(['app'], function(app)
 {
-    app.controller('searchResultController', ['$scope', "serverCallService", 'translationService', '$location', '$rootScope', 
-             function($scope, serverCallService, translationService, $location, $rootScope) {
-        
+    app.controller('searchResultController', ['$scope', "serverCallService", 'translationService', '$location', 
+             function($scope, serverCallService, translationService, $location) {
+    	
         // Pagination variables
         $scope.paging = [];
         $scope.paging.before = [];
@@ -25,14 +25,14 @@ define(['app'], function(app)
 
         // Get search results
         if (searchObject.q) {
+            $scope.searchQuery = searchObject.q;
             $scope.searching = true;
             var params = {
                 'q': searchObject.q,
                 'start': start
             };
             serverCallService.makeGet("rest/search", params, getAllMaterialSuccess, getAllMaterialFail);
-            $rootScope.searchFields.searchQuery = searchObject.q;
-        } else {
+    	} else {
             $location.url('/');
         }
         
@@ -132,9 +132,5 @@ define(['app'], function(app)
             }
         }
 
-        $scope.$on("$destroy", function() {
-            $rootScope.searchFields.searchQuery = "";
-        });
-        
     }]);
 });

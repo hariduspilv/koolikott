@@ -1,13 +1,19 @@
 define(['app'], function(app)
 {
     
-    app.directive('dopHeader', function(translationService) {
+    app.directive('dopHeader', ['translationService', '$location', function(translationService, $location) {
         return {
             scope: true,
             templateUrl: 'app/directives/header/header.html',
             controller: function ($scope, $location, $rootScope) {
                 $scope.showLanguageSelection = false;
                 $scope.selectedLanguage = translationService.getLanguage();
+                
+                $scope.searchQuery = "";
+                var searchObject = $location.search();
+                if (searchObject.q) {
+                    $scope.searchQuery = searchObject.q;
+                }
 	        
                 $scope.languageSelectClick = function() {
                     $scope.showLanguageSelection = !$scope.showLanguageSelection; 
@@ -25,17 +31,14 @@ define(['app'], function(app)
                     $scope.showLanguageSelection = false;
                 }
                 
-                $rootScope.searchFields = {};
-                
                 $scope.search = function() {
-                    if (!isEmpty($rootScope.searchFields.searchQuery)) {
-                        $location.url("search/result?q=" + $rootScope.searchFields.searchQuery)
+                    if (!isEmpty($scope.searchQuery)) {
+                        $location.url("search/result?q=" + $scope.searchQuery)
                     }
                 }
-
             }
         };
-    });
+    }]);
     
     return app;
 });
