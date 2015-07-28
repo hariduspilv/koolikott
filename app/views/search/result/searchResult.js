@@ -117,7 +117,6 @@ define(['app'], function(app)
         }
 
         function showMiddlePages() {
-            var pagesBefore = 0;
             // Display PAGES_BEFORE_THIS_PAGE amount of page numbers, this page number and PAGES_AFTER_THIS_PAGE amount of page numbers
             pushPageNumbers($scope.paging.before, $scope.paging.thisPage - PAGES_BEFORE_THIS_PAGE, $scope.paging.thisPage);
             pushPageNumbers($scope.paging.after, $scope.paging.thisPage + 1, $scope.paging.thisPage + 1 + PAGES_AFTER_THIS_PAGE);
