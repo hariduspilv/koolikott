@@ -41,13 +41,13 @@
                                 </a>
                             </li>
                             <li data-ng-repeat="page in paging.before">
-                                <a href="{{getPageLink(page)}}" data-ng-bind="page"></a>
+                                <a href="#/search/result?q={{searchQuery}}&amp;page={{page}}" data-ng-bind="page"></a>
                             </li>
 
                             <li class="active"><span data-ng-bind="paging.thisPage"></span></li>
 
                             <li data-ng-repeat="page in paging.after">
-                                <a href="{{getPageLink(page)}}" data-ng-bind="page"></a>
+                                <a href="#/search/result?q={{searchQuery}}&amp;page={{page}}" data-ng-bind="page"></a>
                             </li>
 
                             <li class="{{isNextButtonDisabled()}}">
