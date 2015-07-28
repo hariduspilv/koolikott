@@ -52,13 +52,13 @@
 
 .material-taping {
     
-    @media screen and (max-width: $screen-xs) {
+    @media screen and (max-width: $screen-sm) {
         height: 400px; overflow-x: auto; overflow-y: hidden;
     }
                   
     .material {
 
-        @media screen and (max-width: $screen-xs) {
+        @media screen and (max-width: $screen-sm) {
             float: left;
         }
         
