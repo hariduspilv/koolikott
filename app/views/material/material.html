@@ -112,7 +112,7 @@
                                 <span data-translate="MATERIAL_VIEW_TAGS"></span>:
                             </div>	
                             <span data-ng-repeat="tag in material.tags">
-                                <span data-ng-bind="tag.name" class="item"></span>
+                                <a data-ng-bind="tag.name" class="item" href="#"></a>
                             </span>
                             <span data-ng-if="isNullOrZeroLength(material.tags)" data-translate="UNKNOWN">Unknown</span>
                         </div>
