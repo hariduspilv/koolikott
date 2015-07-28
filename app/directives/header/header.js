@@ -29,29 +29,25 @@ define(['app'], function(app)
                     $scope.$apply(function() {
                         $scope.showLanguageSelection = false;
                     });
-                }
+                };
 
                 $scope.closeSearchBox = function () {
-                    $scope.$apply(function() {
-                        $scope.showSearchBox = false;
-                        jQuery('.modal-backdrop').fadeOut();
-                    });
-                    
-                }
+                    $scope.showSearchBox = false;
+                    jQuery('.modal-backdrop').fadeOut();
+                };
                 
                 $scope.setLanguage = function(language) {
                     translationService.setLanguage(language);
                     $scope.selectedLanguage = language;
                     $scope.showLanguageSelection = false;
-                }
+                };
                 
                 $scope.search = function() {
                     $scope.closeSearchBox();
                     if (!isEmpty($scope.searchQuery)) {
-                        
                         $location.url("search/result?q=" + $scope.searchQuery);
                     }
-                }
+                };
             }
         };
     }]);
