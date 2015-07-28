@@ -9,9 +9,21 @@
                 <span class="icon-bar"></span>
             </button>
             
-            <a href="#" class="navbar-search-toggle visible-xs-block pull-right">
+            <a data-ng-click="showSearchBoxClick()" class="navbar-search-toggle visible-xs-block pull-right">
                 <i class="fa fa-search"></i>
             </a>
+            
+            <div data-ng-show="showSearchBox">
+                <div class="form-group">
+                    <div class="input-group">
+                        <input data-ng-keydown="$event.which === 13 && search()" data-ng-model="searchQuery" type="text" placeholder="{{'SEARCH' | translate}}" class="form-control">
+                        <span class="input-group-btn">
+                            <button data-ng-click="search()" class="btn btn-default" type="submit"><i class="fa fa-search"></i></button>
+                        </span>
+                        <span class="input-group-addon hidden"><a href="">Täpne otsing</a></span>
+                    </div>
+                </div>
+            </div>
             
             <a data-ng-href="#/" class="navbar-brand"><img src="img/logo_white.svg"></a>
         </div>

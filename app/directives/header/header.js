@@ -7,6 +7,7 @@ define(['app'], function(app)
             templateUrl: 'app/directives/header/header.html',
             controller: function ($scope, $location, $rootScope) {
                 $scope.showLanguageSelection = false;
+                $scope.showSearchBox = false;
                 $scope.selectedLanguage = translationService.getLanguage();
                 
                 $scope.searchQuery = "";
@@ -18,10 +19,21 @@ define(['app'], function(app)
                 $scope.languageSelectClick = function() {
                     $scope.showLanguageSelection = !$scope.showLanguageSelection; 
                 };
-
+                
+                $scope.showSearchBoxClick = function() {
+                    $scope.showSearchBox = !$scope.showSearchBox;
+                    jQuery('<div class="modal-backdrop fade in"></div>').appendTo(document.body);
+                };
+                
                 $scope.closeLanguageSelection = function () {
                     $scope.$apply(function() {
                         $scope.showLanguageSelection = false;
+                    });
+                }
+
+                $scope.closeSearchBox = function () {
+                    $scope.$apply(function() {
+                        $scope.showSearchBox = false;
                     });
                 }
                 
