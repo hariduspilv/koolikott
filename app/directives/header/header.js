@@ -22,7 +22,7 @@ define(['app'], function(app)
                 
                 $scope.showSearchBoxClick = function() {
                     $scope.showSearchBox = !$scope.showSearchBox;
-                    jQuery('<div class="modal-backdrop fade in hidden-md hidden-lg" data-ng-click="closeSearchBox()"></div>').appendTo(document.body);
+                    jQuery('<div class="modal-backdrop fade in hidden-md hidden-lg"></div>').appendTo(document.body);
                 };
                 
                 $scope.closeLanguageSelection = function () {
@@ -34,10 +34,9 @@ define(['app'], function(app)
                 $scope.closeSearchBox = function () {
                     $scope.$apply(function() {
                         $scope.showSearchBox = false;
-                        jQuery('.modal-backdrop').remove();
-                        
+                        jQuery('.modal-backdrop').fadeOut();
                     });
-                    alert('s');
+                    
                 }
                 
                 $scope.setLanguage = function(language) {
@@ -47,8 +46,10 @@ define(['app'], function(app)
                 }
                 
                 $scope.search = function() {
+                    $scope.closeSearchBox();
                     if (!isEmpty($scope.searchQuery)) {
-                        $location.url("search/result?q=" + $scope.searchQuery)
+                        
+                        $location.url("search/result?q=" + $scope.searchQuery);
                     }
                 }
             }

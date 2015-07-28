@@ -1,7 +1,7 @@
-<div data-ng-show="showSearchBox" class="navbar-searchbox hidden-md hidden-lg">
+<div data-ng-show="showSearchBox" class="navbar-searchbox hidden-md hidden-lg" data-click-outside="closeSearchBox()" data-outside-if-not="SearchBoxShow, SearchBoxMob">
     <div class="form-group">
         <div class="input-group">
-            <input data-ng-keydown="$event.which === 13 && search()" data-ng-model="searchQuery" type="text" placeholder="{{'SEARCH' | translate}}" class="form-control">
+            <input data-ng-keydown="$event.which === 13 && search()" data-ng-model="searchQuery" type="text" placeholder="{{'SEARCH' | translate}}" class="form-control" id="SearchBoxMob">
             <span class="input-group-btn">
                 <button data-ng-click="search()" class="btn btn-default" type="submit"><i class="fa fa-search"></i></button>
             </span>
@@ -20,7 +20,7 @@
                 <span class="icon-bar"></span>
             </button>
             
-            <a data-ng-click="showSearchBoxClick()" class="navbar-search-toggle visible-xs-block pull-right">
+            <a data-ng-click="showSearchBoxClick()" id="SearchBoxShow" class="navbar-search-toggle visible-xs-block pull-right">
                 <i class="fa fa-search"></i>
             </a>
             
