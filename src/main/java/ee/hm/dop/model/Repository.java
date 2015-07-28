@@ -74,8 +74,8 @@ public class Repository {
     @Override
     public String toString() {
         return new ToStringBuilder(this, SHORT_PREFIX_STYLE).append(id) //
-                .append(baseURL) //
                 .append(schema) //
+                .append(baseURL) //
                 .build();
     }
 }
