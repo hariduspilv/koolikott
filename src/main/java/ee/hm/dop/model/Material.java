@@ -120,7 +120,7 @@ public class Material {
     private DateTime updated;
 
     @Column
-    private Long views;
+    private Long views = Long.valueOf(0);
 
     @ManyToMany(fetch = EAGER, cascade = CascadeType.PERSIST)
     @JoinTable(

@@ -316,7 +316,7 @@ insert into Tag(id, name) values (2, 'põhikool');
 insert into Tag(id, name) values (3, 'õpik');
 insert into Tag(id, name) values (4, 'mathematics');
 insert into Tag(id, name) values (5, 'book');
-insert into Tag(id, name) values (6, 'Математика');
+insert into Tag(id, name) values (6, 'математика');
 insert into Tag(id, name) values (7, 'учебник');
 insert into Tag(id, name) values (8, 'لرياضيات');
 insert into Tag(id, name) values (9, 'لكتب');
