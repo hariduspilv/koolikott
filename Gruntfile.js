@@ -82,7 +82,7 @@ module.exports = function(grunt) {
                     archive: 'dop.tar.gz',
                     mode: 'tgz'
                 },
-                src: ['app/**/*', 'assets/**/*', 'img/**/*', 'index.html']
+                src: ['app/**/*', 'assets/**/*', 'img/**/*', 'index.html', 'favicon.ico']
             }
         },
         bower: {
