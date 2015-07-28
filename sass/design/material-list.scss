@@ -50,6 +50,23 @@
     
 }
 
+.material-taping {
+    
+    @media screen and (max-width: $screen-xs) {
+        height: 400px; overflow-x: auto; overflow-y: hidden;
+    }
+                  
+    .material {
+
+        @media screen and (max-width: $screen-xs) {
+            float: left;
+        }
+        
+    }
+
+
+}
+
 .material {
     
     .block {margin-bottom: 20px; @include border-radius(3px); @include box-shadow(0, 0, 2px, 0, #999); background: #FFF; overflow: hidden;
