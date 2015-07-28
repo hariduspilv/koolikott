@@ -125,6 +125,7 @@
    <!-- Material -->
    <field name="title" type="text_general" indexed="true" stored="false" multiValued="true"/>
    <field name="description" type="text_general" indexed="true" stored="false" multiValued="true"/>
+   <field name="author" type="text_general" indexed="true" stored="false" multiValued="true"/>
    <field name="author_name" type="text_general" indexed="true" stored="false" multiValued="true"/>
    <field name="author_surname" type="text_general" indexed="true" stored="false" multiValued="true"/>
 
