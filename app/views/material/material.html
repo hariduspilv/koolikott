@@ -39,7 +39,7 @@
                         </div>
                         <div class="authors">
                             <span data-ng-repeat="author in material.authors" class="item">
-                                <span data-ng-bind="author.name"></span> <span data-ng-bind="author.surname"></span>
+                                <a href=""><span data-ng-bind="author.name"></span> <span data-ng-bind="author.surname"></span></a>
                             </span>
                         </div>
 
@@ -112,7 +112,7 @@
                                 <span data-translate="MATERIAL_VIEW_TAGS"></span>:
                             </div>	
                             <span data-ng-repeat="tag in material.tags">
-                                <a data-ng-bind="tag.name" class="item" href="#"></a>
+                                <span data-ng-bind="tag.name" class="item"></span>
                             </span>
                             <span data-ng-if="isNullOrZeroLength(material.tags)" data-translate="UNKNOWN">Unknown</span>
                         </div>
