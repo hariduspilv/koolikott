@@ -67,13 +67,13 @@ insert into Translation(translationGroup, translationKey, translation) values (2
 insert into Translation(translationGroup, translationKey, translation) values (2, 'LICENSETYPE_CCBYNCND', 'CC BY-NC-ND');
 insert into Translation(translationGroup, translationKey, translation) values (2, 'LICENSETYPE_OTHER', 'Другой');
 insert into Translation(translationGroup, translationKey, translation) values (2, 'MATERIAL_VIEW_TAGS', 'Ключевые слова');
-insert into Translation(translationGroup, translationKey, translation) values (2, 'SEARCH_RESULT_NO_RESULT', 'Не результат не найден для ');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'SEARCH_RESULT_NO_RESULT', 'Результатов не найдено при поиске ');
 insert into Translation(translationGroup, translationKey, translation) values (2, 'SEARCH_RESULT_PART_1', 'Поиск ');
 insert into Translation(translationGroup, translationKey, translation) values (2, 'SEARCH_RESULT_PART_2', ' найдено ');
 insert into Translation(translationGroup, translationKey, translation) values (2, 'SEARCH_RESULT_PART_3', ' результата.');
-insert into Translation(translationGroup, translationKey, translation) values (2, 'SEARCH_RESULT_1_RESULT_PART_1', 'Поиск ');
-insert into Translation(translationGroup, translationKey, translation) values (2, 'SEARCH_RESULT_1_RESULT_PART_2', ' дал ');
-insert into Translation(translationGroup, translationKey, translation) values (2, 'SEARCH_RESULT_1_RESULT_PART_3', ' результат.');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'SEARCH_RESULT_1_RESULT_PART_1', 'При поиске ');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'SEARCH_RESULT_1_RESULT_PART_2', ' найденное количество результатов: ');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'SEARCH_RESULT_1_RESULT_PART_3', '.');
 insert into Translation(translationGroup, translationKey, translation) values (2, 'COPYRIGHT_FOOTER', '© 2016 Все права защищены. Министерство образования и науки');
 insert into Translation(translationGroup, translationKey, translation) values (2, 'SEARCH_RESULT_PREVIOUS', 'Предыдущая');
 insert into Translation(translationGroup, translationKey, translation) values (2, 'SEARCH_RESULT_NEXT', 'Следующий');
