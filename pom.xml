@@ -90,6 +90,12 @@
             <artifactId>log4j-core</artifactId>
             <version>${log4j.version}</version>
         </dependency>
+        <!-- Needed for Hibernate to use slf4j -->
+        <dependency>
+            <groupId>org.jboss.logging</groupId>
+            <artifactId>jboss-logging</artifactId>
+            <version>3.3.0.Final</version>
+        </dependency>
         <!-- Needed for oclc-harvester2 -->
         <dependency>
             <groupId>org.apache.logging.log4j</groupId>

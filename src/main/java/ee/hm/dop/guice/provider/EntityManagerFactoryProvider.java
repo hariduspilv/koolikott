@@ -53,7 +53,7 @@ public class EntityManagerFactoryProvider implements Provider<EntityManagerFacto
         Map<String, String> properties = new HashMap<>();
         properties.put("hibernate.connection.driver_class", "com.mysql.jdbc.Driver");
         properties.put("hibernate.dialect", "org.hibernate.dialect.MySQLDialect");
-        properties.put("hibernate.show_sql", "true");
+        properties.put("hibernate.show_sql", "false");
         properties.put("hibernate.hbm2ddl.auto", "validate");
 
         properties.put("hibernate.c3p0.min_size", "5");
