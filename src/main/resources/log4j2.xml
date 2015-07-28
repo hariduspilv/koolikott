@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="WARN">
+ <Properties>
+    <Property name="logDir">./logs/</Property>
+    <Property name="pattern">%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n</Property>
+  </Properties>
+  <Appenders>
+    <Console name="Console" target="SYSTEM_OUT">
+      <PatternLayout pattern="${pattern}"/>
+    </Console>
+    <File name="MaterialImport" fileName="${logDir}materialImport.log">
+      <PatternLayout pattern="${pattern}"/>
+    </File>
+    <File name="Hibernate" fileName="${logDir}hibernate.log">
+      <PatternLayout pattern="${pattern}"/>
+    </File>
+  </Appenders>
+  <Loggers>
+    <Logger name="ee.hm.dop.oaipmh" level="debug" additivity="false">
+      <AppenderRef ref="MaterialImport"/>
+    </Logger>
+    <Logger name="ee.hm.dop.service.RepositoryService" level="debug" additivity="false">
+      <AppenderRef ref="MaterialImport"/>
+    </Logger>
+    <Root level="INFO">
+      <AppenderRef ref="Console"/>
+    </Root>
+  </Loggers>
+</Configuration>
