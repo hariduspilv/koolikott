@@ -13,6 +13,9 @@
                     <field column="fullname" name="author" />
                 </entity>
             </entity>
+            <entity name="Material_Tag" query="select tag as tag_id from Material_Tag where material='${Material.id}'">
+                <entity name="Tag" query="select name as tag from Tag where id = '${Material_Tag.tag_id}'" />
+            </entity>
         </entity>
     </document>
 </dataConfig>
