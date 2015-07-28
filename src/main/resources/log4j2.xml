@@ -5,9 +5,9 @@
     <Property name="pattern">%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n</Property>
   </Properties>
   <Appenders>
-    <Console name="Console" target="SYSTEM_OUT">
+    <File name="Standard" fileName="${logDir}dop.log">
       <PatternLayout pattern="${pattern}"/>
-    </Console>
+    </File>
     <File name="MaterialImport" fileName="${logDir}materialImport.log">
       <PatternLayout pattern="${pattern}"/>
     </File>
@@ -23,7 +23,7 @@
       <AppenderRef ref="MaterialImport"/>
     </Logger>
     <Root level="INFO">
-      <AppenderRef ref="Console"/>
+      <AppenderRef ref="Standard"/>
     </Root>
   </Loggers>
 </Configuration>
