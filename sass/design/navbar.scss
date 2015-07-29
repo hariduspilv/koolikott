@@ -2,9 +2,9 @@
     
     .input-group {padding: 7px 13px; bordr: 1px solid $navbar-default-bg; @include border-radius(3px); @include box-shadow(0, 0, 2px, 0, rgba(0, 0, 0, 0.4)); background: #FFF;
         
-        .form-control {width: 100%; height: 23px; margin: 0; padding: 4px 0; border: 0; border-bottom: 1px solid #92c8d9; @include box-shadow(0, 0, 0, 0, #FFF); font-size: 15px}
+        .form-control {width: 100%; height: 23px; margin: 0; padding: 0; border: 0; border-bottom: 1px solid $navbar-light-bg; @include box-shadow(0, 0, 0, 0, #FFF); font-size: 15px}
         
-        .input-group-btn {border-bottom: 1px solid #92c8d9;
+        .input-group-btn {border-bottom: 1px solid $navbar-light-bg;
             
             button {padding: 1px 11px; border: 0; background: #FFF; font-size: 14px; color: $navbar-default-bg}
         }
@@ -64,7 +64,7 @@
     
 }
 
-.navbar-default {@include box-shadow(0, -3px, 2px, -3px, #3f7b8f, true)}
+.navbar-default {@include box-shadow(0, -3px, 3px, -3px, rgba(0, 0, 0, 0.2), true)}
 
 .navbar-nav {margin-left: 20px !important;
     
@@ -72,7 +72,7 @@
         
         > a {width: 90px; padding-top: 26.5px; padding-bottom: 27.5px; 
              
-            > span {padding-bottom: 4px; border-bottom: 1px solid #92c8d9}
+            > span {padding-bottom: 4px; border-bottom: 1px solid $navbar-light-bg}
         
         }
         
@@ -87,13 +87,13 @@
         
     }
     
-    .navbar-submenu {position: absolute; top: 16.5px; padding: 8px 0; @include border-radius(3px); @include box-shadow(0, 0, 2px, 0, rgba(0, 0, 0, 0.12)); background: #2d7085; list-style: none; z-index: 10;
+    .navbar-submenu {position: absolute; top: 16.5px; padding: 8px 0; @include border-radius(3px); @include box-shadow(0, 0, 2px, 0, rgba(0, 0, 0, 0.12)); background: $navbar-dark-bg; list-style: none; z-index: 10;
         
         > li:first-child {
             
             a {margin-bottom: 10px;
                 
-                span {display: inline-block; padding-bottom: 3px; border-bottom: 1px solid #92c8d9;
+                span {display: inline-block; padding-bottom: 3px; border-bottom: 1px solid $navbar-light-bg;
                 
                     .fa {margin-left: 25px}
                     
