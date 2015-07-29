@@ -1,7 +1,7 @@
 define(['app'], function(app)
 {
-    app.controller('materialController', ['$scope', 'serverCallService', '$route', 'translationService', '$rootScope',
-    		 function($scope, serverCallService, $route, translationService, $rootScope) {
+    app.controller('materialController', ['$scope', 'serverCallService', '$route', 'translationService', '$rootScope', 'searchService', '$location',
+    		 function($scope, serverCallService, $route, translationService, $rootScope, searchService, $location) {
     	
     	var materialId = $route.current.params.materialId;
         var params = {};
@@ -98,6 +98,10 @@ define(['app'], function(app)
         $scope.isNullOrZeroLength = function (arg) {
         	return !arg || !arg.length;
         }
-        
+
+        $scope.getAuthorSearchURL = function (firstName, surName) {
+            searchService.setSearch('author:"' + firstName + " " + surName + '"');
+            $location.url(searchService.getURL());
+        }
     }]);
 });

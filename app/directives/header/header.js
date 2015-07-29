@@ -1,7 +1,8 @@
 define(['app'], function(app)
 {
     
-    app.directive('dopHeader', ['translationService', '$location', function(translationService, $location) {
+    app.directive('dopHeader', ['translationService', '$location', 'searchService', '$rootScope',
+     function(translationService, $location, searchService, $rootScope) {
         return {
             scope: true,
             templateUrl: 'app/directives/header/header.html',
@@ -9,13 +10,9 @@ define(['app'], function(app)
                 $scope.showLanguageSelection = false;
                 $scope.showSearchBox = false;
                 $scope.selectedLanguage = translationService.getLanguage();
-                
-                $scope.searchQuery = "";
-                var searchObject = $location.search();
-                if (searchObject.q) {
-                    $scope.searchQuery = searchObject.q;
-                }
-	        
+                $rootScope.searchFields = {};
+                $rootScope.searchFields.searchQuery = searchService.getQuery();
+
                 $scope.languageSelectClick = function() {
                     $scope.showLanguageSelection = !$scope.showLanguageSelection; 
                 };
@@ -44,10 +41,14 @@ define(['app'], function(app)
                 
                 $scope.search = function() {
                     $scope.closeSearchBox();
-                    if (!isEmpty($scope.searchQuery)) {
-                        $location.url("search/result?q=" + $scope.searchQuery);
+                    console.log($rootScope.searchFields.searchQuery);
+                    if (!isEmpty($rootScope.searchFields.searchQuery)) {
+                        console.log($rootScope.searchFields.searchQuery);
+                        searchService.setSearch($rootScope.searchFields.searchQuery);
+                        $location.url(searchService.getURL());
                     }
                 };
+
             }
         };
     }]);

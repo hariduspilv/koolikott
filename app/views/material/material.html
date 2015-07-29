@@ -39,7 +39,7 @@
                         </div>
                         <div class="authors">
                             <span data-ng-repeat="author in material.authors" class="item">
-                                <a href=""><span data-ng-bind="author.name"></span> <span data-ng-bind="author.surname"></span></a>
+                                <a data-ng-click="getAuthorSearchURL(author.name, author.surname)"><span data-ng-bind="author.name"></span> <span data-ng-bind="author.surname"></span></a>
                             </span>
                         </div>
 
