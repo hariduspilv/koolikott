@@ -3,18 +3,14 @@ define(['app'], function(app)
     app.controller('materialController', ['$scope', 'serverCallService', '$route', 'translationService', '$rootScope', 'searchService', '$location',
     		 function($scope, serverCallService, $route, translationService, $rootScope, searchService, $location) {
     	
-    	var materialId = $route.current.params.materialId;
-        var params = {};
         if ($rootScope.savedMaterial){
             $scope.material = $rootScope.savedMaterial;
             init();
         } else {
+            var materialId = $route.current.params.materialId;
+            var params = {};
             serverCallService.makeGet("rest/material?materialId=" + materialId, params, getMaterialSuccess, getMaterialFail); 
         }
-        
-        function countViewSuccess(data) { }
-        
-        function countViewFail(data, status) { }
     	
         function getMaterialSuccess(material) {
             if (isEmpty(material)) {
@@ -35,6 +31,10 @@ define(['app'], function(app)
             
             serverCallService.makePost("rest/material/increaseViewCount", $scope.material.id, countViewSuccess, countViewFail); 
     	}
+
+        function countViewSuccess(data) { }
+        
+        function countViewFail(data, status) { }
 
         $scope.getCorrectLanguageString = function(languageStringList) {
             if (languageStringList) {
