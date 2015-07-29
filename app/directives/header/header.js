@@ -41,9 +41,7 @@ define(['app'], function(app)
                 
                 $scope.search = function() {
                     $scope.closeSearchBox();
-                    console.log($rootScope.searchFields.searchQuery);
                     if (!isEmpty($rootScope.searchFields.searchQuery)) {
-                        console.log($rootScope.searchFields.searchQuery);
                         searchService.setSearch($rootScope.searchFields.searchQuery);
                         $location.url(searchService.getURL());
                     }
