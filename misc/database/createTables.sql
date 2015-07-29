@@ -1,5 +1,6 @@
 -- Drop tables
 
+DROP TABLE IF EXISTS Repository;
 DROP TABLE IF EXISTS Page;
 DROP TABLE IF EXISTS Translation;
 DROP TABLE IF EXISTS TranslationGroup;
@@ -87,9 +88,9 @@ CREATE TABLE Material (
   issueDate BIGINT,
   licenseType BIGINT,
   source TEXT NOT NULL,
-  added TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  added TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   updated TIMESTAMP NULL DEFAULT NULL,
-  views BIGINT NOT NULL DEFAULT 0,
+  views BIGINT    DEFAULT 0,
 
   FOREIGN KEY (lang)
   REFERENCES LanguageTable (id)
@@ -272,5 +273,12 @@ CREATE TABLE Page (
   FOREIGN KEY (language)
         REFERENCES LanguageTable(id)
         ON DELETE RESTRICT
+);
+
+CREATE TABLE Repository (
+  id                  BIGINT         AUTO_INCREMENT PRIMARY KEY,
+  baseURL             VARCHAR(255) UNIQUE NOT NULL,
+  lastSynchronization TIMESTAMP NULL DEFAULT NULL,
+  schemaName          VARCHAR(255) UNIQUE NOT NULL
 );
 

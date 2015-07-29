@@ -29,9 +29,11 @@ public class MaterialService {
         materialDao.update(material);
     }
 
-    public void persistMaterial(Material material) {
-        materialDao.persistMaterial(material);
+    public void createMaterial(Material material) {
+        if (material.getId() != null) {
+            throw new IllegalArgumentException("Error creating Material, material already exists.");
+        }
+
+        materialDao.update(material);
     }
-
-
 }

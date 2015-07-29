@@ -8,6 +8,14 @@
             <entity name="Material_Description" query="select description as description_id from Material_Description where material='${Material.id}'">
                 <entity name="LanguageString" query="select textValue as description from LanguageString where id = '${Material_Description.description_id}'" />
             </entity>
+            <entity name="Material_Author" query="select author as author_id from Material_Author where material='${Material.id}'">
+                <entity name="Author" query="select concat(name, ' ', surname) as fullname from Author where id = '${Material_Author.author_id}'">
+                    <field column="fullname" name="author" />
+                </entity>
+            </entity>
+            <entity name="Material_Tag" query="select tag as tag_id from Material_Tag where material='${Material.id}'">
+                <entity name="Tag" query="select name as tag from Tag where id = '${Material_Tag.tag_id}'" />
+            </entity>
         </entity>
     </document>
 </dataConfig>

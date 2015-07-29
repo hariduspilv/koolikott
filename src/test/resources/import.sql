@@ -239,3 +239,7 @@ insert into Page(id, name, content, language) VALUES (4, 'Help', '<h1>Помощ
 insert into Page(id, name, content, language) VALUES (5, 'About', '<h1>About us</h1><p>Text here</p>', 3);
 insert into Page(id, name, content, language) VALUES (6, 'Help', '<h1>Help</h1><p>Text here</p>', 3);
 
+-- Repository
+
+insert into Repository(id, baseURL, lastSynchronization, schemaName) values (1, 'http://koolitaja.eenet.ee:57219/Waramu3Web/OAIHandler', '1970-01-12 13:46:39', 'waramu');
+

@@ -14,7 +14,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.w3c.dom.Document;
 
-import ORG.oclc.oai.harvester2.verb.GetRecord;
+import ee.hm.dop.model.Repository;
 
 /**
  * Created by mart.laus on 17.07.2015.
@@ -26,17 +26,18 @@ public class GetMaterialConnectorTest {
     @Test
     public void getMaterialWrongIdentifier() throws Exception {
         GetMaterialConnector getMaterialConnector = createMock(GetMaterialConnector.class);
+        Repository repository = createMock(Repository.class);
 
-        String baseURL = "hostUrl/correct";
         String identifier = "wrongIdentifier";
         String metadataPrefix = "metadataPrefix";
-        expect(getMaterialConnector.getMaterial(baseURL, identifier, metadataPrefix)).andReturn(null);
 
-        replay(getMaterialConnector);
+        expect(getMaterialConnector.getMaterial(repository, identifier, metadataPrefix)).andReturn(null);
 
-        Document doc = getMaterialConnector.getMaterial(baseURL, identifier, metadataPrefix);
+        replay(getMaterialConnector, repository);
 
-        verify(getMaterialConnector);
+        Document doc = getMaterialConnector.getMaterial(repository, identifier, metadataPrefix);
+
+        verify(getMaterialConnector, repository);
 
         assertNull(doc);
     }
@@ -44,17 +45,17 @@ public class GetMaterialConnectorTest {
     @Test
     public void getMaterialNullIdentifier() throws Exception {
         GetMaterialConnector getMaterialConnector = createMock(GetMaterialConnector.class);
+        Repository repository = createMock(Repository.class);
 
-        String baseURL = "hostUrl/correct";
         String identifier = null;
         String metadataPrefix = "metadataPrefix";
-        expect(getMaterialConnector.getMaterial(baseURL, identifier, metadataPrefix)).andReturn(null);
+        expect(getMaterialConnector.getMaterial(repository, identifier, metadataPrefix)).andReturn(null);
 
-        replay(getMaterialConnector);
+        replay(getMaterialConnector, repository);
 
-        Document doc = getMaterialConnector.getMaterial(baseURL, identifier, metadataPrefix);
+        Document doc = getMaterialConnector.getMaterial(repository, identifier, metadataPrefix);
 
-        verify(getMaterialConnector);
+        verify(getMaterialConnector, repository);
 
         assertNull(doc);
     }
@@ -62,63 +63,68 @@ public class GetMaterialConnectorTest {
     @Test
     public void getMaterialURLNull() throws Exception {
         GetMaterialConnector getMaterialConnector = createMock(GetMaterialConnector.class);
-
         String baseURL = null;
+        Repository repository = createMock(Repository.class);
+
         String identifier = "identifier";
         String metadataPrefix = "metadataPrefix";
         String errorMsg = "Error happened";
 
-        expect(getMaterialConnector.getMaterial(baseURL, identifier, metadataPrefix))
+        expect(repository.getBaseURL()).andReturn(baseURL);
+        expect(getMaterialConnector.getMaterial(repository, identifier, metadataPrefix))
                 .andThrow(new RuntimeException(errorMsg));
 
-        replay(getMaterialConnector);
+        replay(getMaterialConnector, repository);
 
         try {
-            getMaterialConnector.getMaterial(baseURL, identifier, metadataPrefix);
+            if (repository.getBaseURL() == null) {
+                getMaterialConnector.getMaterial(repository, identifier, metadataPrefix);
+            }
             fail("Exception expected.");
         } catch (RuntimeException e) {
             assertEquals(errorMsg, e.getMessage());
         }
 
-        verify(getMaterialConnector);
+        verify(getMaterialConnector, repository);
     }
 
     @Test
     public void getMaterialURLWrong() throws Exception {
         GetMaterialConnector getMaterialConnector = createMock(GetMaterialConnector.class);
+        Repository repository = createMock(Repository.class);
+        String baseURL = "http://invalidURL.com/oai";
 
-        String baseURL = "http://invalidURL/oai";
         String identifier = "identifier";
         String metadataPrefix = "metadataPrefix";
 
-        expect(getMaterialConnector.getMaterial(baseURL, identifier, metadataPrefix)).andReturn(null);
+        expect(repository.getBaseURL()).andReturn(baseURL);
+        expect(getMaterialConnector.getMaterial(repository, identifier, metadataPrefix)).andReturn(null);
 
-        replay(getMaterialConnector);
+        replay(getMaterialConnector, repository);
 
-        Document doc = getMaterialConnector.getMaterial(baseURL, identifier, metadataPrefix);
+        repository.getBaseURL();
+        Document doc = getMaterialConnector.getMaterial(repository, identifier, metadataPrefix);
 
-        verify(getMaterialConnector);
+        verify(getMaterialConnector, repository);
 
         assertNull(doc);
     }
 
     @Test
     public void getMaterial() throws Exception {
-        String baseURL = "http://invalidURL/oai";
+        Repository repository = createMock(Repository.class);
         String identifier = "identifier";
         String metadataPrefix = "metadataPrefix";
 
         GetMaterialConnector getMaterialConnector = createMock(GetMaterialConnector.class);
-        GetRecord getRecord = createMock(GetRecord.class);
         Document doc = createMock(Document.class);
 
-        expect(getMaterialConnector.getMaterial(baseURL, identifier, metadataPrefix)).andReturn(doc);
-        expect(getRecord.getDocument()).andReturn(doc);
+        expect(getMaterialConnector.getMaterial(repository, identifier, metadataPrefix)).andReturn(doc);
 
-        replay(getMaterialConnector, getRecord, doc);
-        Document returnedDoc = getMaterialConnector.getMaterial(baseURL, identifier, metadataPrefix);
+        replay(getMaterialConnector, doc);
+        Document returnedDoc = getMaterialConnector.getMaterial(repository, identifier, metadataPrefix);
 
-        verify(getMaterialConnector);
+        verify(getMaterialConnector, doc);
 
         assertSame(returnedDoc, doc);
     }

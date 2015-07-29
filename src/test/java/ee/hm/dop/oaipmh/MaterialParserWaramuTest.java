@@ -7,27 +7,30 @@ import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
 
+import java.text.ParseException;
+
 import org.junit.Test;
 import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
 
 import ee.hm.dop.model.Material;
+import ee.hm.dop.oaipmh.waramu.MaterialParserWaramu;
 
 /**
  * Created by mart.laus on 17.07.2015.
  */
-public class MaterialParserTest {
+public class MaterialParserWaramuTest {
 
     @Test
-    public void parseXMLisNull() {
-        MaterialParser materialParser = createMock(MaterialParser.class);
+    public void parseXMLisNull() throws ParseException, ee.hm.dop.oaipmh.ParseException {
+        MaterialParserWaramu materialParser = createMock(MaterialParserWaramu.class);
         Document document = createMock(Document.class);
 
-        expect(materialParser.parseXMLtoMaterial(document)).andReturn(null);
+        expect(materialParser.parse(document)).andReturn(null);
 
         replay(materialParser, document);
 
-        Material material = materialParser.parseXMLtoMaterial(document);
+        Material material = materialParser.parse(document);
 
         verify(materialParser);
 
@@ -35,17 +38,17 @@ public class MaterialParserTest {
     }
 
     @Test
-    public void parseXMLNullLomElement() {
-        MaterialParser materialParser = createMock(MaterialParser.class);
+    public void parseXMLNullLomElement() throws ParseException, ee.hm.dop.oaipmh.ParseException {
+        MaterialParserWaramu materialParser = createMock(MaterialParserWaramu.class);
         Document document = createMock(Document.class);
         NodeList nodeList = createMock(NodeList.class);
 
-        expect(materialParser.parseXMLtoMaterial(document)).andReturn(null);
+        expect(materialParser.parse(document)).andReturn(null);
         expect(document.getElementsByTagName("lom")).andReturn(null);
 
         replay(materialParser, document, nodeList);
 
-        Material material = materialParser.parseXMLtoMaterial(document);
+        Material material = materialParser.parse(document);
         NodeList nList = document.getElementsByTagName("lom");
 
         verify(materialParser, document, nodeList);
@@ -55,16 +58,16 @@ public class MaterialParserTest {
     }
 
     @Test
-    public void parseXMLtoMaterial() {
-        MaterialParser materialParser = createMock(MaterialParser.class);
+    public void parseXMLtoMaterial() throws ParseException, ee.hm.dop.oaipmh.ParseException {
+        MaterialParserWaramu materialParser = createMock(MaterialParserWaramu.class);
         Document document = createMock(Document.class);
         Material material = createMock(Material.class);
 
-        expect(materialParser.parseXMLtoMaterial(document)).andReturn(material);
+        expect(materialParser.parse(document)).andReturn(material);
 
         replay(materialParser, document, material);
 
-        Material returnedMaterial = materialParser.parseXMLtoMaterial(document);
+        Material returnedMaterial = materialParser.parse(document);
 
         verify(materialParser);
 

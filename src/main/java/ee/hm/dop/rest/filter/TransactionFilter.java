@@ -1,11 +1,11 @@
 package ee.hm.dop.rest.filter;
 
 import static ee.hm.dop.utils.DbUtils.closeEntityManager;
+import static ee.hm.dop.utils.DbUtils.closeTransaction;
 import static ee.hm.dop.utils.DbUtils.getTransaction;
 
 import java.io.IOException;
 
-import javax.persistence.EntityTransaction;
 import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.container.ContainerRequestFilter;
 import javax.ws.rs.container.ContainerResponseContext;
@@ -33,15 +33,7 @@ public class TransactionFilter implements ContainerRequestFilter, ContainerRespo
     @Override
     public void filter(ContainerRequestContext requestContext, ContainerResponseContext responseContext)
             throws IOException {
-        EntityTransaction transaction = getTransaction();
-        if (transaction.isActive()) {
-            if (transaction.getRollbackOnly()) {
-                transaction.rollback();
-            } else {
-                transaction.commit();
-            }
-        }
-
+        closeTransaction();
         closeEntityManager();
     }
 }

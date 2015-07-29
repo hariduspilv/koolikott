@@ -41,7 +41,7 @@ public class Material {
     @GeneratedValue
     private Long id;
 
-    @ManyToMany(fetch = EAGER, cascade = CascadeType.ALL)
+    @ManyToMany(fetch = EAGER, cascade = CascadeType.PERSIST)
     @JoinTable(
             name = "Material_Title",
             joinColumns = { @JoinColumn(name = "material") },
@@ -53,7 +53,7 @@ public class Material {
     @JoinColumn(name = "lang")
     private Language language;
 
-    @ManyToMany(fetch = EAGER, cascade = CascadeType.ALL)
+    @ManyToMany(fetch = EAGER, cascade = CascadeType.PERSIST)
     @JoinTable(
             name = "Material_Author",
             joinColumns = { @JoinColumn(name = "material") },
@@ -65,7 +65,7 @@ public class Material {
     @JoinColumn(name = "issueDate")
     private IssueDate issueDate;
 
-    @ManyToMany(fetch = EAGER, cascade = CascadeType.ALL)
+    @ManyToMany(fetch = EAGER, cascade = CascadeType.PERSIST)
     @JoinTable(
             name = "Material_Description",
             joinColumns = { @JoinColumn(name = "material") },
@@ -76,7 +76,7 @@ public class Material {
     @Column(nullable = false, columnDefinition = "TEXT")
     private String source;
 
-    @ManyToMany(fetch = EAGER, cascade = CascadeType.ALL)
+    @ManyToMany(fetch = EAGER, cascade = CascadeType.PERSIST)
     @JoinTable(
             name = "Material_ResourceType",
             joinColumns = { @JoinColumn(name = "material") },
@@ -84,7 +84,7 @@ public class Material {
             uniqueConstraints = @UniqueConstraint(columnNames = { "material", "resourceType" }))
     private List<ResourceType> resourceTypes;
 
-    @ManyToMany(fetch = EAGER, cascade = CascadeType.ALL)
+    @ManyToMany(fetch = EAGER, cascade = CascadeType.PERSIST)
     @JoinTable(
             name = "Material_Classification",
             joinColumns = { @JoinColumn(name = "material") },
@@ -92,7 +92,7 @@ public class Material {
             uniqueConstraints = @UniqueConstraint(columnNames = { "material", "classification" }))
     private List<Classification> classifications;
 
-    @ManyToMany(fetch = EAGER, cascade = CascadeType.ALL)
+    @ManyToMany(fetch = EAGER, cascade = CascadeType.PERSIST)
     @JoinTable(
             name = "Material_EducationalContext",
             joinColumns = { @JoinColumn(name = "material") },
@@ -104,7 +104,7 @@ public class Material {
     @JoinColumn(name = "licenseType")
     private LicenseType licenseType;
 
-    @ManyToMany(fetch = EAGER, cascade = CascadeType.ALL)
+    @ManyToMany(fetch = EAGER, cascade = CascadeType.PERSIST)
     @JoinTable(
             name = "Material_Publisher",
             joinColumns = { @JoinColumn(name = "material") },
@@ -112,17 +112,17 @@ public class Material {
             uniqueConstraints = @UniqueConstraint(columnNames = { "material", "publisher" }))
     private List<Publisher> publishers;
 
-    @Column(nullable = false)
+    @Column
     @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
     private DateTime added;
 
     @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
     private DateTime updated;
 
-    @Column(nullable = false)
-    private Long views;
+    @Column
+    private Long views = Long.valueOf(0);
 
-    @ManyToMany(fetch = EAGER, cascade = CascadeType.ALL)
+    @ManyToMany(fetch = EAGER, cascade = CascadeType.PERSIST)
     @JoinTable(
             name = "Material_Tag",
             joinColumns = { @JoinColumn(name = "material") },
