@@ -260,5 +260,7 @@ public class MaterialDAOTest extends DatabaseTestBase {
         assertEquals(material.getViews(), newMaterial.getViews());
         assertEquals(size + 1, materialDAO.findAll().size());
         assertSame(material, materialDAO.findById(material.getId()));
+
+        materialDAO.delete(material);
     }
 }

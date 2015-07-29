@@ -29,7 +29,7 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
         List<Material> materials = response.readEntity(new GenericType<List<Material>>() {
         });
 
-        assertEquals(9, materials.size());
+        assertEquals(8, materials.size());
 
         // Verify if all fields are loaded
         Material material = materials.get(1);
@@ -163,7 +163,7 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
 
         assertEquals(8, materials.size());
 
-        Material material = materials.get(1);
+        Material material = materials.get(0);
         assertEquals(Long.valueOf(8), material.getId());
         assertEquals("Aabits 123", material.getTitles().get(0).getText());
 

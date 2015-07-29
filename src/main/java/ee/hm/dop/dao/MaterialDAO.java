@@ -52,4 +52,13 @@ public class MaterialDAO {
     public void update(Material material) {
             entityManager.persist(material);
     }
+
+    /**
+     * For testing purposes.
+     *
+     * @param material
+     */
+    public void delete(Material material) {
+        entityManager.remove(material);
+    }
 }
