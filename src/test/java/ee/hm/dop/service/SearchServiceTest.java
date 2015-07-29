@@ -5,6 +5,7 @@ import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertSame;
+import static org.junit.Assert.fail;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -123,6 +124,66 @@ public class SearchServiceTest {
         verifyAll();
 
         assertEquals(0, result.size());
+    }
+
+    @Test
+    public void searchTokenizeQuery() {
+        String query = "people 123";
+        String tokenizedQuery = "people 123";
+        long start = 0;
+        SearchResponse searchResponse = new SearchResponse();
+
+        expect(searchEngineService.search(tokenizedQuery, start)).andReturn(searchResponse);
+
+        replayAll();
+
+        searchService.search(query, start);
+
+        verifyAll();
+    }
+
+    @Test
+    public void searchTokenizeQueryExactMatch() {
+        String query = "\"people 123\"";
+        String tokenizedQuery = "\"people 123\"";
+        long start = 0;
+        SearchResponse searchResponse = new SearchResponse();
+
+        expect(searchEngineService.search(tokenizedQuery, start)).andReturn(searchResponse);
+
+        replayAll();
+
+        searchService.search(query, start);
+
+        verifyAll();
+    }
+
+    @Test
+    public void searchTokenizeQueryEvenQuotes() {
+        String query = "\"people 123\" blah\"";
+        String tokenizedQuery = "\"people 123\" blah\\\"";
+        long start = 0;
+        SearchResponse searchResponse = new SearchResponse();
+
+        expect(searchEngineService.search(tokenizedQuery, start)).andReturn(searchResponse);
+
+        replayAll();
+
+        searchService.search(query, start);
+
+        verifyAll();
+    }
+
+    @Test
+    public void searchEmptyQuery() {
+        replayAll();
+        try {
+            searchService.search("", 0);
+            fail(); // Expecting exception
+        } catch (RuntimeException e) {
+            // OK
+        }
+        verifyAll();
     }
 
     private SearchResponse createSearchResponseWithDocuments(List<Long> documentIds) {

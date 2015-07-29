@@ -1,5 +1,7 @@
 package ee.hm.dop.service;
 
+import static org.apache.commons.lang3.StringUtils.isBlank;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -13,6 +15,7 @@ import ee.hm.dop.model.solr.Document;
 import ee.hm.dop.model.solr.Response;
 import ee.hm.dop.model.solr.SearchResponse;
 import ee.hm.dop.model.solr.SearchResult;
+import ee.hm.dop.utils.DOPSearchStringTokenizer;
 
 public class SearchService {
 
@@ -27,7 +30,7 @@ public class SearchService {
     }
 
     public SearchResult search(String query, long start) {
-        SearchResponse searchResponse = searchEngineService.search(query, start);
+        SearchResponse searchResponse = searchEngineService.search(getTokenizedQueryString(query), start);
 
         List<Long> materialIds = new ArrayList<>();
 
@@ -70,6 +73,19 @@ public class SearchService {
         // indexList
         sortedList.removeIf(material -> material == null);
         return sortedList;
+    }
+
+    private String getTokenizedQueryString(String query) {
+        String result = "";
+
+        if (!isBlank(query)) {
+            DOPSearchStringTokenizer tokenizer = new DOPSearchStringTokenizer(query);
+            result = tokenizer.getWhitespaceSeparatedTokens();
+        } else {
+            throw new RuntimeException("Empty search query!");
+        }
+
+        return result;
     }
 
 }
