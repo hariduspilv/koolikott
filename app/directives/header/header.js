@@ -26,7 +26,9 @@ define(['app'], function(app)
                 };
                 
                 $scope.closeLanguageSelection = function () {
-                    $scope.showLanguageSelection = false;
+                    $scope.$apply(function() {
+                        $scope.showLanguageSelection = false;
+                    });
                 };
 
                 $scope.closeSearchBox = function () {
