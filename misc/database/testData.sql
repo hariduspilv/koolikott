@@ -93,7 +93,7 @@ insert into Material(id, lang, issueDate, licenseType, source, added, updated, p
 insert into Material(id, lang, issueDate, licenseType, source, added, updated, picture) values(26, 4, 6, 3, 'https://en.wikipedia.org/wiki/Houthi_insurgency_in_Yemen', '2001-07-16 06:00:01', null, null);
 insert into Material(id, lang, issueDate, licenseType, source, added, updated, picture) values(27, 5, 7, 1, 'https://en.wikipedia.org/wiki/Estonia', '2002-06-01 09:00:01', null, null);
 
-insert into Material(id, lang, issueDate, licenseType, source, added, updated) values(28, 1, 1, 1, 'https://en.wikipedia.org/wiki/Latvia', '1999-02-02 06:00:01', '2000-03-01 07:00:01', null);
+insert into Material(id, lang, issueDate, licenseType, source, added, updated, picture) values(28, 1, 1, 1, 'https://en.wikipedia.org/wiki/Latvia', '1999-02-02 06:00:01', '2000-03-01 07:00:01', null);
 insert into Material(id, lang, issueDate, licenseType, source, added, updated, picture) values(29, 2, 2, 2, 'https://en.wikipedia.org/wiki/Sweded', '1992-02-03 06:00:01', '1995-07-12 09:00:01', null);
 insert into Material(id, lang, issueDate, licenseType, source, added, updated, picture) values(30, 4, 3, 3,  'https://en.wikipedia.org/wiki/Germany', '2009-02-17 08:00:01', '2011-01-10 19:00:01', null);
 insert into Material(id, lang, issueDate, licenseType, source, added, updated, picture) values(31, 3, 4, 1,  'https://en.wikipedia.org/wiki/Russia', '2002-02-02 09:00:01', '2012-08-28 22:40:01', null);
