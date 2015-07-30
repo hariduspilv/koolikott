@@ -145,7 +145,7 @@ public class SearchServiceTest {
     @Test
     public void searchTokenizeQueryExactMatch() {
         String query = "\"people 123\"";
-        String tokenizedQuery = "\"people 123\"";
+        String tokenizedQuery = "\"people\\ 123\"";
         long start = 0;
         SearchResponse searchResponse = new SearchResponse();
 
@@ -161,7 +161,7 @@ public class SearchServiceTest {
     @Test
     public void searchTokenizeQueryEvenQuotes() {
         String query = "\"people 123\" blah\"";
-        String tokenizedQuery = "\"people 123\" blah\\\"";
+        String tokenizedQuery = "\"people\\ 123\" blah\\\"";
         long start = 0;
         SearchResponse searchResponse = new SearchResponse();
 
