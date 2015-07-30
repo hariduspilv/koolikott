@@ -35,26 +35,37 @@
                     <div class="clearfix text-center">
                         <nav>
                             <ul class="pagination">
-                            <li class="{{isPreviousButtonDisabled()}}">
-                                <a href="" aria-label="{{'SEARCH_RESULT_PREVIOUS' | translate}}" class="btn btn-default" data-ng-click="goToPage(paging.thisPage - 1)">
-                                    <span aria-hidden="true"><span data-translate="SEARCH_RESULT_PREVIOUS"></span></span>
-                                </a>
-                            </li>
-                            <li data-ng-repeat="page in paging.before">
-                                <a href="#/search/result?q={{searchQuery}}&amp;page={{page}}" data-ng-bind="page"></a>
-                            </li>
+                                <li data-ng-if="paging.before.length === 0" class="disabled">
+                                    <span aria-label="{{'SEARCH_RESULT_PREVIOUS' | translate}}" class="btn btn-default">
+                                        <span aria-hidden="true"><span data-translate="SEARCH_RESULT_PREVIOUS"></span></span>
+                                    </span>
+                                </li>
+                                <li data-ng-if="paging.before.length > 0">
+                                    <a href="#/search/result?q={{searchQuery}}&amp;page={{paging.thisPage - 1}}" aria-label="{{'SEARCH_RESULT_PREVIOUS' | translate}}" class="btn btn-default">
+                                        <span aria-hidden="true"><span data-translate="SEARCH_RESULT_PREVIOUS"></span></span>
+                                    </a>
+                                </li>
 
-                            <li class="active"><span data-ng-bind="paging.thisPage"></span></li>
+                                <li data-ng-repeat="page in paging.before">
+                                    <a href="#/search/result?q={{searchQuery}}&amp;page={{page}}" data-ng-bind="page"></a>
+                                </li>
 
-                            <li data-ng-repeat="page in paging.after">
-                                <a href="#/search/result?q={{searchQuery}}&amp;page={{page}}" data-ng-bind="page"></a>
-                            </li>
+                                <li class="active"><span data-ng-bind="paging.thisPage"></span></li>
 
-                            <li class="{{isNextButtonDisabled()}}">
-                                <a href="" aria-label="{{'SEARCH_RESULT_NEXT' | translate}}" class="btn btn-default" data-ng-click="goToPage(paging.thisPage + 1)">
-                                    <span aria-hidden="true"><span data-translate="SEARCH_RESULT_NEXT"></span></span>
-                                </a>
-                            </li>
+                                <li data-ng-repeat="page in paging.after">
+                                    <a href="#/search/result?q={{searchQuery}}&amp;page={{page}}" data-ng-bind="page"></a>
+                                </li>
+
+                                <li data-ng-if="paging.after.length === 0" class="disabled">
+                                    <span aria-label="{{'SEARCH_RESULT_NEXT' | translate}}" class="btn btn-default">
+                                        <span aria-hidden="true"><span data-translate="SEARCH_RESULT_NEXT"></span></span>
+                                    </span>
+                                </li>
+                                <li data-ng-if="paging.after.length > 0">
+                                    <a href="#/search/result?q={{searchQuery}}&amp;page={{paging.thisPage + 1}}" aria-label="{{'SEARCH_RESULT_NEXT' | translate}}" class="btn btn-default">
+                                        <span aria-hidden="true"><span data-translate="SEARCH_RESULT_NEXT"></span></span>
+                                    </a>
+                                </li>
                             </ul>
                         </nav>
                     </div>
