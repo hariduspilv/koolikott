@@ -11,6 +11,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
+import javax.persistence.Lob;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
@@ -129,6 +130,11 @@ public class Material {
             inverseJoinColumns = { @JoinColumn(name = "tag") },
             uniqueConstraints = @UniqueConstraint(columnNames = { "material", "tag" }))
     private List<Tag> tags;
+
+    @Column
+    @Lob
+    private byte[] picture;
+
 
     public Long getId() {
         return id;
@@ -264,4 +270,11 @@ public class Material {
         this.tags = tags;
     }
 
+    public byte[] getPicture() {
+        return picture;
+    }
+
+    public void setPicture(byte[] picture) {
+        this.picture = picture;
+    }
 }
