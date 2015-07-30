@@ -16,6 +16,11 @@
             <entity name="Material_Tag" query="select tag as tag_id from Material_Tag where material='${Material.id}'">
                 <entity name="Tag" query="select name as tag from Tag where id = '${Material_Tag.tag_id}'" />
             </entity>
+            <entity name="Material_EducationalContext" query="select educationalContext as eC_id from Material_EducationalContext where material='${Material.id}'">
+                <entity name="EducationalContext" query="select educationalContext as eC_textValue from EducationalContext where id = '${Material_EducationalContext.eC_id}'">
+                    <entity name="Translation" query="select translation as educational_context from Translation where translationKey = '${EducationalContext.eC_textValue}'" />
+                </entity>
+            </entity>    
         </entity>
     </document>
 </dataConfig>
