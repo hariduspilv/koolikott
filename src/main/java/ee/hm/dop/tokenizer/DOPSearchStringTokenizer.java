@@ -1,69 +1,87 @@
-package ee.hm.dop.utils;
+package ee.hm.dop.tokenizer;
 
 import java.util.ArrayList;
 
-import org.apache.commons.lang.StringUtils;
-
-import ee.hm.dop.utils.tokens.DOPToken;
-import ee.hm.dop.utils.tokens.ExactMatchToken;
-import ee.hm.dop.utils.tokens.RegularToken;
-
 public class DOPSearchStringTokenizer {
-
-    private static final String DOUBLE_QUOTE = "\"";
-    private static final String WHITESPACE = " ";
 
     private ArrayList<DOPToken> tokens;
 
     public DOPSearchStringTokenizer(String str) {
         tokens = new ArrayList<DOPToken>();
-        parseStringToTokens(str);
+        parse(str);
     }
 
-    public String getWhitespaceSeparatedTokens() {
-        return StringUtils.join(tokens, WHITESPACE);
+    public int countTokens() {
+        return tokens.size();
     }
 
-    private void parseStringToTokens(String str) {
-        str = str.trim();
-        if (str.length() > 0) {
-            str = findExactMatchTokens(str);
-            str = str.trim();
-            str = str.replaceAll("\\s+", WHITESPACE);
-            if (str.length() > 0) {
-                findRegularTokens(str);
-            }
-        }
+    public boolean hasMoreTokens() {
+        return !tokens.isEmpty();
     }
 
-    private void findRegularTokens(String str) {
-        String[] regularTokens = str.split(WHITESPACE);
-        for (int i = 0; i < regularTokens.length; i++) {
-            tokens.add(new RegularToken(regularTokens[i]));
-        }
+    public DOPToken nextToken() {
+        return tokens.remove(0);
     }
 
-    private String findExactMatchTokens(String str) {
-        int startIndex = str.indexOf(DOUBLE_QUOTE);
-        while (startIndex > -1) {
-            int endIndex = str.indexOf(DOUBLE_QUOTE, startIndex + 1);
+    private void parse(String s) {
 
-            if (endIndex > -1) {
-                str = extractExactMatchToken(str, startIndex, endIndex);
-                startIndex = str.indexOf(DOUBLE_QUOTE);
-            } else {
+        StringBuilder sb = new StringBuilder();
+        boolean readingToken = false;
+        boolean readingExactMatch = false;
+
+        for (int i = 0; i < s.length(); i++) {
+            char c = s.charAt(i);
+            switch (c) {
+
+            case ' ':
+                if (readingToken) {
+                    if (readingExactMatch) {
+                        sb.append(c);
+                    } else {
+                        createRegularToken(sb);
+                        readingToken = false;
+                    }
+                }
                 break;
+
+            case '"':
+                if (readingExactMatch) {
+                    createExactMatchToken(sb);
+                    readingExactMatch = false;
+                    readingToken = false;
+                } else if (s.indexOf('"', i + 1) == -1) {
+                    // Case when there is no closing "
+                    readingToken = true;
+                    sb.append(c);
+                } else {
+                    if (readingToken) {
+                        createRegularToken(sb);
+                    }
+                    readingToken = true;
+                    readingExactMatch = true;
+                }
+                break;
+
+            default:
+                readingToken = true;
+                sb.append(c);
             }
         }
 
-        return str;
+        createRegularToken(sb);
     }
 
-    private String extractExactMatchToken(String str, int startIndex, int endIndex) {
-        String content = str.substring(startIndex + 1, endIndex);
-        if (content.length() > 0) {
-            tokens.add(new ExactMatchToken(content));
+    private void createRegularToken(StringBuilder sb) {
+        if (sb.length() > 0) {
+            tokens.add(new RegularToken(sb.toString()));
+            sb.setLength(0);
         }
-        return str.substring(0, startIndex) + WHITESPACE + str.substring(endIndex + 1);
+    }
+
+    private void createExactMatchToken(StringBuilder sb) {
+        if (sb.length() > 0) {
+            tokens.add(new ExactMatchToken(sb.toString()));
+            sb.setLength(0);
+        }
     }
 }

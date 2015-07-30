@@ -1,4 +1,4 @@
-package ee.hm.dop.utils;
+package ee.hm.dop.tokenizer;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
@@ -13,13 +13,13 @@ public class DOPSearchStringTokenizerTest {
     @Test
     public void tokenizeEmptyString() {
         DOPSearchStringTokenizer tokenizer = new DOPSearchStringTokenizer("");
-        assertEquals("", tokenizer.getWhitespaceSeparatedTokens());
+        assertEquals(0, tokenizer.countTokens());
     }
 
     @Test
     public void tokenizeWhitespaces() {
         DOPSearchStringTokenizer tokenizer = new DOPSearchStringTokenizer("       ");
-        assertEquals("", tokenizer.getWhitespaceSeparatedTokens());
+        assertEquals(0, tokenizer.countTokens());
     }
 
     @Test
@@ -35,24 +35,60 @@ public class DOPSearchStringTokenizerTest {
     @Test
     public void tokenizeRegularQuery() {
         DOPSearchStringTokenizer tokenizer = new DOPSearchStringTokenizer("hello world");
-        assertEquals("hello world", tokenizer.getWhitespaceSeparatedTokens());
+        StringBuilder sb = new StringBuilder();
+
+        while (tokenizer.hasMoreTokens()) {
+            DOPToken token = tokenizer.nextToken();
+            sb.append(token);
+            if (tokenizer.hasMoreTokens()) {
+                sb.append(" ");
+            }
+        }
+        assertEquals("hello world", sb.toString());
     }
 
     @Test
     public void tokenizeExactMatch() {
         DOPSearchStringTokenizer tokenizer = new DOPSearchStringTokenizer("\"hello world\"");
-        assertEquals("\"hello world\"", tokenizer.getWhitespaceSeparatedTokens());
+        StringBuilder sb = new StringBuilder();
+
+        while (tokenizer.hasMoreTokens()) {
+            DOPToken token = tokenizer.nextToken();
+            sb.append(token);
+            if (tokenizer.hasMoreTokens()) {
+                sb.append(" ");
+            }
+        }
+        assertEquals("\"hello\\ world\"", sb.toString());
     }
 
     @Test
     public void tokenizeEvenQuotes() {
         DOPSearchStringTokenizer tokenizer = new DOPSearchStringTokenizer("\"hello world\" aabc\"");
-        assertEquals("\"hello world\" aabc\\\"", tokenizer.getWhitespaceSeparatedTokens());
+        StringBuilder sb = new StringBuilder();
+
+        while (tokenizer.hasMoreTokens()) {
+            DOPToken token = tokenizer.nextToken();
+            sb.append(token);
+            if (tokenizer.hasMoreTokens()) {
+                sb.append(" ");
+            }
+        }
+        assertEquals("\"hello\\ world\" aabc\\\"", sb.toString());
     }
 
     @Test
     public void tokenizeSpecialCharacters() {
         DOPSearchStringTokenizer tokenizer = new DOPSearchStringTokenizer("\"hello world\" aabc\" +-!");
-        assertEquals("\"hello world\" aabc\\\" \\+\\-\\!", tokenizer.getWhitespaceSeparatedTokens());
+        StringBuilder sb = new StringBuilder();
+
+        while (tokenizer.hasMoreTokens()) {
+            DOPToken token = tokenizer.nextToken();
+            sb.append(token);
+            if (tokenizer.hasMoreTokens()) {
+                sb.append(" ");
+            }
+        }
+        assertEquals("\"hello\\ world\" aabc\\\" \\+\\-\\!", sb.toString());
     }
 }

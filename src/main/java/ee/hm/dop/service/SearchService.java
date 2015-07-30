@@ -15,7 +15,7 @@ import ee.hm.dop.model.solr.Document;
 import ee.hm.dop.model.solr.Response;
 import ee.hm.dop.model.solr.SearchResponse;
 import ee.hm.dop.model.solr.SearchResult;
-import ee.hm.dop.utils.DOPSearchStringTokenizer;
+import ee.hm.dop.tokenizer.DOPSearchStringTokenizer;
 
 public class SearchService {
 
@@ -76,16 +76,19 @@ public class SearchService {
     }
 
     private String getTokenizedQueryString(String query) {
-        String result = "";
-
+        StringBuilder sb = new StringBuilder();
         if (!isBlank(query)) {
             DOPSearchStringTokenizer tokenizer = new DOPSearchStringTokenizer(query);
-            result = tokenizer.getWhitespaceSeparatedTokens();
+            while (tokenizer.hasMoreTokens()) {
+                sb.append(tokenizer.nextToken());
+                if (tokenizer.hasMoreTokens()) {
+                    sb.append(" ");
+                }
+            }
         } else {
             throw new RuntimeException("Empty search query!");
         }
-
-        return result;
+        return sb.toString();
     }
 
 }
