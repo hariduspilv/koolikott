@@ -72,11 +72,16 @@
     .block {margin-bottom: 20px; @include border-radius(3px); @include box-shadow(0, 0, 2px, 0, #999); background: #FFF; overflow: hidden;
     
         .illustration {
-
-            img {
-                @media screen and (max-width: $screen-md) {
-                    width: 100%; height: auto;
+            
+            figure {position: relative; overflow: hidden;
+                
+                img {position: absolute;
+                    @media screen and (max-width: $screen-md) {
+                        width: 100%; height: auto;
+                    }
                 }
+                
+                .img-empty {position: relative}
             }
         }    
         
