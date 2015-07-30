@@ -53,13 +53,13 @@
 .material-taping {
     
     @media screen and (max-width: $screen-sm) {
-        height: 400px; overflow-x: auto; overflow-y: hidden;
+        
     }
                   
     .material {
 
         @media screen and (max-width: $screen-sm) {
-            float: left;
+            
         }
         
     }
@@ -71,6 +71,20 @@
     
     .block {margin-bottom: 20px; @include border-radius(3px); @include box-shadow(0, 0, 2px, 0, #999); background: #FFF; overflow: hidden;
     
+        .illustration {
+            
+            figure {position: relative; overflow: hidden;
+                
+                img {position: absolute;
+                    @media screen and (max-width: $screen-md) {
+                        width: 100%; height: auto;
+                    }
+                }
+                
+                .img-empty {position: relative}
+            }
+        }    
+        
         .description {padding: 15px 10px 10px; font-size: 13px; color: $font-color-grey;
         
             .title {position: relative; height: 65px; margin-bottom: 15px; line-height: 21px; font-size: 17px; overflow: hidden;
