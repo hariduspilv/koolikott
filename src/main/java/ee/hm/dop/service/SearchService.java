@@ -11,10 +11,10 @@ import javax.inject.Inject;
 
 import ee.hm.dop.dao.MaterialDAO;
 import ee.hm.dop.model.Material;
+import ee.hm.dop.model.SearchResult;
 import ee.hm.dop.model.solr.Document;
 import ee.hm.dop.model.solr.Response;
 import ee.hm.dop.model.solr.SearchResponse;
-import ee.hm.dop.model.solr.SearchResult;
 import ee.hm.dop.tokenizer.DOPSearchStringTokenizer;
 
 public class SearchService {
