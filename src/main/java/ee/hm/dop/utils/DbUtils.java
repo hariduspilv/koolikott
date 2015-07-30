@@ -19,8 +19,18 @@ public class DbUtils {
         getInjector().getInstance(EntityManager.class).close();
     }
 
+    public static void emptyCache() {
+        EntityManager em = getInjector().getInstance(EntityManager.class);
+        EntityTransaction transaction = em.getTransaction();
+        if (transaction.isActive() && !transaction.getRollbackOnly()) {
+            em.flush();
+            em.clear();
+        }
+    }
+
     /**
-     * Rollsback transaction if transaction is marked as rollback only. Commit otherwise.
+     * Rollsback transaction if transaction is marked as rollback only. Commit
+     * otherwise.
      * <p>
      * If transaction is not active anymore, nothing is done.
      */
