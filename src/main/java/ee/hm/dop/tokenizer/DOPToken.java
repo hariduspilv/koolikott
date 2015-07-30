@@ -1,4 +1,6 @@
-package ee.hm.dop.utils.tokens;
+package ee.hm.dop.tokenizer;
+
+import org.apache.solr.client.solrj.util.ClientUtils;
 
 public abstract class DOPToken {
 
@@ -10,6 +12,10 @@ public abstract class DOPToken {
 
     @Override
     public abstract String toString();
+
+    protected String getContentWithEscapedChars() {
+        return ClientUtils.escapeQueryChars(content);
+    }
 
     public String getContent() {
         return content;

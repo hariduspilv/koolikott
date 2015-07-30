@@ -1,4 +1,4 @@
-package ee.hm.dop.utils.tokens;
+package ee.hm.dop.tokenizer;
 
 import static org.junit.Assert.assertEquals;
 

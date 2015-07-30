@@ -1,4 +1,4 @@
-package ee.hm.dop.utils.tokens;
+package ee.hm.dop.tokenizer;
 
 public class ExactMatchToken extends DOPToken {
 
@@ -8,6 +8,6 @@ public class ExactMatchToken extends DOPToken {
 
     @Override
     public String toString() {
-        return "\"" + this.getContent() + "\"";
+        return "\"" + getContentWithEscapedChars() + "\"";
     }
 }
