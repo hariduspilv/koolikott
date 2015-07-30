@@ -1,6 +1,7 @@
 package ee.hm.dop.tokenizer;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.fail;
 
 import org.junit.Test;
@@ -13,13 +14,13 @@ public class DOPSearchStringTokenizerTest {
     @Test
     public void tokenizeEmptyString() {
         DOPSearchStringTokenizer tokenizer = new DOPSearchStringTokenizer("");
-        assertEquals(0, tokenizer.countTokens());
+        assertFalse(tokenizer.hasMoreTokens());
     }
 
     @Test
     public void tokenizeWhitespaces() {
         DOPSearchStringTokenizer tokenizer = new DOPSearchStringTokenizer("       ");
-        assertEquals(0, tokenizer.countTokens());
+        assertFalse(tokenizer.hasMoreTokens());
     }
 
     @Test

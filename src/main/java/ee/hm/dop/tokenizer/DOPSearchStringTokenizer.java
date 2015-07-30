@@ -1,87 +1,67 @@
 package ee.hm.dop.tokenizer;
 
-import java.util.ArrayList;
-
 public class DOPSearchStringTokenizer {
 
-    private ArrayList<DOPToken> tokens;
+    private String source;
 
-    public DOPSearchStringTokenizer(String str) {
-        tokens = new ArrayList<DOPToken>();
-        parse(str);
-    }
-
-    public int countTokens() {
-        return tokens.size();
+    public DOPSearchStringTokenizer(String source) {
+        this.source = source.trim();
     }
 
     public boolean hasMoreTokens() {
-        return !tokens.isEmpty();
+        return !source.isEmpty();
     }
 
     public DOPToken nextToken() {
-        return tokens.remove(0);
+        return parseStart(new StringBuilder());
     }
 
-    private void parse(String s) {
+    private DOPToken parseStart(StringBuilder result) {
+        Character c = getAndRemoveFirstCharacter();
 
-        StringBuilder sb = new StringBuilder();
-        boolean readingToken = false;
-        boolean readingExactMatch = false;
-
-        for (int i = 0; i < s.length(); i++) {
-            char c = s.charAt(i);
-            switch (c) {
-
-            case ' ':
-                if (readingToken) {
-                    if (readingExactMatch) {
-                        sb.append(c);
-                    } else {
-                        createRegularToken(sb);
-                        readingToken = false;
-                    }
-                }
-                break;
-
-            case '"':
-                if (readingExactMatch) {
-                    createExactMatchToken(sb);
-                    readingExactMatch = false;
-                    readingToken = false;
-                } else if (s.indexOf('"', i + 1) == -1) {
-                    // Case when there is no closing "
-                    readingToken = true;
-                    sb.append(c);
-                } else {
-                    if (readingToken) {
-                        createRegularToken(sb);
-                    }
-                    readingToken = true;
-                    readingExactMatch = true;
-                }
-                break;
-
-            default:
-                readingToken = true;
-                sb.append(c);
-            }
-        }
-
-        createRegularToken(sb);
-    }
-
-    private void createRegularToken(StringBuilder sb) {
-        if (sb.length() > 0) {
-            tokens.add(new RegularToken(sb.toString()));
-            sb.setLength(0);
+        if (c.charValue() == '"' && source.indexOf('"') != -1) {
+            return parseExactMatch(result);
+        } else {
+            return parseRegular(result.append(c));
         }
     }
 
-    private void createExactMatchToken(StringBuilder sb) {
-        if (sb.length() > 0) {
-            tokens.add(new ExactMatchToken(sb.toString()));
-            sb.setLength(0);
+    private DOPToken parseRegular(StringBuilder result) {
+        Character c = getAndRemoveFirstCharacter();
+
+        if (c == null || Character.isWhitespace(c.charValue())) {
+            return createRegularToken(result);
+        } else {
+            return parseRegular(result.append(c));
         }
+    }
+
+    private DOPToken parseExactMatch(StringBuilder result) {
+        Character c = getAndRemoveFirstCharacter();
+
+        if (c.charValue() == '"') {
+            return createExactMatchToken(result);
+        } else {
+            return parseExactMatch(result.append(c));
+        }
+    }
+
+    private DOPToken createRegularToken(StringBuilder result) {
+        source = source.trim();
+        return new RegularToken(result.toString());
+    }
+
+    private DOPToken createExactMatchToken(StringBuilder result) {
+        source = source.trim();
+        return new ExactMatchToken(result.toString());
+    }
+
+    private Character getAndRemoveFirstCharacter() {
+        Character c = null;
+        if (!source.isEmpty()) {
+            c = new Character(source.charAt(0));
+            source = source.substring(1);
+        }
+        return c;
     }
 }

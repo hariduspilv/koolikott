@@ -8,6 +8,6 @@ public class ExactMatchToken extends DOPToken {
 
     @Override
     public String toString() {
-        return "\"" + getContentWithEscapedChars() + "\"";
+        return "\"" + getEscapedContent() + "\"";
     }
 }
