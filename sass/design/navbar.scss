@@ -64,15 +64,24 @@
     
 }
 
-.navbar-default {@include box-shadow(0, -3px, 3px, -3px, rgba(0, 0, 0, 0.2), true)}
+.navbar-default {@include box-shadow(0, -3px, 4px, -3px, rgba(0, 0, 0, 0.35), true)}
 
 .navbar-nav {margin-left: 20px !important;
-    
-    .navbar-lang {
-        
-        > a {width: 90px; padding-top: 26.5px; padding-bottom: 27.5px; 
              
-            > span {padding-bottom: 4px; border-bottom: 1px solid $navbar-light-bg}
+             
+    > li {
+        
+        > a {
+            line-height: 21px
+        }
+
+    }
+    
+    .navbar-link-lang {
+        
+        > a {width: 90px; padding-top: 28px; padding-bottom: 25px; 
+             
+            > span {padding-bottom: 2px; border-bottom: 1px solid $navbar-light-bg}
         
         }
         
@@ -80,22 +89,22 @@
             
             span {display: inline-block;
             
-                .fa {margin-left: 25px}
+                .fa {margin-left: 25px; line-height: 21px}
             }
         }
         
         
     }
     
-    .navbar-submenu {position: absolute; top: 16.5px; padding: 8px 0; @include border-radius(3px); @include box-shadow(0, 0, 2px, 0, rgba(0, 0, 0, 0.12)); background: $navbar-dark-bg; list-style: none; z-index: 10;
+    .navbar-submenu {position: absolute; top: 19px; padding: 9px 0; @include border-radius(3px); @include box-shadow(0, 0, 2px, 0, rgba(0, 0, 0, 0.12)); background: $navbar-dark-bg; list-style: none; z-index: 10;
         
         > li:first-child {
             
-            a {margin-bottom: 10px;
+            a {margin-bottom: 9px; line-height: 21px;
                 
-                span {display: inline-block; padding-bottom: 3px; border-bottom: 1px solid $navbar-light-bg;
+                span {display: inline-block; padding-bottom: 2px; border-bottom: 1px solid $navbar-light-bg;
                 
-                    .fa {margin-left: 25px}
+                    .fa {margin-left: 25px; line-height: 21px}
                     
                 }
             }

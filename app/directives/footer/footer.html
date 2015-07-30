@@ -5,7 +5,15 @@
                 <div class="footer-inner">
                     <p class="copyright pull-left" data-translate="COPYRIGHT_FOOTER"></p>
                     <p class="pull-right">
-                        <img src="img/logo-htm.png">
+                        <a data-ng-if="selectedLanguage === 'est'" data-ng-href="https://www.htm.ee/et">
+                            <img src="img/logo-htm-est.png">
+                        </a>
+                        <a data-ng-if="selectedLanguage === 'rus'" data-ng-href="https://www.htm.ee/ru">
+                            <img src="img/logo-htm-est.png">
+                        </a>
+                        <a data-ng-if="selectedLanguage === 'eng'" data-ng-href="https://www.htm.ee/en">
+                            <img src="img/logo-htm-eng.png">
+                        </a>
                     </p>
                 </div>
             </div>

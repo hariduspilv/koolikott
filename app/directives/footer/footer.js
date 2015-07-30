@@ -7,6 +7,12 @@ define(['app'], function(app)
             templateUrl: 'app/directives/footer/footer.html',
             controller: function ($scope, $location) {
                 
+                translationService.setLanguageChangeListener(getSiteLang);
+                $scope.selectedLanguage = translationService.getLanguage();
+                
+                function getSiteLang() {
+                    $scope.selectedLanguage = translationService.getLanguage();
+                }
             }
         };
     });
