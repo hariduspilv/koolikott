@@ -1,12 +1,19 @@
-.row-material {padding-left: 5px; padding-right: 5px;
+.row-material {
+    padding-left: 5px; padding-right: 5px;
     
-    .col-md-3 {padding-left: 10px; padding-right: 10px}
+    .col-md-3 {
+        padding-left: 10px; padding-right: 10px
+    }
     
-    h4 {padding-left: 10px; padding-bottom: 5px; font-size: 31px; font-weight: 300; color: $font-color-grey}
+    h4 {
+        padding-left: 10px; padding-bottom: 5px; font-size: 31px; font-weight: 300; color: $font-color-grey
+    }
     
     .heading {
         
-        h1 {margin-top: 10.5px; padding-left: 10px; padding-bottom: 5px; font-size: 31px; font-weight: 300}
+        h1 {
+            margin-top: 10.5px; padding-left: 10px; padding-bottom: 5px; font-size: 31px; font-weight: 300
+        }
     
     }
     
@@ -14,21 +21,50 @@
         
         > li {
             
-            &:first-child {
+            @media screen and (max-width: $screen-sm) {
+                display: none;
+            }
             
-                .btn {margin-right: 30px}
+            &:first-child {
+                
+                @media screen and (max-width: $screen-sm) {
+                    display: inline;
+                }
+            
+                .btn {
+                    
+                    margin-right: 30px;
+                
+                    @media screen and (max-width: $screen-sm) {
+                        margin-right: 15px;
+                    }
+                }
             
             }
 
             &:last-child {
+                
+                @media screen and (max-width: $screen-sm) {
+                    display: inline;
+                }
 
-                .btn {margin-left: 30px}
+                .btn {
+                    
+                    margin-left: 30px;
+                
+                    @media screen and (max-width: $screen-sm) {
+                        margin-left: 15px;
+                    }
+                
+                }
 
             }
             
             &.disabled {
                 
-                > a.btn-default {border-color: $pagination-disabled-border; background-color: $pagination-disabled-bg; color: $pagination-disabled-color}
+                > a.btn-default {
+                    border-color: $pagination-disabled-border; background-color: $pagination-disabled-bg; color: $pagination-disabled-color
+                }
                 
             }
             
@@ -36,76 +72,91 @@
                 
                 span {position: relative;
                     
-                    &:after {position: absolute; left: 0; bottom: -8px; display: inline-block; width: 100%; content: "\f0d8"; font-family: FontAwesome}
+                    &:after {
+                        position: absolute; left: 0; bottom: -8px; display: inline-block; width: 100%; content: "\f0d8"; font-family: FontAwesome
+                    }
                     
                 }
                 
             }
             
-            > a.btn-default {border-color: $btn-default-border; background-color: $btn-default-bg; color: #FFF}
-        
+            > a.btn-default {
+                border-color: $btn-default-border; background-color: $btn-default-bg; color: #FFF
+            }
         }
-        
     }
+    
     
 }
 
 .material-taping {
     
-    @media screen and (max-width: $screen-sm) {
-        
-    }
-                  
-    .material {
-
-        @media screen and (max-width: $screen-sm) {
-            
-        }
-        
-    }
-
-
+    
 }
 
 .material {
     
-    .block {margin-bottom: 20px; @include border-radius(3px); @include box-shadow(0, 0, 2px, 0, #999); background: #FFF; overflow: hidden;
+    .block {
+        
+        margin-bottom: 20px; @include border-radius(3px); @include box-shadow(0, 0, 2px, 0, #999); background: #FFF; overflow: hidden;
     
-        .illustration {background: #EEE;
+        .illustration {
             
-            figure {position: relative; overflow: hidden;
+            background: #EEE;
+            
+            figure {
                 
-                img {position: absolute;
+                position: relative; overflow: hidden;
+                
+                img {
+                    position: absolute;
                     @media screen and (max-width: $screen-md) {
                         width: 100%; height: auto;
                     }
                 }
                 
-                .img-empty {position: relative}
+                .img-empty {
+                    position: relative
+                }
             }
         }    
         
-        .description {padding: 15px 10px 10px; font-size: 13px; color: $font-color-grey;
-        
-            .title {position: relative; height: 65px; margin-bottom: 15px; line-height: 21px; font-size: 17px; overflow: hidden;
+        .description {
             
-                a {font-size: 17px}
+            padding: 15px 10px 10px; font-size: 13px; color: $font-color-grey;
+        
+            .title {
                 
-                &:after {position: absolute; bottom: 0; right: 0; dislay: block; content: ""; width: 30px; height: 25px; @include gradient-horizontal-to-transparent($start-color: rgba(255, 255, 255, 1), $end-color: rgba(255, 255, 255, 0)); pointer-events: none}
+                position: relative; height: 65px; margin-bottom: 15px; line-height: 21px; font-size: 17px; overflow: hidden;
+            
+                a {
+                    font-size: 17px
+                }
+                
+                &:after {
+                    position: absolute; bottom: 0; right: 0; dislay: block; content: ""; width: 30px; height: 25px; @include gradient-horizontal-to-transparent($start-color: rgba(255, 255, 255, 1), $end-color: rgba(255, 255, 255, 0)); pointer-events: none
+                }
              
             };
             
-            .authors {position: relative; height: 20px; margin-bottom: 15px; overflow: hidden;
+            .authors {
+                position: relative; height: 20px; margin-bottom: 15px; overflow: hidden;
                       
-                &:after {position: absolute; bottom: 0; right: 0; dislay: block; content: ""; width: 30px; height: 100%; @include gradient-horizontal-to-transparent($start-color: rgba(255, 255, 255, 1), $end-color: rgba(255, 255, 255, 0)); pointer-events: none}
+                &:after {
+                    position: absolute; bottom: 0; right: 0; dislay: block; content: ""; width: 30px; height: 100%; @include gradient-horizontal-to-transparent($start-color: rgba(255, 255, 255, 1), $end-color: rgba(255, 255, 255, 0)); pointer-events: none
+                }
             
             }
         
         }
         
-        .statistic {padding: 10px; background: $background-color-grey-medium; font-size: 11px; color: $font-color-grey;
+        .statistic {
+            
+            padding: 10px; background: $background-color-grey-medium; font-size: 11px; color: $font-color-grey;
         
-            a {color: $font-color-grey}
+            a {
+                color: $font-color-grey
+            }
         
         }
     }
