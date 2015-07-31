@@ -2,19 +2,29 @@
     <div class="container">
         <div class="row">
             <div class="col-md-12">
-                <div class="footer-inner">
-                    <p class="copyright pull-left" data-translate="COPYRIGHT_FOOTER"></p>
-                    <p class="pull-right">
-                        <a data-ng-if="selectedLanguage === 'est'" data-ng-href="https://www.htm.ee/et">
-                            <img src="img/logo-htm-est.png">
-                        </a>
-                        <a data-ng-if="selectedLanguage === 'rus'" data-ng-href="https://www.htm.ee/ru">
-                            <img src="img/logo-htm-est.png">
-                        </a>
-                        <a data-ng-if="selectedLanguage === 'eng'" data-ng-href="https://www.htm.ee/en">
-                            <img src="img/logo-htm-eng.png">
-                        </a>
-                    </p>
+                <div class="footer-outer">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="footer-inner">
+                                <p class="copyright" data-translate="COPYRIGHT_FOOTER"></p>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="footer-inner">
+                                <p class="pull-right">
+                                    <a data-ng-if="selectedLanguage === 'est'" data-ng-href="https://www.htm.ee/et">
+                                        <img src="img/logo-htm-est.png">
+                                    </a>
+                                    <a data-ng-if="selectedLanguage === 'rus'" data-ng-href="https://www.htm.ee/ru">
+                                        <img src="img/logo-htm-est.png">
+                                    </a>
+                                    <a data-ng-if="selectedLanguage === 'eng'" data-ng-href="https://www.htm.ee/en">
+                                        <img src="img/logo-htm-eng.png">
+                                    </a>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
