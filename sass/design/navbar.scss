@@ -16,7 +16,7 @@
     
     margin-bottom: 0; border: 0 !important; z-index: 100;
     
-    @media screen and (max-width: $screen-sm) {
+    @media screen and (max-width: $screen-md) {
         min-height: 60px;
     }
     
@@ -41,7 +41,7 @@
     }
     
     .navbar-toggle {
-        @media screen and (max-width: $screen-sm) {
+        @media screen and (max-width: $screen-md) {
             margin-top: 13px; margin-bottom: 13px; margin-left: 15px;
         }
     }
@@ -49,12 +49,12 @@
     .navbar-search-toggle {padding-right: 20px; line-height: 60px; font-size: 25px; color: #FFF}
 
     .navbar-brand {
-        @media screen and (max-width: $screen-sm) {
+        @media screen and (max-width: $screen-md) {
             display: block; float: none; height: 60px; margin: auto; padding-top: 19.5px; padding-bottom: 19.5px;
         }
         img {width: 140px; @include transition(all 0.4s);
              
-            @media screen and (max-width: $screen-sm) {
+            @media screen and (max-width: $screen-md) {
                 width: 120px; height: auto; margin: auto;
             }
              

@@ -4,6 +4,12 @@ $body-bg: #F4F4F4 !default;
 
 $text-color: #444;
 
+//== Grid system
+//
+//## Define your custom responsive grid.
+
+$grid-float-breakpoint: 992px !default;
+
 
 $font-size-base: 15px;
 
@@ -17,7 +23,9 @@ $link-hover-decoration: none;
 
 $font-color-grey: #777;
 
-$font-color-grey-light: #AAA;
+$font-color-grey-medium: #AAA;
+
+$font-color-grey-light: #DDD;
 
 $background-color-grey-medium: #F4F4F4;
 

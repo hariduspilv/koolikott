@@ -26,6 +26,14 @@ define(['app'], function(app) {
 	        	}
 
 	        	return searchQuery;
+	        },
+
+            getPage : function() {
+                var searchObject = $location.search();
+                if (searchObject.page) {
+                    return parseInt(searchObject.page);
+                }
+                return 1;
 	        }
 	    };
 	}]);

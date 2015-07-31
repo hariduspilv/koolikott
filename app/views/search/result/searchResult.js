@@ -1,7 +1,7 @@
 define(['app'], function(app)
 {
-    app.controller('searchResultController', ['$scope', "serverCallService", 'translationService', '$location', 
-             function($scope, serverCallService, translationService, $location) {
+    app.controller('searchResultController', ['$scope', "serverCallService", 'translationService', '$location', 'searchService', 
+             function($scope, serverCallService, translationService, $location, searchService) {
     	
         // Pagination variables
         $scope.paging = [];
@@ -15,28 +15,24 @@ define(['app'], function(app)
         var MAX_PAGES = PAGES_BEFORE_THIS_PAGE + 1 + PAGES_AFTER_THIS_PAGE;
         var start = 0;
 
-        var searchObject = $location.search();
-
-        // Get current page
-        if (searchObject.page && searchObject.page >= 1) {
-            $scope.paging.thisPage = parseInt(searchObject.page);
-            start = RESULTS_PER_PAGE * ($scope.paging.thisPage - 1);
-        }
+        // Get search query and current page
+        $scope.searchQuery = searchService.getQuery();
+        $scope.paging.thisPage = searchService.getPage();
 
         // Get search results
-        if (searchObject.q) {
-            $scope.searchQuery = searchObject.q;
+        if (!isEmpty($scope.searchQuery)) {
             $scope.searching = true;
+            start = RESULTS_PER_PAGE * ($scope.paging.thisPage - 1);
             var params = {
-                'q': searchObject.q,
+                'q': $scope.searchQuery,
                 'start': start
             };
-            serverCallService.makeGet("rest/search", params, getAllMaterialSuccess, getAllMaterialFail);
+            serverCallService.makeGet("rest/search", params, getSearchedMaterialsSuccess, getSearchedMaterialsFail);
     	} else {
             $location.url('/');
         }
         
-        function getAllMaterialSuccess(data) {
+        function getSearchedMaterialsSuccess(data) {
             if (isEmpty(data)) {
                 log('No material data returned.');
             } else {
@@ -44,7 +40,7 @@ define(['app'], function(app)
                 $scope.totalResults = data.totalResults;
                 $scope.paging.totalPages = Math.ceil($scope.totalResults / RESULTS_PER_PAGE);
                 if ($scope.paging.thisPage > $scope.paging.totalPages) {
-                    $scope.goToPage($scope.paging.totalPages);
+                    goToPage($scope.paging.totalPages);
                 } else {
                     $scope.calculatePaging();
                 }
@@ -52,7 +48,7 @@ define(['app'], function(app)
             $scope.searching = false;
         }
         
-        function getAllMaterialFail(data, status) {
+        function getSearchedMaterialsFail(data, status) {
             console.log('Failed to get materials. ')
             $scope.searching = false;
         }
@@ -69,11 +65,10 @@ define(['app'], function(app)
             return $scope.materials.length;
         }
 
-        function pushPageNumbers(targetArray, from, to) {
+        function addNumbersToArray(targetArray, from, to) {
             for (i = from; i < to; i++) {
                 targetArray.push(i);
             }
-            return to - from;
         }
 
         $scope.calculatePaging = function() {
@@ -82,58 +77,44 @@ define(['app'], function(app)
             }
 
             if ($scope.paging.totalPages <= MAX_PAGES) {
-                showAllPages();
+                addAllPageNumbers();
             } else if ($scope.paging.totalPages - ($scope.paging.thisPage - PAGES_BEFORE_THIS_PAGE) < MAX_PAGES) {
-                showLastPages();
+                addLastPageNumbers();
+            } else if ($scope.paging.thisPage > PAGES_BEFORE_THIS_PAGE) {
+                addMiddlePageNumbers();
             } else {
-                if ($scope.paging.thisPage > PAGES_BEFORE_THIS_PAGE) {
-                    showMiddlePages();
-                } else {
-                    showFirstPages();
-                }
+                addFirstPageNumbers();
             }
         }
 
-        function showAllPages() {
-             // Display all page numbers
-            pushPageNumbers($scope.paging.before, 1, $scope.paging.thisPage);
-            pushPageNumbers($scope.paging.after, $scope.paging.thisPage + 1, $scope.paging.totalPages + 1);
+        function addAllPageNumbers() {
+             // Add all page numbers
+            addNumbersToArray($scope.paging.before, 1, $scope.paging.thisPage);
+            addNumbersToArray($scope.paging.after, $scope.paging.thisPage + 1, $scope.paging.totalPages + 1);
         }
 
-        function showLastPages() {
-            // Display the last MAX_PAGES amount of page numbers
-            var pagesBeforeThisPage = MAX_PAGES - ($scope.paging.totalPages - $scope.paging.thisPage) - 1;
-            var pagesAfterThisPage = MAX_PAGES - pagesBeforeThisPage - 1;
-
-            pushPageNumbers($scope.paging.before, $scope.paging.thisPage - pagesBeforeThisPage, $scope.paging.thisPage);
-            pushPageNumbers($scope.paging.after, $scope.paging.thisPage + 1, $scope.paging.thisPage + 1 + pagesAfterThisPage);
+        function addLastPageNumbers() {
+            // Add the last MAX_PAGES amount of page numbers
+            addNumbersToArray($scope.paging.after, $scope.paging.thisPage + 1, $scope.paging.totalPages + 1);
+            addNumbersToArray($scope.paging.before, $scope.paging.totalPages + 1 - MAX_PAGES, $scope.paging.thisPage);
         }
 
-        function showFirstPages() {
-            var pagesBefore = 0;
-            // Display less than PAGES_BEFORE_THIS_PAGE amount of page numbers before this page
-            pagesBefore += pushPageNumbers($scope.paging.before, 1, $scope.paging.thisPage);
-            pushPageNumbers($scope.paging.after, $scope.paging.thisPage + 1, $scope.paging.thisPage + 1 + PAGES_AFTER_THIS_PAGE + (PAGES_BEFORE_THIS_PAGE - pagesBefore));
+        function addFirstPageNumbers() {
+            // Add less than PAGES_BEFORE_THIS_PAGE amount of page numbers before this page
+            addNumbersToArray($scope.paging.before, 1, $scope.paging.thisPage);
+            addNumbersToArray($scope.paging.after, $scope.paging.thisPage + 1, MAX_PAGES + 1);
         }
 
-        function showMiddlePages() {
-            // Display PAGES_BEFORE_THIS_PAGE amount of page numbers, this page number and PAGES_AFTER_THIS_PAGE amount of page numbers
-            pushPageNumbers($scope.paging.before, $scope.paging.thisPage - PAGES_BEFORE_THIS_PAGE, $scope.paging.thisPage);
-            pushPageNumbers($scope.paging.after, $scope.paging.thisPage + 1, $scope.paging.thisPage + 1 + PAGES_AFTER_THIS_PAGE);
+        function addMiddlePageNumbers() {
+            // Add PAGES_BEFORE_THIS_PAGE amount of page numbers, this page number and PAGES_AFTER_THIS_PAGE amount of page numbers
+            addNumbersToArray($scope.paging.before, $scope.paging.thisPage - PAGES_BEFORE_THIS_PAGE, $scope.paging.thisPage);
+            addNumbersToArray($scope.paging.after, $scope.paging.thisPage + 1, $scope.paging.thisPage + 1 + PAGES_AFTER_THIS_PAGE);
         }
 
-        $scope.isPreviousButtonDisabled = function() {
-            return (start == 0) ? "disabled" : "";
-        }
-
-        $scope.isNextButtonDisabled = function() {
-            return ($scope.paging.thisPage >= $scope.paging.totalPages) ? "disabled" : "";
-        }
-
-        $scope.goToPage = function(page) {
+        goToPage = function(page) {
             if (page >= 1 && page <= $scope.paging.totalPages) {
                 var params = {
-                    'q': searchObject.q,
+                    'q': $scope.searchQuery,
                     'page': page
                 };
                 $location.url("search/result").search(params);
