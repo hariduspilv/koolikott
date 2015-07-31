@@ -18,4 +18,8 @@ public class RepositoryDAO {
     public List<Repository> findAll() {
         return entityManager.createQuery("from Repository", Repository.class).getResultList();
     }
+
+    public void updateRepository(Repository repository) {
+        entityManager.merge(repository);
+    }
 }

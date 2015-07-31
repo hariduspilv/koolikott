@@ -79,4 +79,8 @@ public class RepositoryService {
             materialService.createMaterial(material);
         }
     }
+
+    public void updateRepositoryData(Repository repository) {
+        repositoryDAO.updateRepository(repository);
+    }
 }

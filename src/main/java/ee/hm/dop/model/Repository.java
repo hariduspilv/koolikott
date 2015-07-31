@@ -30,7 +30,7 @@ public class Repository {
     @Column(nullable = false)
     private String baseURL;
 
-    @Column(nullable = false)
+    @Column
     @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
     private DateTime lastSynchronization;
 
