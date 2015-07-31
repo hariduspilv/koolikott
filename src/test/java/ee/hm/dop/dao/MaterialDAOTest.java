@@ -87,6 +87,8 @@ public class MaterialDAOTest extends DatabaseTestBase {
         assertEquals("est", language.getCode());
         assertEquals("Estonian", language.getName());
         assertEquals("et", language.getCodes().get(0));
+        System.out.println(material.getPicture());
+        assertNotNull(material.getPicture());
     }
 
     @Test
@@ -249,6 +251,9 @@ public class MaterialDAOTest extends DatabaseTestBase {
         material.setSource("asd");
         material.setAdded(new DateTime());
         material.setViews((long) 123);
+        String data = "picture";
+        byte[] picture = data.getBytes();
+        material.setPicture(picture);
 
         int size = materialDAO.findAll().size();
 
@@ -261,6 +266,8 @@ public class MaterialDAOTest extends DatabaseTestBase {
         assertEquals(material.getViews(), newMaterial.getViews());
         assertEquals(size + 1, materialDAO.findAll().size());
         assertSame(material, materialDAO.findById(material.getId()));
+        assertEquals(material.getPicture(), newMaterial.getPicture());
+        assertEquals(material.getHasPicture(), newMaterial.getHasPicture());
 
         materialDAO.delete(material);
     }
@@ -291,5 +298,26 @@ public class MaterialDAOTest extends DatabaseTestBase {
     public void getHasPictureNoPicture() {
         Material material = materialDAO.findById(2);
         assertFalse(material.getHasPicture());
+    }
+
+    @Test
+    public void getHasPicture() {
+        Material material = materialDAO.findById(1);
+        assertTrue(material.getHasPicture());
+        byte[] picture = material.getPicture();
+
+        material.setPicture(null);
+        material.setHasPicture(false);
+        materialDAO.update(material);
+        Material material2 = materialDAO.findById(1);
+        assertFalse(material2.getHasPicture());
+
+        material2.setPicture(picture);
+        material2.setHasPicture(true);
+        materialDAO.update(material2);
+
+        Material material3 = materialDAO.findById(1);
+        assertTrue(material3.getHasPicture());
+        assertNotNull(material3.getPicture());
     }
 }
