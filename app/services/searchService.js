@@ -36,9 +36,25 @@ define(['app'], function(app) {
                 return 1;
 	        }, 
 
+	        getActualPage : function() {
+	        	var searchObject = $location.search();
+                if (searchObject.page) {
+                    return searchObject.page;
+                }
+                return 1;
+	        }, 
+
             buildURL : function(query, page) {
             	return "#/" + searchURLbase + query + "&page=" + page;
-            }
+            }, 
+
+            goToPage : function(page) {
+                var params = {
+                    'q': this.getQuery(),
+                    'page': page
+                };
+                $location.url("search/result").search(params);
+       	    }
 	    };
 	}]);
 });

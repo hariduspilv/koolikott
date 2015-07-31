@@ -21,6 +21,18 @@ define(['app'], function(app)
 
         $scope.buildURL = searchService.buildURL;
 
+        // If page is negative, redirect to page 1
+        if ($scope.paging.thisPage < 1) {
+            searchService.goToPage(1);
+            return;
+        }
+
+        // If page number is not an integer, redirect to correct page
+        if ($scope.paging.thisPage !== searchService.getActualPage()) {
+            searchService.goToPage($scope.paging.thisPage);
+            return;
+        }
+
         // Get search results
         if (!isEmpty($scope.searchQuery)) {
             $scope.searching = true;
@@ -42,7 +54,7 @@ define(['app'], function(app)
                 $scope.totalResults = data.totalResults;
                 $scope.paging.totalPages = Math.ceil($scope.totalResults / RESULTS_PER_PAGE);
                 if ($scope.paging.thisPage > $scope.paging.totalPages) {
-                    goToPage($scope.paging.totalPages);
+                    searchService.goToPage($scope.paging.totalPages);
                 } else {
                     $scope.calculatePaging();
                 }
@@ -111,16 +123,6 @@ define(['app'], function(app)
             // Add PAGES_BEFORE_THIS_PAGE amount of page numbers, this page number and PAGES_AFTER_THIS_PAGE amount of page numbers
             addNumbersToArray($scope.paging.before, $scope.paging.thisPage - PAGES_BEFORE_THIS_PAGE, $scope.paging.thisPage);
             addNumbersToArray($scope.paging.after, $scope.paging.thisPage + 1, $scope.paging.thisPage + 1 + PAGES_AFTER_THIS_PAGE);
-        }
-
-        goToPage = function(page) {
-            if (page >= 1 && page <= $scope.paging.totalPages) {
-                var params = {
-                    'q': $scope.searchQuery,
-                    'page': page
-                };
-                $location.url("search/result").search(params);
-            }
         }
 
     }]);
