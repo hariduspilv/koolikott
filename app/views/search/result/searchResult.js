@@ -40,7 +40,7 @@ define(['app'], function(app)
                 $scope.totalResults = data.totalResults;
                 $scope.paging.totalPages = Math.ceil($scope.totalResults / RESULTS_PER_PAGE);
                 if ($scope.paging.thisPage > $scope.paging.totalPages) {
-                    $scope.goToPage($scope.paging.totalPages);
+                    goToPage($scope.paging.totalPages);
                 } else {
                     $scope.calculatePaging();
                 }
