@@ -8,7 +8,7 @@ import javax.ws.rs.core.Response;
 import org.junit.Test;
 
 import ee.hm.dop.common.test.ResourceIntegrationTestBase;
-import ee.hm.dop.model.solr.SearchResult;
+import ee.hm.dop.model.SearchResult;
 
 public class SearchResourceTest extends ResourceIntegrationTestBase {
 

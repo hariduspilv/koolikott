@@ -1,8 +1,6 @@
-package ee.hm.dop.model.solr;
+package ee.hm.dop.model;
 
 import java.util.List;
-
-import ee.hm.dop.model.Material;
 
 public class SearchResult {
 

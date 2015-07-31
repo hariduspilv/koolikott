@@ -2,7 +2,6 @@ package ee.hm.dop.tokenizer;
 
 import static org.junit.Assert.assertEquals;
 
-import org.apache.commons.lang3.StringUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
@@ -15,16 +14,7 @@ public class RegularTokenTest {
         RegularToken token = new RegularToken("test");
         assertEquals("test", token.toString());
 
-        token.setContent("\"test123/!");
+        token = new RegularToken("\"test123/!");
         assertEquals("\\\"test123\\/\\!", token.toString());
-
-        char[] escapedChars = { '\\', '+', '-', '!', '(', ')', ':', '^', '[', ']', '\"', '{', '}', '~', '*', '?', '|',
-                '&', ';', '/' };
-
-        String testString = new String(escapedChars);
-        token.setContent(testString);
-        int count = StringUtils.countMatches(token.toString(), '\\');
-
-        assertEquals(escapedChars.length + 1, count);
     }
 }

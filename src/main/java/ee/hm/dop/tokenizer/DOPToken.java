@@ -7,21 +7,13 @@ public abstract class DOPToken {
     private String content;
 
     public DOPToken(String content) {
-        this.setContent(content);
+        this.content = content;
     }
 
     @Override
     public abstract String toString();
 
-    protected String getContentWithEscapedChars() {
+    protected String getEscapedContent() {
         return ClientUtils.escapeQueryChars(content);
-    }
-
-    public String getContent() {
-        return content;
-    }
-
-    public void setContent(String content) {
-        this.content = content;
     }
 }

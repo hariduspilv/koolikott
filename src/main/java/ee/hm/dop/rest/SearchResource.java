@@ -7,7 +7,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
-import ee.hm.dop.model.solr.SearchResult;
+import ee.hm.dop.model.SearchResult;
 import ee.hm.dop.service.SearchService;
 
 @Path("search")
