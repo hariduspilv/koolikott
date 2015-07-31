@@ -2,11 +2,13 @@ package ee.hm.dop.dao;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 
 import java.util.List;
 
 import javax.inject.Inject;
 
+import org.joda.time.DateTime;
 import org.junit.Test;
 
 import ee.hm.dop.common.test.DatabaseTestBase;
@@ -26,6 +28,19 @@ public class RepositoryDAOTest extends DatabaseTestBase {
 
         assertEquals(1, repositories.size());
         assertEquals("http://koolitaja.eenet.ee:57219/Waramu3Web/OAIHandler", repositories.get(0).getBaseURL());
-        assertNotNull(repositories.get(0).getLastSynchronization());
+        assertNull(repositories.get(0).getLastSynchronization());
+    }
+
+    @Test
+    public void updateRepositoryData() {
+        Repository repository = repositoryDAO.findAll().get(0);
+        assertNull(repository.getLastSynchronization());
+
+        repository.setLastSynchronization(new DateTime());
+        repositoryDAO.updateRepository(repository);
+        assertNotNull(repository.getLastSynchronization());
+
+        repository.setLastSynchronization(null);
+        repositoryDAO.updateRepository(repository);
     }
 }
