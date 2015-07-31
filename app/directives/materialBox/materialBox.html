@@ -2,7 +2,8 @@
     <div class="block">
         <div class="illustration">
             <figure>
-                <img data-ng-src="rest/material/getPicture?materialId={{material.id}}" fallback-src="img/placeholder-material-single.png" class="img-responsive">
+                <img ng-if="material.hasPicture" src="rest/material/getPicture?materialId={{material.id}}">
+                <img ng-if="!material.hasPicture" src="img/placeholder-material-single.png">
                 <img src="img/placeholder-material-empty.png" class="img-responsive img-empty">
             </figure>
         </div>
