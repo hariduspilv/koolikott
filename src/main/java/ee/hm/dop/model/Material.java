@@ -19,6 +19,7 @@ import javax.persistence.NamedQuery;
 import javax.persistence.OneToOne;
 import javax.persistence.UniqueConstraint;
 
+import org.hibernate.annotations.Formula;
 import org.hibernate.annotations.Type;
 import org.joda.time.DateTime;
 
@@ -136,6 +137,9 @@ public class Material {
     @Lob
     @JsonIgnore
     private byte[] picture;
+
+    @Formula("picture is not null")
+    private boolean hasPicture;
 
     public Long getId() {
         return id;
@@ -277,5 +281,13 @@ public class Material {
 
     public void setPicture(byte[] picture) {
         this.picture = picture;
+    }
+
+    public boolean getHasPicture() {
+        return hasPicture;
+    }
+
+    public void setHasPicture(boolean hasPicture) {
+        this.hasPicture = hasPicture;
     }
 }

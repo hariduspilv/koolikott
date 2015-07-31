@@ -57,7 +57,9 @@ public class MaterialResource {
     @Path("/getPicture")
     @Produces("image/png")
     public Response getPictureById(@QueryParam("materialId") long id) {
-        byte[] pictureData = materialService.getPictureById(id);
+        Material material = new Material();
+        material.setId(id);
+        byte[] pictureData = materialService.getMaterialPicture(material);
 
         if (pictureData != null) {
             return Response.ok(pictureData).build();

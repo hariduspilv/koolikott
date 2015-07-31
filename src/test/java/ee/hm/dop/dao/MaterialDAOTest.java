@@ -1,5 +1,6 @@
 package ee.hm.dop.dao;
 
+import static junit.framework.TestCase.assertNull;
 import static org.apache.commons.lang3.StringUtils.isBlank;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -265,9 +266,30 @@ public class MaterialDAOTest extends DatabaseTestBase {
     }
 
     @Test
-    public void findPictureById() {
-        long id = 1;
-        byte[] picture = materialDAO.findPictureById(id);
+    public void findPictureByMaterial() {
+        Material material = new Material();
+        material.setId((long) 1);
+        byte[] picture = materialDAO.findPictureByMaterial(material);
         assertNotNull(picture);
+    }
+
+    @Test
+    public void findPictureByMaterialNoPicture() {
+        Material material = new Material();
+        material.setId((long) 2);
+        byte[] picture = materialDAO.findPictureByMaterial(material);
+        assertNull(picture);
+    }
+
+    @Test
+    public void getHasPictureTrue() {
+        Material material = materialDAO.findById(1);
+        assertTrue(material.getHasPicture());
+    }
+
+    @Test
+    public void getHasPictureNoPicture() {
+        Material material = materialDAO.findById(2);
+        assertFalse(material.getHasPicture());
     }
 }

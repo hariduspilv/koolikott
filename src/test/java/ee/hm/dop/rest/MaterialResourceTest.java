@@ -209,11 +209,19 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
     }
 
     @Test
-    public void getPictureById() {
+    public void getMaterialPicture() {
         long materialId = 1;
-        Response response = doGet("material/getPicture?materialId=" + materialId);
+        Response response = doGet("material/getPicture?materialId=" + materialId, MediaType.WILDCARD_TYPE);
         byte[] picture = response.readEntity(new GenericType<byte[]>() {
         });
         assertNotNull(picture);
+        assertEquals(Status.OK.getStatusCode(), response.getStatus());
+    }
+
+    @Test
+    public void getMaterialPictureNull() {
+        long materialId = 999;
+        Response response = doGet("material/getPicture?materialId=" + materialId, MediaType.WILDCARD_TYPE);
+        assertEquals(Status.NOT_FOUND.getStatusCode(), response.getStatus());
     }
 }
