@@ -19,6 +19,8 @@ define(['app'], function(app)
         $scope.searchQuery = searchService.getQuery();
         $scope.paging.thisPage = searchService.getPage();
 
+        $scope.buildURL = searchService.buildURL;
+
         // Get search results
         if (!isEmpty($scope.searchQuery)) {
             $scope.searching = true;

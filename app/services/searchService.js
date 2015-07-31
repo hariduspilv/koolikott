@@ -34,7 +34,11 @@ define(['app'], function(app) {
                     return parseInt(searchObject.page);
                 }
                 return 1;
-	        }
+	        }, 
+
+            buildURL : function(query, page) {
+            	return "#/" + searchURLbase + query + "&page=" + page;
+            }
 	    };
 	}]);
 });
