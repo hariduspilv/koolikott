@@ -52,4 +52,17 @@ public class MaterialResource {
         materialService.increaseViewCount(material);
         return Response.status(HttpURLConnection.HTTP_OK).build();
     }
+
+    @GET
+    @Path("/getPicture")
+    @Produces("image/png")
+    public Response getPictureById(@QueryParam("materialId") long id) {
+        byte[] pictureData = materialService.getPictureById(id);
+
+        if (pictureData != null) {
+            return Response.ok(pictureData).build();
+        } else {
+            return Response.status(HttpURLConnection.HTTP_NOT_FOUND).build();
+        }
+    }
 }

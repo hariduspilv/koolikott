@@ -61,4 +61,17 @@ public class MaterialDAO {
     public void delete(Material material) {
         entityManager.remove(material);
     }
+
+    public byte[] findPictureById(long id) {
+        TypedQuery<byte[]> findById = entityManager.createNamedQuery("Material.findPictureById", byte[].class);
+
+        byte[] picture = null;
+        try {
+            picture = findById.setParameter("id", id).getSingleResult();
+        } catch (NoResultException ex) {
+            // ignore
+        }
+
+        return picture;
+    }
 }

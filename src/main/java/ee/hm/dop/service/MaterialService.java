@@ -36,4 +36,8 @@ public class MaterialService {
 
         materialDao.update(material);
     }
+
+    public byte[] getPictureById(long id) {
+        return materialDao.findPictureById(id);
+    }
 }

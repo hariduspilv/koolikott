@@ -25,7 +25,7 @@ insert into LicenseType(id, name) values (3, 'CCBYND');
 
 -- Materials
 
-insert into Material(id, lang, issueDate, licenseType, source, added, updated, views, picture) values(1, 1, 1, 1, 'https://www.youtube.com/watch?v=gSWbx3CvVUk', '1999-01-01 00:00:01', '2000-03-01 07:00:01', 100, null);
+insert into Material(id, lang, issueDate, licenseType, source, added, updated, views, picture) values(1, 1, 1, 1, 'https://www.youtube.com/watch?v=gSWbx3CvVUk', '1999-01-01 00:00:01', '2000-03-01 07:00:01', 100, '656b6f6f6c696b6f7474');
 insert into Material(id, lang, issueDate, licenseType, source, added, updated, views, picture) values(2, 2, 2, 2, 'https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes', '1970-01-01 00:00:01', '1995-07-12 09:00:01', 200, null);
 insert into Material(id, lang, issueDate, licenseType, source, added, updated, views, picture) values(3, 4, 3, 3,  'http://eloquentjavascript.net/Eloquent_JavaScript.pdf', '2009-01-01 00:00:01', '2011-01-10 19:00:01', 300, null);
 insert into Material(id, lang, issueDate, licenseType, source, added, updated, views, picture) values(4, 3, 4, 1,  'https://en.wikipedia.org/wiki/Power_Architecture', '2012-01-01 00:00:01', '2012-08-28 22:40:01', 400, null);
@@ -242,4 +242,3 @@ insert into Page(id, name, content, language) VALUES (6, 'Help', '<h1>Help</h1><
 -- Repository
 
 insert into Repository(id, baseURL, lastSynchronization, schemaName) values (1, 'http://koolitaja.eenet.ee:57219/Waramu3Web/OAIHandler', '1970-01-12 13:46:39', 'waramu');
-

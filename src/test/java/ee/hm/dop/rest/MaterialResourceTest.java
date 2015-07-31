@@ -1,6 +1,7 @@
 package ee.hm.dop.rest;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import java.util.List;
@@ -205,5 +206,14 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
 
         response = doGet("material?materialId=" + materialId);
         assertEquals(Status.NO_CONTENT.getStatusCode(), response.getStatus());
+    }
+
+    @Test
+    public void getPictureById() {
+        long materialId = 1;
+        Response response = doGet("material/getPicture?materialId=" + materialId);
+        byte[] picture = response.readEntity(new GenericType<byte[]>() {
+        });
+        assertNotNull(picture);
     }
 }

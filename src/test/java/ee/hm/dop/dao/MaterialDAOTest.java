@@ -263,4 +263,11 @@ public class MaterialDAOTest extends DatabaseTestBase {
 
         materialDAO.delete(material);
     }
+
+    @Test
+    public void findPictureById() {
+        long id = 1;
+        byte[] picture = materialDAO.findPictureById(id);
+        assertNotNull(picture);
+    }
 }

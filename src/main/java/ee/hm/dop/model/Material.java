@@ -23,6 +23,7 @@ import org.hibernate.annotations.Type;
 import org.joda.time.DateTime;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
@@ -35,7 +36,8 @@ import ee.hm.dop.rest.jackson.map.LanguageSerializer;
 @Entity
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id", scope = Material.class)
 @NamedQueries({ @NamedQuery(name = "Material.findById", query = "SELECT m FROM Material m WHERE m.id = :id"),
-        @NamedQuery(name = "Material.findAllById", query = "SELECT m FROM Material m WHERE m.id in :idList") })
+        @NamedQuery(name = "Material.findAllById", query = "SELECT m FROM Material m WHERE m.id in :idList"),
+        @NamedQuery(name = "Material.findPictureById", query = "SELECT m.picture FROM Material m WHERE m.id = :id") })
 public class Material {
 
     @Id
@@ -131,10 +133,9 @@ public class Material {
             uniqueConstraints = @UniqueConstraint(columnNames = { "material", "tag" }))
     private List<Tag> tags;
 
-    @Column
     @Lob
+    @JsonIgnore
     private byte[] picture;
-
 
     public Long getId() {
         return id;
