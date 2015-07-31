@@ -87,7 +87,6 @@ public class MaterialDAOTest extends DatabaseTestBase {
         assertEquals("est", language.getCode());
         assertEquals("Estonian", language.getName());
         assertEquals("et", language.getCodes().get(0));
-        System.out.println(material.getPicture());
         assertNotNull(material.getPicture());
     }
 

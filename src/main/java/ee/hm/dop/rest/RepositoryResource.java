@@ -10,7 +10,6 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -33,11 +32,7 @@ public class RepositoryResource {
     public Response updateResources() {
         List<Repository> repositories = repositoryService.getAllRepositorys();
         for (Repository repository : repositories) {
-            if (repository.getLastSynchronization() == null) {
                 repositoryService.updateRepository(repository);
-                repository.setLastSynchronization(DateTime.now());
-                repositoryService.updateRepositoryData(repository);
-            }
         }
 
         return Response.status(HttpURLConnection.HTTP_OK).build();

@@ -6,6 +6,7 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -38,6 +39,11 @@ public class RepositoryService {
     public void updateRepository(Repository repository) {
         logger.info(format("Updating materials for %s", repository));
 
+        if (repository.getLastSynchronization() != null) {
+            logger.info("Repository already updated.");
+            return;
+        }
+
         long failedMaterials = 0;
         long successfulMaterials = 0;
         long start = System.currentTimeMillis();
@@ -66,6 +72,9 @@ public class RepositoryService {
                 count = 0;
             }
         }
+
+        repository.setLastSynchronization(DateTime.now());
+        updateRepositoryData(repository);
 
         long end = System.currentTimeMillis();
         String message = "Updating materials took %s milliseconds. Successfully downloaded %s"
