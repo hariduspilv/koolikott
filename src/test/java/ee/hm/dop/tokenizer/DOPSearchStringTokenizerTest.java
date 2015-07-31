@@ -4,6 +4,8 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.fail;
 
+import java.util.NoSuchElementException;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
@@ -36,60 +38,95 @@ public class DOPSearchStringTokenizerTest {
     @Test
     public void tokenizeRegularQuery() {
         DOPSearchStringTokenizer tokenizer = new DOPSearchStringTokenizer("hello world");
-        StringBuilder sb = new StringBuilder();
+        String searchQuery = consumeTokenizer(tokenizer);
 
-        while (tokenizer.hasMoreTokens()) {
-            DOPToken token = tokenizer.nextToken();
-            sb.append(token);
-            if (tokenizer.hasMoreTokens()) {
-                sb.append(" ");
-            }
-        }
-        assertEquals("hello world", sb.toString());
+        assertEquals("hello world", searchQuery);
     }
 
     @Test
     public void tokenizeExactMatch() {
         DOPSearchStringTokenizer tokenizer = new DOPSearchStringTokenizer("\"hello world\"");
-        StringBuilder sb = new StringBuilder();
+        String searchQuery = consumeTokenizer(tokenizer);
 
-        while (tokenizer.hasMoreTokens()) {
-            DOPToken token = tokenizer.nextToken();
-            sb.append(token);
-            if (tokenizer.hasMoreTokens()) {
-                sb.append(" ");
-            }
-        }
-        assertEquals("\"hello\\ world\"", sb.toString());
+        assertEquals("\"hello\\ world\"", searchQuery);
     }
 
     @Test
-    public void tokenizeEvenQuotes() {
+    public void tokenizeEvenQuotesAtTheEnd() {
         DOPSearchStringTokenizer tokenizer = new DOPSearchStringTokenizer("\"hello world\" aabc\"");
-        StringBuilder sb = new StringBuilder();
+        String searchQuery = consumeTokenizer(tokenizer);
+
+        assertEquals("\"hello\\ world\" aabc\\\"", searchQuery);
+    }
+
+    @Test
+    public void tokenizeEvenQuotesAtStart() {
+        DOPSearchStringTokenizer tokenizer = new DOPSearchStringTokenizer("\"hello world\" \"aabc");
+        String searchQuery = consumeTokenizer(tokenizer);
+
+        assertEquals("\"hello\\ world\" \\\"aabc", searchQuery);
+    }
+
+    @Test
+    public void tokenizeEvenQuotesInTheMiddle() {
+        DOPSearchStringTokenizer tokenizer = new DOPSearchStringTokenizer("\"hello world\" aa\"bc");
+        String searchQuery = consumeTokenizer(tokenizer);
+
+        assertEquals("\"hello\\ world\" aa\\\"bc", searchQuery);
+    }
+
+    @Test
+    public void nextTokenWhithoutCallingHasNextToken() {
+        DOPSearchStringTokenizer tokenizer = new DOPSearchStringTokenizer("\"hello world\" abc \"again\"");
+
+        assertEquals("\"hello\\ world\"", tokenizer.nextToken().toString());
+        assertEquals("abc", tokenizer.nextToken().toString());
+        assertEquals("\"again\"", tokenizer.nextToken().toString());
+
+        try {
+            tokenizer.nextToken();
+            fail("NoSuchElementException expected");
+        } catch (NoSuchElementException e) {
+            // Everything fine
+        }
+    }
+
+    @Test
+    public void tokenizeUsingTabsAndNewLine() {
+        DOPSearchStringTokenizer tokenizer = new DOPSearchStringTokenizer("\t\n\r\"hello\nworld\"\ra\tabc\"\t\n\r");
+        String searchQuery = consumeTokenizer(tokenizer);
+
+        assertEquals("\"hello\\\nworld\" a abc\\\"", searchQuery);
+    }
+
+    @Test
+    public void emptyQuotes() {
+        DOPSearchStringTokenizer tokenizer = new DOPSearchStringTokenizer("\"\"");
+        String searchQuery = consumeTokenizer(tokenizer);
+
+        assertEquals("", searchQuery);
+    }
+
+    private String consumeTokenizer(DOPSearchStringTokenizer tokenizer) {
+        StringBuilder searchQuery = new StringBuilder();
 
         while (tokenizer.hasMoreTokens()) {
             DOPToken token = tokenizer.nextToken();
-            sb.append(token);
+            searchQuery.append(token);
+
             if (tokenizer.hasMoreTokens()) {
-                sb.append(" ");
+                searchQuery.append(" ");
             }
         }
-        assertEquals("\"hello\\ world\" aabc\\\"", sb.toString());
+
+        return searchQuery.toString();
     }
 
     @Test
     public void tokenizeSpecialCharacters() {
         DOPSearchStringTokenizer tokenizer = new DOPSearchStringTokenizer("\"hello world\" aabc\" +-!");
-        StringBuilder sb = new StringBuilder();
+        String searchQuery = consumeTokenizer(tokenizer);
 
-        while (tokenizer.hasMoreTokens()) {
-            DOPToken token = tokenizer.nextToken();
-            sb.append(token);
-            if (tokenizer.hasMoreTokens()) {
-                sb.append(" ");
-            }
-        }
-        assertEquals("\"hello\\ world\" aabc\\\" \\+\\-\\!", sb.toString());
+        assertEquals("\"hello\\ world\" aabc\\\" \\+\\-\\!", searchQuery);
     }
 }

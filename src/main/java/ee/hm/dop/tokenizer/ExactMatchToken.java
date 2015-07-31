@@ -8,6 +8,7 @@ public class ExactMatchToken extends DOPToken {
 
     @Override
     public String toString() {
-        return "\"" + getEscapedContent() + "\"";
+        String escapedContent = getEscapedContent();
+        return escapedContent.length() > 0 ? "\"" + escapedContent + "\"" : "";
     }
 }
