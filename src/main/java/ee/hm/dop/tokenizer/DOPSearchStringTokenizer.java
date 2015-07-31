@@ -1,67 +1,108 @@
 package ee.hm.dop.tokenizer;
 
+import java.util.NoSuchElementException;
+
 public class DOPSearchStringTokenizer {
 
     private String source;
+    private int currentPosition;
+    private int newPosition;
+    private int maxPosition;
 
     public DOPSearchStringTokenizer(String source) {
         this.source = source.trim();
+        this.currentPosition = 0;
+        this.maxPosition = this.source.length();
+        this.newPosition = -1;
     }
 
     public boolean hasMoreTokens() {
-        return !source.isEmpty();
+        newPosition = skipWhiteSpaces(currentPosition);
+        return newPosition < maxPosition;
     }
 
     public DOPToken nextToken() {
-        return parseStart(new StringBuilder());
-    }
+        currentPosition = newPosition >= 0 ? newPosition : skipWhiteSpaces(currentPosition);
 
-    private DOPToken parseStart(StringBuilder result) {
-        Character c = getAndRemoveFirstCharacter();
+        // Reset anyway
+        newPosition = -1;
 
-        if (c.charValue() == '"' && source.indexOf('"') != -1) {
-            return parseExactMatch(result);
-        } else {
-            return parseRegular(result.append(c));
+        if (currentPosition >= maxPosition) {
+            throw new NoSuchElementException();
         }
+
+        return parse();
     }
 
-    private DOPToken parseRegular(StringBuilder result) {
-        Character c = getAndRemoveFirstCharacter();
+    private DOPToken parse() {
+        DOPToken token = null;
 
-        if (c == null || Character.isWhitespace(c.charValue())) {
-            return createRegularToken(result);
-        } else {
-            return parseRegular(result.append(c));
+        if (currentPosition < maxPosition) {
+            char c = source.charAt(currentPosition);
+
+            if (c == '"') {
+                token = parseExactMatch();
+            }
+
+            if (token == null) {
+                token = parseRegular();
+            }
         }
+
+        return token;
     }
 
-    private DOPToken parseExactMatch(StringBuilder result) {
-        Character c = getAndRemoveFirstCharacter();
+    private DOPToken parseRegular() {
+        int position = currentPosition;
+        char c = source.charAt(position);
 
-        if (c.charValue() == '"') {
-            return createExactMatchToken(result);
-        } else {
-            return parseExactMatch(result.append(c));
+        while (!Character.isWhitespace(c)) {
+            position++;
+            if (position >= maxPosition) {
+                break;
+            }
+
+            c = source.charAt(position);
         }
+
+        RegularToken regularToken = new RegularToken(source.substring(currentPosition, position));
+
+        // Update global position
+        currentPosition = position;
+
+        return regularToken;
     }
 
-    private DOPToken createRegularToken(StringBuilder result) {
-        source = source.trim();
-        return new RegularToken(result.toString());
-    }
+    private DOPToken parseExactMatch() {
+        int position = currentPosition;
+        int tokenStartPos = position + 1;
+        DOPToken token = null;
+        char c = source.charAt(position);
 
-    private DOPToken createExactMatchToken(StringBuilder result) {
-        source = source.trim();
-        return new ExactMatchToken(result.toString());
-    }
+        if (c == '"' && source.indexOf('"', ++position) != -1) {
+            while (source.charAt(position) != '"') {
+                position++;
+            }
 
-    private Character getAndRemoveFirstCharacter() {
-        Character c = null;
-        if (!source.isEmpty()) {
-            c = new Character(source.charAt(0));
-            source = source.substring(1);
+            token = new ExactMatchToken(source.substring(tokenStartPos, position));
+
+            // Consumes the closing "
+            position++;
+
+            // Update global position
+            currentPosition = position;
         }
-        return c;
+
+        return token;
+    }
+
+    private int skipWhiteSpaces(int startPosition) {
+        int position = startPosition;
+
+        while (position < maxPosition && Character.isWhitespace(source.charAt(position))) {
+            position++;
+        }
+
+        return position;
     }
 }
