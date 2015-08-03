@@ -54,8 +54,8 @@
         
         padding-right: 20px; line-height: 60px; font-size: 25px; color: #FFF;
         
-        @media screen and (max-width: $screen-md) {
-            display: block !important;
+        @media screen and (min-width: $screen-md) {
+            display: none;
         }
     }
 
