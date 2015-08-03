@@ -193,12 +193,14 @@ public class DOPSearchStringTokenizerTest {
     @Test
     public void tokenizeAllTogether() {
         DOPSearchStringTokenizer tokenizer = new DOPSearchStringTokenizer(
-                "as \"this is my author:query\" ++ author:Isaac author:\"Leonardo Fibonacci\" a     "
-                        + "\t \t as \r\n \"another long query here\" as:ss \"asads +math  ");
+                "as \"this is my author:query\" ++ author:Isaac author:\"Leonardo Fibonacci\" a   "
+                        + "\t title:\"Alice in Wonderland\" \t as \r\n \"another long query here\" as:ss "
+                        + "\"asads +math  title:Something  ");
         String searchQuery = consumeTokenizer(tokenizer);
 
-        assertEquals("as \"this\\ is\\ my\\ author\\:query\" ++ author:\"isaac\" author:\"leonardo\\ fibonacci\" a as "
-                + "\"another\\ long\\ query\\ here\" as\\:ss* \\\"asads* +math*", searchQuery);
+        assertEquals("as \"this\\ is\\ my\\ author\\:query\" ++ author:\"isaac\" author:\"leonardo\\ fibonacci\" a "
+                + "title:\"alice\\ in\\ wonderland\" as \"another\\ long\\ query\\ here\" as\\:ss* "
+                + "\\\"asads* +math* title:\"something\"", searchQuery);
     }
 
     @Test
@@ -239,5 +241,73 @@ public class DOPSearchStringTokenizerTest {
         String searchQuery = consumeTokenizer(tokenizer);
 
         assertEquals("word\\**", searchQuery);
+    }
+
+    @Test
+    public void tokenizeTitle() {
+        DOPSearchStringTokenizer tokenizer = new DOPSearchStringTokenizer("title:Fibonacci");
+        String searchQuery = consumeTokenizer(tokenizer);
+
+        assertEquals("title:\"fibonacci\"", searchQuery);
+    }
+
+    @Test
+    public void tokenizeTitleExactMatch() {
+        DOPSearchStringTokenizer tokenizer = new DOPSearchStringTokenizer("title:\"Leonardo Fibonacci\"");
+        String searchQuery = consumeTokenizer(tokenizer);
+        assertEquals("title:\"leonardo\\ fibonacci\"", searchQuery);
+    }
+
+    @Test
+    public void tokenizeTitleExactMatchMissingClosingQuotes() {
+        DOPSearchStringTokenizer tokenizer = new DOPSearchStringTokenizer("title:\"Leonardo Fibonacci");
+        String searchQuery = consumeTokenizer(tokenizer);
+        assertEquals("title:\"leonardo\" fibonacci*", searchQuery);
+    }
+
+    @Test
+    public void tokenizeTitleMissingColon() {
+        DOPSearchStringTokenizer tokenizer = new DOPSearchStringTokenizer("title\"Leonardo Fibonacci\"");
+        String searchQuery = consumeTokenizer(tokenizer);
+        assertEquals("title\\\"leonardo* fibonacci\\\"*", searchQuery);
+    }
+
+    @Test
+    public void tokenizeTitleSpaceInsteadColon() {
+        DOPSearchStringTokenizer tokenizer = new DOPSearchStringTokenizer("title \"Leonardo Fibonacci");
+        String searchQuery = consumeTokenizer(tokenizer);
+        assertEquals("title* \\\"leonardo* fibonacci*", searchQuery);
+    }
+
+    @Test
+    public void tokenizeTitleUppercase() {
+        DOPSearchStringTokenizer tokenizer = new DOPSearchStringTokenizer("TItle:Fibonacci");
+        String searchQuery = consumeTokenizer(tokenizer);
+
+        assertEquals("title:\"fibonacci\"", searchQuery);
+    }
+
+    @Test
+    public void tokenizeTitleLastWord() {
+        DOPSearchStringTokenizer tokenizer = new DOPSearchStringTokenizer("math tiTle:Fibonacci");
+        String searchQuery = consumeTokenizer(tokenizer);
+
+        assertEquals("math* title:\"fibonacci\"", searchQuery);
+    }
+
+    @Test
+    public void tokenizeTitleLastWordWithQuotes() {
+        DOPSearchStringTokenizer tokenizer = new DOPSearchStringTokenizer("math tiTle:\"Fibonacci\"");
+        String searchQuery = consumeTokenizer(tokenizer);
+
+        assertEquals("math* title:\"fibonacci\"", searchQuery);
+    }
+
+    @Test
+    public void tokenizeOnlyTitleWord() {
+        DOPSearchStringTokenizer tokenizer = new DOPSearchStringTokenizer("title rest");
+        String searchQuery = consumeTokenizer(tokenizer);
+
+        assertEquals("title* rest*", searchQuery);
     }
 }
