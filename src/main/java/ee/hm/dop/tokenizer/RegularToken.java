@@ -8,6 +8,7 @@ public class RegularToken extends DOPToken {
 
     @Override
     public String toString() {
-        return getEscapedContent();
+        String escapedContent = getEscapedContent();
+        return getContent().length() > 3 ? escapedContent + "*" : escapedContent;
     }
 }

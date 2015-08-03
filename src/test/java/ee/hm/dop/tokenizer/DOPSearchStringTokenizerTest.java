@@ -40,7 +40,7 @@ public class DOPSearchStringTokenizerTest {
         DOPSearchStringTokenizer tokenizer = new DOPSearchStringTokenizer("hello world");
         String searchQuery = consumeTokenizer(tokenizer);
 
-        assertEquals("hello world", searchQuery);
+        assertEquals("hello* world*", searchQuery);
     }
 
     @Test
@@ -56,7 +56,7 @@ public class DOPSearchStringTokenizerTest {
         DOPSearchStringTokenizer tokenizer = new DOPSearchStringTokenizer("\"hello world\" aabc\"");
         String searchQuery = consumeTokenizer(tokenizer);
 
-        assertEquals("\"hello\\ world\" aabc\\\"", searchQuery);
+        assertEquals("\"hello\\ world\" aabc\\\"*", searchQuery);
     }
 
     @Test
@@ -64,7 +64,7 @@ public class DOPSearchStringTokenizerTest {
         DOPSearchStringTokenizer tokenizer = new DOPSearchStringTokenizer("\"hello world\" \"aabc");
         String searchQuery = consumeTokenizer(tokenizer);
 
-        assertEquals("\"hello\\ world\" \\\"aabc", searchQuery);
+        assertEquals("\"hello\\ world\" \\\"aabc*", searchQuery);
     }
 
     @Test
@@ -72,7 +72,7 @@ public class DOPSearchStringTokenizerTest {
         DOPSearchStringTokenizer tokenizer = new DOPSearchStringTokenizer("\"hello world\" aa\"bc");
         String searchQuery = consumeTokenizer(tokenizer);
 
-        assertEquals("\"hello\\ world\" aa\\\"bc", searchQuery);
+        assertEquals("\"hello\\ world\" aa\\\"bc*", searchQuery);
     }
 
     @Test
@@ -96,7 +96,7 @@ public class DOPSearchStringTokenizerTest {
         DOPSearchStringTokenizer tokenizer = new DOPSearchStringTokenizer("\t\n\r\"hello\nworld\"\ra\tabc\"\t\n\r");
         String searchQuery = consumeTokenizer(tokenizer);
 
-        assertEquals("\"hello\\\nworld\" a abc\\\"", searchQuery);
+        assertEquals("\"hello\\\nworld\" a abc\\\"*", searchQuery);
     }
 
     @Test
@@ -127,7 +127,7 @@ public class DOPSearchStringTokenizerTest {
         DOPSearchStringTokenizer tokenizer = new DOPSearchStringTokenizer("\"hello world\" aabc\" +-!");
         String searchQuery = consumeTokenizer(tokenizer);
 
-        assertEquals("\"hello\\ world\" aabc\\\" \\+\\-\\!", searchQuery);
+        assertEquals("\"hello\\ world\" aabc\\\"* \\+\\-\\!", searchQuery);
     }
 
     @Test
@@ -149,21 +149,21 @@ public class DOPSearchStringTokenizerTest {
     public void tokenizeAuthorExactMatchMissingClosingQuotes() {
         DOPSearchStringTokenizer tokenizer = new DOPSearchStringTokenizer("author:\"Leonardo Fibonacci");
         String searchQuery = consumeTokenizer(tokenizer);
-        assertEquals("author:\"leonardo\" fibonacci", searchQuery);
+        assertEquals("author:\"leonardo\" fibonacci*", searchQuery);
     }
 
     @Test
     public void tokenizeAuthorMissingColon() {
         DOPSearchStringTokenizer tokenizer = new DOPSearchStringTokenizer("author\"Leonardo Fibonacci\"");
         String searchQuery = consumeTokenizer(tokenizer);
-        assertEquals("author\\\"leonardo fibonacci\\\"", searchQuery);
+        assertEquals("author\\\"leonardo* fibonacci\\\"*", searchQuery);
     }
 
     @Test
     public void tokenizeAuthorSpaceInsteadColon() {
         DOPSearchStringTokenizer tokenizer = new DOPSearchStringTokenizer("author \"Leonardo Fibonacci");
         String searchQuery = consumeTokenizer(tokenizer);
-        assertEquals("author \\\"leonardo fibonacci", searchQuery);
+        assertEquals("author* \\\"leonardo* fibonacci*", searchQuery);
     }
 
     @Test
@@ -179,7 +179,7 @@ public class DOPSearchStringTokenizerTest {
         DOPSearchStringTokenizer tokenizer = new DOPSearchStringTokenizer("math auThor:Fibonacci");
         String searchQuery = consumeTokenizer(tokenizer);
 
-        assertEquals("math author:\"fibonacci\"", searchQuery);
+        assertEquals("math* author:\"fibonacci\"", searchQuery);
     }
 
     @Test
@@ -187,7 +187,7 @@ public class DOPSearchStringTokenizerTest {
         DOPSearchStringTokenizer tokenizer = new DOPSearchStringTokenizer("math auThor:\"Fibonacci\"");
         String searchQuery = consumeTokenizer(tokenizer);
 
-        assertEquals("math author:\"fibonacci\"", searchQuery);
+        assertEquals("math* author:\"fibonacci\"", searchQuery);
     }
 
     @Test
@@ -198,6 +198,6 @@ public class DOPSearchStringTokenizerTest {
         String searchQuery = consumeTokenizer(tokenizer);
 
         assertEquals("as \"this\\ is\\ my\\ author\\:query\" \\+\\+ author:\"isaac\" author:\"fibonacci\" a as "
-                + "\"another\\ long\\ query\\ here\" as\\:ss \\\"asads", searchQuery);
+                + "\"another\\ long\\ query\\ here\" as\\:ss* \\\"asads*", searchQuery);
     }
 }

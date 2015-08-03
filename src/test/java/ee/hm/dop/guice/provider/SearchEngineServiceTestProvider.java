@@ -64,7 +64,7 @@ class SearchEngineServiceMock implements SearchEngineService {
     }
 
     private static void addArabicQuery() {
-        String arabicQuery = "المدرسية";
+        String arabicQuery = "المدرسية*";
         ArrayList<Document> arabicSearchResult = new ArrayList<>();
         Document newDocument = new Document();
         newDocument.setId("3");
@@ -74,7 +74,7 @@ class SearchEngineServiceMock implements SearchEngineService {
     }
 
     private static void addBigQuery() {
-        String bigQuery = "thishasmanyresults";
+        String bigQuery = "thishasmanyresults*";
         ArrayList<Document> bigQueryDocuments = new ArrayList<>();
         for (long i = 0; i < 8; i++) {
             Document newDocument = new Document();
