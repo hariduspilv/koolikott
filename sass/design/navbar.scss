@@ -6,7 +6,11 @@
         
         .input-group-btn {border-bottom: 1px solid $navbar-light-bg;
             
-            button {padding: 1px 11px; border: 0; background: #FFF; font-size: 14px; color: $navbar-default-bg}
+            button {padding: 1px 11px; border: 0; background: #FFF; font-size: 14px; color: $navbar-default-bg;
+            
+                &:focus {outline: none}
+            
+            }
         }
     }
  
@@ -32,7 +36,7 @@
                 
                 :hover {background: #FFF}
                 
-                :focus {background: #FFF; @include box-shadow(0, 0, 0, 0, #FFF)}
+                :focus {background: #FFF; @include box-shadow(0, 0, 0, 0, #FFF); outline: none}
                 
                 :active {background: #FFF; @include box-shadow(0, 0, 0, 0, #FFF)}
             
