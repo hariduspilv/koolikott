@@ -127,7 +127,7 @@ public class DOPSearchStringTokenizerTest {
         DOPSearchStringTokenizer tokenizer = new DOPSearchStringTokenizer("\"hello world\" aabc\" +-!");
         String searchQuery = consumeTokenizer(tokenizer);
 
-        assertEquals("\"hello\\ world\" aabc\\\" \\+\\-\\!", searchQuery);
+        assertEquals("\"hello\\ world\" aabc\\\" +\\-\\!", searchQuery);
     }
 
     @Test
@@ -194,10 +194,42 @@ public class DOPSearchStringTokenizerTest {
     public void tokenizeAllTogether() {
         DOPSearchStringTokenizer tokenizer = new DOPSearchStringTokenizer(
                 "as \"this is my author:query\" ++ author:Isaac author:\"Fibonacci\" a     "
-                        + "\t \t as \r\n \"another long query here\" as:ss \"asads  ");
+                        + "\t \t as \r\n \"another long query here\" as:ss \"asads +math  ");
         String searchQuery = consumeTokenizer(tokenizer);
 
-        assertEquals("as \"this\\ is\\ my\\ author\\:query\" \\+\\+ author:\"isaac\" author:\"fibonacci\" a as "
-                + "\"another\\ long\\ query\\ here\" as\\:ss \\\"asads", searchQuery);
+        assertEquals("as \"this\\ is\\ my\\ author\\:query\" ++ author:\"isaac\" author:\"fibonacci\" a as "
+                + "\"another\\ long\\ query\\ here\" as\\:ss \\\"asads +math", searchQuery);
+    }
+
+    @Test
+    public void mustHave() {
+        DOPSearchStringTokenizer tokenizer = new DOPSearchStringTokenizer("+phone");
+        String searchQuery = consumeTokenizer(tokenizer);
+
+        assertEquals("+phone", searchQuery);
+    }
+
+    @Test
+    public void mustHaveDoublePlus() {
+        DOPSearchStringTokenizer tokenizer = new DOPSearchStringTokenizer("++");
+        String searchQuery = consumeTokenizer(tokenizer);
+
+        assertEquals("++", searchQuery);
+    }
+
+    @Test
+    public void mustHaveWithQuotes() {
+        DOPSearchStringTokenizer tokenizer = new DOPSearchStringTokenizer("+\"maria joaquina\"");
+        String searchQuery = consumeTokenizer(tokenizer);
+
+        assertEquals("+\"maria\\ joaquina\"", searchQuery);
+    }
+
+    @Test
+    public void mustHaveAloneSign() {
+        DOPSearchStringTokenizer tokenizer = new DOPSearchStringTokenizer("jose +maria + jesus");
+        String searchQuery = consumeTokenizer(tokenizer);
+
+        assertEquals("jose +maria + jesus", searchQuery);
     }
 }

@@ -46,6 +46,8 @@ public class DOPSearchStringTokenizer {
                 token = parseExactMatch();
             } else if (c == 'a') {
                 token = parseAuthor();
+            } else if (c == '+') {
+                token = parseMustHave();
             }
 
             if (token == null) {
@@ -54,6 +56,21 @@ public class DOPSearchStringTokenizer {
         }
 
         return token;
+    }
+
+    private DOPToken parseMustHave() {
+        DOPToken content = null;
+
+        currentPosition++;
+        if (currentPosition < maxPosition) {
+            char c = source.charAt(currentPosition);
+
+            if (!Character.isWhitespace(c)) {
+                content = parse();
+            }
+        }
+
+        return new MustHaveToken(content);
     }
 
     private DOPToken parseAuthor() {
