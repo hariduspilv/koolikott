@@ -16,4 +16,8 @@ public abstract class DOPToken {
     protected String getEscapedContent() {
         return ClientUtils.escapeQueryChars(content);
     }
+
+    public String getContent() {
+        return content;
+    }
 }

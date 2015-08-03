@@ -39,6 +39,7 @@ public class SearchServiceTest {
     @Test
     public void search() {
         String query = "people";
+        String tokenizedQuery = "people*";
         long start = 0;
 
         List<Long> documentIds = Arrays.asList(7L, 1L, 4L);
@@ -56,7 +57,7 @@ public class SearchServiceTest {
         materials.add(material4);
         materials.add(material7);
 
-        expect(searchEngineService.search(query, start)).andReturn(searchResponse);
+        expect(searchEngineService.search(tokenizedQuery, start)).andReturn(searchResponse);
         expect(materialDAO.findAllById(documentIds)).andReturn(materials);
 
         replayAll();
@@ -79,6 +80,7 @@ public class SearchServiceTest {
     @Test
     public void searchWhenDatabaseReturnsLessValuesThanSearch() {
         String query = "people";
+        String tokenizedQuery = "people*";
         long start = 0;
 
         List<Long> documentIds = Arrays.asList(7L, 1L, 4L);
@@ -93,7 +95,7 @@ public class SearchServiceTest {
         materials.add(material4);
         materials.add(material7);
 
-        expect(searchEngineService.search(query, start)).andReturn(searchResponse);
+        expect(searchEngineService.search(tokenizedQuery, start)).andReturn(searchResponse);
         expect(materialDAO.findAllById(documentIds)).andReturn(materials);
 
         replayAll();
@@ -112,10 +114,11 @@ public class SearchServiceTest {
     @Test
     public void searchNoResult() {
         String query = "people";
+        String tokenizedQuery = "people*";
 
         SearchResponse searchResponse = createSearchResponseWithDocuments(new ArrayList<>());
 
-        expect(searchEngineService.search(query, 0)).andReturn(searchResponse);
+        expect(searchEngineService.search(tokenizedQuery, 0)).andReturn(searchResponse);
 
         replayAll();
 
@@ -129,7 +132,7 @@ public class SearchServiceTest {
     @Test
     public void searchTokenizeQuery() {
         String query = "people 123";
-        String tokenizedQuery = "people 123";
+        String tokenizedQuery = "people* 123";
         long start = 0;
         SearchResponse searchResponse = new SearchResponse();
 
@@ -161,7 +164,7 @@ public class SearchServiceTest {
     @Test
     public void searchTokenizeQueryEvenQuotes() {
         String query = "\"people 123\" blah\"";
-        String tokenizedQuery = "\"people\\ 123\" blah\\\"";
+        String tokenizedQuery = "\"people\\ 123\" blah\\\"*";
         long start = 0;
         SearchResponse searchResponse = new SearchResponse();
 
