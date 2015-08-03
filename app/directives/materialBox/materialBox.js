@@ -63,7 +63,7 @@ define(['app'], function(app)
 				$scope.isAudio = function(material) {
 					var types = material.resourceTypes;
 					for (var i = 0; i < types.length; i++) {
-						if (types[i].name === 'AUDIO' && !material.hasPicture) {
+						if (types[i].name === 'AUDIO') {
 							return true;
 						}
 					}
