@@ -274,7 +274,7 @@ insert into Material_ResourceType(material, resourceType) values (1, 1);
 insert into Material_ResourceType(material, resourceType) values (1, 2);
 insert into Material_ResourceType(material, resourceType) values (2, 3);
 insert into Material_ResourceType(material, resourceType) values (3, 4);
-insert into Material_ResourceType(material, resourceType) values (4, 5);
+insert into Material_ResourceType(material, resourceType) values (4, 1);
 insert into Material_ResourceType(material, resourceType) values (5, 3);
 insert into Material_ResourceType(material, resourceType) values (6, 2);
 insert into Material_ResourceType(material, resourceType) values (7, 4);
