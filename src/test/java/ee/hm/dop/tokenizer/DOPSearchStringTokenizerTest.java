@@ -232,4 +232,12 @@ public class DOPSearchStringTokenizerTest {
 
         assertEquals("jose* +maria* + jesus*", searchQuery);
     }
+
+    @Test
+    public void tokenizeWithAsterisk() {
+        DOPSearchStringTokenizer tokenizer = new DOPSearchStringTokenizer("word*");
+        String searchQuery = consumeTokenizer(tokenizer);
+
+        assertEquals("word\\**", searchQuery);
+    }
 }
