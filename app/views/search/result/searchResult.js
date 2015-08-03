@@ -28,7 +28,7 @@ define(['app'], function(app)
         }
 
         // If page number is not an integer, redirect to correct page
-        if ($scope.paging.thisPage !== searchService.getActualPage()) {
+        if ($scope.paging.thisPage != searchService.getActualPage()) {
             searchService.goToPage($scope.paging.thisPage);
             return;
         }
