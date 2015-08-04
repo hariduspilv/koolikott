@@ -52,6 +52,8 @@ public class DOPSearchStringTokenizer {
                 token = parseTitle();
             } else if (c == '+') {
                 token = parseMustHave();
+            } else if (c == '-') {
+                token = parseMustNotHave();
             }
 
             if (token == null) {
@@ -63,6 +65,14 @@ public class DOPSearchStringTokenizer {
     }
 
     private DOPToken parseMustHave() {
+        return new MustHaveToken(extractInnerTokenValue());
+    }
+
+    private DOPToken parseMustNotHave() {
+        return new MustNotHaveToken(extractInnerTokenValue());
+    }
+
+    private DOPToken extractInnerTokenValue() {
         DOPToken content = null;
 
         currentPosition++;
@@ -74,7 +84,7 @@ public class DOPSearchStringTokenizer {
             }
         }
 
-        return new MustHaveToken(content);
+        return content;
     }
 
     private DOPToken parseAuthor() {
