@@ -1,0 +1,35 @@
+<OAI-PMH xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.openarchives.org/OAI/2.0/" xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/ http://www.openarchives.org/OAI/2.0/OAI-PMH.xsd">
+	<responseDate>2015-08-03T14:33:52Z</responseDate>
+	<request verb="GetRecord" identifier="437556e69c7ee410b3ff27ad3eaec360219c3990" metadataPrefix="oai_lom">
+		http://koolitaja.eenet.ee:57219/Waramu3Web/OAIHandler
+	</request>
+	<GetRecord>
+		<record>
+			<header>
+				<identifier>
+					oai:ait.opetaja.ee:437556e69c7ee410b3ff27ad3eaec360219c3990
+				</identifier>
+				<datestamp>2009-08-13T21:02:00Z</datestamp>
+				<setSpec>1</setSpec>
+			</header>
+			<metadata>
+				<lom xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://ltsc.ieee.org/xsd/LOM" xsi:schemaLocation="http://ltsc.ieee.org/xsd/LOM http://standards.ieee.org/reading/ieee/downloads/LOM/lomv1.0/xsd/lom.xsd">
+					<general>
+						<identifier>
+							<catalog>1</catalog>
+							<entry>437556e69c7ee410b3ff27ad3eaec360219c3990</entry>
+						</identifier>
+						<title>
+							<string language="fr">Subjonctif</string>
+							<string language="et">Les exercices du subjonctif.</string>
+						</title>
+						<language>fren</language>
+						<keyword>
+							<string language="fr">grammaire</string>
+						</keyword>
+					</general>
+				</lom>
+			</metadata>
+		</record>
+	</GetRecord>
+</OAI-PMH>
