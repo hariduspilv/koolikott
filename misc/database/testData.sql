@@ -349,7 +349,7 @@ insert into Material_Tag(tag, material) values(11, 8);
 
 -- Repositories
 
-insert into Repository(id, baseURL, lastSynchronization, schemaName) values (1, 'http://koolitaja.eenet.ee:57219/Waramu3Web/OAIHandler', null, 'waramu');
+insert into Repository(id, baseURL, lastSynchronization, schemaName) values (1, 'http://koolitaja.eenet.ee:57219/Waramu3Web/OAIHandler', '2015-08-03 18:00:01', 'waramu');
 
 -- Pictures
 

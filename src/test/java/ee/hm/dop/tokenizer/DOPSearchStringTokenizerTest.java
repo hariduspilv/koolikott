@@ -127,7 +127,7 @@ public class DOPSearchStringTokenizerTest {
         DOPSearchStringTokenizer tokenizer = new DOPSearchStringTokenizer("\"hello world\" aabc\" +-!");
         String searchQuery = consumeTokenizer(tokenizer);
 
-        assertEquals("\"hello\\ world\" aabc\\\"* +\\-\\!", searchQuery);
+        assertEquals("\"hello\\ world\" aabc\\\"* +-\\!", searchQuery);
     }
 
     @Test
@@ -193,12 +193,16 @@ public class DOPSearchStringTokenizerTest {
     @Test
     public void tokenizeAllTogether() {
         DOPSearchStringTokenizer tokenizer = new DOPSearchStringTokenizer(
-                "as \"this is my author:query\" ++ author:Isaac author:\"Leonardo Fibonacci\" a     "
-                        + "\t \t as \r\n \"another long query here\" as:ss \"asads +math  ");
+                "as \"this is my author:query\" ++ author:Isaac author:\"Leonardo Fibonacci\" a   -\"Not\""
+                        + "\t title:\"Alice in Wonderland\" \t as \r\n \"another long query here\" as:ss "
+                        + "\"asads +math  title:Something  -app lorem author:Newton -title:Book   ");
         String searchQuery = consumeTokenizer(tokenizer);
 
-        assertEquals("as \"this\\ is\\ my\\ author\\:query\" ++ author:\"isaac\" author:\"leonardo\\ fibonacci\" a as "
-                + "\"another\\ long\\ query\\ here\" as\\:ss* \\\"asads* +math*", searchQuery);
+        assertEquals(
+                "as \"this\\ is\\ my\\ author\\:query\" ++ author:\"isaac\" author:\"leonardo\\ fibonacci\" a -\"not\" "
+                        + "title:\"alice\\ in\\ wonderland\" as \"another\\ long\\ query\\ here\" as\\:ss* "
+                        + "\\\"asads* +math* title:\"something\" -app lorem* author:\"newton\" -title:\"book\"",
+                searchQuery);
     }
 
     @Test
@@ -231,5 +235,113 @@ public class DOPSearchStringTokenizerTest {
         String searchQuery = consumeTokenizer(tokenizer);
 
         assertEquals("jose* +maria* + jesus*", searchQuery);
+    }
+
+    @Test
+    public void tokenizeWithAsterisk() {
+        DOPSearchStringTokenizer tokenizer = new DOPSearchStringTokenizer("word*");
+        String searchQuery = consumeTokenizer(tokenizer);
+
+        assertEquals("word\\**", searchQuery);
+    }
+
+    @Test
+    public void tokenizeTitle() {
+        DOPSearchStringTokenizer tokenizer = new DOPSearchStringTokenizer("title:Fibonacci");
+        String searchQuery = consumeTokenizer(tokenizer);
+
+        assertEquals("title:\"fibonacci\"", searchQuery);
+    }
+
+    @Test
+    public void tokenizeTitleExactMatch() {
+        DOPSearchStringTokenizer tokenizer = new DOPSearchStringTokenizer("title:\"Leonardo Fibonacci\"");
+        String searchQuery = consumeTokenizer(tokenizer);
+        assertEquals("title:\"leonardo\\ fibonacci\"", searchQuery);
+    }
+
+    @Test
+    public void tokenizeTitleExactMatchMissingClosingQuotes() {
+        DOPSearchStringTokenizer tokenizer = new DOPSearchStringTokenizer("title:\"Leonardo Fibonacci");
+        String searchQuery = consumeTokenizer(tokenizer);
+        assertEquals("title:\"leonardo\" fibonacci*", searchQuery);
+    }
+
+    @Test
+    public void tokenizeTitleMissingColon() {
+        DOPSearchStringTokenizer tokenizer = new DOPSearchStringTokenizer("title\"Leonardo Fibonacci\"");
+        String searchQuery = consumeTokenizer(tokenizer);
+        assertEquals("title\\\"leonardo* fibonacci\\\"*", searchQuery);
+    }
+
+    @Test
+    public void tokenizeTitleSpaceInsteadColon() {
+        DOPSearchStringTokenizer tokenizer = new DOPSearchStringTokenizer("title \"Leonardo Fibonacci");
+        String searchQuery = consumeTokenizer(tokenizer);
+        assertEquals("title* \\\"leonardo* fibonacci*", searchQuery);
+    }
+
+    @Test
+    public void tokenizeTitleUppercase() {
+        DOPSearchStringTokenizer tokenizer = new DOPSearchStringTokenizer("TItle:Fibonacci");
+        String searchQuery = consumeTokenizer(tokenizer);
+
+        assertEquals("title:\"fibonacci\"", searchQuery);
+    }
+
+    @Test
+    public void tokenizeTitleLastWord() {
+        DOPSearchStringTokenizer tokenizer = new DOPSearchStringTokenizer("math tiTle:Fibonacci");
+        String searchQuery = consumeTokenizer(tokenizer);
+
+        assertEquals("math* title:\"fibonacci\"", searchQuery);
+    }
+
+    @Test
+    public void tokenizeTitleLastWordWithQuotes() {
+        DOPSearchStringTokenizer tokenizer = new DOPSearchStringTokenizer("math tiTle:\"Fibonacci\"");
+        String searchQuery = consumeTokenizer(tokenizer);
+
+        assertEquals("math* title:\"fibonacci\"", searchQuery);
+    }
+
+    @Test
+    public void tokenizeOnlyTitleWord() {
+        DOPSearchStringTokenizer tokenizer = new DOPSearchStringTokenizer("title rest");
+        String searchQuery = consumeTokenizer(tokenizer);
+
+        assertEquals("title* rest*", searchQuery);
+    }
+
+    @Test
+    public void mustNotHave() {
+        DOPSearchStringTokenizer tokenizer = new DOPSearchStringTokenizer("-phone");
+        String searchQuery = consumeTokenizer(tokenizer);
+
+        assertEquals("-phone*", searchQuery);
+    }
+
+    @Test
+    public void mustNotHaveDoubleMinus() {
+        DOPSearchStringTokenizer tokenizer = new DOPSearchStringTokenizer("--");
+        String searchQuery = consumeTokenizer(tokenizer);
+
+        assertEquals("--", searchQuery);
+    }
+
+    @Test
+    public void mustNotHaveWithQuotes() {
+        DOPSearchStringTokenizer tokenizer = new DOPSearchStringTokenizer("-\"maria joaquina\"");
+        String searchQuery = consumeTokenizer(tokenizer);
+
+        assertEquals("-\"maria\\ joaquina\"", searchQuery);
+    }
+
+    @Test
+    public void mustNotHaveAloneSign() {
+        DOPSearchStringTokenizer tokenizer = new DOPSearchStringTokenizer("jose -maria - jesus");
+        String searchQuery = consumeTokenizer(tokenizer);
+
+        assertEquals("jose* -maria* - jesus*", searchQuery);
     }
 }

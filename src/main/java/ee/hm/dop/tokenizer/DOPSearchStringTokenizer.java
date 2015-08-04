@@ -5,7 +5,9 @@ import java.util.NoSuchElementException;
 public class DOPSearchStringTokenizer {
 
     private static final String AUTHOR_KEYWORD = "author:";
+    private static final String TITLE_KEYWORD = "title:";
     private static final char QUOTES = '"';
+
     private String source;
     private int currentPosition;
     private int newPosition;
@@ -46,8 +48,12 @@ public class DOPSearchStringTokenizer {
                 token = parseExactMatch();
             } else if (c == 'a') {
                 token = parseAuthor();
+            } else if (c == 't') {
+                token = parseTitle();
             } else if (c == '+') {
                 token = parseMustHave();
+            } else if (c == '-') {
+                token = parseMustNotHave();
             }
 
             if (token == null) {
@@ -59,6 +65,14 @@ public class DOPSearchStringTokenizer {
     }
 
     private DOPToken parseMustHave() {
+        return new MustHaveToken(extractInnerTokenValue());
+    }
+
+    private DOPToken parseMustNotHave() {
+        return new MustNotHaveToken(extractInnerTokenValue());
+    }
+
+    private DOPToken extractInnerTokenValue() {
         DOPToken content = null;
 
         currentPosition++;
@@ -70,22 +84,39 @@ public class DOPSearchStringTokenizer {
             }
         }
 
-        return new MustHaveToken(content);
+        return content;
     }
 
     private DOPToken parseAuthor() {
-        int position = currentPosition;
-
-        // Position (a) + "uthor:".length
-        if (position + AUTHOR_KEYWORD.length() - 1 >= maxPosition) {
+        String value = extractTokenValue(AUTHOR_KEYWORD);
+        if (value == null) {
             return null;
         }
 
-        DOPToken token = null;
+        return new AuthorToken(value);
+    }
+
+    private DOPToken parseTitle() {
+        String value = extractTokenValue(TITLE_KEYWORD);
+        if (value == null) {
+            return null;
+        }
+
+        return new TitleToken(value);
+    }
+
+    private String extractTokenValue(String keyword) {
+        int position = currentPosition;
+
+        if (position + keyword.length() - 1 >= maxPosition) {
+            return null;
+        }
+
+        String value = null;
         char c = source.charAt(position);
 
-        if (startsWithAutor(position)) {
-            position += AUTHOR_KEYWORD.length();
+        if (startsWithKeyword(keyword, position)) {
+            position += keyword.length();
             c = source.charAt(position);
             if (c == QUOTES) {
                 position++;
@@ -94,20 +125,20 @@ public class DOPSearchStringTokenizer {
             int tokenStartPos = position;
             int closingQuotes = getClosingQuotes(position);
             if (c == QUOTES && closingQuotes != -1) {
-                token = new AuthorToken(source.substring(tokenStartPos, closingQuotes));
+                value = source.substring(tokenStartPos, closingQuotes);
 
                 // Consumes the closing "
                 position = closingQuotes + 1;
             } else {
                 position = nextWhiteSpace(position);
-                token = new AuthorToken(source.substring(tokenStartPos, position));
+                value = source.substring(tokenStartPos, position);
             }
 
             // Update global position
             currentPosition = position;
         }
 
-        return token;
+        return value;
     }
 
     private int getClosingQuotes(int position) {
@@ -130,8 +161,8 @@ public class DOPSearchStringTokenizer {
         return position;
     }
 
-    private boolean startsWithAutor(int position) {
-        return source.substring(position, position + AUTHOR_KEYWORD.length()).equals(AUTHOR_KEYWORD);
+    private boolean startsWithKeyword(String keyword, int position) {
+        return source.substring(position, position + keyword.length()).equals(keyword);
     }
 
     private DOPToken parseRegular() {
