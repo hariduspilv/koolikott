@@ -137,6 +137,7 @@ insert into LanguageString(id, lang, textValue) values (8, 5, 'Test description 
 insert into LanguageString(id, lang, textValue) values (19, 1, 'Automated test resource description. DO NOT TOUCH!!!! material language Estonian, Description Estonian');
 insert into LanguageString(id, lang, textValue) values (21, 1, 'Performance test resource description. DO NOT TOUCH!!!!');
 insert into LanguageString(id, lang, textValue) values (39, 3, 'Test description');
+insert into LanguageString(id, lang, textValue) values (10829, 1, 'Missing picture replacement test: Audio');
 
 insert into Material_Description(description, material) values(1, 1);
 insert into Material_Description(description, material) values(2, 2);
@@ -220,9 +221,7 @@ insert into LanguageString(id, lang, textValue) values (45, 3, 'Poland');
 insert into LanguageString(id, lang, textValue) values (46, 3, 'France');
 insert into LanguageString(id, lang, textValue) values (47, 3, 'Austria');
 
-insert into LanguageString(id, lang, textValue) values (10829, 1, 'Missing picture replacement test: Audio');
 insert into LanguageString(id, lang, textValue) values (10830, 1, 'Missing picture replacement test: Audio');
-
 
 insert into Material_Title(title, material) values(9, 1);
 insert into Material_Title(title, material) values(10, 1);
