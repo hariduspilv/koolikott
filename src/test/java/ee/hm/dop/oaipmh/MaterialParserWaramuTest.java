@@ -1,77 +1,191 @@
 package ee.hm.dop.oaipmh;
 
-import static junit.framework.Assert.assertSame;
-import static junit.framework.TestCase.assertNull;
 import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
-import java.text.ParseException;
+import java.io.File;
+import java.io.IOException;
 
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+
+import org.easymock.EasyMockRunner;
+import org.easymock.Mock;
+import org.easymock.TestSubject;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.w3c.dom.Document;
-import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
 
-import ee.hm.dop.model.Material;
+import ee.hm.dop.model.Language;
+import ee.hm.dop.model.Tag;
 import ee.hm.dop.oaipmh.waramu.MaterialParserWaramu;
+import ee.hm.dop.service.LanguageService;
+import ee.hm.dop.service.TagService;
 
-/**
- * Created by mart.laus on 17.07.2015.
- */
+@RunWith(EasyMockRunner.class)
 public class MaterialParserWaramuTest {
 
-    @Test
-    public void parseXMLisNull() throws ParseException, ee.hm.dop.oaipmh.ParseException {
-        MaterialParserWaramu materialParser = createMock(MaterialParserWaramu.class);
+    @TestSubject
+    private MaterialParserWaramu materialParser = new MaterialParserWaramu();
+
+    @Mock
+    private LanguageService languageService;
+
+    @Mock
+    private TagService tagService;
+
+    @Test(expected = ee.hm.dop.oaipmh.ParseException.class)
+    public void parseXMLisNull() throws ParseException {
+        materialParser.parse(null);
+    }
+
+    @Test(expected = ee.hm.dop.oaipmh.ParseException.class)
+    public void parseDocumentIsEmpty() throws ParseException {
         Document document = createMock(Document.class);
-
-        expect(materialParser.parse(document)).andReturn(null);
-
-        replay(materialParser, document);
-
-        Material material = materialParser.parse(document);
-
-        verify(materialParser);
-
-        assertNull(material);
+        materialParser.parse(document);
     }
 
     @Test
-    public void parseXMLNullLomElement() throws ParseException, ee.hm.dop.oaipmh.ParseException {
-        MaterialParserWaramu materialParser = createMock(MaterialParserWaramu.class);
-        Document document = createMock(Document.class);
-        NodeList nodeList = createMock(NodeList.class);
+    public void parse() throws ParseException, ParserConfigurationException, IOException, SAXException {
+        String workingDir = System.getProperty("user.dir");
+        Language language = new Language();
+        Tag tag = new Tag();
 
-        expect(materialParser.parse(document)).andReturn(null);
-        expect(document.getElementsByTagName("lom")).andReturn(null);
+        File fXmlFile = new File(workingDir + File.separator + "src" + File.separator + "test" + File.separator
+                + "resources" + File.separator + "oaipmh" + File.separator + "parse.xml");
+        DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+        DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
 
-        replay(materialParser, document, nodeList);
+        expect(languageService.getLanguage("fr")).andReturn(language).anyTimes();
+        expect(languageService.getLanguage("et")).andReturn(language).anyTimes();
+        expect(languageService.getLanguage("fren")).andReturn(language);
+        expect(tagService.getTagByName("grammaire")).andReturn(tag);
 
-        Material material = materialParser.parse(document);
-        NodeList nList = document.getElementsByTagName("lom");
+        replay(languageService, tagService);
 
-        verify(materialParser, document, nodeList);
+        Document doc = dBuilder.parse(fXmlFile);
+        materialParser.parse(doc);
 
-        assertNull(nList);
-        assertNull(material);
+        verify(languageService, tagService);
     }
 
     @Test
-    public void parseXMLtoMaterial() throws ParseException, ee.hm.dop.oaipmh.ParseException {
-        MaterialParserWaramu materialParser = createMock(MaterialParserWaramu.class);
-        Document document = createMock(Document.class);
-        Material material = createMock(Material.class);
+    public void parseNullTitle() throws ParserConfigurationException, IOException, SAXException {
+        String errorMessage = "Error in parsing Material title";
+        String workingDir = System.getProperty("user.dir");
+        Language language = new Language();
 
-        expect(materialParser.parse(document)).andReturn(material);
+        File fXmlFile = new File(workingDir + File.separator + "src" + File.separator + "test" + File.separator
+                + "resources" + File.separator + "oaipmh" + File.separator + "parseNullTitle.xml");
+        DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+        DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
 
-        replay(materialParser, document, material);
+        expect(languageService.getLanguage("fr")).andReturn(language).anyTimes();
+        expect(languageService.getLanguage("et")).andReturn(language).anyTimes();
 
-        Material returnedMaterial = materialParser.parse(document);
+        replay(languageService);
 
-        verify(materialParser);
+        Document doc = dBuilder.parse(fXmlFile);
 
-        assertSame(returnedMaterial, material);
+        try {
+            materialParser.parse(doc);
+            fail("Exception expected.");
+        } catch (ParseException e) {
+            assertEquals(errorMessage, e.getMessage());
+        }
+
+        verify(languageService);
     }
 
+    @Test
+    public void parseNullLanguage() throws ParserConfigurationException, IOException, SAXException {
+        String errorMessage = "Error in parsing Material language";
+        String workingDir = System.getProperty("user.dir");
+        Language language = new Language();
+
+        File fXmlFile = new File(workingDir + File.separator + "src" + File.separator + "test" + File.separator
+                + "resources" + File.separator + "oaipmh" + File.separator + "parseNullLanguage.xml");
+        DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+        DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+
+        expect(languageService.getLanguage("fr")).andReturn(language).anyTimes();
+        expect(languageService.getLanguage("et")).andReturn(language).anyTimes();
+
+        replay(languageService);
+
+        Document doc = dBuilder.parse(fXmlFile);
+
+        try {
+            materialParser.parse(doc);
+            fail("Exception expected.");
+        } catch (ParseException e) {
+            assertEquals(errorMessage, e.getMessage());
+        }
+
+        verify(languageService);
+    }
+
+    @Test
+    public void parseNullDescriptions() throws ParseException, ParserConfigurationException, IOException, SAXException {
+        String errorMessage = "Error in parsing Material descriptions";
+        String workingDir = System.getProperty("user.dir");
+        Language language = new Language();
+
+        File fXmlFile = new File(workingDir + File.separator + "src" + File.separator + "test" + File.separator
+                + "resources" + File.separator + "oaipmh" + File.separator + "parseNullDescriptions.xml");
+        DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+        DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+
+        expect(languageService.getLanguage("fr")).andReturn(language).anyTimes();
+        expect(languageService.getLanguage("et")).andReturn(language).anyTimes();
+        expect(languageService.getLanguage("fren")).andReturn(language);
+
+        replay(languageService);
+
+        Document doc = dBuilder.parse(fXmlFile);
+
+        try {
+            materialParser.parse(doc);
+            fail("Exception expected.");
+        } catch (ParseException e) {
+            assertEquals(errorMessage, e.getMessage());
+        }
+
+        verify(languageService);
+    }
+
+    @Test
+    public void parseNullSource() throws ParseException, ParserConfigurationException, IOException, SAXException {
+        String errorMessage = "Material has more or less than one source, can't be mapped.";
+        String workingDir = System.getProperty("user.dir");
+        Language language = new Language();
+
+        File fXmlFile = new File(workingDir + File.separator + "src" + File.separator + "test" + File.separator
+                + "resources" + File.separator + "oaipmh" + File.separator + "parseNullSource.xml");
+        DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+        DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+
+        expect(languageService.getLanguage("fr")).andReturn(language).anyTimes();
+        expect(languageService.getLanguage("et")).andReturn(language).anyTimes();
+        expect(languageService.getLanguage("fren")).andReturn(language);
+
+        replay(languageService);
+
+        Document doc = dBuilder.parse(fXmlFile);
+
+        try {
+            materialParser.parse(doc);
+            fail("Exception expected.");
+        } catch (ParseException e) {
+            assertEquals(errorMessage, e.getMessage());
+        }
+
+        verify(languageService);
+    }
 }

@@ -63,7 +63,7 @@ public class MaterialParserWaramu implements MaterialParser {
 
     private void setSource(Material material, Element lom) throws ParseException {
         if (lom.getElementsByTagName("location").getLength() != 1) {
-            throw new ParseException("Material has more than one source, can't be mapped.");
+            throw new ParseException("Material has more or less than one source, can't be mapped.");
         }
 
         NodeList location = lom.getElementsByTagName("location");
@@ -71,7 +71,7 @@ public class MaterialParserWaramu implements MaterialParser {
             throw new ParseException("Required element 'Location' not found.");
         }
 
-        String url = location.item(0).getTextContent();
+        String url = location.item(0).getTextContent().trim();
         UrlValidator urlValidator = new UrlValidator(SCHEMES);
         if (!urlValidator.isValid(url)) {
             String message = "Error parsing document. Invalid URL %s";
@@ -81,12 +81,12 @@ public class MaterialParserWaramu implements MaterialParser {
         material.setSource(url);
     }
 
-    private void setDescriptions(Material material, Element lom) {
+    private void setDescriptions(Material material, Element lom) throws ParseException {
         List<LanguageString> descriptions = getDescriptions(lom);
         material.setDescriptions(descriptions);
     }
 
-    private void setMaterialLanguage(Material material, Element lom) {
+    private void setMaterialLanguage(Material material, Element lom) throws ParseException {
         Language materialLanguage = getMaterialLanguage(lom);
         material.setLanguage(materialLanguage);
     }
@@ -123,20 +123,25 @@ public class MaterialParserWaramu implements MaterialParser {
         return tags;
     }
 
-    private List<LanguageString> getDescriptions(Element lom) {
+    private List<LanguageString> getDescriptions(Element lom) throws ParseException {
         NodeList descriptionNode = lom.getElementsByTagName("description");
         Node description = descriptionNode.item(0);
-
-        return getLanguageStrings(description);
+        try{
+            return getLanguageStrings(description);
+        } catch (Exception e) {
+            throw new ParseException("Error in parsing Material descriptions");
+        }
     }
 
-    private Language getMaterialLanguage(Element lom) {
-        Language language = null;
+    private Language getMaterialLanguage(Element lom) throws ParseException {
+        Language language;
         NodeList languageNode = lom.getElementsByTagName("language");
 
-        if (languageNode != null) {
+        try {
             String materialLanguageString = languageNode.item(0).getTextContent().trim();
             language = languageService.getLanguage(materialLanguageString);
+        } catch (Exception e) {
+            throw new ParseException("Error in parsing Material language");
         }
 
         return language;
@@ -164,7 +169,7 @@ public class MaterialParserWaramu implements MaterialParser {
                 languageString.setText(text);
 
                 if (node.getChildNodes().item(i).hasAttributes()) {
-                    String languageCode = node.getChildNodes().item(i).getAttributes().item(0).getTextContent();
+                    String languageCode = node.getChildNodes().item(i).getAttributes().item(0).getTextContent().trim();
 
                     Language language = languageService.getLanguage(languageCode);
                     if (language != null) {
