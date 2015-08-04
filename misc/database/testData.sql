@@ -176,7 +176,7 @@ insert into Material_Description(description, material) values(39, 33);
 insert into Material_Description(description, material) values(39, 34);
 insert into Material_Description(description, material) values(39, 35);
 
-insert into Material_Description(description, material) values(10829, 3917);
+insert into Material_Description(description, material) values(3917, 10829);
 
 -- Material Titles
 
