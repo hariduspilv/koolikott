@@ -13,8 +13,7 @@
                                 <span data-translate="SEARCH_RESULT_1_RESULT_PART_1"></span>
                                 <strong><span data-ng-bind="searchQuery"></span></strong>
                                 <span data-translate="SEARCH_RESULT_1_RESULT_PART_2"></span>
-                                <strong><span data-ng-bind="getNumberOfResults()"></span></strong>
-                                <span data-translate="SEARCH_RESULT_1_RESULT_PART_3"></span>
+                                <strong><span data-ng-bind="getNumberOfResults()"></span></strong><span data-translate="SEARCH_RESULT_1_RESULT_PART_3"></span>
                             </span>
                             <span data-ng-if="getNumberOfResults() > 1">
                                 <span data-translate="SEARCH_RESULT_PART_1"></span>
@@ -68,6 +67,24 @@
                                 </li>
                             </ul>
                         </nav>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="sidebar-module">
+                    <h4>Filter</h4>
+                    <div class="form-group">
+                        <select class="form-control">
+                            <option>Subject</option>
+                            <option>Matemaatika</option>
+                            <option>Bioloogia</option>
+                            <option>Ajalugu</option>
+                            <option>Geograafia</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-default pull-right">Filtreeri</button>
                     </div>
                 </div>
             </div>
