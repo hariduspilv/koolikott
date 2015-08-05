@@ -27,7 +27,6 @@ define(['app'], function(app)
     	
     	function init() {
             setSourceType();
-            $scope.materialSubjects = getSubjectList()
             
             serverCallService.makePost("rest/material/increaseViewCount", $scope.material.id, countViewSuccess, countViewFail); 
     	}
@@ -64,35 +63,6 @@ define(['app'], function(app)
         $scope.formatMaterialUpdatedDate = function(updatedDate) {
             var updated = new Date(updatedDate);
             return formatDay(updated.getDate()) + "." + formatMonth(updated.getMonth() + 1) + "." + updated.getFullYear();
-        }
-        
-        /**
-         *  Gets the list of unique material subjects
-         */
-        function getSubjectList() {
-            var subjects = [];
-
-            var classifications = $scope.material.classifications;
-            if (classifications) {
-                for (var i = 0; i < classifications.length; i++) {
-                subject = getClassificationSubject(classifications[i]);
-                if (subjects.indexOf(subject) < 0) {
-                    subjects[subjects.length] = subject;
-                    }
-            	}
-            }
-        	
-            return subjects;
-        }
-
-        /**
-         * Subject is the root classification 
-         */
-        function getClassificationSubject (classification) {
-            if (!classification.parent) {
-                return classification.name;
-            }
-            return getClassificationSubject(classification.parent);
         }
         
         $scope.isNullOrZeroLength = function (arg) {
