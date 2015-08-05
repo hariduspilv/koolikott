@@ -335,7 +335,7 @@ insert into Material_Tag(tag, material) values(11, 5);
 insert into Material_Tag(tag, material) values(11, 6);
 insert into Material_Tag(tag, material) values(11, 7);
 insert into Material_Tag(tag, material) values(11, 8);
-insert into Material_Tag(tag, material) values(12, 3918);
+insert into Material_Tag(tag, material) values(6958, 3918);
 
 -- Repositories
 
