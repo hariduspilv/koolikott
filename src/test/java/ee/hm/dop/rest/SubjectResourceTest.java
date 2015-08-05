@@ -1,8 +1,8 @@
 package ee.hm.dop.rest;
 
-import static org.apache.commons.lang3.StringUtils.isBlank;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.fail;
 
 import java.util.List;
 
@@ -24,18 +24,21 @@ public class SubjectResourceTest extends ResourceIntegrationTestBase {
         });
 
         assertEquals(2, subjects.size());
+        assertValidSubject(subjects.get(0));
+        assertValidSubject(subjects.get(1));
 
-        // Verify if all fields are loaded
-        for (int i = 0; i < subjects.size(); i++) {
-            Subject subject = subjects.get(i);
-            assertEquals(Long.valueOf(i + 1), subject.getId());
-            assertFalse(isBlank(subject.getName()));
+    }
+
+    private void assertValidSubject(Subject subject) {
+        assertNotNull(subject.getId());
+        assertNotNull(subject.getName());
+        if (subject.getId() == 1) {
+            assertEquals("Biology", subject.getName());
+        } else if (subject.getId() == 2) {
+            assertEquals("Mathematics", subject.getName());
+        } else {
+            fail("Subject with unexpected id.");
         }
-
-        // Verify the subject names
-        assertEquals("Biology", subjects.get(0).getName());
-        assertEquals("Mathematics", subjects.get(1).getName());
-
     }
 
 }
