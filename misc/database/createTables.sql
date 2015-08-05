@@ -11,7 +11,6 @@ DROP TABLE IF EXISTS Material_ResourceType;
 DROP TABLE IF EXISTS Material_Description;
 DROP TABLE IF EXISTS Material_Title;
 DROP TABLE IF EXISTS Material_Publisher;
-DROP TABLE IF EXISTS Material_Classification;
 DROP TABLE IF EXISTS Material_Author;
 DROP TABLE IF EXISTS LanguageString;
 DROP TABLE IF EXISTS LanguageKeyCodes;
@@ -22,7 +21,6 @@ DROP TABLE IF EXISTS LanguageTable;
 DROP TABLE IF EXISTS IssueDate;
 DROP TABLE IF EXISTS Publisher;
 DROP TABLE IF EXISTS Tag;
-DROP TABLE IF EXISTS Classification;
 DROP TABLE IF EXISTS EducationalContext;
 DROP TABLE IF EXISTS ResourceType;
 DROP TABLE IF EXISTS Author;
@@ -43,16 +41,6 @@ CREATE TABLE ResourceType (
 CREATE TABLE EducationalContext (
   id                 BIGINT AUTO_INCREMENT PRIMARY KEY,
   educationalContext VARCHAR(255) NOT NULL UNIQUE
-);
-
-CREATE TABLE Classification (
-  id                 BIGINT AUTO_INCREMENT PRIMARY KEY,
-  classificationName VARCHAR(255) NOT NULL,
-  parent             BIGINT,
-
-  FOREIGN KEY (parent)
-  REFERENCES Classification (id)
-    ON DELETE RESTRICT
 );
 
 CREATE TABLE Tag (
@@ -141,22 +129,6 @@ CREATE TABLE Material_Author (
   FOREIGN KEY (author)
         REFERENCES Author(id)
         ON DELETE RESTRICT
-);
-
-CREATE TABLE Material_Classification (
-  material       BIGINT NOT NULL,
-  classification BIGINT NOT NULL,
-
-  PRIMARY KEY (material, classification),
-
-  FOREIGN KEY (classification)
-  REFERENCES Classification (id)
-    ON DELETE RESTRICT,
-
-  FOREIGN KEY (material)
-  REFERENCES Material (id)
-    ON DELETE RESTRICT
-
 );
 
 CREATE TABLE Material_Publisher (

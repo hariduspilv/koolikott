@@ -11,43 +11,6 @@ insert into EducationalContext(id, educationalContext) values (1006, 'PROFESSION
 insert into EducationalContext(id, educationalContext) values (1007, 'SPECIALEDUCATION');
 insert into EducationalContext(id, educationalContext) values (1008, 'OTHER');
 
--- Classifications
-
-insert into Classification(id, classificationName, parent) values (1, 'Biology', null);
-insert into Classification(id, classificationName, parent) values(2, 'Plants', 1);
-insert into Classification(id, classificationName, parent) values(3, 'Trees', 2);
-insert into Classification(id, classificationName, parent) values (4, 'Mathematics', null);
-insert into Classification(id, classificationName, parent) values(5, 'Algebra', 4);
-insert into Classification(id, classificationName, parent) values(6, 'Linear', 5);
-insert into Classification(id, classificationName, parent) values(7, 'Quadratic', 5);
-
--- Translation for Classifications. It must be in the translation files when we have the final Classification tree
-
-insert into Translation(translationGroup, translationKey, translation) values (1, 'CLASSIFICATION_BIOLOGY', 'Bioloogia');
-insert into Translation(translationGroup, translationKey, translation) values (1, 'CLASSIFICATION_PLANTS', 'Taimed');
-insert into Translation(translationGroup, translationKey, translation) values (1, 'CLASSIFICATION_TREES', 'Puud');
-insert into Translation(translationGroup, translationKey, translation) values (1, 'CLASSIFICATION_MATHEMATICS', 'Matemaatika');
-insert into Translation(translationGroup, translationKey, translation) values (1, 'CLASSIFICATION_ALGEBRA', 'Algebra');
-insert into Translation(translationGroup, translationKey, translation) values (1, 'CLASSIFICATION_LINEAR', 'Sirgjooneline');
-insert into Translation(translationGroup, translationKey, translation) values (1, 'CLASSIFICATION_QUADRATIC', 'Quadratic');
-
-insert into Translation(translationGroup, translationKey, translation) values (2, 'CLASSIFICATION_BIOLOGY', 'биология');
-insert into Translation(translationGroup, translationKey, translation) values (2, 'CLASSIFICATION_PLANTS', 'растения');
-insert into Translation(translationGroup, translationKey, translation) values (2, 'CLASSIFICATION_TREES', 'деревья');
-insert into Translation(translationGroup, translationKey, translation) values (2, 'CLASSIFICATION_MATHEMATICS', 'математический');
-insert into Translation(translationGroup, translationKey, translation) values (2, 'CLASSIFICATION_ALGEBRA', 'алгебра');
-insert into Translation(translationGroup, translationKey, translation) values (2, 'CLASSIFICATION_LINEAR', 'линейный');
-insert into Translation(translationGroup, translationKey, translation) values (2, 'CLASSIFICATION_QUADRATIC', 'квадратный');
-
-insert into Translation(translationGroup, translationKey, translation) values (3, 'CLASSIFICATION_BIOLOGY', 'Biology');
-insert into Translation(translationGroup, translationKey, translation) values (3, 'CLASSIFICATION_PLANTS', 'Plants');
-insert into Translation(translationGroup, translationKey, translation) values (3, 'CLASSIFICATION_TREES', 'Trees');
-insert into Translation(translationGroup, translationKey, translation) values (3, 'CLASSIFICATION_MATHEMATICS', 'Mathematics');
-insert into Translation(translationGroup, translationKey, translation) values (3, 'CLASSIFICATION_ALGEBRA', 'Algebra');
-insert into Translation(translationGroup, translationKey, translation) values (3, 'CLASSIFICATION_LINEAR', 'Linear');
-insert into Translation(translationGroup, translationKey, translation) values (3, 'CLASSIFICATION_QUADRATIC', 'Quadratic');
-
-
 
 -- Start of test data
 
@@ -266,18 +229,6 @@ insert into Material_Title(title, material) values(47, 35);
 
 insert into Material_Title(title, material) values(10830, 3917);
 
--- Material classifications
-
-insert into Material_Classification(classification, material) values(1,1);
-insert into Material_Classification(classification, material) values(2,1);
-insert into Material_Classification(classification, material) values(2,2);
-insert into Material_Classification(classification, material) values(1,3);
-insert into Material_Classification(classification, material) values(1,4);
-insert into Material_Classification(classification, material) values(5,4);
-insert into Material_Classification(classification, material) values(7,5);
-insert into Material_Classification(classification, material) values(4,10);
-insert into Material_Classification(classification, material) values(4,11);
-insert into Material_Classification(classification, material) values(4,3917);
 
 -- Material_Subject
 

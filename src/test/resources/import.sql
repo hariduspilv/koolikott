@@ -106,26 +106,6 @@ insert into Material_Title(title, material) values(16, 7);
 insert into Material_Title(title, material) values(17, 6);
 insert into Material_Title(title, material) values(18, 8);
 
--- Classifications
-
-insert into Classification(id, classificationName, parent) values (1, 'Biology', null);
-insert into Classification(id, classificationName, parent) values(2, 'Plants', 1);
-insert into Classification(id, classificationName, parent) values(3, 'Trees', 2);
-insert into Classification(id, classificationName, parent) values (4, 'Math', null);
-insert into Classification(id, classificationName, parent) values(5, 'Algebra', 4);
-insert into Classification(id, classificationName, parent) values(6, 'Linear', 5);
-insert into Classification(id, classificationName, parent) values(7, 'Quadratic', 5);
-
--- Material classifications
-
-insert into Material_Classification(classification, material) values(1,1);
-insert into Material_Classification(classification, material) values(2,1);
-insert into Material_Classification(classification, material) values(2,2);
-insert into Material_Classification(classification, material) values(1,3);
-insert into Material_Classification(classification, material) values(1,4);
-insert into Material_Classification(classification, material) values(5,4);
-insert into Material_Classification(classification, material) values(7,5);
-
 -- Subject
 
 insert into Subject(id, name) values (1, 'Biology');

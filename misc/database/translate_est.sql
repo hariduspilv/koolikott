@@ -77,3 +77,11 @@ insert into Translation(translationGroup, translationKey, translation) values (1
 insert into Translation(translationGroup, translationKey, translation) values (1, 'COPYRIGHT_FOOTER', '© 2016 Kõik õigused kaitstud. Haridus- ja Teadusministeerium');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'SEARCH_RESULT_PREVIOUS', 'Eelmine');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'SEARCH_RESULT_NEXT', 'Järgmine');
+
+
+-- Material Subject translations
+
+
+insert into Translation(translationGroup, translationKey, translation) values (1, 'MATERIAL_SUBJECT_BIOLOGY', 'Bioloogia');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'MATERIAL_SUBJECT_MATHEMATICS', 'Matemaatika');
+

@@ -90,14 +90,6 @@ public class Material {
 
     @ManyToMany(fetch = EAGER, cascade = CascadeType.PERSIST)
     @JoinTable(
-            name = "Material_Classification",
-            joinColumns = { @JoinColumn(name = "material") },
-            inverseJoinColumns = { @JoinColumn(name = "classification") },
-            uniqueConstraints = @UniqueConstraint(columnNames = { "material", "classification" }))
-    private List<Classification> classifications;
-
-    @ManyToMany(fetch = EAGER, cascade = CascadeType.PERSIST)
-    @JoinTable(
             name = "Material_EducationalContext",
             joinColumns = { @JoinColumn(name = "material") },
             inverseJoinColumns = { @JoinColumn(name = "educationalContext") },
@@ -213,14 +205,6 @@ public class Material {
 
     public void setResourceTypes(List<ResourceType> resourceTypes) {
         this.resourceTypes = resourceTypes;
-    }
-
-    public List<Classification> getClassifications() {
-        return classifications;
-    }
-
-    public void setClassifications(List<Classification> classifications) {
-        this.classifications = classifications;
     }
 
     public List<EducationalContext> getEducationalContexts() {
