@@ -1,13 +1,12 @@
 package ee.hm.dop.oaipmh;
 
-import static junit.framework.Assert.assertEquals;
-import static junit.framework.Assert.assertNotNull;
-import static junit.framework.Assert.assertSame;
-import static junit.framework.TestCase.assertNull;
 import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertSame;
 import static org.junit.Assert.fail;
 
 import org.easymock.EasyMockRunner;
@@ -18,10 +17,6 @@ import org.w3c.dom.Document;
 
 import ORG.oclc.oai.harvester2.verb.GetRecord;
 import ee.hm.dop.model.Repository;
-
-/**
- * Created by mart.laus on 17.07.2015.
- */
 
 @RunWith(EasyMockRunner.class)
 public class GetMaterialConnectorTest {
@@ -83,7 +78,7 @@ public class GetMaterialConnectorTest {
             }
             fail("Exception expected.");
         } catch (RuntimeException e) {
-            assertEquals(errorMsg, e.getMessage());
+            assertSame(errorMsg, e.getMessage());
         }
 
         verify(getMaterialConnector, repository);

@@ -55,7 +55,9 @@ public class MaterialIteratorTest {
     public void connect() throws Exception {
         MaterialIterator materialIterator = createMock(MaterialIterator.class);
         Repository repository = createMock(Repository.class);
-        Iterator iterator = createMock(Iterator.class);
+
+        @SuppressWarnings("unchecked")
+        Iterator<Material> iterator = createMock(Iterator.class);
 
         expect(materialIterator.connect(repository)).andReturn(iterator);
 
@@ -106,9 +108,8 @@ public class MaterialIteratorTest {
 
     @Test(expected = NullPointerException.class)
     public void connectNullRepository() throws Exception {
-        Repository repository = null;
 
-        materialIterator.connect(repository);
+        materialIterator.connect(null);
     }
 
     @Test(expected = NullPointerException.class)

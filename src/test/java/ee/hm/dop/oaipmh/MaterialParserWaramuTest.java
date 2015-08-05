@@ -128,7 +128,7 @@ public class MaterialParserWaramuTest {
     }
 
     @Test
-    public void parseNullDescriptions() throws ParseException, ParserConfigurationException, IOException, SAXException {
+    public void parseNullDescriptions() throws ParserConfigurationException, IOException, SAXException {
         String errorMessage = "Error in parsing Material descriptions";
 
         File fXmlFile = new File(workingDir + File.separator + "src" + File.separator + "test" + File.separator
@@ -155,7 +155,7 @@ public class MaterialParserWaramuTest {
     }
 
     @Test
-    public void parseNullSource() throws ParseException, ParserConfigurationException, IOException, SAXException {
+    public void parseNullSource() throws ParserConfigurationException, IOException, SAXException {
         String errorMessage = "Material has more or less than one source, can't be mapped.";
 
         File fXmlFile = new File(workingDir + File.separator + "src" + File.separator + "test" + File.separator

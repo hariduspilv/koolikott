@@ -100,12 +100,11 @@ public class ListIdentifiersConnectorTest {
         expect(firstListIdentifiers.getDocument()).andReturn(document);
 
         String baseURL = "hostUrl";
-        String metadataPrefix = null;
-        expect(builder.newListIdentifier(baseURL, metadataPrefix)).andReturn(firstListIdentifiers);
+        expect(builder.newListIdentifier(baseURL, null)).andReturn(firstListIdentifiers);
 
         replay(builder, firstListIdentifiers, element, document, nodeList);
 
-        builder.connect(baseURL, metadataPrefix);
+        builder.connect(baseURL, null);
 
         verify(builder, firstListIdentifiers, element, document, nodeList);
     }
@@ -115,14 +114,13 @@ public class ListIdentifiersConnectorTest {
         ListIdentifiersConnector builder = getListIdentifiersConnector();
 
         String errorMessage = "Malformed URL";
-        String baseURL = null;
         String metadataPrefix = "metadataPrefix";
-        expect(builder.newListIdentifier(baseURL, metadataPrefix)).andThrow(new RuntimeException(errorMessage));
+        expect(builder.newListIdentifier(null, metadataPrefix)).andThrow(new RuntimeException(errorMessage));
 
         replay(builder);
 
         try {
-            builder.connect(baseURL, metadataPrefix);
+            builder.connect(null, metadataPrefix);
             fail("Exception expected.");
         } catch (RuntimeException e) {
             assertEquals(errorMessage, e.getMessage());

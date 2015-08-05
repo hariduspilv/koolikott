@@ -28,7 +28,7 @@ public class RepositoryManagerTest extends DatabaseTestBase{
     }
 
     @Test
-    public void getMaterialsWrongSchema() throws Exception {
+    public void getMaterialsWrongSchema() {
         Repository repository = new Repository();
         repository.setSchema("randomSchema");
         repository.setBaseURL("http://koolitaja.eenet.ee:57219/Waramu3Web/OAIHandler");
@@ -43,7 +43,7 @@ public class RepositoryManagerTest extends DatabaseTestBase{
     }
 
     @Test
-    public void getMaterialsNullSchema() throws Exception {
+    public void getMaterialsNullSchema() {
         Repository repository = new Repository();
         repository.setSchema(null);
         repository.setBaseURL("http://koolitaja.eenet.ee:57219/Waramu3Web/OAIHandler");
@@ -57,7 +57,7 @@ public class RepositoryManagerTest extends DatabaseTestBase{
     }
 
     @Test
-    public void getMaterialsNullURL() throws Exception {
+    public void getMaterialsNullURL() {
         Repository repository = new Repository();
         repository.setSchema("randomSchema");
         repository.setBaseURL(null);

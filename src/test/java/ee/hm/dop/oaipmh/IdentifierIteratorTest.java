@@ -65,6 +65,7 @@ public class IdentifierIteratorTest {
             getIdentifierIterator(nodeList, null, null).next();
             fail("Exception expected.");
         } catch (NoSuchElementException e) {
+            //ignore
         }
 
         verify(nodeList);
