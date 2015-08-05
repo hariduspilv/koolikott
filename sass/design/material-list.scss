@@ -86,21 +86,21 @@
         }
     }
     
-    @media screen and (max-width: 1000px) {
-        //overflow-x: scroll; overflow-y: hidden;
+    @media screen and (max-width: $screen-xs) {
+        overflow-x: scroll; overflow-y: hidden; -webkit-overflow-scrolling: touch;
     }
 }
 
 .material-taping {
     
-    @media screen and (max-width: 1000px) {
-        //white-space: nowrap;
+    @media screen and (max-width: $screen-xs) {
+        white-space: nowrap;
     }
                   
     .material {
 
-        @media screen and (max-width: 1000px) {
-            //display: inline-block !important; width: 120px !important;
+        @media screen and (max-width: $screen-xs) {
+            float: none; display: inline-block !important; width: 100% !important;
         }
     }
 }
