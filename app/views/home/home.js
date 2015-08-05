@@ -3,9 +3,9 @@ define(['app'], function(app)
     app.controller('homeController', ['$scope', "serverCallService", 'translationService',
     		function($scope, serverCallService, translationService) {
         var params = {};
-    	serverCallService.makeGet("rest/material/getNewestMaterials?numberOfMaterials=8", params, getAllMaterialSuccess, getAllMaterialFail);
+    	serverCallService.makeGet("rest/material/getNewestMaterials?numberOfMaterials=8", params, getNewestMaterialsSuccess, getNewestMaterialsFail);
     	
-    	function getAllMaterialSuccess(data) {
+    	function getNewestMaterialsSuccess(data) {
 
             if (isEmpty(data)) {
                 log('No data returned by session search.');
@@ -14,7 +14,7 @@ define(['app'], function(app)
                 }
     	}
     	
-    	function getAllMaterialFail(data, status) {
+    	function getNewestMaterialsFail(data, status) {
             console.log('Session search failed.')
     	}
     }]);
