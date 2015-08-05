@@ -10,10 +10,10 @@
                                     <span data-translate="MATERIAL_VIEW_SUBJECT"></span>:
                                 </div>
                                 <span data-ng-bind="subject"></span>
-                                <span data-ng-repeat="subject in materialSubjects">
-                                    <span data-translate="{{'CLASSIFICATION_' + subject.toUpperCase()}}"></span><span data-ng-bind="$index < materialSubjects.length - 1 ? ', ' : ''"></span>
+                                <span data-ng-repeat="subject in material.subjects">
+                                    <span data-translate="{{'MATERIAL_SUBJECT_' + subject.name.toUpperCase()}}"></span><span data-ng-bind="$index < material.subjects.length - 1 ? ', ' : ''"></span>
                                 </span>
-                                <span data-ng-if="!materialSubjects.length" data-translate="UNKNOWN">Unknown</span>
+                                <span data-ng-if="!material.subjects.length" data-translate="UNKNOWN">Unknown</span>
                             </div>
                             <div class="item pull-left">
                                 <div class="label">
