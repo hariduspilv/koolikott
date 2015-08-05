@@ -87,20 +87,20 @@
     }
     
     @media screen and (max-width: $screen-xs) {
-        overflow-x: scroll; overflow-y: hidden; -webkit-overflow-scrolling: touch;
+        
     }
 }
 
 .material-taping {
     
     @media screen and (max-width: $screen-xs) {
-        white-space: nowrap;
+        padding-top: 10px; overflow-x: scroll; overflow-y: hidden; -webkit-overflow-scrolling: touch; white-space: nowrap;
     }
                   
     .material {
 
         @media screen and (max-width: $screen-xs) {
-            float: none; display: inline-block !important; width: 100% !important;
+            float: none; display: inline-block !important; width: 80%;
         }
     }
 }
