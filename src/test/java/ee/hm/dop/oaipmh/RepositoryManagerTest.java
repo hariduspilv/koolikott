@@ -1,33 +1,78 @@
 package ee.hm.dop.oaipmh;
 
-import static junit.framework.TestCase.assertSame;
-import static org.easymock.EasyMock.createMock;
-import static org.easymock.EasyMock.expect;
-import static org.easymock.EasyMock.replay;
-import static org.easymock.EasyMock.verify;
+import static junit.framework.Assert.assertNotNull;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
+import org.easymock.TestSubject;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
+import ee.hm.dop.common.test.GuiceTestRunner;
 import ee.hm.dop.model.Repository;
 
 /**
  * Created by mart.laus on 16.07.2015.
  */
+@RunWith(GuiceTestRunner.class)
 public class RepositoryManagerTest {
 
+    @TestSubject
+    private RepositoryManager repositoryManager = new RepositoryManager();
+
     @Test
-    public void getMaterials() throws Exception {
-        RepositoryManager repositoryManager = createMock(RepositoryManager.class);
-        Repository repository = createMock(Repository.class);
-        MaterialIterator materialIterator = createMock(MaterialIterator.class);
-
-        expect(repositoryManager.getMaterialsFrom(repository)).andReturn(materialIterator);
-
-        replay(repositoryManager, repository, materialIterator);
+    public void getMaterialsFromWaramu() throws Exception {
+        Repository repository = new Repository();
+        repository.setSchema("waramu");
+        repository.setBaseURL("http://koolitaja.eenet.ee:57219/Waramu3Web/OAIHandler");
 
         MaterialIterator returnedIterator = repositoryManager.getMaterialsFrom(repository);
 
-        verify(repositoryManager, repository, materialIterator);
-        assertSame(returnedIterator, materialIterator);
+        assertNotNull(returnedIterator);
+    }
+
+    @Test
+    public void getMaterialsWrongSchema() throws Exception {
+        Repository repository = new Repository();
+        repository.setSchema("randomSchema");
+        repository.setBaseURL("http://koolitaja.eenet.ee:57219/Waramu3Web/OAIHandler");
+        String errorMessage = "No parser for schema randomSchema or wrong repository URL";
+
+        try {
+            repositoryManager.getMaterialsFrom(repository);
+            fail("Exception expected.");
+        } catch (Exception e) {
+            assertEquals(errorMessage, e.getMessage());
+        }
+    }
+
+    @Test
+    public void getMaterialsNullSchema() throws Exception {
+        Repository repository = new Repository();
+        repository.setSchema(null);
+        repository.setBaseURL("http://koolitaja.eenet.ee:57219/Waramu3Web/OAIHandler");
+        String errorMessage = null;
+
+        try {
+            repositoryManager.getMaterialsFrom(repository);
+            fail("Exception expected.");
+        } catch (Exception e) {
+            assertEquals(errorMessage, e.getMessage());
+        }
+    }
+
+    @Test
+    public void getMaterialsNullURL() throws Exception {
+        Repository repository = new Repository();
+        repository.setSchema("randomSchema");
+        repository.setBaseURL(null);
+        String errorMessage = "No parser for schema randomSchema or wrong repository URL";
+
+        try {
+            repositoryManager.getMaterialsFrom(repository);
+            fail("Exception expected.");
+        } catch (Exception e) {
+            assertEquals(errorMessage, e.getMessage());
+        }
     }
 }
