@@ -23,9 +23,7 @@ import ee.hm.dop.model.Material;
 import ee.hm.dop.model.Repository;
 import ee.hm.dop.oaipmh.waramu.MaterialParserWaramu;
 
-/**
- * Created by mart.laus on 23.07.2015.
- */
+
 @RunWith(EasyMockRunner.class)
 public class MaterialIteratorTest {
 
@@ -119,7 +117,7 @@ public class MaterialIteratorTest {
         repository.setBaseURL("test");
         repository.setSchema("test");
 
-        Iterator<Material> iterator = materialIterator.connect(repository);
+        materialIterator.connect(repository);
     }
 
     @Test

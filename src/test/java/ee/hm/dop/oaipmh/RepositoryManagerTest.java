@@ -1,24 +1,20 @@
 package ee.hm.dop.oaipmh;
 
-import static junit.framework.Assert.assertNotNull;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.fail;
 
-import org.easymock.TestSubject;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import javax.inject.Inject;
 
-import ee.hm.dop.common.test.GuiceTestRunner;
+import org.junit.Test;
+
+import ee.hm.dop.common.test.DatabaseTestBase;
 import ee.hm.dop.model.Repository;
 
-/**
- * Created by mart.laus on 16.07.2015.
- */
-@RunWith(GuiceTestRunner.class)
-public class RepositoryManagerTest {
+public class RepositoryManagerTest extends DatabaseTestBase{
 
-    @TestSubject
-    private RepositoryManager repositoryManager = new RepositoryManager();
+    @Inject
+    private RepositoryManager repositoryManager;
 
     @Test
     public void getMaterialsFromWaramu() throws Exception {
@@ -51,13 +47,12 @@ public class RepositoryManagerTest {
         Repository repository = new Repository();
         repository.setSchema(null);
         repository.setBaseURL("http://koolitaja.eenet.ee:57219/Waramu3Web/OAIHandler");
-        String errorMessage = null;
 
         try {
             repositoryManager.getMaterialsFrom(repository);
             fail("Exception expected.");
         } catch (Exception e) {
-            assertEquals(errorMessage, e.getMessage());
+            assertEquals(null, e.getMessage());
         }
     }
 
