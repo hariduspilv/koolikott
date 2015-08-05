@@ -102,6 +102,7 @@ insert into Material(id, lang, issueDate, licenseType, source, added, updated, p
 insert into Material(id, lang, issueDate, licenseType, source, added, updated, picture) values(34, 4, 6, 3, 'https://en.wikipedia.org/wiki/France', '2001-07-16 06:00:01', null, null);
 insert into Material(id, lang, issueDate, licenseType, source, added, updated, picture) values(35, 5, 7, 1, 'https://en.wikipedia.org/wiki/Austria', '2002-06-01 09:00:01', null, null);
 insert into Material(id, lang, issueDate, licenseType, source) values(3917, 1, 2, 3, 'http://pilditu.audio.ee');
+
 -- Authors
 
 insert into Author(id, name, surname) values(1, 'Isaac', 'John Newton');
@@ -277,6 +278,20 @@ insert into Material_Classification(classification, material) values(7,5);
 insert into Material_Classification(classification, material) values(4,10);
 insert into Material_Classification(classification, material) values(4,11);
 insert into Material_Classification(classification, material) values(4,3917);
+
+-- Material_Subject
+
+insert into Material_Subject(subject, material) values(1,1);
+insert into Material_Subject(subject, material) values(1,2);
+insert into Material_Subject(subject, material) values(1,3);
+insert into Material_Subject(subject, material) values(1,4);
+insert into Material_Subject(subject, material) values(2,5);
+insert into Material_Subject(subject, material) values(1,6);
+insert into Material_Subject(subject, material) values(2,6);
+insert into Material_Subject(subject, material) values(2,10);
+insert into Material_Subject(subject, material) values(2,11);
+insert into Material_Subject(subject, material) values(2,3917);
+
 -- Material_ResourceType
 
 insert into Material_ResourceType(material, resourceType) values (1, 1);
