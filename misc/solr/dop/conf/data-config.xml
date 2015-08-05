@@ -20,6 +20,9 @@
                 <entity name="EducationalContext" query="select educationalContext as eC_textValue from EducationalContext where id = '${Material_EducationalContext.eC_id}'">
                     <entity name="Translation" query="select translation as educational_context from Translation where translationKey = '${EducationalContext.eC_textValue}'" />
                 </entity>
+            </entity>
+            <entity name="Material_Subject" query="select subject as subject_id from Material_Subject where material='${Material.id}'">
+                <entity name="Subject" query="select name as subject from Subject where id = '${Material_Subject.subject_id}'" />  
             </entity>    
         </entity>
     </document>

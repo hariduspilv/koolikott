@@ -61,6 +61,7 @@ class SearchEngineServiceMock implements SearchEngineService {
 
         addArabicQuery();
         addBigQuery();
+        addFilteredQuery();
     }
 
     private static void addArabicQuery() {
@@ -83,5 +84,15 @@ class SearchEngineServiceMock implements SearchEngineService {
         }
 
         searchResponses.put(bigQuery, bigQueryDocuments);
+    }
+
+    private static void addFilteredQuery() {
+        String filteredQuery = "+subject:\"mathematics\" filteredquery*";
+        ArrayList<Document> filteredSearchResult = new ArrayList<>();
+        Document newDocument = new Document();
+        newDocument.setId("5");
+        filteredSearchResult.add(newDocument);
+
+        searchResponses.put(filteredQuery, filteredSearchResult);
     }
 }
