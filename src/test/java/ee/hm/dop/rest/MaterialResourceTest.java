@@ -1,5 +1,6 @@
 package ee.hm.dop.rest;
 
+import static java.lang.String.format;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
@@ -20,8 +21,11 @@ import ee.hm.dop.model.Author;
 import ee.hm.dop.model.IssueDate;
 import ee.hm.dop.model.LanguageString;
 import ee.hm.dop.model.Material;
+import ee.hm.dop.model.Subject;
 
 public class MaterialResourceTest extends ResourceIntegrationTestBase {
+
+    private static final String GET_MATERIAL_URL = "material?materialId=%s";
 
     @Test
     public void getAllMaterials() {
@@ -71,23 +75,12 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
                 assertEquals("est", languageString.getLanguage().getCode());
                 assertEquals("Test description in estonian. (Russian available)", languageString.getText());
             } else if (languageString.getId() == 2) {
-                assertEquals("est", languageString.getLanguage());
+                assertEquals("est", languageString.getLanguage().getCode());
                 assertEquals("Test description in russian, which is the only language available.",
                         languageString.getText());
 
             }
         }
-    }
-
-    @Test
-    public void getMaterialClassifications() {
-        Response response = doGet("material/getAll");
-        List<Material> materials = response.readEntity(new GenericType<List<Material>>() {
-        });
-        Material material = materials.get(0);
-
-        assertEquals("Plants", material.getClassifications().get(0).getChildren().get(0).getName());
-
     }
 
     @Test
@@ -141,7 +134,7 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
     @Test
     public void getMaterialTags() {
         long materialId = 1;
-        Response response = doGet("material?materialId=" + materialId);
+        Response response = doGet(format(GET_MATERIAL_URL, materialId));
         Material material = response.readEntity(new GenericType<Material>() {
         });
 
@@ -178,7 +171,7 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
     public void increaseViewCount() {
         long materialId = 5;
 
-        Response response = doGet("material?materialId=" + materialId);
+        Response response = doGet(format(GET_MATERIAL_URL, materialId));
         Material material = response.readEntity(new GenericType<Material>() {
         });
         Long previousViewCount = material.getViews();
@@ -186,7 +179,7 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
         response = doPost("material/increaseViewCount", Entity.entity(materialId, MediaType.APPLICATION_JSON));
         assertEquals(Status.OK.getStatusCode(), response.getStatus());
 
-        response = doGet("material?materialId=" + materialId);
+        response = doGet(format(GET_MATERIAL_URL, materialId));
         material = response.readEntity(new GenericType<Material>() {
         });
         Long newViewCount = material.getViews();
@@ -198,13 +191,13 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
     public void increaseViewCountNotExistingMaterial() {
         long materialId = 999;
 
-        Response response = doGet("material?materialId=" + materialId);
+        Response response = doGet(format(GET_MATERIAL_URL, materialId));
         assertEquals(Status.NO_CONTENT.getStatusCode(), response.getStatus());
 
         response = doPost("material/increaseViewCount", Entity.entity(materialId, MediaType.APPLICATION_JSON));
         assertEquals(Status.BAD_REQUEST.getStatusCode(), response.getStatus());
 
-        response = doGet("material?materialId=" + materialId);
+        response = doGet(format(GET_MATERIAL_URL, materialId));
         assertEquals(Status.NO_CONTENT.getStatusCode(), response.getStatus());
     }
 
@@ -223,5 +216,30 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
         long materialId = 999;
         Response response = doGet("material/getPicture?materialId=" + materialId, MediaType.WILDCARD_TYPE);
         assertEquals(Status.NOT_FOUND.getStatusCode(), response.getStatus());
+    }
+
+    @Test
+    public void getMaterialWithSubjects() {
+        long materialId = 6;
+        Material material = doGet(format(GET_MATERIAL_URL, materialId), Material.class);
+
+        List<Subject> subjects = material.getSubjects();
+        assertNotNull(subjects);
+        assertEquals(2, subjects.size());
+        Subject biology = subjects.get(0);
+        assertEquals(new Long(1), biology.getId());
+        assertEquals("Biology", biology.getName());
+        Subject math = subjects.get(1);
+        assertEquals(new Long(2), math.getId());
+        assertEquals("Mathematics", math.getName());
+    }
+
+    @Test
+    public void getMaterialWithNoSubject() {
+        long materialId = 7;
+        Material material = doGet(format(GET_MATERIAL_URL, materialId), Material.class);
+        List<Subject> subjects = material.getSubjects();
+        assertNotNull(subjects);
+        assertEquals(0, subjects.size());
     }
 }

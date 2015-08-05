@@ -31,7 +31,7 @@ public class RepositoryManager {
             parser = GuiceInjector.getInjector().getInstance(MaterialParserWaramu.class);
             break;
         default:
-            throw new RuntimeException(format("No parser for schema %s", repository.getSchema()));
+            throw new RuntimeException(format("No parser for schema %s or wrong repository URL" , repository.getSchema()));
         }
 
         return parser;

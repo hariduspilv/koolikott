@@ -40,6 +40,10 @@ public class MaterialParserWaramuTest {
     @Mock
     private TagService tagService;
 
+    private String workingDir = System.getProperty("user.dir");
+    private Language language = new Language();
+    private Tag tag = new Tag();
+
     @Test(expected = ee.hm.dop.oaipmh.ParseException.class)
     public void parseXMLisNull() throws ParseException {
         materialParser.parse(null);
@@ -53,10 +57,6 @@ public class MaterialParserWaramuTest {
 
     @Test
     public void parse() throws ParseException, ParserConfigurationException, IOException, SAXException {
-        String workingDir = System.getProperty("user.dir");
-        Language language = new Language();
-        Tag tag = new Tag();
-
         File fXmlFile = new File(workingDir + File.separator + "src" + File.separator + "test" + File.separator
                 + "resources" + File.separator + "oaipmh" + File.separator + "parse.xml");
         DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
@@ -78,8 +78,6 @@ public class MaterialParserWaramuTest {
     @Test
     public void parseNullTitle() throws ParserConfigurationException, IOException, SAXException {
         String errorMessage = "Error in parsing Material title";
-        String workingDir = System.getProperty("user.dir");
-        Language language = new Language();
 
         File fXmlFile = new File(workingDir + File.separator + "src" + File.separator + "test" + File.separator
                 + "resources" + File.separator + "oaipmh" + File.separator + "parseNullTitle.xml");
@@ -106,8 +104,6 @@ public class MaterialParserWaramuTest {
     @Test
     public void parseNullLanguage() throws ParserConfigurationException, IOException, SAXException {
         String errorMessage = "Error in parsing Material language";
-        String workingDir = System.getProperty("user.dir");
-        Language language = new Language();
 
         File fXmlFile = new File(workingDir + File.separator + "src" + File.separator + "test" + File.separator
                 + "resources" + File.separator + "oaipmh" + File.separator + "parseNullLanguage.xml");
@@ -134,8 +130,6 @@ public class MaterialParserWaramuTest {
     @Test
     public void parseNullDescriptions() throws ParseException, ParserConfigurationException, IOException, SAXException {
         String errorMessage = "Error in parsing Material descriptions";
-        String workingDir = System.getProperty("user.dir");
-        Language language = new Language();
 
         File fXmlFile = new File(workingDir + File.separator + "src" + File.separator + "test" + File.separator
                 + "resources" + File.separator + "oaipmh" + File.separator + "parseNullDescriptions.xml");
@@ -163,8 +157,6 @@ public class MaterialParserWaramuTest {
     @Test
     public void parseNullSource() throws ParseException, ParserConfigurationException, IOException, SAXException {
         String errorMessage = "Material has more or less than one source, can't be mapped.";
-        String workingDir = System.getProperty("user.dir");
-        Language language = new Language();
 
         File fXmlFile = new File(workingDir + File.separator + "src" + File.separator + "test" + File.separator
                 + "resources" + File.separator + "oaipmh" + File.separator + "parseNullSource.xml");

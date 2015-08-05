@@ -1,9 +1,7 @@
 package ee.hm.dop.rest;
 
+import static java.lang.String.format;
 import static org.junit.Assert.assertEquals;
-
-import javax.ws.rs.core.GenericType;
-import javax.ws.rs.core.Response;
 
 import org.junit.Test;
 
@@ -13,13 +11,14 @@ import ee.hm.dop.model.SearchResult;
 public class SearchResourceTest extends ResourceIntegrationTestBase {
 
     private static final int RESULTS_PER_PAGE = 3;
+    private static final String QUERY_URL = "search?q=%s";
+    private static final String QUERY_URL_WITH_SUBJECT = "search?q=%s&subject=%s";
+    private static final String QUERY_URL_WITH_START = "search?q=%s&start=%s";
 
     @Test
     public void search() {
         String query = "المدرسية";
-        Response response = doGet("search?q=" + query);
-        SearchResult searchResult = response.readEntity(new GenericType<SearchResult>() {
-        });
+        SearchResult searchResult = doGet(format(QUERY_URL, query), SearchResult.class);
 
         assertEquals(1, searchResult.getMaterials().size());
         assertEquals(Long.valueOf(3), searchResult.getMaterials().get(0).getId());
@@ -31,9 +30,7 @@ public class SearchResourceTest extends ResourceIntegrationTestBase {
     public void searchGetSecondPage() {
         String query = "thishasmanyresults";
         int start = RESULTS_PER_PAGE;
-        Response response = doGet("search?q=" + query + "&start=" + start);
-        SearchResult searchResult = response.readEntity(new GenericType<SearchResult>() {
-        });
+        SearchResult searchResult = doGet(format(QUERY_URL_WITH_START, query, start), SearchResult.class);
 
         assertEquals(RESULTS_PER_PAGE, searchResult.getMaterials().size());
         for (int i = 0; i < RESULTS_PER_PAGE; i++) {
@@ -45,11 +42,21 @@ public class SearchResourceTest extends ResourceIntegrationTestBase {
     }
 
     @Test
+    public void searchWithSubjectFilter() {
+        String query = "filteredquery";
+        String subject = "Mathematics";
+        SearchResult searchResult = doGet(format(QUERY_URL_WITH_SUBJECT, query, subject), SearchResult.class);
+
+        assertEquals(1, searchResult.getMaterials().size());
+        assertEquals(Long.valueOf(5), searchResult.getMaterials().get(0).getId());
+        assertEquals(Long.valueOf(1), Long.valueOf(searchResult.getTotalResults()));
+        assertEquals(Long.valueOf(0), Long.valueOf(searchResult.getStart()));
+    }
+
+    @Test
     public void searchNoResult() {
         String query = "no+results";
-        Response response = doGet("search?q=" + query);
-        SearchResult searchResult = response.readEntity(new GenericType<SearchResult>() {
-        });
+        SearchResult searchResult = doGet(format(QUERY_URL, query), SearchResult.class);
 
         assertEquals(0, searchResult.getMaterials().size());
     }

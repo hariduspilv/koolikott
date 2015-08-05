@@ -9,6 +9,8 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import org.apache.solr.client.solrj.util.ClientUtils;
+
 import ee.hm.dop.dao.MaterialDAO;
 import ee.hm.dop.model.Material;
 import ee.hm.dop.model.SearchResult;
@@ -25,12 +27,17 @@ public class SearchService {
     @Inject
     private MaterialDAO materialDAO;
 
-    public SearchResult search(String query) {
-        return search(query, 0);
+    public SearchResult search(String query, long start) {
+        return search(query, start, null);
     }
 
-    public SearchResult search(String query, long start) {
-        SearchResponse searchResponse = searchEngineService.search(getTokenizedQueryString(query), start);
+    public SearchResult search(String query, String subject) {
+        return search(query, 0, subject);
+    }
+
+    public SearchResult search(String query, long start, String subject) {
+        String queryString = getFiltersAsQuery(subject) + getTokenizedQueryString(query);
+        SearchResponse searchResponse = searchEngineService.search(queryString, start);
 
         List<Long> materialIds = new ArrayList<>();
 
@@ -89,6 +96,14 @@ public class SearchService {
             throw new RuntimeException("Empty search query!");
         }
         return sb.toString();
+    }
+
+    private String getFiltersAsQuery(String subject) {
+        if (subject == null) {
+            return "";
+        }
+
+        return "+subject:\"" + ClientUtils.escapeQueryChars(subject).toLowerCase() + "\" ";
     }
 
 }

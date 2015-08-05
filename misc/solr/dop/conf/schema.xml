@@ -128,6 +128,7 @@
    <field name="author" type="text_general" indexed="true" stored="false" multiValued="true"/>
    <field name="tag" type="text_general" indexed="true" stored="false" multiValued="true"/>
    <field name="educational_context" type="text_general" indexed="true" stored="false" multiValued="true"/>
+   <field name="subject" type="text_general" indexed="true" stored="false" multiValued="true"/>
 
    <!-- catchall field, containing all other searchable text fields (implemented
         via copyField further on in this schema  -->
@@ -152,6 +153,7 @@
    <copyField source="author" dest="text"/>
    <copyField source="tag" dest="text"/>
    <copyField source="educational_context" dest="text" />
+   <copyField source="subject" dest="text" />
 
    <!-- Above, multiple source fields are copied to the [text] field.
 	  Another way to map multiple source fields to the same

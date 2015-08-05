@@ -115,6 +115,7 @@ public class SearchServiceTest {
     public void searchNoResult() {
         String query = "people";
         String tokenizedQuery = "people*";
+        long start = 0;
 
         SearchResponse searchResponse = createSearchResponseWithDocuments(new ArrayList<>());
 
@@ -122,7 +123,7 @@ public class SearchServiceTest {
 
         replayAll();
 
-        List<Material> result = searchService.search(query).getMaterials();
+        List<Material> result = searchService.search(query, start).getMaterials();
 
         verifyAll();
 
@@ -187,6 +188,72 @@ public class SearchServiceTest {
             // OK
         }
         verifyAll();
+    }
+
+    @Test
+    public void searchWithSubjectFilter() {
+        String query = "airplane";
+        String subject = "Mathematics";
+        String tokenizedQuery = "+subject:\"mathematics\" airplane*";
+        long start = 0;
+
+        List<Long> documentIds = Arrays.asList(9L, 2L);
+        SearchResponse searchResponse = createSearchResponseWithDocuments(documentIds);
+
+        Material material9 = new Material();
+        material9.setId((long) 9);
+        Material material2 = new Material();
+        material2.setId((long) 2);
+
+        List<Material> materials = new ArrayList<>();
+        materials.add(material9);
+        materials.add(material2);
+
+        expect(searchEngineService.search(tokenizedQuery, start)).andReturn(searchResponse);
+        expect(materialDAO.findAllById(documentIds)).andReturn(materials);
+
+        replayAll();
+
+        SearchResult result = searchService.search(query, start, subject);
+
+        verifyAll();
+
+        assertEquals(2, result.getMaterials().size());
+        assertSame(material9, result.getMaterials().get(0));
+        assertSame(material2, result.getMaterials().get(1));
+        assertEquals(2, result.getTotalResults());
+        assertEquals(start, result.getStart());
+    }
+
+    @Test
+    public void searchWithSubjectFilterNull() {
+        String query = "airplane";
+        String subject = null;
+        String tokenizedQuery = "airplane*";
+        long start = 0;
+
+        List<Long> documentIds = Arrays.asList(9L);
+        SearchResponse searchResponse = createSearchResponseWithDocuments(documentIds);
+
+        Material material9 = new Material();
+        material9.setId((long) 9);
+
+        List<Material> materials = new ArrayList<>();
+        materials.add(material9);
+
+        expect(searchEngineService.search(tokenizedQuery, start)).andReturn(searchResponse);
+        expect(materialDAO.findAllById(documentIds)).andReturn(materials);
+
+        replayAll();
+
+        SearchResult result = searchService.search(query, start, subject);
+
+        verifyAll();
+
+        assertEquals(1, result.getMaterials().size());
+        assertSame(material9, result.getMaterials().get(0));
+        assertEquals(1, result.getTotalResults());
+        assertEquals(start, result.getStart());
     }
 
     private SearchResponse createSearchResponseWithDocuments(List<Long> documentIds) {

@@ -90,14 +90,6 @@ public class Material {
 
     @ManyToMany(fetch = EAGER, cascade = CascadeType.PERSIST)
     @JoinTable(
-            name = "Material_Classification",
-            joinColumns = { @JoinColumn(name = "material") },
-            inverseJoinColumns = { @JoinColumn(name = "classification") },
-            uniqueConstraints = @UniqueConstraint(columnNames = { "material", "classification" }))
-    private List<Classification> classifications;
-
-    @ManyToMany(fetch = EAGER, cascade = CascadeType.PERSIST)
-    @JoinTable(
             name = "Material_EducationalContext",
             joinColumns = { @JoinColumn(name = "material") },
             inverseJoinColumns = { @JoinColumn(name = "educationalContext") },
@@ -140,6 +132,14 @@ public class Material {
 
     @Formula("picture is not null")
     private boolean hasPicture;
+
+    @ManyToMany(fetch = EAGER, cascade = CascadeType.PERSIST)
+    @JoinTable(
+            name = "Material_Subject",
+            joinColumns = { @JoinColumn(name = "material") },
+            inverseJoinColumns = { @JoinColumn(name = "subject") },
+            uniqueConstraints = @UniqueConstraint(columnNames = { "material", "subject" }))
+    private List<Subject> subjects;
 
     public Long getId() {
         return id;
@@ -205,14 +205,6 @@ public class Material {
 
     public void setResourceTypes(List<ResourceType> resourceTypes) {
         this.resourceTypes = resourceTypes;
-    }
-
-    public List<Classification> getClassifications() {
-        return classifications;
-    }
-
-    public void setClassifications(List<Classification> classifications) {
-        this.classifications = classifications;
     }
 
     public List<EducationalContext> getEducationalContexts() {
@@ -289,5 +281,13 @@ public class Material {
 
     public void setHasPicture(boolean hasPicture) {
         this.hasPicture = hasPicture;
+    }
+
+    public List<Subject> getSubjects() {
+        return subjects;
+    }
+
+    public void setSubject(List<Subject> subjects) {
+        this.subjects = subjects;
     }
 }

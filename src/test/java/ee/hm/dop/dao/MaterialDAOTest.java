@@ -21,6 +21,7 @@ import ee.hm.dop.model.Author;
 import ee.hm.dop.model.Language;
 import ee.hm.dop.model.LanguageString;
 import ee.hm.dop.model.Material;
+import ee.hm.dop.model.Subject;
 import ee.hm.dop.model.Tag;
 
 public class MaterialDAOTest extends DatabaseTestBase {
@@ -88,6 +89,9 @@ public class MaterialDAOTest extends DatabaseTestBase {
         assertEquals("Estonian", language.getName());
         assertEquals("et", language.getCodes().get(0));
         assertNotNull(material.getPicture());
+        assertNotNull(material.getSubjects());
+        assertEquals(1, material.getSubjects().size());
+        assertEquals(new Long(1), material.getSubjects().get(0).getId());
     }
 
     @Test
@@ -141,17 +145,6 @@ public class MaterialDAOTest extends DatabaseTestBase {
 
         Material material2 = materialDAO.findById(1);
         assertEquals("EXPERIMENT1", material2.getResourceTypes().get(1).getName());
-    }
-
-    @Test
-    public void MaterialClassification() {
-        Material material1 = materialDAO.findById(1);
-        assertEquals("Biology", material1.getClassifications().get(0).getName());
-        assertEquals("Plants", material1.getClassifications().get(0).getChildren().get(0).getName());
-
-        Material material2 = materialDAO.findById(5);
-
-        assertEquals("Algebra", material2.getClassifications().get(0).getParent().getName());
     }
 
     @Test
@@ -318,5 +311,27 @@ public class MaterialDAOTest extends DatabaseTestBase {
         Material material3 = materialDAO.findById(1);
         assertTrue(material3.getHasPicture());
         assertNotNull(material3.getPicture());
+    }
+
+    @Test
+    public void findMaterialWith2Subjects() {
+        Material material = materialDAO.findById(6);
+        List<Subject> subjects = material.getSubjects();
+        assertNotNull(subjects);
+        assertEquals(2, subjects.size());
+        Subject biology = subjects.get(0);
+        assertEquals(new Long(1), biology.getId());
+        assertEquals("Biology", biology.getName());
+        Subject math = subjects.get(1);
+        assertEquals(new Long(2), math.getId());
+        assertEquals("Mathematics", math.getName());
+    }
+
+    @Test
+    public void findMaterialWithNoSubjects() {
+        Material material = materialDAO.findById(7);
+        List<Subject> subjects = material.getSubjects();
+        assertNotNull(subjects);
+        assertEquals(0, subjects.size());
     }
 }
