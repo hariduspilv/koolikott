@@ -8,6 +8,7 @@ import ee.hm.dop.service.MaterialService;
 import ee.hm.dop.service.PageService;
 import ee.hm.dop.service.RepositoryService;
 import ee.hm.dop.service.SearchService;
+import ee.hm.dop.service.SubjectService;
 import ee.hm.dop.service.TagService;
 import ee.hm.dop.service.TranslationService;
 
@@ -23,5 +24,6 @@ public class RestModule extends ServletModule {
         bind(LanguageService.class);
         bind(RepositoryService.class);
         bind(TagService.class);
+        bind(SubjectService.class);
     }
 }

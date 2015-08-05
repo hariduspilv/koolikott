@@ -6,6 +6,7 @@ DROP TABLE IF EXISTS Translation;
 DROP TABLE IF EXISTS TranslationGroup;
 DROP TABLE IF EXISTS Material_Tag;
 DROP TABLE IF EXISTS Material_EducationalContext;
+DROP TABLE IF EXISTS Material_Subject;
 DROP TABLE IF EXISTS Material_ResourceType;
 DROP TABLE IF EXISTS Material_Description;
 DROP TABLE IF EXISTS Material_Title;
@@ -15,6 +16,7 @@ DROP TABLE IF EXISTS Material_Author;
 DROP TABLE IF EXISTS LanguageString;
 DROP TABLE IF EXISTS LanguageKeyCodes;
 DROP TABLE IF EXISTS Material;
+DROP TABLE IF EXISTS Subject;
 DROP TABLE IF EXISTS LicenseType;
 DROP TABLE IF EXISTS LanguageTable;
 DROP TABLE IF EXISTS IssueDate;
@@ -78,6 +80,11 @@ CREATE TABLE LanguageTable (
 );
 
 CREATE TABLE LicenseType (
+  id   BIGINT AUTO_INCREMENT PRIMARY KEY,
+  name VARCHAR(255) UNIQUE NOT NULL
+);
+
+CREATE TABLE Subject (
   id   BIGINT AUTO_INCREMENT PRIMARY KEY,
   name VARCHAR(255) UNIQUE NOT NULL
 );
@@ -209,6 +216,21 @@ CREATE TABLE Material_ResourceType (
 
   FOREIGN KEY (resourceType)
   REFERENCES ResourceType (id)
+    ON DELETE RESTRICT
+);
+
+CREATE TABLE Material_Subject (
+  material BIGINT NOT NULL,
+  subject  BIGINT NOT NULL,
+
+  PRIMARY KEY (material, subject),
+
+  FOREIGN KEY (material)
+  REFERENCES Material (id)
+    ON DELETE RESTRICT,
+
+  FOREIGN KEY (subject)
+  REFERENCES Subject (id)
     ON DELETE RESTRICT
 );
 

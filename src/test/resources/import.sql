@@ -116,7 +116,6 @@ insert into Classification(id, classificationName, parent) values(5, 'Algebra', 
 insert into Classification(id, classificationName, parent) values(6, 'Linear', 5);
 insert into Classification(id, classificationName, parent) values(7, 'Quadratic', 5);
 
-
 -- Material classifications
 
 insert into Material_Classification(classification, material) values(1,1);
@@ -126,6 +125,24 @@ insert into Material_Classification(classification, material) values(1,3);
 insert into Material_Classification(classification, material) values(1,4);
 insert into Material_Classification(classification, material) values(5,4);
 insert into Material_Classification(classification, material) values(7,5);
+
+-- Subject
+
+insert into Subject(id, name) values (1, 'Biology');
+insert into Subject(id, name) values (2, 'Mathematics');
+
+-- Material_Subject
+
+insert into Material_Subject(subject, material) values(1,1);
+insert into Material_Subject(subject, material) values(1,2);
+insert into Material_Subject(subject, material) values(1,3);
+insert into Material_Subject(subject, material) values(1,4);
+insert into Material_Subject(subject, material) values(2,5);
+insert into Material_Subject(subject, material) values(1,6);
+insert into Material_Subject(subject, material) values(2,6);
+insert into Material_Subject(subject, material) values(2,10);
+insert into Material_Subject(subject, material) values(2,11);
+insert into Material_Subject(subject, material) values(2,3917);
 
 -- ResourceType
 

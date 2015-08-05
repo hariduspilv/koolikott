@@ -101,6 +101,8 @@ insert into Material(id, lang, issueDate, licenseType, source, added, updated, p
 insert into Material(id, lang, issueDate, licenseType, source, added, updated, picture) values(33, null, null, null, 'https://en.wikipedia.org/wiki/Poland', '1971-09-22 08:00:01', null, null);
 insert into Material(id, lang, issueDate, licenseType, source, added, updated, picture) values(34, 4, 6, 3, 'https://en.wikipedia.org/wiki/France', '2001-07-16 06:00:01', null, null);
 insert into Material(id, lang, issueDate, licenseType, source, added, updated, picture) values(35, 5, 7, 1, 'https://en.wikipedia.org/wiki/Austria', '2002-06-01 09:00:01', null, null);
+insert into Material(id, lang, issueDate, licenseType, source) values(3917, 1, 2, 3, 'http://pilditu.audio.ee');
+
 -- Authors
 
 insert into Author(id, name, surname) values(1, 'Isaac', 'John Newton');
@@ -121,6 +123,7 @@ insert into Material_Author(material, author) values(7, 3);
 insert into Material_Author(material, author) values(8, 2);
 insert into Material_Author(material, author) values(10, 4);
 insert into Material_Author(material, author) values(11, 4);
+insert into Material_Author(material, author) values(3917, 4);
 
 -- Material Descriptions
 
@@ -135,6 +138,7 @@ insert into LanguageString(id, lang, textValue) values (8, 5, 'Test description 
 insert into LanguageString(id, lang, textValue) values (19, 1, 'Automated test resource description. DO NOT TOUCH!!!! material language Estonian, Description Estonian');
 insert into LanguageString(id, lang, textValue) values (21, 1, 'Performance test resource description. DO NOT TOUCH!!!!');
 insert into LanguageString(id, lang, textValue) values (39, 3, 'Test description');
+insert into LanguageString(id, lang, textValue) values (10829, 1, 'Missing picture replacement test: Audio');
 
 insert into Material_Description(description, material) values(1, 1);
 insert into Material_Description(description, material) values(2, 2);
@@ -173,6 +177,8 @@ insert into Material_Description(description, material) values(39, 32);
 insert into Material_Description(description, material) values(39, 33);
 insert into Material_Description(description, material) values(39, 34);
 insert into Material_Description(description, material) values(39, 35);
+
+insert into Material_Description(description, material) values(10829, 3917);
 
 -- Material Titles
 
@@ -216,6 +222,8 @@ insert into LanguageString(id, lang, textValue) values (45, 3, 'Poland');
 insert into LanguageString(id, lang, textValue) values (46, 3, 'France');
 insert into LanguageString(id, lang, textValue) values (47, 3, 'Austria');
 
+insert into LanguageString(id, lang, textValue) values (10830, 1, 'Missing picture replacement test: Audio');
+
 insert into Material_Title(title, material) values(9, 1);
 insert into Material_Title(title, material) values(10, 1);
 insert into Material_Title(title, material) values(11, 2);
@@ -256,6 +264,8 @@ insert into Material_Title(title, material) values(45, 33);
 insert into Material_Title(title, material) values(46, 34);
 insert into Material_Title(title, material) values(47, 35);
 
+insert into Material_Title(title, material) values(10830, 3917);
+
 -- Material classifications
 
 insert into Material_Classification(classification, material) values(1,1);
@@ -267,6 +277,20 @@ insert into Material_Classification(classification, material) values(5,4);
 insert into Material_Classification(classification, material) values(7,5);
 insert into Material_Classification(classification, material) values(4,10);
 insert into Material_Classification(classification, material) values(4,11);
+insert into Material_Classification(classification, material) values(4,3917);
+
+-- Material_Subject
+
+insert into Material_Subject(subject, material) values(1,1);
+insert into Material_Subject(subject, material) values(1,2);
+insert into Material_Subject(subject, material) values(1,3);
+insert into Material_Subject(subject, material) values(1,4);
+insert into Material_Subject(subject, material) values(2,5);
+insert into Material_Subject(subject, material) values(1,6);
+insert into Material_Subject(subject, material) values(2,6);
+insert into Material_Subject(subject, material) values(2,10);
+insert into Material_Subject(subject, material) values(2,11);
+insert into Material_Subject(subject, material) values(2,3917);
 
 -- Material_ResourceType
 
@@ -280,6 +304,7 @@ insert into Material_ResourceType(material, resourceType) values (6, 2);
 insert into Material_ResourceType(material, resourceType) values (7, 4);
 insert into Material_ResourceType(material, resourceType) values (10, 1);
 insert into Material_ResourceType(material, resourceType) values (11, 1);
+insert into Material_ResourceType(material, resourceType) values (3917, 1);
 
 -- Material_EducationalContext
 
@@ -293,6 +318,8 @@ insert into Material_EducationalContext(material, educationalContext) values (6,
 insert into Material_EducationalContext(material, educationalContext) values (7, 1004);
 insert into Material_EducationalContext(material, educationalContext) values (10, 1001);
 insert into Material_EducationalContext(material, educationalContext) values (11, 1001);
+insert into Material_EducationalContext(material, educationalContext) values (3917, 1001);
+
 
 -- Publishers
 
@@ -308,6 +335,7 @@ insert into Material_Publisher(material, publisher) values (2, 2);
 insert into Material_Publisher(material, publisher) values (3, 3);
 insert into Material_Publisher(material, publisher) values (10, 2);
 insert into Material_Publisher(material, publisher) values (11, 2);
+insert into Material_Publisher(material, publisher) values (3917, 2);
 
 -- Material Tags
 

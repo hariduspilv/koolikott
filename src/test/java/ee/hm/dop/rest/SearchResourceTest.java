@@ -45,6 +45,20 @@ public class SearchResourceTest extends ResourceIntegrationTestBase {
     }
 
     @Test
+    public void searchWithSubjectFilter() {
+        String query = "filteredquery";
+        String subject = "Mathematics";
+        Response response = doGet("search?q=" + query + "&subject=" + subject);
+        SearchResult searchResult = response.readEntity(new GenericType<SearchResult>() {
+        });
+
+        assertEquals(1, searchResult.getMaterials().size());
+        assertEquals(Long.valueOf(5), searchResult.getMaterials().get(0).getId());
+        assertEquals(Long.valueOf(1), Long.valueOf(searchResult.getTotalResults()));
+        assertEquals(Long.valueOf(0), Long.valueOf(searchResult.getStart()));
+    }
+
+    @Test
     public void searchNoResult() {
         String query = "no+results";
         Response response = doGet("search?q=" + query);

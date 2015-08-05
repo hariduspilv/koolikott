@@ -141,6 +141,14 @@ public class Material {
     @Formula("picture is not null")
     private boolean hasPicture;
 
+    @ManyToMany(fetch = EAGER, cascade = CascadeType.PERSIST)
+    @JoinTable(
+            name = "Material_Subject",
+            joinColumns = { @JoinColumn(name = "material") },
+            inverseJoinColumns = { @JoinColumn(name = "subject") },
+            uniqueConstraints = @UniqueConstraint(columnNames = { "material", "subject" }))
+    private List<Subject> subjects;
+
     public Long getId() {
         return id;
     }
@@ -289,5 +297,13 @@ public class Material {
 
     public void setHasPicture(boolean hasPicture) {
         this.hasPicture = hasPicture;
+    }
+
+    public List<Subject> getSubjects() {
+        return subjects;
+    }
+
+    public void setSubject(List<Subject> subjects) {
+        this.subjects = subjects;
     }
 }
