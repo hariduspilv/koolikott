@@ -87,20 +87,20 @@
     }
     
     @media screen and (max-width: 1000px) {
-        overflow-x: scroll; overflow-y: hidden;
+        //overflow-x: scroll; overflow-y: hidden;
     }
 }
 
 .material-taping {
     
     @media screen and (max-width: 1000px) {
-        white-space: nowrap;
+        //white-space: nowrap;
     }
                   
     .material {
 
         @media screen and (max-width: 1000px) {
-            display: inline-block !important; width: 120px !important;
+            //display: inline-block !important; width: 120px !important;
         }
     }
 }
