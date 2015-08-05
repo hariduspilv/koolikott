@@ -14,10 +14,6 @@ public class MaterialDAO {
     @Inject
     private EntityManager entityManager;
 
-    public List<Material> findAll() {
-        return entityManager.createQuery("from Material", Material.class).getResultList();
-    }
-
     public Material findById(long materialId) {
         TypedQuery<Material> findByCode = entityManager.createNamedQuery("Material.findById", Material.class);
 
@@ -35,7 +31,8 @@ public class MaterialDAO {
      * finds all materials contained in the idList. There is no guarantee about
      * in which order the materials will be in the result list.
      *
-     * @param idList the list with materials id
+     * @param idList
+     *            the list with materials id
      * @return a list of materials specified by idList
      */
     public List<Material> findAllById(List<Long> idList) {
@@ -50,7 +47,7 @@ public class MaterialDAO {
     }
 
     public void update(Material material) {
-            entityManager.persist(material);
+        entityManager.persist(material);
     }
 
     /**

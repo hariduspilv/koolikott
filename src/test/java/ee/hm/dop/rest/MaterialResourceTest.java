@@ -3,7 +3,6 @@ package ee.hm.dop.rest;
 import static java.lang.String.format;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
 
 import java.util.List;
 
@@ -18,55 +17,20 @@ import org.junit.Test;
 
 import ee.hm.dop.common.test.ResourceIntegrationTestBase;
 import ee.hm.dop.model.Author;
-import ee.hm.dop.model.IssueDate;
 import ee.hm.dop.model.LanguageString;
 import ee.hm.dop.model.Material;
 import ee.hm.dop.model.Subject;
 
 public class MaterialResourceTest extends ResourceIntegrationTestBase {
 
+    private static final String GET_NEWEST_MATERIALS_URL = "material/getNewestMaterials?numberOfMaterials=%s";
+    private static final String MATERIAL_INCREASE_VIEW_COUNT_URL = "material/increaseViewCount";
+    private static final String GET_MATERIAL_PICTURE_URL = "material/getPicture?materialId=%s";
     private static final String GET_MATERIAL_URL = "material?materialId=%s";
 
     @Test
-    public void getAllMaterials() {
-        Response response = doGet("material/getAll");
-
-        List<Material> materials = response.readEntity(new GenericType<List<Material>>() {
-        });
-
-        assertEquals(8, materials.size());
-
-        // Verify if all fields are loaded
-        Material material = materials.get(1);
-        assertEquals(Long.valueOf(2), material.getId());
-        assertEquals("Математика учебник для 8-го класса", material.getTitles().get(0).getText());
-        assertEquals(new IssueDate((short) 27, (short) 1, -983), material.getIssueDate());
-        List<Author> authors = material.getAuthors();
-        assertEquals(2, authors.size());
-        assertEquals(Long.valueOf(200), material.getViews());
-
-        boolean newton = false, fibonacci = false;
-        for (Author author : authors) {
-            if (author.getId() == 1) {
-                assertEquals("Isaac", author.getName());
-                assertEquals("John Newton", author.getSurname());
-                newton = true;
-            } else if (author.getId() == 3) {
-                assertEquals("Leonardo", author.getName());
-                assertEquals("Fibonacci", author.getSurname());
-                fibonacci = true;
-            }
-        }
-
-        assertTrue(fibonacci && newton);
-    }
-
-    @Test
     public void getMaterialDescriptionAndLanguage() {
-        Response response = doGet("material/getAll");
-        List<Material> materials = response.readEntity(new GenericType<List<Material>>() {
-        });
-        Material material = materials.get(0);
+        Material material = getMaterial(1);
 
         List<LanguageString> descriptions = material.getDescriptions();
         assertEquals(2, descriptions.size());
@@ -85,61 +49,39 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
 
     @Test
     public void getMaterialEducationalContext() {
-        Response response = doGet("material/getAll");
-        List<Material> materials = response.readEntity(new GenericType<List<Material>>() {
-        });
-        Material material = materials.get(0);
-
+        Material material = getMaterial(1);
         assertEquals("PRESCHOOL", material.getEducationalContexts().get(0).getName());
     }
 
     @Test
     public void getMaterialLicenseType() {
-        Response response = doGet("material/getAll");
-        List<Material> materials = response.readEntity(new GenericType<List<Material>>() {
-        });
-        Material material = materials.get(0);
-
+        Material material = getMaterial(1);
         assertEquals("CCBY", material.getLicenseType().getName());
     }
 
     @Test
     public void getMaterialPublisher() {
-        Response response = doGet("material/getAll");
-        List<Material> materials = response.readEntity(new GenericType<List<Material>>() {
-        });
-        Material material = materials.get(0);
-
+        Material material = getMaterial(1);
         assertEquals("Koolibri", material.getPublishers().get(0).getName());
     }
 
     @Test
     public void getMaterialAddedDate() {
-        Response response = doGet("material/getAll");
-        List<Material> materials = response.readEntity(new GenericType<List<Material>>() {
-        });
-        Material material = materials.get(0);
+        Material material = getMaterial(1);
         assertEquals(new DateTime("1999-01-01T02:00:01.000+02:00"), material.getAdded());
     }
 
     @Test
     public void getMaterialUpdatedDate() {
-        Response response = doGet("material/getAll");
-        List<Material> materials = response.readEntity(new GenericType<List<Material>>() {
-        });
-        Material material = materials.get(1);
+        Material material = getMaterial(2);
         assertEquals(new DateTime("1995-07-12T09:00:01.000+00:00"), material.getUpdated());
     }
 
     @Test
     public void getMaterialTags() {
-        long materialId = 1;
-        Response response = doGet(format(GET_MATERIAL_URL, materialId));
-        Material material = response.readEntity(new GenericType<Material>() {
-        });
+        Material material = getMaterial(1);
 
         assertEquals(5, material.getTags().size());
-
         assertEquals("matemaatika", material.getTags().get(0).getName());
         assertEquals("põhikool", material.getTags().get(1).getName());
         assertEquals("õpik", material.getTags().get(2).getName());
@@ -150,7 +92,7 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
 
     @Test
     public void GetNewestMaterials() {
-        Response response = doGet("material/getNewestMaterials?numberOfMaterials=8");
+        Response response = doGet(format(GET_NEWEST_MATERIALS_URL, 8));
 
         List<Material> materials = response.readEntity(new GenericType<List<Material>>() {
         });
@@ -171,20 +113,15 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
     public void increaseViewCount() {
         long materialId = 5;
 
-        Response response = doGet(format(GET_MATERIAL_URL, materialId));
-        Material material = response.readEntity(new GenericType<Material>() {
-        });
-        Long previousViewCount = material.getViews();
+        Material materialBefore = getMaterial(materialId);
 
-        response = doPost("material/increaseViewCount", Entity.entity(materialId, MediaType.APPLICATION_JSON));
+        Response response = doPost(MATERIAL_INCREASE_VIEW_COUNT_URL,
+                Entity.entity(materialId, MediaType.APPLICATION_JSON));
         assertEquals(Status.OK.getStatusCode(), response.getStatus());
 
-        response = doGet(format(GET_MATERIAL_URL, materialId));
-        material = response.readEntity(new GenericType<Material>() {
-        });
-        Long newViewCount = material.getViews();
+        Material materialAfter = getMaterial(materialId);
 
-        assertEquals(Long.valueOf(previousViewCount + 1), newViewCount);
+        assertEquals(Long.valueOf(materialBefore.getViews() + 1), materialAfter.getViews());
     }
 
     @Test
@@ -194,7 +131,7 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
         Response response = doGet(format(GET_MATERIAL_URL, materialId));
         assertEquals(Status.NO_CONTENT.getStatusCode(), response.getStatus());
 
-        response = doPost("material/increaseViewCount", Entity.entity(materialId, MediaType.APPLICATION_JSON));
+        response = doPost(MATERIAL_INCREASE_VIEW_COUNT_URL, Entity.entity(materialId, MediaType.APPLICATION_JSON));
         assertEquals(Status.BAD_REQUEST.getStatusCode(), response.getStatus());
 
         response = doGet(format(GET_MATERIAL_URL, materialId));
@@ -204,7 +141,7 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
     @Test
     public void getMaterialPicture() {
         long materialId = 1;
-        Response response = doGet("material/getPicture?materialId=" + materialId, MediaType.WILDCARD_TYPE);
+        Response response = doGet(format(GET_MATERIAL_PICTURE_URL, materialId), MediaType.WILDCARD_TYPE);
         byte[] picture = response.readEntity(new GenericType<byte[]>() {
         });
         assertNotNull(picture);
@@ -214,14 +151,13 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
     @Test
     public void getMaterialPictureNull() {
         long materialId = 999;
-        Response response = doGet("material/getPicture?materialId=" + materialId, MediaType.WILDCARD_TYPE);
+        Response response = doGet(format(GET_MATERIAL_PICTURE_URL, materialId), MediaType.WILDCARD_TYPE);
         assertEquals(Status.NOT_FOUND.getStatusCode(), response.getStatus());
     }
 
     @Test
     public void getMaterialWithSubjects() {
-        long materialId = 6;
-        Material material = doGet(format(GET_MATERIAL_URL, materialId), Material.class);
+        Material material = getMaterial(6);
 
         List<Subject> subjects = material.getSubjects();
         assertNotNull(subjects);
@@ -236,10 +172,13 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
 
     @Test
     public void getMaterialWithNoSubject() {
-        long materialId = 7;
-        Material material = doGet(format(GET_MATERIAL_URL, materialId), Material.class);
+        Material material = getMaterial(7);
         List<Subject> subjects = material.getSubjects();
         assertNotNull(subjects);
         assertEquals(0, subjects.size());
+    }
+
+    private Material getMaterial(long materialId) {
+        return doGet(format(GET_MATERIAL_URL, materialId), Material.class);
     }
 }

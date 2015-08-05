@@ -12,10 +12,6 @@ public class MaterialService {
     @Inject
     private MaterialDAO materialDao;
 
-    public List<Material> getAllMaterials() {
-        return materialDao.findAll();
-    }
-
     public Material get(long materialId) {
         return materialDao.findById(materialId);
     }

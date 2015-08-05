@@ -1,7 +1,6 @@
 package ee.hm.dop.dao;
 
 import static junit.framework.TestCase.assertNull;
-import static org.apache.commons.lang3.StringUtils.isBlank;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
@@ -17,62 +16,14 @@ import org.joda.time.DateTime;
 import org.junit.Test;
 
 import ee.hm.dop.common.test.DatabaseTestBase;
-import ee.hm.dop.model.Author;
 import ee.hm.dop.model.Language;
-import ee.hm.dop.model.LanguageString;
 import ee.hm.dop.model.Material;
 import ee.hm.dop.model.Subject;
-import ee.hm.dop.model.Tag;
 
 public class MaterialDAOTest extends DatabaseTestBase {
 
     @Inject
     private MaterialDAO materialDAO;
-
-    @Test
-    public void findAll() {
-        List<Material> materials = materialDAO.findAll();
-        assertEquals(8, materials.size());
-
-        // Verify if all required fields are loaded
-        for (int i = 0; i < materials.size(); i++) {
-            Material material = materials.get(i);
-            assertEquals(Long.valueOf(i + 1), material.getId());
-            assertFalse(isBlank(material.getSource()));
-
-            List<Author> authors = material.getAuthors();
-            assertNotNull(authors);
-            for (Author author : authors) {
-                assertNotNull(author.getId());
-                assertFalse(isBlank(author.getName()));
-                assertFalse(isBlank(author.getSurname()));
-            }
-
-            verifyLanguageStrings(material.getDescriptions());
-
-            verifyLanguageStrings(material.getTitles());
-
-            assertNotNull(material.getViews());
-
-            List<Tag> tags = material.getTags();
-            assertNotNull(tags);
-            for (Tag tag : tags) {
-                assertNotNull(tag.getId());
-                assertFalse(isBlank(tag.getName()));
-            }
-
-        }
-    }
-
-    private void verifyLanguageStrings(List<LanguageString> languageStringList) {
-        assertNotNull(languageStringList);
-
-        for (LanguageString languageString : languageStringList) {
-            assertNotNull(languageString.getId());
-            assertNotNull(languageString.getLanguage());
-            assertFalse(isBlank(languageString.getText()));
-        }
-    }
 
     @Test
     public void find() {
@@ -238,7 +189,7 @@ public class MaterialDAOTest extends DatabaseTestBase {
     }
 
     @Test
-    public void updateMaterial() {
+    public void createMaterial() {
         Material material = new Material();
         material.setSource("asd");
         material.setAdded(new DateTime());
@@ -247,8 +198,6 @@ public class MaterialDAOTest extends DatabaseTestBase {
         byte[] picture = data.getBytes();
         material.setPicture(picture);
 
-        int size = materialDAO.findAll().size();
-
         materialDAO.update(material);
 
         Material newMaterial = materialDAO.findById(material.getId());
@@ -256,7 +205,6 @@ public class MaterialDAOTest extends DatabaseTestBase {
         assertEquals(material.getSource(), newMaterial.getSource());
         assertEquals(material.getAdded(), newMaterial.getAdded());
         assertEquals(material.getViews(), newMaterial.getViews());
-        assertEquals(size + 1, materialDAO.findAll().size());
         assertSame(material, materialDAO.findById(material.getId()));
         assertEquals(material.getPicture(), newMaterial.getPicture());
         assertEquals(material.getHasPicture(), newMaterial.getHasPicture());

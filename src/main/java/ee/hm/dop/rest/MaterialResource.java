@@ -22,13 +22,6 @@ public class MaterialResource {
     private MaterialService materialService;
 
     @GET
-    @Path("getAll")
-    @Produces(MediaType.APPLICATION_JSON)
-    public List<Material> getAllMaterials() {
-        return materialService.getAllMaterials();
-    }
-
-    @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Material get(@QueryParam("materialId") long materialId) {
         return materialService.get(materialId);
