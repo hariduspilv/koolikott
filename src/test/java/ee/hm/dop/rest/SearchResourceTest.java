@@ -13,7 +13,7 @@ public class SearchResourceTest extends ResourceIntegrationTestBase {
     private static final int RESULTS_PER_PAGE = 3;
     private static final String QUERY_URL = "search?q=%s";
     private static final String QUERY_URL_WITH_SUBJECT = "search?q=%s&subject=%s";
-    private static final String QUERY_URL_WITH_START = "search?q=%s&start=%s";
+    private static final String QUERY_URL_WITH_START = "search?q=%s&start=%d";
 
     @Test
     public void search() {
