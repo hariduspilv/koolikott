@@ -40,19 +40,19 @@
                                     </span>
                                 </li>
                                 <li data-ng-if="paging.before.length > 0">
-                                    <a href="{{buildURL(searchQuery, paging.thisPage - 1, filters.subject)}}" aria-label="{{'SEARCH_RESULT_PREVIOUS' | translate}}" class="btn btn-default">
+                                    <a href="{{buildURL(searchQuery, paging.thisPage - 1, filters.subject.name)}}" aria-label="{{'SEARCH_RESULT_PREVIOUS' | translate}}" class="btn btn-default">
                                         <span aria-hidden="true"><span data-translate="SEARCH_RESULT_PREVIOUS"></span></span>
                                     </a>
                                 </li>
 
                                 <li data-ng-repeat="page in paging.before">
-                                    <a href="{{buildURL(searchQuery, page, filters.subject)}}" data-ng-bind="page"></a>
+                                    <a href="{{buildURL(searchQuery, page, filters.subject.name)}}" data-ng-bind="page"></a>
                                 </li>
 
                                 <li class="active"><span data-ng-bind="paging.thisPage"></span></li>
 
                                 <li data-ng-repeat="page in paging.after">
-                                    <a href="{{buildURL(searchQuery, page, filters.subject)}}" data-ng-bind="page"></a>
+                                    <a href="{{buildURL(searchQuery, page, filters.subject.name)}}" data-ng-bind="page"></a>
                                 </li>
 
                                 <li data-ng-if="paging.after.length === 0" class="disabled">
@@ -61,7 +61,7 @@
                                     </span>
                                 </li>
                                 <li data-ng-if="paging.after.length > 0">
-                                    <a href="{{buildURL(searchQuery, paging.thisPage + 1, filters.subject)}}" aria-label="{{'SEARCH_RESULT_NEXT' | translate}}" class="btn btn-default">
+                                    <a href="{{buildURL(searchQuery, paging.thisPage + 1, filters.subject.name)}}" aria-label="{{'SEARCH_RESULT_NEXT' | translate}}" class="btn btn-default">
                                         <span aria-hidden="true"><span data-translate="SEARCH_RESULT_NEXT"></span></span>
                                     </a>
                                 </li>
@@ -73,12 +73,14 @@
             <div class="col-md-3">
                 <div class="sidebar-module">
                     <h4>Filter</h4>
-                    
-                    <label for="filter-type">Subject</label>
-                    <ui-select ng-model="filter.subject" theme="bootstrap" ng-disabled="disabled" id="filter-type">
-                        <ui-select-match placeholder="Select or search...">{{$select.selected.name}}</ui-select-match>
+
+                    <label for="filter-subject" data-translate="SEARCH_FILTER_SUBJECT_LABEL">Subject</label>
+                    <ui-select data-ng-model="filters.subject" theme="bootstrap" data-ng-disabled="disabled" id="filter-subject">
+                        <ui-select-match allow-clear="true" placeholder="{{'SEARCH_FILTER_SUBJECT_PLACEHOLDER' | translate}}">
+                            <span data-ng-if="$select.selected.name" data-translate="{{'MATERIAL_SUBJECT_' + $select.selected.name.toUpperCase()}}"></span>
+                        </ui-select-match>
                         <ui-select-choices repeat="subject in subjects | filter: $select.search">
-                            <span ng-bind-html="subject.name | highlight: $select.search"></span>
+                            <span ng-bind-html="'MATERIAL_SUBJECT_' + subject.name.toUpperCase() | translate | highlight: $select.search"></span>                           
                         </ui-select-choices>
                     </ui-select>
                     

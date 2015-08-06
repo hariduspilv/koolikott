@@ -17,7 +17,7 @@ define(['app'], function(app)
 
         // Filters
         $scope.filters = [];
-        $scope.filters.subject = searchService.getSubject();
+        $scope.filters.subject = {};
 
         // Get search query and current page
         $scope.searchQuery = searchService.getQuery();
@@ -47,8 +47,8 @@ define(['app'], function(app)
                 'q': $scope.searchQuery,
                 'start': start
             };
-            if ($scope.filters.subject) {
-                params.subject = $scope.filters.subject;
+            if (searchService.getSubject()) {
+                params.subject = searchService.getSubject();
             }
             serverCallService.makeGet("rest/search", params, getSearchedMaterialsSuccess, getSearchedMaterialsFail);
     	} else {
@@ -137,17 +137,29 @@ define(['app'], function(app)
         }
 
         // Get all subjects
-        serverCallService.makeGet("rest/subject/getAll", params, getAllSubjectsSuccess, getAllSubjectsFail);
+        serverCallService.makeGet("rest/subject/getAll", {}, getAllSubjectsSuccess, getAllSubjectsFail);
 
         function getAllSubjectsSuccess(data) {
             $scope.subjects = data;
+
+            // Select current subject in filter box
+            for (i = 0; i < $scope.subjects.length; i++) {
+                if ($scope.subjects[i].name == searchService.getSubject()) {
+                    $scope.filters.subject = $scope.subjects[i];
+                    break;
+                }
+            }
         }
 
         function getAllSubjectsFail() { }
 
         $scope.filter = function() {
             searchService.setSearch($rootScope.searchFields.searchQuery);
-            searchService.setSubject($scope.filters.subject);
+            if ($scope.filters.subject) {
+                searchService.setSubject($scope.filters.subject.name);
+            } else {
+                searchService.setSubject('');
+            }
             $location.url(searchService.getURL());
         }
 
