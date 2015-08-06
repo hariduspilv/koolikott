@@ -77,6 +77,8 @@ insert into Translation(translationGroup, translationKey, translation) values (1
 insert into Translation(translationGroup, translationKey, translation) values (1, 'COPYRIGHT_FOOTER', '© 2016 Kõik õigused kaitstud. Haridus- ja Teadusministeerium');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'SEARCH_RESULT_PREVIOUS', 'Eelmine');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'SEARCH_RESULT_NEXT', 'Järgmine');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'SEARCH_FILTER_SUBJECT_LABEL', 'Teema');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'SEARCH_FILTER_SUBJECT_PLACEHOLDER', 'Vali või otsi...');
 
 
 -- Material Subject translations

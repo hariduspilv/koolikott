@@ -77,6 +77,8 @@ insert into Translation(translationGroup, translationKey, translation) values (2
 insert into Translation(translationGroup, translationKey, translation) values (2, 'COPYRIGHT_FOOTER', '© 2016 Все права защищены. Министерство образования и науки');
 insert into Translation(translationGroup, translationKey, translation) values (2, 'SEARCH_RESULT_PREVIOUS', 'Предыдущая');
 insert into Translation(translationGroup, translationKey, translation) values (2, 'SEARCH_RESULT_NEXT', 'Следующий');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'SEARCH_FILTER_SUBJECT_LABEL', 'Тема');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'SEARCH_FILTER_SUBJECT_PLACEHOLDER', 'Выберите или поиск...');
 
 
 -- Material Subject translations
