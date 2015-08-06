@@ -17,7 +17,6 @@ define(['app'], function(app)
 
         // Filters
         $scope.filters = [];
-        $scope.filters.subject = {};
 
         // Get search query and current page
         $scope.searchQuery = searchService.getQuery();
