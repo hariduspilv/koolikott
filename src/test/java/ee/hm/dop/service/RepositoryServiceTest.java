@@ -28,14 +28,6 @@ public class RepositoryServiceTest {
     private MaterialIterator materials;
 
     @Test
-    public void updateRepositorySyncroNotNull() {
-        Repository repository = getRepository();
-        repository.setLastSynchronization(new DateTime());
-
-        repositoryService.updateRepository(repository);
-    }
-
-    @Test
     public void updateRepositoryErrorGettingMaterials() throws Exception {
         Repository repository = getRepository();
 
@@ -67,6 +59,7 @@ public class RepositoryServiceTest {
         repository.setBaseURL("http://koolitaja.eenet.ee:57219/Waramu3Web/OAIHandler");
         repository.setSchema("waramu");
         repository.setId((long) 1);
+        repository.setLastSynchronization(new DateTime());
         return repository;
     }
 }

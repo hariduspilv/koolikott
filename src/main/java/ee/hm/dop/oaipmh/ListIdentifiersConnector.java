@@ -1,7 +1,10 @@
 package ee.hm.dop.oaipmh;
 
+import static ee.hm.dop.utils.DateUtils.toJson;
+
 import java.util.Iterator;
 
+import org.joda.time.DateTime;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
@@ -14,8 +17,8 @@ public class ListIdentifiersConnector {
     private NodeList headers;
     private String baseURL;
 
-    public ListIdentifiersConnector connect(String baseURL, String metadataPrefix) throws Exception {
-        ListIdentifiers listIdentifiers = newListIdentifier(baseURL, metadataPrefix);
+    public ListIdentifiersConnector connect(String baseURL, DateTime from, String metadataPrefix) throws Exception {
+        ListIdentifiers listIdentifiers = newListIdentifier(baseURL, from, metadataPrefix);
         headers = getHeaders(listIdentifiers);
         resumptionToken = listIdentifiers.getResumptionToken();
         this.baseURL = baseURL;
@@ -26,8 +29,9 @@ public class ListIdentifiersConnector {
         return new IdentifierIterator(headers, baseURL, resumptionToken);
     }
 
-    protected ListIdentifiers newListIdentifier(String baseURL, String metadataPrefix) throws Exception {
-        return new ListIdentifiers(baseURL, null, null, null, metadataPrefix);
+    protected ListIdentifiers newListIdentifier(String baseURL, DateTime from, String metadataPrefix) throws Exception {
+        String fromDate = from != null ? toJson(from) : null;
+        return new ListIdentifiers(baseURL, fromDate, null, null, metadataPrefix);
     }
 
     private NodeList getHeaders(ListIdentifiers listIdentifiers) {

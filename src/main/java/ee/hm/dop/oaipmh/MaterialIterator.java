@@ -32,7 +32,8 @@ public class MaterialIterator implements Iterator<Material> {
 
     public Iterator<Material> connect(Repository repository) throws Exception {
         this.repository = repository;
-        identifierIterator = listIdentifiersConnector.connect(repository.getBaseURL(), METADATA_PREFIX).iterator();
+        identifierIterator = listIdentifiersConnector.connect(repository.getBaseURL(),
+                repository.getLastSynchronization(), METADATA_PREFIX).iterator();
         return this;
     }
 

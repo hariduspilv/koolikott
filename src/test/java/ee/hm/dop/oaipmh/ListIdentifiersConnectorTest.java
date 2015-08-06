@@ -14,6 +14,7 @@ import java.lang.reflect.Method;
 import java.util.Iterator;
 
 import org.easymock.EasyMockRunner;
+import org.joda.time.DateTime;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.w3c.dom.Document;
@@ -47,12 +48,14 @@ public class ListIdentifiersConnectorTest {
 
         String baseURL = "hostUrl";
         String metadataPrefix = "metadataPrefix";
-        expect(builder.newListIdentifier(baseURL, metadataPrefix)).andReturn(firstListIdentifiers);
+        DateTime fromDate = new DateTime("2015-01-27T08:14:27");
+        expect(builder.newListIdentifier(baseURL, fromDate, metadataPrefix)).andReturn(firstListIdentifiers);
 
         replay(builder, firstListIdentifiers, element1, document, nodeList, element2);
 
-        Iterator<Element> result = builder.connect(baseURL, metadataPrefix).iterator();
-        // This is needed to verify that correct parameters were passed to IdentifierIterator constructor
+        Iterator<Element> result = builder.connect(baseURL, fromDate, metadataPrefix).iterator();
+        // This is needed to verify that correct parameters were passed to
+        // IdentifierIterator constructor
         Element next = result.next();
 
         verify(builder, firstListIdentifiers, element1, document, nodeList, element2);
@@ -68,12 +71,14 @@ public class ListIdentifiersConnectorTest {
         String errorMessage = "Failed to connect to repository";
         String baseURL = "hostUrl";
         String metadataPrefix = "metadataPrefix";
-        expect(builder.newListIdentifier(baseURL, metadataPrefix)).andThrow(new RuntimeException(errorMessage));
+        DateTime fromDate = null;
+        expect(builder.newListIdentifier(baseURL, fromDate, metadataPrefix)).andThrow(
+                new RuntimeException(errorMessage));
 
         replay(builder);
 
         try {
-            builder.connect(baseURL, metadataPrefix);
+            builder.connect(baseURL, fromDate, metadataPrefix);
             fail("Exception expected.");
         } catch (RuntimeException e) {
             assertEquals(errorMessage, e.getMessage());
@@ -100,11 +105,12 @@ public class ListIdentifiersConnectorTest {
         expect(firstListIdentifiers.getDocument()).andReturn(document);
 
         String baseURL = "hostUrl";
-        expect(builder.newListIdentifier(baseURL, null)).andReturn(firstListIdentifiers);
+        DateTime fromDate = null;
+        expect(builder.newListIdentifier(baseURL, fromDate, null)).andReturn(firstListIdentifiers);
 
         replay(builder, firstListIdentifiers, element, document, nodeList);
 
-        builder.connect(baseURL, null);
+        builder.connect(baseURL, fromDate, null);
 
         verify(builder, firstListIdentifiers, element, document, nodeList);
     }
@@ -115,12 +121,13 @@ public class ListIdentifiersConnectorTest {
 
         String errorMessage = "Malformed URL";
         String metadataPrefix = "metadataPrefix";
-        expect(builder.newListIdentifier(null, metadataPrefix)).andThrow(new RuntimeException(errorMessage));
+        DateTime fromDate = new DateTime("2015-01-27T08:14:27");
+        expect(builder.newListIdentifier(null, fromDate, metadataPrefix)).andThrow(new RuntimeException(errorMessage));
 
         replay(builder);
 
         try {
-            builder.connect(null, metadataPrefix);
+            builder.connect(null, fromDate, metadataPrefix);
             fail("Exception expected.");
         } catch (RuntimeException e) {
             assertEquals(errorMessage, e.getMessage());
@@ -130,8 +137,8 @@ public class ListIdentifiersConnectorTest {
     }
 
     private ListIdentifiersConnector getListIdentifiersConnector() throws NoSuchMethodException {
-        Method newListIdentifier = ListIdentifiersConnector.class
-                .getDeclaredMethod("newListIdentifier", String.class, String.class);
+        Method newListIdentifier = ListIdentifiersConnector.class.getDeclaredMethod("newListIdentifier", String.class,
+                DateTime.class, String.class);
         return createMockBuilder(ListIdentifiersConnector.class).addMockedMethod(newListIdentifier).createMock();
     }
 }

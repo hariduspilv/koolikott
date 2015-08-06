@@ -39,11 +39,6 @@ public class RepositoryService {
     public void updateRepository(Repository repository) {
         logger.info(format("Updating materials for %s", repository));
 
-        if (repository.getLastSynchronization() != null) {
-            logger.info("Repository already updated.");
-            return;
-        }
-
         long failedMaterials = 0;
         long successfulMaterials = 0;
         long start = System.currentTimeMillis();
