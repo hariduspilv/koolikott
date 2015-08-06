@@ -25,10 +25,10 @@ module.exports = function(grunt) {
         	}
         },
         concat: {
-            options: {
-                separator: ';\n'
-            },
-            dist: {
+            js: {
+                options: {
+                    separator: ';\n'
+                },
                 src: [
                     'bower_components/jquery/dist/jquery.min.js',
                     'bower_components/angular/angular.min.js',
@@ -39,8 +39,16 @@ module.exports = function(grunt) {
                     'bower_components/angular-youtube-mb/dist/angular-youtube-embed.min.js',
                     'bower_components/jsog/lib/JSOG.js',
                     'bower_components/angular-resource/angular-resource.min.js',
+                    'bower_components/ui-select/dist/select.min.js',
                 ],
                 dest: '<%= project.assets %>/js/dop.min.js',
+            },
+            css: {
+                src: [
+                    'bower_components/ui-select/dist/select.min.css',
+                    '<%= project.assets %>/css/dop.min.css',
+                ],
+                dest: '<%= project.assets %>/css/dop.min.css',
             }
         },
         uglify: {
@@ -100,7 +108,7 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-copy');
     grunt.loadNpmTasks('grunt-npm-install');
 
-    grunt.registerTask('build', ['npm-install', 'bower', 'clean:build', 'copy', 'concat', 'uglify', 'sass']);
+    grunt.registerTask('build', ['npm-install', 'bower', 'clean:build', 'copy', 'sass', 'concat', 'uglify']);
     grunt.registerTask('package', ['build', 'clean:sourcemap', 'compress']);
 
 };
