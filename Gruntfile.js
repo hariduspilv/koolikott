@@ -45,8 +45,8 @@ module.exports = function(grunt) {
             },
             css: {
                 src: [
-                    'bower_components/ui-select/dist/select.min.css',
                     '<%= project.assets %>/css/dop.min.css',
+                    'bower_components/ui-select/dist/select.min.css',
                 ],
                 dest: '<%= project.assets %>/css/dop.min.css',
             }
