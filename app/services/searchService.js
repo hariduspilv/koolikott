@@ -26,7 +26,7 @@ define(['app'], function(app) {
 					var searchObject = $location.search();
 					if (searchObject.q) {
 						//get back + sign
-               			query = searchObject.q.replace(/\\ /g, "+");
+               			var query = searchObject.q.replace(/\\ /g, "+");
                 		//make backslashes singular
                 		query = query.replace(/\\\\/g, "\\");
 						searchQuery = query;
