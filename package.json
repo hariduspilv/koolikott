@@ -2,9 +2,9 @@
   "name": "dop",
   "version": "1.0.0",
   "description": "",
-  "repository" :
-  { "type" : "git"
-  , "url" : "https://github.com/jordanms/DOP-Front-End"
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jordanms/DOP-Front-End"
   },
   "main": "index.html",
   "scripts": {

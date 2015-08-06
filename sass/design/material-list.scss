@@ -93,11 +93,13 @@
 
 .material-taping {
     
-    height: 100%; overflow: hidden;
+    @media screen and (max-width: $screen-xs) {
+        height: 100%; overflow: hidden;
+    }
     
     .scroll {
         
-         @media screen and (max-width: $screen-xs) {
+        @media screen and (max-width: $screen-xs) {
             height: 100%; padding-bottom: 15px; padding-top: 10px; overflow-x: scroll; overflow-y: hidden; -webkit-overflow-scrolling: touch; white-space: nowrap; box-sizing: inherit; 
         }
         
