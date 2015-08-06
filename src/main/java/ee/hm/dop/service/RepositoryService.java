@@ -67,10 +67,7 @@ public class RepositoryService {
                 failedMaterials++;
             }
 
-            if (++count >= MAX_IMPORT_BEFORE_EMPTY_CACHE) {
-                DbUtils.emptyCache();
-                count = 0;
-            }
+            count = getCount(count);
         }
 
         repository.setLastSynchronization(DateTime.now());
@@ -81,6 +78,14 @@ public class RepositoryService {
                 + " materials and %s materials failed to download of total %s";
         logger.info(format(message, end - start, successfulMaterials, failedMaterials, successfulMaterials
                 + failedMaterials));
+    }
+
+    private int getCount(int count) {
+        if (++count >= MAX_IMPORT_BEFORE_EMPTY_CACHE) {
+            DbUtils.emptyCache();
+            count = 0;
+        }
+        return count;
     }
 
     private void handleMaterial(Material material) {

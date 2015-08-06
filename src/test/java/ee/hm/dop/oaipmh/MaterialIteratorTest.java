@@ -51,61 +51,6 @@ public class MaterialIteratorTest {
     @Mock
     private Document document;
 
-    @Test
-    public void connect() throws Exception {
-        MaterialIterator materialIterator = createMock(MaterialIterator.class);
-        Repository repository = createMock(Repository.class);
-
-        @SuppressWarnings("unchecked")
-        Iterator<Material> iterator = createMock(Iterator.class);
-
-        expect(materialIterator.connect(repository)).andReturn(iterator);
-
-        replay(materialIterator, repository, iterator);
-
-        Iterator<Material> returnedIterator = materialIterator.connect(repository);
-
-        verify(materialIterator, repository, iterator);
-
-        assertEquals(returnedIterator, iterator);
-    }
-
-    @Test
-    public void next() {
-        MaterialIterator materialIterator = createMock(MaterialIterator.class);
-        Material material = createMock(Material.class);
-
-        expect(materialIterator.next()).andReturn(material);
-
-        replay(materialIterator, material);
-
-        Material newMaterial = materialIterator.next();
-
-        verify(materialIterator, material);
-
-        assertEquals(material, newMaterial);
-    }
-
-    @Test(expected = Exception.class)
-    public void nextErrorInGettingMaterial() throws Exception {
-        MaterialIterator materialIterator = createMock(MaterialIterator.class);
-        Material material = createMock(Material.class);
-        GetMaterialConnector getMaterialConnector = createMock(GetMaterialConnector.class);
-        Repository repository = createMock(Repository.class);
-
-        expect(materialIterator.next()).andReturn(material);
-        expect(getMaterialConnector.getMaterial(repository, "id", "prefix")).andThrow(new Exception());
-
-        replay(materialIterator, material, getMaterialConnector);
-
-        Material newMaterial = materialIterator.next();
-        getMaterialConnector.getMaterial(repository, "id", "prefix");
-
-        verify(materialIterator, material, getMaterialConnector);
-
-        assertEquals(material, newMaterial);
-    }
-
     @Test(expected = NullPointerException.class)
     public void connectNullRepository() throws Exception {
 
