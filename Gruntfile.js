@@ -15,14 +15,26 @@ module.exports = function(grunt) {
          * Copy the files that cannot be included in dop.min.js and are already minified to assets folder.  
          */
         copy: {
-        	main: {
-        		src: [
-                	'bower_components/angular-translate-loader-url/angular-translate-loader-url.min.js'
+            main: {
+                src: [
+                'bower_components/angular-translate-loader-url/angular-translate-loader-url.min.js'
                 ],
                 dest: '<%= project.assets %>/js/',
                 flatten: true,
                 expand: true
-        	}
+            },
+            fonts: {
+                src: [
+                    'bower_components/bootstrap-sass/assets/fonts/bootstrap/glyphicons-halflings-regular.eot',
+                    'bower_components/bootstrap-sass/assets/fonts/bootstrap/glyphicons-halflings-regular',
+                    'bower_components/bootstrap-sass/assets/fonts/bootstrap/glyphicons-halflings-regular.ttf',
+                    'bower_components/bootstrap-sass/assets/fonts/bootstrap/glyphicons-halflings-regular.woff',
+                    'bower_components/bootstrap-sass/assets/fonts/bootstrap/glyphicons-halflings-regular.woff2',
+                ],
+                dest: '<%= project.assets %>/fonts/bootstrap/',
+                flatten: true,
+                expand: true
+            }
         },
         concat: {
             js: {
