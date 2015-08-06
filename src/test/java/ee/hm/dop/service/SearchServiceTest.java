@@ -194,7 +194,7 @@ public class SearchServiceTest {
     public void searchWithSubjectFilter() {
         String query = "airplane";
         String subject = "Mathematics";
-        String tokenizedQuery = "+subject:\"mathematics\" airplane*";
+        String tokenizedQuery = "(airplane*) AND subject:\"mathematics\"";
         long start = 0;
 
         List<Long> documentIds = Arrays.asList(9L, 2L);

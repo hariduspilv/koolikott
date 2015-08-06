@@ -87,7 +87,7 @@ class SearchEngineServiceMock implements SearchEngineService {
     }
 
     private static void addFilteredQuery() {
-        String filteredQuery = "+subject:\"mathematics\" filteredquery*";
+        String filteredQuery = "(filteredquery*) AND subject:\"mathematics\"";
         ArrayList<Document> filteredSearchResult = new ArrayList<>();
         Document newDocument = new Document();
         newDocument.setId("5");
