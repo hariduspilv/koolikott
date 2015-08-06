@@ -74,13 +74,13 @@
                 <div class="sidebar-module">
                     <h4>Filter</h4>
                     
-                    <label for="filter-type">Type</label>
-                    <div class="form-group">
-                        <select class="form-control" id="filter-type" ng-model="filters.subject">
-                            <option value=""></option>
-                            <option data-ng-if="subjects" data-ng-repeat="subject in subjects" data-translate="MATERIAL_SUBJECT_{{subject.name.toUpperCase()}} " value="{{subject.name}}" data-ng-selected="{{filters.subject == subject.name}}"></option>
-                        </select>
-                    </div>
+                    <label for="filter-type">Subject</label>
+                    <ui-select ng-model="filter.subject" theme="bootstrap" ng-disabled="disabled" id="filter-type">
+                        <ui-select-match placeholder="Select or search...">{{$select.selected.name}}</ui-select-match>
+                        <ui-select-choices repeat="subject in subjects | filter: $select.search">
+                            <span ng-bind-html="subject.name | highlight: $select.search"></span>
+                        </ui-select-choices>
+                    </ui-select>
                     
                     <div class="form-group">
                         <label for="filter-type">Type</label>
