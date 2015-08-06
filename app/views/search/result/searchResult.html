@@ -74,10 +74,33 @@
                 <div class="sidebar-module">
                     <h4>Filter</h4>
                     
+                    <label for="filter-type">Type</label>
                     <div class="form-group">
-                        <select class="form-control" ng-model="filters.subject">
+                        <select class="form-control" id="filter-type" ng-model="filters.subject">
                             <option value=""></option>
                             <option data-ng-if="subjects" data-ng-repeat="subject in subjects" data-translate="MATERIAL_SUBJECT_{{subject.name.toUpperCase()}} " value="{{subject.name}}" data-ng-selected="{{filters.subject == subject.name}}"></option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="filter-type">Type</label>
+                        <select class="form-control" id="filter-type" title="23423423">
+                            <option>Subject</option>
+                            <option>Matemaatika</option>
+                            <option>Bioloogia</option>
+                            <option>Ajalugu</option>
+                            <option>Geograafia</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="filter-licence">Licence</label>
+                        <select class="form-control" id="filter-licence" title="23423423">
+                            <option>Subject</option>
+                            <option>Matemaatika</option>
+                            <option>Bioloogia</option>
+                            <option>Ajalugu</option>
+                            <option>Geograafia</option>
                         </select>
                     </div>
 
