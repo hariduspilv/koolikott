@@ -1,7 +1,7 @@
 define(['app'], function(app)
 {
-    app.controller('searchResultController', ['$scope', "serverCallService", 'translationService', '$location', 'searchService', 
-             function($scope, serverCallService, translationService, $location, searchService) {
+    app.controller('searchResultController', ['$scope', "serverCallService", 'translationService', '$location', 'searchService', '$rootScope', 
+             function($scope, serverCallService, translationService, $location, searchService, $rootScope) {
     	
         // Pagination variables
         $scope.paging = [];
@@ -15,11 +15,17 @@ define(['app'], function(app)
         var MAX_PAGES = PAGES_BEFORE_THIS_PAGE + 1 + PAGES_AFTER_THIS_PAGE;
         var start = 0;
 
+        // Filters
+        $scope.filters = [];
+        $scope.filters.subject = searchService.getSubject();
+
         // Get search query and current page
         $scope.searchQuery = searchService.getQuery();
         $scope.paging.thisPage = searchService.getPage();
 
+        // Expose searchService methods required for the view
         $scope.buildURL = searchService.buildURL;
+        $scope.escapeQuery = searchService.escapeQuery;
 
         // If page is negative, redirect to page 1
         if ($scope.paging.thisPage < 1) {
@@ -41,6 +47,9 @@ define(['app'], function(app)
                 'q': $scope.searchQuery,
                 'start': start
             };
+            if ($scope.filters.subject) {
+                params.subject = $scope.filters.subject;
+            }
             serverCallService.makeGet("rest/search", params, getSearchedMaterialsSuccess, getSearchedMaterialsFail);
     	} else {
             $location.url('/');
@@ -125,6 +134,21 @@ define(['app'], function(app)
             // Add PAGES_BEFORE_THIS_PAGE amount of page numbers, this page number and PAGES_AFTER_THIS_PAGE amount of page numbers
             addNumbersToArray($scope.paging.before, $scope.paging.thisPage - PAGES_BEFORE_THIS_PAGE, $scope.paging.thisPage);
             addNumbersToArray($scope.paging.after, $scope.paging.thisPage + 1, $scope.paging.thisPage + 1 + PAGES_AFTER_THIS_PAGE);
+        }
+
+        // Get all subjects
+        serverCallService.makeGet("rest/subject/getAll", params, getAllSubjectsSuccess, getAllSubjectsFail);
+
+        function getAllSubjectsSuccess(data) {
+            $scope.subjects = data;
+        }
+
+        function getAllSubjectsFail() { }
+
+        $scope.filter = function() {
+            searchService.setSearch($rootScope.searchFields.searchQuery);
+            searchService.setSubject($scope.filters.subject);
+            $location.url(searchService.getURL());
         }
 
     }]);

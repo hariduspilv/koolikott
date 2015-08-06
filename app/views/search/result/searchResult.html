@@ -40,19 +40,19 @@
                                     </span>
                                 </li>
                                 <li data-ng-if="paging.before.length > 0">
-                                    <a href="{{buildURL(searchQuery, paging.thisPage - 1)}}" aria-label="{{'SEARCH_RESULT_PREVIOUS' | translate}}" class="btn btn-default">
+                                    <a href="{{buildURL(searchQuery, paging.thisPage - 1, filters.subject)}}" aria-label="{{'SEARCH_RESULT_PREVIOUS' | translate}}" class="btn btn-default">
                                         <span aria-hidden="true"><span data-translate="SEARCH_RESULT_PREVIOUS"></span></span>
                                     </a>
                                 </li>
 
                                 <li data-ng-repeat="page in paging.before">
-                                    <a href="{{buildURL(searchQuery, page)}}" data-ng-bind="page"></a>
+                                    <a href="{{buildURL(searchQuery, page, filters.subject)}}" data-ng-bind="page"></a>
                                 </li>
 
                                 <li class="active"><span data-ng-bind="paging.thisPage"></span></li>
 
                                 <li data-ng-repeat="page in paging.after">
-                                    <a href="{{buildURL(searchQuery, page)}}" data-ng-bind="page"></a>
+                                    <a href="{{buildURL(searchQuery, page, filters.subject)}}" data-ng-bind="page"></a>
                                 </li>
 
                                 <li data-ng-if="paging.after.length === 0" class="disabled">
@@ -61,7 +61,7 @@
                                     </span>
                                 </li>
                                 <li data-ng-if="paging.after.length > 0">
-                                    <a href="{{buildURL(searchQuery, paging.thisPage + 1)}}" aria-label="{{'SEARCH_RESULT_NEXT' | translate}}" class="btn btn-default">
+                                    <a href="{{buildURL(searchQuery, paging.thisPage + 1, filters.subject)}}" aria-label="{{'SEARCH_RESULT_NEXT' | translate}}" class="btn btn-default">
                                         <span aria-hidden="true"><span data-translate="SEARCH_RESULT_NEXT"></span></span>
                                     </a>
                                 </li>
@@ -74,17 +74,14 @@
                 <div class="sidebar-module">
                     <h4>Filter</h4>
                     <div class="form-group">
-                        <select class="form-control">
-                            <option>Subject</option>
-                            <option>Matemaatika</option>
-                            <option>Bioloogia</option>
-                            <option>Ajalugu</option>
-                            <option>Geograafia</option>
+                        <select class="form-control" ng-model="filters.subject">
+                            <option value=""></option>
+                            <option data-ng-if="subjects" data-ng-repeat="subject in subjects" data-translate="MATERIAL_SUBJECT_{{subject.name.toUpperCase()}} " value="{{subject.name}}" data-ng-selected="{{filters.subject == subject.name}}"></option>
                         </select>
                     </div>
 
                     <div class="form-group">
-                        <button type="submit" class="btn btn-default pull-right">Filtreeri</button>
+                        <button type="submit" class="btn btn-default pull-right" data-ng-click="filter()">Filtreeri</button>
                     </div>
                 </div>
             </div>
