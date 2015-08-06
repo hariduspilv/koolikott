@@ -36,7 +36,14 @@ public class SearchService {
     }
 
     public SearchResult search(String query, long start, String subject) {
-        String queryString = getFiltersAsQuery(subject) + getTokenizedQueryString(query);
+
+        String filtersAsQuery = getFiltersAsQuery(subject);
+        String tokenizedQueryString = getTokenizedQueryString(query);
+
+        String queryString = tokenizedQueryString;
+        if (!filtersAsQuery.isEmpty()) {
+            queryString = "(" + tokenizedQueryString + ") AND " + filtersAsQuery;
+        }
         SearchResponse searchResponse = searchEngineService.search(queryString, start);
 
         List<Long> materialIds = new ArrayList<>();
@@ -103,7 +110,7 @@ public class SearchService {
             return "";
         }
 
-        return "+subject:\"" + ClientUtils.escapeQueryChars(subject).toLowerCase() + "\" ";
+        return "subject:\"" + ClientUtils.escapeQueryChars(subject).toLowerCase() + "\"";
     }
 
 }
