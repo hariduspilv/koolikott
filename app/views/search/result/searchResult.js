@@ -1,7 +1,7 @@
 define(['app'], function(app)
 {
-    app.controller('searchResultController', ['$scope', "serverCallService", 'translationService', '$location', 'searchService', '$rootScope', 
-             function($scope, serverCallService, translationService, $location, searchService, $rootScope) {
+    app.controller('searchResultController', ['$scope', "serverCallService", 'translationService', '$location', 'searchService', 
+             function($scope, serverCallService, translationService, $location, searchService) {
     	
         // Pagination variables
         $scope.paging = [];
@@ -24,7 +24,6 @@ define(['app'], function(app)
 
         // Expose searchService methods required for the view
         $scope.buildURL = searchService.buildURL;
-        $scope.escapeQuery = searchService.escapeQuery;
 
         // If page is negative, redirect to page 1
         if ($scope.paging.thisPage < 1) {
@@ -42,13 +41,16 @@ define(['app'], function(app)
         if (!isEmpty($scope.searchQuery)) {
             $scope.searching = true;
             start = RESULTS_PER_PAGE * ($scope.paging.thisPage - 1);
+
             var params = {
                 'q': $scope.searchQuery,
                 'start': start
             };
+
             if (searchService.getSubject()) {
                 params.subject = searchService.getSubject();
             }
+
             serverCallService.makeGet("rest/search", params, getSearchedMaterialsSuccess, getSearchedMaterialsFail);
     	} else {
             $location.url('/');
@@ -153,7 +155,7 @@ define(['app'], function(app)
         function getAllSubjectsFail() { }
 
         $scope.filter = function() {
-            searchService.setSearch($rootScope.searchFields.searchQuery);
+            searchService.setSearch(searchService.getQuery());
             if ($scope.filters.subject) {
                 searchService.setSubject($scope.filters.subject.name);
             } else {
