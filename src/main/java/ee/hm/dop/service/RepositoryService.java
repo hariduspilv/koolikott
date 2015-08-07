@@ -49,10 +49,12 @@ public class RepositoryService {
         long failedMaterials = 0;
         long successfulMaterials = 0;
         long start = System.currentTimeMillis();
+        DateTime startSyncDateTime;
 
         MaterialIterator materials;
         try {
             materials = repositoryManager.getMaterialsFrom(repository);
+            startSyncDateTime = DateTime.now();
         } catch (Exception e) {
             logger.error(format("Error while getting material from %s. No material will be updated.", repository), e);
             return;
@@ -72,7 +74,7 @@ public class RepositoryService {
             count = getCount(count);
         }
 
-        repository.setLastSynchronization(DateTime.now());
+        repository.setLastSynchronization(startSyncDateTime);
         updateRepositoryData(repository);
 
         long end = System.currentTimeMillis();
