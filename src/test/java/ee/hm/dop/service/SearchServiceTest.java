@@ -40,39 +40,12 @@ public class SearchServiceTest {
     public void search() {
         String query = "people";
         String tokenizedQuery = "people*";
+        String subject = null;
+        String resourceType = null;
         long start = 0;
+        List<Long> identifiers = Arrays.asList(7L, 1L, 4L);
 
-        List<Long> documentIds = Arrays.asList(7L, 1L, 4L);
-        SearchResponse searchResponse = createSearchResponseWithDocuments(documentIds);
-
-        Material material7 = new Material();
-        material7.setId((long) 7);
-        Material material1 = new Material();
-        material1.setId((long) 1);
-        Material material4 = new Material();
-        material4.setId((long) 4);
-
-        List<Material> materials = new ArrayList<>();
-        materials.add(material1);
-        materials.add(material4);
-        materials.add(material7);
-
-        expect(searchEngineService.search(tokenizedQuery, start)).andReturn(searchResponse);
-        expect(materialDAO.findAllById(documentIds)).andReturn(materials);
-
-        replayAll();
-
-        SearchResult result = searchService.search(query, start);
-
-        verifyAll();
-
-        assertEquals(3, result.getMaterials().size());
-        assertSame(material7, result.getMaterials().get(0));
-        assertSame(material1, result.getMaterials().get(1));
-        assertSame(material4, result.getMaterials().get(2));
-        assertEquals(3, result.getTotalResults());
-        assertEquals(start, result.getStart());
-
+        testSearch(query, tokenizedQuery, identifiers, start, subject, resourceType);
     }
 
     // To test asynchronous problems that may occur when search returns deleted
@@ -81,34 +54,12 @@ public class SearchServiceTest {
     public void searchWhenDatabaseReturnsLessValuesThanSearch() {
         String query = "people";
         String tokenizedQuery = "people*";
+        String subject = null;
+        String resourceType = null;
         long start = 0;
+        List<Long> identifiers = Arrays.asList(7L, 1L, 4L);
 
-        List<Long> documentIds = Arrays.asList(7L, 1L, 4L);
-        SearchResponse searchResponse = createSearchResponseWithDocuments(documentIds);
-
-        Material material7 = new Material();
-        material7.setId((long) 7);
-        Material material4 = new Material();
-        material4.setId((long) 4);
-
-        List<Material> materials = new ArrayList<>();
-        materials.add(material4);
-        materials.add(material7);
-
-        expect(searchEngineService.search(tokenizedQuery, start)).andReturn(searchResponse);
-        expect(materialDAO.findAllById(documentIds)).andReturn(materials);
-
-        replayAll();
-
-        SearchResult result = searchService.search(query, start);
-
-        verifyAll();
-
-        assertEquals(2, result.getMaterials().size());
-        assertSame(material7, result.getMaterials().get(0));
-        assertSame(material4, result.getMaterials().get(1));
-        assertEquals(3, result.getTotalResults());
-        assertEquals(start, result.getStart());
+        testSearch(query, tokenizedQuery, identifiers, start, subject, resourceType);
     }
 
     @Test
@@ -194,71 +145,73 @@ public class SearchServiceTest {
     public void searchWithSubjectFilter() {
         String query = "airplane";
         String subject = "Mathematics";
+        String resourceType = null;
         String tokenizedQuery = "(airplane*) AND subject:\"mathematics\"";
         long start = 0;
+        List<Long> identifiers = Arrays.asList(9L, 2L);
 
-        List<Long> documentIds = Arrays.asList(9L, 2L);
-        SearchResponse searchResponse = createSearchResponseWithDocuments(documentIds);
-
-        Material material9 = new Material();
-        material9.setId((long) 9);
-        Material material2 = new Material();
-        material2.setId((long) 2);
-
-        List<Material> materials = new ArrayList<>();
-        materials.add(material9);
-        materials.add(material2);
-
-        expect(searchEngineService.search(tokenizedQuery, start)).andReturn(searchResponse);
-        expect(materialDAO.findAllById(documentIds)).andReturn(materials);
-
-        replayAll();
-
-        SearchResult result = searchService.search(query, start, subject);
-
-        verifyAll();
-
-        assertEquals(2, result.getMaterials().size());
-        assertSame(material9, result.getMaterials().get(0));
-        assertSame(material2, result.getMaterials().get(1));
-        assertEquals(2, result.getTotalResults());
-        assertEquals(start, result.getStart());
+        testSearch(query, tokenizedQuery, identifiers, start, subject, resourceType);
     }
 
     @Test
-    public void searchWithSubjectFilterNull() {
+    public void searchWithFiltersNull() {
         String query = "airplane";
         String subject = null;
+        String resourceType = null;
         String tokenizedQuery = "airplane*";
         long start = 0;
+        List<Long> identifiers = Arrays.asList(9L, 2L);
 
-        List<Long> documentIds = Arrays.asList(9L);
-        SearchResponse searchResponse = createSearchResponseWithDocuments(documentIds);
+        testSearch(query, tokenizedQuery, identifiers, start, subject, resourceType);
+    }
 
-        Material material9 = new Material();
-        material9.setId((long) 9);
+    @Test
+    public void searchWithResourceTypeFilter() {
+        String query = "pythagoras";
+        String subject = null;
+        String resourceType = "TEXTBOOK";
+        String tokenizedQuery = "(pythagoras*) AND resource_type:\"textbook\"";
+        long start = 0;
+        List<Long> identifiers = Arrays.asList(15L, 8L);
 
-        List<Material> materials = new ArrayList<>();
-        materials.add(material9);
+        testSearch(query, tokenizedQuery, identifiers, start, subject, resourceType);
+    }
+
+    @Test
+    public void searchWithAllFilters() {
+        String query = "pythagoras";
+        String subject = "Mathematics";
+        String resourceType = "TEXTBOOK";
+        String tokenizedQuery = "(pythagoras*) AND subject:\"mathematics\" AND resource_type:\"textbook\"";
+        long start = 0;
+        List<Long> identifiers = Arrays.asList(15L, 8L);
+
+        testSearch(query, tokenizedQuery, identifiers, start, subject, resourceType);
+    }
+
+    private void testSearch(String query, String tokenizedQuery, List<Long> identifiers, long start, String subject,
+            String resourceType) {
+        SearchResponse searchResponse = createSearchResponseWithDocuments(identifiers);
+        List<Material> materials = createMaterials(identifiers);
 
         expect(searchEngineService.search(tokenizedQuery, start)).andReturn(searchResponse);
-        expect(materialDAO.findAllById(documentIds)).andReturn(materials);
+        expect(materialDAO.findAllById(identifiers)).andReturn(materials);
 
         replayAll();
 
-        SearchResult result = searchService.search(query, start, subject);
+        SearchResult result = searchService.search(query, start, subject, resourceType);
 
         verifyAll();
 
-        assertEquals(1, result.getMaterials().size());
-        assertSame(material9, result.getMaterials().get(0));
-        assertEquals(1, result.getTotalResults());
+        assertEquals(identifiers.size(), result.getMaterials().size());
+        assertSameMaterials(materials, result.getMaterials());
+        assertEquals(identifiers.size(), result.getTotalResults());
         assertEquals(start, result.getStart());
     }
 
-    private SearchResponse createSearchResponseWithDocuments(List<Long> documentIds) {
+    private SearchResponse createSearchResponseWithDocuments(List<Long> identifers) {
         List<Document> documents = new ArrayList<>();
-        for (Long id : documentIds) {
+        for (Long id : identifers) {
             Document newDocument = new Document();
             newDocument.setId(Long.toString(id));
             documents.add(newDocument);
@@ -271,6 +224,25 @@ public class SearchServiceTest {
         searchResponse.setResponse(response);
 
         return searchResponse;
+    }
+
+    private List<Material> createMaterials(List<Long> identifiers) {
+        List<Material> materials = new ArrayList<>();
+
+        for (Long id : identifiers) {
+            Material material = new Material();
+            material.setId(id);
+            materials.add(material);
+        }
+
+        return materials;
+    }
+
+    private void assertSameMaterials(List<Material> expected, List<Material> actual) {
+        assertEquals(expected.size(), actual.size());
+        for (int i = 0; i < expected.size(); i++) {
+            assertSame(expected.get(i), actual.get(i));
+        }
     }
 
     private void replayAll() {

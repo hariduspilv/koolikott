@@ -61,7 +61,9 @@ class SearchEngineServiceMock implements SearchEngineService {
 
         addArabicQuery();
         addBigQuery();
-        addFilteredQuery();
+        addQueryWithSubjectFilter();
+        addQueryWithResourceTypeFilter();
+        addQueryWithAllFilters();
     }
 
     private static void addArabicQuery() {
@@ -86,11 +88,31 @@ class SearchEngineServiceMock implements SearchEngineService {
         searchResponses.put(bigQuery, bigQueryDocuments);
     }
 
-    private static void addFilteredQuery() {
+    private static void addQueryWithSubjectFilter() {
         String filteredQuery = "(filteredquery*) AND subject:\"mathematics\"";
         ArrayList<Document> filteredSearchResult = new ArrayList<>();
         Document newDocument = new Document();
         newDocument.setId("5");
+        filteredSearchResult.add(newDocument);
+
+        searchResponses.put(filteredQuery, filteredSearchResult);
+    }
+
+    private static void addQueryWithResourceTypeFilter() {
+        String filteredQuery = "(beethoven*) AND resource_type:\"audio\"";
+        ArrayList<Document> filteredSearchResult = new ArrayList<>();
+        Document newDocument = new Document();
+        newDocument.setId("4");
+        filteredSearchResult.add(newDocument);
+
+        searchResponses.put(filteredQuery, filteredSearchResult);
+    }
+
+    private static void addQueryWithAllFilters() {
+        String filteredQuery = "(john*) AND subject:\"mathematics\" AND resource_type:\"audio\"";
+        ArrayList<Document> filteredSearchResult = new ArrayList<>();
+        Document newDocument = new Document();
+        newDocument.setId("2");
         filteredSearchResult.add(newDocument);
 
         searchResponses.put(filteredQuery, filteredSearchResult);
