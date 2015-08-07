@@ -79,7 +79,8 @@ insert into Translation(translationGroup, translationKey, translation) values (3
 insert into Translation(translationGroup, translationKey, translation) values (3, 'SEARCH_RESULT_NEXT', 'Next');
 insert into Translation(translationGroup, translationKey, translation) values (3, 'SEARCH_FILTER_SUBJECT_LABEL', 'Subject');
 insert into Translation(translationGroup, translationKey, translation) values (3, 'SEARCH_FILTER_SUBJECT_PLACEHOLDER', 'Select or search...');
-
+insert into Translation(translationGroup, translationKey, translation) values (3, 'SEARCH_FILTER_BUTTON_FILTER', 'Filter');
+insert into Translation(translationGroup, translationKey, translation) values (3, 'SEARCH_FILTER_BUTTON_RESET', 'Reset');
 
 -- Material Subject translations
 

@@ -79,7 +79,8 @@ insert into Translation(translationGroup, translationKey, translation) values (2
 insert into Translation(translationGroup, translationKey, translation) values (2, 'SEARCH_RESULT_NEXT', 'Следующий');
 insert into Translation(translationGroup, translationKey, translation) values (2, 'SEARCH_FILTER_SUBJECT_LABEL', 'Тема');
 insert into Translation(translationGroup, translationKey, translation) values (2, 'SEARCH_FILTER_SUBJECT_PLACEHOLDER', 'Выберите или поиск...');
-
+insert into Translation(translationGroup, translationKey, translation) values (2, 'SEARCH_FILTER_BUTTON_FILTER', 'Сортировать');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'SEARCH_FILTER_BUTTON_RESET', 'Сброс');
 
 -- Material Subject translations
 
