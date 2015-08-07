@@ -8,7 +8,7 @@ To build the project you need to have installed on your machine NodeJS, NPM, Bow
 	
 ## Grunt installation
 
-	npm install -g grunt-cli
+        npm install -g grunt-cli
 
 
 # Build
@@ -25,6 +25,10 @@ Run commands from project root directory.
 Generates project artifacts.
 
 	grunt build
+
+If project building fails with message like ">> Local Npm module "XXXXXX" not found. Is it installed?" then run command
+
+        npm install
 
 ## Package
 

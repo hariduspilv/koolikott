@@ -130,10 +130,9 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-compress');
     grunt.loadNpmTasks('grunt-bower-task');
     grunt.loadNpmTasks('grunt-contrib-copy');
-    grunt.loadNpmTasks('grunt-npm-install');
     grunt.loadNpmTasks('grunt-contrib-cssmin');
 
-    grunt.registerTask('build', ['npm-install', 'bower', 'clean:build', 'copy', 'sass', 'concat', 'cssmin', 'uglify']);
+    grunt.registerTask('build', ['bower', 'clean:build', 'copy', 'sass', 'concat', 'cssmin', 'uglify']);
     grunt.registerTask('package', ['build', 'clean:sourcemap', 'compress']);
 
 };
