@@ -1,10 +1,15 @@
 .ui-select-container {
     .btn-default {
+        
         border: 1px solid $body-bg;
         border-bottom: 1px solid $brand-grey-medium;
         @include border-radius(0);
         @include box-shadow(0, 0, 0, 0, $body-bg);
         background: none;
         color: $text-color;
+        
+        &:hover, &:focus, &:active {
+            background: none; 
+        }
     }
 }

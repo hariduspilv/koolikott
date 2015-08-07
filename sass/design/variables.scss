@@ -91,9 +91,9 @@ $pagination-disabled-border: #AAA !default;
 
 $btn-default-color: #FFF !default;
 
-$btn-default-bg: #444 !default;
+$btn-default-bg: $brand-primary !default;
 
-$btn-default-border: #444 !default;
+$btn-default-border: $brand-primary !default;
 
 
 $input-border-radius: 0;
