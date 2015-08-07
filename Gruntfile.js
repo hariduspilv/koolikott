@@ -75,6 +75,17 @@ module.exports = function(grunt) {
                 }
             }
         },
+        cssmin: {
+            options: {
+                shorthandCompacting: false,
+                roundingPrecision: -1
+            },
+            target: {
+                files: {
+                    '<%= project.assets %>/css/dop.min.css': ['<%= project.assets %>/css/dop.min.css', 'bower_components/ui-select/dist/select.min.css']
+                }
+            }
+        },
         sass: {
             dev: {
                 options: {
@@ -89,7 +100,7 @@ module.exports = function(grunt) {
         watch: {
             sass: {
                 files: 'sass/{,*/}*.{scss,sass}',
-                tasks: ['sass:dev', 'concat:css']
+                tasks: ['sass:dev', 'cssmin']
             }
         },
         clean: {
@@ -120,8 +131,9 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-bower-task');
     grunt.loadNpmTasks('grunt-contrib-copy');
     grunt.loadNpmTasks('grunt-npm-install');
+    grunt.loadNpmTasks('grunt-contrib-cssmin');
 
-    grunt.registerTask('build', ['npm-install', 'bower', 'clean:build', 'copy', 'sass', 'concat', 'uglify']);
+    grunt.registerTask('build', ['npm-install', 'bower', 'clean:build', 'copy', 'sass', 'concat', 'cssmin', 'uglify']);
     grunt.registerTask('package', ['build', 'clean:sourcemap', 'compress']);
 
 };
