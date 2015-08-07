@@ -5,6 +5,26 @@ define(['app'], function(app) {
         var subjectURL = "&subject=";
 		var searchQuery = "";
         var searchSubject = "";
+
+        function escapeQuery(query) {
+            //replace backslashes
+            query = query.replace(/\\/g, "\\\\");
+
+            //make plus signs into \+
+            query = query.replace(/\+/g, "\\+");
+
+            return query;
+        }
+
+        function unescapeQuery(query) {
+            //get back + sign
+            query = query.replace(/\\ /g, "+");
+
+            //make backslashes singular
+            query = query.replace(/\\\\/g, "\\");
+
+            return query;
+        }
 		
 		return {
 			
@@ -17,28 +37,8 @@ define(['app'], function(app) {
                 searchSubject = subject;
             },
 
-            escapeQuery : function(query) {
-                //replace backslashes
-                query = query.replace(/\\/g, "\\\\");
-
-                //make plus signs into \+
-                query = query.replace(/\+/g, "\\+");
-
-                return query;
-            },
-
-            unescapeQuery : function(query) {
-                //get back + sign
-                query = query.replace(/\\ /g, "+");
-
-                //make backslashes singular
-                query = query.replace(/\\\\/g, "\\");
-
-                return query;
-            },
-
 	        getURL : function() {
-	        	var query = this.escapeQuery(searchQuery);
+	        	var query = escapeQuery(searchQuery);
 
                 var searchURL = searchURLbase + query
                 if (searchSubject) {
@@ -51,7 +51,7 @@ define(['app'], function(app) {
 				if(searchQuery === ""){
 					var searchObject = $location.search();
 					if (searchObject.q) {
-                        searchQuery = this.unescapeQuery(searchObject.q);
+                        searchQuery = unescapeQuery(searchObject.q);
 					}
 				}
 
@@ -86,7 +86,7 @@ define(['app'], function(app) {
 	        }, 
 
             buildURL : function(query, page, subject) {
-            	var searchURL = "#/" + searchURLbase + encodeURI(this.escapeQuery(query)) + "&page=" + page;
+            	var searchURL = "#/" + searchURLbase + encodeURI(escapeQuery(query)) + "&page=" + page;
                 if (subject) {
                     searchURL += subjectURL + subject;
                 }
