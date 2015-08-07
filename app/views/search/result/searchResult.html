@@ -73,16 +73,18 @@
             <div class="col-md-3">
                 <div class="sidebar-module">
                     <h4>Filter</h4>
-
-                    <label for="filter-subject" data-translate="SEARCH_FILTER_SUBJECT_LABEL">Subject</label>
-                    <ui-select data-ng-model="filters.subject" theme="bootstrap" data-ng-disabled="disabled" id="filter-subject">
-                        <ui-select-match allow-clear="true" placeholder="{{'SEARCH_FILTER_SUBJECT_PLACEHOLDER' | translate}}">
-                            <span data-ng-if="$select.selected.name" data-translate="{{'MATERIAL_SUBJECT_' + $select.selected.name.toUpperCase()}}"></span>
-                        </ui-select-match>
-                        <ui-select-choices repeat="subject in subjects | filter: $select.search">
-                            <span ng-bind-html="'MATERIAL_SUBJECT_' + subject.name.toUpperCase() | translate | highlight: $select.search"></span>                           
-                        </ui-select-choices>
-                    </ui-select>
+                    
+                    <div class="form-group">
+                        <label for="filter-subject" data-translate="SEARCH_FILTER_SUBJECT_LABEL">Subject</label>
+                        <ui-select data-ng-model="filters.subject" theme="bootstrap" data-ng-disabled="disabled" id="filter-subject">
+                            <ui-select-match allow-clear="true" placeholder="{{'SEARCH_FILTER_SUBJECT_PLACEHOLDER' | translate}}">
+                                <span data-ng-if="$select.selected.name" data-translate="{{'MATERIAL_SUBJECT_' + $select.selected.name.toUpperCase()}}"></span>
+                            </ui-select-match>
+                            <ui-select-choices repeat="subject in subjects | filter: $select.search">
+                                <span ng-bind-html="'MATERIAL_SUBJECT_' + subject.name.toUpperCase() | translate | highlight: $select.search"></span>                           
+                            </ui-select-choices>
+                        </ui-select>
+                    </div>
                     
                     <div class="form-group">
                         <label for="filter-type">Type</label>
