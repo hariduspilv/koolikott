@@ -75,7 +75,7 @@
                     <h4>Filter</h4>
                     
                     <div class="form-group">
-                        <label for="filter-subject" data-translate="SEARCH_FILTER_SUBJECT_LABEL">Subject</label>
+                        <label for="filter-subject" data-translate="SEARCH_FILTER_SUBJECT_LABEL"></label>
                         <ui-select data-ng-model="filters.subject" theme="bootstrap" data-ng-disabled="disabled" id="filter-subject">
                             <ui-select-match allow-clear="true" placeholder="{{'SEARCH_FILTER_SUBJECT_PLACEHOLDER' | translate}}">
                                 <span data-ng-if="$select.selected.name" data-translate="{{'MATERIAL_SUBJECT_' + $select.selected.name.toUpperCase()}}"></span>
@@ -87,7 +87,7 @@
                     </div>
                     
                     <div class="form-group">
-                        <label for="filter-type">Type</label>
+                        <label for="filter-type" data-translate="MATERIAL_VIEW_RESOURCE_TYPE"></label>
                         <select class="form-control" id="filter-type" title="23423423">
                             <option>Subject</option>
                             <option>Matemaatika</option>
@@ -98,7 +98,7 @@
                     </div>
                     
                     <div class="form-group">
-                        <label for="filter-licence">Licence</label>
+                        <label for="filter-licence" data-translate="MATERIAL_VIEW_LICENSE_TYPE"></label>
                         <select class="form-control" id="filter-licence" title="23423423">
                             <option>Subject</option>
                             <option>Matemaatika</option>
