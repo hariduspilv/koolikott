@@ -4,6 +4,11 @@ import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertSame;
+
+import java.util.List;
 
 import org.easymock.EasyMock;
 import org.easymock.EasyMockRunner;
@@ -39,20 +44,20 @@ public class RepositoryServiceTest {
     private RepositoryDAO repositoryDAO;
 
     @Test
-    public void updateRepositoryErrorGettingMaterials() throws Exception {
+    public void synchronizeErrorGettingMaterials() throws Exception {
         Repository repository = getRepository();
 
         expect(repositoryManager.getMaterialsFrom(repository)).andThrow(new Exception());
 
         replay(repositoryManager);
 
-        repositoryService.updateRepository(repository);
+        repositoryService.synchronize(repository);
 
         verify(repositoryManager);
     }
 
     @Test
-    public void updateRepositoryhasNextFalse() throws Exception {
+    public void synchronizeHasNextFalse() throws Exception {
         Repository repository = getRepository();
 
         expect(repositoryManager.getMaterialsFrom(repository)).andReturn(materials);
@@ -60,13 +65,13 @@ public class RepositoryServiceTest {
 
         replay(repositoryManager, materials);
 
-        repositoryService.updateRepository(repository);
+        repositoryService.synchronize(repository);
 
         verify(repositoryManager, materials);
     }
 
     @Test
-    public void updateRepositoryNext() throws Exception {
+    public void synchronizeNext() throws Exception {
         Repository repository = getRepository();
         Material material = createMock(Material.class);
 
@@ -85,13 +90,13 @@ public class RepositoryServiceTest {
 
         replay(repositoryManager, materials, material);
 
-        repositoryService.updateRepository(repository);
+        repositoryService.synchronize(repository);
 
         verify(repositoryManager, materials, material);
     }
 
     @Test
-    public void updateRepositoryHandleMaterial() throws Exception {
+    public void synchronizeHandleMaterial() throws Exception {
         Repository repository = getRepository();
         Material material = createMock(Material.class);
 
@@ -108,13 +113,13 @@ public class RepositoryServiceTest {
 
         replay(repositoryManager, materials, material, materialService);
 
-        repositoryService.updateRepository(repository);
+        repositoryService.synchronize(repository);
 
         verify(repositoryManager, materials, material, materialService);
     }
 
     @Test
-    public void updateRepository() throws Exception {
+    public void synchronize() throws Exception {
         Repository repository = getRepository();
         Material material = createMock(Material.class);
 
@@ -128,22 +133,51 @@ public class RepositoryServiceTest {
         final DateTime before = DateTime.now();
         repositoryDAO.updateRepository(EasyMock.cmp(repository, (o1, o2) -> {
             if (o1 != o2) {
-              return -1;
+                return -1;
             }
             if (before.getMillis() >= o1.getLastSynchronization().getMillis()) {
                 return -1;
             }
-            if (o1.getLastSynchronization().getMillis() <= DateTime.now().getMillis()){
+            if (o1.getLastSynchronization().getMillis() <= DateTime.now().getMillis()) {
                 return 0;
             }
 
-            return  -1;
+            return -1;
         }, LogicalOperator.EQUAL));
 
         replay(repositoryManager, materials, material, materialService, repositoryDAO);
 
-        repositoryService.updateRepository(repository);
+        repositoryService.synchronize(repository);
         verify(repositoryManager, materials, material, materialService, repositoryDAO);
+    }
+
+    @Test
+    public void getAllRepositorys() {
+        @SuppressWarnings("unchecked")
+        List<Repository> repositories = createMock(List.class);
+        expect(repositoryDAO.findAll()).andReturn(repositories);
+
+        replayAll(repositories);
+
+        List<Repository> allRepositorys = repositoryService.getAllRepositorys();
+
+        verifyAll(repositories);
+
+        assertSame(repositories, allRepositorys);
+    }
+
+    @Test
+    public void getAllRepositorysWhenNoRepositories() {
+        expect(repositoryDAO.findAll()).andReturn(null);
+
+        replayAll();
+
+        List<Repository> allRepositorys = repositoryService.getAllRepositorys();
+
+        verifyAll();
+
+        assertNotNull(allRepositorys);
+        assertEquals(0, allRepositorys.size());
     }
 
     private Repository getRepository() {
@@ -155,5 +189,24 @@ public class RepositoryServiceTest {
         return repository;
     }
 
+    private void replayAll(Object... mocks) {
+        replay(repositoryManager, materials, materialService, repositoryDAO);
+
+        if (mocks != null) {
+            for (Object object : mocks) {
+                replay(object);
+            }
+        }
+    }
+
+    private void verifyAll(Object... mocks) {
+        verify(repositoryManager, materials, materialService, repositoryDAO);
+
+        if (mocks != null) {
+            for (Object object : mocks) {
+                verify(object);
+            }
+        }
+    }
 
 }

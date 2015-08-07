@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 
 import com.google.inject.Singleton;
 
+import ee.hm.dop.executor.SynchronizeMaterialsExecutor;
 import ee.hm.dop.guice.GuiceInjector;
 import ee.hm.dop.server.EmbeddedJetty;
 
@@ -24,6 +25,9 @@ public class ApplicationLauncher {
     @Inject
     private static Configuration configuration;
 
+    @Inject
+    private static SynchronizeMaterialsExecutor synchronizeMaterialsExecutor;
+
     public static void startApplication() {
         GuiceInjector.init();
 
@@ -33,7 +37,12 @@ public class ApplicationLauncher {
             startServer();
             addShutdownHook();
             startCommandListener();
+            startExecutors();
         }
+    }
+
+    private static void startExecutors() {
+        synchronizeMaterialsExecutor.synchronizeMaterials();
     }
 
     private static void startCommandListener() {
@@ -75,6 +84,11 @@ public class ApplicationLauncher {
     public static void stopApplication() throws Exception {
         GuiceInjector.init();
         ApplicationManager.stopApplication();
+        stopExecutors();
+    }
+
+    private static void stopExecutors() {
+        synchronizeMaterialsExecutor.stop();
     }
 
     public static void main(String[] args) throws Exception {

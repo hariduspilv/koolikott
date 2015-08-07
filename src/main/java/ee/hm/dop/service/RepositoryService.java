@@ -2,6 +2,7 @@ package ee.hm.dop.service;
 
 import static java.lang.String.format;
 
+import java.util.Collections;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -33,10 +34,16 @@ public class RepositoryService {
     private MaterialService materialService;
 
     public List<Repository> getAllRepositorys() {
-        return repositoryDAO.findAll();
+        List<Repository> repositories = repositoryDAO.findAll();
+
+        if (repositories == null) {
+            repositories = Collections.emptyList();
+        }
+
+        return repositories;
     }
 
-    public void updateRepository(Repository repository) {
+    public void synchronize(Repository repository) {
         logger.info(format("Updating materials for %s", repository));
 
         long failedMaterials = 0;
