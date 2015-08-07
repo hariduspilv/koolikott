@@ -1,40 +1,46 @@
-.ui-select-container {
-    .btn-default {
-        border: 1px solid $body-bg;
-        border-bottom: 1px solid $brand-grey-medium;
-        @include border-radius(0);
-        @include box-shadow(0, 0, 0, 0, $body-bg);
-        background: none;
-        color: $text-color;
-        
-        &:hover, &:focus {
-            background: none; 
-        }
-        
-        &:active {
+.sidebar-module-filter {
+    .ui-select-container {
+        .btn-default {
+            border: 1px solid $body-bg;
+            border-bottom: 1px solid $brand-grey-medium;
+            @include border-radius(0);
             @include box-shadow(0, 0, 0, 0, $body-bg);
-            background: #FFF;
-        }
-    }
-    
-    .btn-default-focus {
-        @include box-shadow(0, 0, 0, 0, $body-bg);
-        background: none;
-    }
-    
-    .form-control {
-        @include box-shadow(0, 0, 0, 0, $body-bg);
+            background: none;
+            color: $text-color;
 
-        &:focus {
-            border-color: $brand-grey-medium;
-            @include box-shadow(0, 0, 0, 0, #FFF, inset);
-            background: #FFF;
+            &:hover, &:focus {
+                background: none; 
+            }
+
+            &:active {
+                @include box-shadow(0, 0, 0, 0, $body-bg);
+                background: #FFF;
+            }
+        }
+
+        .btn-default-focus {
+            @include box-shadow(0, 0, 0, 0, $body-bg);
+            background: none;
+        }
+
+        .form-control {
+            @include box-shadow(0, 0, 0, 0, $body-bg);
+
+            &:focus {
+                border-color: $brand-grey-medium;
+                @include box-shadow(0, 0, 0, 0, #FFF, inset);
+                background: #FFF;
+            }
+        }
+
+        .dropdown-menu {
+            border: 1px solid $brand-grey-medium;
+            border-top: 0;
+            @include border-top-radius(0);
         }
     }
     
-    .dropdown-menu {
-        border: 1px solid $brand-grey-medium;
-        border-top: 0;
-        @include border-top-radius(0);
+    .btn {
+        margin-left: 10px
     }
 }
