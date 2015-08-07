@@ -77,11 +77,12 @@ module.exports = function(grunt) {
         },
         cssmin: {
             options: {
-                processImport: false
+                processImport: false,
+                keepSpecialComments: 0
             },
             target: {
                 files: {
-                    '<%= project.assets %>/css/dop.min.css': ['<%= project.assets %>/css/dop.min.css', 'bower_components/ui-select/dist/select.min.css']
+                    '<%= project.assets %>/css/dop.min.css': ['<%= project.assets %>/css/dop.min.css']
                 }
             }
         },
@@ -99,7 +100,7 @@ module.exports = function(grunt) {
         watch: {
             sass: {
                 files: 'sass/{,*/}*.{scss,sass}',
-                tasks: ['sass:dev', 'cssmin']
+                tasks: ['sass:dev', 'concat:css']
             }
         },
         clean: {
