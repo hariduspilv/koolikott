@@ -9,6 +9,8 @@ import static org.junit.Assert.fail;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -23,6 +25,7 @@ import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 
 import ee.hm.dop.model.Language;
+import ee.hm.dop.model.Material;
 import ee.hm.dop.model.Tag;
 import ee.hm.dop.oaipmh.waramu.MaterialParserWaramu;
 import ee.hm.dop.service.LanguageService;
@@ -56,9 +59,11 @@ public class MaterialParserWaramuTest {
     }
 
     @Test
-    public void parse() throws ParseException, ParserConfigurationException, IOException, SAXException {
-        File fXmlFile = new File(workingDir + File.separator + "src" + File.separator + "test" + File.separator
-                + "resources" + File.separator + "oaipmh" + File.separator + "parse.xml");
+    public void parse()
+            throws ParseException, ParserConfigurationException, IOException, SAXException, URISyntaxException {
+        URI resource = getClass().getClassLoader().getResource("oaipmh/parse.xml").toURI();
+        File fXmlFile = new File(resource);
+
         DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
         DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
 
@@ -70,17 +75,25 @@ public class MaterialParserWaramuTest {
         replay(languageService, tagService);
 
         Document doc = dBuilder.parse(fXmlFile);
-        materialParser.parse(doc);
+        Material result = materialParser.parse(doc);
 
         verify(languageService, tagService);
+
+        assertEquals("Subjonctif", result.getTitles().get(0).getText());
+        assertEquals("Les exercices du subjonctif.", result.getTitles().get(1).getText());
+        assertEquals("Exercice a completer", result.getDescriptions().get(0).getText());
+        assertEquals("Veebipõhised harjutused kahtleva kõneviisi kohta.", result.getDescriptions().get(1).getText());
+        assertEquals("http://koolitaja.eenet.ee:57219/Waramu3Web/metadata?id=437556e69c7ee410b3ff27ad3eaec360219c3990", result.getSource());
+        assertEquals(1, result.getTags().size());
     }
 
     @Test
-    public void parseNullTitle() throws ParserConfigurationException, IOException, SAXException {
+    public void parseNullTitle() throws ParserConfigurationException, IOException, SAXException, URISyntaxException {
         String errorMessage = "Error in parsing Material title";
 
-        File fXmlFile = new File(workingDir + File.separator + "src" + File.separator + "test" + File.separator
-                + "resources" + File.separator + "oaipmh" + File.separator + "parseNullTitle.xml");
+        URI resource = getClass().getClassLoader().getResource("oaipmh/parseNullTitle.xml").toURI();
+        File fXmlFile = new File(resource);
+
         DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
         DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
 
@@ -102,11 +115,12 @@ public class MaterialParserWaramuTest {
     }
 
     @Test
-    public void parseNullLanguage() throws ParserConfigurationException, IOException, SAXException {
+    public void parseNullLanguage() throws ParserConfigurationException, IOException, SAXException, URISyntaxException {
         String errorMessage = "Error in parsing Material language";
 
-        File fXmlFile = new File(workingDir + File.separator + "src" + File.separator + "test" + File.separator
-                + "resources" + File.separator + "oaipmh" + File.separator + "parseNullLanguage.xml");
+        URI resource = getClass().getClassLoader().getResource("oaipmh/parseNullLanguage.xml").toURI();
+        File fXmlFile = new File(resource);
+
         DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
         DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
 
@@ -128,11 +142,13 @@ public class MaterialParserWaramuTest {
     }
 
     @Test
-    public void parseNullDescriptions() throws ParserConfigurationException, IOException, SAXException {
+    public void parseNullDescriptions()
+            throws ParserConfigurationException, IOException, SAXException, URISyntaxException {
         String errorMessage = "Error in parsing Material descriptions";
 
-        File fXmlFile = new File(workingDir + File.separator + "src" + File.separator + "test" + File.separator
-                + "resources" + File.separator + "oaipmh" + File.separator + "parseNullDescriptions.xml");
+        URI resource = getClass().getClassLoader().getResource("oaipmh/parseNullDescriptions.xml").toURI();
+        File fXmlFile = new File(resource);
+
         DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
         DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
 
@@ -155,11 +171,12 @@ public class MaterialParserWaramuTest {
     }
 
     @Test
-    public void parseNullSource() throws ParserConfigurationException, IOException, SAXException {
+    public void parseNullSource() throws ParserConfigurationException, IOException, SAXException, URISyntaxException {
         String errorMessage = "Material has more or less than one source, can't be mapped.";
 
-        File fXmlFile = new File(workingDir + File.separator + "src" + File.separator + "test" + File.separator
-                + "resources" + File.separator + "oaipmh" + File.separator + "parseNullSource.xml");
+        URI resource = getClass().getClassLoader().getResource("oaipmh/parseNullSource.xml").toURI();
+        File fXmlFile = new File(resource);
+
         DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
         DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
 
