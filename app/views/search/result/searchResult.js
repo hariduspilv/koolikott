@@ -1,7 +1,7 @@
 define(['app'], function(app)
 {
-    app.controller('searchResultController', ['$scope', "serverCallService", 'translationService', '$location', 'searchService', 
-             function($scope, serverCallService, translationService, $location, searchService) {
+    app.controller('searchResultController', ['$scope', "serverCallService", 'translationService', '$location', 'searchService', '$filter', 
+             function($scope, serverCallService, translationService, $location, searchService, $filter) {
     	
         // Pagination variables
         $scope.paging = [];
@@ -49,6 +49,10 @@ define(['app'], function(app)
 
             if (searchService.getSubject()) {
                 params.subject = searchService.getSubject();
+            }
+
+            if (searchService.getResourceType()) {
+                params.resource_type = searchService.getResourceType();
             }
 
             serverCallService.makeGet("rest/search", params, getSearchedMaterialsSuccess, getSearchedMaterialsFail);
@@ -145,24 +149,90 @@ define(['app'], function(app)
 
             // Select current subject in filter box
             for (i = 0; i < $scope.subjects.length; i++) {
-                if ($scope.subjects[i].name == searchService.getSubject()) {
+                if ($scope.subjects[i].name.toLowerCase() == searchService.getSubject().toLowerCase()) {
                     $scope.filters.subject = $scope.subjects[i];
+                    break;
+                }
+            }           
+        }
+
+        function getAllSubjectsFail() { }
+
+        // Get all resourceTypes
+        serverCallService.makeGet("rest/resourceType/getAll", {}, getAllResourceTypesSuccess, getAllResourceTypesFail);
+
+        function getAllResourceTypesSuccess(data) {
+            $scope.resourceTypes = data;
+
+            // Select current resourceType in filter box
+            for (i = 0; i < $scope.resourceTypes.length; i++) {
+                if ($scope.resourceTypes[i].name.toLowerCase() == searchService.getResourceType().toLowerCase()) {
+                    $scope.filters.resourceType = $scope.resourceTypes[i];
                     break;
                 }
             }
         }
 
-        function getAllSubjectsFail() { }
+        function getAllResourceTypesFail() { }
 
         $scope.filter = function() {
             searchService.setSearch(searchService.getQuery());
+
             if ($scope.filters.subject) {
-                searchService.setSubject($scope.filters.subject.name);
+                searchService.setSubject($scope.filters.subject.name.toLowerCase());
             } else {
                 searchService.setSubject('');
             }
+
+            if ($scope.filters.resourceType) {
+                searchService.setResourceType($scope.filters.resourceType.name.toLowerCase());
+            } else {
+                searchService.setResourceType('');
+            }
+
             $location.url(searchService.getURL());
         }
 
     }]);
+
+    app.filter('translatableItemFilter', function($filter) {
+        return function(items, query, translationKey) {
+            var out = [];
+
+            if (angular.isArray(items) && query) {
+                var translate = $filter('translate');
+
+                items.forEach(function(item) {
+                    // Get translation
+                    var translatedItem = translate(translationKey + item.name.toUpperCase());
+
+                    if (translatedItem.toLowerCase().indexOf(query) !== -1) {
+                        out.push(item);
+                    }
+                });
+            } else {
+                // Output -> input
+                out = items;
+            }
+
+            return out;
+        }
+    });
+
+    app.filter('subjectFilter', function($filter) {
+        return function(items, query) {
+            var translationKey = 'MATERIAL_SUBJECT_';
+            var genericFilter = $filter('translatableItemFilter');
+            return genericFilter(items, query, translationKey);
+        }
+    });
+
+    app.filter('resourceTypeFilter', function($filter) {
+        return function(items, query) {
+            var translationKey = '';
+            var genericFilter = $filter('translatableItemFilter');
+            return genericFilter(items, query, translationKey);
+        }
+    });
+
 });

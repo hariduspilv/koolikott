@@ -3,8 +3,10 @@ define(['app'], function(app) {
 	app.factory('searchService',['$location', '$rootScope', function($location, $rootScope) {
 		var searchURLbase = "search/result?q=";
         var subjectURL = "&subject=";
+        var resourceTypeURL = "&resource_type=";
 		var searchQuery = "";
         var searchSubject = "";
+        var searchResourceType = "";
 
         function escapeQuery(query) {
             //replace backslashes
@@ -37,6 +39,10 @@ define(['app'], function(app) {
                 searchSubject = subject;
             },
 
+            setResourceType : function(resourceType) {
+                searchResourceType = resourceType;
+            },
+
 	        getURL : function() {
 	        	var query = escapeQuery(searchQuery);
 
@@ -44,6 +50,10 @@ define(['app'], function(app) {
                 if (searchSubject) {
                     searchURL += subjectURL + searchSubject;
                 } 
+                if (searchResourceType) {
+                    searchURL += resourceTypeURL + searchResourceType;
+                } 
+
 	        	return searchURL;
 	        },
 
@@ -69,6 +79,17 @@ define(['app'], function(app) {
                 return searchSubject;
             },
 
+            getResourceType : function() {
+                if (searchResourceType === "") {
+                    var searchObject = $location.search();
+                    if (searchObject.resource_type) {
+                        return searchObject.resource_type;
+                    }
+                }
+
+                return searchResourceType;
+            },
+
             getPage : function() {
                 var searchObject = $location.search();
                 if (searchObject.page) {
@@ -85,11 +106,16 @@ define(['app'], function(app) {
                 return 1;
 	        }, 
 
-            buildURL : function(query, page, subject) {
+            buildURL : function(query, page, subject, resourceType) {
             	var searchURL = "#/" + searchURLbase + encodeURI(escapeQuery(query)) + "&page=" + page;
+
                 if (subject) {
                     searchURL += subjectURL + subject;
                 }
+                if (resourceType) {
+                    searchURL += resourceTypeURL + resourceType;
+                }
+
                 return searchURL;
             }, 
 
