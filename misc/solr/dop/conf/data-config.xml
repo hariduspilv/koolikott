@@ -23,7 +23,10 @@
             </entity>
             <entity name="Material_Subject" query="select subject as subject_id from Material_Subject where material='${Material.id}'">
                 <entity name="Subject" query="select name as subject from Subject where id = '${Material_Subject.subject_id}'" />  
-            </entity>    
+            </entity>
+            <entity name="Material_ResourceType" query="select resourceType as resourceType_id from Material_ResourceType where material='${Material.id}'">
+                <entity name="ResourceType" query="select resourceType as resource_type from ResourceType where id = '${Material_ResourceType.resourceType_id}'" />  
+            </entity>
         </entity>
     </document>
 </dataConfig>
