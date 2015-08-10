@@ -28,7 +28,7 @@ Generates project artifacts.
 
 If project building fails with message like ">> Local Npm module "XXXXXX" not found. Is it installed?" then run command
 
-        npm install
+    npm install
 
 ## Package
 

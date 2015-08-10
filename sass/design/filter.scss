@@ -1,6 +1,7 @@
 .sidebar-module-filter {
     .ui-select-container {
         .btn-default {
+            padding-right: 50px;
             border: 1px solid $body-bg;
             border-bottom: 1px solid $brand-grey-medium;
             @include border-radius(0);
@@ -17,6 +18,8 @@
                 @include box-shadow(0, 0, 0, 0, $body-bg);
                 background: #FFF;
             }
+            
+            .ui-select-match-text {display: block; width: 100%; overflow: hidden}
         }
 
         .btn-default-focus {
