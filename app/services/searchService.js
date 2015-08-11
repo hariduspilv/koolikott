@@ -4,9 +4,11 @@ define(['app'], function(app) {
 		var searchURLbase = "search/result?q=";
         var subjectURL = "&subject=";
         var resourceTypeURL = "&resource_type=";
+        var educationalContextURL = "&educational_context=";
 		var searchQuery = "";
         var searchSubject = "";
         var searchResourceType = "";
+        var searchEducationalContext = "";
 
         function escapeQuery(query) {
             //replace backslashes
@@ -43,6 +45,10 @@ define(['app'], function(app) {
                 searchResourceType = resourceType;
             },
 
+            setEducationalContext : function(educationalContext) {
+                searchEducationalContext = educationalContext;
+            },
+
 	        getURL : function() {
 	        	var query = escapeQuery(searchQuery);
 
@@ -52,7 +58,10 @@ define(['app'], function(app) {
                 } 
                 if (searchResourceType) {
                     searchURL += resourceTypeURL + searchResourceType;
-                } 
+                }
+                if (searchEducationalContext) {
+                    searchURL += educationalContextURL + searchEducationalContext;
+                }  
 
 	        	return searchURL;
 	        },
@@ -90,6 +99,17 @@ define(['app'], function(app) {
                 return searchResourceType;
             },
 
+            getEducationalContext: function() {
+                if (searchEducationalContext === "") {
+                    var searchObject = $location.search();
+                    if (searchObject.educational_context) {
+                        return searchObject.educational_context;
+                    }
+                }
+
+                return searchEducationalContext;
+            },
+
             getPage : function() {
                 var searchObject = $location.search();
                 if (searchObject.page) {
@@ -106,16 +126,18 @@ define(['app'], function(app) {
                 return 1;
 	        }, 
 
-            buildURL : function(query, page, subject, resourceType) {
+            buildURL : function(query, page, subject, resourceType, educationalContext) {
             	var searchURL = "#/" + searchURLbase + encodeURI(escapeQuery(query)) + "&page=" + page;
-
+            	console.log(educationalContext);
                 if (subject) {
                     searchURL += subjectURL + subject;
                 }
                 if (resourceType) {
                     searchURL += resourceTypeURL + resourceType;
                 }
-
+                if (educationalContext) {
+                    searchURL += educationalContextURL + educationalContext;
+                }
                 return searchURL;
             }, 
 

@@ -55,6 +55,10 @@ define(['app'], function(app)
                 params.resource_type = searchService.getResourceType();
             }
 
+            if (searchService.getEducationalContext()) {
+                params.educational_context = searchService.getEducationalContext();
+            }
+            
             serverCallService.makeGet("rest/search", params, getSearchedMaterialsSuccess, getSearchedMaterialsFail);
     	} else {
             $location.url('/');
@@ -175,6 +179,25 @@ define(['app'], function(app)
 
         function getAllResourceTypesFail() { }
 
+        // Get all educationalContexts
+        serverCallService.makeGet("rest/educationalContext/getAll", {}, getAlleducationalContextsSuccess, getAlleducationalContextsFail);
+
+        function getAlleducationalContextsSuccess(data) {
+            $scope.educationalContexts = data;
+
+            // Select current educationalContext in filter box
+            for (i = 0; i < $scope.educationalContexts.length; i++) {
+                if ($scope.educationalContexts[i].name.toLowerCase() == searchService.getEducationalContext().toLowerCase()) {
+                    $scope.filters.educationalContext = $scope.educationalContexts[i];
+                    break;
+                }
+            }
+        }
+
+        function getAlleducationalContextsFail() {
+            console.log("Getting educational contexts for filter failed.");
+        }
+
         $scope.filter = function() {
             searchService.setSearch(searchService.getQuery());
 
@@ -190,6 +213,11 @@ define(['app'], function(app)
                 searchService.setResourceType('');
             }
 
+            if ($scope.filters.educationalContext) {
+                searchService.setEducationalContext($scope.filters.educationalContext.name.toLowerCase());
+            } else {
+                searchService.setEducationalContext('');
+            }
             $location.url(searchService.getURL());
         }
 
@@ -228,6 +256,14 @@ define(['app'], function(app)
     });
 
     app.filter('resourceTypeFilter', function($filter) {
+        return function(items, query) {
+            var translationKey = '';
+            var genericFilter = $filter('translatableItemFilter');
+            return genericFilter(items, query, translationKey);
+        }
+    });
+
+    app.filter('educationalContextFilter', function($filter) {
         return function(items, query) {
             var translationKey = '';
             var genericFilter = $filter('translatableItemFilter');
