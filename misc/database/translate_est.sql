@@ -87,8 +87,55 @@ insert into Translation(translationGroup, translationKey, translation) values (1
 insert into Translation(translationGroup, translationKey, translation) values (1, 'SEARCH_FILTER_BUTTON_RESET', 'Tühista');
 
 -- Material Subject translations
-
-
-insert into Translation(translationGroup, translationKey, translation) values (1, 'MATERIAL_SUBJECT_BIOLOGY', 'Bioloogia');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'MATERIAL_SUBJECT_ESTONIAN', 'Eesti keel');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'MATERIAL_SUBJECT_RUSSIAN', 'Vene keel');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'MATERIAL_SUBJECT_LITERATURE', 'Kirjandus');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'MATERIAL_SUBJECT_ENGLISH', 'Inglise keel');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'MATERIAL_SUBJECT_FRENCH', 'Prantsuse keel');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'MATERIAL_SUBJECT_GERMAN', 'Saksa keel');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'MATERIAL_SUBJECT_SWEDISH', 'Rootsi keel');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'MATERIAL_SUBJECT_FINNISH', 'Soome keel');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'MATERIAL_SUBJECT_LATIN', 'Ladina keel');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'MATERIAL_SUBJECT_CHINESE', 'Hiina keel');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'MATERIAL_SUBJECT_JAPANESE', 'Jaapani keel');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'MATERIAL_SUBJECT_OTHER', 'Muu');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'MATERIAL_SUBJECT_MATHEMATICS', 'Matemaatika');
-
+insert into Translation(translationGroup, translationKey, translation) values (1, 'MATERIAL_SUBJECT_SCIENCE', 'Loodusõpetus');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'MATERIAL_SUBJECT_BIOLOGY', 'Bioloogia');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'MATERIAL_SUBJECT_GEOGRAPHY', 'Geograafia');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'MATERIAL_SUBJECT_PHYSICS', 'Füüsika');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'MATERIAL_SUBJECT_CHEMISTRY', 'Keemia');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'MATERIAL_SUBJECT_HUMAN_STUDIES', 'Inimeseõpetus');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'MATERIAL_SUBJECT_HISTORY', 'Ajalugu');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'MATERIAL_SUBJECT_CIVICS_AND_CITIZENSHIP', 'Ühiskonnaõpetus');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'MATERIAL_SUBJECT_ART', 'Kunst');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'MATERIAL_SUBJECT_MUSIC', 'Muusika');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'MATERIAL_SUBJECT_TECHNOLOGY', 'Töö- ja tehnoloogiaõpetus');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'MATERIAL_SUBJECT_HANDICRAFT', 'Käsitöö');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'MATERIAL_SUBJECT_HOME_ECONOMICS', 'Kodundus');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'MATERIAL_SUBJECT_EDUCATIONAL_TECHNOLOGY', 'Haridustehnoloogia');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'MATERIAL_SUBJECT_PHYSICAL_EDUCATION', 'Kehaline kasvatus');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'MATERIAL_SUBJECT_RELIGIOUS_STUDIES', 'Usundiõpetus');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'MATERIAL_SUBJECT_INFORMATICS', 'Informaatika');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'MATERIAL_SUBJECT_CAREER_STUDIES', 'Karjääriõpe');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'MATERIAL_SUBJECT_ECONOMICS_AND_BUSINESS_STUDIES', 'Majandus ja ettevõtlus');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'MATERIAL_SUBJECT_MEDIA_STUDIES', 'Meediaõpetus');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'MATERIAL_SUBJECT_NATIONAL_DEFENCE', 'Riigikaitse');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'MATERIAL_SUBJECT_BASICS_OF_INQUIRY', 'Uurimise alused');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'MATERIAL_SUBJECT_PHILOSOPHY', 'Filosoofia');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'MATERIAL_SUBJECT_LIFELONG_LEARNING_AND_CAREER_PLANNING', 'Elukestev õpe ja karjääriplaneerimine');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'MATERIAL_SUBJECT_ENVIRONMENT_AND_SUSTAINABLE_DEVELOPMENT', 'Keskkond ja säästev areng');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'MATERIAL_SUBJECT_CIVIC_INITIATIVE_AND_ENTREPRENEURSHIP', 'Kodanikualgatus ja ettevõtlikkus');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'MATERIAL_SUBJECT_CULTURAL_IDENTITY', 'Kultuuriline identiteet');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'MATERIAL_SUBJECT_INFORMATION_ENVIRONMENT', 'Informatsioonikeskkond');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'MATERIAL_SUBJECT_TECHNOLOGY_AND_INNOVATION', 'Tehnoloogia ja innovatsioon');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'MATERIAL_SUBJECT_HEALTH_AND_SAFETY', 'Tervis ja ohutus');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'MATERIAL_SUBJECT_VALUES_AND_MORAL', 'Väärtused ja moraal');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'MATERIAL_SUBJECT_CULTURAL_AND_VALUE_COMPETENCE', 'Kultuuri- ja väärtuste pädevus');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'MATERIAL_SUBJECT_SOCIAL_AND_CITIZENSHIP_COMPETENCE', 'Sotsiaal- ja kodakondsuse pädevus');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'MATERIAL_SUBJECT_SELF_MANAGEMENT_COMPETENCE', 'Enesejuhtimise pädevus');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'MATERIAL_SUBJECT_LEARNING_TO_LEARN_COMPETENCE', 'Õpipädevus');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'MATERIAL_SUBJECT_COMMUNICATION_COMPETENCE', 'Suhtluspädevus');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'MATERIAL_SUBJECT_MATHEMATICS_NATURAL_SCIENCES_AND_TECHNOLOGY_COMPETENCE', 'Matemaatika-, loodusteaduste- ja tehnoloogiapädevus');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'MATERIAL_SUBJECT_ENTREPRENEURSHIP_COMPETENCE', 'Ettevõtluspädevus');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'MATERIAL_SUBJECT_DIGITAL_COMPETENCE', 'Infotehnoloogiline pädevus');

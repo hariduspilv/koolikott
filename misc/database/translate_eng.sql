@@ -87,7 +87,55 @@ insert into Translation(translationGroup, translationKey, translation) values (3
 insert into Translation(translationGroup, translationKey, translation) values (3, 'SEARCH_FILTER_BUTTON_RESET', 'Reset');
 
 -- Material Subject translations
-
-
-insert into Translation(translationGroup, translationKey, translation) values (3, 'MATERIAL_SUBJECT_BIOLOGY', 'Biology');
+insert into Translation(translationGroup, translationKey, translation) values (3, 'MATERIAL_SUBJECT_ESTONIAN', 'Estonian');
+insert into Translation(translationGroup, translationKey, translation) values (3, 'MATERIAL_SUBJECT_RUSSIAN', 'Russian');
+insert into Translation(translationGroup, translationKey, translation) values (3, 'MATERIAL_SUBJECT_LITERATURE', 'Literature');
+insert into Translation(translationGroup, translationKey, translation) values (3, 'MATERIAL_SUBJECT_ENGLISH', 'English');
+insert into Translation(translationGroup, translationKey, translation) values (3, 'MATERIAL_SUBJECT_FRENCH', 'French');
+insert into Translation(translationGroup, translationKey, translation) values (3, 'MATERIAL_SUBJECT_GERMAN', 'German');
+insert into Translation(translationGroup, translationKey, translation) values (3, 'MATERIAL_SUBJECT_SWEDISH', 'Swedish');
+insert into Translation(translationGroup, translationKey, translation) values (3, 'MATERIAL_SUBJECT_FINNISH', 'Finnish');
+insert into Translation(translationGroup, translationKey, translation) values (3, 'MATERIAL_SUBJECT_LATIN', 'Latin');
+insert into Translation(translationGroup, translationKey, translation) values (3, 'MATERIAL_SUBJECT_CHINESE', 'Chinese');
+insert into Translation(translationGroup, translationKey, translation) values (3, 'MATERIAL_SUBJECT_JAPANESE', 'Japanese');
+insert into Translation(translationGroup, translationKey, translation) values (3, 'MATERIAL_SUBJECT_OTHER', 'Other');
 insert into Translation(translationGroup, translationKey, translation) values (3, 'MATERIAL_SUBJECT_MATHEMATICS', 'Mathematics');
+insert into Translation(translationGroup, translationKey, translation) values (3, 'MATERIAL_SUBJECT_SCIENCE', 'Science');
+insert into Translation(translationGroup, translationKey, translation) values (3, 'MATERIAL_SUBJECT_BIOLOGY', 'Biology');
+insert into Translation(translationGroup, translationKey, translation) values (3, 'MATERIAL_SUBJECT_GEOGRAPHY', 'Geography');
+insert into Translation(translationGroup, translationKey, translation) values (3, 'MATERIAL_SUBJECT_PHYSICS', 'Physics');
+insert into Translation(translationGroup, translationKey, translation) values (3, 'MATERIAL_SUBJECT_CHEMISTRY', 'Chemistry');
+insert into Translation(translationGroup, translationKey, translation) values (3, 'MATERIAL_SUBJECT_HUMAN_STUDIES', 'Human studies');
+insert into Translation(translationGroup, translationKey, translation) values (3, 'MATERIAL_SUBJECT_HISTORY', 'History');
+insert into Translation(translationGroup, translationKey, translation) values (3, 'MATERIAL_SUBJECT_CIVICS_AND_CITIZENSHIP', 'Civics and citizenship');
+insert into Translation(translationGroup, translationKey, translation) values (3, 'MATERIAL_SUBJECT_ART', 'Art');
+insert into Translation(translationGroup, translationKey, translation) values (3, 'MATERIAL_SUBJECT_MUSIC', 'Music');
+insert into Translation(translationGroup, translationKey, translation) values (3, 'MATERIAL_SUBJECT_TECHNOLOGY', 'Technology');
+insert into Translation(translationGroup, translationKey, translation) values (3, 'MATERIAL_SUBJECT_HANDICRAFT', 'Handicraft');
+insert into Translation(translationGroup, translationKey, translation) values (3, 'MATERIAL_SUBJECT_HOME_ECONOMICS', 'Home economics');
+insert into Translation(translationGroup, translationKey, translation) values (3, 'MATERIAL_SUBJECT_EDUCATIONAL_TECHNOLOGY', 'Educational technology');
+insert into Translation(translationGroup, translationKey, translation) values (3, 'MATERIAL_SUBJECT_PHYSICAL_EDUCATION', 'Physical education');
+insert into Translation(translationGroup, translationKey, translation) values (3, 'MATERIAL_SUBJECT_RELIGIOUS_STUDIES', 'Religious studies');
+insert into Translation(translationGroup, translationKey, translation) values (3, 'MATERIAL_SUBJECT_INFORMATICS', 'Informatics');
+insert into Translation(translationGroup, translationKey, translation) values (3, 'MATERIAL_SUBJECT_CAREER_STUDIES', 'Career studies');
+insert into Translation(translationGroup, translationKey, translation) values (3, 'MATERIAL_SUBJECT_ECONOMICS_AND_BUSINESS_STUDIES', 'Economics and business studies');
+insert into Translation(translationGroup, translationKey, translation) values (3, 'MATERIAL_SUBJECT_MEDIA_STUDIES', 'Media studies');
+insert into Translation(translationGroup, translationKey, translation) values (3, 'MATERIAL_SUBJECT_NATIONAL_DEFENCE', 'National defence');
+insert into Translation(translationGroup, translationKey, translation) values (3, 'MATERIAL_SUBJECT_BASICS_OF_INQUIRY', 'Basics of inquiry');
+insert into Translation(translationGroup, translationKey, translation) values (3, 'MATERIAL_SUBJECT_PHILOSOPHY', 'Philosophy');
+insert into Translation(translationGroup, translationKey, translation) values (3, 'MATERIAL_SUBJECT_LIFELONG_LEARNING_AND_CAREER_PLANNING', 'Lifelong learning and career planning');
+insert into Translation(translationGroup, translationKey, translation) values (3, 'MATERIAL_SUBJECT_ENVIRONMENT_AND_SUSTAINABLE_DEVELOPMENT', 'Environment and sustainable development');
+insert into Translation(translationGroup, translationKey, translation) values (3, 'MATERIAL_SUBJECT_CIVIC_INITIATIVE_AND_ENTREPRENEURSHIP', 'Civic initiative and entrepreneurship');
+insert into Translation(translationGroup, translationKey, translation) values (3, 'MATERIAL_SUBJECT_CULTURAL_IDENTITY', 'Cultural identity');
+insert into Translation(translationGroup, translationKey, translation) values (3, 'MATERIAL_SUBJECT_INFORMATION_ENVIRONMENT', 'Information environment');
+insert into Translation(translationGroup, translationKey, translation) values (3, 'MATERIAL_SUBJECT_TECHNOLOGY_AND_INNOVATION', 'Technology and innovation');
+insert into Translation(translationGroup, translationKey, translation) values (3, 'MATERIAL_SUBJECT_HEALTH_AND_SAFETY', 'Health and safety');
+insert into Translation(translationGroup, translationKey, translation) values (3, 'MATERIAL_SUBJECT_VALUES_AND_MORAL', 'Values and moral');
+insert into Translation(translationGroup, translationKey, translation) values (3, 'MATERIAL_SUBJECT_CULTURAL_AND_VALUE_COMPETENCE', 'Cultural and value competence');
+insert into Translation(translationGroup, translationKey, translation) values (3, 'MATERIAL_SUBJECT_SOCIAL_AND_CITIZENSHIP_COMPETENCE', 'Social and citizenship competence');
+insert into Translation(translationGroup, translationKey, translation) values (3, 'MATERIAL_SUBJECT_SELF_MANAGEMENT_COMPETENCE', 'Self-management competence');
+insert into Translation(translationGroup, translationKey, translation) values (3, 'MATERIAL_SUBJECT_LEARNING_TO_LEARN_COMPETENCE', 'Learning to learn competence');
+insert into Translation(translationGroup, translationKey, translation) values (3, 'MATERIAL_SUBJECT_COMMUNICATION_COMPETENCE', 'Communication competence');
+insert into Translation(translationGroup, translationKey, translation) values (3, 'MATERIAL_SUBJECT_MATHEMATICS_NATURAL_SCIENCES_AND_TECHNOLOGY_COMPETENCE', 'Mathematics, natural sciences and technology competence');
+insert into Translation(translationGroup, translationKey, translation) values (3, 'MATERIAL_SUBJECT_ENTREPRENEURSHIP_COMPETENCE', 'Entrepreneurship competence');
+insert into Translation(translationGroup, translationKey, translation) values (3, 'MATERIAL_SUBJECT_DIGITAL_COMPETENCE', 'Digital competence');
