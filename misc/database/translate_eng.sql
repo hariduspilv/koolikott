@@ -81,6 +81,8 @@ insert into Translation(translationGroup, translationKey, translation) values (3
 insert into Translation(translationGroup, translationKey, translation) values (3, 'SEARCH_FILTER_SUBJECT_PLACEHOLDER', 'Select or search...');
 insert into Translation(translationGroup, translationKey, translation) values (3, 'SEARCH_FILTER_RESOURCE_TYPE_LABEL', 'Type');
 insert into Translation(translationGroup, translationKey, translation) values (3, 'SEARCH_FILTER_RESOURCE_TYPE_PLACEHOLDER', 'Select or search...');
+insert into Translation(translationGroup, translationKey, translation) values (3, 'SEARCH_FILTER_EDUCATIONAL_CONTEXT_LABEL', 'Educational context');
+insert into Translation(translationGroup, translationKey, translation) values (3, 'SEARCH_FILTER_EDUCATIONAL_CONTEXT_PLACEHOLDER', 'Select or search...');
 insert into Translation(translationGroup, translationKey, translation) values (3, 'SEARCH_FILTER_BUTTON_FILTER', 'Filter');
 insert into Translation(translationGroup, translationKey, translation) values (3, 'SEARCH_FILTER_BUTTON_RESET', 'Reset');
 

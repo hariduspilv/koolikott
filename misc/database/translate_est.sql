@@ -81,6 +81,8 @@ insert into Translation(translationGroup, translationKey, translation) values (1
 insert into Translation(translationGroup, translationKey, translation) values (1, 'SEARCH_FILTER_SUBJECT_PLACEHOLDER', 'Vali või otsi...');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'SEARCH_FILTER_RESOURCE_TYPE_LABEL', 'Tüüp');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'SEARCH_FILTER_RESOURCE_TYPE_PLACEHOLDER', 'Vali või otsi...');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'SEARCH_FILTER_EDUCATIONAL_CONTEXT_LABEL', 'Kooliaste');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'SEARCH_FILTER_EDUCATIONAL_CONTEXT_PLACEHOLDER', 'Vali või otsi...');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'SEARCH_FILTER_BUTTON_FILTER', 'Filtreeri');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'SEARCH_FILTER_BUTTON_RESET', 'Tühista');
 
