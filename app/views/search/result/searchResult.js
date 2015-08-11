@@ -237,6 +237,13 @@ define(['app'], function(app)
             $location.url(searchService.getURL());
         }
 
+        $scope.reset = function() {
+           $scope.filters.subject = null;
+           $scope.filters.resourceType = null;
+           $scope.filters.educationalContext = null;
+           $scope.filters.licenseType = null;
+        }
+
     }]);
 
 app.filter('translatableItemFilter', function($filter) {
