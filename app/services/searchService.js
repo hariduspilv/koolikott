@@ -124,9 +124,14 @@ define(['app'], function(app) {
                     'q': this.getQuery(),
                     'page': page
                 };
+
                 if (this.getSubject()) {
                     params.subject = this.getSubject();
                 }
+                if (this.getResourceType()) {
+                    params.resource_type = this.getResourceType();
+                }
+                
                 $location.url("search/result").search(params);
        	    }
 	    };
