@@ -1,8 +1,8 @@
 define(['app'], function(app)
 {
     app.controller('searchResultController', ['$scope', "serverCallService", 'translationService', '$location', 'searchService', '$filter', 
-             function($scope, serverCallService, translationService, $location, searchService, $filter) {
-    	
+       function($scope, serverCallService, translationService, $location, searchService, $filter) {
+
         // Pagination variables
         $scope.paging = [];
         $scope.paging.before = [];
@@ -55,8 +55,12 @@ define(['app'], function(app)
                 params.resource_type = searchService.getResourceType();
             }
 
+            if (searchService.getEducationalContext()) {
+                params.educational_context = searchService.getEducationalContext();
+            }
+            
             serverCallService.makeGet("rest/search", params, getSearchedMaterialsSuccess, getSearchedMaterialsFail);
-    	} else {
+        } else {
             $location.url('/');
         }
         
@@ -119,11 +123,11 @@ define(['app'], function(app)
 
         function addAllPageNumbers() {
              // Add all page numbers
-            addNumbersToArray($scope.paging.before, 1, $scope.paging.thisPage);
-            addNumbersToArray($scope.paging.after, $scope.paging.thisPage + 1, $scope.paging.totalPages + 1);
-        }
+             addNumbersToArray($scope.paging.before, 1, $scope.paging.thisPage);
+             addNumbersToArray($scope.paging.after, $scope.paging.thisPage + 1, $scope.paging.totalPages + 1);
+         }
 
-        function addLastPageNumbers() {
+         function addLastPageNumbers() {
             // Add the last MAX_PAGES amount of page numbers
             addNumbersToArray($scope.paging.after, $scope.paging.thisPage + 1, $scope.paging.totalPages + 1);
             addNumbersToArray($scope.paging.before, $scope.paging.totalPages + 1 - MAX_PAGES, $scope.paging.thisPage);
@@ -161,7 +165,7 @@ define(['app'], function(app)
         }
 
         function getAllSubjectsFail(data, status) { 
-            console.log('Failed to get all subjects. ');
+            console.log('Failed to get all subjects.');
         }
 
         // Get all resourceTypes
@@ -184,7 +188,30 @@ define(['app'], function(app)
         }
 
         function getAllResourceTypesFail(data, status) { 
-            console.log('Failed to get all resource types. ');
+            console.log('Failed to get all resource types.');
+        }
+
+        // Get all educationalContexts
+        serverCallService.makeGet("rest/educationalContext/getAll", {}, getAlleducationalContextsSuccess, getAlleducationalContextsFail);
+
+        function getAlleducationalContextsSuccess(data) {
+            if (isEmpty(data)) {
+                log('No resource types returned.');
+            } else {
+                $scope.educationalContexts = data;
+
+                // Select current educationalContext in filter box
+                for (i = 0; i < $scope.educationalContexts.length; i++) {
+                    if ($scope.educationalContexts[i].name.toLowerCase() == searchService.getEducationalContext().toLowerCase()) {
+                        $scope.filters.educationalContext = $scope.educationalContexts[i];
+                        break;
+                    }
+                }
+            }
+        }
+
+        function getAlleducationalContextsFail() {
+            console.log("Getting educational contexts for filter failed.");
         }
 
         $scope.filter = function() {
@@ -202,19 +229,24 @@ define(['app'], function(app)
                 searchService.setResourceType('');
             }
 
+            if ($scope.filters.educationalContext) {
+                searchService.setEducationalContext($scope.filters.educationalContext.name.toLowerCase());
+            } else {
+                searchService.setEducationalContext('');
+            }
             $location.url(searchService.getURL());
         }
 
     }]);
 
-    app.filter('translatableItemFilter', function($filter) {
-        return function(items, query, translationPrefix) {
-            var out = [];
+app.filter('translatableItemFilter', function($filter) {
+    return function(items, query, translationPrefix) {
+        var out = [];
 
-            if (angular.isArray(items) && query) {
-                var translate = $filter('translate');
+        if (angular.isArray(items) && query) {
+            var translate = $filter('translate');
 
-                items.forEach(function(item) {
+            items.forEach(function(item) {
                     // Get translation
                     var translatedItem = translate(translationPrefix + item.name.toUpperCase());
 
@@ -222,7 +254,7 @@ define(['app'], function(app)
                         out.push(item);
                     }
                 });
-            } else {
+        } else {
                 // Output -> input
                 out = items;
             }
@@ -231,20 +263,28 @@ define(['app'], function(app)
         }
     });
 
-    app.filter('subjectFilter', function($filter) {
-        return function(items, query) {
-            var translationPrefix = 'MATERIAL_SUBJECT_';
-            var translatableItemFilter = $filter('translatableItemFilter');
-            return translatableItemFilter(items, query, translationPrefix);
-        }
-    });
+app.filter('subjectFilter', function($filter) {
+    return function(items, query) {
+        var translationPrefix = 'MATERIAL_SUBJECT_';
+        var translatableItemFilter = $filter('translatableItemFilter');
+        return translatableItemFilter(items, query, translationPrefix);
+    }
+});
 
-    app.filter('resourceTypeFilter', function($filter) {
-        return function(items, query) {
-            var translationPrefix = '';
-            var translatableItemFilter = $filter('translatableItemFilter');
-            return translatableItemFilter(items, query, translationPrefix);
-        }
-    });
+app.filter('resourceTypeFilter', function($filter) {
+    return function(items, query) {
+        var translationPrefix = '';
+        var translatableItemFilter = $filter('translatableItemFilter');
+        return translatableItemFilter(items, query, translationPrefix);
+    }
+});
+
+app.filter('educationalContextFilter', function($filter) {
+    return function(items, query) {
+        var translationPrefix = '';
+        var translatableItemFilter = $filter('translatableItemFilter');
+        return translatableItemFilter(items, query, translationPrefix);
+    }
+});
 
 });
