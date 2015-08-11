@@ -206,7 +206,7 @@ define(['app'], function(app)
                     // Get translation
                     var translatedItem = translate(translationKey + item.name.toUpperCase());
 
-                    if (translatedItem.toLowerCase().indexOf(query) !== -1) {
+                    if (translatedItem.toLowerCase().indexOf(query.toLowerCase()) !== -1) {
                         out.push(item);
                     }
                 });
