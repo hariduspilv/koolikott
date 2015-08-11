@@ -85,8 +85,56 @@ insert into Translation(translationGroup, translationKey, translation) values (2
 insert into Translation(translationGroup, translationKey, translation) values (2, 'SEARCH_FILTER_BUTTON_RESET', 'Сброс');
 
 -- Material Subject translations
-
-
-insert into Translation(translationGroup, translationKey, translation) values (2, 'MATERIAL_SUBJECT_BIOLOGY', 'биология');
-insert into Translation(translationGroup, translationKey, translation) values (2, 'MATERIAL_SUBJECT_MATHEMATICS', 'математический');
-
+insert into Translation(translationGroup, translationKey, translation) values (2, 'MATERIAL_SUBJECT_ESTONIAN', 'Эстонский');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'MATERIAL_SUBJECT_RUSSIAN', 'Русский');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'MATERIAL_SUBJECT_LITERATURE', 'Литература');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'MATERIAL_SUBJECT_ENGLISH', 'Английский');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'MATERIAL_SUBJECT_FRENCH', 'Французский');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'MATERIAL_SUBJECT_GERMAN', 'Немецкий');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'MATERIAL_SUBJECT_SWEDISH', 'Шведский');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'MATERIAL_SUBJECT_FINNISH', 'Финский');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'MATERIAL_SUBJECT_LATIN', 'Латинский');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'MATERIAL_SUBJECT_CHINESE', 'Китайский');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'MATERIAL_SUBJECT_JAPANESE', 'Японский');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'MATERIAL_SUBJECT_OTHER', 'Другое');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'MATERIAL_SUBJECT_MATHEMATICS', 'Математика');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'MATERIAL_SUBJECT_SCIENCE', 'Наука');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'MATERIAL_SUBJECT_BIOLOGY', 'Биология');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'MATERIAL_SUBJECT_GEOGRAPHY', 'География');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'MATERIAL_SUBJECT_PHYSICS', 'Физика');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'MATERIAL_SUBJECT_CHEMISTRY', 'Химия');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'MATERIAL_SUBJECT_HUMAN_STUDIES', 'Исследования человека');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'MATERIAL_SUBJECT_HISTORY', 'История');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'MATERIAL_SUBJECT_CIVICS_AND_CITIZENSHIP', 'Основы гражданственности и гражданства');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'MATERIAL_SUBJECT_ART', 'Искусство');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'MATERIAL_SUBJECT_MUSIC', 'Музыка');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'MATERIAL_SUBJECT_TECHNOLOGY', 'Технология');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'MATERIAL_SUBJECT_HANDICRAFT', 'Кустарные');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'MATERIAL_SUBJECT_HOME_ECONOMICS', 'Домашняя экономика');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'MATERIAL_SUBJECT_EDUCATIONAL_TECHNOLOGY', 'Образовательные технологии');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'MATERIAL_SUBJECT_PHYSICAL_EDUCATION', 'Физкультура');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'MATERIAL_SUBJECT_RELIGIOUS_STUDIES', 'Религиоведение');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'MATERIAL_SUBJECT_INFORMATICS', 'Информатика');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'MATERIAL_SUBJECT_CAREER_STUDIES', 'Исследования карьеры');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'MATERIAL_SUBJECT_ECONOMICS_AND_BUSINESS_STUDIES', 'Экономика и бизнес-исследований');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'MATERIAL_SUBJECT_MEDIA_STUDIES', 'Исследования СМИ');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'MATERIAL_SUBJECT_NATIONAL_DEFENCE', 'Национальная защита');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'MATERIAL_SUBJECT_BASICS_OF_INQUIRY', 'Основы расследования');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'MATERIAL_SUBJECT_PHILOSOPHY', 'Философия');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'MATERIAL_SUBJECT_LIFELONG_LEARNING_AND_CAREER_PLANNING', 'Непрерывное обучение и планирование карьеры');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'MATERIAL_SUBJECT_ENVIRONMENT_AND_SUSTAINABLE_DEVELOPMENT', 'Окружающая среда и устойчивое развитие');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'MATERIAL_SUBJECT_CIVIC_INITIATIVE_AND_ENTREPRENEURSHIP', 'Гражданская инициатива и предпринимательство');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'MATERIAL_SUBJECT_CULTURAL_IDENTITY', 'Культурные особенности');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'MATERIAL_SUBJECT_INFORMATION_ENVIRONMENT', 'Информационная среда');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'MATERIAL_SUBJECT_TECHNOLOGY_AND_INNOVATION', 'Технология и инновации');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'MATERIAL_SUBJECT_HEALTH_AND_SAFETY', 'Здоровье и безопасность');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'MATERIAL_SUBJECT_VALUES_AND_MORAL', 'Ценности и нравственное');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'MATERIAL_SUBJECT_CULTURAL_AND_VALUE_COMPETENCE', 'Культурное и значение компетенции');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'MATERIAL_SUBJECT_SOCIAL_AND_CITIZENSHIP_COMPETENCE', 'Социальная компетентность и гражданство');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'MATERIAL_SUBJECT_SELF_MANAGEMENT_COMPETENCE', 'Компетенция Самоуправление');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'MATERIAL_SUBJECT_LEARNING_TO_LEARN_COMPETENCE', 'Умение учиться компетенции');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'MATERIAL_SUBJECT_COMMUNICATION_COMPETENCE', 'Связь компетенции');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'MATERIAL_SUBJECT_MATHEMATICS_NATURAL_SCIENCES_AND_TECHNOLOGY_COMPETENCE', 'Математика, естественные науки и технологии компетентность');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'MATERIAL_SUBJECT_ENTREPRENEURSHIP_COMPETENCE', 'Предпринимательство компетенции');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'MATERIAL_SUBJECT_DIGITAL_COMPETENCE', 'Цифровой компетенции');
+	
