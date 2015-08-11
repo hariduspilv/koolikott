@@ -80,19 +80,36 @@
 </nav>
 
 <div class="container-fluid">
-      <div class="row">
+    <div class="row">
         <div class="col-xs-7 col-sm-3 col-md-3 sidebar sidebar-left sidebar-animate">
-          <ul class="nav navbar-stacked">
-            <li class="active">
-              <a href="#">Home</a>
-            </li>
-            <li>
-              <a href="#about">About</a>
-            </li>
-            <li>
-              <a href="#contact">Contact</a>
-            </li>
-          </ul>
+            <ul class="nav navbar-stacked">
+                <li class="navbar-link-lang">
+                    <a data-ng-if="selectedLanguage === 'est'" data-ng-click="languageSelectClick()" id="languageSelectClose"><span>ET <i class="fa fa-caret-down"></i></span></a>
+                    <a data-ng-if="selectedLanguage === 'rus'" data-ng-click="languageSelectClick()" id="languageSelectClose"><span>RU <i class="fa fa-caret-down"></i></span></a>
+                    <a data-ng-if="selectedLanguage === 'eng'" data-ng-click="languageSelectClick()" id="languageSelectClose"><span>EN <i class="fa fa-caret-down"></i></span></a>
+                    <ul data-ng-show="showLanguageSelection" data-click-outside="closeLanguageSelection()" data-outside-if-not="languageSelectClose" id="languageSelectOpen" class="navbar-submenu">
+                        <li>
+                            <a data-ng-if="selectedLanguage === 'est'" data-ng-click="setLanguage('est')"><span>ET <i class="fa fa-caret-up"></i></span></a>
+                            <a data-ng-if="selectedLanguage === 'rus'" data-ng-click="setLanguage('rus')"><span>RU <i class="fa fa-caret-up"></i></span></a>
+                            <a data-ng-if="selectedLanguage === 'eng'" data-ng-click="setLanguage('eng')"><span>EN <i class="fa fa-caret-up"></i></span></a>
+                        </li>
+                        <li data-ng-if="selectedLanguage !== 'est'">
+                            <a data-ng-click="setLanguage('est')"><span>ET</span></a>
+                        </li>
+                        <li data-ng-if="selectedLanguage !== 'rus'">
+                            <a data-ng-click="setLanguage('rus')"><span>RU</span></a>
+                        </li>
+                        <li data-ng-if="selectedLanguage !== 'eng'">
+                            <a data-ng-click="setLanguage('eng')"><span>EN</span></a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="navbar-link-login hidden">
+                    <a href="#" class="">
+                        <i class="fa fa-lock"></i> Logi Sisse
+                    </a>
+                </li>
+            </ul>
         </div>
     </div>
 </div>
