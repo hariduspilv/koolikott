@@ -165,7 +165,7 @@ define(['app'], function(app)
         }
 
         function getAllSubjectsFail(data, status) { 
-            console.log('Failed to get all subjects. ');
+            console.log('Failed to get all subjects.');
         }
 
         // Get all resourceTypes
@@ -188,7 +188,7 @@ define(['app'], function(app)
         }
 
         function getAllResourceTypesFail(data, status) { 
-            console.log('Failed to get all resource types. ');
+            console.log('Failed to get all resource types.');
         }
 
         // Get all educationalContexts

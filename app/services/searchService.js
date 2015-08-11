@@ -128,7 +128,6 @@ define(['app'], function(app) {
 
             buildURL : function(query, page, subject, resourceType, educationalContext) {
             	var searchURL = "#/" + searchURLbase + encodeURI(escapeQuery(query)) + "&page=" + page;
-            	console.log(educationalContext);
                 if (subject) {
                     searchURL += subjectURL + subject;
                 }
