@@ -277,9 +277,9 @@ define(['app'], function(app)
 
     app.filter('educationalContextFilter', function($filter) {
         return function(items, query) {
-            var translationKey = '';
-            var genericFilter = $filter('translatableItemFilter');
-            return genericFilter(items, query, translationKey);
+            var translationPrefix = '';
+            var translatableItemFilter = $filter('translatableItemFilter');
+            return translatableItemFilter(items, query, translationPrefix);
         }
     });
 
