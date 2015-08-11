@@ -5,7 +5,9 @@ import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
 import static org.joda.time.LocalDateTime.now;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -29,13 +31,7 @@ import ee.hm.dop.service.RepositoryService;
 public class SynchronizeMaterialsExecutorTest {
 
     @TestSubject
-    private SynchronizeMaterialsExecutor synchronizeMaterialsExecutor = new SynchronizeMaterialsExecutor() {
-
-        @Override
-        public long getInitialDelay() {
-            return 1;
-        }
-    };
+    private SynchronizeMaterialsExecutor synchronizeMaterialsExecutor = new SynchronizeMaterialsExecutorMock();
 
     @Mock
     private RepositoryService repositoryService;
@@ -76,6 +72,10 @@ public class SynchronizeMaterialsExecutorTest {
         }
 
         verify(repositoryService, repository1, repository2);
+
+        SynchronizeMaterialsExecutorMock mockExecutor = (SynchronizeMaterialsExecutorMock) synchronizeMaterialsExecutor;
+        assertTrue(mockExecutor.transactionWasStarted);
+        assertFalse(mockExecutor.transactionStarted);
     }
 
     @Test
@@ -143,5 +143,40 @@ public class SynchronizeMaterialsExecutorTest {
         LocalDateTime firstExecution = now.plusMillis(delay);
 
         assertTrue(Math.abs(firstExecution.toDate().getTime() - expectedExecutionTime.toDate().getTime()) < 100);
+    }
+
+    private class SynchronizeMaterialsExecutorMock extends SynchronizeMaterialsExecutor {
+
+        private boolean transactionStarted;
+        private boolean transactionWasStarted;
+
+        @Override
+        public long getInitialDelay() {
+            return 1;
+        }
+
+        @Override
+        protected RepositoryService newRepositoryService() {
+            return repositoryService;
+        };
+
+        @Override
+        protected void beginTransaction() {
+            if (transactionStarted) {
+                fail("Transaction already started");
+            }
+
+            transactionStarted = true;
+            transactionWasStarted = true;
+        };
+
+        @Override
+        protected void closeTransaction() {
+            if (!transactionStarted) {
+                fail("Transaction not started");
+            }
+
+            transactionStarted = false;
+        };
     }
 }

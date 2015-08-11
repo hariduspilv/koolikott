@@ -13,11 +13,12 @@ import java.util.concurrent.ScheduledFuture;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.inject.Inject;
 import com.google.inject.Singleton;
 
+import ee.hm.dop.guice.GuiceInjector;
 import ee.hm.dop.model.Repository;
 import ee.hm.dop.service.RepositoryService;
+import ee.hm.dop.utils.DbUtils;
 
 @Singleton
 public class SynchronizeMaterialsExecutor {
@@ -28,9 +29,6 @@ public class SynchronizeMaterialsExecutor {
     private static final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
     private static ScheduledFuture<?> synchronizeMaterialHandle;
     private static final int hourOfDayToExecute = 1;
-
-    @Inject
-    private RepositoryService repositoryService;
 
     /**
      * The command will be executed once a day at 1 a.m.
@@ -45,16 +43,24 @@ public class SynchronizeMaterialsExecutor {
 
             @Override
             public void run() {
-                List<Repository> repositories = repositoryService.getAllRepositorys();
+                try {
+                    beginTransaction();
 
-                logger.info(format("Synchronizing %d repositories...", repositories.size()));
+                    RepositoryService repositoryService = newRepositoryService();
+                    List<Repository> repositories = repositoryService.getAllRepositorys();
 
-                for (Repository repository : repositories) {
-                    logger.info(format("synchonizing repository %S:", repository));
-                    repositoryService.synchronize(repository);
+                    logger.info(format("Synchronizing %d repositories...", repositories.size()));
+
+                    for (Repository repository : repositories) {
+                        logger.info(format("synchonizing repository %S:", repository));
+                        repositoryService.synchronize(repository);
+                    }
+
+                    logger.info("Synchronization repository service finished execution.");
+                    closeTransaction();
+                } catch (Exception e) {
+                    logger.error("Unexpected error while synchronizing materials.", e);
                 }
-
-                logger.info("Synchronization repository service finished execution.");
             }
         };
 
@@ -99,5 +105,29 @@ public class SynchronizeMaterialsExecutor {
      */
     void setSynchronizeMaterialHandle(ScheduledFuture<?> synchronizeMaterialHandle) {
         SynchronizeMaterialsExecutor.synchronizeMaterialHandle = synchronizeMaterialHandle;
+    }
+
+    /**
+     * Package access modifier for testing purpose
+     * 
+     */
+    protected RepositoryService newRepositoryService() {
+        return GuiceInjector.getInjector().getInstance(RepositoryService.class);
+    }
+
+    /**
+     * Package access modifier for testing purpose
+     * 
+     */
+    protected void closeTransaction() {
+        DbUtils.closeTransaction();
+    }
+
+    /**
+     * Package access modifier for testing purpose
+     * 
+     */
+    protected void beginTransaction() {
+        DbUtils.getTransaction().begin();
     }
 }
