@@ -292,21 +292,49 @@ app.filter('translatableItemFilter', function($filter) {
             var translate = $filter('translate');
 
             items.forEach(function(item) {
-                    // Get translation
-                    var translatedItem = translate(translationPrefix + item.name.toUpperCase());
+                // Get translation
+                var translatedItem = translate(translationPrefix + item.name.toUpperCase());
 
-                    if (translatedItem.toLowerCase().indexOf(query.toLowerCase()) !== -1) {
-                        out.push(item);
-                    }
-                });
+                if (translatedItem.toLowerCase().indexOf(query.toLowerCase()) !== -1) {
+                    out.push(item);
+                }
+            });
         } else {
-                // Output -> input
-                out = items;
+            out = items;
+        }
+
+        return out;
+    }
+});
+
+app.filter('orderByTranslation', function($filter) {
+    return function(items) {
+
+        if (angular.isArray(items)) {
+            var translate = $filter('translate');
+
+            for (i = 0; i < items.length; i++) {
+                // Get translation
+                var translatedItem = translate('MATERIAL_SUBJECT_' + items[i].name.toUpperCase());
+
+                // Create temporary property
+                items[i].translation = translatedItem.toLowerCase();
             }
 
-            return out;
-        }
-    });
+            // Sort alphabetically
+            var orderByFilter = $filter('orderBy');
+            items = orderByFilter(items, '-translation', true);
+
+            // Remove translation property
+            for (i = 0; i < items.length; i++) {
+                items[i].translation = null;
+            }
+
+        } 
+
+        return items;
+    }
+});
 
 app.filter('subjectFilter', function($filter) {
     return function(items, query) {
