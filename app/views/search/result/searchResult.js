@@ -289,11 +289,9 @@ app.filter('translatableItemFilter', function($filter) {
         var out = [];
 
         if (angular.isArray(items) && query) {
-            var translate = $filter('translate');
-
             items.forEach(function(item) {
                 // Get translation
-                var translatedItem = translate(translationPrefix + item.name.toUpperCase());
+                var translatedItem = $filter('translate')(translationPrefix + item.name.toUpperCase());
 
                 if (translatedItem.toLowerCase().indexOf(query.toLowerCase()) !== -1) {
                     out.push(item);
@@ -311,19 +309,16 @@ app.filter('orderByTranslation', function($filter) {
     return function(items, translationPrefix) {
 
         if (angular.isArray(items)) {
-            var translate = $filter('translate');
-
             for (i = 0; i < items.length; i++) {
                 // Get translation
-                var translatedItem = translate(translationPrefix + items[i].name.toUpperCase());
+                var translatedItem = $filter('translate')(translationPrefix + items[i].name.toUpperCase());
 
                 // Create temporary property
                 items[i].translation = translatedItem.toLowerCase();
             }
 
             // Sort alphabetically
-            var orderByFilter = $filter('orderBy');
-            items = orderByFilter(items, '-translation', true);
+            items = $filter('orderBy')(items, '-translation', true);
 
             // Remove translation property
             for (i = 0; i < items.length; i++) {
@@ -339,13 +334,8 @@ app.filter('orderByTranslation', function($filter) {
 app.filter('subjectFilter', function($filter) {
     return function(items, query) {
         var translationPrefix = 'MATERIAL_SUBJECT_';
-
-        var translatableItemFilter = $filter('translatableItemFilter');
-        items = translatableItemFilter(items, query, translationPrefix);
-
-        var orderByTranslation = $filter('orderByTranslation');
-        items = orderByTranslation(items, translationPrefix);
-
+        items = $filter('translatableItemFilter')(items, query, translationPrefix);
+        items = $filter('orderByTranslation')(items, translationPrefix);
         return items;
     }
 });
@@ -353,13 +343,8 @@ app.filter('subjectFilter', function($filter) {
 app.filter('resourceTypeFilter', function($filter) {
     return function(items, query) {
         var translationPrefix = '';
-
-        var translatableItemFilter = $filter('translatableItemFilter');
-        items = translatableItemFilter(items, query, translationPrefix);
-
-        var orderByTranslation = $filter('orderByTranslation');
-        items = orderByTranslation(items, translationPrefix);
-
+        items = $filter('translatableItemFilter')(items, query, translationPrefix);
+        items = $filter('orderByTranslation')(items, translationPrefix);
         return items;
     }
 });
@@ -367,16 +352,17 @@ app.filter('resourceTypeFilter', function($filter) {
 app.filter('educationalContextFilter', function($filter) {
     return function(items, query) {
         var translationPrefix = '';
-        var translatableItemFilter = $filter('translatableItemFilter');
-        return translatableItemFilter(items, query, translationPrefix);
+        items = $filter('translatableItemFilter')(items, query, translationPrefix);
+        return items;
     }
 });
 
 app.filter('licenseTypeFilter', function($filter) {
     return function(items, query) {
         var translationPrefix = 'LICENSETYPE_';
-        var translatableItemFilter = $filter('translatableItemFilter');
-        return translatableItemFilter(items, query, translationPrefix);
+        items = $filter('translatableItemFilter')(items, query, translationPrefix);
+        items = $filter('orderByTranslation')(items, translationPrefix);
+        return items;
     }
 });
 
