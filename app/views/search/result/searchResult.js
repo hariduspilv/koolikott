@@ -353,8 +353,14 @@ app.filter('subjectFilter', function($filter) {
 app.filter('resourceTypeFilter', function($filter) {
     return function(items, query) {
         var translationPrefix = '';
+
         var translatableItemFilter = $filter('translatableItemFilter');
-        return translatableItemFilter(items, query, translationPrefix);
+        items = translatableItemFilter(items, query, translationPrefix);
+
+        var orderByTranslation = $filter('orderByTranslation');
+        items = orderByTranslation(items, translationPrefix);
+
+        return items;
     }
 });
 
