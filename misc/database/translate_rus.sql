@@ -92,15 +92,16 @@ insert into Translation(translationGroup, translationKey, translation) values (2
 insert into Translation(translationGroup, translationKey, translation) values (2, 'MATERIAL_SUBJECT_ESTONIAN', 'Эстонский');
 insert into Translation(translationGroup, translationKey, translation) values (2, 'MATERIAL_SUBJECT_RUSSIAN', 'Русский');
 insert into Translation(translationGroup, translationKey, translation) values (2, 'MATERIAL_SUBJECT_LITERATURE', 'Литература');
-insert into Translation(translationGroup, translationKey, translation) values (2, 'MATERIAL_SUBJECT_ENGLISH', 'Английский');
-insert into Translation(translationGroup, translationKey, translation) values (2, 'MATERIAL_SUBJECT_FRENCH', 'Французский');
-insert into Translation(translationGroup, translationKey, translation) values (2, 'MATERIAL_SUBJECT_GERMAN', 'Немецкий');
-insert into Translation(translationGroup, translationKey, translation) values (2, 'MATERIAL_SUBJECT_SWEDISH', 'Шведский');
-insert into Translation(translationGroup, translationKey, translation) values (2, 'MATERIAL_SUBJECT_FINNISH', 'Финский');
-insert into Translation(translationGroup, translationKey, translation) values (2, 'MATERIAL_SUBJECT_LATIN', 'Латинский');
-insert into Translation(translationGroup, translationKey, translation) values (2, 'MATERIAL_SUBJECT_CHINESE', 'Китайский');
-insert into Translation(translationGroup, translationKey, translation) values (2, 'MATERIAL_SUBJECT_JAPANESE', 'Японский');
-insert into Translation(translationGroup, translationKey, translation) values (2, 'MATERIAL_SUBJECT_OTHER', 'Другое');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'MATERIAL_SUBJECT_ESTONIAN_AS_SECOND_LANGUAGE', 'Эстонский (второй язык)');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'MATERIAL_SUBJECT_ENGLISH_AS_SECOND_LANGUAGE', 'Английский (второй язык)');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'MATERIAL_SUBJECT_FRENCH_AS_SECOND_LANGUAGE', 'Французский (второй язык)');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'MATERIAL_SUBJECT_GERMAN_AS_SECOND_LANGUAGE', 'Немецкий (второй язык)');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'MATERIAL_SUBJECT_RUSSIAN_AS_SECOND_LANGUAGE', 'Русский  (второй язык)');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'MATERIAL_SUBJECT_SWEDISH_AS_SECOND_LANGUAGE', 'Шведский (второй язык)');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'MATERIAL_SUBJECT_FINNISH_AS_SECOND_LANGUAGE', 'Финский (второй язык)');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'MATERIAL_SUBJECT_LATIN_AS_SECOND_LANGUAGE', 'Латинский (второй язык)');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'MATERIAL_SUBJECT_CHINESE_AS_SECOND_LANGUAGE', 'Китайский (второй язык)');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'MATERIAL_SUBJECT_JAPANESE_AS_SECOND_LANGUAGE', 'Японский (второй язык)');
 insert into Translation(translationGroup, translationKey, translation) values (2, 'MATERIAL_SUBJECT_MATHEMATICS', 'Математика');
 insert into Translation(translationGroup, translationKey, translation) values (2, 'MATERIAL_SUBJECT_SCIENCE', 'Наука');
 insert into Translation(translationGroup, translationKey, translation) values (2, 'MATERIAL_SUBJECT_BIOLOGY', 'Биология');
@@ -141,4 +142,4 @@ insert into Translation(translationGroup, translationKey, translation) values (2
 insert into Translation(translationGroup, translationKey, translation) values (2, 'MATERIAL_SUBJECT_MATHEMATICS_NATURAL_SCIENCES_AND_TECHNOLOGY_COMPETENCE', 'Математика, естественные науки и технологии компетентность');
 insert into Translation(translationGroup, translationKey, translation) values (2, 'MATERIAL_SUBJECT_ENTREPRENEURSHIP_COMPETENCE', 'Предпринимательство компетенции');
 insert into Translation(translationGroup, translationKey, translation) values (2, 'MATERIAL_SUBJECT_DIGITAL_COMPETENCE', 'Цифровой компетенции');
-	
+insert into Translation(translationGroup, translationKey, translation) values (2, 'MATERIAL_SUBJECT_OTHER', 'Другое');
