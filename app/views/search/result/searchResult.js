@@ -200,7 +200,7 @@ define(['app'], function(app)
 
         function getAlleducationalContextsSuccess(data) {
             if (isEmpty(data)) {
-                log('No resource types returned.');
+                log('No educational contexts returned.');
             } else {
                 $scope.educationalContexts = data;
 
