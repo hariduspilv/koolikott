@@ -31,6 +31,140 @@ class SearchEngineServiceMock implements SearchEngineService {
 
     private static final int RESULTS_PER_PAGE = 3;
 
+    static {
+        searchResponses = new HashMap<>();
+
+        addArabicQuery();
+        addBigQuery();
+
+        addQueryWithSubjectFilter();
+        addQueryWithResourceTypeFilter();
+        addQueryWithSubjectAndResourceTypeFilter();
+        addQueryWithEducationalContextFilter();
+        addQueryWithSubjectAndEducationalContextFilter();
+        addQueryWithResourceTypeAndEducationalContextFilter();
+        addQueryWithSubjectAndResourceTypeAndEducationalContextFilters();
+
+        addQueryWithLicenseTypeFilter();
+        addQueryWithSubjectAndLicenseTypeFilter();
+        addQueryWithResourceTypeAndLicenseTypeFilter();
+        addQueryWithSubjectAndResourceTypeAndLicenseTypeFilter();
+        addQueryWithEducationalContextAndLicenseTypeFilter();
+        addQueryWithSubjectAndEducationalContextAndLicenseTypeFilter();
+        addQueryWithResourceTypeAndEducationalContextAndLicenseTypeFilter();
+        addQueryWithAllFilters();
+    }
+
+    private static void addArabicQuery() {
+        String arabicQuery = "المدرسية*";
+        List<Document> arabicSearchResult = createDocumentsWithIdentifiers(3L);
+        searchResponses.put(arabicQuery, arabicSearchResult);
+    }
+
+    private static void addBigQuery() {
+        String bigQuery = "thishasmanyresults*";
+        ArrayList<Document> bigQueryDocuments = new ArrayList<>();
+        for (long i = 0; i < 8; i++) {
+            Document newDocument = new Document();
+            newDocument.setId(Long.toString(i));
+            bigQueryDocuments.add(newDocument);
+        }
+
+        searchResponses.put(bigQuery, bigQueryDocuments);
+    }
+
+    private static void addQueryWithSubjectFilter() {
+        String filteredQuery = "(filteredquery*) AND subject:\"mathematics\"";
+        List<Document> filteredSearchResult = createDocumentsWithIdentifiers(5L);
+        searchResponses.put(filteredQuery, filteredSearchResult);
+    }
+
+    private static void addQueryWithResourceTypeFilter() {
+        String filteredQuery = "(beethoven*) AND resource_type:\"audio\"";
+        List<Document> filteredSearchResult = createDocumentsWithIdentifiers(4L);
+        searchResponses.put(filteredQuery, filteredSearchResult);
+    }
+
+    private static void addQueryWithSubjectAndResourceTypeFilter() {
+        String filteredQuery = "(beethoven*) AND subject:\"mathematics\" AND resource_type:\"audio\"";
+        List<Document> filteredSearchResult = createDocumentsWithIdentifiers(7L);
+        searchResponses.put(filteredQuery, filteredSearchResult);
+    }
+
+    private static void addQueryWithEducationalContextFilter() {
+        String filteredQuery = "(beethoven*) AND educational_context:\"preschool\"";
+        List<Document> filteredSearchResult = createDocumentsWithIdentifiers(6L);
+        searchResponses.put(filteredQuery, filteredSearchResult);
+    }
+
+    private static void addQueryWithSubjectAndEducationalContextFilter() {
+        String filteredQuery = "(beethoven*) AND subject:\"mathematics\" AND educational_context:\"preschool\"";
+        List<Document> filteredSearchResult = createDocumentsWithIdentifiers(8L);
+        searchResponses.put(filteredQuery, filteredSearchResult);
+    }
+
+    private static void addQueryWithResourceTypeAndEducationalContextFilter() {
+        String filteredQuery = "(beethoven*) AND resource_type:\"audio\" AND educational_context:\"preschool\"";
+        List<Document> filteredSearchResult = createDocumentsWithIdentifiers(7L, 8L);
+        searchResponses.put(filteredQuery, filteredSearchResult);
+    }
+
+    private static void addQueryWithSubjectAndResourceTypeAndEducationalContextFilters() {
+        String filteredQuery = "(john*) AND subject:\"mathematics\" AND resource_type:\"audio\" AND educational_context:\"preschool\"";
+        List<Document> filteredSearchResult = createDocumentsWithIdentifiers(2L);
+        searchResponses.put(filteredQuery, filteredSearchResult);
+    }
+
+    // Queries with license type
+
+    private static void addQueryWithLicenseTypeFilter() {
+        String filteredQuery = "(database*) AND license_type:\"cc\"";
+        List<Document> filteredSearchResult = createDocumentsWithIdentifiers(2L, 1L);
+        searchResponses.put(filteredQuery, filteredSearchResult);
+    }
+
+    private static void addQueryWithSubjectAndLicenseTypeFilter() {
+        String filteredQuery = "(filteredquery*) AND subject:\"mathematics\" AND license_type:\"ccby\"";
+        List<Document> filteredSearchResult = createDocumentsWithIdentifiers(2L, 1L, 3L);
+        searchResponses.put(filteredQuery, filteredSearchResult);
+    }
+
+    private static void addQueryWithResourceTypeAndLicenseTypeFilter() {
+        String filteredQuery = "(beethoven*) AND resource_type:\"audio\" AND license_type:\"ccbysa\"";
+        List<Document> filteredSearchResult = createDocumentsWithIdentifiers(2L, 3L);
+        searchResponses.put(filteredQuery, filteredSearchResult);
+    }
+
+    private static void addQueryWithSubjectAndResourceTypeAndLicenseTypeFilter() {
+        String filteredQuery = "(beethoven*) AND subject:\"mathematics\" AND resource_type:\"audio\" AND license_type:\"ccbynd\"";
+        List<Document> filteredSearchResult = createDocumentsWithIdentifiers(2L, 4L);
+        searchResponses.put(filteredQuery, filteredSearchResult);
+    }
+
+    private static void addQueryWithEducationalContextAndLicenseTypeFilter() {
+        String filteredQuery = "(beethoven*) AND educational_context:\"preschool\" AND license_type:\"ccbysa\"";
+        List<Document> filteredSearchResult = createDocumentsWithIdentifiers(2L, 5L);
+        searchResponses.put(filteredQuery, filteredSearchResult);
+    }
+
+    private static void addQueryWithSubjectAndEducationalContextAndLicenseTypeFilter() {
+        String filteredQuery = "(beethoven*) AND subject:\"mathematics\" AND educational_context:\"preschool\" AND license_type:\"ccbync\"";
+        List<Document> filteredSearchResult = createDocumentsWithIdentifiers(2L, 6L);
+        searchResponses.put(filteredQuery, filteredSearchResult);
+    }
+
+    private static void addQueryWithResourceTypeAndEducationalContextAndLicenseTypeFilter() {
+        String filteredQuery = "(beethoven*) AND resource_type:\"audio\" AND educational_context:\"preschool\" AND license_type:\"ccbynd\"";
+        List<Document> filteredSearchResult = createDocumentsWithIdentifiers(2L, 7L);
+        searchResponses.put(filteredQuery, filteredSearchResult);
+    }
+
+    private static void addQueryWithAllFilters() {
+        String filteredQuery = "(john*) AND subject:\"mathematics\" AND resource_type:\"audio\" AND educational_context:\"preschool\" AND license_type:\"other\"";
+        List<Document> filteredSearchResult = createDocumentsWithIdentifiers(2L, 8L);
+        searchResponses.put(filteredQuery, filteredSearchResult);
+    }
+
     @Override
     public SearchResponse search(String query, long start) {
         if (!searchResponses.containsKey(query)) {
@@ -48,7 +182,7 @@ class SearchEngineServiceMock implements SearchEngineService {
         Response response = new Response();
         response.setDocuments(selectedDocuments);
         response.setStart(start);
-        response.setTotalResults(selectedDocuments.size());
+        response.setTotalResults(allDocuments.size());
 
         SearchResponse searchResponse = new SearchResponse();
         searchResponse.setResponse(response);
@@ -56,43 +190,13 @@ class SearchEngineServiceMock implements SearchEngineService {
         return searchResponse;
     }
 
-    static {
-        searchResponses = new HashMap<>();
-
-        addArabicQuery();
-        addBigQuery();
-        addFilteredQuery();
-    }
-
-    private static void addArabicQuery() {
-        String arabicQuery = "المدرسية*";
-        ArrayList<Document> arabicSearchResult = new ArrayList<>();
-        Document newDocument = new Document();
-        newDocument.setId("3");
-        arabicSearchResult.add(newDocument);
-
-        searchResponses.put(arabicQuery, arabicSearchResult);
-    }
-
-    private static void addBigQuery() {
-        String bigQuery = "thishasmanyresults*";
-        ArrayList<Document> bigQueryDocuments = new ArrayList<>();
-        for (long i = 0; i < 8; i++) {
+    private static List<Document> createDocumentsWithIdentifiers(Long... identifiers) {
+        List<Document> documents = new ArrayList<>();
+        for (Long id : identifiers) {
             Document newDocument = new Document();
-            newDocument.setId(Long.toString(i));
-            bigQueryDocuments.add(newDocument);
+            newDocument.setId(Long.toString(id));
+            documents.add(newDocument);
         }
-
-        searchResponses.put(bigQuery, bigQueryDocuments);
-    }
-
-    private static void addFilteredQuery() {
-        String filteredQuery = "(filteredquery*) AND subject:\"mathematics\"";
-        ArrayList<Document> filteredSearchResult = new ArrayList<>();
-        Document newDocument = new Document();
-        newDocument.setId("5");
-        filteredSearchResult.add(newDocument);
-
-        searchResponses.put(filteredQuery, filteredSearchResult);
+        return documents;
     }
 }

@@ -3,10 +3,13 @@ package ee.hm.dop.guice.module;
 import com.google.inject.servlet.ServletModule;
 
 import ee.hm.dop.guice.GuiceInjector.Module;
+import ee.hm.dop.service.EducationalContextService;
 import ee.hm.dop.service.LanguageService;
+import ee.hm.dop.service.LicenseTypeService;
 import ee.hm.dop.service.MaterialService;
 import ee.hm.dop.service.PageService;
 import ee.hm.dop.service.RepositoryService;
+import ee.hm.dop.service.ResourceTypeService;
 import ee.hm.dop.service.SearchService;
 import ee.hm.dop.service.SubjectService;
 import ee.hm.dop.service.TagService;
@@ -25,5 +28,8 @@ public class RestModule extends ServletModule {
         bind(RepositoryService.class);
         bind(TagService.class);
         bind(SubjectService.class);
+        bind(EducationalContextService.class);
+        bind(ResourceTypeService.class);
+        bind(LicenseTypeService.class);
     }
 }

@@ -6,15 +6,12 @@ import ee.hm.dop.guice.GuiceInjector;
 import ee.hm.dop.model.Repository;
 import ee.hm.dop.oaipmh.waramu.MaterialParserWaramu;
 
-/**
- * Created by mart.laus on 14.07.2015.
- */
 public class RepositoryManager {
 
     private static final String WARAMU_PARSER = "waramu";
 
     public MaterialIterator getMaterialsFrom(Repository repository) throws Exception {
-        MaterialIterator materialIterator = GuiceInjector.getInjector().getInstance(MaterialIterator.class);
+        MaterialIterator materialIterator = getMaterialIterator();
 
         MaterialParser materialParser = getParser(repository);
         materialIterator.setParser(materialParser);
@@ -28,12 +25,20 @@ public class RepositoryManager {
 
         switch (repository.getSchema()) {
         case WARAMU_PARSER:
-            parser = GuiceInjector.getInjector().getInstance(MaterialParserWaramu.class);
+            parser = getMaterialParser();
             break;
         default:
             throw new RuntimeException(format("No parser for schema %s or wrong repository URL" , repository.getSchema()));
         }
 
         return parser;
+    }
+
+    protected MaterialIterator getMaterialIterator() {
+        return GuiceInjector.getInjector().getInstance(MaterialIterator.class);
+    }
+
+    protected MaterialParser getMaterialParser() {
+        return GuiceInjector.getInjector().getInstance(MaterialParserWaramu.class);
     }
 }

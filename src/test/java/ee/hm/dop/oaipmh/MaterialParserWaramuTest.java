@@ -46,7 +46,6 @@ public class MaterialParserWaramuTest {
     @Mock
     private TagService tagService;
 
-    private String workingDir = System.getProperty("user.dir");
     private Language language = new Language();
 
     @Test(expected = ee.hm.dop.oaipmh.ParseException.class)
@@ -128,11 +127,12 @@ public class MaterialParserWaramuTest {
     }
 
     @Test
-    public void parseNullTitle() throws ParserConfigurationException, IOException, SAXException {
+    public void parseNullTitle() throws ParserConfigurationException, IOException, SAXException, URISyntaxException {
         String errorMessage = "Error in parsing Material title";
 
-        File fXmlFile = new File(workingDir + File.separator + "src" + File.separator + "test" + File.separator
-                + "resources" + File.separator + "oaipmh" + File.separator + "parseNullTitle.xml");
+        URI resource = getClass().getClassLoader().getResource("oaipmh/parseNullTitle.xml").toURI();
+        File fXmlFile = new File(resource);
+
         DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
         DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
 
@@ -154,11 +154,12 @@ public class MaterialParserWaramuTest {
     }
 
     @Test
-    public void parseNullLanguage() throws ParserConfigurationException, IOException, SAXException {
+    public void parseNullLanguage() throws ParserConfigurationException, IOException, SAXException, URISyntaxException {
         String errorMessage = "Error in parsing Material language";
 
-        File fXmlFile = new File(workingDir + File.separator + "src" + File.separator + "test" + File.separator
-                + "resources" + File.separator + "oaipmh" + File.separator + "parseNullLanguage.xml");
+        URI resource = getClass().getClassLoader().getResource("oaipmh/parseNullLanguage.xml").toURI();
+        File fXmlFile = new File(resource);
+
         DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
         DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
 
@@ -180,11 +181,13 @@ public class MaterialParserWaramuTest {
     }
 
     @Test
-    public void parseNullDescriptions() throws ParserConfigurationException, IOException, SAXException {
+    public void parseNullDescriptions() throws ParserConfigurationException, IOException, SAXException,
+            URISyntaxException {
         String errorMessage = "Error in parsing Material descriptions";
 
-        File fXmlFile = new File(workingDir + File.separator + "src" + File.separator + "test" + File.separator
-                + "resources" + File.separator + "oaipmh" + File.separator + "parseNullDescriptions.xml");
+        URI resource = getClass().getClassLoader().getResource("oaipmh/parseNullDescriptions.xml").toURI();
+        File fXmlFile = new File(resource);
+
         DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
         DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
 
@@ -207,11 +210,12 @@ public class MaterialParserWaramuTest {
     }
 
     @Test
-    public void parseNullSource() throws ParserConfigurationException, IOException, SAXException {
+    public void parseNullSource() throws ParserConfigurationException, IOException, SAXException, URISyntaxException {
         String errorMessage = "Material has more or less than one source, can't be mapped.";
 
-        File fXmlFile = new File(workingDir + File.separator + "src" + File.separator + "test" + File.separator
-                + "resources" + File.separator + "oaipmh" + File.separator + "parseNullSource.xml");
+        URI resource = getClass().getClassLoader().getResource("oaipmh/parseNullSource.xml").toURI();
+        File fXmlFile = new File(resource);
+
         DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
         DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
 
