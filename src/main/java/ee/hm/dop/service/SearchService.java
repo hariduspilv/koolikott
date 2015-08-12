@@ -30,16 +30,18 @@ public class SearchService {
     private MaterialDAO materialDAO;
 
     public SearchResult search(String query, long start) {
-        return search(query, start, null, null, null);
+        return search(query, start, null, null, null, null);
     }
 
-    public SearchResult search(String query, String subject, String resourceType, String educationalContext) {
-        return search(query, 0, subject, resourceType, educationalContext);
+    public SearchResult search(String query, String subject, String resourceType, String educationalContext,
+            String licenseType) {
+        return search(query, 0, subject, resourceType, educationalContext, licenseType);
     }
 
-    public SearchResult search(String query, long start, String subject, String resourceType, String educationalContext) {
+    public SearchResult search(String query, long start, String subject, String resourceType, String educationalContext,
+            String licenseType) {
 
-        String filtersAsQuery = getFiltersAsQuery(subject, resourceType, educationalContext);
+        String filtersAsQuery = getFiltersAsQuery(subject, resourceType, educationalContext, licenseType);
         String tokenizedQueryString = getTokenizedQueryString(query);
 
         String queryString = tokenizedQueryString;
@@ -107,11 +109,13 @@ public class SearchService {
         return sb.toString();
     }
 
-    private String getFiltersAsQuery(String subject, String resourceType, String educationalContext) {
+    private String getFiltersAsQuery(String subject, String resourceType, String educationalContext,
+            String licenseType) {
         Map<String, String> filters = new LinkedHashMap<>();
         filters.put("subject", subject);
         filters.put("resource_type", resourceType);
         filters.put("educational_context", educationalContext);
+        filters.put("license_type", licenseType);
 
         // Convert filters to Solr syntax query
         String filtersAsQuery = "";

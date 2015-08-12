@@ -5,6 +5,7 @@ import com.google.inject.servlet.ServletModule;
 import ee.hm.dop.guice.GuiceInjector.Module;
 import ee.hm.dop.service.EducationalContextService;
 import ee.hm.dop.service.LanguageService;
+import ee.hm.dop.service.LicenseTypeService;
 import ee.hm.dop.service.MaterialService;
 import ee.hm.dop.service.PageService;
 import ee.hm.dop.service.RepositoryService;
@@ -29,5 +30,6 @@ public class RestModule extends ServletModule {
         bind(SubjectService.class);
         bind(EducationalContextService.class);
         bind(ResourceTypeService.class);
+        bind(LicenseTypeService.class);
     }
 }

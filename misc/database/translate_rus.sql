@@ -83,6 +83,8 @@ insert into Translation(translationGroup, translationKey, translation) values (2
 insert into Translation(translationGroup, translationKey, translation) values (2, 'SEARCH_FILTER_RESOURCE_TYPE_PLACEHOLDER', 'Выберите или поиск...');
 insert into Translation(translationGroup, translationKey, translation) values (2, 'SEARCH_FILTER_EDUCATIONAL_CONTEXT_LABEL', 'Обучающие контекст');
 insert into Translation(translationGroup, translationKey, translation) values (2, 'SEARCH_FILTER_EDUCATIONAL_CONTEXT_PLACEHOLDER', 'Выберите или поиск...');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'SEARCH_FILTER_LICENSE_TYPE_LABEL', 'Тип лицензии');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'SEARCH_FILTER_LICENSE_TYPE_PLACEHOLDER', 'Выберите или поиск...');
 insert into Translation(translationGroup, translationKey, translation) values (2, 'SEARCH_FILTER_BUTTON_FILTER', 'Сортировать');
 insert into Translation(translationGroup, translationKey, translation) values (2, 'SEARCH_FILTER_BUTTON_RESET', 'Сброс');
 

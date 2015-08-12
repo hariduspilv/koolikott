@@ -36,22 +36,28 @@ class SearchEngineServiceMock implements SearchEngineService {
 
         addArabicQuery();
         addBigQuery();
+
         addQueryWithSubjectFilter();
         addQueryWithResourceTypeFilter();
         addQueryWithSubjectAndResourceTypeFilter();
         addQueryWithEducationalContextFilter();
         addQueryWithSubjectAndEducationalContextFilter();
         addQueryWithResourceTypeAndEducationalContextFilter();
+        addQueryWithSubjectAndResourceTypeAndEducationalContextFilters();
+
+        addQueryWithLicenseTypeFilter();
+        addQueryWithSubjectAndLicenseTypeFilter();
+        addQueryWithResourceTypeAndLicenseTypeFilter();
+        addQueryWithSubjectAndResourceTypeAndLicenseTypeFilter();
+        addQueryWithEducationalContextAndLicenseTypeFilter();
+        addQueryWithSubjectAndEducationalContextAndLicenseTypeFilter();
+        addQueryWithResourceTypeAndEducationalContextAndLicenseTypeFilter();
         addQueryWithAllFilters();
     }
 
     private static void addArabicQuery() {
         String arabicQuery = "المدرسية*";
-        ArrayList<Document> arabicSearchResult = new ArrayList<>();
-        Document newDocument = new Document();
-        newDocument.setId("3");
-        arabicSearchResult.add(newDocument);
-
+        List<Document> arabicSearchResult = createDocumentsWithIdentifiers(3L);
         searchResponses.put(arabicQuery, arabicSearchResult);
     }
 
@@ -69,74 +75,93 @@ class SearchEngineServiceMock implements SearchEngineService {
 
     private static void addQueryWithSubjectFilter() {
         String filteredQuery = "(filteredquery*) AND subject:\"mathematics\"";
-        ArrayList<Document> filteredSearchResult = new ArrayList<>();
-        Document newDocument = new Document();
-        newDocument.setId("5");
-        filteredSearchResult.add(newDocument);
-
+        List<Document> filteredSearchResult = createDocumentsWithIdentifiers(5L);
         searchResponses.put(filteredQuery, filteredSearchResult);
     }
 
     private static void addQueryWithResourceTypeFilter() {
         String filteredQuery = "(beethoven*) AND resource_type:\"audio\"";
-        ArrayList<Document> filteredSearchResult = new ArrayList<>();
-        Document newDocument = new Document();
-        newDocument.setId("4");
-        filteredSearchResult.add(newDocument);
-
+        List<Document> filteredSearchResult = createDocumentsWithIdentifiers(4L);
         searchResponses.put(filteredQuery, filteredSearchResult);
     }
 
     private static void addQueryWithSubjectAndResourceTypeFilter() {
         String filteredQuery = "(beethoven*) AND subject:\"mathematics\" AND resource_type:\"audio\"";
-        ArrayList<Document> filteredSearchResult = new ArrayList<>();
-        Document newDocument = new Document();
-        newDocument.setId("7");
-        filteredSearchResult.add(newDocument);
-
+        List<Document> filteredSearchResult = createDocumentsWithIdentifiers(7L);
         searchResponses.put(filteredQuery, filteredSearchResult);
     }
 
     private static void addQueryWithEducationalContextFilter() {
         String filteredQuery = "(beethoven*) AND educational_context:\"preschool\"";
-        ArrayList<Document> filteredSearchResult = new ArrayList<>();
-        Document newDocument = new Document();
-        newDocument.setId("6");
-        filteredSearchResult.add(newDocument);
-
+        List<Document> filteredSearchResult = createDocumentsWithIdentifiers(6L);
         searchResponses.put(filteredQuery, filteredSearchResult);
     }
 
     private static void addQueryWithSubjectAndEducationalContextFilter() {
         String filteredQuery = "(beethoven*) AND subject:\"mathematics\" AND educational_context:\"preschool\"";
-        ArrayList<Document> filteredSearchResult = new ArrayList<>();
-        Document newDocument = new Document();
-        newDocument.setId("8");
-        filteredSearchResult.add(newDocument);
-
+        List<Document> filteredSearchResult = createDocumentsWithIdentifiers(8L);
         searchResponses.put(filteredQuery, filteredSearchResult);
     }
 
     private static void addQueryWithResourceTypeAndEducationalContextFilter() {
         String filteredQuery = "(beethoven*) AND resource_type:\"audio\" AND educational_context:\"preschool\"";
-        ArrayList<Document> filteredSearchResult = new ArrayList<>();
-        Document newDocument1 = new Document();
-        newDocument1.setId("7");
-        Document newDocument2 = new Document();
-        newDocument2.setId("8");
-        filteredSearchResult.add(newDocument1);
-        filteredSearchResult.add(newDocument2);
+        List<Document> filteredSearchResult = createDocumentsWithIdentifiers(7L, 8L);
+        searchResponses.put(filteredQuery, filteredSearchResult);
+    }
 
+    private static void addQueryWithSubjectAndResourceTypeAndEducationalContextFilters() {
+        String filteredQuery = "(john*) AND subject:\"mathematics\" AND resource_type:\"audio\" AND educational_context:\"preschool\"";
+        List<Document> filteredSearchResult = createDocumentsWithIdentifiers(2L);
+        searchResponses.put(filteredQuery, filteredSearchResult);
+    }
+
+    // Queries with license type
+
+    private static void addQueryWithLicenseTypeFilter() {
+        String filteredQuery = "(database*) AND license_type:\"cc\"";
+        List<Document> filteredSearchResult = createDocumentsWithIdentifiers(2L, 1L);
+        searchResponses.put(filteredQuery, filteredSearchResult);
+    }
+
+    private static void addQueryWithSubjectAndLicenseTypeFilter() {
+        String filteredQuery = "(filteredquery*) AND subject:\"mathematics\" AND license_type:\"ccby\"";
+        List<Document> filteredSearchResult = createDocumentsWithIdentifiers(2L, 1L, 3L);
+        searchResponses.put(filteredQuery, filteredSearchResult);
+    }
+
+    private static void addQueryWithResourceTypeAndLicenseTypeFilter() {
+        String filteredQuery = "(beethoven*) AND resource_type:\"audio\" AND license_type:\"ccbysa\"";
+        List<Document> filteredSearchResult = createDocumentsWithIdentifiers(2L, 3L);
+        searchResponses.put(filteredQuery, filteredSearchResult);
+    }
+
+    private static void addQueryWithSubjectAndResourceTypeAndLicenseTypeFilter() {
+        String filteredQuery = "(beethoven*) AND subject:\"mathematics\" AND resource_type:\"audio\" AND license_type:\"ccbynd\"";
+        List<Document> filteredSearchResult = createDocumentsWithIdentifiers(2L, 4L);
+        searchResponses.put(filteredQuery, filteredSearchResult);
+    }
+
+    private static void addQueryWithEducationalContextAndLicenseTypeFilter() {
+        String filteredQuery = "(beethoven*) AND educational_context:\"preschool\" AND license_type:\"ccbysa\"";
+        List<Document> filteredSearchResult = createDocumentsWithIdentifiers(2L, 5L);
+        searchResponses.put(filteredQuery, filteredSearchResult);
+    }
+
+    private static void addQueryWithSubjectAndEducationalContextAndLicenseTypeFilter() {
+        String filteredQuery = "(beethoven*) AND subject:\"mathematics\" AND educational_context:\"preschool\" AND license_type:\"ccbync\"";
+        List<Document> filteredSearchResult = createDocumentsWithIdentifiers(2L, 6L);
+        searchResponses.put(filteredQuery, filteredSearchResult);
+    }
+
+    private static void addQueryWithResourceTypeAndEducationalContextAndLicenseTypeFilter() {
+        String filteredQuery = "(beethoven*) AND resource_type:\"audio\" AND educational_context:\"preschool\" AND license_type:\"ccbynd\"";
+        List<Document> filteredSearchResult = createDocumentsWithIdentifiers(2L, 7L);
         searchResponses.put(filteredQuery, filteredSearchResult);
     }
 
     private static void addQueryWithAllFilters() {
-        String filteredQuery = "(john*) AND subject:\"mathematics\" AND resource_type:\"audio\" AND educational_context:\"preschool\"";
-        ArrayList<Document> filteredSearchResult = new ArrayList<>();
-        Document newDocument = new Document();
-        newDocument.setId("2");
-        filteredSearchResult.add(newDocument);
-
+        String filteredQuery = "(john*) AND subject:\"mathematics\" AND resource_type:\"audio\" AND educational_context:\"preschool\" AND license_type:\"other\"";
+        List<Document> filteredSearchResult = createDocumentsWithIdentifiers(2L, 8L);
         searchResponses.put(filteredQuery, filteredSearchResult);
     }
 
@@ -157,11 +182,21 @@ class SearchEngineServiceMock implements SearchEngineService {
         Response response = new Response();
         response.setDocuments(selectedDocuments);
         response.setStart(start);
-        response.setTotalResults(selectedDocuments.size());
+        response.setTotalResults(allDocuments.size());
 
         SearchResponse searchResponse = new SearchResponse();
         searchResponse.setResponse(response);
 
         return searchResponse;
+    }
+
+    private static List<Document> createDocumentsWithIdentifiers(Long... identifiers) {
+        List<Document> documents = new ArrayList<>();
+        for (Long id : identifiers) {
+            Document newDocument = new Document();
+            newDocument.setId(Long.toString(id));
+            documents.add(newDocument);
+        }
+        return documents;
     }
 }
