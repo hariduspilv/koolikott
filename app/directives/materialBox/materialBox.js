@@ -60,10 +60,14 @@ define(['app'], function(app)
 					return res;
 				}
 
-				$scope.isAudio = function(material) {
-					var types = material.resourceTypes;
+				$scope.isOfType = function(type) {
+					var types = $scope.material.resourceTypes;
+					if(types.length == 0) {
+						return false;
+					}
+					
 					for (var i = 0; i < types.length; i++) {
-						if (types[i].name === 'AUDIO') {
+						if (types[i].name === type) {
 							return true;
 						}
 					}
