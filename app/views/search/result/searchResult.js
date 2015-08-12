@@ -308,14 +308,14 @@ app.filter('translatableItemFilter', function($filter) {
 });
 
 app.filter('orderByTranslation', function($filter) {
-    return function(items) {
+    return function(items, translationPrefix) {
 
         if (angular.isArray(items)) {
             var translate = $filter('translate');
 
             for (i = 0; i < items.length; i++) {
                 // Get translation
-                var translatedItem = translate('MATERIAL_SUBJECT_' + items[i].name.toUpperCase());
+                var translatedItem = translate(translationPrefix + items[i].name.toUpperCase());
 
                 // Create temporary property
                 items[i].translation = translatedItem.toLowerCase();
@@ -339,8 +339,14 @@ app.filter('orderByTranslation', function($filter) {
 app.filter('subjectFilter', function($filter) {
     return function(items, query) {
         var translationPrefix = 'MATERIAL_SUBJECT_';
+
         var translatableItemFilter = $filter('translatableItemFilter');
-        return translatableItemFilter(items, query, translationPrefix);
+        items = translatableItemFilter(items, query, translationPrefix);
+
+        var orderByTranslation = $filter('orderByTranslation');
+        items = orderByTranslation(items, translationPrefix);
+
+        return items;
     }
 });
 

@@ -80,7 +80,7 @@
                             <ui-select-match allow-clear="true" placeholder="{{'SEARCH_FILTER_SUBJECT_PLACEHOLDER' | translate}}">
                                 <span data-ng-if="$select.selected.name" data-translate="{{'MATERIAL_SUBJECT_' + $select.selected.name.toUpperCase()}}"></span>
                             </ui-select-match>
-                            <ui-select-choices repeat="subject in subjects | subjectFilter: $select.search | orderByTranslation">
+                            <ui-select-choices repeat="subject in subjects | subjectFilter: $select.search">
                                 <span ng-bind-html="'MATERIAL_SUBJECT_' + subject.name.toUpperCase() | translate | highlight: $select.search"></span>                           
                             </ui-select-choices>
                         </ui-select>
