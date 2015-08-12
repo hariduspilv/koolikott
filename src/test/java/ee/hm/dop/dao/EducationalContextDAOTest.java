@@ -41,17 +41,17 @@ public class EducationalContextDAOTest extends DatabaseTestBase {
         assertNotNull(educationalContext.getName());
 
         if (educationalContext.getId() == 1001) {
-            assertEquals("PRESCHOOL", educationalContext.getName());
+            assertEquals("PRESCHOOLEDUCATION", educationalContext.getName());
         } else if (educationalContext.getId() == 1002) {
-            assertEquals("COMPULSORYEDUCATION", educationalContext.getName());
+            assertEquals("GENERALEDUCATION", educationalContext.getName());
         } else if (educationalContext.getId() == 1003) {
-            assertEquals("VOCATIONALEDUCATION", educationalContext.getName());
-        } else if (educationalContext.getId() == 1004) {
             assertEquals("HIGHEREDUCATION", educationalContext.getName());
+        } else if (educationalContext.getId() == 1004) {
+            assertEquals("VOCATIONALEDUCATION", educationalContext.getName());
         } else if (educationalContext.getId() == 1005) {
             assertEquals("CONTINUINGEDUCATION", educationalContext.getName());
         } else if (educationalContext.getId() == 1006) {
-            assertEquals("PROFESSIONALDEVELOPMENT", educationalContext.getName());
+            assertEquals("TEACHEREDUCATION", educationalContext.getName());
         } else if (educationalContext.getId() == 1007) {
             assertEquals("SPECIALEDUCATION", educationalContext.getName());
         } else if (educationalContext.getId() == 1008) {

@@ -43,12 +43,12 @@ insert into Translation(translationGroup, translationKey, translation) values (3
 insert into Translation(translationGroup, translationKey, translation) values (3, 'VIDEOSHARINGPLATFORM', 'Video sharing platform');
 insert into Translation(translationGroup, translationKey, translation) values (3, 'WEBLOG', 'Weblog');
 insert into Translation(translationGroup, translationKey, translation) values (3, 'WIKI', 'Wiki');
-insert into Translation(translationGroup, translationKey, translation) values (3, 'PRESCHOOL', 'Preschool');
-insert into Translation(translationGroup, translationKey, translation) values (3, 'COMPULSORYEDUCATION', 'Compulsory education');
-insert into Translation(translationGroup, translationKey, translation) values (3, 'VOCATIONALEDUCATION', 'Vocational education');
+insert into Translation(translationGroup, translationKey, translation) values (3, 'PRESCHOOLEDUCATION', 'Preschool education');
+insert into Translation(translationGroup, translationKey, translation) values (3, 'GENERALEDUCATION', 'General education');
 insert into Translation(translationGroup, translationKey, translation) values (3, 'HIGHEREDUCATION', 'Higher education');
+insert into Translation(translationGroup, translationKey, translation) values (3, 'VOCATIONALEDUCATION', 'Vocational education');
 insert into Translation(translationGroup, translationKey, translation) values (3, 'CONTINUINGEDUCATION', 'Continuing education');
-insert into Translation(translationGroup, translationKey, translation) values (3, 'PROFESSIONALDEVELOPMENT', 'Professional development');
+insert into Translation(translationGroup, translationKey, translation) values (3, 'TEACHEREDUCATION', 'Teacher education');
 insert into Translation(translationGroup, translationKey, translation) values (3, 'SPECIALEDUCATION', 'Special education');
 insert into Translation(translationGroup, translationKey, translation) values (3, 'MATERIAL_VIEW_LINK_TO_MATERIAL', 'Open material');
 insert into Translation(translationGroup, translationKey, translation) values (3, 'PUBLISHER', 'Publisher');

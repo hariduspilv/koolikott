@@ -43,12 +43,12 @@ insert into Translation(translationGroup, translationKey, translation) values (1
 insert into Translation(translationGroup, translationKey, translation) values (1, 'VIDEOSHARINGPLATFORM', 'Video jagamise platvorm');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'WEBLOG', 'veebilogi');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'WIKI', 'viki');
-insert into Translation(translationGroup, translationKey, translation) values (1, 'PRESCHOOL', 'Eelkool');
-insert into Translation(translationGroup, translationKey, translation) values (1, 'COMPULSORYEDUCATION', 'Kohustuslik haridus');
-insert into Translation(translationGroup, translationKey, translation) values (1, 'VOCATIONALEDUCATION', 'Kutseharidus');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'PRESCHOOLEDUCATION', 'Eelkooli haridus');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'GENERALEDUCATION', 'Üldine haridus');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'HIGHEREDUCATION', 'Kõrgharidus');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'VOCATIONALEDUCATION', 'Kutseharidus');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'CONTINUINGEDUCATION', 'Täiendõpe');
-insert into Translation(translationGroup, translationKey, translation) values (1, 'PROFESSIONALDEVELOPMENT', 'Erialana areng');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'TEACHEREDUCATION', 'Õpetajaharidus');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'SPECIALEDUCATION', 'Eripdagoogika');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'MATERIAL_VIEW_LINK_TO_MATERIAL', 'Ava õppematerjal');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'PUBLISHER', 'Kirjastaja');

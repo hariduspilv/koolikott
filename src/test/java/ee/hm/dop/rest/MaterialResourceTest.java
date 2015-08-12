@@ -50,7 +50,7 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
     @Test
     public void getMaterialEducationalContext() {
         Material material = getMaterial(1);
-        assertEquals("PRESCHOOL", material.getEducationalContexts().get(0).getName());
+        assertEquals("PRESCHOOLEDUCATION", material.getEducationalContexts().get(0).getName());
     }
 
     @Test
