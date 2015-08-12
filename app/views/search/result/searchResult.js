@@ -58,6 +58,10 @@ define(['app'], function(app)
             if (searchService.getEducationalContext()) {
                 params.educational_context = searchService.getEducationalContext();
             }
+
+            if (searchService.getLicenseType()) {
+                params.license_type = searchService.getLicenseType();
+            }
             
             serverCallService.makeGet("rest/search", params, getSearchedMaterialsSuccess, getSearchedMaterialsFail);
         } else {
@@ -214,6 +218,29 @@ define(['app'], function(app)
             console.log("Getting educational contexts for filter failed.");
         }
 
+        // Get all licenseTypes
+        serverCallService.makeGet("rest/licenseType/getAll", {}, getAllLicenseTypesSuccess, getAllLicenseTypesFail);
+
+        function getAllLicenseTypesSuccess(data) {
+            if (isEmpty(data)) {
+                log('No license types returned.');
+            } else {
+                $scope.licenseTypes = data;
+
+                // Select current licenseType in filter box
+                for (i = 0; i < $scope.licenseTypes.length; i++) {
+                    if ($scope.licenseTypes[i].name.toLowerCase() == searchService.getLicenseType().toLowerCase()) {
+                        $scope.filters.licenseType = $scope.licenseTypes[i];
+                        break;
+                    }
+                }
+            }
+        }
+
+        function getAllLicenseTypesFail(data, status) { 
+            console.log('Failed to get all license types.');
+        }
+
         $scope.filter = function() {
             searchService.setSearch(searchService.getQuery());
 
@@ -234,6 +261,13 @@ define(['app'], function(app)
             } else {
                 searchService.setEducationalContext('');
             }
+
+            if ($scope.filters.licenseType) {
+                searchService.setLicenseType($scope.filters.licenseType.name.toLowerCase());
+            } else {
+                searchService.setLicenseType('');
+            }
+
             $location.url(searchService.getURL());
         }
 
@@ -242,6 +276,7 @@ define(['app'], function(app)
            $scope.filters.resourceType = null;
            $scope.filters.educationalContext = null;
            $scope.filters.licenseType = null;
+           searchService.setLicenseType('');
         }
 
     }]);
@@ -289,6 +324,14 @@ app.filter('resourceTypeFilter', function($filter) {
 app.filter('educationalContextFilter', function($filter) {
     return function(items, query) {
         var translationPrefix = '';
+        var translatableItemFilter = $filter('translatableItemFilter');
+        return translatableItemFilter(items, query, translationPrefix);
+    }
+});
+
+app.filter('licenseTypeFilter', function($filter) {
+    return function(items, query) {
+        var translationPrefix = 'LICENSETYPE_';
         var translatableItemFilter = $filter('translatableItemFilter');
         return translatableItemFilter(items, query, translationPrefix);
     }
