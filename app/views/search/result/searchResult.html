@@ -40,19 +40,19 @@
                                     </span>
                                 </li>
                                 <li data-ng-if="paging.before.length > 0">
-                                    <a href="{{buildURL(searchQuery, paging.thisPage - 1, filters.subject.name, filters.resourceType.name, filters.educationalContext.name)}}" aria-label="{{'SEARCH_RESULT_PREVIOUS' | translate}}" class="btn btn-default">
+                                    <a href="{{buildURL(searchQuery, paging.thisPage - 1, filters.subject.name, filters.resourceType.name, filters.educationalContext.name, filters.licenseType.name)}}" aria-label="{{'SEARCH_RESULT_PREVIOUS' | translate}}" class="btn btn-default">
                                         <span aria-hidden="true"><span data-translate="SEARCH_RESULT_PREVIOUS"></span></span>
                                     </a>
                                 </li>
 
                                 <li data-ng-repeat="page in paging.before">
-                                    <a href="{{buildURL(searchQuery, page, filters.subject.name, filters.resourceType.name, filters.educationalContext.name)}}" data-ng-bind="page"></a>
+                                    <a href="{{buildURL(searchQuery, page, filters.subject.name, filters.resourceType.name, filters.educationalContext.name, filters.licenseType.name)}}" data-ng-bind="page"></a>
                                 </li>
 
                                 <li class="active"><span data-ng-bind="paging.thisPage"></span></li>
 
                                 <li data-ng-repeat="page in paging.after">
-                                    <a href="{{buildURL(searchQuery, page, filters.subject.name, filters.resourceType.name, filters.educationalContext.name)}}" data-ng-bind="page"></a>
+                                    <a href="{{buildURL(searchQuery, page, filters.subject.name, filters.resourceType.name, filters.educationalContext.name, filters.licenseType.name)}}" data-ng-bind="page"></a>
                                 </li>
 
                                 <li data-ng-if="paging.after.length === 0" class="disabled">
@@ -61,7 +61,7 @@
                                     </span>
                                 </li>
                                 <li data-ng-if="paging.after.length > 0">
-                                    <a href="{{buildURL(searchQuery, paging.thisPage + 1, filters.subject.name, filters.resourceType.name, filters.educationalContext.name)}}" aria-label="{{'SEARCH_RESULT_NEXT' | translate}}" class="btn btn-default">
+                                    <a href="{{buildURL(searchQuery, paging.thisPage + 1, filters.subject.name, filters.resourceType.name, filters.educationalContext.name, filters.licenseType.name)}}" aria-label="{{'SEARCH_RESULT_NEXT' | translate}}" class="btn btn-default">
                                         <span aria-hidden="true"><span data-translate="SEARCH_RESULT_NEXT"></span></span>
                                     </a>
                                 </li>
@@ -111,14 +111,15 @@
                     </div>
                     
                     <div class="form-group">
-                        <label for="filter-licence" data-translate="MATERIAL_VIEW_LICENSE_TYPE"></label>
-                        <select class="form-control" id="filter-licence" title="23423423">
-                            <option>Subject</option>
-                            <option>Matemaatika</option>
-                            <option>Bioloogia</option>
-                            <option>Ajalugu</option>
-                            <option>Geograafia</option>
-                        </select>
+                        <label for="filter-license-type" data-translate="SEARCH_FILTER_LICENSE_TYPE_LABEL"></label>
+                        <ui-select data-ng-model="filters.licenseType" theme="bootstrap" data-ng-disabled="disabled" id="filter-license-type">
+                            <ui-select-match allow-clear="true" placeholder="{{'SEARCH_FILTER_LICENSE_TYPE_PLACEHOLDER' | translate}}">
+                                <span data-ng-if="$select.selected.name" data-translate="{{'LICENSETYPE_' + $select.selected.name.toUpperCase()}}"></span>
+                            </ui-select-match>
+                            <ui-select-choices repeat="type in licenseTypes | licenseTypeFilter: $select.search">
+                                <span ng-bind-html="'LICENSETYPE_' + type.name.toUpperCase() | translate | highlight: $select.search"></span>                           
+                            </ui-select-choices>
+                        </ui-select>
                     </div>
 
                     <div class="form-group">

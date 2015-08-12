@@ -5,10 +5,12 @@ define(['app'], function(app) {
         var subjectURL = "&subject=";
         var resourceTypeURL = "&resource_type=";
         var educationalContextURL = "&educational_context=";
+        var licenseTypeURL = "&license_type=";
 		var searchQuery = "";
         var searchSubject = "";
         var searchResourceType = "";
         var searchEducationalContext = "";
+        var searchLicenseType = "";
 
         function escapeQuery(query) {
             //replace backslashes
@@ -49,6 +51,10 @@ define(['app'], function(app) {
                 searchEducationalContext = educationalContext;
             },
 
+            setLicenseType : function(licenseType) {
+                searchLicenseType = licenseType;
+            },
+
 	        getURL : function() {
 	        	var query = escapeQuery(searchQuery);
 
@@ -61,7 +67,10 @@ define(['app'], function(app) {
                 }
                 if (searchEducationalContext) {
                     searchURL += educationalContextURL + searchEducationalContext;
-                }  
+                }
+                if (searchLicenseType) {
+                    searchURL += licenseTypeURL + searchLicenseType;
+                }
 
 	        	return searchURL;
 	        },
@@ -110,6 +119,17 @@ define(['app'], function(app) {
                 return searchEducationalContext;
             },
 
+            getLicenseType : function() {
+                if (searchLicenseType === "") {
+                    var searchObject = $location.search();
+                    if (searchObject.license_type) {
+                        return searchObject.license_type;
+                    }
+                }
+
+                return searchLicenseType;
+            },
+
             getPage : function() {
                 var searchObject = $location.search();
                 if (searchObject.page) {
@@ -126,7 +146,7 @@ define(['app'], function(app) {
                 return 1;
 	        }, 
 
-            buildURL : function(query, page, subject, resourceType, educationalContext) {
+            buildURL : function(query, page, subject, resourceType, educationalContext, licenseType) {
             	var searchURL = "#/" + searchURLbase + encodeURI(escapeQuery(query)) + "&page=" + page;
                 if (subject) {
                     searchURL += subjectURL + subject;
@@ -136,6 +156,9 @@ define(['app'], function(app) {
                 }
                 if (educationalContext) {
                     searchURL += educationalContextURL + educationalContext;
+                }
+                if (licenseType) {
+                    searchURL += licenseTypeURL + licenseType;
                 }
                 return searchURL;
             }, 
@@ -151,6 +174,12 @@ define(['app'], function(app) {
                 }
                 if (this.getResourceType()) {
                     params.resource_type = this.getResourceType();
+                }
+                if (this.getEducationalContext()) {
+                    params.educational_context = this.getEducationalContext();
+                }
+                if (this.getLicenseType()) {
+                    params.license_type = this.getLicenseType();
                 }
                 
                 $location.url("search/result").search(params);

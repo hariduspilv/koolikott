@@ -11,3 +11,9 @@ a:hover {cursor: pointer}
     }
 
 }
+
+.btn, input, .btn-default-focus {outline: none !important;
+    
+    &:focus, &:active {outline: none !important}
+    
+}

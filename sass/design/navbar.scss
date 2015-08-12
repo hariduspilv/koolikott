@@ -6,11 +6,7 @@
         
         .input-group-btn {border-bottom: 1px solid $navbar-light-bg;
             
-            button {padding: 1px 11px; border: 0; background: #FFF; font-size: 14px; color: $navbar-default-bg;
-            
-                &:focus {outline: none}
-            
-            }
+            button {padding: 1px 11px; border: 0; background: #FFF; font-size: 14px; color: $navbar-default-bg}
         }
     }
  
