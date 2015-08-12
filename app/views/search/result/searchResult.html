@@ -104,7 +104,7 @@
                             <ui-select-match allow-clear="true" placeholder="{{'SEARCH_FILTER_EDUCATIONAL_CONTEXT_PLACEHOLDER' | translate}}">
                                 <span data-ng-if="$select.selected.name" data-translate="{{$select.selected.name.toUpperCase()}}"></span>
                             </ui-select-match>
-                            <ui-select-choices repeat="context in educationalContexts | educationalContextFilter: $select.search">
+                            <ui-select-choices repeat="context in educationalContexts | educationalContextFilter: $select.search | orderBy: 'id'">
                                 <span ng-bind-html="context.name.toUpperCase() | translate | highlight: $select.search"></span>                           
                             </ui-select-choices>
                         </ui-select>
