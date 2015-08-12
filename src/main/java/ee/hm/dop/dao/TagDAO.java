@@ -12,7 +12,7 @@ public class TagDAO {
     private EntityManager entityManager;
 
     public Tag findTagByName(String name) {
-        TypedQuery<Tag> findByName = entityManager.createNamedQuery("Tag.findByName", Tag.class);
+        TypedQuery<Tag> findByName = entityManager.createQuery("SELECT t FROM Tag t WHERE t.name = :name", Tag.class);
 
         Tag tag = null;
         try {

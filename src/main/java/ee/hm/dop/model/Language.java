@@ -11,8 +11,6 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
 
 /**
  * This is a mapping for ISO 639. For more information @see <a
@@ -21,8 +19,6 @@ import javax.persistence.NamedQuery;
  * @author Jordan Silva
  */
 @Entity(name = "LanguageTable")
-@NamedQueries({
-        @NamedQuery(name = "Language.findByCode", query = "select l from LanguageTable l join l.codes c where l.code = :code or c = :code") })
 public class Language {
 
     @ElementCollection(fetch = EAGER)
