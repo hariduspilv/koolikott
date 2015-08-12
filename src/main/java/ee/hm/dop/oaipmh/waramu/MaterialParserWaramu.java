@@ -40,8 +40,12 @@ public class MaterialParserWaramu implements MaterialParser {
         try {
             doc.getDocumentElement().normalize();
 
-            Element lom = (Element) doc.getElementsByTagName("lom").item(0);
             material = new Material();
+            Element header = (Element) doc.getElementsByTagName("header").item(0);
+            Element identifier = (Element) header.getElementsByTagName("identifier").item(0);
+            material.setRepositoryIdentifier(identifier.getTextContent().trim());
+
+            Element lom = (Element) doc.getElementsByTagName("lom").item(0);
             setTitle(material, lom);
             setMaterialLanguage(material, lom);
             setDescriptions(material, lom);
@@ -126,7 +130,7 @@ public class MaterialParserWaramu implements MaterialParser {
     private List<LanguageString> getDescriptions(Element lom) throws ParseException {
         NodeList descriptionNode = lom.getElementsByTagName("description");
         Node description = descriptionNode.item(0);
-        try{
+        try {
             return getLanguageStrings(description);
         } catch (Exception e) {
             throw new ParseException("Error in parsing Material descriptions");

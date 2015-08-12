@@ -27,8 +27,8 @@ public class MaterialDAOTest extends DatabaseTestBase {
 
     @Test
     public void find() {
-        long a = 1;
-        Material material = materialDAO.findById(a);
+        long materialId = 1;
+        Material material = materialDAO.findById(materialId);
 
         assertEquals(2, material.getTitles().size());
         assertEquals("Matemaatika õpik üheksandale klassile", material.getTitles().get(0).getText());
@@ -43,6 +43,9 @@ public class MaterialDAOTest extends DatabaseTestBase {
         assertNotNull(material.getSubjects());
         assertEquals(1, material.getSubjects().size());
         assertEquals(new Long(1), material.getSubjects().get(0).getId());
+        assertEquals(new Long(1), material.getRepository().getId());
+        assertEquals("http://repo1.ee", material.getRepository().getBaseURL());
+        assertEquals("isssiiaawej", material.getRepositoryIdentifier());
     }
 
     @Test

@@ -7,6 +7,7 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
@@ -17,6 +18,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToOne;
+import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
 import org.hibernate.annotations.Formula;
@@ -36,6 +38,7 @@ import ee.hm.dop.rest.jackson.map.LanguageSerializer;
 
 @Entity
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id", scope = Material.class)
+@Table(uniqueConstraints = { @UniqueConstraint(columnNames = { "repositoryIdentifier", "repository" }) })
 @NamedQueries({ @NamedQuery(name = "Material.findById", query = "SELECT m FROM Material m WHERE m.id = :id"),
         @NamedQuery(name = "Material.findAllById", query = "SELECT m FROM Material m WHERE m.id in :idList"),
         @NamedQuery(name = "Material.findPictureById", query = "SELECT m.picture FROM Material m WHERE m.id = :id") })
@@ -140,6 +143,18 @@ public class Material {
             inverseJoinColumns = { @JoinColumn(name = "subject") },
             uniqueConstraints = @UniqueConstraint(columnNames = { "material", "subject" }))
     private List<Subject> subjects;
+
+    @JsonIgnore
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "repository")
+    private Repository repository;
+
+    /**
+     * The ID in the repository. Null when created in DOP
+     */
+    @JsonIgnore
+    @Column
+    private String repositoryIdentifier;
 
     public Long getId() {
         return id;
@@ -287,7 +302,24 @@ public class Material {
         return subjects;
     }
 
-    public void setSubject(List<Subject> subjects) {
+    public void setSubjects(List<Subject> subjects) {
         this.subjects = subjects;
     }
+
+    public String getRepositoryIdentifier() {
+        return repositoryIdentifier;
+    }
+
+    public void setRepositoryIdentifier(String repositoryIdentifier) {
+        this.repositoryIdentifier = repositoryIdentifier;
+    }
+
+    public Repository getRepository() {
+        return repository;
+    }
+
+    public void setRepository(Repository repository) {
+        this.repository = repository;
+    }
+
 }

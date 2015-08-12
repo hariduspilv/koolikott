@@ -14,9 +14,6 @@ import org.junit.Test;
 import ee.hm.dop.common.test.DatabaseTestBase;
 import ee.hm.dop.model.Repository;
 
-/**
- * Created by mart.laus on 22.07.2015.
- */
 public class RepositoryDAOTest extends DatabaseTestBase {
 
     @Inject
@@ -27,7 +24,7 @@ public class RepositoryDAOTest extends DatabaseTestBase {
         List<Repository> repositories = repositoryDAO.findAll();
 
         assertEquals(1, repositories.size());
-        assertEquals("http://koolitaja.eenet.ee:57219/Waramu3Web/OAIHandler", repositories.get(0).getBaseURL());
+        assertEquals("http://repo1.ee", repositories.get(0).getBaseURL());
         assertNull(repositories.get(0).getLastSynchronization());
     }
 
@@ -38,7 +35,9 @@ public class RepositoryDAOTest extends DatabaseTestBase {
 
         repository.setLastSynchronization(new DateTime());
         repositoryDAO.updateRepository(repository);
-        assertNotNull(repository.getLastSynchronization());
+
+        Repository repository2 = repositoryDAO.findAll().get(0);
+        assertNotNull(repository2.getLastSynchronization());
 
         repository.setLastSynchronization(null);
         repositoryDAO.updateRepository(repository);

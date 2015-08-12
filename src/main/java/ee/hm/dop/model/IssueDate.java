@@ -24,15 +24,6 @@ public class IssueDate {
     @Column
     private Integer year;
 
-    public IssueDate() {
-    }
-
-    public IssueDate(Short day, Short month, Integer year) {
-        this.day = day;
-        this.month = month;
-        this.year = year;
-    }
-
     public Long getId() {
         return id;
     }
@@ -80,11 +71,7 @@ public class IssueDate {
             return true;
         }
 
-        if (obj == null) {
-            return false;
-        }
-
-        if (getClass() != obj.getClass()) {
+        if (!(obj instanceof IssueDate)) {
             return false;
         }
 

@@ -3,6 +3,7 @@ package ee.hm.dop.rest;
 import static java.lang.String.format;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 
 import java.util.List;
 
@@ -17,6 +18,7 @@ import org.junit.Test;
 
 import ee.hm.dop.common.test.ResourceIntegrationTestBase;
 import ee.hm.dop.model.Author;
+import ee.hm.dop.model.Language;
 import ee.hm.dop.model.LanguageString;
 import ee.hm.dop.model.Material;
 import ee.hm.dop.model.Subject;
@@ -27,6 +29,27 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
     private static final String MATERIAL_INCREASE_VIEW_COUNT_URL = "material/increaseViewCount";
     private static final String GET_MATERIAL_PICTURE_URL = "material/getPicture?materialId=%s";
     private static final String GET_MATERIAL_URL = "material?materialId=%s";
+
+    @Test
+    public void getMaterial() {
+        Material material = getMaterial(1);
+
+        assertEquals(2, material.getTitles().size());
+        assertEquals("Matemaatika õpik üheksandale klassile", material.getTitles().get(0).getText());
+        assertEquals(2, material.getDescriptions().size());
+        assertEquals("Test description in estonian. (Russian available)", material.getDescriptions().get(0).getText());
+        Language language = material.getDescriptions().get(0).getLanguage();
+        assertNotNull(language);
+        assertEquals("est", language.getCode());
+        assertNull(language.getName());
+        assertNull(language.getCodes());
+        assertNull(material.getPicture());
+        assertNotNull(material.getSubjects());
+        assertEquals(1, material.getSubjects().size());
+        assertEquals(new Long(1), material.getSubjects().get(0).getId());
+        assertNull(material.getRepository());
+        assertNull(material.getRepositoryIdentifier());
+    }
 
     @Test
     public void getMaterialDescriptionAndLanguage() {

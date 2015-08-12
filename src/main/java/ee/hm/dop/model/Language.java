@@ -1,6 +1,7 @@
 package ee.hm.dop.model;
 
 import static javax.persistence.FetchType.EAGER;
+import static org.apache.commons.lang3.builder.ToStringStyle.SHORT_PREFIX_STYLE;
 
 import java.util.List;
 
@@ -14,6 +15,10 @@ import javax.persistence.JoinColumn;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 
+import org.apache.commons.lang.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+
 /**
  * This is a mapping for ISO 639. For more information @see <a
  * href="http://en.wikipedia.org/wiki/List_of_ISO_639-1_codes" >wikipedia</a>
@@ -21,21 +26,25 @@ import javax.persistence.NamedQuery;
  * @author Jordan Silva
  */
 @Entity(name = "LanguageTable")
-@NamedQueries({
-        @NamedQuery(name = "Language.findByCode", query = "select l from LanguageTable l join l.codes c where l.code = :code or c = :code") })
+@NamedQueries({ @NamedQuery(
+        name = "Language.findByCode",
+        query = "select l from LanguageTable l join l.codes c where l.code = :code or c = :code") })
 public class Language {
+
+    @Id
+    @GeneratedValue
+    private Long id;
+
+    @Column(unique = true, nullable = false)
+    private String name;
+
+    @Column(unique = true, nullable = false)
+    private String code;
 
     @ElementCollection(fetch = EAGER)
     @CollectionTable(name = "LanguageKeyCodes", joinColumns = @JoinColumn(name = "lang"))
     @Column(name = "code")
     List<String> codes;
-    @Id
-    @GeneratedValue
-    private Long id;
-    @Column(unique = true, nullable = false)
-    private String name;
-    @Column(unique = true, nullable = false)
-    private String code;
 
     public Long getId() {
         return id;
@@ -67,5 +76,30 @@ public class Language {
 
     public void setCodes(List<String> codes) {
         this.codes = codes;
+    }
+
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this, SHORT_PREFIX_STYLE).append(name).build();
+    }
+
+    @Override
+    public int hashCode() {
+        return new HashCodeBuilder(3, 37).append(name).toHashCode();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+
+        if (!(obj instanceof Language)) {
+            return false;
+        }
+
+        Language other = (Language) obj;
+
+        return new EqualsBuilder().append(name, other.name).isEquals();
     }
 }

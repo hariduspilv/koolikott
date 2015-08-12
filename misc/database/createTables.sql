@@ -1,6 +1,5 @@
 -- Drop tables
 
-DROP TABLE IF EXISTS Repository;
 DROP TABLE IF EXISTS Page;
 DROP TABLE IF EXISTS Translation;
 DROP TABLE IF EXISTS TranslationGroup;
@@ -15,6 +14,7 @@ DROP TABLE IF EXISTS Material_Author;
 DROP TABLE IF EXISTS LanguageString;
 DROP TABLE IF EXISTS LanguageKeyCodes;
 DROP TABLE IF EXISTS Material;
+DROP TABLE IF EXISTS Repository;
 DROP TABLE IF EXISTS Subject;
 DROP TABLE IF EXISTS LicenseType;
 DROP TABLE IF EXISTS LanguageTable;
@@ -77,23 +77,38 @@ CREATE TABLE Subject (
   name VARCHAR(255) UNIQUE NOT NULL
 );
 
-CREATE TABLE Material (
-  id BIGINT AUTO_INCREMENT PRIMARY KEY,
-  lang BIGINT,
-  issueDate BIGINT,
-  licenseType BIGINT,
-  source TEXT NOT NULL,
-  added TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  updated TIMESTAMP NULL DEFAULT NULL,
-  views   BIGINT   DEFAULT 0,
-  picture LONGBLOB DEFAULT NULL,
+CREATE TABLE Repository (
+  id                  BIGINT         AUTO_INCREMENT PRIMARY KEY,
+  baseURL             VARCHAR(255) UNIQUE NOT NULL,
+  lastSynchronization TIMESTAMP NULL DEFAULT NULL,
+  schemaName          VARCHAR(255) UNIQUE NOT NULL
+);
 
+CREATE TABLE Material (
+  id                   BIGINT AUTO_INCREMENT PRIMARY KEY,
+  lang                 BIGINT,
+  issueDate            BIGINT,
+  licenseType          BIGINT,
+  source               TEXT NOT NULL,
+  added                TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated              TIMESTAMP NULL DEFAULT NULL,
+  views                BIGINT   DEFAULT 0,
+  picture              LONGBLOB DEFAULT NULL,
+  repositoryIdentifier VARCHAR(255),
+  repository           BIGINT,
+
+  UNIQUE KEY (repositoryIdentifier, repository),
+  
   FOREIGN KEY (lang)
   REFERENCES LanguageTable (id)
         ON DELETE RESTRICT,
 
   FOREIGN KEY (issueDate)
   REFERENCES IssueDate (id)
+        ON DELETE RESTRICT,
+
+  FOREIGN KEY (repository)
+  REFERENCES Repository (id)
         ON DELETE RESTRICT
 );
 
@@ -268,12 +283,5 @@ CREATE TABLE Page (
   FOREIGN KEY (language)
         REFERENCES LanguageTable(id)
         ON DELETE RESTRICT
-);
-
-CREATE TABLE Repository (
-  id                  BIGINT         AUTO_INCREMENT PRIMARY KEY,
-  baseURL             VARCHAR(255) UNIQUE NOT NULL,
-  lastSynchronization TIMESTAMP NULL DEFAULT NULL,
-  schemaName          VARCHAR(255) UNIQUE NOT NULL
 );
 
