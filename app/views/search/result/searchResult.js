@@ -239,8 +239,11 @@ define(['app'], function(app)
 
         $scope.reset = function() {
            $scope.filters.subject = null;
+           searchService.setSubject('');
            $scope.filters.resourceType = null;
+           searchService.setResourceType('');
            $scope.filters.educationalContext = null;
+           searchService.setEducationalContext('');
            $scope.filters.licenseType = null;
         }
 
