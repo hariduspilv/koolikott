@@ -1,7 +1,7 @@
 <dataConfig>
     <dataSource driver="com.mysql.jdbc.Driver" url="jdbc:mysql://127.0.0.1/dop" user="root" password="root" readOnly="true" />
     <document>
-        <entity name="Material" query="select id from Material">
+        <entity name="Material" query="select id, licenseType from Material">
         	<entity name="Material_Title" query="select title as title_id from Material_Title where material='${Material.id}'">
                 <entity name="LanguageString" query="select textValue as title from LanguageString where id = '${Material_Title.title_id}'" />
             </entity>
@@ -17,8 +17,8 @@
                 <entity name="Tag" query="select name as tag from Tag where id = '${Material_Tag.tag_id}'" />
             </entity>
             <entity name="Material_EducationalContext" query="select educationalContext as eC_id from Material_EducationalContext where material='${Material.id}'">
-                <entity name="EducationalContext" query="select educationalContext as eC_textValue from EducationalContext where id = '${Material_EducationalContext.eC_id}'">
-                    <entity name="Translation" query="select translation as educational_context from Translation where translationKey = '${EducationalContext.eC_textValue}'" />
+                <entity name="EducationalContext" query="select educationalContext as educational_context from EducationalContext where id = '${Material_EducationalContext.eC_id}'">
+                    <entity name="Translation" query="select translation as educational_context from Translation where translationKey = '${EducationalContext.educational_context}'" />
                 </entity>
             </entity>
             <entity name="Material_Subject" query="select subject as subject_id from Material_Subject where material='${Material.id}'">
@@ -27,6 +27,7 @@
             <entity name="Material_ResourceType" query="select resourceType as resourceType_id from Material_ResourceType where material='${Material.id}'">
                 <entity name="ResourceType" query="select resourceType as resource_type from ResourceType where id = '${Material_ResourceType.resourceType_id}'" />  
             </entity>
+            <entity name="LicenseType" query="select name as license_type from LicenseType where id='${Material.licenseType}'" />
         </entity>
     </document>
 </dataConfig>

@@ -21,7 +21,9 @@ public class SearchResource {
     @Produces(MediaType.APPLICATION_JSON)
     public SearchResult search(@QueryParam("q") String query, @QueryParam("start") Long start,
             @QueryParam("subject") @DefaultValue(value = "") String subject,
-            @QueryParam("resource_type") @DefaultValue(value = "") String resourceType) {
+            @QueryParam("resource_type") @DefaultValue(value = "") String resourceType,
+            @QueryParam("educational_context") @DefaultValue(value = "") String educationalContext,
+            @QueryParam("license_type") @DefaultValue(value = "") String licenseType) {
         if (subject.isEmpty()) {
             subject = null;
         }
@@ -30,10 +32,18 @@ public class SearchResource {
             resourceType = null;
         }
 
+        if (educationalContext.isEmpty()) {
+            educationalContext = null;
+        }
+        
+        if (licenseType.isEmpty()) {
+            licenseType = null;
+        }
+
         if (start == null) {
-            return searchService.search(query, subject, resourceType);
+            return searchService.search(query, subject, resourceType, educationalContext, licenseType);
         } else {
-            return searchService.search(query, start, subject, resourceType);
+            return searchService.search(query, start, subject, resourceType, educationalContext, licenseType);
         }
     }
 

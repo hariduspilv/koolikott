@@ -5,7 +5,7 @@ import static org.apache.commons.lang3.StringUtils.isBlank;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -30,16 +30,18 @@ public class SearchService {
     private MaterialDAO materialDAO;
 
     public SearchResult search(String query, long start) {
-        return search(query, start, null, null);
+        return search(query, start, null, null, null, null);
     }
 
-    public SearchResult search(String query, String subject, String resourceType) {
-        return search(query, 0, subject, resourceType);
+    public SearchResult search(String query, String subject, String resourceType, String educationalContext,
+            String licenseType) {
+        return search(query, 0, subject, resourceType, educationalContext, licenseType);
     }
 
-    public SearchResult search(String query, long start, String subject, String resourceType) {
+    public SearchResult search(String query, long start, String subject, String resourceType, String educationalContext,
+            String licenseType) {
 
-        String filtersAsQuery = getFiltersAsQuery(subject, resourceType);
+        String filtersAsQuery = getFiltersAsQuery(subject, resourceType, educationalContext, licenseType);
         String tokenizedQueryString = getTokenizedQueryString(query);
 
         String queryString = tokenizedQueryString;
@@ -107,10 +109,13 @@ public class SearchService {
         return sb.toString();
     }
 
-    private String getFiltersAsQuery(String subject, String resourceType) {
-        Map<String, String> filters = new HashMap<>();
+    private String getFiltersAsQuery(String subject, String resourceType, String educationalContext,
+            String licenseType) {
+        Map<String, String> filters = new LinkedHashMap<>();
         filters.put("subject", subject);
         filters.put("resource_type", resourceType);
+        filters.put("educational_context", educationalContext);
+        filters.put("license_type", licenseType);
 
         // Convert filters to Solr syntax query
         String filtersAsQuery = "";

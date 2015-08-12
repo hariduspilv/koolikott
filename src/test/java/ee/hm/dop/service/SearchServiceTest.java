@@ -42,10 +42,12 @@ public class SearchServiceTest {
         String tokenizedQuery = "people*";
         String subject = null;
         String resourceType = null;
+        String educationalContext = null;
+        String licenseType = null;
         long start = 0;
         List<Long> identifiers = Arrays.asList(7L, 1L, 4L);
 
-        testSearch(query, tokenizedQuery, identifiers, start, subject, resourceType);
+        testSearch(query, tokenizedQuery, identifiers, start, subject, resourceType, educationalContext, licenseType);
     }
 
     // To test asynchronous problems that may occur when search returns deleted
@@ -56,10 +58,12 @@ public class SearchServiceTest {
         String tokenizedQuery = "people*";
         String subject = null;
         String resourceType = null;
+        String educationalContext = null;
+        String licenseType = null;
         long start = 0;
         List<Long> identifiers = Arrays.asList(7L, 1L, 4L);
 
-        testSearch(query, tokenizedQuery, identifiers, start, subject, resourceType);
+        testSearch(query, tokenizedQuery, identifiers, start, subject, resourceType, educationalContext, licenseType);
     }
 
     @Test
@@ -142,27 +146,31 @@ public class SearchServiceTest {
     }
 
     @Test
-    public void searchWithSubjectFilter() {
-        String query = "airplane";
-        String subject = "Mathematics";
-        String resourceType = null;
-        String tokenizedQuery = "(airplane*) AND subject:\"mathematics\"";
-        long start = 0;
-        List<Long> identifiers = Arrays.asList(9L, 2L);
-
-        testSearch(query, tokenizedQuery, identifiers, start, subject, resourceType);
-    }
-
-    @Test
     public void searchWithFiltersNull() {
         String query = "airplane";
         String subject = null;
         String resourceType = null;
+        String educationalContext = null;
+        String licenseType = null;
         String tokenizedQuery = "airplane*";
         long start = 0;
         List<Long> identifiers = Arrays.asList(9L, 2L);
 
-        testSearch(query, tokenizedQuery, identifiers, start, subject, resourceType);
+        testSearch(query, tokenizedQuery, identifiers, start, subject, resourceType, educationalContext, licenseType);
+    }
+
+    @Test
+    public void searchWithSubjectFilter() {
+        String query = "airplane";
+        String subject = "Mathematics";
+        String resourceType = null;
+        String educationalContext = null;
+        String licenseType = null;
+        String tokenizedQuery = "(airplane*) AND subject:\"mathematics\"";
+        long start = 0;
+        List<Long> identifiers = Arrays.asList(9L, 2L);
+
+        testSearch(query, tokenizedQuery, identifiers, start, subject, resourceType, educationalContext, licenseType);
     }
 
     @Test
@@ -170,11 +178,183 @@ public class SearchServiceTest {
         String query = "pythagoras";
         String subject = null;
         String resourceType = "TEXTBOOK";
+        String educationalContext = null;
+        String licenseType = null;
         String tokenizedQuery = "(pythagoras*) AND resource_type:\"textbook\"";
         long start = 0;
         List<Long> identifiers = Arrays.asList(15L, 8L);
 
-        testSearch(query, tokenizedQuery, identifiers, start, subject, resourceType);
+        testSearch(query, tokenizedQuery, identifiers, start, subject, resourceType, educationalContext, licenseType);
+    }
+
+    @Test
+    public void searchWithSubjectAndResourceTypeFilter() {
+        String query = "pythagoras";
+        String subject = "Mathematics";
+        String resourceType = "TEXTBOOK";
+        String educationalContext = null;
+        String licenseType = null;
+        String tokenizedQuery = "(pythagoras*) AND subject:\"mathematics\" AND resource_type:\"textbook\"";
+        long start = 0;
+        List<Long> identifiers = Arrays.asList(16L, 9L);
+
+        testSearch(query, tokenizedQuery, identifiers, start, subject, resourceType, educationalContext, licenseType);
+    }
+
+    @Test
+    public void searchWithEducationalContextFilter() {
+        String query = "pythagoras";
+        String subject = null;
+        String resourceType = null;
+        String educationalContext = "PRESCHOOL";
+        String licenseType = null;
+        String tokenizedQuery = "(pythagoras*) AND educational_context:\"preschool\"";
+        long start = 0;
+        List<Long> identifiers = Arrays.asList(5L, 7L);
+
+        testSearch(query, tokenizedQuery, identifiers, start, subject, resourceType, educationalContext, licenseType);
+    }
+
+    @Test
+    public void searchWithSubjectAndEducationalContextFilter() {
+        String query = "pythagoras";
+        String subject = "Mathematics";
+        String resourceType = null;
+        String educationalContext = "PRESCHOOL";
+        String licenseType = null;
+        String tokenizedQuery = "(pythagoras*) AND subject:\"mathematics\" AND educational_context:\"preschool\"";
+        long start = 0;
+        List<Long> identifiers = Arrays.asList(16L, 8L);
+
+        testSearch(query, tokenizedQuery, identifiers, start, subject, resourceType, educationalContext, licenseType);
+    }
+
+    @Test
+    public void searchWithResourceTypeAndEducationalContextFilter() {
+        String query = "pythagoras";
+        String subject = null;
+        String resourceType = "TEXTBOOK";
+        String educationalContext = "PRESCHOOL";
+        String licenseType = null;
+        String tokenizedQuery = "(pythagoras*) AND resource_type:\"textbook\" AND educational_context:\"preschool\"";
+        long start = 0;
+        List<Long> identifiers = Arrays.asList(17L, 8L);
+
+        testSearch(query, tokenizedQuery, identifiers, start, subject, resourceType, educationalContext, licenseType);
+    }
+
+    @Test
+    public void searchWithSubjectAndResourceTypeAndEducationalContextFilters() {
+        String query = "pythagoras";
+        String subject = "Mathematics";
+        String resourceType = "TEXTBOOK";
+        String educationalContext = "PRESCHOOL";
+        String licenseType = null;
+        String tokenizedQuery = "(pythagoras*) AND subject:\"mathematics\" AND resource_type:\"textbook\" AND educational_context:\"preschool\"";
+        long start = 0;
+        List<Long> identifiers = Arrays.asList(15L, 8L);
+
+        testSearch(query, tokenizedQuery, identifiers, start, subject, resourceType, educationalContext, licenseType);
+    }
+
+    // Tests with License Type
+
+    @Test
+    public void searchWithLicenseTypeFilter() {
+        String query = "airplane";
+        String subject = null;
+        String resourceType = null;
+        String educationalContext = null;
+        String licenseType = "CCBY";
+        String tokenizedQuery = "(airplane*) AND license_type:\"ccby\"";
+        long start = 0;
+        List<Long> identifiers = Arrays.asList(9L, 2L);
+
+        testSearch(query, tokenizedQuery, identifiers, start, subject, resourceType, educationalContext, licenseType);
+    }
+
+    @Test
+    public void searchWithSubjectAndLicenseTypeFilter() {
+        String query = "airplane";
+        String subject = "Mathematics";
+        String resourceType = null;
+        String educationalContext = null;
+        String licenseType = "CCSA";
+        String tokenizedQuery = "(airplane*) AND subject:\"mathematics\" AND license_type:\"ccsa\"";
+        long start = 0;
+        List<Long> identifiers = Arrays.asList(9L, 2L);
+
+        testSearch(query, tokenizedQuery, identifiers, start, subject, resourceType, educationalContext, licenseType);
+    }
+
+    @Test
+    public void searchWithResourceTypeAndLicenseTypeFilter() {
+        String query = "pythagoras";
+        String subject = null;
+        String resourceType = "TEXTBOOK";
+        String educationalContext = null;
+        String licenseType = "CCBYSA";
+        String tokenizedQuery = "(pythagoras*) AND resource_type:\"textbook\" AND license_type:\"ccbysa\"";
+        long start = 0;
+        List<Long> identifiers = Arrays.asList(15L, 8L);
+
+        testSearch(query, tokenizedQuery, identifiers, start, subject, resourceType, educationalContext, licenseType);
+    }
+
+    @Test
+    public void searchWithEducationalContextAndLicenseTypeFilter() {
+        String query = "pythagoras";
+        String subject = null;
+        String resourceType = null;
+        String educationalContext = "PRESCHOOL";
+        String licenseType = "CCBYNC";
+        String tokenizedQuery = "(pythagoras*) AND educational_context:\"preschool\" AND license_type:\"ccbync\"";
+        long start = 0;
+        List<Long> identifiers = Arrays.asList(5L, 7L);
+
+        testSearch(query, tokenizedQuery, identifiers, start, subject, resourceType, educationalContext, licenseType);
+    }
+
+    @Test
+    public void searchWithSubjectAndResourceTypeAndLicenseTypeFilter() {
+        String query = "pythagoras";
+        String subject = "Mathematics";
+        String resourceType = "TEXTBOOK";
+        String educationalContext = null;
+        String licenseType = "CC";
+        String tokenizedQuery = "(pythagoras*) AND subject:\"mathematics\" AND resource_type:\"textbook\" AND license_type:\"cc\"";
+        long start = 0;
+        List<Long> identifiers = Arrays.asList(16L, 9L);
+
+        testSearch(query, tokenizedQuery, identifiers, start, subject, resourceType, educationalContext, licenseType);
+    }
+
+    @Test
+    public void searchWithSubjectAndEducationalContextAndLicenseTypeFilter() {
+        String query = "pythagoras";
+        String subject = "Mathematics";
+        String resourceType = null;
+        String educationalContext = "PRESCHOOL";
+        String licenseType = "CCBY";
+        String tokenizedQuery = "(pythagoras*) AND subject:\"mathematics\" AND educational_context:\"preschool\" AND license_type:\"ccby\"";
+        long start = 0;
+        List<Long> identifiers = Arrays.asList(16L, 8L);
+
+        testSearch(query, tokenizedQuery, identifiers, start, subject, resourceType, educationalContext, licenseType);
+    }
+
+    @Test
+    public void searchWithResourceTypeAndEducationalContextAndLicenseTypeFilter() {
+        String query = "pythagoras";
+        String subject = null;
+        String resourceType = "TEXTBOOK";
+        String educationalContext = "PRESCHOOL";
+        String licenseType = "CCBYNCND";
+        String tokenizedQuery = "(pythagoras*) AND resource_type:\"textbook\" AND educational_context:\"preschool\" AND license_type:\"ccbyncnd\"";
+        long start = 0;
+        List<Long> identifiers = Arrays.asList(17L, 8L);
+
+        testSearch(query, tokenizedQuery, identifiers, start, subject, resourceType, educationalContext, licenseType);
     }
 
     @Test
@@ -182,15 +362,17 @@ public class SearchServiceTest {
         String query = "pythagoras";
         String subject = "Mathematics";
         String resourceType = "TEXTBOOK";
-        String tokenizedQuery = "(pythagoras*) AND subject:\"mathematics\" AND resource_type:\"textbook\"";
+        String educationalContext = "PRESCHOOL";
+        String licenseType = "CC";
+        String tokenizedQuery = "(pythagoras*) AND subject:\"mathematics\" AND resource_type:\"textbook\" AND educational_context:\"preschool\" AND license_type:\"cc\"";
         long start = 0;
         List<Long> identifiers = Arrays.asList(15L, 8L);
 
-        testSearch(query, tokenizedQuery, identifiers, start, subject, resourceType);
+        testSearch(query, tokenizedQuery, identifiers, start, subject, resourceType, educationalContext, licenseType);
     }
 
     private void testSearch(String query, String tokenizedQuery, List<Long> identifiers, long start, String subject,
-            String resourceType) {
+            String resourceType, String educationalContext, String licenseType) {
         SearchResponse searchResponse = createSearchResponseWithDocuments(identifiers);
         List<Material> materials = createMaterials(identifiers);
 
@@ -199,7 +381,8 @@ public class SearchServiceTest {
 
         replayAll();
 
-        SearchResult result = searchService.search(query, start, subject, resourceType);
+        SearchResult result = searchService.search(query, start, subject, resourceType, educationalContext,
+                licenseType);
 
         verifyAll();
 
