@@ -41,6 +41,13 @@ define([], function()
                     'views/static/about/about',
                     'views/static/abstractStaticPage'
                 ]
+            },
+            '/myprofile': {
+                templateUrl: 'app/views/myprofile/myprofile.html',
+                controller: 'myprofileController',
+                dependencies: [
+                    'views/myprofile/myprofile'
+                ]
             }
         }
     };

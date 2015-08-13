@@ -1,6 +1,17 @@
 define(['app'], function(app)
 {
     
+    app.directive('showFocus', function($timeout) {
+        return function(scope, element, attrs) {
+          scope.$watch(attrs.showFocus, 
+            function (newValue) { 
+                $timeout(function() {
+                    newValue && elementt[0].focus();
+                });
+            },true);
+        };    
+    });
+    
     app.directive('dopHeader', ['translationService', '$location', 'searchService', '$rootScope',
      function(translationService, $location, searchService, $rootScope) {
         return {
