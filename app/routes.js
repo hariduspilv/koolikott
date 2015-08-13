@@ -42,7 +42,7 @@ define([], function()
                     'views/static/abstractStaticPage'
                 ]
             },
-            '/myprofile': {
+            '/:username': {
                 templateUrl: 'app/views/myprofile/myprofile.html',
                 controller: 'myprofileController',
                 dependencies: [
