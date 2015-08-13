@@ -12,15 +12,10 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.MapKeyColumn;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
 import javax.persistence.OneToOne;
 import javax.persistence.UniqueConstraint;
 
 @Entity
-@NamedQueries({ @NamedQuery(
-        name = "TranslationGroup.findByLanguage",
-        query = "SELECT tg FROM TranslationGroup tg WHERE tg.language = :language") })
 public class TranslationGroup {
 
     @Id

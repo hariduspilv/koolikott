@@ -4,16 +4,11 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
 
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
 @Entity
-@NamedQueries({ @NamedQuery(
-        name = "Tag.findByName",
-        query = "SELECT t FROM Tag t WHERE t.name = :name") })
 public class Tag {
 
     @Id

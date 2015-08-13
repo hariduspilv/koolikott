@@ -13,7 +13,8 @@ public class LanguageDAO {
     private EntityManager entityManager;
 
     public Language findByCode(String code) {
-        TypedQuery<Language> findByCode = entityManager.createNamedQuery("Language.findByCode", Language.class);
+        TypedQuery<Language> findByCode = entityManager.createQuery(
+                "select l from LanguageTable l join l.codes c where l.code = :code or c = :code", Language.class);
 
         Language language = null;
         try {

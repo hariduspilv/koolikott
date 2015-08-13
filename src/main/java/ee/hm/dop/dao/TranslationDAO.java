@@ -14,8 +14,8 @@ public class TranslationDAO {
     private EntityManager entityManager;
 
     public TranslationGroup findTranslationGroupFor(Language language) {
-        TypedQuery<TranslationGroup> findByLanguage = entityManager.createNamedQuery("TranslationGroup.findByLanguage",
-                TranslationGroup.class);
+        TypedQuery<TranslationGroup> findByLanguage = entityManager.createQuery(
+                "SELECT tg FROM TranslationGroup tg WHERE tg.language = :language", TranslationGroup.class);
 
         TranslationGroup translationGroup = null;
         try {

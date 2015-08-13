@@ -6,16 +6,11 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
 @Entity
 @Table(uniqueConstraints = @UniqueConstraint(columnNames = { "name", "language" }) )
-@NamedQueries({ @NamedQuery(
-        name = "Page.findByNameAndLanguage",
-        query = "SELECT p FROM Page p WHERE p.name = :name AND p.language = :language") })
 public class Page {
 
     @Id
