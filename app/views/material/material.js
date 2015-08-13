@@ -28,7 +28,10 @@ define(['app'], function(app)
     	function init() {
             setSourceType();
             
-            serverCallService.makePost("rest/material/increaseViewCount", $scope.material.id, countViewSuccess, countViewFail); 
+            var params = {
+                'id': $scope.material.id
+            };
+            serverCallService.makePost("rest/material/increaseViewCount", params, countViewSuccess, countViewFail); 
     	}
 
         function countViewSuccess(data) { }
