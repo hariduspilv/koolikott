@@ -88,7 +88,7 @@ insert into Translation(translationGroup, translationKey, translation) values (1
 insert into Translation(translationGroup, translationKey, translation) values (1, 'SEARCH_FILTER_BUTTON_FILTER', 'Filtreeri');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'SEARCH_FILTER_BUTTON_RESET', 'Tühista');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'SEARCH_FILTER_TITLE', 'Filter');
-insert into Translation(translationGroup, translationKey, translation) values (1, 'MYPROFILE_PAGE_TITLE_COMPLILATION', 'Minu kogumikud');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'MYPROFILE_PAGE_TITLE_COMPLILATIONS', 'Minu kogumikud');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'MYPROFILE_PAGE_TITLE_MATERIALS', 'Minu materialid');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'MYPROFILE_PAGE_TITLE_MY_DATA', 'Minu andmed');
 

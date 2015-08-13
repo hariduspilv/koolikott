@@ -88,7 +88,7 @@ insert into Translation(translationGroup, translationKey, translation) values (2
 insert into Translation(translationGroup, translationKey, translation) values (2, 'SEARCH_FILTER_BUTTON_FILTER', 'Сортировать');
 insert into Translation(translationGroup, translationKey, translation) values (2, 'SEARCH_FILTER_BUTTON_RESET', 'Сброс');
 insert into Translation(translationGroup, translationKey, translation) values (2, 'SEARCH_FILTER_TITLE', 'Фильтр');
-insert into Translation(translationGroup, translationKey, translation) values (2, 'MYPROFILE_PAGE_TITLE_COMPLILATION', 'Мои сборники');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'MYPROFILE_PAGE_TITLE_COMPLILATIONS', 'Мои сборники');
 insert into Translation(translationGroup, translationKey, translation) values (2, 'MYPROFILE_PAGE_TITLE_MATERIALS', 'Мои материалы');
 insert into Translation(translationGroup, translationKey, translation) values (2, 'MYPROFILE_PAGE_TITLE_MY_DATA', 'Мой данные');
 
