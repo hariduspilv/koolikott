@@ -104,8 +104,8 @@ public class MaterialDAOTest extends DatabaseTestBase {
     @Test
     public void MaterialEducationalContext() {
         Material material1 = materialDAO.findById(1);
-        assertEquals("PRESCHOOL", material1.getEducationalContexts().get(0).getName());
-        assertEquals("COMPULSORYEDUCATION", material1.getEducationalContexts().get(1).getName());
+        assertEquals("PRESCHOOLEDUCATION", material1.getEducationalContexts().get(0).getName());
+        assertEquals("GENERALEDUCATION", material1.getEducationalContexts().get(1).getName());
     }
 
     @Test

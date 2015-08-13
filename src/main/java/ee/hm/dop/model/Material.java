@@ -15,8 +15,6 @@ import javax.persistence.JoinTable;
 import javax.persistence.Lob;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
@@ -39,9 +37,6 @@ import ee.hm.dop.rest.jackson.map.LanguageSerializer;
 @Entity
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id", scope = Material.class)
 @Table(uniqueConstraints = { @UniqueConstraint(columnNames = { "repositoryIdentifier", "repository" }) })
-@NamedQueries({ @NamedQuery(name = "Material.findById", query = "SELECT m FROM Material m WHERE m.id = :id"),
-        @NamedQuery(name = "Material.findAllById", query = "SELECT m FROM Material m WHERE m.id in :idList"),
-        @NamedQuery(name = "Material.findPictureById", query = "SELECT m.picture FROM Material m WHERE m.id = :id") })
 public class Material {
 
     @Id

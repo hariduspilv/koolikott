@@ -73,7 +73,7 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
     @Test
     public void getMaterialEducationalContext() {
         Material material = getMaterial(1);
-        assertEquals("PRESCHOOL", material.getEducationalContexts().get(0).getName());
+        assertEquals("PRESCHOOLEDUCATION", material.getEducationalContexts().get(0).getName());
     }
 
     @Test
@@ -138,8 +138,11 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
 
         Material materialBefore = getMaterial(materialId);
 
+        Material materialWithOnlyId = new Material();
+        materialWithOnlyId.setId(materialId);
+
         Response response = doPost(MATERIAL_INCREASE_VIEW_COUNT_URL,
-                Entity.entity(materialId, MediaType.APPLICATION_JSON));
+                Entity.entity(materialWithOnlyId, MediaType.APPLICATION_JSON_TYPE));
         assertEquals(Status.OK.getStatusCode(), response.getStatus());
 
         Material materialAfter = getMaterial(materialId);
@@ -154,7 +157,11 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
         Response response = doGet(format(GET_MATERIAL_URL, materialId));
         assertEquals(Status.NO_CONTENT.getStatusCode(), response.getStatus());
 
-        response = doPost(MATERIAL_INCREASE_VIEW_COUNT_URL, Entity.entity(materialId, MediaType.APPLICATION_JSON));
+        Material materialWithOnlyId = new Material();
+        materialWithOnlyId.setId(materialId);
+
+        response = doPost(MATERIAL_INCREASE_VIEW_COUNT_URL,
+                Entity.entity(materialWithOnlyId, MediaType.APPLICATION_JSON_TYPE));
         assertEquals(Status.BAD_REQUEST.getStatusCode(), response.getStatus());
 
         response = doGet(format(GET_MATERIAL_URL, materialId));

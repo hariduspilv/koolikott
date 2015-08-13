@@ -149,12 +149,12 @@ insert into Material_ResourceType(material, resourceType) values (7, 1004);
 
 -- EducationalContext
 
-insert into EducationalContext(id, educationalContext) values (1001, 'PRESCHOOL');
-insert into EducationalContext(id, educationalContext) values (1002, 'COMPULSORYEDUCATION');
-insert into EducationalContext(id, educationalContext) values (1003, 'VOCATIONALEDUCATION');
-insert into EducationalContext(id, educationalContext) values (1004, 'HIGHEREDUCATION');
+insert into EducationalContext(id, educationalContext) values (1001, 'PRESCHOOLEDUCATION');
+insert into EducationalContext(id, educationalContext) values (1002, 'GENERALEDUCATION');
+insert into EducationalContext(id, educationalContext) values (1003, 'HIGHEREDUCATION');
+insert into EducationalContext(id, educationalContext) values (1004, 'VOCATIONALEDUCATION');
 insert into EducationalContext(id, educationalContext) values (1005, 'CONTINUINGEDUCATION');
-insert into EducationalContext(id, educationalContext) values (1006, 'PROFESSIONALDEVELOPMENT');
+insert into EducationalContext(id, educationalContext) values (1006, 'TEACHEREDUCATION');
 insert into EducationalContext(id, educationalContext) values (1007, 'SPECIALEDUCATION');
 insert into EducationalContext(id, educationalContext) values (1008, 'OTHER');
 

@@ -12,8 +12,6 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
 
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
@@ -26,9 +24,6 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
  * @author Jordan Silva
  */
 @Entity(name = "LanguageTable")
-@NamedQueries({ @NamedQuery(
-        name = "Language.findByCode",
-        query = "select l from LanguageTable l join l.codes c where l.code = :code or c = :code") })
 public class Language {
 
     @Id

@@ -15,7 +15,8 @@ public class PageDAO {
 
     public Page findByNameAndLanguage(String name, Language language) {
 
-        TypedQuery<Page> findByNameAndLanguage = entityManager.createNamedQuery("Page.findByNameAndLanguage", Page.class);
+        TypedQuery<Page> findByNameAndLanguage = entityManager.createQuery(
+                "SELECT p FROM Page p WHERE p.name = :name AND p.language = :language", Page.class);
 
         Page page = null;
         try {

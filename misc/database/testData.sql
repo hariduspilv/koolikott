@@ -2,12 +2,12 @@
 
 -- EducationalContext
 
-insert into EducationalContext(id, educationalContext) values (1001, 'PRESCHOOL');
-insert into EducationalContext(id, educationalContext) values (1002, 'COMPULSORYEDUCATION');
-insert into EducationalContext(id, educationalContext) values (1003, 'VOCATIONALEDUCATION');
-insert into EducationalContext(id, educationalContext) values (1004, 'HIGHEREDUCATION');
+insert into EducationalContext(id, educationalContext) values (1001, 'PRESCHOOLEDUCATION');
+insert into EducationalContext(id, educationalContext) values (1002, 'GENERALEDUCATION');
+insert into EducationalContext(id, educationalContext) values (1003, 'HIGHEREDUCATION');
+insert into EducationalContext(id, educationalContext) values (1004, 'VOCATIONALEDUCATION');
 insert into EducationalContext(id, educationalContext) values (1005, 'CONTINUINGEDUCATION');
-insert into EducationalContext(id, educationalContext) values (1006, 'PROFESSIONALDEVELOPMENT');
+insert into EducationalContext(id, educationalContext) values (1006, 'TEACHEREDUCATION');
 insert into EducationalContext(id, educationalContext) values (1007, 'SPECIALEDUCATION');
 insert into EducationalContext(id, educationalContext) values (1008, 'OTHER');
 
@@ -41,7 +41,7 @@ insert into Material(id, lang, issueDate, licenseType, source, added, updated, p
 insert into Material(id, lang, issueDate, licenseType, source, added, updated, picture) values(7, 4, 6, 3, 'https://president.ee/en/republic-of-estonia/the-constitution/index.html', '2001-07-16 06:00:01', null, null);
 insert into Material(id, lang, issueDate, licenseType, source, added, updated, picture) values(8, 5, 7, 1, 'http://www.palmeiras.com.br/historia/titulos', '2014-06-01 09:00:01', null, null);
 insert into Material(id, lang, issueDate, licenseType, source, added, updated, views, picture) values(9, null, null, null, 'http://EmptyFileds.test.ee', '2015-06-08 08:00:01', null, '98765432', null);
-insert into Material(id, lang, issueDate, licenseType, source, added, updated, picture) values(10, 1, 2, 3, 'http://automated.test.ee', '2015-06-09 08:00:01', null, null);
+insert into Material(id, lang, issueDate, licenseType, source, added, updated, picture) values(10, 1, 2, 2, 'http://automated.test.ee', '2015-06-09 08:00:01', null, null);
 insert into Material(id, lang, issueDate, licenseType, source, added, updated, picture) values(11, 1, 2, 3, 'http://performance.test.ee', '2015-06-09 08:00:01', null, null);
 
 insert into Material(id, lang, issueDate, licenseType, source, added, updated, picture) values(12, 1, 1, 1, 'https://en.wikipedia.org/wiki/Main_Page', '1999-02-02 06:00:01', '2000-03-01 07:00:01', null);
@@ -72,6 +72,7 @@ insert into Material(id, lang, issueDate, licenseType, source, added, updated, p
 insert into Material(id, lang, issueDate, licenseType, source, added, updated, picture) values(35, 5, 7, 1, 'https://en.wikipedia.org/wiki/Austria', '2002-06-01 09:00:01', null, null);
 insert into Material(id, lang, issueDate, licenseType, source) values(36, 1, 2, 3, 'http://pilditu.audio.ee');
 insert into Material(id, lang, issueDate, licenseType, source) values(37, 1, 2, 3, '<script>alert(1)</script>');
+insert into Material(id, lang, issueDate, licenseType, source) values(3919, 1, 2, 3, 'http://pilditu.audio.ee');
 
 -- Authors
 
@@ -79,7 +80,7 @@ insert into Author(id, name, surname) values(1, 'Isaac', 'John Newton');
 insert into Author(id, name, surname) values(2, 'Karl Simon Ben', 'Tom Oliver Marx');
 insert into Author(id, name, surname) values(3, 'Leonardo', 'Fibonacci');
 insert into Author(id, name, surname) values(4, 'Automated', 'Automated');
-insert into Author(id, name, surname) values(5, '<script>alert(1)', '</script>');
+insert into Author(id, name, surname) values(5, '<script>alert(1)</script>', '<script>alert(1)</script>');
 
 -- Material_Authors
 
@@ -96,6 +97,7 @@ insert into Material_Author(material, author) values(10, 4);
 insert into Material_Author(material, author) values(11, 4);
 insert into Material_Author(material, author) values(36, 4);
 insert into Material_Author(material, author) values(37, 5);
+insert into Material_Author(material, author) values(3919, 4);
 
 -- Material Descriptions
 
@@ -112,6 +114,7 @@ insert into LanguageString(id, lang, textValue) values (21, 1, 'Performance test
 insert into LanguageString(id, lang, textValue) values (39, 3, 'Test description');
 insert into LanguageString(id, lang, textValue) values (50, 1, 'Missing picture replacement test: Audio');
 insert into LanguageString(id, lang, textValue) values (51, 1, '<script>alert(1)</script>');
+insert into LanguageString(id, lang, textValue) values (10833, 1, 'Missing picture replacement test: Video');
 
 insert into Material_Description(description, material) values(1, 1);
 insert into Material_Description(description, material) values(2, 2);
@@ -153,6 +156,7 @@ insert into Material_Description(description, material) values(39, 35);
 
 insert into Material_Description(description, material) values(50, 36);
 insert into Material_Description(description, material) values(51, 37);
+insert into Material_Description(description, material) values(10833, 3919);
 
 -- Material Titles
 
@@ -198,6 +202,7 @@ insert into LanguageString(id, lang, textValue) values (47, 3, 'Austria');
 
 insert into LanguageString(id, lang, textValue) values (48, 1, 'Missing picture replacement test: Audio');
 insert into LanguageString(id, lang, textValue) values (49, 1, '<script>alert(1)</script>');
+insert into LanguageString(id, lang, textValue) values (10834, 1, 'Missing picture replacement test: Video');
 
 insert into Material_Title(title, material) values(9, 1);
 insert into Material_Title(title, material) values(10, 1);
@@ -241,6 +246,7 @@ insert into Material_Title(title, material) values(47, 35);
 
 insert into Material_Title(title, material) values(48, 36);
 insert into Material_Title(title, material) values(49, 37);
+insert into Material_Title(title, material) values(10834, 3919);
 
 -- Material_Subject
 
@@ -253,8 +259,9 @@ insert into Material_Subject(subject, material) values(1, 6);
 insert into Material_Subject(subject, material) values(2, 6);
 insert into Material_Subject(subject, material) values(2, 10);
 insert into Material_Subject(subject, material) values(2, 11);
-insert into Material_Subject(subject, material) values(2, 36);
+insert into Material_Subject(subject, material) values(18, 36);
 insert into Material_Subject(subject, material) values(2, 37);
+insert into Material_Subject(subject, material) values(3, 3919);
 
 -- Material_ResourceType
 
@@ -270,6 +277,7 @@ insert into Material_ResourceType(material, resourceType) values (10, 1);
 insert into Material_ResourceType(material, resourceType) values (11, 1);
 insert into Material_ResourceType(material, resourceType) values (36, 1);
 insert into Material_ResourceType(material, resourceType) values (37, 2);
+insert into Material_ResourceType(material, resourceType) values (3919, 5);
 
 -- Material_EducationalContext
 
@@ -285,6 +293,7 @@ insert into Material_EducationalContext(material, educationalContext) values (10
 insert into Material_EducationalContext(material, educationalContext) values (11, 1001);
 insert into Material_EducationalContext(material, educationalContext) values (36, 1001);
 insert into Material_EducationalContext(material, educationalContext) values (37, 1001);
+insert into Material_EducationalContext(material, educationalContext) values (3919, 1001);
 
 -- Publishers
 
@@ -302,6 +311,7 @@ insert into Material_Publisher(material, publisher) values (10, 2);
 insert into Material_Publisher(material, publisher) values (11, 2);
 insert into Material_Publisher(material, publisher) values (36, 2);
 insert into Material_Publisher(material, publisher) values (37, 3);
+insert into Material_Publisher(material, publisher) values (3919, 3);
 
 -- Material Tags
 
@@ -342,6 +352,8 @@ insert into Material_Tag(tag, material) values(11, 6);
 insert into Material_Tag(tag, material) values(11, 7);
 insert into Material_Tag(tag, material) values(11, 8);
 insert into Material_Tag(tag, material) values(12, 37);
+insert into Material_Tag(tag, material) values(4, 3919);
+insert into Material_Tag(tag, material) values(5, 3919);
 
 -- Pictures
 

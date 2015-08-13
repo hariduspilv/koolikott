@@ -15,7 +15,8 @@ public class MaterialDAO {
     private EntityManager entityManager;
 
     public Material findById(long materialId) {
-        TypedQuery<Material> findByCode = entityManager.createNamedQuery("Material.findById", Material.class);
+        TypedQuery<Material> findByCode = entityManager.createQuery("SELECT m FROM Material m WHERE m.id = :id",
+                Material.class);
 
         Material material = null;
         try {
@@ -36,7 +37,8 @@ public class MaterialDAO {
      * @return a list of materials specified by idList
      */
     public List<Material> findAllById(List<Long> idList) {
-        TypedQuery<Material> findAllByIdList = entityManager.createNamedQuery("Material.findAllById", Material.class);
+        TypedQuery<Material> findAllByIdList = entityManager.createQuery(
+                "SELECT m FROM Material m WHERE m.id in :idList", Material.class);
         return findAllByIdList.setParameter("idList", idList).getResultList();
     }
 
@@ -60,7 +62,8 @@ public class MaterialDAO {
     }
 
     public byte[] findPictureByMaterial(Material material) {
-        TypedQuery<byte[]> findById = entityManager.createNamedQuery("Material.findPictureById", byte[].class);
+        TypedQuery<byte[]> findById = entityManager.createQuery("SELECT m.picture FROM Material m WHERE m.id = :id",
+                byte[].class);
 
         byte[] picture = null;
         try {

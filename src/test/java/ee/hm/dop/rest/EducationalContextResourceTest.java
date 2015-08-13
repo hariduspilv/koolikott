@@ -37,9 +37,9 @@ public class EducationalContextResourceTest extends ResourceIntegrationTestBase 
         assertNotNull(educationalContext.getId());
         assertNotNull(educationalContext.getName());
         if (educationalContext.getId() == 1001) {
-            assertEquals("PRESCHOOL", educationalContext.getName());
+            assertEquals("PRESCHOOLEDUCATION", educationalContext.getName());
         } else if (educationalContext.getId() == 1002) {
-            assertEquals("COMPULSORYEDUCATION", educationalContext.getName());
+            assertEquals("GENERALEDUCATION", educationalContext.getName());
         } else {
             fail("Subject with unexpected id.");
         }

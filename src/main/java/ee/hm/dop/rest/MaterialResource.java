@@ -36,7 +36,9 @@ public class MaterialResource {
 
     @POST
     @Path("increaseViewCount")
-    public Response increaseViewCount(Long materialId) {
+    public Response increaseViewCount(Material materialWithOnlyId) {
+        Long materialId = materialWithOnlyId.getId();
+
         Material material = materialService.get(materialId);
         if (material == null) {
             return Response.status(HttpURLConnection.HTTP_BAD_REQUEST).entity("Invalid material").build();
