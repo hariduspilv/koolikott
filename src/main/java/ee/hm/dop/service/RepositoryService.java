@@ -11,6 +11,7 @@ import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import ee.hm.dop.dao.MaterialDAO;
 import ee.hm.dop.dao.RepositoryDAO;
 import ee.hm.dop.model.Material;
 import ee.hm.dop.model.Repository;
@@ -32,6 +33,9 @@ public class RepositoryService {
 
     @Inject
     private MaterialService materialService;
+
+    @Inject
+    private MaterialDAO materialDAO;
 
     public List<Repository> getAllRepositorys() {
         List<Repository> repositories = repositoryDAO.findAll();
@@ -64,7 +68,7 @@ public class RepositoryService {
         while (materials.hasNext()) {
             try {
                 Material material = materials.next();
-                handleMaterial(material);
+                handleMaterial(repository, material);
                 successfulMaterials++;
             } catch (Exception e) {
                 logger.error("An error occurred while getting the next material from repository.", e);
@@ -92,9 +96,19 @@ public class RepositoryService {
         return count;
     }
 
-    private void handleMaterial(Material material) {
+    private void handleMaterial(Repository repository, Material material) {
         if (material != null) {
-            materialService.createMaterial(material);
+            Material existentMaterial = materialDAO.findByRepositoryAndRepositoryIdentifier(repository,
+                    material.getRepositoryIdentifier());
+
+            material.setRepository(repository);
+
+            if (existentMaterial != null) {
+                material.setId(existentMaterial.getId());
+                materialService.update(material);
+            } else {
+                materialService.createMaterial(material);
+            }
         }
     }
 

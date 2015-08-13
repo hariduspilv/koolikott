@@ -2,14 +2,10 @@ package ee.hm.dop.model;
 
 import static org.apache.commons.lang3.builder.ToStringStyle.SHORT_PREFIX_STYLE;
 
-import java.util.List;
-
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.hibernate.annotations.Type;
@@ -40,9 +36,6 @@ public class Repository {
 
     @Column(nullable = false, name = "schemaName")
     private String schema;
-
-    @OneToMany(cascade = CascadeType.PERSIST, mappedBy = "repository")
-    private List<Material> materials;
 
     public Long getId() {
         return id;
@@ -76,14 +69,6 @@ public class Repository {
 
     public void setSchema(String schema) {
         this.schema = schema;
-    }
-
-    public List<Material> getMaterials() {
-        return materials;
-    }
-
-    public void setMaterials(List<Material> materials) {
-        this.materials = materials;
     }
 
     @Override

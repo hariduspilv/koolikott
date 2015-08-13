@@ -18,6 +18,7 @@ import org.junit.Test;
 import ee.hm.dop.common.test.DatabaseTestBase;
 import ee.hm.dop.model.Language;
 import ee.hm.dop.model.Material;
+import ee.hm.dop.model.Repository;
 import ee.hm.dop.model.Subject;
 
 public class MaterialDAOTest extends DatabaseTestBase {
@@ -29,23 +30,7 @@ public class MaterialDAOTest extends DatabaseTestBase {
     public void find() {
         long materialId = 1;
         Material material = materialDAO.findById(materialId);
-
-        assertEquals(2, material.getTitles().size());
-        assertEquals("Matemaatika õpik üheksandale klassile", material.getTitles().get(0).getText());
-        assertEquals(2, material.getDescriptions().size());
-        assertEquals("Test description in estonian. (Russian available)", material.getDescriptions().get(0).getText());
-        Language language = material.getDescriptions().get(0).getLanguage();
-        assertNotNull(language);
-        assertEquals("est", language.getCode());
-        assertEquals("Estonian", language.getName());
-        assertEquals("et", language.getCodes().get(0));
-        assertNotNull(material.getPicture());
-        assertNotNull(material.getSubjects());
-        assertEquals(1, material.getSubjects().size());
-        assertEquals(new Long(1), material.getSubjects().get(0).getId());
-        assertEquals(new Long(1), material.getRepository().getId());
-        assertEquals("http://repo1.ee", material.getRepository().getBaseURL());
-        assertEquals("isssiiaawej", material.getRepositoryIdentifier());
+        assertMaterial1(material);
     }
 
     @Test
@@ -67,10 +52,7 @@ public class MaterialDAOTest extends DatabaseTestBase {
     @Test
     public void AuthorAndDesc() {
         Material material = materialDAO.findById(1);
-        assertEquals(1, material.getAuthors().size());
-        assertEquals("Isaac", material.getAuthors().get(0).getName());
-        assertEquals("John Newton", material.getAuthors().get(0).getSurname());
-        assertEquals("Test description in estonian. (Russian available)", material.getDescriptions().get(0).getText());
+        assertMaterial1(material);
     }
 
     @Test
@@ -284,5 +266,59 @@ public class MaterialDAOTest extends DatabaseTestBase {
         List<Subject> subjects = material.getSubjects();
         assertNotNull(subjects);
         assertEquals(0, subjects.size());
+    }
+
+    @Test
+    public void findByRepositoryAndrepositoryIdentifier() {
+        Repository repository = new Repository();
+        repository.setId(1l);
+
+        Material material = materialDAO.findByRepositoryAndRepositoryIdentifier(repository, "isssiiaawej");
+        assertMaterial1(material);
+    }
+
+    @Test
+    public void findByRepositoryAndrepositoryIdentifierWhenRepositoryDoesNotExists() {
+        Repository repository = new Repository();
+        repository.setId(10l);
+
+        Material material = materialDAO.findByRepositoryAndRepositoryIdentifier(repository, "isssiiaawej");
+        assertNull(material);
+    }
+
+    @Test
+    public void findByRepositoryAndrepositoryIdentifierWhenRepositoryIdentifierDoesNotExist() {
+        Repository repository = new Repository();
+        repository.setId(1l);
+
+        Material material = materialDAO.findByRepositoryAndRepositoryIdentifier(repository, "SomeRandomIdenetifier");
+        assertNull(material);
+    }
+
+    @Test
+    public void findByRepositoryAndrepositoryIdentifierNullRepositoryIdAndNullRepositoryIdentifier() {
+        Repository repository = new Repository();
+
+        Material material = materialDAO.findByRepositoryAndRepositoryIdentifier(repository, null);
+        assertNull(material);
+    }
+
+    private void assertMaterial1(Material material) {
+        assertEquals(2, material.getTitles().size());
+        assertEquals("Matemaatika õpik üheksandale klassile", material.getTitles().get(0).getText());
+        assertEquals(2, material.getDescriptions().size());
+        assertEquals("Test description in estonian. (Russian available)", material.getDescriptions().get(0).getText());
+        Language language = material.getDescriptions().get(0).getLanguage();
+        assertNotNull(language);
+        assertEquals("est", language.getCode());
+        assertEquals("Estonian", language.getName());
+        assertEquals("et", language.getCodes().get(0));
+        assertNotNull(material.getPicture());
+        assertNotNull(material.getSubjects());
+        assertEquals(1, material.getSubjects().size());
+        assertEquals(new Long(1), material.getSubjects().get(0).getId());
+        assertEquals(new Long(1), material.getRepository().getId());
+        assertEquals("http://repo1.ee", material.getRepository().getBaseURL());
+        assertEquals("isssiiaawej", material.getRepositoryIdentifier());
     }
 }

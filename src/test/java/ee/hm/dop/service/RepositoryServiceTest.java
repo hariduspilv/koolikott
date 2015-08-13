@@ -1,5 +1,6 @@
 package ee.hm.dop.service;
 
+import static org.easymock.EasyMock.cmp;
 import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.replay;
@@ -10,7 +11,6 @@ import static org.junit.Assert.assertSame;
 
 import java.util.List;
 
-import org.easymock.EasyMock;
 import org.easymock.EasyMockRunner;
 import org.easymock.LogicalOperator;
 import org.easymock.Mock;
@@ -19,6 +19,7 @@ import org.joda.time.DateTime;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import ee.hm.dop.dao.MaterialDAO;
 import ee.hm.dop.dao.RepositoryDAO;
 import ee.hm.dop.model.Material;
 import ee.hm.dop.model.Repository;
@@ -35,7 +36,7 @@ public class RepositoryServiceTest {
     private RepositoryManager repositoryManager;
 
     @Mock
-    private MaterialIterator materials;
+    private MaterialIterator materialIterator;
 
     @Mock
     private MaterialService materialService;
@@ -43,79 +44,108 @@ public class RepositoryServiceTest {
     @Mock
     private RepositoryDAO repositoryDAO;
 
+    @Mock
+    private MaterialDAO materialDao;
+
     @Test
     public void synchronizeErrorGettingMaterials() throws Exception {
         Repository repository = getRepository();
 
         expect(repositoryManager.getMaterialsFrom(repository)).andThrow(new Exception());
 
-        replay(repositoryManager);
+        replayAll();
 
         repositoryService.synchronize(repository);
 
-        verify(repositoryManager);
+        verifyAll();
     }
 
     @Test
-    public void synchronizeHasNextFalse() throws Exception {
+    public void synchronizeNoMaterials() throws Exception {
         Repository repository = getRepository();
 
-        expect(repositoryManager.getMaterialsFrom(repository)).andReturn(materials);
-        expect(materials.hasNext()).andReturn(false);
+        expect(repositoryManager.getMaterialsFrom(repository)).andReturn(materialIterator);
+        expect(materialIterator.hasNext()).andReturn(false);
+        expectUpdateRepository(repository);
 
-        replay(repositoryManager, materials);
+        replayAll();
 
         repositoryService.synchronize(repository);
 
-        verify(repositoryManager, materials);
+        verifyAll();
     }
 
     @Test
-    public void synchronizeNext() throws Exception {
+    public void synchronizeRecoverFromErrorGettingNextMaterial() throws Exception {
+        Repository repository = getRepository();
+        Material material1 = createMock(Material.class);
+        Material material2 = createMock(Material.class);
+
+        expect(repositoryManager.getMaterialsFrom(repository)).andReturn(materialIterator);
+
+        expect(materialIterator.hasNext()).andReturn(true);
+        expect(materialIterator.next()).andReturn(material1);
+        String repositoryIdentifier1 = "123456Identifier";
+        expect(material1.getRepositoryIdentifier()).andReturn(repositoryIdentifier1);
+        material1.setRepository(repository);
+        expect(materialDao.findByRepositoryAndRepositoryIdentifier(repository, repositoryIdentifier1)).andReturn(null);
+        materialService.createMaterial(material1);
+
+        expect(materialIterator.hasNext()).andReturn(true);
+        expect(materialIterator.next()).andThrow(new RuntimeException());
+
+        expect(materialIterator.hasNext()).andReturn(true);
+        expect(materialIterator.next()).andReturn(material2);
+        String repositoryIdentifier2 = "123456Identifier2";
+        expect(material2.getRepositoryIdentifier()).andReturn(repositoryIdentifier2);
+        material2.setRepository(repository);
+        expect(materialDao.findByRepositoryAndRepositoryIdentifier(repository, repositoryIdentifier2)).andReturn(null);
+        materialService.createMaterial(material2);
+
+        expectUpdateRepository(repository);
+
+        expect(materialIterator.hasNext()).andReturn(false);
+
+        replayAll(material1, material2);
+
+        repositoryService.synchronize(repository);
+
+        verifyAll(material1, material2);
+    }
+
+    @Test
+    public void synchronizeUpdatingMaterial() throws Exception {
         Repository repository = getRepository();
         Material material = createMock(Material.class);
 
-        expect(repositoryManager.getMaterialsFrom(repository)).andReturn(materials);
+        expect(repositoryManager.getMaterialsFrom(repository)).andReturn(materialIterator);
 
-        expect(materials.hasNext()).andReturn(true);
-        expect(materials.next()).andReturn(material);
+        expect(materialIterator.hasNext()).andReturn(true);
+        expect(materialIterator.next()).andReturn(null);
 
-        expect(materials.hasNext()).andReturn(true);
-        expect(materials.next()).andThrow(new RuntimeException());
+        expect(materialIterator.hasNext()).andReturn(true);
+        expect(materialIterator.next()).andReturn(material);
+        String repositoryIdentifier = "123456Identifier";
+        expect(material.getRepositoryIdentifier()).andReturn(repositoryIdentifier);
+        material.setRepository(repository);
 
-        expect(materials.hasNext()).andReturn(true);
-        expect(materials.next()).andReturn(material);
+        Material originalMaterial = new Material();
+        long originalMaterialId = 234l;
+        originalMaterial.setId(originalMaterialId);
+        expect(materialDao.findByRepositoryAndRepositoryIdentifier(repository, repositoryIdentifier)).andReturn(
+                originalMaterial);
+        material.setId(originalMaterialId);
+        materialService.update(material);
 
-        expect(materials.hasNext()).andReturn(false);
+        expectUpdateRepository(repository);
 
-        replay(repositoryManager, materials, material);
+        expect(materialIterator.hasNext()).andReturn(false);
 
-        repositoryService.synchronize(repository);
-
-        verify(repositoryManager, materials, material);
-    }
-
-    @Test
-    public void synchronizeHandleMaterial() throws Exception {
-        Repository repository = getRepository();
-        Material material = createMock(Material.class);
-
-        expect(repositoryManager.getMaterialsFrom(repository)).andReturn(materials);
-
-        expect(materials.hasNext()).andReturn(true);
-        expect(materials.next()).andReturn(null);
-
-        expect(materials.hasNext()).andReturn(true);
-        expect(materials.next()).andReturn(material);
-        materialService.createMaterial(material);
-
-        expect(materials.hasNext()).andReturn(false);
-
-        replay(repositoryManager, materials, material, materialService);
+        replayAll(material);
 
         repositoryService.synchronize(repository);
 
-        verify(repositoryManager, materials, material, materialService);
+        verifyAll(material);
     }
 
     @Test
@@ -123,32 +153,45 @@ public class RepositoryServiceTest {
         Repository repository = getRepository();
         Material material = createMock(Material.class);
 
-        expect(repositoryManager.getMaterialsFrom(repository)).andReturn(materials);
+        expect(repositoryManager.getMaterialsFrom(repository)).andReturn(materialIterator);
 
-        expect(materials.hasNext()).andReturn(true);
-        expect(materials.next()).andReturn(material);
+        expect(materialIterator.hasNext()).andReturn(true);
+        expect(materialIterator.next()).andReturn(material);
         materialService.createMaterial(material);
-        expect(materials.hasNext()).andReturn(false);
+        expect(materialIterator.hasNext()).andReturn(false);
 
+        String repositoryIdentifier = "123456Identifier";
+        expect(material.getRepositoryIdentifier()).andReturn(repositoryIdentifier);
+        material.setRepository(repository);
+        expect(materialDao.findByRepositoryAndRepositoryIdentifier(repository, repositoryIdentifier)).andReturn(null);
+
+        expectUpdateRepository(repository);
+
+        replayAll(material);
+
+        repositoryService.synchronize(repository);
+
+        verifyAll(material);
+    }
+
+    private void expectUpdateRepository(Repository repository) {
         final DateTime before = DateTime.now();
-        repositoryDAO.updateRepository(EasyMock.cmp(repository, (o1, o2) -> {
-            if (o1 != o2) {
-                return -1;
+        repositoryDAO.updateRepository(cmp(repository, (o1, o2) -> {
+            if (o1 == o2) {
+                return 0;
             }
-            if (before.getMillis() >= o1.getLastSynchronization().getMillis()) {
-                return -1;
+
+            DateTime lastSynchronization = o1.getLastSynchronization();
+            if (before.isBefore(lastSynchronization) || before.isEqual(lastSynchronization)) {
+                return 0;
             }
-            if (o1.getLastSynchronization().getMillis() <= DateTime.now().getMillis()) {
+
+            if (lastSynchronization.isEqualNow() || lastSynchronization.isBeforeNow()) {
                 return 0;
             }
 
             return -1;
         }, LogicalOperator.EQUAL));
-
-        replay(repositoryManager, materials, material, materialService, repositoryDAO);
-
-        repositoryService.synchronize(repository);
-        verify(repositoryManager, materials, material, materialService, repositoryDAO);
     }
 
     @Test
@@ -185,12 +228,12 @@ public class RepositoryServiceTest {
         repository.setBaseURL("http://koolitaja.eenet.ee:57219/Waramu3Web/OAIHandler");
         repository.setSchema("waramu");
         repository.setId((long) 1);
-        repository.setLastSynchronization(new DateTime());
+        repository.setLastSynchronization(new DateTime().minusDays(1));
         return repository;
     }
 
     private void replayAll(Object... mocks) {
-        replay(repositoryManager, materials, materialService, repositoryDAO);
+        replay(repositoryManager, materialIterator, materialService, repositoryDAO, materialDao);
 
         if (mocks != null) {
             for (Object object : mocks) {
@@ -200,7 +243,7 @@ public class RepositoryServiceTest {
     }
 
     private void verifyAll(Object... mocks) {
-        verify(repositoryManager, materials, materialService, repositoryDAO);
+        verify(repositoryManager, materialIterator, materialService, repositoryDAO, materialDao);
 
         if (mocks != null) {
             for (Object object : mocks) {
