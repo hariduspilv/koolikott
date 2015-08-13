@@ -8,6 +8,7 @@ import javax.persistence.NoResultException;
 import javax.persistence.TypedQuery;
 
 import ee.hm.dop.model.Material;
+import ee.hm.dop.model.Repository;
 
 public class MaterialDAO {
 
@@ -73,5 +74,27 @@ public class MaterialDAO {
         }
 
         return picture;
+    }
+
+    public Material findByRepositoryAndRepositoryIdentifier(Repository repository, String repositoryIdentifier) {
+        String select = "SELECT m FROM Material m WHERE m.repository.id = :repositoryId AND m.repositoryIdentifier = :repositoryIdentifier";
+        TypedQuery<Material> query = entityManager.createQuery(select, Material.class);
+
+        query.setParameter("repositoryId", repository.getId()) //
+                .setParameter("repositoryIdentifier", repositoryIdentifier);
+
+        return getSingleResult(query);
+    }
+
+    private <T> T getSingleResult(TypedQuery<T> query) {
+        T singleResult = null;
+
+        try {
+            singleResult = query.getSingleResult();
+        } catch (NoResultException ex) {
+            // ignore
+        }
+
+        return singleResult;
     }
 }

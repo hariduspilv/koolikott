@@ -124,9 +124,6 @@ insert into Material_Subject(subject, material) values(1,4);
 insert into Material_Subject(subject, material) values(2,5);
 insert into Material_Subject(subject, material) values(1,6);
 insert into Material_Subject(subject, material) values(2,6);
-insert into Material_Subject(subject, material) values(2,10);
-insert into Material_Subject(subject, material) values(2,11);
-insert into Material_Subject(subject, material) values(2,3917);
 
 -- ResourceType
 
