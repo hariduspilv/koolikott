@@ -239,3 +239,14 @@ insert into Page(id, name, content, language) VALUES (4, 'Help', '<h1>Помощ
 -- English
 insert into Page(id, name, content, language) VALUES (5, 'About', '<h1>About us</h1><p>Text here</p>', 3);
 insert into Page(id, name, content, language) VALUES (6, 'Help', '<h1>Help</h1><p>Text here</p>', 3);
+
+-- User
+
+insert into User(id, userName, name, surName, idCode) values (1, 'mati.maasikas', 'Mati', 'Maasikas', '39011220011');
+insert into User(id, userName, name, surName, idCode) values (2, 'peeter.paan', 'Peeter', 'Paan', '38011550077');
+insert into User(id, userName, name, surName, idCode) values (3, 'voldemar.vapustav', 'Voldemar', 'Vapustav', '37066990099');
+
+-- AuthenticatedUser
+
+insert into User(id, user_id, token) values (1, 1, 'token',);
+
