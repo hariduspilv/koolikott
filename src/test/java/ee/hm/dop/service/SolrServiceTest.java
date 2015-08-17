@@ -53,8 +53,6 @@ public class SolrServiceTest {
 
     private static final int RESULTS_PER_PAGE = 24;
 
-    private static final String SOLR_DELETE = "update?stream.body=%3Cdelete%3E%3Cquery%3E*:*%3C/query%3E%3C/delete%3E&wt=json";
-    private static final String SOLR_COMMIT = "update?stream.body=%3Ccommit/%3E&wt=json";
     private static final String SOLR_IMPORT_PARTIAL = "dataimport?command=full-import&clean=false&wt=json";
 
     @Test
@@ -232,8 +230,6 @@ public class SolrServiceTest {
 
         SolrService partialMockSolrService = getSolrServiceWithMockedExecuteCommand();
 
-        expect(partialMockSolrService.executeCommand(SOLR_DELETE)).andReturn(searchResponse);
-        expect(partialMockSolrService.executeCommand(SOLR_COMMIT)).andReturn(searchResponse);
         expect(partialMockSolrService.executeCommand(SOLR_IMPORT_PARTIAL)).andReturn(searchResponse);
 
         replayAll();

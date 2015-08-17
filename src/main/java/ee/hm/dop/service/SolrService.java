@@ -27,8 +27,6 @@ public class SolrService implements SearchEngineService {
     private static final int RESULTS_PER_PAGE = 24;
     private static final String SEARCH_PATH = "select?q=%s&wt=json&start=%d&rows=" + RESULTS_PER_PAGE;
 
-    private static final String SOLR_DELETE = "update?stream.body=%3Cdelete%3E%3Cquery%3E*:*%3C/query%3E%3C/delete%3E&wt=json";
-    private static final String SOLR_COMMIT = "update?stream.body=%3Ccommit/%3E&wt=json";
     private static final String SOLR_IMPORT_PARTIAL = "dataimport?command=full-import&clean=false&wt=json";
 
     @Inject
@@ -45,8 +43,6 @@ public class SolrService implements SearchEngineService {
     @Override
     public void updateIndex() {
         logger.info("Updating Solr index.");
-        executeCommand(SOLR_DELETE);
-        executeCommand(SOLR_COMMIT);
         executeCommand(SOLR_IMPORT_PARTIAL);
     }
 
