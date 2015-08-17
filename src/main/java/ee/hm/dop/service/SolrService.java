@@ -29,7 +29,7 @@ public class SolrService implements SearchEngineService {
 
     private static final String SOLR_DELETE = "update?stream.body=%3Cdelete%3E%3Cquery%3E*:*%3C/query%3E%3C/delete%3E&wt=json";
     private static final String SOLR_COMMIT = "update?stream.body=%3Ccommit/%3E&wt=json";
-    private static final String SOLR_IMPORT = "dataimport?command=full-import&wt=json";
+    private static final String SOLR_IMPORT_PARTIAL = "dataimport?command=full-import&clean=false&wt=json";
 
     @Inject
     private Client client;
@@ -47,7 +47,7 @@ public class SolrService implements SearchEngineService {
         logger.info("Updating Solr index.");
         executeCommand(SOLR_DELETE);
         executeCommand(SOLR_COMMIT);
-        executeCommand(SOLR_IMPORT);
+        executeCommand(SOLR_IMPORT_PARTIAL);
     }
 
     protected SearchResponse executeCommand(String command) {
