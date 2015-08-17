@@ -4,11 +4,13 @@ import javax.persistence.EntityManagerFactory;
 
 import org.apache.commons.configuration.Configuration;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.inject.AbstractModule;
 
 import ee.hm.dop.guice.GuiceInjector.Module;
 import ee.hm.dop.guice.provider.ConfigurationTestProvider;
 import ee.hm.dop.guice.provider.EntityManagerFactoryTestProvider;
+import ee.hm.dop.guice.provider.ObjectMapperGuiceProvider;
 import ee.hm.dop.guice.provider.SearchEngineServiceTestProvider;
 import ee.hm.dop.service.SearchEngineService;
 
@@ -20,5 +22,6 @@ public class ProviderTestModule extends AbstractModule {
         bind(EntityManagerFactory.class).toProvider(EntityManagerFactoryTestProvider.class);
         bind(Configuration.class).toProvider(ConfigurationTestProvider.class);
         bind(SearchEngineService.class).toProvider(SearchEngineServiceTestProvider.class);
+        bind(ObjectMapper.class).toProvider(ObjectMapperGuiceProvider.class);
     }
 }

@@ -2,6 +2,7 @@ package ee.hm.dop.executor;
 
 import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.expect;
+import static org.easymock.EasyMock.expectLastCall;
 import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
 import static org.joda.time.LocalDateTime.now;
@@ -26,6 +27,7 @@ import org.junit.runner.RunWith;
 
 import ee.hm.dop.model.Repository;
 import ee.hm.dop.service.RepositoryService;
+import ee.hm.dop.service.SearchEngineService;
 
 @RunWith(EasyMockRunner.class)
 public class SynchronizeMaterialsExecutorTest {
@@ -35,6 +37,9 @@ public class SynchronizeMaterialsExecutorTest {
 
     @Mock
     private RepositoryService repositoryService;
+
+    @Mock
+    private SearchEngineService searchEngineService;
 
     private Object lock = new Object();
 
@@ -56,10 +61,13 @@ public class SynchronizeMaterialsExecutorTest {
 
         expect(repositoryService.getAllRepositorys()).andReturn(repositories);
 
+        searchEngineService.updateIndex();
+        expectLastCall();
+
         repositoryService.synchronize(repository1);
         repositoryService.synchronize(repository2);
 
-        replay(repositoryService, repository1, repository2);
+        replay(repositoryService, repository1, repository2, searchEngineService);
 
         synchronizeMaterialsExecutor.synchronizeMaterials();
 
@@ -71,7 +79,7 @@ public class SynchronizeMaterialsExecutorTest {
             }
         }
 
-        verify(repositoryService, repository1, repository2);
+        verify(repositoryService, repository1, repository2, searchEngineService);
 
         SynchronizeMaterialsExecutorMock mockExecutor = (SynchronizeMaterialsExecutorMock) synchronizeMaterialsExecutor;
         assertTrue(mockExecutor.transactionWasStarted);
@@ -158,6 +166,11 @@ public class SynchronizeMaterialsExecutorTest {
         @Override
         protected RepositoryService newRepositoryService() {
             return repositoryService;
+        };
+
+        @Override
+        protected SearchEngineService newSearchEngineService() {
+            return searchEngineService;
         };
 
         @Override

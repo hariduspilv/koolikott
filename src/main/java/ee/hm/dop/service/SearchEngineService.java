@@ -6,4 +6,6 @@ public interface SearchEngineService {
 
     public SearchResponse search(String query, long start);
 
+    public void updateIndex();
+
 }

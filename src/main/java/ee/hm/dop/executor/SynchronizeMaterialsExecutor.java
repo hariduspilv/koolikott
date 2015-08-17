@@ -18,6 +18,8 @@ import com.google.inject.Singleton;
 import ee.hm.dop.guice.GuiceInjector;
 import ee.hm.dop.model.Repository;
 import ee.hm.dop.service.RepositoryService;
+import ee.hm.dop.service.SearchEngineService;
+import ee.hm.dop.service.SolrService;
 import ee.hm.dop.utils.DbUtils;
 
 @Singleton
@@ -58,6 +60,9 @@ public class SynchronizeMaterialsExecutor {
 
                     logger.info("Synchronization repository service finished execution.");
                     closeTransaction();
+
+                    SearchEngineService searchEngineService = newSearchEngineService();
+                    searchEngineService.updateIndex();
                 } catch (Exception e) {
                     logger.error("Unexpected error while synchronizing materials.", e);
                 }
@@ -119,6 +124,14 @@ public class SynchronizeMaterialsExecutor {
      * Package access modifier for testing purpose
      * 
      */
+    protected SearchEngineService newSearchEngineService() {
+        return GuiceInjector.getInjector().getInstance(SolrService.class);
+    }
+
+    /**
+     * Package access modifier for testing purpose
+     * 
+     */
     protected void closeTransaction() {
         DbUtils.closeTransaction();
     }
@@ -130,4 +143,5 @@ public class SynchronizeMaterialsExecutor {
     protected void beginTransaction() {
         DbUtils.getTransaction().begin();
     }
+
 }

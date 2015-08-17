@@ -15,6 +15,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import ee.hm.dop.common.test.GuiceTestRunner;
 import ee.hm.dop.model.solr.Document;
+import ee.hm.dop.model.solr.ResponseHeader;
 import ee.hm.dop.model.solr.SearchResponse;
 
 /**
@@ -83,6 +84,10 @@ public class SearchResponseTest {
         assertEquals(8, documents.get(7).getId());
         assertEquals(8, searchResponse.getResponse().getTotalResults());
         assertEquals(0, searchResponse.getResponse().getStart());
+
+        ResponseHeader responseHeader = searchResponse.getResponseHeader();
+        assertNotNull(responseHeader);
+        assertEquals(0, responseHeader.getStatus());
     }
 
     @Test
@@ -112,6 +117,10 @@ public class SearchResponseTest {
         assertEquals(0, searchResponse.getResponse().getDocuments().size());
         assertEquals(0, searchResponse.getResponse().getTotalResults());
         assertEquals(0, searchResponse.getResponse().getStart());
+
+        ResponseHeader responseHeader = searchResponse.getResponseHeader();
+        assertNotNull(responseHeader);
+        assertEquals(0, responseHeader.getStatus());
     }
 
     @Test
@@ -126,6 +135,10 @@ public class SearchResponseTest {
         SearchResponse searchResponse = mapper.readValue(searchResult, SearchResponse.class);
         assertNotNull(searchResponse);
         assertNull(searchResponse.getResponse());
+
+        ResponseHeader responseHeader = searchResponse.getResponseHeader();
+        assertNotNull(responseHeader);
+        assertEquals(400, responseHeader.getStatus());
     }
 
 }
