@@ -1,0 +1,19 @@
+.col-lg-2-4{
+  @include make-lg-column(2.4)
+}
+.col-md-2-4{
+  @include make-md-column(2.4)
+}
+.col-sm-2-4{
+  @include make-sm-column(2.4)
+}
+
+.col-md-push-2-4{
+  @include make-md-column-push(2.4)
+}
+.col-md-pull-2-4{
+  @include make-md-column-pull(2.4)
+}
+.col-md-offset-2-4{
+  @include make-md-column-offset(2.4)
+}

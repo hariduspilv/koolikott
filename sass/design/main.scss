@@ -4,7 +4,7 @@ body {margin-bottom: 120px !important; font-weight: 400}
 
 a:hover {cursor: pointer}
 
-.main {padding-top: 80px; @include box-shadow(0, 30px, 50px, -30px, $navbar-default-bg, true);
+.main {padding-top: 80px;
 
     @media screen and (max-width: $screen-md) {
         padding-top: 30px;

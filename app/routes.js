@@ -43,10 +43,10 @@ define([], function()
                 ]
             },
             '/:username': {
-                templateUrl: 'app/views/myprofile/myprofile.html',
-                controller: 'myprofileController',
+                templateUrl: 'app/views/profile/profile.html',
+                controller: 'profileController',
                 dependencies: [
-                    'views/myprofile/myprofile'
+                    'views/profile/profile'
                 ]
             },
             '/dev/login/:idCode': {
