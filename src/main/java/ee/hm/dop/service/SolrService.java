@@ -14,14 +14,20 @@ import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
 
 import org.apache.commons.configuration.Configuration;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import ee.hm.dop.model.solr.SearchResponse;
 
 @Singleton
 public class SolrService implements SearchEngineService {
 
+    private static final Logger logger = LoggerFactory.getLogger(SolrService.class);
+
     private static final int RESULTS_PER_PAGE = 24;
     private static final String SEARCH_PATH = "select?q=%s&wt=json&start=%d&rows=" + RESULTS_PER_PAGE;
+
+    private static final String SOLR_IMPORT_PARTIAL = "dataimport?command=full-import&clean=false&wt=json";
 
     @Inject
     private Client client;
@@ -31,10 +37,30 @@ public class SolrService implements SearchEngineService {
 
     @Override
     public SearchResponse search(String query, long start) {
-        SearchResponse searchResponse = getTarget(format(SEARCH_PATH, encodeQuery(query), start))
-                .request(MediaType.APPLICATION_JSON).get(SearchResponse.class);
+        return executeCommand(format(SEARCH_PATH, encodeQuery(query), start));
+    }
+
+    @Override
+    public void updateIndex() {
+        logger.info("Updating Solr index.");
+        executeCommand(SOLR_IMPORT_PARTIAL);
+    }
+
+    protected SearchResponse executeCommand(String command) {
+        SearchResponse searchResponse = getTarget(command).request(MediaType.APPLICATION_JSON)
+                .get(SearchResponse.class);
+
+        logCommand(command, searchResponse);
 
         return searchResponse;
+    }
+
+    protected void logCommand(String command, SearchResponse searchResponse) {
+        long responseCode = searchResponse.getResponseHeader().getStatus();
+        if (responseCode != 0) {
+            logger.warn("Solr responded with code " + responseCode + ", url was "
+                    + configuration.getString(SEARCH_SERVER) + command);
+        }
     }
 
     private WebTarget getTarget(String path) {

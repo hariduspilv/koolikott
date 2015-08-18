@@ -42,6 +42,11 @@ To install Solr in the production environment see
 To install Solr in the development environment see
 [Installing Solr](https://cwiki.apache.org/confluence/display/solr/Installing+Solr "Solr installation guide").
 
+### DOP configuration for Solr
+
+* Copy "dop" folder to  "/path/to/solr-x.x.x/server/solr"
+* Create folder "lib" under "dop" folder
+* Download and copy database connector to "lib" folder (mysql-connector-java-5.1.35.jar in the time of writing this).
 
 # Configuration
 
@@ -56,7 +61,7 @@ In my.ini or my.cnf under [mysqld] add: character-set-server=utf8
 
 * **db.url** - the database url
 * **db.username** - the database username
-* **db.password** - the database password for given username 
+* **db.password** - the database password for given username
 
 ### Server
 

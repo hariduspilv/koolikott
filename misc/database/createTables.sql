@@ -1,5 +1,6 @@
 -- Drop tables
-
+DROP TABLE IF EXISTS AuthenticatedUser;
+DROP TABLE IF EXISTS User;
 DROP TABLE IF EXISTS Page;
 DROP TABLE IF EXISTS Translation;
 DROP TABLE IF EXISTS TranslationGroup;
@@ -283,5 +284,23 @@ CREATE TABLE Page (
   FOREIGN KEY (language)
         REFERENCES LanguageTable(id)
         ON DELETE RESTRICT
+);
+
+CREATE TABLE User (
+  id        BIGINT AUTO_INCREMENT PRIMARY KEY,
+  userName  VARCHAR(255) UNIQUE NOT NULL,
+  name      VARCHAR(255) NOT NULL,
+  surName   VARCHAR(255) NOT NULL,
+  idCode    VARCHAR(11) UNIQUE NOT NULL
+);
+
+CREATE TABLE AuthenticatedUser (
+  id        BIGINT AUTO_INCREMENT PRIMARY KEY,
+  user_id   BIGINT NOT NULL,
+  token     VARCHAR(255) UNIQUE NOT NULL,
+
+  FOREIGN KEY (user_id)
+            REFERENCES User(id)
+            ON DELETE RESTRICT
 );
 

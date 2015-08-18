@@ -190,6 +190,11 @@ class SearchEngineServiceMock implements SearchEngineService {
         return searchResponse;
     }
 
+    @Override
+    public void updateIndex() {
+
+    }
+
     private static List<Document> createDocumentsWithIdentifiers(Long... identifiers) {
         List<Document> documents = new ArrayList<>();
         for (Long id : identifiers) {
