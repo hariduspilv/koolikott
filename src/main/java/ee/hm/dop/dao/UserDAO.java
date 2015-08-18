@@ -15,7 +15,8 @@ public class UserDAO {
     private EntityManager entityManager;
 
     public User findUserByIdCode(String idCode) {
-        TypedQuery<User> findByIdCode = entityManager.createQuery("SELECT u FROM User u WHERE u.idCode = :idCode", User.class);
+        TypedQuery<User> findByIdCode = entityManager.createQuery("SELECT u FROM User u WHERE u.idCode = :idCode",
+                User.class);
 
         User user = null;
         try {
@@ -27,7 +28,21 @@ public class UserDAO {
         return user;
     }
 
-    public void createUser(User user){
+    public User findUserByUsername(String username) {
+        TypedQuery<User> findByUsername = entityManager.createQuery("SELECT u FROM User u WHERE u.username = :username",
+                User.class);
+
+        User user = null;
+        try {
+            user = findByUsername.setParameter("username", username).getSingleResult();
+        } catch (Exception e) {
+            // ignore
+        }
+
+        return user;
+    }
+
+    public void createUser(User user) {
         entityManager.persist(user);
     }
 }

@@ -17,6 +17,10 @@ public class UserService {
         return userDAO.findUserByIdCode(idCode);
     }
 
+    public User getUserByUsername(String username) {
+        return userDAO.findUserByUsername(username);
+    }
+
     public void createUser(User user) {
         userDAO.createUser(user);
     }

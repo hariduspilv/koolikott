@@ -89,8 +89,10 @@ insert into Translation(translationGroup, translationKey, translation) values (1
 insert into Translation(translationGroup, translationKey, translation) values (1, 'SEARCH_FILTER_BUTTON_RESET', 'Tühista');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'SEARCH_FILTER_TITLE', 'Filter');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'MYPROFILE_PAGE_TITLE_COMPILATIONS', 'Minu kogumikud');
-insert into Translation(translationGroup, translationKey, translation) values (1, 'MYPROFILE_PAGE_TITLE_MATERIALS', 'Minu materialid');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'MYPROFILE_PAGE_TITLE_MATERIALS', 'Minu materjalid');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'MYPROFILE_PAGE_TITLE_MY_DATA', 'Minu andmed');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'PROFILE_PAGE_TITLE_COMPILATIONS', 'Kogumikud');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'PROFILE_PAGE_TITLE_MATERIALS', 'Materjalid');
 
 -- Material Subject translations
 insert into Translation(translationGroup, translationKey, translation) values (1, 'MATERIAL_SUBJECT_ESTONIAN', 'Eesti keel');

@@ -91,6 +91,8 @@ insert into Translation(translationGroup, translationKey, translation) values (2
 insert into Translation(translationGroup, translationKey, translation) values (2, 'MYPROFILE_PAGE_TITLE_COMPILATIONS', 'Мои сборники');
 insert into Translation(translationGroup, translationKey, translation) values (2, 'MYPROFILE_PAGE_TITLE_MATERIALS', 'Мои материалы');
 insert into Translation(translationGroup, translationKey, translation) values (2, 'MYPROFILE_PAGE_TITLE_MY_DATA', 'Мой данные');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'PROFILE_PAGE_TITLE_COMPILATIONS', 'Сборники');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'PROFILE_PAGE_TITLE_MATERIALS', 'Материалы');
 
 -- Material Subject translations
 insert into Translation(translationGroup, translationKey, translation) values (2, 'MATERIAL_SUBJECT_ESTONIAN', 'Эстонский');

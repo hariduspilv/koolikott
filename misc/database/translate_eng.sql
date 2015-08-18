@@ -91,6 +91,8 @@ insert into Translation(translationGroup, translationKey, translation) values (3
 insert into Translation(translationGroup, translationKey, translation) values (3, 'MYPROFILE_PAGE_TITLE_COMPILATIONS', 'My compilations');
 insert into Translation(translationGroup, translationKey, translation) values (3, 'MYPROFILE_PAGE_TITLE_MATERIALS', 'My materials');
 insert into Translation(translationGroup, translationKey, translation) values (3, 'MYPROFILE_PAGE_TITLE_MY_DATA', 'My data');
+insert into Translation(translationGroup, translationKey, translation) values (3, 'PROFILE_PAGE_TITLE_COMPILATIONS', 'Compilations');
+insert into Translation(translationGroup, translationKey, translation) values (3, 'PROFILE_PAGE_TITLE_MATERIALS', 'Materials');
 
 -- Material Subject translations
 insert into Translation(translationGroup, translationKey, translation) values (3, 'MATERIAL_SUBJECT_ESTONIAN', 'Estonian');
