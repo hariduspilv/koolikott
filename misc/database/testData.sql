@@ -360,6 +360,8 @@ insert into Material_Tag(tag, material) values(5, 3919);
 insert into User(id, userName, name, surName, idCode) values (1, 'mati.maasikas', 'Mati', 'Maasikas', '39011220011');
 insert into User(id, userName, name, surName, idCode) values (2, 'peeter.paan', 'Peeter', 'Paan', '38011550077');
 insert into User(id, userName, name, surName, idCode) values (3, 'voldemar.vapustav', 'Voldemar', 'Vapustav', '37066990099');
+insert into User(id, userName, name, surName, idCode) values (4, 'voldemar.vapustav', 'Voldemar', 'Vapustav', '38103070238');
+insert into User(id, userName, name, surName, idCode) values (5, 'õäöü.õäöü', 'Õäöü', 'Õäöü', '38103070238');
 
 -- Pictures
 
