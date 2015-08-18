@@ -41,8 +41,8 @@ public class LanguageTest {
         language.setCode("AAA");
         language.setCodes(new ArrayList<String>());
 
-        assertTrue(language.equals(other));
-        assertEquals(language.hashCode(), other.hashCode());
+        assertFalse(language.equals(other));
+        assertNotEquals(language.hashCode(), other.hashCode());
 
         language.setName("language");
 
@@ -56,8 +56,8 @@ public class LanguageTest {
 
         other.setName("language");
 
-        assertTrue(language.equals(other));
-        assertEquals(language.hashCode(), other.hashCode());
+        assertFalse(language.equals(other));
+        assertNotEquals(language.hashCode(), other.hashCode());
     }
 
 }

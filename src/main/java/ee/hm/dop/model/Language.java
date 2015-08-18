@@ -80,7 +80,11 @@ public class Language {
 
     @Override
     public int hashCode() {
-        return new HashCodeBuilder(3, 37).append(name).toHashCode();
+        return new HashCodeBuilder(3, 37) //
+                .append(name) //
+                .append(code) //
+                .append(codes) //
+                .toHashCode();
     }
 
     @Override
@@ -95,6 +99,9 @@ public class Language {
 
         Language other = (Language) obj;
 
-        return new EqualsBuilder().append(name, other.name).isEquals();
+        return new EqualsBuilder().append(name, other.name) //
+                .append(code, other.code) //
+                .append(codes, other.codes) //
+                .isEquals();
     }
 }

@@ -1,10 +1,11 @@
 package ee.hm.dop.model;
 
+import static javax.persistence.CascadeType.MERGE;
+import static javax.persistence.CascadeType.PERSIST;
 import static javax.persistence.FetchType.EAGER;
 
 import java.util.List;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -43,7 +44,7 @@ public class Material {
     @GeneratedValue
     private Long id;
 
-    @ManyToMany(fetch = EAGER, cascade = CascadeType.PERSIST)
+    @ManyToMany(fetch = EAGER, cascade = { PERSIST, MERGE })
     @JoinTable(
             name = "Material_Title",
             joinColumns = { @JoinColumn(name = "material") },
@@ -51,11 +52,11 @@ public class Material {
             uniqueConstraints = @UniqueConstraint(columnNames = { "material", "title" }))
     private List<LanguageString> titles;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "lang")
     private Language language;
 
-    @ManyToMany(fetch = EAGER, cascade = CascadeType.PERSIST)
+    @ManyToMany(fetch = EAGER, cascade = { PERSIST, MERGE })
     @JoinTable(
             name = "Material_Author",
             joinColumns = { @JoinColumn(name = "material") },
@@ -67,7 +68,7 @@ public class Material {
     @JoinColumn(name = "issueDate")
     private IssueDate issueDate;
 
-    @ManyToMany(fetch = EAGER, cascade = CascadeType.PERSIST)
+    @ManyToMany(fetch = EAGER, cascade = { PERSIST, MERGE })
     @JoinTable(
             name = "Material_Description",
             joinColumns = { @JoinColumn(name = "material") },
@@ -78,7 +79,7 @@ public class Material {
     @Column(nullable = false, columnDefinition = "TEXT")
     private String source;
 
-    @ManyToMany(fetch = EAGER, cascade = CascadeType.PERSIST)
+    @ManyToMany(fetch = EAGER)
     @JoinTable(
             name = "Material_ResourceType",
             joinColumns = { @JoinColumn(name = "material") },
@@ -86,7 +87,7 @@ public class Material {
             uniqueConstraints = @UniqueConstraint(columnNames = { "material", "resourceType" }))
     private List<ResourceType> resourceTypes;
 
-    @ManyToMany(fetch = EAGER, cascade = CascadeType.PERSIST)
+    @ManyToMany(fetch = EAGER)
     @JoinTable(
             name = "Material_EducationalContext",
             joinColumns = { @JoinColumn(name = "material") },
@@ -98,7 +99,7 @@ public class Material {
     @JoinColumn(name = "licenseType")
     private LicenseType licenseType;
 
-    @ManyToMany(fetch = EAGER, cascade = CascadeType.PERSIST)
+    @ManyToMany(fetch = EAGER, cascade = { PERSIST, MERGE })
     @JoinTable(
             name = "Material_Publisher",
             joinColumns = { @JoinColumn(name = "material") },
@@ -116,7 +117,7 @@ public class Material {
     @Column
     private Long views = Long.valueOf(0);
 
-    @ManyToMany(fetch = EAGER, cascade = CascadeType.PERSIST)
+    @ManyToMany(fetch = EAGER, cascade = { PERSIST, MERGE })
     @JoinTable(
             name = "Material_Tag",
             joinColumns = { @JoinColumn(name = "material") },
@@ -131,7 +132,7 @@ public class Material {
     @Formula("picture is not null")
     private boolean hasPicture;
 
-    @ManyToMany(fetch = EAGER, cascade = CascadeType.PERSIST)
+    @ManyToMany(fetch = EAGER, cascade = { PERSIST, MERGE })
     @JoinTable(
             name = "Material_Subject",
             joinColumns = { @JoinColumn(name = "material") },

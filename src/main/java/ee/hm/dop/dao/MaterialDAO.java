@@ -49,8 +49,10 @@ public class MaterialDAO {
                 .setMaxResults(numberOfMaterials).getResultList();
     }
 
-    public void update(Material material) {
-        entityManager.persist(material);
+    public Material update(Material material) {
+        Material merged = entityManager.merge(material);
+        entityManager.persist(merged);
+        return merged;
     }
 
     /**
