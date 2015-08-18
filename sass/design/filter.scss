@@ -5,7 +5,7 @@
             border: 1px solid $body-bg;
             border-bottom: 1px solid $brand-grey-medium;
             @include border-radius(0);
-            @include box-shadow(0, 0, 0, 0, $body-bg);
+            @include box-shadow-spec(0, 0, 0, 0, $body-bg);
             background: none;
             color: $text-color;
             overflow: hidden;
@@ -15,7 +15,7 @@
             }
 
             &:active {
-                @include box-shadow(0, 0, 0, 0, $body-bg);
+                @include box-shadow-spec(0, 0, 0, 0, $body-bg);
                 background: #FFF;
             }
             
@@ -23,16 +23,16 @@
         }
 
         .btn-default-focus {
-            @include box-shadow(0, 0, 0, 0, $body-bg);
+            @include box-shadow-spec(0, 0, 0, 0, $body-bg);
             background: none;
         }
 
         .form-control {
-            @include box-shadow(0, 0, 0, 0, $body-bg);
+            @include box-shadow-spec(0, 0, 0, 0, $body-bg);
 
             &:focus {
                 border-color: $brand-grey-medium;
-                @include box-shadow(0, 0, 0, 0, #FFF, inset);
+                @include box-shadow-spec(0, 0, 0, 0, #FFF, inset);
                 background: #FFF;
             }
         }

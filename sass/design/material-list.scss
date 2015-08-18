@@ -124,7 +124,7 @@
     
     .block {
         
-        margin-bottom: 20px; @include border-radius(3px); @include box-shadow(0, 0, 2px, 0, #999); background: #FFF; overflow: hidden;
+        margin-bottom: 20px; @include border-radius(3px); @include box-shadow-spec(0, 0, 2px, 0, #999); background: #FFF; overflow: hidden;
     
         .illustration {
             
