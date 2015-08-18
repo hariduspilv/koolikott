@@ -10,12 +10,14 @@ import javax.ws.rs.core.Response;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
-
-public class LoginResourceTest extends ResourceIntegrationTestBase {
+/**
+ * Created by mart on 18.08.15.
+ */
+public class DevelopmentLoginResourceTest extends ResourceIntegrationTestBase{
 
     @Test
     public void logIn() {
-        Response response = doGet("39011220011");
+        Response response = doGet("dev/login/39011220011");
         AuthenticatedUser authenticatedUser = response.readEntity(new GenericType<AuthenticatedUser>() {
         });
         assertNotNull(authenticatedUser.getToken());
@@ -27,7 +29,7 @@ public class LoginResourceTest extends ResourceIntegrationTestBase {
 
     @Test
     public void loginWrongId() {
-        Response response = doGet("123");
+        Response response = doGet("dev/login/123");
         assertEquals(Response.Status.NO_CONTENT.getStatusCode(), response.getStatus());
     }
 
