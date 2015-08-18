@@ -105,19 +105,41 @@ module.exports = function(grunt) {
                 tasks: ['sass:dev', 'concat:css']
             }
         },
-        clean: {
-            build: ["lib", "assets", "dop.tar.gz"],
-            sourcemap: ["assets/css/dop.min.css.map"]
-        }, 
+        clean: ["lib", "assets", "dop.tar.gz"],
     	compress: {
-            main: {
-                clean: ["assets/css/dop.min.css.map"],
+            dev: {
                 options: {
                     archive: 'dop.tar.gz',
                     mode: 'tgz'
                 },
-                src: ['app/**/*', 'assets/**/*', 'img/**/*', 'index.html', 'favicon.ico']
-            }
+                src: [
+                    'app/**/*',
+                    'app-dev/**/*',
+                    'assets/css/*.css',
+                    'assets/fonts/**/*',
+                    'assets/js/**/*.js',
+                    'img/**/*',
+                    'index.html',
+                    'favicon.ico'
+                ]
+            },
+            live: {
+                options: {
+                    archive: 'dop.tar.gz',
+                    mode: 'tgz'
+                },
+                src: [
+                    'app/**/*',
+                    '!app/views/dev/**',
+                    'app-dev/**/*',
+                    'assets/css/*.css',
+                    'assets/fonts/**/*',
+                    'assets/js/**/*.js',
+                    'img/**/*',
+                    'index.html',
+                    'favicon.ico'
+                ]
+            },
         },
         bower: {
         	install: {}
@@ -134,7 +156,8 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-copy');
     grunt.loadNpmTasks('grunt-contrib-cssmin');
 
-    grunt.registerTask('build', ['bower', 'clean:build', 'copy', 'sass', 'concat', 'cssmin', 'uglify']);
-    grunt.registerTask('package', ['build', 'clean:sourcemap', 'compress']);
+    grunt.registerTask('build', ['bower', 'clean', 'copy', 'sass', 'concat', 'cssmin', 'uglify']);
+    grunt.registerTask('package', ['build', 'compress:dev']);
 
+    grunt.registerTask('package-live', ['build', 'compress:live']);
 };
