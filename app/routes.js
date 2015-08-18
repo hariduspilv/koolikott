@@ -48,6 +48,13 @@ define([], function()
                 dependencies: [
                     'views/myprofile/myprofile'
                 ]
+            },
+            '/dev/login/:idCode': {
+                templateUrl: 'app/views/dev/login/login.html',
+                controller: 'loginController',
+                dependencies: [
+                    'views/dev/login/login'
+                ]
             }
         }
     };
