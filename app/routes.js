@@ -46,7 +46,8 @@ define([], function()
                 templateUrl: 'app/views/profile/profile.html',
                 controller: 'profileController',
                 dependencies: [
-                    'views/profile/profile'
+                    'views/profile/profile',
+                    'directives/materialBox/materialBox'
                 ]
             },
             '/dev/login/:idCode': {
