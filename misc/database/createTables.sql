@@ -1,6 +1,4 @@
 -- Drop tables
-DROP TABLE IF EXISTS AuthenticatedUser;
-DROP TABLE IF EXISTS User;
 DROP TABLE IF EXISTS Page;
 DROP TABLE IF EXISTS Translation;
 DROP TABLE IF EXISTS TranslationGroup;
@@ -15,6 +13,8 @@ DROP TABLE IF EXISTS Material_Author;
 DROP TABLE IF EXISTS LanguageString;
 DROP TABLE IF EXISTS LanguageKeyCodes;
 DROP TABLE IF EXISTS Material;
+DROP TABLE IF EXISTS AuthenticatedUser;
+DROP TABLE IF EXISTS User;
 DROP TABLE IF EXISTS Repository;
 DROP TABLE IF EXISTS Subject;
 DROP TABLE IF EXISTS LicenseType;
@@ -85,6 +85,24 @@ CREATE TABLE Repository (
   schemaName          VARCHAR(255) UNIQUE NOT NULL
 );
 
+CREATE TABLE User (
+  id        BIGINT AUTO_INCREMENT PRIMARY KEY,
+  userName  VARCHAR(255) UNIQUE NOT NULL,
+  name      VARCHAR(255) NOT NULL,
+  surName   VARCHAR(255) NOT NULL,
+  idCode    VARCHAR(11) UNIQUE NOT NULL
+);
+
+CREATE TABLE AuthenticatedUser (
+  id        BIGINT AUTO_INCREMENT PRIMARY KEY,
+  user_id   BIGINT NOT NULL,
+  token     VARCHAR(255) UNIQUE NOT NULL,
+
+  FOREIGN KEY (user_id)
+            REFERENCES User(id)
+            ON DELETE RESTRICT
+);
+
 CREATE TABLE Material (
   id                   BIGINT AUTO_INCREMENT PRIMARY KEY,
   lang                 BIGINT,
@@ -97,6 +115,7 @@ CREATE TABLE Material (
   picture              LONGBLOB DEFAULT NULL,
   repositoryIdentifier VARCHAR(255),
   repository           BIGINT,
+  creator              BIGINT,
 
   UNIQUE KEY (repositoryIdentifier, repository),
   
@@ -110,6 +129,10 @@ CREATE TABLE Material (
 
   FOREIGN KEY (repository)
   REFERENCES Repository (id)
+        ON DELETE RESTRICT, 
+
+  FOREIGN KEY (creator)
+  REFERENCES User (id)
         ON DELETE RESTRICT
 );
 
@@ -284,23 +307,5 @@ CREATE TABLE Page (
   FOREIGN KEY (language)
         REFERENCES LanguageTable(id)
         ON DELETE RESTRICT
-);
-
-CREATE TABLE User (
-  id        BIGINT AUTO_INCREMENT PRIMARY KEY,
-  userName  VARCHAR(255) UNIQUE NOT NULL,
-  name      VARCHAR(255) NOT NULL,
-  surName   VARCHAR(255) NOT NULL,
-  idCode    VARCHAR(11) UNIQUE NOT NULL
-);
-
-CREATE TABLE AuthenticatedUser (
-  id        BIGINT AUTO_INCREMENT PRIMARY KEY,
-  user_id   BIGINT NOT NULL,
-  token     VARCHAR(255) UNIQUE NOT NULL,
-
-  FOREIGN KEY (user_id)
-            REFERENCES User(id)
-            ON DELETE RESTRICT
 );
 
