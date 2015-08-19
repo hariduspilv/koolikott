@@ -50,7 +50,7 @@ public class MaterialServiceTest {
         material.setViews(views);
 
         expect(materialDao.findById(materialId)).andReturn(original);
-        materialDao.update(material);
+        expect(materialDao.update(material)).andReturn(material);
 
         replay(materialDao, material);
 

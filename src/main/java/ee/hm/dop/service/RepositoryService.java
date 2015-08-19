@@ -68,8 +68,10 @@ public class RepositoryService {
         while (materials.hasNext()) {
             try {
                 Material material = materials.next();
-                handleMaterial(repository, material);
-                successfulMaterials++;
+                if (material != null) {
+                    handleMaterial(repository, material);
+                    successfulMaterials++;
+                }
             } catch (Exception e) {
                 logger.error("An error occurred while getting the next material from repository.", e);
                 failedMaterials++;
@@ -97,18 +99,16 @@ public class RepositoryService {
     }
 
     private void handleMaterial(Repository repository, Material material) {
-        if (material != null) {
-            Material existentMaterial = materialDAO.findByRepositoryAndRepositoryIdentifier(repository,
-                    material.getRepositoryIdentifier());
+        Material existentMaterial = materialDAO.findByRepositoryAndRepositoryIdentifier(repository,
+                material.getRepositoryIdentifier());
 
-            material.setRepository(repository);
+        material.setRepository(repository);
 
-            if (existentMaterial != null) {
-                material.setId(existentMaterial.getId());
-                materialService.update(material);
-            } else {
-                materialService.createMaterial(material);
-            }
+        if (existentMaterial != null) {
+            material.setId(existentMaterial.getId());
+            materialService.update(material);
+        } else {
+            materialService.createMaterial(material);
         }
     }
 

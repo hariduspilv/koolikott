@@ -17,7 +17,7 @@ import java.net.HttpURLConnection;
  */
 
 @Path("dev/")
-public class DevelopentLoginResource {
+public class DevelopmentLoginResource {
 
     @Inject
     private LoginService loginService;

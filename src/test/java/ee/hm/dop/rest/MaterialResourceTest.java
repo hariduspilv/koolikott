@@ -17,7 +17,6 @@ import org.joda.time.DateTime;
 import org.junit.Test;
 
 import ee.hm.dop.common.test.ResourceIntegrationTestBase;
-import ee.hm.dop.model.Author;
 import ee.hm.dop.model.Language;
 import ee.hm.dop.model.LanguageString;
 import ee.hm.dop.model.Material;
@@ -109,14 +108,14 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
 
         assertEquals(8, materials.size());
 
-        Material material = materials.get(0);
-        assertEquals(Long.valueOf(8), material.getId());
-        assertEquals("Aabits 123", material.getTitles().get(0).getText());
+        DateTime added = null;
+        for (Material material : materials) {
+            if (added != null) {
+                added.isAfter(material.getAdded());
+            }
 
-        List<Author> authors = material.getAuthors();
-        assertEquals(1, authors.size());
-        assertEquals("Karl Simon Ben", material.getAuthors().get(0).getName());
-        assertEquals("Tom Oliver Marx", material.getAuthors().get(0).getSurname());
+            added = material.getAdded();
+        }
     }
 
     @Test

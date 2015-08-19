@@ -1,26 +1,32 @@
 package ee.hm.dop.dao;
 
 import static junit.framework.TestCase.assertNull;
+import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
+import javax.persistence.RollbackException;
 
 import org.joda.time.DateTime;
 import org.junit.Test;
 
 import ee.hm.dop.common.test.DatabaseTestBase;
+import ee.hm.dop.model.EducationalContext;
 import ee.hm.dop.model.Language;
+import ee.hm.dop.model.LicenseType;
 import ee.hm.dop.model.Material;
 import ee.hm.dop.model.Repository;
+import ee.hm.dop.model.ResourceType;
 import ee.hm.dop.model.Subject;
 import ee.hm.dop.model.User;
+import ee.hm.dop.utils.DbUtils;
 
 public class MaterialDAOTest extends DatabaseTestBase {
 
@@ -184,18 +190,17 @@ public class MaterialDAOTest extends DatabaseTestBase {
         byte[] picture = data.getBytes();
         material.setPicture(picture);
 
-        materialDAO.update(material);
+        Material updated = materialDAO.update(material);
 
-        Material newMaterial = materialDAO.findById(material.getId());
+        Material newMaterial = materialDAO.findById(updated.getId());
 
         assertEquals(material.getSource(), newMaterial.getSource());
         assertEquals(material.getAdded(), newMaterial.getAdded());
         assertEquals(material.getViews(), newMaterial.getViews());
-        assertSame(material, materialDAO.findById(material.getId()));
-        assertEquals(material.getPicture(), newMaterial.getPicture());
+        assertArrayEquals(material.getPicture(), newMaterial.getPicture());
         assertEquals(material.getHasPicture(), newMaterial.getHasPicture());
 
-        materialDAO.delete(material);
+        materialDAO.delete(newMaterial);
     }
 
     @Test
@@ -315,6 +320,161 @@ public class MaterialDAOTest extends DatabaseTestBase {
         assertEquals(Long.valueOf(4), materials.get(1).getId());
         assertEquals(Long.valueOf(1), materials.get(2).getId());
         assertMaterial1(materials.get(2));
+    }
+
+    public void update() {
+        Material changedMaterial = new Material();
+        changedMaterial.setId(9l);
+        changedMaterial.setSource("http://www.chaged.it.com");
+        DateTime now = new DateTime();
+        changedMaterial.setAdded(now);
+        Long views = 234l;
+        changedMaterial.setViews(views);
+        changedMaterial.setUpdated(now);
+
+        materialDAO.update(changedMaterial);
+
+        Material material = materialDAO.findById(9);
+        assertEquals("http://www.chaged.it.com", changedMaterial.getSource());
+        assertEquals(now, changedMaterial.getAdded());
+        assertEquals(now, changedMaterial.getUpdated());
+        assertEquals(views, changedMaterial.getViews());
+
+        // Restore to original values
+        material.setSource("http://www.chaging.it.com");
+        material.setAdded(new DateTime("1911-09-01T00:00:01"));
+        material.setViews(0l);
+        material.setUpdated(null);
+
+        materialDAO.update(changedMaterial);
+    }
+
+    @Test
+    public void updateCreatingNewLanguage() {
+        Material originalMaterial = materialDAO.findById(1);
+
+        Language newLanguage = new Language();
+        newLanguage.setName("Newlanguage");
+        newLanguage.setCode("nlg");
+
+        originalMaterial.setLanguage(newLanguage);
+
+        try {
+            materialDAO.update(originalMaterial);
+
+            // Have to close the transaction to get the error
+            DbUtils.closeTransaction();
+            fail("Exception expected.");
+        } catch (RollbackException e) {
+            String expectedMessage = "org.hibernate.TransientPropertyValueException: "
+                    + "object references an unsaved transient instance - "
+                    + "save the transient instance before flushing : "
+                    + "ee.hm.dop.model.Material.language -> ee.hm.dop.model.Language";
+            assertEquals(expectedMessage, e.getCause().getMessage());
+        }
+    }
+
+    @Inject
+    LanguageDAO languageDAO;
+
+    @Test
+    public void updateCreatingNewResourceType() {
+        Material originalMaterial = materialDAO.findById(1);
+
+        ResourceType newResourceType = new ResourceType();
+        newResourceType.setName("NewType");
+
+        List<ResourceType> newResourceTypes = new ArrayList<>();
+        newResourceTypes.add(newResourceType);
+
+        originalMaterial.setResourceTypes(newResourceTypes);
+
+        try {
+            materialDAO.update(originalMaterial);
+
+            // Have to close the transaction to get the error
+            DbUtils.closeTransaction();
+            fail("Exception expected.");
+        } catch (RollbackException e) {
+            String expectedMessage = "org.hibernate.TransientObjectException: "
+                    + "object references an unsaved transient instance - "
+                    + "save the transient instance before flushing: ee.hm.dop.model.ResourceType";
+            assertEquals(expectedMessage, e.getCause().getMessage());
+        }
+    }
+
+    @Test
+    public void updateCreatingNewEducationalContext() {
+        Material originalMaterial = materialDAO.findById(1);
+
+        EducationalContext newEducationalContext = new EducationalContext();
+        newEducationalContext.setName("NewEducationalContext");
+
+        List<EducationalContext> newEducationalContexts = new ArrayList<>();
+        newEducationalContexts.add(newEducationalContext);
+
+        originalMaterial.setEducationalContexts(newEducationalContexts);
+
+        try {
+            materialDAO.update(originalMaterial);
+
+            // Have to close the transaction to get the error
+            DbUtils.closeTransaction();
+            fail("Exception expected.");
+        } catch (RollbackException e) {
+            String expectedMessage = "org.hibernate.TransientObjectException: "
+                    + "object references an unsaved transient instance - "
+                    + "save the transient instance before flushing: ee.hm.dop.model.EducationalContext";
+            assertEquals(expectedMessage, e.getCause().getMessage());
+        }
+    }
+
+    @Test
+    public void updateCreatingNewLicenseType() {
+        Material originalMaterial = materialDAO.findById(1);
+
+        LicenseType newLicenseType = new LicenseType();
+        newLicenseType.setName("NewEducationalContext");
+        originalMaterial.setLicenseType(newLicenseType);
+
+        try {
+            materialDAO.update(originalMaterial);
+
+            // Have to close the transaction to get the error
+            DbUtils.closeTransaction();
+            fail("Exception expected.");
+        } catch (RollbackException e) {
+            String expectedMessage = "org.hibernate.TransientPropertyValueException: "
+                    + "object references an unsaved transient instance - "
+                    + "save the transient instance before flushing : "
+                    + "ee.hm.dop.model.Material.licenseType -> ee.hm.dop.model.LicenseType";
+            assertEquals(expectedMessage, e.getCause().getMessage());
+        }
+    }
+
+    @Test
+    public void updateCreatingNewRepository() {
+        Material originalMaterial = materialDAO.findById(1);
+
+        Repository newRepository = new Repository();
+        newRepository.setBaseURL("www.url.com");
+        newRepository.setSchema("newSchema");
+        originalMaterial.setRepository(newRepository);
+
+        try {
+            materialDAO.update(originalMaterial);
+
+            // Have to close the transaction to get the error
+            DbUtils.closeTransaction();
+            fail("Exception expected.");
+        } catch (RollbackException e) {
+            String expectedMessage = "org.hibernate.TransientPropertyValueException: "
+                    + "object references an unsaved transient instance - "
+                    + "save the transient instance before flushing : "
+                    + "ee.hm.dop.model.Material.repository -> ee.hm.dop.model.Repository";
+            assertEquals(expectedMessage, e.getCause().getMessage());
+        }
+
     }
 
     private void assertMaterial1(Material material) {
