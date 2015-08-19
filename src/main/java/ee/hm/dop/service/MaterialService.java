@@ -12,6 +12,7 @@ import org.slf4j.LoggerFactory;
 
 import ee.hm.dop.dao.MaterialDAO;
 import ee.hm.dop.model.Material;
+import ee.hm.dop.model.User;
 
 public class MaterialService {
 
@@ -72,6 +73,10 @@ public class MaterialService {
 
     public byte[] getMaterialPicture(Material material) {
         return materialDao.findPictureByMaterial(material);
+    }
+
+    public List<Material> getByCreator(User creator) {
+        return materialDao.findByCreator(creator);
     }
 
     private void doUpdate(Material material) {
