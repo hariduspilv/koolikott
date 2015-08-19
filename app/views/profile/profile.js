@@ -39,7 +39,28 @@ define(['app'], function(app)
             console.log('Getting user failed.')
         }
 
+        function getUsersMaterials() {
+            var params = {
+                'username': $route.current.params.username
+            };
+            var url = "rest/material/getByCreator";
+            serverCallService.makeGet(url, params, getUsersMaterialsSuccess, getUsersMaterialsFail);
+        }
+
+        function getUsersMaterialsSuccess(data) {
+            if (isEmpty(data)) {
+                log('No material data returned.');
+            } else {
+                $scope.materials = data;
+            }
+        }
+        
+        function getUsersMaterialsFail(data, status) {
+            console.log('Failed to get materials. ')
+        }
+
     	getUser();
+        getUsersMaterials();
 
     }]);
 });
