@@ -391,6 +391,32 @@ public class MaterialDAOTest extends DatabaseTestBase {
     }
 
     @Test
+    public void updateCreatingNewSubject() {
+        Material originalMaterial = materialDAO.findById(1);
+
+        Subject newSubject = new Subject();
+        newSubject.setName("New Subject");
+
+        List<Subject> newResourceTypes = new ArrayList<>();
+        newResourceTypes.add(newSubject);
+
+        originalMaterial.setSubjects(newResourceTypes);
+
+        try {
+            materialDAO.update(originalMaterial);
+
+            // Have to close the transaction to get the error
+            DbUtils.closeTransaction();
+            fail("Exception expected.");
+        } catch (RollbackException e) {
+            String expectedMessage = "org.hibernate.TransientObjectException: "
+                    + "object references an unsaved transient instance - "
+                    + "save the transient instance before flushing: ee.hm.dop.model.Subject";
+            assertEquals(expectedMessage, e.getCause().getMessage());
+        }
+    }
+
+    @Test
     public void updateCreatingNewEducationalContext() {
         Material originalMaterial = materialDAO.findById(1);
 

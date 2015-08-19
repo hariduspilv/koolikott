@@ -132,7 +132,7 @@ public class Material {
     @Formula("picture is not null")
     private boolean hasPicture;
 
-    @ManyToMany(fetch = EAGER, cascade = { PERSIST, MERGE })
+    @ManyToMany(fetch = EAGER)
     @JoinTable(
             name = "Material_Subject",
             joinColumns = { @JoinColumn(name = "material") },
