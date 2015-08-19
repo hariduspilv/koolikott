@@ -57,15 +57,47 @@
 
     .navbar-brand {
         @media screen and (max-width: $screen-md) {
-            display: block; float: none; height: 60px; margin: auto; padding-top: 19.5px; padding-bottom: 19.5px;
+            display: block; 
+            float: none; 
+            height: 60px; 
+            margin: auto; 
+            padding-top: 19.5px; 
+            padding-bottom: 19.5px;
         }
-        img {width: 140px; @include transition(all 0.4s);
+        img {
+            width: 140px; 
+            @include transition(all 0.4s);
              
             @media screen and (max-width: $screen-md) {
-                width: 120px; height: auto; margin: auto;
+                width: 120px; 
+                height: auto; 
+                margin: auto;
             }
              
-            &:hover {opacity: 0.8}
+            &:hover {
+                opacity: 0.8
+            }
+        }
+    }
+    
+    .navbar-link-login {
+        .btn {
+            position: relative;
+            
+            &:after {
+                bottom: -23px;
+                left: 50%;
+                border: solid transparent;
+                content: " ";
+                height: 0;
+                width: 0;
+                position: absolute;
+                pointer-events: none;
+                border-color: rgba(136, 183, 213, 0);
+                border-bottom-color: #86D2F6;
+                border-width: 10px;
+                margin-left: -10px;
+            }
         }
     }
     
@@ -125,6 +157,7 @@
 .logins {
     padding: 30px 0 40px;
     background-color: #86D2F6;
+    z-index: 1999;
     
     img {margin-right: 3px; margin-bottom: 2px}
     
