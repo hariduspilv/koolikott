@@ -49,7 +49,7 @@ public class Material {
             name = "Material_Title",
             joinColumns = { @JoinColumn(name = "material") },
             inverseJoinColumns = { @JoinColumn(name = "title") },
-            uniqueConstraints = @UniqueConstraint(columnNames = { "material", "title" }))
+            uniqueConstraints = @UniqueConstraint(columnNames = { "material", "title" }) )
     private List<LanguageString> titles;
 
     @ManyToOne
@@ -61,7 +61,7 @@ public class Material {
             name = "Material_Author",
             joinColumns = { @JoinColumn(name = "material") },
             inverseJoinColumns = { @JoinColumn(name = "author") },
-            uniqueConstraints = @UniqueConstraint(columnNames = { "material", "author" }))
+            uniqueConstraints = @UniqueConstraint(columnNames = { "material", "author" }) )
     private List<Author> authors;
 
     @OneToOne
@@ -73,7 +73,7 @@ public class Material {
             name = "Material_Description",
             joinColumns = { @JoinColumn(name = "material") },
             inverseJoinColumns = { @JoinColumn(name = "description") },
-            uniqueConstraints = @UniqueConstraint(columnNames = { "material", "description" }))
+            uniqueConstraints = @UniqueConstraint(columnNames = { "material", "description" }) )
     private List<LanguageString> descriptions;
 
     @Column(nullable = false, columnDefinition = "TEXT")
@@ -84,7 +84,7 @@ public class Material {
             name = "Material_ResourceType",
             joinColumns = { @JoinColumn(name = "material") },
             inverseJoinColumns = { @JoinColumn(name = "resourceType") },
-            uniqueConstraints = @UniqueConstraint(columnNames = { "material", "resourceType" }))
+            uniqueConstraints = @UniqueConstraint(columnNames = { "material", "resourceType" }) )
     private List<ResourceType> resourceTypes;
 
     @ManyToMany(fetch = EAGER)
@@ -92,7 +92,7 @@ public class Material {
             name = "Material_EducationalContext",
             joinColumns = { @JoinColumn(name = "material") },
             inverseJoinColumns = { @JoinColumn(name = "educationalContext") },
-            uniqueConstraints = @UniqueConstraint(columnNames = { "material", "educationalContext" }))
+            uniqueConstraints = @UniqueConstraint(columnNames = { "material", "educationalContext" }) )
     private List<EducationalContext> educationalContexts;
 
     @ManyToOne
@@ -104,7 +104,7 @@ public class Material {
             name = "Material_Publisher",
             joinColumns = { @JoinColumn(name = "material") },
             inverseJoinColumns = { @JoinColumn(name = "publisher") },
-            uniqueConstraints = @UniqueConstraint(columnNames = { "material", "publisher" }))
+            uniqueConstraints = @UniqueConstraint(columnNames = { "material", "publisher" }) )
     private List<Publisher> publishers;
 
     @Column
@@ -122,7 +122,7 @@ public class Material {
             name = "Material_Tag",
             joinColumns = { @JoinColumn(name = "material") },
             inverseJoinColumns = { @JoinColumn(name = "tag") },
-            uniqueConstraints = @UniqueConstraint(columnNames = { "material", "tag" }))
+            uniqueConstraints = @UniqueConstraint(columnNames = { "material", "tag" }) )
     private List<Tag> tags;
 
     @Lob
@@ -132,12 +132,12 @@ public class Material {
     @Formula("picture is not null")
     private boolean hasPicture;
 
-    @ManyToMany(fetch = EAGER, cascade = { PERSIST, MERGE })
+    @ManyToMany(fetch = EAGER)
     @JoinTable(
             name = "Material_Subject",
             joinColumns = { @JoinColumn(name = "material") },
             inverseJoinColumns = { @JoinColumn(name = "subject") },
-            uniqueConstraints = @UniqueConstraint(columnNames = { "material", "subject" }))
+            uniqueConstraints = @UniqueConstraint(columnNames = { "material", "subject" }) )
     private List<Subject> subjects;
 
     @JsonIgnore
@@ -151,6 +151,10 @@ public class Material {
     @JsonIgnore
     @Column
     private String repositoryIdentifier;
+
+    @ManyToOne
+    @JoinColumn(name = "creator")
+    private User creator;
 
     public Long getId() {
         return id;
@@ -316,6 +320,14 @@ public class Material {
 
     public void setRepository(Repository repository) {
         this.repository = repository;
+    }
+
+    public User getCreator() {
+        return creator;
+    }
+
+    public void setCreator(User creator) {
+        this.creator = creator;
     }
 
 }

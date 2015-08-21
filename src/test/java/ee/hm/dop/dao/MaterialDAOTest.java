@@ -25,6 +25,7 @@ import ee.hm.dop.model.Material;
 import ee.hm.dop.model.Repository;
 import ee.hm.dop.model.ResourceType;
 import ee.hm.dop.model.Subject;
+import ee.hm.dop.model.User;
 import ee.hm.dop.utils.DbUtils;
 
 public class MaterialDAOTest extends DatabaseTestBase {
@@ -309,6 +310,18 @@ public class MaterialDAOTest extends DatabaseTestBase {
     }
 
     @Test
+    public void findByCreator() {
+        User creator = new User();
+        creator.setId(1L);
+
+        List<Material> materials = materialDAO.findByCreator(creator);
+        assertEquals(3, materials.size());
+        assertEquals(Long.valueOf(8), materials.get(0).getId());
+        assertEquals(Long.valueOf(4), materials.get(1).getId());
+        assertEquals(Long.valueOf(1), materials.get(2).getId());
+        assertMaterial1(materials.get(2));
+    }
+
     public void update() {
         Material changedMaterial = new Material();
         changedMaterial.setId(9l);
@@ -391,6 +404,32 @@ public class MaterialDAOTest extends DatabaseTestBase {
     }
 
     @Test
+    public void updateCreatingNewSubject() {
+        Material originalMaterial = materialDAO.findById(1);
+
+        Subject newSubject = new Subject();
+        newSubject.setName("New Subject");
+
+        List<Subject> newResourceTypes = new ArrayList<>();
+        newResourceTypes.add(newSubject);
+
+        originalMaterial.setSubjects(newResourceTypes);
+
+        try {
+            materialDAO.update(originalMaterial);
+
+            // Have to close the transaction to get the error
+            DbUtils.closeTransaction();
+            fail("Exception expected.");
+        } catch (RollbackException e) {
+            String expectedMessage = "org.hibernate.TransientObjectException: "
+                    + "object references an unsaved transient instance - "
+                    + "save the transient instance before flushing: ee.hm.dop.model.Subject";
+            assertEquals(expectedMessage, e.getCause().getMessage());
+        }
+    }
+
+    @Test
     public void updateCreatingNewEducationalContext() {
         Material originalMaterial = materialDAO.findById(1);
 
@@ -461,6 +500,7 @@ public class MaterialDAOTest extends DatabaseTestBase {
                     + "ee.hm.dop.model.Material.repository -> ee.hm.dop.model.Repository";
             assertEquals(expectedMessage, e.getCause().getMessage());
         }
+
     }
 
     private void assertMaterial1(Material material) {
@@ -480,5 +520,6 @@ public class MaterialDAOTest extends DatabaseTestBase {
         assertEquals(new Long(1), material.getRepository().getId());
         assertEquals("http://repo1.ee", material.getRepository().getBaseURL());
         assertEquals("isssiiaawej", material.getRepositoryIdentifier());
+        assertEquals(new Long(1), material.getCreator().getId());
     }
 }

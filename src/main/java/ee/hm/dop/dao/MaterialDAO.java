@@ -9,6 +9,7 @@ import javax.persistence.TypedQuery;
 
 import ee.hm.dop.model.Material;
 import ee.hm.dop.model.Repository;
+import ee.hm.dop.model.User;
 
 public class MaterialDAO {
 
@@ -38,8 +39,8 @@ public class MaterialDAO {
      * @return a list of materials specified by idList
      */
     public List<Material> findAllById(List<Long> idList) {
-        TypedQuery<Material> findAllByIdList = entityManager.createQuery(
-                "SELECT m FROM Material m WHERE m.id in :idList", Material.class);
+        TypedQuery<Material> findAllByIdList = entityManager
+                .createQuery("SELECT m FROM Material m WHERE m.id in :idList", Material.class);
         return findAllByIdList.setParameter("idList", idList).getResultList();
     }
 
@@ -98,5 +99,19 @@ public class MaterialDAO {
         }
 
         return singleResult;
+    }
+
+    /**
+     * Find all materials with the specified creator. Materials are ordered by
+     * added date with newest first.
+     *
+     * @param creator
+     *            User who created the materials
+     * @return A list of materials
+     */
+    public List<Material> findByCreator(User creator) {
+        TypedQuery<Material> findAllByCreator = entityManager.createQuery(
+                "SELECT m FROM Material m WHERE m.creator.id = :creatorId order by added desc", Material.class);
+        return findAllByCreator.setParameter("creatorId", creator.getId()).getResultList();
     }
 }

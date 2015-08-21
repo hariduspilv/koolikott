@@ -28,26 +28,13 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
     private static final String MATERIAL_INCREASE_VIEW_COUNT_URL = "material/increaseViewCount";
     private static final String GET_MATERIAL_PICTURE_URL = "material/getPicture?materialId=%s";
     private static final String GET_MATERIAL_URL = "material?materialId=%s";
+    private static final String GET_BY_CREATOR_URL = "material/getByCreator?username=%s";
 
     @Test
     public void getMaterial() {
         Material material = getMaterial(1);
 
-        assertEquals(2, material.getTitles().size());
-        assertEquals("Matemaatika õpik üheksandale klassile", material.getTitles().get(0).getText());
-        assertEquals(2, material.getDescriptions().size());
-        assertEquals("Test description in estonian. (Russian available)", material.getDescriptions().get(0).getText());
-        Language language = material.getDescriptions().get(0).getLanguage();
-        assertNotNull(language);
-        assertEquals("est", language.getCode());
-        assertNull(language.getName());
-        assertNull(language.getCodes());
-        assertNull(material.getPicture());
-        assertNotNull(material.getSubjects());
-        assertEquals(1, material.getSubjects().size());
-        assertEquals(new Long(1), material.getSubjects().get(0).getId());
-        assertNull(material.getRepository());
-        assertNull(material.getRepositoryIdentifier());
+        assertMaterial1(material);
     }
 
     @Test
@@ -205,6 +192,68 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
         List<Subject> subjects = material.getSubjects();
         assertNotNull(subjects);
         assertEquals(0, subjects.size());
+    }
+
+    @Test
+    public void getByCreator() {
+        String username = "mati.maasikas";
+        List<Material> materials = doGet(format(GET_BY_CREATOR_URL, username))
+                .readEntity(new GenericType<List<Material>>() {
+                });
+
+        assertEquals(3, materials.size());
+        assertEquals(Long.valueOf(8), materials.get(0).getId());
+        assertEquals(Long.valueOf(4), materials.get(1).getId());
+        assertEquals(Long.valueOf(1), materials.get(2).getId());
+        assertMaterial1(materials.get(2));
+    }
+
+    @Test
+    public void getByCreatorWithoutUsername() {
+        Response response = doGet("material/getByCreator");
+        assertEquals(Status.BAD_REQUEST.getStatusCode(), response.getStatus());
+    }
+
+    @Test
+    public void getByCreatorWithBlankUsername() {
+        Response response = doGet(format(GET_BY_CREATOR_URL, ""));
+        assertEquals(Status.BAD_REQUEST.getStatusCode(), response.getStatus());
+    }
+
+    @Test
+    public void getByCreatorNotExistingUser() {
+        String username = "notexisting.user";
+        Response response = doGet(format(GET_BY_CREATOR_URL, username));
+        assertEquals(Status.NO_CONTENT.getStatusCode(), response.getStatus());
+    }
+
+    @Test
+    public void getByCreatorNoMaterials() {
+        String username = "voldemar.vapustav";
+        List<Material> materials = doGet(format(GET_BY_CREATOR_URL, username))
+                .readEntity(new GenericType<List<Material>>() {
+                });
+
+        assertEquals(0, materials.size());
+    }
+
+    private void assertMaterial1(Material material) {
+        assertEquals(2, material.getTitles().size());
+        assertEquals("Matemaatika õpik üheksandale klassile", material.getTitles().get(0).getText());
+        assertEquals(2, material.getDescriptions().size());
+        assertEquals("Test description in estonian. (Russian available)", material.getDescriptions().get(0).getText());
+        Language language = material.getDescriptions().get(0).getLanguage();
+        assertNotNull(language);
+        assertEquals("est", language.getCode());
+        assertNull(language.getName());
+        assertNull(language.getCodes());
+        assertNull(material.getPicture());
+        assertNotNull(material.getSubjects());
+        assertEquals(1, material.getSubjects().size());
+        assertEquals(new Long(1), material.getSubjects().get(0).getId());
+        assertNull(material.getRepository());
+        assertNull(material.getRepositoryIdentifier());
+        assertEquals(new Long(1), material.getCreator().getId());
     }
 
     private Material getMaterial(long materialId) {

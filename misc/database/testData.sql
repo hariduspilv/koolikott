@@ -29,47 +29,54 @@ insert into IssueDate(id, month, year) values(7, 3, 1991);
 
 insert into Repository(id, baseURL, lastSynchronization, schemaName) values (1, 'http://koolitaja.eenet.ee:57219/Waramu3Web/OAIHandler', '2015-08-03 18:00:01', 'waramu');
 
+-- User
+
+insert into User(id, userName, name, surName, idCode) values (1, 'mati.maasikas', 'Mati', 'Maasikas', '39011220011');
+insert into User(id, userName, name, surName, idCode) values (2, 'peeter.paan', 'Peeter', 'Paan', '38011550077');
+insert into User(id, userName, name, surName, idCode) values (3, 'voldemar.vapustav', 'Voldemar', 'Vapustav', '37066990099');
+insert into User(id, userName, name, surName, idCode) values (4, 'voldemar.vapustav2', 'Voldemar', 'Vapustav', '38103070238');
+insert into User(id, userName, name, surName, idCode) values (5, 'õäöü.õäöü', 'Õäöü', 'Õäöü', '4890625956');
 
 -- Materials
 
-insert into Material(id, lang, issueDate, licenseType, source, added, updated, picture) values(1, 1, 1, 1, 'https://www.youtube.com/watch?v=gSWbx3CvVUk', '1999-02-02 06:00:01', '2000-03-01 07:00:01', null);
-insert into Material(id, lang, issueDate, licenseType, source, added, updated, picture) values(2, 2, 2, 2, 'https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes', '1992-02-03 06:00:01', '1995-07-12 09:00:01', null);
-insert into Material(id, lang, issueDate, licenseType, source, added, updated, picture) values(3, 4, 3, 3,  'http://eloquentjavascript.net/Eloquent_JavaScript.pdf', '2009-02-17 08:00:01', '2011-01-10 19:00:01', null);
-insert into Material(id, lang, issueDate, licenseType, source, added, updated, picture) values(4, 3, 4, 1,  'https://en.wikipedia.org/wiki/Power_Architecture', '2012-02-02 09:00:01', '2012-08-28 22:40:01', null);
-insert into Material(id, lang, issueDate, licenseType, source, added, updated, picture) values(5, 3, 5, 2,  'https://en.wikipedia.org/wiki/Power_Architecture', '2011-09-15 08:00:01', '2012-11-04 09:30:01', null);
-insert into Material(id, lang, issueDate, licenseType, source, added, updated, picture) values(6, null, null, null, 'http://www.planalto.gov.br/ccivil_03/Constituicao/Constituicao.htm', '1971-09-22 08:00:01', null, null);
-insert into Material(id, lang, issueDate, licenseType, source, added, updated, picture) values(7, 4, 6, 3, 'https://president.ee/en/republic-of-estonia/the-constitution/index.html', '2001-07-16 06:00:01', null, null);
-insert into Material(id, lang, issueDate, licenseType, source, added, updated, picture) values(8, 5, 7, 1, 'http://www.palmeiras.com.br/historia/titulos', '2014-06-01 09:00:01', null, null);
+insert into Material(id, lang, issueDate, licenseType, source, added, updated, picture, creator) values(1, 1, 1, 1, 'https://www.youtube.com/watch?v=gSWbx3CvVUk', '1999-02-02 06:00:01', '2000-03-01 07:00:01', null, 1);
+insert into Material(id, lang, issueDate, licenseType, source, added, updated, picture, creator) values(2, 2, 2, 2, 'https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes', '1992-02-03 06:00:01', '1995-07-12 09:00:01', null, 1);
+insert into Material(id, lang, issueDate, licenseType, source, added, updated, picture, creator) values(3, 4, 3, 3,  'http://eloquentjavascript.net/Eloquent_JavaScript.pdf', '2009-02-17 08:00:01', '2011-01-10 19:00:01', null, 1);
+insert into Material(id, lang, issueDate, licenseType, source, added, updated, picture, creator) values(4, 3, 4, 1,  'https://en.wikipedia.org/wiki/Power_Architecture', '2012-02-02 09:00:01', '2012-08-28 22:40:01', null, 1);
+insert into Material(id, lang, issueDate, licenseType, source, added, updated, picture, creator) values(5, 3, 5, 2,  'https://en.wikipedia.org/wiki/Power_Architecture', '2011-09-15 08:00:01', '2012-11-04 09:30:01', null, 1);
+insert into Material(id, lang, issueDate, licenseType, source, added, updated, picture, creator) values(6, null, null, null, 'http://www.planalto.gov.br/ccivil_03/Constituicao/Constituicao.htm', '1971-09-22 08:00:01', null, null, 1);
+insert into Material(id, lang, issueDate, licenseType, source, added, updated, picture, creator) values(7, 4, 6, 3, 'https://president.ee/en/republic-of-estonia/the-constitution/index.html', '2001-07-16 06:00:01', null, null, 1);
+insert into Material(id, lang, issueDate, licenseType, source, added, updated, picture, creator) values(8, 5, 7, 1, 'http://www.palmeiras.com.br/historia/titulos', '2014-06-01 09:00:01', null, null, 1);
 insert into Material(id, lang, issueDate, licenseType, source, added, updated, views, picture) values(9, null, null, null, 'http://EmptyFileds.test.ee', '2015-06-08 08:00:01', null, '98765432', null);
 insert into Material(id, lang, issueDate, licenseType, source, added, updated, picture) values(10, 1, 2, 2, 'http://automated.test.ee', '2015-06-09 08:00:01', null, null);
 insert into Material(id, lang, issueDate, licenseType, source, added, updated, picture) values(11, 1, 2, 3, 'http://performance.test.ee', '2015-06-09 08:00:01', null, null);
 
-insert into Material(id, lang, issueDate, licenseType, source, added, updated, picture) values(12, 1, 1, 1, 'https://en.wikipedia.org/wiki/Main_Page', '1999-02-02 06:00:01', '2000-03-01 07:00:01', null);
-insert into Material(id, lang, issueDate, licenseType, source, added, updated, picture) values(13, 2, 2, 2, 'https://en.wikipedia.org/wiki/New_Zealand_flag_debate', '1992-02-03 06:00:01', '1995-07-12 09:00:01', null);
-insert into Material(id, lang, issueDate, licenseType, source, added, updated, picture) values(14, 4, 3, 3,  'https://en.wikipedia.org/wiki/2015_Indian_heat_wave', '2009-02-17 08:00:01', '2011-01-10 19:00:01', null);
-insert into Material(id, lang, issueDate, licenseType, source, added, updated, picture) values(15, 3, 4, 1,  'https://en.wikipedia.org/wiki/Second_Libyan_Civil_War', '2002-02-02 09:00:01', '2012-08-28 22:40:01', null);
-insert into Material(id, lang, issueDate, licenseType, source, added, updated, picture) values(16, 3, 5, 2,  'https://en.wikipedia.org/wiki/United_States', '2001-09-15 08:00:01', '2012-11-04 09:30:01', null);
-insert into Material(id, lang, issueDate, licenseType, source, added, updated, picture) values(17, null, null, null, 'https://en.wikipedia.org/wiki/2015_Cajon_Pass_wildfire', '1971-09-22 08:00:01', null, null);
-insert into Material(id, lang, issueDate, licenseType, source, added, updated, picture) values(18, 4, 6, 3, 'https://en.wikipedia.org/wiki/India', '2001-07-16 06:00:01', null, null);
-insert into Material(id, lang, issueDate, licenseType, source, added, updated, picture) values(19, 5, 7, 1, 'https://en.wikipedia.org/wiki/Japan', '2002-06-01 09:00:01', null, null);
+insert into Material(id, lang, issueDate, licenseType, source, added, updated, picture, creator) values(12, 1, 1, 1, 'https://en.wikipedia.org/wiki/Main_Page', '1999-02-02 06:00:01', '2000-03-01 07:00:01', null, 1);
+insert into Material(id, lang, issueDate, licenseType, source, added, updated, picture, creator) values(13, 2, 2, 2, 'https://en.wikipedia.org/wiki/New_Zealand_flag_debate', '1992-02-03 06:00:01', '1995-07-12 09:00:01', null, 1);
+insert into Material(id, lang, issueDate, licenseType, source, added, updated, picture, creator) values(14, 4, 3, 3,  'https://en.wikipedia.org/wiki/2015_Indian_heat_wave', '2009-02-17 08:00:01', '2011-01-10 19:00:01', null, 1);
+insert into Material(id, lang, issueDate, licenseType, source, added, updated, picture, creator) values(15, 3, 4, 1,  'https://en.wikipedia.org/wiki/Second_Libyan_Civil_War', '2002-02-02 09:00:01', '2012-08-28 22:40:01', null, 1);
+insert into Material(id, lang, issueDate, licenseType, source, added, updated, picture, creator) values(16, 3, 5, 2,  'https://en.wikipedia.org/wiki/United_States', '2001-09-15 08:00:01', '2012-11-04 09:30:01', null, 1);
+insert into Material(id, lang, issueDate, licenseType, source, added, updated, picture, creator) values(17, null, null, null, 'https://en.wikipedia.org/wiki/2015_Cajon_Pass_wildfire', '1971-09-22 08:00:01', null, null, 1);
+insert into Material(id, lang, issueDate, licenseType, source, added, updated, picture, creator) values(18, 4, 6, 3, 'https://en.wikipedia.org/wiki/India', '2001-07-16 06:00:01', null, null, 1);
+insert into Material(id, lang, issueDate, licenseType, source, added, updated, picture, creator) values(19, 5, 7, 1, 'https://en.wikipedia.org/wiki/Japan', '2002-06-01 09:00:01', null, null, 1);
 
-insert into Material(id, lang, issueDate, licenseType, source, added, updated, picture) values(20, 1, 1, 1, 'https://en.wikipedia.org/wiki/Mexican_Drug_War', '1999-02-02 06:00:01', '2000-03-01 07:00:01', null);
-insert into Material(id, lang, issueDate, licenseType, source, added, updated, picture) values(21, 2, 2, 2, 'https://en.wikipedia.org/wiki/War_in_Darfur', '1992-02-03 06:00:01', '1995-07-12 09:00:01', null);
-insert into Material(id, lang, issueDate, licenseType, source, added, updated, picture) values(22, 4, 3, 3,  'https://en.wikipedia.org/wiki/Somalia', '2009-02-17 08:00:01', '2011-01-10 19:00:01', null);
-insert into Material(id, lang, issueDate, licenseType, source, added, updated, picture) values(23, 3, 4, 1,  'https://en.wikipedia.org/wiki/Libya', '2002-02-02 09:00:01', '2012-08-28 22:40:01', null);
-insert into Material(id, lang, issueDate, licenseType, source, added, updated, picture) values(24, 3, 5, 2,  'https://en.wikipedia.org/wiki/Democratic_Republic_of_Congo', '2001-09-15 08:00:01', '2012-11-04 09:30:01', null);
-insert into Material(id, lang, issueDate, licenseType, source, added, updated, picture) values(25, null, null, null, 'https://en.wikipedia.org/wiki/Turkey-PKK_conflict', '1971-09-22 08:00:01', null, null);
-insert into Material(id, lang, issueDate, licenseType, source, added, updated, picture) values(26, 4, 6, 3, 'https://en.wikipedia.org/wiki/Houthi_insurgency_in_Yemen', '2001-07-16 06:00:01', null, null);
-insert into Material(id, lang, issueDate, licenseType, source, added, updated, picture) values(27, 5, 7, 1, 'https://en.wikipedia.org/wiki/Estonia', '2002-06-01 09:00:01', null, null);
+insert into Material(id, lang, issueDate, licenseType, source, added, updated, picture, creator) values(20, 1, 1, 1, 'https://en.wikipedia.org/wiki/Mexican_Drug_War', '1999-02-02 06:00:01', '2000-03-01 07:00:01', null, 1);
+insert into Material(id, lang, issueDate, licenseType, source, added, updated, picture, creator) values(21, 2, 2, 2, 'https://en.wikipedia.org/wiki/War_in_Darfur', '1992-02-03 06:00:01', '1995-07-12 09:00:01', null, 1);
+insert into Material(id, lang, issueDate, licenseType, source, added, updated, picture, creator) values(22, 4, 3, 3,  'https://en.wikipedia.org/wiki/Somalia', '2009-02-17 08:00:01', '2011-01-10 19:00:01', null, 1);
+insert into Material(id, lang, issueDate, licenseType, source, added, updated, picture, creator) values(23, 3, 4, 1,  'https://en.wikipedia.org/wiki/Libya', '2002-02-02 09:00:01', '2012-08-28 22:40:01', null, 1);
+insert into Material(id, lang, issueDate, licenseType, source, added, updated, picture, creator) values(24, 3, 5, 2,  'https://en.wikipedia.org/wiki/Democratic_Republic_of_Congo', '2001-09-15 08:00:01', '2012-11-04 09:30:01', null, 1);
+insert into Material(id, lang, issueDate, licenseType, source, added, updated, picture, creator) values(25, null, null, null, 'https://en.wikipedia.org/wiki/Turkey-PKK_conflict', '1971-09-22 08:00:01', null, null, 2);
+insert into Material(id, lang, issueDate, licenseType, source, added, updated, picture, creator) values(26, 4, 6, 3, 'https://en.wikipedia.org/wiki/Houthi_insurgency_in_Yemen', '2001-07-16 06:00:01', null, null, 2);
+insert into Material(id, lang, issueDate, licenseType, source, added, updated, picture, creator) values(27, 5, 7, 1, 'https://en.wikipedia.org/wiki/Estonia', '2002-06-01 09:00:01', null, null, 2);
 
-insert into Material(id, lang, issueDate, licenseType, source, added, updated, picture) values(28, 1, 1, 1, 'https://en.wikipedia.org/wiki/Latvia', '1999-02-02 06:00:01', '2000-03-01 07:00:01', null);
-insert into Material(id, lang, issueDate, licenseType, source, added, updated, picture) values(29, 2, 2, 2, 'https://en.wikipedia.org/wiki/Sweded', '1992-02-03 06:00:01', '1995-07-12 09:00:01', null);
-insert into Material(id, lang, issueDate, licenseType, source, added, updated, picture) values(30, 4, 3, 3,  'https://en.wikipedia.org/wiki/Germany', '2009-02-17 08:00:01', '2011-01-10 19:00:01', null);
-insert into Material(id, lang, issueDate, licenseType, source, added, updated, picture) values(31, 3, 4, 1,  'https://en.wikipedia.org/wiki/Russia', '2002-02-02 09:00:01', '2012-08-28 22:40:01', null);
-insert into Material(id, lang, issueDate, licenseType, source, added, updated, picture) values(32, 3, 5, 2,  'https://en.wikipedia.org/wiki/Lithuania', '2001-09-15 08:00:01', '2012-11-04 09:30:01', null);
-insert into Material(id, lang, issueDate, licenseType, source, added, updated, picture) values(33, null, null, null, 'https://en.wikipedia.org/wiki/Poland', '1971-09-22 08:00:01', null, null);
-insert into Material(id, lang, issueDate, licenseType, source, added, updated, picture) values(34, 4, 6, 3, 'https://en.wikipedia.org/wiki/France', '2001-07-16 06:00:01', null, null);
-insert into Material(id, lang, issueDate, licenseType, source, added, updated, picture) values(35, 5, 7, 1, 'https://en.wikipedia.org/wiki/Austria', '2002-06-01 09:00:01', null, null);
+insert into Material(id, lang, issueDate, licenseType, source, added, updated, picture, creator) values(28, 1, 1, 1, 'https://en.wikipedia.org/wiki/Latvia', '1999-02-02 06:00:01', '2000-03-01 07:00:01', null, 2);
+insert into Material(id, lang, issueDate, licenseType, source, added, updated, picture, creator) values(29, 2, 2, 2, 'https://en.wikipedia.org/wiki/Sweded', '1992-02-03 06:00:01', '1995-07-12 09:00:01', null, 2);
+insert into Material(id, lang, issueDate, licenseType, source, added, updated, picture, creator) values(30, 4, 3, 3,  'https://en.wikipedia.org/wiki/Germany', '2009-02-17 08:00:01', '2011-01-10 19:00:01', null, 2);
+insert into Material(id, lang, issueDate, licenseType, source, added, updated, picture, creator) values(31, 3, 4, 1,  'https://en.wikipedia.org/wiki/Russia', '2002-02-02 09:00:01', '2012-08-28 22:40:01', null, 2);
+insert into Material(id, lang, issueDate, licenseType, source, added, updated, picture, creator) values(32, 3, 5, 2,  'https://en.wikipedia.org/wiki/Lithuania', '2001-09-15 08:00:01', '2012-11-04 09:30:01', null, 2);
+insert into Material(id, lang, issueDate, licenseType, source, added, updated, picture, creator) values(33, null, null, null, 'https://en.wikipedia.org/wiki/Poland', '1971-09-22 08:00:01', null, null, 2);
+insert into Material(id, lang, issueDate, licenseType, source, added, updated, picture, creator) values(34, 4, 6, 3, 'https://en.wikipedia.org/wiki/France', '2001-07-16 06:00:01', null, null, 2);
+insert into Material(id, lang, issueDate, licenseType, source, added, updated, picture, creator) values(35, 5, 7, 1, 'https://en.wikipedia.org/wiki/Austria', '2002-06-01 09:00:01', null, null, 2);
 insert into Material(id, lang, issueDate, licenseType, source) values(36, 1, 2, 3, 'http://pilditu.audio.ee');
 insert into Material(id, lang, issueDate, licenseType, source) values(37, 1, 2, 3, '<script>alert(1)</script>');
 insert into Material(id, lang, issueDate, licenseType, source) values(3919, 1, 2, 3, 'http://pilditu.audio.ee');
@@ -354,14 +361,6 @@ insert into Material_Tag(tag, material) values(11, 8);
 insert into Material_Tag(tag, material) values(12, 37);
 insert into Material_Tag(tag, material) values(4, 3919);
 insert into Material_Tag(tag, material) values(5, 3919);
-
--- User
-
-insert into User(id, userName, name, surName, idCode) values (1, 'mati.maasikas', 'Mati', 'Maasikas', '39011220011');
-insert into User(id, userName, name, surName, idCode) values (2, 'peeter.paan', 'Peeter', 'Paan', '38011550077');
-insert into User(id, userName, name, surName, idCode) values (3, 'voldemar.vapustav', 'Voldemar', 'Vapustav', '37066990099');
-insert into User(id, userName, name, surName, idCode) values (4, 'voldemar.vapustav2', 'Voldemar', 'Vapustav', '38103070238');
-insert into User(id, userName, name, surName, idCode) values (5, 'õäöü.õäöü', 'Õäöü', 'Õäöü', '4890625956');
 
 -- Pictures
 
