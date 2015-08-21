@@ -36,6 +36,7 @@ insert into User(id, userName, name, surName, idCode) values (2, 'peeter.paan', 
 insert into User(id, userName, name, surName, idCode) values (3, 'voldemar.vapustav', 'Voldemar', 'Vapustav', '37066990099');
 insert into User(id, userName, name, surName, idCode) values (4, 'voldemar.vapustav2', 'Voldemar', 'Vapustav', '38103070238');
 insert into User(id, userName, name, surName, idCode) values (5, 'õäöü.õäöü', 'Õäöü', 'Õäöü', '4890625956');
+insert into User(id, userName, name, surName, idCode) values (6, 'mart.dev', 'dev', 'dev', '39210140032');
 
 -- Materials
 

@@ -36,7 +36,7 @@ public class DevelopmentLoginResourceTest extends ResourceIntegrationTestBase{
     @Test
     public void loginNullId() {
         Response response = doGet(null);
-        assertEquals(Response.Status.NO_CONTENT.getStatusCode(), response.getStatus());
+        assertEquals(Response.Status.NOT_FOUND.getStatusCode(), response.getStatus());
 
     }
 }

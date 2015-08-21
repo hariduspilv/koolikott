@@ -3,10 +3,7 @@ package ee.hm.dop.common.test;
 import static ee.hm.dop.utils.ConfigurationProperties.SERVER_PORT;
 import static java.lang.String.format;
 
-import javax.ws.rs.client.Client;
-import javax.ws.rs.client.ClientBuilder;
-import javax.ws.rs.client.Entity;
-import javax.ws.rs.client.WebTarget;
+import javax.ws.rs.client.*;
 import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -56,8 +53,7 @@ public abstract class ResourceIntegrationTestBase extends IntegrationTestBase {
     }
 
     protected static Response doGet(String url, MediaType mediaType) {
-        Response response = getTarget(url).request().accept(mediaType).get(Response.class);
-        return response;
+        return getTarget(url).request().accept(mediaType).get(Response.class);
     }
 
     /*
@@ -69,8 +65,7 @@ public abstract class ResourceIntegrationTestBase extends IntegrationTestBase {
     }
 
     protected static Response doPost(String url, Entity<?> requestEntity, MediaType mediaType) {
-        Response response = getTarget(url).request().accept(mediaType).post(requestEntity);
-        return response;
+        return getTarget(url).request().accept(mediaType).post(requestEntity);
     }
 
     /*
@@ -78,7 +73,14 @@ public abstract class ResourceIntegrationTestBase extends IntegrationTestBase {
      */
 
     protected static WebTarget getTarget(String url) {
+        return getTarget(url, null);
+    }
 
+    protected static WebTarget getTarget(String url, ClientRequestFilter clientRequestFilter) {
+        return getClient(clientRequestFilter).target(getFullURL(url));
+    }
+
+    private static Client getClient(ClientRequestFilter clientRequestFilter) {
         ClientConfig clientConfig = new ClientConfig();
         clientConfig.property(ClientProperties.READ_TIMEOUT, 60000); // ms
         clientConfig.property(ClientProperties.CONNECT_TIMEOUT, 60000); // ms
@@ -86,8 +88,11 @@ public abstract class ResourceIntegrationTestBase extends IntegrationTestBase {
         Client client = ClientBuilder.newClient(clientConfig);
         client.register(JacksonFeature.class);
         client.register(LoggingFilter.class);
+        if (clientRequestFilter != null) {
+            client.register(clientRequestFilter);
+        }
 
-        return client.target(getFullURL(url));
+        return client;
     }
 
     private static String getFullURL(String path) {

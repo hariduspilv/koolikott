@@ -2,39 +2,118 @@ package ee.hm.dop.rest;
 
 import ee.hm.dop.common.test.ResourceIntegrationTestBase;
 import ee.hm.dop.model.AuthenticatedUser;
+import ee.hm.dop.service.LoginService;
+import org.easymock.Mock;
+import org.glassfish.jersey.filter.LoggingFilter;
 import org.junit.Test;
 
+import javax.inject.Inject;
+import javax.servlet.http.HttpServletRequest;
+import javax.ws.rs.client.ClientRequestContext;
+import javax.ws.rs.client.ClientRequestFilter;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.GenericType;
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.ext.Provider;
+
+import java.io.IOException;
+import java.util.*;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 
 
 public class LoginResourceTest extends ResourceIntegrationTestBase {
 
+    @Mock
+    private LoginService loginService;
+
+    @Mock
+    private HttpServletRequest request;
+
     @Test
-    public void logIn() {
-        Response response = doGet("39011220011");
-        AuthenticatedUser authenticatedUser = response.readEntity(new GenericType<AuthenticatedUser>() {
-        });
+    public void login() {
+        AuthenticatedUser authenticatedUser = getTarget("login/idCard", new LoginFilter1()).request().accept(MediaType.APPLICATION_JSON)
+                .get(AuthenticatedUser.class);
         assertNotNull(authenticatedUser.getToken());
-        assertEquals("Mati", authenticatedUser.getUser().getName());
-        assertEquals("Maasikas", authenticatedUser.getUser().getSurname());
-        assertEquals("mati.maasikas", authenticatedUser.getUser().getUsername());
-        assertEquals("39011220011", authenticatedUser.getUser().getIdCode());
+    }
+
+    @Test
+    public void loginAuthenticationFailed() {
+        AuthenticatedUser authenticatedUser = getTarget("login/idCard", new LoginFilter2()).request().accept(MediaType.APPLICATION_JSON)
+                .get(AuthenticatedUser.class);
+        assertNull(authenticatedUser);
     }
 
     @Test
     public void loginWrongId() {
-        Response response = doGet("123");
-        assertEquals(Response.Status.NO_CONTENT.getStatusCode(), response.getStatus());
+        AuthenticatedUser authenticatedUser = getTarget("login/idCard", new LoginFilter3()).request().accept(MediaType.APPLICATION_JSON)
+                .get(AuthenticatedUser.class);
+        assertNull(authenticatedUser);
     }
 
-    @Test
-    public void loginNullId() {
-        Response response = doGet(null);
-        assertEquals(Response.Status.NO_CONTENT.getStatusCode(), response.getStatus());
+    @Provider
+    public static class LoginFilter1 implements ClientRequestFilter {
 
+        @Override
+        public void filter(ClientRequestContext requestContext) throws IOException {
+            List<Object> list1 = new ArrayList<>();
+            list1.add("serialNumber=39011220011");
+            list1.add("GN=MATI");
+            list1.add("SN=MAASIKAS");
+            list1.add("CN=MATI,MAASIKAS,39011220011");
+            list1.add("OU=authentication");
+            list1.add("O=ESTEID");
+            list1.add("C=EE");
+            requestContext.getHeaders().put("SSL_CLIENT_S_DN", list1);
+
+            List<Object> list2 = new ArrayList<>();
+            list2.add("SUCCESS");
+            requestContext.getHeaders().put("SSL_AUTH_VERIFY", list2);
+        }
+    }
+
+    @Provider
+    public static class LoginFilter2 implements ClientRequestFilter {
+
+        @Override
+        public void filter(ClientRequestContext requestContext) throws IOException {
+            List<Object> list1 = new ArrayList<>();
+            list1.add("serialNumber=39011220011");
+            list1.add("GN=MATI");
+            list1.add("SN=MAASIKAS");
+            list1.add("CN=MATI,MAASIKAS,39011220011");
+            list1.add("OU=authentication");
+            list1.add("O=ESTEID");
+            list1.add("C=EE");
+            requestContext.getHeaders().put("SSL_CLIENT_S_DN", list1);
+
+            List<Object> list2 = new ArrayList<>();
+            list2.add("FAILED");
+            requestContext.getHeaders().put("SSL_AUTH_VERIFY", list2);
+        }
+    }
+
+    @Provider
+    public static class LoginFilter3 implements ClientRequestFilter {
+
+        @Override
+        public void filter(ClientRequestContext requestContext) throws IOException {
+            List<Object> list1 = new ArrayList<>();
+            list1.add("serialNumber=0");
+            list1.add("GN=MATI");
+            list1.add("SN=MAASIKAS");
+            list1.add("CN=MATI,MAASIKAS,39011220011");
+            list1.add("OU=authentication");
+            list1.add("O=ESTEID");
+            list1.add("C=EE");
+            requestContext.getHeaders().put("SSL_CLIENT_S_DN", list1);
+
+            List<Object> list2 = new ArrayList<>();
+            list2.add("SUCCESS");
+            requestContext.getHeaders().put("SSL_AUTH_VERIFY", list2);
+        }
     }
 }
