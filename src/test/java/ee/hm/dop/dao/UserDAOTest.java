@@ -20,9 +20,17 @@ public class UserDAOTest extends DatabaseTestBase {
 
     @Test
     public void findUserByIdCode() {
-        assertValidUser(userDAO.findUserByIdCode("39011220011"));
-        assertValidUser(userDAO.findUserByIdCode("38011550077"));
-        assertValidUser(userDAO.findUserByIdCode("37066990099"));
+        User user = userDAO.findUserByIdCode("39011220011");
+        assertEquals("39011220011", user.getIdCode());
+        assertValidUser(user);
+
+        user = userDAO.findUserByIdCode("39011220011");
+        assertEquals("39011220011", user.getIdCode());
+        assertValidUser(user);
+
+        user = userDAO.findUserByIdCode("39011220011");
+        assertEquals("39011220011", user.getIdCode());
+        assertValidUser(user);
     }
 
     @Test
@@ -52,21 +60,23 @@ public class UserDAOTest extends DatabaseTestBase {
     private void assertValidUser(User user) {
         assertNotNull(user.getId());
 
-        if (user.getId() == 1) {
-            assertEquals("mati.maasikas", user.getUsername());
-            assertEquals("Mati", user.getName());
-            assertEquals("Maasikas", user.getSurname());
-            assertEquals("39011220011", user.getIdCode());
-        } else if (user.getId() == 2) {
-            assertEquals("peeter.paan", user.getUsername());
-            assertEquals("Peeter", user.getName());
-            assertEquals("Paan", user.getSurname());
-            assertEquals("38011550077", user.getIdCode());
-        } else if (user.getId() == 3) {
-            assertEquals("voldemar.vapustav", user.getUsername());
-            assertEquals("Voldemar", user.getName());
-            assertEquals("Vapustav", user.getSurname());
-            assertEquals("37066990099", user.getIdCode());
+        switch (user.getIdCode()) {
+            case "39011220011":
+                assertEquals("mati.maasikas", user.getUsername());
+                assertEquals("Mati", user.getName());
+                assertEquals("Maasikas", user.getSurname());
+                break;
+            case "38011550077":
+                assertEquals("peeter.paan", user.getUsername());
+                assertEquals("Peeter", user.getName());
+                assertEquals("Paan", user.getSurname());
+                break;
+            case "37066990099":
+                assertEquals("voldemar.vapustav", user.getUsername());
+                assertEquals("Voldemar", user.getName());
+                assertEquals("Vapustav", user.getSurname());
+                assertEquals("37066990099", user.getIdCode());
+                break;
         }
     }
 
