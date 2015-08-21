@@ -82,3 +82,55 @@ Configure proxy to forward rest request to Back End servlet
 	ProxyPassReverse /rest http://127.0.0.1:8080/rest
 
 You should be able to run the whole application. Make sure to change Back End address to the one you are using, if not localhost. 
+
+### HTTPS Configuration 
+
+Refer to apache documentation to configure https. 
+
+All requests http must be redirected to https. The mod_alias module needs to be enabled.
+
+	<VirtualHost *:80>
+        Redirect permanent / https://oxygen.netgroupdigital.com/
+	</VirtualHost>
+
+### Id card configuration
+
+To configure id card refer to [Configuring Apache to support ID-card](http://www.id.ee/public/Configuring_Apache_web_server_to_support_ID.pdf).
+
+An example configuration for apache can be seen here:
+
+	<VirtualHost *:443>
+        ServerName yourserver.com
+        DocumentRoot /var/www/dop
+
+        ProxyRequests Off
+        ProxyPreserveHost On
+
+        ErrorLog ${APACHE_LOG_DIR}/error.log
+        CustomLog ${APACHE_LOG_DIR}/access.log combined
+
+        ProxyPass /rest http://yourserver.com:8080/rest
+        ProxyPassReverse /rest http://yourserver.com:8080/rest
+
+        SSLEngine on
+        SSLCertificateFile /yourpath/certs/server.crt
+        SSLCertificateKeyFile /yourpath/certs/server.key
+        SSLCACertificateFile  /yourpath/certs/id.crt
+        SSLCARevocationPath /yourpath/revocation/
+
+        <Location "/rest/login/idCard">
+
+          #verify if user was authenticated
+          RequestHeader set SSL_AUTH_VERIFY ""
+          RequestHeader set SSL_AUTH_VERIFY "%{SSL_CLIENT_VERIFY}s"
+
+          # put user info (name, idcode, etc) from the id card to header
+          RequestHeader set SSL_CLIENT_S_DN ""
+          RequestHeader set SSL_CLIENT_S_DN "%{SSL_CLIENT_S_DN}s"
+
+          SSLVerifyClient require
+          SSLVerifyDepth  2
+         </Location>
+	</VirtualHost>
+
+	
