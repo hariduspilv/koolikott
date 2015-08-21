@@ -3,22 +3,28 @@ define(['app'], function(app)
     app.controller('profileController', ['$scope', '$route', 'loginService', 'serverCallService', '$location', 
         function($scope, $route, loginService, serverCallService, $location) {
 
-    	function getUser() {
-    		if (loginService.isAuthenticated()) {
-    			var user = loginService.getUser()
-
-    			if (user && $route.current.params.username === user.username) {
-    				$scope.user = user;
-    				$scope.myProfile = true;
-    			}
-    		}
+    	function init() {
+    		isMyProfilePage();
 
             if (!$scope.user) {
-                getUserFromRest();
+                getUser();
             }
+
+            getUsersMaterials();
     	}
 
-        function getUserFromRest() {
+        function isMyProfilePage() {
+            if (loginService.isAuthenticated()) {
+                var user = loginService.getUser()
+
+                if (user && $route.current.params.username === user.username) {
+                    $scope.user = user;
+                    $scope.myProfile = true;
+                }
+            }
+        }
+
+        function getUser() {
             var params = {
                 'username': $route.current.params.username
             };
@@ -59,8 +65,7 @@ define(['app'], function(app)
             console.log('Failed to get materials. ')
         }
 
-    	getUser();
-        getUsersMaterials();
+    	init();
 
     }]);
 });
