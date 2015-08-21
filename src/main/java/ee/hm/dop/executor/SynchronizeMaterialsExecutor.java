@@ -10,6 +10,8 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 
+import javax.inject.Inject;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -19,7 +21,6 @@ import ee.hm.dop.guice.GuiceInjector;
 import ee.hm.dop.model.Repository;
 import ee.hm.dop.service.RepositoryService;
 import ee.hm.dop.service.SearchEngineService;
-import ee.hm.dop.service.SolrService;
 import ee.hm.dop.utils.DbUtils;
 
 @Singleton
@@ -31,6 +32,9 @@ public class SynchronizeMaterialsExecutor {
     private static final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
     private static ScheduledFuture<?> synchronizeMaterialHandle;
     private static final int hourOfDayToExecute = 1;
+
+    @Inject
+    private SearchEngineService searchEngineService;
 
     /**
      * The command will be executed once a day at 1 a.m.
@@ -61,7 +65,6 @@ public class SynchronizeMaterialsExecutor {
                     logger.info("Synchronization repository service finished execution.");
                     closeTransaction();
 
-                    SearchEngineService searchEngineService = newSearchEngineService();
                     searchEngineService.updateIndex();
                 } catch (Exception e) {
                     logger.error("Unexpected error while synchronizing materials.", e);
@@ -118,14 +121,6 @@ public class SynchronizeMaterialsExecutor {
      */
     protected RepositoryService newRepositoryService() {
         return GuiceInjector.getInjector().getInstance(RepositoryService.class);
-    }
-
-    /**
-     * Package access modifier for testing purpose
-     * 
-     */
-    protected SearchEngineService newSearchEngineService() {
-        return GuiceInjector.getInjector().getInstance(SolrService.class);
     }
 
     /**

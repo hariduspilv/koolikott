@@ -169,11 +169,6 @@ public class SynchronizeMaterialsExecutorTest {
         };
 
         @Override
-        protected SearchEngineService newSearchEngineService() {
-            return searchEngineService;
-        };
-
-        @Override
         protected void beginTransaction() {
             if (transactionStarted) {
                 fail("Transaction already started");
