@@ -20,15 +20,9 @@ public class UserDAOTest extends DatabaseTestBase {
 
     @Test
     public void findUserByIdCode() {
-        List<String> ids = new ArrayList<>();
-        ids.add("39011220011");
-        ids.add("38011550077");
-        ids.add("37066990099");
-
-        for (String id : ids) {
-            System.out.println(id);
-            assertValidUser(userDAO.findUserByIdCode(id));
-        }
+        assertValidUser(userDAO.findUserByIdCode("39011220011"));
+        assertValidUser(userDAO.findUserByIdCode("38011550077"));
+        assertValidUser(userDAO.findUserByIdCode("37066990099"));
     }
 
     @Test
