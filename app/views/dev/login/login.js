@@ -8,9 +8,10 @@ define(['app'], function(app)
         
         function loginSuccess(authenticatedUser) {
             if (isEmpty(authenticatedUser)) {
-                log('No data returned by logging in');
+                log("No data returned by logging in with id code:" + idCode);
                 $location.url('/');
             } else {
+                console.log(authenticatedUser);
                 loginService.setAuthenticatedUser(authenticatedUser);
                 $location.url('/' + authenticatedUser.user.username);
             }

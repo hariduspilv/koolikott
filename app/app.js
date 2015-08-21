@@ -61,7 +61,6 @@ define(['routes','services/dependencyResolver'], function(config, dependencyReso
 
     function getServicesAndUtilsDependencies() { 
         return [
-            'services/serverCallService',
             'utils/commons'
         ];
     }

@@ -12,8 +12,24 @@ define(['app'], function(app)
         };    
     });
     
-    app.directive('dopHeader', ['translationService', '$location', 'searchService', '$rootScope',
-     function(translationService, $location, searchService, $rootScope) {
+    app.directive('dopHeader', ['translationService', '$location', 'searchService', '$rootScope', 'serverCallService', 'loginService',
+     function(translationService, $location, searchService, $rootScope, serverCallService, loginService) {
+
+        function loginSuccess(authenticatedUser) {
+            if (isEmpty(authenticatedUser)) {
+                log('No data returned by logging in');
+            } else {
+                loginService.setAuthenticatedUser(authenticatedUser);
+                $('#dropdowned').collapse('hide');
+                $location.url('/' + authenticatedUser.user.username);
+            }
+        };
+        
+        function loginFail(material, status) {
+            log('Logging in failed.');
+        };
+
+
         return {
             scope: true,
             templateUrl: 'app/directives/header/header.html',
@@ -58,6 +74,9 @@ define(['app'], function(app)
                     }
                 };
 
+                $scope.idCardAuth = function() {
+                    serverCallService.makeGet("rest/login/idCard", {}, loginSuccess, loginFail);
+                };
             }
         };
     }]);

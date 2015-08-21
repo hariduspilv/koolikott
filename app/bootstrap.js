@@ -3,8 +3,9 @@ require.config({
     paths: {
         'dop': '../assets/js/dop.min',
         'modernizr': '../assets/js/modernizr.min',
-        'searchService': 'services/searchService',
         'loginService': 'services/loginService',
+        'serverCallService': 'services/serverCallService',
+        'searchService': 'services/searchService',
         'dopHeader': 'directives/header/header',
         'dopFooter': 'directives/footer/footer',
         'translateUrlLoader': '../assets/js/angular-translate-loader-url.min',
@@ -20,7 +21,7 @@ require.config({
     }
 });
 
-require(['app', 'translationService', 'searchService', 'loginService', 'dopHeader', 'dopFooter'],
- function(app, translationService, searchService, loginService, dopHeader) {
+require(['app', 'translationService', 'loginService', 'serverCallService', 'searchService', 'dopHeader', 'dopFooter'],
+ function(app, translationService, loginService, serverCallService, searchService, dopHeader) {
     angular.bootstrap(document, ['app']);
 });
