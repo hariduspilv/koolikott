@@ -1,5 +1,6 @@
 package ee.hm.dop.rest;
 
+import static java.lang.String.format;
 
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
@@ -9,12 +10,11 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
-import ee.hm.dop.model.AuthenticatedUser;
-import ee.hm.dop.service.LoginService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import static java.lang.String.*;
+import ee.hm.dop.model.AuthenticatedUser;
+import ee.hm.dop.service.LoginService;
 
 /**
  * Created by mart.laus on 13.08.2015.
@@ -37,7 +37,7 @@ public class LogInResource {
 
         if (isAuthValid()) {
             String idCode = getIdCodeFromRequest();
-            authenticatedUser = loginService.logIn(idCode);
+            authenticatedUser = loginService.logIn(idCode, getNameFromRequest(), getSurnameFromRequest());
 
             if (authenticatedUser != null) {
                 logger.info(format("User %s is logged in using id card login with id %s.",
@@ -55,9 +55,18 @@ public class LogInResource {
         return values[0].split("=")[1];
     }
 
-    private boolean isAuthValid() {
-            return "SUCCESS".equals(request.getHeader("SSL_AUTH_VERIFY"));
+    protected String getNameFromRequest() {
+        String[] values = request.getHeader("SSL_CLIENT_S_DN").split(",");
+        return values[1].split("=")[1];
     }
 
+    protected String getSurnameFromRequest() {
+        String[] values = request.getHeader("SSL_CLIENT_S_DN").split(",");
+        return values[2].split("=")[1];
+    }
+
+    private boolean isAuthValid() {
+        return "SUCCESS".equals(request.getHeader("SSL_AUTH_VERIFY"));
+    }
 
 }

@@ -1,29 +1,24 @@
 package ee.hm.dop.rest;
 
-import ee.hm.dop.common.test.ResourceIntegrationTestBase;
-import ee.hm.dop.model.AuthenticatedUser;
-import ee.hm.dop.service.LoginService;
-import org.easymock.Mock;
-import org.glassfish.jersey.filter.LoggingFilter;
-import org.junit.Test;
-
-import javax.inject.Inject;
-import javax.servlet.http.HttpServletRequest;
-import javax.ws.rs.client.ClientRequestContext;
-import javax.ws.rs.client.ClientRequestFilter;
-import javax.ws.rs.core.Context;
-import javax.ws.rs.core.GenericType;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
-import javax.ws.rs.ext.Provider;
-
-import java.io.IOException;
-import java.util.*;
-
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.ws.rs.client.ClientRequestContext;
+import javax.ws.rs.client.ClientRequestFilter;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.ext.Provider;
+
+import org.easymock.Mock;
+import org.junit.Test;
+
+import ee.hm.dop.common.test.ResourceIntegrationTestBase;
+import ee.hm.dop.model.AuthenticatedUser;
+import ee.hm.dop.service.LoginService;
 
 public class LoginResourceTest extends ResourceIntegrationTestBase {
 
@@ -35,23 +30,23 @@ public class LoginResourceTest extends ResourceIntegrationTestBase {
 
     @Test
     public void login() {
-        AuthenticatedUser authenticatedUser = getTarget("login/idCard", new LoginFilter1()).request().accept(MediaType.APPLICATION_JSON)
-                .get(AuthenticatedUser.class);
+        AuthenticatedUser authenticatedUser = getTarget("login/idCard", new LoginFilter1()).request()
+                .accept(MediaType.APPLICATION_JSON).get(AuthenticatedUser.class);
         assertNotNull(authenticatedUser.getToken());
     }
 
     @Test
     public void loginAuthenticationFailed() {
-        AuthenticatedUser authenticatedUser = getTarget("login/idCard", new LoginFilter2()).request().accept(MediaType.APPLICATION_JSON)
-                .get(AuthenticatedUser.class);
+        AuthenticatedUser authenticatedUser = getTarget("login/idCard", new LoginFilter2()).request()
+                .accept(MediaType.APPLICATION_JSON).get(AuthenticatedUser.class);
         assertNull(authenticatedUser);
     }
 
     @Test
     public void loginWrongId() {
-        AuthenticatedUser authenticatedUser = getTarget("login/idCard", new LoginFilter3()).request().accept(MediaType.APPLICATION_JSON)
-                .get(AuthenticatedUser.class);
-        assertNull(authenticatedUser);
+        AuthenticatedUser authenticatedUser = getTarget("login/idCard", new LoginFilter3()).request()
+                .accept(MediaType.APPLICATION_JSON).get(AuthenticatedUser.class);
+        assertNotNull(authenticatedUser);
     }
 
     @Provider

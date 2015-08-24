@@ -39,12 +39,17 @@ public class LoginServiceTest {
     @Test
     public void logInNullUser() {
         String idCode = "idCode";
+        String name = "John";
+        String surname = "Smith";
 
-        expect(userService.getUserByIdCode(idCode)).andReturn(null);
+        expect(userService.getUserByIdCode(idCode)).andReturn(null).anyTimes();
+        expect(userService.getNextAvailableUsername(name, surname)).andReturn(name + "." + surname);
+        userService.createUser(EasyMock.anyObject(User.class));
+        expectLastCall();
 
         replay(userService, authenticatedUserDAO);
 
-        AuthenticatedUser authenticatedUser = loginService.logIn(idCode);
+        AuthenticatedUser authenticatedUser = loginService.logIn(idCode, name, surname);
 
         verify(userService, authenticatedUserDAO);
 
@@ -54,19 +59,21 @@ public class LoginServiceTest {
     @Test
     public void logInSameTokenThreeTimes() throws NoSuchMethodException {
         String idCode = "idCode";
+        String name = "John";
+        String surname = "Smith";
         User user = createMock(User.class);
 
-        expect(userService.getUserByIdCode(idCode)).andReturn(user);
+        expect(userService.getUserByIdCode(idCode)).andReturn(user).times(2);
         authenticatedUserDAO.createAuthenticatedUser(EasyMock.anyObject(AuthenticatedUser.class));
         expectLastCall().andThrow(new DuplicateTokenException()).times(2);
 
         replay(userService, authenticatedUserDAO, user);
 
         try {
-            loginService.logIn(idCode);
+            loginService.logIn(idCode, name, surname);
             fail("Exception expected");
         } catch (DuplicateTokenException e) {
-            //Everything ok
+            // Everything ok
         }
 
         verify(userService, authenticatedUserDAO, user);
@@ -75,16 +82,18 @@ public class LoginServiceTest {
     @Test
     public void logInDuplicateToken() throws NoSuchMethodException {
         String idCode = "idCode";
+        String name = "John";
+        String surname = "Smith";
         User user = createMock(User.class);
 
-        expect(userService.getUserByIdCode(idCode)).andReturn(user);
+        expect(userService.getUserByIdCode(idCode)).andReturn(user).times(2);
         authenticatedUserDAO.createAuthenticatedUser(EasyMock.anyObject(AuthenticatedUser.class));
         expectLastCall().andThrow(new DuplicateTokenException()).times(1);
         authenticatedUserDAO.createAuthenticatedUser(EasyMock.anyObject(AuthenticatedUser.class));
 
         replay(userService, authenticatedUserDAO, user);
 
-        loginService.logIn(idCode);
+        loginService.logIn(idCode, name, surname);
 
         verify(userService, authenticatedUserDAO, user);
     }
@@ -92,15 +101,17 @@ public class LoginServiceTest {
     @Test
     public void logIn() throws NoSuchMethodException {
         String idCode = "idCode";
+        String name = "John";
+        String surname = "Smith";
         User user = createMock(User.class);
 
-        expect(userService.getUserByIdCode(idCode)).andReturn(user);
+        expect(userService.getUserByIdCode(idCode)).andReturn(user).times(2);
         authenticatedUserDAO.createAuthenticatedUser(EasyMock.anyObject(AuthenticatedUser.class));
         expectLastCall();
 
         replay(userService, authenticatedUserDAO, user);
 
-        loginService.logIn(idCode);
+        loginService.logIn(idCode, name, surname);
 
         verify(userService, authenticatedUserDAO, user);
     }

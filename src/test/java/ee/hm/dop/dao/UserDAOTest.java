@@ -3,9 +3,6 @@ package ee.hm.dop.dao;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import javax.inject.Inject;
 
 import org.junit.Test;
@@ -78,6 +75,13 @@ public class UserDAOTest extends DatabaseTestBase {
                 assertEquals("37066990099", user.getIdCode());
                 break;
         }
+    }
+
+    @Test
+    public void countUsersWithSameFullName() {
+        assertEquals(Long.valueOf(1), userDAO.countUsersWithSameFullName("Mati", "Maasikas"));
+        assertEquals(Long.valueOf(1), userDAO.countUsersWithSameFullName("Peeter", "Paan"));
+        assertEquals(Long.valueOf(2), userDAO.countUsersWithSameFullName("Voldemar", "Vapustav"));
     }
 
 }

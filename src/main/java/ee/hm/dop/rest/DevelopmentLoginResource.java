@@ -1,16 +1,14 @@
 package ee.hm.dop.rest;
 
-import ee.hm.dop.model.AuthenticatedUser;
-import ee.hm.dop.service.LoginService;
-
 import javax.inject.Inject;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
-import java.net.HttpURLConnection;
+
+import ee.hm.dop.model.AuthenticatedUser;
+import ee.hm.dop.service.LoginService;
 
 /**
  * Created by mart on 17.08.15.
@@ -26,6 +24,6 @@ public class DevelopmentLoginResource {
     @Path("/login/{idCode}")
     @Produces(MediaType.APPLICATION_JSON)
     public AuthenticatedUser logIn(@PathParam("idCode") String idCode) {
-        return loginService.logIn(idCode);
+        return loginService.logInWithExistingUser(idCode);
     }
 }

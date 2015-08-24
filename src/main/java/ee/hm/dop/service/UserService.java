@@ -3,6 +3,7 @@ package ee.hm.dop.service;
 import javax.inject.Inject;
 
 import ee.hm.dop.dao.UserDAO;
+import ee.hm.dop.exceptions.DuplicateUserException;
 import ee.hm.dop.model.User;
 
 /**
@@ -21,7 +22,15 @@ public class UserService {
         return userDAO.findUserByUsername(username);
     }
 
-    public void createUser(User user) {
+    public String getNextAvailableUsername(String name, String surname) {
+        Long count = userDAO.countUsersWithSameFullName(name, surname);
+        if (count == 0) {
+            return name + "." + surname;
+        }
+        return name + "." + surname + String.valueOf(count + 1);
+    }
+
+    public void createUser(User user) throws DuplicateUserException {
         userDAO.createUser(user);
     }
 }

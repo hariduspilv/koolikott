@@ -2,8 +2,10 @@ package ee.hm.dop.dao;
 
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
+import javax.persistence.PersistenceException;
 import javax.persistence.TypedQuery;
 
+import ee.hm.dop.exceptions.DuplicateUserException;
 import ee.hm.dop.model.User;
 
 /**
@@ -42,7 +44,27 @@ public class UserDAO {
         return user;
     }
 
-    public void createUser(User user) {
-        entityManager.persist(user);
+    public Long countUsersWithSameFullName(String name, String surname) {
+        TypedQuery<Long> findByFullName = entityManager.createQuery(
+                "SELECT COUNT(u.id) FROM User u WHERE u.name = :name AND u.surname = :surname", Long.class);
+
+        findByFullName.setParameter("name", name).setParameter("surname", surname);
+
+        Long count = null;
+        try {
+            count = findByFullName.getSingleResult();
+        } catch (Exception e) {
+            // ignore
+        }
+
+        return count;
+    }
+
+    public void createUser(User user) throws DuplicateUserException {
+        try {
+            entityManager.persist(user);
+        } catch (PersistenceException e) {
+            throw new DuplicateUserException("Duplicate unique fields found when persisting user. ");
+        }
     }
 }
