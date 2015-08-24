@@ -8,6 +8,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.Transient;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -24,6 +25,9 @@ public class AuthenticatedUser {
 
     @Column(nullable = false, unique = true)
     private String token;
+
+    @Transient
+    private boolean firstLogin;
 
     public Long getId() {
         return id;
@@ -47,5 +51,13 @@ public class AuthenticatedUser {
 
     public void setToken(String token) {
         this.token = token;
+    }
+
+    public boolean isFirstLogin() {
+        return firstLogin;
+    }
+
+    public void setFirstLogin(boolean firstLogin) {
+        this.firstLogin = firstLogin;
     }
 }

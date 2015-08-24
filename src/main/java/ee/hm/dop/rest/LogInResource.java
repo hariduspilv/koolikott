@@ -40,8 +40,8 @@ public class LogInResource {
             authenticatedUser = loginService.logIn(idCode);
 
             if (authenticatedUser != null) {
-                logger.info(format("User %s is logged in using id card login with id %s.",
-                        authenticatedUser.getUser().getUsername(), idCode));
+                logger.info(format("User %s is logged in using id card login with id %s.", authenticatedUser.getUser()
+                        .getUsername(), idCode));
             } else {
                 logger.info(format("User with id %s could not log in, trying to create account. ", idCode));
 
@@ -53,6 +53,7 @@ public class LogInResource {
                     authenticatedUser = loginService.logIn(idCode);
 
                     if (authenticatedUser != null) {
+                    	authenticatedUser.setFirstLogin(true);
                         logger.info(format("User %s logged in for the first time using id card login with id %s.",
                                 authenticatedUser.getUser().getUsername(), idCode));
                     } else {
