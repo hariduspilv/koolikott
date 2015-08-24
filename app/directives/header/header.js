@@ -21,7 +21,6 @@ define(['app'], function(app)
             } else {
                 loginService.setAuthenticatedUser(authenticatedUser);
                 $('#dropdowned').collapse('hide');
-                $location.url('/' + authenticatedUser.user.username);
             }
         };
         
