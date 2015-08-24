@@ -31,8 +31,8 @@ public class UserDAO {
     }
 
     public User findUserByUsername(String username) {
-        TypedQuery<User> findByUsername = entityManager.createQuery(
-                "SELECT u FROM User u WHERE u.username = :username", User.class);
+        TypedQuery<User> findByUsername = entityManager.createQuery("SELECT u FROM User u WHERE u.username = :username",
+                User.class);
 
         User user = null;
         try {
@@ -45,14 +45,14 @@ public class UserDAO {
     }
 
     public Long countUsersWithSameFullName(String name, String surname) {
-        TypedQuery<Long> findByFullName = entityManager.createQuery(
+        TypedQuery<Long> countByFullName = entityManager.createQuery(
                 "SELECT COUNT(u.id) FROM User u WHERE u.name = :name AND u.surname = :surname", Long.class);
 
-        findByFullName.setParameter("name", name).setParameter("surname", surname);
+        countByFullName.setParameter("name", name).setParameter("surname", surname);
 
-        Long count = null;
+        Long count = 0L;
         try {
-            count = findByFullName.getSingleResult();
+            count = countByFullName.getSingleResult();
         } catch (Exception e) {
             // ignore
         }
@@ -62,7 +62,8 @@ public class UserDAO {
 
     public void createUser(User user) throws DuplicateUserException {
         try {
-            entityManager.persist(user);
+            User merged = entityManager.merge(user);
+            entityManager.persist(merged);
         } catch (PersistenceException e) {
             throw new DuplicateUserException("Duplicate unique fields found when persisting user. ");
         }

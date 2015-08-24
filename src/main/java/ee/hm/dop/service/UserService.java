@@ -22,14 +22,6 @@ public class UserService {
         return userDAO.findUserByUsername(username);
     }
 
-    public String getNextAvailableUsername(String name, String surname) {
-        Long count = userDAO.countUsersWithSameFullName(name, surname);
-        if (count == 0) {
-            return name + "." + surname;
-        }
-        return name + "." + surname + String.valueOf(count + 1);
-    }
-
     public void createUser(User user) throws DuplicateUserException {
         userDAO.createUser(user);
     }

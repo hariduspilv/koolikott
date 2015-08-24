@@ -2,12 +2,14 @@ package ee.hm.dop.dao;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.fail;
 
 import javax.inject.Inject;
 
 import org.junit.Test;
 
 import ee.hm.dop.common.test.DatabaseTestBase;
+import ee.hm.dop.exceptions.DuplicateUserException;
 import ee.hm.dop.model.User;
 
 public class UserDAOTest extends DatabaseTestBase {
@@ -82,6 +84,21 @@ public class UserDAOTest extends DatabaseTestBase {
         assertEquals(Long.valueOf(1), userDAO.countUsersWithSameFullName("Mati", "Maasikas"));
         assertEquals(Long.valueOf(1), userDAO.countUsersWithSameFullName("Peeter", "Paan"));
         assertEquals(Long.valueOf(2), userDAO.countUsersWithSameFullName("Voldemar", "Vapustav"));
+    }
+
+    @Test
+    public void createUserWithDuplicateUsername() {
+        User user = new User();
+        user.setName("Mati");
+        user.setSurname("Maasikas");
+        user.setUsername("mati.maasikas");
+        user.setIdCode("12345678901");
+        try {
+            userDAO.createUser(user);
+            fail("Exception expected. ");
+        } catch (DuplicateUserException e) {
+            // expected
+        }
     }
 
 }

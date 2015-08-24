@@ -16,6 +16,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import ee.hm.dop.dao.AuthenticatedUserDAO;
+import ee.hm.dop.dao.UserDAO;
 import ee.hm.dop.exceptions.DuplicateTokenException;
 import ee.hm.dop.model.AuthenticatedUser;
 import ee.hm.dop.model.User;
@@ -36,20 +37,18 @@ public class LoginServiceTest {
     @Mock
     private AuthenticatedUserDAO authenticatedUserDAO;
 
+    @Mock
+    private UserDAO userDAO;
+
     @Test
     public void logInNullUser() {
         String idCode = "idCode";
-        String name = "John";
-        String surname = "Smith";
 
         expect(userService.getUserByIdCode(idCode)).andReturn(null).anyTimes();
-        expect(userService.getNextAvailableUsername(name, surname)).andReturn(name + "." + surname);
-        userService.createUser(EasyMock.anyObject(User.class));
-        expectLastCall();
 
         replay(userService, authenticatedUserDAO);
 
-        AuthenticatedUser authenticatedUser = loginService.logIn(idCode, name, surname);
+        AuthenticatedUser authenticatedUser = loginService.logIn(idCode);
 
         verify(userService, authenticatedUserDAO);
 
@@ -59,18 +58,16 @@ public class LoginServiceTest {
     @Test
     public void logInSameTokenThreeTimes() throws NoSuchMethodException {
         String idCode = "idCode";
-        String name = "John";
-        String surname = "Smith";
         User user = createMock(User.class);
 
-        expect(userService.getUserByIdCode(idCode)).andReturn(user).times(2);
+        expect(userService.getUserByIdCode(idCode)).andReturn(user);
         authenticatedUserDAO.createAuthenticatedUser(EasyMock.anyObject(AuthenticatedUser.class));
         expectLastCall().andThrow(new DuplicateTokenException()).times(2);
 
         replay(userService, authenticatedUserDAO, user);
 
         try {
-            loginService.logIn(idCode, name, surname);
+            loginService.logIn(idCode);
             fail("Exception expected");
         } catch (DuplicateTokenException e) {
             // Everything ok
@@ -82,18 +79,16 @@ public class LoginServiceTest {
     @Test
     public void logInDuplicateToken() throws NoSuchMethodException {
         String idCode = "idCode";
-        String name = "John";
-        String surname = "Smith";
         User user = createMock(User.class);
 
-        expect(userService.getUserByIdCode(idCode)).andReturn(user).times(2);
+        expect(userService.getUserByIdCode(idCode)).andReturn(user);
         authenticatedUserDAO.createAuthenticatedUser(EasyMock.anyObject(AuthenticatedUser.class));
         expectLastCall().andThrow(new DuplicateTokenException()).times(1);
         authenticatedUserDAO.createAuthenticatedUser(EasyMock.anyObject(AuthenticatedUser.class));
 
         replay(userService, authenticatedUserDAO, user);
 
-        loginService.logIn(idCode, name, surname);
+        loginService.logIn(idCode);
 
         verify(userService, authenticatedUserDAO, user);
     }
@@ -101,18 +96,69 @@ public class LoginServiceTest {
     @Test
     public void logIn() throws NoSuchMethodException {
         String idCode = "idCode";
-        String name = "John";
-        String surname = "Smith";
         User user = createMock(User.class);
 
-        expect(userService.getUserByIdCode(idCode)).andReturn(user).times(2);
+        expect(userService.getUserByIdCode(idCode)).andReturn(user);
         authenticatedUserDAO.createAuthenticatedUser(EasyMock.anyObject(AuthenticatedUser.class));
         expectLastCall();
 
         replay(userService, authenticatedUserDAO, user);
 
-        loginService.logIn(idCode, name, surname);
+        loginService.logIn(idCode);
 
         verify(userService, authenticatedUserDAO, user);
     }
+
+    @Test
+    public void createUser() throws Exception {
+        String idCode = "idCode";
+        String name = "John";
+        String surname = "Smith";
+
+        expect(userDAO.countUsersWithSameFullName(name, surname)).andReturn(0L);
+        userService.createUser(EasyMock.anyObject(User.class));
+        expectLastCall();
+
+        replay(userService, userDAO);
+
+        loginService.createUser(idCode, name, surname);
+
+        verify(userService, userDAO);
+
+    }
+
+    @Test
+    public void getNextAvailableUsername() {
+        String name = "John";
+        String surname = "Smith";
+        Long count = 0L;
+        String expectedUsername = "john.smith";
+        expect(userDAO.countUsersWithSameFullName(name, surname)).andReturn(count);
+
+        replay(userDAO);
+
+        String nextUsername = loginService.getNextAvailableUsername(name, surname);
+
+        verify(userDAO);
+
+        assertEquals(expectedUsername, nextUsername);
+    }
+
+    @Test
+    public void getNextAvailableUsernameWhenNameIsTaken() {
+        String name = "John";
+        String surname = "Smith";
+        Long count = 2L;
+        String expectedUsername = "john.smith3";
+        expect(userDAO.countUsersWithSameFullName(name, surname)).andReturn(count);
+
+        replay(userDAO);
+
+        String nextUsername = loginService.getNextAvailableUsername(name, surname);
+
+        verify(userDAO);
+
+        assertEquals(expectedUsername, nextUsername);
+    }
+
 }

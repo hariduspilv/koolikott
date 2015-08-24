@@ -24,6 +24,6 @@ public class DevelopmentLoginResource {
     @Path("/login/{idCode}")
     @Produces(MediaType.APPLICATION_JSON)
     public AuthenticatedUser logIn(@PathParam("idCode") String idCode) {
-        return loginService.logInWithExistingUser(idCode);
+        return loginService.logIn(idCode);
     }
 }

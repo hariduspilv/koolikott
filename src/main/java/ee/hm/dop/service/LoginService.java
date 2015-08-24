@@ -5,7 +5,11 @@ import java.security.SecureRandom;
 
 import javax.inject.Inject;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import ee.hm.dop.dao.AuthenticatedUserDAO;
+import ee.hm.dop.dao.UserDAO;
 import ee.hm.dop.exceptions.DuplicateTokenException;
 import ee.hm.dop.exceptions.DuplicateUserException;
 import ee.hm.dop.model.AuthenticatedUser;
@@ -16,15 +20,20 @@ import ee.hm.dop.model.User;
  */
 public class LoginService {
 
+    private static final Logger logger = LoggerFactory.getLogger(SolrService.class);
+
     @Inject
     private UserService userService;
 
     @Inject
     private AuthenticatedUserDAO authenticatedUserDAO;
 
+    @Inject
+    private UserDAO userDAO;
+
     private SecureRandom random = new SecureRandom();
 
-    public AuthenticatedUser logInWithExistingUser(String idCode) {
+    public AuthenticatedUser logIn(String idCode) {
         User user = getUser(idCode);
         if (user == null) {
             return null;
@@ -36,36 +45,26 @@ public class LoginService {
         return authenticatedUser;
     }
 
-    public AuthenticatedUser logIn(String idCode, String name, String surname) {
-        User user = getUser(idCode);
-        if (user == null) {
-            User newUser = getNewUser(idCode, name, surname);
-            createUser(newUser);
-        }
+    public synchronized void createUser(String idCode, String name, String surname) {
+        User user = new User();
+        user.setIdCode(idCode);
+        user.setName(name);
+        user.setSurname(surname);
+        user.setUsername(getNextAvailableUsername(name, surname));
 
-        return logInWithExistingUser(idCode);
+        createUser(user);
     }
 
     private User getUser(String idCode) {
         return userService.getUserByIdCode(idCode);
     }
 
-    public void createUser(User user) {
+    private void createUser(User user) {
         try {
             userService.createUser(user);
         } catch (DuplicateUserException e) {
-            user.setUsername(userService.getNextAvailableUsername(user.getName(), user.getSurname()));
-            userService.createUser(user);
+            logger.error(e.getMessage());
         }
-    }
-
-    private User getNewUser(String idCode, String name, String surname) {
-        User user = new User();
-        user.setIdCode(idCode);
-        user.setName(name);
-        user.setSurname(surname);
-        user.setUsername(userService.getNextAvailableUsername(name, surname));
-        return user;
     }
 
     private AuthenticatedUser getAuthenticatedUser(User user) {
@@ -83,4 +82,14 @@ public class LoginService {
             authenticatedUserDAO.createAuthenticatedUser(authenticatedUser);
         }
     }
+
+    public String getNextAvailableUsername(String name, String surname) {
+        Long count = userDAO.countUsersWithSameFullName(name, surname);
+        String username = name.toLowerCase() + "." + surname.toLowerCase();
+        if (count == 0) {
+            return username;
+        }
+        return username + String.valueOf(count + 1);
+    }
+
 }

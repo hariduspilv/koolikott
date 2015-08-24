@@ -46,7 +46,7 @@ public class LoginResourceTest extends ResourceIntegrationTestBase {
     public void loginWrongId() {
         AuthenticatedUser authenticatedUser = getTarget("login/idCard", new LoginFilter3()).request()
                 .accept(MediaType.APPLICATION_JSON).get(AuthenticatedUser.class);
-        assertNotNull(authenticatedUser);
+        assertNull(authenticatedUser);
     }
 
     @Provider
