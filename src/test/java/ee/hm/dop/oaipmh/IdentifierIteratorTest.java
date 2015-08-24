@@ -29,8 +29,8 @@ public class IdentifierIteratorTest {
 
     private IdentifierIterator getIdentifierIterator(NodeList headers, String baseURL, String resumptionToken)
             throws NoSuchMethodException {
-        Constructor constructor = IdentifierIterator.class.getDeclaredConstructor(NodeList.class, String.class,
-                String.class);
+        Constructor<IdentifierIterator> constructor = IdentifierIterator.class.getDeclaredConstructor(NodeList.class,
+                String.class, String.class);
 
         Method newListIdentifier = IdentifierIterator.class.getDeclaredMethod("newListIdentifier", String.class,
                 String.class);

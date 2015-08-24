@@ -1,11 +1,9 @@
 package ee.hm.dop.dao;
 
-import static junit.framework.Assert.assertEquals;
-import static junit.framework.TestCase.assertNotNull;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 import javax.inject.Inject;
-
-import junit.framework.TestCase;
 
 import org.junit.Test;
 
@@ -30,6 +28,6 @@ public class TagDAOTest extends DatabaseTestBase {
         assertNotNull(returnedTag);
         assertNotNull(returnedTag.getId());
         assertEquals(id, returnedTag.getId());
-        TestCase.assertEquals(name, returnedTag.getName());
+        assertEquals(name, returnedTag.getName());
     }
 }

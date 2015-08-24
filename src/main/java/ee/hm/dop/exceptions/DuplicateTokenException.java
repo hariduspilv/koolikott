@@ -5,6 +5,8 @@ package ee.hm.dop.exceptions;
  */
 public class DuplicateTokenException extends RuntimeException {
 
+    private static final long serialVersionUID = -2888848626936045166L;
+
     public DuplicateTokenException() {
         super();
     }
