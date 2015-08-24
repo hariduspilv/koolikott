@@ -8,10 +8,12 @@ import org.glassfish.jersey.client.ClientProperties;
 import org.glassfish.jersey.jackson.JacksonFeature;
 
 import com.google.inject.Provider;
+import com.google.inject.Singleton;
 
 /**
  * Provider for Client.
  */
+@Singleton
 public class HttpClientProvider implements Provider<Client> {
 
     private Client client;
@@ -25,7 +27,10 @@ public class HttpClientProvider implements Provider<Client> {
         return client;
     }
 
-    private void initClient() {
+    /**
+     * Protected for test purpose
+     */
+    protected void initClient() {
         ClientConfig clientConfig = new ClientConfig();
         clientConfig.property(ClientProperties.READ_TIMEOUT, 60000); // ms
         clientConfig.property(ClientProperties.CONNECT_TIMEOUT, 60000); // ms
