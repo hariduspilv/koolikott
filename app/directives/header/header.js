@@ -32,7 +32,7 @@ define(['app'], function(app)
         return {
             scope: true,
             templateUrl: 'app/directives/header/header.html',
-            controller: function ($scope, $location, $rootScope) {
+            controller: function ($scope, $location, $rootScope, loginService) {
                 $scope.showLanguageSelection = false;
                 $scope.showSearchBox = false;
                 $scope.selectedLanguage = translationService.getLanguage();
@@ -76,6 +76,17 @@ define(['app'], function(app)
                 $scope.idCardAuth = function() {
                     serverCallService.makeGet("rest/login/idCard", {}, loginSuccess, loginFail);
                 };
+
+                $scope.logout = function() {
+                    $('#userMenu').dropdown('toggle');
+                    loginService.logout();
+                };
+
+                $scope.$watch(function () {
+                        return loginService.getUser();
+                    }, function(user) {
+                        $scope.user = user;
+                }, true);
             }
         };
     }]);

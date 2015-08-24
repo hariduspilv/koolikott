@@ -34,9 +34,15 @@ define(['app'], function(app) {
             getUser : function() {
                 var authenticatedUser = getAuthenticatedUser();
                 if (authenticatedUser) {
-                    return authenticatedUser.user
+                    return authenticatedUser.user;
                 }
+
                 return null;
+            },
+
+            logout : function() {
+                $rootScope.authenticatedUser = null;
+                localStorage.removeItem("authenticatedUser");
             }
 	    };
 	}]);

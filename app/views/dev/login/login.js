@@ -11,7 +11,6 @@ define(['app'], function(app)
                 log("No data returned by logging in with id code:" + idCode);
                 $location.url('/');
             } else {
-                console.log(authenticatedUser);
                 loginService.setAuthenticatedUser(authenticatedUser);
                 $location.url('/' + authenticatedUser.user.username);
             }

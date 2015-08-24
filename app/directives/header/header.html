@@ -58,11 +58,11 @@
                     </ul>
                 </li>
                 <li class="dropdown navbar-link-login yamm-fw">
-                    <button class="btn btn-dark navbar-btn collapsed" type="button" data-toggle="collapse" href="#dropdowned" aria-expanded="false" aria-controls="collapseExample" id="loginButton">
+                    <button data-ng-if="!user" class="btn btn-dark navbar-btn collapsed" type="button" data-toggle="collapse" href="#dropdowned" aria-expanded="false" aria-controls="collapseExample" id="loginButton">
                         <i class="fa fa-lock"></i> Logi Sisse
                     </button>
                     
-                    <button class="btn btn-dark navbar-btn" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id="userMenu">
+                    <button data-ng-if="user" class="btn btn-dark navbar-btn" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id="userMenu">
                         <i class="fa fa-caret-down pull-right"></i> Mati Maasikas 
                     </button>
                     
@@ -70,7 +70,7 @@
                         <li><a href="#">Action</a></li>
                         <li><a href="#">Another action</a></li>
                         <li role="separator" class="divider"></li>
-                        <li><a href="#"><i class="fa fa-lock"></i> Logi välja</a></li>
+                        <li><a data-ng-click="logout()"><i class="fa fa-lock" ></i> Logi välja</a></li>
                     </ul>
                 </li>
             </ul>
@@ -114,7 +114,7 @@
                 </a>
             </div>
             <div class="col-md-2-4">
-                <a class="btn btn-dark btn-lg btn-block" data-ng-click="idCardAuth()"  href="#">
+                <a class="btn btn-dark btn-lg btn-block" data-ng-click="idCardAuth()">
                     <img src="img/logo_id_card.svg"> ID-kaart
                 </a>
             </div>
