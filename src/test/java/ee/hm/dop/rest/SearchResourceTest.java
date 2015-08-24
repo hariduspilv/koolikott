@@ -153,8 +153,7 @@ public class SearchResourceTest extends ResourceIntegrationTestBase {
         String query = "filteredquery";
         String subject = "Mathematics";
         String licenseType = "CCBY";
-        SearchResult searchResult = doGet(buildQueryURL(query, 0, subject, null, null, licenseType),
-                SearchResult.class);
+        SearchResult searchResult = doGet(buildQueryURL(query, 0, subject, null, null, licenseType), SearchResult.class);
 
         assertMaterialIdentifiers(searchResult.getMaterials(), 2L, 1L, 3L);
         assertEquals(3, searchResult.getTotalResults());

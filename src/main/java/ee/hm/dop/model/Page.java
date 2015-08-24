@@ -10,7 +10,7 @@ import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
 @Entity
-@Table(uniqueConstraints = @UniqueConstraint(columnNames = { "name", "language" }) )
+@Table(uniqueConstraints = @UniqueConstraint(columnNames = { "name", "language" }))
 public class Page {
 
     @Id

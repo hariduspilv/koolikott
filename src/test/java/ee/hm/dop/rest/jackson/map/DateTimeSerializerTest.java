@@ -42,7 +42,7 @@ public class DateTimeSerializerTest {
         try {
             generator.writeString(expected);
         } catch (IOException e) {
-            //ignore
+            // ignore
         }
         replay(generator, serializerProvider);
 

@@ -39,8 +39,8 @@ public class MaterialDAO {
      * @return a list of materials specified by idList
      */
     public List<Material> findAllById(List<Long> idList) {
-        TypedQuery<Material> findAllByIdList = entityManager
-                .createQuery("SELECT m FROM Material m WHERE m.id in :idList", Material.class);
+        TypedQuery<Material> findAllByIdList = entityManager.createQuery(
+                "SELECT m FROM Material m WHERE m.id in :idList", Material.class);
         return findAllByIdList.setParameter("idList", idList).getResultList();
     }
 

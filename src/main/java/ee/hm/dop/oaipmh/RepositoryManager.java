@@ -1,7 +1,6 @@
 package ee.hm.dop.oaipmh;
 
 import static java.lang.String.format;
-
 import ee.hm.dop.guice.GuiceInjector;
 import ee.hm.dop.model.Repository;
 import ee.hm.dop.oaipmh.waramu.MaterialParserWaramu;
@@ -24,11 +23,12 @@ public class RepositoryManager {
         MaterialParser parser;
 
         switch (repository.getSchema()) {
-        case WARAMU_PARSER:
-            parser = getMaterialParser();
-            break;
-        default:
-            throw new RuntimeException(format("No parser for schema %s or wrong repository URL" , repository.getSchema()));
+            case WARAMU_PARSER:
+                parser = getMaterialParser();
+                break;
+            default:
+                throw new RuntimeException(format("No parser for schema %s or wrong repository URL",
+                        repository.getSchema()));
         }
 
         return parser;

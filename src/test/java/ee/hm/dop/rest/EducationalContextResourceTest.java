@@ -19,7 +19,6 @@ import ee.hm.dop.model.EducationalContext;
  */
 public class EducationalContextResourceTest extends ResourceIntegrationTestBase {
 
-
     @Test
     public void getAllEducationalContexts() {
         Response response = doGet("educationalContext/getAll");

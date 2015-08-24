@@ -38,8 +38,8 @@ public class SearchService {
         return search(query, 0, subject, resourceType, educationalContext, licenseType);
     }
 
-    public SearchResult search(String query, long start, String subject, String resourceType, String educationalContext,
-            String licenseType) {
+    public SearchResult search(String query, long start, String subject, String resourceType,
+            String educationalContext, String licenseType) {
 
         String filtersAsQuery = getFiltersAsQuery(subject, resourceType, educationalContext, licenseType);
         String tokenizedQueryString = getTokenizedQueryString(query);
@@ -109,8 +109,7 @@ public class SearchService {
         return sb.toString();
     }
 
-    private String getFiltersAsQuery(String subject, String resourceType, String educationalContext,
-            String licenseType) {
+    private String getFiltersAsQuery(String subject, String resourceType, String educationalContext, String licenseType) {
         Map<String, String> filters = new LinkedHashMap<>();
         filters.put("subject", subject);
         filters.put("resource_type", resourceType);

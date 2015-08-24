@@ -35,7 +35,7 @@ public class SearchResource {
         if (educationalContext.isEmpty()) {
             educationalContext = null;
         }
-        
+
         if (licenseType.isEmpty()) {
             licenseType = null;
         }

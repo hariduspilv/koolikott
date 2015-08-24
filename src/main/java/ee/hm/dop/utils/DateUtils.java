@@ -14,10 +14,11 @@ public class DateUtils {
             .withZoneUTC();
 
     /**
-     * Converts JSON date format (yyyy-MM-dd'T'HH:mm:ss.SSS'Z' or yyyy-MM-dd'T'HH:mm:ss'Z') into {@link DateTime}
-     * object.
+     * Converts JSON date format (yyyy-MM-dd'T'HH:mm:ss.SSS'Z' or
+     * yyyy-MM-dd'T'HH:mm:ss'Z') into {@link DateTime} object.
      *
-     * @param jsonDate the date to be parsed
+     * @param jsonDate
+     *            the date to be parsed
      * @return the {@link DateTime} object represented by {@code jsonDate}
      */
     public static DateTime fromJson(String jsonDate) {
@@ -33,9 +34,11 @@ public class DateUtils {
     }
 
     /**
-     * Converts {@link DateTime} object into JSON format (yyyy-MM-dd'T'HH:mm:ss.SSS'Z') String.
+     * Converts {@link DateTime} object into JSON format
+     * (yyyy-MM-dd'T'HH:mm:ss.SSS'Z') String.
      *
-     * @param date the date to be serialized
+     * @param date
+     *            the date to be serialized
      * @return the JSON string representation of {@code date}
      */
     public static String toJson(DateTime date) {

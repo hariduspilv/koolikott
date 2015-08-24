@@ -381,8 +381,8 @@ public class SearchServiceTest {
 
         replayAll();
 
-        SearchResult result = searchService.search(query, start, subject, resourceType, educationalContext,
-                licenseType);
+        SearchResult result = searchService
+                .search(query, start, subject, resourceType, educationalContext, licenseType);
 
         verifyAll();
 

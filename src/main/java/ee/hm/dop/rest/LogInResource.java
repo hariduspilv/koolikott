@@ -40,8 +40,8 @@ public class LogInResource {
             authenticatedUser = loginService.logIn(idCode, getNameFromRequest(), getSurnameFromRequest());
 
             if (authenticatedUser != null) {
-                logger.info(format("User %s is logged in using id card login with id %s.",
-                        authenticatedUser.getUser().getUsername(), idCode));
+                logger.info(format("User %s is logged in using id card login with id %s.", authenticatedUser.getUser()
+                        .getUsername(), idCode));
             } else {
                 logger.info(format("User with id %s tried to log in, but failed.", idCode));
             }
@@ -54,6 +54,7 @@ public class LogInResource {
         String[] values = request.getHeader("SSL_CLIENT_S_DN").split(",");
         return values[0].split("=")[1];
     }
+
 
     protected String getNameFromRequest() {
         String[] values = request.getHeader("SSL_CLIENT_S_DN").split(",");
@@ -68,5 +69,6 @@ public class LogInResource {
     private boolean isAuthValid() {
         return "SUCCESS".equals(request.getHeader("SSL_AUTH_VERIFY"));
     }
+
 
 }
