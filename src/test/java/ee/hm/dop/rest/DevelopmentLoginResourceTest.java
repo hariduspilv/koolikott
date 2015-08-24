@@ -1,14 +1,15 @@
 package ee.hm.dop.rest;
 
-import ee.hm.dop.common.test.ResourceIntegrationTestBase;
-import ee.hm.dop.model.AuthenticatedUser;
-import org.junit.Test;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.Response;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import org.junit.Test;
+
+import ee.hm.dop.common.test.ResourceIntegrationTestBase;
+import ee.hm.dop.model.AuthenticatedUser;
 
 /**
  * Created by mart on 18.08.15.

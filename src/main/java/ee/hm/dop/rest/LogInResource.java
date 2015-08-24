@@ -1,6 +1,8 @@
 package ee.hm.dop.rest;
 
 
+import static java.lang.String.format;
+
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.GET;
@@ -9,12 +11,11 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
-import ee.hm.dop.model.AuthenticatedUser;
-import ee.hm.dop.service.LoginService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import static java.lang.String.*;
+import ee.hm.dop.model.AuthenticatedUser;
+import ee.hm.dop.service.LoginService;
 
 /**
  * Created by mart.laus on 13.08.2015.

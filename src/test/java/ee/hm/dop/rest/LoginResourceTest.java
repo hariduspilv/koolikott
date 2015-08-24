@@ -1,28 +1,24 @@
 package ee.hm.dop.rest;
 
-import ee.hm.dop.common.test.ResourceIntegrationTestBase;
-import ee.hm.dop.model.AuthenticatedUser;
-import ee.hm.dop.service.LoginService;
-import org.easymock.Mock;
-import org.glassfish.jersey.filter.LoggingFilter;
-import org.junit.Test;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 
-import javax.inject.Inject;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.client.ClientRequestContext;
 import javax.ws.rs.client.ClientRequestFilter;
-import javax.ws.rs.core.Context;
-import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.Provider;
 
-import java.io.IOException;
-import java.util.*;
+import org.easymock.Mock;
+import org.junit.Test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
+import ee.hm.dop.common.test.ResourceIntegrationTestBase;
+import ee.hm.dop.model.AuthenticatedUser;
+import ee.hm.dop.service.LoginService;
 
 
 public class LoginResourceTest extends ResourceIntegrationTestBase {

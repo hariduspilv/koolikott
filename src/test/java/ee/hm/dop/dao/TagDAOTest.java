@@ -5,11 +5,12 @@ import static junit.framework.TestCase.assertNotNull;
 
 import javax.inject.Inject;
 
+import junit.framework.TestCase;
+
 import org.junit.Test;
 
 import ee.hm.dop.common.test.DatabaseTestBase;
 import ee.hm.dop.model.Tag;
-import junit.framework.TestCase;
 
 /**
  * Created by mart.laus on 24.07.2015.

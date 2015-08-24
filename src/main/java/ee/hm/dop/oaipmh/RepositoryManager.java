@@ -1,7 +1,6 @@
 package ee.hm.dop.oaipmh;
 
 import static java.lang.String.format;
-
 import ee.hm.dop.guice.GuiceInjector;
 import ee.hm.dop.model.Repository;
 import ee.hm.dop.oaipmh.waramu.MaterialParserWaramu;
