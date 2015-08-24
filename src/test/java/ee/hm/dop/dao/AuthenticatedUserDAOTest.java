@@ -1,7 +1,5 @@
 package ee.hm.dop.dao;
 
-import static org.junit.Assert.assertEquals;
-
 import javax.inject.Inject;
 
 import org.junit.Test;
@@ -31,22 +29,6 @@ public class AuthenticatedUserDAOTest extends DatabaseTestBase {
 
         authenticatedUserDAO.createAuthenticatedUser(authenticatedUser1);
         authenticatedUserDAO.createAuthenticatedUser(authenticatedUser2);
-    }
-
-    @Test
-    public void findAuthenticatedUserByIdCode() {
-        AuthenticatedUser authenticatedUser = new AuthenticatedUser();
-        authenticatedUser.setToken("token");
-        User user = getUser();
-        userDAO.createUser(user);
-        authenticatedUser.setUser(user);
-        authenticatedUserDAO.createAuthenticatedUser(authenticatedUser);
-
-        AuthenticatedUser returnedUser = authenticatedUserDAO.findAuthenticatedUserByIdCode(user.getIdCode());
-
-        assertEquals(authenticatedUser.getToken(), returnedUser.getToken());
-        assertEquals(authenticatedUser.getUser().getIdCode(), returnedUser.getUser().getIdCode());
-
     }
 
     private User getUser() {
