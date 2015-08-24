@@ -45,26 +45,33 @@ public class LoginService {
         return authenticatedUser;
     }
 
-    public synchronized void createUser(String idCode, String name, String surname) {
+    public boolean createUser(String idCode, String name, String surname) {
         User user = new User();
         user.setIdCode(idCode);
         user.setName(name);
         user.setSurname(surname);
-        user.setUsername(getNextAvailableUsername(name, surname));
 
-        createUser(user);
+        return createUser(user);
     }
 
     private User getUser(String idCode) {
         return userService.getUserByIdCode(idCode);
     }
 
-    private void createUser(User user) {
+    private synchronized boolean createUser(User user) {
+        boolean created = false;
+
+        String generatedUsername = generateUsername(user.getName(), user.getSurname());
+        user.setUsername(generatedUsername);
+
         try {
             userService.createUser(user);
+            created = true;
         } catch (DuplicateUserException e) {
             logger.error(e.getMessage());
         }
+
+        return created;
     }
 
     private AuthenticatedUser getAuthenticatedUser(User user) {
@@ -83,7 +90,7 @@ public class LoginService {
         }
     }
 
-    public String getNextAvailableUsername(String name, String surname) {
+    public String generateUsername(String name, String surname) {
         Long count = userDAO.countUsersWithSameFullName(name, surname);
         String username = name.toLowerCase() + "." + surname.toLowerCase();
         if (count == 0) {

@@ -6,6 +6,7 @@ import static org.easymock.EasyMock.expectLastCall;
 import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 import org.easymock.EasyMock;
@@ -121,14 +122,16 @@ public class LoginServiceTest {
 
         replay(userService, userDAO);
 
-        loginService.createUser(idCode, name, surname);
+        boolean created = loginService.createUser(idCode, name, surname);
 
         verify(userService, userDAO);
+
+        assertTrue(created);
 
     }
 
     @Test
-    public void getNextAvailableUsername() {
+    public void generateUsername() {
         String name = "John";
         String surname = "Smith";
         Long count = 0L;
@@ -137,7 +140,7 @@ public class LoginServiceTest {
 
         replay(userDAO);
 
-        String nextUsername = loginService.getNextAvailableUsername(name, surname);
+        String nextUsername = loginService.generateUsername(name, surname);
 
         verify(userDAO);
 
@@ -145,7 +148,7 @@ public class LoginServiceTest {
     }
 
     @Test
-    public void getNextAvailableUsernameWhenNameIsTaken() {
+    public void generateUsernameWhenNameIsTaken() {
         String name = "John";
         String surname = "Smith";
         Long count = 2L;
@@ -154,7 +157,7 @@ public class LoginServiceTest {
 
         replay(userDAO);
 
-        String nextUsername = loginService.getNextAvailableUsername(name, surname);
+        String nextUsername = loginService.generateUsername(name, surname);
 
         verify(userDAO);
 
