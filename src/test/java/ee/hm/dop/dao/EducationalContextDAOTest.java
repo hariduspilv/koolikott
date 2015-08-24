@@ -26,14 +26,14 @@ public class EducationalContextDAOTest extends DatabaseTestBase {
         List<EducationalContext> subjects = educationalContextDAO.findAll();
 
         assertEquals(8, subjects.size());
-        assertValidEducationalContext (subjects.get(0));
-        assertValidEducationalContext (subjects.get(1));
-        assertValidEducationalContext (subjects.get(2));
-        assertValidEducationalContext (subjects.get(3));
-        assertValidEducationalContext (subjects.get(4));
-        assertValidEducationalContext (subjects.get(5));
-        assertValidEducationalContext (subjects.get(6));
-        assertValidEducationalContext (subjects.get(7));
+        assertValidEducationalContext(subjects.get(0));
+        assertValidEducationalContext(subjects.get(1));
+        assertValidEducationalContext(subjects.get(2));
+        assertValidEducationalContext(subjects.get(3));
+        assertValidEducationalContext(subjects.get(4));
+        assertValidEducationalContext(subjects.get(5));
+        assertValidEducationalContext(subjects.get(6));
+        assertValidEducationalContext(subjects.get(7));
     }
 
     private void assertValidEducationalContext(EducationalContext educationalContext) {

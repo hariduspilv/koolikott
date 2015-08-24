@@ -197,8 +197,8 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
     @Test
     public void getByCreator() {
         String username = "mati.maasikas";
-        List<Material> materials = doGet(format(GET_BY_CREATOR_URL, username))
-                .readEntity(new GenericType<List<Material>>() {
+        List<Material> materials = doGet(format(GET_BY_CREATOR_URL, username)).readEntity(
+                new GenericType<List<Material>>() {
                 });
 
         assertEquals(3, materials.size());
@@ -230,8 +230,8 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
     @Test
     public void getByCreatorNoMaterials() {
         String username = "voldemar.vapustav";
-        List<Material> materials = doGet(format(GET_BY_CREATOR_URL, username))
-                .readEntity(new GenericType<List<Material>>() {
+        List<Material> materials = doGet(format(GET_BY_CREATOR_URL, username)).readEntity(
+                new GenericType<List<Material>>() {
                 });
 
         assertEquals(0, materials.size());

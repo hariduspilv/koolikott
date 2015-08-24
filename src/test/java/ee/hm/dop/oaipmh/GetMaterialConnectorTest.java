@@ -67,8 +67,8 @@ public class GetMaterialConnectorTest {
         String errorMsg = "Error happened";
 
         expect(repository.getBaseURL()).andReturn(null);
-        expect(getMaterialConnector.getMaterial(repository, identifier, metadataPrefix))
-                .andThrow(new RuntimeException(errorMsg));
+        expect(getMaterialConnector.getMaterial(repository, identifier, metadataPrefix)).andThrow(
+                new RuntimeException(errorMsg));
 
         replay(getMaterialConnector, repository);
 

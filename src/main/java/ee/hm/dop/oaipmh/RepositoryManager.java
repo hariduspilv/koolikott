@@ -23,11 +23,12 @@ public class RepositoryManager {
         MaterialParser parser;
 
         switch (repository.getSchema()) {
-        case WARAMU_PARSER:
-            parser = getMaterialParser();
-            break;
-        default:
-            throw new RuntimeException(format("No parser for schema %s or wrong repository URL" , repository.getSchema()));
+            case WARAMU_PARSER:
+                parser = getMaterialParser();
+                break;
+            default:
+                throw new RuntimeException(format("No parser for schema %s or wrong repository URL",
+                        repository.getSchema()));
         }
 
         return parser;

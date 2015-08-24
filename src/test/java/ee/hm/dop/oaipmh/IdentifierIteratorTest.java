@@ -29,11 +29,11 @@ public class IdentifierIteratorTest {
 
     private IdentifierIterator getIdentifierIterator(NodeList headers, String baseURL, String resumptionToken)
             throws NoSuchMethodException {
-        Constructor constructor = IdentifierIterator.class
-                .getDeclaredConstructor(NodeList.class, String.class, String.class);
+        Constructor constructor = IdentifierIterator.class.getDeclaredConstructor(NodeList.class, String.class,
+                String.class);
 
-        Method newListIdentifier = IdentifierIterator.class
-                .getDeclaredMethod("newListIdentifier", String.class, String.class);
+        Method newListIdentifier = IdentifierIterator.class.getDeclaredMethod("newListIdentifier", String.class,
+                String.class);
 
         return createMockBuilder(IdentifierIterator.class).addMockedMethod(newListIdentifier)
                 .withConstructor(constructor).withArgs(headers, baseURL, resumptionToken).createMock();
@@ -65,7 +65,7 @@ public class IdentifierIteratorTest {
             getIdentifierIterator(nodeList, null, null).next();
             fail("Exception expected.");
         } catch (NoSuchElementException e) {
-            //ignore
+            // ignore
         }
 
         verify(nodeList);
@@ -97,7 +97,8 @@ public class IdentifierIteratorTest {
         String resumptionToken = "token";
 
         NodeList nodeList1 = createMock(NodeList.class);
-        expect(nodeList1.getLength()).andReturn(0); // same as index == headers.length()
+        expect(nodeList1.getLength()).andReturn(0); // same as index ==
+                                                    // headers.length()
 
         Element element = createMock(Element.class);
 
@@ -120,7 +121,8 @@ public class IdentifierIteratorTest {
         replay(nodeList1, nodeList2, element, document, listIdentifiers, identifierIterator);
 
         boolean result = identifierIterator.hasNext();
-        // This is needed to verify that correct parameters were passed to IdentifierIterator constructor
+        // This is needed to verify that correct parameters were passed to
+        // IdentifierIterator constructor
         Element next = identifierIterator.next();
 
         verify(nodeList1, nodeList2, element, document, listIdentifiers, identifierIterator);
@@ -135,7 +137,8 @@ public class IdentifierIteratorTest {
         String resumptionToken = "token";
 
         NodeList nodeList1 = createMock(NodeList.class);
-        expect(nodeList1.getLength()).andReturn(0).times(2); // same as index == headers.length()
+        expect(nodeList1.getLength()).andReturn(0).times(2); // same as index ==
+                                                             // headers.length()
 
         IdentifierIterator identifierIterator = getIdentifierIterator(nodeList1, baseURL, resumptionToken);
         expect(identifierIterator.newListIdentifier(baseURL, resumptionToken)).andReturn(null);
@@ -155,7 +158,8 @@ public class IdentifierIteratorTest {
         String resumptionToken = "token";
 
         NodeList nodeList1 = createMock(NodeList.class);
-        expect(nodeList1.getLength()).andReturn(0); // same as index == headers.length()
+        expect(nodeList1.getLength()).andReturn(0); // same as index ==
+                                                    // headers.length()
 
         NodeList nodeList2 = createMock(NodeList.class);
         expect(nodeList2.getLength()).andReturn(0);
@@ -183,8 +187,8 @@ public class IdentifierIteratorTest {
     }
 
     /**
-     * This tests the flow while hasNext, get next. It does not care about returning the correct nodes, it is tested in
-     * the other tests.
+     * This tests the flow while hasNext, get next. It does not care about
+     * returning the correct nodes, it is tested in the other tests.
      *
      * @throws Exception
      */

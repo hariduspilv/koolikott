@@ -16,7 +16,8 @@ public class AuthenticatedUserDAO {
     private EntityManager entityManager;
 
     public AuthenticatedUser findAuthenticatedUserByIdCode(String idCode) {
-        TypedQuery<AuthenticatedUser> findByIdCode = entityManager.createQuery("SELECT a FROM AuthenticatedUser a WHERE a.user.idCode = :idCode", AuthenticatedUser.class);
+        TypedQuery<AuthenticatedUser> findByIdCode = entityManager.createQuery(
+                "SELECT a FROM AuthenticatedUser a WHERE a.user.idCode = :idCode", AuthenticatedUser.class);
 
         AuthenticatedUser user = null;
         try {
@@ -29,7 +30,7 @@ public class AuthenticatedUserDAO {
     }
 
     public void createAuthenticatedUser(AuthenticatedUser authenticatedUser) throws DuplicateTokenException {
-        try{
+        try {
             entityManager.persist(authenticatedUser);
         } catch (PersistenceException e) {
             throw new DuplicateTokenException("Duplicate token found when persisting authenticatedUser.");

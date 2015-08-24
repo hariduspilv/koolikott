@@ -54,7 +54,7 @@ public class DateTimeDeserializerTest {
         try {
             expect(jp.getText()).andReturn(date);
         } catch (IOException e) {
-            //ignore
+            // ignore
         }
 
         replay(jp);

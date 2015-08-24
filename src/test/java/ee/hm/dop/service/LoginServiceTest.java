@@ -66,7 +66,7 @@ public class LoginServiceTest {
             loginService.logIn(idCode);
             fail("Exception expected");
         } catch (DuplicateTokenException e) {
-            //Everything ok
+            // Everything ok
         }
 
         verify(userService, authenticatedUserDAO, user);

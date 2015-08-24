@@ -20,7 +20,6 @@ import ee.hm.dop.common.test.ResourceIntegrationTestBase;
 import ee.hm.dop.model.AuthenticatedUser;
 import ee.hm.dop.service.LoginService;
 
-
 public class LoginResourceTest extends ResourceIntegrationTestBase {
 
     @Mock
@@ -31,22 +30,22 @@ public class LoginResourceTest extends ResourceIntegrationTestBase {
 
     @Test
     public void login() {
-        AuthenticatedUser authenticatedUser = getTarget("login/idCard", new LoginFilter1()).request().accept(MediaType.APPLICATION_JSON)
-                .get(AuthenticatedUser.class);
+        AuthenticatedUser authenticatedUser = getTarget("login/idCard", new LoginFilter1()).request()
+                .accept(MediaType.APPLICATION_JSON).get(AuthenticatedUser.class);
         assertNotNull(authenticatedUser.getToken());
     }
 
     @Test
     public void loginAuthenticationFailed() {
-        AuthenticatedUser authenticatedUser = getTarget("login/idCard", new LoginFilter2()).request().accept(MediaType.APPLICATION_JSON)
-                .get(AuthenticatedUser.class);
+        AuthenticatedUser authenticatedUser = getTarget("login/idCard", new LoginFilter2()).request()
+                .accept(MediaType.APPLICATION_JSON).get(AuthenticatedUser.class);
         assertNull(authenticatedUser);
     }
 
     @Test
     public void loginWrongId() {
-        AuthenticatedUser authenticatedUser = getTarget("login/idCard", new LoginFilter3()).request().accept(MediaType.APPLICATION_JSON)
-                .get(AuthenticatedUser.class);
+        AuthenticatedUser authenticatedUser = getTarget("login/idCard", new LoginFilter3()).request()
+                .accept(MediaType.APPLICATION_JSON).get(AuthenticatedUser.class);
         assertNull(authenticatedUser);
     }
 

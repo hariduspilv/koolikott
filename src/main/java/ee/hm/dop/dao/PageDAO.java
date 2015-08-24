@@ -20,7 +20,8 @@ public class PageDAO {
 
         Page page = null;
         try {
-            page = findByNameAndLanguage.setParameter("name", name).setParameter("language", language).getSingleResult();
+            page = findByNameAndLanguage.setParameter("name", name).setParameter("language", language)
+                    .getSingleResult();
         } catch (NoResultException ex) {
             // ignore
         }

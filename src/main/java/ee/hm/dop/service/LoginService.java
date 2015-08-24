@@ -25,7 +25,7 @@ public class LoginService {
 
     public AuthenticatedUser logIn(String idCode) {
         User user = getUser(idCode);
-        if(user == null) {
+        if (user == null) {
             return null;
         }
 
@@ -47,7 +47,7 @@ public class LoginService {
     }
 
     private void createAuthenticatedUser(AuthenticatedUser authenticatedUser) {
-        try{
+        try {
             authenticatedUserDAO.createAuthenticatedUser(authenticatedUser);
         } catch (DuplicateTokenException e) {
             authenticatedUser.setToken(new BigInteger(130, random).toString(32));

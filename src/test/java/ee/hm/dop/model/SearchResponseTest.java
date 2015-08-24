@@ -125,10 +125,17 @@ public class SearchResponseTest {
 
     @Test
     public void deserializeErrorResponse() throws Exception {
-        String searchResult = "{\n" + "        \"responseHeader\": {\n" + "          \"status\": 400,\n"
-                + "          \"QTime\": 1,\n" + "          \"params\": {\n" + "            \"q\": \"\\\"\",\n"
-                + "            \"wt\": \"json\",\n" + "            \"_\": \"1435934978154\"\n" + "          }\n"
-                + "        },\n" + "        \"error\": {\n"
+        String searchResult = "{\n"
+                + "        \"responseHeader\": {\n"
+                + "          \"status\": 400,\n"
+                + "          \"QTime\": 1,\n"
+                + "          \"params\": {\n"
+                + "            \"q\": \"\\\"\",\n"
+                + "            \"wt\": \"json\",\n"
+                + "            \"_\": \"1435934978154\"\n"
+                + "          }\n"
+                + "        },\n"
+                + "        \"error\": {\n"
                 + "          \"msg\": \"org.apache.solr.search.SyntaxError: Cannot parse '\\\"': Lexical error at line 1, column 2.  Encountered: <EOF> after : \\\"\\\"\",\n"
                 + "          \"code\": 400\n" + "        }\n" + "      }";
 

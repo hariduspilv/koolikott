@@ -29,8 +29,8 @@ public class UserDAO {
     }
 
     public User findUserByUsername(String username) {
-        TypedQuery<User> findByUsername = entityManager.createQuery("SELECT u FROM User u WHERE u.username = :username",
-                User.class);
+        TypedQuery<User> findByUsername = entityManager.createQuery(
+                "SELECT u FROM User u WHERE u.username = :username", User.class);
 
         User user = null;
         try {

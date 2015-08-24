@@ -14,7 +14,7 @@ import ee.hm.dop.model.AuthenticatedUser;
 /**
  * Created by mart on 18.08.15.
  */
-public class DevelopmentLoginResourceTest extends ResourceIntegrationTestBase{
+public class DevelopmentLoginResourceTest extends ResourceIntegrationTestBase {
 
     @Test
     public void logIn() {
