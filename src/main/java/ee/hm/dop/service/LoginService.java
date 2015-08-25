@@ -5,6 +5,7 @@ import java.security.SecureRandom;
 
 import javax.inject.Inject;
 
+import org.apache.commons.lang3.text.WordUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -48,8 +49,8 @@ public class LoginService {
     public boolean createUser(String idCode, String name, String surname) {
         User user = new User();
         user.setIdCode(idCode);
-        user.setName(name);
-        user.setSurname(surname);
+        user.setName(WordUtils.capitalizeFully(name, ' ', '-'));
+        user.setSurname(WordUtils.capitalizeFully(surname, ' ', '-'));
 
         return createUser(user);
     }
