@@ -80,6 +80,7 @@ define(['app'], function(app)
                 $scope.logout = function() {
                     $('#userMenu').dropdown('toggle');
                     loginService.logout();
+                    $location.url('/');
                 };
 
                 $scope.$watch(function () {
