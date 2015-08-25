@@ -97,10 +97,10 @@ All requests http must be redirected to https. The mod_alias module needs to be 
 
 To configure id card refer to [Configuring Apache to support ID-card](http://www.id.ee/public/Configuring_Apache_web_server_to_support_ID.pdf).
 
-Id card configuration:
+Id card configuration.
+
 
   <Location "/rest/login/idCard">
-
         #verify if user was authenticated
         RequestHeader set SSL_AUTH_VERIFY ""
         RequestHeader set SSL_AUTH_VERIFY "%{SSL_CLIENT_VERIFY}s"
@@ -113,7 +113,9 @@ Id card configuration:
         SSLVerifyDepth  2
   </Location>
 
+
 ### An example configuration file for Apache
+
 
   <VirtualHost *:80>
         Redirect permanent / https://yoursite.com/
