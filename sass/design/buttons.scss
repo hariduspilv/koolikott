@@ -1,3 +1,18 @@
 .btn-dark {
     @include button-variant(#FFF, #003d68, #003d68);
+    
+    &:hover,
+    &:focus,
+    &.focus,
+    &:active,
+    &:active:focus,
+    &.active {
+        border-color: #003d68;
+        background: #003d68
+    }
+}
+
+.open > .dropdown-toggle {
+    border-color: #003d68;
+    background-color: #003d68
 }
