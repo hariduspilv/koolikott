@@ -58,19 +58,19 @@
                     </ul>
                 </li>
                 <li class="dropdown navbar-link-login yamm-fw">
-                    <button data-ng-if="!user" class="btn btn-dark navbar-btn collapsed" type="button" data-toggle="collapse" href="#dropdowned" aria-expanded="false" aria-controls="collapseExample" id="loginButton">
-                        <i class="fa fa-lock"></i> Logi Sisse
+                    <button data-ng-if="!user" class="btn btn-dark navbar-btn collapsed btn-collapse" type="button" data-toggle="collapse" href="#dropdowned" aria-expanded="false" aria-controls="collapseExample" id="loginButton">
+                        <i class="fa fa-lock"></i> <span data-translate="LOGIN"></span>
                     </button>
                     
-                    <button data-ng-if="user" class="btn btn-dark navbar-btn" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id="userMenu">
-                        <i class="fa fa-caret-down pull-right"></i> Mati Maasikas 
+                    <button data-ng-if="user" class="btn btn-dark navbar-btn btn-dropdown" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id="userMenu">
+                        <span class="btn-username">{{user.name}} {{user.surname}}</span> <i class="fa fa-caret-down pull-right"></i>
                     </button>
                     
                     <ul class="dropdown-menu" aria-labelledby="userMenu">
                         <li><a href="#">Action</a></li>
                         <li><a href="#">Another action</a></li>
                         <li role="separator" class="divider"></li>
-                        <li><a data-ng-click="logout()"><i class="fa fa-lock" ></i> Logi välja</a></li>
+                        <li><a data-ng-click="logout()"><i class="fa fa-lock" ></i> <span data-translate="LOGOUT"></span></a></li>
                     </ul>
                 </li>
             </ul>
@@ -94,33 +94,33 @@
     <div class="container">
         <div class="row">
             <div class="col-md-12 text-center">
-                <h4>Vali sisenemise moodus</h4>
+                <h4 data-translate="LOGIN_CHOOSE_LOGIN_METHOD">Vali sisenemise moodus</h4>
             </div>
         </div>
         <div class="row">
             <div class="col-md-2-4">
                 <a class="btn btn-dark btn-lg btn-block hidden">
-                    <i class="fa fa-facebook-square"></i> Facebook
+                    <i class="fa fa-facebook-square"></i> <span data-translate="LOGIN_FACEBOOK">Facebook</span>
                 </a>
             </div>
             <div class="col-md-2-4">
                 <a class="btn btn-dark btn-lg btn-block hidden">
-                    <i class="fa fa-google-plus"></i> Google+
+                    <i class="fa fa-google-plus"></i> <span data-translate="LOGIN_GOOGLE">Google+</span>
                 </a>
             </div>
             <div class="col-md-2-4">
                 <a class="btn btn-dark btn-lg btn-block hidden">
-                    TAAT
+                    <span data-translate="LOGIN_TAAT">TAAT</span>
                 </a>
             </div>
             <div class="col-md-2-4">
                 <a class="btn btn-dark btn-lg btn-block" data-ng-click="idCardAuth()">
-                    <img src="img/logo_id_card.svg"> ID-kaart
+                    <img src="img/logo_id_card.svg"> <span data-translate="LOGIN_IDCARD">ID-kaart</span>
                 </a>
             </div>
             <div class="col-md-2-4">
                 <a class="btn btn-dark btn-lg btn-block hidden">
-                    <img src="img/logo_id_card.svg"> Mobiil-ID
+                    <img src="img/logo_id_card.svg"> <span data-translate="LOGIN_MOBILEID">Mobiil-ID</span>
                 </a>
             </div>
             <div class="clearfix"></div>

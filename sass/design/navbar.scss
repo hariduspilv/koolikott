@@ -82,8 +82,12 @@
     
     .navbar-link-login {
         
-        .btn {
+        .btn-collapse {
             position: relative;
+            
+            .fa {
+                margin-right: 5px
+            }
             
             &:after {
                 bottom: -23px;
@@ -101,9 +105,32 @@
             }
         }
         
+        .navbar-btn {
+            
+            font-weight: 700;
+        
+            .btn-username {
+                display: inline-block; 
+                min-width: 195px;
+                text-align: left;
+            }
+        
+        }
+        
         .collapsed {
             &:after {
                 display: none
+            }
+        }
+    }
+    
+    .open {
+        .fa-caret-down {
+            &:before {
+                display: none
+            }
+            &:after {
+                content: '\f0d8'
             }
         }
     }
@@ -119,6 +146,10 @@
         
         > a {
             line-height: 21px
+        }
+        
+        > .dropdown-menu {
+            margin-top: -23px
         }
 
     }
