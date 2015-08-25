@@ -105,14 +105,33 @@
             }
         }
         
+        .btn-dropdown {
+            .fa {
+                line-height: $line-height-base;
+            }
+        }
+        
         .navbar-btn {
             
             font-weight: 700;
         
             .btn-username {
-                display: inline-block; 
-                min-width: 195px;
+                position: relative;
+                display: block; 
+                width: 195px;
                 text-align: left;
+                overflow: hidden;
+                
+                &:after {
+                    position: absolute; 
+                    bottom: 0; 
+                    right: 0; 
+                    dislay: block; 
+                    content: ""; 
+                    width: 30px; 
+                    height: 100%; 
+                    @include gradient-horizontal-to-transparent($start-color: rgba(0, 61, 104, 1), $end-color: rgba(0, 61, 104, 0))
+                }
             }
         
         }
