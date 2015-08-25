@@ -98,29 +98,29 @@
             </div>
         </div>
         <div class="row">
-            <div class="col-md-2-4">
-                <a class="btn btn-dark btn-lg btn-block hidden">
-                    <i class="fa fa-facebook-square"></i> <span data-translate="LOGIN_FACEBOOK">Facebook</span>
-                </a>
-            </div>
-            <div class="col-md-2-4">
-                <a class="btn btn-dark btn-lg btn-block hidden">
-                    <i class="fa fa-google-plus"></i> <span data-translate="LOGIN_GOOGLE">Google+</span>
-                </a>
-            </div>
-            <div class="col-md-2-4">
-                <a class="btn btn-dark btn-lg btn-block hidden">
+            <div class="col-md-2-4 login-btn">
+                <a class="btn btn-dark btn-lg btn-block">
                     <span data-translate="LOGIN_TAAT">TAAT</span>
                 </a>
             </div>
-            <div class="col-md-2-4">
+            <div data-ng-if="false" class="col-md-2-4 login-btn">
+                <a class="btn btn-dark btn-lg btn-block hidden">
+                    <img src="img/logo_id_card.svg"> <span data-translate="LOGIN_MOBILEID">Mobiil-ID</span>
+                </a>
+            </div>
+            <div class="col-md-2-4 login-btn">
                 <a class="btn btn-dark btn-lg btn-block" data-ng-click="idCardAuth()">
                     <img src="img/logo_id_card.svg"> <span data-translate="LOGIN_IDCARD">ID-kaart</span>
                 </a>
             </div>
-            <div class="col-md-2-4">
+            <div data-ng-if="false" class="col-md-2-4 login-btn">
                 <a class="btn btn-dark btn-lg btn-block hidden">
-                    <img src="img/logo_id_card.svg"> <span data-translate="LOGIN_MOBILEID">Mobiil-ID</span>
+                    <i class="fa fa-google-plus"></i> <span data-translate="LOGIN_GOOGLE">Google+</span>
+                </a>
+            </div>
+            <div data-ng-if="false" class="col-md-2-4 login-btn">
+                <a class="btn btn-dark btn-lg btn-block">
+                    <i class="fa fa-facebook-square"></i> <span data-translate="LOGIN_FACEBOOK">Facebook</span>
                 </a>
             </div>
             <div class="clearfix"></div>
