@@ -40,10 +40,7 @@ public class LoginService {
             return null;
         }
 
-        AuthenticatedUser authenticatedUser = getAuthenticatedUser(user);
-
-        createAuthenticatedUser(authenticatedUser);
-        return authenticatedUser;
+        return createAuthenticatedUser(user);
     }
 
     public boolean createUser(String idCode, String name, String surname) {
@@ -75,23 +72,22 @@ public class LoginService {
         return created;
     }
 
-    private AuthenticatedUser getAuthenticatedUser(User user) {
+    private AuthenticatedUser createAuthenticatedUser(User user) {
         AuthenticatedUser authenticatedUser = new AuthenticatedUser();
         authenticatedUser.setUser(user);
         authenticatedUser.setToken(new BigInteger(130, random).toString(32));
-        return authenticatedUser;
-    }
 
-    private void createAuthenticatedUser(AuthenticatedUser authenticatedUser) {
         try {
             authenticatedUserDAO.createAuthenticatedUser(authenticatedUser);
         } catch (DuplicateTokenException e) {
             authenticatedUser.setToken(new BigInteger(130, random).toString(32));
             authenticatedUserDAO.createAuthenticatedUser(authenticatedUser);
         }
+
+        return authenticatedUser;
     }
 
-    public String generateUsername(String name, String surname) {
+    protected String generateUsername(String name, String surname) {
         Long count = userDAO.countUsersWithSameFullName(name, surname);
         String username = name.toLowerCase() + "." + surname.toLowerCase();
         if (count == 0) {
