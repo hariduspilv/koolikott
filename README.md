@@ -99,6 +99,10 @@ To configure id card refer to [Configuring Apache to support ID-card](http://www
 
 Id card configuration.
 
+	SSLCertificateFile /yourpath/certs/server.crt
+	SSLCertificateKeyFile /yourpath/certs/server.key
+	SSLCACertificateFile  /yourpath/certs/id.crt
+	SSLCARevocationPath /yourpath/revocation/
  	<Location "/rest/login/idCard">
         #verify if user was authenticated
         RequestHeader set SSL_AUTH_VERIFY ""
