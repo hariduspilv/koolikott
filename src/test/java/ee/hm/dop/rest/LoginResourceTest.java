@@ -42,13 +42,6 @@ public class LoginResourceTest extends ResourceIntegrationTestBase {
         assertNull(authenticatedUser);
     }
 
-    @Test
-    public void loginWrongId() {
-        AuthenticatedUser authenticatedUser = getTarget("login/idCard", new LoginFilter3()).request()
-                .accept(MediaType.APPLICATION_JSON).get(AuthenticatedUser.class);
-        assertNull(authenticatedUser);
-    }
-
     @Provider
     public static class LoginFilter1 implements ClientRequestFilter {
 
@@ -91,24 +84,4 @@ public class LoginResourceTest extends ResourceIntegrationTestBase {
         }
     }
 
-    @Provider
-    public static class LoginFilter3 implements ClientRequestFilter {
-
-        @Override
-        public void filter(ClientRequestContext requestContext) throws IOException {
-            List<Object> list1 = new ArrayList<>();
-            list1.add("serialNumber=0");
-            list1.add("GN=MATI");
-            list1.add("SN=MAASIKAS");
-            list1.add("CN=MATI,MAASIKAS,39011220011");
-            list1.add("OU=authentication");
-            list1.add("O=ESTEID");
-            list1.add("C=EE");
-            requestContext.getHeaders().put("SSL_CLIENT_S_DN", list1);
-
-            List<Object> list2 = new ArrayList<>();
-            list2.add("SUCCESS");
-            requestContext.getHeaders().put("SSL_AUTH_VERIFY", list2);
-        }
-    }
 }
