@@ -90,18 +90,38 @@ Refer to apache documentation to configure https.
 All requests http must be redirected to https. The mod_alias module needs to be enabled.
 
 	<VirtualHost *:80>
-        Redirect permanent / https://oxygen.netgroupdigital.com/
+        Redirect permanent / https://yoursite.com/
 	</VirtualHost>
 
 ### Id card configuration
 
 To configure id card refer to [Configuring Apache to support ID-card](http://www.id.ee/public/Configuring_Apache_web_server_to_support_ID.pdf).
 
-An example configuration for apache can be seen here:
+Id card configuration.
 
-	<VirtualHost *:443>
+ 	<Location "/rest/login/idCard">
+        #verify if user was authenticated
+        RequestHeader set SSL_AUTH_VERIFY ""
+        RequestHeader set SSL_AUTH_VERIFY "%{SSL_CLIENT_VERIFY}s"
+
+        # put user info (name, idcode, etc) from the id card to header
+        RequestHeader set SSL_CLIENT_S_DN ""
+        RequestHeader set SSL_CLIENT_S_DN "%{SSL_CLIENT_S_DN}s"
+
+        SSLVerifyClient require
+        SSLVerifyDepth  2
+ 	</Location>
+
+
+### An example configuration file for Apache
+
+ 	<VirtualHost *:80>
+        Redirect permanent / https://yoursite.com/
+ 	</VirtualHost>
+
+ 	<VirtualHost *:443>
         ServerName yourserver.com
-        DocumentRoot /var/www/dop
+        DocumentRoot /path/to/project
 
         ProxyRequests Off
         ProxyPreserveHost On
@@ -131,6 +151,6 @@ An example configuration for apache can be seen here:
           SSLVerifyClient require
           SSLVerifyDepth  2
          </Location>
-	</VirtualHost>
+ 	</VirtualHost>
 
 	
