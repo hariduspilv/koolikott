@@ -95,6 +95,12 @@ insert into Translation(translationGroup, translationKey, translation) values (2
 insert into Translation(translationGroup, translationKey, translation) values (2, 'MYPROFILE_PAGE_TITLE_MY_DATA', 'Мой данные');
 insert into Translation(translationGroup, translationKey, translation) values (2, 'PROFILE_PAGE_TITLE_COMPILATIONS', 'Сборники');
 insert into Translation(translationGroup, translationKey, translation) values (2, 'PROFILE_PAGE_TITLE_MATERIALS', 'Материалы');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'LOGIN_CHOOSE_LOGIN_METHOD', 'Выберите метод входа');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'LOGIN_FACEBOOK', 'Facebook');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'LOGIN_GOOGLE', 'Google+');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'LOGIN_TAAT', 'TAAT');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'LOGIN_IDCARD', 'ID-карта');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'LOGIN_MOBILEID', 'Mobiil-ID');
 
 -- Material Subject translations
 insert into Translation(translationGroup, translationKey, translation) values (2, 'MATERIAL_SUBJECT_ESTONIAN', 'Эстонский');
