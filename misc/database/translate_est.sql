@@ -96,7 +96,7 @@ insert into Translation(translationGroup, translationKey, translation) values (1
 insert into Translation(translationGroup, translationKey, translation) values (1, 'PROFILE_PAGE_TITLE_MATERIALS', 'Materjalid');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'LOGIN_CHOOSE_LOGIN_METHOD', 'Vali sisenemise moodus');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'LOGIN_FACEBOOK', 'Facebook');
-insert into Translation(translationGroup, translationKey, translation) values (1, 'LOGIN_GOOGLE', 'Google+');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'LOGIN_GOOGLE', 'Google');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'LOGIN_TAAT', 'TAAT');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'LOGIN_IDCARD', 'ID-kaart');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'LOGIN_MOBILEID', 'Mobiil-ID');
