@@ -99,8 +99,7 @@ To configure id card refer to [Configuring Apache to support ID-card](http://www
 
 Id card configuration.
 
-
-  <Location "/rest/login/idCard">
+ 	<Location "/rest/login/idCard">
         #verify if user was authenticated
         RequestHeader set SSL_AUTH_VERIFY ""
         RequestHeader set SSL_AUTH_VERIFY "%{SSL_CLIENT_VERIFY}s"
@@ -111,17 +110,16 @@ Id card configuration.
 
         SSLVerifyClient require
         SSLVerifyDepth  2
-  </Location>
+ 	</Location>
 
 
 ### An example configuration file for Apache
 
-
-  <VirtualHost *:80>
+ 	<VirtualHost *:80>
         Redirect permanent / https://yoursite.com/
-  </VirtualHost>
+ 	</VirtualHost>
 
-  <VirtualHost *:443>
+ 	<VirtualHost *:443>
         ServerName yourserver.com
         DocumentRoot /path/to/project
 
@@ -153,6 +151,6 @@ Id card configuration.
           SSLVerifyClient require
           SSLVerifyDepth  2
          </Location>
-  </VirtualHost>
+ 	</VirtualHost>
 
 	
