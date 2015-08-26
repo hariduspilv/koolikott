@@ -3,7 +3,7 @@
         <div class="input-group">
             <input data-ng-keydown="$event.which === 13 && search()" data-ng-model="searchFields.searchQuery" type="text" placeholder="{{'SEARCH' | translate}}" class="form-control" id="SearchBoxMob" show-focus="customcondition">
             <span class="input-group-btn">
-                <button data-ng-click="search()" class="btn btn-default" type="submit"><i class="fa fa-search"></i></button>
+                <button data-ng-click="search()" class="btn btn-default" type="submit" id="searchButtonMob"><i class="fa fa-search"></i></button>
             </span>
         </div>
     </div>
@@ -78,9 +78,9 @@
             <div role="search" class="navbar-form navbar-right hidden-xs hidden-sm hidden-ms" id="search-form-main">
                 <div class="form-group">
                     <div class="input-group">
-                        <input data-ng-keydown="$event.which === 13 && search()" data-ng-model="searchFields.searchQuery" type="text" placeholder="{{'SEARCH' | translate}}" class="form-control">
+                        <input data-ng-keydown="$event.which === 13 && search()" data-ng-model="searchFields.searchQuery" type="text" placeholder="{{'SEARCH' | translate}}" class="form-control" id="SearchBox">
                         <span class="input-group-btn">
-                            <button data-ng-click="search()" class="btn btn-default" type="submit"><i class="fa fa-search"></i></button>
+                            <button data-ng-click="search()" class="btn btn-default" type="submit" id="searchButton"><i class="fa fa-search"></i></button>
                         </span>
                         <span class="input-group-addon hidden"><a href="">Täpne otsing</a></span>
                     </div>
