@@ -28,7 +28,7 @@ define(['app'], function(app)
             }
         };
         
-        function loginFail(material, status) {
+        function loginFail(status) {
             log('Logging in failed.');
         };
 
