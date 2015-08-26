@@ -24,7 +24,6 @@ define(['app'], function(app) {
                 log('No data returned by logging in');
             } else {
                 instance.setAuthenticatedUser(authenticatedUser);
-                $('#dropdowned').collapse('hide');
                 
                 if (authenticatedUser.firstLogin) {
                 	$location.url('/' + authenticatedUser.user.username);

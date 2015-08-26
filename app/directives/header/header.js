@@ -68,6 +68,7 @@ define(['app'], function(app)
                         return loginService.getUser();
                     }, function(user) {
                         $scope.user = user;
+                        $('#dropdowned').collapse('hide');
                 }, true);
             }
         };
