@@ -1,8 +1,11 @@
 define(['app'], function(app) {
 
-	app.factory('loginService',['$location', '$rootScope', function($location, $rootScope) {
+	var instance;
+	
+	app.factory('loginService',['$location', '$rootScope', 'serverCallService', 
+	       function($location, $rootScope, serverCallService) {
 
-         function getAuthenticatedUser() {
+        function getAuthenticatedUser() {
             var user = JSON.parse(localStorage.getItem("authenticatedUser"));
             if (user) {
                 return user;
@@ -15,9 +18,25 @@ define(['app'], function(app) {
             
             return null;
         }
-		
-		return {
-			
+
+        function loginSuccess(authenticatedUser) {
+            if (isEmpty(authenticatedUser)) {
+                log('No data returned by logging in');
+            } else {
+                instance.setAuthenticatedUser(authenticatedUser);
+                $('#dropdowned').collapse('hide');
+                
+                if (authenticatedUser.firstLogin) {
+                	$location.url('/' + authenticatedUser.user.username);
+                }
+            }
+        };
+        
+        function loginFail(material, status) {
+            log('Logging in failed.');
+        };
+        
+        instance = {
 			setAuthenticatedUser : function(authenticatedUser) {
 				$rootScope.authenticatedUser = authenticatedUser;
                 localStorage.setItem("authenticatedUser", JSON.stringify(authenticatedUser));
@@ -43,7 +62,13 @@ define(['app'], function(app) {
             logout : function() {
                 $rootScope.authenticatedUser = null;
                 localStorage.removeItem("authenticatedUser");
+            },
+
+            loginWithIdCard : function() {
+            	serverCallService.makeGet("rest/login/idCard", {}, loginSuccess, loginFail);
             }
 	    };
+		
+		return instance;
 	}]);
 });

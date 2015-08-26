@@ -91,41 +91,7 @@
 </nav>
 
 <div class="collapse logins" id="dropdowned">
-    <div class="container">
-        <div class="row">
-            <div class="col-md-12 text-center">
-                <h4 data-translate="LOGIN_CHOOSE_LOGIN_METHOD">Vali sisenemise moodus</h4>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-2-4 login-btn">
-                <a class="btn btn-dark btn-lg btn-block">
-                    <span data-translate="LOGIN_TAAT">TAAT</span>
-                </a>
-            </div>
-            <div data-ng-if="false" class="col-md-2-4 login-btn">
-                <a class="btn btn-dark btn-lg btn-block hidden">
-                    <img src="img/logo_id_card.svg"> <span data-translate="LOGIN_MOBILEID">Mobiil-ID</span>
-                </a>
-            </div>
-            <div class="col-md-2-4 login-btn">
-                <a class="btn btn-dark btn-lg btn-block" data-ng-click="idCardAuth()">
-                    <img src="img/logo_id_card.svg"> <span data-translate="LOGIN_IDCARD">ID-kaart</span>
-                </a>
-            </div>
-            <div data-ng-if="false" class="col-md-2-4 login-btn">
-                <a class="btn btn-dark btn-lg btn-block hidden">
-                    <i class="fa fa-google-plus"></i> <span data-translate="LOGIN_GOOGLE">Google+</span>
-                </a>
-            </div>
-            <div data-ng-if="false" class="col-md-2-4 login-btn">
-                <a class="btn btn-dark btn-lg btn-block">
-                    <i class="fa fa-facebook-square"></i> <span data-translate="LOGIN_FACEBOOK">Facebook</span>
-                </a>
-            </div>
-            <div class="clearfix"></div>
-        </div>
-    </div>
+    <div data-dop-login-bar></div>
 </div>
 
 <div class="container-fluid">
