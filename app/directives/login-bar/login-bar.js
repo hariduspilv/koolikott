@@ -11,13 +11,7 @@ define(['app'], function(app)
                     loginService.loginWithIdCard();
                 };
                 
-                jQuery('#dropdowned').on('show.bs.collapse', function () {
-                    jQuery('#loginButton').removeClass('collapsed');
-                })
                 
-                jQuery('#dropdowned').on('hide.bs.collapse', function () {
-                    jQuery('#loginButton').addClass('collapsed');
-                })
             }
         };
     }]);
