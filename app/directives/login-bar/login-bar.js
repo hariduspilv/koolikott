@@ -11,7 +11,6 @@ define(['app'], function(app)
                     loginService.loginWithIdCard();
                 };
                 
-                
             }
         };
     }]);
