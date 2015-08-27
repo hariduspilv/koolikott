@@ -3,7 +3,7 @@
         <div class="input-group">
             <input data-ng-keydown="$event.which === 13 && search()" data-ng-model="searchFields.searchQuery" type="text" placeholder="{{'SEARCH' | translate}}" class="form-control" id="SearchBoxMob" show-focus="customcondition">
             <span class="input-group-btn">
-                <button data-ng-click="search()" class="btn btn-default" type="submit"><i class="fa fa-search"></i></button>
+                <button data-ng-click="search()" class="btn btn-default" type="submit" id="searchButtonMob"><i class="fa fa-search"></i></button>
             </span>
         </div>
     </div>
@@ -58,11 +58,11 @@
                     </ul>
                 </li>
                 <li class="dropdown navbar-link-login yamm-fw">
-                    <button data-ng-if="!user" class="btn btn-dark navbar-btn btn-collapse collapsed" type="button" data-toggle="collapse" href="#dropdowned" aria-expanded="false" aria-controls="dropdowned" id="loginButton">
+                    <button data-ng-hide="user" class="btn btn-dark navbar-btn btn-collapse collapsed" type="button" data-toggle="collapse" href="#dropdowned" aria-expanded="false" aria-controls="dropdowned" id="loginButton">
                         <i class="fa fa-lock"></i> <span data-translate="LOGIN"></span>
                     </button>
                     
-                    <button data-ng-if="user" class="btn btn-dark navbar-btn btn-dropdown" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id="userMenu">
+                    <button data-ng-show="user" class="btn btn-dark navbar-btn btn-dropdown" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id="userMenu">
                         <span class="btn-username pull-left">{{user.name}} {{user.surname}}</span><i class="fa fa-caret-down pull-right"></i>
                     </button>
                     
@@ -78,9 +78,9 @@
             <div role="search" class="navbar-form navbar-right hidden-xs hidden-sm hidden-ms" id="search-form-main">
                 <div class="form-group">
                     <div class="input-group">
-                        <input data-ng-keydown="$event.which === 13 && search()" data-ng-model="searchFields.searchQuery" type="text" placeholder="{{'SEARCH' | translate}}" class="form-control">
+                        <input data-ng-keydown="$event.which === 13 && search()" data-ng-model="searchFields.searchQuery" type="text" placeholder="{{'SEARCH' | translate}}" class="form-control" id="SearchBox">
                         <span class="input-group-btn">
-                            <button data-ng-click="search()" class="btn btn-default" type="submit"><i class="fa fa-search"></i></button>
+                            <button data-ng-click="search()" class="btn btn-default" type="submit" id="searchButton"><i class="fa fa-search"></i></button>
                         </span>
                         <span class="input-group-addon hidden"><a href="">Täpne otsing</a></span>
                     </div>
