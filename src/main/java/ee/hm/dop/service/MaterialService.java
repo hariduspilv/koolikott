@@ -80,9 +80,8 @@ public class MaterialService {
     }
 
     private void createOrUpdate(Material material) {
-        Long materialId = material.getId();
-        if (materialId != null) {
-            logger.info(format("Updating material %s", materialId));
+        if (material.getId() != null) {
+            logger.info(format("Updating material %s", material.getId()));
         } else {
             logger.info("Creating material.");
         }
