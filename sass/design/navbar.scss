@@ -146,6 +146,12 @@
         
         .dropdown-menu {
             width: 235px;
+            
+            & > li > a {
+                padding-left: 40px;
+                
+                .fa {position: absolute; margin-left: -20px; margin-right: 10px; line-height: $line-height-base}
+            }
         }
     }
     
