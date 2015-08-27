@@ -31,7 +31,7 @@ public class MaterialService {
 
     public void increaseViewCount(Material material) {
         material.setViews(material.getViews() + 1);
-        doUpdate(material);
+        createOrUpdate(material);
     }
 
     public void createMaterial(Material material) {
@@ -39,7 +39,7 @@ public class MaterialService {
             throw new IllegalArgumentException("Error creating Material, material already exists.");
         }
 
-        doUpdate(material);
+        createOrUpdate(material);
     }
 
     public void update(Material material) {
@@ -53,7 +53,7 @@ public class MaterialService {
 
         material.setUpdated(DateTime.now());
 
-        doUpdate(material);
+        createOrUpdate(material);
     }
 
     private void validateMaterialUpdate(Material material, Material originalMaterial) {
@@ -79,8 +79,14 @@ public class MaterialService {
         return materialDao.findByCreator(creator);
     }
 
-    private void doUpdate(Material material) {
-        logger.info(format("Updating material %s", material.getId()));
+    private void createOrUpdate(Material material) {
+        Long materialId = material.getId();
+        if (materialId != null) {
+            logger.info(format("Updating material %s", materialId));
+        } else {
+            logger.info("Creating material.");
+        }
+
         materialDao.update(material);
     }
 }
