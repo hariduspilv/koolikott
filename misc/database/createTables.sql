@@ -116,6 +116,7 @@ CREATE TABLE Material (
   repositoryIdentifier VARCHAR(255),
   repository           BIGINT,
   creator              BIGINT,
+  deleted              BOOLEAN,
 
   UNIQUE KEY (repositoryIdentifier, repository),
   
