@@ -90,7 +90,7 @@
             }
             
             &:after {
-                bottom: -23px;
+                bottom: -24px;
                 left: 50%;
                 border: solid transparent;
                 content: " ";
@@ -106,14 +106,7 @@
         }
         
         .btn-dropdown {
-            .fa {
-                line-height: $line-height-base;
-            }
-        }
-        
-        .navbar-btn {
             
-            font-weight: 700;
         
             .btn-username {
                 position: relative;
@@ -132,6 +125,15 @@
                     height: 100%; 
                     @include gradient-horizontal-to-transparent($start-color: rgba(0, 61, 104, 1), $end-color: rgba(0, 61, 104, 0))
                 }
+            }
+        }
+        
+        .navbar-btn {
+            
+            font-weight: 700;
+            
+            .fa {
+                line-height: $line-height-base;
             }
         
         }

@@ -1,9 +1,10 @@
 define(['app'], function(app) {
+	var instance;
+	
+	app.factory('authenticatedUserService',['$location', '$rootScope', 
+	       function($location, $rootScope) {
 
-	app.factory('loginService',['$location', '$rootScope', 'serverCallService',
-     function($location, $rootScope, serverCallService) {
-
-         function getAuthenticatedUser() {
+        function getAuthenticatedUser() {
             var user = JSON.parse(localStorage.getItem("authenticatedUser"));
             if (user) {
                 return user;
@@ -15,18 +16,9 @@ define(['app'], function(app) {
             }
             
             return null;
-        };
-
-        function logoutSuccess() {
-            //ignore
-        };
+        }
         
-        function logoutFail() {
-            //ignore
-        };
-		
-		return {
-			
+        instance = {
 			setAuthenticatedUser : function(authenticatedUser) {
 				$rootScope.authenticatedUser = authenticatedUser;
                 localStorage.setItem("authenticatedUser", JSON.stringify(authenticatedUser));
@@ -57,19 +49,8 @@ define(['app'], function(app) {
 
                 return null;
             },
-
-            logout : function() {
-                var user = getAuthenticatedUser();
-                if (user) {
-                    var params = {
-                    'token' : user.token
-                    };
-
-                    serverCallService.makePost("rest/logout", params, logoutSuccess, logoutFail);
-                }
-                $rootScope.authenticatedUser = null;
-                localStorage.removeItem("authenticatedUser");   
-            }
 	    };
+		
+		return instance;
 	}]);
 });

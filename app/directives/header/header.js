@@ -12,31 +12,12 @@ define(['app'], function(app)
         };    
     });
     
-    app.directive('dopHeader', ['translationService', '$location', 'searchService', '$rootScope', 'serverCallService', 'loginService',
-     function(translationService, $location, searchService, $rootScope, serverCallService, loginService) {
-
-        function loginSuccess(authenticatedUser) {
-            if (isEmpty(authenticatedUser)) {
-                log('No data returned by logging in');
-            } else {
-                loginService.setAuthenticatedUser(authenticatedUser);
-                $('#dropdowned').collapse('hide');
-                
-                if (authenticatedUser.firstLogin) {
-                	$location.url('/' + authenticatedUser.user.username);
-                }
-            }
-        };
-        
-        function loginFail(status) {
-            log('Logging in failed.');
-        };
-
-
+    app.directive('dopHeader', ['translationService', '$location', 'searchService', '$rootScope', 'authenticationService', 'authenticatedUserService',
+     function(translationService, $location, searchService, $rootScope, authenticationService, authenticatedUserService) {
         return {
             scope: true,
             templateUrl: 'app/directives/header/header.html',
-            controller: function ($scope, $location, $rootScope, loginService) {
+            controller: function ($scope, $location, $rootScope, authenticationService, authenticatedUserService) {
                 $scope.showLanguageSelection = false;
                 $scope.showSearchBox = false;
                 $scope.selectedLanguage = translationService.getLanguage();
@@ -77,20 +58,16 @@ define(['app'], function(app)
                     }
                 };
 
-                $scope.idCardAuth = function() {
-                    serverCallService.makeGet("rest/login/idCard", {}, loginSuccess, loginFail);
-                };
-
                 $scope.logout = function() {
-                    $('#userMenu').dropdown('toggle');
-                    loginService.logout();
-                    $location.url('/');
+                    authenticationService.logout();
                 };
 
                 $scope.$watch(function () {
-                        return loginService.getUser();
+                        return authenticatedUserService.getUser();
                     }, function(user) {
                         $scope.user = user;
+                        $('#userMenu').dropdown('toggle');
+                        $('#dropdowned').collapse('hide');
                 }, true);
             }
         };
