@@ -107,7 +107,8 @@
         
         .btn-dropdown {
             
-        
+            width: 235px;
+            
             .btn-username {
                 position: relative;
                 display: block; 
@@ -142,15 +143,25 @@
                 display: none
             }
         }
+        
+        .dropdown-menu {
+            width: 235px;
+        }
     }
     
     .open {
-        .fa-caret-down {
-            &:before {
-                display: none
-            }
-            &:after {
-                content: '\f0d8'
+        
+        .btn-dropdown {
+            
+            @include border-bottom-radius (0);
+            
+            .fa-caret-down {
+                &:before {
+                    display: none
+                }
+                &:after {
+                    content: '\f0d8'
+                }
             }
         }
     }

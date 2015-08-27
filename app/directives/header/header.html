@@ -66,7 +66,18 @@
                         <span class="btn-username pull-left">{{user.name}} {{user.surname}}</span><i class="fa fa-caret-down pull-right"></i>
                     </button>
                     
+                    <button class="btn btn-dark navbar-btn btn-dropdown" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id="userMenu1">
+                        <span class="btn-username pull-left">Matti Nüganen</span><i class="fa fa-caret-down pull-right"></i>
+                    </button>
+                    
                     <ul class="dropdown-menu" aria-labelledby="userMenu">
+                        <li><a href="#">Action</a></li>
+                        <li><a href="#">Another action</a></li>
+                        <li role="separator" class="divider"></li>
+                        <li><a data-ng-click="logout()"><i class="fa fa-lock"></i> <span data-translate="LOGOUT"></span></a></li>
+                    </ul>
+                    
+                    <ul class="dropdown-menu" aria-labelledby="userMenu1">
                         <li><a href="#">Action</a></li>
                         <li><a href="#">Another action</a></li>
                         <li role="separator" class="divider"></li>
