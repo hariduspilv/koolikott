@@ -1,6 +1,6 @@
 -- Estonian translations
 insert into Translation(translationGroup, translationKey, translation) values (1, 'LOGIN', 'Logi sisse');
-insert into Translation(translationGroup, translationKey, translation) values (1, 'LOGOUT', 'Log välja');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'LOGOUT', 'Logi välja');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'MATERIAL_VIEW_SUBJECT', 'Teema');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'MATERIAL_VIEW_RESOURCE_TYPE', 'Tüüp');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'MATERIAL_VIEW_EDUCATIONAL_CONTEXT', 'Vanuserühmadele');
