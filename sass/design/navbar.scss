@@ -131,10 +131,6 @@
         .navbar-btn {
             
             font-weight: 700;
-            
-            .fa {
-                line-height: $line-height-base;
-            }
         
         }
         
@@ -162,6 +158,9 @@
             @include border-bottom-radius (0);
             
             .fa-caret-down {
+                
+                line-height: $line-height-base;
+                
                 &:before {
                     display: none
                 }
