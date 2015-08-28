@@ -1,7 +1,7 @@
 define(['app'], function(app)
 {
-    app.controller('loginController', ['$scope', 'serverCallService', '$route', 'loginService', '$location',
-       function($scope, serverCallService, $route, loginService, $location) {
+    app.controller('loginController', ['$scope', 'serverCallService', '$route', 'authenticatedUserService', '$location',
+       function($scope, serverCallService, $route, authenticatedUserService, $location) {
         var idCode = $route.current.params.idCode;
         var params = {};
         serverCallService.makeGet("rest/dev/login/" + idCode, params, loginSuccess, loginFail); 
@@ -11,7 +11,7 @@ define(['app'], function(app)
                 log("No data returned by logging in with id code:" + idCode);
                 $location.url('/');
             } else {
-                loginService.setAuthenticatedUser(authenticatedUser);
+                authenticatedUserService.setAuthenticatedUser(authenticatedUser);
                 $location.url('/' + authenticatedUser.user.username);
             }
         }

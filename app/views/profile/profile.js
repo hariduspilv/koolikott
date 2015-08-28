@@ -1,7 +1,7 @@
 define(['app'], function(app)
 {
-    app.controller('profileController', ['$scope', '$route', 'loginService', 'serverCallService', '$location', 
-        function($scope, $route, loginService, serverCallService, $location) {
+    app.controller('profileController', ['$scope', '$route', 'authenticatedUserService', 'serverCallService', '$location', 
+        function($scope, $route, authenticatedUserService, serverCallService, $location) {
 
     	function init() {
     		isMyProfilePage();
@@ -14,8 +14,8 @@ define(['app'], function(app)
     	}
 
         function isMyProfilePage() {
-            if (loginService.isAuthenticated()) {
-                var user = loginService.getUser()
+            if (authenticatedUserService.isAuthenticated()) {
+                var user = authenticatedUserService.getUser()
 
                 if (user && $route.current.params.username === user.username) {
                     $scope.user = user;
