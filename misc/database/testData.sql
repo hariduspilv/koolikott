@@ -27,7 +27,7 @@ insert into IssueDate(id, month, year) values(7, 3, 1991);
 
 -- Repositories
 
-insert into Repository(id, baseURL, lastSynchronization, schemaName) values (1, 'http://koolitaja.eenet.ee:57219/Waramu3Web/OAIHandler', '2015-08-03 18:00:01', 'waramu');
+insert into Repository(id, baseURL, lastSynchronization, schemaName) values (1, 'http://koolitaja.eenet.ee:57219/Waramu3Web/OAIHandler', null, 'waramu');
 
 -- User
 
