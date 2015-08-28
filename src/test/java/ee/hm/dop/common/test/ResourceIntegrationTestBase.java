@@ -8,6 +8,7 @@ import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.ClientRequestFilter;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.WebTarget;
+import javax.ws.rs.container.ContainerRequestFilter;
 import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -81,10 +82,14 @@ public abstract class ResourceIntegrationTestBase extends IntegrationTestBase {
     }
 
     protected static WebTarget getTarget(String url, ClientRequestFilter clientRequestFilter) {
-        return getClient(clientRequestFilter).target(getFullURL(url));
+        return getClient(clientRequestFilter, null).target(getFullURL(url));
     }
 
-    private static Client getClient(ClientRequestFilter clientRequestFilter) {
+    protected static WebTarget getTarget(String url, ClientRequestFilter clientRequestFilter, ContainerRequestFilter containerRequestFilter) {
+        return getClient(clientRequestFilter, containerRequestFilter).target(getFullURL(url));
+    }
+
+    private static Client getClient(ClientRequestFilter clientRequestFilter,ContainerRequestFilter containerRequestFilter) {
         ClientConfig clientConfig = new ClientConfig();
         clientConfig.property(ClientProperties.READ_TIMEOUT, 60000); // ms
         clientConfig.property(ClientProperties.CONNECT_TIMEOUT, 60000); // ms
@@ -94,6 +99,9 @@ public abstract class ResourceIntegrationTestBase extends IntegrationTestBase {
         client.register(LoggingFilter.class);
         if (clientRequestFilter != null) {
             client.register(clientRequestFilter);
+        }
+        if(containerRequestFilter != null) {
+            client.register(containerRequestFilter);
         }
 
         return client;

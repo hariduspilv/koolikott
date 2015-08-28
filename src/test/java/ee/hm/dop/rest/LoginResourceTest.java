@@ -7,26 +7,17 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.client.ClientRequestContext;
 import javax.ws.rs.client.ClientRequestFilter;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.ext.Provider;
 
-import org.easymock.Mock;
 import org.junit.Test;
 
 import ee.hm.dop.common.test.ResourceIntegrationTestBase;
 import ee.hm.dop.model.AuthenticatedUser;
-import ee.hm.dop.service.LoginService;
 
 public class LoginResourceTest extends ResourceIntegrationTestBase {
-
-    @Mock
-    private LoginService loginService;
-
-    @Mock
-    private HttpServletRequest request;
 
     @Test
     public void login() {
@@ -83,5 +74,4 @@ public class LoginResourceTest extends ResourceIntegrationTestBase {
             requestContext.getHeaders().put("SSL_AUTH_VERIFY", list2);
         }
     }
-
 }

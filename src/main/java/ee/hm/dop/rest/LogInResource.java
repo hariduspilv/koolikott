@@ -14,20 +14,23 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import ee.hm.dop.model.AuthenticatedUser;
+import ee.hm.dop.model.User;
 import ee.hm.dop.service.LoginService;
+import ee.hm.dop.service.UserService;
 
-/**
- * Created by mart.laus on 13.08.2015.
- */
-@Path("/login")
+@Path("login")
 public class LogInResource {
+
+    private static Logger logger = LoggerFactory.getLogger(LogInResource.class);
+
     @Inject
     private LoginService loginService;
 
+    @Inject
+    private UserService userService;
+
     @Context
     private HttpServletRequest request;
-
-    private static Logger logger = LoggerFactory.getLogger(LogInResource.class);
 
     @GET
     @Path("/idCard")
@@ -46,8 +49,8 @@ public class LogInResource {
                 logger.info(format("User with id %s could not log in, trying to create account. ", idCode));
 
                 // Create new user account
-                boolean created = loginService.createUser(idCode, getNameFromRequest(), getSurnameFromRequest());
-                if (!created) {
+                User user = userService.create(idCode, getNameFromRequest(), getSurnameFromRequest());
+                if (user == null) {
                     logger.info(format("User with id %s failed to create account. ", idCode));
                 } else {
                     authenticatedUser = loginService.logIn(idCode);

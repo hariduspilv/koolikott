@@ -8,17 +8,14 @@ import javax.persistence.TypedQuery;
 import ee.hm.dop.exceptions.DuplicateUserException;
 import ee.hm.dop.model.User;
 
-/**
- * Created by mart.laus on 13.08.2015.
- */
 public class UserDAO {
 
     @Inject
     private EntityManager entityManager;
 
     public User findUserByIdCode(String idCode) {
-        TypedQuery<User> findByIdCode = entityManager.createQuery("SELECT u FROM User u WHERE u.idCode = :idCode",
-                User.class);
+        TypedQuery<User> findByIdCode = entityManager
+                .createQuery("SELECT u FROM User u WHERE u.idCode = :idCode", User.class);
 
         User user = null;
         try {
@@ -31,8 +28,8 @@ public class UserDAO {
     }
 
     public User findUserByUsername(String username) {
-        TypedQuery<User> findByUsername = entityManager.createQuery("SELECT u FROM User u WHERE u.username = :username",
-                User.class);
+        TypedQuery<User> findByUsername = entityManager
+                .createQuery("SELECT u FROM User u WHERE u.username = :username", User.class);
 
         User user = null;
         try {
@@ -45,8 +42,9 @@ public class UserDAO {
     }
 
     public Long countUsersWithSameFullName(String name, String surname) {
-        TypedQuery<Long> countByFullName = entityManager.createQuery(
-                "SELECT COUNT(u.id) FROM User u WHERE u.name = :name AND u.surname = :surname", Long.class);
+        TypedQuery<Long> countByFullName = entityManager
+                .createQuery("SELECT COUNT(u.id) FROM User u WHERE u.name = :name AND u.surname = :surname",
+                        Long.class);
 
         countByFullName.setParameter("name", name).setParameter("surname", surname);
 
@@ -60,12 +58,20 @@ public class UserDAO {
         return count;
     }
 
-    public void createUser(User user) throws DuplicateUserException {
+    public User update(User user) throws DuplicateUserException {
+        User merged;
         try {
-            User merged = entityManager.merge(user);
+            merged = entityManager.merge(user);
             entityManager.persist(merged);
+
         } catch (PersistenceException e) {
             throw new DuplicateUserException("Duplicate unique fields found when persisting user. ");
         }
+
+        return merged;
+    }
+
+    public void delete(User user) {
+        entityManager.remove(user);
     }
 }

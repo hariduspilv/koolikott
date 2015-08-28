@@ -29,14 +29,14 @@ insert into Repository(id, baseURL, lastSynchronization, schemaName) values (1, 
 
 -- User
 
-insert into User(id, userName, name, surName, idCode) values (1, 'mati.maasikas', 'Mati', 'Maasikas', '39011220011');
-insert into User(id, userName, name, surName, idCode) values (2, 'peeter.paan', 'Peeter', 'Paan', '38011550077');
-insert into User(id, userName, name, surName, idCode) values (3, 'voldemar.vapustav', 'Voldemar', 'Vapustav', '37066990099');
-insert into User(id, userName, name, surName, idCode) values (4, 'voldemar.vapustav2', 'Voldemar', 'Vapustav', '15066990099');
+insert into User(id, userName, name, surName, idCode, role) values (1, 'mati.maasikas', 'Mati', 'Maasikas', '39011220011', 'USER');
+insert into User(id, userName, name, surName, idCode, role) values (2, 'peeter.paan', 'Peeter', 'Paan', '38011550077', 'USER');
+insert into User(id, userName, name, surName, idCode, role) values (3, 'voldemar.vapustav', 'Voldemar', 'Vapustav', '37066990099', 'USER');
+insert into User(id, userName, name, surName, idCode, role) values (4, 'voldemar.vapustav2', 'Voldemar', 'Vapustav', '15066990099', 'USER');
 
 -- AuthenticatedUser
 
-insert into User(id, user_id, token) values (1, 1, 'token', );
+insert into User(id, user_id, token) values (1, 1, 'token');
 
 -- Materials
 

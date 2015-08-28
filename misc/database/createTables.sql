@@ -90,7 +90,8 @@ CREATE TABLE User (
   userName  VARCHAR(255) UNIQUE NOT NULL,
   name      VARCHAR(255) NOT NULL,
   surName   VARCHAR(255) NOT NULL,
-  idCode    VARCHAR(11) UNIQUE NOT NULL
+  idCode    VARCHAR(11) UNIQUE NOT NULL,
+  role      VARCHAR(255) NOT NULL
 );
 
 CREATE TABLE AuthenticatedUser (

@@ -2,6 +2,7 @@ package ee.hm.dop.dao;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.fail;
 
 import javax.inject.Inject;
@@ -60,22 +61,22 @@ public class UserDAOTest extends DatabaseTestBase {
         assertNotNull(user.getId());
 
         switch (user.getIdCode()) {
-            case "39011220011":
-                assertEquals("mati.maasikas", user.getUsername());
-                assertEquals("Mati", user.getName());
-                assertEquals("Maasikas", user.getSurname());
-                break;
-            case "38011550077":
-                assertEquals("peeter.paan", user.getUsername());
-                assertEquals("Peeter", user.getName());
-                assertEquals("Paan", user.getSurname());
-                break;
-            case "37066990099":
-                assertEquals("voldemar.vapustav", user.getUsername());
-                assertEquals("Voldemar", user.getName());
-                assertEquals("Vapustav", user.getSurname());
-                assertEquals("37066990099", user.getIdCode());
-                break;
+        case "39011220011":
+            assertEquals("mati.maasikas", user.getUsername());
+            assertEquals("Mati", user.getName());
+            assertEquals("Maasikas", user.getSurname());
+            break;
+        case "38011550077":
+            assertEquals("peeter.paan", user.getUsername());
+            assertEquals("Peeter", user.getName());
+            assertEquals("Paan", user.getSurname());
+            break;
+        case "37066990099":
+            assertEquals("voldemar.vapustav", user.getUsername());
+            assertEquals("Voldemar", user.getName());
+            assertEquals("Vapustav", user.getSurname());
+            assertEquals("37066990099", user.getIdCode());
+            break;
         }
     }
 
@@ -87,18 +88,50 @@ public class UserDAOTest extends DatabaseTestBase {
     }
 
     @Test
-    public void createUserWithDuplicateUsername() {
+    public void updateUserWithDuplicateUsername() {
         User user = new User();
         user.setName("Mati");
         user.setSurname("Maasikas");
         user.setUsername("mati.maasikas");
         user.setIdCode("12345678901");
         try {
-            userDAO.createUser(user);
+            userDAO.update(user);
             fail("Exception expected. ");
         } catch (DuplicateUserException e) {
             // expected
         }
     }
 
+    @Test
+    public void update() {
+        User user = getUser();
+
+        User returnedUser = userDAO.update(user);
+        User foundUser = userDAO.findUserByIdCode(user.getIdCode());
+
+        assertEquals(user.getUsername(), foundUser.getUsername());
+        assertEquals(user.getIdCode(), returnedUser.getIdCode());
+
+        userDAO.delete(returnedUser);
+    }
+
+    @Test
+    public void delete() {
+        User user = getUser();
+
+        User returnedUser = userDAO.update(user);
+
+        userDAO.delete(returnedUser);
+
+        assertNull(userDAO.findUserByIdCode(user.getIdCode()));
+    }
+
+    private User getUser() {
+        User user = new User();
+        user.setName("Mati2");
+        user.setSurname("Maasikas2");
+        user.setUsername("mati2.maasikas2");
+        user.setIdCode("12345678969");
+        return user;
+    }
 }

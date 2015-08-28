@@ -31,12 +31,12 @@ insert into Repository(id, baseURL, lastSynchronization, schemaName) values (1, 
 
 -- User
 
-insert into User(id, userName, name, surName, idCode) values (1, 'mati.maasikas', 'Mati', 'Maasikas', '39011220011');
-insert into User(id, userName, name, surName, idCode) values (2, 'peeter.paan', 'Peeter', 'Paan', '38011550077');
-insert into User(id, userName, name, surName, idCode) values (3, 'voldemar.vapustav', 'Voldemar', 'Vapustav', '37066990099');
-insert into User(id, userName, name, surName, idCode) values (4, 'voldemar.vapustav2', 'Voldemar', 'Vapustav', '38103070239');
-insert into User(id, userName, name, surName, idCode) values (5, 'õäöü.õäöü', 'Õäöü', 'Õäöü', '38406304916');
-insert into User(id, userName, name, surName, idCode) values (6, 'mart.dev', 'dev', 'dev', '39210140032');
+insert into User(id, userName, name, surName, idCode, role) values (1, 'mati.maasikas', 'Mati', 'Maasikas', '39011220011', 'USER');
+insert into User(id, userName, name, surName, idCode, role) values (2, 'peeter.paan', 'Peeter', 'Paan', '38011550077', 'USER');
+insert into User(id, userName, name, surName, idCode, role) values (3, 'voldemar.vapustav', 'Voldemar', 'Vapustav', '37066990099', 'USER');
+insert into User(id, userName, name, surName, idCode, role) values (4, 'voldemar.vapustav2', 'Voldemar', 'Vapustav', '38103070239', 'USER');
+insert into User(id, userName, name, surName, idCode, role) values (5, 'õäöü.õäöü', 'Õäöü', 'Õäöü', '38406304916', 'USER');
+insert into User(id, userName, name, surName, idCode, role) values (6, 'mart.dev', 'dev', 'dev', '39210140032', 'USER');
 
 -- Materials
 

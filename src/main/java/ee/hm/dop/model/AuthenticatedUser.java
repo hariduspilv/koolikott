@@ -1,8 +1,5 @@
 package ee.hm.dop.model;
 
-import static javax.persistence.CascadeType.MERGE;
-import static javax.persistence.CascadeType.PERSIST;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -20,7 +17,7 @@ public class AuthenticatedUser {
     @JsonIgnore
     private Long id;
 
-    @ManyToOne(cascade = { MERGE, PERSIST }, optional = false)
+    @ManyToOne(optional = false)
     private User user;
 
     @Column(nullable = false, unique = true)
