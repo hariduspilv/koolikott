@@ -23,7 +23,7 @@ insert into LicenseType(id, name) values (1, 'CCBY');
 insert into LicenseType(id, name) values (2, 'CCBYSA');
 insert into LicenseType(id, name) values (3, 'CCBYND');
 
--- Repository
+-- Repository. Do not use real URLs here
 
 insert into Repository(id, baseURL, lastSynchronization, schemaName) values (1, 'http://repo1.ee', null, 'waramu');
 

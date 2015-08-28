@@ -71,6 +71,50 @@ public class SynchronizeMaterialsExecutorTest {
 
         synchronizeMaterialsExecutor.synchronizeMaterials();
 
+        verify(repositoryService, repository1, repository2, searchEngineService);
+
+        SynchronizeMaterialsExecutorMock mockExecutor = (SynchronizeMaterialsExecutorMock) synchronizeMaterialsExecutor;
+        assertTrue(mockExecutor.transactionWasStarted);
+        assertFalse(mockExecutor.transactionStarted);
+    }
+
+    @Test
+    public void synchronizeMaterialsUnexpectedError() {
+        expect(repositoryService.getAllRepositorys()).andThrow(new RuntimeException("Some error..."));
+
+        replay(repositoryService, searchEngineService);
+
+        synchronizeMaterialsExecutor.synchronizeMaterials();
+
+        verify(repositoryService, searchEngineService);
+
+        SynchronizeMaterialsExecutorMock mockExecutor = (SynchronizeMaterialsExecutorMock) synchronizeMaterialsExecutor;
+        assertTrue(mockExecutor.transactionWasStarted);
+        assertFalse(mockExecutor.transactionStarted);
+    }
+
+    @Test
+    public void scheduleExecution() {
+
+        Repository repository1 = createMock(Repository.class);
+        Repository repository2 = createMock(Repository.class);
+
+        List<Repository> repositories = new ArrayList<>();
+        repositories.add(repository1);
+        repositories.add(repository2);
+
+        expect(repositoryService.getAllRepositorys()).andReturn(repositories);
+
+        searchEngineService.updateIndex();
+        expectLastCall();
+
+        repositoryService.synchronize(repository1);
+        repositoryService.synchronize(repository2);
+
+        replay(repositoryService, repository1, repository2, searchEngineService);
+
+        synchronizeMaterialsExecutor.scheduleExecution(1);
+
         synchronized (lock) {
             try {
                 // Have to wait for the initial delay and thread execution
@@ -87,14 +131,14 @@ public class SynchronizeMaterialsExecutorTest {
     }
 
     @Test
-    public void synchronizeMaterialsDoubleInitialization() {
+    public void scheduleExecutionDoubleInitialization() {
         List<Repository> repositories = Collections.emptyList();
         expect(repositoryService.getAllRepositorys()).andReturn(repositories);
 
         replay(repositoryService);
 
-        synchronizeMaterialsExecutor.synchronizeMaterials();
-        synchronizeMaterialsExecutor.synchronizeMaterials();
+        synchronizeMaterialsExecutor.scheduleExecution(1);
+        synchronizeMaterialsExecutor.scheduleExecution(1);
 
         synchronized (lock) {
             try {
@@ -136,12 +180,13 @@ public class SynchronizeMaterialsExecutorTest {
 
     @Test
     public void getInitialDelay() {
+        int hourOfDayToExecute = 1;
+
         SynchronizeMaterialsExecutor executor = new SynchronizeMaterialsExecutor();
-        int delay = (int) executor.getInitialDelay();
+        int delay = (int) executor.getInitialDelay(hourOfDayToExecute);
 
         LocalDateTime now = now();
 
-        int hourOfDayToExecute = 1;
         LocalDateTime expectedExecutionTime = now.withHourOfDay(hourOfDayToExecute).withMinuteOfHour(0)
                 .withSecondOfMinute(0).withMillisOfSecond(0);
         if (now.getHourOfDay() >= hourOfDayToExecute) {
@@ -159,7 +204,7 @@ public class SynchronizeMaterialsExecutorTest {
         private boolean transactionWasStarted;
 
         @Override
-        public long getInitialDelay() {
+        public long getInitialDelay(int hourOfDayToExecute) {
             return 1;
         }
 
