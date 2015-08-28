@@ -1,6 +1,6 @@
 package ee.hm.dop.rest;
 
-import static org.easymock.EasyMock.createMock;
+import static org.junit.Assert.assertNotNull;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -8,42 +8,36 @@ import java.util.List;
 
 import javax.ws.rs.client.ClientRequestContext;
 import javax.ws.rs.client.ClientRequestFilter;
-import javax.ws.rs.container.ContainerRequestContext;
-import javax.ws.rs.container.ContainerRequestFilter;
+import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.UriInfo;
+import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.Provider;
 
 import org.junit.Test;
 
 import ee.hm.dop.common.test.ResourceIntegrationTestBase;
 import ee.hm.dop.model.AuthenticatedUser;
-import ee.hm.dop.rest.filter.DopPrincipal;
-import ee.hm.dop.rest.filter.DopSecurityContext;
 
 public class LogoutResourceTest extends ResourceIntegrationTestBase {
 
     @Test
     public void logout() {
-        getTarget("logout", new AuthenticationFilter1(), new LogoutFilter1()).request()
-                .accept(MediaType.APPLICATION_JSON).post(null);
+        Response response = doGet("dev/login/39011220011");
+        AuthenticatedUser authenticatedUser = response.readEntity(new GenericType<AuthenticatedUser>() {});
+        assertNotNull(authenticatedUser.getToken());
+        String token = authenticatedUser.getToken();
+
+        getTarget("logout", new LogoutFilter(token)).request().accept(MediaType.APPLICATION_JSON_TYPE).post(null);
 
     }
 
     @Provider
-    public static class LogoutFilter1 implements ContainerRequestFilter {
+    public static class LogoutFilter implements ClientRequestFilter {
+        String token = null;
 
-        @Override
-        public void filter(ContainerRequestContext requestContext) throws IOException {
-            DopPrincipal principal = new DopPrincipal(new AuthenticatedUser());
-            UriInfo uriInfo = createMock(UriInfo.class);
-            DopSecurityContext securityContext = new DopSecurityContext(principal, uriInfo);
-            requestContext.setSecurityContext(securityContext);
+        public LogoutFilter(String token) {
+            this.token = token;
         }
-    }
-
-    @Provider
-    public static class AuthenticationFilter1 implements ClientRequestFilter {
 
         @Override
         public void filter(ClientRequestContext requestContext) throws IOException {
@@ -60,6 +54,14 @@ public class LogoutResourceTest extends ResourceIntegrationTestBase {
             List<Object> list2 = new ArrayList<>();
             list2.add("SUCCESS");
             requestContext.getHeaders().put("SSL_AUTH_VERIFY", list2);
+
+            List<Object> list3 = new ArrayList<>();
+            list3.add(token);
+            requestContext.getHeaders().put("Authentication", list3);
+
+            List<Object> list4 = new ArrayList<>();
+            list4.add("mati.maasikas");
+            requestContext.getHeaders().put("Username", list4);
         }
     }
 }
