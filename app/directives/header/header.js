@@ -60,13 +60,13 @@ define(['app'], function(app)
 
                 $scope.logout = function() {
                     authenticationService.logout();
+                    $('#userMenu').dropdown('toggle');
                 };
 
                 $scope.$watch(function () {
                         return authenticatedUserService.getUser();
                     }, function(user) {
                         $scope.user = user;
-                        $('#userMenu').dropdown('toggle');
                         $('#dropdowned').collapse('hide');
                 }, true);
             }
