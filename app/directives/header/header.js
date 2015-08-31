@@ -61,6 +61,7 @@ define(['app'], function(app)
                 $scope.logout = function() {
                     authenticationService.logout();
                     $('#userMenu').dropdown('toggle');
+                    $location.url('/');
                 };
 
                 $scope.$watch(function () {
