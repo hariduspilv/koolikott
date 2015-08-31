@@ -49,10 +49,13 @@ public class UserService {
 
     protected String generateUsername(String name, String surname) {
         Long count = userDAO.countUsersWithSameFullName(name, surname);
-        String username = name.toLowerCase() + "." + surname.toLowerCase();
-        if (count == 0) {
-            return username;
+        String username = name.trim().toLowerCase() + "." + surname.trim().toLowerCase();
+        username = username.replaceAll("\\s+", ".");
+
+        if (count > 0) {
+            username += String.valueOf(count + 1);
         }
-        return username + String.valueOf(count + 1);
+
+        return username;
     }
 }

@@ -16,7 +16,6 @@ import org.junit.runner.RunWith;
 import ee.hm.dop.dao.UserDAO;
 import ee.hm.dop.model.User;
 
-
 @RunWith(EasyMockRunner.class)
 public class UserServiceTest {
 
@@ -46,10 +45,10 @@ public class UserServiceTest {
 
     @Test
     public void generateUsername() {
-        String name = "John";
-        String surname = "Smith";
+        String name = " John\tSmith ";
+        String surname = " Second  IV ";
         Long count = 0L;
-        String expectedUsername = "john.smith";
+        String expectedUsername = "john.smith.second.iv";
         expect(userDAO.countUsersWithSameFullName(name, surname)).andReturn(count);
 
         replay(userDAO);
