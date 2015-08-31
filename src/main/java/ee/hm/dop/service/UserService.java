@@ -1,5 +1,7 @@
 package ee.hm.dop.service;
 
+import static java.lang.String.format;
+
 import javax.inject.Inject;
 
 import org.apache.commons.lang3.text.WordUtils;
@@ -7,7 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import ee.hm.dop.dao.UserDAO;
-import ee.hm.dop.exceptions.DuplicateUserException;
+import ee.hm.dop.model.Role;
 import ee.hm.dop.model.User;
 
 public class UserService {
@@ -35,17 +37,14 @@ public class UserService {
     }
 
     public synchronized User create(User user) {
-        User newUser = null;
         String generatedUsername = generateUsername(user.getName(), user.getSurname());
         user.setUsername(generatedUsername);
+        user.setRole(Role.USER);
 
-        try {
-            newUser = userDAO.update(user);
-        } catch (DuplicateUserException e) {
-            logger.error(e.getMessage());
-        }
+        logger.info(format("Creating user: username = %s; name = %s; surname = %s; idCode = %s", user.getUsername(),
+                user.getName(), user.getSurname(), user.getIdCode()));
 
-        return newUser;
+        return userDAO.update(user);
     }
 
     protected String generateUsername(String name, String surname) {

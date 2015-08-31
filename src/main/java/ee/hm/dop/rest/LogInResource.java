@@ -14,7 +14,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import ee.hm.dop.model.AuthenticatedUser;
-import ee.hm.dop.model.User;
 import ee.hm.dop.service.LoginService;
 import ee.hm.dop.service.UserService;
 
@@ -49,21 +48,17 @@ public class LogInResource {
                 logger.info(format("User with id %s could not log in, trying to create account. ", idCode));
 
                 // Create new user account
-                User user = userService.create(idCode, getNameFromRequest(), getSurnameFromRequest());
-                if (user == null) {
-                    logger.info(format("User with id %s failed to create account. ", idCode));
-                } else {
-                    authenticatedUser = loginService.logIn(idCode);
+                userService.create(idCode, getNameFromRequest(), getSurnameFromRequest());
+                authenticatedUser = loginService.logIn(idCode);
 
-                    if (authenticatedUser != null) {
-                    	authenticatedUser.setFirstLogin(true);
-                        logger.info(format("User %s logged in for the first time using id card login with id %s.",
-                                authenticatedUser.getUser().getUsername(), idCode));
-                    } else {
-                        logger.info(
-                                format("User with id %s tried to log in after creating account, but failed.", idCode));
-                    }
+                if (authenticatedUser == null) {
+                    throw new RuntimeException(format(
+                            "User with id %s tried to log in after creating account, but failed.", idCode));
                 }
+
+                authenticatedUser.setFirstLogin(true);
+                logger.info(format("User %s logged in for the first time using id card login with id %s.",
+                        authenticatedUser.getUser().getUsername(), idCode));
             }
         }
 

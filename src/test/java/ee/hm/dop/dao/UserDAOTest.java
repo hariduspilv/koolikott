@@ -6,11 +6,11 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.fail;
 
 import javax.inject.Inject;
+import javax.persistence.PersistenceException;
 
 import org.junit.Test;
 
 import ee.hm.dop.common.test.DatabaseTestBase;
-import ee.hm.dop.exceptions.DuplicateUserException;
 import ee.hm.dop.model.User;
 
 public class UserDAOTest extends DatabaseTestBase {
@@ -61,22 +61,22 @@ public class UserDAOTest extends DatabaseTestBase {
         assertNotNull(user.getId());
 
         switch (user.getIdCode()) {
-        case "39011220011":
-            assertEquals("mati.maasikas", user.getUsername());
-            assertEquals("Mati", user.getName());
-            assertEquals("Maasikas", user.getSurname());
-            break;
-        case "38011550077":
-            assertEquals("peeter.paan", user.getUsername());
-            assertEquals("Peeter", user.getName());
-            assertEquals("Paan", user.getSurname());
-            break;
-        case "37066990099":
-            assertEquals("voldemar.vapustav", user.getUsername());
-            assertEquals("Voldemar", user.getName());
-            assertEquals("Vapustav", user.getSurname());
-            assertEquals("37066990099", user.getIdCode());
-            break;
+            case "39011220011":
+                assertEquals("mati.maasikas", user.getUsername());
+                assertEquals("Mati", user.getName());
+                assertEquals("Maasikas", user.getSurname());
+                break;
+            case "38011550077":
+                assertEquals("peeter.paan", user.getUsername());
+                assertEquals("Peeter", user.getName());
+                assertEquals("Paan", user.getSurname());
+                break;
+            case "37066990099":
+                assertEquals("voldemar.vapustav", user.getUsername());
+                assertEquals("Voldemar", user.getName());
+                assertEquals("Vapustav", user.getSurname());
+                assertEquals("37066990099", user.getIdCode());
+                break;
         }
     }
 
@@ -97,7 +97,7 @@ public class UserDAOTest extends DatabaseTestBase {
         try {
             userDAO.update(user);
             fail("Exception expected. ");
-        } catch (DuplicateUserException e) {
+        } catch (PersistenceException e) {
             // expected
         }
     }
