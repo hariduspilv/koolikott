@@ -27,7 +27,6 @@ import org.junit.runner.RunWith;
 
 import ee.hm.dop.model.Repository;
 import ee.hm.dop.service.RepositoryService;
-import ee.hm.dop.service.SearchEngineService;
 
 @RunWith(EasyMockRunner.class)
 public class SynchronizeMaterialsExecutorTest {
@@ -37,9 +36,6 @@ public class SynchronizeMaterialsExecutorTest {
 
     @Mock
     private RepositoryService repositoryService;
-
-    @Mock
-    private SearchEngineService searchEngineService;
 
     private Object lock = new Object();
 
@@ -61,17 +57,16 @@ public class SynchronizeMaterialsExecutorTest {
 
         expect(repositoryService.getAllRepositorys()).andReturn(repositories);
 
-        searchEngineService.updateIndex();
         expectLastCall();
 
         repositoryService.synchronize(repository1);
         repositoryService.synchronize(repository2);
 
-        replay(repositoryService, repository1, repository2, searchEngineService);
+        replay(repositoryService, repository1, repository2);
 
         synchronizeMaterialsExecutor.synchronizeMaterials();
 
-        verify(repositoryService, repository1, repository2, searchEngineService);
+        verify(repositoryService, repository1, repository2);
 
         SynchronizeMaterialsExecutorMock mockExecutor = (SynchronizeMaterialsExecutorMock) synchronizeMaterialsExecutor;
         assertTrue(mockExecutor.transactionWasStarted);
@@ -82,11 +77,11 @@ public class SynchronizeMaterialsExecutorTest {
     public void synchronizeMaterialsUnexpectedError() {
         expect(repositoryService.getAllRepositorys()).andThrow(new RuntimeException("Some error..."));
 
-        replay(repositoryService, searchEngineService);
+        replay(repositoryService);
 
         synchronizeMaterialsExecutor.synchronizeMaterials();
 
-        verify(repositoryService, searchEngineService);
+        verify(repositoryService);
 
         SynchronizeMaterialsExecutorMock mockExecutor = (SynchronizeMaterialsExecutorMock) synchronizeMaterialsExecutor;
         assertTrue(mockExecutor.transactionWasStarted);
@@ -105,13 +100,12 @@ public class SynchronizeMaterialsExecutorTest {
 
         expect(repositoryService.getAllRepositorys()).andReturn(repositories);
 
-        searchEngineService.updateIndex();
         expectLastCall();
 
         repositoryService.synchronize(repository1);
         repositoryService.synchronize(repository2);
 
-        replay(repositoryService, repository1, repository2, searchEngineService);
+        replay(repositoryService, repository1, repository2);
 
         synchronizeMaterialsExecutor.scheduleExecution(1);
 
@@ -123,7 +117,7 @@ public class SynchronizeMaterialsExecutorTest {
             }
         }
 
-        verify(repositoryService, repository1, repository2, searchEngineService);
+        verify(repositoryService, repository1, repository2);
 
         SynchronizeMaterialsExecutorMock mockExecutor = (SynchronizeMaterialsExecutorMock) synchronizeMaterialsExecutor;
         assertTrue(mockExecutor.transactionWasStarted);

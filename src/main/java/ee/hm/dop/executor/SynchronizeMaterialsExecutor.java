@@ -10,8 +10,6 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 
-import javax.inject.Inject;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -20,7 +18,6 @@ import com.google.inject.Singleton;
 import ee.hm.dop.guice.GuiceInjector;
 import ee.hm.dop.model.Repository;
 import ee.hm.dop.service.RepositoryService;
-import ee.hm.dop.service.SearchEngineService;
 import ee.hm.dop.utils.DbUtils;
 
 @Singleton
@@ -31,9 +28,6 @@ public class SynchronizeMaterialsExecutor {
     // Guarantees that only 1 threat is running at a time
     private static final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
     private static ScheduledFuture<?> synchronizeMaterialHandle;
-
-    @Inject
-    private SearchEngineService searchEngineService;
 
     public synchronized void synchronizeMaterials() {
         try {
@@ -50,8 +44,6 @@ public class SynchronizeMaterialsExecutor {
             }
 
             logger.info("Synchronization repository service finished execution.");
-
-            searchEngineService.updateIndex();
         } catch (Exception e) {
             logger.error("Unexpected error while synchronizing materials.", e);
         } finally {

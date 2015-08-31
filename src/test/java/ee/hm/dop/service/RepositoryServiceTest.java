@@ -47,6 +47,9 @@ public class RepositoryServiceTest {
     @Mock
     private MaterialDAO materialDao;
 
+    @Mock
+    private SearchEngineService searchEngineService;
+
     @Test
     public void synchronizeErrorGettingMaterials() throws Exception {
         Repository repository = getRepository();
@@ -67,6 +70,8 @@ public class RepositoryServiceTest {
         expect(repositoryManager.getMaterialsFrom(repository)).andReturn(materialIterator);
         expect(materialIterator.hasNext()).andReturn(false);
         expectUpdateRepository(repository);
+
+        searchEngineService.updateIndex();
 
         replayAll();
 
@@ -106,6 +111,8 @@ public class RepositoryServiceTest {
 
         expect(materialIterator.hasNext()).andReturn(false);
 
+        searchEngineService.updateIndex();
+
         replayAll(material1, material2);
 
         repositoryService.synchronize(repository);
@@ -141,6 +148,8 @@ public class RepositoryServiceTest {
 
         expect(materialIterator.hasNext()).andReturn(false);
 
+        searchEngineService.updateIndex();
+
         replayAll(material);
 
         repositoryService.synchronize(repository);
@@ -164,6 +173,8 @@ public class RepositoryServiceTest {
         expect(material.getRepositoryIdentifier()).andReturn(repositoryIdentifier);
         material.setRepository(repository);
         expect(materialDao.findByRepositoryAndRepositoryIdentifier(repository, repositoryIdentifier)).andReturn(null);
+
+        searchEngineService.updateIndex();
 
         expectUpdateRepository(repository);
 
@@ -233,7 +244,7 @@ public class RepositoryServiceTest {
     }
 
     private void replayAll(Object... mocks) {
-        replay(repositoryManager, materialIterator, materialService, repositoryDAO, materialDao);
+        replay(repositoryManager, materialIterator, materialService, repositoryDAO, materialDao, searchEngineService);
 
         if (mocks != null) {
             for (Object object : mocks) {
@@ -243,7 +254,7 @@ public class RepositoryServiceTest {
     }
 
     private void verifyAll(Object... mocks) {
-        verify(repositoryManager, materialIterator, materialService, repositoryDAO, materialDao);
+        verify(repositoryManager, materialIterator, materialService, repositoryDAO, materialDao, searchEngineService);
 
         if (mocks != null) {
             for (Object object : mocks) {
