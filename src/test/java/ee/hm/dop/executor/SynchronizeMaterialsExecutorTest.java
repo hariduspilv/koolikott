@@ -27,7 +27,6 @@ import org.junit.runner.RunWith;
 
 import ee.hm.dop.model.Repository;
 import ee.hm.dop.service.RepositoryService;
-import ee.hm.dop.service.SearchEngineService;
 
 @RunWith(EasyMockRunner.class)
 public class SynchronizeMaterialsExecutorTest {
@@ -37,9 +36,6 @@ public class SynchronizeMaterialsExecutorTest {
 
     @Mock
     private RepositoryService repositoryService;
-
-    @Mock
-    private SearchEngineService searchEngineService;
 
     private Object lock = new Object();
 
@@ -61,15 +57,57 @@ public class SynchronizeMaterialsExecutorTest {
 
         expect(repositoryService.getAllRepositorys()).andReturn(repositories);
 
-        searchEngineService.updateIndex();
         expectLastCall();
 
         repositoryService.synchronize(repository1);
         repositoryService.synchronize(repository2);
 
-        replay(repositoryService, repository1, repository2, searchEngineService);
+        replay(repositoryService, repository1, repository2);
 
         synchronizeMaterialsExecutor.synchronizeMaterials();
+
+        verify(repositoryService, repository1, repository2);
+
+        SynchronizeMaterialsExecutorMock mockExecutor = (SynchronizeMaterialsExecutorMock) synchronizeMaterialsExecutor;
+        assertTrue(mockExecutor.transactionWasStarted);
+        assertFalse(mockExecutor.transactionStarted);
+    }
+
+    @Test
+    public void synchronizeMaterialsUnexpectedError() {
+        expect(repositoryService.getAllRepositorys()).andThrow(new RuntimeException("Some error..."));
+
+        replay(repositoryService);
+
+        synchronizeMaterialsExecutor.synchronizeMaterials();
+
+        verify(repositoryService);
+
+        SynchronizeMaterialsExecutorMock mockExecutor = (SynchronizeMaterialsExecutorMock) synchronizeMaterialsExecutor;
+        assertTrue(mockExecutor.transactionWasStarted);
+        assertFalse(mockExecutor.transactionStarted);
+    }
+
+    @Test
+    public void scheduleExecution() {
+
+        Repository repository1 = createMock(Repository.class);
+        Repository repository2 = createMock(Repository.class);
+
+        List<Repository> repositories = new ArrayList<>();
+        repositories.add(repository1);
+        repositories.add(repository2);
+
+        expect(repositoryService.getAllRepositorys()).andReturn(repositories);
+
+        expectLastCall();
+
+        repositoryService.synchronize(repository1);
+        repositoryService.synchronize(repository2);
+
+        replay(repositoryService, repository1, repository2);
+
+        synchronizeMaterialsExecutor.scheduleExecution(1);
 
         synchronized (lock) {
             try {
@@ -79,7 +117,7 @@ public class SynchronizeMaterialsExecutorTest {
             }
         }
 
-        verify(repositoryService, repository1, repository2, searchEngineService);
+        verify(repositoryService, repository1, repository2);
 
         SynchronizeMaterialsExecutorMock mockExecutor = (SynchronizeMaterialsExecutorMock) synchronizeMaterialsExecutor;
         assertTrue(mockExecutor.transactionWasStarted);
@@ -87,14 +125,14 @@ public class SynchronizeMaterialsExecutorTest {
     }
 
     @Test
-    public void synchronizeMaterialsDoubleInitialization() {
+    public void scheduleExecutionDoubleInitialization() {
         List<Repository> repositories = Collections.emptyList();
         expect(repositoryService.getAllRepositorys()).andReturn(repositories);
 
         replay(repositoryService);
 
-        synchronizeMaterialsExecutor.synchronizeMaterials();
-        synchronizeMaterialsExecutor.synchronizeMaterials();
+        synchronizeMaterialsExecutor.scheduleExecution(1);
+        synchronizeMaterialsExecutor.scheduleExecution(1);
 
         synchronized (lock) {
             try {
@@ -136,12 +174,13 @@ public class SynchronizeMaterialsExecutorTest {
 
     @Test
     public void getInitialDelay() {
+        int hourOfDayToExecute = 1;
+
         SynchronizeMaterialsExecutor executor = new SynchronizeMaterialsExecutor();
-        int delay = (int) executor.getInitialDelay();
+        int delay = (int) executor.getInitialDelay(hourOfDayToExecute);
 
         LocalDateTime now = now();
 
-        int hourOfDayToExecute = 1;
         LocalDateTime expectedExecutionTime = now.withHourOfDay(hourOfDayToExecute).withMinuteOfHour(0)
                 .withSecondOfMinute(0).withMillisOfSecond(0);
         if (now.getHourOfDay() >= hourOfDayToExecute) {
@@ -159,7 +198,7 @@ public class SynchronizeMaterialsExecutorTest {
         private boolean transactionWasStarted;
 
         @Override
-        public long getInitialDelay() {
+        public long getInitialDelay(int hourOfDayToExecute) {
             return 1;
         }
 

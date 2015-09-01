@@ -23,6 +23,7 @@ public class ApplicationLauncher {
     private static final Logger logger = LoggerFactory.getLogger(ApplicationLauncher.class);
 
     private static final int DEFAULT_SERVER_PORT = 8080;
+    private static final int MATERIAL_SYNCHRONIZATION_HOUR_OF_DAY = 1;
 
     @Inject
     private static Configuration configuration;
@@ -46,6 +47,7 @@ public class ApplicationLauncher {
 
     private static void startExecutors() {
         synchronizeMaterialsExecutor.synchronizeMaterials();
+        synchronizeMaterialsExecutor.scheduleExecution(MATERIAL_SYNCHRONIZATION_HOUR_OF_DAY);
     }
 
     private static void startCommandListener() {

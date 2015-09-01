@@ -2,15 +2,10 @@ package ee.hm.dop.dao;
 
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
-import javax.persistence.PersistenceException;
 import javax.persistence.TypedQuery;
 
-import ee.hm.dop.exceptions.DuplicateUserException;
 import ee.hm.dop.model.User;
 
-/**
- * Created by mart.laus on 13.08.2015.
- */
 public class UserDAO {
 
     @Inject
@@ -31,8 +26,8 @@ public class UserDAO {
     }
 
     public User findUserByUsername(String username) {
-        TypedQuery<User> findByUsername = entityManager.createQuery("SELECT u FROM User u WHERE u.username = :username",
-                User.class);
+        TypedQuery<User> findByUsername = entityManager.createQuery(
+                "SELECT u FROM User u WHERE u.username = :username", User.class);
 
         User user = null;
         try {
@@ -60,12 +55,14 @@ public class UserDAO {
         return count;
     }
 
-    public void createUser(User user) throws DuplicateUserException {
-        try {
-            User merged = entityManager.merge(user);
-            entityManager.persist(merged);
-        } catch (PersistenceException e) {
-            throw new DuplicateUserException("Duplicate unique fields found when persisting user. ");
-        }
+    public User update(User user) {
+        User merged;
+        merged = entityManager.merge(user);
+        entityManager.persist(merged);
+        return merged;
+    }
+
+    public void delete(User user) {
+        entityManager.remove(user);
     }
 }

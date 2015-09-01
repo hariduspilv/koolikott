@@ -37,6 +37,9 @@ public class RepositoryService {
     @Inject
     private MaterialDAO materialDAO;
 
+    @Inject
+    private SearchEngineService searchEngineService;
+
     public List<Repository> getAllRepositorys() {
         List<Repository> repositories = repositoryDAO.findAll();
 
@@ -88,6 +91,13 @@ public class RepositoryService {
                 + " materials and %s materials failed to download of total %s";
         logger.info(format(message, end - start, successfulMaterials, failedMaterials, successfulMaterials
                 + failedMaterials));
+
+        updateSolrIndex();
+    }
+
+    private void updateSolrIndex() {
+        logger.info("Updating Search Engine index...");
+        searchEngineService.updateIndex();
     }
 
     private int getCount(int count) {

@@ -72,6 +72,10 @@ public abstract class ResourceIntegrationTestBase extends IntegrationTestBase {
         return getTarget(url).request().accept(mediaType).post(requestEntity);
     }
 
+    protected static Response doPost(String url, ClientRequestFilter clientRequestFilter, Entity<?> requestEntity, MediaType mediaType) {
+        return getTarget(url, clientRequestFilter).request().accept(mediaType).post(requestEntity);
+    }
+
     /*
      * Target
      */
