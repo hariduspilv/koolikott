@@ -3,6 +3,8 @@ package ee.hm.dop;
 import static ee.hm.dop.utils.ConfigurationProperties.SERVER_PORT;
 import static java.lang.String.format;
 
+import java.util.concurrent.Executors;
+
 import javax.inject.Inject;
 
 import org.apache.commons.configuration.Configuration;
@@ -42,11 +44,17 @@ public class ApplicationLauncher {
             startCommandListener();
             startExecutors();
             initOpenSaml();
+            synchronizeMaterials();
         }
     }
 
+    private static void synchronizeMaterials() {
+        Executors.newSingleThreadExecutor().submit(() -> {
+            synchronizeMaterialsExecutor.synchronizeMaterials();
+        });
+    }
+
     private static void startExecutors() {
-        synchronizeMaterialsExecutor.synchronizeMaterials();
         synchronizeMaterialsExecutor.scheduleExecution(MATERIAL_SYNCHRONIZATION_HOUR_OF_DAY);
     }
 
