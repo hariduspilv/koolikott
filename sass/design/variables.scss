@@ -1,56 +1,58 @@
 $brand-primary: #0090db;
 
-$brand-grey-medium: #AAA;
+$brand-grey-medium: #AAA !default;
 
-$body-bg: #F4F4F4 !default;
+$body-bg: #F4F4F4;
 
 $text-color: #444;
 
+
 //== Grid system
-//
-//## Define your custom responsive grid.
 
-$grid-float-breakpoint: 992px !default;
-
+$grid-float-breakpoint: 992px;
 
 $font-size-base: 15px;
 
-$font-size-h1: floor(($font-size-base * 2.1)) !default;
+$font-size-h1: floor(($font-size-base * 2.1));
 
-$font-size-h3: floor(($font-size-base * 2.1)) !default;
+$font-size-h3: floor(($font-size-base * 2.1));
 
-$font-family-sans-serif: "Roboto", "Helvetica Neue", Helvetica, Arial, sans-serif !default;
+$font-family-sans-serif: "Roboto", "Helvetica Neue", Helvetica, Arial, sans-serift;
 
 $link-hover-decoration: none;
 
-$font-color-grey: #777;
+$font-color-grey: #777 !default;
 
-$font-color-grey-medium: #AAA;
+$font-color-grey-medium: #AAA !default;
 
-$font-color-grey-light: #DDD;
+$font-color-grey-light: #DDD !default;
 
-$background-color-grey-medium: #F4F4F4;
+$background-color-grey-medium: #F4F4F4 !default;
 
 $input-bg: none;
 
 
-$navbar-height: 80px !default;
+//== Navbar
+
+$navbar-height: 80px;
 
 $navbar-border-radius: 0;
 
 $navbar-default-color: #FFF;
 
-$navbar-default-bg: #0095da !default;
+$navbar-default-bg: #0095da;
 
-$navbar-light-bg: #75caf2;
+$navbar-light-bg: #75caf2 !default;
 
-$navbar-dark-bg: #003d68;
+$navbar-dark-bg: #003d68 !default;
+
 
 // Navbar links
 
-$navbar-default-link-color: #FFF !default;
+$navbar-default-link-color: #FFF;
 
-$navbar-default-link-hover-color: #FFF !default;
+$navbar-default-link-hover-color: #FFF;
+
 
 // Navbar toggle
 
@@ -59,6 +61,7 @@ $navbar-default-toggle-hover-bg: $navbar-default-bg !default;
 $navbar-default-toggle-icon-bar-bg: #FFF !default;
 
 $navbar-default-toggle-border-color: $navbar-default-bg !default;
+
 
 //== Pagination 
 
@@ -87,7 +90,7 @@ $pagination-disabled-bg: #AAA !default;
 $pagination-disabled-border: #AAA !default;
 
 
-
+//== Buttons
 
 $btn-default-color: #FFF !default;
 
@@ -106,28 +109,31 @@ $input-border-radius: 0;
 
 $input-color-placeholder: #92c8d9;
 
+
 // Dropdowns
 
-
 $dropdown-bg: #003d68 !default;
-//** Dropdown menu `border-color`.
+
 $dropdown-border: $dropdown-bg !default;
-//** Dropdown menu `border-color` **for IE8**.
-$dropdown-fallback-border:       #ccc !default;
-//** Divider color for between dropdown items.
+
+$dropdown-fallback-border: #ccc !default;
+
 $dropdown-divider-bg: $brand-primary !default;
 
-//** Dropdown link text color.
 $dropdown-link-color: #FFF !default;
-//** Hover color for dropdown links.
-$dropdown-link-hover-color:      darken(#FFF, 5%) !default;
-//** Hover background for dropdown links.
-$dropdown-link-hover-bg:         $dropdown-bg !default;
 
-//** Active dropdown menu item text color.
-$dropdown-link-active-color:     #FFF !default;
-//** Active dropdown menu item background color.
-$dropdown-link-active-bg:        #FFF !default;
+$dropdown-link-hover-color: darken(#FFF, 5%) !default;
+
+$dropdown-link-hover-bg: $dropdown-bg !default;
+
+$dropdown-link-active-color: #FFF !default;
+
+$dropdown-link-active-bg:v#FFF !default;
+
+
+//== Alerts
+
+$alert-border-radius: 0;
 
 
 
