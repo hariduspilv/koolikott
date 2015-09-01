@@ -47,15 +47,12 @@ public class TaatServiceTest {
         Integer assertionConsumerServiceIndex = 3;
         String connectionId = "https://app.website/sp";
 
-        expect(configuration.getString(KEYSTORE_FILENAME)).andReturn("test.keystore");
-        expect(configuration.getString(KEYSTORE_PASSWORD)).andReturn("newKeyStorePass");
         expect(configuration.getString(TAAT_ASSERTION_CONSUMER_SERVICE_INDEX))
                 .andReturn(String.valueOf(assertionConsumerServiceIndex));
         expect(configuration.getString(TAAT_CONNECTION_ID)).andReturn(connectionId);
 
         replay(configuration);
 
-        taatService.init();
         AuthnRequest authnRequest = taatService.buildAuthnRequest();
 
         verify(configuration);
@@ -94,7 +91,6 @@ public class TaatServiceTest {
 
         replay(configuration);
 
-        taatService.init();
         BasicSAMLMessageContext<SAMLObject, AuthnRequest, SAMLObject> context = taatService
                 .buildMessageContext(authnRequest, response);
 

@@ -12,7 +12,6 @@ import java.math.BigInteger;
 import java.security.KeyStore;
 import java.security.SecureRandom;
 
-import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletResponse;
 
@@ -32,8 +31,11 @@ import org.opensaml.saml2.metadata.impl.EndpointImpl;
 import org.opensaml.ws.transport.http.HttpServletResponseAdapter;
 import org.opensaml.xml.security.credential.Credential;
 
+import com.google.inject.Singleton;
+
 import ee.hm.dop.security.KeyStoreUtils;
 
+@Singleton
 public class TaatService {
 
     @Inject
@@ -41,15 +43,20 @@ public class TaatService {
 
     private SecureRandom random;
 
-    private KeyStore keystore;
+    private KeyStore keyStore;
 
-    @PostConstruct
-    public void init() {
+    public TaatService() {
         random = new SecureRandom();
+    }
 
-        String filename = configuration.getString(KEYSTORE_FILENAME);
-        String password = configuration.getString(KEYSTORE_PASSWORD);
-        keystore = KeyStoreUtils.loadKeystore(filename, password);
+    private KeyStore getKeyStore() {
+        if (keyStore == null) {
+            String filename = configuration.getString(KEYSTORE_FILENAME);
+            String password = configuration.getString(KEYSTORE_PASSWORD);
+            keyStore = KeyStoreUtils.loadKeystore(filename, password);
+        }
+
+        return keyStore;
     }
 
     public AuthnRequest buildAuthnRequest() {
@@ -110,7 +117,7 @@ public class TaatService {
     protected Credential getSigningCredential() {
         String entityId = configuration.getString(KEYSTORE_SIGNING_ENTITY_ID);
         String entityPassword = configuration.getString(KEYSTORE_SIGNING_ENTITY_PASSWORD);
-        return KeyStoreUtils.getSigningCredential(keystore, entityId, entityPassword);
+        return KeyStoreUtils.getSigningCredential(getKeyStore(), entityId, entityPassword);
     }
 
 }
