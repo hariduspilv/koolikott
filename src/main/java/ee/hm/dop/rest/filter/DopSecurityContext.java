@@ -8,21 +8,21 @@ import javax.ws.rs.core.UriInfo;
 public class DopSecurityContext implements SecurityContext {
 
     private UriInfo uriInfo;
-    private DopPrincipal userPrincipal;
+    private DopPrincipal dopPrincipal;
 
     public DopSecurityContext(DopPrincipal principal, UriInfo uriInfo) {
         this.uriInfo = uriInfo;
-        this.userPrincipal = principal;
+        this.dopPrincipal = principal;
     }
 
     @Override
     public Principal getUserPrincipal() {
-        return userPrincipal;
+        return dopPrincipal;
     }
 
     @Override
     public boolean isUserInRole(String role) {
-        return userPrincipal != null && userPrincipal.isUserInRole(role);
+        return dopPrincipal != null && dopPrincipal.isUserInRole(role);
     }
 
     @Override

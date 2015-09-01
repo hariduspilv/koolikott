@@ -40,7 +40,7 @@ public class LogoutResource {
         DopPrincipal dopPrincipal = (DopPrincipal) securityContext.getUserPrincipal();
         logoutService.logout(dopPrincipal.getAuthenticatedUser());
         logger.info(format("User %s is logged out using id card login with id %s.",
-                dopPrincipal.getAuthenticatedUser().getUser().getUsername(),
-                dopPrincipal.getAuthenticatedUser().getUser().getIdCode()));
+                dopPrincipal.getUser().getUsername(),
+                dopPrincipal.getUser().getIdCode()));
     }
 }
