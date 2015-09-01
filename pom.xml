@@ -146,6 +146,11 @@
 			<artifactId>solr-solrj</artifactId>
 			<version>5.2.1</version>
 		</dependency>
+		<dependency>
+			<groupId>org.opensaml</groupId>
+			<artifactId>opensaml</artifactId>
+			<version>2.6.4</version>
+		</dependency>
 
         <!-- Testing -->
 		

@@ -6,6 +6,8 @@ import static java.lang.String.format;
 import javax.inject.Inject;
 
 import org.apache.commons.configuration.Configuration;
+import org.opensaml.DefaultBootstrap;
+import org.opensaml.xml.ConfigurationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -38,6 +40,7 @@ public class ApplicationLauncher {
             addShutdownHook();
             startCommandListener();
             startExecutors();
+            initOpenSaml();
         }
     }
 
@@ -69,6 +72,14 @@ public class ApplicationLauncher {
         } catch (Exception e) {
             logger.error("Error inicializing Jetty Server. Existing application.", e);
             System.exit(1);
+        }
+    }
+
+    private static void initOpenSaml() {
+        try {
+            DefaultBootstrap.bootstrap();
+        } catch (ConfigurationException e) {
+            logger.error("Error initializing OpenSAML library.");
         }
     }
 

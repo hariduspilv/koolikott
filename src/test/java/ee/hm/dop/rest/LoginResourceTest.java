@@ -19,11 +19,15 @@ import org.junit.Test;
 import ee.hm.dop.common.test.ResourceIntegrationTestBase;
 import ee.hm.dop.model.AuthenticatedUser;
 import ee.hm.dop.service.LoginService;
+import ee.hm.dop.service.TaatService;
 
 public class LoginResourceTest extends ResourceIntegrationTestBase {
 
     @Mock
     private LoginService loginService;
+
+    @Mock
+    private TaatService taatService;
 
     @Mock
     private HttpServletRequest request;

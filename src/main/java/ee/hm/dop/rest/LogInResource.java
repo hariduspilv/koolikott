@@ -4,30 +4,47 @@ import static java.lang.String.format;
 
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
+import org.opensaml.common.SAMLObject;
+import org.opensaml.common.binding.BasicSAMLMessageContext;
+import org.opensaml.saml2.binding.encoding.HTTPRedirectDeflateEncoder;
+import org.opensaml.saml2.core.AuthnRequest;
+import org.opensaml.ws.message.encoder.MessageEncodingException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import ee.hm.dop.model.AuthenticatedUser;
 import ee.hm.dop.service.LoginService;
+import ee.hm.dop.service.TaatService;
 
 /**
  * Created by mart.laus on 13.08.2015.
  */
 @Path("/login")
 public class LogInResource {
+
+    private static Logger logger = LoggerFactory.getLogger(LogInResource.class);
+
     @Inject
     private LoginService loginService;
+
+    @Inject
+    private TaatService taatService;
+
+    @Inject
+    HTTPRedirectDeflateEncoder encoder;
 
     @Context
     private HttpServletRequest request;
 
-    private static Logger logger = LoggerFactory.getLogger(LogInResource.class);
+    @Context
+    private HttpServletResponse response;
 
     @GET
     @Path("/idCard")
@@ -40,8 +57,8 @@ public class LogInResource {
             authenticatedUser = loginService.logIn(idCode);
 
             if (authenticatedUser != null) {
-                logger.info(format("User %s is logged in using id card login with id %s.", authenticatedUser.getUser()
-                        .getUsername(), idCode));
+                logger.info(format("User %s is logged in using id card login with id %s.",
+                        authenticatedUser.getUser().getUsername(), idCode));
             } else {
                 logger.info(format("User with id %s could not log in, trying to create account. ", idCode));
 
@@ -53,7 +70,7 @@ public class LogInResource {
                     authenticatedUser = loginService.logIn(idCode);
 
                     if (authenticatedUser != null) {
-                    	authenticatedUser.setFirstLogin(true);
+                        authenticatedUser.setFirstLogin(true);
                         logger.info(format("User %s logged in for the first time using id card login with id %s.",
                                 authenticatedUser.getUser().getUsername(), idCode));
                     } else {
@@ -65,6 +82,21 @@ public class LogInResource {
         }
 
         return authenticatedUser;
+    }
+
+    @GET
+    @Path("/taat")
+    @Produces(MediaType.APPLICATION_JSON)
+    public void makeTaatRequest() {
+        AuthnRequest authnRequest = taatService.buildAuthnRequest();
+        BasicSAMLMessageContext<SAMLObject, AuthnRequest, SAMLObject> context = taatService
+                .buildMessageContext(authnRequest, response);
+
+        try {
+            encoder.encode(context);
+        } catch (MessageEncodingException e) {
+            logger.error("Error while encoding SAML message context.");
+        }
     }
 
     protected String getIdCodeFromRequest() {
