@@ -8,6 +8,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
+import java.security.InvalidParameterException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -199,8 +200,9 @@ public class MaterialDAOTest extends DatabaseTestBase {
         assertEquals(material.getViews(), newMaterial.getViews());
         assertArrayEquals(material.getPicture(), newMaterial.getPicture());
         assertEquals(material.getHasPicture(), newMaterial.getHasPicture());
+        assertNull(newMaterial.getUpdated());
 
-        materialDAO.delete(newMaterial);
+        materialDAO.remove(newMaterial);
     }
 
     @Test
@@ -322,6 +324,7 @@ public class MaterialDAOTest extends DatabaseTestBase {
         assertMaterial1(materials.get(2));
     }
 
+    @Test
     public void update() {
         Material changedMaterial = new Material();
         changedMaterial.setId(9l);
@@ -337,7 +340,8 @@ public class MaterialDAOTest extends DatabaseTestBase {
         Material material = materialDAO.findById(9);
         assertEquals("http://www.chaged.it.com", changedMaterial.getSource());
         assertEquals(now, changedMaterial.getAdded());
-        assertEquals(now, changedMaterial.getUpdated());
+        DateTime updated = changedMaterial.getUpdated();
+        assertTrue(updated.isEqual(now) || updated.isAfter(now));
         assertEquals(views, changedMaterial.getViews());
 
         // Restore to original values
@@ -501,6 +505,27 @@ public class MaterialDAOTest extends DatabaseTestBase {
             assertEquals(expectedMessage, e.getCause().getMessage());
         }
 
+    }
+
+    @Test
+    public void delete() {
+        Material material = materialDAO.findById(10);
+        materialDAO.delete(material);
+
+        Material deletedMaterial = materialDAO.findById(10);
+        assertTrue(deletedMaterial.isDeleted());
+    }
+
+    @Test
+    public void deleteMaterialDoesNotExist() {
+        Material material = new Material();
+
+        try {
+            materialDAO.delete(material);
+            fail("Exception expected");
+        } catch (InvalidParameterException e) {
+            assertEquals("Material does not exist.", e.getMessage());
+        }
     }
 
     private void assertMaterial1(Material material) {

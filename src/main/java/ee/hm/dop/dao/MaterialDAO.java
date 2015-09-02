@@ -1,11 +1,14 @@
 package ee.hm.dop.dao;
 
+import java.security.InvalidParameterException;
 import java.util.List;
 
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.TypedQuery;
+
+import org.joda.time.DateTime;
 
 import ee.hm.dop.model.Material;
 import ee.hm.dop.model.Repository;
@@ -51,9 +54,22 @@ public class MaterialDAO {
     }
 
     public Material update(Material material) {
+        if (material.getId() != null) {
+            material.setUpdated(DateTime.now());
+        }
+
         Material merged = entityManager.merge(material);
         entityManager.persist(merged);
         return merged;
+    }
+
+    public void delete(Material material) {
+        if (material.getId() == null) {
+            throw new InvalidParameterException("Material does not exist.");
+        }
+
+        material.setDeleted(true);
+        update(material);
     }
 
     /**
@@ -61,7 +77,7 @@ public class MaterialDAO {
      *
      * @param material
      */
-    public void delete(Material material) {
+    protected void remove(Material material) {
         entityManager.remove(material);
     }
 

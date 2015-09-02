@@ -49,6 +49,10 @@ public class MaterialIterator implements Iterator<Material> {
         Element header = identifierIterator.next();
         String identifier = header.getElementsByTagName("identifier").item(0).getTextContent();
 
+        if (isDeleted(header)) {
+            return buildDeletedMaterial(identifier);
+        }
+
         try {
             Document doc = getMaterialConnector.getMaterial(repository, identifier, METADATA_PREFIX);
             material = materialParser.parse(doc);
@@ -59,6 +63,18 @@ public class MaterialIterator implements Iterator<Material> {
         }
 
         return material;
+    }
+
+    private Material buildDeletedMaterial(String identifier) {
+        Material material = new Material();
+        material.setRepositoryIdentifier(identifier);
+        material.setDeleted(true);
+        return material;
+    }
+
+    private boolean isDeleted(Element header) {
+        String status = header.getAttribute("status");
+        return "deleted".equalsIgnoreCase(status);
     }
 
     public void setParser(MaterialParser materialParser) {

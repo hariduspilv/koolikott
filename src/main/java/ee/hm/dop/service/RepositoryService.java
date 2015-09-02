@@ -115,10 +115,18 @@ public class RepositoryService {
         material.setRepository(repository);
 
         if (existentMaterial != null) {
+            updateMaterial(material, existentMaterial);
+        } else if (!material.isDeleted()) {
+            materialService.createMaterial(material);
+        }
+    }
+
+    private void updateMaterial(Material material, Material existentMaterial) {
+        if (material.isDeleted()) {
+            materialService.delete(existentMaterial);
+        } else {
             material.setId(existentMaterial.getId());
             materialService.update(material);
-        } else {
-            materialService.createMaterial(material);
         }
     }
 

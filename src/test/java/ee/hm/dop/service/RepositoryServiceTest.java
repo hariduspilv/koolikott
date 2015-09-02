@@ -92,6 +92,7 @@ public class RepositoryServiceTest {
         expect(materialIterator.next()).andReturn(material1);
         String repositoryIdentifier1 = "123456Identifier";
         expect(material1.getRepositoryIdentifier()).andReturn(repositoryIdentifier1);
+        expect(material1.isDeleted()).andReturn(false);
         material1.setRepository(repository);
         expect(materialDao.findByRepositoryAndRepositoryIdentifier(repository, repositoryIdentifier1)).andReturn(null);
         materialService.createMaterial(material1);
@@ -103,6 +104,7 @@ public class RepositoryServiceTest {
         expect(materialIterator.next()).andReturn(material2);
         String repositoryIdentifier2 = "123456Identifier2";
         expect(material2.getRepositoryIdentifier()).andReturn(repositoryIdentifier2);
+        expect(material2.isDeleted()).andReturn(false);
         material2.setRepository(repository);
         expect(materialDao.findByRepositoryAndRepositoryIdentifier(repository, repositoryIdentifier2)).andReturn(null);
         materialService.createMaterial(material2);
@@ -141,8 +143,47 @@ public class RepositoryServiceTest {
         originalMaterial.setId(originalMaterialId);
         expect(materialDao.findByRepositoryAndRepositoryIdentifier(repository, repositoryIdentifier)).andReturn(
                 originalMaterial);
+        expect(material.isDeleted()).andReturn(false);
         material.setId(originalMaterialId);
         materialService.update(material);
+
+        expectUpdateRepository(repository);
+
+        expect(materialIterator.hasNext()).andReturn(false);
+
+        searchEngineService.updateIndex();
+
+        replayAll(material);
+
+        repositoryService.synchronize(repository);
+
+        verifyAll(material);
+    }
+
+    @Test
+    public void synchronizeUpdatingDeletedMaterial() throws Exception {
+        Repository repository = getRepository();
+        Material material = createMock(Material.class);
+
+        expect(repositoryManager.getMaterialsFrom(repository)).andReturn(materialIterator);
+
+        expect(materialIterator.hasNext()).andReturn(true);
+        expect(materialIterator.next()).andReturn(null);
+
+        expect(materialIterator.hasNext()).andReturn(true);
+        expect(materialIterator.next()).andReturn(material);
+        String repositoryIdentifier = "123456Identifier";
+        expect(material.getRepositoryIdentifier()).andReturn(repositoryIdentifier);
+        material.setRepository(repository);
+
+        Material originalMaterial = new Material();
+        long originalMaterialId = 234l;
+        originalMaterial.setId(originalMaterialId);
+        expect(materialDao.findByRepositoryAndRepositoryIdentifier(repository, repositoryIdentifier)).andReturn(
+                originalMaterial);
+        expect(material.isDeleted()).andReturn(true);
+
+        materialService.delete(originalMaterial);
 
         expectUpdateRepository(repository);
 
@@ -171,6 +212,7 @@ public class RepositoryServiceTest {
 
         String repositoryIdentifier = "123456Identifier";
         expect(material.getRepositoryIdentifier()).andReturn(repositoryIdentifier);
+        expect(material.isDeleted()).andReturn(false);
         material.setRepository(repository);
         expect(materialDao.findByRepositoryAndRepositoryIdentifier(repository, repositoryIdentifier)).andReturn(null);
 

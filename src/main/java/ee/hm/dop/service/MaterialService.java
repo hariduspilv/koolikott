@@ -6,7 +6,6 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -51,8 +50,6 @@ public class MaterialService {
         // Should not be able to update added date, must keep the original
         material.setAdded(originalMaterial.getAdded());
 
-        material.setUpdated(DateTime.now());
-
         createOrUpdate(material);
     }
 
@@ -88,5 +85,9 @@ public class MaterialService {
         }
 
         materialDao.update(material);
+    }
+
+    public void delete(Material material) {
+        materialDao.delete(material);
     }
 }
