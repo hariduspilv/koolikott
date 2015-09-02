@@ -1,61 +1,62 @@
 define(['app'], function(app) {
-	var instance;
-	var isAuthenticationInProgress;
-	
-	app.factory('authenticationService',['$location', '$rootScope', 'serverCallService', 'authenticatedUserService',
-	       function($location, $rootScope, serverCallService, authenticatedUserService) {
+    var instance;
+    var isAuthenticationInProgress;
+    
+    app.factory('authenticationService',['$location', '$rootScope', 'serverCallService', 'authenticatedUserService',
+    function($location, $rootScope, serverCallService, authenticatedUserService) {
 
         function loginSuccess(authenticatedUser) {
             if (isEmpty(authenticatedUser)) {
-            	log('No data returned by logging in');
-            	enableLogin();
+                log('No data returned by logging in');
+                enableLogin();
             } else {
                 authenticatedUserService.setAuthenticatedUser(authenticatedUser);
-                
+
                 if (authenticatedUser.firstLogin) {
-                	$location.url('/' + authenticatedUser.user.username);
+                    $location.url('/' + authenticatedUser.user.username);
                 }
             }
         };
-        
+
         function loginFail(data, status) {
             log('Logging in failed.');
+            $scope.errorMessageShow = true;
             enableLogin();
         };
 
         function logoutSuccess(data) {
-        	enableLogin();
+            enableLogin();
         };
 
         function logoutFail(data, status) {
             //ignore
         };
-        
+
         function disableLogin() {
-        	isAuthenticationInProgress = true;
+            isAuthenticationInProgress = true;
         }
-        
+
         function enableLogin() {
-        	isAuthenticationInProgress = false;
+            isAuthenticationInProgress = false;
         }
-        
+
         return {
 
             logout : function() {              
                 serverCallService.makePost("rest/logout", {}, logoutSuccess, logoutFail);
-                
+
                 $rootScope.authenticatedUser = null;
 
                 localStorage.removeItem("authenticatedUser");
             },
 
             loginWithIdCard : function() {
-            	if (isAuthenticationInProgress) {
-            		return;
-            	}
-            	
-            	disableLogin();
-            	serverCallService.makeGet("rest/login/idCard", {}, loginSuccess, loginFail);
+                if (isAuthenticationInProgress) {
+                    return;
+                }
+            
+                disableLogin();
+                serverCallService.makeGet("rest/login/idCard", {}, loginSuccess, loginFail);
             }, 
 
             loginWithTaat : function() {
@@ -63,7 +64,6 @@ define(['app'], function(app) {
                 localStorage.setItem(LOGIN_ORIGIN, $location.url());
                 window.location = "/rest/login/taat";
             }
-
-	    };
-	}]);
+        };
+    }]);
 });

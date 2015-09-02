@@ -1,8 +1,8 @@
 define(['app'], function(app) {
-	var instance;
-	
-	app.factory('authenticatedUserService',['$location', '$rootScope', 
-	       function($location, $rootScope) {
+    var instance;
+
+    app.factory('authenticatedUserService',['$location', '$rootScope', 
+    function($location, $rootScope) {
 
         function getAuthenticatedUser() {
             var user = JSON.parse(localStorage.getItem("authenticatedUser"));
@@ -14,13 +14,13 @@ define(['app'], function(app) {
             if (user) {
                 return user;
             }
-            
+
             return null;
         }
-        
+
         instance = {
-			setAuthenticatedUser : function(authenticatedUser) {
-				$rootScope.authenticatedUser = authenticatedUser;
+            setAuthenticatedUser : function(authenticatedUser) {
+                $rootScope.authenticatedUser = authenticatedUser;
                 localStorage.setItem("authenticatedUser", JSON.stringify(authenticatedUser));
             },
 
@@ -49,8 +49,8 @@ define(['app'], function(app) {
 
                 return null;
             },
-	    };
-		
-		return instance;
-	}]);
+        };
+
+    return instance;
+    }]);
 });
