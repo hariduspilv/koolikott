@@ -5,6 +5,8 @@
  * 
  */
 
+var LOGIN_ORIGIN = "loginOrigin"; 
+
 function log() {
     if (console && console.log) {
         console.log.apply(console, arguments);

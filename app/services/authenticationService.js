@@ -56,7 +56,14 @@ define(['app'], function(app) {
             	
             	disableLogin();
             	serverCallService.makeGet("rest/login/idCard", {}, loginSuccess, loginFail);
+            }, 
+
+            loginWithTaat : function() {
+                localStorage.removeItem(LOGIN_ORIGIN);
+                localStorage.setItem(LOGIN_ORIGIN, $location.url());
+                window.location = "/rest/login/taat";
             }
+
 	    };
 	}]);
 });
