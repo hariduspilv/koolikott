@@ -38,6 +38,10 @@ insert into User(id, userName, name, surName, idCode, role) values (4, 'voldemar
 
 insert into User(id, user_id, token) values (1, 1, 'token');
 
+-- AuthenticationState
+
+insert into AuthenticationState(id, token) values (1, 'testTOKEN');
+
 -- Materials
 
 insert into Material(id, lang, issueDate, licenseType, source, repository, repositoryIdentifier, added, updated, views, picture, creator, deleted) values(1, 1, 1, 1, 'https://www.youtube.com/watch?v=gSWbx3CvVUk', 1, 'isssiiaawej', '1999-01-01 00:00:01', '2000-03-01 07:00:01', 100, '656b6f6f6c696b6f7474', 1, false);

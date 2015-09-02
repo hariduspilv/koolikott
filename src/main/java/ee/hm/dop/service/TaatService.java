@@ -1,5 +1,6 @@
 package ee.hm.dop.service;
 
+import static ee.hm.dop.guice.GuiceInjector.getInjector;
 import static ee.hm.dop.utils.ConfigurationProperties.KEYSTORE_FILENAME;
 import static ee.hm.dop.utils.ConfigurationProperties.KEYSTORE_PASSWORD;
 import static ee.hm.dop.utils.ConfigurationProperties.KEYSTORE_SIGNING_ENTITY_ID;
@@ -33,6 +34,7 @@ import org.opensaml.xml.security.credential.Credential;
 
 import com.google.inject.Singleton;
 
+import ee.hm.dop.model.AuthenticationState;
 import ee.hm.dop.security.KeyStoreUtils;
 
 @Singleton
@@ -81,13 +83,17 @@ public class TaatService {
 
     public BasicSAMLMessageContext<SAMLObject, AuthnRequest, SAMLObject> buildMessageContext(AuthnRequest authnRequest,
             HttpServletResponse response) {
+        String token = new BigInteger(130, random).toString(32);
+        createAuthenticationState(token);
+
         HttpServletResponseAdapter responseAdapter = new HttpServletResponseAdapter(response, true);
         BasicSAMLMessageContext<SAMLObject, AuthnRequest, SAMLObject> context = new BasicSAMLMessageContext<SAMLObject, AuthnRequest, SAMLObject>();
         context.setPeerEntityEndpoint(getEndpoint());
         context.setOutboundSAMLMessage(authnRequest);
         context.setOutboundSAMLMessageSigningCredential(getSigningCredential());
         context.setOutboundMessageTransport(responseAdapter);
-        context.setRelayState(new BigInteger(130, random).toString(32));
+        context.setRelayState(token);
+
         return context;
     }
 
@@ -118,6 +124,17 @@ public class TaatService {
         String entityId = configuration.getString(KEYSTORE_SIGNING_ENTITY_ID);
         String entityPassword = configuration.getString(KEYSTORE_SIGNING_ENTITY_PASSWORD);
         return KeyStoreUtils.getSigningCredential(getKeyStore(), entityId, entityPassword);
+    }
+
+    protected AuthenticationState createAuthenticationState(String token) {
+        AuthenticationState authenticationState = new AuthenticationState();
+        authenticationState.setToken(token);
+        AuthenticationStateService authenticationStateService = newAuthenticationStateService();
+        return authenticationStateService.create(authenticationState);
+    }
+
+    protected AuthenticationStateService newAuthenticationStateService() {
+        return getInjector().getInstance(AuthenticationStateService.class);
     }
 
 }
