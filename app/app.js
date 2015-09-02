@@ -13,7 +13,7 @@ define(['routes','services/dependencyResolver'], function(config, dependencyReso
         '$translateProvider',
         '$httpProvider',
 
-        function($routeProvider, $locationProvider, $controllerProvider, $compileProvider, $filterProvider, $provide, $translateProvider, $httpProvider)
+        function($routeProvider, $locationProvider, $controllerProvider, $compileProvider, $filterProvider, $provide, $translateProvider, $httpProvider, $sceDelegateProvider)
         {
             app.controller = $controllerProvider.register;
             app.directive  = $compileProvider.directive;
@@ -39,6 +39,22 @@ define(['routes','services/dependencyResolver'], function(config, dependencyReso
 
             $httpProvider.defaults.transformResponse.splice(0, 0, parseJSONResponse);
         }
+        
+       	$sceDelegateProvider.resourceUrlWhitelist([
+        	                                           // Allow same origin resource loads.
+        	                                           'self',
+        	                                           // Allow loading from our assets domain.  Notice the difference between * and **.
+        	                                           'https://172.33.45.51'
+        	                                         ]);
+        }
+
+        
+        
+        
+        
+        
+        
+        
     ]);
 
      function parseJSONResponse(data, headersGetter) {
@@ -65,6 +81,6 @@ define(['routes','services/dependencyResolver'], function(config, dependencyReso
             'utils/commons'
         ];
     }
-
+    
    return app;
 });
