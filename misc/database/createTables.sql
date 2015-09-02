@@ -13,6 +13,7 @@ DROP TABLE IF EXISTS Material_Author;
 DROP TABLE IF EXISTS LanguageString;
 DROP TABLE IF EXISTS LanguageKeyCodes;
 DROP TABLE IF EXISTS Material;
+DROP TABLE IF EXISTS AuthenticationState;
 DROP TABLE IF EXISTS AuthenticatedUser;
 DROP TABLE IF EXISTS User;
 DROP TABLE IF EXISTS Repository;
@@ -102,6 +103,11 @@ CREATE TABLE AuthenticatedUser (
   FOREIGN KEY (user_id)
             REFERENCES User(id)
             ON DELETE RESTRICT
+);
+
+CREATE TABLE AuthenticationState (
+  id          BIGINT AUTO_INCREMENT PRIMARY KEY,
+  token       VARCHAR(255) UNIQUE NOT NULL
 );
 
 CREATE TABLE Material (

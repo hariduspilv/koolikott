@@ -18,6 +18,7 @@ import static org.junit.Assert.assertTrue;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.configuration.Configuration;
+import org.easymock.EasyMock;
 import org.easymock.EasyMockRunner;
 import org.easymock.Mock;
 import org.easymock.TestSubject;
@@ -33,14 +34,19 @@ import org.opensaml.saml2.core.Issuer;
 import org.opensaml.saml2.core.NameIDPolicy;
 import org.opensaml.saml2.core.impl.AuthnRequestBuilder;
 
+import ee.hm.dop.model.AuthenticationState;
+
 @RunWith(EasyMockRunner.class)
 public class TaatServiceTest {
 
     @TestSubject
-    private TaatService taatService = new TaatService();
+    private TaatService taatService = new TaatServicePartialMock();
 
     @Mock
     private Configuration configuration;
+
+    @Mock
+    private AuthenticationStateService authenticationStateService;
 
     @Test
     public void buildAuthnRequest() {
@@ -51,11 +57,11 @@ public class TaatServiceTest {
                 .andReturn(String.valueOf(assertionConsumerServiceIndex));
         expect(configuration.getString(TAAT_CONNECTION_ID)).andReturn(connectionId);
 
-        replay(configuration);
+        replay(configuration, authenticationStateService);
 
         AuthnRequest authnRequest = taatService.buildAuthnRequest();
 
-        verify(configuration);
+        verify(configuration, authenticationStateService);
 
         assertNotNull(authnRequest);
         assertNotNull(authnRequest.getID());
@@ -80,6 +86,7 @@ public class TaatServiceTest {
                 "AuthnRequest", "samlp");
 
         HttpServletResponse response = createMock(HttpServletResponse.class);
+        AuthenticationState authenticationState = createMock(AuthenticationState.class);
 
         String endpointLocation = "https://test.taat.ee/notrealurl";
 
@@ -88,17 +95,18 @@ public class TaatServiceTest {
         expect(configuration.getString(TAAT_SSO)).andReturn("https://test.taat.ee/notrealurl");
         expect(configuration.getString(KEYSTORE_SIGNING_ENTITY_ID)).andReturn("testAlias");
         expect(configuration.getString(KEYSTORE_SIGNING_ENTITY_PASSWORD)).andReturn("newKeyPass");
+        expect(authenticationStateService.create(EasyMock.anyObject(AuthenticationState.class)))
+                .andReturn(authenticationState);
 
-        replay(configuration);
+        replay(configuration, authenticationStateService);
 
         BasicSAMLMessageContext<SAMLObject, AuthnRequest, SAMLObject> context = taatService
                 .buildMessageContext(authnRequest, response);
 
-        verify(configuration);
+        verify(configuration, authenticationStateService);
 
         assertEquals(endpointLocation, context.getPeerEntityEndpoint().getLocation());
         assertEquals(authnRequest, context.getOutboundSAMLMessage());
-        assertNotNull(context.getOutboundSAMLMessage());
         assertNotNull(context.getRelayState());
     }
 
@@ -109,6 +117,14 @@ public class TaatServiceTest {
         Issuer issuer = taatService.getIssuer(connectionId);
 
         assertEquals(connectionId, issuer.getValue());
+    }
+
+    private class TaatServicePartialMock extends TaatService {
+
+        @Override
+        protected AuthenticationStateService newAuthenticationStateService() {
+            return authenticationStateService;
+        }
     }
 
 }

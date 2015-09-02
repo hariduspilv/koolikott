@@ -6,6 +6,7 @@ import com.google.inject.servlet.ServletModule;
 
 import ee.hm.dop.guice.GuiceInjector.Module;
 import ee.hm.dop.service.AuthenticatedUserService;
+import ee.hm.dop.service.AuthenticationStateService;
 import ee.hm.dop.service.EducationalContextService;
 import ee.hm.dop.service.LanguageService;
 import ee.hm.dop.service.LicenseTypeService;
@@ -44,5 +45,6 @@ public class RestModule extends ServletModule {
         bind(TaatService.class);
         bind(AuthenticatedUserService.class);
         bind(LogoutService.class);
+        bind(AuthenticationStateService.class);
     }
 }
