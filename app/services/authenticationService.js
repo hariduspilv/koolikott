@@ -20,7 +20,7 @@ define(['app'], function(app) {
 
         function loginFail(data, status) {
             log('Logging in failed.');
-            $scope.errorMessageShow = true;
+            $rootScope.errorMessageShow = true;
             enableLogin();
         };
 
