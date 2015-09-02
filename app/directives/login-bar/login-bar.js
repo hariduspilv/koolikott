@@ -1,7 +1,7 @@
 define(['app'], function(app)
 {    
-    app.directive('dopLoginBar', ['authenticationService',
-     function(authenticationService) {
+    app.directive('dopLoginBar', ['authenticationService', '$location', 
+     function(authenticationService, $location) {
         return {
             scope: true,
             templateUrl: 'app/directives/login-bar/login-bar.html',
@@ -9,6 +9,10 @@ define(['app'], function(app)
 
                 $scope.idCardAuth = function() {
                     authenticationService.loginWithIdCard();
+                };
+
+                $scope.taatAuth = function() {
+                    authenticationService.loginWithTaat();
                 };
                 
             }
