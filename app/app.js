@@ -13,14 +13,13 @@ define(['routes','services/dependencyResolver'], function(config, dependencyReso
         '$translateProvider',
         '$httpProvider',
 
-        function($routeProvider, $locationProvider, $controllerProvider, $compileProvider, $filterProvider, $provide, $translateProvider, $httpProvider, $sceDelegateProvider)
+        function($routeProvider, $locationProvider, $controllerProvider, $compileProvider, $filterProvider, $provide, $translateProvider, $httpProvider)
         {
             app.controller = $controllerProvider.register;
             app.directive  = $compileProvider.directive;
             app.filter     = $filterProvider.register;
             app.factory    = $provide.factory;
-            app.service    = $provide.service;
-                
+            app.service    = $provide.service;   
 
             if(config.routes !== undefined)
             {
@@ -38,17 +37,7 @@ define(['routes','services/dependencyResolver'], function(config, dependencyReso
             configureTranslationService($translateProvider);
 
             $httpProvider.defaults.transformResponse.splice(0, 0, parseJSONResponse);
-            $sceDelegateProvider.resourceUrlWhitelist([
-                                                       // Allow same origin resource loads.
-                                                       'self',
-                                                       // Allow loading from our assets domain.  Notice the difference between * and **.
-                                                       'https://172.33.45.51'
-                                                       ]);
         }
-        
-        
-        
-        
     ]);
 
      function parseJSONResponse(data, headersGetter) {
