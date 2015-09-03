@@ -45,12 +45,6 @@ define(['routes','services/dependencyResolver'], function(config, dependencyReso
                                                        'https://172.33.45.51'
                                                        ]);
         }
-        }
-        
-
-        
-        
-        
         
         
         
