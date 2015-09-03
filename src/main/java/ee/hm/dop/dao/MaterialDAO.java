@@ -20,8 +20,8 @@ public class MaterialDAO {
     private EntityManager entityManager;
 
     public Material findById(long materialId) {
-        TypedQuery<Material> findByCode = entityManager.createQuery("SELECT m FROM Material m WHERE m.id = :id",
-                Material.class);
+        TypedQuery<Material> findByCode = entityManager.createQuery(
+                "SELECT m FROM Material m WHERE m.id = :id AND m.deleted = false", Material.class);
 
         Material material = null;
         try {
@@ -43,13 +43,13 @@ public class MaterialDAO {
      */
     public List<Material> findAllById(List<Long> idList) {
         TypedQuery<Material> findAllByIdList = entityManager.createQuery(
-                "SELECT m FROM Material m WHERE m.id in :idList", Material.class);
+                "SELECT m FROM Material m WHERE m.deleted = false AND m.id in :idList", Material.class);
         return findAllByIdList.setParameter("idList", idList).getResultList();
     }
 
     public List<Material> findNewestMaterials(int numberOfMaterials) {
 
-        return entityManager.createQuery("from Material order by added desc", Material.class)
+        return entityManager.createQuery("FROM Material m WHERE m.deleted = false ORDER BY added desc", Material.class)
                 .setMaxResults(numberOfMaterials).getResultList();
     }
 
@@ -82,8 +82,8 @@ public class MaterialDAO {
     }
 
     public byte[] findPictureByMaterial(Material material) {
-        TypedQuery<byte[]> findById = entityManager.createQuery("SELECT m.picture FROM Material m WHERE m.id = :id",
-                byte[].class);
+        TypedQuery<byte[]> findById = entityManager.createQuery(
+                "SELECT m.picture FROM Material m WHERE m.id = :id AND m.deleted = false", byte[].class);
 
         byte[] picture = null;
         try {
@@ -96,7 +96,8 @@ public class MaterialDAO {
     }
 
     public Material findByRepositoryAndRepositoryIdentifier(Repository repository, String repositoryIdentifier) {
-        String select = "SELECT m FROM Material m WHERE m.repository.id = :repositoryId AND m.repositoryIdentifier = :repositoryIdentifier";
+        String select = "SELECT m FROM Material m WHERE m.repository.id = :repositoryId"
+                + " AND m.repositoryIdentifier = :repositoryIdentifier AND m.deleted = false";
         TypedQuery<Material> query = entityManager.createQuery(select, Material.class);
 
         query.setParameter("repositoryId", repository.getId()) //
@@ -126,8 +127,8 @@ public class MaterialDAO {
      * @return A list of materials
      */
     public List<Material> findByCreator(User creator) {
-        TypedQuery<Material> findAllByCreator = entityManager.createQuery(
-                "SELECT m FROM Material m WHERE m.creator.id = :creatorId order by added desc", Material.class);
+        String query = "SELECT m FROM Material m WHERE m.creator.id = :creatorId AND m.deleted = false order by added desc";
+        TypedQuery<Material> findAllByCreator = entityManager.createQuery(query, Material.class);
         return findAllByCreator.setParameter("creatorId", creator.getId()).getResultList();
     }
 }

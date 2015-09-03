@@ -54,6 +54,7 @@ insert into Material(id, lang, issueDate, licenseType, source, repository, repos
 insert into Material(id, lang, issueDate, licenseType, source, repository, repositoryIdentifier, added, updated, views, picture, creator, deleted) values(8, 5, 7, 1, 'http://www.palmeiras.com.br/historia/titulos', null, null, '2014-06-01 00:00:01', null, 800, null, 1, false);
 insert into Material(id, lang, issueDate, licenseType, source, repository, repositoryIdentifier, added, updated, views, picture, deleted) values(9, null, null, null, 'http://www.chaging.it.com', null, null, '1911-09-01 00:00:01', null, 0, null, false);
 insert into Material(id, lang, issueDate, licenseType, source, repository, repositoryIdentifier, added, updated, views, picture, deleted) values(10, null, null, null, 'http://www.boo.com', null, null, '1911-09-01 00:00:01', null, 0, null, false); -- Do not use this material, it is deleted by tests
+insert into Material(id, lang, issueDate, licenseType, source, repository, repositoryIdentifier, added, updated, views, picture, creator, deleted) values(11, 1, null, 1, 'https://www.deleted.com/', 1, 'isssiiaawejdsada4564', '2015-09-02 00:00:01', '2015-09-03 07:00:01', 100, '656b6f6f6c696b6f7474', 1, true); -- This material should be amoung the 8 latest materials
 
 -- Authors
 
