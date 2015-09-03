@@ -1,8 +1,8 @@
 define(['app'], function(app)
 {
-    app.controller('searchResultController', ['$scope', "serverCallService", 'translationService', '$location', 'searchService', 
-             function($scope, serverCallService, translationService, $location, searchService) {
-    	
+    app.controller('searchResultController', ['$scope', "serverCallService", 'translationService', '$location', 'searchService', '$filter', 
+       function($scope, serverCallService, translationService, $location, searchService, $filter) {
+
         // Pagination variables
         $scope.paging = [];
         $scope.paging.before = [];
@@ -15,10 +15,14 @@ define(['app'], function(app)
         var MAX_PAGES = PAGES_BEFORE_THIS_PAGE + 1 + PAGES_AFTER_THIS_PAGE;
         var start = 0;
 
+        // Filters
+        $scope.filters = [];
+
         // Get search query and current page
         $scope.searchQuery = searchService.getQuery();
         $scope.paging.thisPage = searchService.getPage();
 
+        // Expose searchService methods required for the view
         $scope.buildURL = searchService.buildURL;
 
         // If page is negative, redirect to page 1
@@ -37,12 +41,30 @@ define(['app'], function(app)
         if (!isEmpty($scope.searchQuery)) {
             $scope.searching = true;
             start = RESULTS_PER_PAGE * ($scope.paging.thisPage - 1);
+
             var params = {
                 'q': $scope.searchQuery,
                 'start': start
             };
+
+            if (searchService.getSubject()) {
+                params.subject = searchService.getSubject();
+            }
+
+            if (searchService.getResourceType()) {
+                params.resource_type = searchService.getResourceType();
+            }
+
+            if (searchService.getEducationalContext()) {
+                params.educational_context = searchService.getEducationalContext();
+            }
+
+            if (searchService.getLicenseType()) {
+                params.license_type = searchService.getLicenseType();
+            }
+            
             serverCallService.makeGet("rest/search", params, getSearchedMaterialsSuccess, getSearchedMaterialsFail);
-    	} else {
+        } else {
             $location.url('/');
         }
         
@@ -105,11 +127,11 @@ define(['app'], function(app)
 
         function addAllPageNumbers() {
              // Add all page numbers
-            addNumbersToArray($scope.paging.before, 1, $scope.paging.thisPage);
-            addNumbersToArray($scope.paging.after, $scope.paging.thisPage + 1, $scope.paging.totalPages + 1);
-        }
+             addNumbersToArray($scope.paging.before, 1, $scope.paging.thisPage);
+             addNumbersToArray($scope.paging.after, $scope.paging.thisPage + 1, $scope.paging.totalPages + 1);
+         }
 
-        function addLastPageNumbers() {
+         function addLastPageNumbers() {
             // Add the last MAX_PAGES amount of page numbers
             addNumbersToArray($scope.paging.after, $scope.paging.thisPage + 1, $scope.paging.totalPages + 1);
             addNumbersToArray($scope.paging.before, $scope.paging.totalPages + 1 - MAX_PAGES, $scope.paging.thisPage);
@@ -127,5 +149,221 @@ define(['app'], function(app)
             addNumbersToArray($scope.paging.after, $scope.paging.thisPage + 1, $scope.paging.thisPage + 1 + PAGES_AFTER_THIS_PAGE);
         }
 
+        // Get all subjects
+        serverCallService.makeGet("rest/subject/getAll", {}, getAllSubjectsSuccess, getAllSubjectsFail);
+
+        function getAllSubjectsSuccess(data) {
+            if (isEmpty(data)) {
+                log('No subjects returned.');
+            } else {
+                $scope.subjects = data;
+
+                // Select current subject in filter box
+                for (i = 0; i < $scope.subjects.length; i++) {
+                    if ($scope.subjects[i].name.toLowerCase() == searchService.getSubject().toLowerCase()) {
+                        $scope.filters.subject = $scope.subjects[i];
+                        break;
+                    }
+                }
+            }          
+        }
+
+        function getAllSubjectsFail(data, status) { 
+            console.log('Failed to get all subjects.');
+        }
+
+        // Get all resourceTypes
+        serverCallService.makeGet("rest/resourceType/getAll", {}, getAllResourceTypesSuccess, getAllResourceTypesFail);
+
+        function getAllResourceTypesSuccess(data) {
+            if (isEmpty(data)) {
+                log('No resource types returned.');
+            } else {
+                $scope.resourceTypes = data;
+
+                // Select current resourceType in filter box
+                for (i = 0; i < $scope.resourceTypes.length; i++) {
+                    if ($scope.resourceTypes[i].name.toLowerCase() == searchService.getResourceType().toLowerCase()) {
+                        $scope.filters.resourceType = $scope.resourceTypes[i];
+                        break;
+                    }
+                }
+            }
+        }
+
+        function getAllResourceTypesFail(data, status) { 
+            console.log('Failed to get all resource types.');
+        }
+
+        // Get all educationalContexts
+        serverCallService.makeGet("rest/educationalContext/getAll", {}, getAlleducationalContextsSuccess, getAlleducationalContextsFail);
+
+        function getAlleducationalContextsSuccess(data) {
+            if (isEmpty(data)) {
+                log('No educational contexts returned.');
+            } else {
+                $scope.educationalContexts = data;
+
+                // Select current educationalContext in filter box
+                for (i = 0; i < $scope.educationalContexts.length; i++) {
+                    if ($scope.educationalContexts[i].name.toLowerCase() == searchService.getEducationalContext().toLowerCase()) {
+                        $scope.filters.educationalContext = $scope.educationalContexts[i];
+                        break;
+                    }
+                }
+            }
+        }
+
+        function getAlleducationalContextsFail() {
+            console.log("Getting educational contexts for filter failed.");
+        }
+
+        // Get all licenseTypes
+        serverCallService.makeGet("rest/licenseType/getAll", {}, getAllLicenseTypesSuccess, getAllLicenseTypesFail);
+
+        function getAllLicenseTypesSuccess(data) {
+            if (isEmpty(data)) {
+                log('No license types returned.');
+            } else {
+                $scope.licenseTypes = data;
+
+                // Select current licenseType in filter box
+                for (i = 0; i < $scope.licenseTypes.length; i++) {
+                    if ($scope.licenseTypes[i].name.toLowerCase() == searchService.getLicenseType().toLowerCase()) {
+                        $scope.filters.licenseType = $scope.licenseTypes[i];
+                        break;
+                    }
+                }
+            }
+        }
+
+        function getAllLicenseTypesFail(data, status) { 
+            console.log('Failed to get all license types.');
+        }
+
+        $scope.filter = function() {
+            searchService.setSearch(searchService.getQuery());
+
+            if ($scope.filters.subject) {
+                searchService.setSubject($scope.filters.subject.name.toLowerCase());
+            } else {
+                searchService.setSubject('');
+            }
+
+            if ($scope.filters.resourceType) {
+                searchService.setResourceType($scope.filters.resourceType.name.toLowerCase());
+            } else {
+                searchService.setResourceType('');
+            }
+
+            if ($scope.filters.educationalContext) {
+                searchService.setEducationalContext($scope.filters.educationalContext.name.toLowerCase());
+            } else {
+                searchService.setEducationalContext('');
+            }
+
+            if ($scope.filters.licenseType) {
+                searchService.setLicenseType($scope.filters.licenseType.name.toLowerCase());
+            } else {
+                searchService.setLicenseType('');
+            }
+
+            $location.url(searchService.getURL());
+        }
+
+        $scope.reset = function() {
+           $scope.filters.subject = null;
+           searchService.setSubject('');
+           $scope.filters.resourceType = null;
+           searchService.setResourceType('');
+           $scope.filters.educationalContext = null;
+           searchService.setEducationalContext('');
+           $scope.filters.licenseType = null;
+           searchService.setLicenseType('');
+        }
+
     }]);
+
+app.filter('translatableItemFilter', function($filter) {
+    return function(items, query, translationPrefix) {
+        var out = [];
+
+        if (angular.isArray(items) && query) {
+            items.forEach(function(item) {
+                // Get translation
+                var translatedItem = $filter('translate')(translationPrefix + item.name.toUpperCase());
+
+                if (translatedItem.toLowerCase().indexOf(query.toLowerCase()) !== -1) {
+                    out.push(item);
+                }
+            });
+        } else {
+            out = items;
+        }
+
+        return out;
+    }
+});
+
+app.filter('orderByTranslation', function($filter) {
+    return function(items, translationPrefix) {
+
+        if (angular.isArray(items)) {
+            for (i = 0; i < items.length; i++) {
+                // Get translation
+                var translatedItem = $filter('translate')(translationPrefix + items[i].name.toUpperCase());
+
+                // Create temporary property
+                items[i].translation = translatedItem.toLowerCase();
+            }
+
+            // Sort alphabetically
+            items = $filter('orderBy')(items, '-translation', true);
+
+            // Remove translation property
+            for (i = 0; i < items.length; i++) {
+                items[i].translation = null;
+            }
+
+        } 
+
+        return items;
+    }
+});
+
+app.filter('subjectFilter', function($filter) {
+    return function(items, query) {
+        var translationPrefix = 'MATERIAL_SUBJECT_';
+        items = $filter('translatableItemFilter')(items, query, translationPrefix);
+        items = $filter('orderByTranslation')(items, translationPrefix);
+        return items;
+    }
+});
+
+app.filter('resourceTypeFilter', function($filter) {
+    return function(items, query) {
+        var translationPrefix = '';
+        items = $filter('translatableItemFilter')(items, query, translationPrefix);
+        items = $filter('orderByTranslation')(items, translationPrefix);
+        return items;
+    }
+});
+
+app.filter('educationalContextFilter', function($filter) {
+    return function(items, query) {
+        var translationPrefix = '';
+        items = $filter('translatableItemFilter')(items, query, translationPrefix);
+        return items;
+    }
+});
+
+app.filter('licenseTypeFilter', function($filter) {
+    return function(items, query) {
+        var translationPrefix = 'LICENSETYPE_';
+        items = $filter('translatableItemFilter')(items, query, translationPrefix);
+        items = $filter('orderByTranslation')(items, translationPrefix);
+        return items;
+    }
+});
+
 });

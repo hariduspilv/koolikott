@@ -1,19 +1,28 @@
 <div data-ng-show="showSearchBox" class="navbar-searchbox hidden-md hidden-lg" data-click-outside="closeSearchBox()" data-outside-if-not="SearchBoxShow, SearchBoxMob">
     <div class="form-group">
         <div class="input-group">
-            <input data-ng-keydown="$event.which === 13 && search()" data-ng-model="searchFields.searchQuery" type="text" placeholder="{{'SEARCH' | translate}}" class="form-control" id="SearchBoxMob">
+            <input data-ng-keydown="$event.which === 13 && search()" data-ng-model="searchFields.searchQuery" type="text" placeholder="{{'SEARCH' | translate}}" class="form-control" id="SearchBoxMob" show-focus="customcondition">
             <span class="input-group-btn">
-                <button data-ng-click="search()" class="btn btn-default" type="submit"><i class="fa fa-search"></i></button>
+                <button data-ng-click="search()" class="btn btn-default" type="submit" id="searchButtonMob"><i class="fa fa-search"></i></button>
             </span>
         </div>
     </div>
 </div>
 
-<nav class="navbar navbar-default">
+<div class="navbar-shadow"></div>
+
+<nav class="navbar yamm navbar-default">
     <div class="container">
         
         <div class="navbar-header">
-            <button data-target="#navbar-links" data-toggle="collapse" aria-expanded="false" aria-controls="navbar" class="navbar-toggle collapsed pull-left" type="button">
+            <button data-target="#navbar-links" data-toggle="collapse" aria-expanded="false" aria-controls="navbar" class="navbar-toggle collapsed pull-left hidden-xs hidden-sm hidden-ms" type="button">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            
+            <button class="navbar-toggle pull-left hidden-md hidden-lg" data-toggle="sidebar" data-target=".sidebar" type="button">
                 <span class="sr-only">Toggle navigation</span>
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
@@ -50,19 +59,30 @@
                         </li>
                     </ul>
                 </li>
-                <li class="navbar-link-login hidden">
-                    <a href="#" class="">
-                        <i class="fa fa-lock"></i> Logi Sisse
-                    </a>
+                <li class="dropdown navbar-link-login yamm-fw">
+                    <button data-ng-hide="user" class="btn btn-dark navbar-btn btn-collapse collapsed" type="button" data-toggle="collapse" href="#dropdowned" aria-expanded="false" aria-controls="dropdowned" id="loginButton">
+                        <i class="fa fa-lock"></i> <span data-translate="LOGIN"></span>
+                    </button>
+                    
+                    <button data-ng-show="user" class="btn btn-dark navbar-btn btn-dropdown" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id="userMenu">
+                        <span class="btn-username pull-left text-left">{{user.name}} {{user.surname}}</span><i class="fa fa-caret-down pull-right"></i>
+                    </button>
+                    
+                    <ul class="dropdown-menu" aria-labelledby="userMenu">
+                        <li><a href="#">Action</a></li>
+                        <li><a href="#">Another action</a></li>
+                        <li role="separator" class="divider"></li>
+                        <li><a data-ng-click="logout()"><i class="fa fa-unlock"></i> <span data-translate="LOGOUT"></span></a></li>
+                    </ul>
                 </li>
             </ul>
             
-            <div role="search" class="navbar-form navbar-right hidden-xs hidden-sm" id="search-form-main">
+            <div role="search" class="navbar-form navbar-right hidden-xs hidden-sm hidden-ms" id="search-form-main">
                 <div class="form-group">
                     <div class="input-group">
-                        <input id="searchBar" data-ng-keydown="$event.which === 13 && search()" data-ng-model="searchFields.searchQuery" type="text" placeholder="{{'SEARCH' | translate}}" class="form-control">
+                        <input data-ng-keydown="$event.which === 13 && search()" data-ng-model="searchFields.searchQuery" type="text" placeholder="{{'SEARCH' | translate}}" class="form-control" id="SearchBox">
                         <span class="input-group-btn">
-                            <button data-ng-click="search()" class="btn btn-default" type="submit"><i class="fa fa-search"></i></button>
+                            <button data-ng-click="search()" class="btn btn-default" type="submit" id="searchButton"><i class="fa fa-search"></i></button>
                         </span>
                         <span class="input-group-addon hidden"><a href="">Täpne otsing</a></span>
                     </div>
@@ -71,3 +91,42 @@
         </div>
     </div>
 </nav>
+
+<div class="collapse logins" id="dropdowned">
+    <div data-dop-login-bar></div>
+</div>
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-xs-7 col-sm-3 col-md-3 sidebar sidebar-left sidebar-animate">
+            <ul class="nav navbar-stacked">
+                <li class="navbar-link-lang">
+                    <a data-ng-if="selectedLanguage === 'est'" data-ng-click="languageSelectClick()" id="languageSelectClose"><span>ET <i class="fa fa-caret-down"></i></span></a>
+                    <a data-ng-if="selectedLanguage === 'rus'" data-ng-click="languageSelectClick()" id="languageSelectClose"><span>RU <i class="fa fa-caret-down"></i></span></a>
+                    <a data-ng-if="selectedLanguage === 'eng'" data-ng-click="languageSelectClick()" id="languageSelectClose"><span>EN <i class="fa fa-caret-down"></i></span></a>
+                    <ul data-ng-show="showLanguageSelection" data-click-outside="closeLanguageSelection()" data-outside-if-not="languageSelectClose" id="languageSelectOpen" class="navbar-submenu">
+                        <li>
+                            <a data-ng-if="selectedLanguage === 'est'" data-ng-click="setLanguage('est')"><span>ET <i class="fa fa-caret-up"></i></span></a>
+                            <a data-ng-if="selectedLanguage === 'rus'" data-ng-click="setLanguage('rus')"><span>RU <i class="fa fa-caret-up"></i></span></a>
+                            <a data-ng-if="selectedLanguage === 'eng'" data-ng-click="setLanguage('eng')"><span>EN <i class="fa fa-caret-up"></i></span></a>
+                        </li>
+                        <li data-ng-if="selectedLanguage !== 'est'">
+                            <a data-ng-click="setLanguage('est')"><span>ET</span></a>
+                        </li>
+                        <li data-ng-if="selectedLanguage !== 'rus'">
+                            <a data-ng-click="setLanguage('rus')"><span>RU</span></a>
+                        </li>
+                        <li data-ng-if="selectedLanguage !== 'eng'">
+                            <a data-ng-click="setLanguage('eng')"><span>EN</span></a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="navbar-link-login">
+                    <a href="#" class="">
+                        <i class="fa fa-lock"></i> Logi Sisse
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>

@@ -1,4 +1,4 @@
-@mixin box-shadow($top, $left, $blur, $size, $color, $inset: false) {
+@mixin box-shadow-spec($top, $left, $blur, $size, $color, $inset: false) {
     @if $inset {
         -webkit-box-shadow:inset $top $left $blur $size $color;
         -moz-box-shadow:inset $top $left $blur $size $color;
@@ -9,4 +9,4 @@
         box-shadow: $top $left $blur $size $color;
     }
 }
-/* @include box-shadow(1px,1px,1px,0, #fff, true); */
+/* @include box-shadow-spec(1px,1px,1px,0, #fff, true); */

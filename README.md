@@ -8,7 +8,7 @@ To build the project you need to have installed on your machine NodeJS, NPM, Bow
 	
 ## Grunt installation
 
-	npm install -g grunt-cli
+        npm install -g grunt-cli
 
 
 # Build
@@ -25,6 +25,10 @@ Run commands from project root directory.
 Generates project artifacts.
 
 	grunt build
+
+If project building fails with message like ">> Local Npm module "XXXXXX" not found. Is it installed?" then run command
+
+    npm install
 
 ## Package
 
@@ -78,3 +82,79 @@ Configure proxy to forward rest request to Back End servlet
 	ProxyPassReverse /rest http://127.0.0.1:8080/rest
 
 You should be able to run the whole application. Make sure to change Back End address to the one you are using, if not localhost. 
+
+### HTTPS Configuration 
+
+Refer to apache documentation to configure https. 
+
+All requests http must be redirected to https. The mod_alias module needs to be enabled.
+
+	<VirtualHost *:80>
+        Redirect permanent / https://yoursite.com/
+	</VirtualHost>
+
+### Id card configuration
+
+To configure id card refer to [Configuring Apache to support ID-card](http://www.id.ee/public/Configuring_Apache_web_server_to_support_ID.pdf).
+
+Id card configuration.
+
+	SSLCertificateFile /yourpath/certs/server.crt
+	SSLCertificateKeyFile /yourpath/certs/server.key
+	SSLCACertificateFile  /yourpath/certs/id.crt
+	SSLCARevocationPath /yourpath/revocation/
+ 	<Location "/rest/login/idCard">
+        #verify if user was authenticated
+        RequestHeader set SSL_AUTH_VERIFY ""
+        RequestHeader set SSL_AUTH_VERIFY "%{SSL_CLIENT_VERIFY}s"
+
+        # put user info (name, idcode, etc) from the id card to header
+        RequestHeader set SSL_CLIENT_S_DN ""
+        RequestHeader set SSL_CLIENT_S_DN "%{SSL_CLIENT_S_DN}s"
+
+        SSLVerifyClient require
+        SSLVerifyDepth  2
+ 	</Location>
+
+
+### An example configuration file for Apache
+
+ 	<VirtualHost *:80>
+        Redirect permanent / https://yoursite.com/
+ 	</VirtualHost>
+
+ 	<VirtualHost *:443>
+        ServerName yourserver.com
+        DocumentRoot /path/to/project
+
+        ProxyRequests Off
+        ProxyPreserveHost On
+
+        ErrorLog ${APACHE_LOG_DIR}/error.log
+        CustomLog ${APACHE_LOG_DIR}/access.log combined
+
+        ProxyPass /rest http://yourserver.com:8080/rest
+        ProxyPassReverse /rest http://yourserver.com:8080/rest
+
+        SSLEngine on
+        SSLCertificateFile /yourpath/certs/server.crt
+        SSLCertificateKeyFile /yourpath/certs/server.key
+        SSLCACertificateFile  /yourpath/certs/id.crt
+        SSLCARevocationPath /yourpath/revocation/
+
+        <Location "/rest/login/idCard">
+
+          #verify if user was authenticated
+          RequestHeader set SSL_AUTH_VERIFY ""
+          RequestHeader set SSL_AUTH_VERIFY "%{SSL_CLIENT_VERIFY}s"
+
+          # put user info (name, idcode, etc) from the id card to header
+          RequestHeader set SSL_CLIENT_S_DN ""
+          RequestHeader set SSL_CLIENT_S_DN "%{SSL_CLIENT_S_DN}s"
+
+          SSLVerifyClient require
+          SSLVerifyDepth  2
+         </Location>
+ 	</VirtualHost>
+
+	

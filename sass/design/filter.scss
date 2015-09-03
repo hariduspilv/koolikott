@@ -1,0 +1,57 @@
+.sidebar-module-filter {
+    .ui-select-container {
+        .btn-default {
+            padding-right: 50px;
+            border: 1px solid $body-bg;
+            border-bottom: 1px solid $brand-grey-medium;
+            @include border-radius(0);
+            @include box-shadow-spec(0, 0, 0, 0, $body-bg);
+            background: none;
+            color: $text-color;
+            overflow: hidden;
+
+            &:hover, &:focus {
+                background: none; 
+            }
+
+            &:active {
+                @include box-shadow-spec(0, 0, 0, 0, $body-bg);
+                background: #FFF;
+            }
+            
+            .ui-select-match-text {display: block; width: 100%; overflow: hidden}
+        }
+
+        .btn-default-focus {
+            @include box-shadow-spec(0, 0, 0, 0, $body-bg);
+            background: none;
+        }
+
+        .form-control {
+            @include box-shadow-spec(0, 0, 0, 0, $body-bg);
+
+            &:focus {
+                border-color: $brand-grey-medium;
+                @include box-shadow-spec(0, 0, 0, 0, #FFF, inset);
+                background: #FFF;
+            }
+        }
+
+        .dropdown-menu {
+            border: 1px solid $brand-grey-medium;
+            border-top: 0;
+            @include border-top-radius(0);
+        }
+        
+        .btn-link {
+            position: absolute; 
+            top: 50%; 
+            right: 10px;
+            margin-top: -9px;
+        }
+    }
+    
+    .btn-primary {
+        margin-right: 10px
+    }
+}

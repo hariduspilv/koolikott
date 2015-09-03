@@ -2,8 +2,9 @@
     <div class="block">
         <div class="illustration">
             <figure>
-                <img data-ng-if="!material.hasPicture && !isAudio(material)" data-ng-src="img/placeholder-material-single.png" class="img-responsive">
-                <img data-ng-if="!material.hasPicture && isAudio(material)" data-ng-src="img/placeholder-material-sound.png" class="img-responsive">
+                <img data-ng-if="!material.hasPicture && !isOfType('AUDIO') && !isOfType('VIDEO')" data-ng-src="img/placeholder-material-single.png" class="img-responsive">
+                <img data-ng-if="!material.hasPicture && isOfType('AUDIO') && !isOfType('VIDEO')" data-ng-src="img/placeholder-material-sound.png" class="img-responsive">
+                <img data-ng-if="!material.hasPicture && isOfType('VIDEO')" data-ng-src="img/placeholder-material-video.png" class="img-responsive">
                 <img data-ng-if="material.hasPicture" data-ng-src="rest/material/getPicture?materialId={{material.id}}" class="img-responsive">
                 <img src="img/placeholder-material-empty.png" class="img-responsive img-empty">
             </figure>

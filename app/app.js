@@ -1,6 +1,6 @@
 define(['routes','services/dependencyResolver'], function(config, dependencyResolver)
 {
-    var app = angular.module('app', ['ngRoute', 'pascalprecht.translate', 'mouse.utils', 'youtube-embed', 'ngResource']);
+    var app = angular.module('app', ['ngRoute', 'pascalprecht.translate', 'mouse.utils', 'youtube-embed', 'ngResource', 'ngSanitize', 'ui.select']);
 
     app.config(
     [
@@ -77,7 +77,6 @@ define(['routes','services/dependencyResolver'], function(config, dependencyReso
 
     function getServicesAndUtilsDependencies() { 
         return [
-            'services/serverCallService',
             'utils/commons'
         ];
     }

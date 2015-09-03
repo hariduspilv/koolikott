@@ -41,6 +41,21 @@ define([], function()
                     'views/static/about/about',
                     'views/static/abstractStaticPage'
                 ]
+            },
+            '/:username': {
+                templateUrl: 'app/views/profile/profile.html',
+                controller: 'profileController',
+                dependencies: [
+                    'views/profile/profile',
+                    'directives/materialBox/materialBox'
+                ]
+            },
+            '/dev/login/:idCode': {
+                templateUrl: 'app/views/dev/login/login.html',
+                controller: 'loginController',
+                dependencies: [
+                    'views/dev/login/login'
+                ]
             }
         }
     };

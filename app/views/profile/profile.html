@@ -1,0 +1,39 @@
+<div class="main">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-9">
+                <div class="row row-material">
+                    <h4 class="clearfix" data-ng-if="myProfile" data-translate="MYPROFILE_PAGE_TITLE_COMPILATIONS"></h4>
+                    <h4 class="clearfix" data-ng-if="!myProfile" data-translate="PROFILE_PAGE_TITLE_COMPILATIONS"></h4>
+                </div>
+                <div class="row row-material">
+                    <h4 class="clearfix" data-ng-if="myProfile" data-translate="MYPROFILE_PAGE_TITLE_MATERIALS"></h4>
+                    <h4 class="clearfix" data-ng-if="!myProfile" data-translate="PROFILE_PAGE_TITLE_MATERIALS"></h4>
+                    <div class="material-taping">
+                        <div class="scroll">
+                            <div data-ng-repeat="material in materials" class="col-md-3 col-sm-4 col-xs-12 col-ms-6 material">
+                                <div data-dop-material-box material="material"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="sidebar-module">
+
+                    <h4 data-ng-if="myProfile" data-translate="MYPROFILE_PAGE_TITLE_MY_DATA"></h4>
+                    <p data-ng-if="myProfile">
+                        <strong>{{user.name}} {{user.surname}}</strong><br />
+                        Hugo Treffneri Gümnaasium
+                    </p>
+
+                    <h4 data-ng-if="!myProfile"><strong>{{user.name}} {{user.surname}}</strong></h4>
+                    <p data-ng-if="!myProfile">
+                        Hugo Treffneri Gümnaasium
+                    </p>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

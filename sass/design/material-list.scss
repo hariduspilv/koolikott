@@ -6,7 +6,11 @@
     }
     
     h4 {
-        padding-left: 10px; padding-bottom: 5px; font-size: 31px; font-weight: 300; color: $font-color-grey
+        padding-left: 10px; padding-bottom: 5px; font-size: 31px; font-weight: 300; color: $font-color-grey;
+        
+        @media screen and (max-width: $screen-xs) {
+            text-align: center;
+        }
     }
     
     .heading {
@@ -81,7 +85,11 @@
             }
             
             > a.btn-default {
-                border-color: $btn-default-border; background-color: $btn-default-bg; color: #FFF
+                border-color: $btn-default-border; background-color: $btn-default-bg; color: #FFF;
+                
+                &:hover {
+                    border-color: darken($btn-default-bg, 10%); background: darken($btn-default-bg, 10%);
+                }
             }
         }
     }
@@ -92,16 +100,23 @@
 }
 
 .material-taping {
-    
     @media screen and (max-width: $screen-xs) {
-        padding-top: 10px; overflow-x: scroll; overflow-y: hidden; -webkit-overflow-scrolling: touch; white-space: nowrap;
+        height: 100%; overflow: hidden; 
     }
-                  
-    .material {
-
+    
+    .scroll {
+        
         @media screen and (max-width: $screen-xs) {
-            float: none; display: inline-block !important; width: 80%;
+            height: 100%; padding-bottom: 15px; padding-top: 10px; overflow-x: scroll; overflow-y: hidden; -webkit-overflow-scrolling: touch; white-space: nowrap; box-sizing: inherit;
         }
+        
+        .material {
+
+            @media screen and (max-width: $screen-xs) {
+                float: none; display: inline-block; width: 80%;
+            }
+        }
+        
     }
 }
 
@@ -109,7 +124,7 @@
     
     .block {
         
-        margin-bottom: 20px; @include border-radius(3px); @include box-shadow(0, 0, 2px, 0, #999); background: #FFF; overflow: hidden;
+        margin-bottom: 20px; @include border-radius(3px); @include box-shadow-spec(0, 0, 2px, 0, #999); background: #FFF; overflow: hidden;
     
         .illustration {
             
