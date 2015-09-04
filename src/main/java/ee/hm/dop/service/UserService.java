@@ -30,13 +30,15 @@ public class UserService {
     public User create(String idCode, String name, String surname) {
         User user = new User();
         user.setIdCode(idCode);
-        user.setName(WordUtils.capitalizeFully(name, ' ', '-'));
-        user.setSurname(WordUtils.capitalizeFully(surname, ' ', '-'));
+        user.setName(name);
+        user.setSurname(surname);
 
         return create(user);
     }
 
     public synchronized User create(User user) {
+        user.setName(WordUtils.capitalizeFully(user.getName(), ' ', '-'));
+        user.setSurname(WordUtils.capitalizeFully(user.getSurname(), ' ', '-'));
         String generatedUsername = generateUsername(user.getName(), user.getSurname());
         user.setUsername(generatedUsername);
         user.setRole(Role.USER);

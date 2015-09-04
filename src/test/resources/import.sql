@@ -36,7 +36,7 @@ insert into User(id, userName, name, surName, idCode, role) values (4, 'voldemar
 
 -- AuthenticatedUser
 
-insert into User(id, user_id, token) values (1, 1, 'token');
+insert into AuthenticatedUser(id, user_id, token, firstLogin, homeOrganization, mails, affiliations, scopedAffiliations) values (1, 1, 'token', false, null, null, null, null);
 
 -- AuthenticationState
 

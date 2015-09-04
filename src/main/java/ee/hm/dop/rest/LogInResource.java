@@ -2,14 +2,20 @@ package ee.hm.dop.rest;
 
 import static java.lang.String.format;
 
+import java.net.URI;
+import java.net.URISyntaxException;
+
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.MultivaluedMap;
+import javax.ws.rs.core.Response;
 
 import org.opensaml.common.SAMLObject;
 import org.opensaml.common.binding.BasicSAMLMessageContext;
@@ -36,7 +42,7 @@ public class LogInResource {
     private TaatService taatService;
 
     @Inject
-    HTTPRedirectDeflateEncoder encoder;
+    private HTTPRedirectDeflateEncoder encoder;
 
     @Inject
     private UserService userService;
@@ -68,8 +74,8 @@ public class LogInResource {
                 authenticatedUser = loginService.logIn(idCode);
 
                 if (authenticatedUser == null) {
-                    throw new RuntimeException(format(
-                            "User with id %s tried to log in after creating account, but failed.", idCode));
+                    throw new RuntimeException(
+                            format("User with id %s tried to log in after creating account, but failed.", idCode));
                 }
 
                 authenticatedUser.setFirstLogin(true);
@@ -94,6 +100,15 @@ public class LogInResource {
         } catch (MessageEncodingException e) {
             logger.error("Error while encoding SAML message context.");
         }
+    }
+
+    @POST
+    @Path("/taat")
+    public Response authenticate(MultivaluedMap<String, String> formParams) throws URISyntaxException {
+        AuthenticatedUser authenticatedUser = taatService.authenticate(formParams.getFirst("SAMLResponse"));
+        URI location = new URI("../#/loginRedirect?token=" + authenticatedUser.getToken());
+
+        return Response.temporaryRedirect(location).build();
     }
 
     protected String getIdCodeFromRequest() {

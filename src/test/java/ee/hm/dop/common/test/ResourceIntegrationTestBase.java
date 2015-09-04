@@ -92,6 +92,7 @@ public abstract class ResourceIntegrationTestBase extends IntegrationTestBase {
         ClientConfig clientConfig = new ClientConfig();
         clientConfig.property(ClientProperties.READ_TIMEOUT, 60000); // ms
         clientConfig.property(ClientProperties.CONNECT_TIMEOUT, 60000); // ms
+        clientConfig.property(ClientProperties.FOLLOW_REDIRECTS, false);
 
         Client client = ClientBuilder.newClient(clientConfig);
         client.register(JacksonFeature.class);

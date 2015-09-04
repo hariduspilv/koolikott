@@ -1,0 +1,41 @@
+<md:EntityDescriptor xmlns:md="urn:oasis:names:tc:SAML:2.0:metadata" xmlns:ds="http://www.w3.org/2000/09/xmldsig#" entityID="https://reos.taat.edu.ee/saml2/idp/metadata.php">
+	<md:IDPSSODescriptor protocolSupportEnumeration="urn:oasis:names:tc:SAML:2.0:protocol">
+		<md:KeyDescriptor use="signing">
+			<ds:KeyInfo xmlns:ds="http://www.w3.org/2000/09/xmldsig#">
+				<ds:X509Data>
+					<ds:X509Certificate>
+						MIIDUDCCAjgCCQDNqOA94B8faTANBgkqhkiG9w0BAQUFADBqMQswCQYDVQQGEwJFRTERMA8GA1UECBMIVGFydHVtYWExDjAMBgNVBAcTBVRhcnR1MQ4wDAYDVQQKEwVFRU5ldDENMAsGA1UECxMEVEFBVDEZMBcGA1UEAxMQcmVvcy50YWF0LmVkdS5lZTAeFw0xMzAzMDQxMTQ1NTFaFw0xNjAzMDMxMTQ1NTFaMGoxCzAJBgNVBAYTAkVFMREwDwYDVQQIEwhUYXJ0dW1hYTEOMAwGA1UEBxMFVGFydHUxDjAMBgNVBAoTBUVFTmV0MQ0wCwYDVQQLEwRUQUFUMRkwFwYDVQQDExByZW9zLnRhYXQuZWR1LmVlMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA5VBwvMzbOzT8oyJTk4P7p6gM9hOIe9P6G18ztgegyJZ+TFa+TaU8EXDndvAF5kuBGEtIMgTNujsKgqAyM5W7uZO+Aa6WKZU0JH8z0uNHKtxJT49Up44G6047GkwpRH/VUT/GUw2wzQJhCEgPFAdnkiUE4eZ+gksrslvREPg4MDOBAlvQd5hejEYlBmDIMLhKiDLgdVVzUOVLBcJmV+VVMnmsIAbJGkWrhpvkpNS95hl0CpnV+jyP48VDFSbuT8RjucJlbvjOdTUodF3P2yjfzbBHr15uDIGL25ZwX7zjrOudNsp4VPzwlTuoEtnGgtK+MevisI9uVeoaxJ8+BwuCIQIDAQABMA0GCSqGSIb3DQEBBQUAA4IBAQAn4XgAYULlrw0Aoxm7DtqiP2yNcK44WE97WeIfbq4XY1NqM+E5mA4pepbFOG1REvIzOG1G0MRGQdxgf8gVKSAHTkDusu2Ga2suuuw/60X8DoT72qw934JXZcCw3XKZgqK/ZHyWgmBwdMVuYsIGZ1d4ZUvByldZ1e80R7IlesrLYGVev6vlnu+s04IafjAJxy8ic0SO7C1lbtPrE7hE9uuO86ICN6os3VKsBrgas6R7pBCtSLTiF06jmmquFHWoqj06HRRBNvI7ymjGzOb1KU2KhI3zQvKEpitX5gSNk2KmO3CFzQhmmydzpo2cGoFhPhBSSCRGE85li2oF+aRoRqTq
+					</ds:X509Certificate>
+				</ds:X509Data>
+			</ds:KeyInfo>
+		</md:KeyDescriptor>
+		<md:KeyDescriptor use="encryption">
+			<ds:KeyInfo xmlns:ds="http://www.w3.org/2000/09/xmldsig#">
+				<ds:X509Data>
+					<ds:X509Certificate>
+						MIIDUDCCAjgCCQDNqOA94B8faTANBgkqhkiG9w0BAQUFADBqMQswCQYDVQQGEwJFRTERMA8GA1UECBMIVGFydHVtYWExDjAMBgNVBAcTBVRhcnR1MQ4wDAYDVQQKEwVFRU5ldDENMAsGA1UECxMEVEFBVDEZMBcGA1UEAxMQcmVvcy50YWF0LmVkdS5lZTAeFw0xMzAzMDQxMTQ1NTFaFw0xNjAzMDMxMTQ1NTFaMGoxCzAJBgNVBAYTAkVFMREwDwYDVQQIEwhUYXJ0dW1hYTEOMAwGA1UEBxMFVGFydHUxDjAMBgNVBAoTBUVFTmV0MQ0wCwYDVQQLEwRUQUFUMRkwFwYDVQQDExByZW9zLnRhYXQuZWR1LmVlMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA5VBwvMzbOzT8oyJTk4P7p6gM9hOIe9P6G18ztgegyJZ+TFa+TaU8EXDndvAF5kuBGEtIMgTNujsKgqAyM5W7uZO+Aa6WKZU0JH8z0uNHKtxJT49Up44G6047GkwpRH/VUT/GUw2wzQJhCEgPFAdnkiUE4eZ+gksrslvREPg4MDOBAlvQd5hejEYlBmDIMLhKiDLgdVVzUOVLBcJmV+VVMnmsIAbJGkWrhpvkpNS95hl0CpnV+jyP48VDFSbuT8RjucJlbvjOdTUodF3P2yjfzbBHr15uDIGL25ZwX7zjrOudNsp4VPzwlTuoEtnGgtK+MevisI9uVeoaxJ8+BwuCIQIDAQABMA0GCSqGSIb3DQEBBQUAA4IBAQAn4XgAYULlrw0Aoxm7DtqiP2yNcK44WE97WeIfbq4XY1NqM+E5mA4pepbFOG1REvIzOG1G0MRGQdxgf8gVKSAHTkDusu2Ga2suuuw/60X8DoT72qw934JXZcCw3XKZgqK/ZHyWgmBwdMVuYsIGZ1d4ZUvByldZ1e80R7IlesrLYGVev6vlnu+s04IafjAJxy8ic0SO7C1lbtPrE7hE9uuO86ICN6os3VKsBrgas6R7pBCtSLTiF06jmmquFHWoqj06HRRBNvI7ymjGzOb1KU2KhI3zQvKEpitX5gSNk2KmO3CFzQhmmydzpo2cGoFhPhBSSCRGE85li2oF+aRoRqTq
+					</ds:X509Certificate>
+				</ds:X509Data>
+			</ds:KeyInfo>
+		</md:KeyDescriptor>
+		<md:SingleLogoutService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect" Location="https://reos.taat.edu.ee/saml2/idp/SingleLogoutService.php"/>
+		<md:NameIDFormat>
+			urn:oasis:names:tc:SAML:2.0:nameid-format:transient
+		</md:NameIDFormat>
+		<md:SingleSignOnService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect" Location="https://reos.taat.edu.ee/saml2/idp/SSOService.php"/>
+	</md:IDPSSODescriptor>
+	<md:Organization>
+		<md:OrganizationName xml:lang="et">Teaduse Autentimise ja Autoriseerimise Taristu</md:OrganizationName>
+		<md:OrganizationName xml:lang="en">
+			Research Authentication and Authorization Infrastructure
+		</md:OrganizationName>
+		<md:OrganizationDisplayName xml:lang="et">TAAT</md:OrganizationDisplayName>
+		<md:OrganizationDisplayName xml:lang="en">TAAT</md:OrganizationDisplayName>
+		<md:OrganizationURL xml:lang="et">http://taat.edu.ee</md:OrganizationURL>
+		<md:OrganizationURL xml:lang="en">http://taat.edu.ee</md:OrganizationURL>
+	</md:Organization>
+	<md:ContactPerson contactType="technical">
+		<md:SurName>Administrator</md:SurName>
+		<md:EmailAddress>eenet@eenet.ee</md:EmailAddress>
+	</md:ContactPerson>
+</md:EntityDescriptor>

@@ -12,7 +12,6 @@ import ee.hm.dop.model.User;
 
 public class LoginService {
 
-
     @Inject
     private UserService userService;
 
@@ -37,6 +36,11 @@ public class LoginService {
     private AuthenticatedUser createAuthenticatedUser(User user) {
         AuthenticatedUser authenticatedUser = new AuthenticatedUser();
         authenticatedUser.setUser(user);
+
+        return createAuthenticatedUser(authenticatedUser);
+    }
+
+    public AuthenticatedUser createAuthenticatedUser(AuthenticatedUser authenticatedUser){
         authenticatedUser.setToken(new BigInteger(130, random).toString(32));
 
         AuthenticatedUser returnedAuthenticatedUser;

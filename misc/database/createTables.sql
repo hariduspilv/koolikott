@@ -96,9 +96,14 @@ CREATE TABLE User (
 );
 
 CREATE TABLE AuthenticatedUser (
-  id        BIGINT AUTO_INCREMENT PRIMARY KEY,
-  user_id   BIGINT NOT NULL,
-  token     VARCHAR(255) UNIQUE NOT NULL,
+  id                 BIGINT AUTO_INCREMENT PRIMARY KEY,
+  user_id            BIGINT NOT NULL,
+  token              VARCHAR(255) UNIQUE NOT NULL,
+  firstLogin         BOOLEAN DEFAULT FALSE,
+  homeOrganization   VARCHAR(255),
+  mails              VARCHAR(255),
+  affiliations       VARCHAR(255),
+  scopedAffiliations VARCHAR(255),
 
   FOREIGN KEY (user_id)
             REFERENCES User(id)

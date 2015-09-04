@@ -44,7 +44,7 @@ public class ApplicationLauncher {
             startCommandListener();
             startExecutors();
             initOpenSaml();
-            synchronizeMaterials();
+            //synchronizeMaterials();
         }
     }
 

@@ -1,0 +1,41 @@
+<md:EntityDescriptor xmlns:md="urn:oasis:names:tc:SAML:2.0:metadata" xmlns:ds="http://www.w3.org/2000/09/xmldsig#" entityID="https://sarvik.taat.edu.ee/saml2/idp/metadata.php">
+	<md:IDPSSODescriptor protocolSupportEnumeration="urn:oasis:names:tc:SAML:2.0:protocol">
+		<md:KeyDescriptor use="signing">
+			<ds:KeyInfo xmlns:ds="http://www.w3.org/2000/09/xmldsig#">
+				<ds:X509Data>
+					<ds:X509Certificate>
+						MIIDVDCCAjwCCQD11wTPSPMEFjANBgkqhkiG9w0BAQUFADBsMQswCQYDVQQGEwJFRTERMA8GA1UECBMIVGFydHVtYWExDjAMBgNVBAcTBVRhcnR1MQ4wDAYDVQQKEwVFRU5ldDENMAsGA1UECxMEVEFBVDEbMBkGA1UEAxMSc2FydmlrLnRhYXQuZWR1LmVlMB4XDTEzMDMwNDExNTIxMFoXDTE2MDMwMzExNTIxMFowbDELMAkGA1UEBhMCRUUxETAPBgNVBAgTCFRhcnR1bWFhMQ4wDAYDVQQHEwVUYXJ0dTEOMAwGA1UEChMFRUVOZXQxDTALBgNVBAsTBFRBQVQxGzAZBgNVBAMTEnNhcnZpay50YWF0LmVkdS5lZTCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEBAMbnce4LiYj/300LthjXhW1A2KYsNi+Hn8do/Y0LCSTfOmn6EOL42lLaA6XkWpGO2znN5cUden3iW1huf2YbBYaO9ljQ5xgPnEI8FCp3pkh3bhFBu2xYwbSSLLimrQejghOvEg2QAasvO+IdLJdCGvlA1H8J+sH63Mb7Qrf5GQksvEQSy5XgWlYOJePlt4cZ8oizZxXqBhEoLu6GKc+LeFflSmhEL7j/lc5UqbAcY+gQ/Wnna6u/OGQqe2F0OUu1B3Jj01uRBubGm0uVKyc8W5gEHMUpl5rAl8BF4Dw0cMDLY6eiTdHHVkmOYVJi9FCIix4R7uVXVioBVbLM8ldXBG0CAwEAATANBgkqhkiG9w0BAQUFAAOCAQEAja6vG63IViGl1yacYj/6MFfgDyrA+PDzyKnn+PYyEgITZuHQnwNVWqX05CSA7Xo6iQhFE6Tv2Ri6JpCFyHXEo+8bJ93W8DeAhHc3J6Oh/nCLzr9+SibfSRddiYWmr4NMbcO13B2kQhzBPwAyKKZoKCZr0F/gkBcMKFLsvfnmJDVcKfMaRIzq9nZng6cOQjoQDNstmQ6AIyzc08x0SbqdbKePkxXaMX0KJFXagApW0sBt/v5nTC6euAyiEbSO1cpJrz4lR2UekTsDNtPWuo8NSq6rSx4kenLI4i9JsOsqVe4Lo9DUAF+BHLSKy0+ToV3Falc0EJw6eemUnANtpEBX/Q==
+					</ds:X509Certificate>
+				</ds:X509Data>
+			</ds:KeyInfo>
+		</md:KeyDescriptor>
+		<md:KeyDescriptor use="encryption">
+			<ds:KeyInfo xmlns:ds="http://www.w3.org/2000/09/xmldsig#">
+				<ds:X509Data>
+					<ds:X509Certificate>
+						MIIDVDCCAjwCCQD11wTPSPMEFjANBgkqhkiG9w0BAQUFADBsMQswCQYDVQQGEwJFRTERMA8GA1UECBMIVGFydHVtYWExDjAMBgNVBAcTBVRhcnR1MQ4wDAYDVQQKEwVFRU5ldDENMAsGA1UECxMEVEFBVDEbMBkGA1UEAxMSc2FydmlrLnRhYXQuZWR1LmVlMB4XDTEzMDMwNDExNTIxMFoXDTE2MDMwMzExNTIxMFowbDELMAkGA1UEBhMCRUUxETAPBgNVBAgTCFRhcnR1bWFhMQ4wDAYDVQQHEwVUYXJ0dTEOMAwGA1UEChMFRUVOZXQxDTALBgNVBAsTBFRBQVQxGzAZBgNVBAMTEnNhcnZpay50YWF0LmVkdS5lZTCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEBAMbnce4LiYj/300LthjXhW1A2KYsNi+Hn8do/Y0LCSTfOmn6EOL42lLaA6XkWpGO2znN5cUden3iW1huf2YbBYaO9ljQ5xgPnEI8FCp3pkh3bhFBu2xYwbSSLLimrQejghOvEg2QAasvO+IdLJdCGvlA1H8J+sH63Mb7Qrf5GQksvEQSy5XgWlYOJePlt4cZ8oizZxXqBhEoLu6GKc+LeFflSmhEL7j/lc5UqbAcY+gQ/Wnna6u/OGQqe2F0OUu1B3Jj01uRBubGm0uVKyc8W5gEHMUpl5rAl8BF4Dw0cMDLY6eiTdHHVkmOYVJi9FCIix4R7uVXVioBVbLM8ldXBG0CAwEAATANBgkqhkiG9w0BAQUFAAOCAQEAja6vG63IViGl1yacYj/6MFfgDyrA+PDzyKnn+PYyEgITZuHQnwNVWqX05CSA7Xo6iQhFE6Tv2Ri6JpCFyHXEo+8bJ93W8DeAhHc3J6Oh/nCLzr9+SibfSRddiYWmr4NMbcO13B2kQhzBPwAyKKZoKCZr0F/gkBcMKFLsvfnmJDVcKfMaRIzq9nZng6cOQjoQDNstmQ6AIyzc08x0SbqdbKePkxXaMX0KJFXagApW0sBt/v5nTC6euAyiEbSO1cpJrz4lR2UekTsDNtPWuo8NSq6rSx4kenLI4i9JsOsqVe4Lo9DUAF+BHLSKy0+ToV3Falc0EJw6eemUnANtpEBX/Q==
+					</ds:X509Certificate>
+				</ds:X509Data>
+			</ds:KeyInfo>
+		</md:KeyDescriptor>
+		<md:SingleLogoutService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect" Location="https://sarvik.taat.edu.ee/saml2/idp/SingleLogoutService.php"/>
+		<md:NameIDFormat>
+			urn:oasis:names:tc:SAML:2.0:nameid-format:transient
+		</md:NameIDFormat>
+		<md:SingleSignOnService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect" Location="https://sarvik.taat.edu.ee/saml2/idp/SSOService.php"/>
+	</md:IDPSSODescriptor>
+	<md:Organization>
+		<md:OrganizationName xml:lang="et">Teaduse Autentimise ja Autoriseerimise Taristu</md:OrganizationName>
+		<md:OrganizationName xml:lang="en">
+			Research Authentication and Authorization Infrastructure
+		</md:OrganizationName>
+		<md:OrganizationDisplayName xml:lang="et">TAAT</md:OrganizationDisplayName>
+		<md:OrganizationDisplayName xml:lang="en">TAAT</md:OrganizationDisplayName>
+		<md:OrganizationURL xml:lang="et">http://taat.edu.ee</md:OrganizationURL>
+		<md:OrganizationURL xml:lang="en">http://taat.edu.ee</md:OrganizationURL>
+	</md:Organization>
+	<md:ContactPerson contactType="technical">
+		<md:SurName>Administrator</md:SurName>
+		<md:EmailAddress>eenet@eenet.ee</md:EmailAddress>
+	</md:ContactPerson>
+</md:EntityDescriptor>

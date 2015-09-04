@@ -21,11 +21,8 @@ import javax.security.auth.x500.X500Principal;
 
 import org.apache.commons.codec.binary.Base64;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.JUnit4;
 import org.opensaml.xml.security.credential.Credential;
 
-@RunWith(JUnit4.class)
 public class KeyStoreUtilsTest {
 
     @Test
