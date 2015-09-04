@@ -3,8 +3,6 @@ package ee.hm.dop.security;
 import static java.lang.String.format;
 import static org.apache.commons.io.IOUtils.closeQuietly;
 
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.InputStream;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -61,16 +59,14 @@ public class MetadataUtils {
     }
 
     private static Element getElement(String credentialPath, DocumentBuilder docBuilder) throws Exception {
-        InputStream inputStream = null;
-
-        File file = FileUtils.getFile(credentialPath);
-        if (file == null) {
-            throw new RuntimeException(format("Failed to load credentials in path: %s", credentialPath));
-        }
-
         Element metadataRoot = null;
+        InputStream inputStream = null;
         try {
-            inputStream = new FileInputStream(file);
+            inputStream = FileUtils.getFileAsStream(credentialPath);
+            if (inputStream == null) {
+                throw new RuntimeException(format("Failed to load credentials in path: %s", credentialPath));
+            }
+
             Document metaDataDocument = docBuilder.parse(inputStream);
             metadataRoot = metaDataDocument.getDocumentElement();
         } finally {

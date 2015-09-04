@@ -3,8 +3,7 @@ package ee.hm.dop.security;
 import static java.lang.String.format;
 import static org.apache.commons.io.IOUtils.closeQuietly;
 
-import java.io.File;
-import java.io.FileInputStream;
+import java.io.InputStream;
 import java.security.KeyStore;
 import java.util.HashMap;
 import java.util.Map;
@@ -26,15 +25,14 @@ public class KeyStoreUtils {
 
     public static KeyStore loadKeystore(String filename, String password) {
         KeyStore keyStore = null;
-        FileInputStream inputStream = null;
-
-        File file = FileUtils.getFile(filename);
-        if (file == null) {
-            throw new RuntimeException(format("Failed to load keystore in path: %s", filename));
-        }
+        InputStream inputStream = null;
 
         try {
-            inputStream = new FileInputStream(file);
+            inputStream = FileUtils.getFileAsStream(filename);
+            if (inputStream == null) {
+                throw new RuntimeException(format("Failed to load keystore in path: %s", filename));
+            }
+
             keyStore = KeyStore.getInstance(KeyStore.getDefaultType());
             keyStore.load(inputStream, password.toCharArray());
         } catch (Exception e) {
