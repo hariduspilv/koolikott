@@ -180,7 +180,7 @@ public class TaatService {
         try {
             response = getResponse(responseMessage);
         } catch (Exception e) {
-            logger.error("Error processing data received from Taat.");
+            logger.error("Error processing data received from Taat.", e);
             return null;
         }
 
@@ -303,7 +303,7 @@ public class TaatService {
 
     private X509Credential getCerdential() {
         try {
-            return MetadataUtils.getCerdential("reos_metadata.xml");
+            return MetadataUtils.getCredential("reos_metadata.xml");
         } catch (Exception e) {
             logger.error("Error getting credential.");
         }

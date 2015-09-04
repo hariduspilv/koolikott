@@ -1,9 +1,10 @@
 package ee.hm.dop.security;
 
+import static java.lang.String.format;
+import static org.apache.commons.io.IOUtils.closeQuietly;
+
 import java.io.File;
 import java.io.FileInputStream;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.security.KeyStore;
 import java.util.HashMap;
 import java.util.Map;
@@ -17,6 +18,8 @@ import org.opensaml.xml.security.x509.X509Credential;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import ee.hm.dop.utils.FileUtils;
+
 public class KeyStoreUtils {
 
     private static final Logger logger = LoggerFactory.getLogger(KeyStoreUtils.class);
@@ -25,25 +28,19 @@ public class KeyStoreUtils {
         KeyStore keyStore = null;
         FileInputStream inputStream = null;
 
-        // Try to load keystore file from outside of the application
-        try {
-            File inputFile = new File(filename);
-            inputStream = new FileInputStream(inputFile);
-        } catch (Exception e) {
-            logger.info("Custom keystore " + filename + " could not be loaded. ");
+        File file = FileUtils.getFile(filename);
+        if (file == null) {
+            throw new RuntimeException(format("Failed to load keystore in path: %s", filename));
         }
 
-        // Load keystore from application resources
         try {
-            if (inputStream == null) {
-                File inputFile = getResourceAsFile(filename);
-                inputStream = new FileInputStream(inputFile);
-            }
+            inputStream = new FileInputStream(file);
             keyStore = KeyStore.getInstance(KeyStore.getDefaultType());
             keyStore.load(inputStream, password.toCharArray());
-            inputStream.close();
         } catch (Exception e) {
-            logger.error("Error loading keystore: " + filename);
+            throw new RuntimeException(format("Failed to load keystore in path: %s", filename), e);
+        } finally {
+            closeQuietly(inputStream);
         }
 
         return keyStore;
@@ -67,10 +64,4 @@ public class KeyStoreUtils {
 
         return credential;
     }
-
-    protected static File getResourceAsFile(String resourcePath) throws URISyntaxException {
-        URI resource = KeyStoreUtils.class.getClassLoader().getResource(resourcePath).toURI();
-        return new File(resource);
-    }
-
 }

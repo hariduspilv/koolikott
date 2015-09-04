@@ -104,7 +104,7 @@ public class LogInResource {
 
     @POST
     @Path("/taat")
-    public Response authenticate(MultivaluedMap<String, String> formParams) throws URISyntaxException {
+    public Response taatAuthenticate(MultivaluedMap<String, String> formParams) throws URISyntaxException {
         AuthenticatedUser authenticatedUser = taatService.authenticate(formParams.getFirst("SAMLResponse"));
         URI location = new URI("../#/loginRedirect?token=" + authenticatedUser.getToken());
 

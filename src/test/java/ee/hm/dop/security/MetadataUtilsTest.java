@@ -17,8 +17,7 @@ public class MetadataUtilsTest {
 
     @Test
     public void getCredential() throws Exception {
-        X509Credential credential = MetadataUtils.getCerdential("reos_metadata.xml");
+        X509Credential credential = MetadataUtils.getCredential("reos_metadata.xml");
         assertNotNull(credential);
     }
-
 }

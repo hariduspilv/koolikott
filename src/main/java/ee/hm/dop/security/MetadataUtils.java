@@ -1,10 +1,11 @@
 package ee.hm.dop.security;
 
+import static java.lang.String.format;
+import static org.apache.commons.io.IOUtils.closeQuietly;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
-import java.net.URI;
-import java.net.URISyntaxException;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -24,9 +25,11 @@ import org.opensaml.xml.security.x509.X509Credential;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
+import ee.hm.dop.utils.FileUtils;
+
 public class MetadataUtils {
 
-    public static X509Credential getCerdential(String credentialPath) throws Exception {
+    public static X509Credential getCredential(String credentialPath) throws Exception {
         DocumentBuilder docBuilder = getDocumentBuilder();
 
         Element metadataRoot = getElement(credentialPath, docBuilder);
@@ -58,10 +61,22 @@ public class MetadataUtils {
     }
 
     private static Element getElement(String credentialPath, DocumentBuilder docBuilder) throws Exception {
-        InputStream metaDataInputStream = new FileInputStream(getResourceAsFile(credentialPath));
-        Document metaDataDocument = docBuilder.parse(metaDataInputStream);
-        Element metadataRoot = metaDataDocument.getDocumentElement();
-        metaDataInputStream.close();
+        InputStream inputStream = null;
+
+        File file = FileUtils.getFile(credentialPath);
+        if (file == null) {
+            throw new RuntimeException(format("Failed to load credentials in path: %s", credentialPath));
+        }
+
+        Element metadataRoot = null;
+        try {
+            inputStream = new FileInputStream(file);
+            Document metaDataDocument = docBuilder.parse(inputStream);
+            metadataRoot = metaDataDocument.getDocumentElement();
+        } finally {
+            closeQuietly(inputStream);
+        }
+
         return metadataRoot;
     }
 
@@ -69,10 +84,5 @@ public class MetadataUtils {
         DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
         documentBuilderFactory.setNamespaceAware(true);
         return documentBuilderFactory.newDocumentBuilder();
-    }
-
-    protected static File getResourceAsFile(String resourcePath) throws URISyntaxException {
-        URI resource = MetadataUtils.class.getClassLoader().getResource(resourcePath).toURI();
-        return new File(resource);
     }
 }
