@@ -180,8 +180,7 @@ public class TaatService {
         try {
             response = getResponse(responseMessage);
         } catch (Exception e) {
-            logger.error("Error processing data received from Taat.", e);
-            return null;
+            throw  new RuntimeException("Error processing data received from Taat.", e);
         }
 
         Signature sig = response.getSignature();
@@ -190,8 +189,7 @@ public class TaatService {
             SignatureValidator validator = new SignatureValidator(credential);
             validator.validate(sig);
         } catch (ValidationException e) {
-            logger.error("Error validating signature");
-            return null;
+            throw  new RuntimeException("Error validating signature", e);
         }
 
         List<Attribute> attributes = getAttributes(response);
@@ -201,7 +199,6 @@ public class TaatService {
         authenticatedUser.setUser(user);
 
         return loginService.createAuthenticatedUser(authenticatedUser);
-
     }
 
     private List<Attribute> getAttributes(Response response) {
@@ -305,8 +302,7 @@ public class TaatService {
         try {
             return MetadataUtils.getCredential("reos_metadata.xml");
         } catch (Exception e) {
-            logger.error("Error getting credential.");
+            throw new RuntimeException("Error getting credential.", e);
         }
-        return null;
     }
 }
