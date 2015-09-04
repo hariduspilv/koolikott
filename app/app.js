@@ -19,8 +19,7 @@ define(['routes','services/dependencyResolver'], function(config, dependencyReso
             app.directive  = $compileProvider.directive;
             app.filter     = $filterProvider.register;
             app.factory    = $provide.factory;
-            app.service    = $provide.service;
-                
+            app.service    = $provide.service;   
 
             if(config.routes !== undefined)
             {
@@ -64,6 +63,6 @@ define(['routes','services/dependencyResolver'], function(config, dependencyReso
             'utils/commons'
         ];
     }
-
+    
    return app;
 });

@@ -1,6 +1,8 @@
 <div class="alert alert-danger" role="alert" data-ng-if="errorMessageShow">
-    Sõnum 1
     <span data-ng-if="errorMessageLoginFail">
-        Sõnum 2
+        Sisselogimine ebaõnnestus
+    </span>
+    <span data-ng-if="errorMessageNoLoginData">
+        Puuduvad kasutaja andmed
     </span>
 </div>

@@ -8,6 +8,8 @@ define(['app'], function(app) {
         function loginSuccess(authenticatedUser) {
             if (isEmpty(authenticatedUser)) {
                 log('No data returned by logging in');
+                $rootScope.errorMessageShow = true;
+                $rootScope.errorMessageNoLoginData = true;
                 enableLogin();
             } else {
                 authenticatedUserService.setAuthenticatedUser(authenticatedUser);
@@ -21,6 +23,7 @@ define(['app'], function(app) {
         function loginFail(data, status) {
             log('Logging in failed.');
             $rootScope.errorMessageShow = true;
+            $rootScope.errorMessageLoginFail = true;
             enableLogin();
         };
 
