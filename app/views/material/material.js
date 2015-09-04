@@ -14,15 +14,17 @@ define(['app'], function(app)
     	
         function getMaterialSuccess(material) {
             if (isEmpty(material)) {
-                log('No data returned by getting material');
-                } else {
-                    $scope.material = material;
-                    init();
-                }
+            	log('No data returned by getting material. Redirecting to landing page');
+                $location.url("/");
+            } else {
+                $scope.material = material;
+                init();
+            }
     	}
     	
     	function getMaterialFail(material, status) {
-            log('Getting materials failed.');
+            log('Getting materials failed. Redirecting to landing page');
+            $location.url("/");
     	}
     	
     	function init() {
