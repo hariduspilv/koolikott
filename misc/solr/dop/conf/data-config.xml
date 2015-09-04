@@ -4,7 +4,8 @@
         <entity name="Material" pk="id"
             query="select id, licenseType from Material WHERE deleted = false"
             deltaImportQuery="select id, licenseType from Material where id = '${dih.delta.id}'"
-            deltaQuery="select id from Material where (CONVERT_TZ(added, @@session.time_zone, '+00:00') > '${dataimporter.last_index_time}' OR CONVERT_TZ(updated, @@session.time_zone, '+00:00') > '${dataimporter.last_index_time}') AND deleted = false">
+            deltaQuery="select id from Material where (CONVERT_TZ(added, @@session.time_zone, '+00:00') > '${dataimporter.last_index_time}' OR CONVERT_TZ(updated, @@session.time_zone, '+00:00') > '${dataimporter.last_index_time}') AND deleted = false"
+            deletedPkQuery="select id from Material where (CONVERT_TZ(added, @@session.time_zone, '+00:00') > '${dataimporter.last_index_time}' OR CONVERT_TZ(updated, @@session.time_zone, '+00:00') > '${dataimporter.last_index_time}') AND deleted = true">
             <entity name="Material_Title" query="select title as title_id from Material_Title where material='${Material.id}'">
                 <entity name="LanguageString" query="select textValue as title from LanguageString where id = '${Material_Title.title_id}'" />
             </entity>
