@@ -42,6 +42,13 @@ define([], function()
                     'views/static/abstractStaticPage'
                 ]
             },
+            '/loginRedirect': {
+                templateUrl: 'app/views/loginRedirect/loginRedirect.html',
+                controller: 'loginRedirectController',
+                dependencies: [
+                    'views/loginRedirect/loginRedirect'
+                ]
+            },
             '/:username': {
                 templateUrl: 'app/views/profile/profile.html',
                 controller: 'profileController',

@@ -20,6 +20,5 @@ define(['app'], function(app)
             log('Login failed.');
             $location.url('/');
         }
-        
     }]);
 });
