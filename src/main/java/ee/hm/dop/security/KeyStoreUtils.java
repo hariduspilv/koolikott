@@ -23,15 +23,27 @@ public class KeyStoreUtils {
 
     public static KeyStore loadKeystore(String filename, String password) {
         KeyStore keyStore = null;
+        FileInputStream inputStream = null;
 
+        // Try to load keystore file from outside of the application
         try {
+            File inputFile = new File(filename);
+            inputStream = new FileInputStream(inputFile);
+        } catch (Exception e) {
+            logger.info("Custom keystore " + filename + " could not be loaded. ");
+        }
+
+        // Load keystore from application resources
+        try {
+            if (inputStream == null) {
+                File inputFile = getResourceAsFile(filename);
+                inputStream = new FileInputStream(inputFile);
+            }
             keyStore = KeyStore.getInstance(KeyStore.getDefaultType());
-            File inputFile = getResourceAsFile(filename);
-            FileInputStream inputStream = new FileInputStream(inputFile);
             keyStore.load(inputStream, password.toCharArray());
             inputStream.close();
         } catch (Exception e) {
-            logger.error("Error loading keystore: " + e.getMessage());
+            logger.error("Error loading keystore: " + filename);
         }
 
         return keyStore;
@@ -41,7 +53,7 @@ public class KeyStoreUtils {
         X509Credential credential = null;
 
         try {
-            Map<String, String> passwords = new HashMap<String, String>();
+            Map<String, String> passwords = new HashMap<>();
             passwords.put(entityId, entityPassword);
             KeyStoreCredentialResolver resolver = new KeyStoreCredentialResolver(keystore, passwords);
 
