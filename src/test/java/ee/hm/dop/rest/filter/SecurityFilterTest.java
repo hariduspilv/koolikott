@@ -17,6 +17,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.core.Context;
+import javax.ws.rs.core.Response;
 import javax.ws.rs.core.SecurityContext;
 import javax.ws.rs.core.UriInfo;
 
@@ -34,12 +35,15 @@ import ee.hm.dop.service.AuthenticatedUserService;
 @RunWith(EasyMockRunner.class)
 public class SecurityFilterTest {
 
+    private static final int HTTP_AUTHENTICATION_TIMEOUT = 419;
+
     private SecurityFilter filter;
     private UriInfo uriInfo;
     private HttpServletRequest request;
     private HttpSession session;
     private ContainerRequestContext context;
     private Capture<SecurityContext> capturedSecurityContext;
+    private Capture<Response> capturedResponse;
     private AuthenticatedUserService authenticatedUserService;
 
     @Before
@@ -50,7 +54,7 @@ public class SecurityFilterTest {
 
         context = createMock(ContainerRequestContext.class);
         capturedSecurityContext = newCapture();
-        //context.setSecurityContext(EasyMock.capture(capturedSecurityContext));
+        capturedResponse = newCapture();
 
         uriInfo = createMock(UriInfo.class);
         filter = new SecurityFilterMock(uriInfo, request);
@@ -72,11 +76,13 @@ public class SecurityFilterTest {
 
         expect(request.getHeader("Authentication")).andReturn(token);
         expect(authenticatedUserService.getAuthenticatedUserByToken(token)).andReturn(null);
+        context.abortWith(EasyMock.capture(capturedResponse));
 
         replay(uriInfo, request, session, context, authenticatedUserService);
         filter.filter(context);
         verify(uriInfo, request, session, context, authenticatedUserService);
 
+        assertEquals(HTTP_AUTHENTICATION_TIMEOUT, capturedResponse.getValue().getStatus());
     }
 
     @Test
@@ -84,6 +90,7 @@ public class SecurityFilterTest {
         String token = "token";
         AuthenticatedUser authenticatedUser = createMock(AuthenticatedUser.class);
         User user = createMock(User.class);
+        context.abortWith(EasyMock.capture(capturedResponse));
 
         setExpects(token, authenticatedUser, user, "wrongUsername");
 
@@ -92,6 +99,8 @@ public class SecurityFilterTest {
         filter.filter(context);
 
         verify(uriInfo, request, session, context, authenticatedUserService, authenticatedUser, user);
+
+        assertEquals(HTTP_AUTHENTICATION_TIMEOUT, capturedResponse.getValue().getStatus());
     }
 
     @Test
@@ -176,9 +185,7 @@ public class SecurityFilterTest {
         expect(user.getUsername()).andReturn("realUsername");
     }
 
-
-
-    class SecurityFilterMock extends SecurityFilter{
+    class SecurityFilterMock extends SecurityFilter {
 
         public SecurityFilterMock(@Context UriInfo uriInfo, @Context HttpServletRequest request) {
             super(uriInfo, request);

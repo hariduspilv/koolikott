@@ -10,6 +10,7 @@ import javax.ws.rs.Priorities;
 import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.container.ContainerRequestFilter;
 import javax.ws.rs.core.Context;
+import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 import javax.ws.rs.ext.Provider;
 
@@ -19,6 +20,8 @@ import ee.hm.dop.service.AuthenticatedUserService;
 @Provider
 @Priority(Priorities.AUTHENTICATION)
 public class SecurityFilter implements ContainerRequestFilter {
+
+    private static final int HTTP_AUTHENTICATION_TIMEOUT = 419;
 
     private UriInfo uriInfo;
     private HttpServletRequest request;
@@ -39,6 +42,8 @@ public class SecurityFilter implements ContainerRequestFilter {
                 DopPrincipal principal = new DopPrincipal(authenticatedUser);
                 DopSecurityContext securityContext = new DopSecurityContext(principal, uriInfo);
                 requestContext.setSecurityContext(securityContext);
+            } else {
+                requestContext.abortWith(Response.status(HTTP_AUTHENTICATION_TIMEOUT).build());
             }
         }
 
