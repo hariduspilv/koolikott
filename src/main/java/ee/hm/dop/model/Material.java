@@ -156,6 +156,10 @@ public class Material {
     @JoinColumn(name = "creator")
     private User creator;
 
+    @JsonIgnore
+    @Column
+    private boolean deleted;
+
     public Long getId() {
         return id;
     }
@@ -330,4 +334,11 @@ public class Material {
         this.creator = creator;
     }
 
+    public boolean isDeleted() {
+        return deleted;
+    }
+
+    public void setDeleted(boolean deleted) {
+        this.deleted = deleted;
+    }
 }

@@ -3,9 +3,13 @@ package ee.hm.dop;
 import static ee.hm.dop.utils.ConfigurationProperties.SERVER_PORT;
 import static java.lang.String.format;
 
+import java.util.concurrent.Executors;
+
 import javax.inject.Inject;
 
 import org.apache.commons.configuration.Configuration;
+import org.opensaml.DefaultBootstrap;
+import org.opensaml.xml.ConfigurationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -21,6 +25,7 @@ public class ApplicationLauncher {
     private static final Logger logger = LoggerFactory.getLogger(ApplicationLauncher.class);
 
     private static final int DEFAULT_SERVER_PORT = 8080;
+    private static final int MATERIAL_SYNCHRONIZATION_HOUR_OF_DAY = 1;
 
     @Inject
     private static Configuration configuration;
@@ -38,11 +43,19 @@ public class ApplicationLauncher {
             addShutdownHook();
             startCommandListener();
             startExecutors();
+            initOpenSaml();
+            synchronizeMaterials();
         }
     }
 
+    private static void synchronizeMaterials() {
+        Executors.newSingleThreadExecutor().submit(() -> {
+            synchronizeMaterialsExecutor.synchronizeMaterials();
+        });
+    }
+
     private static void startExecutors() {
-        synchronizeMaterialsExecutor.synchronizeMaterials();
+        synchronizeMaterialsExecutor.scheduleExecution(MATERIAL_SYNCHRONIZATION_HOUR_OF_DAY);
     }
 
     private static void startCommandListener() {
@@ -69,6 +82,14 @@ public class ApplicationLauncher {
         } catch (Exception e) {
             logger.error("Error inicializing Jetty Server. Existing application.", e);
             System.exit(1);
+        }
+    }
+
+    private static void initOpenSaml() {
+        try {
+            DefaultBootstrap.bootstrap();
+        } catch (ConfigurationException e) {
+            logger.error("Error initializing OpenSAML library.");
         }
     }
 

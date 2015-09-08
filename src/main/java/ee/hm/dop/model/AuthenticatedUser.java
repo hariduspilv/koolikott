@@ -1,14 +1,10 @@
 package ee.hm.dop.model;
 
-import static javax.persistence.CascadeType.MERGE;
-import static javax.persistence.CascadeType.PERSIST;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
-import javax.persistence.Transient;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -20,14 +16,26 @@ public class AuthenticatedUser {
     @JsonIgnore
     private Long id;
 
-    @ManyToOne(cascade = { MERGE, PERSIST }, optional = false)
+    @ManyToOne(optional = false)
     private User user;
 
     @Column(nullable = false, unique = true)
     private String token;
 
-    @Transient
-    private boolean firstLogin;
+    @Column
+    private boolean firstLogin = false;
+
+    @Column
+    private String homeOrganization;
+
+    @Column
+    private String mails;
+
+    @Column
+    private String affiliations;
+
+    @Column
+    private String scopedAffiliations;
 
     public Long getId() {
         return id;
@@ -59,5 +67,37 @@ public class AuthenticatedUser {
 
     public void setFirstLogin(boolean firstLogin) {
         this.firstLogin = firstLogin;
+    }
+
+    public String getHomeOrganization() {
+        return homeOrganization;
+    }
+
+    public void setHomeOrganization(String homeOrganization) {
+        this.homeOrganization = homeOrganization;
+    }
+
+    public String getMails() {
+        return mails;
+    }
+
+    public void setMails(String mails) {
+        this.mails = mails;
+    }
+
+    public String getAffiliations() {
+        return affiliations;
+    }
+
+    public void setAffiliations(String affiliations) {
+        this.affiliations = affiliations;
+    }
+
+    public String getScopedAffiliations() {
+        return scopedAffiliations;
+    }
+
+    public void setScopedAffiliations(String scopedAffiliations) {
+        this.scopedAffiliations = scopedAffiliations;
     }
 }

@@ -13,6 +13,7 @@ DROP TABLE IF EXISTS Material_Author;
 DROP TABLE IF EXISTS LanguageString;
 DROP TABLE IF EXISTS LanguageKeyCodes;
 DROP TABLE IF EXISTS Material;
+DROP TABLE IF EXISTS AuthenticationState;
 DROP TABLE IF EXISTS AuthenticatedUser;
 DROP TABLE IF EXISTS User;
 DROP TABLE IF EXISTS Repository;
@@ -90,17 +91,28 @@ CREATE TABLE User (
   userName  VARCHAR(255) UNIQUE NOT NULL,
   name      VARCHAR(255) NOT NULL,
   surName   VARCHAR(255) NOT NULL,
-  idCode    VARCHAR(11) UNIQUE NOT NULL
+  idCode    VARCHAR(11) UNIQUE NOT NULL,
+  role      VARCHAR(255) NOT NULL
 );
 
 CREATE TABLE AuthenticatedUser (
-  id        BIGINT AUTO_INCREMENT PRIMARY KEY,
-  user_id   BIGINT NOT NULL,
-  token     VARCHAR(255) UNIQUE NOT NULL,
+  id                 BIGINT AUTO_INCREMENT PRIMARY KEY,
+  user_id            BIGINT NOT NULL,
+  token              VARCHAR(255) UNIQUE NOT NULL,
+  firstLogin         BOOLEAN DEFAULT FALSE,
+  homeOrganization   VARCHAR(255),
+  mails              VARCHAR(255),
+  affiliations       VARCHAR(255),
+  scopedAffiliations VARCHAR(255),
 
   FOREIGN KEY (user_id)
             REFERENCES User(id)
             ON DELETE RESTRICT
+);
+
+CREATE TABLE AuthenticationState (
+  id          BIGINT AUTO_INCREMENT PRIMARY KEY,
+  token       VARCHAR(255) UNIQUE NOT NULL
 );
 
 CREATE TABLE Material (
@@ -116,6 +128,7 @@ CREATE TABLE Material (
   repositoryIdentifier VARCHAR(255),
   repository           BIGINT,
   creator              BIGINT,
+  deleted              BOOLEAN,
 
   UNIQUE KEY (repositoryIdentifier, repository),
   

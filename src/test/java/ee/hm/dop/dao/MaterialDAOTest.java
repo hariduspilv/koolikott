@@ -8,6 +8,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
+import java.security.InvalidParameterException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,6 +16,7 @@ import javax.inject.Inject;
 import javax.persistence.RollbackException;
 
 import org.joda.time.DateTime;
+import org.junit.Assert;
 import org.junit.Test;
 
 import ee.hm.dop.common.test.DatabaseTestBase;
@@ -41,6 +43,13 @@ public class MaterialDAOTest extends DatabaseTestBase {
     }
 
     @Test
+    public void findDeletedMaterial() {
+        long materialId = 11;
+        Material material = materialDAO.findById(materialId);
+        assertNull(material);
+    }
+
+    @Test
     public void findNewestMaterials() {
         List<Material> materials = materialDAO.findNewestMaterials(8);
         assertEquals(8, materials.size());
@@ -51,15 +60,13 @@ public class MaterialDAOTest extends DatabaseTestBase {
                 // Check that the materials are in the newest to oldest order
                 assertTrue(last.getAdded().compareTo(material.getAdded()) == 1);
             }
+
             last = material;
             assertNotNull(material.getAdded());
-        }
-    }
 
-    @Test
-    public void AuthorAndDesc() {
-        Material material = materialDAO.findById(1);
-        assertMaterial1(material);
+            // Cannot be material 11 because it is deleted
+            Assert.assertNotEquals(new Long(11), material.getId());
+        }
     }
 
     @Test
@@ -123,7 +130,8 @@ public class MaterialDAOTest extends DatabaseTestBase {
         idList.add((long) 7);
         idList.add((long) 3);
 
-        List<Long> idListCopy = new ArrayList<>(idList);
+        List<Long> expectedIdList = new ArrayList<>(idList);
+        idList.add((long) 11); // deleted, should not return
 
         List<Material> result = materialDAO.findAllById(idList);
 
@@ -131,10 +139,10 @@ public class MaterialDAOTest extends DatabaseTestBase {
         assertEquals(3, result.size());
 
         for (Material material : result) {
-            idListCopy.remove(material.getId());
+            expectedIdList.remove(material.getId());
         }
 
-        assertTrue(idListCopy.isEmpty());
+        assertTrue(expectedIdList.isEmpty());
     }
 
     @Test
@@ -199,8 +207,9 @@ public class MaterialDAOTest extends DatabaseTestBase {
         assertEquals(material.getViews(), newMaterial.getViews());
         assertArrayEquals(material.getPicture(), newMaterial.getPicture());
         assertEquals(material.getHasPicture(), newMaterial.getHasPicture());
+        assertNull(newMaterial.getUpdated());
 
-        materialDAO.delete(newMaterial);
+        materialDAO.remove(newMaterial);
     }
 
     @Test
@@ -209,6 +218,14 @@ public class MaterialDAOTest extends DatabaseTestBase {
         material.setId((long) 1);
         byte[] picture = materialDAO.findPictureByMaterial(material);
         assertNotNull(picture);
+    }
+
+    @Test
+    public void findPictureByMaterialWhenMaterialIsDeleted() {
+        Material material = new Material();
+        material.setId(11L);
+        byte[] picture = materialDAO.findPictureByMaterial(material);
+        assertNull(picture);
     }
 
     @Test
@@ -293,6 +310,15 @@ public class MaterialDAOTest extends DatabaseTestBase {
     }
 
     @Test
+    public void findByRepositoryAndrepositoryIdentifierWhenMaterialIsDeleted() {
+        Repository repository = new Repository();
+        repository.setId(1L);
+
+        Material material = materialDAO.findByRepositoryAndRepositoryIdentifier(repository, "isssiiaawejdsada4564");
+        assertNull(material);
+    }
+
+    @Test
     public void findByRepositoryAndrepositoryIdentifierWhenRepositoryIdentifierDoesNotExist() {
         Repository repository = new Repository();
         repository.setId(1l);
@@ -315,6 +341,8 @@ public class MaterialDAOTest extends DatabaseTestBase {
         creator.setId(1L);
 
         List<Material> materials = materialDAO.findByCreator(creator);
+
+        // Should not return material 11 which is deleted
         assertEquals(3, materials.size());
         assertEquals(Long.valueOf(8), materials.get(0).getId());
         assertEquals(Long.valueOf(4), materials.get(1).getId());
@@ -322,6 +350,7 @@ public class MaterialDAOTest extends DatabaseTestBase {
         assertMaterial1(materials.get(2));
     }
 
+    @Test
     public void update() {
         Material changedMaterial = new Material();
         changedMaterial.setId(9l);
@@ -337,7 +366,8 @@ public class MaterialDAOTest extends DatabaseTestBase {
         Material material = materialDAO.findById(9);
         assertEquals("http://www.chaged.it.com", changedMaterial.getSource());
         assertEquals(now, changedMaterial.getAdded());
-        assertEquals(now, changedMaterial.getUpdated());
+        DateTime updated = changedMaterial.getUpdated();
+        assertTrue(updated.isEqual(now) || updated.isAfter(now));
         assertEquals(views, changedMaterial.getViews());
 
         // Restore to original values
@@ -501,6 +531,27 @@ public class MaterialDAOTest extends DatabaseTestBase {
             assertEquals(expectedMessage, e.getCause().getMessage());
         }
 
+    }
+
+    @Test
+    public void delete() {
+        Material material = materialDAO.findById(10);
+        materialDAO.delete(material);
+
+        Material deletedMaterial = materialDAO.findById(10);
+        assertNull(deletedMaterial);
+    }
+
+    @Test
+    public void deleteMaterialDoesNotExist() {
+        Material material = new Material();
+
+        try {
+            materialDAO.delete(material);
+            fail("Exception expected");
+        } catch (InvalidParameterException e) {
+            assertEquals("Material does not exist.", e.getMessage());
+        }
     }
 
     private void assertMaterial1(Material material) {

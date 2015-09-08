@@ -23,32 +23,38 @@ insert into LicenseType(id, name) values (1, 'CCBY');
 insert into LicenseType(id, name) values (2, 'CCBYSA');
 insert into LicenseType(id, name) values (3, 'CCBYND');
 
--- Repository
+-- Repository. Do not use real URLs here
 
 insert into Repository(id, baseURL, lastSynchronization, schemaName) values (1, 'http://repo1.ee', null, 'waramu');
 
 -- User
 
-insert into User(id, userName, name, surName, idCode) values (1, 'mati.maasikas', 'Mati', 'Maasikas', '39011220011');
-insert into User(id, userName, name, surName, idCode) values (2, 'peeter.paan', 'Peeter', 'Paan', '38011550077');
-insert into User(id, userName, name, surName, idCode) values (3, 'voldemar.vapustav', 'Voldemar', 'Vapustav', '37066990099');
-insert into User(id, userName, name, surName, idCode) values (4, 'voldemar.vapustav2', 'Voldemar', 'Vapustav', '15066990099');
+insert into User(id, userName, name, surName, idCode, role) values (1, 'mati.maasikas', 'Mati', 'Maasikas', '39011220011', 'USER');
+insert into User(id, userName, name, surName, idCode, role) values (2, 'peeter.paan', 'Peeter', 'Paan', '38011550077', 'USER');
+insert into User(id, userName, name, surName, idCode, role) values (3, 'voldemar.vapustav', 'Voldemar', 'Vapustav', '37066990099', 'USER');
+insert into User(id, userName, name, surName, idCode, role) values (4, 'voldemar.vapustav2', 'Voldemar', 'Vapustav', '15066990099', 'USER');
 
 -- AuthenticatedUser
 
-insert into User(id, user_id, token) values (1, 1, 'token', );
+insert into AuthenticatedUser(id, user_id, token, firstLogin, homeOrganization, mails, affiliations, scopedAffiliations) values (1, 1, 'token', false, null, null, null, null);
+
+-- AuthenticationState
+
+insert into AuthenticationState(id, token) values (1, 'testTOKEN');
 
 -- Materials
 
-insert into Material(id, lang, issueDate, licenseType, source, repository, repositoryIdentifier, added, updated, views, picture, creator) values(1, 1, 1, 1, 'https://www.youtube.com/watch?v=gSWbx3CvVUk', 1, 'isssiiaawej', '1999-01-01 00:00:01', '2000-03-01 07:00:01', 100, '656b6f6f6c696b6f7474', 1);
-insert into Material(id, lang, issueDate, licenseType, source, repository, repositoryIdentifier, added, updated, views, picture, creator) values(2, 2, 2, 2, 'https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes', 1, 'isssiidosa00dsa', '1970-01-01 00:00:01', '1995-07-12 09:00:01', 200, null, 2);
-insert into Material(id, lang, issueDate, licenseType, source, repository, repositoryIdentifier, added, updated, views, picture, creator) values(3, 4, 3, 3,  'http://eloquentjavascript.net/Eloquent_JavaScript.pdf', null, null, '2009-01-01 00:00:01', '2011-01-10 19:00:01', 300, null, null);
-insert into Material(id, lang, issueDate, licenseType, source, repository, repositoryIdentifier, added, updated, views, picture, creator) values(4, 3, 4, 1,  'https://en.wikipedia.org/wiki/Power_Architecture', null, null, '2012-01-01 00:00:01', '2012-08-28 22:40:01', 400, null, 1);
-insert into Material(id, lang, issueDate, licenseType, source, repository, repositoryIdentifier, added, updated, views, picture, creator) values(5, 3, 5, 2,  'https://en.wikipedia.org/wiki/Power_Architecture', null, null, '2011-09-01 00:00:01', '2012-11-04 09:30:01', 500, null, 2);
-insert into Material(id, lang, issueDate, licenseType, source, repository, repositoryIdentifier, added, updated, views, picture, creator) values(6, null, null, null, 'http://www.planalto.gov.br/ccivil_03/Constituicao/Constituicao.htm', null, null, '1911-09-01 00:00:01', null, 600, null, null);
-insert into Material(id, lang, issueDate, licenseType, source, repository, repositoryIdentifier, added, updated, views, picture, creator) values(7, 4, 6, 3, 'https://president.ee/en/republic-of-estonia/the-constitution/index.html', null, null, '2001-07-01 00:00:01', null, 700, null, null);
-insert into Material(id, lang, issueDate, licenseType, source, repository, repositoryIdentifier, added, updated, views, picture, creator) values(8, 5, 7, 1, 'http://www.palmeiras.com.br/historia/titulos', null, null, '2014-06-01 00:00:01', null, 800, null, 1);
-insert into Material(id, lang, issueDate, licenseType, source, repository, repositoryIdentifier, added, updated, views, picture) values(9, null, null, null, 'http://www.chaging.it.com', null, null, '1911-09-01 00:00:01', null, 0, null);
+insert into Material(id, lang, issueDate, licenseType, source, repository, repositoryIdentifier, added, updated, views, picture, creator, deleted) values(1, 1, 1, 1, 'https://www.youtube.com/watch?v=gSWbx3CvVUk', 1, 'isssiiaawej', '1999-01-01 00:00:01', '2000-03-01 07:00:01', 100, '656b6f6f6c696b6f7474', 1, false);
+insert into Material(id, lang, issueDate, licenseType, source, repository, repositoryIdentifier, added, updated, views, picture, creator, deleted) values(2, 2, 2, 2, 'https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes', 1, 'isssiidosa00dsa', '1970-01-01 00:00:01', '1995-07-12 09:00:01', 200, null, 2, false);
+insert into Material(id, lang, issueDate, licenseType, source, repository, repositoryIdentifier, added, updated, views, picture, creator, deleted) values(3, 4, 3, 3,  'http://eloquentjavascript.net/Eloquent_JavaScript.pdf', null, null, '2009-01-01 00:00:01', '2011-01-10 19:00:01', 300, null, null, false);
+insert into Material(id, lang, issueDate, licenseType, source, repository, repositoryIdentifier, added, updated, views, picture, creator, deleted) values(4, 3, 4, 1,  'https://en.wikipedia.org/wiki/Power_Architecture', null, null, '2012-01-01 00:00:01', '2012-08-28 22:40:01', 400, null, 1, false);
+insert into Material(id, lang, issueDate, licenseType, source, repository, repositoryIdentifier, added, updated, views, picture, creator, deleted) values(5, 3, 5, 2,  'https://en.wikipedia.org/wiki/Power_Architecture', null, null, '2011-09-01 00:00:01', '2012-11-04 09:30:01', 500, null, 2, false);
+insert into Material(id, lang, issueDate, licenseType, source, repository, repositoryIdentifier, added, updated, views, picture, creator, deleted) values(6, null, null, null, 'http://www.planalto.gov.br/ccivil_03/Constituicao/Constituicao.htm', null, null, '1911-09-01 00:00:01', null, 600, null, null, false);
+insert into Material(id, lang, issueDate, licenseType, source, repository, repositoryIdentifier, added, updated, views, picture, creator, deleted) values(7, 4, 6, 3, 'https://president.ee/en/republic-of-estonia/the-constitution/index.html', null, null, '2001-07-01 00:00:01', null, 700, null, null, false);
+insert into Material(id, lang, issueDate, licenseType, source, repository, repositoryIdentifier, added, updated, views, picture, creator, deleted) values(8, 5, 7, 1, 'http://www.palmeiras.com.br/historia/titulos', null, null, '2014-06-01 00:00:01', null, 800, null, 1, false);
+insert into Material(id, lang, issueDate, licenseType, source, repository, repositoryIdentifier, added, updated, views, picture, deleted) values(9, null, null, null, 'http://www.chaging.it.com', null, null, '1911-09-01 00:00:01', null, 0, null, false);
+insert into Material(id, lang, issueDate, licenseType, source, repository, repositoryIdentifier, added, updated, views, picture, deleted) values(10, null, null, null, 'http://www.boo.com', null, null, '1911-09-01 00:00:01', null, 0, null, false); -- Do not use this material, it is deleted by tests
+insert into Material(id, lang, issueDate, licenseType, source, repository, repositoryIdentifier, added, updated, views, picture, creator, deleted) values(11, 1, null, 1, 'https://www.deleted.com/', 1, 'isssiiaawejdsada4564', '2015-09-02 00:00:01', '2015-09-03 07:00:01', 100, '656b6f6f6c696b6f7474', 1, true); -- This material should be amoung the 8 latest materials
 
 -- Authors
 

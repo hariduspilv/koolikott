@@ -1,10 +1,7 @@
 package ee.hm.dop.service;
 
-import static org.easymock.EasyMock.and;
 import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.expect;
-import static org.easymock.EasyMock.gt;
-import static org.easymock.EasyMock.lt;
 import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
 import static org.junit.Assert.assertEquals;
@@ -44,9 +41,6 @@ public class MaterialServiceTest {
         expect(material.getId()).andReturn(materialId).times(2);
         expect(material.getRepository()).andReturn(null).times(2);
         material.setAdded(added);
-
-        DateTime now = DateTime.now();
-        material.setUpdated((DateTime) and(gt(now), lt(now.plusSeconds(5))));
         material.setViews(views);
 
         expect(materialDao.findById(materialId)).andReturn(original);
@@ -121,6 +115,18 @@ public class MaterialServiceTest {
         } catch (IllegalArgumentException ex) {
             assertEquals("Error updating Material: Not allowed to modify repository.", ex.getMessage());
         }
+
+        verify(materialDao, material);
+    }
+
+    @Test
+    public void delete() {
+        Material material = createMock(Material.class);
+        materialDao.delete(material);
+
+        replay(materialDao, material);
+
+        materialService.delete(material);
 
         verify(materialDao, material);
     }

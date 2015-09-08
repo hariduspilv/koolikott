@@ -2,14 +2,15 @@ package ee.hm.dop.dao;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.fail;
 
 import javax.inject.Inject;
+import javax.persistence.PersistenceException;
 
 import org.junit.Test;
 
 import ee.hm.dop.common.test.DatabaseTestBase;
-import ee.hm.dop.exceptions.DuplicateUserException;
 import ee.hm.dop.model.User;
 
 public class UserDAOTest extends DatabaseTestBase {
@@ -87,18 +88,50 @@ public class UserDAOTest extends DatabaseTestBase {
     }
 
     @Test
-    public void createUserWithDuplicateUsername() {
+    public void updateUserWithDuplicateUsername() {
         User user = new User();
         user.setName("Mati");
         user.setSurname("Maasikas");
         user.setUsername("mati.maasikas");
         user.setIdCode("12345678901");
         try {
-            userDAO.createUser(user);
+            userDAO.update(user);
             fail("Exception expected. ");
-        } catch (DuplicateUserException e) {
+        } catch (PersistenceException e) {
             // expected
         }
     }
 
+    @Test
+    public void update() {
+        User user = getUser();
+
+        User returnedUser = userDAO.update(user);
+        User foundUser = userDAO.findUserByIdCode(user.getIdCode());
+
+        assertEquals(user.getUsername(), foundUser.getUsername());
+        assertEquals(user.getIdCode(), returnedUser.getIdCode());
+
+        userDAO.delete(returnedUser);
+    }
+
+    @Test
+    public void delete() {
+        User user = getUser();
+
+        User returnedUser = userDAO.update(user);
+
+        userDAO.delete(returnedUser);
+
+        assertNull(userDAO.findUserByIdCode(user.getIdCode()));
+    }
+
+    private User getUser() {
+        User user = new User();
+        user.setName("Mati2");
+        user.setSurname("Maasikas2");
+        user.setUsername("mati2.maasikas2");
+        user.setIdCode("12345678969");
+        return user;
+    }
 }

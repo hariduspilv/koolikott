@@ -13,4 +13,16 @@ public interface ConfigurationProperties {
 
     // Search
     String SEARCH_SERVER = "search.server";
+
+    // TAAT
+    String TAAT_SSO = "taat.sso";
+    String TAAT_CONNECTION_ID = "taat.connectionId";
+    String TAAT_ASSERTION_CONSUMER_SERVICE_INDEX = "taat.assertionConsumerServiceIndex";
+
+    // Keystore for TAAT
+    String KEYSTORE_FILENAME = "keystore.filename";
+    String KEYSTORE_PASSWORD = "keystore.password";
+    String KEYSTORE_SIGNING_ENTITY_ID = "keystore.signingEntityID";
+    String KEYSTORE_SIGNING_ENTITY_PASSWORD = "keystore.signingEntityPassword";
+
 }

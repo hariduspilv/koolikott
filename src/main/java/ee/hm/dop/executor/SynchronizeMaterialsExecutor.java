@@ -10,8 +10,6 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 
-import javax.inject.Inject;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -20,7 +18,6 @@ import com.google.inject.Singleton;
 import ee.hm.dop.guice.GuiceInjector;
 import ee.hm.dop.model.Repository;
 import ee.hm.dop.service.RepositoryService;
-import ee.hm.dop.service.SearchEngineService;
 import ee.hm.dop.utils.DbUtils;
 
 @Singleton
@@ -31,15 +28,30 @@ public class SynchronizeMaterialsExecutor {
     // Guarantees that only 1 threat is running at a time
     private static final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
     private static ScheduledFuture<?> synchronizeMaterialHandle;
-    private static final int hourOfDayToExecute = 1;
 
-    @Inject
-    private SearchEngineService searchEngineService;
-
-    /**
-     * The command will be executed once a day at 1 a.m.
-     */
     public synchronized void synchronizeMaterials() {
+        try {
+            beginTransaction();
+
+            RepositoryService repositoryService = newRepositoryService();
+            List<Repository> repositories = repositoryService.getAllRepositorys();
+
+            logger.info(format("Synchronizing %d repositories...", repositories.size()));
+
+            for (Repository repository : repositories) {
+                logger.info(format("synchonizing repository %S:", repository));
+                repositoryService.synchronize(repository);
+            }
+
+            logger.info("Synchronization repository service finished execution.");
+        } catch (Exception e) {
+            logger.error("Unexpected error while synchronizing materials.", e);
+        } finally {
+            closeTransaction();
+        }
+    }
+
+    public synchronized void scheduleExecution(int hourOfDayToExecute) {
         if (synchronizeMaterialHandle != null) {
             logger.info("Synchronize Materials Executor already started.");
             return;
@@ -49,30 +61,11 @@ public class SynchronizeMaterialsExecutor {
 
             @Override
             public void run() {
-                try {
-                    beginTransaction();
-
-                    RepositoryService repositoryService = newRepositoryService();
-                    List<Repository> repositories = repositoryService.getAllRepositorys();
-
-                    logger.info(format("Synchronizing %d repositories...", repositories.size()));
-
-                    for (Repository repository : repositories) {
-                        logger.info(format("synchonizing repository %S:", repository));
-                        repositoryService.synchronize(repository);
-                    }
-
-                    logger.info("Synchronization repository service finished execution.");
-                    closeTransaction();
-
-                    searchEngineService.updateIndex();
-                } catch (Exception e) {
-                    logger.error("Unexpected error while synchronizing materials.", e);
-                }
+                synchronizeMaterials();
             }
         };
 
-        long initialDelay = getInitialDelay();
+        long initialDelay = getInitialDelay(hourOfDayToExecute);
         long period = DAYS.toMillis(1);
 
         logger.info("Scheduling Synchronization repository service first execution to "
@@ -102,7 +95,7 @@ public class SynchronizeMaterialsExecutor {
     /**
      * Package access modifier for testing purpose
      */
-    long getInitialDelay() {
+    long getInitialDelay(int hourOfDayToExecute) {
         return ExecutorHelper.getInitialDelay(hourOfDayToExecute);
     }
 

@@ -72,6 +72,10 @@ public abstract class ResourceIntegrationTestBase extends IntegrationTestBase {
         return getTarget(url).request().accept(mediaType).post(requestEntity);
     }
 
+    protected static Response doPost(String url, ClientRequestFilter clientRequestFilter, Entity<?> requestEntity, MediaType mediaType) {
+        return getTarget(url, clientRequestFilter).request().accept(mediaType).post(requestEntity);
+    }
+
     /*
      * Target
      */
@@ -88,6 +92,7 @@ public abstract class ResourceIntegrationTestBase extends IntegrationTestBase {
         ClientConfig clientConfig = new ClientConfig();
         clientConfig.property(ClientProperties.READ_TIMEOUT, 60000); // ms
         clientConfig.property(ClientProperties.CONNECT_TIMEOUT, 60000); // ms
+        clientConfig.property(ClientProperties.FOLLOW_REDIRECTS, false);
 
         Client client = ClientBuilder.newClient(clientConfig);
         client.register(JacksonFeature.class);

@@ -27,7 +27,7 @@ public class SolrService implements SearchEngineService {
     private static final int RESULTS_PER_PAGE = 24;
     private static final String SEARCH_PATH = "select?q=%s&wt=json&start=%d&rows=" + RESULTS_PER_PAGE;
 
-    private static final String SOLR_IMPORT_PARTIAL = "dataimport?command=full-import&clean=false&wt=json";
+    private static final String SOLR_IMPORT_PARTIAL = "dataimport?command=delta-import&wt=json";
 
     @Inject
     private Client client;

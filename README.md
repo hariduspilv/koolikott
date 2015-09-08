@@ -71,3 +71,68 @@ In my.ini or my.cnf under [mysqld] add: character-set-server=utf8
 ### Search Engine
 
 * **search.server** - the URL for the search engine. Currently only Solr is supported. Default value is **http://localhost:8983/solr/dop/**
+
+### TAAT
+* **taat.sso** - the URL of TAAT Single Sign-On Service
+* **taat.connectionId** - the Connection ID in [JANUS](https://taeva.taat.edu.ee/module.php/janus/index.php)
+* **taat.assertionConsumerServiceIndex** - the Assertion Consumer Service Index in JANUS (default 0)
+
+#### KeyStore for TAAT
+This keystore holds credentials used to sign outgoing TAAT authentication requests. 
+
+* **keystore.filename** - name of the keystore file
+* **keystore.password** - password of the keystore file
+* **keystore.signingEntityID** - alias of the key
+* **keystore.signingEntityPassword** - password of the key
+
+# TAAT authentication setup
+Create a new keystore file:
+
+* A valid certificate is required. A self-signed certificate can be generated with the following commands (don't use self-signed certificates for production environment): 
+	* `openssl req -nodes -new -keyout server.pem -newkey rsa:2048 > server.csr`
+	* `openssl x509 -req -days 1095 -in server.csr -signkey server.pem -out server.crt`
+* Create a pkcs12 file:
+	* `openssl pkcs12 -export -in server.crt -inkey server.pem -out server.p12 -name exampleAlias -password pass:examplePassword` Replace **exampleAlias** and **examplePassword**. 
+* Create the keystore:
+	* `keytool -importkeystore -deststorepass exampleStorePass -destkeypass exampleKeyPass -destkeystore server.keystore -srckeystore server.p12 -srcstoretype PKCS12 -srcstorepass examplePassword -alias exampleAlias` Replace **exampleAlias**, **examplePassword**, **exampleStorePass**, **exampleKeyPass**.
+	
+Add all keystore configurations to **custom.properties**. From the example keytool command the configuration would be: 
+```
+	keystore.filename=server.keystore
+	keystore.password=exampleStorePass
+	keystore.signingEntityID=exampleAlias
+	keystore.signingEntityPassword=exampleKeyPass
+```
+
+Create a new connection in [JANUS](https://taeva.taat.edu.ee/module.php/janus/index.php)
+
+* Insert a **Connection ID**. Read how to choose it [here](https://spaces.internet2.edu/display/InCFederation/Entity+IDs). For example: https&#58;//www.example.com/sp
+* Add all required metadata fields and save. Here are some example values:
+	
+Entry | Value
+--- | ---
+AssertionConsumerService:0:Binding | urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST
+AssertionConsumerService:0:Location | https&#58;//www.example.com/rest/login/taat
+SingleLogoutService:0:Binding | urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect
+SingleLogoutService:0:Location | https&#58;//www.example.com/rest/logout/taat
+certData | MIIkjIdnlJ8Kdj342viHOmd214j8kDj...
+url:en | https&#58;//www.example.com
+url:et | https&#58;//www.example.com
+OrganizationName:en | Example Organization
+OrganizationName:et | Example Organization
+OrganizationDisplayName:et | Example Organization
+OrganizationDisplayName:en | Example Organization
+OrganizationURL:en | https&#58;//www.example.com
+OrganizationURL:et | https&#58;//www.example.com
+NameIDFormat | urn:oasis:names:tc:SAML:2.0:nameid-format:transient
+name:en | https&#58;//www.example.com/sp
+name:et | https&#58;//www.example.com/sp
+	
+Add TAAT configurations to **custom.properties**. For example: 
+```
+	taat.sso=https://reos.taat.edu.ee/saml2/idp/SSOService.php
+	taat.connectionId=https://www.example.com/sp
+	taat.assertionConsumerServiceIndex=0
+```
+
+When your TAAT connection is changed to production status, **taat.sso** can be changed to `https://sarvik.taat.edu.ee/saml2/idp/SSOService.php`

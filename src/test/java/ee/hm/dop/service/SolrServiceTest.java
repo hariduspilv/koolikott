@@ -53,7 +53,7 @@ public class SolrServiceTest {
 
     private static final int RESULTS_PER_PAGE = 24;
 
-    private static final String SOLR_IMPORT_PARTIAL = "dataimport?command=full-import&clean=false&wt=json";
+    private static final String SOLR_IMPORT_PARTIAL = "dataimport?command=delta-import&wt=json";
 
     @Test
     public void search() {

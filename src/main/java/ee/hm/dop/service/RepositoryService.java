@@ -37,6 +37,9 @@ public class RepositoryService {
     @Inject
     private MaterialDAO materialDAO;
 
+    @Inject
+    private SearchEngineService searchEngineService;
+
     public List<Repository> getAllRepositorys() {
         List<Repository> repositories = repositoryDAO.findAll();
 
@@ -88,6 +91,13 @@ public class RepositoryService {
                 + " materials and %s materials failed to download of total %s";
         logger.info(format(message, end - start, successfulMaterials, failedMaterials, successfulMaterials
                 + failedMaterials));
+
+        updateSolrIndex();
+    }
+
+    private void updateSolrIndex() {
+        logger.info("Updating Search Engine index...");
+        searchEngineService.updateIndex();
     }
 
     private int getCount(int count) {
@@ -105,10 +115,18 @@ public class RepositoryService {
         material.setRepository(repository);
 
         if (existentMaterial != null) {
+            updateMaterial(material, existentMaterial);
+        } else if (!material.isDeleted()) {
+            materialService.createMaterial(material);
+        }
+    }
+
+    private void updateMaterial(Material material, Material existentMaterial) {
+        if (material.isDeleted()) {
+            materialService.delete(existentMaterial);
+        } else {
             material.setId(existentMaterial.getId());
             materialService.update(material);
-        } else {
-            materialService.createMaterial(material);
         }
     }
 
