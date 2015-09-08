@@ -8,7 +8,7 @@ define(['app'], function(app)
             'token': $route.current.params.token
         };
 
-        serverCallService.makeGet("rest/authenticatedUser/getAuthenticatedUser", params, getSuccess, getFail); 
+        serverCallService.makeGet("rest/login/getAuthenticatedUser", params, getSuccess, getFail); 
         
         function getSuccess(authenticatedUser) {
             if (isEmpty(authenticatedUser)) {
