@@ -2,12 +2,13 @@ define(['app'], function(app) {
     var instance;
     var isAuthenticationInProgress;
     
-    app.factory('authenticationService',['$location', '$rootScope', 'serverCallService', 'authenticatedUserService',
-    function($location, $rootScope, serverCallService, authenticatedUserService) {
+    app.factory('authenticationService',['$location', '$rootScope', 'serverCallService', 'authenticatedUserService', 'alertService',
+    function($location, $rootScope, serverCallService, authenticatedUserService, alertService) {
 
         function loginSuccess(authenticatedUser) {
             if (isEmpty(authenticatedUser)) {
                 log('No data returned by logging in');
+                alertService.setErrorAlert('ERROR_LOGIN_FAILED');
                 $rootScope.errorMessageShow = true;
                 $rootScope.errorMessageNoLoginData = true;
                 enableLogin();
@@ -22,8 +23,7 @@ define(['app'], function(app) {
 
         function loginFail(data, status) {
             log('Logging in failed.');
-            $rootScope.errorMessageShow = true;
-            $rootScope.errorMessageLoginFail = true;
+            alertService.setErrorAlert('ERROR_LOGIN_FAILED');
             enableLogin();
         };
 

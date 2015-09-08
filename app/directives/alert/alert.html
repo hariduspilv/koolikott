@@ -1,8 +1,3 @@
-<div class="alert alert-danger" role="alert" data-ng-if="errorMessageShow">
-    <span data-ng-if="errorMessageLoginFail">
-        Sisselogimine ebaõnnestus
-    </span>
-    <span data-ng-if="errorMessageNoLoginData">
-        Puuduvad kasutaja andmed
-    </span>
+<div data-ng-if="alert" class="alert {{alert.type}}" role="alert">
+    <span data-translate="{{alert.message}}"></span>
 </div>

@@ -12,7 +12,8 @@ require.config({
         'translateUrlLoader': '../assets/js/angular-translate-loader-url.min',
         'translationService': 'services/translationService',
         'dopLoginBar': 'directives/login-bar/login-bar',
-        'dopAlert': 'directives/alert/alert'
+        'dopAlert': 'directives/alert/alert',
+        'alertService': 'services/alertService'
     },
     shim: {
         'app': {
@@ -24,7 +25,7 @@ require.config({
     }
 });
 
-require(['app', 'translationService', 'authenticatedUserService', 'serverCallService', 'authenticationService', 'searchService', 'dopHeader', 'dopFooter', 'dopLoginBar', 'dopAlert'],
- function(app, translationService, authenticatedUserService, serverCallService, authenticationService, searchService, dopHeader, dopAlert) {
+require(['app', 'translationService', 'authenticatedUserService', 'serverCallService', 'authenticationService', 'searchService', 'dopHeader', 'dopFooter', 'dopLoginBar', 'dopAlert', 'alertService'],
+ function(app, translationService, authenticatedUserService, serverCallService, authenticationService, searchService, dopHeader, dopAlert, alertService) {
     angular.bootstrap(document, ['app']);
 });
