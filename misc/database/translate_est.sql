@@ -101,6 +101,7 @@ insert into Translation(translationGroup, translationKey, translation) values (1
 insert into Translation(translationGroup, translationKey, translation) values (1, 'LOGIN_IDCARD', 'ID-kaart');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'LOGIN_MOBILEID', 'Mobiil-ID');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'ERROR_LOGIN_FAILED', 'Sisselogimine ebaõnnestus');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'ERROR_MATERIAL_NOT_FOUND', 'Materjali ei leitud');
 
 -- Material Subject translations
 insert into Translation(translationGroup, translationKey, translation) values (1, 'MATERIAL_SUBJECT_ESTONIAN', 'Eesti keel');
