@@ -8,6 +8,7 @@ import static ee.hm.dop.utils.ConfigurationProperties.KEYSTORE_SIGNING_ENTITY_PA
 import static ee.hm.dop.utils.ConfigurationProperties.TAAT_ASSERTION_CONSUMER_SERVICE_INDEX;
 import static ee.hm.dop.utils.ConfigurationProperties.TAAT_CONNECTION_ID;
 import static ee.hm.dop.utils.ConfigurationProperties.TAAT_SSO;
+import static org.opensaml.Configuration.getUnmarshallerFactory;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -74,17 +75,17 @@ public class TaatService {
     @Inject
     private Configuration configuration;
 
-    private SecureRandom random;
+    protected SecureRandom random;
 
     private KeyStore keyStore;
 
-    private Credential credential;
+    protected Credential credential;
 
     private AuthenticatedUser authenticatedUser;
 
     public TaatService() {
         random = new SecureRandom();
-        credential = getCerdential();
+        credential = getCredential();
     }
 
     private KeyStore getKeyStore() {
@@ -133,6 +134,43 @@ public class TaatService {
         return context;
     }
 
+    public AuthenticatedUser authenticate(String responseMessage, String authenticationStateToken) {
+        LoginService loginService = newLoginService();
+        AuthenticationStateService authenticationStateService = newAuthenticationStateService();
+        Response response;
+
+        AuthenticationState authenticationState = authenticationStateService
+                .getAuthenticationStateByToken(authenticationStateToken);
+        if (authenticationState == null) {
+            throw new RuntimeException("Error validating authentication state.");
+        } else {
+            authenticationStateService.delete(authenticationState);
+        }
+
+        try {
+            response = getResponse(responseMessage);
+        } catch (Exception e) {
+            throw new RuntimeException("Error processing data received from Taat.", e);
+        }
+
+        Signature sig = response.getSignature();
+
+        try {
+            SignatureValidator validator = getSignatureValidator(credential);
+            validator.validate(sig);
+        } catch (ValidationException e) {
+            throw new RuntimeException("Error validating signature", e);
+        }
+
+        getAuthenticatedUser(response);
+
+        return loginService.createAuthenticatedUser(authenticatedUser);
+    }
+
+    protected SignatureValidator getSignatureValidator(Credential credential) {
+        return new SignatureValidator(credential);
+    }
+
     protected Issuer getIssuer(String connectionId) {
         IssuerBuilder issuerBuilder = new IssuerBuilder();
         Issuer issuer = issuerBuilder.buildObject("urn:oasis:names:tc:SAML:2.0:assertion", "Issuer", "saml");
@@ -173,41 +211,25 @@ public class TaatService {
         return getInjector().getInstance(AuthenticationStateService.class);
     }
 
-    public AuthenticatedUser authenticate(String responseMessage) {
-        LoginService loginService = getInjector().getInstance(LoginService.class);
-        Response response;
-
-        try {
-            response = getResponse(responseMessage);
-        } catch (Exception e) {
-            throw  new RuntimeException("Error processing data received from Taat.", e);
-        }
-
-        Signature sig = response.getSignature();
-
-        try {
-            SignatureValidator validator = new SignatureValidator(credential);
-            validator.validate(sig);
-        } catch (ValidationException e) {
-            throw  new RuntimeException("Error validating signature", e);
-        }
-
+    private void getAuthenticatedUser(Response response) {
         List<Attribute> attributes = getAttributes(response);
 
         authenticatedUser = getUserData(attributes);
         User user = createUser(authenticatedUser.getUser());
         authenticatedUser.setUser(user);
-
-        return loginService.createAuthenticatedUser(authenticatedUser);
     }
 
-    private List<Attribute> getAttributes(Response response) {
+    protected LoginService newLoginService() {
+        return getInjector().getInstance(LoginService.class);
+    }
+
+    protected List<Attribute> getAttributes(Response response) {
         Assertion assertion = response.getAssertions().get(0);
         return assertion.getAttributeStatements().get(0).getAttributes();
     }
 
     private User createUser(User user) {
-        UserService userService = getInjector().getInstance(UserService.class);
+        UserService userService = newUserService();
 
         User oldUser = userService.getUserByIdCode(user.getIdCode());
         if (oldUser == null) {
@@ -219,7 +241,11 @@ public class TaatService {
         return user;
     }
 
-    private AuthenticatedUser getUserData(List<Attribute> attributes) {
+    protected UserService newUserService() {
+        return getInjector().getInstance(UserService.class);
+    }
+
+    protected AuthenticatedUser getUserData(List<Attribute> attributes) {
         AuthenticatedUser authenticatedUser = new AuthenticatedUser();
         User user = new User();
         StringJoiner mails = new StringJoiner(",");
@@ -265,7 +291,7 @@ public class TaatService {
         return authenticatedUser;
     }
 
-    private Response getResponse(String responseMessage)
+    protected Response getResponse(String responseMessage)
             throws Base64DecodingException, ParserConfigurationException, SAXException, IOException,
             UnmarshallingException {
         Response response;
@@ -282,7 +308,7 @@ public class TaatService {
     }
 
     private XMLObject getXmlObject(Element element) throws UnmarshallingException {
-        UnmarshallerFactory unmarshallerFactory = org.opensaml.Configuration.getUnmarshallerFactory();
+        UnmarshallerFactory unmarshallerFactory = getUnmarshallerFactory();
         Unmarshaller unmarshaller = unmarshallerFactory.getUnmarshaller(element);
         return unmarshaller.unmarshall(element);
     }
@@ -298,7 +324,7 @@ public class TaatService {
         return documentBuilderFactory.newDocumentBuilder();
     }
 
-    private X509Credential getCerdential() {
+    protected X509Credential getCredential() {
         try {
             return MetadataUtils.getCredential("reos_metadata.xml");
         } catch (Exception e) {

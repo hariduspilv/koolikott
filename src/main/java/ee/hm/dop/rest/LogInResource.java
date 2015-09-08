@@ -12,6 +12,7 @@ import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.MultivaluedMap;
@@ -26,6 +27,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import ee.hm.dop.model.AuthenticatedUser;
+import ee.hm.dop.service.AuthenticatedUserService;
 import ee.hm.dop.service.LoginService;
 import ee.hm.dop.service.TaatService;
 import ee.hm.dop.service.UserService;
@@ -46,6 +48,9 @@ public class LogInResource {
 
     @Inject
     private UserService userService;
+
+    @Inject
+    private AuthenticatedUserService authenticatedUserService;
 
     @Context
     private HttpServletRequest request;
@@ -105,10 +110,18 @@ public class LogInResource {
     @POST
     @Path("/taat")
     public Response taatAuthenticate(MultivaluedMap<String, String> formParams) throws URISyntaxException {
-        AuthenticatedUser authenticatedUser = taatService.authenticate(formParams.getFirst("SAMLResponse"));
+        AuthenticatedUser authenticatedUser = taatService
+                .authenticate(formParams.getFirst("SAMLResponse"), formParams.getFirst("RelayState"));
         URI location = new URI("../#/loginRedirect?token=" + authenticatedUser.getToken());
 
         return Response.temporaryRedirect(location).build();
+    }
+
+    @GET
+    @Path("/getAuthenticatedUser")
+    @Produces(MediaType.APPLICATION_JSON)
+    public AuthenticatedUser getAuthenticatedUser(@QueryParam("token") String token) {
+        return authenticatedUserService.getAuthenticatedUserByToken(token);
     }
 
     protected String getIdCodeFromRequest() {
