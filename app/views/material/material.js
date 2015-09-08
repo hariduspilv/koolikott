@@ -1,7 +1,7 @@
 define(['app'], function(app)
 {
-    app.controller('materialController', ['$scope', 'serverCallService', '$route', 'translationService', '$rootScope', 'searchService', '$location',
-    		 function($scope, serverCallService, $route, translationService, $rootScope, searchService, $location) {
+    app.controller('materialController', ['$scope', 'serverCallService', '$route', 'translationService', '$rootScope', 'searchService', '$location', 'alertService', 
+    		 function($scope, serverCallService, $route, translationService, $rootScope, searchService, $location, alertService) {
     	
         if ($rootScope.savedMaterial){
             $scope.material = $rootScope.savedMaterial;
@@ -15,6 +15,7 @@ define(['app'], function(app)
         function getMaterialSuccess(material) {
             if (isEmpty(material)) {
             	log('No data returned by getting material. Redirecting to landing page');
+                alertService.setErrorAlert('ERROR_MATERIAL_NOT_FOUND');
                 $location.url("/");
             } else {
                 $scope.material = material;
@@ -24,6 +25,7 @@ define(['app'], function(app)
     	
     	function getMaterialFail(material, status) {
             log('Getting materials failed. Redirecting to landing page');
+            alertService.setErrorAlert('ERROR_MATERIAL_NOT_FOUND');
             $location.url("/");
     	}
     	
