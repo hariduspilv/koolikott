@@ -1,8 +1,10 @@
 define(['app'], function(app) {
+	var instance;
 
 	app.factory('serverCallService', ["$http", "$location", "authenticatedUserService",
-	 function($http, $location, authenticatedUserService) {
-		return {
+	function($http, $location, authenticatedUserService) {
+
+		instance = {
 			makePost : function(url, data, successCallback, errorCallback) {
 				var headers = {};
 				var user = authenticatedUserService.getUser();
@@ -22,7 +24,12 @@ define(['app'], function(app) {
 					successCallback(data);
 				}).
 				error(function(data, status, headers, config) {
-					errorCallback(data, status);  
+					if (status == '419') {
+						authenticatedUserService.removeAuthenticatedUser();
+						instance.makePost(url, data, successCallback, errorCallback);
+					} else {
+						errorCallback(data, status); 
+					}
 				});
 			},
 			
@@ -45,9 +52,16 @@ define(['app'], function(app) {
 					successCallback(data);
 				}).
 				error(function(data, status, headers, config) {
-					errorCallback(data, status);  
+					if (status == '419') {
+						authenticatedUserService.removeAuthenticatedUser();
+						instance.makeGet(url, params, successCallback, errorCallback);
+					} else {
+						errorCallback(data, status);
+					}
 				});
 	        }
 	    };
+
+	    return instance;
 	}]);
 });

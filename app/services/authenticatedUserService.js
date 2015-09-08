@@ -24,6 +24,11 @@ define(['app'], function(app) {
                 localStorage.setItem("authenticatedUser", JSON.stringify(authenticatedUser));
             },
 
+            removeAuthenticatedUser : function() {
+                $rootScope.authenticatedUser = null;
+                localStorage.removeItem("authenticatedUser");
+            },
+
             isAuthenticated : function() {
                 if(getAuthenticatedUser()) {
                     return true;
@@ -51,6 +56,6 @@ define(['app'], function(app) {
             },
         };
 
-    return instance;
+        return instance;
     }]);
 });
