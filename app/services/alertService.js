@@ -1,19 +1,21 @@
 define(['app'], function(app) {
     
     var ALERT_TYPE_ERROR = "alert-danger";
+    var alert = {};
     
-    app.factory('alertService',['$rootScope',
-        function($rootScope) {
-		
+    app.factory('alertService',[function() {
             return {
-                clearMessages : function() {
-                    $rootScope.messages = [];
+                clearMessage : function() {
+                    alert = {};
+                },
+                
+                getAlert : function(message) {
+                    return alert;
                 },
 
                 setErrorAlert : function(message) {
-                    $rootScope.alert = {};
-                    $rootScope.alert.message = message;
-                    $rootScope.alert.type = ALERT_TYPE_ERROR;
+                    alert.message = message;
+                    alert.type = ALERT_TYPE_ERROR;
                 }
 	    };
     }]);

@@ -1,12 +1,26 @@
 define(['app'], function(app)
 {
-    app.directive('dopAlert', ['translationService', '$rootScope',
-    function(translationService, $rootScope) {
+    app.directive('dopAlert', ['translationService', '$rootScope', 'alertService',
+    function(translationService, $rootScope, alertService) {
         return {
             scope: true,
             templateUrl: 'app/directives/alert/alert.html',
-            controller: function ($rootScope) {
+            controller: function ($scope, $timeout) {
                 
+                $scope.$watch(function () {
+                        return alertService.getAlert();
+                    }, 
+                    function (newValue) {
+                        if (newValue.message) {
+                            $scope.alert = newValue; 
+                            alertService.clearMessage();
+                            
+                            $timeout(function() {
+                                $scope.alert = null;
+                            }, 5000);                      
+                        }
+                    },true
+                );
             }
         };
     }]);

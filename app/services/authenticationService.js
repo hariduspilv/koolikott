@@ -9,8 +9,6 @@ define(['app'], function(app) {
             if (isEmpty(authenticatedUser)) {
                 log('No data returned by logging in');
                 alertService.setErrorAlert('ERROR_LOGIN_FAILED');
-                $rootScope.errorMessageShow = true;
-                $rootScope.errorMessageNoLoginData = true;
                 enableLogin();
             } else {
                 authenticatedUserService.setAuthenticatedUser(authenticatedUser);
