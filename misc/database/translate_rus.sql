@@ -100,6 +100,7 @@ insert into Translation(translationGroup, translationKey, translation) values (2
 insert into Translation(translationGroup, translationKey, translation) values (2, 'LOGIN_TAAT', 'TAAT');
 insert into Translation(translationGroup, translationKey, translation) values (2, 'LOGIN_IDCARD', 'ID-карта');
 insert into Translation(translationGroup, translationKey, translation) values (2, 'LOGIN_MOBILEID', 'Mobiil-ID');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'ERROR_LOGIN_FAILED', 'Ошибка входа');
 
 -- Material Subject translations
 insert into Translation(translationGroup, translationKey, translation) values (2, 'MATERIAL_SUBJECT_ESTONIAN', 'Эстонский');
