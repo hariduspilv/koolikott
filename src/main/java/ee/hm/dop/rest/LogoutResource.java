@@ -2,7 +2,7 @@ package ee.hm.dop.rest;
 
 import static java.lang.String.format;
 
-import javax.annotation.security.PermitAll;
+import javax.annotation.security.RolesAllowed;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.POST;
@@ -17,7 +17,7 @@ import ee.hm.dop.rest.filter.DopPrincipal;
 import ee.hm.dop.service.LogoutService;
 
 @Path("logout")
-@PermitAll
+@RolesAllowed("USER")
 public class LogoutResource {
 
     private static Logger logger = LoggerFactory.getLogger(LogoutResource.class);
@@ -39,8 +39,7 @@ public class LogoutResource {
     public void logout() {
         DopPrincipal dopPrincipal = (DopPrincipal) securityContext.getUserPrincipal();
         logoutService.logout(dopPrincipal.getAuthenticatedUser());
-        logger.info(format("User %s is logged out using id card login with id %s.",
-                dopPrincipal.getUser().getUsername(),
-                dopPrincipal.getUser().getIdCode()));
+        logger.info(format("User %s is logged out using id card login with id %s.", dopPrincipal.getUser()
+                .getUsername(), dopPrincipal.getUser().getIdCode()));
     }
 }
