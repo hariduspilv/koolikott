@@ -98,12 +98,16 @@ public class MaterialServiceTest {
     @Test
     public void updateChangingRepository() {
         Material original = new Material();
-        original.setRepository(new Repository());
+        Repository originalRepository = new Repository();
+        originalRepository.setBaseURL("original.com");
+        original.setRepository(originalRepository);
 
         long materialId = 1;
         Material material = createMock(Material.class);
         expect(material.getId()).andReturn(materialId);
-        expect(material.getRepository()).andReturn(new Repository()).times(3);
+        Repository newRepository = new Repository();
+        newRepository.setBaseURL("some.com");
+        expect(material.getRepository()).andReturn(newRepository).times(3);
 
         expect(materialDao.findById(materialId)).andReturn(original);
 
