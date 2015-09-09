@@ -1,31 +1,19 @@
 define(['app'], function(app) {
     var instance;
 
-    app.factory('authenticatedUserService',['$location', '$rootScope', 
-    function($location, $rootScope) {
+    app.factory('authenticatedUserService',['$location',
+    function($location) {
 
         function getAuthenticatedUser() {
-            var user = JSON.parse(localStorage.getItem("authenticatedUser"));
-            if (user) {
-                return user;
-            }
-
-            user = $rootScope.authenticatedUser;
-            if (user) {
-                return user;
-            }
-
-            return null;
+            return JSON.parse(localStorage.getItem("authenticatedUser"));
         }
 
         instance = {
             setAuthenticatedUser : function(authenticatedUser) {
-                $rootScope.authenticatedUser = authenticatedUser;
                 localStorage.setItem("authenticatedUser", JSON.stringify(authenticatedUser));
             },
 
             removeAuthenticatedUser : function() {
-                $rootScope.authenticatedUser = null;
                 localStorage.removeItem("authenticatedUser");
             },
 

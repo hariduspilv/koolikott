@@ -19,21 +19,22 @@ define(['app'], function(app) {
                     $location.url('/' + authenticatedUser.user.username);
                 }
             }
-        };
+        }
 
         function loginFail(data, status) {
             log('Logging in failed.');
             alertService.setErrorAlert('ERROR_LOGIN_FAILED');
             enableLogin();
-        };
+        }
 
         function logoutSuccess(data) {
+        	authenticatedUserService.removeAuthenticatedUser();
             enableLogin();
-        };
+        }
 
         function logoutFail(data, status) {
             //ignore
-        };
+        }
 
         function disableLogin() {
             isAuthenticationInProgress = true;
@@ -47,10 +48,6 @@ define(['app'], function(app) {
 
             logout : function() {              
                 serverCallService.makePost("rest/logout", {}, logoutSuccess, logoutFail);
-
-                $rootScope.authenticatedUser = null;
-
-                localStorage.removeItem("authenticatedUser");
             },
 
             loginWithIdCard : function() {
