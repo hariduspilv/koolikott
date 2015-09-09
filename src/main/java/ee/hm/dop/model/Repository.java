@@ -7,6 +7,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
+import org.apache.commons.lang.builder.EqualsBuilder;
+import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.hibernate.annotations.Type;
 import org.joda.time.DateTime;
@@ -77,5 +79,28 @@ public class Repository {
                 .append(schema) //
                 .append(baseURL) //
                 .build();
+    }
+
+    @Override
+    public int hashCode() {
+        return new HashCodeBuilder(859, 937) //
+                .append(baseURL) //
+                .toHashCode();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+
+        if (!(obj instanceof Repository)) {
+            return false;
+        }
+
+        Repository other = (Repository) obj;
+
+        // Have to use get() because of lazyInitialization.
+        return new EqualsBuilder().append(baseURL, other.getBaseURL()).isEquals();
     }
 }

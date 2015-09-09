@@ -44,4 +44,16 @@ public class DateUtils {
     public static String toJson(DateTime date) {
         return formatter.print(date.withZone(DateTimeZone.UTC));
     }
+
+    /**
+     * Converts {@link DateTime} object into String using the format
+     * yyyy-MM-dd'T'HH:mm:ss'Z'.
+     *
+     * @param date
+     *            the date to be serialized
+     * @return the String representation of {@code date}
+     */
+    public static String toStringWithoutMillis(DateTime date) {
+        return formatterWithoutMillis.print(date.withZone(DateTimeZone.UTC));
+    }
 }
