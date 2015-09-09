@@ -1,30 +1,40 @@
 define(['app'], function(app) {
     var instance;
     var isAuthenticationInProgress;
+    var isOAuthAuthentication = false;
     
     app.factory('authenticationService',['$location', '$rootScope', 'serverCallService', 'authenticatedUserService', 'alertService',
     function($location, $rootScope, serverCallService, authenticatedUserService, alertService) {
 
         function loginSuccess(authenticatedUser) {
             if (isEmpty(authenticatedUser)) {
-                log('No data returned by logging in');
-                alertService.setErrorAlert('ERROR_LOGIN_FAILED');
-                $rootScope.errorMessageShow = true;
-                $rootScope.errorMessageNoLoginData = true;
-                enableLogin();
+            	loginFail();
             } else {
                 authenticatedUserService.setAuthenticatedUser(authenticatedUser);
 
                 if (authenticatedUser.firstLogin) {
                     $location.url('/' + authenticatedUser.user.username);
+                } else if (isOAuthAuthentication) {
+                	var url = localStorage.getItem(LOGIN_ORIGIN);
+                	$location.url(url);
                 }
             }
+            
+            localStorage.removeItem(LOGIN_ORIGIN);
+            isOAuthAuthentication = false;
         }
 
-        function loginFail(data, status) {
+        function loginFail() {
             log('Logging in failed.');
             alertService.setErrorAlert('ERROR_LOGIN_FAILED');
             enableLogin();
+            
+            if (isOAuthAuthentication) {
+            	localStorage.removeItem(LOGIN_ORIGIN);
+            	$location.url('/');
+            }
+            
+            isOAuthAuthentication = false
         }
 
         function logoutSuccess(data) {
@@ -63,7 +73,16 @@ define(['app'], function(app) {
                 localStorage.removeItem(LOGIN_ORIGIN);
                 localStorage.setItem(LOGIN_ORIGIN, $location.url());
                 window.location = "/rest/login/taat";
-            }
+            },
+            
+            authenticateUsingOAuth : function(token) {
+            	var params = {
+                        'token': token
+                };
+            	
+            	serverCallService.makeGet("rest/login/getAuthenticatedUser", params, loginSuccess, loginFail);
+            	isOAuthAuthentication = true;
+            }  
         };
     }]);
 });
