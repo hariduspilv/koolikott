@@ -3,6 +3,7 @@ package ee.hm.dop.utils;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 
+import java.io.File;
 import java.io.InputStream;
 
 import org.easymock.EasyMockRunner;
@@ -20,7 +21,20 @@ public class FileUtilsTest {
 
     @Test
     public void getFileAsStream() {
-        InputStream inputStream = FileUtils.getFileAsStream("sarvik_metadata.xml");
+        InputStream inputStream = null;
+        String property = "java.io.tmpdir";
+        String tempDir = System.getProperty(property);
+
+        File dir = new File(tempDir);
+        for (final File fileEntry : dir.listFiles()) {
+            try {
+                inputStream = FileUtils.getFileAsStream(tempDir + "/" + fileEntry.getName());
+                break;
+            } catch (Exception e) {
+                //permission is denied for some files
+            }
+        }
+
         assertNotNull(inputStream);
     }
 }

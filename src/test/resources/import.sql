@@ -41,6 +41,8 @@ insert into AuthenticatedUser(id, user_id, token, firstLogin, homeOrganization, 
 -- AuthenticationState
 
 insert into AuthenticationState(id, token) values (1, 'testTOKEN');
+insert into AuthenticationState(id, token) values (2, 'taatAuthenticateTestToken');
+
 
 -- Materials
 
