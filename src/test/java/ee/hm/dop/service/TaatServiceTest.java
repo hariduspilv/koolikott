@@ -170,7 +170,7 @@ public class TaatServiceTest {
 
     @Test
     public void authenticateNullAuthenticationState() throws Exception {
-        String authenticationStateToken = "testTOKEN";
+        String authenticationStateToken = "token";
 
         expect(authenticationStateService.getAuthenticationStateByToken(authenticationStateToken)).andReturn(null);
 
@@ -339,7 +339,7 @@ public class TaatServiceTest {
     }
 
     private String setAuthenticationExpects() {
-        String authenticationStateToken = "testTOKEN";
+        String authenticationStateToken = "token";
 
         expect(taatServiceWithMockedMethods.newLoginService()).andReturn(loginService);
         expect(taatServiceWithMockedMethods.newAuthenticationStateService()).andReturn(authenticationStateService);

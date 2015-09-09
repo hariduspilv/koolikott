@@ -179,10 +179,10 @@ public class LoginResourceTest extends ResourceIntegrationTestBase {
     }
 
     @Test
-    public void authenticate() {
+    public void taatAuthenticate() {
         MultivaluedMap<String, String> formParams = new MultivaluedStringMap();
         formParams.add("SAMLResponse", getSAMLResponse());
-        formParams.add("RelayState", "testTOKEN");
+        formParams.add("RelayState", "taatAuthenticateTestToken");
 
         Response response = doPost("login/taat", Entity.entity(formParams, MediaType.WILDCARD_TYPE));
         String url = response.getHeaderString("Location");

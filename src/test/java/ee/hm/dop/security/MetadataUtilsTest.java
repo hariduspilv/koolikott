@@ -1,12 +1,17 @@
 package ee.hm.dop.security;
 
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.fail;
 
+import org.easymock.EasyMockRunner;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.opensaml.DefaultBootstrap;
 import org.opensaml.xml.ConfigurationException;
 import org.opensaml.xml.security.x509.X509Credential;
+
+@RunWith(EasyMockRunner.class)
 
 public class MetadataUtilsTest {
 
@@ -19,5 +24,15 @@ public class MetadataUtilsTest {
     public void getCredential() throws Exception {
         X509Credential credential = MetadataUtils.getCredential("reos_metadata.xml");
         assertNotNull(credential);
+    }
+
+    @Test
+    public void getCredentialInputStreamNull() throws Exception {
+        try {
+            MetadataUtils.getCredential("notValid.xml");
+            fail("Exception expected");
+        } catch (Exception e) {
+            //expected
+        }
     }
 }
