@@ -33,4 +33,16 @@ public class DateUtilsTest {
         toJson = DateUtils.toJson(date);
         assertEquals(json, toJson);
     }
+
+    @Test
+    public void toStringWithoutMillis() {
+        DateTime date = new DateTime("2014-10-30T08:37:05Z");
+        String expected = "2014-10-30T08:37:05Z";
+        String result = DateUtils.toStringWithoutMillis(date);
+        assertEquals(expected, result);
+
+        date = new DateTime("2014-10-30T08:37:05.452Z");
+        result = DateUtils.toStringWithoutMillis(date);
+        assertEquals(expected, result);
+    }
 }

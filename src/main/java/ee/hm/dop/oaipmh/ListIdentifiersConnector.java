@@ -1,7 +1,5 @@
 package ee.hm.dop.oaipmh;
 
-import static ee.hm.dop.utils.DateUtils.toJson;
-
 import java.util.Iterator;
 
 import org.joda.time.DateTime;
@@ -10,6 +8,7 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
 import ORG.oclc.oai.harvester2.verb.ListIdentifiers;
+import ee.hm.dop.utils.DateUtils;
 
 public class ListIdentifiersConnector {
 
@@ -30,7 +29,7 @@ public class ListIdentifiersConnector {
     }
 
     protected ListIdentifiers newListIdentifier(String baseURL, DateTime from, String metadataPrefix) throws Exception {
-        String fromDate = from != null ? toJson(from) : null;
+        String fromDate = from != null ? DateUtils.toStringWithoutMillis(from) : null;
         return new ListIdentifiers(baseURL, fromDate, null, null, metadataPrefix);
     }
 
