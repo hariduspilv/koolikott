@@ -12,17 +12,17 @@ define(['app'], function(app)
         };    
     });
     
-    app.directive('dopHeader', ['translationService', '$location', 'searchService', '$rootScope', 'authenticationService', 'authenticatedUserService',
-     function(translationService, $location, searchService, $rootScope, authenticationService, authenticatedUserService) {
+    app.directive('dopHeader', ['translationService', '$location', 'searchService', 'authenticationService', 'authenticatedUserService',
+     function(translationService, $location, searchService, authenticationService, authenticatedUserService) {
         return {
             scope: true,
             templateUrl: 'app/directives/header/header.html',
-            controller: function ($scope, $location, $rootScope, authenticationService, authenticatedUserService) {
+            controller: function ($scope, $location, authenticationService, authenticatedUserService) {
                 $scope.showLanguageSelection = false;
                 $scope.showSearchBox = false;
                 $scope.selectedLanguage = translationService.getLanguage();
-                $rootScope.searchFields = {};
-                $rootScope.searchFields.searchQuery = searchService.getQuery();
+                $scope.searchFields = {};
+                $scope.searchFields.searchQuery = searchService.getQuery();
 
                 $scope.languageSelectClick = function() {
                     $scope.showLanguageSelection = !$scope.showLanguageSelection; 
@@ -52,8 +52,8 @@ define(['app'], function(app)
                 
                 $scope.search = function() {
                     $scope.closeSearchBox();
-                    if (!isEmpty($rootScope.searchFields.searchQuery)) {
-                        searchService.setSearch($rootScope.searchFields.searchQuery);
+                    if (!isEmpty($scope.searchFields.searchQuery)) {
+                        searchService.setSearch($scope.searchFields.searchQuery);
                         $location.url(searchService.getURL());
                     }
                 };
@@ -69,6 +69,12 @@ define(['app'], function(app)
                     }, function(user) {
                         $scope.user = user;
                         $('#dropdowned').collapse('hide');
+                }, true);
+
+                $scope.$watch(function () {
+                        return searchService.getQuery();
+                    }, function(query) {
+                        $scope.searchFields.searchQuery = query;
                 }, true);
             }
         };

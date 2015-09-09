@@ -1,6 +1,6 @@
 define(['app'], function(app) {
 
-	app.factory('searchService',['$location', '$rootScope', function($location, $rootScope) {
+	app.factory('searchService',['$location', function($location) {
 		var searchURLbase = "search/result?q=";
         var subjectURL = "&subject=";
         var resourceTypeURL = "&resource_type=";
@@ -36,7 +36,6 @@ define(['app'], function(app) {
 			
 			setSearch : function(query) {
 				searchQuery = query;
-				$rootScope.searchFields.searchQuery = query;
 			},
 			
             setSubject : function(subject) {
