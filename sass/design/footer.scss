@@ -1,6 +1,8 @@
 .footer {
     
-    position: absolute; bottom: 0; width: 100%;
+    position: absolute; 
+    bottom: 0; 
+    width: 100%;
     
     .footer-outer {
         
@@ -22,7 +24,9 @@
 
             .copyright {
 
-                padding: 15px 0; font-size: 13px; color: $font-color-grey-medium;
+                padding: 15px 0; 
+                font-size: 13px; 
+                color: $font-color-grey-medium;
                 
                 @media screen and (max-width: $screen-md) {
                     padding: 10px 0;

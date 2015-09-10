@@ -1,12 +1,44 @@
- .navbar-searchbox {position: absolute; width: 100%; padding: 11px 15px; z-index: 9999;
+ .navbar-searchbox {
+     
+     position: absolute; 
+     width: 100%; 
+     padding: 11px 15px; 
+     z-index: 9999;
     
-    .input-group {padding: 7px 13px; bordr: 1px solid $navbar-default-bg; @include border-radius(3px); @include box-shadow(0, 0, 2px, 0, rgba(0, 0, 0, 0.4)); background: #FFF;
+    .input-group {
         
-        .form-control {width: 100%; height: 23px; margin: 0; padding: 0; border: 0; border-bottom: 1px solid $navbar-light-bg; @include box-shadow(0, 0, 0, 0, #FFF); font-size: 15px}
+        padding: 7px 13px; 
+        border: 1px solid $navbar-default-bg; 
+        @include border-radius(3px); 
+        @include box-shadow(0, 0, 2px, 0, rgba(0, 0, 0, 0.4)); 
+        background: #FFF;
         
-        .input-group-btn {border-bottom: 1px solid $navbar-light-bg;
+        .form-control {
             
-            button {padding: 1px 11px; border: 0; background: #FFF; font-size: 14px; color: $navbar-default-bg}
+            width: 100%; 
+            height: 23px; 
+            margin: 0; 
+            padding: 0; 
+            border: 0; 
+            border-bottom: 1px solid $navbar-light-bg; 
+            @include box-shadow(0, 0, 0, 0, #FFF); 
+            font-size: 15px
+        
+        }
+        
+        .input-group-btn {
+            
+            border-bottom: 1px solid $navbar-light-bg;
+            
+            button {
+                
+                padding: 1px 11px; 
+                border: 0; 
+                background: #FFF; 
+                font-size: 14px; 
+                color: $navbar-default-bg
+            
+            }
         }
     }
  
@@ -27,27 +59,72 @@
  
 .navbar {
     
-    margin-bottom: 0; border: 0 !important; z-index: 100;
+    margin-bottom: 0; 
+    border: 0 !important; 
+    z-index: 100;
     
     @media screen and (max-width: $screen-md) {
         min-height: 60px;
     }
     
-    .navbar-form {margin-top: 17px !important; margin-bottom: 18px !important; 
+    .navbar-form {
+        
+        margin-top: 17px !important; 
+        margin-bottom: 18px !important; 
 
-        .input-group {padding: 9px 13px; @include border-radius(3px); background: #FFF;
-
-            .form-control {width: 205px; height: 27px; margin: 0; padding: 4px 0; border: 0; border-bottom: 1px solid #92c8d9; @include box-shadow-spec(0, 0, 0, 0, #FFF); font-size: 17px};
+        .input-group {
             
-            .input-group-btn {border-bottom: 1px solid #92c8d9;
+            padding: 9px 13px; 
+            @include border-radius(3px); 
+            background: #FFF;
+
+            .form-control {
                 
-                button {padding: 1px 12px; border: 0; background: #FFF; font-size: 16px; color: $navbar-default-bg}
+                width: 205px; 
+                height: 27px; 
+                margin: 0; 
+                padding: 4px 0; 
+                border: 0; 
+                border-bottom: 1px solid #92c8d9; 
+                @include box-shadow-spec(0, 0, 0, 0, #FFF); 
+                font-size: 17px
+            
+            }
+            
+            .input-group-btn {
                 
-                :hover {background: #FFF}
+                border-bottom: 1px solid #92c8d9;
                 
-                :focus {background: #FFF; @include box-shadow-spec(0, 0, 0, 0, #FFF); outline: none}
+                button {
+                    
+                    padding: 1px 12px; 
+                    border: 0; 
+                    background: #FFF; 
+                    font-size: 16px; 
+                    color: $navbar-default-bg
                 
-                :active {background: #FFF; @include box-shadow-spec(0, 0, 0, 0, #FFF)}
+                }
+                
+                :hover {
+                    
+                    background: #FFF
+                
+                }
+                
+                :focus {
+                    
+                    background: #FFF; 
+                    @include box-shadow-spec(0, 0, 0, 0, #FFF); 
+                    outline: none
+                
+                }
+                
+                :active {
+                    
+                    background: #FFF; 
+                    @include box-shadow-spec(0, 0, 0, 0, #FFF)
+                
+                }
             
             }
         }
@@ -55,13 +132,21 @@
     
     .navbar-toggle {
         @media screen and (max-width: $screen-md) {
-            margin-top: 13px; margin-bottom: 13px; margin-left: 15px;
+            
+            margin-top: 13px; 
+            margin-bottom: 13px; 
+            margin-left: 15px;
+            
         }
     }
     
     .navbar-search-toggle {
         
-        padding-left: 35px; padding-right: 20px; line-height: 60px; font-size: 25px; color: #FFF;
+        padding-left: 35px; 
+        padding-right: 20px; 
+        line-height: 60px; 
+        font-size: 25px; 
+        color: #FFF;
         
         @media screen and (min-width: $screen-md) {
             display: none;
@@ -159,7 +244,12 @@
             & > li > a {
                 padding-left: 40px;
                 
-                .fa {position: absolute; margin-left: -20px; margin-right: 10px; line-height: $line-height-base}
+                .fa {
+                    position: absolute; 
+                    margin-left: -20px; 
+                    margin-right: 10px; 
+                    line-height: $line-height-base
+                }
             }
         }
     }
@@ -186,9 +276,13 @@
     
 }
 
-.navbar-default {@include box-shadow(0 -3px 4px -3px rgba(0, 0, 0, 0.35) inset)}
+.navbar-default {
+    @include box-shadow(0 -3px 4px -3px rgba(0, 0, 0, 0.35) inset)
+}
 
-.navbar-nav {margin-left: 20px !important;
+.navbar-nav {
+    
+    margin-left: 20px !important;
              
              
     > li {
@@ -205,30 +299,56 @@
     
     .navbar-link-lang {
         
-        > a {width: 90px; padding-top: 28px; padding-bottom: 25px; 
+        > a {
+            width: 90px; 
+            padding-top: 28px; 
+            padding-bottom: 25px; 
              
-            > span {padding-bottom: 2px; border-bottom: 1px solid $navbar-light-bg}
+            > span {
+                padding-bottom: 2px; 
+                border-bottom: 1px solid $navbar-light-bg
+            }
         
         }
         
-        a {padding-left: 10px; padding-right: 10px; font-size: 17px;
+        a {
+            padding-left: 10px; 
+            padding-right: 10px; 
+            font-size: 17px;
             
-            span {display: inline-block;
+            span {
+                display: inline-block;
             
-                .fa {margin-left: 25px; line-height: 21px}
+                .fa {
+                    margin-left: 25px; 
+                    line-height: 21px
+                }
             }
         }
         
         
     }
     
-    .navbar-submenu {position: absolute; top: 19px; padding: 9px 0; @include border-radius(3px); @include box-shadow-spec(0, 0, 2px, 0, rgba(0, 0, 0, 0.12)); background: $navbar-dark-bg; list-style: none; z-index: 10;
+    .navbar-submenu {
+        position: absolute; 
+        top: 19px; 
+        padding: 9px 0; 
+        @include border-radius(3px); 
+        @include box-shadow-spec(0, 0, 2px, 0, rgba(0, 0, 0, 0.12)); 
+        background: $navbar-dark-bg; 
+        list-style: none; 
+        z-index: 10;
         
         > li:first-child {
             
-            a {margin-bottom: 9px; line-height: 21px;
+            a {
+                margin-bottom: 9px; 
+                line-height: 21px;
                 
-                span {display: inline-block; padding-bottom: 2px; border-bottom: 1px solid $navbar-light-bg;
+                span {
+                    display: inline-block; 
+                    padding-bottom: 2px; 
+                    border-bottom: 1px solid $navbar-light-bg;
                 
                     .fa {
                         margin-left: 25px; 

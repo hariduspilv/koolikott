@@ -4,23 +4,34 @@
         
         padding-bottom: 15px;
 
-        .item {padding-right: 25px;
+        .item {
+            
+            padding-right: 25px;
             
             .label {
-                display: block; padding: 0; text-align: left; font-size: 11px; font-weight: normal; color: $font-color-grey-medium;
+                display: block; 
+                padding: 0; 
+                text-align: left; 
+                font-size: 11px; 
+                font-weight: normal; 
+                color: $font-color-grey-medium;
             }
         }
     }
     
     .description {
         
-        margin-bottom: 30px; border-right: 1px solid #DDD;
+        margin-bottom: 30px; 
+        border-right: 1px solid #DDD;
     
         .heading {
+            
             padding-bottom: 15px;
             
             h1 {
-                margin: 0; padding: 0
+                
+                margin: 0;
+                padding: 0
             }
         };
         .authors {
@@ -28,7 +39,9 @@
             padding-bottom: 15px;
             
             a, .item {
-                display: inline-block; margin-right: 15px
+                
+                display: inline-block;
+                margin-right: 15px
             }
         }
 
@@ -38,7 +51,8 @@
     .dl-horizontal {
         
         dt {
-            width: 90px; font-weight: normal
+            width: 90px; 
+            font-weight: normal
         };
         
         dd {
@@ -51,26 +65,47 @@
     };
     .preview {
         
-        @include border-radius(3px); @include box-shadow-spec(0, 0, 2px, 0, #999); background: #FFF; overflow: hidden; 
+        @include border-radius(3px); @include box-shadow-spec(0, 0, 2px, 0, #999); 
+        background: #FFF; 
+        overflow: hidden; 
         
         header {
             
-            padding: 20px 40px; background: #F4F4F4;
+            padding: 20px 40px; 
+            background: #F4F4F4;
             
-            .fa {margin-right: 2px}
+            .fa {
+                margin-right: 2px
+            }
             
         }; 
         article {
             
             padding: 45px 40px;
             
-            .material-type-link {position: relative; padding-left: 25px;
+            .material-type-link {
                 
-                .fa-link {position: absolute; top: 5px; left: 0; font-size: 20px}
+                position: relative; 
+                padding-left: 25px;
                 
-                .item-label {display: block; font-size: 17px}
+                .fa-link {
+                    
+                    position: absolute; 
+                    top: 5px; 
+                    left: 0; 
+                    font-size: 20px
+                }
                 
-                .item-link {display: block; font-size: 13px; color: $font-color-grey-medium}
+                .item-label {
+                    display: block; 
+                    font-size: 17px
+                }
+                
+                .item-link {
+                    display: block; 
+                    font-size: 13px; 
+                    color: $font-color-grey-medium
+                }
                 
             }
         }
@@ -81,11 +116,17 @@
         padding-top: 20px;
                
         .label {
-            display: block; padding: 0; text-align: left; font-size: 11px; font-weight: normal; color: $font-color-grey-medium;
+            display: block; 
+            padding: 0; 
+            text-align: left; 
+            font-size: 11px; 
+            font-weight: normal; 
+            color: $font-color-grey-medium;
         }
                
         a, .item {
-            display: inline-block; margin-right: 15px
+            display: inline-block; 
+            margin-right: 15px
         }
     
     }

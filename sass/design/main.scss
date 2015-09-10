@@ -1,10 +1,19 @@
-html {position: relative; min-height: 100%}
+html {
+    position: relative; 
+    min-height: 100%
+}
 
-body {margin-bottom: 120px !important; font-weight: 400}
+body {
+    margin-bottom: 120px !important; 
+    font-weight: 400
+}
 
-a:hover {cursor: pointer}
+a:hover {
+    cursor: pointer
+}
 
-.main {padding-top: 80px;
+.main {
+    padding-top: 80px;
 
     @media screen and (max-width: $screen-md) {
         padding-top: 30px;
@@ -12,8 +21,14 @@ a:hover {cursor: pointer}
 
 }
 
-.btn, input, .btn-default-focus {outline: none !important;
+.btn, input, .btn-default-focus {
     
-    &:focus, &:active {outline: none !important}
+    outline: none !important;
+    
+    &:focus, &:active {
+        
+        outline: none !important
+    
+    }
     
 }
