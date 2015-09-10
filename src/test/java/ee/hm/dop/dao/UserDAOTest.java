@@ -81,10 +81,13 @@ public class UserDAOTest extends DatabaseTestBase {
     }
 
     @Test
-    public void countUsersWithSameFullName() {
-        assertEquals(Long.valueOf(1), userDAO.countUsersWithSameFullName("Mati", "Maasikas"));
-        assertEquals(Long.valueOf(1), userDAO.countUsersWithSameFullName("Peeter", "Paan"));
-        assertEquals(Long.valueOf(2), userDAO.countUsersWithSameFullName("Voldemar", "Vapustav"));
+    public void countUsersWithSameUsernameIgnoringAccents() {
+        assertEquals(Long.valueOf(2), userDAO.countUsersWithSameUsername("mati.maasikas"));
+    }
+
+    @Test
+    public void countUsersWithSameUsernameNoResults() {
+        assertEquals(Long.valueOf(0), userDAO.countUsersWithSameUsername("there.is.no.such.username"));
     }
 
     @Test

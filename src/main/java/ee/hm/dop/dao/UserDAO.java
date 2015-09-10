@@ -1,5 +1,7 @@
 package ee.hm.dop.dao;
 
+import java.util.List;
+
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
@@ -26,8 +28,8 @@ public class UserDAO {
     }
 
     public User findUserByUsername(String username) {
-        TypedQuery<User> findByUsername = entityManager.createQuery(
-                "SELECT u FROM User u WHERE u.username = :username", User.class);
+        TypedQuery<User> findByUsername = entityManager.createQuery("SELECT u FROM User u WHERE u.username = :username",
+                User.class);
 
         User user = null;
         try {
@@ -39,17 +41,26 @@ public class UserDAO {
         return user;
     }
 
-    public Long countUsersWithSameFullName(String name, String surname) {
-        TypedQuery<Long> countByFullName = entityManager.createQuery(
-                "SELECT COUNT(u.id) FROM User u WHERE u.name = :name AND u.surname = :surname", Long.class);
+    /**
+     * Counts the amount of users who have the same username, excluding the
+     * number at the end. For example, users <i>john.smith</i> and
+     * <i>john.smith2</i> are considered to have the same username.
+     * 
+     * @param username
+     *            the username to search for
+     * @return the count of users with the same username, excluding the number
+     */
+    public Long countUsersWithSameUsername(String username) {
+        TypedQuery<User> findByUsername = entityManager
+                .createQuery("SELECT u FROM User u WHERE u.username LIKE :username", User.class);
 
-        countByFullName.setParameter("name", name).setParameter("surname", surname);
-
+        List<User> users = findByUsername.setParameter("username", username + "%").getResultList();
         Long count = 0L;
-        try {
-            count = countByFullName.getSingleResult();
-        } catch (Exception e) {
-            // ignore
+
+        for (User user : users) {
+            if (user.getUsername().equals(username) || user.getUsername().matches(username + "\\d+")) {
+                count++;
+            }
         }
 
         return count;

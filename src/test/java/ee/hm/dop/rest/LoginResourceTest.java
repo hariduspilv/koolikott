@@ -80,6 +80,14 @@ public class LoginResourceTest extends ResourceIntegrationTestBase {
     }
 
     @Test
+    public void loginSameNameWithAccent() {
+        AuthenticatedUser authenticatedUser = getTarget("login/idCard", new LoginFilterAccentInName()).request()
+                .accept(MediaType.APPLICATION_JSON).get(AuthenticatedUser.class);
+        assertNotNull(authenticatedUser.getToken());
+        assertEquals("peeter.paan2", authenticatedUser.getUser().getUsername());
+    }
+
+    @Test
     public void makeTaatRequest() throws Exception {
         Response response = doGet("login/taat");
         assertNotNull(response);
@@ -101,21 +109,21 @@ public class LoginResourceTest extends ResourceIntegrationTestBase {
         List<NameValuePair> parameters = URLEncodedUtils.parse(new URI(location), "UTF-8");
         for (NameValuePair parameter : parameters) {
             switch (parameter.getName()) {
-            case "SAMLRequest":
-                samlRequest = parameter.getValue();
-                break;
-            case "RelayState":
-                token = parameter.getValue();
-                break;
-            case "Signature":
-                signature = parameter.getValue();
-                break;
-            case "SigAlg":
-                signatureAlgorithm = parameter.getValue();
-                break;
-            default:
-                fail("Unexpected parameter in request URL.");
-                break;
+                case "SAMLRequest":
+                    samlRequest = parameter.getValue();
+                    break;
+                case "RelayState":
+                    token = parameter.getValue();
+                    break;
+                case "Signature":
+                    signature = parameter.getValue();
+                    break;
+                case "SigAlg":
+                    signatureAlgorithm = parameter.getValue();
+                    break;
+                default:
+                    fail("Unexpected parameter in request URL.");
+                    break;
             }
         }
 
@@ -193,7 +201,7 @@ public class LoginResourceTest extends ResourceIntegrationTestBase {
     }
 
     @Test
-    public void getAuthenticatedUser(){
+    public void getAuthenticatedUser() {
         String token = "token";
         Response response = doGet("login/getAuthenticatedUser?token=" + token);
         AuthenticatedUser authenticatedUser = response.readEntity(new GenericType<AuthenticatedUser>() {
@@ -203,14 +211,13 @@ public class LoginResourceTest extends ResourceIntegrationTestBase {
     }
 
     @Test
-    public void getAuthenticatedUserWrongToken(){
+    public void getAuthenticatedUserWrongToken() {
         String token = "wrongToken";
         Response response = doGet("login/getAuthenticatedUser?token=" + token);
         AuthenticatedUser authenticatedUser = response.readEntity(new GenericType<AuthenticatedUser>() {
         });
         assertNull(authenticatedUser);
     }
-
 
     private AuthnRequest decodeAuthnRequest(String request) throws Exception {
         InputStream inputStream = base64DecodeAndInflate(request);
@@ -276,6 +283,27 @@ public class LoginResourceTest extends ResourceIntegrationTestBase {
 
             List<Object> list2 = new ArrayList<>();
             list2.add("FAILED");
+            requestContext.getHeaders().put("SSL_AUTH_VERIFY", list2);
+        }
+    }
+
+    @Provider
+    public static class LoginFilterAccentInName implements ClientRequestFilter {
+
+        @Override
+        public void filter(ClientRequestContext requestContext) throws IOException {
+            List<Object> list1 = new ArrayList<>();
+            list1.add("serialNumber=55555555555");
+            list1.add("GN=PEETER");
+            list1.add("SN=PÄÄN");
+            list1.add("CN=PEETER,PÄÄN,55555555555");
+            list1.add("OU=authentication");
+            list1.add("O=ESTEID");
+            list1.add("C=EE");
+            requestContext.getHeaders().put("SSL_CLIENT_S_DN", list1);
+
+            List<Object> list2 = new ArrayList<>();
+            list2.add("SUCCESS");
             requestContext.getHeaders().put("SSL_AUTH_VERIFY", list2);
         }
     }

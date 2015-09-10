@@ -2,6 +2,8 @@ package ee.hm.dop.service;
 
 import static java.lang.String.format;
 
+import java.text.Normalizer;
+
 import javax.inject.Inject;
 
 import org.apache.commons.lang3.text.WordUtils;
@@ -50,14 +52,19 @@ public class UserService {
     }
 
     protected String generateUsername(String name, String surname) {
-        Long count = userDAO.countUsersWithSameFullName(name, surname);
         String username = name.trim().toLowerCase() + "." + surname.trim().toLowerCase();
         username = username.replaceAll("\\s+", ".");
 
+        // Normalize the username and remove all non-ascii characters
+        username = Normalizer.normalize(username, Normalizer.Form.NFD);
+        username = username.replaceAll("[^\\p{ASCII}]", "");
+
+        Long count = userDAO.countUsersWithSameUsername(username);
         if (count > 0) {
             username += String.valueOf(count + 1);
         }
 
         return username;
     }
+
 }

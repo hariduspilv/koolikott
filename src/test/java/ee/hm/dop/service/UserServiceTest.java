@@ -30,8 +30,9 @@ public class UserServiceTest {
         String idCode = "idCode";
         String name = "John";
         String surname = "Smith";
+        String username = "john.smith";
 
-        expect(userDAO.countUsersWithSameFullName(name, surname)).andReturn(0L);
+        expect(userDAO.countUsersWithSameUsername(username)).andReturn(0L);
         expect(userDAO.update(EasyMock.anyObject(User.class))).andReturn(new User());
 
         replay(userDAO);
@@ -48,8 +49,28 @@ public class UserServiceTest {
         String name = " John\tSmith ";
         String surname = " Second  IV ";
         Long count = 0L;
-        String expectedUsername = "john.smith.second.iv";
-        expect(userDAO.countUsersWithSameFullName(name, surname)).andReturn(count);
+        String username = "john.smith.second.iv";
+
+        expect(userDAO.countUsersWithSameUsername(username)).andReturn(count);
+
+        replay(userDAO);
+
+        String nextUsername = userService.generateUsername(name, surname);
+
+        verify(userDAO);
+
+        assertEquals(username, nextUsername);
+    }
+
+    @Test
+    public void generateUsernameWhenNameIsTaken() {
+        String name = "John";
+        String surname = "Smith";
+        String usernameWithoutNumber = "john.smith";
+        Long count = 2L;
+        String expectedUsername = "john.smith3";
+
+        expect(userDAO.countUsersWithSameUsername(usernameWithoutNumber)).andReturn(count);
 
         replay(userDAO);
 
@@ -61,12 +82,13 @@ public class UserServiceTest {
     }
 
     @Test
-    public void generateUsernameWhenNameIsTaken() {
-        String name = "John";
-        String surname = "Smith";
-        Long count = 2L;
-        String expectedUsername = "john.smith3";
-        expect(userDAO.countUsersWithSameFullName(name, surname)).andReturn(count);
+    public void generateUsernameAndRemoveAccents() {
+        String name = "Õnne Ülle Ärni";
+        String surname = "Öpik";
+        Long count = 0L;
+        String username = "onne.ulle.arni.opik";
+
+        expect(userDAO.countUsersWithSameUsername(username)).andReturn(count);
 
         replay(userDAO);
 
@@ -74,6 +96,7 @@ public class UserServiceTest {
 
         verify(userDAO);
 
-        assertEquals(expectedUsername, nextUsername);
+        assertEquals(username, nextUsername);
     }
+
 }

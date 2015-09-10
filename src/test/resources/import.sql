@@ -33,6 +33,8 @@ insert into User(id, userName, name, surName, idCode, role) values (1, 'mati.maa
 insert into User(id, userName, name, surName, idCode, role) values (2, 'peeter.paan', 'Peeter', 'Paan', '38011550077', 'USER');
 insert into User(id, userName, name, surName, idCode, role) values (3, 'voldemar.vapustav', 'Voldemar', 'Vapustav', '37066990099', 'USER');
 insert into User(id, userName, name, surName, idCode, role) values (4, 'voldemar.vapustav2', 'Voldemar', 'Vapustav', '15066990099', 'USER');
+insert into User(id, userName, name, surName, idCode, role) values (5, 'mati.maasikas2', 'Mäti', 'Maasikas', '39011220012', 'USER');
+insert into User(id, userName, name, surName, idCode, role) values (6, 'mati.maasikas-vaarikas', 'Mati', 'Maasikas-Vaarikas', '39011220013', 'USER');
 
 -- AuthenticatedUser
 
