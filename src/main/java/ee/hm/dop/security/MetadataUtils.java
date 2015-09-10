@@ -27,22 +27,22 @@ import ee.hm.dop.utils.FileUtils;
 
 public class MetadataUtils {
 
-    public static X509Credential getCredential(String credentialPath) throws Exception {
+    public static X509Credential getCredential(String credentialPath, String entityId) throws Exception {
         DocumentBuilder docBuilder = getDocumentBuilder();
 
         Element metadataRoot = getElement(credentialPath, docBuilder);
 
         MetadataCredentialResolver credentialResolver = getMetadataCredentialResolver(metadataRoot);
 
-        CriteriaSet criteriaSet = getCriterias();
+        CriteriaSet criteriaSet = getCriterias(entityId);
 
         return (X509Credential) credentialResolver.resolveSingle(criteriaSet);
     }
 
-    private static CriteriaSet getCriterias() {
+    private static CriteriaSet getCriterias(String entityId) {
         CriteriaSet criteriaSet = new CriteriaSet();
         criteriaSet.add(new MetadataCriteria(IDPSSODescriptor.DEFAULT_ELEMENT_NAME, SAMLConstants.SAML20P_NS));
-        criteriaSet.add(new EntityIDCriteria("https://reos.taat.edu.ee/saml2/idp/metadata.php"));
+        criteriaSet.add(new EntityIDCriteria(entityId));
         return criteriaSet;
     }
 

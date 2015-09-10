@@ -95,23 +95,17 @@ public class LogInResource {
     @GET
     @Path("/taat")
     @Produces(MediaType.APPLICATION_JSON)
-    public void makeTaatRequest() {
-        AuthnRequest authnRequest = taatService.buildAuthnRequest();
+    public void makeTaatRequest() throws MessageEncodingException {
         BasicSAMLMessageContext<SAMLObject, AuthnRequest, SAMLObject> context = taatService
-                .buildMessageContext(authnRequest, response);
-
-        try {
-            encoder.encode(context);
-        } catch (MessageEncodingException e) {
-            logger.error("Error while encoding SAML message context.");
-        }
+                .buildMessageContext(response);
+        encoder.encode(context);
     }
 
     @POST
     @Path("/taat")
     public Response taatAuthenticate(MultivaluedMap<String, String> formParams) throws URISyntaxException {
-        AuthenticatedUser authenticatedUser = taatService
-                .authenticate(formParams.getFirst("SAMLResponse"), formParams.getFirst("RelayState"));
+        AuthenticatedUser authenticatedUser = taatService.authenticate(formParams.getFirst("SAMLResponse"),
+                formParams.getFirst("RelayState"));
         URI location = new URI("../#/loginRedirect?token=" + authenticatedUser.getToken());
 
         return Response.temporaryRedirect(location).build();

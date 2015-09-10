@@ -50,9 +50,9 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
 import ee.hm.dop.common.test.ResourceIntegrationTestBase;
+import ee.hm.dop.dao.AuthenticationStateDAO;
 import ee.hm.dop.model.AuthenticatedUser;
 import ee.hm.dop.model.AuthenticationState;
-import ee.hm.dop.service.AuthenticationStateService;
 
 public class LoginResourceTest extends ResourceIntegrationTestBase {
 
@@ -60,7 +60,7 @@ public class LoginResourceTest extends ResourceIntegrationTestBase {
     private Configuration configuration;
 
     @Inject
-    private AuthenticationStateService authenticationStateService;
+    private AuthenticationStateDAO authenticationStateDAO;
 
     @Context
     private HttpServletRequest request;
@@ -143,10 +143,10 @@ public class LoginResourceTest extends ResourceIntegrationTestBase {
         assertNotNull(signature);
         assertNotNull(signatureAlgorithm);
 
-        AuthenticationState authenticationState = authenticationStateService.getAuthenticationStateByToken(token);
+        AuthenticationState authenticationState = authenticationStateDAO.findAuthenticationStateByToken(token);
         assertNotNull(authenticationState);
 
-        authenticationStateService.delete(authenticationState);
+        authenticationStateDAO.delete(authenticationState);
     }
 
     @Test

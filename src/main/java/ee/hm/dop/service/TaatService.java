@@ -1,31 +1,31 @@
 package ee.hm.dop.service;
 
-import static ee.hm.dop.guice.GuiceInjector.getInjector;
 import static ee.hm.dop.utils.ConfigurationProperties.KEYSTORE_FILENAME;
 import static ee.hm.dop.utils.ConfigurationProperties.KEYSTORE_PASSWORD;
 import static ee.hm.dop.utils.ConfigurationProperties.KEYSTORE_SIGNING_ENTITY_ID;
 import static ee.hm.dop.utils.ConfigurationProperties.KEYSTORE_SIGNING_ENTITY_PASSWORD;
 import static ee.hm.dop.utils.ConfigurationProperties.TAAT_ASSERTION_CONSUMER_SERVICE_INDEX;
 import static ee.hm.dop.utils.ConfigurationProperties.TAAT_CONNECTION_ID;
+import static ee.hm.dop.utils.ConfigurationProperties.TAAT_METADATA_ENTITY_ID;
+import static ee.hm.dop.utils.ConfigurationProperties.TAAT_METADATA_FILEPATH;
 import static ee.hm.dop.utils.ConfigurationProperties.TAAT_SSO;
-import static org.opensaml.Configuration.getUnmarshallerFactory;
+import static org.opensaml.xml.Configuration.getUnmarshallerFactory;
 
 import java.io.ByteArrayInputStream;
-import java.io.IOException;
 import java.math.BigInteger;
 import java.security.KeyStore;
 import java.security.SecureRandom;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.StringJoiner;
 
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletResponse;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
 
 import org.apache.commons.configuration.Configuration;
-import org.apache.xml.security.exceptions.Base64DecodingException;
 import org.apache.xml.security.utils.Base64;
 import org.joda.time.DateTime;
 import org.opensaml.common.SAMLObject;
@@ -53,40 +53,49 @@ import org.opensaml.xml.security.x509.X509Credential;
 import org.opensaml.xml.signature.Signature;
 import org.opensaml.xml.signature.SignatureValidator;
 import org.opensaml.xml.validation.ValidationException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-import org.xml.sax.SAXException;
 
-import com.google.inject.Singleton;
-
+import ee.hm.dop.dao.AuthenticationStateDAO;
 import ee.hm.dop.model.AuthenticatedUser;
 import ee.hm.dop.model.AuthenticationState;
 import ee.hm.dop.model.User;
 import ee.hm.dop.security.KeyStoreUtils;
 import ee.hm.dop.security.MetadataUtils;
 
-@Singleton
 public class TaatService {
 
-    private static final Logger logger = LoggerFactory.getLogger(TaatService.class);
+    private static final String SCOPED_AFFILIATION = "urn:mace:dir:attribute-def:eduPersonScopedAffiliation";
+
+    private static final String AFFILIATION = "urn:mace:dir:attribute-def:eduPersonAffiliation";
+
+    private static final String MAIL = "urn:mace:dir:attribute-def:mail";
+
+    private static final String HOME_ORGANIZATION = "schacHomeOrganization";
+
+    private static final String NAME = "urn:mace:dir:attribute-def:cn";
+
+    private static final String SURNAME = "urn:mace:dir:attribute-def:sn";
+
+    private static final String ID_CODE = "schacPersonalUniqueID";
 
     @Inject
     private Configuration configuration;
 
-    protected SecureRandom random;
+    @Inject
+    private AuthenticationStateDAO authenticationStateDAO;
 
-    private KeyStore keyStore;
+    @Inject
+    private LoginService loginService;
 
-    protected Credential credential;
+    @Inject
+    private UserService userService;
 
-    private AuthenticatedUser authenticatedUser;
+    private static final SecureRandom random = new SecureRandom();
 
-    public TaatService() {
-        random = new SecureRandom();
-        credential = getCredential();
-    }
+    private static KeyStore keyStore;
+
+    private static Credential credential;
 
     private KeyStore getKeyStore() {
         if (keyStore == null) {
@@ -98,7 +107,7 @@ public class TaatService {
         return keyStore;
     }
 
-    public AuthnRequest buildAuthnRequest() {
+    private AuthnRequest buildAuthnRequest() {
         int assertionConsumerServiceIndex = Integer
                 .valueOf(configuration.getString(TAAT_ASSERTION_CONSUMER_SERVICE_INDEX));
 
@@ -106,8 +115,8 @@ public class TaatService {
         NameIDPolicy nameIdPolicy = getNameIdPolicy();
 
         AuthnRequestBuilder authRequestBuilder = new AuthnRequestBuilder();
-        AuthnRequest authnRequest = authRequestBuilder
-                .buildObject("urn:oasis:names:tc:SAML:2.0:protocol", "AuthnRequest", "samlp");
+        AuthnRequest authnRequest = authRequestBuilder.buildObject("urn:oasis:names:tc:SAML:2.0:protocol",
+                "AuthnRequest", "samlp");
         authnRequest.setID(new BigInteger(130, random).toString(32));
         authnRequest.setIssueInstant(new DateTime());
         authnRequest.setAssertionConsumerServiceIndex(assertionConsumerServiceIndex);
@@ -118,7 +127,7 @@ public class TaatService {
         return authnRequest;
     }
 
-    public BasicSAMLMessageContext<SAMLObject, AuthnRequest, SAMLObject> buildMessageContext(AuthnRequest authnRequest,
+    public BasicSAMLMessageContext<SAMLObject, AuthnRequest, SAMLObject> buildMessageContext(
             HttpServletResponse response) {
         String token = new BigInteger(130, random).toString(32);
         createAuthenticationState(token);
@@ -126,7 +135,7 @@ public class TaatService {
         HttpServletResponseAdapter responseAdapter = new HttpServletResponseAdapter(response, true);
         BasicSAMLMessageContext<SAMLObject, AuthnRequest, SAMLObject> context = new BasicSAMLMessageContext<>();
         context.setPeerEntityEndpoint(getEndpoint());
-        context.setOutboundSAMLMessage(authnRequest);
+        context.setOutboundSAMLMessage(buildAuthnRequest());
         context.setOutboundSAMLMessageSigningCredential(getSigningCredential());
         context.setOutboundMessageTransport(responseAdapter);
         context.setRelayState(token);
@@ -135,200 +144,183 @@ public class TaatService {
     }
 
     public AuthenticatedUser authenticate(String responseMessage, String authenticationStateToken) {
-        LoginService loginService = newLoginService();
-        AuthenticationStateService authenticationStateService = newAuthenticationStateService();
-        Response response;
+        validateAuthenticationToken(authenticationStateToken);
 
-        AuthenticationState authenticationState = authenticationStateService
-                .getAuthenticationStateByToken(authenticationStateToken);
-        if (authenticationState == null) {
-            throw new RuntimeException("Error validating authentication state.");
-        } else {
-            authenticationStateService.delete(authenticationState);
+        Response response = getResponse(responseMessage);
+        validateResponseSignature(response);
+
+        Map<String, String> dataMap = parseAttributes(response);
+
+        AuthenticatedUser authenticatedUser = getAuthenticatedUser(dataMap);
+
+        User user = userService.getUserByIdCode(dataMap.get(ID_CODE));
+        if (user == null) {
+            user = userService.create(dataMap.get(ID_CODE), dataMap.get(NAME), dataMap.get(SURNAME));
+            authenticatedUser.setFirstLogin(true);
         }
 
-        try {
-            response = getResponse(responseMessage);
-        } catch (Exception e) {
-            throw new RuntimeException("Error processing data received from Taat.", e);
-        }
-
-        Signature sig = response.getSignature();
-
-        try {
-            SignatureValidator validator = getSignatureValidator(credential);
-            validator.validate(sig);
-        } catch (ValidationException e) {
-            throw new RuntimeException("Error validating signature", e);
-        }
-
-        getAuthenticatedUser(response);
+        authenticatedUser.setUser(user);
 
         return loginService.createAuthenticatedUser(authenticatedUser);
     }
 
-    protected SignatureValidator getSignatureValidator(Credential credential) {
-        return new SignatureValidator(credential);
+    private void validateAuthenticationToken(String authenticationStateToken) {
+        AuthenticationState authenticationState = authenticationStateDAO
+                .findAuthenticationStateByToken(authenticationStateToken);
+        if (authenticationState == null) {
+            throw new RuntimeException("Error validating authentication state.");
+        } else {
+            authenticationStateDAO.delete(authenticationState);
+        }
     }
 
-    protected Issuer getIssuer(String connectionId) {
+    private void validateResponseSignature(Response response) {
+        Signature sig = response.getSignature();
+
+        try {
+            SignatureValidator validator = new SignatureValidator(getCredential());
+            validator.validate(sig);
+        } catch (ValidationException e) {
+            throw new RuntimeException("Error validating signature", e);
+        }
+    }
+
+    private Issuer getIssuer(String connectionId) {
         IssuerBuilder issuerBuilder = new IssuerBuilder();
         Issuer issuer = issuerBuilder.buildObject("urn:oasis:names:tc:SAML:2.0:assertion", "Issuer", "saml");
         issuer.setValue(connectionId);
         return issuer;
     }
 
-    protected NameIDPolicy getNameIdPolicy() {
+    private NameIDPolicy getNameIdPolicy() {
         NameIDPolicyBuilder nameIdPolicyBuilder = new NameIDPolicyBuilder();
-        NameIDPolicy nameIdPolicy = nameIdPolicyBuilder
-                .buildObject("urn:oasis:names:tc:SAML:2.0:protocol", "NameIDPolicy", "samlp");
+        NameIDPolicy nameIdPolicy = nameIdPolicyBuilder.buildObject("urn:oasis:names:tc:SAML:2.0:protocol",
+                "NameIDPolicy", "samlp");
         nameIdPolicy.setFormat("urn:oasis:names:tc:SAML:2.0:nameid-format:transient");
         nameIdPolicy.setAllowCreate(true);
         return nameIdPolicy;
     }
 
-    protected Endpoint getEndpoint() {
+    private Endpoint getEndpoint() {
         Endpoint endpoint = new EndpointImpl("urn:oasis:names:tc:SAML:2.0:metadata", "Endpoint", "md") {
         };
         endpoint.setLocation(configuration.getString(TAAT_SSO));
         return endpoint;
     }
 
-    protected Credential getSigningCredential() {
+    private Credential getSigningCredential() {
         String entityId = configuration.getString(KEYSTORE_SIGNING_ENTITY_ID);
         String entityPassword = configuration.getString(KEYSTORE_SIGNING_ENTITY_PASSWORD);
         return KeyStoreUtils.getSigningCredential(getKeyStore(), entityId, entityPassword);
     }
 
-    protected AuthenticationState createAuthenticationState(String token) {
+    private AuthenticationState createAuthenticationState(String token) {
         AuthenticationState authenticationState = new AuthenticationState();
         authenticationState.setToken(token);
-        AuthenticationStateService authenticationStateService = newAuthenticationStateService();
-        return authenticationStateService.create(authenticationState);
+        return authenticationStateDAO.createAuthenticationState(authenticationState);
     }
 
-    protected AuthenticationStateService newAuthenticationStateService() {
-        return getInjector().getInstance(AuthenticationStateService.class);
-    }
-
-    private void getAuthenticatedUser(Response response) {
-        List<Attribute> attributes = getAttributes(response);
-
-        authenticatedUser = getUserData(attributes);
-        User user = createUser(authenticatedUser.getUser());
-        authenticatedUser.setUser(user);
-    }
-
-    protected LoginService newLoginService() {
-        return getInjector().getInstance(LoginService.class);
-    }
-
-    protected List<Attribute> getAttributes(Response response) {
-        Assertion assertion = response.getAssertions().get(0);
-        return assertion.getAttributeStatements().get(0).getAttributes();
-    }
-
-    private User createUser(User user) {
-        UserService userService = newUserService();
-
-        User oldUser = userService.getUserByIdCode(user.getIdCode());
-        if (oldUser == null) {
-            authenticatedUser.setFirstLogin(true);
-            user = userService.create(user);
-        } else {
-            user = oldUser;
-        }
-        return user;
-    }
-
-    protected UserService newUserService() {
-        return getInjector().getInstance(UserService.class);
-    }
-
-    protected AuthenticatedUser getUserData(List<Attribute> attributes) {
+    private AuthenticatedUser getAuthenticatedUser(Map<String, String> dataMap) {
         AuthenticatedUser authenticatedUser = new AuthenticatedUser();
-        User user = new User();
+        authenticatedUser.setMails(dataMap.get(MAIL));
+        authenticatedUser.setAffiliations(dataMap.get(AFFILIATION));
+        authenticatedUser.setScopedAffiliations(dataMap.get(SCOPED_AFFILIATION));
+        authenticatedUser.setHomeOrganization(dataMap.get(HOME_ORGANIZATION));
+        return authenticatedUser;
+    }
+
+    private Map<String, String> parseAttributes(Response response) {
+        Assertion assertion = response.getAssertions().get(0);
+        List<Attribute> attributes = assertion.getAttributeStatements().get(0).getAttributes();
+
         StringJoiner mails = new StringJoiner(",");
         StringJoiner affiliations = new StringJoiner(",");
         StringJoiner scopedAffiliations = new StringJoiner(",");
+
+        Map<String, String> attributeMap = new HashMap<>();
 
         for (Attribute attribute : attributes) {
             for (XMLObject xmlObject : attribute.getAttributeValues()) {
                 String value = ((XSStringImpl) xmlObject).getValue();
 
                 switch (attribute.getName()) {
-                case "schacPersonalUniqueID":
-                    String[] parts = value.split(":");
-                    user.setIdCode(parts[parts.length - 1]);
-                    break;
-                case "urn:mace:dir:attribute-def:sn":
-                    user.setSurname(value);
-                    break;
-                case "urn:mace:dir:attribute-def:cn":
-                    user.setName(value);
-                    break;
-                case "schacHomeOrganization":
-                    authenticatedUser.setHomeOrganization(value);
-                    break;
-                case "urn:mace:dir:attribute-def:mail":
-                    mails.add(value);
-                    break;
-                case "urn:mace:dir:attribute-def:eduPersonAffiliation":
-                    affiliations.add(value);
-                    break;
-                case "urn:mace:dir:attribute-def:eduPersonScopedAffiliation":
-                    scopedAffiliations.add(value);
-                    break;
-                default:
-                    break;
+                    case ID_CODE:
+                        String[] parts = value.split(":");
+                        attributeMap.put(ID_CODE, parts[parts.length - 1]);
+                        break;
+                    case SURNAME:
+                        attributeMap.put(SURNAME, value);
+                        break;
+                    case NAME:
+                        attributeMap.put(NAME, value);
+                        break;
+                    case HOME_ORGANIZATION:
+                        attributeMap.put(HOME_ORGANIZATION, value);
+                        break;
+                    case MAIL:
+                        mails.add(value);
+                        break;
+                    case AFFILIATION:
+                        affiliations.add(value);
+                        break;
+                    case SCOPED_AFFILIATION:
+                        scopedAffiliations.add(value);
+                        break;
+                    default:
+                        break;
                 }
+
+                attributeMap.put(MAIL, mails.toString());
+                attributeMap.put(AFFILIATION, affiliations.toString());
+                attributeMap.put(SCOPED_AFFILIATION, scopedAffiliations.toString());
             }
         }
-        authenticatedUser.setMails(mails.toString());
-        authenticatedUser.setAffiliations(affiliations.toString());
-        authenticatedUser.setScopedAffiliations(scopedAffiliations.toString());
-        authenticatedUser.setUser(user);
-        return authenticatedUser;
+
+        return attributeMap;
     }
 
-    protected Response getResponse(String responseMessage)
-            throws Base64DecodingException, ParserConfigurationException, SAXException, IOException,
-            UnmarshallingException {
-        Response response;
-        byte[] base64DecodedResponse = Base64.decode(responseMessage);
-
-        ByteArrayInputStream is = new ByteArrayInputStream(base64DecodedResponse);
-
-        DocumentBuilder docBuilder = getDocumentBuilder();
-
-        Element element = getElement(is, docBuilder);
-
-        response = (Response) getXmlObject(element);
-        return response;
+    private Response getResponse(String responseMessage) {
+        try {
+            byte[] base64DecodedResponse;
+            base64DecodedResponse = Base64.decode(responseMessage);
+            Element element = buildXmlElementFrom(base64DecodedResponse);
+            return (Response) unmarshall(element);
+        } catch (Exception e) {
+            throw new RuntimeException("Error processing data received from Taat.", e);
+        }
     }
 
-    private XMLObject getXmlObject(Element element) throws UnmarshallingException {
+    private XMLObject unmarshall(Element element) throws UnmarshallingException {
         UnmarshallerFactory unmarshallerFactory = getUnmarshallerFactory();
         Unmarshaller unmarshaller = unmarshallerFactory.getUnmarshaller(element);
         return unmarshaller.unmarshall(element);
     }
 
-    private Element getElement(ByteArrayInputStream is, DocumentBuilder docBuilder) throws SAXException, IOException {
+    private Element buildXmlElementFrom(byte[] xml) throws Exception {
+        ByteArrayInputStream is = new ByteArrayInputStream(xml);
+
+        DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
+        documentBuilderFactory.setNamespaceAware(true);
+        DocumentBuilder docBuilder = documentBuilderFactory.newDocumentBuilder();
+
         Document document = docBuilder.parse(is);
         return document.getDocumentElement();
     }
 
-    private DocumentBuilder getDocumentBuilder() throws ParserConfigurationException {
-        DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
-        documentBuilderFactory.setNamespaceAware(true);
-        return documentBuilderFactory.newDocumentBuilder();
+    private X509Credential getCredential() {
+        if (credential == null) {
+            try {
+                return MetadataUtils.getCredential(configuration.getString(TAAT_METADATA_FILEPATH),
+                        configuration.getString(TAAT_METADATA_ENTITY_ID));
+            } catch (Exception e) {
+                throw new RuntimeException("Error getting credential.", e);
+            }
+        }
+
+        return (X509Credential) credential;
     }
 
-    protected X509Credential getCredential() {
-        try {
-            return MetadataUtils.getCredential("reos_metadata.xml");
-        } catch (Exception e) {
-            throw new RuntimeException("Error getting credential.", e);
-        }
+    static void setKeyStore(KeyStore keyStore) {
+        TaatService.keyStore = keyStore;
     }
 }

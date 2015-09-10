@@ -22,17 +22,18 @@ public class MetadataUtilsTest {
 
     @Test
     public void getCredential() throws Exception {
-        X509Credential credential = MetadataUtils.getCredential("reos_metadata.xml");
+        X509Credential credential = MetadataUtils.getCredential("reos_metadata.xml",
+                "https://reos.taat.edu.ee/saml2/idp/metadata.php");
         assertNotNull(credential);
     }
 
     @Test
     public void getCredentialInputStreamNull() throws Exception {
         try {
-            MetadataUtils.getCredential("notValid.xml");
+            MetadataUtils.getCredential("notValid.xml", "https://reos.taat.edu.ee/saml2/idp/metadata.php");
             fail("Exception expected");
         } catch (Exception e) {
-            //expected
+            // expected
         }
     }
 }
