@@ -7,6 +7,7 @@ define(['app'], function(app) {
 			
 			setLanguage : function(language) {
 				$translate.use(language);
+				localStorage.setItem("userPreferredLanguage", language);
 				if (languageChangeCallback) {
 					languageChangeCallback(language);
 				}
