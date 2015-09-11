@@ -21,6 +21,7 @@
                 <div data-ng-if="material.issueDate.year > 0 && material.issueDate.year < 100" class="pull-left">{{formatMaterialIssueDate(material.issueDate)}} AD</div>
                 <div data-ng-if="material.issueDate.year < 0" class="pull-left">{{formatMaterialIssueDate(material.issueDate)}} BC</div>
                 <div data-ng-if="!material.issueDate.year" class="pull-left"><span data-translate="UNKNOWN"></span></div>
+                <div data-ng-if="material.paid" class="pull-right"><span data-translate="MATERIAL_PAID"></span></div>
             </div>
         </div>
         <div class="statistic text-right text-grey">
