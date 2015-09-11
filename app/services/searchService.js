@@ -1,12 +1,12 @@
 define(['app'], function(app) {
 
 	app.factory('searchService',['$location', function($location) {
-		var searchURLbase = "search/result?q=";
+        var searchURLbase = "search/result?q=";
         var subjectURL = "&subject=";
         var resourceTypeURL = "&resource_type=";
         var educationalContextURL = "&educational_context=";
         var licenseTypeURL = "&license_type=";
-		var searchQuery = "";
+        var searchQuery = "";
         var searchSubject = "";
         var searchResourceType = "";
         var searchEducationalContext = "";
