@@ -103,7 +103,6 @@ insert into Translation(translationGroup, translationKey, translation) values (2
 insert into Translation(translationGroup, translationKey, translation) values (2, 'ERROR_LOGIN_FAILED', 'Ошибка входа');
 insert into Translation(translationGroup, translationKey, translation) values (2, 'ERROR_MATERIAL_NOT_FOUND', 'Материал не найден');
 insert into Translation(translationGroup, translationKey, translation) values (2, 'MATERIAL_PAID', 'Платное');
-insert into Translation(translationGroup, translationKey, translation) values (2, 'MATERIAL_VIEW_PRICE', 'Цена');
 
 -- Material Subject translations
 insert into Translation(translationGroup, translationKey, translation) values (2, 'MATERIAL_SUBJECT_ESTONIAN', 'Эстонский');

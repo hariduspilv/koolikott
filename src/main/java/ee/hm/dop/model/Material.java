@@ -160,7 +160,7 @@ public class Material {
     @Column
     private boolean deleted;
 
-    @Column(nullable = false, name = "paid")
+    @Column(nullable = false)
     private boolean paid = false;
 
     public Long getId() {
