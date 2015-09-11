@@ -136,7 +136,7 @@ function getUserDefinedLanguageString(values, userLanguage, materialLanguage) {
  */
 function getLanguageString(values, language) {
 	if (!language) {
-		return null;
+            return null;
 	}
 	
 	for (var i = 0; i < values.length; i++) {

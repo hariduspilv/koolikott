@@ -42,6 +42,13 @@ define([], function()
                     'views/static/abstractStaticPage'
                 ]
             },
+            '/study': {
+                templateUrl: 'app/views/study/study.html',
+                controller: 'studyController',
+                dependencies: [
+                    'views/study/study'
+                ]
+            },
             '/loginRedirect': {
                 templateUrl: 'app/views/loginRedirect/loginRedirect.html',
                 controller: 'loginRedirectController',
