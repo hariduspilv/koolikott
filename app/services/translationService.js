@@ -1,29 +1,29 @@
 define(['app'], function(app) {
 
-	app.factory('translationService', ["$translate", function($translate) {
-		var languageChangeCallback;
+	app.factory('translationService', ["$rootScope", "$translate", function($rootScope, $translate) {
+		var instance;
 		
-		return {
+   		$rootScope.$watch(function () {
+                return localStorage.getItem("userPreferredLanguage");
+            }, function(newLanguage, oldLanguage) {
+            	if (newLanguage !== oldLanguage) {
+            		instance.setLanguage(newLanguage);
+            	}
+        }, true);
+
+		instance = {
 			
 			setLanguage : function(language) {
 				$translate.use(language);
 				localStorage.setItem("userPreferredLanguage", language);
-				if (languageChangeCallback) {
-					languageChangeCallback(language);
-				}
 			},
 			
 	        getLanguage : function() {
+	        	var language = localStorage.getItem("userPreferredLanguage");
 	        	return $translate.proposedLanguage() || $translate.use() || $translate.preferredLanguage();
-	        },
-			
-			setLanguageChangeListener : function(callback) {
-				languageChangeCallback = callback;
-			},
-	        
-	        removeLanguageChangeListener : function() {
-	        	languageChangeCallback = null;
 	        }
 	    };
+
+	    return instance;
 	}]);
 });
