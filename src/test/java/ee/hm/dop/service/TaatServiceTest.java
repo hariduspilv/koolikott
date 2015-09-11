@@ -55,10 +55,6 @@ public class TaatServiceTest {
     @TestSubject
     private TaatService taatService = new TaatService();
 
-    // @TestSubject
-    // private TaatService taatServiceWithMockedMethods =
-    // getTaatServiceWithMockedMethods();
-
     @Mock
     private Configuration configuration;
 
