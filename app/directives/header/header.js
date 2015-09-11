@@ -76,6 +76,12 @@ define(['app'], function(app)
                     }, function(query) {
                         $scope.searchFields.searchQuery = query;
                 }, true);
+
+                $scope.$watch(function () {
+                        return translationService.getLanguage();
+                    }, function(language) {
+                        $scope.setLanguage(language);
+                }, true);
             }
         };
     }]);

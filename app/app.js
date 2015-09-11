@@ -50,7 +50,12 @@ define(['routes','services/dependencyResolver'], function(config, dependencyReso
     
     function configureTranslationService($translateProvider) {    	  
     	$translateProvider.useUrlLoader('rest/translation');
-        $translateProvider.preferredLanguage('est');
+        var language = localStorage.getItem("userPreferredLanguage");
+        if (!language) {
+            language = 'est';
+        }
+        
+        $translateProvider.preferredLanguage(language);
         $translateProvider.useSanitizeValueStrategy('escaped');
     }
 

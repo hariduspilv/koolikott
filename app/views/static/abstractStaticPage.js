@@ -25,11 +25,12 @@ define(['app'], function(app)
             console.log('Getting page failed.')
     	}
     	
-    	$scope.$on("$destroy", function() {
-    		translationService.removeLanguageChangeListener();
-        });
-    	
+        $scope.$watch(function () {
+                return translationService.getLanguage();
+            }, function(language) {
+                getPage(language);
+        }, true);
+
     	getPage(translationService.getLanguage());
-    	translationService.setLanguageChangeListener(getPage);
     }]);
 });
