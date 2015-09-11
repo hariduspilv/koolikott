@@ -65,19 +65,27 @@
                             </dd>
                         </dl>
 
-                        <div data-ng-if="material.publishers && material.publishers.length === 1" class="text-right" data-translate="PUBLISHER">Publisher</div>
-                        <div data-ng-if="material.publishers && material.publishers.length > 1"class="text-right" data-translate="PUBLISHERS">Publishers</div>
+                        <div data-ng-if="material.publishers && material.publishers.length === 1" class="text-right text-grey" >
+                            <small data-translate="PUBLISHER">Publisher</small>
+                        </div>
+                        <div data-ng-if="material.publishers && material.publishers.length > 1"class="text-right text-grey" >
+                            <small data-translate="PUBLISHERS">Publishers</small>
+                        </div>
 
-                        <div data-ng-if="material.publishers" class="text-right text-grey">
+                        <div data-ng-if="material.publishers" class="text-right">
                             <div data-ng-repeat="publisher in material.publishers">
-                                <small data-ng-bind="publisher.name"></small>
+                                <span data-ng-bind="publisher.name"></span>
                             </div>
                         </div>
-                        <div class="text-right" data-translate="MATERIAL_VIEW_LICENSE_TYPE">License type</div>
+
                         <div class="text-right text-grey">
-                            <small data-ng-if="material.licenseType" data-translate="LICENSETYPE_{{material.licenseType.name.toUpperCase()}}"></small>
-                            <small data-ng-if="!material.licenseType" data-translate="LICENSETYPE_ALLRIGHTSRESERVED"></small>
+                            <small data-translate="MATERIAL_VIEW_LICENSE_TYPE">License type</small>
                         </div>
+                        <div class="text-right">
+                            <span data-ng-if="material.licenseType" data-translate="LICENSETYPE_{{material.licenseType.name.toUpperCase()}}"></span>
+                            <span data-ng-if="!material.licenseType" data-translate="LICENSETYPE_ALLRIGHTSRESERVED"></span>
+                        </div>
+
                         <div class="text-right text-danger" data-ng-if="material.paid" data-translate="MATERIAL_PAID">Paid</div>
                     </div>
                 </div>
