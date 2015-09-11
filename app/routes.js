@@ -42,11 +42,11 @@ define([], function()
                     'views/static/abstractStaticPage'
                 ]
             },
-            '/study': {
-                templateUrl: 'app/views/study/study.html',
-                controller: 'studyController',
+            '/study-plan': {
+                templateUrl: 'app/views/study/studyPlan.html',
+                controller: 'studyPlanController',
                 dependencies: [
-                    'views/study/study'
+                    'views/studyPlan/studyPlan'
                 ]
             },
             '/loginRedirect': {
