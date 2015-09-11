@@ -28,8 +28,8 @@ public class UserDAO {
     }
 
     public User findUserByUsername(String username) {
-        TypedQuery<User> findByUsername = entityManager.createQuery("SELECT u FROM User u WHERE u.username = :username",
-                User.class);
+        TypedQuery<User> findByUsername = entityManager.createQuery(
+                "SELECT u FROM User u WHERE u.username = :username", User.class);
 
         User user = null;
         try {
@@ -51,19 +51,14 @@ public class UserDAO {
      * @return the count of users with the same username, excluding the number
      */
     public Long countUsersWithSameUsername(String username) {
-        TypedQuery<User> findByUsername = entityManager
-                .createQuery("SELECT u FROM User u WHERE u.username LIKE :username", User.class);
+        TypedQuery<User> findByUsername = entityManager.createQuery(
+                "SELECT u FROM User u WHERE u.username LIKE :username", User.class);
 
         List<User> users = findByUsername.setParameter("username", username + "%").getResultList();
-        Long count = 0L;
 
-        for (User user : users) {
-            if (user.getUsername().equals(username) || user.getUsername().matches(username + "\\d+")) {
-                count++;
-            }
-        }
-
-        return count;
+        return users.stream() //
+                .filter(user -> user.getUsername().matches(username + "\\d*")) //
+                .count();
     }
 
     public User update(User user) {
