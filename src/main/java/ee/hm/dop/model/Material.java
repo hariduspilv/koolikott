@@ -115,7 +115,7 @@ public class Material {
     private DateTime updated;
 
     @Column
-    private Long views = Long.valueOf(0);
+    private Long views = (long) 0;
 
     @ManyToMany(fetch = EAGER, cascade = { PERSIST, MERGE })
     @JoinTable(
@@ -159,6 +159,9 @@ public class Material {
     @JsonIgnore
     @Column
     private boolean deleted;
+
+    @Column(nullable = false, name = "paid")
+    private boolean paid = false;
 
     public Long getId() {
         return id;
@@ -340,5 +343,13 @@ public class Material {
 
     public void setDeleted(boolean deleted) {
         this.deleted = deleted;
+    }
+
+    public boolean isPaid() {
+        return paid;
+    }
+
+    public void setIsPaid(boolean paid) {
+        this.paid = paid;
     }
 }

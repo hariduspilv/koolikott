@@ -554,6 +554,20 @@ public class MaterialDAOTest extends DatabaseTestBase {
         }
     }
 
+    @Test
+    public void isPaidTrue() {
+        Material material = materialDAO.findById(1);
+        assertTrue(material.isPaid());
+    }
+
+
+    @Test
+    public void isPaidFalse() {
+        Material material = materialDAO.findById(9);
+        assertFalse(material.isPaid());
+
+    }
+
     private void assertMaterial1(Material material) {
         assertEquals(2, material.getTitles().size());
         assertEquals("Matemaatika õpik üheksandale klassile", material.getTitles().get(0).getText());

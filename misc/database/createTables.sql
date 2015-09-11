@@ -129,6 +129,7 @@ CREATE TABLE Material (
   repository           BIGINT,
   creator              BIGINT,
   deleted              BOOLEAN,
+  paid                 BOOLEAN DEFAULT FALSE,
 
   UNIQUE KEY (repositoryIdentifier, repository),
   
