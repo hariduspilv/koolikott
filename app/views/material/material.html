@@ -11,7 +11,7 @@
                                 </div>
                                 <span data-ng-bind="subject"></span>
                                 <span data-ng-repeat="subject in material.subjects">
-                                    <span data-translate="{{'MATERIAL_SUBJECT_' + subject.name.toUpperCase()}}"></span><span data-ng-bind="$index < material.subjects.length - 1 ? ', ' : ''"></span>
+                                    <span data-translate="{{'SUBJECT_' + subject.name.toUpperCase()}}"></span><span data-ng-bind="$index < material.subjects.length - 1 ? ', ' : ''"></span>
                                 </span>
                                 <span data-ng-if="!material.subjects.length" data-translate="UNKNOWN">Unknown</span>
                             </div>

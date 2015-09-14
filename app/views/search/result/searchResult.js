@@ -333,7 +333,7 @@ app.filter('orderByTranslation', function($filter) {
 
 app.filter('subjectFilter', function($filter) {
     return function(items, query) {
-        var translationPrefix = 'MATERIAL_SUBJECT_';
+        var translationPrefix = 'SUBJECT_';
         items = $filter('translatableItemFilter')(items, query, translationPrefix);
         items = $filter('orderByTranslation')(items, translationPrefix);
         return items;
