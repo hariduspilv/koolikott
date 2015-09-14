@@ -20,5 +20,6 @@ public class StudyPlanResourceTest extends ResourceIntegrationTestBase {
         assertNotNull(studyPlan);
         assertEquals(new Long(1), studyPlan.getId());
         assertEquals("The new stock market", studyPlan.getTitle());
+        assertEquals(new Long(2), studyPlan.getSubject().getId());
     }
 }

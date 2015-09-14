@@ -23,11 +23,23 @@ public class StudyPlanDAOTest extends DatabaseTestBase {
         assertNotNull(studyPlan);
         assertEquals(new Long(1), studyPlan.getId());
         assertEquals("The new stock market", studyPlan.getTitle());
+        assertEquals(new Long(2), studyPlan.getSubject().getId());
     }
 
     @Test
     public void findByIdWhenStudyPlanDoesNotExist() {
         StudyPlan studyPlan = studyPlanDAO.findById(100000);
         assertNull(studyPlan);
+    }
+
+    @Test
+    public void findByIdNullSubject() {
+        Long id = new Long(2);
+        StudyPlan studyPlan = studyPlanDAO.findById(id);
+
+        assertNotNull(studyPlan);
+        assertEquals(id, studyPlan.getId());
+        assertEquals("New ways how to do it", studyPlan.getTitle());
+        assertNull(studyPlan.getSubject());
     }
 }

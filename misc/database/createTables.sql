@@ -327,5 +327,10 @@ CREATE TABLE Page (
 
 CREATE TABLE StudyPlan (
   id        BIGINT AUTO_INCREMENT PRIMARY KEY,
-  title      VARCHAR(255) NOT NULL
+  title      VARCHAR(255) NOT NULL,
+  subject        BIGINT,
+
+  FOREIGN KEY (subject)
+    REFERENCES Subject (id)
+    ON DELETE RESTRICT
 );

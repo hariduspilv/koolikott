@@ -371,6 +371,6 @@ update Material set picture = null where id = 7;
 
 -- Study Plan
 
-insert into StudyPlan(id, title) VALUES (1, 'The new stock market');
-insert into StudyPlan(id, title) VALUES (2, 'Math for my students');
-insert into StudyPlan(id, title) VALUES (3, 'The new World');
+insert into StudyPlan(id, title, subject) VALUES (1, 'The new stock market', 1);
+insert into StudyPlan(id, title, subject) VALUES (2, 'Math for my students', 2);
+insert into StudyPlan(id, title, subject) VALUES (3, 'The new World', null);
