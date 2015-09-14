@@ -43,7 +43,7 @@ define([], function()
                 ]
             },
             '/study-plan': {
-                templateUrl: 'app/views/study/studyPlan.html',
+                templateUrl: 'app/views/studyPlan/studyPlan.html',
                 controller: 'studyPlanController',
                 dependencies: [
                     'views/studyPlan/studyPlan'
