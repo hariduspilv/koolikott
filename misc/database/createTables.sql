@@ -1,4 +1,6 @@
 -- Drop tables
+
+DROP TABLE IF EXISTS StudyPlan;
 DROP TABLE IF EXISTS Page;
 DROP TABLE IF EXISTS Translation;
 DROP TABLE IF EXISTS TranslationGroup;
@@ -323,3 +325,7 @@ CREATE TABLE Page (
         ON DELETE RESTRICT
 );
 
+CREATE TABLE StudyPlan (
+  id        BIGINT AUTO_INCREMENT PRIMARY KEY,
+  title      VARCHAR(255) NOT NULL
+);
