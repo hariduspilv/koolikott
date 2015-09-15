@@ -21,7 +21,7 @@ define(['app'], function(app)
 	    	}
 
 	    	$scope.formatDate = function(date) {
-	    		return formatDatetoDayMonthYear(date);
+	    		return formatDateToDayMonthYear(date);
             }
     	}
     ]);
