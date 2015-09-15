@@ -163,14 +163,19 @@ function formatIssueDate(issueDate) {
     }
 }
 
- function formatDay(day) {
-        return day > 9 ? "" + day : "0" + day; 
-    }
+function formatDay(day) {
+    return day > 9 ? "" + day : "0" + day; 
+}
     
-    function formatMonth(month) {
-        return month > 9 ? "" + month : "0" + month; 
-    }
+function formatMonth(month) {
+    return month > 9 ? "" + month : "0" + month; 
+}
     
-    function formatYear(year) {
-        return year < 0 ? year * -1 : year; 
-    }
+function formatYear(year) {
+    return year < 0 ? year * -1 : year; 
+}
+
+function formatDatetoDayMonthYear(dateString) {
+	var date = new Date(dateString);
+    return formatDay(date.getDate()) + "." + formatMonth(date.getMonth() + 1) + "." + date.getFullYear();
+}

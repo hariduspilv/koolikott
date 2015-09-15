@@ -21,9 +21,8 @@ define(['app'], function(app)
 	    	}
 
 	    	$scope.formatStudyPlanCreatedDate = function(createdDate) {
-            	var created = new Date(createdDate);
-            	return formatDay(created.getDate()) + "." + formatMonth(created.getMonth() + 1) + "." + created.getFullYear();
-        	}
+	    		return formatDatetoDayMonthYear(createdDate);
+            }
     	}
     ]);
 });
