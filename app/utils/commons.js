@@ -175,7 +175,7 @@ function formatYear(year) {
     return year < 0 ? year * -1 : year; 
 }
 
-function formatDatetoDayMonthYear(dateString) {
+function formatDateToDayMonthYear(dateString) {
 	var date = new Date(dateString);
     return formatDay(date.getDate()) + "." + formatMonth(date.getMonth() + 1) + "." + date.getFullYear();
 }

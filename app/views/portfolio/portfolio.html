@@ -18,7 +18,7 @@
                                 <span data-translate="DETAIL_VIEW_EDUCATIONAL_CONTEXT"></span>:
                             </div>
                             <span>
-                                <span>I class</span>, <span>II class</span>
+                                <span data-ng-if="portfolio.educationalContext" data-translate="{{portfolio.educationalContext.name.toUpperCase()}}"></span>
                             </span>
                         </div>
                     </div>
@@ -27,7 +27,7 @@
                     </div>
                     <div class="authors">
                         <span class="item">
-                            <a>Name Surname</a> <a>Name Surname</a>
+                            <a><span data-ng-bind="portfolio.creator.name"></span> <span data-ng-bind="portfolio.creator.surname"></span></a>
                         </span>
                     </div>
                         
@@ -37,11 +37,17 @@
                 </div>
                 <div class="col-md-3 meta-sidebar">
                     <dl class="dl-horizontal">
+                        <dt data-ng-if="portfolio.updated" class="text-grey text-big">
+                            <span data-translate="UPDATED"></span><span>:</span>
+                        </dt>
+                        <dd data-ng-if="portfolio.updated" class="text-right text-big">
+                            <span class="pull-right">{{formatDate(portfolio.updated)}}</span>
+                        </dd>
                         <dt class="text-grey text-big">
                             <span data-translate="CREATED"></span><span>:</span>
                         </dt>
-                        <dd data-ng-if="portfolio.created" class="text-right text-big">
-                            <span class="pull-right">{{formatPortfolioCreatedDate(portfolio.created)}}</span>
+                        <dd class="text-right text-big text-grey">
+                            <span class="pull-right">{{formatDate(portfolio.created)}}</span>
                         </dd>
                     </dl>
                 </div>
