@@ -104,6 +104,7 @@ insert into Translation(translationGroup, translationKey, translation) values (3
 insert into Translation(translationGroup, translationKey, translation) values (3, 'ERROR_MATERIAL_NOT_FOUND', 'Material not found');
 insert into Translation(translationGroup, translationKey, translation) values (3, 'MATERIAL_PAID', 'Paid');
 insert into Translation(translationGroup, translationKey, translation) values (3, 'ERROR_PORTFOLIO_NOT_FOUND', 'Portfolio not found');
+insert into Translation(translationGroup, translationKey, translation) values (3, 'MY_PROFILE', 'My profile');
 
 -- Material Subject translations
 insert into Translation(translationGroup, translationKey, translation) values (3, 'SUBJECT_ESTONIAN', 'Estonian');
