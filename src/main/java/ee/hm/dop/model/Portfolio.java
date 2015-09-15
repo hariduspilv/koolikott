@@ -32,6 +32,10 @@ public class Portfolio {
     @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
     private DateTime created;
 
+    @Column
+    @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
+    private DateTime updated;
+
     public Long getId() {
         return id;
     }
@@ -64,5 +68,15 @@ public class Portfolio {
     @JsonDeserialize(using = DateTimeDeserializer.class)
     public void setCreated(DateTime created) {
         this.created = created;
+    }
+
+    @JsonSerialize(using = DateTimeSerializer.class)
+    public DateTime getUpdated() {
+        return updated;
+    }
+
+    @JsonDeserialize(using = DateTimeDeserializer.class)
+    public void setUpdated(DateTime updated) {
+        this.updated = updated;
     }
 }

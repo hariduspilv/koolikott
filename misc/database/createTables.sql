@@ -1,4 +1,4 @@
-use dop
+use dop;
 
 -- Drop tables
 
@@ -332,6 +332,7 @@ CREATE TABLE Portfolio (
   title       VARCHAR(255) NOT NULL,
   subject     BIGINT,
   created     TIMESTAMP NOT NUll DEFAULT CURRENT_TIMESTAMP,
+  updated     TIMESTAMP NULL DEFAULT NULL,
 
   FOREIGN KEY (subject)
     REFERENCES Subject (id)

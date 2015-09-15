@@ -371,6 +371,6 @@ update Material set picture = null where id = 7;
 
 -- Portfolio
 
-insert into Portfolio(id, title, subject, created) VALUES (1, 'The new stock market', 1, '1999-05-02 06:00:01');
-insert into Portfolio(id, title, subject, created) VALUES (2, 'Math for my students', 2, '2000-12-29 16:00:01');
-insert into Portfolio(id, title, subject, created) VALUES (3, 'The new World', null, '2014-12-29 10:00:01');
+insert into Portfolio(id, title, subject, created, updated) VALUES (1, 'The new stock market', 1, '1999-05-02 06:00:01', '2002-05-02 06:00:01');
+insert into Portfolio(id, title, subject, created, updated) VALUES (2, 'Math for my students', 2, '2000-12-29 16:00:01', '2003-05-02 06:00:01');
+insert into Portfolio(id, title, subject, created, updated) VALUES (3, 'The new World', null, '2014-12-29 10:00:01', null);

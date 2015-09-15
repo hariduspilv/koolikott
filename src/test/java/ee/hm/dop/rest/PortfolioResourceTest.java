@@ -23,5 +23,6 @@ public class PortfolioResourceTest extends ResourceIntegrationTestBase {
         assertEquals("The new stock market", portfolio.getTitle());
         assertEquals(new Long(2), portfolio.getSubject().getId());
         assertEquals(new DateTime("2000-12-29T08:00:01.000+02:00"), portfolio.getCreated());
+        assertEquals(new DateTime("2004-12-29T08:00:01.000+02:00"), portfolio.getUpdated());
     }
 }

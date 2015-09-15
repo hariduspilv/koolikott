@@ -26,6 +26,7 @@ public class PortfolioDAOTest extends DatabaseTestBase {
         assertEquals("The new stock market", portfolio.getTitle());
         assertEquals(new Long(2), portfolio.getSubject().getId());
         assertEquals(new DateTime("2000-12-29T08:00:01.000+02:00"), portfolio.getCreated());
+        assertEquals(new DateTime("2004-12-29T08:00:01.000+02:00"), portfolio.getUpdated());
     }
 
     @Test
@@ -35,7 +36,7 @@ public class PortfolioDAOTest extends DatabaseTestBase {
     }
 
     @Test
-    public void findByIdNullSubject() {
+    public void findByIdNullSubjectAndUpdated() {
         Long id = new Long(2);
         Portfolio portfolio = portfolioDAO.findById(id);
 
@@ -44,5 +45,6 @@ public class PortfolioDAOTest extends DatabaseTestBase {
         assertEquals("New ways how to do it", portfolio.getTitle());
         assertNull(portfolio.getSubject());
         assertEquals(new DateTime("2012-12-29T08:00:01.000+02:00"), portfolio.getCreated());
+        assertNull(portfolio.getUpdated());
     }
 }
