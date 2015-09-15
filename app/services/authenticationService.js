@@ -20,6 +20,7 @@ define(['app'], function(app) {
                 }
             }
             
+            enableLogin();
             localStorage.removeItem(LOGIN_ORIGIN);
             isOAuthAuthentication = false;
         }
