@@ -78,9 +78,9 @@ insert into Material(id, lang, issueDate, licenseType, source, added, updated, p
 insert into Material(id, lang, issueDate, licenseType, source, added, updated, picture, creator, deleted, paid) values(33, null, null, null, 'https://en.wikipedia.org/wiki/Poland', '1971-09-22 08:00:01', null, null, 2, false, false);
 insert into Material(id, lang, issueDate, licenseType, source, added, updated, picture, creator, deleted, paid) values(34, 4, 6, 3, 'https://en.wikipedia.org/wiki/France', '2001-07-16 06:00:01', null, null, 2, false, false);
 insert into Material(id, lang, issueDate, licenseType, source, added, updated, picture, creator, deleted, paid) values(35, 5, 7, 1, 'https://en.wikipedia.org/wiki/Austria', '2002-06-01 09:00:01', null, null, 2, false, false);
-insert into Material(id, lang, issueDate, licenseType, source, deleted, paid) values(36, 1, 2, 3, 'http://pilditu.audio.ee', false, false);
-insert into Material(id, lang, issueDate, licenseType, source, deleted, paid) values(37, 1, 2, 3, '<script>alert(1)</script>', false, false);
-insert into Material(id, lang, issueDate, licenseType, source, deleted, paid) values(3919, 1, 2, 3, 'http://pilditu.audio.ee', false, false);
+insert into Material(id, lang, issueDate, licenseType, source, added, deleted, paid) values(36, 1, 2, 3, 'http://pilditu.audio.ee', '2001-07-16 06:00:01', false, false);
+insert into Material(id, lang, issueDate, licenseType, source, added, deleted, paid) values(37, 1, 2, 3, '<script>alert(1)</script>', '2001-07-16 06:00:01', false, false);
+insert into Material(id, lang, issueDate, licenseType, source, added, deleted, paid) values(3919, 1, 2, 3, 'http://pilditu.audio.ee', '2001-07-16 06:00:01', false, false);
 
 -- Authors
 

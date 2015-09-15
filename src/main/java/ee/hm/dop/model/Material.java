@@ -107,7 +107,7 @@ public class Material {
             uniqueConstraints = @UniqueConstraint(columnNames = { "material", "publisher" }))
     private List<Publisher> publishers;
 
-    @Column
+    @Column(nullable = false)
     @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
     private DateTime added;
 
