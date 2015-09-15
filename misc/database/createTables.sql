@@ -1,3 +1,5 @@
+use dop
+
 -- Drop tables
 
 DROP TABLE IF EXISTS Portfolio;
