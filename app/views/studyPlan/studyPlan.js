@@ -17,6 +17,11 @@ define(['app'], function(app)
 	    	function getStudyPlanFail() {
 	            log('No data returned by getting studyPlan.');
 	    	}
+
+	    	$scope.formatStudyPlanCreatedDate = function(createdDate) {
+            	var created = new Date(createdDate);
+            	return formatDay(created.getDate()) + "." + formatMonth(created.getMonth() + 1) + "." + created.getFullYear();
+        	}
     	}
     ]);
 });

@@ -5,32 +5,45 @@
                 <div class="row">
                     <div class="col-md-9 description">
                         <div class="category text-grey clearfix">
-                           <div class="item pull-left">
-                                <div class="label">
-                                    <span data-translate="DETAIL_VIEW_SUBJECT"></span>:
-                                </div>
-                                <span>
-                                    <span data-translate="{{'SUBJECT_' + studyPlan.subject.name.toUpperCase()}}"></span>
-                                </span>
+                         <div class="item pull-left">
+                            <div class="label">
+                                <span data-translate="DETAIL_VIEW_SUBJECT"></span>:
                             </div>
-                            <div class="item pull-left">
-                                <div class="label">
-                                    <span data-translate="DETAIL_VIEW_EDUCATIONAL_CONTEXT"></span>:
-                                </div>
-                                <span>
-                                    <span>I class</span>, <span>II class</span>
-                                </span>
+                            <span>
+                                <span data-translate="{{'SUBJECT_' + studyPlan.subject.name.toUpperCase()}}"></span>
+                            </span>
+                        </div>
+                        <div class="item pull-left">
+                            <div class="label">
+                                <span data-translate="DETAIL_VIEW_EDUCATIONAL_CONTEXT"></span>:
                             </div>
-                        </div>
-                        <div class="heading">
-                            <h1>{{studyPlan.title}}</h1>
-                        </div>
-                        <div class="authors">
-                            
+                            <span>
+                                <span>I class</span>, <span>II class</span>
+                            </span>
                         </div>
                     </div>
+                    <div class="heading">
+                        <h1>{{studyPlan.title}}</h1>
+                    </div>
+                    <div class="authors">
+
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <dl class="dl-horizontal">
+                        <dt class="text-grey text-big">
+                            <span data-translate="CREATED"></span><span>:</span>
+                        </dt>
+                        <dd data-ng-if="studyPlan.created" class="text-right text-big">
+                            <span class="pull-right">{{formatStudyPlanCreatedDate(studyPlan.created)}}</span>
+                        </dd>
+                    </dl>
                 </div>
             </div>
         </div>
+
+        
+
     </div>
+</div>
 </div>
