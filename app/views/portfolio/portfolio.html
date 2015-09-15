@@ -10,7 +10,7 @@
                                 <span data-translate="DETAIL_VIEW_SUBJECT"></span>:
                             </div>
                             <span>
-                                <span data-ng-if="studyPlan.subject" data-translate="{{'SUBJECT_' + studyPlan.subject.name.toUpperCase()}}"></span>
+                                <span data-ng-if="portfolio.subject" data-translate="{{'SUBJECT_' + portfolio.subject.name.toUpperCase()}}"></span>
                             </span>
                         </div>
                         <div class="item pull-left">
@@ -23,7 +23,7 @@
                         </div>
                     </div>
                     <div class="heading">
-                        <h1>{{studyPlan.title}}</h1>
+                        <h1>{{portfolio.title}}</h1>
                     </div>
                     <div class="authors">
                         <span class="item">
@@ -40,8 +40,8 @@
                         <dt class="text-grey text-big">
                             <span data-translate="CREATED"></span><span>:</span>
                         </dt>
-                        <dd data-ng-if="studyPlan.created" class="text-right text-big">
-                            <span class="pull-right">{{formatStudyPlanCreatedDate(studyPlan.created)}}</span>
+                        <dd data-ng-if="portfolio.created" class="text-right text-big">
+                            <span class="pull-right">{{formatPortfolioCreatedDate(portfolio.created)}}</span>
                         </dd>
                     </dl>
                 </div>
