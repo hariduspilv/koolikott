@@ -68,7 +68,7 @@ define(['app'], function(app)
         }
         
         $scope.formatMaterialUpdatedDate = function(updatedDate) {
-            return formatDatetoDayMonthYear(updatedDate);    
+            return formatDateToDayMonthYear(updatedDate);    
         }
         
         $scope.isNullOrZeroLength = function (arg) {
