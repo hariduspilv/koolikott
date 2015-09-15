@@ -261,5 +261,5 @@ insert into Page(id, name, content, language) VALUES (6, 'Help', '<h1>Help</h1><
 
 -- Portfolio
 
-insert into Portfolio(id, title, subject, educationalContext, created, updated) VALUES (1, 'The new stock market', 2, 1005, '2000-12-29 06:00:01', '2004-12-29 06:00:01');
-insert into Portfolio(id, title, subject, educationalContext, created, updated) VALUES (2, 'New ways how to do it', null, null, '2012-12-29 06:00:01', null);
+insert into Portfolio(id, title, subject, educationalContext, creator, created, updated) VALUES (1, 'The new stock market', 2, 1005, 6, '2000-12-29 06:00:01', '2004-12-29 06:00:01');
+insert into Portfolio(id, title, subject, educationalContext, creator, created, updated) VALUES (2, 'New ways how to do it', null, null, 4, '2012-12-29 06:00:01', null);

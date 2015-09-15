@@ -332,6 +332,7 @@ CREATE TABLE Portfolio (
   title              VARCHAR(255) NOT NULL,
   subject            BIGINT,
   educationalContext BIGINT,
+  creator            BIGINT NOT NULL,
   created            TIMESTAMP NOT NUll DEFAULT CURRENT_TIMESTAMP,
   updated            TIMESTAMP NULL DEFAULT NULL,
 
@@ -341,5 +342,9 @@ CREATE TABLE Portfolio (
 
   FOREIGN KEY (educationalContext)
     REFERENCES EducationalContext (id)
+    ON DELETE RESTRICT,
+
+  FOREIGN KEY (creator)
+    REFERENCES User (id)
     ON DELETE RESTRICT
 );

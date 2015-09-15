@@ -29,6 +29,8 @@ public class PortfolioDAOTest extends DatabaseTestBase {
         assertEquals(new DateTime("2004-12-29T08:00:01.000+02:00"), portfolio.getUpdated());
         assertEquals(new Long(1005), portfolio.getEducationalContext().getId());
         assertEquals("CONTINUINGEDUCATION", portfolio.getEducationalContext().getName());
+        assertEquals(new Long(6), portfolio.getCreator().getId());
+        assertEquals("mati.maasikas-vaarikas", portfolio.getCreator().getUsername());
     }
 
     @Test
@@ -49,5 +51,7 @@ public class PortfolioDAOTest extends DatabaseTestBase {
         assertEquals(new DateTime("2012-12-29T08:00:01.000+02:00"), portfolio.getCreated());
         assertNull(portfolio.getUpdated());
         assertNull(portfolio.getEducationalContext());
+        assertEquals(new Long(4), portfolio.getCreator().getId());
+        assertEquals("voldemar.vapustav2", portfolio.getCreator().getUsername());
     }
 }

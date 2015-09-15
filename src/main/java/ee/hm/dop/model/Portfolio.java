@@ -40,6 +40,10 @@ public class Portfolio {
     @JoinColumn(name = "educationalContext")
     private EducationalContext educationalContext;
 
+    @ManyToOne
+    @JoinColumn(name = "creator", nullable = false)
+    private User creator;
+
     public Long getId() {
         return id;
     }
@@ -90,5 +94,13 @@ public class Portfolio {
 
     public void setEducationalContext(EducationalContext educationalContext) {
         this.educationalContext = educationalContext;
+    }
+
+    public User getCreator() {
+        return creator;
+    }
+
+    public void setCreator(User creator) {
+        this.creator = creator;
     }
 }
