@@ -16,7 +16,6 @@ import org.reflections.Reflections;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.inject.Binder;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 
@@ -49,7 +48,7 @@ public class GuiceInjector {
         for (Class<?> moduleClass : moduleClasses) {
             Class<?> originalModule = moduleClass.getAnnotation(Module.class).override();
 
-            if (originalModule == DefaultModule.class) {
+            if (originalModule == com.google.inject.Module.class) {
                 if (!overriddenModules.contains(moduleClass)) {
                     logger.debug("Adding module '" + moduleClass + "'");
                     modules.add(newModule(moduleClass));
@@ -75,7 +74,6 @@ public class GuiceInjector {
             com.google.inject.Module original = iterator.next();
             if (original.getClass() == module.getClass()) {
                 iterator.remove();
-                break;
             }
         }
     }
@@ -83,7 +81,7 @@ public class GuiceInjector {
     private static com.google.inject.Module newModule(Class<?> testModuleClass) {
         try {
             return (com.google.inject.Module) testModuleClass.newInstance();
-        } catch (InstantiationException | IllegalAccessException e) {
+        } catch (Exception e) {
             throw new RuntimeException(e);
         }
     }
@@ -91,13 +89,6 @@ public class GuiceInjector {
     @Target(ElementType.TYPE)
     @Retention(RetentionPolicy.RUNTIME)
     public @interface Module {
-        Class<? extends com.google.inject.Module> override() default DefaultModule.class;
-    }
-
-    private class DefaultModule implements com.google.inject.Module {
-
-        @Override
-        public void configure(Binder binder) {
-        }
+        Class<? extends com.google.inject.Module> override() default com.google.inject.Module.class;
     }
 }
