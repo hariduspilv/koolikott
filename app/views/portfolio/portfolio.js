@@ -20,8 +20,8 @@ define(['app'], function(app)
 	            $location.url("/");
 	    	}
 
-	    	$scope.formatPortfolioCreatedDate = function(createdDate) {
-	    		return formatDatetoDayMonthYear(createdDate);
+	    	$scope.formatPortfolioDates = function(date) {
+	    		return formatDatetoDayMonthYear(date);
             }
     	}
     ]);

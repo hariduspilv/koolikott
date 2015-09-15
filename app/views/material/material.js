@@ -68,8 +68,7 @@ define(['app'], function(app)
         }
         
         $scope.formatMaterialUpdatedDate = function(updatedDate) {
-            var updated = new Date(updatedDate);
-            return formatDay(updated.getDate()) + "." + formatMonth(updated.getMonth() + 1) + "." + updated.getFullYear();
+            return formatDatetoDayMonthYear(updatedDate);    
         }
         
         $scope.isNullOrZeroLength = function (arg) {
