@@ -1,3 +1,12 @@
+%label {
+    display: block; 
+    padding: 0; 
+    text-align: left; 
+    font-size: 11px; 
+    font-weight: normal; 
+    color: $font-color-grey-medium;
+}
+
 .material-detail {
                   
     .category {
@@ -11,20 +20,14 @@
             padding-right: 25px;
             
             .label {
-                display: block; 
-                padding: 0; 
-                text-align: left; 
-                font-size: 11px; 
-                font-weight: normal; 
-                color: $font-color-grey-medium;
+                @extend %label
             }
         }
     }
     
     .description {
         
-        margin-bottom: 30px; 
-        border-right: 1px solid #DDD;
+        margin-bottom: 30px;
     
         .heading {
             
@@ -35,7 +38,7 @@
                 margin: 0;
                 padding: 0
             }
-        };
+        }
         .authors {
             
             padding-bottom: 15px;
@@ -46,27 +49,43 @@
                 margin-right: 15px
             }
         }
-
         
     }
     
-    .dl-horizontal {
+    .meta-sidebar {
         
-        dt {
-            width: 90px; 
-            font-weight: normal
-        };
+        padding-bottom: 30px;
+        border-left: 1px solid #DDD;
         
-        dd {
-            margin-left: 100px;
+        .dl-horizontal {
+        
+            dt {
+                width: 90px; 
+                font-weight: normal
+            };
 
-            span {
-                white-space: nowrap
+            dd {
+                margin-left: 100px;
+
+                span {
+                    white-space: nowrap
+                }
             }
         }
-    };
+        
+        .item {
+            
+            padding-bottom: 10px;
+            
+            .label {
+                @extend %label;
+                text-align: right
+            }
+        }
+    }
     .preview {
         
+        margin-top: 40px;
         @include border-radius(3px); @include box-shadow-spec(0, 0, 2px, 0, #999); 
         background: #FFF; 
         overflow: hidden; 
