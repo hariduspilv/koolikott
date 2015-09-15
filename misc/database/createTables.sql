@@ -326,9 +326,10 @@ CREATE TABLE Page (
 );
 
 CREATE TABLE StudyPlan (
-  id        BIGINT AUTO_INCREMENT PRIMARY KEY,
-  title      VARCHAR(255) NOT NULL,
-  subject        BIGINT,
+  id          BIGINT AUTO_INCREMENT PRIMARY KEY,
+  title       VARCHAR(255) NOT NULL,
+  subject     BIGINT,
+  created     TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 
   FOREIGN KEY (subject)
     REFERENCES Subject (id)

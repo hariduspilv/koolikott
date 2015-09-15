@@ -6,6 +6,7 @@ import static org.junit.Assert.assertNull;
 
 import javax.inject.Inject;
 
+import org.joda.time.DateTime;
 import org.junit.Test;
 
 import ee.hm.dop.common.test.DatabaseTestBase;
@@ -24,6 +25,7 @@ public class StudyPlanDAOTest extends DatabaseTestBase {
         assertEquals(new Long(1), studyPlan.getId());
         assertEquals("The new stock market", studyPlan.getTitle());
         assertEquals(new Long(2), studyPlan.getSubject().getId());
+        assertEquals(new DateTime("2000-12-29T08:00:01.000+02:00"), studyPlan.getCreated());
     }
 
     @Test
@@ -33,7 +35,7 @@ public class StudyPlanDAOTest extends DatabaseTestBase {
     }
 
     @Test
-    public void findByIdNullSubject() {
+    public void findByIdNullSubjectAndCreated() {
         Long id = new Long(2);
         StudyPlan studyPlan = studyPlanDAO.findById(id);
 
@@ -41,5 +43,6 @@ public class StudyPlanDAOTest extends DatabaseTestBase {
         assertEquals(id, studyPlan.getId());
         assertEquals("New ways how to do it", studyPlan.getTitle());
         assertNull(studyPlan.getSubject());
+        assertNull(studyPlan.getCreated());
     }
 }

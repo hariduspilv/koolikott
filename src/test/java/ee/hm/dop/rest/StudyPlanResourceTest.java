@@ -4,6 +4,7 @@ import static java.lang.String.format;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
+import org.joda.time.DateTime;
 import org.junit.Test;
 
 import ee.hm.dop.common.test.ResourceIntegrationTestBase;
@@ -21,5 +22,6 @@ public class StudyPlanResourceTest extends ResourceIntegrationTestBase {
         assertEquals(new Long(1), studyPlan.getId());
         assertEquals("The new stock market", studyPlan.getTitle());
         assertEquals(new Long(2), studyPlan.getSubject().getId());
+        assertEquals(new DateTime("2000-12-29T08:00:01.000+02:00"), studyPlan.getCreated());
     }
 }

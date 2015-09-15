@@ -261,5 +261,5 @@ insert into Page(id, name, content, language) VALUES (6, 'Help', '<h1>Help</h1><
 
 -- Study Plan
 
-insert into StudyPlan(id, title, subject) VALUES (1, 'The new stock market', 2);
-insert into StudyPlan(id, title, subject) VALUES (2, 'New ways how to do it', null);
+insert into StudyPlan(id, title, subject, created) VALUES (1, 'The new stock market', 2, '2000-12-29 06:00:01');
+insert into StudyPlan(id, title, subject, created) VALUES (2, 'New ways how to do it', null, null);
