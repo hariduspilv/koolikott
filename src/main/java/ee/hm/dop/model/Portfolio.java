@@ -36,6 +36,10 @@ public class Portfolio {
     @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
     private DateTime updated;
 
+    @ManyToOne
+    @JoinColumn(name = "educationalContext")
+    private EducationalContext educationalContext;
+
     public Long getId() {
         return id;
     }
@@ -78,5 +82,13 @@ public class Portfolio {
     @JsonDeserialize(using = DateTimeDeserializer.class)
     public void setUpdated(DateTime updated) {
         this.updated = updated;
+    }
+
+    public EducationalContext getEducationalContext() {
+        return educationalContext;
+    }
+
+    public void setEducationalContext(EducationalContext educationalContext) {
+        this.educationalContext = educationalContext;
     }
 }

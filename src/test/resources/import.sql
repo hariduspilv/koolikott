@@ -178,7 +178,7 @@ insert into EducationalContext(id, educationalContext) values (1007, 'SPECIALEDU
 insert into EducationalContext(id, educationalContext) values (1008, 'OTHER');
 
 
--- EducationalContext
+-- Material_EducationalContext
 
 insert into Material_EducationalContext(material, educationalContext) values (1, 1001);
 insert into Material_EducationalContext(material, educationalContext) values (1, 1002);
@@ -261,5 +261,5 @@ insert into Page(id, name, content, language) VALUES (6, 'Help', '<h1>Help</h1><
 
 -- Portfolio
 
-insert into Portfolio(id, title, subject, created, updated) VALUES (1, 'The new stock market', 2, '2000-12-29 06:00:01', '2004-12-29 06:00:01');
-insert into Portfolio(id, title, subject, created, updated) VALUES (2, 'New ways how to do it', null, '2012-12-29 06:00:01', null);
+insert into Portfolio(id, title, subject, educationalContext, created, updated) VALUES (1, 'The new stock market', 2, 1005, '2000-12-29 06:00:01', '2004-12-29 06:00:01');
+insert into Portfolio(id, title, subject, educationalContext, created, updated) VALUES (2, 'New ways how to do it', null, null, '2012-12-29 06:00:01', null);

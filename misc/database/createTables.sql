@@ -328,13 +328,18 @@ CREATE TABLE Page (
 );
 
 CREATE TABLE Portfolio (
-  id          BIGINT AUTO_INCREMENT PRIMARY KEY,
-  title       VARCHAR(255) NOT NULL,
-  subject     BIGINT,
-  created     TIMESTAMP NOT NUll DEFAULT CURRENT_TIMESTAMP,
-  updated     TIMESTAMP NULL DEFAULT NULL,
+  id                 BIGINT AUTO_INCREMENT PRIMARY KEY,
+  title              VARCHAR(255) NOT NULL,
+  subject            BIGINT,
+  educationalContext BIGINT,
+  created            TIMESTAMP NOT NUll DEFAULT CURRENT_TIMESTAMP,
+  updated            TIMESTAMP NULL DEFAULT NULL,
 
   FOREIGN KEY (subject)
     REFERENCES Subject (id)
+    ON DELETE RESTRICT,
+
+  FOREIGN KEY (educationalContext)
+    REFERENCES EducationalContext (id)
     ON DELETE RESTRICT
 );
