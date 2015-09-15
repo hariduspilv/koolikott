@@ -28,7 +28,7 @@ public class StudyPlan {
     @JoinColumn(name = "subject")
     private Subject subject;
 
-    @Column
+    @Column(nullable = false)
     @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
     private DateTime created;
 

@@ -35,7 +35,7 @@ public class StudyPlanDAOTest extends DatabaseTestBase {
     }
 
     @Test
-    public void findByIdNullSubjectAndCreated() {
+    public void findByIdNullSubject() {
         Long id = new Long(2);
         StudyPlan studyPlan = studyPlanDAO.findById(id);
 
@@ -43,6 +43,6 @@ public class StudyPlanDAOTest extends DatabaseTestBase {
         assertEquals(id, studyPlan.getId());
         assertEquals("New ways how to do it", studyPlan.getTitle());
         assertNull(studyPlan.getSubject());
-        assertNull(studyPlan.getCreated());
+        assertEquals(new DateTime("2012-12-29T08:00:01.000+02:00"), studyPlan.getCreated());
     }
 }
