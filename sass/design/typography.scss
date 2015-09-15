@@ -1,9 +1,16 @@
-.text-grey {color: $font-color-grey}
+.text-grey {
+    color: $font-color-grey
+}
 
 .heading {
-    h1 {font-weight: 300}
+    h1 {
+        font-weight: 300
+    }
 }
 
 .heading-sub {
-    h3 {font-weight: 300; color: $font-color-grey}
+    h3 {
+        font-weight: 300; 
+        color: $font-color-grey
+    }
 }
