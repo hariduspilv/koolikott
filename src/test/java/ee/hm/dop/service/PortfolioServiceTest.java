@@ -12,35 +12,35 @@ import org.easymock.TestSubject;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import ee.hm.dop.dao.StudyPlanDAO;
-import ee.hm.dop.model.StudyPlan;
+import ee.hm.dop.dao.PortfolioDAO;
+import ee.hm.dop.model.Portfolio;
 
 @RunWith(EasyMockRunner.class)
-public class StudyPlanServiceTest {
+public class PortfolioServiceTest {
 
     @TestSubject
-    private StudyPlanService studyPlanService = new StudyPlanService();
+    private PortfolioService portfolioService = new PortfolioService();
 
     @Mock
-    private StudyPlanDAO studyPlanDAO;
+    private PortfolioDAO portfolioDAO;
 
     @Test
     public void get() {
-        int studyPlanId = 125;
-        StudyPlan studyPlan = createMock(StudyPlan.class);
-        expect(studyPlanDAO.findById(studyPlanId)).andReturn(studyPlan);
+        int portfolioId = 125;
+        Portfolio portfolio = createMock(Portfolio.class);
+        expect(portfolioDAO.findById(portfolioId)).andReturn(portfolio);
 
-        replayAll(studyPlan);
+        replayAll(portfolio);
 
-        StudyPlan result = studyPlanService.get(studyPlanId);
+        Portfolio result = portfolioService.get(portfolioId);
 
-        verifyAll(studyPlan);
+        verifyAll(portfolio);
 
-        assertSame(studyPlan, result);
+        assertSame(portfolio, result);
     }
 
     private void replayAll(Object... mocks) {
-        replay(studyPlanDAO);
+        replay(portfolioDAO);
 
         if (mocks != null) {
             for (Object object : mocks) {
@@ -50,7 +50,7 @@ public class StudyPlanServiceTest {
     }
 
     private void verifyAll(Object... mocks) {
-        verify(studyPlanDAO);
+        verify(portfolioDAO);
 
         if (mocks != null) {
             for (Object object : mocks) {

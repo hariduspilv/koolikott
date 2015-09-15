@@ -16,7 +16,7 @@ import ee.hm.dop.rest.jackson.map.DateTimeDeserializer;
 import ee.hm.dop.rest.jackson.map.DateTimeSerializer;
 
 @Entity
-public class StudyPlan {
+public class Portfolio {
 
     @Id
     private Long id;
