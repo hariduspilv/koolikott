@@ -61,7 +61,8 @@ define([], function()
                 controller: 'profileController',
                 dependencies: [
                     'views/profile/profile',
-                    'directives/materialBox/materialBox'
+                    'directives/materialBox/materialBox',
+                    'directives/portfolioBox/portfolioBox'
                 ]
             },
             '/dev/login/:idCode': {
