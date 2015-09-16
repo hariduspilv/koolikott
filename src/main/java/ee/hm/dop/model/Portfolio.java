@@ -44,6 +44,9 @@ public class Portfolio {
     @JoinColumn(name = "creator", nullable = false)
     private User creator;
 
+    @Column(columnDefinition = "TEXT")
+    private String summary;
+
     public Long getId() {
         return id;
     }
@@ -102,5 +105,13 @@ public class Portfolio {
 
     public void setCreator(User creator) {
         this.creator = creator;
+    }
+
+    public String getSummary() {
+        return summary;
+    }
+
+    public void setSummary(String summary) {
+        this.summary = summary;
     }
 }

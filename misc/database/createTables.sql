@@ -333,6 +333,7 @@ CREATE TABLE Portfolio (
   subject            BIGINT,
   educationalContext BIGINT,
   creator            BIGINT NOT NULL,
+  summary            TEXT,
   created            TIMESTAMP NOT NUll DEFAULT CURRENT_TIMESTAMP,
   updated            TIMESTAMP NULL DEFAULT NULL,
 
