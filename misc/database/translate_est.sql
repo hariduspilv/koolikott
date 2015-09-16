@@ -89,10 +89,10 @@ insert into Translation(translationGroup, translationKey, translation) values (1
 insert into Translation(translationGroup, translationKey, translation) values (1, 'SEARCH_FILTER_BUTTON_FILTER', 'Filtreeri');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'SEARCH_FILTER_BUTTON_RESET', 'Tühista');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'SEARCH_FILTER_TITLE', 'Filter');
-insert into Translation(translationGroup, translationKey, translation) values (1, 'MYPROFILE_PAGE_TITLE_COMPILATIONS', 'Minu kogumikud');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'MYPROFILE_PAGE_TITLE_PORTFOLIOS', 'Minu õpimapid');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'MYPROFILE_PAGE_TITLE_MATERIALS', 'Minu materjalid');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'MYPROFILE_PAGE_TITLE_MY_DATA', 'Minu andmed');
-insert into Translation(translationGroup, translationKey, translation) values (1, 'PROFILE_PAGE_TITLE_COMPILATIONS', 'Kogumikud');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'PROFILE_PAGE_TITLE_PORTFOLIOS', 'Õpimapid');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'PROFILE_PAGE_TITLE_MATERIALS', 'Materjalid');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'LOGIN_CHOOSE_LOGIN_METHOD', 'Vali sisenemise moodus');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'LOGIN_FACEBOOK', 'Facebook');

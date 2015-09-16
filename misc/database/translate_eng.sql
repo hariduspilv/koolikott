@@ -89,10 +89,10 @@ insert into Translation(translationGroup, translationKey, translation) values (3
 insert into Translation(translationGroup, translationKey, translation) values (3, 'SEARCH_FILTER_BUTTON_FILTER', 'Filter');
 insert into Translation(translationGroup, translationKey, translation) values (3, 'SEARCH_FILTER_BUTTON_RESET', 'Reset');
 insert into Translation(translationGroup, translationKey, translation) values (3, 'SEARCH_FILTER_TITLE', 'Filter');
-insert into Translation(translationGroup, translationKey, translation) values (3, 'MYPROFILE_PAGE_TITLE_COMPILATIONS', 'My compilations');
+insert into Translation(translationGroup, translationKey, translation) values (3, 'MYPROFILE_PAGE_TITLE_PORTFOLIOS', 'My portfolios');
 insert into Translation(translationGroup, translationKey, translation) values (3, 'MYPROFILE_PAGE_TITLE_MATERIALS', 'My materials');
 insert into Translation(translationGroup, translationKey, translation) values (3, 'MYPROFILE_PAGE_TITLE_MY_DATA', 'My data');
-insert into Translation(translationGroup, translationKey, translation) values (3, 'PROFILE_PAGE_TITLE_COMPILATIONS', 'Compilations');
+insert into Translation(translationGroup, translationKey, translation) values (3, 'PROFILE_PAGE_TITLE_PORTFOLIOS', 'Portfolios');
 insert into Translation(translationGroup, translationKey, translation) values (3, 'PROFILE_PAGE_TITLE_MATERIALS', 'Materials');
 insert into Translation(translationGroup, translationKey, translation) values (3, 'LOGIN_CHOOSE_LOGIN_METHOD', 'Choose login method');
 insert into Translation(translationGroup, translationKey, translation) values (3, 'LOGIN_FACEBOOK', 'Facebook');
