@@ -80,29 +80,7 @@
                 </div>
             </div>
                 
-            <div class="row">
-                <div class="col-md-12">
-                    <article class="chapters">
-                        <section class="chapter">
-                            <div class="heading">
-                                <h2>Chapter 1</h2>
-                            </div>
-                        </section>
-                        
-                        <section class="chapter">
-                            <div class="heading-sub">
-                                <h3>Chapter 1.1</h3>
-                            </div>
-                        </section>
-                    </article>
-                </div>
-            </div>
-                
-            <div class="row row-material">
-                <div data-ng-repeat="material in materials" class="col-md-3 col-sm-4 col-xs-12 col-ms-6 material">
-
-                </div>
-            </div>
+            <div data-ng-if="portfolio.chapter" data-dop-chapter data-chapter="portfolio.chapter"></div>
         </div>
     </div>
 </div>

@@ -46,7 +46,8 @@ define([], function()
                 templateUrl: 'app/views/portfolio/portfolio.html',
                 controller: 'portfolioController',
                 dependencies: [
-                    'views/portfolio/portfolio'
+                    'views/portfolio/portfolio',
+                    'directives/chapter/chapter'
                 ]
             },
             '/loginRedirect': {
