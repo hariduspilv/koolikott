@@ -39,7 +39,7 @@ public class PortfolioResourceTest extends ResourceIntegrationTestBase {
         String username = "mati.maasikas-vaarikas";
         List<Portfolio> portfolios = doGet(format(GET_BY_CREATOR_URL, username))
                 .readEntity(new GenericType<List<Portfolio>>() {
-                        });
+                });
 
         assertEquals(2, portfolios.size());
         assertEquals(Long.valueOf(3), portfolios.get(0).getId());
@@ -51,19 +51,22 @@ public class PortfolioResourceTest extends ResourceIntegrationTestBase {
     public void getByCreatorWithoutUsername() {
         Response response = doGet("portfolio/getByCreator");
         assertEquals(Response.Status.BAD_REQUEST.getStatusCode(), response.getStatus());
+        assertEquals("Username parameter is mandatory", response.readEntity(String.class));
     }
 
     @Test
     public void getByCreatorWithBlankUsername() {
         Response response = doGet(format(GET_BY_CREATOR_URL, ""));
         assertEquals(Response.Status.BAD_REQUEST.getStatusCode(), response.getStatus());
+        assertEquals("Username parameter is mandatory", response.readEntity(String.class));
     }
 
     @Test
     public void getByCreatorNotExistingUser() {
         String username = "notexisting.user";
         Response response = doGet(format(GET_BY_CREATOR_URL, username));
-        assertEquals(Response.Status.NO_CONTENT.getStatusCode(), response.getStatus());
+        assertEquals(Response.Status.BAD_REQUEST.getStatusCode(), response.getStatus());
+        assertEquals("Invalid request", response.readEntity(String.class));
     }
 
     @Test

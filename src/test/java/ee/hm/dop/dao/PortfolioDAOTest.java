@@ -3,6 +3,7 @@ package ee.hm.dop.dao;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 import java.util.List;
 
@@ -24,18 +25,7 @@ public class PortfolioDAOTest extends DatabaseTestBase {
     public void findById() {
         Portfolio portfolio = portfolioDAO.findById(1);
 
-        assertNotNull(portfolio);
-        assertEquals(new Long(1), portfolio.getId());
-        assertEquals("The new stock market", portfolio.getTitle());
-        assertEquals(new Long(2), portfolio.getSubject().getId());
-        assertEquals(new DateTime("2000-12-29T08:00:01.000+02:00"), portfolio.getCreated());
-        assertEquals(new DateTime("2004-12-29T08:00:01.000+02:00"), portfolio.getUpdated());
-        assertEquals(new Long(1005), portfolio.getEducationalContext().getId());
-        assertEquals("CONTINUINGEDUCATION", portfolio.getEducationalContext().getName());
-        assertEquals(new Long(6), portfolio.getCreator().getId());
-        assertEquals("mati.maasikas-vaarikas", portfolio.getCreator().getUsername());
-        assertEquals("The changes after 2008.", portfolio.getSummary());
-        assertEquals(new Long(95455215), portfolio.getViews());
+        assertPortfolio1(portfolio);
     }
 
     @Test
@@ -46,10 +36,20 @@ public class PortfolioDAOTest extends DatabaseTestBase {
 
     @Test
     public void findByIdOnlyMandatoryFields() {
-        Long id = new Long(1);
+        Long id = new Long(2);
         Portfolio portfolio = portfolioDAO.findById(id);
 
-        assertPortfolio1(portfolio);
+        assertNotNull(portfolio);
+        assertEquals(id, portfolio.getId());
+        assertEquals("New ways how to do it", portfolio.getTitle());
+        assertNull(portfolio.getSubject());
+        assertEquals(new DateTime("2012-12-29T08:00:01.000+02:00"), portfolio.getCreated());
+        assertNull(portfolio.getUpdated());
+        assertNull(portfolio.getEducationalContext());
+        assertEquals(new Long(4), portfolio.getCreator().getId());
+        assertEquals("voldemar.vapustav2", portfolio.getCreator().getUsername());
+        assertNull(portfolio.getSummary());
+        assertEquals(new Long(14), portfolio.getViews());
     }
 
     @Test
@@ -58,11 +58,20 @@ public class PortfolioDAOTest extends DatabaseTestBase {
         creator.setId(6L);
 
         List<Portfolio> portfolios = portfolioDAO.findByCreator(creator);
-
         assertEquals(2, portfolios.size());
-        assertEquals(Long.valueOf(3), portfolios.get(0).getId());
-        assertEquals(Long.valueOf(1), portfolios.get(1).getId());
-        assertPortfolio1(portfolios.get(1));
+        DateTime previous = null;
+
+        for(Portfolio portfolio : portfolios) {
+            if(portfolio.getId().equals(Long.valueOf(1))) {
+                assertPortfolio1(portfolio);
+            }
+
+            if(previous != null){
+                assertTrue(previous.isAfter(portfolio.getCreated()));
+            }
+
+            previous = portfolio.getCreated();
+        }
     }
 
     private void assertPortfolio1(Portfolio portfolio) {

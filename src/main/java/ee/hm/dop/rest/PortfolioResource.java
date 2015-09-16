@@ -44,7 +44,7 @@ public class PortfolioResource {
 
         User creator = userService.getUserByUsername(username);
         if (creator == null) {
-            return null;
+            throwBadRequestException("Invalid request");
         }
 
         return portfolioService.getByCreator(creator);
