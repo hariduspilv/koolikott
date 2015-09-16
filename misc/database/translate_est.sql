@@ -67,7 +67,7 @@ insert into Translation(translationGroup, translationKey, translation) values (1
 insert into Translation(translationGroup, translationKey, translation) values (1, 'LICENSETYPE_CCBYNCSA', 'CC BY-NC-SA');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'LICENSETYPE_CCBYNCND', 'CC BY-NC-ND');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'LICENSETYPE_OTHER', 'Muu');
-insert into Translation(translationGroup, translationKey, translation) values (1, 'MATERIAL_VIEW_TAGS', 'Võtmesõnad');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'DETAIL_VIEW_TAGS', 'Võtmesõnad');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'SEARCH_RESULT_NO_RESULT', 'Ühtegi vastust ei leitud otsingule ');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'SEARCH_RESULT_PART_1', 'Otsingule ');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'SEARCH_RESULT_PART_2', ' leidus ');

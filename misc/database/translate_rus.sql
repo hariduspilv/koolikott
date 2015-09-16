@@ -67,7 +67,7 @@ insert into Translation(translationGroup, translationKey, translation) values (2
 insert into Translation(translationGroup, translationKey, translation) values (2, 'LICENSETYPE_CCBYNCSA', 'CC BY-NC-SA');
 insert into Translation(translationGroup, translationKey, translation) values (2, 'LICENSETYPE_CCBYNCND', 'CC BY-NC-ND');
 insert into Translation(translationGroup, translationKey, translation) values (2, 'LICENSETYPE_OTHER', 'Другой');
-insert into Translation(translationGroup, translationKey, translation) values (2, 'MATERIAL_VIEW_TAGS', 'Ключевые слова');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'DETAIL_VIEW_TAGS', 'Ключевые слова');
 insert into Translation(translationGroup, translationKey, translation) values (2, 'SEARCH_RESULT_NO_RESULT', 'Результатов не найдено при поиске ');
 insert into Translation(translationGroup, translationKey, translation) values (2, 'SEARCH_RESULT_PART_1', 'Поиск ');
 insert into Translation(translationGroup, translationKey, translation) values (2, 'SEARCH_RESULT_PART_2', ' найдено ');
