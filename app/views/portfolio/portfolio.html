@@ -31,8 +31,8 @@
                         </span>
                     </div>
                         
-                    <div class="summary">
-                        Kirjeldus. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque semper sagittis mi vitae ultrices. Cras vehicula sit amet ipsum sit amet congue. Donec viverra quam lectus, et scelerisque turpis lacinia eget. Ut vel ullamcorper nisi. Nunc orci neque, elementum et bibendum id, tincidunt ac leo.
+                    <div data-ng-if="portfolio.summary" class="summary">
+                        {{portfolio.summary}}
                     </div>
                 </div>
                 <div class="col-md-3 meta-sidebar">
@@ -58,10 +58,34 @@
                     <section class="preview">
                         <header class="clearfix">
                             <div class="pull-right text-grey">
-                                <i class="fa fa-eye"></i> <span>0</span>
+                                <i class="fa fa-eye"></i> <span>{{portfolio.views}}</span>
                             </div>
                         </header>
                     </section>
+                </div>
+            </div>
+                
+            <div class="row">
+                <div class="col-md-12">
+                    <article class="chapters">
+                        <section class="chapter">
+                            <div class="heading">
+                                <h2>Chapter 1</h2>
+                            </div>
+                        </section>
+                        
+                        <section class="chapter">
+                            <div class="heading-sub">
+                                <h3>Chapter 1.1</h3>
+                            </div>
+                        </section>
+                    </article>
+                </div>
+            </div>
+                
+            <div class="row row-material">
+                <div data-ng-repeat="material in materials" class="col-md-3 col-sm-4 col-xs-12 col-ms-6 material">
+
                 </div>
             </div>
         </div>

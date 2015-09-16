@@ -152,4 +152,16 @@
     
     }
     
+    .chapters {
+        .chapter {
+            .heading-sub {
+                h3 {
+                    font-size: 19px;
+                    font-weight: bold;
+                    color: $text-color;
+                }
+            }
+        }
+    }
+    
 }
