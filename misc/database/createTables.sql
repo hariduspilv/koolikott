@@ -327,6 +327,11 @@ CREATE TABLE Page (
         ON DELETE RESTRICT
 );
 
+CREATE TABLE Chapter (
+  id                 BIGINT AUTO_INCREMENT PRIMARY KEY,
+  title              VARCHAR(255) NOT NULL
+);
+
 CREATE TABLE Portfolio (
   id                 BIGINT AUTO_INCREMENT PRIMARY KEY,
   title              VARCHAR(255) NOT NULL,
@@ -334,7 +339,8 @@ CREATE TABLE Portfolio (
   educationalContext BIGINT,
   creator            BIGINT NOT NULL,
   summary            TEXT,
-  views                BIGINT   NOT NULL DEFAULT 0,
+  views              BIGINT   NOT NULL DEFAULT 0,
+  chapter            BIGINT,
   created            TIMESTAMP NOT NUll DEFAULT CURRENT_TIMESTAMP,
   updated            TIMESTAMP NULL DEFAULT NULL,
 
@@ -348,5 +354,9 @@ CREATE TABLE Portfolio (
 
   FOREIGN KEY (creator)
     REFERENCES User (id)
+    ON DELETE RESTRICT,
+
+  FOREIGN KEY (chapter)
+    REFERENCES Chapter (id)
     ON DELETE RESTRICT
 );

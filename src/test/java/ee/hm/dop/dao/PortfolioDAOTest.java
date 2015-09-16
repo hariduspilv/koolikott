@@ -50,6 +50,7 @@ public class PortfolioDAOTest extends DatabaseTestBase {
         assertEquals("voldemar.vapustav2", portfolio.getCreator().getUsername());
         assertNull(portfolio.getSummary());
         assertEquals(new Long(14), portfolio.getViews());
+        assertNull(portfolio.getChapter());
     }
 
     @Test
@@ -61,12 +62,12 @@ public class PortfolioDAOTest extends DatabaseTestBase {
         assertEquals(2, portfolios.size());
         DateTime previous = null;
 
-        for(Portfolio portfolio : portfolios) {
-            if(portfolio.getId().equals(Long.valueOf(1))) {
+        for (Portfolio portfolio : portfolios) {
+            if (portfolio.getId().equals(Long.valueOf(1))) {
                 assertPortfolio1(portfolio);
             }
 
-            if(previous != null){
+            if (previous != null) {
                 assertTrue(previous.isAfter(portfolio.getCreated()));
             }
 
@@ -86,5 +87,7 @@ public class PortfolioDAOTest extends DatabaseTestBase {
         assertEquals("mati.maasikas-vaarikas", portfolio.getCreator().getUsername());
         assertEquals("The changes after 2008.", portfolio.getSummary());
         assertEquals(new Long(95455215), portfolio.getViews());
+        assertEquals(new Long(1), portfolio.getChapter().getId());
+        assertEquals("The crisis", portfolio.getChapter().getTitle());
     }
 }

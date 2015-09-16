@@ -5,6 +5,7 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 
 import org.hibernate.annotations.Type;
 import org.joda.time.DateTime;
@@ -49,6 +50,10 @@ public class Portfolio {
 
     @Column(nullable = false)
     private Long views = (long) 0;
+
+    @OneToOne
+    @JoinColumn(name = "chapter")
+    private Chapter chapter;
 
     public Long getId() {
         return id;
@@ -124,5 +129,13 @@ public class Portfolio {
 
     public void setViews(Long views) {
         this.views = views;
+    }
+
+    public Chapter getChapter() {
+        return chapter;
+    }
+
+    public void setChapter(Chapter chapter) {
+        this.chapter = chapter;
     }
 }
