@@ -1,11 +1,15 @@
 define(['app'], function(app)
 {
-    app.controller('portfolioController', ['$scope', 'translationService', 'serverCallService', '$route', '$location', 'alertService',
-        function($scope, translationService, serverCallService, $route, $location, alertService) {
+    app.controller('portfolioController', ['$scope', 'translationService', 'serverCallService', '$route', '$location', 'alertService', '$rootScope',
+        function($scope, translationService, serverCallService, $route, $location, alertService, $rootScope) {
 
-	    	var portfolioId = $route.current.params.id;
-	        serverCallService.makeGet("rest/portfolio?id=" + portfolioId, {}, getPortfolioSuccess, getPortfolioFail);
-	        
+        	if ($rootScope.savedMaterial){
+            	$scope.portfolio = $rootScope.savedPortfolio;
+        	} else {
+            	var portfolioId = $route.current.params.id;
+	        	serverCallService.makeGet("rest/portfolio?id=" + portfolioId, {}, getPortfolioSuccess, getPortfolioFail);
+	        }
+	    	
 	        function getPortfolioSuccess(portfolio) {
 	            if (isEmpty(portfolio)) {
 	            	getPortfolioFail();

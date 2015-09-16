@@ -8,6 +8,10 @@ define(['app'], function(app)
 			},
 			templateUrl: 'app/directives/portfolioBox/portfolioBox.html',
 			controller: function ($scope, $location, $rootScope) {
+
+				$scope.saveMaterial = function(portfolio) {
+					$rootScope.savedPortfolio = portfolio;
+				}
 			}
 		};
 	}]);
