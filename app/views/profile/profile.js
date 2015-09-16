@@ -11,6 +11,7 @@ define(['app'], function(app)
             }
 
             getUsersMaterials();
+            getUsersPortfolios();
     	}
 
         function isMyProfilePage() {
@@ -34,14 +35,14 @@ define(['app'], function(app)
 
         function getUserSuccess(user) {
             if (isEmpty(user)) {
-                console.log('No user returned.');
+                getUserFail();
                 $location.url('/');
             } else {
                 $scope.user = user;
             }
         }
         
-        function getUserFail(data, status) {
+        function getUserFail() {
             console.log('Getting user failed.')
         }
 
@@ -55,17 +56,36 @@ define(['app'], function(app)
 
         function getUsersMaterialsSuccess(data) {
             if (isEmpty(data)) {
-                log('No material data returned.');
+                getUsersMaterialsFail();
             } else {
                 $scope.materials = data;
             }
         }
         
-        function getUsersMaterialsFail(data, status) {
+        function getUsersMaterialsFail() {
             console.log('Failed to get materials. ')
         }
 
-    	init();
+        function getUsersPortfolios() {
+            var params = {
+                'username': $route.current.params.username
+            };
+            var url = "rest/portfolio/getByCreator";
+            serverCallService.makeGet(url, params, getUsersPortfoliosSuccess, getUsersPortfoliosFail);
+        }
 
+        function getUsersPortfoliosSuccess(data) {
+            if (isEmpty(data)) {
+                getUsersPortfoliosFail();
+            } else {
+                $scope.portfolios = data;
+            }
+        }
+        
+        function getUsersPortfoliosFail() {
+            console.log('Failed to get portfolios. ')
+        }
+
+    	init();
     }]);
 });
