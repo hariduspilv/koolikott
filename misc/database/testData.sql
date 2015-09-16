@@ -377,8 +377,3 @@ insert into Portfolio(id, title, subject, educationalContext, creator, summary, 
 insert into Portfolio(id, title, subject, educationalContext, creator, summary, views, created, updated) VALUES (4, 'Biology for my students', 2, 1001, 6, 'A marvellous summary.', 2, '2000-12-29 16:00:01', '2003-05-02 06:00:01');
 insert into Portfolio(id, title, subject, educationalContext, creator, summary, views, created, updated) VALUES (5, 'Sports for my students', 3, 1003, 6, 'A brilliant summary.', 3, '2000-12-29 16:00:01', '2003-05-02 06:00:01');
 insert into Portfolio(id, title, subject, educationalContext, creator, summary, views, created, updated) VALUES (6, 'English for my students', 4, 1002, 6, 'An intriguing summary.', 4, '2000-12-29 16:00:01', '2003-05-02 06:00:01');
-
-
-insert into Portfolio(id, title, subject, educationalContext, creator, summary, views, created, updated) VALUES (1, 'The new stock market', 1, 1001, 1, 'Some new stufff coming soon.', 325698, '1999-05-02 06:00:01', '2002-05-02 06:00:01');
-insert into Portfolio(id, title, subject, educationalContext, creator, summary, views, created, updated) VALUES (2, 'Math for my students', 2, 1003, 5, 'You have to read all the textbooks in this portifolio. Don\'t forgert to make ALL exercices.', 7951, '2000-12-29 16:00:01', '2003-05-02 06:00:01');
-insert into Portfolio(id, title, subject, educationalContext, creator, summary, views, created, updated) VALUES (3, 'The new World', null, null, 3, null, 0, '2014-12-29 10:00:01', null);
