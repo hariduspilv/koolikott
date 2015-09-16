@@ -334,6 +334,7 @@ CREATE TABLE Portfolio (
   educationalContext BIGINT,
   creator            BIGINT NOT NULL,
   summary            TEXT,
+  views                BIGINT   NOT NULL DEFAULT 0,
   created            TIMESTAMP NOT NUll DEFAULT CURRENT_TIMESTAMP,
   updated            TIMESTAMP NULL DEFAULT NULL,
 

@@ -47,6 +47,9 @@ public class Portfolio {
     @Column(columnDefinition = "TEXT")
     private String summary;
 
+    @Column(nullable = false)
+    private Long views = (long) 0;
+
     public Long getId() {
         return id;
     }
@@ -113,5 +116,13 @@ public class Portfolio {
 
     public void setSummary(String summary) {
         this.summary = summary;
+    }
+
+    public Long getViews() {
+        return views;
+    }
+
+    public void setViews(Long views) {
+        this.views = views;
     }
 }
