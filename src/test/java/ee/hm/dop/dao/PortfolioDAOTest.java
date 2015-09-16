@@ -63,6 +63,7 @@ public class PortfolioDAOTest extends DatabaseTestBase {
         DateTime previous = null;
 
         for (Portfolio portfolio : portfolios) {
+            assertEquals("mati.maasikas-vaarikas", portfolio.getCreator().getUsername());
             if (portfolio.getId().equals(Long.valueOf(1))) {
                 assertPortfolio1(portfolio);
             }
