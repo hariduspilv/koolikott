@@ -71,10 +71,8 @@
                         <div class="label">
                             <span data-translate="DETAIL_VIEW_TAGS"></span>:
                         </div>	
-                        <span>
-                            <span class="item">Tag</span>
-                            <span class="item">Tag</span> 
-                            <span class="item">Tag</span>
+                        <span data-ng-repeat="tag in portfolio.tags">
+                            <span data-ng-bind="tag.name" class="item"></span>
                         </span>
                     </div>
                 </div>
