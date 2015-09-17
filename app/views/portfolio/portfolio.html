@@ -80,7 +80,9 @@
                 </div>
             </div>
             
-            <div data-ng-if="portfolio.chapter" data-dop-chapter data-chapter="portfolio.chapter"></div>
+            <div data-ng-repeat="chapter in portfolio.chapters">
+                <div data-dop-chapter data-chapter="chapter"></div>
+            </div>
         </div>
     </div>
 </div>
