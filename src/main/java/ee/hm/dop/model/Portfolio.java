@@ -1,11 +1,14 @@
 package ee.hm.dop.model;
 
+import java.util.List;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
+import javax.persistence.OneToMany;
 
 import org.hibernate.annotations.Type;
 import org.joda.time.DateTime;
@@ -51,9 +54,9 @@ public class Portfolio {
     @Column(nullable = false)
     private Long views = (long) 0;
 
-    @OneToOne
-    @JoinColumn(name = "chapter")
-    private Chapter chapter;
+    @OneToMany(fetch = FetchType.EAGER)
+    @JoinColumn(name = "portfolio", nullable = false)
+    private List<Chapter> chapters;
 
     public Long getId() {
         return id;
@@ -131,11 +134,11 @@ public class Portfolio {
         this.views = views;
     }
 
-    public Chapter getChapter() {
-        return chapter;
+    public List<Chapter> getChapters() {
+        return chapters;
     }
 
-    public void setChapter(Chapter chapter) {
-        this.chapter = chapter;
+    public void setChapters(List<Chapter> chapters) {
+        this.chapters = chapters;
     }
 }

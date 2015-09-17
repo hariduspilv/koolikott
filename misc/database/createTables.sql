@@ -327,11 +327,6 @@ CREATE TABLE Page (
         ON DELETE RESTRICT
 );
 
-CREATE TABLE Chapter (
-  id                 BIGINT AUTO_INCREMENT PRIMARY KEY,
-  title              VARCHAR(255) NOT NULL
-);
-
 CREATE TABLE Portfolio (
   id                 BIGINT AUTO_INCREMENT PRIMARY KEY,
   title              VARCHAR(255) NOT NULL,
@@ -340,7 +335,6 @@ CREATE TABLE Portfolio (
   creator            BIGINT NOT NULL,
   summary            TEXT,
   views              BIGINT   NOT NULL DEFAULT 0,
-  chapter            BIGINT,
   created            TIMESTAMP NOT NUll DEFAULT CURRENT_TIMESTAMP,
   updated            TIMESTAMP NULL DEFAULT NULL,
 
@@ -354,9 +348,15 @@ CREATE TABLE Portfolio (
 
   FOREIGN KEY (creator)
     REFERENCES User (id)
-    ON DELETE RESTRICT,
+    ON DELETE RESTRICT
+);
 
-  FOREIGN KEY (chapter)
-    REFERENCES Chapter (id)
+CREATE TABLE Chapter (
+  id                 BIGINT AUTO_INCREMENT PRIMARY KEY,
+  title              VARCHAR(255) NOT NULL,
+  portfolio          BIGINT NOT NULL,
+
+  FOREIGN KEY (portfolio)
+    REFERENCES Portfolio (id)
     ON DELETE RESTRICT
 );

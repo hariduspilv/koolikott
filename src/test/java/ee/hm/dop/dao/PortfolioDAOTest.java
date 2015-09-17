@@ -13,6 +13,7 @@ import org.joda.time.DateTime;
 import org.junit.Test;
 
 import ee.hm.dop.common.test.DatabaseTestBase;
+import ee.hm.dop.model.Chapter;
 import ee.hm.dop.model.Portfolio;
 import ee.hm.dop.model.User;
 
@@ -50,7 +51,7 @@ public class PortfolioDAOTest extends DatabaseTestBase {
         assertEquals("voldemar.vapustav2", portfolio.getCreator().getUsername());
         assertNull(portfolio.getSummary());
         assertEquals(new Long(14), portfolio.getViews());
-        assertNull(portfolio.getChapter());
+        assertTrue(portfolio.getChapters().isEmpty());
     }
 
     @Test
@@ -88,7 +89,11 @@ public class PortfolioDAOTest extends DatabaseTestBase {
         assertEquals("mati.maasikas-vaarikas", portfolio.getCreator().getUsername());
         assertEquals("The changes after 2008.", portfolio.getSummary());
         assertEquals(new Long(95455215), portfolio.getViews());
-        assertEquals(new Long(1), portfolio.getChapter().getId());
-        assertEquals("The crisis", portfolio.getChapter().getTitle());
+
+        List<Chapter> chapters = portfolio.getChapters();
+        assertEquals(1, chapters.size());
+        Chapter chapter = chapters.get(0);
+        assertEquals(new Long(1), chapter.getId());
+        assertEquals("The crisis", chapter.getTitle());
     }
 }

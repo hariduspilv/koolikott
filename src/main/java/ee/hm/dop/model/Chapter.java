@@ -11,7 +11,7 @@ public class Chapter {
     private Long id;
 
     @Column
-    private String Title;
+    private String title;
 
     public Long getId() {
         return id;
@@ -22,10 +22,10 @@ public class Chapter {
     }
 
     public String getTitle() {
-        return Title;
+        return title;
     }
 
     public void setTitle(String title) {
-        Title = title;
+        this.title = title;
     }
 }
