@@ -1,5 +1,7 @@
 package ee.hm.dop.model;
 
+import static javax.persistence.FetchType.EAGER;
+
 import java.util.List;
 
 import javax.persistence.Column;
@@ -7,8 +9,11 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.UniqueConstraint;
 
 import org.hibernate.annotations.Type;
 import org.joda.time.DateTime;
@@ -57,6 +62,14 @@ public class Portfolio {
     @OneToMany(fetch = FetchType.EAGER)
     @JoinColumn(name = "portfolio", nullable = false)
     private List<Chapter> chapters;
+
+    @ManyToMany(fetch = EAGER)
+    @JoinTable(
+            name = "Portfolio_Tag",
+            joinColumns = { @JoinColumn(name = "portfolio") },
+            inverseJoinColumns = { @JoinColumn(name = "tag") },
+            uniqueConstraints = @UniqueConstraint(columnNames = { "portfolio", "tag" }))
+    private List<Tag> tags;
 
     public Long getId() {
         return id;
@@ -140,5 +153,13 @@ public class Portfolio {
 
     public void setChapters(List<Chapter> chapters) {
         this.chapters = chapters;
+    }
+
+    public List<Tag> getTags() {
+        return tags;
+    }
+
+    public void setTags(List<Tag> tags) {
+        this.tags = tags;
     }
 }

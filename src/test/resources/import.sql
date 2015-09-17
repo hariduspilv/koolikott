@@ -268,3 +268,13 @@ insert into Portfolio(id, title, subject, educationalContext, creator, summary, 
 -- Chapter
 
 insert into Chapter(id, title, portfolio) values (1, 'The crisis', 1);
+
+-- Portfolio-Tags
+
+insert into Portfolio_Tag(tag, portfolio) values(1, 1);
+insert into Portfolio_Tag(tag, portfolio) values(1, 3);
+insert into Portfolio_Tag(tag, portfolio) values(2, 1);
+insert into Portfolio_Tag(tag, portfolio) values(3, 1);
+insert into Portfolio_Tag(tag, portfolio) values(4, 1);
+insert into Portfolio_Tag(tag, portfolio) values(4, 3);
+insert into Portfolio_Tag(tag, portfolio) values(5, 1);

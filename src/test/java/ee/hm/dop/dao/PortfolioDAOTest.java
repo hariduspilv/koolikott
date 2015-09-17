@@ -52,6 +52,7 @@ public class PortfolioDAOTest extends DatabaseTestBase {
         assertNull(portfolio.getSummary());
         assertEquals(new Long(14), portfolio.getViews());
         assertTrue(portfolio.getChapters().isEmpty());
+        assertTrue(portfolio.getTags().isEmpty());
     }
 
     @Test
@@ -89,6 +90,7 @@ public class PortfolioDAOTest extends DatabaseTestBase {
         assertEquals("mati.maasikas-vaarikas", portfolio.getCreator().getUsername());
         assertEquals("The changes after 2008.", portfolio.getSummary());
         assertEquals(new Long(95455215), portfolio.getViews());
+        assertEquals(5, portfolio.getTags().size());
 
         List<Chapter> chapters = portfolio.getChapters();
         assertEquals(1, chapters.size());

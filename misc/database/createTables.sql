@@ -360,3 +360,18 @@ CREATE TABLE Chapter (
     REFERENCES Portfolio (id)
     ON DELETE RESTRICT
 );
+
+CREATE TABLE Portfolio_Tag (
+  portfolio BIGINT NOT NULL,
+  tag BIGINT NOT NULL,
+
+  PRIMARY KEY (portfolio, tag),
+    
+  FOREIGN KEY (portfolio) 
+    REFERENCES Portfolio(id)
+    ON DELETE RESTRICT,
+    
+  FOREIGN KEY (tag)
+    REFERENCES Tag(id)
+    ON DELETE RESTRICT
+);
