@@ -116,7 +116,12 @@ CREATE TABLE AuthenticatedUser (
 
 CREATE TABLE AuthenticationState (
   id          BIGINT AUTO_INCREMENT PRIMARY KEY,
-  token       VARCHAR(255) UNIQUE NOT NULL
+  token       VARCHAR(255) UNIQUE NOT NULL,
+  created     TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  name        VARCHAR(255),
+  surname     VARCHAR(255),
+  idCode      VARCHAR(11),
+  sessionCode VARCHAR(255)
 );
 
 CREATE TABLE Material (

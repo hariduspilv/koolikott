@@ -6,6 +6,7 @@ import static org.junit.Assert.fail;
 
 import javax.inject.Inject;
 
+import org.joda.time.DateTime;
 import org.junit.Test;
 
 import ee.hm.dop.common.test.DatabaseTestBase;
@@ -70,6 +71,7 @@ public class AuthenticationStateDAOTest extends DatabaseTestBase {
 
     private AuthenticationState getAuthenticationState() {
         AuthenticationState authenticationState = new AuthenticationState();
+        authenticationState.setCreated(new DateTime());
         authenticationState.setToken("superTOKEN");
         return authenticationState;
     }

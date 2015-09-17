@@ -3,6 +3,7 @@ package ee.hm.dop.guice.module;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.ws.rs.client.Client;
+import javax.xml.soap.SOAPConnection;
 
 import org.apache.commons.configuration.Configuration;
 
@@ -13,6 +14,7 @@ import ee.hm.dop.guice.provider.ConfigurationProvider;
 import ee.hm.dop.guice.provider.EntityManagerFactoryProvider;
 import ee.hm.dop.guice.provider.EntityManagerProvider;
 import ee.hm.dop.guice.provider.HttpClientProvider;
+import ee.hm.dop.guice.provider.SOAPConnectionProvider;
 import ee.hm.dop.guice.provider.SearchEngineServiceProvider;
 import ee.hm.dop.service.SearchEngineService;
 
@@ -26,5 +28,6 @@ public class ProviderModule extends AbstractModule {
         bind(EntityManager.class).toProvider(EntityManagerProvider.class);
         bind(Client.class).toProvider(HttpClientProvider.class);
         bind(SearchEngineService.class).toProvider(SearchEngineServiceProvider.class);
+        bind(SOAPConnection.class).toProvider(SOAPConnectionProvider.class);
     }
 }

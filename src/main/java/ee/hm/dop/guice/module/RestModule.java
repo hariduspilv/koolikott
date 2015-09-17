@@ -12,6 +12,8 @@ import ee.hm.dop.service.LicenseTypeService;
 import ee.hm.dop.service.LoginService;
 import ee.hm.dop.service.LogoutService;
 import ee.hm.dop.service.MaterialService;
+import ee.hm.dop.service.MobileIDLoginService;
+import ee.hm.dop.service.MobileIDSOAPService;
 import ee.hm.dop.service.PageService;
 import ee.hm.dop.service.RepositoryService;
 import ee.hm.dop.service.ResourceTypeService;
@@ -44,5 +46,7 @@ public class RestModule extends ServletModule {
         bind(TaatService.class);
         bind(AuthenticatedUserService.class);
         bind(LogoutService.class);
+        bind(MobileIDLoginService.class);
+        bind(MobileIDSOAPService.class);
     }
 }

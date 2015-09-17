@@ -53,6 +53,8 @@ import ee.hm.dop.common.test.ResourceIntegrationTestBase;
 import ee.hm.dop.dao.AuthenticationStateDAO;
 import ee.hm.dop.model.AuthenticatedUser;
 import ee.hm.dop.model.AuthenticationState;
+import ee.hm.dop.model.User;
+import ee.hm.dop.model.mobileid.MobileAuthResponse;
 
 public class LoginResourceTest extends ResourceIntegrationTestBase {
 
@@ -217,6 +219,48 @@ public class LoginResourceTest extends ResourceIntegrationTestBase {
         AuthenticatedUser authenticatedUser = response.readEntity(new GenericType<AuthenticatedUser>() {
         });
         assertNull(authenticatedUser);
+    }
+
+    @Test
+    public void mobileIDAuthenticate() {
+        String phoneNumber = "55551234";
+        String idCode = "22334455667";
+        String language = "est";
+        Response response = doGet(
+                String.format("login/mobileId?phoneNumber=%s&idCode=%s&language=%s", phoneNumber, idCode, language));
+        MobileAuthResponse mobileAuthResponse = response.readEntity(new GenericType<MobileAuthResponse>() {
+        });
+
+        assertNotNull(mobileAuthResponse.getToken());
+        assertNotNull(mobileAuthResponse.getChallengeId());
+
+        Response isValid = doGet(String.format("login/mobileId/isValid?token=%s", mobileAuthResponse.getToken()));
+        AuthenticatedUser authenticatedUser = isValid.readEntity(new GenericType<AuthenticatedUser>() {
+        });
+
+        assertNotNull(authenticatedUser.getToken());
+        User user = authenticatedUser.getUser();
+        assertEquals(idCode, user.getIdCode());
+        assertEquals("Matt", user.getName());
+        assertEquals("Smith", user.getSurname());
+        assertNotNull(user.getUsername());
+    }
+
+    @Test
+    public void mobileIDAuthenticateNotValid() {
+        String phoneNumber = "44441234";
+        String idCode = "33445566778";
+        String language = "est";
+        Response response = doGet(
+                String.format("login/mobileId?phoneNumber=%s&idCode=%s&language=%s", phoneNumber, idCode, language));
+        MobileAuthResponse mobileAuthResponse = response.readEntity(new GenericType<MobileAuthResponse>() {
+        });
+
+        assertNotNull(mobileAuthResponse.getToken());
+        assertNotNull(mobileAuthResponse.getChallengeId());
+
+        Response isValid = doGet(String.format("login/mobileId/isValid?token=%s", mobileAuthResponse.getToken()));
+        assertEquals(500, isValid.getStatus());
     }
 
     private AuthnRequest decodeAuthnRequest(String request) throws Exception {

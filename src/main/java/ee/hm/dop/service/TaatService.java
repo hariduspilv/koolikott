@@ -216,6 +216,7 @@ public class TaatService {
 
     private AuthenticationState createAuthenticationState(String token) {
         AuthenticationState authenticationState = new AuthenticationState();
+        authenticationState.setCreated(new DateTime());
         authenticationState.setToken(token);
         return authenticationStateDAO.createAuthenticationState(authenticationState);
     }

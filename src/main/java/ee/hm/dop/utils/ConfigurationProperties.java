@@ -28,4 +28,11 @@ public interface ConfigurationProperties {
     String KEYSTORE_SIGNING_ENTITY_ID = "keystore.signingEntityID";
     String KEYSTORE_SIGNING_ENTITY_PASSWORD = "keystore.signingEntityPassword";
 
+    // Mobile ID
+    String MOBILEID_ENDPOINT = "mobileID.endpoint";
+    String MOBILEID_SERVICENAME = "mobileID.serviceName";
+    String MOBILEID_NAMESPACE_PREFIX = "mobileID.namespace.prefix";
+    String MOBILEID_NAMESPACE_URI = "mobileID.namespace.uri";
+    String MOBILEID_MESSAGE_TO_DISPLAY = "mobileID.messageToDisplay";
+
 }
