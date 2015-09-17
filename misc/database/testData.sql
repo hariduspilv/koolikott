@@ -380,8 +380,8 @@ insert into Portfolio(id, title, subject, educationalContext, creator, summary, 
 
 -- Chapter
 
-insert into Chapter(id, title, portfolio) values (1, 'The crisis', 1);
-insert into Chapter(id, title, portfolio) values (2, 'The EU response', 1);
+insert into Chapter(id, title, portfolio, orderInPortfolio) values (1, 'The crisis', 1, 0);
+insert into Chapter(id, title, portfolio, orderInPortfolio) values (2, 'The EU response', 1, 1);
 
 -- Portfolio-Tags
 

@@ -13,6 +13,7 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OrderColumn;
 import javax.persistence.UniqueConstraint;
 
 import org.hibernate.annotations.Type;
@@ -61,6 +62,7 @@ public class Portfolio {
 
     @OneToMany(fetch = FetchType.EAGER)
     @JoinColumn(name = "portfolio", nullable = false)
+    @OrderColumn(name = "orderInPortfolio", nullable = false)
     private List<Chapter> chapters;
 
     @ManyToMany(fetch = EAGER)

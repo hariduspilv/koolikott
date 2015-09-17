@@ -93,9 +93,17 @@ public class PortfolioDAOTest extends DatabaseTestBase {
         assertEquals(5, portfolio.getTags().size());
 
         List<Chapter> chapters = portfolio.getChapters();
-        assertEquals(1, chapters.size());
+        assertEquals(3, chapters.size());
         Chapter chapter = chapters.get(0);
         assertEquals(new Long(1), chapter.getId());
         assertEquals("The crisis", chapter.getTitle());
+
+        chapter = chapters.get(1);
+        assertEquals(new Long(3), chapter.getId());
+        assertEquals("Chapter 2", chapter.getTitle());
+
+        chapter = chapters.get(2);
+        assertEquals(new Long(2), chapter.getId());
+        assertEquals("Chapter 3", chapter.getTitle());
     }
 }

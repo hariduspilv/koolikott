@@ -267,7 +267,9 @@ insert into Portfolio(id, title, subject, educationalContext, creator, summary, 
 
 -- Chapter
 
-insert into Chapter(id, title, portfolio) values (1, 'The crisis', 1);
+insert into Chapter(id, title, portfolio, orderInPortfolio) values (1, 'The crisis', 1, 0);
+insert into Chapter(id, title, portfolio, orderInPortfolio) values (2, 'Chapter 3', 1, 2);
+insert into Chapter(id, title, portfolio, orderInPortfolio) values (3, 'Chapter 2', 1, 1);
 
 -- Portfolio-Tags
 
