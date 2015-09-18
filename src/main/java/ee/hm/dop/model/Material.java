@@ -114,7 +114,7 @@ public class Material {
     @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
     private DateTime updated;
 
-    @Column
+    @Column(nullable = false)
     private Long views = (long) 0;
 
     @ManyToMany(fetch = EAGER, cascade = { PERSIST, MERGE })
