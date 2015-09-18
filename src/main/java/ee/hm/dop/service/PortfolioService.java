@@ -20,4 +20,8 @@ public class PortfolioService {
     public List<Portfolio> getByCreator(User creator) {
         return portfolioDAO.findByCreator(creator);
     }
+
+    public byte[] getPortfolioPicture(Portfolio portfolio) {
+        return portfolioDAO.findPictureByPortfolio(portfolio);
+    }
 }

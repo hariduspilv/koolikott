@@ -10,15 +10,18 @@ import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
+import javax.persistence.Lob;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OrderColumn;
 import javax.persistence.UniqueConstraint;
 
+import org.hibernate.annotations.Formula;
 import org.hibernate.annotations.Type;
 import org.joda.time.DateTime;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
@@ -72,6 +75,13 @@ public class Portfolio {
             inverseJoinColumns = { @JoinColumn(name = "tag") },
             uniqueConstraints = @UniqueConstraint(columnNames = { "portfolio", "tag" }))
     private List<Tag> tags;
+
+    @Lob
+    @JsonIgnore
+    private byte[] picture;
+
+    @Formula("picture is not null")
+    private boolean hasPicture;
 
     public Long getId() {
         return id;
@@ -163,5 +173,21 @@ public class Portfolio {
 
     public void setTags(List<Tag> tags) {
         this.tags = tags;
+    }
+
+    public byte[] getPicture() {
+        return picture;
+    }
+
+    public void setPicture(byte[] picture) {
+        this.picture = picture;
+    }
+
+    public boolean getHasPicture() {
+        return hasPicture;
+    }
+
+    public void setHasPicture(boolean hasPicture) {
+        this.hasPicture = hasPicture;
     }
 }

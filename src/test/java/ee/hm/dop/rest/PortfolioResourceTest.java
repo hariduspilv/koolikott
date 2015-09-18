@@ -7,6 +7,7 @@ import static org.junit.Assert.assertNotNull;
 import java.util.List;
 
 import javax.ws.rs.core.GenericType;
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import org.joda.time.DateTime;
@@ -19,6 +20,7 @@ public class PortfolioResourceTest extends ResourceIntegrationTestBase {
 
     private static final String GET_PORTFOLIO_URL = "portfolio?id=%s";
     private static final String GET_BY_CREATOR_URL = "portfolio/getByCreator?username=%s";
+    private static final String GET_PORTFOLIO_PICTURE_URL = "portfolio/getPicture?portfolioId=%s";
 
     @Test
     public void getPortfolio() {
@@ -77,6 +79,29 @@ public class PortfolioResourceTest extends ResourceIntegrationTestBase {
                 });
 
         assertEquals(0, portfolios.size());
+    }
+
+    @Test
+    public void getPortfolioPicture() {
+        long portfolioId = 1;
+        Response response = doGet(format(GET_PORTFOLIO_PICTURE_URL, portfolioId), MediaType.WILDCARD_TYPE);
+        byte[] picture = response.readEntity(new GenericType<byte[]>() {
+        });
+        assertNotNull(picture);
+        assertEquals(Response.Status.OK.getStatusCode(), response.getStatus());
+    }
+
+    @Test
+    public void getPortfolioPictureNull() {
+        long portfolioId = 2;
+        Response response = doGet(format(GET_PORTFOLIO_PICTURE_URL, portfolioId), MediaType.WILDCARD_TYPE);
+        assertEquals(Response.Status.NOT_FOUND.getStatusCode(), response.getStatus());
+    }
+
+    @Test
+    public void getPortfolioPictureIdNull() {
+        Response response = doGet(format(GET_PORTFOLIO_PICTURE_URL, null), MediaType.WILDCARD_TYPE);
+        assertEquals(Response.Status.NOT_FOUND.getStatusCode(), response.getStatus());
     }
 
     private void assertPortfolio1(Portfolio portfolio) {

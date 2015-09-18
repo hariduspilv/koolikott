@@ -30,8 +30,8 @@ public class PortfolioResource {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public Portfolio get(@QueryParam("id") long materialId) {
-        return portfolioService.get(materialId);
+    public Portfolio get(@QueryParam("id") long portfolioId) {
+        return portfolioService.get(portfolioId);
     }
 
     @GET
@@ -48,6 +48,21 @@ public class PortfolioResource {
         }
 
         return portfolioService.getByCreator(creator);
+    }
+
+    @GET
+    @Path("/getPicture")
+    @Produces("image/png")
+    public Response getPictureById(@QueryParam("portfolioId") long id) {
+        Portfolio portfolio = new Portfolio();
+        portfolio.setId(id);
+        byte[] pictureData = portfolioService.getPortfolioPicture(portfolio);
+
+        if (pictureData != null) {
+            return Response.ok(pictureData).build();
+        } else {
+            return Response.status(HttpURLConnection.HTTP_NOT_FOUND).build();
+        }
     }
 
     private void throwBadRequestException(String message) {

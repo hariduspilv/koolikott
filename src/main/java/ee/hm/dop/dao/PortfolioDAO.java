@@ -40,4 +40,18 @@ public class PortfolioDAO {
 
         return singleResult;
     }
+
+    public byte[] findPictureByPortfolio(Portfolio portfolio) {
+        TypedQuery<byte[]> findById = entityManager.createQuery(
+                "SELECT p.picture FROM Portfolio p WHERE p.id = :id", byte[].class);
+
+        byte[] picture = null;
+        try {
+            picture = findById.setParameter("id", portfolio.getId()).getSingleResult();
+        } catch (NoResultException ex) {
+            // ignore
+        }
+
+        return picture;
+    }
 }

@@ -1,6 +1,7 @@
 package ee.hm.dop.dao;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
@@ -105,5 +106,42 @@ public class PortfolioDAOTest extends DatabaseTestBase {
         chapter = chapters.get(2);
         assertEquals(new Long(2), chapter.getId());
         assertEquals("Chapter 3", chapter.getTitle());
+    }
+
+    @Test
+    public void findPictureByPortfolio() {
+        Portfolio portfolio = new Portfolio();
+        portfolio.setId((long) 1);
+        byte[] picture = portfolioDAO.findPictureByPortfolio(portfolio);
+        assertNotNull(picture);
+    }
+
+
+    @Test
+    public void findPictureByPortfolioNoPicture() {
+        Portfolio portfolio = new Portfolio();
+        portfolio.setId((long) 2);
+        byte[] picture = portfolioDAO.findPictureByPortfolio(portfolio);
+        assertNull(picture);
+    }
+
+    @Test
+    public void findPictureByPortfoNullId() {
+        Portfolio portfolio = new Portfolio();
+        portfolio.setId(null);
+        byte[] picture = portfolioDAO.findPictureByPortfolio(portfolio);
+        assertNull(picture);
+    }
+
+    @Test
+    public void getHasPictureTrue() {
+        Portfolio portfolio = portfolioDAO.findById(1);
+        assertTrue(portfolio.getHasPicture());
+    }
+
+    @Test
+    public void getHasPictureNoPicture() {
+        Portfolio portfolio = portfolioDAO.findById(2);
+        assertFalse(portfolio.getHasPicture());
     }
 }

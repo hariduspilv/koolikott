@@ -342,6 +342,7 @@ CREATE TABLE Portfolio (
   views              BIGINT   NOT NULL DEFAULT 0,
   created            TIMESTAMP NOT NUll DEFAULT CURRENT_TIMESTAMP,
   updated            TIMESTAMP NULL DEFAULT NULL,
+  picture            LONGBLOB DEFAULT NULL,
 
   FOREIGN KEY (subject)
     REFERENCES Subject (id)
