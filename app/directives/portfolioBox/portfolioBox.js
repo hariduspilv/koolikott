@@ -20,6 +20,10 @@ define(['app'], function(app)
 				$scope.formatSurname = function(surname){
 					return formatSurnameToInitialsButLast(surname);
 				}
+
+				$scope.formatDate = function(date) {
+	    		return formatDateToDayMonthYear(date);
+            	}
 			}
 		};
 	}]);

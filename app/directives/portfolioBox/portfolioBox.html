@@ -9,10 +9,11 @@
         <div class="description">
             <div data-ng-bind="portfolio.title" class="title"></div>
             <div class="authors text-nowrap">
-                    <span data-ng-bind="formatName(portfolio.creator.name)"></span><span data-ng-bind="formatSurname(portfolio.creator.surname)"></span>
+                <span data-ng-bind="formatName(portfolio.creator.name)"></span><span data-ng-bind="formatSurname(portfolio.creator.surname)"></span>
             </div>
             <div class="clearfix">
-                
+                <div data-ng-if="portfolio.created" class="pull-left">{{ formatDate(portfolio.created) }}</div>    
+                <div data-ng-if="!portfolio.created" class="pull-left"><span data-translate="UNKNOWN"></span></div>
             </div>
         </div>
         <div class="statistic text-right text-grey">
