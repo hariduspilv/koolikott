@@ -5,6 +5,7 @@ define(['app'], function(app)
 
         	if ($rootScope.savedPortfolio){
             	$scope.portfolio = $rootScope.savedPortfolio;
+            	init();
         	} else {
             	var portfolioId = $route.current.params.id;
 	        	serverCallService.makeGet("rest/portfolio?id=" + portfolioId, {}, getPortfolioSuccess, getPortfolioFail);
@@ -15,6 +16,7 @@ define(['app'], function(app)
 	            	getPortfolioFail();
 	            } else {
 	                $scope.portfolio = portfolio;
+	                init();
 	            }
 	    	}
 	    	
@@ -27,6 +29,18 @@ define(['app'], function(app)
 	    	$scope.formatDate = function(date) {
 	    		return formatDateToDayMonthYear(date);
             }
+
+            function init() {            
+            	var params = {
+                	'id': $scope.portfolio.id
+            	};
+
+            	serverCallService.makePost("rest/portfolio/increaseViewCount", params, countViewSuccess, countViewFail); 
+    		}
+
+    		function countViewSuccess(data) { }
+        
+        	function countViewFail(data, status) { }
     	}
     ]);
 });
