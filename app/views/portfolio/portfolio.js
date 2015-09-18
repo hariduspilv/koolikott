@@ -3,7 +3,7 @@ define(['app'], function(app)
     app.controller('portfolioController', ['$scope', 'translationService', 'serverCallService', '$route', '$location', 'alertService', '$rootScope',
         function($scope, translationService, serverCallService, $route, $location, alertService, $rootScope) {
 
-        	if ($rootScope.savedMaterial){
+        	if ($rootScope.savedPortfolio){
             	$scope.portfolio = $rootScope.savedPortfolio;
         	} else {
             	var portfolioId = $route.current.params.id;
