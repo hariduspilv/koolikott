@@ -6,6 +6,7 @@ import static org.junit.Assert.assertNotNull;
 
 import java.util.List;
 
+import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -21,10 +22,11 @@ public class PortfolioResourceTest extends ResourceIntegrationTestBase {
     private static final String GET_PORTFOLIO_URL = "portfolio?id=%s";
     private static final String GET_BY_CREATOR_URL = "portfolio/getByCreator?username=%s";
     private static final String GET_PORTFOLIO_PICTURE_URL = "portfolio/getPicture?portfolioId=%s";
+    private static final String PORTFOLIO_INCREASE_VIEW_COUNT_URL = "portfolio/increaseViewCount";
 
     @Test
     public void getPortfolio() {
-        Portfolio portfolio = doGet(format(GET_PORTFOLIO_URL, 1), Portfolio.class);
+        Portfolio portfolio = getPortfolio(1);
 
         assertNotNull(portfolio);
         assertEquals(new Long(1), portfolio.getId());
@@ -102,6 +104,37 @@ public class PortfolioResourceTest extends ResourceIntegrationTestBase {
     public void getPortfolioPictureIdNull() {
         Response response = doGet(format(GET_PORTFOLIO_PICTURE_URL, null), MediaType.WILDCARD_TYPE);
         assertEquals(Response.Status.NOT_FOUND.getStatusCode(), response.getStatus());
+    }
+
+    @Test
+    public void increaseViewCount() {
+        long id = 3;
+        Portfolio portfolioBefore = getPortfolio(id);
+
+        Portfolio portfolio = new Portfolio();
+        portfolio.setId(id);
+
+        Response response = doPost(PORTFOLIO_INCREASE_VIEW_COUNT_URL,
+                Entity.entity(portfolio, MediaType.APPLICATION_JSON_TYPE));
+        assertEquals(Response.Status.OK.getStatusCode(), response.getStatus());
+
+        Portfolio portfolioAfter = getPortfolio(id);
+
+        assertEquals(Long.valueOf(portfolioBefore.getViews() + 1), portfolioAfter.getViews());
+    }
+
+    @Test
+    public void increaseViewCountNoPortfolio() {
+        Portfolio portfolio = new Portfolio();
+        portfolio.setId(99999L);
+
+        Response response = doPost(PORTFOLIO_INCREASE_VIEW_COUNT_URL,
+                Entity.entity(portfolio, MediaType.APPLICATION_JSON_TYPE));
+        assertEquals(Response.Status.BAD_REQUEST.getStatusCode(), response.getStatus());
+    }
+
+    private Portfolio getPortfolio(long id) {
+        return doGet(format(GET_PORTFOLIO_URL, id), Portfolio.class);
     }
 
     private void assertPortfolio1(Portfolio portfolio) {

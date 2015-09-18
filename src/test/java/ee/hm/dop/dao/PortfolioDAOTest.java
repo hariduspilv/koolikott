@@ -4,6 +4,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 
 import java.util.List;
@@ -22,6 +23,8 @@ public class PortfolioDAOTest extends DatabaseTestBase {
 
     @Inject
     private PortfolioDAO portfolioDAO;
+
+    private int threadsDone;
 
     @Test
     public void findById() {
@@ -46,7 +49,6 @@ public class PortfolioDAOTest extends DatabaseTestBase {
         assertEquals("New ways how to do it", portfolio.getTitle());
         assertNull(portfolio.getSubject());
         assertEquals(new DateTime("2012-12-29T08:00:01.000+02:00"), portfolio.getCreated());
-        assertNull(portfolio.getUpdated());
         assertNull(portfolio.getEducationalContext());
         assertEquals(new Long(4), portfolio.getCreator().getId());
         assertEquals("voldemar.vapustav2", portfolio.getCreator().getUsername());
@@ -116,7 +118,6 @@ public class PortfolioDAOTest extends DatabaseTestBase {
         assertNotNull(picture);
     }
 
-
     @Test
     public void findPictureByPortfolioNoPicture() {
         Portfolio portfolio = new Portfolio();
@@ -143,5 +144,61 @@ public class PortfolioDAOTest extends DatabaseTestBase {
     public void getHasPictureNoPicture() {
         Portfolio portfolio = portfolioDAO.findById(2);
         assertFalse(portfolio.getHasPicture());
+    }
+
+    @Test
+    public void increaseViewCount() {
+        Portfolio portfolio = portfolioDAO.findById(2);
+        long originalViews = portfolio.getViews();
+        assertSame(14L, originalViews);
+
+        portfolio.setViews(++originalViews);
+        portfolioDAO.incrementViewCount(portfolio);
+
+        Portfolio returnedPortfolio = portfolioDAO.findById(2);
+        assertSame(15L, returnedPortfolio.getViews());
+
+        returnedPortfolio.setViews(14L);
+        Portfolio originalPortfolio = portfolioDAO.update(returnedPortfolio);
+        assertSame(14L, originalPortfolio.getViews());
+    }
+
+    @Test
+    public void increaseViewCountAtTheSameTime() {
+        threadsDone = 0;
+
+        class IncreaseViewCountThread implements Runnable {
+
+            @Override
+            public void run() {
+                Portfolio portfolio = new Portfolio();
+                portfolio.setId(2L);
+
+                for (int i = 0; i < 10; i++) {
+                    portfolioDAO.incrementViewCount(portfolio);
+                }
+
+                threadsDone++;
+            }
+        }
+
+        int totalThreads = 10;
+        for (int i = 0; i < totalThreads; i++) {
+            new IncreaseViewCountThread().run();
+        }
+
+        while (threadsDone < totalThreads) {
+            try {
+                Thread.currentThread().sleep(30);
+            } catch (InterruptedException e) {
+                //ignore
+            }
+        }
+
+        Portfolio newPortfolio = portfolioDAO.findById(2L);
+        assertSame(114L, newPortfolio.getViews());
+
+        newPortfolio.setViews(14L);
+        portfolioDAO.update(newPortfolio);
     }
 }
