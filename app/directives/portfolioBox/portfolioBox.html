@@ -2,7 +2,8 @@
     <div class="block">
         <div class="illustration">
             <figure>
-                <img src="img/placeholder-portfolio-single.png" class="img-responsive">
+                <img data-ng-if="!portfolio.hasPicture" src="img/placeholder-portfolio-single.png" class="img-responsive">
+                <img data-ng-if="portfolio.hasPicture" data-ng-src="rest/portfolio/getPicture?portfolioId={{portfolio.id}}" class="img-responsive">
                 <img src="img/placeholder-material-empty.png" class="img-responsive img-empty">
             </figure>
         </div>
