@@ -179,3 +179,33 @@ function formatDateToDayMonthYear(dateString) {
 	var date = new Date(dateString);
     return formatDay(date.getDate()) + "." + formatMonth(date.getMonth() + 1) + "." + date.getFullYear();
 }
+
+function arrayToInitials(array) {
+	var res = "";
+	for(var i = 0; i < array.length; i++) {
+		res += wordToInitial(array[i]) + " ";
+	}
+
+	return res.trim();
+}
+
+function wordToInitial(name){
+	return name.charAt(0).toUpperCase() + ".";
+}
+
+function formatNameToInitials(name) {
+	return arrayToInitials(name.split(" "));
+}
+
+function formatSurnameToInitialsButLast(surname) {
+	var array = surname.split(" ");
+	var last = array.length - 1;
+	var res = "";
+
+	if (last > 0) {
+		res = arrayToInitials(array.slice(0, last)) + " ";
+	}
+
+	res += array[last];
+	return res;	
+}

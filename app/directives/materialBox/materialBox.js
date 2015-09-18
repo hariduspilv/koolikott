@@ -31,33 +31,11 @@ define(['app'], function(app)
 				}
 
 				$scope.formatName = function(name) {
-					return arrayToInitials(name.split(" "));
-				}
-
-				function arrayToInitials(array) {
-					var res = "";
-					for(var i = 0; i < array.length; i++) {
-						res += wordToInitial(array[i]) + " ";
-					}
-
-					return res.trim();
-				}
-
-				function wordToInitial(name){
-					return name.charAt(0).toUpperCase() + ".";
+					return formatNameToInitials(name);
 				}
 
 				$scope.formatSurname = function(surname){
-					var array = surname.split(" ");
-					var last = array.length - 1;
-					var res = "";
-
-					if (last > 0) {
-						res = arrayToInitials(array.slice(0, last)) + " ";
-					}
-
-					res += array[last];
-					return res;
+					return formatSurnameToInitialsButLast(surname);
 				}
 
 				$scope.isOfType = function(type) {

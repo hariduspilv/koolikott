@@ -12,6 +12,14 @@ define(['app'], function(app)
 				$scope.savePortfolio = function(portfolio) {
 					$rootScope.savedPortfolio = portfolio;
 				}
+
+				$scope.formatName = function(name) {
+					return formatNameToInitials(name);
+				}
+
+				$scope.formatSurname = function(surname){
+					return formatSurnameToInitialsButLast(surname);
+				}
 			}
 		};
 	}]);
