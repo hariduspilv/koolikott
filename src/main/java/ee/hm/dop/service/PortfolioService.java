@@ -24,4 +24,8 @@ public class PortfolioService {
     public byte[] getPortfolioPicture(Portfolio portfolio) {
         return portfolioDAO.findPictureByPortfolio(portfolio);
     }
+
+    public void incrementViewCount(Portfolio portfolio) {
+        portfolioDAO.incrementViewCount(portfolio);
+    }
 }

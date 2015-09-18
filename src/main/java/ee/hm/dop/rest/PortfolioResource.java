@@ -7,6 +7,7 @@ import java.util.List;
 
 import javax.inject.Inject;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
@@ -67,5 +68,19 @@ public class PortfolioResource {
 
     private void throwBadRequestException(String message) {
         throw new WebApplicationException(Response.status(HttpURLConnection.HTTP_BAD_REQUEST).entity(message).build());
+    }
+
+    @POST
+    @Path("increaseViewCount")
+    public Response increaseViewCount(Portfolio portfolio) {
+        Long portfolioId = portfolio.getId();
+
+        Portfolio originalPortfolio = portfolioService.get(portfolioId);
+        if (originalPortfolio == null) {
+            return Response.status(HttpURLConnection.HTTP_BAD_REQUEST).entity("Invalid portfolio").build();
+        }
+
+        portfolioService.incrementViewCount(originalPortfolio);
+        return Response.status(HttpURLConnection.HTTP_OK).build();
     }
 }
