@@ -132,7 +132,7 @@ CREATE TABLE Material (
   source               TEXT NOT NULL,
   added                TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   updated              TIMESTAMP NULL DEFAULT NULL,
-  views                BIGINT DEFAULT 0,
+  views                BIGINT NOT NULL DEFAULT 0,
   picture              LONGBLOB DEFAULT NULL,
   repositoryIdentifier VARCHAR(255),
   repository           BIGINT,
