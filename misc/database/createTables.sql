@@ -361,6 +361,7 @@ CREATE TABLE Chapter (
   id                 BIGINT AUTO_INCREMENT PRIMARY KEY,
   title              VARCHAR(255) NOT NULL,
   portfolio          BIGINT NOT NULL,
+  textValue          TEXT,
   orderInPortfolio   INTEGER NOT NULL,
 
   FOREIGN KEY (portfolio)

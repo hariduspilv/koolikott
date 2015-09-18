@@ -381,8 +381,8 @@ update Portfolio set picture = (unhex('FFD8FFE1001845786966000049492A00080000000
 
 -- Chapter
 
-insert into Chapter(id, title, portfolio, orderInPortfolio) values (1, 'The crisis', 1, 0);
-insert into Chapter(id, title, portfolio, orderInPortfolio) values (2, 'The EU response', 1, 1);
+insert into Chapter(id, title, portfolio, textValue, orderInPortfolio) values (1, 'The crisis', 1, 'line 1\nline2', 0);
+insert into Chapter(id, title, portfolio, textValue, orderInPortfolio) values (2, 'The EU response', 1, 'This is some text that explains what is this Chapter about.\nIt can have many lines\n\n\nAnd can also have    spaces   betwenn    the words on it', 1);
 
 -- Portfolio-Tags
 
