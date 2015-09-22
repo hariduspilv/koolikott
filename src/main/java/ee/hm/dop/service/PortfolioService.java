@@ -26,6 +26,11 @@ public class PortfolioService {
     }
 
     public void incrementViewCount(Portfolio portfolio) {
-        portfolioDAO.incrementViewCount(portfolio);
+        Portfolio originalPortfolio = portfolioDAO.findById(portfolio.getId());
+        if (originalPortfolio == null) {
+            throw new RuntimeException("Portfolio not found");
+        }
+
+        portfolioDAO.incrementViewCount(originalPortfolio);
     }
 }
