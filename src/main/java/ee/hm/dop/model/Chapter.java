@@ -13,6 +13,9 @@ public class Chapter {
     @Column
     private String title;
 
+    @Column(columnDefinition = "TEXT", name = "textValue")
+    private String text;
+
     public Long getId() {
         return id;
     }
@@ -27,5 +30,13 @@ public class Chapter {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public String getText() {
+        return text;
+    }
+
+    public void setText(String text) {
+        this.text = text;
     }
 }
