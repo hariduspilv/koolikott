@@ -105,6 +105,8 @@ insert into Translation(translationGroup, translationKey, translation) values (2
 insert into Translation(translationGroup, translationKey, translation) values (2, 'MATERIAL_PAID', 'Платное');
 insert into Translation(translationGroup, translationKey, translation) values (2, 'ERROR_PORTFOLIO_NOT_FOUND', 'Портфолио не найдены');
 insert into Translation(translationGroup, translationKey, translation) values (2, 'MY_PROFILE', 'Мой профайл');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'ERROR_GETTING_USER_FAILED', 'Пользователь не найден');
+
 
 -- Material Subject translations
 insert into Translation(translationGroup, translationKey, translation) values (2, 'SUBJECT_ESTONIAN', 'Эстонский');
