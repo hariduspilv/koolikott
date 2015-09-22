@@ -107,7 +107,7 @@ insert into Translation(translationGroup, translationKey, translation) values (1
 insert into Translation(translationGroup, translationKey, translation) values (1, 'ERROR_PORTFOLIO_NOT_FOUND', 'Õpimappi ei leitud');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'MY_PROFILE', 'Minu profiil');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'ERROR_GETTING_USER_FAILED', 'Kasutajat ei leitud');
-
+insert into Translation(translationGroup, translationKey, translation) values (1, 'PERSONAL_CODE', 'Isikukood');
 
 -- Material Subject translations
 insert into Translation(translationGroup, translationKey, translation) values (1, 'SUBJECT_ESTONIAN', 'Eesti keel');
