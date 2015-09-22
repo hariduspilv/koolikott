@@ -100,6 +100,7 @@ insert into Translation(translationGroup, translationKey, translation) values (1
 insert into Translation(translationGroup, translationKey, translation) values (1, 'LOGIN_TAAT', 'TAAT');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'LOGIN_IDCARD', 'ID-kaart');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'LOGIN_MOBILEID', 'Mobiil-ID');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'LOGIN_MOBILEID_CODE', 'Sinu kood on');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'ERROR_LOGIN_FAILED', 'Sisselogimine ebaõnnestus');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'ERROR_MATERIAL_NOT_FOUND', 'Materjali ei leitud');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'MATERIAL_PAID', 'Tasuline');

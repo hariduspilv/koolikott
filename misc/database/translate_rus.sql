@@ -100,6 +100,7 @@ insert into Translation(translationGroup, translationKey, translation) values (2
 insert into Translation(translationGroup, translationKey, translation) values (2, 'LOGIN_TAAT', 'TAAT');
 insert into Translation(translationGroup, translationKey, translation) values (2, 'LOGIN_IDCARD', 'ID-карта');
 insert into Translation(translationGroup, translationKey, translation) values (2, 'LOGIN_MOBILEID', 'Mobiil-ID');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'LOGIN_MOBILEID_CODE', 'Ваш код');
 insert into Translation(translationGroup, translationKey, translation) values (2, 'ERROR_LOGIN_FAILED', 'Ошибка входа');
 insert into Translation(translationGroup, translationKey, translation) values (2, 'ERROR_MATERIAL_NOT_FOUND', 'Материал не найден');
 insert into Translation(translationGroup, translationKey, translation) values (2, 'MATERIAL_PAID', 'Платное');
