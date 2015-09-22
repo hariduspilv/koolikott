@@ -403,5 +403,26 @@
         float: none;
         height: 100%;
         vertical-align: bottom;
+        
+        .form-control {
+            border: 0; 
+            border-bottom: 1px solid #003D68; 
+            @include box-shadow-spec(0, 0, 0, 0, #FFF);
+            background: none;
+            color: #003D68;
+            
+            &::-webkit-input-placeholder {
+                color: $navbar-default-bg;
+            }
+            &::-moz-placeholder {
+                color: $navbar-default-bg;
+            }
+            &:-moz-placeholder {
+                color: $navbar-default-bg;
+            }
+            &:-ms-input-placeholder {
+                color: $navbar-default-bg;
+            }
+        }
     }
 }
