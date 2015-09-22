@@ -1,7 +1,7 @@
 define(['app'], function(app)
 {
-    app.controller('profileController', ['$scope', '$route', 'authenticatedUserService', 'serverCallService', '$location', 
-        function($scope, $route, authenticatedUserService, serverCallService, $location) {
+    app.controller('profileController', ['$scope', '$route', 'authenticatedUserService', 'serverCallService', '$location', 'alertService',
+        function($scope, $route, authenticatedUserService, serverCallService, $location, alertService) {
 
     	function init() {
     		isMyProfilePage();
@@ -36,14 +36,15 @@ define(['app'], function(app)
         function getUserSuccess(user) {
             if (isEmpty(user)) {
                 getUserFail();
-                $location.url('/');
             } else {
                 $scope.user = user;
             }
         }
         
         function getUserFail() {
-            console.log('Getting user failed.')
+            console.log('Getting user failed.');
+            alertService.setErrorAlert('ERROR_GETTING_USER_FAILED');
+            $location.url('/');
         }
 
         function getUsersMaterials() {
@@ -63,7 +64,7 @@ define(['app'], function(app)
         }
         
         function getUsersMaterialsFail() {
-            console.log('Failed to get materials. ')
+            console.log('Failed to get materials.');
         }
 
         function getUsersPortfolios() {
@@ -83,7 +84,7 @@ define(['app'], function(app)
         }
         
         function getUsersPortfoliosFail() {
-            console.log('Failed to get portfolios. ')
+            console.log('Failed to get portfolios.');
         }
 
     	init();
