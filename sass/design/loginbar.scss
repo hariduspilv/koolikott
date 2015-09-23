@@ -1,6 +1,7 @@
 .logins {
     position: relative;
     width: 100%;
+    @include box-shadow-spec(0, 1px, 3px, 0, rgba(0, 0, 0, 0.4));
     background-color: #D8F1FD;
     z-index: 99;
     
