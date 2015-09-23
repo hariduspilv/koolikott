@@ -100,12 +100,14 @@ insert into Translation(translationGroup, translationKey, translation) values (3
 insert into Translation(translationGroup, translationKey, translation) values (3, 'LOGIN_TAAT', 'TAAT');
 insert into Translation(translationGroup, translationKey, translation) values (3, 'LOGIN_IDCARD', 'ID-card');
 insert into Translation(translationGroup, translationKey, translation) values (3, 'LOGIN_MOBILEID', 'Mobile-ID');
+insert into Translation(translationGroup, translationKey, translation) values (3, 'LOGIN_MOBILEID_CODE', 'Your code is');
 insert into Translation(translationGroup, translationKey, translation) values (3, 'ERROR_LOGIN_FAILED', 'Login failed');
 insert into Translation(translationGroup, translationKey, translation) values (3, 'ERROR_MATERIAL_NOT_FOUND', 'Material not found');
 insert into Translation(translationGroup, translationKey, translation) values (3, 'MATERIAL_PAID', 'Paid');
 insert into Translation(translationGroup, translationKey, translation) values (3, 'ERROR_PORTFOLIO_NOT_FOUND', 'Portfolio not found');
 insert into Translation(translationGroup, translationKey, translation) values (3, 'MY_PROFILE', 'My profile');
 insert into Translation(translationGroup, translationKey, translation) values (3, 'ERROR_GETTING_USER_FAILED', 'User not found');
+insert into Translation(translationGroup, translationKey, translation) values (3, 'PERSONAL_CODE', 'Personal code');
 
 -- Material Subject translations
 insert into Translation(translationGroup, translationKey, translation) values (3, 'SUBJECT_ESTONIAN', 'Estonian');

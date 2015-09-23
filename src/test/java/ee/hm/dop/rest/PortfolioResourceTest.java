@@ -3,6 +3,7 @@ package ee.hm.dop.rest;
 import static java.lang.String.format;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 
 import java.util.List;
 
@@ -15,6 +16,7 @@ import org.joda.time.DateTime;
 import org.junit.Test;
 
 import ee.hm.dop.common.test.ResourceIntegrationTestBase;
+import ee.hm.dop.model.Chapter;
 import ee.hm.dop.model.Portfolio;
 
 public class PortfolioResourceTest extends ResourceIntegrationTestBase {
@@ -27,22 +29,14 @@ public class PortfolioResourceTest extends ResourceIntegrationTestBase {
     @Test
     public void getPortfolio() {
         Portfolio portfolio = getPortfolio(1);
-
-        assertNotNull(portfolio);
-        assertEquals(new Long(1), portfolio.getId());
-        assertEquals("The new stock market", portfolio.getTitle());
-        assertEquals(new Long(2), portfolio.getSubject().getId());
-        assertEquals(new DateTime("2000-12-29T08:00:01.000+02:00"), portfolio.getCreated());
-        assertEquals(new DateTime("2004-12-29T08:00:01.000+02:00"), portfolio.getUpdated());
-        assertEquals(new Long(1005), portfolio.getEducationalContext().getId());
-        assertEquals("CONTINUINGEDUCATION", portfolio.getEducationalContext().getName());
+        assertPortfolio1(portfolio);
     }
 
     @Test
     public void getByCreator() {
         String username = "mati.maasikas-vaarikas";
-        List<Portfolio> portfolios = doGet(format(GET_BY_CREATOR_URL, username))
-                .readEntity(new GenericType<List<Portfolio>>() {
+        List<Portfolio> portfolios = doGet(format(GET_BY_CREATOR_URL, username)).readEntity(
+                new GenericType<List<Portfolio>>() {
                 });
 
         assertEquals(2, portfolios.size());
@@ -76,8 +70,8 @@ public class PortfolioResourceTest extends ResourceIntegrationTestBase {
     @Test
     public void getByCreatorNoMaterials() {
         String username = "voldemar.vapustav";
-        List<Portfolio> portfolios = doGet(format(GET_BY_CREATOR_URL, username))
-                .readEntity(new GenericType<List<Portfolio>>() {
+        List<Portfolio> portfolios = doGet(format(GET_BY_CREATOR_URL, username)).readEntity(
+                new GenericType<List<Portfolio>>() {
                 });
 
         assertEquals(0, portfolios.size());
@@ -146,5 +140,30 @@ public class PortfolioResourceTest extends ResourceIntegrationTestBase {
         assertEquals("CONTINUINGEDUCATION", portfolio.getEducationalContext().getName());
         assertEquals(new Long(6), portfolio.getCreator().getId());
         assertEquals("mati.maasikas-vaarikas", portfolio.getCreator().getUsername());
+        assertEquals("The changes after 2008.", portfolio.getSummary());
+        assertEquals(new Long(95455215), portfolio.getViews());
+        assertEquals(5, portfolio.getTags().size());
+
+        List<Chapter> chapters = portfolio.getChapters();
+        assertEquals(3, chapters.size());
+        Chapter chapter = chapters.get(0);
+        assertEquals(new Long(1), chapter.getId());
+        assertEquals("The crisis", chapter.getTitle());
+        assertNull(chapter.getText());
+        assertEquals(new Long(4), chapter.getSubchapter().getId());
+        assertEquals("Subprime", chapter.getSubchapter().getTitle());
+
+        chapter = chapters.get(1);
+        assertEquals(new Long(3), chapter.getId());
+        assertEquals("Chapter 2", chapter.getTitle());
+        assertEquals("Paragraph 1\n\nParagraph 2\n\nParagraph 3\n\nParagraph 4", chapter.getText());
+        assertNull(chapter.getSubchapter());
+
+        chapter = chapters.get(2);
+        assertEquals(new Long(2), chapter.getId());
+        assertEquals("Chapter 3", chapter.getTitle());
+        assertEquals("This is some text that explains what is the Chapter 3 about.\nIt can have many lines\n\n\n"
+                + "And can also have    spaces   betwenn    the words on it", chapter.getText());
+        assertNull(chapter.getSubchapter());
     }
 }

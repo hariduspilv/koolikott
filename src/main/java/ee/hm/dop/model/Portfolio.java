@@ -64,8 +64,8 @@ public class Portfolio {
     private Long views = (long) 0;
 
     @OneToMany(fetch = FetchType.EAGER)
-    @JoinColumn(name = "portfolio", nullable = false)
-    @OrderColumn(name = "orderInPortfolio", nullable = false)
+    @JoinColumn(name = "portfolio")
+    @OrderColumn(name = "chapterOrder", nullable = false)
     private List<Chapter> chapters;
 
     @ManyToMany(fetch = EAGER)
