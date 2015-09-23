@@ -4,30 +4,44 @@
             <h4 data-translate="LOGIN_CHOOSE_LOGIN_METHOD"></h4>
         </div>
     </div>
-    <div class="row">
+    <div class="row row-login text-right">        
         <div class="col-md-2-4 login-btn">
-            <a class="btn btn-dark btn-lg btn-block" data-ng-click="taatAuth()">
-                <span data-translate="LOGIN_TAAT"></span>
+            <a data-ng-if="false" class="btn btn-dark btn-lg btn-block hidden">
+                <i class="fa fa-google-plus"></i> <span data-translate="LOGIN_GOOGLE"></span>
             </a>
         </div>
-        <div data-ng-if="false" class="col-md-2-4 login-btn">
-            <a class="btn btn-dark btn-lg btn-block hidden">
-                <img src="img/logo_id_card.svg"> <span data-translate="LOGIN_MOBILEID"></span>
+        
+        <div class="col-md-2-4 login-btn">
+            <a data-ng-if="false" class="btn btn-dark btn-lg btn-block">
+                <i class="fa fa-facebook-square"></i> <span data-translate="LOGIN_FACEBOOK"></span>
             </a>
         </div>
+        
         <div class="col-md-2-4 login-btn">
             <a class="btn btn-dark btn-lg btn-block" data-ng-click="idCardAuth()">
                 <img src="img/logo_id_card.svg"> <span data-translate="LOGIN_IDCARD"></span>
             </a>
         </div>
-        <div data-ng-if="false" class="col-md-2-4 login-btn">
-            <a class="btn btn-dark btn-lg btn-block hidden">
-                <i class="fa fa-google-plus"></i> <span data-translate="LOGIN_GOOGLE"></span>
+        
+        <div class="col-md-2-4 login-btn">
+            <div class="text-center">
+                <div data-translate="LOGIN_MOBILEID_CODE">:</div>
+                <div class="lead">5454</div>
+            </div>
+            <div class="form-group">
+                <input type="email" class="form-control" id="exampleInputEmail1" placeholder="{{'PERSONAL_CODE' | translate}}">
+            </div>
+            <div class="form-group">
+                <input type="email" class="form-control" id="exampleInputEmail1" placeholder="+372 XX XXX XXX">
+            </div>
+            <a class="btn btn-dark btn-lg btn-block">
+                <img src="img/logo_id_card.svg"> <span data-translate="LOGIN_MOBILEID"></span>
             </a>
         </div>
-        <div data-ng-if="false" class="col-md-2-4 login-btn">
-            <a class="btn btn-dark btn-lg btn-block">
-                <i class="fa fa-facebook-square"></i> <span data-translate="LOGIN_FACEBOOK"></span>
+        
+        <div class="col-md-2-4 login-btn">
+            <a class="btn btn-dark btn-lg btn-block" data-ng-click="taatAuth()">
+                <span data-translate="LOGIN_TAAT"></span>
             </a>
         </div>
         <div class="clearfix"></div>

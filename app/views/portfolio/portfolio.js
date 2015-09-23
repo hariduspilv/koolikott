@@ -35,12 +35,8 @@ define(['app'], function(app)
                 	'id': $scope.portfolio.id
             	};
 
-            	serverCallService.makePost("rest/portfolio/increaseViewCount", params, countViewSuccess, countViewFail); 
-    		}
-
-    		function countViewSuccess(data) { }
-        
-        	function countViewFail(data, status) { }
+            	serverCallService.makePost("rest/portfolio/increaseViewCount", params, function success(){}, function fail(){}); 
+    		}	
     	}
     ]);
 });
