@@ -1,0 +1,59 @@
+.logins {
+    position: relative;
+    width: 100%;
+    background-color: #D8F1FD;
+    z-index: 99;
+    
+    .container {
+        padding: 30px 0 40px;
+    }
+    
+    h4 {
+        margin-top: 0;
+        font-size: 25px; 
+        font-weight: 300
+    }
+    
+    img {
+        margin-right: 3px; 
+        margin-bottom: 2px
+    }
+    
+    .fa {
+        margin-right: 3px; 
+        font-size: 23px
+    }
+}
+
+.row-login {
+    display: table;
+    width: 100%;
+    
+    .col-md-2-4 {
+        display: table-cell;
+        float: none;
+        height: 100%;
+        vertical-align: bottom;
+        
+        .form-control {
+            border: 0; 
+            border-bottom: 1px solid #003D68; 
+            @include box-shadow-spec(0, 0, 0, 0, #FFF);
+            background: none;
+            color: #003D68;
+            
+            &::-webkit-input-placeholder {
+                color: $navbar-default-bg;
+            }
+            &::-moz-placeholder {
+                color: $navbar-default-bg;
+            }
+            &:-moz-placeholder {
+                color: $navbar-default-bg;
+            }
+            &:-ms-input-placeholder {
+                color: $navbar-default-bg;
+            }
+        }
+    }
+}
