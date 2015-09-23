@@ -72,15 +72,7 @@ public class PortfolioResource {
 
     @POST
     @Path("increaseViewCount")
-    public Response increaseViewCount(Portfolio portfolio) {
-        Long portfolioId = portfolio.getId();
-
-        Portfolio originalPortfolio = portfolioService.get(portfolioId);
-        if (originalPortfolio == null) {
-            return Response.status(HttpURLConnection.HTTP_BAD_REQUEST).entity("Invalid portfolio").build();
-        }
-
-        portfolioService.incrementViewCount(originalPortfolio);
-        return Response.status(HttpURLConnection.HTTP_OK).build();
+    public void increaseViewCount(Portfolio portfolio) {
+        portfolioService.incrementViewCount(portfolio);
     }
 }

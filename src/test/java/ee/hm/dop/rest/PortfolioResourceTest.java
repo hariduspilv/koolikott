@@ -108,9 +108,7 @@ public class PortfolioResourceTest extends ResourceIntegrationTestBase {
         Portfolio portfolio = new Portfolio();
         portfolio.setId(id);
 
-        Response response = doPost(PORTFOLIO_INCREASE_VIEW_COUNT_URL,
-                Entity.entity(portfolio, MediaType.APPLICATION_JSON_TYPE));
-        assertEquals(Response.Status.OK.getStatusCode(), response.getStatus());
+        doPost(PORTFOLIO_INCREASE_VIEW_COUNT_URL, Entity.entity(portfolio, MediaType.APPLICATION_JSON_TYPE));
 
         Portfolio portfolioAfter = getPortfolio(id);
 
@@ -124,7 +122,8 @@ public class PortfolioResourceTest extends ResourceIntegrationTestBase {
 
         Response response = doPost(PORTFOLIO_INCREASE_VIEW_COUNT_URL,
                 Entity.entity(portfolio, MediaType.APPLICATION_JSON_TYPE));
-        assertEquals(Response.Status.BAD_REQUEST.getStatusCode(), response.getStatus());
+
+        assertEquals(500, response.getStatus());
     }
 
     private Portfolio getPortfolio(long id) {
