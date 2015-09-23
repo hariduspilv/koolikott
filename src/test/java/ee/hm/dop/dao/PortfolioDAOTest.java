@@ -101,17 +101,21 @@ public class PortfolioDAOTest extends DatabaseTestBase {
         assertEquals(new Long(1), chapter.getId());
         assertEquals("The crisis", chapter.getTitle());
         assertNull(chapter.getText());
+        assertEquals(new Long(4), chapter.getSubchapter().getId());
+        assertEquals("Subprime", chapter.getSubchapter().getTitle());
 
         chapter = chapters.get(1);
         assertEquals(new Long(3), chapter.getId());
         assertEquals("Chapter 2", chapter.getTitle());
         assertEquals("Paragraph 1\n\nParagraph 2\n\nParagraph 3\n\nParagraph 4", chapter.getText());
+        assertNull(chapter.getSubchapter());
 
         chapter = chapters.get(2);
         assertEquals(new Long(2), chapter.getId());
         assertEquals("Chapter 3", chapter.getTitle());
         assertEquals("This is some text that explains what is the Chapter 3 about.\nIt can have many lines\n\n\n"
                 + "And can also have    spaces   betwenn    the words on it", chapter.getText());
+        assertNull(chapter.getSubchapter());
     }
 
     @Test
@@ -193,9 +197,9 @@ public class PortfolioDAOTest extends DatabaseTestBase {
 
         while (threadsDone < totalThreads) {
             try {
-                Thread.currentThread().sleep(30);
+                Thread.sleep(30);
             } catch (InterruptedException e) {
-                //ignore
+                // ignore
             }
         }
 

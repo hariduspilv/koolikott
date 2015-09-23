@@ -360,12 +360,17 @@ CREATE TABLE Portfolio (
 CREATE TABLE Chapter (
   id                 BIGINT AUTO_INCREMENT PRIMARY KEY,
   title              VARCHAR(255) NOT NULL,
-  portfolio          BIGINT NOT NULL,
   textValue          TEXT,
-  orderInPortfolio   INTEGER NOT NULL,
+  subchapter         BIGINT,
+  portfolio          BIGINT,
+  chapterOrder       INTEGER NOT NULL,
 
   FOREIGN KEY (portfolio)
     REFERENCES Portfolio (id)
+    ON DELETE RESTRICT,
+    
+  FOREIGN KEY (subchapter)
+    REFERENCES Chapter (id)
     ON DELETE RESTRICT
 );
 
