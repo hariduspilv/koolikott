@@ -61,12 +61,16 @@ public class PortfolioServiceTest {
         portfolio.setId(99L);
         expect(portfolioDAO.findById(portfolio.getId())).andReturn(null);
 
+        replayAll();
+
         try {
             portfolioService.incrementViewCount(portfolio);
             fail("Exception expected");
         } catch (Exception e) {
             //expected
         }
+
+        verifyAll();
     }
 
     private void replayAll(Object... mocks) {
