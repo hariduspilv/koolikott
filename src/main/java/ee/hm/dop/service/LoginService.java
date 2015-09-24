@@ -21,11 +21,11 @@ import ee.hm.dop.model.AuthenticatedUser;
 import ee.hm.dop.model.AuthenticationState;
 import ee.hm.dop.model.Language;
 import ee.hm.dop.model.User;
-import ee.hm.dop.model.mobileid.MobileAuthResponse;
+import ee.hm.dop.service.MobileIDLoginService.MobileAuthResponse;
 
 public class LoginService {
 
-    private static final int MINUTES_AUTHENTICATIONSTATE_IS_VALID_FOR = 5;
+    private static final int MILLISECONDS_AUTHENTICATIONSTATE_IS_VALID_FOR = 5 * 60 * 1000;
 
     private static Logger logger = LoggerFactory.getLogger(LoginService.class);
 
@@ -47,7 +47,7 @@ public class LoginService {
      * Try to log in with the given id code and if that fails, create a new user
      * and log in with that.
      */
-    public AuthenticatedUser logInOrCreateUser(String idCode, String name, String surname) {
+    public AuthenticatedUser logIn(String idCode, String name, String surname) {
         AuthenticatedUser authenticatedUser = logIn(idCode);
 
         if (authenticatedUser != null) {
@@ -73,43 +73,40 @@ public class LoginService {
     }
 
     /**
-     * Convenience method for logging in or creating an user using a token that
-     * references user data in an authenticationState.
+     * Log in (or create an user and log in) using data in an
+     * authenticationState.
      */
-    public AuthenticatedUser logInOrCreateUser(String authenticationStateToken) {
-        AuthenticationState authenticationState = authenticationStateDAO
-                .findAuthenticationStateByToken(authenticationStateToken);
+    public AuthenticatedUser logIn(AuthenticationState authenticationState) {
         if (authenticationState == null) {
             return null;
         }
 
         // Make sure the token is not expired
         Interval interval = new Interval(authenticationState.getCreated(), new DateTime());
-        Duration duration = new Duration(MINUTES_AUTHENTICATIONSTATE_IS_VALID_FOR * 60 * 1000);
+        Duration duration = new Duration(MILLISECONDS_AUTHENTICATIONSTATE_IS_VALID_FOR);
         if (interval.toDuration().isLongerThan(duration)) {
             authenticationStateDAO.delete(authenticationState);
             return null;
         }
 
-        AuthenticatedUser authenticatedUser = logInOrCreateUser(authenticationState.getIdCode(),
-                authenticationState.getName(), authenticationState.getSurname());
+        AuthenticatedUser authenticatedUser = logIn(authenticationState.getIdCode(), authenticationState.getName(),
+                authenticationState.getSurname());
 
         authenticationStateDAO.delete(authenticationState);
 
         return authenticatedUser;
     }
 
-    public AuthenticatedUser logIn(String idCode) {
-        User user = getUser(idCode);
+    /**
+     * Protected access modifier for testing purposes.
+     */
+    protected AuthenticatedUser logIn(String idCode) {
+        User user = userService.getUserByIdCode(idCode);
         if (user == null) {
             return null;
         }
 
         return createAuthenticatedUser(user);
-    }
-
-    private User getUser(String idCode) {
-        return userService.getUserByIdCode(idCode);
     }
 
     private AuthenticatedUser createAuthenticatedUser(User user) {
@@ -140,7 +137,8 @@ public class LoginService {
 
     public AuthenticatedUser isMobileIDAuthenticationValid(String token) throws SOAPException {
         if (mobileIDLoginService.isAuthenticated(token)) {
-            return logInOrCreateUser(token);
+            AuthenticationState authenticationState = authenticationStateDAO.findAuthenticationStateByToken(token);
+            return logIn(authenticationState);
         }
         throw new RuntimeException("Authentication not valid.");
     }

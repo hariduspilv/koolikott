@@ -24,10 +24,10 @@ import org.opensaml.saml2.core.AuthnRequest;
 import org.opensaml.ws.message.encoder.MessageEncodingException;
 
 import ee.hm.dop.model.AuthenticatedUser;
-import ee.hm.dop.model.mobileid.MobileAuthResponse;
 import ee.hm.dop.service.AuthenticatedUserService;
 import ee.hm.dop.service.LanguageService;
 import ee.hm.dop.service.LoginService;
+import ee.hm.dop.service.MobileIDLoginService.MobileAuthResponse;
 import ee.hm.dop.service.TaatService;
 
 @Path("login")
@@ -61,7 +61,7 @@ public class LogInResource {
         AuthenticatedUser authenticatedUser = null;
 
         if (isAuthValid()) {
-            authenticatedUser = loginService.logInOrCreateUser(getIdCodeFromRequest(), getNameFromRequest(),
+            authenticatedUser = loginService.logIn(getIdCodeFromRequest(), getNameFromRequest(),
                     getSurnameFromRequest());
         }
 

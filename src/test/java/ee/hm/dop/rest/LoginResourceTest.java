@@ -54,7 +54,7 @@ import ee.hm.dop.dao.AuthenticationStateDAO;
 import ee.hm.dop.model.AuthenticatedUser;
 import ee.hm.dop.model.AuthenticationState;
 import ee.hm.dop.model.User;
-import ee.hm.dop.model.mobileid.MobileAuthResponse;
+import ee.hm.dop.service.MobileIDLoginService.MobileAuthResponse;
 
 public class LoginResourceTest extends ResourceIntegrationTestBase {
 
@@ -260,6 +260,33 @@ public class LoginResourceTest extends ResourceIntegrationTestBase {
         assertNotNull(mobileAuthResponse.getChallengeId());
 
         Response isValid = doGet(String.format("login/mobileId/isValid?token=%s", mobileAuthResponse.getToken()));
+        assertEquals(500, isValid.getStatus());
+    }
+
+    @Test
+    public void mobileIDAuthenticateMissingResponseFields() {
+        String phoneNumber = "33331234";
+        String idCode = "44556677889";
+        String language = "est";
+        Response response = doGet(
+                String.format("login/mobileId?phoneNumber=%s&idCode=%s&language=%s", phoneNumber, idCode, language));
+        assertEquals(500, response.getStatus());
+    }
+
+    @Test
+    public void mobileIDAuthenticateInvalidPhoneNumber() {
+        String phoneNumber = "1";
+        String idCode = "55667788990";
+        String language = "est";
+        Response response = doGet(
+                String.format("login/mobileId?phoneNumber=%s&idCode=%s&language=%s", phoneNumber, idCode, language));
+        assertEquals(500, response.getStatus());
+    }
+
+    @Test
+    public void mobileIDIsAuthenticatedInvalidSessionCode() {
+        String token = "2";
+        Response isValid = doGet(String.format("login/mobileId/isValid?token=%s", token));
         assertEquals(500, isValid.getStatus());
     }
 

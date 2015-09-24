@@ -31,7 +31,7 @@ public class DevelopmentLoginResourceTest extends ResourceIntegrationTestBase {
     @Test
     public void loginWrongId() {
         Response response = doGet("dev/login/123");
-        assertEquals(Response.Status.NO_CONTENT.getStatusCode(), response.getStatus());
+        assertEquals(Response.Status.INTERNAL_SERVER_ERROR.getStatusCode(), response.getStatus());
     }
 
     @Test

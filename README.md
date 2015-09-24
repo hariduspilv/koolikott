@@ -85,6 +85,14 @@ This keystore holds credentials used to sign outgoing TAAT authentication reques
 * **keystore.signingEntityID** - alias of the key
 * **keystore.signingEntityPassword** - password of the key
 
+#### Mobile ID
+
+* **mobileID.endpoint** - DigiDocService endpoint address. 
+* **mobileID.serviceName** - Name of your service, must be agreed upon with Mobile ID service provider. Maximum length 20 characters. 
+* **mobileID.namespace.prefix** - Prefix to use in SOAP messages. Default value is **dig**
+* **mobileID.namespace.uri** - DigiDocService WSDL URI. Default value is **http://www.sk.ee/DigiDocService/DigiDocService_2_3.wsdl**
+* **mobileID.messageToDisplay** - Extra message that can be displayed on user's phone prior to entering the PIN code. Maximum size is 40 bytes. Default value is **eKoolikott**
+
 # TAAT authentication setup
 Create a new keystore file:
 
@@ -136,3 +144,9 @@ Add TAAT configurations to **custom.properties**. For example:
 ```
 
 When your TAAT connection is changed to production status, **taat.sso** can be changed to `https://sarvik.taat.edu.ee/saml2/idp/SSOService.php`
+
+# Mobile ID authentication setup
+
+By default **mobileID.endpoint** is set to the Test DigiDocService at `https://www.openxades.org:9443/DigiDocService`. 
+Set **mobileID.endpoint** to `https://digidocservice.sk.ee/DigiDocService` to use the real endpoint. 
+Set **mobileID.serviceName** to the name that has been agreed upon with the Mobile ID provider. 

@@ -1,5 +1,8 @@
 package ee.hm.dop.guice.provider;
 
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -61,6 +64,10 @@ class SOAPConnectionMock extends SOAPConnection {
         response.put("ChallengeID", "1111");
         mobileAuthenticateResponses.put("44441234", response);
 
+        response = new HashMap<>();
+        response.put("Sesscode", "894689260456");
+        mobileAuthenticateResponses.put("33331234", response);
+
         // The key is session code (Sesscode)
         getMobileAuthenticateStatusResponses = new HashMap<>();
 
@@ -71,6 +78,10 @@ class SOAPConnectionMock extends SOAPConnection {
         response = new HashMap<>();
         response.put("Status", "NOT_VALID");
         getMobileAuthenticateStatusResponses.put("782652658", response);
+
+        response = new HashMap<>();
+        response.put("Status", "USER_AUTHENTICATED");
+        getMobileAuthenticateStatusResponses.put("894689260456", response);
     }
 
     @Override
@@ -94,7 +105,7 @@ class SOAPConnectionMock extends SOAPConnection {
         if (mobileAuthenticateResponses.containsKey(phoneNumber)) {
             return createSOAPMessage("MobileAuthenticateResponse", mobileAuthenticateResponses.get(phoneNumber));
         }
-        return null;
+        return createSOAPFault("SOAP-ENV:Client", "301", "User is not a Mobile-ID client");
     }
 
     private SOAPMessage getMobileAuthenticateStatus(Map<String, String> request) throws SOAPException {
@@ -103,7 +114,7 @@ class SOAPConnectionMock extends SOAPConnection {
             return createSOAPMessage("GetMobileAuthenticateStatusResponse",
                     getMobileAuthenticateStatusResponses.get(sessionCode));
         }
-        return null;
+        return createSOAPFault("SOAP-ENV:Client", "101", "No session or session timeout");
     }
 
     private Map<String, String> parseRequest(SOAPMessage request) throws SOAPException {
@@ -120,7 +131,7 @@ class SOAPConnectionMock extends SOAPConnection {
         return message;
     }
 
-    public SOAPMessage createSOAPMessage(String messageName, Map<String, String> childElements) throws SOAPException {
+    private SOAPMessage createSOAPMessage(String messageName, Map<String, String> childElements) throws SOAPException {
         MessageFactory messageFactory = MessageFactory.newInstance();
         SOAPMessage message = messageFactory.createMessage();
 
@@ -141,6 +152,28 @@ class SOAPConnectionMock extends SOAPConnection {
         }
 
         return message;
+    }
+
+    private SOAPMessage createSOAPFault(String faultCode, String faultString, String detailMessage)
+            throws SOAPException {
+        String message = "<SOAP-ENV:Envelope xmlns:SOAP-ENV=\"http://schemas.xmlsoap.org/soap/envelope/\">" //
+                + "<SOAP-ENV:Header/>" //
+                + "<SOAP-ENV:Body>" //
+                + "<SOAP-ENV:Fault>" //
+                + "<faultcode>" + faultCode + "</faultcode>" //
+                + "<faultstring xml:lang=\"en\">" + faultString + "</faultstring>" //
+                + "<detail><message>" + detailMessage + "</message></detail>" //
+                + "</SOAP-ENV:Fault>" //
+                + "</SOAP-ENV:Body>" //
+                + "</SOAP-ENV:Envelope>";
+        InputStream is = new ByteArrayInputStream(message.getBytes());
+        SOAPMessage faultMessage = null;
+        try {
+            faultMessage = MessageFactory.newInstance().createMessage(null, is);
+        } catch (IOException e) {
+            throw new RuntimeException("Failed to create SOAP Fault message.");
+        }
+        return faultMessage;
     }
 
     @Override

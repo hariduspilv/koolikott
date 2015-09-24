@@ -18,7 +18,7 @@ public class SOAPConnectionProvider implements Provider<SOAPConnection> {
             SOAPConnectionFactory connectionFactory = SOAPConnectionFactory.newInstance();
             return connectionFactory.createConnection();
         } catch (Exception e) {
-            return null;
+            throw new RuntimeException("Error creating new SOAP connection.");
         }
     }
 }
