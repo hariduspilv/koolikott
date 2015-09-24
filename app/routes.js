@@ -47,7 +47,8 @@ define([], function()
                 controller: 'portfolioController',
                 dependencies: [
                     'views/portfolio/portfolio',
-                    'directives/chapter/chapter'
+                    'directives/chapter/chapter',
+                    'directives/materialBox/materialBox'
                 ]
             },
             '/loginRedirect': {
