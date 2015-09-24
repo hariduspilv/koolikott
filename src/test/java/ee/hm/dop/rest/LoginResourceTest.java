@@ -54,7 +54,7 @@ import ee.hm.dop.dao.AuthenticationStateDAO;
 import ee.hm.dop.model.AuthenticatedUser;
 import ee.hm.dop.model.AuthenticationState;
 import ee.hm.dop.model.User;
-import ee.hm.dop.service.MobileIDLoginService.MobileAuthResponse;
+import ee.hm.dop.model.mobileid.MobileIDSecurityCodes;
 
 public class LoginResourceTest extends ResourceIntegrationTestBase {
 
@@ -228,13 +228,13 @@ public class LoginResourceTest extends ResourceIntegrationTestBase {
         String language = "est";
         Response response = doGet(
                 String.format("login/mobileId?phoneNumber=%s&idCode=%s&language=%s", phoneNumber, idCode, language));
-        MobileAuthResponse mobileAuthResponse = response.readEntity(new GenericType<MobileAuthResponse>() {
+        MobileIDSecurityCodes mobileIDSecurityCodes = response.readEntity(new GenericType<MobileIDSecurityCodes>() {
         });
 
-        assertNotNull(mobileAuthResponse.getToken());
-        assertNotNull(mobileAuthResponse.getChallengeId());
+        assertNotNull(mobileIDSecurityCodes.getToken());
+        assertNotNull(mobileIDSecurityCodes.getChallengeId());
 
-        Response isValid = doGet(String.format("login/mobileId/isValid?token=%s", mobileAuthResponse.getToken()));
+        Response isValid = doGet(String.format("login/mobileId/isValid?token=%s", mobileIDSecurityCodes.getToken()));
         AuthenticatedUser authenticatedUser = isValid.readEntity(new GenericType<AuthenticatedUser>() {
         });
 
@@ -253,13 +253,13 @@ public class LoginResourceTest extends ResourceIntegrationTestBase {
         String language = "est";
         Response response = doGet(
                 String.format("login/mobileId?phoneNumber=%s&idCode=%s&language=%s", phoneNumber, idCode, language));
-        MobileAuthResponse mobileAuthResponse = response.readEntity(new GenericType<MobileAuthResponse>() {
+        MobileIDSecurityCodes mobileIDSecurityCodes = response.readEntity(new GenericType<MobileIDSecurityCodes>() {
         });
 
-        assertNotNull(mobileAuthResponse.getToken());
-        assertNotNull(mobileAuthResponse.getChallengeId());
+        assertNotNull(mobileIDSecurityCodes.getToken());
+        assertNotNull(mobileIDSecurityCodes.getChallengeId());
 
-        Response isValid = doGet(String.format("login/mobileId/isValid?token=%s", mobileAuthResponse.getToken()));
+        Response isValid = doGet(String.format("login/mobileId/isValid?token=%s", mobileIDSecurityCodes.getToken()));
         assertEquals(500, isValid.getStatus());
     }
 

@@ -21,7 +21,7 @@ import ee.hm.dop.model.AuthenticatedUser;
 import ee.hm.dop.model.AuthenticationState;
 import ee.hm.dop.model.Language;
 import ee.hm.dop.model.User;
-import ee.hm.dop.service.MobileIDLoginService.MobileAuthResponse;
+import ee.hm.dop.model.mobileid.MobileIDSecurityCodes;
 
 public class LoginService {
 
@@ -130,17 +130,17 @@ public class LoginService {
         return returnedAuthenticatedUser;
     }
 
-    public MobileAuthResponse mobileIDAuthenticate(String phoneNumber, String idCode, Language language)
+    public MobileIDSecurityCodes mobileIDAuthenticate(String phoneNumber, String idCode, Language language)
             throws Exception {
         return mobileIDLoginService.authenticate(phoneNumber, idCode, language);
     }
 
-    public AuthenticatedUser isMobileIDAuthenticationValid(String token) throws SOAPException {
-        if (mobileIDLoginService.isAuthenticated(token)) {
-            AuthenticationState authenticationState = authenticationStateDAO.findAuthenticationStateByToken(token);
-            return logIn(authenticationState);
+    public AuthenticatedUser validateMobileIDAuthentication(String token) throws SOAPException {
+        if (!mobileIDLoginService.isAuthenticated(token)) {
+            throw new RuntimeException("Authentication not valid.");
         }
-        throw new RuntimeException("Authentication not valid.");
+        AuthenticationState authenticationState = authenticationStateDAO.findAuthenticationStateByToken(token);
+        return logIn(authenticationState);
     }
 
 }

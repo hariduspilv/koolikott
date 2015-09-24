@@ -11,7 +11,8 @@ import org.joda.time.DateTime;
 import ee.hm.dop.dao.AuthenticationStateDAO;
 import ee.hm.dop.model.AuthenticationState;
 import ee.hm.dop.model.Language;
-import ee.hm.dop.model.mobileid.MobileAuthenticateResponse;
+import ee.hm.dop.model.mobileid.MobileIDSecurityCodes;
+import ee.hm.dop.model.mobileid.soap.MobileAuthenticateResponse;
 
 public class MobileIDLoginService {
 
@@ -23,16 +24,16 @@ public class MobileIDLoginService {
 
     private SecureRandom random = new SecureRandom();
 
-    public MobileAuthResponse authenticate(String phoneNumber, String idCode, Language language) throws Exception {
+    public MobileIDSecurityCodes authenticate(String phoneNumber, String idCode, Language language) throws Exception {
         MobileAuthenticateResponse mobileAuthenticateResponse = mobileIDSOAPService.authenticate(phoneNumber, idCode,
                 language);
 
         AuthenticationState authenticationState = saveResponseToAuthenticationState(mobileAuthenticateResponse);
 
-        MobileAuthResponse mobileAuthResponse = new MobileAuthResponse();
-        mobileAuthResponse.setChallengeId(mobileAuthenticateResponse.getChallengeID());
-        mobileAuthResponse.setToken(authenticationState.getToken());
-        return mobileAuthResponse;
+        MobileIDSecurityCodes mobileIDSecurityCodes = new MobileIDSecurityCodes();
+        mobileIDSecurityCodes.setChallengeId(mobileAuthenticateResponse.getChallengeID());
+        mobileIDSecurityCodes.setToken(authenticationState.getToken());
+        return mobileIDSecurityCodes;
     }
 
     public boolean isAuthenticated(String token) throws SOAPException {
@@ -55,39 +56,6 @@ public class MobileIDLoginService {
         authenticationState.setName(mobileAuthenticateResponse.getName());
         authenticationState.setSurname(mobileAuthenticateResponse.getSurname());
         return authenticationStateDAO.createAuthenticationState(authenticationState);
-    }
-
-    /**
-     * Response sent to the front-end.
-     */
-    public static class MobileAuthResponse {
-
-        /**
-         * Code that is shown on the user's mobile and on the site.
-         */
-        private String challengeId;
-
-        /**
-         * Token that references an AuthenticationState.
-         */
-        private String token;
-
-        public String getChallengeId() {
-            return challengeId;
-        }
-
-        public void setChallengeId(String challengeId) {
-            this.challengeId = challengeId;
-        }
-
-        public String getToken() {
-            return token;
-        }
-
-        public void setToken(String token) {
-            this.token = token;
-        }
-
     }
 
 }

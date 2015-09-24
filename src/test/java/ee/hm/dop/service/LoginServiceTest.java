@@ -176,7 +176,7 @@ public class LoginServiceTest {
 
         replayAll();
 
-        AuthenticatedUser returnedAuthenticatedUser = loginService.isMobileIDAuthenticationValid(token);
+        AuthenticatedUser returnedAuthenticatedUser = loginService.validateMobileIDAuthentication(token);
 
         verifyAll();
 
@@ -197,7 +197,7 @@ public class LoginServiceTest {
 
         AuthenticatedUser returnedAuthenticatedUser = null;
         try {
-            returnedAuthenticatedUser = loginService.isMobileIDAuthenticationValid(token);
+            returnedAuthenticatedUser = loginService.validateMobileIDAuthentication(token);
         } catch (RuntimeException e) {
             assertEquals("Authentication not valid.", e.getMessage());
         }

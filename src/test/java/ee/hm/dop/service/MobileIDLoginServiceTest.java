@@ -25,8 +25,8 @@ import org.junit.runner.RunWith;
 import ee.hm.dop.dao.AuthenticationStateDAO;
 import ee.hm.dop.model.AuthenticationState;
 import ee.hm.dop.model.Language;
-import ee.hm.dop.model.mobileid.MobileAuthenticateResponse;
-import ee.hm.dop.service.MobileIDLoginService.MobileAuthResponse;
+import ee.hm.dop.model.mobileid.MobileIDSecurityCodes;
+import ee.hm.dop.model.mobileid.soap.MobileAuthenticateResponse;
 
 @RunWith(EasyMockRunner.class)
 public class MobileIDLoginServiceTest {
@@ -64,12 +64,12 @@ public class MobileIDLoginServiceTest {
 
         replayAll();
 
-        MobileAuthResponse mobileAuthResponse = mobileIDLoginService.authenticate(phoneNumber, idCode, language);
+        MobileIDSecurityCodes mobileIDSecurityCodes = mobileIDLoginService.authenticate(phoneNumber, idCode, language);
 
         verifyAll();
 
         validateAuthenticationState(capturedAuthenticationState, mobileAuthenticateResponse);
-        validateMobileAuthResponse(mobileAuthResponse, mobileAuthenticateResponse, capturedAuthenticationState);
+        validateMobileIDSecurityCodes(mobileIDSecurityCodes, mobileAuthenticateResponse, capturedAuthenticationState);
     }
 
     @Test
@@ -152,11 +152,11 @@ public class MobileIDLoginServiceTest {
         assertFalse(created.isAfterNow());
     }
 
-    private void validateMobileAuthResponse(MobileAuthResponse mobileAuthResponse, MobileAuthenticateResponse response,
-            Capture<AuthenticationState> capturedAuthenticationState) {
-        assertEquals(response.getChallengeID(), mobileAuthResponse.getChallengeId());
+    private void validateMobileIDSecurityCodes(MobileIDSecurityCodes mobileIDSecurityCodes,
+            MobileAuthenticateResponse response, Capture<AuthenticationState> capturedAuthenticationState) {
+        assertEquals(response.getChallengeID(), mobileIDSecurityCodes.getChallengeId());
         assertNotNull(capturedAuthenticationState.getValue().getToken());
-        assertEquals(capturedAuthenticationState.getValue().getToken(), mobileAuthResponse.getToken());
+        assertEquals(capturedAuthenticationState.getValue().getToken(), mobileIDSecurityCodes.getToken());
     }
 
     private void replayAll(Object... mocks) {

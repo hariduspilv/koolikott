@@ -1,4 +1,4 @@
-package ee.hm.dop.model.mobileid;
+package ee.hm.dop.model.mobileid.soap;
 
 public class MobileAuthenticateResponse {
 

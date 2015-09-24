@@ -41,7 +41,7 @@ import org.junit.runner.RunWith;
 
 import ee.hm.dop.model.AuthenticationState;
 import ee.hm.dop.model.Language;
-import ee.hm.dop.model.mobileid.MobileAuthenticateResponse;
+import ee.hm.dop.model.mobileid.soap.MobileAuthenticateResponse;
 
 @RunWith(EasyMockRunner.class)
 public class MobileIDSOAPServiceTest {

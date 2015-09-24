@@ -30,8 +30,8 @@ import org.apache.commons.configuration.Configuration;
 
 import ee.hm.dop.model.AuthenticationState;
 import ee.hm.dop.model.Language;
-import ee.hm.dop.model.mobileid.GetMobileAuthenticateStatusResponse;
-import ee.hm.dop.model.mobileid.MobileAuthenticateResponse;
+import ee.hm.dop.model.mobileid.soap.GetMobileAuthenticateStatusResponse;
+import ee.hm.dop.model.mobileid.soap.MobileAuthenticateResponse;
 
 public class MobileIDSOAPService {
 

@@ -24,10 +24,10 @@ import org.opensaml.saml2.core.AuthnRequest;
 import org.opensaml.ws.message.encoder.MessageEncodingException;
 
 import ee.hm.dop.model.AuthenticatedUser;
+import ee.hm.dop.model.mobileid.MobileIDSecurityCodes;
 import ee.hm.dop.service.AuthenticatedUserService;
 import ee.hm.dop.service.LanguageService;
 import ee.hm.dop.service.LoginService;
-import ee.hm.dop.service.MobileIDLoginService.MobileAuthResponse;
 import ee.hm.dop.service.TaatService;
 
 @Path("login")
@@ -97,7 +97,7 @@ public class LogInResource {
     @GET
     @Path("/mobileId")
     @Produces(MediaType.APPLICATION_JSON)
-    public MobileAuthResponse mobileIDAuthenticate(@QueryParam("phoneNumber") String phoneNumber,
+    public MobileIDSecurityCodes mobileIDAuthenticate(@QueryParam("phoneNumber") String phoneNumber,
             @QueryParam("idCode") String idCode, @QueryParam("language") String languageCode) throws Exception {
         return loginService.mobileIDAuthenticate(phoneNumber, idCode, languageService.getLanguage(languageCode));
     }
@@ -105,8 +105,8 @@ public class LogInResource {
     @GET
     @Path("/mobileId/isValid")
     @Produces(MediaType.APPLICATION_JSON)
-    public AuthenticatedUser isMobileIDAuthenticationValid(@QueryParam("token") String token) throws SOAPException {
-        return loginService.isMobileIDAuthenticationValid(token);
+    public AuthenticatedUser validateMobileIDAuthentication(@QueryParam("token") String token) throws SOAPException {
+        return loginService.validateMobileIDAuthentication(token);
     }
 
     protected String getIdCodeFromRequest() {
