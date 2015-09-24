@@ -2,6 +2,10 @@ define(['app'], function(app) {
     var instance;
     var isAuthenticationInProgress;
     var isOAuthAuthentication = false;
+
+    var mobileIdLoginSuccessCallback;
+    var mobileIdLoginFailCallback;
+    var mobileIdChallengeReceivedCallback;
     
     app.factory('authenticationService',['$location', '$rootScope', 'serverCallService', 'authenticatedUserService', 'alertService',
     function($location, $rootScope, serverCallService, authenticatedUserService, alertService) {
@@ -23,6 +27,10 @@ define(['app'], function(app) {
             enableLogin();
             localStorage.removeItem(LOGIN_ORIGIN);
             isOAuthAuthentication = false;
+
+            if (mobileIdLoginSuccessCallback) {
+                mobileIdLoginSuccessCallback();
+            }
         }
 
         function loginFail() {
@@ -36,6 +44,10 @@ define(['app'], function(app) {
             }
             
             isOAuthAuthentication = false
+
+            if (mobileIdLoginFailCallback) {
+                mobileIdLoginFailCallback();
+            }
         }
 
         function logoutSuccess(data) {
@@ -53,6 +65,16 @@ define(['app'], function(app) {
 
         function enableLogin() {
             isAuthenticationInProgress = false;
+        }
+
+        function loginWithMobileIdSuccess(mobileIDSecurityCodes) {
+            mobileIdChallengeReceivedCallback(mobileIDSecurityCodes.challengeId);
+            
+            var params = {
+                'token': mobileIDSecurityCodes.token
+            };
+        
+            serverCallService.makeGet("rest/login/mobileId/isValid", params, loginSuccess, loginFail);
         }
 
         return {
@@ -83,7 +105,27 @@ define(['app'], function(app) {
             	
             	serverCallService.makeGet("rest/login/getAuthenticatedUser", params, loginSuccess, loginFail);
             	isOAuthAuthentication = true;
-            }  
+            },
+
+            loginWithMobileId : function(phoneNumber, idCode, language, successCallback, failCallback, challengeReceivedCallback) {
+                if (isAuthenticationInProgress) {
+                    return;
+                }
+
+                mobileIdLoginSuccessCallback = successCallback;
+                mobileIdLoginFailCallback = failCallback;
+                mobileIdChallengeReceivedCallback = challengeReceivedCallback;
+
+                var params = {
+                    'phoneNumber': phoneNumber,
+                    'idCode': idCode,
+                    'language': language
+                };
+            
+                disableLogin();
+                serverCallService.makeGet("rest/login/mobileId", params, loginWithMobileIdSuccess, loginFail);
+            }
+
         };
     }]);
 });
