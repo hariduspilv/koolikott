@@ -96,7 +96,7 @@ public class PortfolioResourceTest extends ResourceIntegrationTestBase {
 
     @Test
     public void getPortfolioPictureIdNull() {
-        Response response = doGet(format(GET_PORTFOLIO_PICTURE_URL, null), MediaType.WILDCARD_TYPE);
+        Response response = doGet(format(GET_PORTFOLIO_PICTURE_URL, "null"), MediaType.WILDCARD_TYPE);
         assertEquals(Response.Status.NOT_FOUND.getStatusCode(), response.getStatus());
     }
 
