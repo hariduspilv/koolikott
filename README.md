@@ -76,6 +76,8 @@ In my.ini or my.cnf under [mysqld] add: character-set-server=utf8
 * **taat.sso** - the URL of TAAT Single Sign-On Service
 * **taat.connectionId** - the Connection ID in [JANUS](https://taeva.taat.edu.ee/module.php/janus/index.php)
 * **taat.assertionConsumerServiceIndex** - the Assertion Consumer Service Index in JANUS (default 0)
+* **taat.metadata.filepath** TAAT service metadata filepath. Default value is **reos_metadata.xml** (this file is included in the application).
+* **taat.metadata.entityID** Entity ID in the metadata. Default value is **https://reos.taat.edu.ee/saml2/idp/metadata.php**
 
 #### KeyStore for TAAT
 This keystore holds credentials used to sign outgoing TAAT authentication requests. 
@@ -143,7 +145,13 @@ Add TAAT configurations to **custom.properties**. For example:
 	taat.assertionConsumerServiceIndex=0
 ```
 
-When your TAAT connection is changed to production status, **taat.sso** can be changed to `https://sarvik.taat.edu.ee/saml2/idp/SSOService.php`
+## Production mode
+When your TAAT connection is changed to production status, you can set
+```
+	taat.sso=https://sarvik.taat.edu.ee/saml2/idp/SSOService.php
+	taat.metadata.entityID=https://sarvik.taat.edu.ee/saml2/idp/metadata.php
+```
+and download the metadata from the URL and set **taat.metadata.filepath** to point to the filepath. 
 
 # Mobile ID authentication setup
 
