@@ -325,6 +325,55 @@ public class MobileIDSOAPServiceTest {
         assertEquals("FALSE", request.get("WaitSignature"));
     }
 
+    @Test
+    public void isAuthenticatedResponseMissingFields() throws Exception {
+        String sessionCode = "testingSessionCode123";
+        AuthenticationState authenticationState = new AuthenticationState();
+        authenticationState.setSessionCode(sessionCode);
+
+        String endpoint = "https://www.example.com:9876/Service";
+
+        Capture<SOAPMessage> capturedRequest = newCapture();
+
+        String message = "<SOAP-ENV:Envelope xmlns:SOAP-ENV=\"http://schemas.xmlsoap.org/soap/envelope/\" " //
+                + "xmlns:SOAP-ENC=\"http://schemas.xmlsoap.org/soap/encoding/\" " //
+                + "xmlns:dig=\"http://www.example.com/Service/Service.wsdl\" " //
+                + "xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" " //
+                + "xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">" //
+                + "<SOAP-ENV:Header/>" //
+                + "<SOAP-ENV:Body SOAP-ENV:encodingStyle=\"http://schemas.xmlsoap.org/soap/encoding/\">" //
+                + "<dig:MobileAuthenticateResponse>" //
+                + "</dig:MobileAuthenticateResponse>" //
+                + "</SOAP-ENV:Body></SOAP-ENV:Envelope>";
+        InputStream is = new ByteArrayInputStream(message.getBytes());
+        SOAPMessage responseMessage = MessageFactory.newInstance().createMessage(null, is);
+
+        expect(configuration.getString(MOBILEID_NAMESPACE_PREFIX)).andReturn("prefix");
+        expect(configuration.getString(MOBILEID_NAMESPACE_URI))
+                .andReturn("http://www.example.com/Service/Service.wsdl");
+
+        expect(configuration.getString(MOBILEID_ENDPOINT)).andReturn(endpoint);
+        expect(connection.call(EasyMock.capture(capturedRequest), EasyMock.eq(endpoint))).andReturn(responseMessage);
+
+        replayAll();
+
+        boolean isAuthenticated = false;
+        try {
+            isAuthenticated = mobileIDSOAPService.isAuthenticated(authenticationState);
+        } catch (RuntimeException e) {
+            assertEquals("GetMobileAuthenticateStatusResponse response is missing a Status field.", e.getMessage());
+        }
+        verifyAll();
+
+        assertFalse(isAuthenticated);
+
+        // Validate captured request message
+        Map<String, String> request = parseMessage(capturedRequest.getValue(), "GetMobileAuthenticateStatus");
+        assertEquals(2, request.size());
+        assertEquals(sessionCode, request.get("Sesscode"));
+        assertEquals("FALSE", request.get("WaitSignature"));
+    }
+
     private Map<String, String> parseMessage(SOAPMessage message, String messageName) throws SOAPException {
         SOAPBody body = message.getSOAPPart().getEnvelope().getBody();
         SOAPElement messageElement = (SOAPElement) body.getChildElements().next();
@@ -395,11 +444,11 @@ public class MobileIDSOAPServiceTest {
     private void expectConfiguration(String serviceName, String messageToDisplay, String endpoint) {
         expect(configuration.getString(MOBILEID_SERVICENAME)).andReturn(serviceName);
         expect(configuration.getString(MOBILEID_MESSAGE_TO_DISPLAY)).andReturn(messageToDisplay);
-    
+
         expect(configuration.getString(MOBILEID_NAMESPACE_PREFIX)).andReturn("prefix");
         expect(configuration.getString(MOBILEID_NAMESPACE_URI))
                 .andReturn("http://www.example.com/Service/Service.wsdl");
-    
+
         expect(configuration.getString(MOBILEID_ENDPOINT)).andReturn(endpoint);
     }
 

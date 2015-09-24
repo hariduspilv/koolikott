@@ -121,6 +121,36 @@ public class LoginServiceTest {
     }
 
     @Test
+    public void logInNullAuthenticationState() {
+        AuthenticationState authenticationState = null;
+
+        replayAll();
+
+        AuthenticatedUser returnedAuthenticatedUser = loginService.logIn(authenticationState);
+
+        verifyAll();
+
+        assertNull(returnedAuthenticatedUser);
+    }
+
+    @Test
+    public void logInExpiredAuthenticationState() {
+        AuthenticationState authenticationState = new AuthenticationState();
+        authenticationState.setToken("123123123");
+        authenticationState.setCreated(new DateTime("2015-01-01T11:12:13.444"));
+
+        authenticationStateDAO.delete(authenticationState);
+
+        replayAll();
+
+        AuthenticatedUser returnedAuthenticatedUser = loginService.logIn(authenticationState);
+
+        verifyAll();
+
+        assertNull(returnedAuthenticatedUser);
+    }
+
+    @Test
     public void isMobileIDAuthenticationValid() throws SOAPException {
         String token = "725abc";
 
