@@ -381,9 +381,10 @@ update Portfolio set picture = (unhex('FFD8FFE1001845786966000049492A00080000000
 
 -- Chapter
 
-insert into Chapter(id, title, portfolio, textValue, material, subchapter, chapterOrder) values (3, 'Subprime', null, 'The crises of subprime bla bla bla', 5, null, 0);
-insert into Chapter(id, title, portfolio, textValue, material, subchapter, chapterOrder) values (1, 'The crisis', 1, 'line 1\nline2', 1, 3, 0);
-insert into Chapter(id, title, portfolio, textValue, material, subchapter, chapterOrder) values (2, 'The EU response', 1, 'This is some text that explains what is this Chapter about.\nIt can have many lines\n\n\nAnd can also have    spaces   betwenn    the words on it', null, null, 1);
+insert into Chapter(id, title, portfolio, textValue, material, parentChapter, chapterOrder) values (1, 'The crisis', 1, 'line 1\nline2', 1, null, 0);
+insert into Chapter(id, title, portfolio, textValue, material, parentChapter, chapterOrder) values (2, 'The EU response', 1, 'This is some text that explains what is this Chapter about.\nIt can have many lines\n\n\nAnd can also have    spaces   betwenn    the words on it', null, null, 1);
+insert into Chapter(id, title, portfolio, textValue, material, parentChapter, chapterOrder) values (3, 'Subprime', null, 'The crises of subprime bla bla bla', 5, 1, 0);
+insert into Chapter(id, title, portfolio, textValue, material, parentChapter, chapterOrder) values (4, 'The big crash', null, 'Bla bla bla Bla bla bla Bla bla bla\nBla bla bla Bla bla blaBla bla blaBla bla blaBla bla bla\nBla bla blaBla bla bla', 5, 1, 0);
 
 -- Portfolio-Tags
 

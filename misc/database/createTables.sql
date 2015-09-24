@@ -358,13 +358,13 @@ CREATE TABLE Portfolio (
 );
 
 CREATE TABLE Chapter (
-  id           BIGINT AUTO_INCREMENT PRIMARY KEY,
-  title        VARCHAR(255) NOT NULL,
-  textValue    TEXT,
-  material     BIGINT,
-  subchapter   BIGINT,
-  portfolio    BIGINT,
-  chapterOrder INTEGER NOT NULL,
+  id            BIGINT AUTO_INCREMENT PRIMARY KEY,
+  title         VARCHAR(255) NOT NULL,
+  textValue     TEXT,
+  material      BIGINT,
+  parentChapter BIGINT,
+  portfolio     BIGINT,
+  chapterOrder  INTEGER NOT NULL,
 
   FOREIGN KEY (portfolio)
     REFERENCES Portfolio (id)
@@ -374,7 +374,7 @@ CREATE TABLE Chapter (
     REFERENCES Material (id)
     ON DELETE RESTRICT,
     
-  FOREIGN KEY (subchapter)
+  FOREIGN KEY (parentChapter)
     REFERENCES Chapter (id)
     ON DELETE RESTRICT
 );

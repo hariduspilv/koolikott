@@ -1,11 +1,15 @@
 package ee.hm.dop.model;
 
+import static javax.persistence.FetchType.EAGER;
+
+import java.util.List;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
+import javax.persistence.OneToMany;
 
 @Entity
 public class Chapter {
@@ -23,9 +27,9 @@ public class Chapter {
     @JoinColumn(name = "material")
     private Material material;
 
-    @OneToOne
-    @JoinColumn(name = "subchapter")
-    private Chapter subchapter;
+    @OneToMany(fetch = EAGER)
+    @JoinColumn(name = "parentChapter")
+    private List<Chapter> subchapters;
 
     public Long getId() {
         return id;
@@ -51,17 +55,17 @@ public class Chapter {
         this.text = text;
     }
 
-    public Chapter getSubchapter() {
-        return subchapter;
-    }
-
-    public void setSubchapter(Chapter subchapter) {
-        this.subchapter = subchapter;
-    }
-
     @Override
     public String toString() {
         return title;
+    }
+
+    public List<Chapter> getSubchapters() {
+        return subchapters;
+    }
+
+    public void setSubchapters(List<Chapter> subchapters) {
+        this.subchapters = subchapters;
     }
 
     public Material getMaterial() {

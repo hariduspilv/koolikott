@@ -151,16 +151,24 @@ public class PortfolioResourceTest extends ResourceIntegrationTestBase {
         assertEquals("The crisis", chapter.getTitle());
         assertNull(chapter.getText());
         assertEquals(new Long(1), chapter.getMaterial().getId());
-        assertEquals(new Long(4), chapter.getSubchapter().getId());
-        assertEquals("Subprime", chapter.getSubchapter().getTitle());
-        assertEquals(new Long(5), chapter.getSubchapter().getMaterial().getId());
+        assertEquals(2, chapter.getSubchapters().size());
+        Chapter subchapter1 = chapter.getSubchapters().get(0);
+        assertEquals(new Long(4), subchapter1.getId());
+        assertEquals("Subprime", subchapter1.getTitle());
+        assertNull(subchapter1.getText());
+        assertEquals(new Long(5), subchapter1.getMaterial().getId());
+        Chapter subchapter2 = chapter.getSubchapters().get(1);
+        assertEquals(new Long(5), subchapter2.getId());
+        assertEquals("The big crash", subchapter2.getTitle());
+        assertEquals("Bla bla bla\nBla bla bla bla bla bla bla", subchapter2.getText());
+        assertEquals(new Long(3), subchapter2.getMaterial().getId());
 
         chapter = chapters.get(1);
         assertEquals(new Long(3), chapter.getId());
         assertEquals("Chapter 2", chapter.getTitle());
         assertEquals("Paragraph 1\n\nParagraph 2\n\nParagraph 3\n\nParagraph 4", chapter.getText());
         assertNull(chapter.getMaterial());
-        assertNull(chapter.getSubchapter());
+        assertEquals(0, chapter.getSubchapters().size());
 
         chapter = chapters.get(2);
         assertEquals(new Long(2), chapter.getId());
@@ -168,6 +176,6 @@ public class PortfolioResourceTest extends ResourceIntegrationTestBase {
         assertEquals("This is some text that explains what is the Chapter 3 about.\nIt can have many lines\n\n\n"
                 + "And can also have    spaces   betwenn    the words on it", chapter.getText());
         assertNull(chapter.getMaterial());
-        assertNull(chapter.getSubchapter());
+        assertEquals(0, chapter.getSubchapters().size());
     }
 }
