@@ -4,6 +4,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 
 @Entity
@@ -17,6 +18,10 @@ public class Chapter {
 
     @Column(columnDefinition = "TEXT", name = "textValue")
     private String text;
+
+    @ManyToOne
+    @JoinColumn(name = "material")
+    private Material material;
 
     @OneToOne
     @JoinColumn(name = "subchapter")
@@ -57,5 +62,13 @@ public class Chapter {
     @Override
     public String toString() {
         return title;
+    }
+
+    public Material getMaterial() {
+        return material;
+    }
+
+    public void setMaterial(Material material) {
+        this.material = material;
     }
 }

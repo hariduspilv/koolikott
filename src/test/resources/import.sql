@@ -267,10 +267,10 @@ insert into Portfolio(id, title, subject, educationalContext, creator, summary, 
 
 -- Chapter
 
-insert into Chapter(id, title, portfolio, textValue, subchapter, chapterOrder) values (4, 'Subprime', null, null, null, 0); -- Subchpater of #1
-insert into Chapter(id, title, portfolio, textValue, subchapter, chapterOrder) values (1, 'The crisis', 1, null, 4, 0);
-insert into Chapter(id, title, portfolio, textValue, subchapter, chapterOrder) values (2, 'Chapter 3', 1, 'This is some text that explains what is the Chapter 3 about.' || char(10) || 'It can have many lines' || char(10) || char(10) || char(10) || 'And can also have    spaces   betwenn    the words on it', null, 2);
-insert into Chapter(id, title, portfolio, textValue, subchapter, chapterOrder) values (3, 'Chapter 2', 1, 'Paragraph 1' || char(10) || char(10) || 'Paragraph 2' || char(10) || char(10) || 'Paragraph 3' || char(10) || char(10) || 'Paragraph 4', null, 1);
+insert into Chapter(id, title, portfolio, textValue, material, subchapter, chapterOrder) values (4, 'Subprime', null, null, 5, null, 0); -- Subchpater of #1
+insert into Chapter(id, title, portfolio, textValue, material, subchapter, chapterOrder) values (1, 'The crisis', 1, null, 1, 4, 0);
+insert into Chapter(id, title, portfolio, textValue, material, subchapter, chapterOrder) values (2, 'Chapter 3', 1, 'This is some text that explains what is the Chapter 3 about.' || char(10) || 'It can have many lines' || char(10) || char(10) || char(10) || 'And can also have    spaces   betwenn    the words on it', null, null, 2);
+insert into Chapter(id, title, portfolio, textValue, material, subchapter, chapterOrder) values (3, 'Chapter 2', 1, 'Paragraph 1' || char(10) || char(10) || 'Paragraph 2' || char(10) || char(10) || 'Paragraph 3' || char(10) || char(10) || 'Paragraph 4', null, null, 1);
 
 -- Portfolio-Tags
 

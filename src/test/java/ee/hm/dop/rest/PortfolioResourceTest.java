@@ -150,13 +150,16 @@ public class PortfolioResourceTest extends ResourceIntegrationTestBase {
         assertEquals(new Long(1), chapter.getId());
         assertEquals("The crisis", chapter.getTitle());
         assertNull(chapter.getText());
+        assertEquals(new Long(1), chapter.getMaterial().getId());
         assertEquals(new Long(4), chapter.getSubchapter().getId());
         assertEquals("Subprime", chapter.getSubchapter().getTitle());
+        assertEquals(new Long(5), chapter.getSubchapter().getMaterial().getId());
 
         chapter = chapters.get(1);
         assertEquals(new Long(3), chapter.getId());
         assertEquals("Chapter 2", chapter.getTitle());
         assertEquals("Paragraph 1\n\nParagraph 2\n\nParagraph 3\n\nParagraph 4", chapter.getText());
+        assertNull(chapter.getMaterial());
         assertNull(chapter.getSubchapter());
 
         chapter = chapters.get(2);
@@ -164,6 +167,7 @@ public class PortfolioResourceTest extends ResourceIntegrationTestBase {
         assertEquals("Chapter 3", chapter.getTitle());
         assertEquals("This is some text that explains what is the Chapter 3 about.\nIt can have many lines\n\n\n"
                 + "And can also have    spaces   betwenn    the words on it", chapter.getText());
+        assertNull(chapter.getMaterial());
         assertNull(chapter.getSubchapter());
     }
 }
