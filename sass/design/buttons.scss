@@ -7,8 +7,20 @@
     &:active,
     &:active:focus,
     &.active {
-        border-color: #003d68;
-        background: #003d68
+        @include button-variant(#FFF, #003d68, #003d68);
+    }
+}
+
+.btn-grey {
+    @include button-variant(#FFF, #777, #777);
+    
+    &:hover,
+    &:focus,
+    &.focus,
+    &:active,
+    &:active:focus,
+    &.active {
+        @include button-variant(#FFF, #666, #666);
     }
 }
 
