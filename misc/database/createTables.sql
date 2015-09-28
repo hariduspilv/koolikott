@@ -2,7 +2,7 @@ use dop;
 
 -- Drop tables
 
-DROP TABLE IF EXISTS Chapter_Material
+DROP TABLE IF EXISTS Chapter_Material;
 DROP TABLE IF EXISTS Chapter;
 DROP TABLE IF EXISTS Portfolio;
 DROP TABLE IF EXISTS Page;
