@@ -2,6 +2,8 @@ use dop;
 
 -- Drop tables
 
+DROP TABLE IF EXISTS Chapter_Material
+DROP TABLE IF EXISTS Chapter;
 DROP TABLE IF EXISTS Portfolio;
 DROP TABLE IF EXISTS Page;
 DROP TABLE IF EXISTS Translation;
@@ -361,17 +363,12 @@ CREATE TABLE Chapter (
   id            BIGINT AUTO_INCREMENT PRIMARY KEY,
   title         VARCHAR(255) NOT NULL,
   textValue     TEXT,
-  material      BIGINT,
   parentChapter BIGINT,
   portfolio     BIGINT,
   chapterOrder  INTEGER NOT NULL,
 
   FOREIGN KEY (portfolio)
     REFERENCES Portfolio (id)
-    ON DELETE RESTRICT,
-    
-  FOREIGN KEY (material)
-    REFERENCES Material (id)
     ON DELETE RESTRICT,
     
   FOREIGN KEY (parentChapter)
@@ -391,5 +388,21 @@ CREATE TABLE Portfolio_Tag (
     
   FOREIGN KEY (tag)
     REFERENCES Tag(id)
+    ON DELETE RESTRICT
+);
+
+CREATE TABLE Chapter_Material (
+  chapter       BIGINT NOT NULL,
+  material      BIGINT NOT NULL,
+  materialOrder INTEGER NOT NULL, 
+
+  PRIMARY KEY (chapter, material),
+    
+  FOREIGN KEY (chapter) 
+    REFERENCES Chapter (id)
+    ON DELETE RESTRICT,
+    
+  FOREIGN KEY (material)
+    REFERENCES Material (id)
     ON DELETE RESTRICT
 );

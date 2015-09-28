@@ -381,10 +381,28 @@ update Portfolio set picture = (unhex('FFD8FFE1001845786966000049492A00080000000
 
 -- Chapter
 
-insert into Chapter(id, title, portfolio, textValue, material, parentChapter, chapterOrder) values (1, 'The crisis', 1, 'line 1\nline2', 1, null, 0);
-insert into Chapter(id, title, portfolio, textValue, material, parentChapter, chapterOrder) values (2, 'The EU response', 1, 'This is some text that explains what is this Chapter about.\nIt can have many lines\n\n\nAnd can also have    spaces   betwenn    the words on it', null, null, 1);
-insert into Chapter(id, title, portfolio, textValue, material, parentChapter, chapterOrder) values (3, 'Subprime', null, 'The crises of subprime bla bla bla', 5, 1, 0);
-insert into Chapter(id, title, portfolio, textValue, material, parentChapter, chapterOrder) values (4, 'The big crash', null, 'Bla bla bla Bla bla bla Bla bla bla\nBla bla bla Bla bla blaBla bla blaBla bla blaBla bla bla\nBla bla blaBla bla bla', 5, 1, 0);
+insert into Chapter(id, title, portfolio, textValue, parentChapter, chapterOrder) values (1, 'The crisis', 1, 'line 1\nline2', null, 0);
+insert into Chapter(id, title, portfolio, textValue, parentChapter, chapterOrder) values (2, 'The EU response', 1, 'This is some text that explains what is this Chapter about.\nIt can have many lines\n\n\nAnd can also have    spaces   betwenn    the words on it', null, 1);
+insert into Chapter(id, title, portfolio, textValue, parentChapter, chapterOrder) values (3, 'Subprime', null, 'The crises of subprime bla bla bla', 1, 0);
+insert into Chapter(id, title, portfolio, textValue, parentChapter, chapterOrder) values (4, 'The big crash', null, 'Bla bla bla Bla bla bla Bla bla bla\nBla bla bla Bla bla blaBla bla blaBla bla blaBla bla bla\nBla bla blaBla bla bla', 1, 0);
+
+-- Chapter-Material
+
+insert into Chapter_Material(chapter, material, materialOrder) values(1, 1, 0);
+insert into Chapter_Material(chapter, material, materialOrder) values(1, 2, 1);
+insert into Chapter_Material(chapter, material, materialOrder) values(1, 3, 2);
+insert into Chapter_Material(chapter, material, materialOrder) values(1, 4, 3);
+insert into Chapter_Material(chapter, material, materialOrder) values(1, 5, 4);
+insert into Chapter_Material(chapter, material, materialOrder) values(1, 6, 5);
+insert into Chapter_Material(chapter, material, materialOrder) values(1, 7, 6);
+insert into Chapter_Material(chapter, material, materialOrder) values(1, 8, 7);
+insert into Chapter_Material(chapter, material, materialOrder) values(1, 9, 8);
+insert into Chapter_Material(chapter, material, materialOrder) values(1, 10, 9);
+insert into Chapter_Material(chapter, material, materialOrder) values(1, 11, 10);
+insert into Chapter_Material(chapter, material, materialOrder) values(1, 12, 11);
+insert into Chapter_Material(chapter, material, materialOrder) values(4, 5, 0);
+insert into Chapter_Material(chapter, material, materialOrder) values(4, 1, 1);
+insert into Chapter_Material(chapter, material, materialOrder) values(4, 8, 2);
 
 -- Portfolio-Tags
 

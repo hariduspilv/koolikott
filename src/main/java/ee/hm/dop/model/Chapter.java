@@ -8,8 +8,11 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
+import javax.persistence.OrderColumn;
+import javax.persistence.UniqueConstraint;
 
 @Entity
 public class Chapter {
@@ -23,9 +26,14 @@ public class Chapter {
     @Column(columnDefinition = "TEXT", name = "textValue")
     private String text;
 
-    @ManyToOne
-    @JoinColumn(name = "material")
-    private Material material;
+    @ManyToMany(fetch = EAGER)
+    @OrderColumn(name = "materialOrder", nullable = false)
+    @JoinTable(
+            name = "Chapter_Material",
+            joinColumns = { @JoinColumn(name = "chapter") },
+            inverseJoinColumns = { @JoinColumn(name = "material") },
+            uniqueConstraints = @UniqueConstraint(columnNames = { "chapter", "material" }))
+    private List<Material> materials;
 
     @OneToMany(fetch = EAGER)
     @JoinColumn(name = "parentChapter")
@@ -68,11 +76,11 @@ public class Chapter {
         this.subchapters = subchapters;
     }
 
-    public Material getMaterial() {
-        return material;
+    public List<Material> getMaterials() {
+        return materials;
     }
 
-    public void setMaterial(Material material) {
-        this.material = material;
+    public void setMaterials(List<Material> materials) {
+        this.materials = materials;
     }
 }
