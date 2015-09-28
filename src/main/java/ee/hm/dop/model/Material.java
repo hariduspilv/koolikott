@@ -24,9 +24,7 @@ import org.hibernate.annotations.Formula;
 import org.hibernate.annotations.Type;
 import org.joda.time.DateTime;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
@@ -36,7 +34,6 @@ import ee.hm.dop.rest.jackson.map.LanguageDeserializer;
 import ee.hm.dop.rest.jackson.map.LanguageSerializer;
 
 @Entity
-@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id", scope = Material.class)
 @Table(uniqueConstraints = { @UniqueConstraint(columnNames = { "repositoryIdentifier", "repository" }) })
 public class Material {
 
