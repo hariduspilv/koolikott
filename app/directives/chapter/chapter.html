@@ -18,9 +18,9 @@
     </div>
 
     <!-- Chapter Materials -->
-    <div data-ng-if="chapter.material" class="row row-material">
-        <div class="col-md-3 col-sm-4 col-xs-12 col-ms-6">
-           <div data-dop-material-box material="chapter.material"></div>
+    <div class="row row-material">
+        <div data-ng-repeat="material in chapter.materials" class="col-md-3 col-sm-4 col-xs-12 col-ms-6">
+           <div data-dop-material-box material="material"></div>
         </div>
     </div>
 
