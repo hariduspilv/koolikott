@@ -208,9 +208,6 @@ public class MobileIDSOAPServiceTest {
         String idCode = "77799901010";
         Language language = new Language();
         language.setCode("rus");
-        String serviceName = "ServiceNameHere";
-        String messageToDisplay = "Special message";
-        String endpoint = "https://www.example.com:9876/Service";
 
         replayAll();
 
