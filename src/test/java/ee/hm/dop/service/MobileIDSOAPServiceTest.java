@@ -60,7 +60,7 @@ public class MobileIDSOAPServiceTest {
 
     @Test
     public void authenticate() throws Exception {
-        String phoneNumber = "55550000";
+        String phoneNumber = "+37255550000";
         String idCode = "55882128025";
         Language language = new Language();
         language.setCode("rus");
@@ -108,7 +108,7 @@ public class MobileIDSOAPServiceTest {
 
     @Test
     public void authenticateNotSupportedLanguageAndMessageEmpty() throws Exception {
-        String phoneNumber = "55550000";
+        String phoneNumber = "+37255550000";
         String idCode = "55882128025";
         Language language = new Language();
         language.setCode("www");
@@ -158,7 +158,7 @@ public class MobileIDSOAPServiceTest {
 
     @Test
     public void authenticateResponseMissingFields() throws Exception {
-        String phoneNumber = "55550000";
+        String phoneNumber = "+37255550000";
         String idCode = "55882128025";
         Language language = new Language();
         language.setCode("rus");
@@ -203,8 +203,32 @@ public class MobileIDSOAPServiceTest {
     }
 
     @Test
+    public void authenticateNonEstonianPhoneNumber() throws Exception {
+        String phoneNumber = "+37012345678";
+        String idCode = "77799901010";
+        Language language = new Language();
+        language.setCode("rus");
+        String serviceName = "ServiceNameHere";
+        String messageToDisplay = "Special message";
+        String endpoint = "https://www.example.com:9876/Service";
+
+        replayAll();
+
+        MobileAuthenticateResponse mobileAuthenticateResponse = null;
+        try {
+            mobileAuthenticateResponse = mobileIDSOAPService.authenticate(phoneNumber, idCode, language);
+        } catch (RuntimeException e) {
+            assertEquals("Non-Estonian mobile numbers are not allowed.", e.getMessage());
+        }
+
+        verifyAll();
+
+        assertNull(mobileAuthenticateResponse);
+    }
+
+    @Test
     public void authenticateFault() throws Exception {
-        String phoneNumber = "55550000";
+        String phoneNumber = "+37255550000";
         String idCode = "55882128025";
         Language language = new Language();
         language.setCode("rus");

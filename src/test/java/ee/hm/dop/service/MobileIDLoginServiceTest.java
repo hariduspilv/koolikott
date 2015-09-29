@@ -42,7 +42,7 @@ public class MobileIDLoginServiceTest {
 
     @Test
     public void authenticate() throws Exception {
-        String phoneNumber = "55501234";
+        String phoneNumber = "+37255501234";
         String idCode = "88881010888";
         Language language = new Language();
         language.setCode("est");

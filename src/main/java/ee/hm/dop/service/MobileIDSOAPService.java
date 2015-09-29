@@ -57,6 +57,10 @@ public class MobileIDSOAPService {
 
     public MobileAuthenticateResponse authenticate(String phoneNumber, String idCode, Language language)
             throws SOAPException {
+        if (!phoneNumber.startsWith("+372")) {
+            throw new RuntimeException("Non-Estonian mobile numbers are not allowed.");
+        }
+
         if (language == null || !supportedLanguages.contains(language.getCode())) {
             language = languageService.getLanguage("est");
         }

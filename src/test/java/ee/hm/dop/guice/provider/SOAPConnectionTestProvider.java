@@ -51,7 +51,7 @@ class SOAPConnectionMock extends SOAPConnection {
         response.put("UserCountry", "EE");
         response.put("UserCN", "MATT,SMITH,22334455667");
         response.put("ChallengeID", "1111");
-        mobileAuthenticateResponses.put("55551234", response);
+        mobileAuthenticateResponses.put("+37255551234", response);
 
         response = new HashMap<>();
         response.put("Sesscode", "782652658");
@@ -62,11 +62,22 @@ class SOAPConnectionMock extends SOAPConnection {
         response.put("UserCountry", "EE");
         response.put("UserCN", "MATT,SMITH,33445566778");
         response.put("ChallengeID", "1111");
-        mobileAuthenticateResponses.put("44441234", response);
+        mobileAuthenticateResponses.put("+37244441234", response);
 
         response = new HashMap<>();
         response.put("Sesscode", "894689260456");
-        mobileAuthenticateResponses.put("33331234", response);
+        mobileAuthenticateResponses.put("+37233331234", response);
+
+        response = new HashMap<>();
+        response.put("Sesscode", "653568853");
+        response.put("Status", "OK");
+        response.put("UserIDCode", "66778899001");
+        response.put("UserGivenname", "Jon");
+        response.put("UserSurname", "Smith");
+        response.put("UserCountry", "LT");
+        response.put("UserCN", "JON,SMITH,66778899001");
+        response.put("ChallengeID", "1111");
+        mobileAuthenticateResponses.put("+37077778888", response);
 
         // The key is session code (Sesscode)
         getMobileAuthenticateStatusResponses = new HashMap<>();
@@ -82,6 +93,10 @@ class SOAPConnectionMock extends SOAPConnection {
         response = new HashMap<>();
         response.put("Status", "USER_AUTHENTICATED");
         getMobileAuthenticateStatusResponses.put("894689260456", response);
+
+        response = new HashMap<>();
+        response.put("Status", "USER_AUTHENTICATED");
+        getMobileAuthenticateStatusResponses.put("653568853", response);
     }
 
     @Override
