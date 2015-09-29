@@ -5,7 +5,7 @@ define(['app'], function(app)
             return {
                 require : '?ngModel',
                 scope : {
-                    integers : '='
+                    
                 },
                 link : function(scope, element, attrs, ngModelCtrl) {
                     if (!ngModelCtrl) {
@@ -14,9 +14,6 @@ define(['app'], function(app)
 
                     ngModelCtrl.$parsers.push(function(val) {
                         var clean = val.replace(/[^0-9]/g, '');
-                        if (clean.length > scope.integers) {
-                            clean = clean.slice(0, scope.integers);
-                        }
 
                         if (val !== clean) {
                             ngModelCtrl.$setViewValue(clean);
