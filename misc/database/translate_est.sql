@@ -102,7 +102,7 @@ insert into Translation(translationGroup, translationKey, translation) values (1
 insert into Translation(translationGroup, translationKey, translation) values (1, 'LOGIN_MOBILEID', 'Mobiil-ID');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'LOGIN_MOBILEID_CODE', 'Sinu kood on');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'LOGIN_CANCEL', 'Katkesta');
-insert into Translation(translationGroup, translationKey, translation) values (3, 'LOGIN_SMS', 'Kontrollige, et SMSi teel saabunud kontrollkood ühtiks arvutiekraanil näidatuga.');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'LOGIN_SMS', 'Kontrollige, et SMSi teel saabunud kontrollkood ühtiks arvutiekraanil näidatuga.');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'ERROR_LOGIN_FAILED', 'Sisselogimine ebaõnnestus');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'ERROR_MATERIAL_NOT_FOUND', 'Materjali ei leitud');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'MATERIAL_PAID', 'Tasuline');
