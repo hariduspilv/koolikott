@@ -27,8 +27,13 @@ define(['app'], function(app)
                         $scope.mobileId.phoneNumber = ESTONIAN_CALLING_CODE + $scope.mobileId.phoneNumber;
                     }
 
-                    authenticationService.loginWithMobileId($scope.mobileId.phoneNumber, $scope.mobileId.idCode, language, 
+                    if (validIdCode($scope.mobileId.idCode)) {
+                        authenticationService.loginWithMobileId($scope.mobileId.phoneNumber, $scope.mobileId.idCode, language, 
                         mobileIdSuccess, mobileIdFail, mobileIdReceiveChallenge);
+                    } else {
+                        log("Invalid id code.");
+                    }
+                   
                 };
 
                 function mobileIdSuccess() {

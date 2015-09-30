@@ -209,3 +209,41 @@ function formatSurnameToInitialsButLast(surname) {
 	res += array[last];
 	return res;	
 }
+
+function validIdCode(idCode) {
+	if (!idCode || idCode.length !== 11) {
+		return false;
+	}
+
+	var controlCode;
+
+	var firstWeights = [1, 2, 3, 4, 5, 6, 7, 8, 9, 1];
+	var secondWeights = [3, 4, 5, 6, 7, 8, 9, 1, 2, 3];
+
+	var firstSum = 0;
+	for (i = 0; i < 10; i++) {
+		firstSum += idCode.charAt(i) * firstWeights[i];
+	}
+
+	if (firstSum % 11 !== 10) {
+		controlCode = firstSum % 11;
+	} else {
+		// Calculate second sum using second set of weights
+		var secondSum = 0;
+		for (i = 0; i < 10; i++) {
+			secondSum += idCode.charAt(i) * secondWeights[i];
+		}
+
+		if (secondSum % 11 !== 10) {
+			controlCode = secondSum % 11;
+		} else {
+			controlCode = 0;
+		}
+	}
+
+	if (idCode[10] == controlCode) {
+		return true;
+	} else {
+		return false;
+	}
+}
