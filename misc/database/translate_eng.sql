@@ -101,7 +101,6 @@ insert into Translation(translationGroup, translationKey, translation) values (3
 insert into Translation(translationGroup, translationKey, translation) values (3, 'LOGIN_IDCARD', 'ID-card');
 insert into Translation(translationGroup, translationKey, translation) values (3, 'LOGIN_MOBILEID', 'Mobile-ID');
 insert into Translation(translationGroup, translationKey, translation) values (3, 'LOGIN_MOBILEID_CODE', 'Your code is');
-insert into Translation(translationGroup, translationKey, translation) values (3, 'LOGIN_CANCEL', 'Cancel');
 insert into Translation(translationGroup, translationKey, translation) values (3, 'LOGIN_SMS', 'Make sure that the SMS inbox for verification code match that shown on the computer screen.');
 insert into Translation(translationGroup, translationKey, translation) values (3, 'ERROR_LOGIN_FAILED', 'Login failed');
 insert into Translation(translationGroup, translationKey, translation) values (3, 'ERROR_MATERIAL_NOT_FOUND', 'Material not found');
