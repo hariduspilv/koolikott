@@ -263,7 +263,7 @@ public class LoginResourceTest extends ResourceIntegrationTestBase {
         assertNotNull(mobileIDSecurityCodes.getChallengeId());
 
         Response isValid = doGet(String.format("login/mobileId/isValid?token=%s", mobileIDSecurityCodes.getToken()));
-        assertEquals(500, isValid.getStatus());
+        assertEquals(204, isValid.getStatus());
     }
 
     @Test
@@ -273,7 +273,7 @@ public class LoginResourceTest extends ResourceIntegrationTestBase {
         String language = "est";
         Response response = doGet(String.format("login/mobileId?phoneNumber=%s&idCode=%s&language=%s",
                 encodeQuery(phoneNumber), idCode, language));
-        assertEquals(500, response.getStatus());
+        assertEquals(204, response.getStatus());
     }
 
     @Test
@@ -283,7 +283,7 @@ public class LoginResourceTest extends ResourceIntegrationTestBase {
         String language = "est";
         Response response = doGet(String.format("login/mobileId?phoneNumber=%s&idCode=%s&language=%s",
                 encodeQuery(phoneNumber), idCode, language));
-        assertEquals(500, response.getStatus());
+        assertEquals(204, response.getStatus());
     }
 
     @Test
@@ -293,14 +293,14 @@ public class LoginResourceTest extends ResourceIntegrationTestBase {
         String language = "eng";
         Response response = doGet(String.format("login/mobileId?phoneNumber=%s&idCode=%s&language=%s",
                 encodeQuery(phoneNumber), idCode, language));
-        assertEquals(500, response.getStatus());
+        assertEquals(204, response.getStatus());
     }
 
     @Test
     public void mobileIDIsAuthenticatedInvalidSessionCode() {
         String token = "2";
         Response isValid = doGet(String.format("login/mobileId/isValid?token=%s", token));
-        assertEquals(500, isValid.getStatus());
+        assertEquals(204, isValid.getStatus());
     }
 
     private AuthnRequest decodeAuthnRequest(String request) throws Exception {

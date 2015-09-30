@@ -137,7 +137,8 @@ public class LoginService {
 
     public AuthenticatedUser validateMobileIDAuthentication(String token) throws SOAPException {
         if (!mobileIDLoginService.isAuthenticated(token)) {
-            throw new RuntimeException("Authentication not valid.");
+            logger.info("Authentication not valid.");
+            return null;
         }
         AuthenticationState authenticationState = authenticationStateDAO.findAuthenticationStateByToken(token);
         return logIn(authenticationState);

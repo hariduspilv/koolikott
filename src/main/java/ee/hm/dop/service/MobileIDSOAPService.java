@@ -27,6 +27,8 @@ import javax.xml.soap.SOAPMessage;
 import javax.xml.soap.SOAPPart;
 
 import org.apache.commons.configuration.Configuration;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import ee.hm.dop.model.AuthenticationState;
 import ee.hm.dop.model.Language;
@@ -34,6 +36,8 @@ import ee.hm.dop.model.mobileid.soap.GetMobileAuthenticateStatusResponse;
 import ee.hm.dop.model.mobileid.soap.MobileAuthenticateResponse;
 
 public class MobileIDSOAPService {
+
+    private static Logger logger = LoggerFactory.getLogger(MobileIDSOAPService.class);
 
     protected static final String MOBILE_AUTHENTICATE_MESSAGING_MODE = "asynchClientServer";
     protected static final String AUTHENTICATION_COMPLETE = "USER_AUTHENTICATED";
@@ -85,6 +89,10 @@ public class MobileIDSOAPService {
             while (status.equals(AUTHENTICATION_IN_PROGRESS)) {
                 status = getAuthenticationStatus(authenticationState);
 
+                if (status == null) {
+                    return false;
+                }
+
                 if (status.equals(AUTHENTICATION_COMPLETE)) {
                     return true;
                 }
@@ -92,7 +100,7 @@ public class MobileIDSOAPService {
                 Thread.sleep(getPollingInterval());
             }
         } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
+
         }
 
         return false;
@@ -108,6 +116,10 @@ public class MobileIDSOAPService {
 
         GetMobileAuthenticateStatusResponse getMobileAuthenticateStatusResponse = parseGetMobileAuthenticateStatusResponse(
                 response);
+
+        if (getMobileAuthenticateStatusResponse == null) {
+            return null;
+        }
 
         return getMobileAuthenticateStatusResponse.getStatus();
     }
@@ -151,7 +163,8 @@ public class MobileIDSOAPService {
             Detail detail = fault.getDetail();
             String detailMessage = detail.getFirstChild().getTextContent();
 
-            throw new RuntimeException("SOAPResponse Fault " + faultString + ": " + detailMessage);
+            logger.info("SOAPResponse Fault " + faultString + ": " + detailMessage);
+            return null;
         }
 
         SOAPElement responseElement = (SOAPElement) body.getChildElements().next();
@@ -168,26 +181,31 @@ public class MobileIDSOAPService {
     }
 
     private MobileAuthenticateResponse parseMobileAuthenticateResponse(SOAPMessage message) throws SOAPException {
-        Map<String, String> elements = parseSOAPResponse(message);
-
-        if (!elements.keySet()
-                .containsAll(Arrays.asList("Sesscode", "UserIDCode", "UserGivenname", "UserSurname", "ChallengeID"))) {
-            throw new RuntimeException("MobileAuthenticate response is missing one or more required fields.");
+        Map<String, String> responseElements = parseSOAPResponse(message);
+        if (responseElements == null) {
+            return null;
         }
 
-        if (!elements.get("Status").equals("OK")) {
-            throw new RuntimeException("MobileAuthenticate response is not OK.");
+        if (!responseElements.keySet()
+                .containsAll(Arrays.asList("Sesscode", "UserIDCode", "UserGivenname", "UserSurname", "ChallengeID"))) {
+            logger.warn("MobileAuthenticate response is missing one or more required fields.");
+            return null;
+        }
+
+        if (!responseElements.get("Status").equals("OK")) {
+            logger.warn("MobileAuthenticate response is not OK.");
+            return null;
         }
 
         MobileAuthenticateResponse response = new MobileAuthenticateResponse();
-        response.setSessionCode(elements.get("Sesscode"));
-        response.setStatus(elements.get("Status"));
-        response.setIdCode(elements.get("UserIDCode"));
-        response.setName(elements.get("UserGivenname"));
-        response.setSurname(elements.get("UserSurname"));
-        response.setCountry(elements.get("UserCountry"));
-        response.setUserCommonName(elements.get("UserCN"));
-        response.setChallengeID(elements.get("ChallengeID"));
+        response.setSessionCode(responseElements.get("Sesscode"));
+        response.setStatus(responseElements.get("Status"));
+        response.setIdCode(responseElements.get("UserIDCode"));
+        response.setName(responseElements.get("UserGivenname"));
+        response.setSurname(responseElements.get("UserSurname"));
+        response.setCountry(responseElements.get("UserCountry"));
+        response.setUserCommonName(responseElements.get("UserCN"));
+        response.setChallengeID(responseElements.get("ChallengeID"));
         return response;
     }
 
@@ -196,7 +214,8 @@ public class MobileIDSOAPService {
         Map<String, String> elements = parseSOAPResponse(message);
 
         if (!elements.containsKey("Status")) {
-            throw new RuntimeException("GetMobileAuthenticateStatusResponse response is missing a Status field.");
+            logger.info("GetMobileAuthenticateStatusResponse response is missing a Status field.");
+            return null;
         }
 
         GetMobileAuthenticateStatusResponse response = new GetMobileAuthenticateStatusResponse();
