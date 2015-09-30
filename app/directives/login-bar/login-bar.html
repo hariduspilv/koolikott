@@ -42,10 +42,10 @@
         
         <div class="col-md-2-4 login-btn">
             <div class="form-group">
-                <input type="text" class="form-control" id="idCode" data-ng-model="mobileId.idCode" placeholder="{{'PERSONAL_CODE' | translate}}" data-va-integer maxlength="11">
+                <input type="text" class="form-control" id="idCode" data-ng-model="mobileId.idCode" placeholder="{{'PERSONAL_CODE' | translate}}" input-pattern="[^0-9]+" data-va-integer maxlength="11">
             </div>
             <div class="form-group has-error">
-                <input type="text" class="form-control" id="phoneNumber" data-ng-model="mobileId.phoneNumber" placeholder="+372 XX XXX XXX">
+                <input type="text" class="form-control" id="phoneNumber" data-ng-model="mobileId.phoneNumber" placeholder="+372 XX XXX XXX" input-pattern="[^0-9+]+" data-va-integer>
             </div>
             <a class="btn btn-dark btn-lg btn-block" data-ng-click="mobileIdAuth()">
                 <img src="img/logo_id_card.svg"> <span data-translate="LOGIN_MOBILEID"></span>
