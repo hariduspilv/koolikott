@@ -203,27 +203,6 @@ public class MobileIDSOAPServiceTest {
     }
 
     @Test
-    public void authenticateNonEstonianPhoneNumber() throws Exception {
-        String phoneNumber = "+37012345678";
-        String idCode = "77799901010";
-        Language language = new Language();
-        language.setCode("rus");
-
-        replayAll();
-
-        MobileAuthenticateResponse mobileAuthenticateResponse = null;
-        try {
-            mobileAuthenticateResponse = mobileIDSOAPService.authenticate(phoneNumber, idCode, language);
-        } catch (RuntimeException e) {
-            assertEquals("Non-Estonian mobile numbers are not allowed.", e.getMessage());
-        }
-
-        verifyAll();
-
-        assertNull(mobileAuthenticateResponse);
-    }
-
-    @Test
     public void authenticateFault() throws Exception {
         String phoneNumber = "+37255550000";
         String idCode = "55882128025";

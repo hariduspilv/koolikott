@@ -7,6 +7,7 @@ import static org.easymock.EasyMock.verify;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
@@ -70,6 +71,28 @@ public class MobileIDLoginServiceTest {
 
         validateAuthenticationState(capturedAuthenticationState, mobileAuthenticateResponse);
         validateMobileIDSecurityCodes(mobileIDSecurityCodes, mobileAuthenticateResponse, capturedAuthenticationState);
+    }
+
+    @Test
+    public void authenticateNonEstonianPhoneNumber() throws Exception {
+        String phoneNumber = "+33355501234";
+        String idCode = "99991010888";
+        Language language = new Language();
+        language.setCode("eng");
+
+        replayAll();
+
+        MobileIDSecurityCodes mobileIDSecurityCodes = null;
+
+        try {
+            mobileIDSecurityCodes = mobileIDLoginService.authenticate(phoneNumber, idCode, language);
+        } catch (RuntimeException e) {
+            assertEquals("Non-Estonian mobile numbers are not allowed.", e.getMessage());
+        }
+
+        verifyAll();
+
+        assertNull(mobileIDSecurityCodes);
     }
 
     @Test

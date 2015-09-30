@@ -25,6 +25,10 @@ public class MobileIDLoginService {
     private SecureRandom random = new SecureRandom();
 
     public MobileIDSecurityCodes authenticate(String phoneNumber, String idCode, Language language) throws Exception {
+        if (!phoneNumber.startsWith("+372")) {
+            throw new RuntimeException("Non-Estonian mobile numbers are not allowed.");
+        }
+
         MobileAuthenticateResponse mobileAuthenticateResponse = mobileIDSOAPService.authenticate(phoneNumber, idCode,
                 language);
 
