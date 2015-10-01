@@ -14,7 +14,7 @@ require.config({
         'dopLoginBar': 'directives/login-bar/login-bar',
         'dopAlert': 'directives/alert/alert',
         'alertService': 'services/alertService',
-        'vaInteger': 'directives/value-integer'
+        'inputValueControl': 'directives/input-value-control'
     },
     shim: {
         'app': {
@@ -26,7 +26,7 @@ require.config({
     }
 });
 
-require(['app', 'translationService', 'authenticatedUserService', 'serverCallService', 'authenticationService', 'searchService', 'dopHeader', 'dopFooter', 'dopLoginBar', 'dopAlert', 'alertService', 'vaInteger'],
- function(app, translationService, authenticatedUserService, serverCallService, authenticationService, searchService, dopHeader, dopAlert, alertService, vaInteger) {
+require(['app', 'translationService', 'authenticatedUserService', 'serverCallService', 'authenticationService', 'searchService', 'dopHeader', 'dopFooter', 'dopLoginBar', 'dopAlert', 'alertService', 'inputValueControl'],
+ function(app, translationService, authenticatedUserService, serverCallService, authenticationService, searchService, dopHeader, dopAlert, alertService, inputValueControl) {
     angular.bootstrap(document, ['app']);
 });

@@ -1,6 +1,6 @@
 define(['app'], function(app)
 {
-    app.directive('vaInteger', [
+    app.directive('inputValueControl', [
         function() {
             return {
               require: '?ngModel',
