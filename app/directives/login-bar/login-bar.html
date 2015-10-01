@@ -39,10 +39,12 @@
         <div class="col-md-2-4 login-btn">
             <div class="form-group">
                 <input type="text" class="form-control" id="idCode" data-ng-model="mobileId.idCode" placeholder="{{'PERSONAL_CODE' | translate}}" data-input-pattern="[^0-9]+" data-input-value-control maxlength="11">
+                <div class="has-error">
+                    <span data-ng-if="validation.error.idCode === 'required'" class="help-block text-left" data-translate="MESSAGE_ERROR_PERSONAL_CODE_REQUIRED"></span>
+                </div>
             </div>
-            <div class="form-group has-error">
+            <div class="form-group">
                 <input type="text" class="form-control" id="phoneNumber" data-ng-model="mobileId.phoneNumber" placeholder="+372 XX XXX XXX" data-input-pattern="[^0-9+]+" data-input-value-control>
-                <span class="help-block text-left">Error</span>
             </div>
             <a class="btn btn-dark btn-lg btn-block" data-ng-click="mobileIdAuth()">
                 <img src="img/logo_id_card.svg"> <span data-translate="LOGIN_MOBILEID"></span>

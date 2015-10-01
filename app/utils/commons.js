@@ -210,7 +210,7 @@ function formatSurnameToInitialsButLast(surname) {
 	return res;	
 }
 
-function validIdCode(idCode) {
+function isIdCodeValid(idCode) {
 	if (!idCode || idCode.length !== 11) {
 		return false;
 	}

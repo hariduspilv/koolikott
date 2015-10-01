@@ -7,7 +7,10 @@ define(['app'], function(app)
             templateUrl: 'app/directives/login-bar/login-bar.html',
             controller: function ($scope) {
 
-                $scope.mobileId = [];
+                $scope.mobileId = {};
+                $scope.validation = {
+                    error: {}
+                };
 
                 $scope.idCardAuth = function() {
                     authenticationService.loginWithIdCard();
@@ -18,15 +21,17 @@ define(['app'], function(app)
                 };
 
                 $scope.mobileIdAuth = function() {
-                    language = translationService.getLanguage();
+                    $scope.validation.error.idCode = null;
 
-                    if (validIdCode($scope.mobileId.idCode)) {
-                        authenticationService.loginWithMobileId($scope.mobileId.phoneNumber, $scope.mobileId.idCode, language, 
+                    if (isIdCodeValid($scope.mobileId.idCode)) {
+                        language = translationService.getLanguage();
+                        authenticationService.loginWithMobileId($scope.mobileId.phoneNumber, $scope.mobileId.idCode, language,
                         mobileIdSuccess, mobileIdFail, mobileIdReceiveChallenge);
                     } else {
-                        log("Invalid id code.");
+                        if (isEmpty($scope.mobileId.idCode)) {
+                            $scope.validation.error.idCode = "required";
+                        }
                     }
-                   
                 };
 
                 function mobileIdSuccess() {
@@ -42,7 +47,6 @@ define(['app'], function(app)
                 function mobileIdReceiveChallenge(challenge) {
                     $scope.mobileIdChallenge = challenge;
                 }
-                
             }
         };
     }]);
