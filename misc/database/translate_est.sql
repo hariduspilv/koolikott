@@ -109,6 +109,7 @@ insert into Translation(translationGroup, translationKey, translation) values (1
 insert into Translation(translationGroup, translationKey, translation) values (1, 'MY_PROFILE', 'Minu profiil');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'ERROR_GETTING_USER_FAILED', 'Kasutajat ei leitud');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'PERSONAL_CODE', 'Isikukood');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'MESSAGE_ERROR_PERSONAL_CODE_REQUIRED', 'Isikukood code on nõutud');
 
 -- Material Subject translations
 insert into Translation(translationGroup, translationKey, translation) values (1, 'SUBJECT_ESTONIAN', 'Eesti keel');
