@@ -21,8 +21,8 @@ define(['app'], function(app)
                 };
 
                 $scope.mobileIdAuth = function() {
-                    var idCodeValid = validateIdCode($scope.mobileId.idCode);
-                    var phoneNumberValid = validatePhoneNumber($scope.mobileId.phoneNumber);
+                    var idCodeValid = validateIdCode();
+                    var phoneNumberValid = validatePhoneNumber();
 
                     if (idCodeValid && phoneNumberValid) {
                         language = translationService.getLanguage();
@@ -48,12 +48,12 @@ define(['app'], function(app)
                 function validateIdCode() {
                     $scope.validation.error.idCode = null;
 
-                    var isValid = isIdCodeValid($scope.mobileId.idCode);
+                    if (isEmpty($scope.mobileId.idCode)) {
+                        $scope.validation.error.idCode = "required";
+                    } else {
+                        var isValid = isIdCodeValid($scope.mobileId.idCode);
 
-                    if (!isValid) {
-                        if (isEmpty($scope.mobileId.idCode)) {
-                            $scope.validation.error.idCode = "required";
-                        } else {
+                        if (!isValid) {
                             $scope.validation.error.idCode = "invalid";
                         }
                     }
@@ -64,12 +64,12 @@ define(['app'], function(app)
                 function validatePhoneNumber() {
                     $scope.validation.error.phoneNumber = null;
 
-                    var isValid = isPhoneNumberEstonian($scope.mobileId.phoneNumber);
+                    if (isEmpty($scope.mobileId.phoneNumber)) {
+                        $scope.validation.error.phoneNumber = "required";
+                    } else {
+                        var isValid = isPhoneNumberEstonian($scope.mobileId.phoneNumber);
 
-                    if (!isValid) {
-                        if (isEmpty($scope.mobileId.phoneNumber)) {
-                            $scope.validation.error.phoneNumber = "required";
-                        } else {
+                        if (!isValid) {
                             $scope.validation.error.phoneNumber = "notEstonian";
                         }
                     }
@@ -78,9 +78,6 @@ define(['app'], function(app)
                 }
 
                 function isPhoneNumberEstonian(phoneNumber) {
-                    if (!phoneNumber) {
-                        return false;
-                    }
                     return !phoneNumber.startsWith("+") || phoneNumber.startsWith("+372");
                 }
             }
