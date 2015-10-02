@@ -110,6 +110,7 @@ insert into Translation(translationGroup, translationKey, translation) values (1
 insert into Translation(translationGroup, translationKey, translation) values (1, 'ERROR_GETTING_USER_FAILED', 'Kasutajat ei leitud');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'PERSONAL_CODE', 'Isikukood');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'MESSAGE_ERROR_PERSONAL_CODE_REQUIRED', 'Isikukood on nõutud');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'MESSAGE_ERROR_PERSONAL_CODE_INVALID', 'Isikukood ei ole korrektne');
 
 -- Material Subject translations
 insert into Translation(translationGroup, translationKey, translation) values (1, 'SUBJECT_ESTONIAN', 'Eesti keel');

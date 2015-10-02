@@ -110,6 +110,7 @@ insert into Translation(translationGroup, translationKey, translation) values (3
 insert into Translation(translationGroup, translationKey, translation) values (3, 'ERROR_GETTING_USER_FAILED', 'User not found');
 insert into Translation(translationGroup, translationKey, translation) values (3, 'PERSONAL_CODE', 'Personal code');
 insert into Translation(translationGroup, translationKey, translation) values (3, 'MESSAGE_ERROR_PERSONAL_CODE_REQUIRED', 'Personal code is required');
+insert into Translation(translationGroup, translationKey, translation) values (3, 'MESSAGE_ERROR_PERSONAL_CODE_INVALID', 'Personal code is invalid');
 
 -- Material Subject translations
 insert into Translation(translationGroup, translationKey, translation) values (3, 'SUBJECT_ESTONIAN', 'Estonian');
