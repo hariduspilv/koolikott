@@ -48,10 +48,12 @@ define(['app'], function(app)
                 function validateIdCode() {
                     $scope.validation.error.idCode = null;
 
+                    var isValid = false;
+
                     if (isEmpty($scope.mobileId.idCode)) {
                         $scope.validation.error.idCode = "required";
                     } else {
-                        var isValid = isIdCodeValid($scope.mobileId.idCode);
+                        isValid = isIdCodeValid($scope.mobileId.idCode);
 
                         if (!isValid) {
                             $scope.validation.error.idCode = "invalid";
@@ -64,10 +66,12 @@ define(['app'], function(app)
                 function validatePhoneNumber() {
                     $scope.validation.error.phoneNumber = null;
 
+                    var isValid = false;
+
                     if (isEmpty($scope.mobileId.phoneNumber)) {
                         $scope.validation.error.phoneNumber = "required";
                     } else {
-                        var isValid = isPhoneNumberEstonian($scope.mobileId.phoneNumber);
+                        isValid = isPhoneNumberEstonian($scope.mobileId.phoneNumber);
 
                         if (!isValid) {
                             $scope.validation.error.phoneNumber = "notEstonian";
