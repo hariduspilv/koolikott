@@ -21,18 +21,13 @@ define(['app'], function(app)
                 };
 
                 $scope.mobileIdAuth = function() {
-                    $scope.validation.error.idCode = null;
-                    $scope.validation.error.phoneNumber = null;
+                    var idCodeValid = validateIdCode($scope.mobileId.idCode);
+                    var phoneNumberValid = validatePhoneNumber($scope.mobileId.phoneNumber);
 
-                    var idCodeValid = isIdCodeValid($scope.mobileId.idCode);
-                    var phoneNumberEstonian = isPhoneNumberEstonian($scope.mobileId.phoneNumber);
-
-                    if (idCodeValid && phoneNumberEstonian) {
+                    if (idCodeValid && phoneNumberValid) {
                         language = translationService.getLanguage();
                         authenticationService.loginWithMobileId($scope.mobileId.phoneNumber, $scope.mobileId.idCode, language,
                         mobileIdSuccess, mobileIdFail, mobileIdReceiveChallenge);
-                    } else {
-                        showValidationErrors(idCodeValid, phoneNumberEstonian);
                     }
                 };
 
@@ -50,15 +45,12 @@ define(['app'], function(app)
                     $scope.mobileIdChallenge = challenge;
                 }
 
-                function isPhoneNumberEstonian(phoneNumber) {
-                    if (!phoneNumber) {
-                        return false;
-                    }
-                    return !phoneNumber.startsWith("+") || phoneNumber.startsWith("+372");
-                }
+                function validateIdCode() {
+                    $scope.validation.error.idCode = null;
 
-                function showValidationErrors(idCodeValid, phoneNumberEstonian) {
-                    if (!idCodeValid) {
+                    var isValid = isIdCodeValid($scope.mobileId.idCode);
+
+                    if (!isValid) {
                         if (isEmpty($scope.mobileId.idCode)) {
                             $scope.validation.error.idCode = "required";
                         } else {
@@ -66,13 +58,30 @@ define(['app'], function(app)
                         }
                     }
 
-                    if (!phoneNumberEstonian) {
+                    return isValid;
+                }
+
+                function validatePhoneNumber() {
+                    $scope.validation.error.phoneNumber = null;
+
+                    var isValid = isPhoneNumberEstonian($scope.mobileId.phoneNumber);
+
+                    if (!isValid) {
                         if (isEmpty($scope.mobileId.phoneNumber)) {
                             $scope.validation.error.phoneNumber = "required";
                         } else {
                             $scope.validation.error.phoneNumber = "notEstonian";
                         }
                     }
+
+                    return isValid;
+                }
+
+                function isPhoneNumberEstonian(phoneNumber) {
+                    if (!phoneNumber) {
+                        return false;
+                    }
+                    return !phoneNumber.startsWith("+") || phoneNumber.startsWith("+372");
                 }
             }
         };
