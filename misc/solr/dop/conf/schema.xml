@@ -121,6 +121,7 @@
      installations. See the <uniqueKey> declaration below where <uniqueKey> is set to "id".
    -->   
    <field name="id" type="string" indexed="true" stored="true" required="true" multiValued="false" />
+   <field name="type" type="string" indexed="true" stored="true" required="true" multiValued="false" />
 
    <!-- Material -->
    <field name="title" type="text_general" indexed="true" stored="false" multiValued="true"/>

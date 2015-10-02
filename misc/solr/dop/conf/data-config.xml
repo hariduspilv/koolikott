@@ -2,8 +2,8 @@
     <dataSource driver="com.mysql.jdbc.Driver" url="jdbc:mysql://127.0.0.1/dop" user="root" password="root" readOnly="true" />
     <document>
         <entity name="Material" pk="id"
-            query="select id, licenseType from Material WHERE deleted = false"
-            deltaImportQuery="select id, licenseType from Material where id = '${dih.delta.id}'"
+            query="select id, licenseType, 'material' as type from Material WHERE deleted = false"
+            deltaImportQuery="select id, licenseType, 'material' as type  from Material where id = '${dih.delta.id}'"
             deltaQuery="select id from Material where (CONVERT_TZ(added, @@session.time_zone, '+00:00') > '${dataimporter.last_index_time}' OR CONVERT_TZ(updated, @@session.time_zone, '+00:00') > '${dataimporter.last_index_time}') AND deleted = false"
             deletedPkQuery="select id from Material where (CONVERT_TZ(added, @@session.time_zone, '+00:00') > '${dataimporter.last_index_time}' OR CONVERT_TZ(updated, @@session.time_zone, '+00:00') > '${dataimporter.last_index_time}') AND deleted = true">
             <entity name="Material_Title" query="select title as title_id from Material_Title where material='${Material.id}'">
