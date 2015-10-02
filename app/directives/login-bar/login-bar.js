@@ -22,16 +22,25 @@ define(['app'], function(app)
 
                 $scope.mobileIdAuth = function() {
                     $scope.validation.error.idCode = null;
+                    $scope.validation.error.phoneNumber = null;
 
-                    if (isIdCodeValid($scope.mobileId.idCode)) {
+                    var idCodeValid = isIdCodeValid($scope.mobileId.idCode);
+
+                    if (idCodeValid && !isEmpty($scope.mobileId.phoneNumber)) {
                         language = translationService.getLanguage();
                         authenticationService.loginWithMobileId($scope.mobileId.phoneNumber, $scope.mobileId.idCode, language,
                         mobileIdSuccess, mobileIdFail, mobileIdReceiveChallenge);
                     } else {
-                        if (isEmpty($scope.mobileId.idCode)) {
-                            $scope.validation.error.idCode = "required";
-                        } else {
-                            $scope.validation.error.idCode = "invalid";
+                        if (!idCodeValid) {
+                            if (isEmpty($scope.mobileId.idCode)) {
+                                $scope.validation.error.idCode = "required";
+                            } else {
+                                $scope.validation.error.idCode = "invalid";
+                            }
+                        }
+
+                        if (isEmpty($scope.mobileId.phoneNumber)) {
+                            $scope.validation.error.phoneNumber = "required";
                         }
                     }
                 };
