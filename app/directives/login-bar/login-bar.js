@@ -30,6 +30,8 @@ define(['app'], function(app)
                     } else {
                         if (isEmpty($scope.mobileId.idCode)) {
                             $scope.validation.error.idCode = "required";
+                        } else {
+                            $scope.validation.error.idCode = "invalid";
                         }
                     }
                 };
