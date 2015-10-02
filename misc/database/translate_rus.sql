@@ -111,6 +111,7 @@ insert into Translation(translationGroup, translationKey, translation) values (2
 insert into Translation(translationGroup, translationKey, translation) values (2, 'PERSONAL_CODE', 'Персональный код');
 insert into Translation(translationGroup, translationKey, translation) values (2, 'MESSAGE_ERROR_PERSONAL_CODE_REQUIRED', 'Персональный код требуется');
 insert into Translation(translationGroup, translationKey, translation) values (2, 'MESSAGE_ERROR_PERSONAL_CODE_INVALID', 'Персональный код является недействительным');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'MESSAGE_ERROR_PHONE_NUMBER_REQUIRED', 'Телефонный номер требуется');
 
 -- Material Subject translations
 insert into Translation(translationGroup, translationKey, translation) values (2, 'SUBJECT_ESTONIAN', 'Эстонский');

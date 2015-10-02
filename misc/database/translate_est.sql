@@ -111,6 +111,7 @@ insert into Translation(translationGroup, translationKey, translation) values (1
 insert into Translation(translationGroup, translationKey, translation) values (1, 'PERSONAL_CODE', 'Isikukood');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'MESSAGE_ERROR_PERSONAL_CODE_REQUIRED', 'Isikukood on nõutud');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'MESSAGE_ERROR_PERSONAL_CODE_INVALID', 'Isikukood ei ole korrektne');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'MESSAGE_ERROR_PHONE_NUMBER_REQUIRED', 'Telefoninumber on nõutud');
 
 -- Material Subject translations
 insert into Translation(translationGroup, translationKey, translation) values (1, 'SUBJECT_ESTONIAN', 'Eesti keel');
