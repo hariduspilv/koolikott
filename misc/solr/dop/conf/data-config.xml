@@ -1,11 +1,17 @@
 <dataConfig>
     <dataSource driver="com.mysql.jdbc.Driver" url="jdbc:mysql://127.0.0.1/dop" user="root" password="root" readOnly="true" />
     <document>
-        <entity name="Material" pk="id"
-            query="select id, licenseType, 'material' as type from Material WHERE deleted = false"
-            deltaImportQuery="select id, licenseType, 'material' as type  from Material where id = '${dih.delta.id}'"
-            deltaQuery="select id from Material where (CONVERT_TZ(added, @@session.time_zone, '+00:00') > '${dataimporter.last_index_time}' OR CONVERT_TZ(updated, @@session.time_zone, '+00:00') > '${dataimporter.last_index_time}') AND deleted = false"
-            deletedPkQuery="select id from Material where (CONVERT_TZ(added, @@session.time_zone, '+00:00') > '${dataimporter.last_index_time}' OR CONVERT_TZ(updated, @@session.time_zone, '+00:00') > '${dataimporter.last_index_time}') AND deleted = true">
+        <!--
+            Primary key (uniqueKey) has to be unique amoung all entities, so we have to generate it using the pair (type, id).
+            deltaQuery: must return uniqueKey which will be used to match the changed entity (in db) with the Solr index.
+                        nust return the database id to be used in the deltaImportQuery.
+            deletedPkQuery: must return uniqueKey which will be used to remove document from Solr index.
+         -->
+        <entity name="Material" pk="uniqueKey"
+            query="select concat('material', id ) as uniqueKey, id, licenseType, 'material' as type from Material WHERE deleted = false"
+            deltaImportQuery="select concat('material', id ) as uniqueKey, id, licenseType, 'material' as type  from Material where id = '${dih.delta.id}'"
+            deltaQuery="select concat('material', id ) as uniqueKey, id from Material where (CONVERT_TZ(added, @@session.time_zone, '+00:00') > '${dataimporter.last_index_time}' OR CONVERT_TZ(updated, @@session.time_zone, '+00:00') > '${dataimporter.last_index_time}') AND deleted = false"
+            deletedPkQuery="select concat('material', id ) as uniqueKey from Material where (CONVERT_TZ(added, @@session.time_zone, '+00:00') > '${dataimporter.last_index_time}' OR CONVERT_TZ(updated, @@session.time_zone, '+00:00') > '${dataimporter.last_index_time}') AND deleted = true">
             <entity name="Material_Title" query="select title as title_id from Material_Title where material='${Material.id}'">
                 <entity name="LanguageString" query="select textValue as title from LanguageString where id = '${Material_Title.title_id}'" />
             </entity>
@@ -33,8 +39,8 @@
             </entity>
             <entity name="LicenseType" query="select name as license_type from LicenseType where id='${Material.licenseType}'" />
         </entity>
-        <entity name="Portfolio" pk="id"
-            query="select id, title, 'portfolio' as type from Portfolio">
+        <entity name="Portfolio" pk="uniqueKey"
+            query="select concat('portfolio', id ) as uniqueKey, id, title, 'portfolio' as type from Portfolio">
         </entity>
     </document>
 </dataConfig>

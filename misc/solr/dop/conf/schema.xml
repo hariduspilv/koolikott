@@ -120,10 +120,12 @@
      required, it is highly recommended. A <uniqueKey> is present in almost all Solr 
      installations. See the <uniqueKey> declaration below where <uniqueKey> is set to "id".
    -->   
+   <!-- Common to ALL entities -->
+   <field name="uniqueKey" type="string" indexed="true" stored="true" required="true"/>
    <field name="id" type="string" indexed="true" stored="true" required="true" multiValued="false" />
    <field name="type" type="string" indexed="true" stored="true" required="true" multiValued="false" />
 
-   <!-- Material -->
+   <!-- Material & Portfolio-->
    <field name="title" type="text_general" indexed="true" stored="false" multiValued="true"/>
    <field name="description" type="text_general" indexed="true" stored="false" multiValued="true"/>
    <field name="author" type="text_general" indexed="true" stored="false" multiValued="true"/>
@@ -145,7 +147,7 @@
  <!-- Field to use to determine and enforce document uniqueness. 
       Unless this field is marked with required="false", it will be a required field
    -->
- <uniqueKey>id</uniqueKey>
+ <uniqueKey>uniqueKey</uniqueKey>
 
   <!-- copyField commands copy one field to another at the time a document
         is added to the index.  It's used either to index the same field differently,
@@ -161,9 +163,9 @@
    <copyField source="license_type" dest="text" />
 
    <!-- Above, multiple source fields are copied to the [text] field.
-	  Another way to map multiple source fields to the same
-	  destination field is to use the dynamic field syntax.
-	  copyField also supports a maxChars to copy setting.  -->
+    Another way to map multiple source fields to the same
+    destination field is to use the dynamic field syntax.
+    copyField also supports a maxChars to copy setting.  -->
 
    <!-- <copyField source="*_t" dest="text" maxChars="3000"/> -->
 
@@ -191,8 +193,8 @@
     <!-- sortMissingLast and sortMissingFirst attributes are optional attributes are
          currently supported on types that are sorted internally as strings
          and on numeric types.
-	     This includes "string","boolean", and, as of 3.5 (and 4.x),
-	     int, float, long, date, double, including the "Trie" variants.
+       This includes "string","boolean", and, as of 3.5 (and 4.x),
+       int, float, long, date, double, including the "Trie" variants.
        - If sortMissingLast="true", then a sort on this field will cause documents
          without the field to come after documents with the field,
          regardless of the requested sort order (asc or desc).
@@ -303,9 +305,9 @@
 
     <!-- A general text field that has reasonable, generic
          cross-language defaults: it tokenizes with StandardTokenizer,
-	 removes stop words from case-insensitive "stopwords.txt"
-	 (empty by default), and down cases.  At query time only, it
-	 also applies synonyms. -->
+   removes stop words from case-insensitive "stopwords.txt"
+   (empty by default), and down cases.  At query time only, it
+   also applies synonyms. -->
     <fieldType name="text_general" class="solr.TextField" positionIncrementGap="100">
       <analyzer type="index">
         <tokenizer class="solr.StandardTokenizerFactory"/>
@@ -399,10 +401,10 @@
         a token of "foo|1.4"  would be indexed as "foo" with a payload of 1.4f
         Attributes of the DelimitedPayloadTokenFilterFactory : 
          "delimiter" - a one character delimiter. Default is | (pipe)
-	 "encoder" - how to encode the following value into a playload
-	    float -> org.apache.lucene.analysis.payloads.FloatEncoder,
-	    integer -> o.a.l.a.p.IntegerEncoder
-	    identity -> o.a.l.a.p.IdentityEncoder
+   "encoder" - how to encode the following value into a playload
+      float -> org.apache.lucene.analysis.payloads.FloatEncoder,
+      integer -> o.a.l.a.p.IntegerEncoder
+      identity -> o.a.l.a.p.IdentityEncoder
             Fully Qualified class name implementing PayloadEncoder, Encoder must have a no arg constructor.
          -->
         <filter class="solr.DelimitedPayloadTokenFilterFactory" encoder="float"/>
@@ -423,10 +425,10 @@
     -->
     <fieldType name="descendent_path" class="solr.TextField">
       <analyzer type="index">
-	<tokenizer class="solr.PathHierarchyTokenizerFactory" delimiter="/" />
+  <tokenizer class="solr.PathHierarchyTokenizerFactory" delimiter="/" />
       </analyzer>
       <analyzer type="query">
-	<tokenizer class="solr.KeywordTokenizerFactory" />
+  <tokenizer class="solr.KeywordTokenizerFactory" />
       </analyzer>
     </fieldType>
     <!-- 
@@ -435,10 +437,10 @@
     -->
     <fieldType name="ancestor_path" class="solr.TextField">
       <analyzer type="index">
-	<tokenizer class="solr.KeywordTokenizerFactory" />
+  <tokenizer class="solr.KeywordTokenizerFactory" />
       </analyzer>
       <analyzer type="query">
-	<tokenizer class="solr.PathHierarchyTokenizerFactory" delimiter="/" />
+  <tokenizer class="solr.PathHierarchyTokenizerFactory" delimiter="/" />
       </analyzer>
     </fieldType>
 
