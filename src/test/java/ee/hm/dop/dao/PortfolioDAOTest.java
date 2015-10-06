@@ -7,6 +7,7 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -57,6 +58,41 @@ public class PortfolioDAOTest extends DatabaseTestBase {
         assertEquals(new Long(14), portfolio.getViews());
         assertTrue(portfolio.getChapters().isEmpty());
         assertTrue(portfolio.getTags().isEmpty());
+    }
+
+    @Test
+    public void findAllById() {
+        List<Long> idList = new ArrayList<>();
+        idList.add(1L);
+        idList.add(2L);
+        idList.add(3L);
+
+        List<Portfolio> result = portfolioDAO.findAllById(idList);
+
+        assertEquals(3, result.size());
+
+        for (Portfolio portfolio : result) {
+            idList.remove(portfolio.getId());
+        }
+
+        assertTrue(idList.isEmpty());
+    }
+
+    @Test
+    public void findAllByIdNoResult() {
+        List<Long> idList = new ArrayList<>();
+        idList.add((long) 90123);
+
+        List<Portfolio> result = portfolioDAO.findAllById(idList);
+
+        assertEquals(0, result.size());
+    }
+
+    @Test
+    public void findAllByIdEmptyList() {
+        List<Portfolio> result = portfolioDAO.findAllById(new ArrayList<>());
+
+        assertEquals(0, result.size());
     }
 
     @Test

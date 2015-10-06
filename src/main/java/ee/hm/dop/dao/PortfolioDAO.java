@@ -18,11 +18,25 @@ public class PortfolioDAO {
     private EntityManager entityManager;
 
     public Portfolio findById(long portfolioId) {
-        TypedQuery<Portfolio> findById = entityManager
-                .createQuery("SELECT p FROM Portfolio p WHERE p.id = :id", Portfolio.class);
+        TypedQuery<Portfolio> findById = entityManager.createQuery("SELECT p FROM Portfolio p WHERE p.id = :id",
+                Portfolio.class);
 
         TypedQuery<Portfolio> query = findById.setParameter("id", portfolioId);
         return getSingleResult(query);
+    }
+
+    /**
+     * Finds all portfolios contained in the idList. There is no guarantee about
+     * in which order the portfolios will be in the result list.
+     *
+     * @param idList
+     *            the list with portfolio identifiers
+     * @return a list of portfolios specified by idList
+     */
+    public List<Portfolio> findAllById(List<Long> idList) {
+        TypedQuery<Portfolio> findAllByIdList = entityManager
+                .createQuery("SELECT p FROM Portfolio p WHERE p.id in :idList", Portfolio.class);
+        return findAllByIdList.setParameter("idList", idList).getResultList();
     }
 
     public List<Portfolio> findByCreator(User creator) {
@@ -44,8 +58,8 @@ public class PortfolioDAO {
     }
 
     public byte[] findPictureByPortfolio(Portfolio portfolio) {
-        TypedQuery<byte[]> findById = entityManager
-                .createQuery("SELECT p.picture FROM Portfolio p WHERE p.id = :id", byte[].class);
+        TypedQuery<byte[]> findById = entityManager.createQuery("SELECT p.picture FROM Portfolio p WHERE p.id = :id",
+                byte[].class);
 
         byte[] picture = null;
         try {
