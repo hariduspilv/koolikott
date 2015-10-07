@@ -4,6 +4,7 @@
     @include box-shadow-spec(0, 1px, 3px, 0, rgba(0, 0, 0, 0.4));
     background-color: #D8F1FD;
     z-index: 99;
+    color: $navbar-dark-bg;
     
     .container {
         padding: 30px 0 40px;
@@ -21,9 +22,27 @@
     }
     
     .fa {
-        margin-right: 3px; 
-        font-size: 23px
+        margin-right: 3px
     }
+    
+    .col-mobil-id-respons {
+        
+        border-left: 1px solid $navbar-dark-bg;
+        
+        .btn-grey {
+            
+            margin-top: 15px;
+                
+            .fa {
+                font-size: 14px
+            }
+        }
+    }
+    
+    .lead {
+        margin-bottom: 10.5px
+    }
+    
 }
 
 .row-login {
@@ -38,10 +57,10 @@
         
         .form-control {
             border: 0; 
-            border-bottom: 1px solid #003D68; 
+            border-bottom: 1px solid $navbar-dark-bg; 
             @include box-shadow-spec(0, 0, 0, 0, #FFF);
             background: none;
-            color: #003D68;
+            color: $navbar-dark-bg;
             
             &::-webkit-input-placeholder {
                 color: $navbar-default-bg;
@@ -56,5 +75,17 @@
                 color: $navbar-default-bg;
             }
         }
+        
+        .fa {
+            margin-right: 3px;
+            font-size: 23px
+        }
+        
+        .has-error {
+            .form-control {
+                border-bottom: 1px solid $alert-danger-text;
+            }
+        }
     }
+    
 }

@@ -11,9 +11,8 @@ define(['routes','services/dependencyResolver'], function(config, dependencyReso
         '$filterProvider',
         '$provide',
         '$translateProvider',
-        '$httpProvider',
 
-        function($routeProvider, $locationProvider, $controllerProvider, $compileProvider, $filterProvider, $provide, $translateProvider, $httpProvider)
+        function($routeProvider, $locationProvider, $controllerProvider, $compileProvider, $filterProvider, $provide, $translateProvider)
         {
             app.controller = $controllerProvider.register;
             app.directive  = $compileProvider.directive;
@@ -35,18 +34,8 @@ define(['routes','services/dependencyResolver'], function(config, dependencyReso
             }
 
             configureTranslationService($translateProvider);
-
-            $httpProvider.defaults.transformResponse.splice(0, 0, parseJSONResponse);
         }
     ]);
-
-     function parseJSONResponse(data, headersGetter) {
-        if (data && (headersGetter()['content-type'] === 'application/json')) {
-            return JSOG.parse(data);
-        } else {
-            return data;
-        }
-    } 
     
     function configureTranslationService($translateProvider) {    	  
     	$translateProvider.useUrlLoader('rest/translation');

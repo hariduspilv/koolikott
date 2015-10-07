@@ -22,14 +22,14 @@ define(['app'], function(app) {
                 	var url = localStorage.getItem(LOGIN_ORIGIN);
                 	$location.url(url);
                 }
-            }
-            
-            enableLogin();
-            localStorage.removeItem(LOGIN_ORIGIN);
-            isOAuthAuthentication = false;
 
-            if (mobileIdLoginSuccessCallback) {
-                mobileIdLoginSuccessCallback();
+                enableLogin();
+                localStorage.removeItem(LOGIN_ORIGIN);
+                isOAuthAuthentication = false;
+
+                if (mobileIdLoginSuccessCallback) {
+                    mobileIdLoginSuccessCallback();
+                }
             }
         }
 
@@ -68,13 +68,17 @@ define(['app'], function(app) {
         }
 
         function loginWithMobileIdSuccess(mobileIDSecurityCodes) {
-            mobileIdChallengeReceivedCallback(mobileIDSecurityCodes.challengeId);
+            if (isEmpty(mobileIDSecurityCodes)) {
+                loginFail();
+            } else {
+                mobileIdChallengeReceivedCallback(mobileIDSecurityCodes.challengeId);
             
-            var params = {
-                'token': mobileIDSecurityCodes.token
-            };
-        
-            serverCallService.makeGet("rest/login/mobileId/isValid", params, loginSuccess, loginFail);
+                var params = {
+                    'token': mobileIDSecurityCodes.token
+                };
+            
+                serverCallService.makeGet("rest/login/mobileId/isValid", params, loginSuccess, loginFail);
+            }
         }
 
         return {
