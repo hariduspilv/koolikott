@@ -1,37 +1,22 @@
 package ee.hm.dop.model;
 
-import static javax.persistence.CascadeType.MERGE;
-import static javax.persistence.CascadeType.PERSIST;
-import static javax.persistence.FetchType.EAGER;
-
-import java.util.List;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.Lob;
-import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
-import javax.persistence.Table;
-import javax.persistence.UniqueConstraint;
-
-import org.hibernate.annotations.Formula;
-import org.hibernate.annotations.Type;
-import org.joda.time.DateTime;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-
 import ee.hm.dop.rest.jackson.map.DateTimeDeserializer;
 import ee.hm.dop.rest.jackson.map.DateTimeSerializer;
 import ee.hm.dop.rest.jackson.map.LanguageDeserializer;
 import ee.hm.dop.rest.jackson.map.LanguageSerializer;
+import org.hibernate.annotations.Formula;
+import org.hibernate.annotations.Type;
+import org.joda.time.DateTime;
+
+import javax.persistence.*;
+import java.util.List;
+
+import static javax.persistence.CascadeType.MERGE;
+import static javax.persistence.CascadeType.PERSIST;
+import static javax.persistence.FetchType.EAGER;
 
 @Entity
 @Table(uniqueConstraints = { @UniqueConstraint(columnNames = { "repositoryIdentifier", "repository" }) })
@@ -159,6 +144,9 @@ public class Material {
 
     @Column(nullable = false)
     private boolean paid = false;
+
+    @Column(nullable = false)
+    private boolean embeddable = false;
 
     public Long getId() {
         return id;
@@ -348,5 +336,13 @@ public class Material {
 
     public void setIsPaid(boolean paid) {
         this.paid = paid;
+    }
+
+    public boolean isEmbeddable() {
+        return embeddable;
+    }
+
+    public void setEmbeddable(boolean embeddable) {
+        this.embeddable = embeddable;
     }
 }
