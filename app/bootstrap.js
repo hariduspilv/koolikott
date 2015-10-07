@@ -10,6 +10,8 @@ require.config({
         'dopHeader': 'directives/header/header',
         'dopFooter': 'directives/footer/footer',
         'translateUrlLoader': '../assets/js/angular-translate-loader-url.min',
+        'screenfull': '../assets/js/screenfull',
+        'angularScreenfull': '../assets/js/angular-screenfull.min',
         'translationService': 'services/translationService',
         'dopLoginBar': 'directives/login-bar/login-bar',
         'dopAlert': 'directives/alert/alert',
@@ -17,7 +19,13 @@ require.config({
     },
     shim: {
         'app': {
-            deps: ['dop', 'modernizr', 'translateUrlLoader']
+            deps: ['dop', 'modernizr', 'translateUrlLoader','screenfull', 'angularScreenfull']
+        },
+        'screenfull': {
+            deps: ['dop']
+        },
+        'angularScreenfull': {
+            deps: ['screenfull']
         },
         'translateUrlLoader': {
             deps: ['dop']
@@ -25,7 +33,7 @@ require.config({
     }
 });
 
-require(['app', 'translationService', 'authenticatedUserService', 'serverCallService', 'authenticationService', 'searchService', 'dopHeader', 'dopFooter', 'dopLoginBar', 'dopAlert', 'alertService'],
- function(app, translationService, authenticatedUserService, serverCallService, authenticationService, searchService, dopHeader, dopAlert, alertService) {
+require(['app', 'translationService', 'authenticatedUserService', 'serverCallService', 'authenticationService', 'searchService', 'dopHeader', 'dopFooter', 'dopLoginBar', 'dopAlert', 'alertService', 'angularScreenfull'],
+ function(app, translationService, authenticatedUserService, serverCallService, authenticationService, searchService, dopHeader, dopAlert, alertService, angularScreenfull) {
     angular.bootstrap(document, ['app']);
 });

@@ -29,7 +29,8 @@
     "angular-resource": "~1.4.3",
     "ui-select": "https://github.com/angular-ui/ui-select.git#~0.12.1",
     "angular-sanitize": "~1.4.3",
-    "bootstrap-sidebar": "https://github.com/asyraf9/bootstrap-sidebar.git#~0.2.2"
+    "bootstrap-sidebar": "https://github.com/asyraf9/bootstrap-sidebar.git#~0.2.2",
+    "angular-screenfull": "https://github.com/hrajchert/angular-screenfull.git#~0.1.0"
   },
   "resolutions": {
     "angular": "~1.4.3"

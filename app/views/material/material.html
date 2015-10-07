@@ -109,8 +109,15 @@
                                     <youtube-video video-url="material.source" player-width="'768'" player-height="'432'" class="embed-responsive-item"></youtube-video>
                                 </div>
 
-                                <div data-ng-if="sourceType === 'LINK'" class="clearfix">
+                                <div data-ng-if="sourceType === 'LINK' && !material.embeddable" class="clearfix">
                                     <a data-ng-href="{{material.source}}" target="_blank" class="material-type material-type-link pull-left">
+                                        <i class="fa fa-link"></i> <span class="item-label" data-translate="MATERIAL_VIEW_LINK_TO_MATERIAL">Open material</span>
+                                        <span class="item-link" data-ng-bind="material.source"></span>
+                                    </a>
+                                </div>
+
+                                <div data-ng-if="sourceType === 'LINK' && material.embeddable" class="clearfix">
+                                    <a ng-click="showSourceFullscreen()" class="material-type material-type-link pull-left">
                                         <i class="fa fa-link"></i> <span class="item-label" data-translate="MATERIAL_VIEW_LINK_TO_MATERIAL">Open material</span>
                                         <span class="item-link" data-ng-bind="material.source"></span>
                                     </a>
@@ -133,6 +140,7 @@
                         </div>
                     </div>
                 </div>
+                <iframe data-ng-src="{{material.source}}" data-ng-show="showMaterialContent" width="100%" height="100%" ngsf-fullscreen="fullscreenCtrl" ></iframe>
             </div>
         </div>
     </div>

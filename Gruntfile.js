@@ -17,7 +17,9 @@ module.exports = function(grunt) {
         copy: {
             main: {
                 src: [
-                'bower_components/angular-translate-loader-url/angular-translate-loader-url.min.js'
+                'bower_components/angular-translate-loader-url/angular-translate-loader-url.min.js',
+                'bower_components/screenfull/dist/screenfull.js',
+                'bower_components/angular-screenfull/dist/angular-screenfull.min.js'
                 ],
                 dest: '<%= project.assets %>/js/',
                 flatten: true,

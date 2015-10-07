@@ -1,8 +1,15 @@
 define(['app'], function(app)
 {
-    app.controller('materialController', ['$scope', 'serverCallService', '$route', 'translationService', '$rootScope', 'searchService', '$location', 'alertService', 
-    		 function($scope, serverCallService, $route, translationService, $rootScope, searchService, $location, alertService) {
-    	
+    app.controller('materialController', ['$scope', 'serverCallService', '$route', 'translationService', '$rootScope', 'searchService', '$location', 'alertService', '$sce',
+    		 function($scope, serverCallService, $route, translationService, $rootScope, searchService, $location, alertService, $sce) {
+        $scope.showMaterialContent = false;
+
+        $rootScope.$on('fullscreenchange', function() {
+            $scope.$apply(function() {
+                $scope.showMaterialContent = !$scope.showMaterialContent;
+            });
+        });
+
         if ($rootScope.savedMaterial){
             $scope.material = $rootScope.savedMaterial;
             init();
@@ -32,6 +39,10 @@ define(['app'], function(app)
     	function init() {
             setSourceType();
             
+            if($scope.sourceType === 'LINK') {
+                $scope.material.source = $sce.trustAsResourceUrl($scope.material.source);;
+            }
+             
             var params = {
                 'id': $scope.material.id
             };
@@ -55,9 +66,9 @@ define(['app'], function(app)
         }
         
         function setSourceType() {
-        	if (isYoutubeVideo($scope.material.source)) {
-        		$scope.sourceType = 'YOUTUBE';
-        	} else {
+            if (isYoutubeVideo($scope.material.source)) {
+                $scope.sourceType = 'YOUTUBE';
+            } else {
         		$scope.sourceType = 'LINK';
         	}
         }
@@ -79,5 +90,9 @@ define(['app'], function(app)
             searchService.setSearch('author:"' + firstName + " " + surName + '"');
             $location.url(searchService.getURL());
         }
+
+        $scope.showSourceFullscreen = function(){
+            $scope.fullscreenCtrl.toggleFullscreen();
+        };
     }]);
 });
