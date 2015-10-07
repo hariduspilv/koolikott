@@ -80,6 +80,12 @@
             margin-right: 3px;
             font-size: 23px
         }
+        
+        .has-error {
+            .form-control {
+                border-bottom: 1px solid $alert-danger-text;
+            }
+        }
     }
     
 }
