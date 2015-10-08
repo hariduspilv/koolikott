@@ -11,8 +11,9 @@ define(['routes','services/dependencyResolver'], function(config, dependencyReso
         '$filterProvider',
         '$provide',
         '$translateProvider',
+        '$sceProvider',
 
-        function($routeProvider, $locationProvider, $controllerProvider, $compileProvider, $filterProvider, $provide, $translateProvider)
+        function($routeProvider, $locationProvider, $controllerProvider, $compileProvider, $filterProvider, $provide, $translateProvider, $sceProvider)
         {
             app.controller = $controllerProvider.register;
             app.directive  = $compileProvider.directive;
@@ -34,6 +35,8 @@ define(['routes','services/dependencyResolver'], function(config, dependencyReso
             }
 
             configureTranslationService($translateProvider);
+
+            $sceProvider.enabled(false);
         }
     ]);
     

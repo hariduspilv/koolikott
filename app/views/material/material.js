@@ -1,7 +1,7 @@
 define(['app'], function(app)
 {
-    app.controller('materialController', ['$scope', 'serverCallService', '$route', 'translationService', '$rootScope', 'searchService', '$location', 'alertService', '$sce',
-    		 function($scope, serverCallService, $route, translationService, $rootScope, searchService, $location, alertService, $sce) {
+    app.controller('materialController', ['$scope', 'serverCallService', '$route', 'translationService', '$rootScope', 'searchService', '$location', 'alertService',
+    		 function($scope, serverCallService, $route, translationService, $rootScope, searchService, $location, alertService) {
         $scope.showMaterialContent = false;
 
         $rootScope.$on('fullscreenchange', function() {
@@ -38,10 +38,6 @@ define(['app'], function(app)
     	
     	function init() {
             setSourceType();
-            
-            if($scope.sourceType === 'LINK') {
-                $scope.material.source = $sce.trustAsResourceUrl($scope.material.source);;
-            }
              
             var params = {
                 'id': $scope.material.id
