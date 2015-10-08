@@ -86,7 +86,7 @@
                         </span>
                     </div>
                 </div>
-                <a href="#" class="btn btn-inline">Täppis- otsing</a>
+                <a class="btn btn-inline btn-collapse collapsed" type="button" data-toggle="collapse" href="#detailedSearch" aria-expanded="false" aria-controls="detailedSearch">Täppis- otsing</a>
             </div>
         </div>
     </div>
@@ -94,6 +94,10 @@
 
 <div data-ng-hide="user" class="collapse logins" id="dropdowned">
     <div data-dop-login-bar></div>
+</div>
+
+<div class="collapse detailed-search" id="detailedSearch">
+    <div data-dop-detailed-search></div>
 </div>
 
 <div class="container-fluid">
