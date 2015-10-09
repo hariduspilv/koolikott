@@ -32,6 +32,7 @@ define(['app'], function(app)
 
             function init() {            
             	var params = {
+					'type' : '.Portfolio',
                 	'id': $scope.portfolio.id
             	};
 

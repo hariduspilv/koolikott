@@ -40,6 +40,7 @@ define(['app'], function(app)
             setSourceType();
              
             var params = {
+                'type' : '.Material',
                 'id': $scope.material.id
             };
             serverCallService.makePost("rest/material/increaseViewCount", params, countViewSuccess, countViewFail); 
