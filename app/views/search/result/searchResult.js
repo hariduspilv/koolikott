@@ -63,16 +63,16 @@ define(['app'], function(app)
                 params.license_type = searchService.getLicenseType();
             }
             
-            serverCallService.makeGet("rest/search", params, getSearchedMaterialsSuccess, getSearchedMaterialsFail);
+            serverCallService.makeGet("rest/search", params, searchSuccess, searchFail);
         } else {
             $location.url('/');
         }
         
-        function getSearchedMaterialsSuccess(data) {
+        function searchSuccess(data) {
             if (isEmpty(data)) {
-                log('No material data returned.');
+                searchFail();
             } else {
-                $scope.materials = data.materials;
+                $scope.items = data.items;
                 $scope.totalResults = data.totalResults;
                 $scope.paging.totalPages = Math.ceil($scope.totalResults / RESULTS_PER_PAGE);
                 if ($scope.paging.thisPage > $scope.paging.totalPages) {
@@ -86,13 +86,13 @@ define(['app'], function(app)
             $scope.searching = false;
         }
         
-        function getSearchedMaterialsFail(data, status) {
-            console.log('Failed to get materials. ')
+        function searchFail() {
+            console.log('Search failed.');
             $scope.searching = false;
         }
 
         $scope.getNumberOfResults = function() {
-            if (!$scope.materials) {
+            if (!$scope.items) {
                 return 0;
             }
             
@@ -100,8 +100,8 @@ define(['app'], function(app)
                 return $scope.totalResults;
             }
 
-            return $scope.materials.length;
-        }
+            return $scope.items.length;
+        };
 
         function addNumbersToArray(targetArray, from, to) {
             for (i = from; i < to; i++) {
@@ -123,7 +123,7 @@ define(['app'], function(app)
             } else {
                 addFirstPageNumbers();
             }
-        }
+        };
 
         function addAllPageNumbers() {
              // Add all page numbers
