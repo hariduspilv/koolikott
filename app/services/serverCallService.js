@@ -59,6 +59,23 @@ define(['app'], function(app) {
 						errorCallback(data, status);
 					}
 				});
+	        },
+
+	        makeJsonp : function(url, params, successCallback, errorCallback) {
+	        	var headers = {};
+
+	        	$http({
+					method: 'JSONP',
+					url: url,
+					params: params,
+					headers: headers
+				}).
+				success(function(data) {
+					successCallback(data);
+				}).
+				error(function(data, status, headers, config) {
+					errorCallback(data, status);
+				});
 	        }
 	    };
 
