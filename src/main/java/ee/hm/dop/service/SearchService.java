@@ -3,8 +3,6 @@ package ee.hm.dop.service;
 import static org.apache.commons.lang3.StringUtils.isBlank;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -14,8 +12,9 @@ import javax.inject.Inject;
 import org.apache.solr.client.solrj.util.ClientUtils;
 
 import ee.hm.dop.dao.MaterialDAO;
-import ee.hm.dop.model.Material;
+import ee.hm.dop.dao.PortfolioDAO;
 import ee.hm.dop.model.SearchResult;
+import ee.hm.dop.model.Searchable;
 import ee.hm.dop.model.solr.Document;
 import ee.hm.dop.model.solr.Response;
 import ee.hm.dop.model.solr.SearchResponse;
@@ -23,11 +22,18 @@ import ee.hm.dop.tokenizer.DOPSearchStringTokenizer;
 
 public class SearchService {
 
+    protected static final String MATERIAL_TYPE = "material";
+
+    protected static final String PORTFOLIO_TYPE = "portfolio";
+
     @Inject
     private SearchEngineService searchEngineService;
 
     @Inject
     private MaterialDAO materialDAO;
+
+    @Inject
+    private PortfolioDAO portfolioDAO;
 
     public SearchResult search(String query, long start) {
         return search(query, start, null, null, null, null);
@@ -40,57 +46,83 @@ public class SearchService {
 
     public SearchResult search(String query, long start, String subject, String resourceType,
             String educationalContext, String licenseType) {
-
-        String filtersAsQuery = getFiltersAsQuery(subject, resourceType, educationalContext, licenseType);
-        String tokenizedQueryString = getTokenizedQueryString(query);
-
-        String queryString = tokenizedQueryString;
-        if (!filtersAsQuery.isEmpty()) {
-            queryString = "(" + tokenizedQueryString + ")" + filtersAsQuery;
-        }
-        SearchResponse searchResponse = searchEngineService.search(queryString, start);
-
-        List<Long> materialIds = new ArrayList<>();
-
-        Response response = searchResponse.getResponse();
-        if (response != null) {
-            for (Document document : response.getDocuments()) {
-                materialIds.add(document.getId());
-            }
-        }
-
-        List<Material> materials = Collections.emptyList();
-        if (!materialIds.isEmpty()) {
-            List<Material> unsortedMaterials = materialDAO.findAllById(materialIds);
-            materials = sortMaterials(materialIds, unsortedMaterials);
-        }
-
         SearchResult searchResult = new SearchResult();
-        searchResult.setMaterials(materials);
+
+        SearchResponse searchResponse = doSearch(query, start, subject, resourceType, educationalContext, licenseType);
+        Response response = searchResponse.getResponse();
+
         if (response != null) {
-            searchResult.setTotalResults(response.getTotalResults());
+            List<Document> documents = response.getDocuments();
+            List<Searchable> unsortedSearchable = retrieveSearchedItems(documents);
+            List<Searchable> sortedSearchable = sortSearchable(documents, unsortedSearchable);
+
+            searchResult.setItems(sortedSearchable);
             searchResult.setStart(response.getStart());
-        } else {
-            searchResult.setTotalResults(0);
-            searchResult.setStart(0);
+            // "- documents.size() + sortedSearchable.size()" needed in case
+            // SearchEngine and DB are not sync because of re-indexing time.
+            searchResult.setTotalResults(response.getTotalResults() - documents.size() + sortedSearchable.size());
         }
 
         return searchResult;
     }
 
-    private List<Material> sortMaterials(List<Long> indexList, List<Material> unsortedMaterials) {
-        Material[] sortedMaterials = new Material[indexList.size()];
-
-        for (Material material : unsortedMaterials) {
-            sortedMaterials[indexList.indexOf(material.getId())] = material;
+    private List<Searchable> retrieveSearchedItems(List<Document> documents) {
+        List<Long> materialIds = new ArrayList<>();
+        List<Long> portfolioIds = new ArrayList<>();
+        for (Document document : documents) {
+            switch (document.getType()) {
+                case MATERIAL_TYPE:
+                    materialIds.add(document.getId());
+                    break;
+                case PORTFOLIO_TYPE:
+                    portfolioIds.add(document.getId());
+                    break;
+            }
         }
 
-        List<Material> sortedList = new ArrayList<>(Arrays.asList(sortedMaterials));
+        List<Searchable> unsortedSearchable = new ArrayList<>();
+        ;
 
-        // Removes null elements in case unsortedMaterials is smaller than
-        // indexList
-        sortedList.removeIf(material -> material == null);
-        return sortedList;
+        if (!materialIds.isEmpty()) {
+            unsortedSearchable.addAll(materialDAO.findAllById(materialIds));
+        }
+
+        if (!portfolioIds.isEmpty()) {
+            unsortedSearchable.addAll(portfolioDAO.findAllById(portfolioIds));
+        }
+
+        return unsortedSearchable;
+    }
+
+    private SearchResponse doSearch(String query, long start, String subject, String resourceType,
+            String educationalContext, String licenseType) {
+        String queryString = getTokenizedQueryString(query);
+
+        String filtersAsQuery = getFiltersAsQuery(subject, resourceType, educationalContext, licenseType);
+        if (!filtersAsQuery.isEmpty()) {
+            queryString = "(" + queryString + ")" + filtersAsQuery;
+        }
+
+        return searchEngineService.search(queryString, start);
+    }
+
+    private List<Searchable> sortSearchable(List<Document> indexList, List<Searchable> unsortedSearchable) {
+        List<Searchable> sortedSearchable = new ArrayList<>();
+        ;
+
+        for (Document document : indexList) {
+            for (int i = 0; i < unsortedSearchable.size(); i++) {
+                Searchable searchable = unsortedSearchable.get(i);
+
+                if (document.getId() == searchable.getId() && document.getType().equals(searchable.getType())) {
+                    sortedSearchable.add(searchable);
+                    unsortedSearchable.remove(i);
+                    break;
+                }
+            }
+        }
+
+        return sortedSearchable;
     }
 
     private String getTokenizedQueryString(String query) {

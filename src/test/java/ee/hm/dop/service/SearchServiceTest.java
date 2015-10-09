@@ -8,7 +8,6 @@ import static org.junit.Assert.assertSame;
 import static org.junit.Assert.fail;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import org.easymock.EasyMockRunner;
@@ -18,8 +17,11 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import ee.hm.dop.dao.MaterialDAO;
+import ee.hm.dop.dao.PortfolioDAO;
 import ee.hm.dop.model.Material;
+import ee.hm.dop.model.Portfolio;
 import ee.hm.dop.model.SearchResult;
+import ee.hm.dop.model.Searchable;
 import ee.hm.dop.model.solr.Document;
 import ee.hm.dop.model.solr.Response;
 import ee.hm.dop.model.solr.SearchResponse;
@@ -33,6 +35,9 @@ public class SearchServiceTest {
     @Mock
     private MaterialDAO materialDAO;
 
+    @Mock
+    private PortfolioDAO portfolioDAO;
+
     @TestSubject
     private SearchService searchService = new SearchService();
 
@@ -45,9 +50,13 @@ public class SearchServiceTest {
         String educationalContext = null;
         String licenseType = null;
         long start = 0;
-        List<Long> identifiers = Arrays.asList(7L, 1L, 4L);
+        List<Searchable> searchables = new ArrayList<>();
+        searchables.add(createMaterial(7L));
+        searchables.add(createMaterial(1L));
+        searchables.add(createMaterial(4L));
+        searchables.add(createPortfolio(2L));
 
-        testSearch(query, tokenizedQuery, identifiers, start, subject, resourceType, educationalContext, licenseType);
+        testSearch(query, tokenizedQuery, searchables, start, subject, resourceType, educationalContext, licenseType);
     }
 
     // To test asynchronous problems that may occur when search returns deleted
@@ -60,10 +69,47 @@ public class SearchServiceTest {
         String resourceType = null;
         String educationalContext = null;
         String licenseType = null;
-        long start = 0;
-        List<Long> identifiers = Arrays.asList(7L, 1L, 4L);
+        long start = 10;
 
-        testSearch(query, tokenizedQuery, identifiers, start, subject, resourceType, educationalContext, licenseType);
+        List<Searchable> searchables = new ArrayList<>();
+        searchables.add(createMaterial(7L));
+        searchables.add(createMaterial(4L));
+        searchables.add(createPortfolio(2L));
+
+        Material material1 = createMaterial(1L);
+        searchables.add(material1);
+
+        Portfolio portfolio2 = createPortfolio(2L);
+        searchables.add(portfolio2);
+
+        SearchResponse searchResponse = createSearchResponseWithDocuments(searchables, start, searchables.size());
+        List<Material> materials = collectMaterialsFrom(searchables);
+        List<Long> materialIdentifiers = getIdentifiers(materials);
+        materials.remove(material1);
+
+        List<Portfolio> portfolios = collectPortfoliosFrom(searchables);
+        List<Long> portfoliosIdentifiers = getIdentifiers(portfolios);
+        portfolios.remove(portfolio2);
+
+        // Have to remove from searchables as well so we can compare the return
+        // with the expected
+        searchables.remove(material1);
+        searchables.remove(portfolio2);
+
+        expect(searchEngineService.search(tokenizedQuery, start)).andReturn(searchResponse);
+        expect(materialDAO.findAllById(materialIdentifiers)).andReturn(materials);
+        expect(portfolioDAO.findAllById(portfoliosIdentifiers)).andReturn(portfolios);
+
+        replayAll();
+
+        SearchResult result = searchService
+                .search(query, start, subject, resourceType, educationalContext, licenseType);
+
+        verifyAll();
+
+        assertSameSearchable(searchables, result.getItems());
+        assertEquals(searchables.size(), result.getTotalResults());
+        assertEquals(start, result.getStart());
     }
 
     @Test
@@ -72,13 +118,13 @@ public class SearchServiceTest {
         String tokenizedQuery = "people*";
         long start = 0;
 
-        SearchResponse searchResponse = createSearchResponseWithDocuments(new ArrayList<>());
+        SearchResponse searchResponse = createSearchResponseWithDocuments(new ArrayList<>(), 0, 0);
 
         expect(searchEngineService.search(tokenizedQuery, 0)).andReturn(searchResponse);
 
         replayAll();
 
-        List<Material> result = searchService.search(query, start).getMaterials();
+        List<Searchable> result = searchService.search(query, start).getItems();
 
         verifyAll();
 
@@ -154,9 +200,13 @@ public class SearchServiceTest {
         String licenseType = null;
         String tokenizedQuery = "airplane*";
         long start = 0;
-        List<Long> identifiers = Arrays.asList(9L, 2L);
 
-        testSearch(query, tokenizedQuery, identifiers, start, subject, resourceType, educationalContext, licenseType);
+        List<Searchable> searchables = new ArrayList<>();
+        searchables.add(createMaterial(9L));
+        searchables.add(createMaterial(2L));
+        searchables.add(createPortfolio(2L));
+
+        testSearch(query, tokenizedQuery, searchables, start, subject, resourceType, educationalContext, licenseType);
     }
 
     @Test
@@ -168,9 +218,13 @@ public class SearchServiceTest {
         String licenseType = null;
         String tokenizedQuery = "(airplane*) AND subject:\"mathematics\"";
         long start = 0;
-        List<Long> identifiers = Arrays.asList(9L, 2L);
 
-        testSearch(query, tokenizedQuery, identifiers, start, subject, resourceType, educationalContext, licenseType);
+        List<Searchable> searchables = new ArrayList<>();
+        searchables.add(createMaterial(9L));
+        searchables.add(createMaterial(2L));
+        searchables.add(createPortfolio(2L));
+
+        testSearch(query, tokenizedQuery, searchables, start, subject, resourceType, educationalContext, licenseType);
     }
 
     @Test
@@ -182,9 +236,13 @@ public class SearchServiceTest {
         String licenseType = null;
         String tokenizedQuery = "(pythagoras*) AND resource_type:\"textbook\"";
         long start = 0;
-        List<Long> identifiers = Arrays.asList(15L, 8L);
 
-        testSearch(query, tokenizedQuery, identifiers, start, subject, resourceType, educationalContext, licenseType);
+        List<Searchable> searchables = new ArrayList<>();
+        searchables.add(createMaterial(15L));
+        searchables.add(createMaterial(8L));
+        searchables.add(createPortfolio(214L));
+
+        testSearch(query, tokenizedQuery, searchables, start, subject, resourceType, educationalContext, licenseType);
     }
 
     @Test
@@ -196,9 +254,13 @@ public class SearchServiceTest {
         String licenseType = null;
         String tokenizedQuery = "(pythagoras*) AND subject:\"mathematics\" AND resource_type:\"textbook\"";
         long start = 0;
-        List<Long> identifiers = Arrays.asList(16L, 9L);
 
-        testSearch(query, tokenizedQuery, identifiers, start, subject, resourceType, educationalContext, licenseType);
+        List<Searchable> searchables = new ArrayList<>();
+        searchables.add(createMaterial(9L));
+        searchables.add(createMaterial(2L));
+        searchables.add(createPortfolio(2L));
+
+        testSearch(query, tokenizedQuery, searchables, start, subject, resourceType, educationalContext, licenseType);
     }
 
     @Test
@@ -210,9 +272,13 @@ public class SearchServiceTest {
         String licenseType = null;
         String tokenizedQuery = "(pythagoras*) AND educational_context:\"preschool\"";
         long start = 0;
-        List<Long> identifiers = Arrays.asList(5L, 7L);
 
-        testSearch(query, tokenizedQuery, identifiers, start, subject, resourceType, educationalContext, licenseType);
+        List<Searchable> searchables = new ArrayList<>();
+        searchables.add(createMaterial(9L));
+        searchables.add(createMaterial(2L));
+        searchables.add(createPortfolio(2L));
+
+        testSearch(query, tokenizedQuery, searchables, start, subject, resourceType, educationalContext, licenseType);
     }
 
     @Test
@@ -224,9 +290,13 @@ public class SearchServiceTest {
         String licenseType = null;
         String tokenizedQuery = "(pythagoras*) AND subject:\"mathematics\" AND educational_context:\"preschool\"";
         long start = 0;
-        List<Long> identifiers = Arrays.asList(16L, 8L);
 
-        testSearch(query, tokenizedQuery, identifiers, start, subject, resourceType, educationalContext, licenseType);
+        List<Searchable> searchables = new ArrayList<>();
+        searchables.add(createMaterial(9L));
+        searchables.add(createMaterial(2L));
+        searchables.add(createPortfolio(2L));
+
+        testSearch(query, tokenizedQuery, searchables, start, subject, resourceType, educationalContext, licenseType);
     }
 
     @Test
@@ -238,9 +308,13 @@ public class SearchServiceTest {
         String licenseType = null;
         String tokenizedQuery = "(pythagoras*) AND resource_type:\"textbook\" AND educational_context:\"preschool\"";
         long start = 0;
-        List<Long> identifiers = Arrays.asList(17L, 8L);
 
-        testSearch(query, tokenizedQuery, identifiers, start, subject, resourceType, educationalContext, licenseType);
+        List<Searchable> searchables = new ArrayList<>();
+        searchables.add(createMaterial(9L));
+        searchables.add(createMaterial(2L));
+        searchables.add(createPortfolio(2L));
+
+        testSearch(query, tokenizedQuery, searchables, start, subject, resourceType, educationalContext, licenseType);
     }
 
     @Test
@@ -252,9 +326,13 @@ public class SearchServiceTest {
         String licenseType = null;
         String tokenizedQuery = "(pythagoras*) AND subject:\"mathematics\" AND resource_type:\"textbook\" AND educational_context:\"preschool\"";
         long start = 0;
-        List<Long> identifiers = Arrays.asList(15L, 8L);
 
-        testSearch(query, tokenizedQuery, identifiers, start, subject, resourceType, educationalContext, licenseType);
+        List<Searchable> searchables = new ArrayList<>();
+        searchables.add(createMaterial(9L));
+        searchables.add(createMaterial(2L));
+        searchables.add(createPortfolio(2L));
+
+        testSearch(query, tokenizedQuery, searchables, start, subject, resourceType, educationalContext, licenseType);
     }
 
     // Tests with License Type
@@ -268,9 +346,13 @@ public class SearchServiceTest {
         String licenseType = "CCBY";
         String tokenizedQuery = "(airplane*) AND license_type:\"ccby\"";
         long start = 0;
-        List<Long> identifiers = Arrays.asList(9L, 2L);
 
-        testSearch(query, tokenizedQuery, identifiers, start, subject, resourceType, educationalContext, licenseType);
+        List<Searchable> searchables = new ArrayList<>();
+        searchables.add(createMaterial(9L));
+        searchables.add(createMaterial(2L));
+        searchables.add(createPortfolio(2L));
+
+        testSearch(query, tokenizedQuery, searchables, start, subject, resourceType, educationalContext, licenseType);
     }
 
     @Test
@@ -282,9 +364,13 @@ public class SearchServiceTest {
         String licenseType = "CCSA";
         String tokenizedQuery = "(airplane*) AND subject:\"mathematics\" AND license_type:\"ccsa\"";
         long start = 0;
-        List<Long> identifiers = Arrays.asList(9L, 2L);
 
-        testSearch(query, tokenizedQuery, identifiers, start, subject, resourceType, educationalContext, licenseType);
+        List<Searchable> searchables = new ArrayList<>();
+        searchables.add(createMaterial(9L));
+        searchables.add(createMaterial(2L));
+        searchables.add(createPortfolio(2L));
+
+        testSearch(query, tokenizedQuery, searchables, start, subject, resourceType, educationalContext, licenseType);
     }
 
     @Test
@@ -296,9 +382,13 @@ public class SearchServiceTest {
         String licenseType = "CCBYSA";
         String tokenizedQuery = "(pythagoras*) AND resource_type:\"textbook\" AND license_type:\"ccbysa\"";
         long start = 0;
-        List<Long> identifiers = Arrays.asList(15L, 8L);
 
-        testSearch(query, tokenizedQuery, identifiers, start, subject, resourceType, educationalContext, licenseType);
+        List<Searchable> searchables = new ArrayList<>();
+        searchables.add(createMaterial(9L));
+        searchables.add(createMaterial(2L));
+        searchables.add(createPortfolio(2L));
+
+        testSearch(query, tokenizedQuery, searchables, start, subject, resourceType, educationalContext, licenseType);
     }
 
     @Test
@@ -310,9 +400,13 @@ public class SearchServiceTest {
         String licenseType = "CCBYNC";
         String tokenizedQuery = "(pythagoras*) AND educational_context:\"preschool\" AND license_type:\"ccbync\"";
         long start = 0;
-        List<Long> identifiers = Arrays.asList(5L, 7L);
 
-        testSearch(query, tokenizedQuery, identifiers, start, subject, resourceType, educationalContext, licenseType);
+        List<Searchable> searchables = new ArrayList<>();
+        searchables.add(createMaterial(9L));
+        searchables.add(createMaterial(2L));
+        searchables.add(createPortfolio(2L));
+
+        testSearch(query, tokenizedQuery, searchables, start, subject, resourceType, educationalContext, licenseType);
     }
 
     @Test
@@ -324,9 +418,13 @@ public class SearchServiceTest {
         String licenseType = "CC";
         String tokenizedQuery = "(pythagoras*) AND subject:\"mathematics\" AND resource_type:\"textbook\" AND license_type:\"cc\"";
         long start = 0;
-        List<Long> identifiers = Arrays.asList(16L, 9L);
 
-        testSearch(query, tokenizedQuery, identifiers, start, subject, resourceType, educationalContext, licenseType);
+        List<Searchable> searchables = new ArrayList<>();
+        searchables.add(createMaterial(9L));
+        searchables.add(createMaterial(2L));
+        searchables.add(createPortfolio(2L));
+
+        testSearch(query, tokenizedQuery, searchables, start, subject, resourceType, educationalContext, licenseType);
     }
 
     @Test
@@ -338,9 +436,13 @@ public class SearchServiceTest {
         String licenseType = "CCBY";
         String tokenizedQuery = "(pythagoras*) AND subject:\"mathematics\" AND educational_context:\"preschool\" AND license_type:\"ccby\"";
         long start = 0;
-        List<Long> identifiers = Arrays.asList(16L, 8L);
 
-        testSearch(query, tokenizedQuery, identifiers, start, subject, resourceType, educationalContext, licenseType);
+        List<Searchable> searchables = new ArrayList<>();
+        searchables.add(createMaterial(9L));
+        searchables.add(createMaterial(2L));
+        searchables.add(createPortfolio(2L));
+
+        testSearch(query, tokenizedQuery, searchables, start, subject, resourceType, educationalContext, licenseType);
     }
 
     @Test
@@ -352,32 +454,139 @@ public class SearchServiceTest {
         String licenseType = "CCBYNCND";
         String tokenizedQuery = "(pythagoras*) AND resource_type:\"textbook\" AND educational_context:\"preschool\" AND license_type:\"ccbyncnd\"";
         long start = 0;
-        List<Long> identifiers = Arrays.asList(17L, 8L);
 
-        testSearch(query, tokenizedQuery, identifiers, start, subject, resourceType, educationalContext, licenseType);
+        List<Searchable> searchables = new ArrayList<>();
+        searchables.add(createMaterial(9L));
+        searchables.add(createMaterial(2L));
+        searchables.add(createPortfolio(2L));
+
+        testSearch(query, tokenizedQuery, searchables, start, subject, resourceType, educationalContext, licenseType);
     }
 
     @Test
     public void searchWithAllFilters() {
-        String query = "pythagoras";
-        String subject = "Mathematics";
-        String resourceType = "TEXTBOOK";
-        String educationalContext = "PRESCHOOL";
-        String licenseType = "CC";
-        String tokenizedQuery = "(pythagoras*) AND subject:\"mathematics\" AND resource_type:\"textbook\" AND educational_context:\"preschool\" AND license_type:\"cc\"";
+        String query = "people";
+        String tokenizedQuery = "people*";
+        String subject = null;
+        String resourceType = null;
+        String educationalContext = null;
+        String licenseType = null;
         long start = 0;
-        List<Long> identifiers = Arrays.asList(15L, 8L);
 
-        testSearch(query, tokenizedQuery, identifiers, start, subject, resourceType, educationalContext, licenseType);
+        List<Searchable> searchables = new ArrayList<>();
+        searchables.add(createMaterial(9L));
+        searchables.add(createMaterial(2L));
+        searchables.add(createPortfolio(2L));
+
+        testSearch(query, tokenizedQuery, searchables, start, subject, resourceType, educationalContext, licenseType);
     }
 
-    private void testSearch(String query, String tokenizedQuery, List<Long> identifiers, long start, String subject,
-            String resourceType, String educationalContext, String licenseType) {
-        SearchResponse searchResponse = createSearchResponseWithDocuments(identifiers);
-        List<Material> materials = createMaterials(identifiers);
+    @Test
+    public void searchNotFromStart() {
+        String query = "people";
+        String tokenizedQuery = "people*";
+        String subject = null;
+        String resourceType = null;
+        String educationalContext = null;
+        String licenseType = null;
+        long start = 50;
+
+        List<Searchable> searchables = new ArrayList<>();
+        searchables.add(createMaterial(9L));
+        searchables.add(createMaterial(2L));
+        searchables.add(createPortfolio(2L));
+
+        testSearch(query, tokenizedQuery, searchables, start, subject, resourceType, educationalContext, licenseType);
+    }
+
+    @Test
+    public void searchHasMoreResultsThanMaxResultsPerPage() {
+        String query = "people";
+        String tokenizedQuery = "people*";
+        String subject = null;
+        String resourceType = null;
+        String educationalContext = null;
+        String licenseType = null;
+        long start = 0;
+        long totalResults = 1450;
+
+        List<Searchable> searchables = new ArrayList<>();
+        searchables.add(createMaterial(9L));
+        searchables.add(createMaterial(2L));
+        searchables.add(createPortfolio(2L));
+
+        testSearch(query, tokenizedQuery, searchables, start, totalResults, subject, resourceType, educationalContext,
+                licenseType);
+    }
+
+    @Test
+    public void searchReturnsOnlyMaterials() {
+        String query = "people";
+        String tokenizedQuery = "people*";
+        String subject = null;
+        String resourceType = null;
+        String educationalContext = null;
+        String licenseType = null;
+        long start = 0;
+
+        List<Searchable> searchables = new ArrayList<>();
+        searchables.add(createMaterial(9L));
+        searchables.add(createMaterial(2L));
+
+        testSearch(query, tokenizedQuery, searchables, start, subject, resourceType, educationalContext, licenseType);
+    }
+
+    @Test
+    public void searchReturnsOnlyPortfolios() {
+        String query = "people";
+        String tokenizedQuery = "people*";
+        String subject = null;
+        String resourceType = null;
+        String educationalContext = null;
+        String licenseType = null;
+        long start = 0;
+
+        List<Searchable> searchables = new ArrayList<>();
+        searchables.add(createPortfolio(9L));
+        searchables.add(createPortfolio(2L));
+
+        testSearch(query, tokenizedQuery, searchables, start, subject, resourceType, educationalContext, licenseType);
+    }
+
+    @Test
+    public void searchReturnsMaterialAndPortfoliosWithSameIds() {
+        String query = "people";
+        String tokenizedQuery = "people*";
+        String subject = null;
+        String resourceType = null;
+        String educationalContext = null;
+        String licenseType = null;
+        long start = 0;
+
+        List<Searchable> searchables = new ArrayList<>();
+        searchables.add(createPortfolio(9L));
+        searchables.add(createMaterial(9L));
+
+        testSearch(query, tokenizedQuery, searchables, start, subject, resourceType, educationalContext, licenseType);
+    }
+
+    private void testSearch(String query, String tokenizedQuery, List<Searchable> searchables, long start,
+            long totalResults, String subject, String resourceType, String educationalContext, String licenseType) {
+        SearchResponse searchResponse = createSearchResponseWithDocuments(searchables, start, totalResults);
+        List<Material> materials = collectMaterialsFrom(searchables);
+        List<Long> materialIdentifiers = getIdentifiers(materials);
+        List<Portfolio> portfolios = collectPortfoliosFrom(searchables);
+        List<Long> portfoliosIdentifiers = getIdentifiers(portfolios);
 
         expect(searchEngineService.search(tokenizedQuery, start)).andReturn(searchResponse);
-        expect(materialDAO.findAllById(identifiers)).andReturn(materials);
+
+        if (!materialIdentifiers.isEmpty()) {
+            expect(materialDAO.findAllById(materialIdentifiers)).andReturn(materials);
+        }
+
+        if (!portfoliosIdentifiers.isEmpty()) {
+            expect(portfolioDAO.findAllById(portfoliosIdentifiers)).andReturn(portfolios);
+        }
 
         replayAll();
 
@@ -386,42 +595,67 @@ public class SearchServiceTest {
 
         verifyAll();
 
-        assertEquals(identifiers.size(), result.getMaterials().size());
-        assertSameMaterials(materials, result.getMaterials());
-        assertEquals(identifiers.size(), result.getTotalResults());
+        assertSameSearchable(searchables, result.getItems());
+        assertEquals(totalResults, result.getTotalResults());
         assertEquals(start, result.getStart());
     }
 
-    private SearchResponse createSearchResponseWithDocuments(List<Long> identifers) {
+    private void testSearch(String query, String tokenizedQuery, List<Searchable> searchables, long start,
+            String subject, String resourceType, String educationalContext, String licenseType) {
+        testSearch(query, tokenizedQuery, searchables, start, searchables.size(), subject, resourceType,
+                educationalContext, licenseType);
+    }
+
+    private List<Long> getIdentifiers(List<? extends Searchable> searchables) {
+        List<Long> identifiers = new ArrayList<>();
+        searchables.stream().forEach(s -> identifiers.add(s.getId()));
+        return identifiers;
+    }
+
+    private SearchResponse createSearchResponseWithDocuments(List<Searchable> searchables, long start, long totalResults) {
         List<Document> documents = new ArrayList<>();
-        for (Long id : identifers) {
+        for (Searchable searchable : searchables) {
             Document newDocument = new Document();
-            newDocument.setId(Long.toString(id));
+            newDocument.setId(searchable.getId().toString());
+            newDocument.setType(searchable.getType());
             documents.add(newDocument);
         }
 
         Response response = new Response();
         response.setDocuments(documents);
-        response.setTotalResults(documents.size());
+        response.setTotalResults(totalResults);
+        response.setStart(start);
         SearchResponse searchResponse = new SearchResponse();
         searchResponse.setResponse(response);
 
         return searchResponse;
     }
 
-    private List<Material> createMaterials(List<Long> identifiers) {
+    private List<Material> collectMaterialsFrom(List<Searchable> searchables) {
         List<Material> materials = new ArrayList<>();
 
-        for (Long id : identifiers) {
-            Material material = new Material();
-            material.setId(id);
-            materials.add(material);
+        for (Searchable searchable : searchables) {
+            if (searchable instanceof Material) {
+                materials.add((Material) searchable);
+            }
         }
 
         return materials;
     }
 
-    private void assertSameMaterials(List<Material> expected, List<Material> actual) {
+    private List<Portfolio> collectPortfoliosFrom(List<Searchable> searchables) {
+        List<Portfolio> portfolios = new ArrayList<>();
+
+        for (Searchable searchable : searchables) {
+            if (searchable instanceof Portfolio) {
+                portfolios.add((Portfolio) searchable);
+            }
+        }
+
+        return portfolios;
+    }
+
+    private void assertSameSearchable(List<Searchable> expected, List<Searchable> actual) {
         assertEquals(expected.size(), actual.size());
         for (int i = 0; i < expected.size(); i++) {
             assertSame(expected.get(i), actual.get(i));
@@ -429,11 +663,23 @@ public class SearchServiceTest {
     }
 
     private void replayAll() {
-        replay(searchEngineService, materialDAO);
+        replay(searchEngineService, materialDAO, portfolioDAO);
     }
 
     private void verifyAll() {
-        verify(searchEngineService, materialDAO);
+        verify(searchEngineService, materialDAO, portfolioDAO);
+    }
+
+    private Material createMaterial(Long id) {
+        Material material = new Material();
+        material.setId(id);
+        return material;
+    }
+
+    private Portfolio createPortfolio(Long id) {
+        Portfolio portfolio = new Portfolio();
+        portfolio.setId(id);
+        return portfolio;
     }
 
 }

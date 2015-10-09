@@ -29,7 +29,7 @@ import ee.hm.dop.rest.jackson.map.DateTimeDeserializer;
 import ee.hm.dop.rest.jackson.map.DateTimeSerializer;
 
 @Entity
-public class Portfolio {
+public class Portfolio implements Searchable {
 
     @Id
     private Long id;

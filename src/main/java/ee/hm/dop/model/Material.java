@@ -35,7 +35,7 @@ import ee.hm.dop.rest.jackson.map.LanguageSerializer;
 
 @Entity
 @Table(uniqueConstraints = { @UniqueConstraint(columnNames = { "repositoryIdentifier", "repository" }) })
-public class Material {
+public class Material implements Searchable {
 
     @Id
     @GeneratedValue

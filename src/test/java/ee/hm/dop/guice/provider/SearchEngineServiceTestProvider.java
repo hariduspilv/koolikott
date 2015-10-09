@@ -1,5 +1,7 @@
 package ee.hm.dop.guice.provider;
 
+import static org.apache.commons.lang3.ArrayUtils.contains;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -28,6 +30,8 @@ public class SearchEngineServiceTestProvider implements Provider<SearchEngineSer
 class SearchEngineServiceMock implements SearchEngineService {
 
     private static final Map<String, List<Document>> searchResponses;
+
+    private static final Long[] portfolioIds = { 1L, 2L, 3L };
 
     private static final int RESULTS_PER_PAGE = 3;
 
@@ -65,9 +69,7 @@ class SearchEngineServiceMock implements SearchEngineService {
         String bigQuery = "thishasmanyresults*";
         ArrayList<Document> bigQueryDocuments = new ArrayList<>();
         for (long i = 0; i < 8; i++) {
-            Document newDocument = new Document();
-            newDocument.setId(Long.toString(i));
-            bigQueryDocuments.add(newDocument);
+            addNewDocument(bigQueryDocuments, i);
         }
 
         searchResponses.put(bigQuery, bigQueryDocuments);
@@ -198,10 +200,22 @@ class SearchEngineServiceMock implements SearchEngineService {
     private static List<Document> createDocumentsWithIdentifiers(Long... identifiers) {
         List<Document> documents = new ArrayList<>();
         for (Long id : identifiers) {
-            Document newDocument = new Document();
-            newDocument.setId(Long.toString(id));
-            documents.add(newDocument);
+            addNewDocument(documents, id);
         }
+
         return documents;
+    }
+
+    private static void addNewDocument(List<Document> documents, Long id) {
+        Document newDocument = new Document();
+        newDocument.setId(Long.toString(id));
+
+        if (contains(portfolioIds, id)) {
+            newDocument.setType("portfolio");
+        } else {
+            newDocument.setType("material");
+        }
+
+        documents.add(newDocument);
     }
 }

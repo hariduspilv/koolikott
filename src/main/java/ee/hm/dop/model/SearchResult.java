@@ -1,21 +1,28 @@
 package ee.hm.dop.model;
 
+import java.util.Collections;
 import java.util.List;
 
 public class SearchResult {
 
-    private List<Material> materials;
+    private List<Searchable> items;
 
     private long totalResults;
 
     private long start;
 
-    public List<Material> getMaterials() {
-        return materials;
+    public SearchResult() {
+        items = Collections.emptyList();
+        start = 0L;
+        totalResults = 0L;
     }
 
-    public void setMaterials(List<Material> materials) {
-        this.materials = materials;
+    public List<Searchable> getItems() {
+        return items;
+    }
+
+    public void setItems(List<Searchable> items) {
+        this.items = items;
     }
 
     public long getTotalResults() {
@@ -33,5 +40,4 @@ public class SearchResult {
     public void setStart(long start) {
         this.start = start;
     }
-
 }
