@@ -30,7 +30,8 @@
     "ui-select": "https://github.com/angular-ui/ui-select.git#0.12.1",
     "angular-sanitize": "1.4.3",
     "bootstrap-sidebar": "https://github.com/asyraf9/bootstrap-sidebar.git#0.2.2",
-    "angular-screenfull": "https://github.com/hrajchert/angular-screenfull.git#~0.1.0"
+    "angular-screenfull": "https://github.com/hrajchert/angular-screenfull.git#~0.1.0",
+    "awesome-bootstrap-checkbox": "~0.3.5"
   },
   "resolutions": {
     "angular": "1.4.3"
