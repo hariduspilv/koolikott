@@ -16,7 +16,8 @@ define([], function()
                 controller: 'searchResultController',
                 dependencies: [
                     'views/search/result/searchResult',
-                    'directives/materialBox/materialBox'
+                    'directives/materialBox/materialBox',
+                    'directives/portfolioBox/portfolioBox'
                 ]
             },
             '/material': {
