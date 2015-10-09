@@ -40,7 +40,10 @@
             <entity name="LicenseType" query="select name as license_type from LicenseType where id='${Material.licenseType}'" />
         </entity>
         <entity name="Portfolio" pk="uniqueKey"
-            query="select concat('portfolio', id ) as uniqueKey, id, title, summary, 'portfolio' as type from Portfolio">
+            query="select concat('portfolio', id ) as uniqueKey, id, title, summary, educationalContext as eC_id, 'portfolio' as type from Portfolio">
+            <entity name="EducationalContext" query="select educationalContext as educational_context from EducationalContext where id = '${Portfolio.eC_id}'">
+                <entity name="Translation" query="select translation as educational_context from Translation where translationKey = '${EducationalContext.educational_context}'" />
+            </entity>
         </entity>
     </document>
 </dataConfig>
