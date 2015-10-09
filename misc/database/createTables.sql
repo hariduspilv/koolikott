@@ -141,6 +141,7 @@ CREATE TABLE Material (
   creator              BIGINT,
   deleted              BOOLEAN,
   paid                 BOOLEAN DEFAULT FALSE,
+  embeddable           BOOLEAN DEFAULT FALSE,
 
   UNIQUE KEY (repositoryIdentifier, repository),
   

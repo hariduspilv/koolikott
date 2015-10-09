@@ -20,8 +20,8 @@ public class MaterialDAO {
     private EntityManager entityManager;
 
     public Material findById(long materialId) {
-        TypedQuery<Material> findByCode = entityManager.createQuery(
-                "SELECT m FROM Material m WHERE m.id = :id AND m.deleted = false", Material.class);
+        TypedQuery<Material> findByCode = entityManager
+                .createQuery("SELECT m FROM Material m WHERE m.id = :id AND m.deleted = false", Material.class);
 
         Material material = null;
         try {
@@ -42,8 +42,8 @@ public class MaterialDAO {
      * @return a list of materials specified by idList
      */
     public List<Material> findAllById(List<Long> idList) {
-        TypedQuery<Material> findAllByIdList = entityManager.createQuery(
-                "SELECT m FROM Material m WHERE m.deleted = false AND m.id in :idList", Material.class);
+        TypedQuery<Material> findAllByIdList = entityManager
+                .createQuery("SELECT m FROM Material m WHERE m.deleted = false AND m.id in :idList", Material.class);
         return findAllByIdList.setParameter("idList", idList).getResultList();
     }
 
@@ -56,6 +56,8 @@ public class MaterialDAO {
     public Material update(Material material) {
         if (material.getId() != null) {
             material.setUpdated(DateTime.now());
+        } else {
+            material.setAdded(DateTime.now());
         }
 
         Material merged = entityManager.merge(material);
@@ -82,8 +84,8 @@ public class MaterialDAO {
     }
 
     public byte[] findPictureByMaterial(Material material) {
-        TypedQuery<byte[]> findById = entityManager.createQuery(
-                "SELECT m.picture FROM Material m WHERE m.id = :id AND m.deleted = false", byte[].class);
+        TypedQuery<byte[]> findById = entityManager
+                .createQuery("SELECT m.picture FROM Material m WHERE m.id = :id AND m.deleted = false", byte[].class);
 
         byte[] picture = null;
         try {
