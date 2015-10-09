@@ -125,8 +125,10 @@
    <field name="id" type="string" indexed="true" stored="true" required="true" multiValued="false" />
    <field name="type" type="string" indexed="true" stored="true" required="true" multiValued="false" />
 
-   <!-- Material & Portfolio-->
+   <!-- Material & Portfolio -->
    <field name="title" type="text_general" indexed="true" stored="false" multiValued="true"/>
+
+   <!-- Material -->
    <field name="description" type="text_general" indexed="true" stored="false" multiValued="true"/>
    <field name="author" type="text_general" indexed="true" stored="false" multiValued="true"/>
    <field name="tag" type="text_general" indexed="true" stored="false" multiValued="true"/>
@@ -134,6 +136,9 @@
    <field name="subject" type="text_general" indexed="true" stored="false" multiValued="true"/>
    <field name="resource_type" type="text_general" indexed="true" stored="false" multiValued="true"/>
    <field name="license_type" type="text_general" indexed="true" stored="false" multiValued="true"/>
+
+   <!-- Portfolio -->
+   <field name="summary" type="text_general" indexed="true" stored="false"/>
 
    <!-- catchall field, containing all other searchable text fields (implemented
         via copyField further on in this schema  -->
@@ -161,6 +166,7 @@
    <copyField source="subject" dest="text" />
    <copyField source="resource_type" dest="text" />
    <copyField source="license_type" dest="text" />
+   <copyField source="summary" dest="text"/>
 
    <!-- Above, multiple source fields are copied to the [text] field.
     Another way to map multiple source fields to the same

@@ -40,7 +40,7 @@
             <entity name="LicenseType" query="select name as license_type from LicenseType where id='${Material.licenseType}'" />
         </entity>
         <entity name="Portfolio" pk="uniqueKey"
-            query="select concat('portfolio', id ) as uniqueKey, id, title, 'portfolio' as type from Portfolio">
+            query="select concat('portfolio', id ) as uniqueKey, id, title, summary, 'portfolio' as type from Portfolio">
         </entity>
     </document>
 </dataConfig>
