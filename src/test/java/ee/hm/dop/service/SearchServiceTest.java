@@ -465,12 +465,12 @@ public class SearchServiceTest {
 
     @Test
     public void searchWithAllFilters() {
-        String query = "people";
-        String tokenizedQuery = "people*";
-        String subject = null;
-        String resourceType = null;
-        String educationalContext = null;
-        String licenseType = null;
+        String query = "pythagoras";
+        String subject = "Mathematics";
+        String resourceType = "TEXTBOOK";
+        String educationalContext = "PRESCHOOL";
+        String licenseType = "CC";
+        String tokenizedQuery = "(pythagoras*) AND subject:\"mathematics\" AND resource_type:\"textbook\" AND educational_context:\"preschool\" AND license_type:\"cc\"";
         long start = 0;
 
         List<Searchable> searchables = new ArrayList<>();

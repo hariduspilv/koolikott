@@ -81,7 +81,6 @@ public class SearchService {
         }
 
         List<Searchable> unsortedSearchable = new ArrayList<>();
-        ;
 
         if (!materialIds.isEmpty()) {
             unsortedSearchable.addAll(materialDAO.findAllById(materialIds));
@@ -108,7 +107,6 @@ public class SearchService {
 
     private List<Searchable> sortSearchable(List<Document> indexList, List<Searchable> unsortedSearchable) {
         List<Searchable> sortedSearchable = new ArrayList<>();
-        ;
 
         for (Document document : indexList) {
             for (int i = 0; i < unsortedSearchable.size(); i++) {
