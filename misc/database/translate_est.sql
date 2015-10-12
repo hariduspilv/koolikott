@@ -113,6 +113,7 @@ insert into Translation(translationGroup, translationKey, translation) values (1
 insert into Translation(translationGroup, translationKey, translation) values (1, 'MESSAGE_ERROR_PERSONAL_CODE_INVALID', 'Isikukood ei ole korrektne');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'MESSAGE_ERROR_PHONE_NUMBER_REQUIRED', 'Telefoninumber on nõutud');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'MESSAGE_ERROR_PHONE_NUMBER_NOT_ESTONIAN', 'Telefoninumber peab olema Eesti koodiga');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'DETAILED_SEARCH_OPEN', 'Täppis- otsing');
 
 -- Material Subject translations
 insert into Translation(translationGroup, translationKey, translation) values (1, 'SUBJECT_ESTONIAN', 'Eesti keel');
