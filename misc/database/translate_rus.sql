@@ -114,6 +114,8 @@ insert into Translation(translationGroup, translationKey, translation) values (2
 insert into Translation(translationGroup, translationKey, translation) values (2, 'MESSAGE_ERROR_PHONE_NUMBER_REQUIRED', 'Телефонный номер требуется');
 insert into Translation(translationGroup, translationKey, translation) values (2, 'MESSAGE_ERROR_PHONE_NUMBER_NOT_ESTONIAN', 'Код страны должен быть Эстонии');
 insert into Translation(translationGroup, translationKey, translation) values (2, 'DETAILED_SEARCH_OPEN', 'Детальный поиск');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'DETAILED_SEARCH_TITLE', 'Заглавие');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'DETAILED_SEARCH_DESCRIPTION', 'Описание');
 
 -- Material Subject translations
 insert into Translation(translationGroup, translationKey, translation) values (2, 'SUBJECT_ESTONIAN', 'Эстонский');
