@@ -6,6 +6,7 @@ define(['app'], function(app)
 
         $rootScope.$on('fullscreenchange', function() {
             $scope.$apply(function() {
+                $scope.material.iframeSource = $scope.material.source;
                 $scope.showMaterialContent = !$scope.showMaterialContent;
             });
         });
