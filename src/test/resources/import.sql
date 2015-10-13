@@ -168,26 +168,27 @@ insert into Material_ResourceType(material, resourceType) values (7, 1004);
 
 -- EducationalContext
 
-insert into EducationalContext(id, educationalContext) values (1001, 'PRESCHOOLEDUCATION');
-insert into EducationalContext(id, educationalContext) values (1002, 'GENERALEDUCATION');
-insert into EducationalContext(id, educationalContext) values (1003, 'HIGHEREDUCATION');
-insert into EducationalContext(id, educationalContext) values (1004, 'VOCATIONALEDUCATION');
-insert into EducationalContext(id, educationalContext) values (1005, 'CONTINUINGEDUCATION');
-insert into EducationalContext(id, educationalContext) values (1006, 'TEACHEREDUCATION');
-insert into EducationalContext(id, educationalContext) values (1007, 'SPECIALEDUCATION');
-insert into EducationalContext(id, educationalContext) values (1008, 'OTHER');
+insert into EducationalContext(id, educationalContext) values (1, 'PRESCHOOLEDUCATION');
+insert into EducationalContext(id, educationalContext) values (2, 'BASICEDUCATION');
+insert into EducationalContext(id, educationalContext) values (3, 'SECONDARYEDUCATION');
+insert into EducationalContext(id, educationalContext) values (4, 'HIGHEREDUCATION');
+insert into EducationalContext(id, educationalContext) values (5, 'VOCATIONALEDUCATION');
+insert into EducationalContext(id, educationalContext) values (6, 'CONTINUINGEDUCATION');
+insert into EducationalContext(id, educationalContext) values (7, 'TEACHEREDUCATION');
+insert into EducationalContext(id, educationalContext) values (8, 'SPECIALEDUCATION');
+insert into EducationalContext(id, educationalContext) values (9, 'OTHER');
 
 
 -- Material_EducationalContext
 
-insert into Material_EducationalContext(material, educationalContext) values (1, 1001);
-insert into Material_EducationalContext(material, educationalContext) values (1, 1002);
-insert into Material_EducationalContext(material, educationalContext) values (2, 1003);
-insert into Material_EducationalContext(material, educationalContext) values (3, 1004);
-insert into Material_EducationalContext(material, educationalContext) values (4, 1005);
-insert into Material_EducationalContext(material, educationalContext) values (5, 1003);
-insert into Material_EducationalContext(material, educationalContext) values (6, 1002);
-insert into Material_EducationalContext(material, educationalContext) values (7, 1004);
+insert into Material_EducationalContext(material, educationalContext) values (1, 1);
+insert into Material_EducationalContext(material, educationalContext) values (1, 2);
+insert into Material_EducationalContext(material, educationalContext) values (2, 4);
+insert into Material_EducationalContext(material, educationalContext) values (3, 5);
+insert into Material_EducationalContext(material, educationalContext) values (4, 6);
+insert into Material_EducationalContext(material, educationalContext) values (5, 4);
+insert into Material_EducationalContext(material, educationalContext) values (6, 3);
+insert into Material_EducationalContext(material, educationalContext) values (7, 5);
 
 -- Publishers
 
@@ -261,9 +262,9 @@ insert into Page(id, name, content, language) VALUES (6, 'Help', '<h1>Help</h1><
 
 -- Portfolio
 
-insert into Portfolio(id, title, subject, educationalContext, creator, summary, views, created, updated, picture) VALUES (1, 'The new stock market', 2, 1005, 6, 'The changes after 2008.', 95455215, '2000-12-29 06:00:01', '2004-12-29 06:00:01', '656b6f6f6c696b6f7474');
+insert into Portfolio(id, title, subject, educationalContext, creator, summary, views, created, updated, picture) VALUES (1, 'The new stock market', 2, 6, 6, 'The changes after 2008.', 95455215, '2000-12-29 06:00:01', '2004-12-29 06:00:01', '656b6f6f6c696b6f7474');
 insert into Portfolio(id, title, subject, educationalContext, creator, summary, views, created, updated, picture) VALUES (2, 'New ways how to do it', null, null, 4, null, 14, '2012-12-29 06:00:01', null, null);
-insert into Portfolio(id, title, subject, educationalContext, creator, summary, views, created, updated, picture) VALUES (3, 'The newer stock market', 2, 1005, 6, 'A marvellous summary.', 14, '2002-12-29 06:00:01', '2006-12-29 06:00:01', '656b6f6f6c696b6f7474');
+insert into Portfolio(id, title, subject, educationalContext, creator, summary, views, created, updated, picture) VALUES (3, 'The newer stock market', 2, 6, 6, 'A marvellous summary.', 14, '2002-12-29 06:00:01', '2006-12-29 06:00:01', '656b6f6f6c696b6f7474');
 
 -- Chapter
 

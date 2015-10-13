@@ -25,7 +25,7 @@ public class EducationalContextDAOTest extends DatabaseTestBase {
     public void findAll() {
         List<EducationalContext> subjects = educationalContextDAO.findAll();
 
-        assertEquals(8, subjects.size());
+        assertEquals(9, subjects.size());
         assertValidEducationalContext(subjects.get(0));
         assertValidEducationalContext(subjects.get(1));
         assertValidEducationalContext(subjects.get(2));
@@ -34,27 +34,30 @@ public class EducationalContextDAOTest extends DatabaseTestBase {
         assertValidEducationalContext(subjects.get(5));
         assertValidEducationalContext(subjects.get(6));
         assertValidEducationalContext(subjects.get(7));
+        assertValidEducationalContext(subjects.get(8));
     }
 
     private void assertValidEducationalContext(EducationalContext educationalContext) {
         assertNotNull(educationalContext.getId());
         assertNotNull(educationalContext.getName());
 
-        if (educationalContext.getId() == 1001) {
+        if (educationalContext.getId() == 1) {
             assertEquals("PRESCHOOLEDUCATION", educationalContext.getName());
-        } else if (educationalContext.getId() == 1002) {
-            assertEquals("GENERALEDUCATION", educationalContext.getName());
-        } else if (educationalContext.getId() == 1003) {
+        } else if (educationalContext.getId() == 2) {
+            assertEquals("BASICEDUCATION", educationalContext.getName());
+        } else if (educationalContext.getId() == 3) {
+            assertEquals("SECONDARYEDUCATION", educationalContext.getName());
+        } else if (educationalContext.getId() == 4) {
             assertEquals("HIGHEREDUCATION", educationalContext.getName());
-        } else if (educationalContext.getId() == 1004) {
+        } else if (educationalContext.getId() == 5) {
             assertEquals("VOCATIONALEDUCATION", educationalContext.getName());
-        } else if (educationalContext.getId() == 1005) {
+        } else if (educationalContext.getId() == 6) {
             assertEquals("CONTINUINGEDUCATION", educationalContext.getName());
-        } else if (educationalContext.getId() == 1006) {
+        } else if (educationalContext.getId() == 7) {
             assertEquals("TEACHEREDUCATION", educationalContext.getName());
-        } else if (educationalContext.getId() == 1007) {
+        } else if (educationalContext.getId() == 8) {
             assertEquals("SPECIALEDUCATION", educationalContext.getName());
-        } else if (educationalContext.getId() == 1008) {
+        } else if (educationalContext.getId() == 9) {
             assertEquals("OTHER", educationalContext.getName());
         } else {
             fail("Educational context with unexpected id.");

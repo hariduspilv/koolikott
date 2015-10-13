@@ -101,7 +101,7 @@ public class MaterialDAOTest extends DatabaseTestBase {
     public void MaterialEducationalContext() {
         Material material1 = materialDAO.findById(1);
         assertEquals("PRESCHOOLEDUCATION", material1.getEducationalContexts().get(0).getName());
-        assertEquals("GENERALEDUCATION", material1.getEducationalContexts().get(1).getName());
+        assertEquals("BASICEDUCATION", material1.getEducationalContexts().get(1).getName());
     }
 
     @Test
@@ -559,7 +559,6 @@ public class MaterialDAOTest extends DatabaseTestBase {
         Material material = materialDAO.findById(1);
         assertTrue(material.isPaid());
     }
-
 
     @Test
     public void isPaidFalse() {

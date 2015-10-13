@@ -26,7 +26,7 @@ public class EducationalContextResourceTest extends ResourceIntegrationTestBase 
         List<EducationalContext> educationalContexts = response.readEntity(new GenericType<List<EducationalContext>>() {
         });
 
-        assertEquals(8, educationalContexts.size());
+        assertEquals(9, educationalContexts.size());
         assertValidEducationalContext(educationalContexts.get(0));
         assertValidEducationalContext(educationalContexts.get(1));
 
@@ -35,10 +35,10 @@ public class EducationalContextResourceTest extends ResourceIntegrationTestBase 
     private void assertValidEducationalContext(EducationalContext educationalContext) {
         assertNotNull(educationalContext.getId());
         assertNotNull(educationalContext.getName());
-        if (educationalContext.getId() == 1001) {
+        if (educationalContext.getId() == 1) {
             assertEquals("PRESCHOOLEDUCATION", educationalContext.getName());
-        } else if (educationalContext.getId() == 1002) {
-            assertEquals("GENERALEDUCATION", educationalContext.getName());
+        } else if (educationalContext.getId() == 2) {
+            assertEquals("BASICEDUCATION", educationalContext.getName());
         } else {
             fail("Subject with unexpected id.");
         }
