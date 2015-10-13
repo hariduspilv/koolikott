@@ -109,6 +109,10 @@
                                     <youtube-video video-url="material.source" player-width="'768'" player-height="'432'" class="embed-responsive-item"></youtube-video>
                                 </div>
 
+                                <div data-ng-if="sourceType === 'SLIDESHARE'" class="embed-responsive embed-responsive-4by3">
+                                    <div data-dop-slideshare source="material.source" width="767" height="639" class="embed-responsive-item" fail-callback="slideshareFail()"></div>
+                                </div>
+
                                 <div data-ng-if="sourceType === 'LINK' && !material.embeddable" class="clearfix">
                                     <a data-ng-href="{{material.source}}" target="_blank" class="material-type material-type-link pull-left">
                                         <i class="fa fa-link"></i> <span class="item-label" data-translate="MATERIAL_VIEW_LINK_TO_MATERIAL">Open material</span>

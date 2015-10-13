@@ -1,51 +1,40 @@
 <div id="mainChapter">
-    <!-- Text part -->
     <div class="row">
         <div class="col-md-12">
-            <article class="chapters">
-                <section class="chapter">
-                    <!-- Chapter title -->
-                    <div class="heading">
-                        <h2>{{chapter.title}}</h2>
-                    </div>
-                    <!-- Chapter Text -->
-                    <article>
-                        <p>{{chapter.text}}</p>
-                    </article>
+            <article class="chapter">
+                
+                <div class="heading">
+                    <h2>{{chapter.title}}</h2>
+                </div>
+                <section>
+                    <p>{{chapter.text}}</p>
                 </section>
             </article>
         </div>
     </div>
 
-    <!-- Chapter Materials -->
-    <div id="chapter-materials" class="row row-material">
+    <div id="chapter-materials" class="row row-material row-chapter">
         <div data-ng-repeat="material in chapter.materials" class="col-md-3 col-sm-4 col-xs-12 col-ms-6">
            <div data-dop-material-box material="material"></div>
         </div>
     </div>
 
-    <!-- Sub Chapters -->
     <div data-ng-repeat="subchapter in chapter.subchapters">
         <div id="sub-chapter-{{ $index }}">
             <div class="row">
                 <div class="col-md-12">
-                    <article class="chapters">
-                        <section class="chapter">
-                            <!-- Sub-Chapter title -->
-                            <div class="heading-sub">
-                                <h3>{{subchapter.title}}</h3>
-                            </div>
-                            <!-- Sub-Chapter Text -->
-                            <article>
-                                <p>{{subchapter.text}}</p>
-                            </article>
+                    <article class="chapter">
+                        <div class="heading-sub">
+                            <h3>{{subchapter.title}}</h3>
+                        </div>
+                        <section>
+                            <p>{{subchapter.text}}</p>
                         </section>
                     </article>
                 </div>
             </div>
 
-            <!-- Sub-Chapter Materials -->
-            <div  id="sub-chapter-materials-{{ $index }}" class="row row-material">
+            <div  id="sub-chapter-materials-{{ $index }}" class="row row-material row-chapter">
                 <div data-ng-repeat="material in subchapter.materials" class="col-md-3 col-sm-4 col-xs-12 col-ms-6">
                     <div data-dop-material-box material="material"></div>
                 </div>

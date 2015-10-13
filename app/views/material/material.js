@@ -41,6 +41,7 @@ define(['app'], function(app)
             setSourceType();
              
             var params = {
+                'type' : '.Material',
                 'id': $scope.material.id
             };
             serverCallService.makePost("rest/material/increaseViewCount", params, countViewSuccess, countViewFail); 
@@ -61,13 +62,20 @@ define(['app'], function(app)
         	var youtubeUrlRegex = /^(?:https?:\/\/)?(?:www\.)?(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))((\w|-){11})(?:\S+)?$/;
             return url && url.match(youtubeUrlRegex);
         }
+
+        function isSlideshareLink(url) {
+            var slideshareUrlRegex = /^https?\:\/\/www\.slideshare\.net\/[a-zA-Z0-9\-]+\/[a-zA-Z0-9\-]+$/;
+            return url && url.match(slideshareUrlRegex);
+        }
         
         function setSourceType() {
             if (isYoutubeVideo($scope.material.source)) {
                 $scope.sourceType = 'YOUTUBE';
+            } else if (isSlideshareLink($scope.material.source)) {
+                $scope.sourceType = 'SLIDESHARE';
             } else {
         		$scope.sourceType = 'LINK';
-        	}
+            }
         }
 
         $scope.formatMaterialIssueDate = function(issueDate) {
@@ -91,5 +99,10 @@ define(['app'], function(app)
         $scope.showSourceFullscreen = function(){
             $scope.fullscreenCtrl.toggleFullscreen();
         };
+
+        $scope.slideshareFail = function() {
+            $scope.sourceType = 'LINK';
+        };
+
     }]);
 });

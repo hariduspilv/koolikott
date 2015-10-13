@@ -101,31 +101,58 @@
                     border: 0; 
                     background: #FFF; 
                     font-size: 16px; 
-                    color: $navbar-default-bg
-                
-                }
-                
-                :hover {
+                    color: $navbar-default-bg;
                     
-                    background: #FFF
-                
-                }
-                
-                :focus {
+                    &:hover,
+                    &:focus,
+                    &:active {
                     
-                    background: #FFF; 
-                    @include box-shadow-spec(0, 0, 0, 0, #FFF); 
-                    outline: none
+                        background: #FFF; 
+                        @include box-shadow-spec(0, 0, 0, 0, #FFF); 
+                        outline: none
                 
-                }
-                
-                :active {
-                    
-                    background: #FFF; 
-                    @include box-shadow-spec(0, 0, 0, 0, #FFF)
-                
+                    }
                 }
             
+            }
+        }
+        
+        .btn-inline {
+            position: relative;
+            width: 70px;
+            padding: 4px;
+            white-space: normal;
+            font-size: 12px;
+            color: #FFF;
+            
+            &:hover,
+            &:focus,
+            &:active {
+                
+                @include box-shadow-spec(0, 0, 0, 0, $navbar-default-bg); 
+                outline: none
+
+            }
+
+            &:after {
+                bottom: -19px;
+                left: 50%;
+                border: solid transparent;
+                content: " ";
+                height: 0;
+                width: 0;
+                position: absolute;
+                pointer-events: none;
+                border-color: rgba(256, 256, 256, 0);
+                border-bottom-color: #FFF;
+                border-width: 10px;
+                margin-left: -10px;
+            }
+        }
+
+        .collapsed {
+            &:after {
+                display: none
             }
         }
     }
@@ -284,7 +311,6 @@
     
     margin-left: 20px !important;
              
-             
     > li {
         
         > a {
@@ -365,4 +391,5 @@
         }
 
     }
+    
 }

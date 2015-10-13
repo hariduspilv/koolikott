@@ -12,6 +12,8 @@
 
 @import '../bower_components/bootstrap-sass/assets/stylesheets/bootstrap';
 
+@import '../bower_components/awesome-bootstrap-checkbox/awesome-bootstrap-checkbox';
+
 /* extra grid size */
 
 @import 'design/grid-ms';
@@ -49,3 +51,5 @@
 @import 'design/alert';
 
 @import 'design/portfolio';
+
+@import 'design/detailed-search';
