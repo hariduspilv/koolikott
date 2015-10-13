@@ -92,15 +92,7 @@ define(['app'], function(app)
         }
 
         $scope.getNumberOfResults = function() {
-            if (!$scope.items) {
-                return 0;
-            }
-            
-            if ($scope.totalResults) {
-                return $scope.totalResults;
-            }
-
-            return $scope.items.length;
+            return $scope.totalResults || 0;
         };
 
         function addNumbersToArray(targetArray, from, to) {
