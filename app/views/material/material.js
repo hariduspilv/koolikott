@@ -6,7 +6,6 @@ define(['app'], function(app)
 
         $rootScope.$on('fullscreenchange', function() {
             $scope.$apply(function() {
-                $scope.material.iframeSource = $scope.material.source;
                 $scope.showMaterialContent = !$scope.showMaterialContent;
             });
         });
@@ -39,6 +38,10 @@ define(['app'], function(app)
     	
     	function init() {
             setSourceType();
+
+            if($scope.material.embeddable && $scope.sourceType === 'LINK') {
+                $scope.material.iframeSource = $scope.material.source;
+            }
              
             var params = {
                 'type' : '.Material',
