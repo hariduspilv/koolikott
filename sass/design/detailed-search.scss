@@ -10,3 +10,13 @@
         }
     }
 }
+
+.form-control {
+    border: 0;
+    border-bottom: 1px solid $brand-grey-medium;
+    @include box-shadow-spec(0, 0, 0, 0, #FFF);
+    
+    &:active, &:focus {
+        @include box-shadow-spec(0, 0, 0, 0, #FFF)
+    }
+}
