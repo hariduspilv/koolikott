@@ -45,7 +45,8 @@ insert into Translation(translationGroup, translationKey, translation) values (1
 insert into Translation(translationGroup, translationKey, translation) values (1, 'WEBLOG', 'veebilogi');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'WIKI', 'viki');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'PRESCHOOLEDUCATION', 'Eelkooli haridus');
-insert into Translation(translationGroup, translationKey, translation) values (1, 'GENERALEDUCATION', 'Üldine haridus');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'BASICEDUCATION', 'Põhiharidus');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'SECONDARYEDUCATION', 'Keskharidus');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'HIGHEREDUCATION', 'Kõrgharidus');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'VOCATIONALEDUCATION', 'Kutseharidus');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'CONTINUINGEDUCATION', 'Täiendõpe');

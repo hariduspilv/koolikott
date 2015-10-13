@@ -45,7 +45,8 @@ insert into Translation(translationGroup, translationKey, translation) values (3
 insert into Translation(translationGroup, translationKey, translation) values (3, 'WEBLOG', 'Weblog');
 insert into Translation(translationGroup, translationKey, translation) values (3, 'WIKI', 'Wiki');
 insert into Translation(translationGroup, translationKey, translation) values (3, 'PRESCHOOLEDUCATION', 'Preschool education');
-insert into Translation(translationGroup, translationKey, translation) values (3, 'GENERALEDUCATION', 'General education');
+insert into Translation(translationGroup, translationKey, translation) values (3, 'BASICEDUCATION', 'Basic education');
+insert into Translation(translationGroup, translationKey, translation) values (3, 'SECONDARYEDUCATION', 'Secondary education');
 insert into Translation(translationGroup, translationKey, translation) values (3, 'HIGHEREDUCATION', 'Higher education');
 insert into Translation(translationGroup, translationKey, translation) values (3, 'VOCATIONALEDUCATION', 'Vocational education');
 insert into Translation(translationGroup, translationKey, translation) values (3, 'CONTINUINGEDUCATION', 'Continuing education');

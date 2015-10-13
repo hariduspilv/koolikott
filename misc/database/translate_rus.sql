@@ -45,7 +45,8 @@ insert into Translation(translationgroup, translationkey, translation) values (2
 insert into Translation(translationgroup, translationkey, translation) values (2, 'WEBLOG', 'сайт вход');
 insert into Translation(translationgroup, translationkey, translation) values (2, 'WIKI', 'энциклопедия');
 insert into Translation(translationGroup, translationKey, translation) values (2, 'PRESCHOOLEDUCATION', 'Дошкольное образование');
-insert into Translation(translationGroup, translationKey, translation) values (2, 'GENERALEDUCATION', 'Общее образование');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'BASICEDUCATION', 'Начальное образование');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'SECONDARYEDUCATION', 'Среднее образование');
 insert into Translation(translationGroup, translationKey, translation) values (2, 'HIGHEREDUCATION', 'высшее образование');
 insert into Translation(translationGroup, translationKey, translation) values (2, 'VOCATIONALEDUCATION', 'профессионального образования');
 insert into Translation(translationGroup, translationKey, translation) values (2, 'CONTINUINGEDUCATION', 'Непрерывное образование');
