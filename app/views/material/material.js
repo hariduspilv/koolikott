@@ -44,10 +44,6 @@ define(['app'], function(app)
                 'id': $scope.material.id
             };
             serverCallService.makePost("rest/material/increaseViewCount", params, countViewSuccess, countViewFail); 
-
-            if ($scope.sourceType === 'SLIDESHARE') {
-                getSlideshareData();
-            }
     	}
 
         function countViewSuccess(data) { }
@@ -103,30 +99,9 @@ define(['app'], function(app)
             $scope.fullscreenCtrl.toggleFullscreen();
         };
 
-        function getSlideshareData() {
-            var params = {
-                url: $scope.material.source,
-                format: "jsonp",
-                callback: "JSON_CALLBACK"
-            };
-            serverCallService.makeJsonp("https://www.slideshare.net/api/oembed/2", params, getSlideshareDataSuccess, getSlideshareDataFail); 
-        }
-
-        function getSlideshareDataSuccess(data) {
-            if (!isEmpty(data)) {
-                var embedCodeRegex = /(?:embed_code\/key\/)((\w|-)+)(?:\")/;
-                var embedCode = data.html.match(embedCodeRegex)[1];
-                $scope.slideshareEmbedLink = "https://www.slideshare.net/slideshow/embed_code/key/" + embedCode;
-            } else {
-                log("Slideshare data is empty. ");
-                $scope.sourceType = 'LINK';
-            }
-        }
-
-        function getSlideshareDataFail(data) {
-            log("Failed to get slideshare data. ");
+        $scope.slideshareFail = function() {
             $scope.sourceType = 'LINK';
-        }
+        };
 
     }]);
 });

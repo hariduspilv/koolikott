@@ -24,7 +24,8 @@ define([], function()
                 templateUrl: 'app/views/material/material.html',
                 controller: 'materialController',
                 dependencies: [
-                    'views/material/material'
+                    'views/material/material',
+                    'directives/slideshare/slideshare'
                 ]
             },
             '/help': {

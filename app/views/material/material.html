@@ -110,7 +110,7 @@
                                 </div>
 
                                 <div data-ng-if="sourceType === 'SLIDESHARE'" class="embed-responsive embed-responsive-4by3">
-                                    <iframe data-ng-src="{{slideshareEmbedLink}}" width="767" height="639" allowfullscreen></iframe> 
+                                    <div data-dop-slideshare source="material.source" width="767" height="639" class="embed-responsive-item" fail-callback="slideshareFail()"></div>
                                 </div>
 
                                 <div data-ng-if="sourceType === 'LINK' && !material.embeddable" class="clearfix">
