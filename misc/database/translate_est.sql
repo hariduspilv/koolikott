@@ -118,6 +118,7 @@ insert into Translation(translationGroup, translationKey, translation) values (1
 insert into Translation(translationGroup, translationKey, translation) values (1, 'DETAILED_SEARCH_TITLE', 'Pealkiri');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'DETAILED_SEARCH_DESCRIPTION', 'Kirjeldus');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'DETAILED_SEARCH_AUTHOR', 'Autor');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'DETAILED_SEARCH_SUBMIT', 'Otsi');
 
 -- Material Subject translations
 insert into Translation(translationGroup, translationKey, translation) values (1, 'SUBJECT_ESTONIAN', 'Eesti keel');

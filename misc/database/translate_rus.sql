@@ -118,6 +118,7 @@ insert into Translation(translationGroup, translationKey, translation) values (2
 insert into Translation(translationGroup, translationKey, translation) values (2, 'DETAILED_SEARCH_TITLE', 'Заглавие');
 insert into Translation(translationGroup, translationKey, translation) values (2, 'DETAILED_SEARCH_DESCRIPTION', 'Описание');
 insert into Translation(translationGroup, translationKey, translation) values (2, 'DETAILED_SEARCH_AUTHOR', 'Автор');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'DETAILED_SEARCH_SUBMIT', 'Поиск');
 
 -- Material Subject translations
 insert into Translation(translationGroup, translationKey, translation) values (2, 'SUBJECT_ESTONIAN', 'Эстонский');
