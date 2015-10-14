@@ -5,36 +5,41 @@
                 <div class="form-horizontal">
                     <section>
                         <div class="form-group">
-                            <label for="detailedSearchTitleField" class="col-md-4 control-label">Title</label>
+                            <label for="detailedSearchTitleField" class="col-md-4 control-label" data-translate="DETAILED_SEARCH_TITLE"></label>
                             <div class="col-sm-8">
                                 <input type="text" class="form-control" id="detailedSearchTitleField">
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="detailedSearchDescriptionField" class="col-md-4 control-label">Description</label>
+                            <label for="detailedSearchDescriptionField" class="col-md-4 control-label" data-translate="DETAILED_SEARCH_DESCRIPTION"></label>
                             <div class="col-sm-8">
                                 <input type="text" class="form-control" id="detailedSearchDescriptionField">
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="detailedSearchAuthorField" class="col-md-4 control-label">Author</label>
+                            <label for="detailedSearchAuthorField" class="col-md-4 control-label" data-translate="DETAILED_SEARCH_AUTHOR"></label>
                             <div class="col-sm-8">
                                 <input type="text" class="form-control" id="detailedSearchAuthorField">
                             </div>
                         </div>
-                        <div class="checkbox checkbox-primary">
-                            <input type="checkbox" id="detailedSearchMaterialsField" value="">
-                            <label for="detailedSearchMaterialsField">
-                                Materials
-                            </label>
+                        <div class="col-md-offset-4 clearfix">
+                            <div class="choices">
+                                <div class="checkbox checkbox-primary">
+                                    <input type="checkbox" id="detailedSearchMaterialsField" value="">
+                                    <label for="detailedSearchMaterialsField" data-translate="DETAILED_SEARCH_MATERIALS">
+                                        Materials
+                                    </label>
+                                </div>
+                                <div class="checkbox checkbox-primary">
+                                    <input type="checkbox" id="detailedSearchPortfoliosField" value="">
+                                    <label for="detailedSearchPortfoliosField" data-translate="DETAILED_SEARCH_PORTFOLIOS">
+                                        Portfolios
+                                    </label>
+                                </div>
+                            </div>
+                            
+                            <button type="submit" class="btn btn-default pull-right" id="detailedSearchSubmit" data-ng-click="search()" data-translate="DETAILED_SEARCH_SUBMIT"></button>
                         </div>
-                        <div class="checkbox checkbox-primary">
-                            <input type="checkbox" id="detailedSearchPortfoliosField" value="">
-                            <label for="detailedSearchPortfoliosField">
-                                Portfolios
-                            </label>
-                        </div>
-                        <button type="submit" data-ng-click="search()" class="btn btn-default">Submit</button>
                     </section>
                 </div>
             </div>
@@ -42,27 +47,19 @@
                 <section>
                     <div class="radio">
                         <input type="radio" id="detailedSearchEducat1" data-ng-model="detailedSearch.educationalContext" value="preschooleducation">
-                        <label for="detailedSearchEducat1">
-                            Alusharidus
-                        </label>
+                        <label for="detailedSearchEducat1" data-translate="PRESCHOOLEDUCATION"></label>
                     </div>
                     <div class="radio">
                         <input type="radio" id="detailedSearchEducat2" data-ng-model="detailedSearch.educationalContext" value="basiceducation">
-                        <label for="detailedSearchEducat2">
-                            Põhiharidus
-                        </label>
+                        <label for="detailedSearchEducat2" data-translate="BASICEDUCATION"></label>
                     </div>
                     <div class="radio">
                         <input type="radio" id="detailedSearchEducat3" data-ng-model="detailedSearch.educationalContext" value="secondaryeducation">
-                        <label for="detailedSearchEducat3">
-                            Keskharidus
-                        </label>
+                        <label for="detailedSearchEducat3" data-translate="SECONDARYEDUCATION"</label>
                     </div>
                     <div class="radio">
                         <input type="radio" id="detailedSearchEducat4" data-ng-model="detailedSearch.educationalContext" value="vocationaleducation">
-                        <label for="detailedSearchEducat4">
-                            Kutseharidus
-                        </label>
+                        <label for="detailedSearchEducat4" data-translate="VOCATIONALEDUCATION"></label>
                     </div>
                 </section>
             </div>

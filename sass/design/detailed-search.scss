@@ -6,7 +6,11 @@
         @include box-shadow-spec(0, 0, 2px, 0, #999);
         
         section {
-            padding: 15px 0
+            padding: 15px 0;
+            
+            .choices {
+                padding-bottom: 15px 
+            }
         }
     }
 }
