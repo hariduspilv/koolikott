@@ -1,4 +1,4 @@
-<form>
+<form name="detailedSearchForm">
     <div class="container">
         <div class="row">
             <div class="col-md-5">
@@ -34,32 +34,32 @@
                                 Portfolios
                             </label>
                         </div>
-                        <button type="submit" class="btn btn-default">Submit</button>
+                        <button type="submit" data-ng-click="search()" class="btn btn-default">Submit</button>
                     </section>
                 </div>
             </div>
             <div class="col-md-2">
                 <section>
                     <div class="radio">
-                        <input type="radio" name="detailedSearchEducat" id="detailedSearchEducat1" value="option1">
+                        <input type="radio" id="detailedSearchEducat1" data-ng-model="detailedSearch.educationalContext" value="preschooleducation">
                         <label for="detailedSearchEducat1">
                             Alusharidus
                         </label>
                     </div>
                     <div class="radio">
-                        <input type="radio" name="detailedSearchEducat" id="detailedSearchEducat2" value="option2">
+                        <input type="radio" id="detailedSearchEducat2" data-ng-model="detailedSearch.educationalContext" value="basiceducation">
                         <label for="detailedSearchEducat2">
                             Põhiharidus
                         </label>
                     </div>
                     <div class="radio">
-                        <input type="radio" name="detailedSearchEducat" id="detailedSearchEducat3" value="option3">
+                        <input type="radio" id="detailedSearchEducat3" data-ng-model="detailedSearch.educationalContext" value="secondaryeducation">
                         <label for="detailedSearchEducat3">
                             Keskharidus
                         </label>
                     </div>
                     <div class="radio">
-                        <input type="radio" name="detailedSearchEducat" id="detailedSearchEducat4" value="option4">
+                        <input type="radio" id="detailedSearchEducat4" data-ng-model="detailedSearch.educationalContext" value="vocationaleducation">
                         <label for="detailedSearchEducat4">
                             Kutseharidus
                         </label>

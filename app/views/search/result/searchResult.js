@@ -15,30 +15,37 @@ define(['app'], function(app)
         var MAX_PAGES = PAGES_BEFORE_THIS_PAGE + 1 + PAGES_AFTER_THIS_PAGE;
         var start = 0;
 
-        // Filters
-        $scope.filters = [];
+        init();
+        validatePageNumber();
+        search();
 
-        // Get search query and current page
-        $scope.searchQuery = searchService.getQuery();
-        $scope.paging.thisPage = searchService.getPage();
+        function init() {
+            // Filters
+            $scope.filters = [];
 
-        // Expose searchService methods required for the view
-        $scope.buildURL = searchService.buildURL;
+            // Get search query and current page
+            $scope.searchQuery = searchService.getQuery();
+            $scope.paging.thisPage = searchService.getPage();
 
-        // If page is negative, redirect to page 1
-        if ($scope.paging.thisPage < 1) {
-            searchService.goToPage(1);
-            return;
+            // Expose searchService methods required for the view
+            $scope.buildURL = searchService.buildURL;
         }
 
-        // If page number is not an integer, redirect to correct page
-        if ($scope.paging.thisPage != searchService.getActualPage()) {
-            searchService.goToPage($scope.paging.thisPage);
-            return;
+        function validatePageNumber() {
+            // If page is negative, redirect to page 1
+            if ($scope.paging.thisPage < 1) {
+                searchService.goToPage(1);
+                return;
+            }
+
+            // If page number is not an integer, redirect to correct page
+            if ($scope.paging.thisPage != searchService.getActualPage()) {
+                searchService.goToPage($scope.paging.thisPage);
+                return;
+            }
         }
 
-        // Get search results
-        if (!isEmpty($scope.searchQuery)) {
+        function search() {
             $scope.searching = true;
             start = RESULTS_PER_PAGE * ($scope.paging.thisPage - 1);
 
@@ -64,8 +71,6 @@ define(['app'], function(app)
             }
             
             serverCallService.makeGet("rest/search", params, searchSuccess, searchFail);
-        } else {
-            $location.url('/');
         }
         
         function searchSuccess(data) {
