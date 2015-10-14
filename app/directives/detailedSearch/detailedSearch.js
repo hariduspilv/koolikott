@@ -11,11 +11,14 @@ define(['app'], function(app)
                 
                 function init() {
                     $scope.detailedSearch = {};
+                    
+                    var validEducationalContexts = ['preschooleducation', 'basiceducation', 'secondaryeducation', 'vocationaleducation'];
+                    var defaultEducationalContext = 'preschooleducation';
 
-                    if (searchService.getEducationalContext()) {
+                    if (searchService.getEducationalContext() && validEducationalContexts.indexOf(searchService.getEducationalContext()) > -1) {
                         $scope.detailedSearch.educationalContext = searchService.getEducationalContext();
                     } else {
-                        $scope.detailedSearch.educationalContext = 'preschooleducation';
+                        $scope.detailedSearch.educationalContext = defaultEducationalContext;
                     }
                 }
 
