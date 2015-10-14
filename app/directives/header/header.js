@@ -23,6 +23,7 @@ define(['app'], function(app)
                 $scope.selectedLanguage = translationService.getLanguage();
                 $scope.searchFields = {};
                 $scope.searchFields.searchQuery = searchService.getQuery();
+                $scope.isDetailedSearchVisible = false;
 
                 $scope.languageSelectClick = function() {
                     $scope.showLanguageSelection = !$scope.showLanguageSelection; 
@@ -62,6 +63,10 @@ define(['app'], function(app)
                     authenticationService.logout();
                     $('#userMenu').dropdown('toggle');
                     $location.url('/');
+                };
+
+                $scope.detailedSearchToggled = function() {
+                    $scope.isDetailedSearchVisible = !$scope.isDetailedSearchVisible;
                 };
 
                 $scope.$watch(function () {
