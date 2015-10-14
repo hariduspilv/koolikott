@@ -37,6 +37,7 @@ insert into User(id, userName, name, surName, idCode, role) values (3, 'voldemar
 insert into User(id, userName, name, surName, idCode, role) values (4, 'voldemar.vapustav2', 'Voldemar', 'Vapustav', '38103070239', 'USER');
 insert into User(id, userName, name, surName, idCode, role) values (5, 'õäöü.õäöü', 'Õäöü', 'Õäöü', '38406304916', 'USER');
 insert into User(id, userName, name, surName, idCode, role) values (6, 'mart.dev', 'dev', 'dev', '39210140032', 'USER');
+insert into User(id, userName, name, surName, idCode, role) values (7, 'ester.tester', 'Ester', 'Tester', '38202020234', 'USER');
 
 -- Materials
 
