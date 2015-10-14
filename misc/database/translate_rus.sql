@@ -76,6 +76,11 @@ insert into Translation(translationGroup, translationKey, translation) values (2
 insert into Translation(translationGroup, translationKey, translation) values (2, 'SEARCH_RESULT_1_RESULT_PART_1', 'При поиске ');
 insert into Translation(translationGroup, translationKey, translation) values (2, 'SEARCH_RESULT_1_RESULT_PART_2', ' найденное количество результатов: ');
 insert into Translation(translationGroup, translationKey, translation) values (2, 'SEARCH_RESULT_1_RESULT_PART_3', '.');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'SEARCH_RESULT_EMPTY_QUERY_NO_RESULT', 'Результатов не найдено.');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'SEARCH_RESULT_EMPTY_QUERY_PART_1', 'Найдены Результаты поиска: ');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'SEARCH_RESULT_EMPTY_QUERY_PART_2', '.');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'SEARCH_RESULT_EMPTY_QUERY_1_RESULT_PART_1', 'Поиск вернулся ');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'SEARCH_RESULT_EMPTY_QUERY_1_RESULT_PART_2', ' результат.');
 insert into Translation(translationGroup, translationKey, translation) values (2, 'COPYRIGHT_FOOTER', '© 2016 Все права защищены. Министерство образования и науки');
 insert into Translation(translationGroup, translationKey, translation) values (2, 'SEARCH_RESULT_PREVIOUS', 'Предыдущая');
 insert into Translation(translationGroup, translationKey, translation) values (2, 'SEARCH_RESULT_NEXT', 'Следующий');

@@ -76,6 +76,11 @@ insert into Translation(translationGroup, translationKey, translation) values (3
 insert into Translation(translationGroup, translationKey, translation) values (3, 'SEARCH_RESULT_1_RESULT_PART_1', 'Searching for ');
 insert into Translation(translationGroup, translationKey, translation) values (3, 'SEARCH_RESULT_1_RESULT_PART_2', ' returned ');
 insert into Translation(translationGroup, translationKey, translation) values (3, 'SEARCH_RESULT_1_RESULT_PART_3', ' result.');
+insert into Translation(translationGroup, translationKey, translation) values (3, 'SEARCH_RESULT_EMPTY_QUERY_NO_RESULT', 'No results found.');
+insert into Translation(translationGroup, translationKey, translation) values (3, 'SEARCH_RESULT_EMPTY_QUERY_PART_1', 'Search returned');
+insert into Translation(translationGroup, translationKey, translation) values (3, 'SEARCH_RESULT_EMPTY_QUERY_PART_2', ' results.');
+insert into Translation(translationGroup, translationKey, translation) values (3, 'SEARCH_RESULT_EMPTY_QUERY_1_RESULT_PART_1', 'Search returned ');
+insert into Translation(translationGroup, translationKey, translation) values (3, 'SEARCH_RESULT_EMPTY_QUERY_1_RESULT_PART_2', ' result.');
 insert into Translation(translationGroup, translationKey, translation) values (3, 'COPYRIGHT_FOOTER', '© 2016 All rights reserved. Ministry of Education and Research');
 insert into Translation(translationGroup, translationKey, translation) values (3, 'SEARCH_RESULT_PREVIOUS', 'Previous');
 insert into Translation(translationGroup, translationKey, translation) values (3, 'SEARCH_RESULT_NEXT', 'Next');
