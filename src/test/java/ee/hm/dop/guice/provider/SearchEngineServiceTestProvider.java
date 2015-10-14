@@ -41,6 +41,9 @@ class SearchEngineServiceMock implements SearchEngineService {
         addArabicQuery();
         addBigQuery();
 
+        addEmptyQueryWithSubjectFilter();
+        addEmptyQueryWithNoFilters();
+
         addQueryWithSubjectFilter();
         addQueryWithResourceTypeFilter();
         addQueryWithSubjectAndResourceTypeFilter();
@@ -74,6 +77,21 @@ class SearchEngineServiceMock implements SearchEngineService {
 
         searchResponses.put(bigQuery, bigQueryDocuments);
     }
+
+    private static void addEmptyQueryWithSubjectFilter() {
+        String filteredQuery = "subject:\"interestingsubject\"";
+        List<Document> filteredSearchResult = createDocumentsWithIdentifiers(5L, 1L);
+        searchResponses.put(filteredQuery, filteredSearchResult);
+    }
+
+    private static void addEmptyQueryWithNoFilters() {
+        String filteredQuery = "";
+        List<Document> filteredSearchResult = createDocumentsWithIdentifiers();
+        searchResponses.put(filteredQuery, filteredSearchResult);
+    }
+
+    // Queries containing combinations of subject, resource and educational
+    // context:
 
     private static void addQueryWithSubjectFilter() {
         String filteredQuery = "(filteredquery*) AND subject:\"mathematics\"";

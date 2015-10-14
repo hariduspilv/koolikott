@@ -1,5 +1,6 @@
 package ee.hm.dop.service;
 
+import static java.lang.String.format;
 import static org.apache.commons.lang3.StringUtils.isBlank;
 
 import java.util.ArrayList;
@@ -44,8 +45,8 @@ public class SearchService {
         return search(query, 0, subject, resourceType, educationalContext, licenseType);
     }
 
-    public SearchResult search(String query, long start, String subject, String resourceType,
-            String educationalContext, String licenseType) {
+    public SearchResult search(String query, long start, String subject, String resourceType, String educationalContext,
+            String licenseType) {
         SearchResult searchResult = new SearchResult();
 
         SearchResponse searchResponse = doSearch(query, start, subject, resourceType, educationalContext, licenseType);
@@ -99,7 +100,11 @@ public class SearchService {
 
         String filtersAsQuery = getFiltersAsQuery(subject, resourceType, educationalContext, licenseType);
         if (!filtersAsQuery.isEmpty()) {
-            queryString = "(" + queryString + ")" + filtersAsQuery;
+            if (!queryString.isEmpty()) {
+                queryString = format("(%s) AND %s", queryString, filtersAsQuery);
+            } else {
+                queryString = filtersAsQuery;
+            }
         }
 
         return searchEngineService.search(queryString, start);
@@ -133,13 +138,12 @@ public class SearchService {
                     sb.append(" ");
                 }
             }
-        } else {
-            throw new RuntimeException("Empty search query!");
         }
         return sb.toString();
     }
 
-    private String getFiltersAsQuery(String subject, String resourceType, String educationalContext, String licenseType) {
+    private String getFiltersAsQuery(String subject, String resourceType, String educationalContext,
+            String licenseType) {
         Map<String, String> filters = new LinkedHashMap<>();
         filters.put("subject", subject);
         filters.put("resource_type", resourceType);
@@ -151,7 +155,10 @@ public class SearchService {
         for (Map.Entry<String, String> filter : filters.entrySet()) {
             if (filter.getValue() != null) {
                 String value = ClientUtils.escapeQueryChars(filter.getValue()).toLowerCase();
-                filtersAsQuery += " AND " + filter.getKey() + ":\"" + value + "\"";
+                if (!filtersAsQuery.isEmpty()) {
+                    filtersAsQuery += " AND ";
+                }
+                filtersAsQuery += filter.getKey() + ":\"" + value + "\"";
             }
         }
         return filtersAsQuery;

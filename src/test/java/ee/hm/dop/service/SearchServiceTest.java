@@ -5,7 +5,6 @@ import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertSame;
-import static org.junit.Assert.fail;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -102,8 +101,8 @@ public class SearchServiceTest {
 
         replayAll();
 
-        SearchResult result = searchService
-                .search(query, start, subject, resourceType, educationalContext, licenseType);
+        SearchResult result = searchService.search(query, start, subject, resourceType, educationalContext,
+                licenseType);
 
         verifyAll();
 
@@ -181,14 +180,66 @@ public class SearchServiceTest {
 
     @Test
     public void searchEmptyQuery() {
-        replayAll();
-        try {
-            searchService.search("", 0);
-            fail(); // Expecting exception
-        } catch (RuntimeException e) {
-            // OK
-        }
-        verifyAll();
+        String query = "";
+        String subject = null;
+        String resourceType = null;
+        String educationalContext = null;
+        String licenseType = null;
+        String tokenizedQuery = "";
+        long start = 0;
+
+        List<Searchable> searchables = new ArrayList<>();
+
+        testSearch(query, tokenizedQuery, searchables, start, subject, resourceType, educationalContext, licenseType);
+    }
+
+    @Test
+    public void searchEmptyQueryAndSubjectFilter() {
+        String query = "";
+        String subject = "testsubject";
+        String resourceType = null;
+        String educationalContext = null;
+        String licenseType = null;
+        String tokenizedQuery = "subject:\"testsubject\"";
+        long start = 0;
+
+        List<Searchable> searchables = new ArrayList<>();
+        searchables.add(createMaterial(3L));
+        searchables.add(createMaterial(4L));
+
+        testSearch(query, tokenizedQuery, searchables, start, subject, resourceType, educationalContext, licenseType);
+    }
+
+    @Test
+    public void searchNullQueryAndNullFilters() {
+        String query = null;
+        String subject = null;
+        String resourceType = null;
+        String educationalContext = null;
+        String licenseType = null;
+        String tokenizedQuery = "";
+        long start = 0;
+
+        List<Searchable> searchables = new ArrayList<>();
+
+        testSearch(query, tokenizedQuery, searchables, start, subject, resourceType, educationalContext, licenseType);
+    }
+
+    @Test
+    public void searchNullQueryAndSubjectFilter() {
+        String query = null;
+        String subject = "testsubject";
+        String resourceType = null;
+        String educationalContext = null;
+        String licenseType = null;
+        String tokenizedQuery = "subject:\"testsubject\"";
+        long start = 0;
+
+        List<Searchable> searchables = new ArrayList<>();
+        searchables.add(createMaterial(3L));
+        searchables.add(createMaterial(4L));
+
+        testSearch(query, tokenizedQuery, searchables, start, subject, resourceType, educationalContext, licenseType);
     }
 
     @Test
@@ -590,8 +641,8 @@ public class SearchServiceTest {
 
         replayAll();
 
-        SearchResult result = searchService
-                .search(query, start, subject, resourceType, educationalContext, licenseType);
+        SearchResult result = searchService.search(query, start, subject, resourceType, educationalContext,
+                licenseType);
 
         verifyAll();
 
@@ -612,7 +663,8 @@ public class SearchServiceTest {
         return identifiers;
     }
 
-    private SearchResponse createSearchResponseWithDocuments(List<Searchable> searchables, long start, long totalResults) {
+    private SearchResponse createSearchResponseWithDocuments(List<Searchable> searchables, long start,
+            long totalResults) {
         List<Document> documents = new ArrayList<>();
         for (Searchable searchable : searchables) {
             Document newDocument = new Document();
