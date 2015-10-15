@@ -126,6 +126,7 @@ insert into Translation(translationGroup, translationKey, translation) values (2
 insert into Translation(translationGroup, translationKey, translation) values (2, 'DETAILED_SEARCH_SUBMIT', 'Поиск');
 insert into Translation(translationGroup, translationKey, translation) values (2, 'DETAILED_SEARCH_MATERIALS', 'Материалы');
 insert into Translation(translationGroup, translationKey, translation) values (2, 'DETAILED_SEARCH_PORTFOLIOS', 'Портфели');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'DETAILED_SEARCH_MAIN', 'Портфели');
 
 -- Material Subject translations
 insert into Translation(translationGroup, translationKey, translation) values (2, 'SUBJECT_ESTONIAN', 'Эстонский');
