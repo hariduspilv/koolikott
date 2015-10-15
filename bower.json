@@ -31,7 +31,8 @@
     "angular-sanitize": "1.4.3",
     "bootstrap-sidebar": "https://github.com/asyraf9/bootstrap-sidebar.git#0.2.2",
     "angular-screenfull": "https://github.com/hrajchert/angular-screenfull.git#~0.1.0",
-    "awesome-bootstrap-checkbox": "~0.3.5"
+    "awesome-bootstrap-checkbox": "~0.3.5",
+    "bootstrap-switch": "~3.3.2"
   },
   "resolutions": {
     "angular": "1.4.3"
