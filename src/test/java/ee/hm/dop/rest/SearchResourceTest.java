@@ -6,6 +6,9 @@ import static org.junit.Assert.fail;
 
 import java.util.List;
 
+import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status;
+
 import org.junit.Test;
 
 import ee.hm.dop.common.test.ResourceIntegrationTestBase;
@@ -52,11 +55,8 @@ public class SearchResourceTest extends ResourceIntegrationTestBase {
 
     @Test
     public void searchWithNullQueryAndNullFilter() {
-        SearchResult searchResult = doGet(buildQueryURL(null, 0, null, null, null, null), SearchResult.class);
-
-        assertEquals(0, searchResult.getItems().size());
-        assertEquals(0, searchResult.getTotalResults());
-        assertEquals(0, searchResult.getStart());
+        Response response = doGet(buildQueryURL(null, 0, null, null, null, null));
+        assertEquals(Status.INTERNAL_SERVER_ERROR.getStatusCode(), response.getStatus());
     }
 
     @Test
