@@ -46,7 +46,7 @@ public class UserResource {
 
     @GET
     @Path("getSignedUserData")
-    @Produces(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.TEXT_PLAIN)
     public String getSignedUserData(@QueryParam("token") String token) {
         if (isBlank(token)) {
             throwBadRequestException("Valid authenticated user token parameter is mandatory");
