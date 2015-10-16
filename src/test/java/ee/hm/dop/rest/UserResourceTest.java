@@ -66,7 +66,7 @@ public class UserResourceTest extends ResourceIntegrationTestBase {
     @Test
     public void getSignedUserDataNoToken() {
         Response response = doGet("user/getSignedUserData?token=");
-        assertEquals(400, response.getStatus());
+        assertEquals(406, response.getStatus());
     }
 
     private User getUser(String username) {
