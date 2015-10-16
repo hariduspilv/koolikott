@@ -12,8 +12,8 @@ define(['app'], function(app)
         };    
     });
     
-    app.directive('dopHeader', ['translationService', '$location', 'searchService', 'authenticationService', 'authenticatedUserService',
-     function(translationService, $location, searchService, authenticationService, authenticatedUserService) {
+    app.directive('dopHeader', ['translationService', '$location', 'searchService', 'authenticationService', 'authenticatedUserService', '$timeout', 
+     function(translationService, $location, searchService, authenticationService, authenticatedUserService, $timeout) {
         return {
             scope: true,
             templateUrl: 'app/directives/header/header.html',
@@ -24,6 +24,7 @@ define(['app'], function(app)
                 $scope.searchFields = {};
                 $scope.searchFields.searchQuery = searchService.getQuery();
                 $scope.isDetailedSearchVisible = false;
+                var isDetailedSearchToggling = false;
 
                 $scope.languageSelectClick = function() {
                     $scope.showLanguageSelection = !$scope.showLanguageSelection; 
@@ -65,8 +66,15 @@ define(['app'], function(app)
                     $location.url('/');
                 };
 
-                $scope.detailedSearchToggled = function() {
-                    $scope.isDetailedSearchVisible = !$scope.isDetailedSearchVisible;
+                $scope.detailedSearchButtonClicked = function() {
+                    // Timeout is used to not register clicks while detailed search box is collapsing/expanding
+                    if (!isDetailedSearchToggling) {
+                        isDetailedSearchToggling = true;
+                        $timeout(function() {
+                            $scope.isDetailedSearchVisible = !$scope.isDetailedSearchVisible;
+                            isDetailedSearchToggling = false;
+                        }, 350);
+                    }
                 };
 
                 $scope.$watch(function () {
