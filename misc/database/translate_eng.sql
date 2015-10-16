@@ -129,7 +129,7 @@ insert into Translation(translationGroup, translationKey, translation) values (3
 insert into Translation(translationGroup, translationKey, translation) values (3, 'DETAILED_SEARCH_MAIN', 'Main');
 insert into Translation(translationGroup, translationKey, translation) values (3, 'DETAILED_SEARCH_ON', 'Yes');
 insert into Translation(translationGroup, translationKey, translation) values (3, 'DETAILED_SEARCH_OFF', 'No');
-insert into Translation(translationGroup, translationKey, translation) values (3, 'DETAILED_SEARCH_PAID', 'PAID');
+insert into Translation(translationGroup, translationKey, translation) values (3, 'DETAILED_SEARCH_PAID', 'Paid');
 
 -- Material Subject translations
 insert into Translation(translationGroup, translationKey, translation) values (3, 'SUBJECT_ESTONIAN', 'Estonian');
