@@ -15,8 +15,10 @@ define(['app'], function(app)
             init();
         } else {
             var materialId = $route.current.params.materialId;
-            var params = {};
-            serverCallService.makeGet("rest/material?materialId=" + materialId, params, getMaterialSuccess, getMaterialFail); 
+            var params = {
+                'materialId' : materialId
+            };
+            serverCallService.makeGet("rest/material", params, getMaterialSuccess, getMaterialFail); 
         }
     	
         function getMaterialSuccess(material) {
@@ -113,9 +115,7 @@ define(['app'], function(app)
         };
 
         function getSignedUserData(token) {
-            var params = {};
-
-            serverCallService.makeGet("rest/user/getSignedUserData?token=" + token, params, getSignedUserDataSuccess, getSignedUserDataFail); 
+            serverCallService.makeGet("rest/user/getSignedUserData", {}, getSignedUserDataSuccess, getSignedUserDataFail); 
         }
 
         function getSignedUserDataSuccess(data) { 
