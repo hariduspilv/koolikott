@@ -1,16 +1,14 @@
 package ee.hm.dop.rest;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
+import ee.hm.dop.common.test.ResourceIntegrationTestBase;
+import ee.hm.dop.model.User;
+import org.junit.Test;
 
 import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
-import org.junit.Test;
-
-import ee.hm.dop.common.test.ResourceIntegrationTestBase;
-import ee.hm.dop.model.User;
+import static org.junit.Assert.*;
 
 public class UserResourceTest extends ResourceIntegrationTestBase {
 
@@ -55,6 +53,20 @@ public class UserResourceTest extends ResourceIntegrationTestBase {
         String username = "notexisting.user";
         Response response = doGet("user?username=" + username);
         assertEquals(Status.NO_CONTENT.getStatusCode(), response.getStatus());
+    }
+
+    @Test
+    public void getSignedUserData() {
+        Response response = doGet("user/getSignedUserData?token=token");
+        String encryptedUserData = response.readEntity(new GenericType<String>() {
+        });
+        assertNotNull(encryptedUserData);
+    }
+
+    @Test
+    public void getSignedUserDataNoToken() {
+        Response response = doGet("user/getSignedUserData?token=");
+        assertEquals(400, response.getStatus());
     }
 
     private User getUser(String username) {

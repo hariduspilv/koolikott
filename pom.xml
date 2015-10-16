@@ -113,8 +113,14 @@
             <artifactId>commons-validator</artifactId>
             <version>1.4.1</version>
         </dependency>
+		<dependency>
+			<groupId>commons-codec</groupId>
+			<artifactId>commons-codec</artifactId>
+			<version>1.10</version>
+		</dependency>
 
-        <!-- Others -->
+
+		<!-- Others -->
 
 		<dependency>
 	         <groupId>org.reflections</groupId>
@@ -151,8 +157,14 @@
 			<artifactId>opensaml</artifactId>
 			<version>2.6.4</version>
 		</dependency>
+		<dependency>
+			<groupId>org.json</groupId>
+			<artifactId>json</artifactId>
+			<version>20150729</version>
+		</dependency>
 
-        <!-- Testing -->
+
+		<!-- Testing -->
 		
 		<dependency>
 			<groupId>junit</groupId>

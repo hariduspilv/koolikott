@@ -1,26 +1,25 @@
 package ee.hm.dop.rest;
 
-import static org.apache.commons.lang3.StringUtils.isBlank;
-
-import java.net.HttpURLConnection;
+import ee.hm.dop.model.User;
+import ee.hm.dop.service.AuthenticatedUserService;
+import ee.hm.dop.service.UserService;
 
 import javax.inject.Inject;
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
-import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.net.HttpURLConnection;
 
-import ee.hm.dop.model.User;
-import ee.hm.dop.service.UserService;
+import static org.apache.commons.lang3.StringUtils.isBlank;
 
 @Path("user")
 public class UserResource {
 
     @Inject
     private UserService userService;
+
+    @Inject
+    private AuthenticatedUserService authenticatedUserService;
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
@@ -42,6 +41,18 @@ public class UserResource {
         }
 
         return newUser;
+    }
+
+
+    @GET
+    @Path("getSignedUserData")
+    @Produces(MediaType.APPLICATION_JSON)
+    public String getSignedUserData(@QueryParam("token") String token) {
+        if (isBlank(token)) {
+            throwBadRequestException("Valid authenticated user token parameter is mandatory");
+        }
+
+        return authenticatedUserService.getSignedUserData(token);
     }
 
     private void throwBadRequestException(String message) {
