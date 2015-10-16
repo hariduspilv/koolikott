@@ -117,6 +117,21 @@
             }
         }
         
+        .input-group-disabled {
+            background: $gray-lighter;
+            
+            .input-group-btn {
+                button {
+                    background: $gray-lighter;
+                    &:hover,
+                    &:focus,
+                    &:active {
+                        background: $gray-lighter;
+                    }
+                }
+            }
+        }
+        
         .btn-inline {
             position: relative;
             width: 70px;
