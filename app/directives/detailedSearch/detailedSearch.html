@@ -34,7 +34,23 @@
                                 <input
                                 bs-switch
                                 ng-model="isSelected"
-                                type="checkbox" switch-size="small" switch-label-width="auto" switch-handle-width="auto">
+                                type="checkbox"
+                                switch-active="{{ isActive }}"
+                                switch-on-text="{{'ON' | translate}}"
+                                switch-off-text="{{'OFF' | translate}}"
+                                switch-on-color="{{ onColor }}"
+                                switch-off-color="{{ offColor }}"
+                                switch-animate="{{ animate }}"
+                                switch-size="{{ size }}"
+                                switch-label="{{ label }}"
+                                switch-icon="{{ icon }}"
+                                switch-radio-off="{{ radioOff }}"
+                                switch-label-width="{{ labelWidth }}"
+                                switch-handle-width="{{ handleWidth }}"
+                                switch-wrapper="{{ wrapper }}"
+                                ng-true-value="'yep'"
+                                ng-false-value="'nope'"
+                                switch-inverse="{{ !inverse }}">
                             </div>
                         </div>
                         <div class="col-md-offset-4 clearfix">
