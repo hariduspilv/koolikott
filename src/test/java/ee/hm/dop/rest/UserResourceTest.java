@@ -4,8 +4,7 @@ import ee.hm.dop.common.test.ResourceIntegrationTestBase;
 import ee.hm.dop.model.User;
 import org.junit.Test;
 
-import javax.ws.rs.core.GenericType;
-import javax.ws.rs.core.Response;
+import javax.ws.rs.core.*;
 import javax.ws.rs.core.Response.Status;
 
 import static org.junit.Assert.*;
@@ -57,16 +56,23 @@ public class UserResourceTest extends ResourceIntegrationTestBase {
 
     @Test
     public void getSignedUserData() {
-        Response response = doGet("user/getSignedUserData?token=token");
-        String encryptedUserData = response.readEntity(new GenericType<String>() {
+        MultivaluedMap<String, Object> headers = new MultivaluedHashMap<>();
+        headers.add("Authentication", "token");
+        headers.add("Username", "mati.maasikas");
+
+
+        Response response2 = doGet("user/getSignedUserData", headers, MediaType.APPLICATION_JSON_TYPE);
+        assertEquals(Status.OK.getStatusCode(), response2.getStatus());
+
+        String encryptedUserData = response2.readEntity(new GenericType<String>() {
         });
         assertNotNull(encryptedUserData);
     }
 
     @Test
-    public void getSignedUserDataNoToken() {
-        Response response = doGet("user/getSignedUserData?token=");
-        assertEquals(406, response.getStatus());
+    public void getSignedUserDataNotLoggedIn() {
+        Response response = doGet("user/getSignedUserData");
+        assertEquals(Status.UNAUTHORIZED.getStatusCode(), response.getStatus());
     }
 
     private User getUser(String username) {
@@ -74,5 +80,4 @@ public class UserResourceTest extends ResourceIntegrationTestBase {
         return response.readEntity(new GenericType<User>() {
         });
     }
-
 }

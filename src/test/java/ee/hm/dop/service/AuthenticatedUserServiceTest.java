@@ -1,6 +1,5 @@
 package ee.hm.dop.service;
 
-import ee.hm.dop.dao.AuthenticatedUserDAO;
 import ee.hm.dop.model.AuthenticatedUser;
 import ee.hm.dop.security.KeyStoreUtils;
 import ee.hm.dop.utils.EncryptionUtils;
@@ -25,9 +24,6 @@ public class AuthenticatedUserServiceTest {
     private AuthenticatedUserService authenticatedUserService = new AuthenticatedUserService();
 
     @Mock
-    private AuthenticatedUserDAO authenticatedUserDAO;
-
-    @Mock
     private Configuration configuration;
 
     @Test
@@ -37,14 +33,13 @@ public class AuthenticatedUserServiceTest {
         authenticatedUser.setHomeOrganization("htg.tartu.ee");
         authenticatedUser.setAffiliations("member,student");
 
-        expect(authenticatedUserDAO.findAuthenticatedUserByToken("uniqueToken")).andReturn(authenticatedUser);
         expect(configuration.getString(KEYSTORE_FILENAME)).andReturn("test.keystore").anyTimes();
         expect(configuration.getString(KEYSTORE_PASSWORD)).andReturn("newKeyStorePass").anyTimes();
         expect(configuration.getString(KEYSTORE_SIGNING_ENTITY_ID)).andReturn("testAlias").anyTimes();
         expect(configuration.getString(KEYSTORE_SIGNING_ENTITY_PASSWORD)).andReturn("newKeyPass").anyTimes();
 
         replayAll();
-        String signedUserData = authenticatedUserService.getSignedUserData("uniqueToken");
+        String signedUserData = authenticatedUserService.signUserData(authenticatedUser);
 
         assertNotNull(signedUserData);
 
@@ -54,14 +49,14 @@ public class AuthenticatedUserServiceTest {
 
         JSONObject userDataObject = new JSONObject(userData);
         assertEquals("TAAT", userDataObject.getString("authProvider"));
-        assertNotNull(userDataObject.getLong("createdAt"));
+        assertNotNull(userDataObject.getString("createdAt"));
         JSONObject authenticationContext = userDataObject.getJSONObject("authCtx");
         assertEquals("member,student", authenticationContext.getString("roles"));
         assertEquals("htg.tartu.ee", authenticationContext.getString("schacHomeOrganization"));
     }
 
     private void replayAll(Object... mocks) {
-        replay(configuration, authenticatedUserDAO);
+        replay(configuration);
 
         if (mocks != null) {
             for (Object object : mocks) {
@@ -71,7 +66,7 @@ public class AuthenticatedUserServiceTest {
     }
 
     private void verifyAll(Object... mocks) {
-        verify(configuration, authenticatedUserDAO);
+        verify(configuration);
 
         if (mocks != null) {
             for (Object object : mocks) {
