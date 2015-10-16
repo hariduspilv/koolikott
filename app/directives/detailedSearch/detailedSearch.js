@@ -3,7 +3,9 @@ define(['app'], function(app)
     app.directive('dopDetailedSearch', [ '$location', 'searchService', 
      function($location, searchService) {
         return {
-            scope: true,
+            scope: {
+                visible: '='
+            },
             templateUrl: 'app/directives/detailedSearch/detailedSearch.html',
             controller: function ($scope) {
 
@@ -29,6 +31,19 @@ define(['app'], function(app)
                     searchService.setEducationalContext($scope.detailedSearch.educationalContext);
                     $location.url(searchService.getURL());
                 };
+
+                // Move search query between simple search box and detailed search
+                $scope.$watch('visible', function(newValue, oldValue) {
+                    if (newValue != oldValue) {
+                        if ($scope.visible) {
+                            $scope.detailedSearch.main = searchService.getQuery();
+                            searchService.setSearch(null);
+                        } else {
+                            searchService.setSearch($scope.detailedSearch.main);
+                            $scope.detailedSearch.main = '';
+                        }
+                    } 
+                }, true);
 
             }
         };

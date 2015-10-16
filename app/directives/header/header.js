@@ -67,6 +67,13 @@ define(['app'], function(app)
                 };
 
                 $scope.detailedSearchButtonClicked = function() {
+                    // Save the search so that detailed search can access it
+                    if (!isEmpty($scope.searchFields.searchQuery)) {
+                        searchService.setSearch($scope.searchFields.searchQuery);
+                    } else {
+                        searchService.setSearch(null);
+                    }
+
                     // Timeout is used to not register clicks while detailed search box is collapsing/expanding
                     if (!isDetailedSearchToggling) {
                         isDetailedSearchToggling = true;
