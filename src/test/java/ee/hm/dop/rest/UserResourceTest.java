@@ -60,8 +60,7 @@ public class UserResourceTest extends ResourceIntegrationTestBase {
         headers.add("Authentication", "token");
         headers.add("Username", "mati.maasikas");
 
-
-        Response response2 = doGet("user/getSignedUserData", headers, MediaType.APPLICATION_JSON_TYPE);
+        Response response2 = doGet("user/getSignedUserData", headers, MediaType.TEXT_PLAIN_TYPE);
         assertEquals(Status.OK.getStatusCode(), response2.getStatus());
 
         String encryptedUserData = response2.readEntity(new GenericType<String>() {
@@ -71,7 +70,7 @@ public class UserResourceTest extends ResourceIntegrationTestBase {
 
     @Test
     public void getSignedUserDataNotLoggedIn() {
-        Response response = doGet("user/getSignedUserData");
+        Response response = doGet("user/getSignedUserData", MediaType.TEXT_PLAIN_TYPE);
         assertEquals(Status.UNAUTHORIZED.getStatusCode(), response.getStatus());
     }
 
