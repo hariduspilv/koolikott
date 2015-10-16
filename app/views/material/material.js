@@ -1,7 +1,7 @@
 define(['app'], function(app)
 {
-    app.controller('materialController', ['$scope', 'serverCallService', '$route', 'translationService', '$rootScope', 'searchService', '$location', 'alertService',
-    		 function($scope, serverCallService, $route, translationService, $rootScope, searchService, $location, alertService) {
+    app.controller('materialController', ['$scope', 'serverCallService', '$route', 'translationService', '$rootScope', 'searchService', '$location', 'alertService', 'authenticatedUserService',
+    		 function($scope, serverCallService, $route, translationService, $rootScope, searchService, $location, alertService, authenticatedUserService) {
         $scope.showMaterialContent = false;
 
         $rootScope.$on('fullscreenchange', function() {
@@ -40,7 +40,12 @@ define(['app'], function(app)
             setSourceType();
 
             if($scope.material.embeddable && $scope.sourceType === 'LINK') {
-                $scope.material.iframeSource = $scope.material.source;
+                if (authenticatedUserService.isAuthenticated()) {
+                    var token = authenticatedUserService.getToken();
+                    getSignedUserData(token)
+                } else {
+                    $scope.material.iframeSource = $scope.material.source;
+                }
             }
              
             var params = {
@@ -107,5 +112,21 @@ define(['app'], function(app)
             $scope.sourceType = 'LINK';
         };
 
+        function getSignedUserData(token) {
+            var params = {};
+
+            serverCallService.makeGet("rest/user/getSignedUserData?token=" + token, params, getSignedUserDataSuccess, getSignedUserDataFail); 
+        }
+
+        function getSignedUserDataSuccess(data) { 
+            var url = $scope.material.source;
+            url += (url.split('?')[1] ? '&':'?') + "dop_token=" + data;
+
+            $scope.material.iframeSource = url;
+        }
+        
+        function getSignedUserDataFail(data, status) {
+            console.log("Failed to get signed user data.")
+        }
     }]);
 });

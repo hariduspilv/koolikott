@@ -32,18 +32,19 @@
         }
 
         .form-control {
+            border: 1px solid $body-bg;
+            border-bottom: 1px solid $brand-grey-medium;
             @include box-shadow-spec(0, 0, 0, 0, $body-bg);
 
-            &:focus {
-                border-color: $brand-grey-medium;
+            &:focus, &:active {
+                border: 1px solid #FFF;
                 @include box-shadow-spec(0, 0, 0, 0, #FFF, inset);
                 background: #FFF;
             }
         }
 
         .dropdown-menu {
-            border: 1px solid $brand-grey-medium;
-            border-top: 0;
+            border: 0;
             @include border-top-radius(0);
         }
         
