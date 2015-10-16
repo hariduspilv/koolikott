@@ -28,7 +28,7 @@ public class EncryptionUtilsTest {
 
     @Test
     public void encryptAndDecrypt() throws NoSuchAlgorithmException {
-        String dataToEncrypt = "{\"createdAt\":1444818843,\"authProvider\":\"TAAT\",\"authCtx\":{\"roles\":\"member,student\",\"schacHomeOrganization\":\"htg.tartu.ee\"}}";
+        String dataToEncrypt = "{\"createdAt\":”2012-04-23T18:25:43.511Z”,\"authProvider\":\"TAAT\",\"authCtx\":{\"roles\":\"member,student\",\"schacHomeOrganization\":\"htg.tartu.ee\"}}";
 
         byte[] bytes = EncryptionUtils.encrypt(dataToEncrypt, credential.getPrivateKey());
         assertNotNull(bytes);
@@ -42,7 +42,7 @@ public class EncryptionUtilsTest {
 
     @Test
     public void encrypt() throws NoSuchAlgorithmException {
-        String dataToEncrypt = "{\"createdAt\":1444818843,\"authProvider\":\"TAAT\",\"authCtx\":{\"roles\":\"member,student\",\"schacHomeOrganization\":\"htg.tartu.ee\"}}";
+        String dataToEncrypt = "{\"createdAt\":”2012-04-23T18:25:43.511Z”,\"authProvider\":\"TAAT\",\"authCtx\":{\"roles\":\"member,student\",\"schacHomeOrganization\":\"htg.tartu.ee\"}}";
 
         byte[] bytes = EncryptionUtils.encrypt(dataToEncrypt, credential.getPrivateKey());
         assertNotNull(bytes);

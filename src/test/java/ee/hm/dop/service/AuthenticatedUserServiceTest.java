@@ -8,14 +8,14 @@ import org.apache.commons.configuration.Configuration;
 import org.easymock.EasyMockRunner;
 import org.easymock.Mock;
 import org.easymock.TestSubject;
+import org.joda.time.DateTime;
 import org.json.JSONObject;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import static ee.hm.dop.utils.ConfigurationProperties.*;
 import static org.easymock.EasyMock.*;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.*;
 
 @RunWith(EasyMockRunner.class)
 public class AuthenticatedUserServiceTest {
@@ -49,7 +49,10 @@ public class AuthenticatedUserServiceTest {
 
         JSONObject userDataObject = new JSONObject(userData);
         assertEquals("TAAT", userDataObject.getString("authProvider"));
-        assertNotNull(userDataObject.getString("createdAt"));
+
+        DateTime dateTime = new DateTime(userDataObject.getString("createdAt"));
+        assertTrue(dateTime.isBefore(DateTime.now()) && dateTime.isAfter(DateTime.now().getMillis() - 5000));
+
         JSONObject authenticationContext = userDataObject.getJSONObject("authCtx");
         assertEquals("member,student", authenticationContext.getString("roles"));
         assertEquals("htg.tartu.ee", authenticationContext.getString("schacHomeOrganization"));
