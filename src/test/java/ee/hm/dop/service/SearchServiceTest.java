@@ -4,7 +4,9 @@ import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertSame;
+import static org.junit.Assert.fail;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -180,17 +182,19 @@ public class SearchServiceTest {
 
     @Test
     public void searchEmptyQuery() {
-        String query = "";
-        String subject = null;
-        String resourceType = null;
-        String educationalContext = null;
-        String licenseType = null;
-        String tokenizedQuery = "";
-        long start = 0;
+        replayAll();
 
-        List<Searchable> searchables = new ArrayList<>();
+        SearchResult result = null;
+        try {
+            result = searchService.search("", 0, null, null, null, null);
+            fail("Exception expected.");
+        } catch (RuntimeException e) {
+            assertEquals("No query string and filters present.", e.getMessage());
+        }
 
-        testSearch(query, tokenizedQuery, searchables, start, subject, resourceType, educationalContext, licenseType);
+        verifyAll();
+
+        assertNull(result);
     }
 
     @Test
@@ -212,17 +216,19 @@ public class SearchServiceTest {
 
     @Test
     public void searchNullQueryAndNullFilters() {
-        String query = null;
-        String subject = null;
-        String resourceType = null;
-        String educationalContext = null;
-        String licenseType = null;
-        String tokenizedQuery = "";
-        long start = 0;
+        replayAll();
 
-        List<Searchable> searchables = new ArrayList<>();
+        SearchResult result = null;
+        try {
+            result = searchService.search(null, 0, null, null, null, null);
+            fail("Exception expected.");
+        } catch (RuntimeException e) {
+            assertEquals("No query string and filters present.", e.getMessage());
+        }
 
-        testSearch(query, tokenizedQuery, searchables, start, subject, resourceType, educationalContext, licenseType);
+        verifyAll();
+
+        assertNull(result);
     }
 
     @Test

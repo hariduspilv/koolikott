@@ -105,6 +105,10 @@ public class SearchService {
             } else {
                 queryString = filtersAsQuery;
             }
+        } else {
+            if (queryString.isEmpty()) {
+                throw new RuntimeException("No query string and filters present.");
+            }
         }
 
         return searchEngineService.search(queryString, start);

@@ -42,7 +42,6 @@ class SearchEngineServiceMock implements SearchEngineService {
         addBigQuery();
 
         addEmptyQueryWithSubjectFilter();
-        addEmptyQueryWithNoFilters();
 
         addQueryWithSubjectFilter();
         addQueryWithResourceTypeFilter();
@@ -81,12 +80,6 @@ class SearchEngineServiceMock implements SearchEngineService {
     private static void addEmptyQueryWithSubjectFilter() {
         String filteredQuery = "subject:\"interestingsubject\"";
         List<Document> filteredSearchResult = createDocumentsWithIdentifiers(5L, 1L);
-        searchResponses.put(filteredQuery, filteredSearchResult);
-    }
-
-    private static void addEmptyQueryWithNoFilters() {
-        String filteredQuery = "";
-        List<Document> filteredSearchResult = createDocumentsWithIdentifiers();
         searchResponses.put(filteredQuery, filteredSearchResult);
     }
 
