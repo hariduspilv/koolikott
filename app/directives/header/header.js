@@ -67,6 +67,13 @@ define(['app'], function(app)
                 };
 
                 $scope.detailedSearchButtonClicked = function() {
+                    // Save the search so that detailed search can access it
+                    if (!isEmpty($scope.searchFields.searchQuery)) {
+                        searchService.setSearch($scope.searchFields.searchQuery);
+                    } else {
+                        searchService.setSearch(null);
+                    }
+
                     // Timeout is used to not register clicks while detailed search box is collapsing/expanding
                     if (!isDetailedSearchToggling) {
                         isDetailedSearchToggling = true;
@@ -87,7 +94,10 @@ define(['app'], function(app)
                 $scope.$watch(function () {
                         return searchService.getQuery();
                     }, function(query) {
-                        $scope.searchFields.searchQuery = query;
+                        // Search query is not shown in simple search box when detailed search is open
+                        if (isEmpty(query) || !$scope.isDetailedSearchVisible) {
+                            $scope.searchFields.searchQuery = query;
+                        }
                 }, true);
 
                 $scope.$watch(function () {

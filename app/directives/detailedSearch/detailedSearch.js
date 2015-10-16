@@ -3,7 +3,9 @@ define(['app'], function(app)
     app.directive('dopDetailedSearch', [ '$location', 'searchService', 'translationService', '$filter', 
      function($location, searchService, translationService, $filter, bsSwitch) {
         return {
-            scope: true,
+            scope: {
+                visible: '='
+            },
             templateUrl: 'app/directives/detailedSearch/detailedSearch.html',
             controller: function ($scope) {
 
@@ -23,8 +25,7 @@ define(['app'], function(app)
                 }
 
                 $scope.search = function() {
-                    // Clear the search query if it has been set from simple search
-                    searchService.setSearch('');
+                    searchService.setSearch($scope.detailedSearch.main);
 
                     searchService.setEducationalContext($scope.detailedSearch.educationalContext);
                     $location.url(searchService.getURL());
@@ -66,6 +67,19 @@ define(['app'], function(app)
                   $scope.toggleActivation = function() {
                     $scope.isActive = !$scope.isActive;
                   }
+
+                // Move search query between simple search box and detailed search
+                $scope.$watch('visible', function(newValue, oldValue) {
+                    if (newValue != oldValue) {
+                        if ($scope.visible) {
+                            $scope.detailedSearch.main = searchService.getQuery();
+                            searchService.setSearch(null);
+                        } else {
+                            searchService.setSearch($scope.detailedSearch.main);
+                            $scope.detailedSearch.main = '';
+                        }
+                    } 
+                }, true);
 
             }
         };
