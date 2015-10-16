@@ -68,7 +68,8 @@ module.exports = function(grunt) {
                     '<%= project.assets %>/css/dop.min.css',
                     'bower_components/ui-select/dist/select.min.css',
                     'bower_components/bootstrap-sidebar/dist/css/sidebar.css',
-                    'bower_components/bootstrap-switch/dist/css/bootstrap3/bootstrap-switch.min.css'
+                    'bower_components/bootstrap-switch/dist/css/bootstrap3/bootstrap-switch.min.css',
+                    'bower_components/seiyria-bootstrap-slider/sass/bootstrap-slider.css'
                 ],
                 dest: '<%= project.assets %>/css/dop.min.css',
             }
