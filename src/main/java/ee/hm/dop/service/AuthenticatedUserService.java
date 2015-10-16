@@ -6,6 +6,7 @@ import ee.hm.dop.security.KeyStoreUtils;
 import ee.hm.dop.utils.EncryptionUtils;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.configuration.Configuration;
+import org.joda.time.DateTime;
 import org.json.JSONObject;
 
 import javax.inject.Inject;
@@ -25,19 +26,15 @@ public class AuthenticatedUserService {
         return authenticatedUserDAO.findAuthenticatedUserByToken(token);
     }
 
-    public String getSignedUserData(String token) {
-        AuthenticatedUser authenticatedUser = authenticatedUserDAO.findAuthenticatedUserByToken(token);
-        if(authenticatedUser == null) {
-            return null;
-        }
-        long currentUnixTime = System.currentTimeMillis() / 1000L;
+    public String signUserData(AuthenticatedUser authenticatedUser) {
+        DateTime createdAt = DateTime.now();
 
         JSONObject authenticationContext = new JSONObject();
         authenticationContext.put("schacHomeOrganization", authenticatedUser.getHomeOrganization());
         authenticationContext.put("roles", authenticatedUser.getAffiliations());
 
         JSONObject userDataObject = new JSONObject();
-        userDataObject.put("createdAt", currentUnixTime);
+        userDataObject.put("createdAt", createdAt);
         userDataObject.put("authProvider", TAAT);
         userDataObject.put("authCtx", authenticationContext);
 

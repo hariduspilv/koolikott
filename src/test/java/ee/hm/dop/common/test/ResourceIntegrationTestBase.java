@@ -1,24 +1,20 @@
 package ee.hm.dop.common.test;
 
-import static ee.hm.dop.utils.ConfigurationProperties.SERVER_PORT;
-import static java.lang.String.format;
-
-import javax.ws.rs.client.Client;
-import javax.ws.rs.client.ClientBuilder;
-import javax.ws.rs.client.ClientRequestFilter;
-import javax.ws.rs.client.Entity;
-import javax.ws.rs.client.WebTarget;
-import javax.ws.rs.core.GenericType;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
-
+import com.google.inject.Inject;
 import org.apache.commons.configuration.Configuration;
 import org.glassfish.jersey.client.ClientConfig;
 import org.glassfish.jersey.client.ClientProperties;
 import org.glassfish.jersey.filter.LoggingFilter;
 import org.glassfish.jersey.jackson.JacksonFeature;
 
-import com.google.inject.Inject;
+import javax.ws.rs.client.*;
+import javax.ws.rs.core.GenericType;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.MultivaluedMap;
+import javax.ws.rs.core.Response;
+
+import static ee.hm.dop.utils.ConfigurationProperties.SERVER_PORT;
+import static java.lang.String.format;
 
 /**
  * Base class for all resource integration tests.
@@ -58,6 +54,10 @@ public abstract class ResourceIntegrationTestBase extends IntegrationTestBase {
 
     protected static Response doGet(String url, MediaType mediaType) {
         return getTarget(url).request().accept(mediaType).get(Response.class);
+    }
+
+    protected static Response doGet(String url, MultivaluedMap<String, Object> headers, MediaType mediaType) {
+        return getTarget(url).request().headers(headers).accept(mediaType).get(Response.class);
     }
 
     /*
