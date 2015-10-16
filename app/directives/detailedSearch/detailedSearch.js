@@ -25,8 +25,7 @@ define(['app'], function(app)
                 }
 
                 $scope.search = function() {
-                    // Clear the search query if it has been set from simple search
-                    searchService.setSearch('');
+                    searchService.setSearch($scope.detailedSearch.main);
 
                     searchService.setEducationalContext($scope.detailedSearch.educationalContext);
                     $location.url(searchService.getURL());

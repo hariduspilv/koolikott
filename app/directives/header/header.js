@@ -94,7 +94,10 @@ define(['app'], function(app)
                 $scope.$watch(function () {
                         return searchService.getQuery();
                     }, function(query) {
-                        $scope.searchFields.searchQuery = query;
+                        // Search query is not shown in simple search box when detailed search is open
+                        if (isEmpty(query) || !$scope.isDetailedSearchVisible) {
+                            $scope.searchFields.searchQuery = query;
+                        }
                 }, true);
 
                 $scope.$watch(function () {
