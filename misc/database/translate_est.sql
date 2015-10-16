@@ -127,6 +127,9 @@ insert into Translation(translationGroup, translationKey, translation) values (1
 insert into Translation(translationGroup, translationKey, translation) values (1, 'DETAILED_SEARCH_MATERIALS', 'Materjalid');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'DETAILED_SEARCH_PORTFOLIOS', 'Portfoliod');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'DETAILED_SEARCH_MAIN', 'Põhiväli');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'DETAILED_SEARCH_ON', 'Jah');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'DETAILED_SEARCH_OFF', 'Ei');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'DETAILED_SEARCH_PAID', 'Tasuline');
 
 -- Material Subject translations
 insert into Translation(translationGroup, translationKey, translation) values (1, 'SUBJECT_ESTONIAN', 'Eesti keel');
