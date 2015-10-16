@@ -56,6 +56,8 @@ module.exports = function(grunt) {
                     'bower_components/angular-resource/angular-resource.min.js',
                     'bower_components/ui-select/dist/select.min.js',
                     'bower_components/bootstrap-sidebar/dist/js/sidebar.js',
+                    'bower_components/bootstrap-switch/dist/js/bootstrap-switch.min.js',
+                    'bower_components/angular-bootstrap-switch/dist/angular-bootstrap-switch.min.js'
                 ],
                 dest: '<%= project.assets %>/js/dop.min.js',
             },
@@ -63,7 +65,8 @@ module.exports = function(grunt) {
                 src: [
                     '<%= project.assets %>/css/dop.min.css',
                     'bower_components/ui-select/dist/select.min.css',
-                    'bower_components/bootstrap-sidebar/dist/css/sidebar.css'
+                    'bower_components/bootstrap-sidebar/dist/css/sidebar.css',
+                    'bower_components/bootstrap-switch/dist/css/bootstrap3/bootstrap-switch.min.css'
                 ],
                 dest: '<%= project.assets %>/css/dop.min.css',
             }
