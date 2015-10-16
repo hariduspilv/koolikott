@@ -51,22 +51,18 @@ define(['app'], function(app)
                 $scope.handleWidth = "auto";
                 $scope.labelWidth = "auto";
                 $scope.inverse = true;
-            
-                $scope.$watch('isSelected', function() {
-                    $log.info('Selection changed.');
-                  });
 
-                  $scope.toggle = function() {
-                    $scope.isSelected = $scope.isSelected === 'yep' ? 'nope' : 'yep';
-                  };
+                $scope.toggle = function() {
+                  $scope.isSelected = $scope.isSelected === 'yep' ? 'nope' : 'yep';
+                };
 
-                  $scope.setUndefined = function() {
-                    $scope.isSelected = undefined;
-                  };
+                $scope.setUndefined = function() {
+                  $scope.isSelected = undefined;
+                };
 
-                  $scope.toggleActivation = function() {
-                    $scope.isActive = !$scope.isActive;
-                  }
+                $scope.toggleActivation = function() {
+                  $scope.isActive = !$scope.isActive;
+                }
 
                 // Move search query between simple search box and detailed search
                 $scope.$watch('visible', function(newValue, oldValue) {
