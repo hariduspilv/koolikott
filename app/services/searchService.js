@@ -74,6 +74,15 @@ define(['app'], function(app) {
 	        	return searchURL;
 	        },
 
+            queryExists : function() {
+                var searchObject = $location.search();
+                if (searchObject.q || searchObject.subject || searchObject.resource_type || searchObject.educational_context || searchObject.license_type) {
+                    return true;
+                } else {
+                    return false;
+                }
+            },
+
 	        getQuery : function() {
 				if(searchQuery === ""){
 					var searchObject = $location.search();

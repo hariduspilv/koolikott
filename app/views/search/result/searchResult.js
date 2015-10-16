@@ -20,6 +20,11 @@ define(['app'], function(app)
         search();
 
         function init() {
+            // Redirect to landing page if neither query or filters are present
+            if (!searchService.queryExists()) {
+                $location.url('/');
+            }
+
             // Filters
             $scope.filters = [];
 
@@ -28,7 +33,7 @@ define(['app'], function(app)
             $scope.paging.thisPage = searchService.getPage();
 
             // Expose searchService methods required for the view
-            $scope.buildURL = searchService.buildURL;
+            $scope.buildURL = searchService.buildURL;  
         }
 
         function validatePageNumber() {
