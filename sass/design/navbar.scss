@@ -264,7 +264,11 @@
                     width: 30px; 
                     height: 100%; 
                     @include gradient-horizontal-to-transparent($start-color: rgba(0, 61, 104, 1), $end-color: rgba(0, 61, 104, 0))
-                }
+                }                
+            }
+            
+            .fa-caret-down {
+                line-height: $line-height-base;
             }
         }
         
@@ -282,9 +286,16 @@
         
         .dropdown-menu {
             width: 235px;
+            border: 0;
+            background: $navbar-dark-bg;
             
             & > li > a {
                 padding-left: 40px;
+                
+                &:hover {
+                    background: $navbar-dark-bg;
+                    color: #FFF;
+                }
                 
                 .fa {
                     position: absolute; 
@@ -303,8 +314,6 @@
             @include border-bottom-radius (0);
             
             .fa-caret-down {
-                
-                line-height: $line-height-base;
                 
                 &:before {
                     display: none
@@ -399,10 +408,6 @@
                 color: #FFF
             }
 
-        }
-
-        .dropdown-menu {
-            background: $navbar-dark-bg
         }
 
     }
