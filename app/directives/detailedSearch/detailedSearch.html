@@ -29,28 +29,28 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="detailedSearchAuthorField" class="col-md-4 control-label" data-translate="DETAILED_SEARCH_PAID"></label>
+                            <label for="detailedSearchPaidField" class="col-md-4 control-label" data-translate="DETAILED_SEARCH_PAID"></label>
                             <div class="col-sm-8">
                                 <input
                                 bs-switch
-                                ng-model="isSelected"
+                                data-ng-model="isSelected"
                                 type="checkbox"
-                                switch-active="{{ isActive }}"
                                 switch-on-text="{{'DETAILED_SEARCH_ON' | translate}}"
                                 switch-off-text="{{'DETAILED_SEARCH_OFF' | translate}}"
-                                switch-on-color="{{ onColor }}"
-                                switch-off-color="{{ offColor }}"
-                                switch-animate="{{ animate }}"
-                                switch-size="{{ size }}"
-                                switch-label="{{ label }}"
-                                switch-icon="{{ icon }}"
-                                switch-radio-off="{{ radioOff }}"
-                                switch-label-width="{{ labelWidth }}"
-                                switch-handle-width="{{ handleWidth }}"
-                                switch-wrapper="{{ wrapper }}"
+                                switch-animate="true"
+                                switch-size="normal"
+                                switch-radio-off="true"
+                                switch-label-width="auto"
+                                switch-handle-width="auto"
                                 ng-true-value="'yep'"
                                 ng-false-value="'nope'"
-                                switch-inverse="{{ !inverse }}">
+                                switch-inverse="false" id="detailedSearchPaidField">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="detailedSearchPaidField" class="col-md-4 control-label" data-translate="DETAILED_SEARCH_PAID"></label>
+                            <div class="col-sm-8">
+                                
                             </div>
                         </div>
                         <div class="col-md-offset-4 clearfix">

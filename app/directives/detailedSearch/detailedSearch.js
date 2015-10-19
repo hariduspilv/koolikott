@@ -1,7 +1,7 @@
 define(['app'], function(app)
 {    
     app.directive('dopDetailedSearch', [ '$location', 'searchService', 'translationService', '$filter', 
-     function($location, searchService, translationService, $filter, bsSwitch) {
+     function($location, searchService, translationService, $filter) {
         return {
             scope: {
                 visible: '='
@@ -42,18 +42,9 @@ define(['app'], function(app)
                 } ];
             
                 $scope.isSelected = 'nope';
-                $scope.onText = 'Y';
-                $scope.offText = 'N';
-                $scope.isActive = true;
-                $scope.size = 'normal';
-                $scope.animate = true;
-                $scope.radioOff = true;
-                $scope.handleWidth = "auto";
-                $scope.labelWidth = "auto";
-                $scope.inverse = true;
 
                 $scope.toggle = function() {
-                  $scope.isSelected = $scope.isSelected === 'yep' ? 'nope' : 'yep';
+                    $scope.isSelected = $scope.isSelected === 'yep' ? 'nope' : 'yep';
                 };
 
                 $scope.setUndefined = function() {

@@ -19,7 +19,8 @@ module.exports = function(grunt) {
                 src: [
                 'bower_components/angular-translate-loader-url/angular-translate-loader-url.min.js',
                 'bower_components/screenfull/dist/screenfull.js',
-                'bower_components/angular-screenfull/dist/angular-screenfull.min.js'
+                'bower_components/angular-screenfull/dist/angular-screenfull.min.js',
+                'bower_components/angular-bootstrap-slider/slider.js'
                 ],
                 dest: '<%= project.assets %>/js/',
                 flatten: true,
@@ -57,9 +58,8 @@ module.exports = function(grunt) {
                     'bower_components/ui-select/dist/select.min.js',
                     'bower_components/bootstrap-sidebar/dist/js/sidebar.js',
                     'bower_components/bootstrap-switch/dist/js/bootstrap-switch.min.js',
-                    'bower_components/angular-bootstrap-switch/dist/angular-bootstrap-switch.min.js',
-                    'bower_components/seiyria-bootstrap-slider/dist/bootstrap-slider.min.js',
-                    'bower_components/angular-bootstrap-slider/slider.js'
+                    'bower_components/angular-bootstrap-switch/dist/angular-bootstrap-switch.min.js'
+                    
                 ],
                 dest: '<%= project.assets %>/js/dop.min.js',
             },
