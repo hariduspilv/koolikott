@@ -45,8 +45,8 @@ public class SearchService {
         return search(query, 0, subject, resourceType, educationalContext, licenseType);
     }
 
-    public SearchResult search(String query, long start, String subject, String resourceType, String educationalContext,
-            String licenseType) {
+    public SearchResult search(String query, long start, String subject, String resourceType,
+            String educationalContext, String licenseType) {
         SearchResult searchResult = new SearchResult();
 
         SearchResponse searchResponse = doSearch(query, start, subject, resourceType, educationalContext, licenseType);
@@ -105,10 +105,10 @@ public class SearchService {
             } else {
                 queryString = filtersAsQuery;
             }
-        } else {
-            if (queryString.isEmpty()) {
-                throw new RuntimeException("No query string and filters present.");
-            }
+        }
+
+        if (queryString.isEmpty()) {
+            throw new RuntimeException("No query string and filters present.");
         }
 
         return searchEngineService.search(queryString, start);
@@ -146,8 +146,7 @@ public class SearchService {
         return sb.toString();
     }
 
-    private String getFiltersAsQuery(String subject, String resourceType, String educationalContext,
-            String licenseType) {
+    private String getFiltersAsQuery(String subject, String resourceType, String educationalContext, String licenseType) {
         Map<String, String> filters = new LinkedHashMap<>();
         filters.put("subject", subject);
         filters.put("resource_type", resourceType);
