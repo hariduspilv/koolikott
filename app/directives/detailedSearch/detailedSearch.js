@@ -26,7 +26,8 @@ define(['app'], function(app)
 
                 $scope.search = function() {
                     searchService.setSearch($scope.detailedSearch.main);
-
+                    searchService.setTitle($scope.detailedSearch.title);
+                    
                     searchService.setEducationalContext($scope.detailedSearch.educationalContext);
                     $location.url(searchService.getURL());
                 };

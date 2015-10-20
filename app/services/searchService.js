@@ -1,16 +1,19 @@
 define(['app'], function(app) {
 
-	app.factory('searchService',['$location', function($location) {
+    app.factory('searchService',['$location', function($location) {
         var searchURLbase = "search/result?q=";
         var subjectURL = "&subject=";
         var resourceTypeURL = "&resource_type=";
         var educationalContextURL = "&educational_context=";
         var licenseTypeURL = "&license_type=";
+        var titleURL = "&title=";
+
         var searchQuery = "";
         var searchSubject = "";
         var searchResourceType = "";
         var searchEducationalContext = "";
         var searchLicenseType = "";
+        var searchTitle = "";
 
         function escapeQuery(query) {
             //replace backslashes
@@ -31,13 +34,13 @@ define(['app'], function(app) {
 
             return query;
         }
-		
-		return {
-			
-			setSearch : function(query) {
-				searchQuery = query;
-			},
-			
+        
+        return {
+            
+            setSearch : function(query) {
+                searchQuery = query;
+            },
+            
             setSubject : function(subject) {
                 searchSubject = subject;
             },
@@ -54,10 +57,18 @@ define(['app'], function(app) {
                 searchLicenseType = licenseType;
             },
 
-	        getURL : function() {
-	        	var query = escapeQuery(searchQuery);
+            setTitle : function(title) {
+                searchTitle = title;
+            },
 
-                var searchURL = searchURLbase + query
+            getURL : function() {
+                var searchURL;
+                if (searchQuery) {
+                    searchURL = searchURLbase + escapeQuery(searchQuery)
+                } else {
+                    searchURL = searchURLbase;
+                }
+
                 if (searchSubject) {
                     searchURL += subjectURL + searchSubject;
                 } 
@@ -70,29 +81,32 @@ define(['app'], function(app) {
                 if (searchLicenseType) {
                     searchURL += licenseTypeURL + searchLicenseType;
                 }
+                if (searchTitle) {
+                    searchURL += titleURL + searchTitle;
+                }
 
-	        	return searchURL;
-	        },
+                return searchURL;
+            },
 
             queryExists : function() {
                 var searchObject = $location.search();
-                if (searchObject.q || searchObject.subject || searchObject.resource_type || searchObject.educational_context || searchObject.license_type) {
+                if (searchObject.q || searchObject.subject || searchObject.resource_type || searchObject.educational_context || searchObject.license_type || searchObject.title) {
                     return true;
                 } else {
                     return false;
                 }
             },
 
-	        getQuery : function() {
-				if(searchQuery === ""){
-					var searchObject = $location.search();
-					if (searchObject.q) {
+            getQuery : function() {
+                if(searchQuery === ""){
+                    var searchObject = $location.search();
+                    if (searchObject.q) {
                         searchQuery = unescapeQuery(searchObject.q);
-					}
-				}
+                    }
+                }
 
-				return searchQuery;
-			},
+                return searchQuery;
+            },
 
             getSubject : function() {
                 if (searchSubject === "") {
@@ -138,24 +152,35 @@ define(['app'], function(app) {
                 return searchLicenseType;
             },
 
+            getTitle : function() {
+                if (searchTitle === "") {
+                    var searchObject = $location.search();
+                    if (searchObject.title) {
+                        return searchObject.title;
+                    }
+                }
+
+                return searchTitle;
+            },
+
             getPage : function() {
                 var searchObject = $location.search();
                 if (searchObject.page) {
                     return parseInt(searchObject.page);
                 }
                 return 1;
-	        }, 
+            }, 
 
-	        getActualPage : function() {
-	        	var searchObject = $location.search();
+            getActualPage : function() {
+                var searchObject = $location.search();
                 if (searchObject.page) {
                     return searchObject.page;
                 }
                 return 1;
-	        }, 
+            }, 
 
-            buildURL : function(query, page, subject, resourceType, educationalContext, licenseType) {
-            	var searchURL = "#/" + searchURLbase + encodeURI(escapeQuery(query)) + "&page=" + page;
+            buildURL : function(query, page, subject, resourceType, educationalContext, licenseType, title) {
+                var searchURL = "#/" + searchURLbase + encodeURI(escapeQuery(query)) + "&page=" + page;
                 if (subject) {
                     searchURL += subjectURL + subject;
                 }
@@ -167,6 +192,9 @@ define(['app'], function(app) {
                 }
                 if (licenseType) {
                     searchURL += licenseTypeURL + licenseType;
+                }
+                if (title) {
+                    searchURL += titleURL + title;
                 }
                 return searchURL;
             }, 
@@ -189,9 +217,16 @@ define(['app'], function(app) {
                 if (this.getLicenseType()) {
                     params.license_type = this.getLicenseType();
                 }
+                if (this.getTitle()) {
+                    params.title = this.getTitle();
+                }
                 
                 $location.url("search/result").search(params);
-       	    }
-	    };
-	}]);
+            },
+
+            clearFieldsNotInSimpleSearch : function() {
+                searchTitle = '';
+            }
+        };
+    }]);
 });

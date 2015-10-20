@@ -34,6 +34,7 @@ define(['app'], function(app)
 
             // Expose searchService methods required for the view
             $scope.buildURL = searchService.buildURL;  
+            $scope.getTitle = searchService.getTitle;
         }
 
         function validatePageNumber() {
@@ -73,6 +74,10 @@ define(['app'], function(app)
 
             if (searchService.getLicenseType()) {
                 params.license_type = searchService.getLicenseType();
+            }
+
+            if (searchService.getTitle()) {
+                params.title = searchService.getTitle();
             }
             
             serverCallService.makeGet("rest/search", params, searchSuccess, searchFail);
