@@ -9,7 +9,11 @@ import ee.hm.dop.service.UserService;
 import javax.annotation.security.RolesAllowed;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
-import javax.ws.rs.*;
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
+import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -66,9 +70,6 @@ public class UserResource {
     @Produces(MediaType.TEXT_PLAIN)
     public String getSignedUserData() {
         DopPrincipal dopPrincipal = (DopPrincipal) securityContext.getUserPrincipal();
-        if (dopPrincipal == null) {
-            throwBadRequestException("User needs to be logged in");
-        }
         AuthenticatedUser authenticatedUser = dopPrincipal.getAuthenticatedUser();
 
         return authenticatedUserService.signUserData(authenticatedUser);
