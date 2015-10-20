@@ -114,6 +114,13 @@ Add all keystore configurations to **custom.properties**. From the example keyto
 	keystore.signingEntityID=exampleAlias
 	keystore.signingEntityPassword=exampleKeyPass
 ```
+
+### Exporting the generated public key certificate
+
+To export the public key certificate, which can then be given to the material providers (publishers):
+	*`keytool -export -keystore server.keystore -alias exampleAlias -file EkoolikottPublicKeyCert.cer`
+	
+This EkoolikottPublicKeyCert.cer file can then be used by the material providers to verify, if the user should have the access to the required resource.
 # TAAT authentication setup
 
 In order to set up TAAT authentication you have to have a keystore set up with a public/private key pair.
