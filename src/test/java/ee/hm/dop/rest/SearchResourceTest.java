@@ -24,7 +24,7 @@ public class SearchResourceTest extends ResourceIntegrationTestBase {
     @Test
     public void search() {
         String query = "المدرسية";
-        SearchResult searchResult = doGet(buildQueryURL(query, 0, null, null, null, null), SearchResult.class);
+        SearchResult searchResult = doGet(buildQueryURL(query, 0, null, null, null, null, null), SearchResult.class);
 
         assertMaterialIdentifiers(searchResult.getItems(), 3L);
         assertEquals(1, searchResult.getTotalResults());
@@ -35,7 +35,8 @@ public class SearchResourceTest extends ResourceIntegrationTestBase {
     public void searchGetSecondPage() {
         String query = "thishasmanyresults";
         int start = RESULTS_PER_PAGE;
-        SearchResult searchResult = doGet(buildQueryURL(query, start, null, null, null, null), SearchResult.class);
+        SearchResult searchResult = doGet(buildQueryURL(query, start, null, null, null, null, null),
+                SearchResult.class);
 
         assertEquals(RESULTS_PER_PAGE, searchResult.getItems().size());
         for (int i = 0; i < RESULTS_PER_PAGE; i++) {
@@ -48,14 +49,14 @@ public class SearchResourceTest extends ResourceIntegrationTestBase {
     @Test
     public void searchNoResult() {
         String query = "no+results";
-        SearchResult searchResult = doGet(buildQueryURL(query, 0, null, null, null, null), SearchResult.class);
+        SearchResult searchResult = doGet(buildQueryURL(query, 0, null, null, null, null, null), SearchResult.class);
 
         assertEquals(0, searchResult.getItems().size());
     }
 
     @Test
     public void searchWithNullQueryAndNullFilter() {
-        Response response = doGet(buildQueryURL(null, 0, null, null, null, null));
+        Response response = doGet(buildQueryURL(null, 0, null, null, null, null, null));
         assertEquals(Status.INTERNAL_SERVER_ERROR.getStatusCode(), response.getStatus());
     }
 
@@ -63,7 +64,7 @@ public class SearchResourceTest extends ResourceIntegrationTestBase {
     public void searchWithNullQueryAndSubjectFilter() {
         String query = null;
         String subject = "InterestingSubject";
-        SearchResult searchResult = doGet(buildQueryURL(query, 0, subject, null, null, null), SearchResult.class);
+        SearchResult searchResult = doGet(buildQueryURL(query, 0, subject, null, null, null, null), SearchResult.class);
 
         assertMaterialIdentifiers(searchResult.getItems(), 5L, 1L);
         assertEquals(2, searchResult.getTotalResults());
@@ -74,7 +75,7 @@ public class SearchResourceTest extends ResourceIntegrationTestBase {
     public void searchWithSubjectFilter() {
         String query = "filteredquery";
         String subject = "Mathematics";
-        SearchResult searchResult = doGet(buildQueryURL(query, 0, subject, null, null, null), SearchResult.class);
+        SearchResult searchResult = doGet(buildQueryURL(query, 0, subject, null, null, null, null), SearchResult.class);
 
         assertMaterialIdentifiers(searchResult.getItems(), 5L);
         assertEquals(1, searchResult.getTotalResults());
@@ -85,7 +86,7 @@ public class SearchResourceTest extends ResourceIntegrationTestBase {
     public void searchWithResourceTypeFilter() {
         String query = "beethoven";
         String resourceType = "Audio";
-        String queryURL = buildQueryURL(query, 0, null, resourceType, null, null);
+        String queryURL = buildQueryURL(query, 0, null, resourceType, null, null, null);
         SearchResult searchResult = doGet(queryURL, SearchResult.class);
 
         assertMaterialIdentifiers(searchResult.getItems(), 4L);
@@ -98,7 +99,7 @@ public class SearchResourceTest extends ResourceIntegrationTestBase {
         String query = "beethoven";
         String subject = "Mathematics";
         String resourceType = "Audio";
-        String queryURL = buildQueryURL(query, 0, subject, resourceType, null, null);
+        String queryURL = buildQueryURL(query, 0, subject, resourceType, null, null, null);
         SearchResult searchResult = doGet(queryURL, SearchResult.class);
 
         assertMaterialIdentifiers(searchResult.getItems(), 7L);
@@ -110,7 +111,7 @@ public class SearchResourceTest extends ResourceIntegrationTestBase {
     public void searchWithEducationalContextFilter() {
         String query = "beethoven";
         String educationalContext = "preschool";
-        String queryURL = buildQueryURL(query, 0, null, null, educationalContext, null);
+        String queryURL = buildQueryURL(query, 0, null, null, educationalContext, null, null);
         SearchResult searchResult = doGet(queryURL, SearchResult.class);
 
         assertMaterialIdentifiers(searchResult.getItems(), 6L);
@@ -123,7 +124,7 @@ public class SearchResourceTest extends ResourceIntegrationTestBase {
         String query = "beethoven";
         String subject = "Mathematics";
         String educationalContext = "Preschool";
-        String queryURL = buildQueryURL(query, 0, subject, null, educationalContext, null);
+        String queryURL = buildQueryURL(query, 0, subject, null, educationalContext, null, null);
         SearchResult searchResult = doGet(queryURL, SearchResult.class);
 
         assertMaterialIdentifiers(searchResult.getItems(), 8L);
@@ -136,7 +137,7 @@ public class SearchResourceTest extends ResourceIntegrationTestBase {
         String query = "beethoven";
         String resourceType = "audio";
         String educationalContext = "preschool";
-        String queryURL = buildQueryURL(query, 0, null, resourceType, educationalContext, null);
+        String queryURL = buildQueryURL(query, 0, null, resourceType, educationalContext, null, null);
         SearchResult searchResult = doGet(queryURL, SearchResult.class);
 
         assertMaterialIdentifiers(searchResult.getItems(), 7L, 8L);
@@ -150,8 +151,8 @@ public class SearchResourceTest extends ResourceIntegrationTestBase {
         String subject = "Mathematics";
         String resourceType = "Audio";
         String educationalContext = "Preschool";
-        SearchResult searchResult = doGet(buildQueryURL(query, 0, subject, resourceType, educationalContext, null),
-                SearchResult.class);
+        SearchResult searchResult = doGet(
+                buildQueryURL(query, 0, subject, resourceType, educationalContext, null, null), SearchResult.class);
 
         assertMaterialIdentifiers(searchResult.getItems(), 2L);
         assertEquals(1, searchResult.getTotalResults());
@@ -164,7 +165,8 @@ public class SearchResourceTest extends ResourceIntegrationTestBase {
     public void searchWithLicenseType() {
         String query = "database";
         String licenseType = "CC";
-        SearchResult searchResult = doGet(buildQueryURL(query, 0, null, null, null, licenseType), SearchResult.class);
+        SearchResult searchResult = doGet(buildQueryURL(query, 0, null, null, null, licenseType, null),
+                SearchResult.class);
 
         assertMaterialIdentifiers(searchResult.getItems(), 2L, 1L);
         assertEquals(0L, searchResult.getStart());
@@ -176,7 +178,7 @@ public class SearchResourceTest extends ResourceIntegrationTestBase {
         String query = "filteredquery";
         String subject = "Mathematics";
         String licenseType = "CCBY";
-        SearchResult searchResult = doGet(buildQueryURL(query, 0, subject, null, null, licenseType),
+        SearchResult searchResult = doGet(buildQueryURL(query, 0, subject, null, null, licenseType, null),
                 SearchResult.class);
 
         assertMaterialIdentifiers(searchResult.getItems(), 2L, 1L, 3L);
@@ -189,7 +191,7 @@ public class SearchResourceTest extends ResourceIntegrationTestBase {
         String query = "beethoven";
         String resourceType = "Audio";
         String licenseType = "CCBYSA";
-        String queryURL = buildQueryURL(query, 0, null, resourceType, null, licenseType);
+        String queryURL = buildQueryURL(query, 0, null, resourceType, null, licenseType, null);
         SearchResult searchResult = doGet(queryURL, SearchResult.class);
 
         assertMaterialIdentifiers(searchResult.getItems(), 2L, 3L);
@@ -203,7 +205,7 @@ public class SearchResourceTest extends ResourceIntegrationTestBase {
         String subject = "Mathematics";
         String resourceType = "Audio";
         String licenseType = "CCBYND";
-        String queryURL = buildQueryURL(query, 0, subject, resourceType, null, licenseType);
+        String queryURL = buildQueryURL(query, 0, subject, resourceType, null, licenseType, null);
         SearchResult searchResult = doGet(queryURL, SearchResult.class);
 
         assertMaterialIdentifiers(searchResult.getItems(), 2L, 4L);
@@ -216,7 +218,7 @@ public class SearchResourceTest extends ResourceIntegrationTestBase {
         String query = "beethoven";
         String educationalContext = "preschool";
         String licenseType = "CCBYSA";
-        String queryURL = buildQueryURL(query, 0, null, null, educationalContext, licenseType);
+        String queryURL = buildQueryURL(query, 0, null, null, educationalContext, licenseType, null);
         SearchResult searchResult = doGet(queryURL, SearchResult.class);
 
         assertMaterialIdentifiers(searchResult.getItems(), 2L, 5L);
@@ -230,7 +232,7 @@ public class SearchResourceTest extends ResourceIntegrationTestBase {
         String subject = "Mathematics";
         String educationalContext = "Preschool";
         String licenseType = "CCBYNC";
-        String queryURL = buildQueryURL(query, 0, subject, null, educationalContext, licenseType);
+        String queryURL = buildQueryURL(query, 0, subject, null, educationalContext, licenseType, null);
         SearchResult searchResult = doGet(queryURL, SearchResult.class);
 
         assertMaterialIdentifiers(searchResult.getItems(), 2L, 6L);
@@ -244,7 +246,7 @@ public class SearchResourceTest extends ResourceIntegrationTestBase {
         String resourceType = "audio";
         String educationalContext = "preschool";
         String licenseType = "CCBYND";
-        String queryURL = buildQueryURL(query, 0, null, resourceType, educationalContext, licenseType);
+        String queryURL = buildQueryURL(query, 0, null, resourceType, educationalContext, licenseType, null);
         SearchResult searchResult = doGet(queryURL, SearchResult.class);
 
         assertMaterialIdentifiers(searchResult.getItems(), 2L, 7L);
@@ -259,16 +261,58 @@ public class SearchResourceTest extends ResourceIntegrationTestBase {
         String resourceType = "Audio";
         String educationalContext = "Preschool";
         String licenseType = "other";
+        String title = "smith";
         SearchResult searchResult = doGet(
-                buildQueryURL(query, 0, subject, resourceType, educationalContext, licenseType), SearchResult.class);
+                buildQueryURL(query, 0, subject, resourceType, educationalContext, licenseType, title),
+                SearchResult.class);
 
         assertMaterialIdentifiers(searchResult.getItems(), 2L, 8L);
         assertEquals(2, searchResult.getTotalResults());
         assertEquals(0, searchResult.getStart());
     }
 
+    // Tests with title (not all combinations)
+
+    @Test
+    public void searchWithTitleFilter() {
+        String query = "web";
+        String title = "www";
+        SearchResult searchResult = doGet(buildQueryURL(query, 0, null, null, null, null, title), SearchResult.class);
+
+        assertMaterialIdentifiers(searchResult.getItems(), 3L, 1L);
+        assertEquals(2, searchResult.getTotalResults());
+        assertEquals(0, searchResult.getStart());
+    }
+
+    @Test
+    public void searchWithSubjectAndTitleFilter() {
+        String query = "web";
+        String subject = "algebra";
+        String title = "www";
+        SearchResult searchResult = doGet(buildQueryURL(query, 0, subject, null, null, null, title),
+                SearchResult.class);
+
+        assertMaterialIdentifiers(searchResult.getItems(), 3L, 2L);
+        assertEquals(2, searchResult.getTotalResults());
+        assertEquals(0, searchResult.getStart());
+    }
+
+    @Test
+    public void searchWithLicenseTypeAndResourceTypeAndTitleFilter() {
+        String query = "web";
+        String resourceType = "video";
+        String licenseType = "other";
+        String title = "www";
+        SearchResult searchResult = doGet(buildQueryURL(query, 0, null, resourceType, null, licenseType, title),
+                SearchResult.class);
+
+        assertMaterialIdentifiers(searchResult.getItems(), 3L, 4L);
+        assertEquals(2, searchResult.getTotalResults());
+        assertEquals(0, searchResult.getStart());
+    }
+
     private String buildQueryURL(String query, int start, String subject, String resourceType,
-            String educationalContext, String licenseType) {
+            String educationalContext, String licenseType, String title) {
         String queryURL = "search?";
         if (query != null) {
             queryURL += "q=" + query;
@@ -287,6 +331,9 @@ public class SearchResourceTest extends ResourceIntegrationTestBase {
         }
         if (licenseType != null) {
             queryURL += "&license_type=" + licenseType;
+        }
+        if (title != null) {
+            queryURL += "&title=" + title;
         }
         return queryURL;
     }

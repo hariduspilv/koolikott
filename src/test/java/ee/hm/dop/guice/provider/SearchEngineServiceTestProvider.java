@@ -59,6 +59,10 @@ class SearchEngineServiceMock implements SearchEngineService {
         addQueryWithSubjectAndEducationalContextAndLicenseTypeFilter();
         addQueryWithResourceTypeAndEducationalContextAndLicenseTypeFilter();
         addQueryWithAllFilters();
+
+        addQueryWithTitleFilter();
+        addQueryWithTitleAndSubjectFilter();
+        addQueryWithTitleAndLicenseTypeAndResourceTypeFilter();
     }
 
     private static void addArabicQuery() {
@@ -173,8 +177,29 @@ class SearchEngineServiceMock implements SearchEngineService {
     }
 
     private static void addQueryWithAllFilters() {
-        String filteredQuery = "(john*) AND subject:\"mathematics\" AND resource_type:\"audio\" AND educational_context:\"preschool\" AND license_type:\"other\"";
+        String filteredQuery = "(john*) AND subject:\"mathematics\" AND resource_type:\"audio\" AND educational_context:\"preschool\""
+                + " AND license_type:\"other\" AND title:\"smith\"";
         List<Document> filteredSearchResult = createDocumentsWithIdentifiers(2L, 8L);
+        searchResponses.put(filteredQuery, filteredSearchResult);
+    }
+
+    // Queries with title (only some combinations)
+
+    private static void addQueryWithTitleFilter() {
+        String filteredQuery = "(web) AND title:\"www\"";
+        List<Document> filteredSearchResult = createDocumentsWithIdentifiers(3L, 1L);
+        searchResponses.put(filteredQuery, filteredSearchResult);
+    }
+
+    private static void addQueryWithTitleAndSubjectFilter() {
+        String filteredQuery = "(web) AND subject:\"algebra\" AND title:\"www\"";
+        List<Document> filteredSearchResult = createDocumentsWithIdentifiers(3L, 2L);
+        searchResponses.put(filteredQuery, filteredSearchResult);
+    }
+
+    private static void addQueryWithTitleAndLicenseTypeAndResourceTypeFilter() {
+        String filteredQuery = "(web) AND resource_type:\"video\" AND license_type:\"other\" AND title:\"www\"";
+        List<Document> filteredSearchResult = createDocumentsWithIdentifiers(3L, 4L);
         searchResponses.put(filteredQuery, filteredSearchResult);
     }
 

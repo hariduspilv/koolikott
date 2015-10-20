@@ -50,6 +50,7 @@ public class SearchServiceTest {
         String resourceType = null;
         String educationalContext = null;
         String licenseType = null;
+        String title = null;
         long start = 0;
         List<Searchable> searchables = new ArrayList<>();
         searchables.add(createMaterial(7L));
@@ -57,7 +58,8 @@ public class SearchServiceTest {
         searchables.add(createMaterial(4L));
         searchables.add(createPortfolio(2L));
 
-        testSearch(query, tokenizedQuery, searchables, start, subject, resourceType, educationalContext, licenseType);
+        testSearch(query, tokenizedQuery, searchables, start, subject, resourceType, educationalContext, licenseType,
+                title);
     }
 
     // To test asynchronous problems that may occur when search returns deleted
@@ -70,6 +72,7 @@ public class SearchServiceTest {
         String resourceType = null;
         String educationalContext = null;
         String licenseType = null;
+        String title = null;
         long start = 10;
 
         List<Searchable> searchables = new ArrayList<>();
@@ -103,8 +106,8 @@ public class SearchServiceTest {
 
         replayAll();
 
-        SearchResult result = searchService.search(query, start, subject, resourceType, educationalContext,
-                licenseType);
+        SearchResult result = searchService.search(query, start, subject, resourceType, educationalContext, licenseType,
+                title);
 
         verifyAll();
 
@@ -186,7 +189,7 @@ public class SearchServiceTest {
 
         SearchResult result = null;
         try {
-            result = searchService.search("", 0, null, null, null, null);
+            result = searchService.search("", 0, null, null, null, null, null);
             fail("Exception expected.");
         } catch (RuntimeException e) {
             assertEquals("No query string and filters present.", e.getMessage());
@@ -204,6 +207,7 @@ public class SearchServiceTest {
         String resourceType = null;
         String educationalContext = null;
         String licenseType = null;
+        String title = null;
         String tokenizedQuery = "subject:\"testsubject\"";
         long start = 0;
 
@@ -211,7 +215,8 @@ public class SearchServiceTest {
         searchables.add(createMaterial(3L));
         searchables.add(createMaterial(4L));
 
-        testSearch(query, tokenizedQuery, searchables, start, subject, resourceType, educationalContext, licenseType);
+        testSearch(query, tokenizedQuery, searchables, start, subject, resourceType, educationalContext, licenseType,
+                title);
     }
 
     @Test
@@ -220,7 +225,7 @@ public class SearchServiceTest {
 
         SearchResult result = null;
         try {
-            result = searchService.search(null, 0, null, null, null, null);
+            result = searchService.search(null, 0, null, null, null, null, null);
             fail("Exception expected.");
         } catch (RuntimeException e) {
             assertEquals("No query string and filters present.", e.getMessage());
@@ -238,6 +243,7 @@ public class SearchServiceTest {
         String resourceType = null;
         String educationalContext = null;
         String licenseType = null;
+        String title = null;
         String tokenizedQuery = "subject:\"testsubject\"";
         long start = 0;
 
@@ -245,7 +251,8 @@ public class SearchServiceTest {
         searchables.add(createMaterial(3L));
         searchables.add(createMaterial(4L));
 
-        testSearch(query, tokenizedQuery, searchables, start, subject, resourceType, educationalContext, licenseType);
+        testSearch(query, tokenizedQuery, searchables, start, subject, resourceType, educationalContext, licenseType,
+                title);
     }
 
     @Test
@@ -255,6 +262,7 @@ public class SearchServiceTest {
         String resourceType = null;
         String educationalContext = null;
         String licenseType = null;
+        String title = null;
         String tokenizedQuery = "airplane*";
         long start = 0;
 
@@ -263,7 +271,8 @@ public class SearchServiceTest {
         searchables.add(createMaterial(2L));
         searchables.add(createPortfolio(2L));
 
-        testSearch(query, tokenizedQuery, searchables, start, subject, resourceType, educationalContext, licenseType);
+        testSearch(query, tokenizedQuery, searchables, start, subject, resourceType, educationalContext, licenseType,
+                title);
     }
 
     @Test
@@ -273,6 +282,7 @@ public class SearchServiceTest {
         String resourceType = null;
         String educationalContext = null;
         String licenseType = null;
+        String title = null;
         String tokenizedQuery = "(airplane*) AND subject:\"mathematics\"";
         long start = 0;
 
@@ -281,7 +291,8 @@ public class SearchServiceTest {
         searchables.add(createMaterial(2L));
         searchables.add(createPortfolio(2L));
 
-        testSearch(query, tokenizedQuery, searchables, start, subject, resourceType, educationalContext, licenseType);
+        testSearch(query, tokenizedQuery, searchables, start, subject, resourceType, educationalContext, licenseType,
+                title);
     }
 
     @Test
@@ -291,6 +302,7 @@ public class SearchServiceTest {
         String resourceType = "TEXTBOOK";
         String educationalContext = null;
         String licenseType = null;
+        String title = null;
         String tokenizedQuery = "(pythagoras*) AND resource_type:\"textbook\"";
         long start = 0;
 
@@ -299,7 +311,8 @@ public class SearchServiceTest {
         searchables.add(createMaterial(8L));
         searchables.add(createPortfolio(214L));
 
-        testSearch(query, tokenizedQuery, searchables, start, subject, resourceType, educationalContext, licenseType);
+        testSearch(query, tokenizedQuery, searchables, start, subject, resourceType, educationalContext, licenseType,
+                title);
     }
 
     @Test
@@ -309,6 +322,7 @@ public class SearchServiceTest {
         String resourceType = "TEXTBOOK";
         String educationalContext = null;
         String licenseType = null;
+        String title = null;
         String tokenizedQuery = "(pythagoras*) AND subject:\"mathematics\" AND resource_type:\"textbook\"";
         long start = 0;
 
@@ -317,7 +331,8 @@ public class SearchServiceTest {
         searchables.add(createMaterial(2L));
         searchables.add(createPortfolio(2L));
 
-        testSearch(query, tokenizedQuery, searchables, start, subject, resourceType, educationalContext, licenseType);
+        testSearch(query, tokenizedQuery, searchables, start, subject, resourceType, educationalContext, licenseType,
+                title);
     }
 
     @Test
@@ -327,6 +342,7 @@ public class SearchServiceTest {
         String resourceType = null;
         String educationalContext = "PRESCHOOL";
         String licenseType = null;
+        String title = null;
         String tokenizedQuery = "(pythagoras*) AND educational_context:\"preschool\"";
         long start = 0;
 
@@ -335,7 +351,8 @@ public class SearchServiceTest {
         searchables.add(createMaterial(2L));
         searchables.add(createPortfolio(2L));
 
-        testSearch(query, tokenizedQuery, searchables, start, subject, resourceType, educationalContext, licenseType);
+        testSearch(query, tokenizedQuery, searchables, start, subject, resourceType, educationalContext, licenseType,
+                title);
     }
 
     @Test
@@ -345,6 +362,7 @@ public class SearchServiceTest {
         String resourceType = null;
         String educationalContext = "PRESCHOOL";
         String licenseType = null;
+        String title = null;
         String tokenizedQuery = "(pythagoras*) AND subject:\"mathematics\" AND educational_context:\"preschool\"";
         long start = 0;
 
@@ -353,7 +371,8 @@ public class SearchServiceTest {
         searchables.add(createMaterial(2L));
         searchables.add(createPortfolio(2L));
 
-        testSearch(query, tokenizedQuery, searchables, start, subject, resourceType, educationalContext, licenseType);
+        testSearch(query, tokenizedQuery, searchables, start, subject, resourceType, educationalContext, licenseType,
+                title);
     }
 
     @Test
@@ -363,6 +382,7 @@ public class SearchServiceTest {
         String resourceType = "TEXTBOOK";
         String educationalContext = "PRESCHOOL";
         String licenseType = null;
+        String title = null;
         String tokenizedQuery = "(pythagoras*) AND resource_type:\"textbook\" AND educational_context:\"preschool\"";
         long start = 0;
 
@@ -371,7 +391,8 @@ public class SearchServiceTest {
         searchables.add(createMaterial(2L));
         searchables.add(createPortfolio(2L));
 
-        testSearch(query, tokenizedQuery, searchables, start, subject, resourceType, educationalContext, licenseType);
+        testSearch(query, tokenizedQuery, searchables, start, subject, resourceType, educationalContext, licenseType,
+                title);
     }
 
     @Test
@@ -381,6 +402,7 @@ public class SearchServiceTest {
         String resourceType = "TEXTBOOK";
         String educationalContext = "PRESCHOOL";
         String licenseType = null;
+        String title = null;
         String tokenizedQuery = "(pythagoras*) AND subject:\"mathematics\" AND resource_type:\"textbook\" AND educational_context:\"preschool\"";
         long start = 0;
 
@@ -389,7 +411,8 @@ public class SearchServiceTest {
         searchables.add(createMaterial(2L));
         searchables.add(createPortfolio(2L));
 
-        testSearch(query, tokenizedQuery, searchables, start, subject, resourceType, educationalContext, licenseType);
+        testSearch(query, tokenizedQuery, searchables, start, subject, resourceType, educationalContext, licenseType,
+                title);
     }
 
     // Tests with License Type
@@ -401,6 +424,7 @@ public class SearchServiceTest {
         String resourceType = null;
         String educationalContext = null;
         String licenseType = "CCBY";
+        String title = null;
         String tokenizedQuery = "(airplane*) AND license_type:\"ccby\"";
         long start = 0;
 
@@ -409,7 +433,8 @@ public class SearchServiceTest {
         searchables.add(createMaterial(2L));
         searchables.add(createPortfolio(2L));
 
-        testSearch(query, tokenizedQuery, searchables, start, subject, resourceType, educationalContext, licenseType);
+        testSearch(query, tokenizedQuery, searchables, start, subject, resourceType, educationalContext, licenseType,
+                title);
     }
 
     @Test
@@ -419,6 +444,7 @@ public class SearchServiceTest {
         String resourceType = null;
         String educationalContext = null;
         String licenseType = "CCSA";
+        String title = null;
         String tokenizedQuery = "(airplane*) AND subject:\"mathematics\" AND license_type:\"ccsa\"";
         long start = 0;
 
@@ -427,7 +453,8 @@ public class SearchServiceTest {
         searchables.add(createMaterial(2L));
         searchables.add(createPortfolio(2L));
 
-        testSearch(query, tokenizedQuery, searchables, start, subject, resourceType, educationalContext, licenseType);
+        testSearch(query, tokenizedQuery, searchables, start, subject, resourceType, educationalContext, licenseType,
+                title);
     }
 
     @Test
@@ -437,6 +464,7 @@ public class SearchServiceTest {
         String resourceType = "TEXTBOOK";
         String educationalContext = null;
         String licenseType = "CCBYSA";
+        String title = null;
         String tokenizedQuery = "(pythagoras*) AND resource_type:\"textbook\" AND license_type:\"ccbysa\"";
         long start = 0;
 
@@ -445,7 +473,8 @@ public class SearchServiceTest {
         searchables.add(createMaterial(2L));
         searchables.add(createPortfolio(2L));
 
-        testSearch(query, tokenizedQuery, searchables, start, subject, resourceType, educationalContext, licenseType);
+        testSearch(query, tokenizedQuery, searchables, start, subject, resourceType, educationalContext, licenseType,
+                title);
     }
 
     @Test
@@ -455,6 +484,7 @@ public class SearchServiceTest {
         String resourceType = null;
         String educationalContext = "PRESCHOOL";
         String licenseType = "CCBYNC";
+        String title = null;
         String tokenizedQuery = "(pythagoras*) AND educational_context:\"preschool\" AND license_type:\"ccbync\"";
         long start = 0;
 
@@ -463,7 +493,8 @@ public class SearchServiceTest {
         searchables.add(createMaterial(2L));
         searchables.add(createPortfolio(2L));
 
-        testSearch(query, tokenizedQuery, searchables, start, subject, resourceType, educationalContext, licenseType);
+        testSearch(query, tokenizedQuery, searchables, start, subject, resourceType, educationalContext, licenseType,
+                title);
     }
 
     @Test
@@ -473,6 +504,7 @@ public class SearchServiceTest {
         String resourceType = "TEXTBOOK";
         String educationalContext = null;
         String licenseType = "CC";
+        String title = null;
         String tokenizedQuery = "(pythagoras*) AND subject:\"mathematics\" AND resource_type:\"textbook\" AND license_type:\"cc\"";
         long start = 0;
 
@@ -481,7 +513,8 @@ public class SearchServiceTest {
         searchables.add(createMaterial(2L));
         searchables.add(createPortfolio(2L));
 
-        testSearch(query, tokenizedQuery, searchables, start, subject, resourceType, educationalContext, licenseType);
+        testSearch(query, tokenizedQuery, searchables, start, subject, resourceType, educationalContext, licenseType,
+                title);
     }
 
     @Test
@@ -491,7 +524,9 @@ public class SearchServiceTest {
         String resourceType = null;
         String educationalContext = "PRESCHOOL";
         String licenseType = "CCBY";
-        String tokenizedQuery = "(pythagoras*) AND subject:\"mathematics\" AND educational_context:\"preschool\" AND license_type:\"ccby\"";
+        String title = null;
+        String tokenizedQuery = "(pythagoras*) AND subject:\"mathematics\" AND educational_context:\"preschool\" "
+                + "AND license_type:\"ccby\"";
         long start = 0;
 
         List<Searchable> searchables = new ArrayList<>();
@@ -499,7 +534,8 @@ public class SearchServiceTest {
         searchables.add(createMaterial(2L));
         searchables.add(createPortfolio(2L));
 
-        testSearch(query, tokenizedQuery, searchables, start, subject, resourceType, educationalContext, licenseType);
+        testSearch(query, tokenizedQuery, searchables, start, subject, resourceType, educationalContext, licenseType,
+                title);
     }
 
     @Test
@@ -509,7 +545,9 @@ public class SearchServiceTest {
         String resourceType = "TEXTBOOK";
         String educationalContext = "PRESCHOOL";
         String licenseType = "CCBYNCND";
-        String tokenizedQuery = "(pythagoras*) AND resource_type:\"textbook\" AND educational_context:\"preschool\" AND license_type:\"ccbyncnd\"";
+        String title = null;
+        String tokenizedQuery = "(pythagoras*) AND resource_type:\"textbook\" AND educational_context:\"preschool\" "
+                + "AND license_type:\"ccbyncnd\"";
         long start = 0;
 
         List<Searchable> searchables = new ArrayList<>();
@@ -517,7 +555,8 @@ public class SearchServiceTest {
         searchables.add(createMaterial(2L));
         searchables.add(createPortfolio(2L));
 
-        testSearch(query, tokenizedQuery, searchables, start, subject, resourceType, educationalContext, licenseType);
+        testSearch(query, tokenizedQuery, searchables, start, subject, resourceType, educationalContext, licenseType,
+                title);
     }
 
     @Test
@@ -527,7 +566,9 @@ public class SearchServiceTest {
         String resourceType = "TEXTBOOK";
         String educationalContext = "PRESCHOOL";
         String licenseType = "CC";
-        String tokenizedQuery = "(pythagoras*) AND subject:\"mathematics\" AND resource_type:\"textbook\" AND educational_context:\"preschool\" AND license_type:\"cc\"";
+        String title = "something";
+        String tokenizedQuery = "(pythagoras*) AND subject:\"mathematics\" AND resource_type:\"textbook\" "
+                + "AND educational_context:\"preschool\" AND license_type:\"cc\" AND title:\"something\"";
         long start = 0;
 
         List<Searchable> searchables = new ArrayList<>();
@@ -535,7 +576,69 @@ public class SearchServiceTest {
         searchables.add(createMaterial(2L));
         searchables.add(createPortfolio(2L));
 
-        testSearch(query, tokenizedQuery, searchables, start, subject, resourceType, educationalContext, licenseType);
+        testSearch(query, tokenizedQuery, searchables, start, subject, resourceType, educationalContext, licenseType,
+                title);
+    }
+
+    // Tests with title (only some combinations are covered)
+    @Test
+    public void searchWithTitleFilter() {
+        String query = "test";
+        String subject = null;
+        String resourceType = null;
+        String educationalContext = null;
+        String licenseType = null;
+        String title = "Good title";
+        String tokenizedQuery = "(test*) AND title:\"good\\ title\"";
+        long start = 0;
+
+        List<Searchable> searchables = new ArrayList<>();
+        searchables.add(createMaterial(9L));
+        searchables.add(createMaterial(2L));
+        searchables.add(createPortfolio(2L));
+
+        testSearch(query, tokenizedQuery, searchables, start, subject, resourceType, educationalContext, licenseType,
+                title);
+    }
+
+    @Test
+    public void searchWithTitleAndEducationalContextFilter() {
+        String query = "test";
+        String subject = null;
+        String resourceType = null;
+        String educationalContext = "VOCATIONALEDUCATION";
+        String licenseType = null;
+        String title = "Good title";
+        String tokenizedQuery = "(test*) AND educational_context:\"vocationaleducation\" AND title:\"good\\ title\"";
+        long start = 0;
+
+        List<Searchable> searchables = new ArrayList<>();
+        searchables.add(createMaterial(9L));
+        searchables.add(createMaterial(2L));
+        searchables.add(createPortfolio(2L));
+
+        testSearch(query, tokenizedQuery, searchables, start, subject, resourceType, educationalContext, licenseType,
+                title);
+    }
+
+    @Test
+    public void searchWithTitleAndSubjectAndResourceTypeFilter() {
+        String query = "search";
+        String subject = "geography";
+        String resourceType = "Presentation";
+        String educationalContext = null;
+        String licenseType = null;
+        String title = "verylongtitlehere";
+        String tokenizedQuery = "(search*) AND subject:\"geography\" AND resource_type:\"presentation\" AND title:\"verylongtitlehere\"";
+        long start = 0;
+
+        List<Searchable> searchables = new ArrayList<>();
+        searchables.add(createMaterial(9L));
+        searchables.add(createMaterial(2L));
+        searchables.add(createPortfolio(2L));
+
+        testSearch(query, tokenizedQuery, searchables, start, subject, resourceType, educationalContext, licenseType,
+                title);
     }
 
     @Test
@@ -546,6 +649,7 @@ public class SearchServiceTest {
         String resourceType = null;
         String educationalContext = null;
         String licenseType = null;
+        String title = null;
         long start = 50;
 
         List<Searchable> searchables = new ArrayList<>();
@@ -553,7 +657,8 @@ public class SearchServiceTest {
         searchables.add(createMaterial(2L));
         searchables.add(createPortfolio(2L));
 
-        testSearch(query, tokenizedQuery, searchables, start, subject, resourceType, educationalContext, licenseType);
+        testSearch(query, tokenizedQuery, searchables, start, subject, resourceType, educationalContext, licenseType,
+                title);
     }
 
     @Test
@@ -564,6 +669,7 @@ public class SearchServiceTest {
         String resourceType = null;
         String educationalContext = null;
         String licenseType = null;
+        String title = null;
         long start = 0;
         long totalResults = 1450;
 
@@ -573,7 +679,7 @@ public class SearchServiceTest {
         searchables.add(createPortfolio(2L));
 
         testSearch(query, tokenizedQuery, searchables, start, totalResults, subject, resourceType, educationalContext,
-                licenseType);
+                licenseType, title);
     }
 
     @Test
@@ -584,13 +690,15 @@ public class SearchServiceTest {
         String resourceType = null;
         String educationalContext = null;
         String licenseType = null;
+        String title = null;
         long start = 0;
 
         List<Searchable> searchables = new ArrayList<>();
         searchables.add(createMaterial(9L));
         searchables.add(createMaterial(2L));
 
-        testSearch(query, tokenizedQuery, searchables, start, subject, resourceType, educationalContext, licenseType);
+        testSearch(query, tokenizedQuery, searchables, start, subject, resourceType, educationalContext, licenseType,
+                title);
     }
 
     @Test
@@ -601,13 +709,15 @@ public class SearchServiceTest {
         String resourceType = null;
         String educationalContext = null;
         String licenseType = null;
+        String title = null;
         long start = 0;
 
         List<Searchable> searchables = new ArrayList<>();
         searchables.add(createPortfolio(9L));
         searchables.add(createPortfolio(2L));
 
-        testSearch(query, tokenizedQuery, searchables, start, subject, resourceType, educationalContext, licenseType);
+        testSearch(query, tokenizedQuery, searchables, start, subject, resourceType, educationalContext, licenseType,
+                title);
     }
 
     @Test
@@ -618,17 +728,20 @@ public class SearchServiceTest {
         String resourceType = null;
         String educationalContext = null;
         String licenseType = null;
+        String title = null;
         long start = 0;
 
         List<Searchable> searchables = new ArrayList<>();
         searchables.add(createPortfolio(9L));
         searchables.add(createMaterial(9L));
 
-        testSearch(query, tokenizedQuery, searchables, start, subject, resourceType, educationalContext, licenseType);
+        testSearch(query, tokenizedQuery, searchables, start, subject, resourceType, educationalContext, licenseType,
+                title);
     }
 
     private void testSearch(String query, String tokenizedQuery, List<Searchable> searchables, long start,
-            long totalResults, String subject, String resourceType, String educationalContext, String licenseType) {
+            long totalResults, String subject, String resourceType, String educationalContext, String licenseType,
+            String title) {
         SearchResponse searchResponse = createSearchResponseWithDocuments(searchables, start, totalResults);
         List<Material> materials = collectMaterialsFrom(searchables);
         List<Long> materialIdentifiers = getIdentifiers(materials);
@@ -647,8 +760,8 @@ public class SearchServiceTest {
 
         replayAll();
 
-        SearchResult result = searchService.search(query, start, subject, resourceType, educationalContext,
-                licenseType);
+        SearchResult result = searchService.search(query, start, subject, resourceType, educationalContext, licenseType,
+                title);
 
         verifyAll();
 
@@ -658,9 +771,9 @@ public class SearchServiceTest {
     }
 
     private void testSearch(String query, String tokenizedQuery, List<Searchable> searchables, long start,
-            String subject, String resourceType, String educationalContext, String licenseType) {
+            String subject, String resourceType, String educationalContext, String licenseType, String title) {
         testSearch(query, tokenizedQuery, searchables, start, searchables.size(), subject, resourceType,
-                educationalContext, licenseType);
+                educationalContext, licenseType, title);
     }
 
     private List<Long> getIdentifiers(List<? extends Searchable> searchables) {

@@ -37,19 +37,20 @@ public class SearchService {
     private PortfolioDAO portfolioDAO;
 
     public SearchResult search(String query, long start) {
-        return search(query, start, null, null, null, null);
+        return search(query, start, null, null, null, null, null);
     }
 
     public SearchResult search(String query, String subject, String resourceType, String educationalContext,
-            String licenseType) {
-        return search(query, 0, subject, resourceType, educationalContext, licenseType);
+            String licenseType, String title) {
+        return search(query, 0, subject, resourceType, educationalContext, licenseType, title);
     }
 
     public SearchResult search(String query, long start, String subject, String resourceType, String educationalContext,
-            String licenseType) {
+            String licenseType, String title) {
         SearchResult searchResult = new SearchResult();
 
-        SearchResponse searchResponse = doSearch(query, start, subject, resourceType, educationalContext, licenseType);
+        SearchResponse searchResponse = doSearch(query, start, subject, resourceType, educationalContext, licenseType,
+                title);
         Response response = searchResponse.getResponse();
 
         if (response != null) {
@@ -95,10 +96,10 @@ public class SearchService {
     }
 
     private SearchResponse doSearch(String query, long start, String subject, String resourceType,
-            String educationalContext, String licenseType) {
+            String educationalContext, String licenseType, String title) {
         String queryString = getTokenizedQueryString(query);
 
-        String filtersAsQuery = getFiltersAsQuery(subject, resourceType, educationalContext, licenseType);
+        String filtersAsQuery = getFiltersAsQuery(subject, resourceType, educationalContext, licenseType, title);
         if (!filtersAsQuery.isEmpty()) {
             if (!queryString.isEmpty()) {
                 queryString = format("(%s) AND %s", queryString, filtersAsQuery);
@@ -146,13 +147,14 @@ public class SearchService {
         return sb.toString();
     }
 
-    private String getFiltersAsQuery(String subject, String resourceType, String educationalContext,
-            String licenseType) {
+    private String getFiltersAsQuery(String subject, String resourceType, String educationalContext, String licenseType,
+            String title) {
         Map<String, String> filters = new LinkedHashMap<>();
         filters.put("subject", subject);
         filters.put("resource_type", resourceType);
         filters.put("educational_context", educationalContext);
         filters.put("license_type", licenseType);
+        filters.put("title", title);
 
         // Convert filters to Solr syntax query
         String filtersAsQuery = "";
