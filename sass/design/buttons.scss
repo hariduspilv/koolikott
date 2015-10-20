@@ -6,8 +6,10 @@
     &.focus,
     &:active,
     &:active:focus,
-    &.active {
-        @include button-variant(#FFF, #003d68, #003d68);
+    &.active,
+    &.active.focus {
+        border: 1px solid $navbar-dark-bg;
+        background: $navbar-dark-bg;
     }
 }
 
