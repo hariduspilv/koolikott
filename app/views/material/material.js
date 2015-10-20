@@ -43,8 +43,7 @@ define(['app'], function(app)
 
             if($scope.material.embeddable && $scope.sourceType === 'LINK') {
                 if (authenticatedUserService.isAuthenticated()) {
-                    var token = authenticatedUserService.getToken();
-                    getSignedUserData(token)
+                    getSignedUserData()
                 } else {
                     $scope.material.iframeSource = $scope.material.source;
                 }
@@ -114,7 +113,7 @@ define(['app'], function(app)
             $scope.sourceType = 'LINK';
         };
 
-        function getSignedUserData(token) {
+        function getSignedUserData() {
             serverCallService.makeGet("rest/user/getSignedUserData", {}, getSignedUserDataSuccess, getSignedUserDataFail); 
         }
 
