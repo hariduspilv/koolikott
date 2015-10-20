@@ -45,8 +45,8 @@ public class SearchService {
         return search(query, 0, subject, resourceType, educationalContext, licenseType, title);
     }
 
-    public SearchResult search(String query, long start, String subject, String resourceType, String educationalContext,
-            String licenseType, String title) {
+    public SearchResult search(String query, long start, String subject, String resourceType,
+            String educationalContext, String licenseType, String title) {
         SearchResult searchResult = new SearchResult();
 
         SearchResponse searchResponse = doSearch(query, start, subject, resourceType, educationalContext, licenseType,
@@ -106,10 +106,10 @@ public class SearchService {
             } else {
                 queryString = filtersAsQuery;
             }
-        } else {
-            if (queryString.isEmpty()) {
-                throw new RuntimeException("No query string and filters present.");
-            }
+        }
+
+        if (queryString.isEmpty()) {
+            throw new RuntimeException("No query string and filters present.");
         }
 
         return searchEngineService.search(queryString, start);
