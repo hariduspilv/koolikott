@@ -44,6 +44,9 @@
             <entity name="EducationalContext" query="select educationalContext as educational_context from EducationalContext where id = '${Portfolio.eC_id}'">
                 <entity name="Translation" query="select translation as educational_context from Translation where translationKey = '${EducationalContext.educational_context}'" />
             </entity>
+            <entity name="Portfolio_Tag" query="select tag as tag_id from Portfolio_Tag where portfolio='${Portfolio.id}'">
+                <entity name="Tag" query="select name as tag from Tag where id = '${Portfolio_Tag.tag_id}'" />
+            </entity>
         </entity>
     </document>
 </dataConfig>

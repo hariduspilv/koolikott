@@ -128,11 +128,11 @@
    <!-- Material & Portfolio -->
    <field name="title" type="text_general" indexed="true" stored="false" multiValued="true"/>
    <field name="educational_context" type="text_general" indexed="true" stored="false" multiValued="true"/>
+   <field name="tag" type="text_general" indexed="true" stored="false" multiValued="true"/>
 
    <!-- Material -->
    <field name="description" type="text_general" indexed="true" stored="false" multiValued="true"/>
    <field name="author" type="text_general" indexed="true" stored="false" multiValued="true"/>
-   <field name="tag" type="text_general" indexed="true" stored="false" multiValued="true"/>
    <field name="subject" type="text_general" indexed="true" stored="false" multiValued="true"/>
    <field name="resource_type" type="text_general" indexed="true" stored="false" multiValued="true"/>
    <field name="license_type" type="text_general" indexed="true" stored="false" multiValued="true"/>
