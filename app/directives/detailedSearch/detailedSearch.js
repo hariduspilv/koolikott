@@ -14,6 +14,7 @@ define(['app'], function(app)
                 function init() {
                     $scope.detailedSearch = {};
                     
+                    // Educational context
                     var validEducationalContexts = ['preschooleducation', 'basiceducation', 'secondaryeducation', 'vocationaleducation'];
                     var defaultEducationalContext = 'preschooleducation';
 
@@ -22,12 +23,17 @@ define(['app'], function(app)
                     } else {
                         $scope.detailedSearch.educationalContext = defaultEducationalContext;
                     }
+
+                    // Title
+                    if (searchService.getTitle()) {
+                        $scope.detailedSearch.title = searchService.getTitle();
+                    }
                 }
 
                 $scope.search = function() {
                     searchService.setSearch($scope.detailedSearch.main);
                     searchService.setTitle($scope.detailedSearch.title);
-                    
+
                     searchService.setEducationalContext($scope.detailedSearch.educationalContext);
                     $location.url(searchService.getURL());
                 };

@@ -82,7 +82,7 @@ define(['app'], function(app) {
                     searchURL += licenseTypeURL + searchLicenseType;
                 }
                 if (searchTitle) {
-                    searchURL += titleURL + searchTitle;
+                    searchURL += titleURL + escapeQuery(searchTitle);
                 }
 
                 return searchURL;
@@ -156,7 +156,7 @@ define(['app'], function(app) {
                 if (searchTitle === "") {
                     var searchObject = $location.search();
                     if (searchObject.title) {
-                        return searchObject.title;
+                        return unescapeQuery(searchObject.title);
                     }
                 }
 
@@ -182,19 +182,19 @@ define(['app'], function(app) {
             buildURL : function(query, page, subject, resourceType, educationalContext, licenseType, title) {
                 var searchURL = "#/" + searchURLbase + encodeURI(escapeQuery(query)) + "&page=" + page;
                 if (subject) {
-                    searchURL += subjectURL + subject;
+                    searchURL += subjectURL + subject.toLowerCase();
                 }
                 if (resourceType) {
-                    searchURL += resourceTypeURL + resourceType;
+                    searchURL += resourceTypeURL + resourceType.toLowerCase();
                 }
                 if (educationalContext) {
-                    searchURL += educationalContextURL + educationalContext;
+                    searchURL += educationalContextURL + educationalContext.toLowerCase();
                 }
                 if (licenseType) {
-                    searchURL += licenseTypeURL + licenseType;
+                    searchURL += licenseTypeURL + licenseType.toLowerCase();
                 }
                 if (title) {
-                    searchURL += titleURL + title;
+                    searchURL += titleURL + encodeURI(escapeQuery(title));
                 }
                 return searchURL;
             }, 
