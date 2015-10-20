@@ -23,7 +23,8 @@ public class SearchResource {
             @QueryParam("subject") @DefaultValue(value = "") String subject,
             @QueryParam("resource_type") @DefaultValue(value = "") String resourceType,
             @QueryParam("educational_context") @DefaultValue(value = "") String educationalContext,
-            @QueryParam("license_type") @DefaultValue(value = "") String licenseType) {
+            @QueryParam("license_type") @DefaultValue(value = "") String licenseType,
+            @QueryParam("title") @DefaultValue(value = "") String title) {
         if (subject.isEmpty()) {
             subject = null;
         }
@@ -40,10 +41,14 @@ public class SearchResource {
             licenseType = null;
         }
 
+        if (title.isEmpty()) {
+            title = null;
+        }
+
         if (start == null) {
-            return searchService.search(query, subject, resourceType, educationalContext, licenseType);
+            return searchService.search(query, subject, resourceType, educationalContext, licenseType, title);
         } else {
-            return searchService.search(query, start, subject, resourceType, educationalContext, licenseType);
+            return searchService.search(query, start, subject, resourceType, educationalContext, licenseType, title);
         }
     }
 
