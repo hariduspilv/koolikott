@@ -35,6 +35,7 @@ define(['app'], function(app)
             // Expose searchService methods required for the view
             $scope.buildURL = searchService.buildURL;  
             $scope.getTitle = searchService.getTitle;
+            $scope.getAuthor = searchService.getAuthor;
         }
 
         function validatePageNumber() {
@@ -78,6 +79,10 @@ define(['app'], function(app)
 
             if (searchService.getTitle()) {
                 params.title = searchService.getTitle();
+            }
+
+            if (searchService.getAuthor()) {
+                params.author = searchService.getAuthor();
             }
             
             serverCallService.makeGet("rest/search", params, searchSuccess, searchFail);

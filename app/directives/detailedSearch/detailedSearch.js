@@ -28,11 +28,17 @@ define(['app'], function(app)
                     if (searchService.getTitle()) {
                         $scope.detailedSearch.title = searchService.getTitle();
                     }
+
+                    // Author
+                    if (searchService.getAuthor()) {
+                        $scope.detailedSearch.author = searchService.getAuthor();
+                    }
                 }
 
                 $scope.search = function() {
                     searchService.setSearch($scope.detailedSearch.main);
                     searchService.setTitle($scope.detailedSearch.title);
+                    searchService.setAuthor($scope.detailedSearch.author);
 
                     searchService.setEducationalContext($scope.detailedSearch.educationalContext);
                     $location.url(searchService.getURL());
