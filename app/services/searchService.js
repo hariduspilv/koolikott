@@ -8,6 +8,7 @@ define(['app'], function(app) {
         var licenseTypeURL = "&license_type=";
         var titleURL = "&title=";
         var authorURL = "&author="
+        var combinedDescriptionURL = "&combined_description=";
 
         var searchQuery = "";
         var searchSubject = "";
@@ -16,6 +17,7 @@ define(['app'], function(app) {
         var searchLicenseType = "";
         var searchTitle = "";
         var searchAuthor = "";
+        var searchCombinedDescription = "";
 
         function escapeQuery(query) {
             //replace backslashes
@@ -67,6 +69,10 @@ define(['app'], function(app) {
                 searchAuthor = author;
             },
 
+            setCombinedDescription : function(combinedDescription) {
+                searchCombinedDescription = combinedDescription;
+            },
+
             getURL : function() {
                 var searchURL;
                 if (searchQuery) {
@@ -93,13 +99,17 @@ define(['app'], function(app) {
                 if (searchAuthor) {
                     searchURL += authorURL + escapeQuery(searchAuthor);
                 }
+                if (searchCombinedDescription) {
+                    searchURL += combinedDescriptionURL + escapeQuery(searchCombinedDescription);
+                }
 
                 return searchURL;
             },
 
             queryExists : function() {
                 var searchObject = $location.search();
-                if (searchObject.q || searchObject.subject || searchObject.resource_type || searchObject.educational_context || searchObject.license_type || searchObject.title || searchObject.author) {
+                if (searchObject.q || searchObject.subject || searchObject.resource_type || searchObject.educational_context || 
+                    searchObject.license_type || searchObject.title || searchObject.author || searchObject.combinedDescription) {
                     return true;
                 } else {
                     return false;
@@ -183,6 +193,17 @@ define(['app'], function(app) {
                 return searchAuthor;
             },
 
+            getCombinedDescription : function() {
+                if (searchCombinedDescription === "") {
+                    var searchObject = $location.search();
+                    if (searchObject.combined_description) {
+                        return unescapeQuery(searchObject.combined_description);
+                    }
+                }
+
+                return searchCombinedDescription;
+            },
+
             getPage : function() {
                 var searchObject = $location.search();
                 if (searchObject.page) {
@@ -199,7 +220,7 @@ define(['app'], function(app) {
                 return 1;
             }, 
 
-            buildURL : function(query, page, subject, resourceType, educationalContext, licenseType, title, author) {
+            buildURL : function(query, page, subject, resourceType, educationalContext, licenseType, title, author, combinedDescription) {
                 var searchURL = "#/" + searchURLbase + encodeURI(escapeQuery(query)) + "&page=" + page;
                 if (subject) {
                     searchURL += subjectURL + subject.toLowerCase();
@@ -218,6 +239,9 @@ define(['app'], function(app) {
                 }
                 if (author) {
                     searchURL += authorURL + encodeURI(escapeQuery(author));
+                }
+                if (combinedDescription) {
+                    searchURL += authorURL + encodeURI(escapeQuery(combinedDescription));
                 }
                 return searchURL;
             }, 
@@ -246,6 +270,9 @@ define(['app'], function(app) {
                 if (this.getAuthor()) {
                     params.author = this.getAuthor();
                 }
+                if (this.getCombinedDescription()) {
+                    params.combined_description = this.getCombinedDescription();
+                }
                 
                 $location.url("search/result").search(params);
             },
@@ -253,6 +280,7 @@ define(['app'], function(app) {
             clearFieldsNotInSimpleSearch : function() {
                 searchTitle = '';
                 searchAuthor = '';
+                searchCombinedDescription = '';
             }
         };
     }]);

@@ -31,11 +31,6 @@ define(['app'], function(app)
             // Get search query and current page
             $scope.searchQuery = searchService.getQuery();
             $scope.paging.thisPage = searchService.getPage();
-
-            // Expose searchService methods required for the view
-            $scope.buildURL = searchService.buildURL;  
-            $scope.getTitle = searchService.getTitle;
-            $scope.getAuthor = searchService.getAuthor;
         }
 
         function validatePageNumber() {
@@ -83,6 +78,10 @@ define(['app'], function(app)
 
             if (searchService.getAuthor()) {
                 params.author = searchService.getAuthor();
+            }
+
+            if (searchService.getCombinedDescription()) {
+                params.combined_description = searchService.getCombinedDescription();
             }
             
             serverCallService.makeGet("rest/search", params, searchSuccess, searchFail);
@@ -293,6 +292,17 @@ define(['app'], function(app)
            $scope.filters.licenseType = null;
            searchService.setLicenseType('');
         }
+
+        $scope.buildPageURL = function(page) {
+            var subject = $scope.filters.subject ? $scope.filters.subject.name : null;
+            var resourceType = $scope.filters.resourceType ? $scope.filters.resourceType.name : null;
+            var educationalContext = $scope.filters.educationalContext ? $scope.filters.educationalContext.name : null;
+            var licenseType = $scope.filters.licenseType ? $scope.filters.licenseType.name : null;
+
+            return searchService.buildURL($scope.searchQuery, page, subject, resourceType, educationalContext, licenseType, 
+                searchService.getTitle(), searchService.getAuthor(), searchService.getCombinedDescription());
+        }
+
 
     }]);
 

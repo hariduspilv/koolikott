@@ -55,19 +55,19 @@
                                     </span>
                                 </li>
                                 <li data-ng-if="paging.before.length > 0">
-                                    <a href="{{buildURL(searchQuery, paging.thisPage - 1, filters.subject.name, filters.resourceType.name, filters.educationalContext.name, filters.licenseType.name, getTitle(), getAuthor())}}" aria-label="{{'SEARCH_RESULT_PREVIOUS' | translate}}" class="btn btn-default">
+                                    <a href="{{buildPageURL(paging.thisPage - 1)}}" aria-label="{{'SEARCH_RESULT_PREVIOUS' | translate}}" class="btn btn-default">
                                         <span aria-hidden="true"><span data-translate="SEARCH_RESULT_PREVIOUS"></span></span>
                                     </a>
                                 </li>
 
                                 <li data-ng-repeat="page in paging.before">
-                                    <a href="{{buildURL(searchQuery, page, filters.subject.name, filters.resourceType.name, filters.educationalContext.name, filters.licenseType.name, getTitle(), getAuthor())}}" data-ng-bind="page"></a>
+                                    <a href="{{buildPageURL(page)}}" data-ng-bind="page"></a>
                                 </li>
 
                                 <li class="active"><span data-ng-bind="paging.thisPage"></span></li>
 
                                 <li data-ng-repeat="page in paging.after">
-                                    <a href="{{buildURL(searchQuery, page, filters.subject.name, filters.resourceType.name, filters.educationalContext.name, filters.licenseType.name, getTitle(), getAuthor())}}" data-ng-bind="page"></a>
+                                    <a href="{{buildPageURL(page)}}" data-ng-bind="page"></a>
                                 </li>
 
                                 <li data-ng-if="paging.after.length === 0" class="disabled">
@@ -76,7 +76,7 @@
                                     </span>
                                 </li>
                                 <li data-ng-if="paging.after.length > 0">
-                                    <a href="{{buildURL(searchQuery, paging.thisPage + 1, filters.subject.name, filters.resourceType.name, filters.educationalContext.name, filters.licenseType.name, getTitle(), getAuthor())}}" aria-label="{{'SEARCH_RESULT_NEXT' | translate}}" class="btn btn-default">
+                                    <a href="{{buildPageURL(paging.thisPage + 1)}}" aria-label="{{'SEARCH_RESULT_NEXT' | translate}}" class="btn btn-default">
                                         <span aria-hidden="true"><span data-translate="SEARCH_RESULT_NEXT"></span></span>
                                     </a>
                                 </li>
