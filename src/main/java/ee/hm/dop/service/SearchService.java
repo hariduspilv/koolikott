@@ -14,6 +14,7 @@ import org.apache.solr.client.solrj.util.ClientUtils;
 
 import ee.hm.dop.dao.MaterialDAO;
 import ee.hm.dop.dao.PortfolioDAO;
+import ee.hm.dop.model.SearchFilter;
 import ee.hm.dop.model.SearchResult;
 import ee.hm.dop.model.Searchable;
 import ee.hm.dop.model.solr.Document;
@@ -37,20 +38,17 @@ public class SearchService {
     private PortfolioDAO portfolioDAO;
 
     public SearchResult search(String query, long start) {
-        return search(query, start, null, null, null, null, null);
+        return search(query, start, new SearchFilter());
     }
 
-    public SearchResult search(String query, String subject, String resourceType, String educationalContext,
-            String licenseType, String title) {
-        return search(query, 0, subject, resourceType, educationalContext, licenseType, title);
+    public SearchResult search(String query, SearchFilter searchFilter) {
+        return search(query, 0, searchFilter);
     }
 
-    public SearchResult search(String query, long start, String subject, String resourceType,
-            String educationalContext, String licenseType, String title) {
+    public SearchResult search(String query, long start, SearchFilter searchFilter) {
         SearchResult searchResult = new SearchResult();
 
-        SearchResponse searchResponse = doSearch(query, start, subject, resourceType, educationalContext, licenseType,
-                title);
+        SearchResponse searchResponse = doSearch(query, start, searchFilter);
         Response response = searchResponse.getResponse();
 
         if (response != null) {
@@ -95,11 +93,10 @@ public class SearchService {
         return unsortedSearchable;
     }
 
-    private SearchResponse doSearch(String query, long start, String subject, String resourceType,
-            String educationalContext, String licenseType, String title) {
+    private SearchResponse doSearch(String query, long start, SearchFilter searchFilter) {
         String queryString = getTokenizedQueryString(query);
 
-        String filtersAsQuery = getFiltersAsQuery(subject, resourceType, educationalContext, licenseType, title);
+        String filtersAsQuery = getFiltersAsQuery(searchFilter);
         if (!filtersAsQuery.isEmpty()) {
             if (!queryString.isEmpty()) {
                 queryString = format("(%s) AND %s", queryString, filtersAsQuery);
@@ -147,14 +144,13 @@ public class SearchService {
         return sb.toString();
     }
 
-    private String getFiltersAsQuery(String subject, String resourceType, String educationalContext, String licenseType,
-            String title) {
+    private String getFiltersAsQuery(SearchFilter searchFilter) {
         Map<String, String> filters = new LinkedHashMap<>();
-        filters.put("subject", subject);
-        filters.put("resource_type", resourceType);
-        filters.put("educational_context", educationalContext);
-        filters.put("license_type", licenseType);
-        filters.put("title", title);
+        filters.put("subject", searchFilter.getSubject());
+        filters.put("resource_type", searchFilter.getResourceType());
+        filters.put("educational_context", searchFilter.getEducationalContext());
+        filters.put("license_type", searchFilter.getLicenseType());
+        filters.put("title", searchFilter.getTitle());
 
         // Convert filters to Solr syntax query
         String filtersAsQuery = "";
