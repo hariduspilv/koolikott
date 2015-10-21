@@ -152,6 +152,7 @@ public class SearchService {
         filters.put("license_type", searchFilter.getLicenseType());
         filters.put("title", searchFilter.getTitle());
         filters.put("author", searchFilter.getAuthor());
+        filters.put("combined_description", searchFilter.getCombinedDescription());
 
         // Convert filters to Solr syntax query
         String filtersAsQuery = "";
@@ -161,7 +162,12 @@ public class SearchService {
                 if (!filtersAsQuery.isEmpty()) {
                     filtersAsQuery += " AND ";
                 }
-                filtersAsQuery += filter.getKey() + ":\"" + value + "\"";
+
+                if (filter.getKey().equals("combined_description")) {
+                    filtersAsQuery += format("(description:\"%s\" OR summary:\"%s\")", value, value);
+                } else {
+                    filtersAsQuery += format("%s:\"%s\"", filter.getKey(), value);
+                }
             }
         }
         return filtersAsQuery;

@@ -14,6 +14,8 @@ public class SearchFilter {
 
     private String author;
 
+    private String combinedDescription;
+
     public String getSubject() {
         return subject;
     }
@@ -60,6 +62,14 @@ public class SearchFilter {
 
     public void setAuthor(String author) {
         this.author = author;
+    }
+
+    public String getCombinedDescription() {
+        return combinedDescription;
+    }
+
+    public void setCombinedDescription(String description) {
+        this.combinedDescription = description;
     }
 
 }

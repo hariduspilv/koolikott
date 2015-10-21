@@ -67,6 +67,10 @@ class SearchEngineServiceMock implements SearchEngineService {
         addQueryWithAuthorFilter();
         addQueryWithesourceTypeAndAuthorFilter();
         addQueryWithEducationalContextAndTitleAndAuthorFilter();
+
+        addQueryWithCombinedDescriptionFilter();
+        addQueryWithLicenseTypeAndCombinedDescriptionFilter();
+        addQueryWithEducationalContextAndAuthorAndCombinedDescriptionFilter();
     }
 
     private static void addArabicQuery() {
@@ -225,6 +229,28 @@ class SearchEngineServiceMock implements SearchEngineService {
         String filteredQuery = "(other* books*) AND educational_context:\"teachereducation\""
                 + " AND title:\"cool\\ title\" AND author:\"mary\"";
         List<Document> filteredSearchResult = createDocumentsWithIdentifiers(4L, 3L);
+        searchResponses.put(filteredQuery, filteredSearchResult);
+    }
+
+    // Queries with combined description
+
+    private static void addQueryWithCombinedDescriptionFilter() {
+        String filteredQuery = "(material*) AND (description:\"the\\ description.\" OR summary:\"the\\ description.\")";
+        List<Document> filteredSearchResult = createDocumentsWithIdentifiers(5L, 1L);
+        searchResponses.put(filteredQuery, filteredSearchResult);
+    }
+
+    private static void addQueryWithLicenseTypeAndCombinedDescriptionFilter() {
+        String filteredQuery = "(material*) AND license_type:\"ccbyncnd\""
+                + " AND (description:\"another\\ description.\" OR summary:\"another\\ description.\")";
+        List<Document> filteredSearchResult = createDocumentsWithIdentifiers(5L, 2L);
+        searchResponses.put(filteredQuery, filteredSearchResult);
+    }
+
+    private static void addQueryWithEducationalContextAndAuthorAndCombinedDescriptionFilter() {
+        String filteredQuery = "(material*) AND educational_context:\"highereducation\" AND author:\"mary\""
+                + " AND (description:\"more\\ descriptions.\" OR summary:\"more\\ descriptions.\")";
+        List<Document> filteredSearchResult = createDocumentsWithIdentifiers(5L, 3L);
         searchResponses.put(filteredQuery, filteredSearchResult);
     }
 
