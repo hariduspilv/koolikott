@@ -47,7 +47,7 @@
             <entity name="Portfolio_Tag" query="select tag as tag_id from Portfolio_Tag where portfolio='${Portfolio.id}'">
                 <entity name="Tag" query="select name as tag from Tag where id = '${Portfolio_Tag.tag_id}'" />
             </entity>
-            <entity name="Chapter" query="select title as chapterTitle from Chapter where portfolio = '${Portfolio.id}' or parentChapter in (select id from Chapter where portfolio = '${Portfolio.id}')">
+            <entity name="Chapter" query="select title as chapterTitle, textValue as chapterText from Chapter where portfolio = '${Portfolio.id}' or parentChapter in (select id from Chapter where portfolio = '${Portfolio.id}')">
             </entity>
         </entity>
     </document>
