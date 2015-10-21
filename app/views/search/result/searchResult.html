@@ -39,9 +39,11 @@
                         </h1>
                     </div>
 
-                    <div data-ng-repeat="item in items" class="col-md-3 col-sm-4 col-xs-12 col-ms-6">
-                        <div data-ng-if="item.type === '.Material'" data-dop-material-box material="item"></div>
-                        <div data-ng-if="item.type === '.Portfolio'" data-dop-portfolio-box portfolio="item"></div>
+                    <div id="results">
+                        <div data-ng-repeat="item in items" class="col-md-3 col-sm-4 col-xs-12 col-ms-6">
+                            <div data-ng-if="item.type === '.Material'" data-dop-material-box material="item"></div>
+                            <div data-ng-if="item.type === '.Portfolio'" data-dop-portfolio-box portfolio="item"></div>
+                        </div>
                     </div>
                 </div>
 
