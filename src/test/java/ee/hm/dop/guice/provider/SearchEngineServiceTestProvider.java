@@ -63,6 +63,10 @@ class SearchEngineServiceMock implements SearchEngineService {
         addQueryWithTitleFilter();
         addQueryWithTitleAndSubjectFilter();
         addQueryWithTitleAndLicenseTypeAndResourceTypeFilter();
+
+        addQueryWithAuthorFilter();
+        addQueryWithesourceTypeAndAuthorFilter();
+        addQueryWithEducationalContextAndTitleAndAuthorFilter();
     }
 
     private static void addArabicQuery() {
@@ -178,7 +182,7 @@ class SearchEngineServiceMock implements SearchEngineService {
 
     private static void addQueryWithAllFilters() {
         String filteredQuery = "(john*) AND subject:\"mathematics\" AND resource_type:\"audio\" AND educational_context:\"preschool\""
-                + " AND license_type:\"other\" AND title:\"smith\"";
+                + " AND license_type:\"other\" AND title:\"smith\" AND author:\"mary\"";
         List<Document> filteredSearchResult = createDocumentsWithIdentifiers(2L, 8L);
         searchResponses.put(filteredQuery, filteredSearchResult);
     }
@@ -200,6 +204,27 @@ class SearchEngineServiceMock implements SearchEngineService {
     private static void addQueryWithTitleAndLicenseTypeAndResourceTypeFilter() {
         String filteredQuery = "(web) AND resource_type:\"video\" AND license_type:\"other\" AND title:\"www\"";
         List<Document> filteredSearchResult = createDocumentsWithIdentifiers(3L, 4L);
+        searchResponses.put(filteredQuery, filteredSearchResult);
+    }
+
+    // Queries with author
+
+    private static void addQueryWithAuthorFilter() {
+        String filteredQuery = "(books*) AND author:\"mary\"";
+        List<Document> filteredSearchResult = createDocumentsWithIdentifiers(4L, 1L);
+        searchResponses.put(filteredQuery, filteredSearchResult);
+    }
+
+    private static void addQueryWithesourceTypeAndAuthorFilter() {
+        String filteredQuery = "(books*) AND resource_type:\"unknown\" AND author:\"mary\"";
+        List<Document> filteredSearchResult = createDocumentsWithIdentifiers(4L, 2L);
+        searchResponses.put(filteredQuery, filteredSearchResult);
+    }
+
+    private static void addQueryWithEducationalContextAndTitleAndAuthorFilter() {
+        String filteredQuery = "(other* books*) AND educational_context:\"teachereducation\""
+                + " AND title:\"cool\\ title\" AND author:\"mary\"";
+        List<Document> filteredSearchResult = createDocumentsWithIdentifiers(4L, 3L);
         searchResponses.put(filteredQuery, filteredSearchResult);
     }
 

@@ -455,8 +455,10 @@ public class SearchServiceTest {
         searchFilter.setEducationalContext("PRESCHOOL");
         searchFilter.setLicenseType("CC");
         searchFilter.setTitle("something");
-        String tokenizedQuery = "(pythagoras*) AND subject:\"mathematics\" AND resource_type:\"textbook\" "
-                + "AND educational_context:\"preschool\" AND license_type:\"cc\" AND title:\"something\"";
+        searchFilter.setAuthor("Mary");
+        String tokenizedQuery = "(pythagoras*) AND subject:\"mathematics\" AND resource_type:\"textbook\""
+                + " AND educational_context:\"preschool\" AND license_type:\"cc\" AND title:\"something\""
+                + " AND author:\"mary\"";
         long start = 0;
 
         List<Searchable> searchables = Arrays.asList(createMaterial(9L), createMaterial(2L), createPortfolio(2L));
@@ -500,6 +502,49 @@ public class SearchServiceTest {
         searchFilter.setResourceType("Presentation");
         searchFilter.setTitle("verylongtitlehere");
         String tokenizedQuery = "(search*) AND subject:\"geography\" AND resource_type:\"presentation\" AND title:\"verylongtitlehere\"";
+        long start = 0;
+
+        List<Searchable> searchables = Arrays.asList(createMaterial(9L), createMaterial(2L), createPortfolio(2L));
+
+        testSearch(query, tokenizedQuery, searchables, start, searchFilter);
+    }
+
+    // Tests with author
+    @Test
+    public void searchWithAuthorFilter() {
+        String query = "books";
+        SearchFilter searchFilter = new SearchFilter();
+        searchFilter.setAuthor("John Author");
+        String tokenizedQuery = "(books*) AND author:\"john\\ author\"";
+        long start = 0;
+
+        List<Searchable> searchables = Arrays.asList(createMaterial(9L), createMaterial(2L), createPortfolio(2L));
+
+        testSearch(query, tokenizedQuery, searchables, start, searchFilter);
+    }
+
+    @Test
+    public void searchWithLicenseTypeAndAuthorFilter() {
+        String query = "many books";
+        SearchFilter searchFilter = new SearchFilter();
+        searchFilter.setLicenseType("CC");
+        searchFilter.setAuthor("John Author");
+        String tokenizedQuery = "(many* books*) AND license_type:\"cc\" AND author:\"john\\ author\"";
+        long start = 0;
+
+        List<Searchable> searchables = Arrays.asList(createMaterial(9L), createMaterial(2L), createPortfolio(2L));
+
+        testSearch(query, tokenizedQuery, searchables, start, searchFilter);
+    }
+
+    @Test
+    public void searchWithSubjectAndTitleAndAuthorFilter() {
+        String query = "some books";
+        SearchFilter searchFilter = new SearchFilter();
+        searchFilter.setSubject("Interesting");
+        searchFilter.setTitle("Introduction");
+        searchFilter.setAuthor("John");
+        String tokenizedQuery = "(some* books*) AND subject:\"interesting\" AND title:\"introduction\" AND author:\"john\"";
         long start = 0;
 
         List<Searchable> searchables = Arrays.asList(createMaterial(9L), createMaterial(2L), createPortfolio(2L));
@@ -552,7 +597,6 @@ public class SearchServiceTest {
         long start = 0;
 
         List<Searchable> searchables = Arrays.asList(createPortfolio(9L), createPortfolio(2L));
-        ;
 
         testSearch(query, tokenizedQuery, searchables, start, searchFilter);
     }

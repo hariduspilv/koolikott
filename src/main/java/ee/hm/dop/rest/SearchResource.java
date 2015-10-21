@@ -25,13 +25,15 @@ public class SearchResource {
             @QueryParam("resource_type") @DefaultValue(value = "") String resourceType,
             @QueryParam("educational_context") @DefaultValue(value = "") String educationalContext,
             @QueryParam("license_type") @DefaultValue(value = "") String licenseType,
-            @QueryParam("title") @DefaultValue(value = "") String title) {
+            @QueryParam("title") @DefaultValue(value = "") String title,
+            @QueryParam("author") @DefaultValue(value = "") String author) {
 
         subject = subject.isEmpty() ? null : subject;
         resourceType = resourceType.isEmpty() ? null : resourceType;
         educationalContext = educationalContext.isEmpty() ? null : educationalContext;
         licenseType = licenseType.isEmpty() ? null : licenseType;
         title = title.isEmpty() ? null : title;
+        author = author.isEmpty() ? null : author;
 
         SearchFilter searchFilter = new SearchFilter();
         searchFilter.setSubject(subject);
@@ -39,6 +41,7 @@ public class SearchResource {
         searchFilter.setEducationalContext(educationalContext);
         searchFilter.setLicenseType(licenseType);
         searchFilter.setTitle(title);
+        searchFilter.setAuthor(author);
 
         if (start == null) {
             return searchService.search(query, searchFilter);

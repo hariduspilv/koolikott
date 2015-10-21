@@ -1,9 +1,12 @@
 package ee.hm.dop.rest;
 
+import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.List;
 
 import javax.ws.rs.core.Response;
@@ -275,6 +278,7 @@ public class SearchResourceTest extends ResourceIntegrationTestBase {
         searchFilter.setEducationalContext("Preschool");
         searchFilter.setLicenseType("other");
         searchFilter.setTitle("smith");
+        searchFilter.setAuthor("mary");
         SearchResult searchResult = doGet(buildQueryURL(query, 0, searchFilter), SearchResult.class);
 
         assertMaterialIdentifiers(searchResult.getItems(), 2L, 8L);
@@ -323,28 +327,72 @@ public class SearchResourceTest extends ResourceIntegrationTestBase {
         assertEquals(0, searchResult.getStart());
     }
 
+    // Tests with author
+
+    @Test
+    public void searchWithAuthorFilter() {
+        String query = "books";
+        SearchFilter searchFilter = new SearchFilter();
+        searchFilter.setAuthor("Mary");
+        SearchResult searchResult = doGet(buildQueryURL(query, 0, searchFilter), SearchResult.class);
+
+        assertMaterialIdentifiers(searchResult.getItems(), 4L, 1L);
+        assertEquals(2, searchResult.getTotalResults());
+        assertEquals(0, searchResult.getStart());
+    }
+
+    @Test
+    public void searchWithResourceTypeAndAuthorFilter() {
+        String query = "books";
+        SearchFilter searchFilter = new SearchFilter();
+        searchFilter.setResourceType("unknown");
+        searchFilter.setAuthor("Mary");
+        SearchResult searchResult = doGet(buildQueryURL(query, 0, searchFilter), SearchResult.class);
+
+        assertMaterialIdentifiers(searchResult.getItems(), 4L, 2L);
+        assertEquals(2, searchResult.getTotalResults());
+        assertEquals(0, searchResult.getStart());
+    }
+
+    @Test
+    public void searchWithEducationalContextAndTitleAndAuthorFilter() {
+        String query = "other books";
+        SearchFilter searchFilter = new SearchFilter();
+        searchFilter.setEducationalContext("TEACHEREDUCATION");
+        searchFilter.setTitle("Cool title");
+        searchFilter.setAuthor("Mary");
+        SearchResult searchResult = doGet(buildQueryURL(query, 0, searchFilter), SearchResult.class);
+
+        assertMaterialIdentifiers(searchResult.getItems(), 4L, 3L);
+        assertEquals(2, searchResult.getTotalResults());
+        assertEquals(0, searchResult.getStart());
+    }
+
     private String buildQueryURL(String query, int start, SearchFilter searchFilter) {
         String queryURL = "search?";
         if (query != null) {
-            queryURL += "q=" + query;
+            queryURL += "q=" + encodeQuery(query);
         }
         if (start != 0) {
             queryURL += "&start=" + start;
         }
         if (searchFilter.getSubject() != null) {
-            queryURL += "&subject=" + searchFilter.getSubject();
+            queryURL += "&subject=" + encodeQuery(searchFilter.getSubject());
         }
         if (searchFilter.getResourceType() != null) {
-            queryURL += "&resource_type=" + searchFilter.getResourceType();
+            queryURL += "&resource_type=" + encodeQuery(searchFilter.getResourceType());
         }
         if (searchFilter.getEducationalContext() != null) {
-            queryURL += "&educational_context=" + searchFilter.getEducationalContext();
+            queryURL += "&educational_context=" + encodeQuery(searchFilter.getEducationalContext());
         }
         if (searchFilter.getLicenseType() != null) {
-            queryURL += "&license_type=" + searchFilter.getLicenseType();
+            queryURL += "&license_type=" + encodeQuery(searchFilter.getLicenseType());
         }
         if (searchFilter.getTitle() != null) {
-            queryURL += "&title=" + searchFilter.getTitle();
+            queryURL += "&title=" + encodeQuery(searchFilter.getTitle());
+        }
+        if (searchFilter.getAuthor() != null) {
+            queryURL += "&author=" + encodeQuery(searchFilter.getAuthor());
         }
         return queryURL;
     }
@@ -364,6 +412,17 @@ public class SearchResourceTest extends ResourceIntegrationTestBase {
                 fail("No such Searchable type: " + searchable.getType());
             }
         }
+    }
+
+    private String encodeQuery(String query) {
+        String encodedQuery;
+        try {
+            encodedQuery = URLEncoder.encode(query, UTF_8.name());
+        } catch (UnsupportedEncodingException e) {
+            throw new RuntimeException(e);
+        }
+
+        return encodedQuery;
     }
 
 }

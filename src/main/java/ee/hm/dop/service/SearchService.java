@@ -151,6 +151,7 @@ public class SearchService {
         filters.put("educational_context", searchFilter.getEducationalContext());
         filters.put("license_type", searchFilter.getLicenseType());
         filters.put("title", searchFilter.getTitle());
+        filters.put("author", searchFilter.getAuthor());
 
         // Convert filters to Solr syntax query
         String filtersAsQuery = "";
