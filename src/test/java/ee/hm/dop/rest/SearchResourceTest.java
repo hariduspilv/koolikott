@@ -409,6 +409,59 @@ public class SearchResourceTest extends ResourceIntegrationTestBase {
         assertEquals(0, searchResult.getStart());
     }
 
+    // Tests with paid/free
+
+    @Test
+    public void searchWithPaidFilterTrue() {
+        String query = "dop";
+        SearchFilter searchFilter = new SearchFilter();
+        searchFilter.setPaid(true);
+        SearchResult searchResult = doGet(buildQueryURL(query, 0, searchFilter), SearchResult.class);
+
+        assertMaterialIdentifiers(searchResult.getItems(), 6L, 4L);
+        assertEquals(2, searchResult.getTotalResults());
+        assertEquals(0, searchResult.getStart());
+    }
+
+    @Test
+    public void searchWithPaidFilterFalse() {
+        String query = "dop";
+        SearchFilter searchFilter = new SearchFilter();
+        searchFilter.setPaid(false);
+        SearchResult searchResult = doGet(buildQueryURL(query, 0, searchFilter), SearchResult.class);
+
+        assertMaterialIdentifiers(searchResult.getItems(), 6L, 1L);
+        assertEquals(2, searchResult.getTotalResults());
+        assertEquals(0, searchResult.getStart());
+    }
+
+    @Test
+    public void searchWithEducationalContextAndPaidFilterFalse() {
+        String query = "dop";
+        SearchFilter searchFilter = new SearchFilter();
+        searchFilter.setEducationalContext("specialeducation");
+        searchFilter.setPaid(false);
+        SearchResult searchResult = doGet(buildQueryURL(query, 0, searchFilter), SearchResult.class);
+
+        assertMaterialIdentifiers(searchResult.getItems(), 6L, 2L);
+        assertEquals(2, searchResult.getTotalResults());
+        assertEquals(0, searchResult.getStart());
+    }
+
+    @Test
+    public void searchWithSubjectAndTitleAndAndPaidFilterFalse() {
+        String query = "dop";
+        SearchFilter searchFilter = new SearchFilter();
+        searchFilter.setSubject("music");
+        searchFilter.setTitle("Opera");
+        searchFilter.setPaid(false);
+        SearchResult searchResult = doGet(buildQueryURL(query, 0, searchFilter), SearchResult.class);
+
+        assertMaterialIdentifiers(searchResult.getItems(), 6L, 3L);
+        assertEquals(2, searchResult.getTotalResults());
+        assertEquals(0, searchResult.getStart());
+    }
+
     private String buildQueryURL(String query, int start, SearchFilter searchFilter) {
         String queryURL = "search?";
         if (query != null) {
@@ -437,6 +490,9 @@ public class SearchResourceTest extends ResourceIntegrationTestBase {
         }
         if (searchFilter.getCombinedDescription() != null) {
             queryURL += "&combined_description=" + encodeQuery(searchFilter.getCombinedDescription());
+        }
+        if (searchFilter.isPaid() == false) {
+            queryURL += "&paid=false";
         }
         return queryURL;
     }

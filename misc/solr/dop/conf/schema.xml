@@ -136,6 +136,7 @@
    <field name="subject" type="text_general" indexed="true" stored="false" multiValued="true"/>
    <field name="resource_type" type="text_general" indexed="true" stored="false" multiValued="true"/>
    <field name="license_type" type="text_general" indexed="true" stored="false" multiValued="true"/>
+   <field name="paid" type="boolean" indexed="true" stored="false" multiValued="false"/>
 
    <!-- Portfolio -->
    <field name="summary" type="text_general" indexed="true" stored="false"/>

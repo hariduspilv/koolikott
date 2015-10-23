@@ -71,6 +71,11 @@ class SearchEngineServiceMock implements SearchEngineService {
         addQueryWithCombinedDescriptionFilter();
         addQueryWithLicenseTypeAndCombinedDescriptionFilter();
         addQueryWithEducationalContextAndAuthorAndCombinedDescriptionFilter();
+
+        addQueryWithPaidFilterTrue();
+        addQueryWithPaidFilterFalse();
+        addQueryWithEducationalContextAndPaidFilterFalse();
+        addQueryWithSubjectAndTitleAndAndPaidFilterFalse();
     }
 
     private static void addArabicQuery() {
@@ -251,6 +256,34 @@ class SearchEngineServiceMock implements SearchEngineService {
         String filteredQuery = "(material*) AND educational_context:\"highereducation\" AND author:\"mary\""
                 + " AND (description:\"more\\ descriptions.\" OR summary:\"more\\ descriptions.\")";
         List<Document> filteredSearchResult = createDocumentsWithIdentifiers(5L, 3L);
+        searchResponses.put(filteredQuery, filteredSearchResult);
+    }
+
+    // Queries with no paid materials
+
+    private static void addQueryWithPaidFilterTrue() {
+        String filteredQuery = "dop";
+        List<Document> filteredSearchResult = createDocumentsWithIdentifiers(6L, 4L);
+        searchResponses.put(filteredQuery, filteredSearchResult);
+    }
+
+    private static void addQueryWithPaidFilterFalse() {
+        String filteredQuery = "(dop) AND (paid:\"false\" OR type:\"portfolio\")";
+        List<Document> filteredSearchResult = createDocumentsWithIdentifiers(6L, 1L);
+        searchResponses.put(filteredQuery, filteredSearchResult);
+    }
+
+    private static void addQueryWithEducationalContextAndPaidFilterFalse() {
+        String filteredQuery = "(dop) AND educational_context:\"specialeducation\""
+                + " AND (paid:\"false\" OR type:\"portfolio\")";
+        List<Document> filteredSearchResult = createDocumentsWithIdentifiers(6L, 2L);
+        searchResponses.put(filteredQuery, filteredSearchResult);
+    }
+
+    private static void addQueryWithSubjectAndTitleAndAndPaidFilterFalse() {
+        String filteredQuery = "(dop) AND subject:\"music\" AND title:\"opera\""
+                + " AND (paid:\"false\" OR type:\"portfolio\")";
+        List<Document> filteredSearchResult = createDocumentsWithIdentifiers(6L, 3L);
         searchResponses.put(filteredQuery, filteredSearchResult);
     }
 

@@ -27,7 +27,8 @@ public class SearchResource {
             @QueryParam("license_type") @DefaultValue(value = "") String licenseType,
             @QueryParam("title") @DefaultValue(value = "") String title,
             @QueryParam("author") @DefaultValue(value = "") String author,
-            @QueryParam("combined_description") @DefaultValue(value = "") String combinedDescription) {
+            @QueryParam("combined_description") @DefaultValue(value = "") String combinedDescription,
+            @QueryParam("paid") @DefaultValue(value = "true") Boolean paid) {
 
         subject = subject.isEmpty() ? null : subject;
         resourceType = resourceType.isEmpty() ? null : resourceType;
@@ -45,6 +46,7 @@ public class SearchResource {
         searchFilter.setTitle(title);
         searchFilter.setAuthor(author);
         searchFilter.setCombinedDescription(combinedDescription);
+        searchFilter.setPaid(paid);
 
         if (start == null) {
             return searchService.search(query, searchFilter);

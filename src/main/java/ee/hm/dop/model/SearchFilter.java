@@ -16,6 +16,8 @@ public class SearchFilter {
 
     private String combinedDescription;
 
+    private boolean paid = true;
+
     public String getSubject() {
         return subject;
     }
@@ -70,6 +72,14 @@ public class SearchFilter {
 
     public void setCombinedDescription(String description) {
         this.combinedDescription = description;
+    }
+
+    public boolean isPaid() {
+        return paid;
+    }
+
+    public void setPaid(boolean paid) {
+        this.paid = paid;
     }
 
 }

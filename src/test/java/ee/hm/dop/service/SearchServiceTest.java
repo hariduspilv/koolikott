@@ -602,6 +602,63 @@ public class SearchServiceTest {
         testSearch(query, tokenizedQuery, searchables, start, searchFilter);
     }
 
+    // Tests with paid/free
+
+    @Test
+    public void searchWithPaidFilterFalse() {
+        String query = "textbooks";
+        SearchFilter searchFilter = new SearchFilter();
+        searchFilter.setPaid(false);
+        String tokenizedQuery = "(textbooks*) AND (paid:\"false\" OR type:\"portfolio\")";
+        long start = 0;
+
+        List<Searchable> searchables = Arrays.asList(createMaterial(9L), createMaterial(2L), createPortfolio(2L));
+
+        testSearch(query, tokenizedQuery, searchables, start, searchFilter);
+    }
+
+    @Test
+    public void searchWithPaidFilterTrue() {
+        String query = "textbooks";
+        SearchFilter searchFilter = new SearchFilter();
+        searchFilter.setPaid(true);
+        String tokenizedQuery = "textbooks*";
+        long start = 0;
+
+        List<Searchable> searchables = Arrays.asList(createMaterial(9L), createMaterial(2L), createPortfolio(2L));
+
+        testSearch(query, tokenizedQuery, searchables, start, searchFilter);
+    }
+
+    @Test
+    public void searchWithResourceTypeAndAuthorAndPaidFilterFalse() {
+        String query = "story";
+        SearchFilter searchFilter = new SearchFilter();
+        searchFilter.setResourceType("pdf");
+        searchFilter.setAuthor("Mr. Writer");
+        searchFilter.setPaid(false);
+        String tokenizedQuery = "(story*) AND resource_type:\"pdf\" AND author:\"mr.\\ writer\" AND (paid:\"false\" OR type:\"portfolio\")";
+        long start = 0;
+
+        List<Searchable> searchables = Arrays.asList(createMaterial(9L), createMaterial(2L), createPortfolio(2L));
+
+        testSearch(query, tokenizedQuery, searchables, start, searchFilter);
+    }
+
+    @Test
+    public void searchWithSubjectAndPaidFilterFalse() {
+        String query = "story";
+        SearchFilter searchFilter = new SearchFilter();
+        searchFilter.setSubject("astronomy");
+        searchFilter.setPaid(false);
+        String tokenizedQuery = "(story*) AND subject:\"astronomy\" AND (paid:\"false\" OR type:\"portfolio\")";
+        long start = 0;
+
+        List<Searchable> searchables = Arrays.asList(createMaterial(9L), createMaterial(2L), createPortfolio(2L));
+
+        testSearch(query, tokenizedQuery, searchables, start, searchFilter);
+    }
+
     @Test
     public void searchNotFromStart() {
         String query = "people";
