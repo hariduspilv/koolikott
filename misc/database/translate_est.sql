@@ -125,7 +125,8 @@ insert into Translation(translationGroup, translationKey, translation) values (1
 insert into Translation(translationGroup, translationKey, translation) values (1, 'DETAILED_SEARCH_AUTHOR', 'Autor');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'DETAILED_SEARCH_SUBMIT', 'Otsi');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'DETAILED_SEARCH_MATERIALS', 'Materjalid');
-insert into Translation(translationGroup, translationKey, translation) values (1, 'DETAILED_SEARCH_PORTFOLIOS', 'Portfoliod');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'DETAILED_SEARCH_PORTFOLIOS', 'Portfooliod');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'DETAILED_SEARCH_ALL', 'Kõik');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'DETAILED_SEARCH_MAIN', 'Põhiväli');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'DETAILED_SEARCH_ON', 'Jah');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'DETAILED_SEARCH_OFF', 'Ei');

@@ -265,6 +265,7 @@ insert into Page(id, name, content, language) VALUES (6, 'Help', '<h1>Help</h1><
 insert into Portfolio(id, title, subject, educationalContext, creator, summary, views, created, updated, picture) VALUES (1, 'The new stock market', 2, 6, 6, 'The changes after 2008.', 95455215, '2000-12-29 06:00:01', '2004-12-29 06:00:01', '656b6f6f6c696b6f7474');
 insert into Portfolio(id, title, subject, educationalContext, creator, summary, views, created, updated, picture) VALUES (2, 'New ways how to do it', null, null, 4, null, 14, '2012-12-29 06:00:01', null, null);
 insert into Portfolio(id, title, subject, educationalContext, creator, summary, views, created, updated, picture) VALUES (3, 'The newer stock market', 2, 6, 6, 'A marvellous summary.', 14, '2002-12-29 06:00:01', '2006-12-29 06:00:01', '656b6f6f6c696b6f7474');
+insert into Portfolio(id, title, subject, educationalContext, creator, summary, views, created, updated, picture) VALUES (4, 'The even newer stock market', null, null, 1, 'Cool summary.', 100, '2003-10-10 07:00:11', null, null);
 
 -- Chapter
 

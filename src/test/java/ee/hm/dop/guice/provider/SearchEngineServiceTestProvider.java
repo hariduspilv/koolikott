@@ -31,7 +31,7 @@ class SearchEngineServiceMock implements SearchEngineService {
 
     private static final Map<String, List<Document>> searchResponses;
 
-    private static final Long[] portfolioIds = { 1L, 2L, 3L };
+    private static final Long[] portfolioIds = { 1L, 2L, 3L, 4L };
 
     private static final int RESULTS_PER_PAGE = 3;
 
@@ -76,6 +76,10 @@ class SearchEngineServiceMock implements SearchEngineService {
         addQueryWithPaidFilterFalse();
         addQueryWithEducationalContextAndPaidFilterFalse();
         addQueryWithSubjectAndTitleAndAndPaidFilterFalse();
+
+        addQueryWithTypeFilter();
+        addQueryWithCombinedDescriptionAndTypeFilter();
+        addQueryWithAuthorAndPaidFalseAndTypeFilter();
     }
 
     private static void addArabicQuery() {
@@ -284,6 +288,27 @@ class SearchEngineServiceMock implements SearchEngineService {
         String filteredQuery = "(dop) AND subject:\"music\" AND title:\"opera\""
                 + " AND (paid:\"false\" OR type:\"portfolio\")";
         List<Document> filteredSearchResult = createDocumentsWithIdentifiers(6L, 3L);
+        searchResponses.put(filteredQuery, filteredSearchResult);
+    }
+
+    // Queries with type
+
+    private static void addQueryWithTypeFilter() {
+        String filteredQuery = "(weird*) AND type:\"portfolio\"";
+        List<Document> filteredSearchResult = createDocumentsWithIdentifiers(1L, 2L, 3L, 4L);
+        searchResponses.put(filteredQuery, filteredSearchResult);
+    }
+
+    private static void addQueryWithCombinedDescriptionAndTypeFilter() {
+        String filteredQuery = "(weird*) AND (description:\"aliens\" OR summary:\"aliens\") AND type:\"material\"";
+        List<Document> filteredSearchResult = createDocumentsWithIdentifiers(7L, 1L);
+        searchResponses.put(filteredQuery, filteredSearchResult);
+    }
+
+    private static void addQueryWithAuthorAndPaidFalseAndTypeFilter() {
+        String filteredQuery = "(weird*) AND author:\"mati\" AND (paid:\"false\" OR type:\"portfolio\")"
+                + " AND type:\"material\"";
+        List<Document> filteredSearchResult = createDocumentsWithIdentifiers(7L, 2L);
         searchResponses.put(filteredQuery, filteredSearchResult);
     }
 

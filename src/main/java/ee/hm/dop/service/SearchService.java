@@ -7,10 +7,13 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.inject.Inject;
 
 import org.apache.solr.client.solrj.util.ClientUtils;
+
+import com.google.common.collect.ImmutableSet;
 
 import ee.hm.dop.dao.MaterialDAO;
 import ee.hm.dop.dao.PortfolioDAO;
@@ -156,6 +159,11 @@ public class SearchService {
 
         if (!searchFilter.isPaid()) {
             filters.put("paid", "false");
+        }
+
+        Set<String> types = ImmutableSet.of(MATERIAL_TYPE, PORTFOLIO_TYPE);
+        if (types.contains(searchFilter.getType())) {
+            filters.put("type", searchFilter.getType());
         }
 
         // Convert filters to Solr syntax query

@@ -462,6 +462,48 @@ public class SearchResourceTest extends ResourceIntegrationTestBase {
         assertEquals(0, searchResult.getStart());
     }
 
+    // Tests with type
+
+    @Test
+    public void searchWithTypeFilter() {
+        String query = "weird";
+        SearchFilter searchFilter = new SearchFilter();
+        searchFilter.setType("portfolio");
+        int start = RESULTS_PER_PAGE;
+        SearchResult searchResult = doGet(buildQueryURL(query, start, searchFilter), SearchResult.class);
+
+        assertMaterialIdentifiers(searchResult.getItems(), 4L);
+        assertEquals(4, searchResult.getTotalResults());
+        assertEquals(start, searchResult.getStart());
+    }
+
+    @Test
+    public void searchWithCombinedDescriptionAndTypeFilter() {
+        String query = "weird";
+        SearchFilter searchFilter = new SearchFilter();
+        searchFilter.setCombinedDescription("aliens");
+        searchFilter.setType("material");
+        SearchResult searchResult = doGet(buildQueryURL(query, 0, searchFilter), SearchResult.class);
+
+        assertMaterialIdentifiers(searchResult.getItems(), 7L, 1L);
+        assertEquals(2, searchResult.getTotalResults());
+        assertEquals(0, searchResult.getStart());
+    }
+
+    @Test
+    public void searchWithAuthorAndPaidFalseAndTypeFilter() {
+        String query = "weird";
+        SearchFilter searchFilter = new SearchFilter();
+        searchFilter.setAuthor("mati");
+        searchFilter.setPaid(false);
+        searchFilter.setType("material");
+        SearchResult searchResult = doGet(buildQueryURL(query, 0, searchFilter), SearchResult.class);
+
+        assertMaterialIdentifiers(searchResult.getItems(), 7L, 2L);
+        assertEquals(2, searchResult.getTotalResults());
+        assertEquals(0, searchResult.getStart());
+    }
+
     private String buildQueryURL(String query, int start, SearchFilter searchFilter) {
         String queryURL = "search?";
         if (query != null) {
@@ -493,6 +535,9 @@ public class SearchResourceTest extends ResourceIntegrationTestBase {
         }
         if (searchFilter.isPaid() == false) {
             queryURL += "&paid=false";
+        }
+        if (searchFilter.getType() != null) {
+            queryURL += "&type=" + encodeQuery(searchFilter.getType());
         }
         return queryURL;
     }

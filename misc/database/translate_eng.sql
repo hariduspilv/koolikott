@@ -126,6 +126,7 @@ insert into Translation(translationGroup, translationKey, translation) values (3
 insert into Translation(translationGroup, translationKey, translation) values (3, 'DETAILED_SEARCH_SUBMIT', 'Search');
 insert into Translation(translationGroup, translationKey, translation) values (3, 'DETAILED_SEARCH_MATERIALS', 'Materials');
 insert into Translation(translationGroup, translationKey, translation) values (3, 'DETAILED_SEARCH_PORTFOLIOS', 'Portfolios');
+insert into Translation(translationGroup, translationKey, translation) values (3, 'DETAILED_SEARCH_ALL', 'All');
 insert into Translation(translationGroup, translationKey, translation) values (3, 'DETAILED_SEARCH_MAIN', 'Main');
 insert into Translation(translationGroup, translationKey, translation) values (3, 'DETAILED_SEARCH_ON', 'Yes');
 insert into Translation(translationGroup, translationKey, translation) values (3, 'DETAILED_SEARCH_OFF', 'No');

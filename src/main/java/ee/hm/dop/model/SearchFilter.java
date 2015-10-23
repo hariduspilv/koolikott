@@ -18,6 +18,8 @@ public class SearchFilter {
 
     private boolean paid = true;
 
+    private String type;
+
     public String getSubject() {
         return subject;
     }
@@ -80,6 +82,14 @@ public class SearchFilter {
 
     public void setPaid(boolean paid) {
         this.paid = paid;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 
 }

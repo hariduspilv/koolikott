@@ -659,6 +659,50 @@ public class SearchServiceTest {
         testSearch(query, tokenizedQuery, searchables, start, searchFilter);
     }
 
+    // Tests with type
+
+    @Test
+    public void searchWithTypeFilter() {
+        String query = "sky";
+        SearchFilter searchFilter = new SearchFilter();
+        searchFilter.setType("material");
+        String tokenizedQuery = "(sky) AND type:\"material\"";
+        long start = 0;
+
+        List<Searchable> searchables = Arrays.asList(createMaterial(9L), createMaterial(2L), createPortfolio(2L));
+
+        testSearch(query, tokenizedQuery, searchables, start, searchFilter);
+    }
+
+    @Test
+    public void searchWithTitleAndTypeFilter() {
+        String query = "sky";
+        SearchFilter searchFilter = new SearchFilter();
+        searchFilter.setTitle("Book title");
+        searchFilter.setType("portfolio");
+        String tokenizedQuery = "(sky) AND title:\"book\\ title\" AND type:\"portfolio\"";
+        long start = 0;
+
+        List<Searchable> searchables = Arrays.asList(createMaterial(9L), createMaterial(2L), createPortfolio(2L));
+
+        testSearch(query, tokenizedQuery, searchables, start, searchFilter);
+    }
+
+    @Test
+    public void searchWithSubjectAndPaidFalseAndTypeFilter() {
+        String query = "sky";
+        SearchFilter searchFilter = new SearchFilter();
+        searchFilter.setSubject("ufo");
+        searchFilter.setType("material");
+        searchFilter.setPaid(false);
+        String tokenizedQuery = "(sky) AND subject:\"ufo\" AND (paid:\"false\" OR type:\"portfolio\") AND type:\"material\"";
+        long start = 0;
+
+        List<Searchable> searchables = Arrays.asList(createMaterial(9L), createMaterial(2L), createPortfolio(2L));
+
+        testSearch(query, tokenizedQuery, searchables, start, searchFilter);
+    }
+
     @Test
     public void searchNotFromStart() {
         String query = "people";
