@@ -6,7 +6,6 @@ define(['app'], function(app) {
         var resourceTypeURL = "&resource_type=";
         var educationalContextURL = "&educational_context=";
         var licenseTypeURL = "&license_type=";
-        var authorURL = "&author="
         var combinedDescriptionURL = "&combined_description=";
         var paidURL = "&paid=";
         var typeURL = "&type="
@@ -16,7 +15,6 @@ define(['app'], function(app) {
         var searchResourceType = "";
         var searchEducationalContext = "";
         var searchLicenseType = "";
-        var searchAuthor = "";
         var searchCombinedDescription = "";
         var searchPaid = "";
         var searchType = "";
@@ -63,10 +61,6 @@ define(['app'], function(app) {
                 searchLicenseType = licenseType;
             },
 
-            setAuthor : function(author) {
-                searchAuthor = author;
-            },
-
             setCombinedDescription : function(combinedDescription) {
                 searchCombinedDescription = combinedDescription;
             },
@@ -99,9 +93,6 @@ define(['app'], function(app) {
                 if (searchLicenseType) {
                     searchURL += licenseTypeURL + searchLicenseType;
                 }
-                if (searchAuthor) {
-                    searchURL += authorURL + escapeQuery(searchAuthor);
-                }
                 if (searchCombinedDescription) {
                     searchURL += combinedDescriptionURL + escapeQuery(searchCombinedDescription);
                 }
@@ -118,8 +109,8 @@ define(['app'], function(app) {
             queryExists : function() {
                 var searchObject = $location.search();
                 if (searchObject.q || searchObject.subject || searchObject.resource_type || searchObject.educational_context || 
-                    searchObject.license_type || searchObject.author || searchObject.combinedDescription ||
-                    (searchObject.paid && searchObject.paid === 'false') || (searchObject.type && this.isValidType(searchObject.type))) {
+                    searchObject.license_type|| searchObject.combinedDescription || (searchObject.paid && searchObject.paid === 'false') || 
+                    (searchObject.type && this.isValidType(searchObject.type))) {
                     return true;
                 } else {
                     return false;
@@ -181,17 +172,6 @@ define(['app'], function(app) {
                 return searchLicenseType;
             },
 
-            getAuthor : function() {
-                if (searchAuthor === "") {
-                    var searchObject = $location.search();
-                    if (searchObject.author) {
-                        return unescapeQuery(searchObject.author);
-                    }
-                }
-
-                return searchAuthor;
-            },
-
             getCombinedDescription : function() {
                 if (searchCombinedDescription === "") {
                     var searchObject = $location.search();
@@ -241,7 +221,7 @@ define(['app'], function(app) {
                 return 1;
             }, 
 
-            buildURL : function(query, page, subject, resourceType, educationalContext, licenseType, author, combinedDescription, paid, type) {
+            buildURL : function(query, page, subject, resourceType, educationalContext, licenseType, combinedDescription, paid, type) {
                 var searchURL = "#/" + searchURLbase + encodeURI(escapeQuery(query)) + "&page=" + page;
                 if (subject) {
                     searchURL += subjectURL + subject.toLowerCase();
@@ -254,9 +234,6 @@ define(['app'], function(app) {
                 }
                 if (licenseType) {
                     searchURL += licenseTypeURL + licenseType.toLowerCase();
-                }
-                if (author) {
-                    searchURL += authorURL + encodeURI(escapeQuery(author));
                 }
                 if (combinedDescription) {
                     searchURL += authorURL + encodeURI(escapeQuery(combinedDescription));
@@ -288,9 +265,6 @@ define(['app'], function(app) {
                 if (this.getLicenseType()) {
                     params.license_type = this.getLicenseType();
                 }
-                if (this.getAuthor()) {
-                    params.author = this.getAuthor();
-                }
                 if (this.getCombinedDescription()) {
                     params.combined_description = this.getCombinedDescription();
                 }
@@ -305,7 +279,6 @@ define(['app'], function(app) {
             },
 
             clearFieldsNotInSimpleSearch : function() {
-                searchAuthor = '';
                 searchCombinedDescription = '';
                 searchPaid = '';
                 searchType = '';
