@@ -153,7 +153,6 @@ public class SearchService {
         filters.put("resource_type", searchFilter.getResourceType());
         filters.put("educational_context", searchFilter.getEducationalContext());
         filters.put("license_type", searchFilter.getLicenseType());
-        filters.put("title", searchFilter.getTitle());
         filters.put("author", searchFilter.getAuthor());
         filters.put("combined_description", searchFilter.getCombinedDescription());
 

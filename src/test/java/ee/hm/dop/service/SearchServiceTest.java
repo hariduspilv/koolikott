@@ -454,55 +454,14 @@ public class SearchServiceTest {
         searchFilter.setResourceType("TEXTBOOK");
         searchFilter.setEducationalContext("PRESCHOOL");
         searchFilter.setLicenseType("CC");
-        searchFilter.setTitle("something");
         searchFilter.setAuthor("Mary");
         searchFilter.setCombinedDescription("This is description.");
+        searchFilter.setPaid(false);
+        searchFilter.setType("material");
         String tokenizedQuery = "(pythagoras*) AND subject:\"mathematics\" AND resource_type:\"textbook\""
-                + " AND educational_context:\"preschool\" AND license_type:\"cc\" AND title:\"something\""
-                + " AND author:\"mary\" AND (description:\"this\\ is\\ description.\" OR summary:\"this\\ is\\ description.\")";
-        long start = 0;
-
-        List<Searchable> searchables = Arrays.asList(createMaterial(9L), createMaterial(2L), createPortfolio(2L));
-
-        testSearch(query, tokenizedQuery, searchables, start, searchFilter);
-    }
-
-    // Tests with title (only some combinations are covered)
-    @Test
-    public void searchWithTitleFilter() {
-        String query = "test";
-        SearchFilter searchFilter = new SearchFilter();
-        searchFilter.setTitle("Good title");
-        String tokenizedQuery = "(test*) AND title:\"good\\ title\"";
-        long start = 0;
-
-        List<Searchable> searchables = Arrays.asList(createMaterial(9L), createMaterial(2L), createPortfolio(2L));
-
-        testSearch(query, tokenizedQuery, searchables, start, searchFilter);
-    }
-
-    @Test
-    public void searchWithTitleAndEducationalContextFilter() {
-        String query = "test";
-        SearchFilter searchFilter = new SearchFilter();
-        searchFilter.setEducationalContext("VOCATIONALEDUCATION");
-        searchFilter.setTitle("Good title");
-        String tokenizedQuery = "(test*) AND educational_context:\"vocationaleducation\" AND title:\"good\\ title\"";
-        long start = 0;
-
-        List<Searchable> searchables = Arrays.asList(createMaterial(9L), createMaterial(2L), createPortfolio(2L));
-
-        testSearch(query, tokenizedQuery, searchables, start, searchFilter);
-    }
-
-    @Test
-    public void searchWithTitleAndSubjectAndResourceTypeFilter() {
-        String query = "search";
-        SearchFilter searchFilter = new SearchFilter();
-        searchFilter.setSubject("geography");
-        searchFilter.setResourceType("Presentation");
-        searchFilter.setTitle("verylongtitlehere");
-        String tokenizedQuery = "(search*) AND subject:\"geography\" AND resource_type:\"presentation\" AND title:\"verylongtitlehere\"";
+                + " AND educational_context:\"preschool\" AND license_type:\"cc\""
+                + " AND author:\"mary\" AND (description:\"this\\ is\\ description.\" OR summary:\"this\\ is\\ description.\")"
+                + " AND (paid:\"false\" OR type:\"portfolio\") AND type:\"material\"";
         long start = 0;
 
         List<Searchable> searchables = Arrays.asList(createMaterial(9L), createMaterial(2L), createPortfolio(2L));
@@ -539,13 +498,12 @@ public class SearchServiceTest {
     }
 
     @Test
-    public void searchWithSubjectAndTitleAndAuthorFilter() {
+    public void searchWithSubjectAndAuthorFilter() {
         String query = "some books";
         SearchFilter searchFilter = new SearchFilter();
         searchFilter.setSubject("Interesting");
-        searchFilter.setTitle("Introduction");
         searchFilter.setAuthor("John");
-        String tokenizedQuery = "(some* books*) AND subject:\"interesting\" AND title:\"introduction\" AND author:\"john\"";
+        String tokenizedQuery = "(some* books*) AND subject:\"interesting\" AND author:\"john\"";
         long start = 0;
 
         List<Searchable> searchables = Arrays.asList(createMaterial(9L), createMaterial(2L), createPortfolio(2L));
@@ -585,15 +543,13 @@ public class SearchServiceTest {
     }
 
     @Test
-    public void searchWithEducationalContextAndLicenseTypeAndTitleAndCombinedDescriptionFilter() {
+    public void searchWithEducationalContextAndLicenseTypeAndCombinedDescriptionFilter() {
         String query = "querytest";
         SearchFilter searchFilter = new SearchFilter();
         searchFilter.setEducationalContext("OTHER");
         searchFilter.setLicenseType("CCBY");
-        searchFilter.setTitle("Title of something");
         searchFilter.setCombinedDescription("What is this about.");
         String tokenizedQuery = "(querytest*) AND educational_context:\"other\" AND license_type:\"ccby\""
-                + " AND title:\"title\\ of\\ something\""
                 + " AND (description:\"what\\ is\\ this\\ about.\" OR summary:\"what\\ is\\ this\\ about.\")";
         long start = 0;
 
@@ -675,12 +631,12 @@ public class SearchServiceTest {
     }
 
     @Test
-    public void searchWithTitleAndTypeFilter() {
+    public void searchWithResourceTypeAndTypeFilter() {
         String query = "sky";
         SearchFilter searchFilter = new SearchFilter();
-        searchFilter.setTitle("Book title");
+        searchFilter.setResourceType("something");
         searchFilter.setType("portfolio");
-        String tokenizedQuery = "(sky) AND title:\"book\\ title\" AND type:\"portfolio\"";
+        String tokenizedQuery = "(sky) AND resource_type:\"something\" AND type:\"portfolio\"";
         long start = 0;
 
         List<Searchable> searchables = Arrays.asList(createMaterial(9L), createMaterial(2L), createPortfolio(2L));

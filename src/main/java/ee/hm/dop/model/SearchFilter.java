@@ -10,8 +10,6 @@ public class SearchFilter {
 
     private String licenseType;
 
-    private String title;
-
     private String author;
 
     private String combinedDescription;
@@ -50,14 +48,6 @@ public class SearchFilter {
 
     public void setLicenseType(String licenseType) {
         this.licenseType = licenseType;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
     }
 
     public String getAuthor() {

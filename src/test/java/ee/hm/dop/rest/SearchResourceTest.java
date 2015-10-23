@@ -277,53 +277,14 @@ public class SearchResourceTest extends ResourceIntegrationTestBase {
         searchFilter.setResourceType("Audio");
         searchFilter.setEducationalContext("Preschool");
         searchFilter.setLicenseType("other");
-        searchFilter.setTitle("smith");
         searchFilter.setAuthor("mary");
+        searchFilter.setCombinedDescription("desc");
+        searchFilter.setPaid(false);
+        searchFilter.setType("portfolio");
         SearchResult searchResult = doGet(buildQueryURL(query, 0, searchFilter), SearchResult.class);
 
-        assertMaterialIdentifiers(searchResult.getItems(), 2L, 8L);
-        assertEquals(2, searchResult.getTotalResults());
-        assertEquals(0, searchResult.getStart());
-    }
-
-    // Tests with title (not all combinations)
-
-    @Test
-    public void searchWithTitleFilter() {
-        String query = "web";
-        SearchFilter searchFilter = new SearchFilter();
-        searchFilter.setTitle("www");
-        SearchResult searchResult = doGet(buildQueryURL(query, 0, searchFilter), SearchResult.class);
-
-        assertMaterialIdentifiers(searchResult.getItems(), 3L, 1L);
-        assertEquals(2, searchResult.getTotalResults());
-        assertEquals(0, searchResult.getStart());
-    }
-
-    @Test
-    public void searchWithSubjectAndTitleFilter() {
-        String query = "web";
-        SearchFilter searchFilter = new SearchFilter();
-        searchFilter.setSubject("algebra");
-        searchFilter.setTitle("www");
-        SearchResult searchResult = doGet(buildQueryURL(query, 0, searchFilter), SearchResult.class);
-
-        assertMaterialIdentifiers(searchResult.getItems(), 3L, 2L);
-        assertEquals(2, searchResult.getTotalResults());
-        assertEquals(0, searchResult.getStart());
-    }
-
-    @Test
-    public void searchWithLicenseTypeAndResourceTypeAndTitleFilter() {
-        String query = "web";
-        SearchFilter searchFilter = new SearchFilter();
-        searchFilter.setResourceType("video");
-        searchFilter.setLicenseType("other");
-        searchFilter.setTitle("www");
-        SearchResult searchResult = doGet(buildQueryURL(query, 0, searchFilter), SearchResult.class);
-
-        assertMaterialIdentifiers(searchResult.getItems(), 3L, 4L);
-        assertEquals(2, searchResult.getTotalResults());
+        assertMaterialIdentifiers(searchResult.getItems(), 2L, 3L, 4L);
+        assertEquals(3, searchResult.getTotalResults());
         assertEquals(0, searchResult.getStart());
     }
 
@@ -355,11 +316,10 @@ public class SearchResourceTest extends ResourceIntegrationTestBase {
     }
 
     @Test
-    public void searchWithEducationalContextAndTitleAndAuthorFilter() {
+    public void searchWithEducationalContextAndAuthorFilter() {
         String query = "other books";
         SearchFilter searchFilter = new SearchFilter();
         searchFilter.setEducationalContext("TEACHEREDUCATION");
-        searchFilter.setTitle("Cool title");
         searchFilter.setAuthor("Mary");
         SearchResult searchResult = doGet(buildQueryURL(query, 0, searchFilter), SearchResult.class);
 
@@ -449,11 +409,10 @@ public class SearchResourceTest extends ResourceIntegrationTestBase {
     }
 
     @Test
-    public void searchWithSubjectAndTitleAndAndPaidFilterFalse() {
+    public void searchWithSubjectAndAndPaidFilterFalse() {
         String query = "dop";
         SearchFilter searchFilter = new SearchFilter();
         searchFilter.setSubject("music");
-        searchFilter.setTitle("Opera");
         searchFilter.setPaid(false);
         SearchResult searchResult = doGet(buildQueryURL(query, 0, searchFilter), SearchResult.class);
 
@@ -523,9 +482,6 @@ public class SearchResourceTest extends ResourceIntegrationTestBase {
         }
         if (searchFilter.getLicenseType() != null) {
             queryURL += "&license_type=" + encodeQuery(searchFilter.getLicenseType());
-        }
-        if (searchFilter.getTitle() != null) {
-            queryURL += "&title=" + encodeQuery(searchFilter.getTitle());
         }
         if (searchFilter.getAuthor() != null) {
             queryURL += "&author=" + encodeQuery(searchFilter.getAuthor());
