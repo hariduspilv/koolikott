@@ -8,6 +8,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
+import ee.hm.dop.model.SearchFilter;
 import ee.hm.dop.model.SearchResult;
 import ee.hm.dop.service.SearchService;
 
@@ -24,31 +25,33 @@ public class SearchResource {
             @QueryParam("resource_type") @DefaultValue(value = "") String resourceType,
             @QueryParam("educational_context") @DefaultValue(value = "") String educationalContext,
             @QueryParam("license_type") @DefaultValue(value = "") String licenseType,
-            @QueryParam("title") @DefaultValue(value = "") String title) {
-        if (subject.isEmpty()) {
-            subject = null;
-        }
+            @QueryParam("title") @DefaultValue(value = "") String title,
+            @QueryParam("author") @DefaultValue(value = "") String author,
+            @QueryParam("combined_description") @DefaultValue(value = "") String combinedDescription,
+            @QueryParam("paid") @DefaultValue(value = "true") Boolean paid) {
 
-        if (resourceType.isEmpty()) {
-            resourceType = null;
-        }
+        subject = subject.isEmpty() ? null : subject;
+        resourceType = resourceType.isEmpty() ? null : resourceType;
+        educationalContext = educationalContext.isEmpty() ? null : educationalContext;
+        licenseType = licenseType.isEmpty() ? null : licenseType;
+        title = title.isEmpty() ? null : title;
+        author = author.isEmpty() ? null : author;
+        combinedDescription = combinedDescription.isEmpty() ? null : combinedDescription;
 
-        if (educationalContext.isEmpty()) {
-            educationalContext = null;
-        }
-
-        if (licenseType.isEmpty()) {
-            licenseType = null;
-        }
-
-        if (title.isEmpty()) {
-            title = null;
-        }
+        SearchFilter searchFilter = new SearchFilter();
+        searchFilter.setSubject(subject);
+        searchFilter.setResourceType(resourceType);
+        searchFilter.setEducationalContext(educationalContext);
+        searchFilter.setLicenseType(licenseType);
+        searchFilter.setTitle(title);
+        searchFilter.setAuthor(author);
+        searchFilter.setCombinedDescription(combinedDescription);
+        searchFilter.setPaid(paid);
 
         if (start == null) {
-            return searchService.search(query, subject, resourceType, educationalContext, licenseType, title);
+            return searchService.search(query, searchFilter);
         } else {
-            return searchService.search(query, start, subject, resourceType, educationalContext, licenseType, title);
+            return searchService.search(query, start, searchFilter);
         }
     }
 

@@ -63,6 +63,19 @@ class SearchEngineServiceMock implements SearchEngineService {
         addQueryWithTitleFilter();
         addQueryWithTitleAndSubjectFilter();
         addQueryWithTitleAndLicenseTypeAndResourceTypeFilter();
+
+        addQueryWithAuthorFilter();
+        addQueryWithesourceTypeAndAuthorFilter();
+        addQueryWithEducationalContextAndTitleAndAuthorFilter();
+
+        addQueryWithCombinedDescriptionFilter();
+        addQueryWithLicenseTypeAndCombinedDescriptionFilter();
+        addQueryWithEducationalContextAndAuthorAndCombinedDescriptionFilter();
+
+        addQueryWithPaidFilterTrue();
+        addQueryWithPaidFilterFalse();
+        addQueryWithEducationalContextAndPaidFilterFalse();
+        addQueryWithSubjectAndTitleAndAndPaidFilterFalse();
     }
 
     private static void addArabicQuery() {
@@ -178,7 +191,7 @@ class SearchEngineServiceMock implements SearchEngineService {
 
     private static void addQueryWithAllFilters() {
         String filteredQuery = "(john*) AND subject:\"mathematics\" AND resource_type:\"audio\" AND educational_context:\"preschool\""
-                + " AND license_type:\"other\" AND title:\"smith\"";
+                + " AND license_type:\"other\" AND title:\"smith\" AND author:\"mary\"";
         List<Document> filteredSearchResult = createDocumentsWithIdentifiers(2L, 8L);
         searchResponses.put(filteredQuery, filteredSearchResult);
     }
@@ -200,6 +213,77 @@ class SearchEngineServiceMock implements SearchEngineService {
     private static void addQueryWithTitleAndLicenseTypeAndResourceTypeFilter() {
         String filteredQuery = "(web) AND resource_type:\"video\" AND license_type:\"other\" AND title:\"www\"";
         List<Document> filteredSearchResult = createDocumentsWithIdentifiers(3L, 4L);
+        searchResponses.put(filteredQuery, filteredSearchResult);
+    }
+
+    // Queries with author
+
+    private static void addQueryWithAuthorFilter() {
+        String filteredQuery = "(books*) AND author:\"mary\"";
+        List<Document> filteredSearchResult = createDocumentsWithIdentifiers(4L, 1L);
+        searchResponses.put(filteredQuery, filteredSearchResult);
+    }
+
+    private static void addQueryWithesourceTypeAndAuthorFilter() {
+        String filteredQuery = "(books*) AND resource_type:\"unknown\" AND author:\"mary\"";
+        List<Document> filteredSearchResult = createDocumentsWithIdentifiers(4L, 2L);
+        searchResponses.put(filteredQuery, filteredSearchResult);
+    }
+
+    private static void addQueryWithEducationalContextAndTitleAndAuthorFilter() {
+        String filteredQuery = "(other* books*) AND educational_context:\"teachereducation\""
+                + " AND title:\"cool\\ title\" AND author:\"mary\"";
+        List<Document> filteredSearchResult = createDocumentsWithIdentifiers(4L, 3L);
+        searchResponses.put(filteredQuery, filteredSearchResult);
+    }
+
+    // Queries with combined description
+
+    private static void addQueryWithCombinedDescriptionFilter() {
+        String filteredQuery = "(material*) AND (description:\"the\\ description.\" OR summary:\"the\\ description.\")";
+        List<Document> filteredSearchResult = createDocumentsWithIdentifiers(5L, 1L);
+        searchResponses.put(filteredQuery, filteredSearchResult);
+    }
+
+    private static void addQueryWithLicenseTypeAndCombinedDescriptionFilter() {
+        String filteredQuery = "(material*) AND license_type:\"ccbyncnd\""
+                + " AND (description:\"another\\ description.\" OR summary:\"another\\ description.\")";
+        List<Document> filteredSearchResult = createDocumentsWithIdentifiers(5L, 2L);
+        searchResponses.put(filteredQuery, filteredSearchResult);
+    }
+
+    private static void addQueryWithEducationalContextAndAuthorAndCombinedDescriptionFilter() {
+        String filteredQuery = "(material*) AND educational_context:\"highereducation\" AND author:\"mary\""
+                + " AND (description:\"more\\ descriptions.\" OR summary:\"more\\ descriptions.\")";
+        List<Document> filteredSearchResult = createDocumentsWithIdentifiers(5L, 3L);
+        searchResponses.put(filteredQuery, filteredSearchResult);
+    }
+
+    // Queries with no paid materials
+
+    private static void addQueryWithPaidFilterTrue() {
+        String filteredQuery = "dop";
+        List<Document> filteredSearchResult = createDocumentsWithIdentifiers(6L, 4L);
+        searchResponses.put(filteredQuery, filteredSearchResult);
+    }
+
+    private static void addQueryWithPaidFilterFalse() {
+        String filteredQuery = "(dop) AND (paid:\"false\" OR type:\"portfolio\")";
+        List<Document> filteredSearchResult = createDocumentsWithIdentifiers(6L, 1L);
+        searchResponses.put(filteredQuery, filteredSearchResult);
+    }
+
+    private static void addQueryWithEducationalContextAndPaidFilterFalse() {
+        String filteredQuery = "(dop) AND educational_context:\"specialeducation\""
+                + " AND (paid:\"false\" OR type:\"portfolio\")";
+        List<Document> filteredSearchResult = createDocumentsWithIdentifiers(6L, 2L);
+        searchResponses.put(filteredQuery, filteredSearchResult);
+    }
+
+    private static void addQueryWithSubjectAndTitleAndAndPaidFilterFalse() {
+        String filteredQuery = "(dop) AND subject:\"music\" AND title:\"opera\""
+                + " AND (paid:\"false\" OR type:\"portfolio\")";
+        List<Document> filteredSearchResult = createDocumentsWithIdentifiers(6L, 3L);
         searchResponses.put(filteredQuery, filteredSearchResult);
     }
 
