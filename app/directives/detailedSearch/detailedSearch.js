@@ -36,11 +36,6 @@ define(['app'], function(app)
                         $scope.detailedSearch.educationalContext = defaultEducationalContext;
                     }
 
-                    // Title
-                    if (searchService.getTitle()) {
-                        $scope.detailedSearch.title = searchService.getTitle();
-                    }
-
                     // Author
                     if (searchService.getAuthor()) {
                         $scope.detailedSearch.author = searchService.getAuthor();
@@ -71,8 +66,7 @@ define(['app'], function(app)
                 }
 
                 $scope.search = function() {
-                    searchService.setSearch($scope.detailedSearch.main);
-                    searchService.setTitle($scope.detailedSearch.title);
+                    searchService.setSearch(createSearchQuery($scope.detailedSearch.main));
                     searchService.setAuthor($scope.detailedSearch.author);
                     searchService.setCombinedDescription($scope.detailedSearch.combinedDescription);
                     searchService.setPaid($scope.detailedSearch.paid);
@@ -81,6 +75,20 @@ define(['app'], function(app)
                     searchService.setEducationalContext($scope.detailedSearch.educationalContext);
                     $location.url(searchService.getURL());
                 };
+
+                function createSearchQuery() {
+                    var query = '';
+
+                    if ($scope.detailedSearch.main) {
+                        query += $scope.detailedSearch.main;
+                    }
+                    if ($scope.detailedSearch.title) {
+                        query += isEmpty(query) ? '' : ' ';
+                        query += 'title:"' + $scope.detailedSearch.title + '"';
+                    }
+
+                    return query;
+                }
 
                 // Move search query between simple search box and detailed search
                 $scope.$watch('visible', function(newValue, oldValue) {
