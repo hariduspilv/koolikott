@@ -14,6 +14,7 @@ define(['app'], function(app)
                 function init() {
                     $scope.detailedSearch = {};
                     
+                    // Educational context
                     var validEducationalContexts = ['preschooleducation', 'basiceducation', 'secondaryeducation', 'vocationaleducation'];
                     var defaultEducationalContext = 'preschooleducation';
 
@@ -22,10 +23,28 @@ define(['app'], function(app)
                     } else {
                         $scope.detailedSearch.educationalContext = defaultEducationalContext;
                     }
+
+                    // Title
+                    if (searchService.getTitle()) {
+                        $scope.detailedSearch.title = searchService.getTitle();
+                    }
+
+                    // Author
+                    if (searchService.getAuthor()) {
+                        $scope.detailedSearch.author = searchService.getAuthor();
+                    }
+
+                    // Combined Description
+                    if (searchService.getCombinedDescription()) {
+                        $scope.detailedSearch.combinedDescription = searchService.getCombinedDescription();
+                    }
                 }
 
                 $scope.search = function() {
                     searchService.setSearch($scope.detailedSearch.main);
+                    searchService.setTitle($scope.detailedSearch.title);
+                    searchService.setAuthor($scope.detailedSearch.author);
+                    searchService.setCombinedDescription($scope.detailedSearch.combinedDescription);
 
                     searchService.setEducationalContext($scope.detailedSearch.educationalContext);
                     $location.url(searchService.getURL());

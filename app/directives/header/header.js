@@ -56,6 +56,7 @@ define(['app'], function(app)
                     $scope.closeSearchBox();
                     if (!isEmpty($scope.searchFields.searchQuery)) {
                         searchService.setSearch($scope.searchFields.searchQuery);
+                        searchService.clearFieldsNotInSimpleSearch();
                         $location.url(searchService.getURL());
                     }
                 };
