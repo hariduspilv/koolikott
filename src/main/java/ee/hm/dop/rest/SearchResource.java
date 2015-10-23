@@ -25,7 +25,6 @@ public class SearchResource {
             @QueryParam("resource_type") @DefaultValue(value = "") String resourceType,
             @QueryParam("educational_context") @DefaultValue(value = "") String educationalContext,
             @QueryParam("license_type") @DefaultValue(value = "") String licenseType,
-            @QueryParam("author") @DefaultValue(value = "") String author,
             @QueryParam("combined_description") @DefaultValue(value = "") String combinedDescription,
             @QueryParam("paid") @DefaultValue(value = "true") Boolean paid,
             @QueryParam("type") @DefaultValue(value = "") String type) {
@@ -34,7 +33,6 @@ public class SearchResource {
         resourceType = resourceType.isEmpty() ? null : resourceType;
         educationalContext = educationalContext.isEmpty() ? null : educationalContext;
         licenseType = licenseType.isEmpty() ? null : licenseType;
-        author = author.isEmpty() ? null : author;
         combinedDescription = combinedDescription.isEmpty() ? null : combinedDescription;
         type = type.isEmpty() ? null : type;
 
@@ -43,7 +41,6 @@ public class SearchResource {
         searchFilter.setResourceType(resourceType);
         searchFilter.setEducationalContext(educationalContext);
         searchFilter.setLicenseType(licenseType);
-        searchFilter.setAuthor(author);
         searchFilter.setCombinedDescription(combinedDescription);
         searchFilter.setPaid(paid);
         searchFilter.setType(type);

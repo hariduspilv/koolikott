@@ -60,13 +60,9 @@ class SearchEngineServiceMock implements SearchEngineService {
         addQueryWithResourceTypeAndEducationalContextAndLicenseTypeFilter();
         addQueryWithAllFilters();
 
-        addQueryWithAuthorFilter();
-        addQueryWithesourceTypeAndAuthorFilter();
-        addQueryWithEducationalContextAndAuthorFilter();
-
         addQueryWithCombinedDescriptionFilter();
         addQueryWithLicenseTypeAndCombinedDescriptionFilter();
-        addQueryWithEducationalContextAndAuthorAndCombinedDescriptionFilter();
+        addQueryWithEducationalContextAndCombinedDescriptionFilter();
 
         addQueryWithPaidFilterTrue();
         addQueryWithPaidFilterFalse();
@@ -75,7 +71,7 @@ class SearchEngineServiceMock implements SearchEngineService {
 
         addQueryWithTypeFilter();
         addQueryWithCombinedDescriptionAndTypeFilter();
-        addQueryWithAuthorAndPaidFalseAndTypeFilter();
+        addQueryWithPaidFalseAndTypeFilter();
     }
 
     private static void addArabicQuery() {
@@ -191,29 +187,9 @@ class SearchEngineServiceMock implements SearchEngineService {
 
     private static void addQueryWithAllFilters() {
         String filteredQuery = "(john*) AND subject:\"mathematics\" AND resource_type:\"audio\" AND educational_context:\"preschool\""
-                + " AND license_type:\"other\" AND author:\"mary\" AND (description:\"desc\" OR summary:\"desc\")"
+                + " AND license_type:\"other\" AND (description:\"desc\" OR summary:\"desc\")"
                 + " AND (paid:\"false\" OR type:\"portfolio\") AND type:\"portfolio\"";
         List<Document> filteredSearchResult = createDocumentsWithIdentifiers(2L, 3L, 4L);
-        searchResponses.put(filteredQuery, filteredSearchResult);
-    }
-
-    // Queries with author
-
-    private static void addQueryWithAuthorFilter() {
-        String filteredQuery = "(books*) AND author:\"mary\"";
-        List<Document> filteredSearchResult = createDocumentsWithIdentifiers(4L, 1L);
-        searchResponses.put(filteredQuery, filteredSearchResult);
-    }
-
-    private static void addQueryWithesourceTypeAndAuthorFilter() {
-        String filteredQuery = "(books*) AND resource_type:\"unknown\" AND author:\"mary\"";
-        List<Document> filteredSearchResult = createDocumentsWithIdentifiers(4L, 2L);
-        searchResponses.put(filteredQuery, filteredSearchResult);
-    }
-
-    private static void addQueryWithEducationalContextAndAuthorFilter() {
-        String filteredQuery = "(other* books*) AND educational_context:\"teachereducation\" AND author:\"mary\"";
-        List<Document> filteredSearchResult = createDocumentsWithIdentifiers(4L, 3L);
         searchResponses.put(filteredQuery, filteredSearchResult);
     }
 
@@ -232,8 +208,8 @@ class SearchEngineServiceMock implements SearchEngineService {
         searchResponses.put(filteredQuery, filteredSearchResult);
     }
 
-    private static void addQueryWithEducationalContextAndAuthorAndCombinedDescriptionFilter() {
-        String filteredQuery = "(material*) AND educational_context:\"highereducation\" AND author:\"mary\""
+    private static void addQueryWithEducationalContextAndCombinedDescriptionFilter() {
+        String filteredQuery = "(material*) AND educational_context:\"highereducation\""
                 + " AND (description:\"more\\ descriptions.\" OR summary:\"more\\ descriptions.\")";
         List<Document> filteredSearchResult = createDocumentsWithIdentifiers(5L, 3L);
         searchResponses.put(filteredQuery, filteredSearchResult);
@@ -280,9 +256,8 @@ class SearchEngineServiceMock implements SearchEngineService {
         searchResponses.put(filteredQuery, filteredSearchResult);
     }
 
-    private static void addQueryWithAuthorAndPaidFalseAndTypeFilter() {
-        String filteredQuery = "(weird*) AND author:\"mati\" AND (paid:\"false\" OR type:\"portfolio\")"
-                + " AND type:\"material\"";
+    private static void addQueryWithPaidFalseAndTypeFilter() {
+        String filteredQuery = "(weird*) AND (paid:\"false\" OR type:\"portfolio\")" + " AND type:\"material\"";
         List<Document> filteredSearchResult = createDocumentsWithIdentifiers(7L, 2L);
         searchResponses.put(filteredQuery, filteredSearchResult);
     }

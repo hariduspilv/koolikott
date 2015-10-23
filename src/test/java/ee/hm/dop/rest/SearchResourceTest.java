@@ -277,7 +277,6 @@ public class SearchResourceTest extends ResourceIntegrationTestBase {
         searchFilter.setResourceType("Audio");
         searchFilter.setEducationalContext("Preschool");
         searchFilter.setLicenseType("other");
-        searchFilter.setAuthor("mary");
         searchFilter.setCombinedDescription("desc");
         searchFilter.setPaid(false);
         searchFilter.setType("portfolio");
@@ -285,46 +284,6 @@ public class SearchResourceTest extends ResourceIntegrationTestBase {
 
         assertMaterialIdentifiers(searchResult.getItems(), 2L, 3L, 4L);
         assertEquals(3, searchResult.getTotalResults());
-        assertEquals(0, searchResult.getStart());
-    }
-
-    // Tests with author
-
-    @Test
-    public void searchWithAuthorFilter() {
-        String query = "books";
-        SearchFilter searchFilter = new SearchFilter();
-        searchFilter.setAuthor("Mary");
-        SearchResult searchResult = doGet(buildQueryURL(query, 0, searchFilter), SearchResult.class);
-
-        assertMaterialIdentifiers(searchResult.getItems(), 4L, 1L);
-        assertEquals(2, searchResult.getTotalResults());
-        assertEquals(0, searchResult.getStart());
-    }
-
-    @Test
-    public void searchWithResourceTypeAndAuthorFilter() {
-        String query = "books";
-        SearchFilter searchFilter = new SearchFilter();
-        searchFilter.setResourceType("unknown");
-        searchFilter.setAuthor("Mary");
-        SearchResult searchResult = doGet(buildQueryURL(query, 0, searchFilter), SearchResult.class);
-
-        assertMaterialIdentifiers(searchResult.getItems(), 4L, 2L);
-        assertEquals(2, searchResult.getTotalResults());
-        assertEquals(0, searchResult.getStart());
-    }
-
-    @Test
-    public void searchWithEducationalContextAndAuthorFilter() {
-        String query = "other books";
-        SearchFilter searchFilter = new SearchFilter();
-        searchFilter.setEducationalContext("TEACHEREDUCATION");
-        searchFilter.setAuthor("Mary");
-        SearchResult searchResult = doGet(buildQueryURL(query, 0, searchFilter), SearchResult.class);
-
-        assertMaterialIdentifiers(searchResult.getItems(), 4L, 3L);
-        assertEquals(2, searchResult.getTotalResults());
         assertEquals(0, searchResult.getStart());
     }
 
@@ -356,11 +315,10 @@ public class SearchResourceTest extends ResourceIntegrationTestBase {
     }
 
     @Test
-    public void searchWithEducationalContextAndAuthorAndCombinedDescriptionFilter() {
+    public void searchWithEducationalContextAndCombinedDescriptionFilter() {
         String query = "material";
         SearchFilter searchFilter = new SearchFilter();
         searchFilter.setEducationalContext("HIGHEREDUCATION");
-        searchFilter.setAuthor("Mary");
         searchFilter.setCombinedDescription("More descriptions.");
         SearchResult searchResult = doGet(buildQueryURL(query, 0, searchFilter), SearchResult.class);
 
@@ -450,10 +408,9 @@ public class SearchResourceTest extends ResourceIntegrationTestBase {
     }
 
     @Test
-    public void searchWithAuthorAndPaidFalseAndTypeFilter() {
+    public void searchWithPaidFalseAndTypeFilter() {
         String query = "weird";
         SearchFilter searchFilter = new SearchFilter();
-        searchFilter.setAuthor("mati");
         searchFilter.setPaid(false);
         searchFilter.setType("material");
         SearchResult searchResult = doGet(buildQueryURL(query, 0, searchFilter), SearchResult.class);
@@ -482,9 +439,6 @@ public class SearchResourceTest extends ResourceIntegrationTestBase {
         }
         if (searchFilter.getLicenseType() != null) {
             queryURL += "&license_type=" + encodeQuery(searchFilter.getLicenseType());
-        }
-        if (searchFilter.getAuthor() != null) {
-            queryURL += "&author=" + encodeQuery(searchFilter.getAuthor());
         }
         if (searchFilter.getCombinedDescription() != null) {
             queryURL += "&combined_description=" + encodeQuery(searchFilter.getCombinedDescription());

@@ -454,56 +454,13 @@ public class SearchServiceTest {
         searchFilter.setResourceType("TEXTBOOK");
         searchFilter.setEducationalContext("PRESCHOOL");
         searchFilter.setLicenseType("CC");
-        searchFilter.setAuthor("Mary");
         searchFilter.setCombinedDescription("This is description.");
         searchFilter.setPaid(false);
         searchFilter.setType("material");
         String tokenizedQuery = "(pythagoras*) AND subject:\"mathematics\" AND resource_type:\"textbook\""
                 + " AND educational_context:\"preschool\" AND license_type:\"cc\""
-                + " AND author:\"mary\" AND (description:\"this\\ is\\ description.\" OR summary:\"this\\ is\\ description.\")"
+                + " AND (description:\"this\\ is\\ description.\" OR summary:\"this\\ is\\ description.\")"
                 + " AND (paid:\"false\" OR type:\"portfolio\") AND type:\"material\"";
-        long start = 0;
-
-        List<Searchable> searchables = Arrays.asList(createMaterial(9L), createMaterial(2L), createPortfolio(2L));
-
-        testSearch(query, tokenizedQuery, searchables, start, searchFilter);
-    }
-
-    // Tests with author
-    @Test
-    public void searchWithAuthorFilter() {
-        String query = "books";
-        SearchFilter searchFilter = new SearchFilter();
-        searchFilter.setAuthor("John Author");
-        String tokenizedQuery = "(books*) AND author:\"john\\ author\"";
-        long start = 0;
-
-        List<Searchable> searchables = Arrays.asList(createMaterial(9L), createMaterial(2L), createPortfolio(2L));
-
-        testSearch(query, tokenizedQuery, searchables, start, searchFilter);
-    }
-
-    @Test
-    public void searchWithLicenseTypeAndAuthorFilter() {
-        String query = "many books";
-        SearchFilter searchFilter = new SearchFilter();
-        searchFilter.setLicenseType("CC");
-        searchFilter.setAuthor("John Author");
-        String tokenizedQuery = "(many* books*) AND license_type:\"cc\" AND author:\"john\\ author\"";
-        long start = 0;
-
-        List<Searchable> searchables = Arrays.asList(createMaterial(9L), createMaterial(2L), createPortfolio(2L));
-
-        testSearch(query, tokenizedQuery, searchables, start, searchFilter);
-    }
-
-    @Test
-    public void searchWithSubjectAndAuthorFilter() {
-        String query = "some books";
-        SearchFilter searchFilter = new SearchFilter();
-        searchFilter.setSubject("Interesting");
-        searchFilter.setAuthor("John");
-        String tokenizedQuery = "(some* books*) AND subject:\"interesting\" AND author:\"john\"";
         long start = 0;
 
         List<Searchable> searchables = Arrays.asList(createMaterial(9L), createMaterial(2L), createPortfolio(2L));
@@ -527,13 +484,12 @@ public class SearchServiceTest {
     }
 
     @Test
-    public void searchWithSubjectAndAuthorAndCombinedDescriptionFilter() {
+    public void searchWithSubjectAndCombinedDescriptionFilter() {
         String query = "querytest";
         SearchFilter searchFilter = new SearchFilter();
         searchFilter.setSubject("English");
-        searchFilter.setAuthor("Lewis");
         searchFilter.setCombinedDescription("Lorem ipsum.");
-        String tokenizedQuery = "(querytest*) AND subject:\"english\" AND author:\"lewis\""
+        String tokenizedQuery = "(querytest*) AND subject:\"english\""
                 + " AND (description:\"lorem\\ ipsum.\" OR summary:\"lorem\\ ipsum.\")";
         long start = 0;
 
@@ -591,9 +547,8 @@ public class SearchServiceTest {
         String query = "story";
         SearchFilter searchFilter = new SearchFilter();
         searchFilter.setResourceType("pdf");
-        searchFilter.setAuthor("Mr. Writer");
         searchFilter.setPaid(false);
-        String tokenizedQuery = "(story*) AND resource_type:\"pdf\" AND author:\"mr.\\ writer\" AND (paid:\"false\" OR type:\"portfolio\")";
+        String tokenizedQuery = "(story*) AND resource_type:\"pdf\" AND (paid:\"false\" OR type:\"portfolio\")";
         long start = 0;
 
         List<Searchable> searchables = Arrays.asList(createMaterial(9L), createMaterial(2L), createPortfolio(2L));
