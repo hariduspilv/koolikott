@@ -47,26 +47,18 @@
                                 switch-inverse="false" id="detailedSearchPaidField">
                             </div>
                         </div>
-                        <div class="form-group">
-                            <label for="detailedSearchPaidField" class="col-md-4 control-label" data-translate="DETAILED_SEARCH_PAID"></label>
-                            <div class="col-sm-8">
-                                
-                            </div>
-                        </div>
                         <div class="col-md-offset-4 clearfix">
-                            <div class="choices">
-                                <div class="checkbox checkbox-primary">
-                                    <input type="checkbox" id="detailedSearchMaterialsField" value="">
-                                    <label for="detailedSearchMaterialsField" data-translate="DETAILED_SEARCH_MATERIALS">
-                                        Materials
-                                    </label>
-                                </div>
-                                <div class="checkbox checkbox-primary">
-                                    <input type="checkbox" id="detailedSearchPortfoliosField" value="">
-                                    <label for="detailedSearchPortfoliosField" data-translate="DETAILED_SEARCH_PORTFOLIOS">
-                                        Portfolios
-                                    </label>
-                                </div>
+                            <div class="radio">
+                                <input type="radio" id="detailedSearchTypeMaterials" data-ng-model="detailedSearch.type" value="material">
+                                <label for="detailedSearchTypeMaterials" data-translate="DETAILED_SEARCH_MATERIALS"></label>
+                            </div>
+                            <div class="radio">
+                                <input type="radio" id="detailedSearchTypePortfolios" data-ng-model="detailedSearch.type" value="portfolio">
+                                <label for="detailedSearchTypePortfolios" data-translate="DETAILED_SEARCH_PORTFOLIOS"></label>
+                            </div>
+                            <div class="radio">
+                                <input type="radio" id="detailedSearchTypeAll" data-ng-model="detailedSearch.type" value="">
+                                <label for="detailedSearchTypeAll" data-translate="DETAILED_SEARCH_ALL"></label>
                             </div>
                             
                             <button type="submit" class="btn btn-default pull-right" id="detailedSearchSubmit" data-ng-click="search()" data-translate="DETAILED_SEARCH_SUBMIT"></button>

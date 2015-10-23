@@ -87,6 +87,10 @@ define(['app'], function(app)
             if (searchService.isPaid() && searchService.isPaid() === 'false') {
                 params.paid = searchService.isPaid();
             }
+
+            if (searchService.getType() && searchService.isValidType(searchService.getType())) {
+                params.type = searchService.getType();
+            }
             
             serverCallService.makeGet("rest/search", params, searchSuccess, searchFail);
         }
@@ -304,7 +308,8 @@ define(['app'], function(app)
             var licenseType = $scope.filters.licenseType ? $scope.filters.licenseType.name : null;
 
             return searchService.buildURL($scope.searchQuery, page, subject, resourceType, educationalContext, licenseType, 
-                searchService.getTitle(), searchService.getAuthor(), searchService.getCombinedDescription(), searchService.isPaid());
+                searchService.getTitle(), searchService.getAuthor(), searchService.getCombinedDescription(), searchService.isPaid(),
+                searchService.getType());
         }
 
 

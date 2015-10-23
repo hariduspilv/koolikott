@@ -57,6 +57,17 @@ define(['app'], function(app)
                     } else {
                         $scope.detailedSearch.paid = 'true';
                     }
+
+                    // Type
+                    $scope.detailedSearch.type = '';
+                    if (searchService.getType()) {
+                        if (searchService.getType() === 'material') {
+                            $scope.detailedSearch.type = 'material'
+                        } else if (searchService.getType() === 'portfolio') {
+                            $scope.detailedSearch.type = 'portfolio';
+                        }
+                    }
+
                 }
 
                 $scope.search = function() {
@@ -65,7 +76,8 @@ define(['app'], function(app)
                     searchService.setAuthor($scope.detailedSearch.author);
                     searchService.setCombinedDescription($scope.detailedSearch.combinedDescription);
                     searchService.setPaid($scope.detailedSearch.paid);
-
+                    searchService.setType($scope.detailedSearch.type);
+                    
                     searchService.setEducationalContext($scope.detailedSearch.educationalContext);
                     $location.url(searchService.getURL());
                 };
