@@ -12,6 +12,18 @@ define(['app'], function(app)
                 init();
                 
                 function init() {
+
+                    // Test data
+                    $scope.filters = [];
+                    $scope.licenseTypes = [ {
+                      "id" : 1,
+                      "name" : "allRightsReserved"
+                    }, {
+                      "id" : 2,
+                      "name" : "CCBY"
+                    } ];
+
+                    // Detailed search fields
                     $scope.detailedSearch = {};
                     
                     // Educational context
@@ -38,6 +50,13 @@ define(['app'], function(app)
                     if (searchService.getCombinedDescription()) {
                         $scope.detailedSearch.combinedDescription = searchService.getCombinedDescription();
                     }
+
+                    // Paid
+                    if (searchService.isPaid() && (searchService.isPaid() === 'true' || searchService.isPaid() === 'false')) {
+                        $scope.detailedSearch.paid = searchService.isPaid();
+                    } else {
+                        $scope.detailedSearch.paid = 'true';
+                    }
                 }
 
                 $scope.search = function() {
@@ -45,34 +64,11 @@ define(['app'], function(app)
                     searchService.setTitle($scope.detailedSearch.title);
                     searchService.setAuthor($scope.detailedSearch.author);
                     searchService.setCombinedDescription($scope.detailedSearch.combinedDescription);
+                    searchService.setPaid($scope.detailedSearch.paid);
 
                     searchService.setEducationalContext($scope.detailedSearch.educationalContext);
                     $location.url(searchService.getURL());
                 };
-                
-                $scope.filters = [];
-
-                $scope.licenseTypes = [ {
-                  "id" : 1,
-                  "name" : "allRightsReserved"
-                }, {
-                  "id" : 2,
-                  "name" : "CCBY"
-                } ];
-            
-                $scope.isSelected = 'nope';
-
-                $scope.toggle = function() {
-                    $scope.isSelected = $scope.isSelected === 'yep' ? 'nope' : 'yep';
-                };
-
-                $scope.setUndefined = function() {
-                  $scope.isSelected = undefined;
-                };
-
-                $scope.toggleActivation = function() {
-                  $scope.isActive = !$scope.isActive;
-                }
 
                 // Move search query between simple search box and detailed search
                 $scope.$watch('visible', function(newValue, oldValue) {

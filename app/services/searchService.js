@@ -9,6 +9,7 @@ define(['app'], function(app) {
         var titleURL = "&title=";
         var authorURL = "&author="
         var combinedDescriptionURL = "&combined_description=";
+        var paidURL = "&paid=";
 
         var searchQuery = "";
         var searchSubject = "";
@@ -18,6 +19,7 @@ define(['app'], function(app) {
         var searchTitle = "";
         var searchAuthor = "";
         var searchCombinedDescription = "";
+        var searchPaid = "";
 
         function escapeQuery(query) {
             //replace backslashes
@@ -73,6 +75,10 @@ define(['app'], function(app) {
                 searchCombinedDescription = combinedDescription;
             },
 
+            setPaid : function(paid) {
+                searchPaid = paid;
+            },
+
             getURL : function() {
                 var searchURL;
                 if (searchQuery) {
@@ -102,6 +108,9 @@ define(['app'], function(app) {
                 if (searchCombinedDescription) {
                     searchURL += combinedDescriptionURL + escapeQuery(searchCombinedDescription);
                 }
+                if (searchPaid && searchPaid === 'false') {
+                    searchURL += paidURL + searchPaid;
+                }
 
                 return searchURL;
             },
@@ -109,7 +118,8 @@ define(['app'], function(app) {
             queryExists : function() {
                 var searchObject = $location.search();
                 if (searchObject.q || searchObject.subject || searchObject.resource_type || searchObject.educational_context || 
-                    searchObject.license_type || searchObject.title || searchObject.author || searchObject.combinedDescription) {
+                    searchObject.license_type || searchObject.title || searchObject.author || searchObject.combinedDescription ||
+                    (searchObject.paid && searchObject.paid === 'false')) {
                     return true;
                 } else {
                     return false;
@@ -204,6 +214,17 @@ define(['app'], function(app) {
                 return searchCombinedDescription;
             },
 
+            isPaid : function() {
+                if (searchPaid === "") {
+                    var searchObject = $location.search();
+                    if (searchObject.paid) {
+                        return searchObject.paid;
+                    }
+                }
+
+                return searchPaid;
+            },
+
             getPage : function() {
                 var searchObject = $location.search();
                 if (searchObject.page) {
@@ -220,7 +241,7 @@ define(['app'], function(app) {
                 return 1;
             }, 
 
-            buildURL : function(query, page, subject, resourceType, educationalContext, licenseType, title, author, combinedDescription) {
+            buildURL : function(query, page, subject, resourceType, educationalContext, licenseType, title, author, combinedDescription, paid) {
                 var searchURL = "#/" + searchURLbase + encodeURI(escapeQuery(query)) + "&page=" + page;
                 if (subject) {
                     searchURL += subjectURL + subject.toLowerCase();
@@ -242,6 +263,9 @@ define(['app'], function(app) {
                 }
                 if (combinedDescription) {
                     searchURL += authorURL + encodeURI(escapeQuery(combinedDescription));
+                }
+                if (paid && paid === 'false') {
+                    searchURL += paidURL + paid;
                 }
                 return searchURL;
             }, 
@@ -273,6 +297,9 @@ define(['app'], function(app) {
                 if (this.getCombinedDescription()) {
                     params.combined_description = this.getCombinedDescription();
                 }
+                if (this.isPaid() && this.isPaid() === 'false') {
+                    params.paid = this.isPaid();
+                }
                 
                 $location.url("search/result").search(params);
             },
@@ -281,6 +308,7 @@ define(['app'], function(app) {
                 searchTitle = '';
                 searchAuthor = '';
                 searchCombinedDescription = '';
+                searchPaid = '';
             }
         };
     }]);
