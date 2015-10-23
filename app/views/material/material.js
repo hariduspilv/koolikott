@@ -119,7 +119,8 @@ define(['app'], function(app)
 
         function getSignedUserDataSuccess(data) { 
             var url = $scope.material.source;
-            url += (url.split('?')[1] ? '&':'?') + "dop_token=" + data;
+            var v = encodeURIComponent(data);
+            url += (url.split('?')[1] ? '&':'?') + "dop_token=" + v;
 
             $scope.material.iframeSource = url;
         }
