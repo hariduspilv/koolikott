@@ -79,8 +79,8 @@ In my.ini or my.cnf under [mysqld] add: character-set-server=utf8
 * **taat.metadata.filepath** TAAT service metadata filepath. Default value is **reos_metadata.xml** (this file is included in the application).
 * **taat.metadata.entityID** Entity ID in the metadata. Default value is **https://reos.taat.edu.ee/saml2/idp/metadata.php**
 
-#### KeyStore for TAAT
-This keystore holds credentials used to sign outgoing TAAT authentication requests. 
+#### KeyStore configuration
+This keystore holds credentials used to sign outgoing TAAT authentication requests and to sign the user data that is sent to the material provider.
 
 * **keystore.filename** - name of the keystore file
 * **keystore.password** - password of the keystore file
@@ -95,7 +95,8 @@ This keystore holds credentials used to sign outgoing TAAT authentication reques
 * **mobileID.namespace.uri** - DigiDocService WSDL URI. Default value is **http://www.sk.ee/DigiDocService/DigiDocService_2_3.wsdl**
 * **mobileID.messageToDisplay** - Extra message that can be displayed on user's phone prior to entering the PIN code. Maximum size is 40 bytes. Default value is **eKoolikott**
 
-# TAAT authentication setup
+# Generating the public private key pair in a keystore for DOP
+
 Create a new keystore file:
 
 * A valid certificate is required. A self-signed certificate can be generated with the following commands (don't use self-signed certificates for production environment): 
@@ -113,6 +114,16 @@ Add all keystore configurations to **custom.properties**. From the example keyto
 	keystore.signingEntityID=exampleAlias
 	keystore.signingEntityPassword=exampleKeyPass
 ```
+
+### Exporting the generated public key certificate
+
+To export the public key certificate, which can then be given to the material providers (publishers):
+	*`keytool -export -keystore server.keystore -alias exampleAlias -file EkoolikottPublicKeyCert.cer`
+	
+This EkoolikottPublicKeyCert.cer file can then be used by the material providers to verify, if the user should have the access to the required resource.
+# TAAT authentication setup
+
+In order to set up TAAT authentication you have to have a keystore set up with a public/private key pair.
 
 Create a new connection in [JANUS](https://taeva.taat.edu.ee/module.php/janus/index.php)
 

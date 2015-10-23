@@ -8,6 +8,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
+import ee.hm.dop.model.SearchFilter;
 import ee.hm.dop.model.SearchResult;
 import ee.hm.dop.service.SearchService;
 
@@ -23,27 +24,31 @@ public class SearchResource {
             @QueryParam("subject") @DefaultValue(value = "") String subject,
             @QueryParam("resource_type") @DefaultValue(value = "") String resourceType,
             @QueryParam("educational_context") @DefaultValue(value = "") String educationalContext,
-            @QueryParam("license_type") @DefaultValue(value = "") String licenseType) {
-        if (subject.isEmpty()) {
-            subject = null;
-        }
+            @QueryParam("license_type") @DefaultValue(value = "") String licenseType,
+            @QueryParam("combined_description") @DefaultValue(value = "") String combinedDescription,
+            @QueryParam("paid") @DefaultValue(value = "true") Boolean paid,
+            @QueryParam("type") @DefaultValue(value = "") String type) {
 
-        if (resourceType.isEmpty()) {
-            resourceType = null;
-        }
+        subject = subject.isEmpty() ? null : subject;
+        resourceType = resourceType.isEmpty() ? null : resourceType;
+        educationalContext = educationalContext.isEmpty() ? null : educationalContext;
+        licenseType = licenseType.isEmpty() ? null : licenseType;
+        combinedDescription = combinedDescription.isEmpty() ? null : combinedDescription;
+        type = type.isEmpty() ? null : type;
 
-        if (educationalContext.isEmpty()) {
-            educationalContext = null;
-        }
-
-        if (licenseType.isEmpty()) {
-            licenseType = null;
-        }
+        SearchFilter searchFilter = new SearchFilter();
+        searchFilter.setSubject(subject);
+        searchFilter.setResourceType(resourceType);
+        searchFilter.setEducationalContext(educationalContext);
+        searchFilter.setLicenseType(licenseType);
+        searchFilter.setCombinedDescription(combinedDescription);
+        searchFilter.setPaid(paid);
+        searchFilter.setType(type);
 
         if (start == null) {
-            return searchService.search(query, subject, resourceType, educationalContext, licenseType);
+            return searchService.search(query, searchFilter);
         } else {
-            return searchService.search(query, start, subject, resourceType, educationalContext, licenseType);
+            return searchService.search(query, start, searchFilter);
         }
     }
 

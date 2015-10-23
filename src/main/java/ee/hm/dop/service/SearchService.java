@@ -7,13 +7,17 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.inject.Inject;
 
 import org.apache.solr.client.solrj.util.ClientUtils;
 
+import com.google.common.collect.ImmutableSet;
+
 import ee.hm.dop.dao.MaterialDAO;
 import ee.hm.dop.dao.PortfolioDAO;
+import ee.hm.dop.model.SearchFilter;
 import ee.hm.dop.model.SearchResult;
 import ee.hm.dop.model.Searchable;
 import ee.hm.dop.model.solr.Document;
@@ -37,19 +41,17 @@ public class SearchService {
     private PortfolioDAO portfolioDAO;
 
     public SearchResult search(String query, long start) {
-        return search(query, start, null, null, null, null);
+        return search(query, start, new SearchFilter());
     }
 
-    public SearchResult search(String query, String subject, String resourceType, String educationalContext,
-            String licenseType) {
-        return search(query, 0, subject, resourceType, educationalContext, licenseType);
+    public SearchResult search(String query, SearchFilter searchFilter) {
+        return search(query, 0, searchFilter);
     }
 
-    public SearchResult search(String query, long start, String subject, String resourceType, String educationalContext,
-            String licenseType) {
+    public SearchResult search(String query, long start, SearchFilter searchFilter) {
         SearchResult searchResult = new SearchResult();
 
-        SearchResponse searchResponse = doSearch(query, start, subject, resourceType, educationalContext, licenseType);
+        SearchResponse searchResponse = doSearch(query, start, searchFilter);
         Response response = searchResponse.getResponse();
 
         if (response != null) {
@@ -94,17 +96,20 @@ public class SearchService {
         return unsortedSearchable;
     }
 
-    private SearchResponse doSearch(String query, long start, String subject, String resourceType,
-            String educationalContext, String licenseType) {
+    private SearchResponse doSearch(String query, long start, SearchFilter searchFilter) {
         String queryString = getTokenizedQueryString(query);
 
-        String filtersAsQuery = getFiltersAsQuery(subject, resourceType, educationalContext, licenseType);
+        String filtersAsQuery = getFiltersAsQuery(searchFilter);
         if (!filtersAsQuery.isEmpty()) {
             if (!queryString.isEmpty()) {
                 queryString = format("(%s) AND %s", queryString, filtersAsQuery);
             } else {
                 queryString = filtersAsQuery;
             }
+        }
+
+        if (queryString.isEmpty()) {
+            throw new RuntimeException("No query string and filters present.");
         }
 
         return searchEngineService.search(queryString, start);
@@ -142,13 +147,22 @@ public class SearchService {
         return sb.toString();
     }
 
-    private String getFiltersAsQuery(String subject, String resourceType, String educationalContext,
-            String licenseType) {
+    private String getFiltersAsQuery(SearchFilter searchFilter) {
         Map<String, String> filters = new LinkedHashMap<>();
-        filters.put("subject", subject);
-        filters.put("resource_type", resourceType);
-        filters.put("educational_context", educationalContext);
-        filters.put("license_type", licenseType);
+        filters.put("subject", searchFilter.getSubject());
+        filters.put("resource_type", searchFilter.getResourceType());
+        filters.put("educational_context", searchFilter.getEducationalContext());
+        filters.put("license_type", searchFilter.getLicenseType());
+        filters.put("combined_description", searchFilter.getCombinedDescription());
+
+        if (!searchFilter.isPaid()) {
+            filters.put("paid", "false");
+        }
+
+        Set<String> types = ImmutableSet.of(MATERIAL_TYPE, PORTFOLIO_TYPE);
+        if (types.contains(searchFilter.getType())) {
+            filters.put("type", searchFilter.getType());
+        }
 
         // Convert filters to Solr syntax query
         String filtersAsQuery = "";
@@ -158,7 +172,14 @@ public class SearchService {
                 if (!filtersAsQuery.isEmpty()) {
                     filtersAsQuery += " AND ";
                 }
-                filtersAsQuery += filter.getKey() + ":\"" + value + "\"";
+
+                if (filter.getKey().equals("combined_description")) {
+                    filtersAsQuery += format("(description:\"%s\" OR summary:\"%s\")", value, value);
+                } else if (filter.getKey().equals("paid")) {
+                    filtersAsQuery += "(paid:\"false\" OR type:\"portfolio\")";
+                } else {
+                    filtersAsQuery += format("%s:\"%s\"", filter.getKey(), value);
+                }
             }
         }
         return filtersAsQuery;

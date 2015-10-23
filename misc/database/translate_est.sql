@@ -76,6 +76,11 @@ insert into Translation(translationGroup, translationKey, translation) values (1
 insert into Translation(translationGroup, translationKey, translation) values (1, 'SEARCH_RESULT_1_RESULT_PART_1', 'Otsingule ');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'SEARCH_RESULT_1_RESULT_PART_2', ' leidus ');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'SEARCH_RESULT_1_RESULT_PART_3', ' vaste.');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'SEARCH_RESULT_EMPTY_QUERY_NO_RESULT', 'Ühtegi vastust ei leitud.');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'SEARCH_RESULT_EMPTY_QUERY_PART_1', 'Otsingule leidus ');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'SEARCH_RESULT_EMPTY_QUERY_PART_2', ' vastet.');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'SEARCH_RESULT_EMPTY_QUERY_1_RESULT_PART_1', 'Otsingule leidus ');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'SEARCH_RESULT_EMPTY_QUERY_1_RESULT_PART_2', ' vaste.');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'COPYRIGHT_FOOTER', '© 2016 Kõik õigused kaitstud. Haridus- ja Teadusministeerium');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'SEARCH_RESULT_PREVIOUS', 'Eelmine');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'SEARCH_RESULT_NEXT', 'Järgmine');
@@ -120,7 +125,12 @@ insert into Translation(translationGroup, translationKey, translation) values (1
 insert into Translation(translationGroup, translationKey, translation) values (1, 'DETAILED_SEARCH_AUTHOR', 'Autor');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'DETAILED_SEARCH_SUBMIT', 'Otsi');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'DETAILED_SEARCH_MATERIALS', 'Materjalid');
-insert into Translation(translationGroup, translationKey, translation) values (1, 'DETAILED_SEARCH_PORTFOLIOS', 'Portfoliod');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'DETAILED_SEARCH_PORTFOLIOS', 'Portfooliod');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'DETAILED_SEARCH_ALL', 'Kõik');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'DETAILED_SEARCH_MAIN', 'Põhiväli');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'DETAILED_SEARCH_ON', 'Jah');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'DETAILED_SEARCH_OFF', 'Ei');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'DETAILED_SEARCH_PAID', 'Tasuline');
 
 -- Material Subject translations
 insert into Translation(translationGroup, translationKey, translation) values (1, 'SUBJECT_ESTONIAN', 'Eesti keel');

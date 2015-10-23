@@ -1,16 +1,13 @@
 package ee.hm.dop.rest;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
-
-import javax.ws.rs.core.GenericType;
-import javax.ws.rs.core.Response;
-import javax.ws.rs.core.Response.Status;
-
-import org.junit.Test;
-
 import ee.hm.dop.common.test.ResourceIntegrationTestBase;
 import ee.hm.dop.model.User;
+import org.junit.Test;
+
+import javax.ws.rs.core.*;
+import javax.ws.rs.core.Response.Status;
+
+import static org.junit.Assert.*;
 
 public class UserResourceTest extends ResourceIntegrationTestBase {
 
@@ -57,10 +54,29 @@ public class UserResourceTest extends ResourceIntegrationTestBase {
         assertEquals(Status.NO_CONTENT.getStatusCode(), response.getStatus());
     }
 
+    @Test
+    public void getSignedUserData() {
+        MultivaluedMap<String, Object> headers = new MultivaluedHashMap<>();
+        headers.add("Authentication", "token");
+        headers.add("Username", "mati.maasikas");
+
+        Response response2 = doGet("user/getSignedUserData", headers, MediaType.TEXT_PLAIN_TYPE);
+        assertEquals(Status.OK.getStatusCode(), response2.getStatus());
+
+        String encryptedUserData = response2.readEntity(new GenericType<String>() {
+        });
+        assertNotNull(encryptedUserData);
+    }
+
+    @Test
+    public void getSignedUserDataNotLoggedIn() {
+        Response response = doGet("user/getSignedUserData", MediaType.TEXT_PLAIN_TYPE);
+        assertEquals(Status.UNAUTHORIZED.getStatusCode(), response.getStatus());
+    }
+
     private User getUser(String username) {
         Response response = doGet("user?username=" + username);
         return response.readEntity(new GenericType<User>() {
         });
     }
-
 }

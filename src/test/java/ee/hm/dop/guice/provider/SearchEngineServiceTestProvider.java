@@ -31,7 +31,7 @@ class SearchEngineServiceMock implements SearchEngineService {
 
     private static final Map<String, List<Document>> searchResponses;
 
-    private static final Long[] portfolioIds = { 1L, 2L, 3L };
+    private static final Long[] portfolioIds = { 1L, 2L, 3L, 4L };
 
     private static final int RESULTS_PER_PAGE = 3;
 
@@ -42,7 +42,6 @@ class SearchEngineServiceMock implements SearchEngineService {
         addBigQuery();
 
         addEmptyQueryWithSubjectFilter();
-        addEmptyQueryWithNoFilters();
 
         addQueryWithSubjectFilter();
         addQueryWithResourceTypeFilter();
@@ -60,6 +59,19 @@ class SearchEngineServiceMock implements SearchEngineService {
         addQueryWithSubjectAndEducationalContextAndLicenseTypeFilter();
         addQueryWithResourceTypeAndEducationalContextAndLicenseTypeFilter();
         addQueryWithAllFilters();
+
+        addQueryWithCombinedDescriptionFilter();
+        addQueryWithLicenseTypeAndCombinedDescriptionFilter();
+        addQueryWithEducationalContextAndCombinedDescriptionFilter();
+
+        addQueryWithPaidFilterTrue();
+        addQueryWithPaidFilterFalse();
+        addQueryWithEducationalContextAndPaidFilterFalse();
+        addQueryWithSubjectAndTitleAndAndPaidFilterFalse();
+
+        addQueryWithTypeFilter();
+        addQueryWithCombinedDescriptionAndTypeFilter();
+        addQueryWithPaidFalseAndTypeFilter();
     }
 
     private static void addArabicQuery() {
@@ -81,12 +93,6 @@ class SearchEngineServiceMock implements SearchEngineService {
     private static void addEmptyQueryWithSubjectFilter() {
         String filteredQuery = "subject:\"interestingsubject\"";
         List<Document> filteredSearchResult = createDocumentsWithIdentifiers(5L, 1L);
-        searchResponses.put(filteredQuery, filteredSearchResult);
-    }
-
-    private static void addEmptyQueryWithNoFilters() {
-        String filteredQuery = "";
-        List<Document> filteredSearchResult = createDocumentsWithIdentifiers();
         searchResponses.put(filteredQuery, filteredSearchResult);
     }
 
@@ -180,8 +186,79 @@ class SearchEngineServiceMock implements SearchEngineService {
     }
 
     private static void addQueryWithAllFilters() {
-        String filteredQuery = "(john*) AND subject:\"mathematics\" AND resource_type:\"audio\" AND educational_context:\"preschool\" AND license_type:\"other\"";
-        List<Document> filteredSearchResult = createDocumentsWithIdentifiers(2L, 8L);
+        String filteredQuery = "(john*) AND subject:\"mathematics\" AND resource_type:\"audio\" AND educational_context:\"preschool\""
+                + " AND license_type:\"other\" AND (description:\"desc\" OR summary:\"desc\")"
+                + " AND (paid:\"false\" OR type:\"portfolio\") AND type:\"portfolio\"";
+        List<Document> filteredSearchResult = createDocumentsWithIdentifiers(2L, 3L, 4L);
+        searchResponses.put(filteredQuery, filteredSearchResult);
+    }
+
+    // Queries with combined description
+
+    private static void addQueryWithCombinedDescriptionFilter() {
+        String filteredQuery = "(material*) AND (description:\"the\\ description.\" OR summary:\"the\\ description.\")";
+        List<Document> filteredSearchResult = createDocumentsWithIdentifiers(5L, 1L);
+        searchResponses.put(filteredQuery, filteredSearchResult);
+    }
+
+    private static void addQueryWithLicenseTypeAndCombinedDescriptionFilter() {
+        String filteredQuery = "(material*) AND license_type:\"ccbyncnd\""
+                + " AND (description:\"another\\ description.\" OR summary:\"another\\ description.\")";
+        List<Document> filteredSearchResult = createDocumentsWithIdentifiers(5L, 2L);
+        searchResponses.put(filteredQuery, filteredSearchResult);
+    }
+
+    private static void addQueryWithEducationalContextAndCombinedDescriptionFilter() {
+        String filteredQuery = "(material*) AND educational_context:\"highereducation\""
+                + " AND (description:\"more\\ descriptions.\" OR summary:\"more\\ descriptions.\")";
+        List<Document> filteredSearchResult = createDocumentsWithIdentifiers(5L, 3L);
+        searchResponses.put(filteredQuery, filteredSearchResult);
+    }
+
+    // Queries with no paid materials
+
+    private static void addQueryWithPaidFilterTrue() {
+        String filteredQuery = "dop";
+        List<Document> filteredSearchResult = createDocumentsWithIdentifiers(6L, 4L);
+        searchResponses.put(filteredQuery, filteredSearchResult);
+    }
+
+    private static void addQueryWithPaidFilterFalse() {
+        String filteredQuery = "(dop) AND (paid:\"false\" OR type:\"portfolio\")";
+        List<Document> filteredSearchResult = createDocumentsWithIdentifiers(6L, 1L);
+        searchResponses.put(filteredQuery, filteredSearchResult);
+    }
+
+    private static void addQueryWithEducationalContextAndPaidFilterFalse() {
+        String filteredQuery = "(dop) AND educational_context:\"specialeducation\""
+                + " AND (paid:\"false\" OR type:\"portfolio\")";
+        List<Document> filteredSearchResult = createDocumentsWithIdentifiers(6L, 2L);
+        searchResponses.put(filteredQuery, filteredSearchResult);
+    }
+
+    private static void addQueryWithSubjectAndTitleAndAndPaidFilterFalse() {
+        String filteredQuery = "(dop) AND subject:\"music\" AND (paid:\"false\" OR type:\"portfolio\")";
+        List<Document> filteredSearchResult = createDocumentsWithIdentifiers(6L, 3L);
+        searchResponses.put(filteredQuery, filteredSearchResult);
+    }
+
+    // Queries with type
+
+    private static void addQueryWithTypeFilter() {
+        String filteredQuery = "(weird*) AND type:\"portfolio\"";
+        List<Document> filteredSearchResult = createDocumentsWithIdentifiers(1L, 2L, 3L, 4L);
+        searchResponses.put(filteredQuery, filteredSearchResult);
+    }
+
+    private static void addQueryWithCombinedDescriptionAndTypeFilter() {
+        String filteredQuery = "(weird*) AND (description:\"aliens\" OR summary:\"aliens\") AND type:\"material\"";
+        List<Document> filteredSearchResult = createDocumentsWithIdentifiers(7L, 1L);
+        searchResponses.put(filteredQuery, filteredSearchResult);
+    }
+
+    private static void addQueryWithPaidFalseAndTypeFilter() {
+        String filteredQuery = "(weird*) AND (paid:\"false\" OR type:\"portfolio\")" + " AND type:\"material\"";
+        List<Document> filteredSearchResult = createDocumentsWithIdentifiers(7L, 2L);
         searchResponses.put(filteredQuery, filteredSearchResult);
     }
 

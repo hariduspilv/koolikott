@@ -1,26 +1,45 @@
 package ee.hm.dop.rest;
 
-import static org.apache.commons.lang3.StringUtils.isBlank;
+import ee.hm.dop.model.AuthenticatedUser;
+import ee.hm.dop.model.User;
+import ee.hm.dop.rest.filter.DopPrincipal;
+import ee.hm.dop.service.AuthenticatedUserService;
+import ee.hm.dop.service.UserService;
 
-import java.net.HttpURLConnection;
-
+import javax.annotation.security.RolesAllowed;
 import javax.inject.Inject;
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.SecurityContext;
+import java.net.HttpURLConnection;
 
-import ee.hm.dop.model.User;
-import ee.hm.dop.service.UserService;
+import static org.apache.commons.lang3.StringUtils.isBlank;
 
 @Path("user")
 public class UserResource {
 
     @Inject
     private UserService userService;
+
+    @Inject
+    private AuthenticatedUserService authenticatedUserService;
+
+    @Context
+    private HttpServletRequest request;
+
+    private SecurityContext securityContext;
+
+    @Context
+    public void setSecurityContext(SecurityContext securityContext) {
+        this.securityContext = securityContext;
+    }
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
@@ -42,6 +61,18 @@ public class UserResource {
         }
 
         return newUser;
+    }
+
+
+    @GET
+    @Path("getSignedUserData")
+    @RolesAllowed("USER")
+    @Produces(MediaType.TEXT_PLAIN)
+    public String getSignedUserData() {
+        DopPrincipal dopPrincipal = (DopPrincipal) securityContext.getUserPrincipal();
+        AuthenticatedUser authenticatedUser = dopPrincipal.getAuthenticatedUser();
+
+        return authenticatedUserService.signUserData(authenticatedUser);
     }
 
     private void throwBadRequestException(String message) {

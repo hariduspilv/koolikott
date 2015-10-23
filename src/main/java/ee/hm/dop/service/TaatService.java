@@ -1,42 +1,18 @@
 package ee.hm.dop.service;
 
-import static ee.hm.dop.utils.ConfigurationProperties.KEYSTORE_FILENAME;
-import static ee.hm.dop.utils.ConfigurationProperties.KEYSTORE_PASSWORD;
-import static ee.hm.dop.utils.ConfigurationProperties.KEYSTORE_SIGNING_ENTITY_ID;
-import static ee.hm.dop.utils.ConfigurationProperties.KEYSTORE_SIGNING_ENTITY_PASSWORD;
-import static ee.hm.dop.utils.ConfigurationProperties.TAAT_ASSERTION_CONSUMER_SERVICE_INDEX;
-import static ee.hm.dop.utils.ConfigurationProperties.TAAT_CONNECTION_ID;
-import static ee.hm.dop.utils.ConfigurationProperties.TAAT_METADATA_ENTITY_ID;
-import static ee.hm.dop.utils.ConfigurationProperties.TAAT_METADATA_FILEPATH;
-import static ee.hm.dop.utils.ConfigurationProperties.TAAT_SSO;
-import static org.opensaml.xml.Configuration.getUnmarshallerFactory;
-
-import java.io.ByteArrayInputStream;
-import java.math.BigInteger;
-import java.security.KeyStore;
-import java.security.SecureRandom;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.StringJoiner;
-
-import javax.inject.Inject;
-import javax.servlet.http.HttpServletResponse;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-
+import ee.hm.dop.dao.AuthenticationStateDAO;
+import ee.hm.dop.model.AuthenticatedUser;
+import ee.hm.dop.model.AuthenticationState;
+import ee.hm.dop.model.User;
+import ee.hm.dop.security.KeyStoreUtils;
+import ee.hm.dop.security.MetadataUtils;
 import org.apache.commons.configuration.Configuration;
 import org.apache.xml.security.utils.Base64;
 import org.joda.time.DateTime;
 import org.opensaml.common.SAMLObject;
 import org.opensaml.common.SAMLVersion;
 import org.opensaml.common.binding.BasicSAMLMessageContext;
-import org.opensaml.saml2.core.Assertion;
-import org.opensaml.saml2.core.Attribute;
-import org.opensaml.saml2.core.AuthnRequest;
-import org.opensaml.saml2.core.Issuer;
-import org.opensaml.saml2.core.NameIDPolicy;
-import org.opensaml.saml2.core.Response;
+import org.opensaml.saml2.core.*;
 import org.opensaml.saml2.core.impl.AuthnRequestBuilder;
 import org.opensaml.saml2.core.impl.IssuerBuilder;
 import org.opensaml.saml2.core.impl.NameIDPolicyBuilder;
@@ -56,12 +32,20 @@ import org.opensaml.xml.validation.ValidationException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
-import ee.hm.dop.dao.AuthenticationStateDAO;
-import ee.hm.dop.model.AuthenticatedUser;
-import ee.hm.dop.model.AuthenticationState;
-import ee.hm.dop.model.User;
-import ee.hm.dop.security.KeyStoreUtils;
-import ee.hm.dop.security.MetadataUtils;
+import javax.inject.Inject;
+import javax.servlet.http.HttpServletResponse;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import java.io.ByteArrayInputStream;
+import java.math.BigInteger;
+import java.security.SecureRandom;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.StringJoiner;
+
+import static ee.hm.dop.utils.ConfigurationProperties.*;
+import static org.opensaml.xml.Configuration.getUnmarshallerFactory;
 
 public class TaatService {
 
@@ -93,19 +77,7 @@ public class TaatService {
 
     private static final SecureRandom random = new SecureRandom();
 
-    private static KeyStore keyStore;
-
     private static Credential credential;
-
-    private KeyStore getKeyStore() {
-        if (keyStore == null) {
-            String filename = configuration.getString(KEYSTORE_FILENAME);
-            String password = configuration.getString(KEYSTORE_PASSWORD);
-            keyStore = KeyStoreUtils.loadKeystore(filename, password);
-        }
-
-        return keyStore;
-    }
 
     private AuthnRequest buildAuthnRequest() {
         int assertionConsumerServiceIndex = Integer
@@ -136,7 +108,7 @@ public class TaatService {
         BasicSAMLMessageContext<SAMLObject, AuthnRequest, SAMLObject> context = new BasicSAMLMessageContext<>();
         context.setPeerEntityEndpoint(getEndpoint());
         context.setOutboundSAMLMessage(buildAuthnRequest());
-        context.setOutboundSAMLMessageSigningCredential(getSigningCredential());
+        context.setOutboundSAMLMessageSigningCredential(KeyStoreUtils.getDOPSigningCredential(configuration));
         context.setOutboundMessageTransport(responseAdapter);
         context.setRelayState(token);
 
@@ -208,11 +180,7 @@ public class TaatService {
         return endpoint;
     }
 
-    private Credential getSigningCredential() {
-        String entityId = configuration.getString(KEYSTORE_SIGNING_ENTITY_ID);
-        String entityPassword = configuration.getString(KEYSTORE_SIGNING_ENTITY_PASSWORD);
-        return KeyStoreUtils.getSigningCredential(getKeyStore(), entityId, entityPassword);
-    }
+
 
     private AuthenticationState createAuthenticationState(String token) {
         AuthenticationState authenticationState = new AuthenticationState();
@@ -319,9 +287,5 @@ public class TaatService {
         }
 
         return (X509Credential) credential;
-    }
-
-    static void setKeyStore(KeyStore keyStore) {
-        TaatService.keyStore = keyStore;
     }
 }

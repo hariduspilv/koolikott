@@ -1,13 +1,7 @@
 package ee.hm.dop.security;
 
-import static java.lang.String.format;
-import static org.apache.commons.io.IOUtils.closeQuietly;
-
-import java.io.InputStream;
-import java.security.KeyStore;
-import java.util.HashMap;
-import java.util.Map;
-
+import ee.hm.dop.utils.FileUtils;
+import org.apache.commons.configuration.Configuration;
 import org.opensaml.xml.security.Criteria;
 import org.opensaml.xml.security.CriteriaSet;
 import org.opensaml.xml.security.credential.Credential;
@@ -17,11 +11,20 @@ import org.opensaml.xml.security.x509.X509Credential;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import ee.hm.dop.utils.FileUtils;
+import java.io.InputStream;
+import java.security.KeyStore;
+import java.util.HashMap;
+import java.util.Map;
+
+import static ee.hm.dop.utils.ConfigurationProperties.*;
+import static java.lang.String.format;
+import static org.apache.commons.io.IOUtils.closeQuietly;
 
 public class KeyStoreUtils {
 
     private static final Logger logger = LoggerFactory.getLogger(KeyStoreUtils.class);
+
+    private static KeyStore DOPkeyStore;
 
     public static KeyStore loadKeystore(String filename, String password) {
         KeyStore keyStore = null;
@@ -61,5 +64,25 @@ public class KeyStoreUtils {
         }
 
         return credential;
+    }
+
+    public static void setKeyStore(KeyStore keyStore) {
+        KeyStoreUtils.DOPkeyStore = keyStore;
+    }
+
+    private static KeyStore getDOPKeyStore(Configuration configuration) {
+        if (DOPkeyStore == null) {
+            String filename = configuration.getString(KEYSTORE_FILENAME);
+            String password = configuration.getString(KEYSTORE_PASSWORD);
+            DOPkeyStore = KeyStoreUtils.loadKeystore(filename, password);
+        }
+
+        return DOPkeyStore;
+    }
+
+    public static Credential getDOPSigningCredential(Configuration configuration) {
+        String entityId = configuration.getString(KEYSTORE_SIGNING_ENTITY_ID);
+        String entityPassword = configuration.getString(KEYSTORE_SIGNING_ENTITY_PASSWORD);
+        return KeyStoreUtils.getSigningCredential(getDOPKeyStore(configuration), entityId, entityPassword);
     }
 }
