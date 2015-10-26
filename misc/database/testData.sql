@@ -418,4 +418,4 @@ insert into Portfolio_Tag(tag, portfolio) values(3, 1);
 insert into Portfolio_Tag(tag, portfolio) values(4, 1);
 insert into Portfolio_Tag(tag, portfolio) values(4, 2);
 insert into Portfolio_Tag(tag, portfolio) values(5, 1);
-insert into Portfolio_Tag(tag, portfolio) values(9541, 7);
+insert into Portfolio_Tag(tag, portfolio) values(2, 7);
