@@ -34,7 +34,8 @@
     "awesome-bootstrap-checkbox": "~0.3.5",
     "bootstrap-switch": "~3.3.2",
     "angular-bootstrap-switch": "~0.4.1",
-    "angularjs-slider": "~1.0.0"
+    "angularjs-slider": "~1.0.0",
+    "angular-material": "~0.11.4"
   },
   "resolutions": {
     "angular": "1.4.3"
