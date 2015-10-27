@@ -218,4 +218,22 @@ public class DOPSearchStringTokenizerTest {
 
         assertEquals("jose* -maria* - jesus*", searchQuery);
     }
+
+    @Test
+    public void doNotEscapeParentheses() {
+        DOPSearchStringTokenizer tokenizer = new DOPSearchStringTokenizer(
+                "(test stuff) AND title:\"resource\" AND author:\"automated\"");
+        String searchQuery = consumeTokenizer(tokenizer);
+
+        assertEquals("( test* stuff* ) AND title:\"resource\" AND author:\"automated\"", searchQuery);
+    }
+
+    @Test
+    public void escapeParenthesesInQuotes() {
+        DOPSearchStringTokenizer tokenizer = new DOPSearchStringTokenizer("(test stuff) AND title:\"one (two) three\"");
+        String searchQuery = consumeTokenizer(tokenizer);
+
+        assertEquals("( test* stuff* ) AND title:\"one\\ \\(two\\)\\ three\"", searchQuery);
+    }
+
 }
