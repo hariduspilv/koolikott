@@ -43,7 +43,7 @@ require.config({
     }
 });
 
-require(['app', 'ngMaterial', 'translationService', 'authenticatedUserService', 'serverCallService', 'authenticationService', 'searchService', 'dopHeader', 'dopFooter', 'dopLoginBar', 'dopAlert', 'alertService', 'inputValueControl', 'angularScreenfull', 'dopDetailedSearch'],
- function(app, ngMaterial, translationService, authenticatedUserService, serverCallService, authenticationService, searchService, dopHeader, dopAlert, alertService, inputValueControl, angularScreenfull, dopDetailedSearch) {
+require(['app', 'ngAnimate', 'ngAria', 'ngMaterial', 'translationService', 'authenticatedUserService', 'serverCallService', 'authenticationService', 'searchService', 'dopHeader', 'dopFooter', 'dopLoginBar', 'dopAlert', 'alertService', 'inputValueControl', 'angularScreenfull', 'dopDetailedSearch'],
+ function(app, ngAnimate, ngAria, ngMaterial, translationService, authenticatedUserService, serverCallService, authenticationService, searchService, dopHeader, dopAlert, alertService, inputValueControl, angularScreenfull, dopDetailedSearch) {
     angular.bootstrap(document, ['app']);
 });
