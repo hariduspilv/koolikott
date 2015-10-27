@@ -3,9 +3,9 @@ require.config({
     paths: {
         'dop': '../assets/js/dop.min',
         'modernizr': '../assets/js/modernizr.min',
-        'ngAnimate': '../assets/angular-animate.min',
-        'ngAria': '../assets/angular-aria.min',
-        'ngMaterial': '../assets/angular-material.min',
+        'ngAnimate': '../assets/js/angular-animate.min',
+        'ngAria': '../assets/js/angular-aria.min',
+        'ngMaterial': '../assets/js/angular-material.min',
         'authenticatedUserService': 'services/authenticatedUserService',
         'serverCallService': 'services/serverCallService',
         'authenticationService': 'services/authenticationService',
