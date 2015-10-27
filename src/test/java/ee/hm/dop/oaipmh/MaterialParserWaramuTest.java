@@ -1,23 +1,14 @@
 package ee.hm.dop.oaipmh;
 
-import static org.easymock.EasyMock.createMock;
-import static org.easymock.EasyMock.expect;
-import static org.easymock.EasyMock.replay;
-import static org.easymock.EasyMock.verify;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
-
-import java.io.File;
-import java.io.IOException;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
-
+import ee.hm.dop.model.Language;
+import ee.hm.dop.model.LanguageString;
+import ee.hm.dop.model.Material;
+import ee.hm.dop.model.ResourceType;
+import ee.hm.dop.model.Tag;
+import ee.hm.dop.oaipmh.waramu.MaterialParserWaramu;
+import ee.hm.dop.service.LanguageService;
+import ee.hm.dop.service.ResourceTypeService;
+import ee.hm.dop.service.TagService;
 import org.easymock.EasyMockRunner;
 import org.easymock.Mock;
 import org.easymock.TestSubject;
@@ -26,13 +17,22 @@ import org.junit.runner.RunWith;
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 
-import ee.hm.dop.model.Language;
-import ee.hm.dop.model.LanguageString;
-import ee.hm.dop.model.Material;
-import ee.hm.dop.model.Tag;
-import ee.hm.dop.oaipmh.waramu.MaterialParserWaramu;
-import ee.hm.dop.service.LanguageService;
-import ee.hm.dop.service.TagService;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import java.io.File;
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.easymock.EasyMock.createMock;
+import static org.easymock.EasyMock.expect;
+import static org.easymock.EasyMock.replay;
+import static org.easymock.EasyMock.verify;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
 @RunWith(EasyMockRunner.class)
 public class MaterialParserWaramuTest {
@@ -45,6 +45,9 @@ public class MaterialParserWaramuTest {
 
     @Mock
     private TagService tagService;
+
+    @Mock
+    private ResourceTypeService resourceTypeService;
 
     private Language language = new Language();
 
@@ -78,10 +81,20 @@ public class MaterialParserWaramuTest {
         tag.setId(325L);
         tag.setName("grammaire");
 
+        ResourceType resourceType1 = new ResourceType();
+        resourceType1.setId(444L);
+        resourceType1.setName("WEBSITE");
+
+        ResourceType resourceType2 = new ResourceType();
+        resourceType2.setId(555L);
+        resourceType2.setName("COURSE");
+
         expect(languageService.getLanguage("fr")).andReturn(french).times(2);
         expect(languageService.getLanguage("et")).andReturn(estonian).times(2);
         expect(languageService.getLanguage("fren")).andReturn(french);
         expect(tagService.getTagByName("grammaire")).andReturn(tag);
+        expect(resourceTypeService.getResourceTypeByName(resourceType1.getName())).andReturn(resourceType1);
+        expect(resourceTypeService.getResourceTypeByName(resourceType2.getName())).andReturn(resourceType2);
 
         LanguageString title1 = new LanguageString();
         title1.setLanguage(french);
@@ -110,12 +123,16 @@ public class MaterialParserWaramuTest {
         List<Tag> tags = new ArrayList<>();
         tags.add(tag);
 
-        replay(languageService, tagService);
+        List<ResourceType> resourceTypes = new ArrayList<>();
+        resourceTypes.add(resourceType1);
+        resourceTypes.add(resourceType2);
+
+        replay(languageService, tagService, resourceTypeService);
 
         Document doc = dBuilder.parse(fXmlFile);
         Material material = materialParser.parse(doc);
 
-        verify(languageService, tagService);
+        verify(languageService, tagService, resourceTypeService);
 
         assertEquals("oai:ait.opetaja.ee:437556e69c7ee410b3ff27ad3eaec360219c3990", material.getRepositoryIdentifier());
         assertEquals(titles, material.getTitles());
@@ -124,6 +141,7 @@ public class MaterialParserWaramuTest {
         assertEquals(french, material.getLanguage());
         assertEquals("http://koolitaja.eenet.ee:57219/Waramu3Web/metadata?id=437556e69c7ee410b3ff27ad3eaec360219c3990",
                 material.getSource());
+        assertEquals(resourceTypes, material.getResourceTypes());
     }
 
     @Test

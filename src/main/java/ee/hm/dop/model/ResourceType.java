@@ -12,7 +12,7 @@ public class ResourceType {
     @GeneratedValue
     private Long id;
 
-    @Column(nullable = false, unique = true, name = "resourceType")
+    @Column(nullable = false, unique = true)
     private String name;
 
     public Long getId() {

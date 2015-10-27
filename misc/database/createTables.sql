@@ -43,7 +43,7 @@ CREATE TABLE Author(
 
 CREATE TABLE ResourceType (
   id           BIGINT AUTO_INCREMENT PRIMARY KEY,
-  resourceType VARCHAR(255) NOT NULL UNIQUE
+  name         VARCHAR(255) NOT NULL UNIQUE
 );
 
 CREATE TABLE EducationalContext (

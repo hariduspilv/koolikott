@@ -149,11 +149,13 @@ insert into Material_Subject(subject, material) values(2,6);
 
 -- ResourceType
 
-insert into ResourceType(id, resourceType) values (1001, 'TEXTBOOK1');
-insert into ResourceType(id, resourceType) values (1002, 'EXPERIMENT1');
-insert into ResourceType(id, resourceType) values (1003, 'SIMULATION1');
-insert into ResourceType(id, resourceType) values (1004, 'GLOSSARY1');
-insert into ResourceType(id, resourceType) values (1005, 'ROLEPLAY1');
+insert into ResourceType(id, name) values (1001, 'TEXTBOOK1');
+insert into ResourceType(id, name) values (1002, 'EXPERIMENT1');
+insert into ResourceType(id, name) values (1003, 'SIMULATION1');
+insert into ResourceType(id, name) values (1004, 'GLOSSARY1');
+insert into ResourceType(id, name) values (1005, 'ROLEPLAY1');
+insert into ResourceType(id, name) values (1006, 'WEBSITE');
+insert into ResourceType(id, name) values (1007, 'COURSE');
 
 -- Material_ResourceType
 

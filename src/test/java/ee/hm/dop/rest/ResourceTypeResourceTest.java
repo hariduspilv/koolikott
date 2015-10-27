@@ -1,20 +1,18 @@
 package ee.hm.dop.rest;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.fail;
+import ee.hm.dop.common.test.ResourceIntegrationTestBase;
+import ee.hm.dop.model.ResourceType;
+import org.junit.Test;
 
+import javax.ws.rs.core.GenericType;
+import javax.ws.rs.core.Response;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.ws.rs.core.GenericType;
-import javax.ws.rs.core.Response;
-
-import org.junit.Test;
-
-import ee.hm.dop.common.test.ResourceIntegrationTestBase;
-import ee.hm.dop.model.ResourceType;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.fail;
 
 public class ResourceTypeResourceTest extends ResourceIntegrationTestBase {
 
@@ -25,7 +23,7 @@ public class ResourceTypeResourceTest extends ResourceIntegrationTestBase {
         List<ResourceType> resourceTypes = response.readEntity(new GenericType<List<ResourceType>>() {
         });
 
-        assertEquals(5, resourceTypes.size());
+        assertEquals(7, resourceTypes.size());
         for (int i = 0; i < resourceTypes.size(); i++) {
             assertValidResourceType(resourceTypes.get(i));
         }
@@ -38,6 +36,8 @@ public class ResourceTypeResourceTest extends ResourceIntegrationTestBase {
         resourceTypes.put(1003L, "SIMULATION1");
         resourceTypes.put(1004L, "GLOSSARY1");
         resourceTypes.put(1005L, "ROLEPLAY1");
+        resourceTypes.put(1006L, "WEBSITE");
+        resourceTypes.put(1007L, "COURSE");
 
         assertNotNull(resourceType.getId());
         assertNotNull(resourceType.getName());

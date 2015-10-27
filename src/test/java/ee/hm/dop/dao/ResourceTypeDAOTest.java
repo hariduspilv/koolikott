@@ -1,19 +1,17 @@
 package ee.hm.dop.dao;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.fail;
+import ee.hm.dop.common.test.DatabaseTestBase;
+import ee.hm.dop.model.ResourceType;
+import org.junit.Test;
 
+import javax.inject.Inject;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.inject.Inject;
-
-import org.junit.Test;
-
-import ee.hm.dop.common.test.DatabaseTestBase;
-import ee.hm.dop.model.ResourceType;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.fail;
 
 public class ResourceTypeDAOTest extends DatabaseTestBase {
 
@@ -24,10 +22,23 @@ public class ResourceTypeDAOTest extends DatabaseTestBase {
     public void findAll() {
         List<ResourceType> resourceTypes = resourceTypeDAO.findAll();
 
-        assertEquals(5, resourceTypes.size());
+        assertEquals(7, resourceTypes.size());
         for (int i = 0; i < resourceTypes.size(); i++) {
             assertValidResourceType(resourceTypes.get(i));
         }
+    }
+
+    @Test
+    public void findResourceTypeByName() {
+        Long id = new Long(1001);
+        String name = "TEXTBOOK1";
+
+        ResourceType returnedResourceType = resourceTypeDAO.findResourceTypeByName(name);
+
+        assertNotNull(returnedResourceType);
+        assertNotNull(returnedResourceType.getId());
+        assertEquals(id, returnedResourceType.getId());
+        assertEquals(name, returnedResourceType.getName());
     }
 
     private void assertValidResourceType(ResourceType resourceType) {
@@ -37,6 +48,8 @@ public class ResourceTypeDAOTest extends DatabaseTestBase {
         resourceTypes.put(1003L, "SIMULATION1");
         resourceTypes.put(1004L, "GLOSSARY1");
         resourceTypes.put(1005L, "ROLEPLAY1");
+        resourceTypes.put(1006L, "WEBSITE");
+        resourceTypes.put(1007L, "COURSE");
 
         assertNotNull(resourceType.getId());
         assertNotNull(resourceType.getName());
