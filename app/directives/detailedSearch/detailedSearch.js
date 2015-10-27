@@ -71,21 +71,35 @@ define(['app'], function(app)
                     $location.url(searchService.getURL());
                 };
 
-                function createSearchQuery() {
-                    var query = '';
+                function getFiltersAsQuery() {
+                    var filters = '';
 
-                    if ($scope.detailedSearch.main) {
-                        query += $scope.detailedSearch.main;
-                    }
                     if ($scope.detailedSearch.title) {
-                        query += isEmpty(query) ? '' : ' ';
-                        query += 'title:"' + $scope.detailedSearch.title + '"';
+                        filters += isEmpty(filters) ? '' : ' AND ';
+                        filters += 'title:"' + $scope.detailedSearch.title + '"';
                     }
                     if ($scope.detailedSearch.author) {
-                        query += isEmpty(query) ? '' : ' ';
-                        query += 'author:"' + $scope.detailedSearch.author + '"';
+                        filters += isEmpty(filters) ? '' : ' AND ';
+                        filters += 'author:"' + $scope.detailedSearch.author + '"';
                     }
 
+                    return filters;
+                }
+
+                function createSearchQuery() {
+                    var query = '';
+                    var filters = getFiltersAsQuery();
+
+                    if ($scope.detailedSearch.main) {
+                        if (filters) {
+                            query = '(' + $scope.detailedSearch.main + ') AND ' + filters;
+                        } else {
+                            query = $scope.detailedSearch.main;
+                        }
+                    } else if (filters) {
+                        query = filters;
+                    }
+                    
                     return query;
                 }
 
