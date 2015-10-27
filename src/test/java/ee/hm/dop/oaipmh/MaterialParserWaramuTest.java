@@ -1,11 +1,13 @@
 package ee.hm.dop.oaipmh;
 
+import ee.hm.dop.model.EducationalContext;
 import ee.hm.dop.model.Language;
 import ee.hm.dop.model.LanguageString;
 import ee.hm.dop.model.Material;
 import ee.hm.dop.model.ResourceType;
 import ee.hm.dop.model.Tag;
 import ee.hm.dop.oaipmh.waramu.MaterialParserWaramu;
+import ee.hm.dop.service.EducationalContextService;
 import ee.hm.dop.service.LanguageService;
 import ee.hm.dop.service.ResourceTypeService;
 import ee.hm.dop.service.TagService;
@@ -49,6 +51,9 @@ public class MaterialParserWaramuTest {
     @Mock
     private ResourceTypeService resourceTypeService;
 
+    @Mock
+    private EducationalContextService educationalContextService;
+
     private Language language = new Language();
 
     @Test(expected = ee.hm.dop.oaipmh.ParseException.class)
@@ -89,12 +94,17 @@ public class MaterialParserWaramuTest {
         resourceType2.setId(555L);
         resourceType2.setName("COURSE");
 
+        EducationalContext educationalContext = new EducationalContext();
+        educationalContext.setName("BASICEDUCATION");
+
         expect(languageService.getLanguage("fr")).andReturn(french).times(2);
         expect(languageService.getLanguage("et")).andReturn(estonian).times(2);
         expect(languageService.getLanguage("fren")).andReturn(french);
         expect(tagService.getTagByName("grammaire")).andReturn(tag);
         expect(resourceTypeService.getResourceTypeByName(resourceType1.getName())).andReturn(resourceType1);
         expect(resourceTypeService.getResourceTypeByName(resourceType2.getName())).andReturn(resourceType2);
+        expect(educationalContextService.getEducationalContextByName(educationalContext.getName())).andReturn(educationalContext);
+
 
         LanguageString title1 = new LanguageString();
         title1.setLanguage(french);
@@ -127,12 +137,15 @@ public class MaterialParserWaramuTest {
         resourceTypes.add(resourceType1);
         resourceTypes.add(resourceType2);
 
-        replay(languageService, tagService, resourceTypeService);
+        List<EducationalContext> educationalContexts = new ArrayList<>();
+        educationalContexts.add(educationalContext);
+
+        replay(languageService, tagService, resourceTypeService, educationalContextService);
 
         Document doc = dBuilder.parse(fXmlFile);
         Material material = materialParser.parse(doc);
 
-        verify(languageService, tagService, resourceTypeService);
+        verify(languageService, tagService, resourceTypeService, educationalContextService);
 
         assertEquals("oai:ait.opetaja.ee:437556e69c7ee410b3ff27ad3eaec360219c3990", material.getRepositoryIdentifier());
         assertEquals(titles, material.getTitles());
@@ -142,6 +155,7 @@ public class MaterialParserWaramuTest {
         assertEquals("http://koolitaja.eenet.ee:57219/Waramu3Web/metadata?id=437556e69c7ee410b3ff27ad3eaec360219c3990",
                 material.getSource());
         assertEquals(resourceTypes, material.getResourceTypes());
+        assertEquals(educationalContexts, material.getEducationalContexts());
     }
 
     @Test
