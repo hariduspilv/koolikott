@@ -1,6 +1,9 @@
 package ee.hm.dop.tokenizer;
 
 import java.util.NoSuchElementException;
+import java.util.Set;
+
+import com.google.common.collect.ImmutableSet;
 
 public class DOPSearchStringTokenizer {
 
@@ -9,6 +12,8 @@ public class DOPSearchStringTokenizer {
     private static final String DESCRIPTION_KEYWORD = "description:";
     private static final String SUMMARY_KEYWORD = "summary:";
     private static final char QUOTES = '"';
+    private static final Set<Character> ADDITIONAL_SEPARATORS = ImmutableSet.of('(', ')');
+    private static final Set<String> SYNTAX_KEYWORDS = ImmutableSet.of("AND", "OR");
 
     private String source;
     private int currentPosition;
@@ -50,6 +55,9 @@ public class DOPSearchStringTokenizer {
                 token = parseExactMatch();
             } else if (c == 'a') {
                 token = parseAuthor();
+                if (token == null) {
+                    token = parseSyntaxKeyword();
+                }
             } else if (c == 'd') {
                 token = parseDescription();
             } else if (c == 's') {
@@ -60,6 +68,10 @@ public class DOPSearchStringTokenizer {
                 token = parseMustHave();
             } else if (c == '-') {
                 token = parseMustNotHave();
+            } else if (c == 'o') {
+                token = parseSyntaxKeyword();
+            } else if (ADDITIONAL_SEPARATORS.contains(c)) {
+                token = parseCharacter();
             }
 
             if (token == null) {
@@ -154,7 +166,7 @@ public class DOPSearchStringTokenizer {
                 // Consumes the closing "
                 position = closingQuotes + 1;
             } else {
-                position = nextWhiteSpace(position);
+                position = nextSeparator(position);
                 value = source.substring(tokenStartPos, position);
             }
 
@@ -169,11 +181,11 @@ public class DOPSearchStringTokenizer {
         return source.indexOf(QUOTES, position);
     }
 
-    private int nextWhiteSpace(int startPosition) {
+    private int nextSeparator(int startPosition) {
         int position = startPosition;
         char c = source.charAt(position);
 
-        while (!Character.isWhitespace(c)) {
+        while (!Character.isWhitespace(c) && !ADDITIONAL_SEPARATORS.contains(c)) {
             position++;
             if (position >= maxPosition) {
                 break;
@@ -190,7 +202,7 @@ public class DOPSearchStringTokenizer {
     }
 
     private DOPToken parseRegular() {
-        int position = nextWhiteSpace(currentPosition);
+        int position = nextSeparator(currentPosition);
         RegularToken regularToken = new RegularToken(source.substring(currentPosition, position));
 
         // Update global position
@@ -216,6 +228,26 @@ public class DOPSearchStringTokenizer {
         }
 
         return token;
+    }
+
+    private DOPToken parseCharacter() {
+        char c = source.charAt(currentPosition);
+        currentPosition++;
+        return new SyntaxToken(String.valueOf(c));
+    }
+
+    private DOPToken parseSyntaxKeyword() {
+        int position = nextSeparator(currentPosition);
+        SyntaxToken syntaxToken = new SyntaxToken(source.substring(currentPosition, position).toUpperCase());
+
+        if (!SYNTAX_KEYWORDS.contains(syntaxToken.toString())) {
+            return null;
+        }
+
+        // Update global position
+        currentPosition = position;
+
+        return syntaxToken;
     }
 
     private int skipWhiteSpaces(int startPosition) {
