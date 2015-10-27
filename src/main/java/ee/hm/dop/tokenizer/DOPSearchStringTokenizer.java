@@ -6,6 +6,8 @@ public class DOPSearchStringTokenizer {
 
     private static final String AUTHOR_KEYWORD = "author:";
     private static final String TITLE_KEYWORD = "title:";
+    private static final String DESCRIPTION_KEYWORD = "description:";
+    private static final String SUMMARY_KEYWORD = "summary:";
     private static final char QUOTES = '"';
 
     private String source;
@@ -48,6 +50,10 @@ public class DOPSearchStringTokenizer {
                 token = parseExactMatch();
             } else if (c == 'a') {
                 token = parseAuthor();
+            } else if (c == 'd') {
+                token = parseDescription();
+            } else if (c == 's') {
+                token = parseSummary();
             } else if (c == 't') {
                 token = parseTitle();
             } else if (c == '+') {
@@ -94,6 +100,24 @@ public class DOPSearchStringTokenizer {
         }
 
         return new AuthorToken(value);
+    }
+
+    private DOPToken parseDescription() {
+        String value = extractTokenValue(DESCRIPTION_KEYWORD);
+        if (value == null) {
+            return null;
+        }
+
+        return new DescriptionToken(value);
+    }
+
+    private DOPToken parseSummary() {
+        String value = extractTokenValue(SUMMARY_KEYWORD);
+        if (value == null) {
+            return null;
+        }
+
+        return new SummaryToken(value);
     }
 
     private DOPToken parseTitle() {
