@@ -1,5 +1,6 @@
 package ee.hm.dop.oaipmh.waramu;
 
+import ee.hm.dop.model.EducationalContext;
 import ee.hm.dop.model.Language;
 import ee.hm.dop.model.LanguageString;
 import ee.hm.dop.model.Material;
@@ -7,6 +8,7 @@ import ee.hm.dop.model.ResourceType;
 import ee.hm.dop.model.Tag;
 import ee.hm.dop.oaipmh.MaterialParser;
 import ee.hm.dop.oaipmh.ParseException;
+import ee.hm.dop.service.EducationalContextService;
 import ee.hm.dop.service.LanguageService;
 import ee.hm.dop.service.ResourceTypeService;
 import ee.hm.dop.service.TagService;
@@ -33,6 +35,8 @@ public class MaterialParserWaramu implements MaterialParser {
     private static final String[] SCHEMES = {"http", "https"};
     public static final String WEB_PAGE = "WEBPAGE";
     public static final String WEBSITE = "WEBSITE";
+    public static final String COMPULSORYEDUCATION = "COMPULSORYEDUCATION";
+    public static final String BASICEDUCATION = "BASICEDUCATION";
 
     @Inject
     private LanguageService languageService;
@@ -42,6 +46,9 @@ public class MaterialParserWaramu implements MaterialParser {
 
     @Inject
     private ResourceTypeService resourceTypeService;
+
+    @Inject
+    private EducationalContextService educationalContextService;
 
     @Override
     public Material parse(Document doc) throws ParseException {
@@ -62,6 +69,7 @@ public class MaterialParserWaramu implements MaterialParser {
             setSource(material, lom);
             setTags(material, lom);
             setLearningResourceType(material, doc);
+            setEducationalContext(material, doc);
         } catch (RuntimeException e) {
             logger.error("Unexpected error while parsing document. Document may not"
                     + " match Waramu mapping or XML structure.", e);
@@ -69,6 +77,16 @@ public class MaterialParserWaramu implements MaterialParser {
         }
 
         return material;
+    }
+
+    private void setEducationalContext(Material material, Document doc) throws ParseException {
+        List<EducationalContext> educationalContexts = null;
+        try {
+            educationalContexts = getEducationalContexts(doc);
+        } catch (Exception e) {
+            //ignore if there is no educational context for a material
+        }
+        material.setEducationalContexts(educationalContexts);
     }
 
     private void setLearningResourceType(Material material, Document doc) throws ParseException {
@@ -131,7 +149,7 @@ public class MaterialParserWaramu implements MaterialParser {
 
         XPathFactory xPathfactory = XPathFactory.newInstance();
         XPath xpath = xPathfactory.newXPath();
-        XPathExpression expr = xpath.compile("//*[local-name()='learningResourceType']");
+        XPathExpression expr = xpath.compile("//*[local-name()='lom']/*[local-name()='educational']/*[local-name()='learningResourceType']");
         NodeList nl = (NodeList) expr.evaluate(doc, XPathConstants.NODESET);
 
         for (int i = 0; i < nl.getLength(); i++) {
@@ -146,6 +164,31 @@ public class MaterialParserWaramu implements MaterialParser {
             ResourceType resourceType = resourceTypeService.getResourceTypeByName(type);
             if(!resourceTypes.contains(resourceType) && resourceType != null) {
                 resourceTypes.add(resourceType);
+            }
+        }
+
+        return resourceTypes;
+    }
+
+    private List<EducationalContext> getEducationalContexts(Document doc) throws XPathExpressionException {
+        List<EducationalContext> resourceTypes = new ArrayList<>();
+
+        XPathFactory xPathfactory = XPathFactory.newInstance();
+        XPath xpath = xPathfactory.newXPath();
+        XPathExpression expr = xpath.compile("//*[local-name()='lom']/*[local-name()='educational']/*[local-name()='context']");
+        NodeList nl = (NodeList) expr.evaluate(doc, XPathConstants.NODESET);
+
+        for (int i = 0; i < nl.getLength(); i++) {
+            Element e = (Element) nl.item(i);
+            String context = e.getElementsByTagName("value").item(0).getFirstChild().getTextContent().trim().toUpperCase().replaceAll("\\s", "");
+
+            if (context.equals(COMPULSORYEDUCATION)) {
+                context = BASICEDUCATION;
+            }
+
+            EducationalContext educationalContext = educationalContextService.getEducationalContextByName(context);
+            if(!resourceTypes.contains(educationalContext) && educationalContext != null) {
+                resourceTypes.add(educationalContext);
             }
         }
 

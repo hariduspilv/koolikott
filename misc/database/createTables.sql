@@ -47,8 +47,8 @@ CREATE TABLE ResourceType (
 );
 
 CREATE TABLE EducationalContext (
-  id                 BIGINT AUTO_INCREMENT PRIMARY KEY,
-  educationalContext VARCHAR(255) NOT NULL UNIQUE
+  id   BIGINT AUTO_INCREMENT PRIMARY KEY,
+  name VARCHAR(255) NOT NULL UNIQUE
 );
 
 CREATE TABLE Tag (

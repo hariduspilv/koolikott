@@ -1,17 +1,15 @@
 package ee.hm.dop.dao;
 
+import ee.hm.dop.common.test.DatabaseTestBase;
+import ee.hm.dop.model.EducationalContext;
+import org.junit.Test;
+
+import javax.inject.Inject;
+import java.util.List;
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.fail;
-
-import java.util.List;
-
-import javax.inject.Inject;
-
-import org.junit.Test;
-
-import ee.hm.dop.common.test.DatabaseTestBase;
-import ee.hm.dop.model.EducationalContext;
 
 /**
  * Created by mart.laus on 6.08.2015.
@@ -35,6 +33,19 @@ public class EducationalContextDAOTest extends DatabaseTestBase {
         assertValidEducationalContext(subjects.get(6));
         assertValidEducationalContext(subjects.get(7));
         assertValidEducationalContext(subjects.get(8));
+    }
+
+    @Test
+    public void findResourceTypeByName() {
+        Long id = new Long(1);
+        String name = "PRESCHOOLEDUCATION";
+
+        EducationalContext educationalContext = educationalContextDAO.findEducationalContextByName(name);
+
+        assertNotNull(educationalContext);
+        assertNotNull(educationalContext.getId());
+        assertEquals(id, educationalContext.getId());
+        assertEquals(name, educationalContext.getName());
     }
 
     private void assertValidEducationalContext(EducationalContext educationalContext) {
