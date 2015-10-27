@@ -52,7 +52,7 @@ module.exports = function(grunt) {
                     //'bower_components/angular-material/angular-material.min.js',
                     'bower_components/angular-route/angular-route.min.js',
                     'bower_components/angular-sanitize/angular-sanitize.min.js',
-                    //'bower_components/bootstrap-sass/assets/javascripts/bootstrap.min.js',
+                    'bower_components/bootstrap-sass/assets/javascripts/bootstrap.min.js',
                     'bower_components/angular-translate/angular-translate.min.js',
                     'bower_components/angular-click-outside/clickoutside.directive.js',
                     'bower_components/angular-youtube-mb/dist/angular-youtube-embed.min.js',
