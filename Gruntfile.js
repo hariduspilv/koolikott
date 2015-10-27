@@ -20,7 +20,10 @@ module.exports = function(grunt) {
                 'bower_components/angular-translate-loader-url/angular-translate-loader-url.min.js',
                 'bower_components/screenfull/dist/screenfull.js',
                 'bower_components/angular-screenfull/dist/angular-screenfull.min.js',
-                'bower_components/angular-bootstrap-slider/slider.js'
+                'bower_components/angular-bootstrap-slider/slider.js',
+                'bower_components/angular-animate/angular-animate.min.js',
+                'bower_components/angular-aria/angular-aria.min.js',
+                'bower_components/angular-material/angular-material.min.js'
                 ],
                 dest: '<%= project.assets %>/js/',
                 flatten: true,
