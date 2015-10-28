@@ -1,6 +1,6 @@
 define(['routes','services/dependencyResolver'], function(config, dependencyResolver)
 {
-    var app = angular.module('app', ['ngRoute', 'pascalprecht.translate', 'mouse.utils', 'youtube-embed', 'ngResource', 'ngSanitize', 'ui.select', 'angularScreenfull', 'frapontillo.bootstrap-switch']);
+    var app = angular.module('app', ['ngMaterial', 'ngRoute', 'pascalprecht.translate', 'mouse.utils', 'youtube-embed', 'ngResource', 'ngSanitize', 'ui.select', 'angularScreenfull', 'frapontillo.bootstrap-switch']);
 
     app.config(
     [

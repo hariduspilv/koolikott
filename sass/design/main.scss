@@ -4,8 +4,11 @@ html {
 }
 
 body {
+    position: static;
+    height: auto;
+    min-height: auto;
     margin-bottom: 120px !important; 
-    font-weight: 400
+    font-weight: 400;
 }
 
 a:hover {
