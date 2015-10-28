@@ -36,11 +36,6 @@ define(['app'], function(app)
                         $scope.detailedSearch.educationalContext = defaultEducationalContext;
                     }
 
-                    // Combined Description
-                    if (searchService.getCombinedDescription()) {
-                        $scope.detailedSearch.combinedDescription = searchService.getCombinedDescription();
-                    }
-
                     // Paid
                     if (searchService.isPaid() && (searchService.isPaid() === 'true' || searchService.isPaid() === 'false')) {
                         $scope.detailedSearch.paid = searchService.isPaid();
@@ -63,7 +58,6 @@ define(['app'], function(app)
                 $scope.search = function() {
                     searchService.setSearch(createSearchQuery($scope.detailedSearch.main));
                     
-                    searchService.setCombinedDescription($scope.detailedSearch.combinedDescription);
                     searchService.setPaid($scope.detailedSearch.paid);
                     searchService.setType($scope.detailedSearch.type);
                     searchService.setEducationalContext($scope.detailedSearch.educationalContext);
@@ -77,6 +71,11 @@ define(['app'], function(app)
                     if ($scope.detailedSearch.title) {
                         filters += isEmpty(filters) ? '' : ' AND ';
                         filters += 'title:"' + $scope.detailedSearch.title + '"';
+                    }
+                    if ($scope.detailedSearch.combinedDescription) {
+                        filters += isEmpty(filters) ? '' : ' AND ';
+                        filters += '(description:"' + $scope.detailedSearch.combinedDescription 
+                            + '" OR summary:"' + $scope.detailedSearch.combinedDescription + '")';
                     }
                     if ($scope.detailedSearch.author) {
                         filters += isEmpty(filters) ? '' : ' AND ';
