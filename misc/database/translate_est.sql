@@ -14,7 +14,7 @@ insert into Translation(translationGroup, translationKey, translation) values (1
 insert into Translation(translationGroup, translationKey, translation) values (1, 'TEXT', 'Tekst');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'VIDEO', 'Video');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'APPLICATION', 'Rakendus');
-insert into Translation(translationGroup, translationKey, translation) values (1, 'ASSESSEMENT', 'Hinnang');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'ASSESSMENT', 'Hinnang');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'BROADCAST', 'Saade');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'CASESTUDY', 'Juhtumiuuring');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'COURSE', 'Kursus');

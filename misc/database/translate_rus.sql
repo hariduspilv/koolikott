@@ -14,7 +14,7 @@ insert into Translation(translationgroup, translationkey, translation) values (2
 insert into Translation(translationgroup, translationkey, translation) values (2, 'TEXT', 'текст');
 insert into Translation(translationgroup, translationkey, translation) values (2, 'VIDEO', 'видео');
 insert into Translation(translationgroup, translationkey, translation) values (2, 'APPLICATION', 'применение');
-insert into Translation(translationgroup, translationkey, translation) values (2, 'ASSESSEMENT', 'оценка');
+insert into Translation(translationgroup, translationkey, translation) values (2, 'ASSESSMENT', 'оценка');
 insert into Translation(translationgroup, translationkey, translation) values (2, 'BROADCAST', 'рассылка');
 insert into Translation(translationgroup, translationkey, translation) values (2, 'CASESTUDY', 'пример');
 insert into Translation(translationgroup, translationkey, translation) values (2, 'COURSE', 'курс');

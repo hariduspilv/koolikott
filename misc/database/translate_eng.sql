@@ -14,7 +14,7 @@ insert into Translation(translationGroup, translationKey, translation) values (3
 insert into Translation(translationGroup, translationKey, translation) values (3, 'TEXT', 'Text');
 insert into Translation(translationGroup, translationKey, translation) values (3, 'VIDEO', 'Video');
 insert into Translation(translationGroup, translationKey, translation) values (3, 'APPLICATION', 'Application');
-insert into Translation(translationGroup, translationKey, translation) values (3, 'ASSESSEMENT', 'Assessment');
+insert into Translation(translationGroup, translationKey, translation) values (3, 'ASSESSMENT', 'Assessment');
 insert into Translation(translationGroup, translationKey, translation) values (3, 'BROADCAST', 'Broadcast');
 insert into Translation(translationGroup, translationKey, translation) values (3, 'CASESTUDY', 'Casestudy');
 insert into Translation(translationGroup, translationKey, translation) values (3, 'COURSE', 'Course');
