@@ -4,37 +4,18 @@
             <div class="col-md-9">
                 <div class="row row-material">
                     <div class="heading">
-                        <h1 data-ng-if="!searching && searchQuery">
+                        <h1 data-ng-if="!searching">
                             <span data-ng-if="getNumberOfResults() < 1">
                                 <span data-translate="SEARCH_RESULT_NO_RESULT"></span>
-                                <strong><span data-ng-bind="searchQuery"></span></strong>.
                             </span>
                             <span data-ng-if="getNumberOfResults() === 1">
                                 <span data-translate="SEARCH_RESULT_1_RESULT_PART_1"></span>
-                                <strong><span data-ng-bind="searchQuery"></span></strong>
+                                <strong><span data-ng-bind="getNumberOfResults()"></span></strong>
                                 <span data-translate="SEARCH_RESULT_1_RESULT_PART_2"></span>
-                                <strong><span data-ng-bind="getNumberOfResults()"></span></strong><span data-translate="SEARCH_RESULT_1_RESULT_PART_3"></span>
                             </span>
                             <span data-ng-if="getNumberOfResults() > 1">
                                 <span data-translate="SEARCH_RESULT_PART_1"></span>
-                                <strong><span data-ng-bind="searchQuery"></span></strong>
-                                <span data-translate="SEARCH_RESULT_PART_2"></span>
-                                <strong><span data-ng-bind="getNumberOfResults()"></span></strong>
-                                <span data-translate="SEARCH_RESULT_PART_3"></span>
-                            </span>
-                        </h1>
-                        <h1 data-ng-if="!searching && !searchQuery">
-                            <span data-ng-if="getNumberOfResults() < 1">
-                                <span data-translate="SEARCH_RESULT_EMPTY_QUERY_NO_RESULT"></span>
-                            </span>
-                            <span data-ng-if="getNumberOfResults() === 1">
-                                <span data-translate="SEARCH_RESULT_EMPTY_QUERY_1_RESULT_PART_1"></span>
-                                <strong><span data-ng-bind="getNumberOfResults()"></span></strong>
-                                <span data-translate="SEARCH_RESULT_EMPTY_QUERY_1_RESULT_PART_2"></span>
-                            </span>
-                            <span data-ng-if="getNumberOfResults() > 1">
-                                <span data-translate="SEARCH_RESULT_EMPTY_QUERY_PART_1"></span>
-                                <strong><span data-ng-bind="getNumberOfResults()"></span></strong><span data-translate="SEARCH_RESULT_EMPTY_QUERY_PART_2"></span>
+                                <strong><span data-ng-bind="getNumberOfResults()"></span></strong><span data-translate="SEARCH_RESULT_PART_2"></span>
                             </span>
                         </h1>
                     </div>
@@ -86,7 +67,7 @@
                         </nav>
                     </div>
                 </div>
-                
+
             </div>
         </div>
     </div>
