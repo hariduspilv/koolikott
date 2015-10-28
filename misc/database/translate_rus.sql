@@ -84,17 +84,6 @@ insert into Translation(translationGroup, translationKey, translation) values (2
 insert into Translation(translationGroup, translationKey, translation) values (2, 'COPYRIGHT_FOOTER', '© 2016 Все права защищены. Министерство образования и науки');
 insert into Translation(translationGroup, translationKey, translation) values (2, 'SEARCH_RESULT_PREVIOUS', 'Предыдущая');
 insert into Translation(translationGroup, translationKey, translation) values (2, 'SEARCH_RESULT_NEXT', 'Следующий');
-insert into Translation(translationGroup, translationKey, translation) values (2, 'SEARCH_FILTER_SUBJECT_LABEL', 'Тема');
-insert into Translation(translationGroup, translationKey, translation) values (2, 'SEARCH_FILTER_SUBJECT_PLACEHOLDER', 'Выберите или поиск...');
-insert into Translation(translationGroup, translationKey, translation) values (2, 'SEARCH_FILTER_RESOURCE_TYPE_LABEL', 'Тип');
-insert into Translation(translationGroup, translationKey, translation) values (2, 'SEARCH_FILTER_RESOURCE_TYPE_PLACEHOLDER', 'Выберите или поиск...');
-insert into Translation(translationGroup, translationKey, translation) values (2, 'SEARCH_FILTER_EDUCATIONAL_CONTEXT_LABEL', 'Обучающие контекст');
-insert into Translation(translationGroup, translationKey, translation) values (2, 'SEARCH_FILTER_EDUCATIONAL_CONTEXT_PLACEHOLDER', 'Выберите или поиск...');
-insert into Translation(translationGroup, translationKey, translation) values (2, 'SEARCH_FILTER_LICENSE_TYPE_LABEL', 'Тип лицензии');
-insert into Translation(translationGroup, translationKey, translation) values (2, 'SEARCH_FILTER_LICENSE_TYPE_PLACEHOLDER', 'Выберите или поиск...');
-insert into Translation(translationGroup, translationKey, translation) values (2, 'SEARCH_FILTER_BUTTON_FILTER', 'Сортировать');
-insert into Translation(translationGroup, translationKey, translation) values (2, 'SEARCH_FILTER_BUTTON_RESET', 'Сброс');
-insert into Translation(translationGroup, translationKey, translation) values (2, 'SEARCH_FILTER_TITLE', 'Фильтр');
 insert into Translation(translationGroup, translationKey, translation) values (2, 'MYPROFILE_PAGE_TITLE_PORTFOLIOS', 'Мои портфели');
 insert into Translation(translationGroup, translationKey, translation) values (2, 'MYPROFILE_PAGE_TITLE_MATERIALS', 'Мои материалы');
 insert into Translation(translationGroup, translationKey, translation) values (2, 'MYPROFILE_PAGE_TITLE_MY_DATA', 'Мой данные');

@@ -149,10 +149,7 @@ public class SearchService {
 
     private String getFiltersAsQuery(SearchFilter searchFilter) {
         Map<String, String> filters = new LinkedHashMap<>();
-        filters.put("subject", searchFilter.getSubject());
-        filters.put("resource_type", searchFilter.getResourceType());
         filters.put("educational_context", searchFilter.getEducationalContext());
-        filters.put("license_type", searchFilter.getLicenseType());
 
         if (!searchFilter.isPaid()) {
             filters.put("paid", "false");

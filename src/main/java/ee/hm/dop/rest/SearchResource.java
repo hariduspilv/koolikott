@@ -21,24 +21,15 @@ public class SearchResource {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public SearchResult search(@QueryParam("q") String query, @QueryParam("start") Long start,
-            @QueryParam("subject") @DefaultValue(value = "") String subject,
-            @QueryParam("resource_type") @DefaultValue(value = "") String resourceType,
             @QueryParam("educational_context") @DefaultValue(value = "") String educationalContext,
-            @QueryParam("license_type") @DefaultValue(value = "") String licenseType,
             @QueryParam("paid") @DefaultValue(value = "true") Boolean paid,
             @QueryParam("type") @DefaultValue(value = "") String type) {
 
-        subject = subject.isEmpty() ? null : subject;
-        resourceType = resourceType.isEmpty() ? null : resourceType;
         educationalContext = educationalContext.isEmpty() ? null : educationalContext;
-        licenseType = licenseType.isEmpty() ? null : licenseType;
         type = type.isEmpty() ? null : type;
 
         SearchFilter searchFilter = new SearchFilter();
-        searchFilter.setSubject(subject);
-        searchFilter.setResourceType(resourceType);
         searchFilter.setEducationalContext(educationalContext);
-        searchFilter.setLicenseType(licenseType);
         searchFilter.setPaid(paid);
         searchFilter.setType(type);
 

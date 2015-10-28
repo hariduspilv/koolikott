@@ -84,17 +84,6 @@ insert into Translation(translationGroup, translationKey, translation) values (1
 insert into Translation(translationGroup, translationKey, translation) values (1, 'COPYRIGHT_FOOTER', '© 2016 Kõik õigused kaitstud. Haridus- ja Teadusministeerium');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'SEARCH_RESULT_PREVIOUS', 'Eelmine');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'SEARCH_RESULT_NEXT', 'Järgmine');
-insert into Translation(translationGroup, translationKey, translation) values (1, 'SEARCH_FILTER_SUBJECT_LABEL', 'Teema');
-insert into Translation(translationGroup, translationKey, translation) values (1, 'SEARCH_FILTER_SUBJECT_PLACEHOLDER', 'Vali või otsi...');
-insert into Translation(translationGroup, translationKey, translation) values (1, 'SEARCH_FILTER_RESOURCE_TYPE_LABEL', 'Tüüp');
-insert into Translation(translationGroup, translationKey, translation) values (1, 'SEARCH_FILTER_RESOURCE_TYPE_PLACEHOLDER', 'Vali või otsi...');
-insert into Translation(translationGroup, translationKey, translation) values (1, 'SEARCH_FILTER_EDUCATIONAL_CONTEXT_LABEL', 'Kooliaste');
-insert into Translation(translationGroup, translationKey, translation) values (1, 'SEARCH_FILTER_EDUCATIONAL_CONTEXT_PLACEHOLDER', 'Vali või otsi...');
-insert into Translation(translationGroup, translationKey, translation) values (1, 'SEARCH_FILTER_LICENSE_TYPE_LABEL', 'Litsentsi tüüp');
-insert into Translation(translationGroup, translationKey, translation) values (1, 'SEARCH_FILTER_LICENSE_TYPE_PLACEHOLDER', 'Vali või otsi...');
-insert into Translation(translationGroup, translationKey, translation) values (1, 'SEARCH_FILTER_BUTTON_FILTER', 'Filtreeri');
-insert into Translation(translationGroup, translationKey, translation) values (1, 'SEARCH_FILTER_BUTTON_RESET', 'Tühista');
-insert into Translation(translationGroup, translationKey, translation) values (1, 'SEARCH_FILTER_TITLE', 'Filter');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'MYPROFILE_PAGE_TITLE_PORTFOLIOS', 'Minu õpimapid');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'MYPROFILE_PAGE_TITLE_MATERIALS', 'Minu materjalid');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'MYPROFILE_PAGE_TITLE_MY_DATA', 'Minu andmed');

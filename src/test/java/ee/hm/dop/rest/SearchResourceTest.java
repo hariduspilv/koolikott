@@ -30,7 +30,7 @@ public class SearchResourceTest extends ResourceIntegrationTestBase {
         String query = "المدرسية";
         SearchResult searchResult = doGet(buildQueryURL(query, 0, new SearchFilter()), SearchResult.class);
 
-        assertMaterialIdentifiers(searchResult.getItems(), 3L);
+        assertMaterialIdentifiers(searchResult.getItems(), 1L);
         assertEquals(1, searchResult.getTotalResults());
         assertEquals(0, searchResult.getStart());
     }
@@ -64,52 +64,13 @@ public class SearchResourceTest extends ResourceIntegrationTestBase {
     }
 
     @Test
-    public void searchWithNullQueryAndSubjectFilter() {
+    public void searchWithNullQueryAndEducationalContextFilter() {
         String query = null;
         SearchFilter searchFilter = new SearchFilter();
-        searchFilter.setSubject("InterestingSubject");
+        searchFilter.setEducationalContext("Interesting");
         SearchResult searchResult = doGet(buildQueryURL(query, 0, searchFilter), SearchResult.class);
 
-        assertMaterialIdentifiers(searchResult.getItems(), 5L, 1L);
-        assertEquals(2, searchResult.getTotalResults());
-        assertEquals(0, searchResult.getStart());
-    }
-
-    @Test
-    public void searchWithSubjectFilter() {
-        String query = "filteredquery";
-        SearchFilter searchFilter = new SearchFilter();
-        searchFilter.setSubject("Mathematics");
-        SearchResult searchResult = doGet(buildQueryURL(query, 0, searchFilter), SearchResult.class);
-
-        assertMaterialIdentifiers(searchResult.getItems(), 5L);
-        assertEquals(1, searchResult.getTotalResults());
-        assertEquals(0, searchResult.getStart());
-    }
-
-    @Test
-    public void searchWithResourceTypeFilter() {
-        String query = "beethoven";
-        SearchFilter searchFilter = new SearchFilter();
-        searchFilter.setResourceType("Audio");
-        String queryURL = buildQueryURL(query, 0, searchFilter);
-        SearchResult searchResult = doGet(queryURL, SearchResult.class);
-
-        assertMaterialIdentifiers(searchResult.getItems(), 4L);
-        assertEquals(1, searchResult.getTotalResults());
-        assertEquals(0, searchResult.getStart());
-    }
-
-    @Test
-    public void searchWithSubjectAndResourceTypeFilter() {
-        String query = "beethoven";
-        SearchFilter searchFilter = new SearchFilter();
-        searchFilter.setSubject("Mathematics");
-        searchFilter.setResourceType("Audio");
-        String queryURL = buildQueryURL(query, 0, searchFilter);
-        SearchResult searchResult = doGet(queryURL, SearchResult.class);
-
-        assertMaterialIdentifiers(searchResult.getItems(), 7L);
+        assertMaterialIdentifiers(searchResult.getItems(), 2L);
         assertEquals(1, searchResult.getTotalResults());
         assertEquals(0, searchResult.getStart());
     }
@@ -122,171 +83,10 @@ public class SearchResourceTest extends ResourceIntegrationTestBase {
         String queryURL = buildQueryURL(query, 0, searchFilter);
         SearchResult searchResult = doGet(queryURL, SearchResult.class);
 
-        assertMaterialIdentifiers(searchResult.getItems(), 6L);
-        assertEquals(1, searchResult.getTotalResults());
-        assertEquals(0, searchResult.getStart());
-    }
-
-    @Test
-    public void searchWithSubjectAndEducationalContextFilter() {
-        String query = "beethoven";
-        SearchFilter searchFilter = new SearchFilter();
-        searchFilter.setSubject("Mathematics");
-        searchFilter.setEducationalContext("Preschool");
-        String queryURL = buildQueryURL(query, 0, searchFilter);
-        SearchResult searchResult = doGet(queryURL, SearchResult.class);
-
-        assertMaterialIdentifiers(searchResult.getItems(), 8L);
-        assertEquals(1, searchResult.getTotalResults());
-        assertEquals(0, searchResult.getStart());
-    }
-
-    @Test
-    public void searchWithResourceTypeAndEducationalContextFilter() {
-        String query = "beethoven";
-        SearchFilter searchFilter = new SearchFilter();
-        searchFilter.setResourceType("audio");
-        searchFilter.setEducationalContext("preschool");
-        String queryURL = buildQueryURL(query, 0, searchFilter);
-        SearchResult searchResult = doGet(queryURL, SearchResult.class);
-
-        assertMaterialIdentifiers(searchResult.getItems(), 7L, 8L);
+        assertMaterialIdentifiers(searchResult.getItems(), 1L, 2L);
         assertEquals(2, searchResult.getTotalResults());
         assertEquals(0, searchResult.getStart());
     }
-
-    @Test
-    public void searchWithSubjectAndResourceTypeAndEducationalContextFilters() {
-        String query = "john";
-        SearchFilter searchFilter = new SearchFilter();
-        searchFilter.setSubject("Mathematics");
-        searchFilter.setResourceType("Audio");
-        searchFilter.setEducationalContext("Preschool");
-        SearchResult searchResult = doGet(buildQueryURL(query, 0, searchFilter), SearchResult.class);
-
-        assertMaterialIdentifiers(searchResult.getItems(), 2L);
-        assertEquals(1, searchResult.getTotalResults());
-        assertEquals(0, searchResult.getStart());
-    }
-
-    // Tests with License type
-
-    @Test
-    public void searchWithLicenseType() {
-        String query = "database";
-        SearchFilter searchFilter = new SearchFilter();
-        searchFilter.setLicenseType("CC");
-        SearchResult searchResult = doGet(buildQueryURL(query, 0, searchFilter), SearchResult.class);
-
-        assertMaterialIdentifiers(searchResult.getItems(), 2L, 1L);
-        assertEquals(0L, searchResult.getStart());
-        assertEquals(2L, searchResult.getTotalResults());
-    }
-
-    @Test
-    public void searchWithSubjectAndLicenseTypeFilter() {
-        String query = "filteredquery";
-        SearchFilter searchFilter = new SearchFilter();
-        searchFilter.setSubject("Mathematics");
-        searchFilter.setLicenseType("CCBY");
-        SearchResult searchResult = doGet(buildQueryURL(query, 0, searchFilter), SearchResult.class);
-
-        assertMaterialIdentifiers(searchResult.getItems(), 2L, 1L, 3L);
-        assertEquals(3, searchResult.getTotalResults());
-        assertEquals(0, searchResult.getStart());
-    }
-
-    @Test
-    public void searchWithResourceTypeAndLicenseTypeFilter() {
-        String query = "beethoven";
-        SearchFilter searchFilter = new SearchFilter();
-        searchFilter.setResourceType("Audio");
-        searchFilter.setLicenseType("CCBYSA");
-        String queryURL = buildQueryURL(query, 0, searchFilter);
-        SearchResult searchResult = doGet(queryURL, SearchResult.class);
-
-        assertMaterialIdentifiers(searchResult.getItems(), 2L, 3L);
-        assertEquals(2, searchResult.getTotalResults());
-        assertEquals(0, searchResult.getStart());
-    }
-
-    @Test
-    public void searchWithSubjectAndResourceTypeAndLicenseTypeFilter() {
-        String query = "beethoven";
-        SearchFilter searchFilter = new SearchFilter();
-        searchFilter.setSubject("Mathematics");
-        searchFilter.setResourceType("Audio");
-        searchFilter.setLicenseType("CCBYND");
-        String queryURL = buildQueryURL(query, 0, searchFilter);
-        SearchResult searchResult = doGet(queryURL, SearchResult.class);
-
-        assertMaterialIdentifiers(searchResult.getItems(), 2L, 4L);
-        assertEquals(2, searchResult.getTotalResults());
-        assertEquals(0, searchResult.getStart());
-    }
-
-    @Test
-    public void searchWithEducationalContextAndLicenseTypeFilter() {
-        String query = "beethoven";
-        SearchFilter searchFilter = new SearchFilter();
-        searchFilter.setEducationalContext("preschool");
-        searchFilter.setLicenseType("CCBYSA");
-        String queryURL = buildQueryURL(query, 0, searchFilter);
-        SearchResult searchResult = doGet(queryURL, SearchResult.class);
-
-        assertMaterialIdentifiers(searchResult.getItems(), 2L, 5L);
-        assertEquals(2, searchResult.getTotalResults());
-        assertEquals(0, searchResult.getStart());
-    }
-
-    @Test
-    public void searchWithSubjectAndEducationalContextAndLicenseTypeFilter() {
-        String query = "beethoven";
-        SearchFilter searchFilter = new SearchFilter();
-        searchFilter.setSubject("Mathematics");
-        searchFilter.setEducationalContext("Preschool");
-        searchFilter.setLicenseType("CCBYNC");
-        String queryURL = buildQueryURL(query, 0, searchFilter);
-        SearchResult searchResult = doGet(queryURL, SearchResult.class);
-
-        assertMaterialIdentifiers(searchResult.getItems(), 2L, 6L);
-        assertEquals(2, searchResult.getTotalResults());
-        assertEquals(0, searchResult.getStart());
-    }
-
-    @Test
-    public void searchWithResourceTypeAndEducationalContextAndLicenseTypeFilter() {
-        String query = "beethoven";
-        SearchFilter searchFilter = new SearchFilter();
-        searchFilter.setResourceType("audio");
-        searchFilter.setEducationalContext("preschool");
-        searchFilter.setLicenseType("CCBYND");
-        String queryURL = buildQueryURL(query, 0, searchFilter);
-        SearchResult searchResult = doGet(queryURL, SearchResult.class);
-
-        assertMaterialIdentifiers(searchResult.getItems(), 2L, 7L);
-        assertEquals(2, searchResult.getTotalResults());
-        assertEquals(0, searchResult.getStart());
-    }
-
-    @Test
-    public void searchWithAllFilters() {
-        String query = "john";
-        SearchFilter searchFilter = new SearchFilter();
-        searchFilter.setSubject("Mathematics");
-        searchFilter.setResourceType("Audio");
-        searchFilter.setEducationalContext("Preschool");
-        searchFilter.setLicenseType("other");
-        searchFilter.setPaid(false);
-        searchFilter.setType("portfolio");
-        SearchResult searchResult = doGet(buildQueryURL(query, 0, searchFilter), SearchResult.class);
-
-        assertMaterialIdentifiers(searchResult.getItems(), 2L, 3L, 4L);
-        assertEquals(3, searchResult.getTotalResults());
-        assertEquals(0, searchResult.getStart());
-    }
-
-    // Tests with paid/free
 
     @Test
     public void searchWithPaidFilterTrue() {
@@ -295,7 +95,7 @@ public class SearchResourceTest extends ResourceIntegrationTestBase {
         searchFilter.setPaid(true);
         SearchResult searchResult = doGet(buildQueryURL(query, 0, searchFilter), SearchResult.class);
 
-        assertMaterialIdentifiers(searchResult.getItems(), 6L, 4L);
+        assertMaterialIdentifiers(searchResult.getItems(), 1L, 3L);
         assertEquals(2, searchResult.getTotalResults());
         assertEquals(0, searchResult.getStart());
     }
@@ -307,9 +107,22 @@ public class SearchResourceTest extends ResourceIntegrationTestBase {
         searchFilter.setPaid(false);
         SearchResult searchResult = doGet(buildQueryURL(query, 0, searchFilter), SearchResult.class);
 
-        assertMaterialIdentifiers(searchResult.getItems(), 6L, 1L);
+        assertMaterialIdentifiers(searchResult.getItems(), 1L, 4L);
         assertEquals(2, searchResult.getTotalResults());
         assertEquals(0, searchResult.getStart());
+    }
+
+    @Test
+    public void searchWithTypeFilter() {
+        String query = "weird";
+        SearchFilter searchFilter = new SearchFilter();
+        searchFilter.setType("portfolio");
+        int start = 0;
+        SearchResult searchResult = doGet(buildQueryURL(query, start, searchFilter), SearchResult.class);
+
+        assertMaterialIdentifiers(searchResult.getItems(), 1L, 2L, 3L);
+        assertEquals(3, searchResult.getTotalResults());
+        assertEquals(start, searchResult.getStart());
     }
 
     @Test
@@ -320,48 +133,21 @@ public class SearchResourceTest extends ResourceIntegrationTestBase {
         searchFilter.setPaid(false);
         SearchResult searchResult = doGet(buildQueryURL(query, 0, searchFilter), SearchResult.class);
 
-        assertMaterialIdentifiers(searchResult.getItems(), 6L, 2L);
+        assertMaterialIdentifiers(searchResult.getItems(), 1L, 6L);
         assertEquals(2, searchResult.getTotalResults());
         assertEquals(0, searchResult.getStart());
     }
 
     @Test
-    public void searchWithSubjectAndAndPaidFilterFalse() {
-        String query = "dop";
+    public void searchWithEducationalContextAndTypeFilter() {
+        String query = "beethoven";
         SearchFilter searchFilter = new SearchFilter();
-        searchFilter.setSubject("music");
-        searchFilter.setPaid(false);
-        SearchResult searchResult = doGet(buildQueryURL(query, 0, searchFilter), SearchResult.class);
-
-        assertMaterialIdentifiers(searchResult.getItems(), 6L, 3L);
-        assertEquals(2, searchResult.getTotalResults());
-        assertEquals(0, searchResult.getStart());
-    }
-
-    // Tests with type
-
-    @Test
-    public void searchWithTypeFilter() {
-        String query = "weird";
-        SearchFilter searchFilter = new SearchFilter();
-        searchFilter.setType("portfolio");
-        int start = RESULTS_PER_PAGE;
-        SearchResult searchResult = doGet(buildQueryURL(query, start, searchFilter), SearchResult.class);
-
-        assertMaterialIdentifiers(searchResult.getItems(), 4L);
-        assertEquals(4, searchResult.getTotalResults());
-        assertEquals(start, searchResult.getStart());
-    }
-
-    @Test
-    public void searchWithResourceTypeAndTypeFilter() {
-        String query = "weird";
-        SearchFilter searchFilter = new SearchFilter();
-        searchFilter.setResourceType("aliens");
+        searchFilter.setEducationalContext("Preschool");
         searchFilter.setType("material");
-        SearchResult searchResult = doGet(buildQueryURL(query, 0, searchFilter), SearchResult.class);
+        String queryURL = buildQueryURL(query, 0, searchFilter);
+        SearchResult searchResult = doGet(queryURL, SearchResult.class);
 
-        assertMaterialIdentifiers(searchResult.getItems(), 7L, 1L);
+        assertMaterialIdentifiers(searchResult.getItems(), 1L, 7L);
         assertEquals(2, searchResult.getTotalResults());
         assertEquals(0, searchResult.getStart());
     }
@@ -374,8 +160,22 @@ public class SearchResourceTest extends ResourceIntegrationTestBase {
         searchFilter.setType("material");
         SearchResult searchResult = doGet(buildQueryURL(query, 0, searchFilter), SearchResult.class);
 
-        assertMaterialIdentifiers(searchResult.getItems(), 7L, 2L);
+        assertMaterialIdentifiers(searchResult.getItems(), 1L, 8L);
         assertEquals(2, searchResult.getTotalResults());
+        assertEquals(0, searchResult.getStart());
+    }
+
+    @Test
+    public void searchWithAllFilters() {
+        String query = "john";
+        SearchFilter searchFilter = new SearchFilter();
+        searchFilter.setEducationalContext("Preschool");
+        searchFilter.setPaid(false);
+        searchFilter.setType("portfolio");
+        SearchResult searchResult = doGet(buildQueryURL(query, 0, searchFilter), SearchResult.class);
+
+        assertMaterialIdentifiers(searchResult.getItems(), 2L, 3L, 4L);
+        assertEquals(3, searchResult.getTotalResults());
         assertEquals(0, searchResult.getStart());
     }
 
@@ -387,17 +187,8 @@ public class SearchResourceTest extends ResourceIntegrationTestBase {
         if (start != 0) {
             queryURL += "&start=" + start;
         }
-        if (searchFilter.getSubject() != null) {
-            queryURL += "&subject=" + encodeQuery(searchFilter.getSubject());
-        }
-        if (searchFilter.getResourceType() != null) {
-            queryURL += "&resource_type=" + encodeQuery(searchFilter.getResourceType());
-        }
         if (searchFilter.getEducationalContext() != null) {
             queryURL += "&educational_context=" + encodeQuery(searchFilter.getEducationalContext());
-        }
-        if (searchFilter.getLicenseType() != null) {
-            queryURL += "&license_type=" + encodeQuery(searchFilter.getLicenseType());
         }
         if (searchFilter.isPaid() == false) {
             queryURL += "&paid=false";

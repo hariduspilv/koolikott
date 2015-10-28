@@ -41,38 +41,21 @@ class SearchEngineServiceMock implements SearchEngineService {
         addArabicQuery();
         addBigQuery();
 
-        addEmptyQueryWithSubjectFilter();
+        addEmptyQueryWithEducationalContextFilter();
 
-        addQueryWithSubjectFilter();
-        addQueryWithResourceTypeFilter();
-        addQueryWithSubjectAndResourceTypeFilter();
         addQueryWithEducationalContextFilter();
-        addQueryWithSubjectAndEducationalContextFilter();
-        addQueryWithResourceTypeAndEducationalContextFilter();
-        addQueryWithSubjectAndResourceTypeAndEducationalContextFilters();
-
-        addQueryWithLicenseTypeFilter();
-        addQueryWithSubjectAndLicenseTypeFilter();
-        addQueryWithResourceTypeAndLicenseTypeFilter();
-        addQueryWithSubjectAndResourceTypeAndLicenseTypeFilter();
-        addQueryWithEducationalContextAndLicenseTypeFilter();
-        addQueryWithSubjectAndEducationalContextAndLicenseTypeFilter();
-        addQueryWithResourceTypeAndEducationalContextAndLicenseTypeFilter();
-        addQueryWithAllFilters();
-
         addQueryWithPaidFilterTrue();
         addQueryWithPaidFilterFalse();
-        addQueryWithEducationalContextAndPaidFilterFalse();
-        addQueryWithSubjectAndTitleAndAndPaidFilterFalse();
-
         addQueryWithTypeFilter();
-        addQueryWithResourceTypeAndTypeFilter();
+        addQueryWithEducationalContextAndPaidFilterFalse();
+        addQueryWithEducationalContextAndTypeFilter();
         addQueryWithPaidFalseAndTypeFilter();
+        addQueryWithAllFilters();
     }
 
     private static void addArabicQuery() {
         String arabicQuery = "المدرسية*";
-        List<Document> arabicSearchResult = createDocumentsWithIdentifiers(3L);
+        List<Document> arabicSearchResult = createDocumentsWithIdentifiers(1L);
         searchResponses.put(arabicQuery, arabicSearchResult);
     }
 
@@ -86,152 +69,59 @@ class SearchEngineServiceMock implements SearchEngineService {
         searchResponses.put(bigQuery, bigQueryDocuments);
     }
 
-    private static void addEmptyQueryWithSubjectFilter() {
-        String filteredQuery = "subject:\"interestingsubject\"";
-        List<Document> filteredSearchResult = createDocumentsWithIdentifiers(5L, 1L);
-        searchResponses.put(filteredQuery, filteredSearchResult);
-    }
-
-    // Queries containing combinations of subject, resource and educational
-    // context:
-
-    private static void addQueryWithSubjectFilter() {
-        String filteredQuery = "(filteredquery*) AND subject:\"mathematics\"";
-        List<Document> filteredSearchResult = createDocumentsWithIdentifiers(5L);
-        searchResponses.put(filteredQuery, filteredSearchResult);
-    }
-
-    private static void addQueryWithResourceTypeFilter() {
-        String filteredQuery = "(beethoven*) AND resource_type:\"audio\"";
-        List<Document> filteredSearchResult = createDocumentsWithIdentifiers(4L);
-        searchResponses.put(filteredQuery, filteredSearchResult);
-    }
-
-    private static void addQueryWithSubjectAndResourceTypeFilter() {
-        String filteredQuery = "(beethoven*) AND subject:\"mathematics\" AND resource_type:\"audio\"";
-        List<Document> filteredSearchResult = createDocumentsWithIdentifiers(7L);
+    private static void addEmptyQueryWithEducationalContextFilter() {
+        String filteredQuery = "educational_context:\"interesting\"";
+        List<Document> filteredSearchResult = createDocumentsWithIdentifiers(2L);
         searchResponses.put(filteredQuery, filteredSearchResult);
     }
 
     private static void addQueryWithEducationalContextFilter() {
         String filteredQuery = "(beethoven*) AND educational_context:\"preschool\"";
-        List<Document> filteredSearchResult = createDocumentsWithIdentifiers(6L);
+        List<Document> filteredSearchResult = createDocumentsWithIdentifiers(1L, 2L);
         searchResponses.put(filteredQuery, filteredSearchResult);
     }
-
-    private static void addQueryWithSubjectAndEducationalContextFilter() {
-        String filteredQuery = "(beethoven*) AND subject:\"mathematics\" AND educational_context:\"preschool\"";
-        List<Document> filteredSearchResult = createDocumentsWithIdentifiers(8L);
-        searchResponses.put(filteredQuery, filteredSearchResult);
-    }
-
-    private static void addQueryWithResourceTypeAndEducationalContextFilter() {
-        String filteredQuery = "(beethoven*) AND resource_type:\"audio\" AND educational_context:\"preschool\"";
-        List<Document> filteredSearchResult = createDocumentsWithIdentifiers(7L, 8L);
-        searchResponses.put(filteredQuery, filteredSearchResult);
-    }
-
-    private static void addQueryWithSubjectAndResourceTypeAndEducationalContextFilters() {
-        String filteredQuery = "(john*) AND subject:\"mathematics\" AND resource_type:\"audio\" AND educational_context:\"preschool\"";
-        List<Document> filteredSearchResult = createDocumentsWithIdentifiers(2L);
-        searchResponses.put(filteredQuery, filteredSearchResult);
-    }
-
-    // Queries with license type
-
-    private static void addQueryWithLicenseTypeFilter() {
-        String filteredQuery = "(database*) AND license_type:\"cc\"";
-        List<Document> filteredSearchResult = createDocumentsWithIdentifiers(2L, 1L);
-        searchResponses.put(filteredQuery, filteredSearchResult);
-    }
-
-    private static void addQueryWithSubjectAndLicenseTypeFilter() {
-        String filteredQuery = "(filteredquery*) AND subject:\"mathematics\" AND license_type:\"ccby\"";
-        List<Document> filteredSearchResult = createDocumentsWithIdentifiers(2L, 1L, 3L);
-        searchResponses.put(filteredQuery, filteredSearchResult);
-    }
-
-    private static void addQueryWithResourceTypeAndLicenseTypeFilter() {
-        String filteredQuery = "(beethoven*) AND resource_type:\"audio\" AND license_type:\"ccbysa\"";
-        List<Document> filteredSearchResult = createDocumentsWithIdentifiers(2L, 3L);
-        searchResponses.put(filteredQuery, filteredSearchResult);
-    }
-
-    private static void addQueryWithSubjectAndResourceTypeAndLicenseTypeFilter() {
-        String filteredQuery = "(beethoven*) AND subject:\"mathematics\" AND resource_type:\"audio\" AND license_type:\"ccbynd\"";
-        List<Document> filteredSearchResult = createDocumentsWithIdentifiers(2L, 4L);
-        searchResponses.put(filteredQuery, filteredSearchResult);
-    }
-
-    private static void addQueryWithEducationalContextAndLicenseTypeFilter() {
-        String filteredQuery = "(beethoven*) AND educational_context:\"preschool\" AND license_type:\"ccbysa\"";
-        List<Document> filteredSearchResult = createDocumentsWithIdentifiers(2L, 5L);
-        searchResponses.put(filteredQuery, filteredSearchResult);
-    }
-
-    private static void addQueryWithSubjectAndEducationalContextAndLicenseTypeFilter() {
-        String filteredQuery = "(beethoven*) AND subject:\"mathematics\" AND educational_context:\"preschool\" AND license_type:\"ccbync\"";
-        List<Document> filteredSearchResult = createDocumentsWithIdentifiers(2L, 6L);
-        searchResponses.put(filteredQuery, filteredSearchResult);
-    }
-
-    private static void addQueryWithResourceTypeAndEducationalContextAndLicenseTypeFilter() {
-        String filteredQuery = "(beethoven*) AND resource_type:\"audio\" AND educational_context:\"preschool\" AND license_type:\"ccbynd\"";
-        List<Document> filteredSearchResult = createDocumentsWithIdentifiers(2L, 7L);
-        searchResponses.put(filteredQuery, filteredSearchResult);
-    }
-
-    private static void addQueryWithAllFilters() {
-        String filteredQuery = "(john*) AND subject:\"mathematics\" AND resource_type:\"audio\" AND educational_context:\"preschool\""
-                + " AND license_type:\"other\" AND (paid:\"false\" OR type:\"portfolio\") AND type:\"portfolio\"";
-        List<Document> filteredSearchResult = createDocumentsWithIdentifiers(2L, 3L, 4L);
-        searchResponses.put(filteredQuery, filteredSearchResult);
-    }
-
-    // Queries with no paid materials
 
     private static void addQueryWithPaidFilterTrue() {
         String filteredQuery = "dop";
-        List<Document> filteredSearchResult = createDocumentsWithIdentifiers(6L, 4L);
+        List<Document> filteredSearchResult = createDocumentsWithIdentifiers(1L, 3L);
         searchResponses.put(filteredQuery, filteredSearchResult);
     }
 
     private static void addQueryWithPaidFilterFalse() {
         String filteredQuery = "(dop) AND (paid:\"false\" OR type:\"portfolio\")";
-        List<Document> filteredSearchResult = createDocumentsWithIdentifiers(6L, 1L);
+        List<Document> filteredSearchResult = createDocumentsWithIdentifiers(1L, 4L);
+        searchResponses.put(filteredQuery, filteredSearchResult);
+    }
+
+    private static void addQueryWithTypeFilter() {
+        String filteredQuery = "(weird*) AND type:\"portfolio\"";
+        List<Document> filteredSearchResult = createDocumentsWithIdentifiers(1L, 2L, 3L);
         searchResponses.put(filteredQuery, filteredSearchResult);
     }
 
     private static void addQueryWithEducationalContextAndPaidFilterFalse() {
         String filteredQuery = "(dop) AND educational_context:\"specialeducation\""
                 + " AND (paid:\"false\" OR type:\"portfolio\")";
-        List<Document> filteredSearchResult = createDocumentsWithIdentifiers(6L, 2L);
+        List<Document> filteredSearchResult = createDocumentsWithIdentifiers(1L, 6L);
         searchResponses.put(filteredQuery, filteredSearchResult);
     }
 
-    private static void addQueryWithSubjectAndTitleAndAndPaidFilterFalse() {
-        String filteredQuery = "(dop) AND subject:\"music\" AND (paid:\"false\" OR type:\"portfolio\")";
-        List<Document> filteredSearchResult = createDocumentsWithIdentifiers(6L, 3L);
-        searchResponses.put(filteredQuery, filteredSearchResult);
-    }
-
-    // Queries with type
-
-    private static void addQueryWithTypeFilter() {
-        String filteredQuery = "(weird*) AND type:\"portfolio\"";
-        List<Document> filteredSearchResult = createDocumentsWithIdentifiers(1L, 2L, 3L, 4L);
-        searchResponses.put(filteredQuery, filteredSearchResult);
-    }
-
-    private static void addQueryWithResourceTypeAndTypeFilter() {
-        String filteredQuery = "(weird*) AND resource_type:\"aliens\" AND type:\"material\"";
-        List<Document> filteredSearchResult = createDocumentsWithIdentifiers(7L, 1L);
+    private static void addQueryWithEducationalContextAndTypeFilter() {
+        String filteredQuery = "(beethoven*) AND educational_context:\"preschool\" AND type:\"material\"";
+        List<Document> filteredSearchResult = createDocumentsWithIdentifiers(1L, 7L);
         searchResponses.put(filteredQuery, filteredSearchResult);
     }
 
     private static void addQueryWithPaidFalseAndTypeFilter() {
-        String filteredQuery = "(weird*) AND (paid:\"false\" OR type:\"portfolio\")" + " AND type:\"material\"";
-        List<Document> filteredSearchResult = createDocumentsWithIdentifiers(7L, 2L);
+        String filteredQuery = "(weird*) AND (paid:\"false\" OR type:\"portfolio\") AND type:\"material\"";
+        List<Document> filteredSearchResult = createDocumentsWithIdentifiers(1L, 8L);
+        searchResponses.put(filteredQuery, filteredSearchResult);
+    }
+
+    private static void addQueryWithAllFilters() {
+        String filteredQuery = "(john*) AND educational_context:\"preschool\""
+                + " AND (paid:\"false\" OR type:\"portfolio\") AND type:\"portfolio\"";
+        List<Document> filteredSearchResult = createDocumentsWithIdentifiers(2L, 3L, 4L);
         searchResponses.put(filteredQuery, filteredSearchResult);
     }
 

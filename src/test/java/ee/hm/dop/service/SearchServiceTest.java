@@ -193,8 +193,8 @@ public class SearchServiceTest {
     public void searchEmptyQueryAndSubjectFilter() {
         String query = "";
         SearchFilter searchFilter = new SearchFilter();
-        searchFilter.setSubject("testSubject");
-        String tokenizedQuery = "subject:\"testsubject\"";
+        searchFilter.setEducationalContext("education");
+        String tokenizedQuery = "educational_context:\"education\"";
         long start = 0;
 
         List<Searchable> searchables = Arrays.asList(createMaterial(3L), createMaterial(4L));
@@ -220,11 +220,11 @@ public class SearchServiceTest {
     }
 
     @Test
-    public void searchNullQueryAndSubjectFilter() {
+    public void searchNullQueryAndEducationalContextFilter() {
         String query = null;
         SearchFilter searchFilter = new SearchFilter();
-        searchFilter.setSubject("testSubject");
-        String tokenizedQuery = "subject:\"testsubject\"";
+        searchFilter.setEducationalContext("context");
+        String tokenizedQuery = "educational_context:\"context\"";
         long start = 0;
 
         List<Searchable> searchables = Arrays.asList(createMaterial(3L), createMaterial(4L));
@@ -245,46 +245,6 @@ public class SearchServiceTest {
     }
 
     @Test
-    public void searchWithSubjectFilter() {
-        String query = "airplane";
-        SearchFilter searchFilter = new SearchFilter();
-        searchFilter.setSubject("Mathematics");
-        String tokenizedQuery = "(airplane*) AND subject:\"mathematics\"";
-        long start = 0;
-
-        List<Searchable> searchables = Arrays.asList(createMaterial(9L), createMaterial(2L), createPortfolio(2L));
-
-        testSearch(query, tokenizedQuery, searchables, start, searchFilter);
-    }
-
-    @Test
-    public void searchWithResourceTypeFilter() {
-        String query = "pythagoras";
-        SearchFilter searchFilter = new SearchFilter();
-        searchFilter.setResourceType("TEXTBOOK");
-        String tokenizedQuery = "(pythagoras*) AND resource_type:\"textbook\"";
-        long start = 0;
-
-        List<Searchable> searchables = Arrays.asList(createMaterial(15L), createMaterial(8L), createPortfolio(214L));
-
-        testSearch(query, tokenizedQuery, searchables, start, searchFilter);
-    }
-
-    @Test
-    public void searchWithSubjectAndResourceTypeFilter() {
-        String query = "pythagoras";
-        SearchFilter searchFilter = new SearchFilter();
-        searchFilter.setSubject("Mathematics");
-        searchFilter.setResourceType("TEXTBOOK");
-        String tokenizedQuery = "(pythagoras*) AND subject:\"mathematics\" AND resource_type:\"textbook\"";
-        long start = 0;
-
-        List<Searchable> searchables = Arrays.asList(createMaterial(9L), createMaterial(2L), createPortfolio(2L));
-
-        testSearch(query, tokenizedQuery, searchables, start, searchFilter);
-    }
-
-    @Test
     public void searchWithEducationalContextFilter() {
         String query = "pythagoras";
         SearchFilter searchFilter = new SearchFilter();
@@ -296,177 +256,6 @@ public class SearchServiceTest {
 
         testSearch(query, tokenizedQuery, searchables, start, searchFilter);
     }
-
-    @Test
-    public void searchWithSubjectAndEducationalContextFilter() {
-        String query = "pythagoras";
-        SearchFilter searchFilter = new SearchFilter();
-        searchFilter.setSubject("Mathematics");
-        searchFilter.setEducationalContext("PRESCHOOL");
-        String tokenizedQuery = "(pythagoras*) AND subject:\"mathematics\" AND educational_context:\"preschool\"";
-        long start = 0;
-
-        List<Searchable> searchables = Arrays.asList(createMaterial(9L), createMaterial(2L), createPortfolio(2L));
-
-        testSearch(query, tokenizedQuery, searchables, start, searchFilter);
-    }
-
-    @Test
-    public void searchWithResourceTypeAndEducationalContextFilter() {
-        String query = "pythagoras";
-        SearchFilter searchFilter = new SearchFilter();
-        searchFilter.setResourceType("TEXTBOOK");
-        searchFilter.setEducationalContext("PRESCHOOL");
-        String tokenizedQuery = "(pythagoras*) AND resource_type:\"textbook\" AND educational_context:\"preschool\"";
-        long start = 0;
-
-        List<Searchable> searchables = Arrays.asList(createMaterial(9L), createMaterial(2L), createPortfolio(2L));
-
-        testSearch(query, tokenizedQuery, searchables, start, searchFilter);
-    }
-
-    @Test
-    public void searchWithSubjectAndResourceTypeAndEducationalContextFilters() {
-        String query = "pythagoras";
-        SearchFilter searchFilter = new SearchFilter();
-        searchFilter.setSubject("Mathematics");
-        searchFilter.setResourceType("TEXTBOOK");
-        searchFilter.setEducationalContext("PRESCHOOL");
-        String tokenizedQuery = "(pythagoras*) AND subject:\"mathematics\" AND resource_type:\"textbook\""
-                + " AND educational_context:\"preschool\"";
-        long start = 0;
-
-        List<Searchable> searchables = Arrays.asList(createMaterial(9L), createMaterial(2L), createPortfolio(2L));
-
-        testSearch(query, tokenizedQuery, searchables, start, searchFilter);
-    }
-
-    // Tests with License Type
-
-    @Test
-    public void searchWithLicenseTypeFilter() {
-        String query = "airplane";
-        SearchFilter searchFilter = new SearchFilter();
-        searchFilter.setLicenseType("CCBY");
-        String tokenizedQuery = "(airplane*) AND license_type:\"ccby\"";
-        long start = 0;
-
-        List<Searchable> searchables = Arrays.asList(createMaterial(9L), createMaterial(2L), createPortfolio(2L));
-
-        testSearch(query, tokenizedQuery, searchables, start, searchFilter);
-    }
-
-    @Test
-    public void searchWithSubjectAndLicenseTypeFilter() {
-        String query = "airplane";
-        SearchFilter searchFilter = new SearchFilter();
-        searchFilter.setSubject("Mathematics");
-        searchFilter.setLicenseType("CCSA");
-        String tokenizedQuery = "(airplane*) AND subject:\"mathematics\" AND license_type:\"ccsa\"";
-        long start = 0;
-
-        List<Searchable> searchables = Arrays.asList(createMaterial(9L), createMaterial(2L), createPortfolio(2L));
-
-        testSearch(query, tokenizedQuery, searchables, start, searchFilter);
-    }
-
-    @Test
-    public void searchWithResourceTypeAndLicenseTypeFilter() {
-        String query = "pythagoras";
-        SearchFilter searchFilter = new SearchFilter();
-        searchFilter.setResourceType("TEXTBOOK");
-        searchFilter.setLicenseType("CCBYSA");
-        String tokenizedQuery = "(pythagoras*) AND resource_type:\"textbook\" AND license_type:\"ccbysa\"";
-        long start = 0;
-
-        List<Searchable> searchables = Arrays.asList(createMaterial(9L), createMaterial(2L), createPortfolio(2L));
-
-        testSearch(query, tokenizedQuery, searchables, start, searchFilter);
-    }
-
-    @Test
-    public void searchWithEducationalContextAndLicenseTypeFilter() {
-        String query = "pythagoras";
-        SearchFilter searchFilter = new SearchFilter();
-        searchFilter.setEducationalContext("PRESCHOOL");
-        searchFilter.setLicenseType("CCBYNC");
-        String tokenizedQuery = "(pythagoras*) AND educational_context:\"preschool\" AND license_type:\"ccbync\"";
-        long start = 0;
-
-        List<Searchable> searchables = Arrays.asList(createMaterial(9L), createMaterial(2L), createPortfolio(2L));
-
-        testSearch(query, tokenizedQuery, searchables, start, searchFilter);
-    }
-
-    @Test
-    public void searchWithSubjectAndResourceTypeAndLicenseTypeFilter() {
-        String query = "pythagoras";
-        SearchFilter searchFilter = new SearchFilter();
-        searchFilter.setSubject("Mathematics");
-        searchFilter.setResourceType("TEXTBOOK");
-        searchFilter.setLicenseType("CC");
-        String tokenizedQuery = "(pythagoras*) AND subject:\"mathematics\" AND resource_type:\"textbook\""
-                + " AND license_type:\"cc\"";
-        long start = 0;
-
-        List<Searchable> searchables = Arrays.asList(createMaterial(9L), createMaterial(2L), createPortfolio(2L));
-
-        testSearch(query, tokenizedQuery, searchables, start, searchFilter);
-    }
-
-    @Test
-    public void searchWithSubjectAndEducationalContextAndLicenseTypeFilter() {
-        String query = "pythagoras";
-        SearchFilter searchFilter = new SearchFilter();
-        searchFilter.setSubject("Mathematics");
-        searchFilter.setEducationalContext("PRESCHOOL");
-        searchFilter.setLicenseType("CCBY");
-        String tokenizedQuery = "(pythagoras*) AND subject:\"mathematics\" AND educational_context:\"preschool\" "
-                + "AND license_type:\"ccby\"";
-        long start = 0;
-
-        List<Searchable> searchables = Arrays.asList(createMaterial(9L), createMaterial(2L), createPortfolio(2L));
-
-        testSearch(query, tokenizedQuery, searchables, start, searchFilter);
-    }
-
-    @Test
-    public void searchWithResourceTypeAndEducationalContextAndLicenseTypeFilter() {
-        String query = "pythagoras";
-        SearchFilter searchFilter = new SearchFilter();
-        searchFilter.setResourceType("TEXTBOOK");
-        searchFilter.setEducationalContext("PRESCHOOL");
-        searchFilter.setLicenseType("CCBYNCND");
-        String tokenizedQuery = "(pythagoras*) AND resource_type:\"textbook\" AND educational_context:\"preschool\" "
-                + "AND license_type:\"ccbyncnd\"";
-        long start = 0;
-
-        List<Searchable> searchables = Arrays.asList(createMaterial(9L), createMaterial(2L), createPortfolio(2L));
-
-        testSearch(query, tokenizedQuery, searchables, start, searchFilter);
-    }
-
-    @Test
-    public void searchWithAllFilters() {
-        String query = "pythagoras";
-        SearchFilter searchFilter = new SearchFilter();
-        searchFilter.setSubject("Mathematics");
-        searchFilter.setResourceType("TEXTBOOK");
-        searchFilter.setEducationalContext("PRESCHOOL");
-        searchFilter.setLicenseType("CC");
-        searchFilter.setPaid(false);
-        searchFilter.setType("material");
-        String tokenizedQuery = "(pythagoras*) AND subject:\"mathematics\" AND resource_type:\"textbook\""
-                + " AND educational_context:\"preschool\" AND license_type:\"cc\""
-                + " AND (paid:\"false\" OR type:\"portfolio\") AND type:\"material\"";
-        long start = 0;
-
-        List<Searchable> searchables = Arrays.asList(createMaterial(9L), createMaterial(2L), createPortfolio(2L));
-
-        testSearch(query, tokenizedQuery, searchables, start, searchFilter);
-    }
-
-    // Tests with paid/free
 
     @Test
     public void searchWithPaidFilterFalse() {
@@ -495,36 +284,6 @@ public class SearchServiceTest {
     }
 
     @Test
-    public void searchWithResourceTypeAndAuthorAndPaidFilterFalse() {
-        String query = "story";
-        SearchFilter searchFilter = new SearchFilter();
-        searchFilter.setResourceType("pdf");
-        searchFilter.setPaid(false);
-        String tokenizedQuery = "(story*) AND resource_type:\"pdf\" AND (paid:\"false\" OR type:\"portfolio\")";
-        long start = 0;
-
-        List<Searchable> searchables = Arrays.asList(createMaterial(9L), createMaterial(2L), createPortfolio(2L));
-
-        testSearch(query, tokenizedQuery, searchables, start, searchFilter);
-    }
-
-    @Test
-    public void searchWithSubjectAndPaidFilterFalse() {
-        String query = "story";
-        SearchFilter searchFilter = new SearchFilter();
-        searchFilter.setSubject("astronomy");
-        searchFilter.setPaid(false);
-        String tokenizedQuery = "(story*) AND subject:\"astronomy\" AND (paid:\"false\" OR type:\"portfolio\")";
-        long start = 0;
-
-        List<Searchable> searchables = Arrays.asList(createMaterial(9L), createMaterial(2L), createPortfolio(2L));
-
-        testSearch(query, tokenizedQuery, searchables, start, searchFilter);
-    }
-
-    // Tests with type
-
-    @Test
     public void searchWithTypeFilter() {
         String query = "sky";
         SearchFilter searchFilter = new SearchFilter();
@@ -538,12 +297,12 @@ public class SearchServiceTest {
     }
 
     @Test
-    public void searchWithResourceTypeAndTypeFilter() {
-        String query = "sky";
+    public void searchWithEducationalContextAndPaidFilter() {
+        String query = "pythagoras";
         SearchFilter searchFilter = new SearchFilter();
-        searchFilter.setResourceType("something");
-        searchFilter.setType("portfolio");
-        String tokenizedQuery = "(sky) AND resource_type:\"something\" AND type:\"portfolio\"";
+        searchFilter.setEducationalContext("PRESCHOOL");
+        searchFilter.setPaid(false);
+        String tokenizedQuery = "(pythagoras*) AND educational_context:\"preschool\" AND (paid:\"false\" OR type:\"portfolio\")";
         long start = 0;
 
         List<Searchable> searchables = Arrays.asList(createMaterial(9L), createMaterial(2L), createPortfolio(2L));
@@ -552,13 +311,42 @@ public class SearchServiceTest {
     }
 
     @Test
-    public void searchWithSubjectAndPaidFalseAndTypeFilter() {
-        String query = "sky";
+    public void searchWithEducationalContextAndTypeFilter() {
+        String query = "pythagoras";
         SearchFilter searchFilter = new SearchFilter();
-        searchFilter.setSubject("ufo");
-        searchFilter.setType("material");
+        searchFilter.setEducationalContext("PRESCHOOL");
+        searchFilter.setType("portfolio");
+        String tokenizedQuery = "(pythagoras*) AND educational_context:\"preschool\" AND type:\"portfolio\"";
+        long start = 0;
+
+        List<Searchable> searchables = Arrays.asList(createMaterial(9L), createMaterial(2L), createPortfolio(2L));
+
+        testSearch(query, tokenizedQuery, searchables, start, searchFilter);
+    }
+
+    @Test
+    public void searchWithPaidAndTypeFilter() {
+        String query = "pythagoras";
+        SearchFilter searchFilter = new SearchFilter();
         searchFilter.setPaid(false);
-        String tokenizedQuery = "(sky) AND subject:\"ufo\" AND (paid:\"false\" OR type:\"portfolio\") AND type:\"material\"";
+        searchFilter.setType("material");
+        String tokenizedQuery = "(pythagoras*) AND (paid:\"false\" OR type:\"portfolio\") AND type:\"material\"";
+        long start = 0;
+
+        List<Searchable> searchables = Arrays.asList(createMaterial(9L), createMaterial(2L), createPortfolio(2L));
+
+        testSearch(query, tokenizedQuery, searchables, start, searchFilter);
+    }
+
+    @Test
+    public void searchWithAllFilters() {
+        String query = "pythagoras";
+        SearchFilter searchFilter = new SearchFilter();
+        searchFilter.setEducationalContext("PRESCHOOL");
+        searchFilter.setPaid(false);
+        searchFilter.setType("material");
+        String tokenizedQuery = "(pythagoras*) AND educational_context:\"preschool\""
+                + " AND (paid:\"false\" OR type:\"portfolio\") AND type:\"material\"";
         long start = 0;
 
         List<Searchable> searchables = Arrays.asList(createMaterial(9L), createMaterial(2L), createPortfolio(2L));
