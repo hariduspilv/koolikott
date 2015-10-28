@@ -153,7 +153,6 @@ public class SearchService {
         filters.put("resource_type", searchFilter.getResourceType());
         filters.put("educational_context", searchFilter.getEducationalContext());
         filters.put("license_type", searchFilter.getLicenseType());
-        filters.put("combined_description", searchFilter.getCombinedDescription());
 
         if (!searchFilter.isPaid()) {
             filters.put("paid", "false");
@@ -173,9 +172,7 @@ public class SearchService {
                     filtersAsQuery += " AND ";
                 }
 
-                if (filter.getKey().equals("combined_description")) {
-                    filtersAsQuery += format("(description:\"%s\" OR summary:\"%s\")", value, value);
-                } else if (filter.getKey().equals("paid")) {
+                if (filter.getKey().equals("paid")) {
                     filtersAsQuery += "(paid:\"false\" OR type:\"portfolio\")";
                 } else {
                     filtersAsQuery += format("%s:\"%s\"", filter.getKey(), value);

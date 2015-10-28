@@ -277,53 +277,12 @@ public class SearchResourceTest extends ResourceIntegrationTestBase {
         searchFilter.setResourceType("Audio");
         searchFilter.setEducationalContext("Preschool");
         searchFilter.setLicenseType("other");
-        searchFilter.setCombinedDescription("desc");
         searchFilter.setPaid(false);
         searchFilter.setType("portfolio");
         SearchResult searchResult = doGet(buildQueryURL(query, 0, searchFilter), SearchResult.class);
 
         assertMaterialIdentifiers(searchResult.getItems(), 2L, 3L, 4L);
         assertEquals(3, searchResult.getTotalResults());
-        assertEquals(0, searchResult.getStart());
-    }
-
-    // Tests with combined description
-
-    @Test
-    public void searchWithCombinedDescriptionFilter() {
-        String query = "material";
-        SearchFilter searchFilter = new SearchFilter();
-        searchFilter.setCombinedDescription("The description.");
-        SearchResult searchResult = doGet(buildQueryURL(query, 0, searchFilter), SearchResult.class);
-
-        assertMaterialIdentifiers(searchResult.getItems(), 5L, 1L);
-        assertEquals(2, searchResult.getTotalResults());
-        assertEquals(0, searchResult.getStart());
-    }
-
-    @Test
-    public void searchWithLicenseTypeAndCombinedDescriptionFilter() {
-        String query = "material";
-        SearchFilter searchFilter = new SearchFilter();
-        searchFilter.setLicenseType("CCBYNCND");
-        searchFilter.setCombinedDescription("Another description.");
-        SearchResult searchResult = doGet(buildQueryURL(query, 0, searchFilter), SearchResult.class);
-
-        assertMaterialIdentifiers(searchResult.getItems(), 5L, 2L);
-        assertEquals(2, searchResult.getTotalResults());
-        assertEquals(0, searchResult.getStart());
-    }
-
-    @Test
-    public void searchWithEducationalContextAndCombinedDescriptionFilter() {
-        String query = "material";
-        SearchFilter searchFilter = new SearchFilter();
-        searchFilter.setEducationalContext("HIGHEREDUCATION");
-        searchFilter.setCombinedDescription("More descriptions.");
-        SearchResult searchResult = doGet(buildQueryURL(query, 0, searchFilter), SearchResult.class);
-
-        assertMaterialIdentifiers(searchResult.getItems(), 5L, 3L);
-        assertEquals(2, searchResult.getTotalResults());
         assertEquals(0, searchResult.getStart());
     }
 
@@ -395,10 +354,10 @@ public class SearchResourceTest extends ResourceIntegrationTestBase {
     }
 
     @Test
-    public void searchWithCombinedDescriptionAndTypeFilter() {
+    public void searchWithResourceTypeAndTypeFilter() {
         String query = "weird";
         SearchFilter searchFilter = new SearchFilter();
-        searchFilter.setCombinedDescription("aliens");
+        searchFilter.setResourceType("aliens");
         searchFilter.setType("material");
         SearchResult searchResult = doGet(buildQueryURL(query, 0, searchFilter), SearchResult.class);
 
@@ -439,9 +398,6 @@ public class SearchResourceTest extends ResourceIntegrationTestBase {
         }
         if (searchFilter.getLicenseType() != null) {
             queryURL += "&license_type=" + encodeQuery(searchFilter.getLicenseType());
-        }
-        if (searchFilter.getCombinedDescription() != null) {
-            queryURL += "&combined_description=" + encodeQuery(searchFilter.getCombinedDescription());
         }
         if (searchFilter.isPaid() == false) {
             queryURL += "&paid=false";

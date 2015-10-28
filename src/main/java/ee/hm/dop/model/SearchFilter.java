@@ -10,8 +10,6 @@ public class SearchFilter {
 
     private String licenseType;
 
-    private String combinedDescription;
-
     private boolean paid = true;
 
     private String type;
@@ -46,14 +44,6 @@ public class SearchFilter {
 
     public void setLicenseType(String licenseType) {
         this.licenseType = licenseType;
-    }
-
-    public String getCombinedDescription() {
-        return combinedDescription;
-    }
-
-    public void setCombinedDescription(String description) {
-        this.combinedDescription = description;
     }
 
     public boolean isPaid() {

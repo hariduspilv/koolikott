@@ -60,17 +60,13 @@ class SearchEngineServiceMock implements SearchEngineService {
         addQueryWithResourceTypeAndEducationalContextAndLicenseTypeFilter();
         addQueryWithAllFilters();
 
-        addQueryWithCombinedDescriptionFilter();
-        addQueryWithLicenseTypeAndCombinedDescriptionFilter();
-        addQueryWithEducationalContextAndCombinedDescriptionFilter();
-
         addQueryWithPaidFilterTrue();
         addQueryWithPaidFilterFalse();
         addQueryWithEducationalContextAndPaidFilterFalse();
         addQueryWithSubjectAndTitleAndAndPaidFilterFalse();
 
         addQueryWithTypeFilter();
-        addQueryWithCombinedDescriptionAndTypeFilter();
+        addQueryWithResourceTypeAndTypeFilter();
         addQueryWithPaidFalseAndTypeFilter();
     }
 
@@ -187,31 +183,8 @@ class SearchEngineServiceMock implements SearchEngineService {
 
     private static void addQueryWithAllFilters() {
         String filteredQuery = "(john*) AND subject:\"mathematics\" AND resource_type:\"audio\" AND educational_context:\"preschool\""
-                + " AND license_type:\"other\" AND (description:\"desc\" OR summary:\"desc\")"
-                + " AND (paid:\"false\" OR type:\"portfolio\") AND type:\"portfolio\"";
+                + " AND license_type:\"other\" AND (paid:\"false\" OR type:\"portfolio\") AND type:\"portfolio\"";
         List<Document> filteredSearchResult = createDocumentsWithIdentifiers(2L, 3L, 4L);
-        searchResponses.put(filteredQuery, filteredSearchResult);
-    }
-
-    // Queries with combined description
-
-    private static void addQueryWithCombinedDescriptionFilter() {
-        String filteredQuery = "(material*) AND (description:\"the\\ description.\" OR summary:\"the\\ description.\")";
-        List<Document> filteredSearchResult = createDocumentsWithIdentifiers(5L, 1L);
-        searchResponses.put(filteredQuery, filteredSearchResult);
-    }
-
-    private static void addQueryWithLicenseTypeAndCombinedDescriptionFilter() {
-        String filteredQuery = "(material*) AND license_type:\"ccbyncnd\""
-                + " AND (description:\"another\\ description.\" OR summary:\"another\\ description.\")";
-        List<Document> filteredSearchResult = createDocumentsWithIdentifiers(5L, 2L);
-        searchResponses.put(filteredQuery, filteredSearchResult);
-    }
-
-    private static void addQueryWithEducationalContextAndCombinedDescriptionFilter() {
-        String filteredQuery = "(material*) AND educational_context:\"highereducation\""
-                + " AND (description:\"more\\ descriptions.\" OR summary:\"more\\ descriptions.\")";
-        List<Document> filteredSearchResult = createDocumentsWithIdentifiers(5L, 3L);
         searchResponses.put(filteredQuery, filteredSearchResult);
     }
 
@@ -250,8 +223,8 @@ class SearchEngineServiceMock implements SearchEngineService {
         searchResponses.put(filteredQuery, filteredSearchResult);
     }
 
-    private static void addQueryWithCombinedDescriptionAndTypeFilter() {
-        String filteredQuery = "(weird*) AND (description:\"aliens\" OR summary:\"aliens\") AND type:\"material\"";
+    private static void addQueryWithResourceTypeAndTypeFilter() {
+        String filteredQuery = "(weird*) AND resource_type:\"aliens\" AND type:\"material\"";
         List<Document> filteredSearchResult = createDocumentsWithIdentifiers(7L, 1L);
         searchResponses.put(filteredQuery, filteredSearchResult);
     }
