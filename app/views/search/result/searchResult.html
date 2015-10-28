@@ -86,64 +86,7 @@
                         </nav>
                     </div>
                 </div>
-            </div>
-            <div class="col-md-3">
-                <div class="sidebar-module sidebar-module-filter">
-                    <h4 data-translate="SEARCH_FILTER_TITLE"></h4>
-                    
-                    <div class="form-group">
-                        <label for="filter-subject" data-translate="SEARCH_FILTER_SUBJECT_LABEL"></label>
-                        <ui-select data-ng-model="filters.subject" theme="bootstrap" data-ng-disabled="disabled" id="filter-subject">
-                            <ui-select-match allow-clear="true" placeholder="{{'SEARCH_FILTER_SUBJECT_PLACEHOLDER' | translate}}">
-                                <span data-ng-if="$select.selected.name" data-translate="{{'SUBJECT_' + $select.selected.name.toUpperCase()}}"></span>
-                            </ui-select-match>
-                            <ui-select-choices repeat="subject in subjects | subjectFilter: $select.search">
-                                <span ng-bind-html="'SUBJECT_' + subject.name.toUpperCase() | translate | highlight: $select.search"></span>                           
-                            </ui-select-choices>
-                        </ui-select>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="filter-resource-type" data-translate="SEARCH_FILTER_RESOURCE_TYPE_LABEL"></label>
-                        <ui-select data-ng-model="filters.resourceType" theme="bootstrap" data-ng-disabled="disabled" id="filter-resource-type">
-                            <ui-select-match allow-clear="true" placeholder="{{'SEARCH_FILTER_RESOURCE_TYPE_PLACEHOLDER' | translate}}">
-                                <span data-ng-if="$select.selected.name" data-translate="{{$select.selected.name.toUpperCase()}}"></span>
-                            </ui-select-match>
-                            <ui-select-choices repeat="type in resourceTypes | resourceTypeFilter: $select.search">
-                                <span ng-bind-html="type.name.toUpperCase() | translate | highlight: $select.search"></span>                           
-                            </ui-select-choices>
-                        </ui-select>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="filter-educational-context" data-translate="SEARCH_FILTER_EDUCATIONAL_CONTEXT_LABEL"></label>
-                        <ui-select data-ng-model="filters.educationalContext" theme="bootstrap" data-ng-disabled="disabled" id="filter-educational-context">
-                            <ui-select-match allow-clear="true" placeholder="{{'SEARCH_FILTER_EDUCATIONAL_CONTEXT_PLACEHOLDER' | translate}}">
-                                <span data-ng-if="$select.selected.name" data-translate="{{$select.selected.name.toUpperCase()}}"></span>
-                            </ui-select-match>
-                            <ui-select-choices repeat="context in educationalContexts | educationalContextFilter: $select.search | orderBy: 'id'">
-                                <span ng-bind-html="context.name.toUpperCase() | translate | highlight: $select.search"></span>                           
-                            </ui-select-choices>
-                        </ui-select>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="filter-license-type" data-translate="SEARCH_FILTER_LICENSE_TYPE_LABEL"></label>
-                        <ui-select data-ng-model="filters.licenseType" theme="bootstrap" data-ng-disabled="disabled" id="filter-license-type">
-                            <ui-select-match allow-clear="true" placeholder="{{'SEARCH_FILTER_LICENSE_TYPE_PLACEHOLDER' | translate}}">
-                                <span data-ng-if="$select.selected.name" data-translate="{{'LICENSETYPE_' + $select.selected.name.toUpperCase()}}"></span>
-                            </ui-select-match>
-                            <ui-select-choices repeat="type in licenseTypes | licenseTypeFilter: $select.search">
-                                <span ng-bind-html="'LICENSETYPE_' + type.name.toUpperCase() | translate | highlight: $select.search"></span>                           
-                            </ui-select-choices>
-                        </ui-select>
-                    </div>
-
-                    <div class="form-group">
-                        <button type="submit" class="btn btn-default pull-right" data-ng-click="filter()"><span data-translate="SEARCH_FILTER_BUTTON_FILTER"></span></button>
-                        <button type="submit" class="btn btn-primary pull-right" data-ng-click="reset()"><span data-translate="SEARCH_FILTER_BUTTON_RESET"></span></button>
-                    </div>
-                </div>
+                
             </div>
         </div>
     </div>

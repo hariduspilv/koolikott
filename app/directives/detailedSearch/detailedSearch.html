@@ -91,7 +91,7 @@
                     <div class="form-group">
                         <label for="filter-license-type">Valdkond</label>
                         <ui-select data-ng-model="filters.licenseType" theme="bootstrap" data-ng-disabled="disabled" id="filter-license-type">
-                            <ui-select-match allow-clear="true" placeholder="{{'SEARCH_FILTER_LICENSE_TYPE_PLACEHOLDER' | translate}}">
+                            <ui-select-match allow-clear="true" placeholder="Vali või otsi...">
                                 <span data-ng-if="$select.selected.name" data-translate="{{'LICENSETYPE_' + $select.selected.name.toUpperCase()}}"></span>
                             </ui-select-match>
                             <ui-select-choices repeat="type in licenseTypes | licenseTypeFilter: $select.search">

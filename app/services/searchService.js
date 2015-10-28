@@ -2,18 +2,12 @@ define(['app'], function(app) {
 
     app.factory('searchService',['$location', function($location) {
         var searchURLbase = "search/result?q=";
-        var subjectURL = "&subject=";
-        var resourceTypeURL = "&resource_type=";
         var educationalContextURL = "&educational_context=";
-        var licenseTypeURL = "&license_type=";
         var paidURL = "&paid=";
         var typeURL = "&type="
 
         var searchQuery = "";
-        var searchSubject = "";
-        var searchResourceType = "";
         var searchEducationalContext = "";
-        var searchLicenseType = "";
         var searchPaid = "";
         var searchType = "";
 
@@ -43,20 +37,8 @@ define(['app'], function(app) {
                 searchQuery = query;
             },
             
-            setSubject : function(subject) {
-                searchSubject = subject;
-            },
-
-            setResourceType : function(resourceType) {
-                searchResourceType = resourceType;
-            },
-
             setEducationalContext : function(educationalContext) {
                 searchEducationalContext = educationalContext;
-            },
-
-            setLicenseType : function(licenseType) {
-                searchLicenseType = licenseType;
             },
 
             setPaid : function(paid) {
@@ -75,17 +57,8 @@ define(['app'], function(app) {
                     searchURL = searchURLbase;
                 }
 
-                if (searchSubject) {
-                    searchURL += subjectURL + searchSubject;
-                } 
-                if (searchResourceType) {
-                    searchURL += resourceTypeURL + searchResourceType;
-                }
                 if (searchEducationalContext) {
                     searchURL += educationalContextURL + searchEducationalContext;
-                }
-                if (searchLicenseType) {
-                    searchURL += licenseTypeURL + searchLicenseType;
                 }
                 if (searchPaid && searchPaid === 'false') {
                     searchURL += paidURL + searchPaid;
@@ -99,8 +72,7 @@ define(['app'], function(app) {
 
             queryExists : function() {
                 var searchObject = $location.search();
-                if (searchObject.q || searchObject.subject || searchObject.resource_type || searchObject.educational_context || 
-                    searchObject.license_type|| (searchObject.paid && searchObject.paid === 'false') || 
+                if (searchObject.q || searchObject.educational_context || (searchObject.paid && searchObject.paid === 'false') || 
                     (searchObject.type && this.isValidType(searchObject.type))) {
                     return true;
                 } else {
@@ -119,28 +91,6 @@ define(['app'], function(app) {
                 return searchQuery;
             },
 
-            getSubject : function() {
-                if (searchSubject === "") {
-                    var searchObject = $location.search();
-                    if (searchObject.subject) {
-                        return searchObject.subject;
-                    }
-                }
-
-                return searchSubject;
-            },
-
-            getResourceType : function() {
-                if (searchResourceType === "") {
-                    var searchObject = $location.search();
-                    if (searchObject.resource_type) {
-                        return searchObject.resource_type;
-                    }
-                }
-
-                return searchResourceType;
-            },
-
             getEducationalContext: function() {
                 if (searchEducationalContext === "") {
                     var searchObject = $location.search();
@@ -150,17 +100,6 @@ define(['app'], function(app) {
                 }
 
                 return searchEducationalContext;
-            },
-
-            getLicenseType : function() {
-                if (searchLicenseType === "") {
-                    var searchObject = $location.search();
-                    if (searchObject.license_type) {
-                        return searchObject.license_type;
-                    }
-                }
-
-                return searchLicenseType;
             },
 
             isPaid : function() {
@@ -201,19 +140,10 @@ define(['app'], function(app) {
                 return 1;
             }, 
 
-            buildURL : function(query, page, subject, resourceType, educationalContext, licenseType, paid, type) {
+            buildURL : function(query, page, educationalContext, paid, type) {
                 var searchURL = "#/" + searchURLbase + encodeURI(escapeQuery(query)) + "&page=" + page;
-                if (subject) {
-                    searchURL += subjectURL + subject.toLowerCase();
-                }
-                if (resourceType) {
-                    searchURL += resourceTypeURL + resourceType.toLowerCase();
-                }
                 if (educationalContext) {
                     searchURL += educationalContextURL + educationalContext.toLowerCase();
-                }
-                if (licenseType) {
-                    searchURL += licenseTypeURL + licenseType.toLowerCase();
                 }
                 if (paid && paid === 'false') {
                     searchURL += paidURL + paid;
@@ -230,17 +160,8 @@ define(['app'], function(app) {
                     'page': page
                 };
 
-                if (this.getSubject()) {
-                    params.subject = this.getSubject();
-                }
-                if (this.getResourceType()) {
-                    params.resource_type = this.getResourceType();
-                }
                 if (this.getEducationalContext()) {
                     params.educational_context = this.getEducationalContext();
-                }
-                if (this.getLicenseType()) {
-                    params.license_type = this.getLicenseType();
                 }
                 if (this.isPaid() && this.isPaid() === 'false') {
                     params.paid = this.isPaid();
@@ -253,6 +174,7 @@ define(['app'], function(app) {
             },
 
             clearFieldsNotInSimpleSearch : function() {
+                searchEducationalContext = '';
                 searchPaid = '';
                 searchType = '';
             },
