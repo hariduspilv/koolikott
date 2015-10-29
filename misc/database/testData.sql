@@ -79,7 +79,7 @@ insert into Material(id, lang, issueDate, licenseType, source, added, updated, p
 insert into Material(id, lang, issueDate, licenseType, source, added, updated, picture, creator, deleted, paid, embeddable) values(33, null, null, null, 'https://en.wikipedia.org/wiki/Poland', '1971-09-22 08:00:01', null, null, 2, false, false, false);
 insert into Material(id, lang, issueDate, licenseType, source, added, updated, picture, creator, deleted, paid, embeddable) values(34, 4, 6, 3, 'https://en.wikipedia.org/wiki/France', '2001-07-16 06:00:01', null, null, 2, false, false, false);
 insert into Material(id, lang, issueDate, licenseType, source, added, updated, picture, creator, deleted, paid, embeddable) values(35, 5, 7, 1, 'https://en.wikipedia.org/wiki/Austria', '2002-06-01 09:00:01', null, null, 2, false, false, false);
-insert into Material(id, lang, issueDate, licenseType, source, added, deleted, paid, embeddable) values(36, 1, 2, 3, 'http://pilditu.audio.ee', '2001-07-16 06:00:01', false, false, false);
+insert into Material(id, lang, issueDate, licenseType, source, added, deleted, paid, embeddable) values(36, 1, 2, 3, 'http://pilditu.au/dio.ee', '2001-07-16 06:00:01', false, false, false);
 insert into Material(id, lang, issueDate, licenseType, source, added, deleted, paid, embeddable) values(37, 1, 2, 3, '<script>alert(1)</script>', '2001-07-16 06:00:01', false, false, false);
 insert into Material(id, lang, issueDate, licenseType, source, added, deleted, paid, embeddable) values(3919, 1, 2, 3, 'http://pilditu.audio.ee', '2001-07-16 06:00:01', false, false, false);
 insert into Material(id, lang, issueDate, licenseType, source, added, updated, picture, creator, deleted, paid, embeddable) values(3920, 2, 2, 2, 'https://oxygen.netgroupdigital.com/rest/repoMaterialSource', '1992-02-03 06:00:01', '1995-07-12 09:00:01', null, 1, false, true, true);
@@ -122,7 +122,7 @@ insert into LanguageString(id, lang, textValue) values (8, 5, 'Test description 
 insert into LanguageString(id, lang, textValue) values (19, 1, 'Automated test resource description. DO NOT TOUCH!!!! material language Estonian, Description Estonian');
 insert into LanguageString(id, lang, textValue) values (21, 1, 'Performance test resource description. DO NOT TOUCH!!!!');
 insert into LanguageString(id, lang, textValue) values (39, 3, 'Test description');
-insert into LanguageString(id, lang, textValue) values (50, 1, 'Missing picture replacement test: Audio');
+insert into LanguageString(id, lang, textValue) values (50, 1, 'Missing picture replacement test: Au/dio. DO NOT TOUCH!!!!');
 insert into LanguageString(id, lang, textValue) values (51, 1, '<script>alert(1)</script>');
 insert into LanguageString(id, lang, textValue) values (10833, 1, 'Missing picture replacement test: Video');
 
@@ -210,7 +210,7 @@ insert into LanguageString(id, lang, textValue) values (45, 3, 'Poland');
 insert into LanguageString(id, lang, textValue) values (46, 3, 'France');
 insert into LanguageString(id, lang, textValue) values (47, 3, 'Austria');
 
-insert into LanguageString(id, lang, textValue) values (48, 1, 'Missing picture replacement test: Audio');
+insert into LanguageString(id, lang, textValue) values (48, 1, 'Missing picture replacement test: Au/dio');
 insert into LanguageString(id, lang, textValue) values (49, 1, '<script>alert(1)</script>');
 insert into LanguageString(id, lang, textValue) values (10834, 1, 'Missing picture replacement test: Video');
 
