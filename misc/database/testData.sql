@@ -81,8 +81,8 @@ insert into Material(id, lang, issueDate, licenseType, source, added, updated, p
 insert into Material(id, lang, issueDate, licenseType, source, added, updated, picture, creator, deleted, paid, embeddable) values(35, 5, 7, 1, 'https://en.wikipedia.org/wiki/Austria', '2002-06-01 09:00:01', null, null, 2, false, false, false);
 insert into Material(id, lang, issueDate, licenseType, source, added, deleted, paid, embeddable) values(36, 1, 2, 3, 'http://pilditu.audio.ee', '2001-07-16 06:00:01', false, false, false);
 insert into Material(id, lang, issueDate, licenseType, source, added, deleted, paid, embeddable) values(37, 1, 2, 3, '<script>alert(1)</script>', '2001-07-16 06:00:01', false, false, false);
-insert into Material(id, lang, issueDate, licenseType, source, added, updated, picture, creator, deleted, paid, embeddable) values(38, 2, 2, 2, 'https://oxygen.netgroupdigital.com/rest/repoMaterialSource', '1992-02-03 06:00:01', '1995-07-12 09:00:01', null, 1, false, true, true);
 insert into Material(id, lang, issueDate, licenseType, source, added, deleted, paid, embeddable) values(3919, 1, 2, 3, 'http://pilditu.audio.ee', '2001-07-16 06:00:01', false, false, false);
+insert into Material(id, lang, issueDate, licenseType, source, added, updated, picture, creator, deleted, paid, embeddable) values(3920, 2, 2, 2, 'https://oxygen.netgroupdigital.com/rest/repoMaterialSource', '1992-02-03 06:00:01', '1995-07-12 09:00:01', null, 1, false, true, true);
 
 -- Authors
 
