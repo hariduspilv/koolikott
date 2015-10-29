@@ -1,7 +1,5 @@
 package ee.hm.dop.service;
 
-import java.util.List;
-
 import javax.inject.Inject;
 
 import ee.hm.dop.dao.EducationalContextDAO;
@@ -15,7 +13,7 @@ public class EducationalContextService {
     @Inject
     private EducationalContextDAO educationalContextDAO;
 
-    public List<EducationalContext> educationalContexts() {
-        return educationalContextDAO.findAll();
+    public EducationalContext getEducationalContextByName(String name) {
+        return educationalContextDAO.findEducationalContextByName(name);
     }
 }

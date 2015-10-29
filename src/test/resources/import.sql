@@ -149,11 +149,13 @@ insert into Material_Subject(subject, material) values(2,6);
 
 -- ResourceType
 
-insert into ResourceType(id, resourceType) values (1001, 'TEXTBOOK1');
-insert into ResourceType(id, resourceType) values (1002, 'EXPERIMENT1');
-insert into ResourceType(id, resourceType) values (1003, 'SIMULATION1');
-insert into ResourceType(id, resourceType) values (1004, 'GLOSSARY1');
-insert into ResourceType(id, resourceType) values (1005, 'ROLEPLAY1');
+insert into ResourceType(id, name) values (1001, 'TEXTBOOK1');
+insert into ResourceType(id, name) values (1002, 'EXPERIMENT1');
+insert into ResourceType(id, name) values (1003, 'SIMULATION1');
+insert into ResourceType(id, name) values (1004, 'GLOSSARY1');
+insert into ResourceType(id, name) values (1005, 'ROLEPLAY1');
+insert into ResourceType(id, name) values (1006, 'WEBSITE');
+insert into ResourceType(id, name) values (1007, 'COURSE');
 
 -- Material_ResourceType
 
@@ -168,15 +170,15 @@ insert into Material_ResourceType(material, resourceType) values (7, 1004);
 
 -- EducationalContext
 
-insert into EducationalContext(id, educationalContext) values (1, 'PRESCHOOLEDUCATION');
-insert into EducationalContext(id, educationalContext) values (2, 'BASICEDUCATION');
-insert into EducationalContext(id, educationalContext) values (3, 'SECONDARYEDUCATION');
-insert into EducationalContext(id, educationalContext) values (4, 'HIGHEREDUCATION');
-insert into EducationalContext(id, educationalContext) values (5, 'VOCATIONALEDUCATION');
-insert into EducationalContext(id, educationalContext) values (6, 'CONTINUINGEDUCATION');
-insert into EducationalContext(id, educationalContext) values (7, 'TEACHEREDUCATION');
-insert into EducationalContext(id, educationalContext) values (8, 'SPECIALEDUCATION');
-insert into EducationalContext(id, educationalContext) values (9, 'OTHER');
+insert into EducationalContext(id, name) values (1, 'PRESCHOOLEDUCATION');
+insert into EducationalContext(id, name) values (2, 'BASICEDUCATION');
+insert into EducationalContext(id, name) values (3, 'SECONDARYEDUCATION');
+insert into EducationalContext(id, name) values (4, 'HIGHEREDUCATION');
+insert into EducationalContext(id, name) values (5, 'VOCATIONALEDUCATION');
+insert into EducationalContext(id, name) values (6, 'CONTINUINGEDUCATION');
+insert into EducationalContext(id, name) values (7, 'TEACHEREDUCATION');
+insert into EducationalContext(id, name) values (8, 'SPECIALEDUCATION');
+insert into EducationalContext(id, name) values (9, 'OTHER');
 
 
 -- Material_EducationalContext

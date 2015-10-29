@@ -2,15 +2,15 @@
 
 -- EducationalContext
 
-insert into EducationalContext(id, educationalContext) values (1, 'PRESCHOOLEDUCATION');
-insert into EducationalContext(id, educationalContext) values (2, 'BASICEDUCATION');
-insert into EducationalContext(id, educationalContext) values (3, 'SECONDARYEDUCATION');
-insert into EducationalContext(id, educationalContext) values (4, 'HIGHEREDUCATION');
-insert into EducationalContext(id, educationalContext) values (5, 'VOCATIONALEDUCATION');
-insert into EducationalContext(id, educationalContext) values (6, 'CONTINUINGEDUCATION');
-insert into EducationalContext(id, educationalContext) values (7, 'TEACHEREDUCATION');
-insert into EducationalContext(id, educationalContext) values (8, 'SPECIALEDUCATION');
-insert into EducationalContext(id, educationalContext) values (9, 'OTHER');
+insert into EducationalContext(id, name) values (1, 'PRESCHOOLEDUCATION');
+insert into EducationalContext(id, name) values (2, 'BASICEDUCATION');
+insert into EducationalContext(id, name) values (3, 'SECONDARYEDUCATION');
+insert into EducationalContext(id, name) values (4, 'HIGHEREDUCATION');
+insert into EducationalContext(id, name) values (5, 'VOCATIONALEDUCATION');
+insert into EducationalContext(id, name) values (6, 'CONTINUINGEDUCATION');
+insert into EducationalContext(id, name) values (7, 'TEACHEREDUCATION');
+insert into EducationalContext(id, name) values (8, 'SPECIALEDUCATION');
+insert into EducationalContext(id, name) values (9, 'OTHER');
 
 -- Start of test data
 
@@ -81,8 +81,8 @@ insert into Material(id, lang, issueDate, licenseType, source, added, updated, p
 insert into Material(id, lang, issueDate, licenseType, source, added, updated, picture, creator, deleted, paid, embeddable) values(35, 5, 7, 1, 'https://en.wikipedia.org/wiki/Austria', '2002-06-01 09:00:01', null, null, 2, false, false, false);
 insert into Material(id, lang, issueDate, licenseType, source, added, deleted, paid, embeddable) values(36, 1, 2, 3, 'http://pilditu.audio.ee', '2001-07-16 06:00:01', false, false, false);
 insert into Material(id, lang, issueDate, licenseType, source, added, deleted, paid, embeddable) values(37, 1, 2, 3, '<script>alert(1)</script>', '2001-07-16 06:00:01', false, false, false);
-insert into Material(id, lang, issueDate, licenseType, source, added, updated, picture, creator, deleted, paid, embeddable) values(38, 2, 2, 2, 'https://oxygen.netgroupdigital.com/rest/repoMaterialSource', '1992-02-03 06:00:01', '1995-07-12 09:00:01', null, 1, false, true, true);
 insert into Material(id, lang, issueDate, licenseType, source, added, deleted, paid, embeddable) values(3919, 1, 2, 3, 'http://pilditu.audio.ee', '2001-07-16 06:00:01', false, false, false);
+insert into Material(id, lang, issueDate, licenseType, source, added, updated, picture, creator, deleted, paid, embeddable) values(3920, 2, 2, 2, 'https://oxygen.netgroupdigital.com/rest/repoMaterialSource', '1992-02-03 06:00:01', '1995-07-12 09:00:01', null, 1, false, true, true);
 
 -- Authors
 

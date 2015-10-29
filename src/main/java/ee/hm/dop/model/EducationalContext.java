@@ -15,7 +15,7 @@ public class EducationalContext {
     @GeneratedValue
     private Long id;
 
-    @Column(nullable = false, unique = true, name = "educationalContext")
+    @Column(nullable = false, unique = true)
     private String name;
 
     public Long getId() {
