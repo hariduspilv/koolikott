@@ -32,8 +32,6 @@ define(['app'], function(app)
 
                     if (searchService.getEducationalContext() && validEducationalContexts.indexOf(searchService.getEducationalContext()) > -1) {
                         $scope.detailedSearch.educationalContext = searchService.getEducationalContext();
-                    } else {
-                        $scope.detailedSearch.educationalContext = defaultEducationalContext;
                     }
 
                     // Paid

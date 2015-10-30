@@ -88,7 +88,7 @@
             </div>
             <div class="col-md-4">
                 <section>
-                    <div class="form-group">
+                    <div class="form-group" data-ng-if="detailedSearch.educationalContext">
                         <label for="filter-license-type">Valdkond</label>
                         <ui-select data-ng-model="filters.licenseType" theme="bootstrap" data-ng-disabled="disabled" id="filter-license-type">
                             <ui-select-match allow-clear="true" placeholder="Vali või otsi...">
