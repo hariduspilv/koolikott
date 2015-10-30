@@ -365,7 +365,6 @@ insert into Material_Tag(tag, material) values(11, 8);
 insert into Material_Tag(tag, material) values(12, 37);
 insert into Material_Tag(tag, material) values(4, 3919);
 insert into Material_Tag(tag, material) values(5, 3919);
---insert into Material_Tag(tag, material) values(13, 10);
 
 -- Portfolio
 
