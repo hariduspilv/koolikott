@@ -18,7 +18,7 @@ public class AuthorDAOTest extends DatabaseTestBase {
     private AuthorDAO authorDAO;
 
     @Test
-    public void findResourceTypeByName() {
+    public void findAuthorByFullName() {
         Long id = (long) 3;
         String name = "Leonardo";
         String surname = "Fibonacci";
@@ -29,5 +29,20 @@ public class AuthorDAOTest extends DatabaseTestBase {
         assertEquals(id, author.getId());
         assertEquals(name, author.getName());
         assertEquals(surname, author.getSurname());
+    }
+
+    @Test
+    public void create() {
+        Author author = new Author();
+        author.setName("Illimar");
+        author.setSurname("Onomatöpöa");
+
+        Author created = authorDAO.create(author);
+
+        Author newAuthor = authorDAO.findAuthorByFullName(created.getName(), created.getSurname());
+
+        assertEquals(created.getId(), newAuthor.getId());
+        assertEquals(created.getName(), newAuthor.getName());
+        assertEquals(created.getSurname(), newAuthor.getSurname());
     }
 }
