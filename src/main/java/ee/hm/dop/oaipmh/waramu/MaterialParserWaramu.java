@@ -190,7 +190,7 @@ public class MaterialParserWaramu implements MaterialParser {
     }
 
     private List<EducationalContext> getEducationalContexts(Document doc) throws XPathExpressionException {
-        List<EducationalContext> resourceTypes = new ArrayList<>();
+        List<EducationalContext> educationalContexts = new ArrayList<>();
 
         XPathFactory xPathfactory = XPathFactory.newInstance();
         XPath xpath = xPathfactory.newXPath();
@@ -198,20 +198,20 @@ public class MaterialParserWaramu implements MaterialParser {
         NodeList nl = (NodeList) expr.evaluate(doc, XPathConstants.NODESET);
 
         for (int i = 0; i < nl.getLength(); i++) {
-            Element e = (Element) nl.item(i);
-            String context = e.getElementsByTagName("value").item(0).getFirstChild().getTextContent().trim().toUpperCase().replaceAll("\\s", "");
+            Element element = (Element) nl.item(i);
+            String context = element.getElementsByTagName("value").item(0).getFirstChild().getTextContent().trim().toUpperCase().replaceAll("\\s", "");
 
             if (context.equals(COMPULSORYEDUCATION)) {
                 context = BASICEDUCATION;
             }
 
             EducationalContext educationalContext = educationalContextService.getEducationalContextByName(context);
-            if (!resourceTypes.contains(educationalContext) && educationalContext != null) {
-                resourceTypes.add(educationalContext);
+            if (!educationalContexts.contains(educationalContext) && educationalContext != null) {
+                educationalContexts.add(educationalContext);
             }
         }
 
-        return resourceTypes;
+        return educationalContexts;
     }
 
     private List<Author> getAuthors(Document doc) throws XPathExpressionException {
