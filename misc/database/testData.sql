@@ -337,7 +337,7 @@ insert into Tag(id, name) values (9, 'لكتب');
 insert into Tag(id, name) values (10, 'test');
 insert into Tag(id, name) values (11, 'material');
 insert into Tag(id, name) values (12, '<script>alert(1)</script>');
-insert into Tag(id, name) values (13, 'abiogenesis');
+-- insert into Tag(id, name) values (13, 'abiogenesis');
 
 insert into Material_Tag(tag, material) values(1, 1);
 insert into Material_Tag(tag, material) values(1, 2);
@@ -365,7 +365,8 @@ insert into Material_Tag(tag, material) values(11, 8);
 insert into Material_Tag(tag, material) values(12, 37);
 insert into Material_Tag(tag, material) values(4, 3919);
 insert into Material_Tag(tag, material) values(5, 3919);
-insert into Material_Tag(tag, material) values(13, 7);
+
+-- insert into Material_Tag(tag, material) values(13, 7);
 
 -- Portfolio
 
