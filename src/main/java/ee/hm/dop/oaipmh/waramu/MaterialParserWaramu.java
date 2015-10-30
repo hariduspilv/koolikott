@@ -1,5 +1,6 @@
 package ee.hm.dop.oaipmh.waramu;
 
+import ee.hm.dop.model.Author;
 import ee.hm.dop.model.EducationalContext;
 import ee.hm.dop.model.Language;
 import ee.hm.dop.model.LanguageString;
@@ -8,13 +9,17 @@ import ee.hm.dop.model.ResourceType;
 import ee.hm.dop.model.Tag;
 import ee.hm.dop.oaipmh.MaterialParser;
 import ee.hm.dop.oaipmh.ParseException;
+import ee.hm.dop.service.AuthorService;
 import ee.hm.dop.service.EducationalContextService;
 import ee.hm.dop.service.LanguageService;
 import ee.hm.dop.service.ResourceTypeService;
 import ee.hm.dop.service.TagService;
+import ezvcard.Ezvcard;
+import ezvcard.VCard;
 import org.apache.commons.validator.routines.UrlValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.w3c.dom.CharacterData;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -50,6 +55,9 @@ public class MaterialParserWaramu implements MaterialParser {
     @Inject
     private EducationalContextService educationalContextService;
 
+    @Inject
+    private AuthorService authorService;
+
     @Override
     public Material parse(Document doc) throws ParseException {
         Material material;
@@ -70,6 +78,7 @@ public class MaterialParserWaramu implements MaterialParser {
             setTags(material, lom);
             setLearningResourceType(material, doc);
             setEducationalContext(material, doc);
+            setAuthors(material, doc);
         } catch (RuntimeException e) {
             logger.error("Unexpected error while parsing document. Document may not"
                     + " match Waramu mapping or XML structure.", e);
@@ -79,7 +88,17 @@ public class MaterialParserWaramu implements MaterialParser {
         return material;
     }
 
-    private void setEducationalContext(Material material, Document doc) throws ParseException {
+    private void setAuthors(Material material, Document doc) {
+        List<Author> authors = null;
+        try {
+            authors = getAuthors(doc);
+        } catch (Exception e) {
+            //ignore if there is no educational context for a material
+        }
+        material.setAuthors(authors);
+    }
+
+    private void setEducationalContext(Material material, Document doc) {
         List<EducationalContext> educationalContexts = null;
         try {
             educationalContexts = getEducationalContexts(doc);
@@ -89,7 +108,7 @@ public class MaterialParserWaramu implements MaterialParser {
         material.setEducationalContexts(educationalContexts);
     }
 
-    private void setLearningResourceType(Material material, Document doc) throws ParseException {
+    private void setLearningResourceType(Material material, Document doc) {
         List<ResourceType> resourceTypes = null;
         try {
             resourceTypes = getResourceTypes(doc);
@@ -162,7 +181,7 @@ public class MaterialParserWaramu implements MaterialParser {
             }
 
             ResourceType resourceType = resourceTypeService.getResourceTypeByName(type);
-            if(!resourceTypes.contains(resourceType) && resourceType != null) {
+            if (!resourceTypes.contains(resourceType) && resourceType != null) {
                 resourceTypes.add(resourceType);
             }
         }
@@ -187,12 +206,48 @@ public class MaterialParserWaramu implements MaterialParser {
             }
 
             EducationalContext educationalContext = educationalContextService.getEducationalContextByName(context);
-            if(!resourceTypes.contains(educationalContext) && educationalContext != null) {
+            if (!resourceTypes.contains(educationalContext) && educationalContext != null) {
                 resourceTypes.add(educationalContext);
             }
         }
 
         return resourceTypes;
+    }
+
+    private List<Author> getAuthors(Document doc) throws XPathExpressionException {
+        List<Author> authors = new ArrayList<>();
+
+        XPathFactory xPathfactory = XPathFactory.newInstance();
+        XPath xpath = xPathfactory.newXPath();
+        XPathExpression expr = xpath
+                .compile("//*[local-name()='lom']/*[local-name()='lifeCycle']/*[local-name()='contribute']/*[local-name()='entity']");
+        NodeList nl = (NodeList) expr.evaluate(doc, XPathConstants.NODESET);
+
+        NodeList authorNodes = nl.item(0).getChildNodes();
+
+        for (int i = 0; i < authorNodes.getLength(); i++) {
+
+            CharacterData child = (CharacterData) authorNodes.item(i);
+            String data = child.getData().trim().replaceAll(" (?=[A-Z]{1,99}:)", "\r\n");
+
+            if (data.length() > 0) {
+                VCard vcard = Ezvcard.parse(data).first();
+                String name = vcard.getStructuredName().getGiven();
+                String surname = vcard.getStructuredName().getFamily();
+
+                if (name != null && surname != null) {
+                    Author author = authorService.getAuthorByFullName(name, surname);
+                    if (author == null) {
+                        author = authorService.createAuthor(name, surname);
+                        authors.add(author);
+                    } else if (!authors.contains(author)) {
+                        authors.add(author);
+                    }
+                }
+            }
+        }
+
+        return authors;
     }
 
     private List<Tag> getTags(Element lom) {

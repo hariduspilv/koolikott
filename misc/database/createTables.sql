@@ -38,7 +38,9 @@ DROP TABLE IF EXISTS Author;
 CREATE TABLE Author(
   id      BIGINT AUTO_INCREMENT PRIMARY KEY,
   name    VARCHAR(255) NOT NULL,
-  surname VARCHAR(255) NOT NULL
+  surname VARCHAR(255) NOT NULL,
+
+  UNIQUE KEY (name, surname)
 );
 
 CREATE TABLE ResourceType (

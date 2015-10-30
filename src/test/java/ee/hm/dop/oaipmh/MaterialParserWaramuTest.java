@@ -1,5 +1,6 @@
 package ee.hm.dop.oaipmh;
 
+import ee.hm.dop.model.Author;
 import ee.hm.dop.model.EducationalContext;
 import ee.hm.dop.model.Language;
 import ee.hm.dop.model.LanguageString;
@@ -7,6 +8,7 @@ import ee.hm.dop.model.Material;
 import ee.hm.dop.model.ResourceType;
 import ee.hm.dop.model.Tag;
 import ee.hm.dop.oaipmh.waramu.MaterialParserWaramu;
+import ee.hm.dop.service.AuthorService;
 import ee.hm.dop.service.EducationalContextService;
 import ee.hm.dop.service.LanguageService;
 import ee.hm.dop.service.ResourceTypeService;
@@ -54,6 +56,9 @@ public class MaterialParserWaramuTest {
     @Mock
     private EducationalContextService educationalContextService;
 
+    @Mock
+    private AuthorService authorService;
+
     private Language language = new Language();
 
     @Test(expected = ee.hm.dop.oaipmh.ParseException.class)
@@ -97,6 +102,10 @@ public class MaterialParserWaramuTest {
         EducationalContext educationalContext = new EducationalContext();
         educationalContext.setName("BASICEDUCATION");
 
+        Author author = new Author();
+        author.setName("Andrew");
+        author.setSurname("Balaam");
+
         expect(languageService.getLanguage("fr")).andReturn(french).times(2);
         expect(languageService.getLanguage("et")).andReturn(estonian).times(2);
         expect(languageService.getLanguage("fren")).andReturn(french);
@@ -104,7 +113,7 @@ public class MaterialParserWaramuTest {
         expect(resourceTypeService.getResourceTypeByName(resourceType1.getName())).andReturn(resourceType1);
         expect(resourceTypeService.getResourceTypeByName(resourceType2.getName())).andReturn(resourceType2);
         expect(educationalContextService.getEducationalContextByName(educationalContext.getName())).andReturn(educationalContext);
-
+        expect(authorService.getAuthorByFullName(author.getName(), author.getSurname())).andReturn(author);
 
         LanguageString title1 = new LanguageString();
         title1.setLanguage(french);
@@ -140,12 +149,15 @@ public class MaterialParserWaramuTest {
         List<EducationalContext> educationalContexts = new ArrayList<>();
         educationalContexts.add(educationalContext);
 
-        replay(languageService, tagService, resourceTypeService, educationalContextService);
+        List<Author> authors = new ArrayList<>();
+        authors.add(author);
+
+        replay(languageService, tagService, resourceTypeService, educationalContextService, authorService);
 
         Document doc = dBuilder.parse(fXmlFile);
         Material material = materialParser.parse(doc);
 
-        verify(languageService, tagService, resourceTypeService, educationalContextService);
+        verify(languageService, tagService, resourceTypeService, educationalContextService, authorService);
 
         assertEquals("oai:ait.opetaja.ee:437556e69c7ee410b3ff27ad3eaec360219c3990", material.getRepositoryIdentifier());
         assertEquals(titles, material.getTitles());
@@ -156,6 +168,80 @@ public class MaterialParserWaramuTest {
                 material.getSource());
         assertEquals(resourceTypes, material.getResourceTypes());
         assertEquals(educationalContexts, material.getEducationalContexts());
+        assertEquals(authors, material.getAuthors());
+    }
+
+    @Test
+    public void parseWithNewAuthor() throws Exception {
+        File fXmlFile = getResourceAsFile("oaipmh/parseNewAuthor.xml");
+
+        DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+        DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+
+        Language french = new Language();
+        french.setId(1L);
+        french.setName("French");
+
+        Language estonian = new Language();
+        estonian.setId(2L);
+        estonian.setName("Estonian");
+
+        Author author = new Author();
+        author.setName("Author");
+        author.setSurname("Supernew");
+
+        expect(languageService.getLanguage("fr")).andReturn(french).times(2);
+        expect(languageService.getLanguage("et")).andReturn(estonian).times(2);
+        expect(languageService.getLanguage("fren")).andReturn(french);
+        expect(authorService.getAuthorByFullName(author.getName(), author.getSurname())).andReturn(null);
+        expect(authorService.createAuthor(author.getName(), author.getSurname())).andReturn(author);
+        List<Author> authors = new ArrayList<>();
+        authors.add(author);
+
+        replay(languageService, authorService);
+
+        Document doc = dBuilder.parse(fXmlFile);
+        Material material = materialParser.parse(doc);
+
+        verify(languageService, authorService);
+
+        assertEquals("oai:ait.opetaja.ee:437556e69c7ee410b3ff27ad3eaec360219c3990", material.getRepositoryIdentifier());
+        assertEquals(french, material.getLanguage());
+        assertEquals("http://koolitaja.eenet.ee:57219/Waramu3Web/metadata?id=437556e69c7ee410b3ff27ad3eaec360219c3990",
+                material.getSource());
+        assertEquals(authors, material.getAuthors());
+    }
+
+    @Test
+    public void parseWithNoAuthorData() throws Exception {
+        File fXmlFile = getResourceAsFile("oaipmh/parseNoAuthor.xml");
+
+        DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+        DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+
+        Language french = new Language();
+        french.setId(1L);
+        french.setName("French");
+
+        Language estonian = new Language();
+        estonian.setId(2L);
+        estonian.setName("Estonian");
+
+        expect(languageService.getLanguage("fr")).andReturn(french).times(2);
+        expect(languageService.getLanguage("et")).andReturn(estonian).times(2);
+        expect(languageService.getLanguage("fren")).andReturn(french);
+
+        replay(languageService, authorService);
+
+        Document doc = dBuilder.parse(fXmlFile);
+        Material material = materialParser.parse(doc);
+
+        verify(languageService, authorService);
+
+        assertEquals("oai:ait.opetaja.ee:437556e69c7ee410b3ff27ad3eaec360219c3990", material.getRepositoryIdentifier());
+        assertEquals(french, material.getLanguage());
+        assertEquals("http://koolitaja.eenet.ee:57219/Waramu3Web/metadata?id=437556e69c7ee410b3ff27ad3eaec360219c3990",
+                material.getSource());
     }
 
     @Test
