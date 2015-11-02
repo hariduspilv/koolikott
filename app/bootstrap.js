@@ -31,7 +31,7 @@ require.config({
         'ngAria': ['dop'],
         'ngMaterial': {
              deps: ['ngAnimate', 'ngAria']
-         },
+        },
         'screenfull': {
             deps: ['dop']
         },
