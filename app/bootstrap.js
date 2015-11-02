@@ -20,7 +20,8 @@ require.config({
         'dopAlert': 'directives/alert/alert',
         'alertService': 'services/alertService',
         'inputValueControl': 'directives/input-value-control',
-        'dopDetailedSearch': 'directives/detailedSearch/detailedSearch'
+        'dopDetailedSearch': 'directives/detailedSearch/detailedSearch',
+        'dopAddPortfolio': 'directives/addPortfolio/addPortfolio'
     },
     shim: {
         'app': {
@@ -43,7 +44,7 @@ require.config({
     }
 });
 
-require(['app', 'ngAnimate', 'ngAria', 'ngMaterial', 'translationService', 'authenticatedUserService', 'serverCallService', 'authenticationService', 'searchService', 'dopHeader', 'dopFooter', 'dopLoginBar', 'dopAlert', 'alertService', 'inputValueControl', 'angularScreenfull', 'dopDetailedSearch'],
- function(app, ngAnimate, ngAria, ngMaterial, translationService, authenticatedUserService, serverCallService, authenticationService, searchService, dopHeader, dopAlert, alertService, inputValueControl, angularScreenfull, dopDetailedSearch) {
+require(['app', 'ngAnimate', 'ngAria', 'ngMaterial', 'translationService', 'authenticatedUserService', 'serverCallService', 'authenticationService', 'searchService', 'dopHeader', 'dopFooter', 'dopLoginBar', 'dopAlert', 'alertService', 'inputValueControl', 'angularScreenfull', 'dopDetailedSearch', 'dopAddPortfolio'],
+ function(app, ngAnimate, ngAria, ngMaterial, translationService, authenticatedUserService, serverCallService, authenticationService, searchService, dopHeader, dopAlert, alertService, inputValueControl, angularScreenfull, dopDetailedSearch, dopAddPortfolio) {
     angular.bootstrap(document, ['app']);
 });

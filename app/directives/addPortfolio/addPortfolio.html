@@ -1,0 +1,72 @@
+<div>
+    <md-button class="md-fab md-fab-bottom-right" aria-label="Add">
+        <md-tooltip>
+            Lisa materjal
+        </md-tooltip>
+        <ng-md-icon icon="add"></ng-md-icon>
+    </md-button>
+</div>
+
+<md-dialog aria-label="Metadata" class="dialog-cover" flex="100">
+  <md-toolbar class="md-accent">
+    <div class="md-toolbar-tools">
+      <md-button ng-click="hide()" class="md-icon-button" aria-label="close">
+        <ng-md-icon icon="close"></ng-md-icon>
+      </md-button>
+      <h2>Lisa materjali põhiandmed</h2>
+    </div>
+  </md-toolbar>
+  <form>
+    <div layout="row" layout-sm="column" layout-align="center start">
+      <div flex-gt-sm="80">
+        <md-content>
+          <form name="">
+            <div layout layout-sm="column">
+              <md-input-container flex>
+                <label>Pealkiri</label> <input placeholder="Näiteks: Bioloogia töövihik">
+              </md-input-container>
+              <div layout="column" layout-align="center center">
+                <md-input-container>
+                  <label>Keel</label>
+                  <md-select ng-model="ctrl.angular">
+                    <md-option ng-repeat="angular in ctrl.angulars" value="{{angulars}}">{{angulars}}</md-option>
+                  </md-select>
+                </md-input-container>
+              </div>
+            </div>
+
+            <md-input-container flex>
+              <label>Kirjeldus (valikuline)</label>
+              <textarea ng-model="user.biography" columns="1" md-maxlength="150"></textarea>
+            </md-input-container>
+            <md-input-container flex>
+              <md-chips ng-model="model.chips" delete-button-label="Eemalda märksõna" delete-hint="Vajuta x märksõna kustutamiseks" secondary-placeholder="Lisa märksõna (valikuline)">
+              </md-chips>
+            </md-input-container>
+            <div layout layout-sm="column">
+              <md-input-container flex>
+                <label>Autorid</label>
+                <input >
+              </md-input-container>
+              <md-input-container flex>
+                <label>Kirjastaja</label>
+                <input >
+              </md-input-container>
+            </div>
+          </form>
+        </md-content>
+      </div>
+    </div>
+    <div layout="row" layout-sm="column" layout-align="center start">
+      <div class="md-actions" flex-gt-sm="80" >
+        <span flex></span>
+        <md-button ng-click="hide()">
+          Katkesta
+        </md-button>
+        <md-button ng-click="forward('add')" class="md-primary">
+          <ng-md-icon icon="arrow_forward"> </ng-md-icon> Jätka
+        </md-button>
+      </div>
+    </div>
+  </form>
+</md-dialog>

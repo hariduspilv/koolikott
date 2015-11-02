@@ -64,7 +64,8 @@ module.exports = function(grunt) {
                     'bower_components/ui-select/dist/select.min.js',
                     'bower_components/bootstrap-sidebar/dist/js/sidebar.js',
                     'bower_components/bootstrap-switch/dist/js/bootstrap-switch.min.js',
-                    'bower_components/angular-bootstrap-switch/dist/angular-bootstrap-switch.min.js'
+                    'bower_components/angular-bootstrap-switch/dist/angular-bootstrap-switch.min.js',
+                    'bower_components/angular-material-icons/angular-material-icons.min.js'
                     
                 ],
                 dest: '<%= project.assets %>/js/dop.min.js',
@@ -75,7 +76,8 @@ module.exports = function(grunt) {
                     'bower_components/ui-select/dist/select.min.css',
                     'bower_components/bootstrap-sidebar/dist/css/sidebar.css',
                     'bower_components/bootstrap-switch/dist/css/bootstrap3/bootstrap-switch.min.css',
-                    'bower_components/seiyria-bootstrap-slider/sass/bootstrap-slider.css'
+                    'bower_components/seiyria-bootstrap-slider/sass/bootstrap-slider.css',
+                    'bower_components/angular-material-icons/angular-material-icons.css'
                 ],
                 dest: '<%= project.assets %>/css/dop.min.css',
             }
