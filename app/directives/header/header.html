@@ -79,10 +79,10 @@
             
             <div role="search" class="navbar-form navbar-right hidden-xs hidden-sm hidden-ms" id="search-form-main">
                 <div class="form-group">
-                    <div class="input-group" data-ng-class="{'input-group-disabled': isDetailedSearchVisible}">
-                        <input data-ng-keydown="$event.which === 13 && search()" data-ng-model="searchFields.searchQuery" data-ng-disabled="isDetailedSearchVisible" type="text" placeholder="{{'SEARCH' | translate}}" class="form-control" id="SearchBox">
+                    <div class="input-group" data-ng-class="{'input-group-disabled': detailedSearch.isVisible}">
+                        <input data-ng-keydown="$event.which === 13 && search()" data-ng-model="searchFields.searchQuery" data-ng-disabled="detailedSearch.isVisible" type="text" placeholder="{{'SEARCH' | translate}}" class="form-control" id="SearchBox">
                         <span class="input-group-btn">
-                            <button data-ng-click="search()" class="btn btn-default" type="submit" data-ng-disabled="isDetailedSearchVisible" id="searchButton"><i class="fa fa-search"></i></button>
+                            <button data-ng-click="search()" class="btn btn-default" type="submit" data-ng-disabled="detailedSearch.isVisible" id="searchButton"><i class="fa fa-search"></i></button>
                         </span>
                     </div>
                 </div>
@@ -97,7 +97,7 @@
 </div>
 
 <div class="collapse detailed-search" id="detailedSearch">
-    <div data-dop-detailed-search visible="isDetailedSearchVisible"></div>
+    <div data-dop-detailed-search query-in="detailedSearch.queryIn" query-out="detailedSearch.queryOut"></div>
 </div>
 
 <div class="container-fluid">

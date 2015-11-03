@@ -23,8 +23,7 @@ define(['app'], function(app)
                 $scope.selectedLanguage = translationService.getLanguage();
                 $scope.searchFields = {};
                 $scope.searchFields.searchQuery = searchService.getQuery();
-                $scope.isDetailedSearchVisible = false;
-                var isDetailedSearchToggling = false;
+                $scope.detailedSearch = {};
 
                 $scope.languageSelectClick = function() {
                     $scope.showLanguageSelection = !$scope.showLanguageSelection; 
@@ -68,22 +67,25 @@ define(['app'], function(app)
                 };
 
                 $scope.detailedSearchButtonClicked = function() {
-                    // Save the search so that detailed search can access it
-                    if (!isEmpty($scope.searchFields.searchQuery)) {
-                        searchService.setSearch($scope.searchFields.searchQuery);
-                    } else {
-                        searchService.setSearch(null);
-                    }
-
                     // Timeout is used to not register clicks while detailed search box is collapsing/expanding
-                    if (!isDetailedSearchToggling) {
-                        isDetailedSearchToggling = true;
+                    if (!$scope.detailedSearch.isToggling) {
+                        $scope.detailedSearch.isToggling = true;
                         $timeout(function() {
-                            $scope.isDetailedSearchVisible = !$scope.isDetailedSearchVisible;
-                            isDetailedSearchToggling = false;
+                            $scope.detailedSearch.isVisible = !$scope.detailedSearch.isVisible;
+                            $scope.detailedSearch.isToggling = false;
+                            toggleSearchQuery();
                         }, 350);
                     }
                 };
+
+                function toggleSearchQuery() {
+                    if ($scope.detailedSearch.isVisible) {
+                        $scope.detailedSearch.queryIn = $scope.searchFields.searchQuery;
+                        $scope.searchFields.searchQuery = null;
+                    } else {
+                        $scope.searchFields.searchQuery = $scope.detailedSearch.queryOut;
+                    }
+                }
 
                 $scope.$watch(function () {
                         return authenticatedUserService.getUser();
@@ -96,7 +98,7 @@ define(['app'], function(app)
                         return searchService.getQuery();
                     }, function(query) {
                         // Search query is not shown in simple search box when detailed search is open
-                        if (!query || !$scope.isDetailedSearchVisible) {
+                        if (!query || !$scope.detailedSearch.isVisible) {
                             $scope.searchFields.searchQuery = query;
                         }
                 }, true);

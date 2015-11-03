@@ -4,7 +4,8 @@ define(['app'], function(app)
      function($location, searchService, translationService, $filter) {
         return {
             scope: {
-                visible: '='
+                queryIn: '=',
+                queryOut: '='
             },
             templateUrl: 'app/directives/detailedSearch/detailedSearch.html',
             controller: function ($scope) {
@@ -63,54 +64,49 @@ define(['app'], function(app)
                     $location.url(searchService.getURL());
                 };
 
-                function getFiltersAsQuery() {
-                    var filters = '';
+                function getTextFieldsAsQuery() {
+                    var query = '';
 
                     if ($scope.detailedSearch.title) {
-                        filters += isEmpty(filters) ? '' : ' AND ';
-                        filters += 'title:"' + $scope.detailedSearch.title + '"';
+                        query += isEmpty(query) ? '' : ' AND ';
+                        query += 'title:"' + $scope.detailedSearch.title + '"';
                     }
                     if ($scope.detailedSearch.combinedDescription) {
-                        filters += isEmpty(filters) ? '' : ' AND ';
-                        filters += '(description:"' + $scope.detailedSearch.combinedDescription 
+                        query += isEmpty(query) ? '' : ' AND ';
+                        query += '(description:"' + $scope.detailedSearch.combinedDescription 
                             + '" OR summary:"' + $scope.detailedSearch.combinedDescription + '")';
                     }
                     if ($scope.detailedSearch.author) {
-                        filters += isEmpty(filters) ? '' : ' AND ';
-                        filters += 'author:"' + $scope.detailedSearch.author + '"';
+                        query += isEmpty(query) ? '' : ' AND ';
+                        query += 'author:"' + $scope.detailedSearch.author + '"';
                     }
 
-                    return filters;
+                    return query;
                 }
 
                 function createSearchQuery() {
                     var query = '';
-                    var filters = getFiltersAsQuery();
+                    var textFields = getTextFieldsAsQuery();
 
                     if ($scope.detailedSearch.main) {
-                        if (filters) {
-                            query = '(' + $scope.detailedSearch.main + ') AND ' + filters;
+                        if (textFields) {
+                            query = '(' + $scope.detailedSearch.main + ') AND ' + textFields;
                         } else {
                             query = $scope.detailedSearch.main;
                         }
-                    } else if (filters) {
-                        query = filters;
+                    } else if (textFields) {
+                        query = textFields;
                     }
                     
                     return query;
                 }
 
-                // Move search query between simple search box and detailed search
-                $scope.$watch('visible', function(newValue, oldValue) {
-                    if (newValue != oldValue) {
-                        if ($scope.visible) {
-                            $scope.detailedSearch.main = searchService.getQuery();
-                            searchService.setSearch(null);
-                        } else {
-                            searchService.setSearch($scope.detailedSearch.main);
-                            $scope.detailedSearch.main = '';
-                        }
-                    } 
+                $scope.$watch('queryIn', function(queryIn) {
+                    $scope.detailedSearch.main = queryIn;
+                }, true);
+
+                $scope.$watch('detailedSearch.main', function() {
+                    $scope.queryOut = $scope.detailedSearch.main;
                 }, true);
 
             }
