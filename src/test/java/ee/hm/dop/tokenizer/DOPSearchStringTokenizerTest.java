@@ -229,11 +229,19 @@ public class DOPSearchStringTokenizerTest {
     }
 
     @Test
-    public void escapeParenthesesInQuotes() {
+    public void escapeParenthesesInTitle() {
         DOPSearchStringTokenizer tokenizer = new DOPSearchStringTokenizer("(test stuff) AND title:\"one (two) three\"");
         String searchQuery = consumeTokenizer(tokenizer);
 
         assertEquals("(test* stuff*) AND title:\"one\\ \\(two\\)\\ three\"", searchQuery);
+    }
+
+    @Test
+    public void escapeParenthesesInExactMatch() {
+        DOPSearchStringTokenizer tokenizer = new DOPSearchStringTokenizer("(test) AND \"one (two) three\"");
+        String searchQuery = consumeTokenizer(tokenizer);
+
+        assertEquals("(test*) AND \"one\\ \\(two\\)\\ three\"", searchQuery);
     }
 
     @Test
@@ -274,6 +282,22 @@ public class DOPSearchStringTokenizerTest {
         String searchQuery = consumeTokenizer(tokenizer);
 
         assertEquals("\\)\\) query*", searchQuery);
+    }
+
+    @Test
+    public void parenthesesLeftOpen() {
+        DOPSearchStringTokenizer tokenizer = new DOPSearchStringTokenizer("(one test");
+        String searchQuery = consumeTokenizer(tokenizer);
+
+        assertEquals("\\(one* test*", searchQuery);
+    }
+
+    @Test
+    public void orToken() {
+        DOPSearchStringTokenizer tokenizer = new DOPSearchStringTokenizer("(one two) OR title:\"wow\"");
+        String searchQuery = consumeTokenizer(tokenizer);
+
+        assertEquals("(one two) OR title:\"wow\"", searchQuery);
     }
 
 }

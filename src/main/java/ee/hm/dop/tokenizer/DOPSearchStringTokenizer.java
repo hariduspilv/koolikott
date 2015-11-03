@@ -271,7 +271,7 @@ public class DOPSearchStringTokenizer {
             String innerSource = source.substring(position, closingParentheses);
             token = new ParenthesesToken(getInnerTokens(innerSource));
 
-            // Consumes the closing "
+            // Consumes the closing parentheses
             position = closingParentheses + 1;
 
             // Update global position
