@@ -1,18 +1,16 @@
 package ee.hm.dop.dao;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-
-import java.util.List;
-
-import javax.inject.Inject;
-
+import ee.hm.dop.common.test.DatabaseTestBase;
+import ee.hm.dop.model.Repository;
 import org.joda.time.DateTime;
 import org.junit.Test;
 
-import ee.hm.dop.common.test.DatabaseTestBase;
-import ee.hm.dop.model.Repository;
+import javax.inject.Inject;
+import java.util.List;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 
 public class RepositoryDAOTest extends DatabaseTestBase {
 
@@ -23,7 +21,7 @@ public class RepositoryDAOTest extends DatabaseTestBase {
     public void findAll() {
         List<Repository> repositories = repositoryDAO.findAll();
 
-        assertEquals(1, repositories.size());
+        assertEquals(2, repositories.size());
         assertEquals("http://repo1.ee", repositories.get(0).getBaseURL());
         assertNull(repositories.get(0).getLastSynchronization());
     }

@@ -11,7 +11,19 @@ import org.hibernate.annotations.Formula;
 import org.hibernate.annotations.Type;
 import org.joda.time.DateTime;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.Lob;
+import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 import java.util.List;
 
 import static javax.persistence.CascadeType.MERGE;
@@ -145,8 +157,8 @@ public class Material implements Searchable {
     @Column(nullable = false)
     private boolean paid = false;
 
-    @Column(nullable = false)
-    private boolean embeddable = false;
+    @Formula("(select r.isEstonianPublisher from Repository r where r.id = repository)")
+    private Boolean embeddable;
 
     public Long getId() {
         return id;
@@ -339,10 +351,10 @@ public class Material implements Searchable {
     }
 
     public boolean isEmbeddable() {
-        return embeddable;
+        return embeddable != null ? embeddable : false;
     }
 
-    public void setEmbeddable(boolean embeddable) {
+    public void setEmbeddable(Boolean embeddable) {
         this.embeddable = embeddable;
     }
 }
