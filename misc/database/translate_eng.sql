@@ -113,6 +113,8 @@ insert into Translation(translationGroup, translationKey, translation) values (3
 insert into Translation(translationGroup, translationKey, translation) values (3, 'DETAILED_SEARCH_ON', 'Yes');
 insert into Translation(translationGroup, translationKey, translation) values (3, 'DETAILED_SEARCH_OFF', 'No');
 insert into Translation(translationGroup, translationKey, translation) values (3, 'DETAILED_SEARCH_PAID', 'Paid');
+insert into Translation(translationGroup, translationKey, translation) values (3, 'ADD_PORTFOLIO', 'Add Portfolio');
+insert into Translation(translationGroup, translationKey, translation) values (3, 'PORTFOLIO_TITLE', 'Title');
 
 -- Material Subject translations
 insert into Translation(translationGroup, translationKey, translation) values (3, 'SUBJECT_ESTONIAN', 'Estonian');
