@@ -25,7 +25,8 @@ insert into LicenseType(id, name) values (3, 'CCBYND');
 
 -- Repository. Do not use real URLs here
 
-insert into Repository(id, baseURL, lastSynchronization, schemaName) values (1, 'http://repo1.ee', null, 'waramu');
+insert into Repository(id, baseURL, lastSynchronization, schemaName, isEstonianPublisher) values (1, 'http://repo1.ee', null, 'waramu', false);
+insert into Repository(id, baseURL, lastSynchronization, schemaName, isEstonianPublisher) values (2, 'http://estonianPublisher.ee/OAIHandler', null, 'estCore', true);
 
 -- User
 
@@ -59,6 +60,7 @@ insert into Material(id, lang, issueDate, licenseType, source, repository, repos
 insert into Material(id, lang, issueDate, licenseType, source, repository, repositoryIdentifier, added, updated, views, picture, deleted, paid) values(9, null, null, null, 'http://www.chaging.it.com', null, null, '1911-09-01 00:00:01', null, 0, null, false, false);
 insert into Material(id, lang, issueDate, licenseType, source, repository, repositoryIdentifier, added, updated, views, picture, deleted, paid) values(10, null, null, null, 'http://www.boo.com', null, null, '1911-09-01 00:00:01', null, 0, null, false, false); -- Do not use this material, it is deleted by tests
 insert into Material(id, lang, issueDate, licenseType, source, repository, repositoryIdentifier, added, updated, views, picture, creator, deleted, paid) values(11, 1, null, 1, 'https://www.deleted.com/', 1, 'isssiiaawejdsada4564', '2015-09-02 00:00:01', '2015-09-03 07:00:01', 100, '656b6f6f6c696b6f7474', 1, true, false); -- This material should be amoung the 8 latest materials
+insert into Material(id, lang, issueDate, licenseType, source, repository, repositoryIdentifier, added, updated, views, picture, deleted, paid) values(12, null, null, null, 'http://estRepo.com', 2, null, '1911-09-01 00:00:01', null, 0, null, false, false);
 
 -- Authors
 

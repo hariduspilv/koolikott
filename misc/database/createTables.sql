@@ -91,7 +91,8 @@ CREATE TABLE Repository (
   id                  BIGINT         AUTO_INCREMENT PRIMARY KEY,
   baseURL             VARCHAR(255) UNIQUE NOT NULL,
   lastSynchronization TIMESTAMP NULL DEFAULT NULL,
-  schemaName          VARCHAR(255) UNIQUE NOT NULL
+  schemaName          VARCHAR(255) UNIQUE NOT NULL,
+  isEstonianPublisher BOOLEAN
 );
 
 CREATE TABLE User (
@@ -143,7 +144,6 @@ CREATE TABLE Material (
   creator              BIGINT,
   deleted              BOOLEAN,
   paid                 BOOLEAN DEFAULT FALSE,
-  embeddable           BOOLEAN DEFAULT FALSE,
 
   UNIQUE KEY (repositoryIdentifier, repository),
   

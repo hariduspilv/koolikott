@@ -1,26 +1,24 @@
 package ee.hm.dop.rest;
 
-import static java.lang.String.format;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-
-import java.util.List;
+import ee.hm.dop.common.test.ResourceIntegrationTestBase;
+import ee.hm.dop.model.Language;
+import ee.hm.dop.model.LanguageString;
+import ee.hm.dop.model.Material;
+import ee.hm.dop.model.Subject;
+import org.joda.time.DateTime;
+import org.junit.Test;
 
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
+import java.util.List;
 
-import org.joda.time.DateTime;
-import org.junit.Test;
-
-import ee.hm.dop.common.test.ResourceIntegrationTestBase;
-import ee.hm.dop.model.Language;
-import ee.hm.dop.model.LanguageString;
-import ee.hm.dop.model.Material;
-import ee.hm.dop.model.Subject;
+import static java.lang.String.format;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 
 public class MaterialResourceTest extends ResourceIntegrationTestBase {
 
@@ -254,6 +252,7 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
         assertNull(material.getRepository());
         assertNull(material.getRepositoryIdentifier());
         assertEquals(new Long(1), material.getCreator().getId());
+        assertEquals(false, material.isEmbeddable());
     }
 
     private Material getMaterial(long materialId) {

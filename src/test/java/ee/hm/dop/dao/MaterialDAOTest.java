@@ -1,24 +1,5 @@
 package ee.hm.dop.dao;
 
-import static junit.framework.TestCase.assertNull;
-import static org.junit.Assert.assertArrayEquals;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
-
-import java.security.InvalidParameterException;
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.inject.Inject;
-import javax.persistence.RollbackException;
-
-import org.joda.time.DateTime;
-import org.junit.Assert;
-import org.junit.Test;
-
 import ee.hm.dop.common.test.DatabaseTestBase;
 import ee.hm.dop.model.EducationalContext;
 import ee.hm.dop.model.Language;
@@ -29,6 +10,23 @@ import ee.hm.dop.model.ResourceType;
 import ee.hm.dop.model.Subject;
 import ee.hm.dop.model.User;
 import ee.hm.dop.utils.DbUtils;
+import org.joda.time.DateTime;
+import org.junit.Assert;
+import org.junit.Test;
+
+import javax.inject.Inject;
+import javax.persistence.RollbackException;
+import java.security.InvalidParameterException;
+import java.util.ArrayList;
+import java.util.List;
+
+import static junit.framework.TestCase.assertNull;
+import static org.junit.Assert.assertArrayEquals;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 public class MaterialDAOTest extends DatabaseTestBase {
 
@@ -567,6 +565,24 @@ public class MaterialDAOTest extends DatabaseTestBase {
 
     }
 
+    @Test
+    public void isEmbeddedWhenNoRepository() {
+        Material material = materialDAO.findById(3);
+        assertFalse(material.isEmbeddable());
+    }
+
+    @Test
+    public void isEmbeddedWhenEstonianRepo() {
+        Material material = materialDAO.findById(12);
+        assertTrue(material.isEmbeddable());
+    }
+
+    @Test
+    public void isEmbeddedWhenNotEstonianRepo() {
+        Material material = materialDAO.findById(1);
+        assertFalse(material.isEmbeddable());
+    }
+
     private void assertMaterial1(Material material) {
         assertEquals(2, material.getTitles().size());
         assertEquals("Matemaatika õpik üheksandale klassile", material.getTitles().get(0).getText());
@@ -585,5 +601,6 @@ public class MaterialDAOTest extends DatabaseTestBase {
         assertEquals("http://repo1.ee", material.getRepository().getBaseURL());
         assertEquals("isssiiaawej", material.getRepositoryIdentifier());
         assertEquals(new Long(1), material.getCreator().getId());
+        assertFalse(material.isEmbeddable());
     }
 }
