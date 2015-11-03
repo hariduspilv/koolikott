@@ -24,10 +24,24 @@ public class AuthorServiceTest {
     private AuthorDAO authorDAO;
 
     @Test
+    public void getAuthorByFullName() {
+        Author author = getAuthor();
+
+        expect(authorDAO.findAuthorByFullName(author.getName(), author.getSurname())).andReturn(author);
+
+        replay(authorDAO);
+
+        Author returned = authorService.getAuthorByFullName(author.getName(), author.getSurname());
+
+        verify(authorDAO);
+
+        assertEquals(author.getName(), returned.getName());
+        assertEquals(author.getSurname(), returned.getSurname());
+    }
+
+    @Test
     public void createAuthor() {
-        Author author = new Author();
-        author.setName("firstName");
-        author.setSurname("lastName");
+        Author author = getAuthor();
 
         expect(authorDAO.create(anyObject(Author.class))).andReturn(author);
 
@@ -39,5 +53,12 @@ public class AuthorServiceTest {
 
         assertEquals(author.getName(), returned.getName());
         assertEquals(author.getSurname(), returned.getSurname());
+    }
+
+    private Author getAuthor() {
+        Author author = new Author();
+        author.setName("firstName");
+        author.setSurname("lastName");
+        return author;
     }
 }

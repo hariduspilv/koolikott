@@ -1,13 +1,12 @@
 package ee.hm.dop.guice.provider;
 
-import static org.junit.Assert.assertNotNull;
-
-import javax.inject.Inject;
-
+import ee.hm.dop.common.test.GuiceTestRunner;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import ee.hm.dop.common.test.GuiceTestRunner;
+import javax.inject.Inject;
+
+import static org.junit.Assert.assertNotNull;
 
 @RunWith(GuiceTestRunner.class)
 public class SOAPConnectionProviderTest {
@@ -19,5 +18,4 @@ public class SOAPConnectionProviderTest {
     public void get() {
         assertNotNull(soapConnectionProvider.get());
     }
-
 }
