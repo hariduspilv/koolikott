@@ -1,9 +1,9 @@
 package ee.hm.dop.tokenizer;
 
-public class SyntaxToken extends DOPToken {
+public class OrToken extends DOPToken {
 
-    public SyntaxToken(String content) {
-        super(content);
+    public OrToken() {
+        super("OR");
     }
 
     @Override

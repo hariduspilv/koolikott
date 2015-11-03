@@ -7,14 +7,11 @@ import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
 @RunWith(JUnit4.class)
-public class SyntaxTokenTest {
+public class AndTokenTest {
 
     @Test
     public void testToString() {
-        SyntaxToken token = new SyntaxToken("AND");
+        AndToken token = new AndToken();
         assertEquals("AND", token.toString());
-
-        token = new SyntaxToken("longsyntaxkeyword");
-        assertEquals("longsyntaxkeyword", token.toString());
     }
 }

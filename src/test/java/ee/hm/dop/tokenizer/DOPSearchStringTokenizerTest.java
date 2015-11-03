@@ -225,7 +225,7 @@ public class DOPSearchStringTokenizerTest {
                 "(test stuff) AND title:\"resource\" AND author:\"automated\"");
         String searchQuery = consumeTokenizer(tokenizer);
 
-        assertEquals("( test* stuff* ) AND title:\"resource\" AND author:\"automated\"", searchQuery);
+        assertEquals("(test* stuff*) AND title:\"resource\" AND author:\"automated\"", searchQuery);
     }
 
     @Test
@@ -233,7 +233,47 @@ public class DOPSearchStringTokenizerTest {
         DOPSearchStringTokenizer tokenizer = new DOPSearchStringTokenizer("(test stuff) AND title:\"one (two) three\"");
         String searchQuery = consumeTokenizer(tokenizer);
 
-        assertEquals("( test* stuff* ) AND title:\"one\\ \\(two\\)\\ three\"", searchQuery);
+        assertEquals("(test* stuff*) AND title:\"one\\ \\(two\\)\\ three\"", searchQuery);
+    }
+
+    @Test
+    public void escapeMatchingParenthesesInQuotes() {
+        DOPSearchStringTokenizer tokenizer = new DOPSearchStringTokenizer("(test stuff AND title:\"one two) three\"");
+        String searchQuery = consumeTokenizer(tokenizer);
+
+        assertEquals("\\(test* stuff* AND title:\"one\\ two\\)\\ three\"", searchQuery);
+    }
+
+    @Test
+    public void escapeEmptyParentheses() {
+        DOPSearchStringTokenizer tokenizer = new DOPSearchStringTokenizer("() test");
+        String searchQuery = consumeTokenizer(tokenizer);
+
+        assertEquals("\\(\\) test*", searchQuery);
+    }
+
+    @Test
+    public void twoParenthesesTokens() {
+        DOPSearchStringTokenizer tokenizer = new DOPSearchStringTokenizer("(test a) (stuff b) AND title:\"resource\"");
+        String searchQuery = consumeTokenizer(tokenizer);
+
+        assertEquals("(test* a) (stuff* b) AND title:\"resource\"", searchQuery);
+    }
+
+    @Test
+    public void tooManyClosingParentheses() {
+        DOPSearchStringTokenizer tokenizer = new DOPSearchStringTokenizer("(airplane)))");
+        String searchQuery = consumeTokenizer(tokenizer);
+
+        assertEquals("(airplane*) \\)\\)", searchQuery);
+    }
+
+    @Test
+    public void startsWithClosingParentheses() {
+        DOPSearchStringTokenizer tokenizer = new DOPSearchStringTokenizer(")) query");
+        String searchQuery = consumeTokenizer(tokenizer);
+
+        assertEquals("\\)\\) query*", searchQuery);
     }
 
 }
