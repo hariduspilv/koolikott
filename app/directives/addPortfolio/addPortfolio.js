@@ -1,7 +1,12 @@
 define(['app'], function(app)
 {
-    app.controller('addPortfolioDialog', ['$scope',
-        function($scope) {
+    app.controller('addPortfolioDialog', ['$scope', '$mdDialog',
+        function($scope, $mdDialog) {
+            
+            $scope.hide = function() {
+                log('111');
+                $mdDialog.hide();
+            };
         }
     ]);
 
@@ -17,8 +22,7 @@ define(['app'], function(app)
                             controller: 'addPortfolioDialog',
                             templateUrl: 'app/directives/addPortfolio/addPortfolioDialog.html'
                         });
-                    };
-                    
+                    };                    
                 }
             };
         }

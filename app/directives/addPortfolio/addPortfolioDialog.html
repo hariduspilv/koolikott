@@ -1,18 +1,24 @@
 <md-dialog aria-label="Metadata" class="dialog-cover" flex="100">
-    <md-content>
-        <div layout="row" layout-sm="column" layout-align="center start">
-            <div flex-gt-sm="80">
-                <md-content class="md-dialog-content">
-                    <form name="">
-                        <div layout layout-sm="column">
-                            <md-input-container flex>
-                                <label for="portfolioTitleInput" data-translate="PORTFOLIO_TITLE"></label> 
-                                <input id="portfolioTitleInput">
-                            </md-input-container>
-                        </div>
-                    </form>
-                </md-content>
+    <form name="">
+        <md-content class="md-dialog-content">
+            <div layout="row" layout-sm="column" layout-align="center start">
+                <div flex-gt-sm="80">
+                    <div layout layout-sm="column">
+                        <md-input-container flex>
+                            <label for="portfolioTitleInput" data-translate="PORTFOLIO_TITLE"></label> 
+                            <input id="portfolioTitleInput">
+                        </md-input-container>
+                    </div>
+                </div>
             </div>
-        </div>
-    </md-content>
+            <div layout="row" layout-sm="column" layout-align="center">
+                <div class="md-actions" flex-gt-sm="80">
+                    <span flex></span>
+                    <md-button ng-click="hide()">
+                        <span data-translate="BUTTON_CANCEL"></span>
+                    </md-button>
+                </div>
+            </div>
+        </md-content>
+    </form>
 </md-dialog>
