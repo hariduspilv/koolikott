@@ -55,7 +55,7 @@ define(['app'], function(app)
                 }
 
                 $scope.search = function() {
-                    searchService.setSearch(createSearchQuery($scope.detailedSearch.main));
+                    searchService.setSearch(createSimpleSearchQuery(true, true, true));
                     
                     searchService.setPaid($scope.detailedSearch.paid);
                     searchService.setType($scope.detailedSearch.type);
@@ -64,26 +64,26 @@ define(['app'], function(app)
                     $location.url(searchService.getURL());
                 };
 
-                function getTextFieldsAsQuery() {
+                function getTextFieldsAsQuery(usingTitle, usingDescription, usingAuthor) {
                     var query = '';
 
-                    if ($scope.detailedSearch.title) {
-                        query += 'title:"' + $scope.detailedSearch.title + '"';
+                    if (usingTitle && $scope.detailedSearch.title) {
+                        query += 'title:' + addQuotesIfHasWhitespace($scope.detailedSearch.title);
                     }
-                    if ($scope.detailedSearch.combinedDescription) {
-                        query += ' description:"' + $scope.detailedSearch.combinedDescription 
-                            + '" summary:"' + $scope.detailedSearch.combinedDescription + '"';
+                    if (usingDescription && $scope.detailedSearch.combinedDescription) {
+                        query += ' description:' + addQuotesIfHasWhitespace($scope.detailedSearch.combinedDescription)
+                            + ' summary:' + addQuotesIfHasWhitespace($scope.detailedSearch.combinedDescription);
                     }
-                    if ($scope.detailedSearch.author) {
-                        query += ' author:"' + $scope.detailedSearch.author + '"';
+                    if (usingAuthor && $scope.detailedSearch.author) {
+                        query += ' author:' + addQuotesIfHasWhitespace($scope.detailedSearch.author);
                     }
 
                     return query.trim();
                 }
 
-                function createSearchQuery() {
+                function createSimpleSearchQuery(usingTitle, usingDescription, usingAuthor) {
                     var query = '';
-                    var textFields = getTextFieldsAsQuery();
+                    var textFields = getTextFieldsAsQuery(usingTitle, usingDescription, usingAuthor);
 
                     if ($scope.detailedSearch.main) {
                         query = $scope.detailedSearch.main + ' ' + textFields;
@@ -94,12 +94,45 @@ define(['app'], function(app)
                     return query.trim();
                 }
 
+                function parseSimpleSearchQuery(query) {
+                    if (query) {
+                        var titleRegex = /(title:\"(.*?)\"|title:([^\s]+?)(\s|$))/g;
+
+                        var firstTitle = '';
+                        var main = query;
+
+                        while(title = titleRegex.exec(query)) {
+                            // Remove token from main query
+                            main = main.replace(title[1], '');
+
+                            if (!firstTitle) {
+                                firstTitle = title[3] ? title[3] : title[2];
+                            }
+                        }
+
+                        $scope.detailedSearch.main = removeExtraWhitespace(main).trim();
+                        $scope.detailedSearch.title = firstTitle.trim();
+                    }
+                }
+
+                function removeExtraWhitespace(str) {
+                    return str.replace(/\s{2,}/g,' ');
+                }
+
+                function hasWhitespace(str) {
+                    return /\s/g.test(str);
+                }
+
+                function addQuotesIfHasWhitespace(str) {
+                    return hasWhitespace(str) ? '"' + str + '"' : str;
+                }
+
                 $scope.$watch('queryIn', function(queryIn) {
-                    $scope.detailedSearch.main = queryIn;
+                    parseSimpleSearchQuery(queryIn);
                 }, true);
 
-                $scope.$watch('detailedSearch.main', function() {
-                    $scope.queryOut = $scope.detailedSearch.main;
+                $scope.$watch('detailedSearch', function() {
+                    $scope.queryOut = createSimpleSearchQuery(true);
                 }, true);
 
             }
