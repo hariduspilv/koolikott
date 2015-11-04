@@ -115,6 +115,7 @@ insert into Translation(translationGroup, translationKey, translation) values (1
 insert into Translation(translationGroup, translationKey, translation) values (1, 'DETAILED_SEARCH_INCLUDE_PAID', 'Kaasa tasulised');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'ADD_PORTFOLIO', 'Lisa portfolio');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'PORTFOLIO_TITLE', 'Pealkiri');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'PORTFOLIO_DESCRIPTION', 'Kirjeldus');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'BUTTON_CANCEL', 'Katkesta');
 
 -- Material Subject translations

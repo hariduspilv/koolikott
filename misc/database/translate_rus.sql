@@ -115,6 +115,7 @@ insert into Translation(translationGroup, translationKey, translation) values (2
 insert into Translation(translationGroup, translationKey, translation) values (2, 'DETAILED_SEARCH_INCLUDE_PAID', 'Включить заплатили');
 insert into Translation(translationGroup, translationKey, translation) values (2, 'ADD_PORTFOLIO', 'Добавить портфель');
 insert into Translation(translationGroup, translationKey, translation) values (2, 'PORTFOLIO_TITLE', 'Заглавие');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'PORTFOLIO_DESCRIPTION', 'Описание');
 insert into Translation(translationGroup, translationKey, translation) values (2, 'BUTTON_CANCEL', 'Отмена');
 
 -- Material Subject translations
