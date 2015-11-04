@@ -28,6 +28,23 @@ public class MaterialServiceTest {
     private MaterialDAO materialDao;
 
     @Test
+    public void createMaterialWithNotNullId() {
+        Material material = new Material();
+        material.setId(123L);
+
+        replay(materialDao);
+
+        try {
+            materialService.createMaterial(material);
+            fail("Exception expected.");
+        } catch (IllegalArgumentException e) {
+            assertEquals("Error creating Material, material already exists.", e.getMessage());
+        }
+
+        verify(materialDao);
+    }
+
+    @Test
     public void update() {
         DateTime added = new DateTime("2001-10-04T10:15:45.937");
         Long views = 124l;
