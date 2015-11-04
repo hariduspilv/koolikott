@@ -68,20 +68,17 @@ define(['app'], function(app)
                     var query = '';
 
                     if ($scope.detailedSearch.title) {
-                        query += isEmpty(query) ? '' : ' ';
                         query += 'title:"' + $scope.detailedSearch.title + '"';
                     }
                     if ($scope.detailedSearch.combinedDescription) {
-                        query += isEmpty(query) ? '' : ' ';
-                        query += 'description:"' + $scope.detailedSearch.combinedDescription 
+                        query += ' description:"' + $scope.detailedSearch.combinedDescription 
                             + '" summary:"' + $scope.detailedSearch.combinedDescription + '"';
                     }
                     if ($scope.detailedSearch.author) {
-                        query += isEmpty(query) ? '' : ' ';
-                        query += 'author:"' + $scope.detailedSearch.author + '"';
+                        query += ' author:"' + $scope.detailedSearch.author + '"';
                     }
 
-                    return query;
+                    return query.trim();
                 }
 
                 function createSearchQuery() {
@@ -89,16 +86,12 @@ define(['app'], function(app)
                     var textFields = getTextFieldsAsQuery();
 
                     if ($scope.detailedSearch.main) {
-                        if (textFields) {
-                            query = $scope.detailedSearch.main + ' ' + textFields;
-                        } else {
-                            query = $scope.detailedSearch.main;
-                        }
-                    } else if (textFields) {
+                        query = $scope.detailedSearch.main + ' ' + textFields;
+                    } else {
                         query = textFields;
                     }
                     
-                    return query;
+                    return query.trim();
                 }
 
                 $scope.$watch('queryIn', function(queryIn) {
