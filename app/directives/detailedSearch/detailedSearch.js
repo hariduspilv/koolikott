@@ -95,6 +95,9 @@ define(['app'], function(app)
                 }
 
                 function parseSimpleSearchQuery(query) {
+                    $scope.detailedSearch.main = '';
+                    $scope.detailedSearch.title = '';
+
                     if (query) {
                         var titleRegex = /(title:\"(.*?)\"|title:([^\s]+?)(\s|$))/g;
 
@@ -112,7 +115,7 @@ define(['app'], function(app)
                         }
 
                         $scope.detailedSearch.main = removeExtraWhitespace(main).trim();
-                        $scope.detailedSearch.title = firstTitle.trim();
+                        $scope.detailedSearch.title = firstTitle ? firstTitle.trim() : '';
                     }
                 }
 
