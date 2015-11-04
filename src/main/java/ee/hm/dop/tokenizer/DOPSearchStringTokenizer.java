@@ -1,9 +1,6 @@
 package ee.hm.dop.tokenizer;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.Stack;
 
 public class DOPSearchStringTokenizer {
 
@@ -12,8 +9,6 @@ public class DOPSearchStringTokenizer {
     private static final String DESCRIPTION_KEYWORD = "description:";
     private static final String SUMMARY_KEYWORD = "summary:";
     private static final char QUOTES = '"';
-    private static final char OPENING_PARENTHESES = '(';
-    private static final char CLOSING_PARENTHESES = ')';
 
     private String source;
     private int currentPosition;
@@ -53,13 +48,8 @@ public class DOPSearchStringTokenizer {
 
             if (c == QUOTES) {
                 token = parseExactMatch();
-            } else if (c == OPENING_PARENTHESES) {
-                token = parseParentheses();
             } else if (c == 'a') {
                 token = parseAuthor();
-                if (token == null) {
-                    token = parseAnd();
-                }
             } else if (c == 'd') {
                 token = parseDescription();
             } else if (c == 's') {
@@ -70,8 +60,6 @@ public class DOPSearchStringTokenizer {
                 token = parseMustHave();
             } else if (c == '-') {
                 token = parseMustNotHave();
-            } else if (c == 'o') {
-                token = parseOr();
             }
 
             if (token == null) {
@@ -181,37 +169,6 @@ public class DOPSearchStringTokenizer {
         return source.indexOf(QUOTES, position);
     }
 
-    private int getClosingParentheses(int position) {
-        Stack<Integer> openingParentheses = new Stack<>();
-        openingParentheses.push(position - 1);
-
-        boolean quotesOpen = false;
-        while (position < maxPosition) {
-            switch (source.charAt(position)) {
-                case OPENING_PARENTHESES:
-                    if (!quotesOpen) {
-                        openingParentheses.push(position);
-                    }
-                    break;
-                case CLOSING_PARENTHESES:
-                    if (!quotesOpen) {
-                        openingParentheses.pop();
-                        if (openingParentheses.isEmpty()) {
-                            return position;
-                        }
-                    }
-                    break;
-                case QUOTES:
-                    quotesOpen = !quotesOpen;
-                    break;
-                default:
-                    break;
-            }
-            position++;
-        }
-        return -1;
-    }
-
     private int nextWhitespace(int startPosition) {
         int position = startPosition;
         char c = source.charAt(position);
@@ -259,63 +216,6 @@ public class DOPSearchStringTokenizer {
         }
 
         return token;
-    }
-
-    private DOPToken parseParentheses() {
-        DOPToken token = null;
-        int position = currentPosition;
-        char c = source.charAt(position++);
-
-        int closingParentheses = getClosingParentheses(position);
-        if (c == OPENING_PARENTHESES && closingParentheses != -1) {
-            String innerSource = source.substring(position, closingParentheses);
-            token = new ParenthesesToken(getInnerTokens(innerSource));
-
-            // Consumes the closing parentheses
-            position = closingParentheses + 1;
-
-            // Update global position
-            currentPosition = position;
-        }
-
-        return token;
-    }
-
-    private List<DOPToken> getInnerTokens(String innerSource) {
-        DOPSearchStringTokenizer tokenizer = new DOPSearchStringTokenizer(innerSource);
-        List<DOPToken> tokens = new ArrayList<>();
-        while (tokenizer.hasMoreTokens()) {
-            tokens.add(tokenizer.nextToken());
-        }
-        return tokens;
-    }
-
-    private DOPToken parseAnd() {
-        int position = nextWhitespace(currentPosition);
-        String value = source.substring(currentPosition, position).toUpperCase();
-
-        if (!value.equals("AND")) {
-            return null;
-        }
-
-        // Update global position
-        currentPosition = position;
-
-        return new AndToken();
-    }
-
-    private DOPToken parseOr() {
-        int position = nextWhitespace(currentPosition);
-        String value = source.substring(currentPosition, position).toUpperCase();
-
-        if (!value.equals("OR")) {
-            return null;
-        }
-
-        // Update global position
-        currentPosition = position;
-
-        return new OrToken();
     }
 
     private int skipWhiteSpaces(int startPosition) {
