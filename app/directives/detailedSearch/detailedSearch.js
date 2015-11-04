@@ -98,13 +98,16 @@ define(['app'], function(app)
                     $scope.detailedSearch.main = '';
                     $scope.detailedSearch.title = '';
                     $scope.detailedSearch.combinedDescription = '';
+                    $scope.detailedSearch.author = '';
 
                     if (query) {
                         var titleRegex = /(title:\"(.*?)\"|title:([^\s]+?)(\s|$))/g;
                         var descriptionRegex = /(description:\"(.*?)\"|description:([^\s]+?)(\s|$)|summary:\"(.*?)\"|summary:([^\s]+?)(\s|$))/g;
+                        var authorRegex = /(author:\"(.*?)\"|author:([^\s]+?)(\s|$))/g;
 
                         var firstTitle;
                         var firstDescription;
+                        var firstAuthor;
                         var main = query;
 
                         while(title = titleRegex.exec(query)) {
@@ -124,9 +127,17 @@ define(['app'], function(app)
                             }
                         }
 
+                        while(author = authorRegex.exec(query)) {
+                            main = main.replace(author[1], '');
+                            if (!firstAuthor) {
+                                firstAuthor = author[2] || author[3];
+                            }
+                        }
+
                         $scope.detailedSearch.main = removeExtraWhitespace(main).trim();
                         $scope.detailedSearch.title = firstTitle;
                         $scope.detailedSearch.combinedDescription = firstDescription;
+                        $scope.detailedSearch.author = firstAuthor;
                     }
                 }
 
