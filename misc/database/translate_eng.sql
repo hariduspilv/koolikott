@@ -112,7 +112,7 @@ insert into Translation(translationGroup, translationKey, translation) values (3
 insert into Translation(translationGroup, translationKey, translation) values (3, 'DETAILED_SEARCH_MAIN', 'Main');
 insert into Translation(translationGroup, translationKey, translation) values (3, 'DETAILED_SEARCH_ON', 'Yes');
 insert into Translation(translationGroup, translationKey, translation) values (3, 'DETAILED_SEARCH_OFF', 'No');
-insert into Translation(translationGroup, translationKey, translation) values (3, 'DETAILED_SEARCH_PAID', 'Paid');
+insert into Translation(translationGroup, translationKey, translation) values (3, 'DETAILED_SEARCH_INCLUDE_PAID', 'Include Paid');
 insert into Translation(translationGroup, translationKey, translation) values (3, 'ADD_PORTFOLIO', 'Add Portfolio');
 insert into Translation(translationGroup, translationKey, translation) values (3, 'PORTFOLIO_TITLE', 'Title');
 insert into Translation(translationGroup, translationKey, translation) values (3, 'BUTTON_CANCEL', 'Cancel');

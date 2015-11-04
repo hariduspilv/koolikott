@@ -112,7 +112,7 @@ insert into Translation(translationGroup, translationKey, translation) values (2
 insert into Translation(translationGroup, translationKey, translation) values (2, 'DETAILED_SEARCH_MAIN', 'Портфели');
 insert into Translation(translationGroup, translationKey, translation) values (2, 'DETAILED_SEARCH_ON', 'Да');
 insert into Translation(translationGroup, translationKey, translation) values (2, 'DETAILED_SEARCH_OFF', 'Нет');
-insert into Translation(translationGroup, translationKey, translation) values (2, 'DETAILED_SEARCH_PAID', 'Платный');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'DETAILED_SEARCH_INCLUDE_PAID', 'Включить заплатили');
 insert into Translation(translationGroup, translationKey, translation) values (2, 'ADD_PORTFOLIO', 'Добавить портфель');
 insert into Translation(translationGroup, translationKey, translation) values (2, 'PORTFOLIO_TITLE', 'Заглавие');
 insert into Translation(translationGroup, translationKey, translation) values (2, 'BUTTON_CANCEL', 'Отмена');
