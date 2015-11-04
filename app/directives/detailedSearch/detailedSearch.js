@@ -55,7 +55,7 @@ define(['app'], function(app)
                 }
 
                 $scope.search = function() {
-                    searchService.setSearch(createSimpleSearchQuery(true, true, true));
+                    searchService.setSearch(createSimpleSearchQuery());
                     
                     searchService.setPaid($scope.detailedSearch.paid);
                     searchService.setType($scope.detailedSearch.type);
@@ -64,26 +64,26 @@ define(['app'], function(app)
                     $location.url(searchService.getURL());
                 };
 
-                function getTextFieldsAsQuery(usingTitle, usingDescription, usingAuthor) {
+                function getTextFieldsAsQuery() {
                     var query = '';
 
-                    if (usingTitle && $scope.detailedSearch.title) {
-                        query += 'title:' + addQuotesIfHasWhitespace($scope.detailedSearch.title);
+                    if ($scope.detailedSearch.title) {
+                        query += 'title:' + addQuotesIfNecessary($scope.detailedSearch.title);
                     }
-                    if (usingDescription && $scope.detailedSearch.combinedDescription) {
-                        query += ' description:' + addQuotesIfHasWhitespace($scope.detailedSearch.combinedDescription)
-                            + ' summary:' + addQuotesIfHasWhitespace($scope.detailedSearch.combinedDescription);
+                    if ($scope.detailedSearch.combinedDescription) {
+                        query += ' description:' + addQuotesIfNecessary($scope.detailedSearch.combinedDescription)
+                            + ' summary:' + addQuotesIfNecessary($scope.detailedSearch.combinedDescription);
                     }
-                    if (usingAuthor && $scope.detailedSearch.author) {
-                        query += ' author:' + addQuotesIfHasWhitespace($scope.detailedSearch.author);
+                    if ($scope.detailedSearch.author) {
+                        query += ' author:' + addQuotesIfNecessary($scope.detailedSearch.author);
                     }
 
                     return query.trim();
                 }
 
-                function createSimpleSearchQuery(usingTitle, usingDescription, usingAuthor) {
+                function createSimpleSearchQuery() {
                     var query = '';
-                    var textFields = getTextFieldsAsQuery(usingTitle, usingDescription, usingAuthor);
+                    var textFields = getTextFieldsAsQuery();
 
                     if ($scope.detailedSearch.main) {
                         query = $scope.detailedSearch.main + ' ' + textFields;
@@ -106,6 +106,7 @@ define(['app'], function(app)
                             main = main.replace(title[1], '');
 
                             if (!firstTitle) {
+                                // Get token content
                                 firstTitle = title[3] ? title[3] : title[2];
                             }
                         }
@@ -123,7 +124,7 @@ define(['app'], function(app)
                     return /\s/g.test(str);
                 }
 
-                function addQuotesIfHasWhitespace(str) {
+                function addQuotesIfNecessary(str) {
                     return hasWhitespace(str) ? '"' + str + '"' : str;
                 }
 
@@ -132,7 +133,7 @@ define(['app'], function(app)
                 }, true);
 
                 $scope.$watch('detailedSearch', function() {
-                    $scope.queryOut = createSimpleSearchQuery(true);
+                    $scope.queryOut = createSimpleSearchQuery();
                 }, true);
 
             }
