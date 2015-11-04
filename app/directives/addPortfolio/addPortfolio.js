@@ -4,7 +4,6 @@ define(['app'], function(app)
         function($scope, $mdDialog) {
             
             $scope.hide = function() {
-                log('111');
                 $mdDialog.hide();
             };
         }
