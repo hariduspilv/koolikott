@@ -97,11 +97,14 @@ define(['app'], function(app)
                 function parseSimpleSearchQuery(query) {
                     $scope.detailedSearch.main = '';
                     $scope.detailedSearch.title = '';
+                    $scope.detailedSearch.combinedDescription = '';
 
                     if (query) {
                         var titleRegex = /(title:\"(.*?)\"|title:([^\s]+?)(\s|$))/g;
+                        var descriptionRegex = /(description:\"(.*?)\"|description:([^\s]+?)(\s|$)|summary:\"(.*?)\"|summary:([^\s]+?)(\s|$))/g;
 
-                        var firstTitle = '';
+                        var firstTitle;
+                        var firstDescription;
                         var main = query;
 
                         while(title = titleRegex.exec(query)) {
@@ -110,12 +113,20 @@ define(['app'], function(app)
 
                             if (!firstTitle) {
                                 // Get token content
-                                firstTitle = title[3] ? title[3] : title[2];
+                                firstTitle = title[2] || title[3];
+                            }
+                        }
+
+                        while(description = descriptionRegex.exec(query)) {
+                            main = main.replace(description[1], '');
+                            if (!firstDescription) {
+                                firstDescription = description[2] || description[3] || description[5] || description[6];
                             }
                         }
 
                         $scope.detailedSearch.main = removeExtraWhitespace(main).trim();
-                        $scope.detailedSearch.title = firstTitle ? firstTitle.trim() : '';
+                        $scope.detailedSearch.title = firstTitle;
+                        $scope.detailedSearch.combinedDescription = firstDescription;
                     }
                 }
 
