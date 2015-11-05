@@ -26,8 +26,8 @@
                     <div layout layout-sm="column">
                         <md-input-container flex>
                             <label for="portfolioEducationalSelect" data-translate="DETAIL_VIEW_EDUCATIONAL_CONTEXT"></label> 
-                            <md-select data-ng-model="someModel" id="portfolioEducationalSelect">
-                                <md-option ng-value="opt" ng-repeat="opt in neighborhoods">{{ opt }}</md-option>
+                            <md-select data-ng-model="portfolio.educationalContext" id="portfolioEducationalSelect">
+                                <md-option ng-value="educationalContext" ng-repeat="educationalContext in educationalContexts" data-translate="{{portfolio.educationalContext.name.toUpperCase()}}">{{ educationalContext.name }}</md-option>
                             </md-select>  
                         </md-input-container>
                     </div>
