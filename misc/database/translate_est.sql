@@ -117,6 +117,7 @@ insert into Translation(translationGroup, translationKey, translation) values (1
 insert into Translation(translationGroup, translationKey, translation) values (1, 'PORTFOLIO_TITLE', 'Pealkiri');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'PORTFOLIO_DESCRIPTION', 'Kirjeldus');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'BUTTON_CANCEL', 'Katkesta');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'BUTTON_CANCEL', 'Salvesta');
 
 -- Material Subject translations
 insert into Translation(translationGroup, translationKey, translation) values (1, 'SUBJECT_ESTONIAN', 'Eesti keel');
