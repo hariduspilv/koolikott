@@ -3,7 +3,7 @@ define(['app'], function(app)
     app.controller('addPortfolioDialog', ['$scope', '$mdDialog',
         function($scope, $mdDialog) {
             
-            $scope.hide = function() {
+            $scope.cancel = function() {
                 $mdDialog.hide();
             };
         }
