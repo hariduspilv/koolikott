@@ -26,7 +26,9 @@ define(['app'], function(app)
                 $mdDialog.hide();
             };
             
-            $scope.portfolio = {};
+            $scope.portfolio = {
+            	educationalContext: null,
+            };
             
         }
     ]);
