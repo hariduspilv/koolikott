@@ -117,7 +117,7 @@ insert into Translation(translationGroup, translationKey, translation) values (3
 insert into Translation(translationGroup, translationKey, translation) values (3, 'PORTFOLIO_TITLE', 'Title');
 insert into Translation(translationGroup, translationKey, translation) values (3, 'PORTFOLIO_DESCRIPTION', 'Description');
 insert into Translation(translationGroup, translationKey, translation) values (3, 'BUTTON_CANCEL', 'Cancel');
-insert into Translation(translationGroup, translationKey, translation) values (3, 'BUTTON_SAVE', 'Save');
+insert into Translation(translationGroup, translationKey, translation) values (3, 'BUTTON_CREATE_PORTFOLIO', 'Create portfolio');
 
 -- Material Subject translations
 insert into Translation(translationGroup, translationKey, translation) values (3, 'SUBJECT_ESTONIAN', 'Estonian');
