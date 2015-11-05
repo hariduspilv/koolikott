@@ -84,6 +84,7 @@ define(['app'], function(app)
                         $scope.searchFields.searchQuery = null;
                     } else {
                         $scope.searchFields.searchQuery = $scope.detailedSearch.queryOut;
+                        $scope.detailedSearch.queryIn = null;
                     }
                 }
 
