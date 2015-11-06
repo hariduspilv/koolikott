@@ -103,7 +103,7 @@ define(['app'], function(app)
                     if (query) {
                         var titleRegex = /(^|\s)(title:([^\s\"]\S*)|title:\"(.*?)\"|title:)/g;
                         var descriptionRegex = /(^|\s)(description:([^\s\"]\S*)|description:\"(.*?)\"|description:|summary:([^\s\"]\S*)|summary:\"(.*?)\"|summary:)/g;
-                        var authorRegex = /(author:\"(.*?)\"|author:([^\s]+?)(\s|$))/g;
+                        var authorRegex = /(^|\s)(author:([^\s\"]\S*)|author:\"(.*?)\"|author:)/g;
 
                         var firstTitle;
                         var firstDescription;
@@ -128,9 +128,9 @@ define(['app'], function(app)
                         }
 
                         while(author = authorRegex.exec(query)) {
-                            main = main.replace(author[1], '');
+                            main = main.replace(author[2], '');
                             if (!firstAuthor) {
-                                firstAuthor = author[2] || author[3];
+                                firstAuthor = author[3] || author[4];
                             }
                         }
 
