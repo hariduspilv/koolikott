@@ -126,6 +126,19 @@ public class SearchResourceTest extends ResourceIntegrationTestBase {
     }
 
     @Test
+    public void searchWithTypeFilterAll() {
+        String query = "weird";
+        SearchFilter searchFilter = new SearchFilter();
+        searchFilter.setType("all");
+        int start = 0;
+        SearchResult searchResult = doGet(buildQueryURL(query, start, searchFilter), SearchResult.class);
+
+        assertMaterialIdentifiers(searchResult.getItems(), 1L, 5L);
+        assertEquals(2, searchResult.getTotalResults());
+        assertEquals(start, searchResult.getStart());
+    }
+
+    @Test
     public void searchWithEducationalContextAndPaidFilterFalse() {
         String query = "dop";
         SearchFilter searchFilter = new SearchFilter();

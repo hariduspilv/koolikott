@@ -47,6 +47,7 @@ class SearchEngineServiceMock implements SearchEngineService {
         addQueryWithPaidFilterTrue();
         addQueryWithPaidFilterFalse();
         addQueryWithTypeFilter();
+        addQueryWithTypeFilterAll();
         addQueryWithEducationalContextAndPaidFilterFalse();
         addQueryWithEducationalContextAndTypeFilter();
         addQueryWithPaidFalseAndTypeFilter();
@@ -96,6 +97,12 @@ class SearchEngineServiceMock implements SearchEngineService {
     private static void addQueryWithTypeFilter() {
         String filteredQuery = "(weird*) AND type:\"portfolio\"";
         List<Document> filteredSearchResult = createDocumentsWithIdentifiers(1L, 2L, 3L);
+        searchResponses.put(filteredQuery, filteredSearchResult);
+    }
+
+    private static void addQueryWithTypeFilterAll() {
+        String filteredQuery = "(weird*) AND (type:\"material\" OR type:\"portfolio\")";
+        List<Document> filteredSearchResult = createDocumentsWithIdentifiers(1L, 5L);
         searchResponses.put(filteredQuery, filteredSearchResult);
     }
 

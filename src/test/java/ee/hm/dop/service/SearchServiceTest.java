@@ -203,6 +203,19 @@ public class SearchServiceTest {
     }
 
     @Test
+    public void searchWithEmptyQueryAndTypeFilterAll() {
+        String query = "";
+        SearchFilter searchFilter = new SearchFilter();
+        searchFilter.setType("all");
+        String tokenizedQuery = "(type:\"material\" OR type:\"portfolio\")";
+        long start = 0;
+
+        List<Searchable> searchables = Arrays.asList(createMaterial(9L), createMaterial(2L), createPortfolio(2L));
+
+        testSearch(query, tokenizedQuery, searchables, start, searchFilter);
+    }
+
+    @Test
     public void searchNullQueryAndNullFilters() {
         replayAll();
 
@@ -289,6 +302,19 @@ public class SearchServiceTest {
         SearchFilter searchFilter = new SearchFilter();
         searchFilter.setType("material");
         String tokenizedQuery = "(sky) AND type:\"material\"";
+        long start = 0;
+
+        List<Searchable> searchables = Arrays.asList(createMaterial(9L), createMaterial(2L), createPortfolio(2L));
+
+        testSearch(query, tokenizedQuery, searchables, start, searchFilter);
+    }
+
+    @Test
+    public void searchWithTypeFilterAll() {
+        String query = "sky";
+        SearchFilter searchFilter = new SearchFilter();
+        searchFilter.setType("all");
+        String tokenizedQuery = "(sky) AND (type:\"material\" OR type:\"portfolio\")";
         long start = 0;
 
         List<Searchable> searchables = Arrays.asList(createMaterial(9L), createMaterial(2L), createPortfolio(2L));
