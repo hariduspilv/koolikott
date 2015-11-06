@@ -29,7 +29,6 @@ define(['app'], function(app)
                     
                     // Educational context
                     var validEducationalContexts = ['preschooleducation', 'basiceducation', 'secondaryeducation', 'vocationaleducation'];
-                    var defaultEducationalContext = 'preschooleducation';
 
                     if (searchService.getEducationalContext() && validEducationalContexts.indexOf(searchService.getEducationalContext()) > -1) {
                         $scope.detailedSearch.educationalContext = searchService.getEducationalContext();
@@ -43,13 +42,10 @@ define(['app'], function(app)
                     }
 
                     // Type
-                    $scope.detailedSearch.type = '';
-                    if (searchService.getType()) {
-                        if (searchService.getType() === 'material') {
-                            $scope.detailedSearch.type = 'material'
-                        } else if (searchService.getType() === 'portfolio') {
-                            $scope.detailedSearch.type = 'portfolio';
-                        }
+                    $scope.detailedSearch.type = 'all';
+                    
+                    if (searchService.getType() && searchService.isValidType(searchService.getType())) {
+                        $scope.detailedSearch.type = searchService.getType();
                     }
 
                 }

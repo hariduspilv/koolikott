@@ -180,7 +180,7 @@ define(['app'], function(app) {
             },
 
             isValidType : function(type) {
-                return type === 'material' || type === 'portfolio';
+                return type === 'material' || type === 'portfolio' || type === 'all';
             }
         };
     }]);
