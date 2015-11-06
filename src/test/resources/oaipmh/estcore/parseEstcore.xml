@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<OAI-PMH xmlns="http://www.openarchives.org/OAI/2.0/"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/
+    http://www.openarchives.org/OAI/2.0/OAI-PMH.xsd">
+    <responseDate>2015-09-22T13:43:05Z</responseDate>
+    <request verb="GetRecord" identifier="6d0a950c264cbbae4947a6c3f67f9a3aa7aab89d" metadataPrefix="oai_lom">
+        http://koolitaja.eenet.ee:57219/Waramu3Web/OAIHandler
+    </request>
+    <GetRecord>
+        <record>
+            <header>
+                <identifier>
+                    identifier1
+                </identifier>
+                <datestamp>1999-12-31T22:00:00Z</datestamp>
+                <setSpec>1</setSpec>
+            </header>
+            <metadata>
+
+                <xm:estcore
+                        xmlns:lom="http://ltsc.ieee.org/xsd/LOM"
+                        xmlns:xm="http://www.estcore/2015/XMLSchema"
+                        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                        xsi:schemaLocation="http://www.estcore/2015/XMLSchema file:/home/mart/ESTCORE/estcoreOnlyNeeded.xsd"
+                        xmlns="">
+                    <general>
+                        <title uniqueElementName="title">
+                            <lom:string language="fr-FR">first title</lom:string>
+                            <lom:string language="et">teine pealkiri</lom:string>
+
+                        </title>
+                        <language uniqueElementName="language">en-US</language>
+                        <language uniqueElementName="language">en-US</language>
+                        <description uniqueElementName="description">
+                            <lom:string language="en-GB">string1</lom:string>
+                        </description>
+                        <description uniqueElementName="description">
+                            <lom:string language="ee">string2</lom:string>
+                        </description>
+                        <keyword>
+                        </keyword>
+                        <keyword>
+                            <lom:string language="en-US">string3</lom:string>
+                        </keyword>
+                    </general>
+                    <lifeCycle>
+                        <contribute>
+                            <lom:date uniqueElementName="date">
+                                <lom:description uniqueElementName="description">
+                                    <lom:string language="en-US">string4</lom:string>
+                                    <lom:string language="en-US">string5</lom:string>
+                                </lom:description>
+                            </lom:date>
+                            <lom:entity>entity0</lom:entity>
+                        </contribute>
+                        <contribute>
+                            <lom:entity>entity1</lom:entity>
+                            <lom:date uniqueElementName="date">
+                                <lom:description uniqueElementName="description">
+                                    <lom:string language="en-US">string6</lom:string>
+                                </lom:description>
+                            </lom:date>
+                        </contribute>
+                    </lifeCycle>
+                    <technical>
+                        <location>location0</location>
+                    </technical>
+                    <educational>
+                        <learningResourceType>audio</learningResourceType>
+                        <learningResourceType>audio</learningResourceType>
+                        <context>preschoolEducation</context>
+                        <context>preschoolEducation</context>
+                        <typicalAgeRange>0-0</typicalAgeRange>
+                        <typicalAgeRange>0-0</typicalAgeRange>
+                    </educational>
+                    <educational>
+                        <learningResourceType>audio</learningResourceType>
+                        <learningResourceType>audio</learningResourceType>
+                        <context>preschoolEducation</context>
+                        <context>preschoolEducation</context>
+                        <typicalAgeRange>0-0</typicalAgeRange>
+                        <typicalAgeRange>0-0</typicalAgeRange>
+                    </educational>
+                    <rights uniqueElementName="rights">
+                        <lom:description uniqueElementName="description">
+                        </lom:description>
+                        <lom:description uniqueElementName="description">
+                            <lom:string language="en-US">string7</lom:string>
+                        </lom:description>
+                    </rights>
+                    <classification>
+                        <taxonPath>
+                            <gymnasiumTaxon>
+                                <curriculum>KLRÕK2011</curriculum>
+                                <domain>Mina ja keskkond</domain>
+                                <subject>Estonian</subject>
+                                <topic>Ajaloo algõpetus</topic>
+                                <subtopic>Ajaarvamine</subtopic>
+                            </gymnasiumTaxon>
+                        </taxonPath>
+                        <taxonPath>
+                            <gymnasiumTaxon>
+                                <curriculum>KLRÕK2011</curriculum>
+                                <domain>Mina ja keskkond</domain>
+                                <subject>Estonian</subject>
+                                <topic>Ajaloo algõpetus</topic>
+                                <subtopic>Ajaarvamine</subtopic>
+                            </gymnasiumTaxon>
+                        </taxonPath>
+                    </classification>
+                    <classification>
+                        <taxonPath>
+                            <gymnasiumTaxon>
+                                <curriculum>KLRÕK2011</curriculum>
+                                <domain>Mina ja keskkond</domain>
+                                <subject>Estonian</subject>
+                                <topic>Ajaloo algõpetus</topic>
+                                <subtopic>Ajaarvamine</subtopic>
+                            </gymnasiumTaxon>
+                        </taxonPath>
+                        <taxonPath>
+                            <basicSchoolTaxon>
+                                <curriculum>KLRÕK2011</curriculum>
+                                <domain>Mina ja keskkond</domain>
+                                <subject>Estonian</subject>
+                                <topic>Ajaloo algõpetus</topic>
+                                <subtopic>Ajaarvamine</subtopic>
+                            </basicSchoolTaxon>
+                        </taxonPath>
+                    </classification>
+                    <imgSrc>ZGVmYXVsdA==</imgSrc>
+                </xm:estcore>
+
+            </metadata>
+        </record>
+    </GetRecord>
+</OAI-PMH>

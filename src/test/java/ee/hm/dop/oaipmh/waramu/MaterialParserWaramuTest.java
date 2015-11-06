@@ -1,18 +1,23 @@
-package ee.hm.dop.oaipmh;
+package ee.hm.dop.oaipmh.waramu;
 
-import ee.hm.dop.model.Author;
-import ee.hm.dop.model.EducationalContext;
-import ee.hm.dop.model.Language;
-import ee.hm.dop.model.LanguageString;
-import ee.hm.dop.model.Material;
-import ee.hm.dop.model.ResourceType;
-import ee.hm.dop.model.Tag;
-import ee.hm.dop.oaipmh.waramu.MaterialParserWaramu;
-import ee.hm.dop.service.AuthorService;
-import ee.hm.dop.service.EducationalContextService;
-import ee.hm.dop.service.LanguageService;
-import ee.hm.dop.service.ResourceTypeService;
-import ee.hm.dop.service.TagService;
+import static org.easymock.EasyMock.createMock;
+import static org.easymock.EasyMock.expect;
+import static org.easymock.EasyMock.replay;
+import static org.easymock.EasyMock.verify;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
+
+import java.io.File;
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+
 import org.easymock.EasyMockRunner;
 import org.easymock.Mock;
 import org.easymock.TestSubject;
@@ -21,22 +26,19 @@ import org.junit.runner.RunWith;
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
-import java.io.File;
-import java.io.IOException;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.util.ArrayList;
-import java.util.List;
-
-import static org.easymock.EasyMock.createMock;
-import static org.easymock.EasyMock.expect;
-import static org.easymock.EasyMock.replay;
-import static org.easymock.EasyMock.verify;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
+import ee.hm.dop.model.Author;
+import ee.hm.dop.model.EducationalContext;
+import ee.hm.dop.model.Language;
+import ee.hm.dop.model.LanguageString;
+import ee.hm.dop.model.Material;
+import ee.hm.dop.model.ResourceType;
+import ee.hm.dop.model.Tag;
+import ee.hm.dop.oaipmh.ParseException;
+import ee.hm.dop.service.AuthorService;
+import ee.hm.dop.service.EducationalContextService;
+import ee.hm.dop.service.LanguageService;
+import ee.hm.dop.service.ResourceTypeService;
+import ee.hm.dop.service.TagService;
 
 @RunWith(EasyMockRunner.class)
 public class MaterialParserWaramuTest {
@@ -74,7 +76,7 @@ public class MaterialParserWaramuTest {
 
     @Test
     public void parse() throws Exception {
-        File fXmlFile = getResourceAsFile("oaipmh/parse.xml");
+        File fXmlFile = getResourceAsFile("oaipmh/waramu/parseWaramu.xml");
 
         DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
         DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
@@ -173,7 +175,7 @@ public class MaterialParserWaramuTest {
 
     @Test
     public void parseWithNewAuthor() throws Exception {
-        File fXmlFile = getResourceAsFile("oaipmh/parseNewAuthor.xml");
+        File fXmlFile = getResourceAsFile("oaipmh/waramu/parseNewAuthor.xml");
 
         DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
         DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
@@ -214,7 +216,7 @@ public class MaterialParserWaramuTest {
 
     @Test
     public void parseWithNoAuthorData() throws Exception {
-        File fXmlFile = getResourceAsFile("oaipmh/parseNoAuthor.xml");
+        File fXmlFile = getResourceAsFile("oaipmh/waramu/parseNoAuthor.xml");
 
         DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
         DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
@@ -248,7 +250,7 @@ public class MaterialParserWaramuTest {
     public void parseNullTitle() throws ParserConfigurationException, IOException, SAXException, URISyntaxException {
         String errorMessage = "Error in parsing Material title";
 
-        URI resource = getClass().getClassLoader().getResource("oaipmh/parseNullTitle.xml").toURI();
+        URI resource = getClass().getClassLoader().getResource("oaipmh/waramu/parseNullTitle.xml").toURI();
         File fXmlFile = new File(resource);
 
         DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
@@ -275,7 +277,7 @@ public class MaterialParserWaramuTest {
     public void parseNullLanguage() throws ParserConfigurationException, IOException, SAXException, URISyntaxException {
         String errorMessage = "Error in parsing Material language";
 
-        URI resource = getClass().getClassLoader().getResource("oaipmh/parseNullLanguage.xml").toURI();
+        URI resource = getClass().getClassLoader().getResource("oaipmh/waramu/parseNullLanguage.xml").toURI();
         File fXmlFile = new File(resource);
 
         DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
@@ -303,7 +305,7 @@ public class MaterialParserWaramuTest {
             URISyntaxException {
         String errorMessage = "Error in parsing Material descriptions";
 
-        URI resource = getClass().getClassLoader().getResource("oaipmh/parseNullDescriptions.xml").toURI();
+        URI resource = getClass().getClassLoader().getResource("oaipmh/waramu/parseNullDescriptions.xml").toURI();
         File fXmlFile = new File(resource);
 
         DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
@@ -331,7 +333,7 @@ public class MaterialParserWaramuTest {
     public void parseNullSource() throws ParserConfigurationException, IOException, SAXException, URISyntaxException {
         String errorMessage = "Material has more or less than one source, can't be mapped.";
 
-        URI resource = getClass().getClassLoader().getResource("oaipmh/parseNullSource.xml").toURI();
+        URI resource = getClass().getClassLoader().getResource("oaipmh/waramu/parseNullSource.xml").toURI();
         File fXmlFile = new File(resource);
 
         DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
