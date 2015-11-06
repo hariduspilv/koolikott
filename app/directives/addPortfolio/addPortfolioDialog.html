@@ -33,6 +33,18 @@
                     </div>
                 </div>
             </div>
+            <div layout="row" layout-sm="column" layout-align="center start">
+                <div flex-gt-sm="80">
+                    <div layout layout-sm="column">
+                        <md-input-container flex>
+                            <label for="portfolioSubjectSelect" data-translate="DETAIL_VIEW_SUBJECT"></label> 
+                            <md-select data-ng-model="someModel" id="portfolioSubjectSelect">
+                                <md-option ng-value="opt" ng-repeat="opt in neighborhoods">{{ opt }}</md-option>
+                            </md-select>  
+                        </md-input-container>
+                    </div>
+                </div>
+            </div>
             <div layout="row" layout-sm="column" layout-align="center">
                 <div class="md-actions" flex-gt-sm="80">
                     <span flex></span>
