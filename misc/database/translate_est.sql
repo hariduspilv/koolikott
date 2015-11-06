@@ -3,7 +3,7 @@ insert into Translation(translationGroup, translationKey, translation) values (1
 insert into Translation(translationGroup, translationKey, translation) values (1, 'LOGOUT', 'Logi välja');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'DETAIL_VIEW_SUBJECT', 'Teema');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'MATERIAL_VIEW_RESOURCE_TYPE', 'Tüüp');
-insert into Translation(translationGroup, translationKey, translation) values (1, 'DETAIL_VIEW_EDUCATIONAL_CONTEXT', 'Vanuserühmadele');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'DETAIL_VIEW_EDUCATIONAL_CONTEXT', 'Vanuserühm');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'UPDATED', 'Uuendatud');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'CREATED', 'Loodud');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'REPOSITORY_NUMBER', 'Repositooriumi number');
@@ -115,7 +115,9 @@ insert into Translation(translationGroup, translationKey, translation) values (1
 insert into Translation(translationGroup, translationKey, translation) values (1, 'DETAILED_SEARCH_INCLUDE_PAID', 'Kaasa tasulised');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'ADD_PORTFOLIO', 'Lisa portfolio');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'PORTFOLIO_TITLE', 'Pealkiri');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'PORTFOLIO_DESCRIPTION', 'Kirjeldus');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'BUTTON_CANCEL', 'Katkesta');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'BUTTON_CREATE_PORTFOLIO', 'Loo portfolio');
 
 -- Material Subject translations
 insert into Translation(translationGroup, translationKey, translation) values (1, 'SUBJECT_ESTONIAN', 'Eesti keel');
