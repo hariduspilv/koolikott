@@ -27,6 +27,7 @@ define(['app'], function(app)
             };
             
             $scope.portfolio = {
+            	title: null,
             	educationalContext: null,
             };
             
