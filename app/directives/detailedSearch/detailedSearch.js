@@ -101,7 +101,7 @@ define(['app'], function(app)
                     $scope.detailedSearch.author = '';
 
                     if (query) {
-                        var titleRegex = /(title:\"(.*?)\"|title:([^\s]+?)(\s|$))/g;
+                        var titleRegex = /(^|\s)(title:([^\s\"]\S*)|title:\"(.*?)\"|title:)/g;
                         var descriptionRegex = /(description:\"(.*?)\"|description:([^\s]+?)(\s|$)|summary:\"(.*?)\"|summary:([^\s]+?)(\s|$))/g;
                         var authorRegex = /(author:\"(.*?)\"|author:([^\s]+?)(\s|$))/g;
 
@@ -112,11 +112,11 @@ define(['app'], function(app)
 
                         while(title = titleRegex.exec(query)) {
                             // Remove token from main query
-                            main = main.replace(title[1], '');
+                            main = main.replace(title[2], '');
 
                             if (!firstTitle) {
                                 // Get token content
-                                firstTitle = title[2] || title[3];
+                                firstTitle = title[3] || title[4];
                             }
                         }
 
