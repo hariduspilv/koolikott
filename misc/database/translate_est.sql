@@ -116,6 +116,7 @@ insert into Translation(translationGroup, translationKey, translation) values (1
 insert into Translation(translationGroup, translationKey, translation) values (1, 'ADD_PORTFOLIO', 'Lisa portfolio');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'PORTFOLIO_TITLE', 'Pealkiri');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'PORTFOLIO_SUMMARY', 'Kokkuvõte');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'PORTFOLIO_METADATA_TOOLBAR_LABEL', 'Lisa portfolio põhiandmed');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'BUTTON_CANCEL', 'Katkesta');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'BUTTON_CREATE_PORTFOLIO', 'Loo portfolio');
 

@@ -116,6 +116,7 @@ insert into Translation(translationGroup, translationKey, translation) values (2
 insert into Translation(translationGroup, translationKey, translation) values (2, 'ADD_PORTFOLIO', 'Добавить портфель');
 insert into Translation(translationGroup, translationKey, translation) values (2, 'PORTFOLIO_TITLE', 'Заглавие');
 insert into Translation(translationGroup, translationKey, translation) values (2, 'PORTFOLIO_SUMMARY', 'Описание');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'PORTFOLIO_METADATA_TOOLBAR_LABEL', 'Добавить резюме основных данных');
 insert into Translation(translationGroup, translationKey, translation) values (2, 'BUTTON_CANCEL', 'Отмена');
 insert into Translation(translationGroup, translationKey, translation) values (2, 'BUTTON_CREATE_PORTFOLIO', 'Создать портфолио');
 
