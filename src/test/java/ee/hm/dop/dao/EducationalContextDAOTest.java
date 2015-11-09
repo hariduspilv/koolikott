@@ -1,13 +1,16 @@
 package ee.hm.dop.dao;
 
-import ee.hm.dop.common.test.DatabaseTestBase;
-import ee.hm.dop.model.EducationalContext;
-import org.junit.Test;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+
+import java.util.List;
 
 import javax.inject.Inject;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import org.junit.Test;
+
+import ee.hm.dop.common.test.DatabaseTestBase;
+import ee.hm.dop.model.EducationalContext;
 
 /**
  * Created by mart.laus on 6.08.2015.
@@ -28,6 +31,12 @@ public class EducationalContextDAOTest extends DatabaseTestBase {
         assertNotNull(educationalContext.getId());
         assertEquals(id, educationalContext.getId());
         assertEquals(name, educationalContext.getName());
+    }
+
+    @Test
+    public void findAll() {
+        List<EducationalContext> educationalContexts = educationalContextDAO.findAll();
+        assertEquals(9, educationalContexts.stream().distinct().count());
     }
 
 }

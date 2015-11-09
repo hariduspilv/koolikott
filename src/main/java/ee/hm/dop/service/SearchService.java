@@ -31,6 +31,8 @@ public class SearchService {
 
     protected static final String PORTFOLIO_TYPE = "portfolio";
 
+    protected static final String ALL_TYPE = "all";
+
     @Inject
     private SearchEngineService searchEngineService;
 
@@ -155,7 +157,7 @@ public class SearchService {
             filters.put("paid", "false");
         }
 
-        Set<String> types = ImmutableSet.of(MATERIAL_TYPE, PORTFOLIO_TYPE);
+        Set<String> types = ImmutableSet.of(MATERIAL_TYPE, PORTFOLIO_TYPE, ALL_TYPE);
         if (types.contains(searchFilter.getType())) {
             filters.put("type", searchFilter.getType());
         }
@@ -171,6 +173,8 @@ public class SearchService {
 
                 if (filter.getKey().equals("paid")) {
                     filtersAsQuery += "(paid:\"false\" OR type:\"portfolio\")";
+                } else if (filter.getKey().equals("type") && filter.getValue().equals("all")) {
+                    filtersAsQuery += "(type:\"material\" OR type:\"portfolio\")";
                 } else {
                     filtersAsQuery += format("%s:\"%s\"", filter.getKey(), value);
                 }

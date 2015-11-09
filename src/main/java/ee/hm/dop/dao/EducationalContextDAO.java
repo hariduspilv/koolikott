@@ -1,5 +1,7 @@
 package ee.hm.dop.dao;
 
+import java.util.List;
+
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
@@ -14,8 +16,8 @@ public class EducationalContextDAO {
     private EntityManager entityManager;
 
     public EducationalContext findEducationalContextByName(String name) {
-        TypedQuery<EducationalContext> findByName = entityManager
-                .createQuery("SELECT e FROM EducationalContext e WHERE e.name = :name", EducationalContext.class);
+        TypedQuery<EducationalContext> findByName = entityManager.createQuery(
+                "SELECT e FROM EducationalContext e WHERE e.name = :name", EducationalContext.class);
 
         EducationalContext educationalContext = null;
         try {
@@ -26,4 +28,9 @@ public class EducationalContextDAO {
 
         return educationalContext;
     }
+
+    public List<EducationalContext> findAll() {
+        return entityManager.createQuery("from EducationalContext", EducationalContext.class).getResultList();
+    }
+
 }
