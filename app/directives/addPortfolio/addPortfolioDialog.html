@@ -1,6 +1,6 @@
 <md-dialog aria-label="Metadata" class="dialog-cover" flex="100">
-    <form name="">
-        <md-content class="md-dialog-content">
+    <md-content class="md-dialog-content">
+        <form name="">
             <div layout="row" layout-sm="column" layout-align="center start">
                 <div flex-gt-sm="80">
                     <div layout layout-sm="column">
@@ -45,17 +45,17 @@
                     </div>
                 </div>
             </div>
-            <div layout="row" layout-sm="column" layout-align="center">
-                <div class="md-actions" flex-gt-sm="80">
-                    <span flex></span>
-                    <md-button ng-click="cancel()" aria-label="{{'BUTTON_CANCEL' | translate}}">
-                        <span data-translate="BUTTON_CANCEL"></span>
-                    </md-button>
-                    <md-button class="md-primary" aria-label="{{'BUTTON_CREATE_PORTFOLIO' | translate}}">
-                        <span data-translate="BUTTON_CREATE_PORTFOLIO"></span>
-                    </md-button>
-                </div>
+        </form>
+        <div layout="row" layout-sm="column" layout-align="center">
+            <div class="md-actions" flex-gt-sm="80">
+                <span flex></span>
+                <md-button ng-click="cancel()" aria-label="{{'BUTTON_CANCEL' | translate}}">
+                    <span data-translate="BUTTON_CANCEL"></span>
+                </md-button>
+                <md-button class="md-primary" aria-label="{{'BUTTON_CREATE_PORTFOLIO' | translate}}">
+                    <span data-translate="BUTTON_CREATE_PORTFOLIO"></span>
+                </md-button>
             </div>
-        </md-content>
-    </form>
+        </div>
+    </md-content>
 </md-dialog>
