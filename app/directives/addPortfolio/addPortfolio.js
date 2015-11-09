@@ -1,7 +1,7 @@
 define(['app'], function(app)
 {
-    app.controller('addPortfolioDialog', ['$scope', '$mdDialog', 'serverCallService',
-        function($scope, $mdDialog, serverCallService) {
+    app.controller('addPortfolioDialog', ['$scope', '$mdDialog', 'serverCallService', 'translationService',
+        function($scope, $mdDialog, serverCallService, translationService) {
     	
     		// get educational contexts
     		serverCallService.makeGet("rest/learningMaterialMetadata/educationalContext", {}, getEducationalContextSuccess, getEducationalContextFail);
@@ -42,10 +42,11 @@ define(['app'], function(app)
                 templateUrl: 'app/directives/addPortfolio/addPortfolio.html',
                 controller: function ($scope, $mdDialog) {
                     
-                    $scope.ShowAddPortfolioDialog = function() {
+                    $scope.ShowAddPortfolioDialog = function(ev) {
                         $mdDialog.show({
                             controller: 'addPortfolioDialog',
-                            templateUrl: 'app/directives/addPortfolio/addPortfolioDialog.html'
+                            templateUrl: 'app/directives/addPortfolio/addPortfolioDialog.html',
+                            targetEvent: ev
                         });
                     };                    
                 }

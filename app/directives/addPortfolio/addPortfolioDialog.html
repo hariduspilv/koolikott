@@ -5,8 +5,8 @@
                 <div flex-gt-sm="80">
                     <div layout layout-sm="column">
                         <md-input-container flex>
-                            <label for="portfolioTitleInput" data-translate="PORTFOLIO_TITLE"></label> 
-                            <input data-ng-model="portfolio.title" id="portfolioTitleInput">
+                            <label data-translate="PORTFOLIO_TITLE"></label> 
+                            <input data-ng-model="portfolio.title">
                         </md-input-container>
                     </div>
                 </div>
@@ -15,7 +15,7 @@
                 <div flex-gt-sm="80">
                     <div layout layout-sm="column">
                         <md-input-container flex>
-                            <label for="portfolioDescriptionTextarea" data-translate="PORTFOLIO_DESCRIPTION"></label> 
+                            <label for="portfolioDescriptionTextarea" data-translate="PORTFOLIO_SUMMARY"></label> 
                             <textarea data-ng-model="portfolio.summary" id="portfolioDescriptionTextarea"></textarea>
                         </md-input-container>
                     </div>
@@ -48,10 +48,10 @@
             <div layout="row" layout-sm="column" layout-align="center">
                 <div class="md-actions" flex-gt-sm="80">
                     <span flex></span>
-                    <md-button ng-click="cancel()">
+                    <md-button ng-click="cancel()" aria-label="{{'BUTTON_CANCEL' | translate}}">
                         <span data-translate="BUTTON_CANCEL"></span>
                     </md-button>
-                    <md-button class="md-primary">
+                    <md-button class="md-primary" aria-label="{{'BUTTON_CREATE_PORTFOLIO' | translate}}">
                         <span data-translate="BUTTON_CREATE_PORTFOLIO"></span>
                     </md-button>
                 </div>
