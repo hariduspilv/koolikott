@@ -1,7 +1,7 @@
 define(['app'], function(app)
 {
-    app.controller('addPortfolioDialog', ['$scope', '$mdDialog', 'serverCallService', 'translationService',
-        function($scope, $mdDialog, serverCallService, translationService) {
+    app.controller('addPortfolioDialog', ['$scope', '$mdDialog', 'serverCallService',
+        function($scope, $mdDialog, serverCallService) {
     	
     		// get educational contexts
     		serverCallService.makeGet("rest/learningMaterialMetadata/educationalContext", {}, getEducationalContextSuccess, getEducationalContextFail);
