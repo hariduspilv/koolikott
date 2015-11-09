@@ -23,7 +23,7 @@ define(['app'], function(app)
     		
     		
             $scope.cancel = function() {
-                $mdDialog.hide();
+                $mdDialog.cancel();
             };
             
             $scope.portfolio = {
