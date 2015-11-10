@@ -107,6 +107,8 @@ public class MaterialParserEstCoreTest {
         verify(languageService, tagService, resourceTypeService, educationalContextService, authorService);
 
         assertEquals(titles, material.getTitles());
+        assertEquals("https://oxygen.netgroupdigital.com/rest/repoMaterialSource", material.getSource());
+
     }
 
     private File getResourceAsFile(String resourcePath) throws URISyntaxException {

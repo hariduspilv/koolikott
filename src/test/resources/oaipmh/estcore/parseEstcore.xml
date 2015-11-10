@@ -64,7 +64,7 @@
                         </contribute>
                     </lifeCycle>
                     <technical>
-                        <location>location0</location>
+                        <location>https://oxygen.netgroupdigital.com/rest/repoMaterialSource</location>
                     </technical>
                     <educational>
                         <learningResourceType>audio</learningResourceType>
