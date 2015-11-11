@@ -26,7 +26,7 @@
                         xmlns="">
                     <general>
                         <title uniqueElementName="title">
-                            <lom:string language="fr-FR">first title</lom:string>
+                            <lom:string language="en-US">first title</lom:string>
                             <lom:string language="et">teine pealkiri</lom:string>
 
                         </title>

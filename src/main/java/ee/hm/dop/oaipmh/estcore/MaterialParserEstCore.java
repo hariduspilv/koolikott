@@ -16,6 +16,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
+import ee.hm.dop.model.Language;
 import ee.hm.dop.model.LanguageString;
 import ee.hm.dop.model.Material;
 import ee.hm.dop.oaipmh.MaterialParser;
@@ -43,10 +44,9 @@ public class MaterialParserEstCore implements MaterialParser {
             doc.getDocumentElement().normalize();
             material = new Material();
 
-
             setTitle(material, doc);
             setSource(material, doc);
-
+            setLanguage(material, doc);
         } catch (Exception e) {
             logger.error("Unexpected error while parsing document. Document may not"
                     + " match EstCore mapping or XML structure.", e);
@@ -54,6 +54,18 @@ public class MaterialParserEstCore implements MaterialParser {
         }
 
         return material;
+    }
+
+    private void setLanguage(Material material, Document doc) throws ParseException {
+        Language language;
+
+        try {
+            language = getLanguage(doc);
+        } catch (Exception e) {
+            throw new ParseException("Error parsing document language.");
+        }
+
+        material.setLanguage(language);
     }
 
     private void setTitle(Material material, Document doc) throws ParseException {
@@ -65,7 +77,7 @@ public class MaterialParserEstCore implements MaterialParser {
                 throw new ParseException("No titles found.");
             }
         } catch (Exception e) {
-            throw new ParseException("Error parsing document.");
+            throw new ParseException("Error parsing document title.");
         }
 
 
@@ -78,11 +90,26 @@ public class MaterialParserEstCore implements MaterialParser {
             source = getSource(doc);
 
         } catch (Exception e) {
-            throw new ParseException("Error parsing document.");
+            throw new ParseException("Error parsing document source.");
         }
 
 
         material.setSource(source);
+    }
+
+    private Language getLanguage(Document doc) throws XPathExpressionException {
+        Language language;
+
+        XPathFactory xPathfactory = XPathFactory.newInstance();
+        XPath xpath = xPathfactory.newXPath();
+        XPathExpression expr = xpath
+                .compile("//*[local-name()='estcore']/*[local-name()='general']/*[local-name()='language']");
+        Node node = (Node) expr.evaluate(doc, XPathConstants.NODE);
+
+        String[] tokens = node.getFirstChild().getTextContent().trim().split("-");
+        language = languageService.getLanguage(tokens[0]);
+
+        return language;
     }
 
     private List<LanguageString> getTitles(Document doc) throws ParseException, XPathExpressionException {
