@@ -1,36 +1,25 @@
 package ee.hm.dop.model;
 
-import javax.persistence.Column;
+import static javax.persistence.FetchType.EAGER;
+
+import java.util.Set;
+
+import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.OneToMany;
 
-/**
- * Created by mart.laus on 18.06.2015.
- */
 @Entity
-public class EducationalContext {
+@DiscriminatorValue("EDUCATIONAL_CONTEXT")
+public class EducationalContext extends Taxon {
 
-    @Id
-    @GeneratedValue
-    private Long id;
+    @OneToMany(fetch = EAGER, mappedBy = "educationalContext")
+    private Set<Domain> domains;
 
-    @Column(nullable = false, unique = true)
-    private String name;
-
-    public Long getId() {
-        return id;
+    public Set<Domain> getDomains() {
+        return domains;
     }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
+    public void setDomains(Set<Domain> domains) {
+        this.domains = domains;
     }
 }

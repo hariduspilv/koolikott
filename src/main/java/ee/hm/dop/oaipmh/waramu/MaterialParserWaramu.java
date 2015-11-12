@@ -1,21 +1,17 @@
 package ee.hm.dop.oaipmh.waramu;
 
-import ee.hm.dop.model.Author;
-import ee.hm.dop.model.EducationalContext;
-import ee.hm.dop.model.Language;
-import ee.hm.dop.model.LanguageString;
-import ee.hm.dop.model.Material;
-import ee.hm.dop.model.ResourceType;
-import ee.hm.dop.model.Tag;
-import ee.hm.dop.oaipmh.MaterialParser;
-import ee.hm.dop.oaipmh.ParseException;
-import ee.hm.dop.service.AuthorService;
-import ee.hm.dop.service.EducationalContextService;
-import ee.hm.dop.service.LanguageService;
-import ee.hm.dop.service.ResourceTypeService;
-import ee.hm.dop.service.TagService;
-import ezvcard.Ezvcard;
-import ezvcard.VCard;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
+import javax.inject.Inject;
+import javax.xml.xpath.XPath;
+import javax.xml.xpath.XPathConstants;
+import javax.xml.xpath.XPathExpression;
+import javax.xml.xpath.XPathExpressionException;
+import javax.xml.xpath.XPathFactory;
+
 import org.apache.commons.validator.routines.UrlValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,19 +21,28 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-import javax.inject.Inject;
-import javax.xml.xpath.XPath;
-import javax.xml.xpath.XPathConstants;
-import javax.xml.xpath.XPathExpression;
-import javax.xml.xpath.XPathExpressionException;
-import javax.xml.xpath.XPathFactory;
-import java.util.ArrayList;
-import java.util.List;
+import ee.hm.dop.model.Author;
+import ee.hm.dop.model.EducationalContext;
+import ee.hm.dop.model.Language;
+import ee.hm.dop.model.LanguageString;
+import ee.hm.dop.model.Material;
+import ee.hm.dop.model.ResourceType;
+import ee.hm.dop.model.Tag;
+import ee.hm.dop.model.Taxon;
+import ee.hm.dop.oaipmh.MaterialParser;
+import ee.hm.dop.oaipmh.ParseException;
+import ee.hm.dop.service.AuthorService;
+import ee.hm.dop.service.LanguageService;
+import ee.hm.dop.service.ResourceTypeService;
+import ee.hm.dop.service.TagService;
+import ee.hm.dop.service.TaxonService;
+import ezvcard.Ezvcard;
+import ezvcard.VCard;
 
 public class MaterialParserWaramu implements MaterialParser {
     private static final Logger logger = LoggerFactory.getLogger(MaterialParserWaramu.class);
 
-    private static final String[] SCHEMES = {"http", "https"};
+    private static final String[] SCHEMES = { "http", "https" };
     public static final String WEB_PAGE = "WEBPAGE";
     public static final String WEBSITE = "WEBSITE";
     public static final String COMPULSORYEDUCATION = "COMPULSORYEDUCATION";
@@ -53,7 +58,7 @@ public class MaterialParserWaramu implements MaterialParser {
     private ResourceTypeService resourceTypeService;
 
     @Inject
-    private EducationalContextService educationalContextService;
+    private TaxonService taxonService;
 
     @Inject
     private AuthorService authorService;
@@ -77,7 +82,7 @@ public class MaterialParserWaramu implements MaterialParser {
             setSource(material, lom);
             setTags(material, lom);
             setLearningResourceType(material, doc);
-            setEducationalContext(material, doc);
+            setTaxon(material, doc);
             setAuthors(material, doc);
         } catch (RuntimeException e) {
             logger.error("Unexpected error while parsing document. Document may not"
@@ -93,19 +98,19 @@ public class MaterialParserWaramu implements MaterialParser {
         try {
             authors = getAuthors(doc);
         } catch (Exception e) {
-            //ignore if there is no educational context for a material
+            // ignore if there is no educational context for a material
         }
         material.setAuthors(authors);
     }
 
-    private void setEducationalContext(Material material, Document doc) {
-        List<EducationalContext> educationalContexts = null;
+    private void setTaxon(Material material, Document doc) {
+        List<Taxon> taxons = null;
         try {
-            educationalContexts = getEducationalContexts(doc);
+            taxons = getTaxons(doc);
         } catch (Exception e) {
-            //ignore if there is no educational context for a material
+            // ignore if there is no educational context for a material
         }
-        material.setEducationalContexts(educationalContexts);
+        material.setTaxons(taxons);
     }
 
     private void setLearningResourceType(Material material, Document doc) {
@@ -113,7 +118,7 @@ public class MaterialParserWaramu implements MaterialParser {
         try {
             resourceTypes = getResourceTypes(doc);
         } catch (Exception e) {
-            //ignore if there is no resource type for a material
+            // ignore if there is no resource type for a material
         }
         material.setResourceTypes(resourceTypes);
     }
@@ -168,14 +173,16 @@ public class MaterialParserWaramu implements MaterialParser {
 
         XPathFactory xPathfactory = XPathFactory.newInstance();
         XPath xpath = xPathfactory.newXPath();
-        XPathExpression expr = xpath.compile("//*[local-name()='lom']/*[local-name()='educational']/*[local-name()='learningResourceType']");
+        XPathExpression expr = xpath
+                .compile("//*[local-name()='lom']/*[local-name()='educational']/*[local-name()='learningResourceType']");
         NodeList nl = (NodeList) expr.evaluate(doc, XPathConstants.NODESET);
 
         for (int i = 0; i < nl.getLength(); i++) {
             Element e = (Element) nl.item(i);
-            String type = e.getElementsByTagName("value").item(0).getFirstChild().getTextContent().trim().toUpperCase().replaceAll("\\s", "");
+            String type = e.getElementsByTagName("value").item(0).getFirstChild().getTextContent().trim().toUpperCase()
+                    .replaceAll("\\s", "");
 
-            //The only special case where waramu and est-core are different
+            // The only special case where waramu and est-core are different
             if (type.equals(WEB_PAGE)) {
                 type = WEBSITE;
             }
@@ -189,29 +196,35 @@ public class MaterialParserWaramu implements MaterialParser {
         return resourceTypes;
     }
 
-    private List<EducationalContext> getEducationalContexts(Document doc) throws XPathExpressionException {
-        List<EducationalContext> educationalContexts = new ArrayList<>();
+    private List<Taxon> getTaxons(Document doc) throws XPathExpressionException {
+        Set<Taxon> taxons = new HashSet<>();
 
+        addEducationalContexts(doc, taxons);
+
+        return new ArrayList<Taxon>(taxons);
+    }
+
+    private void addEducationalContexts(Document doc, Set<Taxon> taxons) throws XPathExpressionException {
         XPathFactory xPathfactory = XPathFactory.newInstance();
         XPath xpath = xPathfactory.newXPath();
-        XPathExpression expr = xpath.compile("//*[local-name()='lom']/*[local-name()='educational']/*[local-name()='context']");
+        XPathExpression expr = xpath
+                .compile("//*[local-name()='lom']/*[local-name()='educational']/*[local-name()='context']");
         NodeList nl = (NodeList) expr.evaluate(doc, XPathConstants.NODESET);
 
         for (int i = 0; i < nl.getLength(); i++) {
             Element element = (Element) nl.item(i);
-            String context = element.getElementsByTagName("value").item(0).getFirstChild().getTextContent().trim().toUpperCase().replaceAll("\\s", "");
+            String context = element.getElementsByTagName("value").item(0).getFirstChild().getTextContent().trim()
+                    .toUpperCase().replaceAll("\\s", "");
 
             if (context.equals(COMPULSORYEDUCATION)) {
                 context = BASICEDUCATION;
             }
 
-            EducationalContext educationalContext = educationalContextService.getEducationalContextByName(context);
-            if (!educationalContexts.contains(educationalContext) && educationalContext != null) {
-                educationalContexts.add(educationalContext);
+            EducationalContext educationalContext = taxonService.getEducationalContextByName(context);
+            if (educationalContext != null) {
+                taxons.add(educationalContext);
             }
         }
-
-        return educationalContexts;
     }
 
     private List<Author> getAuthors(Document doc) throws XPathExpressionException {

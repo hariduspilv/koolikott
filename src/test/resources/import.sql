@@ -46,6 +46,40 @@ insert into AuthenticatedUser(id, user_id, token, firstLogin, homeOrganization, 
 insert into AuthenticationState(id, token) values (1, 'testTOKEN');
 insert into AuthenticationState(id, token) values (2, 'taatAuthenticateTestToken');
 
+-- EducationalContext
+
+insert into Taxon(id, name, level) values (1, 'PRESCHOOLEDUCATION', 'EDUCATIONAL_CONTEXT');
+insert into EducationalContext(id) values (1); 
+insert into Taxon(id, name, level) values (2, 'BASICEDUCATION', 'EDUCATIONAL_CONTEXT');
+insert into EducationalContext(id) values (2);
+insert into Taxon(id, name, level) values (3, 'SECONDARYEDUCATION', 'EDUCATIONAL_CONTEXT');
+insert into EducationalContext(id) values (3);
+insert into Taxon(id, name, level) values (4, 'HIGHEREDUCATION', 'EDUCATIONAL_CONTEXT');
+insert into EducationalContext(id) values (4);
+insert into Taxon(id, name, level) values (5, 'VOCATIONALEDUCATION', 'EDUCATIONAL_CONTEXT');
+insert into EducationalContext(id) values (5);
+insert into Taxon(id, name, level) values (6, 'CONTINUINGEDUCATION', 'EDUCATIONAL_CONTEXT');
+insert into EducationalContext(id) values (6);
+insert into Taxon(id, name, level) values (7, 'TEACHEREDUCATION', 'EDUCATIONAL_CONTEXT');
+insert into EducationalContext(id) values (7);
+insert into Taxon(id, name, level) values (8, 'SPECIALEDUCATION', 'EDUCATIONAL_CONTEXT');
+insert into EducationalContext(id) values (8);
+insert into Taxon(id, name, level) values (9, 'OTHER', 'EDUCATIONAL_CONTEXT');
+insert into EducationalContext(id) values (9);
+
+-- Domain
+
+insert into Taxon(id, name, level) values (10, 'Mathematics', 'DOMAIN');
+insert into Domain(id, educationalContext) values (10, 1);
+insert into Taxon(id, name, level) values (11, 'ForeignLanguage', 'DOMAIN');
+insert into Domain(id, educationalContext) values (11, 1);
+
+-- Subject
+
+insert into Taxon(id, name, level) values (20, 'Biology', 'SUBJECT');
+insert into Subject(id, domain) values (20, 10);
+insert into Taxon(id, name, level) values (21, 'Mathematics', 'SUBJECT');
+insert into Subject(id, domain) values (21, 10);
 
 -- Materials
 
@@ -134,20 +168,26 @@ insert into Material_Title(title, material) values(16, 7);
 insert into Material_Title(title, material) values(17, 6);
 insert into Material_Title(title, material) values(18, 8);
 
--- Subject
 
-insert into Subject(id, name) values (1, 'Biology');
-insert into Subject(id, name) values (2, 'Mathematics');
+-- Material_Taxon
 
--- Material_Subject
+insert into Material_Taxon(material, taxon) values(1,20); -- PRESCHOOLEDUCATION/Mathematics/Biology
+insert into Material_Taxon(material, taxon) values(2,21); -- PRESCHOOLEDUCATION/Mathematics/Mathematics
+insert into Material_Taxon(material, taxon) values(3,20); -- PRESCHOOLEDUCATION/Mathematics/Biology
+insert into Material_Taxon(material, taxon) values(4,20); -- PRESCHOOLEDUCATION/Mathematics/Biology
+insert into Material_Taxon(material, taxon) values(5,21); -- PRESCHOOLEDUCATION/Mathematics/Mathematics
+insert into Material_Taxon(material, taxon) values(6,20); -- PRESCHOOLEDUCATION/Mathematics/Biology
+insert into Material_Taxon(material, taxon) values(6,21); -- PRESCHOOLEDUCATION/Mathematics/Mathematics
 
-insert into Material_Subject(subject, material) values(1,1);
-insert into Material_Subject(subject, material) values(1,2);
-insert into Material_Subject(subject, material) values(1,3);
-insert into Material_Subject(subject, material) values(1,4);
-insert into Material_Subject(subject, material) values(2,5);
-insert into Material_Subject(subject, material) values(1,6);
-insert into Material_Subject(subject, material) values(2,6);
+insert into Material_Taxon(material, taxon) values(7,11); -- PRESCHOOLEDUCATION/ForeignLanguage
+
+insert into Material_Taxon(material, taxon) values(1,2); -- BASICEDUCATION
+insert into Material_Taxon(material, taxon) values(2,4); -- HIGHEREDUCATION
+insert into Material_Taxon(material, taxon) values(3,5); -- VOCATIONALEDUCATION
+insert into Material_Taxon(material, taxon) values(4,6); -- CONTINUINGEDUCATION
+insert into Material_Taxon(material, taxon) values(5,4); -- HIGHEREDUCATION
+insert into Material_Taxon(material, taxon) values(7,5); -- VOCATIONALEDUCATION
+
 
 -- ResourceType
 
@@ -169,30 +209,6 @@ insert into Material_ResourceType(material, resourceType) values (4, 1005);
 insert into Material_ResourceType(material, resourceType) values (5, 1003);
 insert into Material_ResourceType(material, resourceType) values (6, 1002);
 insert into Material_ResourceType(material, resourceType) values (7, 1004);
-
--- EducationalContext
-
-insert into EducationalContext(id, name) values (1, 'PRESCHOOLEDUCATION');
-insert into EducationalContext(id, name) values (2, 'BASICEDUCATION');
-insert into EducationalContext(id, name) values (3, 'SECONDARYEDUCATION');
-insert into EducationalContext(id, name) values (4, 'HIGHEREDUCATION');
-insert into EducationalContext(id, name) values (5, 'VOCATIONALEDUCATION');
-insert into EducationalContext(id, name) values (6, 'CONTINUINGEDUCATION');
-insert into EducationalContext(id, name) values (7, 'TEACHEREDUCATION');
-insert into EducationalContext(id, name) values (8, 'SPECIALEDUCATION');
-insert into EducationalContext(id, name) values (9, 'OTHER');
-
-
--- Material_EducationalContext
-
-insert into Material_EducationalContext(material, educationalContext) values (1, 1);
-insert into Material_EducationalContext(material, educationalContext) values (1, 2);
-insert into Material_EducationalContext(material, educationalContext) values (2, 4);
-insert into Material_EducationalContext(material, educationalContext) values (3, 5);
-insert into Material_EducationalContext(material, educationalContext) values (4, 6);
-insert into Material_EducationalContext(material, educationalContext) values (5, 4);
-insert into Material_EducationalContext(material, educationalContext) values (6, 3);
-insert into Material_EducationalContext(material, educationalContext) values (7, 5);
 
 -- Publishers
 
@@ -266,10 +282,10 @@ insert into Page(id, name, content, language) VALUES (6, 'Help', '<h1>Help</h1><
 
 -- Portfolio
 
-insert into Portfolio(id, title, subject, educationalContext, creator, summary, views, created, updated, picture) VALUES (1, 'The new stock market', 2, 6, 6, 'The changes after 2008.', 95455215, '2000-12-29 06:00:01', '2004-12-29 06:00:01', '656b6f6f6c696b6f7474');
-insert into Portfolio(id, title, subject, educationalContext, creator, summary, views, created, updated, picture) VALUES (2, 'New ways how to do it', null, null, 4, null, 14, '2012-12-29 06:00:01', null, null);
-insert into Portfolio(id, title, subject, educationalContext, creator, summary, views, created, updated, picture) VALUES (3, 'The newer stock market', 2, 6, 6, 'A marvellous summary.', 14, '2002-12-29 06:00:01', '2006-12-29 06:00:01', '656b6f6f6c696b6f7474');
-insert into Portfolio(id, title, subject, educationalContext, creator, summary, views, created, updated, picture) VALUES (4, 'The even newer stock market', null, null, 1, 'Cool summary.', 100, '2003-10-10 07:00:11', null, null);
+insert into Portfolio(id, title, taxon, creator, summary, views, created, updated, picture) VALUES (1, 'The new stock market', 21, 6, 'The changes after 2008.', 95455215, '2000-12-29 06:00:01', '2004-12-29 06:00:01', '656b6f6f6c696b6f7474');
+insert into Portfolio(id, title, taxon, creator, summary, views, created, updated, picture) VALUES (2, 'New ways how to do it', null, 4, null, 14, '2012-12-29 06:00:01', null, null);
+insert into Portfolio(id, title, taxon, creator, summary, views, created, updated, picture) VALUES (3, 'The newer stock market', 21, 6, 'A marvellous summary.', 14, '2002-12-29 06:00:01', '2006-12-29 06:00:01', '656b6f6f6c696b6f7474');
+insert into Portfolio(id, title, taxon, creator, summary, views, created, updated, picture) VALUES (4, 'The even newer stock market', null, 1, 'Cool summary.', 100, '2003-10-10 07:00:11', null, null);
 
 -- Chapter
 

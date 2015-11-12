@@ -35,10 +35,10 @@ import ee.hm.dop.model.ResourceType;
 import ee.hm.dop.model.Tag;
 import ee.hm.dop.oaipmh.ParseException;
 import ee.hm.dop.service.AuthorService;
-import ee.hm.dop.service.EducationalContextService;
 import ee.hm.dop.service.LanguageService;
 import ee.hm.dop.service.ResourceTypeService;
 import ee.hm.dop.service.TagService;
+import ee.hm.dop.service.TaxonService;
 
 @RunWith(EasyMockRunner.class)
 public class MaterialParserWaramuTest {
@@ -56,7 +56,7 @@ public class MaterialParserWaramuTest {
     private ResourceTypeService resourceTypeService;
 
     @Mock
-    private EducationalContextService educationalContextService;
+    private TaxonService taxonService;
 
     @Mock
     private AuthorService authorService;
@@ -114,7 +114,8 @@ public class MaterialParserWaramuTest {
         expect(tagService.getTagByName("grammaire")).andReturn(tag);
         expect(resourceTypeService.getResourceTypeByName(resourceType1.getName())).andReturn(resourceType1);
         expect(resourceTypeService.getResourceTypeByName(resourceType2.getName())).andReturn(resourceType2);
-        expect(educationalContextService.getEducationalContextByName(educationalContext.getName())).andReturn(educationalContext);
+        expect(taxonService.getEducationalContextByName(educationalContext.getName())).andReturn(
+                educationalContext);
         expect(authorService.getAuthorByFullName(author.getName(), author.getSurname())).andReturn(author);
 
         LanguageString title1 = new LanguageString();
@@ -154,12 +155,12 @@ public class MaterialParserWaramuTest {
         List<Author> authors = new ArrayList<>();
         authors.add(author);
 
-        replay(languageService, tagService, resourceTypeService, educationalContextService, authorService);
+        replay(languageService, tagService, resourceTypeService, taxonService, authorService);
 
         Document doc = dBuilder.parse(fXmlFile);
         Material material = materialParser.parse(doc);
 
-        verify(languageService, tagService, resourceTypeService, educationalContextService, authorService);
+        verify(languageService, tagService, resourceTypeService, taxonService, authorService);
 
         assertEquals("oai:ait.opetaja.ee:437556e69c7ee410b3ff27ad3eaec360219c3990", material.getRepositoryIdentifier());
         assertEquals(titles, material.getTitles());
@@ -169,7 +170,7 @@ public class MaterialParserWaramuTest {
         assertEquals("http://koolitaja.eenet.ee:57219/Waramu3Web/metadata?id=437556e69c7ee410b3ff27ad3eaec360219c3990",
                 material.getSource());
         assertEquals(resourceTypes, material.getResourceTypes());
-        assertEquals(educationalContexts, material.getEducationalContexts());
+        assertEquals(educationalContexts, material.getTaxons());
         assertEquals(authors, material.getAuthors());
     }
 

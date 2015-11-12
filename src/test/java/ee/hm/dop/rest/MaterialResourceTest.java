@@ -1,24 +1,28 @@
 package ee.hm.dop.rest;
 
-import ee.hm.dop.common.test.ResourceIntegrationTestBase;
-import ee.hm.dop.model.Language;
-import ee.hm.dop.model.LanguageString;
-import ee.hm.dop.model.Material;
-import ee.hm.dop.model.Subject;
-import org.joda.time.DateTime;
-import org.junit.Test;
+import static java.lang.String.format;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+
+import java.util.List;
 
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
-import java.util.List;
 
-import static java.lang.String.format;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
+import org.joda.time.DateTime;
+import org.junit.Test;
+
+import ee.hm.dop.common.test.ResourceIntegrationTestBase;
+import ee.hm.dop.model.Language;
+import ee.hm.dop.model.LanguageString;
+import ee.hm.dop.model.Material;
+import ee.hm.dop.model.Subject;
+import ee.hm.dop.model.Taxon;
 
 public class MaterialResourceTest extends ResourceIntegrationTestBase {
 
@@ -31,7 +35,6 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
     @Test
     public void getMaterial() {
         Material material = getMaterial(1);
-
         assertMaterial1(material);
     }
 
@@ -52,12 +55,6 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
 
             }
         }
-    }
-
-    @Test
-    public void getMaterialEducationalContext() {
-        Material material = getMaterial(1);
-        assertEquals("PRESCHOOLEDUCATION", material.getEducationalContexts().get(0).getName());
     }
 
     @Test
@@ -173,23 +170,23 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
     public void getMaterialWithSubjects() {
         Material material = getMaterial(6);
 
-        List<Subject> subjects = material.getSubjects();
-        assertNotNull(subjects);
-        assertEquals(2, subjects.size());
-        Subject biology = subjects.get(0);
-        assertEquals(new Long(1), biology.getId());
+        List<Taxon> taxons = material.getTaxons();
+        assertNotNull(taxons);
+        assertEquals(2, taxons.size());
+        Subject biology = (Subject) taxons.get(0);
+        assertEquals(new Long(20), biology.getId());
         assertEquals("Biology", biology.getName());
-        Subject math = subjects.get(1);
-        assertEquals(new Long(2), math.getId());
+        Subject math = (Subject) taxons.get(1);
+        assertEquals(new Long(21), math.getId());
         assertEquals("Mathematics", math.getName());
     }
 
     @Test
-    public void getMaterialWithNoSubject() {
-        Material material = getMaterial(7);
-        List<Subject> subjects = material.getSubjects();
-        assertNotNull(subjects);
-        assertEquals(0, subjects.size());
+    public void getMaterialWithNoTaxon() {
+        Material material = getMaterial(8);
+        List<Taxon> taxons = material.getTaxons();
+        assertNotNull(taxons);
+        assertEquals(0, taxons.size());
     }
 
     @Test
@@ -240,19 +237,24 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
         assertEquals("Matemaatika õpik üheksandale klassile", material.getTitles().get(0).getText());
         assertEquals(2, material.getDescriptions().size());
         assertEquals("Test description in estonian. (Russian available)", material.getDescriptions().get(0).getText());
-        Language language = material.getDescriptions().get(0).getLanguage();
+        Language descriptionLanguage = material.getDescriptions().get(0).getLanguage();
+        assertEquals("est", descriptionLanguage.getCode());
+        assertNull(descriptionLanguage.getName());
+        assertNull(descriptionLanguage.getCodes());
+        Language language = material.getLanguage();
         assertNotNull(language);
         assertEquals("est", language.getCode());
         assertNull(language.getName());
         assertNull(language.getCodes());
         assertNull(material.getPicture());
-        assertNotNull(material.getSubjects());
-        assertEquals(1, material.getSubjects().size());
-        assertEquals(new Long(1), material.getSubjects().get(0).getId());
+        assertNotNull(material.getTaxons());
+        assertEquals(2, material.getTaxons().size());
+        assertEquals(new Long(2), material.getTaxons().get(0).getId());
+        assertEquals(new Long(20), material.getTaxons().get(1).getId());
         assertNull(material.getRepository());
         assertNull(material.getRepositoryIdentifier());
         assertEquals(new Long(1), material.getCreator().getId());
-        assertEquals(false, material.isEmbeddable());
+        assertFalse(material.isEmbeddable());
     }
 
     private Material getMaterial(long materialId) {

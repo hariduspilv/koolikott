@@ -27,7 +27,6 @@ import ee.hm.dop.model.LanguageString;
 import ee.hm.dop.model.Material;
 import ee.hm.dop.oaipmh.ParseException;
 import ee.hm.dop.service.AuthorService;
-import ee.hm.dop.service.EducationalContextService;
 import ee.hm.dop.service.LanguageService;
 import ee.hm.dop.service.ResourceTypeService;
 import ee.hm.dop.service.TagService;
@@ -51,9 +50,6 @@ public class MaterialParserEstCoreTest {
     private ResourceTypeService resourceTypeService;
 
     @Mock
-    private EducationalContextService educationalContextService;
-
-    @Mock
     private AuthorService authorService;
 
     @Test(expected = ee.hm.dop.oaipmh.ParseException.class)
@@ -66,7 +62,6 @@ public class MaterialParserEstCoreTest {
         Document document = createMock(Document.class);
         materialParser.parse(document);
     }
-
 
     @Test
     public void parse() throws Exception {
@@ -99,12 +94,12 @@ public class MaterialParserEstCoreTest {
         titles.add(title1);
         titles.add(title2);
 
-        replay(languageService, tagService, resourceTypeService, educationalContextService, authorService);
+        replay(languageService, tagService, resourceTypeService, authorService);
 
         Document doc = dBuilder.parse(fXmlFile);
         Material material = materialParser.parse(doc);
 
-        verify(languageService, tagService, resourceTypeService, educationalContextService, authorService);
+        verify(languageService, tagService, resourceTypeService, authorService);
 
         assertEquals(titles, material.getTitles());
     }

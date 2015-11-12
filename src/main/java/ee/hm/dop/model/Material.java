@@ -1,15 +1,10 @@
 package ee.hm.dop.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import ee.hm.dop.rest.jackson.map.DateTimeDeserializer;
-import ee.hm.dop.rest.jackson.map.DateTimeSerializer;
-import ee.hm.dop.rest.jackson.map.LanguageDeserializer;
-import ee.hm.dop.rest.jackson.map.LanguageSerializer;
-import org.hibernate.annotations.Formula;
-import org.hibernate.annotations.Type;
-import org.joda.time.DateTime;
+import static javax.persistence.CascadeType.MERGE;
+import static javax.persistence.CascadeType.PERSIST;
+import static javax.persistence.FetchType.EAGER;
+
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -24,11 +19,19 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
-import java.util.List;
 
-import static javax.persistence.CascadeType.MERGE;
-import static javax.persistence.CascadeType.PERSIST;
-import static javax.persistence.FetchType.EAGER;
+import org.hibernate.annotations.Formula;
+import org.hibernate.annotations.Type;
+import org.joda.time.DateTime;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+
+import ee.hm.dop.rest.jackson.map.DateTimeDeserializer;
+import ee.hm.dop.rest.jackson.map.DateTimeSerializer;
+import ee.hm.dop.rest.jackson.map.LanguageDeserializer;
+import ee.hm.dop.rest.jackson.map.LanguageSerializer;
 
 @Entity
 @Table(uniqueConstraints = { @UniqueConstraint(columnNames = { "repositoryIdentifier", "repository" }) })
@@ -83,11 +86,11 @@ public class Material implements Searchable {
 
     @ManyToMany(fetch = EAGER)
     @JoinTable(
-            name = "Material_EducationalContext",
+            name = "Material_Taxon",
             joinColumns = { @JoinColumn(name = "material") },
-            inverseJoinColumns = { @JoinColumn(name = "educationalContext") },
-            uniqueConstraints = @UniqueConstraint(columnNames = { "material", "educationalContext" }))
-    private List<EducationalContext> educationalContexts;
+            inverseJoinColumns = { @JoinColumn(name = "taxon") },
+            uniqueConstraints = @UniqueConstraint(columnNames = { "material", "taxon" }))
+    private List<Taxon> taxons;
 
     @ManyToOne
     @JoinColumn(name = "licenseType")
@@ -125,14 +128,6 @@ public class Material implements Searchable {
 
     @Formula("picture is not null")
     private boolean hasPicture;
-
-    @ManyToMany(fetch = EAGER)
-    @JoinTable(
-            name = "Material_Subject",
-            joinColumns = { @JoinColumn(name = "material") },
-            inverseJoinColumns = { @JoinColumn(name = "subject") },
-            uniqueConstraints = @UniqueConstraint(columnNames = { "material", "subject" }))
-    private List<Subject> subjects;
 
     @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
@@ -226,12 +221,12 @@ public class Material implements Searchable {
         this.resourceTypes = resourceTypes;
     }
 
-    public List<EducationalContext> getEducationalContexts() {
-        return educationalContexts;
+    public List<Taxon> getTaxons() {
+        return taxons;
     }
 
-    public void setEducationalContexts(List<EducationalContext> educationalContexts) {
-        this.educationalContexts = educationalContexts;
+    public void setTaxons(List<Taxon> taxons) {
+        this.taxons = taxons;
     }
 
     public LicenseType getLicenseType() {
@@ -300,14 +295,6 @@ public class Material implements Searchable {
 
     public void setHasPicture(boolean hasPicture) {
         this.hasPicture = hasPicture;
-    }
-
-    public List<Subject> getSubjects() {
-        return subjects;
-    }
-
-    public void setSubjects(List<Subject> subjects) {
-        this.subjects = subjects;
     }
 
     public String getRepositoryIdentifier() {

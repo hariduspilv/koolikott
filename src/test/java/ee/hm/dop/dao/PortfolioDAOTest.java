@@ -19,6 +19,7 @@ import ee.hm.dop.common.test.DatabaseTestBase;
 import ee.hm.dop.model.Chapter;
 import ee.hm.dop.model.Material;
 import ee.hm.dop.model.Portfolio;
+import ee.hm.dop.model.Subject;
 import ee.hm.dop.model.User;
 
 public class PortfolioDAOTest extends DatabaseTestBase {
@@ -49,9 +50,8 @@ public class PortfolioDAOTest extends DatabaseTestBase {
         assertNotNull(portfolio);
         assertEquals(id, portfolio.getId());
         assertEquals("New ways how to do it", portfolio.getTitle());
-        assertNull(portfolio.getSubject());
         assertEquals(new DateTime("2012-12-29T08:00:01.000+02:00"), portfolio.getCreated());
-        assertNull(portfolio.getEducationalContext());
+        assertNull(portfolio.getTaxon());
         assertEquals(new Long(4), portfolio.getCreator().getId());
         assertEquals("voldemar.vapustav2", portfolio.getCreator().getUsername());
         assertNull(portfolio.getSummary());
@@ -122,10 +122,15 @@ public class PortfolioDAOTest extends DatabaseTestBase {
         assertNotNull(portfolio);
         assertEquals(Long.valueOf(1), portfolio.getId());
         assertEquals("The new stock market", portfolio.getTitle());
-        assertEquals("Mathematics", portfolio.getSubject().getName());
         assertEquals(new DateTime("2000-12-29T08:00:01.000+02:00"), portfolio.getCreated());
         assertEquals(new DateTime("2004-12-29T08:00:01.000+02:00"), portfolio.getUpdated());
-        assertEquals("CONTINUINGEDUCATION", portfolio.getEducationalContext().getName());
+
+        Subject mathematics = (Subject) portfolio.getTaxon();
+        assertEquals("Mathematics", mathematics.getName());
+        assertEquals(new Long(21), mathematics.getId());
+        assertEquals(2, mathematics.getDomain().getSubjects().size());
+        assertEquals(2, mathematics.getDomain().getEducationalContext().getDomains().size());
+
         assertEquals(new Long(6), portfolio.getCreator().getId());
         assertEquals("mati.maasikas-vaarikas", portfolio.getCreator().getUsername());
         assertEquals("The changes after 2008.", portfolio.getSummary());

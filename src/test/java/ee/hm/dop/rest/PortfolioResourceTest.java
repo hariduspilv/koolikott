@@ -135,10 +135,9 @@ public class PortfolioResourceTest extends ResourceIntegrationTestBase {
         assertNotNull(portfolio);
         assertEquals(Long.valueOf(1), portfolio.getId());
         assertEquals("The new stock market", portfolio.getTitle());
-        assertEquals("Mathematics", portfolio.getSubject().getName());
         assertEquals(new DateTime("2000-12-29T08:00:01.000+02:00"), portfolio.getCreated());
         assertEquals(new DateTime("2004-12-29T08:00:01.000+02:00"), portfolio.getUpdated());
-        assertEquals("CONTINUINGEDUCATION", portfolio.getEducationalContext().getName());
+        assertEquals("Mathematics", portfolio.getTaxon().getName());
         assertEquals(new Long(6), portfolio.getCreator().getId());
         assertEquals("mati.maasikas-vaarikas", portfolio.getCreator().getUsername());
         assertEquals("The changes after 2008.", portfolio.getSummary());
