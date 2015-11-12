@@ -71,19 +71,19 @@ public class MaterialParserEstCoreTest {
         DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
         DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
 
-        Language french = new Language();
-        french.setId(1L);
-        french.setName("French");
+        Language english = new Language();
+        english.setId(1L);
+        english.setName("English");
 
         Language estonian = new Language();
         estonian.setId(2L);
         estonian.setName("Estonian");
 
-        expect(languageService.getLanguage("fr")).andReturn(french);
+        expect(languageService.getLanguage("en")).andReturn(english).times(2);
         expect(languageService.getLanguage("et")).andReturn(estonian);
 
         LanguageString title1 = new LanguageString();
-        title1.setLanguage(french);
+        title1.setLanguage(english);
         title1.setText("first title");
 
         LanguageString title2 = new LanguageString();
@@ -102,6 +102,10 @@ public class MaterialParserEstCoreTest {
         verify(languageService, tagService, resourceTypeService, authorService);
 
         assertEquals(titles, material.getTitles());
+        assertEquals("https://oxygen.netgroupdigital.com/rest/repoMaterialSource", material.getSource());
+        assertEquals(english, material.getLanguage());
+
+
     }
 
     private File getResourceAsFile(String resourcePath) throws URISyntaxException {

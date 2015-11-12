@@ -32,7 +32,7 @@ public class RepositoryManagerTest {
         Repository repository = getRepository();
 
         expect(repositoryManager.getMaterialIterator()).andReturn(materialIterator);
-        expect(repositoryManager.getMaterialParser()).andReturn(materialParser);
+        expect(repositoryManager.getWaramuMaterialParser()).andReturn(materialParser);
 
         materialIterator.setParser(materialParser);
         expectLastCall();
@@ -93,7 +93,7 @@ public class RepositoryManagerTest {
 
         Method getMaterialIterator = RepositoryManager.class.getDeclaredMethod("getMaterialIterator");
 
-        Method getMaterialParser = RepositoryManager.class.getDeclaredMethod("getMaterialParser");
+        Method getMaterialParser = RepositoryManager.class.getDeclaredMethod("getWaramuMaterialParser");
 
         return createMockBuilder(RepositoryManager.class).addMockedMethods(getMaterialParser, getMaterialIterator)
                 .createMock();

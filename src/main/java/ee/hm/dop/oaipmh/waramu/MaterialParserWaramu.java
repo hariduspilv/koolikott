@@ -36,6 +36,7 @@ import ee.hm.dop.service.LanguageService;
 import ee.hm.dop.service.ResourceTypeService;
 import ee.hm.dop.service.TagService;
 import ee.hm.dop.service.TaxonService;
+import ee.hm.dop.utils.ParserUtils;
 import ezvcard.Ezvcard;
 import ezvcard.VCard;
 
@@ -289,7 +290,7 @@ public class MaterialParserWaramu implements MaterialParser {
         NodeList descriptionNode = lom.getElementsByTagName("description");
         Node description = descriptionNode.item(0);
         try {
-            return getLanguageStrings(description);
+            return ParserUtils.getLanguageStrings(description, languageService);
         } catch (Exception e) {
             throw new ParseException("Error in parsing Material descriptions");
         }
@@ -313,39 +314,11 @@ public class MaterialParserWaramu implements MaterialParser {
         List<LanguageString> titles;
         try {
             Node title = lom.getElementsByTagName("title").item(0);
-            titles = getLanguageStrings(title);
+            titles = ParserUtils.getLanguageStrings(title, languageService);
         } catch (Exception e) {
             throw new ParseException("Error in parsing Material title");
         }
 
         return titles;
-    }
-
-    private List<LanguageString> getLanguageStrings(Node node) {
-        List<LanguageString> languageStrings = new ArrayList<>();
-        for (int i = 0; i < node.getChildNodes().getLength(); i++) {
-            LanguageString languageString = new LanguageString();
-
-            String text = node.getChildNodes().item(i).getTextContent().trim();
-            if (!text.isEmpty()) {
-                languageString.setText(text);
-
-                if (node.getChildNodes().item(i).hasAttributes()) {
-                    String languageCode = node.getChildNodes().item(i).getAttributes().item(0).getTextContent().trim();
-
-                    Language language = languageService.getLanguage(languageCode);
-                    if (language != null) {
-                        languageString.setLanguage(language);
-                    } else {
-                        String message = "No such language for '%s'. LanguageString will have no Language";
-                        logger.warn(String.format(message, languageCode));
-                    }
-                }
-
-                languageStrings.add(languageString);
-            }
-        }
-
-        return languageStrings;
     }
 }

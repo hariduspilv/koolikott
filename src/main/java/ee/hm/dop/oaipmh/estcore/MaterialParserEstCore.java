@@ -1,6 +1,5 @@
 package ee.hm.dop.oaipmh.estcore;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -10,11 +9,12 @@ import javax.xml.xpath.XPathExpression;
 import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
 
+import org.apache.commons.validator.routines.UrlValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
-import org.w3c.dom.Element;
 import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 import ee.hm.dop.model.Language;
 import ee.hm.dop.model.LanguageString;
@@ -22,6 +22,7 @@ import ee.hm.dop.model.Material;
 import ee.hm.dop.oaipmh.MaterialParser;
 import ee.hm.dop.oaipmh.ParseException;
 import ee.hm.dop.service.LanguageService;
+import ee.hm.dop.utils.ParserUtils;
 
 /**
  * Created by mart on 4.11.15.
@@ -29,6 +30,8 @@ import ee.hm.dop.service.LanguageService;
 public class MaterialParserEstCore implements MaterialParser {
 
     private static final Logger logger = LoggerFactory.getLogger(MaterialParserEstCore.class);
+
+    private static final String[] SCHEMES = {"http", "https"};
 
     @Inject
     private LanguageService languageService;
@@ -39,15 +42,11 @@ public class MaterialParserEstCore implements MaterialParser {
 
         try {
             doc.getDocumentElement().normalize();
-
             material = new Material();
-            Element header = (Element) doc.getElementsByTagName("header").item(0);
-            Element identifier = (Element) header.getElementsByTagName("identifier").item(0);
-            material.setRepositoryIdentifier(identifier.getTextContent().trim());
 
             setTitle(material, doc);
-
-
+            setSource(material, doc);
+            setLanguage(material, doc);
         } catch (Exception e) {
             logger.error("Unexpected error while parsing document. Document may not"
                     + " match EstCore mapping or XML structure.", e);
@@ -55,6 +54,18 @@ public class MaterialParserEstCore implements MaterialParser {
         }
 
         return material;
+    }
+
+    private void setLanguage(Material material, Document doc) throws ParseException {
+        Language language;
+
+        try {
+            language = getLanguage(doc);
+        } catch (Exception e) {
+            throw new ParseException("Error parsing document language.");
+        }
+
+        material.setLanguage(language);
     }
 
     private void setTitle(Material material, Document doc) throws ParseException {
@@ -66,12 +77,39 @@ public class MaterialParserEstCore implements MaterialParser {
                 throw new ParseException("No titles found.");
             }
         } catch (Exception e) {
-            throw new ParseException("Error parsing document.");
+            throw new ParseException("Error parsing document title.");
         }
 
 
-
         material.setTitles(titles);
+    }
+
+    private void setSource(Material material, Document doc) throws ParseException {
+        String source;
+        try {
+            source = getSource(doc);
+
+        } catch (Exception e) {
+            throw new ParseException("Error parsing document source.");
+        }
+
+
+        material.setSource(source);
+    }
+
+    private Language getLanguage(Document doc) throws XPathExpressionException {
+        Language language;
+
+        XPathFactory xPathfactory = XPathFactory.newInstance();
+        XPath xpath = xPathfactory.newXPath();
+        XPathExpression expr = xpath
+                .compile("//*[local-name()='estcore']/*[local-name()='general']/*[local-name()='language']");
+        Node node = (Node) expr.evaluate(doc, XPathConstants.NODE);
+
+        String[] tokens = node.getFirstChild().getTextContent().trim().split("-");
+        language = languageService.getLanguage(tokens[0]);
+
+        return language;
     }
 
     private List<LanguageString> getTitles(Document doc) throws ParseException, XPathExpressionException {
@@ -82,39 +120,31 @@ public class MaterialParserEstCore implements MaterialParser {
         XPathExpression expr = xpath
                 .compile("//*[local-name()='estcore']/*[local-name()='general']/*[local-name()='title']");
         Node node = (Node) expr.evaluate(doc, XPathConstants.NODE);
-        titles = getLanguageStrings(node);
+        titles = ParserUtils.getLanguageStrings(node, languageService);
 
 
         return titles;
     }
 
+    private String getSource(Document doc) throws ParseException, XPathExpressionException {
+        String source;
 
-    private List<LanguageString> getLanguageStrings(Node node) {
-        List<LanguageString> languageStrings = new ArrayList<>();
-        for (int i = 0; i < node.getChildNodes().getLength(); i++) {
-            LanguageString languageString = new LanguageString();
-
-            String text = node.getChildNodes().item(i).getTextContent().trim();
-            if (!text.isEmpty()) {
-                languageString.setText(text);
-
-                if (node.getChildNodes().item(i).hasAttributes()) {
-                    String languageCode = node.getChildNodes().item(i).getAttributes().item(0).getTextContent().trim();
-                    String[] tokens = languageCode.split("-");
-
-                    Language language = languageService.getLanguage(tokens[0]);
-                    if (language != null) {
-                        languageString.setLanguage(language);
-                    } else {
-                        String message = "No such language for '%s'. LanguageString will have no Language";
-                        logger.warn(String.format(message, languageCode));
-                    }
-                }
-
-                languageStrings.add(languageString);
-            }
+        XPathFactory xPathfactory = XPathFactory.newInstance();
+        XPath xpath = xPathfactory.newXPath();
+        XPathExpression expr = xpath
+                .compile("//*[local-name()='estcore']/*[local-name()='technical']/*[local-name()='location']");
+        NodeList nodeList = (NodeList) expr.evaluate(doc, XPathConstants.NODESET);
+        if (nodeList.getLength() != 1) {
+            throw new ParseException("Material has more or less than one source, can't be mapped.");
         }
 
-        return languageStrings;
+        source = nodeList.item(0).getTextContent().trim();
+        UrlValidator urlValidator = new UrlValidator(SCHEMES);
+        if (!urlValidator.isValid(source)) {
+            String message = "Error parsing document. Invalid URL %s";
+            throw new ParseException(String.format(message, source));
+        }
+
+        return source;
     }
 }
