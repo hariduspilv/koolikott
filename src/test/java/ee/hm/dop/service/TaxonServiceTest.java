@@ -11,32 +11,32 @@ import org.easymock.TestSubject;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import ee.hm.dop.dao.EducationalContextDAO;
+import ee.hm.dop.dao.TaxonDAO;
 import ee.hm.dop.model.EducationalContext;
 
 @RunWith(EasyMockRunner.class)
-public class EducationalContextServiceTest {
+public class TaxonServiceTest {
 
     @TestSubject
-    private EducationalContextService educationalContextService = new EducationalContextService();
+    private TaxonService taxonService = new TaxonService();
 
     @Mock
-    private EducationalContextDAO educationalContextDAO;
+    private TaxonDAO taxonDAO;
 
     @Test
-    public void get() {
+    public void getEducationalContextByName() {
         String name = "preschool";
         EducationalContext educationalContext = new EducationalContext();
         educationalContext.setId(123L);
         educationalContext.setName(name);
 
-        expect(educationalContextDAO.findEducationalContextByName(name)).andReturn(educationalContext);
+        expect(taxonDAO.findEducationalContextByName(name)).andReturn(educationalContext);
 
-        replay(educationalContextDAO);
+        replay(taxonDAO);
 
-        EducationalContext result = educationalContextService.getEducationalContextByName(name);
+        EducationalContext result = taxonService.getEducationalContextByName(name);
 
-        verify(educationalContextDAO);
+        verify(taxonDAO);
 
         assertEquals(educationalContext, result);
     }

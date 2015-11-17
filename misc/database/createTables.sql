@@ -4,13 +4,13 @@ use dop;
 
 DROP TABLE IF EXISTS Chapter_Material;
 DROP TABLE IF EXISTS Chapter;
+DROP TABLE IF EXISTS Portfolio_Tag;
 DROP TABLE IF EXISTS Portfolio;
 DROP TABLE IF EXISTS Page;
 DROP TABLE IF EXISTS Translation;
 DROP TABLE IF EXISTS TranslationGroup;
 DROP TABLE IF EXISTS Material_Tag;
-DROP TABLE IF EXISTS Material_EducationalContext;
-DROP TABLE IF EXISTS Material_Subject;
+DROP TABLE IF EXISTS Material_Taxon;
 DROP TABLE IF EXISTS Material_ResourceType;
 DROP TABLE IF EXISTS Material_Description;
 DROP TABLE IF EXISTS Material_Title;
@@ -23,13 +23,15 @@ DROP TABLE IF EXISTS AuthenticationState;
 DROP TABLE IF EXISTS AuthenticatedUser;
 DROP TABLE IF EXISTS User;
 DROP TABLE IF EXISTS Repository;
-DROP TABLE IF EXISTS Subject;
 DROP TABLE IF EXISTS LicenseType;
 DROP TABLE IF EXISTS LanguageTable;
 DROP TABLE IF EXISTS IssueDate;
 DROP TABLE IF EXISTS Publisher;
 DROP TABLE IF EXISTS Tag;
+DROP TABLE IF EXISTS Subject;
+DROP TABLE IF EXISTS Domain;
 DROP TABLE IF EXISTS EducationalContext;
+DROP TABLE IF EXISTS Taxon;
 DROP TABLE IF EXISTS ResourceType;
 DROP TABLE IF EXISTS Author;
 
@@ -46,11 +48,6 @@ CREATE TABLE Author(
 CREATE TABLE ResourceType (
   id           BIGINT AUTO_INCREMENT PRIMARY KEY,
   name         VARCHAR(255) NOT NULL UNIQUE
-);
-
-CREATE TABLE EducationalContext (
-  id   BIGINT AUTO_INCREMENT PRIMARY KEY,
-  name VARCHAR(255) NOT NULL UNIQUE
 );
 
 CREATE TABLE Tag (
@@ -82,9 +79,44 @@ CREATE TABLE LicenseType (
   name VARCHAR(255) UNIQUE NOT NULL
 );
 
+CREATE TABLE Taxon (
+  id          BIGINT AUTO_INCREMENT PRIMARY KEY,
+  name        VARCHAR(255) NOT NULL,
+  level       VARCHAR(255) NOT NULL
+);
+
+CREATE TABLE EducationalContext (
+  id BIGINT PRIMARY KEY,
+  
+  FOREIGN KEY (id)
+            REFERENCES Taxon(id)
+            ON DELETE RESTRICT
+);
+
+CREATE TABLE Domain (
+  id                 BIGINT PRIMARY KEY,
+  educationalContext BIGINT NOT NULL,
+  
+  FOREIGN KEY (id)
+            REFERENCES Taxon(id)
+            ON DELETE RESTRICT,
+  
+  FOREIGN KEY (educationalContext)
+            REFERENCES EducationalContext(id)
+            ON DELETE RESTRICT
+);
+
 CREATE TABLE Subject (
-  id   BIGINT AUTO_INCREMENT PRIMARY KEY,
-  name VARCHAR(255) UNIQUE NOT NULL
+  id     BIGINT PRIMARY KEY,
+  domain BIGINT NOT NULL,
+  
+  FOREIGN KEY (id)
+            REFERENCES Taxon(id)
+            ON DELETE RESTRICT,
+  
+  FOREIGN KEY (domain)
+            REFERENCES Domain(id)
+            ON DELETE RESTRICT
 );
 
 CREATE TABLE Repository (
@@ -258,33 +290,18 @@ CREATE TABLE Material_ResourceType (
     ON DELETE RESTRICT
 );
 
-CREATE TABLE Material_Subject (
+CREATE TABLE Material_Taxon (
   material BIGINT NOT NULL,
-  subject  BIGINT NOT NULL,
+  taxon  BIGINT NOT NULL,
 
-  PRIMARY KEY (material, subject),
-
-  FOREIGN KEY (material)
-  REFERENCES Material (id)
-    ON DELETE RESTRICT,
-
-  FOREIGN KEY (subject)
-  REFERENCES Subject (id)
-    ON DELETE RESTRICT
-);
-
-CREATE TABLE Material_EducationalContext (
-  material           BIGINT NOT NULL,
-  educationalContext BIGINT NOT NULL,
-
-  PRIMARY KEY (material, educationalContext),
+  PRIMARY KEY (material, taxon),
 
   FOREIGN KEY (material)
   REFERENCES Material (id)
     ON DELETE RESTRICT,
 
-  FOREIGN KEY (educationalContext)
-  REFERENCES EducationalContext (id)
+  FOREIGN KEY (taxon)
+  REFERENCES Taxon (id)
     ON DELETE RESTRICT
 );
 
@@ -338,27 +355,22 @@ CREATE TABLE Page (
 );
 
 CREATE TABLE Portfolio (
-  id                 BIGINT AUTO_INCREMENT PRIMARY KEY,
-  title              VARCHAR(255) NOT NULL,
-  subject            BIGINT,
-  educationalContext BIGINT,
-  creator            BIGINT NOT NULL,
-  summary            TEXT,
-  views              BIGINT   NOT NULL DEFAULT 0,
-  created            TIMESTAMP NOT NUll DEFAULT CURRENT_TIMESTAMP,
-  updated            TIMESTAMP NULL DEFAULT NULL,
-  picture            LONGBLOB DEFAULT NULL,
-
-  FOREIGN KEY (subject)
-    REFERENCES Subject (id)
-    ON DELETE RESTRICT,
-
-  FOREIGN KEY (educationalContext)
-    REFERENCES EducationalContext (id)
-    ON DELETE RESTRICT,
+  id        BIGINT AUTO_INCREMENT PRIMARY KEY,
+  title     VARCHAR(255) NOT NULL,
+  taxon     BIGINT,
+  creator   BIGINT NOT NULL,
+  summary   TEXT,
+  views     BIGINT   NOT NULL DEFAULT 0,
+  created   TIMESTAMP NOT NUll DEFAULT CURRENT_TIMESTAMP,
+  updated   TIMESTAMP NULL DEFAULT NULL,
+  picture   LONGBLOB DEFAULT NULL,
 
   FOREIGN KEY (creator)
     REFERENCES User (id)
+    ON DELETE RESTRICT,
+
+  FOREIGN KEY (taxon)
+    REFERENCES Taxon(id)
     ON DELETE RESTRICT
 );
 

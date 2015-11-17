@@ -9,18 +9,18 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
 import ee.hm.dop.model.EducationalContext;
-import ee.hm.dop.service.EducationalContextService;
+import ee.hm.dop.service.TaxonService;
 
 @Path("learningMaterialMetadata")
 public class LearningMaterialMetadataResource {
 
     @Inject
-    private EducationalContextService educationalContextService;
+    private TaxonService taxonService;
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Path("educationalContext")
     public List<EducationalContext> getEducationalContext() {
-        return educationalContextService.getAll();
+        return taxonService.getAllEducationalContext();
     }
 }

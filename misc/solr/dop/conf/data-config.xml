@@ -12,43 +12,72 @@
             deltaImportQuery="select concat('material', id ) as uniqueKey, id, licenseType, paid, 'material' as type  from Material where id = '${dih.delta.id}'"
             deltaQuery="select concat('material', id ) as uniqueKey, id from Material where (CONVERT_TZ(added, @@session.time_zone, '+00:00') > '${dataimporter.last_index_time}' OR CONVERT_TZ(updated, @@session.time_zone, '+00:00') > '${dataimporter.last_index_time}') AND deleted = false"
             deletedPkQuery="select concat('material', id ) as uniqueKey from Material where (CONVERT_TZ(added, @@session.time_zone, '+00:00') > '${dataimporter.last_index_time}' OR CONVERT_TZ(updated, @@session.time_zone, '+00:00') > '${dataimporter.last_index_time}') AND deleted = true">
+            
             <entity name="Material_Title" query="select title as title_id from Material_Title where material='${Material.id}'">
                 <entity name="LanguageString" query="select textValue as title from LanguageString where id = '${Material_Title.title_id}'" />
             </entity>
+
             <entity name="Material_Description" query="select description as description_id from Material_Description where material='${Material.id}'">
                 <entity name="LanguageString" query="select textValue as description from LanguageString where id = '${Material_Description.description_id}'" />
             </entity>
+
             <entity name="Material_Author" query="select author as author_id from Material_Author where material='${Material.id}'">
                 <entity name="Author" query="select concat(name, ' ', surname) as fullname from Author where id = '${Material_Author.author_id}'">
                     <field column="fullname" name="author" />
                 </entity>
             </entity>
+
             <entity name="Material_Tag" query="select tag as tag_id from Material_Tag where material='${Material.id}'">
                 <entity name="Tag" query="select name as tag from Tag where id = '${Material_Tag.tag_id}'" />
             </entity>
-            <entity name="Material_EducationalContext" query="select educationalContext as eC_id from Material_EducationalContext where material='${Material.id}'">
-                <entity name="EducationalContext" query="select name as educational_context from EducationalContext where id = '${Material_EducationalContext.eC_id}'">
-                    <entity name="Translation" query="select translation as educational_context from Translation where translationKey = '${EducationalContext.educational_context}'" />
+
+            <entity name="Material_Taxon" query="select taxon as taxon_id from Material_Taxon where material = '${Material.id}'">
+                <!-- Travel up the taxon path -->
+                <!-- Get subject -->
+                <entity name="Subject" query="select t.id as subject_id, t.name as subject, s.domain as parent from Taxon t left join Subject s on t.id = s.id where t.level = 'SUBJECT' and t.id = '${Material_Taxon.taxon_id}'">
+                    <entity name="Translation" query="select translation as subject from Translation where translationKey = 'SUBJECT_${Subject.subject}'" />
+
+                        <!-- Get domain -->
+                        <entity name="Domain" query="select t.id as domain_id, t.name as domain, d.educationalContext as parent from Taxon t left join Domain d on t.id = d.id where t.level = 'DOMAIN' and t.id = '${Subject.parent}'">
+                            
+                            <!-- Get educational context -->
+                            <entity name="EducationalContext" query="select name as educational_context from Taxon where level = 'EDUCATIONAL_CONTEXT' and id = '${Domain.parent}'">
+                                <entity name="Translation" query="select translation as educational_context from Translation where translationKey = '${EducationalContext.educational_context}'" />
+                            </entity>
+                        </entity>
                 </entity>
             </entity>
-            <entity name="Material_Subject" query="select subject as subject_id from Material_Subject where material='${Material.id}'">
-                <entity name="Subject" query="select name as subject from Subject where id = '${Material_Subject.subject_id}'" />  
-            </entity>
+
             <entity name="Material_ResourceType" query="select resourceType as resourceType_id from Material_ResourceType where material='${Material.id}'">
                 <entity name="ResourceType" query="select name as resource_type from ResourceType where id = '${Material_ResourceType.resourceType_id}'" />
             </entity>
+
             <entity name="LicenseType" query="select name as license_type from LicenseType where id='${Material.licenseType}'" />
         </entity>
+
         <entity name="Portfolio" pk="uniqueKey"
-            query="select concat('portfolio', id ) as uniqueKey, id, title, summary, educationalContext as eC_id, 'portfolio' as type from Portfolio">
-            <entity name="EducationalContext" query="select name as educational_context from EducationalContext where id = '${Portfolio.eC_id}'">
-                <entity name="Translation" query="select translation as educational_context from Translation where translationKey = '${EducationalContext.educational_context}'" />
+            query="select concat('portfolio', id ) as uniqueKey, id, title, summary, taxon as taxon_id, 'portfolio' as type from Portfolio">
+
+            <!-- Travel up the taxon path -->
+            <!-- Get subject -->
+            <entity name="Subject" query="select t.id as subject_id, t.name as subject, s.domain as parent from Taxon t left join Subject s on t.id = s.id where t.level = 'SUBJECT' and t.id = '${Portfolio.taxon_id}'">
+                <entity name="Translation" query="select translation as subject from Translation where translationKey = 'SUBJECT_${Subject.subject}'" />
+
+                    <!-- Get domain -->
+                    <entity name="Domain" query="select t.id as domain_id, t.name as domain, d.educationalContext as parent from Taxon t left join Domain d on t.id = d.id where t.level = 'DOMAIN' and t.id = '${Subject.parent}'">
+                        
+                        <!-- Get educational context -->
+                        <entity name="EducationalContext" query="select name as educational_context from Taxon where level = 'EDUCATIONAL_CONTEXT' and id = '${Domain.parent}'">
+                            <entity name="Translation" query="select translation as educational_context from Translation where translationKey = '${EducationalContext.educational_context}'" />
+                        </entity>
+                    </entity>
             </entity>
+
             <entity name="Portfolio_Tag" query="select tag as tag_id from Portfolio_Tag where portfolio='${Portfolio.id}'">
                 <entity name="Tag" query="select name as tag from Tag where id = '${Portfolio_Tag.tag_id}'" />
             </entity>
-            <entity name="Chapter" query="select title as chapterTitle, textValue as chapterText from Chapter where portfolio = '${Portfolio.id}' or parentChapter in (select id from Chapter where portfolio = '${Portfolio.id}')">
-            </entity>
+
+            <entity name="Chapter" query="select title as chapterTitle, textValue as chapterText from Chapter where portfolio = '${Portfolio.id}' or parentChapter in (select id from Chapter where portfolio = '${Portfolio.id}')" />
         </entity>
     </document>
 </dataConfig>

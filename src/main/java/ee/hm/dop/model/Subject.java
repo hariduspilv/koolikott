@@ -1,33 +1,23 @@
 package ee.hm.dop.model;
 
-import javax.persistence.Column;
+import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 
 @Entity
-public class Subject {
+@DiscriminatorValue("SUBJECT")
+public class Subject extends Taxon {
 
-    @Id
-    @GeneratedValue
-    private Long id;
+    @ManyToOne
+    @JoinColumn(name = "domain", nullable = false)
+    private Domain domain;
 
-    @Column(nullable = false, unique = true)
-    private String name;
-
-    public Long getId() {
-        return id;
+    public Domain getDomain() {
+        return domain;
     }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
+    public void setDomain(Domain domain) {
+        this.domain = domain;
     }
 }

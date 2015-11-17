@@ -12,31 +12,28 @@ import org.junit.Test;
 import ee.hm.dop.common.test.DatabaseTestBase;
 import ee.hm.dop.model.EducationalContext;
 
-/**
- * Created by mart.laus on 6.08.2015.
- */
-public class EducationalContextDAOTest extends DatabaseTestBase {
+public class TaxonDAOTest extends DatabaseTestBase {
 
     @Inject
-    private EducationalContextDAO educationalContextDAO;
+    private TaxonDAO taxonDAO;
 
     @Test
     public void findEducationalContextByName() {
         Long id = new Long(1);
         String name = "PRESCHOOLEDUCATION";
 
-        EducationalContext educationalContext = educationalContextDAO.findEducationalContextByName(name);
+        EducationalContext educationalContext = taxonDAO.findEducationalContextByName(name);
 
         assertNotNull(educationalContext);
         assertNotNull(educationalContext.getId());
         assertEquals(id, educationalContext.getId());
         assertEquals(name, educationalContext.getName());
+        assertEquals(2, educationalContext.getDomains().size());
     }
 
     @Test
-    public void findAll() {
-        List<EducationalContext> educationalContexts = educationalContextDAO.findAll();
+    public void findAllEducationalContext() {
+        List<EducationalContext> educationalContexts = taxonDAO.findAllEducationalContext();
         assertEquals(9, educationalContexts.stream().distinct().count());
     }
-
 }

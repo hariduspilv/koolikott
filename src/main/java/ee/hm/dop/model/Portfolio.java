@@ -37,10 +37,6 @@ public class Portfolio implements Searchable {
     @Column(nullable = false)
     private String title;
 
-    @ManyToOne
-    @JoinColumn(name = "subject")
-    private Subject subject;
-
     @Column(nullable = false)
     @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
     private DateTime created;
@@ -50,8 +46,8 @@ public class Portfolio implements Searchable {
     private DateTime updated;
 
     @ManyToOne
-    @JoinColumn(name = "educationalContext")
-    private EducationalContext educationalContext;
+    @JoinColumn(name = "taxon")
+    private Taxon taxon;
 
     @ManyToOne
     @JoinColumn(name = "creator", nullable = false)
@@ -99,14 +95,6 @@ public class Portfolio implements Searchable {
         this.title = title;
     }
 
-    public Subject getSubject() {
-        return subject;
-    }
-
-    public void setSubject(Subject subject) {
-        this.subject = subject;
-    }
-
     @JsonSerialize(using = DateTimeSerializer.class)
     public DateTime getCreated() {
         return created;
@@ -127,12 +115,12 @@ public class Portfolio implements Searchable {
         this.updated = updated;
     }
 
-    public EducationalContext getEducationalContext() {
-        return educationalContext;
+    public Taxon getTaxon() {
+        return taxon;
     }
 
-    public void setEducationalContext(EducationalContext educationalContext) {
-        this.educationalContext = educationalContext;
+    public void setTaxon(Taxon taxon) {
+        this.taxon = taxon;
     }
 
     public User getCreator() {

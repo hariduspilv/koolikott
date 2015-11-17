@@ -1,19 +1,3 @@
--- Those should be in separate files with complete data
-
--- EducationalContext
-
-insert into EducationalContext(id, name) values (1, 'PRESCHOOLEDUCATION');
-insert into EducationalContext(id, name) values (2, 'BASICEDUCATION');
-insert into EducationalContext(id, name) values (3, 'SECONDARYEDUCATION');
-insert into EducationalContext(id, name) values (4, 'HIGHEREDUCATION');
-insert into EducationalContext(id, name) values (5, 'VOCATIONALEDUCATION');
-insert into EducationalContext(id, name) values (6, 'CONTINUINGEDUCATION');
-insert into EducationalContext(id, name) values (7, 'TEACHEREDUCATION');
-insert into EducationalContext(id, name) values (8, 'SPECIALEDUCATION');
-insert into EducationalContext(id, name) values (9, 'OTHER');
-
--- Start of test data
-
 -- IssueDate
 
 insert into IssueDate(id, day, month, year) values(1, 2, 2, 1983);
@@ -257,20 +241,24 @@ insert into Material_Title(title, material) values(48, 36);
 insert into Material_Title(title, material) values(49, 37);
 insert into Material_Title(title, material) values(10834, 3919);
 
--- Material_Subject
 
-insert into Material_Subject(subject, material) values(1, 1);
-insert into Material_Subject(subject, material) values(1, 2);
-insert into Material_Subject(subject, material) values(1, 3);
-insert into Material_Subject(subject, material) values(1, 4);
-insert into Material_Subject(subject, material) values(2, 5);
-insert into Material_Subject(subject, material) values(1, 6);
-insert into Material_Subject(subject, material) values(2, 6);
-insert into Material_Subject(subject, material) values(2, 10);
-insert into Material_Subject(subject, material) values(2, 11);
-insert into Material_Subject(subject, material) values(18, 36);
-insert into Material_Subject(subject, material) values(2, 37);
-insert into Material_Subject(subject, material) values(3, 3919);
+-- Material_Taxon
+
+insert into Material_Taxon(material, taxon) values(1, 1); -- PRESCHOOLEDUCATION
+insert into Material_Taxon(material, taxon) values(1, 1016); -- BASICEDUCATION - Natural sciences - Biology
+insert into Material_Taxon(material, taxon) values(2, 1066); -- SECONDARYEDUCATION - Natural sciences - Biology
+insert into Material_Taxon(material, taxon) values(3, 4); -- VOCATIONALEDUCATION
+insert into Material_Taxon(material, taxon) values(4, 1066); -- SECONDARYEDUCATION - Natural sciences - Biology
+insert into Material_Taxon(material, taxon) values(5, 1064); -- SECONDARYEDUCATION - Mathematics - Mathematics
+insert into Material_Taxon(material, taxon) values(6, 1014); -- BASICEDUCATION - Mathematics - Mathematics
+insert into Material_Taxon(material, taxon) values(6, 1066); -- SECONDARYEDUCATION - Natural sciences - Biology
+insert into Material_Taxon(material, taxon) values(10, 103); -- PRESCHOOLEDUCATION - Mathematics
+insert into Material_Taxon(material, taxon) values(11, 103); -- PRESCHOOLEDUCATION - Mathematics
+insert into Material_Taxon(material, taxon) values(36, 1); -- PRESCHOOLEDUCATION
+insert into Material_Taxon(material, taxon) values(36, 1018); -- BASICEDUCATION - Natural sciences - Physics
+insert into Material_Taxon(material, taxon) values(37, 103); -- PRESCHOOLEDUCATION - Mathematics
+insert into Material_Taxon(material, taxon) values(3919, 1053); -- SECONDARYEDUCATION - Foreign language - Estonian
+
 
 -- Material_ResourceType
 
@@ -288,21 +276,6 @@ insert into Material_ResourceType(material, resourceType) values (36, 1);
 insert into Material_ResourceType(material, resourceType) values (37, 2);
 insert into Material_ResourceType(material, resourceType) values (3919, 5);
 
--- Material_EducationalContext
-
-insert into Material_EducationalContext(material, educationalContext) values (1, 1);
-insert into Material_EducationalContext(material, educationalContext) values (1, 2);
-insert into Material_EducationalContext(material, educationalContext) values (2, 4);
-insert into Material_EducationalContext(material, educationalContext) values (3, 5);
-insert into Material_EducationalContext(material, educationalContext) values (4, 6);
-insert into Material_EducationalContext(material, educationalContext) values (5, 4);
-insert into Material_EducationalContext(material, educationalContext) values (6, 2);
-insert into Material_EducationalContext(material, educationalContext) values (7, 5);
-insert into Material_EducationalContext(material, educationalContext) values (10, 1);
-insert into Material_EducationalContext(material, educationalContext) values (11, 1);
-insert into Material_EducationalContext(material, educationalContext) values (36, 1);
-insert into Material_EducationalContext(material, educationalContext) values (37, 1);
-insert into Material_EducationalContext(material, educationalContext) values (3919, 1);
 
 -- Publishers
 
@@ -369,13 +342,13 @@ insert into Material_Tag(tag, material) values(5, 3919);
 
 -- Portfolio
 
-insert into Portfolio(id, title, subject, educationalContext, creator, summary, views, created, updated, picture) VALUES (1, 'The new stock market', 1, 1, 1, 'Some new stufff coming soon.', 325698, '1999-05-02 06:00:01', '2002-05-02 06:00:01', null);
-insert into Portfolio(id, title, subject, educationalContext, creator, summary, views, created, updated, picture) VALUES (2, 'Math for my students', 2, 4, 5, "You have to read all the textbooks in this portfolio. Don't forgert to make ALL exercices.", 7951, '2000-12-29 16:00:01', '2003-05-02 06:00:01', null);
-insert into Portfolio(id, title, subject, educationalContext, creator, summary, views, created, updated, picture) VALUES (3, 'The new World', null, null, 3, null, 0, '2014-12-29 10:00:01', null, null);
-insert into Portfolio(id, title, subject, educationalContext, creator, summary, views, created, updated, picture) VALUES (4, 'Biology for my students', 2, 1, 6, 'A marvellous summary.', 2, '2000-12-29 16:00:01', '2003-05-02 06:00:01', null);
-insert into Portfolio(id, title, subject, educationalContext, creator, summary, views, created, updated, picture) VALUES (5, 'Sports for my students', 3, 4, 6, 'A brilliant summary.', 3, '2003-12-29 16:00:01', '2003-05-02 06:00:01', null);
-insert into Portfolio(id, title, subject, educationalContext, creator, summary, views, created, updated, picture) VALUES (6, 'English for my students', 4, 2, 6, 'An intriguing summary.', 4, '2007-12-29 16:00:01', '2003-05-02 06:00:01', null);
-insert into Portfolio(id, title, subject, educationalContext, creator, summary, views, created, updated, picture) VALUES (7, 'Automated test resource title. DO NOT TOUCH!!! Title in estonian', 3, 2, 6, 'An intriguing summary.', 4, '2007-12-29 16:00:01', '2003-05-02 06:00:01', null);
+insert into Portfolio(id, title, taxon, creator, summary, views, created, updated, picture) VALUES (1, 'The new stock market', 1000, 1, 'Some new stufff coming soon.', 325698, '1999-05-02 06:00:01', '2002-05-02 06:00:01', null);
+insert into Portfolio(id, title, taxon, creator, summary, views, created, updated, picture) VALUES (2, 'Math for my students', 1001, 5, "You have to read all the textbooks in this portfolio. Don't forgert to make ALL exercices.", 7951, '2000-12-29 16:00:01', '2003-05-02 06:00:01', null);
+insert into Portfolio(id, title, taxon, creator, summary, views, created, updated, picture) VALUES (3, 'The new World', null, 3, null, 0, '2014-12-29 10:00:01', null, null);
+insert into Portfolio(id, title, taxon, creator, summary, views, created, updated, picture) VALUES (4, 'Biology for my students', 1016, 6, 'A marvellous summary.', 2, '2000-12-29 16:00:01', '2003-05-02 06:00:01', null);
+insert into Portfolio(id, title, taxon, creator, summary, views, created, updated, picture) VALUES (5, 'Sports for my students', 1028, 6, 'A brilliant summary.', 3, '2003-12-29 16:00:01', '2003-05-02 06:00:01', null);
+insert into Portfolio(id, title, taxon, creator, summary, views, created, updated, picture) VALUES (6, 'English for my students', 1054, 6, 'An intriguing summary.', 4, '2007-12-29 16:00:01', '2003-05-02 06:00:01', null);
+insert into Portfolio(id, title, taxon, creator, summary, views, created, updated, picture) VALUES (7, 'Automated test resource title. DO NOT TOUCH!!! Title in estonian', 1002, 6, 'An intriguing summary.', 4, '2007-12-29 16:00:01', '2003-05-02 06:00:01', null);
 
 
 

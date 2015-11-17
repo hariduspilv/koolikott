@@ -1,25 +1,5 @@
 package ee.hm.dop.dao;
 
-import ee.hm.dop.common.test.DatabaseTestBase;
-import ee.hm.dop.model.EducationalContext;
-import ee.hm.dop.model.Language;
-import ee.hm.dop.model.LicenseType;
-import ee.hm.dop.model.Material;
-import ee.hm.dop.model.Repository;
-import ee.hm.dop.model.ResourceType;
-import ee.hm.dop.model.Subject;
-import ee.hm.dop.model.User;
-import ee.hm.dop.utils.DbUtils;
-import org.joda.time.DateTime;
-import org.junit.Assert;
-import org.junit.Test;
-
-import javax.inject.Inject;
-import javax.persistence.RollbackException;
-import java.security.InvalidParameterException;
-import java.util.ArrayList;
-import java.util.List;
-
 import static junit.framework.TestCase.assertNull;
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
@@ -27,6 +7,28 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
+
+import java.security.InvalidParameterException;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.inject.Inject;
+import javax.persistence.RollbackException;
+
+import org.joda.time.DateTime;
+import org.junit.Assert;
+import org.junit.Test;
+
+import ee.hm.dop.common.test.DatabaseTestBase;
+import ee.hm.dop.model.Language;
+import ee.hm.dop.model.LicenseType;
+import ee.hm.dop.model.Material;
+import ee.hm.dop.model.Repository;
+import ee.hm.dop.model.ResourceType;
+import ee.hm.dop.model.Subject;
+import ee.hm.dop.model.Taxon;
+import ee.hm.dop.model.User;
+import ee.hm.dop.utils.DbUtils;
 
 public class MaterialDAOTest extends DatabaseTestBase {
 
@@ -68,7 +70,7 @@ public class MaterialDAOTest extends DatabaseTestBase {
     }
 
     @Test
-    public void Authors() {
+    public void authors() {
         Material material = materialDAO.findById(2);
         assertEquals(2, material.getAuthors().size());
         assertEquals("Isaac", material.getAuthors().get(0).getName());
@@ -78,7 +80,7 @@ public class MaterialDAOTest extends DatabaseTestBase {
     }
 
     @Test
-    public void MaterialLanguage() {
+    public void materialLanguage() {
         Material material1 = materialDAO.findById(2);
         assertEquals("rus", material1.getLanguage().getCode());
 
@@ -87,7 +89,7 @@ public class MaterialDAOTest extends DatabaseTestBase {
     }
 
     @Test
-    public void MaterialResourceType() {
+    public void materialResourceType() {
         Material material1 = materialDAO.findById(1);
         assertEquals("TEXTBOOK1", material1.getResourceTypes().get(0).getName());
 
@@ -96,27 +98,27 @@ public class MaterialDAOTest extends DatabaseTestBase {
     }
 
     @Test
-    public void MaterialEducationalContext() {
+    public void materialTaxon() {
         Material material1 = materialDAO.findById(1);
-        assertEquals("PRESCHOOLEDUCATION", material1.getEducationalContexts().get(0).getName());
-        assertEquals("BASICEDUCATION", material1.getEducationalContexts().get(1).getName());
+        assertEquals("BASICEDUCATION", material1.getTaxons().get(0).getName());
+        assertEquals("Biology", material1.getTaxons().get(1).getName());
     }
 
     @Test
-    public void MaterialLicense() {
+    public void materialLicense() {
         Material material = materialDAO.findById(1);
         assertEquals("CCBY", material.getLicenseType().getName());
     }
 
     @Test
-    public void MaterialPublisher() {
+    public void materialPublisher() {
         Material material = materialDAO.findById(1);
         assertEquals("Koolibri", material.getPublishers().get(0).getName());
         assertEquals("http://www.pegasus.ee", material.getPublishers().get(1).getWebsite());
     }
 
     @Test
-    public void MaterialViews() {
+    public void materialViews() {
         Material material = materialDAO.findById(3);
         assertEquals(Long.valueOf(300), material.getViews());
     }
@@ -163,19 +165,19 @@ public class MaterialDAOTest extends DatabaseTestBase {
     }
 
     @Test
-    public void MaterialAddedDate() {
+    public void materialAddedDate() {
         Material material = materialDAO.findById(1);
         assertEquals(new DateTime("1999-01-01T02:00:01.000+02:00"), material.getAdded());
     }
 
     @Test
-    public void MaterialUpdatedDate() {
+    public void materialUpdatedDate() {
         Material material = materialDAO.findById(2);
         assertEquals(new DateTime("1995-07-12T09:00:01.000+00:00"), material.getUpdated());
     }
 
     @Test
-    public void MaterialTags() {
+    public void materialTags() {
         Material material = materialDAO.findById(2);
 
         assertEquals(4, material.getTags().size());
@@ -270,23 +272,23 @@ public class MaterialDAOTest extends DatabaseTestBase {
     @Test
     public void findMaterialWith2Subjects() {
         Material material = materialDAO.findById(6);
-        List<Subject> subjects = material.getSubjects();
-        assertNotNull(subjects);
-        assertEquals(2, subjects.size());
-        Subject biology = subjects.get(0);
-        assertEquals(new Long(1), biology.getId());
+        List<Taxon> taxons = material.getTaxons();
+        assertNotNull(taxons);
+        assertEquals(2, taxons.size());
+        Subject biology = (Subject) taxons.get(0);
+        assertEquals(new Long(20), biology.getId());
         assertEquals("Biology", biology.getName());
-        Subject math = subjects.get(1);
-        assertEquals(new Long(2), math.getId());
+        Subject math = (Subject) taxons.get(1);
+        assertEquals(new Long(21), math.getId());
         assertEquals("Mathematics", math.getName());
     }
 
     @Test
-    public void findMaterialWithNoSubjects() {
-        Material material = materialDAO.findById(7);
-        List<Subject> subjects = material.getSubjects();
-        assertNotNull(subjects);
-        assertEquals(0, subjects.size());
+    public void findMaterialWithNoTaxon() {
+        Material material = materialDAO.findById(8);
+        List<Taxon> taxons = material.getTaxons();
+        assertNotNull(taxons);
+        assertEquals(0, taxons.size());
     }
 
     @Test
@@ -432,42 +434,16 @@ public class MaterialDAOTest extends DatabaseTestBase {
     }
 
     @Test
-    public void updateCreatingNewSubject() {
+    public void updateCreatingNewTaxon() {
         Material originalMaterial = materialDAO.findById(1);
 
         Subject newSubject = new Subject();
         newSubject.setName("New Subject");
 
-        List<Subject> newResourceTypes = new ArrayList<>();
-        newResourceTypes.add(newSubject);
+        List<Taxon> newTaxons = new ArrayList<>();
+        newTaxons.add(newSubject);
 
-        originalMaterial.setSubjects(newResourceTypes);
-
-        try {
-            materialDAO.update(originalMaterial);
-
-            // Have to close the transaction to get the error
-            DbUtils.closeTransaction();
-            fail("Exception expected.");
-        } catch (RollbackException e) {
-            String expectedMessage = "org.hibernate.TransientObjectException: "
-                    + "object references an unsaved transient instance - "
-                    + "save the transient instance before flushing: ee.hm.dop.model.Subject";
-            assertEquals(expectedMessage, e.getCause().getMessage());
-        }
-    }
-
-    @Test
-    public void updateCreatingNewEducationalContext() {
-        Material originalMaterial = materialDAO.findById(1);
-
-        EducationalContext newEducationalContext = new EducationalContext();
-        newEducationalContext.setName("NewEducationalContext");
-
-        List<EducationalContext> newEducationalContexts = new ArrayList<>();
-        newEducationalContexts.add(newEducationalContext);
-
-        originalMaterial.setEducationalContexts(newEducationalContexts);
+        originalMaterial.setTaxons(newTaxons);
 
         try {
             materialDAO.update(originalMaterial);
@@ -478,7 +454,7 @@ public class MaterialDAOTest extends DatabaseTestBase {
         } catch (RollbackException e) {
             String expectedMessage = "org.hibernate.TransientObjectException: "
                     + "object references an unsaved transient instance - "
-                    + "save the transient instance before flushing: ee.hm.dop.model.EducationalContext";
+                    + "save the transient instance before flushing: ee.hm.dop.model.Taxon";
             assertEquals(expectedMessage, e.getCause().getMessage());
         }
     }
@@ -528,7 +504,6 @@ public class MaterialDAOTest extends DatabaseTestBase {
                     + "ee.hm.dop.model.Material.repository -> ee.hm.dop.model.Repository";
             assertEquals(expectedMessage, e.getCause().getMessage());
         }
-
     }
 
     @Test
@@ -588,15 +563,24 @@ public class MaterialDAOTest extends DatabaseTestBase {
         assertEquals("Matemaatika õpik üheksandale klassile", material.getTitles().get(0).getText());
         assertEquals(2, material.getDescriptions().size());
         assertEquals("Test description in estonian. (Russian available)", material.getDescriptions().get(0).getText());
-        Language language = material.getDescriptions().get(0).getLanguage();
+        Language descriptionLanguage = material.getDescriptions().get(0).getLanguage();
+        assertEquals("est", descriptionLanguage.getCode());
+        assertEquals("Estonian", descriptionLanguage.getName());
+        Language language = material.getLanguage();
         assertNotNull(language);
         assertEquals("est", language.getCode());
         assertEquals("Estonian", language.getName());
         assertEquals("et", language.getCodes().get(0));
         assertNotNull(material.getPicture());
-        assertNotNull(material.getSubjects());
-        assertEquals(1, material.getSubjects().size());
-        assertEquals(new Long(1), material.getSubjects().get(0).getId());
+        assertNotNull(material.getTaxons());
+        assertEquals(2, material.getTaxons().size());
+        assertEquals(new Long(2), material.getTaxons().get(0).getId());
+
+        Subject biology = (Subject) material.getTaxons().get(1);
+        assertEquals(new Long(20), biology.getId());
+        assertEquals(2, biology.getDomain().getSubjects().size());
+        assertEquals(2, biology.getDomain().getEducationalContext().getDomains().size());
+
         assertEquals(new Long(1), material.getRepository().getId());
         assertEquals("http://repo1.ee", material.getRepository().getBaseURL());
         assertEquals("isssiiaawej", material.getRepositoryIdentifier());
