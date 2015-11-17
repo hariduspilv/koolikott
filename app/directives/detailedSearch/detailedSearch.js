@@ -29,7 +29,6 @@ define(['app'], function(app)
 
                     // Educational context
                     var validEducationalContexts = ['preschooleducation', 'basiceducation', 'secondaryeducation', 'vocationaleducation'];
-                    var defaultEducationalContext = 'preschooleducation';
 
                     if (searchService.getEducationalContext() && validEducationalContexts.indexOf(searchService.getEducationalContext()) > -1) {
                         $scope.detailedSearch.educationalContext = searchService.getEducationalContext();
@@ -39,17 +38,14 @@ define(['app'], function(app)
                     if (searchService.isPaid() && (searchService.isPaid() === 'true' || searchService.isPaid() === 'false')) {
                         $scope.detailedSearch.paid = searchService.isPaid();
                     } else {
-                        $scope.detailedSearch.paid = true;
+                        $scope.detailedSearch.paid = 'true';
                     }
 
                     // Type
-                    $scope.detailedSearch.type = '';
-                    if (searchService.getType()) {
-                        if (searchService.getType() === 'material') {
-                            $scope.detailedSearch.type = 'material'
-                        } else if (searchService.getType() === 'portfolio') {
-                            $scope.detailedSearch.type = 'portfolio';
-                        }
+                    $scope.detailedSearch.type = 'all';
+
+                    if (searchService.getType() && searchService.isValidType(searchService.getType())) {
+                        $scope.detailedSearch.type = searchService.getType();
                     }
 
                 }
@@ -101,9 +97,9 @@ define(['app'], function(app)
                     $scope.detailedSearch.author = '';
 
                     if (query) {
-                        var titleRegex = /(title:\"(.*?)\"|title:([^\s]+?)(\s|$))/g;
-                        var descriptionRegex = /(description:\"(.*?)\"|description:([^\s]+?)(\s|$)|summary:\"(.*?)\"|summary:([^\s]+?)(\s|$))/g;
-                        var authorRegex = /(author:\"(.*?)\"|author:([^\s]+?)(\s|$))/g;
+                        var titleRegex = /(^|\s)(title:([^\s\"]\S*)|title:\"(.*?)\"|title:)/g;
+                        var descriptionRegex = /(^|\s)(description:([^\s\"]\S*)|description:\"(.*?)\"|description:|summary:([^\s\"]\S*)|summary:\"(.*?)\"|summary:)/g;
+                        var authorRegex = /(^|\s)(author:([^\s\"]\S*)|author:\"(.*?)\"|author:)/g;
 
                         var firstTitle;
                         var firstDescription;
@@ -112,25 +108,25 @@ define(['app'], function(app)
 
                         while(title = titleRegex.exec(query)) {
                             // Remove token from main query
-                            main = main.replace(title[1], '');
+                            main = main.replace(title[2], '');
 
                             if (!firstTitle) {
                                 // Get token content
-                                firstTitle = title[2] || title[3];
+                                firstTitle = title[3] || title[4];
                             }
                         }
 
                         while(description = descriptionRegex.exec(query)) {
-                            main = main.replace(description[1], '');
+                            main = main.replace(description[2], '');
                             if (!firstDescription) {
-                                firstDescription = description[2] || description[3] || description[5] || description[6];
+                                firstDescription = description[3] || description[4] || description[5] || description[6];
                             }
                         }
 
                         while(author = authorRegex.exec(query)) {
-                            main = main.replace(author[1], '');
+                            main = main.replace(author[2], '');
                             if (!firstAuthor) {
-                                firstAuthor = author[2] || author[3];
+                                firstAuthor = author[3] || author[4];
                             }
                         }
 
