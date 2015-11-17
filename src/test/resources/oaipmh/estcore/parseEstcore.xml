@@ -39,7 +39,8 @@
                         <keyword>
                         </keyword>
                         <keyword>
-                            <lom:string language="en-US">string3</lom:string>
+                            <lom:string language="en-US">tag1</lom:string>
+                            <lom:string language="en-US">tag2</lom:string>
                         </keyword>
                     </general>
                     <lifeCycle>

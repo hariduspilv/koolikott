@@ -15,8 +15,10 @@ import ee.hm.dop.model.Author;
 import ee.hm.dop.model.Language;
 import ee.hm.dop.model.LanguageString;
 import ee.hm.dop.model.Material;
+import ee.hm.dop.model.Tag;
 import ee.hm.dop.service.AuthorService;
 import ee.hm.dop.service.LanguageService;
+import ee.hm.dop.service.TagService;
 import ezvcard.Ezvcard;
 import ezvcard.VCard;
 
@@ -110,6 +112,27 @@ public abstract class MaterialParser {
 
     protected String getVCardWithNewLines(CharacterData characterData) {
         return characterData.getData().trim().trim().replaceAll("\\n\\s*(?=(\\s*))", "\r\n");
+    }
+
+
+    protected List<Tag> getTagsFromKeywords(NodeList keywords, TagService tagService) {
+        List<Tag> tags = new ArrayList<>();
+        for (int i = 0; i < keywords.getLength(); i++) {
+            String keyword = keywords.item(i).getTextContent().trim().toLowerCase();
+
+            if (!keyword.isEmpty()) {
+                Tag tag = tagService.getTagByName(keyword);
+                if (tag == null) {
+                    tag = new Tag();
+                    tag.setName(keyword);
+                }
+
+                if (!tags.contains(tag)) {
+                    tags.add(tag);
+                }
+            }
+        }
+        return tags;
     }
 
     protected abstract void setAuthors(Material material, Document doc);

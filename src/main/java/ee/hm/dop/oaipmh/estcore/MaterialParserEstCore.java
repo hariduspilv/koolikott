@@ -20,10 +20,12 @@ import ee.hm.dop.model.Author;
 import ee.hm.dop.model.Language;
 import ee.hm.dop.model.LanguageString;
 import ee.hm.dop.model.Material;
+import ee.hm.dop.model.Tag;
 import ee.hm.dop.oaipmh.MaterialParser;
 import ee.hm.dop.oaipmh.ParseException;
 import ee.hm.dop.service.AuthorService;
 import ee.hm.dop.service.LanguageService;
+import ee.hm.dop.service.TagService;
 
 
 /**
@@ -39,6 +41,9 @@ public class MaterialParserEstCore extends MaterialParser {
 
     @Inject
     private AuthorService authorService;
+
+    @Inject
+    private TagService tagService;
 
     private XPathFactory xPathfactory = XPathFactory.newInstance();
 
@@ -67,7 +72,13 @@ public class MaterialParserEstCore extends MaterialParser {
 
     @Override
     protected void setTags(Material material, Document doc) {
-
+        List<Tag> tags = null;
+        try {
+            tags = getTags(doc);
+        } catch (XPathExpressionException e) {
+            //ignore
+        }
+        material.setTags(tags);
     }
 
     @Override
@@ -77,7 +88,7 @@ public class MaterialParserEstCore extends MaterialParser {
             source = getSource(doc);
 
         } catch (Exception e) {
-            throw new ParseException ("Error parsing document source.");
+            throw new ParseException("Error parsing document source.");
         }
 
         material.setSource(source);
@@ -104,7 +115,7 @@ public class MaterialParserEstCore extends MaterialParser {
             language = getLanguage(doc);
         } catch (Exception e) {
             //ignore
-       }
+        }
 
         material.setLanguage(language);
     }
@@ -219,5 +230,14 @@ public class MaterialParserEstCore extends MaterialParser {
         descriptions = getLanguageStrings(node, languageService);
 
         return descriptions;
+    }
+
+    private List<Tag> getTags(Document doc) throws XPathExpressionException {
+        XPath xpath = xPathfactory.newXPath();
+        XPathExpression expr = xpath
+                .compile("//*[local-name()='estcore']/*[local-name()='general']/*[local-name()='keyword']/*[local-name()='string']");
+        NodeList keywords = (NodeList) expr.evaluate(doc, XPathConstants.NODESET);
+
+        return getTagsFromKeywords(keywords, tagService);
     }
 }

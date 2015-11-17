@@ -250,23 +250,8 @@ public class MaterialParserWaramu extends MaterialParser {
     }
 
     private List<Tag> getTags(Element lom) {
-        List<Tag> tags = new ArrayList<>();
         NodeList keywords = lom.getElementsByTagName("keyword");
-        for (int i = 0; i < keywords.getLength(); i++) {
-            String keyword = keywords.item(i).getTextContent().trim().toLowerCase();
-
-            if (!keyword.isEmpty()) {
-                Tag tag = tagService.getTagByName(keyword);
-                if (tag == null) {
-                    tag = new Tag();
-                    tag.setName(keyword);
-                }
-
-                if (!tags.contains(tag)) {
-                    tags.add(tag);
-                }
-            }
-        }
+        List<Tag> tags = getTagsFromKeywords(keywords, tagService);
 
         return tags;
     }
