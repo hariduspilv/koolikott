@@ -22,15 +22,13 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.w3c.dom.Document;
 
+import ee.hm.dop.model.Author;
 import ee.hm.dop.model.Language;
 import ee.hm.dop.model.LanguageString;
 import ee.hm.dop.model.Material;
 import ee.hm.dop.oaipmh.ParseException;
 import ee.hm.dop.service.AuthorService;
-import ee.hm.dop.service.EducationalContextService;
 import ee.hm.dop.service.LanguageService;
-import ee.hm.dop.service.ResourceTypeService;
-import ee.hm.dop.service.TagService;
 
 /**
  * Created by mart on 6.11.15.
@@ -43,15 +41,6 @@ public class MaterialParserEstCoreTest {
 
     @Mock
     private LanguageService languageService;
-
-    @Mock
-    private TagService tagService;
-
-    @Mock
-    private ResourceTypeService resourceTypeService;
-
-    @Mock
-    private EducationalContextService educationalContextService;
 
     @Mock
     private AuthorService authorService;
@@ -84,8 +73,19 @@ public class MaterialParserEstCoreTest {
         estonian.setId(2L);
         estonian.setName("Estonian");
 
+        Author author1 = new Author();
+        author1.setName("Jonathan");
+        author1.setSurname("Doe");
+
+        Author author2 = new Author();
+        author2.setName("Andrew");
+        author2.setSurname("Balaam");
+
         expect(languageService.getLanguage("en")).andReturn(english).times(2);
         expect(languageService.getLanguage("et")).andReturn(estonian);
+        expect(authorService.getAuthorByFullName(author1.getName(), author1.getSurname())).andReturn(author1);
+        expect(authorService.getAuthorByFullName(author2.getName(), author2.getSurname())).andReturn(author2);
+
 
         LanguageString title1 = new LanguageString();
         title1.setLanguage(english);
@@ -99,18 +99,21 @@ public class MaterialParserEstCoreTest {
         titles.add(title1);
         titles.add(title2);
 
-        replay(languageService, tagService, resourceTypeService, educationalContextService, authorService);
+        List<Author> authors = new ArrayList<>();
+        authors.add(author1);
+        authors.add(author2);
+
+        replay(languageService, authorService);
 
         Document doc = dBuilder.parse(fXmlFile);
         Material material = materialParser.parse(doc);
 
-        verify(languageService, tagService, resourceTypeService, educationalContextService, authorService);
+        verify(languageService, authorService);
 
         assertEquals(titles, material.getTitles());
         assertEquals("https://oxygen.netgroupdigital.com/rest/repoMaterialSource", material.getSource());
         assertEquals(english, material.getLanguage());
-
-
+        assertEquals(authors, material.getAuthors());
     }
 
     private File getResourceAsFile(String resourcePath) throws URISyntaxException {

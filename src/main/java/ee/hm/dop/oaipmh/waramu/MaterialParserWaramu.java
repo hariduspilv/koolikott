@@ -11,8 +11,6 @@ import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
 
 import org.apache.commons.validator.routines.UrlValidator;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.w3c.dom.CharacterData;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -33,18 +31,14 @@ import ee.hm.dop.service.EducationalContextService;
 import ee.hm.dop.service.LanguageService;
 import ee.hm.dop.service.ResourceTypeService;
 import ee.hm.dop.service.TagService;
-import ee.hm.dop.utils.ParserUtils;
-import ezvcard.Ezvcard;
-import ezvcard.VCard;
 
-public class MaterialParserWaramu implements MaterialParser {
-    private static final Logger logger = LoggerFactory.getLogger(MaterialParserWaramu.class);
+public class MaterialParserWaramu extends MaterialParser {
 
     private static final String[] SCHEMES = {"http", "https"};
     public static final String WEB_PAGE = "WEBPAGE";
     public static final String WEBSITE = "WEBSITE";
-    public static final String COMPULSORYEDUCATION = "COMPULSORYEDUCATION";
-    public static final String BASICEDUCATION = "BASICEDUCATION";
+    public static final String COMPULSORY_EDUCATION = "COMPULSORYEDUCATION";
+    public static final String BASIC_EDUCATION = "BASICEDUCATION";
 
     @Inject
     private LanguageService languageService;
@@ -62,36 +56,43 @@ public class MaterialParserWaramu implements MaterialParser {
     private AuthorService authorService;
 
     @Override
-    public Material parse(Document doc) throws ParseException {
-        Material material;
-
-        try {
-            doc.getDocumentElement().normalize();
-
-            material = new Material();
-            Element header = (Element) doc.getElementsByTagName("header").item(0);
-            Element identifier = (Element) header.getElementsByTagName("identifier").item(0);
-            material.setRepositoryIdentifier(identifier.getTextContent().trim());
-
-            Element lom = (Element) doc.getElementsByTagName("lom").item(0);
-            setTitle(material, lom);
-            setMaterialLanguage(material, lom);
-            setDescriptions(material, lom);
-            setSource(material, lom);
-            setTags(material, lom);
-            setLearningResourceType(material, doc);
-            setEducationalContext(material, doc);
-            setAuthors(material, doc);
-        } catch (RuntimeException e) {
-            logger.error("Unexpected error while parsing document. Document may not"
-                    + " match Waramu mapping or XML structure.", e);
-            throw new ParseException(e);
-        }
-
-        return material;
+    protected void setTags(Material material, Document doc) {
+        Element lom = (Element) doc.getElementsByTagName("lom").item(0);
+        setTags(material, lom);
     }
 
-    private void setAuthors(Material material, Document doc) {
+    @Override
+    protected void setSource(Material material, Document doc) throws ParseException {
+        Element lom = (Element) doc.getElementsByTagName("lom").item(0);
+        setSource(material, lom);
+    }
+
+    @Override
+    protected void setDescriptions(Material material, Document doc) {
+        Element lom = (Element) doc.getElementsByTagName("lom").item(0);
+        setDescriptions(material, lom);
+
+    }
+
+    @Override
+    protected void setLanguage(Material material, Document doc) {
+        Element lom = (Element) doc.getElementsByTagName("lom").item(0);
+        setMaterialLanguage(material, lom);
+
+    }
+
+    @Override
+    protected void setTitles(Material material, Document doc) throws ParseException {
+        Element lom = (Element) doc.getElementsByTagName("lom").item(0);
+        setTitle(material, lom);
+    }
+
+    @Override
+    protected String getVCardWithNewLines(CharacterData characterData) {
+        return characterData.getData().trim().replaceAll("\\s(?=[A-Z]{1,99}:)", "\r\n");
+    }
+
+    protected void setAuthors(Material material, Document doc) {
         List<Author> authors = null;
         try {
             authors = getAuthors(doc);
@@ -101,7 +102,7 @@ public class MaterialParserWaramu implements MaterialParser {
         material.setAuthors(authors);
     }
 
-    private void setEducationalContext(Material material, Document doc) {
+    protected void setEducationalContext(Material material, Document doc) {
         List<EducationalContext> educationalContexts = null;
         try {
             educationalContexts = getEducationalContexts(doc);
@@ -111,7 +112,7 @@ public class MaterialParserWaramu implements MaterialParser {
         material.setEducationalContexts(educationalContexts);
     }
 
-    private void setLearningResourceType(Material material, Document doc) {
+    protected void setLearningResourceType(Material material, Document doc) {
         List<ResourceType> resourceTypes = null;
         try {
             resourceTypes = getResourceTypes(doc);
@@ -146,12 +147,12 @@ public class MaterialParserWaramu implements MaterialParser {
         material.setSource(url);
     }
 
-    private void setDescriptions(Material material, Element lom) throws ParseException {
+    private void setDescriptions(Material material, Element lom) {
         List<LanguageString> descriptions = getDescriptions(lom);
         material.setDescriptions(descriptions);
     }
 
-    private void setMaterialLanguage(Material material, Element lom) throws ParseException {
+    private void setMaterialLanguage(Material material, Element lom) {
         Language materialLanguage = getMaterialLanguage(lom);
         material.setLanguage(materialLanguage);
     }
@@ -204,8 +205,8 @@ public class MaterialParserWaramu implements MaterialParser {
             Element element = (Element) nl.item(i);
             String context = element.getElementsByTagName("value").item(0).getFirstChild().getTextContent().trim().toUpperCase().replaceAll("\\s", "");
 
-            if (context.equals(COMPULSORYEDUCATION)) {
-                context = BASICEDUCATION;
+            if (context.equals(COMPULSORY_EDUCATION)) {
+                context = BASIC_EDUCATION;
             }
 
             EducationalContext educationalContext = educationalContextService.getEducationalContextByName(context);
@@ -230,24 +231,10 @@ public class MaterialParserWaramu implements MaterialParser {
 
         for (int i = 0; i < authorNodes.getLength(); i++) {
 
-            CharacterData child = (CharacterData) authorNodes.item(i);
-            String data = child.getData().trim().replaceAll(" (?=[A-Z]{1,99}:)", "\r\n");
+            CharacterData characterData = (CharacterData) authorNodes.item(i);
+            String data = getVCardWithNewLines(characterData);
 
-            if (data.length() > 0) {
-                VCard vcard = Ezvcard.parse(data).first();
-                String name = vcard.getStructuredName().getGiven();
-                String surname = vcard.getStructuredName().getFamily();
-
-                if (name != null && surname != null) {
-                    Author author = authorService.getAuthorByFullName(name, surname);
-                    if (author == null) {
-                        author = authorService.createAuthor(name, surname);
-                        authors.add(author);
-                    } else if (!authors.contains(author)) {
-                        authors.add(author);
-                    }
-                }
-            }
+            parseVCard(authors, data, authorService);
         }
 
         return authors;
@@ -275,35 +262,25 @@ public class MaterialParserWaramu implements MaterialParser {
         return tags;
     }
 
-    private List<LanguageString> getDescriptions(Element lom) throws ParseException {
+    private List<LanguageString> getDescriptions(Element lom) {
         NodeList descriptionNode = lom.getElementsByTagName("description");
         Node description = descriptionNode.item(0);
-        try {
-            return ParserUtils.getLanguageStrings(description, languageService);
-        } catch (Exception e) {
-            throw new ParseException("Error in parsing Material descriptions");
-        }
+
+        return getLanguageStrings(description, languageService);
     }
 
-    private Language getMaterialLanguage(Element lom) throws ParseException {
-        Language language;
+    private Language getMaterialLanguage(Element lom) {
         NodeList languageNode = lom.getElementsByTagName("language");
+        String materialLanguageString = languageNode.item(0).getTextContent().trim();
 
-        try {
-            String materialLanguageString = languageNode.item(0).getTextContent().trim();
-            language = languageService.getLanguage(materialLanguageString);
-        } catch (Exception e) {
-            throw new ParseException("Error in parsing Material language");
-        }
-
-        return language;
+        return languageService.getLanguage(materialLanguageString);
     }
 
     private List<LanguageString> getTitles(Element lom) throws ParseException {
         List<LanguageString> titles;
         try {
             Node title = lom.getElementsByTagName("title").item(0);
-            titles = ParserUtils.getLanguageStrings(title, languageService);
+            titles = getLanguageStrings(title, languageService);
         } catch (Exception e) {
             throw new ParseException("Error in parsing Material title");
         }

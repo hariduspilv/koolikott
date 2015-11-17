@@ -1,4 +1,4 @@
-package ee.hm.dop.utils;
+package ee.hm.dop.oaipmh;
 
 import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.expect;
@@ -12,14 +12,17 @@ import java.util.List;
 
 import org.easymock.EasyMockRunner;
 import org.easymock.Mock;
+import org.easymock.TestSubject;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import ee.hm.dop.model.Language;
 import ee.hm.dop.model.LanguageString;
+import ee.hm.dop.model.Material;
 import ee.hm.dop.service.LanguageService;
 
 /**
@@ -27,7 +30,10 @@ import ee.hm.dop.service.LanguageService;
  */
 
 @RunWith(EasyMockRunner.class)
-public class ParserUtilsTest {
+public class MaterialParserTest {
+
+    @TestSubject
+    private MaterialParser materialParser = new MaterialParserImpl();
 
     @Mock
     private LanguageService languageService;
@@ -45,7 +51,7 @@ public class ParserUtilsTest {
 
         replay(languageService, node, nodeList);
 
-        List<LanguageString> languageStrings = ParserUtils.getLanguageStrings(node, languageService);
+        List<LanguageString> languageStrings = materialParser.getLanguageStrings(node, languageService);
 
         verify(languageService, node, nodeList);
 
@@ -61,7 +67,7 @@ public class ParserUtilsTest {
 
         replay(languageService, node, nodeList);
 
-        List<LanguageString> languageStrings = ParserUtils.getLanguageStrings(node, languageService);
+        List<LanguageString> languageStrings = materialParser.getLanguageStrings(node, languageService);
 
         verify(languageService, node, nodeList);
 
@@ -78,7 +84,7 @@ public class ParserUtilsTest {
 
         replay(languageService, node, nodeList);
 
-        List<LanguageString> languageStrings = ParserUtils.getLanguageStrings(node, languageService);
+        List<LanguageString> languageStrings = materialParser.getLanguageStrings(node, languageService);
 
         verify(languageService, node, nodeList);
 
@@ -104,7 +110,7 @@ public class ParserUtilsTest {
 
         replay(languageService, node, nodeList, namedNodeMap);
 
-        List<LanguageString> languageStrings = ParserUtils.getLanguageStrings(node, languageService);
+        List<LanguageString> languageStrings = materialParser.getLanguageStrings(node, languageService);
 
         verify(languageService, node, nodeList, namedNodeMap);
 
@@ -130,7 +136,7 @@ public class ParserUtilsTest {
 
         replay(languageService, node, nodeList, namedNodeMap);
 
-        List<LanguageString> languageStrings = ParserUtils.getLanguageStrings(node, languageService);
+        List<LanguageString> languageStrings = materialParser.getLanguageStrings(node, languageService);
 
         verify(languageService, node, nodeList, namedNodeMap);
 
@@ -138,4 +144,48 @@ public class ParserUtilsTest {
         assertNotNull(languageStrings.get(0).getLanguage());
         assertEquals("someValue", languageStrings.get(0).getText());
     }
+
+    private class MaterialParserImpl extends MaterialParser {
+
+        @Override
+        protected void setAuthors(Material material, Document doc) {
+
+        }
+
+        @Override
+        protected void setEducationalContext(Material material, Document doc) {
+
+        }
+
+        @Override
+        protected void setLearningResourceType(Material material, Document doc) {
+
+        }
+
+        @Override
+        protected void setTags(Material material, Document doc) {
+
+        }
+
+        @Override
+        protected void setSource(Material material, Document doc) throws ParseException {
+
+        }
+
+        @Override
+        protected void setDescriptions(Material material, Document doc) {
+
+        }
+
+        @Override
+        protected void setLanguage(Material material, Document doc) {
+
+        }
+
+        @Override
+        protected void setTitles(Material material, Document doc) throws ParseException {
+
+        }
+    }
 }
+

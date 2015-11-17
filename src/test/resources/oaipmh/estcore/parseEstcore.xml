@@ -46,21 +46,34 @@
                     </general>
                     <lifeCycle>
                         <contribute>
-                            <lom:date uniqueElementName="date">
-                                <lom:description uniqueElementName="description">
-                                    <lom:string language="en-US">string4</lom:string>
-                                    <lom:string language="en-US">string5</lom:string>
-                                </lom:description>
-                            </lom:date>
-                            <lom:entity>entity0</lom:entity>
+                            <lom:role>
+                                <lom:value>author</lom:value>
+                            </lom:role>
+                            <lom:entity>
+                                <![CDATA[
+								BEGIN:VCARD
+                                VERSION:4.0
+                                N:Doe;Jonathan;;Mr;
+                                FN:John Doe
+                                END:VCARD
+								]]>
+                            </lom:entity>
                         </contribute>
                         <contribute>
-                            <lom:entity>entity1</lom:entity>
-                            <lom:date uniqueElementName="date">
-                                <lom:description uniqueElementName="description">
-                                    <lom:string language="en-US">string6</lom:string>
-                                </lom:description>
-                            </lom:date>
+                            <lom:role>
+                                <lom:value>author</lom:value>
+                            </lom:role>
+                            <lom:entity>
+                                <![CDATA[
+                                BEGIN:VCARD
+								VERSION:3.0
+								N:Balaam;Andrew;;;
+								FN:Andrew Balaam
+								ORG:Languages Online
+								EMAIL;TYPE=internet,pref:acb@rgshw.com
+								END:VCARD
+								]]>
+                            </lom:entity>
                         </contribute>
                     </lifeCycle>
                     <technical>
