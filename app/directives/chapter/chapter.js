@@ -1,16 +1,16 @@
 define(['app'], function(app)
-{    
+{
     app.directive('dopChapter', ['translationService',
      function(translationService) {
         return {
             scope: {
-            	chapter: '=' 
+            	chapter: '='
             },
-            templateUrl: 'app/directives/chapter/chapter.html',
+            templateUrl: 'directives/chapter/chapter.html',
             link: function () {
             }
         };
     }]);
-    
+
     return app;
 });
