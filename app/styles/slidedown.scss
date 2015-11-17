@@ -1,0 +1,48 @@
+
+/*
+animation for toggle search:*/
+
+.slideDown {
+  max-height:999px;
+  transition:max-height 0.35s ease;
+  overflow:hidden;
+  position:relative;
+
+  &.ng-hide {
+    max-height:0;
+  }
+}
+
+.slideDown.ng-hide-remove,
+.slideDown.ng-hide-add {
+  /* remember, the .hg-hide class is added to element
+  when the active class is added causing it to appear
+  as hidden. Therefore set the styling to display=block
+  so that the hide animation is visible */
+  display:block!important;
+}
+
+
+.slideDown.ng-hide-add {
+  animation-name: hide;
+  -webkit-animation-name: hide;
+
+  animation-duration: .5s;
+  -webkit-animation-duration: .5s;
+
+  animation-timing-function: ease-in;
+  -webkit-animation-timing-function: ease-in;
+}
+
+
+
+.slideDown.ng-hide-remove {
+  animation-name: show;
+  -webkit-animation-name: show;
+
+  animation-duration: .5s;
+  -webkit-animation-duration: .5s;
+
+  animation-timing-function: ease-out;
+  -webkit-animation-timing-function: ease-out;
+}

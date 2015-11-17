@@ -1,0 +1,43 @@
+.md-toolbar-filter {
+  padding: 0 16px;
+  background-color: #fff;
+  max-height:999px;
+  overflow:hidden;
+  position:relative;
+  transition:max-height 0.35s ease;
+
+  &.ng-hide {
+    max-height:0;
+  }
+
+  &.ng-hide-remove,
+  &.ng-hide-add {
+    display:block!important;
+
+    animation-duration: .5s;
+    -webkit-animation-duration: .5s;
+  }
+
+  &.ng-hide-add {
+    animation-name: hide;
+    -webkit-animation-name: hide;
+
+    animation-timing-function: ease-in;
+    -webkit-animation-timing-function: ease-in;
+  }
+
+  &.ng-hide-remove {
+    animation-name: show;
+    -webkit-animation-name: show;
+
+    animation-timing-function: ease-out;
+    -webkit-animation-timing-function: ease-out;
+  }
+
+  md-input-container {
+    padding-bottom: 13px;
+  }
+}
+.md-toolbar-filter-toggle {
+  cursor: pointer;
+}

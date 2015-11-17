@@ -1,17 +1,17 @@
 define(['app'], function(app)
-{    
-    app.directive('dopDetailedSearch', [ '$location', 'searchService', 'translationService', '$filter', 
+{
+    app.directive('dopDetailedSearch', [ '$location', 'searchService', 'translationService', '$filter',
      function($location, searchService, translationService, $filter) {
         return {
             scope: {
                 queryIn: '=',
                 queryOut: '='
             },
-            templateUrl: 'app/directives/detailedSearch/detailedSearch.html',
+            templateUrl: 'directives/detailedSearch/detailedSearch.html',
             controller: function ($scope) {
 
                 init();
-                
+
                 function init() {
 
                     // Test data
@@ -26,7 +26,7 @@ define(['app'], function(app)
 
                     // Detailed search fields
                     $scope.detailedSearch = {};
-                    
+
                     // Educational context
                     var validEducationalContexts = ['preschooleducation', 'basiceducation', 'secondaryeducation', 'vocationaleducation'];
 
@@ -43,7 +43,7 @@ define(['app'], function(app)
 
                     // Type
                     $scope.detailedSearch.type = 'all';
-                    
+
                     if (searchService.getType() && searchService.isValidType(searchService.getType())) {
                         $scope.detailedSearch.type = searchService.getType();
                     }
@@ -52,7 +52,7 @@ define(['app'], function(app)
 
                 $scope.search = function() {
                     searchService.setSearch(createSimpleSearchQuery());
-                    
+
                     searchService.setPaid($scope.detailedSearch.paid);
                     searchService.setType($scope.detailedSearch.type);
                     searchService.setEducationalContext($scope.detailedSearch.educationalContext);
@@ -86,7 +86,7 @@ define(['app'], function(app)
                     } else {
                         query = textFields;
                     }
-                    
+
                     return query.trim();
                 }
 
@@ -169,7 +169,7 @@ define(['app'], function(app)
             return items;
         }
     });
-    
+
     app.filter('translatableItemFilter', function($filter) {
         return function(items, query, translationPrefix) {
             var out = [];
@@ -211,11 +211,11 @@ define(['app'], function(app)
                     items[i].translation = null;
                 }
 
-            } 
+            }
 
             return items;
         }
     });
-    
+
     return app;
 });

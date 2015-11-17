@@ -1,0 +1,27 @@
+<aside layout="column" class="sidebar">
+  <h2 class="md-headline">eKoolikott</h2>
+  <md-list>
+    <md-list-item>
+      <md-button ng-href="#/about" class="md-primary" data-translate="ABOUT_PAGE_LINK_TITLE"></md-button>
+    </md-list-item>
+    <md-list-item>
+      <md-button ng-href="#/help" class="md-primary" data-translate="HELP_PAGE_LINK_TITLE"></md-button>
+    </md-list-item>
+  </md-list>
+
+  <h2 class="md-headline">Soovitused</h2>
+  <md-list>
+    <md-list-item class="md-3-line" ng-repeat="item in books">
+      <div class="md-list-item-text">
+        <h3>{{item.what}}</h3>
+        <p class="one-row">{{item.notes}}</p>
+        <h4>{{item.who}}</h4>
+      </div>
+      <md-divider ng-if="!$last"></md-divider>
+    </md-list-item>
+    <md-button layout layout-align="start center" flex class="md-primary">
+      <ng-md-icon icon="arrow_forward"> </ng-md-icon>
+       Veel soovitusi
+    </md-button>
+  </md-list>
+</aside>

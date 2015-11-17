@@ -1,136 +1,108 @@
-<div data-ng-show="showSearchBox" class="navbar-searchbox hidden-md hidden-lg" data-click-outside="closeSearchBox()" data-outside-if-not="SearchBoxShow, SearchBoxMob">
-    <div class="form-group">
-        <div class="input-group">
-            <input data-ng-keydown="$event.which === 13 && search()" data-ng-model="searchFields.searchQuery" type="text" placeholder="{{'SEARCH' | translate}}" class="form-control" id="SearchBoxMob" show-focus="customcondition">
-            <span class="input-group-btn">
-                <button data-ng-click="search()" class="btn btn-default" type="submit" id="searchButtonMob"><i class="fa fa-search"></i></button>
-            </span>
-        </div>
+<md-toolbar ng-show="!showSearch" class="md-whiteframe-1dp" >
+  <div class="md-toolbar-tools">
+    <div layout-align="center start" flex-gt-md="10" flex>
+      <a href="#/" class="logo-lg"></a>
     </div>
-</div>
 
-<div class="navbar-shadow"></div>
-
-<nav class="navbar navbar-default">
-    <div class="container">
-        
-        <div class="navbar-header">
-            <button data-target="#navbar-links" data-toggle="collapse" aria-expanded="false" aria-controls="navbar" class="navbar-toggle collapsed pull-left hidden-xs hidden-sm hidden-ms" type="button">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
-            
-            <button class="navbar-toggle pull-left hidden-md hidden-lg" data-toggle="sidebar" data-target=".sidebar" type="button">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
-            
-            <a data-ng-click="showSearchBoxClick()" id="SearchBoxShow" class="navbar-search-toggle pull-right">
-                <i class="fa fa-search"></i>
-            </a>
-            
-            <a data-ng-href="#/" class="navbar-brand"><img src="img/logo_white.svg"></a>
-        </div>
-        
-        <div class="navbar-collapse collapse" id="navbar-links">
-            <ul class="nav navbar-nav navbar-right">
-                <li class="navbar-link-lang">
-                    <a data-ng-if="selectedLanguage === 'est'" data-ng-click="languageSelectClick()" id="languageSelectClose"><span>ET <i class="fa fa-caret-down"></i></span></a>
-                    <a data-ng-if="selectedLanguage === 'rus'" data-ng-click="languageSelectClick()" id="languageSelectClose"><span>RU <i class="fa fa-caret-down"></i></span></a>
-                    <a data-ng-if="selectedLanguage === 'eng'" data-ng-click="languageSelectClick()" id="languageSelectClose"><span>EN <i class="fa fa-caret-down"></i></span></a>
-                    <ul data-ng-show="showLanguageSelection" data-click-outside="closeLanguageSelection()" data-outside-if-not="languageSelectClose" id="languageSelectOpen" class="navbar-submenu">
-                        <li>
-                            <a data-ng-if="selectedLanguage === 'est'" data-ng-click="setLanguage('est')"><span>ET <i class="fa fa-caret-up"></i></span></a>
-                            <a data-ng-if="selectedLanguage === 'rus'" data-ng-click="setLanguage('rus')"><span>RU <i class="fa fa-caret-up"></i></span></a>
-                            <a data-ng-if="selectedLanguage === 'eng'" data-ng-click="setLanguage('eng')"><span>EN <i class="fa fa-caret-up"></i></span></a>
-                        </li>
-                        <li data-ng-if="selectedLanguage !== 'est'">
-                            <a data-ng-click="setLanguage('est')"><span>ET</span></a>
-                        </li>
-                        <li data-ng-if="selectedLanguage !== 'rus'">
-                            <a data-ng-click="setLanguage('rus')"><span>RU</span></a>
-                        </li>
-                        <li data-ng-if="selectedLanguage !== 'eng'">
-                            <a data-ng-click="setLanguage('eng')"><span>EN</span></a>
-                        </li>
-                    </ul>
-                </li>
-                <li class="dropdown navbar-link-login yamm-fw">
-                    <button data-ng-hide="user" class="btn btn-dark navbar-btn btn-collapse collapsed" type="button" data-toggle="collapse" href="#dropdowned" aria-expanded="false" aria-controls="dropdowned" id="loginButton">
-                        <i class="fa fa-lock"></i> <span data-translate="LOGIN"></span>
-                    </button>
-                    
-                    <button data-ng-show="user" class="btn btn-dark navbar-btn btn-dropdown" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id="userMenu">
-                        <span class="btn-username pull-left text-left">{{user.name}} {{user.surname}}</span><i class="fa fa-caret-down pull-right"></i>
-                    </button>
-                    
-                    <ul class="dropdown-menu" aria-labelledby="userMenu">
-                        <li><a href="#/{{user.username}}"><span data-translate="MY_PROFILE"></span></a></li>
-                        <li><a href="#">Another action</a></li>
-                        <li role="separator" class="divider"></li>
-                        <li><a data-ng-click="logout()"><i class="fa fa-unlock"></i> <span data-translate="LOGOUT"></span></a></li>
-                    </ul>
-                </li>
-            </ul>
-            
-            <div role="search" class="navbar-form navbar-right hidden-xs hidden-sm hidden-ms" id="search-form-main">
-                <div class="form-group">
-                    <div class="input-group" data-ng-class="{'input-group-disabled': detailedSearch.isVisible}">
-                        <input data-ng-keydown="$event.which === 13 && search()" data-ng-model="searchFields.searchQuery" data-ng-disabled="detailedSearch.isVisible" type="text" placeholder="{{'SEARCH' | translate}}" class="form-control" id="SearchBox">
-                        <span class="input-group-btn">
-                            <button data-ng-click="search()" class="btn btn-default" type="submit" data-ng-disabled="detailedSearch.isVisible" id="searchButton"><i class="fa fa-search"></i></button>
-                        </span>
-                    </div>
-                </div>
-                <a class="btn btn-inline btn-collapse collapsed pull-right" type="button" data-toggle="collapse" href="#detailedSearch" id="detailedSearchToggle" data-ng-click="detailedSearchButtonClicked()" aria-expanded="false" aria-controls="detailedSearch" data-translate="DETAILED_SEARCH_OPEN"></a>
-            </div>
-        </div>
+    <div flex-gt-md="75" flex="none">
+      <div layout="row" layout-align-gt-md="center center" layout-align="center end">
+        <md-button aria-label="Search" class="md-icon-button md-padding" ng-click="showSearch = !showSearch">
+          <ng-md-icon icon="search"></ng-md-icon>
+        </md-button>
+        <md-input-container class="md-padding" hide show-gt-md flex>
+          <input ng-click="showSearch = !showSearch">
+        </md-input-container>
+        <md-button aria-label="Open Settings" class="md-icon-button" ng-click="toggleDetailSearch()" >
+          <ng-md-icon icon="filter_list"></ng-md-icon>
+        </md-button>
+      </div>
     </div>
-</nav>
 
-<div data-ng-hide="user" class="collapse logins" id="dropdowned">
-    <div data-dop-login-bar></div>
-</div>
-
-<div class="collapse detailed-search" id="detailedSearch">
-    <div data-dop-detailed-search query-in="detailedSearch.queryIn" query-out="detailedSearch.queryOut"></div>
-</div>
-
-<div class="container-fluid">
-    <div class="row">
-        <div class="col-xs-7 col-sm-3 col-md-3 sidebar sidebar-left sidebar-animate">
-            <ul class="nav navbar-stacked">
-                <li class="navbar-link-lang">
-                    <a data-ng-if="selectedLanguage === 'est'" data-ng-click="languageSelectClick()" id="languageSelectClose"><span>ET <i class="fa fa-caret-down"></i></span></a>
-                    <a data-ng-if="selectedLanguage === 'rus'" data-ng-click="languageSelectClick()" id="languageSelectClose"><span>RU <i class="fa fa-caret-down"></i></span></a>
-                    <a data-ng-if="selectedLanguage === 'eng'" data-ng-click="languageSelectClick()" id="languageSelectClose"><span>EN <i class="fa fa-caret-down"></i></span></a>
-                    <ul data-ng-show="showLanguageSelection" data-click-outside="closeLanguageSelection()" data-outside-if-not="languageSelectClose" id="languageSelectOpen" class="navbar-submenu">
-                        <li>
-                            <a data-ng-if="selectedLanguage === 'est'" data-ng-click="setLanguage('est')"><span>ET <i class="fa fa-caret-up"></i></span></a>
-                            <a data-ng-if="selectedLanguage === 'rus'" data-ng-click="setLanguage('rus')"><span>RU <i class="fa fa-caret-up"></i></span></a>
-                            <a data-ng-if="selectedLanguage === 'eng'" data-ng-click="setLanguage('eng')"><span>EN <i class="fa fa-caret-up"></i></span></a>
-                        </li>
-                        <li data-ng-if="selectedLanguage !== 'est'">
-                            <a data-ng-click="setLanguage('est')"><span>ET</span></a>
-                        </li>
-                        <li data-ng-if="selectedLanguage !== 'rus'">
-                            <a data-ng-click="setLanguage('rus')"><span>RU</span></a>
-                        </li>
-                        <li data-ng-if="selectedLanguage !== 'eng'">
-                            <a data-ng-click="setLanguage('eng')"><span>EN</span></a>
-                        </li>
-                    </ul>
-                </li>
-                <li class="navbar-link-login">
-                    <a href="#" class="">
-                        <i class="fa fa-lock"></i> Logi Sisse
-                    </a>
-                </li>
-            </ul>
-        </div>
+    <div flex-gt-md="15" flex="none">
+      <md-button data-ng-hide="user" aria-label="Login" class="md-icon-button" ng-click="showLogin($event)">
+        <ng-md-icon icon="lock"></ng-md-icon>
+        <md-tooltip>Sisene</md-tooltip>
+      </md-button>
+      <md-menu data-ng-show="user">
+        <md-button aria-label="Open user profile" class="md-icon-button" ng-click="$mdOpenMenu($event)">
+          <ng-md-icon icon="account_circle"></ng-md-icon>
+        </md-button>
+        <md-menu-content width="4">
+          <md-menu-item>
+            <md-button href="#/{{user.username}}">
+              <span data-translate="MY_PROFILE"></span>
+            </md-button>
+          </md-menu-item>
+          <md-menu-divider></md-menu-divider>
+          <md-menu-item>
+            <md-button>
+              <a data-ng-click="logout()">
+                <span data-translate="LOGOUT"></span>
+              </a>
+            </md-button>
+          </md-menu-item>
+        </md-menu-content>
+      </md-menu>
+      <md-menu>
+        <md-button aria-label="Open language menu" class="md-icon-button" ng-click="$mdOpenMenu($event)">
+          <span data-ng-if="selectedLanguage === 'est'">ET</span>
+          <span data-ng-if="selectedLanguage === 'rus'">RU</span>
+          <span data-ng-if="selectedLanguage === 'eng'">EN</span>
+        </md-button>
+        <md-menu-content width="4">
+          <md-menu-item data-ng-click="setLanguage('est')">
+            <md-button >
+              ET
+            </md-button>
+          </md-menu-item>
+          <md-menu-divider></md-menu-divider>
+          <md-menu-item data-ng-click="setLanguage('eng')">
+            <md-button>
+              EN
+            </md-button>
+          </md-menu-item>
+          <md-menu-divider></md-menu-divider>
+          <md-menu-item data-ng-click="setLanguage('rus')">
+            <md-button>
+              RU
+            </md-button>
+          </md-menu-item>
+        </md-menu-content>
+      </md-menu>
     </div>
+  </div>
+</md-toolbar>
+
+<div class="md-toolbar-expandable" ng-show="showSearch">
+  <md-toolbar class="md-hue-1">
+    <div layout="row" layout-align="center center">
+      <div flex-gt-md="80" flex="100">
+        <div class="md-toolbar-tools" layout="row" layout-align="center center">
+          <md-button aria-label="Search" data-ng-click="search()" class="md-icon-button" data-ng-disabled="detailedSearch.isVisible">
+            <ng-md-icon icon="search"></ng-md-icon>
+          </md-button>
+
+          <md-input-container class="md-padding" flex>
+            <label hidden="hidden">&nbsp;</label>
+            <input data-ng-keydown="$event.which === 13 && search()" data-ng-model="searchFields.searchQuery" placeholder="{{'SEARCH' | translate}}" data-ng-disabled="detailedSearch.isVisible" />
+          </md-input-container>
+
+          <md-button aria-label="Open Settings" class="md-icon-button" ng-click="toggleDetailSearch()" >
+            <ng-md-icon icon="filter_list"></ng-md-icon>
+          </md-button>
+          <md-button ng-click="showSearch = detailedSearch.isVisible = !showSearch" aria-label="Back" class="md-icon-button">
+            <ng-md-icon icon="close"></ng-md-icon>
+          </md-button>
+        </div>
+      </div>
+    </div>
+  </md-toolbar>
+
+  <div class="md-toolbar-filter" id="detailedSearch" ng-show="detailedSearch.isVisible">
+   <form layout-align="center start" layout="row" layout-sm="column">
+      <div flex="100" flex-gt-md="80">
+        <div data-dop-detailed-search query-in="detailedSearch.queryIn" query-out="detailedSearch.queryOut"></div>
+      </div>
+    </form>
+  </div>
 </div>

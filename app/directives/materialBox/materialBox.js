@@ -6,11 +6,13 @@ define(['app'], function(app)
 			scope: {
 				material: '='
 			},
-			templateUrl: 'app/directives/materialBox/materialBox.html',
+			templateUrl: 'directives/materialBox/materialBox.html',
 			controller: function ($scope, $location, $rootScope) {
 
-				$scope.saveMaterial = function(material) {
+				$scope.navigateTo = function(material) {
 					$rootScope.savedMaterial = material;
+
+                    $location.path('/material').search({materialId:  material.id});
 				}
 
 				$scope.getCorrectLanguageTitle = function(material) {
@@ -43,7 +45,7 @@ define(['app'], function(app)
 					if(types.length == 0) {
 						return false;
 					}
-					
+
 					for (var i = 0; i < types.length; i++) {
 						if (types[i].name === type) {
 							return true;
@@ -52,6 +54,22 @@ define(['app'], function(app)
 
 					return false;
 				}
+
+                $scope.getType = function() {
+                    var types = $scope.material.resourceTypes;
+					if (types.length == 0) {
+						return 'book';
+					}
+
+                    for (var i = 0; i < types.length; i++) {
+						if (types[i].name.toLocaleLowerCase().trim() === 'audio')
+							return 'audiotrack';
+                        if (types[i].name.toLocaleLowerCase().trim() === 'video')
+							return 'videocam';
+					}
+
+                    return 'book';
+                }
 			}
 		};
 	}]);

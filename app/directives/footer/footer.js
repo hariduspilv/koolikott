@@ -1,10 +1,10 @@
 define(['app'], function(app)
 {
-    
+
     app.directive('dopFooter', function(translationService) {
         return {
             scope: true,
-            templateUrl: 'app/directives/footer/footer.html',
+            templateUrl: 'directives/footer/footer.html',
             controller: function ($scope, $location) {
 
                 function setSiteLang(language) {
@@ -16,11 +16,11 @@ define(['app'], function(app)
                     }, function(language) {
                         setSiteLang(language);
                 }, true);
-                
+
                 setSiteLang(translationService.getLanguage());
             }
         };
     });
-    
+
     return app;
 });

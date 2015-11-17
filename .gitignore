@@ -1,9 +1,6 @@
-/node_modules/
-/bower_components/
-/.sass-cache/
-/.project
-/assets/
-/target/
-/nbproject/
-/dop.tar.gz
-/.idea/
+node_modules
+dist
+.tmp
+.sass-cache
+bower_components
+.DS_Store

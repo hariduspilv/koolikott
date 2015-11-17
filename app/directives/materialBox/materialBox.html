@@ -1,33 +1,32 @@
-<div id="materialBox{{material.id}}" class="material">
-    <a data-ng-click="saveMaterial(material)" data-ng-href="#/material?materialId={{material.id}}">
-        <div class="block">
-            <div class="illustration">
-                <figure>
-                    <img data-ng-if="!material.hasPicture && !isOfType('AUDIO') && !isOfType('VIDEO')" data-ng-src="img/placeholder-material-single.png" class="img-responsive">
-                    <img data-ng-if="!material.hasPicture && isOfType('AUDIO') && !isOfType('VIDEO')" data-ng-src="img/placeholder-material-sound.png" class="img-responsive">
-                    <img data-ng-if="!material.hasPicture && isOfType('VIDEO')" data-ng-src="img/placeholder-material-video.png" class="img-responsive">
-                    <img data-ng-if="material.hasPicture" data-ng-src="rest/material/getPicture?materialId={{material.id}}" class="img-responsive">
-                    <img src="img/placeholder-material-empty.png" class="img-responsive img-empty">
-                </figure>
-            </div>
-            <div class="description">
-                <div data-ng-bind="getCorrectLanguageTitle(material)" class="title"></div>
-                <div class="authors text-nowrap">
-                    <span data-ng-repeat="author in material.authors">
-                        <span data-ng-bind="formatName(author.name)"></span><span data-ng-bind="formatSurname(author.surname)"></span><span data-ng-bind="$index < material.authors.length - 1 ? ', ' : ''"></span>
-                    </span>
-                </div>
-                <div class="clearfix">
-                    <div data-ng-if="material.issueDate.year >= 100" class="pull-left">{{formatMaterialIssueDate(material.issueDate)}}</div>
-                    <div data-ng-if="material.issueDate.year > 0 && material.issueDate.year < 100" class="pull-left">{{formatMaterialIssueDate(material.issueDate)}} AD</div>
-                    <div data-ng-if="material.issueDate.year < 0" class="pull-left">{{formatMaterialIssueDate(material.issueDate)}} BC</div>
-                    <div data-ng-if="!material.issueDate.year" class="pull-left"><span data-translate="UNKNOWN"></span></div>
-                    <div data-ng-if="material.paid" class="pull-right text-danger"><span data-translate="MATERIAL_PAID"></span></div>
-                </div>
-            </div>
-            <div class="statistic text-right text-grey">
-                <i class="fa fa-eye"></i> <span data-ng-bind="material.views"></span>
-            </div>
-        </div>
-    </a>
-</div>
+ <md-card class="card-sm md-whiteframe-4dp" data-ng-click="navigateTo(material)">
+  <div class="card-cover {{getType()}}">
+    <img data-ng-if="material.hasPicture" data-ng-src="rest/material/getPicture?materialId={{material.id}}" class="md-card-image" />
+    <div data-ng-if!="material.hasPicture" layout="row" layout-fill flex layout-align="center center">
+      <md-icon class="icon-kind">{{getType()}}</md-icon>
+    </div>
+    <div class="card-hover {{getType()}}" layout="row" layout-fill flex layout-align="center center">
+      <div class="pick">
+        <md-icon class="unchecked">radio_button_unchecked</md-icon>
+        <md-icon class="checked">check_circle</md-icon>
+      </div>
+      <md-icon class="icon-kind">{{getType()}}</md-icon>
+    </div>
+  </div>
+  <md-card-content>
+    <h2 class="md-headline two-rows" data-ng-bind="getCorrectLanguageTitle(material)"></h2>
+    <span data-ng-repeat="author in material.authors">
+      <span class="md-caption one-row" data-ng-bind="formatName(author.name)"></span>
+      <span class="md-caption one-row" data-ng-bind="formatSurname(author.surname)"></span>
+      <span class="md-caption one-row" data-ng-bind="$index < material.authors.length - 1 ? ', ' : ''"></span>
+    </span>
+  </md-card-content>
+  <md-card-footer>
+  <md-divider></md-divider>
+  <div class="md-actions" layout="row" layout-align="end center">
+    <span class="md-caption">
+      <md-icon>visibility</md-icon>
+      <span data-ng-bind="material.views"></span>
+    </span>
+  </div>
+  </md-card-footer>
+</md-card>

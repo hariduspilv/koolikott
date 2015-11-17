@@ -1,0 +1,62 @@
+<md-dialog aria-label="Login" flex="30">
+  <md-toolbar class="md-hue-2">
+    <div layout-align="center start" layout="row" layout-sm="column">
+      <div class="md-toolbar-tools">
+        <h2 data-translate="LOGIN_CHOOSE_LOGIN_METHOD"></h2>
+        <span flex></span>
+        <md-button ng-click="hideLogin()" class="md-icon-button" aria-label="close">
+          <ng-md-icon icon="close"></ng-md-icon>
+        </md-button>
+      </div>
+    </div>
+  </md-toolbar>
+  <form>
+    <div layout="row" layout-align="center start">
+      <div class="md-padding" flex>
+        <md-content>
+          <div layout="row" data-ng-if="mobileIdChallenge">
+            <div flex>
+              <p>
+                <span data-translate="LOGIN_MOBILEID_CODE"></span>: <strong data-ng-bind="mobileIdChallenge"></strong>
+              </p>
+
+              <p data-translate="LOGIN_SMS"></p>
+            </div>
+          </div>
+
+          <div layout="column" data-ng-if="!mobileIdChallenge">
+            <div flex>
+              <div layout="column">
+                <md-input-container flex>
+                  <label></label>
+                  <input data-ng-model="mobileId.idCode" placeholder="{{'PERSONAL_CODE' | translate}}" data-input-pattern="[^0-9]+" data-input-value-control maxlength="11">
+                  <div ng-messages="mobileId.idCode.$error">
+                    <div data-ng-if="validation.error.idCode === 'required'" data-translate="MESSAGE_ERROR_PERSONAL_CODE_REQUIRED"></div>
+                    <div data-ng-if="validation.error.idCode === 'invalid'" data-translate="MESSAGE_ERROR_PERSONAL_CODE_INVALID"></div>
+                  </div>
+                </md-input-container>
+                <md-input-container flex>
+                  <label></label>
+                  <input data-ng-model="mobileId.phoneNumber" placeholder="+372 XX XXX XXX" data-input-pattern="[^0-9+]+" data-input-value-control>
+                  <div ng-messages="mobileId.phoneNumber.$error">
+                      <span data-ng-if="validation.error.phoneNumber === 'required'" data-translate="MESSAGE_ERROR_PHONE_NUMBER_REQUIRED"></span>
+                      <span data-ng-if="validation.error.phoneNumber === 'notEstonian'" data-translate="MESSAGE_ERROR_PHONE_NUMBER_NOT_ESTONIAN"></span>
+                  </div>
+                </md-input-container>
+                <md-button class="md-raised md-primary" data-ng-click="mobileIdAuth()" flex>
+                  <span data-translate="LOGIN_MOBILEID"></span>
+                </md-button>
+              </div>
+            </div>
+            <md-button class="md-raised md-primary" data-ng-click="idCardAuth()" flex>
+              <span data-translate="LOGIN_IDCARD"></span>
+            </md-button>
+            <md-button class="md-raised md-primary" data-ng-click="taatAuth()" flex>
+              <span data-translate="LOGIN_TAAT"></span>
+            </md-button>
+          </div>
+        </md-content>
+      </div>
+    </div>
+  </form>
+</md-dialog>

@@ -9,7 +9,7 @@ define(['app'], function(app)
                 height: '=',
                 failCallback: '&'
             },
-            templateUrl: 'app/directives/slideshare/slideshare.html',
+            templateUrl: 'directives/slideshare/slideshare.html',
             controller: function ($scope) {
 
             	getSlideshareData();
@@ -20,7 +20,7 @@ define(['app'], function(app)
 		                format: "jsonp",
 		                callback: "JSON_CALLBACK"
 		            };
-		            serverCallService.makeJsonp("https://www.slideshare.net/api/oembed/2", params, getSlideshareDataSuccess, getSlideshareDataFail); 
+		            serverCallService.makeJsonp("https://www.slideshare.net/api/oembed/2", params, getSlideshareDataSuccess, getSlideshareDataFail);
 		        }
 
 		        function getSlideshareDataSuccess(data) {
@@ -38,7 +38,7 @@ define(['app'], function(app)
 		            log("Failed to get slideshare data. ");
 		            $scope.failCallback();
 		        }
-                
+
             }
         };
     }]);

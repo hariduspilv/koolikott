@@ -1,0 +1,66 @@
+<md-dialog aria-label="Metadata" flex-gt-md="75">
+  <md-toolbar class="md-accent">
+    <div class="md-toolbar-tools" flex>
+      <h2>Lisa materjali põhiandmed</h2>
+      <span flex></span>
+      <md-button ng-click="cancel()" class="md-icon-button" aria-label="close">
+        <ng-md-icon icon="close"></ng-md-icon>
+      </md-button>
+    </div>
+  </md-toolbar>
+  <form>
+    <md-content class="md-padding">
+      <md-input-container flex>
+        <label>Pealkiri</label>
+        <input placeholder="Näiteks: Bioloogia töövihik">
+      </md-input-container>
+
+      <md-input-container flex>
+        <label>Kirjeldus (valikuline)</label>
+        <textarea data-ng-model="portfolio.biography" columns="1" md-maxlength="150"></textarea>
+      </md-input-container>
+
+      <div layout layout-sm="column">
+        <md-input-container flex>
+          <label for="portfolioEducationalSelect" data-translate="DETAIL_VIEW_EDUCATIONAL_CONTEXT"></label>
+          <md-select data-ng-model="portfolio.educationalContext" id="portfolioEducationalSelect">
+              <md-option ng-value="educationalContext" ng-repeat="educationalContext in educationalContexts" data-translate="{{educationalContext.name.toUpperCase()}}">{{ educationalContext.name }}</md-option>
+          </md-select>
+        </md-input-container>
+        <md-input-container flex>
+        <label>Valdkond</label>
+          <md-select data-ng-model="portfolio.fieldId">
+            <md-option data-ng-repeat="field in portfolio.fields" value="{{field.Id}}">{{field.value}}</md-option>
+          </md-select>
+        </md-input-container>
+        <md-input-container flex>
+          <label>Teema</label>
+          <md-select data-ng-model="portfolio.topicId">
+            <md-option data-ng-repeat="topic in portfolio.topics" value="{{topic.Id}}">{{topic.value}}</md-option>
+          </md-select>
+        </md-input-container>
+        <md-input-container flex>
+          <label>Alateema</label>
+          <md-select data-ng-model="portfolio.subTopicId">
+            <md-option data-ng-repeat="subTopic in portfolio.subTopics" value="{{subTopic.Id}}">{{subTopic.value}}</md-option>
+          </md-select>
+        </md-input-container>
+      </div>
+
+      <md-input-container flex>
+        <md-chips data-ng-model="portfolio.tags" delete-button-label="Eemalda märksõna" delete-hint="Vajuta x märksõna kustutamiseks" secondary-placeholder="Lisa märksõna (valikuline)">
+        </md-chips>
+      </md-input-container>
+    </md-content>
+    <div class="md-actions">
+      <span flex></span>
+      <md-button ng-click="cancel()">
+        <span data-translate="BUTTON_CANCEL"></span>
+      </md-button>
+      <md-button ng-click="forward()" class="md-primary">
+        <ng-md-icon icon="arrow_forward"></ng-md-icon>
+        <span data-translate="BUTTON_CREATE_PORTFOLIO"></span>
+      </md-button>
+    </div>
+  </form>
+</md-dialog>
