@@ -1,0 +1,118 @@
+<div id="page-add" layout="row" flex>
+  <!-- Left sidenav -->
+  <!-- ////////////////////////- -->
+  <md-sidenav layout="column" layout-fill class="md-sidenav-left" md-component-id="left" md-is-locked-open="$mdMedia('gt-md')">
+    <md-toolbar class="md-accent">
+      <h6 class="md-toolbar-tools md-subhead">
+        <md-button class="md-icon-button hide-gt-md" ng-click="toggleSidenav()" >
+          <md-icon class="md-48">arrow_backward</md-icon>
+        </md-button>
+      </h6>
+    </md-toolbar>
+    <md-list>
+      <h6 class="md-subhead">Matemaatika õpik üheksandale klassile</h6>
+      <md-item ng-repeat="item in menu">
+        <a>
+          <md-item-content md-ink-ripple layout="row" layout-align="start center">
+            <div>
+              {{item.title}}
+            </div>
+          </md-item-content>
+        </a>
+      </md-item>
+    </md-list>
+  </md-sidenav>
+
+  <!-- Rest of content -->
+  <!-- ////////////////////////- -->
+  <div class="content-wrap" layout="column" flex>
+
+    <div id="navmenu" data-portfolio-header></div>
+
+    <section layout="row" layout-align="start start" ng-cloak>
+
+      <!-- Middle content -->
+      <!-- ////////////////////////- -->
+      <article flex="100" flex-gt-sm="90"  layout="row" layout-sm="column">
+        <div layout="column" flex="75" flex-sm="100" role="main" class="md-padding">
+          <md-card class="card-lg" id="material-card">
+            <md-card-content>
+                <h1 class="md-accent md-display-1 book-headline">Matemaatika õpik üheksandale klassile</h1>
+                <div  layout="row">
+                  <div layout="column" flex="66" class="left-of-book">
+                    <div layout="row">
+                      <div flex>
+                        <p class="md-body-1">
+                          <small class="md-caption">Teema</small>
+                          <br>Bioloogia
+                        </p>
+                      </div>
+                      <div flex>
+                        <p class="md-body-1">
+                          <small class="md-caption">Tüüp</small>
+                          <br>Audio, Andmed
+                        </p>
+                      </div>
+                      <div flex>
+                        <p class="md-body-1">
+                          <small class="md-caption">Vanuserühm</small>
+                          <br>Eelkooli haridus, Põhiharidus
+                        </p>
+                      </div>
+                    </div>
+                    <md-divider class="md-default-theme"></md-divider>
+
+                    <p class="md-body-1">Meie metaandmed, mis on edukalt sisestatud modaalis, on siin näha. Nt Valik erinevaid veebipõhiseid ning väljaprinditavaid nuputamisülesandeid. Valik ülesandeid, mis sobivad lisülesanneteks nutikatele või aineolümpiaadide läbiviimiseks.</p>
+                    <p><small class="md-caption">Võtmesõnad: </small></p>
+                    <md-chips>
+                      <md-chip>Hockey</md-chip>
+                      <md-chip>Lacrosse</md-chip>
+                      <md-chip>Baseball</md-chip>
+                    </md-chips>
+                  </div>
+                  <div layout="column" flex="33" class="divider-left" layout-align="start start">
+                    <md-content>
+                      <p class="md-body-1">
+                        <small class="md-caption">Uuendatud: </small>
+
+                        20.12.2015 kl 14:40
+                      </p>
+                      <p class="md-body-1">
+                        <small class="md-caption">Loodud: </small>
+
+                        20.12.2015
+                      </p>
+                      <p class="md-body-1">
+                        <small class="md-caption">Litsentsi tüüp:</small>
+                        <br>Kõik õigused kaitstud
+                      </p>
+                    </md-content>
+                  </div>
+                </div>
+            </md-card-content>
+          </md-card>
+
+          <h2 class="md-headline">Materjalid</h2>
+
+          <!-- Cards -->
+          <!-- ////////////////////////- -->
+          <md-grid-list md-cols-gt-md="4" md-cols-gt-md="2" md-cols-md="3" md-cols-sm="2" md-gutter="20px" md-row-height="300px">
+            <md-grid-tile ng-repeat="item in books">
+              <figure ng-include="'views/common/card-repeat.html'"></figure>
+            </md-grid-tile>
+          </md-grid-list>
+
+          <!-- Showmore -->
+          <!-- ////////////////////////- -->
+          <div layout="row" layout-align="end-center" class="md-padding">
+            <md-button class="md-primary">
+              <ng-md-icon icon="arrow_forward"> </ng-md-icon>Veel
+            </md-button>
+          </div>
+        </div>
+
+        <div data-dop-sidebar flex="25" flex-sm="100" class="md-padding" role="sidebar"></div>
+      </article>
+    </section>
+  </div>
+</div>

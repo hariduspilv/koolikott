@@ -1,46 +1,67 @@
-<div class="main">
-    <div class="container">
-        <div class="row">
-            <div class="col-md-9">
-                <div class="row row-material">
-                    <h4 class="clearfix" data-ng-if="myProfile" data-translate="MYPROFILE_PAGE_TITLE_PORTFOLIOS"></h4>
-                    <h4 class="clearfix" data-ng-if="!myProfile" data-translate="PROFILE_PAGE_TITLE_PORTFOLIOS"></h4>
-                    <div class="material-taping">
-                        <div class="scroll">
-                            <div data-ng-repeat="portfolio in portfolios" class="col-md-3 col-sm-4 col-xs-12 col-ms-6">
-                                <div data-dop-portfolio-box portfolio="portfolio"></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="row row-material">
-                    <h4 class="clearfix" data-ng-if="myProfile" data-translate="MYPROFILE_PAGE_TITLE_MATERIALS"></h4>
-                    <h4 class="clearfix" data-ng-if="!myProfile" data-translate="PROFILE_PAGE_TITLE_MATERIALS"></h4>
-                    <div class="material-taping">
-                        <div class="scroll">
-                            <div data-ng-repeat="material in materials" class="col-md-3 col-sm-4 col-xs-12 col-ms-6">
-                                <div data-dop-material-box material="material"></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div class="sidebar-module">
+<div id="navmenu" data-dop-header></div>
 
-                    <h4 data-ng-if="myProfile" data-translate="MYPROFILE_PAGE_TITLE_MY_DATA"></h4>
-                    <p data-ng-if="myProfile">
-                        <strong>{{user.name}} {{user.surname}}</strong><br />
-                        Hugo Treffneri Gümnaasium
-                    </p>
+<section layout="row" layout-align="center start" ng-cloak>
+  <!-- Middle content -->
+  <!-- ////////////////////////- -->
+  <article layout="row" layout-sm="column" flex flex-gt-md="80">
+    <div layout="column" flex="75" flex-sm="100" class="md-padding" role="main">
+      <h2 class="md-headline" data-ng-if="myProfile" data-translate="MYPROFILE_PAGE_TITLE_PORTFOLIOS"></h2>
+      <h2 class="md-headline" data-ng-if="!myProfile" data-translate="PROFILE_PAGE_TITLE_PORTFOLIOS"></h2>
 
-                    <h4 data-ng-if="!myProfile"><strong>{{user.name}} {{user.surname}}</strong></h4>
-                    <p data-ng-if="!myProfile">
-                        Hugo Treffneri Gümnaasium
-                    </p>
+      <!-- Cards -->
+      <!-- ////////////////////////- -->
+      <md-grid-list md-cols-gt-md="4" md-cols-md="3" md-cols-sm="2" md-gutter="20px" md-row-height="300px">
+        <md-grid-tile data-ng-repeat="portfolio in portfolios">
+          <figure data-dop-portfolio-box portfolio="portfolio"></figure>
+        </md-grid-tile>
+      </md-grid-list>
 
-                </div>
-            </div>
-        </div>
+      <!-- Showmore -->
+      <!-- ////////////////////////- -->
+      <div layout="row" layout-align="end center">
+        <md-button class="md-primary">
+          <ng-md-icon icon="arrow_forward"></ng-md-icon>Veel
+        </md-button>
+      </div>
+
+      <h2 class="md-headline" data-ng-if="myProfile" data-translate="MYPROFILE_PAGE_TITLE_MATERIALS"></h2>
+      <h2 class="md-headline" data-ng-if="!myProfile" data-translate="PROFILE_PAGE_TITLE_MATERIALS"></h2>
+
+      <!-- Cards -->
+      <!-- ////////////////////////- -->
+      <md-grid-list md-cols-gt-md="4" md-cols-md="3" md-cols-sm="2" md-gutter="20px" md-row-height="300px">
+        <md-grid-tile data-ng-repeat="material in materials">
+          <figure data-dop-material-box material="material"></figure>
+        </md-grid-tile>
+      </md-grid-list>
+
+      <!-- Showmore -->
+      <!-- ////////////////////////- -->
+      <div layout="row" layout-align="end center">
+        <md-button class="md-primary">
+          <ng-md-icon icon="arrow_forward"></ng-md-icon>Veel
+        </md-button>
+      </div>
     </div>
-</div>
+
+    <div flex="25" flex-sm="100" class="md-padding" role="sidebar">
+      <aside layout="column" class="sidebar">
+        <h2 class="md-headline" data-ng-if="myProfile" data-translate="MYPROFILE_PAGE_TITLE_MY_DATA"></h2>
+
+        <p data-ng-if="myProfile">
+          <strong>{{user.name}} {{user.surname}}</strong><br />
+          Hugo Treffneri Gümnaasium
+        </p>
+
+        <h2 class="md-headline" data-ng-if="!myProfile">
+          {{user.name}} {{user.surname}}
+        </h2>
+        <p data-ng-if="!myProfile">
+            Hugo Treffneri Gümnaasium
+        </p>
+      </aside>
+    </div>
+  </article>
+</section>
+
+<div data-dop-add-portfolio></div>

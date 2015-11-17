@@ -1,0 +1,25 @@
+$sidenav-default-width: 256px;
+$layout-breakpoint-md:  960px;
+
+md-sidenav.md-locked-open, md-sidenav.md-locked-open.md-closed, md-sidenav.md-locked-open.md-closed.md-sidenav-left, md-sidenav.md-locked-open.md-closed, md-sidenav.md-locked-open.md-closed.md-sidenav-right, md-sidenav.md-locked-open-remove.md-closed {
+   position: absolute;
+   left: 0;
+   top: 0;
+   width: $sidenav-default-width;
+   min-width: $sidenav-default-width;
+   max-width: $sidenav-default-width;
+}
+
+.content-wrap {
+  margin-left: 0;
+  @media (min-width: $layout-breakpoint-md) {
+    margin-left: $sidenav-default-width;
+  }
+}
+
+md-sidenav {
+  h6 {
+    margin-left: 20px;
+    margin-right: 20px;
+  }
+}

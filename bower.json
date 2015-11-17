@@ -1,46 +1,22 @@
 {
-  "name": "dop",
-  "version": "0",
-  "authors": [
-    "silvermuru <silx99@gmail.com>",
-    "rasmuslelumees <rasmus.lelumees@netgroup.ee>"
-  ],
-  "description": "project",
-  "main": "index.html",
-  "license": "MIT",
-  "ignore": [
-    "**/.*",
-    "node_modules",
-    "bower_components",
-    "test",
-    "tests"
-  ],
+  "name": "ranits",
+  "version": "0.0.0",
   "dependencies": {
-    "requirejs": "2.1.17",
     "angular": "1.4.3",
-    "angular-route": "1.4.3",
-    "bootstrap-sass": "3.3.5",
-    "shufflejs": "3.1.1",
-    "angular-translate": "2.7.2",
-    "angular-translate-loader-url": "2.7.2",
-    "angular-click-outside": "1.1.0",
-    "angular-youtube-mb": "1.0.2",
-    "jsog": "1.0.7",
-    "angular-resource": "1.4.3",
-    "ui-select": "https://github.com/angular-ui/ui-select.git#0.12.1",
-    "angular-sanitize": "1.4.3",
-    "bootstrap-sidebar": "https://github.com/asyraf9/bootstrap-sidebar.git#0.2.2",
-    "angular-screenfull": "https://github.com/hrajchert/angular-screenfull.git#~0.1.0",
-    "awesome-bootstrap-checkbox": "~0.3.5",
-    "bootstrap-switch": "~3.3.2",
-    "angular-bootstrap-switch": "~0.4.1",
-    "angularjs-slider": "~1.0.0",
-    "angular-material": "0.11.4",
     "angular-animate": "1.4.3",
     "angular-aria": "1.4.3",
-    "angular-material-icons": "0.6.0"
+    "angular-click-outside": "1.1.0",
+    "angular-material": "~0.11.4",
+    "angular-material-icons": "~0.6.0",
+    "angular-resource": "1.4.3",
+    "angular-route": "1.4.3",
+    "angular-translate": "2.7.2",
+    "angular-translate-loader-url": "2.7.2",
+    "angular-youtube-mb": "1.0.2",
+    "jquery": "~2.1.4",
+    "material-design-icons": "~2.0.0",
+    "requirejs": "2.1.17"
   },
-  "resolutions": {
-    "angular": "1.4.3"
-  }
+  "appPath": "app",
+  "moduleName": "ranitsApp"
 }

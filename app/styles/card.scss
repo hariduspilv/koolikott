@@ -1,0 +1,97 @@
+// Card
+$green1: #00838f;
+$green2: #00695c;
+$green3: #43a047;
+
+md-card {
+  width: 100%;
+  max-width: 100%;
+  min-width: 100%;
+  min-height: 100%;
+}
+
+md-card.card-lg .card-cover {
+  height: 300px;
+  overflow: hidden;
+  position: relative;
+}
+
+md-card.card-sm {
+  transition: all 0.5s;
+  md-icon.icon-kind {
+    font-size: 48px;
+    color: #fff;
+  }
+  &:hover {
+    background-color: #eee;
+    cursor: pointer;
+    .card-hover {
+      opacity: 1;
+      md-icon {
+        color: rgba(255,255,255, 1);
+      }
+    }
+  }
+  .card-cover {
+    height: 150px;
+    overflow: hidden;
+    position: relative;
+    transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+    &.book {
+      background-color: $green1;
+    }
+    &.videocam {
+      background-color: $green2;
+    }
+    &.audiotrack {
+      background-color: $green3;
+    }
+  }
+  .card-hover {
+    position: absolute;
+    background-color: rgba(0,0,0, 0.7);
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    opacity: 0;
+    .pick {
+      position: absolute;
+      padding: 10px;
+      right: 0;
+      transition: display 1s cubic-bezier(0.25, 0.8, 0.25, 1);
+      .checked {
+        display: none;
+      }
+
+      &:hover {
+        .checked {
+          display: block;
+        }
+        .unchecked {
+          display: none;
+        }
+      }
+    }
+    md-icon.icon-kind {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      font-size: 48px;
+      color: rgba(255,255,255, 0.6);
+    }
+  }
+  md-card-footer {
+    padding: 0;
+
+    .md-actions {
+      padding: 10px 15px;
+      md-icon {
+        color: rgba (0,0,0, 0.7);
+        font-size: inherit;
+      }
+    }
+  }
+}

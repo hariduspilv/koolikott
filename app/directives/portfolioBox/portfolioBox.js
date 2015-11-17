@@ -6,11 +6,12 @@ define(['app'], function(app)
 			scope: {
 				portfolio: '='
 			},
-			templateUrl: 'app/directives/portfolioBox/portfolioBox.html',
+			templateUrl: 'directives/portfolioBox/portfolioBox.html',
 			controller: function ($scope, $location, $rootScope) {
-
-				$scope.savePortfolio = function(portfolio) {
+                $scope.navigateTo = function(portfolio) {
 					$rootScope.savedPortfolio = portfolio;
+
+                    $location.path('/portfolio').search({id:  portfolio.id});
 				}
 
 				$scope.formatName = function(name) {

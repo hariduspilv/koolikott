@@ -1,27 +1,31 @@
-<div class="main">
-    <div class="container">
-        <div class="row">
-            <div class="col-md-9">
-                <div class="row row-material">
-                    <h4 class="clearfix" data-translate="LANDING_PAGE_TITLE_NEWEST"></h4>
-                    <div class="material-taping">
-                        <div class="scroll">
-                            <div data-ng-repeat="material in materials" class="col-md-3 col-sm-4 col-xs-12 col-ms-6">
-                                <div data-dop-material-box material="material"></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div class="sidebar-module">
-                    <h4>eKoolikott</h4>
-                    <ul class="list-unstyled">
-                        <li><a data-translate="ABOUT_PAGE_LINK_TITLE" href="#/about"></a></li>
-                        <li><a data-translate="HELP_PAGE_LINK_TITLE" href="#/help"></a></li>
-                    </ul>
-                </div>
-            </div>
-        </div>
+<div id="navmenu" data-dop-header></div>
+
+<section layout="row" layout-align="center start" ng-cloak>
+  <!-- Middle content -->
+  <!-- ////////////////////////- -->
+  <article layout="row" layout-sm="column" flex flex-gt-md="80">
+    <div layout="column" flex="75" flex-sm="100" class="md-padding" role="main">
+      <h2 class="md-headline" data-translate="LANDING_PAGE_TITLE_NEWEST"></h2>
+
+      <!-- Cards -->
+      <!-- ////////////////////////- -->
+      <md-grid-list md-cols-gt-md="4" md-cols-md="3" md-cols-sm="2" md-gutter="20px" md-row-height="300px">
+        <md-grid-tile data-ng-repeat="material in materials">
+          <figure data-dop-material-box material="material"></figure>
+        </md-grid-tile>
+      </md-grid-list>
+
+      <!-- Showmore -->
+      <!-- ////////////////////////- -->
+      <div layout="row" layout-align="end center">
+        <md-button class="md-primary">
+          <ng-md-icon icon="arrow_forward"></ng-md-icon>Veel
+        </md-button>
+      </div>
     </div>
-</div>
+
+    <div data-dop-sidebar flex="25" flex-sm="100" class="md-padding" role="sidebar"></div>
+  </article>
+</section>
+
+<div data-add-portfolio-fab-button></div>

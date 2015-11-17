@@ -1,17 +1,17 @@
 define(['app'], function(app)
-{    
-    app.directive('dopDetailedSearch', [ '$location', 'searchService', 'translationService', '$filter', 
+{
+    app.directive('dopDetailedSearch', [ '$location', 'searchService', 'translationService', '$filter',
      function($location, searchService, translationService, $filter) {
         return {
             scope: {
                 queryIn: '=',
                 queryOut: '='
             },
-            templateUrl: 'app/directives/detailedSearch/detailedSearch.html',
+            templateUrl: 'directives/detailedSearch/detailedSearch.html',
             controller: function ($scope) {
 
                 init();
-                
+
                 function init() {
 
                     // Test data
@@ -26,9 +26,10 @@ define(['app'], function(app)
 
                     // Detailed search fields
                     $scope.detailedSearch = {};
-                    
+
                     // Educational context
                     var validEducationalContexts = ['preschooleducation', 'basiceducation', 'secondaryeducation', 'vocationaleducation'];
+                    var defaultEducationalContext = 'preschooleducation';
 
                     if (searchService.getEducationalContext() && validEducationalContexts.indexOf(searchService.getEducationalContext()) > -1) {
                         $scope.detailedSearch.educationalContext = searchService.getEducationalContext();
@@ -38,21 +39,24 @@ define(['app'], function(app)
                     if (searchService.isPaid() && (searchService.isPaid() === 'true' || searchService.isPaid() === 'false')) {
                         $scope.detailedSearch.paid = searchService.isPaid();
                     } else {
-                        $scope.detailedSearch.paid = 'true';
+                        $scope.detailedSearch.paid = true;
                     }
 
                     // Type
-                    $scope.detailedSearch.type = 'all';
-                    
-                    if (searchService.getType() && searchService.isValidType(searchService.getType())) {
-                        $scope.detailedSearch.type = searchService.getType();
+                    $scope.detailedSearch.type = '';
+                    if (searchService.getType()) {
+                        if (searchService.getType() === 'material') {
+                            $scope.detailedSearch.type = 'material'
+                        } else if (searchService.getType() === 'portfolio') {
+                            $scope.detailedSearch.type = 'portfolio';
+                        }
                     }
 
                 }
 
                 $scope.search = function() {
                     searchService.setSearch(createSimpleSearchQuery());
-                    
+
                     searchService.setPaid($scope.detailedSearch.paid);
                     searchService.setType($scope.detailedSearch.type);
                     searchService.setEducationalContext($scope.detailedSearch.educationalContext);
@@ -86,7 +90,7 @@ define(['app'], function(app)
                     } else {
                         query = textFields;
                     }
-                    
+
                     return query.trim();
                 }
 
@@ -97,9 +101,9 @@ define(['app'], function(app)
                     $scope.detailedSearch.author = '';
 
                     if (query) {
-                        var titleRegex = /(^|\s)(title:([^\s\"]\S*)|title:\"(.*?)\"|title:)/g;
-                        var descriptionRegex = /(^|\s)(description:([^\s\"]\S*)|description:\"(.*?)\"|description:|summary:([^\s\"]\S*)|summary:\"(.*?)\"|summary:)/g;
-                        var authorRegex = /(^|\s)(author:([^\s\"]\S*)|author:\"(.*?)\"|author:)/g;
+                        var titleRegex = /(title:\"(.*?)\"|title:([^\s]+?)(\s|$))/g;
+                        var descriptionRegex = /(description:\"(.*?)\"|description:([^\s]+?)(\s|$)|summary:\"(.*?)\"|summary:([^\s]+?)(\s|$))/g;
+                        var authorRegex = /(author:\"(.*?)\"|author:([^\s]+?)(\s|$))/g;
 
                         var firstTitle;
                         var firstDescription;
@@ -108,25 +112,25 @@ define(['app'], function(app)
 
                         while(title = titleRegex.exec(query)) {
                             // Remove token from main query
-                            main = main.replace(title[2], '');
+                            main = main.replace(title[1], '');
 
                             if (!firstTitle) {
                                 // Get token content
-                                firstTitle = title[3] || title[4];
+                                firstTitle = title[2] || title[3];
                             }
                         }
 
                         while(description = descriptionRegex.exec(query)) {
-                            main = main.replace(description[2], '');
+                            main = main.replace(description[1], '');
                             if (!firstDescription) {
-                                firstDescription = description[3] || description[4] || description[5] || description[6];
+                                firstDescription = description[2] || description[3] || description[5] || description[6];
                             }
                         }
 
                         while(author = authorRegex.exec(query)) {
-                            main = main.replace(author[2], '');
+                            main = main.replace(author[1], '');
                             if (!firstAuthor) {
-                                firstAuthor = author[3] || author[4];
+                                firstAuthor = author[2] || author[3];
                             }
                         }
 
@@ -169,7 +173,7 @@ define(['app'], function(app)
             return items;
         }
     });
-    
+
     app.filter('translatableItemFilter', function($filter) {
         return function(items, query, translationPrefix) {
             var out = [];
@@ -211,11 +215,11 @@ define(['app'], function(app)
                     items[i].translation = null;
                 }
 
-            } 
+            }
 
             return items;
         }
     });
-    
+
     return app;
 });

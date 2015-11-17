@@ -1,0 +1,79 @@
+<md-toolbar class="md-accent" ng-show="!showSearch">
+  <div layout-align="start start" layout="row" layout-sm="column">
+    <div class="md-toolbar-tools" flex="100" flex-gt-sm="90">
+      <md-button class="md-icon-button" ng-click="toggleSidenav()" hide-gt-md aria-label="Menu">
+        <md-icon>menu</md-icon>
+      </md-button>
+
+      <md-button aria-label="Search" class="md-icon-button" ng-click="showSearch = !showSearch">
+        <ng-md-icon icon="search"></ng-md-icon>
+      </md-button>
+      <md-input-container md-theme="input" flex>
+        <label>&nbsp;</label>
+        <input ng-click="showSearch = !showSearch">
+      </md-input-container>
+      <md-button aria-label="Open Settings" class="md-icon-button" ng-click="showFilter = showSearch = !showFilter" >
+        <ng-md-icon icon="filter_list"></ng-md-icon>
+      </md-button>
+      <md-menu>
+        <md-button aria-label="Share" class="md-icon-button" ng-click="$mdOpenMenu($event)">
+          <md-icon>visibility</md-icon>
+        </md-button>
+        <md-menu-content width="4">
+          <md-menu-item>
+            <md-button >
+              <md-icon >link</md-icon> Saada link
+            </md-button>
+          </md-menu-item>
+          <md-menu-divider></md-menu-divider>
+          <md-menu-item>
+            <md-button>
+              <span><md-icon >visibility</md-icon> Avaldatud </span><span class="md-alt-text"><md-icon>check</md-icon></span>
+            </md-button>
+          </md-menu-item>
+          <md-menu-divider></md-menu-divider>
+          <md-menu-item>
+            <md-button>
+              <md-icon >visibility_off</md-icon> Avalda
+            </md-button>
+          </md-menu-item>
+        </md-menu-content>
+      </md-menu>
+      <md-button ng-href="./#/" class="md-icon-button" aria-label="close">
+        <md-icon>close</md-icon>
+      </md-button>
+    </div>
+  </div>
+</md-toolbar>
+
+<div class="md-toolbar-expandable" ng-show="showSearch">
+  <md-toolbar class="md-hue-1">
+    <div layout-align="start start" layout="row" layout-sm="column">
+      <div class="md-toolbar-tools" flex="100" flex-gt-sm="90">
+        <md-button aria-label="Search" ng-click="showSearch = !showSearch" class="md-icon-button">
+          <ng-md-icon icon="search"></ng-md-icon>
+        </md-button>
+        <md-input-container md-theme="input" flex>
+          <label>&nbsp;</label>
+          <input ng-model="search.who" placeholder="Otsi">
+        </md-input-container>
+
+        <md-button aria-label="Open Settings" class="md-icon-button" ng-click="showFilter = !showFilter">
+          <ng-md-icon icon="filter_list"></ng-md-icon>
+        </md-button>
+
+        <md-button ng-click="showSearch = showFilter = !showSearch" aria-label="Back" class="md-icon-button">
+          <ng-md-icon icon="close"></ng-md-icon>
+        </md-button>
+      </div>
+    </div>
+  </md-toolbar>
+
+  <div class="md-toolbar-filter" id="detailedSearch" ng-show="showFilter">
+   <form layout-align="start start" layout="row" layout-sm="column">
+      <div flex="100" flex-gt-md="90">
+        <div data-dop-detailed-search query-in="detailedSearch.queryIn" query-out="detailedSearch.queryOut"></div>
+      </div>
+    </form>
+  </div>
+</div>

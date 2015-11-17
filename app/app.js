@@ -1,6 +1,12 @@
-define(['routes','services/dependencyResolver'], function(config, dependencyResolver)
+define(['app.routes', 'services/dependencyResolver'], function(config, dependencyResolver)
 {
-    var app = angular.module('app', ['ngMaterial', 'ngRoute', 'pascalprecht.translate', 'mouse.utils', 'youtube-embed', 'ngResource', 'ngSanitize', 'ui.select', 'angularScreenfull', 'frapontillo.bootstrap-switch', 'ngMdIcons']);
+    var app = angular.module('app', [
+      'ngRoute',
+      'ngMaterial',
+      'ngMdIcons',
+      'pascalprecht.translate',
+      'youtube-embed'
+    ]);
 
     app.config(
     [
@@ -12,14 +18,15 @@ define(['routes','services/dependencyResolver'], function(config, dependencyReso
         '$provide',
         '$translateProvider',
         '$sceProvider',
+        '$mdThemingProvider',
 
-        function($routeProvider, $locationProvider, $controllerProvider, $compileProvider, $filterProvider, $provide, $translateProvider, $sceProvider)
+        function($routeProvider, $locationProvider, $controllerProvider, $compileProvider, $filterProvider, $provide, $translateProvider, $sceProvider, $mdThemingProvider)
         {
             app.controller = $controllerProvider.register;
             app.directive  = $compileProvider.directive;
             app.filter     = $filterProvider.register;
             app.factory    = $provide.factory;
-            app.service    = $provide.service;   
+            app.service    = $provide.service;
 
             if(config.routes !== undefined)
             {
@@ -35,18 +42,18 @@ define(['routes','services/dependencyResolver'], function(config, dependencyReso
             }
 
             configureTranslationService($translateProvider);
-
+            configureTheme($mdThemingProvider)
             $sceProvider.enabled(false);
         }
     ]);
-    
-    function configureTranslationService($translateProvider) {    	  
+
+    function configureTranslationService($translateProvider) {
     	$translateProvider.useUrlLoader('rest/translation');
         var language = localStorage.getItem("userPreferredLanguage");
         if (!language) {
             language = 'est';
         }
-        
+
         $translateProvider.preferredLanguage(language);
         $translateProvider.useSanitizeValueStrategy('escaped');
     }
@@ -55,11 +62,31 @@ define(['routes','services/dependencyResolver'], function(config, dependencyReso
         return getServicesAndUtilsDependencies().concat(dependencies);
     }
 
-    function getServicesAndUtilsDependencies() { 
+    function getServicesAndUtilsDependencies() {
         return [
             'utils/commons'
         ];
     }
-    
+
+    function configureTheme($mdThemingProvider) {
+        var customBlueMap = $mdThemingProvider.extendPalette('light-blue', {
+          'contrastDefaultColor': 'light',
+          'contrastDarkColors': ['50'],
+          '50': 'ffffff'
+        });
+
+        $mdThemingProvider.definePalette('customBlue', customBlueMap);
+        $mdThemingProvider.theme('default')
+        .primaryPalette('customBlue', {
+          'default': '500',
+          'hue-1': '50'
+        })
+        .accentPalette('purple',  {
+          'default': '500'
+        });
+
+        $mdThemingProvider.theme('input', 'default').primaryPalette('grey');
+    }
+
    return app;
 });
