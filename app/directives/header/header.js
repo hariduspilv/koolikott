@@ -18,36 +18,14 @@ define(['app'], function(app)
             templateUrl: 'directives/header/header.html',
             controller: function ($scope, $location, authenticationService, authenticatedUserService) {
                 $scope.showLanguageSelection = false;
-                $scope.showSearchBox = false;
                 $scope.selectedLanguage = translationService.getLanguage();
                 $scope.searchFields = {};
                 $scope.searchFields.searchQuery = searchService.getQuery();
                 $scope.detailedSearch = {};
 
-                $scope.languageSelectClick = function() {
-                    $scope.showLanguageSelection = !$scope.showLanguageSelection;
-                };
-
-                $scope.showSearchBoxClick = function() {
-                    $scope.showSearchBox = !$scope.showSearchBox;
-                    jQuery('<div class="modal-backdrop fade in hidden-md hidden-lg"></div>').appendTo(document.body);
-                };
-
-                $scope.closeLanguageSelection = function () {
-                    $scope.$apply(function() {
-                        $scope.showLanguageSelection = false;
-                    });
-                };
-
-                $scope.closeSearchBox = function () {
-                    $scope.showSearchBox = false;
-                    jQuery('.modal-backdrop').fadeOut();
-                };
-
                 $scope.setLanguage = function(language) {
                     translationService.setLanguage(language);
                     $scope.selectedLanguage = language;
-                    $scope.showLanguageSelection = false;
                 };
 
                 $scope.search = function() {
@@ -61,20 +39,7 @@ define(['app'], function(app)
 
                 $scope.logout = function() {
                     authenticationService.logout();
-                    $('#userMenu').dropdown('toggle');
                     $location.url('/');
-                };
-
-                $scope.detailedSearchButtonClicked = function() {
-                    // Timeout is used to not register clicks while detailed search box is collapsing/expanding
-                    if (!$scope.detailedSearch.isToggling) {
-                        $scope.detailedSearch.isToggling = true;
-                        $timeout(function() {
-                            $scope.detailedSearch.isVisible = !$scope.detailedSearch.isVisible;
-                            $scope.detailedSearch.isToggling = false;
-                            toggleSearchQuery();
-                        }, 350);
-                    }
                 };
 
                 $scope.showLogin = function(ev) {
@@ -85,10 +50,12 @@ define(['app'], function(app)
                   	})
                 };
 
-                function toggleSearchQuery() {
+                $scope.toggleDetailSearch = function() {
+                    $scope.showSearch = true;
+                    $scope.detailedSearch.isVisible = !$scope.detailedSearch.isVisible;
+
                     if ($scope.detailedSearch.isVisible) {
                         $scope.detailedSearch.queryIn = $scope.searchFields.searchQuery;
-                        $scope.searchFields.searchQuery = null;
                     } else {
                         $scope.searchFields.searchQuery = $scope.detailedSearch.queryOut;
                         $scope.detailedSearch.queryIn = null;

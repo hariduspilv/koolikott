@@ -12,7 +12,7 @@
         <md-input-container class="md-padding" hide show-gt-md flex>
           <input ng-click="showSearch = !showSearch">
         </md-input-container>
-        <md-button aria-label="Open Settings" class="md-icon-button" ng-click="showFilter = showSearch = !showFilter" >
+        <md-button aria-label="Open Settings" class="md-icon-button" ng-click="toggleDetailSearch()" >
           <ng-md-icon icon="filter_list"></ng-md-icon>
         </md-button>
       </div>
@@ -78,19 +78,19 @@
     <div layout="row" layout-align="center center">
       <div flex-gt-md="80" flex="100">
         <div class="md-toolbar-tools" layout="row" layout-align="center center">
-          <md-button aria-label="Search" data-ng-click="search()" class="md-icon-button">
+          <md-button aria-label="Search" data-ng-click="search()" class="md-icon-button" data-ng-disabled="detailedSearch.isVisible">
             <ng-md-icon icon="search"></ng-md-icon>
           </md-button>
 
           <md-input-container class="md-padding" flex>
             <label hidden="hidden">&nbsp;</label>
-            <input data-ng-keydown="$event.which === 13 && search()" data-ng-model="searchFields.searchQuery" placeholder="{{'SEARCH' | translate}}" data-ng-disabled="detailedSearch.isVisible"  />
+            <input data-ng-keydown="$event.which === 13 && search()" data-ng-model="searchFields.searchQuery" placeholder="{{'SEARCH' | translate}}" data-ng-disabled="detailedSearch.isVisible" />
           </md-input-container>
 
-          <md-button aria-label="Open Settings" class="md-icon-button" ng-click="showFilter = !showFilter" >
+          <md-button aria-label="Open Settings" class="md-icon-button" ng-click="toggleDetailSearch()" >
             <ng-md-icon icon="filter_list"></ng-md-icon>
           </md-button>
-          <md-button ng-click="showSearch = showFilter = !showSearch" aria-label="Back" class="md-icon-button">
+          <md-button ng-click="showSearch = detailedSearch.isVisible = !showSearch" aria-label="Back" class="md-icon-button">
             <ng-md-icon icon="close"></ng-md-icon>
           </md-button>
         </div>
@@ -98,7 +98,7 @@
     </div>
   </md-toolbar>
 
-  <div class="md-toolbar-filter" id="detailedSearch" ng-show="showFilter">
+  <div class="md-toolbar-filter" id="detailedSearch" ng-show="detailedSearch.isVisible">
    <form layout-align="center start" layout="row" layout-sm="column">
       <div flex="100" flex-gt-md="80">
         <div data-dop-detailed-search query-in="detailedSearch.queryIn" query-out="detailedSearch.queryOut"></div>
