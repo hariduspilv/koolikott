@@ -32,8 +32,6 @@ define(['app'], function(app)
 
             $scope.portfolio = {
             	educationalContext: null,
-				educationLevelId: 0,
-				educationsLevels: [],
                 fieldId: 0,
 				fields: [],
 				topicId: 0,
