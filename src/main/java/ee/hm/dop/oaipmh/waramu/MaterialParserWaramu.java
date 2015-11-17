@@ -34,13 +34,10 @@ import ee.hm.dop.service.LanguageService;
 import ee.hm.dop.service.ResourceTypeService;
 import ee.hm.dop.service.TagService;
 import ee.hm.dop.service.TaxonService;
-import ee.hm.dop.utils.ParserUtils;
-import ezvcard.Ezvcard;
-import ezvcard.VCard;
 
 public class MaterialParserWaramu extends MaterialParser {
 
-    private static final String[] SCHEMES = { "http", "https" };
+    private static final String[] SCHEMES = {"http", "https"};
     public static final String WEB_PAGE = "WEBPAGE";
     public static final String WEBSITE = "WEBSITE";
     public static final String COMPULSORY_EDUCATION = "COMPULSORYEDUCATION";
@@ -79,20 +76,6 @@ public class MaterialParserWaramu extends MaterialParser {
         setDescriptions(material, lom);
 
     }
-            Element lom = (Element) doc.getElementsByTagName("lom").item(0);
-            setTitle(material, lom);
-            setMaterialLanguage(material, lom);
-            setDescriptions(material, lom);
-            setSource(material, lom);
-            setTags(material, lom);
-            setLearningResourceType(material, doc);
-            setTaxon(material, doc);
-            setAuthors(material, doc);
-        } catch (RuntimeException e) {
-            logger.error("Unexpected error while parsing document. Document may not"
-                    + " match Waramu mapping or XML structure.", e);
-            throw new ParseException(e);
-        }
 
     @Override
     protected void setLanguage(Material material, Document doc) {
@@ -117,19 +100,17 @@ public class MaterialParserWaramu extends MaterialParser {
         try {
             authors = getAuthors(doc);
         } catch (Exception e) {
-            // ignore if there is no educational context for a material
+            //ignore if there is no educational context for a material
         }
         material.setAuthors(authors);
     }
 
-    private void setTaxon(Material material, Document doc) {
+    protected void setTaxon(Material material, Document doc) {
         List<Taxon> taxons = null;
-    protected void setEducationalContext(Material material, Document doc) {
-        List<EducationalContext> educationalContexts = null;
         try {
             taxons = getTaxons(doc);
         } catch (Exception e) {
-            // ignore if there is no educational context for a material
+            //ignore if there is no educational context for a material
         }
         material.setTaxons(taxons);
     }
@@ -139,7 +120,7 @@ public class MaterialParserWaramu extends MaterialParser {
         try {
             resourceTypes = getResourceTypes(doc);
         } catch (Exception e) {
-            // ignore if there is no resource type for a material
+            //ignore if there is no resource type for a material
         }
         material.setResourceTypes(resourceTypes);
     }
@@ -194,16 +175,14 @@ public class MaterialParserWaramu extends MaterialParser {
 
         XPathFactory xPathfactory = XPathFactory.newInstance();
         XPath xpath = xPathfactory.newXPath();
-        XPathExpression expr = xpath
-                .compile("//*[local-name()='lom']/*[local-name()='educational']/*[local-name()='learningResourceType']");
+        XPathExpression expr = xpath.compile("//*[local-name()='lom']/*[local-name()='educational']/*[local-name()='learningResourceType']");
         NodeList nl = (NodeList) expr.evaluate(doc, XPathConstants.NODESET);
 
         for (int i = 0; i < nl.getLength(); i++) {
             Element e = (Element) nl.item(i);
-            String type = e.getElementsByTagName("value").item(0).getFirstChild().getTextContent().trim().toUpperCase()
-                    .replaceAll("\\s", "");
+            String type = e.getElementsByTagName("value").item(0).getFirstChild().getTextContent().trim().toUpperCase().replaceAll("\\s", "");
 
-            // The only special case where waramu and est-core are different
+            //The only special case where waramu and est-core are different
             if (type.equals(WEB_PAGE)) {
                 type = WEBSITE;
             }
@@ -222,7 +201,7 @@ public class MaterialParserWaramu extends MaterialParser {
 
         addEducationalContexts(doc, taxons);
 
-        return new ArrayList<Taxon>(taxons);
+        return new ArrayList<>(taxons);
     }
 
     private void addEducationalContexts(Document doc, Set<Taxon> taxons) throws XPathExpressionException {

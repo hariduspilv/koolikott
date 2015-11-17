@@ -153,7 +153,7 @@ public class MaterialParserTest {
         }
 
         @Override
-        protected void setEducationalContext(Material material, Document doc) {
+        protected void setTaxon(Material material, Document doc) {
 
         }
 

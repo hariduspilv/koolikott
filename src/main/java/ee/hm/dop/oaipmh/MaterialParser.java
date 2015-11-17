@@ -41,7 +41,7 @@ public abstract class MaterialParser {
             setSource(material, doc);
             setTags(material, doc);
             setLearningResourceType(material, doc);
-            setEducationalContext(material, doc);
+            setTaxon(material, doc);
             setAuthors(material, doc);
         } catch (RuntimeException e) {
             logger.error("Unexpected error while parsing document. Document may not"
@@ -114,7 +114,7 @@ public abstract class MaterialParser {
 
     protected abstract void setAuthors(Material material, Document doc);
 
-    protected abstract void setEducationalContext(Material material, Document doc);
+    protected abstract void setTaxon(Material material, Document doc);
 
     protected abstract void setLearningResourceType(Material material, Document doc);
 

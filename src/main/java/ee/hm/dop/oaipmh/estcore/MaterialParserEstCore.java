@@ -56,7 +56,7 @@ public class MaterialParserEstCore extends MaterialParser {
     }
 
     @Override
-    protected void setEducationalContext(Material material, Document doc) {
+    protected void setTaxon(Material material, Document doc) {
 
     }
 

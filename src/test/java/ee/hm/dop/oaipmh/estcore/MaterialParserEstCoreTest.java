@@ -56,7 +56,6 @@ public class MaterialParserEstCoreTest {
         materialParser.parse(document);
     }
 
-
     @Test
     public void parse() throws Exception {
 
@@ -85,7 +84,6 @@ public class MaterialParserEstCoreTest {
         expect(languageService.getLanguage("et")).andReturn(estonian);
         expect(authorService.getAuthorByFullName(author1.getName(), author1.getSurname())).andReturn(author1);
         expect(authorService.getAuthorByFullName(author2.getName(), author2.getSurname())).andReturn(author2);
-
 
         LanguageString title1 = new LanguageString();
         title1.setLanguage(english);
