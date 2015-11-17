@@ -12,7 +12,7 @@ module.exports = function (grunt) {
   var appConfig = {
     app: require('./bower.json').appPath || 'app',
     dist: {
-      app: 'dist/app',
+      app: 'dist/dop',
       folder: 'dist'
     }
   };
@@ -402,7 +402,7 @@ module.exports = function (grunt) {
         },
         expand: true,
         cwd: '<%= yeoman.dist.folder %>/',
-        src: ['app/**/*']
+        src: ['dop/**/*']
       },
       live: {
         options: {
@@ -412,8 +412,8 @@ module.exports = function (grunt) {
         expand: true,
         cwd: '<%= yeoman.dist.folder %>/',
         src: [
-          'app/**/*',
-          '!app/views/dev/**'
+          'dop/**/*',
+          '!dop/views/dev/**'
         ]
       },
     },
