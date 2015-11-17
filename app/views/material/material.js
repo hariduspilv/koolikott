@@ -40,6 +40,11 @@ define(['app'], function(app)
     	
     	function init() {
             setSourceType();
+            
+            if ($scope.material.taxons) {
+            	preprocessMaterialSubjects();
+            	preprocessMaterialEducationalContexts();
+            }
 
             if($scope.material.embeddable && $scope.sourceType === 'LINK') {
                 if (authenticatedUserService.isAuthenticated()) {
@@ -55,6 +60,32 @@ define(['app'], function(app)
             };
             serverCallService.makePost("rest/material/increaseViewCount", params, countViewSuccess, countViewFail); 
     	}
+    	
+    	function preprocessMaterialSubjects() {
+    		$scope.material.subjects = [];
+    		
+    		for (var i = 0, j = 0; i < $scope.material.taxons.length; i++) {
+    			var taxon = $scope.material.taxons[i];
+    			var subject = $rootScope.taxonUtils.getSubject(taxon);
+    			
+    			if (subject) {
+    				$scope.material.subjects[j++] = subject;
+    			}
+    		}
+		}
+    	
+    	function preprocessMaterialEducationalContexts() {
+    		$scope.material.educationalContexts = [];
+    		
+    		for (var i = 0, j = 0; i < $scope.material.taxons.length; i++) {
+    			var taxon = $scope.material.taxons[i];
+    			var educationalContext = $rootScope.taxonUtils.getEducationalContext(taxon);
+    			
+    			if (educationalContext) {
+    				$scope.material.educationalContexts[j++] = educationalContext;
+    			}
+    		}
+		}
 
         function countViewSuccess(data) { }
         

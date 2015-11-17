@@ -1,3 +1,5 @@
+"use strict";
+
 define(['routes','services/dependencyResolver'], function(config, dependencyResolver)
 {
     var app = angular.module('app', ['ngMaterial', 'ngRoute', 'pascalprecht.translate', 'mouse.utils', 'youtube-embed', 'ngResource', 'ngSanitize', 'ui.select', 'angularScreenfull', 'frapontillo.bootstrap-switch', 'ngMdIcons']);
@@ -60,6 +62,37 @@ define(['routes','services/dependencyResolver'], function(config, dependencyReso
             'utils/commons'
         ];
     }
+    
+    app.run(function($rootScope) {
+    	class TaxonUtils {
+
+    		getEducationalContext(taxon) {
+    			if (!taxon) {
+    				return;
+    			}
+    			
+    			if (taxon.level === '.EducationalContext') {
+    				return taxon;
+    			}
+    			
+    			if (taxon.level === '.Domain') {
+    				return this.getEducationalContext(taxon.educationalContext);
+    			}
+    			
+    			if (taxon.level === '.Subject') {
+    				return this.getEducationalContext(taxon.domain);
+    			}
+    		}
+    		
+    		getSubject(taxon) {
+    			if (taxon && taxon.level === '.Subject') {
+    				return taxon;
+    			}
+    		}
+    	}
+    	
+    	$rootScope.taxonUtils = new TaxonUtils();
+	});
     
    return app;
 });
