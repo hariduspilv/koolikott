@@ -26,10 +26,12 @@ import ee.hm.dop.model.Author;
 import ee.hm.dop.model.Language;
 import ee.hm.dop.model.LanguageString;
 import ee.hm.dop.model.Material;
+import ee.hm.dop.model.ResourceType;
 import ee.hm.dop.model.Tag;
 import ee.hm.dop.oaipmh.ParseException;
 import ee.hm.dop.service.AuthorService;
 import ee.hm.dop.service.LanguageService;
+import ee.hm.dop.service.ResourceTypeService;
 import ee.hm.dop.service.TagService;
 
 /**
@@ -49,6 +51,9 @@ public class MaterialParserEstCoreTest {
 
     @Mock
     private TagService tagService;
+
+    @Mock
+    private ResourceTypeService resourceTypeService;
 
     @Test(expected = ee.hm.dop.oaipmh.ParseException.class)
     public void parseXMLisNull() throws ParseException {
@@ -99,6 +104,13 @@ public class MaterialParserEstCoreTest {
         tag2.setId(326L);
         tag2.setName("tag2");
 
+        ResourceType resourceType1 = new ResourceType();
+        resourceType1.setId(448L);
+        resourceType1.setName("AUDIO");
+
+        ResourceType resourceType2 = new ResourceType();
+        resourceType2.setId(559L);
+        resourceType2.setName("VIDEO");
 
         expect(languageService.getLanguage("en")).andReturn(english).times(3);
         expect(languageService.getLanguage("et")).andReturn(estonian).times(2);
@@ -106,6 +118,8 @@ public class MaterialParserEstCoreTest {
         expect(authorService.getAuthorByFullName(author2.getName(), author2.getSurname())).andReturn(author2);
         expect(tagService.getTagByName(tag1.getName())).andReturn(tag1);
         expect(tagService.getTagByName(tag2.getName())).andReturn(tag2);
+        expect(resourceTypeService.getResourceTypeByName(resourceType1.getName())).andReturn(resourceType1);
+        expect(resourceTypeService.getResourceTypeByName(resourceType2.getName())).andReturn(resourceType2);
 
         LanguageString title1 = new LanguageString();
         title1.setLanguage(english);
@@ -131,12 +145,16 @@ public class MaterialParserEstCoreTest {
         tags.add(tag1);
         tags.add(tag2);
 
-        replay(languageService, authorService, tagService);
+        List<ResourceType> resourceTypes = new ArrayList<>();
+        resourceTypes.add(resourceType1);
+        resourceTypes.add(resourceType2);
+
+        replay(languageService, authorService, tagService, resourceTypeService);
 
         Document doc = dBuilder.parse(fXmlFile);
         Material material = materialParser.parse(doc);
 
-        verify(languageService, authorService, tagService);
+        verify(languageService, authorService, tagService, resourceTypeService);
 
         assertEquals(titles, material.getTitles());
         assertEquals("https://oxygen.netgroupdigital.com/rest/repoMaterialSource", material.getSource());
@@ -144,6 +162,7 @@ public class MaterialParserEstCoreTest {
         assertEquals(authors, material.getAuthors());
         assertEquals(descriptions, material.getDescriptions());
         assertEquals(tags, material.getTags());
+        assertEquals(resourceTypes, material.getResourceTypes());
     }
 
     private File getResourceAsFile(String resourcePath) throws URISyntaxException {

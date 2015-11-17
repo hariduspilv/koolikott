@@ -20,11 +20,13 @@ import ee.hm.dop.model.Author;
 import ee.hm.dop.model.Language;
 import ee.hm.dop.model.LanguageString;
 import ee.hm.dop.model.Material;
+import ee.hm.dop.model.ResourceType;
 import ee.hm.dop.model.Tag;
 import ee.hm.dop.oaipmh.MaterialParser;
 import ee.hm.dop.oaipmh.ParseException;
 import ee.hm.dop.service.AuthorService;
 import ee.hm.dop.service.LanguageService;
+import ee.hm.dop.service.ResourceTypeService;
 import ee.hm.dop.service.TagService;
 
 
@@ -44,6 +46,9 @@ public class MaterialParserEstCore extends MaterialParser {
 
     @Inject
     private TagService tagService;
+
+    @Inject
+    private ResourceTypeService resourceTypeService;
 
     private XPathFactory xPathfactory = XPathFactory.newInstance();
 
@@ -67,7 +72,14 @@ public class MaterialParserEstCore extends MaterialParser {
 
     @Override
     protected void setLearningResourceType(Material material, Document doc) {
-
+        List<ResourceType> resourceTypes = null;
+        String pathToResourceTypes = "//*[local-name()='estcore']/*[local-name()='educational']/*[local-name()='learningResourceType']";
+        try {
+            resourceTypes = getResourceTypes(doc, pathToResourceTypes, resourceTypeService);
+        } catch (Exception e) {
+            //ignore if there is no resource type for a material
+        }
+        material.setResourceTypes(resourceTypes);
     }
 
     @Override

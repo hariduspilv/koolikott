@@ -80,17 +80,9 @@
                     </technical>
                     <educational>
                         <learningResourceType>audio</learningResourceType>
-                        <learningResourceType>audio</learningResourceType>
+                        <learningResourceType>video</learningResourceType>
                         <context>preschoolEducation</context>
-                        <context>preschoolEducation</context>
-                        <typicalAgeRange>0-0</typicalAgeRange>
-                        <typicalAgeRange>0-0</typicalAgeRange>
-                    </educational>
-                    <educational>
-                        <learningResourceType>audio</learningResourceType>
-                        <learningResourceType>audio</learningResourceType>
-                        <context>preschoolEducation</context>
-                        <context>preschoolEducation</context>
+                        <context>basicEducation</context>
                         <typicalAgeRange>0-0</typicalAgeRange>
                         <typicalAgeRange>0-0</typicalAgeRange>
                     </educational>

@@ -3,6 +3,12 @@ package ee.hm.dop.oaipmh;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.xml.xpath.XPath;
+import javax.xml.xpath.XPathConstants;
+import javax.xml.xpath.XPathExpression;
+import javax.xml.xpath.XPathExpressionException;
+import javax.xml.xpath.XPathFactory;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.CharacterData;
@@ -15,9 +21,11 @@ import ee.hm.dop.model.Author;
 import ee.hm.dop.model.Language;
 import ee.hm.dop.model.LanguageString;
 import ee.hm.dop.model.Material;
+import ee.hm.dop.model.ResourceType;
 import ee.hm.dop.model.Tag;
 import ee.hm.dop.service.AuthorService;
 import ee.hm.dop.service.LanguageService;
+import ee.hm.dop.service.ResourceTypeService;
 import ee.hm.dop.service.TagService;
 import ezvcard.Ezvcard;
 import ezvcard.VCard;
@@ -25,7 +33,8 @@ import ezvcard.VCard;
 public abstract class MaterialParser {
 
     protected final Logger logger = LoggerFactory.getLogger(this.getClass());
-
+    public static final String WEB_PAGE = "WEBPAGE";
+    public static final String WEBSITE = "WEBSITE";
 
     public Material parse(Document doc) throws ParseException {
         Material material;
@@ -84,7 +93,7 @@ public abstract class MaterialParser {
 
         for (int i = 0; i < nodeList.getLength(); i++) {
             LanguageString languageString = new LanguageString();
-            Node currentNode =  nodeList.item(i);
+            Node currentNode = nodeList.item(i);
 
             String text = currentNode.getTextContent().trim();
             if (!text.isEmpty()) {
@@ -133,6 +142,42 @@ public abstract class MaterialParser {
             }
         }
         return tags;
+    }
+
+    protected List<ResourceType> getResourceTypes(Document doc, String path, ResourceTypeService resourceTypeService) throws XPathExpressionException {
+        List<ResourceType> resourceTypes = new ArrayList<>();
+
+        XPathFactory xPathfactory = XPathFactory.newInstance();
+        XPath xpath = xPathfactory.newXPath();
+        XPathExpression expr = xpath.compile(path);
+        NodeList nl = (NodeList) expr.evaluate(doc, XPathConstants.NODESET);
+
+        for (int i = 0; i < nl.getLength(); i++) {
+            Node node = nl.item(i);
+            XPathExpression rolePath = xpath.compile("./*[local-name()='value']");
+            Node value = (Node) rolePath.evaluate(node, XPathConstants.NODE);
+
+            String type;
+            if( value != null) {
+                //waramu
+                type = value.getTextContent().trim().toUpperCase().replaceAll("\\s", "");
+            } else {
+                //estCore
+                type = node.getTextContent().trim().toUpperCase();
+            }
+
+            //The only special case where waramu and est-core are different
+            if (type.equals(WEB_PAGE)) {
+                type = WEBSITE;
+            }
+
+            ResourceType resourceType = resourceTypeService.getResourceTypeByName(type);
+            if (!resourceTypes.contains(resourceType) && resourceType != null) {
+                resourceTypes.add(resourceType);
+            }
+        }
+
+        return resourceTypes;
     }
 
     protected abstract void setAuthors(Material material, Document doc);

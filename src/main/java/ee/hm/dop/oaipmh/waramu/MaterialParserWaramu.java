@@ -38,8 +38,6 @@ import ee.hm.dop.service.TaxonService;
 public class MaterialParserWaramu extends MaterialParser {
 
     private static final String[] SCHEMES = {"http", "https"};
-    public static final String WEB_PAGE = "WEBPAGE";
-    public static final String WEBSITE = "WEBSITE";
     public static final String COMPULSORY_EDUCATION = "COMPULSORYEDUCATION";
     public static final String BASIC_EDUCATION = "BASICEDUCATION";
 
@@ -115,10 +113,13 @@ public class MaterialParserWaramu extends MaterialParser {
         material.setTaxons(taxons);
     }
 
+    @Override
     protected void setLearningResourceType(Material material, Document doc) {
         List<ResourceType> resourceTypes = null;
+        String pathToResourceTypes = "//*[local-name()='lom']/*[local-name()='educational']/*[local-name()='learningResourceType']";
+
         try {
-            resourceTypes = getResourceTypes(doc);
+            resourceTypes = getResourceTypes(doc, pathToResourceTypes, resourceTypeService);
         } catch (Exception e) {
             //ignore if there is no resource type for a material
         }
@@ -168,32 +169,6 @@ public class MaterialParserWaramu extends MaterialParser {
         }
 
         material.setTitles(titles);
-    }
-
-    private List<ResourceType> getResourceTypes(Document doc) throws XPathExpressionException {
-        List<ResourceType> resourceTypes = new ArrayList<>();
-
-        XPathFactory xPathfactory = XPathFactory.newInstance();
-        XPath xpath = xPathfactory.newXPath();
-        XPathExpression expr = xpath.compile("//*[local-name()='lom']/*[local-name()='educational']/*[local-name()='learningResourceType']");
-        NodeList nl = (NodeList) expr.evaluate(doc, XPathConstants.NODESET);
-
-        for (int i = 0; i < nl.getLength(); i++) {
-            Element e = (Element) nl.item(i);
-            String type = e.getElementsByTagName("value").item(0).getFirstChild().getTextContent().trim().toUpperCase().replaceAll("\\s", "");
-
-            //The only special case where waramu and est-core are different
-            if (type.equals(WEB_PAGE)) {
-                type = WEBSITE;
-            }
-
-            ResourceType resourceType = resourceTypeService.getResourceTypeByName(type);
-            if (!resourceTypes.contains(resourceType) && resourceType != null) {
-                resourceTypes.add(resourceType);
-            }
-        }
-
-        return resourceTypes;
     }
 
     private List<Taxon> getTaxons(Document doc) throws XPathExpressionException {
@@ -251,9 +226,8 @@ public class MaterialParserWaramu extends MaterialParser {
 
     private List<Tag> getTags(Element lom) {
         NodeList keywords = lom.getElementsByTagName("keyword");
-        List<Tag> tags = getTagsFromKeywords(keywords, tagService);
 
-        return tags;
+        return getTagsFromKeywords(keywords, tagService);
     }
 
     private List<LanguageString> getDescriptions(Element lom) {
