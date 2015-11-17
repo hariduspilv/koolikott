@@ -85,7 +85,15 @@ public class MaterialParserEstCore extends MaterialParser {
 
     @Override
     protected void setDescriptions(Material material, Document doc) {
+        List<LanguageString> descriptions = null;
 
+        try {
+            descriptions = getDescriptions(doc);
+        } catch (Exception e) {
+            //ignore
+        }
+
+        material.setDescriptions(descriptions);
     }
 
     @Override
@@ -113,7 +121,6 @@ public class MaterialParserEstCore extends MaterialParser {
         } catch (Exception e) {
             throw new ParseException("Error parsing document title.");
         }
-
 
         material.setTitles(titles);
     }
@@ -169,8 +176,6 @@ public class MaterialParserEstCore extends MaterialParser {
         parseVCard(authors, vCard, authorService);
     }
 
-
-
     private List<LanguageString> getTitles(Document doc) throws ParseException, XPathExpressionException {
         List<LanguageString> titles;
 
@@ -179,7 +184,6 @@ public class MaterialParserEstCore extends MaterialParser {
                 .compile("//*[local-name()='estcore']/*[local-name()='general']/*[local-name()='title']");
         Node node = (Node) expr.evaluate(doc, XPathConstants.NODE);
         titles = getLanguageStrings(node, languageService);
-
 
         return titles;
     }
@@ -203,5 +207,17 @@ public class MaterialParserEstCore extends MaterialParser {
         }
 
         return source;
+    }
+
+    private List<LanguageString> getDescriptions(Document doc) throws XPathExpressionException {
+        List<LanguageString> descriptions;
+
+        XPath xpath = xPathfactory.newXPath();
+        XPathExpression expr = xpath
+                .compile("//*[local-name()='estcore']/*[local-name()='general']/*[local-name()='description']");
+        Node node = (Node) expr.evaluate(doc, XPathConstants.NODE);
+        descriptions = getLanguageStrings(node, languageService);
+
+        return descriptions;
     }
 }

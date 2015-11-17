@@ -80,8 +80,16 @@ public class MaterialParserEstCoreTest {
         author2.setName("Andrew");
         author2.setSurname("Balaam");
 
-        expect(languageService.getLanguage("en")).andReturn(english).times(2);
-        expect(languageService.getLanguage("et")).andReturn(estonian);
+        LanguageString description1 = new LanguageString();
+        description1.setLanguage(english);
+        description1.setText("description 1");
+
+        LanguageString description2 = new LanguageString();
+        description2.setLanguage(estonian);
+        description2.setText("description 2");
+
+        expect(languageService.getLanguage("en")).andReturn(english).times(3);
+        expect(languageService.getLanguage("et")).andReturn(estonian).times(2);
         expect(authorService.getAuthorByFullName(author1.getName(), author1.getSurname())).andReturn(author1);
         expect(authorService.getAuthorByFullName(author2.getName(), author2.getSurname())).andReturn(author2);
 
@@ -101,6 +109,10 @@ public class MaterialParserEstCoreTest {
         authors.add(author1);
         authors.add(author2);
 
+        List<LanguageString> descriptions = new ArrayList<>();
+        descriptions.add(description1);
+        descriptions.add(description2);
+
         replay(languageService, authorService);
 
         Document doc = dBuilder.parse(fXmlFile);
@@ -112,6 +124,7 @@ public class MaterialParserEstCoreTest {
         assertEquals("https://oxygen.netgroupdigital.com/rest/repoMaterialSource", material.getSource());
         assertEquals(english, material.getLanguage());
         assertEquals(authors, material.getAuthors());
+        assertEquals(descriptions, material.getDescriptions());
     }
 
     private File getResourceAsFile(String resourcePath) throws URISyntaxException {

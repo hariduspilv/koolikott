@@ -33,10 +33,8 @@
                         <language uniqueElementName="language">en-US</language>
                         <language uniqueElementName="language">en-US</language>
                         <description uniqueElementName="description">
-                            <lom:string language="en-GB">string1</lom:string>
-                        </description>
-                        <description uniqueElementName="description">
-                            <lom:string language="ee">string2</lom:string>
+                            <lom:string language="en-GB">description 1</lom:string>
+                            <lom:string language="et">description 2</lom:string>
                         </description>
                         <keyword>
                         </keyword>
