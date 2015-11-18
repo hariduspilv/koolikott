@@ -29,7 +29,6 @@ define(['app'], function(app)
                 };
 
                 $scope.search = function() {
-                    $scope.closeSearchBox();
                     if (!isEmpty($scope.searchFields.searchQuery)) {
                         searchService.setSearch($scope.searchFields.searchQuery);
                         searchService.clearFieldsNotInSimpleSearch();
