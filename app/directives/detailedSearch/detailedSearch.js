@@ -1,7 +1,9 @@
 define(['app'], function(app)
 {
-    app.directive('dopDetailedSearch', [ '$location', 'searchService', 'translationService', '$filter',
-     function($location, searchService, translationService, $filter) {
+    var EDUCATIONAL_CONTEXTS;
+
+    app.directive('dopDetailedSearch', [ '$location', 'searchService', 'translationService', '$filter', 'serverCallService', 
+     function($location, searchService, translationService, $filter, serverCallService) {
         return {
             scope: {
                 queryIn: '=',
@@ -10,25 +12,20 @@ define(['app'], function(app)
             templateUrl: 'directives/detailedSearch/detailedSearch.html',
             controller: function ($scope) {
 
+                var taxon;
+
                 init();
 
                 function init() {
-
-                    // Test data
-                    $scope.filters = [];
-                    $scope.licenseTypes = [ {
-                      "id" : 1,
-                      "name" : "allRightsReserved"
-                    }, {
-                      "id" : 2,
-                      "name" : "CCBY"
-                    } ];
-
                     // Detailed search fields
                     $scope.detailedSearch = {};
 
-                    // Educational context
-                    $scope.detailedSearch.educationalContext = searchService.getEducationalContext();
+                    // Taxon
+                    if (!EDUCATIONAL_CONTEXTS) {
+                        serverCallService.makeGet("rest/learningMaterialMetadata/educationalContext", {}, getEducationalContextSuccess, getEducationalContextFail);
+                    } else {
+                        $scope.detailedSearch.taxon = getTaxonFromEducationalContexts(searchService.getTaxon());
+                    }
 
                     // Paid
                     if (searchService.isPaid() === true  || searchService.isPaid() === false) {
@@ -43,7 +40,6 @@ define(['app'], function(app)
                     if (searchService.getType() && searchService.isValidType(searchService.getType())) {
                         $scope.detailedSearch.type = searchService.getType();
                     }
-
                 }
 
                 $scope.search = function() {
@@ -51,7 +47,9 @@ define(['app'], function(app)
 
                     searchService.setPaid($scope.detailedSearch.paid);
                     searchService.setType($scope.detailedSearch.type);
-                    searchService.setEducationalContext($scope.detailedSearch.educationalContext);
+                    if ($scope.detailedSearch.taxon) {
+                        searchService.setTaxon($scope.detailedSearch.taxon.id);
+                    }
 
                     $location.url(searchService.getURL());
                 };
@@ -152,6 +150,49 @@ define(['app'], function(app)
                 $scope.$watch('detailedSearch', function() {
                     $scope.queryOut = createSimpleSearchQuery();
                 }, true);
+
+                function getEducationalContextSuccess(data) {
+                    if (isEmpty(data)) {
+                        getEducationalContextFail();
+                    } else {
+                        EDUCATIONAL_CONTEXTS = data;
+                        $scope.detailedSearch.taxon = getTaxonFromEducationalContexts(searchService.getTaxon());
+                    }
+                }
+
+                function getEducationalContextFail() {
+                    console.log('Failed to get educational contexts.')
+                }
+
+                function getTaxonFromEducationalContexts(id) {
+                    for (c = 0; c < EDUCATIONAL_CONTEXTS.length; c++) {
+                        var taxon = getTaxonById(EDUCATIONAL_CONTEXTS[c], id);
+                        if (taxon) {
+                            return taxon;
+                        }
+                    }
+                }
+
+                function getTaxonById(taxon, id) {
+                    if (taxon.id == id) {
+                        return taxon;
+                    } else {
+                        var children;
+                        if (taxon.level === '.EducationalContext') {
+                            children = taxon.domains;
+                        } else if (taxon.level === '.Domain') {
+                            children = taxon.subject;
+                        }
+
+                        if (children) {
+                            var result = null;
+                            for (i = 0; result == null && i < children.length; i++) {
+                                result = getTaxonById(children[i], id);
+                            }
+                            return result; 
+                        }   
+                    }
+                }
 
             }
         };

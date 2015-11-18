@@ -53,8 +53,8 @@ define(['app'], function(app)
                 'start': start
             };
 
-            if (searchService.getEducationalContext()) {
-                params.educational_context = searchService.getEducationalContext();
+            if (searchService.getTaxon()) {
+                params.taxon = searchService.getTaxon();
             }
 
             if (searchService.isPaid() === false) {
@@ -142,9 +142,8 @@ define(['app'], function(app)
         }
 
         $scope.buildPageURL = function(page) {
-            return searchService.buildURL($scope.searchQuery, page, searchService.getEducationalContext(), searchService.isPaid().toString(), searchService.getType());
+            return searchService.buildURL($scope.searchQuery, page, searchService.getTaxon(), searchService.isPaid().toString(), searchService.getType());
         }
-
 
     }]);
 });
