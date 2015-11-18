@@ -3,6 +3,11 @@ package ee.hm.dop.dao;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
+
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 
@@ -44,5 +49,15 @@ public class LanguageDAOTest extends DatabaseTestBase {
     @Test
     public void findByCodePassingNotExistingLanguage() {
         assertNull(languageDAO.findByCode("doesntExist"));
+    }
+
+    @Test
+    public void findAll() {
+        List<Language> languages = languageDAO.findAll();
+        assertEquals(6, languages.size());
+
+        List<String> expectedNames = Arrays.asList("Estonian", "Russian", "English", "Arabic", "Portuguese", "French");
+        List<String> actualNames = languages.stream().map(l -> l.getName()).collect(Collectors.toList());
+        assertTrue(actualNames.containsAll(expectedNames));
     }
 }

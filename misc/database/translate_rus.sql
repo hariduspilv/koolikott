@@ -175,3 +175,9 @@ insert into Translation(translationGroup, translationKey, translation) values (2
 insert into Translation(translationGroup, translationKey, translation) values (2, 'SUBJECT_ENTREPRENEURSHIP_COMPETENCE', 'Предпринимательство компетенции');
 insert into Translation(translationGroup, translationKey, translation) values (2, 'SUBJECT_DIGITAL_COMPETENCE', 'Цифровой компетенции');
 insert into Translation(translationGroup, translationKey, translation) values (2, 'SUBJECT_OTHER', 'Другое');
+
+-- Language name translations, more can be added using the same conventions for the translation key
+insert into Translation(translationGroup, translationKey, translation) values (2, 'LANGUAGE_ESTONIAN', 'Эстонский');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'LANGUAGE_RUSSIAN', 'Русский');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'LANGUAGE_ENGLISH', 'Английский');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'LANGUAGE_NORTHERN_SAMI', 'Северная Сами');
