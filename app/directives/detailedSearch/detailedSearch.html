@@ -59,18 +59,18 @@
     </md-input-container>
 
     <div layout="column" layout-align="end start" layout-fill>
-      <md-checkbox data-ng-model="filter.onlyEducationLiterature" aria-label="Ainult õppekirjandus" flex>Ainult õppekirjandus</md-checkbox>
-      <md-checkbox data-ng-model="detailedSearch.paid" flex>
+      <md-checkbox data-ng-model="filter.onlyEducationLiterature" aria-label="Ainult õppekirjandus" class="md-primary" flex>Ainult õppekirjandus</md-checkbox>
+      <md-checkbox data-ng-model="detailedSearch.paid" class="md-primary" flex>
         <span data-translate="DETAILED_SEARCH_INCLUDE_PAID"></span>
       </md-checkbox>
       <md-radio-group data-ng-model="detailedSearch.type">
-        <md-radio-button value="material">
+        <md-radio-button value="material" class="md-primary">
           <span data-translate="DETAILED_SEARCH_MATERIALS"></span>
         </md-radio-button>
-        <md-radio-button value="portfolio">
+        <md-radio-button value="portfolio" class="md-primary">
           <span data-translate="DETAILED_SEARCH_PORTFOLIOS"></span>
         </md-radio-button>
-        <md-radio-button value="all">
+        <md-radio-button value="all" class="md-primary">
           <span data-translate="DETAILED_SEARCH_ALL"></span>
         </md-radio-button>
       </md-radio-group>
