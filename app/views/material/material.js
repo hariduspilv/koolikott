@@ -18,9 +18,9 @@ define(['app'], function(app)
             var params = {
                 'materialId' : materialId
             };
-            serverCallService.makeGet("rest/material", params, getMaterialSuccess, getMaterialFail); 
+            serverCallService.makeGet("rest/material", params, getMaterialSuccess, getMaterialFail);
         }
-    	
+
         function getMaterialSuccess(material) {
             if (isEmpty(material)) {
             	log('No data returned by getting material. Redirecting to landing page');
@@ -31,16 +31,16 @@ define(['app'], function(app)
                 init();
             }
     	}
-    	
+
     	function getMaterialFail(material, status) {
             log('Getting materials failed. Redirecting to landing page');
             alertService.setErrorAlert('ERROR_MATERIAL_NOT_FOUND');
             $location.url("/");
     	}
-    	
+
     	function init() {
             setSourceType();
-            
+
             if ($scope.material.taxons) {
             	preprocessMaterialSubjects();
             	preprocessMaterialEducationalContexts();
@@ -53,34 +53,34 @@ define(['app'], function(app)
                     $scope.material.iframeSource = $scope.material.source;
                 }
             }
-             
+
             var params = {
                 'type' : '.Material',
                 'id': $scope.material.id
             };
-            serverCallService.makePost("rest/material/increaseViewCount", params, countViewSuccess, countViewFail); 
+            serverCallService.makePost("rest/material/increaseViewCount", params, countViewSuccess, countViewFail);
     	}
-    	
+
     	function preprocessMaterialSubjects() {
     		$scope.material.subjects = [];
-    		
+
     		for (var i = 0, j = 0; i < $scope.material.taxons.length; i++) {
     			var taxon = $scope.material.taxons[i];
     			var subject = $rootScope.taxonUtils.getSubject(taxon);
-    			
+
     			if (subject) {
     				$scope.material.subjects[j++] = subject;
     			}
     		}
 		}
-    	
+
     	function preprocessMaterialEducationalContexts() {
     		$scope.material.educationalContexts = [];
-    		
+
     		for (var i = 0, j = 0; i < $scope.material.taxons.length; i++) {
     			var taxon = $scope.material.taxons[i];
     			var educationalContext = $rootScope.taxonUtils.getEducationalContext(taxon);
-    			
+
     			if (educationalContext) {
     				$scope.material.educationalContexts[j++] = educationalContext;
     			}
@@ -88,7 +88,7 @@ define(['app'], function(app)
 		}
 
         function countViewSuccess(data) { }
-        
+
         function countViewFail(data, status) { }
 
         $scope.getCorrectLanguageString = function(languageStringList) {
@@ -96,7 +96,7 @@ define(['app'], function(app)
                return getUserDefinedLanguageString(languageStringList, translationService.getLanguage(), $scope.material.language);
             }
         }
-        
+
         function isYoutubeVideo(url) {
         	// regex taken from http://stackoverflow.com/questions/2964678/jquery-youtube-url-validation-with-regex #ULTIMATE YOUTUBE REGEX
         	var youtubeUrlRegex = /^(?:https?:\/\/)?(?:www\.)?(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))((\w|-){11})(?:\S+)?$/;
@@ -107,7 +107,7 @@ define(['app'], function(app)
             var slideshareUrlRegex = /^https?\:\/\/www\.slideshare\.net\/[a-zA-Z0-9\-]+\/[a-zA-Z0-9\-]+$/;
             return url && url.match(slideshareUrlRegex);
         }
-        
+
         function setSourceType() {
             if (isYoutubeVideo($scope.material.source)) {
                 $scope.sourceType = 'YOUTUBE';
@@ -120,13 +120,13 @@ define(['app'], function(app)
 
         $scope.formatMaterialIssueDate = function(issueDate) {
             return formatIssueDate(issueDate);
-            
+
         }
-        
+
         $scope.formatMaterialUpdatedDate = function(updatedDate) {
-            return formatDateToDayMonthYear(updatedDate);    
+            return formatDateToDayMonthYear(updatedDate);
         }
-        
+
         $scope.isNullOrZeroLength = function (arg) {
         	return !arg || !arg.length;
         }
@@ -136,7 +136,9 @@ define(['app'], function(app)
             $location.url(searchService.getURL());
         }
 
-        $scope.showSourceFullscreen = function(){
+        $scope.showSourceFullscreen = function($event){
+            $event.preventDefault()
+
             $scope.fullscreenCtrl.toggleFullscreen();
         };
 
@@ -145,17 +147,17 @@ define(['app'], function(app)
         };
 
         function getSignedUserData() {
-            serverCallService.makeGet("rest/user/getSignedUserData", {}, getSignedUserDataSuccess, getSignedUserDataFail); 
+            serverCallService.makeGet("rest/user/getSignedUserData", {}, getSignedUserDataSuccess, getSignedUserDataFail);
         }
 
-        function getSignedUserDataSuccess(data) { 
+        function getSignedUserDataSuccess(data) {
             var url = $scope.material.source;
             var v = encodeURIComponent(data);
             url += (url.split('?')[1] ? '&':'?') + "dop_token=" + v;
 
             $scope.material.iframeSource = url;
         }
-        
+
         function getSignedUserDataFail(data, status) {
             console.log("Failed to get signed user data.")
         }
