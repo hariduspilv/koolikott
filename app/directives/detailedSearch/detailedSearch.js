@@ -20,6 +20,9 @@ define(['app'], function(app)
                     // Detailed search fields
                     $scope.detailedSearch = {};
 
+                    // Languages
+                    serverCallService.makeGet("rest/learningMaterialMetadata/language", {}, getLanguagesSuccess, getLanguagesFail);
+
                     // Taxon
                     if (!EDUCATIONAL_CONTEXTS) {
                         serverCallService.makeGet("rest/learningMaterialMetadata/educationalContext", {}, getEducationalContextSuccess, getEducationalContextFail);
@@ -192,6 +195,22 @@ define(['app'], function(app)
                             return result; 
                         }   
                     }
+                }
+
+                function getLanguagesSuccess(data) {
+                    if (isEmpty(data)) {
+                        getEducationalContextFail();
+                    } else {
+                        $scope.languages = data;
+                    }
+                }
+
+                function getLanguagesFail() {
+                    console.log('Failed to get languages.')
+                }
+
+                $scope.getLanguageTranslationKey = function(languageName) {
+                    return 'LANGUAGE_' + languageName.toUpperCase().replace(/\s+/g, '_');
                 }
 
             }

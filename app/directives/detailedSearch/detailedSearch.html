@@ -18,9 +18,9 @@
     </md-input-container>
     <md-input-container flex>
       <label>Keel</label>
-      <md-select data-ng-model="filter.language">
-        <md-option data-ng-repeat="language in languages" value="{{language.value}}">
-          {{language.label}}
+      <md-select data-ng-model="detailedSearch.language">
+        <md-option data-ng-repeat="language in languages" value="{{language.code}}">
+          <span data-translate="{{getLanguageTranslationKey(language.name)}}" data-translate-default="{{language.name}}" />
         </md-option>
       </md-select>
     </md-input-container>
