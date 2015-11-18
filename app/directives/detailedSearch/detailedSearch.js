@@ -28,11 +28,7 @@ define(['app'], function(app)
                     $scope.detailedSearch = {};
 
                     // Educational context
-                    var validEducationalContexts = ['preschooleducation', 'basiceducation', 'secondaryeducation', 'vocationaleducation'];
-
-                    if (searchService.getEducationalContext() && validEducationalContexts.indexOf(searchService.getEducationalContext()) > -1) {
-                        $scope.detailedSearch.educationalContext = searchService.getEducationalContext();
-                    }
+                    $scope.detailedSearch.educationalContext = searchService.getEducationalContext();
 
                     // Paid
                     if (searchService.isPaid() && (searchService.isPaid() === 'true' || searchService.isPaid() === 'false')) {

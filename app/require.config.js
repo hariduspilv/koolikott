@@ -28,7 +28,8 @@ require.config({
     'angular-translate-loader-url': '../bower_components/angular-translate-loader-url/angular-translate-loader-url',
     'angular-youtube-mb': '../bower_components/angular-youtube-mb/src/angular-youtube-embed',
     jquery: '../bower_components/jquery/dist/jquery',
-    requirejs: '../bower_components/requirejs/require'
+    requirejs: '../bower_components/requirejs/require',
+    dopTaxonSelector: 'directives/taxonSelector/taxonSelector'
   },
   shim: {
     angular: {
@@ -103,7 +104,8 @@ define([
   'dopDetailedSearch',
   'addPortfolioFabButton',
   'addPortfolioDialogController',
-  'loginDialogController'
+  'loginDialogController',
+  'dopTaxonSelector'
 ], function (angular, app) {
   'use strict';
   var $html = angular.element(document.getElementsByTagName('html')[0]);

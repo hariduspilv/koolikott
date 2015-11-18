@@ -1,24 +1,7 @@
 define(['app'], function(app)
 {
-    app.controller('addPortfolioDialog', ['$scope', '$mdDialog', 'serverCallService', '$location',
-        function($scope, $mdDialog, serverCallService, $location) {
-    		// get educational contexts
-    		serverCallService.makeGet("rest/learningMaterialMetadata/educationalContext", {}, getEducationalContextSuccess, getEducationalContextFail);
-
-    		function getEducationalContextSuccess(data) {
-                if (isEmpty(data)) {
-                	getEducationalContextFail();
-                } else {
-                	$scope.educationalContexts = data;
-                	$scope.educationalContexts.sort(function(context1, context2) {
-                		return context1.id - context2.id;
-                	})
-                }
-        	}
-
-        	function getEducationalContextFail() {
-                console.log('Failed to get educational contexts.')
-        	}
+    app.controller('addPortfolioDialog', ['$scope', '$mdDialog', '$location',
+        function($scope, $mdDialog, $location) {
 
             $scope.cancel = function() {
                 $mdDialog.hide();
