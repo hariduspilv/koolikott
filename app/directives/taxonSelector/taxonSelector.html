@@ -1,0 +1,6 @@
+<md-input-container flex>
+  <label for="portfolioEducationalSelect" data-translate="DETAIL_VIEW_EDUCATIONAL_CONTEXT"></label>
+  <md-select data-ng-model="taxon" id="portfolioEducationalSelect">
+      <md-option ng-value="educationalContext" ng-repeat="educationalContext in educationalContexts" data-translate="{{educationalContext.name.toUpperCase()}}"></md-option>
+  </md-select>
+</md-input-container>

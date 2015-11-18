@@ -29,6 +29,7 @@ require.config({
     'angular-youtube-mb': '../bower_components/angular-youtube-mb/src/angular-youtube-embed',
     jquery: '../bower_components/jquery/dist/jquery',
     requirejs: '../bower_components/requirejs/require',
+    dopTaxonSelector: 'directives/taxonSelector/taxonSelector',
     'angular-screenfull': '../bower_components/angular-screenfull/dist/angular-screenfull',
     screenfull: '../bower_components/screenfull/dist/screenfull'
   },
@@ -110,7 +111,8 @@ define([
   'dopDetailedSearch',
   'addPortfolioFabButton',
   'addPortfolioDialogController',
-  'loginDialogController'
+  'loginDialogController',
+  'dopTaxonSelector'
 ], function (angular, app) {
   'use strict';
   var $html = angular.element(document.getElementsByTagName('html')[0]);

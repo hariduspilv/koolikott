@@ -44,39 +44,8 @@
     </div>
   </div>
 
-  <div flex>
-    <md-input-container flex>
-      <label>Haridustase</label>
-      <md-select data-ng-model="filter.education">
-        <md-option data-ng-repeat="education in filter.educations" value="{{education.value}}">
-          {{education.label}}
-        </md-option>
-      </md-select>
-    </md-input-container>
-    <md-input-container flex>
-      <label>Ainevaldkond</label>
-      <md-select data-ng-model="filter.area">
-        <md-option data-ng-repeat="area in areas" value="{{area.abbrev}}">
-          {{area.abbrev}}
-        </md-option>
-      </md-select>
-    </md-input-container>
-    <md-input-container flex>
-      <label>Teema</label>
-      <md-select data-ng-model="filter.topic">
-        <md-option data-ng-repeat="topic in topics" value="{{topic.abbrev}}">
-          {{topic.abbrev}}
-        </md-option>
-      </md-select>
-    </md-input-container>
-    <md-input-container flex>
-      <label>Alateema</label>
-      <md-select data-ng-model="filter.subtopic">
-        <md-option data-ng-repeat="subtopic in subtopics" value="{{subtopic.abbrev}}">
-          {{subtopic.abbrev}}
-        </md-option>
-      </md-select>
-    </md-input-container>
+  <div data-flex>
+    <div data-dop-taxon-selector data-taxon="detailedSearch.taxon"></div>
   </div>
 
   <div flex>
