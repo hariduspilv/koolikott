@@ -2,12 +2,12 @@ define(['app'], function(app) {
 
     app.factory('searchService',['$location', function($location) {
         var searchURLbase = "search/result?q=";
-        var educationalContextURL = "&educational_context=";
+        var taxonURL = "&taxon=";
         var paidURL = "&paid=";
         var typeURL = "&type="
 
         var searchQuery = "";
-        var searchEducationalContext = "";
+        var searchTaxon = "";
         var searchPaid = "";
         var searchType = "";
 
@@ -37,8 +37,8 @@ define(['app'], function(app) {
                 searchQuery = query;
             },
 
-            setEducationalContext : function(educationalContext) {
-                searchEducationalContext = educationalContext;
+            setTaxon : function(taxon) {
+                searchTaxon = taxon;
             },
 
             setPaid : function(paid) {
@@ -57,8 +57,8 @@ define(['app'], function(app) {
                     searchURL = searchURLbase;
                 }
 
-                if (searchEducationalContext) {
-                    searchURL += educationalContextURL + searchEducationalContext;
+                if (searchTaxon) {
+                    searchURL += taxonURL + searchTaxon;
                 }
                 if (searchPaid === false) {
                     searchURL += paidURL + searchPaid;
@@ -72,7 +72,7 @@ define(['app'], function(app) {
 
             queryExists : function() {
                 var searchObject = $location.search();
-                if (searchObject.q || searchObject.educational_context || searchObject.paid === false ||
+                if (searchObject.q || searchObject.taxon || searchObject.paid === false ||
                     (searchObject.type && this.isValidType(searchObject.type))) {
                     return true;
                 } else {
@@ -91,15 +91,15 @@ define(['app'], function(app) {
                 return searchQuery;
             },
 
-            getEducationalContext: function() {
-                if (searchEducationalContext === "") {
+            getTaxon: function() {
+                if (searchTaxon === "") {
                     var searchObject = $location.search();
-                    if (searchObject.educational_context) {
-                        return searchObject.educational_context;
+                    if (searchObject.taxon) {
+                        return searchObject.taxon;
                     }
                 }
 
-                return searchEducationalContext;
+                return searchTaxon;
             },
 
             isPaid : function() {
@@ -140,10 +140,10 @@ define(['app'], function(app) {
                 return 1;
             },
 
-            buildURL : function(query, page, educationalContext, paid, type) {
+            buildURL : function(query, page, taxon, paid, type) {
                 var searchURL = "#/" + searchURLbase + encodeURI(escapeQuery(query)) + "&page=" + page;
-                if (educationalContext) {
-                    searchURL += educationalContextURL + educationalContext.toLowerCase();
+                if (taxon) {
+                    searchURL += taxonURL + taxon;
                 }
                 if (paid && paid === 'false') {
                     searchURL += paidURL + paid;
@@ -160,8 +160,8 @@ define(['app'], function(app) {
                     'page': page
                 };
 
-                if (this.getEducationalContext()) {
-                    params.educational_context = this.getEducationalContext();
+                if (this.getTaxon()) {
+                    params.taxon = this.getTaxon();
                 }
                 if (this.isPaid() === false) {
                     params.paid = this.isPaid();
@@ -174,7 +174,7 @@ define(['app'], function(app) {
             },
 
             clearFieldsNotInSimpleSearch : function() {
-                searchEducationalContext = '';
+                searchTaxon = '';
                 searchPaid = '';
                 searchType = '';
             },
