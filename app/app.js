@@ -1,7 +1,7 @@
-"use strict";
-
 define(['app.routes', 'services/dependencyResolver'], function(config, dependencyResolver)
 {
+    "use strict";
+
     var app = angular.module('app', [
       'ngRoute',
       'ngMaterial',
@@ -97,27 +97,27 @@ define(['app.routes', 'services/dependencyResolver'], function(config, dependenc
     			if (!taxon) {
     				return;
     			}
-    			
+
     			if (taxon.level === '.EducationalContext') {
     				return taxon;
     			}
-    			
+
     			if (taxon.level === '.Domain') {
     				return this.getEducationalContext(taxon.educationalContext);
     			}
-    			
+
     			if (taxon.level === '.Subject') {
     				return this.getEducationalContext(taxon.domain);
     			}
     		}
-    		
+
     		getSubject(taxon) {
     			if (taxon && taxon.level === '.Subject') {
     				return taxon;
     			}
     		}
     	}
-    	
+
     	$rootScope.taxonUtils = new TaxonUtils();
 	});
 
