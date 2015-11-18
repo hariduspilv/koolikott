@@ -10,7 +10,9 @@ import javax.ws.rs.core.MediaType;
 
 import ee.hm.dop.model.SearchFilter;
 import ee.hm.dop.model.SearchResult;
+import ee.hm.dop.model.Taxon;
 import ee.hm.dop.service.SearchService;
+import ee.hm.dop.service.TaxonService;
 
 @Path("search")
 public class SearchResource {
@@ -18,18 +20,20 @@ public class SearchResource {
     @Inject
     private SearchService searchService;
 
+    @Inject
+    private TaxonService taxonService;
+
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public SearchResult search(@QueryParam("q") String query, @QueryParam("start") Long start,
-            @QueryParam("educational_context") @DefaultValue(value = "") String educationalContext,
-            @QueryParam("paid") @DefaultValue(value = "true") Boolean paid,
+            @QueryParam("taxon") Long taxonId, @QueryParam("paid") @DefaultValue(value = "true") Boolean paid,
             @QueryParam("type") @DefaultValue(value = "") String type) {
 
-        educationalContext = educationalContext.isEmpty() ? null : educationalContext;
+        Taxon taxon = taxonService.getTaxonById(taxonId);
         type = type.isEmpty() ? null : type;
 
         SearchFilter searchFilter = new SearchFilter();
-        searchFilter.setEducationalContext(educationalContext);
+        searchFilter.setTaxon(taxon);
         searchFilter.setPaid(paid);
         searchFilter.setType(type);
 
