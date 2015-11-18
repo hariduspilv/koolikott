@@ -22,6 +22,7 @@ define(['app'], function(app)
                 $scope.searchFields = {};
                 $scope.searchFields.searchQuery = searchService.getQuery();
                 $scope.detailedSearch = {};
+                $scope.showSearch = searchService.queryExists();
 
                 $scope.setLanguage = function(language) {
                     translationService.setLanguage(language);

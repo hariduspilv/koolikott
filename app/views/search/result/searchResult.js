@@ -1,6 +1,6 @@
 define(['app'], function(app)
 {
-    app.controller('searchResultController', ['$scope', "serverCallService", 'translationService', '$location', 'searchService', 
+    app.controller('searchResultController', ['$scope', "serverCallService", 'translationService', '$location', 'searchService',
        function($scope, serverCallService, translationService, $location, searchService) {
 
         // Pagination variables
@@ -57,17 +57,17 @@ define(['app'], function(app)
                 params.educational_context = searchService.getEducationalContext();
             }
 
-            if (searchService.isPaid() && searchService.isPaid() === 'false') {
+            if (searchService.isPaid() === false) {
                 params.paid = searchService.isPaid();
             }
 
             if (searchService.getType() && searchService.isValidType(searchService.getType())) {
                 params.type = searchService.getType();
             }
-            
+
             serverCallService.makeGet("rest/search", params, searchSuccess, searchFail);
         }
-        
+
         function searchSuccess(data) {
             if (isEmpty(data)) {
                 searchFail();
@@ -85,7 +85,7 @@ define(['app'], function(app)
             }
             $scope.searching = false;
         }
-        
+
         function searchFail() {
             console.log('Search failed.');
             $scope.searching = false;
@@ -142,7 +142,7 @@ define(['app'], function(app)
         }
 
         $scope.buildPageURL = function(page) {
-            return searchService.buildURL($scope.searchQuery, page, searchService.getEducationalContext(), searchService.isPaid(), searchService.getType());
+            return searchService.buildURL($scope.searchQuery, page, searchService.getEducationalContext(), searchService.isPaid().toString(), searchService.getType());
         }
 
 

@@ -35,10 +35,10 @@ define(['app'], function(app)
                     }
 
                     // Paid
-                    if (searchService.isPaid() && (searchService.isPaid() === 'true' || searchService.isPaid() === 'false')) {
+                    if (searchService.isPaid() === true  || searchService.isPaid() === false) {
                         $scope.detailedSearch.paid = searchService.isPaid();
                     } else {
-                        $scope.detailedSearch.paid = 'true';
+                        $scope.detailedSearch.paid = true;
                     }
 
                     // Type

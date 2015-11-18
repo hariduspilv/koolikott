@@ -30,13 +30,13 @@ define(['app'], function(app) {
 
             return query;
         }
-        
+
         return {
-            
+
             setSearch : function(query) {
                 searchQuery = query;
             },
-            
+
             setEducationalContext : function(educationalContext) {
                 searchEducationalContext = educationalContext;
             },
@@ -60,7 +60,7 @@ define(['app'], function(app) {
                 if (searchEducationalContext) {
                     searchURL += educationalContextURL + searchEducationalContext;
                 }
-                if (searchPaid && searchPaid === 'false') {
+                if (searchPaid === false) {
                     searchURL += paidURL + searchPaid;
                 }
                 if (searchType && this.isValidType(searchType)) {
@@ -72,7 +72,7 @@ define(['app'], function(app) {
 
             queryExists : function() {
                 var searchObject = $location.search();
-                if (searchObject.q || searchObject.educational_context || (searchObject.paid && searchObject.paid === 'false') || 
+                if (searchObject.q || searchObject.educational_context || searchObject.paid === false ||
                     (searchObject.type && this.isValidType(searchObject.type))) {
                     return true;
                 } else {
@@ -106,7 +106,7 @@ define(['app'], function(app) {
                 if (searchPaid === "") {
                     var searchObject = $location.search();
                     if (searchObject.paid) {
-                        return searchObject.paid;
+                        return searchObject.paid === 'true' ? true : false;
                     }
                 }
 
@@ -130,7 +130,7 @@ define(['app'], function(app) {
                     return parseInt(searchObject.page);
                 }
                 return 1;
-            }, 
+            },
 
             getActualPage : function() {
                 var searchObject = $location.search();
@@ -138,7 +138,7 @@ define(['app'], function(app) {
                     return searchObject.page;
                 }
                 return 1;
-            }, 
+            },
 
             buildURL : function(query, page, educationalContext, paid, type) {
                 var searchURL = "#/" + searchURLbase + encodeURI(escapeQuery(query)) + "&page=" + page;
@@ -152,7 +152,7 @@ define(['app'], function(app) {
                     searchURL += typeURL + type;
                 }
                 return searchURL;
-            }, 
+            },
 
             goToPage : function(page) {
                 var params = {
@@ -163,13 +163,13 @@ define(['app'], function(app) {
                 if (this.getEducationalContext()) {
                     params.educational_context = this.getEducationalContext();
                 }
-                if (this.isPaid() && this.isPaid() === 'false') {
+                if (this.isPaid() === false) {
                     params.paid = this.isPaid();
                 }
                 if (this.getType() && this.isValidType(this.getType())) {
                     params.type = this.getType();
                 }
-                
+
                 $location.url("search/result").search(params);
             },
 
