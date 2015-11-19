@@ -15,7 +15,7 @@ $lines-to-show: 3;
   display: -webkit-box;
   max-width: 400px;
   height: $font-size*$line-height*$lines-to-show; /* Fallback for non-webkit */
-  margin: 0 auto;
+  margin: 0;
   font-size: $font-size;
   line-height: $line-height;
   -webkit-line-clamp: $lines-to-show;
@@ -33,7 +33,7 @@ $lines-to-show2: 2;
   display: -webkit-box;
   max-width: 200px;
   height: $font-size2*$line-height2*$lines-to-show2; /* Fallback for non-webkit */
-  margin: 0 auto;
+  margin: 0;
   font-size: $font-size2;
   line-height: $line-height2;
   -webkit-line-clamp: $lines-to-show2;
