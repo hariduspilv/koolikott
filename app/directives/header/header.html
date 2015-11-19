@@ -24,21 +24,19 @@
         <md-tooltip>Sisene</md-tooltip>
       </md-button>
       <md-menu data-ng-show="user">
-        <md-button aria-label="Open user profile" class="md-icon-button" data-ng-click="$mdOpenMenu($event)">
+        <md-button aria-label="Open user profile" class="md-icon-button" id="header-user-menu-icon" data-ng-click="$mdOpenMenu($event)">
           <ng-md-icon icon="account_circle"></ng-md-icon>
         </md-button>
         <md-menu-content width="4">
           <md-menu-item>
-            <md-button href="#/{{user.username}}">
+            <md-button href="#/{{user.username}}" id="user-menu-view-profile">
               <span data-translate="MY_PROFILE"></span>
             </md-button>
           </md-menu-item>
           <md-menu-divider></md-menu-divider>
           <md-menu-item>
-            <md-button>
-              <a data-ng-click="logout()">
-                <span data-translate="LOGOUT"></span>
-              </a>
+            <md-button data-ng-click="logout()" id="user-menu-logout">
+              <span data-translate="LOGOUT"></span>
             </md-button>
           </md-menu-item>
         </md-menu-content>
