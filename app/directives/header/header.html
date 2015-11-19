@@ -1,30 +1,30 @@
-<md-toolbar ng-show="!showSearch" class="md-whiteframe-1dp" >
+<md-toolbar data-ng-show="!showSearch" class="md-whiteframe-1dp" >
   <div class="md-toolbar-tools">
     <div layout-align="center start" flex-gt-md="10" flex>
-      <a href="#/" class="logo-lg"></a>
+      <a href="#/" class="logo-lg" id="logo"></a>
     </div>
 
     <div flex-gt-md="75" flex="none">
       <div layout="row" layout-align-gt-md="center center" layout-align="center end">
-        <md-button aria-label="Search" class="md-icon-button md-padding" ng-click="showSearch = !showSearch">
+        <md-button aria-label="Search" class="md-icon-button md-padding" id="header-show-search-button" data-ng-click="showSearch = !showSearch">
           <ng-md-icon icon="search"></ng-md-icon>
         </md-button>
         <md-input-container class="md-padding" hide show-gt-md flex>
-          <input ng-click="showSearch = !showSearch">
+          <input ng-click="showSearch = !showSearch" id="header-show-search-input">
         </md-input-container>
-        <md-button aria-label="Open Settings" class="md-icon-button" ng-click="toggleDetailSearch()" >
+        <md-button aria-label="Open Settings" class="md-icon-button" id="header-show-detailed-search-icon" data-ng-click="toggleDetailSearch()" >
           <ng-md-icon icon="filter_list"></ng-md-icon>
         </md-button>
       </div>
     </div>
 
     <div flex-gt-md="15" flex="none">
-      <md-button data-ng-hide="user" aria-label="Login" class="md-icon-button" ng-click="showLogin($event)">
+      <md-button data-ng-hide="user" aria-label="Login" class="md-icon-button" id="header-login-icon" data-ng-click="showLogin($event)">
         <ng-md-icon icon="lock"></ng-md-icon>
         <md-tooltip>Sisene</md-tooltip>
       </md-button>
       <md-menu data-ng-show="user">
-        <md-button aria-label="Open user profile" class="md-icon-button" ng-click="$mdOpenMenu($event)">
+        <md-button aria-label="Open user profile" class="md-icon-button" data-ng-click="$mdOpenMenu($event)">
           <ng-md-icon icon="account_circle"></ng-md-icon>
         </md-button>
         <md-menu-content width="4">
@@ -44,25 +44,25 @@
         </md-menu-content>
       </md-menu>
       <md-menu>
-        <md-button aria-label="Open language menu" class="md-icon-button" ng-click="$mdOpenMenu($event)">
+        <md-button aria-label="Open language menu" class="md-icon-button" id="header-language-icon" data-ng-click="$mdOpenMenu($event)">
           <span data-ng-if="selectedLanguage === 'est'">ET</span>
           <span data-ng-if="selectedLanguage === 'rus'">RU</span>
           <span data-ng-if="selectedLanguage === 'eng'">EN</span>
         </md-button>
         <md-menu-content width="4">
-          <md-menu-item data-ng-click="setLanguage('est')">
+          <md-menu-item id="language-select-et" data-ng-click="setLanguage('est')">
             <md-button >
               ET
             </md-button>
           </md-menu-item>
           <md-menu-divider></md-menu-divider>
-          <md-menu-item data-ng-click="setLanguage('eng')">
+          <md-menu-item id="language-select-en" data-ng-click="setLanguage('eng')">
             <md-button>
               EN
             </md-button>
           </md-menu-item>
           <md-menu-divider></md-menu-divider>
-          <md-menu-item data-ng-click="setLanguage('rus')">
+          <md-menu-item id="language-select-eng" data-ng-click="setLanguage('rus')">
             <md-button>
               RU
             </md-button>
@@ -73,24 +73,24 @@
   </div>
 </md-toolbar>
 
-<div class="md-toolbar-expandable" ng-show="showSearch">
+<div class="md-toolbar-expandable" data-ng-show="showSearch">
   <md-toolbar class="md-hue-1">
     <div layout="row" layout-align="center center">
       <div flex-gt-md="80" flex="100">
         <div class="md-toolbar-tools" layout="row" layout-align="center center">
-          <md-button aria-label="Search" data-ng-click="search()" class="md-icon-button" data-ng-disabled="detailedSearch.isVisible">
-            <ng-md-icon icon="search"></ng-md-icon>
+          <md-button aria-label="Search" class="md-icon-button" data-ng-click="search()" data-ng-disabled="detailedSearch.isVisible">
+            <ng-md-icon icon="search" id="header-simple-search-button"></ng-md-icon>
           </md-button>
 
           <md-input-container class="md-padding" flex>
             <label hidden="hidden">&nbsp;</label>
-            <input data-ng-keydown="$event.which === 13 && search()" data-ng-model="searchFields.searchQuery" placeholder="{{'SEARCH' | translate}}" data-ng-disabled="detailedSearch.isVisible" />
+            <input id="header-simple-search-input" data-ng-keydown="$event.which === 13 && search()" data-ng-model="searchFields.searchQuery" placeholder="{{'SEARCH' | translate}}" data-ng-disabled="detailedSearch.isVisible" />
           </md-input-container>
 
-          <md-button aria-label="Open Settings" class="md-icon-button" ng-click="toggleDetailSearch()" >
+          <md-button aria-label="Open Settings" class="md-icon-button" id="header-simple-search-toggle-detailed-search-icon" data-ng-click="toggleDetailSearch()" >
             <ng-md-icon icon="filter_list"></ng-md-icon>
           </md-button>
-          <md-button ng-click="showSearch = detailedSearch.isVisible = !showSearch" aria-label="Back" class="md-icon-button">
+          <md-button aria-label="Back" class="md-icon-button" id="header-simple-search-close-icon" data-ng-click="showSearch = detailedSearch.isVisible = !showSearch">
             <ng-md-icon icon="close"></ng-md-icon>
           </md-button>
         </div>
@@ -98,7 +98,7 @@
     </div>
   </md-toolbar>
 
-  <div class="md-toolbar-filter" id="detailedSearch" ng-show="detailedSearch.isVisible">
+  <div class="md-toolbar-filter" id="detailedSearch" data-ng-show="detailedSearch.isVisible">
    <form layout-align="center start" layout="row" layout-sm="column">
       <div flex="100" flex-gt-md="80">
         <div data-dop-detailed-search query-in="detailedSearch.queryIn" query-out="detailedSearch.queryOut"></div>
