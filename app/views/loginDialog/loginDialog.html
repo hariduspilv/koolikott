@@ -29,7 +29,7 @@
               <div layout="column">
                 <md-input-container flex>
                   <label></label>
-                  <input data-ng-model="mobileId.idCode" placeholder="{{'PERSONAL_CODE' | translate}}" data-input-pattern="[^0-9]+" data-input-value-control maxlength="11">
+                  <input id="login-personal-code" data-ng-model="mobileId.idCode" placeholder="{{'PERSONAL_CODE' | translate}}" data-input-pattern="[^0-9]+" data-input-value-control maxlength="11">
                   <div ng-messages="mobileId.idCode.$error">
                     <div data-ng-if="validation.error.idCode === 'required'" data-translate="MESSAGE_ERROR_PERSONAL_CODE_REQUIRED"></div>
                     <div data-ng-if="validation.error.idCode === 'invalid'" data-translate="MESSAGE_ERROR_PERSONAL_CODE_INVALID"></div>
@@ -37,21 +37,21 @@
                 </md-input-container>
                 <md-input-container flex>
                   <label></label>
-                  <input data-ng-model="mobileId.phoneNumber" placeholder="+372 XX XXX XXX" data-input-pattern="[^0-9+]+" data-input-value-control>
-                  <div ng-messages="mobileId.phoneNumber.$error">
+                  <input id="login-phone-number" data-ng-model="mobileId.phoneNumber" placeholder="+372 XX XXX XXX" data-input-pattern="[^0-9+]+" data-input-value-control>
+                  <div data-ng-messages="mobileId.phoneNumber.$error">
                       <span data-ng-if="validation.error.phoneNumber === 'required'" data-translate="MESSAGE_ERROR_PHONE_NUMBER_REQUIRED"></span>
                       <span data-ng-if="validation.error.phoneNumber === 'notEstonian'" data-translate="MESSAGE_ERROR_PHONE_NUMBER_NOT_ESTONIAN"></span>
                   </div>
                 </md-input-container>
-                <md-button class="md-raised md-primary" data-ng-click="mobileIdAuth()" flex>
+                <md-button class="md-raised md-primary" id="login-mobile-id-button" data-ng-click="mobileIdAuth()" flex>
                   <span data-translate="LOGIN_MOBILEID"></span>
                 </md-button>
               </div>
             </div>
-            <md-button class="md-raised md-primary" data-ng-click="idCardAuth()" flex>
+            <md-button class="md-raised md-primary" id="login-id-card-button" data-ng-click="idCardAuth()" flex>
               <span data-translate="LOGIN_IDCARD"></span>
             </md-button>
-            <md-button class="md-raised md-primary" data-ng-click="taatAuth()" flex>
+            <md-button class="md-raised md-primary" id="login-taat-button" data-ng-click="taatAuth()" flex>
               <span data-translate="LOGIN_TAAT"></span>
             </md-button>
           </div>
