@@ -21,6 +21,21 @@ define(['app'], function(app)
             	function init() {
             		setEducationalContexts();
             		buildTaxonPath();
+            		addTaxonPathListeners();                	
+            	}
+            	
+            	function addTaxonPathListeners() {
+            		$scope.$watch('taxonPath.educationalContext', function(newEducationalContext, oldEducationalContext) {
+                        if (newEducationalContext !== oldEducationalContext) {
+                        	$scope.taxon = newEducationalContext;
+                        }
+                    }, true);
+                	
+                	$scope.$watch('taxonPath.domain', function(newDomain, oldDomain) {
+                        if (newDomain !== oldDomain) {
+                        	$scope.taxon = newDomain;
+                        }
+                    }, true);
             	}
 
         		function getEducationalContextSuccess(data) {
