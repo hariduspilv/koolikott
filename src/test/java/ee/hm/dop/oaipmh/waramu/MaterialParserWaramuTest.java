@@ -275,62 +275,6 @@ public class MaterialParserWaramuTest {
     }
 
     @Test
-    public void parseNullLanguage() throws ParserConfigurationException, IOException, SAXException, URISyntaxException {
-        String errorMessage = "Error in parsing Material language";
-
-        URI resource = getClass().getClassLoader().getResource("oaipmh/waramu/parseNullLanguage.xml").toURI();
-        File fXmlFile = new File(resource);
-
-        DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
-        DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
-
-        expect(languageService.getLanguage("fr")).andReturn(language).anyTimes();
-        expect(languageService.getLanguage("et")).andReturn(language).anyTimes();
-
-        replay(languageService);
-
-        Document doc = dBuilder.parse(fXmlFile);
-
-        try {
-            materialParser.parse(doc);
-            fail("Exception expected.");
-        } catch (ParseException e) {
-            assertEquals(errorMessage, e.getMessage());
-        }
-
-        verify(languageService);
-    }
-
-    @Test
-    public void parseNullDescriptions() throws ParserConfigurationException, IOException, SAXException,
-            URISyntaxException {
-        String errorMessage = "Error in parsing Material descriptions";
-
-        URI resource = getClass().getClassLoader().getResource("oaipmh/waramu/parseNullDescriptions.xml").toURI();
-        File fXmlFile = new File(resource);
-
-        DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
-        DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
-
-        expect(languageService.getLanguage("fr")).andReturn(language).anyTimes();
-        expect(languageService.getLanguage("et")).andReturn(language).anyTimes();
-        expect(languageService.getLanguage("fren")).andReturn(language);
-
-        replay(languageService);
-
-        Document doc = dBuilder.parse(fXmlFile);
-
-        try {
-            materialParser.parse(doc);
-            fail("Exception expected.");
-        } catch (ParseException e) {
-            assertEquals(errorMessage, e.getMessage());
-        }
-
-        verify(languageService);
-    }
-
-    @Test
     public void parseNullSource() throws ParserConfigurationException, IOException, SAXException, URISyntaxException {
         String errorMessage = "Material has more or less than one source, can't be mapped.";
 

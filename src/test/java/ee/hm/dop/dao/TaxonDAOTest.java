@@ -10,12 +10,25 @@ import javax.inject.Inject;
 import org.junit.Test;
 
 import ee.hm.dop.common.test.DatabaseTestBase;
+import ee.hm.dop.model.Domain;
 import ee.hm.dop.model.EducationalContext;
 
 public class TaxonDAOTest extends DatabaseTestBase {
 
     @Inject
     private TaxonDAO taxonDAO;
+
+    @Test
+    public void findTaxonById() {
+        Long id = new Long(11);
+        String name = "ForeignLanguage";
+
+        Domain domain = (Domain) taxonDAO.findTaxonById(id);
+
+        assertNotNull(domain);
+        assertEquals(id, domain.getId());
+        assertEquals(name, domain.getName());
+    }
 
     @Test
     public void findEducationalContextByName() {
@@ -36,4 +49,5 @@ public class TaxonDAOTest extends DatabaseTestBase {
         List<EducationalContext> educationalContexts = taxonDAO.findAllEducationalContext();
         assertEquals(9, educationalContexts.stream().distinct().count());
     }
+
 }

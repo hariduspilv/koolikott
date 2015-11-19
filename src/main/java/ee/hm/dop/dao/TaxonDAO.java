@@ -10,10 +10,17 @@ import ee.hm.dop.model.Taxon;
 
 public class TaxonDAO extends BaseDAO {
 
+    public Taxon findTaxonById(Long id) {
+        TypedQuery<Taxon> findById = createQuery("FROM Taxon t WHERE t.id = :id", Taxon.class) //
+                .setParameter("id", id);
+
+        return getSingleResult(findById);
+    }
+
     public EducationalContext findEducationalContextByName(String name) {
         TypedQuery<Taxon> findByName = createQuery(
                 "FROM Taxon t WHERE t.name = :name and level = 'EDUCATIONAL_CONTEXT'", Taxon.class) //
-                .setParameter("name", name);
+                        .setParameter("name", name);
 
         return (EducationalContext) getSingleResult(findByName);
     }
@@ -30,4 +37,5 @@ public class TaxonDAO extends BaseDAO {
 
         return educationalContexts;
     }
+
 }

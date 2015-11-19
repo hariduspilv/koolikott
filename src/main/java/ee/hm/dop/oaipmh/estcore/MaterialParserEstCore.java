@@ -1,5 +1,6 @@
 package ee.hm.dop.oaipmh.estcore;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -10,65 +11,129 @@ import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
 
 import org.apache.commons.validator.routines.UrlValidator;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.w3c.dom.CharacterData;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
+import ee.hm.dop.model.Author;
 import ee.hm.dop.model.Language;
 import ee.hm.dop.model.LanguageString;
 import ee.hm.dop.model.Material;
+import ee.hm.dop.model.ResourceType;
+import ee.hm.dop.model.Tag;
 import ee.hm.dop.oaipmh.MaterialParser;
 import ee.hm.dop.oaipmh.ParseException;
+import ee.hm.dop.service.AuthorService;
 import ee.hm.dop.service.LanguageService;
-import ee.hm.dop.utils.ParserUtils;
+import ee.hm.dop.service.ResourceTypeService;
+import ee.hm.dop.service.TagService;
+
 
 /**
  * Created by mart on 4.11.15.
  */
-public class MaterialParserEstCore implements MaterialParser {
-
-    private static final Logger logger = LoggerFactory.getLogger(MaterialParserEstCore.class);
+public class MaterialParserEstCore extends MaterialParser {
 
     private static final String[] SCHEMES = {"http", "https"};
+    public static final String AUTHOR = "author";
 
     @Inject
     private LanguageService languageService;
 
+    @Inject
+    private AuthorService authorService;
+
+    @Inject
+    private TagService tagService;
+
+    @Inject
+    private ResourceTypeService resourceTypeService;
+
+    private XPathFactory xPathfactory = XPathFactory.newInstance();
+
     @Override
-    public Material parse(Document doc) throws ParseException {
-        Material material;
+    protected void setAuthors(Material material, Document doc) {
+        List<Author> authors = null;
 
         try {
-            doc.getDocumentElement().normalize();
-            material = new Material();
-
-            setTitle(material, doc);
-            setSource(material, doc);
-            setLanguage(material, doc);
+            authors = getAuthors(doc);
         } catch (Exception e) {
-            logger.error("Unexpected error while parsing document. Document may not"
-                    + " match EstCore mapping or XML structure.", e);
-            throw new ParseException(e);
+            //ignore
         }
 
-        return material;
+        material.setAuthors(authors);
     }
 
-    private void setLanguage(Material material, Document doc) throws ParseException {
-        Language language;
+    @Override
+    protected void setTaxon(Material material, Document doc) {
+
+    }
+
+    @Override
+    protected void setLearningResourceType(Material material, Document doc) {
+        List<ResourceType> resourceTypes = null;
+        String pathToResourceTypes = "//*[local-name()='estcore']/*[local-name()='educational']/*[local-name()='learningResourceType']";
+        try {
+            resourceTypes = getResourceTypes(doc, pathToResourceTypes, resourceTypeService);
+        } catch (Exception e) {
+            //ignore if there is no resource type for a material
+        }
+        material.setResourceTypes(resourceTypes);
+    }
+
+    @Override
+    protected void setTags(Material material, Document doc) {
+        List<Tag> tags = null;
+        try {
+            tags = getTags(doc);
+        } catch (XPathExpressionException e) {
+            //ignore
+        }
+        material.setTags(tags);
+    }
+
+    @Override
+    protected void setSource(Material material, Document doc) throws ParseException {
+        String source;
+        try {
+            source = getSource(doc);
+
+        } catch (Exception e) {
+            throw new ParseException("Error parsing document source.");
+        }
+
+        material.setSource(source);
+    }
+
+    @Override
+    protected void setDescriptions(Material material, Document doc) {
+        List<LanguageString> descriptions = null;
+
+        try {
+            descriptions = getDescriptions(doc);
+        } catch (Exception e) {
+            //ignore
+        }
+
+        material.setDescriptions(descriptions);
+    }
+
+    @Override
+    protected void setLanguage(Material material, Document doc) {
+        Language language = null;
 
         try {
             language = getLanguage(doc);
         } catch (Exception e) {
-            throw new ParseException("Error parsing document language.");
+            //ignore
         }
 
         material.setLanguage(language);
     }
 
-    private void setTitle(Material material, Document doc) throws ParseException {
+    @Override
+    protected void setTitles(Material material, Document doc) throws ParseException {
         List<LanguageString> titles;
 
         try {
@@ -80,27 +145,12 @@ public class MaterialParserEstCore implements MaterialParser {
             throw new ParseException("Error parsing document title.");
         }
 
-
         material.setTitles(titles);
-    }
-
-    private void setSource(Material material, Document doc) throws ParseException {
-        String source;
-        try {
-            source = getSource(doc);
-
-        } catch (Exception e) {
-            throw new ParseException("Error parsing document source.");
-        }
-
-
-        material.setSource(source);
     }
 
     private Language getLanguage(Document doc) throws XPathExpressionException {
         Language language;
 
-        XPathFactory xPathfactory = XPathFactory.newInstance();
         XPath xpath = xPathfactory.newXPath();
         XPathExpression expr = xpath
                 .compile("//*[local-name()='estcore']/*[local-name()='general']/*[local-name()='language']");
@@ -112,16 +162,51 @@ public class MaterialParserEstCore implements MaterialParser {
         return language;
     }
 
+    private List<Author> getAuthors(Document doc) throws ParseException, XPathExpressionException {
+        List<Author> authors = new ArrayList<>();
+
+        XPath xpath = xPathfactory.newXPath();
+        XPathExpression contributePath = xpath
+                .compile("//*[local-name()='estcore']/*[local-name()='lifeCycle']/*[local-name()='contribute']");
+        NodeList nodeList = (NodeList) contributePath.evaluate(doc, XPathConstants.NODESET);
+
+        for (int i = 0; i < nodeList.getLength(); i++) {
+            Node contributorNode = nodeList.item(i);
+            XPathExpression rolePath = xpath.compile("./*[local-name()='role']/*[local-name()='value']");
+            Node role = (Node) rolePath.evaluate(contributorNode, XPathConstants.NODE);
+
+            if (AUTHOR.equals(role.getTextContent().trim())) {
+                getAuthor(authors, contributorNode);
+            }
+        }
+
+        return authors;
+    }
+
+    private void getAuthor(List<Author> authors, Node contributorNode) throws XPathExpressionException {
+        XPath xpath = xPathfactory.newXPath();
+        String vCard = "";
+
+        XPathExpression vCardPath = xpath.compile("./*[local-name()='entity']");
+        NodeList authorNodes = ((Node) vCardPath.evaluate(contributorNode, XPathConstants.NODE)).getChildNodes();
+        for (int j = 0; j < authorNodes.getLength(); j++) {
+            if (!authorNodes.item(j).getTextContent().trim().isEmpty()) {
+                CharacterData characterData = (CharacterData) authorNodes.item(j);
+                vCard = getVCardWithNewLines(characterData);
+            }
+        }
+
+        parseVCard(authors, vCard, authorService);
+    }
+
     private List<LanguageString> getTitles(Document doc) throws ParseException, XPathExpressionException {
         List<LanguageString> titles;
 
-        XPathFactory xPathfactory = XPathFactory.newInstance();
         XPath xpath = xPathfactory.newXPath();
         XPathExpression expr = xpath
                 .compile("//*[local-name()='estcore']/*[local-name()='general']/*[local-name()='title']");
         Node node = (Node) expr.evaluate(doc, XPathConstants.NODE);
-        titles = ParserUtils.getLanguageStrings(node, languageService);
-
+        titles = getLanguageStrings(node, languageService);
 
         return titles;
     }
@@ -129,7 +214,6 @@ public class MaterialParserEstCore implements MaterialParser {
     private String getSource(Document doc) throws ParseException, XPathExpressionException {
         String source;
 
-        XPathFactory xPathfactory = XPathFactory.newInstance();
         XPath xpath = xPathfactory.newXPath();
         XPathExpression expr = xpath
                 .compile("//*[local-name()='estcore']/*[local-name()='technical']/*[local-name()='location']");
@@ -146,5 +230,26 @@ public class MaterialParserEstCore implements MaterialParser {
         }
 
         return source;
+    }
+
+    private List<LanguageString> getDescriptions(Document doc) throws XPathExpressionException {
+        List<LanguageString> descriptions;
+
+        XPath xpath = xPathfactory.newXPath();
+        XPathExpression expr = xpath
+                .compile("//*[local-name()='estcore']/*[local-name()='general']/*[local-name()='description']");
+        Node node = (Node) expr.evaluate(doc, XPathConstants.NODE);
+        descriptions = getLanguageStrings(node, languageService);
+
+        return descriptions;
+    }
+
+    private List<Tag> getTags(Document doc) throws XPathExpressionException {
+        XPath xpath = xPathfactory.newXPath();
+        XPathExpression expr = xpath
+                .compile("//*[local-name()='estcore']/*[local-name()='general']/*[local-name()='keyword']/*[local-name()='string']");
+        NodeList keywords = (NodeList) expr.evaluate(doc, XPathConstants.NODESET);
+
+        return getTagsFromKeywords(keywords, tagService);
     }
 }

@@ -178,5 +178,12 @@ insert into Translation(translationGroup, translationKey, translation) values (1
 insert into Translation(translationGroup, translationKey, translation) values (1, 'SUBJECT_ENTREPRENEURSHIP_COMPETENCE', 'Ettevõtluspädevus');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'SUBJECT_DIGITAL_COMPETENCE', 'Infotehnoloogiline pädevus');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'SUBJECT_OTHER', 'Muu');
+
 -- Taxon path
 insert into Translation(translationGroup, translationKey, translation) values (1, 'TAXON_PATH_DOMAIN', 'Домен');
+
+-- Language name translations, more can be added using the same conventions for the translation key
+insert into Translation(translationGroup, translationKey, translation) values (1, 'LANGUAGE_ESTONIAN', 'Eesti');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'LANGUAGE_RUSSIAN', 'Vene');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'LANGUAGE_ENGLISH', 'Inglise');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'LANGUAGE_NORTHERN_SAMI', 'Põhjasaami');

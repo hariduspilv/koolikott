@@ -41,15 +41,15 @@ class SearchEngineServiceMock implements SearchEngineService {
         addArabicQuery();
         addBigQuery();
 
-        addEmptyQueryWithEducationalContextFilter();
+        addEmptyQueryWithTaxonEducationalContextFilter();
 
         addQueryWithEducationalContextFilter();
         addQueryWithPaidFilterTrue();
         addQueryWithPaidFilterFalse();
         addQueryWithTypeFilter();
         addQueryWithTypeFilterAll();
-        addQueryWithEducationalContextAndPaidFilterFalse();
-        addQueryWithEducationalContextAndTypeFilter();
+        addQueryWithTaxonSubjectAndPaidFilterFalse();
+        addQueryWithTaxonSubjectAndTypeFilter();
         addQueryWithPaidFalseAndTypeFilter();
         addQueryWithAllFilters();
     }
@@ -70,14 +70,14 @@ class SearchEngineServiceMock implements SearchEngineService {
         searchResponses.put(bigQuery, bigQueryDocuments);
     }
 
-    private static void addEmptyQueryWithEducationalContextFilter() {
-        String filteredQuery = "educational_context:\"interesting\"";
+    private static void addEmptyQueryWithTaxonEducationalContextFilter() {
+        String filteredQuery = "educational_context:\"preschooleducation\"";
         List<Document> filteredSearchResult = createDocumentsWithIdentifiers(2L);
         searchResponses.put(filteredQuery, filteredSearchResult);
     }
 
     private static void addQueryWithEducationalContextFilter() {
-        String filteredQuery = "(beethoven*) AND educational_context:\"preschool\"";
+        String filteredQuery = "(beethoven*) AND domain:\"mathematics\"";
         List<Document> filteredSearchResult = createDocumentsWithIdentifiers(1L, 2L);
         searchResponses.put(filteredQuery, filteredSearchResult);
     }
@@ -106,15 +106,14 @@ class SearchEngineServiceMock implements SearchEngineService {
         searchResponses.put(filteredQuery, filteredSearchResult);
     }
 
-    private static void addQueryWithEducationalContextAndPaidFilterFalse() {
-        String filteredQuery = "(dop) AND educational_context:\"specialeducation\""
-                + " AND (paid:\"false\" OR type:\"portfolio\")";
+    private static void addQueryWithTaxonSubjectAndPaidFilterFalse() {
+        String filteredQuery = "(dop) AND subject:\"biology\"" + " AND (paid:\"false\" OR type:\"portfolio\")";
         List<Document> filteredSearchResult = createDocumentsWithIdentifiers(1L, 6L);
         searchResponses.put(filteredQuery, filteredSearchResult);
     }
 
-    private static void addQueryWithEducationalContextAndTypeFilter() {
-        String filteredQuery = "(beethoven*) AND educational_context:\"preschool\" AND type:\"material\"";
+    private static void addQueryWithTaxonSubjectAndTypeFilter() {
+        String filteredQuery = "(beethoven*) AND subject:\"mathematics\" AND type:\"material\"";
         List<Document> filteredSearchResult = createDocumentsWithIdentifiers(1L, 7L);
         searchResponses.put(filteredQuery, filteredSearchResult);
     }
@@ -126,7 +125,7 @@ class SearchEngineServiceMock implements SearchEngineService {
     }
 
     private static void addQueryWithAllFilters() {
-        String filteredQuery = "(john*) AND educational_context:\"preschool\""
+        String filteredQuery = "(john*) AND educational_context:\"basiceducation\""
                 + " AND (paid:\"false\" OR type:\"portfolio\") AND type:\"portfolio\"";
         List<Document> filteredSearchResult = createDocumentsWithIdentifiers(2L, 3L, 4L);
         searchResponses.put(filteredQuery, filteredSearchResult);

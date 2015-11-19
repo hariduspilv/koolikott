@@ -33,34 +33,46 @@
                         <language uniqueElementName="language">en-US</language>
                         <language uniqueElementName="language">en-US</language>
                         <description uniqueElementName="description">
-                            <lom:string language="en-GB">string1</lom:string>
-                        </description>
-                        <description uniqueElementName="description">
-                            <lom:string language="ee">string2</lom:string>
+                            <lom:string language="en-GB">description 1</lom:string>
+                            <lom:string language="et">description 2</lom:string>
                         </description>
                         <keyword>
                         </keyword>
                         <keyword>
-                            <lom:string language="en-US">string3</lom:string>
+                            <lom:string language="en-US">tag1</lom:string>
+                            <lom:string language="en-US">tag2</lom:string>
                         </keyword>
                     </general>
                     <lifeCycle>
                         <contribute>
-                            <lom:date uniqueElementName="date">
-                                <lom:description uniqueElementName="description">
-                                    <lom:string language="en-US">string4</lom:string>
-                                    <lom:string language="en-US">string5</lom:string>
-                                </lom:description>
-                            </lom:date>
-                            <lom:entity>entity0</lom:entity>
+                            <lom:role>
+                                <lom:value>author</lom:value>
+                            </lom:role>
+                            <lom:entity>
+                                <![CDATA[
+								BEGIN:VCARD
+                                VERSION:4.0
+                                N:Doe;Jonathan;;Mr;
+                                FN:John Doe
+                                END:VCARD
+								]]>
+                            </lom:entity>
                         </contribute>
                         <contribute>
-                            <lom:entity>entity1</lom:entity>
-                            <lom:date uniqueElementName="date">
-                                <lom:description uniqueElementName="description">
-                                    <lom:string language="en-US">string6</lom:string>
-                                </lom:description>
-                            </lom:date>
+                            <lom:role>
+                                <lom:value>author</lom:value>
+                            </lom:role>
+                            <lom:entity>
+                                <![CDATA[
+                                BEGIN:VCARD
+								VERSION:3.0
+								N:Balaam;Andrew;;;
+								FN:Andrew Balaam
+								ORG:Languages Online
+								EMAIL;TYPE=internet,pref:acb@rgshw.com
+								END:VCARD
+								]]>
+                            </lom:entity>
                         </contribute>
                     </lifeCycle>
                     <technical>
@@ -68,17 +80,9 @@
                     </technical>
                     <educational>
                         <learningResourceType>audio</learningResourceType>
-                        <learningResourceType>audio</learningResourceType>
+                        <learningResourceType>video</learningResourceType>
                         <context>preschoolEducation</context>
-                        <context>preschoolEducation</context>
-                        <typicalAgeRange>0-0</typicalAgeRange>
-                        <typicalAgeRange>0-0</typicalAgeRange>
-                    </educational>
-                    <educational>
-                        <learningResourceType>audio</learningResourceType>
-                        <learningResourceType>audio</learningResourceType>
-                        <context>preschoolEducation</context>
-                        <context>preschoolEducation</context>
+                        <context>basicEducation</context>
                         <typicalAgeRange>0-0</typicalAgeRange>
                         <typicalAgeRange>0-0</typicalAgeRange>
                     </educational>

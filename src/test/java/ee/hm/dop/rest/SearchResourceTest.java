@@ -15,11 +15,14 @@ import javax.ws.rs.core.Response.Status;
 import org.junit.Test;
 
 import ee.hm.dop.common.test.ResourceIntegrationTestBase;
+import ee.hm.dop.model.Domain;
+import ee.hm.dop.model.EducationalContext;
 import ee.hm.dop.model.Material;
 import ee.hm.dop.model.Portfolio;
 import ee.hm.dop.model.SearchFilter;
 import ee.hm.dop.model.SearchResult;
 import ee.hm.dop.model.Searchable;
+import ee.hm.dop.model.Subject;
 
 public class SearchResourceTest extends ResourceIntegrationTestBase {
 
@@ -67,7 +70,10 @@ public class SearchResourceTest extends ResourceIntegrationTestBase {
     public void searchWithNullQueryAndEducationalContextFilter() {
         String query = null;
         SearchFilter searchFilter = new SearchFilter();
-        searchFilter.setEducationalContext("Interesting");
+        EducationalContext educationalContext = new EducationalContext();
+        educationalContext.setId(1L);
+        educationalContext.setName("PRESCHOOLEDUCATION");
+        searchFilter.setTaxon(educationalContext);
         SearchResult searchResult = doGet(buildQueryURL(query, 0, searchFilter), SearchResult.class);
 
         assertMaterialIdentifiers(searchResult.getItems(), 2L);
@@ -76,10 +82,13 @@ public class SearchResourceTest extends ResourceIntegrationTestBase {
     }
 
     @Test
-    public void searchWithEducationalContextFilter() {
+    public void searchWithTaxonDomainFilter() {
         String query = "beethoven";
         SearchFilter searchFilter = new SearchFilter();
-        searchFilter.setEducationalContext("preschool");
+        Domain domain = new Domain();
+        domain.setId(10L);
+        domain.setName("Mathematics");
+        searchFilter.setTaxon(domain);
         String queryURL = buildQueryURL(query, 0, searchFilter);
         SearchResult searchResult = doGet(queryURL, SearchResult.class);
 
@@ -139,10 +148,13 @@ public class SearchResourceTest extends ResourceIntegrationTestBase {
     }
 
     @Test
-    public void searchWithEducationalContextAndPaidFilterFalse() {
+    public void searchWithTaxonSubjectAndPaidFilterFalse() {
         String query = "dop";
         SearchFilter searchFilter = new SearchFilter();
-        searchFilter.setEducationalContext("specialeducation");
+        Subject subject = new Subject();
+        subject.setId(20L);
+        subject.setName("Biology");
+        searchFilter.setTaxon(subject);
         searchFilter.setPaid(false);
         SearchResult searchResult = doGet(buildQueryURL(query, 0, searchFilter), SearchResult.class);
 
@@ -152,10 +164,13 @@ public class SearchResourceTest extends ResourceIntegrationTestBase {
     }
 
     @Test
-    public void searchWithEducationalContextAndTypeFilter() {
+    public void searchWithTaxonSubjectAndTypeFilter() {
         String query = "beethoven";
         SearchFilter searchFilter = new SearchFilter();
-        searchFilter.setEducationalContext("Preschool");
+        Subject subject = new Subject();
+        subject.setId(21L);
+        subject.setName("Mathematics");
+        searchFilter.setTaxon(subject);
         searchFilter.setType("material");
         String queryURL = buildQueryURL(query, 0, searchFilter);
         SearchResult searchResult = doGet(queryURL, SearchResult.class);
@@ -182,7 +197,10 @@ public class SearchResourceTest extends ResourceIntegrationTestBase {
     public void searchWithAllFilters() {
         String query = "john";
         SearchFilter searchFilter = new SearchFilter();
-        searchFilter.setEducationalContext("Preschool");
+        EducationalContext educationalContext = new EducationalContext();
+        educationalContext.setId(2L);
+        educationalContext.setName("BASICEDUCATION");
+        searchFilter.setTaxon(educationalContext);
         searchFilter.setPaid(false);
         searchFilter.setType("portfolio");
         SearchResult searchResult = doGet(buildQueryURL(query, 0, searchFilter), SearchResult.class);
@@ -200,8 +218,8 @@ public class SearchResourceTest extends ResourceIntegrationTestBase {
         if (start != 0) {
             queryURL += "&start=" + start;
         }
-        if (searchFilter.getEducationalContext() != null) {
-            queryURL += "&educational_context=" + encodeQuery(searchFilter.getEducationalContext());
+        if (searchFilter.getTaxon() != null) {
+            queryURL += "&taxon=" + searchFilter.getTaxon().getId();
         }
         if (searchFilter.isPaid() == false) {
             queryURL += "&paid=false";
