@@ -15,7 +15,12 @@ define(['app'], function(app)
             	if (!EDUCATIONAL_CONTEXTS) {
             		serverCallService.makeGet("rest/learningMaterialMetadata/educationalContext", {}, getEducationalContextSuccess, getEducationalContextFail);
             	} else {
-                	setEducationalContexts();
+            		init();
+            	}
+            	
+            	function init() {
+            		setEducationalContexts();
+            		buildTaxonPath();
             	}
 
         		function getEducationalContextSuccess(data) {
@@ -23,7 +28,7 @@ define(['app'], function(app)
                     	getEducationalContextFail();
                     } else {
                     	EDUCATIONAL_CONTEXTS = data;
-                    	setEducationalContexts();
+                    	init();
                     }
             	}
 
@@ -36,6 +41,14 @@ define(['app'], function(app)
                 	$scope.educationalContexts.sort(function(context1, context2) {
                 		return context1.id - context2.id;
                 	});
+            	}
+            	
+            	function buildTaxonPath() {
+            		if ($scope.taxon) {
+            			$scope.taxonPath = {}
+            			$scope.taxonPath.educationalContext = $scope.taxonUtils.getEducationalContext(taxon);
+            			$scope.taxonPath.domain = $scope.taxonUtils.getDomain(taxon);
+            		}
             	}
             }
         };

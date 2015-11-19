@@ -93,28 +93,39 @@ define(['app.routes', 'services/dependencyResolver'], function(config, dependenc
 
     app.run(function($rootScope) {
     	class TaxonUtils {
+    		constructor() {
+    			this.EDUCATIONAL_CONTEXT = '.EducationalContext';
+    			this.DOMAIN = '.Domain';
+    			this.SUBJECT = '.Subject';
+    	    }
 
     		getEducationalContext(taxon) {
+    			this.getTaxon(taxon, EDUCATIONAL_CONTEXT);
+    		}
+    		
+    		getDomain(taxon) {
+    			this.getTaxon(taxon, DOMAIN);
+    		}
+
+    		getSubject(taxon) {
+    			this.getTaxon(taxon, SUBJECT);
+    		}
+    		
+    		getTaxon(taxon, level) {
     			if (!taxon) {
     				return;
     			}
 
-    			if (taxon.level === '.EducationalContext') {
-    				return taxon;
+    			if (taxon.level === EDUCATIONAL_CONTEXT) {
+    				return taxon.level === level ? taxon : null;
     			}
 
-    			if (taxon.level === '.Domain') {
-    				return this.getEducationalContext(taxon.educationalContext);
+    			if (taxon.level === DOMAIN) {
+    				return taxon.level === level ? taxon : this.getTaxon(taxon.educationalContext, level);
     			}
 
-    			if (taxon.level === '.Subject') {
-    				return this.getEducationalContext(taxon.domain);
-    			}
-    		}
-
-    		getSubject(taxon) {
-    			if (taxon && taxon.level === '.Subject') {
-    				return taxon;
+    			if (taxon.level === SUBJECT) {
+    				return taxon.level === level ? taxon : this.getTaxon(taxon.domain, level);
     			}
     		}
     	}
