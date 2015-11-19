@@ -10,3 +10,9 @@
       <md-option ng-value="domain" ng-repeat="domain in taxonPath.educationalContext.domains" data-translate="DOMAIN_{{domain.name.toUpperCase()}}"></md-option>
   </md-select>
 </md-input-container>
+<md-input-container data-ng-show="taxonPath.domain && taxonPath.domain.subjects.length > 0" flex>
+  <label for="taxonSubjectSelect" data-translate="DETAIL_VIEW_SUBJECT"></label>
+  <md-select data-ng-model="taxonPath.subject" id="taxonSubjectSelect" ng-model-options="{trackBy: '$value.id'}" >
+      <md-option ng-value="subject" ng-repeat="subject in taxonPath.domain.subjects" data-translate="SUBJECT_{{subject.name.toUpperCase()}}"></md-option>
+  </md-select>
+</md-input-container>

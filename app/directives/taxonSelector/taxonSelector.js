@@ -28,12 +28,21 @@ define(['app'], function(app)
             		$scope.$watch('taxonPath.educationalContext', function(newEducationalContext, oldEducationalContext) {
                         if (newEducationalContext !== oldEducationalContext) {
                         	$scope.taxon = newEducationalContext;
+                        	$scope.taxonPath.domain = null;
+                        	$scope.taxonPath.subject = null;
                         }
                     }, true);
                 	
                 	$scope.$watch('taxonPath.domain', function(newDomain, oldDomain) {
                         if (newDomain !== oldDomain) {
                         	$scope.taxon = newDomain;
+                        	$scope.taxonPath.subject = null;
+                        }
+                    }, true);
+                	
+                	$scope.$watch('taxonPath.subject', function(newSubject, oldSuject) {
+                        if (newSubject !== oldSuject) {
+                        	$scope.taxon = newSubject;
                         }
                     }, true);
             	}
@@ -63,6 +72,7 @@ define(['app'], function(app)
             			$scope.taxonPath = {}
             			$scope.taxonPath.educationalContext = $scope.taxonUtils.getEducationalContext(taxon);
             			$scope.taxonPath.domain = $scope.taxonUtils.getDomain(taxon);
+            			$scope.taxonPath.subject = $scope.taxonUtils.getSubject(taxon);
             		}
             	}
             }
