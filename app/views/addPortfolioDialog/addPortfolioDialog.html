@@ -12,12 +12,12 @@
     <md-content class="md-padding">
       <md-input-container flex>
         <label>Pealkiri</label>
-        <input placeholder="Näiteks: Bioloogia töövihik">
+        <input id="add-portfolio-title-input" placeholder="Näiteks: Bioloogia töövihik">
       </md-input-container>
 
       <md-input-container flex>
         <label>Kirjeldus (valikuline)</label>
-        <textarea data-ng-model="portfolio.biography" columns="1" md-maxlength="150"></textarea>
+        <textarea id="add-portfolio-description-input" data-ng-model="portfolio.biography" columns="1" md-maxlength="150"></textarea>
       </md-input-container>
 
       <div data-layout="layout" data-layout-sm="column">
@@ -31,10 +31,10 @@
     </md-content>
     <div class="md-actions">
       <span flex></span>
-      <md-button ng-click="cancel()">
+      <md-button id="add-portfolio-cancel-button" data-ng-click="cancel()">
         <span data-translate="BUTTON_CANCEL"></span>
       </md-button>
-      <md-button ng-click="forward()" class="md-primary">
+      <md-button id="add-portfolio-create-button" ng-click="forward()" class="md-primary">
         <ng-md-icon icon="arrow_forward"></ng-md-icon>
         <span data-translate="BUTTON_CREATE_PORTFOLIO"></span>
       </md-button>
