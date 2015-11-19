@@ -1,4 +1,4 @@
- <md-card class="card-sm md-whiteframe-4dp" data-ng-click="navigateTo(material)">
+ <md-card class="card-sm md-whiteframe-4dp" id="material-card-{{material.id}}" data-ng-click="navigateTo(material)">
   <div class="card-cover {{getType()}}">
     <img data-ng-if="material.hasPicture" data-ng-src="rest/material/getPicture?materialId={{material.id}}" class="md-card-image" />
     <div data-ng-if!="material.hasPicture" layout="row" layout-fill flex layout-align="center center">
