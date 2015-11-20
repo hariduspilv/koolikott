@@ -8,6 +8,8 @@ public class SearchFilter {
 
     private String type;
 
+    private Language language;
+
     public Taxon getTaxon() {
         return taxon;
     }
@@ -30,6 +32,14 @@ public class SearchFilter {
 
     public void setType(String type) {
         this.type = type;
+    }
+
+    public Language getLanguage() {
+        return language;
+    }
+
+    public void setLanguage(Language language) {
+        this.language = language;
     }
 
 }

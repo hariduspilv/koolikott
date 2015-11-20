@@ -52,6 +52,8 @@ class SearchEngineServiceMock implements SearchEngineService {
         addQueryWithTaxonSubjectAndTypeFilter();
         addQueryWithPaidFalseAndTypeFilter();
         addQueryWithAllFilters();
+
+        addQueryWithLanguage();
     }
 
     private static void addArabicQuery() {
@@ -130,6 +132,12 @@ class SearchEngineServiceMock implements SearchEngineService {
         String filteredQuery = "(john*) AND educational_context:\"basiceducation\""
                 + " AND (paid:\"false\" OR type:\"portfolio\") AND type:\"portfolio\"";
         List<Document> filteredSearchResult = createDocumentsWithIdentifiers(2L, 3L, 4L);
+        searchResponses.put(filteredQuery, filteredSearchResult);
+    }
+
+    private static void addQueryWithLanguage() {
+        String filteredQuery = "(monday*) AND (language:\"eng\" OR type:\"portfolio\")";
+        List<Document> filteredSearchResult = createDocumentsWithIdentifiers(2L, 1L);
         searchResponses.put(filteredQuery, filteredSearchResult);
     }
 

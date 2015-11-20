@@ -19,6 +19,7 @@ import ee.hm.dop.dao.MaterialDAO;
 import ee.hm.dop.dao.PortfolioDAO;
 import ee.hm.dop.model.Domain;
 import ee.hm.dop.model.EducationalContext;
+import ee.hm.dop.model.Language;
 import ee.hm.dop.model.SearchFilter;
 import ee.hm.dop.model.SearchResult;
 import ee.hm.dop.model.Searchable;
@@ -156,10 +157,13 @@ public class SearchService {
     private String getFiltersAsQuery(SearchFilter searchFilter) {
         Map<String, String> filters = new LinkedHashMap<>();
 
-        Taxon taxon = searchFilter.getTaxon();
-        if (taxon != null) {
-            filters.putAll(getTaxonsAsFilters(taxon));
+        Language language = searchFilter.getLanguage();
+        if (language != null) {
+            filters.put("language", language.getCode());
         }
+
+        Taxon taxon = searchFilter.getTaxon();
+        filters.putAll(getTaxonsAsFilters(taxon));
 
         if (!searchFilter.isPaid()) {
             filters.put("paid", "false");
@@ -183,6 +187,8 @@ public class SearchService {
                     filtersAsQuery += "(paid:\"false\" OR type:\"portfolio\")";
                 } else if (filter.getKey().equals("type") && filter.getValue().equals("all")) {
                     filtersAsQuery += "(type:\"material\" OR type:\"portfolio\")";
+                } else if (filter.getKey().equals("language")) {
+                    filtersAsQuery += format("(language:\"%s\" OR type:\"portfolio\")", filter.getValue());
                 } else {
                     filtersAsQuery += format("%s:\"%s\"", filter.getKey(), value);
                 }
