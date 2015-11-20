@@ -1,7 +1,5 @@
 define(['app'], function(app)
 {
-    var EDUCATIONAL_CONTEXTS;
-
     app.directive('dopDetailedSearch', [ '$location', 'searchService', 'translationService', '$filter', 'serverCallService', 
      function($location, searchService, translationService, $filter, serverCallService) {
         return {
@@ -24,10 +22,12 @@ define(['app'], function(app)
                     serverCallService.makeGet("rest/learningMaterialMetadata/language", {}, getLanguagesSuccess, getLanguagesFail);
 
                     // Taxon
-                    if (!EDUCATIONAL_CONTEXTS) {
-                        serverCallService.makeGet("rest/learningMaterialMetadata/educationalContext", {}, getEducationalContextSuccess, getEducationalContextFail);
-                    } else {
-                        $scope.detailedSearch.taxon = getTaxonFromEducationalContexts(searchService.getTaxon());
+                    if (searchService.getTaxon()) {
+                        var params = {
+                            'taxonId': searchService.getTaxon()
+                        };
+                        log('Getting taxon.')
+                        serverCallService.makeGet("rest/learningMaterialMetadata/taxon", params, getTaxonSuccess, getTaxonFail);
                     }
 
                     // Paid
@@ -154,49 +154,16 @@ define(['app'], function(app)
                     $scope.queryOut = createSimpleSearchQuery();
                 }, true);
 
-                function getEducationalContextSuccess(data) {
+                function getTaxonSuccess(data) {
                     if (isEmpty(data)) {
-                        getEducationalContextFail();
+                        getTaxonFail();
                     } else {
-                        EDUCATIONAL_CONTEXTS = data;
-                        $scope.detailedSearch.taxon = getTaxonFromEducationalContexts(searchService.getTaxon());
+                        $scope.detailedSearch.taxon = data;
                     }
                 }
 
-                function getEducationalContextFail() {
-                    console.log('Failed to get educational contexts.')
-                }
-
-                function getTaxonFromEducationalContexts(id) {
-                    if (id) {
-                        for (c = 0; c < EDUCATIONAL_CONTEXTS.length; c++) {
-                            var taxon = getTaxonById(EDUCATIONAL_CONTEXTS[c], id);
-                            if (taxon) {
-                                return taxon;
-                            }
-                        }
-                    }
-                }
-
-                function getTaxonById(taxon, id) {
-                    if (taxon.id == id) {
-                        return taxon;
-                    } else {
-                        var children;
-                        if (taxon.level === '.EducationalContext') {
-                            children = taxon.domains;
-                        } else if (taxon.level === '.Domain') {
-                            children = taxon.subjects;
-                        }
-
-                        if (children && children.length) {
-                            var result = null;
-                            for (i = 0; result == null && i < children.length; i++) {
-                                result = getTaxonById(children[i], id);
-                            }
-                            return result; 
-                        }
-                    }
+                function getTaxonFail() {
+                    console.log('Failed to get taxon.')
                 }
 
                 function getLanguagesSuccess(data) {
