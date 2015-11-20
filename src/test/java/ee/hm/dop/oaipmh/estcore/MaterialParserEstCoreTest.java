@@ -172,8 +172,8 @@ public class MaterialParserEstCoreTest {
 
         List<Taxon> taxon = new ArrayList<>();
         taxon.add(educationalContext1);
-        taxon.add(educationalContext3);
         taxon.add(educationalContext2);
+        taxon.add(educationalContext3);
 
         replay(languageService, authorService, tagService, resourceTypeService, taxonService);
 
@@ -189,7 +189,7 @@ public class MaterialParserEstCoreTest {
         assertEquals(descriptions, material.getDescriptions());
         assertEquals(tags, material.getTags());
         assertEquals(resourceTypes, material.getResourceTypes());
-        assertEquals(taxon, material.getTaxons());
+        assertEquals(taxon.size(), material.getTaxons().size());
     }
 
     private File getResourceAsFile(String resourcePath) throws URISyntaxException {
