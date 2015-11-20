@@ -178,7 +178,7 @@ insert into Translation(translationGroup, translationKey, translation) values (1
 insert into Translation(translationGroup, translationKey, translation) values (1, 'SUBJECT_OTHER', 'Muu');
 
 -- Taxon path
-insert into Translation(translationGroup, translationKey, translation) values (1, 'TAXON_PATH_DOMAIN', 'Домен');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'TAXON_PATH_DOMAIN', 'Domeen');
 
 -- Language name translations, more can be added using the same conventions for the translation key
 insert into Translation(translationGroup, translationKey, translation) values (1, 'LANGUAGE_ESTONIAN', 'Eesti');
