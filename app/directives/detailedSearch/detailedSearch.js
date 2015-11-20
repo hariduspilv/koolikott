@@ -21,6 +21,9 @@ define(['app'], function(app)
                     // Languages
                     serverCallService.makeGet("rest/learningMaterialMetadata/language", {}, getLanguagesSuccess, getLanguagesFail);
 
+                    // Language
+                    $scope.detailedSearch.language = searchService.getLanguage();
+
                     // Taxon
                     if (searchService.getTaxon()) {
                         var params = {
@@ -53,6 +56,7 @@ define(['app'], function(app)
                     if ($scope.detailedSearch.taxon) {
                         searchService.setTaxon($scope.detailedSearch.taxon.id);
                     }
+                    searchService.setLanguage($scope.detailedSearch.language);
 
                     $location.url(searchService.getURL());
                 };

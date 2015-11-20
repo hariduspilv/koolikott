@@ -5,11 +5,13 @@ define(['app'], function(app) {
         var taxonURL = "&taxon=";
         var paidURL = "&paid=";
         var typeURL = "&type="
+        var languageURL = "&language=";
 
         var searchQuery = "";
         var searchTaxon = "";
         var searchPaid = "";
         var searchType = "";
+        var searchLanguage = "";
 
         function escapeQuery(query) {
             //replace backslashes
@@ -49,6 +51,10 @@ define(['app'], function(app) {
                 searchType = type;
             },
 
+            setLanguage : function(language) {
+                searchLanguage = language;
+            },    
+
             getURL : function() {
                 var searchURL;
                 if (searchQuery) {
@@ -66,6 +72,9 @@ define(['app'], function(app) {
                 if (searchType && this.isValidType(searchType)) {
                     searchURL += typeURL + searchType;
                 }
+                if (searchLanguage) {
+                    searchURL += languageURL + searchLanguage;
+                }
 
                 return searchURL;
             },
@@ -73,7 +82,7 @@ define(['app'], function(app) {
             queryExists : function() {
                 var searchObject = $location.search();
                 if (searchObject.q || searchObject.taxon || searchObject.paid === false ||
-                    (searchObject.type && this.isValidType(searchObject.type))) {
+                    (searchObject.type && this.isValidType(searchObject.type)) || searchObject.language) {
                     return true;
                 } else {
                     return false;
@@ -124,6 +133,17 @@ define(['app'], function(app) {
                 return searchType;
             },
 
+            getLanguage : function() {
+                if (searchLanguage === "") {
+                    var searchObject = $location.search();
+                    if (searchObject.language) {
+                        return searchObject.language;
+                    }
+                }
+
+                return searchLanguage;
+            },
+
             getPage : function() {
                 var searchObject = $location.search();
                 if (searchObject.page) {
@@ -140,7 +160,7 @@ define(['app'], function(app) {
                 return 1;
             },
 
-            buildURL : function(query, page, taxon, paid, type) {
+            buildURL : function(query, page, taxon, paid, type, language) {
                 var searchURL = "#/" + searchURLbase + encodeURI(escapeQuery(query)) + "&page=" + page;
                 if (taxon) {
                     searchURL += taxonURL + taxon;
@@ -150,6 +170,9 @@ define(['app'], function(app) {
                 }
                 if (type && this.isValidType(type)) {
                     searchURL += typeURL + type;
+                }
+                if (language) {
+                    searchURL += languageURL + language;
                 }
                 return searchURL;
             },
@@ -169,6 +192,9 @@ define(['app'], function(app) {
                 if (this.getType() && this.isValidType(this.getType())) {
                     params.type = this.getType();
                 }
+                if (this.getLanguage()) {
+                    params.language = this.getLanguage();
+                }
 
                 $location.url("search/result").search(params);
             },
@@ -177,6 +203,7 @@ define(['app'], function(app) {
                 searchTaxon = '';
                 searchPaid = '';
                 searchType = '';
+                searchLanguage = '';
             },
 
             isValidType : function(type) {
