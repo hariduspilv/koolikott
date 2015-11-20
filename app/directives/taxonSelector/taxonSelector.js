@@ -27,22 +27,33 @@ define(['app'], function(app)
             	function addTaxonPathListeners() {
             		$scope.$watch('taxonPath.educationalContext', function(newEducationalContext, oldEducationalContext) {
                         if (newEducationalContext !== oldEducationalContext) {
-                        	$scope.taxon = newEducationalContext;
+                        	if (!$scope.taxonPath.cleaning) {
+                        		$scope.taxon = newEducationalContext;
+                        	}
+                        	
                         	$scope.taxonPath.domain = null;
-                        	$scope.taxonPath.subject = null;
+                        	$scope.taxonPath.cleaning = true;
                         }
                     }, true);
                 	
                 	$scope.$watch('taxonPath.domain', function(newDomain, oldDomain) {
                         if (newDomain !== oldDomain) {
-                        	$scope.taxon = newDomain;
+                        	if (!$scope.taxonPath.cleaning) {
+                        		$scope.taxon = newDomain;
+                        	}
+                        	
                         	$scope.taxonPath.subject = null;
+                        	$scope.taxonPath.cleaning = true;
                         }
                     }, true);
                 	
                 	$scope.$watch('taxonPath.subject', function(newSubject, oldSuject) {
                         if (newSubject !== oldSuject) {
-                        	$scope.taxon = newSubject;
+                        	if (!$scope.taxonPath.cleaning) {
+                        		$scope.taxon = newSubject;
+                        	}
+                        	
+                        	$scope.taxonPath.cleaning = false;
                         }
                     }, true);
             	}
@@ -70,9 +81,9 @@ define(['app'], function(app)
             	function buildTaxonPath() {
             		if ($scope.taxon) {
             			$scope.taxonPath = {}
-            			$scope.taxonPath.educationalContext = $scope.taxonUtils.getEducationalContext(taxon);
-            			$scope.taxonPath.domain = $scope.taxonUtils.getDomain(taxon);
-            			$scope.taxonPath.subject = $scope.taxonUtils.getSubject(taxon);
+            			$scope.taxonPath.educationalContext = $scope.taxonUtils.getEducationalContext($scope.taxon);
+            			$scope.taxonPath.domain = $scope.taxonUtils.getDomain($scope.taxon);
+            			$scope.taxonPath.subject = $scope.taxonUtils.getSubject($scope.taxon);
             		}
             	}
             }

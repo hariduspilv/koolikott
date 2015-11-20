@@ -100,15 +100,15 @@ define(['app.routes', 'services/dependencyResolver'], function(config, dependenc
     	    }
 
     		getEducationalContext(taxon) {
-    			this.getTaxon(taxon, EDUCATIONAL_CONTEXT);
+    			return this.getTaxon(taxon, this.EDUCATIONAL_CONTEXT);
     		}
     		
     		getDomain(taxon) {
-    			this.getTaxon(taxon, DOMAIN);
+    			return this.getTaxon(taxon, this.DOMAIN);
     		}
 
     		getSubject(taxon) {
-    			this.getTaxon(taxon, SUBJECT);
+    			return this.getTaxon(taxon, this.SUBJECT);
     		}
     		
     		getTaxon(taxon, level) {
@@ -116,15 +116,15 @@ define(['app.routes', 'services/dependencyResolver'], function(config, dependenc
     				return;
     			}
 
-    			if (taxon.level === EDUCATIONAL_CONTEXT) {
+    			if (taxon.level === this.EDUCATIONAL_CONTEXT) {
     				return taxon.level === level ? taxon : null;
     			}
 
-    			if (taxon.level === DOMAIN) {
+    			if (taxon.level === this.DOMAIN) {
     				return taxon.level === level ? taxon : this.getTaxon(taxon.educationalContext, level);
     			}
 
-    			if (taxon.level === SUBJECT) {
+    			if (taxon.level === this.SUBJECT) {
     				return taxon.level === level ? taxon : this.getTaxon(taxon.domain, level);
     			}
     		}
