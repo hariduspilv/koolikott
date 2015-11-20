@@ -1,6 +1,7 @@
 package ee.hm.dop.rest;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import java.util.Arrays;
@@ -16,11 +17,13 @@ import ee.hm.dop.model.Domain;
 import ee.hm.dop.model.EducationalContext;
 import ee.hm.dop.model.Language;
 import ee.hm.dop.model.Subject;
+import ee.hm.dop.model.Taxon;
 import ee.hm.dop.model.Topic;
 
 public class LearningMaterialMetadataResourceTest extends ResourceIntegrationTestBase {
 
     private static final String GET_EDUCATIONAL_CONTEXT_URL = "learningMaterialMetadata/educationalContext";
+    private static final String GET_TAXON_URL = "learningMaterialMetadata/taxon?taxonId=%s";
     private static final String GET_LANGUAGES_URL = "learningMaterialMetadata/language";
 
     @Test
@@ -57,6 +60,14 @@ public class LearningMaterialMetadataResourceTest extends ResourceIntegrationTes
 
         assertEquals(2, domains);
         assertEquals(2, subjects);
+    }
+
+    @Test
+    public void getTaxon() {
+        Long id = 10L;
+        Domain taxon = (Domain) doGet(String.format(GET_TAXON_URL, id), Taxon.class);
+        assertEquals(id, taxon.getId());
+        assertNotNull(taxon.getEducationalContext());
     }
 
     @Test

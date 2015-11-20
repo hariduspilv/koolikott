@@ -121,7 +121,7 @@ insert into Translation(translationGroup, translationKey, translation) values (2
 insert into Translation(translationGroup, translationKey, translation) values (2, 'BUTTON_CREATE_PORTFOLIO', 'Создать портфолио');
 
 -- Taxon Domain translations
-insert into Translation(translationGroup, translationKey, translation) values (2, 'DOMAIN_LANGUAGE_AND_SPEACH', 'Язык и речь');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'DOMAIN_LANGUAGE_AND_SPEECH', 'Язык и речь');
 
 -- Taxon Topic translations
 insert into Translation(translationGroup, translationKey, translation) values (2, 'TOPIC_BASIC_HISTORY', 'История основы');
@@ -131,16 +131,14 @@ insert into Translation(translationGroup, translationKey, translation) values (2
 insert into Translation(translationGroup, translationKey, translation) values (2, 'SUBJECT_ESTONIAN', 'Эстонский');
 insert into Translation(translationGroup, translationKey, translation) values (2, 'SUBJECT_RUSSIAN', 'Русский');
 insert into Translation(translationGroup, translationKey, translation) values (2, 'SUBJECT_LITERATURE', 'Литература');
-insert into Translation(translationGroup, translationKey, translation) values (2, 'SUBJECT_ESTONIAN_AS_SECOND_LANGUAGE', 'Эстонский (второй язык)');
-insert into Translation(translationGroup, translationKey, translation) values (2, 'SUBJECT_ENGLISH_AS_SECOND_LANGUAGE', 'Английский (второй язык)');
-insert into Translation(translationGroup, translationKey, translation) values (2, 'SUBJECT_FRENCH_AS_SECOND_LANGUAGE', 'Французский (второй язык)');
-insert into Translation(translationGroup, translationKey, translation) values (2, 'SUBJECT_GERMAN_AS_SECOND_LANGUAGE', 'Немецкий (второй язык)');
-insert into Translation(translationGroup, translationKey, translation) values (2, 'SUBJECT_RUSSIAN_AS_SECOND_LANGUAGE', 'Русский  (второй язык)');
-insert into Translation(translationGroup, translationKey, translation) values (2, 'SUBJECT_SWEDISH_AS_SECOND_LANGUAGE', 'Шведский (второй язык)');
-insert into Translation(translationGroup, translationKey, translation) values (2, 'SUBJECT_FINNISH_AS_SECOND_LANGUAGE', 'Финский (второй язык)');
-insert into Translation(translationGroup, translationKey, translation) values (2, 'SUBJECT_LATIN_AS_SECOND_LANGUAGE', 'Латинский (второй язык)');
-insert into Translation(translationGroup, translationKey, translation) values (2, 'SUBJECT_CHINESE_AS_SECOND_LANGUAGE', 'Китайский (второй язык)');
-insert into Translation(translationGroup, translationKey, translation) values (2, 'SUBJECT_JAPANESE_AS_SECOND_LANGUAGE', 'Японский (второй язык)');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'SUBJECT_ENGLISH', 'Английский');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'SUBJECT_FRENCH', 'Французский');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'SUBJECT_GERMAN', 'Немецкий');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'SUBJECT_SWEDISH', 'Шведский');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'SUBJECT_FINNISH', 'Финский');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'SUBJECT_LATIN', 'Латинский');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'SUBJECT_CHINESE', 'Китайский');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'SUBJECT_JAPANESE', 'Японский');
 insert into Translation(translationGroup, translationKey, translation) values (2, 'SUBJECT_MATHEMATICS', 'Математика');
 insert into Translation(translationGroup, translationKey, translation) values (2, 'SUBJECT_SCIENCE', 'Наука');
 insert into Translation(translationGroup, translationKey, translation) values (2, 'SUBJECT_BIOLOGY', 'Биология');

@@ -285,12 +285,19 @@ public class SearchServiceTest {
     @Test
     public void searchWithTaxonDomainFilter() {
         String query = "pythagoras";
+
         SearchFilter searchFilter = new SearchFilter();
+        EducationalContext educationalContext = new EducationalContext();
+        educationalContext.setId(2L);
+        educationalContext.setName("PRESCHOOL");
+
         Domain domain = new Domain();
         domain.setId(3L);
         domain.setName("COOL_DOMAIN");
+        domain.setEducationalContext(educationalContext);
+
         searchFilter.setTaxon(domain);
-        String tokenizedQuery = "(pythagoras*) AND domain:\"cool_domain\"";
+        String tokenizedQuery = "(pythagoras*) AND domain:\"cool_domain\" AND educational_context:\"preschool\"";
         long start = 0;
 
         List<Searchable> searchables = Arrays.asList(createMaterial(9L), createMaterial(2L), createPortfolio(2L));
@@ -301,12 +308,25 @@ public class SearchServiceTest {
     @Test
     public void searchWithTaxonSubjctFilter() {
         String query = "pythagoras";
+
         SearchFilter searchFilter = new SearchFilter();
+        EducationalContext educationalContext = new EducationalContext();
+        educationalContext.setId(2L);
+        educationalContext.setName("PRESCHOOL");
+
+        Domain domain = new Domain();
+        domain.setId(3L);
+        domain.setName("COOL_DOMAIN");
+        domain.setEducationalContext(educationalContext);
+
         Subject subject = new Subject();
         subject.setId(4L);
         subject.setName("COOL_SUBJECT");
+        subject.setDomain(domain);
+
         searchFilter.setTaxon(subject);
-        String tokenizedQuery = "(pythagoras*) AND subject:\"cool_subject\"";
+
+        String tokenizedQuery = "(pythagoras*) AND subject:\"cool_subject\" AND domain:\"cool_domain\" AND educational_context:\"preschool\"";
         long start = 0;
 
         List<Searchable> searchables = Arrays.asList(createMaterial(9L), createMaterial(2L), createPortfolio(2L));
@@ -367,7 +387,7 @@ public class SearchServiceTest {
     }
 
     @Test
-    public void searchWithTaxonAndPaidFilter() {
+    public void searchWithTaxonEducationalContextAndPaidFilter() {
         String query = "pythagoras";
         SearchFilter searchFilter = new SearchFilter();
         EducationalContext educationalContext = new EducationalContext();
@@ -384,7 +404,7 @@ public class SearchServiceTest {
     }
 
     @Test
-    public void searchWithEducationalContextAndTypeFilter() {
+    public void searchWithTaxonEducationalContextAndTypeFilter() {
         String query = "pythagoras";
         SearchFilter searchFilter = new SearchFilter();
         EducationalContext educationalContext = new EducationalContext();
@@ -417,14 +437,28 @@ public class SearchServiceTest {
     @Test
     public void searchWithAllFilters() {
         String query = "pythagoras";
+
         SearchFilter searchFilter = new SearchFilter();
+
         EducationalContext educationalContext = new EducationalContext();
         educationalContext.setId(2L);
         educationalContext.setName("PRESCHOOL");
-        searchFilter.setTaxon(educationalContext);
+
+        Domain domain = new Domain();
+        domain.setId(3L);
+        domain.setName("COOL_DOMAIN");
+        domain.setEducationalContext(educationalContext);
+
+        Subject subject = new Subject();
+        subject.setId(4L);
+        subject.setName("COOL_SUBJECT");
+        subject.setDomain(domain);
+
+        searchFilter.setTaxon(subject);
+
         searchFilter.setPaid(false);
         searchFilter.setType("material");
-        String tokenizedQuery = "(pythagoras*) AND educational_context:\"preschool\""
+        String tokenizedQuery = "(pythagoras*) AND subject:\"cool_subject\" AND domain:\"cool_domain\" AND educational_context:\"preschool\""
                 + " AND (paid:\"false\" OR type:\"portfolio\") AND type:\"material\"";
         long start = 0;
 

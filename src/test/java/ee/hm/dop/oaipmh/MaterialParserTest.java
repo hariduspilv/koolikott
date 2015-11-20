@@ -9,6 +9,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 
 import java.util.List;
+import java.util.Set;
 
 import org.easymock.EasyMockRunner;
 import org.easymock.Mock;
@@ -23,6 +24,7 @@ import org.w3c.dom.NodeList;
 import ee.hm.dop.model.Language;
 import ee.hm.dop.model.LanguageString;
 import ee.hm.dop.model.Material;
+import ee.hm.dop.model.Taxon;
 import ee.hm.dop.service.LanguageService;
 
 /**
@@ -153,22 +155,7 @@ public class MaterialParserTest {
         }
 
         @Override
-        protected void setTaxon(Material material, Document doc) {
-
-        }
-
-        @Override
-        protected void setLearningResourceType(Material material, Document doc) {
-
-        }
-
-        @Override
         protected void setTags(Material material, Document doc) {
-
-        }
-
-        @Override
-        protected void setSource(Material material, Document doc) throws ParseException {
 
         }
 
@@ -184,6 +171,26 @@ public class MaterialParserTest {
 
         @Override
         protected void setTitles(Material material, Document doc) throws ParseException {
+
+        }
+
+        @Override
+        protected String getPathToContext() {
+            return null;
+        }
+
+        @Override
+        protected String getPathToResourceType() {
+            return null;
+        }
+
+        @Override
+        protected String getPathToLocation() {
+            return null;
+        }
+
+        @Override
+        protected void setContextsFromElements(Document doc, Set<Taxon> taxons) {
 
         }
     }

@@ -1,14 +1,20 @@
 package ee.hm.dop.oaipmh;
 
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
+import javax.inject.Inject;
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpression;
 import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
 
+import org.apache.commons.validator.routines.UrlValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.CharacterData;
@@ -18,34 +24,42 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import ee.hm.dop.model.Author;
+import ee.hm.dop.model.EducationalContext;
 import ee.hm.dop.model.Language;
 import ee.hm.dop.model.LanguageString;
 import ee.hm.dop.model.Material;
 import ee.hm.dop.model.ResourceType;
 import ee.hm.dop.model.Tag;
+import ee.hm.dop.model.Taxon;
 import ee.hm.dop.service.AuthorService;
 import ee.hm.dop.service.LanguageService;
 import ee.hm.dop.service.ResourceTypeService;
 import ee.hm.dop.service.TagService;
+import ee.hm.dop.service.TaxonService;
 import ezvcard.Ezvcard;
 import ezvcard.VCard;
 
 public abstract class MaterialParser {
 
     protected final Logger logger = LoggerFactory.getLogger(this.getClass());
-    public static final String WEB_PAGE = "WEBPAGE";
-    public static final String WEBSITE = "WEBSITE";
+    protected static final String[] SCHEMES = {"http", "https"};
+    protected XPathFactory xPathfactory = XPathFactory.newInstance();
+    protected XPath xpath = xPathfactory.newXPath();
+
+    @Inject
+    private TaxonService taxonService;
+
+    @Inject
+    private ResourceTypeService resourceTypeService;
 
     public Material parse(Document doc) throws ParseException {
         Material material;
 
         try {
+            material = new Material();
             doc.getDocumentElement().normalize();
 
-            material = new Material();
-
             setIdentifier(material, doc);
-
             setTitles(material, doc);
             setLanguage(material, doc);
             setDescriptions(material, doc);
@@ -144,32 +158,15 @@ public abstract class MaterialParser {
         return tags;
     }
 
-    protected List<ResourceType> getResourceTypes(Document doc, String path, ResourceTypeService resourceTypeService) throws XPathExpressionException {
+    protected List<ResourceType> getResourceTypes(Document doc, String path) throws XPathExpressionException {
         List<ResourceType> resourceTypes = new ArrayList<>();
 
-        XPathFactory xPathfactory = XPathFactory.newInstance();
-        XPath xpath = xPathfactory.newXPath();
         XPathExpression expr = xpath.compile(path);
         NodeList nl = (NodeList) expr.evaluate(doc, XPathConstants.NODESET);
 
         for (int i = 0; i < nl.getLength(); i++) {
             Node node = nl.item(i);
-            XPathExpression rolePath = xpath.compile("./*[local-name()='value']");
-            Node value = (Node) rolePath.evaluate(node, XPathConstants.NODE);
-
-            String type;
-            if( value != null) {
-                //waramu
-                type = value.getTextContent().trim().toUpperCase().replaceAll("\\s", "");
-            } else {
-                //estCore
-                type = node.getTextContent().trim().toUpperCase();
-            }
-
-            //The only special case where waramu and est-core are different
-            if (type.equals(WEB_PAGE)) {
-                type = WEBSITE;
-            }
+            String type = getElementValue(node);
 
             ResourceType resourceType = resourceTypeService.getResourceTypeByName(type);
             if (!resourceTypes.contains(resourceType) && resourceType != null) {
@@ -180,19 +177,104 @@ public abstract class MaterialParser {
         return resourceTypes;
     }
 
+    protected void setEducationalContexts(Document doc, Set<Taxon> taxons, String path) throws XPathExpressionException {
+        XPathExpression expr = xpath.compile(path);
+        NodeList nl = (NodeList) expr.evaluate(doc, XPathConstants.NODESET);
+
+        for (int i = 0; i < nl.getLength(); i++) {
+            Node node = nl.item(i);
+            String context = getElementValue(node);
+
+            EducationalContext educationalContext = taxonService.getEducationalContextByName(context);
+            if (educationalContext != null) {
+                taxons.add(educationalContext);
+            }
+        }
+
+        setContextsFromElements(doc, taxons);
+    }
+
+    protected String getElementValue(Node node) throws XPathExpressionException {
+        return node.getTextContent().trim().toUpperCase();
+    }
+
+    protected void setTaxon(Material material, Document doc) {
+        Set<Taxon> taxons = new HashSet<>();
+        try {
+            setEducationalContexts(doc, taxons, getPathToContext());
+        } catch (Exception e) {
+            //ignore if there is no taxon for a material
+        }
+        material.setTaxons(new ArrayList<>(taxons));
+    }
+
+    protected void setLearningResourceType(Material material, Document doc) {
+        List<ResourceType> resourceTypes = null;
+
+        try {
+            resourceTypes = getResourceTypes(doc, getPathToResourceType());
+        } catch (Exception e) {
+            //ignore if there is no resource type for a material
+        }
+        material.setResourceTypes(resourceTypes);
+    }
+
+    protected void setSource(Material material, Document doc) throws ParseException {
+        String source;
+        try {
+            source = getSource(doc);
+
+        } catch (Exception e) {
+            throw new ParseException("Error parsing document source.");
+        }
+
+        material.setSource(source);
+    }
+
+    private String getSource(Document doc) throws ParseException, XPathExpressionException, URISyntaxException {
+        String source;
+
+        XPathExpression expr = xpath
+                .compile(getPathToLocation());
+        NodeList nodeList = (NodeList) expr.evaluate(doc, XPathConstants.NODESET);
+        if (nodeList.getLength() != 1) {
+            String message = "Material has more or less than one source, can't be mapped.";
+            logger.error(String.format(message, message));
+            throw new ParseException(message);
+        }
+
+        source = nodeList.item(0).getTextContent().trim();
+
+        URI uri = new URI(source);
+        if(uri.getScheme() == null) {
+            source = "http://" + source;
+        }
+
+        UrlValidator urlValidator = new UrlValidator(SCHEMES);
+        if (!urlValidator.isValid(source)) {
+            String message = "Error parsing document. Invalid URL %s";
+            logger.error(String.format(message, source));
+            throw new ParseException(String.format(message, source));
+        }
+
+        return source;
+    }
+
     protected abstract void setAuthors(Material material, Document doc);
 
-    protected abstract void setTaxon(Material material, Document doc);
-
-    protected abstract void setLearningResourceType(Material material, Document doc);
-
     protected abstract void setTags(Material material, Document doc);
-
-    protected abstract void setSource(Material material, Document doc) throws ParseException;
 
     protected abstract void setDescriptions(Material material, Document doc);
 
     protected abstract void setLanguage(Material material, Document doc);
 
     protected abstract void setTitles(Material material, Document doc) throws ParseException;
+
+    protected abstract String getPathToContext();
+
+    protected abstract String getPathToResourceType();
+
+    protected abstract String getPathToLocation();
+
+    protected abstract void setContextsFromElements(Document doc, Set<Taxon> taxons);
 }

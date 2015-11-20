@@ -157,9 +157,8 @@ public class SearchService {
         Map<String, String> filters = new LinkedHashMap<>();
 
         Taxon taxon = searchFilter.getTaxon();
-        String level = getTaxonLevel(taxon);
-        if (level != null) {
-            filters.put(level, taxon.getName());
+        if (taxon != null) {
+            filters.putAll(getTaxonsAsFilters(taxon));
         }
 
         if (!searchFilter.isPaid()) {
@@ -190,6 +189,26 @@ public class SearchService {
             }
         }
         return filtersAsQuery;
+    }
+
+    private Map<String, String> getTaxonsAsFilters(Taxon taxon) {
+        Map<String, String> filters = new LinkedHashMap<>();
+
+        if (taxon instanceof Subject) {
+            filters.put(getTaxonLevel(taxon), taxon.getName());
+            taxon = ((Subject) taxon).getDomain();
+        }
+
+        if (taxon instanceof Domain) {
+            filters.put(getTaxonLevel(taxon), taxon.getName());
+            taxon = ((Domain) taxon).getEducationalContext();
+        }
+
+        if (taxon instanceof EducationalContext) {
+            filters.put(getTaxonLevel(taxon), taxon.getName());
+        }
+
+        return filters;
     }
 
     private String getTaxonLevel(Taxon taxon) {

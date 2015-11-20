@@ -87,20 +87,15 @@
                         <typicalAgeRange>0-0</typicalAgeRange>
                     </educational>
                     <rights uniqueElementName="rights">
-                        <lom:description uniqueElementName="description">
-                        </lom:description>
-                        <lom:description uniqueElementName="description">
-                            <lom:string language="en-US">string7</lom:string>
-                        </lom:description>
+                        <lom:cost>
+                            <lom:value>
+                                yes
+                            </lom:value>
+                        </lom:cost>
                     </rights>
                     <classification>
                         <taxonPath>
                             <gymnasiumTaxon>
-                                <curriculum>KLRÕK2011</curriculum>
-                                <domain>Mina ja keskkond</domain>
-                                <subject>Estonian</subject>
-                                <topic>Ajaloo algõpetus</topic>
-                                <subtopic>Ajaarvamine</subtopic>
                             </gymnasiumTaxon>
                         </taxonPath>
                         <taxonPath>

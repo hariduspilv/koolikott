@@ -1,33 +1,34 @@
 package ee.hm.dop.oaipmh.estcore;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import javax.inject.Inject;
-import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpression;
 import javax.xml.xpath.XPathExpressionException;
-import javax.xml.xpath.XPathFactory;
 
-import org.apache.commons.validator.routines.UrlValidator;
 import org.w3c.dom.CharacterData;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import ee.hm.dop.model.Author;
+import ee.hm.dop.model.EducationalContext;
 import ee.hm.dop.model.Language;
 import ee.hm.dop.model.LanguageString;
 import ee.hm.dop.model.Material;
-import ee.hm.dop.model.ResourceType;
 import ee.hm.dop.model.Tag;
+import ee.hm.dop.model.Taxon;
 import ee.hm.dop.oaipmh.MaterialParser;
 import ee.hm.dop.oaipmh.ParseException;
 import ee.hm.dop.service.AuthorService;
 import ee.hm.dop.service.LanguageService;
-import ee.hm.dop.service.ResourceTypeService;
 import ee.hm.dop.service.TagService;
+import ee.hm.dop.service.TaxonService;
 
 
 /**
@@ -35,8 +36,17 @@ import ee.hm.dop.service.TagService;
  */
 public class MaterialParserEstCore extends MaterialParser {
 
-    private static final String[] SCHEMES = {"http", "https"};
-    public static final String AUTHOR = "author";
+    private static final String AUTHOR = "author";
+    private static final String[] TAXONS = {"preschoolTaxon", "basicSchoolTaxon", "gymnasiumTaxon", "vocationalTaxon"};
+    private static final Map<String, String> taxonMap;
+
+    static {
+        taxonMap = new HashMap<>();
+        taxonMap.put("preschoolTaxon", "PRESCHOOLEDUCATION");
+        taxonMap.put("basicSchoolTaxon", "BASICEDUCATION");
+        taxonMap.put("gymnasiumTaxon", "SECONDARYEDUCATION");
+        taxonMap.put("vocationalTaxon", "VOCATIONALEDUCATION");
+    }
 
     @Inject
     private LanguageService languageService;
@@ -48,9 +58,7 @@ public class MaterialParserEstCore extends MaterialParser {
     private TagService tagService;
 
     @Inject
-    private ResourceTypeService resourceTypeService;
-
-    private XPathFactory xPathfactory = XPathFactory.newInstance();
+    private TaxonService taxonService;
 
     @Override
     protected void setAuthors(Material material, Document doc) {
@@ -66,20 +74,8 @@ public class MaterialParserEstCore extends MaterialParser {
     }
 
     @Override
-    protected void setTaxon(Material material, Document doc) {
-
-    }
-
-    @Override
-    protected void setLearningResourceType(Material material, Document doc) {
-        List<ResourceType> resourceTypes = null;
-        String pathToResourceTypes = "//*[local-name()='estcore']/*[local-name()='educational']/*[local-name()='learningResourceType']";
-        try {
-            resourceTypes = getResourceTypes(doc, pathToResourceTypes, resourceTypeService);
-        } catch (Exception e) {
-            //ignore if there is no resource type for a material
-        }
-        material.setResourceTypes(resourceTypes);
+    protected String getPathToResourceType() {
+        return "//*[local-name()='estcore']/*[local-name()='educational']/*[local-name()='learningResourceType']";
     }
 
     @Override
@@ -93,18 +89,6 @@ public class MaterialParserEstCore extends MaterialParser {
         material.setTags(tags);
     }
 
-    @Override
-    protected void setSource(Material material, Document doc) throws ParseException {
-        String source;
-        try {
-            source = getSource(doc);
-
-        } catch (Exception e) {
-            throw new ParseException("Error parsing document source.");
-        }
-
-        material.setSource(source);
-    }
 
     @Override
     protected void setDescriptions(Material material, Document doc) {
@@ -148,10 +132,43 @@ public class MaterialParserEstCore extends MaterialParser {
         material.setTitles(titles);
     }
 
+    @Override
+    protected String getPathToContext() {
+        return "//*[local-name()='estcore']/*[local-name()='educational']/*[local-name()='context']";
+    }
+
+    @Override
+    protected String getPathToLocation() {
+        return "//*[local-name()='estcore']/*[local-name()='technical']/*[local-name()='location']";
+    }
+
+    @Override
+    protected void setContextsFromElements(Document doc, Set<Taxon> taxons) {
+        String path = "//*[local-name()='estcore']/*[local-name()='classification']/*[local-name()='taxonPath']";
+
+        for (int i = 0; i < TAXONS.length; i++) {
+            String tag = TAXONS[i];
+            try {
+                XPathExpression expr = xpath.compile(path + "/*[local-name()='" + tag + "']");
+                NodeList nl = (NodeList) expr.evaluate(doc, XPathConstants.NODESET);
+
+                if (nl != null && nl.getLength() > 0) {
+                    EducationalContext educationalContext = taxonService.getEducationalContextByName(taxonMap.get(TAXONS[i]));
+
+                    if (educationalContext != null) {
+                        taxons.add(educationalContext);
+                    }
+                }
+            } catch (XPathExpressionException e) {
+                //ignore
+            }
+        }
+    }
+
+
     private Language getLanguage(Document doc) throws XPathExpressionException {
         Language language;
 
-        XPath xpath = xPathfactory.newXPath();
         XPathExpression expr = xpath
                 .compile("//*[local-name()='estcore']/*[local-name()='general']/*[local-name()='language']");
         Node node = (Node) expr.evaluate(doc, XPathConstants.NODE);
@@ -165,7 +182,6 @@ public class MaterialParserEstCore extends MaterialParser {
     private List<Author> getAuthors(Document doc) throws ParseException, XPathExpressionException {
         List<Author> authors = new ArrayList<>();
 
-        XPath xpath = xPathfactory.newXPath();
         XPathExpression contributePath = xpath
                 .compile("//*[local-name()='estcore']/*[local-name()='lifeCycle']/*[local-name()='contribute']");
         NodeList nodeList = (NodeList) contributePath.evaluate(doc, XPathConstants.NODESET);
@@ -184,7 +200,6 @@ public class MaterialParserEstCore extends MaterialParser {
     }
 
     private void getAuthor(List<Author> authors, Node contributorNode) throws XPathExpressionException {
-        XPath xpath = xPathfactory.newXPath();
         String vCard = "";
 
         XPathExpression vCardPath = xpath.compile("./*[local-name()='entity']");
@@ -202,7 +217,6 @@ public class MaterialParserEstCore extends MaterialParser {
     private List<LanguageString> getTitles(Document doc) throws ParseException, XPathExpressionException {
         List<LanguageString> titles;
 
-        XPath xpath = xPathfactory.newXPath();
         XPathExpression expr = xpath
                 .compile("//*[local-name()='estcore']/*[local-name()='general']/*[local-name()='title']");
         Node node = (Node) expr.evaluate(doc, XPathConstants.NODE);
@@ -211,31 +225,10 @@ public class MaterialParserEstCore extends MaterialParser {
         return titles;
     }
 
-    private String getSource(Document doc) throws ParseException, XPathExpressionException {
-        String source;
-
-        XPath xpath = xPathfactory.newXPath();
-        XPathExpression expr = xpath
-                .compile("//*[local-name()='estcore']/*[local-name()='technical']/*[local-name()='location']");
-        NodeList nodeList = (NodeList) expr.evaluate(doc, XPathConstants.NODESET);
-        if (nodeList.getLength() != 1) {
-            throw new ParseException("Material has more or less than one source, can't be mapped.");
-        }
-
-        source = nodeList.item(0).getTextContent().trim();
-        UrlValidator urlValidator = new UrlValidator(SCHEMES);
-        if (!urlValidator.isValid(source)) {
-            String message = "Error parsing document. Invalid URL %s";
-            throw new ParseException(String.format(message, source));
-        }
-
-        return source;
-    }
 
     private List<LanguageString> getDescriptions(Document doc) throws XPathExpressionException {
         List<LanguageString> descriptions;
 
-        XPath xpath = xPathfactory.newXPath();
         XPathExpression expr = xpath
                 .compile("//*[local-name()='estcore']/*[local-name()='general']/*[local-name()='description']");
         Node node = (Node) expr.evaluate(doc, XPathConstants.NODE);
@@ -245,7 +238,6 @@ public class MaterialParserEstCore extends MaterialParser {
     }
 
     private List<Tag> getTags(Document doc) throws XPathExpressionException {
-        XPath xpath = xPathfactory.newXPath();
         XPathExpression expr = xpath
                 .compile("//*[local-name()='estcore']/*[local-name()='general']/*[local-name()='keyword']/*[local-name()='string']");
         NodeList keywords = (NodeList) expr.evaluate(doc, XPathConstants.NODESET);

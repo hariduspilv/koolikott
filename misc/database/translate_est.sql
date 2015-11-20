@@ -3,7 +3,7 @@ insert into Translation(translationGroup, translationKey, translation) values (1
 insert into Translation(translationGroup, translationKey, translation) values (1, 'LOGOUT', 'Logi välja');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'DETAIL_VIEW_SUBJECT', 'Teema');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'MATERIAL_VIEW_RESOURCE_TYPE', 'Tüüp');
-insert into Translation(translationGroup, translationKey, translation) values (1, 'DETAIL_VIEW_EDUCATIONAL_CONTEXT', 'Vanuserühm');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'DETAIL_VIEW_EDUCATIONAL_CONTEXT', 'Haridustase');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'UPDATED', 'Uuendatud');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'CREATED', 'Loodud');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'REPOSITORY_NUMBER', 'Repositooriumi number');
@@ -121,7 +121,7 @@ insert into Translation(translationGroup, translationKey, translation) values (1
 insert into Translation(translationGroup, translationKey, translation) values (1, 'BUTTON_CREATE_PORTFOLIO', 'Loo portfolio');
 
 -- Taxon Domain translations
-insert into Translation(translationGroup, translationKey, translation) values (1, 'DOMAIN_LANGUAGE_AND_SPEACH', 'Keel ja kõne');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'DOMAIN_LANGUAGE_AND_SPEECH', 'Keel ja kõne');
 
 -- Taxon Topic translations
 insert into Translation(translationGroup, translationKey, translation) values (1, 'TOPIC_BASIC_HISTORY', 'Ajaloo algõpetus');
@@ -131,16 +131,14 @@ insert into Translation(translationGroup, translationKey, translation) values (1
 insert into Translation(translationGroup, translationKey, translation) values (1, 'SUBJECT_ESTONIAN', 'Eesti keel');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'SUBJECT_RUSSIAN', 'Vene keel');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'SUBJECT_LITERATURE', 'Kirjandus');
-insert into Translation(translationGroup, translationKey, translation) values (1, 'SUBJECT_ESTONIAN_AS_SECOND_LANGUAGE', 'Eesti keel (võõrkeel)');
-insert into Translation(translationGroup, translationKey, translation) values (1, 'SUBJECT_ENGLISH_AS_SECOND_LANGUAGE', 'Inglise keel (võõrkeel)');
-insert into Translation(translationGroup, translationKey, translation) values (1, 'SUBJECT_FRENCH_AS_SECOND_LANGUAGE', 'Prantsuse keel (võõrkeel)');
-insert into Translation(translationGroup, translationKey, translation) values (1, 'SUBJECT_GERMAN_AS_SECOND_LANGUAGE', 'Saksa keel (võõrkeel)');
-insert into Translation(translationGroup, translationKey, translation) values (1, 'SUBJECT_RUSSIAN_AS_SECOND_LANGUAGE', 'Vene keel  (võõrkeel)');
-insert into Translation(translationGroup, translationKey, translation) values (1, 'SUBJECT_SWEDISH_AS_SECOND_LANGUAGE', 'Rootsi keel (võõrkeel)');
-insert into Translation(translationGroup, translationKey, translation) values (1, 'SUBJECT_FINNISH_AS_SECOND_LANGUAGE', 'Soome keel (võõrkeel)');
-insert into Translation(translationGroup, translationKey, translation) values (1, 'SUBJECT_LATIN_AS_SECOND_LANGUAGE', 'Ladina keel (võõrkeel)');
-insert into Translation(translationGroup, translationKey, translation) values (1, 'SUBJECT_CHINESE_AS_SECOND_LANGUAGE', 'Hiina keel (võõrkeel)');
-insert into Translation(translationGroup, translationKey, translation) values (1, 'SUBJECT_JAPANESE_AS_SECOND_LANGUAGE', 'Jaapani keel (võõrkeel)');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'SUBJECT_ENGLISH', 'Inglise keel');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'SUBJECT_FRENCH', 'Prantsuse keel');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'SUBJECT_GERMAN', 'Saksa keel');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'SUBJECT_SWEDISH', 'Rootsi keel');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'SUBJECT_FINNISH', 'Soome keel');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'SUBJECT_LATIN', 'Ladina keel');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'SUBJECT_CHINESE', 'Hiina keel');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'SUBJECT_JAPANESE', 'Jaapani keel');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'SUBJECT_MATHEMATICS', 'Matemaatika');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'SUBJECT_SCIENCE', 'Loodusõpetus');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'SUBJECT_BIOLOGY', 'Bioloogia');
@@ -184,8 +182,9 @@ insert into Translation(translationGroup, translationKey, translation) values (1
 insert into Translation(translationGroup, translationKey, translation) values (1, 'SUBJECT_OTHER', 'Muu');
 
 -- Taxon path
-insert into Translation(translationGroup, translationKey, translation) values (1, 'TAXON_PATH_DOMAIN', 'Домен');
-insert into Translation(translationGroup, translationKey, translation) values (1, 'TAXON_PATH_TOPIC', 'тема');
+
+insert into Translation(translationGroup, translationKey, translation) values (1, 'TAXON_PATH_DOMAIN', 'Domeen');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'TAXON_PATH_TOPIC', 'Teema');
 
 -- Language name translations, more can be added using the same conventions for the translation key
 insert into Translation(translationGroup, translationKey, translation) values (1, 'LANGUAGE_ESTONIAN', 'Eesti');

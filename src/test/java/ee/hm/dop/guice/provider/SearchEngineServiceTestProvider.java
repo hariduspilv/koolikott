@@ -77,7 +77,7 @@ class SearchEngineServiceMock implements SearchEngineService {
     }
 
     private static void addQueryWithEducationalContextFilter() {
-        String filteredQuery = "(beethoven*) AND domain:\"mathematics\"";
+        String filteredQuery = "(beethoven*) AND domain:\"mathematics\" AND educational_context:\"preschooleducation\"";
         List<Document> filteredSearchResult = createDocumentsWithIdentifiers(1L, 2L);
         searchResponses.put(filteredQuery, filteredSearchResult);
     }
@@ -107,13 +107,15 @@ class SearchEngineServiceMock implements SearchEngineService {
     }
 
     private static void addQueryWithTaxonSubjectAndPaidFilterFalse() {
-        String filteredQuery = "(dop) AND subject:\"biology\"" + " AND (paid:\"false\" OR type:\"portfolio\")";
+        String filteredQuery = "(dop) AND subject:\"biology\" AND domain:\"mathematics\" "
+                + "AND educational_context:\"preschooleducation\" AND (paid:\"false\" OR type:\"portfolio\")";
         List<Document> filteredSearchResult = createDocumentsWithIdentifiers(1L, 6L);
         searchResponses.put(filteredQuery, filteredSearchResult);
     }
 
     private static void addQueryWithTaxonSubjectAndTypeFilter() {
-        String filteredQuery = "(beethoven*) AND subject:\"mathematics\" AND type:\"material\"";
+        String filteredQuery = "(beethoven*) AND subject:\"mathematics\" AND domain:\"mathematics\""
+                + " AND educational_context:\"preschooleducation\" AND type:\"material\"";
         List<Document> filteredSearchResult = createDocumentsWithIdentifiers(1L, 7L);
         searchResponses.put(filteredQuery, filteredSearchResult);
     }

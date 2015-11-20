@@ -276,7 +276,7 @@ public class MaterialParserWaramuTest {
 
     @Test
     public void parseNullSource() throws ParserConfigurationException, IOException, SAXException, URISyntaxException {
-        String errorMessage = "Material has more or less than one source, can't be mapped.";
+        String errorMessage = "Error parsing document source.";
 
         URI resource = getClass().getClassLoader().getResource("oaipmh/waramu/parseNullSource.xml").toURI();
         File fXmlFile = new File(resource);
