@@ -332,3 +332,14 @@ insert into Taxon(id, name, level) values (1103, 'Digital_competence', 'SUBJECT'
 insert into Subject(id, domain) values (1103, 127);
 
 -- End of Secondary Education Subjects
+
+-- Topic
+
+-- Start of topics for Basic Education
+
+insert into Taxon(id, name, level) values (10000, 'Basic_history', 'TOPIC');
+insert into Topic(id, subject) values (10000, 1021);
+insert into Taxon(id, name, level) values (10001, 'Estonian_history', 'TOPIC');
+insert into Topic(id, subject) values (10001, 1021);
+
+-- End of topics for Basic Education

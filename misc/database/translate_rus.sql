@@ -123,6 +123,10 @@ insert into Translation(translationGroup, translationKey, translation) values (2
 -- Taxon Domain translations
 insert into Translation(translationGroup, translationKey, translation) values (2, 'DOMAIN_LANGUAGE_AND_SPEACH', 'Язык и речь');
 
+-- Taxon Topic translations
+insert into Translation(translationGroup, translationKey, translation) values (2, 'TOPIC_BASIC_HISTORY', 'История основы');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'TOPIC_ESTONIAN_HISTORY', 'История Эстонии');
+
 -- Material Subject translations
 insert into Translation(translationGroup, translationKey, translation) values (2, 'SUBJECT_ESTONIAN', 'Эстонский');
 insert into Translation(translationGroup, translationKey, translation) values (2, 'SUBJECT_RUSSIAN', 'Русский');
@@ -181,6 +185,7 @@ insert into Translation(translationGroup, translationKey, translation) values (2
 
 -- Taxon path
 insert into Translation(translationGroup, translationKey, translation) values (2, 'TAXON_PATH_DOMAIN', 'Domain');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'TAXON_PATH_TOPIC', 'Tema');
 
 -- Language name translations, more can be added using the same conventions for the translation key
 insert into Translation(translationGroup, translationKey, translation) values (2, 'LANGUAGE_ESTONIAN', 'Эстонский');

@@ -81,6 +81,13 @@ insert into Subject(id, domain) values (20, 10);
 insert into Taxon(id, name, level) values (21, 'Mathematics', 'SUBJECT');
 insert into Subject(id, domain) values (21, 10);
 
+-- Subject
+
+insert into Taxon(id, name, level) values (30, 'Algebra', 'TOPIC');
+insert into Topic(id, subject) values (30, 21);
+insert into Taxon(id, name, level) values (31, 'Trigonometria', 'TOPIC');
+insert into Topic(id, subject) values (31, 21);
+
 -- Materials
 
 insert into Material(id, lang, issueDate, licenseType, source, repository, repositoryIdentifier, added, updated, views, picture, creator, deleted, paid) values(1, 1, 1, 1, 'https://www.youtube.com/watch?v=gSWbx3CvVUk', 1, 'isssiiaawej', '1999-01-01 00:00:01', '2000-03-01 07:00:01', 100, '656b6f6f6c696b6f7474', 1, false, true);

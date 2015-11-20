@@ -28,6 +28,7 @@ DROP TABLE IF EXISTS LanguageTable;
 DROP TABLE IF EXISTS IssueDate;
 DROP TABLE IF EXISTS Publisher;
 DROP TABLE IF EXISTS Tag;
+DROP TABLE IF EXISTS Topic;
 DROP TABLE IF EXISTS Subject;
 DROP TABLE IF EXISTS Domain;
 DROP TABLE IF EXISTS EducationalContext;
@@ -116,6 +117,19 @@ CREATE TABLE Subject (
   
   FOREIGN KEY (domain)
             REFERENCES Domain(id)
+            ON DELETE RESTRICT
+);
+
+CREATE TABLE Topic (
+  id      BIGINT PRIMARY KEY,
+  subject BIGINT NOT NULL,
+  
+  FOREIGN KEY (id)
+            REFERENCES Taxon(id)
+            ON DELETE RESTRICT,
+  
+  FOREIGN KEY (subject)
+            REFERENCES Subject(id)
             ON DELETE RESTRICT
 );
 
