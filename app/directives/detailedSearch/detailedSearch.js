@@ -168,10 +168,12 @@ define(['app'], function(app)
                 }
 
                 function getTaxonFromEducationalContexts(id) {
-                    for (c = 0; c < EDUCATIONAL_CONTEXTS.length; c++) {
-                        var taxon = getTaxonById(EDUCATIONAL_CONTEXTS[c], id);
-                        if (taxon) {
-                            return taxon;
+                    if (id) {
+                        for (c = 0; c < EDUCATIONAL_CONTEXTS.length; c++) {
+                            var taxon = getTaxonById(EDUCATIONAL_CONTEXTS[c], id);
+                            if (taxon) {
+                                return taxon;
+                            }
                         }
                     }
                 }
@@ -184,16 +186,16 @@ define(['app'], function(app)
                         if (taxon.level === '.EducationalContext') {
                             children = taxon.domains;
                         } else if (taxon.level === '.Domain') {
-                            children = taxon.subject;
+                            children = taxon.subjects;
                         }
 
-                        if (children) {
+                        if (children && children.length) {
                             var result = null;
                             for (i = 0; result == null && i < children.length; i++) {
                                 result = getTaxonById(children[i], id);
                             }
                             return result; 
-                        }   
+                        }
                     }
                 }
 
