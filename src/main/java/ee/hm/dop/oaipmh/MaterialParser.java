@@ -190,6 +190,8 @@ public abstract class MaterialParser {
                 taxons.add(educationalContext);
             }
         }
+
+        setContextsFromElements(doc, taxons);
     }
 
     protected String getElementValue(Node node) throws XPathExpressionException {
@@ -274,4 +276,5 @@ public abstract class MaterialParser {
 
     protected abstract String getPathToLocation();
 
+    protected abstract void setContextsFromElements(Document doc, Set<Taxon> taxons);
 }

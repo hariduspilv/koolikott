@@ -124,6 +124,9 @@ public class MaterialParserEstCoreTest {
         EducationalContext educationalContext2 = new EducationalContext();
         educationalContext2.setName("BASICEDUCATION");
 
+        EducationalContext educationalContext3 = new EducationalContext();
+        educationalContext3.setName("SECONDARYEDUCATION");
+
         expect(languageService.getLanguage("en")).andReturn(english).times(3);
         expect(languageService.getLanguage("et")).andReturn(estonian).times(2);
         expect(authorService.getAuthorByFullName(author1.getName(), author1.getSurname())).andReturn(author1);
@@ -135,7 +138,9 @@ public class MaterialParserEstCoreTest {
         expect(taxonService.getEducationalContextByName(educationalContext1.getName())).andReturn(
                 educationalContext1);
         expect(taxonService.getEducationalContextByName(educationalContext2.getName())).andReturn(
-                educationalContext2);
+                educationalContext2).times(2);
+        expect(taxonService.getEducationalContextByName(educationalContext3.getName())).andReturn(
+                educationalContext3);
 
         LanguageString title1 = new LanguageString();
         title1.setLanguage(english);
@@ -167,6 +172,7 @@ public class MaterialParserEstCoreTest {
 
         List<Taxon> taxon = new ArrayList<>();
         taxon.add(educationalContext1);
+        taxon.add(educationalContext3);
         taxon.add(educationalContext2);
 
         replay(languageService, authorService, tagService, resourceTypeService, taxonService);

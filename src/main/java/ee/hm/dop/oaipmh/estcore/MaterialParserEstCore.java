@@ -1,7 +1,10 @@
 package ee.hm.dop.oaipmh.estcore;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import javax.inject.Inject;
 import javax.xml.xpath.XPathConstants;
@@ -14,15 +17,18 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import ee.hm.dop.model.Author;
+import ee.hm.dop.model.EducationalContext;
 import ee.hm.dop.model.Language;
 import ee.hm.dop.model.LanguageString;
 import ee.hm.dop.model.Material;
 import ee.hm.dop.model.Tag;
+import ee.hm.dop.model.Taxon;
 import ee.hm.dop.oaipmh.MaterialParser;
 import ee.hm.dop.oaipmh.ParseException;
 import ee.hm.dop.service.AuthorService;
 import ee.hm.dop.service.LanguageService;
 import ee.hm.dop.service.TagService;
+import ee.hm.dop.service.TaxonService;
 
 
 /**
@@ -30,7 +36,17 @@ import ee.hm.dop.service.TagService;
  */
 public class MaterialParserEstCore extends MaterialParser {
 
-    public static final String AUTHOR = "author";
+    private static final String AUTHOR = "author";
+    private static final String[] TAXONS = {"preschoolTaxon", "basicSchoolTaxon", "gymnasiumTaxon", "vocationalTaxon"};
+    private static final Map<String, String> taxonMap;
+
+    static {
+        taxonMap = new HashMap<>();
+        taxonMap.put("preschoolTaxon", "PRESCHOOLEDUCATION");
+        taxonMap.put("basicSchoolTaxon", "BASICEDUCATION");
+        taxonMap.put("gymnasiumTaxon", "SECONDARYEDUCATION");
+        taxonMap.put("vocationalTaxon", "VOCATIONALEDUCATION");
+    }
 
     @Inject
     private LanguageService languageService;
@@ -40,6 +56,9 @@ public class MaterialParserEstCore extends MaterialParser {
 
     @Inject
     private TagService tagService;
+
+    @Inject
+    private TaxonService taxonService;
 
     @Override
     protected void setAuthors(Material material, Document doc) {
@@ -69,7 +88,6 @@ public class MaterialParserEstCore extends MaterialParser {
         }
         material.setTags(tags);
     }
-
 
 
     @Override
@@ -123,6 +141,30 @@ public class MaterialParserEstCore extends MaterialParser {
     protected String getPathToLocation() {
         return "//*[local-name()='estcore']/*[local-name()='technical']/*[local-name()='location']";
     }
+
+    @Override
+    protected void setContextsFromElements(Document doc, Set<Taxon> taxons) {
+        String path = "//*[local-name()='estcore']/*[local-name()='classification']/*[local-name()='taxonPath']";
+
+        for (int i = 0; i < TAXONS.length; i++) {
+            String tag = TAXONS[i];
+            try {
+                XPathExpression expr = xpath.compile(path + "/*[local-name()='" + tag + "']");
+                NodeList nl = (NodeList) expr.evaluate(doc, XPathConstants.NODESET);
+
+                if (nl != null && nl.getLength() > 0) {
+                    EducationalContext educationalContext = taxonService.getEducationalContextByName(taxonMap.get(TAXONS[i]));
+
+                    if (educationalContext != null) {
+                        taxons.add(educationalContext);
+                    }
+                }
+            } catch (XPathExpressionException e) {
+                //ignore
+            }
+        }
+    }
+
 
     private Language getLanguage(Document doc) throws XPathExpressionException {
         Language language;
@@ -182,7 +224,6 @@ public class MaterialParserEstCore extends MaterialParser {
 
         return titles;
     }
-
 
 
     private List<LanguageString> getDescriptions(Document doc) throws XPathExpressionException {

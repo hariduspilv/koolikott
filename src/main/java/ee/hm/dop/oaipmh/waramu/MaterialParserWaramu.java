@@ -2,6 +2,7 @@ package ee.hm.dop.oaipmh.waramu;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import javax.inject.Inject;
 import javax.xml.xpath.XPathConstants;
@@ -19,6 +20,7 @@ import ee.hm.dop.model.Language;
 import ee.hm.dop.model.LanguageString;
 import ee.hm.dop.model.Material;
 import ee.hm.dop.model.Tag;
+import ee.hm.dop.model.Taxon;
 import ee.hm.dop.oaipmh.MaterialParser;
 import ee.hm.dop.oaipmh.ParseException;
 import ee.hm.dop.service.AuthorService;
@@ -101,6 +103,11 @@ public class MaterialParserWaramu extends MaterialParser {
     @Override
     protected String getPathToLocation() {
         return "//*[local-name()='lom']/*[local-name()='technical']/*[local-name()='location']";
+    }
+
+    @Override
+    protected void setContextsFromElements(Document doc, Set<Taxon> taxons) {
+
     }
 
     private void setTags(Material material, Element lom) {
