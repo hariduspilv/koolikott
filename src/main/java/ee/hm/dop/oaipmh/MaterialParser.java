@@ -46,6 +46,9 @@ public abstract class MaterialParser {
     @Inject
     private TaxonService taxonService;
 
+    @Inject
+    private ResourceTypeService resourceTypeService;
+
     public Material parse(Document doc) throws ParseException {
         Material material;
 
@@ -152,7 +155,7 @@ public abstract class MaterialParser {
         return tags;
     }
 
-    protected List<ResourceType> getResourceTypes(Document doc, String path, ResourceTypeService resourceTypeService) throws XPathExpressionException {
+    protected List<ResourceType> getResourceTypes(Document doc, String path) throws XPathExpressionException {
         List<ResourceType> resourceTypes = new ArrayList<>();
 
         XPathExpression expr = xpath.compile(path);
@@ -200,9 +203,18 @@ public abstract class MaterialParser {
         material.setTaxons(new ArrayList<>(taxons));
     }
 
-    protected abstract void setAuthors(Material material, Document doc);
+    protected void setLearningResourceType(Material material, Document doc) {
+        List<ResourceType> resourceTypes = null;
 
-    protected abstract void setLearningResourceType(Material material, Document doc);
+        try {
+            resourceTypes = getResourceTypes(doc, getPathToResourceType());
+        } catch (Exception e) {
+            //ignore if there is no resource type for a material
+        }
+        material.setResourceTypes(resourceTypes);
+    }
+
+    protected abstract void setAuthors(Material material, Document doc);
 
     protected abstract void setTags(Material material, Document doc);
 
@@ -215,4 +227,6 @@ public abstract class MaterialParser {
     protected abstract void setTitles(Material material, Document doc) throws ParseException;
 
     protected abstract String getPathToContext();
+
+    protected abstract String getPathToResourceType();
 }
