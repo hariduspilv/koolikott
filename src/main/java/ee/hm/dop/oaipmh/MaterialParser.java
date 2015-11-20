@@ -1,5 +1,7 @@
 package ee.hm.dop.oaipmh;
 
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -12,6 +14,7 @@ import javax.xml.xpath.XPathExpression;
 import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
 
+import org.apache.commons.validator.routines.UrlValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.CharacterData;
@@ -214,11 +217,50 @@ public abstract class MaterialParser {
         material.setResourceTypes(resourceTypes);
     }
 
+    protected void setSource(Material material, Document doc) throws ParseException {
+        String source;
+        try {
+            source = getSource(doc);
+
+        } catch (Exception e) {
+            throw new ParseException("Error parsing document source.");
+        }
+
+        material.setSource(source);
+    }
+
+    private String getSource(Document doc) throws ParseException, XPathExpressionException, URISyntaxException {
+        String source;
+
+        XPathExpression expr = xpath
+                .compile(getPathToLocation());
+        NodeList nodeList = (NodeList) expr.evaluate(doc, XPathConstants.NODESET);
+        if (nodeList.getLength() != 1) {
+            String message = "Material has more or less than one source, can't be mapped.";
+            logger.error(String.format(message, message));
+            throw new ParseException(message);
+        }
+
+        source = nodeList.item(0).getTextContent().trim();
+
+        URI uri = new URI(source);
+        if(uri.getScheme() == null) {
+            source = "http://" + source;
+        }
+
+        UrlValidator urlValidator = new UrlValidator(SCHEMES);
+        if (!urlValidator.isValid(source)) {
+            String message = "Error parsing document. Invalid URL %s";
+            logger.error(String.format(message, source));
+            throw new ParseException(String.format(message, source));
+        }
+
+        return source;
+    }
+
     protected abstract void setAuthors(Material material, Document doc);
 
     protected abstract void setTags(Material material, Document doc);
-
-    protected abstract void setSource(Material material, Document doc) throws ParseException;
 
     protected abstract void setDescriptions(Material material, Document doc);
 
@@ -229,4 +271,7 @@ public abstract class MaterialParser {
     protected abstract String getPathToContext();
 
     protected abstract String getPathToResourceType();
+
+    protected abstract String getPathToLocation();
+
 }

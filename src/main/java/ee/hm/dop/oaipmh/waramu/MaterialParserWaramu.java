@@ -8,7 +8,6 @@ import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpression;
 import javax.xml.xpath.XPathExpressionException;
 
-import org.apache.commons.validator.routines.UrlValidator;
 import org.w3c.dom.CharacterData;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -24,7 +23,6 @@ import ee.hm.dop.oaipmh.MaterialParser;
 import ee.hm.dop.oaipmh.ParseException;
 import ee.hm.dop.service.AuthorService;
 import ee.hm.dop.service.LanguageService;
-import ee.hm.dop.service.ResourceTypeService;
 import ee.hm.dop.service.TagService;
 
 public class MaterialParserWaramu extends MaterialParser {
@@ -41,21 +39,12 @@ public class MaterialParserWaramu extends MaterialParser {
     private TagService tagService;
 
     @Inject
-    private ResourceTypeService resourceTypeService;
-
-    @Inject
     private AuthorService authorService;
 
     @Override
     protected void setTags(Material material, Document doc) {
         Element lom = (Element) doc.getElementsByTagName("lom").item(0);
         setTags(material, lom);
-    }
-
-    @Override
-    protected void setSource(Material material, Document doc) throws ParseException {
-        Element lom = (Element) doc.getElementsByTagName("lom").item(0);
-        setSource(material, lom);
     }
 
     @Override
@@ -109,6 +98,11 @@ public class MaterialParserWaramu extends MaterialParser {
         return "//*[local-name()='lom']/*[local-name()='educational']/*[local-name()='context']";
     }
 
+    @Override
+    protected String getPathToLocation() {
+        return "//*[local-name()='lom']/*[local-name()='technical']/*[local-name()='location']";
+    }
+
     private void setTags(Material material, Element lom) {
         List<Tag> tags = getTags(lom);
         material.setTags(tags);
@@ -122,27 +116,6 @@ public class MaterialParserWaramu extends MaterialParser {
             //ignore if there is no authors for a material
         }
         material.setAuthors(authors);
-    }
-
-
-    private void setSource(Material material, Element lom) throws ParseException {
-        if (lom.getElementsByTagName("location").getLength() != 1) {
-            throw new ParseException("Material has more or less than one source, can't be mapped.");
-        }
-
-        NodeList location = lom.getElementsByTagName("location");
-        if (location == null) {
-            throw new ParseException("Required element 'Location' not found.");
-        }
-
-        String url = location.item(0).getTextContent().trim();
-        UrlValidator urlValidator = new UrlValidator(SCHEMES);
-        if (!urlValidator.isValid(url)) {
-            String message = "Error parsing document. Invalid URL %s";
-            throw new ParseException(String.format(message, url));
-        }
-
-        material.setSource(url);
     }
 
     private void setDescriptions(Material material, Element lom) {

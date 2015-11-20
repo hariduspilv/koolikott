@@ -153,22 +153,7 @@ public class MaterialParserTest {
         }
 
         @Override
-        protected void setTaxon(Material material, Document doc) {
-
-        }
-
-        @Override
-        protected void setLearningResourceType(Material material, Document doc) {
-
-        }
-
-        @Override
         protected void setTags(Material material, Document doc) {
-
-        }
-
-        @Override
-        protected void setSource(Material material, Document doc) throws ParseException {
 
         }
 
@@ -194,6 +179,11 @@ public class MaterialParserTest {
 
         @Override
         protected String getPathToResourceType() {
+            return null;
+        }
+
+        @Override
+        protected String getPathToLocation() {
             return null;
         }
     }

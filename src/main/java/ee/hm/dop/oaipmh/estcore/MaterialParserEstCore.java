@@ -8,7 +8,6 @@ import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpression;
 import javax.xml.xpath.XPathExpressionException;
 
-import org.apache.commons.validator.routines.UrlValidator;
 import org.w3c.dom.CharacterData;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
@@ -23,7 +22,6 @@ import ee.hm.dop.oaipmh.MaterialParser;
 import ee.hm.dop.oaipmh.ParseException;
 import ee.hm.dop.service.AuthorService;
 import ee.hm.dop.service.LanguageService;
-import ee.hm.dop.service.ResourceTypeService;
 import ee.hm.dop.service.TagService;
 
 
@@ -42,9 +40,6 @@ public class MaterialParserEstCore extends MaterialParser {
 
     @Inject
     private TagService tagService;
-
-    @Inject
-    private ResourceTypeService resourceTypeService;
 
     @Override
     protected void setAuthors(Material material, Document doc) {
@@ -75,18 +70,7 @@ public class MaterialParserEstCore extends MaterialParser {
         material.setTags(tags);
     }
 
-    @Override
-    protected void setSource(Material material, Document doc) throws ParseException {
-        String source;
-        try {
-            source = getSource(doc);
 
-        } catch (Exception e) {
-            throw new ParseException("Error parsing document source.");
-        }
-
-        material.setSource(source);
-    }
 
     @Override
     protected void setDescriptions(Material material, Document doc) {
@@ -133,6 +117,11 @@ public class MaterialParserEstCore extends MaterialParser {
     @Override
     protected String getPathToContext() {
         return "//*[local-name()='estcore']/*[local-name()='educational']/*[local-name()='context']";
+    }
+
+    @Override
+    protected String getPathToLocation() {
+        return "//*[local-name()='estcore']/*[local-name()='technical']/*[local-name()='location']";
     }
 
     private Language getLanguage(Document doc) throws XPathExpressionException {
@@ -194,25 +183,7 @@ public class MaterialParserEstCore extends MaterialParser {
         return titles;
     }
 
-    private String getSource(Document doc) throws ParseException, XPathExpressionException {
-        String source;
 
-        XPathExpression expr = xpath
-                .compile("//*[local-name()='estcore']/*[local-name()='technical']/*[local-name()='location']");
-        NodeList nodeList = (NodeList) expr.evaluate(doc, XPathConstants.NODESET);
-        if (nodeList.getLength() != 1) {
-            throw new ParseException("Material has more or less than one source, can't be mapped.");
-        }
-
-        source = nodeList.item(0).getTextContent().trim();
-        UrlValidator urlValidator = new UrlValidator(SCHEMES);
-        if (!urlValidator.isValid(source)) {
-            String message = "Error parsing document. Invalid URL %s";
-            throw new ParseException(String.format(message, source));
-        }
-
-        return source;
-    }
 
     private List<LanguageString> getDescriptions(Document doc) throws XPathExpressionException {
         List<LanguageString> descriptions;
