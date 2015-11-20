@@ -191,6 +191,11 @@ public class MaterialParserTest {
         protected String getPathToContext() {
             return null;
         }
+
+        @Override
+        protected String getPathToResourceType() {
+            return null;
+        }
     }
 }
 
