@@ -120,6 +120,9 @@ insert into Translation(translationGroup, translationKey, translation) values (1
 insert into Translation(translationGroup, translationKey, translation) values (1, 'BUTTON_CANCEL', 'Katkesta');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'BUTTON_CREATE_PORTFOLIO', 'Loo portfolio');
 
+-- Taxon Domain translations
+insert into Translation(translationGroup, translationKey, translation) values (1, 'DOMAIN_LANGUAGE_AND_SPEACH', 'Keel ja kõne');
+
 -- Material Subject translations
 insert into Translation(translationGroup, translationKey, translation) values (1, 'SUBJECT_ESTONIAN', 'Eesti keel');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'SUBJECT_RUSSIAN', 'Vene keel');
@@ -175,3 +178,12 @@ insert into Translation(translationGroup, translationKey, translation) values (1
 insert into Translation(translationGroup, translationKey, translation) values (1, 'SUBJECT_ENTREPRENEURSHIP_COMPETENCE', 'Ettevõtluspädevus');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'SUBJECT_DIGITAL_COMPETENCE', 'Infotehnoloogiline pädevus');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'SUBJECT_OTHER', 'Muu');
+
+-- Taxon path
+insert into Translation(translationGroup, translationKey, translation) values (1, 'TAXON_PATH_DOMAIN', 'Домен');
+
+-- Language name translations, more can be added using the same conventions for the translation key
+insert into Translation(translationGroup, translationKey, translation) values (1, 'LANGUAGE_ESTONIAN', 'Eesti');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'LANGUAGE_RUSSIAN', 'Vene');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'LANGUAGE_ENGLISH', 'Inglise');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'LANGUAGE_NORTHERN_SAMI', 'Põhjasaami');

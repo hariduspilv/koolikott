@@ -1,5 +1,7 @@
 package ee.hm.dop.dao;
 
+import java.util.List;
+
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
@@ -24,5 +26,10 @@ public class LanguageDAO {
         }
 
         return language;
+    }
+
+    public List<Language> findAll() {
+        TypedQuery<Language> findAll = entityManager.createQuery("select l from LanguageTable l", Language.class);
+        return findAll.getResultList();
     }
 }

@@ -120,7 +120,10 @@ insert into Translation(translationGroup, translationKey, translation) values (3
 insert into Translation(translationGroup, translationKey, translation) values (3, 'BUTTON_CANCEL', 'Cancel');
 insert into Translation(translationGroup, translationKey, translation) values (3, 'BUTTON_CREATE_PORTFOLIO', 'Create portfolio');
 
--- Material Subject translations
+-- Taxon Domain translations
+insert into Translation(translationGroup, translationKey, translation) values (3, 'DOMAIN_LANGUAGE_AND_SPEACH', 'Language and speach');
+
+-- Taxon Subject translations
 insert into Translation(translationGroup, translationKey, translation) values (3, 'SUBJECT_ESTONIAN', 'Estonian');
 insert into Translation(translationGroup, translationKey, translation) values (3, 'SUBJECT_RUSSIAN', 'Russian');
 insert into Translation(translationGroup, translationKey, translation) values (3, 'SUBJECT_LITERATURE', 'Literature');
@@ -175,3 +178,12 @@ insert into Translation(translationGroup, translationKey, translation) values (3
 insert into Translation(translationGroup, translationKey, translation) values (3, 'SUBJECT_ENTREPRENEURSHIP_COMPETENCE', 'Entrepreneurship competence');
 insert into Translation(translationGroup, translationKey, translation) values (3, 'SUBJECT_DIGITAL_COMPETENCE', 'Digital competence');
 insert into Translation(translationGroup, translationKey, translation) values (3, 'SUBJECT_OTHER', 'Other');
+
+-- Taxon path
+insert into Translation(translationGroup, translationKey, translation) values (3, 'TAXON_PATH_DOMAIN', 'Domain');
+
+-- Language name translations, more can be added using the same conventions for the translation key
+insert into Translation(translationGroup, translationKey, translation) values (3, 'LANGUAGE_ESTONIAN', 'Estonian');
+insert into Translation(translationGroup, translationKey, translation) values (3, 'LANGUAGE_RUSSIAN', 'Russian');
+insert into Translation(translationGroup, translationKey, translation) values (3, 'LANGUAGE_ENGLISH', 'English');
+insert into Translation(translationGroup, translationKey, translation) values (3, 'LANGUAGE_NORTHERN_SAMI', 'Northern Sami');

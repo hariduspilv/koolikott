@@ -17,9 +17,13 @@ import com.google.common.collect.ImmutableSet;
 
 import ee.hm.dop.dao.MaterialDAO;
 import ee.hm.dop.dao.PortfolioDAO;
+import ee.hm.dop.model.Domain;
+import ee.hm.dop.model.EducationalContext;
 import ee.hm.dop.model.SearchFilter;
 import ee.hm.dop.model.SearchResult;
 import ee.hm.dop.model.Searchable;
+import ee.hm.dop.model.Subject;
+import ee.hm.dop.model.Taxon;
 import ee.hm.dop.model.solr.Document;
 import ee.hm.dop.model.solr.Response;
 import ee.hm.dop.model.solr.SearchResponse;
@@ -151,7 +155,11 @@ public class SearchService {
 
     private String getFiltersAsQuery(SearchFilter searchFilter) {
         Map<String, String> filters = new LinkedHashMap<>();
-        filters.put("educational_context", searchFilter.getEducationalContext());
+
+        Taxon taxon = searchFilter.getTaxon();
+        if (taxon != null) {
+            filters.putAll(getTaxonsAsFilters(taxon));
+        }
 
         if (!searchFilter.isPaid()) {
             filters.put("paid", "false");
@@ -181,6 +189,37 @@ public class SearchService {
             }
         }
         return filtersAsQuery;
+    }
+
+    private Map<String, String> getTaxonsAsFilters(Taxon taxon) {
+        Map<String, String> filters = new LinkedHashMap<>();
+
+        if (taxon instanceof Subject) {
+            filters.put(getTaxonLevel(taxon), taxon.getName());
+            taxon = ((Subject) taxon).getDomain();
+        }
+
+        if (taxon instanceof Domain) {
+            filters.put(getTaxonLevel(taxon), taxon.getName());
+            taxon = ((Domain) taxon).getEducationalContext();
+        }
+
+        if (taxon instanceof EducationalContext) {
+            filters.put(getTaxonLevel(taxon), taxon.getName());
+        }
+
+        return filters;
+    }
+
+    private String getTaxonLevel(Taxon taxon) {
+        if (taxon instanceof EducationalContext) {
+            return "educational_context";
+        } else if (taxon instanceof Domain) {
+            return "domain";
+        } else if (taxon instanceof Subject) {
+            return "subject";
+        }
+        return null;
     }
 
 }

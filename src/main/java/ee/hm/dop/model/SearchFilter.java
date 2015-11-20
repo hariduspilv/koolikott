@@ -2,18 +2,18 @@ package ee.hm.dop.model;
 
 public class SearchFilter {
 
-    private String educationalContext;
+    private Taxon taxon;
 
     private boolean paid = true;
 
     private String type;
 
-    public String getEducationalContext() {
-        return educationalContext;
+    public Taxon getTaxon() {
+        return taxon;
     }
 
-    public void setEducationalContext(String educationalContext) {
-        this.educationalContext = educationalContext;
+    public void setTaxon(Taxon taxon) {
+        this.taxon = taxon;
     }
 
     public boolean isPaid() {
