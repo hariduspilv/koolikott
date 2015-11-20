@@ -1,16 +1,12 @@
 package ee.hm.dop.oaipmh.waramu;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import javax.inject.Inject;
-import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpression;
 import javax.xml.xpath.XPathExpressionException;
-import javax.xml.xpath.XPathFactory;
 
 import org.apache.commons.validator.routines.UrlValidator;
 import org.w3c.dom.CharacterData;
@@ -20,26 +16,24 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import ee.hm.dop.model.Author;
-import ee.hm.dop.model.EducationalContext;
 import ee.hm.dop.model.Language;
 import ee.hm.dop.model.LanguageString;
 import ee.hm.dop.model.Material;
 import ee.hm.dop.model.ResourceType;
 import ee.hm.dop.model.Tag;
-import ee.hm.dop.model.Taxon;
 import ee.hm.dop.oaipmh.MaterialParser;
 import ee.hm.dop.oaipmh.ParseException;
 import ee.hm.dop.service.AuthorService;
 import ee.hm.dop.service.LanguageService;
 import ee.hm.dop.service.ResourceTypeService;
 import ee.hm.dop.service.TagService;
-import ee.hm.dop.service.TaxonService;
 
 public class MaterialParserWaramu extends MaterialParser {
 
-    private static final String[] SCHEMES = {"http", "https"};
-    public static final String COMPULSORY_EDUCATION = "COMPULSORYEDUCATION";
-    public static final String BASIC_EDUCATION = "BASICEDUCATION";
+    protected static final String WEB_PAGE = "WEBPAGE";
+    protected static final String WEBSITE = "WEBSITE";
+    protected static final String COMPULSORY_EDUCATION = "COMPULSORYEDUCATION";
+    protected static final String BASIC_EDUCATION = "BASICEDUCATION";
 
     @Inject
     private LanguageService languageService;
@@ -49,9 +43,6 @@ public class MaterialParserWaramu extends MaterialParser {
 
     @Inject
     private ResourceTypeService resourceTypeService;
-
-    @Inject
-    private TaxonService taxonService;
 
     @Inject
     private AuthorService authorService;
@@ -93,26 +84,6 @@ public class MaterialParserWaramu extends MaterialParser {
         return characterData.getData().trim().replaceAll("\\s(?=[A-Z]{1,99}:)", "\r\n");
     }
 
-    protected void setAuthors(Material material, Document doc) {
-        List<Author> authors = null;
-        try {
-            authors = getAuthors(doc);
-        } catch (Exception e) {
-            //ignore if there is no educational context for a material
-        }
-        material.setAuthors(authors);
-    }
-
-    protected void setTaxon(Material material, Document doc) {
-        List<Taxon> taxons = null;
-        try {
-            taxons = getTaxons(doc);
-        } catch (Exception e) {
-            //ignore if there is no educational context for a material
-        }
-        material.setTaxons(taxons);
-    }
-
     @Override
     protected void setLearningResourceType(Material material, Document doc) {
         List<ResourceType> resourceTypes = null;
@@ -126,10 +97,42 @@ public class MaterialParserWaramu extends MaterialParser {
         material.setResourceTypes(resourceTypes);
     }
 
+    @Override
+    protected String getElementValue(Node node) throws XPathExpressionException {
+        XPathExpression rolePath = xpath.compile("./*[local-name()='value']");
+        Node valueNode = (Node) rolePath.evaluate(node, XPathConstants.NODE);
+
+        String value = valueNode.getTextContent().trim().toUpperCase().replaceAll("\\s", "");
+
+        //Waramu specific values
+        if (value.equals(COMPULSORY_EDUCATION)) {
+            value = BASIC_EDUCATION;
+        } else if (value.equals(WEB_PAGE)) {
+            value = WEBSITE;
+        }
+        return value;
+    }
+
+    @Override
+    protected String getPathToContext() {
+        return "//*[local-name()='lom']/*[local-name()='educational']/*[local-name()='context']";
+    }
+
     private void setTags(Material material, Element lom) {
         List<Tag> tags = getTags(lom);
         material.setTags(tags);
     }
+
+    protected void setAuthors(Material material, Document doc) {
+        List<Author> authors = null;
+        try {
+            authors = getAuthors(doc);
+        } catch (Exception e) {
+            //ignore if there is no authors for a material
+        }
+        material.setAuthors(authors);
+    }
+
 
     private void setSource(Material material, Element lom) throws ParseException {
         if (lom.getElementsByTagName("location").getLength() != 1) {
@@ -171,42 +174,9 @@ public class MaterialParserWaramu extends MaterialParser {
         material.setTitles(titles);
     }
 
-    private List<Taxon> getTaxons(Document doc) throws XPathExpressionException {
-        Set<Taxon> taxons = new HashSet<>();
-
-        addEducationalContexts(doc, taxons);
-
-        return new ArrayList<>(taxons);
-    }
-
-    private void addEducationalContexts(Document doc, Set<Taxon> taxons) throws XPathExpressionException {
-        XPathFactory xPathfactory = XPathFactory.newInstance();
-        XPath xpath = xPathfactory.newXPath();
-        XPathExpression expr = xpath
-                .compile("//*[local-name()='lom']/*[local-name()='educational']/*[local-name()='context']");
-        NodeList nl = (NodeList) expr.evaluate(doc, XPathConstants.NODESET);
-
-        for (int i = 0; i < nl.getLength(); i++) {
-            Element element = (Element) nl.item(i);
-            String context = element.getElementsByTagName("value").item(0).getFirstChild().getTextContent().trim()
-                    .toUpperCase().replaceAll("\\s", "");
-
-            if (context.equals(COMPULSORY_EDUCATION)) {
-                context = BASIC_EDUCATION;
-            }
-
-            EducationalContext educationalContext = taxonService.getEducationalContextByName(context);
-            if (educationalContext != null) {
-                taxons.add(educationalContext);
-            }
-        }
-    }
-
     private List<Author> getAuthors(Document doc) throws XPathExpressionException {
         List<Author> authors = new ArrayList<>();
 
-        XPathFactory xPathfactory = XPathFactory.newInstance();
-        XPath xpath = xPathfactory.newXPath();
         XPathExpression expr = xpath
                 .compile("//*[local-name()='lom']/*[local-name()='lifeCycle']/*[local-name()='contribute']/*[local-name()='entity']");
         NodeList nl = (NodeList) expr.evaluate(doc, XPathConstants.NODESET);

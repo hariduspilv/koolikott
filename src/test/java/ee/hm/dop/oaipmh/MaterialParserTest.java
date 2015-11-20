@@ -186,6 +186,11 @@ public class MaterialParserTest {
         protected void setTitles(Material material, Document doc) throws ParseException {
 
         }
+
+        @Override
+        protected String getPathToContext() {
+            return null;
+        }
     }
 }
 

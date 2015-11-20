@@ -4,11 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
-import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpression;
 import javax.xml.xpath.XPathExpressionException;
-import javax.xml.xpath.XPathFactory;
 
 import org.apache.commons.validator.routines.UrlValidator;
 import org.w3c.dom.CharacterData;
@@ -35,7 +33,6 @@ import ee.hm.dop.service.TagService;
  */
 public class MaterialParserEstCore extends MaterialParser {
 
-    private static final String[] SCHEMES = {"http", "https"};
     public static final String AUTHOR = "author";
 
     @Inject
@@ -50,8 +47,6 @@ public class MaterialParserEstCore extends MaterialParser {
     @Inject
     private ResourceTypeService resourceTypeService;
 
-    private XPathFactory xPathfactory = XPathFactory.newInstance();
-
     @Override
     protected void setAuthors(Material material, Document doc) {
         List<Author> authors = null;
@@ -63,11 +58,6 @@ public class MaterialParserEstCore extends MaterialParser {
         }
 
         material.setAuthors(authors);
-    }
-
-    @Override
-    protected void setTaxon(Material material, Document doc) {
-
     }
 
     @Override
@@ -148,10 +138,14 @@ public class MaterialParserEstCore extends MaterialParser {
         material.setTitles(titles);
     }
 
+    @Override
+    protected String getPathToContext() {
+        return "//*[local-name()='estcore']/*[local-name()='educational']/*[local-name()='context']";
+    }
+
     private Language getLanguage(Document doc) throws XPathExpressionException {
         Language language;
 
-        XPath xpath = xPathfactory.newXPath();
         XPathExpression expr = xpath
                 .compile("//*[local-name()='estcore']/*[local-name()='general']/*[local-name()='language']");
         Node node = (Node) expr.evaluate(doc, XPathConstants.NODE);
@@ -165,7 +159,6 @@ public class MaterialParserEstCore extends MaterialParser {
     private List<Author> getAuthors(Document doc) throws ParseException, XPathExpressionException {
         List<Author> authors = new ArrayList<>();
 
-        XPath xpath = xPathfactory.newXPath();
         XPathExpression contributePath = xpath
                 .compile("//*[local-name()='estcore']/*[local-name()='lifeCycle']/*[local-name()='contribute']");
         NodeList nodeList = (NodeList) contributePath.evaluate(doc, XPathConstants.NODESET);
@@ -184,7 +177,6 @@ public class MaterialParserEstCore extends MaterialParser {
     }
 
     private void getAuthor(List<Author> authors, Node contributorNode) throws XPathExpressionException {
-        XPath xpath = xPathfactory.newXPath();
         String vCard = "";
 
         XPathExpression vCardPath = xpath.compile("./*[local-name()='entity']");
@@ -202,7 +194,6 @@ public class MaterialParserEstCore extends MaterialParser {
     private List<LanguageString> getTitles(Document doc) throws ParseException, XPathExpressionException {
         List<LanguageString> titles;
 
-        XPath xpath = xPathfactory.newXPath();
         XPathExpression expr = xpath
                 .compile("//*[local-name()='estcore']/*[local-name()='general']/*[local-name()='title']");
         Node node = (Node) expr.evaluate(doc, XPathConstants.NODE);
@@ -214,7 +205,6 @@ public class MaterialParserEstCore extends MaterialParser {
     private String getSource(Document doc) throws ParseException, XPathExpressionException {
         String source;
 
-        XPath xpath = xPathfactory.newXPath();
         XPathExpression expr = xpath
                 .compile("//*[local-name()='estcore']/*[local-name()='technical']/*[local-name()='location']");
         NodeList nodeList = (NodeList) expr.evaluate(doc, XPathConstants.NODESET);
@@ -235,7 +225,6 @@ public class MaterialParserEstCore extends MaterialParser {
     private List<LanguageString> getDescriptions(Document doc) throws XPathExpressionException {
         List<LanguageString> descriptions;
 
-        XPath xpath = xPathfactory.newXPath();
         XPathExpression expr = xpath
                 .compile("//*[local-name()='estcore']/*[local-name()='general']/*[local-name()='description']");
         Node node = (Node) expr.evaluate(doc, XPathConstants.NODE);
@@ -245,7 +234,6 @@ public class MaterialParserEstCore extends MaterialParser {
     }
 
     private List<Tag> getTags(Document doc) throws XPathExpressionException {
-        XPath xpath = xPathfactory.newXPath();
         XPathExpression expr = xpath
                 .compile("//*[local-name()='estcore']/*[local-name()='general']/*[local-name()='keyword']/*[local-name()='string']");
         NodeList keywords = (NodeList) expr.evaluate(doc, XPathConstants.NODESET);

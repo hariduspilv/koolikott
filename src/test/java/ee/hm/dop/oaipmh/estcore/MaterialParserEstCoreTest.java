@@ -23,16 +23,19 @@ import org.junit.runner.RunWith;
 import org.w3c.dom.Document;
 
 import ee.hm.dop.model.Author;
+import ee.hm.dop.model.EducationalContext;
 import ee.hm.dop.model.Language;
 import ee.hm.dop.model.LanguageString;
 import ee.hm.dop.model.Material;
 import ee.hm.dop.model.ResourceType;
 import ee.hm.dop.model.Tag;
+import ee.hm.dop.model.Taxon;
 import ee.hm.dop.oaipmh.ParseException;
 import ee.hm.dop.service.AuthorService;
 import ee.hm.dop.service.LanguageService;
 import ee.hm.dop.service.ResourceTypeService;
 import ee.hm.dop.service.TagService;
+import ee.hm.dop.service.TaxonService;
 
 /**
  * Created by mart on 6.11.15.
@@ -54,6 +57,9 @@ public class MaterialParserEstCoreTest {
 
     @Mock
     private ResourceTypeService resourceTypeService;
+
+    @Mock
+    private TaxonService taxonService;
 
     @Test(expected = ee.hm.dop.oaipmh.ParseException.class)
     public void parseXMLisNull() throws ParseException {
@@ -112,6 +118,12 @@ public class MaterialParserEstCoreTest {
         resourceType2.setId(559L);
         resourceType2.setName("VIDEO");
 
+        EducationalContext educationalContext1 = new EducationalContext();
+        educationalContext1.setName("PRESCHOOLEDUCATION");
+
+        EducationalContext educationalContext2 = new EducationalContext();
+        educationalContext2.setName("BASICEDUCATION");
+
         expect(languageService.getLanguage("en")).andReturn(english).times(3);
         expect(languageService.getLanguage("et")).andReturn(estonian).times(2);
         expect(authorService.getAuthorByFullName(author1.getName(), author1.getSurname())).andReturn(author1);
@@ -120,6 +132,10 @@ public class MaterialParserEstCoreTest {
         expect(tagService.getTagByName(tag2.getName())).andReturn(tag2);
         expect(resourceTypeService.getResourceTypeByName(resourceType1.getName())).andReturn(resourceType1);
         expect(resourceTypeService.getResourceTypeByName(resourceType2.getName())).andReturn(resourceType2);
+        expect(taxonService.getEducationalContextByName(educationalContext1.getName())).andReturn(
+                educationalContext1);
+        expect(taxonService.getEducationalContextByName(educationalContext2.getName())).andReturn(
+                educationalContext2);
 
         LanguageString title1 = new LanguageString();
         title1.setLanguage(english);
@@ -149,12 +165,16 @@ public class MaterialParserEstCoreTest {
         resourceTypes.add(resourceType1);
         resourceTypes.add(resourceType2);
 
-        replay(languageService, authorService, tagService, resourceTypeService);
+        List<Taxon> taxon = new ArrayList<>();
+        taxon.add(educationalContext1);
+        taxon.add(educationalContext2);
+
+        replay(languageService, authorService, tagService, resourceTypeService, taxonService);
 
         Document doc = dBuilder.parse(fXmlFile);
         Material material = materialParser.parse(doc);
 
-        verify(languageService, authorService, tagService, resourceTypeService);
+        verify(languageService, authorService, tagService, resourceTypeService, taxonService);
 
         assertEquals(titles, material.getTitles());
         assertEquals("https://oxygen.netgroupdigital.com/rest/repoMaterialSource", material.getSource());
@@ -163,6 +183,7 @@ public class MaterialParserEstCoreTest {
         assertEquals(descriptions, material.getDescriptions());
         assertEquals(tags, material.getTags());
         assertEquals(resourceTypes, material.getResourceTypes());
+        assertEquals(taxon, material.getTaxons());
     }
 
     private File getResourceAsFile(String resourcePath) throws URISyntaxException {

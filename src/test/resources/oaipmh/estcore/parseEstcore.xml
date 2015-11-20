@@ -87,11 +87,11 @@
                         <typicalAgeRange>0-0</typicalAgeRange>
                     </educational>
                     <rights uniqueElementName="rights">
-                        <lom:description uniqueElementName="description">
-                        </lom:description>
-                        <lom:description uniqueElementName="description">
-                            <lom:string language="en-US">string7</lom:string>
-                        </lom:description>
+                        <lom:cost>
+                            <lom:value>
+                                yes
+                            </lom:value>
+                        </lom:cost>
                     </rights>
                     <classification>
                         <taxonPath>
