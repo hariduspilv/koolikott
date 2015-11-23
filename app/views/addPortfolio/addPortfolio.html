@@ -1,118 +1,180 @@
 <div id="page-add" layout="row" flex>
-  <!-- Left sidenav -->
-  <!-- ////////////////////////- -->
-  <md-sidenav layout="column" layout-fill class="md-sidenav-left" md-component-id="left" md-is-locked-open="$mdMedia('gt-md')">
+  <!-- md-sidenav -->
+  <md-sidenav layout="column" class="md-sidenav-left md-whiteframe-z2" md-component-id="left" md-is-locked-open="$mdMedia('gt-md')">
     <md-toolbar class="md-accent">
       <h6 class="md-toolbar-tools md-subhead">
-        <md-button class="md-icon-button hide-gt-md" ng-click="toggleSidenav()" >
+        <md-button class="md-icon-button hide-gt-md" data-ng-click="toggleSidenav('left')" >
           <md-icon class="md-48">arrow_backward</md-icon>
         </md-button>
+        Sisukord
       </h6>
     </md-toolbar>
-    <md-list>
-      <h6 class="md-subhead">Matemaatika õpik üheksandale klassile</h6>
-      <md-item ng-repeat="item in menu">
-        <a>
-          <md-item-content md-ink-ripple layout="row" layout-align="start center">
-            <div>
-              {{item.title}}
-            </div>
-          </md-item-content>
-        </a>
-      </md-item>
-    </md-list>
+
+    <md-content layout="column" flex role="navigation" class="sidenav">
+      <div data-dop-table-of-contents portfolio="portfolio"></div>
+    </md-content>
+
   </md-sidenav>
+  <!-- /md-sidenav -->
 
-  <!-- Rest of content -->
-  <!-- ////////////////////////- -->
-  <div class="content-wrap" layout="column" flex>
-
+  <!-- main content -->
+  <div layout="column" flex>
     <div id="navmenu" data-portfolio-header></div>
 
-    <section layout="row" layout-align="start start" ng-cloak>
+    <section id="main-content" layout="row" layout-sm="column" layout-align="start start">
+      <article class="md-padding" layout="column" flex="75" flex-sm="100" role="main">
+        <md-card>
+          <md-card-content>
+            <h1 class="md-accent md-display-1 book-headline" layout="row">
+              Matemaatika õpik üheksandale klassile
+              <span flex></span>
+              <a href="#" data-ng-click="showEditPortfolioDialog($event)">
+                <md-tooltip md-direction="left">
+                  Muuda portfoliot
+                </md-tooltip>
+                <md-icon>edit</md-icon>
+              </a>
+            </h1>
 
-      <!-- Middle content -->
-      <!-- ////////////////////////- -->
-      <article flex="100" flex-gt-sm="90"  layout="row" layout-sm="column">
-        <div layout="column" flex="75" flex-sm="100" role="main" class="md-padding">
-          <md-card class="card-lg" id="material-card">
-            <md-card-content>
-                <h1 class="md-accent md-display-1 book-headline">Matemaatika õpik üheksandale klassile</h1>
-                <div  layout="row">
-                  <div layout="column" flex="66" class="left-of-book">
-                    <div layout="row">
-                      <div flex>
-                        <p class="md-body-1">
-                          <small class="md-caption">Teema</small>
-                          <br>Bioloogia
-                        </p>
-                      </div>
-                      <div flex>
-                        <p class="md-body-1">
-                          <small class="md-caption">Tüüp</small>
-                          <br>Audio, Andmed
-                        </p>
-                      </div>
-                      <div flex>
-                        <p class="md-body-1">
-                          <small class="md-caption">Vanuserühm</small>
-                          <br>Eelkooli haridus, Põhiharidus
-                        </p>
-                      </div>
-                    </div>
-                    <md-divider class="md-default-theme"></md-divider>
+            <div layout="row">
+              <div flex>
+                <p class="md-body-1">
+                  <small class="md-caption">Teema</small>
+                  <br>Bioloogia
+                </p>
+              </div>
+              <div flex>
+                <p class="md-body-1">
+                  <small class="md-caption">Tüüp</small>
+                  <br>Audio, Andmed
+                </p>
+              </div>
+              <div flex>
+                <p class="md-body-1">
+                  <small class="md-caption">Vanuserühm</small>
+                  <br>Eelkooli haridus, Põhiharidus
+                </p>
+              </div>
+            </div>
 
-                    <p class="md-body-1">Meie metaandmed, mis on edukalt sisestatud modaalis, on siin näha. Nt Valik erinevaid veebipõhiseid ning väljaprinditavaid nuputamisülesandeid. Valik ülesandeid, mis sobivad lisülesanneteks nutikatele või aineolümpiaadide läbiviimiseks.</p>
-                    <p><small class="md-caption">Võtmesõnad: </small></p>
-                    <md-chips>
-                      <md-chip>Hockey</md-chip>
-                      <md-chip>Lacrosse</md-chip>
-                      <md-chip>Baseball</md-chip>
-                    </md-chips>
-                  </div>
-                  <div layout="column" flex="33" class="divider-left" layout-align="start start">
-                    <md-content>
-                      <p class="md-body-1">
-                        <small class="md-caption">Uuendatud: </small>
+            <md-divider class="md-default-theme"></md-divider>
 
-                        20.12.2015 kl 14:40
-                      </p>
-                      <p class="md-body-1">
-                        <small class="md-caption">Loodud: </small>
+            <p class="md-body-1">
+              Meie metaandmed, mis on edukalt sisestatud modaalis, on siin näha. Nt Valik erinevaid veebipõhiseid ning väljaprinditavaid nuputamisülesandeid. Valik ülesandeid, mis sobivad lisülesanneteks nutikatele või aineolümpiaadide läbiviimiseks.
+            </p>
 
-                        20.12.2015
-                      </p>
-                      <p class="md-body-1">
-                        <small class="md-caption">Litsentsi tüüp:</small>
-                        <br>Kõik õigused kaitstud
-                      </p>
-                    </md-content>
-                  </div>
+            <!-- tags -->
+            <p>
+              <small class="md-caption">Võtmesõnad: </small>
+            </p>
+
+            <md-chips>
+              <md-chip>Hockey</md-chip>
+              <md-chip>Lacrosse</md-chip>
+              <md-chip>Baseball</md-chip>
+            </md-chips>
+            <!-- /tags -->
+          </md-card-content>
+        </md-card>
+
+        <h1 class="md-headline book-headline">Kogumiku peatükid</h2>
+
+        <div id="portfolio-chapters">
+
+          <!-- chapter -->
+          <div class="portfolio-chapter" data-ng-repeat="chapter in portfolio.chapters">
+            <md-card>
+              <md-card-content>
+                <div layout="row" layout-align="start center">
+                  <md-input-container class="md-block chapter-title" flex>
+                    <label></label>
+                    <input class="md-headline" placeholder="Sisesta peatüki pealkiri" data-ng-model="chapter.title" placeholder="Esimene peatükk">
+                  </md-input-container>
+                  <md-menu>
+                    <md-button class="md-icon-button" data-ng-click="$mdOpenMenu($event)">
+                      <md-icon md-menu-origin>more_vert</md-icon>
+                    </md-button>
+                    <md-menu-content width="4">
+                      <md-menu-item>
+                        <md-button data-ng-click="addNewSubChapter($index)">
+                          <md-icon md-menu-align-target>add</md-icon>
+                          Lisa alampeatükk
+                        </md-button>
+                      </md-menu-item>
+                      <md-menu-item>
+                        <md-button data-ng-click="deleteChapter($event, $index)">
+                          <md-icon md-menu-align-target>delete</md-icon>
+                          Kustuta
+                        </md-button>
+                      </md-menu-item>
+                    </md-menu-content>
+                  </md-menu>
                 </div>
-            </md-card-content>
-          </md-card>
+                <md-input-container class="md-block">
+                  <label></label>
+                  <textarea placeholder="Sisu" data-ng-model="chapter.description" columns="1" rows="5"></textarea>
+                </md-input-container>
+              </md-card-content>
+            </md-card>
 
-          <h2 class="md-headline">Materjalid</h2>
+            <!-- subchapters -->
+            <ul class="portfolio-chapter-subchapters">
+              <li class="portfolio-chapter-subchapter" id="chapter-{{$parent.$index}}-{{$index}}" data-ng-repeat="subchapter in chapter.subchapters">
+                <md-card>
+                  <md-card-content>
+                    <div layout="row" layout-align="start center">
+                      <md-input-container class="md-block subchapter-title" flex>
+                        <label></label>
+                        <input class="md-title" data-ng-model="subchapter.title" placeholder="Sisesta alampealkiri">
+                      </md-input-container>
+                      <md-menu>
+                        <md-button class="md-icon-button" data-ng-click="$mdOpenMenu($event)">
+                          <md-icon md-menu-origin>more_vert</md-icon>
+                        </md-button>
+                        <md-menu-content width="4">
+                          <md-menu-item>
+                            <md-button data-ng-click="deleteSubChapter($event, $parent.$index, $index)">
+                              <md-icon md-menu-align-target>delete</md-icon>
+                              Kustuta
+                            </md-button>
+                          </md-menu-item>
+                        </md-menu-content>
+                      </md-menu>
+                    </div>
+                    <md-input-container class="md-block">
+                      <label></label>
+                      <textarea placeholder="Sisu" data-ng-model="subChapter.description" columns="1" rows="5"></textarea>
+                    </md-input-container>
+                  </md-card-content>
+                </md-card>
 
-          <!-- Cards -->
-          <!-- ////////////////////////- -->
-          <md-grid-list md-cols-gt-md="4" md-cols-gt-md="2" md-cols-md="3" md-cols-sm="2" md-gutter="20px" md-row-height="300px">
-            <md-grid-tile ng-repeat="item in books">
-              <figure ng-include="'views/common/card-repeat.html'"></figure>
-            </md-grid-tile>
-          </md-grid-list>
+                <div class="portfolio-chapter-subchapter-materials" ng-show="subChapter.materials.length">
+                  <h3 class="md-subhead">Kaasatud materialid</h3>
+                  <md-grid-list md-cols-gt-md="4" md-cols-md="3" md-cols-sm="2" md-gutter="20px" md-row-height="300px">
+                    <md-grid-tile data-ng-repeat="material in subChapter.materials">
+                      <figure data-dop-material-box material="material"></figure>
+                    </md-grid-tile>
+                  </md-grid-list>
+                </div>
+              </li>
+            </ul>
 
-          <!-- Showmore -->
-          <!-- ////////////////////////- -->
-          <div layout="row" layout-align="end-center" class="md-padding">
-            <md-button class="md-primary">
-              <ng-md-icon icon="arrow_forward"> </ng-md-icon>Veel
-            </md-button>
+            <!-- /subchapters -->
           </div>
+          <!-- /chapter -->
         </div>
 
-        <div data-dop-sidebar flex="25" flex-sm="100" class="md-padding" role="sidebar"></div>
       </article>
+
+      <aside data-dop-sidebar flex="25" flex-sm="100" class="md-padding" role="sidebar"></aside>
+
+      <md-button class="md-fab md-fab-bottom-right" aria-label="Save portfolio" data-ng-click="savePortfolio()">
+        <md-tooltip md-direction="left">
+          Salvesta kogumikk
+        </md-tooltip>
+        <ng-md-icon icon="save"></ng-md-icon>
+      </md-button>
     </section>
   </div>
+  <!-- /main content -->
 </div>

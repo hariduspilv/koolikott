@@ -4,7 +4,8 @@ define(['app'], function(app)
      function(translationService) {
         return {
             scope: {
-            	chapter: '='
+            	chapter: '=',
+                index: '@'
             },
             templateUrl: 'directives/chapter/chapter.html',
             link: function () {

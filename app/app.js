@@ -8,7 +8,8 @@ define(['app.routes', 'services/dependencyResolver'], function(config, dependenc
       'ngMdIcons',
       'pascalprecht.translate',
       'youtube-embed',
-      'angularScreenfull'
+      'angularScreenfull',
+      'duScroll'
     ]);
 
     app.config(

@@ -16,6 +16,7 @@ require.config({
     addPortfolioFabButton: 'directives/addPortfolioFabButton/addPortfolioFabButton',
     addPortfolioDialogController: 'views/addPortfolioDialog/addPortfolioDialog',
     loginDialogController: 'views/loginDialog/loginDialog',
+    dopTableOfContents: 'directives/tableOfContents/tableOfContents',
     angular: '../bower_components/angular/angular',
     'angular-animate': '../bower_components/angular-animate/angular-animate',
     'angular-aria': '../bower_components/angular-aria/angular-aria',
@@ -27,11 +28,11 @@ require.config({
     'angular-translate': '../bower_components/angular-translate/angular-translate',
     'angular-translate-loader-url': '../bower_components/angular-translate-loader-url/angular-translate-loader-url',
     'angular-youtube-mb': '../bower_components/angular-youtube-mb/src/angular-youtube-embed',
-    jquery: '../bower_components/jquery/dist/jquery',
     requirejs: '../bower_components/requirejs/require',
     dopTaxonSelector: 'directives/taxonSelector/taxonSelector',
     'angular-screenfull': '../bower_components/angular-screenfull/dist/angular-screenfull',
     screenfull: '../bower_components/screenfull/dist/screenfull',
+    'angular-scroll': '../bower_components/angular-scroll/angular-scroll',
     jsog: '../bower_components/jsog/lib/JSOG'
   },
   shim: {
@@ -70,12 +71,14 @@ require.config({
       'angular',
       'screenfull'
     ],
+    'angular-scroll': [
+      'angular'
+    ],
     app: [
       'angular',
       'angular-translate',
       'angular-translate-loader-url',
-      'angular-youtube-mb',
-      'jquery'
+      'angular-youtube-mb'
     ],
     priority: [
       'angular'
@@ -92,11 +95,11 @@ define([
   'angular-translate',
   'angular-translate-loader-url',
   'angular-youtube-mb',
-  'jquery',
   'angular-route',
   'angular-material',
   'angular-material-icons',
   'angular-screenfull',
+  'angular-scroll',
   'translationService',
   'authenticatedUserService',
   'serverCallService',
@@ -114,6 +117,7 @@ define([
   'addPortfolioDialogController',
   'loginDialogController',
   'dopTaxonSelector',
+  'dopTableOfContents',
   'jsog'
 ], function (angular, app) {
   'use strict';

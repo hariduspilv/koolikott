@@ -1,0 +1,30 @@
+<ul class="sidenav-menu">
+  <li ng-repeat="chapter in portfolio.chapters">
+    <md-button data-ng-click="chapter.expand = !chapter.expand">
+      {{chapter.title}}
+      <span flex></span>
+      <span aria-hidden="true" class="md-toggle-icon" data-ng-class="{'toggled' : chapter.expand}" style="">
+        <md-icon>keyboard_arrow_down</md-icon>
+      </span>
+    </md-button>
+    <ul class="sidenav-menu-toggle-list" data-ng-show="chapter.expand" data-ng-class="{'collapsed' : !chapter.expand}">
+      <li ng-repeat="subchapter in chapter.subchapters">
+        <a class="md-button" layout="row" data-ng-click="gotoChapter($parent.$index, $index)">
+          {{subchapter.title}}
+          <span flex></span>
+        </a>
+      </li>
+      <li data-ng-hide="readonly">
+        <a class="md-button md-primary" data-ng-click="addNewSubChapter($index)">
+          Lisa alampeatükk
+        </a>
+      </li>
+    </ul>
+  </li>
+  <li data-ng-click="showAddChapterDialog()" data-ng-hide="readonly">
+    <md-button class="md-primary" data-ng-click="addNewChapter()">
+      Lisa peatükk
+      <span flex></span>
+    </md-button>
+  </li>
+</ul>

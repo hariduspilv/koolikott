@@ -1,44 +1,37 @@
-<div id="mainChapter">
-    <div class="row">
-        <div class="col-md-12">
-            <article class="chapter">
-                
-                <div class="heading">
-                    <h2>{{chapter.title}}</h2>
-                </div>
-                <section>
-                    <p>{{chapter.text}}</p>
-                </section>
-            </article>
-        </div>
-    </div>
+<div class="portfolio-chapter">
+  <md-card>
+    <md-card-content>
+      <h2>{{chapter.title}}</h2>
+      <p>{{chapter.text}}</p>
+    </md-card-content>
+  </md-card>
 
-    <div id="chapter-materials" class="row row-material row-chapter">
-        <div data-ng-repeat="material in chapter.materials" class="col-md-3 col-sm-4 col-xs-12 col-ms-6">
-           <div data-dop-material-box material="material"></div>
-        </div>
-    </div>
+  <div class="portfolio-chapter-subchapter-materials" ng-show="chapter.materials.length">
+    <h3 class="md-subhead">Kaasatud materialid</h3>
+    <md-grid-list md-cols-gt-md="4" md-cols-md="3" md-cols-sm="2" md-gutter="20px" md-row-height="300px">
+      <md-grid-tile data-ng-repeat="material in chapter.materials">
+        <figure data-dop-material-box material="material"></figure>
+      </md-grid-tile>
+    </md-grid-list>
+  </div>
 
-    <div data-ng-repeat="subchapter in chapter.subchapters">
-        <div id="sub-chapter-{{ $index }}">
-            <div class="row">
-                <div class="col-md-12">
-                    <article class="chapter">
-                        <div class="heading-sub">
-                            <h3>{{subchapter.title}}</h3>
-                        </div>
-                        <section>
-                            <p>{{subchapter.text}}</p>
-                        </section>
-                    </article>
-                </div>
-            </div>
+  <ul class="portfolio-chapter-subchapters">
+    <li class="portfolio-chapter-subchapter" id="chapter-{{index}}-{{$index}}" data-ng-repeat="subchapter in chapter.subchapters">
+      <md-card>
+        <md-card-content>
+          <h3>{{subchapter.title}}</h3>
+          <p>{{subchapter.text}}</p>
+        </md-card-content>
+      </md-card>
 
-            <div  id="sub-chapter-materials-{{ $index }}" class="row row-material row-chapter">
-                <div data-ng-repeat="material in subchapter.materials" class="col-md-3 col-sm-4 col-xs-12 col-ms-6">
-                    <div data-dop-material-box material="material"></div>
-                </div>
-            </div>
-        </div>
-    </div>
+      <div class="portfolio-chapter-subchapter-materials" ng-show="subchapter.materials.length">
+        <h3 class="md-subhead">Kaasatud materialid</h3>
+        <md-grid-list md-cols-gt-md="4" md-cols-md="3" md-cols-sm="2" md-gutter="20px" md-row-height="300px">
+          <md-grid-tile data-ng-repeat="material in subchapter.materials">
+            <figure data-dop-material-box material="material"></figure>
+          </md-grid-tile>
+        </md-grid-list>
+      </div>
+    </li>
+  </ul>
 </div>

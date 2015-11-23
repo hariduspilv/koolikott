@@ -57,7 +57,8 @@ define([], function()
                 templateUrl: 'views/addPortfolio/addPortfolio.html',
                 controller: 'addPortfolioController',
                 dependencies: [
-                    'views/addPortfolio/addPortfolio'
+                    'views/addPortfolio/addPortfolio',
+                    'directives/materialBox/materialBox'
                 ]
             },
             '/loginRedirect': {
