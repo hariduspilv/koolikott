@@ -18,6 +18,7 @@ import org.junit.Test;
 import ee.hm.dop.common.test.ResourceIntegrationTestBase;
 import ee.hm.dop.model.Domain;
 import ee.hm.dop.model.EducationalContext;
+import ee.hm.dop.model.Language;
 import ee.hm.dop.model.Material;
 import ee.hm.dop.model.Portfolio;
 import ee.hm.dop.model.SearchFilter;
@@ -212,6 +213,21 @@ public class SearchResourceTest extends ResourceIntegrationTestBase {
         assertEquals(0, searchResult.getStart());
     }
 
+    @Test
+    public void searchWithLanguageFilter() {
+        String query = "monday";
+        SearchFilter searchFilter = new SearchFilter();
+        Language language = new Language();
+        language.setCode("eng");
+        searchFilter.setLanguage(language);
+        int start = 0;
+        SearchResult searchResult = doGet(buildQueryURL(query, start, searchFilter), SearchResult.class);
+
+        assertMaterialIdentifiers(searchResult.getItems(), 2L, 1L);
+        assertEquals(2, searchResult.getTotalResults());
+        assertEquals(start, searchResult.getStart());
+    }
+
     private String buildQueryURL(String query, int start, SearchFilter searchFilter) {
         String queryURL = "search?";
         if (query != null) {
@@ -228,6 +244,9 @@ public class SearchResourceTest extends ResourceIntegrationTestBase {
         }
         if (searchFilter.getType() != null) {
             queryURL += "&type=" + encodeQuery(searchFilter.getType());
+        }
+        if (searchFilter.getLanguage() != null) {
+            queryURL += "&language=" + searchFilter.getLanguage().getCode();
         }
         return queryURL;
     }

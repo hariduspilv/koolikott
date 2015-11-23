@@ -120,7 +120,7 @@
      required, it is highly recommended. A <uniqueKey> is present in almost all Solr 
      installations. See the <uniqueKey> declaration below where <uniqueKey> is set to "id".
    -->   
-   <!-- Common to ALL entities -->
+  <!-- Common to ALL entities -->
    <field name="uniqueKey" type="string" indexed="true" stored="true" required="true"/>
    <field name="id" type="string" indexed="true" stored="true" required="true" multiValued="false" />
    <field name="type" type="string" indexed="true" stored="true" required="true" multiValued="false" />
@@ -138,6 +138,7 @@
    <field name="resource_type" type="text_general" indexed="true" stored="false" multiValued="true"/>
    <field name="license_type" type="text_general" indexed="true" stored="false" multiValued="true"/>
    <field name="paid" type="boolean" indexed="true" stored="false" multiValued="false"/>
+   <field name="language" type="text_general" indexed="true" stored="false" multiValued="true"/>
 
    <!-- Portfolio -->
    <field name="summary" type="text_general" indexed="true" stored="false"/>
@@ -174,6 +175,7 @@
    <copyField source="summary" dest="text"/>
    <copyField source="chapterTitle" dest="text"/>
    <copyField source="chapterText" dest="text"/>
+   <copyField source="language" dest="text"/>
 
    <!-- Above, multiple source fields are copied to the [text] field.
     Another way to map multiple source fields to the same

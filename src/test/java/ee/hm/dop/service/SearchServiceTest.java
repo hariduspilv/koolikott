@@ -22,6 +22,7 @@ import ee.hm.dop.dao.MaterialDAO;
 import ee.hm.dop.dao.PortfolioDAO;
 import ee.hm.dop.model.Domain;
 import ee.hm.dop.model.EducationalContext;
+import ee.hm.dop.model.Language;
 import ee.hm.dop.model.Material;
 import ee.hm.dop.model.Portfolio;
 import ee.hm.dop.model.SearchFilter;
@@ -460,6 +461,21 @@ public class SearchServiceTest {
         searchFilter.setType("material");
         String tokenizedQuery = "(pythagoras*) AND subject:\"cool_subject\" AND domain:\"cool_domain\" AND educational_context:\"preschool\""
                 + " AND (paid:\"false\" OR type:\"portfolio\") AND type:\"material\"";
+        long start = 0;
+
+        List<Searchable> searchables = Arrays.asList(createMaterial(9L), createMaterial(2L), createPortfolio(2L));
+
+        testSearch(query, tokenizedQuery, searchables, start, searchFilter);
+    }
+
+    @Test
+    public void searchWithLanguageFilter() {
+        String query = "alpha beta";
+        SearchFilter searchFilter = new SearchFilter();
+        Language language = new Language();
+        language.setCode("mmm");
+        searchFilter.setLanguage(language);
+        String tokenizedQuery = "(alpha* beta*) AND (language:\"mmm\" OR type:\"portfolio\")";
         long start = 0;
 
         List<Searchable> searchables = Arrays.asList(createMaterial(9L), createMaterial(2L), createPortfolio(2L));
