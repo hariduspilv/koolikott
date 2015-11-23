@@ -14,12 +14,12 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators.IntSequenceGenerator;
+import com.voodoodyne.jackson.jsog.JSOGGenerator;
 
 @Entity
 @DiscriminatorColumn(name = "level")
 @Inheritance(strategy = JOINED)
-@JsonIdentityInfo(generator = IntSequenceGenerator.class)
+@JsonIdentityInfo(generator = JSOGGenerator.class)
 @JsonTypeInfo(use = JsonTypeInfo.Id.MINIMAL_CLASS, include = JsonTypeInfo.As.PROPERTY, property = "level")
 public abstract class Taxon {
 

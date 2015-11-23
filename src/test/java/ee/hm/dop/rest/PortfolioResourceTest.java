@@ -13,6 +13,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import org.joda.time.DateTime;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import ee.hm.dop.common.test.ResourceIntegrationTestBase;
@@ -27,12 +28,14 @@ public class PortfolioResourceTest extends ResourceIntegrationTestBase {
     private static final String GET_PORTFOLIO_PICTURE_URL = "portfolio/getPicture?portfolioId=%s";
     private static final String PORTFOLIO_INCREASE_VIEW_COUNT_URL = "portfolio/increaseViewCount";
 
+    @Ignore
     @Test
     public void getPortfolio() {
         Portfolio portfolio = getPortfolio(1);
         assertPortfolio1(portfolio);
     }
 
+    @Ignore
     @Test
     public void getByCreator() {
         String username = "mati.maasikas-vaarikas";

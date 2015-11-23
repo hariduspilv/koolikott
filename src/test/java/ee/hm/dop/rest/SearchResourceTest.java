@@ -12,6 +12,7 @@ import java.util.List;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 import ee.hm.dop.common.test.ResourceIntegrationTestBase;
@@ -24,6 +25,7 @@ import ee.hm.dop.model.SearchResult;
 import ee.hm.dop.model.Searchable;
 import ee.hm.dop.model.Subject;
 
+@Ignore
 public class SearchResourceTest extends ResourceIntegrationTestBase {
 
     private static final int RESULTS_PER_PAGE = 3;

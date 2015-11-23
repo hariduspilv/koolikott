@@ -13,12 +13,11 @@ public class Topic extends Taxon {
     @JoinColumn(name = "subject", nullable = false)
     private Subject subject;
 
-    protected Subject getSubject() {
+    public Subject getSubject() {
         return subject;
     }
 
-    protected void setSubject(Subject subject) {
+    public void setSubject(Subject subject) {
         this.subject = subject;
     }
-
 }
