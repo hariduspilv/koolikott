@@ -31,7 +31,8 @@ require.config({
     requirejs: '../bower_components/requirejs/require',
     dopTaxonSelector: 'directives/taxonSelector/taxonSelector',
     'angular-screenfull': '../bower_components/angular-screenfull/dist/angular-screenfull',
-    screenfull: '../bower_components/screenfull/dist/screenfull'
+    screenfull: '../bower_components/screenfull/dist/screenfull',
+    jsog: '../bower_components/jsog/lib/JSOG'
   },
   shim: {
     angular: {
@@ -112,7 +113,8 @@ define([
   'addPortfolioFabButton',
   'addPortfolioDialogController',
   'loginDialogController',
-  'dopTaxonSelector'
+  'dopTaxonSelector',
+  'jsog'
 ], function (angular, app) {
   'use strict';
   var $html = angular.element(document.getElementsByTagName('html')[0]);

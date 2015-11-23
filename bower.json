@@ -17,7 +17,8 @@
     "jquery": "~2.1.4",
     "material-design-icons": "~2.0.0",
     "requirejs": "2.1.17",
-    "screenfull": "~2.0.0"
+    "screenfull": "~2.0.0",
+    "jsog": "~1.0.7"
   },
   "appPath": "app",
   "moduleName": "ranitsApp"

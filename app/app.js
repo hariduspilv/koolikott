@@ -22,8 +22,9 @@ define(['app.routes', 'services/dependencyResolver'], function(config, dependenc
         '$translateProvider',
         '$sceProvider',
         '$mdThemingProvider',
+        '$httpProvider',
 
-        function($routeProvider, $locationProvider, $controllerProvider, $compileProvider, $filterProvider, $provide, $translateProvider, $sceProvider, $mdThemingProvider)
+        function($routeProvider, $locationProvider, $controllerProvider, $compileProvider, $filterProvider, $provide, $translateProvider, $sceProvider, $mdThemingProvider, $httpProvider)
         {
             app.controller = $controllerProvider.register;
             app.directive  = $compileProvider.directive;
@@ -47,8 +48,18 @@ define(['app.routes', 'services/dependencyResolver'], function(config, dependenc
             configureTranslationService($translateProvider);
             configureTheme($mdThemingProvider)
             $sceProvider.enabled(false);
+
+            $httpProvider.defaults.transformResponse.splice(0, 0, parseJSONResponse);
         }
     ]);
+    
+     function parseJSONResponse(data, headersGetter) {
+        if (data && (headersGetter()['content-type'] === 'application/json')) {
+            return JSOG.parse(data);
+        }
+        
+        return data;
+    }
 
     function configureTranslationService($translateProvider) {
     	$translateProvider.useUrlLoader('rest/translation');
@@ -97,6 +108,7 @@ define(['app.routes', 'services/dependencyResolver'], function(config, dependenc
     			this.EDUCATIONAL_CONTEXT = '.EducationalContext';
     			this.DOMAIN = '.Domain';
     			this.SUBJECT = '.Subject';
+    			this.TOPIC = '.Topic';
     	    }
 
     		getEducationalContext(taxon) {
@@ -109,6 +121,10 @@ define(['app.routes', 'services/dependencyResolver'], function(config, dependenc
 
     		getSubject(taxon) {
     			return this.getTaxon(taxon, this.SUBJECT);
+    		}
+    		
+    		getTopic(taxon) {
+    			return this.getTaxon(taxon, this.TOPIC);
     		}
     		
     		getTaxon(taxon, level) {
@@ -126,6 +142,10 @@ define(['app.routes', 'services/dependencyResolver'], function(config, dependenc
 
     			if (taxon.level === this.SUBJECT) {
     				return taxon.level === level ? taxon : this.getTaxon(taxon.domain, level);
+    			}
+    			
+    			if (taxon.level === this.TOPIC) {
+    				return taxon.level === level ? taxon : this.getTaxon(taxon.subject, level);
     			}
     		}
     	}

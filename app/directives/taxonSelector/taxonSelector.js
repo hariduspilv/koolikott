@@ -9,7 +9,7 @@ define(['app'], function(app)
                 taxon: '='
             },
             templateUrl: 'directives/taxonSelector/taxonSelector.html',
-            controller: function ($scope, serverCallService) {
+            controller: function ($scope, serverCallService, $rootScope) {
             	
             	// get educational contexts
             	if (!EDUCATIONAL_CONTEXTS) {
@@ -25,35 +25,33 @@ define(['app'], function(app)
             	}
             	
             	function addTaxonPathListeners() {
+            		$scope.$watch('taxon', function(newTaxon, oldTaxon) {
+                        if (newTaxon !== oldTaxon) {
+                       		buildTaxonPath();
+                        }
+                    }, true);
+            		
             		$scope.$watch('taxonPath.educationalContext', function(newEducationalContext, oldEducationalContext) {
-                        if (newEducationalContext !== oldEducationalContext) {
-                        	if (!$scope.taxonPath.cleaning) {
-                        		$scope.taxon = newEducationalContext;
-                        	}
-                        	
-                        	$scope.taxonPath.domain = null;
-                        	$scope.taxonPath.cleaning = true;
+                        if (newEducationalContext && newEducationalContext !== oldEducationalContext) {
+                       		$scope.taxon = newEducationalContext;
                         }
                     }, true);
                 	
                 	$scope.$watch('taxonPath.domain', function(newDomain, oldDomain) {
-                        if (newDomain !== oldDomain) {
-                        	if (!$scope.taxonPath.cleaning) {
-                        		$scope.taxon = newDomain;
-                        	}
-                        	
-                        	$scope.taxonPath.subject = null;
-                        	$scope.taxonPath.cleaning = true;
+                        if (newDomain && newDomain !== oldDomain) {
+                       		$scope.taxon = newDomain;
                         }
                     }, true);
                 	
-                	$scope.$watch('taxonPath.subject', function(newSubject, oldSuject) {
-                        if (newSubject !== oldSuject) {
-                        	if (!$scope.taxonPath.cleaning) {
-                        		$scope.taxon = newSubject;
-                        	}
-                        	
-                        	$scope.taxonPath.cleaning = false;
+                	$scope.$watch('taxonPath.subject', function(newSubject, oldSubject) {
+                        if (newSubject && newSubject !== oldSubject) {
+                        	$scope.taxon = newSubject;
+                        }
+                    }, true);
+                	
+                	$scope.$watch('taxonPath.topic', function(newTopic, oldTopic) {
+                        if (newTopic && newTopic !== oldTopic) {
+                        		$scope.taxon = newTopic;
                         }
                     }, true);
             	}
@@ -79,12 +77,14 @@ define(['app'], function(app)
             	}
             	
             	function buildTaxonPath() {
-            		if ($scope.taxon) {
+            		if (!$scope.taxonPath) {
             			$scope.taxonPath = {}
-            			$scope.taxonPath.educationalContext = $scope.taxonUtils.getEducationalContext($scope.taxon);
-            			$scope.taxonPath.domain = $scope.taxonUtils.getDomain($scope.taxon);
-            			$scope.taxonPath.subject = $scope.taxonUtils.getSubject($scope.taxon);
             		}
+            		
+        			$scope.taxonPath.educationalContext = $rootScope.taxonUtils.getEducationalContext($scope.taxon);
+        			$scope.taxonPath.domain = $rootScope.taxonUtils.getDomain($scope.taxon);
+        			$scope.taxonPath.subject = $rootScope.taxonUtils.getSubject($scope.taxon);
+        			$scope.taxonPath.topic = $rootScope.taxonUtils.getTopic($scope.taxon);
             	}
             }
         };
