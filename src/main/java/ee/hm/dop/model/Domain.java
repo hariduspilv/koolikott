@@ -17,6 +17,9 @@ public class Domain extends Taxon {
     @OneToMany(fetch = EAGER, mappedBy = "domain")
     private Set<Subject> subjects;
 
+    @OneToMany(fetch = EAGER, mappedBy = "domain")
+    private Set<Topic> topics;
+
     @ManyToOne
     @JoinColumn(name = "educationalContext", nullable = false)
     private EducationalContext educationalContext;
@@ -35,5 +38,13 @@ public class Domain extends Taxon {
 
     public void setEducationalContext(EducationalContext educationalContext) {
         this.educationalContext = educationalContext;
+    }
+
+    public Set<Topic> getTopics() {
+        return topics;
+    }
+
+    public void setTopics(Set<Topic> topics) {
+        this.topics = topics;
     }
 }

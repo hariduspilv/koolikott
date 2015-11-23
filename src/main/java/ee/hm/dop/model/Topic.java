@@ -10,8 +10,12 @@ import javax.persistence.ManyToOne;
 public class Topic extends Taxon {
 
     @ManyToOne
-    @JoinColumn(name = "subject", nullable = false)
+    @JoinColumn(name = "subject")
     private Subject subject;
+
+    @ManyToOne
+    @JoinColumn(name = "domain")
+    private Domain domain;
 
     public Subject getSubject() {
         return subject;
@@ -19,5 +23,13 @@ public class Topic extends Taxon {
 
     public void setSubject(Subject subject) {
         this.subject = subject;
+    }
+
+    public Domain getDomain() {
+        return domain;
+    }
+
+    public void setDomain(Domain domain) {
+        this.domain = domain;
     }
 }

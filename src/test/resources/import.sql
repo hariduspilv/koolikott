@@ -73,6 +73,8 @@ insert into Taxon(id, name, level) values (10, 'Mathematics', 'DOMAIN');
 insert into Domain(id, educationalContext) values (10, 1);
 insert into Taxon(id, name, level) values (11, 'ForeignLanguage', 'DOMAIN');
 insert into Domain(id, educationalContext) values (11, 1);
+insert into Taxon(id, name, level) values (12, 'DomainWithTopics', 'DOMAIN');
+insert into Domain(id, educationalContext) values (12, 6);
 
 -- Subject
 
@@ -81,12 +83,19 @@ insert into Subject(id, domain) values (20, 10);
 insert into Taxon(id, name, level) values (21, 'Mathematics', 'SUBJECT');
 insert into Subject(id, domain) values (21, 10);
 
--- Subject
+-- Topics from Subjects
 
 insert into Taxon(id, name, level) values (30, 'Algebra', 'TOPIC');
 insert into Topic(id, subject) values (30, 21);
 insert into Taxon(id, name, level) values (31, 'Trigonometria', 'TOPIC');
 insert into Topic(id, subject) values (31, 21);
+
+-- Topics from Domain
+
+insert into Taxon(id, name, level) values (32, 'EstoniaAndTheWould', 'TOPIC');
+insert into Topic(id, domain) values (32, 12);
+insert into Taxon(id, name, level) values (33, 'VogaisTonicas', 'TOPIC');
+insert into Topic(id, subject) values (33, 12);
 
 -- Materials
 

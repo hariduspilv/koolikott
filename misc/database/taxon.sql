@@ -343,3 +343,12 @@ insert into Taxon(id, name, level) values (10001, 'Estonian_history', 'TOPIC');
 insert into Topic(id, subject) values (10001, 1021);
 
 -- End of topics for Basic Education
+
+-- Start of topics for Preschool
+
+insert into Taxon(id, name, level) values (10100, 'Preschool_Topic1', 'TOPIC');
+insert into Topic(id, domain) values (10100, 100);
+insert into Taxon(id, name, level) values (10101, 'Preschool_Topic2', 'TOPIC');
+insert into Topic(id, domain) values (10101, 100);
+
+-- End of topics for Preschool

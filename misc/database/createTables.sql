@@ -122,7 +122,8 @@ CREATE TABLE Subject (
 
 CREATE TABLE Topic (
   id      BIGINT PRIMARY KEY,
-  subject BIGINT NOT NULL,
+  subject BIGINT,
+  domain  BIGINT,
   
   FOREIGN KEY (id)
             REFERENCES Taxon(id)
@@ -130,6 +131,10 @@ CREATE TABLE Topic (
   
   FOREIGN KEY (subject)
             REFERENCES Subject(id)
+            ON DELETE RESTRICT,
+  
+  FOREIGN KEY (domain)
+            REFERENCES Domain(id)
             ON DELETE RESTRICT
 );
 
