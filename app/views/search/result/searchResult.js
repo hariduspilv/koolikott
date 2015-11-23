@@ -65,6 +65,10 @@ define(['app'], function(app)
                 params.type = searchService.getType();
             }
 
+            if (searchService.getLanguage()) {
+                params.language = searchService.getLanguage();
+            }
+
             serverCallService.makeGet("rest/search", params, searchSuccess, searchFail);
         }
 
@@ -142,7 +146,8 @@ define(['app'], function(app)
         }
 
         $scope.buildPageURL = function(page) {
-            return searchService.buildURL($scope.searchQuery, page, searchService.getTaxon(), searchService.isPaid().toString(), searchService.getType());
+            return searchService.buildURL($scope.searchQuery, page, searchService.getTaxon(), searchService.isPaid().toString(), 
+                searchService.getType(), searchService.getLanguage());
         }
 
     }]);

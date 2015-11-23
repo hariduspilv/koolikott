@@ -20,9 +20,7 @@
         <textarea id="add-portfolio-description-input" data-ng-model="portfolio.biography" columns="1" md-maxlength="150"></textarea>
       </md-input-container>
 
-      <div data-layout="layout" data-layout-sm="column">
-        <div data-dop-taxon-selector data-taxon="portfolio.taxon"></div>
-      </div>
+      <div data-dop-taxon-selector data-taxon="portfolio.taxon" data-layout="row" data-layout-sm="column"></div>
 
       <md-input-container flex>
         <md-chips data-ng-model="portfolio.tags" delete-button-label="Eemalda märksõna" delete-hint="Vajuta x märksõna kustutamiseks" secondary-placeholder="Lisa märksõna (valikuline)">

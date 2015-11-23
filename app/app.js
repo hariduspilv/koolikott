@@ -23,8 +23,9 @@ define(['app.routes', 'services/dependencyResolver'], function(config, dependenc
         '$translateProvider',
         '$sceProvider',
         '$mdThemingProvider',
+        '$httpProvider',
 
-        function($routeProvider, $locationProvider, $controllerProvider, $compileProvider, $filterProvider, $provide, $translateProvider, $sceProvider, $mdThemingProvider)
+        function($routeProvider, $locationProvider, $controllerProvider, $compileProvider, $filterProvider, $provide, $translateProvider, $sceProvider, $mdThemingProvider, $httpProvider)
         {
             app.controller = $controllerProvider.register;
             app.directive  = $compileProvider.directive;
@@ -48,8 +49,18 @@ define(['app.routes', 'services/dependencyResolver'], function(config, dependenc
             configureTranslationService($translateProvider);
             configureTheme($mdThemingProvider)
             $sceProvider.enabled(false);
+
+            $httpProvider.defaults.transformResponse.splice(0, 0, parseJSONResponse);
         }
     ]);
+    
+     function parseJSONResponse(data, headersGetter) {
+        if (data && (headersGetter()['content-type'] === 'application/json')) {
+            return JSOG.parse(data);
+        }
+        
+        return data;
+    }
 
     function configureTranslationService($translateProvider) {
     	$translateProvider.useUrlLoader('rest/translation');
@@ -94,28 +105,48 @@ define(['app.routes', 'services/dependencyResolver'], function(config, dependenc
 
     app.run(function($rootScope) {
     	class TaxonUtils {
+    		constructor() {
+    			this.EDUCATIONAL_CONTEXT = '.EducationalContext';
+    			this.DOMAIN = '.Domain';
+    			this.SUBJECT = '.Subject';
+    			this.TOPIC = '.Topic';
+    	    }
 
     		getEducationalContext(taxon) {
+    			return this.getTaxon(taxon, this.EDUCATIONAL_CONTEXT);
+    		}
+    		
+    		getDomain(taxon) {
+    			return this.getTaxon(taxon, this.DOMAIN);
+    		}
+
+    		getSubject(taxon) {
+    			return this.getTaxon(taxon, this.SUBJECT);
+    		}
+    		
+    		getTopic(taxon) {
+    			return this.getTaxon(taxon, this.TOPIC);
+    		}
+    		
+    		getTaxon(taxon, level) {
     			if (!taxon) {
     				return;
     			}
 
-    			if (taxon.level === '.EducationalContext') {
-    				return taxon;
+    			if (taxon.level === this.EDUCATIONAL_CONTEXT) {
+    				return taxon.level === level ? taxon : null;
     			}
 
-    			if (taxon.level === '.Domain') {
-    				return this.getEducationalContext(taxon.educationalContext);
+    			if (taxon.level === this.DOMAIN) {
+    				return taxon.level === level ? taxon : this.getTaxon(taxon.educationalContext, level);
     			}
 
-    			if (taxon.level === '.Subject') {
-    				return this.getEducationalContext(taxon.domain);
+    			if (taxon.level === this.SUBJECT) {
+    				return taxon.level === level ? taxon : this.getTaxon(taxon.domain, level);
     			}
-    		}
-
-    		getSubject(taxon) {
-    			if (taxon && taxon.level === '.Subject') {
-    				return taxon;
+    			
+    			if (taxon.level === this.TOPIC) {
+    				return taxon.level === level ? taxon : this.getTaxon(taxon.subject, level);
     			}
     		}
     	}

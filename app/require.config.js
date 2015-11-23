@@ -32,7 +32,8 @@ require.config({
     dopTaxonSelector: 'directives/taxonSelector/taxonSelector',
     'angular-screenfull': '../bower_components/angular-screenfull/dist/angular-screenfull',
     screenfull: '../bower_components/screenfull/dist/screenfull',
-    'angular-scroll': '../bower_components/angular-scroll/angular-scroll'
+    'angular-scroll': '../bower_components/angular-scroll/angular-scroll',
+    jsog: '../bower_components/jsog/lib/JSOG'
   },
   shim: {
     angular: {
@@ -116,7 +117,8 @@ define([
   'addPortfolioDialogController',
   'loginDialogController',
   'dopTaxonSelector',
-  'dopTableOfContents'
+  'dopTableOfContents',
+  'jsog'
 ], function (angular, app) {
   'use strict';
   var $html = angular.element(document.getElementsByTagName('html')[0]);
