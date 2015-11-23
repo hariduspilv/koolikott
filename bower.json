@@ -11,6 +11,7 @@
     "angular-resource": "1.4.3",
     "angular-route": "1.4.3",
     "angular-screenfull": "~0.1.0",
+    "angular-scroll": "~1.0.0",
     "angular-translate": "2.7.2",
     "angular-translate-loader-url": "2.7.2",
     "angular-youtube-mb": "1.0.2",

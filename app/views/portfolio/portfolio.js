@@ -10,7 +10,7 @@ define(['app'], function(app)
             	var portfolioId = $route.current.params.id;
 	        	serverCallService.makeGet("rest/portfolio?id=" + portfolioId, {}, getPortfolioSuccess, getPortfolioFail);
 	        }
-	    	
+
 	        function getPortfolioSuccess(portfolio) {
 	            if (isEmpty(portfolio)) {
 	            	getPortfolioFail();
@@ -19,7 +19,7 @@ define(['app'], function(app)
 	                init();
 	            }
 	    	}
-	    	
+
 	    	function getPortfolioFail() {
 	            log('No data returned by getting portfolio.');
 	            alertService.setErrorAlert('ERROR_PORTFOLIO_NOT_FOUND');
@@ -30,14 +30,14 @@ define(['app'], function(app)
 	    		return formatDateToDayMonthYear(date);
             }
 
-            function init() {            
+            function init() {
             	var params = {
 					'type' : '.Portfolio',
                 	'id': $scope.portfolio.id
             	};
 
-            	serverCallService.makePost("rest/portfolio/increaseViewCount", params, function success(){}, function fail(){}); 
-    		}	
+            	serverCallService.makePost("rest/portfolio/increaseViewCount", params, function success(){}, function fail(){});
+    		}
     	}
     ]);
 });

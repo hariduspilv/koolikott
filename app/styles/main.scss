@@ -23,14 +23,16 @@ ul {
 @import "iconfont.scss";
 @import "slidedown.scss";
 @import "typography.scss";
-@import "sidenav.scss";
 @import "card.scss";
 @import "toolbar.scss";
 @import "md-typography.scss";
 @import "sidebar.scss";
+@import "sidenav.scss";
+@import "sidenav-menu.scss";
 
 // Page specific stylesheets
 @import "pages/add.scss";
+@import "pages/view-portfolio.scss";
 
 // Scaffolding
 html, body {

@@ -1,87 +1,117 @@
-<div class="main">
-    <div class="container">
-        <div class="row">
-            <div class="col-md-9 material-detail">
-                <div class="row">
-                    <div class="col-md-9 meta-content no-gutter-right">
-                        <div class="category text-grey clearfix">
-                         <div class="item pull-left">
-                            <div class="label">
-                                <span data-translate="DETAIL_VIEW_SUBJECT"></span>:
-                            </div>
-                            <span>
-                                <span data-ng-if="taxonUtils.getSubject(portfolio.taxon)" data-translate="{{'SUBJECT_' + taxonUtils.getSubject(portfolio.taxon).name.toUpperCase()}}"></span>
-                            </span>
-                        </div>
-                        <div class="item pull-left">
-                            <div class="label">
-                                <span data-translate="DETAIL_VIEW_EDUCATIONAL_CONTEXT"></span>:
-                            </div>
-                            <span>
-                                <span data-ng-if="portfolio.taxon" data-translate="{{taxonUtils.getEducationalContext(portfolio.taxon).name.toUpperCase()}}"></span>
-                            </span>
-                        </div>
-                    </div>
-                    <div class="heading">
-                        <h1>{{portfolio.title}}</h1>
-                    </div>
-                    <div class="authors">
-                        <span class="item">
-                            <a><span data-ng-bind="portfolio.creator.name"></span> <span data-ng-bind="portfolio.creator.surname"></span></a>
-                        </span>
-                    </div>
-                        
-                    <div data-ng-if="portfolio.summary" class="summary">
-                        {{portfolio.summary}}
-                    </div>
+<div id="page-view-portfolio" layout="row" flex>
+  <!-- md-sidenav -->
+  <md-sidenav layout="column" class="md-sidenav-left md-whiteframe-z2" md-component-id="left" md-is-locked-open="$mdMedia('gt-md')">
+    <md-toolbar class="md-primary">
+      <h6 class="md-toolbar-tools md-subhead">
+        <md-button class="md-icon-button hide-gt-md" data-ng-click="toggleSidenav('left')" >
+          <md-icon class="md-48">arrow_backward</md-icon>
+        </md-button>
+        Sisukord
+      </h6>
+    </md-toolbar>
+
+    <md-content layout="column" flex role="navigation" class="sidenav">
+      <div data-dop-table-of-contents data-portfolio="portfolio" data-readonly="true"></div>
+    </md-content>
+  </md-sidenav>
+  <!-- /md-sidenav -->
+
+  <!-- main content -->
+  <div layout="column" flex>
+    <div id="navmenu" data-dop-header></div>
+
+    <section id="main-content" layout="row" layout-sm="column" layout-align="start start">
+      <article class="md-padding" layout="column" flex="75" flex-sm="100" role="main">
+        <md-card>
+          <md-card-content>
+            <h1 class="md-accent md-display-1 book-headline">
+              {{portfolio.title}}
+            </h1>
+
+            <div layout="row">
+              <div layout="column" flex="66" class="left-of-book">
+                <div layout="row">
+                  <div flex>
+                    <p class="md-body-1">
+                      <small class="md-caption">
+                        <span data-translate="DETAIL_VIEW_SUBJECT"></span>
+                      </small>
+                      <br>
+                      <span data-ng-if="taxonUtils.getSubject(portfolio.taxon)" data-translate="{{'SUBJECT_' + taxonUtils.getSubject(portfolio.taxon).name.toUpperCase()}}"></span>
+                    </p>
+                  </div>
+                  <div flex>
+                    <p class="md-body-1">
+                      <small class="md-caption">
+                        <span data-translate="DETAIL_VIEW_EDUCATIONAL_CONTEXT"></span>
+                      </small>
+                      <br>
+                      <span data-ng-if="portfolio.taxon" data-translate="{{taxonUtils.getEducationalContext(portfolio.taxon).name.toUpperCase()}}"></span>
+                    </p>
+                  </div>
                 </div>
-                <div class="col-md-3 meta-sidebar">
-                    <dl class="dl-horizontal">
-                        <dt data-ng-if="portfolio.updated" class="text-grey text-big">
-                            <span data-translate="UPDATED"></span><span>:</span>
-                        </dt>
-                        <dd data-ng-if="portfolio.updated" class="text-right text-big">
-                            <span class="pull-right">{{formatDate(portfolio.updated)}}</span>
-                        </dd>
-                        <dt class="text-grey text-big">
-                            <span data-translate="CREATED"></span><span>:</span>
-                        </dt>
-                        <dd class="text-right text-big text-grey">
-                            <span class="pull-right">{{formatDate(portfolio.created)}}</span>
-                        </dd>
-                    </dl>
-                </div>
+
+                <md-divider class="md-default-theme"></md-divider>
+
+                <p class="md-body-1">
+                  {{portfolio.summary}}
+                </p>
+
+                <!-- tags -->
+                <p>
+                  <small class="md-caption">
+                    <span data-translate="DETAIL_VIEW_TAGS"></span>:
+                  </small>
+                </p>
+
+                <md-chips data-ng-model="portfolio.tags" readonly="true">
+                  <md-chip-template>{{$chip.name}}</md-chip-template>
+                </md-chips>
+                <!-- /tags -->
+              </div>
+              <div layout="column" flex="33" class="divider-left" layout-align="start start">
+                <md-content>
+                  <p class="md-body-1">
+                    <small class="md-caption">
+                      <span data-translate="AUTHORS"></span>:
+                    </small>
+                    <a>
+                      <span data-ng-bind="portfolio.creator.name"></span>
+                      <span data-ng-bind="portfolio.creator.surname"></span>
+                    </a>
+                  </p>
+
+                  <p class="md-body-1" data-ng-if="portfolio.updated">
+                    <small class="md-caption">
+                      <span data-translate="UPDATED"></span>:
+                    </small>
+                    {{formatDate(portfolio.updated)}}
+                  </p>
+
+                  <p class="md-body-1" data-ng-if="portfolio.created">
+                    <small class="md-caption">
+                      <span data-translate="CREATED"></span>:
+                    </small>
+                    {{formatDate(portfolio.created)}}
+                  </p>
+
+                  <p class="md-body-1">
+                    <span data-ng-bind="portfolio.views"></span>
+                  </p>
+                </md-content>
+              </div>
             </div>
-                
-            <div class="row">
-                <div class="col-md-12">
-                    <section class="preview">
-                        <header class="clearfix">
-                            <div class="pull-right text-grey">
-                                <i class="fa fa-eye"></i> <span>{{portfolio.views}}</span>
-                            </div>
-                        </header>
-                    </section>
-                </div>
-            </div>
-                
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="keywords text-grey clearfix">
-                        <div class="label">
-                            <span data-translate="DETAIL_VIEW_TAGS"></span>:
-                        </div>	
-                        <span data-ng-repeat="tag in portfolio.tags">
-                            <span data-ng-bind="tag.name" class="item"></span>
-                        </span>
-                    </div>
-                </div>
-            </div>
-            
-            <div data-ng-repeat="chapter in portfolio.chapters">
-                <div data-dop-chapter data-chapter="chapter"></div>
-            </div>
+          </md-card-content>
+        </md-card>
+
+        <div id="portfolio-chapters">
+          <div data-ng-repeat="chapter in portfolio.chapters">
+            <div data-dop-chapter data-chapter="chapter" data-index="{{$index}}"></div>
+          </div>
         </div>
-    </div>
-</div>
+      </article>
+
+      <aside data-dop-sidebar flex="25" flex-sm="100" class="md-padding" role="sidebar"></aside>
+    </section>
+  </div>
 </div>

@@ -1,4 +1,4 @@
-<md-toolbar class="md-accent" ng-show="!showSearch">
+<md-toolbar class="md-accent md-whiteframe-1dp" ng-show="!showSearch">
   <div layout-align="start start" layout="row" layout-sm="column">
     <div class="md-toolbar-tools" flex="100" flex-gt-sm="90">
       <md-button class="md-icon-button" ng-click="toggleSidenav()" hide-gt-md aria-label="Menu">
@@ -21,8 +21,8 @@
         </md-button>
         <md-menu-content width="4">
           <md-menu-item>
-            <md-button >
-              <md-icon >link</md-icon> Saada link
+            <md-button data-ng-click="showSendLinkDialog()">
+              <md-icon>link</md-icon> Saada link
             </md-button>
           </md-menu-item>
           <md-menu-divider></md-menu-divider>
@@ -47,7 +47,7 @@
 </md-toolbar>
 
 <div class="md-toolbar-expandable" ng-show="showSearch">
-  <md-toolbar class="md-hue-1">
+  <md-toolbar class="md-accent">
     <div layout-align="start start" layout="row" layout-sm="column">
       <div class="md-toolbar-tools" flex="100" flex-gt-sm="90">
         <md-button aria-label="Search" ng-click="showSearch = !showSearch" class="md-icon-button">

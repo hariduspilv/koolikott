@@ -1,4 +1,4 @@
-#page-add {
+#page-view-portfolio {
   #main-content {
     overflow-y: auto;
     overflow-x: hidden;
@@ -17,12 +17,6 @@
       .portfolio-chapter-subchapter {
         & + .portfolio-chapter-subchapter {
           margin-top: 20px;
-        }
-
-        .subchapter-title {
-          input {
-            font-size: 16px;
-          }
         }
 
         h3 {

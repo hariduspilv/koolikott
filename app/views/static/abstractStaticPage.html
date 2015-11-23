@@ -1,24 +1,14 @@
-<div id="navmenu" data-dop-header></div>
+<div id="page-static" flex>
+  <div id="navmenu" data-dop-header flex></div>
 
-<section layout="row" layout-align="center start" ng-cloak>
-  <!-- Round Fab-button -->
-  <!-- ////////////////////////- -->
-  <div>
-    <md-button class="md-fab md-fab-bottom-right" aria-label="Add" ng-click="showMeta($event)">
-      <md-tooltip>
-        Lisa materjal
-      </md-tooltip>
-      <ng-md-icon icon="add"></ng-md-icon>
-    </md-button>
+  <div layout layout-align="center start" flex>
+    <section layout="row" layout-sm="column" flex flex-gt-md="80">
+      <article flex="75" flex-sm="100" class="md-padding" role="main">
+        <div flex layout-padding ng-bind-html="pageContent"></div>
+      </article>
+      <div data-dop-sidebar flex="25" flex-sm="100" class="md-padding" role="sidebar"></div>
+    </section>
   </div>
+</div>
 
-  <!-- Middle content -->
-  <!-- ////////////////////////- -->
-  <article layout="row" layout-sm="column" flex flex-gt-md="80">
-    <div layout="column" flex="75" flex-sm="100" role="main" class="md-padding">
-      <div flex layout-padding ng-bind-html="pageContent"></div>
-    </div>
-
-    <div data-dop-sidebar flex="25" flex-sm="100" class="md-padding" role="sidebar"></div>
-  </article>
-</section>
+<div data-add-portfolio-fab-button></div>
