@@ -145,7 +145,16 @@ define(['app.routes', 'services/dependencyResolver'], function(config, dependenc
     			}
     			
     			if (taxon.level === this.TOPIC) {
-    				return taxon.level === level ? taxon : this.getTaxon(taxon.subject, level);
+    				if (taxon.level === level) {
+    					return taxon;
+    				}
+    				
+    				var parent = taxon.subject; 
+    				if (!parent) {
+    					parent = taxon.domain;
+    				}
+    				
+    				return  this.getTaxon(parent, level);
     			}
     		}
     	}
