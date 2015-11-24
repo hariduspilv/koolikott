@@ -104,6 +104,50 @@
           </md-card-content>
         </md-card>
 
+        <!-- comments/commeting -->
+        <md-card id="portfolio-comments">
+          <md-card-content>
+            <h2 class="portfolio-comments-title">
+              Kommentaarid (21)
+              <md-icon class="md-primary" data-ng-class="{'toggled': showComments}" data-ng-click="showComments = !showComments">
+                keyboard_arrow_down
+              </md-icon>
+            </h2>
+
+            <div data-ng-show="showComments">
+              <md-list>
+                <md-list-item class="md-3-line" ng-repeat="comment in comments">
+                  <md-icon class="md-avatar-icon">person</md-icon>
+                  <div class="md-list-item-text" layout="column">
+                    <h3>{{comment.author}}</h3>
+                    <h4>{{comment.date}}</h4>
+                    <p>{{comment.text}}</p>
+                  </div>
+                </md-list-item>
+              </md-list>
+
+              <div layout="row" layout-align="center center">
+                <md-button md-no-ink class="md-primary">
+                  Veel kommentaare <span>(2/21)</span>
+                </md-button>
+              </div>
+
+              <h2>Lisa kommentaar</h2>
+              <md-input-container flex>
+                <label>Kommentaar</label>
+                <textarea ng-model="portfolio.comment.text" rows="4"></textarea>
+              </md-input-container>
+              <div layout="row" layout-align="end center">
+                <md-button class="md-raised md-primary">
+                  Saada
+                </md-button>
+              </div>
+            </div>
+
+          </md-card-content>
+        </md-card>
+        <!-- /commments/commenting -->
+
         <div id="portfolio-chapters">
           <div data-ng-repeat="chapter in portfolio.chapters">
             <div data-dop-chapter data-chapter="chapter" data-index="{{$index}}"></div>

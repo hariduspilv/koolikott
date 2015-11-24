@@ -33,7 +33,9 @@ require.config({
     'angular-screenfull': '../bower_components/angular-screenfull/dist/angular-screenfull',
     screenfull: '../bower_components/screenfull/dist/screenfull',
     'angular-scroll': '../bower_components/angular-scroll/angular-scroll',
-    jsog: '../bower_components/jsog/lib/JSOG'
+    jsog: '../bower_components/jsog/lib/JSOG',
+    ngInfiniteScroll: '../bower_components/ngInfiniteScroll/build/ng-infinite-scroll',
+    jquery: '../bower_components/jquery/dist/jquery'
   },
   shim: {
     angular: {
@@ -74,6 +76,10 @@ require.config({
     'angular-scroll': [
       'angular'
     ],
+    ngInfiniteScroll: [
+      'angular',
+      'jquery'
+    ],
     app: [
       'angular',
       'angular-translate',
@@ -90,6 +96,7 @@ require.config({
 });
 
 define([
+  'jquery',
   'angular',
   'app',
   'angular-translate',
@@ -118,8 +125,9 @@ define([
   'loginDialogController',
   'dopTaxonSelector',
   'dopTableOfContents',
-  'jsog'
-], function (angular, app) {
+  'jsog',
+  'ngInfiniteScroll'
+], function (jquery, angular, app) {
   'use strict';
   var $html = angular.element(document.getElementsByTagName('html')[0]);
 

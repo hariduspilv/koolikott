@@ -439,7 +439,6 @@ module.exports = function (grunt) {
   grunt.registerTask('build', [
     'clean:dist',
     'wiredep',
-    'bower:app',
     'useminPrepare',
     'concurrent:dist',
     'autoprefixer',

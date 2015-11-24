@@ -11,66 +11,31 @@
           </span>
           <span data-ng-if="getNumberOfResults() === 1">
             <span data-translate="SEARCH_RESULT_1_RESULT_PART_1"></span>
-            <strong><span data-ng-bind="getNumberOfResults()"></span></strong>
+            <strong>
+              <span data-ng-bind="getNumberOfResults()"></span>
+            </strong>
             <span data-translate="SEARCH_RESULT_1_RESULT_PART_2"></span>
           </span>
           <span data-ng-if="getNumberOfResults() > 1">
             <span data-translate="SEARCH_RESULT_PART_1"></span>
-            <strong><span data-ng-bind="getNumberOfResults()"></span></strong><span data-translate="SEARCH_RESULT_PART_2"></span>
+            <strong>
+              <span data-ng-bind="getNumberOfResults()"></span>
+            </strong>
+            <span data-translate="SEARCH_RESULT_PART_2"></span>
           </span>
-        </h1>
+        </h2>
 
-        <md-grid-list md-cols-gt-md="4" md-cols-md="3" md-cols-sm="2" md-gutter="20px" md-row-height="300px">
-          <md-grid-tile data-ng-repeat="item in items">
+        <md-grid-list md-cols-gt-md="4" md-cols-md="3" md-cols-sm="2" md-gutter="20px" md-row-height="300px" data-infinite-scroll="nextPage()" data-infinite-scroll-disabled="searching" data-infinite-scroll-distance="2">
+          <md-grid-tile data-ng-repeat="item in items" md-rowspan="1" md-colspan="1">
             <figure data-ng-if="item.type === '.Material'" data-dop-material-box material="item"></figure>
             <figure data-ng-if="item.type === '.Portfolio'" data-dop-portfolio-box portfolio="item"></figure>
           </md-grid-tile>
         </md-grid-list>
 
-        <!-- THIS SHOULD BE INFINITE SCROLL -->
-        <!-- Pagination -->
-        <!-- ////////////////////////- -->
-        <div layout="row" layout-align="end center">
-          <div data-ng-if="totalResults">
-            <div class="clearfix text-center">
-              <nav>
-                <ul class="pagination">
-                  <li data-ng-if="paging.before.length === 0" class="disabled">
-                    <span aria-label="{{'SEARCH_RESULT_PREVIOUS' | translate}}" class="btn btn-default">
-                      <span aria-hidden="true"><span data-translate="SEARCH_RESULT_PREVIOUS"></span></span>
-                    </span>
-                  </li>
-                  <li data-ng-if="paging.before.length > 0">
-                    <a href="{{buildPageURL(paging.thisPage - 1)}}" aria-label="{{'SEARCH_RESULT_PREVIOUS' | translate}}" class="btn btn-default">
-                      <span aria-hidden="true"><span data-translate="SEARCH_RESULT_PREVIOUS"></span></span>
-                    </a>
-                  </li>
+        <p ng-show="searching">
+          Loading...
+        </p>
 
-                  <li data-ng-repeat="page in paging.before">
-                    <a href="{{buildPageURL(page)}}" data-ng-bind="page"></a>
-                  </li>
-
-                  <li class="active"><span data-ng-bind="paging.thisPage"></span></li>
-
-                  <li data-ng-repeat="page in paging.after">
-                    <a href="{{buildPageURL(page)}}" data-ng-bind="page"></a>
-                  </li>
-
-                  <li data-ng-if="paging.after.length === 0" class="disabled">
-                    <span aria-label="{{'SEARCH_RESULT_NEXT' | translate}}" class="btn btn-default">
-                      <span aria-hidden="true"><span data-translate="SEARCH_RESULT_NEXT"></span></span>
-                    </span>
-                  </li>
-                  <li data-ng-if="paging.after.length > 0">
-                    <a href="{{buildPageURL(paging.thisPage + 1)}}" aria-label="{{'SEARCH_RESULT_NEXT' | translate}}" class="btn btn-default">
-                      <span aria-hidden="true"><span data-translate="SEARCH_RESULT_NEXT"></span></span>
-                    </a>
-                  </li>
-                </ul>
-              </nav>
-            </div>
-          </div>
-        </div>
       </article>
       <div data-dop-sidebar flex="25" flex-sm="100" class="md-padding" role="sidebar"></div>
     </section>

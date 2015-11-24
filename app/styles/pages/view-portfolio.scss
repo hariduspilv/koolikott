@@ -8,6 +8,19 @@
     margin: 0;
   }
 
+  #portfolio-comments {
+    margin-top: 20px;
+
+    .portfolio-comments-title md-icon {
+      cursor: pointer;
+      transition: transform 0.3s ease-in-out;
+
+      &.toggled {
+        transform: rotate(180deg);
+      }
+    }
+  }
+
   #portfolio-chapters {
     margin-top: 20px;
 
