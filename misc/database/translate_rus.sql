@@ -182,8 +182,9 @@ insert into Translation(translationGroup, translationKey, translation) values (2
 insert into Translation(translationGroup, translationKey, translation) values (2, 'SUBJECT_OTHER', 'Другое');
 
 -- Taxon path
-insert into Translation(translationGroup, translationKey, translation) values (2, 'TAXON_PATH_DOMAIN', 'Domain');
-insert into Translation(translationGroup, translationKey, translation) values (2, 'TAXON_PATH_TOPIC', 'Tema');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'TAXON_PATH_DOMAIN', 'Домен');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'TAXON_PATH_TOPIC', 'Тема');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'TAXON_PATH_SUBTOPIC', 'Подраздел');
 
 -- Language name translations, more can be added using the same conventions for the translation key
 insert into Translation(translationGroup, translationKey, translation) values (2, 'LANGUAGE_ESTONIAN', 'Эстонский');

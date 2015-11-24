@@ -185,6 +185,7 @@ insert into Translation(translationGroup, translationKey, translation) values (1
 
 insert into Translation(translationGroup, translationKey, translation) values (1, 'TAXON_PATH_DOMAIN', 'Domeen');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'TAXON_PATH_TOPIC', 'Teema');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'TAXON_PATH_SUBTOPIC', 'Alamteema');
 
 -- Language name translations, more can be added using the same conventions for the translation key
 insert into Translation(translationGroup, translationKey, translation) values (1, 'LANGUAGE_ESTONIAN', 'Eesti');

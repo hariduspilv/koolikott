@@ -1,13 +1,21 @@
 package ee.hm.dop.model;
 
+import static javax.persistence.FetchType.EAGER;
+
+import java.util.Set;
+
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 
 @Entity
 @DiscriminatorValue("TOPIC")
 public class Topic extends Taxon {
+
+    @OneToMany(fetch = EAGER, mappedBy = "topic")
+    private Set<Subtopic> subtopics;
 
     @ManyToOne
     @JoinColumn(name = "subject")
@@ -31,5 +39,13 @@ public class Topic extends Taxon {
 
     public void setDomain(Domain domain) {
         this.domain = domain;
+    }
+
+    public Set<Subtopic> getSubtopics() {
+        return subtopics;
+    }
+
+    public void setSubtopics(Set<Subtopic> subtopics) {
+        this.subtopics = subtopics;
     }
 }

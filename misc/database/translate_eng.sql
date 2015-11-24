@@ -201,6 +201,7 @@ insert into Translation(translationGroup, translationKey, translation) values (3
 -- Taxon path
 insert into Translation(translationGroup, translationKey, translation) values (3, 'TAXON_PATH_DOMAIN', 'Domain');
 insert into Translation(translationGroup, translationKey, translation) values (3, 'TAXON_PATH_TOPIC', 'Topic');
+insert into Translation(translationGroup, translationKey, translation) values (3, 'TAXON_PATH_SUBTOPIC', 'Subtopic');
 
 -- Language name translations, more can be added using the same conventions for the translation key
 insert into Translation(translationGroup, translationKey, translation) values (3, 'LANGUAGE_ESTONIAN', 'Estonian');

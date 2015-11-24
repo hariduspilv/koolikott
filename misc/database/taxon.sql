@@ -352,3 +352,31 @@ insert into Taxon(id, name, level) values (10101, 'Preschool_Topic2', 'TOPIC');
 insert into Topic(id, domain) values (10101, 100);
 
 -- End of topics for Preschool
+
+-- Subtopic
+
+-- Start of subtopics for Basic History
+
+insert into Taxon(id, name, level) values (15000, 'Ajaarvamine', 'SUBTOPIC');
+insert into Subtopic(id, topic) values (15000, 10000);
+insert into Taxon(id, name, level) values (15001, 'Ajalooallikad', 'SUBTOPIC');
+insert into Subtopic(id, topic) values (15001, 10000);
+insert into Taxon(id, name, level) values (15002, 'Eluolu', 'SUBTOPIC');
+insert into Subtopic(id, topic) values (15002, 10000);
+insert into Taxon(id, name, level) values (15003, 'Ajaloosündmused_ja_ajaloolised_isikud', 'SUBTOPIC');
+insert into Subtopic(id, topic) values (15003, 10000);
+
+-- End of subtopics for Basic History
+
+-- Start of subtopics for Estonian History
+
+insert into Taxon(id, name, level) values (15010, 'Muinasaeg', 'SUBTOPIC');
+insert into Subtopic(id, topic) values (15010, 10001);
+insert into Taxon(id, name, level) values (15011, 'Tähtsamad_arheloogilised_kultuurid', 'SUBTOPIC');
+insert into Subtopic(id, topic) values (15011, 10001);
+insert into Taxon(id, name, level) values (15012, 'Eesti_ühiskonf_muinasaja_lõpul', 'SUBTOPIC');
+insert into Subtopic(id, topic) values (15012, 10001);
+insert into Taxon(id, name, level) values (15013, 'Keskaeg', 'SUBTOPIC');
+insert into Subtopic(id, topic) values (15013, 10001);
+
+-- End of subtopics for Estonian History

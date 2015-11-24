@@ -138,6 +138,19 @@ CREATE TABLE Topic (
             ON DELETE RESTRICT
 );
 
+CREATE TABLE Subtopic (
+  id      BIGINT PRIMARY KEY,
+  topic BIGINT NOT NULL,
+  
+  FOREIGN KEY (id)
+            REFERENCES Taxon(id)
+            ON DELETE RESTRICT,
+  
+  FOREIGN KEY (topic)
+            REFERENCES Topic(id)
+            ON DELETE RESTRICT
+);
+
 CREATE TABLE Repository (
   id                  BIGINT         AUTO_INCREMENT PRIMARY KEY,
   baseURL             VARCHAR(255) UNIQUE NOT NULL,
