@@ -29,6 +29,7 @@ import ee.hm.dop.model.SearchFilter;
 import ee.hm.dop.model.SearchResult;
 import ee.hm.dop.model.Searchable;
 import ee.hm.dop.model.Subject;
+import ee.hm.dop.model.Topic;
 import ee.hm.dop.model.solr.Document;
 import ee.hm.dop.model.solr.Response;
 import ee.hm.dop.model.solr.SearchResponse;
@@ -307,7 +308,7 @@ public class SearchServiceTest {
     }
 
     @Test
-    public void searchWithTaxonSubjctFilter() {
+    public void searchWithTaxonSubjectFilter() {
         String query = "pythagoras";
 
         SearchFilter searchFilter = new SearchFilter();
@@ -455,11 +456,17 @@ public class SearchServiceTest {
         subject.setName("COOL_SUBJECT");
         subject.setDomain(domain);
 
-        searchFilter.setTaxon(subject);
+        Topic topic = new Topic();
+        topic.setId(5L);
+        topic.setName("COOL_TOPIC");
+        topic.setSubject(subject);
+
+        searchFilter.setTaxon(topic);
 
         searchFilter.setPaid(false);
         searchFilter.setType("material");
-        String tokenizedQuery = "(pythagoras*) AND subject:\"cool_subject\" AND domain:\"cool_domain\" AND educational_context:\"preschool\""
+        String tokenizedQuery = "(pythagoras*) AND topic:\"cool_topic\" AND subject:\"cool_subject\""
+                + " AND domain:\"cool_domain\" AND educational_context:\"preschool\""
                 + " AND (paid:\"false\" OR type:\"portfolio\") AND type:\"material\"";
         long start = 0;
 
