@@ -53,7 +53,7 @@ define(['app'], function(app) {
 
             setLanguage : function(language) {
                 searchLanguage = language;
-            },    
+            },
 
             getURL : function() {
                 var searchURL;
@@ -142,61 +142,6 @@ define(['app'], function(app) {
                 }
 
                 return searchLanguage;
-            },
-
-            getPage : function() {
-                var searchObject = $location.search();
-                if (searchObject.page) {
-                    return parseInt(searchObject.page);
-                }
-                return 1;
-            },
-
-            getActualPage : function() {
-                var searchObject = $location.search();
-                if (searchObject.page) {
-                    return searchObject.page;
-                }
-                return 1;
-            },
-
-            buildURL : function(query, page, taxon, paid, type, language) {
-                var searchURL = "#/" + searchURLbase + encodeURI(escapeQuery(query)) + "&page=" + page;
-                if (taxon) {
-                    searchURL += taxonURL + taxon;
-                }
-                if (paid && paid === 'false') {
-                    searchURL += paidURL + paid;
-                }
-                if (type && this.isValidType(type)) {
-                    searchURL += typeURL + type;
-                }
-                if (language) {
-                    searchURL += languageURL + language;
-                }
-                return searchURL;
-            },
-
-            goToPage : function(page) {
-                var params = {
-                    'q': this.getQuery(),
-                    'page': page
-                };
-
-                if (this.getTaxon()) {
-                    params.taxon = this.getTaxon();
-                }
-                if (this.isPaid() === false) {
-                    params.paid = this.isPaid();
-                }
-                if (this.getType() && this.isValidType(this.getType())) {
-                    params.type = this.getType();
-                }
-                if (this.getLanguage()) {
-                    params.language = this.getLanguage();
-                }
-
-                $location.url("search/result").search(params);
             },
 
             clearFieldsNotInSimpleSearch : function() {

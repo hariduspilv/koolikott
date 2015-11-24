@@ -9,7 +9,8 @@ define(['app.routes', 'services/dependencyResolver'], function(config, dependenc
       'pascalprecht.translate',
       'youtube-embed',
       'angularScreenfull',
-      'duScroll'
+      'duScroll',
+      'infinite-scroll'
     ]);
 
     app.config(
@@ -53,12 +54,12 @@ define(['app.routes', 'services/dependencyResolver'], function(config, dependenc
             $httpProvider.defaults.transformResponse.splice(0, 0, parseJSONResponse);
         }
     ]);
-    
+
      function parseJSONResponse(data, headersGetter) {
         if (data && (headersGetter()['content-type'] === 'application/json')) {
             return JSOG.parse(data);
         }
-        
+
         return data;
     }
 
@@ -115,7 +116,7 @@ define(['app.routes', 'services/dependencyResolver'], function(config, dependenc
     		getEducationalContext(taxon) {
     			return this.getTaxon(taxon, this.EDUCATIONAL_CONTEXT);
     		}
-    		
+
     		getDomain(taxon) {
     			return this.getTaxon(taxon, this.DOMAIN);
     		}
@@ -123,11 +124,11 @@ define(['app.routes', 'services/dependencyResolver'], function(config, dependenc
     		getSubject(taxon) {
     			return this.getTaxon(taxon, this.SUBJECT);
     		}
-    		
+
     		getTopic(taxon) {
     			return this.getTaxon(taxon, this.TOPIC);
     		}
-    		
+
     		getTaxon(taxon, level) {
     			if (!taxon) {
     				return;
@@ -144,7 +145,7 @@ define(['app.routes', 'services/dependencyResolver'], function(config, dependenc
     			if (taxon.level === this.SUBJECT) {
     				return taxon.level === level ? taxon : this.getTaxon(taxon.domain, level);
     			}
-    			
+
     			if (taxon.level === this.TOPIC) {
     				return taxon.level === level ? taxon : this.getTaxon(taxon.subject, level);
     			}
