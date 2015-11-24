@@ -54,6 +54,12 @@ define(['app'], function(app)
                         		$scope.taxon = newTopic;
                         }
                     }, true);
+                	
+                	$scope.$watch('taxonPath.subtopic', function(newSubtopic, oldSubtopic) {
+                        if (newSubtopic && newSubtopic !== oldSubtopic) {
+                        		$scope.taxon = newSubtopic;
+                        }
+                    }, true);
             	}
 
         		function getEducationalContextSuccess(data) {
@@ -85,6 +91,7 @@ define(['app'], function(app)
         			$scope.taxonPath.domain = $rootScope.taxonUtils.getDomain($scope.taxon);
         			$scope.taxonPath.subject = $rootScope.taxonUtils.getSubject($scope.taxon);
         			$scope.taxonPath.topic = $rootScope.taxonUtils.getTopic($scope.taxon);
+        			$scope.taxonPath.subtopic = $rootScope.taxonUtils.getSubtopic($scope.taxon);
             	}
             }
         };
