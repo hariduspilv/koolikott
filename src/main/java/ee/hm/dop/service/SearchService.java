@@ -4,13 +4,14 @@ import static java.lang.String.format;
 import static org.apache.commons.lang3.StringUtils.isBlank;
 
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
+import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.solr.client.solrj.util.ClientUtils;
 
 import com.google.common.collect.ImmutableSet;
@@ -25,6 +26,7 @@ import ee.hm.dop.model.SearchResult;
 import ee.hm.dop.model.Searchable;
 import ee.hm.dop.model.Subject;
 import ee.hm.dop.model.Taxon;
+import ee.hm.dop.model.Topic;
 import ee.hm.dop.model.solr.Document;
 import ee.hm.dop.model.solr.Response;
 import ee.hm.dop.model.solr.SearchResponse;
@@ -154,67 +156,83 @@ public class SearchService {
         return sb.toString();
     }
 
+    /*
+     * Convert filters to Solr syntax query
+     */
     private String getFiltersAsQuery(SearchFilter searchFilter) {
-        Map<String, String> filters = new LinkedHashMap<>();
+        List<String> filters = new LinkedList<>();
 
+        filters.add(getLanguageAsQuery(searchFilter));
+        filters.add(getTaxonsAsQuery(searchFilter));
+        filters.add(isPaidAsQuery(searchFilter));
+        filters.add(getTypeAsQuery(searchFilter));
+
+        // Remove empty elements
+        filters = filters.stream().filter(f -> !f.isEmpty()).collect(Collectors.toList());
+
+        return StringUtils.join(filters, " AND ");
+    }
+
+    private String getLanguageAsQuery(SearchFilter searchFilter) {
         Language language = searchFilter.getLanguage();
         if (language != null) {
-            filters.put("language", language.getCode());
+            return format("(language:\"%s\" OR type:\"portfolio\")", language.getCode());
         }
+        return "";
+    }
 
-        Taxon taxon = searchFilter.getTaxon();
-        filters.putAll(getTaxonsAsFilters(taxon));
-
+    private String isPaidAsQuery(SearchFilter searchFilter) {
         if (!searchFilter.isPaid()) {
-            filters.put("paid", "false");
+            return "(paid:\"false\" OR type:\"portfolio\")";
         }
+        return "";
+    }
 
+    private String getTypeAsQuery(SearchFilter searchFilter) {
         Set<String> types = ImmutableSet.of(MATERIAL_TYPE, PORTFOLIO_TYPE, ALL_TYPE);
-        if (types.contains(searchFilter.getType())) {
-            filters.put("type", searchFilter.getType());
-        }
 
-        // Convert filters to Solr syntax query
-        String filtersAsQuery = "";
-        for (Map.Entry<String, String> filter : filters.entrySet()) {
-            if (filter.getValue() != null) {
-                String value = ClientUtils.escapeQueryChars(filter.getValue()).toLowerCase();
-                if (!filtersAsQuery.isEmpty()) {
-                    filtersAsQuery += " AND ";
-                }
-
-                if (filter.getKey().equals("paid")) {
-                    filtersAsQuery += "(paid:\"false\" OR type:\"portfolio\")";
-                } else if (filter.getKey().equals("type") && filter.getValue().equals("all")) {
-                    filtersAsQuery += "(type:\"material\" OR type:\"portfolio\")";
-                } else if (filter.getKey().equals("language")) {
-                    filtersAsQuery += format("(language:\"%s\" OR type:\"portfolio\")", filter.getValue());
+        String type = searchFilter.getType();
+        if (type != null) {
+            type = ClientUtils.escapeQueryChars(type).toLowerCase();
+            if (types.contains(type)) {
+                if (type.equals("all")) {
+                    return "(type:\"material\" OR type:\"portfolio\")";
                 } else {
-                    filtersAsQuery += format("%s:\"%s\"", filter.getKey(), value);
+                    return format("type:\"%s\"", type);
                 }
             }
         }
-        return filtersAsQuery;
+        return "";
     }
 
-    private Map<String, String> getTaxonsAsFilters(Taxon taxon) {
-        Map<String, String> filters = new LinkedHashMap<>();
+    private String getTaxonsAsQuery(SearchFilter searchFilter) {
+        Taxon taxon = searchFilter.getTaxon();
+        List<String> taxons = new LinkedList<>();
+
+        if (taxon instanceof Topic) {
+            String name = ClientUtils.escapeQueryChars(taxon.getName()).toLowerCase();
+            taxons.add(format("%s:\"%s\"", getTaxonLevel(taxon), name));
+            taxon = ((Topic) taxon).getSubject();
+        }
 
         if (taxon instanceof Subject) {
-            filters.put(getTaxonLevel(taxon), taxon.getName());
+            String name = ClientUtils.escapeQueryChars(taxon.getName()).toLowerCase();
+            taxons.add(format("%s:\"%s\"", getTaxonLevel(taxon), name));
             taxon = ((Subject) taxon).getDomain();
         }
 
         if (taxon instanceof Domain) {
-            filters.put(getTaxonLevel(taxon), taxon.getName());
+            String name = ClientUtils.escapeQueryChars(taxon.getName()).toLowerCase();
+            taxons.add(format("%s:\"%s\"", getTaxonLevel(taxon), name));
             taxon = ((Domain) taxon).getEducationalContext();
         }
 
         if (taxon instanceof EducationalContext) {
-            filters.put(getTaxonLevel(taxon), taxon.getName());
+            String name = ClientUtils.escapeQueryChars(taxon.getName()).toLowerCase();
+            taxons.add(format("%s:\"%s\"", getTaxonLevel(taxon), name));
         }
 
-        return filters;
+        return StringUtils.join(taxons, " AND ");
     }
 
     private String getTaxonLevel(Taxon taxon) {
@@ -224,6 +242,8 @@ public class SearchService {
             return "domain";
         } else if (taxon instanceof Subject) {
             return "subject";
+        } else if (taxon instanceof Topic) {
+            return "topic";
         }
         return null;
     }

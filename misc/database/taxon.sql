@@ -353,6 +353,15 @@ insert into Topic(id, domain) values (10101, 100);
 
 -- End of topics for Preschool
 
+-- Start of topics for Secondary Education
+
+insert into Taxon(id, name, level) values (10200, 'Secondary_Education_Topic1', 'TOPIC');
+insert into Topic(id, subject) values (10200, 1079);
+insert into Taxon(id, name, level) values (10201, 'Secondary_Education_Topic2', 'TOPIC');
+insert into Topic(id, subject) values (10201, 1079);
+
+-- End of topics for Secondary Education
+
 -- Subtopic
 
 -- Start of subtopics for Basic History
