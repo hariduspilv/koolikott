@@ -76,9 +76,9 @@ require.config({
     'angular-scroll': [
       'angular'
     ],
-    'ngInfiniteScroll': [
-      'jquery',
-      'angular'
+    ngInfiniteScroll: [
+      'angular',
+      'jquery'
     ],
     app: [
       'angular',
@@ -96,6 +96,7 @@ require.config({
 });
 
 define([
+  'jquery',
   'angular',
   'app',
   'angular-translate',
@@ -106,7 +107,6 @@ define([
   'angular-material-icons',
   'angular-screenfull',
   'angular-scroll',
-  'jquery',
   'translationService',
   'authenticatedUserService',
   'serverCallService',
@@ -127,7 +127,7 @@ define([
   'dopTableOfContents',
   'jsog',
   'ngInfiniteScroll'
-], function (angular, app) {
+], function (jquery, angular, app) {
   'use strict';
   var $html = angular.element(document.getElementsByTagName('html')[0]);
 
