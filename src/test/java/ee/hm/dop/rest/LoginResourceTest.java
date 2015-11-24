@@ -140,7 +140,7 @@ public class LoginResourceTest extends ResourceIntegrationTestBase {
 
         Interval interval = new Interval(authnRequest.getIssueInstant(), new DateTime());
         assertFalse(authnRequest.getIssueInstant().isAfterNow());
-        assertTrue(interval.toDurationMillis() < 1000);
+        assertTrue(interval.toDurationMillis() < 10000);
 
         assertEquals(Integer.valueOf(configuration.getString(TAAT_ASSERTION_CONSUMER_SERVICE_INDEX)),
                 authnRequest.getAssertionConsumerServiceIndex());
