@@ -4,6 +4,7 @@ import static javax.persistence.FetchType.EAGER;
 
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -16,6 +17,7 @@ import javax.persistence.Lob;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OrderBy;
 import javax.persistence.OrderColumn;
 import javax.persistence.UniqueConstraint;
 
@@ -65,6 +67,11 @@ public class Portfolio implements Searchable {
     @JoinColumn(name = "portfolio")
     @OrderColumn(name = "chapterOrder", nullable = false)
     private List<Chapter> chapters;
+
+    @OneToMany(fetch = FetchType.EAGER, cascade = { CascadeType.MERGE, CascadeType.PERSIST })
+    @JoinColumn(name = "portfolio")
+    @OrderBy("added DESC")
+    private List<Comment> comments;
 
     @ManyToMany(fetch = EAGER)
     @JoinTable(
@@ -191,6 +198,14 @@ public class Portfolio implements Searchable {
 
     public void setTargetGroup(TargetGroup targetGroup) {
         this.targetGroup = targetGroup;
+    }
+
+    public List<Comment> getComments() {
+        return comments;
+    }
+
+    public void setComments(List<Comment> comments) {
+        this.comments = comments;
     }
 
 }

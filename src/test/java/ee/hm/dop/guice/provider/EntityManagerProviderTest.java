@@ -12,6 +12,7 @@ import org.easymock.EasyMock;
 import org.easymock.EasyMockRunner;
 import org.easymock.Mock;
 import org.easymock.TestSubject;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -23,6 +24,11 @@ public class EntityManagerProviderTest {
 
     @Mock
     private EntityManagerFactory emf;
+
+    @Before
+    public void closeExistingEntityManager() {
+        EntityManagerProvider.clearCache();
+    }
 
     @Test
     public void get() {

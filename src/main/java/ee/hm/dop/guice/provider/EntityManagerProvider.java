@@ -38,4 +38,11 @@ public class EntityManagerProvider implements Provider<EntityManager> {
 
         return entityManager;
     }
+
+    /**
+     * For test only
+     */
+    protected static final void clearCache() {
+        ENTITY_MANAGER_CACHE.remove();
+    }
 }

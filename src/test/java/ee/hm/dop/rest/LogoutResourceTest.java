@@ -21,9 +21,10 @@ import ee.hm.dop.model.AuthenticatedUser;
 public class LogoutResourceTest extends ResourceIntegrationTestBase {
 
     @Test
-    public void logout() {
+    public void testLogout() {
         Response response = doGet("dev/login/39011220011");
-        AuthenticatedUser authenticatedUser = response.readEntity(new GenericType<AuthenticatedUser>() {});
+        AuthenticatedUser authenticatedUser = response.readEntity(new GenericType<AuthenticatedUser>() {
+        });
         assertNotNull(authenticatedUser.getToken());
         String token = authenticatedUser.getToken();
 

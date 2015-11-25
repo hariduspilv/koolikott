@@ -17,6 +17,7 @@ import org.junit.Test;
 
 import ee.hm.dop.common.test.DatabaseTestBase;
 import ee.hm.dop.model.Chapter;
+import ee.hm.dop.model.Comment;
 import ee.hm.dop.model.Material;
 import ee.hm.dop.model.Portfolio;
 import ee.hm.dop.model.Subject;
@@ -27,6 +28,9 @@ public class PortfolioDAOTest extends DatabaseTestBase {
 
     @Inject
     private PortfolioDAO portfolioDAO;
+
+    @Inject
+    private UserDAO userDAO;
 
     private int threadsDone;
 
@@ -274,4 +278,23 @@ public class PortfolioDAOTest extends DatabaseTestBase {
         newPortfolio.setViews(14L);
         portfolioDAO.update(newPortfolio);
     }
+
+    @Test
+    public void addComment() {
+
+        User user = userDAO.findUserByIdCode("37066990099");
+
+        String unique_comment = "UNIQUE" + System.currentTimeMillis();
+
+        Comment comment = new Comment();
+        comment.setText(unique_comment);
+        comment.setCreator(user);
+        comment.setCreated(DateTime.now());
+
+        Portfolio newPortfolio = portfolioDAO.findById(2L);
+        newPortfolio.getComments().add(comment);
+
+        portfolioDAO.update(newPortfolio);
+    }
+
 }
