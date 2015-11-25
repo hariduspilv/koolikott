@@ -54,14 +54,20 @@ define(['app'], function(app)
 
                     searchService.setPaid($scope.detailedSearch.paid);
                     searchService.setType($scope.detailedSearch.type);
+                    searchService.setLanguage($scope.detailedSearch.language);
+
                     if ($scope.detailedSearch.taxon) {
                         searchService.setTaxon($scope.detailedSearch.taxon.id);
+                    } else {
+                        searchService.setTaxon(null);
                     }
-                    searchService.setLanguage($scope.detailedSearch.language);
+
                     if ($scope.detailedSearch.targetGroup) {
                         searchService.setTargetGroup($scope.detailedSearch.targetGroup.toLowerCase());
+                    } else {
+                        searchService.setTargetGroup(null);
                     }
-                    
+
                     $location.url(searchService.getURL());
                 };
 
