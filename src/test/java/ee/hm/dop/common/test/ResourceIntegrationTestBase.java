@@ -19,6 +19,7 @@ import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.ext.Provider;
 
 import org.apache.commons.configuration.Configuration;
@@ -26,7 +27,7 @@ import org.glassfish.jersey.client.ClientConfig;
 import org.glassfish.jersey.client.ClientProperties;
 import org.glassfish.jersey.filter.LoggingFilter;
 import org.glassfish.jersey.jackson.JacksonFeature;
-import org.junit.Before;
+import org.junit.After;
 
 import com.google.inject.Inject;
 
@@ -55,13 +56,13 @@ public abstract class ResourceIntegrationTestBase extends IntegrationTestBase {
         authenticationFilter = new AuthenticationFilter(authenticatedUser);
     }
 
-    @Before
+    @After
     public void logout() {
         if (authenticationFilter != null) {
             Response response = getTarget("logout", authenticationFilter).request()
                     .accept(MediaType.APPLICATION_JSON_TYPE).post(null);
 
-            assertEquals("Logout failed", 200, response.getStatus());
+            assertEquals("Logout failed", Status.NO_CONTENT.getStatusCode(), response.getStatus());
 
             authenticationFilter = null;
         }

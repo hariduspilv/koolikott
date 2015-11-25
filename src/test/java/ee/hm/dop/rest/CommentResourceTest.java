@@ -5,6 +5,7 @@ import static org.junit.Assert.assertEquals;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status;
 
 import org.junit.Test;
 
@@ -36,7 +37,7 @@ public class CommentResourceTest extends ResourceIntegrationTestBase {
         Response response = doPost(POST_COMMENT_PORTFOLIO_URL,
                 Entity.entity(addCommentForm, MediaType.APPLICATION_JSON_TYPE));
 
-        assertEquals(204, response.getStatus());
+        assertEquals(Status.NO_CONTENT.getStatusCode(), response.getStatus());
     }
 
     @Test
@@ -54,7 +55,7 @@ public class CommentResourceTest extends ResourceIntegrationTestBase {
         Response response = doPost(POST_COMMENT_PORTFOLIO_URL,
                 Entity.entity(addCommentForm, MediaType.APPLICATION_JSON_TYPE));
 
-        assertEquals(401, response.getStatus());
+        assertEquals(Status.UNAUTHORIZED.getStatusCode(), response.getStatus());
     }
 
 }
