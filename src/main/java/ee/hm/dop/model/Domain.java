@@ -20,6 +20,9 @@ public class Domain extends Taxon {
     @OneToMany(fetch = EAGER, mappedBy = "domain")
     private Set<Topic> topics;
 
+    @OneToMany(fetch = EAGER, mappedBy = "domain")
+    private Set<Specialization> specializations;
+
     @ManyToOne
     @JoinColumn(name = "educationalContext", nullable = false)
     private EducationalContext educationalContext;
@@ -46,5 +49,13 @@ public class Domain extends Taxon {
 
     public void setTopics(Set<Topic> topics) {
         this.topics = topics;
+    }
+
+    public Set<Specialization> getSpecializations() {
+        return specializations;
+    }
+
+    public void setSpecializations(Set<Specialization> specializations) {
+        this.specializations = specializations;
     }
 }

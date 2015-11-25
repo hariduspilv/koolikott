@@ -28,7 +28,9 @@ DROP TABLE IF EXISTS LanguageTable;
 DROP TABLE IF EXISTS IssueDate;
 DROP TABLE IF EXISTS Publisher;
 DROP TABLE IF EXISTS Tag;
+DROP TABLE IF EXISTS Subtopic;
 DROP TABLE IF EXISTS Topic;
+DROP TABLE IF EXISTS Specialization;
 DROP TABLE IF EXISTS Subject;
 DROP TABLE IF EXISTS Domain;
 DROP TABLE IF EXISTS EducationalContext;
@@ -108,6 +110,19 @@ CREATE TABLE Domain (
 );
 
 CREATE TABLE Subject (
+  id     BIGINT PRIMARY KEY,
+  domain BIGINT NOT NULL,
+  
+  FOREIGN KEY (id)
+            REFERENCES Taxon(id)
+            ON DELETE RESTRICT,
+  
+  FOREIGN KEY (domain)
+            REFERENCES Domain(id)
+            ON DELETE RESTRICT
+);
+
+CREATE TABLE Specialization (
   id     BIGINT PRIMARY KEY,
   domain BIGINT NOT NULL,
   
