@@ -390,7 +390,14 @@ insert into Subtopic(id, topic) values (15013, 10001);
 
 -- End of subtopics for Estonian History
 
--- Topic
+-- Start of subtopics for Preschool_Topic1
+
+insert into Taxon(id, name, level) values (15020, 'Subtopic_for_Preschool_Topic1', 'SUBTOPIC');
+insert into Subtopic(id, topic) values (15020, 10100);
+
+-- End of subtopics for Preschool_Topic1
+
+-- Specialization
 
 -- Start of Specialization for Computer Science
 
