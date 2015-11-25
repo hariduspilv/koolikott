@@ -1,7 +1,8 @@
-use dop;
+USE dop;
 
 -- Drop tables
-
+DROP TABLE IF EXISTS EstCoreTaxonMapping;
+DROP TABLE IF EXISTS WaramuTaxonMapping;
 DROP TABLE IF EXISTS Chapter_Material;
 DROP TABLE IF EXISTS Chapter;
 DROP TABLE IF EXISTS Portfolio_Tag;
@@ -40,7 +41,7 @@ DROP TABLE IF EXISTS Author;
 
 -- Create tables
 
-CREATE TABLE Author(
+CREATE TABLE Author (
   id      BIGINT AUTO_INCREMENT PRIMARY KEY,
   name    VARCHAR(255) NOT NULL,
   surname VARCHAR(255) NOT NULL,
@@ -49,8 +50,8 @@ CREATE TABLE Author(
 );
 
 CREATE TABLE ResourceType (
-  id           BIGINT AUTO_INCREMENT PRIMARY KEY,
-  name         VARCHAR(255) NOT NULL UNIQUE
+  id   BIGINT AUTO_INCREMENT PRIMARY KEY,
+  name VARCHAR(255) NOT NULL UNIQUE
 );
 
 CREATE TABLE Tag (
@@ -60,7 +61,7 @@ CREATE TABLE Tag (
 
 CREATE TABLE Publisher (
   id      BIGINT AUTO_INCREMENT PRIMARY KEY,
-  name VARCHAR(255) NOT NULL UNIQUE,
+  name    VARCHAR(255) NOT NULL UNIQUE,
   website VARCHAR(255) NOT NULL UNIQUE
 );
 
@@ -90,36 +91,36 @@ CREATE TABLE Taxon (
 
 CREATE TABLE EducationalContext (
   id BIGINT PRIMARY KEY,
-  
+
   FOREIGN KEY (id)
-            REFERENCES Taxon(id)
-            ON DELETE RESTRICT
+  REFERENCES Taxon (id)
+    ON DELETE RESTRICT
 );
 
 CREATE TABLE Domain (
   id                 BIGINT PRIMARY KEY,
   educationalContext BIGINT NOT NULL,
-  
+
   FOREIGN KEY (id)
-            REFERENCES Taxon(id)
-            ON DELETE RESTRICT,
-  
+  REFERENCES Taxon (id)
+    ON DELETE RESTRICT,
+
   FOREIGN KEY (educationalContext)
-            REFERENCES EducationalContext(id)
-            ON DELETE RESTRICT
+  REFERENCES EducationalContext (id)
+    ON DELETE RESTRICT
 );
 
 CREATE TABLE Subject (
   id     BIGINT PRIMARY KEY,
   domain BIGINT NOT NULL,
-  
+
   FOREIGN KEY (id)
-            REFERENCES Taxon(id)
-            ON DELETE RESTRICT,
-  
+  REFERENCES Taxon (id)
+    ON DELETE RESTRICT,
+
   FOREIGN KEY (domain)
-            REFERENCES Domain(id)
-            ON DELETE RESTRICT
+  REFERENCES Domain (id)
+    ON DELETE RESTRICT
 );
 
 CREATE TABLE Specialization (
@@ -167,25 +168,25 @@ CREATE TABLE Subtopic (
 );
 
 CREATE TABLE Repository (
-  id                  BIGINT         AUTO_INCREMENT PRIMARY KEY,
+  id                  BIGINT                   AUTO_INCREMENT PRIMARY KEY,
   baseURL             VARCHAR(255) UNIQUE NOT NULL,
-  lastSynchronization TIMESTAMP NULL DEFAULT NULL,
+  lastSynchronization TIMESTAMP           NULL DEFAULT NULL,
   schemaName          VARCHAR(255) UNIQUE NOT NULL,
   isEstonianPublisher BOOLEAN
 );
 
 CREATE TABLE User (
-  id        BIGINT AUTO_INCREMENT PRIMARY KEY,
-  userName  VARCHAR(255) UNIQUE NOT NULL,
-  name      VARCHAR(255) NOT NULL,
-  surName   VARCHAR(255) NOT NULL,
-  idCode    VARCHAR(11) UNIQUE NOT NULL,
-  role      VARCHAR(255) NOT NULL
+  id       BIGINT AUTO_INCREMENT PRIMARY KEY,
+  userName VARCHAR(255) UNIQUE NOT NULL,
+  name     VARCHAR(255)        NOT NULL,
+  surName  VARCHAR(255)        NOT NULL,
+  idCode   VARCHAR(11) UNIQUE  NOT NULL,
+  role     VARCHAR(255)        NOT NULL
 );
 
 CREATE TABLE AuthenticatedUser (
-  id                 BIGINT AUTO_INCREMENT PRIMARY KEY,
-  user_id            BIGINT NOT NULL,
+  id                 BIGINT  AUTO_INCREMENT PRIMARY KEY,
+  user_id            BIGINT              NOT NULL,
   token              VARCHAR(255) UNIQUE NOT NULL,
   firstLogin         BOOLEAN DEFAULT FALSE,
   homeOrganization   VARCHAR(255),
@@ -194,12 +195,12 @@ CREATE TABLE AuthenticatedUser (
   scopedAffiliations VARCHAR(255),
 
   FOREIGN KEY (user_id)
-            REFERENCES User(id)
-            ON DELETE RESTRICT
+  REFERENCES User (id)
+    ON DELETE RESTRICT
 );
 
 CREATE TABLE AuthenticationState (
-  id          BIGINT AUTO_INCREMENT PRIMARY KEY,
+  id          BIGINT    AUTO_INCREMENT PRIMARY KEY,
   token       VARCHAR(255) UNIQUE NOT NULL,
   created     TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   name        VARCHAR(255),
@@ -209,38 +210,38 @@ CREATE TABLE AuthenticationState (
 );
 
 CREATE TABLE Material (
-  id                   BIGINT AUTO_INCREMENT PRIMARY KEY,
+  id                   BIGINT             AUTO_INCREMENT PRIMARY KEY,
   lang                 BIGINT,
   issueDate            BIGINT,
   licenseType          BIGINT,
-  source               TEXT NOT NULL,
-  added                TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  updated              TIMESTAMP NULL DEFAULT NULL,
-  views                BIGINT NOT NULL DEFAULT 0,
-  picture              LONGBLOB DEFAULT NULL,
+  source               TEXT      NOT NULL,
+  added                TIMESTAMP          DEFAULT CURRENT_TIMESTAMP,
+  updated              TIMESTAMP NULL     DEFAULT NULL,
+  views                BIGINT    NOT NULL DEFAULT 0,
+  picture              LONGBLOB           DEFAULT NULL,
   repositoryIdentifier VARCHAR(255),
   repository           BIGINT,
   creator              BIGINT,
   deleted              BOOLEAN,
-  paid                 BOOLEAN DEFAULT FALSE,
+  paid                 BOOLEAN            DEFAULT FALSE,
 
   UNIQUE KEY (repositoryIdentifier, repository),
-  
+
   FOREIGN KEY (lang)
   REFERENCES LanguageTable (id)
-        ON DELETE RESTRICT,
+    ON DELETE RESTRICT,
 
   FOREIGN KEY (issueDate)
   REFERENCES IssueDate (id)
-        ON DELETE RESTRICT,
+    ON DELETE RESTRICT,
 
   FOREIGN KEY (repository)
   REFERENCES Repository (id)
-        ON DELETE RESTRICT, 
+    ON DELETE RESTRICT,
 
   FOREIGN KEY (creator)
   REFERENCES User (id)
-        ON DELETE RESTRICT
+    ON DELETE RESTRICT
 );
 
 CREATE TABLE LanguageKeyCodes (
@@ -248,8 +249,8 @@ CREATE TABLE LanguageKeyCodes (
   code VARCHAR(255) NOT NULL,
 
   FOREIGN KEY (lang)
-        REFERENCES LanguageTable(id)
-        ON DELETE RESTRICT
+  REFERENCES LanguageTable (id)
+    ON DELETE RESTRICT
 );
 
 CREATE TABLE LanguageString (
@@ -269,12 +270,12 @@ CREATE TABLE Material_Author (
   PRIMARY KEY (material, author),
 
   FOREIGN KEY (material)
-        REFERENCES Material(id)
-        ON DELETE RESTRICT,
+  REFERENCES Material (id)
+    ON DELETE RESTRICT,
 
   FOREIGN KEY (author)
-        REFERENCES Author(id)
-        ON DELETE RESTRICT
+  REFERENCES Author (id)
+    ON DELETE RESTRICT
 );
 
 CREATE TABLE Material_Publisher (
@@ -293,33 +294,33 @@ CREATE TABLE Material_Publisher (
 );
 
 CREATE TABLE Material_Title (
-	material BIGINT NOT NULL,
-	title BIGINT NOT NULL,
+  material BIGINT NOT NULL,
+  title    BIGINT NOT NULL,
 
-	PRIMARY KEY (material, title),
-	
-	FOREIGN KEY (material) 
-        REFERENCES Material(id)
-        ON DELETE RESTRICT,
-	
-	FOREIGN KEY (title)
-        REFERENCES LanguageString(id)
-        ON DELETE RESTRICT
+  PRIMARY KEY (material, title),
+
+  FOREIGN KEY (material)
+  REFERENCES Material (id)
+    ON DELETE RESTRICT,
+
+  FOREIGN KEY (title)
+  REFERENCES LanguageString (id)
+    ON DELETE RESTRICT
 );
 
 CREATE TABLE Material_Description (
-	material BIGINT NOT NULL,
-	description BIGINT NOT NULL,
+  material    BIGINT NOT NULL,
+  description BIGINT NOT NULL,
 
-	PRIMARY KEY (material, description),
-	
-	FOREIGN KEY (material) 
-        REFERENCES Material(id)
-        ON DELETE RESTRICT,
-	
-	FOREIGN KEY (description)
-        REFERENCES LanguageString(id)
-        ON DELETE RESTRICT
+  PRIMARY KEY (material, description),
+
+  FOREIGN KEY (material)
+  REFERENCES Material (id)
+    ON DELETE RESTRICT,
+
+  FOREIGN KEY (description)
+  REFERENCES LanguageString (id)
+    ON DELETE RESTRICT
 );
 
 CREATE TABLE Material_ResourceType (
@@ -339,7 +340,7 @@ CREATE TABLE Material_ResourceType (
 
 CREATE TABLE Material_Taxon (
   material BIGINT NOT NULL,
-  taxon  BIGINT NOT NULL,
+  taxon    BIGINT NOT NULL,
 
   PRIMARY KEY (material, taxon),
 
@@ -354,16 +355,16 @@ CREATE TABLE Material_Taxon (
 
 CREATE TABLE Material_Tag (
   material BIGINT NOT NULL,
-  tag BIGINT NOT NULL,
+  tag      BIGINT NOT NULL,
 
   PRIMARY KEY (material, tag),
-	
-  FOREIGN KEY (material) 
-    REFERENCES Material(id)
+
+  FOREIGN KEY (material)
+  REFERENCES Material (id)
     ON DELETE RESTRICT,
-	
+
   FOREIGN KEY (tag)
-    REFERENCES Tag(id)
+  REFERENCES Tag (id)
     ON DELETE RESTRICT
 );
 
@@ -372,8 +373,8 @@ CREATE TABLE TranslationGroup (
   lang BIGINT NOT NULL,
 
   FOREIGN KEY (lang)
-        REFERENCES LanguageTable(id)
-        ON DELETE RESTRICT
+  REFERENCES LanguageTable (id)
+    ON DELETE RESTRICT
 );
 
 CREATE TABLE Translation (
@@ -384,40 +385,40 @@ CREATE TABLE Translation (
   PRIMARY KEY (translationGroup, translationKey),
 
   FOREIGN KEY (translationGroup)
-        REFERENCES TranslationGroup(id)
-        ON DELETE RESTRICT
+  REFERENCES TranslationGroup (id)
+    ON DELETE RESTRICT
 );
 
 CREATE TABLE Page (
-  id        BIGINT AUTO_INCREMENT PRIMARY KEY,
-  name      VARCHAR(255) NOT NULL,
-  content   TEXT NOT NULL,
-  language  BIGINT NOT NULL,
-  
-  UNIQUE KEY (name, language), 
-  
+  id       BIGINT AUTO_INCREMENT PRIMARY KEY,
+  name     VARCHAR(255) NOT NULL,
+  content  TEXT         NOT NULL,
+  language BIGINT       NOT NULL,
+
+  UNIQUE KEY (name, language),
+
   FOREIGN KEY (language)
-        REFERENCES LanguageTable(id)
-        ON DELETE RESTRICT
+  REFERENCES LanguageTable (id)
+    ON DELETE RESTRICT
 );
 
 CREATE TABLE Portfolio (
-  id        BIGINT AUTO_INCREMENT PRIMARY KEY,
-  title     VARCHAR(255) NOT NULL,
-  taxon     BIGINT,
-  creator   BIGINT NOT NULL,
-  summary   TEXT,
-  views     BIGINT   NOT NULL DEFAULT 0,
-  created   TIMESTAMP NOT NUll DEFAULT CURRENT_TIMESTAMP,
-  updated   TIMESTAMP NULL DEFAULT NULL,
-  picture   LONGBLOB DEFAULT NULL,
+  id      BIGINT                AUTO_INCREMENT PRIMARY KEY,
+  title   VARCHAR(255) NOT NULL,
+  taxon   BIGINT,
+  creator BIGINT       NOT NULL,
+  summary TEXT,
+  views   BIGINT       NOT NULL DEFAULT 0,
+  created TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updated TIMESTAMP    NULL     DEFAULT NULL,
+  picture LONGBLOB              DEFAULT NULL,
 
   FOREIGN KEY (creator)
-    REFERENCES User (id)
+  REFERENCES User (id)
     ON DELETE RESTRICT,
 
   FOREIGN KEY (taxon)
-    REFERENCES Taxon(id)
+  REFERENCES Taxon (id)
     ON DELETE RESTRICT
 );
 
@@ -427,44 +428,64 @@ CREATE TABLE Chapter (
   textValue     TEXT,
   parentChapter BIGINT,
   portfolio     BIGINT,
-  chapterOrder  INTEGER NOT NULL,
+  chapterOrder  INTEGER      NOT NULL,
 
   FOREIGN KEY (portfolio)
-    REFERENCES Portfolio (id)
+  REFERENCES Portfolio (id)
     ON DELETE RESTRICT,
-    
+
   FOREIGN KEY (parentChapter)
-    REFERENCES Chapter (id)
+  REFERENCES Chapter (id)
     ON DELETE RESTRICT
 );
 
 CREATE TABLE Portfolio_Tag (
   portfolio BIGINT NOT NULL,
-  tag BIGINT NOT NULL,
+  tag       BIGINT NOT NULL,
 
   PRIMARY KEY (portfolio, tag),
-    
-  FOREIGN KEY (portfolio) 
-    REFERENCES Portfolio(id)
+
+  FOREIGN KEY (portfolio)
+  REFERENCES Portfolio (id)
     ON DELETE RESTRICT,
-    
+
   FOREIGN KEY (tag)
-    REFERENCES Tag(id)
+  REFERENCES Tag (id)
     ON DELETE RESTRICT
 );
 
 CREATE TABLE Chapter_Material (
-  chapter       BIGINT NOT NULL,
-  material      BIGINT NOT NULL,
-  materialOrder INTEGER NOT NULL, 
+  chapter       BIGINT  NOT NULL,
+  material      BIGINT  NOT NULL,
+  materialOrder INTEGER NOT NULL,
 
   PRIMARY KEY (chapter, material),
-    
-  FOREIGN KEY (chapter) 
-    REFERENCES Chapter (id)
+
+  FOREIGN KEY (chapter)
+  REFERENCES Chapter (id)
     ON DELETE RESTRICT,
-    
+
   FOREIGN KEY (material)
-    REFERENCES Material (id)
+  REFERENCES Material (id)
     ON DELETE RESTRICT
 );
+
+CREATE TABLE WaramuTaxonMapping (
+  id    BIGINT PRIMARY KEY,
+  name  VARCHAR(255) NOT NULL,
+  taxon BIGINT,
+
+  FOREIGN KEY (taxon)
+  REFERENCES Taxon (id)
+    ON DELETE RESTRICT
+);
+
+CREATE TABLE EstCoreTaxonMapping (
+  id    BIGINT PRIMARY KEY,
+  name  VARCHAR(255) NOT NULL,
+  taxon BIGINT,
+
+  FOREIGN KEY (taxon)
+  REFERENCES Taxon (id)
+    ON DELETE RESTRICT
+)

@@ -95,8 +95,9 @@
                     </rights>
                     <classification>
                         <taxonPath>
-                            <gymnasiumTaxon>
-                            </gymnasiumTaxon>
+                            <preschoolTaxon>
+                                <domain>Mathematics</domain>
+                            </preschoolTaxon>
                         </taxonPath>
                         <taxonPath>
                             <gymnasiumTaxon>
@@ -109,15 +110,6 @@
                         </taxonPath>
                     </classification>
                     <classification>
-                        <taxonPath>
-                            <gymnasiumTaxon>
-                                <curriculum>KLRÕK2011</curriculum>
-                                <domain>Mina ja keskkond</domain>
-                                <subject>Estonian</subject>
-                                <topic>Ajaloo algõpetus</topic>
-                                <subtopic>Ajaarvamine</subtopic>
-                            </gymnasiumTaxon>
-                        </taxonPath>
                         <taxonPath>
                             <basicSchoolTaxon>
                                 <curriculum>KLRÕK2011</curriculum>

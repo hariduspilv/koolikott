@@ -10,6 +10,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 @DiscriminatorValue("SUBJECT")
 public class Subject extends Taxon {
@@ -35,5 +37,11 @@ public class Subject extends Taxon {
 
     public void setDomain(Domain domain) {
         this.domain = domain;
+    }
+
+    @JsonIgnore
+    @Override
+    public Taxon getParent() {
+        return getDomain();
     }
 }

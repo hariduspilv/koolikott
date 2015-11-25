@@ -17,6 +17,7 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import ee.hm.dop.model.Author;
+import ee.hm.dop.model.Domain;
 import ee.hm.dop.model.EducationalContext;
 import ee.hm.dop.model.Language;
 import ee.hm.dop.model.LanguageString;
@@ -37,7 +38,6 @@ import ee.hm.dop.service.TaxonService;
 public class MaterialParserEstCore extends MaterialParser {
 
     private static final String AUTHOR = "author";
-    private static final String[] TAXONS = {"preschoolTaxon", "basicSchoolTaxon", "gymnasiumTaxon", "vocationalTaxon"};
     private static final Map<String, String> taxonMap;
 
     static {
@@ -146,14 +146,13 @@ public class MaterialParserEstCore extends MaterialParser {
     protected void setContextsFromElements(Document doc, Set<Taxon> taxons) {
         String path = "//*[local-name()='estcore']/*[local-name()='classification']/*[local-name()='taxonPath']";
 
-        for (int i = 0; i < TAXONS.length; i++) {
-            String tag = TAXONS[i];
+        for (String tag : taxonMap.keySet()) {
             try {
                 XPathExpression expr = xpath.compile(path + "/*[local-name()='" + tag + "']");
                 NodeList nl = (NodeList) expr.evaluate(doc, XPathConstants.NODESET);
 
                 if (nl != null && nl.getLength() > 0) {
-                    EducationalContext educationalContext = taxonService.getEducationalContextByName(taxonMap.get(TAXONS[i]));
+                    EducationalContext educationalContext = (EducationalContext) getTaxon(taxonMap.get(tag));
 
                     if (educationalContext != null) {
                         taxons.add(educationalContext);
@@ -165,6 +164,40 @@ public class MaterialParserEstCore extends MaterialParser {
         }
     }
 
+    @Override
+    protected void setDomains(Document doc, Set<Taxon> taxons) {
+        try {
+            XPathExpression expr1 = xpath.compile("//*[local-name()='estcore']/*[local-name()='classification']");
+            NodeList classifications = (NodeList) expr1.evaluate(doc, XPathConstants.NODESET);
+
+            for (int i = 0; i < classifications.getLength(); i++) {
+                Node classification = classifications.item(i);
+                for (String tag : taxonMap.keySet()) {
+
+                    XPathExpression expr2 = xpath.compile("./*[local-name()='taxonPath']/*[local-name()='" + tag + "']/*[local-name()='domain']");
+                    NodeList nl = (NodeList) expr2.evaluate(classification, XPathConstants.NODESET);
+
+                    if (nl != null && nl.getLength() > 0) {
+                        for (int j = 0; j < nl.getLength(); j++) {
+                            Domain domain = (Domain) getTaxon(nl.item(j).getTextContent().trim());
+
+                            if (domain != null) {
+                                taxons.add(domain);
+                            }
+                        }
+                    }
+                }
+            }
+
+        } catch (XPathExpressionException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    protected Taxon getTaxon(String context) {
+        return taxonService.getTaxonByEstCoreName(context);
+    }
 
     private Language getLanguage(Document doc) throws XPathExpressionException {
         Language language;

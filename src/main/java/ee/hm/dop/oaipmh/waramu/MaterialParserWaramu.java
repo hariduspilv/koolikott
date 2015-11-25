@@ -26,13 +26,12 @@ import ee.hm.dop.oaipmh.ParseException;
 import ee.hm.dop.service.AuthorService;
 import ee.hm.dop.service.LanguageService;
 import ee.hm.dop.service.TagService;
+import ee.hm.dop.service.TaxonService;
 
 public class MaterialParserWaramu extends MaterialParser {
 
     protected static final String WEB_PAGE = "WEBPAGE";
     protected static final String WEBSITE = "WEBSITE";
-    protected static final String COMPULSORY_EDUCATION = "COMPULSORYEDUCATION";
-    protected static final String BASIC_EDUCATION = "BASICEDUCATION";
 
     @Inject
     private LanguageService languageService;
@@ -42,6 +41,9 @@ public class MaterialParserWaramu extends MaterialParser {
 
     @Inject
     private AuthorService authorService;
+
+    @Inject
+    private TaxonService taxonService;
 
     @Override
     protected void setTags(Material material, Document doc) {
@@ -87,9 +89,7 @@ public class MaterialParserWaramu extends MaterialParser {
         String value = valueNode.getTextContent().trim().toUpperCase().replaceAll("\\s", "");
 
         //Waramu specific values
-        if (value.equals(COMPULSORY_EDUCATION)) {
-            value = BASIC_EDUCATION;
-        } else if (value.equals(WEB_PAGE)) {
+        if (value.equals(WEB_PAGE)) {
             value = WEBSITE;
         }
         return value;
@@ -106,8 +106,14 @@ public class MaterialParserWaramu extends MaterialParser {
     }
 
     @Override
-    protected void setContextsFromElements(Document doc, Set<Taxon> taxons) {
+    protected void setContextsFromElements(Document doc, Set<Taxon> taxons) {}
 
+    @Override
+    protected void setDomains(Document doc, Set<Taxon> taxons) {}
+
+    @Override
+    protected Taxon getTaxon(String context) {
+        return taxonService.getTaxonByWaramuName(context);
     }
 
     private void setTags(Material material, Element lom) {
