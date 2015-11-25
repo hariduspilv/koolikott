@@ -29,6 +29,7 @@ import ee.hm.dop.model.SearchFilter;
 import ee.hm.dop.model.SearchResult;
 import ee.hm.dop.model.Searchable;
 import ee.hm.dop.model.Subject;
+import ee.hm.dop.model.TargetGroup;
 import ee.hm.dop.model.Topic;
 import ee.hm.dop.model.solr.Document;
 import ee.hm.dop.model.solr.Response;
@@ -483,6 +484,19 @@ public class SearchServiceTest {
         language.setCode("mmm");
         searchFilter.setLanguage(language);
         String tokenizedQuery = "(alpha* beta*) AND (language:\"mmm\" OR type:\"portfolio\")";
+        long start = 0;
+
+        List<Searchable> searchables = Arrays.asList(createMaterial(9L), createMaterial(2L), createPortfolio(2L));
+
+        testSearch(query, tokenizedQuery, searchables, start, searchFilter);
+    }
+
+    @Test
+    public void searchWithTargetGroupFilter() {
+        String query = "umm";
+        SearchFilter searchFilter = new SearchFilter();
+        searchFilter.setTargetGroup(TargetGroup.SIX_SEVEN);
+        String tokenizedQuery = "(umm) AND target_group:\"six_seven\"";
         long start = 0;
 
         List<Searchable> searchables = Arrays.asList(createMaterial(9L), createMaterial(2L), createPortfolio(2L));

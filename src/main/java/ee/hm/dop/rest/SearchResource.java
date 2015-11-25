@@ -11,6 +11,7 @@ import javax.ws.rs.core.MediaType;
 import ee.hm.dop.model.Language;
 import ee.hm.dop.model.SearchFilter;
 import ee.hm.dop.model.SearchResult;
+import ee.hm.dop.model.TargetGroup;
 import ee.hm.dop.model.Taxon;
 import ee.hm.dop.service.LanguageService;
 import ee.hm.dop.service.SearchService;
@@ -34,17 +35,20 @@ public class SearchResource {
             @QueryParam("taxon") Long taxonId, //
             @QueryParam("paid") @DefaultValue(value = "true") Boolean paid, //
             @QueryParam("type") @DefaultValue(value = "") String type, //
-            @QueryParam("language") @DefaultValue(value = "") String languageCode) {
+            @QueryParam("language") @DefaultValue(value = "") String languageCode, //
+            @QueryParam("targetGroup") @DefaultValue(value = "") String targetGroupName) {
 
         Taxon taxon = taxonService.getTaxonById(taxonId);
         Language language = languageService.getLanguage(languageCode);
         type = type.isEmpty() ? null : type;
+        TargetGroup targetGroup = targetGroupName.isEmpty() ? null : TargetGroup.valueOf(targetGroupName.toUpperCase());
 
         SearchFilter searchFilter = new SearchFilter();
         searchFilter.setTaxon(taxon);
         searchFilter.setPaid(paid);
         searchFilter.setType(type);
         searchFilter.setLanguage(language);
+        searchFilter.setTargetGroup(targetGroup);
 
         if (start == null) {
             return searchService.search(query, searchFilter);

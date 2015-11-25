@@ -17,6 +17,7 @@ import ee.hm.dop.model.Domain;
 import ee.hm.dop.model.EducationalContext;
 import ee.hm.dop.model.Language;
 import ee.hm.dop.model.Subject;
+import ee.hm.dop.model.TargetGroup;
 import ee.hm.dop.model.Taxon;
 import ee.hm.dop.model.Topic;
 
@@ -25,6 +26,7 @@ public class LearningMaterialMetadataResourceTest extends ResourceIntegrationTes
     private static final String GET_EDUCATIONAL_CONTEXT_URL = "learningMaterialMetadata/educationalContext";
     private static final String GET_TAXON_URL = "learningMaterialMetadata/taxon?taxonId=%s";
     private static final String GET_LANGUAGES_URL = "learningMaterialMetadata/language";
+    private static final String GET_TARGET_GROUPS_URL = "learningMaterialMetadata/targetGroup";
 
     @Test
     public void getEducationalContext() {
@@ -80,6 +82,19 @@ public class LearningMaterialMetadataResourceTest extends ResourceIntegrationTes
         List<String> expectedNames = Arrays.asList("Estonian", "Russian", "English", "Arabic", "Portuguese", "French");
         List<String> actualNames = languages.stream().map(l -> l.getName()).collect(Collectors.toList());
         assertTrue(actualNames.containsAll(expectedNames));
+    }
+
+    @Test
+    public void getTargetGroups() {
+        TargetGroup[] result = doGet(GET_TARGET_GROUPS_URL, new GenericType<TargetGroup[]>() {
+        });
+
+        assertEquals(2, result.length);
+
+        List<TargetGroup> expectedTargetGroups = Arrays.asList(TargetGroup.values());
+        List<TargetGroup> actualTargetGroups = Arrays.asList(result);
+
+        assertTrue(actualTargetGroups.containsAll(expectedTargetGroups));
     }
 
 }

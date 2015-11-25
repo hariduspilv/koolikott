@@ -113,12 +113,15 @@ insert into Translation(translationGroup, translationKey, translation) values (3
 insert into Translation(translationGroup, translationKey, translation) values (3, 'DETAILED_SEARCH_ON', 'Yes');
 insert into Translation(translationGroup, translationKey, translation) values (3, 'DETAILED_SEARCH_OFF', 'No');
 insert into Translation(translationGroup, translationKey, translation) values (3, 'DETAILED_SEARCH_INCLUDE_PAID', 'Include Paid');
+insert into Translation(translationGroup, translationKey, translation) values (3, 'DETAILED_SEARCH_TARGET_GROUP', 'Age group');
 insert into Translation(translationGroup, translationKey, translation) values (3, 'ADD_PORTFOLIO', 'Add Portfolio');
 insert into Translation(translationGroup, translationKey, translation) values (3, 'PORTFOLIO_TITLE', 'Title');
 insert into Translation(translationGroup, translationKey, translation) values (3, 'PORTFOLIO_SUMMARY', 'Summary');
 insert into Translation(translationGroup, translationKey, translation) values (3, 'PORTFOLIO_METADATA_TOOLBAR_LABEL', 'Add portfolio basic data');
 insert into Translation(translationGroup, translationKey, translation) values (3, 'BUTTON_CANCEL', 'Cancel');
 insert into Translation(translationGroup, translationKey, translation) values (3, 'BUTTON_CREATE_PORTFOLIO', 'Create portfolio');
+insert into Translation(translationGroup, translationKey, translation) values (3, 'TARGET_GROUP_ZERO_FIVE', '0-5');
+insert into Translation(translationGroup, translationKey, translation) values (3, 'TARGET_GROUP_SIX_SEVEN', '6-7');
 
 -- Taxon Domain translations
 insert into Translation(translationGroup, translationKey, translation) values (3, 'DOMAIN_ME_AND_THE_ENVIRONMENT', 'Me and the environment');

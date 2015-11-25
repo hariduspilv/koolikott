@@ -166,6 +166,7 @@ public class SearchService {
         filters.add(getTaxonsAsQuery(searchFilter));
         filters.add(isPaidAsQuery(searchFilter));
         filters.add(getTypeAsQuery(searchFilter));
+        filters.add(getTargetGroupAsQuery(searchFilter));
 
         // Remove empty elements
         filters = filters.stream().filter(f -> !f.isEmpty()).collect(Collectors.toList());
@@ -201,6 +202,13 @@ public class SearchService {
                     return format("type:\"%s\"", type);
                 }
             }
+        }
+        return "";
+    }
+
+    private String getTargetGroupAsQuery(SearchFilter searchFilter) {
+        if (searchFilter.getTargetGroup() != null) {
+            return format("target_group:\"%s\"", searchFilter.getTargetGroup().toString().toLowerCase());
         }
         return "";
     }

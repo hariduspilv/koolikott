@@ -113,12 +113,15 @@ insert into Translation(translationGroup, translationKey, translation) values (2
 insert into Translation(translationGroup, translationKey, translation) values (2, 'DETAILED_SEARCH_ON', 'Да');
 insert into Translation(translationGroup, translationKey, translation) values (2, 'DETAILED_SEARCH_OFF', 'Нет');
 insert into Translation(translationGroup, translationKey, translation) values (2, 'DETAILED_SEARCH_INCLUDE_PAID', 'Включить заплатили');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'DETAILED_SEARCH_TARGET_GROUP', 'Возрастная группа');
 insert into Translation(translationGroup, translationKey, translation) values (2, 'ADD_PORTFOLIO', 'Добавить портфель');
 insert into Translation(translationGroup, translationKey, translation) values (2, 'PORTFOLIO_TITLE', 'Заглавие');
 insert into Translation(translationGroup, translationKey, translation) values (2, 'PORTFOLIO_SUMMARY', 'Описание');
 insert into Translation(translationGroup, translationKey, translation) values (2, 'PORTFOLIO_METADATA_TOOLBAR_LABEL', 'Добавить резюме основных данных');
 insert into Translation(translationGroup, translationKey, translation) values (2, 'BUTTON_CANCEL', 'Отмена');
 insert into Translation(translationGroup, translationKey, translation) values (2, 'BUTTON_CREATE_PORTFOLIO', 'Создать портфолио');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'TARGET_GROUP_ZERO_FIVE', '0-5');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'TARGET_GROUP_SIX_SEVEN', '6-7');
 
 -- Taxon Domain translations
 insert into Translation(translationGroup, translationKey, translation) values (2, 'DOMAIN_LANGUAGE_AND_SPEECH', 'Язык и речь');

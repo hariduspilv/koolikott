@@ -11,6 +11,7 @@ import javax.ws.rs.core.MediaType;
 
 import ee.hm.dop.model.EducationalContext;
 import ee.hm.dop.model.Language;
+import ee.hm.dop.model.TargetGroup;
 import ee.hm.dop.model.Taxon;
 import ee.hm.dop.service.LanguageService;
 import ee.hm.dop.service.TaxonService;
@@ -43,6 +44,13 @@ public class LearningMaterialMetadataResource {
     @Path("language")
     public List<Language> getAllLanguages() {
         return languageService.getAll();
+    }
+
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("targetGroup")
+    public TargetGroup[] getTargetGroups() {
+        return TargetGroup.values();
     }
 
 }

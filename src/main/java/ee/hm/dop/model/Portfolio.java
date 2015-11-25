@@ -6,6 +6,8 @@ import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
@@ -69,7 +71,7 @@ public class Portfolio implements Searchable {
             name = "Portfolio_Tag",
             joinColumns = { @JoinColumn(name = "portfolio") },
             inverseJoinColumns = { @JoinColumn(name = "tag") },
-            uniqueConstraints = @UniqueConstraint(columnNames = { "portfolio", "tag" }))
+            uniqueConstraints = @UniqueConstraint(columnNames = { "portfolio", "tag" }) )
     private List<Tag> tags;
 
     @Lob
@@ -79,6 +81,10 @@ public class Portfolio implements Searchable {
     @Formula("picture is not null")
     private boolean hasPicture;
 
+    @Enumerated(EnumType.STRING)
+    private TargetGroup targetGroup;
+
+    @Override
     public Long getId() {
         return id;
     }
@@ -178,4 +184,13 @@ public class Portfolio implements Searchable {
     public void setHasPicture(boolean hasPicture) {
         this.hasPicture = hasPicture;
     }
+
+    public TargetGroup getTargetGroup() {
+        return targetGroup;
+    }
+
+    public void setTargetGroup(TargetGroup targetGroup) {
+        this.targetGroup = targetGroup;
+    }
+
 }

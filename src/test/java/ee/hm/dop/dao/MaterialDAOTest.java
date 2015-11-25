@@ -26,6 +26,7 @@ import ee.hm.dop.model.Material;
 import ee.hm.dop.model.Repository;
 import ee.hm.dop.model.ResourceType;
 import ee.hm.dop.model.Subject;
+import ee.hm.dop.model.TargetGroup;
 import ee.hm.dop.model.Taxon;
 import ee.hm.dop.model.User;
 import ee.hm.dop.utils.DbUtils;
@@ -586,5 +587,9 @@ public class MaterialDAOTest extends DatabaseTestBase {
         assertEquals("isssiiaawej", material.getRepositoryIdentifier());
         assertEquals(new Long(1), material.getCreator().getId());
         assertFalse(material.isEmbeddable());
+
+        assertEquals(2, material.getTargetGroups().size());
+        assertTrue(material.getTargetGroups().contains(TargetGroup.ZERO_FIVE));
+        assertTrue(material.getTargetGroups().contains(TargetGroup.SIX_SEVEN));
     }
 }

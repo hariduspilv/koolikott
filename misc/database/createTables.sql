@@ -352,6 +352,17 @@ CREATE TABLE Material_Tag (
     ON DELETE RESTRICT
 );
 
+CREATE TABLE Material_TargetGroup (
+  material BIGINT NOT NULL, 
+  targetGroup VARCHAR(255),
+
+  PRIMARY KEY (material, targetGroup),
+
+  FOREIGN KEY (material)
+    REFERENCES Material (id)
+    ON DELETE RESTRICT
+);
+
 CREATE TABLE TranslationGroup (
   id   BIGINT AUTO_INCREMENT PRIMARY KEY,
   lang BIGINT NOT NULL,
@@ -387,15 +398,16 @@ CREATE TABLE Page (
 );
 
 CREATE TABLE Portfolio (
-  id        BIGINT AUTO_INCREMENT PRIMARY KEY,
-  title     VARCHAR(255) NOT NULL,
-  taxon     BIGINT,
-  creator   BIGINT NOT NULL,
-  summary   TEXT,
-  views     BIGINT   NOT NULL DEFAULT 0,
-  created   TIMESTAMP NOT NUll DEFAULT CURRENT_TIMESTAMP,
-  updated   TIMESTAMP NULL DEFAULT NULL,
-  picture   LONGBLOB DEFAULT NULL,
+  id          BIGINT AUTO_INCREMENT PRIMARY KEY,
+  title       VARCHAR(255) NOT NULL,
+  taxon       BIGINT,
+  creator     BIGINT NOT NULL,
+  summary     TEXT,
+  views       BIGINT   NOT NULL DEFAULT 0,
+  created     TIMESTAMP NOT NUll DEFAULT CURRENT_TIMESTAMP,
+  updated     TIMESTAMP NULL DEFAULT NULL,
+  picture     LONGBLOB DEFAULT NULL,
+  targetGroup VARCHAR(255),
 
   FOREIGN KEY (creator)
     REFERENCES User (id)

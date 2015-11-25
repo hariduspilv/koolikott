@@ -20,6 +20,7 @@ import ee.hm.dop.model.Chapter;
 import ee.hm.dop.model.Material;
 import ee.hm.dop.model.Portfolio;
 import ee.hm.dop.model.Subject;
+import ee.hm.dop.model.TargetGroup;
 import ee.hm.dop.model.User;
 
 public class PortfolioDAOTest extends DatabaseTestBase {
@@ -178,6 +179,8 @@ public class PortfolioDAOTest extends DatabaseTestBase {
                 + "And can also have    spaces   betwenn    the words on it", chapter.getText());
         assertEquals(0, chapter.getMaterials().size());
         assertEquals(0, chapter.getSubchapters().size());
+
+        assertEquals(TargetGroup.SIX_SEVEN, portfolio.getTargetGroup());
     }
 
     @Test

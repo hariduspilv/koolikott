@@ -6,8 +6,12 @@ import static javax.persistence.FetchType.EAGER;
 
 import java.util.List;
 
+import javax.persistence.CollectionTable;
 import javax.persistence.Column;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -46,7 +50,7 @@ public class Material implements Searchable {
             name = "Material_Title",
             joinColumns = { @JoinColumn(name = "material") },
             inverseJoinColumns = { @JoinColumn(name = "title") },
-            uniqueConstraints = @UniqueConstraint(columnNames = { "material", "title" }))
+            uniqueConstraints = @UniqueConstraint(columnNames = { "material", "title" }) )
     private List<LanguageString> titles;
 
     @ManyToOne
@@ -58,7 +62,7 @@ public class Material implements Searchable {
             name = "Material_Author",
             joinColumns = { @JoinColumn(name = "material") },
             inverseJoinColumns = { @JoinColumn(name = "author") },
-            uniqueConstraints = @UniqueConstraint(columnNames = { "material", "author" }))
+            uniqueConstraints = @UniqueConstraint(columnNames = { "material", "author" }) )
     private List<Author> authors;
 
     @OneToOne
@@ -70,7 +74,7 @@ public class Material implements Searchable {
             name = "Material_Description",
             joinColumns = { @JoinColumn(name = "material") },
             inverseJoinColumns = { @JoinColumn(name = "description") },
-            uniqueConstraints = @UniqueConstraint(columnNames = { "material", "description" }))
+            uniqueConstraints = @UniqueConstraint(columnNames = { "material", "description" }) )
     private List<LanguageString> descriptions;
 
     @Column(nullable = false, columnDefinition = "TEXT")
@@ -81,7 +85,7 @@ public class Material implements Searchable {
             name = "Material_ResourceType",
             joinColumns = { @JoinColumn(name = "material") },
             inverseJoinColumns = { @JoinColumn(name = "resourceType") },
-            uniqueConstraints = @UniqueConstraint(columnNames = { "material", "resourceType" }))
+            uniqueConstraints = @UniqueConstraint(columnNames = { "material", "resourceType" }) )
     private List<ResourceType> resourceTypes;
 
     @ManyToMany(fetch = EAGER)
@@ -89,7 +93,7 @@ public class Material implements Searchable {
             name = "Material_Taxon",
             joinColumns = { @JoinColumn(name = "material") },
             inverseJoinColumns = { @JoinColumn(name = "taxon") },
-            uniqueConstraints = @UniqueConstraint(columnNames = { "material", "taxon" }))
+            uniqueConstraints = @UniqueConstraint(columnNames = { "material", "taxon" }) )
     private List<Taxon> taxons;
 
     @ManyToOne
@@ -101,7 +105,7 @@ public class Material implements Searchable {
             name = "Material_Publisher",
             joinColumns = { @JoinColumn(name = "material") },
             inverseJoinColumns = { @JoinColumn(name = "publisher") },
-            uniqueConstraints = @UniqueConstraint(columnNames = { "material", "publisher" }))
+            uniqueConstraints = @UniqueConstraint(columnNames = { "material", "publisher" }) )
     private List<Publisher> publishers;
 
     @Column(nullable = false)
@@ -119,7 +123,7 @@ public class Material implements Searchable {
             name = "Material_Tag",
             joinColumns = { @JoinColumn(name = "material") },
             inverseJoinColumns = { @JoinColumn(name = "tag") },
-            uniqueConstraints = @UniqueConstraint(columnNames = { "material", "tag" }))
+            uniqueConstraints = @UniqueConstraint(columnNames = { "material", "tag" }) )
     private List<Tag> tags;
 
     @Lob
@@ -155,6 +159,13 @@ public class Material implements Searchable {
     @Formula("(select r.isEstonianPublisher from Repository r where r.id = repository)")
     private Boolean embeddable;
 
+    @Enumerated(EnumType.STRING)
+    @Column(name = "targetGroup")
+    @ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(name = "Material_TargetGroup", joinColumns = @JoinColumn(name = "material") )
+    private List<TargetGroup> targetGroups;
+
+    @Override
     public Long getId() {
         return id;
     }
@@ -344,4 +355,13 @@ public class Material implements Searchable {
     public void setEmbeddable(Boolean embeddable) {
         this.embeddable = embeddable;
     }
+
+    public List<TargetGroup> getTargetGroups() {
+        return targetGroups;
+    }
+
+    public void setTargetGroups(List<TargetGroup> targetGroups) {
+        this.targetGroups = targetGroups;
+    }
+
 }

@@ -10,6 +10,8 @@ public class SearchFilter {
 
     private Language language;
 
+    private TargetGroup targetGroup;
+
     public Taxon getTaxon() {
         return taxon;
     }
@@ -40,6 +42,14 @@ public class SearchFilter {
 
     public void setLanguage(Language language) {
         this.language = language;
+    }
+
+    public TargetGroup getTargetGroup() {
+        return targetGroup;
+    }
+
+    public void setTargetGroup(TargetGroup targetGroup) {
+        this.targetGroup = targetGroup;
     }
 
 }
