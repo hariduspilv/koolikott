@@ -10,6 +10,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 @DiscriminatorValue("DOMAIN")
 public class Domain extends Taxon {
@@ -38,6 +40,12 @@ public class Domain extends Taxon {
 
     public void setEducationalContext(EducationalContext educationalContext) {
         this.educationalContext = educationalContext;
+    }
+
+    @JsonIgnore
+    @Override
+    public Taxon getParent() {
+        return getEducationalContext();
     }
 
     public Set<Topic> getTopics() {

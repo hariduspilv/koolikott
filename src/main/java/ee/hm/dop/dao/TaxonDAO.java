@@ -38,4 +38,11 @@ public class TaxonDAO extends BaseDAO {
         return educationalContexts;
     }
 
+    public Taxon findTaxonByRepoName(String name, String repoTable) {
+        TypedQuery<Taxon> findByName = createQuery(
+                "SELECT t.taxon FROM " + repoTable + " t WHERE t.name = :name", Taxon.class) //
+                .setParameter("name", name);
+
+        return getSingleResult(findByName);
+    }
 }

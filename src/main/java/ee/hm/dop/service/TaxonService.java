@@ -10,6 +10,9 @@ import ee.hm.dop.model.Taxon;
 
 public class TaxonService {
 
+    public static final String EST_CORE_TAXON_MAPPING = "EstCoreTaxonMapping";
+    public static final String WARAMU_TAXON_MAPPING = "WaramuTaxonMapping";
+
     @Inject
     private TaxonDAO taxonDAO;
 
@@ -23,6 +26,14 @@ public class TaxonService {
 
     public List<EducationalContext> getAllEducationalContext() {
         return taxonDAO.findAllEducationalContext();
+    }
+
+    public Taxon getTaxonByWaramuName(String name) {
+        return taxonDAO.findTaxonByRepoName(name, WARAMU_TAXON_MAPPING);
+    }
+
+    public Taxon getTaxonByEstCoreName(String name) {
+        return taxonDAO.findTaxonByRepoName(name, EST_CORE_TAXON_MAPPING);
     }
 
 }
