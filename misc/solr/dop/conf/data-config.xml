@@ -89,10 +89,12 @@
             <entity name="LicenseType" query="select name as license_type from LicenseType where id='${Material.licenseType}'" />
 
             <entity name="Material_Language" query="select code as language from LanguageTable where id='${Material.lang}'" />
+
+            <entity name="Material_TargetGroup" query="select targetGroup as target_group from Material_TargetGroup where material='${Material.id}'" />
         </entity>
 
         <entity name="Portfolio" pk="uniqueKey"
-            query="select concat('portfolio', id ) as uniqueKey, id, title, summary, taxon as taxon_id, 'portfolio' as type from Portfolio">
+            query="select concat('portfolio', id ) as uniqueKey, id, title, summary, taxon as taxon_id, 'portfolio' as type, targetGroup as target_group from Portfolio">
 
             <!-- Travel up the taxon path -->
 
