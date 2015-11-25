@@ -29,43 +29,43 @@ define(['app'], function(app)
                         if (newTaxon !== oldTaxon) {
                        		buildTaxonPath();
                         }
-                    }, true);
+                    }, false);
             		
             		$scope.$watch('taxonPath.educationalContext', function(newEducationalContext, oldEducationalContext) {
                         if (newEducationalContext && newEducationalContext !== oldEducationalContext) {
                        		$scope.taxon = newEducationalContext;
                         }
-                    }, true);
+                    }, false);
                 	
                 	$scope.$watch('taxonPath.domain', function(newDomain, oldDomain) {
                         if (newDomain && newDomain !== oldDomain) {
                        		$scope.taxon = newDomain;
                         }
-                    }, true);
+                    }, false);
                 	
                 	$scope.$watch('taxonPath.subject', function(newSubject, oldSubject) {
                         if (newSubject && newSubject !== oldSubject) {
                         	$scope.taxon = newSubject;
                         }
-                    }, true);
+                    }, false);
                 	
                 	$scope.$watch('taxonPath.topic', function(newTopic, oldTopic) {
                         if (newTopic && newTopic !== oldTopic) {
                         		$scope.taxon = newTopic;
                         }
-                    }, true);
+                    }, false);
                 	
                 	$scope.$watch('taxonPath.subtopic', function(newSubtopic, oldSubtopic) {
                         if (newSubtopic && newSubtopic !== oldSubtopic) {
                         		$scope.taxon = newSubtopic;
                         }
-                    }, true);
+                    }, false);
                 	
                 	$scope.$watch('taxonPath.specialization', function(newSpecialization, oldSpecialization) {
                         if (newSpecialization && newSpecialization !== oldSpecialization) {
                         		$scope.taxon = newSpecialization;
                         }
-                    }, true);
+                    }, false);
             	}
 
         		function getEducationalContextSuccess(data) {
