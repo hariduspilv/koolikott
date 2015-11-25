@@ -333,6 +333,8 @@ insert into Subject(id, domain) values (1103, 127);
 
 -- End of Secondary Education Subjects
 
+
+
 -- Topic
 
 -- Start of topics for Basic Education
@@ -361,6 +363,8 @@ insert into Taxon(id, name, level) values (10201, 'Secondary_Education_Topic2', 
 insert into Topic(id, subject) values (10201, 1079);
 
 -- End of topics for Secondary Education
+
+
 
 -- Subtopic
 
@@ -396,6 +400,15 @@ insert into Taxon(id, name, level) values (15020, 'Subtopic_for_Preschool_Topic1
 insert into Subtopic(id, topic) values (15020, 10100);
 
 -- End of subtopics for Preschool_Topic1
+
+-- Start of subtopics for Secondary_Education_Topic1
+
+insert into Taxon(id, name, level) values (15030, 'Subtopic_for_Secondary_Education_Topic1', 'SUBTOPIC');
+insert into Subtopic(id, topic) values (15030, 10200);
+
+-- End of subtopics for Secondary_Education_Topic1
+
+
 
 -- Specialization
 
