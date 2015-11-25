@@ -8,7 +8,7 @@ define(['app'], function(app)
                 queryOut: '='
             },
             templateUrl: 'directives/detailedSearch/detailedSearch.html',
-            controller: function ($scope) {
+            controller: function ($scope, $rootScope) {
 
                 var taxon;
 
@@ -20,9 +20,10 @@ define(['app'], function(app)
 
                     // Languages
                     serverCallService.makeGet("rest/learningMaterialMetadata/language", {}, getLanguagesSuccess, getLanguagesFail);
-
-                    // Language
                     $scope.detailedSearch.language = searchService.getLanguage();
+
+                    // Target groups
+                    serverCallService.makeGet("rest/learningMaterialMetadata/targetGroup", {}, getTargetGroupsSuccess, getTargetGroupsFail);
 
                     // Taxon
                     if (searchService.getTaxon()) {
@@ -57,7 +58,10 @@ define(['app'], function(app)
                         searchService.setTaxon($scope.detailedSearch.taxon.id);
                     }
                     searchService.setLanguage($scope.detailedSearch.language);
-
+                    if ($scope.detailedSearch.targetGroup) {
+                        searchService.setTargetGroup($scope.detailedSearch.targetGroup.toLowerCase());
+                    }
+                    
                     $location.url(searchService.getURL());
                 };
 
@@ -172,7 +176,7 @@ define(['app'], function(app)
 
                 function getLanguagesSuccess(data) {
                     if (isEmpty(data)) {
-                        getEducationalContextFail();
+                        getLanguagesFail();
                     } else {
                         $scope.languages = data;
                     }
@@ -185,6 +189,30 @@ define(['app'], function(app)
                 $scope.getLanguageTranslationKey = function(languageName) {
                     return 'LANGUAGE_' + languageName.toUpperCase().replace(/\s+/g, '_');
                 }
+
+                function getTargetGroupsSuccess(data) {
+                    if (isEmpty(data)) {
+                        getTargetGroupsFail();
+                    } else {
+                        $scope.targetGroups = data;
+                        $scope.detailedSearch.targetGroup = searchService.getTargetGroup().toUpperCase();
+                    }
+                }
+
+                function getTargetGroupsFail() {
+                    console.log('Failed to get target groups.')
+                }
+
+                $scope.$watch('detailedSearch.taxon', function(newTaxon, oldTaxon) {
+                    if (newTaxon !== oldTaxon) {
+                        $scope.detailedSearch.educationalContext = $rootScope.taxonUtils.getEducationalContext($scope.detailedSearch.taxon);
+
+                        // Clear value if target group does not apply to this educational context
+                        if ($scope.detailedSearch.educationalContext.id != 1) {
+                            $scope.detailedSearch.targetGroup = null;
+                        }
+                    }
+                }, true);
 
             }
         };

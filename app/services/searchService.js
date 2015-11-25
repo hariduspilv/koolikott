@@ -6,12 +6,14 @@ define(['app'], function(app) {
         var paidURL = "&paid=";
         var typeURL = "&type="
         var languageURL = "&language=";
+        var targetGroupURL = "&targetGroup=";
 
         var searchQuery = "";
         var searchTaxon = "";
         var searchPaid = "";
         var searchType = "";
         var searchLanguage = "";
+        var searchTargetGroup = "";
 
         function escapeQuery(query) {
             //replace backslashes
@@ -55,6 +57,10 @@ define(['app'], function(app) {
                 searchLanguage = language;
             },
 
+            setTargetGroup : function(targetGroup) {
+                searchTargetGroup = targetGroup;
+            },
+
             getURL : function() {
                 var searchURL;
                 if (searchQuery) {
@@ -75,6 +81,9 @@ define(['app'], function(app) {
                 if (searchLanguage) {
                     searchURL += languageURL + searchLanguage;
                 }
+                if (searchTargetGroup) {
+                    searchURL += targetGroupURL + searchTargetGroup;
+                }
 
                 return searchURL;
             },
@@ -82,7 +91,7 @@ define(['app'], function(app) {
             queryExists : function() {
                 var searchObject = $location.search();
                 if (searchObject.q || searchObject.taxon || searchObject.paid === false ||
-                    (searchObject.type && this.isValidType(searchObject.type)) || searchObject.language) {
+                    (searchObject.type && this.isValidType(searchObject.type)) || searchObject.language || searchObject.targetGroup) {
                     return true;
                 } else {
                     return false;
@@ -144,11 +153,23 @@ define(['app'], function(app) {
                 return searchLanguage;
             },
 
+            getTargetGroup : function() {
+                if (searchTargetGroup === "") {
+                    var searchObject = $location.search();
+                    if (searchObject.targetGroup) {
+                        return searchObject.targetGroup;
+                    }
+                }
+
+                return searchTargetGroup;
+            },
+
             clearFieldsNotInSimpleSearch : function() {
                 searchTaxon = '';
                 searchPaid = '';
                 searchType = '';
                 searchLanguage = '';
+                searchTargetGroup = '';
             },
 
             isValidType : function(type) {

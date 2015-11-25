@@ -49,11 +49,11 @@
   </div>
 
   <div flex>
-    <md-input-container flex>
-      <label>Vanuserühm</label>
-      <md-select data-ng-model="filter.ageGroup">
-        <md-option data-ng-repeat="ageGroup in ageGroups" value="{{ageGroup.abbrev}}">
-          {{ageGroup.abbrev}}
+    <md-input-container data-ng-show="detailedSearch.educationalContext.id === 1" flex>
+      <label data-translate="DETAILED_SEARCH_TARGET_GROUP"></label>
+      <md-select data-ng-model="detailedSearch.targetGroup">
+        <md-option data-ng-repeat="targetGroup in targetGroups" value="{{targetGroup}}">
+          <span data-translate="TARGET_GROUP_{{targetGroup.toUpperCase()}}" />
         </md-option>
       </md-select>
     </md-input-container>
