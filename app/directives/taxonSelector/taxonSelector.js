@@ -60,6 +60,12 @@ define(['app'], function(app)
                         		$scope.taxon = newSubtopic;
                         }
                     }, true);
+                	
+                	$scope.$watch('taxonPath.specialization', function(newSpecialization, oldSpecialization) {
+                        if (newSpecialization && newSpecialization !== oldSpecialization) {
+                        		$scope.taxon = newSpecialization;
+                        }
+                    }, true);
             	}
 
         		function getEducationalContextSuccess(data) {
@@ -92,6 +98,7 @@ define(['app'], function(app)
         			$scope.taxonPath.subject = $rootScope.taxonUtils.getSubject($scope.taxon);
         			$scope.taxonPath.topic = $rootScope.taxonUtils.getTopic($scope.taxon);
         			$scope.taxonPath.subtopic = $rootScope.taxonUtils.getSubtopic($scope.taxon);
+        			$scope.taxonPath.specialization = $rootScope.taxonUtils.getSpecialization($scope.taxon);
             	}
             }
         };
