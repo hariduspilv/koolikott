@@ -13,6 +13,7 @@ import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.voodoodyne.jackson.jsog.JSOGGenerator;
 
@@ -44,6 +45,19 @@ public abstract class Taxon {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    @JsonIgnore
+    public abstract Taxon getParent();
+
+    public boolean containsTaxon(Taxon taxon) {
+        if(this.equals(taxon)) {
+            return true;
+        } else if(getParent() != null) {
+            return getParent().containsTaxon(taxon);
+        }
+
+        return false;
     }
 
     @Override

@@ -10,6 +10,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 @DiscriminatorValue("DOMAIN")
 public class Domain extends Taxon {
@@ -19,6 +21,9 @@ public class Domain extends Taxon {
 
     @OneToMany(fetch = EAGER, mappedBy = "domain")
     private Set<Topic> topics;
+
+    @OneToMany(fetch = EAGER, mappedBy = "domain")
+    private Set<Specialization> specializations;
 
     @ManyToOne
     @JoinColumn(name = "educationalContext", nullable = false)
@@ -40,11 +45,25 @@ public class Domain extends Taxon {
         this.educationalContext = educationalContext;
     }
 
+    @JsonIgnore
+    @Override
+    public Taxon getParent() {
+        return getEducationalContext();
+    }
+
     public Set<Topic> getTopics() {
         return topics;
     }
 
     public void setTopics(Set<Topic> topics) {
         this.topics = topics;
+    }
+
+    public Set<Specialization> getSpecializations() {
+        return specializations;
+    }
+
+    public void setSpecializations(Set<Specialization> specializations) {
+        this.specializations = specializations;
     }
 }

@@ -35,7 +35,6 @@ import ee.hm.dop.service.AuthorService;
 import ee.hm.dop.service.LanguageService;
 import ee.hm.dop.service.ResourceTypeService;
 import ee.hm.dop.service.TagService;
-import ee.hm.dop.service.TaxonService;
 import ezvcard.Ezvcard;
 import ezvcard.VCard;
 
@@ -45,9 +44,6 @@ public abstract class MaterialParser {
     protected static final String[] SCHEMES = {"http", "https"};
     protected XPathFactory xPathfactory = XPathFactory.newInstance();
     protected XPath xpath = xPathfactory.newXPath();
-
-    @Inject
-    private TaxonService taxonService;
 
     @Inject
     private ResourceTypeService resourceTypeService;
@@ -68,6 +64,7 @@ public abstract class MaterialParser {
             setLearningResourceType(material, doc);
             setTaxon(material, doc);
             setAuthors(material, doc);
+            removeDuplicateTaxons(material);
         } catch (RuntimeException e) {
             logger.error("Unexpected error while parsing document. Document may not"
                     + " match mapping or XML structure.", e);
@@ -75,6 +72,24 @@ public abstract class MaterialParser {
         }
 
         return material;
+    }
+
+    private void removeDuplicateTaxons(Material material) {
+        List<Taxon> taxons = material.getTaxons();
+        for (int i = 0; i < taxons.size(); i++) {
+            Taxon first = taxons.get(i);
+
+            for (int j = i + 1; j < taxons.size(); j++) {
+                Taxon second = taxons.get(j);
+
+                if (second.containsTaxon(first)) {
+                    taxons.remove(first);
+                } else if(first.containsTaxon(second)) {
+                    taxons.remove(second);
+                }
+            }
+        }
+        material.setTaxons(taxons);
     }
 
     protected void setIdentifier(Material material, Document doc) {
@@ -185,7 +200,7 @@ public abstract class MaterialParser {
             Node node = nl.item(i);
             String context = getElementValue(node);
 
-            EducationalContext educationalContext = taxonService.getEducationalContextByName(context);
+            EducationalContext educationalContext = (EducationalContext) getTaxon(context);
             if (educationalContext != null) {
                 taxons.add(educationalContext);
             }
@@ -202,6 +217,7 @@ public abstract class MaterialParser {
         Set<Taxon> taxons = new HashSet<>();
         try {
             setEducationalContexts(doc, taxons, getPathToContext());
+            setDomains(doc, taxons);
         } catch (Exception e) {
             //ignore if there is no taxon for a material
         }
@@ -246,7 +262,7 @@ public abstract class MaterialParser {
         source = nodeList.item(0).getTextContent().trim();
 
         URI uri = new URI(source);
-        if(uri.getScheme() == null) {
+        if (uri.getScheme() == null) {
             source = "http://" + source;
         }
 
@@ -277,4 +293,8 @@ public abstract class MaterialParser {
     protected abstract String getPathToLocation();
 
     protected abstract void setContextsFromElements(Document doc, Set<Taxon> taxons);
+
+    protected abstract void setDomains(Document doc, Set<Taxon> taxons);
+
+    protected abstract Taxon getTaxon(String context);
 }

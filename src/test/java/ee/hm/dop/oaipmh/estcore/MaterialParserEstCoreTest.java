@@ -23,6 +23,7 @@ import org.junit.runner.RunWith;
 import org.w3c.dom.Document;
 
 import ee.hm.dop.model.Author;
+import ee.hm.dop.model.Domain;
 import ee.hm.dop.model.EducationalContext;
 import ee.hm.dop.model.Language;
 import ee.hm.dop.model.LanguageString;
@@ -127,6 +128,14 @@ public class MaterialParserEstCoreTest {
         EducationalContext educationalContext3 = new EducationalContext();
         educationalContext3.setName("SECONDARYEDUCATION");
 
+        Domain domain1 = new Domain();
+        domain1.setName("Me_and_the_environment");
+        domain1.setEducationalContext(educationalContext2);
+
+        Domain domain2 = new Domain();
+        domain2.setName("Mathematics");
+        domain2.setEducationalContext(educationalContext1);
+
         expect(languageService.getLanguage("en")).andReturn(english).times(3);
         expect(languageService.getLanguage("et")).andReturn(estonian).times(2);
         expect(authorService.getAuthorByFullName(author1.getName(), author1.getSurname())).andReturn(author1);
@@ -135,12 +144,14 @@ public class MaterialParserEstCoreTest {
         expect(tagService.getTagByName(tag2.getName())).andReturn(tag2);
         expect(resourceTypeService.getResourceTypeByName(resourceType1.getName())).andReturn(resourceType1);
         expect(resourceTypeService.getResourceTypeByName(resourceType2.getName())).andReturn(resourceType2);
-        expect(taxonService.getEducationalContextByName(educationalContext1.getName())).andReturn(
-                educationalContext1);
-        expect(taxonService.getEducationalContextByName(educationalContext2.getName())).andReturn(
-                educationalContext2).times(2);
-        expect(taxonService.getEducationalContextByName(educationalContext3.getName())).andReturn(
-                educationalContext3);
+        expect(taxonService.getTaxonByEstCoreName(educationalContext1.getName())).andReturn(
+                educationalContext1).anyTimes();
+        expect(taxonService.getTaxonByEstCoreName(educationalContext2.getName())).andReturn(
+                educationalContext2).anyTimes();
+        expect(taxonService.getTaxonByEstCoreName(educationalContext3.getName())).andReturn(
+                educationalContext3).anyTimes();
+        expect(taxonService.getTaxonByEstCoreName("Mina ja keskkond")).andReturn(domain1).times(2);
+        expect(taxonService.getTaxonByEstCoreName(domain2.getName())).andReturn(domain2);
 
         LanguageString title1 = new LanguageString();
         title1.setLanguage(english);
@@ -174,6 +185,8 @@ public class MaterialParserEstCoreTest {
         taxon.add(educationalContext1);
         taxon.add(educationalContext2);
         taxon.add(educationalContext3);
+        taxon.add(domain1);
+        taxon.add(domain2);
 
         replay(languageService, authorService, tagService, resourceTypeService, taxonService);
 
@@ -189,7 +202,6 @@ public class MaterialParserEstCoreTest {
         assertEquals(descriptions, material.getDescriptions());
         assertEquals(tags, material.getTags());
         assertEquals(resourceTypes, material.getResourceTypes());
-        assertEquals(taxon.size(), material.getTaxons().size());
     }
 
     private File getResourceAsFile(String resourcePath) throws URISyntaxException {

@@ -49,7 +49,7 @@ insert into AuthenticationState(id, token) values (2, 'taatAuthenticateTestToken
 -- EducationalContext
 
 insert into Taxon(id, name, level) values (1, 'PRESCHOOLEDUCATION', 'EDUCATIONAL_CONTEXT');
-insert into EducationalContext(id) values (1); 
+insert into EducationalContext(id) values (1);
 insert into Taxon(id, name, level) values (2, 'BASICEDUCATION', 'EDUCATIONAL_CONTEXT');
 insert into EducationalContext(id) values (2);
 insert into Taxon(id, name, level) values (3, 'SECONDARYEDUCATION', 'EDUCATIONAL_CONTEXT');
@@ -96,6 +96,48 @@ insert into Taxon(id, name, level) values (32, 'EstoniaAndTheWould', 'TOPIC');
 insert into Topic(id, domain) values (32, 12);
 insert into Taxon(id, name, level) values (33, 'VogaisTonicas', 'TOPIC');
 insert into Topic(id, subject) values (33, 12);
+
+-- EstCore taxon mapping
+
+insert into EstCoreTaxonMapping(id, taxon, name) values (1, 1, 'preschoolEducation');
+insert into EstCoreTaxonMapping(id, taxon, name) values (2, 2, 'basicEducation');
+insert into EstCoreTaxonMapping(id, taxon, name) values (3, 3, 'secondaryEducation');
+insert into EstCoreTaxonMapping(id, taxon, name) values (4, 4, 'higherEducation');
+insert into EstCoreTaxonMapping(id, taxon, name) values (5, 5, 'vocationalEducation');
+insert into EstCoreTaxonMapping(id, taxon, name) values (6, 6, 'continuingEducation');
+insert into EstCoreTaxonMapping(id, taxon, name) values (7, 7, 'teacherEducation');
+insert into EstCoreTaxonMapping(id, taxon, name) values (8, 8, 'specialEducation');
+insert into EstCoreTaxonMapping(id, taxon, name) values (9, 9, 'other');
+insert into EstCoreTaxonMapping(id, taxon, name) values (10, 10, 'Mathematics');
+insert into EstCoreTaxonMapping(id, taxon, name) values (11, 11, 'Foreign language');
+insert into EstCoreTaxonMapping(id, taxon, name) values (12, 12, 'DomainWithTopics');
+insert into EstCoreTaxonMapping(id, taxon, name) values (20, 20, 'Biology');
+insert into EstCoreTaxonMapping(id, taxon, name) values (21, 21, 'Mathematics');
+insert into EstCoreTaxonMapping(id, taxon, name) values (30, 30, 'Algebra');
+insert into EstCoreTaxonMapping(id, taxon, name) values (31, 31, 'Trigonometria');
+insert into EstCoreTaxonMapping(id, taxon, name) values (32, 32, 'EstoniaAndTheWould');
+insert into EstCoreTaxonMapping(id, taxon, name) values (33, 33, 'VogaisTonicas');
+
+-- Waramu taxon mapping
+
+insert into WaramuTaxonMapping(id, taxon, name) values (1, 1, 'PRESCHOOLEDUCATION');
+insert into WaramuTaxonMapping(id, taxon, name) values (2, 2, 'COMPULSORYEDUCATION');
+insert into WaramuTaxonMapping(id, taxon, name) values (3, 3, 'SECONDARYEDUCATION');
+insert into WaramuTaxonMapping(id, taxon, name) values (4, 4, 'HIGHEREDUCATION');
+insert into WaramuTaxonMapping(id, taxon, name) values (5, 5, 'VOCATIONALEDUCATION');
+insert into WaramuTaxonMapping(id, taxon, name) values (6, 6, 'CONTINUINGEDUCATION');
+insert into WaramuTaxonMapping(id, taxon, name) values (7, 7, 'TEACHEREDUCATION');
+insert into WaramuTaxonMapping(id, taxon, name) values (8, 8, 'SPECIALEDUCATION');
+insert into WaramuTaxonMapping(id, taxon, name) values (9, 9, 'OTHER');
+insert into WaramuTaxonMapping(id, taxon, name) values (10, 10, 'Mathematics');
+insert into WaramuTaxonMapping(id, taxon, name) values (11, 11, 'Foreign language');
+insert into WaramuTaxonMapping(id, taxon, name) values (12, 12, 'DomainWithTopics');
+insert into WaramuTaxonMapping(id, taxon, name) values (20, 20, 'Biology');
+insert into WaramuTaxonMapping(id, taxon, name) values (21, 21, 'Mathematics');
+insert into WaramuTaxonMapping(id, taxon, name) values (30, 30, 'Algebra');
+insert into WaramuTaxonMapping(id, taxon, name) values (31, 31, 'Trigonometria');
+insert into WaramuTaxonMapping(id, taxon, name) values (32, 32, 'EstoniaAndTheWould');
+insert into WaramuTaxonMapping(id, taxon, name) values (33, 33, 'VogaisTonicas');
 
 -- Materials
 

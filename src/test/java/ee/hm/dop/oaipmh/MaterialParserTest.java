@@ -151,27 +151,22 @@ public class MaterialParserTest {
 
         @Override
         protected void setAuthors(Material material, Document doc) {
-
         }
 
         @Override
         protected void setTags(Material material, Document doc) {
-
         }
 
         @Override
         protected void setDescriptions(Material material, Document doc) {
-
         }
 
         @Override
         protected void setLanguage(Material material, Document doc) {
-
         }
 
         @Override
         protected void setTitles(Material material, Document doc) throws ParseException {
-
         }
 
         @Override
@@ -191,7 +186,15 @@ public class MaterialParserTest {
 
         @Override
         protected void setContextsFromElements(Document doc, Set<Taxon> taxons) {
+        }
 
+        @Override
+        protected void setDomains(Document doc, Set<Taxon> taxons) {
+        }
+
+        @Override
+        protected Taxon getTaxon(String context) {
+            return null;
         }
     }
 }

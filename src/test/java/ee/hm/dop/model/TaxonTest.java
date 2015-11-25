@@ -32,6 +32,10 @@ public class TaxonTest {
         assertTrue(taxon.equals(taxon2));
 
         Taxon taxon3 = new Taxon() {
+            @Override
+            public Taxon getParent() {
+                return null;
+            }
         };
 
         assertFalse(taxon.equals(taxon3));
@@ -62,6 +66,10 @@ public class TaxonTest {
         assertNotEquals(taxon.hashCode(), taxon2.hashCode());
 
         Taxon taxon3 = new Taxon() {
+            @Override
+            public Taxon getParent() {
+                return null;
+            }
         };
         assertNotEquals(taxon.hashCode(), taxon3.hashCode());
 
@@ -71,6 +79,10 @@ public class TaxonTest {
     }
 
     private class TaxonImpl extends Taxon {
+        @Override
+        public Taxon getParent() {
+            return null;
+        }
     }
 
 }

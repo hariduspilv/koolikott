@@ -50,4 +50,26 @@ public class TaxonDAOTest extends DatabaseTestBase {
         assertEquals(9, educationalContexts.stream().distinct().count());
     }
 
+    @Test
+    public void findEducationalContextByRepoName() {
+        Long id =  2L;
+        String waramuName = "COMPULSORYEDUCATION";
+        String systemName = "BASICEDUCATION";
+
+        EducationalContext educationalContext = (EducationalContext) taxonDAO.findTaxonByRepoName(waramuName, "WaramuTaxonMapping");
+
+        assertNotNull(educationalContext);
+        assertNotNull(educationalContext.getId());
+        assertEquals(id, educationalContext.getId());
+        assertEquals(systemName, educationalContext.getName());
+        assertEquals(0, educationalContext.getDomains().size());
+
+        educationalContext = (EducationalContext) taxonDAO.findTaxonByRepoName("basicEducation", "EstCoreTaxonMapping");
+
+        assertNotNull(educationalContext);
+        assertNotNull(educationalContext.getId());
+        assertEquals(id, educationalContext.getId());
+        assertEquals(systemName, educationalContext.getName());
+        assertEquals(0, educationalContext.getDomains().size());
+    }
 }
