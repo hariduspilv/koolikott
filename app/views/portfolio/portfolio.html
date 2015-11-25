@@ -108,7 +108,7 @@
         <md-card id="portfolio-comments">
           <md-card-content>
             <h2 class="portfolio-comments-title">
-              Kommentaarid (21)
+              Kommentaarid - needs translation ({{portfolio.comments.length}})
               <md-icon class="md-primary" data-ng-class="{'toggled': showComments}" data-ng-click="showComments = !showComments">
                 keyboard_arrow_down
               </md-icon>
@@ -116,30 +116,24 @@
 
             <div data-ng-show="showComments">
               <md-list>
-                <md-list-item class="md-3-line" ng-repeat="comment in comments">
+                <md-list-item class="md-3-line" ng-repeat="comment in portfolio.comments">
                   <md-icon class="md-avatar-icon">person</md-icon>
                   <div class="md-list-item-text" layout="column">
-                    <h3>{{comment.author}}</h3>
-                    <h4>{{comment.date}}</h4>
+                    <h3>{{comment.creator.name}}</h3>
+                    <h4>{{formatDate(comment.created.millis)}}</h4>
                     <p>{{comment.text}}</p>
                   </div>
                 </md-list-item>
               </md-list>
 
-              <div layout="row" layout-align="center center">
-                <md-button md-no-ink class="md-primary">
-                  Veel kommentaare <span>(2/21)</span>
-                </md-button>
-              </div>
-
-              <h2>Lisa kommentaar</h2>
+              <h2>Lisa kommentaar - needs translation</h2>
               <md-input-container flex>
-                <label>Kommentaar</label>
-                <textarea ng-model="portfolio.comment.text" rows="4"></textarea>
+                <label>Kommentaar - needs translation</label>
+                <textarea ng-model="newComment.text" rows="4"></textarea>
               </md-input-container>
               <div layout="row" layout-align="end center">
-                <md-button class="md-raised md-primary">
-                  Saada
+                <md-button ng-click="addComment()" class="md-raised md-primary">
+                  Saada - needs translation
                 </md-button>
               </div>
             </div>
