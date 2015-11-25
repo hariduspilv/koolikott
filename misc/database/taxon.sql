@@ -389,6 +389,15 @@ insert into Taxon(id, name, level) values (15013, 'Keskaeg', 'SUBTOPIC');
 insert into Subtopic(id, topic) values (15013, 10001);
 
 -- End of subtopics for Estonian History
+
+-- Topic
+
+-- Start of Specialization for Computer Science
+
+insert into Taxon(id, name, level) values (20000, 'Computers_and_Networks', 'SPECIALIZATION');
+insert into Specialization(id, domain) values (20000, 129);
+
+-- End of Specialization for Computer Science
 -- End of Secondary Education Subjects
 
 -- EstCore Taxon mapping
