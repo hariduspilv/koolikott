@@ -5,6 +5,8 @@ import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 @DiscriminatorValue("SPECIALIZATION")
 public class Specialization extends Taxon {
@@ -19,5 +21,11 @@ public class Specialization extends Taxon {
 
     public void setDomain(Domain domain) {
         this.domain = domain;
+    }
+
+    @JsonIgnore
+    @Override
+    public Taxon getParent() {
+        return getDomain();
     }
 }
