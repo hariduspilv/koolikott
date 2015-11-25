@@ -1,4 +1,4 @@
-package ee.hm.dop.model;
+package ee.hm.dop.model.taxon;
 
 import static javax.persistence.FetchType.EAGER;
 

@@ -1,5 +1,7 @@
 package ee.hm.dop.model;
 
+import ee.hm.dop.model.taxon.Taxon;
+
 public class SearchFilter {
 
     private Taxon taxon;

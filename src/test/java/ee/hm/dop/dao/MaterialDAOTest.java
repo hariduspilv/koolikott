@@ -25,10 +25,10 @@ import ee.hm.dop.model.LicenseType;
 import ee.hm.dop.model.Material;
 import ee.hm.dop.model.Repository;
 import ee.hm.dop.model.ResourceType;
-import ee.hm.dop.model.Subject;
 import ee.hm.dop.model.TargetGroup;
-import ee.hm.dop.model.Taxon;
 import ee.hm.dop.model.User;
+import ee.hm.dop.model.taxon.Subject;
+import ee.hm.dop.model.taxon.Taxon;
 import ee.hm.dop.utils.DbUtils;
 
 public class MaterialDAOTest extends DatabaseTestBase {
@@ -455,7 +455,7 @@ public class MaterialDAOTest extends DatabaseTestBase {
         } catch (RollbackException e) {
             String expectedMessage = "org.hibernate.TransientObjectException: "
                     + "object references an unsaved transient instance - "
-                    + "save the transient instance before flushing: ee.hm.dop.model.Taxon";
+                    + "save the transient instance before flushing: ee.hm.dop.model.taxon.Taxon";
             assertEquals(expectedMessage, e.getCause().getMessage());
         }
     }

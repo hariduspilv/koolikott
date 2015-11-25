@@ -5,8 +5,8 @@ import java.util.List;
 
 import javax.persistence.TypedQuery;
 
-import ee.hm.dop.model.EducationalContext;
-import ee.hm.dop.model.Taxon;
+import ee.hm.dop.model.taxon.EducationalContext;
+import ee.hm.dop.model.taxon.Taxon;
 
 public class TaxonDAO extends BaseDAO {
 

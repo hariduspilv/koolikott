@@ -20,9 +20,9 @@ import ee.hm.dop.model.Chapter;
 import ee.hm.dop.model.Comment;
 import ee.hm.dop.model.Material;
 import ee.hm.dop.model.Portfolio;
-import ee.hm.dop.model.Subject;
 import ee.hm.dop.model.TargetGroup;
 import ee.hm.dop.model.User;
+import ee.hm.dop.model.taxon.Subject;
 
 public class PortfolioDAOTest extends DatabaseTestBase {
 

@@ -24,7 +24,7 @@ import org.w3c.dom.NodeList;
 import ee.hm.dop.model.Language;
 import ee.hm.dop.model.LanguageString;
 import ee.hm.dop.model.Material;
-import ee.hm.dop.model.Taxon;
+import ee.hm.dop.model.taxon.Taxon;
 import ee.hm.dop.service.LanguageService;
 
 /**

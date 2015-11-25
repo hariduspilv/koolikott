@@ -12,7 +12,7 @@ import ee.hm.dop.model.Language;
 import ee.hm.dop.model.SearchFilter;
 import ee.hm.dop.model.SearchResult;
 import ee.hm.dop.model.TargetGroup;
-import ee.hm.dop.model.Taxon;
+import ee.hm.dop.model.taxon.Taxon;
 import ee.hm.dop.service.LanguageService;
 import ee.hm.dop.service.SearchService;
 import ee.hm.dop.service.TaxonService;

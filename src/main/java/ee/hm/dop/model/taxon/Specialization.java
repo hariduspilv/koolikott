@@ -1,4 +1,4 @@
-package ee.hm.dop.model;
+package ee.hm.dop.model.taxon;
 
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;

@@ -1,4 +1,4 @@
-package ee.hm.dop.model;
+package ee.hm.dop.model.taxon;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;

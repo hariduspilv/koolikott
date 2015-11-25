@@ -16,15 +16,15 @@ import org.junit.Ignore;
 import org.junit.Test;
 
 import ee.hm.dop.common.test.ResourceIntegrationTestBase;
-import ee.hm.dop.model.Domain;
-import ee.hm.dop.model.EducationalContext;
 import ee.hm.dop.model.Language;
 import ee.hm.dop.model.Material;
 import ee.hm.dop.model.Portfolio;
 import ee.hm.dop.model.SearchFilter;
 import ee.hm.dop.model.SearchResult;
 import ee.hm.dop.model.Searchable;
-import ee.hm.dop.model.Subject;
+import ee.hm.dop.model.taxon.Domain;
+import ee.hm.dop.model.taxon.EducationalContext;
+import ee.hm.dop.model.taxon.Subject;
 
 @Ignore
 public class SearchResourceTest extends ResourceIntegrationTestBase {

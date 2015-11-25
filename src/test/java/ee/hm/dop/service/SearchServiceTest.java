@@ -20,20 +20,20 @@ import org.junit.runner.RunWith;
 
 import ee.hm.dop.dao.MaterialDAO;
 import ee.hm.dop.dao.PortfolioDAO;
-import ee.hm.dop.model.Domain;
-import ee.hm.dop.model.EducationalContext;
 import ee.hm.dop.model.Language;
 import ee.hm.dop.model.Material;
 import ee.hm.dop.model.Portfolio;
 import ee.hm.dop.model.SearchFilter;
 import ee.hm.dop.model.SearchResult;
 import ee.hm.dop.model.Searchable;
-import ee.hm.dop.model.Subject;
 import ee.hm.dop.model.TargetGroup;
-import ee.hm.dop.model.Topic;
 import ee.hm.dop.model.solr.Document;
 import ee.hm.dop.model.solr.Response;
 import ee.hm.dop.model.solr.SearchResponse;
+import ee.hm.dop.model.taxon.Domain;
+import ee.hm.dop.model.taxon.EducationalContext;
+import ee.hm.dop.model.taxon.Subject;
+import ee.hm.dop.model.taxon.Topic;
 
 @RunWith(EasyMockRunner.class)
 public class SearchServiceTest {

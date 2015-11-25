@@ -13,13 +13,13 @@ import javax.ws.rs.core.GenericType;
 import org.junit.Test;
 
 import ee.hm.dop.common.test.ResourceIntegrationTestBase;
-import ee.hm.dop.model.Domain;
-import ee.hm.dop.model.EducationalContext;
 import ee.hm.dop.model.Language;
-import ee.hm.dop.model.Subject;
 import ee.hm.dop.model.TargetGroup;
-import ee.hm.dop.model.Taxon;
-import ee.hm.dop.model.Topic;
+import ee.hm.dop.model.taxon.Domain;
+import ee.hm.dop.model.taxon.EducationalContext;
+import ee.hm.dop.model.taxon.Subject;
+import ee.hm.dop.model.taxon.Taxon;
+import ee.hm.dop.model.taxon.Topic;
 
 public class LearningMaterialMetadataResourceTest extends ResourceIntegrationTestBase {
 

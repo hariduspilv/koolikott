@@ -20,7 +20,7 @@ import ee.hm.dop.model.Language;
 import ee.hm.dop.model.LanguageString;
 import ee.hm.dop.model.Material;
 import ee.hm.dop.model.Tag;
-import ee.hm.dop.model.Taxon;
+import ee.hm.dop.model.taxon.Taxon;
 import ee.hm.dop.oaipmh.MaterialParser;
 import ee.hm.dop.oaipmh.ParseException;
 import ee.hm.dop.service.AuthorService;
