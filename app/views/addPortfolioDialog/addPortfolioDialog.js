@@ -10,7 +10,7 @@ define(['app'], function(app)
             $scope.forward = function() {
                 $mdDialog.hide();
 
-                $location.path('/addPortfolio');
+                $location.path('/editPortfolio');
             }
 
             $scope.portfolio = {

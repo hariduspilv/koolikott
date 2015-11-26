@@ -53,7 +53,7 @@ define([], function()
                     'directives/materialBox/materialBox'
                 ]
             },
-            '/addPortfolio': {
+            '/editPortfolio': {
                 templateUrl: 'views/addPortfolio/addPortfolio.html',
                 controller: 'addPortfolioController',
                 dependencies: [
