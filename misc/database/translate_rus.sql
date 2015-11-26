@@ -122,6 +122,13 @@ insert into Translation(translationGroup, translationKey, translation) values (2
 insert into Translation(translationGroup, translationKey, translation) values (2, 'BUTTON_CREATE_PORTFOLIO', 'Создать портфолио');
 insert into Translation(translationGroup, translationKey, translation) values (2, 'TARGET_GROUP_ZERO_FIVE', '0-5');
 insert into Translation(translationGroup, translationKey, translation) values (2, 'TARGET_GROUP_SIX_SEVEN', '6-7');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'TABLE_OF_CONTENTS', 'Содержание');
+
+-- Comment translations
+insert into Translation(translationGroup, translationKey, translation) values (2, 'COMMENTS_TITLE', 'Комментарии');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'ADD_COMMENT_TITLE', 'Добавить комментарий');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'COMMENT', 'Комментарий');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'ADD_COMMENT_BUTTON', 'Добавить');
 
 -- Taxon Domain translations
 insert into Translation(translationGroup, translationKey, translation) values (2, 'DOMAIN_LANGUAGE_AND_SPEECH', 'Язык и речь');

@@ -122,6 +122,13 @@ insert into Translation(translationGroup, translationKey, translation) values (3
 insert into Translation(translationGroup, translationKey, translation) values (3, 'BUTTON_CREATE_PORTFOLIO', 'Create portfolio');
 insert into Translation(translationGroup, translationKey, translation) values (3, 'TARGET_GROUP_ZERO_FIVE', '0-5');
 insert into Translation(translationGroup, translationKey, translation) values (3, 'TARGET_GROUP_SIX_SEVEN', '6-7');
+insert into Translation(translationGroup, translationKey, translation) values (3, 'TABLE_OF_CONTENTS', 'Table of Contents');
+
+-- Comment translations
+insert into Translation(translationGroup, translationKey, translation) values (3, 'COMMENTS_TITLE', 'Comments');
+insert into Translation(translationGroup, translationKey, translation) values (3, 'ADD_COMMENT_TITLE', 'Add a comment');
+insert into Translation(translationGroup, translationKey, translation) values (3, 'COMMENT', 'Comment');
+insert into Translation(translationGroup, translationKey, translation) values (3, 'ADD_COMMENT_BUTTON', 'Send');
 
 -- Taxon Domain translations
 insert into Translation(translationGroup, translationKey, translation) values (3, 'DOMAIN_ME_AND_THE_ENVIRONMENT', 'Me and the environment');
