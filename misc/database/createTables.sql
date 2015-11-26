@@ -31,6 +31,7 @@ DROP TABLE IF EXISTS Publisher;
 DROP TABLE IF EXISTS Tag;
 DROP TABLE IF EXISTS Subtopic;
 DROP TABLE IF EXISTS Topic;
+DROP TABLE IF EXISTS Module;
 DROP TABLE IF EXISTS Specialization;
 DROP TABLE IF EXISTS Subject;
 DROP TABLE IF EXISTS Domain;
@@ -134,6 +135,19 @@ CREATE TABLE Specialization (
   
   FOREIGN KEY (domain)
             REFERENCES Domain(id)
+            ON DELETE RESTRICT
+);
+
+CREATE TABLE Module (
+  id             BIGINT PRIMARY KEY,
+  specialization BIGINT NOT NULL,
+  
+  FOREIGN KEY (id)
+            REFERENCES Taxon(id)
+            ON DELETE RESTRICT,
+  
+  FOREIGN KEY (specialization)
+            REFERENCES Specialization(id)
             ON DELETE RESTRICT
 );
 
@@ -509,11 +523,11 @@ CREATE TABLE Comment (
     creator   BIGINT NOT NULL,
     portfolio BIGINT NOT NULL,
     added     TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-	
+  
     FOREIGN KEY (creator)
     REFERENCES User (id)
       ON DELETE RESTRICT,
-	  
+    
     FOREIGN KEY (portfolio)
     REFERENCES Portfolio (id)
       ON DELETE RESTRICT
