@@ -4,7 +4,7 @@ define(['app'], function(app)
       $anchorScroll.yOffset = 50;
     }]);
 
-    app.controller('addPortfolioController', ['$scope', 'serverCallService', 'translationService', '$mdSidenav', '$mdDialog', '$mdToast', '$document',
+    app.controller('editPortfolioController', ['$scope', 'serverCallService', 'translationService', '$mdSidenav', '$mdDialog', '$mdToast', '$document',
         function($scope, serverCallService, translationService, $mdSidenav, $mdDialog, $mdToast, $document) {
             $scope.portfolio = {
                 chapters: []

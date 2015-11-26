@@ -54,10 +54,10 @@ define([], function()
                 ]
             },
             '/editPortfolio': {
-                templateUrl: 'views/addPortfolio/addPortfolio.html',
-                controller: 'addPortfolioController',
+                templateUrl: 'views/editPortfolio/editPortfolio.html',
+                controller: 'editPortfolioController',
                 dependencies: [
-                    'views/addPortfolio/addPortfolio',
+                    'views/editPortfolio/editPortfolio',
                     'directives/materialBox/materialBox'
                 ]
             },
