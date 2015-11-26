@@ -66,6 +66,12 @@ define(['app'], function(app)
                         		$scope.taxon = newSpecialization;
                         }
                     }, false);
+                	
+                	$scope.$watch('taxonPath.module', function(newModule, oldModule) {
+                        if (newModule && newModule !== oldModule) {
+                        		$scope.taxon = newModule;
+                        }
+                    }, false);
             	}
 
         		function getEducationalContextSuccess(data) {
@@ -99,6 +105,7 @@ define(['app'], function(app)
         			$scope.taxonPath.topic = $rootScope.taxonUtils.getTopic($scope.taxon);
         			$scope.taxonPath.subtopic = $rootScope.taxonUtils.getSubtopic($scope.taxon);
         			$scope.taxonPath.specialization = $rootScope.taxonUtils.getSpecialization($scope.taxon);
+        			$scope.taxonPath.module = $rootScope.taxonUtils.getModule($scope.taxon);
             	}
             }
         };

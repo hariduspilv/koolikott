@@ -17,9 +17,15 @@
   </md-select>
 </md-input-container>
 <md-input-container data-ng-show="taxonPath.domain && taxonPath.domain.specializations.length > 0" flex>
-  <label for="taxonSspecializationSelect" data-translate="TAXON_PATH_SPECIALIZATION"></label>
+  <label for="taxonSpecializationSelect" data-translate="TAXON_PATH_SPECIALIZATION"></label>
   <md-select data-ng-model="taxonPath.specialization" id="taxonSpecializationSelect" ng-model-options="{trackBy: '$value.id'}" >
       <md-option ng-value="specialization" ng-repeat="specialization in taxonPath.domain.specializations" data-translate="SPECIALIZATION_{{specialization.name.toUpperCase()}}"></md-option>
+  </md-select>
+</md-input-container>
+<md-input-container data-ng-show="taxonPath.specialization && taxonPath.specialization.modules.length > 0" flex>
+  <label for="taxonModuleSelect" data-translate="TAXON_PATH_MODULE"></label>
+  <md-select data-ng-model="taxonPath.module" id="taxonModuleSelect" ng-model-options="{trackBy: '$value.id'}" >
+      <md-option ng-value="module" ng-repeat="module in taxonPath.specialization.modules" data-translate="MODULE_{{module.name.toUpperCase()}}"></md-option>
   </md-select>
 </md-input-container>
 <md-input-container data-ng-show="taxonPath.subject && taxonPath.subject.topics.length > 0" flex>

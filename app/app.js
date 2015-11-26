@@ -113,6 +113,7 @@ define(['app.routes', 'services/dependencyResolver'], function(config, dependenc
     			this.TOPIC = '.Topic';
     			this.SUBTOPIC = '.Subtopic';
     			this.SPECIALIZATION = '.Specialization';
+    			this.MODULE = '.Module';
     	    }
 
     		getEducationalContext(taxon) {
@@ -137,6 +138,10 @@ define(['app.routes', 'services/dependencyResolver'], function(config, dependenc
     		
     		getSpecialization(taxon) {
     			return this.getTaxon(taxon, this.SPECIALIZATION);
+    		}
+    		
+    		getModule(taxon) {
+    			return this.getTaxon(taxon, this.MODULE);
     		}
 
     		getTaxon(taxon, level) {
@@ -175,6 +180,10 @@ define(['app.routes', 'services/dependencyResolver'], function(config, dependenc
     			
     			if (taxon.level === this.SPECIALIZATION) {
     				return taxon.level === level ? taxon : this.getTaxon(taxon.domain, level);
+    			}
+    			
+    			if (taxon.level === this.MODULE) {
+    				return taxon.level === level ? taxon : this.getTaxon(taxon.specialization, level);
     			}
     		}
     	}
