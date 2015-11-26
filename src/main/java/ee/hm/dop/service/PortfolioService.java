@@ -53,7 +53,7 @@ public class PortfolioService {
             throw new RuntimeException("Portfolio not found");
         }
 
-        comment.setCreated(DateTime.now());
+        comment.setAdded(DateTime.now());
         originalPortfolio.getComments().add(comment);
         portfolioDAO.update(originalPortfolio);
     }

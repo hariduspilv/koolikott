@@ -289,7 +289,7 @@ public class PortfolioDAOTest extends DatabaseTestBase {
         Comment comment = new Comment();
         comment.setText(unique_comment);
         comment.setCreator(user);
-        comment.setCreated(DateTime.now());
+        comment.setAdded(DateTime.now());
 
         Portfolio newPortfolio = portfolioDAO.findById(2L);
         newPortfolio.getComments().add(comment);

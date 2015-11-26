@@ -52,12 +52,12 @@ public class Comment {
         this.text = text;
     }
 
-    public DateTime getCreated() {
+    public DateTime getAdded() {
         return added;
     }
 
-    public void setCreated(DateTime created) {
-        this.added = created;
+    public void setAdded(DateTime added) {
+        this.added = added;
     }
 
     @Override
