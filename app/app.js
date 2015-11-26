@@ -169,6 +169,10 @@ define(['app.routes', 'services/dependencyResolver'], function(config, dependenc
     				var parent = taxon.subject; 
     				if (!parent) {
     					parent = taxon.domain;
+    					
+    					if (!parent) {
+        					parent = taxon.module;
+        				}
     				}
     				
     				return  this.getTaxon(parent, level);
