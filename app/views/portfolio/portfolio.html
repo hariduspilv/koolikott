@@ -3,10 +3,12 @@
   <md-sidenav layout="column" class="md-sidenav-left md-whiteframe-z2" md-component-id="left" md-is-locked-open="$mdMedia('gt-md')">
     <md-toolbar class="md-primary">
       <h6 class="md-toolbar-tools md-subhead">
-        <md-button class="md-icon-button hide-gt-md" data-ng-click="toggleSidenav('left')" >
-          <md-icon class="md-48">arrow_backward</md-icon>
-        </md-button>
-        Sisukord
+		<span>
+			<md-button class="md-icon-button hide-gt-md" data-ng-click="toggleSidenav('left')" >
+			  <md-icon class="md-48">arrow_backward</md-icon>
+			</md-button>
+		</span>
+        <span data-translate="TABLE_OF_CONTENTS"></span>
       </h6>
     </md-toolbar>
 
@@ -108,10 +110,13 @@
         <md-card id="portfolio-comments">
           <md-card-content>
             <h2 class="portfolio-comments-title">
-              Kommentaarid - needs translation ({{portfolio.comments.length}})
-              <md-icon class="md-primary" data-ng-class="{'toggled': showComments}" data-ng-click="showComments = !showComments">
-                keyboard_arrow_down
-              </md-icon>
+				<span data-translate="COMMENTS_TITLE"></span>
+				<span>({{portfolio.comments.length}})</span>
+				<span>
+				  <md-icon class="md-primary" data-ng-class="{'toggled': showComments}" data-ng-click="showComments = !showComments">
+					keyboard_arrow_down
+				  </md-icon>
+				</span>
             </h2>
 
             <div data-ng-show="showComments">
@@ -120,22 +125,24 @@
                   <md-icon class="md-avatar-icon">person</md-icon>
                   <div class="md-list-item-text" layout="column">
                     <h3>{{comment.creator.name}}</h3>
-                    <h4>{{formatDate(comment.created.millis)}}</h4>
+                    <h4>{{formatDate(comment.added.millis)}}</h4>
                     <p>{{comment.text}}</p>
                   </div>
                 </md-list-item>
               </md-list>
 
-              <h2>Lisa kommentaar - needs translation</h2>
-              <md-input-container flex>
-                <label>Kommentaar - needs translation</label>
-                <textarea ng-model="newComment.text" rows="4"></textarea>
-              </md-input-container>
-              <div layout="row" layout-align="end center">
-                <md-button ng-click="addComment()" class="md-raised md-primary">
-                  Saada - needs translation
-                </md-button>
-              </div>
+			  <div ng-show="authorized">
+				  <h2 data-translate="ADD_COMMENT_TITLE"></h2>
+				  <md-input-container flex>
+					<label data-translate="COMMENT"></label>
+					<textarea ng-model="newComment.text" rows="4"></textarea>
+				  </md-input-container>
+				  <div layout="row" layout-align="end center">
+					<md-button data-translate="ADD_COMMENT_BUTTON" ng-click="addComment()" class="md-raised md-primary">
+					</md-button>
+				  </div>
+			  </div>
+			  
             </div>
 
           </md-card-content>

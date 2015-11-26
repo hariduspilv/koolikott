@@ -1,17 +1,19 @@
 define(['app'], function(app)
 {
-    app.controller('portfolioController', ['$scope', 'translationService', 'serverCallService', '$route', '$location', 'alertService', '$rootScope',
-        function($scope, translationService, serverCallService, $route, $location, alertService, $rootScope) {
+    app.controller('portfolioController', ['$scope', 'translationService', 'serverCallService', '$route', '$location', 'alertService', '$rootScope', 'authenticatedUserService',
+        function($scope, translationService, serverCallService, $route, $location, alertService, $rootScope, authenticatedUserService) {
 
 			function init() {
-				if ($rootScope.savedPortfolio){
+				if ($rootScope.savedPortfolio) {
 					$scope.portfolio = $rootScope.savedPortfolio;
 					increaseViewCount();
 				} else {
 					getPortfolio(getPortfolioSuccess, getPortfolioFail);
 				}
+				
+				$scope.authorized = authenticatedUserService.isAuthenticated();
 			}
-			
+
 			function getPortfolio(success, fail) {
 				var portfolioId = $route.current.params.id;
 				serverCallService.makeGet("rest/portfolio?id=" + portfolioId, {}, success, fail);
