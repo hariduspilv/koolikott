@@ -38,6 +38,7 @@ DROP TABLE IF EXISTS EducationalContext;
 DROP TABLE IF EXISTS Taxon;
 DROP TABLE IF EXISTS ResourceType;
 DROP TABLE IF EXISTS Author;
+DROP TABLE IF EXISTS Comment;
 
 -- Create tables
 
