@@ -9,21 +9,6 @@ define(['app'], function(app)
                 $scope.toggleSidenav = function() {
                     $mdSidenav('left').toggle();
                 };
-
-                $scope.showSendLinkDialog = function() {
-                    $mdDialog.show({
-                        controller: function($scope, $mdDialog) {
-                            $scope.cancel = function() {
-                                $mdDialog.hide();
-                            };
-
-                            // TEST DATA
-                            $scope.link = "https://ekoolikott.ee/#/viewPortfolio?id=1";
-                            // TEST DATA
-                        },
-                        templateUrl: 'views/addPortfolio/sendLinkDialog/sendLinkDialog.html'
-                    });
-                };
             }
         };
     }]);
