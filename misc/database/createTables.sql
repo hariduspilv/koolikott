@@ -1,6 +1,7 @@
 USE dop;
 
 -- Drop tables
+DROP TABLE IF EXISTS Comment;
 DROP TABLE IF EXISTS EstCoreTaxonMapping;
 DROP TABLE IF EXISTS WaramuTaxonMapping;
 DROP TABLE IF EXISTS Chapter_Material;
@@ -39,7 +40,6 @@ DROP TABLE IF EXISTS EducationalContext;
 DROP TABLE IF EXISTS Taxon;
 DROP TABLE IF EXISTS ResourceType;
 DROP TABLE IF EXISTS Author;
-DROP TABLE IF EXISTS Comment;
 
 -- Create tables
 
@@ -526,7 +526,7 @@ CREATE TABLE Comment (
     id        BIGINT AUTO_INCREMENT PRIMARY KEY,
     text      TEXT NOT NULL,
     creator   BIGINT NOT NULL,
-    portfolio BIGINT NOT NULL,
+    portfolio BIGINT,
     added     TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   
     FOREIGN KEY (creator)

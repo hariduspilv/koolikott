@@ -183,6 +183,13 @@ insert into Translation(translationGroup, translationKey, translation) values (1
 insert into Translation(translationGroup, translationKey, translation) values (1, 'SUBJECT_ENTREPRENEURSHIP_COMPETENCE', 'Ettevõtluspädevus');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'SUBJECT_DIGITAL_COMPETENCE', 'Infotehnoloogiline pädevus');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'SUBJECT_OTHER', 'Muu');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'TABLE_OF_CONTENTS', 'Sisukord');
+
+-- Comment translations
+insert into Translation(translationGroup, translationKey, translation) values (1, 'COMMENTS_TITLE', 'Kommentaarid');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'ADD_COMMENT_TITLE', 'Lisa kommentaar');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'COMMENT', 'Kommentaar');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'ADD_COMMENT_BUTTON', 'Saada');
 
 -- Taxon path
 
