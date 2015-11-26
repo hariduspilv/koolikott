@@ -503,17 +503,17 @@ CREATE TABLE EstCoreTaxonMapping (
 );
 
 CREATE TABLE Comment (
-	id 			BIGINT PRIMARY KEY,
-	text 		TEXT NOT NULL,
-	creator 	BIGINT NOT NULL,
-	portfolio 	BIGINT NOT NULL,
-	added 		TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    id        BIGINT AUTO_INCREMENT PRIMARY KEY,
+    text      TEXT NOT NULL,
+    creator   BIGINT NOT NULL,
+    portfolio BIGINT NOT NULL,
+    added     TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 	
-	FOREIGN KEY (creator)
-	REFERENCES User (id)
+    FOREIGN KEY (creator)
+    REFERENCES User (id)
       ON DELETE RESTRICT,
 	  
-	FOREIGN KEY (portfolio)
-	REFERENCES Portfolio (id)
+    FOREIGN KEY (portfolio)
+    REFERENCES Portfolio (id)
       ON DELETE RESTRICT
 );
