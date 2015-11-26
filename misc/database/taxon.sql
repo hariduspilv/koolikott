@@ -446,6 +446,14 @@ insert into Subtopic(id, topic) values (15030, 10200);
 
 -- End of subtopics for Secondary_Education_Topic1
 
+-- Start of subtopics for Secondary_Education_Topic1
+
+insert into Taxon(id, name, level) values (15040, 'Subtopic_for_Vocational_Education', 'SUBTOPIC');
+insert into Subtopic(id, topic) values (15040, 10300);
+
+-- End of subtopics for Secondary_Education_Topic1
+
+
 
 -- EstCore Taxon mapping
 
