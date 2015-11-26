@@ -155,6 +155,7 @@ CREATE TABLE Topic (
   id      BIGINT PRIMARY KEY,
   subject BIGINT,
   domain  BIGINT,
+  module  BIGINT,
   
   FOREIGN KEY (id)
             REFERENCES Taxon(id)
@@ -166,6 +167,10 @@ CREATE TABLE Topic (
   
   FOREIGN KEY (domain)
             REFERENCES Domain(id)
+            ON DELETE RESTRICT,
+  
+  FOREIGN KEY (module)
+            REFERENCES Module(id)
             ON DELETE RESTRICT
 );
 

@@ -395,6 +395,13 @@ insert into Topic(id, subject) values (10201, 1079);
 
 -- End of topics for Secondary Education
 
+-- Start of topics for Vocational Education
+
+insert into Taxon(id, name, level) values (10300, 'Vocational_Education_Topic1', 'TOPIC');
+insert into Topic(id, module) values (10300, 20100);
+
+-- End of topics for Vocational Education
+
 
 
 -- Subtopic
