@@ -420,6 +420,26 @@ insert into Specialization(id, domain) values (20000, 129);
 -- End of Specialization for Computer Science
 -- End of Secondary Education Subjects
 
+
+
+-- Module
+
+-- Start of Module for Computer And Networks
+
+insert into Taxon(id, name, level) values (20100, 'Majanduse_alused', 'MODULE');
+insert into Module(id, specialization) values (20100, 20000);
+insert into Taxon(id, name, level) values (20101, 'Ettevõtluse_alused', 'MODULE');
+insert into Module(id, specialization) values (20101, 20000);
+insert into Taxon(id, name, level) values (20102, 'Õiguse_alused', 'MODULE');
+insert into Module(id, specialization) values (20102, 20000);
+insert into Taxon(id, name, level) values (20103, 'IT_õigus', 'MODULE');
+insert into Module(id, specialization) values (20103, 20000);
+insert into Taxon(id, name, level) values (20104, 'Kommunikatsioon', 'MODULE');
+insert into Module(id, specialization) values (20104, 20000);
+
+-- End of Module for Computer And Networks
+
+
 -- EstCore Taxon mapping
 
 insert into EstCoreTaxonMapping(id, taxon, name) values (1, 1, 'preschoolEducation');
