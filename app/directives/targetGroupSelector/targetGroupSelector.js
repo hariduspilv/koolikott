@@ -4,17 +4,21 @@ define(['app'], function(app)
      function() {
         return {
             scope: {
-                targetGroups: '='
+                targetGroups: '=',
+                educationalContext: '='
             },
             templateUrl: 'directives/targetGroupSelector/targetGroupSelector.html',
             controller: function ($scope) {
-            	
+
+                var preschoolGroups = ['PRESCHOOL', 'ZERO_FIVE', 'SIX_SEVEN'];
+                var level1Groups = ['LEVEL1', 'GRADE1', 'GRADE2', 'GRADE3'];
+                var level2Groups = ['LEVEL2', 'GRADE4', 'GRADE5', 'GRADE6'];
+                var level3Groups = ['LEVEL3', 'GRADE7', 'GRADE8', 'GRADE9'];
+
                 init();
 
                 function init() {
-                    $scope.groups = ['PRESCHOOL', 'ZERO_FIVE', 'SIX_SEVEN', 'BASICEDUCATION', 'GRADE1', 'GRADE2', 
-                                     'GRADE3', 'GRADE4', 'GRADE5', 'GRADE6', 'GRADE7', 'GRADE8', 'GRADE9'];
-
+                    fill();
                     addListeners();
             	}
             	
@@ -37,40 +41,64 @@ define(['app'], function(app)
                             selectValue();
                         }
                     }, false);
+
+                    $scope.$watch('educationalContext', function(newContext, oldContext) {
+                        if (newContext !== oldContext) {
+                            fill();
+                        }
+                    }, false);
             	}
-            	
-            	function parseSelectedTargetGroup() {
-            		if ($scope.selectedTargetGroup === 'PRESCHOOL') {
-                        $scope.targetGroups = [];
-                        $scope.targetGroups.push($scope.groups[1]);
-                        $scope.targetGroups.push($scope.groups[2]);
-                    } else if ($scope.selectedTargetGroup === 'BASICEDUCATION') {
-                        $scope.targetGroups = [];
-                        for (i = 0; i < 9; i++) { 
-                            $scope.targetGroups.push($scope.groups[i + 4]);
+
+                function fill() {
+                    if ($scope.educationalContext) {
+                        switch ($scope.educationalContext.id) {
+                            case 1:
+                                $scope.groups = preschoolGroups.slice();
+                                break;
+                            case 2:
+                                $scope.groups = level1Groups.concat(level2Groups, level3Groups);
+                                break;
+                            default:
+                                $scope.groups = [];
+                                break;
+                        }
+
+                        // Clear if the selected value does not belong under this educational context
+                        if (!scope.groups.indexOf($scope.selectedTargetGroup) === -1) {
+                            $scope.selectedTargetGroup = null;
                         }
                     } else {
-                        $scope.targetGroups = [];
-                        $scope.targetGroups.push($scope.selectedTargetGroup);
+                        $scope.groups = preschoolGroups.concat(level1Groups, level2Groups, level3Groups);
+                    }
+                }
+            	
+            	function parseSelectedTargetGroup() {
+                    switch($scope.selectedTargetGroup) {
+                        case 'PRESCHOOL':
+                            $scope.targetGroups = preschoolGroups.slice();
+                            $scope.targetGroups.splice(0, 1); // Remove PRESCHOOL label
+                            break;
+                        case 'LEVEL1':
+                            $scope.targetGroups = level1Groups.slice();
+                            $scope.targetGroups.splice(0, 1);
+                            break;
+                        case 'LEVEL2':
+                            $scope.targetGroups = level2Groups.slice();
+                            $scope.targetGroups.splice(0, 1);
+                            break;
+                        case 'LEVEL3':
+                            $scope.targetGroups = level3Groups.slice();
+                            $scope.targetGroups.splice(0, 1);
+                            break;
+                        default:
+                            $scope.targetGroups = [];
+                            $scope.targetGroups.push($scope.selectedTargetGroup);
+                            break;
                     }
             	}
 
                 function selectValue() {
                     if ($scope.targetGroups) {
-                        // Check if values are valid
-                        var invalid = [];
-                        for (i = 0; i < $scope.targetGroups.length; i++) {
-                            if ($scope.groups.indexOf($scope.targetGroups[i]) === -1) {
-                                invalid.push($scope.targetGroups[i]);
-                            }
-                        }
-
-                        // Remove invalid
-                        for (i = 0; i < invalid.length; i++) {
-                            var index = $scope.targetGroups.indexOf(invalid[i]);
-                            $scope.targetGroups.splice(index, 1);
-                        }
-
                         // Select correct value
                         if ($scope.targetGroups.length === 1) {
                             $scope.selectedTargetGroup = $scope.targetGroups[0];
@@ -79,17 +107,23 @@ define(['app'], function(app)
                                 $scope.targetGroups.indexOf('SIX_SEVEN') > -1) {
                                 $scope.selectedTargetGroup = 'PRESCHOOL';
                             }
-                        } else if ($scope.targetGroups.length === 9) {
-                            // Contains Grades 1 to 9
-                            var containsGrades = true;
-                            for (i = 0; i < 9; i++) {
-                                if ($scope.targetGroups.indexOf($scope.groups[i + 4]) === -1) {
-                                    containsGrades = false;
-                                }
+                        } else if ($scope.targetGroups.length === 3) {
+                            if ($scope.targetGroups.indexOf('GRADE1') > -1 &&
+                                $scope.targetGroups.indexOf('GRADE2') > -1 &&
+                                $scope.targetGroups.indexOf('GRADE3') > -1) {
+                                $scope.selectedTargetGroup = 'LEVEL1';
                             }
 
-                            if (containsGrades) {
-                                $scope.selectedTargetGroup = 'BASICEDUCATION';
+                            if ($scope.targetGroups.indexOf('GRADE4') > -1 &&
+                                $scope.targetGroups.indexOf('GRADE5') > -1 &&
+                                $scope.targetGroups.indexOf('GRADE6') > -1) {
+                                $scope.selectedTargetGroup = 'LEVEL2';
+                            }
+
+                            if ($scope.targetGroups.indexOf('GRADE7') > -1 &&
+                                $scope.targetGroups.indexOf('GRADE8') > -1 &&
+                                $scope.targetGroups.indexOf('GRADE9') > -1) {
+                                $scope.selectedTargetGroup = 'LEVEL3';
                             }
                         }
                     }
