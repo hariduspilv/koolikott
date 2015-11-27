@@ -12,7 +12,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import ee.hm.dop.dao.TaxonDAO;
-import ee.hm.dop.model.EducationalContext;
+import ee.hm.dop.model.taxon.EducationalContext;
 
 @RunWith(EasyMockRunner.class)
 public class TaxonServiceTest {

@@ -35,6 +35,19 @@
                 <!-- Travel up the taxon path -->
 
                 <!-- Get topic -->
+                <entity name="Topic" query="select t.id as topic_id, t.name as topic, top.domain as parent from Taxon t left join Topic top on t.id = top.id where t.level = 'TOPIC' and t.id = '${Material_Taxon.taxon_id}'">
+
+                        <!-- Get domain -->
+                        <entity name="Domain" query="select t.id as domain_id, t.name as domain, d.educationalContext as parent from Taxon t left join Domain d on t.id = d.id where t.level = 'DOMAIN' and t.id = '${Topic.parent}'">
+                            
+                            <!-- Get educational context -->
+                            <entity name="EducationalContext" query="select name as educational_context from Taxon where level = 'EDUCATIONAL_CONTEXT' and id = '${Domain.parent}'">
+                                <entity name="Translation" query="select translation as educational_context from Translation where translationKey = '${EducationalContext.educational_context}'" />
+                            </entity>
+                        </entity>
+                </entity>
+
+                <!-- Get topic -->
                 <entity name="Topic" query="select t.id as topic_id, t.name as topic, top.subject as parent from Taxon t left join Topic top on t.id = top.id where t.level = 'TOPIC' and t.id = '${Material_Taxon.taxon_id}'">
 
                     <!-- Get subject -->
@@ -97,6 +110,19 @@
             query="select concat('portfolio', id ) as uniqueKey, id, title, summary, taxon as taxon_id, 'portfolio' as type, targetGroup as target_group from Portfolio">
 
             <!-- Travel up the taxon path -->
+
+            <!-- Get topic -->
+            <entity name="Topic" query="select t.id as topic_id, t.name as topic, top.domain as parent from Taxon t left join Topic top on t.id = top.id where t.level = 'TOPIC' and t.id = '${Portfolio.taxon_id}'">
+
+                <!-- Get domain -->
+                <entity name="Domain" query="select t.id as domain_id, t.name as domain, d.educationalContext as parent from Taxon t left join Domain d on t.id = d.id where t.level = 'DOMAIN' and t.id = '${Topic.parent}'">
+                    
+                    <!-- Get educational context -->
+                    <entity name="EducationalContext" query="select name as educational_context from Taxon where level = 'EDUCATIONAL_CONTEXT' and id = '${Domain.parent}'">
+                        <entity name="Translation" query="select translation as educational_context from Translation where translationKey = '${EducationalContext.educational_context}'" />
+                    </entity>
+                </entity>
+            </entity>
 
             <!-- Get topic -->
             <entity name="Topic" query="select t.id as topic_id, t.name as topic, top.subject as parent from Taxon t left join Topic top on t.id = top.id where t.level = 'TOPIC' and t.id = '${Portfolio.taxon_id}'">

@@ -7,6 +7,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 
+import ee.hm.dop.model.taxon.Taxon;
+
 @Entity
 public class WaramuTaxonMapping {
 

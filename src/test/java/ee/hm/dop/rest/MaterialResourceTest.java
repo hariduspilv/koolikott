@@ -22,8 +22,8 @@ import ee.hm.dop.common.test.ResourceIntegrationTestBase;
 import ee.hm.dop.model.Language;
 import ee.hm.dop.model.LanguageString;
 import ee.hm.dop.model.Material;
-import ee.hm.dop.model.Subject;
-import ee.hm.dop.model.Taxon;
+import ee.hm.dop.model.taxon.Subject;
+import ee.hm.dop.model.taxon.Taxon;
 
 public class MaterialResourceTest extends ResourceIntegrationTestBase {
 

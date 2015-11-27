@@ -1,14 +1,17 @@
 package ee.hm.dop.common.test;
 
-import com.google.inject.Inject;
-import org.apache.commons.configuration.Configuration;
-import org.glassfish.jersey.client.ClientConfig;
-import org.glassfish.jersey.client.ClientProperties;
-import org.glassfish.jersey.filter.LoggingFilter;
-import org.glassfish.jersey.jackson.JacksonFeature;
+import static ee.hm.dop.utils.ConfigurationProperties.SERVER_PORT;
+import static java.lang.String.format;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
+import javax.ws.rs.client.ClientRequestContext;
 import javax.ws.rs.client.ClientRequestFilter;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.WebTarget;
@@ -16,9 +19,19 @@ import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status;
+import javax.ws.rs.ext.Provider;
 
-import static ee.hm.dop.utils.ConfigurationProperties.SERVER_PORT;
-import static java.lang.String.format;
+import org.apache.commons.configuration.Configuration;
+import org.glassfish.jersey.client.ClientConfig;
+import org.glassfish.jersey.client.ClientProperties;
+import org.glassfish.jersey.filter.LoggingFilter;
+import org.glassfish.jersey.jackson.JacksonFeature;
+import org.junit.After;
+
+import com.google.inject.Inject;
+
+import ee.hm.dop.model.AuthenticatedUser;
 
 /**
  * Base class for all resource integration tests.
@@ -29,6 +42,31 @@ public abstract class ResourceIntegrationTestBase extends IntegrationTestBase {
 
     @Inject
     private static Configuration configuration;
+
+    private static AuthenticationFilter authenticationFilter;
+
+    protected void login(String idCode) {
+        Response response = doGet("dev/login/" + idCode);
+        AuthenticatedUser authenticatedUser = response.readEntity(new GenericType<AuthenticatedUser>() {
+        });
+
+        assertNotNull("Login failed", authenticatedUser.getToken());
+        assertNotNull("Login failed", authenticatedUser.getUser().getUsername());
+
+        authenticationFilter = new AuthenticationFilter(authenticatedUser);
+    }
+
+    @After
+    public void logout() {
+        if (authenticationFilter != null) {
+            Response response = getTarget("logout", authenticationFilter).request()
+                    .accept(MediaType.APPLICATION_JSON_TYPE).post(null);
+
+            assertEquals("Logout failed", Status.NO_CONTENT.getStatusCode(), response.getStatus());
+
+            authenticationFilter = null;
+        }
+    }
 
     /*
      * GET
@@ -76,7 +114,8 @@ public abstract class ResourceIntegrationTestBase extends IntegrationTestBase {
         return getTarget(url).request().accept(mediaType).post(requestEntity);
     }
 
-    protected static Response doPost(String url, ClientRequestFilter clientRequestFilter, Entity<?> requestEntity, MediaType mediaType) {
+    protected static Response doPost(String url, ClientRequestFilter clientRequestFilter, Entity<?> requestEntity,
+            MediaType mediaType) {
         return getTarget(url, clientRequestFilter).request().accept(mediaType).post(requestEntity);
     }
 
@@ -85,7 +124,7 @@ public abstract class ResourceIntegrationTestBase extends IntegrationTestBase {
      */
 
     protected static WebTarget getTarget(String url) {
-        return getTarget(url, null);
+        return getTarget(url, authenticationFilter);
     }
 
     protected static WebTarget getTarget(String url, ClientRequestFilter clientRequestFilter) {
@@ -115,5 +154,30 @@ public abstract class ResourceIntegrationTestBase extends IntegrationTestBase {
         }
 
         return RESOURCE_BASE_URL + path;
+    }
+
+    @Provider
+    public static class AuthenticationFilter implements ClientRequestFilter {
+        private String token = null;
+        private String username = null;
+
+        public AuthenticationFilter(AuthenticatedUser authenticatedUser) {
+            this.token = authenticatedUser.getToken();
+            this.username = authenticatedUser.getUser().getUsername();
+        }
+
+        @Override
+        public void filter(ClientRequestContext requestContext) throws IOException {
+
+            if (token != null && username != null) {
+                List<Object> tokenList = new ArrayList<>();
+                tokenList.add(token);
+                requestContext.getHeaders().put("Authentication", tokenList);
+
+                List<Object> usernameList = new ArrayList<>();
+                usernameList.add(username);
+                requestContext.getHeaders().put("Username", usernameList);
+            }
+        }
     }
 }

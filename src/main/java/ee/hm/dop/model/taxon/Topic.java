@@ -1,4 +1,4 @@
-package ee.hm.dop.model;
+package ee.hm.dop.model.taxon;
 
 import static javax.persistence.FetchType.EAGER;
 
@@ -27,6 +27,18 @@ public class Topic extends Taxon {
     @JoinColumn(name = "domain")
     private Domain domain;
 
+    @ManyToOne
+    @JoinColumn(name = "module")
+    private Module module;
+
+    public Set<Subtopic> getSubtopics() {
+        return subtopics;
+    }
+
+    public void setSubtopics(Set<Subtopic> subtopics) {
+        this.subtopics = subtopics;
+    }
+
     public Subject getSubject() {
         return subject;
     }
@@ -43,12 +55,12 @@ public class Topic extends Taxon {
         this.domain = domain;
     }
 
-    public Set<Subtopic> getSubtopics() {
-        return subtopics;
+    public Module getModule() {
+        return module;
     }
 
-    public void setSubtopics(Set<Subtopic> subtopics) {
-        this.subtopics = subtopics;
+    public void setModule(Module module) {
+        this.module = module;
     }
 
     @JsonIgnore

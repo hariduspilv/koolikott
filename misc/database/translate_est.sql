@@ -120,6 +120,7 @@ insert into Translation(translationGroup, translationKey, translation) values (1
 insert into Translation(translationGroup, translationKey, translation) values (1, 'PORTFOLIO_METADATA_TOOLBAR_LABEL', 'Lisa portfolio põhiandmed');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'BUTTON_CANCEL', 'Katkesta');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'BUTTON_CREATE_PORTFOLIO', 'Loo portfolio');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'TARGET_GROUP_PRESCHOOL', 'Eelkool');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'TARGET_GROUP_ZERO_FIVE', '0-5');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'TARGET_GROUP_SIX_SEVEN', '6-7');
 
@@ -183,11 +184,19 @@ insert into Translation(translationGroup, translationKey, translation) values (1
 insert into Translation(translationGroup, translationKey, translation) values (1, 'SUBJECT_ENTREPRENEURSHIP_COMPETENCE', 'Ettevõtluspädevus');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'SUBJECT_DIGITAL_COMPETENCE', 'Infotehnoloogiline pädevus');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'SUBJECT_OTHER', 'Muu');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'TABLE_OF_CONTENTS', 'Sisukord');
+
+-- Comment translations
+insert into Translation(translationGroup, translationKey, translation) values (1, 'COMMENTS_TITLE', 'Kommentaarid');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'ADD_COMMENT_TITLE', 'Lisa kommentaar');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'COMMENT', 'Kommentaar');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'ADD_COMMENT_BUTTON', 'Saada');
 
 -- Taxon path
 
 insert into Translation(translationGroup, translationKey, translation) values (1, 'TAXON_PATH_DOMAIN', 'Domeen');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'TAXON_PATH_SPECIALIZATION', 'Eriala');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'TAXON_PATH_MODULE', 'Moodul');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'TAXON_PATH_TOPIC', 'Teema');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'TAXON_PATH_SUBTOPIC', 'Alamteema');
 

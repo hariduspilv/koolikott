@@ -335,6 +335,37 @@ insert into Subject(id, domain) values (1103, 127);
 
 
 
+-- Specialization
+
+-- Start of Specialization for Computer Science
+
+insert into Taxon(id, name, level) values (20000, 'Computers_and_Networks', 'SPECIALIZATION');
+insert into Specialization(id, domain) values (20000, 129);
+
+-- End of Specialization for Computer Science
+-- End of Secondary Education Subjects
+
+
+
+-- Module
+
+-- Start of Module for Computer And Networks
+
+insert into Taxon(id, name, level) values (20100, 'Majanduse_alused', 'MODULE');
+insert into Module(id, specialization) values (20100, 20000);
+insert into Taxon(id, name, level) values (20101, 'Ettevõtluse_alused', 'MODULE');
+insert into Module(id, specialization) values (20101, 20000);
+insert into Taxon(id, name, level) values (20102, 'Õiguse_alused', 'MODULE');
+insert into Module(id, specialization) values (20102, 20000);
+insert into Taxon(id, name, level) values (20103, 'IT_õigus', 'MODULE');
+insert into Module(id, specialization) values (20103, 20000);
+insert into Taxon(id, name, level) values (20104, 'Kommunikatsioon', 'MODULE');
+insert into Module(id, specialization) values (20104, 20000);
+
+-- End of Module for Computer And Networks
+
+
+
 -- Topic
 
 -- Start of topics for Basic Education
@@ -363,6 +394,13 @@ insert into Taxon(id, name, level) values (10201, 'Secondary_Education_Topic2', 
 insert into Topic(id, subject) values (10201, 1079);
 
 -- End of topics for Secondary Education
+
+-- Start of topics for Vocational Education
+
+insert into Taxon(id, name, level) values (10300, 'Vocational_Education_Topic1', 'TOPIC');
+insert into Topic(id, module) values (10300, 20100);
+
+-- End of topics for Vocational Education
 
 
 
@@ -408,16 +446,13 @@ insert into Subtopic(id, topic) values (15030, 10200);
 
 -- End of subtopics for Secondary_Education_Topic1
 
+-- Start of subtopics for Secondary_Education_Topic1
+
+insert into Taxon(id, name, level) values (15040, 'Subtopic_for_Vocational_Education', 'SUBTOPIC');
+insert into Subtopic(id, topic) values (15040, 10300);
+
+-- End of subtopics for Secondary_Education_Topic1
 
 
--- Specialization
-
--- Start of Specialization for Computer Science
-
-insert into Taxon(id, name, level) values (20000, 'Computers_and_Networks', 'SPECIALIZATION');
-insert into Specialization(id, domain) values (20000, 129);
-
--- End of Specialization for Computer Science
--- End of Secondary Education Subjects
 
 

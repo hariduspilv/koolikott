@@ -1,6 +1,7 @@
 USE dop;
 
 -- Drop tables
+DROP TABLE IF EXISTS Comment;
 DROP TABLE IF EXISTS EstCoreTaxonMapping;
 DROP TABLE IF EXISTS WaramuTaxonMapping;
 DROP TABLE IF EXISTS Chapter_Material;
@@ -31,6 +32,7 @@ DROP TABLE IF EXISTS Publisher;
 DROP TABLE IF EXISTS Tag;
 DROP TABLE IF EXISTS Subtopic;
 DROP TABLE IF EXISTS Topic;
+DROP TABLE IF EXISTS Module;
 DROP TABLE IF EXISTS Specialization;
 DROP TABLE IF EXISTS Subject;
 DROP TABLE IF EXISTS Domain;
@@ -136,11 +138,26 @@ CREATE TABLE Specialization (
             ON DELETE RESTRICT
 );
 
+CREATE TABLE Module (
+  id             BIGINT PRIMARY KEY,
+  specialization BIGINT NOT NULL,
+  
+  FOREIGN KEY (id)
+            REFERENCES Taxon(id)
+            ON DELETE RESTRICT,
+  
+  FOREIGN KEY (specialization)
+            REFERENCES Specialization(id)
+            ON DELETE RESTRICT
+);
+
 CREATE TABLE Topic (
   id      BIGINT PRIMARY KEY,
   subject BIGINT,
   domain  BIGINT,
 
+  module  BIGINT,
+  
   FOREIGN KEY (id)
             REFERENCES Taxon(id)
             ON DELETE RESTRICT,
@@ -151,6 +168,10 @@ CREATE TABLE Topic (
 
   FOREIGN KEY (domain)
             REFERENCES Domain(id)
+            ON DELETE RESTRICT,
+  
+  FOREIGN KEY (module)
+            REFERENCES Module(id)
             ON DELETE RESTRICT
 );
 
@@ -500,4 +521,20 @@ CREATE TABLE EstCoreTaxonMapping (
   FOREIGN KEY (taxon)
   REFERENCES Taxon (id)
     ON DELETE RESTRICT
-)
+);
+
+CREATE TABLE Comment (
+    id        BIGINT AUTO_INCREMENT PRIMARY KEY,
+    text      TEXT NOT NULL,
+    creator   BIGINT NOT NULL,
+    portfolio BIGINT,
+    added     TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  
+    FOREIGN KEY (creator)
+    REFERENCES User (id)
+      ON DELETE RESTRICT,
+    
+    FOREIGN KEY (portfolio)
+    REFERENCES Portfolio (id)
+      ON DELETE RESTRICT
+);

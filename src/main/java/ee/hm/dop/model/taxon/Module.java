@@ -1,4 +1,4 @@
-package ee.hm.dop.model;
+package ee.hm.dop.model.taxon;
 
 import static javax.persistence.FetchType.EAGER;
 
@@ -13,15 +13,15 @@ import javax.persistence.OneToMany;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
-@DiscriminatorValue("SUBJECT")
-public class Subject extends Taxon {
+@DiscriminatorValue("MODULE")
+public class Module extends Taxon {
 
-    @OneToMany(fetch = EAGER, mappedBy = "subject")
+    @OneToMany(fetch = EAGER, mappedBy = "module")
     private Set<Topic> topics;
 
     @ManyToOne
-    @JoinColumn(name = "domain", nullable = false)
-    private Domain domain;
+    @JoinColumn(name = "specialization", nullable = false)
+    private Specialization specialization;
 
     public Set<Topic> getTopics() {
         return topics;
@@ -31,17 +31,17 @@ public class Subject extends Taxon {
         this.topics = topics;
     }
 
-    public Domain getDomain() {
-        return domain;
+    public Specialization getSpecialization() {
+        return specialization;
     }
 
-    public void setDomain(Domain domain) {
-        this.domain = domain;
+    public void setSpecialization(Specialization specialization) {
+        this.specialization = specialization;
     }
 
     @JsonIgnore
     @Override
     public Taxon getParent() {
-        return getDomain();
+        return getSpecialization();
     }
 }
