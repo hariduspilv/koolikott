@@ -9,9 +9,10 @@ define(['app'], function(app)
                 $scope.toggleSidenav = function() {
                     $mdSidenav('left').toggle();
                 };
-				$scope.exitEditPortfolioMode = function() {
+
+                $scope.exitEditPortfolioMode = function() {
                     $rootScope.isEditPortforlioMode = false;
-					$location.path("./#/");
+                    $location.path("/");
                 };
             }
         };
@@ -19,3 +20,4 @@ define(['app'], function(app)
 
     return app;
 });
+ 
