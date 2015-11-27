@@ -6,6 +6,8 @@ import java.net.HttpURLConnection;
 import java.util.List;
 
 import javax.inject.Inject;
+import javax.ws.rs.BadRequestException;
+import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -17,17 +19,22 @@ import javax.ws.rs.core.Response;
 
 import ee.hm.dop.model.Portfolio;
 import ee.hm.dop.model.User;
+import ee.hm.dop.model.taxon.Taxon;
 import ee.hm.dop.service.PortfolioService;
+import ee.hm.dop.service.TaxonService;
 import ee.hm.dop.service.UserService;
 
 @Path("portfolio")
-public class PortfolioResource {
+public class PortfolioResource extends BaseResource {
 
     @Inject
     private PortfolioService portfolioService;
 
     @Inject
     private UserService userService;
+
+    @Inject
+    private TaxonService taxonService;
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
@@ -74,5 +81,51 @@ public class PortfolioResource {
     @Path("increaseViewCount")
     public void increaseViewCount(Portfolio portfolio) {
         portfolioService.incrementViewCount(portfolio);
+    }
+
+    @POST
+    @Path("create")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Portfolio create(CreatePortfolioForm createPortfolioForm) {
+        Portfolio portfolio = createPortfolioForm.getPortfolio();
+
+        if (createPortfolioForm.getTaxon() != null) {
+            Taxon taxon = taxonService.getTaxonById(createPortfolioForm.getTaxon());
+
+            if (taxon == null) {
+                throw new BadRequestException("Taxon does not exist.");
+            }
+
+            portfolio.setTaxon(taxon);
+        }
+
+        return portfolioService.create(portfolio, getLoggedInUser());
+    }
+
+    /**
+     * This is an workaround to bypass JSOG/Jackson problem:
+     * https://github.com/jsog/jsog-jackson/pull/8
+     */
+    public static class CreatePortfolioForm {
+
+        private Long taxon;
+        private Portfolio portfolio;
+
+        public Long getTaxon() {
+            return taxon;
+        }
+
+        public void setTaxon(Long taxon) {
+            this.taxon = taxon;
+        }
+
+        public Portfolio getPortfolio() {
+            return portfolio;
+        }
+
+        public void setPortfolio(Portfolio portfolio) {
+            this.portfolio = portfolio;
+        }
     }
 }

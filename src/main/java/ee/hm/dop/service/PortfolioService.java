@@ -57,4 +57,26 @@ public class PortfolioService {
         originalPortfolio.getComments().add(comment);
         portfolioDAO.update(originalPortfolio);
     }
+
+    public Portfolio create(Portfolio portfolio, User creator) {
+        if (portfolio.getId() != null) {
+            throw new RuntimeException("Portfolio already exists.");
+        }
+
+        Portfolio safePortfolio = getPortfolioWithAllowedFieldsOnCreate(portfolio);
+        safePortfolio.setViews(0L);
+        safePortfolio.setCreator(creator);
+
+        return portfolioDAO.update(safePortfolio);
+    }
+
+    private Portfolio getPortfolioWithAllowedFieldsOnCreate(Portfolio portfolio) {
+        Portfolio safePortfolio = new Portfolio();
+        safePortfolio.setTitle(portfolio.getTitle());
+        safePortfolio.setSummary(portfolio.getSummary());
+        safePortfolio.setTags(portfolio.getTags());
+        safePortfolio.setTargetGroup(portfolio.getTargetGroup());
+        safePortfolio.setTaxon(portfolio.getTaxon());
+        return safePortfolio;
+    }
 }

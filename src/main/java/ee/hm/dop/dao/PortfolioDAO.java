@@ -34,8 +34,8 @@ public class PortfolioDAO {
      * @return a list of portfolios specified by idList
      */
     public List<Portfolio> findAllById(List<Long> idList) {
-        TypedQuery<Portfolio> findAllByIdList = entityManager
-                .createQuery("SELECT p FROM Portfolio p WHERE p.id in :idList", Portfolio.class);
+        TypedQuery<Portfolio> findAllByIdList = entityManager.createQuery(
+                "SELECT p FROM Portfolio p WHERE p.id in :idList", Portfolio.class);
         return findAllByIdList.setParameter("idList", idList).getResultList();
     }
 
@@ -77,15 +77,11 @@ public class PortfolioDAO {
         entityManager.flush();
     }
 
-    /**
-     * Currently for testing purposes.
-     *
-     * @param portfolio
-     */
-
     public Portfolio update(Portfolio portfolio) {
         if (portfolio.getId() != null) {
             portfolio.setUpdated(DateTime.now());
+        } else {
+            portfolio.setCreated(DateTime.now());
         }
 
         Portfolio merged = entityManager.merge(portfolio);
