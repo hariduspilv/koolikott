@@ -3,9 +3,12 @@ package ee.hm.dop.rest;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import javax.ws.rs.core.GenericType;
@@ -14,6 +17,7 @@ import org.junit.Test;
 
 import ee.hm.dop.common.test.ResourceIntegrationTestBase;
 import ee.hm.dop.model.Language;
+import ee.hm.dop.model.LicenseType;
 import ee.hm.dop.model.ResourceType;
 import ee.hm.dop.model.TargetGroup;
 import ee.hm.dop.model.taxon.Domain;
@@ -29,6 +33,7 @@ public class LearningMaterialMetadataResourceTest extends ResourceIntegrationTes
     private static final String GET_LANGUAGES_URL = "learningMaterialMetadata/language";
     private static final String GET_TARGET_GROUPS_URL = "learningMaterialMetadata/targetGroup";
     private static final String GET_RESOURCE_TYPES_URL = "learningMaterialMetadata/resourceType";
+    private static final String GET_LICENSE_TYPES_URL = "learningMaterialMetadata/licenseType";
 
     @Test
     public void getEducationalContext() {
@@ -110,6 +115,32 @@ public class LearningMaterialMetadataResourceTest extends ResourceIntegrationTes
         List<String> actual = result.stream().map(r -> r.getName()).collect(Collectors.toList());
 
         assertTrue(actual.containsAll(expected));
+    }
+
+    @Test
+    public void getAllLicenseTypes() {
+        List<LicenseType> licenseTypes = doGet(GET_LICENSE_TYPES_URL, new GenericType<List<LicenseType>>() {
+        });
+
+        assertEquals(3, licenseTypes.size());
+        for (int i = 0; i < licenseTypes.size(); i++) {
+            assertValidLicenseType(licenseTypes.get(i));
+        }
+    }
+
+    private void assertValidLicenseType(LicenseType licenseType) {
+        Map<Long, String> licenseTypes = new HashMap<>();
+        licenseTypes.put(1L, "CCBY");
+        licenseTypes.put(2L, "CCBYSA");
+        licenseTypes.put(3L, "CCBYND");
+
+        assertNotNull(licenseType.getId());
+        assertNotNull(licenseType.getName());
+        if (licenseTypes.containsKey(licenseType.getId())) {
+            assertEquals(licenseTypes.get(licenseType.getId()), licenseType.getName());
+        } else {
+            fail("LicenseType with unexpected id.");
+        }
     }
 
 }
