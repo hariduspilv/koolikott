@@ -344,6 +344,9 @@ insert into Material_Tag(tag, material) values(5, 3919);
 -- Material TargetGroups
 insert into Material_TargetGroup(material, targetGroup) values (1, 'ZERO_FIVE');
 insert into Material_TargetGroup(material, targetGroup) values (1, 'SIX_SEVEN');
+insert into Material_TargetGroup(material, targetGroup) values (12, 'GRADE1');
+insert into Material_TargetGroup(material, targetGroup) values (13, 'GRADE6');
+insert into Material_TargetGroup(material, targetGroup) values (14, 'GRADE9');
 insert into Material_TargetGroup(material, targetGroup) values (36, 'ZERO_FIVE');
 insert into Material_TargetGroup(material, targetGroup) values (37, 'SIX_SEVEN');
 
@@ -405,5 +408,6 @@ insert into Portfolio_Tag(tag, portfolio) values(12, 7);
 
 -- Portfolio TargetGroups
 insert into Portfolio_TargetGroup(portfolio, targetGroup) values (1, 'ZERO_FIVE');
+insert into Portfolio_TargetGroup(portfolio, targetGroup) values (1, 'GRADE1');
 insert into Portfolio_TargetGroup(portfolio, targetGroup) values (8, 'ZERO_FIVE');
 insert into Portfolio_TargetGroup(portfolio, targetGroup) values (8, 'SIX_SEVEN');
