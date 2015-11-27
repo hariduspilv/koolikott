@@ -12,6 +12,7 @@ define(['app'], function(app)
 				}
 				
 				$scope.authorized = authenticatedUserService.isAuthenticated();
+				$scope.newComment = {};
 			}
 
 			function getPortfolio(success, fail) {
