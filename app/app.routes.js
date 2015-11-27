@@ -50,7 +50,8 @@ define([], function()
                 dependencies: [
                     'views/portfolio/portfolio',
                     'directives/chapter/chapter',
-                    'directives/materialBox/materialBox'
+                    'directives/materialBox/materialBox',
+                    'directives/portfolioSummaryCard/portfolioSummaryCard'
                 ]
             },
             '/editPortfolio': {
@@ -58,7 +59,8 @@ define([], function()
                 controller: 'editPortfolioController',
                 dependencies: [
                     'views/editPortfolio/editPortfolio',
-                    'directives/materialBox/materialBox'
+                    'directives/materialBox/materialBox',
+                    'directives/portfolioSummaryCard/portfolioSummaryCard'
                 ]
             },
             '/loginRedirect': {
