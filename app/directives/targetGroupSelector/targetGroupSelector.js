@@ -12,7 +12,8 @@ define(['app'], function(app)
                 init();
 
                 function init() {
-                    $scope.groups = ['PRESCHOOL', 'ZERO_FIVE', 'SIX_SEVEN'];
+                    $scope.groups = ['PRESCHOOL', 'ZERO_FIVE', 'SIX_SEVEN', 'BASICEDUCATION', 'GRADE1', 'GRADE2', 
+                                     'GRADE3', 'GRADE4', 'GRADE5', 'GRADE6', 'GRADE7', 'GRADE8', 'GRADE9'];
 
                     addListeners();
             	}
@@ -43,6 +44,11 @@ define(['app'], function(app)
                         $scope.targetGroups = [];
                         $scope.targetGroups.push($scope.groups[1]);
                         $scope.targetGroups.push($scope.groups[2]);
+                    } else if ($scope.selectedTargetGroup === 'BASICEDUCATION') {
+                        $scope.targetGroups = [];
+                        for (i = 0; i < 9; i++) { 
+                            $scope.targetGroups.push($scope.groups[i + 4]);
+                        }
                     } else {
                         $scope.targetGroups = [];
                         $scope.targetGroups.push($scope.selectedTargetGroup);
@@ -51,7 +57,6 @@ define(['app'], function(app)
 
                 function selectValue() {
                     if ($scope.targetGroups) {
-
                         // Check if values are valid
                         var invalid = [];
                         for (i = 0; i < $scope.targetGroups.length; i++) {
@@ -70,9 +75,21 @@ define(['app'], function(app)
                         if ($scope.targetGroups.length === 1) {
                             $scope.selectedTargetGroup = $scope.targetGroups[0];
                         } else if ($scope.targetGroups.length === 2) {
-                            if ($scope.targetGroups.indexOf($scope.groups[1]) > -1 &&
-                                $scope.targetGroups.indexOf($scope.groups[2]) > -1) {
+                            if ($scope.targetGroups.indexOf('ZERO_FIVE') > -1 &&
+                                $scope.targetGroups.indexOf('SIX_SEVEN') > -1) {
                                 $scope.selectedTargetGroup = 'PRESCHOOL';
+                            }
+                        } else if ($scope.targetGroups.length === 9) {
+                            // Contains Grades 1 to 9
+                            var containsGrades = true;
+                            for (i = 0; i < 9; i++) {
+                                if ($scope.targetGroups.indexOf($scope.groups[i + 4]) === -1) {
+                                    containsGrades = false;
+                                }
+                            }
+
+                            if (containsGrades) {
+                                $scope.selectedTargetGroup = 'BASICEDUCATION';
                             }
                         }
                     }

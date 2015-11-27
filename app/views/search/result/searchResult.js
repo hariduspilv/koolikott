@@ -54,9 +54,7 @@ define(['app'], function(app)
             }
 
             if (searchService.getTargetGroups()) {
-                //for (i = 0; i < searchService.getTargetGroups().length; i++) {
-                    params.targetGroup = searchService.getTargetGroups();
-                //}
+                params.targetGroup = searchService.getTargetGroups();
             }
 
             serverCallService.makeGet("rest/search", params, searchSuccess, searchFail);
