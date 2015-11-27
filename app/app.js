@@ -38,7 +38,7 @@ define(['app.routes', 'services/dependencyResolver'], function(config, dependenc
             {
                 angular.forEach(config.routes, function(route, path)
                 {
-                    $routeProvider.when(path, {templateUrl:route.templateUrl, controller:route.controller, resolve:dependencyResolver(concatDependencies(route.dependencies))});
+                    $routeProvider.when(path, {templateUrl:route.templateUrl, controller:route.controller, resolve:dependencyResolver(route.dependencies)});
                 });
             }
 
@@ -72,16 +72,6 @@ define(['app.routes', 'services/dependencyResolver'], function(config, dependenc
 
         $translateProvider.preferredLanguage(language);
         $translateProvider.useSanitizeValueStrategy('escaped');
-    }
-
-    function concatDependencies(dependencies) {
-        return getServicesAndUtilsDependencies().concat(dependencies);
-    }
-
-    function getServicesAndUtilsDependencies() {
-        return [
-            'utils/commons'
-        ];
     }
 
     function configureTheme($mdThemingProvider) {

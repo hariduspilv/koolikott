@@ -23,7 +23,8 @@
 
     <div id="alert" data-dop-alert></div>
     
-    <div id="navmenu" data-dop-header></div>
+    <div data-ng-hide="isEditPortforlioMode" id="navmenu" data-dop-header></div>
+    <div data-ng-show="isEditPortforlioMode" id="navmenu" data--dop-edit-portfolio-mode-header></div>
 
     <div data-ng-view layout="row" flex></div>
 

@@ -35,7 +35,8 @@ require.config({
     'angular-scroll': '../bower_components/angular-scroll/angular-scroll',
     jsog: '../bower_components/jsog/lib/JSOG',
     ngInfiniteScroll: '../bower_components/ngInfiniteScroll/build/ng-infinite-scroll',
-    jquery: '../bower_components/jquery/dist/jquery'
+    jquery: '../bower_components/jquery/dist/jquery',
+    commons: 'utils/commons'
   },
   shim: {
     angular: {
@@ -84,7 +85,8 @@ require.config({
       'angular',
       'angular-translate',
       'angular-translate-loader-url',
-      'angular-youtube-mb'
+      'angular-youtube-mb',
+      'commons'
     ],
     priority: [
       'angular'

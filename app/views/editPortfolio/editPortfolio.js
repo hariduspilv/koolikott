@@ -4,9 +4,11 @@ define(['app'], function(app)
       $anchorScroll.yOffset = 50;
     }]);
 
-    app.controller('editPortfolioController', ['$scope', 'serverCallService', 'translationService', '$mdSidenav', '$mdDialog', '$mdToast', '$document',
-        function($scope, serverCallService, translationService, $mdSidenav, $mdDialog, $mdToast, $document) {
-            $scope.portfolio = {
+    app.controller('editPortfolioController', ['$scope', 'serverCallService', 'translationService', '$mdSidenav', '$mdDialog', '$mdToast', '$document', '$rootScope',
+        function($scope, serverCallService, translationService, $mdSidenav, $mdDialog, $mdToast, $document, $rootScope) {
+            $rootScope.isEditPortforlioMode = true;
+    	
+    		$scope.portfolio = {
                 chapters: []
             };
 
