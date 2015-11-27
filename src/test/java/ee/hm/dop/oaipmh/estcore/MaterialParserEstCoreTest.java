@@ -33,6 +33,7 @@ import ee.hm.dop.model.Tag;
 import ee.hm.dop.model.taxon.Domain;
 import ee.hm.dop.model.taxon.EducationalContext;
 import ee.hm.dop.model.taxon.Subject;
+import ee.hm.dop.model.taxon.Topic;
 import ee.hm.dop.oaipmh.ParseException;
 import ee.hm.dop.service.AuthorService;
 import ee.hm.dop.service.LanguageService;
@@ -175,6 +176,20 @@ public class MaterialParserEstCoreTest {
         subjects.add(subject2);
         domain1.setSubjects(subjects);
 
+        Topic topic1 = new Topic();
+        topic1.setName("Basic_history");
+        topic1.setSubject(subject1);
+        Set<Topic> topics = new HashSet<>();
+        topics.add(topic1);
+        subject1.setTopics(topics);
+
+        Topic topic2 = new Topic();
+        topic2.setName("Estonian_history");
+        topic2.setSubject(subject2);
+        topics = new HashSet<>();
+        topics.add(topic2);
+        subject2.setTopics(topics);
+
         expect(languageService.getLanguage("en")).andReturn(english).times(3);
         expect(languageService.getLanguage("et")).andReturn(estonian).times(2);
         expect(authorService.getAuthorByFullName(author1.getName(), author1.getSurname())).andReturn(author1);
@@ -183,20 +198,31 @@ public class MaterialParserEstCoreTest {
         expect(tagService.getTagByName(tag2.getName())).andReturn(tag2);
         expect(resourceTypeService.getResourceTypeByName(resourceType1.getName())).andReturn(resourceType1);
         expect(resourceTypeService.getResourceTypeByName(resourceType2.getName())).andReturn(resourceType2);
+
+        //first taxon
         expect(taxonService.getTaxonByEstCoreName(educationalContext1.getName(), EducationalContext.class)).andReturn(
                 educationalContext1).anyTimes();
         expect(taxonService.getTaxonByEstCoreName(domain2.getName(), Domain.class)).andReturn(domain2);
+
+        //second taxon
         expect(taxonService.getTaxonByEstCoreName(educationalContext3.getName(), EducationalContext.class)).andReturn(
                 educationalContext3).anyTimes();
         expect(taxonService.getTaxonByEstCoreName("Language and literature", Domain.class)).andReturn(domain4);
         expect(taxonService.getTaxonByEstCoreName(subject1.getName(), Subject.class)).andReturn(subject1);
+        expect(taxonService.getTaxonByEstCoreName("Ajaloo algõpetus", Topic.class)).andReturn(topic1);
+
+        //third taxon
         expect(taxonService.getTaxonByEstCoreName(educationalContext4.getName(), EducationalContext.class)).andReturn(
                 educationalContext4).anyTimes();
         expect(taxonService.getTaxonByEstCoreName(domain3.getName(), Domain.class)).andReturn(domain3);
+
+        //fourth taxon
         expect(taxonService.getTaxonByEstCoreName(educationalContext2.getName(), EducationalContext.class)).andReturn(
                 educationalContext2).anyTimes();
         expect(taxonService.getTaxonByEstCoreName("Foreign language", Domain.class)).andReturn(domain1);
         expect(taxonService.getTaxonByEstCoreName(subject2.getName(), Subject.class)).andReturn(subject2);
+        expect(taxonService.getTaxonByEstCoreName("Eesti ajalugu", Topic.class)).andReturn(topic2);
+
 
         LanguageString title1 = new LanguageString();
         title1.setLanguage(english);

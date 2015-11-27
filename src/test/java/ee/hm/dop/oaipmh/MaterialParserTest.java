@@ -207,6 +207,11 @@ public class MaterialParserTest {
         protected Taxon setSubject(Node node, Taxon lastTaxon) {
             return null;
         }
+
+        @Override
+        protected Taxon setTopic(Node taxonPath, Taxon parent) {
+            return null;
+        }
     }
 }
 

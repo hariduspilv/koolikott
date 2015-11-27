@@ -134,8 +134,8 @@ insert into EstCoreTaxonMapping(id, taxon, name) values (1100, 1100, 'Communicat
 insert into EstCoreTaxonMapping(id, taxon, name) values (1101, 1101, 'Mathematics natural sciences and technology competence');
 insert into EstCoreTaxonMapping(id, taxon, name) values (1102, 1102, 'Entrepreneurship competence');
 insert into EstCoreTaxonMapping(id, taxon, name) values (1103, 1103, 'Digital competence');
-insert into EstCoreTaxonMapping(id, taxon, name) values (10000, 10000, 'Basic history');
-insert into EstCoreTaxonMapping(id, taxon, name) values (10001, 10001, 'Estonian history');
+insert into EstCoreTaxonMapping(id, taxon, name) values (10000, 10000, 'Ajaloo algõpetus');
+insert into EstCoreTaxonMapping(id, taxon, name) values (10001, 10001, 'Eesti ajalugu');
 insert into EstCoreTaxonMapping(id, taxon, name) values (10100, 10100, 'Preschool Topic1');
 insert into EstCoreTaxonMapping(id, taxon, name) values (10101, 10101, 'Preschool Topic2');
 insert into EstCoreTaxonMapping(id, taxon, name) values (10200, 10200, 'Secondary Education Topic1');

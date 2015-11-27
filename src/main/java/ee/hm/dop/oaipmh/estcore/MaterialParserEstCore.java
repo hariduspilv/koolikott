@@ -22,8 +22,10 @@ import ee.hm.dop.model.Material;
 import ee.hm.dop.model.Tag;
 import ee.hm.dop.model.taxon.Domain;
 import ee.hm.dop.model.taxon.EducationalContext;
+import ee.hm.dop.model.taxon.Module;
 import ee.hm.dop.model.taxon.Subject;
 import ee.hm.dop.model.taxon.Taxon;
+import ee.hm.dop.model.taxon.Topic;
 import ee.hm.dop.oaipmh.MaterialParser;
 import ee.hm.dop.oaipmh.ParseException;
 import ee.hm.dop.service.AuthorService;
@@ -166,11 +168,8 @@ public class MaterialParserEstCore extends MaterialParser {
                     List<Taxon> domains = new ArrayList<>(((EducationalContext) educationalContext).getDomains());
                     String systemName = getTaxon(node.getTextContent(), Domain.class).getName();
 
-                    for (Taxon taxon : domains) {
-                        if (taxon.getName().equals(systemName)) {
-                            return taxon;
-                        }
-                    }
+                    Taxon taxon = getTaxonByName(domains, systemName);
+                    if (taxon != null) return taxon;
                 }
             } catch (XPathExpressionException e) {
                 //ignore
@@ -190,17 +189,40 @@ public class MaterialParserEstCore extends MaterialParser {
                     List<Taxon> subjects = new ArrayList<>(((Domain) domain).getSubjects());
                     String systemName = getTaxon(node.getTextContent(), Subject.class).getName();
 
-                    for (Taxon taxon : subjects) {
-                        if (taxon.getName().equals(systemName)) {
-                            return taxon;
-                        }
-                    }
+                    Taxon taxon = getTaxonByName(subjects, systemName);
+                    if (taxon != null) return taxon;
                 }
             } catch (XPathExpressionException e) {
                 //ignore
             }
         }
         return domain;
+    }
+
+    @Override
+    protected Taxon setTopic(Node taxonPath, Taxon parent) {
+        for (String tag : taxonMap.keySet()) {
+            try {
+                XPathExpression expr = xpath.compile("./*[local-name()='" + tag + "']/*[local-name()='topic']");
+                Node node = (Node) expr.evaluate(taxonPath, XPathConstants.NODE);
+
+                if (node != null) {
+                    List<Taxon> topics;
+                    if(tag.equals("vocationalTaxon")){
+                        topics = new ArrayList<>(((Module) parent).getTopics());
+                    } else {
+                        topics = new ArrayList<>(((Subject) parent).getTopics());
+                    }
+
+                    String systemName = getTaxon(node.getTextContent(), Topic.class).getName();
+                    Taxon taxon = getTaxonByName(topics, systemName);
+                    if (taxon != null) return taxon;
+                }
+            } catch (XPathExpressionException e) {
+                //ignore
+            }
+        }
+        return parent;
     }
 
     @Override
@@ -234,6 +256,15 @@ public class MaterialParserEstCore extends MaterialParser {
         }
 
         return nodes;
+    }
+
+    private Taxon getTaxonByName(List<Taxon> topics, String systemName) {
+        for (Taxon taxon : topics) {
+            if (taxon.getName().equals(systemName)) {
+                return taxon;
+            }
+        }
+        return null;
     }
 
     private Language getLanguage(Document doc) throws XPathExpressionException {
