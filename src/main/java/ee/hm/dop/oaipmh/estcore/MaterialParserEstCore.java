@@ -23,6 +23,7 @@ import ee.hm.dop.model.Tag;
 import ee.hm.dop.model.taxon.Domain;
 import ee.hm.dop.model.taxon.EducationalContext;
 import ee.hm.dop.model.taxon.Module;
+import ee.hm.dop.model.taxon.Specialization;
 import ee.hm.dop.model.taxon.Subject;
 import ee.hm.dop.model.taxon.Taxon;
 import ee.hm.dop.model.taxon.Topic;
@@ -208,7 +209,7 @@ public class MaterialParserEstCore extends MaterialParser {
 
                 if (node != null) {
                     List<Taxon> topics;
-                    if(tag.equals("vocationalTaxon")){
+                    if (tag.equals("vocationalTaxon")) {
                         topics = new ArrayList<>(((Module) parent).getTopics());
                     } else {
                         topics = new ArrayList<>(((Subject) parent).getTopics());
@@ -216,6 +217,28 @@ public class MaterialParserEstCore extends MaterialParser {
 
                     String systemName = getTaxon(node.getTextContent(), Topic.class).getName();
                     Taxon taxon = getTaxonByName(topics, systemName);
+                    if (taxon != null) return taxon;
+                }
+            } catch (XPathExpressionException e) {
+                //ignore
+            }
+        }
+        return parent;
+    }
+
+    @Override
+    protected Taxon setSpecialization(Node taxonPath, Taxon parent) {
+        for (String tag : taxonMap.keySet()) {
+            try {
+                XPathExpression expr = xpath.compile("./*[local-name()='" + tag + "']/*[local-name()='specialization']");
+                Node node = (Node) expr.evaluate(taxonPath, XPathConstants.NODE);
+
+                if (node != null) {
+                    List<Taxon> specializations;
+                    specializations = new ArrayList<>(((Domain) parent).getSpecializations());
+
+                    String systemName = getTaxon(node.getTextContent(), Specialization.class).getName();
+                    Taxon taxon = getTaxonByName(specializations, systemName);
                     if (taxon != null) return taxon;
                 }
             } catch (XPathExpressionException e) {

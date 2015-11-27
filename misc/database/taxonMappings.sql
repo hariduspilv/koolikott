@@ -32,7 +32,7 @@ insert into EstCoreTaxonMapping(id, taxon, name) values (124, 124, 'Physical edu
 insert into EstCoreTaxonMapping(id, taxon, name) values (125, 125, 'Electives');
 insert into EstCoreTaxonMapping(id, taxon, name) values (126, 126, 'Cross-curricular themes');
 insert into EstCoreTaxonMapping(id, taxon, name) values (127, 127, 'Key competences');
-insert into EstCoreTaxonMapping(id, taxon, name) values (129, 129, 'Computer science');
+insert into EstCoreTaxonMapping(id, taxon, name) values (129, 129, 'Computer Science');
 insert into EstCoreTaxonMapping(id, taxon, name) values (1000, 1000, 'Estonian');
 insert into EstCoreTaxonMapping(id, taxon, name) values (1001, 1001, 'Russian');
 insert into EstCoreTaxonMapping(id, taxon, name) values (1002, 1002, 'Literature');
@@ -148,9 +148,9 @@ insert into EstCoreTaxonMapping(id, taxon, name) values (15010, 15010, 'Muinasae
 insert into EstCoreTaxonMapping(id, taxon, name) values (15011, 15011, 'Tähtsamad arheloogilised kultuurid');
 insert into EstCoreTaxonMapping(id, taxon, name) values (15012, 15012, 'Eesti ühiskonf muinasaja lõpul');
 insert into EstCoreTaxonMapping(id, taxon, name) values (15013, 15013, 'Keskaeg');
-insert into EstCoreTaxonMapping(id, taxon, name) values (15020, 15020, 'Subtopic_for_Preschool_Topic1');
-insert into EstCoreTaxonMapping(id, taxon, name) values (15030, 15030, 'Subtopic_for_Secondary_Education_Topic1');
-insert into EstCoreTaxonMapping(id, taxon, name) values (20000, 20000, 'Computers_and_Networks');
+insert into EstCoreTaxonMapping(id, taxon, name) values (15020, 15020, 'Subtopic for Preschool Topic1');
+insert into EstCoreTaxonMapping(id, taxon, name) values (15030, 15030, 'Subtopic for Secondary Education_Topic1');
+insert into EstCoreTaxonMapping(id, taxon, name) values (20000, 20000, 'Computers and Networks');
 
 -- Waramu Taxon mapping - for testing purposes
 

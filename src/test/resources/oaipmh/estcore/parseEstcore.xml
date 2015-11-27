@@ -111,6 +111,7 @@
                         <taxonPath>
                             <vocationalTaxon>
                                 <domain>Computer Science</domain>
+                                <specialization>Computers and Networks</specialization>
                             </vocationalTaxon>
                         </taxonPath>
                     </classification>

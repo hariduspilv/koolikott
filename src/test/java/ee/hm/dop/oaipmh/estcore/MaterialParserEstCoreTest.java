@@ -32,6 +32,7 @@ import ee.hm.dop.model.ResourceType;
 import ee.hm.dop.model.Tag;
 import ee.hm.dop.model.taxon.Domain;
 import ee.hm.dop.model.taxon.EducationalContext;
+import ee.hm.dop.model.taxon.Specialization;
 import ee.hm.dop.model.taxon.Subject;
 import ee.hm.dop.model.taxon.Topic;
 import ee.hm.dop.oaipmh.ParseException;
@@ -149,11 +150,18 @@ public class MaterialParserEstCoreTest {
         educationalContext1.setDomains(domains);
 
         Domain domain3 = new Domain();
-        domain3.setName("Computer Science");
+        domain3.setName("Computer_science");
         domain3.setEducationalContext(educationalContext4);
         domains = new HashSet<>();
         domains.add(domain3);
         educationalContext4.setDomains(domains);
+
+        Specialization specialization = new Specialization();
+        specialization.setName("Computers_and_Networks");
+        specialization.setDomain(domain3);
+        Set<Specialization> specializations = new HashSet<>();
+        specializations.add(specialization);
+        domain3.setSpecializations(specializations);
 
         Domain domain4 = new Domain();
         domain4.setName("Language_and_literature");
@@ -214,7 +222,8 @@ public class MaterialParserEstCoreTest {
         //third taxon
         expect(taxonService.getTaxonByEstCoreName(educationalContext4.getName(), EducationalContext.class)).andReturn(
                 educationalContext4).anyTimes();
-        expect(taxonService.getTaxonByEstCoreName(domain3.getName(), Domain.class)).andReturn(domain3);
+        expect(taxonService.getTaxonByEstCoreName("Computer Science", Domain.class)).andReturn(domain3);
+        expect(taxonService.getTaxonByEstCoreName("Computers and Networks", Specialization.class)).andReturn(specialization);
 
         //fourth taxon
         expect(taxonService.getTaxonByEstCoreName(educationalContext2.getName(), EducationalContext.class)).andReturn(

@@ -220,7 +220,10 @@ public abstract class MaterialParser {
             for (Node taxonPath : getTaxonPathNodes(doc)) {
                 Taxon parent = setEducationalContext(taxonPath);
                 parent = setDomain(taxonPath, parent);
+
                 parent = setSubject(taxonPath, parent);
+                parent = setSpecialization(taxonPath, parent);
+
                 parent = setTopic(taxonPath, parent);
 
                 taxons.add(parent);
@@ -317,4 +320,7 @@ public abstract class MaterialParser {
     protected abstract Taxon setSubject(Node node, Taxon lastTaxon);
 
     protected abstract Taxon setTopic(Node taxonPath, Taxon parent);
+
+    protected abstract Taxon setSpecialization(Node taxonPath, Taxon parent);
+
 }

@@ -134,6 +134,11 @@ public class MaterialParserWaramu extends MaterialParser {
         return null;
     }
 
+    @Override
+    protected Taxon setSpecialization(Node taxonPath, Taxon parent) {
+        return null;
+    }
+
     private void setTags(Material material, Element lom) {
         List<Tag> tags = getTags(lom);
         material.setTags(tags);
