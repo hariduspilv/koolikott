@@ -122,8 +122,8 @@
                 <md-list-item class="md-3-line" ng-repeat="comment in portfolio.comments">
                   <md-icon class="md-avatar-icon">person</md-icon>
                   <div class="md-list-item-text" layout="column">
-                    <h3>{{comment.creator.name}}</h3>
-                    <h4>{{formatDate(comment.added.millis)}}</h4>
+                    <h3>{{comment.creator.name}} {{comment.creator.surname}}</h3>
+                    <h4>{{comment.added.millis | date:'dd.MM.yyyy HH:mm'}}</h4>
                     <p>{{comment.text}}</p>
                   </div>
                 </md-list-item>
