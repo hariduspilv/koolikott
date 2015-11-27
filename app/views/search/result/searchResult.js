@@ -53,8 +53,10 @@ define(['app'], function(app)
                 params.language = searchService.getLanguage();
             }
 
-            if (searchService.getTargetGroup()) {
-                params.targetGroup = searchService.getTargetGroup();
+            if (searchService.getTargetGroups()) {
+                //for (i = 0; i < searchService.getTargetGroups().length; i++) {
+                    params.targetGroup = searchService.getTargetGroups();
+                //}
             }
 
             serverCallService.makeGet("rest/search", params, searchSuccess, searchFail);

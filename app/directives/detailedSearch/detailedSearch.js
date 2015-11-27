@@ -62,10 +62,10 @@ define(['app'], function(app)
                         searchService.setTaxon(null);
                     }
 
-                    if ($scope.detailedSearch.targetGroup) {
-                        searchService.setTargetGroup($scope.detailedSearch.targetGroup.toLowerCase());
+                    if ($scope.detailedSearch.targetGroups) {
+                        searchService.setTargetGroups($scope.detailedSearch.targetGroups);
                     } else {
-                        searchService.setTargetGroup(null);
+                        searchService.setTargetGroups(null);
                     }
 
                     $location.url(searchService.getURL());
@@ -201,7 +201,7 @@ define(['app'], function(app)
                         getTargetGroupsFail();
                     } else {
                         $scope.targetGroups = data;
-                        $scope.detailedSearch.targetGroup = searchService.getTargetGroup().toUpperCase();
+                        $scope.detailedSearch.targetGroups = searchService.getTargetGroups();
                     }
                 }
 
@@ -212,11 +212,6 @@ define(['app'], function(app)
                 $scope.$watch('detailedSearch.taxon', function(newTaxon, oldTaxon) {
                     if (newTaxon !== oldTaxon) {
                         $scope.detailedSearch.educationalContext = $rootScope.taxonUtils.getEducationalContext($scope.detailedSearch.taxon);
-
-                        // Clear value if target group does not apply to this educational context
-                        if ($scope.detailedSearch.educationalContext.id != 1) {
-                            $scope.detailedSearch.targetGroup = null;
-                        }
                     }
                 }, true);
 

@@ -6,14 +6,14 @@ define(['app'], function(app) {
         var paidURL = "&paid=";
         var typeURL = "&type="
         var languageURL = "&language=";
-        var targetGroupURL = "&targetGroup=";
+        var targetGroupsURL = "&targetGroup=";
 
         var searchQuery = "";
         var searchTaxon = "";
         var searchPaid = "";
         var searchType = "";
         var searchLanguage = "";
-        var searchTargetGroup = "";
+        var searchTargetGroups = [];
 
         function escapeQuery(query) {
             //replace backslashes
@@ -57,8 +57,14 @@ define(['app'], function(app) {
                 searchLanguage = language;
             },
 
-            setTargetGroup : function(targetGroup) {
-                searchTargetGroup = targetGroup;
+            setTargetGroups : function(targetGroups) {
+                if (!Array.isArray(targetGroups)) {
+                    searchTargetGroups = [];
+                    searchTargetGroups.push(targetGroups);
+                    searchTargetGroups = this.arrayToLowerCase(searchTargetGroups);
+                } else {
+                    searchTargetGroups = this.arrayToLowerCase(targetGroups);
+                }
             },
 
             getURL : function() {
@@ -81,8 +87,10 @@ define(['app'], function(app) {
                 if (searchLanguage) {
                     searchURL += languageURL + searchLanguage;
                 }
-                if (searchTargetGroup) {
-                    searchURL += targetGroupURL + searchTargetGroup;
+                if (searchTargetGroups) {
+                    for (i = 0; i < searchTargetGroups.length; i++) {
+                        searchURL += targetGroupsURL + searchTargetGroups[i];
+                    }
                 }
 
                 return searchURL;
@@ -153,15 +161,21 @@ define(['app'], function(app) {
                 return searchLanguage;
             },
 
-            getTargetGroup : function() {
-                if (searchTargetGroup === "") {
+            getTargetGroups : function() {
+                if (!searchTargetGroups || searchTargetGroups.length === 0) {
                     var searchObject = $location.search();
                     if (searchObject.targetGroup) {
-                        return searchObject.targetGroup;
+                        if (!Array.isArray(searchObject.targetGroup)) {
+                            var targetGroupsArray = [];
+                            targetGroupsArray.push(searchObject.targetGroup);
+                            return this.arrayToUpperCase(targetGroupsArray);
+                        } else {
+                            return this.arrayToUpperCase(searchObject.targetGroup);
+                        }
                     }
-                }
+                } 
 
-                return searchTargetGroup;
+                return this.arrayToUpperCase(searchTargetGroups);
             },
 
             clearFieldsNotInSimpleSearch : function() {
@@ -169,11 +183,27 @@ define(['app'], function(app) {
                 searchPaid = '';
                 searchType = '';
                 searchLanguage = '';
-                searchTargetGroup = '';
+                searchTargetGroups = '';
             },
 
             isValidType : function(type) {
                 return type === 'material' || type === 'portfolio' || type === 'all';
+            },
+
+            arrayToLowerCase : function(upperCaseArray) {
+                var lowerCaseArray = [];
+                for (i = 0; i < upperCaseArray.length; i++) {
+                    lowerCaseArray.push(upperCaseArray[i].toLowerCase());
+                }
+                return lowerCaseArray;
+            },
+
+            arrayToUpperCase : function(lowerCaseArray) {
+                var upperCaseArray = [];
+                for (i = 0; i < lowerCaseArray.length; i++) {
+                    upperCaseArray.push(lowerCaseArray[i].toUpperCase());
+                }
+                return upperCaseArray;
             }
         };
     }]);

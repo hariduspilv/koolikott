@@ -1,0 +1,8 @@
+<md-input-container flex>
+  <label data-translate="DETAILED_SEARCH_TARGET_GROUP"></label>
+  <md-select data-ng-model="selectedTargetGroup">
+    <md-option data-ng-repeat="group in groups" value="{{group}}">
+      <span data-translate="TARGET_GROUP_{{group.toUpperCase()}}" />
+    </md-option>
+  </md-select>
+</md-input-container>
