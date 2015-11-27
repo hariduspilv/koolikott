@@ -1,8 +1,14 @@
 <md-card>
           <md-card-content>
             <h1 class="md-accent md-display-1 book-headline" layout="row">
-              {{portfolio.title}}
-              <span flex></span>
+                {{portfolio.title}}
+                <span flex></span>
+                <a href="#" data-ng-show="$root.isEditPortforlioMode" data-ng-click="showEditPortfolioDialog($event)">
+                    <md-tooltip md-direction="left">
+                        Muuda portfoliot
+                    </md-tooltip>
+                    <md-icon>edit</md-icon>
+                </a>
             </h1>
 
             <div layout="row">
