@@ -9,7 +9,6 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 
 import java.util.List;
-import java.util.Set;
 
 import org.easymock.EasyMockRunner;
 import org.easymock.Mock;
@@ -185,15 +184,37 @@ public class MaterialParserTest {
         }
 
         @Override
-        protected void setContextsFromElements(Document doc, Set<Taxon> taxons) {
+        protected Taxon setEducationalContext(Node node) {
+            return null;
         }
 
         @Override
-        protected void setDomains(Document doc, Set<Taxon> taxons) {
+        protected Taxon setDomain(Node node, Taxon lastTaxon) {
+            return null;
         }
 
         @Override
-        protected Taxon getTaxon(String context) {
+        protected Taxon getTaxon(String context, Class level) {
+            return null;
+        }
+
+        @Override
+        protected List<Node> getTaxonPathNodes(Document doc) {
+            return null;
+        }
+
+        @Override
+        protected Taxon setSubject(Node node, Taxon lastTaxon) {
+            return null;
+        }
+
+        @Override
+        protected Taxon setTopic(Node taxonPath, Taxon parent) {
+            return null;
+        }
+
+        @Override
+        protected Taxon setSpecialization(Node taxonPath, Taxon parent) {
             return null;
         }
     }

@@ -22,6 +22,7 @@ import ee.hm.dop.model.Language;
 import ee.hm.dop.model.SearchFilter;
 import ee.hm.dop.model.SearchResult;
 import ee.hm.dop.model.Searchable;
+import ee.hm.dop.model.TargetGroup;
 import ee.hm.dop.model.solr.Document;
 import ee.hm.dop.model.solr.Response;
 import ee.hm.dop.model.solr.SearchResponse;
@@ -166,7 +167,7 @@ public class SearchService {
         filters.add(getTaxonsAsQuery(searchFilter));
         filters.add(isPaidAsQuery(searchFilter));
         filters.add(getTypeAsQuery(searchFilter));
-        filters.add(getTargetGroupAsQuery(searchFilter));
+        filters.add(getTargetGroupsAsQuery(searchFilter));
 
         // Remove empty elements
         filters = filters.stream().filter(f -> !f.isEmpty()).collect(Collectors.toList());
@@ -206,9 +207,20 @@ public class SearchService {
         return "";
     }
 
-    private String getTargetGroupAsQuery(SearchFilter searchFilter) {
-        if (searchFilter.getTargetGroup() != null) {
-            return format("target_group:\"%s\"", searchFilter.getTargetGroup().toString().toLowerCase());
+    private String getTargetGroupsAsQuery(SearchFilter searchFilter) {
+        if (searchFilter.getTargetGroups() != null && !searchFilter.getTargetGroups().isEmpty()) {
+            List<TargetGroup> targetGroups = searchFilter.getTargetGroups();
+            List<String> filters = new ArrayList<>();
+
+            for (TargetGroup targetGroup : targetGroups) {
+                filters.add(format("target_group:\"%s\"", targetGroup.toString().toLowerCase()));
+            }
+
+            if (filters.size() == 1) {
+                return filters.get(0);
+            } else {
+                return "(" + StringUtils.join(filters, " OR ") + ")";
+            }
         }
         return "";
     }

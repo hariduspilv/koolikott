@@ -120,8 +120,19 @@ insert into Translation(translationGroup, translationKey, translation) values (3
 insert into Translation(translationGroup, translationKey, translation) values (3, 'PORTFOLIO_METADATA_TOOLBAR_LABEL', 'Add portfolio basic data');
 insert into Translation(translationGroup, translationKey, translation) values (3, 'BUTTON_CANCEL', 'Cancel');
 insert into Translation(translationGroup, translationKey, translation) values (3, 'BUTTON_CREATE_PORTFOLIO', 'Create portfolio');
+insert into Translation(translationGroup, translationKey, translation) values (3, 'TARGET_GROUP_PRESCHOOL', 'Preschool');
 insert into Translation(translationGroup, translationKey, translation) values (3, 'TARGET_GROUP_ZERO_FIVE', '0-5');
 insert into Translation(translationGroup, translationKey, translation) values (3, 'TARGET_GROUP_SIX_SEVEN', '6-7');
+insert into Translation(translationGroup, translationKey, translation) values (3, 'TARGET_GROUP_BASICEDUCATION', 'Basic education');
+insert into Translation(translationGroup, translationKey, translation) values (3, 'TARGET_GROUP_GRADE1', '1st grade');
+insert into Translation(translationGroup, translationKey, translation) values (3, 'TARGET_GROUP_GRADE2', '2nd grade');
+insert into Translation(translationGroup, translationKey, translation) values (3, 'TARGET_GROUP_GRADE3', '3rd grade');
+insert into Translation(translationGroup, translationKey, translation) values (3, 'TARGET_GROUP_GRADE4', '4th grade');
+insert into Translation(translationGroup, translationKey, translation) values (3, 'TARGET_GROUP_GRADE5', '5th grade');
+insert into Translation(translationGroup, translationKey, translation) values (3, 'TARGET_GROUP_GRADE6', '6th grade');
+insert into Translation(translationGroup, translationKey, translation) values (3, 'TARGET_GROUP_GRADE7', '7th grade');
+insert into Translation(translationGroup, translationKey, translation) values (3, 'TARGET_GROUP_GRADE8', '8th grade');
+insert into Translation(translationGroup, translationKey, translation) values (3, 'TARGET_GROUP_GRADE9', '9th grade');
 insert into Translation(translationGroup, translationKey, translation) values (3, 'TABLE_OF_CONTENTS', 'Table of Contents');
 
 -- Comment translations

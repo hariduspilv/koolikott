@@ -107,7 +107,7 @@
         </entity>
 
         <entity name="Portfolio" pk="uniqueKey"
-            query="select concat('portfolio', id ) as uniqueKey, id, title, summary, taxon as taxon_id, 'portfolio' as type, targetGroup as target_group from Portfolio">
+            query="select concat('portfolio', id ) as uniqueKey, id, title, summary, taxon as taxon_id, 'portfolio' as type from Portfolio">
 
             <!-- Travel up the taxon path -->
 
@@ -175,6 +175,8 @@
             </entity>
 
             <entity name="Chapter" query="select title as chapterTitle, textValue as chapterText from Chapter where portfolio = '${Portfolio.id}' or parentChapter in (select id from Chapter where portfolio = '${Portfolio.id}')" />
+
+            <entity name="Portfolio_TargetGroup" query="select targetGroup as target_group from Portfolio_TargetGroup where portfolio = '${Portfolio.id}'" />
         </entity>
     </document>
 </dataConfig>

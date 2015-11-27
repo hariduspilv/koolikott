@@ -1,7 +1,8 @@
 package ee.hm.dop.rest;
 
+import java.util.List;
+
 import javax.inject.Inject;
-import javax.ws.rs.DefaultValue;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -33,22 +34,25 @@ public class SearchResource {
     @Produces(MediaType.APPLICATION_JSON)
     public SearchResult search(@QueryParam("q") String query, @QueryParam("start") Long start, //
             @QueryParam("taxon") Long taxonId, //
-            @QueryParam("paid") @DefaultValue(value = "true") Boolean paid, //
-            @QueryParam("type") @DefaultValue(value = "") String type, //
-            @QueryParam("language") @DefaultValue(value = "") String languageCode, //
-            @QueryParam("targetGroup") @DefaultValue(value = "") String targetGroupName) {
+            @QueryParam("paid") Boolean paid, //
+            @QueryParam("type") String type, //
+            @QueryParam("language") String languageCode, //
+            @QueryParam("targetGroup") List<TargetGroup> targetGroups) {
 
         Taxon taxon = taxonService.getTaxonById(taxonId);
+
         Language language = languageService.getLanguage(languageCode);
-        type = type.isEmpty() ? null : type;
-        TargetGroup targetGroup = targetGroupName.isEmpty() ? null : TargetGroup.valueOf(targetGroupName.toUpperCase());
+
+        if (paid == null) {
+            paid = true;
+        }
 
         SearchFilter searchFilter = new SearchFilter();
         searchFilter.setTaxon(taxon);
         searchFilter.setPaid(paid);
         searchFilter.setType(type);
         searchFilter.setLanguage(language);
-        searchFilter.setTargetGroup(targetGroup);
+        searchFilter.setTargetGroups(targetGroups);
 
         if (start == null) {
             return searchService.search(query, searchFilter);

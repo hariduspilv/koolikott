@@ -128,11 +128,11 @@ CREATE TABLE Subject (
 CREATE TABLE Specialization (
   id     BIGINT PRIMARY KEY,
   domain BIGINT NOT NULL,
-  
+
   FOREIGN KEY (id)
             REFERENCES Taxon(id)
             ON DELETE RESTRICT,
-  
+
   FOREIGN KEY (domain)
             REFERENCES Domain(id)
             ON DELETE RESTRICT
@@ -155,16 +155,17 @@ CREATE TABLE Topic (
   id      BIGINT PRIMARY KEY,
   subject BIGINT,
   domain  BIGINT,
+
   module  BIGINT,
   
   FOREIGN KEY (id)
             REFERENCES Taxon(id)
             ON DELETE RESTRICT,
-  
+
   FOREIGN KEY (subject)
             REFERENCES Subject(id)
             ON DELETE RESTRICT,
-  
+
   FOREIGN KEY (domain)
             REFERENCES Domain(id)
             ON DELETE RESTRICT,
@@ -177,11 +178,11 @@ CREATE TABLE Topic (
 CREATE TABLE Subtopic (
   id      BIGINT PRIMARY KEY,
   topic BIGINT NOT NULL,
-  
+
   FOREIGN KEY (id)
             REFERENCES Taxon(id)
             ON DELETE RESTRICT,
-  
+
   FOREIGN KEY (topic)
             REFERENCES Topic(id)
             ON DELETE RESTRICT
@@ -485,6 +486,18 @@ CREATE TABLE Portfolio_Tag (
   REFERENCES Tag (id)
     ON DELETE RESTRICT
 );
+
+CREATE TABLE Portfolio_TargetGroup (
+  portfolio   BIGINT NOT NULL, 
+  targetGroup VARCHAR(255),
+
+  PRIMARY KEY (portfolio, targetGroup),
+
+  FOREIGN KEY (portfolio)
+    REFERENCES Portfolio (id)
+    ON DELETE RESTRICT
+);
+
 
 CREATE TABLE Chapter_Material (
   chapter       BIGINT  NOT NULL,

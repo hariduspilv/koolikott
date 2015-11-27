@@ -10,7 +10,9 @@ import java.io.File;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -30,7 +32,9 @@ import ee.hm.dop.model.ResourceType;
 import ee.hm.dop.model.Tag;
 import ee.hm.dop.model.taxon.Domain;
 import ee.hm.dop.model.taxon.EducationalContext;
-import ee.hm.dop.model.taxon.Taxon;
+import ee.hm.dop.model.taxon.Specialization;
+import ee.hm.dop.model.taxon.Subject;
+import ee.hm.dop.model.taxon.Topic;
 import ee.hm.dop.oaipmh.ParseException;
 import ee.hm.dop.service.AuthorService;
 import ee.hm.dop.service.LanguageService;
@@ -128,13 +132,71 @@ public class MaterialParserEstCoreTest {
         EducationalContext educationalContext3 = new EducationalContext();
         educationalContext3.setName("SECONDARYEDUCATION");
 
+        EducationalContext educationalContext4 = new EducationalContext();
+        educationalContext4.setName("VOCATIONALEDUCATION");
+
         Domain domain1 = new Domain();
         domain1.setName("Me_and_the_environment");
         domain1.setEducationalContext(educationalContext2);
+        Set<Domain> domains = new HashSet<>();
+        domains.add(domain1);
+        educationalContext2.setDomains(domains);
 
         Domain domain2 = new Domain();
-        domain2.setName("Mathematics");
+        domain2.setName("Matemaatika");
         domain2.setEducationalContext(educationalContext1);
+        domains = new HashSet<>();
+        domains.add(domain2);
+        educationalContext1.setDomains(domains);
+
+        Domain domain3 = new Domain();
+        domain3.setName("Computer_science");
+        domain3.setEducationalContext(educationalContext4);
+        domains = new HashSet<>();
+        domains.add(domain3);
+        educationalContext4.setDomains(domains);
+
+        Specialization specialization = new Specialization();
+        specialization.setName("Computers_and_Networks");
+        specialization.setDomain(domain3);
+        Set<Specialization> specializations = new HashSet<>();
+        specializations.add(specialization);
+        domain3.setSpecializations(specializations);
+
+        Domain domain4 = new Domain();
+        domain4.setName("Language_and_literature");
+        domain4.setEducationalContext(educationalContext3);
+        domains = new HashSet<>();
+        domains.add(domain4);
+        educationalContext3.setDomains(domains);
+
+        Subject subject1 = new Subject();
+        subject1.setName("Estonian");
+        subject1.setDomain(domain4);
+        Set<Subject> subjects = new HashSet<>();
+        subjects.add(subject1);
+        domain4.setSubjects(subjects);
+
+        Subject subject2 = new Subject();
+        subject2.setName("English");
+        subject2.setDomain(domain1);
+        subjects = new HashSet<>();
+        subjects.add(subject2);
+        domain1.setSubjects(subjects);
+
+        Topic topic1 = new Topic();
+        topic1.setName("Basic_history");
+        topic1.setSubject(subject1);
+        Set<Topic> topics = new HashSet<>();
+        topics.add(topic1);
+        subject1.setTopics(topics);
+
+        Topic topic2 = new Topic();
+        topic2.setName("Estonian_history");
+        topic2.setSubject(subject2);
+        topics = new HashSet<>();
+        topics.add(topic2);
+        subject2.setTopics(topics);
 
         expect(languageService.getLanguage("en")).andReturn(english).times(3);
         expect(languageService.getLanguage("et")).andReturn(estonian).times(2);
@@ -144,14 +206,32 @@ public class MaterialParserEstCoreTest {
         expect(tagService.getTagByName(tag2.getName())).andReturn(tag2);
         expect(resourceTypeService.getResourceTypeByName(resourceType1.getName())).andReturn(resourceType1);
         expect(resourceTypeService.getResourceTypeByName(resourceType2.getName())).andReturn(resourceType2);
-        expect(taxonService.getTaxonByEstCoreName(educationalContext1.getName())).andReturn(
+
+        //first taxon
+        expect(taxonService.getTaxonByEstCoreName(educationalContext1.getName(), EducationalContext.class)).andReturn(
                 educationalContext1).anyTimes();
-        expect(taxonService.getTaxonByEstCoreName(educationalContext2.getName())).andReturn(
-                educationalContext2).anyTimes();
-        expect(taxonService.getTaxonByEstCoreName(educationalContext3.getName())).andReturn(
+        expect(taxonService.getTaxonByEstCoreName(domain2.getName(), Domain.class)).andReturn(domain2);
+
+        //second taxon
+        expect(taxonService.getTaxonByEstCoreName(educationalContext3.getName(), EducationalContext.class)).andReturn(
                 educationalContext3).anyTimes();
-        expect(taxonService.getTaxonByEstCoreName("Mina ja keskkond")).andReturn(domain1).times(2);
-        expect(taxonService.getTaxonByEstCoreName(domain2.getName())).andReturn(domain2);
+        expect(taxonService.getTaxonByEstCoreName("Language and literature", Domain.class)).andReturn(domain4);
+        expect(taxonService.getTaxonByEstCoreName(subject1.getName(), Subject.class)).andReturn(subject1);
+        expect(taxonService.getTaxonByEstCoreName("Ajaloo algõpetus", Topic.class)).andReturn(topic1);
+
+        //third taxon
+        expect(taxonService.getTaxonByEstCoreName(educationalContext4.getName(), EducationalContext.class)).andReturn(
+                educationalContext4).anyTimes();
+        expect(taxonService.getTaxonByEstCoreName("Computer Science", Domain.class)).andReturn(domain3);
+        expect(taxonService.getTaxonByEstCoreName("Computers and Networks", Specialization.class)).andReturn(specialization);
+
+        //fourth taxon
+        expect(taxonService.getTaxonByEstCoreName(educationalContext2.getName(), EducationalContext.class)).andReturn(
+                educationalContext2).anyTimes();
+        expect(taxonService.getTaxonByEstCoreName("Foreign language", Domain.class)).andReturn(domain1);
+        expect(taxonService.getTaxonByEstCoreName(subject2.getName(), Subject.class)).andReturn(subject2);
+        expect(taxonService.getTaxonByEstCoreName("Eesti ajalugu", Topic.class)).andReturn(topic2);
+
 
         LanguageString title1 = new LanguageString();
         title1.setLanguage(english);
@@ -181,13 +261,6 @@ public class MaterialParserEstCoreTest {
         resourceTypes.add(resourceType1);
         resourceTypes.add(resourceType2);
 
-        List<Taxon> taxon = new ArrayList<>();
-        taxon.add(educationalContext1);
-        taxon.add(educationalContext2);
-        taxon.add(educationalContext3);
-        taxon.add(domain1);
-        taxon.add(domain2);
-
         replay(languageService, authorService, tagService, resourceTypeService, taxonService);
 
         Document doc = dBuilder.parse(fXmlFile);
@@ -202,6 +275,7 @@ public class MaterialParserEstCoreTest {
         assertEquals(descriptions, material.getDescriptions());
         assertEquals(tags, material.getTags());
         assertEquals(resourceTypes, material.getResourceTypes());
+        assertEquals(4, material.getTaxons().size());
     }
 
     private File getResourceAsFile(String resourcePath) throws URISyntaxException {

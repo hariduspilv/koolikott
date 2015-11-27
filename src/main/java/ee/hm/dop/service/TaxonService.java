@@ -28,12 +28,12 @@ public class TaxonService {
         return taxonDAO.findAllEducationalContext();
     }
 
-    public Taxon getTaxonByWaramuName(String name) {
-        return taxonDAO.findTaxonByRepoName(name, WARAMU_TAXON_MAPPING);
+    public Taxon getTaxonByWaramuName(String name, Class level) {
+        return taxonDAO.findTaxonByRepoName(name, WARAMU_TAXON_MAPPING, level);
     }
 
-    public Taxon getTaxonByEstCoreName(String name) {
-        return taxonDAO.findTaxonByRepoName(name, EST_CORE_TAXON_MAPPING);
+    public Taxon getTaxonByEstCoreName(String name, Class level) {
+        return taxonDAO.findTaxonByRepoName(name, EST_CORE_TAXON_MAPPING, level);
     }
 
 }

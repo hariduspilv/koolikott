@@ -120,8 +120,19 @@ insert into Translation(translationGroup, translationKey, translation) values (1
 insert into Translation(translationGroup, translationKey, translation) values (1, 'PORTFOLIO_METADATA_TOOLBAR_LABEL', 'Lisa portfolio põhiandmed');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'BUTTON_CANCEL', 'Katkesta');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'BUTTON_CREATE_PORTFOLIO', 'Loo portfolio');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'TARGET_GROUP_PRESCHOOL', 'Eelkool');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'TARGET_GROUP_ZERO_FIVE', '0-5');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'TARGET_GROUP_SIX_SEVEN', '6-7');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'TARGET_GROUP_BASICEDUCATION', 'Põhiharidus');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'TARGET_GROUP_GRADE1', '1. klass');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'TARGET_GROUP_GRADE2', '2. klass');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'TARGET_GROUP_GRADE3', '3. klass');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'TARGET_GROUP_GRADE4', '4. klass');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'TARGET_GROUP_GRADE5', '5. klass');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'TARGET_GROUP_GRADE6', '6. klass');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'TARGET_GROUP_GRADE7', '7. klass');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'TARGET_GROUP_GRADE8', '8. klass');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'TARGET_GROUP_GRADE9', '9. klass');
 
 -- Taxon Domain translations
 insert into Translation(translationGroup, translationKey, translation) values (1, 'DOMAIN_LANGUAGE_AND_SPEECH', 'Keel ja kõne');

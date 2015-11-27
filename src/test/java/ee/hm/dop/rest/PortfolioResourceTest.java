@@ -4,6 +4,7 @@ import static java.lang.String.format;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 import java.util.List;
 
@@ -20,6 +21,7 @@ import ee.hm.dop.common.test.ResourceIntegrationTestBase;
 import ee.hm.dop.model.Chapter;
 import ee.hm.dop.model.Material;
 import ee.hm.dop.model.Portfolio;
+import ee.hm.dop.model.TargetGroup;
 
 public class PortfolioResourceTest extends ResourceIntegrationTestBase {
 
@@ -39,8 +41,8 @@ public class PortfolioResourceTest extends ResourceIntegrationTestBase {
     @Test
     public void getByCreator() {
         String username = "mati.maasikas-vaarikas";
-        List<Portfolio> portfolios = doGet(format(GET_BY_CREATOR_URL, username)).readEntity(
-                new GenericType<List<Portfolio>>() {
+        List<Portfolio> portfolios = doGet(format(GET_BY_CREATOR_URL, username))
+                .readEntity(new GenericType<List<Portfolio>>() {
                 });
 
         assertEquals(2, portfolios.size());
@@ -74,8 +76,8 @@ public class PortfolioResourceTest extends ResourceIntegrationTestBase {
     @Test
     public void getByCreatorNoMaterials() {
         String username = "voldemar.vapustav";
-        List<Portfolio> portfolios = doGet(format(GET_BY_CREATOR_URL, username)).readEntity(
-                new GenericType<List<Portfolio>>() {
+        List<Portfolio> portfolios = doGet(format(GET_BY_CREATOR_URL, username))
+                .readEntity(new GenericType<List<Portfolio>>() {
                 });
 
         assertEquals(0, portfolios.size());
@@ -188,5 +190,9 @@ public class PortfolioResourceTest extends ResourceIntegrationTestBase {
                 + "And can also have    spaces   betwenn    the words on it", chapter.getText());
         assertEquals(0, chapter.getMaterials().size());
         assertEquals(0, chapter.getSubchapters().size());
+
+        assertEquals(2, portfolio.getTargetGroups().size());
+        assertTrue(portfolio.getTargetGroups().contains(TargetGroup.ZERO_FIVE));
+        assertTrue(portfolio.getTargetGroups().contains(TargetGroup.SIX_SEVEN));
     }
 }

@@ -7,6 +7,7 @@ import com.google.inject.servlet.ServletModule;
 import ee.hm.dop.guice.GuiceInjector.Module;
 import ee.hm.dop.service.AuthenticatedUserService;
 import ee.hm.dop.service.LanguageService;
+import ee.hm.dop.service.LicenseTypeService;
 import ee.hm.dop.service.LoginService;
 import ee.hm.dop.service.LogoutService;
 import ee.hm.dop.service.MaterialService;
@@ -36,6 +37,7 @@ public class RestModule extends ServletModule {
         bind(TagService.class);
         bind(TaxonService.class);
         bind(ResourceTypeService.class);
+        bind(LicenseTypeService.class);
         bind(UserService.class);
         bind(LoginService.class);
         bind(HTTPRedirectDeflateEncoder.class);

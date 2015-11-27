@@ -10,10 +10,14 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
 import ee.hm.dop.model.Language;
+import ee.hm.dop.model.LicenseType;
+import ee.hm.dop.model.ResourceType;
 import ee.hm.dop.model.TargetGroup;
 import ee.hm.dop.model.taxon.EducationalContext;
 import ee.hm.dop.model.taxon.Taxon;
 import ee.hm.dop.service.LanguageService;
+import ee.hm.dop.service.LicenseTypeService;
+import ee.hm.dop.service.ResourceTypeService;
 import ee.hm.dop.service.TaxonService;
 
 @Path("learningMaterialMetadata")
@@ -24,6 +28,12 @@ public class LearningMaterialMetadataResource {
 
     @Inject
     private LanguageService languageService;
+
+    @Inject
+    private ResourceTypeService resourceTypeService;
+
+    @Inject
+    private LicenseTypeService licenseTypeService;
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
@@ -51,6 +61,20 @@ public class LearningMaterialMetadataResource {
     @Path("targetGroup")
     public TargetGroup[] getTargetGroups() {
         return TargetGroup.values();
+    }
+
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("resourceType")
+    public List<ResourceType> getAllResourceTypes() {
+        return resourceTypeService.getAllResourceTypes();
+    }
+
+    @GET
+    @Path("licenseType")
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<LicenseType> getAllLicenseTypes() {
+        return licenseTypeService.getAllLicenseTypes();
     }
 
 }

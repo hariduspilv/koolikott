@@ -2,6 +2,7 @@ package ee.hm.dop.dao;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.persistence.TypedQuery;
 
@@ -20,7 +21,7 @@ public class TaxonDAO extends BaseDAO {
     public EducationalContext findEducationalContextByName(String name) {
         TypedQuery<Taxon> findByName = createQuery(
                 "FROM Taxon t WHERE t.name = :name and level = 'EDUCATIONAL_CONTEXT'", Taxon.class) //
-                        .setParameter("name", name);
+                .setParameter("name", name);
 
         return (EducationalContext) getSingleResult(findByName);
     }
@@ -38,11 +39,19 @@ public class TaxonDAO extends BaseDAO {
         return educationalContexts;
     }
 
-    public Taxon findTaxonByRepoName(String name, String repoTable) {
-        TypedQuery<Taxon> findByName = createQuery(
+    public Taxon findTaxonByRepoName(String name, String repoTable, Class level) {
+        List<Taxon> taxons = createQuery(
                 "SELECT t.taxon FROM " + repoTable + " t WHERE t.name = :name", Taxon.class) //
-                .setParameter("name", name);
+                .setParameter("name", name).getResultList();
+        List<Taxon> res = taxons
+                .stream()
+                .filter(t -> (t.getClass().equals(level)))
+                .collect(Collectors.toList());
 
-        return getSingleResult(findByName);
+        if (res != null) {
+            return res.get(0);
+        }
+
+        return null;
     }
 }

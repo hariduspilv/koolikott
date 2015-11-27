@@ -184,7 +184,9 @@ public class PortfolioDAOTest extends DatabaseTestBase {
         assertEquals(0, chapter.getMaterials().size());
         assertEquals(0, chapter.getSubchapters().size());
 
-        assertEquals(TargetGroup.SIX_SEVEN, portfolio.getTargetGroup());
+        assertEquals(2, portfolio.getTargetGroups().size());
+        assertTrue(portfolio.getTargetGroups().contains(TargetGroup.ZERO_FIVE));
+        assertTrue(portfolio.getTargetGroups().contains(TargetGroup.SIX_SEVEN));
     }
 
     @Test

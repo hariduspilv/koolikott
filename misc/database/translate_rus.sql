@@ -120,8 +120,19 @@ insert into Translation(translationGroup, translationKey, translation) values (2
 insert into Translation(translationGroup, translationKey, translation) values (2, 'PORTFOLIO_METADATA_TOOLBAR_LABEL', 'Добавить резюме основных данных');
 insert into Translation(translationGroup, translationKey, translation) values (2, 'BUTTON_CANCEL', 'Отмена');
 insert into Translation(translationGroup, translationKey, translation) values (2, 'BUTTON_CREATE_PORTFOLIO', 'Создать портфолио');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'TARGET_GROUP_PRESCHOOL', 'Дошкольное');
 insert into Translation(translationGroup, translationKey, translation) values (2, 'TARGET_GROUP_ZERO_FIVE', '0-5');
 insert into Translation(translationGroup, translationKey, translation) values (2, 'TARGET_GROUP_SIX_SEVEN', '6-7');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'TARGET_GROUP_BASICEDUCATION', 'Начальное образование');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'TARGET_GROUP_GRADE1', '1-й класс');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'TARGET_GROUP_GRADE2', '2-го класса');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'TARGET_GROUP_GRADE3', '3-го класса');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'TARGET_GROUP_GRADE4', '4 класс');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'TARGET_GROUP_GRADE5', '5 класс');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'TARGET_GROUP_GRADE6', '6-й класс');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'TARGET_GROUP_GRADE7', '7-го класса');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'TARGET_GROUP_GRADE8', '8-го класса');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'TARGET_GROUP_GRADE9', '9-го класса');
 insert into Translation(translationGroup, translationKey, translation) values (2, 'TABLE_OF_CONTENTS', 'Содержание');
 
 -- Comment translations

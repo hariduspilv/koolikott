@@ -344,19 +344,22 @@ insert into Material_Tag(tag, material) values(5, 3919);
 -- Material TargetGroups
 insert into Material_TargetGroup(material, targetGroup) values (1, 'ZERO_FIVE');
 insert into Material_TargetGroup(material, targetGroup) values (1, 'SIX_SEVEN');
+insert into Material_TargetGroup(material, targetGroup) values (12, 'GRADE1');
+insert into Material_TargetGroup(material, targetGroup) values (13, 'GRADE6');
+insert into Material_TargetGroup(material, targetGroup) values (14, 'GRADE9');
 insert into Material_TargetGroup(material, targetGroup) values (36, 'ZERO_FIVE');
 insert into Material_TargetGroup(material, targetGroup) values (37, 'SIX_SEVEN');
 
 -- Portfolio
 
-insert into Portfolio(id, title, taxon, creator, summary, views, created, updated, picture, targetGroup) VALUES (1, 'The new stock market', 1000, 1, 'Some new stufff coming soon.', 325698, '1999-05-02 06:00:01', '2002-05-02 06:00:01', null, null);
-insert into Portfolio(id, title, taxon, creator, summary, views, created, updated, picture, targetGroup) VALUES (2, 'Math for my students', 1001, 5, "You have to read all the textbooks in this portfolio. Don't forgert to make ALL exercices.", 7951, '2000-12-29 16:00:01', '2003-05-02 06:00:01', null, null);
-insert into Portfolio(id, title, taxon, creator, summary, views, created, updated, picture, targetGroup) VALUES (3, 'The new World', null, 3, null, 0, '2014-12-29 10:00:01', null, null, null);
-insert into Portfolio(id, title, taxon, creator, summary, views, created, updated, picture, targetGroup) VALUES (4, 'Biology for my students', 1016, 6, 'A marvellous summary.', 2, '2000-12-29 16:00:01', '2003-05-02 06:00:01', null, null);
-insert into Portfolio(id, title, taxon, creator, summary, views, created, updated, picture, targetGroup) VALUES (5, 'Sports for my students', 1028, 6, 'A brilliant summary.', 3, '2003-12-29 16:00:01', '2003-05-02 06:00:01', null, null);
-insert into Portfolio(id, title, taxon, creator, summary, views, created, updated, picture, targetGroup) VALUES (6, 'English for my students', 1054, 6, 'An intriguing summary.', 4, '2007-12-29 16:00:01', '2003-05-02 06:00:01', null, null);
-insert into Portfolio(id, title, taxon, creator, summary, views, created, updated, picture, targetGroup) VALUES (7, 'Automated test resource title. DO NOT TOUCH!!! Title in estonian', 1002, 6, 'An intriguing summary.', 4, '2007-12-29 16:00:01', '2003-05-02 06:00:01', null, null);
-insert into Portfolio(id, title, taxon, creator, summary, views, created, updated, picture, targetGroup) VALUES (8, 'Test portfolio number 8', 10100, 6, 'Bla bla bla.', 1, '2001-12-29 11:00:01', '2001-05-02 06:01:01', null, 'ZERO_FIVE');
+insert into Portfolio(id, title, taxon, creator, summary, views, created, updated, picture) VALUES (1, 'The new stock market', 1000, 1, 'Some new stufff coming soon.', 325698, '1999-05-02 06:00:01', '2002-05-02 06:00:01', null);
+insert into Portfolio(id, title, taxon, creator, summary, views, created, updated, picture) VALUES (2, 'Math for my students', 1001, 5, "You have to read all the textbooks in this portfolio. Don't forgert to make ALL exercices.", 7951, '2000-12-29 16:00:01', '2003-05-02 06:00:01', null);
+insert into Portfolio(id, title, taxon, creator, summary, views, created, updated, picture) VALUES (3, 'The new World', null, 3, null, 0, '2014-12-29 10:00:01', null, null);
+insert into Portfolio(id, title, taxon, creator, summary, views, created, updated, picture) VALUES (4, 'Biology for my students', 1016, 6, 'A marvellous summary.', 2, '2000-12-29 16:00:01', '2003-05-02 06:00:01', null);
+insert into Portfolio(id, title, taxon, creator, summary, views, created, updated, picture) VALUES (5, 'Sports for my students', 1028, 6, 'A brilliant summary.', 3, '2003-12-29 16:00:01', '2003-05-02 06:00:01', null);
+insert into Portfolio(id, title, taxon, creator, summary, views, created, updated, picture) VALUES (6, 'English for my students', 1054, 6, 'An intriguing summary.', 4, '2007-12-29 16:00:01', '2003-05-02 06:00:01', null);
+insert into Portfolio(id, title, taxon, creator, summary, views, created, updated, picture) VALUES (7, 'Automated test resource title. DO NOT TOUCH!!! Title in estonian', 1002, 6, 'An intriguing summary.', 4, '2007-12-29 16:00:01', '2003-05-02 06:00:01', null);
+insert into Portfolio(id, title, taxon, creator, summary, views, created, updated, picture) VALUES (8, 'Test portfolio number 8', 10100, 6, 'Bla bla bla.', 1, '2001-12-29 11:00:01', '2001-05-02 06:01:01', null);
 
 
 -- Pictures
@@ -402,3 +405,9 @@ insert into Portfolio_Tag(tag, portfolio) values(4, 2);
 insert into Portfolio_Tag(tag, portfolio) values(5, 1);
 insert into Portfolio_Tag(tag, portfolio) values(2, 7);
 insert into Portfolio_Tag(tag, portfolio) values(12, 7);
+
+-- Portfolio TargetGroups
+insert into Portfolio_TargetGroup(portfolio, targetGroup) values (1, 'ZERO_FIVE');
+insert into Portfolio_TargetGroup(portfolio, targetGroup) values (1, 'GRADE1');
+insert into Portfolio_TargetGroup(portfolio, targetGroup) values (8, 'ZERO_FIVE');
+insert into Portfolio_TargetGroup(portfolio, targetGroup) values (8, 'SIX_SEVEN');
