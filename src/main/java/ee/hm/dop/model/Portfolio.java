@@ -5,7 +5,9 @@ import static javax.persistence.FetchType.EAGER;
 import java.util.List;
 
 import javax.persistence.CascadeType;
+import javax.persistence.CollectionTable;
 import javax.persistence.Column;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -90,7 +92,10 @@ public class Portfolio implements Searchable {
     private boolean hasPicture;
 
     @Enumerated(EnumType.STRING)
-    private TargetGroup targetGroup;
+    @Column(name = "targetGroup")
+    @ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(name = "Portfolio_TargetGroup", joinColumns = @JoinColumn(name = "portfolio") )
+    private List<TargetGroup> targetGroups;
 
     @Override
     public Long getId() {
@@ -193,12 +198,12 @@ public class Portfolio implements Searchable {
         this.hasPicture = hasPicture;
     }
 
-    public TargetGroup getTargetGroup() {
-        return targetGroup;
+    public List<TargetGroup> getTargetGroups() {
+        return targetGroups;
     }
 
-    public void setTargetGroup(TargetGroup targetGroup) {
-        this.targetGroup = targetGroup;
+    public void setTargetGroups(List<TargetGroup> targetGroups) {
+        this.targetGroups = targetGroups;
     }
 
     public List<Comment> getComments() {

@@ -495,8 +495,21 @@ public class SearchServiceTest {
     public void searchWithTargetGroupFilter() {
         String query = "umm";
         SearchFilter searchFilter = new SearchFilter();
-        searchFilter.setTargetGroup(TargetGroup.SIX_SEVEN);
+        searchFilter.setTargetGroups(Arrays.asList(TargetGroup.SIX_SEVEN));
         String tokenizedQuery = "(umm) AND target_group:\"six_seven\"";
+        long start = 0;
+
+        List<Searchable> searchables = Arrays.asList(createMaterial(9L), createMaterial(2L), createPortfolio(2L));
+
+        testSearch(query, tokenizedQuery, searchables, start, searchFilter);
+    }
+
+    @Test
+    public void searchWithMultipleTargetGroupsFilter() {
+        String query = "umm";
+        SearchFilter searchFilter = new SearchFilter();
+        searchFilter.setTargetGroups(Arrays.asList(TargetGroup.SIX_SEVEN, TargetGroup.ZERO_FIVE));
+        String tokenizedQuery = "(umm) AND (target_group:\"six_seven\" OR target_group:\"zero_five\")";
         long start = 0;
 
         List<Searchable> searchables = Arrays.asList(createMaterial(9L), createMaterial(2L), createPortfolio(2L));

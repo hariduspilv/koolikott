@@ -487,6 +487,18 @@ CREATE TABLE Portfolio_Tag (
     ON DELETE RESTRICT
 );
 
+CREATE TABLE Portfolio_TargetGroup (
+  portfolio   BIGINT NOT NULL, 
+  targetGroup VARCHAR(255),
+
+  PRIMARY KEY (portfolio, targetGroup),
+
+  FOREIGN KEY (portfolio)
+    REFERENCES Portfolio (id)
+    ON DELETE RESTRICT
+);
+
+
 CREATE TABLE Chapter_Material (
   chapter       BIGINT  NOT NULL,
   material      BIGINT  NOT NULL,
