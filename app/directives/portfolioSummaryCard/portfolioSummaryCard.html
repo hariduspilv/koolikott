@@ -36,13 +36,13 @@
 
                 <!-- tags -->
                 <p>
-                  <small class="md-caption">
+                    <small class="md-caption">
                     <span data-translate="DETAIL_VIEW_TAGS"></span>:
-                  </small>
+                    </small>
                 </p>
 
                 <md-chips data-ng-model="portfolio.tags" readonly="true">
-                  <md-chip-template>{{tag}}</md-chip-template>
+                    <md-chip-template>{{$chip.name}}</md-chip-template>
                 </md-chips>
                 <!-- /tags -->
               </div>
