@@ -36,7 +36,8 @@ require.config({
     jsog: '../bower_components/jsog/lib/JSOG',
     ngInfiniteScroll: '../bower_components/ngInfiniteScroll/build/ng-infinite-scroll',
     jquery: '../bower_components/jquery/dist/jquery',
-    commons: 'utils/commons'
+    commons: 'utils/commons',
+    dopTargetGroupSelector: 'directives/targetGroupSelector/targetGroupSelector'
   },
   shim: {
     angular: {
@@ -128,7 +129,8 @@ define([
   'dopTaxonSelector',
   'dopTableOfContents',
   'jsog',
-  'ngInfiniteScroll'
+  'ngInfiniteScroll',
+  'dopTargetGroupSelector'
 ], function (jquery, angular, app) {
   'use strict';
   var $html = angular.element(document.getElementsByTagName('html')[0]);
