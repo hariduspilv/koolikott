@@ -4,67 +4,37 @@ define(['app'], function(app)
       $anchorScroll.yOffset = 50;
     }]);
 
-    app.controller('editPortfolioController', ['$scope', 'serverCallService', 'translationService', '$mdSidenav', '$mdDialog', '$mdToast', '$document', '$rootScope',
-        function($scope, serverCallService, translationService, $mdSidenav, $mdDialog, $mdToast, $document, $rootScope) {
-            $rootScope.isEditPortforlioMode = true;
-    	
-            $scope.portfolio = {
-                title: "Matemaatika",
-                educationalContext: null,
-                fieldId: 0,
-                fields: [],
-                topicId: 0,
-                topics: [],
-                subTopicId: 0,
-                subTopics: [],
-                tags: ['Tag1', 'Tag2'],
-                chapters: []
-            };
+    app.controller('editPortfolioController', ['$scope', 'translationService', 'serverCallService', '$route', '$location', 'alertService', '$rootScope', 'authenticatedUserService',
+        function($scope, translationService, serverCallService, $route, $location, alertService, $rootScope, authenticatedUserService) {
 
-            // example data
+            function init() {
+				if ($rootScope.savedPortfolio) {
+					$scope.portfolio = $rootScope.savedPortfolio;
+				} else {
+					getPortfolio(getPortfolioSuccess, getPortfolioFail);
+				}
+				$rootScope.isEditPortforlioMode = true;
+			}
 
-            $scope.portfolio.chapters.push({
-                title: 'Esimene peatükk',
-                subchapters: [
-                    {
-                        title: 'Alampeatükk 1',
-                        materials: []
-                    },
-                    {
-                        title: 'Alampeatükk 2',
-                        materials: []
-                    }
-                ]
-            },
-            {
-                title: 'Teine peatükk',
-                subchapters: [
-                    {
-                        title: 'Alampeatükk 1',
-                        materials: []
-                    }
-                ]
-            },
-            {
-                title: 'Kolmas peatükk',
-                subchapters: [
-                    {
-                        title: 'Alampeatükk 1',
-                        materials: []
-                    },
-                    {
-                        title: 'Alampeatükk 2',
-                        materials: []
-                    },
-                    {
-                        title: 'Alampeatükk 3',
-                        materials: []
-                    }
-                ]
-            });
+			function getPortfolio(success, fail) {
+				var portfolioId = $route.current.params.id;
+				serverCallService.makeGet("rest/portfolio?id=" + portfolioId, {}, success, fail);
+			}
 
-            // example data end
+	        function getPortfolioSuccess(portfolio) {
+	            if (isEmpty(portfolio)) {
+	            	getPortfolioFail();
+	            } else {
+	                $scope.portfolio = portfolio;
+	            }
+	    	}
 
+	    	function getPortfolioFail() {
+                $rootScope.isEditPortforlioMode = false;
+	            log('No data returned by getting portfolio.');
+	            alertService.setErrorAlert('ERROR_PORTFOLIO_NOT_FOUND');
+	            $location.url("/");
+	    	}
 
             $scope.toggleSidenav = function (menuId) {
                 $mdSidenav(menuId).toggle();
@@ -117,6 +87,8 @@ define(['app'], function(app)
 
                 $mdToast.show($mdToast.simple().position('right top').content('Portfolio saved!'));
             };
+            
+            init();
     	}
     ]);
 });
