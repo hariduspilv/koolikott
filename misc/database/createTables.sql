@@ -126,11 +126,11 @@ CREATE TABLE Subject (
 CREATE TABLE Specialization (
   id     BIGINT PRIMARY KEY,
   domain BIGINT NOT NULL,
-  
+
   FOREIGN KEY (id)
             REFERENCES Taxon(id)
             ON DELETE RESTRICT,
-  
+
   FOREIGN KEY (domain)
             REFERENCES Domain(id)
             ON DELETE RESTRICT
@@ -140,15 +140,15 @@ CREATE TABLE Topic (
   id      BIGINT PRIMARY KEY,
   subject BIGINT,
   domain  BIGINT,
-  
+
   FOREIGN KEY (id)
             REFERENCES Taxon(id)
             ON DELETE RESTRICT,
-  
+
   FOREIGN KEY (subject)
             REFERENCES Subject(id)
             ON DELETE RESTRICT,
-  
+
   FOREIGN KEY (domain)
             REFERENCES Domain(id)
             ON DELETE RESTRICT
@@ -157,11 +157,11 @@ CREATE TABLE Topic (
 CREATE TABLE Subtopic (
   id      BIGINT PRIMARY KEY,
   topic BIGINT NOT NULL,
-  
+
   FOREIGN KEY (id)
             REFERENCES Taxon(id)
             ON DELETE RESTRICT,
-  
+
   FOREIGN KEY (topic)
             REFERENCES Topic(id)
             ON DELETE RESTRICT

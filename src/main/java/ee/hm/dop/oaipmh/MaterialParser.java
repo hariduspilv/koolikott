@@ -76,20 +76,22 @@ public abstract class MaterialParser {
 
     private void removeDuplicateTaxons(Material material) {
         List<Taxon> taxons = material.getTaxons();
+        List<Taxon> uniqueTaxons = new ArrayList<>(taxons);
+
         for (int i = 0; i < taxons.size(); i++) {
             Taxon first = taxons.get(i);
 
-            for (int j = i + 1; j < taxons.size(); j++) {
+            for (int j = 0; j < taxons.size(); j++) {
                 Taxon second = taxons.get(j);
 
-                if (second.containsTaxon(first)) {
-                    taxons.remove(first);
-                } else if(first.containsTaxon(second)) {
-                    taxons.remove(second);
+                if (second.containsTaxon(first) && j != i) {
+                    uniqueTaxons.remove(first);
+                } else if (first.containsTaxon(second) && j != i) {
+                    uniqueTaxons.remove(second);
                 }
             }
         }
-        material.setTaxons(taxons);
+        material.setTaxons(uniqueTaxons);
     }
 
     protected void setIdentifier(Material material, Document doc) {
@@ -200,13 +202,11 @@ public abstract class MaterialParser {
             Node node = nl.item(i);
             String context = getElementValue(node);
 
-            EducationalContext educationalContext = (EducationalContext) getTaxon(context);
+            EducationalContext educationalContext = (EducationalContext) getTaxon(context, EducationalContext.class);
             if (educationalContext != null) {
                 taxons.add(educationalContext);
             }
         }
-
-        setContextsFromElements(doc, taxons);
     }
 
     protected String getElementValue(Node node) throws XPathExpressionException {
@@ -215,12 +215,25 @@ public abstract class MaterialParser {
 
     protected void setTaxon(Material material, Document doc) {
         Set<Taxon> taxons = new HashSet<>();
+
         try {
-            setEducationalContexts(doc, taxons, getPathToContext());
-            setDomains(doc, taxons);
+            for (Node taxonPath : getTaxonPathNodes(doc)) {
+                Taxon parent = setEducationalContext(taxonPath);
+                parent = setDomain(taxonPath, parent);
+                parent = setSubject(taxonPath, parent);
+
+                taxons.add(parent);
+            }
         } catch (Exception e) {
             //ignore if there is no taxon for a material
         }
+
+        try {
+            setEducationalContexts(doc, taxons, getPathToContext());
+        } catch (XPathExpressionException e) {
+            e.printStackTrace();
+        }
+
         material.setTaxons(new ArrayList<>(taxons));
     }
 
@@ -292,9 +305,13 @@ public abstract class MaterialParser {
 
     protected abstract String getPathToLocation();
 
-    protected abstract void setContextsFromElements(Document doc, Set<Taxon> taxons);
+    protected abstract Taxon setEducationalContext(Node node);
 
-    protected abstract void setDomains(Document doc, Set<Taxon> taxons);
+    protected abstract Taxon setDomain(Node node, Taxon lastTaxon);
 
-    protected abstract Taxon getTaxon(String context);
+    protected abstract Taxon getTaxon(String context, Class level);
+
+    protected abstract List<Node> getTaxonPathNodes(Document doc);
+
+    protected abstract Taxon setSubject(Node node, Taxon lastTaxon);
 }

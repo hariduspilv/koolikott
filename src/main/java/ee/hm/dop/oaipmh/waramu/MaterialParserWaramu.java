@@ -2,7 +2,6 @@ package ee.hm.dop.oaipmh.waramu;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 import javax.inject.Inject;
 import javax.xml.xpath.XPathConstants;
@@ -106,14 +105,28 @@ public class MaterialParserWaramu extends MaterialParser {
     }
 
     @Override
-    protected void setContextsFromElements(Document doc, Set<Taxon> taxons) {}
+    protected Taxon setEducationalContext(Node node) {
+        return null;
+    }
 
     @Override
-    protected void setDomains(Document doc, Set<Taxon> taxons) {}
+    protected Taxon setDomain(Node node, Taxon lastTaxon) {
+        return null;
+    }
 
     @Override
-    protected Taxon getTaxon(String context) {
-        return taxonService.getTaxonByWaramuName(context);
+    protected Taxon getTaxon(String context, Class level) {
+        return taxonService.getTaxonByWaramuName(context, level);
+    }
+
+    @Override
+    protected List<Node> getTaxonPathNodes(Document doc) {
+        return null;
+    }
+
+    @Override
+    protected Taxon setSubject(Node node, Taxon lastTaxon) {
+        return null;
     }
 
     private void setTags(Material material, Element lom) {

@@ -114,7 +114,7 @@ public class MaterialParserWaramuTest {
         expect(tagService.getTagByName("grammaire")).andReturn(tag);
         expect(resourceTypeService.getResourceTypeByName(resourceType1.getName())).andReturn(resourceType1);
         expect(resourceTypeService.getResourceTypeByName(resourceType2.getName())).andReturn(resourceType2);
-        expect(taxonService.getTaxonByWaramuName("COMPULSORYEDUCATION")).andReturn(
+        expect(taxonService.getTaxonByWaramuName("COMPULSORYEDUCATION", EducationalContext.class)).andReturn(
                 educationalContext);
         expect(authorService.getAuthorByFullName(author.getName(), author.getSurname())).andReturn(author);
 

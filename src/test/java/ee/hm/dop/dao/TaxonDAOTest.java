@@ -52,11 +52,12 @@ public class TaxonDAOTest extends DatabaseTestBase {
 
     @Test
     public void findEducationalContextByRepoName() {
-        Long id =  2L;
+        Long id = 2L;
         String waramuName = "COMPULSORYEDUCATION";
         String systemName = "BASICEDUCATION";
 
-        EducationalContext educationalContext = (EducationalContext) taxonDAO.findTaxonByRepoName(waramuName, "WaramuTaxonMapping");
+        EducationalContext educationalContext = (EducationalContext) taxonDAO
+                .findTaxonByRepoName(waramuName, "WaramuTaxonMapping", EducationalContext.class);
 
         assertNotNull(educationalContext);
         assertNotNull(educationalContext.getId());
@@ -64,7 +65,8 @@ public class TaxonDAOTest extends DatabaseTestBase {
         assertEquals(systemName, educationalContext.getName());
         assertEquals(0, educationalContext.getDomains().size());
 
-        educationalContext = (EducationalContext) taxonDAO.findTaxonByRepoName("basicEducation", "EstCoreTaxonMapping");
+        educationalContext = (EducationalContext) taxonDAO
+                .findTaxonByRepoName("basicEducation", "EstCoreTaxonMapping", EducationalContext.class);
 
         assertNotNull(educationalContext);
         assertNotNull(educationalContext.getId());

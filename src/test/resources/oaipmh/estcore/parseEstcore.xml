@@ -96,25 +96,30 @@
                     <classification>
                         <taxonPath>
                             <preschoolTaxon>
-                                <domain>Mathematics</domain>
+                                <domain>Matemaatika</domain>
                             </preschoolTaxon>
                         </taxonPath>
                         <taxonPath>
                             <gymnasiumTaxon>
                                 <curriculum>KLRÕK2011</curriculum>
-                                <domain>Mina ja keskkond</domain>
+                                <domain>Language and literature</domain>
                                 <subject>Estonian</subject>
                                 <topic>Ajaloo algõpetus</topic>
                                 <subtopic>Ajaarvamine</subtopic>
                             </gymnasiumTaxon>
+                        </taxonPath>
+                        <taxonPath>
+                            <vocationalTaxon>
+                                <domain>Computer Science</domain>
+                            </vocationalTaxon>
                         </taxonPath>
                     </classification>
                     <classification>
                         <taxonPath>
                             <basicSchoolTaxon>
                                 <curriculum>KLRÕK2011</curriculum>
-                                <domain>Mina ja keskkond</domain>
-                                <subject>Estonian</subject>
+                                <domain>Foreign language</domain>
+                                <subject>English</subject>
                                 <topic>Ajaloo algõpetus</topic>
                                 <subtopic>Ajaarvamine</subtopic>
                             </basicSchoolTaxon>
