@@ -14,6 +14,7 @@ import org.junit.Test;
 
 import ee.hm.dop.common.test.ResourceIntegrationTestBase;
 import ee.hm.dop.model.Language;
+import ee.hm.dop.model.ResourceType;
 import ee.hm.dop.model.TargetGroup;
 import ee.hm.dop.model.taxon.Domain;
 import ee.hm.dop.model.taxon.EducationalContext;
@@ -27,6 +28,7 @@ public class LearningMaterialMetadataResourceTest extends ResourceIntegrationTes
     private static final String GET_TAXON_URL = "learningMaterialMetadata/taxon?taxonId=%s";
     private static final String GET_LANGUAGES_URL = "learningMaterialMetadata/language";
     private static final String GET_TARGET_GROUPS_URL = "learningMaterialMetadata/targetGroup";
+    private static final String GET_RESOURCE_TYPES_URL = "learningMaterialMetadata/resourceType";
 
     @Test
     public void getEducationalContext() {
@@ -95,6 +97,19 @@ public class LearningMaterialMetadataResourceTest extends ResourceIntegrationTes
         List<TargetGroup> actualTargetGroups = Arrays.asList(result);
 
         assertTrue(actualTargetGroups.containsAll(expectedTargetGroups));
+    }
+
+    @Test
+    public void getResourceTypesGroups() {
+        List<ResourceType> result = doGet(GET_RESOURCE_TYPES_URL, new GenericType<List<ResourceType>>() {
+        });
+
+        assertEquals(7, result.size());
+
+        List<String> expected = Arrays.asList("TEXTBOOK1", "EXPERIMENT1", "COURSE");
+        List<String> actual = result.stream().map(r -> r.getName()).collect(Collectors.toList());
+
+        assertTrue(actual.containsAll(expected));
     }
 
 }

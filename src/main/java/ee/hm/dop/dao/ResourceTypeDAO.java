@@ -1,5 +1,7 @@
 package ee.hm.dop.dao;
 
+import java.util.List;
+
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
@@ -24,4 +26,12 @@ public class ResourceTypeDAO {
 
         return resource;
     }
+
+    public List<ResourceType> findAllResourceTypes() {
+        List<ResourceType> resultList = entityManager.createQuery("select r FROM ResourceType r", ResourceType.class)
+                .getResultList();
+
+        return resultList;
+    }
+
 }
