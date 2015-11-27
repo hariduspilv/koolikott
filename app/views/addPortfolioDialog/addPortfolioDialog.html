@@ -12,7 +12,7 @@
     <md-content class="md-padding">
       <md-input-container flex>
         <label>Pealkiri</label>
-        <input id="add-portfolio-title-input" placeholder="Näiteks: Bioloogia töövihik">
+        <input data-ng-model="portfolio.title" id="add-portfolio-title-input" placeholder="Näiteks: Bioloogia töövihik">
       </md-input-container>
 
       <md-input-container flex>
@@ -32,7 +32,7 @@
       <md-button id="add-portfolio-cancel-button" data-ng-click="cancel()">
         <span data-translate="BUTTON_CANCEL"></span>
       </md-button>
-      <md-button id="add-portfolio-create-button" ng-click="forward()" class="md-primary">
+      <md-button id="add-portfolio-create-button" ng-click="create()" class="md-primary">
         <ng-md-icon icon="arrow_forward"></ng-md-icon>
         <span data-translate="BUTTON_CREATE_PORTFOLIO"></span>
       </md-button>

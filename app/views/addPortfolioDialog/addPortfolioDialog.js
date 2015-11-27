@@ -1,27 +1,41 @@
 define(['app'], function(app)
 {
-    app.controller('addPortfolioDialog', ['$scope', '$mdDialog', '$location',
-        function($scope, $mdDialog, $location) {
+    app.controller('addPortfolioDialog', ['$scope', '$mdDialog', '$location', 'serverCallService', '$rootScope',
+        function($scope, $mdDialog, $location, serverCallService, $rootScope) {
 
             $scope.cancel = function() {
                 $mdDialog.hide();
             };
 
-            $scope.forward = function() {
-                $mdDialog.hide();
-
-                $location.path('/editPortfolio');
+            $scope.create = function() {
+            	var url = "rest/portfolio/create";
+            	var taxon = $scope.portfolio.taxon;
+            	$scope.portfolio.taxon = null;
+            	
+				var params = {
+					'taxon': taxon,
+					'portfolio': $scope.portfolio
+				};
+				serverCallService.makePost(url, params, createPortfolioSuccess, createPortfolioFailed);
             }
+            
+            function createPortfolioSuccess(portfolio) {
+            	if (isEmpty(portfolio)) {
+            		createPortfolioFailed();
+	            } else {
+	            	$rootScope.portfolio = portfolio;
+	            	$mdDialog.hide();
+	                $location.url('/portfolio/edit?id=' + portfolio.id);
+	            }
+			}
+			
+			function createPortfolioFailed(){
+				log('Creating portfolio failed.');
+			}
 
             $scope.portfolio = {
-            	educationalContext: null,
-                fieldId: 0,
-				fields: [],
-				topicId: 0,
-				topics: [],
-				subTopicId: 0,
-				subTopics: [],
-                tags: ['Tag1', 'Tag2']
+            	type: ".Portfolio",
+            	tags:[]
             };
         }
     ]);
