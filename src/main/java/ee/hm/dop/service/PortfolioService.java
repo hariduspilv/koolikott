@@ -75,7 +75,7 @@ public class PortfolioService {
         safePortfolio.setTitle(portfolio.getTitle());
         safePortfolio.setSummary(portfolio.getSummary());
         safePortfolio.setTags(portfolio.getTags());
-        safePortfolio.setTargetGroup(portfolio.getTargetGroup());
+        safePortfolio.setTargetGroups(portfolio.getTargetGroups());
         safePortfolio.setTaxon(portfolio.getTaxon());
         return safePortfolio;
     }
