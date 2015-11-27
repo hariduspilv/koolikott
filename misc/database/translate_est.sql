@@ -120,6 +120,7 @@ insert into Translation(translationGroup, translationKey, translation) values (1
 insert into Translation(translationGroup, translationKey, translation) values (1, 'PORTFOLIO_METADATA_TOOLBAR_LABEL', 'Lisa portfolio põhiandmed');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'BUTTON_CANCEL', 'Katkesta');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'BUTTON_CREATE_PORTFOLIO', 'Loo portfolio');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'TARGET_GROUP_PRESCHOOL', 'Eelkool');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'TARGET_GROUP_ZERO_FIVE', '0-5');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'TARGET_GROUP_SIX_SEVEN', '6-7');
 

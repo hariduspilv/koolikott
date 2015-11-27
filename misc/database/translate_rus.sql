@@ -120,6 +120,7 @@ insert into Translation(translationGroup, translationKey, translation) values (2
 insert into Translation(translationGroup, translationKey, translation) values (2, 'PORTFOLIO_METADATA_TOOLBAR_LABEL', 'Добавить резюме основных данных');
 insert into Translation(translationGroup, translationKey, translation) values (2, 'BUTTON_CANCEL', 'Отмена');
 insert into Translation(translationGroup, translationKey, translation) values (2, 'BUTTON_CREATE_PORTFOLIO', 'Создать портфолио');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'TARGET_GROUP_PRESCHOOL', 'Дошкольное');
 insert into Translation(translationGroup, translationKey, translation) values (2, 'TARGET_GROUP_ZERO_FIVE', '0-5');
 insert into Translation(translationGroup, translationKey, translation) values (2, 'TARGET_GROUP_SIX_SEVEN', '6-7');
 insert into Translation(translationGroup, translationKey, translation) values (2, 'TABLE_OF_CONTENTS', 'Содержание');
