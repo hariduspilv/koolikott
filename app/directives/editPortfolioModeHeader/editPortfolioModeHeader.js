@@ -12,7 +12,7 @@ define(['app'], function(app)
 
                 $scope.exitEditPortfolioMode = function() {
                     $rootScope.isEditPortforlioMode = false;
-                    $location.path("/");
+                    $location.url("/");
                 };
             }
         };
