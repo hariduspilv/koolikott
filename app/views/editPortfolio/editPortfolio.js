@@ -8,7 +8,16 @@ define(['app'], function(app)
         function($scope, serverCallService, translationService, $mdSidenav, $mdDialog, $mdToast, $document, $rootScope) {
             $rootScope.isEditPortforlioMode = true;
     	
-    		$scope.portfolio = {
+            $scope.portfolio = {
+                title: "Matemaatika",
+                educationalContext: null,
+                fieldId: 0,
+                fields: [],
+                topicId: 0,
+                topics: [],
+                subTopicId: 0,
+                subTopics: [],
+                tags: ['Tag1', 'Tag2'],
                 chapters: []
             };
 
