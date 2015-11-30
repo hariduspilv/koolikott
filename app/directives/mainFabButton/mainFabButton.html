@@ -1,0 +1,21 @@
+<md-fab-speed-dial class="md-fab-bottom-right md-fling main-fab-button" md-open="isOpen" md-direction="up" data-ng-class="md-fling">
+  <md-fab-trigger>
+    <md-button aria-label="menu" class="md-fab">
+      <md-icon>add</md-icon>
+    </md-button>
+  </md-fab-trigger>
+  <md-fab-actions>
+    <md-button aria-label="Add portfolio" class="md-fab md-raised md-mini" data-ng-click="showAddPortfolioDialog($event)">
+      <md-tooltip md-direction="left">
+        <span data-translate="ADD_PORTFOLIO"></span>
+      </md-tooltip>
+      <md-icon>book</md-icon>
+    </md-button>
+    <md-button aria-label="Add material" class="md-fab md-raised md-mini" data-ng-click="showAddMaterialDialog($event)">
+      <md-tooltip md-direction="left">
+        <span data-translate="ADD_MATERIAL"></span>
+      </md-tooltip>
+      <md-icon>description</md-icon>
+    </md-button>
+  </md-fab-actions>
+</md-fab-speed-dial>

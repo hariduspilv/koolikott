@@ -33,7 +33,7 @@ define(['app'], function(app) {
 				});
 			},
 			
-	        makeGet : function(url, params, successCallback, errorCallback) {
+	        makeGet : function(url, params, successCallback, errorCallback, finallyCallback) {
 	        	var headers = {};
 				var user = authenticatedUserService.getUser();
 
@@ -58,7 +58,7 @@ define(['app'], function(app) {
 					} else {
 						errorCallback(data, status);
 					}
-				});
+				}).finally(finallyCallback);
 	        },
 
 	        makeJsonp : function(url, params, successCallback, errorCallback) {

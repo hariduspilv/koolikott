@@ -29,10 +29,16 @@ ul {
 @import "sidebar.scss";
 @import "sidenav.scss";
 @import "sidenav-menu.scss";
+@import "fab-buttons.scss";
+@import "file-upload.scss";
+@import "collapsible.scss";
 
 // Page specific stylesheets
 @import "pages/add.scss";
 @import "pages/view-portfolio.scss";
+
+// Dialog specific stylesheets
+@import "dialogs/add-material.scss";
 
 // Scaffolding
 html, body {
@@ -67,6 +73,6 @@ html, body {
   background-position: left center;
 }
 
-.md-button.md-fab {
+md-fab-speed-dial {
   position: fixed !important;
 }

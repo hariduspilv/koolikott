@@ -13,8 +13,9 @@ require.config({
     alertService: 'services/alertService',
     inputValueControl: 'directives/input-value-control',
     dopDetailedSearch: 'directives/detailedSearch/detailedSearch',
-    addPortfolioFabButton: 'directives/addPortfolioFabButton/addPortfolioFabButton',
+    dopMainFabButton: 'directives/mainFabButton/mainFabButton',
     addPortfolioDialogController: 'views/addPortfolioDialog/addPortfolioDialog',
+    addMaterialDialogController: 'views/addMaterialDialog/addMaterialDialog',
     loginDialogController: 'views/loginDialog/loginDialog',
     dopTableOfContents: 'directives/tableOfContents/tableOfContents',
     angular: '../bower_components/angular/angular',
@@ -37,7 +38,10 @@ require.config({
     ngInfiniteScroll: '../bower_components/ngInfiniteScroll/build/ng-infinite-scroll',
     jquery: '../bower_components/jquery/dist/jquery',
     commons: 'utils/commons',
-    dopTargetGroupSelector: 'directives/targetGroupSelector/targetGroupSelector'
+    dopTargetGroupSelector: 'directives/targetGroupSelector/targetGroupSelector',
+    'ng-file-upload-shim': '../bower_components/ng-file-upload-shim/ng-file-upload-shim',
+    'ng-file-upload': '../bower_components/ng-file-upload/ng-file-upload',
+    'angular-material-data-table': '../bower_components/angular-material-data-table/dist/md-data-table.min'
   },
   shim: {
     angular: {
@@ -78,6 +82,12 @@ require.config({
     'angular-scroll': [
       'angular'
     ],
+    'ng-file-upload-shim': [
+      'angular'
+    ],
+    'ng-file-upload': [
+      'angular'
+    ],
     ngInfiniteScroll: [
       'angular',
       'jquery'
@@ -110,6 +120,8 @@ define([
   'angular-material-icons',
   'angular-screenfull',
   'angular-scroll',
+  'ng-file-upload-shim',
+  'ng-file-upload',
   'translationService',
   'authenticatedUserService',
   'serverCallService',
@@ -123,8 +135,9 @@ define([
   'alertService',
   'inputValueControl',
   'dopDetailedSearch',
-  'addPortfolioFabButton',
+  'dopMainFabButton',
   'addPortfolioDialogController',
+  'addMaterialDialogController',
   'loginDialogController',
   'dopTaxonSelector',
   'dopTableOfContents',

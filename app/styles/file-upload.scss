@@ -1,0 +1,17 @@
+.drop-box {
+    border: 1px dashed #e0e0e0;
+    height: 125px;
+    text-align: center;
+	cursor: pointer;
+	border-radius: 4px;
+	
+	transition: border .25s;
+	
+	&.dragover {
+    	border-style: solid;
+	}
+	
+	&.dragover-err {
+    	border-color: red;
+	}
+}

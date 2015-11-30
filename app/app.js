@@ -10,7 +10,8 @@ define(['app.routes', 'services/dependencyResolver'], function(config, dependenc
       'youtube-embed',
       'angularScreenfull',
       'duScroll',
-      'infinite-scroll'
+      'infinite-scroll',
+      'ngFileUpload'
     ]);
 
     app.config(
