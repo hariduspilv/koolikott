@@ -13,7 +13,7 @@ define(['app'], function(app)
             	$scope.portfolio.taxon = null;
             	
 				var params = {
-					'taxon': taxon,
+					'taxonId': taxon.id,
 					'portfolio': $scope.portfolio
 				};
 				serverCallService.makePost(url, params, createPortfolioSuccess, createPortfolioFailed);
