@@ -4,14 +4,14 @@
       <md-button class="md-icon-button" ng-click="toggleSidenav()" hide-gt-md aria-label="Menu">
         <md-icon>menu</md-icon>
       </md-button>
-
-      <md-button aria-label="Search" class="md-icon-button" ng-click="showSearch = !showSearch">
-        <ng-md-icon icon="search"></ng-md-icon>
-      </md-button>
-      <md-input-container md-theme="input" flex>
-        <label>&nbsp;</label>
-        <input ng-click="showSearch = !showSearch">
-      </md-input-container>
+      <div class="navbar-search" layout="row" flex>
+        <md-button aria-label="Search" class="md-icon-button" ng-click="showSearch = !showSearch">
+          <ng-md-icon icon="search"></ng-md-icon>
+        </md-button>
+        <md-input-container md-theme="input" flex>
+          <input ng-click="showSearch = !showSearch">
+        </md-input-container>
+      </div>
       <md-button aria-label="Open Settings" class="md-icon-button" ng-click="showFilter = showSearch = !showFilter" >
         <ng-md-icon icon="filter_list"></ng-md-icon>
       </md-button>
@@ -47,16 +47,17 @@
 </md-toolbar>
 
 <div class="md-toolbar-expandable" ng-show="showSearch">
-  <md-toolbar class="md-accent">
+  <md-toolbar class="md-hue-1">
     <div layout-align="start start" layout="row" layout-sm="column">
       <div class="md-toolbar-tools" flex="100" flex-gt-sm="90">
-        <md-button aria-label="Search" ng-click="showSearch = !showSearch" class="md-icon-button">
-          <ng-md-icon icon="search"></ng-md-icon>
-        </md-button>
-        <md-input-container md-theme="input" flex>
-          <label>&nbsp;</label>
-          <input ng-model="search.who" placeholder="Otsi">
-        </md-input-container>
+        <div class="navbar-search" layout="row" flex>
+          <md-button aria-label="Search" ng-click="showSearch = !showSearch" class="md-icon-button">
+            <ng-md-icon icon="search"></ng-md-icon>
+          </md-button>
+          <md-input-container md-theme="input" flex>
+            <input ng-model="search.who" placeholder="Otsi">
+          </md-input-container>
+        </div>
 
         <md-button aria-label="Open Settings" class="md-icon-button" ng-click="showFilter = !showFilter">
           <ng-md-icon icon="filter_list"></ng-md-icon>

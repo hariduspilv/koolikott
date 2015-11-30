@@ -6,12 +6,14 @@
 
     <div flex-gt-md="75" flex="none">
       <div layout="row" layout-align-gt-md="center center" layout-align="center end">
-        <md-button aria-label="Search" class="md-icon-button md-padding" id="header-show-search-button" data-ng-click="showSearch = !showSearch">
-          <ng-md-icon icon="search"></ng-md-icon>
-        </md-button>
-        <md-input-container class="md-padding" hide show-gt-md flex>
-          <input ng-click="showSearch = !showSearch" id="header-show-search-input">
-        </md-input-container>
+        <div class="navbar-search" layout="row" flex>
+          <md-button aria-label="Search" class="md-icon-button" id="header-show-search-button" data-ng-click="showSearch = !showSearch">
+            <ng-md-icon icon="search"></ng-md-icon>
+          </md-button>
+          <md-input-container class="" hide show-gt-md flex>
+            <input ng-click="showSearch = !showSearch" id="header-show-search-input">
+          </md-input-container>
+        </div>
         <md-button aria-label="Open Settings" class="md-icon-button" id="header-show-detailed-search-icon" data-ng-click="toggleDetailSearch()" >
           <ng-md-icon icon="filter_list"></ng-md-icon>
         </md-button>
@@ -71,19 +73,21 @@
   </div>
 </md-toolbar>
 
-<div class="md-toolbar-expandable" data-ng-show="showSearch">
+<div class="md-toolbar-expandable md-whiteframe-1dp" data-ng-show="showSearch">
   <md-toolbar class="md-hue-1">
     <div layout="row" layout-align="center center">
       <div flex-gt-md="80" flex="100">
         <div class="md-toolbar-tools" layout="row" layout-align="center center">
-          <md-button aria-label="Search" class="md-icon-button" data-ng-click="search()" data-ng-disabled="detailedSearch.isVisible">
-            <ng-md-icon icon="search" id="header-simple-search-button"></ng-md-icon>
-          </md-button>
-
-          <md-input-container class="md-padding" flex>
-            <label hidden="hidden">&nbsp;</label>
-            <input id="header-simple-search-input" data-ng-keydown="$event.which === 13 && search()" data-ng-model="searchFields.searchQuery" placeholder="{{'SEARCH' | translate}}" data-ng-disabled="detailedSearch.isVisible" />
-          </md-input-container>
+          <div class="navbar-search" layout="row" flex>
+            <md-button aria-label="Search" class="md-icon-button" data-ng-click="search()" data-ng-disabled="detailedSearch.isVisible">
+              <ng-md-icon icon="search" id="header-simple-search-button"></ng-md-icon>
+            </md-button>
+  
+            <md-input-container flex>
+              <label hidden="hidden">&nbsp;</label>
+              <input id="header-simple-search-input" data-ng-keydown="$event.which === 13 && search()" data-ng-model="searchFields.searchQuery" placeholder="{{'SEARCH' | translate}}" data-ng-disabled="detailedSearch.isVisible" />
+            </md-input-container>
+          </div>
 
           <md-button aria-label="Open Settings" class="md-icon-button" id="header-simple-search-toggle-detailed-search-icon" data-ng-click="toggleDetailSearch()" >
             <ng-md-icon icon="filter_list"></ng-md-icon>
