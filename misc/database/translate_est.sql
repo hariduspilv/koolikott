@@ -119,7 +119,12 @@ insert into Translation(translationGroup, translationKey, translation) values (1
 insert into Translation(translationGroup, translationKey, translation) values (1, 'PORTFOLIO_SUMMARY', 'Kokkuvõte');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'PORTFOLIO_METADATA_TOOLBAR_LABEL', 'Lisa portfolio põhiandmed');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'BUTTON_CANCEL', 'Katkesta');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'BUTTON_ADD', 'Lisa');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'BUTTON_REMOVE', 'Eemalda');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'BUTTON_CREATE_PORTFOLIO', 'Loo portfolio');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'BUTTON_CREATE_MATERIAL', 'Loo materjal');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'BUTTON_NEXT_STEP', 'Järgmine samm');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'BUTTON_PREVIOUS_STEP', 'Eelmine samm');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'TARGET_GROUP_PRESCHOOL', 'Eelkool');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'TARGET_GROUP_ZERO_FIVE', '0-5');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'TARGET_GROUP_SIX_SEVEN', '6-7');
@@ -213,7 +218,35 @@ insert into Translation(translationGroup, translationKey, translation) values (1
 insert into Translation(translationGroup, translationKey, translation) values (1, 'TAXON_PATH_SUBTOPIC', 'Alamteema');
 
 -- Language name translations, more can be added using the same conventions for the translation key
+insert into Translation(translationGroup, translationKey, translation) values (1, 'LANGUAGE', 'Keel');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'LANGUAGE_ESTONIAN', 'Eesti');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'LANGUAGE_RUSSIAN', 'Vene');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'LANGUAGE_ENGLISH', 'Inglise');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'LANGUAGE_NORTHERN_SAMI', 'Põhjasaami');
+
+-- Add Material translations
+insert into Translation(translationGroup, translationKey, translation) values (1, 'ADD_MATERIAL', 'Lisa materjal');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'MATERIAL_URL', 'Materjali URL');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'MATERIAL_URL_IS_MANDATORY', 'Materjali URL on kohustuslik');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'MATERIAL_URL_IS_INVALID', 'Materjali URL ei vasta formaadile');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'MATERIAL_TITLE_DESCRIPTION', 'Pealkiri ja kirjeldus');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'MATERIAL_ADDITIONAL_DATA', 'Lisaandmed');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'MATERIAL_TITLE', 'Pealkiri');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'MATERIAL_DESCRIPTION', 'Kirjeldus');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'MATERIAL_PUBLISHER', 'Kirjastaja');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'MATERIAL_AUTHOR', 'Autor');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'MATERIAL_PHOTO', 'Materjali pilt');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'MATERIAL_PHOTO_UPLOAD_HELP', 'Lohista pilt siia või vali pilt arvutist vajutades siia');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'MATERIAL_PHOTO_PREVIEW', 'Eelvaade');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'MATERIAL_TAXON', 'Liigitus');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'MATERIAL_ADD_TAG', 'Lisa märksõna');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'MATERIAL_REMOVE_TAG', 'Eemalda märksõna');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'MATERIAL_REMOVE_TAG_HINT', 'Vajuta x märksõna kustutamiseks');
+
+-- Add Material tab translations
+insert into Translation(translationGroup, translationKey, translation) values (1, 'MATERIAL_TAB_URL', 'URL');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'MATERIAL_TAB_MAIN_DATA', 'Põhiandmed');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'MATERIAL_TAB_ADDITIONAL_DATA', 'Lisaandmed');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'MATERIAL_TAB_TYPE', 'Tüüp');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'MATERIAL_TAB_PICTURE', 'Pilt');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'MATERIAL_TAB_TAXON', 'Liigitus');

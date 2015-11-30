@@ -119,7 +119,12 @@ insert into Translation(translationGroup, translationKey, translation) values (2
 insert into Translation(translationGroup, translationKey, translation) values (2, 'PORTFOLIO_SUMMARY', 'Описание');
 insert into Translation(translationGroup, translationKey, translation) values (2, 'PORTFOLIO_METADATA_TOOLBAR_LABEL', 'Добавить резюме основных данных');
 insert into Translation(translationGroup, translationKey, translation) values (2, 'BUTTON_CANCEL', 'Отмена');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'BUTTON_ADD', 'Добавить');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'BUTTON_REMOVE', 'Удалить');
 insert into Translation(translationGroup, translationKey, translation) values (2, 'BUTTON_CREATE_PORTFOLIO', 'Создать портфолио');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'BUTTON_CREATE_MATERIAL', 'Создать материал');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'BUTTON_NEXT_STEP', 'Следующий шаг');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'BUTTON_PREVIOUS_STEP', 'Предыдущий шаг');
 insert into Translation(translationGroup, translationKey, translation) values (2, 'TARGET_GROUP_PRESCHOOL', 'Дошкольное');
 insert into Translation(translationGroup, translationKey, translation) values (2, 'TARGET_GROUP_ZERO_FIVE', '0-5');
 insert into Translation(translationGroup, translationKey, translation) values (2, 'TARGET_GROUP_SIX_SEVEN', '6-7');
@@ -212,7 +217,35 @@ insert into Translation(translationGroup, translationKey, translation) values (2
 insert into Translation(translationGroup, translationKey, translation) values (2, 'TAXON_PATH_SUBTOPIC', 'Подраздел');
 
 -- Language name translations, more can be added using the same conventions for the translation key
+insert into Translation(translationGroup, translationKey, translation) values (1, 'LANGUAGE', 'язык');
 insert into Translation(translationGroup, translationKey, translation) values (2, 'LANGUAGE_ESTONIAN', 'Эстонский');
 insert into Translation(translationGroup, translationKey, translation) values (2, 'LANGUAGE_RUSSIAN', 'Русский');
 insert into Translation(translationGroup, translationKey, translation) values (2, 'LANGUAGE_ENGLISH', 'Английский');
 insert into Translation(translationGroup, translationKey, translation) values (2, 'LANGUAGE_NORTHERN_SAMI', 'Северная Сами');
+
+-- Add Material translations
+insert into Translation(translationGroup, translationKey, translation) values (1, 'ADD_MATERIAL', 'Добавить материал');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'MATERIAL_URL', 'Материал URL');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'MATERIAL_URL_IS_MANDATORY', 'Материал URL требуется');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'MATERIAL_URL_IS_INVALID', 'Материал URL не правильный формат');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'MATERIAL_TITLE_DESCRIPTION', 'Название и описание');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'MATERIAL_ADDITIONAL_DATA', 'Дополнительная название');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'MATERIAL_TITLE', 'заглавие');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'MATERIAL_DESCRIPTION', 'Описание');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'MATERIAL_PUBLISHER', 'издатель');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'MATERIAL_AUTHOR', 'Aвтор');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'MATERIAL_PHOTO', 'Материал картина');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'MATERIAL_PHOTO_UPLOAD_HELP', 'Перетащите картина здесь или выберите из компьютера');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'MATERIAL_PHOTO_PREVIEW', 'предварительный просмотр');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'MATERIAL_TAXON', 'Cистематика');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'MATERIAL_ADD_TAG', 'Добавить тег');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'MATERIAL_REMOVE_TAG', 'Удалить тег');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'MATERIAL_REMOVE_TAG_HINT', 'Нажмите, чтобы удалить х тег');
+
+-- Add Material tab translations
+insert into Translation(translationGroup, translationKey, translation) values (1, 'MATERIAL_TAB_URL', 'URL');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'MATERIAL_TAB_MAIN_DATA', 'Основные данные');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'MATERIAL_TAB_ADDITIONAL_DATA', 'Дополнительные данные');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'MATERIAL_TAB_TYPE', 'Тип');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'MATERIAL_TAB_PICTURE', 'Картина');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'MATERIAL_TAB_TAXON', 'Cистематика');
