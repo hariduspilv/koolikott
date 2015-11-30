@@ -94,7 +94,7 @@ define(['app.routes', 'services/dependencyResolver'], function(config, dependenc
         $mdThemingProvider.theme('input', 'default').primaryPalette('grey');
     }
 
-    app.run(function($rootScope) {
+    app.run(function($rootScope, authenticatedUserService) {
     	class TaxonUtils {
     		constructor() {
     			this.EDUCATIONAL_CONTEXT = '.EducationalContext';
@@ -183,6 +183,13 @@ define(['app.routes', 'services/dependencyResolver'], function(config, dependenc
     	}
 
     	$rootScope.taxonUtils = new TaxonUtils();
+    	
+    	$rootScope.$watch(function () {
+            return authenticatedUserService.isAuthenticated();
+        }, function (isAuthenticated) {
+        	$rootScope.showAddPortfolioFabButton = isAuthenticated;
+        },true
+    );
 	});
 
    return app;
