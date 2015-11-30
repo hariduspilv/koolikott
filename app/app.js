@@ -188,7 +188,7 @@ define(['app.routes', 'services/dependencyResolver'], function(config, dependenc
     	$rootScope.$watch(function () {
             return authenticatedUserService.isAuthenticated();
         }, function (isAuthenticated) {
-        	$rootScope.showAddPortfolioFabButton = isAuthenticated;
+        	$rootScope.showMainFabButton = isAuthenticated;
         },true
     );
 	});
