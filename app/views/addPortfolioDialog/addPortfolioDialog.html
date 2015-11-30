@@ -35,7 +35,8 @@
       </md-button>
       <md-button id="add-portfolio-create-button" ng-click="create()" class="md-primary">
         <ng-md-icon icon="arrow_forward"></ng-md-icon>
-        <span data-translate="BUTTON_CREATE_PORTFOLIO"></span>
+        <span ng-if="!edit_portfolio" data-translate="BUTTON_CREATE_PORTFOLIO"></span>
+        <span ng-if="edit_portfolio" data-translate="BUTTON_EDIT_PORTFOLIO"></span>
       </md-button>
     </div>
   </form>

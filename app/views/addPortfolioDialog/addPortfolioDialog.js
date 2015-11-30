@@ -42,6 +42,10 @@ define(['app'], function(app)
                 $scope.portfolio = portfolio;
             }
             
+            if($scope.portfolio.id != null) {
+                $scope.edit_portfolio = true;
+            }
+            
         }
     ]);
 });
