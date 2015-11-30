@@ -8,7 +8,7 @@ define(['app'], function(app)
                 controller: function ($scope, $mdDialog) {
                     $scope.ShowAddPortfolioDialog = function() {
                         
-                        var default_portfolio = {
+                        var portfolio = {
                             type: ".Portfolio",
                             tags:[]
                         };
@@ -16,7 +16,7 @@ define(['app'], function(app)
                         $mdDialog.show({
                             controller: 'addPortfolioDialog',
                             templateUrl: 'views/addPortfolioDialog/addPortfolioDialog.html',
-                            locals:{portfolio: default_portfolio}
+                            locals:{portfolio: portfolio}
                         });
                         
                     };

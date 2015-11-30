@@ -10,9 +10,6 @@ define(['app'], function(app)
                 $scope.showEditPortfolioDialog = function($event) {
                     $event.preventDefault();
 
-                    console.log("dopPortfolioSummaryCard");
-                    console.log($scope.portfolio);
-
                     $mdDialog.show({
                         controller: 'addPortfolioDialog',
                         templateUrl: 'views/addPortfolioDialog/addPortfolioDialog.html',
