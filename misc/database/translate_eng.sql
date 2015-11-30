@@ -253,6 +253,7 @@ insert into Translation(translationGroup, translationKey, translation) values (3
 insert into Translation(translationGroup, translationKey, translation) values (3, 'MATERIAL_DESCRIPTION', 'Description');
 insert into Translation(translationGroup, translationKey, translation) values (3, 'MATERIAL_PUBLISHER', 'Publisher');
 insert into Translation(translationGroup, translationKey, translation) values (3, 'MATERIAL_AUTHOR', 'Author');
+insert into Translation(translationGroup, translationKey, translation) values (3, 'MATERIAL_TAGS', 'Tags');
 insert into Translation(translationGroup, translationKey, translation) values (3, 'MATERIAL_PHOTO', 'Material picture');
 insert into Translation(translationGroup, translationKey, translation) values (3, 'MATERIAL_PHOTO_UPLOAD_HELP', 'Drag picture here or select from computer');
 insert into Translation(translationGroup, translationKey, translation) values (3, 'MATERIAL_PHOTO_PREVIEW', 'Preview');

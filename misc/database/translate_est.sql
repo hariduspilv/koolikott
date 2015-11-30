@@ -237,6 +237,7 @@ insert into Translation(translationGroup, translationKey, translation) values (1
 insert into Translation(translationGroup, translationKey, translation) values (1, 'MATERIAL_DESCRIPTION', 'Kirjeldus');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'MATERIAL_PUBLISHER', 'Kirjastaja');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'MATERIAL_AUTHOR', 'Autor');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'MATERIAL_TAGS', 'Märksõnad');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'MATERIAL_PHOTO', 'Materjali pilt');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'MATERIAL_PHOTO_UPLOAD_HELP', 'Lohista pilt siia või vali pilt arvutist vajutades siia');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'MATERIAL_PHOTO_PREVIEW', 'Eelvaade');

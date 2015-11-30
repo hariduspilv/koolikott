@@ -236,6 +236,7 @@ insert into Translation(translationGroup, translationKey, translation) values (2
 insert into Translation(translationGroup, translationKey, translation) values (2, 'MATERIAL_DESCRIPTION', 'Описание');
 insert into Translation(translationGroup, translationKey, translation) values (2, 'MATERIAL_PUBLISHER', 'издатель');
 insert into Translation(translationGroup, translationKey, translation) values (2, 'MATERIAL_AUTHOR', 'Aвтор');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'MATERIAL_TAGS', 'Ключевые слова');
 insert into Translation(translationGroup, translationKey, translation) values (2, 'MATERIAL_PHOTO', 'Материал картина');
 insert into Translation(translationGroup, translationKey, translation) values (2, 'MATERIAL_PHOTO_UPLOAD_HELP', 'Перетащите картина здесь или выберите из компьютера');
 insert into Translation(translationGroup, translationKey, translation) values (2, 'MATERIAL_PHOTO_PREVIEW', 'предварительный просмотр');
