@@ -1,8 +1,8 @@
 define(['app'], function(app)
 {
-    app.controller('addPortfolioDialog', ['$scope', '$mdDialog', '$location', 'serverCallService', '$rootScope',
-        function($scope, $mdDialog, $location, serverCallService, $rootScope) {
-
+    app.controller('addPortfolioDialog', ['$scope', '$mdDialog', '$location', 'serverCallService', '$rootScope', 'portfolio',
+        function($scope, $mdDialog, $location, serverCallService, $rootScope, portfolio) {
+        
             $scope.cancel = function() {
                 $mdDialog.hide();
             };
@@ -33,10 +33,15 @@ define(['app'], function(app)
 				log('Creating portfolio failed.');
 			}
 
-            $scope.portfolio = {
-            	type: ".Portfolio",
-            	tags:[]
-            };
+            if(portfolio == null) {
+                $scope.portfolio = {
+                    type: ".Portfolio",
+                    tags:[]
+                };
+            } else {
+                $scope.portfolio = portfolio;
+            }
+            
         }
     ]);
 });
