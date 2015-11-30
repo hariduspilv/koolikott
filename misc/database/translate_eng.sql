@@ -120,12 +120,12 @@ insert into Translation(translationGroup, translationKey, translation) values (3
 insert into Translation(translationGroup, translationKey, translation) values (3, 'PORTFOLIO_SUMMARY', 'Summary');
 insert into Translation(translationGroup, translationKey, translation) values (3, 'PORTFOLIO_METADATA_TOOLBAR_LABEL', 'Add portfolio basic data');
 insert into Translation(translationGroup, translationKey, translation) values (3, 'BUTTON_CANCEL', 'Cancel');
-insert into Translation(translationGroup, translationKey, translation) values (1, 'BUTTON_ADD', 'Add');
-insert into Translation(translationGroup, translationKey, translation) values (1, 'BUTTON_REMOVE', 'Remove');
+insert into Translation(translationGroup, translationKey, translation) values (3, 'BUTTON_ADD', 'Add');
+insert into Translation(translationGroup, translationKey, translation) values (3, 'BUTTON_REMOVE', 'Remove');
 insert into Translation(translationGroup, translationKey, translation) values (3, 'BUTTON_CREATE_PORTFOLIO', 'Create portfolio');
-insert into Translation(translationGroup, translationKey, translation) values (1, 'BUTTON_CREATE_MATERIAL', 'Create material');
-insert into Translation(translationGroup, translationKey, translation) values (1, 'BUTTON_NEXT_STEP', 'Next step');
-insert into Translation(translationGroup, translationKey, translation) values (1, 'BUTTON_PREVIOUS_STEP', 'Previous step');
+insert into Translation(translationGroup, translationKey, translation) values (3, 'BUTTON_CREATE_MATERIAL', 'Create material');
+insert into Translation(translationGroup, translationKey, translation) values (3, 'BUTTON_NEXT_STEP', 'Next step');
+insert into Translation(translationGroup, translationKey, translation) values (3, 'BUTTON_PREVIOUS_STEP', 'Previous step');
 insert into Translation(translationGroup, translationKey, translation) values (3, 'BUTTON_EDIT_PORTFOLIO', 'Save');
 insert into Translation(translationGroup, translationKey, translation) values (3, 'TARGET_GROUP_PRESCHOOL', 'Preschool');
 insert into Translation(translationGroup, translationKey, translation) values (3, 'TARGET_GROUP_ZERO_FIVE', '0-5');
@@ -236,35 +236,35 @@ insert into Translation(translationGroup, translationKey, translation) values (3
 insert into Translation(translationGroup, translationKey, translation) values (3, 'TAXON_PATH_SUBTOPIC', 'Subtopic');
 
 -- Language name translations, more can be added using the same conventions for the translation key
-insert into Translation(translationGroup, translationKey, translation) values (1, 'LANGUAGE', 'Language');
+insert into Translation(translationGroup, translationKey, translation) values (3, 'LANGUAGE', 'Language');
 insert into Translation(translationGroup, translationKey, translation) values (3, 'LANGUAGE_ESTONIAN', 'Estonian');
 insert into Translation(translationGroup, translationKey, translation) values (3, 'LANGUAGE_RUSSIAN', 'Russian');
 insert into Translation(translationGroup, translationKey, translation) values (3, 'LANGUAGE_ENGLISH', 'English');
 insert into Translation(translationGroup, translationKey, translation) values (3, 'LANGUAGE_NORTHERN_SAMI', 'Northern Sami');
 
 -- Add Material translations
-insert into Translation(translationGroup, translationKey, translation) values (1, 'ADD_MATERIAL', 'Add material');
-insert into Translation(translationGroup, translationKey, translation) values (1, 'MATERIAL_URL', 'Material URL');
-insert into Translation(translationGroup, translationKey, translation) values (1, 'MATERIAL_URL_IS_MANDATORY', 'Material URL is required');
-insert into Translation(translationGroup, translationKey, translation) values (1, 'MATERIAL_URL_IS_INVALID', 'Material URL is not correct format');
-insert into Translation(translationGroup, translationKey, translation) values (1, 'MATERIAL_TITLE_DESCRIPTION', 'Title and description');
-insert into Translation(translationGroup, translationKey, translation) values (1, 'MATERIAL_ADDITIONAL_DATA', 'Additional title');
-insert into Translation(translationGroup, translationKey, translation) values (1, 'MATERIAL_TITLE', 'Title');
-insert into Translation(translationGroup, translationKey, translation) values (1, 'MATERIAL_DESCRIPTION', 'Description');
-insert into Translation(translationGroup, translationKey, translation) values (1, 'MATERIAL_PUBLISHER', 'Publisher');
-insert into Translation(translationGroup, translationKey, translation) values (1, 'MATERIAL_AUTHOR', 'Author');
-insert into Translation(translationGroup, translationKey, translation) values (1, 'MATERIAL_PHOTO', 'Material picture');
-insert into Translation(translationGroup, translationKey, translation) values (1, 'MATERIAL_PHOTO_UPLOAD_HELP', 'Drag picture here or select from computer');
-insert into Translation(translationGroup, translationKey, translation) values (1, 'MATERIAL_PHOTO_PREVIEW', 'Preview');
-insert into Translation(translationGroup, translationKey, translation) values (1, 'MATERIAL_TAXON', 'Taxonomy');
-insert into Translation(translationGroup, translationKey, translation) values (1, 'MATERIAL_ADD_TAG', 'Add tag');
-insert into Translation(translationGroup, translationKey, translation) values (1, 'MATERIAL_REMOVE_TAG', 'Remove tag');
-insert into Translation(translationGroup, translationKey, translation) values (1, 'MATERIAL_REMOVE_TAG_HINT', 'Click x to remove tag');
+insert into Translation(translationGroup, translationKey, translation) values (3, 'ADD_MATERIAL', 'Add material');
+insert into Translation(translationGroup, translationKey, translation) values (3, 'MATERIAL_URL', 'Material URL');
+insert into Translation(translationGroup, translationKey, translation) values (3, 'MATERIAL_URL_IS_MANDATORY', 'Material URL is required');
+insert into Translation(translationGroup, translationKey, translation) values (3, 'MATERIAL_URL_IS_INVALID', 'Material URL is not correct format');
+insert into Translation(translationGroup, translationKey, translation) values (3, 'MATERIAL_TITLE_DESCRIPTION', 'Title and description');
+insert into Translation(translationGroup, translationKey, translation) values (3, 'MATERIAL_ADDITIONAL_DATA', 'Additional title');
+insert into Translation(translationGroup, translationKey, translation) values (3, 'MATERIAL_TITLE', 'Title');
+insert into Translation(translationGroup, translationKey, translation) values (3, 'MATERIAL_DESCRIPTION', 'Description');
+insert into Translation(translationGroup, translationKey, translation) values (3, 'MATERIAL_PUBLISHER', 'Publisher');
+insert into Translation(translationGroup, translationKey, translation) values (3, 'MATERIAL_AUTHOR', 'Author');
+insert into Translation(translationGroup, translationKey, translation) values (3, 'MATERIAL_PHOTO', 'Material picture');
+insert into Translation(translationGroup, translationKey, translation) values (3, 'MATERIAL_PHOTO_UPLOAD_HELP', 'Drag picture here or select from computer');
+insert into Translation(translationGroup, translationKey, translation) values (3, 'MATERIAL_PHOTO_PREVIEW', 'Preview');
+insert into Translation(translationGroup, translationKey, translation) values (3, 'MATERIAL_TAXON', 'Taxonomy');
+insert into Translation(translationGroup, translationKey, translation) values (3, 'MATERIAL_ADD_TAG', 'Add tag');
+insert into Translation(translationGroup, translationKey, translation) values (3, 'MATERIAL_REMOVE_TAG', 'Remove tag');
+insert into Translation(translationGroup, translationKey, translation) values (3, 'MATERIAL_REMOVE_TAG_HINT', 'Click x to remove tag');
 
 -- Add Material tab translations
-insert into Translation(translationGroup, translationKey, translation) values (1, 'MATERIAL_TAB_URL', 'URL');
-insert into Translation(translationGroup, translationKey, translation) values (1, 'MATERIAL_TAB_MAIN_DATA', 'Main data');
-insert into Translation(translationGroup, translationKey, translation) values (1, 'MATERIAL_TAB_ADDITIONAL_DATA', 'Additional data');
-insert into Translation(translationGroup, translationKey, translation) values (1, 'MATERIAL_TAB_TYPE', 'Type');
-insert into Translation(translationGroup, translationKey, translation) values (1, 'MATERIAL_TAB_PICTURE', 'Picture');
-insert into Translation(translationGroup, translationKey, translation) values (1, 'MATERIAL_TAB_TAXON', 'Taxonomy');
+insert into Translation(translationGroup, translationKey, translation) values (3, 'MATERIAL_TAB_URL', 'URL');
+insert into Translation(translationGroup, translationKey, translation) values (3, 'MATERIAL_TAB_MAIN_DATA', 'Main data');
+insert into Translation(translationGroup, translationKey, translation) values (3, 'MATERIAL_TAB_ADDITIONAL_DATA', 'Additional data');
+insert into Translation(translationGroup, translationKey, translation) values (3, 'MATERIAL_TAB_TYPE', 'Type');
+insert into Translation(translationGroup, translationKey, translation) values (3, 'MATERIAL_TAB_PICTURE', 'Picture');
+insert into Translation(translationGroup, translationKey, translation) values (3, 'MATERIAL_TAB_TAXON', 'Taxonomy');
