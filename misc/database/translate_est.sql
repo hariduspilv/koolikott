@@ -115,6 +115,7 @@ insert into Translation(translationGroup, translationKey, translation) values (1
 insert into Translation(translationGroup, translationKey, translation) values (1, 'DETAILED_SEARCH_INCLUDE_PAID', 'Kaasa tasulised');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'DETAILED_SEARCH_TARGET_GROUP', 'Vanuserühm');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'ADD_PORTFOLIO', 'Lisa portfolio');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'EDIT_PORTFOLIO', 'Muuda portfooliot');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'PORTFOLIO_TITLE', 'Pealkiri');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'PORTFOLIO_SUMMARY', 'Kokkuvõte');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'PORTFOLIO_METADATA_TOOLBAR_LABEL', 'Lisa portfolio põhiandmed');
@@ -125,6 +126,7 @@ insert into Translation(translationGroup, translationKey, translation) values (1
 insert into Translation(translationGroup, translationKey, translation) values (1, 'BUTTON_CREATE_MATERIAL', 'Loo materjal');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'BUTTON_NEXT_STEP', 'Järgmine samm');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'BUTTON_PREVIOUS_STEP', 'Eelmine samm');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'BUTTON_EDIT_PORTFOLIO', 'Salvesta');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'TARGET_GROUP_PRESCHOOL', 'Eelkool');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'TARGET_GROUP_ZERO_FIVE', '0-5');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'TARGET_GROUP_SIX_SEVEN', '6-7');

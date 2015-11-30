@@ -115,6 +115,7 @@ insert into Translation(translationGroup, translationKey, translation) values (3
 insert into Translation(translationGroup, translationKey, translation) values (3, 'DETAILED_SEARCH_INCLUDE_PAID', 'Include Paid');
 insert into Translation(translationGroup, translationKey, translation) values (3, 'DETAILED_SEARCH_TARGET_GROUP', 'Age group');
 insert into Translation(translationGroup, translationKey, translation) values (3, 'ADD_PORTFOLIO', 'Add Portfolio');
+insert into Translation(translationGroup, translationKey, translation) values (3, 'EDIT_PORTFOLIO', 'Edit portfolio');
 insert into Translation(translationGroup, translationKey, translation) values (3, 'PORTFOLIO_TITLE', 'Title');
 insert into Translation(translationGroup, translationKey, translation) values (3, 'PORTFOLIO_SUMMARY', 'Summary');
 insert into Translation(translationGroup, translationKey, translation) values (3, 'PORTFOLIO_METADATA_TOOLBAR_LABEL', 'Add portfolio basic data');
@@ -125,6 +126,7 @@ insert into Translation(translationGroup, translationKey, translation) values (3
 insert into Translation(translationGroup, translationKey, translation) values (1, 'BUTTON_CREATE_MATERIAL', 'Create material');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'BUTTON_NEXT_STEP', 'Next step');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'BUTTON_PREVIOUS_STEP', 'Previous step');
+insert into Translation(translationGroup, translationKey, translation) values (3, 'BUTTON_EDIT_PORTFOLIO', 'Save');
 insert into Translation(translationGroup, translationKey, translation) values (3, 'TARGET_GROUP_PRESCHOOL', 'Preschool');
 insert into Translation(translationGroup, translationKey, translation) values (3, 'TARGET_GROUP_ZERO_FIVE', '0-5');
 insert into Translation(translationGroup, translationKey, translation) values (3, 'TARGET_GROUP_SIX_SEVEN', '6-7');

@@ -115,6 +115,8 @@ insert into Translation(translationGroup, translationKey, translation) values (2
 insert into Translation(translationGroup, translationKey, translation) values (2, 'DETAILED_SEARCH_INCLUDE_PAID', 'Включить заплатили');
 insert into Translation(translationGroup, translationKey, translation) values (2, 'DETAILED_SEARCH_TARGET_GROUP', 'Возрастная группа');
 insert into Translation(translationGroup, translationKey, translation) values (2, 'ADD_PORTFOLIO', 'Добавить портфель');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'EDIT_PORTFOLIO', 'Редактировать портфель');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'BUTTON_EDIT_PORTFOLIO', 'Сохранить');
 insert into Translation(translationGroup, translationKey, translation) values (2, 'PORTFOLIO_TITLE', 'Заглавие');
 insert into Translation(translationGroup, translationKey, translation) values (2, 'PORTFOLIO_SUMMARY', 'Описание');
 insert into Translation(translationGroup, translationKey, translation) values (2, 'PORTFOLIO_METADATA_TOOLBAR_LABEL', 'Добавить резюме основных данных');

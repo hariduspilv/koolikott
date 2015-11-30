@@ -5,6 +5,7 @@ import static org.apache.commons.lang3.StringUtils.isBlank;
 import java.net.HttpURLConnection;
 import java.util.List;
 
+import javax.annotation.security.RolesAllowed;
 import javax.inject.Inject;
 import javax.ws.rs.BadRequestException;
 import javax.ws.rs.Consumes;
@@ -87,11 +88,12 @@ public class PortfolioResource extends BaseResource {
     @Path("create")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
+    @RolesAllowed("USER")
     public Portfolio create(CreatePortfolioForm createPortfolioForm) {
         Portfolio portfolio = createPortfolioForm.getPortfolio();
 
-        if (createPortfolioForm.getTaxon() != null) {
-            Taxon taxon = taxonService.getTaxonById(createPortfolioForm.getTaxon());
+        if (createPortfolioForm.getTaxonId() != null) {
+            Taxon taxon = taxonService.getTaxonById(createPortfolioForm.getTaxonId());
 
             if (taxon == null) {
                 throw new BadRequestException("Taxon does not exist.");
@@ -109,15 +111,15 @@ public class PortfolioResource extends BaseResource {
      */
     public static class CreatePortfolioForm {
 
-        private Long taxon;
+        private Long taxonId;
         private Portfolio portfolio;
 
-        public Long getTaxon() {
-            return taxon;
+        public Long getTaxonId() {
+            return taxonId;
         }
 
-        public void setTaxon(Long taxon) {
-            this.taxon = taxon;
+        public void setTaxonId(Long taxon) {
+            this.taxonId = taxon;
         }
 
         public Portfolio getPortfolio() {
