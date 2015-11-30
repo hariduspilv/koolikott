@@ -40,8 +40,7 @@ require.config({
     commons: 'utils/commons',
     dopTargetGroupSelector: 'directives/targetGroupSelector/targetGroupSelector',
     'ng-file-upload-shim': '../bower_components/ng-file-upload-shim/ng-file-upload-shim',
-    'ng-file-upload': '../bower_components/ng-file-upload/ng-file-upload',
-    'angular-material-data-table': '../bower_components/angular-material-data-table/dist/md-data-table.min'
+    'ng-file-upload': '../bower_components/ng-file-upload/ng-file-upload'
   },
   shim: {
     angular: {
