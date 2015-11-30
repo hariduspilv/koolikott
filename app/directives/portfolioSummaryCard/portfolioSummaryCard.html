@@ -3,9 +3,9 @@
             <h1 class="md-accent md-display-1 book-headline" layout="row">
                 {{portfolio.title}}
                 <span flex></span>
-                <a href="#" data-ng-show="$root.isEditPortforlioMode" data-ng-click="showEditPortfolioDialog($event)">
+                <a href="#" data-ng-if="$root.isEditPortforlioMode" data-ng-click="showEditPortfolioDialog($event)">
                     <md-tooltip md-direction="left">
-                        Muuda portfoliot
+                        <span data-translate="EDIT_PORTFOLIO">Muuda portfoliot</span>
                     </md-tooltip>
                     <md-icon>edit</md-icon>
                 </a>
