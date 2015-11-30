@@ -43,7 +43,7 @@ define(['app'], function(app)
             }
             
             if($scope.portfolio.id != null) {
-                $scope.edit_portfolio = true;
+                $scope.editPortfolio = true;
             }
             
         }
