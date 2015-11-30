@@ -5,6 +5,7 @@ import static org.apache.commons.lang3.StringUtils.isBlank;
 import java.net.HttpURLConnection;
 import java.util.List;
 
+import javax.annotation.security.RolesAllowed;
 import javax.inject.Inject;
 import javax.ws.rs.BadRequestException;
 import javax.ws.rs.Consumes;
@@ -87,6 +88,7 @@ public class PortfolioResource extends BaseResource {
     @Path("create")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
+    @RolesAllowed("USER")
     public Portfolio create(CreatePortfolioForm createPortfolioForm) {
         Portfolio portfolio = createPortfolioForm.getPortfolio();
 
