@@ -121,6 +121,7 @@ insert into Translation(translationGroup, translationKey, translation) values (3
 insert into Translation(translationGroup, translationKey, translation) values (3, 'PORTFOLIO_METADATA_TOOLBAR_LABEL', 'Add portfolio basic data');
 insert into Translation(translationGroup, translationKey, translation) values (3, 'BUTTON_CANCEL', 'Cancel');
 insert into Translation(translationGroup, translationKey, translation) values (3, 'BUTTON_CREATE_PORTFOLIO', 'Create portfolio');
+insert into Translation(translationGroup, translationKey, translation) values (3, 'BUTTON_EDIT_PORTFOLIO', 'Save');
 insert into Translation(translationGroup, translationKey, translation) values (3, 'TARGET_GROUP_PRESCHOOL', 'Preschool');
 insert into Translation(translationGroup, translationKey, translation) values (3, 'TARGET_GROUP_ZERO_FIVE', '0-5');
 insert into Translation(translationGroup, translationKey, translation) values (3, 'TARGET_GROUP_SIX_SEVEN', '6-7');
