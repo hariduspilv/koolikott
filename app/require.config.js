@@ -18,6 +18,9 @@ require.config({
     addMaterialDialogController: 'views/addMaterialDialog/addMaterialDialog',
     loginDialogController: 'views/loginDialog/loginDialog',
     dopTableOfContents: 'directives/tableOfContents/tableOfContents',
+    commons: 'utils/commons',
+    dopTargetGroupSelector: 'directives/targetGroupSelector/targetGroupSelector',
+    dopCommentsCard: 'directives/commentsCard/commentsCard',
     angular: '../bower_components/angular/angular',
     'angular-animate': '../bower_components/angular-animate/angular-animate',
     'angular-aria': '../bower_components/angular-aria/angular-aria',
@@ -37,8 +40,6 @@ require.config({
     jsog: '../bower_components/jsog/lib/JSOG',
     ngInfiniteScroll: '../bower_components/ngInfiniteScroll/build/ng-infinite-scroll',
     jquery: '../bower_components/jquery/dist/jquery',
-    commons: 'utils/commons',
-    dopTargetGroupSelector: 'directives/targetGroupSelector/targetGroupSelector',
     'ng-file-upload-shim': '../bower_components/ng-file-upload-shim/ng-file-upload-shim',
     'ng-file-upload': '../bower_components/ng-file-upload/ng-file-upload'
   },
@@ -142,7 +143,8 @@ define([
   'dopTableOfContents',
   'jsog',
   'ngInfiniteScroll',
-  'dopTargetGroupSelector'
+  'dopTargetGroupSelector',
+  'dopCommentsCard'
 ], function (jquery, angular, app) {
   'use strict';
   var $html = angular.element(document.getElementsByTagName('html')[0]);

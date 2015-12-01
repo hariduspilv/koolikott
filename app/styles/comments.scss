@@ -1,0 +1,12 @@
+#comments-card {
+  margin: 20px 0 0;
+  
+  .comments-card-title md-icon {
+    cursor: pointer;
+    transition: transform 0.3s ease-in-out;
+  
+    &.toggled {
+      transform: rotate(180deg);
+    }
+  }
+}

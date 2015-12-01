@@ -24,48 +24,7 @@
       <article class="md-padding" layout="column" flex="75" flex-sm="100" role="main">
         <div data-dop-portfolio-summary-card></div>
 
-        <!-- comments/commeting -->
-        <md-card id="portfolio-comments">
-          <md-card-content>
-            <h2 class="portfolio-comments-title">
-				<span data-translate="COMMENTS_TITLE"></span>
-				<span>({{portfolio.comments.length}})</span>
-				<span>
-				  <md-icon class="md-primary" data-ng-class="{'toggled': showComments}" data-ng-click="showComments = !showComments">
-					keyboard_arrow_down
-				  </md-icon>
-				</span>
-            </h2>
-
-            <div data-ng-show="showComments">
-              <md-list>
-                <md-list-item class="md-3-line" ng-repeat="comment in portfolio.comments">
-                  <md-icon class="md-avatar-icon">person</md-icon>
-                  <div class="md-list-item-text" layout="column">
-                    <h3>{{comment.creator.name}} {{comment.creator.surname}}</h3>
-                    <h4>{{comment.added.millis | date:'dd.MM.yyyy HH:mm'}}</h4>
-                    <p>{{comment.text}}</p>
-                  </div>
-                </md-list-item>
-              </md-list>
-
-			  <div data-ng-if="authorized">
-				  <h2 data-translate="ADD_COMMENT_TITLE"></h2>
-				  <md-input-container flex>
-					<label data-translate="COMMENT"></label>
-					<textarea ng-model="newComment.text" rows="4"></textarea>
-				  </md-input-container>
-				  <div layout="row" layout-align="end center">
-					<md-button data-translate="ADD_COMMENT_BUTTON" ng-click="addComment()" class="md-raised md-primary">
-					</md-button>
-				  </div>
-			  </div>
-			  
-            </div>
-
-          </md-card-content>
-        </md-card>
-        <!-- /commments/commenting -->
+        <div data-dop-comments-card comments="portfolio.comments" comment="newComment" submit-click="addComment()"></div>
 
         <div id="portfolio-chapters">
           <div data-ng-repeat="chapter in portfolio.chapters">
