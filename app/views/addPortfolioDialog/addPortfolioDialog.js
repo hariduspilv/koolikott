@@ -45,6 +45,12 @@ define(['app'], function(app)
             if($scope.portfolio.id != null) {
                 $scope.editPortfolio = true;
             }
+
+            $scope.$watch('portfolio.taxon', function(newTaxon, oldTaxon) {
+                if (newTaxon !== oldTaxon) {
+                    $scope.educationalContext = $rootScope.taxonUtils.getEducationalContext($scope.portfolio.taxon);
+                }
+            }, true);
             
         }
     ]);

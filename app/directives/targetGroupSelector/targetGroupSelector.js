@@ -14,6 +14,8 @@ define(['app'], function(app)
                 var level1Groups = ['LEVEL1', 'GRADE1', 'GRADE2', 'GRADE3'];
                 var level2Groups = ['LEVEL2', 'GRADE4', 'GRADE5', 'GRADE6'];
                 var level3Groups = ['LEVEL3', 'GRADE7', 'GRADE8', 'GRADE9'];
+                var secondaryGroups = ['GYMNASIUM'];
+                var vocationalGroups = ['VOCATIONAL'];
 
                 init();
 
@@ -58,6 +60,12 @@ define(['app'], function(app)
                             case 2:
                                 $scope.groups = level1Groups.concat(level2Groups, level3Groups);
                                 break;
+                            case 3:
+                                $scope.groups = secondaryGroups.slice();
+                                break;
+                            case 4:
+                                $scope.groups = vocationalGroups.slice();
+                                break;
                             default:
                                 $scope.groups = [];
                                 break;
@@ -68,7 +76,7 @@ define(['app'], function(app)
                             $scope.selectedTargetGroup = null;
                         }
                     } else {
-                        $scope.groups = preschoolGroups.concat(level1Groups, level2Groups, level3Groups);
+                        $scope.groups = preschoolGroups.concat(level1Groups, level2Groups, level3Groups, secondaryGroups, vocationalGroups);
                     }
                 }
             	
