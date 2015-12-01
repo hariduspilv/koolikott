@@ -39,6 +39,27 @@ define(['app'], function(app)
 			function createPortfolioFailed(){
 				log('Creating portfolio failed.');
 			}
+            
+            $scope.update = function() {
+                var url = "rest/portfolio/update";
+                var taxon = $scope.portfolio.taxon;
+                $scope.portfolio.taxon = null;
+
+                var params = {
+                    'taxonId': taxon ? taxon.id : null,
+                    'portfolio': $scope.portfolio
+                };
+                serverCallService.makePost(url, params, updatePortfolioSuccess, createPortfolioFailed);
+            }
+            
+            function updatePortfolioSuccess(portfolio) {
+                if (isEmpty(portfolio)) {
+                    createPortfolioFailed();
+                } else {
+                    $scope.portfolio.taxon = portfolio.taxon;
+                    $mdDialog.hide();
+                }
+            }
 
             $scope.$watch('portfolio.taxon', function(newTaxon, oldTaxon) {
                 if (newTaxon !== oldTaxon) {
