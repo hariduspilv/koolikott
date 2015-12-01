@@ -12,6 +12,7 @@ import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
@@ -39,6 +40,7 @@ import ee.hm.dop.rest.jackson.map.DateTimeSerializer;
 public class Portfolio implements Searchable {
 
     @Id
+    @GeneratedValue
     private Long id;
 
     @Column(nullable = false)
@@ -81,7 +83,7 @@ public class Portfolio implements Searchable {
             name = "Portfolio_Tag",
             joinColumns = { @JoinColumn(name = "portfolio") },
             inverseJoinColumns = { @JoinColumn(name = "tag") },
-            uniqueConstraints = @UniqueConstraint(columnNames = { "portfolio", "tag" }) )
+            uniqueConstraints = @UniqueConstraint(columnNames = { "portfolio", "tag" }))
     private List<Tag> tags;
 
     @Lob

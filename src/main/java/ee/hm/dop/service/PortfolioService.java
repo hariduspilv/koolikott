@@ -18,6 +18,9 @@ public class PortfolioService {
     @Inject
     private PortfolioDAO portfolioDAO;
 
+    @Inject
+    private SearchEngineService searchEngineService;
+
     public Portfolio get(long materialId) {
         return portfolioDAO.findById(materialId);
     }
@@ -56,5 +59,34 @@ public class PortfolioService {
         comment.setAdded(DateTime.now());
         originalPortfolio.getComments().add(comment);
         portfolioDAO.update(originalPortfolio);
+    }
+
+    public Portfolio create(Portfolio portfolio, User creator) {
+        if (portfolio.getId() != null) {
+            throw new RuntimeException("Portfolio already exists.");
+        }
+
+        Portfolio safePortfolio = getPortfolioWithAllowedFieldsOnCreate(portfolio);
+        safePortfolio.setViews(0L);
+        safePortfolio.setCreator(creator);
+
+        Portfolio createdPortfolio = portfolioDAO.update(safePortfolio);
+        updateSearchIndex();
+
+        return createdPortfolio;
+    }
+
+    private Portfolio getPortfolioWithAllowedFieldsOnCreate(Portfolio portfolio) {
+        Portfolio safePortfolio = new Portfolio();
+        safePortfolio.setTitle(portfolio.getTitle());
+        safePortfolio.setSummary(portfolio.getSummary());
+        safePortfolio.setTags(portfolio.getTags());
+        safePortfolio.setTargetGroups(portfolio.getTargetGroups());
+        safePortfolio.setTaxon(portfolio.getTaxon());
+        return safePortfolio;
+    }
+
+    private void updateSearchIndex() {
+        searchEngineService.updateIndex();
     }
 }
