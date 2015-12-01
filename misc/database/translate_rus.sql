@@ -142,6 +142,8 @@ insert into Translation(translationGroup, translationKey, translation) values (2
 insert into Translation(translationGroup, translationKey, translation) values (2, 'TARGET_GROUP_GRADE7', '7-го класса');
 insert into Translation(translationGroup, translationKey, translation) values (2, 'TARGET_GROUP_GRADE8', '8-го класса');
 insert into Translation(translationGroup, translationKey, translation) values (2, 'TARGET_GROUP_GRADE9', '9-го класса');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'TARGET_GROUP_GYMNASIUM', 'Среднее образование');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'TARGET_GROUP_VOCATIONAL', 'профессионального образования');
 insert into Translation(translationGroup, translationKey, translation) values (2, 'TABLE_OF_CONTENTS', 'Содержание');
 
 -- Comment translations

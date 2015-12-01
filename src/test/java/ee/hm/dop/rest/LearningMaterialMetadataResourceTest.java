@@ -96,7 +96,7 @@ public class LearningMaterialMetadataResourceTest extends ResourceIntegrationTes
         TargetGroup[] result = doGet(GET_TARGET_GROUPS_URL, new GenericType<TargetGroup[]>() {
         });
 
-        assertEquals(11, result.length);
+        assertEquals(13, result.length);
 
         List<TargetGroup> expectedTargetGroups = Arrays.asList(TargetGroup.values());
         List<TargetGroup> actualTargetGroups = Arrays.asList(result);
