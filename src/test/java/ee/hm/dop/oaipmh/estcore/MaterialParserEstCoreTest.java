@@ -200,11 +200,18 @@ public class MaterialParserEstCoreTest {
         subject2.setTopics(topics);
 
         Module module = new Module();
-        module.setName("IT_õigus");
+        module.setName("Majanduse_alused");
         module.setSpecialization(specialization);
         Set<Module> modules = new HashSet<>();
         modules.add(module);
         specialization.setModules(modules);
+
+        Topic topic3 = new Topic();
+        topic3.setName("Vocational_Education_Topic1");
+        topic3.setModule(module);
+        topics = new HashSet<>();
+        topics.add(topic3);
+        module.setTopics(topics);
 
         expect(languageService.getLanguage("en")).andReturn(english).times(3);
         expect(languageService.getLanguage("et")).andReturn(estonian).times(2);
@@ -232,7 +239,9 @@ public class MaterialParserEstCoreTest {
                 educationalContext4).anyTimes();
         expect(taxonService.getTaxonByEstCoreName("Computer Science", Domain.class)).andReturn(domain3);
         expect(taxonService.getTaxonByEstCoreName("Computers and Networks", Specialization.class)).andReturn(specialization);
-        expect(taxonService.getTaxonByEstCoreName("IT õigus", Module.class)).andReturn(module);
+        expect(taxonService.getTaxonByEstCoreName("Majanduse alused", Module.class)).andReturn(module);
+        expect(taxonService.getTaxonByEstCoreName("Vocational Education Topic1", Topic.class)).andReturn(topic3);
+
 
         //fourth taxon
         expect(taxonService.getTaxonByEstCoreName(educationalContext2.getName(), EducationalContext.class)).andReturn(

@@ -140,6 +140,7 @@ INSERT INTO EstCoreTaxonMapping (id, taxon, name) VALUES (10100, 10100, 'Prescho
 INSERT INTO EstCoreTaxonMapping (id, taxon, name) VALUES (10101, 10101, 'Preschool Topic2');
 INSERT INTO EstCoreTaxonMapping (id, taxon, name) VALUES (10200, 10200, 'Secondary Education Topic1');
 INSERT INTO EstCoreTaxonMapping (id, taxon, name) VALUES (10201, 10201, 'Secondary Education Topic2');
+INSERT INTO EstCoreTaxonMapping (id, taxon, name) VALUES (10300, 10300, 'Vocational Education Topic1');
 INSERT INTO EstCoreTaxonMapping (id, taxon, name) VALUES (15000, 15000, 'Ajaarvamine');
 INSERT INTO EstCoreTaxonMapping (id, taxon, name) VALUES (15001, 15001, 'Ajalooallikad');
 INSERT INTO EstCoreTaxonMapping (id, taxon, name) VALUES (15002, 15002, 'Eluolu');
@@ -299,6 +300,7 @@ INSERT INTO WaramuTaxonMapping (id, taxon, name) VALUES (10100, 10100, 'Preschoo
 INSERT INTO WaramuTaxonMapping (id, taxon, name) VALUES (10101, 10101, 'Preschool_Topic2');
 INSERT INTO WaramuTaxonMapping (id, taxon, name) VALUES (10200, 10200, 'Secondary_Education_Topic1');
 INSERT INTO WaramuTaxonMapping (id, taxon, name) VALUES (10201, 10201, 'Secondary_Education_Topic2');
+INSERT INTO WaramuTaxonMapping (id, taxon, name) VALUES (10300, 10300, 'Vocational Education Topic1');
 INSERT INTO WaramuTaxonMapping (id, taxon, name) VALUES (15000, 15000, 'Ajaarvamine');
 INSERT INTO WaramuTaxonMapping (id, taxon, name) VALUES (15001, 15001, 'Ajalooallikad');
 INSERT INTO WaramuTaxonMapping (id, taxon, name) VALUES (15002, 15002, 'Eluolu');

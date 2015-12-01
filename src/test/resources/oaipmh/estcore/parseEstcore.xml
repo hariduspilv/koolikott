@@ -111,7 +111,8 @@
                             <vocationalTaxon>
                                 <domain>Computer Science</domain>
                                 <specialization>Computers and Networks</specialization>
-                                <module>IT õigus</module>
+                                <module>Majanduse alused</module>
+                                <topic>Vocational Education Topic1</topic>
                             </vocationalTaxon>
                         </taxonPath>
                     </classification>
