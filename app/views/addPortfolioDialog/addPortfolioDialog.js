@@ -3,6 +3,13 @@ define(['app'], function(app)
     app.controller('addPortfolioDialog', ['$scope', '$mdDialog', '$location', 'serverCallService', '$rootScope', 'portfolio',
         function($scope, $mdDialog, $location, serverCallService, $rootScope, portfolio) {
         
+            function init() {
+                $scope.portfolio = portfolio;
+                if($scope.portfolio.id != null) {
+                    $scope.isEditPortfolio = true;
+                }
+            }
+            
             $scope.cancel = function() {
                 $mdDialog.hide();
             };
@@ -33,24 +40,13 @@ define(['app'], function(app)
 				log('Creating portfolio failed.');
 			}
 
-            if(portfolio == null) {
-                $scope.portfolio = {
-                    type: ".Portfolio",
-                    tags:[]
-                };
-            } else {
-                $scope.portfolio = portfolio;
-            }
-            
-            if($scope.portfolio.id != null) {
-                $scope.editPortfolio = true;
-            }
-
             $scope.$watch('portfolio.taxon', function(newTaxon, oldTaxon) {
                 if (newTaxon !== oldTaxon) {
                     $scope.educationalContext = $rootScope.taxonUtils.getEducationalContext($scope.portfolio.taxon);
                 }
             }, true);
+            
+            init();
             
         }
     ]);

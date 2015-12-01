@@ -35,10 +35,13 @@
       <md-button id="add-portfolio-cancel-button" data-ng-click="cancel()">
         <span data-translate="BUTTON_CANCEL"></span>
       </md-button>
-      <md-button id="add-portfolio-create-button" ng-click="create()" class="md-primary">
+      <md-button ng-if="!isEditPortfolio" id="add-portfolio-create-button" ng-click="create()" class="md-primary">
         <ng-md-icon icon="arrow_forward"></ng-md-icon>
-        <span ng-if="!editPortfolio" data-translate="BUTTON_CREATE_PORTFOLIO"></span>
-        <span ng-if="editPortfolio" data-translate="BUTTON_EDIT_PORTFOLIO"></span>
+        <span data-translate="BUTTON_CREATE_PORTFOLIO"></span>
+      </md-button>
+      <md-button ng-if="isEditPortfolio" id="add-portfolio-create-button" class="md-primary">
+        <ng-md-icon icon="arrow_forward"></ng-md-icon>
+        <span data-translate="BUTTON_EDIT_PORTFOLIO"></span>
       </md-button>
     </div>
   </form>
