@@ -105,6 +105,27 @@ public class PortfolioResource extends BaseResource {
         return portfolioService.create(portfolio, getLoggedInUser());
     }
 
+    @POST
+    @Path("update")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    @RolesAllowed("USER")
+    public Portfolio update(CreatePortfolioForm createPortfolioForm) {
+        Portfolio portfolio = createPortfolioForm.getPortfolio();
+
+        if (createPortfolioForm.getTaxonId() != null) {
+            Taxon taxon = taxonService.getTaxonById(createPortfolioForm.getTaxonId());
+
+            if (taxon == null) {
+                throw new BadRequestException("Taxon does not exist.");
+            }
+
+            portfolio.setTaxon(taxon);
+        }
+
+        return portfolioService.update(portfolio, getLoggedInUser());
+    }
+
     /**
      * This is an workaround to bypass JSOG/Jackson problem:
      * https://github.com/jsog/jsog-jackson/pull/8
