@@ -92,6 +92,16 @@ md-card.card-sm {
         color: rgba (0,0,0, 0.7);
         font-size: inherit;
       }
+      
+      .md-action-icons-list {
+        span {
+          padding: 0 5px;
+          
+          &:last-child {
+            padding-right: 0;
+          }
+        }
+      }
     }
   }
 }
