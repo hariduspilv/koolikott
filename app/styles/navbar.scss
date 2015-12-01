@@ -1,6 +1,5 @@
 .navbar-search {
 	margin: 0 16px;
-	background: rgba(255,255,255,.15);
     border-radius: 2px;
 	
 	md-input-container {
@@ -15,5 +14,11 @@
 				background-image: none;
 			}
 		}
+	}
+}
+
+@media screen and (min-width: 960px) {
+	.navbar-search {
+		background: rgba(255,255,255,.15);
 	}
 }
