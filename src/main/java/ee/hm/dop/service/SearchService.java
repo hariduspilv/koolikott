@@ -28,6 +28,7 @@ import ee.hm.dop.model.solr.Response;
 import ee.hm.dop.model.solr.SearchResponse;
 import ee.hm.dop.model.taxon.Domain;
 import ee.hm.dop.model.taxon.EducationalContext;
+import ee.hm.dop.model.taxon.Module;
 import ee.hm.dop.model.taxon.Specialization;
 import ee.hm.dop.model.taxon.Subject;
 import ee.hm.dop.model.taxon.Taxon;
@@ -235,17 +236,25 @@ public class SearchService {
 
             Subject subject = ((Topic) taxon).getSubject();
             Domain domain = ((Topic) taxon).getDomain();
+            Module module = ((Topic) taxon).getModule();
 
             if (subject != null) {
                 taxon = subject;
             } else if (domain != null) {
                 taxon = domain;
+            } else if (module != null) {
+                taxon = module;
             }
         }
 
         if (taxon instanceof Subject) {
             addTaxonToQuery(taxon, taxons);
             taxon = ((Subject) taxon).getDomain();
+        }
+
+        if (taxon instanceof Module) {
+            addTaxonToQuery(taxon, taxons);
+            taxon = ((Module) taxon).getSpecialization();
         }
 
         if (taxon instanceof Specialization) {
@@ -285,6 +294,8 @@ public class SearchService {
             return "topic";
         } else if (taxon instanceof Specialization) {
             return "specialization";
+        } else if (taxon instanceof Module) {
+            return "module";
         }
         return null;
     }
