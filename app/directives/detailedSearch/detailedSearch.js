@@ -23,7 +23,7 @@ define(['app'], function(app)
                     $scope.detailedSearch.language = searchService.getLanguage();
 
                     // Target groups
-                    serverCallService.makeGet("rest/learningMaterialMetadata/targetGroup", {}, getTargetGroupsSuccess, getTargetGroupsFail);
+                    $scope.detailedSearch.targetGroups = searchService.getTargetGroups();
 
                     // Taxon
                     if (searchService.getTaxon()) {
@@ -196,19 +196,6 @@ define(['app'], function(app)
                     return 'LANGUAGE_' + languageName.toUpperCase().replace(/\s+/g, '_');
                 }
 
-                function getTargetGroupsSuccess(data) {
-                    if (isEmpty(data)) {
-                        getTargetGroupsFail();
-                    } else {
-                        $scope.targetGroups = data;
-                        $scope.detailedSearch.targetGroups = searchService.getTargetGroups();
-                    }
-                }
-
-                function getTargetGroupsFail() {
-                    console.log('Failed to get target groups.')
-                }
-
                 $scope.$watch('detailedSearch.taxon', function(newTaxon, oldTaxon) {
                     if (newTaxon !== oldTaxon) {
                         $scope.detailedSearch.educationalContext = $rootScope.taxonUtils.getEducationalContext($scope.detailedSearch.taxon);
@@ -218,62 +205,6 @@ define(['app'], function(app)
             }
         };
     }]);
-
-    app.filter('licenseTypeFilter', function($filter) {
-        return function(items, query) {
-            var translationPrefix = 'LICENSETYPE_';
-            items = $filter('translatableItemFilter')(items, query, translationPrefix);
-            items = $filter('orderByTranslation')(items, translationPrefix);
-            return items;
-        }
-    });
-
-    app.filter('translatableItemFilter', function($filter) {
-        return function(items, query, translationPrefix) {
-            var out = [];
-
-            if (angular.isArray(items) && query) {
-                items.forEach(function(item) {
-                    // Get translation
-                    var translatedItem = $filter('translate')(translationPrefix + item.name.toUpperCase());
-
-                    if (translatedItem.toLowerCase().indexOf(query.toLowerCase()) !== -1) {
-                        out.push(item);
-                    }
-                });
-            } else {
-                out = items;
-            }
-
-            return out;
-        }
-    });
-
-    app.filter('orderByTranslation', function($filter) {
-        return function(items, translationPrefix) {
-
-            if (angular.isArray(items)) {
-                for (i = 0; i < items.length; i++) {
-                    // Get translation
-                    var translatedItem = $filter('translate')(translationPrefix + items[i].name.toUpperCase());
-
-                    // Create temporary property
-                    items[i].translation = translatedItem.toLowerCase();
-                }
-
-                // Sort alphabetically
-                items = $filter('orderBy')(items, '-translation', true);
-
-                // Remove translation property
-                for (i = 0; i < items.length; i++) {
-                    items[i].translation = null;
-                }
-
-            }
-
-            return items;
-        }
-    });
 
     return app;
 });
