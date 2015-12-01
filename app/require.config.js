@@ -21,6 +21,7 @@ require.config({
     commons: 'utils/commons',
     dopTargetGroupSelector: 'directives/targetGroupSelector/targetGroupSelector',
     dopCommentsCard: 'directives/commentsCard/commentsCard',
+    dopRating: 'directives/rating/rating',
     angular: '../bower_components/angular/angular',
     'angular-animate': '../bower_components/angular-animate/angular-animate',
     'angular-aria': '../bower_components/angular-aria/angular-aria',
@@ -144,7 +145,8 @@ define([
   'jsog',
   'ngInfiniteScroll',
   'dopTargetGroupSelector',
-  'dopCommentsCard'
+  'dopCommentsCard',
+  'dopRating'
 ], function (jquery, angular, app) {
   'use strict';
   var $html = angular.element(document.getElementsByTagName('html')[0]);
