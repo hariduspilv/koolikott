@@ -67,7 +67,7 @@ public abstract class MaterialParser {
             removeDuplicateTaxons(material);
         } catch (RuntimeException e) {
             logger.error("Unexpected error while parsing document. Document may not"
-                    + " match mapping or XML structure.", e);
+                    + " match mapping or XML structure - " + e.getMessage(), e);
             throw new ParseException(e);
         }
 
@@ -178,8 +178,7 @@ public abstract class MaterialParser {
     protected List<ResourceType> getResourceTypes(Document doc, String path) throws XPathExpressionException {
         List<ResourceType> resourceTypes = new ArrayList<>();
 
-        XPathExpression expr = xpath.compile(path);
-        NodeList nl = (NodeList) expr.evaluate(doc, XPathConstants.NODESET);
+        NodeList nl = getNodeList(doc, path);
 
         for (int i = 0; i < nl.getLength(); i++) {
             Node node = nl.item(i);
@@ -195,8 +194,7 @@ public abstract class MaterialParser {
     }
 
     protected void setEducationalContexts(Document doc, Set<Taxon> taxons, String path) throws XPathExpressionException {
-        XPathExpression expr = xpath.compile(path);
-        NodeList nl = (NodeList) expr.evaluate(doc, XPathConstants.NODESET);
+        NodeList nl = getNodeList(doc, path);
 
         for (int i = 0; i < nl.getLength(); i++) {
             Node node = nl.item(i);
@@ -223,6 +221,7 @@ public abstract class MaterialParser {
 
                 parent = setSubject(taxonPath, parent);
                 parent = setSpecialization(taxonPath, parent);
+                parent = setModule(taxonPath, parent);
 
                 parent = setTopic(taxonPath, parent);
 
@@ -267,9 +266,7 @@ public abstract class MaterialParser {
     private String getSource(Document doc) throws ParseException, XPathExpressionException, URISyntaxException {
         String source;
 
-        XPathExpression expr = xpath
-                .compile(getPathToLocation());
-        NodeList nodeList = (NodeList) expr.evaluate(doc, XPathConstants.NODESET);
+        NodeList nodeList = getNodeList(doc, getPathToLocation());
         if (nodeList.getLength() != 1) {
             String message = "Material has more or less than one source, can't be mapped.";
             logger.error(String.format(message, message));
@@ -291,6 +288,16 @@ public abstract class MaterialParser {
         }
 
         return source;
+    }
+
+    protected NodeList getNodeList(Document doc, String path) throws XPathExpressionException {
+        XPathExpression expr = xpath.compile(path);
+        return (NodeList) expr.evaluate(doc, XPathConstants.NODESET);
+    }
+
+    protected Node getNode(Node node, String path) throws XPathExpressionException {
+        XPathExpression expr = xpath.compile(path);
+        return (Node) expr.evaluate(node, XPathConstants.NODE);
     }
 
     protected abstract void setAuthors(Material material, Document doc);
@@ -323,4 +330,5 @@ public abstract class MaterialParser {
 
     protected abstract Taxon setSpecialization(Node taxonPath, Taxon parent);
 
+    protected abstract Taxon setModule(Node taxonPath, Taxon parent);
 }

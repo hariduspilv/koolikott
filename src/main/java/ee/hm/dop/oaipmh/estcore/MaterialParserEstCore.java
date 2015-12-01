@@ -145,8 +145,7 @@ public class MaterialParserEstCore extends MaterialParser {
     protected Taxon setEducationalContext(Node taxonPath) {
         for (String tag : taxonMap.keySet()) {
             try {
-                XPathExpression expr = xpath.compile("./*[local-name()='" + tag + "']");
-                Node node = (Node) expr.evaluate(taxonPath, XPathConstants.NODE);
+                Node node = getNode(taxonPath, "./*[local-name()='" + tag + "']");
 
                 if (node != null) {
                     return getTaxon(taxonMap.get(tag), EducationalContext.class);
@@ -162,8 +161,7 @@ public class MaterialParserEstCore extends MaterialParser {
     protected Taxon setDomain(Node taxonPath, Taxon educationalContext) {
         for (String tag : taxonMap.keySet()) {
             try {
-                XPathExpression expr = xpath.compile("./*[local-name()='" + tag + "']/*[local-name()='domain']");
-                Node node = (Node) expr.evaluate(taxonPath, XPathConstants.NODE);
+                Node node = getNode(taxonPath, "./*[local-name()='" + tag + "']/*[local-name()='domain']");
 
                 if (node != null) {
                     List<Taxon> domains = new ArrayList<>(((EducationalContext) educationalContext).getDomains());
@@ -183,8 +181,7 @@ public class MaterialParserEstCore extends MaterialParser {
     protected Taxon setSubject(Node taxonPath, Taxon domain) {
         for (String tag : taxonMap.keySet()) {
             try {
-                XPathExpression expr = xpath.compile("./*[local-name()='" + tag + "']/*[local-name()='subject']");
-                Node node = (Node) expr.evaluate(taxonPath, XPathConstants.NODE);
+                Node node = getNode(taxonPath, "./*[local-name()='" + tag + "']/*[local-name()='subject']");
 
                 if (node != null) {
                     List<Taxon> subjects = new ArrayList<>(((Domain) domain).getSubjects());
@@ -204,8 +201,7 @@ public class MaterialParserEstCore extends MaterialParser {
     protected Taxon setTopic(Node taxonPath, Taxon parent) {
         for (String tag : taxonMap.keySet()) {
             try {
-                XPathExpression expr = xpath.compile("./*[local-name()='" + tag + "']/*[local-name()='topic']");
-                Node node = (Node) expr.evaluate(taxonPath, XPathConstants.NODE);
+                Node node = getNode(taxonPath, "./*[local-name()='" + tag + "']/*[local-name()='topic']");
 
                 if (node != null) {
                     List<Taxon> topics;
@@ -230,8 +226,7 @@ public class MaterialParserEstCore extends MaterialParser {
     protected Taxon setSpecialization(Node taxonPath, Taxon parent) {
         for (String tag : taxonMap.keySet()) {
             try {
-                XPathExpression expr = xpath.compile("./*[local-name()='" + tag + "']/*[local-name()='specialization']");
-                Node node = (Node) expr.evaluate(taxonPath, XPathConstants.NODE);
+                Node node = getNode(taxonPath, "./*[local-name()='" + tag + "']/*[local-name()='specialization']");
 
                 if (node != null) {
                     List<Taxon> specializations;
@@ -239,6 +234,27 @@ public class MaterialParserEstCore extends MaterialParser {
 
                     String systemName = getTaxon(node.getTextContent(), Specialization.class).getName();
                     Taxon taxon = getTaxonByName(specializations, systemName);
+                    if (taxon != null) return taxon;
+                }
+            } catch (XPathExpressionException e) {
+                //ignore
+            }
+        }
+        return parent;
+    }
+
+    @Override
+    protected Taxon setModule(Node taxonPath, Taxon parent) {
+        for (String tag : taxonMap.keySet()) {
+            try {
+                Node node = getNode(taxonPath, "./*[local-name()='" + tag + "']/*[local-name()='module']");
+
+                if (node != null) {
+                    List<Taxon> modules;
+                    modules = new ArrayList<>(((Specialization) parent).getModules());
+
+                    String systemName = getTaxon(node.getTextContent(), Module.class).getName();
+                    Taxon taxon = getTaxonByName(modules, systemName);
                     if (taxon != null) return taxon;
                 }
             } catch (XPathExpressionException e) {
@@ -257,8 +273,7 @@ public class MaterialParserEstCore extends MaterialParser {
     protected List<Node> getTaxonPathNodes(Document doc) {
         List<Node> nodes = new ArrayList<>();
         try {
-            XPathExpression expr1 = xpath.compile("//*[local-name()='estcore']/*[local-name()='classification']");
-            NodeList classifications = (NodeList) expr1.evaluate(doc, XPathConstants.NODESET);
+            NodeList classifications = getNodeList(doc, "//*[local-name()='estcore']/*[local-name()='classification']");
 
             for (int i = 0; i < classifications.getLength(); i++) {
                 Node classification = classifications.item(i);
@@ -292,10 +307,7 @@ public class MaterialParserEstCore extends MaterialParser {
 
     private Language getLanguage(Document doc) throws XPathExpressionException {
         Language language;
-
-        XPathExpression expr = xpath
-                .compile("//*[local-name()='estcore']/*[local-name()='general']/*[local-name()='language']");
-        Node node = (Node) expr.evaluate(doc, XPathConstants.NODE);
+        Node node = getNode(doc, "//*[local-name()='estcore']/*[local-name()='general']/*[local-name()='language']");
 
         String[] tokens = node.getFirstChild().getTextContent().trim().split("-");
         language = languageService.getLanguage(tokens[0]);
@@ -305,10 +317,7 @@ public class MaterialParserEstCore extends MaterialParser {
 
     private List<Author> getAuthors(Document doc) throws ParseException, XPathExpressionException {
         List<Author> authors = new ArrayList<>();
-
-        XPathExpression contributePath = xpath
-                .compile("//*[local-name()='estcore']/*[local-name()='lifeCycle']/*[local-name()='contribute']");
-        NodeList nodeList = (NodeList) contributePath.evaluate(doc, XPathConstants.NODESET);
+        NodeList nodeList = getNodeList(doc, "//*[local-name()='estcore']/*[local-name()='lifeCycle']/*[local-name()='contribute']");
 
         for (int i = 0; i < nodeList.getLength(); i++) {
             Node contributorNode = nodeList.item(i);
@@ -325,9 +334,8 @@ public class MaterialParserEstCore extends MaterialParser {
 
     private void getAuthor(List<Author> authors, Node contributorNode) throws XPathExpressionException {
         String vCard = "";
+        NodeList authorNodes = getNode(contributorNode, "./*[local-name()='entity']").getChildNodes();
 
-        XPathExpression vCardPath = xpath.compile("./*[local-name()='entity']");
-        NodeList authorNodes = ((Node) vCardPath.evaluate(contributorNode, XPathConstants.NODE)).getChildNodes();
         for (int j = 0; j < authorNodes.getLength(); j++) {
             if (!authorNodes.item(j).getTextContent().trim().isEmpty()) {
                 CharacterData characterData = (CharacterData) authorNodes.item(j);
@@ -340,10 +348,7 @@ public class MaterialParserEstCore extends MaterialParser {
 
     private List<LanguageString> getTitles(Document doc) throws ParseException, XPathExpressionException {
         List<LanguageString> titles;
-
-        XPathExpression expr = xpath
-                .compile("//*[local-name()='estcore']/*[local-name()='general']/*[local-name()='title']");
-        Node node = (Node) expr.evaluate(doc, XPathConstants.NODE);
+        Node node = getNode(doc, "//*[local-name()='estcore']/*[local-name()='general']/*[local-name()='title']");
         titles = getLanguageStrings(node, languageService);
 
         return titles;
@@ -352,19 +357,14 @@ public class MaterialParserEstCore extends MaterialParser {
 
     private List<LanguageString> getDescriptions(Document doc) throws XPathExpressionException {
         List<LanguageString> descriptions;
-
-        XPathExpression expr = xpath
-                .compile("//*[local-name()='estcore']/*[local-name()='general']/*[local-name()='description']");
-        Node node = (Node) expr.evaluate(doc, XPathConstants.NODE);
+        Node node = getNode(doc, "//*[local-name()='estcore']/*[local-name()='general']/*[local-name()='description']");
         descriptions = getLanguageStrings(node, languageService);
 
         return descriptions;
     }
 
     private List<Tag> getTags(Document doc) throws XPathExpressionException {
-        XPathExpression expr = xpath
-                .compile("//*[local-name()='estcore']/*[local-name()='general']/*[local-name()='keyword']/*[local-name()='string']");
-        NodeList keywords = (NodeList) expr.evaluate(doc, XPathConstants.NODESET);
+        NodeList keywords = getNodeList(doc, "//*[local-name()='estcore']/*[local-name()='general']/*[local-name()='keyword']/*[local-name()='string']");
 
         return getTagsFromKeywords(keywords, tagService);
     }

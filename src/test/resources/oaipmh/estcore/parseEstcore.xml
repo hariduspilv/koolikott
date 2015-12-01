@@ -28,7 +28,6 @@
                         <title uniqueElementName="title">
                             <lom:string language="en-US">first title</lom:string>
                             <lom:string language="et">teine pealkiri</lom:string>
-
                         </title>
                         <language uniqueElementName="language">en-US</language>
                         <language uniqueElementName="language">en-US</language>
@@ -112,6 +111,7 @@
                             <vocationalTaxon>
                                 <domain>Computer Science</domain>
                                 <specialization>Computers and Networks</specialization>
+                                <module>IT õigus</module>
                             </vocationalTaxon>
                         </taxonPath>
                     </classification>

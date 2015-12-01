@@ -32,6 +32,7 @@ import ee.hm.dop.model.ResourceType;
 import ee.hm.dop.model.Tag;
 import ee.hm.dop.model.taxon.Domain;
 import ee.hm.dop.model.taxon.EducationalContext;
+import ee.hm.dop.model.taxon.Module;
 import ee.hm.dop.model.taxon.Specialization;
 import ee.hm.dop.model.taxon.Subject;
 import ee.hm.dop.model.taxon.Topic;
@@ -198,6 +199,13 @@ public class MaterialParserEstCoreTest {
         topics.add(topic2);
         subject2.setTopics(topics);
 
+        Module module = new Module();
+        module.setName("IT_õigus");
+        module.setSpecialization(specialization);
+        Set<Module> modules = new HashSet<>();
+        modules.add(module);
+        specialization.setModules(modules);
+
         expect(languageService.getLanguage("en")).andReturn(english).times(3);
         expect(languageService.getLanguage("et")).andReturn(estonian).times(2);
         expect(authorService.getAuthorByFullName(author1.getName(), author1.getSurname())).andReturn(author1);
@@ -224,6 +232,7 @@ public class MaterialParserEstCoreTest {
                 educationalContext4).anyTimes();
         expect(taxonService.getTaxonByEstCoreName("Computer Science", Domain.class)).andReturn(domain3);
         expect(taxonService.getTaxonByEstCoreName("Computers and Networks", Specialization.class)).andReturn(specialization);
+        expect(taxonService.getTaxonByEstCoreName("IT õigus", Module.class)).andReturn(module);
 
         //fourth taxon
         expect(taxonService.getTaxonByEstCoreName(educationalContext2.getName(), EducationalContext.class)).andReturn(
