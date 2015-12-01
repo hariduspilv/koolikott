@@ -84,5 +84,9 @@
                 </md-content>
               </div>
             </div>
+            
+            <!-- rating control -->
+            <div data-ng-if="!$root.isEditPortforlioMode" data-dop-rating like-message="{{ 'PORTFOLIO_LIKED' | translate }}" dislike-message="{{ 'PORTFOLIO_DISLIKED' | translate }}"></div>
+            
           </md-card-content>
         </md-card>
