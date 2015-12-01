@@ -254,6 +254,12 @@ insert into Material_Taxon(material, taxon) values(6, 1014); -- BASICEDUCATION -
 insert into Material_Taxon(material, taxon) values(6, 1066); -- SECONDARYEDUCATION - Natural sciences - Biology
 insert into Material_Taxon(material, taxon) values(10, 103); -- PRESCHOOLEDUCATION - Mathematics
 insert into Material_Taxon(material, taxon) values(11, 103); -- PRESCHOOLEDUCATION - Mathematics
+
+insert into Material_Taxon(material, taxon) values(12, 15020); -- PRESCHOOLEDUCATION - Me_and_the_environment - Preschool_Topic1 - Subtopic_for_Preschool_Topic1
+insert into Material_Taxon(material, taxon) values(13, 15000); --  BASICEDUCATION - Social_studies - History - Basic_history - Ajaarvamine (subtopic)
+insert into Material_Taxon(material, taxon) values(14, 15030); --  SECONDARYEDUCATION - Electives - Religious_studies - Secondary_Education_Topic1 - Subtopic_for_Secondary_Education_Topic1
+insert into Material_Taxon(material, taxon) values(15, 15040); -- VOCATIONALEDUCATION - Computer_science - Computers_and_Networks - Majanduse_alused - Vocational_Education_Topic1 - Subtopic_for_Vocational_Education
+
 insert into Material_Taxon(material, taxon) values(30, 10001); -- BASICEDUCATION - Social_studies - History - Estonian_history (topic)
 insert into Material_Taxon(material, taxon) values(31, 20000); -- VOCATIONALEDUCATION - Computer_science - Computers_and_Networks (specialization)
 insert into Material_Taxon(material, taxon) values(32, 20100); -- VOCATIONALEDUCATION - Computer_science - Computers_and_Networks - Majanduse_alused (module)
@@ -366,6 +372,10 @@ insert into Portfolio(id, title, taxon, creator, summary, views, created, update
 insert into Portfolio(id, title, taxon, creator, summary, views, created, updated, picture) VALUES (9, 'Test portfolio number 9', 20000, 6, 'Blabla2.', 1, '2001-12-29 11:00:01', '2001-05-02 06:01:01', null);
 insert into Portfolio(id, title, taxon, creator, summary, views, created, updated, picture) VALUES (10, 'Test portfolio number 10', 20100, 6, 'Blabla3.', 1, '2001-12-29 11:00:01', '2001-05-02 06:01:01', null);
 insert into Portfolio(id, title, taxon, creator, summary, views, created, updated, picture) VALUES (11, 'Test portfolio number 11', 10300, 6, 'Blabla4.', 1, '2001-12-29 11:00:01', '2001-05-02 06:01:01', null);
+insert into Portfolio(id, title, taxon, creator, summary, views, created, updated, picture) VALUES (12, 'Test portfolio number 12', 15020, 6, 'Blabla4.', 1, '2001-12-29 11:00:01', '2001-05-02 06:01:01', null);
+insert into Portfolio(id, title, taxon, creator, summary, views, created, updated, picture) VALUES (13, 'Test portfolio number 13', 15000, 6, 'Blabla5.', 1, '2001-12-29 11:00:01', '2001-05-02 06:01:01', null);
+insert into Portfolio(id, title, taxon, creator, summary, views, created, updated, picture) VALUES (14, 'Test portfolio number 14', 15030, 6, 'Blabla6.', 1, '2001-12-29 11:00:01', '2001-05-02 06:01:01', null);
+insert into Portfolio(id, title, taxon, creator, summary, views, created, updated, picture) VALUES (15, 'Test portfolio number 15', 15040, 6, 'Blabla7.', 1, '2001-12-29 11:00:01', '2001-05-02 06:01:01', null);
 
 -- Pictures
 
