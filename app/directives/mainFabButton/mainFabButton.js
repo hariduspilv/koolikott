@@ -8,12 +8,11 @@ define(['app'], function(app)
                 controller: function ($scope, $mdDialog) {
                     $scope.isOpen = false;
 
-                    var portfolio = {
-                        type: ".Portfolio",
-                        tags:[]
-                    };
-
                     $scope.showAddPortfolioDialog = function() {
+                        var portfolio = {
+                            type: ".Portfolio",
+                            tags:[]
+                        };
                         $mdDialog.show({
                             controller: 'addPortfolioDialog',
                             templateUrl: 'views/addPortfolioDialog/addPortfolioDialog.html',
