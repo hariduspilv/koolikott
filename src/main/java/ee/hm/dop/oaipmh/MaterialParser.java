@@ -3,6 +3,7 @@ package ee.hm.dop.oaipmh;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -213,10 +214,12 @@ public abstract class MaterialParser {
 
     protected void setTaxon(Material material, Document doc) {
         Set<Taxon> taxons = new HashSet<>();
+        Taxon parent = null;
 
         try {
             for (Node taxonPath : getTaxonPathNodes(doc)) {
-                Taxon parent = setEducationalContext(taxonPath);
+                parent = null;
+                parent = setEducationalContext(taxonPath);
                 parent = setDomain(taxonPath, parent);
 
                 parent = setSubject(taxonPath, parent);
@@ -224,11 +227,12 @@ public abstract class MaterialParser {
                 parent = setModule(taxonPath, parent);
 
                 parent = setTopic(taxonPath, parent);
+                parent = setSubTopic(taxonPath, parent);
 
                 taxons.add(parent);
             }
         } catch (Exception e) {
-            //ignore if there is no taxon for a material
+            taxons.add(parent);
         }
 
         try {
@@ -237,6 +241,7 @@ public abstract class MaterialParser {
             e.printStackTrace();
         }
 
+        taxons.removeAll(Collections.singleton(null));
         material.setTaxons(new ArrayList<>(taxons));
     }
 
@@ -331,4 +336,6 @@ public abstract class MaterialParser {
     protected abstract Taxon setSpecialization(Node taxonPath, Taxon parent);
 
     protected abstract Taxon setModule(Node taxonPath, Taxon parent);
+
+    protected abstract Taxon setSubTopic(Node taxonPath, Taxon parent);
 }

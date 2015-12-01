@@ -25,6 +25,7 @@ import ee.hm.dop.model.taxon.EducationalContext;
 import ee.hm.dop.model.taxon.Module;
 import ee.hm.dop.model.taxon.Specialization;
 import ee.hm.dop.model.taxon.Subject;
+import ee.hm.dop.model.taxon.Subtopic;
 import ee.hm.dop.model.taxon.Taxon;
 import ee.hm.dop.model.taxon.Topic;
 import ee.hm.dop.oaipmh.MaterialParser;
@@ -204,10 +205,12 @@ public class MaterialParserEstCore extends MaterialParser {
                 Node node = getNode(taxonPath, "./*[local-name()='" + tag + "']/*[local-name()='topic']");
 
                 if (node != null) {
-                    List<Taxon> topics;
-                    if (tag.equals("vocationalTaxon")) {
+                    List<Taxon> topics = null;
+                    if (parent instanceof Module && tag.equals("vocationalTaxon")) {
                         topics = new ArrayList<>(((Module) parent).getTopics());
-                    } else {
+                    } else if (parent instanceof Domain && tag.equals("preschoolTaxon")) {
+                        topics = new ArrayList<>(((Domain) parent).getTopics());
+                    } else if (parent instanceof Subject) {
                         topics = new ArrayList<>(((Subject) parent).getTopics());
                     }
 
@@ -255,6 +258,27 @@ public class MaterialParserEstCore extends MaterialParser {
 
                     String systemName = getTaxon(node.getTextContent(), Module.class).getName();
                     Taxon taxon = getTaxonByName(modules, systemName);
+                    if (taxon != null) return taxon;
+                }
+            } catch (XPathExpressionException e) {
+                //ignore
+            }
+        }
+        return parent;
+    }
+
+    @Override
+    protected Taxon setSubTopic(Node taxonPath, Taxon parent) {
+        for (String tag : taxonMap.keySet()) {
+            try {
+                Node node = getNode(taxonPath, "./*[local-name()='" + tag + "']/*[local-name()='subtopic']");
+
+                if (node != null) {
+                    List<Taxon> subtopics;
+                    subtopics = new ArrayList<>(((Topic) parent).getSubtopics());
+
+                    String systemName = getTaxon(node.getTextContent(), Subtopic.class).getName();
+                    Taxon taxon = getTaxonByName(subtopics, systemName);
                     if (taxon != null) return taxon;
                 }
             } catch (XPathExpressionException e) {

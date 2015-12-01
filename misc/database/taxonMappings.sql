@@ -150,7 +150,8 @@ INSERT INTO EstCoreTaxonMapping (id, taxon, name) VALUES (15011, 15011, 'Tähtsa
 INSERT INTO EstCoreTaxonMapping (id, taxon, name) VALUES (15012, 15012, 'Eesti ühiskonf muinasaja lõpul');
 INSERT INTO EstCoreTaxonMapping (id, taxon, name) VALUES (15013, 15013, 'Keskaeg');
 INSERT INTO EstCoreTaxonMapping (id, taxon, name) VALUES (15020, 15020, 'Subtopic for Preschool Topic1');
-INSERT INTO EstCoreTaxonMapping (id, taxon, name) VALUES (15030, 15030, 'Subtopic for Secondary Education_Topic1');
+INSERT INTO EstCoreTaxonMapping (id, taxon, name) VALUES (15030, 15030, 'Subtopic for Secondary Education Topic1');
+INSERT INTO EstCoreTaxonMapping (id, taxon, name) VALUES (15040, 15040, 'Subtopic for Vocational Education');
 INSERT INTO EstCoreTaxonMapping (id, taxon, name) VALUES (20000, 20000, 'Computers and Networks');
 INSERT INTO EstCoreTaxonMapping (id, taxon, name) VALUES (20100, 20100, 'Majanduse alused');
 INSERT INTO EstCoreTaxonMapping (id, taxon, name) VALUES (20101, 20101, 'Ettevõtluse alused');
@@ -309,6 +310,9 @@ INSERT INTO WaramuTaxonMapping (id, taxon, name) VALUES (15010, 15010, 'Muinasae
 INSERT INTO WaramuTaxonMapping (id, taxon, name) VALUES (15011, 15011, 'Tähtsamad_arheloogilised_kultuurid');
 INSERT INTO WaramuTaxonMapping (id, taxon, name) VALUES (15012, 15012, 'Eesti_ühiskonf_muinasaja_lõpul');
 INSERT INTO WaramuTaxonMapping (id, taxon, name) VALUES (15013, 15013, 'Keskaeg');
+INSERT INTO WaramuTaxonMapping (id, taxon, name) VALUES (15020, 15020, 'Subtopic_for_Preschool_Topic1');
+INSERT INTO WaramuTaxonMapping (id, taxon, name) VALUES (15030, 15030, 'Subtopic_for_Secondary_Education_Topic1');
+INSERT INTO WaramuTaxonMapping (id, taxon, name) VALUES (15040, 15040, 'Subtopic_for_Vocational_Education');
 INSERT INTO WaramuTaxonMapping (id, taxon, name) VALUES (20000, 20000, 'Computers_and_Networks');
 INSERT INTO WaramuTaxonMapping (id, taxon, name) VALUES (20100, 20100, 'Majanduse_alused');
 INSERT INTO WaramuTaxonMapping (id, taxon, name) VALUES (20101, 20101, 'Ettevõtluse_alused');

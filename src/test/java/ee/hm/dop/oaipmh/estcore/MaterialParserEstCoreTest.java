@@ -35,6 +35,7 @@ import ee.hm.dop.model.taxon.EducationalContext;
 import ee.hm.dop.model.taxon.Module;
 import ee.hm.dop.model.taxon.Specialization;
 import ee.hm.dop.model.taxon.Subject;
+import ee.hm.dop.model.taxon.Subtopic;
 import ee.hm.dop.model.taxon.Topic;
 import ee.hm.dop.oaipmh.ParseException;
 import ee.hm.dop.service.AuthorService;
@@ -144,7 +145,7 @@ public class MaterialParserEstCoreTest {
         educationalContext2.setDomains(domains);
 
         Domain domain2 = new Domain();
-        domain2.setName("Matemaatika");
+        domain2.setName("Me_and_the_environment");
         domain2.setEducationalContext(educationalContext1);
         domains = new HashSet<>();
         domains.add(domain2);
@@ -199,6 +200,13 @@ public class MaterialParserEstCoreTest {
         topics.add(topic2);
         subject2.setTopics(topics);
 
+        Topic topic3 = new Topic();
+        topic3.setName("Preschool_Topic1");
+        topic3.setSubject(subject2);
+        topics = new HashSet<>();
+        topics.add(topic3);
+        domain2.setTopics(topics);
+
         Module module = new Module();
         module.setName("Majanduse_alused");
         module.setSpecialization(specialization);
@@ -206,12 +214,40 @@ public class MaterialParserEstCoreTest {
         modules.add(module);
         specialization.setModules(modules);
 
-        Topic topic3 = new Topic();
-        topic3.setName("Vocational_Education_Topic1");
-        topic3.setModule(module);
+        Topic topic4 = new Topic();
+        topic4.setName("Vocational_Education_Topic1");
+        topic4.setModule(module);
         topics = new HashSet<>();
-        topics.add(topic3);
+        topics.add(topic4);
         module.setTopics(topics);
+
+        Subtopic subtopic1 = new Subtopic();
+        subtopic1.setName("Subtopic_for_Preschool_Topic1");
+        subtopic1.setTopic(topic3);
+        Set<Subtopic> subtopics = new HashSet<>();
+        subtopics.add(subtopic1);
+        topic3.setSubtopics(subtopics);
+
+        Subtopic subtopic2 = new Subtopic();
+        subtopic2.setName("Ajaarvamine");
+        subtopic2.setTopic(topic1);
+        subtopics = new HashSet<>();
+        subtopics.add(subtopic2);
+        topic1.setSubtopics(subtopics);
+
+        Subtopic subtopic3 = new Subtopic();
+        subtopic3.setName("Subtopic_for_Vocational_Education");
+        subtopic3.setTopic(topic4);
+        subtopics = new HashSet<>();
+        subtopics.add(subtopic3);
+        topic4.setSubtopics(subtopics);
+
+        Subtopic subtopic4 = new Subtopic();
+        subtopic4.setName("Ajaarvamine");
+        subtopic4.setTopic(topic2);
+        subtopics = new HashSet<>();
+        subtopics.add(subtopic4);
+        topic2.setSubtopics(subtopics);
 
         expect(languageService.getLanguage("en")).andReturn(english).times(3);
         expect(languageService.getLanguage("et")).andReturn(estonian).times(2);
@@ -225,7 +261,9 @@ public class MaterialParserEstCoreTest {
         //first taxon
         expect(taxonService.getTaxonByEstCoreName(educationalContext1.getName(), EducationalContext.class)).andReturn(
                 educationalContext1).anyTimes();
-        expect(taxonService.getTaxonByEstCoreName(domain2.getName(), Domain.class)).andReturn(domain2);
+        expect(taxonService.getTaxonByEstCoreName("Mina ja keskkond", Domain.class)).andReturn(domain2);
+        expect(taxonService.getTaxonByEstCoreName("Preschool Topic1", Topic.class)).andReturn(topic3);
+        expect(taxonService.getTaxonByEstCoreName("Subtopic for Preschool Topic1", Subtopic.class)).andReturn(subtopic1);
 
         //second taxon
         expect(taxonService.getTaxonByEstCoreName(educationalContext3.getName(), EducationalContext.class)).andReturn(
@@ -233,6 +271,8 @@ public class MaterialParserEstCoreTest {
         expect(taxonService.getTaxonByEstCoreName("Language and literature", Domain.class)).andReturn(domain4);
         expect(taxonService.getTaxonByEstCoreName(subject1.getName(), Subject.class)).andReturn(subject1);
         expect(taxonService.getTaxonByEstCoreName("Ajaloo algõpetus", Topic.class)).andReturn(topic1);
+        expect(taxonService.getTaxonByEstCoreName("Ajaarvamine", Subtopic.class)).andReturn(subtopic2);
+
 
         //third taxon
         expect(taxonService.getTaxonByEstCoreName(educationalContext4.getName(), EducationalContext.class)).andReturn(
@@ -240,7 +280,8 @@ public class MaterialParserEstCoreTest {
         expect(taxonService.getTaxonByEstCoreName("Computer Science", Domain.class)).andReturn(domain3);
         expect(taxonService.getTaxonByEstCoreName("Computers and Networks", Specialization.class)).andReturn(specialization);
         expect(taxonService.getTaxonByEstCoreName("Majanduse alused", Module.class)).andReturn(module);
-        expect(taxonService.getTaxonByEstCoreName("Vocational Education Topic1", Topic.class)).andReturn(topic3);
+        expect(taxonService.getTaxonByEstCoreName("Vocational Education Topic1", Topic.class)).andReturn(topic4);
+        expect(taxonService.getTaxonByEstCoreName("Subtopic for Vocational Education", Subtopic.class)).andReturn(subtopic3);
 
 
         //fourth taxon
@@ -249,6 +290,8 @@ public class MaterialParserEstCoreTest {
         expect(taxonService.getTaxonByEstCoreName("Foreign language", Domain.class)).andReturn(domain1);
         expect(taxonService.getTaxonByEstCoreName(subject2.getName(), Subject.class)).andReturn(subject2);
         expect(taxonService.getTaxonByEstCoreName("Eesti ajalugu", Topic.class)).andReturn(topic2);
+        expect(taxonService.getTaxonByEstCoreName("Ajalooallikad", Subtopic.class)).andReturn(subtopic4);
+
 
 
         LanguageString title1 = new LanguageString();
