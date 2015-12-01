@@ -45,7 +45,8 @@ define(['app'], function(app)
 
                 $mdDialog.show({
                     controller: 'addPortfolioDialog',
-                    templateUrl: 'views/addPortfolioDialog/addPortfolioDialog.html'
+                    templateUrl: 'views/addPortfolioDialog/addPortfolioDialog.html',
+                    locals:{portfolio: portfolio}
                 });
             };
 

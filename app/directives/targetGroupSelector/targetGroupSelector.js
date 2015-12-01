@@ -22,6 +22,7 @@ define(['app'], function(app)
                 function init() {
                     fill();
                     addListeners();
+                    selectValue();
             	}
             	
             	function addListeners() {

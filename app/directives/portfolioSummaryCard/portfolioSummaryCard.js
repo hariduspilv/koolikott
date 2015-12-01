@@ -7,15 +7,19 @@ define(['app'], function(app)
                 templateUrl: 'directives/portfolioSummaryCard/portfolioSummaryCard.html',
                 controller: function ($scope, $location) {
 
-                $scope.showEditPortfolioDialog = function($event) {
-                    $event.preventDefault();
+                    $scope.formatDate = function(date) {
+                        return formatDateToDayMonthYear(date);
+                    }
+                
+                    $scope.showEditPortfolioDialog = function($event) {
+                        $event.preventDefault();
 
-                    $mdDialog.show({
-                        controller: 'addPortfolioDialog',
-                        templateUrl: 'views/addPortfolioDialog/addPortfolioDialog.html',
-                        locals:{portfolio: $scope.portfolio}
-                    });
-                };
+                        $mdDialog.show({
+                            controller: 'addPortfolioDialog',
+                            templateUrl: 'views/addPortfolioDialog/addPortfolioDialog.html',
+                            locals:{portfolio: $scope.portfolio}
+                        });
+                    };
 
                 }
             };
