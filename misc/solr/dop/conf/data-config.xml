@@ -34,6 +34,27 @@
             <entity name="Material_Taxon" query="select taxon as taxon_id from Material_Taxon where material = '${Material.id}'">
                 <!-- Travel up the taxon path -->
 
+                <!-- Get topic -->
+                <entity name="Topic" query="select t.id, t.name as topic, top.module as parent from Taxon t left join Topic top on t.id = top.id where t.level = 'TOPIC' and t.id = '${Material_Taxon.taxon_id}'">
+
+                    <!-- Get module -->
+                    <entity name="Module" query="select t.id, t.name as module, m.specialization as parent from Taxon t left join Module m on t.id = m.id where t.level = 'MODULE' and t.id = '${Topic.parent}'">
+
+                        <!-- Get specialization -->
+                        <entity name="Specialization" query="select t.id, t.name as specialization, s.domain as parent from Taxon t left join Specialization s on t.id = s.id where t.level = 'SPECIALIZATION' and t.id = '${Module.parent}'">
+
+                                <!-- Get domain -->
+                                <entity name="Domain" query="select t.id, t.name as domain, d.educationalContext as parent from Taxon t left join Domain d on t.id = d.id where t.level = 'DOMAIN' and t.id = '${Specialization.parent}'">
+                                    
+                                    <!-- Get educational context -->
+                                    <entity name="EducationalContext" query="select name as educational_context from Taxon where level = 'EDUCATIONAL_CONTEXT' and id = '${Domain.parent}'">
+                                        <entity name="Translation" query="select translation as educational_context from Translation where translationKey = '${EducationalContext.educational_context}'" />
+                                    </entity>
+                                </entity>
+                        </entity>
+                    </entity>
+                </entity>
+
                 <!-- Get module -->
                 <entity name="Module" query="select t.id, t.name as module, m.specialization as parent from Taxon t left join Module m on t.id = m.id where t.level = 'MODULE' and t.id = '${Material_Taxon.taxon_id}'">
 
@@ -142,6 +163,27 @@
             deltaQuery="select concat('portfolio', id ) as uniqueKey, id from Portfolio where (CONVERT_TZ(created, @@session.time_zone, '+00:00') > '${dataimporter.last_index_time}' OR CONVERT_TZ(updated, @@session.time_zone, '+00:00') > '${dataimporter.last_index_time}')">
 
             <!-- Travel up the taxon path -->
+
+            <!-- Get topic -->
+            <entity name="Topic" query="select t.id, t.name as topic, top.module as parent from Taxon t left join Topic top on t.id = top.id where t.level = 'TOPIC' and t.id = '${Portfolio.taxon_id}'">
+
+                <!-- Get module -->
+                <entity name="Module" query="select t.id, t.name as module, m.specialization as parent from Taxon t left join Module m on t.id = m.id where t.level = 'MODULE' and t.id = '${Topic.parent}'">
+
+                    <!-- Get specialization -->
+                    <entity name="Specialization" query="select t.id, t.name as specialization, s.domain as parent from Taxon t left join Specialization s on t.id = s.id where t.level = 'SPECIALIZATION' and t.id = '${Module.parent}'">
+
+                            <!-- Get domain -->
+                            <entity name="Domain" query="select t.id, t.name as domain, d.educationalContext as parent from Taxon t left join Domain d on t.id = d.id where t.level = 'DOMAIN' and t.id = '${Specialization.parent}'">
+                                
+                                <!-- Get educational context -->
+                                <entity name="EducationalContext" query="select name as educational_context from Taxon where level = 'EDUCATIONAL_CONTEXT' and id = '${Domain.parent}'">
+                                    <entity name="Translation" query="select translation as educational_context from Translation where translationKey = '${EducationalContext.educational_context}'" />
+                                </entity>
+                            </entity>
+                    </entity>
+                </entity>
+            </entity>
 
             <!-- Get module -->
             <entity name="Module" query="select t.id, t.name as module, m.specialization as parent from Taxon t left join Module m on t.id = m.id where t.level = 'MODULE' and t.id = '${Portfolio.taxon_id}'">
