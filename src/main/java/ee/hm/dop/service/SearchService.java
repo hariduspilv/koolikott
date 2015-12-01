@@ -28,6 +28,8 @@ import ee.hm.dop.model.solr.Response;
 import ee.hm.dop.model.solr.SearchResponse;
 import ee.hm.dop.model.taxon.Domain;
 import ee.hm.dop.model.taxon.EducationalContext;
+import ee.hm.dop.model.taxon.Module;
+import ee.hm.dop.model.taxon.Specialization;
 import ee.hm.dop.model.taxon.Subject;
 import ee.hm.dop.model.taxon.Taxon;
 import ee.hm.dop.model.taxon.Topic;
@@ -230,29 +232,55 @@ public class SearchService {
         List<String> taxons = new LinkedList<>();
 
         if (taxon instanceof Topic) {
-            String name = ClientUtils.escapeQueryChars(taxon.getName()).toLowerCase();
-            taxons.add(format("%s:\"%s\"", getTaxonLevel(taxon), name));
-            taxon = ((Topic) taxon).getSubject();
+            addTaxonToQuery(taxon, taxons);
+
+            Subject subject = ((Topic) taxon).getSubject();
+            Domain domain = ((Topic) taxon).getDomain();
+            Module module = ((Topic) taxon).getModule();
+
+            if (subject != null) {
+                taxon = subject;
+            } else if (domain != null) {
+                taxon = domain;
+            } else if (module != null) {
+                taxon = module;
+            }
         }
 
         if (taxon instanceof Subject) {
-            String name = ClientUtils.escapeQueryChars(taxon.getName()).toLowerCase();
-            taxons.add(format("%s:\"%s\"", getTaxonLevel(taxon), name));
+            addTaxonToQuery(taxon, taxons);
             taxon = ((Subject) taxon).getDomain();
         }
 
+        if (taxon instanceof Module) {
+            addTaxonToQuery(taxon, taxons);
+            taxon = ((Module) taxon).getSpecialization();
+        }
+
+        if (taxon instanceof Specialization) {
+            addTaxonToQuery(taxon, taxons);
+            taxon = ((Specialization) taxon).getDomain();
+        }
+
         if (taxon instanceof Domain) {
-            String name = ClientUtils.escapeQueryChars(taxon.getName()).toLowerCase();
-            taxons.add(format("%s:\"%s\"", getTaxonLevel(taxon), name));
+            addTaxonToQuery(taxon, taxons);
             taxon = ((Domain) taxon).getEducationalContext();
         }
 
         if (taxon instanceof EducationalContext) {
-            String name = ClientUtils.escapeQueryChars(taxon.getName()).toLowerCase();
-            taxons.add(format("%s:\"%s\"", getTaxonLevel(taxon), name));
+            addTaxonToQuery(taxon, taxons);
         }
 
         return StringUtils.join(taxons, " AND ");
+    }
+
+    private void addTaxonToQuery(Taxon taxon, List<String> taxons) {
+        String name = getTaxonName(taxon);
+        taxons.add(format("%s:\"%s\"", getTaxonLevel(taxon), name));
+    }
+
+    private String getTaxonName(Taxon taxon) {
+        return ClientUtils.escapeQueryChars(taxon.getName()).toLowerCase();
     }
 
     private String getTaxonLevel(Taxon taxon) {
@@ -264,6 +292,10 @@ public class SearchService {
             return "subject";
         } else if (taxon instanceof Topic) {
             return "topic";
+        } else if (taxon instanceof Specialization) {
+            return "specialization";
+        } else if (taxon instanceof Module) {
+            return "module";
         }
         return null;
     }

@@ -32,6 +32,8 @@ import ee.hm.dop.model.solr.Response;
 import ee.hm.dop.model.solr.SearchResponse;
 import ee.hm.dop.model.taxon.Domain;
 import ee.hm.dop.model.taxon.EducationalContext;
+import ee.hm.dop.model.taxon.Module;
+import ee.hm.dop.model.taxon.Specialization;
 import ee.hm.dop.model.taxon.Subject;
 import ee.hm.dop.model.taxon.Topic;
 
@@ -330,6 +332,174 @@ public class SearchServiceTest {
         searchFilter.setTaxon(subject);
 
         String tokenizedQuery = "(pythagoras*) AND subject:\"cool_subject\" AND domain:\"cool_domain\" AND educational_context:\"preschool\"";
+        long start = 0;
+
+        List<Searchable> searchables = Arrays.asList(createMaterial(9L), createMaterial(2L), createPortfolio(2L));
+
+        testSearch(query, tokenizedQuery, searchables, start, searchFilter);
+    }
+
+    @Test
+    public void searchWithTaxonSpecializationFilter() {
+        String query = "pythagoras";
+
+        SearchFilter searchFilter = new SearchFilter();
+        EducationalContext educationalContext = new EducationalContext();
+        educationalContext.setId(2L);
+        educationalContext.setName("PRESCHOOL");
+
+        Domain domain = new Domain();
+        domain.setId(3L);
+        domain.setName("COOL_DOMAIN");
+        domain.setEducationalContext(educationalContext);
+
+        Specialization specialization = new Specialization();
+        specialization.setId(4L);
+        specialization.setName("COOL_SPECIALIZATION");
+        specialization.setDomain(domain);
+
+        searchFilter.setTaxon(specialization);
+
+        String tokenizedQuery = "(pythagoras*) AND specialization:\"cool_specialization\" AND domain:\"cool_domain\" AND educational_context:\"preschool\"";
+        long start = 0;
+
+        List<Searchable> searchables = Arrays.asList(createMaterial(9L), createMaterial(2L), createPortfolio(2L));
+
+        testSearch(query, tokenizedQuery, searchables, start, searchFilter);
+    }
+
+    @Test
+    public void searchWithTaxonModuleFilter() {
+        String query = "pythagoras";
+
+        SearchFilter searchFilter = new SearchFilter();
+        EducationalContext educationalContext = new EducationalContext();
+        educationalContext.setId(2L);
+        educationalContext.setName("PRESCHOOL");
+
+        Domain domain = new Domain();
+        domain.setId(3L);
+        domain.setName("COOL_DOMAIN");
+        domain.setEducationalContext(educationalContext);
+
+        Specialization specialization = new Specialization();
+        specialization.setId(4L);
+        specialization.setName("COOL_SPECIALIZATION");
+        specialization.setDomain(domain);
+
+        Module module = new Module();
+        module.setId(5L);
+        module.setName("COOL_MODULE");
+        module.setSpecialization(specialization);
+
+        searchFilter.setTaxon(module);
+
+        String tokenizedQuery = "(pythagoras*) AND module:\"cool_module\" AND specialization:\"cool_specialization\""
+                + " AND domain:\"cool_domain\" AND educational_context:\"preschool\"";
+        long start = 0;
+
+        List<Searchable> searchables = Arrays.asList(createMaterial(9L), createMaterial(2L), createPortfolio(2L));
+
+        testSearch(query, tokenizedQuery, searchables, start, searchFilter);
+    }
+
+    @Test
+    public void searchWithTaxonPreschoolTopicFilter() {
+        String query = "pythagoras";
+
+        SearchFilter searchFilter = new SearchFilter();
+        EducationalContext educationalContext = new EducationalContext();
+        educationalContext.setId(2L);
+        educationalContext.setName("PRESCHOOL");
+
+        Domain domain = new Domain();
+        domain.setId(3L);
+        domain.setName("COOL_DOMAIN");
+        domain.setEducationalContext(educationalContext);
+
+        Topic topic = new Topic();
+        topic.setId(4L);
+        topic.setName("COOL_TOPIC");
+        topic.setDomain(domain);
+
+        searchFilter.setTaxon(topic);
+        String tokenizedQuery = "(pythagoras*) AND topic:\"cool_topic\" AND domain:\"cool_domain\""
+                + " AND educational_context:\"preschool\"";
+        long start = 0;
+
+        List<Searchable> searchables = Arrays.asList(createMaterial(9L), createMaterial(2L), createPortfolio(2L));
+
+        testSearch(query, tokenizedQuery, searchables, start, searchFilter);
+    }
+
+    @Test
+    public void searchWithTaxonBasicEducationTopicFilter() {
+        String query = "pythagoras";
+
+        SearchFilter searchFilter = new SearchFilter();
+        EducationalContext educationalContext = new EducationalContext();
+        educationalContext.setId(2L);
+        educationalContext.setName("PRESCHOOL");
+
+        Domain domain = new Domain();
+        domain.setId(3L);
+        domain.setName("COOL_DOMAIN");
+        domain.setEducationalContext(educationalContext);
+
+        Subject subject = new Subject();
+        subject.setId(4L);
+        subject.setName("COOL_SUBJECT");
+        subject.setDomain(domain);
+
+        Topic topic = new Topic();
+        topic.setId(5L);
+        topic.setName("COOL_TOPIC");
+        topic.setSubject(subject);
+
+        searchFilter.setTaxon(topic);
+        String tokenizedQuery = "(pythagoras*) AND topic:\"cool_topic\" AND subject:\"cool_subject\""
+                + " AND domain:\"cool_domain\" AND educational_context:\"preschool\"";
+        long start = 0;
+
+        List<Searchable> searchables = Arrays.asList(createMaterial(9L), createMaterial(2L), createPortfolio(2L));
+
+        testSearch(query, tokenizedQuery, searchables, start, searchFilter);
+    }
+
+    @Test
+    public void searchWithTaxonVocationalEducationTopicFilter() {
+        String query = "pythagoras";
+
+        SearchFilter searchFilter = new SearchFilter();
+        EducationalContext educationalContext = new EducationalContext();
+        educationalContext.setId(2L);
+        educationalContext.setName("PRESCHOOL");
+
+        Domain domain = new Domain();
+        domain.setId(3L);
+        domain.setName("COOL_DOMAIN");
+        domain.setEducationalContext(educationalContext);
+
+        Specialization specialization = new Specialization();
+        specialization.setId(4L);
+        specialization.setName("COOL_SPECIALIZATION");
+        specialization.setDomain(domain);
+
+        Module module = new Module();
+        module.setId(5L);
+        module.setName("COOL_MODULE");
+        module.setSpecialization(specialization);
+
+        Topic topic = new Topic();
+        topic.setId(6L);
+        topic.setName("COOL_TOPIC");
+        topic.setModule(module);
+
+        searchFilter.setTaxon(topic);
+
+        String tokenizedQuery = "(pythagoras*) AND topic:\"cool_topic\" AND module:\"cool_module\""
+                + " AND specialization:\"cool_specialization\" AND domain:\"cool_domain\""
+                + " AND educational_context:\"preschool\"";
         long start = 0;
 
         List<Searchable> searchables = Arrays.asList(createMaterial(9L), createMaterial(2L), createPortfolio(2L));

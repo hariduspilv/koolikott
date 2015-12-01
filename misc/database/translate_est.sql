@@ -255,3 +255,13 @@ insert into Translation(translationGroup, translationKey, translation) values (1
 insert into Translation(translationGroup, translationKey, translation) values (1, 'MATERIAL_TAB_TYPE', 'Tüüp');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'MATERIAL_TAB_PICTURE', 'Pilt');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'MATERIAL_TAB_TAXON', 'Liigitus');
+
+-- Like box translations
+insert into Translation(translationGroup, translationKey, translation) values (1, 'RATING_LIKE', 'Mulle meeldib see');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'RATING_DISLIKE', 'Mulle ei meeldi see');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'RATING_LIKE_REMOVED', 'Meeldimine eemaldatud');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'RATING_DISLIKE_REMOVED', 'Mitte meeldimine eemaldatud');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'MATERIAL_LIKED', 'Materjal märgitud meeldivaks!');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'MATERIAL_DISLIKED', 'Materjal märgitud mitte meeldivaks!');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'PORTFOLIO_LIKED', 'Kogumik märgitud meeldivaks!');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'PORTFOLIO_DISLIKED', 'Kogumik märgitud mitte meeldivaks!');

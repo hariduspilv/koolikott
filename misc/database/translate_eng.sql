@@ -271,3 +271,13 @@ insert into Translation(translationGroup, translationKey, translation) values (3
 insert into Translation(translationGroup, translationKey, translation) values (3, 'MATERIAL_TAB_TYPE', 'Type');
 insert into Translation(translationGroup, translationKey, translation) values (3, 'MATERIAL_TAB_PICTURE', 'Picture');
 insert into Translation(translationGroup, translationKey, translation) values (3, 'MATERIAL_TAB_TAXON', 'Taxonomy');
+
+-- Like box translations
+insert into Translation(translationGroup, translationKey, translation) values (3, 'RATING_LIKE', 'I like this');
+insert into Translation(translationGroup, translationKey, translation) values (3, 'RATING_DISLIKE', 'I dont like this');
+insert into Translation(translationGroup, translationKey, translation) values (3, 'RATING_LIKE_REMOVED', 'Like removed');
+insert into Translation(translationGroup, translationKey, translation) values (3, 'RATING_DISLIKE_REMOVED', 'Dislike removed');
+insert into Translation(translationGroup, translationKey, translation) values (3, 'MATERIAL_LIKED', 'Material liked!');
+insert into Translation(translationGroup, translationKey, translation) values (3, 'MATERIAL_DISLIKED', 'Material disliked!');
+insert into Translation(translationGroup, translationKey, translation) values (3, 'PORTFOLIO_LIKED', 'Portfolio liked!');
+insert into Translation(translationGroup, translationKey, translation) values (3, 'PORTFOLIO_DISLIKED', 'Portfolio disliked!');

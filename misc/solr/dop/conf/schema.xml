@@ -131,6 +131,8 @@
    <field name="domain" type="text_general" indexed="true" stored="false" multiValued="true"/>
    <field name="subject" type="text_general" indexed="true" stored="false" multiValued="true"/>
    <field name="topic" type="text_general" indexed="true" stored="false" multiValued="true"/>
+   <field name="specialization" type="text_general" indexed="true" stored="false" multiValued="true"/>
+   <field name="module" type="text_general" indexed="true" stored="false" multiValued="true"/>
    <field name="tag" type="text_general" indexed="true" stored="false" multiValued="true"/>
    <field name="target_group" type="text_general" indexed="true" stored="false" multiValued="true"/>
 
