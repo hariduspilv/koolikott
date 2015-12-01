@@ -227,6 +227,10 @@ public class MaterialParserTest {
         protected Taxon setSubTopic(Node taxonPath, Taxon parent) {
             return null;
         }
+
+        @Override
+        protected void setIsPaid(Material material, Document doc) {
+        }
     }
 }
 

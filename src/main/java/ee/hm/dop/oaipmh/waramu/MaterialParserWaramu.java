@@ -149,6 +149,10 @@ public class MaterialParserWaramu extends MaterialParser {
         return null;
     }
 
+    @Override
+    protected void setIsPaid(Material material, Document doc) {
+    }
+
     private void setTags(Material material, Element lom) {
         List<Tag> tags = getTags(lom);
         material.setTags(tags);

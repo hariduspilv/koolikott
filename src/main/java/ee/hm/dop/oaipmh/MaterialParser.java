@@ -65,6 +65,7 @@ public abstract class MaterialParser {
             setLearningResourceType(material, doc);
             setTaxon(material, doc);
             setAuthors(material, doc);
+            setIsPaid(material, doc);
             removeDuplicateTaxons(material);
         } catch (RuntimeException e) {
             logger.error("Unexpected error while parsing document. Document may not"
@@ -154,7 +155,6 @@ public abstract class MaterialParser {
     protected String getVCardWithNewLines(CharacterData characterData) {
         return characterData.getData().trim().trim().replaceAll("\\n\\s*(?=(\\s*))", "\r\n");
     }
-
 
     protected List<Tag> getTagsFromKeywords(NodeList keywords, TagService tagService) {
         List<Tag> tags = new ArrayList<>();
@@ -338,4 +338,6 @@ public abstract class MaterialParser {
     protected abstract Taxon setModule(Node taxonPath, Taxon parent);
 
     protected abstract Taxon setSubTopic(Node taxonPath, Taxon parent);
+
+    protected abstract void setIsPaid(Material material, Document doc);
 }

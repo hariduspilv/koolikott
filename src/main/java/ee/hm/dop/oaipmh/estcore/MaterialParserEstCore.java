@@ -39,6 +39,7 @@ public class MaterialParserEstCore extends MaterialParser {
 
     private static final String AUTHOR = "author";
     private static final Map<String, String> taxonMap;
+    public static final String YES = "YES";
 
     static {
         taxonMap = new HashMap<>();
@@ -286,6 +287,21 @@ public class MaterialParserEstCore extends MaterialParser {
             }
         }
         return parent;
+    }
+
+    @Override
+    protected void setIsPaid(Material material, Document doc) {
+        try {
+            Node isPaid = getNode(doc, "//*[local-name()='estcore']/*[local-name()='rights']/*[local-name()='cost']/*[local-name()='value']");
+
+            if (isPaid.getTextContent().trim().toUpperCase().equals(YES)) {
+                material.setIsPaid(true);
+            } else {
+                material.setIsPaid(false);
+            }
+        } catch (XPathExpressionException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
