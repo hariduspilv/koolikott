@@ -18,6 +18,9 @@ public class PortfolioService {
     @Inject
     private PortfolioDAO portfolioDAO;
 
+    @Inject
+    private SearchEngineService searchEngineService;
+
     public Portfolio get(long materialId) {
         return portfolioDAO.findById(materialId);
     }
@@ -67,7 +70,10 @@ public class PortfolioService {
         safePortfolio.setViews(0L);
         safePortfolio.setCreator(creator);
 
-        return portfolioDAO.update(safePortfolio);
+        Portfolio createdPortfolio = portfolioDAO.update(safePortfolio);
+        updateSearchIndex();
+
+        return createdPortfolio;
     }
 
     private Portfolio getPortfolioWithAllowedFieldsOnCreate(Portfolio portfolio) {
@@ -78,5 +84,9 @@ public class PortfolioService {
         safePortfolio.setTargetGroups(portfolio.getTargetGroups());
         safePortfolio.setTaxon(portfolio.getTaxon());
         return safePortfolio;
+    }
+
+    private void updateSearchIndex() {
+        searchEngineService.updateIndex();
     }
 }

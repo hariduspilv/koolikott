@@ -25,6 +25,9 @@ public class PortfolioServiceTest {
     @Mock
     private PortfolioDAO portfolioDAO;
 
+    @Mock
+    private SearchEngineService searchEngineService;
+
     @Test
     public void get() {
         int portfolioId = 125;
@@ -67,14 +70,14 @@ public class PortfolioServiceTest {
             portfolioService.incrementViewCount(portfolio);
             fail("Exception expected");
         } catch (Exception e) {
-            //expected
+            // expected
         }
 
         verifyAll();
     }
 
     private void replayAll(Object... mocks) {
-        replay(portfolioDAO);
+        replay(portfolioDAO, searchEngineService);
 
         if (mocks != null) {
             for (Object object : mocks) {
@@ -84,7 +87,7 @@ public class PortfolioServiceTest {
     }
 
     private void verifyAll(Object... mocks) {
-        verify(portfolioDAO);
+        verify(portfolioDAO, searchEngineService);
 
         if (mocks != null) {
             for (Object object : mocks) {
