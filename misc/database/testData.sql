@@ -255,6 +255,7 @@ insert into Material_Taxon(material, taxon) values(6, 1066); -- SECONDARYEDUCATI
 insert into Material_Taxon(material, taxon) values(10, 103); -- PRESCHOOLEDUCATION - Mathematics
 insert into Material_Taxon(material, taxon) values(11, 103); -- PRESCHOOLEDUCATION - Mathematics
 insert into Material_Taxon(material, taxon) values(30, 10001); -- BASICEDUCATION - Social_studies - History - Estonian_history (topic)
+insert into Material_Taxon(material, taxon) values(31, 20000); -- VOCATIONALEDUCATION - Computer_science - Computers_and_Networks (specialization)
 insert into Material_Taxon(material, taxon) values(36, 1); -- PRESCHOOLEDUCATION
 insert into Material_Taxon(material, taxon) values(36, 1018); -- BASICEDUCATION - Natural sciences - Physics
 insert into Material_Taxon(material, taxon) values(37, 103); -- PRESCHOOLEDUCATION - Mathematics
@@ -360,7 +361,7 @@ insert into Portfolio(id, title, taxon, creator, summary, views, created, update
 insert into Portfolio(id, title, taxon, creator, summary, views, created, updated, picture) VALUES (6, 'English for my students', 1054, 6, 'An intriguing summary.', 4, '2007-12-29 16:00:01', '2003-05-02 06:00:01', null);
 insert into Portfolio(id, title, taxon, creator, summary, views, created, updated, picture) VALUES (7, 'Automated test resource title. DO NOT TOUCH!!! Title in estonian', 1002, 6, 'An intriguing summary.', 4, '2007-12-29 16:00:01', '2003-05-02 06:00:01', null);
 insert into Portfolio(id, title, taxon, creator, summary, views, created, updated, picture) VALUES (8, 'Test portfolio number 8', 10100, 6, 'Bla bla bla.', 1, '2001-12-29 11:00:01', '2001-05-02 06:01:01', null);
-
+insert into Portfolio(id, title, taxon, creator, summary, views, created, updated, picture) VALUES (9, 'Test portfolio number 9', 20000, 6, 'Blabla2.', 1, '2001-12-29 11:00:01', '2001-05-02 06:01:01', null);
 
 -- Pictures
 
