@@ -254,3 +254,13 @@ insert into Translation(translationGroup, translationKey, translation) values (2
 insert into Translation(translationGroup, translationKey, translation) values (2, 'MATERIAL_TAB_TYPE', 'Тип');
 insert into Translation(translationGroup, translationKey, translation) values (2, 'MATERIAL_TAB_PICTURE', 'Картина');
 insert into Translation(translationGroup, translationKey, translation) values (2, 'MATERIAL_TAB_TAXON', 'Cистематика');
+
+-- Like box translations
+insert into Translation(translationGroup, translationKey, translation) values (2, 'RATING_LIKE', 'Мне это нравится');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'RATING_DISLIKE', 'Мне не нравится это');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'RATING_LIKE_REMOVED', 'Как удалить');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'RATING_DISLIKE_REMOVED', 'Неприязнь удалены');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'MATERIAL_LIKED', 'Материал понравился!');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'MATERIAL_DISLIKED', 'Материал не любил!');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'PORTFOLIO_LIKED', 'Портфолио понравился');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'PORTFOLIO_DISLIKED', 'Портфолио не любил!');
