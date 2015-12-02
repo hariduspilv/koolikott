@@ -31,6 +31,7 @@ import ee.hm.dop.model.taxon.EducationalContext;
 import ee.hm.dop.model.taxon.Module;
 import ee.hm.dop.model.taxon.Specialization;
 import ee.hm.dop.model.taxon.Subject;
+import ee.hm.dop.model.taxon.Subtopic;
 import ee.hm.dop.model.taxon.Taxon;
 import ee.hm.dop.model.taxon.Topic;
 import ee.hm.dop.tokenizer.DOPSearchStringTokenizer;
@@ -231,6 +232,11 @@ public class SearchService {
         Taxon taxon = searchFilter.getTaxon();
         List<String> taxons = new LinkedList<>();
 
+        if (taxon instanceof Subtopic) {
+            addTaxonToQuery(taxon, taxons);
+            taxon = ((Subtopic) taxon).getTopic();
+        }
+
         if (taxon instanceof Topic) {
             addTaxonToQuery(taxon, taxons);
 
@@ -276,7 +282,10 @@ public class SearchService {
 
     private void addTaxonToQuery(Taxon taxon, List<String> taxons) {
         String name = getTaxonName(taxon);
-        taxons.add(format("%s:\"%s\"", getTaxonLevel(taxon), name));
+        String taxonLevel = getTaxonLevel(taxon);
+        if (taxonLevel != null) {
+            taxons.add(format("%s:\"%s\"", taxonLevel, name));
+        }
     }
 
     private String getTaxonName(Taxon taxon) {
@@ -292,6 +301,8 @@ public class SearchService {
             return "subject";
         } else if (taxon instanceof Topic) {
             return "topic";
+        } else if (taxon instanceof Subtopic) {
+            return "subtopic";
         } else if (taxon instanceof Specialization) {
             return "specialization";
         } else if (taxon instanceof Module) {
