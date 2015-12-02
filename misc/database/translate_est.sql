@@ -227,6 +227,7 @@ insert into Translation(translationGroup, translationKey, translation) values (1
 insert into Translation(translationGroup, translationKey, translation) values (1, 'PORTFOLIO_ADD_SUBCHAPTER', 'Lisa alampeatükk');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'PORTFOLIO_DEFAULT_NEW_CHAPTER_TITLE', 'Uus peatükk');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'PORTFOLIO_DEFAULT_NEW_SUBCHAPTER_TITLE', 'Uus alampeatükk');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'PORTFOLIO_CREATE_NEW_MATERIAL_URL', 'E-koolikoti välise materiali aadress');
 
 -- Comment translations
 insert into Translation(translationGroup, translationKey, translation) values (1, 'COMMENTS_TITLE', 'Kommentaarid');

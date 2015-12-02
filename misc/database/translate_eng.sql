@@ -166,6 +166,7 @@ insert into Translation(translationGroup, translationKey, translation) values (3
 insert into Translation(translationGroup, translationKey, translation) values (3, 'PORTFOLIO_ADD_SUBCHAPTER', 'Add subchapter');
 insert into Translation(translationGroup, translationKey, translation) values (3, 'PORTFOLIO_DEFAULT_NEW_CHAPTER_TITLE', 'New chapter');
 insert into Translation(translationGroup, translationKey, translation) values (3, 'PORTFOLIO_DEFAULT_NEW_SUBCHAPTER_TITLE', 'New subchapter');
+insert into Translation(translationGroup, translationKey, translation) values (3, 'PORTFOLIO_CREATE_NEW_MATERIAL_URL', 'URL for material that does not exists in E-koolikott');
 
 -- Comment translations
 insert into Translation(translationGroup, translationKey, translation) values (3, 'COMMENTS_TITLE', 'Comments');
