@@ -337,6 +337,7 @@ public class MaterialParserEstCoreTest {
         assertEquals(tags, material.getTags());
         assertEquals(resourceTypes, material.getResourceTypes());
         assertEquals(4, material.getTaxons().size());
+        assertEquals(10, material.getTargetGroups().size());
     }
 
     private File getResourceAsFile(String resourcePath) throws URISyntaxException {

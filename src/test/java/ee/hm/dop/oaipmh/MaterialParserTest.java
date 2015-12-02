@@ -231,6 +231,11 @@ public class MaterialParserTest {
         @Override
         protected void setIsPaid(Material material, Document doc) {
         }
+
+        @Override
+        protected void setTargetGroups(Material material, Document doc) {
+
+        }
     }
 }
 
