@@ -22,6 +22,7 @@ import ee.hm.dop.model.Author;
 import ee.hm.dop.model.Language;
 import ee.hm.dop.model.LanguageString;
 import ee.hm.dop.model.Material;
+import ee.hm.dop.model.Publisher;
 import ee.hm.dop.model.Tag;
 import ee.hm.dop.model.TargetGroup;
 import ee.hm.dop.model.taxon.Domain;
@@ -36,6 +37,7 @@ import ee.hm.dop.oaipmh.MaterialParser;
 import ee.hm.dop.oaipmh.ParseException;
 import ee.hm.dop.service.AuthorService;
 import ee.hm.dop.service.LanguageService;
+import ee.hm.dop.service.PublisherService;
 import ee.hm.dop.service.TagService;
 import ee.hm.dop.service.TaxonService;
 
@@ -44,6 +46,7 @@ public class MaterialParserEstCore extends MaterialParser {
     private static final String AUTHOR = "AUTHOR";
     private static final Map<String, String> taxonMap;
     public static final String YES = "YES";
+    public static final String PUBLISHER = "PUBLISHER";
 
     static {
         taxonMap = new HashMap<>();
@@ -65,17 +68,23 @@ public class MaterialParserEstCore extends MaterialParser {
     @Inject
     private TaxonService taxonService;
 
+    @Inject
+    private PublisherService publisherService;
+
     @Override
-    protected void setAuthors(Material material, Document doc) {
+    protected void setContributors(Material material, Document doc) {
         List<Author> authors = null;
+        List<Publisher> publishers = null;
 
         try {
             authors = getAuthors(doc);
+            publishers = getPublishers(doc);
         } catch (Exception e) {
             //ignore
         }
 
         material.setAuthors(authors);
+        material.setPublishers(publishers);
     }
 
     @Override
@@ -400,29 +409,52 @@ public class MaterialParserEstCore extends MaterialParser {
 
         for (int i = 0; i < nodeList.getLength(); i++) {
             Node contributorNode = nodeList.item(i);
-            XPathExpression rolePath = xpath.compile("./*[local-name()='role']/*[local-name()='value']");
-            Node role = (Node) rolePath.evaluate(contributorNode, XPathConstants.NODE);
+            String role = getRoleString(contributorNode);
 
-            if (AUTHOR.equals(role.getTextContent().trim().toUpperCase())) {
-                getAuthor(authors, contributorNode);
+            if (AUTHOR.equals(role)) {
+                String vCard = getVCard(contributorNode);
+                setAuthorFromVCard(authors, vCard, authorService);
             }
         }
 
         return authors;
     }
 
-    private void getAuthor(List<Author> authors, Node contributorNode) throws XPathExpressionException {
+    private List<Publisher> getPublishers(Document doc) throws ParseException, XPathExpressionException {
+        List<Publisher> publishers = new ArrayList<>();
+        NodeList nodeList = getNodeList(doc, "//*[local-name()='estcore']/*[local-name()='lifeCycle']/*[local-name()='contribute']");
+
+        for (int i = 0; i < nodeList.getLength(); i++) {
+            Node contributorNode = nodeList.item(i);
+            String role = getRoleString(contributorNode);
+
+            if (PUBLISHER.equals(role)) {
+                String vCard = getVCard(contributorNode);
+                setPublisherFromVCard(publishers, vCard, publisherService);
+            }
+        }
+
+        return publishers;
+    }
+
+    private String getRoleString(Node contributorNode) throws XPathExpressionException {
+        XPathExpression rolePath = xpath.compile("./*[local-name()='role']/*[local-name()='value']");
+        Node roleNode = (Node) rolePath.evaluate(contributorNode, XPathConstants.NODE);
+        return roleNode.getTextContent().trim().toUpperCase();
+    }
+
+    private String getVCard(Node contributorNode) throws XPathExpressionException {
         String vCard = "";
         NodeList authorNodes = getNode(contributorNode, "./*[local-name()='entity']").getChildNodes();
 
         for (int j = 0; j < authorNodes.getLength(); j++) {
             if (!authorNodes.item(j).getTextContent().trim().isEmpty()) {
                 CharacterData characterData = (CharacterData) authorNodes.item(j);
-                vCard = getVCardWithNewLines(characterData);
+                return getVCardWithNewLines(characterData);
             }
         }
 
-        parseVCard(authors, vCard, authorService);
+        return vCard;
     }
 
     private List<LanguageString> getTitles(Document doc) throws ParseException, XPathExpressionException {

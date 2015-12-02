@@ -29,6 +29,7 @@ import ee.hm.dop.model.Author;
 import ee.hm.dop.model.Language;
 import ee.hm.dop.model.LanguageString;
 import ee.hm.dop.model.Material;
+import ee.hm.dop.model.Publisher;
 import ee.hm.dop.model.ResourceType;
 import ee.hm.dop.model.Tag;
 import ee.hm.dop.model.taxon.Domain;
@@ -41,6 +42,7 @@ import ee.hm.dop.model.taxon.Topic;
 import ee.hm.dop.oaipmh.ParseException;
 import ee.hm.dop.service.AuthorService;
 import ee.hm.dop.service.LanguageService;
+import ee.hm.dop.service.PublisherService;
 import ee.hm.dop.service.ResourceTypeService;
 import ee.hm.dop.service.TagService;
 import ee.hm.dop.service.TaxonService;
@@ -68,6 +70,9 @@ public class MaterialParserEstCoreTest {
 
     @Mock
     private TaxonService taxonService;
+
+    @Mock
+    private PublisherService publisherService;
 
     @Test(expected = ee.hm.dop.oaipmh.ParseException.class)
     public void parseXMLisNull() throws ParseException {
@@ -250,6 +255,10 @@ public class MaterialParserEstCoreTest {
         subtopics.add(subtopic4);
         topic2.setSubtopics(subtopics);
 
+        Publisher publisher = new Publisher();
+        publisher.setName("BigPublisher");
+        publisher.setWebsite("https://www.google.com/");
+
         expect(languageService.getLanguage("en")).andReturn(english).times(3);
         expect(languageService.getLanguage("et")).andReturn(estonian).times(2);
         expect(authorService.getAuthorByFullName(author1.getName(), author1.getSurname())).andReturn(author1);
@@ -258,6 +267,9 @@ public class MaterialParserEstCoreTest {
         expect(tagService.getTagByName(tag2.getName())).andReturn(tag2);
         expect(resourceTypeService.getResourceTypeByName(resourceType1.getName())).andReturn(resourceType1);
         expect(resourceTypeService.getResourceTypeByName(resourceType2.getName())).andReturn(resourceType2);
+        expect(publisherService.getPublisherByName(publisher.getName())).andReturn(null);
+        expect(publisherService.createPublisher(publisher.getName(), publisher.getWebsite())).andReturn(publisher);
+
 
         //first taxon
         expect(taxonService.getTaxonByEstCoreName(educationalContext1.getName(), EducationalContext.class)).andReturn(
@@ -323,12 +335,12 @@ public class MaterialParserEstCoreTest {
         resourceTypes.add(resourceType1);
         resourceTypes.add(resourceType2);
 
-        replay(languageService, authorService, tagService, resourceTypeService, taxonService);
+        replay(languageService, authorService, tagService, resourceTypeService, taxonService, publisherService);
 
         Document doc = dBuilder.parse(fXmlFile);
         Material material = materialParser.parse(doc);
 
-        verify(languageService, authorService, tagService, resourceTypeService, taxonService);
+        verify(languageService, authorService, tagService, resourceTypeService, taxonService, publisherService);
 
         assertEquals(titles, material.getTitles());
         assertEquals("https://oxygen.netgroupdigital.com/rest/repoMaterialSource", material.getSource());
@@ -340,6 +352,7 @@ public class MaterialParserEstCoreTest {
         assertEquals(4, material.getTaxons().size());
         assertEquals(10, material.getTargetGroups().size());
         assertNotNull(material.getPicture());
+        assertEquals(1, material.getPublishers().size());
     }
 
     private File getResourceAsFile(String resourcePath) throws URISyntaxException {

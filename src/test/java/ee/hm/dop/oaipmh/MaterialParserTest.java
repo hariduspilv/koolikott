@@ -149,7 +149,7 @@ public class MaterialParserTest {
     private class MaterialParserImpl extends MaterialParser {
 
         @Override
-        protected void setAuthors(Material material, Document doc) {
+        protected void setContributors(Material material, Document doc) {
         }
 
         @Override

@@ -73,6 +73,21 @@
 								]]>
                             </lom:entity>
                         </contribute>
+                        <contribute>
+                            <lom:role>
+                                <lom:value>publisher</lom:value>
+                            </lom:role>
+                            <lom:entity>
+                                <![CDATA[
+								BEGIN:VCARD
+                                VERSION:4.0
+                                URL:https://www.google.com/
+                                N:BigPublisher;;;Mr;
+                                FN:BigPublisher
+                                END:VCARD
+								]]>
+                            </lom:entity>
+                        </contribute>
                     </lifeCycle>
                     <technical>
                         <location>https://oxygen.netgroupdigital.com/rest/repoMaterialSource</location>
