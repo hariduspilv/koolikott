@@ -167,7 +167,7 @@ public class MaterialParserWaramu extends MaterialParser {
         material.setTags(tags);
     }
 
-    protected void setAuthors(Material material, Document doc) {
+    protected void setContributors(Material material, Document doc) {
         List<Author> authors = null;
         try {
             authors = getAuthors(doc);
@@ -211,7 +211,7 @@ public class MaterialParserWaramu extends MaterialParser {
             CharacterData characterData = (CharacterData) authorNodes.item(i);
             String data = getVCardWithNewLines(characterData);
 
-            parseVCard(authors, data, authorService);
+            setAuthorFromVCard(authors, data, authorService);
         }
 
         return authors;

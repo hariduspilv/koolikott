@@ -28,12 +28,14 @@ import ee.hm.dop.model.Author;
 import ee.hm.dop.model.Language;
 import ee.hm.dop.model.LanguageString;
 import ee.hm.dop.model.Material;
+import ee.hm.dop.model.Publisher;
 import ee.hm.dop.model.ResourceType;
 import ee.hm.dop.model.Tag;
 import ee.hm.dop.model.taxon.EducationalContext;
 import ee.hm.dop.model.taxon.Taxon;
 import ee.hm.dop.service.AuthorService;
 import ee.hm.dop.service.LanguageService;
+import ee.hm.dop.service.PublisherService;
 import ee.hm.dop.service.ResourceTypeService;
 import ee.hm.dop.service.TagService;
 import ezvcard.Ezvcard;
@@ -64,7 +66,7 @@ public abstract class MaterialParser {
             setTags(material, doc);
             setLearningResourceType(material, doc);
             setTaxon(material, doc);
-            setAuthors(material, doc);
+            setContributors(material, doc);
             setIsPaid(material, doc);
             setTargetGroups(material, doc);
             setPicture(material, doc);
@@ -104,7 +106,7 @@ public abstract class MaterialParser {
         material.setRepositoryIdentifier(identifier.getTextContent().trim());
     }
 
-    protected void parseVCard(List<Author> authors, String data, AuthorService authorService) {
+    protected void setAuthorFromVCard(List<Author> authors, String data, AuthorService authorService) {
         if (data.length() > 0) {
             VCard vcard = Ezvcard.parse(data).first();
             String name = vcard.getStructuredName().getGiven();
@@ -113,10 +115,30 @@ public abstract class MaterialParser {
             if (name != null && surname != null) {
                 Author author = authorService.getAuthorByFullName(name, surname);
                 if (author == null) {
-                    author = authorService.createAuthor(name, surname);
-                    authors.add(author);
+                    authors.add(authorService.createAuthor(name, surname));
                 } else if (!authors.contains(author)) {
                     authors.add(author);
+                }
+            }
+        }
+    }
+
+    protected void setPublisherFromVCard(List<Publisher> publishers, String data, PublisherService publisherService) {
+        if (data.length() > 0) {
+            VCard vcard = Ezvcard.parse(data).first();
+            String name = vcard.getFormattedName().getValue();
+            String website = null;
+
+            if (vcard.getUrls() != null && vcard.getUrls().size() > 0) {
+                website = vcard.getUrls().get(0).getValue();
+            }
+
+            if (name != null && website != null) {
+                Publisher publisher = publisherService.getPublisherByName(name);
+                if (publisher == null) {
+                    publishers.add( publisherService.createPublisher(name, website));
+                } else if (!publishers.contains(publisher)) {
+                    publishers.add(publisher);
                 }
             }
         }
@@ -307,7 +329,7 @@ public abstract class MaterialParser {
         return (Node) expr.evaluate(node, XPathConstants.NODE);
     }
 
-    protected abstract void setAuthors(Material material, Document doc);
+    protected abstract void setContributors(Material material, Document doc);
 
     protected abstract void setTags(Material material, Document doc);
 

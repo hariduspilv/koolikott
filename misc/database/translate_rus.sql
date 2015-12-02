@@ -147,6 +147,28 @@ insert into Translation(translationGroup, translationKey, translation) values (2
 insert into Translation(translationGroup, translationKey, translation) values (2, 'TARGET_GROUP_GYMNASIUM', 'Среднее образование');
 insert into Translation(translationGroup, translationKey, translation) values (2, 'TABLE_OF_CONTENTS', 'Содержание');
 
+-- Edit portfolio
+insert into Translation(translationGroup, translationKey, translation) values (2, 'PORTFOLIO_ENTER_CHAPTER_TITLE', 'Добавить название главы');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'PORTFOLIO_ENTER_SUB_CHAPTER_TITLE', 'Добавить подраздел название');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'PORTFOLIO_CHAPTER_CONTENT', 'содержание Глава');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'PORTFOLIO_SUB_CHAPTER_CONTENT', 'содержание параграфа');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'PORTFOLIO_ATTACHED_MATERIALS', 'Прикрепленные материалы');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'PORTFOLIO_DELETE_CHAPTER', 'Удалить');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'PORTFOLIO_DELETE_SUB_CHAPTER', 'Удалить');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'PORTFOLIO_CHAPTERS', 'Портфолио главы');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'PORTFOLIO_SAVE', 'Сохранить портфель');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'PORTFOLIO_DELETE_CHAPTER_CONFIRM_TITLE', 'Вы уверены?');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'PORTFOLIO_DELETE_SUB_CHAPTER_CONFIRM_TITLE', 'Вы уверены?');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'PORTFOLIO_DELETE_CHAPTER_CONFIRM_MESSAGE', 'Это не возможно, чтобы отменить эту операцию');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'PORTFOLIO_DELETE_SUB_CHAPTER_CONFIRM_MESSAGE', 'Это не возможно, чтобы отменить эту операцию');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'PORTFOLIO_DELETE_ALERT_CONFIRM_POSITIVE', 'Да');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'PORTFOLIO_DELETE_ALERT_CONFIRM_NEGATIVE', 'Нет');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'PORTFOLIO_ADD_CHAPTER', 'Добавить главу');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'PORTFOLIO_ADD_SUBCHAPTER', 'Добавить подглаву');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'PORTFOLIO_DEFAULT_NEW_CHAPTER_TITLE', 'Новая глава');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'PORTFOLIO_DEFAULT_NEW_SUBCHAPTER_TITLE', 'Новый подраздел');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'PORTFOLIO_CREATE_NEW_MATERIAL_URL', 'Ссылка на материал, который не существует в E-koolikott');
+
 -- Comment translations
 insert into Translation(translationGroup, translationKey, translation) values (2, 'COMMENTS_TITLE', 'Комментарии');
 insert into Translation(translationGroup, translationKey, translation) values (2, 'ADD_COMMENT_TITLE', 'Добавить комментарий');
@@ -267,3 +289,4 @@ insert into Translation(translationGroup, translationKey, translation) values (2
 insert into Translation(translationGroup, translationKey, translation) values (2, 'PORTFOLIO_DISLIKED', 'Портфолио не любил!');
 
 insert into Translation(translationGroup, translationKey, translation) values (2, 'COPY_PORTFOLIO', 'Копировать портфель');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'COPY_URL', 'Копировать ссылку');

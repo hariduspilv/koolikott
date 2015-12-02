@@ -147,6 +147,28 @@ insert into Translation(translationGroup, translationKey, translation) values (3
 insert into Translation(translationGroup, translationKey, translation) values (3, 'TARGET_GROUP_GYMNASIUM', 'Gymnasium');
 insert into Translation(translationGroup, translationKey, translation) values (3, 'TABLE_OF_CONTENTS', 'Table of Contents');
 
+-- Edit portfolio
+insert into Translation(translationGroup, translationKey, translation) values (3, 'PORTFOLIO_ENTER_CHAPTER_TITLE', 'Add chapter title');
+insert into Translation(translationGroup, translationKey, translation) values (3, 'PORTFOLIO_ENTER_SUB_CHAPTER_TITLE', 'Add subchapter title');
+insert into Translation(translationGroup, translationKey, translation) values (3, 'PORTFOLIO_CHAPTER_CONTENT', 'Chapter content');
+insert into Translation(translationGroup, translationKey, translation) values (3, 'PORTFOLIO_SUB_CHAPTER_CONTENT', 'Subchapter content');
+insert into Translation(translationGroup, translationKey, translation) values (3, 'PORTFOLIO_ATTACHED_MATERIALS', 'Attached Materials');
+insert into Translation(translationGroup, translationKey, translation) values (3, 'PORTFOLIO_DELETE_CHAPTER', 'Delete');
+insert into Translation(translationGroup, translationKey, translation) values (3, 'PORTFOLIO_DELETE_SUB_CHAPTER', 'Delete');
+insert into Translation(translationGroup, translationKey, translation) values (3, 'PORTFOLIO_CHAPTERS', 'Portfolio chapters');
+insert into Translation(translationGroup, translationKey, translation) values (3, 'PORTFOLIO_SAVE', 'Save portfolio');
+insert into Translation(translationGroup, translationKey, translation) values (3, 'PORTFOLIO_DELETE_CHAPTER_CONFIRM_TITLE', 'Are you sure?');
+insert into Translation(translationGroup, translationKey, translation) values (3, 'PORTFOLIO_DELETE_SUB_CHAPTER_CONFIRM_TITLE', 'Are you sure?');
+insert into Translation(translationGroup, translationKey, translation) values (3, 'PORTFOLIO_DELETE_CHAPTER_CONFIRM_MESSAGE', 'It is not possible to undo this operation');
+insert into Translation(translationGroup, translationKey, translation) values (3, 'PORTFOLIO_DELETE_SUB_CHAPTER_CONFIRM_MESSAGE', 'It is not possible to undo this operation');
+insert into Translation(translationGroup, translationKey, translation) values (3, 'PORTFOLIO_DELETE_ALERT_CONFIRM_POSITIVE', 'Yes');
+insert into Translation(translationGroup, translationKey, translation) values (3, 'PORTFOLIO_DELETE_ALERT_CONFIRM_NEGATIVE', 'No');
+insert into Translation(translationGroup, translationKey, translation) values (3, 'PORTFOLIO_ADD_CHAPTER', 'Add chapter');
+insert into Translation(translationGroup, translationKey, translation) values (3, 'PORTFOLIO_ADD_SUBCHAPTER', 'Add subchapter');
+insert into Translation(translationGroup, translationKey, translation) values (3, 'PORTFOLIO_DEFAULT_NEW_CHAPTER_TITLE', 'New chapter');
+insert into Translation(translationGroup, translationKey, translation) values (3, 'PORTFOLIO_DEFAULT_NEW_SUBCHAPTER_TITLE', 'New subchapter');
+insert into Translation(translationGroup, translationKey, translation) values (3, 'PORTFOLIO_CREATE_NEW_MATERIAL_URL', 'URL for material that does not exists in E-koolikott');
+
 -- Comment translations
 insert into Translation(translationGroup, translationKey, translation) values (3, 'COMMENTS_TITLE', 'Comments');
 insert into Translation(translationGroup, translationKey, translation) values (3, 'ADD_COMMENT_TITLE', 'Add a comment');
@@ -284,3 +306,4 @@ insert into Translation(translationGroup, translationKey, translation) values (3
 insert into Translation(translationGroup, translationKey, translation) values (3, 'PORTFOLIO_DISLIKED', 'Portfolio disliked!');
 
 insert into Translation(translationGroup, translationKey, translation) values (3, 'COPY_PORTFOLIO', 'Copy portfolio');
+insert into Translation(translationGroup, translationKey, translation) values (3, 'COPY_URL', 'Copy link');

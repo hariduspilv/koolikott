@@ -13,15 +13,18 @@ import javax.xml.xpath.XPathExpression;
 import javax.xml.xpath.XPathExpressionException;
 
 import org.apache.commons.codec.binary.Base64;
+import org.joda.time.DateTime;
 import org.w3c.dom.CharacterData;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import ee.hm.dop.model.Author;
+import ee.hm.dop.model.IssueDate;
 import ee.hm.dop.model.Language;
 import ee.hm.dop.model.LanguageString;
 import ee.hm.dop.model.Material;
+import ee.hm.dop.model.Publisher;
 import ee.hm.dop.model.Tag;
 import ee.hm.dop.model.TargetGroup;
 import ee.hm.dop.model.taxon.Domain;
@@ -35,7 +38,9 @@ import ee.hm.dop.model.taxon.Topic;
 import ee.hm.dop.oaipmh.MaterialParser;
 import ee.hm.dop.oaipmh.ParseException;
 import ee.hm.dop.service.AuthorService;
+import ee.hm.dop.service.IssueDateService;
 import ee.hm.dop.service.LanguageService;
+import ee.hm.dop.service.PublisherService;
 import ee.hm.dop.service.TagService;
 import ee.hm.dop.service.TaxonService;
 
@@ -44,6 +49,7 @@ public class MaterialParserEstCore extends MaterialParser {
     private static final String AUTHOR = "AUTHOR";
     private static final Map<String, String> taxonMap;
     public static final String YES = "YES";
+    public static final String PUBLISHER = "PUBLISHER";
 
     static {
         taxonMap = new HashMap<>();
@@ -65,17 +71,20 @@ public class MaterialParserEstCore extends MaterialParser {
     @Inject
     private TaxonService taxonService;
 
-    @Override
-    protected void setAuthors(Material material, Document doc) {
-        List<Author> authors = null;
+    @Inject
+    private PublisherService publisherService;
 
+    @Inject
+    private IssueDateService issueDateService;
+
+    @Override
+    protected void setContributors(Material material, Document doc) {
         try {
-            authors = getAuthors(doc);
+            setAuthors(doc, material);
+            setPublishersData(doc, material);
         } catch (Exception e) {
             //ignore
         }
-
-        material.setAuthors(authors);
     }
 
     @Override
@@ -394,35 +403,69 @@ public class MaterialParserEstCore extends MaterialParser {
         return language;
     }
 
-    private List<Author> getAuthors(Document doc) throws ParseException, XPathExpressionException {
+    private void setAuthors(Document doc, Material material) throws ParseException, XPathExpressionException {
         List<Author> authors = new ArrayList<>();
         NodeList nodeList = getNodeList(doc, "//*[local-name()='estcore']/*[local-name()='lifeCycle']/*[local-name()='contribute']");
 
         for (int i = 0; i < nodeList.getLength(); i++) {
             Node contributorNode = nodeList.item(i);
-            XPathExpression rolePath = xpath.compile("./*[local-name()='role']/*[local-name()='value']");
-            Node role = (Node) rolePath.evaluate(contributorNode, XPathConstants.NODE);
+            String role = getRoleString(contributorNode);
 
-            if (AUTHOR.equals(role.getTextContent().trim().toUpperCase())) {
-                getAuthor(authors, contributorNode);
+            if (AUTHOR.equals(role)) {
+                String vCard = getVCard(contributorNode);
+                setAuthorFromVCard(authors, vCard, authorService);
             }
         }
 
-        return authors;
+        material.setAuthors(authors);
     }
 
-    private void getAuthor(List<Author> authors, Node contributorNode) throws XPathExpressionException {
+    private void setPublishersData(Document doc, Material material) throws ParseException, XPathExpressionException {
+        List<Publisher> publishers = new ArrayList<>();
+        IssueDate issueDate = null;
+        NodeList nodeList = getNodeList(doc, "//*[local-name()='estcore']/*[local-name()='lifeCycle']/*[local-name()='contribute']");
+
+        for (int i = 0; i < nodeList.getLength(); i++) {
+            Node contributorNode = nodeList.item(i);
+            String role = getRoleString(contributorNode);
+
+            if (PUBLISHER.equals(role)) {
+                String vCard = getVCard(contributorNode);
+                setPublisherFromVCard(publishers, vCard, publisherService);
+
+                Node issueDateNode = getNode(contributorNode, "./*[local-name()='date']/*[local-name()='dateTime']");
+                DateTime dateTime = new DateTime(issueDateNode.getTextContent().trim());
+                issueDate = new IssueDate();
+
+                issueDate.setDay((short) dateTime.getDayOfMonth());
+                issueDate.setMonth((short) dateTime.getMonthOfYear());
+                issueDate.setYear(dateTime.getYear());
+                issueDate = issueDateService.createIssueDate(issueDate);
+            }
+        }
+
+        material.setPublishers(publishers);
+        material.setIssueDate(issueDate);
+    }
+
+    private String getRoleString(Node contributorNode) throws XPathExpressionException {
+        XPathExpression rolePath = xpath.compile("./*[local-name()='role']/*[local-name()='value']");
+        Node roleNode = (Node) rolePath.evaluate(contributorNode, XPathConstants.NODE);
+        return roleNode.getTextContent().trim().toUpperCase();
+    }
+
+    private String getVCard(Node contributorNode) throws XPathExpressionException {
         String vCard = "";
         NodeList authorNodes = getNode(contributorNode, "./*[local-name()='entity']").getChildNodes();
 
         for (int j = 0; j < authorNodes.getLength(); j++) {
             if (!authorNodes.item(j).getTextContent().trim().isEmpty()) {
                 CharacterData characterData = (CharacterData) authorNodes.item(j);
-                vCard = getVCardWithNewLines(characterData);
+                return getVCardWithNewLines(characterData);
             }
         }
 
-        parseVCard(authors, vCard, authorService);
+        return vCard;
     }
 
     private List<LanguageString> getTitles(Document doc) throws ParseException, XPathExpressionException {
