@@ -67,6 +67,7 @@ public abstract class MaterialParser {
             setAuthors(material, doc);
             setIsPaid(material, doc);
             setTargetGroups(material, doc);
+            setPicture(material, doc);
             removeDuplicateTaxons(material);
         } catch (RuntimeException e) {
             logger.error("Unexpected error while parsing document. Document may not"
@@ -343,4 +344,6 @@ public abstract class MaterialParser {
     protected abstract void setIsPaid(Material material, Document doc);
 
     protected abstract void setTargetGroups(Material material, Document doc);
+
+    protected abstract void setPicture(Material material, Document doc);
 }

@@ -12,6 +12,7 @@ import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpression;
 import javax.xml.xpath.XPathExpressionException;
 
+import org.apache.commons.codec.binary.Base64;
 import org.w3c.dom.CharacterData;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
@@ -40,7 +41,7 @@ import ee.hm.dop.service.TaxonService;
 
 public class MaterialParserEstCore extends MaterialParser {
 
-    private static final String AUTHOR = "author";
+    private static final String AUTHOR = "AUTHOR";
     private static final Map<String, String> taxonMap;
     public static final String YES = "YES";
 
@@ -331,6 +332,18 @@ public class MaterialParserEstCore extends MaterialParser {
     }
 
     @Override
+    protected void setPicture(Material material, Document doc) {
+        try {
+            Node imageNode = getNode(doc, "//*[local-name()='estcore']/*[local-name()='imgSrc']");
+            byte[] bytes = Base64.decodeBase64(imageNode.getTextContent());
+
+            material.setPicture(bytes);
+        } catch (XPathExpressionException e) {
+            //ignore
+        }
+    }
+
+    @Override
     protected Taxon getTaxon(String context, Class level) {
         return taxonService.getTaxonByEstCoreName(context, level);
     }
@@ -390,7 +403,7 @@ public class MaterialParserEstCore extends MaterialParser {
             XPathExpression rolePath = xpath.compile("./*[local-name()='role']/*[local-name()='value']");
             Node role = (Node) rolePath.evaluate(contributorNode, XPathConstants.NODE);
 
-            if (AUTHOR.equals(role.getTextContent().trim())) {
+            if (AUTHOR.equals(role.getTextContent().trim().toUpperCase())) {
                 getAuthor(authors, contributorNode);
             }
         }

@@ -157,6 +157,11 @@ public class MaterialParserWaramu extends MaterialParser {
     protected void setTargetGroups(Material material, Document doc) {
     }
 
+    @Override
+    protected void setPicture(Material material, Document doc) {
+
+    }
+
     private void setTags(Material material, Element lom) {
         List<Tag> tags = getTags(lom);
         material.setTags(tags);

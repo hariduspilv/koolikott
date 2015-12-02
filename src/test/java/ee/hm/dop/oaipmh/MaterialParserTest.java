@@ -234,7 +234,10 @@ public class MaterialParserTest {
 
         @Override
         protected void setTargetGroups(Material material, Document doc) {
+        }
 
+        @Override
+        protected void setPicture(Material material, Document doc) {
         }
     }
 }

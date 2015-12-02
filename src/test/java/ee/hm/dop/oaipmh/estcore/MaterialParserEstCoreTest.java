@@ -5,6 +5,7 @@ import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 import java.io.File;
 import java.net.URI;
@@ -338,6 +339,7 @@ public class MaterialParserEstCoreTest {
         assertEquals(resourceTypes, material.getResourceTypes());
         assertEquals(4, material.getTaxons().size());
         assertEquals(10, material.getTargetGroups().size());
+        assertNotNull(material.getPicture());
     }
 
     private File getResourceAsFile(String resourcePath) throws URISyntaxException {
