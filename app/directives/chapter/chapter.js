@@ -4,9 +4,7 @@ define(['app'], function(app)
      function(translationService, $rootScope) {
         return {
             scope: false,
-            templateUrl: 'directives/chapter/chapter.html',
-            link: function () {
-            }
+            templateUrl: 'directives/chapter/chapter.html'
         };
     }]);
 

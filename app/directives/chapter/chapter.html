@@ -1,11 +1,9 @@
 <div class="portfolio-chapter">
   <md-card>
-  
     <md-card-content data-ng-if="!$root.isEditPortforlioMode">
       <h2>{{chapter.title}}</h2>
       <p>{{chapter.text}}</p>
     </md-card-content>
-    
     <md-card-content data-ng-if="$root.isEditPortforlioMode">
         <div layout="row" layout-align="start center">
             <md-input-container class="md-block chapter-title" flex>
@@ -30,11 +28,9 @@
             <label></label>
             <textarea placeholder="{{ 'PORTFOLIO_CHAPTER_CONTENT' | translate }}" data-ng-model="chapter.text" columns="1" rows="5"></textarea>
         </md-input-container>
+        <div dop-add-chapter-material chapter="chapter"></div>
     </md-card-content>
-
-    
   </md-card>
-  
             
   <div class="portfolio-chapter-subchapter-materials" ng-show="chapter.materials.length">
     <h3 class="md-subhead" data-translate="PORTFOLIO_ATTACHED_MATERIALS"></h3>
@@ -48,12 +44,10 @@
   <ul class="portfolio-chapter-subchapters">
     <li class="portfolio-chapter-subchapter" id="chapter-{{$parent.$index}}-{{$index}}" data-ng-repeat="subchapter in chapter.subchapters">
       <md-card>
-      
         <md-card-content data-ng-if="!$root.isEditPortforlioMode">
           <h3>{{subchapter.title}}</h3>
           <p>{{subchapter.text}}</p>
         </md-card-content>
-        
         <md-card-content data-ng-if="$root.isEditPortforlioMode">
             <div layout="row" layout-align="start center">
                 <md-input-container class="md-block subchapter-title" flex>
@@ -78,8 +72,8 @@
                 <label></label>
                 <textarea placeholder="{{ 'PORTFOLIO_SUB_CHAPTER_CONTENT' | translate }}" data-ng-model="subchapter.text" columns="1" rows="5"></textarea>
             </md-input-container>
+            <div dop-add-chapter-material chapter="chapter"></div>
         </md-card-content>
-        
       </md-card>
 
       <div class="portfolio-chapter-subchapter-materials" ng-show="subchapter.materials.length">
