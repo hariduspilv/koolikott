@@ -38,6 +38,7 @@ import ee.hm.dop.model.taxon.Topic;
 import ee.hm.dop.oaipmh.MaterialParser;
 import ee.hm.dop.oaipmh.ParseException;
 import ee.hm.dop.service.AuthorService;
+import ee.hm.dop.service.IssueDateService;
 import ee.hm.dop.service.LanguageService;
 import ee.hm.dop.service.PublisherService;
 import ee.hm.dop.service.TagService;
@@ -72,6 +73,9 @@ public class MaterialParserEstCore extends MaterialParser {
 
     @Inject
     private PublisherService publisherService;
+
+    @Inject
+    private IssueDateService issueDateService;
 
     @Override
     protected void setContributors(Material material, Document doc) {
@@ -436,6 +440,7 @@ public class MaterialParserEstCore extends MaterialParser {
                 issueDate.setDay((short) dateTime.getDayOfMonth());
                 issueDate.setMonth((short) dateTime.getMonthOfYear());
                 issueDate.setYear(dateTime.getYear());
+                issueDate = issueDateService.createIssueDate(issueDate);
             }
         }
 
