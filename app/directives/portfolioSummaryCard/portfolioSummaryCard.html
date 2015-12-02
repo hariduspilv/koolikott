@@ -68,14 +68,14 @@
                     <small class="md-caption">
                       <span data-translate="UPDATED"></span>:
                     </small>
-                    {{formatDate(portfolio.updated)}}
+                    {{portfolio.updated | date:'dd.MM.yyyy'}}
                   </p>
 
                   <p class="md-body-1" data-ng-if="portfolio.created">
                     <small class="md-caption">
                       <span data-translate="CREATED"></span>:
                     </small>
-                    {{formatDate(portfolio.created)}}
+                    {{portfolio.created | date:'dd.MM.yyyy'}}
                   </p>
 
                   <p class="md-body-1">
