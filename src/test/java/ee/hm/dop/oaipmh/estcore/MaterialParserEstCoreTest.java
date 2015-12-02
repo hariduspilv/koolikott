@@ -18,6 +18,7 @@ import java.util.Set;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
+import org.easymock.EasyMock;
 import org.easymock.EasyMockRunner;
 import org.easymock.Mock;
 import org.easymock.TestSubject;
@@ -26,6 +27,7 @@ import org.junit.runner.RunWith;
 import org.w3c.dom.Document;
 
 import ee.hm.dop.model.Author;
+import ee.hm.dop.model.IssueDate;
 import ee.hm.dop.model.Language;
 import ee.hm.dop.model.LanguageString;
 import ee.hm.dop.model.Material;
@@ -41,6 +43,7 @@ import ee.hm.dop.model.taxon.Subtopic;
 import ee.hm.dop.model.taxon.Topic;
 import ee.hm.dop.oaipmh.ParseException;
 import ee.hm.dop.service.AuthorService;
+import ee.hm.dop.service.IssueDateService;
 import ee.hm.dop.service.LanguageService;
 import ee.hm.dop.service.PublisherService;
 import ee.hm.dop.service.ResourceTypeService;
@@ -73,6 +76,9 @@ public class MaterialParserEstCoreTest {
 
     @Mock
     private PublisherService publisherService;
+
+    @Mock
+    private IssueDateService issueDateService;
 
     @Test(expected = ee.hm.dop.oaipmh.ParseException.class)
     public void parseXMLisNull() throws ParseException {
@@ -269,7 +275,7 @@ public class MaterialParserEstCoreTest {
         expect(resourceTypeService.getResourceTypeByName(resourceType2.getName())).andReturn(resourceType2);
         expect(publisherService.getPublisherByName(publisher.getName())).andReturn(null);
         expect(publisherService.createPublisher(publisher.getName(), publisher.getWebsite())).andReturn(publisher);
-
+        expect(issueDateService.createIssueDate(EasyMock.anyObject(IssueDate.class))).andReturn(new IssueDate());
 
         //first taxon
         expect(taxonService.getTaxonByEstCoreName(educationalContext1.getName(), EducationalContext.class)).andReturn(
@@ -335,12 +341,12 @@ public class MaterialParserEstCoreTest {
         resourceTypes.add(resourceType1);
         resourceTypes.add(resourceType2);
 
-        replay(languageService, authorService, tagService, resourceTypeService, taxonService, publisherService);
+        replay(languageService, authorService, tagService, resourceTypeService, taxonService, publisherService, issueDateService);
 
         Document doc = dBuilder.parse(fXmlFile);
         Material material = materialParser.parse(doc);
 
-        verify(languageService, authorService, tagService, resourceTypeService, taxonService, publisherService);
+        verify(languageService, authorService, tagService, resourceTypeService, taxonService, publisherService, issueDateService);
 
         assertEquals(titles, material.getTitles());
         assertEquals("https://oxygen.netgroupdigital.com/rest/repoMaterialSource", material.getSource());
