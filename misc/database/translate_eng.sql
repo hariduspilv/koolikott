@@ -281,3 +281,5 @@ insert into Translation(translationGroup, translationKey, translation) values (3
 insert into Translation(translationGroup, translationKey, translation) values (3, 'MATERIAL_DISLIKED', 'Material disliked!');
 insert into Translation(translationGroup, translationKey, translation) values (3, 'PORTFOLIO_LIKED', 'Portfolio liked!');
 insert into Translation(translationGroup, translationKey, translation) values (3, 'PORTFOLIO_DISLIKED', 'Portfolio disliked!');
+
+insert into Translation(translationGroup, translationKey, translation) values (3, 'COPY_PORTFOLIO', 'Copy portfolio');
