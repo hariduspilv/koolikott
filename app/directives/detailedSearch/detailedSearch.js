@@ -47,6 +47,12 @@ define(['app'], function(app)
                     if (searchService.getType() && searchService.isValidType(searchService.getType())) {
                         $scope.detailedSearch.type = searchService.getType();
                     }
+
+                    // ResourceType
+                    var resourceType = searchService.getResourceType();
+                    if (resourceType && resourceType.toLowerCase() === 'textbook') {
+                        $scope.detailedSearch.onlyBooks = true;
+                    }
                 }
 
                 $scope.search = function() {
@@ -66,6 +72,12 @@ define(['app'], function(app)
                         searchService.setTargetGroups($scope.detailedSearch.targetGroups);
                     } else {
                         searchService.setTargetGroups(null);
+                    }
+
+                    if ($scope.detailedSearch.onlyBooks) {
+                        searchService.setResourceType('textbook');
+                    } else {
+                        searchService.setResourceType(null);
                     }
 
                     $location.url(searchService.getURL());
@@ -196,9 +208,19 @@ define(['app'], function(app)
                     return 'LANGUAGE_' + languageName.toUpperCase().replace(/\s+/g, '_');
                 }
 
+                function clearHiddenFields() {
+                    var educationalContext = $scope.detailedSearch.educationalContext;
+
+                    // "Only books" applies to basic/secondary/vocational education
+                    if (!educationalContext || educationalContext.id < 2 || educationalContext.id > 4) {
+                        $scope.detailedSearch.onlyBooks = false;
+                    }
+                }
+
                 $scope.$watch('detailedSearch.taxon', function(newTaxon, oldTaxon) {
                     if (newTaxon !== oldTaxon) {
                         $scope.detailedSearch.educationalContext = $rootScope.taxonUtils.getEducationalContext($scope.detailedSearch.taxon);
+                        clearHiddenFields();
                     }
                 }, true);
 

@@ -7,6 +7,7 @@ define(['app'], function(app) {
         var typeURL = "&type="
         var languageURL = "&language=";
         var targetGroupsURL = "&targetGroup=";
+        var resourceTypeURL = "&resourceType=";
 
         var searchQuery = "";
         var searchTaxon = "";
@@ -14,6 +15,7 @@ define(['app'], function(app) {
         var searchType = "";
         var searchLanguage = "";
         var searchTargetGroups = [];
+        var searchResourceType = "";
 
         function escapeQuery(query) {
             //replace backslashes
@@ -67,6 +69,10 @@ define(['app'], function(app) {
                 }
             },
 
+            setResourceType : function(resourceType) {
+                searchResourceType = resourceType;
+            },
+
             getURL : function() {
                 var searchURL;
                 if (searchQuery) {
@@ -92,6 +98,9 @@ define(['app'], function(app) {
                         searchURL += targetGroupsURL + searchTargetGroups[i];
                     }
                 }
+                if (searchResourceType) {
+                    searchURL += resourceTypeURL + searchResourceType;
+                }
 
                 return searchURL;
             },
@@ -99,7 +108,8 @@ define(['app'], function(app) {
             queryExists : function() {
                 var searchObject = $location.search();
                 if (searchObject.q || searchObject.taxon || searchObject.paid === false ||
-                    (searchObject.type && this.isValidType(searchObject.type)) || searchObject.language || searchObject.targetGroup) {
+                    (searchObject.type && this.isValidType(searchObject.type)) || searchObject.language || searchObject.targetGroup ||
+                    searchObject.resourceType) {
                     return true;
                 } else {
                     return false;
@@ -178,12 +188,24 @@ define(['app'], function(app) {
                 return this.arrayToUpperCase(searchTargetGroups);
             },
 
+            getResourceType : function() {
+                if (searchResourceType === "") {
+                    var searchObject = $location.search();
+                    if (searchObject.resourceType) {
+                        return searchObject.resourceType;
+                    }
+                }
+
+                return searchResourceType;
+            },
+
             clearFieldsNotInSimpleSearch : function() {
                 searchTaxon = '';
                 searchPaid = '';
                 searchType = '';
                 searchLanguage = '';
                 searchTargetGroups = '';
+                searchResourceType = '';
             },
 
             isValidType : function(type) {

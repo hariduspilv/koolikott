@@ -52,7 +52,9 @@
     <div data-dop-target-group-selector data-target-groups="detailedSearch.targetGroups" data-educational-context="detailedSearch.educationalContext"></div>
 
     <div layout="column" layout-align="end start" layout-fill>
-      <md-checkbox data-ng-model="filter.onlyEducationLiterature" aria-label="Ainult õppekirjandus" class="md-primary" flex>Ainult õppekirjandus</md-checkbox>
+      <md-checkbox data-ng-if="detailedSearch.educationalContext.id >= 2 && detailedSearch.educationalContext.id <= 4" data-ng-model="detailedSearch.onlyBooks" aria-label="{{'DETAILED_SEARCH_ONLY_BOOKS' | translate}}" class="md-primary" flex>
+        <span data-translate="DETAILED_SEARCH_ONLY_BOOKS"></span>
+      </md-checkbox>
       <md-checkbox data-ng-model="detailedSearch.paid" class="md-primary" flex>
         <span data-translate="DETAILED_SEARCH_INCLUDE_PAID"></span>
       </md-checkbox>

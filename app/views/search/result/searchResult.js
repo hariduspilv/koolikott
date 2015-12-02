@@ -57,6 +57,10 @@ define(['app'], function(app)
                 params.targetGroup = searchService.getTargetGroups();
             }
 
+            if (searchService.getResourceType()) {
+                params.resourceType = searchService.getResourceType();
+            }
+
             serverCallService.makeGet("rest/search", params, searchSuccess, searchFail);
         }
 
