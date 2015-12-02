@@ -46,7 +46,7 @@
   </div>
 
   <ul class="portfolio-chapter-subchapters">
-    <li class="portfolio-chapter-subchapter" id="chapter-{{index}}-{{$index}}" data-ng-repeat="subchapter in chapter.subchapters">
+    <li class="portfolio-chapter-subchapter" id="chapter-{{$parent.$index}}-{{$index}}" data-ng-repeat="subchapter in chapter.subchapters">
       <md-card>
       
         <md-card-content data-ng-if="!$root.isEditPortforlioMode">
