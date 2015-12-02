@@ -114,6 +114,7 @@ insert into Translation(translationGroup, translationKey, translation) values (1
 insert into Translation(translationGroup, translationKey, translation) values (1, 'DETAILED_SEARCH_OFF', 'Ei');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'DETAILED_SEARCH_INCLUDE_PAID', 'Kaasa tasulised');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'DETAILED_SEARCH_TARGET_GROUP', 'Vanuserühm');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'DETAILED_SEARCH_ONLY_BOOKS', 'Ainult õppekirjandus');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'ADD_PORTFOLIO', 'Lisa portfolio');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'EDIT_PORTFOLIO', 'Muuda portfooliot');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'PORTFOLIO_TITLE', 'Pealkiri');
@@ -265,3 +266,5 @@ insert into Translation(translationGroup, translationKey, translation) values (1
 insert into Translation(translationGroup, translationKey, translation) values (1, 'MATERIAL_DISLIKED', 'Materjal märgitud mitte meeldivaks!');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'PORTFOLIO_LIKED', 'Kogumik märgitud meeldivaks!');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'PORTFOLIO_DISLIKED', 'Kogumik märgitud mitte meeldivaks!');
+
+insert into Translation(translationGroup, translationKey, translation) values (1, 'COPY_PORTFOLIO', 'Kopeeri kogumik');

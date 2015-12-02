@@ -16,6 +16,8 @@ public class SearchFilter {
 
     private List<TargetGroup> targetGroups;
 
+    private ResourceType resourceType;
+
     public Taxon getTaxon() {
         return taxon;
     }
@@ -54,6 +56,14 @@ public class SearchFilter {
 
     public void setTargetGroups(List<TargetGroup> targetGroups) {
         this.targetGroups = targetGroups;
+    }
+
+    public ResourceType getResourceType() {
+        return resourceType;
+    }
+
+    public void setResourceType(ResourceType resourceType) {
+        this.resourceType = resourceType;
     }
 
 }

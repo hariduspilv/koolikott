@@ -19,6 +19,7 @@ import com.google.common.collect.ImmutableSet;
 import ee.hm.dop.dao.MaterialDAO;
 import ee.hm.dop.dao.PortfolioDAO;
 import ee.hm.dop.model.Language;
+import ee.hm.dop.model.ResourceType;
 import ee.hm.dop.model.SearchFilter;
 import ee.hm.dop.model.SearchResult;
 import ee.hm.dop.model.Searchable;
@@ -171,6 +172,7 @@ public class SearchService {
         filters.add(isPaidAsQuery(searchFilter));
         filters.add(getTypeAsQuery(searchFilter));
         filters.add(getTargetGroupsAsQuery(searchFilter));
+        filters.add(getResourceTypeAsQuery(searchFilter));
 
         // Remove empty elements
         filters = filters.stream().filter(f -> !f.isEmpty()).collect(Collectors.toList());
@@ -309,6 +311,14 @@ public class SearchService {
             return "module";
         }
         return null;
+    }
+
+    private String getResourceTypeAsQuery(SearchFilter searchFilter) {
+        ResourceType resourceType = searchFilter.getResourceType();
+        if (resourceType != null) {
+            return format("resource_type:\"%s\"", resourceType.getName().toLowerCase());
+        }
+        return "";
     }
 
 }
