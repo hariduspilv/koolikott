@@ -144,7 +144,6 @@ insert into Translation(translationGroup, translationKey, translation) values (1
 insert into Translation(translationGroup, translationKey, translation) values (1, 'TARGET_GROUP_GRADE8', '8. klass');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'TARGET_GROUP_GRADE9', '9. klass');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'TARGET_GROUP_GYMNASIUM', 'Gümnaasium');
-insert into Translation(translationGroup, translationKey, translation) values (1, 'TARGET_GROUP_VOCATIONAL', 'Kutseharidus');
 
 -- Taxon Domain translations
 insert into Translation(translationGroup, translationKey, translation) values (1, 'DOMAIN_LANGUAGE_AND_SPEECH', 'Keel ja kõne');

@@ -144,7 +144,6 @@ insert into Translation(translationGroup, translationKey, translation) values (3
 insert into Translation(translationGroup, translationKey, translation) values (3, 'TARGET_GROUP_GRADE8', '8th grade');
 insert into Translation(translationGroup, translationKey, translation) values (3, 'TARGET_GROUP_GRADE9', '9th grade');
 insert into Translation(translationGroup, translationKey, translation) values (3, 'TARGET_GROUP_GYMNASIUM', 'Gymnasium');
-insert into Translation(translationGroup, translationKey, translation) values (3, 'TARGET_GROUP_VOCATIONAL', 'Vocational education');
 insert into Translation(translationGroup, translationKey, translation) values (3, 'TABLE_OF_CONTENTS', 'Table of Contents');
 
 -- Comment translations
