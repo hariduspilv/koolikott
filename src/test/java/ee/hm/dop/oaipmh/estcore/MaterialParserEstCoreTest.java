@@ -353,6 +353,7 @@ public class MaterialParserEstCoreTest {
         assertEquals(10, material.getTargetGroups().size());
         assertNotNull(material.getPicture());
         assertEquals(1, material.getPublishers().size());
+        assertNotNull(material.getIssueDate());
     }
 
     private File getResourceAsFile(String resourcePath) throws URISyntaxException {

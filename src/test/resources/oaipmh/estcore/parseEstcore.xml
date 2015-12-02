@@ -87,6 +87,9 @@
                                 END:VCARD
 								]]>
                             </lom:entity>
+                            <lom:date uniqueElementName="date">
+                                <lom:dateTime>1999-12-31T22:00:00</lom:dateTime>
+                            </lom:date>
                         </contribute>
                     </lifeCycle>
                     <technical>
