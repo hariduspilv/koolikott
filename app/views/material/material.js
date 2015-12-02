@@ -4,8 +4,6 @@ define(['app'], function(app)
       function($scope, serverCallService, $route, translationService, $rootScope, searchService, $location, alertService, authenticatedUserService) {
           $scope.showMaterialContent = false;
           $scope.newComment = {};
-  
-          $scope.absUrl = $location.absUrl();
     
           $rootScope.$on('fullscreenchange', function() {
               $scope.$apply(function() {

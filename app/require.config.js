@@ -23,6 +23,7 @@ require.config({
     dopCommentsCard: 'directives/commentsCard/commentsCard',
     dopRating: 'directives/rating/rating',
     dopAddChapterMaterial: 'directives/chapter/addChapterMaterial/addChapterMaterial',
+    dopCopyPermalink: 'directives/copyPermalink/copyPermalink',
     angular: '../bower_components/angular/angular',
     'angular-animate': '../bower_components/angular-animate/angular-animate',
     'angular-aria': '../bower_components/angular-aria/angular-aria',
@@ -44,7 +45,7 @@ require.config({
     jquery: '../bower_components/jquery/dist/jquery',
     'ng-file-upload-shim': '../bower_components/ng-file-upload-shim/ng-file-upload-shim',
     'ng-file-upload': '../bower_components/ng-file-upload/ng-file-upload',
-    ngclipboard: '../bower_components/ngclipboard/dist/ngclipboard.min'
+    clipboard: '../bower_components/clipboard/dist/clipboard'
   },
   shim: {
     angular: {
@@ -95,9 +96,6 @@ require.config({
       'angular',
       'jquery'
     ],
-    ngclipboard: [
-      'angular'
-    ],
     app: [
       'angular',
       'angular-translate',
@@ -128,7 +126,7 @@ require([
   'angular-scroll',
   'ng-file-upload-shim',
   'ng-file-upload',
-  'ngclipboard',
+  'clipboard',
   'translationService',
   'authenticatedUserService',
   'serverCallService',
@@ -153,7 +151,8 @@ require([
   'dopTargetGroupSelector',
   'dopCommentsCard',
   'dopRating',
-  'dopAddChapterMaterial'
+  'dopAddChapterMaterial',
+  'dopCopyPermalink'
 ], function (jquery, angular, app) {
   'use strict';
   var $html = angular.element(document.getElementsByTagName('html')[0]);

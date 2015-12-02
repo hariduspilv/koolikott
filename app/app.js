@@ -12,7 +12,7 @@ define(['app.routes', 'services/dependencyResolver'], function(config, dependenc
       'duScroll',
       'infinite-scroll',
       'ngFileUpload',
-      'ngclipboard'
+      //'ngclipboard'
     ]);
 
     app.config(
@@ -101,7 +101,6 @@ define(['app.routes', 'services/dependencyResolver'], function(config, dependenc
             var path = $location.path();
             
             $rootScope.isViewPortfolio = path === '/portfolio';
-            $rootScope.isViewMaterial = path === '/material';
         });
     });
 

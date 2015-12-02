@@ -20,8 +20,6 @@ define(['app'], function(app)
                             locals:{portfolio: $scope.portfolio}
                         });
                     };
-                    
-                    $scope.absUrl = $location.absUrl();
                 }
             };
         }]);

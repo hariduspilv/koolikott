@@ -10,12 +10,7 @@
                   <md-icon md-menu-origin>more_vert</md-icon>
                 </md-button>
                 <md-menu-content width="4">
-                  <md-menu-item data-ng-if="$root.isViewMaterial">
-                    <md-button data-ngclipboard data-ngclipboard-success="copyUrl(e)" data-clipboard-text="{{ absUrl }}">
-                      <md-icon md-menu-align-target>content_copy</md-icon>
-                      <span data-translate="COPY_URL"></span>
-                    </md-button>
-                  </md-menu-item>
+                  <md-menu-item dop-copy-permalink></md-menu-item>
                 </md-menu-content>
               </md-menu>
             </div>
