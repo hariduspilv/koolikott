@@ -287,3 +287,4 @@ insert into Translation(translationGroup, translationKey, translation) values (2
 insert into Translation(translationGroup, translationKey, translation) values (2, 'PORTFOLIO_DISLIKED', 'Портфолио не любил!');
 
 insert into Translation(translationGroup, translationKey, translation) values (2, 'COPY_PORTFOLIO', 'Копировать портфель');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'COPY_URL', 'Копировать ссылку');
