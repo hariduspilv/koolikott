@@ -1,12 +1,9 @@
 define(['app'], function(app)
 {
-    app.directive('dopChapter', ['translationService',
-     function(translationService) {
+    app.directive('dopChapter', ['translationService', '$rootScope',
+     function(translationService, $rootScope) {
         return {
-            scope: {
-                chapter: '=',
-                index: '@'
-            },
+            scope: false,
             templateUrl: 'directives/chapter/chapter.html',
             link: function () {
             }
