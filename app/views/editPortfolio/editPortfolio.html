@@ -6,7 +6,7 @@
         <md-button class="md-icon-button hide-gt-md" data-ng-click="toggleSidenav('left')" >
           <md-icon class="md-48">arrow_backward</md-icon>
         </md-button>
-        Sisukord
+        <span data-translate="TABLE_OF_CONTENTS"></span>
       </h6>
     </md-toolbar>
 
@@ -24,91 +24,12 @@
 	  
         <div data-dop-portfolio-summary-card></div>
 
-        <h1 class="md-headline book-headline">Kogumiku peatükid</h2>
+        <h1 class="md-headline book-headline" data-translate="PORTFOLIO_CHAPTERS"></h2>
 
         <div id="portfolio-chapters">
-
-          <!-- chapter -->
-          <div class="portfolio-chapter" data-ng-repeat="chapter in portfolio.chapters">
-            <md-card>
-              <md-card-content>
-                <div layout="row" layout-align="start center">
-                  <md-input-container class="md-block chapter-title" flex>
-                    <label></label>
-                    <input class="md-headline" placeholder="Sisesta peatüki pealkiri" data-ng-model="chapter.title" placeholder="Esimene peatükk">
-                  </md-input-container>
-                  <md-menu>
-                    <md-button class="md-icon-button" data-ng-click="$mdOpenMenu($event)">
-                      <md-icon md-menu-origin>more_vert</md-icon>
-                    </md-button>
-                    <md-menu-content width="4">
-                      <md-menu-item>
-                        <md-button data-ng-click="addNewSubChapter($index)">
-                          <md-icon md-menu-align-target>add</md-icon>
-                          Lisa alampeatükk
-                        </md-button>
-                      </md-menu-item>
-                      <md-menu-item>
-                        <md-button data-ng-click="deleteChapter($event, $index)">
-                          <md-icon md-menu-align-target>delete</md-icon>
-                          Kustuta
-                        </md-button>
-                      </md-menu-item>
-                    </md-menu-content>
-                  </md-menu>
-                </div>
-                <md-input-container class="md-block">
-                  <label></label>
-                  <textarea placeholder="Sisu" data-ng-model="chapter.description" columns="1" rows="5"></textarea>
-                </md-input-container>
-              </md-card-content>
-            </md-card>
-
-            <!-- subchapters -->
-            <ul class="portfolio-chapter-subchapters">
-              <li class="portfolio-chapter-subchapter" id="chapter-{{$parent.$index}}-{{$index}}" data-ng-repeat="subchapter in chapter.subchapters">
-                <md-card>
-                  <md-card-content>
-                    <div layout="row" layout-align="start center">
-                      <md-input-container class="md-block subchapter-title" flex>
-                        <label></label>
-                        <input class="md-title" data-ng-model="subchapter.title" placeholder="Sisesta alampealkiri">
-                      </md-input-container>
-                      <md-menu>
-                        <md-button class="md-icon-button" data-ng-click="$mdOpenMenu($event)">
-                          <md-icon md-menu-origin>more_vert</md-icon>
-                        </md-button>
-                        <md-menu-content width="4">
-                          <md-menu-item>
-                            <md-button data-ng-click="deleteSubChapter($event, $parent.$index, $index)">
-                              <md-icon md-menu-align-target>delete</md-icon>
-                              Kustuta
-                            </md-button>
-                          </md-menu-item>
-                        </md-menu-content>
-                      </md-menu>
-                    </div>
-                    <md-input-container class="md-block">
-                      <label></label>
-                      <textarea placeholder="Sisu" data-ng-model="subChapter.description" columns="1" rows="5"></textarea>
-                    </md-input-container>
-                  </md-card-content>
-                </md-card>
-
-                <div class="portfolio-chapter-subchapter-materials" ng-show="subChapter.materials.length">
-                  <h3 class="md-subhead">Kaasatud materialid</h3>
-                  <md-grid-list md-cols-gt-md="4" md-cols-md="3" md-cols-sm="2" md-gutter="20px" md-row-height="300px">
-                    <md-grid-tile data-ng-repeat="material in subChapter.materials">
-                      <figure data-dop-material-box material="material"></figure>
-                    </md-grid-tile>
-                  </md-grid-list>
-                </div>
-              </li>
-            </ul>
-
-            <!-- /subchapters -->
-          </div>
-          <!-- /chapter -->
+            <div data-ng-repeat="chapter in portfolio.chapters">
+                <div data-dop-chapter data-chapter="chapter" data-index="{{$index}}"></div>
+            </div>
         </div>
 
       </article>
@@ -117,7 +38,7 @@
 
       <md-button class="md-fab md-fab-bottom-right" aria-label="Save portfolio" data-ng-click="savePortfolio()">
         <md-tooltip md-direction="left">
-          Salvesta kogumikk
+          <span data-translate="PORTFOLIO_SAVE"></span>
         </md-tooltip>
         <ng-md-icon icon="save"></ng-md-icon>
       </md-button>

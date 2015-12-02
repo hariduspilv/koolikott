@@ -1,7 +1,7 @@
 define(['app'], function(app)
 {
-    app.directive('dopTableOfContents', [
-     function() {
+    app.directive('dopTableOfContents', ['$filter',
+     function($filter) {
         return {
             scope: {
                 portfolio: '=',
@@ -23,14 +23,14 @@ define(['app'], function(app)
                     var subChapters = $scope.portfolio.chapters[index].subchapters;
 
                     subChapters.push({
-                        title: 'Alampeatükk ' + (subChapters.length + 1),
+                        title: $filter('translate')('PORTFOLIO_DEFAULT_NEW_SUBCHAPTER_TITLE') + ' ' + (subChapters.length + 1),
                         materials: []
                     });
                 };
 
                 $scope.addNewChapter = function(index) {
                     $scope.portfolio.chapters.push({
-                        title: 'Uus peatükk',
+                        title: $filter('translate')('PORTFOLIO_DEFAULT_NEW_CHAPTER_TITLE'),
                         subchapters: []
                     });
                 };

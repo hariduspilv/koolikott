@@ -4,8 +4,8 @@ define(['app'], function(app)
       $anchorScroll.yOffset = 50;
     }]);
 
-    app.controller('editPortfolioController', ['$scope', 'translationService', 'serverCallService', '$route', '$location', 'alertService', '$rootScope', 'authenticatedUserService',
-        function($scope, translationService, serverCallService, $route, $location, alertService, $rootScope, authenticatedUserService) {
+    app.controller('editPortfolioController', ['$scope', 'translationService', 'serverCallService', '$route', '$location', 'alertService', '$rootScope', 'authenticatedUserService', '$mdDialog', '$filter',
+        function($scope, translationService, serverCallService, $route, $location, alertService, $rootScope, authenticatedUserService, $mdDialog, $filter) {
 
             function init() {
 				if ($rootScope.savedPortfolio) {
@@ -52,35 +52,35 @@ define(['app'], function(app)
 
             $scope.deleteSubChapter = function($event, chapterId, subChapterId) {
                 var confirm = getDeleteConfirmationDialog(
-                    'Kas oled kindel?',
-                    'Alampeatüki kustutamist ei ole võimalik tagasi võtta',
+                    $filter('translate')('PORTFOLIO_DELETE_SUB_CHAPTER_CONFIRM_TITLE'), 
+                    $filter('translate')('PORTFOLIO_DELETE_SUB_CHAPTER_CONFIRM_MESSAGE'), 
                     $event, chapterId, subChapterId);
-
+                    
                 $mdDialog.show(confirm).then(function() {
-                    $scope.portfolio.chapters[chapterId].subChapters.splice(subChapterId, 1);
+                    $scope.portfolio.chapters[chapterId].subchapters.splice(subChapterId, 1);
                 }, null);
             };
 
             $scope.deleteChapter = function($event, chapterId) {
                 var confirm = getDeleteConfirmationDialog(
-                    'Kas oled kindel?',
-                    'Peatüki kustutamist ei ole võimalik tagasi võtta',
+                    $filter('translate')('PORTFOLIO_DELETE_CHAPTER_CONFIRM_TITLE'), 
+                    $filter('translate')('PORTFOLIO_DELETE_CHAPTER_CONFIRM_MESSAGE'), 
                     $event, chapterId);;
-
+                    
                 $mdDialog.show(confirm).then(function() {
                     $scope.portfolio.chapters.splice(chapterId, 1);
                 }, null);
             };
 
             var getDeleteConfirmationDialog = function(title, content) {
-                 var args = Array.prototype.slice.call(arguments, 2);
+                var args = Array.prototype.slice.call(arguments, 2);
 
                 return $mdDialog.confirm()
-                          .title(title)
-                          .content(content)
-                          .targetEvent(args)
-                          .ok('Jah')
-                          .cancel('Ei');
+                .title(title)
+                .content(content)
+                .targetEvent(args)
+                .ok($filter('translate')('PORTFOLIO_DELETE_ALERT_CONFIRM_POSITIVE'))
+                .cancel($filter('translate')('PORTFOLIO_DELETE_ALERT_CONFIRM_NEGATIVE'));
             };
 
             $scope.savePortfolio = function() {
