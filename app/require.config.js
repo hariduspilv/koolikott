@@ -23,6 +23,7 @@ require.config({
     dopCommentsCard: 'directives/commentsCard/commentsCard',
     dopRating: 'directives/rating/rating',
     dopAddChapterMaterial: 'directives/chapter/addChapterMaterial/addChapterMaterial',
+    dopCopyPermalink: 'directives/copyPermalink/copyPermalink',
     angular: '../bower_components/angular/angular',
     'angular-animate': '../bower_components/angular-animate/angular-animate',
     'angular-aria': '../bower_components/angular-aria/angular-aria',
@@ -43,7 +44,8 @@ require.config({
     ngInfiniteScroll: '../bower_components/ngInfiniteScroll/build/ng-infinite-scroll',
     jquery: '../bower_components/jquery/dist/jquery',
     'ng-file-upload-shim': '../bower_components/ng-file-upload-shim/ng-file-upload-shim',
-    'ng-file-upload': '../bower_components/ng-file-upload/ng-file-upload'
+    'ng-file-upload': '../bower_components/ng-file-upload/ng-file-upload',
+    clipboard: '../bower_components/clipboard/dist/clipboard'
   },
   shim: {
     angular: {
@@ -110,7 +112,7 @@ require.config({
   ]
 });
 
-define([
+require([
   'jquery',
   'angular',
   'app',
@@ -124,6 +126,7 @@ define([
   'angular-scroll',
   'ng-file-upload-shim',
   'ng-file-upload',
+  'clipboard',
   'translationService',
   'authenticatedUserService',
   'serverCallService',
@@ -148,7 +151,8 @@ define([
   'dopTargetGroupSelector',
   'dopCommentsCard',
   'dopRating',
-  'dopAddChapterMaterial'
+  'dopAddChapterMaterial',
+  'dopCopyPermalink'
 ], function (jquery, angular, app) {
   'use strict';
   var $html = angular.element(document.getElementsByTagName('html')[0]);

@@ -49,7 +49,7 @@ module.exports = function (grunt) {
         },
         files: [
           '<%= yeoman.app %>/views/**/**/*.html',
-          '<%= yeoman.app %>/directives/**/*.html',
+          '<%= yeoman.app %>/directives/**/**/*.html',
           '.tmp/styles/{,*/}*.css',
           '<%= yeoman.app %>/images/{,*/}*.{png,jpg,jpeg,gif,webp,svg}'
         ]
@@ -309,7 +309,7 @@ module.exports = function (grunt) {
             'views/**/**/*.html',
             'images/{,*/}*.{webp}',
             'fonts/{,*/}*.*',
-            'directives/{,*/}*.html'
+            'directives/**/**/*.html'
           ]
         },{
           expand: true,

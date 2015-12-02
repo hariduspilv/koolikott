@@ -4,6 +4,7 @@ $green2: #00695c;
 $green3: #43a047;
 
 md-card {
+  position: relative;
   width: 100%;
   max-width: 100%;
   min-width: 100%;
@@ -104,4 +105,10 @@ md-card.card-sm {
       }
     }
   }
+}
+
+md-card .card-menu {
+  position: absolute;
+  top: 8px;
+  right: 8px;
 }
