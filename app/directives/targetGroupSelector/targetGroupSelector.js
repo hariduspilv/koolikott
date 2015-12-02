@@ -1,11 +1,10 @@
 define(['app'], function(app)
-{	
+{
     app.directive('dopTargetGroupSelector', [
      function() {
         return {
             scope: {
-                targetGroups: '=',
-                educationalContext: '='
+                targetGroups: '='
             },
             templateUrl: 'directives/targetGroupSelector/targetGroupSelector.html',
             controller: function ($scope) {
@@ -15,7 +14,6 @@ define(['app'], function(app)
                 var level2Groups = ['LEVEL2', 'GRADE4', 'GRADE5', 'GRADE6'];
                 var level3Groups = ['LEVEL3', 'GRADE7', 'GRADE8', 'GRADE9'];
                 var secondaryGroups = ['GYMNASIUM'];
-                var vocationalGroups = ['VOCATIONAL'];
 
                 init();
 
@@ -44,41 +42,10 @@ define(['app'], function(app)
                             selectValue();
                         }
                     }, false);
-
-                    $scope.$watch('educationalContext', function(newContext, oldContext) {
-                        if (newContext !== oldContext) {
-                            fill();
-                        }
-                    }, false);
             	}
 
                 function fill() {
-                    if ($scope.educationalContext) {
-                        switch ($scope.educationalContext.id) {
-                            case 1:
-                                $scope.groups = preschoolGroups.slice();
-                                break;
-                            case 2:
-                                $scope.groups = level1Groups.concat(level2Groups, level3Groups);
-                                break;
-                            case 3:
-                                $scope.groups = secondaryGroups.slice();
-                                break;
-                            case 4:
-                                $scope.groups = vocationalGroups.slice();
-                                break;
-                            default:
-                                $scope.groups = [];
-                                break;
-                        }
-
-                        // Clear if the selected value does not belong under this educational context
-                        if (!scope.groups.indexOf($scope.selectedTargetGroup) === -1) {
-                            $scope.selectedTargetGroup = null;
-                        }
-                    } else {
-                        $scope.groups = preschoolGroups.concat(level1Groups, level2Groups, level3Groups, secondaryGroups, vocationalGroups);
-                    }
+                    $scope.groups = preschoolGroups.concat(level1Groups, level2Groups, level3Groups, secondaryGroups);
                 }
             	
             	function parseSelectedTargetGroup() {
