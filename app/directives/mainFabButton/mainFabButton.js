@@ -5,7 +5,7 @@ define(['app'], function(app)
             return {
                 scope: true,
                 templateUrl: 'directives/mainFabButton/mainFabButton.html',
-                controller: function ($scope, $mdDialog) {
+                controller: function ($scope, $mdDialog, $location) {
                     $scope.isOpen = false;
 
                     $scope.showAddPortfolioDialog = function() {

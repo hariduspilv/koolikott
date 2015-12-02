@@ -94,6 +94,14 @@ define(['app.routes', 'services/dependencyResolver'], function(config, dependenc
 
         $mdThemingProvider.theme('input', 'default').primaryPalette('grey');
     }
+    
+    app.run(function($rootScope, $location) {        
+        $rootScope.$on('$routeChangeSuccess', function() {
+            var path = $location.path();
+            
+            $rootScope.isViewPortforlioMode = path === '/portfolio';
+        });
+    });
 
     app.run(function($rootScope, authenticatedUserService) {
     	class TaxonUtils {
