@@ -288,3 +288,4 @@ insert into Translation(translationGroup, translationKey, translation) values (1
 insert into Translation(translationGroup, translationKey, translation) values (1, 'PORTFOLIO_DISLIKED', 'Kogumik märgitud mitte meeldivaks!');
 
 insert into Translation(translationGroup, translationKey, translation) values (1, 'COPY_PORTFOLIO', 'Kopeeri kogumik');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'COPY_URL', 'Kopeeri link');
