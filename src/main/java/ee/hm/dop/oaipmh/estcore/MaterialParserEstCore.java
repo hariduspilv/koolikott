@@ -2,8 +2,10 @@ package ee.hm.dop.oaipmh.estcore;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.inject.Inject;
 import javax.xml.xpath.XPathConstants;
@@ -20,6 +22,7 @@ import ee.hm.dop.model.Language;
 import ee.hm.dop.model.LanguageString;
 import ee.hm.dop.model.Material;
 import ee.hm.dop.model.Tag;
+import ee.hm.dop.model.TargetGroup;
 import ee.hm.dop.model.taxon.Domain;
 import ee.hm.dop.model.taxon.EducationalContext;
 import ee.hm.dop.model.taxon.Module;
@@ -302,6 +305,29 @@ public class MaterialParserEstCore extends MaterialParser {
         } catch (XPathExpressionException e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    protected void setTargetGroups(Material material, Document doc) {
+        Set<TargetGroup> targetGroups = new HashSet<>();
+        try {
+            NodeList ageRanges = getNodeList(doc, "//*[local-name()='estcore']/*[local-name()='educational']/*[local-name()='typicalAgeRange']");
+
+            for (int i = 0; i < ageRanges.getLength(); i++) {
+                String ageRange = ageRanges.item(i).getTextContent().trim();
+                String[] ranges = ageRange.split("-");
+
+                if (ranges.length == 2) {
+                    int from = Integer.parseInt(ranges[0]);
+                    int to = Integer.parseInt(ranges[1]);
+                    targetGroups.addAll(TargetGroup.getTargetGroupsByAge(from, to));
+                }
+            }
+        } catch (XPathExpressionException e) {
+            //ignore
+        }
+
+        material.setTargetGroups(new ArrayList<>(targetGroups));
     }
 
     @Override
