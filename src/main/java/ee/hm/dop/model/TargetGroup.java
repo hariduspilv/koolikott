@@ -17,8 +17,7 @@ public enum TargetGroup {
     GRADE7(13, 14),
     GRADE8(14, 15),
     GRADE9(15, 16),
-    GYMNASIUM(16, 19),
-    VOCATIONAL(-1566565623, -1566565623);
+    GYMNASIUM(16, 19);
 
     private final Range<Integer> range;
 

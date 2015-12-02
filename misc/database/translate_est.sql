@@ -144,7 +144,6 @@ insert into Translation(translationGroup, translationKey, translation) values (1
 insert into Translation(translationGroup, translationKey, translation) values (1, 'TARGET_GROUP_GRADE8', '8. klass');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'TARGET_GROUP_GRADE9', '9. klass');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'TARGET_GROUP_GYMNASIUM', 'Gümnaasium');
-insert into Translation(translationGroup, translationKey, translation) values (1, 'TARGET_GROUP_VOCATIONAL', 'Kutseharidus');
 
 -- Taxon Domain translations
 insert into Translation(translationGroup, translationKey, translation) values (1, 'DOMAIN_LANGUAGE_AND_SPEECH', 'Keel ja kõne');
@@ -207,6 +206,27 @@ insert into Translation(translationGroup, translationKey, translation) values (1
 insert into Translation(translationGroup, translationKey, translation) values (1, 'SUBJECT_DIGITAL_COMPETENCE', 'Infotehnoloogiline pädevus');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'SUBJECT_OTHER', 'Muu');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'TABLE_OF_CONTENTS', 'Sisukord');
+
+-- Edit portfolio
+insert into Translation(translationGroup, translationKey, translation) values (1, 'PORTFOLIO_ENTER_CHAPTER_TITLE', 'Sisesta peatüki pealkiri');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'PORTFOLIO_ENTER_SUB_CHAPTER_TITLE', 'Sisesta alampeatüki pealkiri');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'PORTFOLIO_CHAPTER_CONTENT', 'Peatüki sisu');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'PORTFOLIO_SUB_CHAPTER_CONTENT', 'Alampeatüki sisu');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'PORTFOLIO_ATTACHED_MATERIALS', 'Kaasatud Materjalid');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'PORTFOLIO_DELETE_CHAPTER', 'Kustuta');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'PORTFOLIO_DELETE_SUB_CHAPTER', 'Kustuta');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'PORTFOLIO_CHAPTERS', 'Kogumiku peatükid');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'PORTFOLIO_SAVE', 'Salvesta kogumik');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'PORTFOLIO_DELETE_CHAPTER_CONFIRM_TITLE', 'Kas oled kindel?');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'PORTFOLIO_DELETE_SUB_CHAPTER_CONFIRM_TITLE', 'Kas oled kindel?');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'PORTFOLIO_DELETE_CHAPTER_CONFIRM_MESSAGE', 'Peatüki kustutamist ei ole võimalik tagasi võtta');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'PORTFOLIO_DELETE_SUB_CHAPTER_CONFIRM_MESSAGE', 'Alampeatüki kustutamist ei ole võimalik tagasi võtta');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'PORTFOLIO_DELETE_ALERT_CONFIRM_POSITIVE', 'Jah');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'PORTFOLIO_DELETE_ALERT_CONFIRM_NEGATIVE', 'Ei');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'PORTFOLIO_ADD_CHAPTER', 'Lisa peatükk');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'PORTFOLIO_ADD_SUBCHAPTER', 'Lisa alampeatükk');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'PORTFOLIO_DEFAULT_NEW_CHAPTER_TITLE', 'Uus peatükk');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'PORTFOLIO_DEFAULT_NEW_SUBCHAPTER_TITLE', 'Uus alampeatükk');
 
 -- Comment translations
 insert into Translation(translationGroup, translationKey, translation) values (1, 'COMMENTS_TITLE', 'Kommentaarid');
