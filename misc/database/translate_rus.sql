@@ -114,6 +114,7 @@ insert into Translation(translationGroup, translationKey, translation) values (2
 insert into Translation(translationGroup, translationKey, translation) values (2, 'DETAILED_SEARCH_OFF', 'Нет');
 insert into Translation(translationGroup, translationKey, translation) values (2, 'DETAILED_SEARCH_INCLUDE_PAID', 'Включить заплатили');
 insert into Translation(translationGroup, translationKey, translation) values (2, 'DETAILED_SEARCH_TARGET_GROUP', 'Возрастная группа');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'DETAILED_SEARCH_ONLY_BOOKS', 'Только книги');
 insert into Translation(translationGroup, translationKey, translation) values (2, 'ADD_PORTFOLIO', 'Добавить портфель');
 insert into Translation(translationGroup, translationKey, translation) values (2, 'EDIT_PORTFOLIO', 'Редактировать портфель');
 insert into Translation(translationGroup, translationKey, translation) values (2, 'BUTTON_EDIT_PORTFOLIO', 'Сохранить');

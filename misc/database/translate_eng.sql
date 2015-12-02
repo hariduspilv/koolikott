@@ -114,6 +114,7 @@ insert into Translation(translationGroup, translationKey, translation) values (3
 insert into Translation(translationGroup, translationKey, translation) values (3, 'DETAILED_SEARCH_OFF', 'No');
 insert into Translation(translationGroup, translationKey, translation) values (3, 'DETAILED_SEARCH_INCLUDE_PAID', 'Include Paid');
 insert into Translation(translationGroup, translationKey, translation) values (3, 'DETAILED_SEARCH_TARGET_GROUP', 'Age group');
+insert into Translation(translationGroup, translationKey, translation) values (3, 'DETAILED_SEARCH_ONLY_BOOKS', 'Only books');
 insert into Translation(translationGroup, translationKey, translation) values (3, 'ADD_PORTFOLIO', 'Add Portfolio');
 insert into Translation(translationGroup, translationKey, translation) values (3, 'EDIT_PORTFOLIO', 'Edit portfolio');
 insert into Translation(translationGroup, translationKey, translation) values (3, 'PORTFOLIO_TITLE', 'Title');

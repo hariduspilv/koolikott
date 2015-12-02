@@ -10,11 +10,13 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
 import ee.hm.dop.model.Language;
+import ee.hm.dop.model.ResourceType;
 import ee.hm.dop.model.SearchFilter;
 import ee.hm.dop.model.SearchResult;
 import ee.hm.dop.model.TargetGroup;
 import ee.hm.dop.model.taxon.Taxon;
 import ee.hm.dop.service.LanguageService;
+import ee.hm.dop.service.ResourceTypeService;
 import ee.hm.dop.service.SearchService;
 import ee.hm.dop.service.TaxonService;
 
@@ -30,6 +32,9 @@ public class SearchResource {
     @Inject
     private LanguageService languageService;
 
+    @Inject
+    private ResourceTypeService resourceTypeService;
+
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public SearchResult search(@QueryParam("q") String query, @QueryParam("start") Long start, //
@@ -37,11 +42,12 @@ public class SearchResource {
             @QueryParam("paid") Boolean paid, //
             @QueryParam("type") String type, //
             @QueryParam("language") String languageCode, //
-            @QueryParam("targetGroup") List<TargetGroup> targetGroups) {
+            @QueryParam("targetGroup") List<TargetGroup> targetGroups, //
+            @QueryParam("resourceType") String resourceTypeName) {
 
         Taxon taxon = taxonService.getTaxonById(taxonId);
-
         Language language = languageService.getLanguage(languageCode);
+        ResourceType resourceType = resourceTypeService.getResourceTypeByName(resourceTypeName);
 
         if (paid == null) {
             paid = true;
@@ -53,6 +59,7 @@ public class SearchResource {
         searchFilter.setType(type);
         searchFilter.setLanguage(language);
         searchFilter.setTargetGroups(targetGroups);
+        searchFilter.setResourceType(resourceType);
 
         if (start == null) {
             return searchService.search(query, searchFilter);

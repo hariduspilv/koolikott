@@ -23,6 +23,7 @@ import ee.hm.dop.dao.PortfolioDAO;
 import ee.hm.dop.model.Language;
 import ee.hm.dop.model.Material;
 import ee.hm.dop.model.Portfolio;
+import ee.hm.dop.model.ResourceType;
 import ee.hm.dop.model.SearchFilter;
 import ee.hm.dop.model.SearchResult;
 import ee.hm.dop.model.Searchable;
@@ -756,9 +757,15 @@ public class SearchServiceTest {
 
         searchFilter.setPaid(false);
         searchFilter.setType("material");
+
+        ResourceType resourceType = new ResourceType();
+        resourceType.setId(1L);
+        resourceType.setName("EXTRABOOK");
+        searchFilter.setResourceType(resourceType);
+
         String tokenizedQuery = "(pythagoras*) AND topic:\"cool_topic\" AND subject:\"cool_subject\""
                 + " AND domain:\"cool_domain\" AND educational_context:\"preschool\""
-                + " AND (paid:\"false\" OR type:\"portfolio\") AND type:\"material\"";
+                + " AND (paid:\"false\" OR type:\"portfolio\") AND type:\"material\" AND resource_type:\"extrabook\"";
         long start = 0;
 
         List<Searchable> searchables = Arrays.asList(createMaterial(9L), createMaterial(2L), createPortfolio(2L));
@@ -800,6 +807,22 @@ public class SearchServiceTest {
         SearchFilter searchFilter = new SearchFilter();
         searchFilter.setTargetGroups(Arrays.asList(TargetGroup.SIX_SEVEN, TargetGroup.ZERO_FIVE));
         String tokenizedQuery = "(umm) AND (target_group:\"six_seven\" OR target_group:\"zero_five\")";
+        long start = 0;
+
+        List<Searchable> searchables = Arrays.asList(createMaterial(9L), createMaterial(2L), createPortfolio(2L));
+
+        testSearch(query, tokenizedQuery, searchables, start, searchFilter);
+    }
+
+    @Test
+    public void searchWithResourceType() {
+        String query = "test";
+        SearchFilter searchFilter = new SearchFilter();
+        ResourceType resourceType = new ResourceType();
+        resourceType.setId(1L);
+        resourceType.setName("EXTRABOOK");
+        searchFilter.setResourceType(resourceType);
+        String tokenizedQuery = "(test*) AND resource_type:\"extrabook\"";
         long start = 0;
 
         List<Searchable> searchables = Arrays.asList(createMaterial(9L), createMaterial(2L), createPortfolio(2L));
