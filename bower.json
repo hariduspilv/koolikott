@@ -15,11 +15,13 @@
     "angular-translate": "2.7.2",
     "angular-translate-loader-url": "2.7.2",
     "angular-youtube-mb": "1.0.2",
+    "clipboard": "~1.5.5",
     "jquery": "~2.1.4",
     "jsog": "~1.0.7",
     "material-design-icons": "~2.0.0",
     "ng-file-upload": "~10.0.2",
     "ng-file-upload-shim": "~10.0.2",
+    "ngclipboard": "~1.0.0",
     "ngInfiniteScroll": "1.0.0",
     "requirejs": "2.1.17",
     "screenfull": "~2.0.0"

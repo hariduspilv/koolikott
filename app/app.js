@@ -11,7 +11,8 @@ define(['app.routes', 'services/dependencyResolver'], function(config, dependenc
       'angularScreenfull',
       'duScroll',
       'infinite-scroll',
-      'ngFileUpload'
+      'ngFileUpload',
+      'ngclipboard'
     ]);
 
     app.config(
@@ -99,7 +100,8 @@ define(['app.routes', 'services/dependencyResolver'], function(config, dependenc
         $rootScope.$on('$routeChangeSuccess', function() {
             var path = $location.path();
             
-            $rootScope.isViewPortforlioMode = path === '/portfolio';
+            $rootScope.isViewPortfolio = path === '/portfolio';
+            $rootScope.isViewMaterial = path === '/material';
         });
     });
 

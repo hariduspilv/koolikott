@@ -4,7 +4,24 @@
       <article flex="75" flex-sm="100" class="md-padding" role="main">
         <md-card class="card-lg" id="material-card">
           <md-card-content>
+            <div class="card-menu">
+              <md-menu>
+                <md-button class="md-icon-button" data-ng-click="$mdOpenMenu($event)">
+                  <md-icon md-menu-origin>more_vert</md-icon>
+                </md-button>
+                <md-menu-content width="4">
+                  <md-menu-item data-ng-if="$root.isViewMaterial">
+                    <md-button data-ngclipboard data-ngclipboard-success="copyUrl(e)" data-clipboard-text="{{ absUrl }}">
+                      <md-icon md-menu-align-target>content_copy</md-icon>
+                      <span data-translate="COPY_URL"></span>
+                    </md-button>
+                  </md-menu-item>
+                </md-menu-content>
+              </md-menu>
+            </div>
+            
             <h1 class="md-accent md-display-1 book-headline" data-ng-bind="getCorrectLanguageString(material.titles)"></h1>
+            
             <div  layout="row">
               <div layout="column" flex="66" class="left-of-book">
                 <div layout="row">

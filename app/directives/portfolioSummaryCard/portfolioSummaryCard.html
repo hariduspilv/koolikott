@@ -1,92 +1,107 @@
 <md-card>
-          <md-card-content>
-            <h1 class="md-accent md-display-1 book-headline" layout="row">
-                {{portfolio.title}}
-                <span flex></span>
-                <a href="#" data-ng-if="$root.isEditPortforlioMode" data-ng-click="showEditPortfolioDialog($event)">
-                    <md-tooltip md-direction="left">
-                        <span data-translate="EDIT_PORTFOLIO"></span>
-                    </md-tooltip>
-                    <md-icon>edit</md-icon>
-                </a>
-            </h1>
+  <md-card-content>
+    <div class="card-menu">
+      <md-menu>
+        <md-button class="md-icon-button" data-ng-click="$mdOpenMenu($event)">
+          <md-icon md-menu-origin>more_vert</md-icon>
+        </md-button>
+        <md-menu-content width="4">
+          <md-menu-item data-ng-if="$root.isEditPortforlioMode">
+            <md-button data-ng-click="showEditPortfolioDialog($event)">
+              <md-icon md-menu-align-target>edit</md-icon>
+              <span data-translate="EDIT_PORTFOLIO"></span>
+            </md-button>
+          </md-menu-item>
+          <md-menu-item data-ng-if="$root.isViewPortfolio">
+            <md-button data-ngclipboard data-ngclipboard-success="copyUrl(e)" data-clipboard-text="{{ absUrl }}">
+              <md-icon md-menu-align-target>content_copy</md-icon>
+              <span data-translate="COPY_URL"></span>
+            </md-button>
+          </md-menu-item>
+        </md-menu-content>
+      </md-menu>
+    </div>
+    
+    <h1 class="md-accent md-display-1 book-headline">
+      {{portfolio.title}}
+    </h1>
 
-            <div layout="row">
-              <div layout="column" flex="66" class="left-of-book">
-                <div layout="row">
-                  <div flex>
-                    <p class="md-body-1">
-                      <small class="md-caption">
-                        <span data-translate="DETAIL_VIEW_SUBJECT"></span>
-                      </small>
-                      <br>
-                      <span data-ng-if="taxonUtils.getSubject(portfolio.taxon)" data-translate="{{'SUBJECT_' + taxonUtils.getSubject(portfolio.taxon).name.toUpperCase()}}"></span>
-                    </p>
-                  </div>
-                  <div flex>
-                    <p class="md-body-1">
-                      <small class="md-caption">
-                        <span data-translate="DETAIL_VIEW_EDUCATIONAL_CONTEXT"></span>
-                      </small>
-                      <br>
-                      <span data-ng-if="portfolio.taxon" data-translate="{{taxonUtils.getEducationalContext(portfolio.taxon).name.toUpperCase()}}"></span>
-                    </p>
-                  </div>
-                </div>
+    <div layout="row">
+      <div layout="column" flex="66" class="left-of-book">
+        <div layout="row">
+          <div flex>
+            <p class="md-body-1">
+              <small class="md-caption">
+                <span data-translate="DETAIL_VIEW_SUBJECT"></span>
+              </small>
+              <br>
+              <span data-ng-if="taxonUtils.getSubject(portfolio.taxon)" data-translate="{{'SUBJECT_' + taxonUtils.getSubject(portfolio.taxon).name.toUpperCase()}}"></span>
+            </p>
+          </div>
+          <div flex>
+            <p class="md-body-1">
+              <small class="md-caption">
+                <span data-translate="DETAIL_VIEW_EDUCATIONAL_CONTEXT"></span>
+              </small>
+              <br>
+              <span data-ng-if="portfolio.taxon" data-translate="{{taxonUtils.getEducationalContext(portfolio.taxon).name.toUpperCase()}}"></span>
+            </p>
+          </div>
+        </div>
 
-                <md-divider class="md-default-theme"></md-divider>
+        <md-divider class="md-default-theme"></md-divider>
 
-                <p class="md-body-1">
-                  {{portfolio.summary}}
-                </p>
+        <p class="md-body-1">
+          {{portfolio.summary}}
+        </p>
 
-                <!-- tags -->
-                <p>
-                    <small class="md-caption">
-                    <span data-translate="DETAIL_VIEW_TAGS"></span>:
-                    </small>
-                </p>
+        <!-- tags -->
+        <p>
+            <small class="md-caption">
+            <span data-translate="DETAIL_VIEW_TAGS"></span>:
+            </small>
+        </p>
 
-                <md-chips data-ng-model="portfolio.tags" readonly="true">
-                    <md-chip-template>{{$chip.name}}</md-chip-template>
-                </md-chips>
-                <!-- /tags -->
-              </div>
-              <div layout="column" flex="33" class="divider-left" layout-align="start start">
-                <md-content>
-                  <p class="md-body-1">
-                    <small class="md-caption">
-                      <span data-translate="AUTHORS"></span>:
-                    </small>
-                    <a>
-                      <span data-ng-bind="portfolio.creator.name"></span>
-                      <span data-ng-bind="portfolio.creator.surname"></span>
-                    </a>
-                  </p>
+        <md-chips data-ng-model="portfolio.tags" readonly="true">
+            <md-chip-template>{{$chip.name}}</md-chip-template>
+        </md-chips>
+        <!-- /tags -->
+      </div>
+      <div layout="column" flex="33" class="divider-left" layout-align="start start">
+        <md-content>
+          <p class="md-body-1">
+            <small class="md-caption">
+              <span data-translate="AUTHORS"></span>:
+            </small>
+            <a>
+              <span data-ng-bind="portfolio.creator.name"></span>
+              <span data-ng-bind="portfolio.creator.surname"></span>
+            </a>
+          </p>
 
-                  <p class="md-body-1" data-ng-if="portfolio.updated">
-                    <small class="md-caption">
-                      <span data-translate="UPDATED"></span>:
-                    </small>
-                    {{formatDate(portfolio.updated)}}
-                  </p>
+          <p class="md-body-1" data-ng-if="portfolio.updated">
+            <small class="md-caption">
+              <span data-translate="UPDATED"></span>:
+            </small>
+            {{formatDate(portfolio.updated)}}
+          </p>
 
-                  <p class="md-body-1" data-ng-if="portfolio.created">
-                    <small class="md-caption">
-                      <span data-translate="CREATED"></span>:
-                    </small>
-                    {{formatDate(portfolio.created)}}
-                  </p>
+          <p class="md-body-1" data-ng-if="portfolio.created">
+            <small class="md-caption">
+              <span data-translate="CREATED"></span>:
+            </small>
+            {{formatDate(portfolio.created)}}
+          </p>
 
-                  <p class="md-body-1">
-                    <span data-ng-bind="portfolio.views"></span>
-                  </p>
-                </md-content>
-              </div>
-            </div>
-            
-            <!-- rating control -->
-            <div data-ng-if="!$root.isEditPortforlioMode" data-dop-rating like-message="{{ 'PORTFOLIO_LIKED' | translate }}" dislike-message="{{ 'PORTFOLIO_DISLIKED' | translate }}"></div>
-            
-          </md-card-content>
-        </md-card>
+          <p class="md-body-1">
+            <span data-ng-bind="portfolio.views"></span>
+          </p>
+        </md-content>
+      </div>
+    </div>
+    
+    <!-- rating control -->
+    <div data-ng-if="!$root.isEditPortforlioMode" data-dop-rating like-message="{{ 'PORTFOLIO_LIKED' | translate }}" dislike-message="{{ 'PORTFOLIO_DISLIKED' | translate }}"></div>
+    
+  </md-card-content>
+</md-card>

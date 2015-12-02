@@ -5,6 +5,8 @@ define(['app'], function(app)
           $scope.showMaterialContent = false;
           $scope.newComment = {};
   
+          $scope.absUrl = $location.absUrl();
+    
           $rootScope.$on('fullscreenchange', function() {
               $scope.$apply(function() {
                   $scope.showMaterialContent = !$scope.showMaterialContent;
