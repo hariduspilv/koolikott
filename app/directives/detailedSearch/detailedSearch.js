@@ -100,15 +100,23 @@ define(['app'], function(app)
                     return query.trim();
                 }
 
+                function getCheckboxesAsQuery() {
+                    if ($scope.detailedSearch.CLIL === true && $scope.detailedSearch.educationalContext.id === 2) {
+                        return 'LAK "Lõimitud aine- ja keeleõpe"';
+                    }
+                    return '';
+                }
+
                 function createSimpleSearchQuery() {
                     var query = '';
                     var textFields = getTextFieldsAsQuery();
+                    var checkboxes = getCheckboxesAsQuery();
+
+                    query = (textFields + ' ' + checkboxes).trim();
 
                     if ($scope.detailedSearch.main) {
-                        query = $scope.detailedSearch.main + ' ' + textFields;
-                    } else {
-                        query = textFields;
-                    }
+                        query = $scope.detailedSearch.main + ' ' + query;
+                    } 
 
                     return query.trim();
                 }
@@ -123,6 +131,7 @@ define(['app'], function(app)
                         var titleRegex = /(^|\s)(title:([^\s\"]\S*)|title:\"(.*?)\"|title:)/g;
                         var descriptionRegex = /(^|\s)(description:([^\s\"]\S*)|description:\"(.*?)\"|description:|summary:([^\s\"]\S*)|summary:\"(.*?)\"|summary:)/g;
                         var authorRegex = /(^|\s)(author:([^\s\"]\S*)|author:\"(.*?)\"|author:)/g;
+                        var clilRegex = /(^|\s)(LAK|"Lõimitud aine- ja keeleõpe")(?=\s|$)/g;
 
                         var firstTitle;
                         var firstDescription;
@@ -153,6 +162,11 @@ define(['app'], function(app)
                             }
                         }
 
+                        while(keyword = clilRegex.exec(query)) {
+                            main = main.replace(keyword[2], '');
+                            $scope.detailedSearch.CLIL = true;
+                        }
+
                         $scope.detailedSearch.main = removeExtraWhitespace(main).trim();
                         $scope.detailedSearch.title = firstTitle;
                         $scope.detailedSearch.combinedDescription = firstDescription;
@@ -176,9 +190,9 @@ define(['app'], function(app)
                     parseSimpleSearchQuery(queryIn);
                 }, true);
 
-                $scope.$watch('detailedSearch', function() {
+                $scope.$watchCollection('detailedSearch', function() {
                     $scope.queryOut = createSimpleSearchQuery();
-                }, true);
+                });
 
                 function getTaxonSuccess(data) {
                     if (isEmpty(data)) {
