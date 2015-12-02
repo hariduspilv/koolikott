@@ -30,7 +30,7 @@ module.exports = function (grunt) {
         tasks: ['wiredep']
       },
       js: {
-        files: ['<%= yeoman.app %>/scripts/{,*/}*.js'],
+        files: ['<%= yeoman.app %>/**/**/**/*.js'],
         tasks: ['newer:jshint:all'],
         options: {
           livereload: '<%= connect.options.livereload %>'
@@ -48,7 +48,8 @@ module.exports = function (grunt) {
           livereload: '<%= connect.options.livereload %>'
         },
         files: [
-          '<%= yeoman.app %>/{,*/}/{,*/}*.html',
+          '<%= yeoman.app %>/views/**/**/*.html',
+          '<%= yeoman.app %>/directives/**/*.html',
           '.tmp/styles/{,*/}*.css',
           '<%= yeoman.app %>/images/{,*/}*.{png,jpg,jpeg,gif,webp,svg}'
         ]
@@ -61,14 +62,12 @@ module.exports = function (grunt) {
         port: 3001,
         // Change this to '0.0.0.0' to access the server from outside.
         hostname: '0.0.0.0',
-        livereload: 3729,
-        protocol: 'https'
+        livereload: 3729
       },
       proxies: [{
         context: '/rest',
         host: 'oxygen.netgroupdigital.com',
-        port: 8080,
-        https: true
+        port: 8080
       }],
       livereload: {
         options: {
