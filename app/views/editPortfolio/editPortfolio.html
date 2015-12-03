@@ -1,4 +1,23 @@
 <div id="page-add" layout="row" flex>
+  <!-- md-sidenav -->
+  <md-sidenav layout="column" class="md-sidenav-left md-whiteframe-z2" md-component-id="left" md-is-locked-open="$mdMedia('gt-md')">
+    <md-toolbar class="md-accent">
+      <h6 class="md-toolbar-tools md-subhead">
+        <md-button class="md-icon-button hide-gt-md" data-ng-click="toggleSidenav('left')" >
+          <md-icon class="md-48">arrow_backward</md-icon>
+        </md-button>
+        <span data-translate="TABLE_OF_CONTENTS"></span>
+      </h6>
+    </md-toolbar>
+
+    <md-content layout="column" flex role="navigation" class="sidenav">
+      <div data-dop-table-of-contents portfolio="portfolio"></div>
+    </md-content>
+
+  </md-sidenav>
+  <!-- /md-sidenav -->
+
+  <!-- main content -->
   <div layout="column" flex>
     <section id="main-content" layout="row" layout-sm="column" layout-align="start start">
       <article class="md-padding" layout="column" flex="75" flex-sm="100" role="main">
@@ -23,4 +42,5 @@
       </md-button>
     </section>
   </div>
+  <!-- /main content -->
 </div>

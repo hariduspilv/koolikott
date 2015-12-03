@@ -9,11 +9,11 @@ define(['app'], function(app)
 
             function init() {
 				if ($rootScope.savedPortfolio) {
-					$rootScope.portfolio = $rootScope.savedPortfolio;
+					$scope.portfolio = $rootScope.savedPortfolio;
 				} else {
 					getPortfolio(getPortfolioSuccess, getPortfolioFail);
 				}
-				
+				$rootScope.isEditPortforlioMode = true;
 			}
 
 			function getPortfolio(success, fail) {
@@ -25,7 +25,7 @@ define(['app'], function(app)
 	            if (isEmpty(portfolio)) {
 	            	getPortfolioFail();
 	            } else {
-	            	$rootScope.portfolio = portfolio;
+	                $scope.portfolio = portfolio;
 	            }
 	    	}
 

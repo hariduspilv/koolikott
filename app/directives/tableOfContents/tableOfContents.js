@@ -4,11 +4,11 @@ define(['app'], function(app)
      function($filter) {
         return {
             scope: {
-                readonly: '='
+                portfolio: '=',
+                readonly: '=readonly'
             },
             templateUrl: 'directives/tableOfContents/tableOfContents.html',
-            controller: function ($scope, $rootScope) {
-            	
+            controller: function ($scope) {
                 $scope.isReadOnly = angular.isDefined($scope.isReadOnly) ? $scope.isReadOnly : false;
 
                 $scope.gotoChapter = function(chapterId, subchapterId) {
@@ -34,10 +34,6 @@ define(['app'], function(app)
                         subchapters: []
                     });
                 };
-
-                $rootScope.$watch('portfolio', function(portfolio) {
-                    $scope.portfolio = $rootScope.portfolio;
-                }, false);
             }
         };
     }]);
