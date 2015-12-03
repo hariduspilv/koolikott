@@ -146,6 +146,8 @@ insert into Translation(translationGroup, translationKey, translation) values (2
 insert into Translation(translationGroup, translationKey, translation) values (2, 'TARGET_GROUP_GRADE9', '9-го класса');
 insert into Translation(translationGroup, translationKey, translation) values (2, 'TARGET_GROUP_GYMNASIUM', 'Среднее образование');
 insert into Translation(translationGroup, translationKey, translation) values (2, 'TABLE_OF_CONTENTS', 'Содержание');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'ALERT_CONFIRM_POSITIVE', 'Да');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'ALERT_CONFIRM_NEGATIVE', 'Нет');
 
 -- Edit portfolio
 insert into Translation(translationGroup, translationKey, translation) values (2, 'PORTFOLIO_ENTER_CHAPTER_TITLE', 'Добавить название главы');
@@ -161,8 +163,6 @@ insert into Translation(translationGroup, translationKey, translation) values (2
 insert into Translation(translationGroup, translationKey, translation) values (2, 'PORTFOLIO_DELETE_SUB_CHAPTER_CONFIRM_TITLE', 'Вы уверены?');
 insert into Translation(translationGroup, translationKey, translation) values (2, 'PORTFOLIO_DELETE_CHAPTER_CONFIRM_MESSAGE', 'Это не возможно, чтобы отменить эту операцию');
 insert into Translation(translationGroup, translationKey, translation) values (2, 'PORTFOLIO_DELETE_SUB_CHAPTER_CONFIRM_MESSAGE', 'Это не возможно, чтобы отменить эту операцию');
-insert into Translation(translationGroup, translationKey, translation) values (2, 'PORTFOLIO_DELETE_ALERT_CONFIRM_POSITIVE', 'Да');
-insert into Translation(translationGroup, translationKey, translation) values (2, 'PORTFOLIO_DELETE_ALERT_CONFIRM_NEGATIVE', 'Нет');
 insert into Translation(translationGroup, translationKey, translation) values (2, 'PORTFOLIO_ADD_CHAPTER', 'Добавить главу');
 insert into Translation(translationGroup, translationKey, translation) values (2, 'PORTFOLIO_ADD_SUBCHAPTER', 'Добавить подглаву');
 insert into Translation(translationGroup, translationKey, translation) values (2, 'PORTFOLIO_DEFAULT_NEW_CHAPTER_TITLE', 'Новая глава');

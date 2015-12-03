@@ -145,6 +145,8 @@ insert into Translation(translationGroup, translationKey, translation) values (3
 insert into Translation(translationGroup, translationKey, translation) values (3, 'TARGET_GROUP_GRADE9', '9th grade');
 insert into Translation(translationGroup, translationKey, translation) values (3, 'TARGET_GROUP_GYMNASIUM', 'Gymnasium');
 insert into Translation(translationGroup, translationKey, translation) values (3, 'TABLE_OF_CONTENTS', 'Table of Contents');
+insert into Translation(translationGroup, translationKey, translation) values (3, 'ALERT_CONFIRM_POSITIVE', 'Yes');
+insert into Translation(translationGroup, translationKey, translation) values (3, 'ALERT_CONFIRM_NEGATIVE', 'No');
 
 -- Edit portfolio
 insert into Translation(translationGroup, translationKey, translation) values (3, 'PORTFOLIO_ENTER_CHAPTER_TITLE', 'Add chapter title');
@@ -160,8 +162,6 @@ insert into Translation(translationGroup, translationKey, translation) values (3
 insert into Translation(translationGroup, translationKey, translation) values (3, 'PORTFOLIO_DELETE_SUB_CHAPTER_CONFIRM_TITLE', 'Are you sure?');
 insert into Translation(translationGroup, translationKey, translation) values (3, 'PORTFOLIO_DELETE_CHAPTER_CONFIRM_MESSAGE', 'It is not possible to undo this operation');
 insert into Translation(translationGroup, translationKey, translation) values (3, 'PORTFOLIO_DELETE_SUB_CHAPTER_CONFIRM_MESSAGE', 'It is not possible to undo this operation');
-insert into Translation(translationGroup, translationKey, translation) values (3, 'PORTFOLIO_DELETE_ALERT_CONFIRM_POSITIVE', 'Yes');
-insert into Translation(translationGroup, translationKey, translation) values (3, 'PORTFOLIO_DELETE_ALERT_CONFIRM_NEGATIVE', 'No');
 insert into Translation(translationGroup, translationKey, translation) values (3, 'PORTFOLIO_ADD_CHAPTER', 'Add chapter');
 insert into Translation(translationGroup, translationKey, translation) values (3, 'PORTFOLIO_ADD_SUBCHAPTER', 'Add subchapter');
 insert into Translation(translationGroup, translationKey, translation) values (3, 'PORTFOLIO_DEFAULT_NEW_CHAPTER_TITLE', 'New chapter');

@@ -207,6 +207,8 @@ insert into Translation(translationGroup, translationKey, translation) values (1
 insert into Translation(translationGroup, translationKey, translation) values (1, 'SUBJECT_DIGITAL_COMPETENCE', 'Infotehnoloogiline pädevus');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'SUBJECT_OTHER', 'Muu');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'TABLE_OF_CONTENTS', 'Sisukord');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'ALERT_CONFIRM_POSITIVE', 'Jah');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'ALERT_CONFIRM_NEGATIVE', 'Ei');
 
 -- Edit portfolio
 insert into Translation(translationGroup, translationKey, translation) values (1, 'PORTFOLIO_ENTER_CHAPTER_TITLE', 'Sisesta peatüki pealkiri');
@@ -222,8 +224,6 @@ insert into Translation(translationGroup, translationKey, translation) values (1
 insert into Translation(translationGroup, translationKey, translation) values (1, 'PORTFOLIO_DELETE_SUB_CHAPTER_CONFIRM_TITLE', 'Kas oled kindel?');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'PORTFOLIO_DELETE_CHAPTER_CONFIRM_MESSAGE', 'Peatüki kustutamist ei ole võimalik tagasi võtta');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'PORTFOLIO_DELETE_SUB_CHAPTER_CONFIRM_MESSAGE', 'Alampeatüki kustutamist ei ole võimalik tagasi võtta');
-insert into Translation(translationGroup, translationKey, translation) values (1, 'PORTFOLIO_DELETE_ALERT_CONFIRM_POSITIVE', 'Jah');
-insert into Translation(translationGroup, translationKey, translation) values (1, 'PORTFOLIO_DELETE_ALERT_CONFIRM_NEGATIVE', 'Ei');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'PORTFOLIO_ADD_CHAPTER', 'Lisa peatükk');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'PORTFOLIO_ADD_SUBCHAPTER', 'Lisa alampeatükk');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'PORTFOLIO_DEFAULT_NEW_CHAPTER_TITLE', 'Uus peatükk');
