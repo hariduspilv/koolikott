@@ -194,7 +194,7 @@ define(['app.routes', 'services/dependencyResolver'], function(config, dependenc
     	
     	$rootScope.$on('$routeChangeSuccess', function() {
             var path = $location.path();
-            $rootScope.isViewPortfolio = path === '/portfolio';
+            $rootScope.isViewPortforlioPage = path === '/portfolio';
             
             var url = $location.url();
             if (url.startsWith('/portfolio/edit?id=')) {
