@@ -4,7 +4,7 @@ define(['app'], function(app)
       function($scope, serverCallService, $route, translationService, $rootScope, searchService, $location, alertService, authenticatedUserService) {
           $scope.showMaterialContent = false;
           $scope.newComment = {};
-  
+    
           $rootScope.$on('fullscreenchange', function() {
               $scope.$apply(function() {
                   $scope.showMaterialContent = !$scope.showMaterialContent;

@@ -16,7 +16,6 @@ define(['app'], function(app)
                             locals:{portfolio: $scope.portfolio}
                         });
                     };
-
                 }
             };
         }]);
