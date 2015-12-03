@@ -4,7 +4,7 @@ define(['app'], function(app)
       function($scope, translationService, serverCallService, $route, $location, alertService, $rootScope, authenticatedUserService) {
           function init() {
               if ($rootScope.savedPortfolio) {
-                  $scope.portfolio = $rootScope.savedPortfolio;
+            	  $rootScope.portfolio = $rootScope.savedPortfolio;
                   increaseViewCount();
               } else {
                   getPortfolio(getPortfolioSuccess, getPortfolioFail);
@@ -22,7 +22,7 @@ define(['app'], function(app)
               if (isEmpty(portfolio)) {
                   getPortfolioFail();
               } else {
-                  $scope.portfolio = portfolio;
+            	  $rootScope.portfolio = portfolio;
                   increaseViewCount();
               }
           }

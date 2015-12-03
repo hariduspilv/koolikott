@@ -94,16 +94,8 @@ define(['app.routes', 'services/dependencyResolver'], function(config, dependenc
 
         $mdThemingProvider.theme('input', 'default').primaryPalette('grey');
     }
-    
-    app.run(function($rootScope, $location) {        
-        $rootScope.$on('$routeChangeSuccess', function() {
-            var path = $location.path();
-            
-            $rootScope.isViewPortforlioMode = path === '/portfolio';
-        });
-    });
 
-    app.run(function($rootScope, authenticatedUserService) {
+    app.run(function($rootScope, authenticatedUserService, $location) {
     	class TaxonUtils {
     		constructor() {
     			this.EDUCATIONAL_CONTEXT = '.EducationalContext';
@@ -197,8 +189,17 @@ define(['app.routes', 'services/dependencyResolver'], function(config, dependenc
             return authenticatedUserService.isAuthenticated();
         }, function (isAuthenticated) {
         	$rootScope.showMainFabButton = isAuthenticated;
-        },true
-    );
+        },true);
+    	
+    	$rootScope.$on('$routeChangeSuccess', function() {
+            var path = $location.path();
+            $rootScope.isViewPortforlioMode = path === '/portfolio';
+            
+            var url = $location.url();
+            if (url.startsWith('/portfolio/edit?id=')) {
+            	$rootScope.isEditPortforlioMode = true;
+            }
+        });
 	});
 
    return app;
