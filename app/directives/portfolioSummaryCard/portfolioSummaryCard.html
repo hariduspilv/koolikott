@@ -13,7 +13,9 @@
             </md-button>
           </md-menu-item>
           <md-menu-item data-ng-if="isViewPortforlioPage" dop-copy-permalink></md-menu-item>
-          <md-menu-divider></md-menu-divider>
+          <md-menu-divider data-ng-if="isViewPortforlioPage"></md-menu-divider>
+          <md-menu-item data-ng-if="isViewPortforlioPage" dop-recommend></md-menu-item>
+          <md-menu-divider data-ng-if="isViewPortforlioPage"></md-menu-divider>
           <md-menu-item data-ng-if="isViewPortforlioPage" dop-report-imporper></md-menu-item>
         </md-menu-content>
       </md-menu>

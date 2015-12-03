@@ -26,6 +26,7 @@ require.config({
     dopCopyPermalink: 'directives/copyPermalink/copyPermalink',
     dopReportImporper: 'directives/report/improper/improper',
     dopReportBrokenLink: 'directives/report/brokenLink/brokenLink',
+    dopRecommend: 'directives/recommend/recommend',
     angular: '../bower_components/angular/angular',
     'angular-animate': '../bower_components/angular-animate/angular-animate',
     'angular-aria': '../bower_components/angular-aria/angular-aria',
@@ -156,7 +157,8 @@ require([
   'dopAddChapterMaterial',
   'dopCopyPermalink',
   'dopReportImporper',
-  'dopReportBrokenLink'
+  'dopReportBrokenLink',
+  'dopRecommend'
 ], function (jquery, angular, app) {
   'use strict';
   var $html = angular.element(document.getElementsByTagName('html')[0]);
