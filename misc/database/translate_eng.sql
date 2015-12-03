@@ -317,3 +317,5 @@ insert into Translation(translationGroup, translationKey, translation) values (3
 insert into Translation(translationGroup, translationKey, translation) values (3, 'REPORT_BROKEN_LINK_TITLE', 'Would you like to report a broken material?');
 insert into Translation(translationGroup, translationKey, translation) values (3, 'REPORT_BROKEN_LINK_CONTENT', 'Adminstrator will recive your notification and will take necessary actions.');
 insert into Translation(translationGroup, translationKey, translation) values (3, 'BUTTON_REPORT', 'Report');
+
+insert into Translation(translationGroup, translationKey, translation) values (3, 'RECOMMEND', 'Recommend');

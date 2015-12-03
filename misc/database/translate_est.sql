@@ -302,3 +302,5 @@ insert into Translation(translationGroup, translationKey, translation) values (1
 insert into Translation(translationGroup, translationKey, translation) values (1, 'REPORT_BROKEN_LINK_TITLE', 'Kas soovite teavitada katkisest materjalist?');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'REPORT_BROKEN_LINK_CONTENT', 'Administraatorile saadetakse teavitus katkise materjali kohta.');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'BUTTON_REPORT', 'Raporteeri');
+
+insert into Translation(translationGroup, translationKey, translation) values (1, 'RECOMMEND', 'Soovita');
