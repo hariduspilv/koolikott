@@ -24,6 +24,8 @@ require.config({
     dopRating: 'directives/rating/rating',
     dopAddChapterMaterial: 'directives/chapter/addChapterMaterial/addChapterMaterial',
     dopCopyPermalink: 'directives/copyPermalink/copyPermalink',
+    dopRaportImporper: 'directives/raport/improper/improper',
+    dopRaportBrokenLink: 'directives/raport/brokenLink/brokenLink',
     angular: '../bower_components/angular/angular',
     'angular-animate': '../bower_components/angular-animate/angular-animate',
     'angular-aria': '../bower_components/angular-aria/angular-aria',
@@ -152,7 +154,9 @@ require([
   'dopCommentsCard',
   'dopRating',
   'dopAddChapterMaterial',
-  'dopCopyPermalink'
+  'dopCopyPermalink',
+  'dopRaportImporper',
+  'dopRaportBrokenLink'
 ], function (jquery, angular, app) {
   'use strict';
   var $html = angular.element(document.getElementsByTagName('html')[0]);

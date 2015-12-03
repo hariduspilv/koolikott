@@ -12,7 +12,9 @@
               <span data-translate="EDIT_PORTFOLIO"></span>
             </md-button>
           </md-menu-item>
-          <md-menu-item data-ng-if="$root.isViewPortforlioPage" dop-copy-permalink></md-menu-item>
+          <md-menu-item data-ng-if="isViewPortforlioPage" dop-copy-permalink></md-menu-item>
+          <md-menu-divider></md-menu-divider>
+          <md-menu-item data-ng-if="isViewPortforlioPage" dop-raport-imporper></md-menu-item>
         </md-menu-content>
       </md-menu>
     </div>
