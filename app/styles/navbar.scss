@@ -1,15 +1,15 @@
 .navbar-search {
-	margin: 0 16px;
-    border-radius: 2px;
-	
+	margin: 0 5px;
+  border-radius: 2px;
+
 	md-input-container {
 		padding: 0;
-		
+
 		input {
 			height: 48px;
 			padding: 0;
 			border: 0;
-			
+
 			&[disabled] {
 				background-image: none;
 			}

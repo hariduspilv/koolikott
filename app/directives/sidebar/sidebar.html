@@ -11,7 +11,7 @@
 
   <h2 class="md-headline">Soovitused</h2>
   <md-list>
-    <md-list-item class="md-3-line" ng-repeat="item in books">
+    <md-list-item md-ink-ripple="#03A9F4" class="md-3-line md-clickable" ng-repeat="item in recommendations">
       <div class="md-list-item-text">
         <h3>{{item.what}}</h3>
         <p class="one-row">{{item.notes}}</p>
@@ -24,4 +24,15 @@
        Veel soovitusi
     </md-button>
   </md-list>
+  <md-list>
+    <md-list-item
+        ng-repeat="section in ::admin.sections"
+        ng-class="{
+            'active': $state.includes(section.active),
+            'disabled': section.disabled
+        }"
+        ng-click="!section.disabled && $state.go(section.state)">
+        <span ng-bind="::section.label"></span>
+    </md-list-item>
+</md-list>
 </aside>

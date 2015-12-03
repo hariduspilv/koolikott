@@ -10,15 +10,61 @@
   outline: none;
 }
 
-//h1, h2, h3,  h4, h5, h6 {
-//  -webkit-margin-before: 0em;
-//  -webkit-padding-start: 0;
-//  -webkit-margin-after: 0em;
-//}
-
 ul {
     -webkit-padding-start: 0em;
 }
+
+h1 {
+  font-weight: 300;
+  font-size: 34px;
+  color: #212121;
+  font-size: 30px;
+  margin: 0  0 10px 0;
+  font-weight: 300;
+  line-height: 35px;
+}
+
+h3 {
+  color: #212121;
+font-size: 14px;
+font-weight: normal;
+text-transform: uppercase;
+}
+.md-body-1 {
+  color: #333;
+  font-size: 14px;
+  font-weight: 300;
+  line-height: 20px;
+  overflow: hidden;
+  text-align: left;
+  line-height: 20px;
+  &.description {
+    line-height: 24px;
+  }
+}
+
+.md-body-2 {
+  &.meta {
+    line-height: 1.2;
+    color: #333;
+    md-icon.material-icons {
+      font-size: inherit;
+      vertical-align: baseline;
+    }
+  }
+  .md-caption {
+    font-weight: 300;
+  }
+  a {
+    font-size: 15px;
+  font-weight: 400;
+  }
+}
+
+$md-primary: #1E88E5;
+$link-color: #15c;
+$bg-gray: #eee;
+$border-color: rgba(0,0,0,0.12);
 
 @import "iconfont.scss";
 @import "slidedown.scss";
@@ -46,25 +92,28 @@ ul {
 
 // Scaffolding
 html, body {
-  background: #eee;
+  background: $bg-gray;
   color: rgba(0,0,0,0.77);
   line-height: 1.2;
 }
 
-.left-of-book {
-  padding-right: 20px;
-}
-.book-headline {
-  margin-top: 20px;
-  font-weight: 300;
+.wrapped {
+  white-space: pre;
+  white-space: pre-wrap;
+  white-space: pre-line;
+  white-space: -pre-wrap;
+  white-space: -o-pre-wrap;
+  white-space: -moz-pre-wrap;
+  white-space: -hp-pre-wrap;
+  word-wrap: break-word;
 }
 
-.divider-left {
-  display: block;
-  border-left-width: 1px;
-  border-left-style: solid;
-  margin: 0;
-  border-left-color: rgba(0,0,0,0.12);
+a {
+  text-decoration: none;
+  color: $link-color;
+  &:hover {
+    text-decoration: underline;
+  }
 }
 
 .logo-lg {

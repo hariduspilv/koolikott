@@ -20,13 +20,13 @@
         </md-menu-content>
       </md-menu>
     </div>
-    
+
     <h1 class="md-accent md-display-1 book-headline">
       {{portfolio.title}}
     </h1>
 
     <div layout="row">
-      <div layout="column" flex="66" class="left-of-book">
+      <div layout="column" flex="66">
         <div layout="row">
           <div flex>
             <p class="md-body-1">
@@ -56,12 +56,13 @@
 
         <!-- tags -->
         <p>
-            <small class="md-caption">
+          <small class="md-caption">
             <span data-translate="DETAIL_VIEW_TAGS"></span>:
-            </small>
+          </small>
         </p>
 
         <md-chips data-ng-model="portfolio.tags" readonly="true">
+          <md-chip-template>{{$chip.name}}</md-chip-template>
         </md-chips>
         <!-- /tags -->
       </div>
@@ -97,9 +98,9 @@
         </md-content>
       </div>
     </div>
-    
+
     <!-- rating control -->
     <div data-ng-if="!$root.isEditPortforlioMode" data-dop-rating like-message="{{ 'PORTFOLIO_LIKED' | translate }}" dislike-message="{{ 'PORTFOLIO_DISLIKED' | translate }}"></div>
-    
+
   </md-card-content>
 </md-card>

@@ -4,19 +4,22 @@
   <div layout layout-align="center start" flex>
     <section layout="row" layout-sm="column" flex flex-gt-md="80">
       <article flex="75" flex-sm="100" class="md-padding" role="main">
-        <h2 class="md-headline" data-translate="LANDING_PAGE_TITLE_NEWEST"></h2>
+        <div layout="row">
+          <h2 class="md-headline" data-translate="LANDING_PAGE_TITLE_NEWEST"></h2>
+          <span flex></span>
+          <md-button class="md-primary">
+            Näita rohkem
+            <ng-md-icon icon="arrow_forward"></ng-md-icon>
+          </md-button>
+        </div>
 
-        <md-grid-list md-cols-gt-md="4" md-cols-md="3" md-cols-sm="2" md-gutter="20px" md-row-height="300px">
+        <md-grid-list md-cols-gt-md="4" md-cols-md="3" md-cols-sm="2" md-gutter="8px" md-row-height="300px">
           <md-grid-tile data-ng-repeat="material in materials">
             <figure data-dop-material-box material="material"></figure>
           </md-grid-tile>
         </md-grid-list>
 
-        <div layout="row" layout-align="end center">
-          <md-button class="md-primary">
-            <ng-md-icon icon="arrow_forward"></ng-md-icon>Veel
-          </md-button>
-        </div>
+
       </article>
 
       <div data-dop-sidebar flex="25" flex-sm="100" class="md-padding" role="sidebar"></div>
