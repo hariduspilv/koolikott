@@ -290,3 +290,7 @@ insert into Translation(translationGroup, translationKey, translation) values (2
 
 insert into Translation(translationGroup, translationKey, translation) values (2, 'COPY_PORTFOLIO', 'Копировать портфель');
 insert into Translation(translationGroup, translationKey, translation) values (2, 'COPY_URL', 'Копировать ссылку');
+
+-- Report
+insert into Translation(translationGroup, translationKey, translation) values (2, 'REPORT_IMPROPER', 'Сообщите неправильного содержания');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'REPORT_BROKEN_LINK', 'Сообщить о неработающей материал');

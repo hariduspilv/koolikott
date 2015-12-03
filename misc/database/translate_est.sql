@@ -291,3 +291,7 @@ insert into Translation(translationGroup, translationKey, translation) values (1
 
 insert into Translation(translationGroup, translationKey, translation) values (1, 'COPY_PORTFOLIO', 'Kopeeri kogumik');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'COPY_URL', 'Kopeeri link');
+
+-- Report
+insert into Translation(translationGroup, translationKey, translation) values (1, 'REPORT_IMPROPER', 'Teavita ebasobivast sisust');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'REPORT_BROKEN_LINK', 'Teavita katkisest materjalist');

@@ -307,3 +307,7 @@ insert into Translation(translationGroup, translationKey, translation) values (3
 
 insert into Translation(translationGroup, translationKey, translation) values (3, 'COPY_PORTFOLIO', 'Copy portfolio');
 insert into Translation(translationGroup, translationKey, translation) values (3, 'COPY_URL', 'Copy link');
+
+-- Report
+insert into Translation(translationGroup, translationKey, translation) values (3, 'REPORT_IMPROPER', 'Notify of improper content');
+insert into Translation(translationGroup, translationKey, translation) values (3, 'REPORT_BROKEN_LINK', 'Report broken material');
