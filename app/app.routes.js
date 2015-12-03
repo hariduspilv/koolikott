@@ -60,6 +60,7 @@ define([], function()
                 dependencies: [
                     'views/editPortfolio/editPortfolio',
                     'directives/chapter/chapter',
+                    'directives/chapter/addChapterMaterial',
                     'directives/materialBox/materialBox',
                     'directives/portfolioSummaryCard/portfolioSummaryCard',
                     'services/dialogService'
