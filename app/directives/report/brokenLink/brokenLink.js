@@ -1,16 +1,16 @@
 define(['app'], function(app)
 {
-    app.directive('dopRaportImporper', ['translationService', '$mdDialog', '$translate',
+    app.directive('dopReportBrokenLink', ['translationService', '$mdDialog', '$translate',
      function(translationService, $mdDialog, $translate) {
         return {
             scope: false,
-            templateUrl: 'directives/raport/improper/improper.html',
+            templateUrl: 'directives/report/brokenLink/brokenLink.html',
             controller: function($scope) {
                 $scope.showConfirmationDialog = function() {
                     var confirm = $mdDialog.confirm()
-                        .title($translate.instant('REPORT_IMPROPER_TITLE'))
-                        .content($translate.instant('REPORT_IMPROPER_CONTENT'))
-                        .ok($translate.instant('BUTTON_NOTIFY'))
+                        .title($translate.instant('REPORT_BROKEN_LINK_TITLE'))
+                        .content($translate.instant('REPORT_BROKEN_LINK_CONTENT'))
+                        .ok($translate.instant('BUTTON_REPORT'))
                         .cancel($translate.instant('BUTTON_CANCEL'));
             
                     $mdDialog.show(confirm).then(function() {

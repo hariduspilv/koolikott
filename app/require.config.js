@@ -24,8 +24,8 @@ require.config({
     dopRating: 'directives/rating/rating',
     dopAddChapterMaterial: 'directives/chapter/addChapterMaterial/addChapterMaterial',
     dopCopyPermalink: 'directives/copyPermalink/copyPermalink',
-    dopRaportImporper: 'directives/raport/improper/improper',
-    dopRaportBrokenLink: 'directives/raport/brokenLink/brokenLink',
+    dopReportImporper: 'directives/report/improper/improper',
+    dopReportBrokenLink: 'directives/report/brokenLink/brokenLink',
     angular: '../bower_components/angular/angular',
     'angular-animate': '../bower_components/angular-animate/angular-animate',
     'angular-aria': '../bower_components/angular-aria/angular-aria',
@@ -155,8 +155,8 @@ require([
   'dopRating',
   'dopAddChapterMaterial',
   'dopCopyPermalink',
-  'dopRaportImporper',
-  'dopRaportBrokenLink'
+  'dopReportImporper',
+  'dopReportBrokenLink'
 ], function (jquery, angular, app) {
   'use strict';
   var $html = angular.element(document.getElementsByTagName('html')[0]);
