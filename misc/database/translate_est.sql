@@ -294,4 +294,11 @@ insert into Translation(translationGroup, translationKey, translation) values (1
 
 -- Report
 insert into Translation(translationGroup, translationKey, translation) values (1, 'REPORT_IMPROPER', 'Teavita ebasobivast sisust');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'REPORT_IMPROPER_TITLE', 'Kas soovite teavitada ebasobivast sisust?');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'REPORT_IMPROPER_CONTENT', 'Administraatorile saadetakse teavitus ebasobiva sisu kohta.');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'BUTTON_NOTIFY', 'Teavita');
+
 insert into Translation(translationGroup, translationKey, translation) values (1, 'REPORT_BROKEN_LINK', 'Teavita katkisest materjalist');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'REPORT_BROKEN_LINK_TITLE', 'Kas soovite teavitada katkisest materjalist?');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'REPORT_BROKEN_LINK_CONTENT', 'Administraatorile saadetakse teavitus katkise materjali kohta.');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'BUTTON_REPORT', 'Raporteeri');

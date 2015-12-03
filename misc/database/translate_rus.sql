@@ -293,4 +293,11 @@ insert into Translation(translationGroup, translationKey, translation) values (2
 
 -- Report
 insert into Translation(translationGroup, translationKey, translation) values (2, 'REPORT_IMPROPER', 'Сообщите неправильного содержания');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'REPORT_IMPROPER_TITLE', 'Хотите, чтобы сообщить о неправильной контента?');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'REPORT_IMPROPER_CONTENT', 'Администратор получит уведомление ваш и принять необходимые меры.');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'BUTTON_NOTIFY', 'Поставить в известность');
+
 insert into Translation(translationGroup, translationKey, translation) values (2, 'REPORT_BROKEN_LINK', 'Сообщить о неработающей материал');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'REPORT_BROKEN_LINK_TITLE', 'Хотите, чтобы сообщить о битой материал?');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'REPORT_BROKEN_LINK_CONTENT', 'Администратор получит уведомление ваш и принять необходимые меры.');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'BUTTON_REPORT', 'Oтчет');

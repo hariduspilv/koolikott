@@ -115,7 +115,6 @@ insert into Translation(translationGroup, translationKey, translation) values (3
 insert into Translation(translationGroup, translationKey, translation) values (3, 'DETAILED_SEARCH_INCLUDE_PAID', 'Include Paid');
 insert into Translation(translationGroup, translationKey, translation) values (3, 'DETAILED_SEARCH_TARGET_GROUP', 'Age group');
 insert into Translation(translationGroup, translationKey, translation) values (3, 'DETAILED_SEARCH_ONLY_BOOKS', 'Only books');
-insert into Translation(translationGroup, translationKey, translation) values (3, 'DETAILED_SEARCH_CLIL', 'Content and language integrated learning');
 insert into Translation(translationGroup, translationKey, translation) values (3, 'ADD_PORTFOLIO', 'Add Portfolio');
 insert into Translation(translationGroup, translationKey, translation) values (3, 'EDIT_PORTFOLIO', 'Edit portfolio');
 insert into Translation(translationGroup, translationKey, translation) values (3, 'PORTFOLIO_TITLE', 'Title');
@@ -310,4 +309,11 @@ insert into Translation(translationGroup, translationKey, translation) values (3
 
 -- Report
 insert into Translation(translationGroup, translationKey, translation) values (3, 'REPORT_IMPROPER', 'Notify of improper content');
+insert into Translation(translationGroup, translationKey, translation) values (3, 'REPORT_IMPROPER_TITLE', 'Would you like to notify of improper content?');
+insert into Translation(translationGroup, translationKey, translation) values (3, 'REPORT_IMPROPER_CONTENT', 'Adminstrator will recive your notification and will take necessary actions.');
+insert into Translation(translationGroup, translationKey, translation) values (3, 'BUTTON_NOTIFY', 'Notify');
+
 insert into Translation(translationGroup, translationKey, translation) values (3, 'REPORT_BROKEN_LINK', 'Report broken material');
+insert into Translation(translationGroup, translationKey, translation) values (3, 'REPORT_BROKEN_LINK_TITLE', 'Would you like to report a broken material?');
+insert into Translation(translationGroup, translationKey, translation) values (3, 'REPORT_BROKEN_LINK_CONTENT', 'Adminstrator will recive your notification and will take necessary actions.');
+insert into Translation(translationGroup, translationKey, translation) values (3, 'BUTTON_REPORT', 'Report');
