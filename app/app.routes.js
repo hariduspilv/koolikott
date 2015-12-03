@@ -61,7 +61,8 @@ define([], function()
                     'views/editPortfolio/editPortfolio',
                     'directives/chapter/chapter',
                     'directives/materialBox/materialBox',
-                    'directives/portfolioSummaryCard/portfolioSummaryCard'
+                    'directives/portfolioSummaryCard/portfolioSummaryCard',
+                    'services/dialogService'
                 ]
             },
             '/loginRedirect': {

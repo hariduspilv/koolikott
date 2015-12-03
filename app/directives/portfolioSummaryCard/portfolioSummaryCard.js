@@ -8,8 +8,6 @@ define(['app'], function(app)
                 controller: function ($scope, $location) {
 
                     $scope.showEditPortfolioDialog = function($event) {
-                        $event.preventDefault();
-
                         $mdDialog.show({
                             controller: 'addPortfolioDialog',
                             templateUrl: 'views/addPortfolioDialog/addPortfolioDialog.html',

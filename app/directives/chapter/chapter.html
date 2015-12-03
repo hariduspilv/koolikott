@@ -16,7 +16,7 @@
                 </md-button>
                 <md-menu-content width="4">
                     <md-menu-item>
-                        <md-button data-ng-click="deleteChapter($event, $index)">
+                        <md-button data-ng-click="deleteChapter($index)">
                         <md-icon md-menu-align-target>delete</md-icon>
                             <span data-translate="PORTFOLIO_DELETE_CHAPTER"></span>
                         </md-button>
@@ -42,7 +42,7 @@
   </div>
 
   <ul class="portfolio-chapter-subchapters">
-    <li class="portfolio-chapter-subchapter" id="chapter-{{$parent.$index}}-{{$index}}" data-ng-repeat="subchapter in chapter.subchapters">
+    <li class="portfolio-chapter-subchapter" id="chapter-{{index}}-{{$index}}" data-ng-repeat="subchapter in chapter.subchapters">
       <md-card>
         <md-card-content data-ng-if="!$root.isEditPortforlioMode">
           <h3>{{subchapter.title}}</h3>
@@ -60,7 +60,7 @@
                     </md-button>
                     <md-menu-content width="4">
                         <md-menu-item>
-                            <md-button data-ng-click="deleteSubChapter($event, $parent.$index, $index)">
+                            <md-button data-ng-click="onDeleteSubChapter(subchapter)">
                                 <md-icon md-menu-align-target>delete</md-icon>
                                 <span data-translate="PORTFOLIO_DELETE_SUB_CHAPTER"></span>
                             </md-button>
