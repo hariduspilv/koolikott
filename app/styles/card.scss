@@ -6,7 +6,6 @@ $green3: #43a047;
 $card-lg-padding: 25px;
 $border-color: rgba(0,0,0,0.12);
 
-
 md-card {
   position: relative;
   width: 100%;
@@ -65,7 +64,6 @@ md-card {
         .checked {
           display: none;
         }
-
         &:hover {
           .checked {
             display: block;
@@ -87,18 +85,15 @@ md-card {
     }
     md-card-footer {
       padding: 0;
-
       .md-actions {
         padding: 10px 15px;
         md-icon {
           color: rgba (0,0,0, 0.7);
           font-size: inherit;
         }
-
         .md-action-icons-list {
           span {
             padding: 0 5px;
-
             &:last-child {
               padding-right: 0;
             }
@@ -112,11 +107,6 @@ md-card {
     .md-menu {
       margin-top: -15px;
     }
-    .card-cover {
-    height: 300px;
-    overflow: hidden;
-    position: relative;
-    }
     md-card-content {
       padding: $card-lg-padding;
     }
@@ -129,11 +119,15 @@ md-card {
       border-left-style: solid;
       padding-left: $card-lg-padding;
       border-left-color: $border-color;
+      md-content {
+        margin-top: 20px;
+      }
     }
     .card-cover {
       height: 180px;
       background: $green2;
       overflow: hidden;
+      position: relative;
       margin-right: -$card-lg-padding;
       margin-top: -$card-lg-padding;
       margin-left: -$card-lg-padding;
@@ -146,6 +140,32 @@ md-card {
         right: 0;
         font-size: 48px;
         color: rgba(255, 255, 255, 0.8);
+      }
+      .card-hover {
+        transition: all 0.5s;
+        cursor: pointer;
+        position: absolute;
+        background-color: rgba(0,0,0, 0);
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        md-icon {
+          color: rgba(255,255,255, 0);
+        }
+        &:hover {
+          background-color: rgba(0,0,0, 0.7);
+          md-icon {
+            color: rgba(255,255,255, 1);
+          }
+        }
+      }
+    }
+    .md-actions {
+      margin-top: 10px;
+      margin-bottom: -10px;
+      .md-button {
+        margin-left: -5px;
       }
     }
   }

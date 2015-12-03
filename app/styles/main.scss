@@ -10,6 +10,11 @@
   outline: none;
 }
 
+$md-primary: #1E88E5;
+$link-color: #15c;
+$bg-gray: #eee;
+$border-color: rgba(0,0,0,0.12);
+
 ul {
     -webkit-padding-start: 0em;
 }
@@ -57,14 +62,20 @@ text-transform: uppercase;
   }
   a {
     font-size: 15px;
-  font-weight: 400;
+    font-weight: 400;
+    &:hover {
+      text-decoration: none;
+      border-bottom: 1px solid $link-color;
+    }
+    h1 {
+      display: block;
+      text-decoration: none;
+
+    }
   }
 }
 
-$md-primary: #1E88E5;
-$link-color: #15c;
-$bg-gray: #eee;
-$border-color: rgba(0,0,0,0.12);
+
 
 @import "iconfont.scss";
 @import "slidedown.scss";

@@ -1,25 +1,25 @@
 .rating {
-	margin-top: 20px;
+	margin-top: 10px;
 	padding: 8px 0;
 }
 
 .rating-button {
 	display: inline-block;
 	cursor: pointer;
-	
+
 	md-icon {
-		vertical-align: top;
-		font-size: 20px;
+		vertical-align: middle;
+		font-size: 24px;
 	}
-	
+
 	span {
 		display: inline-block;
-		line-height: 20px;
+		line-height: 24px;
 		font-weight: bold;
 		padding: 0 5px;
 	}
-	
+
 	& + .rating-button {
-		margin-left: 16px;
+		margin-left: 20px;
 	}
 }

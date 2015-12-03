@@ -1,10 +1,12 @@
-<h3 class="comments-card-title">
+<!-- TODO: arrow changes direction right/down-->
+<!-- TODO: no parenthesis if no comments. or number 0 -->
+<md-button data-ng-class="{'toggled': showComments}" data-ng-click="showComments = !showComments">
   <span data-translate="COMMENTS_TITLE"></span>
   <span>({{comments.length}})</span>
-  <md-icon class="md-primary" data-ng-class="{'toggled': showComments}" data-ng-click="showComments = !showComments">
-    keyboard_arrow_down
+  <md-icon class="md-primary" >
+    keyboard_arrow_right
   </md-icon>
-</h3>
+</md-button>
 
 <div data-ng-show="showComments">
   <md-list>
