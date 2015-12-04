@@ -17,6 +17,9 @@ md-card {
     width: auto;
     height: 100%;
   }
+  .md-button {
+    font-weight: 400;
+  }
   &.card-sm {
     transition: all 0.5s;
     md-icon.icon-kind {
@@ -158,6 +161,11 @@ md-card {
           md-icon {
             color: rgba(255,255,255, 1);
           }
+        }
+      }
+      &:hover {
+        .icon-kind {
+          color: rgba(255, 255, 255, 0);
         }
       }
     }

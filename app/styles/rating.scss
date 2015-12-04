@@ -9,17 +9,17 @@
 
 	md-icon {
 		vertical-align: middle;
-		font-size: 24px;
+		font-size: 20px;
 	}
 
 	span {
 		display: inline-block;
-		line-height: 24px;
-		font-weight: bold;
+		line-height: 20px;
+		font-weight: 500;
 		padding: 0 5px;
 	}
 
 	& + .rating-button {
-		margin-left: 20px;
+		margin-left: 15px;
 	}
 }

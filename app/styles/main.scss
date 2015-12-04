@@ -12,6 +12,7 @@
 
 $md-primary: #1E88E5;
 $link-color: #15c;
+$heading-color: #212121;
 $bg-gray: #eee;
 $border-color: rgba(0,0,0,0.12);
 
@@ -22,19 +23,19 @@ ul {
 h1 {
   font-weight: 300;
   font-size: 34px;
-  color: #212121;
+  color: $heading-color;
   font-size: 30px;
   margin: 0  0 10px 0;
   font-weight: 300;
   line-height: 35px;
 }
 
-h3 {
-  color: #212121;
-font-size: 14px;
-font-weight: normal;
-text-transform: uppercase;
-}
+// h3 {
+//   color: $heading-color;
+// font-size: 14px;
+// font-weight: normal;
+// text-transform: uppercase;
+// }
 .md-body-1 {
   color: #333;
   font-size: 14px;
