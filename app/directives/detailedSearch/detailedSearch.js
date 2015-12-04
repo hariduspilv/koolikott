@@ -10,6 +10,11 @@ define(['app'], function(app)
             templateUrl: 'directives/detailedSearch/detailedSearch.html',
             controller: function ($scope, $rootScope) {
 
+                var BASIC_EDUCATION_ID = 2;
+                var SECONDARY_EDUCATION_ID = 3;
+                var VOCATIONAL_EDUCATION_ID = 4;
+                var SPECIAL_EDUCATION_ID = 5;
+
                 var taxon;
 
                 init();
@@ -35,15 +40,15 @@ define(['app'], function(app)
                     }
 
                     // Paid
-                    if (searchService.isPaid() === true  || searchService.isPaid() === false) {
-                        $scope.detailedSearch.paid = searchService.isPaid();
+                    var isPaid = searchService.isPaid();
+                    if (isPaid === true  || isPaid === false) {
+                        $scope.detailedSearch.paid = isPaid;
                     } else {
                         $scope.detailedSearch.paid = true;
                     }
 
                     // Type
                     $scope.detailedSearch.type = 'all';
-
                     if (searchService.getType() && searchService.isValidType(searchService.getType())) {
                         $scope.detailedSearch.type = searchService.getType();
                     }
@@ -53,35 +58,69 @@ define(['app'], function(app)
                     if (resourceType && resourceType.toLowerCase() === 'textbook') {
                         $scope.detailedSearch.onlyBooks = true;
                     }
+
+                    // Special education
+                    var isSpecialEducation = searchService.isSpecialEducation();
+                    if (isSpecialEducation === true || isSpecialEducation === false) {
+                        $scope.detailedSearch.specialEducation = isSpecialEducation;
+                    } else {
+                        $scope.detailedSearch.specialEducation = false;
+                    }
                 }
 
                 $scope.search = function() {
                     searchService.setSearch(createSimpleSearchQuery());
 
-                    searchService.setPaid($scope.detailedSearch.paid);
-                    searchService.setType($scope.detailedSearch.type);
-                    searchService.setLanguage($scope.detailedSearch.language);
+                    addIsPaidToSearch();
+                    addTypeToSearch();
+                    addLanguageToSearch();
+                    addTaxonToSearch();
+                    addTargetGroupsToSearch();
+                    addOnlyBooksCheckboxToSearch();
+                    addSpecialEducationCheckboxToSearch();
 
-                    if ($scope.detailedSearch.taxon) {
+                    $location.url(searchService.getURL());
+                };
+
+                function addIsPaidToSearch() {
+                    searchService.setPaid($scope.detailedSearch.paid);
+                }
+
+                function addTypeToSearch() {
+                    searchService.setType($scope.detailedSearch.type);
+                }
+
+                function addLanguageToSearch() {
+                    searchService.setLanguage($scope.detailedSearch.language);
+                }
+
+                function addTaxonToSearch() {
+                   if ($scope.detailedSearch.taxon) {
                         searchService.setTaxon($scope.detailedSearch.taxon.id);
                     } else {
                         searchService.setTaxon(null);
                     }
+                }
 
+                function addTargetGroupsToSearch() {
                     if ($scope.detailedSearch.targetGroups) {
                         searchService.setTargetGroups($scope.detailedSearch.targetGroups);
                     } else {
                         searchService.setTargetGroups(null);
                     }
+                }
 
+                function addOnlyBooksCheckboxToSearch() {
                     if ($scope.detailedSearch.onlyBooks) {
                         searchService.setResourceType('textbook');
                     } else {
                         searchService.setResourceType(null);
                     }
+                }
 
-                    $location.url(searchService.getURL());
-                };
+                function addSpecialEducationCheckboxToSearch() {
+                    searchService.setIsSpecialEducation($scope.detailedSearch.specialEducation);
+                }
 
                 function getTextFieldsAsQuery() {
                     var query = '';
@@ -225,9 +264,17 @@ define(['app'], function(app)
                 function clearHiddenFields() {
                     var educationalContext = $scope.detailedSearch.educationalContext;
 
-                    // "Only books" applies to basic/secondary/vocational education
-                    if (!educationalContext || educationalContext.id < 2 || educationalContext.id > 4) {
+                    // Only books checkbox
+                    if (!educationalContext ||
+                        (educationalContext.id != BASIC_EDUCATION_ID && 
+                         educationalContext.id != SECONDARY_EDUCATION_ID && 
+                         educationalContext.id != VOCATIONAL_EDUCATION_ID)) {
                         $scope.detailedSearch.onlyBooks = false;
+                    }
+
+                    // Special education checkbox
+                    if (!educationalContext || educationalContext.id != BASIC_EDUCATION_ID) {
+                        $scope.detailedSearch.specialEducation = false;
                     }
                 }
 

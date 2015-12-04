@@ -61,6 +61,10 @@ define(['app'], function(app)
                 params.resourceType = searchService.getResourceType();
             }
 
+            if (searchService.isSpecialEducation() === true) {
+                params.specialEducation = searchService.isSpecialEducation();
+            }
+
             serverCallService.makeGet("rest/search", params, searchSuccess, searchFail);
         }
 

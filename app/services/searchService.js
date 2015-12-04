@@ -8,6 +8,7 @@ define(['app'], function(app) {
         var languageURL = "&language=";
         var targetGroupsURL = "&targetGroup=";
         var resourceTypeURL = "&resourceType=";
+        var isSpecialEducationURL = "&specialEducation=";
 
         var searchQuery = "";
         var searchTaxon = "";
@@ -16,6 +17,7 @@ define(['app'], function(app) {
         var searchLanguage = "";
         var searchTargetGroups = [];
         var searchResourceType = "";
+        var searchIsSpecialEducation = "";
 
         function escapeQuery(query) {
             //replace backslashes
@@ -35,6 +37,33 @@ define(['app'], function(app) {
             query = query.replace(/\\\\/g, "\\");
 
             return query;
+        }
+
+        function arrayToLowerCase(upperCaseArray) {
+            var lowerCaseArray = [];
+            for (i = 0; i < upperCaseArray.length; i++) {
+                lowerCaseArray.push(upperCaseArray[i].toLowerCase());
+            }
+            return lowerCaseArray;
+        }
+
+        function arrayToUpperCase(lowerCaseArray) {
+            var upperCaseArray = [];
+            for (i = 0; i < lowerCaseArray.length; i++) {
+                upperCaseArray.push(lowerCaseArray[i].toUpperCase());
+            }
+            return upperCaseArray;
+        }
+
+        // Get value as array
+        function asArray(value) {
+            if (!Array.isArray(value)) {
+                var valueArray = [];
+                valueArray.push(value);
+                return valueArray;
+            } else {
+                return value;
+            }
         }
 
         return {
@@ -60,17 +89,15 @@ define(['app'], function(app) {
             },
 
             setTargetGroups : function(targetGroups) {
-                if (!Array.isArray(targetGroups)) {
-                    searchTargetGroups = [];
-                    searchTargetGroups.push(targetGroups);
-                    searchTargetGroups = this.arrayToLowerCase(searchTargetGroups);
-                } else {
-                    searchTargetGroups = this.arrayToLowerCase(targetGroups);
-                }
+                searchTargetGroups = arrayToLowerCase(asArray(targetGroups));
             },
 
             setResourceType : function(resourceType) {
                 searchResourceType = resourceType;
+            },
+
+            setIsSpecialEducation : function(isSpecialEducation) {
+                searchIsSpecialEducation = isSpecialEducation;
             },
 
             getURL : function() {
@@ -101,6 +128,9 @@ define(['app'], function(app) {
                 if (searchResourceType) {
                     searchURL += resourceTypeURL + searchResourceType;
                 }
+                if (searchIsSpecialEducation === true) {
+                    searchURL += isSpecialEducationURL + searchIsSpecialEducation;
+                }
 
                 return searchURL;
             },
@@ -109,7 +139,7 @@ define(['app'], function(app) {
                 var searchObject = $location.search();
                 if (searchObject.q || searchObject.taxon || searchObject.paid === false ||
                     (searchObject.type && this.isValidType(searchObject.type)) || searchObject.language || searchObject.targetGroup ||
-                    searchObject.resourceType) {
+                    searchObject.resourceType || searchObject.specialEducation) {
                     return true;
                 } else {
                     return false;
@@ -175,17 +205,11 @@ define(['app'], function(app) {
                 if (!searchTargetGroups || searchTargetGroups.length === 0) {
                     var searchObject = $location.search();
                     if (searchObject.targetGroup) {
-                        if (!Array.isArray(searchObject.targetGroup)) {
-                            var targetGroupsArray = [];
-                            targetGroupsArray.push(searchObject.targetGroup);
-                            return this.arrayToUpperCase(targetGroupsArray);
-                        } else {
-                            return this.arrayToUpperCase(searchObject.targetGroup);
-                        }
+                       return arrayToUpperCase(asArray(searchObject.targetGroup));
                     }
                 } 
 
-                return this.arrayToUpperCase(searchTargetGroups);
+                return arrayToUpperCase(searchTargetGroups);
             },
 
             getResourceType : function() {
@@ -199,6 +223,17 @@ define(['app'], function(app) {
                 return searchResourceType;
             },
 
+            isSpecialEducation : function() {
+                if (searchIsSpecialEducation === "") {
+                    var searchObject = $location.search();
+                    if (searchObject.specialEducation) {
+                        return searchObject.specialEducation === 'true' ? true : false;
+                    }
+                }
+
+                return searchIsSpecialEducation;
+            },
+
             clearFieldsNotInSimpleSearch : function() {
                 searchTaxon = '';
                 searchPaid = '';
@@ -206,26 +241,11 @@ define(['app'], function(app) {
                 searchLanguage = '';
                 searchTargetGroups = '';
                 searchResourceType = '';
+                searchIsSpecialEducation = '';
             },
 
             isValidType : function(type) {
                 return type === 'material' || type === 'portfolio' || type === 'all';
-            },
-
-            arrayToLowerCase : function(upperCaseArray) {
-                var lowerCaseArray = [];
-                for (i = 0; i < upperCaseArray.length; i++) {
-                    lowerCaseArray.push(upperCaseArray[i].toLowerCase());
-                }
-                return lowerCaseArray;
-            },
-
-            arrayToUpperCase : function(lowerCaseArray) {
-                var upperCaseArray = [];
-                for (i = 0; i < lowerCaseArray.length; i++) {
-                    upperCaseArray.push(lowerCaseArray[i].toUpperCase());
-                }
-                return upperCaseArray;
             }
         };
     }]);
