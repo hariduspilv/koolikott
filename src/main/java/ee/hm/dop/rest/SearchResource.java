@@ -43,7 +43,8 @@ public class SearchResource {
             @QueryParam("type") String type, //
             @QueryParam("language") String languageCode, //
             @QueryParam("targetGroup") List<TargetGroup> targetGroups, //
-            @QueryParam("resourceType") String resourceTypeName) {
+            @QueryParam("resourceType") String resourceTypeName, //
+            @QueryParam("specialEducation") Boolean isSpecialEducation) {
 
         Taxon taxon = taxonService.getTaxonById(taxonId);
         Language language = languageService.getLanguage(languageCode);
@@ -53,6 +54,10 @@ public class SearchResource {
             paid = true;
         }
 
+        if (isSpecialEducation == null) {
+            isSpecialEducation = false;
+        }
+
         SearchFilter searchFilter = new SearchFilter();
         searchFilter.setTaxon(taxon);
         searchFilter.setPaid(paid);
@@ -60,6 +65,7 @@ public class SearchResource {
         searchFilter.setLanguage(language);
         searchFilter.setTargetGroups(targetGroups);
         searchFilter.setResourceType(resourceType);
+        searchFilter.setSpecialEducation(isSpecialEducation);
 
         if (start == null) {
             return searchService.search(query, searchFilter);

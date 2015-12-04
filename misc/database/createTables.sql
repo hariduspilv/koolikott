@@ -245,6 +245,7 @@ CREATE TABLE Material (
   creator              BIGINT,
   deleted              BOOLEAN,
   paid                 BOOLEAN            DEFAULT FALSE,
+  isSpecialEducation   BOOLEAN            DEFAULT FALSE,
 
   UNIQUE KEY (repositoryIdentifier, repository),
 

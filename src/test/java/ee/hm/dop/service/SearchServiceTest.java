@@ -831,6 +831,19 @@ public class SearchServiceTest {
     }
 
     @Test
+    public void searchWithSpecialEducation() {
+        String query = "test";
+        SearchFilter searchFilter = new SearchFilter();
+        searchFilter.setSpecialEducation(true);
+        String tokenizedQuery = "(test*) AND special_education:\"true\"";
+        long start = 0;
+
+        List<Searchable> searchables = Arrays.asList(createMaterial(9L), createMaterial(2L), createPortfolio(2L));
+
+        testSearch(query, tokenizedQuery, searchables, start, searchFilter);
+    }
+
+    @Test
     public void searchNotFromStart() {
         String query = "people";
         String tokenizedQuery = "people*";

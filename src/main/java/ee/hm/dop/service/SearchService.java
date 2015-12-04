@@ -173,6 +173,7 @@ public class SearchService {
         filters.add(getTypeAsQuery(searchFilter));
         filters.add(getTargetGroupsAsQuery(searchFilter));
         filters.add(getResourceTypeAsQuery(searchFilter));
+        filters.add(isSpecialEducationAsQuery(searchFilter));
 
         // Remove empty elements
         filters = filters.stream().filter(f -> !f.isEmpty()).collect(Collectors.toList());
@@ -317,6 +318,13 @@ public class SearchService {
         ResourceType resourceType = searchFilter.getResourceType();
         if (resourceType != null) {
             return format("resource_type:\"%s\"", resourceType.getName().toLowerCase());
+        }
+        return "";
+    }
+
+    private String isSpecialEducationAsQuery(SearchFilter searchFilter) {
+        if (searchFilter.isSpecialEducation()) {
+            return "special_education:\"true\"";
         }
         return "";
     }

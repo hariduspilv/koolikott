@@ -5,6 +5,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 import java.util.List;
 
@@ -22,6 +23,7 @@ import ee.hm.dop.common.test.ResourceIntegrationTestBase;
 import ee.hm.dop.model.Language;
 import ee.hm.dop.model.LanguageString;
 import ee.hm.dop.model.Material;
+import ee.hm.dop.model.TargetGroup;
 import ee.hm.dop.model.taxon.Subject;
 import ee.hm.dop.model.taxon.Taxon;
 
@@ -196,8 +198,8 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
     @Test
     public void getByCreator() {
         String username = "mati.maasikas";
-        List<Material> materials = doGet(format(GET_BY_CREATOR_URL, username)).readEntity(
-                new GenericType<List<Material>>() {
+        List<Material> materials = doGet(format(GET_BY_CREATOR_URL, username))
+                .readEntity(new GenericType<List<Material>>() {
                 });
 
         assertEquals(3, materials.size());
@@ -229,8 +231,8 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
     @Test
     public void getByCreatorNoMaterials() {
         String username = "voldemar.vapustav";
-        List<Material> materials = doGet(format(GET_BY_CREATOR_URL, username)).readEntity(
-                new GenericType<List<Material>>() {
+        List<Material> materials = doGet(format(GET_BY_CREATOR_URL, username))
+                .readEntity(new GenericType<List<Material>>() {
                 });
 
         assertEquals(0, materials.size());
@@ -259,6 +261,11 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
         assertNull(material.getRepositoryIdentifier());
         assertEquals(new Long(1), material.getCreator().getId());
         assertFalse(material.isEmbeddable());
+
+        assertEquals(2, material.getTargetGroups().size());
+        assertTrue(material.getTargetGroups().contains(TargetGroup.ZERO_FIVE));
+        assertTrue(material.getTargetGroups().contains(TargetGroup.SIX_SEVEN));
+        assertTrue(material.isSpecialEducation());
     }
 
     private Material getMaterial(long materialId) {

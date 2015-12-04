@@ -166,6 +166,9 @@ public class Material implements Searchable {
     @CollectionTable(name = "Material_TargetGroup", joinColumns = @JoinColumn(name = "material") )
     private List<TargetGroup> targetGroups;
 
+    @Column(nullable = false)
+    private boolean isSpecialEducation = false;
+
     @Override
     public Long getId() {
         return id;
@@ -363,6 +366,14 @@ public class Material implements Searchable {
 
     public void setTargetGroups(List<TargetGroup> targetGroups) {
         this.targetGroups = targetGroups;
+    }
+
+    public boolean isSpecialEducation() {
+        return isSpecialEducation;
+    }
+
+    public void setSpecialEducation(boolean isSpecialEducation) {
+        this.isSpecialEducation = isSpecialEducation;
     }
 
 }

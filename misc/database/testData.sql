@@ -27,7 +27,7 @@ insert into User(id, userName, name, surName, idCode, role) values (7, 'ester.te
 
 -- Materials
 
-insert into Material(id, lang, issueDate, licenseType, source, added, updated, picture, creator, deleted, paid) values(1, 1, 1, 1, 'https://www.youtube.com/watch?v=gSWbx3CvVUk', '1999-02-02 06:00:01', '2000-03-01 07:00:01', null, 1, false, true);
+insert into Material(id, lang, issueDate, licenseType, source, added, updated, picture, creator, deleted, paid, isSpecialEducation) values(1, 1, 1, 1, 'https://www.youtube.com/watch?v=gSWbx3CvVUk', '1999-02-02 06:00:01', '2000-03-01 07:00:01', null, 1, false, true, true);
 insert into Material(id, lang, issueDate, licenseType, source, added, updated, picture, creator, deleted, paid, repository) values(2, 2, 2, 2, 'https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes', '1992-02-03 06:00:01', '1995-07-12 09:00:01', null, 1, false, true, 2);
 insert into Material(id, lang, issueDate, licenseType, source, added, updated, picture, creator, deleted, paid) values(3, 4, 3, 3,  'http://eloquentjavascript.net/Eloquent_JavaScript.pdf', '2009-02-17 08:00:01', '2011-01-10 19:00:01', null, 1, false, false);
 insert into Material(id, lang, issueDate, licenseType, source, added, updated, picture, creator, deleted, paid) values(4, 3, 4, 1,  'https://en.wikipedia.org/wiki/Power_Architecture', '2012-02-02 09:00:01', '2012-08-28 22:40:01', null, 1, false, false);

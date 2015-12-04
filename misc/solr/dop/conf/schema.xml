@@ -144,6 +144,7 @@
    <field name="license_type" type="text_general" indexed="true" stored="false" multiValued="true"/>
    <field name="paid" type="boolean" indexed="true" stored="false" multiValued="false"/>
    <field name="language" type="text_general" indexed="true" stored="false" multiValued="true"/>
+   <field name="special_education" type="boolean" indexed="true" stored="false" multiValued="false"/>
 
    <!-- Portfolio -->
    <field name="summary" type="text_general" indexed="true" stored="false"/>

@@ -18,6 +18,8 @@ public class SearchFilter {
 
     private ResourceType resourceType;
 
+    private boolean isSpecialEducation = false;
+
     public Taxon getTaxon() {
         return taxon;
     }
@@ -64,6 +66,14 @@ public class SearchFilter {
 
     public void setResourceType(ResourceType resourceType) {
         this.resourceType = resourceType;
+    }
+
+    public boolean isSpecialEducation() {
+        return isSpecialEducation;
+    }
+
+    public void setSpecialEducation(boolean isSpecialEducation) {
+        this.isSpecialEducation = isSpecialEducation;
     }
 
 }
