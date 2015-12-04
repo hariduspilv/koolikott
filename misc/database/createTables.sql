@@ -462,7 +462,7 @@ CREATE TABLE Chapter (
   textValue     TEXT,
   parentChapter BIGINT,
   portfolio     BIGINT,
-  chapterOrder  INTEGER      NOT NULL,
+  chapterOrder  INTEGER,
 
   FOREIGN KEY (portfolio)
   REFERENCES Portfolio (id)

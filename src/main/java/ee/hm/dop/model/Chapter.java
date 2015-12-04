@@ -1,11 +1,14 @@
 package ee.hm.dop.model;
 
+import static javax.persistence.CascadeType.MERGE;
+import static javax.persistence.CascadeType.PERSIST;
 import static javax.persistence.FetchType.EAGER;
 
 import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
@@ -18,6 +21,7 @@ import javax.persistence.UniqueConstraint;
 public class Chapter {
 
     @Id
+    @GeneratedValue
     private Long id;
 
     @Column
@@ -26,16 +30,16 @@ public class Chapter {
     @Column(columnDefinition = "TEXT", name = "textValue")
     private String text;
 
-    @ManyToMany(fetch = EAGER)
+    @ManyToMany(fetch = EAGER, cascade = { MERGE, PERSIST })
     @OrderColumn(name = "materialOrder", nullable = false)
     @JoinTable(
             name = "Chapter_Material",
             joinColumns = { @JoinColumn(name = "chapter") },
             inverseJoinColumns = { @JoinColumn(name = "material") },
-            uniqueConstraints = @UniqueConstraint(columnNames = { "chapter", "material" }))
+            uniqueConstraints = @UniqueConstraint(columnNames = { "chapter", "material" }) )
     private List<Material> materials;
 
-    @OneToMany(fetch = EAGER)
+    @OneToMany(fetch = EAGER, cascade = { MERGE, PERSIST })
     @JoinColumn(name = "parentChapter")
     private List<Chapter> subchapters;
 
