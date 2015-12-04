@@ -1,17 +1,17 @@
 package ee.hm.dop.model;
 
+import static javax.persistence.CascadeType.MERGE;
+import static javax.persistence.CascadeType.PERSIST;
 import static javax.persistence.FetchType.EAGER;
 
 import java.util.List;
 
-import javax.persistence.CascadeType;
 import javax.persistence.CollectionTable;
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
@@ -68,22 +68,22 @@ public class Portfolio implements Searchable {
     @Column(nullable = false)
     private Long views = (long) 0;
 
-    @OneToMany(fetch = FetchType.EAGER)
+    @OneToMany(fetch = EAGER, cascade = { MERGE, PERSIST })
     @JoinColumn(name = "portfolio")
-    @OrderColumn(name = "chapterOrder", nullable = false)
+    @OrderColumn(name = "chapterOrder")
     private List<Chapter> chapters;
 
-    @OneToMany(fetch = FetchType.EAGER, cascade = { CascadeType.MERGE, CascadeType.PERSIST })
+    @OneToMany(fetch = EAGER, cascade = { MERGE, PERSIST })
     @JoinColumn(name = "portfolio")
     @OrderBy("added DESC")
     private List<Comment> comments;
 
-    @ManyToMany(fetch = EAGER)
+    @ManyToMany(fetch = EAGER, cascade = { MERGE, PERSIST })
     @JoinTable(
             name = "Portfolio_Tag",
             joinColumns = { @JoinColumn(name = "portfolio") },
             inverseJoinColumns = { @JoinColumn(name = "tag") },
-            uniqueConstraints = @UniqueConstraint(columnNames = { "portfolio", "tag" }))
+            uniqueConstraints = @UniqueConstraint(columnNames = { "portfolio", "tag" }) )
     private List<Tag> tags;
 
     @Lob
@@ -95,7 +95,7 @@ public class Portfolio implements Searchable {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "targetGroup")
-    @ElementCollection(fetch = FetchType.EAGER)
+    @ElementCollection(fetch = EAGER)
     @CollectionTable(name = "Portfolio_TargetGroup", joinColumns = @JoinColumn(name = "portfolio") )
     private List<TargetGroup> targetGroups;
 

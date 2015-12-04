@@ -76,13 +76,15 @@ public class PortfolioService {
         return createdPortfolio;
     }
 
-    public Portfolio update(Portfolio portfolio, User creator) {
+    public Portfolio update(Portfolio portfolio, User loggedInUser) {
         if (portfolio.getId() == null) {
             throw new RuntimeException("Portfolio must already exist.");
         }
-        if (portfolio.getCreator().getId() != creator.getId()) {
+
+        if (portfolio.getCreator().getId() != loggedInUser.getId()) {
             throw new RuntimeException("Logged in user must be the creator of this portfolio.");
         }
+
         if (isEmpty(portfolio.getTitle())) {
             throw new RuntimeException("Required field title must be filled.");
         }
@@ -92,7 +94,7 @@ public class PortfolioService {
             throw new RuntimeException("Portfolio not found");
         }
 
-        originalPortfolio = updatePortfolioObjectMetadata(originalPortfolio, portfolio);
+        originalPortfolio = setPortfolioUpdatableFields(originalPortfolio, portfolio);
 
         return portfolioDAO.update(originalPortfolio);
     }
@@ -107,12 +109,13 @@ public class PortfolioService {
         return safePortfolio;
     }
 
-    private Portfolio updatePortfolioObjectMetadata(Portfolio originalPortfolio, Portfolio portfolio) {
+    private Portfolio setPortfolioUpdatableFields(Portfolio originalPortfolio, Portfolio portfolio) {
         originalPortfolio.setTitle(portfolio.getTitle());
         originalPortfolio.setSummary(portfolio.getSummary());
         originalPortfolio.setTags(portfolio.getTags());
         originalPortfolio.setTargetGroups(portfolio.getTargetGroups());
         originalPortfolio.setTaxon(portfolio.getTaxon());
+        originalPortfolio.setChapters(portfolio.getChapters());
         return originalPortfolio;
     }
 

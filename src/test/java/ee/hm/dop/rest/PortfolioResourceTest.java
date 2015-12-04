@@ -2,16 +2,19 @@ package ee.hm.dop.rest;
 
 import static java.lang.String.format;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status;
 
 import org.joda.time.DateTime;
 import org.junit.Ignore;
@@ -22,9 +25,14 @@ import ee.hm.dop.model.Chapter;
 import ee.hm.dop.model.Material;
 import ee.hm.dop.model.Portfolio;
 import ee.hm.dop.model.TargetGroup;
+import ee.hm.dop.rest.PortfolioResource.ChapterForm;
+import ee.hm.dop.rest.PortfolioResource.CreatePortfolioForm;
+import ee.hm.dop.rest.PortfolioResource.UpdatePortfolioForm;
 
 public class PortfolioResourceTest extends ResourceIntegrationTestBase {
 
+    private static final String CREATE_PORTFOLIO_URL = "portfolio/create";
+    private static final String UPDATE_PORTFOLIO_URL = "portfolio/update";
     private static final String GET_PORTFOLIO_URL = "portfolio?id=%s";
     private static final String GET_BY_CREATOR_URL = "portfolio/getByCreator?username=%s";
     private static final String GET_PORTFOLIO_PICTURE_URL = "portfolio/getPicture?portfolioId=%s";
@@ -132,6 +140,133 @@ public class PortfolioResourceTest extends ResourceIntegrationTestBase {
         assertEquals(500, response.getStatus());
     }
 
+    @Test
+    public void create() {
+        login("39011220011");
+
+        CreatePortfolioForm portfolioForm = new CreatePortfolioForm();
+
+        Portfolio portfolio = new Portfolio();
+        portfolio.setTitle("Tere");
+
+        portfolioForm.setPortfolio(portfolio);
+        portfolioForm.setTaxonId(1L);
+
+        Response response = doPost(CREATE_PORTFOLIO_URL, Entity.entity(portfolioForm, MediaType.APPLICATION_JSON_TYPE));
+
+        assertEquals(Status.OK.getStatusCode(), response.getStatus());
+
+    }
+
+    @Test
+    public void updateChanginMetadataNoChapters() {
+        login("39011220011");
+
+        Portfolio portfolio = getPortfolio(5);
+        String originalTitle = portfolio.getTitle();
+        portfolio.setTitle("New mega nice title that I come with Yesterday night!");
+        UpdatePortfolioForm updatePortfolioForm = getUpdatePortfolioForm(portfolio);
+
+        Response response = doPost(UPDATE_PORTFOLIO_URL,
+                Entity.entity(updatePortfolioForm, MediaType.APPLICATION_JSON_TYPE));
+
+        assertEquals(Status.OK.getStatusCode(), response.getStatus());
+
+        Portfolio updatedPortfolio = response.readEntity(Portfolio.class);
+        assertFalse(originalTitle.equals(updatedPortfolio.getTitle()));
+        assertEquals("New mega nice title that I come with Yesterday night!", updatedPortfolio.getTitle());
+
+    }
+
+    @Test
+    public void updateCreatingChapter() {
+        login("39011220011");
+
+        List<Chapter> chapters = new ArrayList<>();
+
+        Chapter newChapter = new Chapter();
+        newChapter.setTitle("New chapter 1");
+        chapters.add(newChapter);
+
+        Portfolio portfolio = getPortfolio(5);
+        portfolio.setChapters(chapters);
+
+        UpdatePortfolioForm updatePortfolioForm = getUpdatePortfolioForm(portfolio);
+
+        Response response = doPost(UPDATE_PORTFOLIO_URL,
+                Entity.entity(updatePortfolioForm, MediaType.APPLICATION_JSON_TYPE));
+
+        assertEquals(Status.OK.getStatusCode(), response.getStatus());
+        Portfolio updatedPortfolio = response.readEntity(Portfolio.class);
+        assertFalse(updatedPortfolio.getChapters().isEmpty());
+
+    }
+
+    @Test
+    public void updateCreatingChapterWithSubchapterNoMaterials() {
+        login("39011220011");
+
+        List<Chapter> chapters = new ArrayList<>();
+        List<Chapter> subchapters = new ArrayList<>();
+
+        Chapter newChapter = new Chapter();
+        newChapter.setTitle("New chapter 1");
+
+        Chapter subChapter = new Chapter();
+        subChapter.setTitle("New subchapter");
+        subchapters.add(subChapter);
+        newChapter.setSubchapters(subchapters);
+
+        chapters.add(newChapter);
+
+        Portfolio portfolio = getPortfolio(5);
+        portfolio.setChapters(chapters);
+
+        UpdatePortfolioForm updatePortfolioForm = getUpdatePortfolioForm(portfolio);
+
+        Response response = doPost(UPDATE_PORTFOLIO_URL,
+                Entity.entity(updatePortfolioForm, MediaType.APPLICATION_JSON_TYPE));
+
+        assertEquals(Status.OK.getStatusCode(), response.getStatus());
+        Portfolio updatedPortfolio = response.readEntity(Portfolio.class);
+        assertFalse(updatedPortfolio.getChapters().isEmpty());
+
+        assertFalse(updatedPortfolio.getChapters().get(0).getSubchapters().isEmpty());
+    }
+
+    @Test
+    public void updateCreatingChapterWithExistingChapter() {
+        login("39011220011");
+
+        List<Chapter> subchapters = new ArrayList<>();
+
+        Chapter newChapter = new Chapter();
+        newChapter.setTitle("New chapter 1");
+
+        Chapter subChapter = new Chapter();
+        subChapter.setTitle("New cool subchapter");
+        subchapters.add(subChapter);
+        newChapter.setSubchapters(subchapters);
+
+        Portfolio portfolio = getPortfolio(5);
+        portfolio.getChapters().add(newChapter);
+
+        UpdatePortfolioForm updatePortfolioForm = getUpdatePortfolioForm(portfolio);
+
+        Response response = doPost(UPDATE_PORTFOLIO_URL,
+                Entity.entity(updatePortfolioForm, MediaType.APPLICATION_JSON_TYPE));
+
+        assertEquals(Status.OK.getStatusCode(), response.getStatus());
+        Portfolio updatedPortfolio = response.readEntity(Portfolio.class);
+        assertFalse(updatedPortfolio.getChapters().isEmpty());
+
+        Chapter verify = updatedPortfolio.getChapters().get(updatedPortfolio.getChapters().size() - 1).getSubchapters()
+                .get(0);
+
+        assertEquals(verify.getTitle(), "New cool subchapter");
+
+    }
+
     private Portfolio getPortfolio(long id) {
         return doGet(format(GET_PORTFOLIO_URL, id), Portfolio.class);
     }
@@ -195,4 +330,54 @@ public class PortfolioResourceTest extends ResourceIntegrationTestBase {
         assertTrue(portfolio.getTargetGroups().contains(TargetGroup.ZERO_FIVE));
         assertTrue(portfolio.getTargetGroups().contains(TargetGroup.SIX_SEVEN));
     }
+
+    private UpdatePortfolioForm getUpdatePortfolioForm(Portfolio portfolio) {
+        UpdatePortfolioForm portfolioForm = new UpdatePortfolioForm();
+        portfolioForm.setPortfolio(portfolio);
+        portfolioForm.setChapters(getChapterForms(portfolio.getChapters()));
+
+        if (portfolio.getTaxon() != null) {
+            portfolioForm.setTaxonId(portfolio.getTaxon().getId());
+            portfolio.setTaxon(null);
+        }
+
+        return portfolioForm;
+    }
+
+    private List<ChapterForm> getChapterForms(List<Chapter> chapters) {
+        List<ChapterForm> chapterForms = new ArrayList<>();
+
+        if (chapters != null) {
+            for (Chapter chapter : chapters) {
+                chapterForms.add(getChapterForm(chapter));
+            }
+        }
+
+        return chapterForms;
+    }
+
+    private ChapterForm getChapterForm(Chapter chapter) {
+        ChapterForm chapterForm = new ChapterForm();
+        chapterForm.setChapter(chapter);
+
+        chapterForm.setMaterials(getMaterialIdsList(chapter.getMaterials()));
+        chapter.setMaterials(null);
+
+        chapterForm.setSubchapters(getChapterForms(chapter.getSubchapters()));
+        chapter.setSubchapters(null);
+
+        return chapterForm;
+    }
+
+    private List<Long> getMaterialIdsList(List<Material> materials) {
+        List<Long> ids = new ArrayList<>();
+        if (materials != null) {
+            for (Material material : materials) {
+                ids.add(material.getId());
+            }
+        }
+
+        return ids;
+    }
+
 }
