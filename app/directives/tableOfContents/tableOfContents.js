@@ -23,7 +23,7 @@ define(['app'], function(app)
                     var subChapters = $scope.portfolio.chapters[index].subchapters;
 
                     subChapters.push({
-                        title: $filter('translate')('PORTFOLIO_DEFAULT_NEW_SUBCHAPTER_TITLE') + ' ' + (subChapters.length + 1),
+                        title: $filter('translate')('PORTFOLIO_DEFAULT_NEW_SUBCHAPTER_TITLE'),
                         materials: []
                     });
                 };
