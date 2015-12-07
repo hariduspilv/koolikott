@@ -63,7 +63,8 @@ define([], function()
                     'directives/chapter/chapter',
                     'directives/materialBox/materialBox',
                     'directives/portfolioSummaryCard/portfolioSummaryCard',
-                    'services/dialogService'
+                    'services/dialogService',
+                    'services/toastService'
                 ]
             },
             '/loginRedirect': {

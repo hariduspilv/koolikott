@@ -4,8 +4,8 @@ define(['app'], function(app)
       $anchorScroll.yOffset = 50;
     }]);
 
-    app.controller('editPortfolioController', ['$scope', 'translationService', 'serverCallService', '$route', '$location', 'alertService', '$rootScope', 'authenticatedUserService', 'dialogService',
-        function($scope, translationService, serverCallService, $route, $location, alertService, $rootScope, authenticatedUserService, dialogService) {
+    app.controller('editPortfolioController', ['$scope', 'translationService', 'serverCallService', '$route', '$location', 'alertService', '$rootScope', 'authenticatedUserService', 'dialogService', 'toastService',
+        function($scope, translationService, serverCallService, $route, $location, alertService, $rootScope, authenticatedUserService, dialogService, toastService) {
 
             function init() {
 				if ($rootScope.savedPortfolio) {
@@ -59,9 +59,73 @@ define(['app'], function(app)
                 deleteChapter);
             };
 
+            function generateMaterialsList(materials) {
+                var materialList = [];
+                if(materials) {
+                    for(var i=0; i<materials.length; i++) {
+                        var material = materials[i];
+                        materialList.push(material.id);
+                    }
+                }
+                return materialList;
+            }
+            
+            function generateChapterForm(chapters) {
+                var list = [];
+                
+                if(chapters) {
+                    for(var i=0; i<chapters.length; i++) {
+                        
+                        var portfolioChapter = chapters[i];        
+                        var materialList = generateMaterialsList(chapters[i].materials);
+                        var subchapters = generateChapterForm(portfolioChapter.subchapters);
+
+                        var chapterForm = {
+                            'chapter': portfolioChapter,
+                            'materials': materialList,
+                            'subchapters': subchapters
+                        }
+                        
+                        portfolioChapter.materials = [];
+                        portfolioChapter.subchapters = [];
+                        
+                        list.push(chapterForm);
+
+                    }
+                }
+                
+                return list;
+            }
+            
             $scope.savePortfolio = function() {
-                $mdToast.show($mdToast.simple().position('right top').content('Portfolio saved!'));
+            	var url = "rest/portfolio/update";
+                var chapters = generateChapterForm($scope.portfolio.chapters);
+                var taxon = $scope.portfolio.taxon;
+                $scope.portfolio.taxon = null;
+
+                var params = {
+                    'portfolio': $scope.portfolio,
+                    'taxonId': taxon ? taxon.id : null,
+                    'portfolioId': $scope.portfolio.id,
+                    'chapters': chapters
+                };
+
+                serverCallService.makePost(url, params, updatePortfolioSuccess, updatePortfolioFailed);
             };
+            
+            function updatePortfolioSuccess(portfolio) {
+                if (isEmpty(portfolio)) {
+                    createPortfolioFailed();
+                } else {
+                    $scope.portfolio.taxon = portfolio.taxon;
+                    $scope.portfolio.chapters = portfolio.chapters;
+                    toastService.show("PORTFOLIO_SAVED");
+                }
+            }
+            
+            function updatePortfolioFailed(){
+				log('Updagint portfolio failed.');
+			}
             
             init();
     	}
