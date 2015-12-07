@@ -70,7 +70,7 @@ insert into Material(id, lang, issueDate, licenseType, source, added, updated, p
 -- Authors
 
 insert into Author(id, name, surname) values(1, 'Isaac', 'John Newton');
-insert into Author(id, name, surname) values(2, 'Karl Simon Ben', 'Tom Oliver Marx');
+insert into Author(id, name, surname) values(2, 'This is a first name', 'and a family name');
 insert into Author(id, name, surname) values(3, 'Leonardo', 'Fibonacci');
 insert into Author(id, name, surname) values(4, 'Automated', 'Automated');
 insert into Author(id, name, surname) values(5, '<script>alert(1)</script>', '<script>alert(1)</script>');
@@ -78,6 +78,9 @@ insert into Author(id, name, surname) values(5, '<script>alert(1)</script>', '<s
 -- Material_Authors
 
 insert into Material_Author(material, author) values(1, 1);
+insert into Material_Author(material, author) values(1, 2);
+insert into Material_Author(material, author) values(1, 3);
+insert into Material_Author(material, author) values(1, 4);
 insert into Material_Author(material, author) values(2, 1);
 insert into Material_Author(material, author) values(2, 3);
 insert into Material_Author(material, author) values(3, 1);
@@ -94,7 +97,7 @@ insert into Material_Author(material, author) values(3919, 4);
 
 -- Material Descriptions
 
-insert into LanguageString(id, lang, textValue) values (1, 1, 'Test description in estonian. (Russian available)');
+insert into LanguageString(id, lang, textValue) values (1, 1, 'The Eurovision Song Contest (French: Concours Eurovision de la chanson),[1] often shortened to ESC or Eurovision, is the longest running[2] annual TV song competition held, primarily, among the member countries of the European Broadcasting Union (EBU) since 1956. The competition was based upon the existing Sanremo Music Festival held in Italy. Each participating country submits an original song to be performed on live television and radio and then casts votes for the other countries songs to determine the most popular song in the competition. The contest has been broadcast every year for sixty years, since its inauguration in 1956 and is one of the longest-running television programmes in the world. It is also one of the most watched non-sporting events in the world,[3] with audience figures having been quoted in recent years as anything between 100 million and 600 million internationally.[4][5] Eurovision has also been broadcast outside Europe to several countries that do not compete such as the USA & China. An exception was made in 2015 when Australia was allowed to compete as a guest entrant as part of the celebration of the 60th anniversary of the event.[6][7][8] Since 2000, the contest has also been broadcast over the Internet, via the Eurovision website.[9] Winning the Eurovision Song Contest provides a short term boost to the winning artists career, but rarely results in long-term success.[10] Notable exceptions are ABBA (winner in 1974 for Sweden) and Céline Dion (winner in 1988 for Switzerland), both of whom launched successful worldwide careers after their wins.Ireland holds the record for the highest number of wins, having won the contest seven times—including four times in five years in 1992, 1993, 1994 and 1996. The latest winner of the Eurovision Song Contest is Måns Zelmerlöw of Sweden, who won the 2015 contest in Vienna, Austria with the song "Heroes". The highest scoring winner is Alexander Rybak who won the 2009 contest with a record breaking 387 points.');
 insert into LanguageString(id, lang, textValue) values (2, 2, 'Test description in russian, which is the only language available.');
 insert into LanguageString(id, lang, textValue) values (3, 2, 'Test description in russian. (Estonian available)');
 insert into LanguageString(id, lang, textValue) values (4, 5, 'Test description in portugese, as the material language (english) not available.');
@@ -153,7 +156,7 @@ insert into Material_Description(description, material) values(10833, 3919);
 
 -- Material Titles
 
-insert into LanguageString(id, lang, textValue) values (9, 1, 'Matemaatika õpik üheksandale klassile');
+insert into LanguageString(id, lang, textValue) values (9, 1, 'Pikk lugu sellest, kuidas erinevad inimesed tulevad kokku ja hakkavad laulma ning leiavad, et selle tulemusena ei saa eksisteerida kultuurilis biast');
 insert into LanguageString(id, lang, textValue) values (10, 2, 'Математика учебник для 9-го класса');
 insert into LanguageString(id, lang, textValue) values (11, 2, 'Математика учебник для 8-го класса');
 insert into LanguageString(id, lang, textValue) values (12, 5, 'Test title in portugese: manual de instruções, as the material language (english) not available.');
@@ -246,6 +249,8 @@ insert into Material_Title(title, material) values(10834, 3919);
 
 insert into Material_Taxon(material, taxon) values(1, 1); -- PRESCHOOLEDUCATION
 insert into Material_Taxon(material, taxon) values(1, 1016); -- BASICEDUCATION - Natural sciences - Biology
+insert into Material_Taxon(material, taxon) values(1, 10001); -- BASICEDUCATION - Social_studies - History - Estonian_history (topic)
+insert into Material_Taxon(material, taxon) values(1, 10300); -- VOCATIONALEDUCATION - Computer_science - Computers_and_Networks - Majanduse_alused - Vocational_Education_Topic1
 insert into Material_Taxon(material, taxon) values(2, 1066); -- SECONDARYEDUCATION - Natural sciences - Biology
 insert into Material_Taxon(material, taxon) values(3, 4); -- VOCATIONALEDUCATION
 insert into Material_Taxon(material, taxon) values(4, 1066); -- SECONDARYEDUCATION - Natural sciences - Biology
@@ -254,6 +259,7 @@ insert into Material_Taxon(material, taxon) values(6, 1014); -- BASICEDUCATION -
 insert into Material_Taxon(material, taxon) values(6, 1066); -- SECONDARYEDUCATION - Natural sciences - Biology
 insert into Material_Taxon(material, taxon) values(10, 103); -- PRESCHOOLEDUCATION - Mathematics
 insert into Material_Taxon(material, taxon) values(11, 103); -- PRESCHOOLEDUCATION - Mathematics
+
 
 insert into Material_Taxon(material, taxon) values(12, 15020); -- PRESCHOOLEDUCATION - Me_and_the_environment - Preschool_Topic1 - Subtopic_for_Preschool_Topic1
 insert into Material_Taxon(material, taxon) values(13, 15000); --  BASICEDUCATION - Social_studies - History - Basic_history - Ajaarvamine (subtopic)
@@ -300,6 +306,7 @@ insert into Publisher(id, name, website) values (3, 'Varrak', 'http://www.varrak
 
 insert into Material_Publisher(material, publisher) values (1, 1);
 insert into Material_Publisher(material, publisher) values (1, 2);
+insert into Material_Publisher(material, publisher) values (1, 3);
 insert into Material_Publisher(material, publisher) values (2, 2);
 insert into Material_Publisher(material, publisher) values (3, 3);
 insert into Material_Publisher(material, publisher) values (10, 2);
