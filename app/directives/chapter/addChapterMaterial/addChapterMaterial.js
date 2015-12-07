@@ -1,13 +1,16 @@
 define(['app'], function(app)
 {
-    app.directive('dopAddChapterMaterial', ['translationService', '$mdDialog',
-     function(translationService, $mdDialog) {
+    app.directive('dopAddChapterMaterial', ['translationService', '$mdDialog', '$rootScope',
+     function(translationService, $mdDialog, $rootScope) {
         return {
             scope: {
                 chapter: '='
             },
             templateUrl: 'directives/chapter/addChapterMaterial/addChapterMaterial.html',
             controller: function ($scope) {
+            	
+            	$scope.isEditable = $rootScope.isEditPortforlioMode;
+            	
                 $scope.addMaterialFromPermalink = function() {
                     var addMaterialScope = $scope.$new(true);
 
