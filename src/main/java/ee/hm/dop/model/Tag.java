@@ -11,7 +11,15 @@ import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+
+import ee.hm.dop.rest.jackson.map.TagDeserializer;
+import ee.hm.dop.rest.jackson.map.TagSerializer;
+
 @Entity
+@JsonDeserialize(using = TagDeserializer.class)
+@JsonSerialize(using = TagSerializer.class)
 public class Tag {
 
     @Id
