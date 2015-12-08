@@ -119,6 +119,7 @@ insert into Translation(translationGroup, translationKey, translation) values (2
 insert into Translation(translationGroup, translationKey, translation) values (2, 'DETAILED_SEARCH_SPECIAL_EDUCATION', 'Упрощенная учебный план');
 insert into Translation(translationGroup, translationKey, translation) values (2, 'DETAILED_SEARCH_ISSUE_DATE_FROM', 'Выпущено ');
 insert into Translation(translationGroup, translationKey, translation) values (2, 'DETAILED_SEARCH_ISSUE_DATE_OR_LATER', ' или позже.');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'DETAILED_SEARCH_CROSS_CURRICULAR_THEME', 'Междисциплинарной темой');
 insert into Translation(translationGroup, translationKey, translation) values (2, 'ADD_PORTFOLIO', 'Добавить портфель');
 insert into Translation(translationGroup, translationKey, translation) values (2, 'EDIT_PORTFOLIO', 'Редактировать портфель');
 insert into Translation(translationGroup, translationKey, translation) values (2, 'BUTTON_EDIT_PORTFOLIO', 'Сохранить');
@@ -246,6 +247,16 @@ insert into Translation(translationGroup, translationKey, translation) values (2
 insert into Translation(translationGroup, translationKey, translation) values (2, 'TAXON_PATH_MODULE', 'Модуль');
 insert into Translation(translationGroup, translationKey, translation) values (2, 'TAXON_PATH_TOPIC', 'Тема');
 insert into Translation(translationGroup, translationKey, translation) values (2, 'TAXON_PATH_SUBTOPIC', 'Подраздел');
+
+-- Cross-curricular themes translations
+insert into Translation(translationGroup, translationKey, translation) values (2, 'CROSS_CURRICULAR_THEME_LIFELONG_LEARNING_AND_CAREER_PLANNING', 'Непрерывное обучение и планирование карьеры');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'CROSS_CURRICULAR_THEME_ENVIRONMENT_AND_SUSTAINABLE_DEVELOPMENT', 'Окружающая среда и устойчивое развитие');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'CROSS_CURRICULAR_THEME_CIVIC_INITIATIVE_AND_ENTREPRENEURSHIP', 'Гражданская инициатива и предпринимательство');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'CROSS_CURRICULAR_THEME_CULTURAL_IDENTITY', 'Культурные особенности');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'CROSS_CURRICULAR_THEME_INFORMATION_ENVIRONMENT', 'Информационная среда');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'CROSS_CURRICULAR_THEME_TECHNOLOGY_AND_INNOVATION', 'Технология и инновации');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'CROSS_CURRICULAR_THEME_HEALTH_AND_SAFETY', 'Здоровье и безопасность');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'CROSS_CURRICULAR_THEME_VALUES_AND_MORAL', 'Ценности и нравственное');
 
 -- Language name translations, more can be added using the same conventions for the translation key
 insert into Translation(translationGroup, translationKey, translation) values (2, 'LANGUAGE', 'язык');

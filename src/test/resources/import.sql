@@ -378,3 +378,8 @@ insert into Portfolio_Tag(tag, portfolio) values(5, 1);
 -- Portfolio TargetGroups
 insert into Portfolio_TargetGroup(portfolio, targetGroup) values (1, 'SIX_SEVEN');
 insert into Portfolio_TargetGroup(portfolio, targetGroup) values (1, 'ZERO_FIVE');
+
+
+-- Cross-curricular themes
+insert into CrossCurricularTheme(id, name) values (1, 'Lifelong_learning_and_career_planning');
+insert into CrossCurricularTheme(id, name) values (2, 'Environment_and_sustainable_development');
