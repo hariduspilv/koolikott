@@ -117,6 +117,8 @@ insert into Translation(translationGroup, translationKey, translation) values (1
 insert into Translation(translationGroup, translationKey, translation) values (1, 'DETAILED_SEARCH_ONLY_BOOKS', 'Ainult õppekirjandus');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'DETAILED_SEARCH_CLIL', 'Lõimitud aine- ja keeleõpe');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'DETAILED_SEARCH_SPECIAL_EDUCATION', 'Lihtsustatud õppekava');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'DETAILED_SEARCH_ISSUE_DATE_FROM', 'Antud välja ');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'DETAILED_SEARCH_ISSUE_DATE_OR_LATER', ' või hiljem.');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'ADD_PORTFOLIO', 'Lisa kogumik');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'EDIT_PORTFOLIO', 'Muuda kogumikku');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'PORTFOLIO_TITLE', 'Pealkiri');
