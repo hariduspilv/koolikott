@@ -125,13 +125,9 @@ public class PortfolioResource extends BaseResource {
     public Portfolio update(UpdatePortfolioForm updatePortfolioForm) {
         Portfolio portfolio = updatePortfolioForm.portfolio;
 
-        List<Tag> tags = new ArrayList<>();
-
         if (updatePortfolioForm.getTaxonId() != null) {
             setTaxon(updatePortfolioForm.getTaxonId(), portfolio);
         }
-
-        portfolio.setTags(tags);
 
         List<Chapter> chapters = parseChapters(updatePortfolioForm.chapters);
         portfolio.setChapters(chapters);
