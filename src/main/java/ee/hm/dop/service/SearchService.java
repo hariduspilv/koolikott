@@ -174,6 +174,7 @@ public class SearchService {
         filters.add(getTargetGroupsAsQuery(searchFilter));
         filters.add(getResourceTypeAsQuery(searchFilter));
         filters.add(isSpecialEducationAsQuery(searchFilter));
+        filters.add(issuedFromAsQuery(searchFilter));
 
         // Remove empty elements
         filters = filters.stream().filter(f -> !f.isEmpty()).collect(Collectors.toList());
@@ -325,6 +326,13 @@ public class SearchService {
     private String isSpecialEducationAsQuery(SearchFilter searchFilter) {
         if (searchFilter.isSpecialEducation()) {
             return "special_education:\"true\"";
+        }
+        return "";
+    }
+
+    private String issuedFromAsQuery(SearchFilter searchFilter) {
+        if (searchFilter.getIssuedFrom() != null) {
+            return format("(issue_date_year:[%s TO *] OR type:\"portfolio\")", searchFilter.getIssuedFrom());
         }
         return "";
     }

@@ -20,6 +20,8 @@ public class SearchFilter {
 
     private boolean isSpecialEducation = false;
 
+    private Integer issuedFrom;
+
     public Taxon getTaxon() {
         return taxon;
     }
@@ -74,6 +76,14 @@ public class SearchFilter {
 
     public void setSpecialEducation(boolean isSpecialEducation) {
         this.isSpecialEducation = isSpecialEducation;
+    }
+
+    public Integer getIssuedFrom() {
+        return issuedFrom;
+    }
+
+    public void setIssuedFrom(Integer issuedFrom) {
+        this.issuedFrom = issuedFrom;
     }
 
 }

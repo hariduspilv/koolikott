@@ -844,6 +844,19 @@ public class SearchServiceTest {
     }
 
     @Test
+    public void searchWithIssueDate() {
+        String query = "airplane";
+        SearchFilter searchFilter = new SearchFilter();
+        searchFilter.setIssuedFrom(2012);
+        String tokenizedQuery = "(airplane*) AND (issue_date_year:[2012 TO *] OR type:\"portfolio\")";
+        long start = 0;
+
+        List<Searchable> searchables = Arrays.asList(createMaterial(9L), createMaterial(2L), createPortfolio(2L));
+
+        testSearch(query, tokenizedQuery, searchables, start, searchFilter);
+    }
+
+    @Test
     public void searchNotFromStart() {
         String query = "people";
         String tokenizedQuery = "people*";
