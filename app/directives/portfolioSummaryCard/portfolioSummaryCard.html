@@ -2,11 +2,11 @@
   <md-card-content>
     <div class="card-menu">
       <md-menu>
-        <md-button class="md-icon-button" data-ng-click="$mdOpenMenu($event)">
+        <md-button class="md-icon-button" data-ng-click="openMenu($mdOpenMenu)">
           <md-icon md-menu-origin>more_vert</md-icon>
         </md-button>
         <md-menu-content width="4">
-          <md-menu-item data-ng-if="$root.isEditPortforlioMode">
+          <md-menu-item data-ng-if="showEditButton">
             <md-button data-ng-click="showEditPortfolioDialog()">
               <md-icon md-menu-align-target>edit</md-icon>
               <span data-translate="EDIT_PORTFOLIO"></span>
