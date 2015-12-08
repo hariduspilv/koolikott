@@ -24,7 +24,7 @@
         </md-option>
       </md-select>
     </md-input-container>
-    <md-slider flex md-discrete ng-model="detailedSearch.issueDate" step="1" min="{{issueDateFirstYear}}" max="{{issueDateLastYear}}">
+    <md-slider flex md-discrete ng-model="detailedSearch.issueDate" step="1" min="{{issueDateFirstYear}}" max="{{issueDateLastYear}}" aria-label="{{DETAILED_SEARCH_ISSUE_DATE_FROM | translate}}">
     </md-slider>
     <span data-ng-if="getEffectiveIssueDate()">
       <span data-translate="DETAILED_SEARCH_ISSUE_DATE_FROM" />{{getEffectiveIssueDate()}}<span data-translate="DETAILED_SEARCH_ISSUE_DATE_OR_LATER" />
@@ -37,6 +37,15 @@
 
   <div flex>
     <div data-dop-target-group-selector data-target-groups="detailedSearch.targetGroups"></div>
+
+    <md-input-container flex>
+      <label data-translate="DETAILED_SEARCH_CROSS_CURRICULAR_THEME"></label>
+      <md-select data-ng-model="detailedSearch.crossCurricularTheme">
+        <md-option data-ng-repeat="crossCurricularTheme in crossCurricularThemes" value="{{crossCurricularTheme.id}}">
+          <span data-translate="CROSS_CURRICULAR_THEME_{{crossCurricularTheme.name.toUpperCase()}}"></span>
+        </md-option>
+      </md-select>
+    </md-input-container>
 
     <div layout="column" layout-align="end start" layout-fill>
       <md-checkbox data-ng-if="detailedSearch.educationalContext.id === 2" data-ng-model="detailedSearch.CLIL" aria-label="{{'DETAILED_SEARCH_CLIL' | translate}}" class="md-primary" flex>

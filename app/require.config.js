@@ -48,7 +48,8 @@ require.config({
     jquery: '../bower_components/jquery/dist/jquery',
     'ng-file-upload-shim': '../bower_components/ng-file-upload-shim/ng-file-upload-shim',
     'ng-file-upload': '../bower_components/ng-file-upload/ng-file-upload',
-    clipboard: '../bower_components/clipboard/dist/clipboard'
+    clipboard: '../bower_components/clipboard/dist/clipboard',
+    metadataService: 'services/metadataService'
   },
   shim: {
     angular: {
@@ -158,7 +159,8 @@ require([
   'dopCopyPermalink',
   'dopReportImporper',
   'dopReportBrokenLink',
-  'dopRecommend'
+  'dopRecommend',
+  'metadataService'
 ], function (jquery, angular, app) {
   'use strict';
   var $html = angular.element(document.getElementsByTagName('html')[0]);

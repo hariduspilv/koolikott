@@ -1,7 +1,7 @@
 define(['app'], function(app)
 {
-    app.directive('dopDetailedSearch', [ '$location', 'searchService', 'translationService', '$filter', 'serverCallService', 
-     function($location, searchService, translationService, $filter, serverCallService) {
+    app.directive('dopDetailedSearch', [ '$location', 'searchService', 'translationService', '$filter', 'serverCallService', 'metadataService', 
+     function($location, searchService, translationService, $filter, serverCallService, metadataService) {
         return {
             scope: {
                 queryIn: '=',
@@ -74,6 +74,9 @@ define(['app'], function(app)
                     if (issuedFrom && issuedFrom >= $scope.issueDateFirstYear && issuedFrom <= $scope.issueDateLastYear) {
                         $scope.detailedSearch.issueDate = issuedFrom;
                     }
+
+                    // Cross-curricular themes
+                    metadataService.loadCrossCurricularThemes(setCrossCurricularThemes);
                 }
 
                 $scope.search = function() {
@@ -307,6 +310,10 @@ define(['app'], function(app)
                     if ($scope.detailedSearch.issueDate && $scope.detailedSearch.issueDate != $scope.issueDateFirstYear) {
                         return $scope.detailedSearch.issueDate;
                     }
+                }
+
+                function setCrossCurricularThemes(crossCurricularThemes) {
+                    $scope.crossCurricularThemes = crossCurricularThemes;
                 }
 
             }
