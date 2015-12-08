@@ -38,7 +38,7 @@
   <div flex>
     <div data-dop-target-group-selector data-target-groups="detailedSearch.targetGroups"></div>
 
-    <md-input-container flex data-ng-if="detailedSearch.educationalContext.id === 2">
+    <md-input-container flex data-ng-if="detailedSearch.educationalContext.id === 2 || detailedSearch.educationalContext.id === 3">
       <label data-translate="DETAILED_SEARCH_CROSS_CURRICULAR_THEME"></label>
       <md-select data-ng-model="detailedSearch.crossCurricularTheme">
         <md-option data-ng-repeat="crossCurricularTheme in crossCurricularThemes" value="{{crossCurricularTheme.id}}">
