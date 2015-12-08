@@ -4,25 +4,25 @@
     overflow-x: hidden;
   }
 
-  md-card:not(#comments-card) {
-    margin: 0;
-  }
-
-  #portfolio-chapters {
-    margin-top: 20px;
-
-    .portfolio-chapter-subchapters {
-      list-style: none;
-
-      .portfolio-chapter-subchapter {
-        & + .portfolio-chapter-subchapter {
-          margin-top: 20px;
-        }
-
-        h3 {
-          text-transform: uppercase;
-        }
-      }
-    }
-  }
+//   md-card:not(#comments-card) {
+//     margin: 0;
+//   }
+// 
+//   #portfolio-chapters {
+//     margin-top: 20px;
+// 
+//     .portfolio-chapter-subchapters {
+//       list-style: none;
+// 
+//       .portfolio-chapter-subchapter {
+//         & + .portfolio-chapter-subchapter {
+//           margin-top: 20px;
+//         }
+// 
+//         h3 {
+//           text-transform: uppercase;
+//         }
+//       }
+//     }
+//   }
 }

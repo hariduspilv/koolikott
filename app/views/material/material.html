@@ -130,13 +130,13 @@
                 <div data-ng-if="!isNullOrZeroLength(material.tags)">
                   <p class="md-body-2 meta">
                     <small class="md-caption">
-                    <span data-translate="DETAIL_VIEW_TAGS"></span>:
-                  </small>
+                      <span data-translate="DETAIL_VIEW_TAGS"></span>:
+                    </small>
                     <br>
                     <a href="#" data-ng-repeat="tag in material.tags">
-                    {{tag.name}}
-                    <span data-ng-bind="$index < material.tags.length - 1 ? ', ' : ''"></span>
-                  </a>
+                      {{tag}}
+                      <span data-ng-bind="$index < material.tags.length - 1 ? ', ' : ''"></span>
+                    </a>
                   </p>
                 </div>
               </div>

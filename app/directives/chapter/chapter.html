@@ -1,8 +1,8 @@
 <div class="portfolio-chapter">
-  <md-card id="chapter-{{index}}">
+  <md-card class="card-lg" id="chapter-{{index}}">
     <md-card-content data-ng-if="!isEditable">
       <h2>{{chapter.title}}</h2>
-      <p>{{chapter.text}}</p>
+      <p class="md-body-1 description">{{chapter.text}}</p>
     </md-card-content>
     <md-card-content data-ng-if="isEditable">
         <div layout="row" layout-align="start center">
@@ -33,8 +33,7 @@
   </md-card>
             
   <div class="portfolio-chapter-subchapter-materials" ng-show="chapter.materials.length">
-    <h3 class="md-subhead" data-translate="PORTFOLIO_ATTACHED_MATERIALS"></h3>
-    <md-grid-list md-cols-gt-md="4" md-cols-md="3" md-cols-sm="2" md-gutter="20px" md-row-height="300px">
+    <md-grid-list md-cols-xl="7" md-cols-lg="5"  md-cols-md="4" md-cols-sm="3" md-cols-xs="2" md-gutter="10px" md-row-height="280px">
       <md-grid-tile data-ng-repeat="material in chapter.materials">
         <figure data-dop-material-box material="material"></figure>
       </md-grid-tile>
@@ -43,10 +42,10 @@
 
   <ul class="portfolio-chapter-subchapters">
     <li class="portfolio-chapter-subchapter" id="chapter-{{index}}-{{$index}}" data-ng-repeat="subchapter in chapter.subchapters">
-      <md-card>
+      <md-card class="card-lg">
         <md-card-content data-ng-if="!isEditable">
           <h3>{{subchapter.title}}</h3>
-          <p>{{subchapter.text}}</p>
+          <p class="md-body-1 description">{{subchapter.text}}</p>
         </md-card-content>
         <md-card-content data-ng-if="isEditable">
             <div layout="row" layout-align="start center">
@@ -77,8 +76,7 @@
       </md-card>
 
       <div class="portfolio-chapter-subchapter-materials" ng-show="subchapter.materials.length">
-        <h3 class="md-subhead" data-translate="PORTFOLIO_ATTACHED_MATERIALS"></h3>
-        <md-grid-list md-cols-gt-md="4" md-cols-md="3" md-cols-sm="2" md-gutter="20px" md-row-height="300px">
+        <md-grid-list md-cols-gt-lg="6" md-cols-gt-md="4" md-cols-md="3" md-cols-sm="2" md-gutter="10px" md-row-height="300px">
           <md-grid-tile data-ng-repeat="material in subchapter.materials">
             <figure data-dop-material-box material="material"></figure>
           </md-grid-tile>

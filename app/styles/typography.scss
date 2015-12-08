@@ -1,4 +1,5 @@
 // multiline-ellipsis
+$heading-color: #212121;
 
 .one-row {
   overflow: hidden;
@@ -24,7 +25,7 @@ $lines-to-show: 3;
   text-overflow: ellipsis;
 }
 
-$font-size2: 20px;
+$font-size2: 18px;
 $line-height2: 1.2;
 $lines-to-show2: 2;
 
@@ -40,4 +41,6 @@ $lines-to-show2: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
   text-overflow: ellipsis;
+  font-weight: 300;
+  color: $heading-color;
 }

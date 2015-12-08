@@ -1,4 +1,4 @@
-<md-card>
+<md-card  class="card-lg">
   <md-card-content>
     <div class="card-menu">
       <md-menu>
@@ -21,15 +21,16 @@
       </md-menu>
     </div>
 
-    <h1 class="md-accent md-display-1 book-headline">
+    <h1 layout="row">
       {{portfolio.title}}
     </h1>
 
     <div layout="row">
-      <div layout="column" flex="66">
+      <div layout="column" flex="75">
+
         <div layout="row">
           <div flex>
-            <p class="md-body-1">
+            <p class="md-body-2 meta">
               <small class="md-caption">
                 <span data-translate="DETAIL_VIEW_SUBJECT"></span>
               </small>
@@ -38,7 +39,7 @@
             </p>
           </div>
           <div flex>
-            <p class="md-body-1">
+            <p class="md-body-2 meta">
               <small class="md-caption">
                 <span data-translate="DETAIL_VIEW_EDUCATIONAL_CONTEXT"></span>
               </small>
@@ -50,23 +51,22 @@
 
         <md-divider class="md-default-theme"></md-divider>
 
-        <p class="md-body-1">
+        <p class="md-body-1 description">
           {{portfolio.summary}}
         </p>
 
-        <!-- tags -->
-        <p>
+        <p class="md-body-2 meta">
           <small class="md-caption">
             <span data-translate="DETAIL_VIEW_TAGS"></span>:
           </small>
+          <br>
+          <a href="#" data-ng-repeat="tag in portfolio.tags">
+            {{tag}}
+            <span data-ng-bind="$index < portfolio.tags.length - 1 ? ', ' : ''"></span>
+          </a>
         </p>
-
-        <md-chips data-ng-model="portfolio.tags" readonly="true">
-          <md-chip-template>{{$chip.name}}</md-chip-template>
-        </md-chips>
-        <!-- /tags -->
       </div>
-      <div layout="column" flex="33" class="divider-left" layout-align="start start">
+      <div layout="column" flex="25" class="divider-left" layout-align="start start">
         <md-content>
           <p class="md-body-1">
             <small class="md-caption">
@@ -98,9 +98,13 @@
         </md-content>
       </div>
     </div>
+    <md-divider class="md-default-theme"></md-divider>
 
+    <div layout="row" class="md-actions">
+      <div data-dop-comments-card comments="portfolio.comments" comment="newComment" submit-click="addComment()"></div>
+      <span flex></span>
     <!-- rating control -->
     <div data-ng-if="!$root.isEditPortforlioMode" data-dop-rating like-message="{{ 'PORTFOLIO_LIKED' | translate }}" dislike-message="{{ 'PORTFOLIO_DISLIKED' | translate }}"></div>
-
+  </div>
   </md-card-content>
 </md-card>

@@ -1,4 +1,4 @@
- <md-card class="card-sm md-whiteframe-4dp" id="material-card-{{material.id}}" data-ng-click="navigateTo(material)">
+ <md-card class="card-sm md-whiteframe-2dp" id="material-card-{{material.id}}" data-ng-click="navigateTo(material)">
   <div class="card-cover {{getType()}}">
     <img data-ng-if="material.hasPicture" data-ng-src="rest/material/getPicture?materialId={{material.id}}" class="md-card-image" />
     <div data-ng-if!="material.hasPicture" layout="row" layout-fill flex layout-align="center center">
@@ -13,16 +13,22 @@
     </div>
   </div>
   <md-card-content>
-    <h2 class="md-headline two-rows" data-ng-bind="getCorrectLanguageTitle(material)"></h2>
-    <span data-ng-repeat="author in material.authors">
-      <span class="md-caption one-row" data-ng-bind="formatName(author.name)"></span>
-      <span class="md-caption one-row" data-ng-bind="formatSurname(author.surname)"></span>
-      <span class="md-caption one-row" data-ng-bind="$index < material.authors.length - 1 ? ', ' : ''"></span>
-    </span>
+    <h4 class="md-headline two-rows" data-ng-bind="getCorrectLanguageTitle(material)"></h4>
+    <p class="md-caption one-row">
+      <span data-ng-repeat="author in material.authors">
+        <span data-ng-bind="formatName(author.name)"></span>
+        <span data-ng-bind="formatSurname(author.surname)"></span>
+        <span data-ng-bind="$index < material.authors.length - 1 ? ', ' : ''"></span>
+      </span>
+    </p>
+    <p class="md-caption one-row">
+Väljaandja: Varrak
+    </p>
   </md-card-content>
+    <md-divider></md-divider>
   <md-card-footer>
-  <md-divider></md-divider>
-  <div class="md-actions" layout="row" flex>
+
+  <div layout="row" flex>
     <span class="md-action-icons-list md-caption" layout="row" layout-align="start center" flex>
       <md-icon>thumb_up</md-icon>
 	    <span>5</span>
