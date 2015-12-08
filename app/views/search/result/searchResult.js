@@ -65,6 +65,10 @@ define(['app'], function(app)
                 params.specialEducation = searchService.isSpecialEducation();
             }
 
+            if (searchService.getIssuedFrom()) {
+                params.issuedFrom = searchService.getIssuedFrom();
+            }
+
             serverCallService.makeGet("rest/search", params, searchSuccess, searchFail);
         }
 

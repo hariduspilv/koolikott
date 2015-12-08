@@ -9,6 +9,7 @@ define(['app'], function(app) {
         var targetGroupsURL = "&targetGroup=";
         var resourceTypeURL = "&resourceType=";
         var isSpecialEducationURL = "&specialEducation=";
+        var issuedFromURL = "&issuedFrom=";
 
         var searchQuery = "";
         var searchTaxon = "";
@@ -18,6 +19,7 @@ define(['app'], function(app) {
         var searchTargetGroups = [];
         var searchResourceType = "";
         var searchIsSpecialEducation = "";
+        var searchIssuedFrom = "";
 
         function escapeQuery(query) {
             //replace backslashes
@@ -100,6 +102,10 @@ define(['app'], function(app) {
                 searchIsSpecialEducation = isSpecialEducation;
             },
 
+            setIssuedFrom : function(issuedFrom) {
+                searchIssuedFrom = issuedFrom;
+            },
+
             getURL : function() {
                 var searchURL;
                 if (searchQuery) {
@@ -131,6 +137,9 @@ define(['app'], function(app) {
                 if (searchIsSpecialEducation === true) {
                     searchURL += isSpecialEducationURL + searchIsSpecialEducation;
                 }
+                if (searchIssuedFrom) {
+                    searchURL += issuedFromURL + searchIssuedFrom;
+                }
 
                 return searchURL;
             },
@@ -139,7 +148,7 @@ define(['app'], function(app) {
                 var searchObject = $location.search();
                 if (searchObject.q || searchObject.taxon || searchObject.paid === false ||
                     (searchObject.type && this.isValidType(searchObject.type)) || searchObject.language || searchObject.targetGroup ||
-                    searchObject.resourceType || searchObject.specialEducation) {
+                    searchObject.resourceType || searchObject.specialEducation || searchObject.issuedFrom) {
                     return true;
                 } else {
                     return false;
@@ -234,6 +243,17 @@ define(['app'], function(app) {
                 return searchIsSpecialEducation;
             },
 
+            getIssuedFrom : function() {
+                if (searchIssuedFrom === "") {
+                    var searchObject = $location.search();
+                    if (searchObject.issuedFrom) {
+                        return searchObject.issuedFrom;
+                    }
+                }
+
+                return searchIssuedFrom;
+            },
+
             clearFieldsNotInSimpleSearch : function() {
                 searchTaxon = '';
                 searchPaid = '';
@@ -242,6 +262,7 @@ define(['app'], function(app) {
                 searchTargetGroups = '';
                 searchResourceType = '';
                 searchIsSpecialEducation = '';
+                searchIssuedFrom = '';
             },
 
             isValidType : function(type) {

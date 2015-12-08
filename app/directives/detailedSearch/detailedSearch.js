@@ -70,6 +70,10 @@ define(['app'], function(app)
                     // Issue date
                     $scope.issueDateFirstYear = 2009;
                     $scope.issueDateLastYear = new Date().getFullYear();
+                    var issuedFrom = searchService.getIssuedFrom();
+                    if (issuedFrom && issuedFrom >= $scope.issueDateFirstYear && issuedFrom <= $scope.issueDateLastYear) {
+                        $scope.detailedSearch.issueDate = issuedFrom;
+                    }
                 }
 
                 $scope.search = function() {
@@ -82,6 +86,7 @@ define(['app'], function(app)
                     addTargetGroupsToSearch();
                     addOnlyBooksCheckboxToSearch();
                     addSpecialEducationCheckboxToSearch();
+                    addIssueDateToSearch();
 
                     $location.url(searchService.getURL());
                 };
@@ -124,6 +129,15 @@ define(['app'], function(app)
 
                 function addSpecialEducationCheckboxToSearch() {
                     searchService.setIsSpecialEducation($scope.detailedSearch.specialEducation);
+                }
+
+                function addIssueDateToSearch() {
+                    var effectiveIssueDate = $scope.getEffectiveIssueDate();
+                    if (effectiveIssueDate) {
+                        searchService.setIssuedFrom(effectiveIssueDate);
+                    } else {
+                        searchService.setIssuedFrom(null);
+                    }
                 }
 
                 function getTextFieldsAsQuery() {
