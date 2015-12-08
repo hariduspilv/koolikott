@@ -66,6 +66,10 @@ define(['app'], function(app)
                     } else {
                         $scope.detailedSearch.specialEducation = false;
                     }
+
+                    // Issue date
+                    $scope.issueDateFirstYear = 2009;
+                    $scope.issueDateLastYear = new Date().getFullYear();
                 }
 
                 $scope.search = function() {
@@ -284,6 +288,12 @@ define(['app'], function(app)
                         clearHiddenFields();
                     }
                 }, true);
+
+                $scope.getEffectiveIssueDate = function() {
+                    if ($scope.detailedSearch.issueDate && $scope.detailedSearch.issueDate != $scope.issueDateFirstYear) {
+                        return $scope.detailedSearch.issueDate;
+                    }
+                }
 
             }
         };

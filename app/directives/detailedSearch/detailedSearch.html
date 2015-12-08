@@ -24,24 +24,11 @@
         </md-option>
       </md-select>
     </md-input-container>
-    <div layout="row">
-      <md-input-container flex>
-        <label>Alates</label>
-        <md-select data-ng-model="filter.yearFrom" flex>
-          <md-option data-ng-repeat="year in filter.years" value="{{year.value}}">
-            {{year.label}}
-          </md-option>
-        </md-select>
-      </md-input-container>
-      <md-input-container flex>
-        <label>Kuni</label>
-        <md-select data-ng-model="filter.yearTo" flex>
-          <md-option data-ng-repeat="year in filter.years" value="{{year.value}}">
-            {{year.label}}
-          </md-option>
-        </md-select>
-      </md-input-container>
-    </div>
+    <md-slider flex md-discrete ng-model="detailedSearch.issueDate" step="1" min="{{issueDateFirstYear}}" max="{{issueDateLastYear}}">
+    </md-slider>
+    <span data-ng-if="getEffectiveIssueDate()">
+      <span data-translate="DETAILED_SEARCH_ISSUE_DATE_FROM" />{{getEffectiveIssueDate()}}<span data-translate="DETAILED_SEARCH_ISSUE_DATE_OR_LATER" />
+    </span>
   </div>
 
   <div data-flex>
