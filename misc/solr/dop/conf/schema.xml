@@ -145,6 +145,7 @@
    <field name="paid" type="boolean" indexed="true" stored="false" multiValued="false"/>
    <field name="language" type="text_general" indexed="true" stored="false" multiValued="true"/>
    <field name="special_education" type="boolean" indexed="true" stored="false" multiValued="false"/>
+   <field name="issue_date_year" type="tint" indexed="true" stored="false" multiValued="false" />
 
    <!-- Portfolio -->
    <field name="summary" type="text_general" indexed="true" stored="false"/>

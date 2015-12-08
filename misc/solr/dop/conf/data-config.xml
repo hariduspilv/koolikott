@@ -8,8 +8,8 @@
             deletedPkQuery: must return uniqueKey which will be used to remove document from Solr index.
          -->
         <entity name="Material" pk="uniqueKey"
-            query="select concat('material', id ) as uniqueKey, id, licenseType, paid, 'material' as type, lang, isSpecialEducation as special_education from Material WHERE deleted = false"
-            deltaImportQuery="select concat('material', id ) as uniqueKey, id, licenseType, paid, 'material' as type, lang, isSpecialEducation as special_education from Material where id = '${dih.delta.id}'"
+            query="select concat('material', id ) as uniqueKey, id, licenseType, paid, 'material' as type, lang, isSpecialEducation as special_education, issueDate as issue_date_id from Material WHERE deleted = false"
+            deltaImportQuery="select concat('material', id ) as uniqueKey, id, licenseType, paid, 'material' as type, lang, isSpecialEducation as special_education, issueDate as issue_date_id from Material where id = '${dih.delta.id}'"
             deltaQuery="select concat('material', id ) as uniqueKey, id from Material where (CONVERT_TZ(added, @@session.time_zone, '+00:00') > '${dataimporter.last_index_time}' OR CONVERT_TZ(updated, @@session.time_zone, '+00:00') > '${dataimporter.last_index_time}') AND deleted = false"
             deletedPkQuery="select concat('material', id ) as uniqueKey from Material where (CONVERT_TZ(added, @@session.time_zone, '+00:00') > '${dataimporter.last_index_time}' OR CONVERT_TZ(updated, @@session.time_zone, '+00:00') > '${dataimporter.last_index_time}') AND deleted = true">
             
@@ -219,6 +219,8 @@
             <entity name="Material_Language" query="select code as language from LanguageTable where id='${Material.lang}'" />
 
             <entity name="Material_TargetGroup" query="select targetGroup as target_group from Material_TargetGroup where material='${Material.id}'" />
+
+            <entity name="IssueDate" query="select year as issue_date_year from IssueDate where id='${Material.issue_date_id}'" />
         </entity>
 
         <entity name="Portfolio" pk="uniqueKey"
