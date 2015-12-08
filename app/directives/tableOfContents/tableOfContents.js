@@ -12,7 +12,10 @@ define(['app'], function(app)
                 $scope.isReadOnly = angular.isDefined($scope.isReadOnly) ? $scope.isReadOnly : false;
 
                 $scope.gotoChapter = function(chapterId, subchapterId) {
-                    var combinedId = 'chapter-' + chapterId + '-' + subchapterId;
+                    var combinedId = 'chapter-' + chapterId;
+                    if(subchapterId != null) {
+                    	combinedId += '-' + subchapterId;
+                    }
                     var $chapter = angular.element(document.getElementById(combinedId));
                     var $context = angular.element(document.getElementById('main-content'));
 

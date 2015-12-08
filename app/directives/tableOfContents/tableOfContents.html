@@ -1,9 +1,9 @@
 <ul class="sidenav-menu">
   <li ng-repeat="chapter in portfolio.chapters">
-    <md-button data-ng-click="chapter.expand = !chapter.expand">
+    <md-button data-ng-click="gotoChapter($index)">
       {{chapter.title}}
       <span flex></span>
-      <span aria-hidden="true" class="md-toggle-icon" data-ng-class="{'toggled' : chapter.expand}">
+      <span aria-hidden="true" class="md-toggle-icon" data-ng-click="chapter.expand = !chapter.expand" data-ng-class="{'toggled' : chapter.expand}">
         <md-icon>keyboard_arrow_down</md-icon>
       </span>
     </md-button>
