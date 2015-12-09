@@ -10,6 +10,7 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
 import ee.hm.dop.model.CrossCurricularTheme;
+import ee.hm.dop.model.KeyCompetence;
 import ee.hm.dop.model.Language;
 import ee.hm.dop.model.LicenseType;
 import ee.hm.dop.model.ResourceType;
@@ -17,6 +18,7 @@ import ee.hm.dop.model.TargetGroup;
 import ee.hm.dop.model.taxon.EducationalContext;
 import ee.hm.dop.model.taxon.Taxon;
 import ee.hm.dop.service.CrossCurricularThemeService;
+import ee.hm.dop.service.KeyCompetenceService;
 import ee.hm.dop.service.LanguageService;
 import ee.hm.dop.service.LicenseTypeService;
 import ee.hm.dop.service.ResourceTypeService;
@@ -39,6 +41,9 @@ public class LearningMaterialMetadataResource {
 
     @Inject
     private CrossCurricularThemeService crossCurricularThemeService;
+
+    @Inject
+    private KeyCompetenceService keyCompetenceService;
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
@@ -87,6 +92,13 @@ public class LearningMaterialMetadataResource {
     @Produces(MediaType.APPLICATION_JSON)
     public List<CrossCurricularTheme> getAllCrossCurricularThemes() {
         return crossCurricularThemeService.getAllCrossCurricularThemes();
+    }
+
+    @GET
+    @Path("keyCompetence")
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<KeyCompetence> getAllCompetences() {
+        return keyCompetenceService.getAllKeyCompetences();
     }
 
 }
