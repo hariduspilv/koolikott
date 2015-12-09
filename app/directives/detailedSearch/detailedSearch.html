@@ -66,6 +66,9 @@
       <md-checkbox data-ng-if="detailedSearch.educationalContext.id >= 2 && detailedSearch.educationalContext.id <= 4" data-ng-model="detailedSearch.onlyBooks" aria-label="{{'DETAILED_SEARCH_ONLY_BOOKS' | translate}}" class="md-primary" flex>
         <span data-translate="DETAILED_SEARCH_ONLY_BOOKS"></span>
       </md-checkbox>
+      <md-checkbox data-ng-if="detailedSearch.educationalContext.id == 4" data-ng-model="detailedSearch.specialEducationalNeed" aria-label="{{'DETAILED_SEARCH_SPECIAL_EDUCATIONAL_NEED' | translate}}" class="md-primary" flex>
+        <span data-translate="DETAILED_SEARCH_SPECIAL_EDUCATIONAL_NEED"></span>
+      </md-checkbox>
       <md-checkbox data-ng-model="detailedSearch.paid" class="md-primary" flex>
         <span data-translate="DETAILED_SEARCH_INCLUDE_PAID"></span>
       </md-checkbox>
