@@ -33,7 +33,7 @@
   </md-card>
             
   <div class="portfolio-chapter-subchapter-materials" ng-show="chapter.materials.length">
-    <md-grid-list md-cols-xl="7" md-cols-lg="5"  md-cols-md="4" md-cols-sm="3" md-cols-xs="2" md-gutter="10px" md-row-height="280px">
+    <md-grid-list md-cols-xl="7" md-cols-gt-lg="6"  md-cols-gt-md="5" md-cols-md="4" md-cols-sm="4" md-cols-xs="2" md-gutter="10px" md-row-height="280px">
       <md-grid-tile data-ng-repeat="material in chapter.materials">
         <figure data-dop-material-box material="material"></figure>
       </md-grid-tile>
@@ -76,7 +76,7 @@
       </md-card>
 
       <div class="portfolio-chapter-subchapter-materials" ng-show="subchapter.materials.length">
-        <md-grid-list md-cols-gt-lg="6" md-cols-gt-md="4" md-cols-md="3" md-cols-sm="2" md-gutter="10px" md-row-height="300px">
+        <md-grid-list md-cols-xl="7" md-cols-gt-lg="6"  md-cols-gt-md="5" md-cols-md="4" md-cols-sm="4" md-cols-xs="2" md-gutter="10px" md-row-height="280px">
           <md-grid-tile data-ng-repeat="material in subchapter.materials">
             <figure data-dop-material-box material="material"></figure>
           </md-grid-tile>
