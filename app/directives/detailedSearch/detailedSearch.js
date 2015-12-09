@@ -80,6 +80,10 @@ define(['app'], function(app)
 
                     // Key competences
                     metadataService.loadKeyCompetences(setKeyCompetences);
+                    var keyCompetence = searchService.getKeyCompetence();
+                    if (keyCompetence) {
+                        $scope.detailedSearch.keyCompetence = keyCompetence;
+                    }
                 }
 
                 function getTaxonById(taxonId) {
@@ -102,6 +106,7 @@ define(['app'], function(app)
                     addSpecialEducationCheckboxToSearch();
                     addIssueDateToSearch();
                     addCrossCurricularThemeToSearch();
+                    addKeyCompetenceToSearch();
 
                     $location.url(searchService.getURL());
                 };
@@ -160,6 +165,14 @@ define(['app'], function(app)
                         searchService.setCrossCurricularTheme($scope.detailedSearch.crossCurricularTheme);
                     } else {
                         searchService.setCrossCurricularTheme(null);
+                    }
+                }
+
+                function addKeyCompetenceToSearch() {
+                    if ($scope.detailedSearch.keyCompetence) {
+                        searchService.setKeyCompetence($scope.detailedSearch.keyCompetence);
+                    } else {
+                        searchService.setKeyCompetence(null);
                     }
                 }
 
@@ -318,9 +331,10 @@ define(['app'], function(app)
                         $scope.detailedSearch.specialEducation = false;
                     }
 
-                    // Cross-curricular themes
+                    // Cross-curricular themes and key competences
                     if (!educationalContext || (educationalContext.id != BASIC_EDUCATION_ID && educationalContext.id != SECONDARY_EDUCATION_ID)) {
                         $scope.detailedSearch.crossCurricularTheme = null;
+                        $scope.detailedSearch.keyCompetences = null;
                     }
                 }
 
