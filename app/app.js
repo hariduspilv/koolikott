@@ -11,8 +11,7 @@ define(['app.routes', 'services/dependencyResolver'], function(config, dependenc
       'angularScreenfull',
       'duScroll',
       'infinite-scroll',
-      'ngFileUpload',
-      //'ngclipboard'
+      'ngFileUpload'
     ]);
 
     app.config(
