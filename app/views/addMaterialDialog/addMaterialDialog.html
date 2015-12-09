@@ -29,8 +29,8 @@
               <md-input-container flex="20">
                 <label data-translate="LANGUAGE"></label>
                 <md-select data-ng-model="material.language" id="add-material-language-select">
-                  <md-option data-ng-repeat="language in material.languages" value="{{language.id}}">
-                    {{language.name}}
+                  <md-option data-ng-repeat="language in material.languages" value="{{language}}">
+                    <span data-translate="LANGUAGE_{{language.toUpperCase()}}" />
                   </md-option>
                 </md-select>
               </md-input-container>
@@ -51,15 +51,16 @@
               <md-list-item data-ng-repeat="metadata in material.metadata">
                 <div layout="column" flex>
                   <div class="collapsible-header" data-ng-click="metadata.expanded = !metadata.expanded" layout="row" layout-align="center start" flex>
-                    <p>{{getLanguageById(metadata.language)}}</p>
+                    <p>                    <span data-translate="LANGUAGE_{{metadata.language.toUpperCase()}}" />
+                    </p>
                     <span flex></span>
                     <md-icon class="md-toggle-icon" data-ng-class="{ 'toggled': metadata.expanded }">keyboard_arrow_down</md-icon>
                   </div>
                   
                   <div class="collapsible-body" data-ng-show="metadata.expanded" layout="column" flex>
                     <md-select data-ng-model="metadata.language" flex>
-                      <md-option data-ng-repeat="language in material.languages" value="{{language.id}}">
-                        {{language.name}}
+                      <md-option data-ng-repeat="language in material.languages" value="{{language}}">
+                        <span data-translate="LANGUAGE_{{language.toUpperCase()}}" />
                       </md-option>
                     </md-select>
                     <md-input-container flex>
@@ -77,6 +78,7 @@
             </md-list>
             
             <h2 class="md-title" data-translate="MATERIAL_TAGS"></h2>
+            <p class="md-caption" data-translate="MATERIAL_HOW_TO_SAVE_TAG"></p>
             
             <md-chips 
                 data-ng-model="material.tags"
@@ -104,17 +106,23 @@
             <input data-ng-model="material.publisher">
           </md-input-container>
     
-          <md-input-container flex>
-            <label data-translate="MATERIAL_AUTHOR"></label>
-            <input data-ng-model="material.author">
-          </md-input-container>
-          
+          <div layout="row" flex>
+            <md-input-container flex>
+              <label data-translate="MATERIAL_AUTHOR_NAME"></label>
+              <input data-ng-model="material.author.name">
+            </md-input-container>
+            <md-input-container flex>
+              <label data-translate="MATERIAL_AUTHOR_SURNAME"></label>
+              <input data-ng-model="material.author.surname" ng-required="material.author.name">
+            </md-input-container>
+          </div>
+
           <div data-dop-target-group-selector data-target-groups="material.targetGroups"></div>
           
           <md-input-container flex>
             <label data-translate="MATERIAL_VIEW_LICENSE_TYPE"></label>
-            <md-select data-ng-model="material.licenceType">
-              <md-option data-ng-repeat="licenceType in material.licenceTypes" value="{{licenceType.id}}">
+            <md-select data-ng-model="material.licenseType">
+              <md-option data-ng-repeat="licenceType in material.licenceTypes" value="{{licenceType}}">
                 <span data-translate="LICENSETYPE_{{licenceType.name}}"></span>
               </md-option>
             </md-select>
@@ -166,9 +174,9 @@
           </div>
           
           <md-list>
-            <md-list-item data-ng-repeat="taxon in material.taxons">
+            <md-list-item data-ng-repeat="taxon in material.taxons track by $index">
               <div class="md-no-style" layout="row" layout-align="center center">
-                <div data-dop-taxon-selector data-taxon="taxon" layout="row" layout-sm="column" flex></div>
+                <div data-dop-taxon-selector data-taxon="material.taxons[$index]" layout="row" layout-sm="column" flex></div>
                 <md-button class="md-raised" data-ng-click="deleteTaxon($index)" data-translate="BUTTON_REMOVE"></md-button>
               </div>
             </md-list-item>

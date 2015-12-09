@@ -298,8 +298,8 @@ define(['app'], function(app)
                     console.log('Failed to get languages.')
                 }
 
-                $scope.getLanguageTranslationKey = function(languageName) {
-                    return 'LANGUAGE_' + languageName.toUpperCase().replace(/\s+/g, '_');
+                $scope.getLanguageTranslationKey = function(languageCode) {
+                    return 'LANGUAGE_' + languageCode.toUpperCase();
                 }
 
                 function clearHiddenFields() {
