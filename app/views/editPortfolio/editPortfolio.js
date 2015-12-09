@@ -10,6 +10,8 @@ define(['app'], function(app)
             function init() {
 				getPortfolio(getPortfolioSuccess, getPortfolioFail);
 				$rootScope.isEditPortforlioMode = true;
+				searchService.setTaxon(null);
+				searchService.setTargetGroups([]);
 			}
 
 			function getPortfolio(success, fail) {
@@ -22,7 +24,11 @@ define(['app'], function(app)
 	            	getPortfolioFail();
 	            } else {
 	                $scope.portfolio = portfolio;
-	                searchService.setTaxon(portfolio.taxon.id);
+	                
+	                var taxon = portfolio.taxon != null ? portfolio.taxon.id : null;
+	                searchService.setTaxon(taxon);
+    
+	                searchService.setTargetGroups(portfolio.targetGroups);
 	            }
 	    	}
 

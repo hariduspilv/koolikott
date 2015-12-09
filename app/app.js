@@ -150,63 +150,63 @@ define(['app.routes', 'services/dependencyResolver'], function(config, dependenc
     });
 
     app.run(function($rootScope, authenticatedUserService) {
-    	class TaxonUtils {
-    		constructor() {
-    			this.EDUCATIONAL_CONTEXT = '.EducationalContext';
-    			this.DOMAIN = '.Domain';
-    			this.SUBJECT = '.Subject';
-    			this.TOPIC = '.Topic';
-    			this.SUBTOPIC = '.Subtopic';
-    			this.SPECIALIZATION = '.Specialization';
-    			this.MODULE = '.Module';
-    	    }
+    	$rootScope.taxonUtils = {
+            constants: {
+                EDUCATIONAL_CONTEXT: '.EducationalContext',
+                DOMAIN: '.Domain',
+                SUBJECT: '.Subject',
+                TOPIC: '.Topic',
+                SUBTOPIC: '.Subtopic',
+                SPECIALIZATION: '.Specialization',
+                MODULE: '.Module'
+            },
 
-    		getEducationalContext(taxon) {
-    			return this.getTaxon(taxon, this.EDUCATIONAL_CONTEXT);
-    		}
+    		getEducationalContext: function(taxon) {
+    			return this.getTaxon(taxon, this.constants.EDUCATIONAL_CONTEXT);
+    		},
 
-    		getDomain(taxon) {
-    			return this.getTaxon(taxon, this.DOMAIN);
-    		}
+    		getDomain: function(taxon) {
+    			return this.getTaxon(taxon, this.constants.DOMAIN);
+    		},
 
-    		getSubject(taxon) {
-    			return this.getTaxon(taxon, this.SUBJECT);
-    		}
+    		getSubject: function(taxon) {
+    			return this.getTaxon(taxon, this.constants.SUBJECT);
+    		},
 
-    		getTopic(taxon) {
-    			return this.getTaxon(taxon, this.TOPIC);
-    		}
+    		getTopic: function(taxon) {
+    			return this.getTaxon(taxon, this.constants.TOPIC);
+    		},
 
-    		getSubtopic(taxon) {
-    			return this.getTaxon(taxon, this.SUBTOPIC);
-    		}
+    		getSubtopic: function(taxon) {
+    			return this.getTaxon(taxon, this.constants.SUBTOPIC);
+    		},
 
-    		getSpecialization(taxon) {
-    			return this.getTaxon(taxon, this.SPECIALIZATION);
-    		}
+    		getSpecialization: function(taxon) {
+    			return this.getTaxon(taxon, this.constants.SPECIALIZATION);
+    		},
 
-    		getModule(taxon) {
-    			return this.getTaxon(taxon, this.MODULE);
-    		}
-
-    		getTaxon(taxon, level) {
+    		getModule: function(taxon) {
+    			return this.getTaxon(taxon, this.constants.MODULE);
+    		},
+            
+    		getTaxon: function(taxon, level) {
     			if (!taxon) {
     				return;
     			}
 
-    			if (taxon.level === this.EDUCATIONAL_CONTEXT) {
+    			if (taxon.level === this.constants.EDUCATIONAL_CONTEXT) {
     				return taxon.level === level ? taxon : null;
     			}
 
-    			if (taxon.level === this.DOMAIN) {
+    			if (taxon.level === this.constants.DOMAIN) {
     				return taxon.level === level ? taxon : this.getTaxon(taxon.educationalContext, level);
     			}
 
-    			if (taxon.level === this.SUBJECT) {
+    			if (taxon.level === this.constants.SUBJECT) {
     				return taxon.level === level ? taxon : this.getTaxon(taxon.domain, level);
     			}
 
-    			if (taxon.level === this.TOPIC) {
+    			if (taxon.level === this.constants.TOPIC) {
     				if (taxon.level === level) {
     					return taxon;
     				}
@@ -223,21 +223,19 @@ define(['app.routes', 'services/dependencyResolver'], function(config, dependenc
     				return  this.getTaxon(parent, level);
     			}
 
-    			if (taxon.level === this.SUBTOPIC) {
+    			if (taxon.level === this.constants.SUBTOPIC) {
     				return taxon.level === level ? taxon : this.getTaxon(taxon.topic, level);
     			}
 
-    			if (taxon.level === this.SPECIALIZATION) {
+    			if (taxon.level === this.constants.SPECIALIZATION) {
     				return taxon.level === level ? taxon : this.getTaxon(taxon.domain, level);
     			}
 
-    			if (taxon.level === this.MODULE) {
+    			if (taxon.level === this.constants.MODULE) {
     				return taxon.level === level ? taxon : this.getTaxon(taxon.specialization, level);
     			}
     		}
     	}
-
-    	$rootScope.taxonUtils = new TaxonUtils();
 
     	$rootScope.$watch(function () {
             return authenticatedUserService.isAuthenticated();

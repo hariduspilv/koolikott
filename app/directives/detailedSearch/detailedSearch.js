@@ -1,7 +1,7 @@
 define(['app'], function(app)
 {
-    app.directive('dopDetailedSearch', [ '$location', 'searchService', 'translationService', '$filter', 'serverCallService', 'metadataService', 
-     function($location, searchService, translationService, $filter, serverCallService, metadataService) {
+    app.directive('dopDetailedSearch', [ '$location', 'searchService', 'translationService', '$filter', 'serverCallService', 'metadataService', '$rootScope',
+     function($location, searchService, translationService, $filter, serverCallService, metadataService, $rootScope) {
         return {
             scope: {
                 queryIn: '=',
@@ -20,6 +20,8 @@ define(['app'], function(app)
                 init();
 
                 function init() {
+                	$scope.isEditPortforlioMode = $rootScope.isEditPortforlioMode;
+                	
                     // Detailed search fields
                     $scope.detailedSearch = {};
 
@@ -333,8 +335,17 @@ define(['app'], function(app)
                 
                 $scope.$watch(function() { return searchService.getTaxon() }, function(newTaxon, oldTaxon) {
                     if (newTaxon !== oldTaxon) {
-                        getTaxonById(newTaxon);
+                    	if(newTaxon == null) {
+                    		 $scope.detailedSearch.taxon = newTaxon;
+                    	}
+                    	else {
+                    		getTaxonById(newTaxon);
+                    	}
                     }
+                }, true);
+                
+                $scope.$watch(function() { return searchService.getTargetGroups() }, function(newGroups, oldGroups) {
+                	$scope.detailedSearch.targetGroups = newGroups;
                 }, true);
 
                 $scope.getEffectiveIssueDate = function() {

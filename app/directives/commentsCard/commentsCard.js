@@ -38,7 +38,7 @@ define(['app'], function(app)
                     }
                     
                     $scope.showMoreCommentsButton = function() {
-                        return getLeftCommentsCount() > COMMENTS_PER_PAGE;
+                        return getLeftCommentsCount() > 0;
                     }
                     
                     function getLeftCommentsCount() {
