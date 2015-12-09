@@ -341,6 +341,10 @@ define(['app'], function(app)
                     	}
                     }
                 }, true);
+                
+                $scope.$watch(function() { return searchService.getTargetGroups() }, function(newGroups, oldGroups) {
+                	$scope.detailedSearch.targetGroups = newGroups;
+                }, true);
 
                 $scope.getEffectiveIssueDate = function() {
                     if ($scope.detailedSearch.issueDate && $scope.detailedSearch.issueDate != $scope.issueDateFirstYear) {

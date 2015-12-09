@@ -11,6 +11,7 @@ define(['app'], function(app)
 				getPortfolio(getPortfolioSuccess, getPortfolioFail);
 				$rootScope.isEditPortforlioMode = true;
 				searchService.setTaxon(null);
+				searchService.setTargetGroups([]);
 			}
 
 			function getPortfolio(success, fail) {
@@ -26,6 +27,8 @@ define(['app'], function(app)
 	                
 	                var taxon = portfolio.taxon != null ? portfolio.taxon.id : null;
 	                searchService.setTaxon(taxon);
+    
+	                searchService.setTargetGroups(portfolio.targetGroups);
 	            }
 	    	}
 
