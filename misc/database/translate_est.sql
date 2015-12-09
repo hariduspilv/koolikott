@@ -273,10 +273,9 @@ insert into Translation(translationGroup, translationKey, translation) values (1
 
 -- Language name translations, more can be added using the same conventions for the translation key
 insert into Translation(translationGroup, translationKey, translation) values (1, 'LANGUAGE', 'Keel');
-insert into Translation(translationGroup, translationKey, translation) values (1, 'LANGUAGE_ESTONIAN', 'Eesti');
-insert into Translation(translationGroup, translationKey, translation) values (1, 'LANGUAGE_RUSSIAN', 'Vene');
-insert into Translation(translationGroup, translationKey, translation) values (1, 'LANGUAGE_ENGLISH', 'Inglise');
-insert into Translation(translationGroup, translationKey, translation) values (1, 'LANGUAGE_NORTHERN_SAMI', 'Põhjasaami');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'LANGUAGE_EST', 'Eesti');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'LANGUAGE_RUS', 'Vene');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'LANGUAGE_ENG', 'Inglise');
 
 -- Add Material translations
 insert into Translation(translationGroup, translationKey, translation) values (1, 'ADD_MATERIAL', 'Lisa materjal');
@@ -288,8 +287,10 @@ insert into Translation(translationGroup, translationKey, translation) values (1
 insert into Translation(translationGroup, translationKey, translation) values (1, 'MATERIAL_TITLE', 'Pealkiri');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'MATERIAL_DESCRIPTION', 'Kirjeldus');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'MATERIAL_PUBLISHER', 'Kirjastaja');
-insert into Translation(translationGroup, translationKey, translation) values (1, 'MATERIAL_AUTHOR', 'Autor');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'MATERIAL_AUTHOR_NAME', 'Autori eesnimi');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'MATERIAL_AUTHOR_SURNAME', 'Autori perenimi');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'MATERIAL_TAGS', 'Märksõnad');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'MATERIAL_HOW_TO_SAVE_TAG', '*Märksõna salvestamiseks vajuta enterit');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'MATERIAL_PHOTO', 'Materjali pilt');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'MATERIAL_PHOTO_UPLOAD_HELP', 'Lohista pilt siia või vali pilt arvutist vajutades siia');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'MATERIAL_PHOTO_PREVIEW', 'Eelvaade');

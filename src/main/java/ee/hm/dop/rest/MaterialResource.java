@@ -5,7 +5,9 @@ import static org.apache.commons.lang3.StringUtils.isBlank;
 import java.net.HttpURLConnection;
 import java.util.List;
 
+import javax.annotation.security.RolesAllowed;
 import javax.inject.Inject;
+import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -21,7 +23,7 @@ import ee.hm.dop.service.MaterialService;
 import ee.hm.dop.service.UserService;
 
 @Path("material")
-public class MaterialResource {
+public class MaterialResource extends BaseResource {
 
     @Inject
     private MaterialService materialService;
@@ -85,6 +87,15 @@ public class MaterialResource {
         }
 
         return materialService.getByCreator(creator);
+    }
+
+    @POST
+    @RolesAllowed("USER")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Material createMaterial(Material material) {
+        material = materialService.createMaterial(material, getLoggedInUser());
+        return material;
     }
 
     private void throwBadRequestException(String message) {

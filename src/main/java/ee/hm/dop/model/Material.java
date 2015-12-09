@@ -23,20 +23,21 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
+import javax.validation.constraints.NotNull;
 
 import org.hibernate.annotations.Formula;
 import org.hibernate.annotations.Type;
 import org.joda.time.DateTime;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 import ee.hm.dop.model.taxon.Taxon;
 import ee.hm.dop.rest.jackson.map.DateTimeDeserializer;
 import ee.hm.dop.rest.jackson.map.DateTimeSerializer;
-import ee.hm.dop.rest.jackson.map.LanguageDeserializer;
-import ee.hm.dop.rest.jackson.map.LanguageSerializer;
+import ee.hm.dop.rest.jackson.map.PictureDeserializer;
 
 @Entity
 @Table(uniqueConstraints = { @UniqueConstraint(columnNames = { "repositoryIdentifier", "repository" }) })
@@ -46,6 +47,7 @@ public class Material implements Searchable {
     @GeneratedValue
     private Long id;
 
+    @NotNull
     @ManyToMany(fetch = EAGER, cascade = { PERSIST, MERGE })
     @JoinTable(
             name = "Material_Title",
@@ -128,7 +130,6 @@ public class Material implements Searchable {
     private List<Tag> tags;
 
     @Lob
-    @JsonIgnore
     private byte[] picture;
 
     @Formula("picture is not null")
@@ -226,12 +227,10 @@ public class Material implements Searchable {
         this.descriptions = descriptions;
     }
 
-    @JsonSerialize(using = LanguageSerializer.class)
     public Language getLanguage() {
         return language;
     }
 
-    @JsonDeserialize(using = LanguageDeserializer.class)
     public void setLanguage(Language language) {
         this.language = language;
     }
@@ -312,10 +311,13 @@ public class Material implements Searchable {
         this.tags = tags;
     }
 
+    @JsonIgnore
     public byte[] getPicture() {
         return picture;
     }
 
+    @JsonProperty
+    @JsonDeserialize(using = PictureDeserializer.class)
     public void setPicture(byte[] picture) {
         this.picture = picture;
     }

@@ -13,12 +13,6 @@ import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-
-import ee.hm.dop.rest.jackson.map.LanguageDeserializer;
-import ee.hm.dop.rest.jackson.map.LanguageSerializer;
-
 /**
  * Created by mart.laus on 10.06.2015.
  */
@@ -43,12 +37,10 @@ public class LanguageString {
         this.id = id;
     }
 
-    @JsonSerialize(using = LanguageSerializer.class)
     public Language getLanguage() {
         return language;
     }
 
-    @JsonDeserialize(using = LanguageDeserializer.class)
     public void setLanguage(Language language) {
         this.language = language;
     }

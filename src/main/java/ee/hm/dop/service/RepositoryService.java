@@ -117,7 +117,7 @@ public class RepositoryService {
         if (existentMaterial != null) {
             updateMaterial(material, existentMaterial);
         } else if (!material.isDeleted()) {
-            materialService.createMaterial(material);
+            materialService.createMaterial(material, null);
         }
     }
 
