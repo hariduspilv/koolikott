@@ -69,6 +69,10 @@ define(['app'], function(app)
                 params.issuedFrom = searchService.getIssuedFrom();
             }
 
+            if (searchService.getCrossCurricularTheme()) {
+                params.crossCurricularTheme = searchService.getCrossCurricularTheme();
+            }
+
             serverCallService.makeGet("rest/search", params, searchSuccess, searchFail);
         }
 

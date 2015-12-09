@@ -10,6 +10,7 @@ define(['app'], function(app) {
         var resourceTypeURL = "&resourceType=";
         var isSpecialEducationURL = "&specialEducation=";
         var issuedFromURL = "&issuedFrom=";
+        var crossCurricularThemeURL = "&crossCurricularTheme=";
 
         var searchQuery = "";
         var searchTaxon = "";
@@ -20,6 +21,7 @@ define(['app'], function(app) {
         var searchResourceType = "";
         var searchIsSpecialEducation = "";
         var searchIssuedFrom = "";
+        var searchCrossCurricularTheme = "";
 
         function escapeQuery(query) {
             //replace backslashes
@@ -106,6 +108,10 @@ define(['app'], function(app) {
                 searchIssuedFrom = issuedFrom;
             },
 
+            setCrossCurricularTheme : function(crossCurricularTheme) {
+                searchCrossCurricularTheme = crossCurricularTheme;
+            },
+
             getURL : function() {
                 var searchURL;
                 if (searchQuery) {
@@ -140,6 +146,9 @@ define(['app'], function(app) {
                 if (searchIssuedFrom) {
                     searchURL += issuedFromURL + searchIssuedFrom;
                 }
+                if (searchCrossCurricularTheme) {
+                    searchURL += crossCurricularThemeURL + searchCrossCurricularTheme;
+                }
 
                 return searchURL;
             },
@@ -148,7 +157,7 @@ define(['app'], function(app) {
                 var searchObject = $location.search();
                 if (searchObject.q || searchObject.taxon || searchObject.paid === false ||
                     (searchObject.type && this.isValidType(searchObject.type)) || searchObject.language || searchObject.targetGroup ||
-                    searchObject.resourceType || searchObject.specialEducation || searchObject.issuedFrom) {
+                    searchObject.resourceType || searchObject.specialEducation || searchObject.issuedFrom || searchObject.crossCurricularTheme) {
                     return true;
                 } else {
                     return false;
@@ -254,6 +263,17 @@ define(['app'], function(app) {
                 return searchIssuedFrom;
             },
 
+            getCrossCurricularTheme : function() {
+                if (searchCrossCurricularTheme === "") {
+                    var searchObject = $location.search();
+                    if (searchObject.crossCurricularTheme) {
+                        return searchObject.crossCurricularTheme;
+                    }
+                }
+
+                return searchCrossCurricularTheme;
+            },
+
             clearFieldsNotInSimpleSearch : function() {
                 searchTaxon = '';
                 searchPaid = '';
@@ -263,6 +283,7 @@ define(['app'], function(app) {
                 searchResourceType = '';
                 searchIsSpecialEducation = '';
                 searchIssuedFrom = '';
+                searchCrossCurricularTheme = '';
             },
 
             isValidType : function(type) {
