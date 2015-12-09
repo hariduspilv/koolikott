@@ -37,10 +37,8 @@
                         <span data-translate="DETAIL_VIEW_SUBJECT"></span>
                       </small>
                       <br />
-                      <span data-ng-bind="subject"></span>
                       <span data-ng-repeat="subject in material.subjects">
-                        <span data-translate="{{'SUBJECT_' + subject.name.toUpperCase()}}"></span>
-                      <span data-ng-bind="$index < material.subjects.length - 1 ? ', ' : ''"></span>
+                        {{'SUBJECT_' + subject.name.toUpperCase() | translate}}{{$last ? '' : ', '}}
                       </span>
                       <span data-ng-if="!material.subjects.length" data-translate="UNKNOWN">Unknown</span>
                     </p>
@@ -52,8 +50,7 @@
                       </small>
                       <br>
                       <span data-ng-repeat="resourceType in material.resourceTypes">
-                        <span data-translate="{{resourceType.name.toUpperCase()}}"></span>
-                      <span data-ng-bind="$index < material.resourceTypes.length - 1 ? ', ' : ''"></span>
+                        {{resourceType.name.toUpperCase() | translate}}{{$last ? '' : ', '}}
                       </span>
                       <span data-ng-if="isNullOrZeroLength(material.resourceTypes)" data-translate="UNKNOWN">Unknown</span>
                     </p>
@@ -65,8 +62,7 @@
                       </small>
                       <br>
                       <span data-ng-repeat="educationalContext in material.educationalContexts">
-                        <span data-translate="{{educationalContext.name.toUpperCase()}}"></span>
-                      <span data-ng-bind="$index < material.educationalContexts.length - 1 ? ', ' : ''"></span>
+                        {{educationalContext.name.toUpperCase() | translate}}{{$last ? '' : ', '}}
                       </span>
                       <span data-ng-if="isNullOrZeroLength(material.educationalContexts)" data-translate="UNKNOWN">Unknown</span>
                     </p>
@@ -76,17 +72,15 @@
 
                 <md-divider class="md-default-theme"></md-divider>
 
-                <div layout="column" class="on-left">
+                <div layout="column" class="on-left" flex>
                   <p class="md-body-1 description" data-ng-bind="getCorrectLanguageString(material.descriptions)"></p>
                   <!-- TODO: you have to warn before you download something or send into external view -->
                   <!-- TODO: don't show if TEADMATA or undefined. Hide the headline as well, please -->
                   <!-- TODO: date created cant be undefined. It has been created in one day.-->
                   <!-- TODO: remove the link properly. I didn't dare to delete it - you might need something from there-->
-                  <!-- TODO: why 2 lisence types?-->
                   <!-- TODO: img display instead icon if we have image -->
                   <!-- TODO: mobile view after stable release -->
                   <!-- TODO: I think this fullscreen is a really bad idea -->
-                  <!-- TODO: materialId=11112 the fonts on the right side display false. The Sammalhabe. Can't find the reason-->
 
 
                   <!-- TODO: NEEDS FIXING AFTER STYLE -->
@@ -133,10 +127,7 @@
                       <span data-translate="DETAIL_VIEW_TAGS"></span>:
                     </small>
                     <br>
-                    <a href="#" data-ng-repeat="tag in material.tags">
-                      {{tag}}
-                      <span data-ng-bind="$index < material.tags.length - 1 ? ', ' : ''"></span>
-                    </a>
+                    <a href="#" data-ng-repeat="tag in material.tags">{{tag}}{{$last ? '' : ', '}}</a>
                   </p>
                 </div>
               </div>
@@ -156,42 +147,41 @@
                     <small class="md-caption">
                     <span data-translate="AUTHORS"></span>:
                   </small>
-                    <span data-ng-repeat="author in material.authors" class="item">
-                    <a data-ng-click="getAuthorSearchURL(author.name, author.surname)">
-                      <span data-ng-bind="author.name"></span>
-                    <span data-ng-bind="author.surname"></span>
+                    <a href="#" data-ng-click="getAuthorSearchURL(author.name, author.surname)" data-ng-repeat="author in material.authors">
+                        {{author.name}} {{author.surname}}{{$last ? '' : ', '}}
                     </a>
-                    </span>
                   </p>
 
                   <p class="md-body-2 meta" data-ng-if="material.updated">
                     <small class="md-caption">
-                    <span data-translate="UPDATED"></span>:
-                  </small> {{formatMaterialUpdatedDate(material.updated)}}
+                      <span data-translate="UPDATED"></span>:
+                    </small> 
+                    {{formatMaterialUpdatedDate(material.updated)}}
                   </p>
+                  
                   <p class="md-body-2 meta">
                     <small class="md-caption">
-                    <span data-translate="CREATED"></span>:
-                  </small>
+                      <span data-translate="CREATED"></span>:
+                    </small>
 
                     <span data-ng-if="material.issueDate.year >= 100">
-                    {{formatMaterialIssueDate(material.issueDate)}}
-                  </span>
-                    <span data-ng-if="material.issueDate.year > 0 && material.issueDate.year < 100">
-                    {{formatMaterialIssueDate(material.issueDate)}} AD
-                  </span>
-                    <span data-ng-if="material.issueDate.year < 0">
-                    {{formatMaterialIssueDate(material.issueDate)}} BC
-                  </span>
+                      {{formatMaterialIssueDate(material.issueDate)}}
+                    </span>
+                      <span data-ng-if="material.issueDate.year > 0 && material.issueDate.year < 100">
+                      {{formatMaterialIssueDate(material.issueDate)}} AD
+                    </span>
+                      <span data-ng-if="material.issueDate.year < 0">
+                      {{formatMaterialIssueDate(material.issueDate)}} BC
+                    </span>
                     <span data-ng-if="!material.issueDate.year">
-                    <span data-translate="UNKNOWN"></span>
+                      <span data-translate="UNKNOWN"></span>
                     </span>
                   </p>
 
                   <p class="md-body-2 meta">
                     <small class="md-caption">
-                    <span data-translate="MATERIAL_VIEW_LICENSE_TYPE">License type</span>:
-                  </small>
+                      <span data-translate="MATERIAL_VIEW_LICENSE_TYPE"></span>:
+                    </small>
                     <br>
                     <span data-ng-if="material.licenseType" data-translate="LICENSETYPE_{{material.licenseType.name.toUpperCase()}}"></span>
                     <span data-ng-if="!material.licenseType" data-translate="LICENSETYPE_ALLRIGHTSRESERVED"></span>
@@ -199,28 +189,21 @@
 
                   <p class="md-body-2 meta" data-ng-if="material.publishers">
                     <small class="md-caption">
-                    <span data-translate="MATERIAL_VIEW_LICENSE_TYPE">License type</span>:
-                    <div data-ng-if="material.publishers && material.publishers.length === 1">
-                      <span data-translate="PUBLISHER">Publisher:</span>
-                    </div>
-                    <div data-ng-if="material.publishers && material.publishers.length > 1">
-                      <span data-translate="PUBLISHERS">Publishers:</span>
-                    </div>
-                  </small>
+                      <span data-ng-if="material.publishers && material.publishers.length === 1" data-translate="PUBLISHER"></span>
+                      <span data-ng-if="material.publishers && material.publishers.length > 1" data-translate="PUBLISHERS"></span>
+                    </small>
                     <br>
-                    <div data-ng-repeat="publisher in material.publishers">
-                      <span data-ng-bind="publisher.name"></span>
-                    </div>
+                    <span data-ng-repeat="publisher in material.publishers" data-ng-bind="publisher.name"></span>
                   </p>
 
                   <p class="md-body-2 meta" data-ng-if="material.paid">
-                    <span data-translate="MATERIAL_PAID">Paid</span>
+                    <span data-translate="MATERIAL_PAID"></span>
                   </p>
 
                   <p class="md-body-2 meta">
                     <small class="md-caption">
-                    Vaadatud
-                  </small>
+                      Vaadatud
+                    </small>
                     <span data-ng-bind="material.views"></span> x
                   </p>
                 </md-content>
