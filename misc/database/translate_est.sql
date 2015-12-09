@@ -121,6 +121,7 @@ insert into Translation(translationGroup, translationKey, translation) values (1
 insert into Translation(translationGroup, translationKey, translation) values (1, 'DETAILED_SEARCH_ISSUE_DATE_OR_LATER', ' või hiljem.');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'DETAILED_SEARCH_CROSS_CURRICULAR_THEME', 'Läbivad teemad');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'DETAILED_SEARCH_KEY_COMPETENCE', 'Üldpädevused');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'DETAILED_SEARCH_SPECIAL_EDUCATIONAL_NEED', 'Hariduslik erivajadus');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'ADD_PORTFOLIO', 'Lisa kogumik');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'EDIT_PORTFOLIO', 'Muuda kogumikku');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'PORTFOLIO_TITLE', 'Pealkiri');
