@@ -99,10 +99,7 @@ define(['app'], function(app)
             	}
             	
             	function buildTaxonPath() {
-            		if (!$scope.taxonPath) {
-            			$scope.taxonPath = {}
-            		}
-            		
+            		$scope.taxonPath = {};
         			$scope.taxonPath.educationalContext = $rootScope.taxonUtils.getEducationalContext($scope.taxon);
         			$scope.taxonPath.domain = $rootScope.taxonUtils.getDomain($scope.taxon);
         			$scope.taxonPath.subject = $rootScope.taxonUtils.getSubject($scope.taxon);

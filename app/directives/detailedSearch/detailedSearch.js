@@ -333,7 +333,12 @@ define(['app'], function(app)
                 
                 $scope.$watch(function() { return searchService.getTaxon() }, function(newTaxon, oldTaxon) {
                     if (newTaxon !== oldTaxon) {
-                        getTaxonById(newTaxon);
+                    	if(newTaxon == null) {
+                    		 $scope.detailedSearch.taxon = newTaxon;
+                    	}
+                    	else {
+                    		getTaxonById(newTaxon);
+                    	}
                     }
                 }, true);
 
