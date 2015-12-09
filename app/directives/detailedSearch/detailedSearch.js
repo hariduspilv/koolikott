@@ -77,6 +77,9 @@ define(['app'], function(app)
                     if (crossCurricularTheme) {
                         $scope.detailedSearch.crossCurricularTheme = crossCurricularTheme;
                     }
+
+                    // Key competences
+                    metadataService.loadKeyCompetences(setKeyCompetences);
                 }
 
                 function getTaxonById(taxonId) {
@@ -342,6 +345,10 @@ define(['app'], function(app)
 
                 function setCrossCurricularThemes(crossCurricularThemes) {
                     $scope.crossCurricularThemes = crossCurricularThemes;
+                }
+
+                function setKeyCompetences(keyCompetences) {
+                    $scope.keyCompetences = keyCompetences;
                 }
 
             }

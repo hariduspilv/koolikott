@@ -47,6 +47,15 @@
       </md-select>
     </md-input-container>
 
+    <md-input-container flex data-ng-if="detailedSearch.educationalContext.id === 2">
+      <label data-translate="DETAILED_SEARCH_KEY_COMPETENCE"></label>
+      <md-select data-ng-model="detailedSearch.keyCompetence">
+        <md-option data-ng-repeat="keyCompetence in keyCompetences" value="{{keyCompetence.id}}">
+          <span data-translate="KEY_COMPETENCE_{{keyCompetence.name.toUpperCase()}}"></span>
+        </md-option>
+      </md-select>
+    </md-input-container>
+
     <div layout="column" layout-align="end start" layout-fill>
       <md-checkbox data-ng-if="detailedSearch.educationalContext.id === 2" data-ng-model="detailedSearch.CLIL" aria-label="{{'DETAILED_SEARCH_CLIL' | translate}}" class="md-primary" flex>
         <span data-translate="DETAILED_SEARCH_CLIL"></span>
