@@ -261,10 +261,9 @@ insert into Translation(translationGroup, translationKey, translation) values (2
 
 -- Language name translations, more can be added using the same conventions for the translation key
 insert into Translation(translationGroup, translationKey, translation) values (2, 'LANGUAGE', 'язык');
-insert into Translation(translationGroup, translationKey, translation) values (2, 'LANGUAGE_ESTONIAN', 'Эстонский');
-insert into Translation(translationGroup, translationKey, translation) values (2, 'LANGUAGE_RUSSIAN', 'Русский');
-insert into Translation(translationGroup, translationKey, translation) values (2, 'LANGUAGE_ENGLISH', 'Английский');
-insert into Translation(translationGroup, translationKey, translation) values (2, 'LANGUAGE_NORTHERN_SAMI', 'Северная Сами');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'LANGUAGE_EST', 'Эстонский');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'LANGUAGE_RUS', 'Русский');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'LANGUAGE_ENG', 'Английский');
 
 -- Add Material translations
 insert into Translation(translationGroup, translationKey, translation) values (2, 'ADD_MATERIAL', 'Добавить материал');
@@ -276,8 +275,10 @@ insert into Translation(translationGroup, translationKey, translation) values (2
 insert into Translation(translationGroup, translationKey, translation) values (2, 'MATERIAL_TITLE', 'заглавие');
 insert into Translation(translationGroup, translationKey, translation) values (2, 'MATERIAL_DESCRIPTION', 'Описание');
 insert into Translation(translationGroup, translationKey, translation) values (2, 'MATERIAL_PUBLISHER', 'издатель');
-insert into Translation(translationGroup, translationKey, translation) values (2, 'MATERIAL_AUTHOR', 'Aвтор');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'MATERIAL_AUTHOR_NAME', 'Aвтор имя');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'MATERIAL_AUTHOR_SURNAME', 'Aвтор Фамилия');
 insert into Translation(translationGroup, translationKey, translation) values (2, 'MATERIAL_TAGS', 'Ключевые слова');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'MATERIAL_HOW_TO_SAVE_TAG', 'Нажмите клавишу Enter, чтобы сохранить метку');
 insert into Translation(translationGroup, translationKey, translation) values (2, 'MATERIAL_PHOTO', 'Материал картина');
 insert into Translation(translationGroup, translationKey, translation) values (2, 'MATERIAL_PHOTO_UPLOAD_HELP', 'Перетащите картина здесь или выберите из компьютера');
 insert into Translation(translationGroup, translationKey, translation) values (2, 'MATERIAL_PHOTO_PREVIEW', 'предварительный просмотр');

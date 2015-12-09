@@ -465,7 +465,7 @@ public class MaterialDAOTest extends DatabaseTestBase {
         Material originalMaterial = materialDAO.findById(1);
 
         LicenseType newLicenseType = new LicenseType();
-        newLicenseType.setName("NewEducationalContext");
+        newLicenseType.setName("NewLicenseTypeTpFail");
         originalMaterial.setLicenseType(newLicenseType);
 
         try {

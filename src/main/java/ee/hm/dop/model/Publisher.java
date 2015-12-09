@@ -18,7 +18,7 @@ public class Publisher {
     @Column(unique = true, nullable = false)
     private String name;
 
-    @Column(unique = true, nullable = false)
+    @Column(unique = true)
     private String website;
 
     public Long getId() {

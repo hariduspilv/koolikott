@@ -245,13 +245,13 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
         assertEquals("Test description in estonian. (Russian available)", material.getDescriptions().get(0).getText());
         Language descriptionLanguage = material.getDescriptions().get(0).getLanguage();
         assertEquals("est", descriptionLanguage.getCode());
-        assertNull(descriptionLanguage.getName());
-        assertNull(descriptionLanguage.getCodes());
+        assertNotNull(descriptionLanguage.getName());
+        assertNotNull(descriptionLanguage.getCodes());
         Language language = material.getLanguage();
         assertNotNull(language);
         assertEquals("est", language.getCode());
-        assertNull(language.getName());
-        assertNull(language.getCodes());
+        assertEquals("Estonian", language.getName());
+        assertNotNull(language.getCodes());
         assertNull(material.getPicture());
         assertNotNull(material.getTaxons());
         assertEquals(2, material.getTaxons().size());
