@@ -6,10 +6,16 @@
           <md-icon md-menu-origin>more_vert</md-icon>
         </md-button>
         <md-menu-content width="4">
-          <md-menu-item data-ng-if="showEditButton">
-            <md-button data-ng-click="showEditPortfolioDialog()">
+          <md-menu-item data-ng-if="showRedirectButton">
+            <md-button data-ng-click="redirectToEditMode()">
               <md-icon md-menu-align-target>edit</md-icon>
               <span data-translate="EDIT_PORTFOLIO"></span>
+            </md-button>
+          </md-menu-item>
+          <md-menu-item data-ng-if="showEditButton">
+            <md-button data-ng-click="showEditMetadataoDialog()">
+              <md-icon md-menu-align-target>edit</md-icon>
+              <span data-translate="PORTFOLIO_EDIT_METADATA"></span>
             </md-button>
           </md-menu-item>
           <md-menu-item data-ng-if="isViewPortforlioPage" dop-copy-permalink></md-menu-item>
