@@ -86,7 +86,9 @@
                   <!-- TODO: NEEDS FIXING AFTER STYLE -->
                   <p>
                     <div data-ng-if="sourceType === 'YOUTUBE'" class="embed-responsive embed-responsive-16by9">
-                      <youtube-video video-url="material.source" player-width="'768'" player-height="'432'" class="embed-responsive-item"></youtube-video>
+                      <div class="video-container">
+                        <youtube-video video-url="material.source" player-width="'768'" player-height="'432'" class="embed-responsive-item"></youtube-video>
+                      </div>
                     </div>
 
                     <div data-ng-if="sourceType === 'SLIDESHARE'" class="embed-responsive embed-responsive-4by3">
