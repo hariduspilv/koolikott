@@ -77,6 +77,10 @@ define(['app'], function(app)
 
                     // Cross-curricular themes
                     metadataService.loadCrossCurricularThemes(setCrossCurricularThemes);
+                    var crossCurricularTheme = searchService.getCrossCurricularTheme();
+                    if (crossCurricularTheme) {
+                        $scope.detailedSearch.crossCurricularTheme = crossCurricularTheme;
+                    }
                 }
 
                 $scope.search = function() {
@@ -90,6 +94,7 @@ define(['app'], function(app)
                     addOnlyBooksCheckboxToSearch();
                     addSpecialEducationCheckboxToSearch();
                     addIssueDateToSearch();
+                    addCrossCurricularThemeToSearch();
 
                     $location.url(searchService.getURL());
                 };
@@ -140,6 +145,14 @@ define(['app'], function(app)
                         searchService.setIssuedFrom(effectiveIssueDate);
                     } else {
                         searchService.setIssuedFrom(null);
+                    }
+                }
+
+                function addCrossCurricularThemeToSearch() {
+                    if ($scope.detailedSearch.crossCurricularTheme) {
+                        searchService.setCrossCurricularTheme($scope.detailedSearch.crossCurricularTheme);
+                    } else {
+                        searchService.setCrossCurricularTheme(null);
                     }
                 }
 
@@ -296,6 +309,11 @@ define(['app'], function(app)
                     // Special education checkbox
                     if (!educationalContext || educationalContext.id != BASIC_EDUCATION_ID) {
                         $scope.detailedSearch.specialEducation = false;
+                    }
+
+                    // Cross-curricular themes
+                    if (!educationalContext || (educationalContext.id != BASIC_EDUCATION_ID && educationalContext.id != SECONDARY_EDUCATION_ID)) {
+                        $scope.detailedSearch.crossCurricularTheme = null;
                     }
                 }
 
