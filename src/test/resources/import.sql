@@ -278,6 +278,10 @@ insert into Publisher(id, name, website) values (3, 'Varrak', 'http://www.varrak
 insert into CrossCurricularTheme(id, name) values (1, 'Lifelong_learning_and_career_planning');
 insert into CrossCurricularTheme(id, name) values (2, 'Environment_and_sustainable_development');
 
+-- Key competences
+insert into KeyCompetence(id, name) values (1, 'Cultural_and_value_competence');
+insert into KeyCompetence(id, name) values (2, 'Social_and_citizenship_competence');
+
 -- Material Cross-curricular themes
 insert into Material_CrossCurricularTheme(material, crossCurricularTheme) values (1, 1);
 

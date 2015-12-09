@@ -120,6 +120,7 @@ insert into Translation(translationGroup, translationKey, translation) values (1
 insert into Translation(translationGroup, translationKey, translation) values (1, 'DETAILED_SEARCH_ISSUE_DATE_FROM', 'Antud välja ');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'DETAILED_SEARCH_ISSUE_DATE_OR_LATER', ' või hiljem.');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'DETAILED_SEARCH_CROSS_CURRICULAR_THEME', 'Läbivad teemad');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'DETAILED_SEARCH_KEY_COMPETENCE', 'Üldpädevused');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'ADD_PORTFOLIO', 'Lisa kogumik');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'EDIT_PORTFOLIO', 'Muuda kogumikku');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'PORTFOLIO_TITLE', 'Pealkiri');
@@ -223,6 +224,16 @@ insert into Translation(translationGroup, translationKey, translation) values (1
 insert into Translation(translationGroup, translationKey, translation) values (1, 'CROSS_CURRICULAR_THEME_TECHNOLOGY_AND_INNOVATION', 'Tehnoloogia ja innovatsioon');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'CROSS_CURRICULAR_THEME_HEALTH_AND_SAFETY', 'Tervis ja ohutus');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'CROSS_CURRICULAR_THEME_VALUES_AND_MORAL', 'Väärtused ja moraal');
+
+-- Key compentences translations
+insert into Translation(translationGroup, translationKey, translation) values (1, 'KEY_COMPETENCE_CULTURAL_AND_VALUE_COMPETENCE', 'Kultuuri- ja väärtuste pädevus');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'KEY_COMPETENCE_SOCIAL_AND_CITIZENSHIP_COMPETENCE', 'Sotsiaal- ja kodakondsuse pädevus');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'KEY_COMPETENCE_SELF_MANAGEMENT_COMPETENCE', 'Enesejuhtimise pädevus');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'KEY_COMPETENCE_LEARNING_TO_LEARN_COMPETENCE', 'Õpipädevus');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'KEY_COMPETENCE_COMMUNICATION_COMPETENCE', 'Suhtluspädevus');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'KEY_COMPETENCE_MATHEMATICS_NATURAL_SCIENCES_AND_TECHNOLOGY_COMPETENCE', 'Matemaatika-, loodusteaduste- ja tehnoloogiapädevus');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'KEY_COMPETENCE_ENTREPRENEURSHIP_COMPETENCE', 'Ettevõtluspädevus');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'KEY_COMPETENCE_DIGITAL_COMPETENCE', 'Infotehnoloogiline pädevus');
 
 -- Edit portfolio
 insert into Translation(translationGroup, translationKey, translation) values (1, 'PORTFOLIO_ENTER_CHAPTER_TITLE', 'Sisesta peatüki pealkiri');

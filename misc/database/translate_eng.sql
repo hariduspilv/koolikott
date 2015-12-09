@@ -120,6 +120,7 @@ insert into Translation(translationGroup, translationKey, translation) values (3
 insert into Translation(translationGroup, translationKey, translation) values (3, 'DETAILED_SEARCH_ISSUE_DATE_FROM', 'Issued from ');
 insert into Translation(translationGroup, translationKey, translation) values (3, 'DETAILED_SEARCH_ISSUE_DATE_OR_LATER', ' or later.');
 insert into Translation(translationGroup, translationKey, translation) values (3, 'DETAILED_SEARCH_CROSS_CURRICULAR_THEME', 'Cross-curricular theme');
+insert into Translation(translationGroup, translationKey, translation) values (3, 'DETAILED_SEARCH_KEY_COMPETENCE', 'Key competence');
 insert into Translation(translationGroup, translationKey, translation) values (3, 'ADD_PORTFOLIO', 'Add Portfolio');
 insert into Translation(translationGroup, translationKey, translation) values (3, 'EDIT_PORTFOLIO', 'Edit portfolio');
 insert into Translation(translationGroup, translationKey, translation) values (3, 'PORTFOLIO_TITLE', 'Title');
@@ -275,6 +276,16 @@ insert into Translation(translationGroup, translationKey, translation) values (3
 insert into Translation(translationGroup, translationKey, translation) values (3, 'CROSS_CURRICULAR_THEME_TECHNOLOGY_AND_INNOVATION', 'Technology and innovation');
 insert into Translation(translationGroup, translationKey, translation) values (3, 'CROSS_CURRICULAR_THEME_HEALTH_AND_SAFETY', 'Health and safety');
 insert into Translation(translationGroup, translationKey, translation) values (3, 'CROSS_CURRICULAR_THEME_VALUES_AND_MORAL', 'Values and moral');
+
+-- Key competences translations
+insert into Translation(translationGroup, translationKey, translation) values (3, 'KEY_COMPETENCE_CULTURAL_AND_VALUE_COMPETENCE', 'Cultural and value competence');
+insert into Translation(translationGroup, translationKey, translation) values (3, 'KEY_COMPETENCE_SOCIAL_AND_CITIZENSHIP_COMPETENCE', 'Social and citizenship competence');
+insert into Translation(translationGroup, translationKey, translation) values (3, 'KEY_COMPETENCE_SELF_MANAGEMENT_COMPETENCE', 'Self-management competence');
+insert into Translation(translationGroup, translationKey, translation) values (3, 'KEY_COMPETENCE_LEARNING_TO_LEARN_COMPETENCE', 'Learning to learn competence');
+insert into Translation(translationGroup, translationKey, translation) values (3, 'KEY_COMPETENCE_COMMUNICATION_COMPETENCE', 'Communication competence');
+insert into Translation(translationGroup, translationKey, translation) values (3, 'KEY_COMPETENCE_MATHEMATICS_NATURAL_SCIENCES_AND_TECHNOLOGY_COMPETENCE', 'Mathematics, natural sciences and technology competence');
+insert into Translation(translationGroup, translationKey, translation) values (3, 'KEY_COMPETENCE_ENTREPRENEURSHIP_COMPETENCE', 'Entrepreneurship competence');
+insert into Translation(translationGroup, translationKey, translation) values (3, 'KEY_COMPETENCE_DIGITAL_COMPETENCE', 'Digital competence');
 
 -- Language name translations, more can be added using the same conventions for the translation key
 insert into Translation(translationGroup, translationKey, translation) values (3, 'LANGUAGE', 'Language');
