@@ -199,6 +199,9 @@ define(['app'], function(app)
                     if ($scope.detailedSearch.CLIL === true && $scope.detailedSearch.educationalContext.id === 2) {
                         return 'LAK "Lõimitud aine- ja keeleõpe"';
                     }
+                    if ($scope.detailedSearch.specialEducationalNeed === true && $scope.detailedSearch.educationalContext.id === 4) {
+                        return 'HEV "Hariduslik erivajadus"';
+                    }
                     return '';
                 }
 
@@ -227,6 +230,7 @@ define(['app'], function(app)
                         var descriptionRegex = /(^|\s)(description:([^\s\"]\S*)|description:\"(.*?)\"|description:|summary:([^\s\"]\S*)|summary:\"(.*?)\"|summary:)/g;
                         var authorRegex = /(^|\s)(author:([^\s\"]\S*)|author:\"(.*?)\"|author:)/g;
                         var clilRegex = /(^|\s)(LAK|"Lõimitud aine- ja keeleõpe")(?=\s|$)/g;
+                        var specialEducationalNeedRegex = /(^|\s)(HEV|"Hariduslik erivajadus")(?=\s|$)/g;
 
                         var firstTitle;
                         var firstDescription;
@@ -260,6 +264,11 @@ define(['app'], function(app)
                         while(keyword = clilRegex.exec(query)) {
                             main = main.replace(keyword[2], '');
                             $scope.detailedSearch.CLIL = true;
+                        }
+
+                        while(keyword = specialEducationalNeedRegex.exec(query)) {
+                            main = main.replace(keyword[2], '');
+                            $scope.detailedSearch.specialEducationalNeed = true;
                         }
 
                         $scope.detailedSearch.main = removeExtraWhitespace(main).trim();
