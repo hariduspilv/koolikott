@@ -267,6 +267,7 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
         assertTrue(material.getTargetGroups().contains(TargetGroup.SIX_SEVEN));
         assertTrue(material.isSpecialEducation());
         assertEquals("Lifelong_learning_and_career_planning", material.getCrossCurricularThemes().get(0).getName());
+        assertEquals("Cultural_and_value_competence", material.getKeyCompetences().get(0).getName());
     }
 
     private Material getMaterial(long materialId) {

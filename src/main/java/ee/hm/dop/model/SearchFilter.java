@@ -24,6 +24,8 @@ public class SearchFilter {
 
     private CrossCurricularTheme crossCurricularTheme;
 
+    private KeyCompetence keyCompetence;
+
     public Taxon getTaxon() {
         return taxon;
     }
@@ -94,6 +96,14 @@ public class SearchFilter {
 
     public void setCrossCurricularTheme(CrossCurricularTheme crossCurricularTheme) {
         this.crossCurricularTheme = crossCurricularTheme;
+    }
+
+    public KeyCompetence getKeyCompetence() {
+        return keyCompetence;
+    }
+
+    public void setKeyCompetence(KeyCompetence keyCompetence) {
+        this.keyCompetence = keyCompetence;
     }
 
 }

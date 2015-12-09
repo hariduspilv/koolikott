@@ -21,6 +21,7 @@ import org.junit.runner.RunWith;
 import ee.hm.dop.dao.MaterialDAO;
 import ee.hm.dop.dao.PortfolioDAO;
 import ee.hm.dop.model.CrossCurricularTheme;
+import ee.hm.dop.model.KeyCompetence;
 import ee.hm.dop.model.Language;
 import ee.hm.dop.model.Material;
 import ee.hm.dop.model.Portfolio;
@@ -771,10 +772,16 @@ public class SearchServiceTest {
         crossCurricularTheme.setName("test_theme");
         searchFilter.setCrossCurricularTheme(crossCurricularTheme);
 
+        KeyCompetence keyCompetence = new KeyCompetence();
+        keyCompetence.setId(1L);
+        keyCompetence.setName("test_competence");
+        searchFilter.setKeyCompetence(keyCompetence);
+
         String tokenizedQuery = "(pythagoras*) AND topic:\"cool_topic\" AND subject:\"cool_subject\""
                 + " AND domain:\"cool_domain\" AND educational_context:\"preschool\""
                 + " AND (paid:\"false\" OR type:\"portfolio\") AND type:\"material\" AND resource_type:\"extrabook\""
-                + " AND special_education:\"true\" AND cross_curricular_theme:\"test_theme\"";
+                + " AND special_education:\"true\" AND cross_curricular_theme:\"test_theme\""
+                + " AND key_competence:\"test_competence\"";
         long start = 0;
 
         List<Searchable> searchables = Arrays.asList(createMaterial(9L), createMaterial(2L), createPortfolio(2L));
@@ -861,6 +868,22 @@ public class SearchServiceTest {
         crossCurricularTheme.setName("test_theme");
         searchFilter.setCrossCurricularTheme(crossCurricularTheme);
         String tokenizedQuery = "(test*) AND cross_curricular_theme:\"test_theme\"";
+        long start = 0;
+
+        List<Searchable> searchables = Arrays.asList(createMaterial(9L), createMaterial(2L), createPortfolio(2L));
+
+        testSearch(query, tokenizedQuery, searchables, start, searchFilter);
+    }
+
+    @Test
+    public void searchWithKeyCompetence() {
+        String query = "test";
+        SearchFilter searchFilter = new SearchFilter();
+        KeyCompetence keyCompetence = new KeyCompetence();
+        keyCompetence.setId(1L);
+        keyCompetence.setName("test_competence");
+        searchFilter.setKeyCompetence(keyCompetence);
+        String tokenizedQuery = "(test*) AND key_competence:\"test_competence\"";
         long start = 0;
 
         List<Searchable> searchables = Arrays.asList(createMaterial(9L), createMaterial(2L), createPortfolio(2L));

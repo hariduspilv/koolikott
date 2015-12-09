@@ -285,6 +285,9 @@ insert into KeyCompetence(id, name) values (2, 'Social_and_citizenship_competenc
 -- Material Cross-curricular themes
 insert into Material_CrossCurricularTheme(material, crossCurricularTheme) values (1, 1);
 
+-- Material Key competences
+insert into Material_KeyCompetence(material, keyCompetence) values (1, 1);
+
 -- MaterialPublisher
 
 insert into Material_Publisher(material, publisher) values (1, 1);
@@ -392,3 +395,6 @@ insert into Portfolio_TargetGroup(portfolio, targetGroup) values (1, 'ZERO_FIVE'
 
 -- Portfolio Cross-curricular themes
 insert into Portfolio_CrossCurricularTheme(portfolio, crossCurricularTheme) values (1, 1);
+
+-- Portfolio Key competences
+insert into Portfolio_KeyCompetence(portfolio, keyCompetence) values (1, 1);

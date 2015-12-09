@@ -137,6 +137,7 @@
    <field name="tag" type="text_general" indexed="true" stored="false" multiValued="true"/>
    <field name="target_group" type="text_general" indexed="true" stored="false" multiValued="true"/>
    <field name="cross_curricular_theme" type="text_general" indexed="true" stored="false" multiValued="true"/>
+   <field name="key_competence" type="text_general" indexed="true" stored="false" multiValued="true"/>
 
    <!-- Material -->
    <field name="description" type="text_general" indexed="true" stored="false" multiValued="true"/>

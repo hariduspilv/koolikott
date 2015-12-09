@@ -330,6 +330,7 @@ public class PortfolioResourceTest extends ResourceIntegrationTestBase {
         assertTrue(portfolio.getTargetGroups().contains(TargetGroup.ZERO_FIVE));
         assertTrue(portfolio.getTargetGroups().contains(TargetGroup.SIX_SEVEN));
         assertEquals("Lifelong_learning_and_career_planning", portfolio.getCrossCurricularThemes().get(0).getName());
+        assertEquals("Cultural_and_value_competence", portfolio.getKeyCompetences().get(0).getName());
     }
 
     private UpdatePortfolioForm getUpdatePortfolioForm(Portfolio portfolio) {

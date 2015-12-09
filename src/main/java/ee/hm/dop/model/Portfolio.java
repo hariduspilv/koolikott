@@ -107,6 +107,14 @@ public class Portfolio implements Searchable {
             uniqueConstraints = @UniqueConstraint(columnNames = { "portfolio", "crossCurricularTheme" }) )
     private List<CrossCurricularTheme> crossCurricularThemes;
 
+    @ManyToMany(fetch = EAGER)
+    @JoinTable(
+            name = "Portfolio_KeyCompetence",
+            joinColumns = { @JoinColumn(name = "portfolio") },
+            inverseJoinColumns = { @JoinColumn(name = "keyCompetence") },
+            uniqueConstraints = @UniqueConstraint(columnNames = { "portfolio", "keyCompetence" }) )
+    private List<KeyCompetence> keyCompetences;
+
     @Override
     public Long getId() {
         return id;
@@ -230,6 +238,14 @@ public class Portfolio implements Searchable {
 
     public void setCrossCurricularThemes(List<CrossCurricularTheme> crossCurricularThemes) {
         this.crossCurricularThemes = crossCurricularThemes;
+    }
+
+    public List<KeyCompetence> getKeyCompetences() {
+        return keyCompetences;
+    }
+
+    public void setKeyCompetences(List<KeyCompetence> keyCompetences) {
+        this.keyCompetences = keyCompetences;
     }
 
 }

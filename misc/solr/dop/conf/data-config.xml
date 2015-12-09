@@ -225,6 +225,10 @@
             <entity name="Material_CrossCurricularTheme" query="select crossCurricularTheme as cross_curricular_theme_id from Material_CrossCurricularTheme where material='${Material.id}'">
                 <entity name="CrossCurricularTheme" query="select name as cross_curricular_theme from CrossCurricularTheme where id = '${Material_CrossCurricularTheme.cross_curricular_theme_id}'" />
             </entity>
+
+            <entity name="Material_KeyCompetence" query="select keyCompetence as key_competence_id from Material_KeyCompetence where material='${Material.id}'">
+                <entity name="KeyCompetence" query="select name as key_competence from KeyCompetence where id = '${Material_KeyCompetence.key_competence_id}'" />
+            </entity>
         </entity>
 
         <entity name="Portfolio" pk="uniqueKey"
@@ -418,6 +422,10 @@
 
             <entity name="Portfolio_CrossCurricularTheme" query="select crossCurricularTheme as cross_curricular_theme_id from Portfolio_CrossCurricularTheme where portfolio='${Portfolio.id}'">
                 <entity name="CrossCurricularTheme" query="select name as cross_curricular_theme from CrossCurricularTheme where id = '${Portfolio_CrossCurricularTheme.cross_curricular_theme_id}'" />
+            </entity>
+
+            <entity name="Portfolio_KeyCompetence" query="select keyCompetence as key_competence_id from Portfolio_KeyCompetence where portfolio='${Portfolio.id}'">
+                <entity name="KeyCompetence" query="select name as key_competence from KeyCompetence where id = '${Portfolio_KeyCompetence.key_competence_id}'" />
             </entity>
         </entity>
     </document>

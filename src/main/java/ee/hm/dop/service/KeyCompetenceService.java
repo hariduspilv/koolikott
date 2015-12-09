@@ -12,6 +12,10 @@ public class KeyCompetenceService {
     @Inject
     private KeyCompetenceDAO keyCompetenceDAO;
 
+    public KeyCompetence getKeyCompetenceById(Long id) {
+        return keyCompetenceDAO.findKeyCompetenceById(id);
+    }
+
     public List<KeyCompetence> getAllKeyCompetences() {
         return keyCompetenceDAO.findAll();
     }

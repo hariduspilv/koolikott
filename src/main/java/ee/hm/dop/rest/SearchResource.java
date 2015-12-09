@@ -10,6 +10,7 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
 import ee.hm.dop.model.CrossCurricularTheme;
+import ee.hm.dop.model.KeyCompetence;
 import ee.hm.dop.model.Language;
 import ee.hm.dop.model.ResourceType;
 import ee.hm.dop.model.SearchFilter;
@@ -17,6 +18,7 @@ import ee.hm.dop.model.SearchResult;
 import ee.hm.dop.model.TargetGroup;
 import ee.hm.dop.model.taxon.Taxon;
 import ee.hm.dop.service.CrossCurricularThemeService;
+import ee.hm.dop.service.KeyCompetenceService;
 import ee.hm.dop.service.LanguageService;
 import ee.hm.dop.service.ResourceTypeService;
 import ee.hm.dop.service.SearchService;
@@ -40,6 +42,9 @@ public class SearchResource {
     @Inject
     private CrossCurricularThemeService crossCurricularThemeService;
 
+    @Inject
+    private KeyCompetenceService keyCompetenceService;
+
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public SearchResult search(@QueryParam("q") String query, @QueryParam("start") Long start, //
@@ -51,13 +56,15 @@ public class SearchResource {
             @QueryParam("resourceType") String resourceTypeName, //
             @QueryParam("specialEducation") Boolean isSpecialEducation, //
             @QueryParam("issuedFrom") Integer issuedFrom, //
-            @QueryParam("crossCurricularTheme") Long crossCurricularThemeId) {
+            @QueryParam("crossCurricularTheme") Long crossCurricularThemeId, //
+            @QueryParam("keyCompetence") Long keyCompetenceId) {
 
         Taxon taxon = taxonService.getTaxonById(taxonId);
         Language language = languageService.getLanguage(languageCode);
         ResourceType resourceType = resourceTypeService.getResourceTypeByName(resourceTypeName);
         CrossCurricularTheme crossCurricularTheme = crossCurricularThemeService
                 .getCrossCurricularThemeById(crossCurricularThemeId);
+        KeyCompetence keyCompetence = keyCompetenceService.getKeyCompetenceById(keyCompetenceId);
 
         if (paid == null) {
             paid = true;
@@ -77,6 +84,7 @@ public class SearchResource {
         searchFilter.setSpecialEducation(isSpecialEducation);
         searchFilter.setIssuedFrom(issuedFrom);
         searchFilter.setCrossCurricularTheme(crossCurricularTheme);
+        searchFilter.setKeyCompetence(keyCompetence);
 
         if (start == null) {
             return searchService.search(query, searchFilter);

@@ -177,6 +177,14 @@ public class Material implements Searchable {
             uniqueConstraints = @UniqueConstraint(columnNames = { "material", "crossCurricularTheme" }) )
     private List<CrossCurricularTheme> crossCurricularThemes;
 
+    @ManyToMany(fetch = EAGER)
+    @JoinTable(
+            name = "Material_KeyCompetence",
+            joinColumns = { @JoinColumn(name = "material") },
+            inverseJoinColumns = { @JoinColumn(name = "keyCompetence") },
+            uniqueConstraints = @UniqueConstraint(columnNames = { "material", "keyCompetence" }) )
+    private List<KeyCompetence> keyCompetences;
+
     @Override
     public Long getId() {
         return id;
@@ -390,6 +398,14 @@ public class Material implements Searchable {
 
     public void setCrossCurricularThemes(List<CrossCurricularTheme> crossCurricularThemes) {
         this.crossCurricularThemes = crossCurricularThemes;
+    }
+
+    public List<KeyCompetence> getKeyCompetences() {
+        return keyCompetences;
+    }
+
+    public void setKeyCompetences(List<KeyCompetence> keyCompetences) {
+        this.keyCompetences = keyCompetences;
     }
 
 }

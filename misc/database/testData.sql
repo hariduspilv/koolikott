@@ -376,6 +376,26 @@ insert into Material_TargetGroup(material, targetGroup) values (14, 'GRADE9');
 insert into Material_TargetGroup(material, targetGroup) values (36, 'ZERO_FIVE');
 insert into Material_TargetGroup(material, targetGroup) values (37, 'SIX_SEVEN');
 
+-- Material Cross-curricular themes
+insert into Material_CrossCurricularTheme(material, crossCurricularTheme) values (1, 1);
+insert into Material_CrossCurricularTheme(material, crossCurricularTheme) values (1, 2);
+insert into Material_CrossCurricularTheme(material, crossCurricularTheme) values (13, 3);
+insert into Material_CrossCurricularTheme(material, crossCurricularTheme) values (30, 4);
+insert into Material_CrossCurricularTheme(material, crossCurricularTheme) values (36, 5);
+insert into Material_CrossCurricularTheme(material, crossCurricularTheme) values (13, 6);
+insert into Material_CrossCurricularTheme(material, crossCurricularTheme) values (30, 7);
+insert into Material_CrossCurricularTheme(material, crossCurricularTheme) values (36, 8);
+
+-- Material Key competences
+insert into Material_KeyCompetence(material, keyCompetence) values (1, 8);
+insert into Material_KeyCompetence(material, keyCompetence) values (1, 7);
+insert into Material_KeyCompetence(material, keyCompetence) values (13, 6);
+insert into Material_KeyCompetence(material, keyCompetence) values (30, 5);
+insert into Material_KeyCompetence(material, keyCompetence) values (36, 4);
+insert into Material_KeyCompetence(material, keyCompetence) values (13, 3);
+insert into Material_KeyCompetence(material, keyCompetence) values (30, 2);
+insert into Material_KeyCompetence(material, keyCompetence) values (36, 1);
+
 -- Portfolio
 
 insert into Portfolio(id, title, taxon, creator, summary, views, created, updated, picture) VALUES (1, 'The new stock market', 1000, 1, 'Some new stufff coming soon.', 325698, '1999-05-02 06:00:01', '2002-05-02 06:00:01', null);
@@ -444,18 +464,7 @@ insert into Portfolio_TargetGroup(portfolio, targetGroup) values (1, 'GRADE1');
 insert into Portfolio_TargetGroup(portfolio, targetGroup) values (8, 'ZERO_FIVE');
 insert into Portfolio_TargetGroup(portfolio, targetGroup) values (8, 'SIX_SEVEN');
 
--- Cross-curricular themes
-insert into Material_CrossCurricularTheme(material, crossCurricularTheme) values (1, 1);
-insert into Material_CrossCurricularTheme(material, crossCurricularTheme) values (1, 2);
-insert into Material_CrossCurricularTheme(material, crossCurricularTheme) values (13, 3);
-insert into Material_CrossCurricularTheme(material, crossCurricularTheme) values (30, 4);
-insert into Material_CrossCurricularTheme(material, crossCurricularTheme) values (36, 5);
-insert into Material_CrossCurricularTheme(material, crossCurricularTheme) values (13, 6);
-insert into Material_CrossCurricularTheme(material, crossCurricularTheme) values (30, 7);
-insert into Material_CrossCurricularTheme(material, crossCurricularTheme) values (36, 8);
-
-
--- Cross-curricular themes
+-- Portfolio Cross-curricular themes
 insert into Portfolio_CrossCurricularTheme(portfolio, crossCurricularTheme) values (1, 1);
 insert into Portfolio_CrossCurricularTheme(portfolio, crossCurricularTheme) values (1, 2);
 insert into Portfolio_CrossCurricularTheme(portfolio, crossCurricularTheme) values (4, 3);
@@ -464,3 +473,13 @@ insert into Portfolio_CrossCurricularTheme(portfolio, crossCurricularTheme) valu
 insert into Portfolio_CrossCurricularTheme(portfolio, crossCurricularTheme) values (4, 6);
 insert into Portfolio_CrossCurricularTheme(portfolio, crossCurricularTheme) values (5, 7);
 insert into Portfolio_CrossCurricularTheme(portfolio, crossCurricularTheme) values (6, 8);
+
+-- Portfolio Key competences
+insert into Portfolio_KeyCompetence(portfolio, keyCompetence) values (1, 8);
+insert into Portfolio_KeyCompetence(portfolio, keyCompetence) values (1, 7);
+insert into Portfolio_KeyCompetence(portfolio, keyCompetence) values (4, 6);
+insert into Portfolio_KeyCompetence(portfolio, keyCompetence) values (5, 5);
+insert into Portfolio_KeyCompetence(portfolio, keyCompetence) values (6, 4);
+insert into Portfolio_KeyCompetence(portfolio, keyCompetence) values (4, 3);
+insert into Portfolio_KeyCompetence(portfolio, keyCompetence) values (5, 2);
+insert into Portfolio_KeyCompetence(portfolio, keyCompetence) values (6, 1);

@@ -6,6 +6,7 @@ DROP TABLE IF EXISTS EstCoreTaxonMapping;
 DROP TABLE IF EXISTS WaramuTaxonMapping;
 DROP TABLE IF EXISTS Chapter_Material;
 DROP TABLE IF EXISTS Chapter;
+DROP TABLE IF EXISTS Portfolio_KeyCompetence;
 DROP TABLE IF EXISTS Portfolio_CrossCurricularTheme;
 DROP TABLE IF EXISTS Portfolio_TargetGroup;
 DROP TABLE IF EXISTS Portfolio_Tag;
@@ -14,6 +15,7 @@ DROP TABLE IF EXISTS Page;
 DROP TABLE IF EXISTS Translation;
 DROP TABLE IF EXISTS TranslationGroup;
 DROP TABLE IF EXISTS Material_TargetGroup;
+DROP TABLE IF EXISTS Material_KeyCompetence;
 DROP TABLE IF EXISTS Material_CrossCurricularTheme;
 DROP TABLE IF EXISTS Material_Tag;
 DROP TABLE IF EXISTS Material_Taxon;
@@ -421,6 +423,21 @@ CREATE TABLE Material_CrossCurricularTheme (
     ON DELETE RESTRICT
 );
 
+CREATE TABLE Material_KeyCompetence (
+  material             BIGINT NOT NULL,
+  keyCompetence        BIGINT NOT NULL,
+
+  PRIMARY KEY (material, keyCompetence),
+
+  FOREIGN KEY (material)
+  REFERENCES Material (id)
+    ON DELETE RESTRICT,
+
+  FOREIGN KEY (keyCompetence)
+  REFERENCES KeyCompetence (id)
+    ON DELETE RESTRICT
+);
+
 CREATE TABLE Material_TargetGroup (
   material BIGINT NOT NULL, 
   targetGroup VARCHAR(255),
@@ -542,6 +559,21 @@ CREATE TABLE Portfolio_CrossCurricularTheme (
 
   FOREIGN KEY (crossCurricularTheme)
   REFERENCES CrossCurricularTheme (id)
+    ON DELETE RESTRICT
+);
+
+CREATE TABLE Portfolio_KeyCompetence (
+  portfolio             BIGINT NOT NULL,
+  keyCompetence         BIGINT NOT NULL,
+
+  PRIMARY KEY (portfolio, keyCompetence),
+
+  FOREIGN KEY (portfolio)
+  REFERENCES Portfolio (id)
+    ON DELETE RESTRICT,
+
+  FOREIGN KEY (keyCompetence)
+  REFERENCES KeyCompetence (id)
     ON DELETE RESTRICT
 );
 
