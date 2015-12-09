@@ -4,15 +4,11 @@ define(['app'], function(app)
       $anchorScroll.yOffset = 50;
     }]);
 
-    app.controller('editPortfolioController', ['$scope', 'translationService', 'serverCallService', '$route', '$location', 'alertService', '$rootScope', 'authenticatedUserService', 'dialogService', 'toastService',
-        function($scope, translationService, serverCallService, $route, $location, alertService, $rootScope, authenticatedUserService, dialogService, toastService) {
+    app.controller('editPortfolioController', ['$scope', 'translationService', 'serverCallService', '$route', '$location', 'alertService', '$rootScope', 'authenticatedUserService', 'dialogService', 'toastService', 'searchService',
+        function($scope, translationService, serverCallService, $route, $location, alertService, $rootScope, authenticatedUserService, dialogService, toastService, searchService) {
 
             function init() {
-				if ($rootScope.savedPortfolio) {
-					$scope.portfolio = $rootScope.savedPortfolio;
-				} else {
-					getPortfolio(getPortfolioSuccess, getPortfolioFail);
-				}
+				getPortfolio(getPortfolioSuccess, getPortfolioFail);
 				$rootScope.isEditPortforlioMode = true;
 			}
 
@@ -26,6 +22,7 @@ define(['app'], function(app)
 	            	getPortfolioFail();
 	            } else {
 	                $scope.portfolio = portfolio;
+	                searchService.setTaxon(portfolio.taxon.id);
 	            }
 	    	}
 

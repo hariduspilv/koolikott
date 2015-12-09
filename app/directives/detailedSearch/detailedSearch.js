@@ -32,11 +32,7 @@ define(['app'], function(app)
 
                     // Taxon
                     if (searchService.getTaxon()) {
-                        var params = {
-                            'taxonId': searchService.getTaxon()
-                        };
-                        log('Getting taxon.')
-                        serverCallService.makeGet("rest/learningMaterialMetadata/taxon", params, getTaxonSuccess, getTaxonFail);
+                    	getTaxonById(searchService.getTaxon());
                     }
 
                     // Paid
@@ -83,6 +79,14 @@ define(['app'], function(app)
                     }
                 }
 
+                function getTaxonById(taxonId) {
+                    var params = {
+                        'taxonId': taxonId
+                    };
+                    log('Getting taxon.')
+                    serverCallService.makeGet("rest/learningMaterialMetadata/taxon", params, getTaxonSuccess, getTaxonFail);
+                }
+                
                 $scope.search = function() {
                     searchService.setSearch(createSimpleSearchQuery());
 
@@ -321,6 +325,12 @@ define(['app'], function(app)
                     if (newTaxon !== oldTaxon) {
                         $scope.detailedSearch.educationalContext = $rootScope.taxonUtils.getEducationalContext($scope.detailedSearch.taxon);
                         clearHiddenFields();
+                    }
+                }, true);
+                
+                $scope.$watch(function() { return searchService.getTaxon() }, function(newTaxon, oldTaxon) {
+                    if (newTaxon !== oldTaxon) {
+                        getTaxonById(newTaxon);
                     }
                 }, true);
 
