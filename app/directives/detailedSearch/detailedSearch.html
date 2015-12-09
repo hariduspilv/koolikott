@@ -47,7 +47,7 @@
       </md-select>
     </md-input-container>
 
-    <md-input-container flex data-ng-if="detailedSearch.educationalContext.id === 2">
+    <md-input-container flex data-ng-if="detailedSearch.educationalContext.id === 2 || detailedSearch.educationalContext.id === 3">
       <label data-translate="DETAILED_SEARCH_KEY_COMPETENCE"></label>
       <md-select data-ng-model="detailedSearch.keyCompetence">
         <md-option data-ng-repeat="keyCompetence in keyCompetences" value="{{keyCompetence.id}}">
