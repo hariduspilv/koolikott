@@ -9,11 +9,14 @@ define(['app'], function(app)
                   submitClick: "&"
                 },
                 templateUrl: 'directives/commentsCard/commentsCard.html',
+                link: function($scope, iElem, iAttr){
+                    if (angular.isUndefined($scope.comments))
+                        $scope.comments = [];
+                },
                 controller: function ($scope) {
                     var COMMENTS_PER_PAGE = 5;
                     
                     $scope.authorized = authenticatedUserService.isAuthenticated();
-
                     $scope.visibleCommentsCount = COMMENTS_PER_PAGE;
                     
                     $scope.getLoadMoreCommentsLabel = function() {
@@ -32,6 +35,10 @@ define(['app'], function(app)
                             $scope.visibleCommentsCount += COMMENTS_PER_PAGE
                         else
                             $scope.visibleCommentsCount = $scope.comments.length;
+                    }
+                    
+                    $scope.showMoreCommentsButton = function() {
+                        return getLeftCommentsCount() > COMMENTS_PER_PAGE;
                     }
                     
                     function getLeftCommentsCount() {

@@ -1,5 +1,6 @@
 <!-- TODO: arrow changes direction right/down-->
 <!-- TODO: no parenthesis if no comments. or number 0 -->
+<!-- TODO: add translations if UI is finalized -->
 <md-button data-ng-class="{'toggled': showComments}" data-ng-click="showComments = !showComments">
   <span data-translate="COMMENTS_TITLE"></span>
   <span>({{comments.length}})</span>
@@ -20,7 +21,7 @@
     </md-list-item>
   </md-list>
 
-  <div layout="row" layout-align="center center" ng-show="visibleCommentsCount != comments.length">
+  <div layout="row" layout-align="center center" data-ng-show="showMoreCommentsButton()">
     <md-button md-no-ink class="md-primary" data-ng-click="showMoreComments()">
       Veel kommentaare <span data-ng-bind="getLoadMoreCommentsLabel()"></span>
     </md-button>
