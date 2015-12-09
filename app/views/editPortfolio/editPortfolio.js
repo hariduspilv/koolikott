@@ -10,6 +10,7 @@ define(['app'], function(app)
             function init() {
 				getPortfolio(getPortfolioSuccess, getPortfolioFail);
 				$rootScope.isEditPortforlioMode = true;
+				searchService.setType("material");
 				searchService.setTaxon(null);
 				searchService.setTargetGroups([]);
 			}
