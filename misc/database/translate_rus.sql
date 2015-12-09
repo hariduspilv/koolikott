@@ -173,6 +173,7 @@ insert into Translation(translationGroup, translationKey, translation) values (2
 insert into Translation(translationGroup, translationKey, translation) values (2, 'PORTFOLIO_DEFAULT_NEW_SUBCHAPTER_TITLE', 'Новый подраздел');
 insert into Translation(translationGroup, translationKey, translation) values (2, 'PORTFOLIO_CREATE_NEW_MATERIAL_URL', 'Ссылка на материал, который не существует в E-koolikott');
 insert into Translation(translationGroup, translationKey, translation) values (2, 'PORTFOLIO_SAVED', 'Портфолио сохраняются');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'PORTFOLIO_EDIT_METADATA', 'Изменить метаданные');
 
 -- Comment translations
 insert into Translation(translationGroup, translationKey, translation) values (2, 'COMMENTS_TITLE', 'Комментарии');
