@@ -20,6 +20,7 @@ import org.junit.runner.RunWith;
 
 import ee.hm.dop.dao.MaterialDAO;
 import ee.hm.dop.dao.PortfolioDAO;
+import ee.hm.dop.model.CrossCurricularTheme;
 import ee.hm.dop.model.Language;
 import ee.hm.dop.model.Material;
 import ee.hm.dop.model.Portfolio;
@@ -763,9 +764,17 @@ public class SearchServiceTest {
         resourceType.setName("EXTRABOOK");
         searchFilter.setResourceType(resourceType);
 
+        searchFilter.setSpecialEducation(true);
+
+        CrossCurricularTheme crossCurricularTheme = new CrossCurricularTheme();
+        crossCurricularTheme.setId(1L);
+        crossCurricularTheme.setName("test_theme");
+        searchFilter.setCrossCurricularTheme(crossCurricularTheme);
+
         String tokenizedQuery = "(pythagoras*) AND topic:\"cool_topic\" AND subject:\"cool_subject\""
                 + " AND domain:\"cool_domain\" AND educational_context:\"preschool\""
-                + " AND (paid:\"false\" OR type:\"portfolio\") AND type:\"material\" AND resource_type:\"extrabook\"";
+                + " AND (paid:\"false\" OR type:\"portfolio\") AND type:\"material\" AND resource_type:\"extrabook\""
+                + " AND special_education:\"true\" AND cross_curricular_theme:\"test_theme\"";
         long start = 0;
 
         List<Searchable> searchables = Arrays.asList(createMaterial(9L), createMaterial(2L), createPortfolio(2L));
@@ -836,6 +845,22 @@ public class SearchServiceTest {
         SearchFilter searchFilter = new SearchFilter();
         searchFilter.setSpecialEducation(true);
         String tokenizedQuery = "(test*) AND special_education:\"true\"";
+        long start = 0;
+
+        List<Searchable> searchables = Arrays.asList(createMaterial(9L), createMaterial(2L), createPortfolio(2L));
+
+        testSearch(query, tokenizedQuery, searchables, start, searchFilter);
+    }
+
+    @Test
+    public void searchWithCrossCurricularTheme() {
+        String query = "test";
+        SearchFilter searchFilter = new SearchFilter();
+        CrossCurricularTheme crossCurricularTheme = new CrossCurricularTheme();
+        crossCurricularTheme.setId(1L);
+        crossCurricularTheme.setName("test_theme");
+        searchFilter.setCrossCurricularTheme(crossCurricularTheme);
+        String tokenizedQuery = "(test*) AND cross_curricular_theme:\"test_theme\"";
         long start = 0;
 
         List<Searchable> searchables = Arrays.asList(createMaterial(9L), createMaterial(2L), createPortfolio(2L));

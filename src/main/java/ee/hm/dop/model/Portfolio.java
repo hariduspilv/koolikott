@@ -99,6 +99,14 @@ public class Portfolio implements Searchable {
     @CollectionTable(name = "Portfolio_TargetGroup", joinColumns = @JoinColumn(name = "portfolio") )
     private List<TargetGroup> targetGroups;
 
+    @ManyToMany(fetch = EAGER)
+    @JoinTable(
+            name = "Portfolio_CrossCurricularTheme",
+            joinColumns = { @JoinColumn(name = "portfolio") },
+            inverseJoinColumns = { @JoinColumn(name = "crossCurricularTheme") },
+            uniqueConstraints = @UniqueConstraint(columnNames = { "portfolio", "crossCurricularTheme" }) )
+    private List<CrossCurricularTheme> crossCurricularThemes;
+
     @Override
     public Long getId() {
         return id;
@@ -214,6 +222,14 @@ public class Portfolio implements Searchable {
 
     public void setComments(List<Comment> comments) {
         this.comments = comments;
+    }
+
+    public List<CrossCurricularTheme> getCrossCurricularThemes() {
+        return crossCurricularThemes;
+    }
+
+    public void setCrossCurricularThemes(List<CrossCurricularTheme> crossCurricularThemes) {
+        this.crossCurricularThemes = crossCurricularThemes;
     }
 
 }

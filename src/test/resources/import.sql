@@ -274,6 +274,13 @@ insert into Publisher(id, name, website) values (1, 'Koolibri', 'http://www.kool
 insert into Publisher(id, name, website) values (2, 'Pegasus', 'http://www.pegasus.ee');
 insert into Publisher(id, name, website) values (3, 'Varrak', 'http://www.varrak.ee');
 
+-- Cross-curricular themes
+insert into CrossCurricularTheme(id, name) values (1, 'Lifelong_learning_and_career_planning');
+insert into CrossCurricularTheme(id, name) values (2, 'Environment_and_sustainable_development');
+
+-- Material Cross-curricular themes
+insert into Material_CrossCurricularTheme(material, crossCurricularTheme) values (1, 1);
+
 -- MaterialPublisher
 
 insert into Material_Publisher(material, publisher) values (1, 1);
@@ -379,7 +386,5 @@ insert into Portfolio_Tag(tag, portfolio) values(5, 1);
 insert into Portfolio_TargetGroup(portfolio, targetGroup) values (1, 'SIX_SEVEN');
 insert into Portfolio_TargetGroup(portfolio, targetGroup) values (1, 'ZERO_FIVE');
 
-
--- Cross-curricular themes
-insert into CrossCurricularTheme(id, name) values (1, 'Lifelong_learning_and_career_planning');
-insert into CrossCurricularTheme(id, name) values (2, 'Environment_and_sustainable_development');
+-- Portfolio Cross-curricular themes
+insert into Portfolio_CrossCurricularTheme(portfolio, crossCurricularTheme) values (1, 1);

@@ -221,6 +221,10 @@
             <entity name="Material_TargetGroup" query="select targetGroup as target_group from Material_TargetGroup where material='${Material.id}'" />
 
             <entity name="IssueDate" query="select year as issue_date_year from IssueDate where id='${Material.issue_date_id}'" />
+
+            <entity name="Material_CrossCurricularTheme" query="select crossCurricularTheme as cross_curricular_theme_id from Material_CrossCurricularTheme where material='${Material.id}'">
+                <entity name="CrossCurricularTheme" query="select name as cross_curricular_theme from CrossCurricularTheme where id = '${Material_CrossCurricularTheme.cross_curricular_theme_id}'" />
+            </entity>
         </entity>
 
         <entity name="Portfolio" pk="uniqueKey"
@@ -411,6 +415,10 @@
             <entity name="Chapter" query="select title as chapterTitle, textValue as chapterText from Chapter where portfolio = '${Portfolio.id}' or parentChapter in (select id from Chapter where portfolio = '${Portfolio.id}')" />
 
             <entity name="Portfolio_TargetGroup" query="select targetGroup as target_group from Portfolio_TargetGroup where portfolio = '${Portfolio.id}'" />
+
+            <entity name="Portfolio_CrossCurricularTheme" query="select crossCurricularTheme as cross_curricular_theme_id from Portfolio_CrossCurricularTheme where portfolio='${Portfolio.id}'">
+                <entity name="CrossCurricularTheme" query="select name as cross_curricular_theme from CrossCurricularTheme where id = '${Portfolio_CrossCurricularTheme.cross_curricular_theme_id}'" />
+            </entity>
         </entity>
     </document>
 </dataConfig>

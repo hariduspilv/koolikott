@@ -443,3 +443,24 @@ insert into Portfolio_TargetGroup(portfolio, targetGroup) values (1, 'ZERO_FIVE'
 insert into Portfolio_TargetGroup(portfolio, targetGroup) values (1, 'GRADE1');
 insert into Portfolio_TargetGroup(portfolio, targetGroup) values (8, 'ZERO_FIVE');
 insert into Portfolio_TargetGroup(portfolio, targetGroup) values (8, 'SIX_SEVEN');
+
+-- Cross-curricular themes
+insert into Material_CrossCurricularTheme(material, crossCurricularTheme) values (1, 1);
+insert into Material_CrossCurricularTheme(material, crossCurricularTheme) values (1, 2);
+insert into Material_CrossCurricularTheme(material, crossCurricularTheme) values (13, 3);
+insert into Material_CrossCurricularTheme(material, crossCurricularTheme) values (30, 4);
+insert into Material_CrossCurricularTheme(material, crossCurricularTheme) values (36, 5);
+insert into Material_CrossCurricularTheme(material, crossCurricularTheme) values (13, 6);
+insert into Material_CrossCurricularTheme(material, crossCurricularTheme) values (30, 7);
+insert into Material_CrossCurricularTheme(material, crossCurricularTheme) values (36, 8);
+
+
+-- Cross-curricular themes
+insert into Portfolio_CrossCurricularTheme(portfolio, crossCurricularTheme) values (1, 1);
+insert into Portfolio_CrossCurricularTheme(portfolio, crossCurricularTheme) values (1, 2);
+insert into Portfolio_CrossCurricularTheme(portfolio, crossCurricularTheme) values (4, 3);
+insert into Portfolio_CrossCurricularTheme(portfolio, crossCurricularTheme) values (5, 4);
+insert into Portfolio_CrossCurricularTheme(portfolio, crossCurricularTheme) values (6, 5);
+insert into Portfolio_CrossCurricularTheme(portfolio, crossCurricularTheme) values (4, 6);
+insert into Portfolio_CrossCurricularTheme(portfolio, crossCurricularTheme) values (5, 7);
+insert into Portfolio_CrossCurricularTheme(portfolio, crossCurricularTheme) values (6, 8);

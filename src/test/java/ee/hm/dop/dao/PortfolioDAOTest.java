@@ -187,6 +187,7 @@ public class PortfolioDAOTest extends DatabaseTestBase {
         assertEquals(2, portfolio.getTargetGroups().size());
         assertTrue(portfolio.getTargetGroups().contains(TargetGroup.ZERO_FIVE));
         assertTrue(portfolio.getTargetGroups().contains(TargetGroup.SIX_SEVEN));
+        assertEquals("Lifelong_learning_and_career_planning", portfolio.getCrossCurricularThemes().get(0).getName());
     }
 
     @Test

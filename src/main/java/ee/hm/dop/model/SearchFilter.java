@@ -22,6 +22,8 @@ public class SearchFilter {
 
     private Integer issuedFrom;
 
+    private CrossCurricularTheme crossCurricularTheme;
+
     public Taxon getTaxon() {
         return taxon;
     }
@@ -84,6 +86,14 @@ public class SearchFilter {
 
     public void setIssuedFrom(Integer issuedFrom) {
         this.issuedFrom = issuedFrom;
+    }
+
+    public CrossCurricularTheme getCrossCurricularTheme() {
+        return crossCurricularTheme;
+    }
+
+    public void setCrossCurricularTheme(CrossCurricularTheme crossCurricularTheme) {
+        this.crossCurricularTheme = crossCurricularTheme;
     }
 
 }

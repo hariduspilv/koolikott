@@ -591,7 +591,7 @@ public class MaterialDAOTest extends DatabaseTestBase {
         assertEquals(2, material.getTargetGroups().size());
         assertTrue(material.getTargetGroups().contains(TargetGroup.ZERO_FIVE));
         assertTrue(material.getTargetGroups().contains(TargetGroup.SIX_SEVEN));
-
         assertTrue(material.isSpecialEducation());
+        assertEquals("Lifelong_learning_and_career_planning", material.getCrossCurricularThemes().get(0).getName());
     }
 }

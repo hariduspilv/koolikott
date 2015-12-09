@@ -169,6 +169,14 @@ public class Material implements Searchable {
     @Column(nullable = false)
     private boolean isSpecialEducation = false;
 
+    @ManyToMany(fetch = EAGER)
+    @JoinTable(
+            name = "Material_CrossCurricularTheme",
+            joinColumns = { @JoinColumn(name = "material") },
+            inverseJoinColumns = { @JoinColumn(name = "crossCurricularTheme") },
+            uniqueConstraints = @UniqueConstraint(columnNames = { "material", "crossCurricularTheme" }) )
+    private List<CrossCurricularTheme> crossCurricularThemes;
+
     @Override
     public Long getId() {
         return id;
@@ -374,6 +382,14 @@ public class Material implements Searchable {
 
     public void setSpecialEducation(boolean isSpecialEducation) {
         this.isSpecialEducation = isSpecialEducation;
+    }
+
+    public List<CrossCurricularTheme> getCrossCurricularThemes() {
+        return crossCurricularThemes;
+    }
+
+    public void setCrossCurricularThemes(List<CrossCurricularTheme> crossCurricularThemes) {
+        this.crossCurricularThemes = crossCurricularThemes;
     }
 
 }

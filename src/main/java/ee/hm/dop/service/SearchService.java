@@ -18,6 +18,7 @@ import com.google.common.collect.ImmutableSet;
 
 import ee.hm.dop.dao.MaterialDAO;
 import ee.hm.dop.dao.PortfolioDAO;
+import ee.hm.dop.model.CrossCurricularTheme;
 import ee.hm.dop.model.Language;
 import ee.hm.dop.model.ResourceType;
 import ee.hm.dop.model.SearchFilter;
@@ -175,6 +176,7 @@ public class SearchService {
         filters.add(getResourceTypeAsQuery(searchFilter));
         filters.add(isSpecialEducationAsQuery(searchFilter));
         filters.add(issuedFromAsQuery(searchFilter));
+        filters.add(getCrossCurricularThemeAsQuery(searchFilter));
 
         // Remove empty elements
         filters = filters.stream().filter(f -> !f.isEmpty()).collect(Collectors.toList());
@@ -333,6 +335,14 @@ public class SearchService {
     private String issuedFromAsQuery(SearchFilter searchFilter) {
         if (searchFilter.getIssuedFrom() != null) {
             return format("(issue_date_year:[%s TO *] OR type:\"portfolio\")", searchFilter.getIssuedFrom());
+        }
+        return "";
+    }
+
+    private String getCrossCurricularThemeAsQuery(SearchFilter searchFilter) {
+        CrossCurricularTheme crossCurricularTheme = searchFilter.getCrossCurricularTheme();
+        if (crossCurricularTheme != null) {
+            return format("cross_curricular_theme:\"%s\"", crossCurricularTheme.getName().toLowerCase());
         }
         return "";
     }

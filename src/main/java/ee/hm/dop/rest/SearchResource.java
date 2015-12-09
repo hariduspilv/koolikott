@@ -9,12 +9,14 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
+import ee.hm.dop.model.CrossCurricularTheme;
 import ee.hm.dop.model.Language;
 import ee.hm.dop.model.ResourceType;
 import ee.hm.dop.model.SearchFilter;
 import ee.hm.dop.model.SearchResult;
 import ee.hm.dop.model.TargetGroup;
 import ee.hm.dop.model.taxon.Taxon;
+import ee.hm.dop.service.CrossCurricularThemeService;
 import ee.hm.dop.service.LanguageService;
 import ee.hm.dop.service.ResourceTypeService;
 import ee.hm.dop.service.SearchService;
@@ -35,6 +37,9 @@ public class SearchResource {
     @Inject
     private ResourceTypeService resourceTypeService;
 
+    @Inject
+    private CrossCurricularThemeService crossCurricularThemeService;
+
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public SearchResult search(@QueryParam("q") String query, @QueryParam("start") Long start, //
@@ -45,11 +50,14 @@ public class SearchResource {
             @QueryParam("targetGroup") List<TargetGroup> targetGroups, //
             @QueryParam("resourceType") String resourceTypeName, //
             @QueryParam("specialEducation") Boolean isSpecialEducation, //
-            @QueryParam("issuedFrom") Integer issuedFrom) {
+            @QueryParam("issuedFrom") Integer issuedFrom, //
+            @QueryParam("crossCurricularTheme") Long crossCurricularThemeId) {
 
         Taxon taxon = taxonService.getTaxonById(taxonId);
         Language language = languageService.getLanguage(languageCode);
         ResourceType resourceType = resourceTypeService.getResourceTypeByName(resourceTypeName);
+        CrossCurricularTheme crossCurricularTheme = crossCurricularThemeService
+                .getCrossCurricularThemeById(crossCurricularThemeId);
 
         if (paid == null) {
             paid = true;
@@ -68,6 +76,7 @@ public class SearchResource {
         searchFilter.setResourceType(resourceType);
         searchFilter.setSpecialEducation(isSpecialEducation);
         searchFilter.setIssuedFrom(issuedFrom);
+        searchFilter.setCrossCurricularTheme(crossCurricularTheme);
 
         if (start == null) {
             return searchService.search(query, searchFilter);

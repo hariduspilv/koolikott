@@ -12,6 +12,10 @@ public class CrossCurricularThemeService {
     @Inject
     private CrossCurricularThemeDAO crossCurricularThemeDAO;
 
+    public CrossCurricularTheme getCrossCurricularThemeById(Long id) {
+        return crossCurricularThemeDAO.findCrossCurricularThemeById(id);
+    }
+
     public List<CrossCurricularTheme> getAllCrossCurricularThemes() {
         return crossCurricularThemeDAO.findAll();
     }
