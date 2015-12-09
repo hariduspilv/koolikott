@@ -367,6 +367,10 @@ define(['app'], function(app)
                     }
                 }, true);
                 
+                $scope.$watch(function() { return searchService.getType() }, function(newType, oldType) {
+                	$scope.detailedSearch.type = newType;
+                }, true);
+                
                 $scope.$watch(function() { return searchService.getTargetGroups() }, function(newGroups, oldGroups) {
                 	$scope.detailedSearch.targetGroups = newGroups;
                 }, true);
