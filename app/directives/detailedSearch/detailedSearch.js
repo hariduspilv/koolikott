@@ -1,7 +1,7 @@
 define(['app'], function(app)
 {
-    app.directive('dopDetailedSearch', [ '$location', 'searchService', 'translationService', '$filter', 'serverCallService', 'metadataService', 
-     function($location, searchService, translationService, $filter, serverCallService, metadataService) {
+    app.directive('dopDetailedSearch', [ '$location', 'searchService', 'translationService', '$filter', 'serverCallService', 'metadataService', '$rootScope',
+     function($location, searchService, translationService, $filter, serverCallService, metadataService, $rootScope) {
         return {
             scope: {
                 queryIn: '=',
@@ -20,6 +20,8 @@ define(['app'], function(app)
                 init();
 
                 function init() {
+                	$scope.isEditPortforlioMode = $rootScope.isEditPortforlioMode;
+                	
                     // Detailed search fields
                     $scope.detailedSearch = {};
 
