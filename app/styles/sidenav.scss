@@ -1,5 +1,28 @@
-.sidenav {
-  h2 {
-    padding-bottom: 0;
-  }
+// .sidenav {
+//   h2 {
+//     padding-bottom: 0;
+//   }
+// }
+.md-toolbar-tools {
+  font-size: 18px;
+}
+
+md-sidenav {
+    width: 260px;
+    max-width: 260px;
+    .sidenav-menu > li {
+      > .md-button {
+        font-weight: 400;
+        text-transform: none;
+      }
+      > .sidenav-menu-toggle-list a.md-button {
+        font-weight: 500;
+        text-transform: none;
+        font-size: 12px;
+        &:before {
+          content: "-  ";
+        }
+      }
+
+    }
 }

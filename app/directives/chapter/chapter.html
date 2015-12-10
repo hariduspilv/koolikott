@@ -2,7 +2,7 @@
   <md-card class="card-lg" id="chapter-{{index}}">
     <md-card-content data-ng-if="!isEditable">
       <h2>{{chapter.title}}</h2>
-      <p class="md-body-1 description">{{chapter.text}}</p>
+      <p class="md-body-1">{{chapter.text}}</p>
     </md-card-content>
     <md-card-content data-ng-if="isEditable">
         <div layout="row" layout-align="start center">
@@ -31,7 +31,7 @@
         <div dop-add-chapter-material chapter="chapter"></div>
     </md-card-content>
   </md-card>
-            
+
   <div class="portfolio-chapter-subchapter-materials" ng-show="chapter.materials.length">
     <md-grid-list md-cols-xl="7" md-cols-gt-lg="6"  md-cols-gt-md="5" md-cols-md="4" md-cols-sm="4" md-cols-xs="2" md-gutter="10px" md-row-height="280px">
       <md-grid-tile data-ng-repeat="material in chapter.materials">
@@ -40,12 +40,15 @@
     </md-grid-list>
   </div>
 
+
+<!-- TODO: Non-editable subchapter margin-top -30 is a major hack, to be rebuilt! -->
   <ul class="portfolio-chapter-subchapters">
     <li class="portfolio-chapter-subchapter" id="chapter-{{index}}-{{$index}}" data-ng-repeat="subchapter in chapter.subchapters">
       <md-card class="card-lg">
         <md-card-content data-ng-if="!isEditable">
+          <md-divider class="md-default-theme"></md-divider>
           <h3>{{subchapter.title}}</h3>
-          <p class="md-body-1 description">{{subchapter.text}}</p>
+          <p class="md-body-1">{{subchapter.text}}</p>
         </md-card-content>
         <md-card-content data-ng-if="isEditable">
             <div layout="row" layout-align="start center">
