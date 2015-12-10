@@ -20,8 +20,6 @@ define(['app'], function(app)
                 init();
 
                 function init() {
-                	$scope.isEditPortforlioMode = $rootScope.isEditPortforlioMode;
-                	
                     // Detailed search fields
                     $scope.detailedSearch = {};
 
@@ -31,11 +29,6 @@ define(['app'], function(app)
 
                     // Target groups
                     $scope.detailedSearch.targetGroups = searchService.getTargetGroups();
-
-                    // Taxon
-                    if (searchService.getTaxon()) {
-                    	getTaxonById(searchService.getTaxon());
-                    }
 
                     // Paid
                     var isPaid = searchService.isPaid();
@@ -85,6 +78,16 @@ define(['app'], function(app)
                     var keyCompetence = searchService.getKeyCompetence();
                     if (keyCompetence) {
                         $scope.detailedSearch.keyCompetence = keyCompetence;
+                    }
+                    
+                    $scope.isEditPortforlioMode = $rootScope.isEditPortforlioMode;
+                    if ($rootScope.isEditPortforlioMode && $rootScope.savedPortifolio) {
+                    	$scope.detailedSearch.taxon = $rootScope.savedPortifolio.taxon;
+                    } else {
+                        // Taxon
+                        if (searchService.getTaxon()) {
+                        	getTaxonById(searchService.getTaxon());
+                        }
                     }
                 }
 
@@ -199,6 +202,9 @@ define(['app'], function(app)
                     if ($scope.detailedSearch.CLIL === true && $scope.detailedSearch.educationalContext.id === 2) {
                         return 'LAK "Lõimitud aine- ja keeleõpe"';
                     }
+                    if ($scope.detailedSearch.specialEducationalNeed === true && $scope.detailedSearch.educationalContext.id === 4) {
+                        return 'HEV "Hariduslik erivajadus"';
+                    }
                     return '';
                 }
 
@@ -227,6 +233,7 @@ define(['app'], function(app)
                         var descriptionRegex = /(^|\s)(description:([^\s\"]\S*)|description:\"(.*?)\"|description:|summary:([^\s\"]\S*)|summary:\"(.*?)\"|summary:)/g;
                         var authorRegex = /(^|\s)(author:([^\s\"]\S*)|author:\"(.*?)\"|author:)/g;
                         var clilRegex = /(^|\s)(LAK|"Lõimitud aine- ja keeleõpe")(?=\s|$)/g;
+                        var specialEducationalNeedRegex = /(^|\s)(HEV|"Hariduslik erivajadus")(?=\s|$)/g;
 
                         var firstTitle;
                         var firstDescription;
@@ -260,6 +267,11 @@ define(['app'], function(app)
                         while(keyword = clilRegex.exec(query)) {
                             main = main.replace(keyword[2], '');
                             $scope.detailedSearch.CLIL = true;
+                        }
+
+                        while(keyword = specialEducationalNeedRegex.exec(query)) {
+                            main = main.replace(keyword[2], '');
+                            $scope.detailedSearch.specialEducationalNeed = true;
                         }
 
                         $scope.detailedSearch.main = removeExtraWhitespace(main).trim();
@@ -347,15 +359,8 @@ define(['app'], function(app)
                     }
                 }, true);
                 
-                $scope.$watch(function() { return searchService.getTaxon() }, function(newTaxon, oldTaxon) {
-                    if (newTaxon !== oldTaxon) {
-                    	if(newTaxon == null) {
-                    		 $scope.detailedSearch.taxon = newTaxon;
-                    	}
-                    	else {
-                    		getTaxonById(newTaxon);
-                    	}
-                    }
+                $scope.$watch(function() { return searchService.getType() }, function(newType, oldType) {
+                	$scope.detailedSearch.type = newType;
                 }, true);
                 
                 $scope.$watch(function() { return searchService.getTargetGroups() }, function(newGroups, oldGroups) {
