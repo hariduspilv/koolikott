@@ -1,5 +1,22 @@
-#page-view-material {
-  md-card:not(#comments-card) {
-    margin: 0;
+// #page-view-material {
+//   md-card:not(#comments-card) {
+//     margin: 0;
+//   }
+// }
+.description {
+  font-size: 16px;
+}
+
+.portfolio-chapter {
+  .description {
+    font-size: 14px;
+  }
+}
+.portfolio-chapter-subchapter {
+  .description {
+    font-weight: 300;
+    -webkit-column-count: 2; /* Chrome, Safari, Opera */
+    -moz-column-count: 2; /* Firefox */
+    column-count: 2;
   }
 }

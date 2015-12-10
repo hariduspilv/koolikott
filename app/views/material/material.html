@@ -96,13 +96,13 @@
                     </div>
 
                     <div data-ng-if="sourceType === 'LINK' && !material.embeddable">
-                      <md-button data-ng-href="{{material.source}}" target="_blank">
+                      <!-- <md-button data-ng-href="{{material.source}}" target="_blank">
                         Vaata
                         <md-icon class="material-icons md-primary">send</md-icon>
                         <md-tooltip md-direction="top">
                           Avaneb uues aknas
                         </md-tooltip>
-                      </md-button>
+                      </md-button> -->
 
                       <!-- <span class="item-label" data-translate="MATERIAL_VIEW_LINK_TO_MATERIAL">Open material</span> -->
                       <!-- <a data-ng-href="{{material.source}}" target="_blank" class="wrapped regular-link md-primary">
@@ -155,10 +155,10 @@
                   <p class="md-body-2 meta" data-ng-if="material.updated">
                     <small class="md-caption">
                       <span data-translate="UPDATED"></span>:
-                    </small> 
+                    </small>
                     {{formatMaterialUpdatedDate(material.updated)}}
                   </p>
-                  
+
                   <p class="md-body-2 meta">
                     <small class="md-caption">
                       <span data-translate="CREATED"></span>:
