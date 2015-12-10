@@ -17,7 +17,7 @@ define(['app'], function(app)
                 		return creatorId === userId;
                 	}
  
-                    $scope.redirectToEditMode = function() {
+                    $scope.editPortfolio = function() {
 	                    var portfolioId = $route.current.params.id;
 	                    $location.url("/portfolio/edit?id="+portfolioId);
                     };
