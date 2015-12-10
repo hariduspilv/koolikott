@@ -7,25 +7,21 @@ define(['app'], function(app)
                 templateUrl: 'directives/portfolioSummaryCard/portfolioSummaryCard.html',
                 controller: function ($scope, $location) {
 
-                	var user = authenticatedUserService.getUser();
-                	var authenticated = authenticatedUserService.isAuthenticated();
-                	
-                	 $scope.openMenu = function($mdOpenMenu) {
-                     	 if(isShowEditMetadataButton()) {
-                     		 $scope.showEditButton = true;
-                     	 }
-                     	 if(isShowRedirectButton()) {
-                    		 $scope.showRedirectButton = true;
-                    	 }
-                     	
-                         $mdOpenMenu();     
-                     };
-                     
+                	$scope.isOwner = function() {
+                		if (!authenticatedUserService.isAuthenticated()) {
+                			return false;
+                		}
+                		
+                		var creatorId = $scope.portfolio.creator.id;
+                		var userId = authenticatedUserService.getUser().id;
+                		return creatorId === userId;
+                	}
+ 
                     $scope.redirectToEditMode = function() {
 	                    var portfolioId = $route.current.params.id;
 	                    $location.url("/portfolio/edit?id="+portfolioId);
                     };
-                     
+
                     $scope.showEditMetadataoDialog = function() {
                         $mdDialog.show({
                             controller: 'addPortfolioDialog',
@@ -33,27 +29,6 @@ define(['app'], function(app)
                             locals:{portfolio: $scope.portfolio}
                         });
                     };
-                    
-                    function isShowEditMetadataButton() {
-                    	var portfolio = $scope.portfolio;
-						if(authenticated && user.id == portfolio.creator.id && !isPortfolioViewMode()) {
-							 return true;
-						}
-	                	return false;
-                    }
-                    
-                    function isShowRedirectButton() {
-                    	var portfolio = $scope.portfolio;
-						if(authenticated && user.id == portfolio.creator.id && isPortfolioViewMode()) {
-							return true;
-						}
-	                	return false;
-                    }
-                    
-                    function isPortfolioViewMode() {
-                    	return $rootScope.isViewPortforlioPage;
-                    }
-                    
                 }
             };
         }]);
