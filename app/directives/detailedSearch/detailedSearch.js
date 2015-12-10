@@ -20,8 +20,6 @@ define(['app'], function(app)
                 init();
 
                 function init() {
-                	$scope.isEditPortforlioMode = $rootScope.isEditPortforlioMode;
-                	
                     // Detailed search fields
                     $scope.detailedSearch = {};
 
@@ -31,11 +29,6 @@ define(['app'], function(app)
 
                     // Target groups
                     $scope.detailedSearch.targetGroups = searchService.getTargetGroups();
-
-                    // Taxon
-                    if (searchService.getTaxon()) {
-                    	getTaxonById(searchService.getTaxon());
-                    }
 
                     // Paid
                     var isPaid = searchService.isPaid();
@@ -85,6 +78,16 @@ define(['app'], function(app)
                     var keyCompetence = searchService.getKeyCompetence();
                     if (keyCompetence) {
                         $scope.detailedSearch.keyCompetence = keyCompetence;
+                    }
+                    
+                    $scope.isEditPortforlioMode = $rootScope.isEditPortforlioMode;
+                    if ($rootScope.isEditPortforlioMode && $rootScope.savedPortifolio) {
+                    	$scope.detailedSearch.taxon = $rootScope.savedPortifolio.taxon;
+                    } else {
+                        // Taxon
+                        if (searchService.getTaxon()) {
+                        	getTaxonById(searchService.getTaxon());
+                        }
                     }
                 }
 
@@ -353,17 +356,6 @@ define(['app'], function(app)
                     if (newTaxon !== oldTaxon) {
                         $scope.detailedSearch.educationalContext = $rootScope.taxonUtils.getEducationalContext($scope.detailedSearch.taxon);
                         clearHiddenFields();
-                    }
-                }, true);
-                
-                $scope.$watch(function() { return searchService.getTaxon() }, function(newTaxon, oldTaxon) {
-                    if (newTaxon !== oldTaxon) {
-                    	if(newTaxon == null) {
-                    		 $scope.detailedSearch.taxon = newTaxon;
-                    	}
-                    	else {
-                    		getTaxonById(newTaxon);
-                    	}
                     }
                 }, true);
                 
