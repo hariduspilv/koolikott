@@ -69,8 +69,8 @@ public class LoginServiceTest {
         User user = createMock(User.class);
 
         expect(userService.getUserByIdCode(idCode)).andReturn(user);
-        expect(authenticatedUserDAO.createAuthenticatedUser(EasyMock.anyObject(AuthenticatedUser.class)))
-                .andThrow(new DuplicateTokenException()).times(2);
+        expect(authenticatedUserDAO.createAuthenticatedUser(EasyMock.anyObject(AuthenticatedUser.class))).andThrow(
+                new DuplicateTokenException()).times(2);
 
         replayAll(user);
 
@@ -91,10 +91,10 @@ public class LoginServiceTest {
         AuthenticatedUser authenticatedUser = createMock(AuthenticatedUser.class);
 
         expect(userService.getUserByIdCode(idCode)).andReturn(user);
-        expect(authenticatedUserDAO.createAuthenticatedUser(EasyMock.anyObject(AuthenticatedUser.class)))
-                .andThrow(new DuplicateTokenException()).times(1);
-        expect(authenticatedUserDAO.createAuthenticatedUser(EasyMock.anyObject(AuthenticatedUser.class)))
-                .andReturn(authenticatedUser);
+        expect(authenticatedUserDAO.createAuthenticatedUser(EasyMock.anyObject(AuthenticatedUser.class))).andThrow(
+                new DuplicateTokenException()).times(1);
+        expect(authenticatedUserDAO.createAuthenticatedUser(EasyMock.anyObject(AuthenticatedUser.class))).andReturn(
+                authenticatedUser);
 
         replayAll(user);
 
@@ -110,8 +110,8 @@ public class LoginServiceTest {
         AuthenticatedUser authenticatedUser = createMock(AuthenticatedUser.class);
 
         expect(userService.getUserByIdCode(idCode)).andReturn(user);
-        expect(authenticatedUserDAO.createAuthenticatedUser(EasyMock.anyObject(AuthenticatedUser.class)))
-                .andReturn(authenticatedUser);
+        expect(authenticatedUserDAO.createAuthenticatedUser(EasyMock.anyObject(AuthenticatedUser.class))).andReturn(
+                authenticatedUser);
 
         replayAll(user);
 
@@ -208,8 +208,8 @@ public class LoginServiceTest {
     }
 
     private void expectCreateAuthenticatedUser(Capture<AuthenticatedUser> capturedAuthenticatedUser) {
-        expect(authenticatedUserDAO.createAuthenticatedUser(EasyMock.capture(capturedAuthenticatedUser)))
-                .andAnswer(new IAnswer<AuthenticatedUser>() {
+        expect(authenticatedUserDAO.createAuthenticatedUser(EasyMock.capture(capturedAuthenticatedUser))).andAnswer(
+                new IAnswer<AuthenticatedUser>() {
                     @Override
                     public AuthenticatedUser answer() throws Throwable {
                         return capturedAuthenticatedUser.getValue();

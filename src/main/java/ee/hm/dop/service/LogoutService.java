@@ -11,7 +11,7 @@ public class LogoutService {
     private AuthenticatedUserDAO authenticatedUserDAO;
 
     public void logout(AuthenticatedUser authenticatedUser) {
-        if(authenticatedUser != null) {
+        if (authenticatedUser != null) {
             authenticatedUserDAO.delete(authenticatedUser);
         }
     }

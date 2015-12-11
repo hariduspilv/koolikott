@@ -18,11 +18,11 @@ import ee.hm.dop.service.TagService;
  *
  */
 public class TagDeserializer extends JsonDeserializer<Tag> {
-    
+
     @Override
     public Tag deserialize(JsonParser jp, DeserializationContext ctxt) throws IOException, JsonProcessingException {
         TagService tagService = GuiceInjector.getInjector().getInstance(TagService.class);
-        
+
         String tagName = jp.getText();
         Tag tag = tagService.getTagByName(tagName);
 

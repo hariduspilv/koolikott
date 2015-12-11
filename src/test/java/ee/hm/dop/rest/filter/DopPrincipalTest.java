@@ -1,16 +1,17 @@
 package ee.hm.dop.rest.filter;
 
-import ee.hm.dop.model.AuthenticatedUser;
-import ee.hm.dop.model.Role;
-import ee.hm.dop.model.User;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
+
 import org.easymock.EasyMockRunner;
 import org.easymock.TestSubject;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
+import ee.hm.dop.model.AuthenticatedUser;
+import ee.hm.dop.model.Role;
+import ee.hm.dop.model.User;
 
 @RunWith(EasyMockRunner.class)
 public class DopPrincipalTest {
@@ -35,7 +36,7 @@ public class DopPrincipalTest {
         assertTrue(dopPrincipal.isUserInRole("USER"));
     }
 
-    private AuthenticatedUser getUser(){
+    private AuthenticatedUser getUser() {
         AuthenticatedUser authenticatedUser = new AuthenticatedUser();
         User user = new User();
         user.setName("Mati");

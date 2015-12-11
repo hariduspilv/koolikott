@@ -15,7 +15,8 @@ public class PublisherDAO {
     private EntityManager entityManager;
 
     public Publisher findPublisherByName(String name) {
-        TypedQuery<Publisher> findByName = entityManager.createQuery("SELECT p FROM Publisher p WHERE p.name = :name ", Publisher.class);
+        TypedQuery<Publisher> findByName = entityManager.createQuery("SELECT p FROM Publisher p WHERE p.name = :name ",
+                Publisher.class);
 
         Publisher publisher = null;
         try {

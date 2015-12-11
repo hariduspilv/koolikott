@@ -13,22 +13,22 @@ public class AuthenticatedUserDAO {
     @Inject
     private EntityManager entityManager;
 
-    public AuthenticatedUser createAuthenticatedUser(AuthenticatedUser authenticatedUser) throws DuplicateTokenException {
+    public AuthenticatedUser createAuthenticatedUser(AuthenticatedUser authenticatedUser)
+            throws DuplicateTokenException {
         AuthenticatedUser merged;
         try {
             merged = entityManager.merge(authenticatedUser);
             entityManager.persist(merged);
         } catch (PersistenceException e) {
-            throw new DuplicateTokenException("Duplicate token found when persisting authenticatedUser." );
+            throw new DuplicateTokenException("Duplicate token found when persisting authenticatedUser.");
         }
 
         return merged;
     }
 
     public AuthenticatedUser findAuthenticatedUserByToken(String token) {
-        TypedQuery<AuthenticatedUser> findByToken = entityManager
-                .createQuery("SELECT a FROM AuthenticatedUser a WHERE a.token = :token",
-                        AuthenticatedUser.class);
+        TypedQuery<AuthenticatedUser> findByToken = entityManager.createQuery(
+                "SELECT a FROM AuthenticatedUser a WHERE a.token = :token", AuthenticatedUser.class);
 
         AuthenticatedUser user = null;
         try {

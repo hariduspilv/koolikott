@@ -12,7 +12,6 @@ import org.opensaml.xml.ConfigurationException;
 import org.opensaml.xml.security.x509.X509Credential;
 
 @RunWith(EasyMockRunner.class)
-
 public class MetadataUtilsTest {
 
     @BeforeClass

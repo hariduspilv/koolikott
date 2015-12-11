@@ -36,7 +36,7 @@ public class Chapter {
             name = "Chapter_Material",
             joinColumns = { @JoinColumn(name = "chapter") },
             inverseJoinColumns = { @JoinColumn(name = "material") },
-            uniqueConstraints = @UniqueConstraint(columnNames = { "chapter", "material" }) )
+            uniqueConstraints = @UniqueConstraint(columnNames = { "chapter", "material" }))
     private List<Material> materials;
 
     @OneToMany(fetch = EAGER, cascade = { MERGE, PERSIST })

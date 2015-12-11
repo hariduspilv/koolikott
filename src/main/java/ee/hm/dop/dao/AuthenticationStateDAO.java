@@ -28,8 +28,8 @@ public class AuthenticationStateDAO {
     }
 
     public AuthenticationState findAuthenticationStateByToken(String token) {
-        TypedQuery<AuthenticationState> findByToken = entityManager
-                .createQuery("SELECT a FROM AuthenticationState a WHERE a.token = :token", AuthenticationState.class);
+        TypedQuery<AuthenticationState> findByToken = entityManager.createQuery(
+                "SELECT a FROM AuthenticationState a WHERE a.token = :token", AuthenticationState.class);
 
         AuthenticationState authenticationState = null;
         try {

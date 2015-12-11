@@ -1005,8 +1005,7 @@ public class SearchServiceTest {
         return identifiers;
     }
 
-    private SearchResponse createSearchResponseWithDocuments(List<Searchable> searchables, long start,
-            long totalResults) {
+    private SearchResponse createSearchResponseWithDocuments(List<Searchable> searchables, long start, long totalResults) {
         List<Document> documents = new ArrayList<>();
         for (Searchable searchable : searchables) {
             Document newDocument = new Document();

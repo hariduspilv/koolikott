@@ -90,8 +90,8 @@ public class MobileIDLoginServiceTest {
         mobileAuthenticateResponse.setUserCommonName("JAAN,SEPP,11110000111");
         mobileAuthenticateResponse.setChallengeID("4321");
 
-        expect(mobileIDSOAPService.authenticate(ESTONIAN_CALLING_CODE + phoneNumber, idCode, language))
-                .andReturn(mobileAuthenticateResponse);
+        expect(mobileIDSOAPService.authenticate(ESTONIAN_CALLING_CODE + phoneNumber, idCode, language)).andReturn(
+                mobileAuthenticateResponse);
 
         Capture<AuthenticationState> capturedAuthenticationState = newCapture();
         expectCreateAuthenticationState(capturedAuthenticationState);

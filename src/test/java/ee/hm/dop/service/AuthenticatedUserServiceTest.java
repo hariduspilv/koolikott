@@ -1,8 +1,16 @@
 package ee.hm.dop.service;
 
-import ee.hm.dop.model.AuthenticatedUser;
-import ee.hm.dop.security.KeyStoreUtils;
-import ee.hm.dop.utils.EncryptionUtils;
+import static ee.hm.dop.utils.ConfigurationProperties.KEYSTORE_FILENAME;
+import static ee.hm.dop.utils.ConfigurationProperties.KEYSTORE_PASSWORD;
+import static ee.hm.dop.utils.ConfigurationProperties.KEYSTORE_SIGNING_ENTITY_ID;
+import static ee.hm.dop.utils.ConfigurationProperties.KEYSTORE_SIGNING_ENTITY_PASSWORD;
+import static org.easymock.EasyMock.expect;
+import static org.easymock.EasyMock.replay;
+import static org.easymock.EasyMock.verify;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.configuration.Configuration;
 import org.easymock.EasyMockRunner;
@@ -13,9 +21,9 @@ import org.json.JSONObject;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import static ee.hm.dop.utils.ConfigurationProperties.*;
-import static org.easymock.EasyMock.*;
-import static org.junit.Assert.*;
+import ee.hm.dop.model.AuthenticatedUser;
+import ee.hm.dop.security.KeyStoreUtils;
+import ee.hm.dop.utils.EncryptionUtils;
 
 @RunWith(EasyMockRunner.class)
 public class AuthenticatedUserServiceTest {
@@ -44,7 +52,8 @@ public class AuthenticatedUserServiceTest {
         assertNotNull(signedUserData);
 
         byte[] bytes = Base64.decodeBase64(signedUserData);
-        String userData = EncryptionUtils.decrypt(bytes, KeyStoreUtils.getDOPSigningCredential(configuration).getPublicKey());
+        String userData = EncryptionUtils.decrypt(bytes, KeyStoreUtils.getDOPSigningCredential(configuration)
+                .getPublicKey());
         verifyAll();
 
         JSONObject userDataObject = new JSONObject(userData);

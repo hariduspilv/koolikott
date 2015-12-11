@@ -1,18 +1,37 @@
 package ee.hm.dop.service;
 
-import ee.hm.dop.dao.AuthenticationStateDAO;
-import ee.hm.dop.model.AuthenticatedUser;
-import ee.hm.dop.model.AuthenticationState;
-import ee.hm.dop.model.User;
-import ee.hm.dop.security.KeyStoreUtils;
-import ee.hm.dop.security.MetadataUtils;
+import static ee.hm.dop.utils.ConfigurationProperties.TAAT_ASSERTION_CONSUMER_SERVICE_INDEX;
+import static ee.hm.dop.utils.ConfigurationProperties.TAAT_CONNECTION_ID;
+import static ee.hm.dop.utils.ConfigurationProperties.TAAT_METADATA_ENTITY_ID;
+import static ee.hm.dop.utils.ConfigurationProperties.TAAT_METADATA_FILEPATH;
+import static ee.hm.dop.utils.ConfigurationProperties.TAAT_SSO;
+import static org.opensaml.xml.Configuration.getUnmarshallerFactory;
+
+import java.io.ByteArrayInputStream;
+import java.math.BigInteger;
+import java.security.SecureRandom;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.StringJoiner;
+
+import javax.inject.Inject;
+import javax.servlet.http.HttpServletResponse;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+
 import org.apache.commons.configuration.Configuration;
 import org.apache.xml.security.utils.Base64;
 import org.joda.time.DateTime;
 import org.opensaml.common.SAMLObject;
 import org.opensaml.common.SAMLVersion;
 import org.opensaml.common.binding.BasicSAMLMessageContext;
-import org.opensaml.saml2.core.*;
+import org.opensaml.saml2.core.Assertion;
+import org.opensaml.saml2.core.Attribute;
+import org.opensaml.saml2.core.AuthnRequest;
+import org.opensaml.saml2.core.Issuer;
+import org.opensaml.saml2.core.NameIDPolicy;
+import org.opensaml.saml2.core.Response;
 import org.opensaml.saml2.core.impl.AuthnRequestBuilder;
 import org.opensaml.saml2.core.impl.IssuerBuilder;
 import org.opensaml.saml2.core.impl.NameIDPolicyBuilder;
@@ -32,20 +51,12 @@ import org.opensaml.xml.validation.ValidationException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
-import javax.inject.Inject;
-import javax.servlet.http.HttpServletResponse;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import java.io.ByteArrayInputStream;
-import java.math.BigInteger;
-import java.security.SecureRandom;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.StringJoiner;
-
-import static ee.hm.dop.utils.ConfigurationProperties.*;
-import static org.opensaml.xml.Configuration.getUnmarshallerFactory;
+import ee.hm.dop.dao.AuthenticationStateDAO;
+import ee.hm.dop.model.AuthenticatedUser;
+import ee.hm.dop.model.AuthenticationState;
+import ee.hm.dop.model.User;
+import ee.hm.dop.security.KeyStoreUtils;
+import ee.hm.dop.security.MetadataUtils;
 
 public class TaatService {
 
@@ -80,8 +91,8 @@ public class TaatService {
     private static Credential credential;
 
     private AuthnRequest buildAuthnRequest() {
-        int assertionConsumerServiceIndex = Integer
-                .valueOf(configuration.getString(TAAT_ASSERTION_CONSUMER_SERVICE_INDEX));
+        int assertionConsumerServiceIndex = Integer.valueOf(configuration
+                .getString(TAAT_ASSERTION_CONSUMER_SERVICE_INDEX));
 
         Issuer issuer = getIssuer(configuration.getString(TAAT_CONNECTION_ID));
         NameIDPolicy nameIdPolicy = getNameIdPolicy();
@@ -179,8 +190,6 @@ public class TaatService {
         endpoint.setLocation(configuration.getString(TAAT_SSO));
         return endpoint;
     }
-
-
 
     private AuthenticationState createAuthenticationState(String token) {
         AuthenticationState authenticationState = new AuthenticationState();

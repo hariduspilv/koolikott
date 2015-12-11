@@ -1,16 +1,18 @@
 package ee.hm.dop.service;
 
-import ee.hm.dop.dao.AuthenticatedUserDAO;
-import ee.hm.dop.model.AuthenticatedUser;
-import ee.hm.dop.security.KeyStoreUtils;
-import ee.hm.dop.utils.EncryptionUtils;
+import java.security.PrivateKey;
+
+import javax.inject.Inject;
+
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.configuration.Configuration;
 import org.joda.time.DateTime;
 import org.json.JSONObject;
 
-import javax.inject.Inject;
-import java.security.PrivateKey;
+import ee.hm.dop.dao.AuthenticatedUserDAO;
+import ee.hm.dop.model.AuthenticatedUser;
+import ee.hm.dop.security.KeyStoreUtils;
+import ee.hm.dop.utils.EncryptionUtils;
 
 public class AuthenticatedUserService {
 

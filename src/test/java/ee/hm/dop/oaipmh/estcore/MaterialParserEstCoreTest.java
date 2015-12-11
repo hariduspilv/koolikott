@@ -277,14 +277,15 @@ public class MaterialParserEstCoreTest {
         expect(publisherService.createPublisher(publisher.getName(), publisher.getWebsite())).andReturn(publisher);
         expect(issueDateService.createIssueDate(EasyMock.anyObject(IssueDate.class))).andReturn(new IssueDate());
 
-        //first taxon
+        // first taxon
         expect(taxonService.getTaxonByEstCoreName(educationalContext1.getName(), EducationalContext.class)).andReturn(
                 educationalContext1).anyTimes();
         expect(taxonService.getTaxonByEstCoreName("Mina ja keskkond", Domain.class)).andReturn(domain2);
         expect(taxonService.getTaxonByEstCoreName("Preschool Topic1", Topic.class)).andReturn(topic3);
-        expect(taxonService.getTaxonByEstCoreName("Subtopic for Preschool Topic1", Subtopic.class)).andReturn(subtopic1);
+        expect(taxonService.getTaxonByEstCoreName("Subtopic for Preschool Topic1", Subtopic.class))
+                .andReturn(subtopic1);
 
-        //second taxon
+        // second taxon
         expect(taxonService.getTaxonByEstCoreName(educationalContext3.getName(), EducationalContext.class)).andReturn(
                 educationalContext3).anyTimes();
         expect(taxonService.getTaxonByEstCoreName("Language and literature", Domain.class)).andReturn(domain4);
@@ -292,26 +293,24 @@ public class MaterialParserEstCoreTest {
         expect(taxonService.getTaxonByEstCoreName("Ajaloo algõpetus", Topic.class)).andReturn(topic1);
         expect(taxonService.getTaxonByEstCoreName("Ajaarvamine", Subtopic.class)).andReturn(subtopic2);
 
-
-        //third taxon
+        // third taxon
         expect(taxonService.getTaxonByEstCoreName(educationalContext4.getName(), EducationalContext.class)).andReturn(
                 educationalContext4).anyTimes();
         expect(taxonService.getTaxonByEstCoreName("Computer Science", Domain.class)).andReturn(domain3);
-        expect(taxonService.getTaxonByEstCoreName("Computers and Networks", Specialization.class)).andReturn(specialization);
+        expect(taxonService.getTaxonByEstCoreName("Computers and Networks", Specialization.class)).andReturn(
+                specialization);
         expect(taxonService.getTaxonByEstCoreName("Majanduse alused", Module.class)).andReturn(module);
         expect(taxonService.getTaxonByEstCoreName("Vocational Education Topic1", Topic.class)).andReturn(topic4);
-        expect(taxonService.getTaxonByEstCoreName("Subtopic for Vocational Education", Subtopic.class)).andReturn(subtopic3);
+        expect(taxonService.getTaxonByEstCoreName("Subtopic for Vocational Education", Subtopic.class)).andReturn(
+                subtopic3);
 
-
-        //fourth taxon
+        // fourth taxon
         expect(taxonService.getTaxonByEstCoreName(educationalContext2.getName(), EducationalContext.class)).andReturn(
                 educationalContext2).anyTimes();
         expect(taxonService.getTaxonByEstCoreName("Foreign language", Domain.class)).andReturn(domain1);
         expect(taxonService.getTaxonByEstCoreName(subject2.getName(), Subject.class)).andReturn(subject2);
         expect(taxonService.getTaxonByEstCoreName("Eesti ajalugu", Topic.class)).andReturn(topic2);
         expect(taxonService.getTaxonByEstCoreName("Ajalooallikad", Subtopic.class)).andReturn(subtopic4);
-
-
 
         LanguageString title1 = new LanguageString();
         title1.setLanguage(english);
@@ -341,12 +340,14 @@ public class MaterialParserEstCoreTest {
         resourceTypes.add(resourceType1);
         resourceTypes.add(resourceType2);
 
-        replay(languageService, authorService, tagService, resourceTypeService, taxonService, publisherService, issueDateService);
+        replay(languageService, authorService, tagService, resourceTypeService, taxonService, publisherService,
+                issueDateService);
 
         Document doc = dBuilder.parse(fXmlFile);
         Material material = materialParser.parse(doc);
 
-        verify(languageService, authorService, tagService, resourceTypeService, taxonService, publisherService, issueDateService);
+        verify(languageService, authorService, tagService, resourceTypeService, taxonService, publisherService,
+                issueDateService);
 
         assertEquals(titles, material.getTitles());
         assertEquals("https://oxygen.netgroupdigital.com/rest/repoMaterialSource", material.getSource());

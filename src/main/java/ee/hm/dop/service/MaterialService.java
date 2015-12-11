@@ -15,7 +15,6 @@ import ee.hm.dop.dao.MaterialDAO;
 import ee.hm.dop.model.Author;
 import ee.hm.dop.model.Comment;
 import ee.hm.dop.model.Material;
-import ee.hm.dop.model.Portfolio;
 import ee.hm.dop.model.Publisher;
 import ee.hm.dop.model.User;
 
@@ -67,7 +66,8 @@ public class MaterialService {
                     if (returnedPublisher != null) {
                         publishers.set(i, returnedPublisher);
                     } else {
-                        returnedPublisher = publisherService.createPublisher(publisher.getName(), publisher.getWebsite());
+                        returnedPublisher = publisherService.createPublisher(publisher.getName(),
+                                publisher.getWebsite());
                         publishers.set(i, returnedPublisher);
                     }
                 }
@@ -111,7 +111,7 @@ public class MaterialService {
         originalMaterial.getComments().add(comment);
         materialDao.update(originalMaterial);
     }
-    
+
     public void update(Material material) {
         Material originalMaterial = materialDao.findById(material.getId());
         validateMaterialUpdate(material, originalMaterial);

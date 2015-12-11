@@ -44,7 +44,7 @@ import ezvcard.VCard;
 public abstract class MaterialParser {
 
     protected final Logger logger = LoggerFactory.getLogger(this.getClass());
-    protected static final String[] SCHEMES = {"http", "https"};
+    protected static final String[] SCHEMES = { "http", "https" };
     protected XPathFactory xPathfactory = XPathFactory.newInstance();
     protected XPath xpath = xPathfactory.newXPath();
 
@@ -136,7 +136,7 @@ public abstract class MaterialParser {
             if (name != null && website != null) {
                 Publisher publisher = publisherService.getPublisherByName(name);
                 if (publisher == null) {
-                    publishers.add( publisherService.createPublisher(name, website));
+                    publishers.add(publisherService.createPublisher(name, website));
                 } else if (!publishers.contains(publisher)) {
                     publishers.add(publisher);
                 }
@@ -275,7 +275,7 @@ public abstract class MaterialParser {
         try {
             resourceTypes = getResourceTypes(doc, getPathToResourceType());
         } catch (Exception e) {
-            //ignore if there is no resource type for a material
+            // ignore if there is no resource type for a material
         }
         material.setResourceTypes(resourceTypes);
     }

@@ -1,7 +1,6 @@
 package ee.hm.dop.oaipmh;
 
 import static java.lang.String.format;
-
 import ee.hm.dop.guice.GuiceInjector;
 import ee.hm.dop.model.Repository;
 import ee.hm.dop.oaipmh.estcore.MaterialParserEstCore;
@@ -11,7 +10,6 @@ public class RepositoryManager {
 
     private static final String WARAMU_PARSER = "waramu";
     private static final String ESTCORE_PARSER = "estCore";
-
 
     public MaterialIterator getMaterialsFrom(Repository repository) throws Exception {
         MaterialIterator materialIterator = getMaterialIterator();

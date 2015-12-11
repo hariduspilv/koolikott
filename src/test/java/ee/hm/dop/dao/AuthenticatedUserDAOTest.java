@@ -43,12 +43,11 @@ public class AuthenticatedUserDAOTest extends DatabaseTestBase {
         authenticatedUser2.setToken("123123");
         authenticatedUser2.setUser(user);
 
-
         try {
             authenticatedUserDAO.createAuthenticatedUser(authenticatedUser2);
             fail("Exception expected");
         } catch (DuplicateTokenException e) {
-            //expected
+            // expected
         }
 
         authenticatedUserDAO.delete(returnedAuthenticatedUser);
@@ -66,10 +65,10 @@ public class AuthenticatedUserDAOTest extends DatabaseTestBase {
         AuthenticatedUser returnedUser1 = authenticatedUserDAO.createAuthenticatedUser(authenticatedUser1);
         AuthenticatedUser returnedUser2 = authenticatedUserDAO.createAuthenticatedUser(authenticatedUser2);
 
-        assertEquals(authenticatedUser1.getUser(),
-                authenticatedUserDAO.findAuthenticatedUserByToken("token1").getUser());
-        assertEquals(authenticatedUser2.getUser(),
-                authenticatedUserDAO.findAuthenticatedUserByToken("token2").getUser());
+        assertEquals(authenticatedUser1.getUser(), authenticatedUserDAO.findAuthenticatedUserByToken("token1")
+                .getUser());
+        assertEquals(authenticatedUser2.getUser(), authenticatedUserDAO.findAuthenticatedUserByToken("token2")
+                .getUser());
 
         authenticatedUserDAO.delete(returnedUser1);
         authenticatedUserDAO.delete(returnedUser2);
@@ -77,7 +76,7 @@ public class AuthenticatedUserDAOTest extends DatabaseTestBase {
     }
 
     @Test
-    public void findAuthenticatedUserByToken(){
+    public void findAuthenticatedUserByToken() {
         User user = getUser();
 
         AuthenticatedUser returnedAuthenticatedUser = createAuthenticatedUser(user, "123123");

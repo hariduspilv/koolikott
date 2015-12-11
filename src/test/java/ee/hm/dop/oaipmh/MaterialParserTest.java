@@ -108,7 +108,6 @@ public class MaterialParserTest {
         expect(node.getTextContent()).andReturn("");
         expect(languageService.getLanguage("")).andReturn(null);
 
-
         replay(languageService, node, nodeList, namedNodeMap);
 
         List<LanguageString> languageStrings = materialParser.getLanguageStrings(node, languageService);
@@ -241,4 +240,3 @@ public class MaterialParserTest {
         }
     }
 }
-

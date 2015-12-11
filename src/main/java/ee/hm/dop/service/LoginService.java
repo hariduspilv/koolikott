@@ -60,13 +60,13 @@ public class LoginService {
             authenticatedUser = logIn(idCode);
 
             if (authenticatedUser == null) {
-                throw new RuntimeException(
-                        format("User with id %s tried to log in after creating account, but failed.", idCode));
+                throw new RuntimeException(format(
+                        "User with id %s tried to log in after creating account, but failed.", idCode));
             }
 
             authenticatedUser.setFirstLogin(true);
-            logger.info(format("User %s with id %s logged in for the first time.",
-                    authenticatedUser.getUser().getUsername(), idCode));
+            logger.info(format("User %s with id %s logged in for the first time.", authenticatedUser.getUser()
+                    .getUsername(), idCode));
         }
 
         return authenticatedUser;

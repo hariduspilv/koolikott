@@ -40,13 +40,9 @@ public class TaxonDAO extends BaseDAO {
     }
 
     public Taxon findTaxonByRepoName(String name, String repoTable, Class level) {
-        List<Taxon> taxons = createQuery(
-                "SELECT t.taxon FROM " + repoTable + " t WHERE t.name = :name", Taxon.class) //
+        List<Taxon> taxons = createQuery("SELECT t.taxon FROM " + repoTable + " t WHERE t.name = :name", Taxon.class) //
                 .setParameter("name", name).getResultList();
-        List<Taxon> res = taxons
-                .stream()
-                .filter(t -> (t.getClass().equals(level)))
-                .collect(Collectors.toList());
+        List<Taxon> res = taxons.stream().filter(t -> (t.getClass().equals(level))).collect(Collectors.toList());
 
         if (res != null) {
             return res.get(0);

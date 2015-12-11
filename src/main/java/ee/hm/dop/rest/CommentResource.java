@@ -21,7 +21,7 @@ public class CommentResource extends BaseResource {
 
     @Inject
     private MaterialService materialService;
-    
+
     @POST
     @Path("portfolio")
     @Consumes("application/json")
@@ -32,7 +32,7 @@ public class CommentResource extends BaseResource {
 
         portfolioService.addComment(comment, form.getPortfolio());
     }
-    
+
     @POST
     @Path("material")
     @Consumes("application/json")
@@ -66,13 +66,13 @@ public class CommentResource extends BaseResource {
             this.portfolio = portfolio;
         }
 
-		public Material getMaterial() {
-			return material;
-		}
+        public Material getMaterial() {
+            return material;
+        }
 
-		public void setMaterial(Material material) {
-			this.material = material;
-		}
+        public void setMaterial(Material material) {
+            this.material = material;
+        }
     }
 
 }

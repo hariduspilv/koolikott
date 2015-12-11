@@ -22,7 +22,8 @@ public interface ConfigurationProperties {
     String TAAT_METADATA_FILEPATH = "taat.metadata.filepath";
     String TAAT_METADATA_ENTITY_ID = "taat.metadata.entityID";
 
-    // Keystore for TAAT and signing user data for estonian publisher repositories
+    // Keystore for TAAT and signing user data for estonian publisher
+    // repositories
     String KEYSTORE_FILENAME = "keystore.filename";
     String KEYSTORE_PASSWORD = "keystore.password";
     String KEYSTORE_SIGNING_ENTITY_ID = "keystore.signingEntityID";

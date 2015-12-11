@@ -83,7 +83,7 @@ public class MaterialParserEstCore extends MaterialParser {
             setAuthors(doc, material);
             setPublishersData(doc, material);
         } catch (Exception e) {
-            //ignore
+            // ignore
         }
     }
 
@@ -98,11 +98,10 @@ public class MaterialParserEstCore extends MaterialParser {
         try {
             tags = getTags(doc);
         } catch (XPathExpressionException e) {
-            //ignore
+            // ignore
         }
         material.setTags(tags);
     }
-
 
     @Override
     protected void setDescriptions(Material material, Document doc) {
@@ -111,7 +110,7 @@ public class MaterialParserEstCore extends MaterialParser {
         try {
             descriptions = getDescriptions(doc);
         } catch (Exception e) {
-            //ignore
+            // ignore
         }
 
         material.setDescriptions(descriptions);
@@ -124,7 +123,7 @@ public class MaterialParserEstCore extends MaterialParser {
         try {
             language = getLanguage(doc);
         } catch (Exception e) {
-            //ignore
+            // ignore
         }
 
         material.setLanguage(language);
@@ -166,7 +165,7 @@ public class MaterialParserEstCore extends MaterialParser {
                     return getTaxon(taxonMap.get(tag), EducationalContext.class);
                 }
             } catch (XPathExpressionException e) {
-                //ignore
+                // ignore
             }
         }
         return null;
@@ -183,10 +182,11 @@ public class MaterialParserEstCore extends MaterialParser {
                     String systemName = getTaxon(node.getTextContent(), Domain.class).getName();
 
                     Taxon taxon = getTaxonByName(domains, systemName);
-                    if (taxon != null) return taxon;
+                    if (taxon != null)
+                        return taxon;
                 }
             } catch (XPathExpressionException e) {
-                //ignore
+                // ignore
             }
         }
         return educationalContext;
@@ -203,10 +203,11 @@ public class MaterialParserEstCore extends MaterialParser {
                     String systemName = getTaxon(node.getTextContent(), Subject.class).getName();
 
                     Taxon taxon = getTaxonByName(subjects, systemName);
-                    if (taxon != null) return taxon;
+                    if (taxon != null)
+                        return taxon;
                 }
             } catch (XPathExpressionException e) {
-                //ignore
+                // ignore
             }
         }
         return domain;
@@ -230,10 +231,11 @@ public class MaterialParserEstCore extends MaterialParser {
 
                     String systemName = getTaxon(node.getTextContent(), Topic.class).getName();
                     Taxon taxon = getTaxonByName(topics, systemName);
-                    if (taxon != null) return taxon;
+                    if (taxon != null)
+                        return taxon;
                 }
             } catch (XPathExpressionException e) {
-                //ignore
+                // ignore
             }
         }
         return parent;
@@ -251,10 +253,11 @@ public class MaterialParserEstCore extends MaterialParser {
 
                     String systemName = getTaxon(node.getTextContent(), Specialization.class).getName();
                     Taxon taxon = getTaxonByName(specializations, systemName);
-                    if (taxon != null) return taxon;
+                    if (taxon != null)
+                        return taxon;
                 }
             } catch (XPathExpressionException e) {
-                //ignore
+                // ignore
             }
         }
         return parent;
@@ -272,10 +275,11 @@ public class MaterialParserEstCore extends MaterialParser {
 
                     String systemName = getTaxon(node.getTextContent(), Module.class).getName();
                     Taxon taxon = getTaxonByName(modules, systemName);
-                    if (taxon != null) return taxon;
+                    if (taxon != null)
+                        return taxon;
                 }
             } catch (XPathExpressionException e) {
-                //ignore
+                // ignore
             }
         }
         return parent;
@@ -293,10 +297,11 @@ public class MaterialParserEstCore extends MaterialParser {
 
                     String systemName = getTaxon(node.getTextContent(), Subtopic.class).getName();
                     Taxon taxon = getTaxonByName(subtopics, systemName);
-                    if (taxon != null) return taxon;
+                    if (taxon != null)
+                        return taxon;
                 }
             } catch (XPathExpressionException e) {
-                //ignore
+                // ignore
             }
         }
         return parent;
@@ -305,7 +310,8 @@ public class MaterialParserEstCore extends MaterialParser {
     @Override
     protected void setIsPaid(Material material, Document doc) {
         try {
-            Node isPaid = getNode(doc, "//*[local-name()='estcore']/*[local-name()='rights']/*[local-name()='cost']/*[local-name()='value']");
+            Node isPaid = getNode(doc,
+                    "//*[local-name()='estcore']/*[local-name()='rights']/*[local-name()='cost']/*[local-name()='value']");
 
             if (isPaid.getTextContent().trim().toUpperCase().equals(YES)) {
                 material.setIsPaid(true);
@@ -321,7 +327,8 @@ public class MaterialParserEstCore extends MaterialParser {
     protected void setTargetGroups(Material material, Document doc) {
         Set<TargetGroup> targetGroups = new HashSet<>();
         try {
-            NodeList ageRanges = getNodeList(doc, "//*[local-name()='estcore']/*[local-name()='educational']/*[local-name()='typicalAgeRange']");
+            NodeList ageRanges = getNodeList(doc,
+                    "//*[local-name()='estcore']/*[local-name()='educational']/*[local-name()='typicalAgeRange']");
 
             for (int i = 0; i < ageRanges.getLength(); i++) {
                 String ageRange = ageRanges.item(i).getTextContent().trim();
@@ -334,7 +341,7 @@ public class MaterialParserEstCore extends MaterialParser {
                 }
             }
         } catch (XPathExpressionException e) {
-            //ignore
+            // ignore
         }
 
         material.setTargetGroups(new ArrayList<>(targetGroups));
@@ -348,7 +355,7 @@ public class MaterialParserEstCore extends MaterialParser {
 
             material.setPicture(bytes);
         } catch (XPathExpressionException e) {
-            //ignore
+            // ignore
         }
     }
 
@@ -366,8 +373,7 @@ public class MaterialParserEstCore extends MaterialParser {
             for (int i = 0; i < classifications.getLength(); i++) {
                 Node classification = classifications.item(i);
 
-                XPathExpression expr2 = xpath
-                        .compile("./*[local-name()='taxonPath']");
+                XPathExpression expr2 = xpath.compile("./*[local-name()='taxonPath']");
                 NodeList nl = (NodeList) expr2.evaluate(classification, XPathConstants.NODESET);
 
                 if (nl != null && nl.getLength() > 0) {
@@ -405,7 +411,8 @@ public class MaterialParserEstCore extends MaterialParser {
 
     private void setAuthors(Document doc, Material material) throws ParseException, XPathExpressionException {
         List<Author> authors = new ArrayList<>();
-        NodeList nodeList = getNodeList(doc, "//*[local-name()='estcore']/*[local-name()='lifeCycle']/*[local-name()='contribute']");
+        NodeList nodeList = getNodeList(doc,
+                "//*[local-name()='estcore']/*[local-name()='lifeCycle']/*[local-name()='contribute']");
 
         for (int i = 0; i < nodeList.getLength(); i++) {
             Node contributorNode = nodeList.item(i);
@@ -423,7 +430,8 @@ public class MaterialParserEstCore extends MaterialParser {
     private void setPublishersData(Document doc, Material material) throws ParseException, XPathExpressionException {
         List<Publisher> publishers = new ArrayList<>();
         IssueDate issueDate = null;
-        NodeList nodeList = getNodeList(doc, "//*[local-name()='estcore']/*[local-name()='lifeCycle']/*[local-name()='contribute']");
+        NodeList nodeList = getNodeList(doc,
+                "//*[local-name()='estcore']/*[local-name()='lifeCycle']/*[local-name()='contribute']");
 
         for (int i = 0; i < nodeList.getLength(); i++) {
             Node contributorNode = nodeList.item(i);
@@ -476,7 +484,6 @@ public class MaterialParserEstCore extends MaterialParser {
         return titles;
     }
 
-
     private List<LanguageString> getDescriptions(Document doc) throws XPathExpressionException {
         List<LanguageString> descriptions;
         Node node = getNode(doc, "//*[local-name()='estcore']/*[local-name()='general']/*[local-name()='description']");
@@ -486,7 +493,8 @@ public class MaterialParserEstCore extends MaterialParser {
     }
 
     private List<Tag> getTags(Document doc) throws XPathExpressionException {
-        NodeList keywords = getNodeList(doc, "//*[local-name()='estcore']/*[local-name()='general']/*[local-name()='keyword']/*[local-name()='string']");
+        NodeList keywords = getNodeList(doc,
+                "//*[local-name()='estcore']/*[local-name()='general']/*[local-name()='keyword']/*[local-name()='string']");
 
         return getTagsFromKeywords(keywords, tagService);
     }
