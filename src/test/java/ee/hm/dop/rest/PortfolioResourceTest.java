@@ -14,10 +14,8 @@ import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import javax.ws.rs.core.Response.Status;
 
 import org.joda.time.DateTime;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import ee.hm.dop.common.test.ResourceIntegrationTestBase;
@@ -25,9 +23,6 @@ import ee.hm.dop.model.Chapter;
 import ee.hm.dop.model.Material;
 import ee.hm.dop.model.Portfolio;
 import ee.hm.dop.model.TargetGroup;
-import ee.hm.dop.rest.PortfolioResource.ChapterForm;
-import ee.hm.dop.rest.PortfolioResource.CreatePortfolioForm;
-import ee.hm.dop.rest.PortfolioResource.UpdatePortfolioForm;
 
 public class PortfolioResourceTest extends ResourceIntegrationTestBase {
 
@@ -38,19 +33,17 @@ public class PortfolioResourceTest extends ResourceIntegrationTestBase {
     private static final String GET_PORTFOLIO_PICTURE_URL = "portfolio/getPicture?portfolioId=%s";
     private static final String PORTFOLIO_INCREASE_VIEW_COUNT_URL = "portfolio/increaseViewCount";
 
-    @Ignore
     @Test
     public void getPortfolio() {
         Portfolio portfolio = getPortfolio(1);
         assertPortfolio1(portfolio);
     }
 
-    @Ignore
     @Test
     public void getByCreator() {
         String username = "mati.maasikas-vaarikas";
-        List<Portfolio> portfolios = doGet(format(GET_BY_CREATOR_URL, username))
-                .readEntity(new GenericType<List<Portfolio>>() {
+        List<Portfolio> portfolios = doGet(format(GET_BY_CREATOR_URL, username)).readEntity(
+                new GenericType<List<Portfolio>>() {
                 });
 
         assertEquals(2, portfolios.size());
@@ -84,8 +77,8 @@ public class PortfolioResourceTest extends ResourceIntegrationTestBase {
     @Test
     public void getByCreatorNoMaterials() {
         String username = "voldemar.vapustav";
-        List<Portfolio> portfolios = doGet(format(GET_BY_CREATOR_URL, username))
-                .readEntity(new GenericType<List<Portfolio>>() {
+        List<Portfolio> portfolios = doGet(format(GET_BY_CREATOR_URL, username)).readEntity(
+                new GenericType<List<Portfolio>>() {
                 });
 
         assertEquals(0, portfolios.size());
@@ -144,18 +137,13 @@ public class PortfolioResourceTest extends ResourceIntegrationTestBase {
     public void create() {
         login("39011220011");
 
-        CreatePortfolioForm portfolioForm = new CreatePortfolioForm();
-
         Portfolio portfolio = new Portfolio();
         portfolio.setTitle("Tere");
 
-        portfolioForm.setPortfolio(portfolio);
-        portfolioForm.setTaxonId(1L);
+        Portfolio createdPortfolio = doPost(CREATE_PORTFOLIO_URL, portfolio, Portfolio.class);
 
-        Response response = doPost(CREATE_PORTFOLIO_URL, Entity.entity(portfolioForm, MediaType.APPLICATION_JSON_TYPE));
-
-        assertEquals(Status.OK.getStatusCode(), response.getStatus());
-
+        assertNotNull(createdPortfolio);
+        assertNotNull(createdPortfolio.getId());
     }
 
     @Test
@@ -165,14 +153,9 @@ public class PortfolioResourceTest extends ResourceIntegrationTestBase {
         Portfolio portfolio = getPortfolio(5);
         String originalTitle = portfolio.getTitle();
         portfolio.setTitle("New mega nice title that I come with Yesterday night!");
-        UpdatePortfolioForm updatePortfolioForm = getUpdatePortfolioForm(portfolio);
 
-        Response response = doPost(UPDATE_PORTFOLIO_URL,
-                Entity.entity(updatePortfolioForm, MediaType.APPLICATION_JSON_TYPE));
+        Portfolio updatedPortfolio = doPost(UPDATE_PORTFOLIO_URL, portfolio, Portfolio.class);
 
-        assertEquals(Status.OK.getStatusCode(), response.getStatus());
-
-        Portfolio updatedPortfolio = response.readEntity(Portfolio.class);
         assertFalse(originalTitle.equals(updatedPortfolio.getTitle()));
         assertEquals("New mega nice title that I come with Yesterday night!", updatedPortfolio.getTitle());
 
@@ -191,13 +174,7 @@ public class PortfolioResourceTest extends ResourceIntegrationTestBase {
         Portfolio portfolio = getPortfolio(5);
         portfolio.setChapters(chapters);
 
-        UpdatePortfolioForm updatePortfolioForm = getUpdatePortfolioForm(portfolio);
-
-        Response response = doPost(UPDATE_PORTFOLIO_URL,
-                Entity.entity(updatePortfolioForm, MediaType.APPLICATION_JSON_TYPE));
-
-        assertEquals(Status.OK.getStatusCode(), response.getStatus());
-        Portfolio updatedPortfolio = response.readEntity(Portfolio.class);
+        Portfolio updatedPortfolio = doPost(UPDATE_PORTFOLIO_URL, portfolio, Portfolio.class);
         assertFalse(updatedPortfolio.getChapters().isEmpty());
 
     }
@@ -222,15 +199,9 @@ public class PortfolioResourceTest extends ResourceIntegrationTestBase {
         Portfolio portfolio = getPortfolio(5);
         portfolio.setChapters(chapters);
 
-        UpdatePortfolioForm updatePortfolioForm = getUpdatePortfolioForm(portfolio);
+        Portfolio updatedPortfolio = doPost(UPDATE_PORTFOLIO_URL, portfolio, Portfolio.class);
 
-        Response response = doPost(UPDATE_PORTFOLIO_URL,
-                Entity.entity(updatePortfolioForm, MediaType.APPLICATION_JSON_TYPE));
-
-        assertEquals(Status.OK.getStatusCode(), response.getStatus());
-        Portfolio updatedPortfolio = response.readEntity(Portfolio.class);
         assertFalse(updatedPortfolio.getChapters().isEmpty());
-
         assertFalse(updatedPortfolio.getChapters().get(0).getSubchapters().isEmpty());
     }
 
@@ -251,18 +222,11 @@ public class PortfolioResourceTest extends ResourceIntegrationTestBase {
         Portfolio portfolio = getPortfolio(5);
         portfolio.getChapters().add(newChapter);
 
-        UpdatePortfolioForm updatePortfolioForm = getUpdatePortfolioForm(portfolio);
+        Portfolio updatedPortfolio = doPost(UPDATE_PORTFOLIO_URL, portfolio, Portfolio.class);
 
-        Response response = doPost(UPDATE_PORTFOLIO_URL,
-                Entity.entity(updatePortfolioForm, MediaType.APPLICATION_JSON_TYPE));
-
-        assertEquals(Status.OK.getStatusCode(), response.getStatus());
-        Portfolio updatedPortfolio = response.readEntity(Portfolio.class);
         assertFalse(updatedPortfolio.getChapters().isEmpty());
-
         Chapter verify = updatedPortfolio.getChapters().get(updatedPortfolio.getChapters().size() - 1).getSubchapters()
                 .get(0);
-
         assertEquals(verify.getTitle(), "New cool subchapter");
 
     }
@@ -332,54 +296,4 @@ public class PortfolioResourceTest extends ResourceIntegrationTestBase {
         assertEquals("Lifelong_learning_and_career_planning", portfolio.getCrossCurricularThemes().get(0).getName());
         assertEquals("Cultural_and_value_competence", portfolio.getKeyCompetences().get(0).getName());
     }
-
-    private UpdatePortfolioForm getUpdatePortfolioForm(Portfolio portfolio) {
-        UpdatePortfolioForm portfolioForm = new UpdatePortfolioForm();
-        portfolioForm.setPortfolio(portfolio);
-        portfolioForm.setChapters(getChapterForms(portfolio.getChapters()));
-
-        if (portfolio.getTaxon() != null) {
-            portfolioForm.setTaxonId(portfolio.getTaxon().getId());
-            portfolio.setTaxon(null);
-        }
-
-        return portfolioForm;
-    }
-
-    private List<ChapterForm> getChapterForms(List<Chapter> chapters) {
-        List<ChapterForm> chapterForms = new ArrayList<>();
-
-        if (chapters != null) {
-            for (Chapter chapter : chapters) {
-                chapterForms.add(getChapterForm(chapter));
-            }
-        }
-
-        return chapterForms;
-    }
-
-    private ChapterForm getChapterForm(Chapter chapter) {
-        ChapterForm chapterForm = new ChapterForm();
-        chapterForm.setChapter(chapter);
-
-        chapterForm.setMaterials(getMaterialIdsList(chapter.getMaterials()));
-        chapter.setMaterials(null);
-
-        chapterForm.setSubchapters(getChapterForms(chapter.getSubchapters()));
-        chapter.setSubchapters(null);
-
-        return chapterForm;
-    }
-
-    private List<Long> getMaterialIdsList(List<Material> materials) {
-        List<Long> ids = new ArrayList<>();
-        if (materials != null) {
-            for (Material material : materials) {
-                ids.add(material.getId());
-            }
-        }
-
-        return ids;
-    }
-
 }

@@ -16,7 +16,6 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
 import org.joda.time.DateTime;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import ee.hm.dop.common.test.ResourceIntegrationTestBase;
@@ -97,7 +96,6 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
 
     }
 
-    @Ignore
     @Test
     public void GetNewestMaterials() {
         Response response = doGet(format(GET_NEWEST_MATERIALS_URL, 8));
@@ -170,7 +168,6 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
         assertEquals(Status.NOT_FOUND.getStatusCode(), response.getStatus());
     }
 
-    @Ignore
     @Test
     public void getMaterialWithSubjects() {
         Material material = getMaterial(6);
@@ -194,12 +191,11 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
         assertEquals(0, taxons.size());
     }
 
-    @Ignore
     @Test
     public void getByCreator() {
         String username = "mati.maasikas";
-        List<Material> materials = doGet(format(GET_BY_CREATOR_URL, username))
-                .readEntity(new GenericType<List<Material>>() {
+        List<Material> materials = doGet(format(GET_BY_CREATOR_URL, username)).readEntity(
+                new GenericType<List<Material>>() {
                 });
 
         assertEquals(3, materials.size());
@@ -231,8 +227,8 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
     @Test
     public void getByCreatorNoMaterials() {
         String username = "voldemar.vapustav";
-        List<Material> materials = doGet(format(GET_BY_CREATOR_URL, username))
-                .readEntity(new GenericType<List<Material>>() {
+        List<Material> materials = doGet(format(GET_BY_CREATOR_URL, username)).readEntity(
+                new GenericType<List<Material>>() {
                 });
 
         assertEquals(0, materials.size());
