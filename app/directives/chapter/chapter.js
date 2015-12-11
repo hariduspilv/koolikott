@@ -11,7 +11,7 @@ define(['app'], function(app)
             templateUrl: 'directives/chapter/chapter.html',
             controller: function($scope) {
             	
-            	$scope.isEditable = $rootScope.isEditPortforlioMode;
+            	$scope.isEditable = $rootScope.isEditPortfolioMode;
             	
                 $scope.onDeleteSubChapter = function(subChapter) {
                     

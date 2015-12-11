@@ -80,9 +80,9 @@ define(['app'], function(app)
                         $scope.detailedSearch.keyCompetence = keyCompetence;
                     }
                     
-                    $scope.isEditPortforlioMode = $rootScope.isEditPortforlioMode;
-                    if ($rootScope.isEditPortforlioMode && $rootScope.savedPortifolio) {
-                    	$scope.detailedSearch.taxon = $rootScope.savedPortifolio.taxon;
+                    $scope.isEditPortfolioMode = $rootScope.isEditPortfolioMode;
+                    if ($rootScope.isEditPortfolioMode && $rootScope.savedPortfolio) {
+                    	$scope.detailedSearch.taxon = $rootScope.savedPortfolio.taxon;
                     } else {
                         // Taxon
                         if (searchService.getTaxon()) {

@@ -9,7 +9,7 @@ define(['app'], function(app)
             templateUrl: 'directives/chapter/addChapterMaterial/addChapterMaterial.html',
             controller: function ($scope) {
             	
-            	$scope.isEditable = $rootScope.isEditPortforlioMode;
+            	$scope.isEditable = $rootScope.isEditPortfolioMode;
             	
                 $scope.addMaterialFromPermalink = function() {
                     if ($scope.resourcePermalinkForm.$valid) {

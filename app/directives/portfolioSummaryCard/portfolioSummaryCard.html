@@ -6,13 +6,13 @@
           <md-icon md-menu-origin>more_vert</md-icon>
         </md-button>
         <md-menu-content width="4">
-          <md-menu-item data-ng-if="!isEditPortforlioMode && isOwner()">
+          <md-menu-item data-ng-if="!isEditPortfolioMode && isOwner()">
             <md-button data-ng-click="editPortfolio()">
               <md-icon md-menu-align-target>edit</md-icon>
               <span data-translate="EDIT_PORTFOLIO"></span>
             </md-button>
           </md-menu-item>
-          <md-menu-item data-ng-if="isEditPortforlioMode">
+          <md-menu-item data-ng-if="isEditPortfolioMode">
             <md-button data-ng-click="showEditMetadataoDialog()">
               <md-icon md-menu-align-target>edit</md-icon>
               <span data-translate="PORTFOLIO_EDIT_METADATA"></span>
@@ -110,7 +110,7 @@
       <div data-dop-comments-card comments="portfolio.comments" comment="newComment" submit-click="addComment()"></div>
       <span flex></span>
     <!-- rating control -->
-    <div data-ng-if="!$root.isEditPortforlioMode" data-dop-rating like-message="{{ 'PORTFOLIO_LIKED' | translate }}" dislike-message="{{ 'PORTFOLIO_DISLIKED' | translate }}"></div>
+    <div data-ng-if="!$root.isEditPortfolioMode" data-dop-rating like-message="{{ 'PORTFOLIO_LIKED' | translate }}" dislike-message="{{ 'PORTFOLIO_DISLIKED' | translate }}"></div>
   </div>
   </md-card-content>
 </md-card>
