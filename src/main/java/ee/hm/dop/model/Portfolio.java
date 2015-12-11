@@ -29,12 +29,14 @@ import org.hibernate.annotations.Type;
 import org.joda.time.DateTime;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 import ee.hm.dop.model.taxon.Taxon;
 import ee.hm.dop.rest.jackson.map.DateTimeDeserializer;
 import ee.hm.dop.rest.jackson.map.DateTimeSerializer;
+import ee.hm.dop.rest.jackson.map.PictureDeserializer;
 
 @Entity
 public class Portfolio implements Searchable {
@@ -87,7 +89,6 @@ public class Portfolio implements Searchable {
     private List<Tag> tags;
 
     @Lob
-    @JsonIgnore
     private byte[] picture;
 
     @Formula("picture is not null")
@@ -200,10 +201,13 @@ public class Portfolio implements Searchable {
         this.tags = tags;
     }
 
+    @JsonIgnore
     public byte[] getPicture() {
         return picture;
     }
 
+    @JsonProperty
+    @JsonDeserialize(using = PictureDeserializer.class)
     public void setPicture(byte[] picture) {
         this.picture = picture;
     }

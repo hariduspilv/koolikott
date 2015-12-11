@@ -152,6 +152,8 @@ insert into Translation(translationGroup, translationKey, translation) values (1
 insert into Translation(translationGroup, translationKey, translation) values (1, 'TARGET_GROUP_GRADE8', '8. klass');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'TARGET_GROUP_GRADE9', '9. klass');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'TARGET_GROUP_GYMNASIUM', 'Gümnaasium');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'PORTFOLIO_PHOTO_UPLOAD_HELP', 'Lohista pilt siia või vali pilt arvutist vajutades siia');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'PORTFOLIO_PHOTO_PREVIEW', 'Eelvaade');
 
 -- Taxon Domain translations
 insert into Translation(translationGroup, translationKey, translation) values (1, 'DOMAIN_LANGUAGE_AND_SPEECH', 'Keel ja kõne');

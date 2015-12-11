@@ -155,6 +155,8 @@ insert into Translation(translationGroup, translationKey, translation) values (3
 insert into Translation(translationGroup, translationKey, translation) values (3, 'TABLE_OF_CONTENTS', 'Table of Contents');
 insert into Translation(translationGroup, translationKey, translation) values (3, 'ALERT_CONFIRM_POSITIVE', 'Yes');
 insert into Translation(translationGroup, translationKey, translation) values (3, 'ALERT_CONFIRM_NEGATIVE', 'No');
+insert into Translation(translationGroup, translationKey, translation) values (3, 'PORTFOLIO_PHOTO_UPLOAD_HELP', 'Drag and drop the picture or choose from your computer');
+insert into Translation(translationGroup, translationKey, translation) values (3, 'PORTFOLIO_PHOTO_PREVIEW', 'Preview');
 
 -- Edit portfolio
 insert into Translation(translationGroup, translationKey, translation) values (3, 'PORTFOLIO_ENTER_CHAPTER_TITLE', 'Add chapter title');

@@ -106,6 +106,7 @@ public class PortfolioService {
         safePortfolio.setTags(portfolio.getTags());
         safePortfolio.setTargetGroups(portfolio.getTargetGroups());
         safePortfolio.setTaxon(portfolio.getTaxon());
+        safePortfolio.setPicture(portfolio.getPicture());
         return safePortfolio;
     }
 
@@ -116,6 +117,7 @@ public class PortfolioService {
         originalPortfolio.setTargetGroups(portfolio.getTargetGroups());
         originalPortfolio.setTaxon(portfolio.getTaxon());
         originalPortfolio.setChapters(portfolio.getChapters());
+        originalPortfolio.setPicture(portfolio.getPicture());
         return originalPortfolio;
     }
 
