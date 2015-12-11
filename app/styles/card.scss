@@ -22,9 +22,12 @@ md-card {
   .md-button {
     font-weight: 400;
   }
+  h2 {
+    margin-top: 0;
+  }
   .md-body-1 {
     color: #222;
-    font-size: 14px;
+    font-size: 16px;
     font-weight: 300;
     line-height: 20px;
     overflow: hidden;
@@ -34,6 +37,7 @@ md-card {
       line-height: 24px;
     }
   }
+
   md-card-footer {
     padding-top: 10px;
     padding-bottom: 12px;
@@ -246,7 +250,7 @@ md-card {
         }
       }
     }
-    .md-actions {
+    .actions {
       margin-top: 10px;
       margin-bottom: -10px;
       .md-button {

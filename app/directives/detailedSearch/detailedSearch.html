@@ -66,6 +66,9 @@
       <md-checkbox data-ng-if="detailedSearch.educationalContext.id >= 2 && detailedSearch.educationalContext.id <= 4" data-ng-model="detailedSearch.onlyBooks" aria-label="{{'DETAILED_SEARCH_ONLY_BOOKS' | translate}}" class="md-primary" flex>
         <span data-translate="DETAILED_SEARCH_ONLY_BOOKS"></span>
       </md-checkbox>
+      <md-checkbox data-ng-if="detailedSearch.educationalContext.id == 4" data-ng-model="detailedSearch.specialEducationalNeed" aria-label="{{'DETAILED_SEARCH_SPECIAL_EDUCATIONAL_NEED' | translate}}" class="md-primary" flex>
+        <span data-translate="DETAILED_SEARCH_SPECIAL_EDUCATIONAL_NEED"></span>
+      </md-checkbox>
       <md-checkbox data-ng-model="detailedSearch.paid" class="md-primary" flex>
         <span data-translate="DETAILED_SEARCH_INCLUDE_PAID"></span>
       </md-checkbox>
@@ -76,7 +79,7 @@
         <md-radio-button ng-disabled="isEditPortforlioMode" value="portfolio" class="md-primary">
           <span data-translate="DETAILED_SEARCH_PORTFOLIOS"></span>
         </md-radio-button>
-        <md-radio-button value="all" class="md-primary">
+        <md-radio-button ng-disabled="isEditPortforlioMode" value="all" class="md-primary">
           <span data-translate="DETAILED_SEARCH_ALL"></span>
         </md-radio-button>
       </md-radio-group>
@@ -85,6 +88,6 @@
 </div>
 
 <div class="md-actions" layout="row" layout-sm="column" layout-align="end start" layout-padding>
-  <md-button>Tühista valikud</md-button>
-  <md-button type="submit" class="md-primary md-button" data-ng-click="search()" data-translate="DETAILED_SEARCH_SUBMIT"></md-button>
+  <md-button data-ng-click="clear()" data-translate="DETAILED_SEARCH_CLEAR" aria-label="{{'DETAILED_SEARCH_CLEAR' | translate}}"></md-button>
+  <md-button type="submit" class="md-primary md-button" data-ng-click="search()" data-translate="DETAILED_SEARCH_SUBMIT" aria-label="{{'DETAILED_SEARCH_SUBMIT' | translate}}"></md-button>
 </div>

@@ -1,0 +1,6 @@
+.type-block {
+  margin-top: 40px;
+  &:first-of-type {
+    margin-top: 0;
+  }
+}

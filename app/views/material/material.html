@@ -86,7 +86,9 @@
                   <!-- TODO: NEEDS FIXING AFTER STYLE -->
                   <p>
                     <div data-ng-if="sourceType === 'YOUTUBE'" class="embed-responsive embed-responsive-16by9">
-                      <youtube-video video-url="material.source" player-width="'768'" player-height="'432'" class="embed-responsive-item"></youtube-video>
+                      <div class="video-container">
+                        <youtube-video video-url="material.source" player-width="'768'" player-height="'432'" class="embed-responsive-item"></youtube-video>
+                      </div>
                     </div>
 
                     <div data-ng-if="sourceType === 'SLIDESHARE'" class="embed-responsive embed-responsive-4by3">
@@ -94,13 +96,13 @@
                     </div>
 
                     <div data-ng-if="sourceType === 'LINK' && !material.embeddable">
-                      <md-button data-ng-href="{{material.source}}" target="_blank">
+                      <!-- <md-button data-ng-href="{{material.source}}" target="_blank">
                         Vaata
                         <md-icon class="material-icons md-primary">send</md-icon>
                         <md-tooltip md-direction="top">
                           Avaneb uues aknas
                         </md-tooltip>
-                      </md-button>
+                      </md-button> -->
 
                       <!-- <span class="item-label" data-translate="MATERIAL_VIEW_LINK_TO_MATERIAL">Open material</span> -->
                       <!-- <a data-ng-href="{{material.source}}" target="_blank" class="wrapped regular-link md-primary">
@@ -118,8 +120,6 @@
 
                   <iframe data-ng-src="{{material.iframeSource}}" data-ng-show="showMaterialContent" width="100%" height="100%" ngsf-fullscreen="fullscreenCtrl"></iframe>
                 </div>
-
-                <!-- TODO: Tags should align bottom -->
 
                 <div data-ng-if="!isNullOrZeroLength(material.tags)">
                   <p class="md-body-2 meta">
@@ -155,10 +155,10 @@
                   <p class="md-body-2 meta" data-ng-if="material.updated">
                     <small class="md-caption">
                       <span data-translate="UPDATED"></span>:
-                    </small> 
+                    </small>
                     {{formatMaterialUpdatedDate(material.updated)}}
                   </p>
-                  
+
                   <p class="md-body-2 meta">
                     <small class="md-caption">
                       <span data-translate="CREATED"></span>:
@@ -193,7 +193,9 @@
                       <span data-ng-if="material.publishers && material.publishers.length > 1" data-translate="PUBLISHERS"></span>
                     </small>
                     <br>
-                    <span data-ng-repeat="publisher in material.publishers" data-ng-bind="publisher.name"></span>
+                    <span data-ng-repeat="publisher in material.publishers">
+                        {{publisher.name}}{{$last ? '' : ', '}}
+                    </span>
                   </p>
 
                   <p class="md-body-2 meta" data-ng-if="material.paid">

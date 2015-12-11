@@ -8,9 +8,14 @@ define(['app'], function(app)
         function($scope, translationService, serverCallService, $route, $location, alertService, $rootScope, authenticatedUserService, dialogService, toastService, searchService) {
 
             function init() {
-				getPortfolio(getPortfolioSuccess, getPortfolioFail);
+            	if ($rootScope.savedPortfolio) {
+					setPortfolio($rootScope.savedPortfolio);
+				} else {
+					getPortfolio(getPortfolioSuccess, getPortfolioFail);
+				}
+            	
 				$rootScope.isEditPortforlioMode = true;
-				searchService.setTaxon(null);
+				searchService.setType("material");
 				searchService.setTargetGroups([]);
 			}
 
@@ -23,11 +28,7 @@ define(['app'], function(app)
 	            if (isEmpty(portfolio)) {
 	            	getPortfolioFail();
 	            } else {
-	                $scope.portfolio = portfolio;
-	                
-	                var taxon = portfolio.taxon != null ? portfolio.taxon.id : null;
-	                searchService.setTaxon(taxon);
-    
+	            	setPortfolio(portfolio);    
 	                searchService.setTargetGroups(portfolio.targetGroups);
 	            }
 	    	}
@@ -120,8 +121,7 @@ define(['app'], function(app)
                 if (isEmpty(portfolio)) {
                     createPortfolioFailed();
                 } else {
-                    $scope.portfolio.taxon = portfolio.taxon;
-                    $scope.portfolio.chapters = portfolio.chapters;
+                	setPortfolio(portfolio);
                     toastService.show("PORTFOLIO_SAVED");
                 }
             }
@@ -129,6 +129,11 @@ define(['app'], function(app)
             function updatePortfolioFailed(){
 				log('Updagint portfolio failed.');
 			}
+            
+            function setPortfolio(portfolio) {
+            	$scope.portfolio = portfolio;
+                $rootScope.savedPortfolio = portfolio;
+            }
             
             init();
     	}

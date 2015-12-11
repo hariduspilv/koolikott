@@ -11,6 +11,7 @@ define(['app'], function(app) {
         var isSpecialEducationURL = "&specialEducation=";
         var issuedFromURL = "&issuedFrom=";
         var crossCurricularThemeURL = "&crossCurricularTheme=";
+        var keyCompetenceURL = "&keyCompetence="
 
         var searchQuery = "";
         var searchTaxon = "";
@@ -22,6 +23,7 @@ define(['app'], function(app) {
         var searchIsSpecialEducation = "";
         var searchIssuedFrom = "";
         var searchCrossCurricularTheme = "";
+        var searchKeyCompetence = "";
 
         function escapeQuery(query) {
             //replace backslashes
@@ -46,7 +48,9 @@ define(['app'], function(app) {
         function arrayToLowerCase(upperCaseArray) {
             var lowerCaseArray = [];
             for (i = 0; i < upperCaseArray.length; i++) {
-                lowerCaseArray.push(upperCaseArray[i].toLowerCase());
+                if (upperCaseArray[i]) {
+                    lowerCaseArray.push(upperCaseArray[i].toLowerCase());
+                }
             }
             return lowerCaseArray;
         }
@@ -54,7 +58,9 @@ define(['app'], function(app) {
         function arrayToUpperCase(lowerCaseArray) {
             var upperCaseArray = [];
             for (i = 0; i < lowerCaseArray.length; i++) {
-                upperCaseArray.push(lowerCaseArray[i].toUpperCase());
+                if (lowerCaseArray[i]) {
+                    upperCaseArray.push(lowerCaseArray[i].toUpperCase());
+                }
             }
             return upperCaseArray;
         }
@@ -112,6 +118,10 @@ define(['app'], function(app) {
                 searchCrossCurricularTheme = crossCurricularTheme;
             },
 
+            setKeyCompetence : function(keyCompetence) {
+                searchKeyCompetence = keyCompetence;
+            },
+
             getURL : function() {
                 var searchURL;
                 if (searchQuery) {
@@ -149,6 +159,9 @@ define(['app'], function(app) {
                 if (searchCrossCurricularTheme) {
                     searchURL += crossCurricularThemeURL + searchCrossCurricularTheme;
                 }
+                if (searchKeyCompetence) {
+                    searchURL += keyCompetenceURL + searchKeyCompetence;
+                }
 
                 return searchURL;
             },
@@ -157,7 +170,8 @@ define(['app'], function(app) {
                 var searchObject = $location.search();
                 if (searchObject.q || searchObject.taxon || searchObject.paid === false ||
                     (searchObject.type && this.isValidType(searchObject.type)) || searchObject.language || searchObject.targetGroup ||
-                    searchObject.resourceType || searchObject.specialEducation || searchObject.issuedFrom || searchObject.crossCurricularTheme) {
+                    searchObject.resourceType || searchObject.specialEducation || searchObject.issuedFrom || searchObject.crossCurricularTheme ||
+                    searchObject.keyCompetence) {
                     return true;
                 } else {
                     return false;
@@ -274,6 +288,17 @@ define(['app'], function(app) {
                 return searchCrossCurricularTheme;
             },
 
+            getKeyCompetence : function() {
+                if (searchKeyCompetence === "") {
+                    var searchObject = $location.search();
+                    if (searchObject.keyCompetence) {
+                        return searchObject.keyCompetence;
+                    }
+                }
+
+                return searchKeyCompetence;
+            },
+
             clearFieldsNotInSimpleSearch : function() {
                 searchTaxon = '';
                 searchPaid = '';
@@ -284,6 +309,7 @@ define(['app'], function(app) {
                 searchIsSpecialEducation = '';
                 searchIssuedFrom = '';
                 searchCrossCurricularTheme = '';
+                searchKeyCompetence = '';
             },
 
             isValidType : function(type) {

@@ -73,6 +73,10 @@ define(['app'], function(app)
                 params.crossCurricularTheme = searchService.getCrossCurricularTheme();
             }
 
+            if (searchService.getKeyCompetence()) {
+                params.keyCompetence = searchService.getKeyCompetence();
+            }
+
             serverCallService.makeGet("rest/search", params, searchSuccess, searchFail);
         }
 
