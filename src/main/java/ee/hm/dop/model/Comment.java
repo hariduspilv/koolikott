@@ -10,6 +10,12 @@ import javax.persistence.ManyToOne;
 import org.hibernate.annotations.Type;
 import org.joda.time.DateTime;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+
+import ee.hm.dop.rest.jackson.map.DateTimeDeserializer;
+import ee.hm.dop.rest.jackson.map.DateTimeSerializer;
+
 @Entity
 public class Comment {
 
@@ -26,6 +32,8 @@ public class Comment {
 
     @Column(nullable = false)
     @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
+    @JsonSerialize(using = DateTimeSerializer.class)
+    @JsonDeserialize(using = DateTimeDeserializer.class)
     private DateTime added;
 
     public Long getId() {
