@@ -71,7 +71,7 @@ public class PortfolioService {
         safePortfolio.setCreator(creator);
 
         Portfolio createdPortfolio = portfolioDAO.update(safePortfolio);
-        updateSearchIndex();
+        searchEngineService.updateIndex();
 
         return createdPortfolio;
     }
@@ -96,7 +96,10 @@ public class PortfolioService {
 
         originalPortfolio = setPortfolioUpdatableFields(originalPortfolio, portfolio);
 
-        return portfolioDAO.update(originalPortfolio);
+        Portfolio updatedPortfolio = portfolioDAO.update(originalPortfolio);
+        searchEngineService.updateIndex();
+
+        return updatedPortfolio;
     }
 
     private Portfolio getPortfolioWithAllowedFieldsOnCreate(Portfolio portfolio) {
@@ -121,7 +124,4 @@ public class PortfolioService {
         return originalPortfolio;
     }
 
-    private void updateSearchIndex() {
-        searchEngineService.updateIndex();
-    }
 }
