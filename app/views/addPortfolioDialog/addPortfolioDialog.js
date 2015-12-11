@@ -87,6 +87,7 @@ define(['app'], function(app)
                 var chapters = generateChapterForm($scope.portfolio.chapters);
                 var taxon = $scope.portfolio.taxon;
                 $scope.portfolio.taxon = null;
+                $scope.portfolio.picture = getPicture($scope.portfolio);
 
                 var params = {
                     'portfolio': $scope.portfolio,
