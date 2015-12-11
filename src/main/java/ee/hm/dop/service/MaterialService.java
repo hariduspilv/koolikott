@@ -31,6 +31,9 @@ public class MaterialService {
     @Inject
     private PublisherService publisherService;
 
+    @Inject
+    private SearchEngineService searchEngineService;
+
     public Material get(long materialId) {
         return materialDao.findById(materialId);
     }
@@ -44,7 +47,7 @@ public class MaterialService {
         createOrUpdate(material);
     }
 
-    public Material createMaterial(Material material, User creator) {
+    public Material createMaterial(Material material, User creator, boolean updateSearchIndex) {
         if (material.getId() != null) {
             throw new IllegalArgumentException("Error creating Material, material already exists.");
         }
@@ -52,7 +55,12 @@ public class MaterialService {
         setAuthors(material);
         setPublishers(material);
 
-        return createOrUpdate(material);
+        Material createdMaterial = createOrUpdate(material);
+        if (updateSearchIndex) {
+            searchEngineService.updateIndex();
+        }
+
+        return createdMaterial;
     }
 
     private void setPublishers(Material material) {

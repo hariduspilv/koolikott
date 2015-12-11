@@ -35,7 +35,7 @@ public class MaterialServiceTest {
         replay(materialDao);
 
         try {
-            materialService.createMaterial(material, null);
+            materialService.createMaterial(material, null, false);
             fail("Exception expected.");
         } catch (IllegalArgumentException e) {
             assertEquals("Error creating Material, material already exists.", e.getMessage());
