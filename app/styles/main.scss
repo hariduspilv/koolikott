@@ -42,6 +42,7 @@ ul {
 @import "pages/add.scss";
 @import "pages/view-portfolio.scss";
 @import "pages/view-material.scss";
+@import "pages/home.scss";
 
 // Dialog specific stylesheets
 @import "dialogs/add-material.scss";
@@ -69,6 +70,30 @@ a {
   color: $link-color;
   &:hover {
     text-decoration: underline;
+  }
+}
+
+h1 {
+  font-weight: 300;
+  font-size: 32px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+.portfolio-chapter {
+  .md-body-1  {
+    font-size: 15px;
+    line-height: 22px;
+  }
+}
+.portfolio-chapter-subchapter {
+  margin-top: -30px;
+  .md-body-1  {
+    font-size: 14px;
+    line-height: 22px;
+    -webkit-column-count: 2; /* Chrome, Safari, Opera */
+    -moz-column-count: 2; /* Firefox */
+    column-count: 2;
   }
 }
 

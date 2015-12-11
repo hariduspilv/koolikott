@@ -4,28 +4,28 @@
   <div layout layout-align="center start" flex>
     <section layout="row" layout-sm="column" flex flex-gt-md="80" class="md-padding">
       <article flex="75" flex-xs="100" flex-sm="100" flex-gt-lg="80" class="md-padding" role="main">
-        <div layout="row">
-          <h1 class="md-display-2" data-translate="LANDING_PAGE_TITLE_NEWEST"></h1>
-          <span flex></span>
+        <div layout="row" class="type-block">
+          <h1 data-translate="LANDING_PAGE_TITLE_NEWEST"></h1>
+          <!-- <span flex></span>
           <md-button class="md-primary">
             Näita rohkem
             <ng-md-icon icon="arrow_forward"></ng-md-icon>
-          </md-button>
+          </md-button> -->
         </div>
-        <md-grid-list md-cols-xl="7" md-cols-gt-lg="6"  md-cols-gt-md="5" md-cols-md="4" md-cols-sm="4" md-cols-xs="2" md-gutter="10px" md-row-height="280px">
+        <md-grid-list md-cols-xl="7" md-cols-gt-md="4" md-cols-md="3" md-cols-sm="2" md-gutter="10px" md-row-height="280px">
           <md-grid-tile data-ng-repeat="material in materials">
             <figure data-dop-material-box material="material"></figure>
           </md-grid-tile>
         </md-grid-list>
-        <div layout="row">
-          <h1 class="md-display-2"> Populaarseimad</h1>
-          <span flex></span>
+        <div layout="row" class="type-block">
+          <h1> Populaarseimad</h1>
+          <!-- <span flex></span>
           <md-button class="md-primary">
             Näita rohkem
             <ng-md-icon icon="arrow_forward"></ng-md-icon>
-          </md-button>
+          </md-button> -->
         </div>
-        <md-grid-list md-cols-xl="7" md-cols-gt-lg="6"  md-cols-gt-md="5" md-cols-md="4" md-cols-sm="4" md-cols-xs="2" md-gutter="10px" md-row-height="280px">
+        <md-grid-list md-cols-xl="7" md-cols-gt-md="4" md-cols-md="3" md-cols-sm="2" md-gutter="10px" md-row-height="280px">
           <md-grid-tile data-ng-repeat="material in materials">
             <figure data-dop-material-box material="material"></figure>
           </md-grid-tile>
