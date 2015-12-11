@@ -301,6 +301,8 @@ insert into Translation(translationGroup, translationKey, translation) values (1
 insert into Translation(translationGroup, translationKey, translation) values (1, 'MATERIAL_REMOVE_TAG', 'Eemalda märksõna');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'MATERIAL_REMOVE_TAG_HINT', 'Vajuta x märksõna kustutamiseks');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'MATERIAL_SEARCH_KEY_COMPETENCE', 'Otsi üldpäedevusi');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'MATERIAL_KEY_COMPETENCES', 'Üldpädevused');
+
 
 -- Add Material tab translations
 insert into Translation(translationGroup, translationKey, translation) values (1, 'MATERIAL_TAB_URL', 'URL');

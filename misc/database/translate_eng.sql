@@ -317,6 +317,8 @@ insert into Translation(translationGroup, translationKey, translation) values (3
 insert into Translation(translationGroup, translationKey, translation) values (3, 'MATERIAL_REMOVE_TAG', 'Remove tag');
 insert into Translation(translationGroup, translationKey, translation) values (3, 'MATERIAL_REMOVE_TAG_HINT', 'Click x to remove tag');
 insert into Translation(translationGroup, translationKey, translation) values (3, 'MATERIAL_SEARCH_KEY_COMPETENCE', 'Search for a key competence');
+insert into Translation(translationGroup, translationKey, translation) values (3, 'MATERIAL_KEY_COMPETENCES', 'Key competences');
+
 
 -- Add Material tab translations
 insert into Translation(translationGroup, translationKey, translation) values (3, 'MATERIAL_TAB_URL', 'URL');
