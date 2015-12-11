@@ -42,75 +42,22 @@ define(['app'], function(app)
 			function createPortfolioFailed(){
 				log('Creating portfolio failed.');
 			}
-            
-            
-            function generateMaterialsList(materials) {
-                var materialList = [];
-                if(materials) {
-                    for(var i=0; i<materials.length; i++) {
-                        var material = materials[i];
-                        materialList.push(material.id);
-                    }
-                }
-                return materialList;
-            }
-            
-            function generateChapterForm(chapters) {
-                var list = [];
-                
-                if(chapters) {
-                    for(var i=0; i<chapters.length; i++) {
-                        
-                        var portfolioChapter = chapters[i];        
-                        var materialList = generateMaterialsList(chapters[i].materials);
-                        var subchapters = generateChapterForm(portfolioChapter.subchapters);
-
-                        var chapterForm = {
-                            'chapter': portfolioChapter,
-                            'materials': materialList,
-                            'subchapters': subchapters
-                        };
-                        
-                        portfolioChapter.materials = [];
-                        portfolioChapter.subchapters = [];
-                        
-                        list.push(chapterForm);
-
-                    }
-                }
-                
-                return list;
-            }
-            
+			
             $scope.update = function() {
                 var url = "rest/portfolio/update";
-                var chapters = generateChapterForm($scope.portfolio.chapters);
-                var taxon = $scope.portfolio.taxon;
-                $scope.portfolio.taxon = null;
-                $scope.portfolio.picture = getPicture($scope.portfolio);
-
-                var params = {
-                    'portfolio': $scope.portfolio,
-                    'taxonId': taxon ? taxon.id : null,
-                    'portfolioId': $scope.portfolio.id,
-                    'chapters': chapters
-                };
-
-                serverCallService.makePost(url, params, updatePortfolioSuccess, createPortfolioFailed);
+                serverCallService.makePost(url, $scope.portfolio, updatePortfolioSuccess, createPortfolioFailed);
             }
             
             function updatePortfolioSuccess(portfolio) {
                 if (isEmpty(portfolio)) {
                     createPortfolioFailed();
                 } else {
-                    $scope.portfolio.taxon = portfolio.taxon;
-                    $scope.portfolio.chapters = portfolio.chapters;
+                    $scope.portfolio = portfolio;
                     $mdDialog.hide();
                 }
             }
             
             init();
-            
         }
     ]);
 });
