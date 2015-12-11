@@ -298,6 +298,7 @@ insert into Translation(translationGroup, translationKey, translation) values (2
 insert into Translation(translationGroup, translationKey, translation) values (2, 'MATERIAL_ADD_TAG', 'Добавить тег');
 insert into Translation(translationGroup, translationKey, translation) values (2, 'MATERIAL_REMOVE_TAG', 'Удалить тег');
 insert into Translation(translationGroup, translationKey, translation) values (2, 'MATERIAL_REMOVE_TAG_HINT', 'Нажмите, чтобы удалить х тег');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'MATERIAL_SEARCH_KEY_COMPETENCE', 'Поиск ключевого компетенции');
 
 -- Add Material tab translations
 insert into Translation(translationGroup, translationKey, translation) values (2, 'MATERIAL_TAB_URL', 'URL');

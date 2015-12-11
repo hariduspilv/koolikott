@@ -170,7 +170,7 @@ public class Material implements Searchable {
     @Column(nullable = false)
     private boolean isSpecialEducation = false;
 
-    @ManyToMany(fetch = EAGER)
+    @ManyToMany(fetch = EAGER, cascade = { PERSIST, MERGE })
     @JoinTable(
             name = "Material_CrossCurricularTheme",
             joinColumns = { @JoinColumn(name = "material") },
@@ -178,7 +178,7 @@ public class Material implements Searchable {
             uniqueConstraints = @UniqueConstraint(columnNames = { "material", "crossCurricularTheme" }) )
     private List<CrossCurricularTheme> crossCurricularThemes;
 
-    @ManyToMany(fetch = EAGER)
+    @ManyToMany(fetch = EAGER, cascade = { PERSIST, MERGE })
     @JoinTable(
             name = "Material_KeyCompetence",
             joinColumns = { @JoinColumn(name = "material") },
