@@ -318,6 +318,8 @@ insert into Translation(translationGroup, translationKey, translation) values (3
 insert into Translation(translationGroup, translationKey, translation) values (3, 'MATERIAL_REMOVE_TAG_HINT', 'Click x to remove tag');
 insert into Translation(translationGroup, translationKey, translation) values (3, 'MATERIAL_SEARCH_KEY_COMPETENCE', 'Search for a key competence');
 insert into Translation(translationGroup, translationKey, translation) values (3, 'MATERIAL_KEY_COMPETENCES', 'Key competences');
+insert into Translation(translationGroup, translationKey, translation) values (3, 'MATERIAL_SEARCH_CROSS_CURRICULAR_THEME', 'Search for a cross-curricular theme');
+insert into Translation(translationGroup, translationKey, translation) values (3, 'MATERIAL_CROSS_CURRICULAR_THEMES', 'Cross-curricular themes');
 
 
 -- Add Material tab translations

@@ -300,8 +300,10 @@ insert into Translation(translationGroup, translationKey, translation) values (1
 insert into Translation(translationGroup, translationKey, translation) values (1, 'MATERIAL_ADD_TAG', 'Lisa märksõna');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'MATERIAL_REMOVE_TAG', 'Eemalda märksõna');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'MATERIAL_REMOVE_TAG_HINT', 'Vajuta x märksõna kustutamiseks');
-insert into Translation(translationGroup, translationKey, translation) values (1, 'MATERIAL_SEARCH_KEY_COMPETENCE', 'Otsi üldpäedevusi');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'MATERIAL_SEARCH_KEY_COMPETENCE', 'Otsi üldpädevusi');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'MATERIAL_KEY_COMPETENCES', 'Üldpädevused');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'MATERIAL_SEARCH_CROSS_CURRICULAR_THEME', 'Otsi läbivaid teemasid');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'MATERIAL_CROSS_CURRICULAR_THEMES', 'Läbivad teemad');
 
 
 -- Add Material tab translations
