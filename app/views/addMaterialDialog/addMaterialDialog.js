@@ -1,6 +1,6 @@
 define(['app'], function (app) {
-    app.controller('addMaterialDialog', ['$scope', '$mdDialog', 'serverCallService', 'translationService',
-        function ($scope, $mdDialog, serverCallService, translationService) {
+    app.controller('addMaterialDialog', ['$scope', '$mdDialog', 'serverCallService', 'translationService', 'metadataService', '$filter',
+        function ($scope, $mdDialog, serverCallService, translationService, metadataService, $filter) {
             var preferredLanguage;
 
             var TABS_COUNT = 5;
@@ -12,6 +12,7 @@ define(['app'], function (app) {
             $scope.material.tags = [];
             $scope.material.taxons = [{}];
             $scope.material.author = {};
+            $scope.material.selectedKeyCompetences = [];
 
             $scope.step = {};
             $scope.step.currentStep = 0;
@@ -93,6 +94,7 @@ define(['app'], function (app) {
                 var resourceTypes = getResourceTypes(material);
                 var base64Picture = getPicture(material);
                 var taxons = getTaxons(material);
+                var keyCompetences = material.selectedKeyCompetences;
 
                 var newMaterial = {
                     type: '.Material',
@@ -108,7 +110,8 @@ define(['app'], function (app) {
                     licenseType: licenseType,
                     resourceTypes: resourceTypes,
                     picture: base64Picture,
-                    taxons: taxons
+                    taxons: taxons,
+                    keyCompetences: keyCompetences
                 };
 
                 serverCallService.makePost("rest/material", JSOG.stringify(newMaterial), postMaterialSuccess, postMaterialFail);
@@ -207,10 +210,44 @@ define(['app'], function (app) {
                 }
             }
 
+            $scope.translateKeyCompetence = function (competence) {
+                return $filter("translate")("KEY_COMPETENCE_" + competence.toUpperCase());
+            };
+
+            /**
+             * Search for keyCompetences.
+             */
+            $scope.querySearch = function (query) {
+                return query ? $scope.material.keyCompetences.filter(createFilterFor(query)) : [];
+            };
+
+            /**
+             * Create filter function for a query string
+             */
+            function createFilterFor(query) {
+                var lowercaseQuery = angular.lowercase(query);
+
+                return function filterFn(keyCompetence) {
+                    var lowercaseCompetence = $scope.translateKeyCompetence(keyCompetence.name);
+                    lowercaseCompetence = angular.lowercase(lowercaseCompetence);
+
+                    if (lowercaseCompetence.indexOf(lowercaseQuery) === 0) {
+                        return keyCompetence;
+                    }
+                };
+            }
+
             function init() {
                 serverCallService.makeGet("rest/learningMaterialMetadata/language", {}, getLanguagesSuccess, getLanguagesFail, getLanguageFinally);
                 serverCallService.makeGet("rest/learningMaterialMetadata/licenseType", {}, getLicenseTypeSuccess, getLicenseTypeFail);
                 serverCallService.makeGet("rest/learningMaterialMetadata/resourceType", {}, getResourceTypeSuccess, getResourceTypeFail);
+                metadataService.loadKeyCompetences(setKeyCompetence);
+            }
+
+            function setKeyCompetence(data) {
+                if (!isEmpty(data)) {
+                    $scope.material.keyCompetences = data;
+                }
             }
 
             function postMaterialSuccess(data) {
@@ -284,6 +321,6 @@ define(['app'], function (app) {
                         return metadata.title.length !== 0;
                     }).length !== 0;
             }
-        }
-    ]);
+
+        }])
 });
