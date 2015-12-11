@@ -122,6 +122,7 @@ insert into Translation(translationGroup, translationKey, translation) values (1
 insert into Translation(translationGroup, translationKey, translation) values (1, 'DETAILED_SEARCH_CROSS_CURRICULAR_THEME', 'Läbivad teemad');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'DETAILED_SEARCH_KEY_COMPETENCE', 'Üldpädevused');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'DETAILED_SEARCH_SPECIAL_EDUCATIONAL_NEED', 'Hariduslik erivajadus');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'DETAILED_SEARCH_CLEAR', 'Tühista valikud');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'ADD_PORTFOLIO', 'Lisa kogumik');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'EDIT_PORTFOLIO', 'Muuda kogumikku');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'PORTFOLIO_TITLE', 'Pealkiri');
@@ -299,6 +300,11 @@ insert into Translation(translationGroup, translationKey, translation) values (1
 insert into Translation(translationGroup, translationKey, translation) values (1, 'MATERIAL_ADD_TAG', 'Lisa märksõna');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'MATERIAL_REMOVE_TAG', 'Eemalda märksõna');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'MATERIAL_REMOVE_TAG_HINT', 'Vajuta x märksõna kustutamiseks');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'MATERIAL_SEARCH_KEY_COMPETENCE', 'Otsi üldpädevusi');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'MATERIAL_KEY_COMPETENCES', 'Üldpädevused');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'MATERIAL_SEARCH_CROSS_CURRICULAR_THEME', 'Otsi läbivaid teemasid');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'MATERIAL_CROSS_CURRICULAR_THEMES', 'Läbivad teemad');
+
 
 -- Add Material tab translations
 insert into Translation(translationGroup, translationKey, translation) values (1, 'MATERIAL_TAB_URL', 'URL');

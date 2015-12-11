@@ -122,6 +122,7 @@ insert into Translation(translationGroup, translationKey, translation) values (2
 insert into Translation(translationGroup, translationKey, translation) values (2, 'DETAILED_SEARCH_CROSS_CURRICULAR_THEME', 'Междисциплинарной темой');
 insert into Translation(translationGroup, translationKey, translation) values (2, 'DETAILED_SEARCH_KEY_COMPETENCE', 'Ключевая компетенция');
 insert into Translation(translationGroup, translationKey, translation) values (2, 'DETAILED_SEARCH_SPECIAL_EDUCATIONAL_NEED', 'Специальный учебно необходимости');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'DETAILED_SEARCH_CLEAR', 'Очистить');
 insert into Translation(translationGroup, translationKey, translation) values (2, 'ADD_PORTFOLIO', 'Добавить портфель');
 insert into Translation(translationGroup, translationKey, translation) values (2, 'EDIT_PORTFOLIO', 'Редактировать портфель');
 insert into Translation(translationGroup, translationKey, translation) values (2, 'BUTTON_EDIT_PORTFOLIO', 'Сохранить');
@@ -298,6 +299,10 @@ insert into Translation(translationGroup, translationKey, translation) values (2
 insert into Translation(translationGroup, translationKey, translation) values (2, 'MATERIAL_ADD_TAG', 'Добавить тег');
 insert into Translation(translationGroup, translationKey, translation) values (2, 'MATERIAL_REMOVE_TAG', 'Удалить тег');
 insert into Translation(translationGroup, translationKey, translation) values (2, 'MATERIAL_REMOVE_TAG_HINT', 'Нажмите, чтобы удалить х тег');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'MATERIAL_SEARCH_KEY_COMPETENCE', 'Поиск ключевого компетенции');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'MATERIAL_KEY_COMPETENCES', 'Ключевые компетенции');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'MATERIAL_SEARCH_CROSS_CURRICULAR_THEME', 'Поиск по межпредметном тему');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'MATERIAL_CROSS_CURRICULAR_THEMES', 'Межпредметном темы');
 
 -- Add Material tab translations
 insert into Translation(translationGroup, translationKey, translation) values (2, 'MATERIAL_TAB_URL', 'URL');
