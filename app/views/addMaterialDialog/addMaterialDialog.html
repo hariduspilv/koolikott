@@ -15,7 +15,7 @@
       <md-tab label="{{ 'MATERIAL_TAB_URL' | translate }}" data-ng-disabled="step.isTabDisabled(0)">
         <md-content class="md-padding">
           <h2 class="md-title" data-translate="MATERIAL_URL"></h2>
-          
+
           <form name="materialUrlForm">
             <div layout="row" flex>
               <md-input-container flex>
@@ -39,14 +39,14 @@
         </md-content>
       </md-tab>
       <md-tab label="{{ 'MATERIAL_TAB_MAIN_DATA' | translate }}" data-ng-disabled="step.isTabDisabled(1)">
-        <form name="materialMainForm">     
+        <form name="materialMainForm">
           <md-content class="md-padding">
             <div layout="row" layout-align="center center">
               <h2 class="md-title" data-translate="MATERIAL_TITLE_DESCRIPTION"></h2>
               <span flex></span>
               <md-button class="md-raised md-primary" data-ng-click="addNewMetadata()" data-translate="BUTTON_ADD"></md-button>
             </div>
-            
+
             <md-list class="collapsible md-whiteframe-2dp">
               <md-list-item data-ng-repeat="metadata in material.metadata">
                 <div layout="column" flex>
@@ -56,7 +56,7 @@
                     <span flex></span>
                     <md-icon class="md-toggle-icon" data-ng-class="{ 'toggled': metadata.expanded }">keyboard_arrow_down</md-icon>
                   </div>
-                  
+
                   <div class="collapsible-body" data-ng-show="metadata.expanded" layout="column" flex>
                     <md-select data-ng-model="metadata.language" flex>
                       <md-option data-ng-repeat="language in material.languages" value="{{language}}">
@@ -76,36 +76,82 @@
                 </div>
               </md-list-item>
             </md-list>
-            
+
             <h2 class="md-title" data-translate="MATERIAL_TAGS"></h2>
             <p class="md-caption" data-translate="MATERIAL_HOW_TO_SAVE_TAG"></p>
-            
-            <md-chips 
+
+            <md-chips
                 data-ng-model="material.tags"
                 delete-button-label="{{ 'MATERIAL_REMOVE_TAG' | translate }}"
                 delete-hint="{{ 'MATERIAL_REMOVE_TAG_HINT' | translate }}"
                 secondary-placeholder="{{ 'MATERIAL_ADD_TAG' | translate }}"
                 flex>
             </md-chips>
-            
+
             <br />
-            
+
+            <h2 class="md-title" data-translate="MATERIAL_KEY_COMPETENCES"></h2>
+
+            <md-chips ng-model="material.selectedKeyCompetences" md-autocomplete-snap="" md-require-match="true">
+              <md-autocomplete
+                      md-selected-item="material.selectedKeyCompetence"
+                      md-search-text="material.competenceSearchText"
+                      md-items="keyCompetence in searchKeyCompetences(material.competenceSearchText)"
+                      md-item-text="translate(keyCompetence.name, 'KEY_COMPETENCE_')"
+                      placeholder="{{ 'MATERIAL_SEARCH_KEY_COMPETENCE' | translate }}"
+                      md-autoselect>
+                <span md-highlight-text="material.competenceSearchText" md-highlight-flags="^i">
+                  {{translate(keyCompetence.name, 'KEY_COMPETENCE_')}}
+                </span>
+              </md-autocomplete>
+              <md-chip-template>
+                  <span>
+                    <span data-translate="KEY_COMPETENCE_{{$chip.name.toUpperCase()}}"></span>
+                  </span>
+              </md-chip-template>
+            </md-chips>
+
+            <br />
+
+            <h2 class="md-title" data-translate="MATERIAL_CROSS_CURRICULAR_THEMES"></h2>
+
+            <md-chips ng-model="material.selectedCrossCurricularThemes" md-autocomplete-snap="" md-require-match="true">
+              <md-autocomplete
+                      md-selected-item="material.selectedCrossCurricularTheme"
+                      md-search-text="material.crossCurricularSearchText"
+                      md-items="crossCurricularTheme in searchCrossCurricularThemes(material.crossCurricularSearchText)"
+                      md-item-text="translate(crossCurricularTheme.name, 'CROSS_CURRICULAR_THEME_')"
+                      placeholder="{{ 'MATERIAL_SEARCH_CROSS_CURRICULAR_THEME' | translate }}"
+                      md-autoselect>
+                <span md-highlight-text="material.crossCurricularSearchText" md-highlight-flags="^i">
+                  {{translate(crossCurricularTheme.name, 'CROSS_CURRICULAR_THEME_')}}
+                </span>
+              </md-autocomplete>
+              <md-chip-template>
+                  <span>
+                    <span data-translate="CROSS_CURRICULAR_THEME_{{$chip.name.toUpperCase()}}"></span>
+                  </span>
+              </md-chip-template>
+            </md-chips>
+
+            <br />
+
             <md-switch class="md-primary md-block" md-no-ink data-ng-model="material.paid">
               <span data-translate="MATERIAL_PAID"></span>
             </md-switch>
-            
+
           </md-content>
         </form>
       </md-tab>
       <md-tab label="{{ 'MATERIAL_TAB_ADDITIONAL_DATA' | translate }}" data-ng-disabled="step.isTabDisabled(2)">
         <md-content class="md-padding">
           <h2 class="md-title" data-translate="MATERIAL_ADDITIONAL_DATA"></h2>
-          
+
           <md-input-container flex>
             <label data-translate="MATERIAL_PUBLISHER"></label>
             <input data-ng-model="material.publisher">
           </md-input-container>
-    
+
           <div layout="row" flex>
             <md-input-container flex>
               <label data-translate="MATERIAL_AUTHOR_NAME"></label>
@@ -118,7 +164,7 @@
           </div>
 
           <div data-dop-target-group-selector data-target-groups="material.targetGroups"></div>
-          
+
           <md-input-container flex>
             <label data-translate="MATERIAL_VIEW_LICENSE_TYPE"></label>
             <md-select data-ng-model="material.licenseType">
@@ -132,7 +178,7 @@
       <md-tab label="{{ 'MATERIAL_TAB_TYPE' | translate }}" data-ng-disabled="step.isTabDisabled(3)">
         <md-content id="material-type-tab">
           <h2 class="md-title md-padding" data-translate="MATERIAL_VIEW_RESOURCE_TYPE"></h2>
-          
+
           <md-list>
             <md-list-item data-ng-repeat="resourceType in material.resourceTypes">
               <p data-translate="{{resourceType.name}}"></p>
@@ -144,11 +190,11 @@
       <md-tab label="{{ 'MATERIAL_TAB_PICTURE' | translate }}" data-ng-disabled="step.isTabDisabled(3)">
         <md-content class="md-padding">
           <h2 class="md-title" data-translate="MATERIAL_PHOTO"></h2>
-          
-          <div data-ngf-drop ngf-select ng-model="material.picture" class="drop-box" 
+
+          <div data-ngf-drop ngf-select ng-model="material.picture" class="drop-box"
               data-ngf-drag-over-class="'dragover'"
               data-ngf-multiple="false"
-              data-accept="image/*" 
+              data-accept="image/*"
               data-ngf-pattern="'image/*'"
               layout="row"
               layout-align="center center">
@@ -157,10 +203,10 @@
                 <span data-translate="MATERIAL_PHOTO_UPLOAD_HELP"></span>
               </span>
           </div>
-          
+
           <div data-ng-if="material.picture" class="drop-box-preview">
             <h3 class="md-subhead" data-translate="MATERIAL_PHOTO_PREVIEW"></h3>
-            
+
             <img data-ngf-thumbnail="material.picture" ngf-size="{width: 300, height: 300, quality: 0.9}" alt="photo">
           </div>
         </md-content>
@@ -172,7 +218,7 @@
             <span flex></span>
             <md-button class="md-raised md-primary" data-ng-click="addNewTaxon()" data-translate="BUTTON_ADD"></md-button>
           </div>
-          
+
           <md-list>
             <md-list-item data-ng-repeat="taxon in material.taxons track by $index">
               <div class="md-no-style" layout="row" layout-align="center center">
@@ -186,7 +232,7 @@
       </md-tab>
     </md-tabs>
   </md-dialog-content>
-  
+
   <div class="md-actions">
     <md-button data-ng-click="step.previousStep()" data-ng-show="step.currentStep > 0" class="md-primary">
       <ng-md-icon icon="arrow_back"></ng-md-icon>

@@ -1,7 +1,13 @@
-<div data-ng-if="isEditable" layout="row" layout-align="start center">
-  <md-input-container flex>
-	<label data-translate="PORTFOLIO_CREATE_NEW_MATERIAL_URL"></label>
-	<input ng-model="chapter.resourcePermalink">
-  </md-input-container>
-  <md-button md-no-ink class="md-primary" data-translate="ADD_MATERIAL" data-ng-click="addMaterialFromPermalink()"></md-button>
+<div data-ng-show="isEditable" layout="row" layout-align="start center">
+  <form name="resourcePermalinkForm">
+	  <md-input-container flex>
+		<label data-translate="PORTFOLIO_CREATE_NEW_MATERIAL_URL"></label>
+		<input data-ng-model="chapter.resourcePermalink" name="url" id="resource-permalink-url-input" type="url" required>
+		<div data-ng-messages="resourcePermalinkForm.url.$error" data-ng-show="resourcePermalinkForm.url.$dirty" multiple>
+          <div data-ng-message="required" data-ng-show="resourcePermalinkForm.url.$error.required" data-translate="MATERIAL_URL_IS_MANDATORY"></div>
+          <div data-ng-message="url" data-ng-show="resourcePermalinkForm.url.$error.url" data-translate="MATERIAL_URL_IS_INVALID"></div>
+        </div>
+	  </md-input-container>
+	  <md-button md-no-ink class="md-primary" data-translate="ADD_MATERIAL" data-ng-click="addMaterialFromPermalink()"></md-button>
+  </form>
 </div>

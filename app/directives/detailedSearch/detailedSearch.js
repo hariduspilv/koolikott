@@ -80,9 +80,9 @@ define(['app'], function(app)
                         $scope.detailedSearch.keyCompetence = keyCompetence;
                     }
                     
-                    $scope.isEditPortforlioMode = $rootScope.isEditPortforlioMode;
-                    if ($rootScope.isEditPortforlioMode && $rootScope.savedPortifolio) {
-                    	$scope.detailedSearch.taxon = $rootScope.savedPortifolio.taxon;
+                    $scope.isEditPortfolioMode = $rootScope.isEditPortfolioMode;
+                    if ($rootScope.isEditPortfolioMode && $rootScope.savedPortfolio) {
+                    	$scope.detailedSearch.taxon = $rootScope.savedPortfolio.taxon;
                     } else {
                         // Taxon
                         if (searchService.getTaxon()) {
@@ -348,8 +348,21 @@ define(['app'], function(app)
                     // Cross-curricular themes and key competences
                     if (!educationalContext || (educationalContext.id != BASIC_EDUCATION_ID && educationalContext.id != SECONDARY_EDUCATION_ID)) {
                         $scope.detailedSearch.crossCurricularTheme = null;
-                        $scope.detailedSearch.keyCompetences = null;
+                        $scope.detailedSearch.keyCompetence = null;
                     }
+                }
+
+                $scope.clear = function() {
+                    $scope.detailedSearch = {
+                        'paid': true,
+                        'onlyBooks': false,
+                        'CLIL': false,
+                        'targetGroups': [],
+                        'specialEducation': false,
+                        'specialEducationalNeed': false,
+                        'issueDate': $scope.issueDateFirstYear,
+                        'type': 'all'
+                    };
                 }
 
                 $scope.$watch('detailedSearch.taxon', function(newTaxon, oldTaxon) {

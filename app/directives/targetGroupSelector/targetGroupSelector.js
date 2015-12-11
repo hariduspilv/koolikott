@@ -34,9 +34,10 @@ define(['app'], function(app)
                         if (newGroups !== oldGroups) {
                             // Check that input is an array
                             if (!Array.isArray(newGroups)) {
-                                var group = newGroups;
                                 $scope.targetGroups = [];
-                                $scope.targetGroups.push(group);
+                                if (newGroups) {
+                                    $scope.targetGroups.push(newGroups);
+                                }
                             }
 
                             selectValue();
@@ -101,7 +102,11 @@ define(['app'], function(app)
                                 $scope.targetGroups.indexOf('GRADE9') > -1) {
                                 $scope.selectedTargetGroup = 'LEVEL3';
                             }
+                        } else {
+                            $scope.selectedTargetGroup = null;
                         }
+                    } else {
+                        $scope.selectedTargetGroup = null;
                     }
                 }
 

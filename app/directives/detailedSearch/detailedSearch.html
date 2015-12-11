@@ -76,10 +76,10 @@
         <md-radio-button value="material" class="md-primary">
           <span data-translate="DETAILED_SEARCH_MATERIALS"></span>
         </md-radio-button>
-        <md-radio-button ng-disabled="isEditPortforlioMode" value="portfolio" class="md-primary">
+        <md-radio-button ng-disabled="isEditPortfolioMode" value="portfolio" class="md-primary">
           <span data-translate="DETAILED_SEARCH_PORTFOLIOS"></span>
         </md-radio-button>
-        <md-radio-button ng-disabled="isEditPortforlioMode" value="all" class="md-primary">
+        <md-radio-button ng-disabled="isEditPortfolioMode" value="all" class="md-primary">
           <span data-translate="DETAILED_SEARCH_ALL"></span>
         </md-radio-button>
       </md-radio-group>
@@ -88,6 +88,6 @@
 </div>
 
 <div class="md-actions" layout="row" layout-sm="column" layout-align="end start" layout-padding>
-  <md-button>Tühista valikud</md-button>
-  <md-button type="submit" class="md-primary md-button" data-ng-click="search()" data-translate="DETAILED_SEARCH_SUBMIT"></md-button>
+  <md-button data-ng-click="clear()" data-translate="DETAILED_SEARCH_CLEAR" aria-label="{{'DETAILED_SEARCH_CLEAR' | translate}}"></md-button>
+  <md-button type="submit" class="md-primary md-button" data-ng-click="search()" data-translate="DETAILED_SEARCH_SUBMIT" aria-label="{{'DETAILED_SEARCH_SUBMIT' | translate}}"></md-button>
 </div>
