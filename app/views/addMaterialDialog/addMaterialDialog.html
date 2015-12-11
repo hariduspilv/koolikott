@@ -96,17 +96,40 @@
               <md-autocomplete
                       md-selected-item="material.selectedKeyCompetence"
                       md-search-text="material.competenceSearchText"
-                      md-items="keyCompetence in querySearch(material.competenceSearchText)"
-                      md-item-text="translateKeyCompetence(keyCompetence.name)"
+                      md-items="keyCompetence in searchKeyCompetences(material.competenceSearchText)"
+                      md-item-text="translate(keyCompetence.name, 'KEY_COMPETENCE_')"
                       placeholder="{{ 'MATERIAL_SEARCH_KEY_COMPETENCE' | translate }}"
                       md-autoselect>
                 <span md-highlight-text="material.competenceSearchText" md-highlight-flags="^i">
-                  {{translateKeyCompetence(keyCompetence.name)}}
+                  {{translate(keyCompetence.name, 'KEY_COMPETENCE_')}}
                 </span>
               </md-autocomplete>
               <md-chip-template>
                   <span>
                     <span data-translate="KEY_COMPETENCE_{{$chip.name.toUpperCase()}}"></span>
+                  </span>
+              </md-chip-template>
+            </md-chips>
+
+            <br />
+
+            <h2 class="md-title" data-translate="MATERIAL_CROSS_CURRICULAR_THEMES"></h2>
+
+            <md-chips ng-model="material.selectedCrossCurricularThemes" md-autocomplete-snap="" md-require-match="true">
+              <md-autocomplete
+                      md-selected-item="material.selectedCrossCurricularTheme"
+                      md-search-text="material.crossCurricularSearchText"
+                      md-items="crossCurricularTheme in searchCrossCurricularThemes(material.crossCurricularSearchText)"
+                      md-item-text="translate(crossCurricularTheme.name, 'CROSS_CURRICULAR_THEME_')"
+                      placeholder="{{ 'MATERIAL_SEARCH_CROSS_CURRICULAR_THEME' | translate }}"
+                      md-autoselect>
+                <span md-highlight-text="material.crossCurricularSearchText" md-highlight-flags="^i">
+                  {{translate(crossCurricularTheme.name, 'CROSS_CURRICULAR_THEME_')}}
+                </span>
+              </md-autocomplete>
+              <md-chip-template>
+                  <span>
+                    <span data-translate="CROSS_CURRICULAR_THEME_{{$chip.name.toUpperCase()}}"></span>
                   </span>
               </md-chip-template>
             </md-chips>

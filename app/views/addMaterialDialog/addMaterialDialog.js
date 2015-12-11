@@ -13,6 +13,7 @@ define(['app'], function (app) {
             $scope.material.taxons = [{}];
             $scope.material.author = {};
             $scope.material.selectedKeyCompetences = [];
+            $scope.material.selectedCrossCurricularThemes = [];
 
             $scope.step = {};
             $scope.step.currentStep = 0;
@@ -95,6 +96,7 @@ define(['app'], function (app) {
                 var base64Picture = getPicture(material);
                 var taxons = getTaxons(material);
                 var keyCompetences = material.selectedKeyCompetences;
+                var crossCurricularThemes = material.selectedCrossCurricularThemes;
 
                 var newMaterial = {
                     type: '.Material',
@@ -111,7 +113,8 @@ define(['app'], function (app) {
                     resourceTypes: resourceTypes,
                     picture: base64Picture,
                     taxons: taxons,
-                    keyCompetences: keyCompetences
+                    keyCompetences: keyCompetences,
+                    crossCurricularThemes: crossCurricularThemes
                 };
 
                 serverCallService.makePost("rest/material", JSOG.stringify(newMaterial), postMaterialSuccess, postMaterialFail);
@@ -210,29 +213,38 @@ define(['app'], function (app) {
                 }
             }
 
-            $scope.translateKeyCompetence = function (competence) {
-                return $filter("translate")("KEY_COMPETENCE_" + competence.toUpperCase());
+            $scope.translate = function (item, prefix) {
+                return $filter("translate")(prefix + item.toUpperCase());
             };
 
             /**
              * Search for keyCompetences.
              */
-            $scope.querySearch = function (query) {
-                return query ? $scope.material.keyCompetences.filter(createFilterFor(query)) : [];
+            $scope.searchKeyCompetences = function (query) {
+                return query ? $scope.material.keyCompetences
+                    .filter(searchFilter(query, "KEY_COMPETENCE_")) : [];
+            };
+
+            /**
+             * Search for CrossCurricularThemes.
+             */
+            $scope.searchCrossCurricularThemes = function (query) {
+                return query ? $scope.material.crossCurricularThemes
+                    .filter(searchFilter(query, "CROSS_CURRICULAR_THEME_")) : [];
             };
 
             /**
              * Create filter function for a query string
              */
-            function createFilterFor(query) {
+            function searchFilter(query, translationPrefix) {
                 var lowercaseQuery = angular.lowercase(query);
 
-                return function filterFn(keyCompetence) {
-                    var lowercaseCompetence = $scope.translateKeyCompetence(keyCompetence.name);
-                    lowercaseCompetence = angular.lowercase(lowercaseCompetence);
+                return function filterFn(filterSearchObject) {
+                    var lowercaseItem = $scope.translate(filterSearchObject.name, translationPrefix);
+                    lowercaseItem = angular.lowercase(lowercaseItem);
 
-                    if (lowercaseCompetence.indexOf(lowercaseQuery) === 0) {
-                        return keyCompetence;
+                    if (lowercaseItem.indexOf(lowercaseQuery) === 0) {
+                        return filterSearchObject;
                     }
                 };
             }
@@ -241,10 +253,17 @@ define(['app'], function (app) {
                 serverCallService.makeGet("rest/learningMaterialMetadata/language", {}, getLanguagesSuccess, getLanguagesFail, getLanguageFinally);
                 serverCallService.makeGet("rest/learningMaterialMetadata/licenseType", {}, getLicenseTypeSuccess, getLicenseTypeFail);
                 serverCallService.makeGet("rest/learningMaterialMetadata/resourceType", {}, getResourceTypeSuccess, getResourceTypeFail);
-                metadataService.loadKeyCompetences(setKeyCompetence);
+                metadataService.loadKeyCompetences(setKeyCompetences);
+                metadataService.loadCrossCurricularThemes(setCrossCurricularThemes);
             }
 
-            function setKeyCompetence(data) {
+            function setCrossCurricularThemes(data) {
+                if (!isEmpty(data)) {
+                    $scope.material.crossCurricularThemes = data;
+                }
+            }
+
+            function setKeyCompetences(data) {
                 if (!isEmpty(data)) {
                     $scope.material.keyCompetences = data;
                 }
