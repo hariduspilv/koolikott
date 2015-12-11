@@ -15,7 +15,7 @@
       <md-icon class="md-avatar-icon">person</md-icon>
       <div class="md-list-item-text" layout="column">
         <h3>{{comment.creator.name}} {{comment.creator.surname}}</h3>
-        <h4>{{comment.added.millis | date:'dd.MM.yyyy HH:mm'}}</h4>
+        <h4>{{comment.added | date:'dd.MM.yyyy HH:mm'}}</h4>
         <p>{{comment.text}}</p>
       </div>
     </md-list-item>
