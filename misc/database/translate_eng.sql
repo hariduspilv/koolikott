@@ -122,6 +122,7 @@ insert into Translation(translationGroup, translationKey, translation) values (3
 insert into Translation(translationGroup, translationKey, translation) values (3, 'DETAILED_SEARCH_CROSS_CURRICULAR_THEME', 'Cross-curricular theme');
 insert into Translation(translationGroup, translationKey, translation) values (3, 'DETAILED_SEARCH_KEY_COMPETENCE', 'Key competence');
 insert into Translation(translationGroup, translationKey, translation) values (3, 'DETAILED_SEARCH_SPECIAL_EDUCATIONAL_NEED', 'Special educational need');
+insert into Translation(translationGroup, translationKey, translation) values (3, 'DETAILED_SEARCH_CLEAR', 'Clear');
 insert into Translation(translationGroup, translationKey, translation) values (3, 'ADD_PORTFOLIO', 'Add Portfolio');
 insert into Translation(translationGroup, translationKey, translation) values (3, 'EDIT_PORTFOLIO', 'Edit portfolio');
 insert into Translation(translationGroup, translationKey, translation) values (3, 'PORTFOLIO_TITLE', 'Title');

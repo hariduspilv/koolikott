@@ -122,6 +122,7 @@ insert into Translation(translationGroup, translationKey, translation) values (2
 insert into Translation(translationGroup, translationKey, translation) values (2, 'DETAILED_SEARCH_CROSS_CURRICULAR_THEME', 'Междисциплинарной темой');
 insert into Translation(translationGroup, translationKey, translation) values (2, 'DETAILED_SEARCH_KEY_COMPETENCE', 'Ключевая компетенция');
 insert into Translation(translationGroup, translationKey, translation) values (2, 'DETAILED_SEARCH_SPECIAL_EDUCATIONAL_NEED', 'Специальный учебно необходимости');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'DETAILED_SEARCH_CLEAR', 'Очистить');
 insert into Translation(translationGroup, translationKey, translation) values (2, 'ADD_PORTFOLIO', 'Добавить портфель');
 insert into Translation(translationGroup, translationKey, translation) values (2, 'EDIT_PORTFOLIO', 'Редактировать портфель');
 insert into Translation(translationGroup, translationKey, translation) values (2, 'BUTTON_EDIT_PORTFOLIO', 'Сохранить');
