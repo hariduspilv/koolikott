@@ -17,7 +17,16 @@ define(['app'], function(app)
 
             $scope.create = function() {
             	var url = "rest/portfolio/create";
+                $scope.portfolio.picture = getPicture($scope.portfolio);
+
 				serverCallService.makePost(url, $scope.portfolio, createPortfolioSuccess, createPortfolioFailed);
+            };
+
+            function getPicture(portfolio) {
+                if (portfolio.picture) {
+                    var base64Picture = portfolio.picture.$ngfDataUrl;
+                }
+                return base64Picture;
             }
             
             function createPortfolioSuccess(portfolio) {
@@ -60,7 +69,7 @@ define(['app'], function(app)
                             'chapter': portfolioChapter,
                             'materials': materialList,
                             'subchapters': subchapters
-                        }
+                        };
                         
                         portfolioChapter.materials = [];
                         portfolioChapter.subchapters = [];

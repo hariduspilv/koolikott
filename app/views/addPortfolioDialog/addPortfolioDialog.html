@@ -28,6 +28,24 @@
         <md-chips data-ng-model="portfolio.tags" delete-button-label="Eemalda märksõna" delete-hint="Vajuta x märksõna kustutamiseks" secondary-placeholder="Lisa märksõna (valikuline)">
         </md-chips>
       </md-input-container>
+
+      <div data-ngf-drop ngf-select ng-model="portfolio.picture" class="drop-box"
+           data-ngf-drag-over-class="'dragover'"
+           data-ngf-multiple="false"
+           data-accept="image/*"
+           data-ngf-pattern="'image/*'"
+           layout="row"
+           layout-align="center center">
+              <span flex>
+                <md-icon>attach_file</md-icon>
+                <span data-translate="PORTFOLIO_PHOTO_UPLOAD_HELP"></span>
+              </span>
+      </div>
+
+      <div data-ng-if="portfolio.picture" class="drop-box-preview">
+        <h3 class="md-subhead" data-translate="PORTFOLIO_PHOTO_PREVIEW"></h3>
+        <img data-ngf-thumbnail="portfolio.picture" ngf-size="{width: 300, height: 300, quality: 0.9}" alt="photo">
+      </div>
     </md-content>
     <div class="md-actions">
       <span flex></span>
