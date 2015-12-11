@@ -17,14 +17,7 @@ define(['app'], function(app)
 
             $scope.create = function() {
             	var url = "rest/portfolio/create";
-            	var taxon = $scope.portfolio.taxon;
-            	$scope.portfolio.taxon = null;
-            	
-				var params = {
-					'taxonId': taxon ? taxon.id : null,
-					'portfolio': $scope.portfolio
-				};
-				serverCallService.makePost(url, params, createPortfolioSuccess, createPortfolioFailed);
+				serverCallService.makePost(url, $scope.portfolio, createPortfolioSuccess, createPortfolioFailed);
             }
             
             function createPortfolioSuccess(portfolio) {

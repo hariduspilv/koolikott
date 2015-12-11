@@ -53,10 +53,19 @@ define(['app.routes', 'services/dependencyResolver'], function(config, dependenc
             $sceProvider.enabled(false);
 
             $httpProvider.defaults.transformResponse.splice(0, 0, parseJSONResponse);
+            $httpProvider.defaults.transformRequest = serializeRequest;
         }
     ]);
 
-     function parseJSONResponse(data, headersGetter) {
+    function serializeRequest(data, headersGetter) {
+        if (data && headersGetter()['content-type'].contains('application/json')) {
+        	return JSOG.stringify(data);
+        }
+
+        return data;
+    }
+    
+    function parseJSONResponse(data, headersGetter) {
         if (data && (headersGetter()['content-type'] === 'application/json')) {
             return JSOG.parse(data);
         }

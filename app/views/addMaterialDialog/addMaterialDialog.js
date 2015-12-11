@@ -111,7 +111,7 @@ define(['app'], function (app) {
                     taxons: taxons
                 };
 
-                serverCallService.makePost("rest/material", JSOG.stringify(newMaterial), postMaterialSuccess, postMaterialFail);
+                serverCallService.makePost("rest/material", newMaterial, postMaterialSuccess, postMaterialFail);
                 $mdDialog.hide();
             };
 
