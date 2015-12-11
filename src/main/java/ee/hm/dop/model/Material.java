@@ -20,7 +20,9 @@ import javax.persistence.JoinTable;
 import javax.persistence.Lob;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+import javax.persistence.OrderBy;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.NotNull;
@@ -128,6 +130,11 @@ public class Material implements Searchable {
             inverseJoinColumns = { @JoinColumn(name = "tag") },
             uniqueConstraints = @UniqueConstraint(columnNames = { "material", "tag" }) )
     private List<Tag> tags;
+    
+    @OneToMany(fetch = EAGER, cascade = { MERGE, PERSIST })
+    @JoinColumn(name = "material")
+    @OrderBy("added DESC")
+    private List<Comment> comments;
 
     @Lob
     private byte[] picture;
@@ -310,6 +317,14 @@ public class Material implements Searchable {
     public void setTags(List<Tag> tags) {
         this.tags = tags;
     }
+    
+    public List<Comment> getComments() {
+        return comments;
+    }
+
+    public void setComments(List<Comment> comments) {
+        this.comments = comments;
+    } 
 
     @JsonIgnore
     public byte[] getPicture() {

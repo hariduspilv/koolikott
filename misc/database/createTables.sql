@@ -618,6 +618,7 @@ CREATE TABLE Comment (
     text      TEXT NOT NULL,
     creator   BIGINT NOT NULL,
     portfolio BIGINT,
+    material  BIGINT,
     added     TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   
     FOREIGN KEY (creator)
@@ -626,5 +627,9 @@ CREATE TABLE Comment (
     
     FOREIGN KEY (portfolio)
     REFERENCES Portfolio (id)
-      ON DELETE RESTRICT
+      ON DELETE RESTRICT,
+      
+	FOREIGN KEY (material)
+    REFERENCES Material (id)
+      ON DELETE RESTRICT      
 );

@@ -1,17 +1,21 @@
 package ee.hm.dop.service;
 
 import static java.lang.String.format;
+import static org.apache.commons.lang3.StringUtils.isEmpty;
 
 import java.util.List;
 
 import javax.inject.Inject;
 
+import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import ee.hm.dop.dao.MaterialDAO;
 import ee.hm.dop.model.Author;
+import ee.hm.dop.model.Comment;
 import ee.hm.dop.model.Material;
+import ee.hm.dop.model.Portfolio;
 import ee.hm.dop.model.Publisher;
 import ee.hm.dop.model.User;
 
@@ -89,6 +93,25 @@ public class MaterialService {
         }
     }
 
+    public void addComment(Comment comment, Material material) {
+        if (isEmpty(comment.getText())) {
+            throw new RuntimeException("Comment is missing text.");
+        }
+
+        if (comment.getId() != null) {
+            throw new RuntimeException("Comment already exists.");
+        }
+
+        Material originalMaterial = materialDao.findById(material.getId());
+        if (originalMaterial == null) {
+            throw new RuntimeException("Material not found");
+        }
+
+        comment.setAdded(DateTime.now());
+        originalMaterial.getComments().add(comment);
+        materialDao.update(originalMaterial);
+    }
+    
     public void update(Material material) {
         Material originalMaterial = materialDao.findById(material.getId());
         validateMaterialUpdate(material, originalMaterial);
