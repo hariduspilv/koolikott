@@ -345,8 +345,21 @@ define(['app'], function(app)
                     // Cross-curricular themes and key competences
                     if (!educationalContext || (educationalContext.id != BASIC_EDUCATION_ID && educationalContext.id != SECONDARY_EDUCATION_ID)) {
                         $scope.detailedSearch.crossCurricularTheme = null;
-                        $scope.detailedSearch.keyCompetences = null;
+                        $scope.detailedSearch.keyCompetence = null;
                     }
+                }
+
+                $scope.clear = function() {
+                    $scope.detailedSearch = {
+                        'paid': true,
+                        'onlyBooks': false,
+                        'CLIL': false,
+                        'targetGroups': [],
+                        'specialEducation': false,
+                        'specialEducationalNeed': false,
+                        'issueDate': $scope.issueDateFirstYear,
+                        'type': 'all'
+                    };
                 }
 
                 $scope.$watch('detailedSearch.taxon', function(newTaxon, oldTaxon) {

@@ -48,7 +48,9 @@ define(['app'], function(app) {
         function arrayToLowerCase(upperCaseArray) {
             var lowerCaseArray = [];
             for (i = 0; i < upperCaseArray.length; i++) {
-                lowerCaseArray.push(upperCaseArray[i].toLowerCase());
+                if (upperCaseArray[i]) {
+                    lowerCaseArray.push(upperCaseArray[i].toLowerCase());
+                }
             }
             return lowerCaseArray;
         }
@@ -56,7 +58,9 @@ define(['app'], function(app) {
         function arrayToUpperCase(lowerCaseArray) {
             var upperCaseArray = [];
             for (i = 0; i < lowerCaseArray.length; i++) {
-                upperCaseArray.push(lowerCaseArray[i].toUpperCase());
+                if (lowerCaseArray[i]) {
+                    upperCaseArray.push(lowerCaseArray[i].toUpperCase());
+                }
             }
             return upperCaseArray;
         }
