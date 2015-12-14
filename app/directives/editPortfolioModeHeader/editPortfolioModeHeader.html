@@ -19,6 +19,7 @@
         <md-button aria-label="Share" class="md-icon-button" ng-click="$mdOpenMenu($event)">
           <md-icon data-ng-if="portfolioVisibility === 'PUBLIC'">visibility</md-icon>
           <md-icon data-ng-if="portfolioVisibility === 'NOT_LISTED'">link</md-icon>
+          <md-icon data-ng-if="portfolioVisibility === 'PRIVATE'">visibility_off</md-icon>
         </md-button>
         <md-menu-content width="4">
           <md-menu-item>
