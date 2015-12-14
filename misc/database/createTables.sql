@@ -493,6 +493,7 @@ CREATE TABLE Portfolio (
   created     TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP,
   updated     TIMESTAMP    NULL     DEFAULT NULL,
   picture     LONGBLOB              DEFAULT NULL,
+  visibility  VARCHAR(255) NOT NULL,
 
   FOREIGN KEY (creator)
   REFERENCES User (id)

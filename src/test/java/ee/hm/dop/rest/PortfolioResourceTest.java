@@ -23,6 +23,7 @@ import ee.hm.dop.model.Chapter;
 import ee.hm.dop.model.Material;
 import ee.hm.dop.model.Portfolio;
 import ee.hm.dop.model.TargetGroup;
+import ee.hm.dop.model.Visibility;
 
 public class PortfolioResourceTest extends ResourceIntegrationTestBase {
 
@@ -42,8 +43,8 @@ public class PortfolioResourceTest extends ResourceIntegrationTestBase {
     @Test
     public void getByCreator() {
         String username = "mati.maasikas-vaarikas";
-        List<Portfolio> portfolios = doGet(format(GET_BY_CREATOR_URL, username)).readEntity(
-                new GenericType<List<Portfolio>>() {
+        List<Portfolio> portfolios = doGet(format(GET_BY_CREATOR_URL, username))
+                .readEntity(new GenericType<List<Portfolio>>() {
                 });
 
         assertEquals(2, portfolios.size());
@@ -77,8 +78,8 @@ public class PortfolioResourceTest extends ResourceIntegrationTestBase {
     @Test
     public void getByCreatorNoMaterials() {
         String username = "voldemar.vapustav";
-        List<Portfolio> portfolios = doGet(format(GET_BY_CREATOR_URL, username)).readEntity(
-                new GenericType<List<Portfolio>>() {
+        List<Portfolio> portfolios = doGet(format(GET_BY_CREATOR_URL, username))
+                .readEntity(new GenericType<List<Portfolio>>() {
                 });
 
         assertEquals(0, portfolios.size());
@@ -231,6 +232,18 @@ public class PortfolioResourceTest extends ResourceIntegrationTestBase {
 
     }
 
+    @Test
+    public void updateChangingVisibility() {
+        login("39011220011");
+
+        Portfolio portfolio = getPortfolio(6);
+        portfolio.setVisibility(Visibility.NOT_LISTED);
+
+        Portfolio updatedPortfolio = doPost(UPDATE_PORTFOLIO_URL, portfolio, Portfolio.class);
+
+        assertEquals(Visibility.NOT_LISTED, updatedPortfolio.getVisibility());
+    }
+
     private Portfolio getPortfolio(long id) {
         return doGet(format(GET_PORTFOLIO_URL, id), Portfolio.class);
     }
@@ -295,5 +308,6 @@ public class PortfolioResourceTest extends ResourceIntegrationTestBase {
         assertTrue(portfolio.getTargetGroups().contains(TargetGroup.SIX_SEVEN));
         assertEquals("Lifelong_learning_and_career_planning", portfolio.getCrossCurricularThemes().get(0).getName());
         assertEquals("Cultural_and_value_competence", portfolio.getKeyCompetences().get(0).getName());
+        assertEquals(Visibility.PUBLIC, portfolio.getVisibility());
     }
 }

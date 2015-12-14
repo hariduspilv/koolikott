@@ -85,7 +85,7 @@ public class Portfolio implements Searchable {
             name = "Portfolio_Tag",
             joinColumns = { @JoinColumn(name = "portfolio") },
             inverseJoinColumns = { @JoinColumn(name = "tag") },
-            uniqueConstraints = @UniqueConstraint(columnNames = { "portfolio", "tag" }))
+            uniqueConstraints = @UniqueConstraint(columnNames = { "portfolio", "tag" }) )
     private List<Tag> tags;
 
     @Lob
@@ -97,7 +97,7 @@ public class Portfolio implements Searchable {
     @Enumerated(EnumType.STRING)
     @Column(name = "targetGroup")
     @ElementCollection(fetch = EAGER)
-    @CollectionTable(name = "Portfolio_TargetGroup", joinColumns = @JoinColumn(name = "portfolio"))
+    @CollectionTable(name = "Portfolio_TargetGroup", joinColumns = @JoinColumn(name = "portfolio") )
     private List<TargetGroup> targetGroups;
 
     @ManyToMany(fetch = EAGER)
@@ -105,7 +105,7 @@ public class Portfolio implements Searchable {
             name = "Portfolio_CrossCurricularTheme",
             joinColumns = { @JoinColumn(name = "portfolio") },
             inverseJoinColumns = { @JoinColumn(name = "crossCurricularTheme") },
-            uniqueConstraints = @UniqueConstraint(columnNames = { "portfolio", "crossCurricularTheme" }))
+            uniqueConstraints = @UniqueConstraint(columnNames = { "portfolio", "crossCurricularTheme" }) )
     private List<CrossCurricularTheme> crossCurricularThemes;
 
     @ManyToMany(fetch = EAGER)
@@ -113,8 +113,12 @@ public class Portfolio implements Searchable {
             name = "Portfolio_KeyCompetence",
             joinColumns = { @JoinColumn(name = "portfolio") },
             inverseJoinColumns = { @JoinColumn(name = "keyCompetence") },
-            uniqueConstraints = @UniqueConstraint(columnNames = { "portfolio", "keyCompetence" }))
+            uniqueConstraints = @UniqueConstraint(columnNames = { "portfolio", "keyCompetence" }) )
     private List<KeyCompetence> keyCompetences;
+
+    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
+    private Visibility visibility;
 
     @Override
     public Long getId() {
@@ -250,6 +254,14 @@ public class Portfolio implements Searchable {
 
     public void setKeyCompetences(List<KeyCompetence> keyCompetences) {
         this.keyCompetences = keyCompetences;
+    }
+
+    public Visibility getVisibility() {
+        return visibility;
+    }
+
+    public void setVisibility(Visibility visibility) {
+        this.visibility = visibility;
     }
 
 }
