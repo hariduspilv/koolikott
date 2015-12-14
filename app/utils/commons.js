@@ -258,3 +258,13 @@ function containsObject(obj, list) {
 
 	return false;
 }
+
+function createPortfolio(id) {
+	var portfolio = {
+		type: ".Portfolio",
+		id: id,
+		tags: []
+	}
+	
+	return portfolio;
+}

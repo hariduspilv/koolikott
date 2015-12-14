@@ -4,7 +4,7 @@ define(['app'], function(app)
       function($scope, translationService, serverCallService, $route, $location, alertService, $rootScope, authenticatedUserService) {
           function init() {
               if ($rootScope.savedPortfolio) {
-                  $scope.portfolio = $rootScope.savedPortfolio;
+            	  setPortfolio($rootScope.savedPortfolio);
                   increaseViewCount();
               } else {
                   getPortfolio(getPortfolioSuccess, getPortfolioFail);
@@ -22,7 +22,7 @@ define(['app'], function(app)
               if (isEmpty(portfolio)) {
                   getPortfolioFail();
               } else {
-                  $scope.portfolio = portfolio;
+            	  setPortfolio(portfolio);
                   increaseViewCount();
               }
           }
@@ -34,22 +34,17 @@ define(['app'], function(app)
           }
     
           function increaseViewCount() {
-              var params = {
-                  'type' : '.Portfolio',
-                  'id': $scope.portfolio.id
-              };
-    
-              serverCallService.makePost("rest/portfolio/increaseViewCount", params, function success(){}, function fail(){});
+          	var portfolio = createPortfolio($scope.portfolio.id);
+          	serverCallService.makePost("rest/portfolio/increaseViewCount", portfolio, function success(){}, function fail(){});
           }
       
         $scope.addComment = function() {
             var url = "rest/comment/portfolio";
+
+        	var portfolio = createPortfolio($scope.portfolio.id);
             var params = {
                 'comment': $scope.newComment,
-                'portfolio': {
-                  'type' : '.Portfolio',
-                  'id': $scope.portfolio.id
-                }
+                'portfolio': portfolio
             };
             serverCallService.makePost(url, params, addCommentSuccess, addCommentFailed);
         };
@@ -67,7 +62,12 @@ define(['app'], function(app)
         function addCommentFailed(){
             log('Adding comment failed.');
         }
-      
+        
+        function setPortfolio(portfolio) {
+        	$scope.portfolio = portfolio;
+            $rootScope.savedPortfolio = portfolio;
+        }
+        
         init();
     }]);
 });
