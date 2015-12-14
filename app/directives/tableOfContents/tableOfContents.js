@@ -8,9 +8,10 @@ define(['app'], function(app)
                 readonly: '=readonly'
             },
             templateUrl: 'directives/tableOfContents/tableOfContents.html',
-            controller: function ($scope) {
+            controller: function ($scope, $rootScope) {
                 $scope.isReadOnly = angular.isDefined($scope.isReadOnly) ? $scope.isReadOnly : false;
-
+                $scope.isEditPortfolioMode = $rootScope.isEditPortfolioMode;
+                
                 $scope.gotoChapter = function(chapterId, subchapterId) {
                     var combinedId = 'chapter-' + chapterId;
                     if(subchapterId != null) {

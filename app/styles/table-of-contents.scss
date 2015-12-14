@@ -1,0 +1,12 @@
+.toc {
+  .md-button,
+  a {
+    &:hover .add-materials-to-chapter {
+      display: block;
+    }
+  }
+  
+  .add-materials-to-chapter {
+	  display: none;		
+  }
+}

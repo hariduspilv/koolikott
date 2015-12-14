@@ -1,17 +1,26 @@
-<ul class="sidenav-menu">
+<ul class="sidenav-menu toc">
   <li ng-repeat="chapter in portfolio.chapters">
     <md-button data-ng-click="gotoChapter($index)">
       {{chapter.title}}
       <span flex></span>
-      <span aria-hidden="true" class="md-toggle-icon" data-ng-click="chapter.expand = !chapter.expand" data-ng-class="{'toggled' : chapter.expand}">
-        <md-icon>keyboard_arrow_down</md-icon>
+      <span class="add-materials-to-chapter" data-ng-if="isEditPortfolioMode">
+        <md-tooltip md-direction="right">
+          Lisa materjal(id) sellesse peatükki
+        </md-tooltip>
+        <md-icon>my_library_books</md-icon>
       </span>
     </md-button>
-    <ul class="sidenav-menu-toggle-list" data-ng-show="chapter.expand" data-ng-class="{'collapsed' : !chapter.expand}">
+    <ul class="sidenav-menu-toggle-list">
       <li ng-repeat="subchapter in chapter.subchapters">
         <a class="md-button" layout="row" data-ng-click="gotoChapter($parent.$index, $index)">
           {{subchapter.title}}
           <span flex></span>
+          <span class="add-materials-to-chapter" data-ng-if="isEditPortfolioMode">
+            <md-tooltip md-direction="right">
+              Lisa materjal(id) sellesse peatükki
+            </md-tooltip>
+            <md-icon>my_library_books</md-icon>
+          </span>
         </a>
       </li>
       <li data-ng-hide="readonly">
