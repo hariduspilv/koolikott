@@ -1,16 +1,19 @@
 .drop-box {
-    border: 1px dashed #e0e0e0;
-    height: 125px;
+    border: 1px dashed #dedede;
+    height: 100px;
     text-align: center;
-	cursor: pointer;
-	border-radius: 4px;
-	
-	transition: border .25s;
-	
-	&.dragover {
+  	cursor: pointer;
+  	border-radius: 4px;
+  	transition: all .25s;
+
+    background: #eee;
+
+	&.dragover,
+  &:hover {
     	border-style: solid;
+      background: #e0e0e0;
 	}
-	
+
 	&.dragover-err {
     	border-color: red;
 	}
