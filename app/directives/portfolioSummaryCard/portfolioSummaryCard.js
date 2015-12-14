@@ -9,6 +9,9 @@ define(['app'], function(app)
                 templateUrl: 'directives/portfolioSummaryCard/portfolioSummaryCard.html',
                 controller: function ($scope, $location) {
 
+                	$scope.isViewPortforlioPage = $rootScope.isViewPortforlioPage;
+                	$scope.isEditPortfolioMode = $rootScope.isEditPortfolioMode;
+                	
                 	$scope.isOwner = function() {
                 		if (!authenticatedUserService.isAuthenticated()) {
                 			return false;
