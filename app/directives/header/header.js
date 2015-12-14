@@ -28,6 +28,13 @@ define(['app'], function(app)
                     translationService.setLanguage(language);
                     $scope.selectedLanguage = language;
                 };
+                
+                $scope.showSearchBar = function() {
+                    $scope.showSearch = true;
+                    $timeout(function() {
+                        angular.element('#header-simple-search-input').focus();
+                    });
+                }
 
                 $scope.search = function() {
                     if (!isEmpty($scope.searchFields.searchQuery)) {
