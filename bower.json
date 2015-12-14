@@ -5,7 +5,7 @@
     "angular": "1.4.3",
     "angular-animate": "1.4.3",
     "angular-aria": "1.4.3",
-    "angular-click-outside": "1.1.0",
+    "angular-click-outside": "~2.2.1",
     "angular-material": "master",
     "angular-material-icons": "0.6.0",
     "angular-resource": "1.4.3",

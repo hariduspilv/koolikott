@@ -96,6 +96,9 @@ require.config({
     'ng-file-upload': [
       'angular'
     ],
+    'angular-click-outside': [
+      'angular'
+    ],
     ngInfiniteScroll: [
       'angular',
       'jquery'
@@ -128,6 +131,7 @@ require([
   'angular-material-icons',
   'angular-screenfull',
   'angular-scroll',
+  'angular-click-outside',
   'ng-file-upload-shim',
   'ng-file-upload',
   'clipboard',

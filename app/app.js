@@ -11,7 +11,8 @@ define(['app.routes', 'services/dependencyResolver'], function(config, dependenc
       'angularScreenfull',
       'duScroll',
       'infinite-scroll',
-      'ngFileUpload'
+      'ngFileUpload',
+      'angular-click-outside'
     ]);
 
     app.config(
