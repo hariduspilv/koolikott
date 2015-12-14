@@ -6,6 +6,9 @@ define(['app'], function(app)
             scope: true,
             templateUrl: 'directives/editPortfolioModeHeader/editPortfolioModeHeader.html',
             controller: function ($scope, $location) {
+
+                $scope.portfolioVisibility = 'PUBLIC';
+
                 $scope.toggleSidenav = function() {
                     $mdSidenav('left').toggle();
                 };
@@ -14,6 +17,18 @@ define(['app'], function(app)
                     $rootScope.isEditPortfolioMode = false;
                     $location.url("/");
                 };
+
+                $scope.makePublic = function() {
+                    $scope.portfolioVisibility = 'PUBLIC';
+                }
+
+                $scope.makeNotListed = function() {
+                    $scope.portfolioVisibility = 'NOT_LISTED';
+                }
+
+                $scope.makePrivate = function() {
+                    $scope.portfolioVisibility = 'PRIVATE';
+                }
             }
         };
     }]);
