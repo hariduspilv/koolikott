@@ -12,11 +12,9 @@
   </md-toolbar>
   <md-dialog-content layout="column">
     <md-tabs md-dynamic-height md-border-bottom md-autoselect md-stretch-tabs="always" md-selected="step.currentStep">
-      <md-tab label="{{ 'MATERIAL_TAB_URL' | translate }}" data-ng-disabled="step.isTabDisabled(0)">
-        <md-content class="md-padding">
-          <h2 class="md-title" data-translate="MATERIAL_URL"></h2>
-
-          <form name="materialUrlForm">
+      <md-tab label="{{ 'MATERIAL_TAB_MAIN_DATA' | translate }}" data-ng-disabled="step.isTabDisabled(1)">
+        <form name="materialMainForm">
+          <md-content class="md-padding">
             <div layout="row" flex>
               <md-input-container flex>
                 <label data-translate="MATERIAL_URL"></label>
@@ -35,12 +33,6 @@
                 </md-select>
               </md-input-container>
             </div>
-          </form>
-        </md-content>
-      </md-tab>
-      <md-tab label="{{ 'MATERIAL_TAB_MAIN_DATA' | translate }}" data-ng-disabled="step.isTabDisabled(1)">
-        <form name="materialMainForm">
-          <md-content class="md-padding">
             <div layout="row" layout-align="center center">
               <h2 class="md-title" data-translate="MATERIAL_TITLE_DESCRIPTION"></h2>
               <span flex></span>
