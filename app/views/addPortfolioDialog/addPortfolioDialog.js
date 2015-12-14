@@ -33,7 +33,7 @@ define(['app'], function(app)
             	if (isEmpty(portfolio)) {
             		createPortfolioFailed();
 	            } else {
-	            	$rootScope.portfolio = portfolio;
+	            	$rootScope.savedPortfolio = portfolio;
 	            	$mdDialog.hide();
 	                $location.url('/portfolio/edit?id=' + portfolio.id);
 	            }
@@ -52,6 +52,7 @@ define(['app'], function(app)
                 if (isEmpty(portfolio)) {
                     createPortfolioFailed();
                 } else {
+                    $rootScope.savedPortfolio = portfolio;
                     $scope.portfolio = portfolio;
                     $mdDialog.hide();
                 }
