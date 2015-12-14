@@ -305,7 +305,7 @@ define(['app'], function(app)
                     if (isEmpty(data)) {
                         getTaxonFail();
                     } else {
-                        $scope.detailedSearch.taxon = data;
+                        $scope.detailedSearch.taxon = Object.create(data);
                     }
                 }
 

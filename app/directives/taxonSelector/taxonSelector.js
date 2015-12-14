@@ -28,54 +28,54 @@ define(['app'], function(app)
             		/*
             		 * The other of the watchers is important and should be the same as the three.
             		 */
-            		
-            		$scope.$watch('taxon', function(newTaxon, oldTaxon) {
+            		                    
+            		$scope.$watch('taxon.id', function(newTaxon, oldTaxon) {
                         if (newTaxon !== oldTaxon) {
                        		buildTaxonPath();
                         }
-                    }, false);
+                    }, true);
             		
-            		$scope.$watch('taxonPath.educationalContext', function(newEducationalContext, oldEducationalContext) {
+            		$scope.$watch('taxonPath.educationalContext.id', function(newEducationalContext, oldEducationalContext) {
                         if (newEducationalContext && newEducationalContext !== oldEducationalContext) {
-                       		$scope.taxon = newEducationalContext;
+                       		$scope.taxon = Object.create($scope.taxonPath.educationalContext);
                         }
-                    }, false);
+                    }, true);
                 	
-                	$scope.$watch('taxonPath.domain', function(newDomain, oldDomain) {
+                	$scope.$watch('taxonPath.domain.id', function(newDomain, oldDomain) {
                         if (newDomain && newDomain !== oldDomain) {
-                       		$scope.taxon = newDomain;
+                       		$scope.taxon = Object.create($scope.taxonPath.domain);
                         }
-                    }, false);
+                    }, true);
                 	
-                	$scope.$watch('taxonPath.subject', function(newSubject, oldSubject) {
+                	$scope.$watch('taxonPath.subject.id', function(newSubject, oldSubject) {
                         if (newSubject && newSubject !== oldSubject) {
-                        	$scope.taxon = newSubject;
+                        	$scope.taxon = Object.create($scope.taxonPath.subject);
                         }
-                    }, false);
+                    }, true);
                 	
-                	$scope.$watch('taxonPath.specialization', function(newSpecialization, oldSpecialization) {
+                	$scope.$watch('taxonPath.specialization.id', function(newSpecialization, oldSpecialization) {
                         if (newSpecialization && newSpecialization !== oldSpecialization) {
-                        		$scope.taxon = newSpecialization;
+                            $scope.taxon = Object.create($scope.taxonPath.specialization);
                         }
-                    }, false);
+                    }, true);
                 	
-                	$scope.$watch('taxonPath.module', function(newModule, oldModule) {
+                	$scope.$watch('taxonPath.module.id', function(newModule, oldModule) {
                         if (newModule && newModule !== oldModule) {
-                        		$scope.taxon = newModule;
+                            $scope.taxon = Object.create($scope.taxonPath.module);
                         }
-                    }, false);
+                    }, true);
                 	
-                	$scope.$watch('taxonPath.topic', function(newTopic, oldTopic) {
+                	$scope.$watch('taxonPath.topic.id', function(newTopic, oldTopic) {
                 		if (newTopic && newTopic !== oldTopic) {
-                			$scope.taxon = newTopic;
+                			$scope.taxon = Object.create($scope.taxonPath.topic);
                 		}
-                	}, false);
+                	}, true);
                 	
-                	$scope.$watch('taxonPath.subtopic', function(newSubtopic, oldSubtopic) {
+                	$scope.$watch('taxonPath.subtopic.id', function(newSubtopic, oldSubtopic) {
                 		if (newSubtopic && newSubtopic !== oldSubtopic) {
-                			$scope.taxon = newSubtopic;
+                			$scope.taxon = Object.create($scope.taxonPath.subtopic);
                 		}
-                	}, false);
+                	}, true);
             	}
 
         		function getEducationalContextSuccess(data) {
