@@ -4,6 +4,7 @@ import static org.apache.commons.lang3.StringUtils.isEmpty;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 
@@ -24,15 +25,32 @@ public class PortfolioService {
     @Inject
     private SearchEngineService searchEngineService;
 
-    public Portfolio get(long materialId) {
-        return portfolioDAO.findById(materialId);
+    public Portfolio get(long portfolioId, User loggedInUser) {
+        Portfolio portfolio = portfolioDAO.findById(portfolioId);
+
+        if (!portfolioIsAccessibleToUser(portfolio, loggedInUser)) {
+            throw new RuntimeException("Logged in user must be the creator of this private portfolio.");
+        }
+
+        return portfolio;
     }
 
-    public List<Portfolio> getByCreator(User creator) {
-        return portfolioDAO.findByCreator(creator);
+    public List<Portfolio> getByCreator(User creator, User loggedInUser) {
+        List<Portfolio> portfolios = portfolioDAO.findByCreator(creator);
+
+        portfolios = portfolios.stream().filter(p -> portfolioIsAccessibleToUser(p, loggedInUser))
+                .collect(Collectors.toList());
+
+        return portfolios;
     }
 
-    public byte[] getPortfolioPicture(Portfolio portfolio) {
+    public byte[] getPortfolioPicture(Portfolio portfolio, User loggedInUser) {
+        Portfolio actualPortfolio = portfolioDAO.findById(portfolio.getId());
+        if (!portfolioIsAccessibleToUser(actualPortfolio, loggedInUser)) {
+            throw new RuntimeException(
+                    "Logged in user must be the creator of this private portfolio that the picture belongs to.");
+        }
+
         return portfolioDAO.findPictureByPortfolio(portfolio);
     }
 
@@ -165,6 +183,15 @@ public class PortfolioService {
         originalPortfolio.setPicture(portfolio.getPicture());
         originalPortfolio.setVisibility(portfolio.getVisibility());
         return originalPortfolio;
+    }
+
+    private boolean portfolioIsAccessibleToUser(Portfolio portfolio, User loggedInUser) {
+        if (portfolio.getVisibility() != Visibility.PRIVATE
+                || (loggedInUser != null && portfolio.getCreator().getId() == loggedInUser.getId())) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
 }

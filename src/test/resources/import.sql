@@ -363,7 +363,9 @@ insert into Portfolio(id, title, taxon, creator, summary, views, created, update
 insert into Portfolio(id, title, taxon, creator, summary, views, created, updated, picture, visibility) VALUES (3, 'The newer stock market', 21, 6, 'A marvellous summary.', 14, '2002-12-29 06:00:01', '2006-12-29 06:00:01', '656b6f6f6c696b6f7474', 'PUBLIC');
 insert into Portfolio(id, title, taxon, creator, summary, views, created, updated, picture, visibility) VALUES (4, 'The even newer stock market', null, 1, 'Cool summary.', 100, '2003-10-10 07:00:11', null, null, 'PUBLIC');
 insert into Portfolio(id, title, taxon, creator, summary, views, created, updated, picture, visibility) VALUES (5, 'Adding comment to a portfolio', null, 1, 'Cool summary.', 100, '2003-10-10 07:00:11', null, null, 'PUBLIC');
-insert into Portfolio(id, title, taxon, creator, summary, views, created, updated, picture, visibility) VALUES (6, 'This portfolio will be changed to not listed in the tests. ', null, 1, 'Summary.', 100, '2003-10-10 07:00:11', null, null, 'PUBLIC');
+insert into Portfolio(id, title, taxon, creator, summary, views, created, updated, picture, visibility) VALUES (6, 'This portfolio will be changed to not listed in the tests. ', null, 2, 'Summary.', 100, '2003-10-10 07:00:11', null, null, 'PUBLIC');
+insert into Portfolio(id, title, taxon, creator, summary, views, created, updated, picture, visibility) VALUES (7, 'This portfolio is private. ', null, 2, 'Summary. Sum sum sum.', 100, '2003-10-10 07:00:11', null, '656b6f6f6c696b6f7474', 'PRIVATE');
+insert into Portfolio(id, title, taxon, creator, summary, views, created, updated, picture, visibility) VALUES (8, 'This portfolio is public. ', null, 2, 'Summary. Wow.', 100, '2003-10-10 07:00:11', null, null, 'PUBLIC');
 
 -- Chapter
 

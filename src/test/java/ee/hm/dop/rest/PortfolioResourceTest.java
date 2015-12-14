@@ -8,12 +8,15 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status;
 
 import org.joda.time.DateTime;
 import org.junit.Test;
@@ -41,6 +44,26 @@ public class PortfolioResourceTest extends ResourceIntegrationTestBase {
     }
 
     @Test
+    public void getPrivatePortfolioAsCreator() {
+        login("38011550077");
+        Long id = 7L;
+
+        Portfolio portfolio = getPortfolio(id);
+
+        assertEquals(id, portfolio.getId());
+        assertEquals("This portfolio is private. ", portfolio.getTitle());
+    }
+
+    @Test
+    public void getPrivatePortfolioAsNotCreator() {
+        login("15066990099");
+        Long id = 7L;
+
+        Response response = doGet(format(GET_PORTFOLIO_URL, id));
+        assertEquals(Status.INTERNAL_SERVER_ERROR.getStatusCode(), response.getStatus());
+    }
+
+    @Test
     public void getByCreator() {
         String username = "mati.maasikas-vaarikas";
         List<Portfolio> portfolios = doGet(format(GET_BY_CREATOR_URL, username))
@@ -51,6 +74,34 @@ public class PortfolioResourceTest extends ResourceIntegrationTestBase {
         assertEquals(Long.valueOf(3), portfolios.get(0).getId());
         assertEquals(Long.valueOf(1), portfolios.get(1).getId());
         assertPortfolio1(portfolios.get(1));
+    }
+
+    @Test
+    public void getByCreatorWhenSomeArePrivate() {
+        String username = "peeter.paan";
+        List<Portfolio> portfolios = doGet(format(GET_BY_CREATOR_URL, username))
+                .readEntity(new GenericType<List<Portfolio>>() {
+                });
+
+        assertEquals(2, portfolios.size());
+        List<Long> expectedIds = Arrays.asList(6L, 8L);
+        List<Long> actualIds = portfolios.stream().map(p -> p.getId()).collect(Collectors.toList());
+        assertTrue(actualIds.containsAll(expectedIds));
+    }
+
+    @Test
+    public void getByCreatorWhenSomeArePrivateAsCreator() {
+        login("38011550077");
+
+        String username = "peeter.paan";
+        List<Portfolio> portfolios = doGet(format(GET_BY_CREATOR_URL, username))
+                .readEntity(new GenericType<List<Portfolio>>() {
+                });
+
+        assertEquals(3, portfolios.size());
+        List<Long> expectedIds = Arrays.asList(6L, 7L, 8L);
+        List<Long> actualIds = portfolios.stream().map(p -> p.getId()).collect(Collectors.toList());
+        assertTrue(actualIds.containsAll(expectedIds));
     }
 
     @Test
@@ -106,6 +157,31 @@ public class PortfolioResourceTest extends ResourceIntegrationTestBase {
     public void getPortfolioPictureIdNull() {
         Response response = doGet(format(GET_PORTFOLIO_PICTURE_URL, "null"), MediaType.WILDCARD_TYPE);
         assertEquals(Response.Status.NOT_FOUND.getStatusCode(), response.getStatus());
+    }
+
+    @Test
+    public void getPortfolioPictureWhenPortfolioIsPrivate() {
+        long portfolioId = 7;
+        Response response = doGet(format(GET_PORTFOLIO_PICTURE_URL, portfolioId), MediaType.WILDCARD_TYPE);
+        assertEquals(Response.Status.INTERNAL_SERVER_ERROR.getStatusCode(), response.getStatus());
+    }
+
+    @Test
+    public void getPortfolioPictureWhenPortfolioIsPrivateAsCreator() {
+        login("38011550077");
+        long portfolioId = 7;
+        Response response = doGet(format(GET_PORTFOLIO_PICTURE_URL, portfolioId), MediaType.WILDCARD_TYPE);
+        byte[] picture = response.readEntity(new GenericType<byte[]>() {
+        });
+        assertNotNull(picture);
+    }
+
+    @Test
+    public void getPortfolioPictureWhenPortfolioIsPrivateAsNotCreator() {
+        login("39011220011");
+        long portfolioId = 7;
+        Response response = doGet(format(GET_PORTFOLIO_PICTURE_URL, portfolioId), MediaType.WILDCARD_TYPE);
+        assertEquals(Response.Status.INTERNAL_SERVER_ERROR.getStatusCode(), response.getStatus());
     }
 
     @Test
@@ -234,7 +310,7 @@ public class PortfolioResourceTest extends ResourceIntegrationTestBase {
 
     @Test
     public void updateChangingVisibility() {
-        login("39011220011");
+        login("38011550077");
 
         Portfolio portfolio = getPortfolio(6);
         portfolio.setVisibility(Visibility.NOT_LISTED);
