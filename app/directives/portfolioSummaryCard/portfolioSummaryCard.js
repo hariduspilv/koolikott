@@ -3,7 +3,9 @@ define(['app'], function(app)
     app.directive('dopPortfolioSummaryCard', ['translationService', '$location', '$mdSidenav', '$mdDialog', '$rootScope', 'authenticatedUserService', '$route',
         function(translationService, $location, $mdSidenav, $mdDialog, $rootScope, authenticatedUserService, $route) {
             return {
-                scope: true,
+            	scope: {
+                    portfolio: '=',
+                },
                 templateUrl: 'directives/portfolioSummaryCard/portfolioSummaryCard.html',
                 controller: function ($scope, $location) {
 
