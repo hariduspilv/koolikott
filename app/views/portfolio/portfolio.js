@@ -65,7 +65,7 @@ define(['app'], function(app)
         
         function setPortfolio(portfolio) {
         	$scope.portfolio = portfolio;
-            $rootScope.savedPortfolio = portfolio;
+            $rootScope.savedPortfolio = null;;
         }
         
         init();

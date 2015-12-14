@@ -78,7 +78,7 @@ define(['app'], function(app)
             }
             
             function updatePortfolioFailed(){
-				log('Updagint portfolio failed.');
+				log('Updating portfolio failed.');
 			}
             
             function setPortfolio(portfolio) {
