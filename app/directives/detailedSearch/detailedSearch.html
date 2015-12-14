@@ -1,22 +1,22 @@
 <div layout="row" layout-sm="column">
   <div flex>
-    <md-input-container flex>
+    <md-input-container class="md-block">
       <label data-translate="DETAILED_SEARCH_MAIN"></label>
       <input data-ng-model="detailedSearch.main" />
     </md-input-container>
-    <md-input-container flex>
+    <md-input-container class="md-block">
       <label data-translate="DETAILED_SEARCH_TITLE"></label>
       <input data-ng-model="detailedSearch.title" />
     </md-input-container>
-    <md-input-container flex>
+    <md-input-container class="md-block">
       <label data-translate="DETAILED_SEARCH_AUTHOR"></label>
       <input data-ng-model="detailedSearch.author" />
     </md-input-container>
-    <md-input-container flex>
+    <md-input-container class="md-block">
       <label data-translate="DETAILED_SEARCH_DESCRIPTION"></label>
       <input data-ng-model="detailedSearch.combinedDescription"/>
     </md-input-container>
-    <md-input-container flex>
+    <md-input-container class="md-block">
       <label>Keel</label>
       <md-select data-ng-model="detailedSearch.language">
         <md-option data-ng-repeat="language in languages" value="{{language}}">
@@ -38,7 +38,7 @@
   <div flex>
     <div data-dop-target-group-selector data-target-groups="detailedSearch.targetGroups"></div>
 
-    <md-input-container flex data-ng-if="detailedSearch.educationalContext.id === 2 || detailedSearch.educationalContext.id === 3">
+    <md-input-container class="md-block" data-ng-if="detailedSearch.educationalContext.id === 2 || detailedSearch.educationalContext.id === 3">
       <label data-translate="DETAILED_SEARCH_CROSS_CURRICULAR_THEME"></label>
       <md-select data-ng-model="detailedSearch.crossCurricularTheme">
         <md-option data-ng-repeat="crossCurricularTheme in crossCurricularThemes" value="{{crossCurricularTheme.id}}">
@@ -47,7 +47,7 @@
       </md-select>
     </md-input-container>
 
-    <md-input-container flex data-ng-if="detailedSearch.educationalContext.id === 2 || detailedSearch.educationalContext.id === 3">
+    <md-input-container class="md-block" data-ng-if="detailedSearch.educationalContext.id === 2 || detailedSearch.educationalContext.id === 3">
       <label data-translate="DETAILED_SEARCH_KEY_COMPETENCE"></label>
       <md-select data-ng-model="detailedSearch.keyCompetence">
         <md-option data-ng-repeat="keyCompetence in keyCompetences" value="{{keyCompetence.id}}">

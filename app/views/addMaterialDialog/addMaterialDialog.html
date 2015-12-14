@@ -147,7 +147,7 @@
         <md-content class="md-padding">
           <h2 class="md-title" data-translate="MATERIAL_ADDITIONAL_DATA"></h2>
 
-          <md-input-container flex>
+          <md-input-container class="md-block">
             <label data-translate="MATERIAL_PUBLISHER"></label>
             <input data-ng-model="material.publisher">
           </md-input-container>
@@ -165,7 +165,7 @@
 
           <div data-dop-target-group-selector data-target-groups="material.targetGroups"></div>
 
-          <md-input-container flex>
+          <md-input-container class="md-block">
             <label data-translate="MATERIAL_VIEW_LICENSE_TYPE"></label>
             <md-select data-ng-model="material.licenseType">
               <md-option data-ng-repeat="licenceType in material.licenceTypes" value="{{licenceType}}">
