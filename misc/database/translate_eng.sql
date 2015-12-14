@@ -179,6 +179,13 @@ insert into Translation(translationGroup, translationKey, translation) values (3
 insert into Translation(translationGroup, translationKey, translation) values (3, 'PORTFOLIO_CREATE_NEW_MATERIAL_URL', 'URL for material that does not exists in E-koolikott');
 insert into Translation(translationGroup, translationKey, translation) values (3, 'PORTFOLIO_SAVED', 'Portfolio saved');
 insert into Translation(translationGroup, translationKey, translation) values (3, 'PORTFOLIO_EDIT_METADATA', 'Change Metadata');
+insert into Translation(translationGroup, translationKey, translation) values (3, 'PORTFOLIO_SEND_LINK', 'Send link');
+insert into Translation(translationGroup, translationKey, translation) values (3, 'PORTFOLIO_VISIBILITY_PUBLIC', 'Public');
+insert into Translation(translationGroup, translationKey, translation) values (3, 'PORTFOLIO_VISIBILITY_NOT_LISTED', 'Not listed');
+insert into Translation(translationGroup, translationKey, translation) values (3, 'PORTFOLIO_VISIBILITY_PRIVATE', 'Private');
+insert into Translation(translationGroup, translationKey, translation) values (3, 'PORTFOLIO_VISIBILITY_MAKE_PUBLIC', 'Make public');
+insert into Translation(translationGroup, translationKey, translation) values (3, 'PORTFOLIO_VISIBILITY_MAKE_NOT_LISTED', 'Make not listed');
+insert into Translation(translationGroup, translationKey, translation) values (3, 'PORTFOLIO_VISIBILITY_MAKE_PRIVATE', 'Make private');
 
 -- Comment translations
 insert into Translation(translationGroup, translationKey, translation) values (3, 'COMMENTS_TITLE', 'Comments');

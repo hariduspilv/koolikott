@@ -260,6 +260,13 @@ insert into Translation(translationGroup, translationKey, translation) values (1
 insert into Translation(translationGroup, translationKey, translation) values (1, 'PORTFOLIO_CREATE_NEW_MATERIAL_URL', 'E-koolikoti välise materiali aadress');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'PORTFOLIO_SAVED', 'Portfoolio salvestatud');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'PORTFOLIO_EDIT_METADATA', 'Muuda Andmeid');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'PORTFOLIO_SEND_LINK', 'Saada link');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'PORTFOLIO_VISIBILITY_PUBLIC', 'Avalik');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'PORTFOLIO_VISIBILITY_NOT_LISTED', 'Ainult lingiga');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'PORTFOLIO_VISIBILITY_PRIVATE', 'Privaatne');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'PORTFOLIO_VISIBILITY_MAKE_PUBLIC', 'Tee avalikuks');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'PORTFOLIO_VISIBILITY_MAKE_NOT_LISTED', 'Jaga ainult lingiga');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'PORTFOLIO_VISIBILITY_MAKE_PRIVATE', 'Tee privaatseks');
 
 -- Comment translations
 insert into Translation(translationGroup, translationKey, translation) values (1, 'COMMENTS_TITLE', 'Kommentaarid');
