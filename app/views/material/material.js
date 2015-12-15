@@ -194,5 +194,25 @@ define(['app'], function (app) {
             function addCommentFailed() {
                 log('Adding comment failed.');
             }
+
+            $scope.getType = function () {
+                if ($scope.material) {
+                    if ($scope.material.resourceTypes) {
+                        var types = $scope.material.resourceTypes;
+                        if (types.length == 0) {
+                            return 'description';
+                        }
+
+                        for (var i = 0; i < types.length; i++) {
+                            if (types[i].name.toLocaleLowerCase().trim() === 'audio')
+                                return 'audiotrack';
+                            if (types[i].name.toLocaleLowerCase().trim() === 'video')
+                                return 'videocam';
+                        }
+                    }
+                }
+
+                return 'description';
+            }
         }]);
 });

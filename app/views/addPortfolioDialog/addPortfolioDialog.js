@@ -45,8 +45,10 @@ define(['app'], function(app)
 			
             $scope.update = function() {
                 var url = "rest/portfolio/update";
+                $scope.portfolio.picture = getPicture($scope.portfolio);
+
                 serverCallService.makePost(url, $scope.portfolio, updatePortfolioSuccess, createPortfolioFailed);
-            }
+            };
             
             function updatePortfolioSuccess(portfolio) {
                 if (isEmpty(portfolio)) {
