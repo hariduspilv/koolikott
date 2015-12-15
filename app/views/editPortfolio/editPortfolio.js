@@ -4,12 +4,15 @@ define(['app'], function(app) {
         $anchorScroll.yOffset = 50;
     }]);
 
-    app.controller('editPortfolioController', ['$scope', 'translationService', 'serverCallService', '$route', '$location', 'alertService', '$rootScope', 'authenticatedUserService', 'dialogService', 'toastService', 'searchService', '$mdDialog',
-        function($scope, translationService, serverCallService, $route, $location, alertService, $rootScope, authenticatedUserService, dialogService, toastService, searchService, $mdDialog) {
+    app.controller('editPortfolioController', ['$scope', 'translationService', 'serverCallService', '$route', '$location', 'alertService', '$rootScope', 'authenticatedUserService', 'dialogService', 'toastService', 'searchService', '$mdDialog', '$interval',
+        function($scope, translationService, serverCallService, $route, $location, alertService, $rootScope, authenticatedUserService, dialogService, toastService, searchService, $mdDialog, $interval) {
+            var isAutoSaving = false;
+            var autoSaveInterval;
 
             function init() {
                 if ($rootScope.savedPortfolio) {
                     setPortfolio($rootScope.savedPortfolio);
+                    checkPortfolioVisibility($rootScope.savedPortfolio);
                 } else {
                     getPortfolio(getPortfolioSuccess, getPortfolioFail);
                 }
@@ -17,6 +20,14 @@ define(['app'], function(app) {
                 $rootScope.isEditPortfolioMode = true;
                 searchService.setType("material");
                 searchService.setTargetGroups([]);
+                
+                startAutosave();
+            }
+            
+            function checkPortfolioVisibility(portfolio) {
+                if (portfolio.visibility === 'PRIVATE') return;
+                
+                showWarning();
             }
 
             function getPortfolio(success, fail) {
@@ -29,6 +40,7 @@ define(['app'], function(app) {
                     getPortfolioFail();
                 } else {
                     setPortfolio(portfolio);
+                    checkPortfolioVisibility(portfolio);
                     searchService.setTargetGroups(portfolio.targetGroups);
                 }
             }
@@ -65,7 +77,11 @@ define(['app'], function(app) {
                     deleteChapter);
             };
 
-            $scope.savePortfolio = updatePortfolio();
+            $scope.savePortfolio = function() {
+              isAutoSaving = false;
+              
+              updatePortfolio();
+            }
             
             function updatePortfolio() {
                 var url = "rest/portfolio/update";
@@ -77,7 +93,9 @@ define(['app'], function(app) {
                     createPortfolioFailed();
                 } else {
                     setPortfolio(portfolio);
-                    toastService.show("PORTFOLIO_SAVED");
+                    
+                    var message = isAutoSaving ? 'AutoSaved' : 'PORTFOLIO_SAVED';
+                    toastService.show(message);
                 }
             }
 
@@ -88,9 +106,6 @@ define(['app'], function(app) {
             function setPortfolio(portfolio) {
                 $scope.portfolio = portfolio;
                 $rootScope.savedPortfolio = portfolio;
-                
-                if (portfolio.visibility !== 'PRIVATE')
-                    showWarning();
             }
             
             function showWarning() {
@@ -107,6 +122,14 @@ define(['app'], function(app) {
                     'Tee kogumik privaatseks',
                     'Jah, ma mõistan',
                     setPrivate);
+            }
+            
+            function startAutosave() {
+                autoSaveInterval = $interval(function() {
+                    isAutoSaving = true;
+                    
+                    updatePortfolio();
+                }, 20000);
             }
 
             init();
