@@ -267,6 +267,7 @@ insert into Translation(translationGroup, translationKey, translation) values (1
 insert into Translation(translationGroup, translationKey, translation) values (1, 'PORTFOLIO_VISIBILITY_MAKE_PUBLIC', 'Tee avalikuks');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'PORTFOLIO_VISIBILITY_MAKE_NOT_LISTED', 'Jaga ainult lingiga');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'PORTFOLIO_VISIBILITY_MAKE_PRIVATE', 'Tee privaatseks');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'PORTFOLIO_DELETE', 'Kustuta kogumik');
 
 -- Comment translations
 insert into Translation(translationGroup, translationKey, translation) values (1, 'COMMENTS_TITLE', 'Kommentaarid');

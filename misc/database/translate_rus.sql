@@ -186,6 +186,7 @@ insert into Translation(translationGroup, translationKey, translation) values (2
 insert into Translation(translationGroup, translationKey, translation) values (2, 'PORTFOLIO_VISIBILITY_MAKE_PUBLIC', 'Опубликовать');
 insert into Translation(translationGroup, translationKey, translation) values (2, 'PORTFOLIO_VISIBILITY_MAKE_NOT_LISTED', 'Поделитесь только со ссылкой');
 insert into Translation(translationGroup, translationKey, translation) values (2, 'PORTFOLIO_VISIBILITY_MAKE_PRIVATE', 'Сделать личное');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'PORTFOLIO_DELETE', 'Удалить портфель');
 
 -- Comment translations
 insert into Translation(translationGroup, translationKey, translation) values (2, 'COMMENTS_TITLE', 'Комментарии');

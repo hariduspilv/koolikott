@@ -186,6 +186,7 @@ insert into Translation(translationGroup, translationKey, translation) values (3
 insert into Translation(translationGroup, translationKey, translation) values (3, 'PORTFOLIO_VISIBILITY_MAKE_PUBLIC', 'Make public');
 insert into Translation(translationGroup, translationKey, translation) values (3, 'PORTFOLIO_VISIBILITY_MAKE_NOT_LISTED', 'Make not listed');
 insert into Translation(translationGroup, translationKey, translation) values (3, 'PORTFOLIO_VISIBILITY_MAKE_PRIVATE', 'Make private');
+insert into Translation(translationGroup, translationKey, translation) values (3, 'PORTFOLIO_DELETE', 'Delete portfolio');
 
 -- Comment translations
 insert into Translation(translationGroup, translationKey, translation) values (3, 'COMMENTS_TITLE', 'Comments');
