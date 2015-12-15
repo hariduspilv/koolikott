@@ -84,29 +84,27 @@ public class PortfolioResourceTest extends ResourceIntegrationTestBase {
     }
 
     @Test
-    public void getByCreatorWhenSomeArePrivate() {
-        String username = "peeter.paan";
+    public void getByCreatorWhenSomeArePrivateOrNotListed() {
+        String username = "my.testuser";
         List<Portfolio> portfolios = doGet(format(GET_BY_CREATOR_URL, username))
                 .readEntity(new GenericType<List<Portfolio>>() {
                 });
 
-        assertEquals(2, portfolios.size());
-        List<Long> expectedIds = Arrays.asList(6L, 8L);
-        List<Long> actualIds = portfolios.stream().map(p -> p.getId()).collect(Collectors.toList());
-        assertTrue(actualIds.containsAll(expectedIds));
+        assertEquals(1, portfolios.size());
+        assertEquals(Long.valueOf(9), portfolios.get(0).getId());
     }
 
     @Test
-    public void getByCreatorWhenSomeArePrivateAsCreator() {
-        login("38011550077");
+    public void getByCreatorWhenSomeArePrivateOrNotListedAsCreator() {
+        login("78912378912");
 
-        String username = "peeter.paan";
+        String username = "my.testuser";
         List<Portfolio> portfolios = doGet(format(GET_BY_CREATOR_URL, username))
                 .readEntity(new GenericType<List<Portfolio>>() {
                 });
 
         assertEquals(3, portfolios.size());
-        List<Long> expectedIds = Arrays.asList(6L, 7L, 8L);
+        List<Long> expectedIds = Arrays.asList(9L, 10L, 11L);
         List<Long> actualIds = portfolios.stream().map(p -> p.getId()).collect(Collectors.toList());
         assertTrue(actualIds.containsAll(expectedIds));
     }
