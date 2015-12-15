@@ -25,13 +25,14 @@
         <ng-md-icon icon="lock"></ng-md-icon>
         <md-tooltip>Sisene</md-tooltip>
       </md-button>
+      
       <md-menu data-ng-show="user">
         <md-button aria-label="Open user profile" class="md-icon-button" id="header-user-menu-icon" ng-click="$mdOpenMenu($event)">
           <ng-md-icon icon="account_circle"></ng-md-icon>
         </md-button>
         <md-menu-content width="4">
           <md-menu-item>
-            <md-button href="#/{{user.username}}" id="user-menu-view-profile">
+            <md-button data-ng-href="#/{{user.username}}" id="user-menu-view-profile">
               <span data-translate="MY_PROFILE"></span>
             </md-button>
           </md-menu-item>
@@ -43,6 +44,7 @@
           </md-menu-item>
         </md-menu-content>
       </md-menu>
+      
       <md-menu>
         <md-button aria-label="Open language menu" class="md-icon-button" id="header-language-icon" ng-click="$mdOpenMenu($event)">
           <span data-ng-if="selectedLanguage === 'est'">ET</span>
