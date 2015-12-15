@@ -1,32 +1,46 @@
 define(['app'], function(app)
 {
-    app.directive('dopRating', function(translationService, $mdToast, $translate) {
+    app.directive('dopRating', function(translationService, $mdToast, $translate, serverCallService) {
         return {
             scope: {
             	portfolio: '=',
-                rating: '=',
                 likeMessage: '@',
                 dislikeMessage: '@'
             },
             templateUrl: 'directives/rating/rating.html',
-            controller: function ($scope, $mdToast, $translate) {
+            controller: function ($scope, $mdToast, $translate, serverCallService) {
                 // todo: add actual logic
                 $scope.isLiked = false;
                 $scope.isDisliked = false;
                 
-                $scope.rating = {};
-                $scope.rating.likes = $scope.portfolio.likes;
-                $scope.rating.dislikes = $scope.portfolio.dislikes;
+                function init() {
+                	setRatings();
+                }
+                
+                function setRatings() {
+                	$scope.rating = {};
+                	if($scope.portfolio) {
+	                    $scope.rating.likes = $scope.portfolio.likes;
+	                    $scope.rating.dislikes = $scope.portfolio.dislikes;
+                	}
+                }
                 
                 $scope.like = function() {
                     if ($scope.isLiked) {
                         showToast($translate.instant('RATING_LIKE_REMOVED'));
-                    } else {
-                        showToast($scope.likeMessage);
                     }
-   
-                    $scope.isLiked = !$scope.isLiked;
+                    else {
+                    	var portfolio = createPortfolio($scope.portfolio.id);
+                  		serverCallService.makePost("rest/portfolio/like", portfolio, likePortfolioSuccess, function() {});
+                    }
+                }
+                
+                function likePortfolioSuccess() {
+                	$scope.isDisliked = !$scope.isDisliked;
                     $scope.isDisliked = false;
+                    $scope.portfolio.likes += 1;
+                    setRatings();
+                    showToast($scope.likeMessage);
                 }
                 
                 $scope.dislike = function() {
@@ -39,10 +53,12 @@ define(['app'], function(app)
                     $scope.isDisliked = !$scope.isDisliked;
                     $scope.isLiked = false;
                 }
-                
+
                 function showToast(message) {
                     $mdToast.show($mdToast.simple().position('right top').content(message));
                 }
+                
+                init();
             }
         };
     });
