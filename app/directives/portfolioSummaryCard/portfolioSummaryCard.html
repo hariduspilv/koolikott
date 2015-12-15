@@ -18,6 +18,12 @@
               <span data-translate="PORTFOLIO_EDIT_METADATA"></span>
             </md-button>
           </md-menu-item>
+          <md-menu-item data-ng-if="isEditPortfolioMode">
+            <md-button>
+              <md-icon md-menu-align-target>delete</md-icon>
+              <span data-translate="PORTFOLIO_DELETE"></span>
+            </md-button>
+          </md-menu-item>
           <md-menu-item data-ng-if="isViewPortforlioPage" dop-copy-permalink></md-menu-item>
           <md-menu-divider data-ng-if="isViewPortforlioPage"></md-menu-divider>
           <md-menu-item data-ng-if="isViewPortforlioPage" dop-recommend></md-menu-item>
