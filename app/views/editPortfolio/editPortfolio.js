@@ -131,6 +131,10 @@ define(['app'], function(app) {
                     updatePortfolio();
                 }, 20000);
             }
+            
+            $scope.$on('$destroy', function() {
+                $interval.cancel(autoSaveInterval);
+            });
 
             init();
         }
