@@ -89,6 +89,9 @@ public class Portfolio implements Searchable {
 	@Formula(value = "(SELECT COUNT(*) FROM UserLike ul WHERE ul.portfolio = id AND ul.isLiked = 1)")
 	private int likes;
 
+	@Formula(value = "(SELECT COUNT(*) FROM UserLike ul WHERE ul.portfolio = id AND ul.isLiked = 0)")
+	private int dislikes;
+
 	@ManyToMany(fetch = EAGER, cascade = { MERGE, PERSIST })
 	@JoinTable(name = "Portfolio_Tag", joinColumns = { @JoinColumn(name = "portfolio") }, inverseJoinColumns = {
 			@JoinColumn(name = "tag") }, uniqueConstraints = @UniqueConstraint(columnNames = { "portfolio", "tag" }) )
@@ -282,6 +285,14 @@ public class Portfolio implements Searchable {
 
 	public void setLikes(int likes) {
 		this.likes = likes;
+	}
+
+	public int getDislikes() {
+		return dislikes;
+	}
+
+	public void setDislikes(int dislikes) {
+		this.dislikes = dislikes;
 	}
 
 }
