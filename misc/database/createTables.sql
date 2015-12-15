@@ -1,6 +1,7 @@
 USE dop;
 
 -- Drop tables
+DROP TABLE IF EXISTS UserLike;
 DROP TABLE IF EXISTS Comment;
 DROP TABLE IF EXISTS EstCoreTaxonMapping;
 DROP TABLE IF EXISTS WaramuTaxonMapping;
@@ -493,6 +494,7 @@ CREATE TABLE Portfolio (
   created     TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP,
   updated     TIMESTAMP    NULL     DEFAULT NULL,
   picture     LONGBLOB              DEFAULT NULL,
+  visibility  VARCHAR(255) NOT NULL,
 
   FOREIGN KEY (creator)
   REFERENCES User (id)
@@ -632,4 +634,22 @@ CREATE TABLE Comment (
 	FOREIGN KEY (material)
     REFERENCES Material (id)
       ON DELETE RESTRICT      
+);
+
+CREATE TABLE UserLike (
+	id        BIGINT AUTO_INCREMENT PRIMARY KEY,
+    creator   BIGINT NOT NULL,
+    portfolio BIGINT,
+    isLiked   BOOLEAN NOT NULL,
+    added     TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    
+    UNIQUE KEY (portfolio, creator),
+  
+    FOREIGN KEY (creator)
+    REFERENCES User (id)
+      ON DELETE RESTRICT,
+    
+    FOREIGN KEY (portfolio)
+    REFERENCES Portfolio (id)
+      ON DELETE RESTRICT
 );

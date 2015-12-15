@@ -8,12 +8,15 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status;
 
 import org.joda.time.DateTime;
 import org.junit.Test;
@@ -23,6 +26,7 @@ import ee.hm.dop.model.Chapter;
 import ee.hm.dop.model.Material;
 import ee.hm.dop.model.Portfolio;
 import ee.hm.dop.model.TargetGroup;
+import ee.hm.dop.model.Visibility;
 
 public class PortfolioResourceTest extends ResourceIntegrationTestBase {
 
@@ -32,6 +36,7 @@ public class PortfolioResourceTest extends ResourceIntegrationTestBase {
     private static final String GET_BY_CREATOR_URL = "portfolio/getByCreator?username=%s";
     private static final String GET_PORTFOLIO_PICTURE_URL = "portfolio/getPicture?portfolioId=%s";
     private static final String PORTFOLIO_INCREASE_VIEW_COUNT_URL = "portfolio/increaseViewCount";
+    private static final String PORTFOLIO_COPY_URL = "portfolio/copy";
 
     @Test
     public void getPortfolio() {
@@ -40,16 +45,70 @@ public class PortfolioResourceTest extends ResourceIntegrationTestBase {
     }
 
     @Test
+    public void getNotExistingPortfolio() {
+        Response response = doGet(format(GET_PORTFOLIO_URL, 2000));
+        assertEquals(Status.NO_CONTENT.getStatusCode(), response.getStatus());
+    }
+
+    @Test
+    public void getPrivatePortfolioAsCreator() {
+        login("38011550077");
+        Long id = 7L;
+
+        Portfolio portfolio = getPortfolio(id);
+
+        assertEquals(id, portfolio.getId());
+        assertEquals("This portfolio is private. ", portfolio.getTitle());
+    }
+
+    @Test
+    public void getPrivatePortfolioAsNotCreator() {
+        login("15066990099");
+        Long id = 7L;
+
+        Response response = doGet(format(GET_PORTFOLIO_URL, id));
+        assertEquals(Status.NO_CONTENT.getStatusCode(), response.getStatus());
+    }
+
+    @Test
     public void getByCreator() {
         String username = "mati.maasikas-vaarikas";
-        List<Portfolio> portfolios = doGet(format(GET_BY_CREATOR_URL, username)).readEntity(
-                new GenericType<List<Portfolio>>() {
+        List<Portfolio> portfolios = doGet(format(GET_BY_CREATOR_URL, username))
+                .readEntity(new GenericType<List<Portfolio>>() {
                 });
 
         assertEquals(2, portfolios.size());
         assertEquals(Long.valueOf(3), portfolios.get(0).getId());
         assertEquals(Long.valueOf(1), portfolios.get(1).getId());
         assertPortfolio1(portfolios.get(1));
+    }
+
+    @Test
+    public void getByCreatorWhenSomeArePrivate() {
+        String username = "peeter.paan";
+        List<Portfolio> portfolios = doGet(format(GET_BY_CREATOR_URL, username))
+                .readEntity(new GenericType<List<Portfolio>>() {
+                });
+
+        assertEquals(2, portfolios.size());
+        List<Long> expectedIds = Arrays.asList(6L, 8L);
+        List<Long> actualIds = portfolios.stream().map(p -> p.getId()).collect(Collectors.toList());
+        assertTrue(actualIds.containsAll(expectedIds));
+    }
+
+    @Test
+    public void getByCreatorWhenSomeArePrivateAsCreator() {
+        login("38011550077");
+
+        String username = "peeter.paan";
+        List<Portfolio> portfolios = doGet(format(GET_BY_CREATOR_URL, username))
+                .readEntity(new GenericType<List<Portfolio>>() {
+                });
+
+        assertEquals(3, portfolios.size());
+        List<Long> expectedIds = Arrays.asList(6L, 7L, 8L);
+        List<Long> actualIds = portfolios.stream().map(p -> p.getId()).collect(Collectors.toList());
+        assertTrue(actualIds.containsAll(expectedIds));
     }
 
     @Test
@@ -77,8 +136,8 @@ public class PortfolioResourceTest extends ResourceIntegrationTestBase {
     @Test
     public void getByCreatorNoMaterials() {
         String username = "voldemar.vapustav";
-        List<Portfolio> portfolios = doGet(format(GET_BY_CREATOR_URL, username)).readEntity(
-                new GenericType<List<Portfolio>>() {
+        List<Portfolio> portfolios = doGet(format(GET_BY_CREATOR_URL, username))
+                .readEntity(new GenericType<List<Portfolio>>() {
                 });
 
         assertEquals(0, portfolios.size());
@@ -104,6 +163,31 @@ public class PortfolioResourceTest extends ResourceIntegrationTestBase {
     @Test
     public void getPortfolioPictureIdNull() {
         Response response = doGet(format(GET_PORTFOLIO_PICTURE_URL, "null"), MediaType.WILDCARD_TYPE);
+        assertEquals(Response.Status.NOT_FOUND.getStatusCode(), response.getStatus());
+    }
+
+    @Test
+    public void getPortfolioPictureWhenPortfolioIsPrivate() {
+        long portfolioId = 7;
+        Response response = doGet(format(GET_PORTFOLIO_PICTURE_URL, portfolioId), MediaType.WILDCARD_TYPE);
+        assertEquals(Response.Status.NOT_FOUND.getStatusCode(), response.getStatus());
+    }
+
+    @Test
+    public void getPortfolioPictureWhenPortfolioIsPrivateAsCreator() {
+        login("38011550077");
+        long portfolioId = 7;
+        Response response = doGet(format(GET_PORTFOLIO_PICTURE_URL, portfolioId), MediaType.WILDCARD_TYPE);
+        byte[] picture = response.readEntity(new GenericType<byte[]>() {
+        });
+        assertNotNull(picture);
+    }
+
+    @Test
+    public void getPortfolioPictureWhenPortfolioIsPrivateAsNotCreator() {
+        login("39011220011");
+        long portfolioId = 7;
+        Response response = doGet(format(GET_PORTFOLIO_PICTURE_URL, portfolioId), MediaType.WILDCARD_TYPE);
         assertEquals(Response.Status.NOT_FOUND.getStatusCode(), response.getStatus());
     }
 
@@ -231,6 +315,61 @@ public class PortfolioResourceTest extends ResourceIntegrationTestBase {
 
     }
 
+    @Test
+    public void updateChangingVisibility() {
+        login("38011550077");
+
+        Portfolio portfolio = getPortfolio(6);
+        portfolio.setVisibility(Visibility.NOT_LISTED);
+
+        Portfolio updatedPortfolio = doPost(UPDATE_PORTFOLIO_URL, portfolio, Portfolio.class);
+
+        assertEquals(Visibility.NOT_LISTED, updatedPortfolio.getVisibility());
+    }
+
+    @Test
+    public void copyPrivatePortfolio() {
+        login("38011550077");
+
+        Portfolio portfolio = new Portfolio();
+        portfolio.setId(7L);
+
+        Portfolio copiedPortfolio = doPost(PORTFOLIO_COPY_URL, portfolio, Portfolio.class);
+
+        assertNotNull(copiedPortfolio);
+    }
+
+    @Test
+    public void copyPrivatePortfolioNotLoggedIn() {
+        Portfolio portfolio = new Portfolio();
+        portfolio.setId(7L);
+
+        Response response = doPost(PORTFOLIO_COPY_URL, Entity.entity(portfolio, MediaType.APPLICATION_JSON_TYPE));
+        assertEquals(Status.UNAUTHORIZED.getStatusCode(), response.getStatus());
+    }
+
+    @Test
+    public void copyPrivatePortfolioLoggedInAsNotCreator() {
+        login("39011220011");
+
+        Portfolio portfolio = new Portfolio();
+        portfolio.setId(7L);
+
+        Response response = doPost(PORTFOLIO_COPY_URL, Entity.entity(portfolio, MediaType.APPLICATION_JSON_TYPE));
+        assertEquals(Status.INTERNAL_SERVER_ERROR.getStatusCode(), response.getStatus());
+    }
+
+    @Test
+    public void copyPrivatePortfolioLoggedInAsCreator() {
+        login("38011550077");
+
+        Portfolio portfolio = new Portfolio();
+        portfolio.setId(7L);
+
+        Response response = doPost(PORTFOLIO_COPY_URL, Entity.entity(portfolio, MediaType.APPLICATION_JSON_TYPE));
+        assertEquals(Status.OK.getStatusCode(), response.getStatus());
+    }
+
     private Portfolio getPortfolio(long id) {
         return doGet(format(GET_PORTFOLIO_URL, id), Portfolio.class);
     }
@@ -295,5 +434,6 @@ public class PortfolioResourceTest extends ResourceIntegrationTestBase {
         assertTrue(portfolio.getTargetGroups().contains(TargetGroup.SIX_SEVEN));
         assertEquals("Lifelong_learning_and_career_planning", portfolio.getCrossCurricularThemes().get(0).getName());
         assertEquals("Cultural_and_value_competence", portfolio.getKeyCompetences().get(0).getName());
+        assertEquals(Visibility.PUBLIC, portfolio.getVisibility());
     }
 }

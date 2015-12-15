@@ -94,7 +94,7 @@ public class MaterialResource extends BaseResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Material createMaterial(Material material) {
-        material = materialService.createMaterial(material, getLoggedInUser());
+        material = materialService.createMaterial(material, getLoggedInUser(), true);
         return material;
     }
 

@@ -183,6 +183,14 @@ insert into Translation(translationGroup, translationKey, translation) values (2
 insert into Translation(translationGroup, translationKey, translation) values (2, 'PORTFOLIO_CREATE_NEW_MATERIAL_URL', 'Ссылка на материал, который не существует в E-koolikott');
 insert into Translation(translationGroup, translationKey, translation) values (2, 'PORTFOLIO_SAVED', 'Портфолио сохраняются');
 insert into Translation(translationGroup, translationKey, translation) values (2, 'PORTFOLIO_EDIT_METADATA', 'Изменить метаданные');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'PORTFOLIO_SEND_LINK', 'Отправить ссылку');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'PORTFOLIO_VISIBILITY_PUBLIC', 'Общественный');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'PORTFOLIO_VISIBILITY_NOT_LISTED', 'Только с ссылкой');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'PORTFOLIO_VISIBILITY_PRIVATE', 'Личное');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'PORTFOLIO_VISIBILITY_MAKE_PUBLIC', 'Опубликовать');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'PORTFOLIO_VISIBILITY_MAKE_NOT_LISTED', 'Поделитесь только со ссылкой');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'PORTFOLIO_VISIBILITY_MAKE_PRIVATE', 'Сделать личное');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'PORTFOLIO_DELETE', 'Удалить портфель');
 
 -- Comment translations
 insert into Translation(translationGroup, translationKey, translation) values (2, 'COMMENTS_TITLE', 'Комментарии');

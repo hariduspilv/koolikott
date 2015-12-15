@@ -9,9 +9,6 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.List;
 
-import javax.ws.rs.core.Response;
-import javax.ws.rs.core.Response.Status;
-
 import org.junit.Test;
 
 import ee.hm.dop.common.test.ResourceIntegrationTestBase;
@@ -63,8 +60,10 @@ public class SearchResourceTest extends ResourceIntegrationTestBase {
 
     @Test
     public void searchWithNullQueryAndNullFilter() {
-        Response response = doGet(buildQueryURL(null, 0, new SearchFilter()));
-        assertEquals(Status.INTERNAL_SERVER_ERROR.getStatusCode(), response.getStatus());
+        SearchResult searchResult = doGet(buildQueryURL(null, 0, new SearchFilter()), SearchResult.class);
+
+        assertEquals(0, searchResult.getTotalResults());
+        assertEquals(0, searchResult.getStart());
     }
 
     @Test

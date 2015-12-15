@@ -30,7 +30,7 @@ public class Chapter {
     @Column(columnDefinition = "TEXT", name = "textValue")
     private String text;
 
-    @ManyToMany(fetch = EAGER, cascade = { MERGE, PERSIST })
+    @ManyToMany(fetch = EAGER)
     @OrderColumn(name = "materialOrder", nullable = false)
     @JoinTable(
             name = "Chapter_Material",

@@ -41,215 +41,258 @@ import ee.hm.dop.rest.jackson.map.PictureDeserializer;
 @Entity
 public class Portfolio implements Searchable {
 
-    @Id
-    @GeneratedValue
-    private Long id;
+	@Id
+	@GeneratedValue
+	private Long id;
 
-    @Column(nullable = false)
-    private String title;
+	@Column(nullable = false)
+	private String title;
 
-    @Column(nullable = false)
-    @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
-    private DateTime created;
+	@Column(nullable = false)
+	@Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
+	private DateTime created;
 
-    @Column
-    @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
-    private DateTime updated;
+	@Column
+	@Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
+	private DateTime updated;
 
-    @ManyToOne
-    @JoinColumn(name = "taxon")
-    private Taxon taxon;
+	@ManyToOne
+	@JoinColumn(name = "taxon")
+	private Taxon taxon;
 
-    @ManyToOne
-    @JoinColumn(name = "creator", nullable = false)
-    private User creator;
+	@ManyToOne
+	@JoinColumn(name = "creator", nullable = false)
+	private User creator;
 
-    @Column(columnDefinition = "TEXT")
-    private String summary;
+	@Column(columnDefinition = "TEXT")
+	private String summary;
 
-    @Column(nullable = false)
-    private Long views = (long) 0;
+	@Column(nullable = false)
+	private Long views = (long) 0;
 
-    @OneToMany(fetch = EAGER, cascade = { MERGE, PERSIST })
-    @JoinColumn(name = "portfolio")
-    @OrderColumn(name = "chapterOrder")
-    private List<Chapter> chapters;
+	@OneToMany(fetch = EAGER, cascade = { MERGE, PERSIST })
+	@JoinColumn(name = "portfolio")
+	@OrderColumn(name = "chapterOrder")
+	private List<Chapter> chapters;
 
-    @OneToMany(fetch = EAGER, cascade = { MERGE, PERSIST })
-    @JoinColumn(name = "portfolio")
-    @OrderBy("added DESC")
-    private List<Comment> comments;
+	@OneToMany(fetch = EAGER, cascade = { MERGE, PERSIST })
+	@JoinColumn(name = "portfolio")
+	@OrderBy("added DESC")
+	private List<Comment> comments;
 
-    @ManyToMany(fetch = EAGER, cascade = { MERGE, PERSIST })
-    @JoinTable(
-            name = "Portfolio_Tag",
-            joinColumns = { @JoinColumn(name = "portfolio") },
-            inverseJoinColumns = { @JoinColumn(name = "tag") },
-            uniqueConstraints = @UniqueConstraint(columnNames = { "portfolio", "tag" }))
-    private List<Tag> tags;
+	@JsonIgnore
+	@OneToMany(fetch = EAGER, cascade = { MERGE, PERSIST })
+	@JoinColumn(name = "portfolio")
+	@OrderBy("added DESC")
+	private List<UserLike> userLikes;
 
-    @Lob
-    private byte[] picture;
+	@Formula(value = "(SELECT COUNT(*) FROM UserLike ul WHERE ul.portfolio = id AND ul.isLiked = 1)")
+	private int likes;
 
-    @Formula("picture is not null")
-    private boolean hasPicture;
+	@Formula(value = "(SELECT COUNT(*) FROM UserLike ul WHERE ul.portfolio = id AND ul.isLiked = 0)")
+	private int dislikes;
 
-    @Enumerated(EnumType.STRING)
-    @Column(name = "targetGroup")
-    @ElementCollection(fetch = EAGER)
-    @CollectionTable(name = "Portfolio_TargetGroup", joinColumns = @JoinColumn(name = "portfolio"))
-    private List<TargetGroup> targetGroups;
+	@ManyToMany(fetch = EAGER, cascade = { MERGE, PERSIST })
+	@JoinTable(name = "Portfolio_Tag", joinColumns = { @JoinColumn(name = "portfolio") }, inverseJoinColumns = {
+			@JoinColumn(name = "tag") }, uniqueConstraints = @UniqueConstraint(columnNames = { "portfolio", "tag" }) )
+	private List<Tag> tags;
 
-    @ManyToMany(fetch = EAGER)
-    @JoinTable(
-            name = "Portfolio_CrossCurricularTheme",
-            joinColumns = { @JoinColumn(name = "portfolio") },
-            inverseJoinColumns = { @JoinColumn(name = "crossCurricularTheme") },
-            uniqueConstraints = @UniqueConstraint(columnNames = { "portfolio", "crossCurricularTheme" }))
-    private List<CrossCurricularTheme> crossCurricularThemes;
+	@Lob
+	private byte[] picture;
 
-    @ManyToMany(fetch = EAGER)
-    @JoinTable(
-            name = "Portfolio_KeyCompetence",
-            joinColumns = { @JoinColumn(name = "portfolio") },
-            inverseJoinColumns = { @JoinColumn(name = "keyCompetence") },
-            uniqueConstraints = @UniqueConstraint(columnNames = { "portfolio", "keyCompetence" }))
-    private List<KeyCompetence> keyCompetences;
+	@Formula("picture is not null")
+	private boolean hasPicture;
 
-    @Override
-    public Long getId() {
-        return id;
-    }
+	@Enumerated(EnumType.STRING)
+	@Column(name = "targetGroup")
+	@ElementCollection(fetch = EAGER)
+	@CollectionTable(name = "Portfolio_TargetGroup", joinColumns = @JoinColumn(name = "portfolio") )
+	private List<TargetGroup> targetGroups;
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+	@ManyToMany(fetch = EAGER)
+	@JoinTable(name = "Portfolio_CrossCurricularTheme", joinColumns = {
+			@JoinColumn(name = "portfolio") }, inverseJoinColumns = {
+					@JoinColumn(name = "crossCurricularTheme") }, uniqueConstraints = @UniqueConstraint(columnNames = {
+							"portfolio", "crossCurricularTheme" }) )
+	private List<CrossCurricularTheme> crossCurricularThemes;
 
-    public String getTitle() {
-        return title;
-    }
+	@ManyToMany(fetch = EAGER)
+	@JoinTable(name = "Portfolio_KeyCompetence", joinColumns = {
+			@JoinColumn(name = "portfolio") }, inverseJoinColumns = {
+					@JoinColumn(name = "keyCompetence") }, uniqueConstraints = @UniqueConstraint(columnNames = {
+							"portfolio", "keyCompetence" }) )
+	private List<KeyCompetence> keyCompetences;
 
-    public void setTitle(String title) {
-        this.title = title;
-    }
+	@Column(nullable = false)
+	@Enumerated(EnumType.STRING)
+	private Visibility visibility;
 
-    @JsonSerialize(using = DateTimeSerializer.class)
-    public DateTime getCreated() {
-        return created;
-    }
+	@Override
+	public Long getId() {
+		return id;
+	}
 
-    @JsonDeserialize(using = DateTimeDeserializer.class)
-    public void setCreated(DateTime created) {
-        this.created = created;
-    }
+	public void setId(Long id) {
+		this.id = id;
+	}
 
-    @JsonSerialize(using = DateTimeSerializer.class)
-    public DateTime getUpdated() {
-        return updated;
-    }
+	public String getTitle() {
+		return title;
+	}
 
-    @JsonDeserialize(using = DateTimeDeserializer.class)
-    public void setUpdated(DateTime updated) {
-        this.updated = updated;
-    }
+	public void setTitle(String title) {
+		this.title = title;
+	}
 
-    public Taxon getTaxon() {
-        return taxon;
-    }
+	@JsonSerialize(using = DateTimeSerializer.class)
+	public DateTime getCreated() {
+		return created;
+	}
 
-    public void setTaxon(Taxon taxon) {
-        this.taxon = taxon;
-    }
+	@JsonDeserialize(using = DateTimeDeserializer.class)
+	public void setCreated(DateTime created) {
+		this.created = created;
+	}
 
-    public User getCreator() {
-        return creator;
-    }
+	@JsonSerialize(using = DateTimeSerializer.class)
+	public DateTime getUpdated() {
+		return updated;
+	}
 
-    public void setCreator(User creator) {
-        this.creator = creator;
-    }
+	@JsonDeserialize(using = DateTimeDeserializer.class)
+	public void setUpdated(DateTime updated) {
+		this.updated = updated;
+	}
 
-    public String getSummary() {
-        return summary;
-    }
+	public Taxon getTaxon() {
+		return taxon;
+	}
 
-    public void setSummary(String summary) {
-        this.summary = summary;
-    }
+	public void setTaxon(Taxon taxon) {
+		this.taxon = taxon;
+	}
 
-    public Long getViews() {
-        return views;
-    }
+	public User getCreator() {
+		return creator;
+	}
 
-    public void setViews(Long views) {
-        this.views = views;
-    }
+	public void setCreator(User creator) {
+		this.creator = creator;
+	}
 
-    public List<Chapter> getChapters() {
-        return chapters;
-    }
+	public String getSummary() {
+		return summary;
+	}
 
-    public void setChapters(List<Chapter> chapters) {
-        this.chapters = chapters;
-    }
+	public void setSummary(String summary) {
+		this.summary = summary;
+	}
 
-    public List<Tag> getTags() {
-        return tags;
-    }
+	public Long getViews() {
+		return views;
+	}
 
-    public void setTags(List<Tag> tags) {
-        this.tags = tags;
-    }
+	public void setViews(Long views) {
+		this.views = views;
+	}
 
-    @JsonIgnore
-    public byte[] getPicture() {
-        return picture;
-    }
+	public List<Chapter> getChapters() {
+		return chapters;
+	}
 
-    @JsonProperty
-    @JsonDeserialize(using = PictureDeserializer.class)
-    public void setPicture(byte[] picture) {
-        this.picture = picture;
-    }
+	public void setChapters(List<Chapter> chapters) {
+		this.chapters = chapters;
+	}
 
-    public boolean getHasPicture() {
-        return hasPicture;
-    }
+	public List<Tag> getTags() {
+		return tags;
+	}
 
-    public void setHasPicture(boolean hasPicture) {
-        this.hasPicture = hasPicture;
-    }
+	public void setTags(List<Tag> tags) {
+		this.tags = tags;
+	}
 
-    public List<TargetGroup> getTargetGroups() {
-        return targetGroups;
-    }
+	@JsonIgnore
+	public byte[] getPicture() {
+		return picture;
+	}
 
-    public void setTargetGroups(List<TargetGroup> targetGroups) {
-        this.targetGroups = targetGroups;
-    }
+	@JsonProperty
+	@JsonDeserialize(using = PictureDeserializer.class)
+	public void setPicture(byte[] picture) {
+		this.picture = picture;
+	}
 
-    public List<Comment> getComments() {
-        return comments;
-    }
+	public boolean getHasPicture() {
+		return hasPicture;
+	}
 
-    public void setComments(List<Comment> comments) {
-        this.comments = comments;
-    }
+	public void setHasPicture(boolean hasPicture) {
+		this.hasPicture = hasPicture;
+	}
 
-    public List<CrossCurricularTheme> getCrossCurricularThemes() {
-        return crossCurricularThemes;
-    }
+	public List<TargetGroup> getTargetGroups() {
+		return targetGroups;
+	}
 
-    public void setCrossCurricularThemes(List<CrossCurricularTheme> crossCurricularThemes) {
-        this.crossCurricularThemes = crossCurricularThemes;
-    }
+	public void setTargetGroups(List<TargetGroup> targetGroups) {
+		this.targetGroups = targetGroups;
+	}
 
-    public List<KeyCompetence> getKeyCompetences() {
-        return keyCompetences;
-    }
+	public List<Comment> getComments() {
+		return comments;
+	}
 
-    public void setKeyCompetences(List<KeyCompetence> keyCompetences) {
-        this.keyCompetences = keyCompetences;
-    }
+	public void setComments(List<Comment> comments) {
+		this.comments = comments;
+	}
+
+	public List<CrossCurricularTheme> getCrossCurricularThemes() {
+		return crossCurricularThemes;
+	}
+
+	public void setCrossCurricularThemes(List<CrossCurricularTheme> crossCurricularThemes) {
+		this.crossCurricularThemes = crossCurricularThemes;
+	}
+
+	public List<KeyCompetence> getKeyCompetences() {
+		return keyCompetences;
+	}
+
+	public void setKeyCompetences(List<KeyCompetence> keyCompetences) {
+		this.keyCompetences = keyCompetences;
+	}
+
+	public Visibility getVisibility() {
+		return visibility;
+	}
+
+	public void setVisibility(Visibility visibility) {
+		this.visibility = visibility;
+	}
+
+	public List<UserLike> getUserLikes() {
+		return userLikes;
+	}
+
+	public void setUserLikes(List<UserLike> userLikes) {
+		this.userLikes = userLikes;
+	}
+
+	public int getLikes() {
+		return likes;
+	}
+
+	public void setLikes(int likes) {
+		this.likes = likes;
+	}
+
+	public int getDislikes() {
+		return dislikes;
+	}
+
+	public void setDislikes(int dislikes) {
+		this.dislikes = dislikes;
+	}
 
 }
