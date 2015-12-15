@@ -9,7 +9,7 @@ insert into Translation(translationGroup, translationKey, translation) values (3
 insert into Translation(translationGroup, translationKey, translation) values (3, 'ADDED', 'Added');
 insert into Translation(translationGroup, translationKey, translation) values (3, 'AUTHORS', 'Authors');
 insert into Translation(translationGroup, translationKey, translation) values (3, 'CREATOR', 'Creator');
-insert into Translation(translationGroup, translationKey, translation) values (1, 'VIEW_COUNT', 'Views');
+insert into Translation(translationGroup, translationKey, translation) values (3, 'VIEW_COUNT', 'Views');
 insert into Translation(translationGroup, translationKey, translation) values (3, 'REPOSITORY_NUMBER', 'Repository number');
 insert into Translation(translationGroup, translationKey, translation) values (3, 'MATERIAL_VIEW_LICENSE_TYPE', 'License type');
 insert into Translation(translationGroup, translationKey, translation) values (3, 'AUDIO', 'Audio');
