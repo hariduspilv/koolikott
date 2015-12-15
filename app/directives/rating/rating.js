@@ -16,7 +16,7 @@ define(['app'], function(app)
                 
                 $scope.rating = {};
                 $scope.rating.likes = $scope.portfolio.likes;
-                $scope.rating.dislikes = 4;
+                $scope.rating.dislikes = $scope.portfolio.dislikes;
                 
                 $scope.like = function() {
                     if ($scope.isLiked) {
