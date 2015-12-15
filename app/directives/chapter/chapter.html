@@ -1,47 +1,48 @@
 <div class="portfolio-chapter">
-  <md-card class="card-lg" id="chapter-{{index}}">
-    <md-card-content data-ng-if="!isEditable">
-      <h2>{{chapter.title}}</h2>
-      <p class="md-body-1">{{chapter.text}}</p>
-    </md-card-content>
-    <md-card-content data-ng-if="isEditable">
+  <div id="chapter-{{index}}">
+    <md-card class="card-lg">
+      <md-card-content data-ng-if="!isEditable">
+        <h2>{{chapter.title}}</h2>
+        <p class="md-body-1">{{chapter.text}}</p>
+      </md-card-content>
+      <md-card-content data-ng-if="isEditable">
         <div layout="row" layout-align="start center">
-            <md-input-container class="md-block chapter-title" flex>
-                <label></label>
-                <input class="md-headline" placeholder="{{ 'PORTFOLIO_ENTER_CHAPTER_TITLE' | translate }}" data-ng-model="chapter.title">
-            </md-input-container>
-            <md-menu>
-                <md-button class="md-icon-button" ng-click="$mdOpenMenu($event)">
-                    <md-icon md-menu-origin>more_vert</md-icon>
+          <md-input-container class="md-block chapter-title" flex>
+            <label></label>
+            <input class="md-headline" placeholder="{{ 'PORTFOLIO_ENTER_CHAPTER_TITLE' | translate }}" data-ng-model="chapter.title">
+          </md-input-container>
+          <md-menu>
+            <md-button class="md-icon-button" ng-click="$mdOpenMenu($event)">
+              <md-icon md-menu-origin>more_vert</md-icon>
+            </md-button>
+            <md-menu-content width="4">
+              <md-menu-item>
+                <md-button data-ng-click="deleteChapter($index)">
+                  <md-icon md-menu-align-target>delete</md-icon>
+                  <span data-translate="PORTFOLIO_DELETE_CHAPTER"></span>
                 </md-button>
-                <md-menu-content width="4">
-                    <md-menu-item>
-                        <md-button data-ng-click="deleteChapter($index)">
-                        <md-icon md-menu-align-target>delete</md-icon>
-                            <span data-translate="PORTFOLIO_DELETE_CHAPTER"></span>
-                        </md-button>
-                    </md-menu-item>
-                </md-menu-content>
-            </md-menu>
+              </md-menu-item>
+            </md-menu-content>
+          </md-menu>
         </div>
         <md-input-container class="md-block">
-            <label></label>
-            <textarea placeholder="{{ 'PORTFOLIO_CHAPTER_CONTENT' | translate }}" data-ng-model="chapter.text" columns="1" rows="5"></textarea>
+          <label></label>
+          <textarea placeholder="{{ 'PORTFOLIO_CHAPTER_CONTENT' | translate }}" data-ng-model="chapter.text" columns="1" rows="5"></textarea>
         </md-input-container>
         <div dop-add-chapter-material chapter="chapter"></div>
-    </md-card-content>
-  </md-card>
-
-  <div class="portfolio-chapter-subchapter-materials" ng-show="chapter.materials.length">
-    <md-grid-list md-cols-xl="7" md-cols-gt-lg="6"  md-cols-gt-md="5" md-cols-md="4" md-cols-sm="4" md-cols-xs="2" md-gutter="10px" md-row-height="280px">
-      <md-grid-tile data-ng-repeat="material in chapter.materials">
-        <figure data-dop-material-box material="material"></figure>
-      </md-grid-tile>
-    </md-grid-list>
+      </md-card-content>
+    </md-card>
+    
+    <div class="portfolio-chapter-subchapter-materials" ng-show="chapter.materials.length">
+      <md-grid-list md-cols-xl="7" md-cols-gt-lg="6"  md-cols-gt-md="5" md-cols-md="4" md-cols-sm="4" md-cols-xs="2" md-gutter="10px" md-row-height="280px">
+        <md-grid-tile data-ng-repeat="material in chapter.materials">
+          <figure data-dop-material-box material="material"></figure>
+        </md-grid-tile>
+      </md-grid-list>
+    </div>
   </div>
 
-
-<!-- TODO: Non-editable subchapter margin-top -30 is a major hack, to be rebuilt! -->
+  <!-- TODO: Non-editable subchapter margin-top -30 is a major hack, to be rebuilt! -->
   <ul class="portfolio-chapter-subchapters">
     <li class="portfolio-chapter-subchapter" id="chapter-{{index}}-{{$index}}" data-ng-repeat="subchapter in chapter.subchapters">
       <md-card class="card-lg">
@@ -51,30 +52,30 @@
           <p class="md-body-1">{{subchapter.text}}</p>
         </md-card-content>
         <md-card-content data-ng-if="isEditable">
-            <div layout="row" layout-align="start center">
-                <md-input-container class="md-block subchapter-title" flex>
-                    <label></label>
-                    <input class="md-title" data-ng-model="subchapter.title" placeholder="{{ 'PORTFOLIO_ENTER_SUB_CHAPTER_TITLE' | translate }}">
-                </md-input-container>
-                <md-menu>
-                    <md-button class="md-icon-button" data-ng-click="$mdOpenMenu($event)">
-                        <md-icon md-menu-origin>more_vert</md-icon>
-                    </md-button>
-                    <md-menu-content width="4">
-                        <md-menu-item>
-                            <md-button data-ng-click="onDeleteSubChapter(subchapter)">
-                                <md-icon md-menu-align-target>delete</md-icon>
-                                <span data-translate="PORTFOLIO_DELETE_SUB_CHAPTER"></span>
-                            </md-button>
-                        </md-menu-item>
-                    </md-menu-content>
-                </md-menu>
-            </div>
-            <md-input-container class="md-block">
-                <label></label>
-                <textarea placeholder="{{ 'PORTFOLIO_SUB_CHAPTER_CONTENT' | translate }}" data-ng-model="subchapter.text" columns="1" rows="5"></textarea>
+          <div layout="row" layout-align="start center">
+            <md-input-container class="md-block subchapter-title" flex>
+              <label></label>
+              <input class="md-title" data-ng-model="subchapter.title" placeholder="{{ 'PORTFOLIO_ENTER_SUB_CHAPTER_TITLE' | translate }}">
             </md-input-container>
-            <div dop-add-chapter-material chapter="chapter"></div>
+            <md-menu>
+              <md-button class="md-icon-button" data-ng-click="$mdOpenMenu($event)">
+                <md-icon md-menu-origin>more_vert</md-icon>
+              </md-button>
+              <md-menu-content width="4">
+                <md-menu-item>
+                  <md-button data-ng-click="onDeleteSubChapter(subchapter)">
+                    <md-icon md-menu-align-target>delete</md-icon>
+                    <span data-translate="PORTFOLIO_DELETE_SUB_CHAPTER"></span>
+                  </md-button>
+                </md-menu-item>
+              </md-menu-content>
+            </md-menu>
+          </div>
+          <md-input-container class="md-block">
+            <label></label>
+            <textarea placeholder="{{ 'PORTFOLIO_SUB_CHAPTER_CONTENT' | translate }}" data-ng-model="subchapter.text" columns="1" rows="5"></textarea>
+          </md-input-container>
+          <div dop-add-chapter-material chapter="chapter"></div>
         </md-card-content>
       </md-card>
 
