@@ -3,7 +3,7 @@ define(['app'], function (app) {
         function ($scope, $mdDialog, serverCallService, translationService, metadataService, $filter) {
             var preferredLanguage;
 
-            var TABS_COUNT = 5;
+            var TABS_COUNT = 2;
             if ($scope.material === undefined) {
                 $scope.material = {};
             }
@@ -43,7 +43,7 @@ define(['app'], function (app) {
             };
 
             $scope.step.canCreateMaterial = function () {
-                return isStepValid(2);
+                return isStepValid(1);
             };
 
             $scope.step.isLastStep = function () {
@@ -135,16 +135,6 @@ define(['app'], function (app) {
                 return base64Picture;
             }
 
-            function getResourceTypes(material) {
-                var resourceTypes = [];
-                material.resourceTypes.forEach(function (item) {
-                    if (item.selected) {
-                        resourceTypes.push(item);
-                    }
-                });
-                return resourceTypes;
-            }
-
             function getPublisher(material) {
                 if (material.publisher) {
                     var publisher = {
@@ -159,6 +149,18 @@ define(['app'], function (app) {
                     var licenseType = JSON.parse(material.licenseType)
                 }
                 return licenseType;
+            }
+            
+            function getResourceTypes(material) {
+                var resourceTypes = [];
+                
+                if (material.selectedResourceTypes) {
+                    material.selectedResourceTypes.forEach(function(resourceType) {
+                        resourceTypes.push(JSON.parse(resourceType));
+                    });
+                }
+                
+                return resourceTypes;
             }
 
             function getMetadata(material) {
@@ -205,9 +207,7 @@ define(['app'], function (app) {
             function isStepValid(index) {
                 switch (index) {
                     case 0:
-                        return $scope.step.isMaterialUrlStepValid;
-                    case 1:
-                        return isStepValid(0) && isMetadataStepValid();
+                        return $scope.step.isMaterialUrlStepValid && isMetadataStepValid();
                     default:
                         return isStepValid(index - 1);
                 }
