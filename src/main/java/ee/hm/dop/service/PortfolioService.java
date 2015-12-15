@@ -120,7 +120,7 @@ public class PortfolioService {
     private Portfolio doCreate(Portfolio portfolio, User creator) {
         portfolio.setViews(0L);
         portfolio.setCreator(creator);
-        portfolio.setVisibility(Visibility.PUBLIC);
+        portfolio.setVisibility(Visibility.PRIVATE);
 
         Portfolio createdPortfolio = portfolioDAO.update(portfolio);
         searchEngineService.updateIndex();
