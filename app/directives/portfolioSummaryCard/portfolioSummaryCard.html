@@ -116,7 +116,7 @@
       <div data-dop-comments-card comments="portfolio.comments" comment="newComment" submit-click="addComment()"></div>
       <span flex></span>
     <!-- rating control -->
-    <div data-ng-if="!isEditPortfolioMode" data-dop-rating like-message="{{ 'PORTFOLIO_LIKED' | translate }}" dislike-message="{{ 'PORTFOLIO_DISLIKED' | translate }}"></div>
+    <div data-ng-if="!isEditPortfolioMode" data-portfolio="portfolio" data-dop-rating like-message="{{ 'PORTFOLIO_LIKED' | translate }}" dislike-message="{{ 'PORTFOLIO_DISLIKED' | translate }}"></div>
   </div>
   </md-card-content>
 </md-card>

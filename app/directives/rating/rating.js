@@ -3,6 +3,7 @@ define(['app'], function(app)
     app.directive('dopRating', function(translationService, $mdToast, $translate) {
         return {
             scope: {
+            	portfolio: '=',
                 rating: '=',
                 likeMessage: '@',
                 dislikeMessage: '@'
@@ -14,7 +15,7 @@ define(['app'], function(app)
                 $scope.isDisliked = false;
                 
                 $scope.rating = {};
-                $scope.rating.likes = 13;
+                $scope.rating.likes = $scope.portfolio.likes;
                 $scope.rating.dislikes = 4;
                 
                 $scope.like = function() {
@@ -23,6 +24,9 @@ define(['app'], function(app)
                     } else {
                         showToast($scope.likeMessage);
                     }
+                    
+                    var portfolio = createPortfolio($scope.portfolio.id);
+                  	serverCallService.makePost("rest/portfolio/increaseViewCount", portfolio, function success(){}, function fail(){});
                     
                     $scope.isLiked = !$scope.isLiked;
                     $scope.isDisliked = false;
