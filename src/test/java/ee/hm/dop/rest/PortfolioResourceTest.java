@@ -44,6 +44,12 @@ public class PortfolioResourceTest extends ResourceIntegrationTestBase {
     }
 
     @Test
+    public void getNotExistingPortfolio() {
+        Response response = doGet(format(GET_PORTFOLIO_URL, 2000));
+        assertEquals(Status.NO_CONTENT.getStatusCode(), response.getStatus());
+    }
+
+    @Test
     public void getPrivatePortfolioAsCreator() {
         login("38011550077");
         Long id = 7L;
@@ -60,7 +66,7 @@ public class PortfolioResourceTest extends ResourceIntegrationTestBase {
         Long id = 7L;
 
         Response response = doGet(format(GET_PORTFOLIO_URL, id));
-        assertEquals(Status.INTERNAL_SERVER_ERROR.getStatusCode(), response.getStatus());
+        assertEquals(Status.NO_CONTENT.getStatusCode(), response.getStatus());
     }
 
     @Test
@@ -163,7 +169,7 @@ public class PortfolioResourceTest extends ResourceIntegrationTestBase {
     public void getPortfolioPictureWhenPortfolioIsPrivate() {
         long portfolioId = 7;
         Response response = doGet(format(GET_PORTFOLIO_PICTURE_URL, portfolioId), MediaType.WILDCARD_TYPE);
-        assertEquals(Response.Status.INTERNAL_SERVER_ERROR.getStatusCode(), response.getStatus());
+        assertEquals(Response.Status.NOT_FOUND.getStatusCode(), response.getStatus());
     }
 
     @Test
@@ -181,7 +187,7 @@ public class PortfolioResourceTest extends ResourceIntegrationTestBase {
         login("39011220011");
         long portfolioId = 7;
         Response response = doGet(format(GET_PORTFOLIO_PICTURE_URL, portfolioId), MediaType.WILDCARD_TYPE);
-        assertEquals(Response.Status.INTERNAL_SERVER_ERROR.getStatusCode(), response.getStatus());
+        assertEquals(Response.Status.NOT_FOUND.getStatusCode(), response.getStatus());
     }
 
     @Test

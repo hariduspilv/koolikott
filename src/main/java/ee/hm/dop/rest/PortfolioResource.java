@@ -34,7 +34,7 @@ public class PortfolioResource extends BaseResource {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Portfolio get(@QueryParam("id") long portfolioId) {
-        User loggedInUser = getLoggedInUserOrNull();
+        User loggedInUser = getLoggedInUser();
 
         return portfolioService.get(portfolioId, loggedInUser);
     }
@@ -52,7 +52,7 @@ public class PortfolioResource extends BaseResource {
             throwBadRequestException("Invalid request");
         }
 
-        User loggedInUser = getLoggedInUserOrNull();
+        User loggedInUser = getLoggedInUser();
 
         return portfolioService.getByCreator(creator, loggedInUser);
     }
@@ -63,7 +63,7 @@ public class PortfolioResource extends BaseResource {
     public Response getPictureById(@QueryParam("portfolioId") long id) {
         Portfolio portfolio = new Portfolio();
         portfolio.setId(id);
-        User loggedInUser = getLoggedInUserOrNull();
+        User loggedInUser = getLoggedInUser();
         byte[] pictureData = portfolioService.getPortfolioPicture(portfolio, loggedInUser);
 
         if (pictureData != null) {
@@ -110,13 +110,4 @@ public class PortfolioResource extends BaseResource {
         return portfolioService.copy(portfolio, getLoggedInUser());
     }
 
-    private User getLoggedInUserOrNull() {
-        User loggedInUser = null;
-        try {
-            loggedInUser = getLoggedInUser();
-        } catch (Exception ignored) {
-
-        }
-        return loggedInUser;
-    }
 }
