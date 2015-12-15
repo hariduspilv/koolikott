@@ -2,6 +2,7 @@
 $green1: #00838f;
 $green2: #00695c;
 $green3: #43a047;
+$green4: #CDDC39;
 
 $heading-color: #212121;
 $link-color: #15c;
@@ -101,7 +102,7 @@ md-card {
       overflow: hidden;
       position: relative;
       transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
-      &.book {
+      &.description {
         background-color: $green1;
       }
       &.videocam {
@@ -109,6 +110,9 @@ md-card {
       }
       &.audiotrack {
         background-color: $green3;
+      }
+      &.portfolio {
+        background-color: $green4;
       }
     }
     .card-hover {

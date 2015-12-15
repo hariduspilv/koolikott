@@ -58,7 +58,7 @@ define(['app'], function(app)
                 $scope.getType = function() {
                     var types = $scope.material.resourceTypes;
 					if (types.length == 0) {
-						return 'book';
+						return 'description';
 					}
 
                     for (var i = 0; i < types.length; i++) {
@@ -68,7 +68,7 @@ define(['app'], function(app)
 							return 'videocam';
 					}
 
-                    return 'book';
+                    return 'description';
                 }
 			}
 		};
