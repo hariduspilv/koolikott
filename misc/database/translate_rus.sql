@@ -6,6 +6,10 @@ insert into Translation(translationGroup, translationKey, translation) values (2
 insert into Translation(translationGroup, translationKey, translation) values (2, 'DETAIL_VIEW_EDUCATIONAL_CONTEXT', 'Возрастные группы');
 insert into Translation(translationGroup, translationKey, translation) values (2, 'UPDATED', 'Новый');
 insert into Translation(translationGroup, translationKey, translation) values (2, 'CREATED', 'Созданный');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'ADDED', 'Добавлено');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'AUTHORS', 'Авторы');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'CREATOR', 'Создатель');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'VIEW_COUNT', 'Количество мнение');
 insert into Translation(translationGroup, translationKey, translation) values (2, 'REPOSITORY_NUMBER', 'Количество хранилище');
 insert into Translation(translationGroup, translationKey, translation) values (2, 'MATERIAL_VIEW_LICENSE_TYPE', 'Тип лицензии');
 insert into Translation(translationgroup, translationkey, translation) values (2, 'AUDIO', 'аудио');

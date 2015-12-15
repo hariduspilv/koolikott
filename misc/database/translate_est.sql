@@ -6,6 +6,10 @@ insert into Translation(translationGroup, translationKey, translation) values (1
 insert into Translation(translationGroup, translationKey, translation) values (1, 'DETAIL_VIEW_EDUCATIONAL_CONTEXT', 'Haridustase');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'UPDATED', 'Uuendatud');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'CREATED', 'Loodud');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'ADDED', 'Lisatud');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'AUTHORS', 'Autorid');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'CREATOR', 'Lisaja');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'VIEW_COUNT', 'Vaatamisi');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'REPOSITORY_NUMBER', 'Repositooriumi number');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'MATERIAL_VIEW_LICENSE_TYPE', 'Litsentsi tüüp');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'AUDIO', 'Audio');
