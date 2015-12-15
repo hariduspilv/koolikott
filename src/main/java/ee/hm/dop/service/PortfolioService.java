@@ -39,7 +39,7 @@ public class PortfolioService {
 	public List<Portfolio> getByCreator(User creator, User loggedInUser) {
 		List<Portfolio> portfolios = portfolioDAO.findByCreator(creator);
 
-		portfolios = portfolios.stream().filter(p -> isPortfolioAccessibleToUser(p, loggedInUser))
+		portfolios = portfolios.stream().filter(p -> isPortfolioVisibleToUser(p, loggedInUser))
 				.collect(Collectors.toList());
 
 		return portfolios;
@@ -120,7 +120,7 @@ public class PortfolioService {
 	private Portfolio doCreate(Portfolio portfolio, User creator) {
 		portfolio.setViews(0L);
 		portfolio.setCreator(creator);
-		portfolio.setVisibility(Visibility.PUBLIC);
+		portfolio.setVisibility(Visibility.PRIVATE);
 
 		Portfolio createdPortfolio = portfolioDAO.update(portfolio);
 		searchEngineService.updateIndex();
@@ -219,8 +219,20 @@ public class PortfolioService {
 		if (portfolio.getVisibility() != Visibility.PRIVATE) {
 			return true;
 		} else {
-			return loggedInUser != null && portfolio.getCreator().getId() == loggedInUser.getId();
+			return isUserPortfolioCreator(portfolio, loggedInUser);
 		}
+	}
+
+	private boolean isPortfolioVisibleToUser(Portfolio portfolio, User loggedInUser) {
+		if (portfolio.getVisibility() == Visibility.PUBLIC) {
+			return true;
+		} else {
+			return isUserPortfolioCreator(portfolio, loggedInUser);
+		}
+	}
+
+	private boolean isUserPortfolioCreator(Portfolio portfolio, User loggedInUser) {
+		return loggedInUser != null && portfolio.getCreator().getId() == loggedInUser.getId();
 	}
 
 }

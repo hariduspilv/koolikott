@@ -36,6 +36,7 @@ insert into User(id, userName, name, surName, idCode, role) values (3, 'voldemar
 insert into User(id, userName, name, surName, idCode, role) values (4, 'voldemar.vapustav2', 'Voldemar', 'Vapustav', '15066990099', 'USER');
 insert into User(id, userName, name, surName, idCode, role) values (5, 'mati.maasikas2', 'Mäti', 'Maasikas', '39011220012', 'USER');
 insert into User(id, userName, name, surName, idCode, role) values (6, 'mati.maasikas-vaarikas', 'Mati', 'Maasikas-Vaarikas', '39011220013', 'USER');
+insert into User(id, userName, name, surName, idCode, role) values (7, 'my.testuser', 'My', 'Testuser', '78912378912', 'USER');
 
 -- AuthenticatedUser
 
@@ -366,6 +367,9 @@ insert into Portfolio(id, title, taxon, creator, summary, views, created, update
 insert into Portfolio(id, title, taxon, creator, summary, views, created, updated, picture, visibility) VALUES (6, 'This portfolio will be changed to not listed in the tests. ', null, 2, 'Summary.', 100, '2003-10-10 07:00:11', null, null, 'PUBLIC');
 insert into Portfolio(id, title, taxon, creator, summary, views, created, updated, picture, visibility) VALUES (7, 'This portfolio is private. ', null, 2, 'Summary. Sum sum sum.', 100, '2003-10-10 07:00:11', null, '656b6f6f6c696b6f7474', 'PRIVATE');
 insert into Portfolio(id, title, taxon, creator, summary, views, created, updated, picture, visibility) VALUES (8, 'This portfolio is public. ', null, 2, 'Summary. Wow.', 100, '2003-10-10 07:00:11', null, null, 'PUBLIC');
+insert into Portfolio(id, title, taxon, creator, summary, views, created, updated, picture, visibility) VALUES (9, 'This portfolio2 is public. ', null, 7, 'Alpha.', 100, '2003-10-10 07:00:11', null, null, 'PUBLIC');
+insert into Portfolio(id, title, taxon, creator, summary, views, created, updated, picture, visibility) VALUES (10, 'This portfolio2 is private. ', null, 7, 'Alpha.', 100, '2003-10-10 07:00:11', null, null, 'PRIVATE');
+insert into Portfolio(id, title, taxon, creator, summary, views, created, updated, picture, visibility) VALUES (11, 'This portfolio2 is not listed. ', null, 7, 'Alpha.', 100, '2003-10-10 07:00:11', null, null, 'NOT_LISTED');
 
 -- Chapter
 
