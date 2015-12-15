@@ -11,7 +11,7 @@
     </div>
   </md-toolbar>
   <md-dialog-content layout="column">
-    
+
     <md-tabs md-dynamic-height md-border-bottom md-autoselect md-stretch-tabs="always" md-selected="step.currentStep">
       <md-tab label="{{ 'MATERIAL_TAB_MAIN_DATA' | translate }}" data-ng-disabled="step.isTabDisabled(0)">
         <md-content class="md-padding">
@@ -36,7 +36,7 @@
               </md-select>
             </md-input-container>
           </form>
-          
+
           <!-- image upload -->
           <div layout="row" flex layout-align="space-between center">
             <div data-ngf-drop ngf-select ng-model="material.picture" class="drop-box"
@@ -56,7 +56,7 @@
               <img data-ngf-thumbnail="material.picture" ngf-size="{width: 300, height: 300, quality: 0.9}" alt="photo">
             </div>
           </div>
-          
+
           <!-- heading-desc-lang group -->
           <div class="form-group" data-ng-repeat="metadata in material.metadata">
             <div layout="row" layout-align="center center">
@@ -90,7 +90,7 @@
               </md-button>
             </div>
           </div>
-          
+
           <div layout="row" flex layout-align="space-between center">
             <h6 class="md-caption md-padding" data-translate="MATERIAL_VIEW_RESOURCE_TYPE"></h6>
             <md-input-container flex>
@@ -102,10 +102,10 @@
               </md-select>
             </md-input-container>
           </div>
-                    
+
         </md-content>
       </md-tab>
-      
+
       <md-tab label="{{ 'MATERIAL_TAB_ADDITIONAL_DATA' | translate }}" data-ng-disabled="step.isTabDisabled(1)">
         <md-content class="md-padding">
           <div layout="row" flex layout-align="space-between center">
@@ -119,7 +119,7 @@
               <input data-ng-model="material.author.surname" ng-required="material.author.name">
             </md-input-container>
           </div>
-          
+
           <div layout="row" flex layout-align="space-between center">
             <h6 class="md-caption md-padding" data-translate="MATERIAL_PUBLISHER"></h6>
             <md-input-container class="md-block" flex>
@@ -127,7 +127,7 @@
               <input data-ng-model="material.publisher">
             </md-input-container>
           </div>
-          
+
           <div layout="row" flex layout-align="space-between center">
             <h6 class="md-caption md-padding" data-translate="MATERIAL_VIEW_LICENSE_TYPE"></h6>
             <md-input-container flex>
@@ -143,7 +143,7 @@
           </div>
         </md-content>
       </md-tab>
-            
+
       <md-tab label="Klassifikatsioon" data-ng-disabled="step.isTabDisabled(2)">
         <md-content class="md-padding">
           <div layout="row" flex layout-align="space-between center" data-ng-repeat="taxon in material.taxons track by $index">
@@ -158,7 +158,7 @@
               <md-tooltip md-direction="top">Eemalda liigitus</md-tooltip>
             </md-button>
           </div>
-          
+
           <div layout="row" flex layout-align="space-between center">
             <h6 class="md-caption md-padding">Sihtrühm</h6>
             <div data-dop-target-group-selector data-target-groups="material.targetGroups" flex="20"></div>
@@ -171,7 +171,7 @@
               flex>
             </md-chips>
           </div>
-        
+
           <div layout="row" flex layout-align="center center">
             <h6 class="md-caption md-padding" data-translate="MATERIAL_KEY_COMPETENCES"></h6>
             <md-chips ng-model="material.selectedKeyCompetences" md-autocomplete-snap="" md-require-match="true" flex>
@@ -193,8 +193,8 @@
               </md-chip-template>
             </md-chips>
           </div>
-          
-          <div layout="row" flex layout-align="center center">  
+
+          <div layout="row" flex layout-align="center center">
             <h6 class="md-caption md-padding" data-translate="MATERIAL_CROSS_CURRICULAR_THEMES"></h6>
             <md-chips ng-model="material.selectedCrossCurricularThemes" md-autocomplete-snap="" md-require-match="true" flex>
               <md-autocomplete
@@ -219,7 +219,7 @@
       </md-tab>
     </md-tabs>
   </md-dialog-content>
-
+<!-- <md-divider class="md-default-theme"></md-divider> -->
   <div class="md-actions">
     <md-button data-ng-click="step.previousStep()" data-ng-show="step.currentStep > 0" class="md-primary">
       <ng-md-icon icon="arrow_back"></ng-md-icon>
