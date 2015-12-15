@@ -87,7 +87,7 @@ public class PortfolioService {
 		portfolioDAO.update(originalPortfolio);
 	}
 
-	public Portfolio likePortfolio(Portfolio portfolio, User loggedInUser) {
+	public Portfolio addUserLike(Portfolio portfolio, User loggedInUser, boolean isLiked) {
 		if (portfolio == null || portfolio.getId() == null) {
 			throw new RuntimeException("Portfolio not found");
 		}
@@ -101,7 +101,7 @@ public class PortfolioService {
 
 		UserLike like = new UserLike();
 		like.setCreator(loggedInUser);
-		like.setLiked(true);
+		like.setLiked(isLiked);
 		like.setAdded(DateTime.now());
 
 		originalPortfolio.getUserLikes().add(like);
