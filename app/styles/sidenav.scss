@@ -3,20 +3,31 @@
 }
 
 md-sidenav {
-    width: 260px;
-    max-width: 260px;
-    .sidenav-menu > li {
-      > .md-button {
-        font-weight: 400;
-        text-transform: none;
-      }
-      > .sidenav-menu-toggle-list a.md-button {
-        font-weight: 500;
-        text-transform: none;
-        font-size: 12px;
-        &:before {
-          content: "-  ";
-        }
+  width: 260px;
+  max-width: 260px;
+  
+  .sidenav-menu > li {
+    > .md-button {
+      font-weight: 400;
+      text-transform: none;
+        
+      &.active {
+        background-color: rgba(158,158,158,0.2);
       }
     }
+    
+    > .sidenav-menu-toggle-list a.md-button {
+      font-weight: 500;
+      text-transform: none;
+      font-size: 12px;
+    
+      &:before {
+        content: "-  ";
+      }
+        
+      &.active {
+        background-color: rgba(158,158,158,0.2);
+      }
+    }
+  }
 }

@@ -12,7 +12,9 @@ define(['app'], function(app)
                 $scope.isReadOnly = angular.isDefined($scope.isReadOnly) ? $scope.isReadOnly : false;
                 $scope.isEditPortfolioMode = $rootScope.isEditPortfolioMode;
                 
-                $scope.gotoChapter = function(chapterId, subchapterId) {
+                $scope.gotoChapter = function(e, chapterId, subchapterId) {
+                    e.preventDefault();
+                  
                     var combinedId = 'chapter-' + chapterId;
                     if(subchapterId != null) {
                     	combinedId += '-' + subchapterId;
