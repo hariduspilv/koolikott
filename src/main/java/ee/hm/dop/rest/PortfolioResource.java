@@ -25,89 +25,95 @@ import ee.hm.dop.service.UserService;
 @Path("portfolio")
 public class PortfolioResource extends BaseResource {
 
-    @Inject
-    private PortfolioService portfolioService;
+	@Inject
+	private PortfolioService portfolioService;
 
-    @Inject
-    private UserService userService;
+	@Inject
+	private UserService userService;
 
-    @GET
-    @Produces(MediaType.APPLICATION_JSON)
-    public Portfolio get(@QueryParam("id") long portfolioId) {
-        User loggedInUser = getLoggedInUser();
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	public Portfolio get(@QueryParam("id") long portfolioId) {
+		User loggedInUser = getLoggedInUser();
 
-        return portfolioService.get(portfolioId, loggedInUser);
-    }
+		return portfolioService.get(portfolioId, loggedInUser);
+	}
 
-    @GET
-    @Path("getByCreator")
-    @Produces(MediaType.APPLICATION_JSON)
-    public List<Portfolio> getByCreator(@QueryParam("username") String username) {
-        if (isBlank(username)) {
-            throwBadRequestException("Username parameter is mandatory");
-        }
+	@GET
+	@Path("getByCreator")
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<Portfolio> getByCreator(@QueryParam("username") String username) {
+		if (isBlank(username)) {
+			throwBadRequestException("Username parameter is mandatory");
+		}
 
-        User creator = userService.getUserByUsername(username);
-        if (creator == null) {
-            throwBadRequestException("Invalid request");
-        }
+		User creator = userService.getUserByUsername(username);
+		if (creator == null) {
+			throwBadRequestException("Invalid request");
+		}
 
-        User loggedInUser = getLoggedInUser();
+		User loggedInUser = getLoggedInUser();
 
-        return portfolioService.getByCreator(creator, loggedInUser);
-    }
+		return portfolioService.getByCreator(creator, loggedInUser);
+	}
 
-    @GET
-    @Path("/getPicture")
-    @Produces("image/png")
-    public Response getPictureById(@QueryParam("portfolioId") long id) {
-        Portfolio portfolio = new Portfolio();
-        portfolio.setId(id);
-        User loggedInUser = getLoggedInUser();
-        byte[] pictureData = portfolioService.getPortfolioPicture(portfolio, loggedInUser);
+	@GET
+	@Path("/getPicture")
+	@Produces("image/png")
+	public Response getPictureById(@QueryParam("portfolioId") long id) {
+		Portfolio portfolio = new Portfolio();
+		portfolio.setId(id);
+		User loggedInUser = getLoggedInUser();
+		byte[] pictureData = portfolioService.getPortfolioPicture(portfolio, loggedInUser);
 
-        if (pictureData != null) {
-            return Response.ok(pictureData).build();
-        } else {
-            return Response.status(HttpURLConnection.HTTP_NOT_FOUND).build();
-        }
-    }
+		if (pictureData != null) {
+			return Response.ok(pictureData).build();
+		} else {
+			return Response.status(HttpURLConnection.HTTP_NOT_FOUND).build();
+		}
+	}
 
-    private void throwBadRequestException(String message) {
-        throw new WebApplicationException(Response.status(HttpURLConnection.HTTP_BAD_REQUEST).entity(message).build());
-    }
+	private void throwBadRequestException(String message) {
+		throw new WebApplicationException(Response.status(HttpURLConnection.HTTP_BAD_REQUEST).entity(message).build());
+	}
 
-    @POST
-    @Path("increaseViewCount")
-    public void increaseViewCount(Portfolio portfolio) {
-        portfolioService.incrementViewCount(portfolio);
-    }
+	@POST
+	@Path("increaseViewCount")
+	public void increaseViewCount(Portfolio portfolio) {
+		portfolioService.incrementViewCount(portfolio);
+	}
 
-    @POST
-    @Path("create")
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
-    @RolesAllowed("USER")
-    public Portfolio create(Portfolio portfolio) {
-        return portfolioService.create(portfolio, getLoggedInUser());
-    }
+	@POST
+	@Path("like")
+	public void likePortfolio(Portfolio portfolio) {
+		portfolioService.likePortfolio(portfolio, getLoggedInUser());
+	}
 
-    @POST
-    @Path("update")
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
-    @RolesAllowed("USER")
-    public Portfolio update(Portfolio portfolio) {
-        return portfolioService.update(portfolio, getLoggedInUser());
-    }
+	@POST
+	@Path("create")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	@RolesAllowed("USER")
+	public Portfolio create(Portfolio portfolio) {
+		return portfolioService.create(portfolio, getLoggedInUser());
+	}
 
-    @POST
-    @Path("copy")
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
-    @RolesAllowed("USER")
-    public Portfolio copy(Portfolio portfolio) {
-        return portfolioService.copy(portfolio, getLoggedInUser());
-    }
+	@POST
+	@Path("update")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	@RolesAllowed("USER")
+	public Portfolio update(Portfolio portfolio) {
+		return portfolioService.update(portfolio, getLoggedInUser());
+	}
+
+	@POST
+	@Path("copy")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	@RolesAllowed("USER")
+	public Portfolio copy(Portfolio portfolio) {
+		return portfolioService.copy(portfolio, getLoggedInUser());
+	}
 
 }
