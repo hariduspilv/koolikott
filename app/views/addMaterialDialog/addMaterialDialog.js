@@ -1,6 +1,6 @@
 define(['app'], function (app) {
-    app.controller('addMaterialDialog', ['$scope', '$mdDialog', 'serverCallService', 'translationService', 'metadataService', '$filter',
-        function ($scope, $mdDialog, serverCallService, translationService, metadataService, $filter) {
+    app.controller('addMaterialDialog', ['$scope', '$mdDialog', 'serverCallService', 'translationService', 'metadataService', '$filter', '$location',
+        function ($scope, $mdDialog, serverCallService, translationService, metadataService, $filter, $location) {
             var preferredLanguage;
 
             var TABS_COUNT = 2;
@@ -272,6 +272,7 @@ define(['app'], function (app) {
             function postMaterialSuccess(data) {
                 if (!isEmpty(data)) {
                     console.log("material added");
+                    $location.url('/material?materialId=' + data.id);
                 }
             }
 
