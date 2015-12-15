@@ -138,6 +138,10 @@ public class PortfolioService {
             throw new RuntimeException("Portfolio not found");
         }
 
+        if (!isPortfolioAccessibleToUser(originalPortfolio, loggedInUser)) {
+            throw new RuntimeException("Portfolio not found");
+        }
+
         Portfolio copy = getPortfolioWithAllowedFieldsOnCreate(originalPortfolio);
         copy.setChapters(copyChapters(originalPortfolio.getChapters()));
 
