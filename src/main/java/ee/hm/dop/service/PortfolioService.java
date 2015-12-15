@@ -63,7 +63,7 @@ public class PortfolioService {
         portfolioDAO.incrementViewCount(originalPortfolio);
     }
 
-    public void addComment(Comment comment, Portfolio portfolio) {
+    public void addComment(Comment comment, Portfolio portfolio, User loggedInUser) {
         if (isEmpty(comment.getText())) {
             throw new RuntimeException("Comment is missing text.");
         }
@@ -74,6 +74,10 @@ public class PortfolioService {
 
         Portfolio originalPortfolio = portfolioDAO.findById(portfolio.getId());
         if (originalPortfolio == null) {
+            throw new RuntimeException("Portfolio not found");
+        }
+
+        if (!isPortfolioAccessibleToUser(originalPortfolio, loggedInUser)) {
             throw new RuntimeException("Portfolio not found");
         }
 

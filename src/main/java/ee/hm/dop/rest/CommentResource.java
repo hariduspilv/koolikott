@@ -9,6 +9,7 @@ import javax.ws.rs.Path;
 import ee.hm.dop.model.Comment;
 import ee.hm.dop.model.Material;
 import ee.hm.dop.model.Portfolio;
+import ee.hm.dop.model.User;
 import ee.hm.dop.service.MaterialService;
 import ee.hm.dop.service.PortfolioService;
 
@@ -28,9 +29,10 @@ public class CommentResource extends BaseResource {
     public void addPortfolioComment(AddCommentForm form) {
 
         Comment comment = form.getComment();
-        comment.setCreator(getLoggedInUser());
+        User loggedInUser = getLoggedInUser();
+        comment.setCreator(loggedInUser);
 
-        portfolioService.addComment(comment, form.getPortfolio());
+        portfolioService.addComment(comment, form.getPortfolio(), loggedInUser);
     }
 
     @POST
