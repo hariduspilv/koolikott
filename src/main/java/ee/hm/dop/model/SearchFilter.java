@@ -26,6 +26,8 @@ public class SearchFilter {
 
     private KeyCompetence keyCompetence;
 
+    private Visibility visibility;
+
     public Taxon getTaxon() {
         return taxon;
     }
@@ -104,6 +106,14 @@ public class SearchFilter {
 
     public void setKeyCompetence(KeyCompetence keyCompetence) {
         this.keyCompetence = keyCompetence;
+    }
+
+    public Visibility getVisibility() {
+        return visibility;
+    }
+
+    public void setVisibility(Visibility visibility) {
+        this.visibility = visibility;
     }
 
 }

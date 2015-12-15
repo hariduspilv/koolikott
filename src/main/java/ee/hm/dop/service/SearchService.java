@@ -26,6 +26,7 @@ import ee.hm.dop.model.SearchFilter;
 import ee.hm.dop.model.SearchResult;
 import ee.hm.dop.model.Searchable;
 import ee.hm.dop.model.TargetGroup;
+import ee.hm.dop.model.Visibility;
 import ee.hm.dop.model.solr.Document;
 import ee.hm.dop.model.solr.Response;
 import ee.hm.dop.model.solr.SearchResponse;
@@ -179,6 +180,7 @@ public class SearchService {
         filters.add(issuedFromAsQuery(searchFilter));
         filters.add(getCrossCurricularThemeAsQuery(searchFilter));
         filters.add(getKeyCompetenceAsQuery(searchFilter));
+        filters.add(getVisibilityAsQuery(searchFilter));
 
         // Remove empty elements
         filters = filters.stream().filter(f -> !f.isEmpty()).collect(Collectors.toList());
@@ -353,6 +355,14 @@ public class SearchService {
         KeyCompetence keyCompetence = searchFilter.getKeyCompetence();
         if (keyCompetence != null) {
             return format("key_competence:\"%s\"", keyCompetence.getName().toLowerCase());
+        }
+        return "";
+    }
+
+    private String getVisibilityAsQuery(SearchFilter searchFilter) {
+        Visibility visibility = searchFilter.getVisibility();
+        if (visibility != null) {
+            return format("(visibility:\"%s\" OR type:\"material\")", visibility.toString().toLowerCase());
         }
         return "";
     }

@@ -153,7 +153,8 @@
    <field name="summary" type="text_general" indexed="true" stored="false"/>
    <field name="chapterTitle" type="text_general" indexed="true" stored="false" multiValued="true"/>
    <field name="chapterText" type="text_general" indexed="true" stored="false" multiValued="true"/>
-
+   <field name="visibility" type="text_general" indexed="true" stored="false" multiValued="true"/>
+   
    <!-- catchall field, containing all other searchable text fields (implemented
         via copyField further on in this schema  -->
    <field name="text" type="text_general" indexed="true" stored="false" multiValued="true"/>

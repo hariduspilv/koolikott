@@ -16,6 +16,7 @@ import ee.hm.dop.model.ResourceType;
 import ee.hm.dop.model.SearchFilter;
 import ee.hm.dop.model.SearchResult;
 import ee.hm.dop.model.TargetGroup;
+import ee.hm.dop.model.Visibility;
 import ee.hm.dop.model.taxon.Taxon;
 import ee.hm.dop.service.CrossCurricularThemeService;
 import ee.hm.dop.service.KeyCompetenceService;
@@ -25,7 +26,7 @@ import ee.hm.dop.service.SearchService;
 import ee.hm.dop.service.TaxonService;
 
 @Path("search")
-public class SearchResource {
+public class SearchResource extends BaseResource {
 
     @Inject
     private SearchService searchService;
@@ -85,6 +86,7 @@ public class SearchResource {
         searchFilter.setIssuedFrom(issuedFrom);
         searchFilter.setCrossCurricularTheme(crossCurricularTheme);
         searchFilter.setKeyCompetence(keyCompetence);
+        searchFilter.setVisibility(Visibility.PUBLIC);
 
         if (start == null) {
             return searchService.search(query, searchFilter);
