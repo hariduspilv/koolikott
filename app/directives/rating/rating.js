@@ -24,10 +24,7 @@ define(['app'], function(app)
                     } else {
                         showToast($scope.likeMessage);
                     }
-                    
-                    var portfolio = createPortfolio($scope.portfolio.id);
-                  	serverCallService.makePost("rest/portfolio/increaseViewCount", portfolio, function success(){}, function fail(){});
-                    
+   
                     $scope.isLiked = !$scope.isLiked;
                     $scope.isDisliked = false;
                 }
