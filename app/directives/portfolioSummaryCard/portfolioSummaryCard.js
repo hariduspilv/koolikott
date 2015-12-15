@@ -5,6 +5,8 @@ define(['app'], function(app)
             return {
             	scope: {
                     portfolio: '=',
+                    comment: '=',
+                    submitClick: "&"
                 },
                 templateUrl: 'directives/portfolioSummaryCard/portfolioSummaryCard.html',
                 controller: function ($scope, $location) {
@@ -35,6 +37,10 @@ define(['app'], function(app)
                             locals:{portfolio: $scope.portfolio}
                         });
                     };
+                    
+                    $scope.addComment = function() {
+                        $scope.submitClick();
+                    }
                 }
             };
         }]);
