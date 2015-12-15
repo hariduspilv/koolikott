@@ -119,8 +119,8 @@ define(['app'], function(app) {
                 dialogService.showConfirmationDialog(
                     'Kas soovid muuta kogumiku privaatseks?',
                     'Vastasel juhul on kõigile koheselt nähtavad tehtud muudatused.',
-                    'Tee kogumik privaatseks',
-                    'Jah, ma mõistan',
+                    'Jah, Tee kogumik privaatseks',
+                    'Ei',
                     setPrivate);
             }
             
