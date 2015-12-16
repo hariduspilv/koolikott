@@ -67,7 +67,7 @@ define(['app'], function(app)
                     }
 
                     function deletePortfolioSuccess() {
-                        $location.url('/');
+                        $location.url('/' + authenticatedUserService.getUser().username);
                     }
 
                     function deletePortfolioFailed() {
