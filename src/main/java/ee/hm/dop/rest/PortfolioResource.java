@@ -19,6 +19,7 @@ import javax.ws.rs.core.Response;
 
 import ee.hm.dop.model.Portfolio;
 import ee.hm.dop.model.User;
+import ee.hm.dop.model.UserLike;
 import ee.hm.dop.service.PortfolioService;
 import ee.hm.dop.service.UserService;
 
@@ -90,9 +91,21 @@ public class PortfolioResource extends BaseResource {
 	}
 
 	@POST
+	@Path("removeUserLike")
+	public void portfolioRemoveLike(Portfolio portfolio) {
+		portfolioService.removeUserLike(portfolio, getLoggedInUser());
+	}
+
+	@POST
 	@Path("dislike")
 	public void dislikePortfolio(Portfolio portfolio) {
 		portfolioService.addUserLike(portfolio, getLoggedInUser(), false);
+	}
+
+	@POST
+	@Path("getUserLike")
+	public UserLike getUserLike(Portfolio portfolio) {
+		return portfolioService.getUserLike(portfolio, getLoggedInUser());
 	}
 
 	@POST

@@ -33,6 +33,10 @@ public class UserLike {
 	@Column
 	private boolean isLiked;
 
+	@ManyToOne
+	@JoinColumn(name = "portfolio")
+	private Portfolio portfolio;
+
 	@Column(nullable = false)
 	@Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
 	@JsonSerialize(using = DateTimeSerializer.class)
@@ -61,6 +65,14 @@ public class UserLike {
 
 	public void setLiked(boolean isLiked) {
 		this.isLiked = isLiked;
+	}
+
+	public Portfolio getPortfolio() {
+		return portfolio;
+	}
+
+	public void setPortfolio(Portfolio portfolio) {
+		this.portfolio = portfolio;
 	}
 
 	public DateTime getAdded() {
