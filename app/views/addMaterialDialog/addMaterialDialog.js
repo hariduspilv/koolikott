@@ -118,7 +118,6 @@ define(['app'], function (app) {
                 };
 
                 serverCallService.makePost("rest/material", newMaterial, postMaterialSuccess, postMaterialFail);
-                $mdDialog.hide();
             };
 
             function getTaxons(material) {
@@ -150,16 +149,16 @@ define(['app'], function (app) {
                 }
                 return licenseType;
             }
-            
+
             function getResourceTypes(material) {
                 var resourceTypes = [];
-                
+
                 if (material.selectedResourceTypes) {
                     material.selectedResourceTypes.forEach(function(resourceType) {
                         resourceTypes.push(JSON.parse(resourceType));
                     });
                 }
-                
+
                 return resourceTypes;
             }
 
@@ -271,8 +270,11 @@ define(['app'], function (app) {
 
             function postMaterialSuccess(data) {
                 if (!isEmpty(data)) {
+                    $mdDialog.hide(data);
                     console.log("material added");
-                    $location.url('/material?materialId=' + data.id);
+                    if(!$scope.isChapterMaterial) {
+                        $location.url('/material?materialId=' + data.id);
+                    }
                 }
             }
 

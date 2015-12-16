@@ -42,7 +42,6 @@
     </div>
   </div>
 
-  <!-- TODO: Non-editable subchapter margin-top -30 is a major hack, to be rebuilt! -->
   <ul class="portfolio-chapter-subchapters">
     <li class="portfolio-chapter-subchapter" id="chapter-{{index}}-{{$index}}" data-ng-repeat="subchapter in chapter.subchapters">
       <md-card class="card-lg">
@@ -75,7 +74,7 @@
             <label></label>
             <textarea placeholder="{{ 'PORTFOLIO_SUB_CHAPTER_CONTENT' | translate }}" data-ng-model="subchapter.text" columns="1" rows="5"></textarea>
           </md-input-container>
-          <div dop-add-chapter-material chapter="chapter"></div>
+          <div dop-add-chapter-material chapter="subchapter"></div>
         </md-card-content>
       </md-card>
 
