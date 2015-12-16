@@ -92,7 +92,7 @@ define(['app'], function(app) {
                 if (isEmpty(portfolio)) {
                     createPortfolioFailed();
                 } else {
-                    setPortfolio(portfolio);
+                    if(!isAutoSaving) setPortfolio(portfolio);
                     
                     var message = isAutoSaving ? 'AutoSaved' : 'PORTFOLIO_SAVED';
                     toastService.show(message);

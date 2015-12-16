@@ -37,7 +37,8 @@ define(['app'], function(app)
                 $scope.addNewChapter = function(index) {
                     $scope.portfolio.chapters.push({
                         title: $filter('translate')('PORTFOLIO_DEFAULT_NEW_CHAPTER_TITLE'),
-                        subchapters: []
+                        subchapters: [],
+                        materials: []
                     });
                 };
             }

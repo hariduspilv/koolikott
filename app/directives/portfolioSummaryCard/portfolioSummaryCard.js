@@ -10,12 +10,15 @@ define(['app'], function(app)
                 },
                 templateUrl: 'directives/portfolioSummaryCard/portfolioSummaryCard.html',
                 controller: function ($scope, $location) {
+                    if($scope.portfolio) {
+                        $scope.newTaxon = Object.create($scope.portfolio.taxon);
+                    }
 
                 	$scope.isViewPortforlioPage = $rootScope.isViewPortforlioPage;
                 	$scope.isEditPortfolioMode = $rootScope.isEditPortfolioMode;
 
                     $scope.getEducationalContext = function() {
-                        return $rootScope.taxonUtils.getEducationalContext($scope.portfolio.taxon)
+                        return $rootScope.taxonUtils.getEducationalContext($scope.newTaxon)
                             .name.toUpperCase();
                     };
 
@@ -24,7 +27,7 @@ define(['app'], function(app)
                 			return false;
                 		}
 
-                        if($scope.portfolio) {
+                        if($scope.portfolio && $scope.portfolio.creator) {
                             var creatorId = $scope.portfolio.creator.id;
                             var userId = authenticatedUserService.getUser().id;
                             return creatorId === userId;
