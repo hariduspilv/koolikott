@@ -61,14 +61,21 @@ define(['app'], function(app)
                 }
                 
                 $scope.dislike = function() {
+                	var portfolio = createPortfolio($scope.portfolio.id);
                     if ($scope.isDisliked) {
-                        showToast($translate.instant('RATING_DISLIKE_REMOVED'));
+                    	serverCallService.makePost("rest/portfolio/removeUserLike", portfolio, removeUserDisikePortfolioSuccess, function() {});
                     } else {
-	                    var portfolio = createPortfolio($scope.portfolio.id);
 	              		serverCallService.makePost("rest/portfolio/dislike", portfolio, dislikePortfolioSuccess, function() {});
                     }
                     $scope.isDisliked = !$scope.isDisliked;
                     $scope.isLiked = false;
+                }
+                
+                function removeUserDisikePortfolioSuccess() {
+                	$scope.isDisliked = false;
+                    $scope.portfolio.dislikes -= 1;
+                    setRatings();
+                    showToast($translate.instant('RATING_DISLIKE_REMOVED'));
                 }
                 
                 function dislikePortfolioSuccess() {
