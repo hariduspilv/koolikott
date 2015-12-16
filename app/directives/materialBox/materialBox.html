@@ -5,9 +5,13 @@
       <md-icon class="icon-kind" data-ng-bind="getType()"></md-icon>
     </div>
     <div class="card-hover {{getType()}}" layout="row" layout-fill flex layout-align="center center">
-      <div class="pick">
+      <div class="pick" data-ng-if!="isEditPortfolioMode">
         <md-icon class="unchecked">radio_button_unchecked</md-icon>
         <md-icon class="checked">check_circle</md-icon>
+      </div>
+      <div class="pick" data-ng-if="isEditPortfolioMode">
+        <md-icon class="unchecked">remove_circle_outline</md-icon>
+        <md-icon class="checked">remove_circle</md-icon>
       </div>
       <md-icon class="icon-kind" data-ng-bind="getType()"></md-icon>
     </div>

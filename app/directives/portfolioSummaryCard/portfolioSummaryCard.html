@@ -1,5 +1,7 @@
 <md-card class="card-lg" id="portfolio-card">
-    <md-card-content>
+  <md-card-content>
+    <div layout="row">
+      <div layout="column" flex="75">
         <div layout="row">
             <div layout="column" flex="75">
                 <div layout="row">
@@ -36,105 +38,105 @@
                     </md-menu>
                 </div>
 
-                <div layout="row" class="on-left">
-                    <div flex>
-                        <p class="md-body-2 meta">
-                            <small class="md-caption">
-                                <span data-translate="DETAIL_VIEW_SUBJECT"></span>
-                            </small>
-                            <br/>
-                            <span data-ng-if="taxonUtils.getSubject(portfolio.taxon)"
-                                  data-translate="{{'SUBJECT_' + taxonUtils.getSubject(portfolio.taxon).name.toUpperCase()}}">
-                            </span>
-                            <span data-ng-if="!taxonUtils.getSubject(portfolio.taxon)"
-                                  data-translate="UNKNOWN">Unknown</span>
-                        </p>
-                    </div>
-                    <div flex>
-                        <p class="md-body-2 meta">
-                            <small class="md-caption">
-                                <span data-translate="DETAIL_VIEW_EDUCATIONAL_CONTEXT"></span>
-                            </small>
-                            <br>
-                            <span data-ng-if="portfolio.taxon"
-                                  data-translate="{{getEducationalContext()}}">
-                            </span>
-                            <span data-ng-if="!portfolio.taxon" data-translate="UNKNOWN">Unknown</span>
-                        </p>
-                    </div>
-                </div>
-
-                <md-divider class="md-default-theme"></md-divider>
-
-                <div layout="column" class="on-left" flex>
-                    <p class="md-body-1 description" data-ng-bind="portfolio.summary"></p>
-                </div>
-
-
-                <p class="md-body-2 meta">
-                    <small class="md-caption">
-                        <span data-translate="DETAIL_VIEW_TAGS"></span>:
-                    </small>
-                    <br>
-                    <a href="#" data-ng-repeat="tag in portfolio.tags">{{tag}}{{$last ? '' : ', '}}</a>
-                </p>
-            </div>
-
-            <div layout="column" flex="25" class="divider-left" layout-align="start start">
-                <div class="card-cover">
-                    <img data-ng-if="portfolio.hasPicture"
-                         data-ng-src="rest/portfolio/getPicture?portfolioId={{portfolio.id}}"/>
-                  <span data-ng-if="!portfolio.hasPicture">
-                    <md-icon>book</md-icon>
-                  </span>
-                </div>
-
-                <md-content>
-                    <p class="md-body-2 meta">
-                        <small class="md-caption">
-                            <span data-translate="CREATOR"></span>:
-                        </small>
-                        <a>
-                            <span data-ng-bind="portfolio.creator.name"></span>
-                            <span data-ng-bind="portfolio.creator.surname"></span>
-                        </a>
-                    </p>
-
-                    <p class="md-body-2 meta" data-ng-if="portfolio.updated">
-                        <small class="md-caption">
-                            <span data-translate="UPDATED"></span>:
-                        </small>
-                        {{portfolio.updated | date:'dd.MM.yyyy'}}
-                    </p>
-
-                    <p class="md-body-2 meta" data-ng-if="portfolio.created">
-                        <small class="md-caption">
-                            <span data-translate="CREATED"></span>:
-                        </small>
-                        {{portfolio.created | date:'dd.MM.yyyy'}}
-                    </p>
-
-                    <p class="md-body-2 meta">
-                        <small class="md-caption">
-                            <span data-translate="VIEW_COUNT"></span>:
-                        </small>
-                        <span data-ng-bind="portfolio.views"></span>
-                    </p>
-                </md-content>
-            </div>
+        <div layout="row" class="on-left">
+          <div flex>
+            <p class="md-body-2 meta">
+              <small class="md-caption">
+                <span data-translate="DETAIL_VIEW_SUBJECT"></span>
+              </small>
+              <br/>
+              <span data-ng-if="taxonUtils.getSubject(portfolio.taxon)"
+              data-translate="{{'SUBJECT_' + taxonUtils.getSubject(portfolio.taxon).name.toUpperCase()}}">
+            </span>
+            <span data-ng-if="!taxonUtils.getSubject(portfolio.taxon)"
+            data-translate="UNKNOWN">Unknown</span>
+          </p>
         </div>
+        <div flex>
+          <p class="md-body-2 meta">
+            <small class="md-caption">
+              <span data-translate="DETAIL_VIEW_EDUCATIONAL_CONTEXT"></span>
+            </small>
+            <br>
+            <span data-ng-if="portfolio.taxon"
+            data-translate="{{getEducationalContext()}}">
+          </span>
+          <span data-ng-if="!portfolio.taxon" data-translate="UNKNOWN">Unknown</span>
+        </p>
+      </div>
+    </div>
 
-        <md-divider class="md-default-theme"></md-divider>
+    <md-divider class="md-default-theme"></md-divider>
 
-        <div layout="row" class="md-actions" layout-align="start start">
-            <div data-dop-comments-card comments="portfolio.comments" comment="comment"
-                 submit-click="addComment()"></div>
-            <span flex></span>
-            <!-- rating control -->
-            <div data-ng-if="!isEditPortfolioMode" data-dop-rating
-                 data-portfolio="portfolio"
-                 like-message="{{ 'PORTFOLIO_LIKED' | translate }}"
-                 dislike-message="{{ 'PORTFOLIO_DISLIKED' | translate }}"></div>
-        </div>
-    </md-card-content>
+    <div layout="column" class="on-left" flex>
+      <p class="md-body-1 description" data-ng-bind="portfolio.summary"></p>
+    </div>
+
+
+    <p class="md-body-2 meta">
+      <small class="md-caption">
+        <span data-translate="DETAIL_VIEW_TAGS"></span>:
+      </small>
+      <br>
+      <a href="#" data-ng-repeat="tag in portfolio.tags">{{tag}}{{$last ? '' : ', '}}</a>
+    </p>
+  </div>
+
+  <div layout="column" flex="25" class="divider-left" layout-align="start start">
+    <div class="card-cover">
+      <img data-ng-if="portfolio.hasPicture"
+      data-ng-src="rest/portfolio/getPicture?portfolioId={{portfolio.id}}"/>
+      <span data-ng-if="!portfolio.hasPicture">
+        <md-icon>book</md-icon>
+      </span>
+    </div>
+
+    <md-content>
+      <p class="md-body-2 meta">
+        <small class="md-caption">
+          <span data-translate="CREATOR"></span>:
+        </small>
+        <a>
+          <span data-ng-bind="portfolio.creator.name"></span>
+          <span data-ng-bind="portfolio.creator.surname"></span>
+        </a>
+      </p>
+
+      <p class="md-body-2 meta" data-ng-if="portfolio.updated">
+        <small class="md-caption">
+          <span data-translate="UPDATED"></span>:
+        </small>
+        {{portfolio.updated | date:'dd.MM.yyyy'}}
+      </p>
+
+      <p class="md-body-2 meta" data-ng-if="portfolio.created">
+        <small class="md-caption">
+          <span data-translate="CREATED"></span>:
+        </small>
+        {{portfolio.created | date:'dd.MM.yyyy'}}
+      </p>
+
+      <p class="md-body-2 meta">
+        <small class="md-caption">
+          <span data-translate="VIEW_COUNT"></span>:
+        </small>
+        <span data-ng-bind="portfolio.views"></span>
+      </p>
+    </md-content>
+  </div>
+</div>
+
+<md-divider class="md-default-theme"></md-divider>
+
+<div layout="row" class="md-actions" layout-align="start start">
+  <div data-dop-comments-card comments="portfolio.comments" comment="comment"
+  submit-click="addComment()"></div>
+  <span flex></span>
+  <!-- rating control -->
+  <div data-ng-if="!isEditPortfolioMode" data-dop-rating
+  data-portfolio="portfolio"
+  like-message="{{ 'PORTFOLIO_LIKED' | translate }}"
+  dislike-message="{{ 'PORTFOLIO_DISLIKED' | translate }}"></div>
+</div>
+</md-card-content>
 </md-card>
