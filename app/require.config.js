@@ -50,8 +50,8 @@ require.config({
     'ng-file-upload': '../bower_components/ng-file-upload/ng-file-upload',
     clipboard: '../bower_components/clipboard/dist/clipboard',
     metadataService: 'services/metadataService',
-    linearLayout: '/directives/pageStructure/linearLayout/linearLayout',
-    columnLayout: '/directives/pageStructure/columnLayout/columnLayout'
+    linearLayout: 'directives/pageStructure/linearLayout/linearLayout',
+    columnLayout: 'directives/pageStructure/columnLayout/columnLayout'
   },
   shim: {
     angular: {
