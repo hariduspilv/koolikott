@@ -1,48 +1,22 @@
-<div id="page-add" layout="row" flex>
-  <!-- md-sidenav -->
-  <md-sidenav layout="column" class="md-sidenav-left md-whiteframe-z2" md-component-id="left" md-is-locked-open="$mdMedia('gt-md')">
-    <md-toolbar class="md-accent">
-      <h6 class="md-toolbar-tools md-subhead">
-        <md-button class="md-icon-button hide-gt-md" data-ng-click="toggleSidenav('left')" >
-          <md-icon class="md-48">arrow_backward</md-icon>
-        </md-button>
-        <span data-translate="TABLE_OF_CONTENTS"></span>
-      </h6>
-    </md-toolbar>
+<section id="main-content" layout="row" layout-sm="column" layout-align="start start">
+  <article class="md-padding" layout="column" flex="75" flex-sm="100" role="main">
 
-    <md-content layout="column" flex role="navigation" class="sidenav">
-      <div data-dop-table-of-contents portfolio="portfolio"></div>
-    </md-content>
+    <div data-dop-portfolio-summary-card data-portfolio="portfolio"></div>
 
-  </md-sidenav>
-  <!-- /md-sidenav -->
-
-  <!-- main content -->
-  <div layout="column" flex>
-    <div id="navmenu" data--dop-edit-portfolio-mode-header></div>
-
-    <section id="main-content" layout="row" layout-sm="column" layout-align="start start">
-      <article class="md-padding" layout="column" flex="75" flex-sm="100" role="main">
-
-        <div data-dop-portfolio-summary-card data-portfolio="portfolio"></div>
-
-        <div id="portfolio-chapters">
-            <div data-ng-repeat="chapter in portfolio.chapters">
-                <div data-dop-chapter data-on-delete="onDeleteChapter" data-chapter="chapter" data-index="{{$index}}"></div>
-            </div>
+    <div id="portfolio-chapters">
+        <div data-ng-repeat="chapter in portfolio.chapters">
+            <div data-dop-chapter data-on-delete="onDeleteChapter" data-chapter="chapter" data-index="{{$index}}"></div>
         </div>
+    </div>
 
-      </article>
+  </article>
 
-      <aside data-dop-sidebar flex="25" flex-sm="100" class="md-padding" role="sidebar"></aside>
+  <aside data-dop-sidebar flex="25" flex-sm="100" class="md-padding" role="sidebar"></aside>
 
-      <md-button class="md-fab md-fab-bottom-right" aria-label="Save portfolio" data-ng-click="savePortfolio()">
-        <md-tooltip md-direction="left">
-          <span data-translate="PORTFOLIO_SAVE"></span>
-        </md-tooltip>
-        <ng-md-icon icon="save"></ng-md-icon>
-      </md-button>
-    </section>
-  </div>
-  <!-- /main content -->
-</div>
+  <md-button class="md-fab md-fab-bottom-right" aria-label="Save portfolio" data-ng-click="savePortfolio()">
+    <md-tooltip md-direction="left">
+      <span data-translate="PORTFOLIO_SAVE"></span>
+    </md-tooltip>
+    <ng-md-icon icon="save"></ng-md-icon>
+  </md-button>
+</section>

@@ -49,7 +49,9 @@ require.config({
     'ng-file-upload-shim': '../bower_components/ng-file-upload-shim/ng-file-upload-shim',
     'ng-file-upload': '../bower_components/ng-file-upload/ng-file-upload',
     clipboard: '../bower_components/clipboard/dist/clipboard',
-    metadataService: 'services/metadataService'
+    metadataService: 'services/metadataService',
+    linearLayout: '/directives/pageStructure/linearLayout/linearLayout',
+    columnLayout: '/directives/pageStructure/columnLayout/columnLayout'
   },
   shim: {
     angular: {
@@ -164,7 +166,9 @@ require([
   'dopReportImporper',
   'dopReportBrokenLink',
   'dopRecommend',
-  'metadataService'
+  'metadataService',
+  'linearLayout',
+  'columnLayout'
 ], function (jquery, angular, app) {
   'use strict';
   var $html = angular.element(document.getElementsByTagName('html')[0]);

@@ -14,7 +14,6 @@ define(['app'], function(app)
 					getPortfolio(getPortfolioSuccess, getPortfolioFail);
 				}
             	
-				$rootScope.isEditPortfolioMode = true;
 				searchService.setType("material");
 				searchService.setTargetGroups([]);
 			}
@@ -34,7 +33,6 @@ define(['app'], function(app)
 	    	}
 
 	    	function getPortfolioFail() {
-                $rootScope.isEditPortfolioMode = false;
 	            log('No data returned by getting portfolio.');
 	            alertService.setErrorAlert('ERROR_PORTFOLIO_NOT_FOUND');
 	            $location.url("/");
