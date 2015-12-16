@@ -38,6 +38,7 @@ public class PortfolioResourceTest extends ResourceIntegrationTestBase {
     private static final String GET_PORTFOLIO_PICTURE_URL = "portfolio/getPicture?portfolioId=%s";
     private static final String PORTFOLIO_INCREASE_VIEW_COUNT_URL = "portfolio/increaseViewCount";
     private static final String PORTFOLIO_COPY_URL = "portfolio/copy";
+    private static final String DELETE_PORTFOLIO_URL = "portfolio/delete";
 
     @Test
     public void getPortfolio() {
@@ -421,6 +422,37 @@ public class PortfolioResourceTest extends ResourceIntegrationTestBase {
         assertEquals(Status.OK.getStatusCode(), response.getStatus());
     }
 
+    @Test
+    public void deletePortfolioAsCreator() {
+        login("89012378912");
+
+        Portfolio portfolio = new Portfolio();
+        portfolio.setId(12L);
+
+        Response response = doPost(DELETE_PORTFOLIO_URL, Entity.entity(portfolio, MediaType.APPLICATION_JSON_TYPE));
+        assertEquals(Status.NO_CONTENT.getStatusCode(), response.getStatus());
+    }
+
+    @Test
+    public void deletePortfolioAsNotCreator() {
+        login("89012378912");
+
+        Portfolio portfolio = new Portfolio();
+        portfolio.setId(1L);
+
+        Response response = doPost(DELETE_PORTFOLIO_URL, Entity.entity(portfolio, MediaType.APPLICATION_JSON_TYPE));
+        assertEquals(Status.INTERNAL_SERVER_ERROR.getStatusCode(), response.getStatus());
+    }
+
+    @Test
+    public void deletePortfolioNotLoggedIn() {
+        Portfolio portfolio = new Portfolio();
+        portfolio.setId(1L);
+
+        Response response = doPost(DELETE_PORTFOLIO_URL, Entity.entity(portfolio, MediaType.APPLICATION_JSON_TYPE));
+        assertEquals(Status.UNAUTHORIZED.getStatusCode(), response.getStatus());
+    }
+
     private Portfolio getPortfolio(long id) {
         return doGet(format(GET_PORTFOLIO_URL, id), Portfolio.class);
     }
@@ -486,6 +518,6 @@ public class PortfolioResourceTest extends ResourceIntegrationTestBase {
         assertEquals("Lifelong_learning_and_career_planning", portfolio.getCrossCurricularThemes().get(0).getName());
         assertEquals("Cultural_and_value_competence", portfolio.getKeyCompetences().get(0).getName());
         assertEquals(Visibility.PUBLIC, portfolio.getVisibility());
-        // assertFalse(portfolio.isDeleted());
+        assertFalse(portfolio.isDeleted());
     }
 }
