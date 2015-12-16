@@ -191,6 +191,10 @@ insert into Translation(translationGroup, translationKey, translation) values (2
 insert into Translation(translationGroup, translationKey, translation) values (2, 'PORTFOLIO_VISIBILITY_MAKE_NOT_LISTED', 'Поделитесь только со ссылкой');
 insert into Translation(translationGroup, translationKey, translation) values (2, 'PORTFOLIO_VISIBILITY_MAKE_PRIVATE', 'Сделать личное');
 insert into Translation(translationGroup, translationKey, translation) values (2, 'PORTFOLIO_DELETE', 'Удалить портфель');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'PORTFOLIO_CONFIRM_DELETE_DIALOG_TITLE', 'Удалить портфель');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'PORTFOLIO_CONFIRM_DELETE_DIALOG_CONTENT', 'Вы уверены, что хотите удалить этот портфель?');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'PORTFOLIO_CONFIRM_DELETE_DIALOG_YES', 'Да, удалить эту портфель');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'PORTFOLIO_CONFIRM_DELETE_DIALOG_NO', 'Нет');
 
 -- Comment translations
 insert into Translation(translationGroup, translationKey, translation) values (2, 'COMMENTS_TITLE', 'Комментарии');

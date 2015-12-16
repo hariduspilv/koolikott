@@ -272,6 +272,10 @@ insert into Translation(translationGroup, translationKey, translation) values (1
 insert into Translation(translationGroup, translationKey, translation) values (1, 'PORTFOLIO_VISIBILITY_MAKE_NOT_LISTED', 'Jaga ainult lingiga');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'PORTFOLIO_VISIBILITY_MAKE_PRIVATE', 'Tee privaatseks');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'PORTFOLIO_DELETE', 'Kustuta kogumik');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'PORTFOLIO_CONFIRM_DELETE_DIALOG_TITLE', 'Kustuta portfoolio');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'PORTFOLIO_CONFIRM_DELETE_DIALOG_CONTENT', 'Kas oled kindel, et soovid kustutada selle portfoolio?');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'PORTFOLIO_CONFIRM_DELETE_DIALOG_YES', 'Jah, kustuta portfoolio');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'PORTFOLIO_CONFIRM_DELETE_DIALOG_NO', 'Ei');
 
 -- Comment translations
 insert into Translation(translationGroup, translationKey, translation) values (1, 'COMMENTS_TITLE', 'Kommentaarid');

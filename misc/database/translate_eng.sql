@@ -191,6 +191,10 @@ insert into Translation(translationGroup, translationKey, translation) values (3
 insert into Translation(translationGroup, translationKey, translation) values (3, 'PORTFOLIO_VISIBILITY_MAKE_NOT_LISTED', 'Make not listed');
 insert into Translation(translationGroup, translationKey, translation) values (3, 'PORTFOLIO_VISIBILITY_MAKE_PRIVATE', 'Make private');
 insert into Translation(translationGroup, translationKey, translation) values (3, 'PORTFOLIO_DELETE', 'Delete portfolio');
+insert into Translation(translationGroup, translationKey, translation) values (3, 'PORTFOLIO_CONFIRM_DELETE_DIALOG_TITLE', 'Delete portfolio');
+insert into Translation(translationGroup, translationKey, translation) values (3, 'PORTFOLIO_CONFIRM_DELETE_DIALOG_CONTENT', 'Are you sure you want to delete this portfolio?');
+insert into Translation(translationGroup, translationKey, translation) values (3, 'PORTFOLIO_CONFIRM_DELETE_DIALOG_YES', 'Yes, delete this portfolio');
+insert into Translation(translationGroup, translationKey, translation) values (3, 'PORTFOLIO_CONFIRM_DELETE_DIALOG_NO', 'No');
 
 -- Comment translations
 insert into Translation(translationGroup, translationKey, translation) values (3, 'COMMENTS_TITLE', 'Comments');
