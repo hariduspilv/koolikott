@@ -1,7 +1,7 @@
 define(['app'], function(app)
 {
-    app.directive('dopPortfolioSummaryCard', ['translationService', '$location', '$mdSidenav', '$mdDialog', '$rootScope', 'authenticatedUserService', '$route',
-        function(translationService, $location, $mdSidenav, $mdDialog, $rootScope, authenticatedUserService, $route) {
+    app.directive('dopPortfolioSummaryCard', ['translationService', '$location', '$mdSidenav', '$mdDialog', '$rootScope', 'authenticatedUserService', '$route', 'dialogService',
+        function(translationService, $location, $mdSidenav, $mdDialog, $rootScope, authenticatedUserService, $route, dialogService) {
             return {
             	scope: {
                     portfolio: '=',
@@ -50,6 +50,19 @@ define(['app'], function(app)
                     
                     $scope.addComment = function() {
                         $scope.submitClick();
+                    };
+
+                    $scope.confirmPortfolioDeletion = function() {
+                        dialogService.showConfirmationDialog(
+                            'PORTFOLIO_CONFIRM_DELETE_DIALOG_TITLE',
+                            'PORTFOLIO_CONFIRM_DELETE_DIALOG_CONTENT',
+                            'PORTFOLIO_CONFIRM_DELETE_DIALOG_YES',
+                            'PORTFOLIO_CONFIRM_DELETE_DIALOG_NO',
+                            deletePortfolio);
+                    };
+
+                    function deletePortfolio() {
+
                     }
                 }
             };
