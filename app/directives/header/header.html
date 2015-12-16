@@ -1,4 +1,4 @@
-<md-toolbar data-ng-show="!showSearch" class="md-whiteframe-1dp" >
+<md-toolbar data-ng-show="!showSearch" class="md-whiteframe-1dp">
   <div class="md-toolbar-tools">
     <div data-ng-hide="isViewPortforlioPage" layout-align="center start" flex-gt-md="10" flex>
       <a href="#/" class="logo-lg" id="logo"></a>
@@ -25,7 +25,7 @@
         <ng-md-icon icon="lock"></ng-md-icon>
         <md-tooltip>Sisene</md-tooltip>
       </md-button>
-      
+
       <md-menu data-ng-show="user">
         <md-button aria-label="Open user profile" class="md-icon-button" id="header-user-menu-icon" ng-click="$mdOpenMenu($event)">
           <ng-md-icon icon="account_circle"></ng-md-icon>
@@ -44,7 +44,7 @@
           </md-menu-item>
         </md-menu-content>
       </md-menu>
-      
+
       <md-menu>
         <md-button aria-label="Open language menu" class="md-icon-button" id="header-language-icon" ng-click="$mdOpenMenu($event)">
           <span data-ng-if="selectedLanguage === 'est'">ET</span>
@@ -76,7 +76,7 @@
 </md-toolbar>
 
 <div id="md-toolbar-expandable" class="md-toolbar-expandable md-whiteframe-1dp" data-ng-show="showSearch" data-click-outside="showSearch = false">
-  <md-toolbar class="md-hue-1">
+  <md-toolbar class="md-primary">
     <div layout="row" layout-align="center center">
       <div flex-gt-md="80" flex="100">
         <div class="md-toolbar-tools" layout="row" layout-align="center center">
@@ -84,7 +84,7 @@
             <md-button aria-label="Search" class="md-icon-button" data-ng-click="search()" data-ng-disabled="detailedSearch.isVisible">
               <ng-md-icon icon="search" id="header-simple-search-button"></ng-md-icon>
             </md-button>
-  
+
             <md-input-container flex>
               <label hidden="hidden">&nbsp;</label>
               <input id="header-simple-search-input" data-ng-keydown="$event.which === 13 && search()" data-ng-model="searchFields.searchQuery" placeholder="{{'SEARCH' | translate}}" data-ng-disabled="detailedSearch.isVisible" />
@@ -101,12 +101,11 @@
       </div>
     </div>
   </md-toolbar>
-
-  <div class="md-toolbar-filter" id="detailedSearch" data-ng-show="detailedSearch.isVisible">
-   <form layout-align="center start" layout="row" layout-sm="column">
-      <div flex="100" flex-gt-md="80">
-        <div data-dop-detailed-search query-in="detailedSearch.queryIn" query-out="detailedSearch.queryOut"></div>
-      </div>
-    </form>
-  </div>
+</div>
+<div class="md-toolbar-filter" id="detailedSearch" data-ng-show="detailedSearch.isVisible">
+ <form layout-align="center start" layout="row" layout-sm="column">
+    <div flex="80" flex-gt-md="80" class="md-whiteframe-1dp filter-content">
+      <div data-dop-detailed-search query-in="detailedSearch.queryIn" query-out="detailedSearch.queryOut"></div>
+    </div>
+  </form>
 </div>
