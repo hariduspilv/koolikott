@@ -1,8 +1,11 @@
 define(['app'], function(app)
 {
-    app.controller('portfolioController', ['$scope', 'translationService', 'serverCallService', '$route', '$location', 'alertService', '$rootScope', 'authenticatedUserService',
-      function($scope, translationService, serverCallService, $route, $location, alertService, $rootScope, authenticatedUserService) {
-          function init() {
+    app.controller('portfolioController', ['$scope', 'translationService', 'serverCallService', '$route', '$location', 'alertService', '$rootScope', 'authenticatedUserService', '$timeout',
+      function($scope, translationService, serverCallService, $route, $location, alertService, $rootScope, authenticatedUserService, $timeout) {
+          
+    	  var increaseViewCountPromise;
+    	  
+    	  function init() {
               if ($rootScope.savedPortfolio) {
             	  setPortfolio($rootScope.savedPortfolio);
                   increaseViewCount();
@@ -34,8 +37,14 @@ define(['app'], function(app)
           }
     
           function increaseViewCount() {
-          	var portfolio = createPortfolio($scope.portfolio.id);
-          	serverCallService.makePost("rest/portfolio/increaseViewCount", portfolio, function success(){}, function fail(){});
+        	  /*
+        	   *  It is needed to have it in a timeout because of double call caused by using two different page structure.
+        	   *  So we cancel it in case the page is destroyed so the new one that will be create makes the valid call.
+        	   */
+        	  increaseViewCountPromise = $timeout(function() {
+        		  var portfolio = createPortfolio($scope.portfolio.id);
+        		  serverCallService.makePost("rest/portfolio/increaseViewCount", portfolio, function success(){}, function fail(){});
+        	  }, 1000);
           }
       
         $scope.addComment = function() {
@@ -65,8 +74,20 @@ define(['app'], function(app)
         
         function setPortfolio(portfolio) {
         	$scope.portfolio = portfolio;
-            $rootScope.savedPortfolio = null;;
+            $rootScope.savedPortfolio = portfolio;;
         }
+
+        $scope.$on('$routeChangeStart', function() {
+        	if (!$location.url().startsWith("/portfolio/edit?id=")) {
+        		setPortfolio(null);
+        	}
+	    });
+        
+        $scope.$on('$destroy', function() {
+        	if (increaseViewCountPromise) {
+        		$timeout.cancel(increaseViewCountPromise);
+        	}
+	    });
         
         init();
     }]);
