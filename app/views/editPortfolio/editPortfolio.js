@@ -16,8 +16,7 @@ define(['app'], function(app) {
                 } else {
                     getPortfolio(getPortfolioSuccess, getPortfolioFail);
                 }
-
-                $rootScope.isEditPortfolioMode = true;
+                
                 searchService.setType("material");
                 searchService.setTargetGroups([]);
                 
@@ -35,6 +34,12 @@ define(['app'], function(app) {
                 serverCallService.makeGet("rest/portfolio?id=" + portfolioId, {}, success, fail);
             }
 
+	    	function getPortfolioFail() {
+	            log('No data returned by getting portfolio.');
+	            alertService.setErrorAlert('ERROR_PORTFOLIO_NOT_FOUND');
+	            $location.url("/");
+	    	}
+
             function getPortfolioSuccess(portfolio) {
                 if (isEmpty(portfolio)) {
                     getPortfolioFail();
@@ -43,13 +48,6 @@ define(['app'], function(app) {
                     checkPortfolioVisibility(portfolio);
                     searchService.setTargetGroups(portfolio.targetGroups);
                 }
-            }
-
-            function getPortfolioFail() {
-                $rootScope.isEditPortfolioMode = false;
-                log('No data returned by getting portfolio.');
-                alertService.setErrorAlert('ERROR_PORTFOLIO_NOT_FOUND');
-                $location.url("/");
             }
 
             $scope.toggleSidenav = function(menuId) {

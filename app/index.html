@@ -23,11 +23,12 @@
 
     <div id="alert" data-dop-alert></div>
     
-    <div data-ng-view layout="row" flex></div>
+    <div data-ng-if="isEditPortfolioMode || isViewPortforlioPage" data-dop-column-layout></div>
+    <div data-ng-if="!isEditPortfolioMode && !isViewPortforlioPage" data-dop-linear-layout></div>
     
     <div data-ng-show="showMainFabButton && !isEditPortfolioMode" data-dop-main-fab-button></div>
 
     <script src="bower_components/requirejs/require.js" data-main="require.config.js"></script>
     <script src="https://www.youtube.com/iframe_api"></script>
-</body>
+  </body>
 </html>

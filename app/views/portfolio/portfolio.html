@@ -1,46 +1,18 @@
-<div id="page-view-portfolio" layout="row" flex>
-  <!-- md-sidenav -->
-  <md-sidenav layout="column" class="md-sidenav-left md-whiteframe-z2" md-component-id="left" md-is-locked-open="$mdMedia('gt-md')">
-    <md-toolbar class="md-primary">
-      <h6 class="md-toolbar-tools md-subhead">
-		<span>
-			<md-button class="md-icon-button hide-gt-md" data-ng-click="toggleSidenav('left')" >
-			  <md-icon class="md-48">arrow_backward</md-icon>
-			</md-button>
-		</span>
-        <!-- <span data-translate="TABLE_OF_CONTENTS"></span> -->
-        <span class="one-row">Lessons Learned In Big App Development, A Hawaiian Airlines Case Study</span>
-        <md-tooltip md-direction="bottom">
-          Lessons Learned In Big App Development, A Hawaiian Airlines Case Study
-        </md-tooltip>
-      </h6>
-    </md-toolbar>
+<div layout="column" flex>
+  <section id="main-content" layout="row" layout-sm="column" class="md-padding" layout-align="start start">
+    <article class="md-padding" layout="column" flex="75" flex-sm="100" role="main">
 
-    <md-content layout="column" flex role="navigation" class="sidenav">
-      <div data-dop-table-of-contents data-portfolio="portfolio" data-readonly="true"></div>
-    </md-content>
-  </md-sidenav>
-  <!-- /md-sidenav -->
+      <div data-dop-portfolio-summary-card comment="newComment" submit-click="addComment()" data-portfolio="portfolio"></div>
 
-  <!-- main content -->
-  <div layout="column" flex>
-    <div id="navmenu" data-dop-header></div>
+      <!-- <div data-dop-comments-card comments="portfolio.comments" comment="newComment" submit-click="addComment()"></div> -->
 
-    <section id="main-content" layout="row" layout-sm="column" class="md-padding" layout-align="start start">
-      <article class="md-padding" layout="column" flex="75" flex-sm="100" role="main">
-
-        <div data-dop-portfolio-summary-card comment="newComment" submit-click="addComment()" data-portfolio="portfolio"></div>
-
-        <!-- <div data-dop-comments-card comments="portfolio.comments" comment="newComment" submit-click="addComment()"></div> -->
-
-        <div id="portfolio-chapters">
-          <div data-ng-repeat="chapter in portfolio.chapters">
-            <div data-dop-chapter data-chapter="chapter" data-index="{{$index}}"></div>
-          </div>
+      <div id="portfolio-chapters">
+        <div data-ng-repeat="chapter in portfolio.chapters">
+          <div data-dop-chapter data-chapter="chapter" data-index="{{$index}}"></div>
         </div>
-      </article>
+      </div>
+    </article>
 
-      <aside data-dop-sidebar flex="25" flex-sm="100" class="md-padding" role="sidebar"></aside>
-    </section>
-  </div>
+    <aside data-dop-sidebar flex="25" flex-sm="100" class="md-padding" role="sidebar"></aside>
+  </section>
 </div>

@@ -152,10 +152,16 @@ define(['app.routes', 'services/dependencyResolver', 'utils/taxonUtils'], functi
     }
     
     app.run(function($rootScope, $location) {        
-        $rootScope.$on('$routeChangeSuccess', function() {
+    	$rootScope.$on('$routeChangeSuccess', function() {
             var path = $location.path();
             
             $rootScope.isViewPortforlioPage = path === '/portfolio';
+            
+            if (!$rootScope.isEditPortfolioMode) {
+            	$rootScope.isEditPortfolioMode = path === '/portfolio/edit';
+            } else {
+            	$rootScope.isEditPortfolioMode = false;
+            }
         });
     });
 

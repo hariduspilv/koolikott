@@ -34,6 +34,7 @@ define(['app'], function(app)
 				$scope.mobileIdChallenge = null;
 				$scope.mobileId.idCode = null;
 				$scope.mobileId.phoneNumber = null;
+				$scope.hideLogin();
 			}
 
 			function mobileIdFail() {
