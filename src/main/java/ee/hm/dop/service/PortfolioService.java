@@ -134,10 +134,6 @@ public class PortfolioService {
             throw new RuntimeException("Portfolio must already exist.");
         }
 
-        if (portfolio.getCreator().getId() != loggedInUser.getId()) {
-            throw new RuntimeException("Logged in user must be the creator of this portfolio.");
-        }
-
         if (isEmpty(portfolio.getTitle())) {
             throw new RuntimeException("Required field title must be filled.");
         }
@@ -145,6 +141,10 @@ public class PortfolioService {
         Portfolio originalPortfolio = portfolioDAO.findById(portfolio.getId());
         if (originalPortfolio == null) {
             throw new RuntimeException("Portfolio not found");
+        }
+
+        if (originalPortfolio.getCreator().getId() != loggedInUser.getId()) {
+            throw new RuntimeException("Logged in user must be the creator of this portfolio.");
         }
 
         originalPortfolio = setPortfolioUpdatableFields(originalPortfolio, portfolio);

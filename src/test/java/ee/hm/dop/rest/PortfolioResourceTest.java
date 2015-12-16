@@ -26,6 +26,7 @@ import ee.hm.dop.model.Chapter;
 import ee.hm.dop.model.Material;
 import ee.hm.dop.model.Portfolio;
 import ee.hm.dop.model.TargetGroup;
+import ee.hm.dop.model.User;
 import ee.hm.dop.model.Visibility;
 
 public class PortfolioResourceTest extends ResourceIntegrationTestBase {
@@ -277,6 +278,22 @@ public class PortfolioResourceTest extends ResourceIntegrationTestBase {
         assertFalse(originalTitle.equals(updatedPortfolio.getTitle()));
         assertEquals("New mega nice title that I come with Yesterday night!", updatedPortfolio.getTitle());
 
+    }
+
+    @Test
+    public void updateSomeoneElsesPortfolio() {
+        login("38011550077");
+
+        Portfolio portfolio = getPortfolio(5);
+        portfolio.setTitle("This is not my portfolio.");
+
+        // Set creator to the current logged in user
+        User creator = new User();
+        creator.setId(2L);
+        portfolio.setCreator(creator);
+
+        Response response = doPost(UPDATE_PORTFOLIO_URL, Entity.entity(portfolio, MediaType.APPLICATION_JSON_TYPE));
+        assertEquals(Status.INTERNAL_SERVER_ERROR.getStatusCode(), response.getStatus());
     }
 
     @Test
