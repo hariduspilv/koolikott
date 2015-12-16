@@ -9,12 +9,23 @@ define(['app'], function(app)
             },
             templateUrl: 'directives/rating/rating.html',
             controller: function ($scope, $mdToast, $translate, serverCallService) {
-                // todo: add actual logic
-                $scope.isLiked = false;
-                $scope.isDisliked = false;
-                
+
                 function init() {
                 	setRatings();
+                	getUserLike();
+                }
+                
+                function getUserLike() {
+                	var portfolio = createPortfolio($scope.portfolio.id);
+                	serverCallService.makePost("rest/portfolio/getUserLike", portfolio, getUserLikeSuccess, function() {});
+                }
+                
+                function getUserLikeSuccess(userlike) {
+            		if(userlike.liked) {
+            			$scope.isLiked = true;
+            		} else {
+                        $scope.isDisliked = true;
+            		}
                 }
                 
                 function setRatings() {
@@ -26,18 +37,24 @@ define(['app'], function(app)
                 }
                 
                 $scope.like = function() {
+                	var portfolio = createPortfolio($scope.portfolio.id);
                     if ($scope.isLiked) {
-                        showToast($translate.instant('RATING_LIKE_REMOVED'));
+                        serverCallService.makePost("rest/portfolio/removeUserLike", portfolio, removeUserLikePortfolioSuccess, function() {});
                     }
                     else {
-                    	var portfolio = createPortfolio($scope.portfolio.id);
                   		serverCallService.makePost("rest/portfolio/like", portfolio, likePortfolioSuccess, function() {});
                     }
                 }
                 
+                function removeUserLikePortfolioSuccess() {
+                	$scope.isLiked = false;
+                    $scope.portfolio.likes -= 1;
+                    setRatings();
+                	showToast($translate.instant('RATING_LIKE_REMOVED'));
+                }
+                
                 function likePortfolioSuccess() {
-                	$scope.isDisliked = !$scope.isDisliked;
-                    $scope.isDisliked = false;
+                    $scope.isLiked = true;
                     $scope.portfolio.likes += 1;
                     setRatings();
                     showToast($scope.likeMessage);
@@ -55,8 +72,7 @@ define(['app'], function(app)
                 }
                 
                 function dislikePortfolioSuccess() {
-                	$scope.isDisliked = !$scope.isDisliked;
-                    $scope.isDisliked = false;
+                    $scope.isDisliked = true;
                     $scope.portfolio.dislikes += 1;
                     setRatings();
                     showToast($scope.dislikeMessage);
