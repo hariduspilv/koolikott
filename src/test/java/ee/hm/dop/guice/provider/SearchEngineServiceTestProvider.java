@@ -54,6 +54,8 @@ class SearchEngineServiceMock implements SearchEngineService {
         addQueryWithAllFilters();
 
         addQueryWithLanguage();
+        addQueryWithVisibility();
+        addAdminQuery();
     }
 
     private static void addArabicQuery() {
@@ -148,6 +150,18 @@ class SearchEngineServiceMock implements SearchEngineService {
                 + " AND (visibility:\"public\" OR type:\"material\")";
         List<Document> filteredSearchResult = createDocumentsWithIdentifiers(2L, 1L);
         searchResponses.put(filteredQuery, filteredSearchResult);
+    }
+
+    private static void addQueryWithVisibility() {
+        String query = "(visibility:\"public\" OR type:\"material\")";
+        List<Document> result = createDocumentsWithIdentifiers(2L, 3L);
+        searchResponses.put(query, result);
+    }
+
+    private static void addAdminQuery() {
+        String query = "super*";
+        List<Document> result = createDocumentsWithIdentifiers(2L, 4L);
+        searchResponses.put(query, result);
     }
 
     @Override

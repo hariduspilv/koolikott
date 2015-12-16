@@ -26,10 +26,12 @@ import ee.hm.dop.model.Language;
 import ee.hm.dop.model.Material;
 import ee.hm.dop.model.Portfolio;
 import ee.hm.dop.model.ResourceType;
+import ee.hm.dop.model.Role;
 import ee.hm.dop.model.SearchFilter;
 import ee.hm.dop.model.SearchResult;
 import ee.hm.dop.model.Searchable;
 import ee.hm.dop.model.TargetGroup;
+import ee.hm.dop.model.User;
 import ee.hm.dop.model.solr.Document;
 import ee.hm.dop.model.solr.Response;
 import ee.hm.dop.model.solr.SearchResponse;
@@ -59,7 +61,7 @@ public class SearchServiceTest {
     @Test
     public void search() {
         String query = "people";
-        String tokenizedQuery = "people*";
+        String tokenizedQuery = "(people*) AND (visibility:\"public\" OR type:\"material\")";
         SearchFilter searchFilter = new SearchFilter();
         long start = 0;
         List<Searchable> searchables = Arrays.asList(createMaterial(7L), createMaterial(1L), createPortfolio(4L),
@@ -73,7 +75,7 @@ public class SearchServiceTest {
     @Test
     public void searchWhenDatabaseReturnsLessValuesThanSearch() {
         String query = "people";
-        String tokenizedQuery = "people*";
+        String tokenizedQuery = "(people*) AND (visibility:\"public\" OR type:\"material\")";
         SearchFilter searchFilter = new SearchFilter();
         long start = 10;
 
@@ -120,7 +122,7 @@ public class SearchServiceTest {
     @Test
     public void searchNoResult() {
         String query = "people";
-        String tokenizedQuery = "people*";
+        String tokenizedQuery = "(people*) AND (visibility:\"public\" OR type:\"material\")";
         long start = 0;
 
         SearchResponse searchResponse = createSearchResponseWithDocuments(new ArrayList<>(), 0, 0);
@@ -129,7 +131,7 @@ public class SearchServiceTest {
 
         replayAll();
 
-        List<Searchable> result = searchService.search(query, start).getItems();
+        List<Searchable> result = searchService.search(query, start, new SearchFilter()).getItems();
 
         verifyAll();
 
@@ -139,7 +141,7 @@ public class SearchServiceTest {
     @Test
     public void searchTokenizeQuery() {
         String query = "people 123";
-        String tokenizedQuery = "people* 123";
+        String tokenizedQuery = "(people* 123) AND (visibility:\"public\" OR type:\"material\")";
         long start = 0;
         SearchResponse searchResponse = new SearchResponse();
 
@@ -147,7 +149,7 @@ public class SearchServiceTest {
 
         replayAll();
 
-        searchService.search(query, start);
+        searchService.search(query, start, new SearchFilter());
 
         verifyAll();
     }
@@ -155,7 +157,7 @@ public class SearchServiceTest {
     @Test
     public void searchTokenizeQueryExactMatch() {
         String query = "\"people 123\"";
-        String tokenizedQuery = "\"people\\ 123\"";
+        String tokenizedQuery = "(\"people\\ 123\") AND (visibility:\"public\" OR type:\"material\")";
         long start = 0;
         SearchResponse searchResponse = new SearchResponse();
 
@@ -163,7 +165,7 @@ public class SearchServiceTest {
 
         replayAll();
 
-        searchService.search(query, start);
+        searchService.search(query, start, new SearchFilter());
 
         verifyAll();
     }
@@ -171,7 +173,7 @@ public class SearchServiceTest {
     @Test
     public void searchTokenizeQueryEvenQuotes() {
         String query = "\"people 123\" blah\"";
-        String tokenizedQuery = "\"people\\ 123\" blah\\\"*";
+        String tokenizedQuery = "(\"people\\ 123\" blah\\\"*) AND (visibility:\"public\" OR type:\"material\")";
         long start = 0;
         SearchResponse searchResponse = new SearchResponse();
 
@@ -179,18 +181,21 @@ public class SearchServiceTest {
 
         replayAll();
 
-        searchService.search(query, start);
+        searchService.search(query, start, new SearchFilter());
 
         verifyAll();
     }
 
     @Test
-    public void searchEmptyQuery() {
+    public void searchEmptyQueryAsAdmin() {
+        User loggedInUser = new User();
+        loggedInUser.setRole(Role.ADMIN);
+
         replayAll();
 
         SearchResult result = null;
         try {
-            result = searchService.search("", 0);
+            result = searchService.search("", 0, new SearchFilter(), loggedInUser);
             fail("Exception expected.");
         } catch (RuntimeException e) {
             assertEquals("No query string and filters present.", e.getMessage());
@@ -209,7 +214,7 @@ public class SearchServiceTest {
         educationalContext.setId(1L);
         educationalContext.setName("PRESCHOOL");
         searchFilter.setTaxon(educationalContext);
-        String tokenizedQuery = "educational_context:\"preschool\"";
+        String tokenizedQuery = "educational_context:\"preschool\" AND (visibility:\"public\" OR type:\"material\")";
         long start = 0;
 
         List<Searchable> searchables = Arrays.asList(createMaterial(3L), createMaterial(4L));
@@ -222,7 +227,7 @@ public class SearchServiceTest {
         String query = "";
         SearchFilter searchFilter = new SearchFilter();
         searchFilter.setType("all");
-        String tokenizedQuery = "(type:\"material\" OR type:\"portfolio\")";
+        String tokenizedQuery = "(type:\"material\" OR type:\"portfolio\") AND (visibility:\"public\" OR type:\"material\")";
         long start = 0;
 
         List<Searchable> searchables = Arrays.asList(createMaterial(9L), createMaterial(2L), createPortfolio(2L));
@@ -231,12 +236,15 @@ public class SearchServiceTest {
     }
 
     @Test
-    public void searchNullQueryAndNullFilters() {
+    public void searchNullQueryAndNullFiltersAsAdmin() {
+        User loggedInUser = new User();
+        loggedInUser.setRole(Role.ADMIN);
+
         replayAll();
 
         SearchResult result = null;
         try {
-            result = searchService.search(null, 0);
+            result = searchService.search(null, 0, new SearchFilter(), loggedInUser);
             fail("Exception expected.");
         } catch (RuntimeException e) {
             assertEquals("No query string and filters present.", e.getMessage());
@@ -255,7 +263,7 @@ public class SearchServiceTest {
         educationalContext.setId(2L);
         educationalContext.setName("context");
         searchFilter.setTaxon(educationalContext);
-        String tokenizedQuery = "educational_context:\"context\"";
+        String tokenizedQuery = "educational_context:\"context\" AND (visibility:\"public\" OR type:\"material\")";
         long start = 0;
 
         List<Searchable> searchables = Arrays.asList(createMaterial(3L), createMaterial(4L));
@@ -267,7 +275,7 @@ public class SearchServiceTest {
     public void searchWithFiltersNull() {
         String query = "airplane";
         SearchFilter searchFilter = new SearchFilter();
-        String tokenizedQuery = "airplane*";
+        String tokenizedQuery = "(airplane*) AND (visibility:\"public\" OR type:\"material\")";
         long start = 0;
 
         List<Searchable> searchables = Arrays.asList(createMaterial(9L), createMaterial(2L), createPortfolio(2L));
@@ -283,7 +291,8 @@ public class SearchServiceTest {
         educationalContext.setId(2L);
         educationalContext.setName("PRESCHOOL");
         searchFilter.setTaxon(educationalContext);
-        String tokenizedQuery = "(pythagoras*) AND educational_context:\"preschool\"";
+        String tokenizedQuery = "(pythagoras*) AND educational_context:\"preschool\""
+                + " AND (visibility:\"public\" OR type:\"material\")";
         long start = 0;
 
         List<Searchable> searchables = Arrays.asList(createMaterial(9L), createMaterial(2L), createPortfolio(2L));
@@ -306,7 +315,8 @@ public class SearchServiceTest {
         domain.setEducationalContext(educationalContext);
 
         searchFilter.setTaxon(domain);
-        String tokenizedQuery = "(pythagoras*) AND domain:\"cool_domain\" AND educational_context:\"preschool\"";
+        String tokenizedQuery = "(pythagoras*) AND domain:\"cool_domain\" AND educational_context:\"preschool\""
+                + " AND (visibility:\"public\" OR type:\"material\")";
         long start = 0;
 
         List<Searchable> searchables = Arrays.asList(createMaterial(9L), createMaterial(2L), createPortfolio(2L));
@@ -335,7 +345,8 @@ public class SearchServiceTest {
 
         searchFilter.setTaxon(subject);
 
-        String tokenizedQuery = "(pythagoras*) AND subject:\"cool_subject\" AND domain:\"cool_domain\" AND educational_context:\"preschool\"";
+        String tokenizedQuery = "(pythagoras*) AND subject:\"cool_subject\" AND domain:\"cool_domain\""
+                + " AND educational_context:\"preschool\" AND (visibility:\"public\" OR type:\"material\")";
         long start = 0;
 
         List<Searchable> searchables = Arrays.asList(createMaterial(9L), createMaterial(2L), createPortfolio(2L));
@@ -364,7 +375,8 @@ public class SearchServiceTest {
 
         searchFilter.setTaxon(specialization);
 
-        String tokenizedQuery = "(pythagoras*) AND specialization:\"cool_specialization\" AND domain:\"cool_domain\" AND educational_context:\"preschool\"";
+        String tokenizedQuery = "(pythagoras*) AND specialization:\"cool_specialization\" AND domain:\"cool_domain\""
+                + " AND educational_context:\"preschool\" AND (visibility:\"public\" OR type:\"material\")";
         long start = 0;
 
         List<Searchable> searchables = Arrays.asList(createMaterial(9L), createMaterial(2L), createPortfolio(2L));
@@ -399,7 +411,7 @@ public class SearchServiceTest {
         searchFilter.setTaxon(module);
 
         String tokenizedQuery = "(pythagoras*) AND module:\"cool_module\" AND specialization:\"cool_specialization\""
-                + " AND domain:\"cool_domain\" AND educational_context:\"preschool\"";
+                + " AND domain:\"cool_domain\" AND educational_context:\"preschool\" AND (visibility:\"public\" OR type:\"material\")";
         long start = 0;
 
         List<Searchable> searchables = Arrays.asList(createMaterial(9L), createMaterial(2L), createPortfolio(2L));
@@ -428,7 +440,7 @@ public class SearchServiceTest {
 
         searchFilter.setTaxon(topic);
         String tokenizedQuery = "(pythagoras*) AND topic:\"cool_topic\" AND domain:\"cool_domain\""
-                + " AND educational_context:\"preschool\"";
+                + " AND educational_context:\"preschool\" AND (visibility:\"public\" OR type:\"material\")";
         long start = 0;
 
         List<Searchable> searchables = Arrays.asList(createMaterial(9L), createMaterial(2L), createPortfolio(2L));
@@ -462,7 +474,7 @@ public class SearchServiceTest {
 
         searchFilter.setTaxon(topic);
         String tokenizedQuery = "(pythagoras*) AND topic:\"cool_topic\" AND subject:\"cool_subject\""
-                + " AND domain:\"cool_domain\" AND educational_context:\"preschool\"";
+                + " AND domain:\"cool_domain\" AND educational_context:\"preschool\" AND (visibility:\"public\" OR type:\"material\")";
         long start = 0;
 
         List<Searchable> searchables = Arrays.asList(createMaterial(9L), createMaterial(2L), createPortfolio(2L));
@@ -503,7 +515,7 @@ public class SearchServiceTest {
 
         String tokenizedQuery = "(pythagoras*) AND topic:\"cool_topic\" AND module:\"cool_module\""
                 + " AND specialization:\"cool_specialization\" AND domain:\"cool_domain\""
-                + " AND educational_context:\"preschool\"";
+                + " AND educational_context:\"preschool\" AND (visibility:\"public\" OR type:\"material\")";
         long start = 0;
 
         List<Searchable> searchables = Arrays.asList(createMaterial(9L), createMaterial(2L), createPortfolio(2L));
@@ -537,7 +549,7 @@ public class SearchServiceTest {
 
         searchFilter.setTaxon(subtopic);
         String tokenizedQuery = "(pythagoras*) AND subtopic:\"cool_subtopic\" AND topic:\"cool_topic\""
-                + " AND domain:\"cool_domain\" AND educational_context:\"preschool\"";
+                + " AND domain:\"cool_domain\" AND educational_context:\"preschool\" AND (visibility:\"public\" OR type:\"material\")";
         long start = 0;
 
         List<Searchable> searchables = Arrays.asList(createMaterial(9L), createMaterial(2L), createPortfolio(2L));
@@ -576,7 +588,8 @@ public class SearchServiceTest {
 
         searchFilter.setTaxon(subtopic);
         String tokenizedQuery = "(pythagoras*) AND subtopic:\"cool_subtopic\" AND topic:\"cool_topic\""
-                + " AND subject:\"cool_subject\" AND domain:\"cool_domain\" AND educational_context:\"preschool\"";
+                + " AND subject:\"cool_subject\" AND domain:\"cool_domain\" AND educational_context:\"preschool\""
+                + " AND (visibility:\"public\" OR type:\"material\")";
         long start = 0;
 
         List<Searchable> searchables = Arrays.asList(createMaterial(9L), createMaterial(2L), createPortfolio(2L));
@@ -622,7 +635,7 @@ public class SearchServiceTest {
 
         String tokenizedQuery = "(pythagoras*) AND subtopic:\"cool_subtopic\" AND topic:\"cool_topic\""
                 + " AND module:\"cool_module\" AND specialization:\"cool_specialization\" AND domain:\"cool_domain\""
-                + " AND educational_context:\"preschool\"";
+                + " AND educational_context:\"preschool\" AND (visibility:\"public\" OR type:\"material\")";
         long start = 0;
 
         List<Searchable> searchables = Arrays.asList(createMaterial(9L), createMaterial(2L), createPortfolio(2L));
@@ -635,7 +648,8 @@ public class SearchServiceTest {
         String query = "textbooks";
         SearchFilter searchFilter = new SearchFilter();
         searchFilter.setPaid(false);
-        String tokenizedQuery = "(textbooks*) AND (paid:\"false\" OR type:\"portfolio\")";
+        String tokenizedQuery = "(textbooks*) AND (paid:\"false\" OR type:\"portfolio\")"
+                + " AND (visibility:\"public\" OR type:\"material\")";
         long start = 0;
 
         List<Searchable> searchables = Arrays.asList(createMaterial(9L), createMaterial(2L), createPortfolio(2L));
@@ -648,7 +662,7 @@ public class SearchServiceTest {
         String query = "textbooks";
         SearchFilter searchFilter = new SearchFilter();
         searchFilter.setPaid(true);
-        String tokenizedQuery = "textbooks*";
+        String tokenizedQuery = "(textbooks*) AND (visibility:\"public\" OR type:\"material\")";
         long start = 0;
 
         List<Searchable> searchables = Arrays.asList(createMaterial(9L), createMaterial(2L), createPortfolio(2L));
@@ -661,7 +675,7 @@ public class SearchServiceTest {
         String query = "sky";
         SearchFilter searchFilter = new SearchFilter();
         searchFilter.setType("material");
-        String tokenizedQuery = "(sky) AND type:\"material\"";
+        String tokenizedQuery = "(sky) AND type:\"material\" AND (visibility:\"public\" OR type:\"material\")";
         long start = 0;
 
         List<Searchable> searchables = Arrays.asList(createMaterial(9L), createMaterial(2L), createPortfolio(2L));
@@ -674,7 +688,7 @@ public class SearchServiceTest {
         String query = "sky";
         SearchFilter searchFilter = new SearchFilter();
         searchFilter.setType("all");
-        String tokenizedQuery = "(sky) AND (type:\"material\" OR type:\"portfolio\")";
+        String tokenizedQuery = "(sky) AND (type:\"material\" OR type:\"portfolio\") AND (visibility:\"public\" OR type:\"material\")";
         long start = 0;
 
         List<Searchable> searchables = Arrays.asList(createMaterial(9L), createMaterial(2L), createPortfolio(2L));
@@ -691,7 +705,8 @@ public class SearchServiceTest {
         educationalContext.setName("PRESCHOOL");
         searchFilter.setTaxon(educationalContext);
         searchFilter.setPaid(false);
-        String tokenizedQuery = "(pythagoras*) AND educational_context:\"preschool\" AND (paid:\"false\" OR type:\"portfolio\")";
+        String tokenizedQuery = "(pythagoras*) AND educational_context:\"preschool\" AND (paid:\"false\" OR type:\"portfolio\")"
+                + " AND (visibility:\"public\" OR type:\"material\")";
         long start = 0;
 
         List<Searchable> searchables = Arrays.asList(createMaterial(9L), createMaterial(2L), createPortfolio(2L));
@@ -708,7 +723,8 @@ public class SearchServiceTest {
         educationalContext.setName("PRESCHOOL");
         searchFilter.setTaxon(educationalContext);
         searchFilter.setType("portfolio");
-        String tokenizedQuery = "(pythagoras*) AND educational_context:\"preschool\" AND type:\"portfolio\"";
+        String tokenizedQuery = "(pythagoras*) AND educational_context:\"preschool\" AND type:\"portfolio\""
+                + " AND (visibility:\"public\" OR type:\"material\")";
         long start = 0;
 
         List<Searchable> searchables = Arrays.asList(createMaterial(9L), createMaterial(2L), createPortfolio(2L));
@@ -722,7 +738,8 @@ public class SearchServiceTest {
         SearchFilter searchFilter = new SearchFilter();
         searchFilter.setPaid(false);
         searchFilter.setType("material");
-        String tokenizedQuery = "(pythagoras*) AND (paid:\"false\" OR type:\"portfolio\") AND type:\"material\"";
+        String tokenizedQuery = "(pythagoras*) AND (paid:\"false\" OR type:\"portfolio\") AND type:\"material\""
+                + " AND (visibility:\"public\" OR type:\"material\")";
         long start = 0;
 
         List<Searchable> searchables = Arrays.asList(createMaterial(9L), createMaterial(2L), createPortfolio(2L));
@@ -781,7 +798,7 @@ public class SearchServiceTest {
                 + " AND domain:\"cool_domain\" AND educational_context:\"preschool\""
                 + " AND (paid:\"false\" OR type:\"portfolio\") AND type:\"material\" AND resource_type:\"extrabook\""
                 + " AND special_education:\"true\" AND cross_curricular_theme:\"test_theme\""
-                + " AND key_competence:\"test_competence\"";
+                + " AND key_competence:\"test_competence\" AND (visibility:\"public\" OR type:\"material\")";
         long start = 0;
 
         List<Searchable> searchables = Arrays.asList(createMaterial(9L), createMaterial(2L), createPortfolio(2L));
@@ -796,7 +813,8 @@ public class SearchServiceTest {
         Language language = new Language();
         language.setCode("mmm");
         searchFilter.setLanguage(language);
-        String tokenizedQuery = "(alpha* beta*) AND (language:\"mmm\" OR type:\"portfolio\")";
+        String tokenizedQuery = "(alpha* beta*) AND (language:\"mmm\" OR type:\"portfolio\")"
+                + " AND (visibility:\"public\" OR type:\"material\")";
         long start = 0;
 
         List<Searchable> searchables = Arrays.asList(createMaterial(9L), createMaterial(2L), createPortfolio(2L));
@@ -809,7 +827,7 @@ public class SearchServiceTest {
         String query = "umm";
         SearchFilter searchFilter = new SearchFilter();
         searchFilter.setTargetGroups(Arrays.asList(TargetGroup.SIX_SEVEN));
-        String tokenizedQuery = "(umm) AND target_group:\"six_seven\"";
+        String tokenizedQuery = "(umm) AND target_group:\"six_seven\" AND (visibility:\"public\" OR type:\"material\")";
         long start = 0;
 
         List<Searchable> searchables = Arrays.asList(createMaterial(9L), createMaterial(2L), createPortfolio(2L));
@@ -822,7 +840,8 @@ public class SearchServiceTest {
         String query = "umm";
         SearchFilter searchFilter = new SearchFilter();
         searchFilter.setTargetGroups(Arrays.asList(TargetGroup.SIX_SEVEN, TargetGroup.ZERO_FIVE));
-        String tokenizedQuery = "(umm) AND (target_group:\"six_seven\" OR target_group:\"zero_five\")";
+        String tokenizedQuery = "(umm) AND (target_group:\"six_seven\" OR target_group:\"zero_five\")"
+                + " AND (visibility:\"public\" OR type:\"material\")";
         long start = 0;
 
         List<Searchable> searchables = Arrays.asList(createMaterial(9L), createMaterial(2L), createPortfolio(2L));
@@ -838,7 +857,7 @@ public class SearchServiceTest {
         resourceType.setId(1L);
         resourceType.setName("EXTRABOOK");
         searchFilter.setResourceType(resourceType);
-        String tokenizedQuery = "(test*) AND resource_type:\"extrabook\"";
+        String tokenizedQuery = "(test*) AND resource_type:\"extrabook\" AND (visibility:\"public\" OR type:\"material\")";
         long start = 0;
 
         List<Searchable> searchables = Arrays.asList(createMaterial(9L), createMaterial(2L), createPortfolio(2L));
@@ -851,7 +870,7 @@ public class SearchServiceTest {
         String query = "test";
         SearchFilter searchFilter = new SearchFilter();
         searchFilter.setSpecialEducation(true);
-        String tokenizedQuery = "(test*) AND special_education:\"true\"";
+        String tokenizedQuery = "(test*) AND special_education:\"true\" AND (visibility:\"public\" OR type:\"material\")";
         long start = 0;
 
         List<Searchable> searchables = Arrays.asList(createMaterial(9L), createMaterial(2L), createPortfolio(2L));
@@ -867,7 +886,7 @@ public class SearchServiceTest {
         crossCurricularTheme.setId(1L);
         crossCurricularTheme.setName("test_theme");
         searchFilter.setCrossCurricularTheme(crossCurricularTheme);
-        String tokenizedQuery = "(test*) AND cross_curricular_theme:\"test_theme\"";
+        String tokenizedQuery = "(test*) AND cross_curricular_theme:\"test_theme\" AND (visibility:\"public\" OR type:\"material\")";
         long start = 0;
 
         List<Searchable> searchables = Arrays.asList(createMaterial(9L), createMaterial(2L), createPortfolio(2L));
@@ -883,7 +902,7 @@ public class SearchServiceTest {
         keyCompetence.setId(1L);
         keyCompetence.setName("test_competence");
         searchFilter.setKeyCompetence(keyCompetence);
-        String tokenizedQuery = "(test*) AND key_competence:\"test_competence\"";
+        String tokenizedQuery = "(test*) AND key_competence:\"test_competence\" AND (visibility:\"public\" OR type:\"material\")";
         long start = 0;
 
         List<Searchable> searchables = Arrays.asList(createMaterial(9L), createMaterial(2L), createPortfolio(2L));
@@ -892,11 +911,31 @@ public class SearchServiceTest {
     }
 
     @Test
+    public void searchWithKeyCompetenceAsAdmin() {
+        String query = "test";
+        SearchFilter searchFilter = new SearchFilter();
+        KeyCompetence keyCompetence = new KeyCompetence();
+        keyCompetence.setId(1L);
+        keyCompetence.setName("test_competence");
+        searchFilter.setKeyCompetence(keyCompetence);
+        String tokenizedQuery = "(test*) AND key_competence:\"test_competence\"";
+        long start = 0;
+
+        User loggedInUser = new User();
+        loggedInUser.setRole(Role.ADMIN);
+
+        List<Searchable> searchables = Arrays.asList(createMaterial(9L), createMaterial(2L));
+
+        testSearch(query, tokenizedQuery, searchables, start, searchables.size(), searchFilter, loggedInUser);
+    }
+
+    @Test
     public void searchWithIssueDate() {
         String query = "airplane";
         SearchFilter searchFilter = new SearchFilter();
         searchFilter.setIssuedFrom(2012);
-        String tokenizedQuery = "(airplane*) AND (issue_date_year:[2012 TO *] OR type:\"portfolio\")";
+        String tokenizedQuery = "(airplane*) AND (issue_date_year:[2012 TO *] OR type:\"portfolio\")"
+                + " AND (visibility:\"public\" OR type:\"material\")";
         long start = 0;
 
         List<Searchable> searchables = Arrays.asList(createMaterial(9L), createMaterial(2L), createPortfolio(2L));
@@ -907,7 +946,7 @@ public class SearchServiceTest {
     @Test
     public void searchNotFromStart() {
         String query = "people";
-        String tokenizedQuery = "people*";
+        String tokenizedQuery = "(people*) AND (visibility:\"public\" OR type:\"material\")";
         SearchFilter searchFilter = new SearchFilter();
         long start = 50;
 
@@ -919,20 +958,20 @@ public class SearchServiceTest {
     @Test
     public void searchHasMoreResultsThanMaxResultsPerPage() {
         String query = "people";
-        String tokenizedQuery = "people*";
+        String tokenizedQuery = "(people*) AND (visibility:\"public\" OR type:\"material\")";
         SearchFilter searchFilter = new SearchFilter();
         long start = 0;
         long totalResults = 1450;
 
         List<Searchable> searchables = Arrays.asList(createMaterial(9L), createMaterial(2L), createPortfolio(2L));
 
-        testSearch(query, tokenizedQuery, searchables, start, totalResults, searchFilter);
+        testSearch(query, tokenizedQuery, searchables, start, totalResults, searchFilter, null);
     }
 
     @Test
     public void searchReturnsOnlyMaterials() {
         String query = "people";
-        String tokenizedQuery = "people*";
+        String tokenizedQuery = "(people*) AND (visibility:\"public\" OR type:\"material\")";
         SearchFilter searchFilter = new SearchFilter();
         long start = 0;
 
@@ -944,7 +983,7 @@ public class SearchServiceTest {
     @Test
     public void searchReturnsOnlyPortfolios() {
         String query = "people";
-        String tokenizedQuery = "people*";
+        String tokenizedQuery = "(people*) AND (visibility:\"public\" OR type:\"material\")";
         SearchFilter searchFilter = new SearchFilter();
         long start = 0;
 
@@ -956,7 +995,7 @@ public class SearchServiceTest {
     @Test
     public void searchReturnsMaterialAndPortfoliosWithSameIds() {
         String query = "people";
-        String tokenizedQuery = "people*";
+        String tokenizedQuery = "(people*) AND (visibility:\"public\" OR type:\"material\")";
         SearchFilter searchFilter = new SearchFilter();
         long start = 0;
 
@@ -966,7 +1005,7 @@ public class SearchServiceTest {
     }
 
     private void testSearch(String query, String tokenizedQuery, List<Searchable> searchables, long start,
-            long totalResults, SearchFilter searchFilter) {
+            long totalResults, SearchFilter searchFilter, User loggedInUser) {
         SearchResponse searchResponse = createSearchResponseWithDocuments(searchables, start, totalResults);
         List<Material> materials = collectMaterialsFrom(searchables);
         List<Long> materialIdentifiers = getIdentifiers(materials);
@@ -985,7 +1024,7 @@ public class SearchServiceTest {
 
         replayAll();
 
-        SearchResult result = searchService.search(query, start, searchFilter);
+        SearchResult result = searchService.search(query, start, searchFilter, loggedInUser);
 
         verifyAll();
 
@@ -996,7 +1035,7 @@ public class SearchServiceTest {
 
     private void testSearch(String query, String tokenizedQuery, List<Searchable> searchables, long start,
             SearchFilter searchFilter) {
-        testSearch(query, tokenizedQuery, searchables, start, searchables.size(), searchFilter);
+        testSearch(query, tokenizedQuery, searchables, start, searchables.size(), searchFilter, null);
     }
 
     private List<Long> getIdentifiers(List<? extends Searchable> searchables) {
@@ -1005,7 +1044,8 @@ public class SearchServiceTest {
         return identifiers;
     }
 
-    private SearchResponse createSearchResponseWithDocuments(List<Searchable> searchables, long start, long totalResults) {
+    private SearchResponse createSearchResponseWithDocuments(List<Searchable> searchables, long start,
+            long totalResults) {
         List<Document> documents = new ArrayList<>();
         for (Searchable searchable : searchables) {
             Document newDocument = new Document();

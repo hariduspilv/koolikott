@@ -16,7 +16,6 @@ import ee.hm.dop.model.ResourceType;
 import ee.hm.dop.model.SearchFilter;
 import ee.hm.dop.model.SearchResult;
 import ee.hm.dop.model.TargetGroup;
-import ee.hm.dop.model.Visibility;
 import ee.hm.dop.model.taxon.Taxon;
 import ee.hm.dop.service.CrossCurricularThemeService;
 import ee.hm.dop.service.KeyCompetenceService;
@@ -75,6 +74,10 @@ public class SearchResource extends BaseResource {
             isSpecialEducation = false;
         }
 
+        if (start == null) {
+            start = 0L;
+        }
+
         SearchFilter searchFilter = new SearchFilter();
         searchFilter.setTaxon(taxon);
         searchFilter.setPaid(paid);
@@ -86,13 +89,8 @@ public class SearchResource extends BaseResource {
         searchFilter.setIssuedFrom(issuedFrom);
         searchFilter.setCrossCurricularTheme(crossCurricularTheme);
         searchFilter.setKeyCompetence(keyCompetence);
-        searchFilter.setVisibility(Visibility.PUBLIC);
 
-        if (start == null) {
-            return searchService.search(query, searchFilter);
-        } else {
-            return searchService.search(query, start, searchFilter);
-        }
+        return searchService.search(query, start, searchFilter, getLoggedInUser());
     }
 
 }

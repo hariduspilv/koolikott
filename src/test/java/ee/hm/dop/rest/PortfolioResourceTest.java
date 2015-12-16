@@ -71,6 +71,17 @@ public class PortfolioResourceTest extends ResourceIntegrationTestBase {
     }
 
     @Test
+    public void getPrivatePortfolioAsAdmin() {
+        login("11111111111");
+        Long id = 7L;
+
+        Portfolio portfolio = getPortfolio(id);
+
+        assertEquals(id, portfolio.getId());
+        assertEquals("This portfolio is private. ", portfolio.getTitle());
+    }
+
+    @Test
     public void getByCreator() {
         String username = "mati.maasikas-vaarikas";
         List<Portfolio> portfolios = doGet(format(GET_BY_CREATOR_URL, username))
@@ -97,6 +108,21 @@ public class PortfolioResourceTest extends ResourceIntegrationTestBase {
     @Test
     public void getByCreatorWhenSomeArePrivateOrNotListedAsCreator() {
         login("78912378912");
+
+        String username = "my.testuser";
+        List<Portfolio> portfolios = doGet(format(GET_BY_CREATOR_URL, username))
+                .readEntity(new GenericType<List<Portfolio>>() {
+                });
+
+        assertEquals(3, portfolios.size());
+        List<Long> expectedIds = Arrays.asList(9L, 10L, 11L);
+        List<Long> actualIds = portfolios.stream().map(p -> p.getId()).collect(Collectors.toList());
+        assertTrue(actualIds.containsAll(expectedIds));
+    }
+
+    @Test
+    public void getByCreatorWhenSomeArePrivateOrNotListedAsAdmin() {
+        login("11111111111");
 
         String username = "my.testuser";
         List<Portfolio> portfolios = doGet(format(GET_BY_CREATOR_URL, username))
@@ -187,6 +213,16 @@ public class PortfolioResourceTest extends ResourceIntegrationTestBase {
         long portfolioId = 7;
         Response response = doGet(format(GET_PORTFOLIO_PICTURE_URL, portfolioId), MediaType.WILDCARD_TYPE);
         assertEquals(Response.Status.NOT_FOUND.getStatusCode(), response.getStatus());
+    }
+
+    @Test
+    public void getPortfolioPictureWhenPortfolioIsPrivateAsAdmin() {
+        login("11111111111");
+        long portfolioId = 7;
+        Response response = doGet(format(GET_PORTFOLIO_PICTURE_URL, portfolioId), MediaType.WILDCARD_TYPE);
+        byte[] picture = response.readEntity(new GenericType<byte[]>() {
+        });
+        assertNotNull(picture);
     }
 
     @Test

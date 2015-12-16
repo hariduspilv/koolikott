@@ -62,8 +62,9 @@ public class SearchResourceTest extends ResourceIntegrationTestBase {
     public void searchWithNullQueryAndNullFilter() {
         SearchResult searchResult = doGet(buildQueryURL(null, 0, new SearchFilter()), SearchResult.class);
 
-        assertEquals(0, searchResult.getTotalResults());
+        assertEquals(2, searchResult.getTotalResults());
         assertEquals(0, searchResult.getStart());
+        assertMaterialIdentifiers(searchResult.getItems(), 2L, 3L);
     }
 
     @Test
@@ -207,6 +208,18 @@ public class SearchResourceTest extends ResourceIntegrationTestBase {
 
         assertMaterialIdentifiers(searchResult.getItems(), 2L, 3L, 4L);
         assertEquals(3, searchResult.getTotalResults());
+        assertEquals(0, searchResult.getStart());
+    }
+
+    @Test
+    public void searchAsAdmin() {
+        login("11111111111");
+
+        String query = "super";
+        SearchResult searchResult = doGet(buildQueryURL(query, 0, new SearchFilter()), SearchResult.class);
+
+        assertMaterialIdentifiers(searchResult.getItems(), 2L, 4L);
+        assertEquals(2, searchResult.getTotalResults());
         assertEquals(0, searchResult.getStart());
     }
 

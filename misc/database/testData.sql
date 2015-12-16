@@ -16,6 +16,7 @@ insert into IssueDate(id, day, month, year) values (13, 4, 5, 2013);
 insert into IssueDate(id, day, month, year) values (14, 5, 4, 2014);
 insert into IssueDate(id, day, month, year) values (15, 6, 3, 2015);
 insert into IssueDate(id, day, month, year) values (16, 7, 2, 2015);
+	
 -- Repositories
 
 insert into Repository(id, baseURL, lastSynchronization, schemaName, isEstonianPublisher) values (1, 'http://koolitaja.eenet.ee:57219/Waramu3Web/OAIHandler', null, 'waramu', false);
@@ -31,6 +32,7 @@ insert into User(id, userName, name, surName, idCode, role) values (4, 'voldemar
 insert into User(id, userName, name, surName, idCode, role) values (5, 'õäöü.õäöü', 'Õäöü', 'Õäöü', '38406304916', 'USER');
 insert into User(id, userName, name, surName, idCode, role) values (6, 'mart.dev', 'dev', 'dev', '39210140032', 'USER');
 insert into User(id, userName, name, surName, idCode, role) values (7, 'ester.tester', 'Ester', 'Tester', '38202020234', 'USER');
+insert into User(id, userName, name, surName, idCode, role) values (8, 'admin.admin', 'Admin', 'Admin', '11111111111', 'ADMIN');
 
 -- Materials
 

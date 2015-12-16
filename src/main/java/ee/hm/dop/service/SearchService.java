@@ -22,10 +22,12 @@ import ee.hm.dop.model.CrossCurricularTheme;
 import ee.hm.dop.model.KeyCompetence;
 import ee.hm.dop.model.Language;
 import ee.hm.dop.model.ResourceType;
+import ee.hm.dop.model.Role;
 import ee.hm.dop.model.SearchFilter;
 import ee.hm.dop.model.SearchResult;
 import ee.hm.dop.model.Searchable;
 import ee.hm.dop.model.TargetGroup;
+import ee.hm.dop.model.User;
 import ee.hm.dop.model.Visibility;
 import ee.hm.dop.model.solr.Document;
 import ee.hm.dop.model.solr.Response;
@@ -57,16 +59,14 @@ public class SearchService {
     @Inject
     private PortfolioDAO portfolioDAO;
 
-    public SearchResult search(String query, long start) {
-        return search(query, start, new SearchFilter());
-    }
-
-    public SearchResult search(String query, SearchFilter searchFilter) {
-        return search(query, 0, searchFilter);
-    }
-
     public SearchResult search(String query, long start, SearchFilter searchFilter) {
+        return search(query, start, searchFilter, null);
+    }
+
+    public SearchResult search(String query, long start, SearchFilter searchFilter, User loggedInUser) {
         SearchResult searchResult = new SearchResult();
+
+        searchFilter.setVisibility(getSearchVisibility(loggedInUser));
 
         SearchResponse searchResponse = doSearch(query, start, searchFilter);
         Response response = searchResponse.getResponse();
@@ -84,6 +84,17 @@ public class SearchService {
         }
 
         return searchResult;
+    }
+
+    private Visibility getSearchVisibility(User loggedInUser) {
+        Visibility visibility = Visibility.PUBLIC;
+
+        if (loggedInUser != null && loggedInUser.getRole() == Role.ADMIN) {
+        	// No visibility filter is applied, so admin can see all searchables
+            visibility = null;
+        }
+
+        return visibility;
     }
 
     private List<Searchable> retrieveSearchedItems(List<Document> documents) {
