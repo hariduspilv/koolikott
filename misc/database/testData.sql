@@ -32,7 +32,7 @@ insert into User(id, userName, name, surName, idCode, role) values (4, 'voldemar
 insert into User(id, userName, name, surName, idCode, role) values (5, 'õäöü.õäöü', 'Õäöü', 'Õäöü', '38406304916', 'USER');
 insert into User(id, userName, name, surName, idCode, role) values (6, 'mart.dev', 'dev', 'dev', '39210140032', 'USER');
 insert into User(id, userName, name, surName, idCode, role) values (7, 'ester.tester', 'Ester', 'Tester', '38202020234', 'USER');
-insert into User(id, userName, name, surName, idCode, role) values (8, 'admin.admin', 'Admin', 'Admin', '11111111111', 'ADMIN');
+insert into User(id, userName, name, surName, idCode, role) values (8, 'admin.admin', 'Admin', 'Admin', '89898989898', 'ADMIN');
 
 -- Materials
 

@@ -73,7 +73,7 @@ public class PortfolioResourceTest extends ResourceIntegrationTestBase {
 
     @Test
     public void getPrivatePortfolioAsAdmin() {
-        login("11111111111");
+        login("89898989898");
         Long id = 7L;
 
         Portfolio portfolio = getPortfolio(id);
@@ -123,7 +123,7 @@ public class PortfolioResourceTest extends ResourceIntegrationTestBase {
 
     @Test
     public void getByCreatorWhenSomeArePrivateOrNotListedAsAdmin() {
-        login("11111111111");
+        login("89898989898");
 
         String username = "my.testuser";
         List<Portfolio> portfolios = doGet(format(GET_BY_CREATOR_URL, username))
@@ -218,7 +218,7 @@ public class PortfolioResourceTest extends ResourceIntegrationTestBase {
 
     @Test
     public void getPortfolioPictureWhenPortfolioIsPrivateAsAdmin() {
-        login("11111111111");
+        login("89898989898");
         long portfolioId = 7;
         Response response = doGet(format(GET_PORTFOLIO_PICTURE_URL, portfolioId), MediaType.WILDCARD_TYPE);
         byte[] picture = response.readEntity(new GenericType<byte[]>() {
@@ -486,5 +486,6 @@ public class PortfolioResourceTest extends ResourceIntegrationTestBase {
         assertEquals("Lifelong_learning_and_career_planning", portfolio.getCrossCurricularThemes().get(0).getName());
         assertEquals("Cultural_and_value_competence", portfolio.getKeyCompetences().get(0).getName());
         assertEquals(Visibility.PUBLIC, portfolio.getVisibility());
+        // assertFalse(portfolio.isDeleted());
     }
 }
