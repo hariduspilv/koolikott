@@ -161,6 +161,7 @@ define(['app.routes', 'services/dependencyResolver', 'utils/taxonUtils'], functi
             	$rootScope.isEditPortfolioMode = path === '/portfolio/edit';
             } else {
             	$rootScope.isEditPortfolioMode = false;
+            	$rootScope.savedPortfolio = null;
             }
         });
     });

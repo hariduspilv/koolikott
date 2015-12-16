@@ -37,7 +37,6 @@ define(['app'], function(app)
                     $scope.editPortfolio = function() {
 	                    var portfolioId = $route.current.params.id;
 	                    $location.url("/portfolio/edit?id="+portfolioId);
-	                    $rootScope.savedPortfolio = $scope.portfolio;
                     };
 
                     $scope.showEditMetadataDialog = function() {
