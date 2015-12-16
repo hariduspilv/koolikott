@@ -33,11 +33,15 @@ define(['app'], function(app)
 				}
 
 				$scope.formatName = function(name) {
-					return formatNameToInitials(name);
+					if(name) {
+						return formatNameToInitials(name);
+					}
 				}
 
 				$scope.formatSurname = function(surname){
-					return formatSurnameToInitialsButLast(surname);
+					if(surname) {
+						return formatSurnameToInitialsButLast(surname);
+					}
 				}
 
 				$scope.isOfType = function(type) {

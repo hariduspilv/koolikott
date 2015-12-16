@@ -7,12 +7,21 @@
             <div layout="row">
               <div layout="column" flex="75">
                 <div layout="row">
-                  <a flex data-ng-href="{{material.source}}" target="_blank">
-                    <h1 data-ng-bind="getCorrectLanguageString(material.titles)"></h1>
-                    <md-tooltip md-direction="bottom">
-                      Avaneb uues aknas
-                    </md-tooltip>
-                  </a>
+
+                    <a flex data-ng-if="sourceType === 'LINK' && !material.embeddable" data-ng-href="{{material.source}}" target="_blank">
+                        <h1 data-ng-bind="getCorrectLanguageString(material.titles)"></h1>
+                        <md-tooltip md-direction="left">
+                            <span data-translate="MATERIAL_VIEW_LINK_TO_MATERIAL">Open material</span>
+                        </md-tooltip>
+                    </a>
+
+                    <a flex data-ng-if="sourceType === 'LINK' && material.embeddable" data-ng-href="#" ng-click="showSourceFullscreen($event)">
+                        <h1 data-ng-bind="getCorrectLanguageString(material.titles)"></h1>
+                        <md-tooltip md-direction="left">
+                            <span data-translate="MATERIAL_VIEW_LINK_TO_MATERIAL"></span>
+                        </md-tooltip>
+                    </a>
+
                   <md-menu>
                     <md-button class="md-icon-button" ng-click="$mdOpenMenu($event)">
                       <md-icon md-menu-origin>more_vert</md-icon>
@@ -34,7 +43,7 @@
                       <small class="md-caption">
                         <span data-translate="DETAIL_VIEW_SUBJECT"></span>
                       </small>
-                      <br />
+                      <br/>
                       <span data-ng-repeat="subject in material.subjects">
                         {{'SUBJECT_' + subject.name.toUpperCase() | translate}}{{$last ? '' : ', '}}
                       </span>
@@ -72,17 +81,8 @@
 
                 <div layout="column" class="on-left" flex>
                   <p class="md-body-1 description" data-ng-bind="getCorrectLanguageString(material.descriptions)"></p>
-                  <!-- TODO: you have to warn before you download something or send into external view -->
-                  <!-- TODO: don't show if TEADMATA or undefined. Hide the headline as well, please -->
-                  <!-- TODO: date created cant be undefined. It has been created in one day.-->
-                  <!-- TODO: remove the link properly. I didn't dare to delete it - you might need something from there-->
-                  <!-- TODO: img display instead icon if we have image -->
                   <!-- TODO: mobile view after stable release -->
-                  <!-- TODO: I think this fullscreen is a really bad idea -->
 
-
-                  <!-- TODO: NEEDS FIXING AFTER STYLE -->
-                  <p>
                     <div data-ng-if="sourceType === 'YOUTUBE'" class="embed-responsive embed-responsive-16by9">
                       <div class="video-container">
                         <youtube-video video-url="material.source" player-width="'768'" player-height="'432'" class="embed-responsive-item"></youtube-video>
@@ -93,30 +93,7 @@
                       <div data-dop-slideshare source="material.source" width="767" height="639" class="embed-responsive-item" fail-callback="slideshareFail()"></div>
                     </div>
 
-                    <div data-ng-if="sourceType === 'LINK' && !material.embeddable">
-                      <!-- <md-button data-ng-href="{{material.source}}" target="_blank">
-                        Vaata
-                        <md-icon class="material-icons md-primary">send</md-icon>
-                        <md-tooltip md-direction="top">
-                          Avaneb uues aknas
-                        </md-tooltip>
-                      </md-button> -->
-
-                      <!-- <span class="item-label" data-translate="MATERIAL_VIEW_LINK_TO_MATERIAL">Open material</span> -->
-                      <!-- <a data-ng-href="{{material.source}}" target="_blank" class="wrapped regular-link md-primary">
-                        <span class="item-link" data-ng-bind="material.source"></span>
-                      </a> -->
-                    </div>
-
-                    <div data-ng-if="sourceType === 'LINK' && material.embeddable">
-                      <i class="material-icons">link</i> <span class="item-label" data-translate="MATERIAL_VIEW_LINK_TO_MATERIAL">Open material</span>
-                      <a href="#" ng-click="showSourceFullscreen($event)">
-                        <span class="item-link" data-ng-bind="material.source"></span>
-                      </a>
-                    </div>
-                  </p>
-
-                  <iframe data-ng-src="{{material.iframeSource}}" data-ng-show="showMaterialContent" width="100%" height="100%" ngsf-fullscreen="fullscreenCtrl"></iframe>
+                    <iframe data-ng-src="{{material.iframeSource}}" data-ng-show="showMaterialContent" width="100%" height="100%" ngsf-fullscreen="fullscreenCtrl"></iframe>
                 </div>
 
                 <div data-ng-if="!isNullOrZeroLength(material.tags)">
@@ -132,14 +109,31 @@
 
               <div layout="column" flex="25" class="divider-left" layout-align="start start">
                 <div class="card-cover">
-                  <md-icon class="icon-kind">theaters</md-icon>
-                  <a class="card-hover" data-ng-href="{{material.source}}" target="_blank">
-                    <md-icon class="material-icons">send</md-icon>
-                    <md-tooltip md-direction="bottom">
-                      Avaneb uues aknas
-                    </md-tooltip>
-                  </a>
+                  <img data-ng-if="material.hasPicture" data-ng-src="rest/material/getPicture?materialId={{material.id}}"/>
+                  <span data-ng-if="!material.hasPicture">
+                    <md-icon class="icon-kind" data-ng-bind="getType()"></md-icon>
+                  </span>
+
+
+                  <span data-ng-if="sourceType === 'LINK' && !material.embeddable">
+                    <a class="card-hover" data-ng-href="{{material.source}}" target="_blank">
+                      <md-icon class="material-icons">send</md-icon>
+                      <md-tooltip md-direction="bottom">
+                        <span data-translate="MATERIAL_VIEW_LINK_TO_MATERIAL">Open material</span>
+                      </md-tooltip>
+                    </a>
+                  </span>
+
+                  <span data-ng-if="sourceType === 'LINK' && material.embeddable">
+                    <a class="card-hover" data-ng-href="#" ng-click="showSourceFullscreen($event)">
+                      <md-icon class="material-icons">send</md-icon>
+                      <md-tooltip md-direction="bottom">
+                        <span data-translate="MATERIAL_VIEW_LINK_TO_MATERIAL"></span>
+                      </md-tooltip>
+                    </a>
+                  </span>
                 </div>
+
                 <md-content>
                   <p class="md-body-2 meta" data-ng-if="!isNullOrZeroLength(material.authors)">
                     <small class="md-caption">
@@ -148,6 +142,22 @@
                     <a href="#" data-ng-click="getAuthorSearchURL(author.name, author.surname)" data-ng-repeat="author in material.authors">
                         {{author.name}} {{author.surname}}{{$last ? '' : ', '}}
                     </a>
+                  </p>
+
+                  <p class="md-body-2 meta" data-ng-if="isNullOrZeroLength(material.authors)">
+                    <small class="md-caption">
+                      <span data-translate="CREATOR"></span>:
+                    </small>
+                    <a href="#/{{material.creator.username}}">
+                      {{material.creator.name}} {{material.creator.surname}}
+                    </a>
+                  </p>
+
+                  <p class="md-body-2 meta" data-ng-if="material.added">
+                    <small class="md-caption">
+                      <span data-translate="ADDED"></span>:
+                    </small>
+                    {{formatMaterialUpdatedDate(material.added)}}
                   </p>
 
                   <p class="md-body-2 meta" data-ng-if="material.updated">
@@ -202,9 +212,9 @@
 
                   <p class="md-body-2 meta">
                     <small class="md-caption">
-                      Vaadatud
+                      <span data-translate="VIEW_COUNT"></span>:
                     </small>
-                    <span data-ng-bind="material.views"></span> x
+                    <span data-ng-bind="material.views"></span>
                   </p>
                 </md-content>
               </div>
@@ -217,7 +227,8 @@
               <div data-dop-comments-card comments="material.comments" comment="newComment" submit-click="addComment()"></div>
               <span flex></span>
               <!-- rating control -->
-              <div data-dop-rating like-message="{{ 'MATERIAL_LIKED' | translate }}" dislike-message="{{ 'MATERIAL_DISLIKED' | translate }}"></div>
+              <div data-dop-rating like-message="{{ 'MATERIAL_LIKED' | translate }}"
+                   dislike-message="{{ 'MATERIAL_DISLIKED' | translate }}"></div>
             </div>
           </md-card-content>
         </md-card>

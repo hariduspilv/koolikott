@@ -7,11 +7,14 @@ define(['app'], function(app) {
         function($mdDialog, $filter) {
             return {
                 showDeleteConfirmationDialog: function(title, content, onConfirm, onCancel) {
+                    this.showConfirmationDialog(title, content, 'ALERT_CONFIRM_POSITIVE', 'ALERT_CONFIRM_NEGATIVE', onConfirm, onCancel)
+                },
+                showConfirmationDialog: function(title, content, ok, cancel, onConfirm, onCancel) {
                     var confirm = $mdDialog.confirm()
                         .title($filter('translate')(title))
                         .content($filter('translate')(content))
-                        .ok($filter('translate')('ALERT_CONFIRM_POSITIVE'))
-                        .cancel($filter('translate')('ALERT_CONFIRM_NEGATIVE'));
+                        .ok($filter('translate')(ok))
+                        .cancel($filter('translate')(cancel));
                         
                     $mdDialog.show(confirm).then(function() {
                         onConfirm();     
@@ -20,7 +23,7 @@ define(['app'], function(app) {
                             onCancel();
                         }
                     });
-                }
+                },
             };
         }
     ]);

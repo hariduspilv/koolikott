@@ -24,11 +24,17 @@
         </md-option>
       </md-select>
     </md-input-container>
-    <md-slider flex md-discrete ng-model="detailedSearch.issueDate" step="1" min="{{issueDateFirstYear}}" max="{{issueDateLastYear}}" aria-label="{{DETAILED_SEARCH_ISSUE_DATE_FROM | translate}}">
-    </md-slider>
-    <span data-ng-if="getEffectiveIssueDate()">
-      <span data-translate="DETAILED_SEARCH_ISSUE_DATE_FROM" />{{getEffectiveIssueDate()}}<span data-translate="DETAILED_SEARCH_ISSUE_DATE_OR_LATER" />
-    </span>
+    <div layout>
+      <div flex="25" layout layout-align="center center">
+        <span class="md-body-1">Avaldatud <br> (alates)</span>
+      </div>
+      <md-slider flex md-discrete ng-model="detailedSearch.issueDate" step="1" min="{{issueDateFirstYear}}" max="{{issueDateLastYear}}" aria-label="{{DETAILED_SEARCH_ISSUE_DATE_FROM | translate}}">
+      </md-slider>
+      <!-- TODO: Can we leave the slider tooltip visible if dirty? -->
+      <!-- <span data-ng-if="getEffectiveIssueDate()">
+        <span data-translate="DETAILED_SEARCH_ISSUE_DATE_FROM" />{{getEffectiveIssueDate()}}<span data-translate="DETAILED_SEARCH_ISSUE_DATE_OR_LATER" />
+      </span> -->
+    </div>
   </div>
 
   <div data-flex>
@@ -71,7 +77,7 @@
       </md-checkbox>
       <md-checkbox data-ng-model="detailedSearch.paid" class="md-primary" flex>
         <span data-translate="DETAILED_SEARCH_INCLUDE_PAID"></span>
-      </md-checkbox>
+      </md-checkbox>      
       <md-radio-group data-ng-model="detailedSearch.type">
         <md-radio-button value="material" class="md-primary">
           <span data-translate="DETAILED_SEARCH_MATERIALS"></span>
@@ -86,7 +92,6 @@
     </div>
   </div>
 </div>
-
 <div class="md-actions" layout="row" layout-sm="column" layout-align="end start" layout-padding>
   <md-button data-ng-click="clear()" data-translate="DETAILED_SEARCH_CLEAR" aria-label="{{'DETAILED_SEARCH_CLEAR' | translate}}"></md-button>
   <md-button type="submit" class="md-primary md-button" data-ng-click="search()" data-translate="DETAILED_SEARCH_SUBMIT" aria-label="{{'DETAILED_SEARCH_SUBMIT' | translate}}"></md-button>

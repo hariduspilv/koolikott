@@ -5,22 +5,31 @@ define(['app'], function(app)
             return {
             	scope: {
                     portfolio: '=',
+                    comment: '=',
+                    submitClick: "&"
                 },
                 templateUrl: 'directives/portfolioSummaryCard/portfolioSummaryCard.html',
                 controller: function ($scope, $location) {
 
                 	$scope.isViewPortforlioPage = $rootScope.isViewPortforlioPage;
                 	$scope.isEditPortfolioMode = $rootScope.isEditPortfolioMode;
-                	
-                	$scope.isOwner = function() {
+
+                    $scope.getEducationalContext = function() {
+                        return $rootScope.taxonUtils.getEducationalContext($scope.portfolio.taxon)
+                            .name.toUpperCase();
+                    };
+
+                    $scope.isOwner = function() {
                 		if (!authenticatedUserService.isAuthenticated()) {
                 			return false;
                 		}
-                		
-                		var creatorId = $scope.portfolio.creator.id;
-                		var userId = authenticatedUserService.getUser().id;
-                		return creatorId === userId;
-                	}
+
+                        if($scope.portfolio) {
+                            var creatorId = $scope.portfolio.creator.id;
+                            var userId = authenticatedUserService.getUser().id;
+                            return creatorId === userId;
+                        }
+                    };
  
                     $scope.editPortfolio = function() {
 	                    var portfolioId = $route.current.params.id;
@@ -28,13 +37,17 @@ define(['app'], function(app)
 	                    $rootScope.savedPortfolio = $scope.portfolio;
                     };
 
-                    $scope.showEditMetadataoDialog = function() {
+                    $scope.showEditMetadataDialog = function() {
                         $mdDialog.show({
                             controller: 'addPortfolioDialog',
                             templateUrl: 'views/addPortfolioDialog/addPortfolioDialog.html',
                             locals:{portfolio: $scope.portfolio}
                         });
                     };
+                    
+                    $scope.addComment = function() {
+                        $scope.submitClick();
+                    }
                 }
             };
         }]);

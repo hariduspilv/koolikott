@@ -2,8 +2,8 @@
   <div layout layout-align="center start" flex>
     <section layout="row" layout-sm="column" flex flex-gt-md="80">
       <article flex="75" flex-sm="100" class="md-padding" role="main">
-        <h2 class="md-headline" data-ng-if="myProfile" data-translate="MYPROFILE_PAGE_TITLE_PORTFOLIOS"></h2>
-        <h2 class="md-headline" data-ng-if="!myProfile" data-translate="PROFILE_PAGE_TITLE_PORTFOLIOS"></h2>
+        <h1 class="md-headline" data-ng-if="myProfile" data-translate="MYPROFILE_PAGE_TITLE_PORTFOLIOS"></h1>
+        <h1 class="md-headline" data-ng-if="!myProfile" data-translate="PROFILE_PAGE_TITLE_PORTFOLIOS"></h1>
 
         <md-grid-list md-cols-xl="7" md-cols-gt-md="4" md-cols-md="3" md-cols-sm="2" md-gutter="10px" md-row-height="280px">
           <md-grid-tile data-ng-repeat="portfolio in portfolios">
@@ -23,7 +23,7 @@
 
       <div flex="25" flex-sm="100" class="md-padding" role="sidebar">
         <aside layout="column" class="sidebar">
-          <h2 class="md-headline" data-ng-if="myProfile" data-translate="MYPROFILE_PAGE_TITLE_MY_DATA"></h2>
+          <h1 class="md-headline" data-ng-if="myProfile" data-translate="MYPROFILE_PAGE_TITLE_MY_DATA"></h1>
 
           <p data-ng-if="myProfile">
             <strong>{{user.name}} {{user.surname}}</strong><br />

@@ -17,11 +17,17 @@ define(['app'], function(app)
 
                         addMaterialScope.material ={};
                         addMaterialScope.material.url = $scope.chapter.resourcePermalink;
+                        addMaterialScope.isChapterMaterial = true;
                         $mdDialog.show({
                             controller: 'addMaterialDialog',
                             templateUrl: 'views/addMaterialDialog/addMaterialDialog.html',
                             scope: addMaterialScope
-                        });
+                        }).then(closeDialog);
+
+                        function closeDialog(material) {
+                            $scope.chapter.materials.push(material);
+
+                        }
                     }
                 };
             }
