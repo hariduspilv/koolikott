@@ -350,6 +350,11 @@ define(['app'], function(app)
                         $scope.detailedSearch.crossCurricularTheme = null;
                         $scope.detailedSearch.keyCompetence = null;
                     }
+
+                    // Target groups
+                    if (educationalContext && educationalContext.id === VOCATIONAL_EDUCATION_ID) {
+                        $scope.detailedSearch.targetGroups = [];
+                    }
                 }
 
                 $scope.clear = function() {
