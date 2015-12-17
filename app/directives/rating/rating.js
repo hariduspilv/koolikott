@@ -30,12 +30,14 @@ define(['app'], function(app)
 	                	$scope.rating.dislikes = $scope.material.dislikes;
 	                	
 	                	$scope.entity = $scope.material;
-	                	$scope.url = "rest/material/";
+	                	$scope.url = "rest/material/";  	
                     }
                     
-                	getUserLike();
+                    if($scope.entity && $scope.entity.type) {
+                    	getUserLike();
+                    }
                 }
-                
+
                 $scope.like = function() {
                 	if($scope.allowRequests) {
                 		$scope.allowRequests = false;
@@ -132,6 +134,21 @@ define(['app'], function(app)
                 function requestFailed() {
                 	$scope.allowRequests = true;
                 }
+                
+                $scope.$watch('portfolio', function(newValue, oldValue) {
+                	if(newValue && newValue.type) {
+                		if(!oldValue || !oldValue.type) {
+                			init();
+                		}
+                	}
+                }, true);
+                $scope.$watch('material', function(newValue, oldValue) {
+                	if(newValue && newValue.type) {
+                		if(!oldValue || !oldValue.type) {
+                			init();
+                		}
+                	}
+                }, true);
                 
                 init();
             }
