@@ -41,8 +41,6 @@ ul {
 
 // Page specific stylesheets
 @import "pages/add.scss";
-@import "pages/view-portfolio.scss";
-@import "pages/view-material.scss";
 @import "pages/home.scss";
 
 // Dialog specific stylesheets
@@ -118,4 +116,9 @@ md-fab-speed-dial {
 /* fixes select overflow */
 .md-select-value *:first-child {
   flex: 1;
+}
+
+#scrollable-content {
+  overflow-y: auto;
+  overflow-x: hidden;
 }
