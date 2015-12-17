@@ -10,13 +10,37 @@
   </md-toolbar>
   <form>
     <md-content class="md-padding">
+      <div layout="row" layout-align="center center">
+        <div flex="10" class="md-padding">
+          <div data-ngf-drop ngf-select ng-model="material.picture" class="drop-box"
+            data-ngf-drag-over-class="'dragover'"
+            data-ngf-multiple="false"
+            data-accept="image/*"
+            data-ngf-pattern="'image/*'"
+            layout="row"
+            layout-align="center center" flex>
+            <span flex>
+              <md-icon>add_a_photo</md-icon>
+            </span>
+          </div>
+          <md-tooltip><span data-translate="PORTFOLIO_PHOTO_UPLOAD_HELP"></span></md-tooltip>
+        </div>
+        <md-input-container flex="90">
+          <label>Pealkiri</label>
+          <input data-ng-model="portfolio.title" id="add-portfolio-title-input">
+        </md-input-container>
+      </div>
+
+      <!-- image preview -->
       <md-input-container class="md-block">
-        <label>Pealkiri</label>
-        <input data-ng-model="portfolio.title" id="add-portfolio-title-input" placeholder="Näiteks: Bioloogia töövihik">
+        <div data-ng-if="material.picture" class="drop-box-preview">
+          <h3 class="md-subhead" data-translate="MATERIAL_PHOTO_PREVIEW"></h3>
+          <img data-ngf-thumbnail="material.picture" ngf-size="{width: 300, height: 300, quality: 0.9}" alt="photo">
+        </div>
       </md-input-container>
 
       <md-input-container class="md-block">
-        <label>Kirjeldus (valikuline)</label>
+        <label>Kirjeldus</label>
         <textarea id="add-portfolio-description-input" data-ng-model="portfolio.summary" columns="1" md-maxlength="150"></textarea>
       </md-input-container>
 
@@ -26,27 +50,11 @@
 
       <md-input-container class="md-block">
         <label>&nbsp;</label>
-        <md-chips data-ng-model="portfolio.tags" delete-button-label="Eemalda märksõna" delete-hint="Vajuta x märksõna kustutamiseks" secondary-placeholder="Lisa märksõna (valikuline)">
+        <md-chips data-ng-model="portfolio.tags" delete-button-label="Eemalda märksõna" delete-hint="Kustutamiseks vajuta x" secondary-placeholder="Märksõnad">
         </md-chips>
+        <div class="hint" ng-if="showHints">Lisamiseks vajuta Enter</div>
       </md-input-container>
 
-      <div data-ngf-drop ngf-select ng-model="portfolio.picture" class="drop-box"
-           data-ngf-drag-over-class="'dragover'"
-           data-ngf-multiple="false"
-           data-accept="image/*"
-           data-ngf-pattern="'image/*'"
-           layout="row"
-           layout-align="center center">
-              <span flex>
-                <md-icon>attach_file</md-icon>
-                <span data-translate="PORTFOLIO_PHOTO_UPLOAD_HELP"></span>
-              </span>
-      </div>
-
-      <div data-ng-if="portfolio.picture" class="drop-box-preview">
-        <h3 class="md-subhead" data-translate="PORTFOLIO_PHOTO_PREVIEW"></h3>
-        <img data-ngf-thumbnail="portfolio.picture" ngf-size="{width: 300, height: 300, quality: 0.9}" alt="photo">
-      </div>
     </md-content>
     <div class="md-actions">
       <span flex></span>

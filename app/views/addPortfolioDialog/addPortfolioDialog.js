@@ -2,7 +2,9 @@ define(['app'], function(app)
 {
     app.controller('addPortfolioDialog', ['$scope', '$mdDialog', '$location', 'serverCallService', '$rootScope', 'portfolio',
         function($scope, $mdDialog, $location, serverCallService, $rootScope, portfolio) {
-        
+
+          $scope.showHints = true;
+
             function init() {
                 $scope.portfolio = portfolio;
 
@@ -10,7 +12,7 @@ define(['app'], function(app)
                     $scope.isEditPortfolio = true;
                 }
             }
-            
+
             $scope.cancel = function() {
                 $mdDialog.hide();
             };
@@ -28,7 +30,7 @@ define(['app'], function(app)
                 }
                 return base64Picture;
             }
-            
+
             function createPortfolioSuccess(portfolio) {
             	if (isEmpty(portfolio)) {
             		createPortfolioFailed();
@@ -38,18 +40,18 @@ define(['app'], function(app)
 	                $location.url('/portfolio/edit?id=' + portfolio.id);
 	            }
 			}
-			
+
 			function createPortfolioFailed(){
 				log('Creating portfolio failed.');
 			}
-			
+
             $scope.update = function() {
                 var url = "rest/portfolio/update";
                 $scope.portfolio.picture = getPicture($scope.portfolio);
 
                 serverCallService.makePost(url, $scope.portfolio, updatePortfolioSuccess, createPortfolioFailed);
             };
-            
+
             function updatePortfolioSuccess(portfolio) {
                 if (isEmpty(portfolio)) {
                     createPortfolioFailed();
@@ -59,7 +61,7 @@ define(['app'], function(app)
                     $mdDialog.hide();
                 }
             }
-            
+
             init();
         }
     ]);

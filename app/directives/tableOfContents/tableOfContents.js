@@ -20,7 +20,7 @@ define(['app'], function(app)
                     	combinedId += '-' + subchapterId;
                     }
                     var $chapter = angular.element(document.getElementById(combinedId));
-                    var $context = angular.element(document.getElementById('main-content'));
+                    var $context = angular.element(document.getElementById('scrollable-content'));
 
                     $context.scrollToElement($chapter, 30, 200);
                 }

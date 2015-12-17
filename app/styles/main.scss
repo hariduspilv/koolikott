@@ -41,8 +41,6 @@ ul {
 
 // Page specific stylesheets
 @import "pages/add.scss";
-@import "pages/view-portfolio.scss";
-@import "pages/view-material.scss";
 @import "pages/home.scss";
 
 // Dialog specific stylesheets
@@ -87,6 +85,7 @@ h1 {
     line-height: 22px;
   }
 }
+
 .portfolio-chapter-subchapter {
   .md-body-1  {
     font-size: 14px;
@@ -115,7 +114,37 @@ md-fab-speed-dial {
   display: none;
 }
 
+.hint {
+  position: absolute;
+  left: 2px;
+  right: auto;
+  bottom: -16px;
+  font-size: 12px;
+  line-height: 14px;
+  transition: all 0.3s cubic-bezier(0.55, 0, 0.55, 0.2);
+  color: grey;
+  text-align: right;
+}
+
+.hint.ng-hide,
+.hint.ng-enter,
+.hint.ng-leave.ng-leave-active {
+  bottom: 26px;
+  opacity: 0;
+}
+
+.hint.ng-leave,
+.hint.ng-enter.ng-enter-active {
+  bottom: 7px;
+  opacity: 1;
+}
+
 /* fixes select overflow */
 .md-select-value *:first-child {
   flex: 1;
+}
+
+#scrollable-content {
+  overflow-y: auto;
+  overflow-x: hidden;
 }

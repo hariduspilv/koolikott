@@ -65,7 +65,7 @@ define(['app.routes', 'services/dependencyResolver', 'utils/taxonUtils'], functi
 
         return data;
     }
-    
+
     function parseJSONResponse(data, headersGetter) {
         if (data && (headersGetter()['content-type'] === 'application/json')) {
             return JSOG.parse(data);
@@ -87,76 +87,33 @@ define(['app.routes', 'services/dependencyResolver', 'utils/taxonUtils'], functi
 
 // http://stackoverflow.com/questions/30123735/how-to-create-multiple-theme-in-material-angular
     function configureTheme($mdThemingProvider) {
-      $mdThemingProvider.theme('default')
-          .primaryPalette('blue', {
-            'default': '600'
-          })
-          .accentPalette('purple', {
-            'default': '500'
-          })
-          .warnPalette('red')
-          .backgroundPalette('grey');
 
-    $mdThemingProvider.theme('custom')
-          .primaryPalette('grey')
-          .accentPalette('deep-purple')
-          .warnPalette('green')
 
-    //create yr own palette
-    $mdThemingProvider.definePalette('ranitsPalette', {
-        '50': 'FF0000',
-        '100': 'ffcdd2',
-        '200': 'ef9a9a',
-        '300': 'e57373',
-        '400': 'ef5350',
-        '500': '#f44336',
-        '600': 'e53935',
-        '700': 'd32f2f',
-        '800': 'c62828',
-        '900': 'b71c1c',
-        'A100': 'ff8a80',
-        'A200': 'ff5252',
-        'A400': 'ff1744',
-        'A700': 'd50000',
-        'contrastDefaultColor': 'light',    // whether, by default, text         (contrast)
-                                    // on this palette should be dark or light
-        'contrastDarkColors': ['50', '100', //hues which contrast should be 'dark' by default
-         '200', '300', '400', 'A100'],
-        'contrastLightColors': undefined,    // could also specify this if default was 'dark'
-        'hue-2': ['50'],
-    });
-
-   $mdThemingProvider.theme('custom2')
-        .primaryPalette('ranitsPalette', {
-          'hue-2': '50',
-          'hue-3': '600'
+        var customBlueMap = $mdThemingProvider.extendPalette('blue', {
+          'contrastDefaultColor': 'light',
+          'contrastDarkColors': ['50'],
+          '50': 'ffffff'
         });
 
-        // var customBlueMap = $mdThemingProvider.extendPalette('blue', {
-        //   'contrastDefaultColor': 'light',
-        //   'contrastDarkColors': ['50'],
-        //   '50': 'ffffff'
-        // });
-        //
-        // $mdThemingProvider.definePalette('customBlue', customBlueMap);
-        // $mdThemingProvider.theme('default')
-        // .primaryPalette('customBlue', {
-        //   'default': '500',
-        //   'hue-1': '50'
-        // })
-        // .accentPalette('purple',  {
-        //   'default': '500'
-        // });
-        //
-        // $mdThemingProvider.theme('input', 'default').primaryPalette('grey');
+        $mdThemingProvider.definePalette('customBlue', customBlueMap);
+        $mdThemingProvider.theme('default')
+        .primaryPalette('customBlue', {
+          'default': '500',
+          'hue-1': '50'
+        })
+        .accentPalette('purple',  {
+          'default': '500'
+        });
+
+        $mdThemingProvider.theme('input', 'default').primaryPalette('grey');
     }
-    
-    app.run(function($rootScope, $location) {        
+
+    app.run(function($rootScope, $location) {
     	$rootScope.$on('$routeChangeSuccess', function() {
             var path = $location.path();
-            
+
             $rootScope.isViewPortforlioPage = path === '/portfolio';
-            
+
             if (!$rootScope.isEditPortfolioMode) {
             	$rootScope.isEditPortfolioMode = path === '/portfolio/edit';
             } else {
