@@ -221,7 +221,7 @@ define(['app'], function (app) {
              */
             $scope.searchKeyCompetences = function (query) {
                 return query ? $scope.material.keyCompetences
-                    .filter(searchFilter(query, "KEY_COMPETENCE_")) : [];
+                    .filter(searchFilter(query, "KEY_COMPETENCE_")) : $scope.material.keyCompetences;
             };
 
             /**
@@ -229,7 +229,7 @@ define(['app'], function (app) {
              */
             $scope.searchCrossCurricularThemes = function (query) {
                 return query ? $scope.material.crossCurricularThemes
-                    .filter(searchFilter(query, "CROSS_CURRICULAR_THEME_")) : [];
+                    .filter(searchFilter(query, "CROSS_CURRICULAR_THEME_")) : $scope.material.crossCurricularThemes;
             };
 
             /**

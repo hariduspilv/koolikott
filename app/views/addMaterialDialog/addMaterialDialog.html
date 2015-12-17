@@ -176,11 +176,13 @@
             <h6 class="md-caption md-padding" data-translate="MATERIAL_KEY_COMPETENCES"></h6>
             <md-chips ng-model="material.selectedKeyCompetences" md-autocomplete-snap="" md-require-match="true" flex>
               <md-autocomplete
+                md-no-cache="true"
                 md-selected-item="material.selectedKeyCompetence"
                 md-search-text="material.competenceSearchText"
                 md-items="keyCompetence in searchKeyCompetences(material.competenceSearchText)"
                 md-item-text="translate(keyCompetence.name, 'KEY_COMPETENCE_')"
                 placeholder="{{ 'MATERIAL_SEARCH_KEY_COMPETENCE' | translate }}"
+                md-min-length="0"
                 md-autoselect>
                 <span md-highlight-text="material.competenceSearchText" md-highlight-flags="^i">
                   {{translate(keyCompetence.name, 'KEY_COMPETENCE_')}}
@@ -203,6 +205,7 @@
                 md-items="crossCurricularTheme in searchCrossCurricularThemes(material.crossCurricularSearchText)"
                 md-item-text="translate(crossCurricularTheme.name, 'CROSS_CURRICULAR_THEME_')"
                 placeholder="{{ 'MATERIAL_SEARCH_CROSS_CURRICULAR_THEME' | translate }}"
+                md-min-length="0"
                 md-autoselect>
                 <span md-highlight-text="material.crossCurricularSearchText" md-highlight-flags="^i">
                   {{translate(crossCurricularTheme.name, 'CROSS_CURRICULAR_THEME_')}}
