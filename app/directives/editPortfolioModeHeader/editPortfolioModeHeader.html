@@ -29,7 +29,7 @@
               <md-icon>visibility</md-icon> <span data-translate="PORTFOLIO_VISIBILITY_PUBLIC"></span> <span class="md-alt-text"><md-icon>check</md-icon></span>
             </md-button>
             <md-button data-ng-if="savedPortfolio.visibility != 'PUBLIC'" aria-label="{{PORTFOLIO_VISIBILITY_MAKE_PUBLIC | translate}}" data-ng-click="makePublic()">
-              <md-icon>visibility</md-icon> <span data-translate="PORTFOLIO_VISIBILITY_MAKE_PUBLIC"></span> 
+              <md-icon>visibility</md-icon> <span data-translate="PORTFOLIO_VISIBILITY_MAKE_PUBLIC"></span>
             </md-button>
           </md-menu-item>
           <md-menu-divider></md-menu-divider>
@@ -38,7 +38,7 @@
               <md-icon>link</md-icon> <span data-translate="PORTFOLIO_VISIBILITY_NOT_LISTED"></span> <span class="md-alt-text"><md-icon>check</md-icon></span>
             </md-button>
             <md-button data-ng-if="savedPortfolio.visibility != 'NOT_LISTED'" aria-label="{{PORTFOLIO_VISIBILITY_MAKE_NOT_LISTED | translate}}" data-ng-click="makeNotListed()">
-              <md-icon>link</md-icon> <span data-translate="PORTFOLIO_VISIBILITY_MAKE_NOT_LISTED"></span> 
+              <md-icon>link</md-icon> <span data-translate="PORTFOLIO_VISIBILITY_MAKE_NOT_LISTED"></span>
             </md-button>
           </md-menu-item>
           <md-menu-divider></md-menu-divider>
@@ -47,7 +47,7 @@
               <md-icon>visibility_off</md-icon> <span data-translate="PORTFOLIO_VISIBILITY_PRIVATE"></span> <span class="md-alt-text"><md-icon>check</md-icon></span>
             </md-button>
             <md-button data-ng-if="savedPortfolio.visibility != 'PRIVATE'" aria-label="{{PORTFOLIO_VISIBILITY_MAKE_PRIVATE | translate}}" data-ng-click="makePrivate()">
-              <md-icon>visibility_off</md-icon> <span data-translate="PORTFOLIO_VISIBILITY_MAKE_PRIVATE"></span> 
+              <md-icon>visibility_off</md-icon> <span data-translate="PORTFOLIO_VISIBILITY_MAKE_PRIVATE"></span>
             </md-button>
           </md-menu-item>
         </md-menu-content>
@@ -60,7 +60,7 @@
 </md-toolbar>
 
 <div class="md-toolbar-expandable" ng-show="showSearch">
-  <md-toolbar class="md-hue-1">
+  <md-toolbar class="md-accent">
     <div layout-align="start start" layout="row" layout-sm="column">
       <div class="md-toolbar-tools" flex="100" flex-gt-sm="90">
         <div class="navbar-search" layout="row" flex>
@@ -72,9 +72,9 @@
           </md-input-container>
         </div>
 
-        <md-button aria-label="Open Settings" class="md-icon-button" ng-click="showFilter = !showFilter">
+        <!-- <md-button aria-label="Open Settings" class="md-icon-button" ng-click="showFilter = !showFilter">
           <ng-md-icon icon="filter_list"></ng-md-icon>
-        </md-button>
+        </md-button> -->
 
         <md-button ng-click="showSearch = showFilter = !showSearch" aria-label="Back" class="md-icon-button">
           <ng-md-icon icon="close"></ng-md-icon>
