@@ -1,6 +1,9 @@
 define(['app'], function (app) {
     app.controller('addMaterialDialog', ['$scope', '$mdDialog', 'serverCallService', 'translationService', 'metadataService', '$filter', '$location', '$rootScope',
         function ($scope, $mdDialog, serverCallService, translationService, metadataService, $filter, $location, $rootScope) {
+
+            $scope.showHints = true;
+
             var preferredLanguage;
 
             var TABS_COUNT = 2;
@@ -70,7 +73,7 @@ define(['app'], function (app) {
 
             $scope.addNewTaxon = function () {
                 var educationalContext = $rootScope.taxonUtils.getEducationalContext($scope.material.taxons[0]);
-                
+
                 $scope.material.taxons.push(educationalContext);
             };
 
@@ -83,11 +86,11 @@ define(['app'], function (app) {
                     return language.id == id;
                 })[0].name;
             };
-            
+
             $scope.$watch('material.taxons[0]', function(newValue, oldValue) {
                 if (newValue.level === $rootScope.taxonUtils.constants.EDUCATIONAL_CONTEXT && newValue !== oldValue) {
                     $scope.isEducationalContextSelected = true;
-                    
+
                     $scope.material.taxons = $scope.material.taxons.slice(0, 1);
                 }
             }, false);
