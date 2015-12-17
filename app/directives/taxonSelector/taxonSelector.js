@@ -6,7 +6,8 @@ define(['app'], function(app)
      function() {
         return {
             scope: {
-                taxon: '='
+                taxon: '=',
+                disableEducationalContext: '='
             },
             templateUrl: 'directives/taxonSelector/taxonSelector.html',
             controller: function ($scope, serverCallService, $rootScope) {

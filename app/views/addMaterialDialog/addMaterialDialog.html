@@ -148,8 +148,8 @@
         <md-content class="md-padding">
           <div layout="row" flex layout-align="space-between center" data-ng-repeat="taxon in material.taxons track by $index">
             <h6 class="md-caption md-padding">Liigitus</h6>
-            <div data-dop-taxon-selector data-taxon="material.taxons[$index]" layout="row" layout-sm="column" flex></div>
-            <md-button class="md-icon-button md-primary" data-ng-click="addNewTaxon()">
+            <div data-dop-taxon-selector data-taxon="material.taxons[$index]" data-disable-educational-context="!$first" layout="row" layout-sm="column" flex></div>
+            <md-button class="md-icon-button md-primary" data-ng-click="addNewTaxon()" data-ng-disabled="!isEducationalContextSelected">
               <md-icon>add_circle</md-icon>
               <md-tooltip md-direction="top">Lisa liigitus</md-tooltip>
             </md-button>

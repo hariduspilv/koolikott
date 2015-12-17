@@ -1,6 +1,6 @@
 define(['app'], function (app) {
-    app.controller('addMaterialDialog', ['$scope', '$mdDialog', 'serverCallService', 'translationService', 'metadataService', '$filter', '$location',
-        function ($scope, $mdDialog, serverCallService, translationService, metadataService, $filter, $location) {
+    app.controller('addMaterialDialog', ['$scope', '$mdDialog', 'serverCallService', 'translationService', 'metadataService', '$filter', '$location', '$rootScope',
+        function ($scope, $mdDialog, serverCallService, translationService, metadataService, $filter, $location, $rootScope) {
             var preferredLanguage;
 
             var TABS_COUNT = 2;
@@ -20,6 +20,8 @@ define(['app'], function (app) {
             $scope.step.canProceed = false;
             $scope.step.isMaterialUrlStepValid = false;
             $scope.step.isMetadataStepValid = false;
+
+            $scope.isEducationalContextSelected = false;
 
             init();
 
@@ -67,7 +69,9 @@ define(['app'], function (app) {
             };
 
             $scope.addNewTaxon = function () {
-                $scope.material.taxons.push({});
+                var educationalContext = $rootScope.taxonUtils.getEducationalContext($scope.material.taxons[0]);
+                
+                $scope.material.taxons.push(educationalContext);
             };
 
             $scope.deleteTaxon = function (index) {
@@ -79,6 +83,14 @@ define(['app'], function (app) {
                     return language.id == id;
                 })[0].name;
             };
+            
+            $scope.$watch('material.taxons[0]', function(newValue, oldValue) {
+                if (newValue.level === $rootScope.taxonUtils.constants.EDUCATIONAL_CONTEXT && newValue !== oldValue) {
+                    $scope.isEducationalContextSelected = true;
+                    
+                    $scope.material.taxons = $scope.material.taxons.slice(0, 1);
+                }
+            }, false);
 
             $scope.cancel = function () {
                 $mdDialog.hide();
