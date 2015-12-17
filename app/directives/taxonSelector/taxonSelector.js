@@ -21,7 +21,9 @@ define(['app'], function(app)
             	function init() {
             		setEducationalContexts();
             		buildTaxonPath();
-            		addTaxonPathListeners();                	
+            		addTaxonPathListeners();        
+            		
+            		$scope.basicEducationDomainSubjects = EDUCATIONAL_CONTEXTS.basicEducationDomainSubjects;
             	}
             	
             	function addTaxonPathListeners() {
@@ -53,6 +55,12 @@ define(['app'], function(app)
                         }
                     }, true);
                 	
+                	$scope.$watch('taxonPath.domainSubject.id', function(newDomainSubject, oldDomainSubject) {
+                		if (newDomainSubject && newDomainSubject !== oldDomainSubject) {
+                			$scope.taxon = Object.create($scope.taxonPath.domainSubject);
+                		}
+                	}, true);
+                	
                 	$scope.$watch('taxonPath.specialization.id', function(newSpecialization, oldSpecialization) {
                         if (newSpecialization && newSpecialization !== oldSpecialization) {
                             $scope.taxon = Object.create($scope.taxonPath.specialization);
@@ -78,14 +86,35 @@ define(['app'], function(app)
                 	}, true);
             	}
 
-        		function getEducationalContextSuccess(data) {
-                    if (isEmpty(data)) {
+        		function getEducationalContextSuccess(educationalContexts) {
+                    if (isEmpty(educationalContexts)) {
                     	getEducationalContextFail();
                     } else {
-                    	EDUCATIONAL_CONTEXTS = data;
+                    	EDUCATIONAL_CONTEXTS = educationalContexts;
+                    	buildBasicEducationDomainSubjects(educationalContexts);
                     	init();
                     }
             	}
+        		
+        		function buildBasicEducationDomainSubjects(educationalContexts) {
+                	for (var i = 0; i < educationalContexts.length; i++) {                		
+                		// Find basic education
+                		if (educationalContexts[i].name === 'BASICEDUCATION') {
+                			var domains = educationalContexts[i].domains;
+                			EDUCATIONAL_CONTEXTS.basicEducationDomainSubjects = [];
+                			
+                			// for every Domain add it to the list and its children.
+                			for (var j = 0; j < domains.length; j++) {
+                				var domain = domains[j];
+                				EDUCATIONAL_CONTEXTS.basicEducationDomainSubjects.push(domain);
+                				// Merge the second array into the first one
+                				Array.prototype.push.apply(EDUCATIONAL_CONTEXTS.basicEducationDomainSubjects, domain.subjects);
+                			}               
+                			
+                			break;
+                		}
+                	}
+        		}
 
             	function getEducationalContextFail() {
                     console.log('Failed to get educational contexts.')
@@ -103,10 +132,18 @@ define(['app'], function(app)
         			$scope.taxonPath.educationalContext = $rootScope.taxonUtils.getEducationalContext($scope.taxon);
         			$scope.taxonPath.domain = $rootScope.taxonUtils.getDomain($scope.taxon);
         			$scope.taxonPath.subject = $rootScope.taxonUtils.getSubject($scope.taxon);
+
+        			if ($scope.taxonPath.subject) {
+        				$scope.taxonPath.domainSubject = $scope.taxonPath.subject;
+        			} else {
+        				$scope.taxonPath.domainSubject = $scope.taxonPath.domain;
+        			}
+        			
         			$scope.taxonPath.specialization = $rootScope.taxonUtils.getSpecialization($scope.taxon);
         			$scope.taxonPath.module = $rootScope.taxonUtils.getModule($scope.taxon);
         			$scope.taxonPath.topic = $rootScope.taxonUtils.getTopic($scope.taxon);
         			$scope.taxonPath.subtopic = $rootScope.taxonUtils.getSubtopic($scope.taxon);
+        			
             	}
             }
         };
