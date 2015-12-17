@@ -5,6 +5,9 @@
 md-sidenav {
   width: 260px;
   max-width: 260px;
+  padding-right: 10px;
+  margin-right: -10px;
+  background-color: transparent;
   
   .sidenav-menu > li {
     > .md-button {
