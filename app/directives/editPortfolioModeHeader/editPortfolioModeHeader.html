@@ -22,11 +22,7 @@
           <md-icon data-ng-if="savedPortfolio.visibility === 'PRIVATE'">visibility_off</md-icon>
         </md-button>
         <md-menu-content width="4">
-          <md-menu-item>
-            <md-button data-ng-click="">
-              <md-icon>send</md-icon> <span data-translate="PORTFOLIO_SEND_LINK"></span>
-            </md-button>
-          </md-menu-item>
+          <md-menu-item dop-copy-permalink url="getShareUrl"></md-menu-item>
           <md-menu-divider></md-menu-divider>
           <md-menu-item>
             <md-button data-ng-if="savedPortfolio.visibility === 'PUBLIC'" aria-label="{{PORTFOLIO_VISIBILITY_PUBLIC | translate}}">

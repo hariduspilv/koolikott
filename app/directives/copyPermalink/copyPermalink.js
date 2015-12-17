@@ -3,7 +3,9 @@ define(['app', 'clipboard'], function(app, Clipboard)
     app.directive('dopCopyPermalink', ['translationService',
      function(translationService) {
         return {
-            scope: false,
+            scope: {
+              url: "="
+            },
             templateUrl: 'directives/copyPermalink/copyPermalink.html',
             link: function(scope, element) {
                 var button = element.find('button');
@@ -16,7 +18,8 @@ define(['app', 'clipboard'], function(app, Clipboard)
                 new Clipboard('#' + _id);
             },
             controller: function($scope, $location) {
-                $scope.absUrl = $location.absUrl();
+                if (!$scope.url)
+                  $scope.url = $location.absUrl();
             }
         };
     }]);

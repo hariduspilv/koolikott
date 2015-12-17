@@ -6,7 +6,6 @@ define(['app'], function(app)
             scope: true,
             templateUrl: 'directives/editPortfolioModeHeader/editPortfolioModeHeader.html',
             controller: function ($scope, $location) {
-
                 $scope.toggleSidenav = function() {
                     $mdSidenav('left').toggle();
                 };
@@ -29,6 +28,17 @@ define(['app'], function(app)
                     $rootScope.savedPortfolio.visibility = 'PRIVATE';
                     updatePortfolio();
                 };
+                
+                $scope.getShareUrl = buildShareUrl();
+                
+                function buildShareUrl() {
+                    var protocol = $location.protocol();
+                    var host = $location.host();
+                    var path = '/#/porftolio'
+                    var params = $location.search();
+
+                    return protocol + '://' + host + path + '?id=' + params.id;
+                }
 
                 function updatePortfolio() {
                     var url = "rest/portfolio/update";

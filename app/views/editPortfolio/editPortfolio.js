@@ -122,11 +122,11 @@ define(['app'], function(app) {
                     setPrivate);
             }
             
-            function startAutosave() {
+            function startAutosave() {                
                 autoSaveInterval = $interval(function() {
                     isAutoSaving = true;
                     
-                    updatePortfolio();
+                    updatePortfolio(); 
                 }, 20000);
             }
             
