@@ -1,0 +1,8 @@
+.target-group-select {
+  font-weight: bold;
+  
+  &.child {
+    font-weight: normal;
+    padding-left: 40px;
+  }
+}

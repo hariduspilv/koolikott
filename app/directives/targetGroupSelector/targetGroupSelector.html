@@ -1,8 +1,8 @@
 <md-input-container class="md-block">
   <label data-translate="DETAILED_SEARCH_TARGET_GROUP"></label>
   <md-select data-ng-model="selectedTargetGroup">
-    <md-option data-ng-repeat="group in groups" value="{{group}}">
-      <span data-translate="TARGET_GROUP_{{group.toUpperCase()}}" />
+    <md-option class="target-group-select" data-ng-class="{ 'child' : !group.parent }" data-ng-repeat="group in groups" value="{{group}}">
+      <span data-translate="TARGET_GROUP_{{group.name.toUpperCase()}}" />
     </md-option>
   </md-select>
 </md-input-container>
