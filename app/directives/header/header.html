@@ -4,8 +4,14 @@
       <md-tooltip>Suundu avalehele</md-tooltip>
       <a href="#/" class="logo-lg" id="logo"></a>
     </div>
+    <!-- TODO: the icon is missing functionality -->
+    <span data-ng-show="isViewPortforlioPage">
+      <md-button class="md-icon-button hide-gt-md" data-ng-click="toggleSidenav('left')" >
+        <md-icon class="md-48">menu</md-icon>
+      </md-button>
+    </span>
 
-    <div flex-gt-md="75" flex="none">
+    <div flex="75">
       <div layout="row" layout-align-gt-md="center center" layout-align="center end">
         <div class="navbar-search" layout="row" flex>
           <md-button aria-label="Search" class="md-icon-button" id="header-show-search-button" data-ng-click="showSearch = !showSearch">
@@ -50,7 +56,7 @@
           </md-menu-item>
         </md-menu-content>
       </md-menu>
-      
+
       <md-button data-ng-hide="user" aria-label="Login" class="md-icon-button" id="header-login-icon" data-ng-click="showLogin($event)">
         <ng-md-icon icon="input"></ng-md-icon>
         <md-tooltip>Sisene</md-tooltip>
