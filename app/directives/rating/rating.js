@@ -3,6 +3,7 @@ define(['app'], function(app)
     app.directive('dopRating', function(translationService, $mdToast, $translate, serverCallService) {
         return {
             scope: {
+            	material: '=',
             	portfolio: '=',
                 likeMessage: '@',
                 dislikeMessage: '@'
@@ -21,6 +22,10 @@ define(['app'], function(app)
 	                	
 	                	$scope.entity = $scope.portfolio;
 	                	$scope.url = "rest/portfolio/";
+                    }
+                    if($scope.material) {
+	                	$scope.rating.likes = $scope.material.likes;
+	                	$scope.rating.dislikes = $scope.material.dislikes;
                     }
                     
                 	getUserLike();
