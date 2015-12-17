@@ -12,6 +12,7 @@ define(['app'], function(app)
             controller: function ($scope, $mdToast, $translate, serverCallService) {
 
                 function init() {
+                	$scope.allowRequests = false;
                     $scope.likeFunction = function() {}   
                     $scope.dislikeFunction = function() {}
                     $scope.rating = {};
@@ -24,8 +25,12 @@ define(['app'], function(app)
 	                	$scope.url = "rest/portfolio/";
                     }
                     if($scope.material) {
+                    	log($scope.material);
 	                	$scope.rating.likes = $scope.material.likes;
 	                	$scope.rating.dislikes = $scope.material.dislikes;
+	                	
+	                	$scope.entity = $scope.material;
+	                	$scope.url = "rest/material/";
                     }
                     
                 	getUserLike();
@@ -48,6 +53,8 @@ define(['app'], function(app)
                 }
                 
                 function getUserLike() {
+                	log($scope.material);
+                	log($scope.entity);
                 	serverCallService.makePost($scope.url+"getUserLike", $scope.entity, getUserLikeSuccess, function() {});
                 }
                 
