@@ -137,14 +137,14 @@ define(['app'], function(app)
                 
                 $scope.$watch('portfolio', function(newValue, oldValue) {
                 	if(newValue && newValue.type) {
-                		if(!oldValue || !oldValue.type) {
+                		if((!oldValue || !oldValue.type) || (oldValue.id && newValue.id && newValue.id != oldValue.id)) {
                 			init();
                 		}
                 	}
                 }, true);
                 $scope.$watch('material', function(newValue, oldValue) {
-                	if(newValue && newValue.type) {
-                		if(!oldValue || !oldValue.type) {
+                	if(newValue && newValue.type && newValue.id) {
+                		if((!oldValue || !oldValue.type) || (oldValue.id && newValue.id && newValue.id != oldValue.id)) {
                 			init();
                 		}
                 	}
