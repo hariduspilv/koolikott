@@ -35,6 +35,10 @@ define(['app'], function(app)
                 };
 
                 $scope.addNewChapter = function(index) {
+                    if(!$scope.portfolio.chapters) {
+                        $scope.portfolio.chapters = [];
+                    }
+
                     $scope.portfolio.chapters.push({
                         title: $filter('translate')('PORTFOLIO_DEFAULT_NEW_CHAPTER_TITLE'),
                         subchapters: [],

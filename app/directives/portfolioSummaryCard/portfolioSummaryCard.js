@@ -18,8 +18,10 @@ define(['app'], function(app)
                 	$scope.isEditPortfolioMode = $rootScope.isEditPortfolioMode;
 
                     $scope.getEducationalContext = function() {
-                        return $rootScope.taxonUtils.getEducationalContext($scope.newTaxon)
-                            .name.toUpperCase();
+                        var educationalContext = $rootScope.taxonUtils.getEducationalContext($scope.newTaxon);
+                        if(educationalContext) {
+                            return educationalContext.name.toUpperCase();
+                        }
                     };
 
                     $scope.isOwner = function() {
