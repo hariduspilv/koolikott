@@ -115,11 +115,13 @@ define(['app.routes', 'services/dependencyResolver', 'utils/taxonUtils'], functi
             
             $rootScope.isViewPortforlioPage = path === '/portfolio';
             
-            if (editModeAllowed.indexOf(path) != -1) {
+            if (path == "/portfolio/edit") {
             	$rootScope.isEditPortfolioMode = true;
             	if(!$rootScope.selectedMaterials) {
             		$rootScope.selectedMaterials = [];
             	}
+            } else if(editModeAllowed.indexOf(path) != -1) {
+            	
             } else {
             	$rootScope.isEditPortfolioMode = false;
             	$rootScope.savedPortfolio = null;
