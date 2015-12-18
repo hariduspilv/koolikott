@@ -28,7 +28,6 @@ ul {
 @import "md-typography.scss";
 @import "sidebar.scss";
 @import "sidenav.scss";
-@import "sidenav-menu.scss";
 @import "fab-buttons.scss";
 @import "file-upload.scss";
 @import "collapsible.scss";
@@ -100,8 +99,9 @@ h1 {
   display: block;
   background-image: url('../images/logo_white.svg');
   margin-top: 5px;
+  margin-left: 5px;
   background-size: contain;
-  height: 35px;
+  height: 30px;
   background-repeat: no-repeat;
   background-position: left center;
 }
@@ -147,8 +147,4 @@ md-fab-speed-dial {
 #scrollable-content {
   overflow-y: auto;
   overflow-x: hidden;
-}
-
-.md-toolbar-filter .md-whiteframe-1dp {
-  background: #fff;
 }
