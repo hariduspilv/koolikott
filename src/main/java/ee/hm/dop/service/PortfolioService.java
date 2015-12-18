@@ -92,7 +92,7 @@ public class PortfolioService {
 		portfolioDAO.update(originalPortfolio);
 	}
 
-	public Portfolio addUserLike(Portfolio portfolio, User loggedInUser, boolean isLiked) {
+	public UserLike addUserLike(Portfolio portfolio, User loggedInUser, boolean isLiked) {
 		if (portfolio == null || portfolio.getId() == null) {
 			throw new RuntimeException("Portfolio not found");
 		}
@@ -104,13 +104,15 @@ public class PortfolioService {
 			throw new RuntimeException("Not authorized");
 		}
 
+		userLikeDAO.deletePortfolioLike(originalPortfolio, loggedInUser);
+
 		UserLike like = new UserLike();
+		like.setPortfolio(originalPortfolio);
 		like.setCreator(loggedInUser);
 		like.setLiked(isLiked);
 		like.setAdded(DateTime.now());
 
-		originalPortfolio.getUserLikes().add(like);
-		return portfolioDAO.update(originalPortfolio);
+		return userLikeDAO.update(like);
 	}
 
 	public void removeUserLike(Portfolio portfolio, User loggedInUser) {
@@ -209,6 +211,24 @@ public class PortfolioService {
 		copy.setChapters(copyChapters(originalPortfolio.getChapters()));
 
 		return doCreate(copy, loggedInUser);
+	}
+
+	public void delete(Portfolio portfolio, User loggedInUser) {
+		if (portfolio.getId() == null) {
+			throw new RuntimeException("Portfolio must already exist.");
+		}
+
+		Portfolio originalPortfolio = portfolioDAO.findById(portfolio.getId());
+		if (originalPortfolio == null) {
+			throw new RuntimeException("Portfolio not found");
+		}
+
+		if (originalPortfolio.getCreator().getId() != loggedInUser.getId()) {
+			throw new RuntimeException("Logged in user must be the creator of this portfolio.");
+		}
+
+		portfolioDAO.delete(originalPortfolio);
+		searchEngineService.updateIndex();
 	}
 
 	private List<Chapter> copyChapters(List<Chapter> chapters) {

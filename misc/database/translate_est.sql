@@ -286,6 +286,7 @@ insert into Translation(translationGroup, translationKey, translation) values (1
 -- Taxon path
 
 insert into Translation(translationGroup, translationKey, translation) values (1, 'TAXON_PATH_DOMAIN', 'Domeen');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'TAXON_PATH_DOMAIN_AND_SUBJECT', 'Ainevaldkond');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'TAXON_PATH_SPECIALIZATION', 'Eriala');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'TAXON_PATH_MODULE', 'Moodul');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'TAXON_PATH_TOPIC', 'Teema');

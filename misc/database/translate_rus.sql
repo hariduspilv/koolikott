@@ -265,6 +265,7 @@ insert into Translation(translationGroup, translationKey, translation) values (2
 
 -- Taxon path
 insert into Translation(translationGroup, translationKey, translation) values (2, 'TAXON_PATH_DOMAIN', 'Домен');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'TAXON_PATH_DOMAIN_AND_SUBJECT', 'Домен и Тема');
 insert into Translation(translationGroup, translationKey, translation) values (2, 'TAXON_PATH_SPECIALIZATION', 'Cпециализация');
 insert into Translation(translationGroup, translationKey, translation) values (2, 'TAXON_PATH_MODULE', 'Модуль');
 insert into Translation(translationGroup, translationKey, translation) values (2, 'TAXON_PATH_TOPIC', 'Тема');

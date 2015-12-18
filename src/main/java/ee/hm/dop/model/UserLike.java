@@ -19,7 +19,8 @@ import ee.hm.dop.rest.jackson.map.DateTimeDeserializer;
 import ee.hm.dop.rest.jackson.map.DateTimeSerializer;
 
 @Entity
-@Table(uniqueConstraints = { @UniqueConstraint(columnNames = { "creator", "portfolio" }) })
+@Table(uniqueConstraints = { @UniqueConstraint(columnNames = { "creator", "portfolio" }),
+		@UniqueConstraint(columnNames = { "creator", "material" }) })
 public class UserLike {
 
 	@Id
@@ -36,6 +37,10 @@ public class UserLike {
 	@ManyToOne
 	@JoinColumn(name = "portfolio")
 	private Portfolio portfolio;
+
+	@ManyToOne
+	@JoinColumn(name = "material")
+	private Material material;
 
 	@Column(nullable = false)
 	@Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
@@ -73,6 +78,14 @@ public class UserLike {
 
 	public void setPortfolio(Portfolio portfolio) {
 		this.portfolio = portfolio;
+	}
+
+	public Material getMaterial() {
+		return material;
+	}
+
+	public void setMaterial(Material material) {
+		this.material = material;
 	}
 
 	public DateTime getAdded() {

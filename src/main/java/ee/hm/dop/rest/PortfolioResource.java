@@ -91,21 +91,21 @@ public class PortfolioResource extends BaseResource {
 	}
 
 	@POST
-	@Path("removeUserLike")
-	public void portfolioRemoveLike(Portfolio portfolio) {
-		portfolioService.removeUserLike(portfolio, getLoggedInUser());
-	}
-
-	@POST
 	@Path("dislike")
 	public void dislikePortfolio(Portfolio portfolio) {
 		portfolioService.addUserLike(portfolio, getLoggedInUser(), false);
 	}
-
+ 
 	@POST
 	@Path("getUserLike")
 	public UserLike getUserLike(Portfolio portfolio) {
 		return portfolioService.getUserLike(portfolio, getLoggedInUser());
+	}
+
+	@POST
+	@Path("removeUserLike")
+	public void removeUserLike(Portfolio portfolio) {
+		portfolioService.removeUserLike(portfolio, getLoggedInUser());
 	}
 
 	@POST
@@ -133,6 +133,14 @@ public class PortfolioResource extends BaseResource {
 	@RolesAllowed("USER")
 	public Portfolio copy(Portfolio portfolio) {
 		return portfolioService.copy(portfolio, getLoggedInUser());
+	}
+
+	@POST
+	@Path("delete")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@RolesAllowed("USER")
+	public void delete(Portfolio portfolio) {
+		portfolioService.delete(portfolio, getLoggedInUser());
 	}
 
 }

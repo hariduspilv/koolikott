@@ -32,7 +32,7 @@ insert into User(id, userName, name, surName, idCode, role) values (4, 'voldemar
 insert into User(id, userName, name, surName, idCode, role) values (5, 'õäöü.õäöü', 'Õäöü', 'Õäöü', '38406304916', 'USER');
 insert into User(id, userName, name, surName, idCode, role) values (6, 'mart.dev', 'dev', 'dev', '39210140032', 'USER');
 insert into User(id, userName, name, surName, idCode, role) values (7, 'ester.tester', 'Ester', 'Tester', '38202020234', 'USER');
-insert into User(id, userName, name, surName, idCode, role) values (8, 'admin.admin', 'Admin', 'Admin', '11111111111', 'ADMIN');
+insert into User(id, userName, name, surName, idCode, role) values (8, 'admin.admin', 'Admin', 'Admin', '89898989898', 'ADMIN');
 
 -- Materials
 
@@ -400,23 +400,23 @@ insert into Material_KeyCompetence(material, keyCompetence) values (36, 1);
 
 -- Portfolio
 
-insert into Portfolio(id, title, taxon, creator, summary, views, created, updated, picture, visibility) VALUES (1, 'The new stock market', 1000, 1, 'Some new stufff coming soon.', 325698, '1999-05-02 06:00:01', '2002-05-02 06:00:01', null, 'PUBLIC');
-insert into Portfolio(id, title, taxon, creator, summary, views, created, updated, picture, visibility) VALUES (2, 'Math for my students', 1001, 5, "You have to read all the textbooks in this portfolio. Don't forgert to make ALL exercices.", 7951, '2000-12-29 16:00:01', '2003-05-02 06:00:01', null, 'PUBLIC');
-insert into Portfolio(id, title, taxon, creator, summary, views, created, updated, picture, visibility) VALUES (3, 'The new World', null, 3, null, 0, '2014-12-29 10:00:01', null, null, 'PUBLIC');
-insert into Portfolio(id, title, taxon, creator, summary, views, created, updated, picture, visibility) VALUES (4, 'Biology for my students', 1016, 6, 'A marvellous summary.', 2, '2000-12-29 16:00:01', '2003-05-02 06:00:01', null, 'PUBLIC');
-insert into Portfolio(id, title, taxon, creator, summary, views, created, updated, picture, visibility) VALUES (5, 'Sports for my students', 1028, 6, 'A brilliant summary.', 3, '2003-12-29 16:00:01', '2003-05-02 06:00:01', null, 'PUBLIC');
-insert into Portfolio(id, title, taxon, creator, summary, views, created, updated, picture, visibility) VALUES (6, 'English for my students', 1054, 6, 'An intriguing summary.', 4, '2007-12-29 16:00:01', '2003-05-02 06:00:01', null, 'PUBLIC');
-insert into Portfolio(id, title, taxon, creator, summary, views, created, updated, picture, visibility) VALUES (7, 'Automated test resource title. DO NOT TOUCH!!! Title in estonian', 1002, 6, 'An intriguing summary.', 4, '2007-12-29 16:00:01', '2003-05-02 06:00:01', null, 'PUBLIC');
-insert into Portfolio(id, title, taxon, creator, summary, views, created, updated, picture, visibility) VALUES (8, 'Test portfolio number 8', 10100, 6, 'Bla bla bla.', 1, '2001-12-29 11:00:01', '2001-05-02 06:01:01', null, 'PUBLIC');
-insert into Portfolio(id, title, taxon, creator, summary, views, created, updated, picture, visibility) VALUES (9, 'Test portfolio number 9', 20000, 6, 'Blabla2.', 1, '2001-12-29 11:00:01', '2001-05-02 06:01:01', null, 'PUBLIC');
-insert into Portfolio(id, title, taxon, creator, summary, views, created, updated, picture, visibility) VALUES (10, 'Test portfolio number 10', 20100, 6, 'Blabla3.', 1, '2001-12-29 11:00:01', '2001-05-02 06:01:01', null, 'PUBLIC');
-insert into Portfolio(id, title, taxon, creator, summary, views, created, updated, picture, visibility) VALUES (11, 'Test portfolio number 11', 10300, 6, 'Blabla4.', 1, '2001-12-29 11:00:01', '2001-05-02 06:01:01', null, 'PUBLIC');
-insert into Portfolio(id, title, taxon, creator, summary, views, created, updated, picture, visibility) VALUES (12, 'Test portfolio number 12', 15020, 6, 'Blabla4.', 1, '2001-12-29 11:00:01', '2001-05-02 06:01:01', null, 'PUBLIC');
-insert into Portfolio(id, title, taxon, creator, summary, views, created, updated, picture, visibility) VALUES (13, 'Test portfolio number 13', 15000, 6, 'Blabla5.', 1, '2001-12-29 11:00:01', '2001-05-02 06:01:01', null, 'PUBLIC');
-insert into Portfolio(id, title, taxon, creator, summary, views, created, updated, picture, visibility) VALUES (14, 'Test portfolio number 14', 15030, 6, 'Blabla6.', 1, '2001-12-29 11:00:01', '2001-05-02 06:01:01', null, 'PUBLIC');
-insert into Portfolio(id, title, taxon, creator, summary, views, created, updated, picture, visibility) VALUES (15, 'Test portfolio number 15', 15040, 6, 'Blabla7.', 1, '2001-12-29 11:00:01', '2001-05-02 06:01:01', null, 'PUBLIC');
-insert into Portfolio(id, title, taxon, creator, summary, views, created, updated, picture, visibility) VALUES (16, 'Test not listed portfolio number 16', 2, 6, 'Blabla8.', 1, '2001-12-29 11:00:01', '2001-05-02 06:01:01', null, 'NOT_LISTED');
-insert into Portfolio(id, title, taxon, creator, summary, views, created, updated, picture, visibility) VALUES (17, 'Test private portfolio number 17', 3, 6, 'Blabla9.', 1, '2001-12-29 11:00:01', '2001-05-02 06:01:01', null, 'PRIVATE');
+insert into Portfolio(id, title, taxon, creator, summary, views, created, updated, picture, visibility, deleted) VALUES (1, 'The new stock market', 1000, 1, 'Some new stufff coming soon.', 325698, '1999-05-02 06:00:01', '2002-05-02 06:00:01', null, 'PUBLIC', false);
+insert into Portfolio(id, title, taxon, creator, summary, views, created, updated, picture, visibility, deleted) VALUES (2, 'Math for my students', 1001, 5, "You have to read all the textbooks in this portfolio. Don't forgert to make ALL exercices.", 7951, '2000-12-29 16:00:01', '2003-05-02 06:00:01', null, 'PUBLIC', false);
+insert into Portfolio(id, title, taxon, creator, summary, views, created, updated, picture, visibility, deleted) VALUES (3, 'The new World', null, 3, null, 0, '2014-12-29 10:00:01', null, null, 'PUBLIC', false);
+insert into Portfolio(id, title, taxon, creator, summary, views, created, updated, picture, visibility, deleted) VALUES (4, 'Biology for my students', 1016, 6, 'A marvellous summary.', 2, '2000-12-29 16:00:01', '2003-05-02 06:00:01', null, 'PUBLIC', false);
+insert into Portfolio(id, title, taxon, creator, summary, views, created, updated, picture, visibility, deleted) VALUES (5, 'Sports for my students', 1028, 6, 'A brilliant summary.', 3, '2003-12-29 16:00:01', '2003-05-02 06:00:01', null, 'PUBLIC', false);
+insert into Portfolio(id, title, taxon, creator, summary, views, created, updated, picture, visibility, deleted) VALUES (6, 'English for my students', 1054, 6, 'An intriguing summary.', 4, '2007-12-29 16:00:01', '2003-05-02 06:00:01', null, 'PUBLIC', false);
+insert into Portfolio(id, title, taxon, creator, summary, views, created, updated, picture, visibility, deleted) VALUES (7, 'Automated test resource title. DO NOT TOUCH!!! Title in estonian', 1002, 6, 'An intriguing summary.', 4, '2007-12-29 16:00:01', '2003-05-02 06:00:01', null, 'PUBLIC', false);
+insert into Portfolio(id, title, taxon, creator, summary, views, created, updated, picture, visibility, deleted) VALUES (8, 'Test portfolio number 8', 10100, 6, 'Bla bla bla.', 1, '2001-12-29 11:00:01', '2001-05-02 06:01:01', null, 'PUBLIC', false);
+insert into Portfolio(id, title, taxon, creator, summary, views, created, updated, picture, visibility, deleted) VALUES (9, 'Test portfolio number 9', 20000, 6, 'Blabla2.', 1, '2001-12-29 11:00:01', '2001-05-02 06:01:01', null, 'PUBLIC', false);
+insert into Portfolio(id, title, taxon, creator, summary, views, created, updated, picture, visibility, deleted) VALUES (10, 'Test portfolio number 10', 20100, 6, 'Blabla3.', 1, '2001-12-29 11:00:01', '2001-05-02 06:01:01', null, 'PUBLIC', false);
+insert into Portfolio(id, title, taxon, creator, summary, views, created, updated, picture, visibility, deleted) VALUES (11, 'Test portfolio number 11', 10300, 6, 'Blabla4.', 1, '2001-12-29 11:00:01', '2001-05-02 06:01:01', null, 'PUBLIC', false);
+insert into Portfolio(id, title, taxon, creator, summary, views, created, updated, picture, visibility, deleted) VALUES (12, 'Test portfolio number 12', 15020, 6, 'Blabla4.', 1, '2001-12-29 11:00:01', '2001-05-02 06:01:01', null, 'PUBLIC', false);
+insert into Portfolio(id, title, taxon, creator, summary, views, created, updated, picture, visibility, deleted) VALUES (13, 'Test portfolio number 13', 15000, 6, 'Blabla5.', 1, '2001-12-29 11:00:01', '2001-05-02 06:01:01', null, 'PUBLIC', false);
+insert into Portfolio(id, title, taxon, creator, summary, views, created, updated, picture, visibility, deleted) VALUES (14, 'Test portfolio number 14', 15030, 6, 'Blabla6.', 1, '2001-12-29 11:00:01', '2001-05-02 06:01:01', null, 'PUBLIC', false);
+insert into Portfolio(id, title, taxon, creator, summary, views, created, updated, picture, visibility, deleted) VALUES (15, 'Test portfolio number 15', 15040, 6, 'Blabla7.', 1, '2001-12-29 11:00:01', '2001-05-02 06:01:01', null, 'PUBLIC', false);
+insert into Portfolio(id, title, taxon, creator, summary, views, created, updated, picture, visibility, deleted) VALUES (16, 'Test not listed portfolio number 16', 2, 6, 'Blabla8.', 1, '2001-12-29 11:00:01', '2001-05-02 06:01:01', null, 'NOT_LISTED', false);
+insert into Portfolio(id, title, taxon, creator, summary, views, created, updated, picture, visibility, deleted) VALUES (17, 'Test private portfolio number 17', 3, 6, 'Blabla9.', 1, '2001-12-29 11:00:01', '2001-05-02 06:01:01', null, 'PRIVATE', false);
 
 -- Pictures
 

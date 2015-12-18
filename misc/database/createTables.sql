@@ -495,6 +495,7 @@ CREATE TABLE Portfolio (
   updated     TIMESTAMP    NULL     DEFAULT NULL,
   picture     LONGBLOB              DEFAULT NULL,
   visibility  VARCHAR(255) NOT NULL,
+  deleted     BOOLEAN,
 
   FOREIGN KEY (creator)
   REFERENCES User (id)
@@ -640,10 +641,12 @@ CREATE TABLE UserLike (
 	id        BIGINT AUTO_INCREMENT PRIMARY KEY,
     creator   BIGINT NOT NULL,
     portfolio BIGINT,
+    material  BIGINT,
     isLiked   BOOLEAN NOT NULL,
     added     TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     
     UNIQUE KEY (portfolio, creator),
+    UNIQUE KEY (material, creator),
   
     FOREIGN KEY (creator)
     REFERENCES User (id)
@@ -651,5 +654,9 @@ CREATE TABLE UserLike (
     
     FOREIGN KEY (portfolio)
     REFERENCES Portfolio (id)
-      ON DELETE RESTRICT
+      ON DELETE RESTRICT,
+      
+    FOREIGN KEY (material)
+    REFERENCES Material (id)
+      ON DELETE RESTRICT      
 );

@@ -19,86 +19,111 @@ import javax.ws.rs.core.Response;
 
 import ee.hm.dop.model.Material;
 import ee.hm.dop.model.User;
+import ee.hm.dop.model.UserLike;
 import ee.hm.dop.service.MaterialService;
 import ee.hm.dop.service.UserService;
 
 @Path("material")
 public class MaterialResource extends BaseResource {
 
-    @Inject
-    private MaterialService materialService;
+	@Inject
+	private MaterialService materialService;
 
-    @Inject
-    private UserService userService;
+	@Inject
+	private UserService userService;
 
-    @GET
-    @Produces(MediaType.APPLICATION_JSON)
-    public Material get(@QueryParam("materialId") long materialId) {
-        return materialService.get(materialId);
-    }
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	public Material get(@QueryParam("materialId") long materialId) {
+		return materialService.get(materialId);
+	}
 
-    @GET
-    @Path("getNewestMaterials")
-    @Produces(MediaType.APPLICATION_JSON)
-    public List<Material> getNewestMaterials(@QueryParam("numberOfMaterials") int numberOfMaterials) {
-        return materialService.getNewestMaterials(numberOfMaterials);
-    }
+	@GET
+	@Path("getNewestMaterials")
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<Material> getNewestMaterials(@QueryParam("numberOfMaterials") int numberOfMaterials) {
+		return materialService.getNewestMaterials(numberOfMaterials);
+	}
 
-    @POST
-    @Path("increaseViewCount")
-    public Response increaseViewCount(Material material) {
-        Long materialId = material.getId();
+	@POST
+	@Path("increaseViewCount")
+	public Response increaseViewCount(Material material) {
+		Long materialId = material.getId();
 
-        Material originalMaterial = materialService.get(materialId);
-        if (originalMaterial == null) {
-            return Response.status(HttpURLConnection.HTTP_BAD_REQUEST).entity("Invalid material").build();
-        }
+		Material originalMaterial = materialService.get(materialId);
+		if (originalMaterial == null) {
+			return Response.status(HttpURLConnection.HTTP_BAD_REQUEST).entity("Invalid material").build();
+		}
 
-        materialService.increaseViewCount(originalMaterial);
-        return Response.status(HttpURLConnection.HTTP_OK).build();
-    }
+		materialService.increaseViewCount(originalMaterial);
+		return Response.status(HttpURLConnection.HTTP_OK).build();
+	}
 
-    @GET
-    @Path("/getPicture")
-    @Produces("image/png")
-    public Response getPictureById(@QueryParam("materialId") long id) {
-        Material material = new Material();
-        material.setId(id);
-        byte[] pictureData = materialService.getMaterialPicture(material);
+	@POST
+	@Path("like")
+	public void likePortfolio(Material material) {
+		materialService.addUserLike(material, getLoggedInUser(), true);
+	}
 
-        if (pictureData != null) {
-            return Response.ok(pictureData).build();
-        } else {
-            return Response.status(HttpURLConnection.HTTP_NOT_FOUND).build();
-        }
-    }
+	@POST
+	@Path("dislike")
+	public void dislikePortfolio(Material material) {
+		materialService.addUserLike(material, getLoggedInUser(), false);
+	}
 
-    @GET
-    @Path("getByCreator")
-    @Produces(MediaType.APPLICATION_JSON)
-    public List<Material> getByCreator(@QueryParam("username") String username) {
-        if (isBlank(username)) {
-            throwBadRequestException("Username parameter is mandatory");
-        }
+	@POST
+	@Path("getUserLike")
+	public UserLike getUserLike(Material material) {
+		return materialService.getUserLike(material, getLoggedInUser());
+	}
 
-        User creator = userService.getUserByUsername(username);
-        if (creator == null) {
-            return null;
-        }
+	@POST
+	@Path("removeUserLike")
+	public void removeUserLike(Material material) {
+		materialService.removeUserLike(material, getLoggedInUser());
+	}
 
-        return materialService.getByCreator(creator);
-    }
+	@GET
+	@Path("/getPicture")
+	@Produces("image/png")
+	public Response getPictureById(@QueryParam("materialId") long id) {
+		Material material = new Material();
+		material.setId(id);
+		byte[] pictureData = materialService.getMaterialPicture(material);
 
-    @POST
-    @RolesAllowed("USER")
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
-    public Material createMaterial(Material material) {
-        material = materialService.createMaterial(material, getLoggedInUser(), true);
-        return material;
-    }
+		if (pictureData != null) {
+			return Response.ok(pictureData).build();
+		} else {
+			return Response.status(HttpURLConnection.HTTP_NOT_FOUND).build();
+		}
+	}
 
-    private void throwBadRequestException(String message) {
-        throw new WebApplicationException(Response.status(HttpURLConnection.HTTP_BAD_REQUEST).entity(message).build());
-    }
+	@GET
+	@Path("getByCreator")
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<Material> getByCreator(@QueryParam("username") String username) {
+		if (isBlank(username)) {
+			throwBadRequestException("Username parameter is mandatory");
+		}
+
+		User creator = userService.getUserByUsername(username);
+		if (creator == null) {
+			return null;
+		}
+
+		return materialService.getByCreator(creator);
+	}
+
+	@POST
+	@RolesAllowed("USER")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Material createMaterial(Material material) {
+		material = materialService.createMaterial(material, getLoggedInUser(), true);
+		return material;
+	}
+
+	private void throwBadRequestException(String message) {
+		throw new WebApplicationException(Response.status(HttpURLConnection.HTTP_BAD_REQUEST).entity(message).build());
+	}
 }

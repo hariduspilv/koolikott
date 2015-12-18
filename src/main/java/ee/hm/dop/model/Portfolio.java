@@ -80,12 +80,6 @@ public class Portfolio implements Searchable {
 	@OrderBy("added DESC")
 	private List<Comment> comments;
 
-	@JsonIgnore
-	@OneToMany(fetch = EAGER, cascade = { MERGE, PERSIST })
-	@JoinColumn(name = "portfolio")
-	@OrderBy("added DESC")
-	private List<UserLike> userLikes;
-
 	@Formula(value = "(SELECT COUNT(*) FROM UserLike ul WHERE ul.portfolio = id AND ul.isLiked = 1)")
 	private int likes;
 
@@ -126,6 +120,10 @@ public class Portfolio implements Searchable {
 	@Column(nullable = false)
 	@Enumerated(EnumType.STRING)
 	private Visibility visibility;
+
+	@JsonIgnore
+	@Column
+	private boolean deleted;
 
 	@Override
 	public Long getId() {
@@ -271,14 +269,6 @@ public class Portfolio implements Searchable {
 		this.visibility = visibility;
 	}
 
-	public List<UserLike> getUserLikes() {
-		return userLikes;
-	}
-
-	public void setUserLikes(List<UserLike> userLikes) {
-		this.userLikes = userLikes;
-	}
-
 	public int getLikes() {
 		return likes;
 	}
@@ -293,6 +283,14 @@ public class Portfolio implements Searchable {
 
 	public void setDislikes(int dislikes) {
 		this.dislikes = dislikes;
+	}
+
+	public boolean isDeleted() {
+		return deleted;
+	}
+
+	public void setDeleted(boolean deleted) {
+		this.deleted = deleted;
 	}
 
 }
