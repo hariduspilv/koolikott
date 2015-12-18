@@ -42,7 +42,9 @@ define(['app'], function(app)
                     }
                     
                     function getLeftCommentsCount() {
-                        return $scope.comments.length - $scope.visibleCommentsCount;
+                        if($scope.comments) {
+                            return $scope.comments.length - $scope.visibleCommentsCount;
+                        }
                     }
                     
                     $scope.addComment = function() {
