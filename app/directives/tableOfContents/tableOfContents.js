@@ -1,6 +1,6 @@
 define(['app'], function(app)
 {
-    app.directive('dopTableOfContents', ['$filter', '$document', '$rootScope'
+    app.directive('dopTableOfContents', ['$filter', '$document', '$rootScope',
      function($filter, $document, $rootScope) {
         return {
             scope: {
