@@ -12,7 +12,7 @@ public class PictureDeserializer extends JsonDeserializer<byte[]> {
 
     @Override
     public byte[] deserialize(JsonParser jp, DeserializationContext ctxt) throws IOException {
-        String base64 = jp.getText().replace("data:image/jpeg;base64,", "");
+        String base64 = jp.getText().replaceAll("^[^_]*;base64,", "");
 
         return Base64.decodeBase64(base64);
     }
