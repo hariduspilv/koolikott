@@ -9,7 +9,7 @@ define(['app'], function(app)
             templateUrl: 'directives/targetGroupSelector/targetGroupSelector.html',
             controller: function ($scope) {
 
-                var preschoolGroups = ['PRESCHOOL', 'ZERO_FIVE', 'SIX_SEVEN'];
+                var preschoolGroups = ['PRESCHOOL', 'ZERO_FIVE', 'SIX_SEVEN'];                
                 var level1Groups = ['LEVEL1', 'GRADE1', 'GRADE2', 'GRADE3'];
                 var level2Groups = ['LEVEL2', 'GRADE4', 'GRADE5', 'GRADE6'];
                 var level3Groups = ['LEVEL3', 'GRADE7', 'GRADE8', 'GRADE9'];
@@ -45,9 +45,18 @@ define(['app'], function(app)
                     }, false);
             	}
 
-                function fill() {
-                    $scope.groups = preschoolGroups.concat(level1Groups, level2Groups, level3Groups, secondaryGroups);
-                }
+              function fill() {
+                  $scope.groups = map(preschoolGroups).concat(map(level1Groups), map(level2Groups), map(level3Groups), map(secondaryGroups));
+              }
+              
+              function map(group) {
+                  return group.map(function(item, index) {
+                      return {
+                          name: item,
+                          parent: index === 0
+                      };
+                  });
+              }
             	
             	function parseSelectedTargetGroup() {
                     switch($scope.selectedTargetGroup) {

@@ -1,9 +1,9 @@
 <div layout="row" layout-sm="column">
-  <div flex>
-    <md-input-container class="md-block">
+  <div flex class="md-padding">
+    <!-- <md-input-container class="md-block">
       <label data-translate="DETAILED_SEARCH_MAIN"></label>
       <input data-ng-model="detailedSearch.main" />
-    </md-input-container>
+    </md-input-container> -->
     <md-input-container class="md-block">
       <label data-translate="DETAILED_SEARCH_TITLE"></label>
       <input data-ng-model="detailedSearch.title" />
@@ -24,26 +24,10 @@
         </md-option>
       </md-select>
     </md-input-container>
-    <div layout>
-      <div flex="25" layout layout-align="center center">
-        <span class="md-body-1">Avaldatud <br> (alates)</span>
-      </div>
-      <md-slider flex md-discrete ng-model="detailedSearch.issueDate" step="1" min="{{issueDateFirstYear}}" max="{{issueDateLastYear}}" aria-label="{{DETAILED_SEARCH_ISSUE_DATE_FROM | translate}}">
-      </md-slider>
-      <!-- TODO: Can we leave the slider tooltip visible if dirty? -->
-      <!-- <span data-ng-if="getEffectiveIssueDate()">
-        <span data-translate="DETAILED_SEARCH_ISSUE_DATE_FROM" />{{getEffectiveIssueDate()}}<span data-translate="DETAILED_SEARCH_ISSUE_DATE_OR_LATER" />
-      </span> -->
-    </div>
   </div>
 
-  <div data-flex>
+  <div data-flex class="md-padding">
     <div data-dop-taxon-selector data-taxon="detailedSearch.taxon"></div>
-  </div>
-
-  <div flex>
-    <div data-dop-target-group-selector data-target-groups="detailedSearch.targetGroups"></div>
-
     <md-input-container class="md-block" data-ng-if="detailedSearch.educationalContext.id === 2 || detailedSearch.educationalContext.id === 3">
       <label data-translate="DETAILED_SEARCH_CROSS_CURRICULAR_THEME"></label>
       <md-select data-ng-model="detailedSearch.crossCurricularTheme">
@@ -61,7 +45,10 @@
         </md-option>
       </md-select>
     </md-input-container>
+  </div>
 
+  <div flex class="md-padding">
+    <div data-dop-target-group-selector data-target-groups="detailedSearch.targetGroups" data-ng-if="detailedSearch.educationalContext.id != 4"></div>
     <div layout="column" layout-align="end start" layout-fill>
       <md-checkbox data-ng-if="detailedSearch.educationalContext.id === 2" data-ng-model="detailedSearch.CLIL" aria-label="{{'DETAILED_SEARCH_CLIL' | translate}}" class="md-primary" flex>
         <span data-translate="DETAILED_SEARCH_CLIL"></span>
@@ -77,22 +64,30 @@
       </md-checkbox>
       <md-checkbox data-ng-model="detailedSearch.paid" class="md-primary" flex>
         <span data-translate="DETAILED_SEARCH_INCLUDE_PAID"></span>
-      </md-checkbox>      
+      </md-checkbox>
       <md-radio-group data-ng-model="detailedSearch.type">
+        <md-radio-button ng-disabled="isEditPortfolioMode" value="all" class="md-primary md-checked">
+          <span data-translate="DETAILED_SEARCH_ALL"></span>
+        </md-radio-button>
         <md-radio-button value="material" class="md-primary">
           <span data-translate="DETAILED_SEARCH_MATERIALS"></span>
         </md-radio-button>
         <md-radio-button ng-disabled="isEditPortfolioMode" value="portfolio" class="md-primary">
           <span data-translate="DETAILED_SEARCH_PORTFOLIOS"></span>
         </md-radio-button>
-        <md-radio-button ng-disabled="isEditPortfolioMode" value="all" class="md-primary">
-          <span data-translate="DETAILED_SEARCH_ALL"></span>
-        </md-radio-button>
       </md-radio-group>
+    </div>
+    <div layout>
+      <div flex="25" layout layout-align="start center">
+        <span class="md-body-1">Avaldatud <br> (alates)</span>
+      </div>
+      <md-slider  class="md-primary" flex md-discrete ng-model="detailedSearch.issueDate" step="1" min="{{issueDateFirstYear}}" max="{{issueDateLastYear}}" aria-label="{{DETAILED_SEARCH_ISSUE_DATE_FROM | translate}}">
+      </md-slider>
+      <!-- TODO: Can we leave the slider tooltip visible if dirty? -->
     </div>
   </div>
 </div>
-<div class="md-actions" layout="row" layout-sm="column" layout-align="end start" layout-padding>
+<div class="md-actions" layout="row" layout-sm="column" layout-align="end start">
   <md-button data-ng-click="clear()" data-translate="DETAILED_SEARCH_CLEAR" aria-label="{{'DETAILED_SEARCH_CLEAR' | translate}}"></md-button>
   <md-button type="submit" class="md-primary md-button" data-ng-click="search()" data-translate="DETAILED_SEARCH_SUBMIT" aria-label="{{'DETAILED_SEARCH_SUBMIT' | translate}}"></md-button>
 </div>

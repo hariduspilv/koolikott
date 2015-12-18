@@ -1,6 +1,9 @@
 define(['app'], function (app) {
-    app.controller('addMaterialDialog', ['$scope', '$mdDialog', 'serverCallService', 'translationService', 'metadataService', '$filter', '$location',
-        function ($scope, $mdDialog, serverCallService, translationService, metadataService, $filter, $location) {
+    app.controller('addMaterialDialog', ['$scope', '$mdDialog', 'serverCallService', 'translationService', 'metadataService', '$filter', '$location', '$rootScope',
+        function ($scope, $mdDialog, serverCallService, translationService, metadataService, $filter, $location, $rootScope) {
+
+            $scope.showHints = true;
+
             var preferredLanguage;
 
             var TABS_COUNT = 2;
@@ -20,6 +23,8 @@ define(['app'], function (app) {
             $scope.step.canProceed = false;
             $scope.step.isMaterialUrlStepValid = false;
             $scope.step.isMetadataStepValid = false;
+
+            $scope.isEducationalContextSelected = false;
 
             init();
 
@@ -67,7 +72,9 @@ define(['app'], function (app) {
             };
 
             $scope.addNewTaxon = function () {
-                $scope.material.taxons.push({});
+                var educationalContext = $rootScope.taxonUtils.getEducationalContext($scope.material.taxons[0]);
+
+                $scope.material.taxons.push(educationalContext);
             };
 
             $scope.deleteTaxon = function (index) {
@@ -79,6 +86,14 @@ define(['app'], function (app) {
                     return language.id == id;
                 })[0].name;
             };
+
+            $scope.$watch('material.taxons[0]', function(newValue, oldValue) {
+                if (newValue.level === $rootScope.taxonUtils.constants.EDUCATIONAL_CONTEXT && newValue !== oldValue) {
+                    $scope.isEducationalContextSelected = true;
+
+                    $scope.material.taxons = $scope.material.taxons.slice(0, 1);
+                }
+            }, false);
 
             $scope.cancel = function () {
                 $mdDialog.hide();
@@ -221,7 +236,7 @@ define(['app'], function (app) {
              */
             $scope.searchKeyCompetences = function (query) {
                 return query ? $scope.material.keyCompetences
-                    .filter(searchFilter(query, "KEY_COMPETENCE_")) : [];
+                    .filter(searchFilter(query, "KEY_COMPETENCE_")) : $scope.material.keyCompetences;
             };
 
             /**
@@ -229,7 +244,7 @@ define(['app'], function (app) {
              */
             $scope.searchCrossCurricularThemes = function (query) {
                 return query ? $scope.material.crossCurricularThemes
-                    .filter(searchFilter(query, "CROSS_CURRICULAR_THEME_")) : [];
+                    .filter(searchFilter(query, "CROSS_CURRICULAR_THEME_")) : $scope.material.crossCurricularThemes;
             };
 
             /**

@@ -3,67 +3,127 @@ define(['app'], function(app)
     app.directive('dopRating', function(translationService, $mdToast, $translate, serverCallService) {
         return {
             scope: {
+            	material: '=',
             	portfolio: '=',
                 likeMessage: '@',
                 dislikeMessage: '@'
             },
             templateUrl: 'directives/rating/rating.html',
             controller: function ($scope, $mdToast, $translate, serverCallService) {
-                // todo: add actual logic
-                $scope.isLiked = false;
-                $scope.isDisliked = false;
-                
+
                 function init() {
-                	setRatings();
-                }
-                
-                function setRatings() {
-                	$scope.rating = {};
-                	if($scope.portfolio) {
-	                    $scope.rating.likes = $scope.portfolio.likes;
-	                    $scope.rating.dislikes = $scope.portfolio.dislikes;
-                	}
+                    $scope.likeFunction = function() {}   
+                    $scope.dislikeFunction = function() {}
+                    $scope.rating = {};
+                    
+                    if($scope.portfolio) {
+	                	$scope.rating.likes = $scope.portfolio.likes;
+	                	$scope.rating.dislikes = $scope.portfolio.dislikes;
+	                	
+	                	$scope.entity = $scope.portfolio;
+	                	$scope.url = "rest/portfolio/";
+                    }
+                    if($scope.material) {
+	                	$scope.rating.likes = $scope.material.likes;
+	                	$scope.rating.dislikes = $scope.material.dislikes;
+                    }
+                    
+                	getUserLike();
                 }
                 
                 $scope.like = function() {
-                    if ($scope.isLiked) {
-                        showToast($translate.instant('RATING_LIKE_REMOVED'));
-                    }
-                    else {
-                    	var portfolio = createPortfolio($scope.portfolio.id);
-                  		serverCallService.makePost("rest/portfolio/like", portfolio, likePortfolioSuccess, function() {});
-                    }
-                }
-                
-                function likePortfolioSuccess() {
-                	$scope.isDisliked = !$scope.isDisliked;
-                    $scope.isDisliked = false;
-                    $scope.portfolio.likes += 1;
-                    setRatings();
-                    showToast($scope.likeMessage);
-                }
+                	if($scope.allowRequests) {
+                		$scope.allowRequests = false;
+                		stateMachine();
+                		$scope.likeFunction();
+                	}
+                }   
                 
                 $scope.dislike = function() {
-                    if ($scope.isDisliked) {
-                        showToast($translate.instant('RATING_DISLIKE_REMOVED'));
-                    } else {
-	                    var portfolio = createPortfolio($scope.portfolio.id);
-	              		serverCallService.makePost("rest/portfolio/dislike", portfolio, dislikePortfolioSuccess, function() {});
-                    }
-                    $scope.isDisliked = !$scope.isDisliked;
-                    $scope.isLiked = false;
+                	if($scope.allowRequests) {
+                		$scope.allowRequests = false;
+                		stateMachine();
+                		$scope.dislikeFunction();
+                	}
                 }
                 
-                function dislikePortfolioSuccess() {
-                	$scope.isDisliked = !$scope.isDisliked;
-                    $scope.isDisliked = false;
-                    $scope.portfolio.dislikes += 1;
-                    setRatings();
-                    showToast($scope.dislikeMessage);
+                function getUserLike() {
+                	serverCallService.makePost($scope.url+"getUserLike", $scope.entity, getUserLikeSuccess, function() {});
+                }
+                
+                function getUserLikeSuccess(userlike) {
+                	if(userlike) {
+	            		if(userlike.liked) {
+	            			$scope.isLiked = true;
+	            		} else {
+	                        $scope.isDisliked = true;
+	            		}
+                	}
+            		requestSuccessful();
+                }
+         
+                function like() {
+                  	serverCallService.makePost($scope.url+"like", $scope.entity, requestSuccessful, requestFailed);
+                  	$scope.isLiked = true;
+                    $scope.rating.likes += 1;
+                }
+                
+                function dislike() {
+                  	serverCallService.makePost($scope.url+"dislike", $scope.entity, requestSuccessful, requestFailed);
+                    $scope.isDisliked = true;
+                    $scope.rating.dislikes += 1;
+                }
+                
+                function removeLike() {
+                  	serverCallService.makePost($scope.url+"removeUserLike", $scope.entity, requestSuccessful, requestFailed);      	
+                    $scope.isLiked = false;
+                	$scope.isDisliked = false;
+                	$scope.rating.likes -= 1;
+                }
+                
+                function removeDislike() {
+                  	serverCallService.makePost($scope.url+"removeUserLike", $scope.entity, requestSuccessful, requestFailed);
+                    $scope.isLiked = false;
+                	$scope.isDisliked = false;
+                	$scope.rating.dislikes -= 1;
+                }
+                
+                function switchRating() {
+                	if($scope.isLiked) {
+                		serverCallService.makePost($scope.url+"dislike", $scope.entity, requestSuccessful, requestFailed);
+                		$scope.isLiked = false;
+                		$scope.isDisliked = true;
+                		$scope.rating.likes -= 1;
+                		$scope.rating.dislikes += 1;
+                	} else {
+                		serverCallService.makePost($scope.url+"like", $scope.entity, requestSuccessful, requestFailed);
+                		$scope.isLiked = true;
+                		$scope.isDisliked = false;
+                		$scope.rating.likes += 1;
+                		$scope.rating.dislikes -= 1;
+                	} 
                 }
 
-                function showToast(message) {
-                    $mdToast.show($mdToast.simple().position('right top').content(message));
+                
+                function stateMachine() {
+                	if($scope.isLiked) {
+                		$scope.likeFunction = removeLike;
+                		$scope.dislikeFunction = switchRating;
+                	} else if($scope.isDisliked) {
+                		$scope.likeFunction = switchRating;
+                		$scope.dislikeFunction = removeDislike;
+                	} else {
+                		$scope.likeFunction = like;
+                		$scope.dislikeFunction = dislike;
+                	}
+                }
+                
+                function requestSuccessful() {    	
+                	$scope.allowRequests = true;
+                }
+                
+                function requestFailed() {
+                	$scope.allowRequests = true;
                 }
                 
                 init();

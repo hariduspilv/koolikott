@@ -1,7 +1,7 @@
 define(['app'], function(app)
 {
-    app.directive('dopPortfolioSummaryCard', ['translationService', '$location', '$mdSidenav', '$mdDialog', '$rootScope', 'authenticatedUserService', '$route', 'dialogService',
-        function(translationService, $location, $mdSidenav, $mdDialog, $rootScope, authenticatedUserService, $route, dialogService) {
+    app.directive('dopPortfolioSummaryCard', ['translationService', '$location', '$mdSidenav', '$mdDialog', '$rootScope', 'authenticatedUserService', '$route', 'dialogService', 'serverCallService',
+        function(translationService, $location, $mdSidenav, $mdDialog, $rootScope, authenticatedUserService, $route, dialogService, serverCallService) {
             return {
             	scope: {
                     portfolio: '=',
@@ -37,7 +37,6 @@ define(['app'], function(app)
                     $scope.editPortfolio = function() {
 	                    var portfolioId = $route.current.params.id;
 	                    $location.url("/portfolio/edit?id="+portfolioId);
-	                    $rootScope.savedPortfolio = $scope.portfolio;
                     };
 
                     $scope.showEditMetadataDialog = function() {
@@ -62,7 +61,16 @@ define(['app'], function(app)
                     };
 
                     function deletePortfolio() {
+                        var url = "rest/portfolio/delete";
+                        serverCallService.makePost(url, $scope.portfolio, deletePortfolioSuccess, deletePortfolioFailed);
+                    }
 
+                    function deletePortfolioSuccess() {
+                        $location.url('/' + authenticatedUserService.getUser().username);
+                    }
+
+                    function deletePortfolioFailed() {
+                        log('Deleting portfolio failed.');
                     }
                 }
             };
