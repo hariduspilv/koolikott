@@ -114,7 +114,9 @@ define(['app.routes', 'services/dependencyResolver', 'utils/taxonUtils'], functi
             var editModeAllowed = ["/portfolio/edit", "/search/result", "/material"];
             
             $rootScope.isViewPortforlioPage = path === '/portfolio';
-            
+            $rootScope.isEditPortfolioPage = path === '/portfolio/edit';
+
+
             if (path == "/portfolio/edit") {
             	$rootScope.isEditPortfolioMode = true;
             	if(!$rootScope.selectedMaterials) {

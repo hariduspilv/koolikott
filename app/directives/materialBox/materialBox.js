@@ -4,7 +4,8 @@ define(['app'], function(app)
 	app.directive('dopMaterialBox', ['translationService', 'serverCallService', '$rootScope', function(translationService, serverCallService, $rootScope) {
 		return {
 			scope: {
-				material: '='
+				material: '=',
+				chapter: '='
 			},
 			templateUrl: 'directives/materialBox/materialBox.html',
 			controller: function ($scope, $location) {
@@ -89,6 +90,17 @@ define(['app'], function(app)
                 		$rootScope.selectedMaterials.splice(index, 1);
                 	}
                 }
+
+				$scope.removeMaterial = function($event, material) {
+					$event.stopPropagation();
+					var index = $rootScope.selectedMaterials.indexOf(material);
+					//$rootScope.selectedMaterials.splice(index, 1);
+					console.log($scope.chapter)
+
+
+
+
+				}
                 
 			}
 		};
