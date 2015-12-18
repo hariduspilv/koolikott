@@ -6,7 +6,7 @@
     <md-button id="toc-chapter-{{$index}}" data-offset="150" data-du-scrollspy data-ng-click="gotoChapter($event, $index)">
       {{chapter.title}}
       <span flex></span>
-      <span class="add-materials-to-chapter" data-ng-if="isEditPortfolioMode" data-ng-click="addMaterialsToChapter($event, chapter)">
+      <span class="add-materials-to-chapter" data-ng-if="$root.isEditPortfolioMode" data-ng-click="addMaterialsToChapter($event, chapter)">
         <md-tooltip md-direction="right">
           Lisa materjal(id) sellesse peatükki
         </md-tooltip>
@@ -18,7 +18,7 @@
         <a id="toc-chapter-{{$parent.$index}}-{{$index}}" data-offset="150" data-du-scrollspy class="md-button" layout="row" data-ng-click="gotoChapter($event, $parent.$index, $index)">
           {{subchapter.title}}
           <span flex></span>
-          <span class="add-materials-to-chapter" data-ng-if="isEditPortfolioMode" data-ng-click="addMaterialsToChapter($event, subchapter)">
+          <span class="add-materials-to-chapter" data-ng-if="$root.isEditPortfolioMode" data-ng-click="addMaterialsToChapter($event, subchapter)">
             <md-tooltip md-direction="right">
               Lisa materjal(id) sellesse peatükki
             </md-tooltip>

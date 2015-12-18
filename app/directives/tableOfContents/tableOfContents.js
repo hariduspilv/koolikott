@@ -10,7 +10,6 @@ define(['app'], function(app)
             templateUrl: 'directives/tableOfContents/tableOfContents.html',
             controller: function ($scope, $rootScope, $document) {
                 $scope.isReadOnly = angular.isDefined($scope.isReadOnly) ? $scope.isReadOnly : false;
-                $scope.isEditPortfolioMode = $rootScope.isEditPortfolioMode;
 
                 $scope.gotoChapter = function(e, chapterId, subchapterId) {
                     e.preventDefault();
