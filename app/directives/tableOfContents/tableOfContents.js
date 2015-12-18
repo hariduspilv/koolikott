@@ -1,7 +1,7 @@
 define(['app'], function(app)
 {
-    app.directive('dopTableOfContents', ['$filter', '$document',
-     function($filter) {
+    app.directive('dopTableOfContents', ['$filter', '$document', '$rootScope'
+     function($filter, $document, $rootScope) {
         return {
             scope: {
                 portfolio: '=',
