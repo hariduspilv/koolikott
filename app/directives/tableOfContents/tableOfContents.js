@@ -11,10 +11,10 @@ define(['app'], function(app)
             controller: function ($scope, $rootScope) {
                 $scope.isReadOnly = angular.isDefined($scope.isReadOnly) ? $scope.isReadOnly : false;
                 $scope.isEditPortfolioMode = $rootScope.isEditPortfolioMode;
-                
+
                 $scope.gotoChapter = function(e, chapterId, subchapterId) {
                     e.preventDefault();
-                  
+
                     var combinedId = 'chapter-' + chapterId;
                     if(subchapterId != null) {
                     	combinedId += '-' + subchapterId;
@@ -23,7 +23,7 @@ define(['app'], function(app)
                     var $context = angular.element(document.getElementById('scrollable-content'));
 
                     $context.scrollToElement($chapter, 30, 200);
-                }
+                };
 
                 $scope.addNewSubChapter = function(index) {
                     var subChapters = $scope.portfolio.chapters[index].subchapters;

@@ -21,7 +21,7 @@ define(function () {
 		getSubject: function(taxon) {
 			return this.getTaxon(taxon, this.constants.SUBJECT);
 		},
-	
+
 		getTopic: function(taxon) {
 			return this.getTaxon(taxon, this.constants.TOPIC);
 		},
@@ -42,7 +42,7 @@ define(function () {
 			if (!taxon) {
 				return;
 			}
-	
+
 			if (taxon.level === this.constants.EDUCATIONAL_CONTEXT) {
 				return taxon.level === level ? taxon : null;
 			}

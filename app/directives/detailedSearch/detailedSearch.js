@@ -79,10 +79,10 @@ define(['app'], function(app)
                     if (keyCompetence) {
                         $scope.detailedSearch.keyCompetence = keyCompetence;
                     }
-                    
+
                     $scope.isEditPortfolioMode = $rootScope.isEditPortfolioMode;
                     if ($rootScope.isEditPortfolioMode && $rootScope.savedPortfolio) {
-                    	$scope.detailedSearch.taxon = $rootScope.savedPortfolio.taxon;
+                    	$scope.detailedSearch.taxon = Object.create($rootScope.savedPortfolio.taxon);
                     } else {
                         // Taxon
                         if (searchService.getTaxon()) {
@@ -98,7 +98,7 @@ define(['app'], function(app)
                     log('Getting taxon.')
                     serverCallService.makeGet("rest/learningMaterialMetadata/taxon", params, getTaxonSuccess, getTaxonFail);
                 }
-                
+
                 $scope.search = function() {
                     searchService.setSearch(createSimpleSearchQuery());
 
@@ -217,7 +217,7 @@ define(['app'], function(app)
 
                     if ($scope.detailedSearch.main) {
                         query = $scope.detailedSearch.main + ' ' + query;
-                    } 
+                    }
 
                     return query.trim();
                 }
@@ -334,8 +334,8 @@ define(['app'], function(app)
 
                     // Only books checkbox
                     if (!educationalContext ||
-                        (educationalContext.id != BASIC_EDUCATION_ID && 
-                         educationalContext.id != SECONDARY_EDUCATION_ID && 
+                        (educationalContext.id != BASIC_EDUCATION_ID &&
+                         educationalContext.id != SECONDARY_EDUCATION_ID &&
                          educationalContext.id != VOCATIONAL_EDUCATION_ID)) {
                         $scope.detailedSearch.onlyBooks = false;
                     }
@@ -370,17 +370,18 @@ define(['app'], function(app)
                     };
                 }
 
-                $scope.$watch('detailedSearch.taxon', function(newTaxon, oldTaxon) {
+                $scope.$watch('detailedSearch.taxon.id', function(newTaxon, oldTaxon) {
                     if (newTaxon !== oldTaxon) {
-                        $scope.detailedSearch.educationalContext = $rootScope.taxonUtils.getEducationalContext($scope.detailedSearch.taxon);
+                        var taxon = Object.create($scope.detailedSearch.taxon);
+                        $scope.detailedSearch.educationalContext = $rootScope.taxonUtils.getEducationalContext(taxon);
                         clearHiddenFields();
                     }
                 }, true);
-                
+
                 $scope.$watch(function() { return searchService.getType() }, function(newType, oldType) {
                 	$scope.detailedSearch.type = newType;
                 }, true);
-                
+
                 $scope.$watch(function() { return searchService.getTargetGroups() }, function(newGroups, oldGroups) {
                 	$scope.detailedSearch.targetGroups = newGroups;
                 }, true);
