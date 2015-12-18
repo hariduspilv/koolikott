@@ -110,15 +110,20 @@ define(['app.routes', 'services/dependencyResolver', 'utils/taxonUtils'], functi
 
     app.run(function($rootScope, $location) {
     	$rootScope.$on('$routeChangeSuccess', function() {
-            var path = $location.path();
-
+    		var path = $location.path();
+            var editModeAllowed = ["/portfolio/edit", "/search/result", "/material"];
+            
             $rootScope.isViewPortforlioPage = path === '/portfolio';
-
-            if (!$rootScope.isEditPortfolioMode) {
-            	$rootScope.isEditPortfolioMode = path === '/portfolio/edit';
+            
+            if (editModeAllowed.indexOf(path) != -1) {
+            	$rootScope.isEditPortfolioMode = true;
+            	if(!$rootScope.selectedMaterials) {
+            		$rootScope.selectedMaterials = [];
+            	}
             } else {
             	$rootScope.isEditPortfolioMode = false;
             	$rootScope.savedPortfolio = null;
+            	$rootScope.selectedMaterials = null;
             }
         });
     });

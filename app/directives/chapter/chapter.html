@@ -33,7 +33,7 @@
       </md-card-content>
     </md-card>
 
-    <div class="portfolio-chapter-subchapter-materials" ng-show="chapter.materials.length">
+    <div class="portfolio-chapter-chapter-materials" ng-show="chapter.materials.length">
       <md-grid-list md-cols="6" md-cols-gt-lg="6"  md-cols-gt-sm="4" md-cols-sm="4" md-cols-xs="2" md-gutter="10px" md-row-height="280px">
         <md-grid-tile data-ng-repeat="material in chapter.materials">
           <figure data-dop-material-box material="material"></figure>
@@ -42,8 +42,8 @@
     </div>
   </div>
 
-  <ul class="portfolio-chapter-subchapters">
-    <li class="portfolio-chapter-subchapter" id="chapter-{{index}}-{{$index}}" data-ng-repeat="subchapter in chapter.subchapters">
+  <div class="portfolio-chapter-subchapters">
+    <div class="portfolio-chapter-subchapter" id="chapter-{{index}}-{{$index}}" data-ng-repeat="subchapter in chapter.subchapters">
       <md-card class="card-lg">
         <md-card-content data-ng-if="!isEditable">
           <h3>{{subchapter.title}}</h3>
@@ -56,7 +56,7 @@
               <input class="md-title" data-ng-model="subchapter.title" placeholder="{{ 'PORTFOLIO_ENTER_SUB_CHAPTER_TITLE' | translate }}">
             </md-input-container>
             <md-menu>
-              <md-button class="md-icon-button" data-ng-click="$mdOpenMenu($event)">
+              <md-button class="md-icon-button" ng-click="$mdOpenMenu($event)">
                 <md-icon md-menu-origin>more_vert</md-icon>
               </md-button>
               <md-menu-content width="4">
@@ -84,6 +84,6 @@
           </md-grid-tile>
         </md-grid-list>
       </div>
-    </li>
-  </ul>
+    </div>
+  </div>
 </div>

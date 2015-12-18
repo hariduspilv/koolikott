@@ -1,14 +1,18 @@
 define(['app'], function(app)
 {
 
-	app.directive('dopMaterialBox', ['translationService', 'serverCallService', function(translationService, serverCallService) {
+	app.directive('dopMaterialBox', ['translationService', 'serverCallService', '$rootScope', function(translationService, serverCallService, $rootScope) {
 		return {
 			scope: {
 				material: '='
 			},
 			templateUrl: 'directives/materialBox/materialBox.html',
-			controller: function ($scope, $location, $rootScope) {
+			controller: function ($scope, $location) {
 
+				$scope.selected = false;
+				
+				$scope.isEditPortfolioMode = $rootScope.isEditPortfolioMode;
+				
 				$scope.navigateTo = function(material) {
 					$rootScope.savedMaterial = material;
 
@@ -74,6 +78,18 @@ define(['app'], function(app)
 
                     return 'description';
                 }
+                
+                $scope.pickMaterial = function($event, material) {
+                	$event.stopPropagation();
+                	var index = $rootScope.selectedMaterials.indexOf(material);
+                	if(index == -1) {
+                		$rootScope.selectedMaterials.push(material); 
+                		$scope.selected = true;
+                	} else {
+                		$rootScope.selectedMaterials.splice(index, 1);
+                	}
+                }
+                
 			}
 		};
 	}]);

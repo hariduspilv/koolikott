@@ -227,7 +227,7 @@
               <div data-dop-comments-card comments="material.comments" comment="newComment" submit-click="addComment()"></div>
               <span flex></span>
               <!-- rating control -->
-              <div data-dop-rating material="material" like-message="{{ 'MATERIAL_LIKED' | translate }}"
+              <div data-ng-if="material" data-dop-rating material="material" like-message="{{ 'MATERIAL_LIKED' | translate }}"
                    dislike-message="{{ 'MATERIAL_DISLIKED' | translate }}"></div>
             </div>
           </md-card-content>
