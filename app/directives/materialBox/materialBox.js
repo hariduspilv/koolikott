@@ -18,13 +18,13 @@ define(['app'], function(app)
 					$rootScope.savedMaterial = material;
 
                     $location.path('/material').search({materialId:  material.id});
-				}
+				};
 
 				$scope.getCorrectLanguageTitle = function(material) {
 					if (material) {
 						return getCorrectLanguageString(material.titles, material.language);
 					}
-				}
+				};
 
 				function getCorrectLanguageString(languageStringList, materialLanguage) {
 					if (languageStringList) {
@@ -35,19 +35,19 @@ define(['app'], function(app)
 				$scope.formatMaterialIssueDate = function(issueDate) {
 					return formatIssueDate(issueDate);
 
-				}
+				};
 
 				$scope.formatName = function(name) {
 					if(name) {
 						return formatNameToInitials(name);
 					}
-				}
+				};
 
 				$scope.formatSurname = function(surname){
 					if(surname) {
 						return formatSurnameToInitialsButLast(surname);
 					}
-				}
+				};
 
 				$scope.isOfType = function(type) {
 					var types = $scope.material.resourceTypes;
@@ -62,7 +62,7 @@ define(['app'], function(app)
 					}
 
 					return false;
-				}
+				};
 
                 $scope.getType = function() {
                     var types = $scope.material.resourceTypes;
@@ -78,7 +78,7 @@ define(['app'], function(app)
 					}
 
                     return 'description';
-                }
+                };
                 
                 $scope.pickMaterial = function($event, material) {
                 	$event.stopPropagation();
@@ -89,19 +89,13 @@ define(['app'], function(app)
                 	} else {
                 		$rootScope.selectedMaterials.splice(index, 1);
                 	}
-                }
+                };
 
 				$scope.removeMaterial = function($event, material) {
 					$event.stopPropagation();
-					var index = $rootScope.selectedMaterials.indexOf(material);
-					//$rootScope.selectedMaterials.splice(index, 1);
-					console.log($scope.chapter)
-
-
-
-
+					var index = $scope.chapter.materials.indexOf(material);
+					$scope.chapter.materials.splice(index, 1);
 				}
-                
 			}
 		};
 	}]);
