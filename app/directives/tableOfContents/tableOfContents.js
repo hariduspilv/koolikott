@@ -1,7 +1,7 @@
 define(['app'], function(app)
 {
-    app.directive('dopTableOfContents', ['$filter', '$document', '$rootScope',
-     function($filter, $document, $rootScope) {
+    app.directive('dopTableOfContents', ['$filter', '$document', '$rootScope', 'translationService', '$mdToast', '$translate',
+     function($filter, $document, $rootScope, translationService, $mdToast, $translate) {
         return {
             scope: {
                 portfolio: '=',
@@ -47,13 +47,26 @@ define(['app'], function(app)
                 
                 $scope.addMaterialsToChapter = function($event, chapter) {
                 	$event.stopPropagation();
-                	if(chapter && chapter.materials) {
-	                	for(var i=0; i<$rootScope.selectedMaterials.length; i++) {
-	                		var selectedMaterial = $rootScope.selectedMaterials[i];
-	                		if(!containsMaterial(chapter.materials, selectedMaterial)) {
-	                			chapter.materials.push(selectedMaterial);
+                	if(chapter && chapter.materials) {              		
+                		if($rootScope.selectedSingleMaterial) {
+                			if(!containsMaterial(chapter.materials, $rootScope.selectedSingleMaterial)) {
+	                			chapter.materials.push($rootScope.selectedSingleMaterial);
+	                			showToast($translate.instant('PORTFOLIO_ADD_MATERIAL_SUCCESS'));
 	                		}
-	                	}
+                		} else {
+                			var pushed = false;
+		                	for(var i=0; i<$rootScope.selectedMaterials.length; i++) {
+		                		var selectedMaterial = $rootScope.selectedMaterials[i];
+		                		if(!containsMaterial(chapter.materials, selectedMaterial)) {
+		                			chapter.materials.push(selectedMaterial);
+		                			pushed = true;
+		                		}
+		                	}
+		                	if(pushed) {
+		                		showToast($translate.instant('PORTFOLIO_ADD_MATERIAL_SUCCESS'));
+		                	}
+		                	
+                		}
                 	}
                 	$rootScope.selectedMaterials = [];
                 }
@@ -66,6 +79,10 @@ define(['app'], function(app)
                 		}
                 	}
                 	return false;
+                }
+                
+                function showToast(message) {
+                    $mdToast.show($mdToast.simple().position('right top').content(message));
                 }
                 
             }

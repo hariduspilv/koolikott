@@ -123,7 +123,10 @@ define(['app.routes', 'services/dependencyResolver', 'utils/taxonUtils'], functi
             		$rootScope.selectedMaterials = [];
             	}
             } else if(editModeAllowed.indexOf(path) != -1) {
-            	
+            	if(path != "/material") {
+            		log("ayy");
+            		$rootScope.selectedSingleMaterial = null;
+            	}
             } else {
             	$rootScope.isEditPortfolioMode = false;
             	$rootScope.savedPortfolio = null;

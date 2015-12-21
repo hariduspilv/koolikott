@@ -12,6 +12,11 @@ define(['app'], function (app) {
 
             if ($rootScope.savedMaterial) {
                 $scope.material = $rootScope.savedMaterial;
+                
+                if($rootScope.isEditPortfolioMode) {
+                	$rootScope.selectedSingleMaterial = $scope.material;
+                }
+                
                 init();
             } else {
                 getMaterial(getMaterialSuccess, getMaterialFail);
@@ -32,6 +37,9 @@ define(['app'], function (app) {
                     $location.url("/");
                 } else {
                     $scope.material = material;
+                    if($rootScope.isEditPortfolioMode) {
+                    	$rootScope.selectedSingleMaterial = $scope.material;
+                    }
                     init();
                 }
             }
