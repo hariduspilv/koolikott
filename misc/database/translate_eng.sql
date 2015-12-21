@@ -195,6 +195,7 @@ insert into Translation(translationGroup, translationKey, translation) values (3
 insert into Translation(translationGroup, translationKey, translation) values (3, 'PORTFOLIO_CONFIRM_DELETE_DIALOG_CONTENT', 'Are you sure you want to delete this portfolio?');
 insert into Translation(translationGroup, translationKey, translation) values (3, 'PORTFOLIO_CONFIRM_DELETE_DIALOG_YES', 'Yes, delete this portfolio');
 insert into Translation(translationGroup, translationKey, translation) values (3, 'PORTFOLIO_CONFIRM_DELETE_DIALOG_NO', 'No');
+insert into Translation(translationGroup, translationKey, translation) values (3, 'PORTFOLIO_DELETED', 'Portfolio deleted');
 
 -- Comment translations
 insert into Translation(translationGroup, translationKey, translation) values (3, 'COMMENTS_TITLE', 'Comments');

@@ -276,6 +276,7 @@ insert into Translation(translationGroup, translationKey, translation) values (1
 insert into Translation(translationGroup, translationKey, translation) values (1, 'PORTFOLIO_CONFIRM_DELETE_DIALOG_CONTENT', 'Kas oled kindel, et soovid kustutada selle portfoolio?');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'PORTFOLIO_CONFIRM_DELETE_DIALOG_YES', 'Jah, kustuta portfoolio');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'PORTFOLIO_CONFIRM_DELETE_DIALOG_NO', 'Ei');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'PORTFOLIO_DELETED', 'Portfoolio kustutatud');
 
 -- Comment translations
 insert into Translation(translationGroup, translationKey, translation) values (1, 'COMMENTS_TITLE', 'Kommentaarid');

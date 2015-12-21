@@ -195,6 +195,7 @@ insert into Translation(translationGroup, translationKey, translation) values (2
 insert into Translation(translationGroup, translationKey, translation) values (2, 'PORTFOLIO_CONFIRM_DELETE_DIALOG_CONTENT', 'Вы уверены, что хотите удалить этот портфель?');
 insert into Translation(translationGroup, translationKey, translation) values (2, 'PORTFOLIO_CONFIRM_DELETE_DIALOG_YES', 'Да, удалить эту портфель');
 insert into Translation(translationGroup, translationKey, translation) values (2, 'PORTFOLIO_CONFIRM_DELETE_DIALOG_NO', 'Нет');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'PORTFOLIO_DELETED', 'Портфолио удалены');
 
 -- Comment translations
 insert into Translation(translationGroup, translationKey, translation) values (2, 'COMMENTS_TITLE', 'Комментарии');
