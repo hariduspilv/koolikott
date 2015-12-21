@@ -1,7 +1,7 @@
 define(['app'], function(app)
 {
-    app.directive('dopPortfolioSummaryCard', ['translationService', '$location', '$mdSidenav', '$mdDialog', '$rootScope', 'authenticatedUserService', '$route', 'dialogService', 'serverCallService',
-        function(translationService, $location, $mdSidenav, $mdDialog, $rootScope, authenticatedUserService, $route, dialogService, serverCallService) {
+    app.directive('dopPortfolioSummaryCard', ['translationService', '$location', '$mdSidenav', '$mdDialog', '$rootScope', 'authenticatedUserService', '$route', 'dialogService', 'serverCallService', 'toastService', 
+        function(translationService, $location, $mdSidenav, $mdDialog, $rootScope, authenticatedUserService, $route, dialogService, serverCallService, toastService) {
             return {
             	scope: {
                     portfolio: '=',
@@ -68,6 +68,7 @@ define(['app'], function(app)
                     }
 
                     function deletePortfolioSuccess() {
+                        toastService.showOnRouteChange('PORTFOLIO_DELETED');
                         $location.url('/' + authenticatedUserService.getUser().username);
                     }
 
