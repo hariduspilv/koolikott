@@ -30,6 +30,7 @@ import org.w3c.dom.Document;
 import ee.hm.dop.model.Author;
 import ee.hm.dop.model.CrossCurricularTheme;
 import ee.hm.dop.model.IssueDate;
+import ee.hm.dop.model.KeyCompetence;
 import ee.hm.dop.model.Language;
 import ee.hm.dop.model.LanguageString;
 import ee.hm.dop.model.Material;
@@ -47,6 +48,7 @@ import ee.hm.dop.oaipmh.ParseException;
 import ee.hm.dop.service.AuthorService;
 import ee.hm.dop.service.CrossCurricularThemeService;
 import ee.hm.dop.service.IssueDateService;
+import ee.hm.dop.service.KeyCompetenceService;
 import ee.hm.dop.service.LanguageService;
 import ee.hm.dop.service.PublisherService;
 import ee.hm.dop.service.ResourceTypeService;
@@ -85,6 +87,9 @@ public class MaterialParserEstCoreTest {
 
     @Mock
     private CrossCurricularThemeService crossCurricularThemeService;
+
+    @Mock
+    private KeyCompetenceService keyCompetenceService;
 
     @Test(expected = ee.hm.dop.oaipmh.ParseException.class)
     public void parseXMLisNull() throws ParseException {
@@ -197,6 +202,13 @@ public class MaterialParserEstCoreTest {
         domains.add(domain5);
         educationalContext2.setDomains(domains);
 
+        Domain domain6 = new Domain();
+        domain6.setName("Key_competences");
+        domain6.setEducationalContext(educationalContext2);
+        domains = educationalContext2.getDomains();
+        domains.add(domain6);
+        educationalContext2.setDomains(domains);
+
         Subject subject1 = new Subject();
         subject1.setName("Estonian");
         subject1.setDomain(domain4);
@@ -217,6 +229,13 @@ public class MaterialParserEstCoreTest {
         subjects = new HashSet<>();
         subjects.add(subject3);
         domain5.setSubjects(subjects);
+
+        Subject subject4 = new Subject();
+        subject4.setName("Cultural_and_value_competence");
+        subject4.setDomain(domain5);
+        subjects = new HashSet<>();
+        subjects.add(subject4);
+        domain6.setSubjects(subjects);
 
         Topic topic1 = new Topic();
         topic1.setName("Basic_history");
@@ -288,6 +307,9 @@ public class MaterialParserEstCoreTest {
         CrossCurricularTheme crossCurricularTheme = new CrossCurricularTheme();
         crossCurricularTheme.setName("Lifelong_learning_and_career_planning");
 
+        KeyCompetence keyCompetence = new KeyCompetence();
+        keyCompetence.setName("Cultural_and_value_competence");
+
         expect(languageService.getLanguage("en")).andReturn(english).times(3);
         expect(languageService.getLanguage("et")).andReturn(estonian).times(2);
         expect(authorService.getAuthorByFullName(author1.getName(), author1.getSurname())).andReturn(author1);
@@ -343,7 +365,10 @@ public class MaterialParserEstCoreTest {
         expect(taxonService.getTaxonByEstCoreName("Lifelong learning and career planning", Subject.class)).andReturn(subject3);
         expect(crossCurricularThemeService.getThemeByName(subject3.getName())).andReturn(crossCurricularTheme);
 
-
+        // Key competence taxon
+        expect(taxonService.getTaxonByEstCoreName("Key competences", Domain.class)).andReturn(domain6);
+        expect(taxonService.getTaxonByEstCoreName("Cultural and value competence", Subject.class)).andReturn(subject4);
+        expect(keyCompetenceService.findKeyCompetenceByName(subject4.getName())).andReturn(keyCompetence);
 
         LanguageString title1 = new LanguageString();
         title1.setLanguage(english);
@@ -374,13 +399,13 @@ public class MaterialParserEstCoreTest {
         resourceTypes.add(resourceType2);
 
         replay(languageService, authorService, tagService, resourceTypeService, taxonService, publisherService,
-                issueDateService, crossCurricularThemeService);
+                issueDateService, crossCurricularThemeService, keyCompetenceService);
 
         Document doc = dBuilder.parse(fXmlFile);
         Material material = materialParser.parse(doc);
 
         verify(languageService, authorService, tagService, resourceTypeService, taxonService, publisherService,
-                issueDateService, crossCurricularThemeService);
+                issueDateService, crossCurricularThemeService, keyCompetenceService);
 
         assertEquals(titles, material.getTitles());
         assertEquals("https://oxygen.netgroupdigital.com/rest/repoMaterialSource", material.getSource());
@@ -389,13 +414,14 @@ public class MaterialParserEstCoreTest {
         assertEquals(descriptions, material.getDescriptions());
         assertEquals(tags, material.getTags());
         assertEquals(resourceTypes, material.getResourceTypes());
-        assertEquals(5, material.getTaxons().size());
+        assertEquals(6, material.getTaxons().size());
         assertEquals(10, material.getTargetGroups().size());
         assertNotNull(material.getPicture());
         assertEquals(1, material.getPublishers().size());
         assertNotNull(material.getIssueDate());
         assertTrue(material.isSpecialEducation());
         assertEquals(1, material.getCrossCurricularThemes().size());
+        assertEquals(1, material.getKeyCompetences().size());
     }
 
     private File getResourceAsFile(String resourcePath) throws URISyntaxException {

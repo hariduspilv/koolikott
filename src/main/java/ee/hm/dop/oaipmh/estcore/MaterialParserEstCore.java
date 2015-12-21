@@ -22,6 +22,7 @@ import org.w3c.dom.NodeList;
 import ee.hm.dop.model.Author;
 import ee.hm.dop.model.CrossCurricularTheme;
 import ee.hm.dop.model.IssueDate;
+import ee.hm.dop.model.KeyCompetence;
 import ee.hm.dop.model.Language;
 import ee.hm.dop.model.LanguageString;
 import ee.hm.dop.model.Material;
@@ -41,6 +42,7 @@ import ee.hm.dop.oaipmh.ParseException;
 import ee.hm.dop.service.AuthorService;
 import ee.hm.dop.service.CrossCurricularThemeService;
 import ee.hm.dop.service.IssueDateService;
+import ee.hm.dop.service.KeyCompetenceService;
 import ee.hm.dop.service.LanguageService;
 import ee.hm.dop.service.PublisherService;
 import ee.hm.dop.service.TagService;
@@ -53,6 +55,7 @@ public class MaterialParserEstCore extends MaterialParser {
     public static final String YES = "YES";
     public static final String PUBLISHER = "PUBLISHER";
     public static final String CROSS_CURRICULAR_THEMES = "Cross-curricular_themes";
+    public static final String KEY_COMPETENCES = "Key_competences";
 
     static {
         taxonMap = new HashMap<>();
@@ -82,6 +85,9 @@ public class MaterialParserEstCore extends MaterialParser {
 
     @Inject
     private CrossCurricularThemeService crossCurricularThemeService;
+
+    @Inject
+    private KeyCompetenceService keyCompetenceService;
 
     @Override
     protected void setContributors(Material material, Document doc) {
@@ -210,15 +216,11 @@ public class MaterialParserEstCore extends MaterialParser {
                     Taxon taxon = getTaxonByName(subjects, systemName);
 
                     //Special case for adding to Cross-curricular themes to eKoolikott
-                    if(taxon != null && domain.getName().equals(CROSS_CURRICULAR_THEMES)) {
-                        if(material.getCrossCurricularThemes() == null) {
-                            material.setCrossCurricularThemes(new ArrayList<>());
-                        }
+                    setCrossCurricularThemes(domain, material, taxon);
 
-                        List<CrossCurricularTheme> themes = material.getCrossCurricularThemes();
-                        themes.add(crossCurricularThemeService.getThemeByName(taxon.getName()));
-                        material.setCrossCurricularThemes(themes);
-                    }
+                    //Special case for adding to Key competences to eKoolikott
+                    setKeyCompetences(domain, material, taxon);
+
                     if (taxon != null)
                         return taxon;
                 }
@@ -227,6 +229,30 @@ public class MaterialParserEstCore extends MaterialParser {
             }
         }
         return domain;
+    }
+
+    private void setKeyCompetences(Taxon domain, Material material, Taxon taxon) {
+        if(taxon != null && domain.getName().equals(KEY_COMPETENCES)) {
+            if(material.getKeyCompetences() == null) {
+                material.setKeyCompetences(new ArrayList<>());
+            }
+
+            List<KeyCompetence> competences = material.getKeyCompetences();
+            competences.add(keyCompetenceService.findKeyCompetenceByName(taxon.getName()));
+            material.setKeyCompetences(competences);
+        }
+    }
+
+    private void setCrossCurricularThemes(Taxon domain, Material material, Taxon taxon) {
+        if(taxon != null && domain.getName().equals(CROSS_CURRICULAR_THEMES)) {
+            if(material.getCrossCurricularThemes() == null) {
+                material.setCrossCurricularThemes(new ArrayList<>());
+            }
+
+            List<CrossCurricularTheme> themes = material.getCrossCurricularThemes();
+            themes.add(crossCurricularThemeService.getThemeByName(taxon.getName()));
+            material.setCrossCurricularThemes(themes);
+        }
     }
 
     @Override

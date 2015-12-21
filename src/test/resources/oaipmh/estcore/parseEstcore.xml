@@ -155,6 +155,12 @@
                                 <subject>Lifelong learning and career planning</subject>
                             </basicSchoolTaxon>
                         </taxonPath>
+                        <taxonPath>
+                            <basicSchoolTaxon>
+                                <domain>Key competences</domain>
+                                <subject>Cultural and value competence</subject>
+                            </basicSchoolTaxon>
+                        </taxonPath>
                     </classification>
                     <imgSrc>ZGVmYXVsdA==</imgSrc>
                 </xm:estcore>

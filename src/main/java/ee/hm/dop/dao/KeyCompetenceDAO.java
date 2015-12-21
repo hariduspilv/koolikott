@@ -19,4 +19,11 @@ public class KeyCompetenceDAO extends BaseDAO {
         return createQuery("from KeyCompetence", KeyCompetence.class).getResultList();
     }
 
+    public KeyCompetence findKeyCompetenceByName(String name) {
+        TypedQuery<KeyCompetence> findById = createQuery("FROM KeyCompetence k WHERE k.name = :name", KeyCompetence.class)
+                .setParameter("name", name);
+
+
+        return getSingleResult(findById);
+    }
 }

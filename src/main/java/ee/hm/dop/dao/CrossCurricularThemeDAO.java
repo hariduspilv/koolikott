@@ -20,10 +20,10 @@ public class CrossCurricularThemeDAO extends BaseDAO {
     }
 
     public CrossCurricularTheme getThemeByName(String name) {
-        TypedQuery<CrossCurricularTheme> findById = createQuery("FROM CrossCurricularTheme c WHERE c.name = :name",
+        TypedQuery<CrossCurricularTheme> findByName = createQuery("FROM CrossCurricularTheme c WHERE c.name = :name",
                 CrossCurricularTheme.class).setParameter("name", name);
 
-        return getSingleResult(findById);
+        return getSingleResult(findByName);
     }
 
 }

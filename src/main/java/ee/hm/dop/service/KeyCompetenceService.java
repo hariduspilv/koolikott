@@ -20,4 +20,7 @@ public class KeyCompetenceService {
         return keyCompetenceDAO.findAll();
     }
 
+    public KeyCompetence findKeyCompetenceByName(String name) {
+        return keyCompetenceDAO.findKeyCompetenceByName(name);
+    }
 }
