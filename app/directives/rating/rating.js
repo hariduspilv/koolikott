@@ -34,6 +34,8 @@ define(['app'], function(app)
                     }
                     
                     if($scope.entity && $scope.entity.type) {
+                    	log("Rating init");
+                    	log($scope.entity);
                     	getUserLike();
                     }
                 }
@@ -55,8 +57,6 @@ define(['app'], function(app)
                 }
                 
                 function getUserLike() {
-                	log($scope.material);
-                	log($scope.entity);
                 	serverCallService.makePost($scope.url+"getUserLike", $scope.entity, getUserLikeSuccess, function() {});
                 }
                 
