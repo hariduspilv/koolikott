@@ -25,7 +25,6 @@ define(['app'], function(app)
 	                	$scope.url = "rest/portfolio/";
                     }
                     if($scope.material) {
-                    	log($scope.material);
 	                	$scope.rating.likes = $scope.material.likes;
 	                	$scope.rating.dislikes = $scope.material.dislikes;
 	                	
@@ -34,8 +33,6 @@ define(['app'], function(app)
                     }
                     
                     if($scope.entity && $scope.entity.type) {
-                    	log("Rating init");
-                    	log($scope.entity);
                     	getUserLike();
                     }
                 }
