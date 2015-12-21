@@ -62,7 +62,7 @@ DOP uses **MariaDB** database. Click [here](https://mariadb.com/kb/en/mariadb/ge
 * **db.username** - the database username
 * **db.password** - the database password for given username
 
-* After installing my.ini or my.cnf under [mysqld] add: **character-set-server=utf8** and **max_allowed_packet = 64M** and **innodb_log_file_size=256M**
+* After installing, in my.ini or my.cnf under [mysqld] add: **character-set-server=utf8** and **max_allowed_packet = 64M** and **innodb_log_file_size=256M**
 ### Server
 
 * **server.port** - the port that server starts.

@@ -6,6 +6,7 @@ import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 import java.io.File;
 import java.net.URI;
@@ -312,6 +313,9 @@ public class MaterialParserEstCoreTest {
         expect(taxonService.getTaxonByEstCoreName("Eesti ajalugu", Topic.class)).andReturn(topic2);
         expect(taxonService.getTaxonByEstCoreName("Ajalooallikad", Subtopic.class)).andReturn(subtopic4);
 
+        // special education taxon
+        expect(taxonService.getTaxonByEstCoreName("SPECIALEDUCATION", EducationalContext.class)).andReturn(null);
+
         LanguageString title1 = new LanguageString();
         title1.setLanguage(english);
         title1.setText("first title");
@@ -361,6 +365,7 @@ public class MaterialParserEstCoreTest {
         assertNotNull(material.getPicture());
         assertEquals(1, material.getPublishers().size());
         assertNotNull(material.getIssueDate());
+        assertTrue(material.isSpecialEducation());
     }
 
     private File getResourceAsFile(String resourcePath) throws URISyntaxException {

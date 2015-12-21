@@ -218,7 +218,7 @@ public abstract class MaterialParser {
         return resourceTypes;
     }
 
-    protected void setEducationalContexts(Document doc, Set<Taxon> taxons, String path) throws XPathExpressionException {
+    protected void setEducationalContexts(Document doc, Set<Taxon> taxons, String path, Material material) throws XPathExpressionException {
         NodeList nl = getNodeList(doc, path);
 
         for (int i = 0; i < nl.getLength(); i++) {
@@ -226,6 +226,8 @@ public abstract class MaterialParser {
             String context = getElementValue(node);
 
             EducationalContext educationalContext = (EducationalContext) getTaxon(context, EducationalContext.class);
+            setIsSpecialEducation(material, context);
+
             if (educationalContext != null) {
                 taxons.add(educationalContext);
             }
@@ -259,14 +261,21 @@ public abstract class MaterialParser {
             taxons.add(parent);
         }
 
+        //Set contexts that are specified separately, not inside the taxon
         try {
-            setEducationalContexts(doc, taxons, getPathToContext());
+            setEducationalContexts(doc, taxons, getPathToContext(), material);
         } catch (XPathExpressionException e) {
             e.printStackTrace();
         }
 
         taxons.removeAll(Collections.singleton(null));
         material.setTaxons(new ArrayList<>(taxons));
+    }
+
+    private void setIsSpecialEducation(Material material, String context) {
+        if(context.equals("SPECIALEDUCATION")) {
+            material.setSpecialEducation(true);
+        }
     }
 
     protected void setLearningResourceType(Material material, Document doc) {
