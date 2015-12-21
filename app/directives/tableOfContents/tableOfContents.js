@@ -51,7 +51,7 @@ define(['app'], function(app)
                 		if($rootScope.selectedSingleMaterial) {
                 			if(!containsMaterial(chapter.materials, $rootScope.selectedSingleMaterial)) {
 	                			chapter.materials.push($rootScope.selectedSingleMaterial);
-	                			showToast($translate.instant('PORTFOLIO_ADD_MATERIAL_SUCCESS'));
+	                			showToast($filter('translate')('PORTFOLIO_ADD_MATERIAL_SUCCESS'));
 	                		}
                 		} else {
                 			var pushed = false;
@@ -63,7 +63,7 @@ define(['app'], function(app)
 		                		}
 		                	}
 		                	if(pushed) {
-		                		showToast($translate.instant('PORTFOLIO_ADD_MATERIAL_SUCCESS'));
+		                		showToast($filter('translate')('PORTFOLIO_ADD_MATERIAL_SUCCESS'));
 		                	}
 		                	
                 		}

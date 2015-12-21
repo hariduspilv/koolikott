@@ -124,7 +124,6 @@ define(['app.routes', 'services/dependencyResolver', 'utils/taxonUtils'], functi
             	}
             } else if(editModeAllowed.indexOf(path) != -1) {
             	if(path != "/material") {
-            		log("ayy");
             		$rootScope.selectedSingleMaterial = null;
             	}
             } else {
