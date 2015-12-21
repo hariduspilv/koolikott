@@ -166,6 +166,6 @@ and download the metadata from the URL and set **taat.metadata.filepath** to poi
 
 # Mobile ID authentication setup
 
-By default **mobileID.endpoint** is set to the Test DigiDocService at `https://www.openxades.org:9443/DigiDocService`. 
+By default **mobileID.endpoint** is set to the Test DigiDocService at `https://tsp.demo.sk.ee`. 
 Set **mobileID.endpoint** to `https://digidocservice.sk.ee/DigiDocService` to use the real endpoint. 
 Set **mobileID.serviceName** to the name that has been agreed upon with the Mobile ID provider. 
