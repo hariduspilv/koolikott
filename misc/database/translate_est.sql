@@ -278,6 +278,7 @@ insert into Translation(translationGroup, translationKey, translation) values (1
 insert into Translation(translationGroup, translationKey, translation) values (1, 'PORTFOLIO_CONFIRM_DELETE_DIALOG_NO', 'Ei');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'PORTFOLIO_DELETED', 'Portfoolio kustutatud');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'PORTFOLIO_ADD_MATERIAL_SUCCESS', 'Materjal(id) edukalt lisatud');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'PORTFOLIO_ADD_MATERIAL', 'Lisa materjal(id) sellese peatükki');
 
 -- Comment translations
 insert into Translation(translationGroup, translationKey, translation) values (1, 'COMMENTS_TITLE', 'Kommentaarid');
