@@ -127,7 +127,7 @@
         <md-divider class="md-default-theme"></md-divider>
 
         <div layout="row" class="md-actions" layout-align="start start">
-            <div data-dop-comments-card comments="portfolio.comments" comment="comment"
+            <div data-ng-if="!isEditPortfolioMode" data-dop-comments-card comments="portfolio.comments" comment="comment"
                  submit-click="addComment()"></div>
             <span flex></span>
             <!-- rating control -->
