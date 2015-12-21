@@ -1,6 +1,8 @@
 package ee.hm.dop.dao;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 
 import java.util.Arrays;
@@ -27,9 +29,17 @@ public class CrossCurricularThemeDAOTest extends DatabaseTestBase {
 
         List<String> expected = Arrays.asList("Lifelong_learning_and_career_planning",
                 "Environment_and_sustainable_development");
-        List<String> actual = result.stream().map(r -> r.getName()).collect(Collectors.toList());
+        List<String> actual = result.stream().map(CrossCurricularTheme::getName).collect(Collectors.toList());
 
         assertTrue(actual.containsAll(expected));
     }
 
+
+    @Test
+    public void findThemeByName() {
+        CrossCurricularTheme crossCurricularTheme = crossCurricularThemeDAO.getThemeByName("Lifelong_learning_and_career_planning");
+        assertNotNull(crossCurricularTheme);
+        assertEquals(crossCurricularTheme.getName(), "Lifelong_learning_and_career_planning");
+        assertSame(1L, crossCurricularTheme.getId());
+    }
 }

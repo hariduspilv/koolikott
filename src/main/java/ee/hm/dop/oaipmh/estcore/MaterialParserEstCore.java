@@ -20,6 +20,7 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import ee.hm.dop.model.Author;
+import ee.hm.dop.model.CrossCurricularTheme;
 import ee.hm.dop.model.IssueDate;
 import ee.hm.dop.model.Language;
 import ee.hm.dop.model.LanguageString;
@@ -38,6 +39,7 @@ import ee.hm.dop.model.taxon.Topic;
 import ee.hm.dop.oaipmh.MaterialParser;
 import ee.hm.dop.oaipmh.ParseException;
 import ee.hm.dop.service.AuthorService;
+import ee.hm.dop.service.CrossCurricularThemeService;
 import ee.hm.dop.service.IssueDateService;
 import ee.hm.dop.service.LanguageService;
 import ee.hm.dop.service.PublisherService;
@@ -50,6 +52,7 @@ public class MaterialParserEstCore extends MaterialParser {
     private static final Map<String, String> taxonMap;
     public static final String YES = "YES";
     public static final String PUBLISHER = "PUBLISHER";
+    public static final String CROSS_CURRICULAR_THEMES = "Cross-curricular_themes";
 
     static {
         taxonMap = new HashMap<>();
@@ -76,6 +79,9 @@ public class MaterialParserEstCore extends MaterialParser {
 
     @Inject
     private IssueDateService issueDateService;
+
+    @Inject
+    private CrossCurricularThemeService crossCurricularThemeService;
 
     @Override
     protected void setContributors(Material material, Document doc) {
@@ -193,7 +199,7 @@ public class MaterialParserEstCore extends MaterialParser {
     }
 
     @Override
-    protected Taxon setSubject(Node taxonPath, Taxon domain) {
+    protected Taxon setSubject(Node taxonPath, Taxon domain, Material material) {
         for (String tag : taxonMap.keySet()) {
             try {
                 Node node = getNode(taxonPath, "./*[local-name()='" + tag + "']/*[local-name()='subject']");
@@ -201,8 +207,18 @@ public class MaterialParserEstCore extends MaterialParser {
                 if (node != null) {
                     List<Taxon> subjects = new ArrayList<>(((Domain) domain).getSubjects());
                     String systemName = getTaxon(node.getTextContent(), Subject.class).getName();
-
                     Taxon taxon = getTaxonByName(subjects, systemName);
+
+                    //Special case for adding to Cross-curricular themes to eKoolikott
+                    if(taxon != null && domain.getName().equals(CROSS_CURRICULAR_THEMES)) {
+                        if(material.getCrossCurricularThemes() == null) {
+                            material.setCrossCurricularThemes(new ArrayList<>());
+                        }
+
+                        List<CrossCurricularTheme> themes = material.getCrossCurricularThemes();
+                        themes.add(crossCurricularThemeService.getThemeByName(taxon.getName()));
+                        material.setCrossCurricularThemes(themes);
+                    }
                     if (taxon != null)
                         return taxon;
                 }

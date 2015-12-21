@@ -203,7 +203,7 @@ public class MaterialParserTest {
         }
 
         @Override
-        protected Taxon setSubject(Node node, Taxon lastTaxon) {
+        protected Taxon setSubject(Node node, Taxon lastTaxon, Material material) {
             return null;
         }
 

@@ -149,6 +149,12 @@
                                 <subtopic>Ajalooallikad</subtopic>
                             </basicSchoolTaxon>
                         </taxonPath>
+                        <taxonPath>
+                            <basicSchoolTaxon>
+                                <domain>Cross-curricular themes</domain>
+                                <subject>Lifelong learning and career planning</subject>
+                            </basicSchoolTaxon>
+                        </taxonPath>
                     </classification>
                     <imgSrc>ZGVmYXVsdA==</imgSrc>
                 </xm:estcore>

@@ -125,7 +125,7 @@ public class MaterialParserWaramu extends MaterialParser {
     }
 
     @Override
-    protected Taxon setSubject(Node node, Taxon lastTaxon) {
+    protected Taxon setSubject(Node node, Taxon lastTaxon, Material material) {
         return null;
     }
 
