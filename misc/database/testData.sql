@@ -16,12 +16,10 @@ insert into IssueDate(id, day, month, year) values (13, 4, 5, 2013);
 insert into IssueDate(id, day, month, year) values (14, 5, 4, 2014);
 insert into IssueDate(id, day, month, year) values (15, 6, 3, 2015);
 insert into IssueDate(id, day, month, year) values (16, 7, 2, 2015);
-	
+
 -- Repositories
 
-insert into Repository(id, baseURL, lastSynchronization, schemaName, isEstonianPublisher) values (1, 'http://koolitaja.eenet.ee:57219/Waramu3Web/OAIHandler', null, 'waramu', false);
 insert into Repository(id, baseURL, lastSynchronization, schemaName, isEstonianPublisher) values (2, 'http://oxygen.netgroupdigital.com:8081/rest/OAIHandler', null, 'estCore', true);
-
 
 -- User
 
