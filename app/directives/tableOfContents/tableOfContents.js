@@ -15,13 +15,15 @@ define(['app'], function(app)
                     e.preventDefault();
 
                     var combinedId = 'chapter-' + chapterId;
-                    if(subchapterId != null) {
+                    
+                    if (subchapterId != null) {
                     	combinedId += '-' + subchapterId;
                     }
+                    
                     var $chapter = angular.element(document.getElementById(combinedId));
-                    log(combinedId);
                     var $context = angular.element(document.getElementById('scrollable-content'));
-                    $document.scrollToElement($chapter, 30, 200);
+
+                    $context.scrollToElement($chapter, 30, 200);
                 };
 
                 $scope.addNewSubChapter = function(index) {
