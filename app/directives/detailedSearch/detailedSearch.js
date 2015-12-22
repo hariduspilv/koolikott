@@ -5,7 +5,9 @@ define(['app'], function(app)
         return {
             scope: {
                 queryIn: '=',
-                queryOut: '='
+                queryOut: '=',
+                mainField: '=',
+                searchCallback: '&'
             },
             templateUrl: 'directives/detailedSearch/detailedSearch.html',
             controller: function ($scope, $rootScope) {
@@ -113,7 +115,7 @@ define(['app'], function(app)
                     addCrossCurricularThemeToSearch();
                     addKeyCompetenceToSearch();
 
-                    $location.url(searchService.getURL());
+                    $scope.searchCallback();
                 };
 
                 function addIsPaidToSearch() {
@@ -215,10 +217,6 @@ define(['app'], function(app)
 
                     query = (textFields + ' ' + checkboxes).trim();
 
-                    if ($scope.detailedSearch.main) {
-                        query = $scope.detailedSearch.main + ' ' + query;
-                    }
-
                     return query.trim();
                 }
 
@@ -278,6 +276,8 @@ define(['app'], function(app)
                         $scope.detailedSearch.title = firstTitle;
                         $scope.detailedSearch.combinedDescription = firstDescription;
                         $scope.detailedSearch.author = firstAuthor;
+
+                        $scope.mainField = $scope.detailedSearch.main;
                     }
                 }
 
@@ -368,10 +368,10 @@ define(['app'], function(app)
                         'issueDate': $scope.issueDateFirstYear,
                         'type': 'all'
                     };
-                }
+                };
 
                 $scope.$watch('detailedSearch.taxon.id', function(newTaxon, oldTaxon) {
-                    if (newTaxon !== oldTaxon) {
+                    if (newTaxon !== oldTaxon && $scope.detailedSearch.taxon) {
                         var taxon = Object.create($scope.detailedSearch.taxon);
                         $scope.detailedSearch.educationalContext = $rootScope.taxonUtils.getEducationalContext(taxon);
                         clearHiddenFields();
