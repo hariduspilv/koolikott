@@ -128,6 +128,11 @@ insert into Translation(translationGroup, translationKey, translation) values (3
 insert into Translation(translationGroup, translationKey, translation) values (3, 'DETAILED_SEARCH_SPECIAL_EDUCATIONAL_NEED', 'Special educational need');
 insert into Translation(translationGroup, translationKey, translation) values (3, 'DETAILED_SEARCH_CLEAR', 'Clear');
 insert into Translation(translationGroup, translationKey, translation) values (3, 'ADD_PORTFOLIO', 'Add Portfolio');
+insert into Translation(translationGroup, translationKey, translation) values (3, 'ADD_PORTFOLIO_REMOVE_TAG', 'Remove tag');
+insert into Translation(translationGroup, translationKey, translation) values (3, 'ADD_PORTFOLIO_REMOVE_TAG_HINT', 'Click x to remove tag');
+insert into Translation(translationGroup, translationKey, translation) values (3, 'ADD_PORTFOLIO_TAGS', 'Tags');
+insert into Translation(translationGroup, translationKey, translation) values (3, 'ADD_PORTFOLIO_PRESS_ENTER', 'Add a tag and press Enter');
+insert into Translation(translationGroup, translationKey, translation) values (3, 'PORTFOLIO_TITLE_IS_MANDATORY', 'Portfolio title is mandatory');
 insert into Translation(translationGroup, translationKey, translation) values (3, 'EDIT_PORTFOLIO', 'Edit portfolio');
 insert into Translation(translationGroup, translationKey, translation) values (3, 'PORTFOLIO_TITLE', 'Title');
 insert into Translation(translationGroup, translationKey, translation) values (3, 'PORTFOLIO_SUMMARY', 'Summary');
@@ -321,6 +326,7 @@ insert into Translation(translationGroup, translationKey, translation) values (3
 insert into Translation(translationGroup, translationKey, translation) values (3, 'ADD_MATERIAL', 'Add material');
 insert into Translation(translationGroup, translationKey, translation) values (3, 'MATERIAL_URL', 'Material URL');
 insert into Translation(translationGroup, translationKey, translation) values (3, 'MATERIAL_URL_IS_MANDATORY', 'Material URL is required');
+insert into Translation(translationGroup, translationKey, translation) values (3, 'MATERIAL_TITLE_IS_MANDATORY', 'Material title is required');
 insert into Translation(translationGroup, translationKey, translation) values (3, 'MATERIAL_URL_IS_INVALID', 'Material URL is not correct format');
 insert into Translation(translationGroup, translationKey, translation) values (3, 'MATERIAL_TITLE_DESCRIPTION', 'Title and description');
 insert into Translation(translationGroup, translationKey, translation) values (3, 'MATERIAL_ADDITIONAL_DATA', 'Additional title');
@@ -351,6 +357,12 @@ insert into Translation(translationGroup, translationKey, translation) values (3
 insert into Translation(translationGroup, translationKey, translation) values (3, 'MATERIAL_TAB_TYPE', 'Type');
 insert into Translation(translationGroup, translationKey, translation) values (3, 'MATERIAL_TAB_PICTURE', 'Picture');
 insert into Translation(translationGroup, translationKey, translation) values (3, 'MATERIAL_TAB_TAXON', 'Taxonomy');
+insert into Translation(translationGroup, translationKey, translation) values (3, 'MATERIAL_TAB_ADD_LANGUAGE', 'Add language');
+insert into Translation(translationGroup, translationKey, translation) values (3, 'MATERIAL_TAB_REMOVE_LANGUAGE', 'Remove language');
+insert into Translation(translationGroup, translationKey, translation) values (3, 'MATERIAL_TAB_ADD_TAXON', 'Add taxonomy');
+insert into Translation(translationGroup, translationKey, translation) values (3, 'MATERIAL_TAB_REMOVE_TAXON', 'Remove taxonomy');
+insert into Translation(translationGroup, translationKey, translation) values (3, 'MATERIAL_TAB_PRESS_ENTER_TO_ADD_TAG', 'Add a tag and press Enter');
+insert into Translation(translationGroup, translationKey, translation) values (3, 'MATERIAL_TAB_CHOOSE_LICENSE', 'Choose license type');
 
 -- Like box translations
 insert into Translation(translationGroup, translationKey, translation) values (3, 'RATING_LIKE', 'I like this');

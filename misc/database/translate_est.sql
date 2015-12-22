@@ -128,6 +128,11 @@ insert into Translation(translationGroup, translationKey, translation) values (1
 insert into Translation(translationGroup, translationKey, translation) values (1, 'DETAILED_SEARCH_SPECIAL_EDUCATIONAL_NEED', 'Hariduslik erivajadus');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'DETAILED_SEARCH_CLEAR', 'Tühista valikud');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'ADD_PORTFOLIO', 'Lisa kogumik');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'ADD_PORTFOLIO_REMOVE_TAG', 'Eemalda märksõna');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'ADD_PORTFOLIO_REMOVE_TAG_HINT', 'Märksõna eemaldamiseks vajuta x-ile');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'ADD_PORTFOLIO_TAGS', 'Märksõnad');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'ADD_PORTFOLIO_PRESS_ENTER', 'Lisa märksõna ja vajuta Enter');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'PORTFOLIO_TITLE_IS_MANDATORY', 'Kogumiku pealkiri on kohustuslik');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'EDIT_PORTFOLIO', 'Muuda kogumikku');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'PORTFOLIO_TITLE', 'Pealkiri');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'PORTFOLIO_SUMMARY', 'Kokkuvõte');
@@ -305,6 +310,7 @@ insert into Translation(translationGroup, translationKey, translation) values (1
 insert into Translation(translationGroup, translationKey, translation) values (1, 'ADD_MATERIAL', 'Lisa materjal');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'MATERIAL_URL', 'Materjali URL');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'MATERIAL_URL_IS_MANDATORY', 'Materjali URL on kohustuslik');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'MATERIAL_TITLE_IS_MANDATORY', 'Materjali pealkiri on kohustuslik');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'MATERIAL_URL_IS_INVALID', 'Materjali URL ei vasta formaadile');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'MATERIAL_TITLE_DESCRIPTION', 'Pealkiri ja kirjeldus');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'MATERIAL_ADDITIONAL_DATA', 'Lisaandmed');
@@ -335,6 +341,12 @@ insert into Translation(translationGroup, translationKey, translation) values (1
 insert into Translation(translationGroup, translationKey, translation) values (1, 'MATERIAL_TAB_TYPE', 'Tüüp');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'MATERIAL_TAB_PICTURE', 'Pilt');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'MATERIAL_TAB_TAXON', 'Liigitus');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'MATERIAL_TAB_ADD_LANGUAGE', 'Lisa keel');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'MATERIAL_TAB_REMOVE_LANGUAGE', 'Eemalda keel');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'MATERIAL_TAB_ADD_TAXON', 'Lisa liigitus');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'MATERIAL_TAB_REMOVE_TAXON', 'Eemalda liigitus');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'MATERIAL_TAB_PRESS_ENTER_TO_ADD_TAG', 'Lisa märksõna ja vajuta Enter');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'MATERIAL_TAB_CHOOSE_LICENSE', 'Vali litsentsi tüüp');
 
 -- Like box translations
 insert into Translation(translationGroup, translationKey, translation) values (1, 'RATING_LIKE', 'Mulle meeldib see');

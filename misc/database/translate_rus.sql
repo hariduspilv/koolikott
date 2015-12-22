@@ -128,6 +128,11 @@ insert into Translation(translationGroup, translationKey, translation) values (2
 insert into Translation(translationGroup, translationKey, translation) values (2, 'DETAILED_SEARCH_SPECIAL_EDUCATIONAL_NEED', 'Специальный учебно необходимости');
 insert into Translation(translationGroup, translationKey, translation) values (2, 'DETAILED_SEARCH_CLEAR', 'Очистить');
 insert into Translation(translationGroup, translationKey, translation) values (2, 'ADD_PORTFOLIO', 'Добавить портфель');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'ADD_PORTFOLIO_REMOVE_TAG', 'Убрать метку');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'ADD_PORTFOLIO_REMOVE_TAG_HINT', 'Нажмите, чтобы удалить х тег');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'ADD_PORTFOLIO_TAGS', 'Ключевые слова');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'ADD_PORTFOLIO_PRESS_ENTER', 'Добавить тег и нажмите Enter');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'PORTFOLIO_TITLE_IS_MANDATORY', 'Название Портфолио является обязательным');
 insert into Translation(translationGroup, translationKey, translation) values (2, 'EDIT_PORTFOLIO', 'Редактировать портфель');
 insert into Translation(translationGroup, translationKey, translation) values (2, 'BUTTON_EDIT_PORTFOLIO', 'Сохранить');
 insert into Translation(translationGroup, translationKey, translation) values (2, 'PORTFOLIO_TITLE', 'Заглавие');
@@ -304,6 +309,7 @@ insert into Translation(translationGroup, translationKey, translation) values (2
 insert into Translation(translationGroup, translationKey, translation) values (2, 'ADD_MATERIAL', 'Добавить материал');
 insert into Translation(translationGroup, translationKey, translation) values (2, 'MATERIAL_URL', 'Материал URL');
 insert into Translation(translationGroup, translationKey, translation) values (2, 'MATERIAL_URL_IS_MANDATORY', 'Материал URL требуется');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'MATERIAL_TITLE_IS_MANDATORY', 'Материал название является обязательным');
 insert into Translation(translationGroup, translationKey, translation) values (2, 'MATERIAL_URL_IS_INVALID', 'Материал URL не правильный формат');
 insert into Translation(translationGroup, translationKey, translation) values (2, 'MATERIAL_TITLE_DESCRIPTION', 'Название и описание');
 insert into Translation(translationGroup, translationKey, translation) values (2, 'MATERIAL_ADDITIONAL_DATA', 'Дополнительная название');
@@ -333,6 +339,12 @@ insert into Translation(translationGroup, translationKey, translation) values (2
 insert into Translation(translationGroup, translationKey, translation) values (2, 'MATERIAL_TAB_TYPE', 'Тип');
 insert into Translation(translationGroup, translationKey, translation) values (2, 'MATERIAL_TAB_PICTURE', 'Картина');
 insert into Translation(translationGroup, translationKey, translation) values (2, 'MATERIAL_TAB_TAXON', 'Cистематика');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'MATERIAL_TAB_ADD_LANGUAGE', 'Добавить язык');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'MATERIAL_TAB_REMOVE_LANGUAGE', 'Удалить язык');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'MATERIAL_TAB_ADD_TAXON', 'Добавить таксономии');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'MATERIAL_TAB_REMOVE_TAXON', 'Удалить таксономии');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'MATERIAL_TAB_PRESS_ENTER_TO_ADD_TAG', 'Добавить тег и нажмите Enter');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'MATERIAL_TAB_CHOOSE_LICENSE', 'Выберите тип лицензии');
 
 -- Like box translations
 insert into Translation(translationGroup, translationKey, translation) values (2, 'RATING_LIKE', 'Мне это нравится');
