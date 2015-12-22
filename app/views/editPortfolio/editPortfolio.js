@@ -11,8 +11,10 @@ define(['app'], function(app) {
 
             function init() {
                 if ($rootScope.savedPortfolio) {
-                    setPortfolio($rootScope.savedPortfolio);
-                    checkPortfolioVisibility($rootScope.savedPortfolio);
+                	if(checkAuthorized($rootScope.savedPortfolio)) {
+	                    setPortfolio($rootScope.savedPortfolio);
+	                    checkPortfolioVisibility($rootScope.savedPortfolio);
+                	}
                 } else {
                     getPortfolio(getPortfolioSuccess, getPortfolioFail);
                 }
@@ -43,7 +45,7 @@ define(['app'], function(app) {
             function getPortfolioSuccess(portfolio) {
                 if (isEmpty(portfolio)) {
                     getPortfolioFail();
-                } else {
+                } else if(checkAuthorized(portfolio)) {              
                     setPortfolio(portfolio);
                     checkPortfolioVisibility(portfolio);
                     searchService.setTargetGroups(portfolio.targetGroups);
@@ -120,6 +122,14 @@ define(['app'], function(app) {
                     'Jah, Tee kogumik privaatseks',
                     'Ei',
                     setPrivate);
+            }
+            
+            function checkAuthorized(portfolio) {
+            	if(authenticatedUserService.getUser().id != portfolio.creator.id) {
+            		$location.url("/");
+            		return false;
+            	}
+            	return true;
             }
             
             function startAutosave() {                

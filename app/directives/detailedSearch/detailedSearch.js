@@ -368,6 +368,10 @@ define(['app'], function(app)
                         'issueDate': $scope.issueDateFirstYear,
                         'type': 'all'
                     };
+
+                    if($rootScope.isEditPortfolioMode) {
+                    	$scope.detailedSearch.type = "material";
+                    }
                 };
 
                 $scope.$watch('detailedSearch.taxon.id', function(newTaxon, oldTaxon) {

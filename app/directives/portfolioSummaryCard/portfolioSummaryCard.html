@@ -43,10 +43,10 @@
                                 <span data-translate="DETAIL_VIEW_SUBJECT"></span>
                             </small>
                             <br/>
-                            <span data-ng-if="taxonUtils.getSubject(newTaxon)"
-                                  data-translate="{{'SUBJECT_' + taxonUtils.getSubject(newTaxon).name.toUpperCase()}}">
+                            <span data-ng-if="$root.taxonUtils.getSubject(portfolio.taxon)"
+                                  data-translate="{{'SUBJECT_' + $root.taxonUtils.getSubject(portfolio.taxon).name.toUpperCase()}}">
                             </span>
-                            <span data-ng-if="!taxonUtils.getSubject(newTaxon)"
+                            <span data-ng-if="!$root.taxonUtils.getSubject(portfolio.taxon)"
                                   data-translate="UNKNOWN">Unknown</span>
                         </p>
                     </div>
@@ -56,10 +56,10 @@
                                 <span data-translate="DETAIL_VIEW_EDUCATIONAL_CONTEXT"></span>
                             </small>
                             <br>
-                            <span data-ng-if="newTaxon"
+                            <span data-ng-if="portfolio.taxon"
                                   data-translate="{{getEducationalContext()}}">
                             </span>
-                            <span data-ng-if="!newTaxon" data-translate="UNKNOWN">Unknown</span>
+                            <span data-ng-if="!portfolio.taxon" data-translate="UNKNOWN">Unknown</span>
                         </p>
                     </div>
                 </div>
@@ -127,11 +127,11 @@
         <md-divider class="md-default-theme"></md-divider>
 
         <div layout="row" class="md-actions" layout-align="start start">
-            <div data-dop-comments-card comments="portfolio.comments" comment="comment"
+            <div data-ng-if="!isEditPortfolioMode" data-dop-comments-card comments="portfolio.comments" comment="comment"
                  submit-click="addComment()"></div>
             <span flex></span>
             <!-- rating control -->
-            <div data-ng-if="!isEditPortfolioMode && portfolio" data-dop-rating
+            <div data-ng-if="!isEditPortfolioMode && portfolio.type" data-dop-rating
                  data-portfolio="portfolio"
                  like-message="{{ 'PORTFOLIO_LIKED' | translate }}"
                  dislike-message="{{ 'PORTFOLIO_DISLIKED' | translate }}">
