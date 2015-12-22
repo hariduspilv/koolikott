@@ -373,6 +373,8 @@ insert into Portfolio(id, title, taxon, creator, summary, views, created, update
 insert into Portfolio(id, title, taxon, creator, summary, views, created, updated, picture, visibility, deleted) VALUES (10, 'This portfolio2 is private. ', null, 7, 'Alpha.', 100, '2003-10-10 07:00:11', null, null, 'PRIVATE', false);
 insert into Portfolio(id, title, taxon, creator, summary, views, created, updated, picture, visibility, deleted) VALUES (11, 'This portfolio2 is not listed. ', null, 7, 'Alpha.', 100, '2003-10-10 07:00:11', null, null, 'NOT_LISTED', false);
 insert into Portfolio(id, title, taxon, creator, summary, views, created, updated, picture, visibility, deleted) VALUES (12, 'This portfolio will be DELETED in tests.', null, 9, 'Alpha.', 100, '2003-10-10 07:00:11', null, null, 'PUBLIC', false);
+insert into Portfolio(id, title, taxon, creator, summary, views, created, updated, picture, visibility, deleted) VALUES (13, 'This portfolio will be DELETED in tests by admin.', null, 9, 'Beta.', 100, '2003-12-10 07:22:11', null, null, 'PUBLIC', false);
+
 -- Chapter
 
 insert into Chapter(id, title, portfolio, textValue, parentChapter, chapterOrder) values (1, 'The crisis', 1, null, null, 0);
