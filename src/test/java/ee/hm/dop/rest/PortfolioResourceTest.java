@@ -434,6 +434,17 @@ public class PortfolioResourceTest extends ResourceIntegrationTestBase {
     }
 
     @Test
+    public void deletePortfolioAsAdmin() {
+        login("89898989898");
+
+        Portfolio portfolio = new Portfolio();
+        portfolio.setId(13L);
+
+        Response response = doPost(DELETE_PORTFOLIO_URL, Entity.entity(portfolio, MediaType.APPLICATION_JSON_TYPE));
+        assertEquals(Status.NO_CONTENT.getStatusCode(), response.getStatus());
+    }
+
+    @Test
     public void deletePortfolioAsNotCreator() {
         login("89012378912");
 

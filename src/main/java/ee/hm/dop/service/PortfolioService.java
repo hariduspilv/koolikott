@@ -22,278 +22,278 @@ import ee.hm.dop.model.Visibility;
 
 public class PortfolioService {
 
-	@Inject
-	private PortfolioDAO portfolioDAO;
+    @Inject
+    private PortfolioDAO portfolioDAO;
 
-	@Inject
-	private UserLikeDAO userLikeDAO;
+    @Inject
+    private UserLikeDAO userLikeDAO;
 
-	@Inject
-	private SearchEngineService searchEngineService;
+    @Inject
+    private SearchEngineService searchEngineService;
 
-	public Portfolio get(long portfolioId, User loggedInUser) {
-		Portfolio portfolio = portfolioDAO.findById(portfolioId);
+    public Portfolio get(long portfolioId, User loggedInUser) {
+        Portfolio portfolio = portfolioDAO.findById(portfolioId);
 
-		if (portfolio != null && !isPortfolioAccessibleToUser(portfolio, loggedInUser)) {
-			portfolio = null;
-		}
+        if (portfolio != null && !isPortfolioAccessibleToUser(portfolio, loggedInUser)) {
+            portfolio = null;
+        }
 
-		return portfolio;
-	}
+        return portfolio;
+    }
 
-	public List<Portfolio> getByCreator(User creator, User loggedInUser) {
-		List<Portfolio> portfolios = portfolioDAO.findByCreator(creator);
+    public List<Portfolio> getByCreator(User creator, User loggedInUser) {
+        List<Portfolio> portfolios = portfolioDAO.findByCreator(creator);
 
-		portfolios = portfolios.stream().filter(p -> isPortfolioVisibleToUser(p, loggedInUser))
-				.collect(Collectors.toList());
+        portfolios = portfolios.stream().filter(p -> isPortfolioVisibleToUser(p, loggedInUser))
+                .collect(Collectors.toList());
 
-		return portfolios;
-	}
+        return portfolios;
+    }
 
-	public byte[] getPortfolioPicture(Portfolio portfolio, User loggedInUser) {
-		Portfolio actualPortfolio = portfolioDAO.findById(portfolio.getId());
+    public byte[] getPortfolioPicture(Portfolio portfolio, User loggedInUser) {
+        Portfolio actualPortfolio = portfolioDAO.findById(portfolio.getId());
 
-		if (actualPortfolio != null && !isPortfolioAccessibleToUser(actualPortfolio, loggedInUser)) {
-			return null;
-		}
+        if (actualPortfolio != null && !isPortfolioAccessibleToUser(actualPortfolio, loggedInUser)) {
+            return null;
+        }
 
-		return portfolioDAO.findPictureByPortfolio(portfolio);
-	}
+        return portfolioDAO.findPictureByPortfolio(portfolio);
+    }
 
-	public void incrementViewCount(Portfolio portfolio) {
-		Portfolio originalPortfolio = portfolioDAO.findById(portfolio.getId());
-		if (originalPortfolio == null) {
-			throw new RuntimeException("Portfolio not found");
-		}
+    public void incrementViewCount(Portfolio portfolio) {
+        Portfolio originalPortfolio = portfolioDAO.findById(portfolio.getId());
+        if (originalPortfolio == null) {
+            throw new RuntimeException("Portfolio not found");
+        }
 
-		portfolioDAO.incrementViewCount(originalPortfolio);
-	}
+        portfolioDAO.incrementViewCount(originalPortfolio);
+    }
 
-	public void addComment(Comment comment, Portfolio portfolio, User loggedInUser) {
-		if (isEmpty(comment.getText())) {
-			throw new RuntimeException("Comment is missing text.");
-		}
+    public void addComment(Comment comment, Portfolio portfolio, User loggedInUser) {
+        if (isEmpty(comment.getText())) {
+            throw new RuntimeException("Comment is missing text.");
+        }
 
-		if (comment.getId() != null) {
-			throw new RuntimeException("Comment already exists.");
-		}
+        if (comment.getId() != null) {
+            throw new RuntimeException("Comment already exists.");
+        }
 
-		Portfolio originalPortfolio = portfolioDAO.findById(portfolio.getId());
-		if (originalPortfolio == null) {
-			throw new RuntimeException("Portfolio not found");
-		}
+        Portfolio originalPortfolio = portfolioDAO.findById(portfolio.getId());
+        if (originalPortfolio == null) {
+            throw new RuntimeException("Portfolio not found");
+        }
 
-		if (!isPortfolioAccessibleToUser(originalPortfolio, loggedInUser)) {
-			throw new RuntimeException("Portfolio not found");
-		}
+        if (!isPortfolioAccessibleToUser(originalPortfolio, loggedInUser)) {
+            throw new RuntimeException("Portfolio not found");
+        }
 
-		comment.setAdded(DateTime.now());
-		originalPortfolio.getComments().add(comment);
-		portfolioDAO.update(originalPortfolio);
-	}
+        comment.setAdded(DateTime.now());
+        originalPortfolio.getComments().add(comment);
+        portfolioDAO.update(originalPortfolio);
+    }
 
-	public UserLike addUserLike(Portfolio portfolio, User loggedInUser, boolean isLiked) {
-		if (portfolio == null || portfolio.getId() == null) {
-			throw new RuntimeException("Portfolio not found");
-		}
-		Portfolio originalPortfolio = portfolioDAO.findById(portfolio.getId());
-		if (originalPortfolio == null) {
-			throw new RuntimeException("Portfolio not found");
-		}
-		if (!isPortfolioAccessibleToUser(originalPortfolio, loggedInUser)) {
-			throw new RuntimeException("Not authorized");
-		}
+    public UserLike addUserLike(Portfolio portfolio, User loggedInUser, boolean isLiked) {
+        if (portfolio == null || portfolio.getId() == null) {
+            throw new RuntimeException("Portfolio not found");
+        }
+        Portfolio originalPortfolio = portfolioDAO.findById(portfolio.getId());
+        if (originalPortfolio == null) {
+            throw new RuntimeException("Portfolio not found");
+        }
+        if (!isPortfolioAccessibleToUser(originalPortfolio, loggedInUser)) {
+            throw new RuntimeException("Not authorized");
+        }
 
-		userLikeDAO.deletePortfolioLike(originalPortfolio, loggedInUser);
+        userLikeDAO.deletePortfolioLike(originalPortfolio, loggedInUser);
 
-		UserLike like = new UserLike();
-		like.setPortfolio(originalPortfolio);
-		like.setCreator(loggedInUser);
-		like.setLiked(isLiked);
-		like.setAdded(DateTime.now());
+        UserLike like = new UserLike();
+        like.setPortfolio(originalPortfolio);
+        like.setCreator(loggedInUser);
+        like.setLiked(isLiked);
+        like.setAdded(DateTime.now());
 
-		return userLikeDAO.update(like);
-	}
+        return userLikeDAO.update(like);
+    }
 
-	public void removeUserLike(Portfolio portfolio, User loggedInUser) {
-		if (portfolio == null || portfolio.getId() == null) {
-			throw new RuntimeException("Portfolio not found");
-		}
-		Portfolio originalPortfolio = portfolioDAO.findById(portfolio.getId());
-		if (originalPortfolio == null) {
-			throw new RuntimeException("Portfolio not found");
-		}
-		if (!isPortfolioAccessibleToUser(originalPortfolio, loggedInUser)) {
-			throw new RuntimeException("Not authorized");
-		}
+    public void removeUserLike(Portfolio portfolio, User loggedInUser) {
+        if (portfolio == null || portfolio.getId() == null) {
+            throw new RuntimeException("Portfolio not found");
+        }
+        Portfolio originalPortfolio = portfolioDAO.findById(portfolio.getId());
+        if (originalPortfolio == null) {
+            throw new RuntimeException("Portfolio not found");
+        }
+        if (!isPortfolioAccessibleToUser(originalPortfolio, loggedInUser)) {
+            throw new RuntimeException("Not authorized");
+        }
 
-		userLikeDAO.deletePortfolioLike(originalPortfolio, loggedInUser);
-	}
+        userLikeDAO.deletePortfolioLike(originalPortfolio, loggedInUser);
+    }
 
-	public UserLike getUserLike(Portfolio portfolio, User loggedInUser) {
+    public UserLike getUserLike(Portfolio portfolio, User loggedInUser) {
 
-		if (portfolio == null || portfolio.getId() == null) {
-			throw new RuntimeException("Portfolio not found");
-		}
-		Portfolio originalPortfolio = portfolioDAO.findById(portfolio.getId());
-		if (originalPortfolio == null) {
-			throw new RuntimeException("Portfolio not found");
-		}
-		if (!isPortfolioAccessibleToUser(originalPortfolio, loggedInUser)) {
-			throw new RuntimeException("Not authorized");
-		}
+        if (portfolio == null || portfolio.getId() == null) {
+            throw new RuntimeException("Portfolio not found");
+        }
+        Portfolio originalPortfolio = portfolioDAO.findById(portfolio.getId());
+        if (originalPortfolio == null) {
+            throw new RuntimeException("Portfolio not found");
+        }
+        if (!isPortfolioAccessibleToUser(originalPortfolio, loggedInUser)) {
+            throw new RuntimeException("Not authorized");
+        }
 
-		UserLike like = userLikeDAO.findPortfolioUserLike(originalPortfolio, loggedInUser);
-		return like;
-	}
+        UserLike like = userLikeDAO.findPortfolioUserLike(originalPortfolio, loggedInUser);
+        return like;
+    }
 
-	public Portfolio create(Portfolio portfolio, User creator) {
-		if (portfolio.getId() != null) {
-			throw new RuntimeException("Portfolio already exists.");
-		}
+    public Portfolio create(Portfolio portfolio, User creator) {
+        if (portfolio.getId() != null) {
+            throw new RuntimeException("Portfolio already exists.");
+        }
 
-		Portfolio safePortfolio = getPortfolioWithAllowedFieldsOnCreate(portfolio);
-		return doCreate(safePortfolio, creator);
-	}
+        Portfolio safePortfolio = getPortfolioWithAllowedFieldsOnCreate(portfolio);
+        return doCreate(safePortfolio, creator);
+    }
 
-	private Portfolio doCreate(Portfolio portfolio, User creator) {
-		portfolio.setViews(0L);
-		portfolio.setCreator(creator);
-		portfolio.setVisibility(Visibility.PRIVATE);
+    private Portfolio doCreate(Portfolio portfolio, User creator) {
+        portfolio.setViews(0L);
+        portfolio.setCreator(creator);
+        portfolio.setVisibility(Visibility.PRIVATE);
 
-		Portfolio createdPortfolio = portfolioDAO.update(portfolio);
-		searchEngineService.updateIndex();
+        Portfolio createdPortfolio = portfolioDAO.update(portfolio);
+        searchEngineService.updateIndex();
 
-		return createdPortfolio;
-	}
+        return createdPortfolio;
+    }
 
-	public Portfolio update(Portfolio portfolio, User loggedInUser) {
-		if (portfolio.getId() == null) {
-			throw new RuntimeException("Portfolio must already exist.");
-		}
+    public Portfolio update(Portfolio portfolio, User loggedInUser) {
+        if (portfolio.getId() == null) {
+            throw new RuntimeException("Portfolio must already exist.");
+        }
 
-		if (isEmpty(portfolio.getTitle())) {
-			throw new RuntimeException("Required field title must be filled.");
-		}
+        if (isEmpty(portfolio.getTitle())) {
+            throw new RuntimeException("Required field title must be filled.");
+        }
 
-		Portfolio originalPortfolio = portfolioDAO.findById(portfolio.getId());
-		if (originalPortfolio == null) {
-			throw new RuntimeException("Portfolio not found");
-		}
+        Portfolio originalPortfolio = portfolioDAO.findById(portfolio.getId());
+        if (originalPortfolio == null) {
+            throw new RuntimeException("Portfolio not found");
+        }
 
-		if (originalPortfolio.getCreator().getId() != loggedInUser.getId()) {
-			throw new RuntimeException("Logged in user must be the creator of this portfolio.");
-		}
+        if (originalPortfolio.getCreator().getId() != loggedInUser.getId()) {
+            throw new RuntimeException("Logged in user must be the creator of this portfolio.");
+        }
 
-		originalPortfolio = setPortfolioUpdatableFields(originalPortfolio, portfolio);
+        originalPortfolio = setPortfolioUpdatableFields(originalPortfolio, portfolio);
 
-		Portfolio updatedPortfolio = portfolioDAO.update(originalPortfolio);
-		searchEngineService.updateIndex();
+        Portfolio updatedPortfolio = portfolioDAO.update(originalPortfolio);
+        searchEngineService.updateIndex();
 
-		return updatedPortfolio;
-	}
+        return updatedPortfolio;
+    }
 
-	public Portfolio copy(Portfolio portfolio, User loggedInUser) {
-		if (portfolio.getId() == null) {
-			throw new RuntimeException("Portfolio not found");
-		}
+    public Portfolio copy(Portfolio portfolio, User loggedInUser) {
+        if (portfolio.getId() == null) {
+            throw new RuntimeException("Portfolio not found");
+        }
 
-		Portfolio originalPortfolio = portfolioDAO.findById(portfolio.getId());
-		if (originalPortfolio == null) {
-			throw new RuntimeException("Portfolio not found");
-		}
+        Portfolio originalPortfolio = portfolioDAO.findById(portfolio.getId());
+        if (originalPortfolio == null) {
+            throw new RuntimeException("Portfolio not found");
+        }
 
-		if (!isPortfolioAccessibleToUser(originalPortfolio, loggedInUser)) {
-			throw new RuntimeException("Portfolio not found");
-		}
+        if (!isPortfolioAccessibleToUser(originalPortfolio, loggedInUser)) {
+            throw new RuntimeException("Portfolio not found");
+        }
 
-		Portfolio copy = getPortfolioWithAllowedFieldsOnCreate(originalPortfolio);
-		copy.setChapters(copyChapters(originalPortfolio.getChapters()));
+        Portfolio copy = getPortfolioWithAllowedFieldsOnCreate(originalPortfolio);
+        copy.setChapters(copyChapters(originalPortfolio.getChapters()));
 
-		return doCreate(copy, loggedInUser);
-	}
+        return doCreate(copy, loggedInUser);
+    }
 
-	public void delete(Portfolio portfolio, User loggedInUser) {
-		if (portfolio.getId() == null) {
-			throw new RuntimeException("Portfolio must already exist.");
-		}
+    public void delete(Portfolio portfolio, User loggedInUser) {
+        if (portfolio.getId() == null) {
+            throw new RuntimeException("Portfolio must already exist.");
+        }
 
-		Portfolio originalPortfolio = portfolioDAO.findById(portfolio.getId());
-		if (originalPortfolio == null) {
-			throw new RuntimeException("Portfolio not found");
-		}
+        Portfolio originalPortfolio = portfolioDAO.findById(portfolio.getId());
+        if (originalPortfolio == null) {
+            throw new RuntimeException("Portfolio not found");
+        }
 
-		if (originalPortfolio.getCreator().getId() != loggedInUser.getId()) {
-			throw new RuntimeException("Logged in user must be the creator of this portfolio.");
-		}
+        if (originalPortfolio.getCreator().getId() != loggedInUser.getId() && !isUserAdmin(loggedInUser)) {
+            throw new RuntimeException("Logged in user must be the creator of this portfolio or administrator.");
+        }
 
-		portfolioDAO.delete(originalPortfolio);
-		searchEngineService.updateIndex();
-	}
+        portfolioDAO.delete(originalPortfolio);
+        searchEngineService.updateIndex();
+    }
 
-	private List<Chapter> copyChapters(List<Chapter> chapters) {
-		List<Chapter> copyChapters = new ArrayList<>();
+    private List<Chapter> copyChapters(List<Chapter> chapters) {
+        List<Chapter> copyChapters = new ArrayList<>();
 
-		if (chapters != null) {
-			for (Chapter chapter : chapters) {
-				Chapter copy = new Chapter();
-				copy.setTitle(chapter.getTitle());
-				copy.setText(chapter.getText());
-				copy.setMaterials(chapter.getMaterials());
-				copy.setSubchapters(copyChapters(chapter.getSubchapters()));
+        if (chapters != null) {
+            for (Chapter chapter : chapters) {
+                Chapter copy = new Chapter();
+                copy.setTitle(chapter.getTitle());
+                copy.setText(chapter.getText());
+                copy.setMaterials(chapter.getMaterials());
+                copy.setSubchapters(copyChapters(chapter.getSubchapters()));
 
-				copyChapters.add(copy);
-			}
-		}
+                copyChapters.add(copy);
+            }
+        }
 
-		return copyChapters;
-	}
+        return copyChapters;
+    }
 
-	private Portfolio getPortfolioWithAllowedFieldsOnCreate(Portfolio portfolio) {
-		Portfolio safePortfolio = new Portfolio();
-		safePortfolio.setTitle(portfolio.getTitle());
-		safePortfolio.setSummary(portfolio.getSummary());
-		safePortfolio.setTags(portfolio.getTags());
-		safePortfolio.setTargetGroups(portfolio.getTargetGroups());
-		safePortfolio.setTaxon(portfolio.getTaxon());
-		safePortfolio.setPicture(portfolio.getPicture());
-		return safePortfolio;
-	}
+    private Portfolio getPortfolioWithAllowedFieldsOnCreate(Portfolio portfolio) {
+        Portfolio safePortfolio = new Portfolio();
+        safePortfolio.setTitle(portfolio.getTitle());
+        safePortfolio.setSummary(portfolio.getSummary());
+        safePortfolio.setTags(portfolio.getTags());
+        safePortfolio.setTargetGroups(portfolio.getTargetGroups());
+        safePortfolio.setTaxon(portfolio.getTaxon());
+        safePortfolio.setPicture(portfolio.getPicture());
+        return safePortfolio;
+    }
 
-	private Portfolio setPortfolioUpdatableFields(Portfolio originalPortfolio, Portfolio portfolio) {
-		originalPortfolio.setTitle(portfolio.getTitle());
-		originalPortfolio.setSummary(portfolio.getSummary());
-		originalPortfolio.setTags(portfolio.getTags());
-		originalPortfolio.setTargetGroups(portfolio.getTargetGroups());
-		originalPortfolio.setTaxon(portfolio.getTaxon());
-		originalPortfolio.setChapters(portfolio.getChapters());
-		originalPortfolio.setPicture(portfolio.getPicture());
-		originalPortfolio.setVisibility(portfolio.getVisibility());
-		return originalPortfolio;
-	}
+    private Portfolio setPortfolioUpdatableFields(Portfolio originalPortfolio, Portfolio portfolio) {
+        originalPortfolio.setTitle(portfolio.getTitle());
+        originalPortfolio.setSummary(portfolio.getSummary());
+        originalPortfolio.setTags(portfolio.getTags());
+        originalPortfolio.setTargetGroups(portfolio.getTargetGroups());
+        originalPortfolio.setTaxon(portfolio.getTaxon());
+        originalPortfolio.setChapters(portfolio.getChapters());
+        originalPortfolio.setPicture(portfolio.getPicture());
+        originalPortfolio.setVisibility(portfolio.getVisibility());
+        return originalPortfolio;
+    }
 
-	private boolean isPortfolioAccessibleToUser(Portfolio portfolio, User loggedInUser) {
-		if (portfolio.getVisibility() != Visibility.PRIVATE) {
-			return true;
-		} else {
-			return isUserPortfolioCreator(portfolio, loggedInUser) || isUserAdmin(loggedInUser);
-		}
-	}
+    private boolean isPortfolioAccessibleToUser(Portfolio portfolio, User loggedInUser) {
+        if (portfolio.getVisibility() != Visibility.PRIVATE) {
+            return true;
+        } else {
+            return isUserPortfolioCreator(portfolio, loggedInUser) || isUserAdmin(loggedInUser);
+        }
+    }
 
-	private boolean isPortfolioVisibleToUser(Portfolio portfolio, User loggedInUser) {
-		if (portfolio.getVisibility() == Visibility.PUBLIC) {
-			return true;
-		} else {
-			return isUserPortfolioCreator(portfolio, loggedInUser) || isUserAdmin(loggedInUser);
-		}
-	}
+    private boolean isPortfolioVisibleToUser(Portfolio portfolio, User loggedInUser) {
+        if (portfolio.getVisibility() == Visibility.PUBLIC) {
+            return true;
+        } else {
+            return isUserPortfolioCreator(portfolio, loggedInUser) || isUserAdmin(loggedInUser);
+        }
+    }
 
-	private boolean isUserPortfolioCreator(Portfolio portfolio, User loggedInUser) {
-		return loggedInUser != null && portfolio.getCreator().getId() == loggedInUser.getId();
-	}
+    private boolean isUserPortfolioCreator(Portfolio portfolio, User loggedInUser) {
+        return loggedInUser != null && portfolio.getCreator().getId() == loggedInUser.getId();
+    }
 
-	private boolean isUserAdmin(User loggedInUser) {
-		return loggedInUser != null && loggedInUser.getRole() == Role.ADMIN;
-	}
+    private boolean isUserAdmin(User loggedInUser) {
+        return loggedInUser != null && loggedInUser.getRole() == Role.ADMIN;
+    }
 
 }
