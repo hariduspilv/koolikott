@@ -94,7 +94,7 @@ define(['app'], function(app) {
                 } else {
                     if(!isAutoSaving) setPortfolio(portfolio);
                     
-                    var message = isAutoSaving ? 'AutoSaved' : 'PORTFOLIO_SAVED';
+                    var message = isAutoSaving ? 'PORTFOLIO_AUTOSAVED' : 'PORTFOLIO_SAVED';
                     toastService.show(message);
                 }
             }
@@ -115,12 +115,11 @@ define(['app'], function(app) {
                     updatePortfolio();
                 }
                 
-                //TODO: Add those texts as translations
                 dialogService.showConfirmationDialog(
-                    'Kas soovid muuta kogumiku privaatseks?',
-                    'Vastasel juhul on kõigile koheselt nähtavad tehtud muudatused.',
-                    'Jah, Tee kogumik privaatseks',
-                    'Ei',
+                     "{{'PORTFOLIO_MAKE_PRIVATE' | translate}}",
+                    "{{'PORTFOLIO_WARNING' | translate}}",
+                    "{{'PORTFOLIO_YES' | translate}}",
+                    "{{'PORTFOLIO_NO' | translate}}",
                     setPrivate);
             }
             
