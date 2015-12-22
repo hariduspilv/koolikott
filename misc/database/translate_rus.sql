@@ -209,6 +209,8 @@ insert into Translation(translationGroup, translationKey, translation) values (2
 insert into Translation(translationGroup, translationKey, translation) values (2, 'PORTFOLIO_WARNING', 'Если вы не сделаете портфель частных все изменения будут видны сразу');
 insert into Translation(translationGroup, translationKey, translation) values (2, 'PORTFOLIO_YES', 'Да, сделать портфолио Частная');
 insert into Translation(translationGroup, translationKey, translation) values (2, 'PORTFOLIO_NO', 'Нет');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'PORTFOLIO_HAS_BEEN_MADE_PUBLIC', 'Все изменения в настоящее время общедоступны');
+
 
 -- Comment translations
 insert into Translation(translationGroup, translationKey, translation) values (2, 'COMMENTS_TITLE', 'Комментарии');

@@ -209,6 +209,8 @@ insert into Translation(translationGroup, translationKey, translation) values (3
 insert into Translation(translationGroup, translationKey, translation) values (3, 'PORTFOLIO_WARNING', 'If you don\'t make the portfolio private all the changes will be visible immediately');
 insert into Translation(translationGroup, translationKey, translation) values (3, 'PORTFOLIO_YES', 'Yes, make the portfolio private');
 insert into Translation(translationGroup, translationKey, translation) values (3, 'PORTFOLIO_NO', 'No');
+insert into Translation(translationGroup, translationKey, translation) values (3, 'PORTFOLIO_HAS_BEEN_MADE_PUBLIC', 'All changes are now publicly visible');
+
 
 -- Comment translations
 insert into Translation(translationGroup, translationKey, translation) values (3, 'COMMENTS_TITLE', 'Comments');

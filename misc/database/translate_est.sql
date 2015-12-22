@@ -290,6 +290,8 @@ insert into Translation(translationGroup, translationKey, translation) values (1
 insert into Translation(translationGroup, translationKey, translation) values (1, 'PORTFOLIO_WARNING', 'Vastasel juhul on kõigile koheselt nähtavad tehtud muudatused.');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'PORTFOLIO_YES', 'Jah, Tee kogumik privaatseks');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'PORTFOLIO_NO', 'Ei');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'PORTFOLIO_HAS_BEEN_MADE_PUBLIC', 'Kõik muutused on nüüd avalikult nähtavad');
+
 
 -- Comment translations
 insert into Translation(translationGroup, translationKey, translation) values (1, 'COMMENTS_TITLE', 'Kommentaarid');
