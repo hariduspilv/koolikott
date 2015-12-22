@@ -6,7 +6,7 @@ define(['app'], function(app)
             scope: true,
             templateUrl: 'directives/editPortfolioModeHeader/editPortfolioModeHeader.html',
             controller: function ($scope, $location) {
-                
+
                 $scope.toggleSidenav = function() {
                     $mdSidenav('left').toggle();
                 };
@@ -69,6 +69,7 @@ define(['app'], function(app)
                     if (!isEmpty($scope.searchFields.searchQuery)) {
                         searchService.setSearch($scope.searchFields.searchQuery);
                         searchService.clearFieldsNotInSimpleSearch();
+                        searchService.setType('material');
                         $location.url(searchService.getURL());
                     }
                 };
