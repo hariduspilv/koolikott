@@ -383,15 +383,17 @@ public class PortfolioResourceTest extends ResourceIntegrationTestBase {
     }
 
     @Test
-    public void copyPrivatePortfolio() {
+    public void copyPortfolio() {
         login("38011550077");
 
         Portfolio portfolio = new Portfolio();
-        portfolio.setId(7L);
+        portfolio.setId(1L);
 
         Portfolio copiedPortfolio = doPost(PORTFOLIO_COPY_URL, portfolio, Portfolio.class);
 
         assertNotNull(copiedPortfolio);
+        assertEquals(Long.valueOf(2), copiedPortfolio.getCreator().getId());
+        assertEquals(Long.valueOf(6), copiedPortfolio.getOriginalCreator().getId());
     }
 
     @Test
@@ -417,12 +419,16 @@ public class PortfolioResourceTest extends ResourceIntegrationTestBase {
     @Test
     public void copyPrivatePortfolioLoggedInAsCreator() {
         login("38011550077");
+        Long userId = 2L;
 
         Portfolio portfolio = new Portfolio();
         portfolio.setId(7L);
 
         Response response = doPost(PORTFOLIO_COPY_URL, Entity.entity(portfolio, MediaType.APPLICATION_JSON_TYPE));
         assertEquals(Status.OK.getStatusCode(), response.getStatus());
+
+        Portfolio copiedPortfolio = response.readEntity(Portfolio.class);
+        assertEquals(userId, copiedPortfolio.getOriginalCreator().getId());
     }
 
     @Test

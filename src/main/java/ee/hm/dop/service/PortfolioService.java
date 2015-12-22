@@ -153,13 +153,13 @@ public class PortfolioService {
         }
 
         Portfolio safePortfolio = getPortfolioWithAllowedFieldsOnCreate(portfolio);
-        return doCreate(safePortfolio, creator);
+        return doCreate(safePortfolio, creator, creator);
     }
 
-    private Portfolio doCreate(Portfolio portfolio, User creator) {
+    private Portfolio doCreate(Portfolio portfolio, User creator, User originalCreator) {
         portfolio.setViews(0L);
         portfolio.setCreator(creator);
-        portfolio.setOriginalCreator(creator);
+        portfolio.setOriginalCreator(originalCreator);
         portfolio.setVisibility(Visibility.PRIVATE);
 
         Portfolio createdPortfolio = portfolioDAO.update(portfolio);
@@ -211,7 +211,7 @@ public class PortfolioService {
         Portfolio copy = getPortfolioWithAllowedFieldsOnCreate(originalPortfolio);
         copy.setChapters(copyChapters(originalPortfolio.getChapters()));
 
-        return doCreate(copy, loggedInUser);
+        return doCreate(copy, loggedInUser, originalPortfolio.getCreator());
     }
 
     public void delete(Portfolio portfolio, User loggedInUser) {
