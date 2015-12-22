@@ -1,6 +1,7 @@
 require.config({
   paths: {
     authenticatedUserService: 'services/authenticatedUserService',
+    toastService: 'services/toastService',
     serverCallService: 'services/serverCallService',
     authenticationService: 'services/authenticationService',
     searchService: 'services/searchService',
@@ -137,6 +138,7 @@ require([
   'ng-file-upload-shim',
   'ng-file-upload',
   'clipboard',
+  'toastService',
   'translationService',
   'authenticatedUserService',
   'serverCallService',
