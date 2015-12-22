@@ -33,7 +33,7 @@ define(['app'], function(app)
                     };
 
                     $scope.isAdmin = function() {
-                        return authenticatedUserService.getUser().role === 'ADMIN';
+                        return authenticatedUserService.getUser() && authenticatedUserService.getUser().role === 'ADMIN';
                     };
  
                     $scope.editPortfolio = function() {
