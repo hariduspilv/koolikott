@@ -12,7 +12,7 @@
           <input ng-click="showSearch = !showSearch">
         </md-input-container>
       </div>
-      <md-button aria-label="Open Settings" class="md-icon-button" ng-click="showFilter = showSearch = !showFilter" >
+      <md-button aria-label="Open Settings" class="md-icon-button" ng-click="openDetailedSearch()" >
         <ng-md-icon icon="filter_list"></ng-md-icon>
       </md-button>
       <md-menu>
@@ -64,29 +64,29 @@
     <div layout-align="start start" layout="row" layout-sm="column">
       <div class="md-toolbar-tools" flex="100" flex-gt-sm="90">
         <div class="navbar-search" layout="row" flex>
-          <md-button aria-label="Search" ng-click="showSearch = !showSearch" class="md-icon-button">
+          <md-button aria-label="Search" data-ng-click="search()" data-ng-disabled="detailedSearch.isVisible" class="md-icon-button">
             <ng-md-icon icon="search"></ng-md-icon>
           </md-button>
           <md-input-container md-theme="input" flex>
-            <input ng-model="search.who" placeholder="Otsi">
+            <input ng-model="searchFields.searchQuery" data-ng-keydown="$event.which === 13 && searchFieldEnterPressed()" placeholder="Otsi">
           </md-input-container>
         </div>
 
-        <!-- <md-button aria-label="Open Settings" class="md-icon-button" ng-click="showFilter = !showFilter">
+        <md-button aria-label="Open Settings" class="md-icon-button" ng-click="openDetailedSearch()" data-ng-if="!detailedSearch.isVisible">
           <ng-md-icon icon="filter_list"></ng-md-icon>
-        </md-button> -->
+        </md-button> 
 
-        <md-button ng-click="showSearch = showFilter = !showSearch" aria-label="Back" class="md-icon-button">
+        <md-button ng-click="closeDetailedSearch()" aria-label="Back" class="md-icon-button">
           <ng-md-icon icon="close"></ng-md-icon>
         </md-button>
       </div>
     </div>
   </md-toolbar>
 
-  <div class="md-toolbar-filter" id="detailedSearch" ng-show="showFilter">
+  <div class="md-toolbar-filter" id="detailedSearch" ng-show="detailedSearch.isVisible">
    <form layout-align="start start" layout="row" layout-sm="column">
       <div flex="100" flex-gt-md="90" class="md-hue-1  md-whiteframe-1dp">
-        <div data-dop-detailed-search query-in="detailedSearch.queryIn" query-out="detailedSearch.queryOut"></div>
+        <div data-dop-detailed-search query-in="detailedSearch.queryIn" query-out="detailedSearch.queryOut" main-field="detailedSearch.mainField" search-callback="detailedSearch.doSearch()"></div>
       </div>
     </form>
   </div>

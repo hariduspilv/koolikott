@@ -36,13 +36,11 @@ define(['app'], function(app)
                     });
                 }
 
-                $scope.search = function() {
-                    if (!isEmpty($scope.searchFields.searchQuery)) {
-                        searchService.setSearch($scope.searchFields.searchQuery);
-                        searchService.clearFieldsNotInSimpleSearch();
-                        $location.url(searchService.getURL());
+                $scope.toggleShowSearch = function() {
+                    if (!$scope.detailedSearch.isVisible) {
+                        $scope.showSearch = false
                     }
-                };
+                }
 
                 $scope.logout = function() {
                     authenticationService.logout();
@@ -57,17 +55,47 @@ define(['app'], function(app)
                   	})
                 };
 
-                $scope.toggleDetailSearch = function() {
-                    $scope.showSearch = true;
-                    $scope.detailedSearch.isVisible = !$scope.detailedSearch.isVisible;
+                $scope.search = function() {
+                    if (!isEmpty($scope.searchFields.searchQuery)) {
+                        searchService.setSearch($scope.searchFields.searchQuery);
+                        searchService.clearFieldsNotInSimpleSearch();
+                        $location.url(searchService.getURL());
+                    }
+                };
 
+                $scope.openDetailedSearch = function() {
+                    $scope.showSearch = true;
+                    $scope.detailedSearch.isVisible = true;
+                    $scope.detailedSearch.queryIn = $scope.searchFields.searchQuery;
+                    $scope.searchFields.searchQuery = $scope.detailedSearch.mainField; 
+                }
+
+                $scope.closeDetailedSearch = function() {
+                    $scope.showSearch = false;
+                    $scope.detailedSearch.isVisible = false;
+                    $scope.searchFields.searchQuery = (($scope.searchFields.searchQuery || "") + " " + $scope.detailedSearch.queryOut).trim();
+                    $scope.detailedSearch.queryIn = null;
+                };
+
+                $scope.detailedSearch.doSearch = function() {
+                    var query = ($scope.searchFields.searchQuery || "") + " " + $scope.detailedSearch.queryOut;
+                    searchService.setSearch(query.trim());
+                    $location.url(searchService.getURL());
+                };
+
+                $scope.searchFieldEnterPressed = function() {
                     if ($scope.detailedSearch.isVisible) {
-                        $scope.detailedSearch.queryIn = $scope.searchFields.searchQuery;
+                        $scope.detailedSearch.doSearch();
                     } else {
-                        $scope.searchFields.searchQuery = $scope.detailedSearch.queryOut;
-                        $scope.detailedSearch.queryIn = null;
+                        $scope.search();
                     }
                 }
+
+                $scope.$watch('detailedSearch.mainField', function(newValue, oldValue) {
+                    if (newValue != oldValue) {
+                        $scope.searchFields.searchQuery = newValue || "";
+                    }
+                }, true);
 
                 $scope.$watch(function () {
                         return authenticatedUserService.getUser();
@@ -78,7 +106,7 @@ define(['app'], function(app)
                 $scope.$watch(function () {
                         return searchService.getQuery();
                     }, function(query) {
-                        // Search query is not shown in simple search box when detailed search is open
+                        // Search query is not updated from search service while detailed search is open
                         if (!query || !$scope.detailedSearch.isVisible) {
                             $scope.searchFields.searchQuery = query;
                         }

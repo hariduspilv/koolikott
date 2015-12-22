@@ -1,6 +1,6 @@
 define(['app'], function(app)
 {
-    app.directive('dopRating', function(translationService, $mdToast, $translate, serverCallService) {
+    app.directive('dopRating', function(translationService, $mdToast, $translate, serverCallService, authenticatedUserService) {
         return {
             scope: {
             	material: '=',
@@ -9,7 +9,7 @@ define(['app'], function(app)
                 dislikeMessage: '@'
             },
             templateUrl: 'directives/rating/rating.html',
-            controller: function ($scope, $mdToast, $translate, serverCallService) {
+            controller: function ($scope, $mdToast, $translate, serverCallService, authenticatedUserService) {
 
                 function init() {
                 	$scope.allowRequests = false;
@@ -25,7 +25,6 @@ define(['app'], function(app)
 	                	$scope.url = "rest/portfolio/";
                     }
                     if($scope.material) {
-                    	log($scope.material);
 	                	$scope.rating.likes = $scope.material.likes;
 	                	$scope.rating.dislikes = $scope.material.dislikes;
 	                	
@@ -33,9 +32,7 @@ define(['app'], function(app)
 	                	$scope.url = "rest/material/";  	
                     }
                     
-                    if($scope.entity && $scope.entity.type) {
-                    	log("Rating init");
-                    	log($scope.entity);
+                    if(authenticatedUserService.isAuthenticated() && $scope.entity && $scope.entity.type) {
                     	getUserLike();
                     }
                 }

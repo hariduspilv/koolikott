@@ -1,11 +1,12 @@
 define(['app'], function(app)
 {
-    app.directive('dopEditPortfolioModeHeader', ['translationService', '$location', '$mdSidenav', '$mdDialog', '$rootScope', 'serverCallService', 
-     function(translationService, $location, $mdSidenav, $mdDialog, $rootScope, serverCallService) {
+    app.directive('dopEditPortfolioModeHeader', ['translationService', '$location', '$mdSidenav', '$mdDialog', '$rootScope', 'serverCallService', 'searchService',
+     function(translationService, $location, $mdSidenav, $mdDialog, $rootScope, serverCallService, searchService) {
         return {
             scope: true,
             templateUrl: 'directives/editPortfolioModeHeader/editPortfolioModeHeader.html',
             controller: function ($scope, $location) {
+
                 $scope.toggleSidenav = function() {
                     $mdSidenav('left').toggle();
                 };
@@ -53,9 +54,59 @@ define(['app'], function(app)
                     }
                 }
                 
-                function updatePortfolioFailed(){
+                function updatePortfolioFailed() {
                     log('Updating portfolio failed.');
                 }
+
+                // Search
+
+                $scope.searchFields = {};
+                $scope.searchFields.searchQuery = "";
+                $scope.detailedSearch = {};
+                $scope.showSearch = searchService.queryExists();
+
+                $scope.search = function() {
+                    if (!isEmpty($scope.searchFields.searchQuery)) {
+                        searchService.setSearch($scope.searchFields.searchQuery);
+                        searchService.clearFieldsNotInSimpleSearch();
+                        searchService.setType('material');
+                        $location.url(searchService.getURL());
+                    }
+                };
+
+                $scope.openDetailedSearch = function() {
+                    $scope.showSearch = true;
+                    $scope.detailedSearch.isVisible = true;
+                    $scope.detailedSearch.queryIn = $scope.searchFields.searchQuery;
+                    $scope.searchFields.searchQuery = $scope.detailedSearch.mainField; 
+                }
+
+                $scope.closeDetailedSearch = function() {
+                    $scope.showSearch = false;
+                    $scope.detailedSearch.isVisible = false;
+                    $scope.searchFields.searchQuery = (($scope.searchFields.searchQuery || "") + " " + $scope.detailedSearch.queryOut).trim();
+                    $scope.detailedSearch.queryIn = null;
+                };
+
+                $scope.detailedSearch.doSearch = function() {
+                    var query = ($scope.searchFields.searchQuery || "") + " " + $scope.detailedSearch.queryOut;
+                    searchService.setSearch(query.trim());
+                    $location.url(searchService.getURL());
+                };
+
+                $scope.searchFieldEnterPressed = function() {
+                    if ($scope.detailedSearch.isVisible) {
+                        $scope.detailedSearch.doSearch();
+                    } else {
+                        $scope.search();
+                    }
+                }
+
+                $scope.$watch('detailedSearch.mainField', function(newValue, oldValue) {
+                    if (newValue != oldValue) {
+                        $scope.searchFields.searchQuery = newValue || "";
+                    }
+                }, true);
 
             }
         };

@@ -1,5 +1,5 @@
 <md-toolbar class="md-hue-1">
-  <h6 class="md-toolbar-tools md-subhead">Some name of material, sometimes long</h6>
+  <h6 class="md-toolbar-tools md-subhead">{{ portfolio.title }}</h6>
 </md-toolbar>
 <ul class="sidenav-menu toc" data-du-scroll-container="scrollable-content">
   <li ng-repeat="chapter in portfolio.chapters">
@@ -8,7 +8,7 @@
       <span flex></span>
       <span class="add-materials-to-chapter" data-ng-if="$root.isEditPortfolioMode" data-ng-click="addMaterialsToChapter($event, chapter)">
         <md-tooltip md-direction="right">
-          Lisa materjal(id) sellesse peatükki
+            <span data-translate="PORTFOLIO_ADD_MATERIAL"></span>
         </md-tooltip>
         <md-icon>my_library_books</md-icon>
       </span>
@@ -20,7 +20,7 @@
           <span flex></span>
           <span class="add-materials-to-chapter" data-ng-if="$root.isEditPortfolioMode" data-ng-click="addMaterialsToChapter($event, subchapter)">
             <md-tooltip md-direction="right">
-              Lisa materjal(id) sellesse peatükki
+              <span data-translate="PORTFOLIO_ADD_MATERIAL"></span>
             </md-tooltip>
             <md-icon>my_library_books</md-icon>
           </span>
