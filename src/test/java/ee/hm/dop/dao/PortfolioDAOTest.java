@@ -138,6 +138,7 @@ public class PortfolioDAOTest extends DatabaseTestBase {
 
         assertEquals(new Long(6), portfolio.getCreator().getId());
         assertEquals("mati.maasikas-vaarikas", portfolio.getCreator().getUsername());
+        assertEquals(new Long(5), portfolio.getOriginalCreator().getId());
         assertEquals("The changes after 2008.", portfolio.getSummary());
         assertEquals(new Long(95455215), portfolio.getViews());
         assertEquals(5, portfolio.getTags().size());
