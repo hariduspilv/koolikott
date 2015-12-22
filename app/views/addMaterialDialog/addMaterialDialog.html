@@ -59,19 +59,28 @@
 
           <!-- heading-desc-lang group -->
           <div class="form-group" data-ng-repeat="metadata in material.metadata">
-            <div layout="row" layout-align="center center">
-              <md-input-container flex>
-                <label data-translate="MATERIAL_TITLE"></label>
-                <input data-ng-model="metadata.title">
-              </md-input-container>
-              <md-input-container flex="20" class="md-padding">
-                <md-select data-ng-model="metadata.language" flex>
-                  <md-option data-ng-repeat="language in material.languages" value="{{language}}">
-                    <span data-translate="LANGUAGE_{{language.toUpperCase()}}" />
-                  </md-option>
-                </md-select>
-              </md-input-container>
-            </div>
+            <form name="materialTitleForm">
+              <div layout="row" layout-align="center center">
+                <md-input-container flex>
+                  <label data-translate="MATERIAL_TITLE"></label>
+                  <input data-ng-model="metadata.title" name="title" required>
+                  <div data-ng-messages="materialTitleForm.title.$error" data-ng-show="materialTitleForm.title.$dirty" multiple>
+                    <div data-ng-message="required" data-ng-show="materialTitleForm.title.$error.required" data-translate="MATERIAL_TITLE_IS_MANDATORY"></div>
+                  </div>
+                </md-input-container>
+                <md-input-container flex="20" class="md-padding">
+                  <label data-translate="LANGUAGE"></label>
+                  <md-select data-ng-model="material.language" id="add-material-title-language-select">
+                    <md-option data-ng-repeat="language in material.languages" value="{{language}}">
+                      <span data-translate="LANGUAGE_{{language.toUpperCase()}}" />
+                    </md-option>
+                  </md-select>
+                </md-input-container>
+
+
+
+              </div>
+            </form>
             <div layout="row" layout-align="top center">
               <md-input-container flex>
                 <label data-translate="MATERIAL_DESCRIPTION"></label>
@@ -79,11 +88,11 @@
               </md-input-container>
               <md-button class="md-icon-button md-primary" data-ng-click="addNewMetadata()">
                 <md-icon>add_circle</md-icon>
-                <md-tooltip md-direction="top">Lisa keel</md-tooltip>
+                <md-tooltip md-direction="top"><span data-translate="MATERIAL_TAB_ADD_LANGUAGE"></span></md-tooltip>
               </md-button>
               <md-button class="md-icon-button" data-ng-show="material.metadata.length > 1" data-ng-click="deleteMetadata($index)">
                 <md-icon>remove_circle</md-icon>
-                <md-tooltip md-direction="top">Eemalda keel</md-tooltip>
+                <md-tooltip md-direction="top"><span data-translate="MATERIAL_TAB_REMOVE_LANGUAGE"></span></md-tooltip>
               </md-button>
             </div>
           </div>
@@ -102,34 +111,32 @@
         </md-content>
       </md-tab>
 
-      <md-tab label="Klassifikatsioon" data-ng-disabled="step.isTabDisabled(2)">
+      <md-tab label="{{'MATERIAL_TAB_TAXON' | translate}}" data-ng-disabled="step.isTabDisabled(2)">
         <md-content class="md-padding">
           <div layout="row" flex layout-align="space-between center" data-ng-repeat="taxon in material.taxons track by $index">
             <div data-dop-taxon-selector data-taxon="material.taxons[$index]" data-disable-educational-context="!$first" layout="row" layout-sm="column" flex></div>
             <md-button class="md-icon-button md-primary" data-ng-click="addNewTaxon()" data-ng-disabled="!isEducationalContextSelected">
               <md-icon>add_circle</md-icon>
-              <md-tooltip md-direction="top">Lisa liigitus</md-tooltip>
+              <md-tooltip md-direction="top"><span data-translate="MATERIAL_TAB_ADD_TAXON"></span></md-tooltip>
             </md-button>
             <md-button class="md-icon-button md-accent-2" data-ng-show="material.taxons.length > 1" data-ng-click="deleteTaxon($index)">
               <md-icon>remove_circle</md-icon>
-              <md-tooltip md-direction="top">Eemalda liigitus</md-tooltip>
+              <md-tooltip md-direction="top"><span data-translate="MATERIAL_TAB_REMOVE_TAXON"></span></md-tooltip>
             </md-button>
           </div>
 
           <div layout="row" flex layout-align="space-between center">
             <div data-dop-target-group-selector data-target-groups="material.targetGroups" flex="20"></div>
-            <h6 class="md-caption md-padding" data-translate="MATERIAL_TAGS"></h6>
             <md-chips
               data-ng-model="material.tags"
               delete-button-label="{{ 'MATERIAL_REMOVE_TAG' | translate }}"
               delete-hint="{{ 'MATERIAL_REMOVE_TAG_HINT' | translate }}"
-              secondary-placeholder="Kinnitamiseks vajuta Enter"
+              secondary-placeholder="{{'MATERIAL_TAB_PRESS_ENTER_TO_ADD_TAG' | translate}}"
               flex>
             </md-chips>
           </div>
 
           <div layout="row" flex layout-align="center center">
-            <h6 class="md-caption md-padding" data-translate="MATERIAL_KEY_COMPETENCES"></h6>
             <md-chips ng-model="material.selectedKeyCompetences" md-autocomplete-snap="" md-require-match="true" flex>
               <md-autocomplete
                 md-no-cache="true"
@@ -137,7 +144,7 @@
                 md-search-text="material.competenceSearchText"
                 md-items="keyCompetence in searchKeyCompetences(material.competenceSearchText)"
                 md-item-text="translate(keyCompetence.name, 'KEY_COMPETENCE_')"
-                placeholder="{{ 'MATERIAL_SEARCH_KEY_COMPETENCE' | translate }}"
+                placeholder="{{ 'MATERIAL_KEY_COMPETENCES' | translate }}"
                 md-min-length="0"
                 md-autoselect>
                 <span md-highlight-text="material.competenceSearchText" md-highlight-flags="^i">
@@ -153,14 +160,13 @@
           </div>
 
           <div layout="row" flex layout-align="center center">
-            <h6 class="md-caption md-padding" data-translate="MATERIAL_CROSS_CURRICULAR_THEMES"></h6>
             <md-chips ng-model="material.selectedCrossCurricularThemes" md-autocomplete-snap="" md-require-match="true" flex>
               <md-autocomplete
                 md-selected-item="material.selectedCrossCurricularTheme"
                 md-search-text="material.crossCurricularSearchText"
                 md-items="crossCurricularTheme in searchCrossCurricularThemes(material.crossCurricularSearchText)"
                 md-item-text="translate(crossCurricularTheme.name, 'CROSS_CURRICULAR_THEME_')"
-                placeholder="{{ 'MATERIAL_SEARCH_CROSS_CURRICULAR_THEME' | translate }}"
+                placeholder="{{ 'MATERIAL_CROSS_CURRICULAR_THEMES' | translate }}"
                 md-min-length="0"
                 md-autoselect>
                 <span md-highlight-text="material.crossCurricularSearchText" md-highlight-flags="^i">
@@ -180,7 +186,6 @@
       <md-tab label="{{ 'MATERIAL_TAB_ADDITIONAL_DATA' | translate }}" data-ng-disabled="step.isTabDisabled(1)">
         <md-content class="md-padding">
           <div layout="row" flex layout-align="space-between center">
-            <h6 class="md-caption md-padding">Autor</h6>
             <md-input-container flex>
               <label data-translate="MATERIAL_AUTHOR_NAME"></label>
               <input data-ng-model="material.author.name">
@@ -192,17 +197,15 @@
           </div>
 
           <div layout="row" flex layout-align="space-between center">
-            <h6 class="md-caption md-padding" data-translate="MATERIAL_PUBLISHER"></h6>
             <md-input-container class="md-block" flex>
-              <label></label>
+              <label data-translate="MATERIAL_PUBLISHER"></label>
               <input data-ng-model="material.publisher">
             </md-input-container>
           </div>
 
           <div layout="row" flex layout-align="space-between center">
-            <h6 class="md-caption md-padding" data-translate="MATERIAL_VIEW_LICENSE_TYPE"></h6>
             <md-input-container flex>
-              <label>Vali litsentsi tüüp</label>
+              <label data-translate="MATERIAL_VIEW_LICENSE_TYPE"></label>
               <md-select data-ng-model="material.licenseType">
                 <md-option data-ng-repeat="licenceType in material.licenceTypes" value="{{licenceType}}" data-translate="LICENSETYPE_{{licenceType.name.toUpperCase()}}">
                 </md-option>

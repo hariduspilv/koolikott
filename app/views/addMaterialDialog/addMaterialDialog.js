@@ -355,7 +355,7 @@ define(['app'], function (app) {
 
             function isMetadataStepValid() {
                 return $scope.material.metadata.filter(function (metadata) {
-                        return metadata.title.length !== 0;
+                        return metadata.title && metadata.title.length !== 0;
                     }).length !== 0;
             }
 

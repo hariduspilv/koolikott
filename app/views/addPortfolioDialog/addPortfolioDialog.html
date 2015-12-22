@@ -8,7 +8,7 @@
       </md-button>
     </div>
   </md-toolbar>
-  <form>
+  <form name="addPortfolioForm">
     <md-content class="md-padding">
       <div layout="row" layout-align="center center">
         <div flex="10" class="md-padding">
@@ -26,8 +26,11 @@
           <md-tooltip><span data-translate="PORTFOLIO_PHOTO_UPLOAD_HELP"></span></md-tooltip>
         </div>
         <md-input-container flex="90">
-          <label>Pealkiri</label>
-          <input data-ng-model="portfolio.title" id="add-portfolio-title-input" required>
+          <label data-translate="PORTFOLIO_TITLE">Pealkiri</label>
+          <input data-ng-model="portfolio.title" id="add-portfolio-title-input" name="title" required>
+          <div data-ng-messages="addPortfolioForm.title.$error" data-ng-show="addPortfolioForm.title.$dirty" multiple>
+            <div data-ng-message="required" data-ng-show="addPortfolioForm.title.$error.required" data-translate="PORTFOLIO_TITLE_IS_MANDATORY"></div>
+          </div>
         </md-input-container>
       </div>
 
@@ -40,7 +43,7 @@
       </md-input-container>
 
       <md-input-container class="md-block">
-        <label>Kirjeldus</label>
+        <label data-translate="PORTFOLIO_SUMMARY">Kirjeldus</label>
         <textarea id="add-portfolio-description-input" data-ng-model="portfolio.summary" columns="1" md-maxlength="150"></textarea>
       </md-input-container>
 
@@ -50,9 +53,9 @@
 
       <md-input-container class="md-block">
         <label>&nbsp;</label>
-        <md-chips data-ng-model="portfolio.tags" delete-button-label="Eemalda märksõna" delete-hint="Kustutamiseks vajuta x" secondary-placeholder="Märksõnad">
+        <md-chips data-ng-model="portfolio.tags" delete-button-label="{{'ADD_PORTFOLIO_REMOVE_TAG' | translate}}"
+                  delete-hint="{{'ADD_PORTFOLIO_REMOVE_TAG_HINT' | translate}}" secondary-placeholder="{{'ADD_PORTFOLIO_PRESS_ENTER' | translate}}">
         </md-chips>
-        <div class="hint" ng-if="showHints">Lisamiseks vajuta Enter</div>
       </md-input-container>
 
     </md-content>
