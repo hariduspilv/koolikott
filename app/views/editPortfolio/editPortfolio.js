@@ -4,8 +4,8 @@ define(['app'], function(app) {
         $anchorScroll.yOffset = 50;
     }]);
 
-    app.controller('editPortfolioController', ['$scope', 'translationService', 'serverCallService', '$route', '$location', 'alertService', '$rootScope', 'authenticatedUserService', 'dialogService', 'toastService', 'searchService', '$mdDialog', '$interval',
-        function($scope, translationService, serverCallService, $route, $location, alertService, $rootScope, authenticatedUserService, dialogService, toastService, searchService, $mdDialog, $interval) {
+    app.controller('editPortfolioController', ['$scope', 'translationService', 'serverCallService', '$route', '$location', 'alertService', '$rootScope', 'authenticatedUserService', 'dialogService', 'toastService', '$mdDialog', '$interval',
+        function($scope, translationService, serverCallService, $route, $location, alertService, $rootScope, authenticatedUserService, dialogService, toastService, $mdDialog, $interval) {
             var isAutoSaving = false;
             var autoSaveInterval;
 
@@ -18,10 +18,7 @@ define(['app'], function(app) {
                 } else {
                     getPortfolio(getPortfolioSuccess, getPortfolioFail);
                 }
-                
-                searchService.setType("material");
-                searchService.setTargetGroups([]);
-                
+   
                 startAutosave();
             }
             
@@ -48,7 +45,6 @@ define(['app'], function(app) {
                 } else if(checkAuthorized(portfolio)) {              
                     setPortfolio(portfolio);
                     checkPortfolioVisibility(portfolio);
-                    searchService.setTargetGroups(portfolio.targetGroups);
                 }
             }
 

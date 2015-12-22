@@ -66,13 +66,13 @@
         <span data-translate="DETAILED_SEARCH_INCLUDE_PAID"></span>
       </md-checkbox>
       <md-radio-group data-ng-model="detailedSearch.type">
-        <md-radio-button ng-disabled="isEditPortfolioMode" value="all" class="md-primary md-checked">
+        <md-radio-button ng-disabled="$root.isEditPortfolioMode" value="all" class="md-primary md-checked">
           <span data-translate="DETAILED_SEARCH_ALL"></span>
         </md-radio-button>
         <md-radio-button value="material" class="md-primary">
           <span data-translate="DETAILED_SEARCH_MATERIALS"></span>
         </md-radio-button>
-        <md-radio-button ng-disabled="isEditPortfolioMode" value="portfolio" class="md-primary">
+        <md-radio-button ng-disabled="$root.isEditPortfolioMode" value="portfolio" class="md-primary">
           <span data-translate="DETAILED_SEARCH_PORTFOLIOS"></span>
         </md-radio-button>
       </md-radio-group>
