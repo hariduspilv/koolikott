@@ -31,6 +31,10 @@ define(['app'], function(app)
                             return creatorId === userId;
                         }
                     };
+
+                    $scope.isAdmin = function() {
+                        return authenticatedUserService.getUser().role === 'ADMIN';
+                    };
  
                     $scope.editPortfolio = function() {
 	                    var portfolioId = $route.current.params.id;
