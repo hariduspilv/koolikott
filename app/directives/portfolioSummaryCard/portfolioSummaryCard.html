@@ -100,6 +100,16 @@
                         </a>
                     </p>
 
+                    <p class="md-body-2 meta" data-ng-if="portfolio.creator.id != portfolio.originalCreator.id">
+                        <small class="md-caption">
+                            <span data-translate="ORIGINAL_CREATOR"></span>:
+                        </small>
+                        <a>
+                            <span data-ng-bind="portfolio.originalCreator.name"></span>
+                            <span data-ng-bind="portfolio.originalCreator.surname"></span>
+                        </a>
+                    </p>
+
                     <p class="md-body-2 meta" data-ng-if="portfolio.updated">
                         <small class="md-caption">
                             <span data-translate="UPDATED"></span>:
