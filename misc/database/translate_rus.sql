@@ -9,6 +9,7 @@ insert into Translation(translationGroup, translationKey, translation) values (2
 insert into Translation(translationGroup, translationKey, translation) values (2, 'ADDED', 'Добавлено');
 insert into Translation(translationGroup, translationKey, translation) values (2, 'AUTHORS', 'Авторы');
 insert into Translation(translationGroup, translationKey, translation) values (2, 'CREATOR', 'Создатель');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'ORIGINAL_CREATOR', 'Оригинальный создатель');
 insert into Translation(translationGroup, translationKey, translation) values (2, 'VIEW_COUNT', 'Количество мнение');
 insert into Translation(translationGroup, translationKey, translation) values (2, 'REPOSITORY_NUMBER', 'Количество хранилище');
 insert into Translation(translationGroup, translationKey, translation) values (2, 'MATERIAL_VIEW_LICENSE_TYPE', 'Тип лицензии');

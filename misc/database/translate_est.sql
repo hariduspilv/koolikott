@@ -9,6 +9,7 @@ insert into Translation(translationGroup, translationKey, translation) values (1
 insert into Translation(translationGroup, translationKey, translation) values (1, 'ADDED', 'Lisatud');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'AUTHORS', 'Autorid');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'CREATOR', 'Lisaja');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'ORIGINAL_CREATOR', 'Originaalne lisaja');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'VIEW_COUNT', 'Vaatamisi');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'REPOSITORY_NUMBER', 'Repositooriumi number');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'MATERIAL_VIEW_LICENSE_TYPE', 'Litsentsi tüüp');

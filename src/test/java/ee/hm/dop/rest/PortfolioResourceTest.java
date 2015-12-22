@@ -256,6 +256,7 @@ public class PortfolioResourceTest extends ResourceIntegrationTestBase {
     @Test
     public void create() {
         login("39011220011");
+        Long id = 1L;
 
         Portfolio portfolio = new Portfolio();
         portfolio.setTitle("Tere");
@@ -264,6 +265,8 @@ public class PortfolioResourceTest extends ResourceIntegrationTestBase {
 
         assertNotNull(createdPortfolio);
         assertNotNull(createdPortfolio.getId());
+        assertEquals(id, createdPortfolio.getOriginalCreator().getId());
+        assertEquals(id, createdPortfolio.getCreator().getId());
     }
 
     @Test
@@ -477,6 +480,7 @@ public class PortfolioResourceTest extends ResourceIntegrationTestBase {
         assertEquals("Mathematics", portfolio.getTaxon().getName());
         assertEquals(new Long(6), portfolio.getCreator().getId());
         assertEquals("mati.maasikas-vaarikas", portfolio.getCreator().getUsername());
+        assertEquals(new Long(5), portfolio.getOriginalCreator().getId());
         assertEquals("The changes after 2008.", portfolio.getSummary());
         assertEquals(new Long(95455215), portfolio.getViews());
         assertEquals(5, portfolio.getTags().size());

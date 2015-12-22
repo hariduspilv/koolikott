@@ -485,19 +485,24 @@ CREATE TABLE Page (
 );
 
 CREATE TABLE Portfolio (
-  id          BIGINT                AUTO_INCREMENT PRIMARY KEY,
-  title       VARCHAR(255) NOT NULL,
-  taxon       BIGINT,
-  creator     BIGINT       NOT NULL,
-  summary     TEXT,
-  views       BIGINT       NOT NULL DEFAULT 0,
-  created     TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  updated     TIMESTAMP    NULL     DEFAULT NULL,
-  picture     LONGBLOB              DEFAULT NULL,
-  visibility  VARCHAR(255) NOT NULL,
-  deleted     BOOLEAN,
+  id               BIGINT                AUTO_INCREMENT PRIMARY KEY,
+  title            VARCHAR(255) NOT NULL,
+  taxon            BIGINT,
+  creator          BIGINT       NOT NULL,
+  originalCreator  BIGINT       NOT NULL,
+  summary          TEXT,
+  views            BIGINT       NOT NULL DEFAULT 0,
+  created          TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updated          TIMESTAMP    NULL     DEFAULT NULL,
+  picture          LONGBLOB              DEFAULT NULL,
+  visibility       VARCHAR(255) NOT NULL,
+  deleted          BOOLEAN,
 
   FOREIGN KEY (creator)
+  REFERENCES User (id)
+    ON DELETE RESTRICT,
+
+  FOREIGN KEY (originalCreator)
   REFERENCES User (id)
     ON DELETE RESTRICT,
 
