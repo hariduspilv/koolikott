@@ -187,6 +187,7 @@ insert into Translation(translationGroup, translationKey, translation) values (3
 insert into Translation(translationGroup, translationKey, translation) values (3, 'PORTFOLIO_DEFAULT_NEW_SUBCHAPTER_TITLE', 'New subchapter');
 insert into Translation(translationGroup, translationKey, translation) values (3, 'PORTFOLIO_CREATE_NEW_MATERIAL_URL', 'URL for material that does not exists in E-koolikott');
 insert into Translation(translationGroup, translationKey, translation) values (3, 'PORTFOLIO_SAVED', 'Portfolio saved');
+insert into Translation(translationGroup, translationKey, translation) values (3, 'PORTFOLIO_AUTOSAVED', 'Portfolio autosaved');
 insert into Translation(translationGroup, translationKey, translation) values (3, 'PORTFOLIO_EDIT_METADATA', 'Change Metadata');
 insert into Translation(translationGroup, translationKey, translation) values (3, 'PORTFOLIO_SEND_LINK', 'Send link');
 insert into Translation(translationGroup, translationKey, translation) values (3, 'PORTFOLIO_VISIBILITY_PUBLIC', 'Public');
@@ -203,6 +204,10 @@ insert into Translation(translationGroup, translationKey, translation) values (3
 insert into Translation(translationGroup, translationKey, translation) values (3, 'PORTFOLIO_DELETED', 'Portfolio deleted');
 insert into Translation(translationGroup, translationKey, translation) values (3, 'PORTFOLIO_ADD_MATERIAL_SUCCESS', 'Material(s) added succesfully');
 insert into Translation(translationGroup, translationKey, translation) values (3, 'PORTFOLIO_ADD_MATERIAL', 'Add material(s) to this chapter');
+insert into Translation(translationGroup, translationKey, translation) values (3, 'PORTFOLIO_MAKE_PRIVATE', 'Do you wish to make the portfolio private');
+insert into Translation(translationGroup, translationKey, translation) values (3, 'PORTFOLIO_WARNING', 'If you don\'t make the portfolio private all the changes will be visible immediately');
+insert into Translation(translationGroup, translationKey, translation) values (3, 'PORTFOLIO_YES', 'Yes, make the portfolio private');
+insert into Translation(translationGroup, translationKey, translation) values (3, 'PORTFOLIO_NO', 'No');
 
 -- Comment translations
 insert into Translation(translationGroup, translationKey, translation) values (3, 'COMMENTS_TITLE', 'Comments');
@@ -357,8 +362,8 @@ insert into Translation(translationGroup, translationKey, translation) values (3
 insert into Translation(translationGroup, translationKey, translation) values (3, 'MATERIAL_TAB_TYPE', 'Type');
 insert into Translation(translationGroup, translationKey, translation) values (3, 'MATERIAL_TAB_PICTURE', 'Picture');
 insert into Translation(translationGroup, translationKey, translation) values (3, 'MATERIAL_TAB_TAXON', 'Taxonomy');
-insert into Translation(translationGroup, translationKey, translation) values (3, 'MATERIAL_TAB_ADD_LANGUAGE', 'Add language');
-insert into Translation(translationGroup, translationKey, translation) values (3, 'MATERIAL_TAB_REMOVE_LANGUAGE', 'Remove language');
+insert into Translation(translationGroup, translationKey, translation) values (3, 'MATERIAL_TAB_NEW_TITLE_AND_DESC', 'Add a title and a description in a new language');
+insert into Translation(translationGroup, translationKey, translation) values (3, 'MATERIAL_TAB_REMOVE', 'Remove');
 insert into Translation(translationGroup, translationKey, translation) values (3, 'MATERIAL_TAB_ADD_TAXON', 'Add taxonomy');
 insert into Translation(translationGroup, translationKey, translation) values (3, 'MATERIAL_TAB_REMOVE_TAXON', 'Remove taxonomy');
 insert into Translation(translationGroup, translationKey, translation) values (3, 'MATERIAL_TAB_PRESS_ENTER_TO_ADD_TAG', 'Add a tag and press Enter');

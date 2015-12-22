@@ -187,6 +187,7 @@ insert into Translation(translationGroup, translationKey, translation) values (2
 insert into Translation(translationGroup, translationKey, translation) values (2, 'PORTFOLIO_DEFAULT_NEW_SUBCHAPTER_TITLE', 'Новый подраздел');
 insert into Translation(translationGroup, translationKey, translation) values (2, 'PORTFOLIO_CREATE_NEW_MATERIAL_URL', 'Ссылка на материал, который не существует в E-koolikott');
 insert into Translation(translationGroup, translationKey, translation) values (2, 'PORTFOLIO_SAVED', 'Портфолио сохраняются');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'PORTFOLIO_AUTOSAVED', 'Портфолио автосохранения');
 insert into Translation(translationGroup, translationKey, translation) values (2, 'PORTFOLIO_EDIT_METADATA', 'Изменить метаданные');
 insert into Translation(translationGroup, translationKey, translation) values (2, 'PORTFOLIO_SEND_LINK', 'Отправить ссылку');
 insert into Translation(translationGroup, translationKey, translation) values (2, 'PORTFOLIO_VISIBILITY_PUBLIC', 'Общественный');
@@ -203,6 +204,10 @@ insert into Translation(translationGroup, translationKey, translation) values (2
 insert into Translation(translationGroup, translationKey, translation) values (2, 'PORTFOLIO_DELETED', 'Портфолио удалены');
 insert into Translation(translationGroup, translationKey, translation) values (2, 'PORTFOLIO_ADD_MATERIAL_SUCCESS', 'Материал (ов) добавлен успешно');
 insert into Translation(translationGroup, translationKey, translation) values (2, 'PORTFOLIO_ADD_MATERIAL', 'Добавить материал (ей) этой главы');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'PORTFOLIO_MAKE_PRIVATE', 'Вы хотите, чтобы портфель частных');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'PORTFOLIO_WARNING', 'Если вы не сделаете портфель частных все изменения будут видны сразу');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'PORTFOLIO_YES', 'Да, сделать портфолио Частная');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'PORTFOLIO_NO', 'Нет');
 
 -- Comment translations
 insert into Translation(translationGroup, translationKey, translation) values (2, 'COMMENTS_TITLE', 'Комментарии');
@@ -339,8 +344,8 @@ insert into Translation(translationGroup, translationKey, translation) values (2
 insert into Translation(translationGroup, translationKey, translation) values (2, 'MATERIAL_TAB_TYPE', 'Тип');
 insert into Translation(translationGroup, translationKey, translation) values (2, 'MATERIAL_TAB_PICTURE', 'Картина');
 insert into Translation(translationGroup, translationKey, translation) values (2, 'MATERIAL_TAB_TAXON', 'Cистематика');
-insert into Translation(translationGroup, translationKey, translation) values (2, 'MATERIAL_TAB_ADD_LANGUAGE', 'Добавить язык');
-insert into Translation(translationGroup, translationKey, translation) values (2, 'MATERIAL_TAB_REMOVE_LANGUAGE', 'Удалить язык');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'MATERIAL_TAB_NEW_TITLE_AND_DESC', 'Добавить заголовок и описание на новом языке');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'MATERIAL_TAB_REMOVE', 'Удалить');
 insert into Translation(translationGroup, translationKey, translation) values (2, 'MATERIAL_TAB_ADD_TAXON', 'Добавить таксономии');
 insert into Translation(translationGroup, translationKey, translation) values (2, 'MATERIAL_TAB_REMOVE_TAXON', 'Удалить таксономии');
 insert into Translation(translationGroup, translationKey, translation) values (2, 'MATERIAL_TAB_PRESS_ENTER_TO_ADD_TAG', 'Добавить тег и нажмите Enter');

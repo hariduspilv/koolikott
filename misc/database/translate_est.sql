@@ -268,6 +268,7 @@ insert into Translation(translationGroup, translationKey, translation) values (1
 insert into Translation(translationGroup, translationKey, translation) values (1, 'PORTFOLIO_DEFAULT_NEW_SUBCHAPTER_TITLE', 'Uus alampeatükk');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'PORTFOLIO_CREATE_NEW_MATERIAL_URL', 'E-koolikoti välise materiali aadress');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'PORTFOLIO_SAVED', 'Portfoolio salvestatud');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'PORTFOLIO_AUTOSAVED', 'Portfoolio automaatselt salvestatud');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'PORTFOLIO_EDIT_METADATA', 'Muuda Andmeid');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'PORTFOLIO_SEND_LINK', 'Saada link');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'PORTFOLIO_VISIBILITY_PUBLIC', 'Avalik');
@@ -284,6 +285,10 @@ insert into Translation(translationGroup, translationKey, translation) values (1
 insert into Translation(translationGroup, translationKey, translation) values (1, 'PORTFOLIO_DELETED', 'Portfoolio kustutatud');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'PORTFOLIO_ADD_MATERIAL_SUCCESS', 'Materjal(id) edukalt lisatud');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'PORTFOLIO_ADD_MATERIAL', 'Lisa materjal(id) sellese peatükki');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'PORTFOLIO_MAKE_PRIVATE', 'Kas soovid muuta kogumiku privaatseks?');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'PORTFOLIO_WARNING', 'Vastasel juhul on kõigile koheselt nähtavad tehtud muudatused.');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'PORTFOLIO_YES', 'Jah, Tee kogumik privaatseks');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'PORTFOLIO_NO', 'Ei');
 
 -- Comment translations
 insert into Translation(translationGroup, translationKey, translation) values (1, 'COMMENTS_TITLE', 'Kommentaarid');
@@ -341,8 +346,8 @@ insert into Translation(translationGroup, translationKey, translation) values (1
 insert into Translation(translationGroup, translationKey, translation) values (1, 'MATERIAL_TAB_TYPE', 'Tüüp');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'MATERIAL_TAB_PICTURE', 'Pilt');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'MATERIAL_TAB_TAXON', 'Liigitus');
-insert into Translation(translationGroup, translationKey, translation) values (1, 'MATERIAL_TAB_ADD_LANGUAGE', 'Lisa keel');
-insert into Translation(translationGroup, translationKey, translation) values (1, 'MATERIAL_TAB_REMOVE_LANGUAGE', 'Eemalda keel');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'MATERIAL_TAB_NEW_TITLE_AND_DESC', 'Lisa pealkiri ja kirjeldus uues keeles');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'MATERIAL_TAB_REMOVE', 'Eemalda');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'MATERIAL_TAB_ADD_TAXON', 'Lisa liigitus');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'MATERIAL_TAB_REMOVE_TAXON', 'Eemalda liigitus');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'MATERIAL_TAB_PRESS_ENTER_TO_ADD_TAG', 'Lisa märksõna ja vajuta Enter');
