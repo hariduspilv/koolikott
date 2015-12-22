@@ -14,6 +14,8 @@ define(['app'], function(app)
                 $scope.gotoChapter = function(e, chapterId, subchapterId) {
                     e.preventDefault();
 
+                    if (!$rootScope.isViewPortforlioPage && !$rootScope.isEditPortfolioPage) return;
+
                     var combinedId = 'chapter-' + chapterId;
                     
                     if (subchapterId != null) {
@@ -48,7 +50,9 @@ define(['app'], function(app)
                 };
                 
                 $scope.addMaterialsToChapter = function($event, chapter) {
+                  $event.preventDefault();
                 	$event.stopPropagation();
+                  
                 	if(chapter && chapter.materials) {              		
                 		if($rootScope.selectedSingleMaterial) {
                 			if(!containsMaterial(chapter.materials, $rootScope.selectedSingleMaterial)) {
