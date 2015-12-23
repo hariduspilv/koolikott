@@ -14,7 +14,7 @@ define(['app'], function (app) {
             $scope.material.metadata = [];
             $scope.material.tags = [];
             $scope.material.taxons = [{}];
-            $scope.material.author = {};
+            $scope.material.authors = [{}];
             $scope.material.selectedKeyCompetences = [];
             $scope.material.selectedCrossCurricularThemes = [];
 
@@ -67,6 +67,14 @@ define(['app'], function (app) {
                 addNewMetadata();
             };
 
+            $scope.addNewAuthor = function () {
+                $scope.material.authors.push({});
+            };
+
+            $scope.deleteAuthor = function (index) {
+                $scope.material.authors.splice(index, 1);
+            };
+
             $scope.deleteMetadata = function (index) {
                 $scope.material.metadata.splice(index, 1);
             };
@@ -105,7 +113,6 @@ define(['app'], function (app) {
                 var titles = metadata.titles;
                 var descriptions = metadata.descriptions;
                 var publisher = getPublisher(material);
-                var author = getAuthor(material);
                 var licenseType = getLicenseType(material);
                 var resourceTypes = getResourceTypes(material);
                 var base64Picture = getPicture(material);
@@ -122,7 +129,7 @@ define(['app'], function (app) {
                     tags: material.tags,
                     paid: material.paid,
                     publishers: [publisher],
-                    authors: [author],
+                    authors: material.authors,
                     targetGroups: material.targetGroups,
                     licenseType: licenseType,
                     resourceTypes: resourceTypes,
@@ -206,16 +213,6 @@ define(['app'], function (app) {
                     titles: titles,
                     descriptions: descriptions
                 };
-            }
-
-            function getAuthor(material) {
-                if (material.author.name && material.author.surname) {
-                    var author = {
-                        name: material.author.name,
-                        surname: material.author.surname
-                    };
-                }
-                return author;
             }
 
             function isStepValid(index) {
