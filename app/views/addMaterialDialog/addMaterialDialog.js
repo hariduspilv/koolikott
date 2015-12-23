@@ -113,6 +113,7 @@ define(['app'], function (app) {
                 var titles = metadata.titles;
                 var descriptions = metadata.descriptions;
                 var publisher = getPublisher(material);
+                var authors = getAuthors(material);
                 var licenseType = getLicenseType(material);
                 var resourceTypes = getResourceTypes(material);
                 var base64Picture = getPicture(material);
@@ -129,7 +130,7 @@ define(['app'], function (app) {
                     tags: material.tags,
                     paid: material.paid,
                     publishers: [publisher],
-                    authors: material.authors,
+                    authors: authors,
                     targetGroups: material.targetGroups,
                     licenseType: licenseType,
                     resourceTypes: resourceTypes,
@@ -141,6 +142,18 @@ define(['app'], function (app) {
 
                 serverCallService.makePost("rest/material", newMaterial, postMaterialSuccess, postMaterialFail);
             };
+
+            function getAuthors(material) {
+                var authors = [];
+
+                material.authors.forEach(function (author) {
+                    if (author.name && author.surname) {
+                        authors.push(author);
+                    }
+                });
+
+                return authors;
+            }
 
             function getTaxons(material) {
                 if (material.taxons[0].id) {
