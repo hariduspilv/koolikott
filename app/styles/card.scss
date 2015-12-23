@@ -270,6 +270,14 @@ md-card {
   }
 }
 
+.md-card.card-sm.active .card-hover .pick md-icon.checked {
+  display: block;
+}
+
+.md-card.card-sm.active .card-hover .pick md-icon.unchecked {
+  display: none;
+}
+
 md-card .card-menu {
   position: absolute;
   top: 8px;
