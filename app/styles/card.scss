@@ -7,7 +7,7 @@ $green4: #CDDC39;
 $heading-color: #212121;
 $link-color: #15c;
 $card-lg-padding: 25px;
-$border-color: rgba(0,0,0,0.12);
+$border-color: rgba(0, 0, 0, 0.12);
 
 md-card {
   position: relative;
@@ -84,13 +84,14 @@ md-card {
       font-size: 48px;
       color: #fff;
     }
-    &:hover {
+    &:hover,
+    &.active {
       background-color: #eee;
       cursor: pointer;
       .card-hover {
         opacity: 1;
         md-icon {
-          color: rgba(255,255,255, 1);
+          color: rgba(255, 255, 255, 1);
         }
       }
     }
@@ -115,9 +116,14 @@ md-card {
         background-color: $green4;
       }
     }
+    .myblock {
+      display: block;
+
+    }
+
     .card-hover {
       position: absolute;
-      background-color: rgba(0,0,0, 0.7);
+      background-color: rgba(0, 0, 0, 0.7);
       top: 0;
       bottom: 0;
       left: 0;
@@ -147,7 +153,7 @@ md-card {
         left: 0;
         right: 0;
         font-size: 48px;
-        color: rgba(255,255,255, 0.6);
+        color: rgba(255, 255, 255, 0.6);
       }
     }
     md-card-footer {
@@ -159,7 +165,7 @@ md-card {
           }
         }
         md-icon {
-          color: rgba(0,0,0, 0.3);
+          color: rgba(0, 0, 0, 0.3);
           font-size: inherit;
         }
       }
@@ -173,7 +179,7 @@ md-card {
       font-size: 34px;
       color: $heading-color;
       font-size: 30px;
-      margin: 0  0 10px 0;
+      margin: 0 0 10px 0;
       font-weight: 300;
       line-height: 35px;
     }
@@ -233,18 +239,18 @@ md-card {
         transition: all 0.5s;
         cursor: pointer;
         position: absolute;
-        background-color: rgba(0,0,0, 0);
+        background-color: rgba(0, 0, 0, 0);
         top: 0;
         bottom: 0;
         left: 0;
         right: 0;
         md-icon {
-          color: rgba(255,255,255, 0);
+          color: rgba(255, 255, 255, 0);
         }
         &:hover {
-          background-color: rgba(0,0,0, 0.7);
+          background-color: rgba(0, 0, 0, 0.7);
           md-icon {
-            color: rgba(255,255,255, 1);
+            color: rgba(255, 255, 255, 1);
           }
         }
       }

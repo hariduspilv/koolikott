@@ -11,7 +11,7 @@ define(['app'], function(app)
 			controller: function ($scope, $location) {
 
 				$scope.selected = false;
-				
+				$scope.isEditPortfolioPage = $rootScope.isEditPortfolioPage;
 				$scope.isEditPortfolioMode = $rootScope.isEditPortfolioMode;
 				
 				$scope.navigateTo = function(material) {

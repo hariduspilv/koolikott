@@ -1,15 +1,15 @@
- <md-card class="card-sm md-whiteframe-2dp" id="material-card-{{material.id}}" data-ng-click="navigateTo(material)">
-  <div class="card-cover {{getType()}}">
+ <md-card class="card-sm md-whiteframe-2dp" ng-class="{ active: selected }" id="material-card-{{material.id}}" data-ng-click="navigateTo(material)">
+  <div class="card-cover  {{getType()}}">
     <img data-ng-if="material.hasPicture" data-ng-src="rest/material/getPicture?materialId={{material.id}}" class="md-card-image" />
     <div data-ng-if="!material.hasPicture" layout="row" layout-fill flex layout-align="center center">
       <md-icon class="icon-kind" data-ng-bind="getType()"></md-icon>
     </div>
-    <div class="card-hover {{getType()}}" layout="row" layout-fill flex layout-align="center center">
-      <div class="pick" data-ng-if="$root.isEditPortfolioMode && !$root.isEditPortfolioPage">
+    <div class="card-hover  {{getType()}}" layout="row" layout-fill flex layout-align="center center">
+      <div class="pick" data-ng-if="isEditPortfolioMode && !isEditPortfolioPage">
         <md-icon class="unchecked">radio_button_unchecked</md-icon>
-        <md-icon data-ng-click="pickMaterial($event, material)" class="checked">check_circle</md-icon>
+        <md-icon data-ng-click="pickMaterial($event, material)" class="checked"">check_circle</md-icon>
       </div>
-        <div class="pick" data-ng-if="$root.isEditPortfolioMode && $root.isEditPortfolioPage">
+        <div class="pick" data-ng-if="isEditPortfolioMode && isEditPortfolioPage">
             <md-icon class="unchecked">remove_circle_outline</md-icon>
             <md-icon data-ng-click="removeMaterial($event, material)" class="checked">remove_circle</md-icon>
         </div>
