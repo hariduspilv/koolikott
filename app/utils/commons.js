@@ -263,8 +263,11 @@ function createPortfolio(id) {
 	var portfolio = {
 		type: ".Portfolio",
 		id: id,
+		title: "",
+		summary: "",
+		taxon: {},
+		targetGroups: [],
 		tags: []
 	}
-	
 	return portfolio;
 }

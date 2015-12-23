@@ -102,11 +102,9 @@ define(['app'], function(app)
                 function handleAddMaterialButton() {
                 	if($rootScope.selectedMaterials && $rootScope.selectedMaterials.length > 0 || $rootScope.selectedSingleMaterial) {
                 		$scope.showAddMaterialButton = true;
-                		log("true");
                 		return;
                 	}
                 	$scope.showAddMaterialButton = false;
-                	log("false");
                 }
                 
             }

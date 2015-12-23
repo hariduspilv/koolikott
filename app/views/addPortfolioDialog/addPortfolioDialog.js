@@ -6,10 +6,20 @@ define(['app'], function(app)
           $scope.showHints = true;
 
             function init() {
+            	$scope.newPortfolio = createPortfolio();
                 $scope.portfolio = portfolio;
 
                 if($scope.portfolio.id != null) {
                     $scope.isEditPortfolio = true;
+                    
+                    var portfolioClone = angular.copy(portfolio);
+                    
+                    $scope.newPortfolio.title = portfolioClone.title;
+                    $scope.newPortfolio.summary = portfolioClone.summary;
+                    $scope.newPortfolio.taxon = portfolioClone.taxon;
+                    $scope.newPortfolio.targetGroups = portfolioClone.targetGroups;
+                    $scope.newPortfolio.tags = portfolioClone.tags;
+                    
                 }
             }
 
@@ -19,9 +29,9 @@ define(['app'], function(app)
 
             $scope.create = function() {
             	var url = "rest/portfolio/create";
-                $scope.portfolio.picture = getPicture($scope.portfolio);
+                $scope.newPortfolio.picture = getPicture($scope.newPortfolio);
 
-				serverCallService.makePost(url, $scope.portfolio, createPortfolioSuccess, createPortfolioFailed);
+				serverCallService.makePost(url, $scope.newPortfolio, createPortfolioSuccess, createPortfolioFailed);
             };
 
             function getPicture(portfolio) {
@@ -47,7 +57,12 @@ define(['app'], function(app)
 
             $scope.update = function() {
                 var url = "rest/portfolio/update";
-                $scope.portfolio.picture = getPicture($scope.portfolio);
+                $scope.portfolio.title = $scope.newPortfolio.title;
+                $scope.portfolio.summary = $scope.newPortfolio.summary;
+                $scope.portfolio.taxon = $scope.newPortfolio.taxon;
+                $scope.portfolio.targetGroups = $scope.newPortfolio.targetGroups;
+                $scope.portfolio.tags = $scope.newPortfolio.tags;
+                $scope.portfolio.picture = getPicture($scope.newPortfolio);
 
                 serverCallService.makePost(url, $scope.portfolio, updatePortfolioSuccess, createPortfolioFailed);
             };
