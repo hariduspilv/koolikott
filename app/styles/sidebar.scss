@@ -6,12 +6,5 @@
   
   .md-list-item-text {
     max-width: 100%;
-    
-    p {
-      display: block;
-      overflow: hidden;
-      white-space: nowrap;
-      text-overflow: ellipsis;
-    }
   }
 }
