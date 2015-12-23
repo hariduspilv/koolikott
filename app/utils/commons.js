@@ -265,7 +265,7 @@ function createPortfolio(id) {
 		id: id,
 		title: "",
 		summary: "",
-		taxon: {},
+		taxon: null,
 		targetGroups: [],
 		tags: []
 	}
