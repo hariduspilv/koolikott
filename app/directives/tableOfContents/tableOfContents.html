@@ -6,11 +6,11 @@
     <a href="#chapter-{{$index}}" class="md-button" id="toc-chapter-{{$index}}" data-offset="150" data-du-scrollspy data-ng-click="gotoChapter($event, $index)">
       {{chapter.title}}
       <span flex></span>
-      <span class="add-materials-to-chapter" data-ng-if="$root.isEditPortfolioMode" data-ng-click="addMaterialsToChapter($event, chapter)">
+      <span class="add-materials-to-chapter" data-ng-if="$root.isEditPortfolioMode && showAddMaterialButton" data-ng-click="addMaterialsToChapter($event, chapter)">
         <md-tooltip md-direction="right">
             <span data-translate="PORTFOLIO_ADD_MATERIAL"></span>
         </md-tooltip>
-        <md-icon>my_library_books</md-icon>
+        <md-icon>add_circle</md-icon>
       </span>
     </a>
     <ul class="sidenav-menu-toggle-list">
@@ -18,11 +18,11 @@
         <a href="#chapter-{{$parent.$index}}-{{$index}}" id="toc-chapter-{{$parent.$index}}-{{$index}}" data-offset="150" data-du-scrollspy class="md-button" layout="row" data-ng-click="gotoChapter($event, $parent.$index, $index)">
           {{subchapter.title}}
           <span flex></span>
-          <span class="add-materials-to-chapter" data-ng-if="$root.isEditPortfolioMode" data-ng-click="addMaterialsToChapter($event, subchapter)">
+          <span class="add-materials-to-chapter" data-ng-if="$root.isEditPortfolioMode && showAddMaterialButton" data-ng-click="addMaterialsToChapter($event, subchapter)">
             <md-tooltip md-direction="right">
               <span data-translate="PORTFOLIO_ADD_MATERIAL"></span>
             </md-tooltip>
-            <md-icon>my_library_books</md-icon>
+            <md-icon>add_circle</md-icon>
           </span>
         </a>
       </li>

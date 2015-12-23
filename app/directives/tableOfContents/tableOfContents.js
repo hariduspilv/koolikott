@@ -91,6 +91,24 @@ define(['app'], function(app)
                     $mdToast.show($mdToast.simple().position('right top').content(message));
                 }
                 
+                $scope.$watch(function() { return $rootScope.selectedMaterials }, function(newValue, oldValue) {
+                	handleAddMaterialButton();
+                }, true);
+                
+                $scope.$watch(function() { return $rootScope.selectedSingleMaterial }, function(newValue, oldValue) {
+                	handleAddMaterialButton();
+                }, true);
+                
+                function handleAddMaterialButton() {
+                	if($rootScope.selectedMaterials && $rootScope.selectedMaterials.length > 0 || $rootScope.selectedSingleMaterial) {
+                		$scope.showAddMaterialButton = true;
+                		log("true");
+                		return;
+                	}
+                	$scope.showAddMaterialButton = false;
+                	log("false");
+                }
+                
             }
         };
     }]);
