@@ -14,7 +14,7 @@ import ee.hm.dop.service.MaterialService;
 import ee.hm.dop.service.PortfolioService;
 
 @Path("comment")
-@RolesAllowed("USER")
+@RolesAllowed({ "USER", "ADMIN" })
 public class CommentResource extends BaseResource {
 
     @Inject

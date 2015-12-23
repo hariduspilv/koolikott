@@ -112,7 +112,7 @@ public class PortfolioResource extends BaseResource {
     @Path("create")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    @RolesAllowed("USER")
+    @RolesAllowed({ "USER", "ADMIN" })
     public Portfolio create(Portfolio portfolio) {
         return portfolioService.create(portfolio, getLoggedInUser());
     }
@@ -121,7 +121,7 @@ public class PortfolioResource extends BaseResource {
     @Path("update")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    @RolesAllowed("USER")
+    @RolesAllowed({ "USER", "ADMIN" })
     public Portfolio update(Portfolio portfolio) {
         return portfolioService.update(portfolio, getLoggedInUser());
     }
@@ -130,7 +130,7 @@ public class PortfolioResource extends BaseResource {
     @Path("copy")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    @RolesAllowed("USER")
+    @RolesAllowed({ "USER", "ADMIN" })
     public Portfolio copy(Portfolio portfolio) {
         return portfolioService.copy(portfolio, getLoggedInUser());
     }
