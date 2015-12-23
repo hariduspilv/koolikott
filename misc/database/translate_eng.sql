@@ -371,6 +371,7 @@ insert into Translation(translationGroup, translationKey, translation) values (3
 insert into Translation(translationGroup, translationKey, translation) values (3, 'MATERIAL_TAB_REMOVE_TAXON', 'Remove taxonomy');
 insert into Translation(translationGroup, translationKey, translation) values (3, 'MATERIAL_TAB_PRESS_ENTER_TO_ADD_TAG', 'Add a tag and press Enter');
 insert into Translation(translationGroup, translationKey, translation) values (3, 'MATERIAL_TAB_CHOOSE_LICENSE', 'Choose license type');
+insert into Translation(translationGroup, translationKey, translation) values (3, 'MATERIAL_TAB_NEW_AUTHOR', 'Add author');
 
 -- Like box translations
 insert into Translation(translationGroup, translationKey, translation) values (3, 'RATING_LIKE', 'I like this');

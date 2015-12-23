@@ -292,7 +292,6 @@ insert into Translation(translationGroup, translationKey, translation) values (1
 insert into Translation(translationGroup, translationKey, translation) values (1, 'PORTFOLIO_NO', 'Ei');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'PORTFOLIO_HAS_BEEN_MADE_PUBLIC', 'Kõik muutused on nüüd avalikult nähtavad');
 
-
 -- Comment translations
 insert into Translation(translationGroup, translationKey, translation) values (1, 'COMMENTS_TITLE', 'Kommentaarid');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'ADD_COMMENT_TITLE', 'Lisa kommentaar');
@@ -341,7 +340,6 @@ insert into Translation(translationGroup, translationKey, translation) values (1
 insert into Translation(translationGroup, translationKey, translation) values (1, 'MATERIAL_SEARCH_CROSS_CURRICULAR_THEME', 'Otsi läbivaid teemasid');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'MATERIAL_CROSS_CURRICULAR_THEMES', 'Läbivad teemad');
 
-
 -- Add Material tab translations
 insert into Translation(translationGroup, translationKey, translation) values (1, 'MATERIAL_TAB_URL', 'URL');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'MATERIAL_TAB_MAIN_DATA', 'Põhiandmed');
@@ -355,6 +353,7 @@ insert into Translation(translationGroup, translationKey, translation) values (1
 insert into Translation(translationGroup, translationKey, translation) values (1, 'MATERIAL_TAB_REMOVE_TAXON', 'Eemalda liigitus');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'MATERIAL_TAB_PRESS_ENTER_TO_ADD_TAG', 'Lisa märksõna ja vajuta Enter');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'MATERIAL_TAB_CHOOSE_LICENSE', 'Vali litsentsi tüüp');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'MATERIAL_TAB_NEW_AUTHOR', 'Lisa autor');
 
 -- Like box translations
 insert into Translation(translationGroup, translationKey, translation) values (1, 'RATING_LIKE', 'Mulle meeldib see');

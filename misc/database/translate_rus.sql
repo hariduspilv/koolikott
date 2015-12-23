@@ -353,6 +353,7 @@ insert into Translation(translationGroup, translationKey, translation) values (2
 insert into Translation(translationGroup, translationKey, translation) values (2, 'MATERIAL_TAB_REMOVE_TAXON', 'Удалить таксономии');
 insert into Translation(translationGroup, translationKey, translation) values (2, 'MATERIAL_TAB_PRESS_ENTER_TO_ADD_TAG', 'Добавить тег и нажмите Enter');
 insert into Translation(translationGroup, translationKey, translation) values (2, 'MATERIAL_TAB_CHOOSE_LICENSE', 'Выберите тип лицензии');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'MATERIAL_TAB_NEW_AUTHOR', 'Добавить автора');
 
 -- Like box translations
 insert into Translation(translationGroup, translationKey, translation) values (2, 'RATING_LIKE', 'Мне это нравится');
