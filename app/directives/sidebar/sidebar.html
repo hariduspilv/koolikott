@@ -11,19 +11,19 @@
 
   <h2 class="md-headline">Soovitused</h2>
   <md-list>
-    <md-list-item md-ink-ripple="#03A9F4" class="md-3-line md-clickable" ng-repeat="item in recommendations">
-      <div class="md-list-item-text">
+    <md-list-item md-ink-ripple="#03A9F4" class="md-3-line md-clickable" layout="row" data-ng-repeat="item in recommendations">
+      <div class="md-list-item-text" layout="column">
         <h3>{{item.what}}</h3>
         <p class="one-row">{{item.notes}}</p>
         <h4>{{item.who}}</h4>
       </div>
       <md-divider ng-if="!$last"></md-divider>
     </md-list-item>
-    <md-button layout layout-align="start center" flex class="md-primary">
-      <ng-md-icon icon="arrow_forward"> </ng-md-icon>
-       Veel soovitusi
-    </md-button>
   </md-list>
+  <md-button layout layout-align="start center" flex class="md-primary">
+    <ng-md-icon icon="arrow_forward"></ng-md-icon>
+    Veel soovitusi
+  </md-button>
   <md-list>
     <md-list-item
         ng-repeat="section in ::admin.sections"
@@ -34,5 +34,5 @@
         ng-click="!section.disabled && $state.go(section.state)">
         <span ng-bind="::section.label"></span>
     </md-list-item>
-</md-list>
+  </md-list>
 </div>

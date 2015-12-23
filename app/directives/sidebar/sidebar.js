@@ -30,7 +30,7 @@ define(['app'], function(app)
 					who: 'Enn Pärtel, Jaak Lõhmus, Rein-Karl Loide',
 					when: '2015',
 					kind: 'videocam',
-					notes: "Uue kujundusega õpik arvestab 2010. a ainekava nõudeid. Aine ehituse mudel. Soojusliikumine. Celsiuse temperatuuriskaala. Soojusülekanne (soojusülekande liigid, rakendused, aastaaegade vaheldumine, ainete soojuslikud kar"
+					notes: "Uue kujundusega õpik arvestab 2010. a ainekava nõudeid. Aine ehituse mudel."
 				}, {
 					what: 'Keemia õpik 8. klassile',
 					who: 'Taavi Ivan',

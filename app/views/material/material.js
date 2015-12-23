@@ -12,6 +12,7 @@ define(['app'], function (app) {
 
             if ($rootScope.savedMaterial) {
                 $scope.material = $rootScope.savedMaterial;
+                $rootScope.savedMaterial = null;
                 
                 if($rootScope.isEditPortfolioMode) {
                 	$rootScope.selectedSingleMaterial = $scope.material;

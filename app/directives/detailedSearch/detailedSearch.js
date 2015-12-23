@@ -81,10 +81,9 @@ define(['app'], function(app)
                     if (keyCompetence) {
                         $scope.detailedSearch.keyCompetence = keyCompetence;
                     }
-
-                    $scope.isEditPortfolioMode = $rootScope.isEditPortfolioMode;
+  
                     if ($rootScope.isEditPortfolioMode && $rootScope.savedPortfolio) {
-                    	$scope.detailedSearch.taxon = Object.create($rootScope.savedPortfolio.taxon);
+                    	setEditModePrefill();
                     } else {
                         // Taxon
                         if (searchService.getTaxon()) {
@@ -382,19 +381,15 @@ define(['app'], function(app)
                     }
                 }, true);
 
-                $scope.$watch(function() { return searchService.getType() }, function(newType, oldType) {
-                	$scope.detailedSearch.type = newType;
-                }, true);
-
-                $scope.$watch(function() { return searchService.getTargetGroups() }, function(newGroups, oldGroups) {
-                	$scope.detailedSearch.targetGroups = newGroups;
-                }, true);
-
                 $scope.getEffectiveIssueDate = function() {
                     if ($scope.detailedSearch.issueDate && $scope.detailedSearch.issueDate != $scope.issueDateFirstYear) {
                         return $scope.detailedSearch.issueDate;
                     }
                 }
+                
+                $scope.$watch(function() { return $rootScope.savedPortfolio }, function(newValue, oldValue) {
+                	setEditModePrefill();
+                }, false);
 
                 function setCrossCurricularThemes(crossCurricularThemes) {
                     $scope.crossCurricularThemes = crossCurricularThemes;
@@ -402,6 +397,16 @@ define(['app'], function(app)
 
                 function setKeyCompetences(keyCompetences) {
                     $scope.keyCompetences = keyCompetences;
+                }
+                
+                function setEditModePrefill() {
+                	if ($rootScope.isEditPortfolioMode && $rootScope.savedPortfolio) {
+                		try {
+		                	$scope.detailedSearch.taxon = Object.create($rootScope.savedPortfolio).taxon;
+		                	$scope.detailedSearch.targetGroups = Object.create($rootScope.savedPortfolio.targetGroups);
+                		}catch(e){}
+                		$scope.detailedSearch.type = "material";
+                	}
                 }
 
             }

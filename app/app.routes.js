@@ -52,8 +52,7 @@ define([], function()
                     'directives/chapter/chapter',
                     'directives/materialBox/materialBox',
                     'directives/portfolioSummaryCard/portfolioSummaryCard',
-                    'services/dialogService',
-                    'services/toastService'
+                    'services/dialogService'
                 ]
             },
             '/portfolio/edit': {
@@ -64,8 +63,7 @@ define([], function()
                     'directives/chapter/chapter',
                     'directives/materialBox/materialBox',
                     'directives/portfolioSummaryCard/portfolioSummaryCard',
-                    'services/dialogService',
-                    'services/toastService'
+                    'services/dialogService'
                 ]
             },
             '/loginRedirect': {

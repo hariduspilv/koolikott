@@ -1,7 +1,7 @@
 define(['app'], function(app)
 {
-    app.directive('dopEditPortfolioModeHeader', ['translationService', '$location', '$mdSidenav', '$mdDialog', '$rootScope', 'serverCallService', 'searchService',
-     function(translationService, $location, $mdSidenav, $mdDialog, $rootScope, serverCallService, searchService) {
+    app.directive('dopEditPortfolioModeHeader', ['translationService', '$location', '$mdSidenav', '$mdDialog', '$rootScope', 'serverCallService', 'searchService', 'toastService',
+     function(translationService, $location, $mdSidenav, $mdDialog, $rootScope, serverCallService, searchService, toastService) {
         return {
             scope: true,
             templateUrl: 'directives/editPortfolioModeHeader/editPortfolioModeHeader.html',
@@ -18,6 +18,8 @@ define(['app'], function(app)
                 $scope.makePublic = function() {
                     $rootScope.savedPortfolio.visibility = 'PUBLIC';
                     updatePortfolio();
+                    
+                    toastService.show('PORTFOLIO_HAS_BEEN_MADE_PUBLIC');
                 };
 
                 $scope.makeNotListed = function() {
