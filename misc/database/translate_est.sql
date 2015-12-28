@@ -167,6 +167,19 @@ insert into Translation(translationGroup, translationKey, translation) values (1
 
 -- Taxon Domain translations
 insert into Translation(translationGroup, translationKey, translation) values (1, 'DOMAIN_LANGUAGE_AND_SPEECH', 'Keel ja kõne');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'DOMAIN_LANGUAGE_AND_LITERATURE', 'Emakeel ja kirjandus');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'DOMAIN_FOREIGN_LANGUAGE', 'Võõrkeeled');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'DOMAIN_MATHEMATICS', 'Matemaatika');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'DOMAIN_NATURAL_SCIENCES', 'Loodusained');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'DOMAIN_SOCIAL_STUDIES', 'Sotsiaalained');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'DOMAIN_ARTS', 'Kunstid');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'DOMAIN_TECHNOLOGY', 'Tehnoloogia');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'DOMAIN_PHYSICAL_EDUCATION', 'Kehaline kasvatus');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'DOMAIN_ELECTIVES', 'Valikained');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'DOMAIN_CROSS-CURRICULAR_THEMES', 'Läbivad teemad');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'DOMAIN_KEY_COMPETENCES', 'Üldpädevused');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'DOMAIN_COMPUTER_SCIENCE', 'Arvutiteadus');
+
 
 -- Taxon Topic translations
 insert into Translation(translationGroup, translationKey, translation) values (1, 'TOPIC_BASIC_HISTORY', 'Ajaloo algõpetus');

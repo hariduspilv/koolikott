@@ -220,6 +220,19 @@ insert into Translation(translationGroup, translationKey, translation) values (2
 
 -- Taxon Domain translations
 insert into Translation(translationGroup, translationKey, translation) values (2, 'DOMAIN_LANGUAGE_AND_SPEECH', 'Язык и речь');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'DOMAIN_LANGUAGE_AND_LITERATURE', 'Язык и литература');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'DOMAIN_FOREIGN_LANGUAGE', 'Иностранный язык');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'DOMAIN_MATHEMATICS', 'Математика');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'DOMAIN_NATURAL_SCIENCES', 'Естественные науки');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'DOMAIN_SOCIAL_STUDIES', 'Социальные исследования');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'DOMAIN_ARTS', 'искусства');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'DOMAIN_TECHNOLOGY', 'Технологии');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'DOMAIN_PHYSICAL_EDUCATION', 'Физическая культура');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'DOMAIN_ELECTIVES', 'Факультативные');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'DOMAIN_CROSS-CURRICULAR_THEMES', 'Кросс-учебные темы');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'DOMAIN_KEY_COMPETENCES', 'Ключевые компетенции');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'DOMAIN_COMPUTER_SCIENCE', 'Информатика');
+
 
 -- Taxon Topic translations
 insert into Translation(translationGroup, translationKey, translation) values (2, 'TOPIC_BASIC_HISTORY', 'История основы');

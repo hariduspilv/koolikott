@@ -220,7 +220,7 @@ insert into Translation(translationGroup, translationKey, translation) values (3
 
 -- Taxon Domain translations
 insert into Translation(translationGroup, translationKey, translation) values (3, 'DOMAIN_ME_AND_THE_ENVIRONMENT', 'Me and the environment');
-insert into Translation(translationGroup, translationKey, translation) values (3, 'DOMAIN_LANGUAGE_AND_SPEECH', 'Language and speach');
+insert into Translation(translationGroup, translationKey, translation) values (3, 'DOMAIN_LANGUAGE_AND_SPEECH', 'Language and speech');
 insert into Translation(translationGroup, translationKey, translation) values (3, 'DOMAIN_ESTONIAN', 'Estonian');
 insert into Translation(translationGroup, translationKey, translation) values (3, 'DOMAIN_MATHEMATICS', 'Mathematics');
 insert into Translation(translationGroup, translationKey, translation) values (3, 'DOMAIN_ARTS', 'Arts');
