@@ -1,6 +1,6 @@
 define(['app'], function (app) {
-    app.controller('materialController', ['$scope', 'serverCallService', '$route', 'translationService', '$rootScope', 'searchService', '$location', 'alertService', 'authenticatedUserService',
-        function ($scope, serverCallService, $route, translationService, $rootScope, searchService, $location, alertService, authenticatedUserService) {
+    app.controller('materialController', ['$scope', 'serverCallService', '$route', 'translationService', '$rootScope', 'searchService', '$location', 'alertService', 'authenticatedUserService', 'dialogService',
+        function ($scope, serverCallService, $route, translationService, $rootScope, searchService, $location, alertService, authenticatedUserService, dialogService) {
             $scope.showMaterialContent = false;
             $scope.newComment = {};
 
@@ -223,5 +223,10 @@ define(['app'], function (app) {
 
                 return 'description';
             }
+            
+            $scope.isAdmin = function() {
+                return authenticatedUserService.getUser() && authenticatedUserService.getUser().role === 'ADMIN';
+            };
+            
         }]);
 });

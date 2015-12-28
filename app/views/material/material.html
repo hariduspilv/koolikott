@@ -27,6 +27,12 @@
                       <md-icon md-menu-origin>more_vert</md-icon>
                     </md-button>
                     <md-menu-content width="4">
+                      <md-menu-item data-ng-if="isAdmin()">
+                          <md-button data-ng-click="confirmMaterialDeletion()">
+                              <md-icon md-menu-align-target>delete</md-icon>
+                              <span data-translate="MATERIAL_DELETE"></span>
+                          </md-button>
+                      </md-menu-item>
                       <md-menu-item dop-copy-permalink></md-menu-item>
                       <md-menu-divider></md-menu-divider>
                       <md-menu-item dop-recommend></md-menu-item>
