@@ -75,6 +75,12 @@ define(['app'], function(app)
                     function deletePortfolioFailed() {
                         log('Deleting portfolio failed.');
                     }
+                    
+                    if($rootScope.openMetadataDialog) {
+                    	$scope.showEditMetadataDialog();
+                    	$rootScope.openMetadataDialog = null;
+                    }
+                    
                 }
             };
         }]);

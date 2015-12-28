@@ -35,6 +35,7 @@ define(['app'], function(app)
                     		createPortfolioFailed();
         	            } else {
         	            	$rootScope.savedPortfolio = portfolio;
+        	            	$rootScope.openMetadataDialog = true;
         	            	$mdDialog.hide();
         	                $location.url('/portfolio/edit?id=' + portfolio.id);
         	            }
