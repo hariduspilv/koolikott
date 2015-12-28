@@ -356,7 +356,9 @@ insert into Translation(translationGroup, translationKey, translation) values (3
 insert into Translation(translationGroup, translationKey, translation) values (3, 'MATERIAL_KEY_COMPETENCES', 'Key competences');
 insert into Translation(translationGroup, translationKey, translation) values (3, 'MATERIAL_SEARCH_CROSS_CURRICULAR_THEME', 'Search for a cross-curricular theme');
 insert into Translation(translationGroup, translationKey, translation) values (3, 'MATERIAL_CROSS_CURRICULAR_THEMES', 'Cross-curricular themes');
-
+insert into Translation(translationGroup, translationKey, translation) values (3, 'MATERIAL_DELETE', 'Delete material');
+insert into Translation(translationGroup, translationKey, translation) values (3, 'MATERIAL_CONFIRM_DELETE_DIALOG_TITLE', 'Delete material');
+insert into Translation(translationGroup, translationKey, translation) values (3, 'MATERIAL_CONFIRM_DELETE_DIALOG_CONTENT', 'Are you sure that you with to delete this material?');
 
 -- Add Material tab translations
 insert into Translation(translationGroup, translationKey, translation) values (3, 'MATERIAL_TAB_URL', 'URL');

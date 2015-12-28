@@ -352,6 +352,9 @@ insert into Translation(translationGroup, translationKey, translation) values (1
 insert into Translation(translationGroup, translationKey, translation) values (1, 'MATERIAL_KEY_COMPETENCES', 'Üldpädevused');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'MATERIAL_SEARCH_CROSS_CURRICULAR_THEME', 'Otsi läbivaid teemasid');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'MATERIAL_CROSS_CURRICULAR_THEMES', 'Läbivad teemad');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'MATERIAL_DELETE', 'Kustuta materjal');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'MATERIAL_CONFIRM_DELETE_DIALOG_TITLE', 'Kustuta materjal');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'MATERIAL_CONFIRM_DELETE_DIALOG_CONTENT', 'Kas oled kindel, et soovid kustutada selle materjali?');
 
 -- Add Material tab translations
 insert into Translation(translationGroup, translationKey, translation) values (1, 'MATERIAL_TAB_URL', 'URL');
