@@ -224,6 +224,29 @@ define(['app'], function (app) {
                 return 'description';
             }
             
+            $scope.confirmMaterialDeletion = function() {
+                dialogService.showConfirmationDialog(
+                    'MATERIAL_CONFIRM_DELETE_DIALOG_TITLE',
+                    'MATERIAL_CONFIRM_DELETE_DIALOG_CONTENT',
+                    'ALERT_CONFIRM_POSITIVE',
+                    'ALERT_CONFIRM_NEGATIVE',
+                    deleteMaterial);
+            };
+
+            function deleteMaterial() {
+                var url = "rest/material/delete";
+                serverCallService.makePost(url, $scope.material, deleteMaterialSuccess, deleteMaterialFailed);
+            }
+
+            function deleteMaterialSuccess() {
+                toastService.showOnRouteChange('PORTFOLIO_DELETED');
+                $location.url('/' + authenticatedUserService.getUser().username);
+            }
+
+            function deleteMaterialFailed() {
+                log('Deleting material failed.');
+            }
+            
             $scope.isAdmin = function() {
                 return authenticatedUserService.getUser() && authenticatedUserService.getUser().role === 'ADMIN';
             };
