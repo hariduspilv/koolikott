@@ -115,6 +115,14 @@ public class MaterialResource extends BaseResource {
     }
 
     @POST
+    @Path("delete")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @RolesAllowed({ "ADMIN" })
+    public void delete(Material material) {
+    	materialService.delete(material, getLoggedInUser());
+    }
+    
+    @POST
     @RolesAllowed({ "USER", "ADMIN", "PUBLISHER" })
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)

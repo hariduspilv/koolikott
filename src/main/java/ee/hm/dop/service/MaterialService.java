@@ -17,6 +17,7 @@ import ee.hm.dop.model.Author;
 import ee.hm.dop.model.Comment;
 import ee.hm.dop.model.Material;
 import ee.hm.dop.model.Publisher;
+import ee.hm.dop.model.Role;
 import ee.hm.dop.model.User;
 import ee.hm.dop.model.UserLike;
 
@@ -67,6 +68,24 @@ public class MaterialService {
 
 		return createdMaterial;
 	}
+	
+    public void delete(Material material, User loggedInUser) {
+        if (material.getId() == null) {
+            throw new RuntimeException("Material must already exist.");
+        }
+
+        Material originalMaterial = materialDao.findById(material.getId());
+        if (originalMaterial == null) {
+            throw new RuntimeException("Material not found");
+        }
+
+        if (!isUserAdmin(loggedInUser)) {
+            throw new RuntimeException("Logged in user must be an administrator.");
+        }
+
+        materialDao.delete(originalMaterial);
+        searchEngineService.updateIndex();
+    }
 
 	private void setPublishers(Material material) {
 		List<Publisher> publishers = material.getPublishers();
@@ -220,4 +239,9 @@ public class MaterialService {
 	public void delete(Material material) {
 		materialDao.delete(material);
 	}
+	
+    private boolean isUserAdmin(User loggedInUser) {
+        return loggedInUser != null && loggedInUser.getRole() == Role.ADMIN;
+    }
+    
 }
