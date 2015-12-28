@@ -1,6 +1,6 @@
 define(['app'], function (app) {
-    app.controller('materialController', ['$scope', 'serverCallService', '$route', 'translationService', '$rootScope', 'searchService', '$location', 'alertService', 'authenticatedUserService', 'dialogService',
-        function ($scope, serverCallService, $route, translationService, $rootScope, searchService, $location, alertService, authenticatedUserService, dialogService) {
+    app.controller('materialController', ['$scope', 'serverCallService', '$route', 'translationService', '$rootScope', 'searchService', '$location', 'alertService', 'authenticatedUserService', 'dialogService', 'toastService',
+        function ($scope, serverCallService, $route, translationService, $rootScope, searchService, $location, alertService, authenticatedUserService, dialogService, toastService) {
             $scope.showMaterialContent = false;
             $scope.newComment = {};
 
@@ -239,7 +239,7 @@ define(['app'], function (app) {
             }
 
             function deleteMaterialSuccess() {
-                toastService.showOnRouteChange('PORTFOLIO_DELETED');
+                toastService.showOnRouteChange('MATERIAL_DELETED');
                 $location.url('/' + authenticatedUserService.getUser().username);
             }
 
