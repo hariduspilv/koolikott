@@ -1,7 +1,7 @@
 define(['app'], function(app)
 {
-    app.directive('dopTableOfContents', ['$filter', '$document', '$rootScope', 'translationService', '$mdToast', '$translate',
-     function($filter, $document, $rootScope, translationService, $mdToast, $translate) {
+    app.directive('dopTableOfContents', ['$filter', '$document', '$rootScope', 'translationService', '$mdToast', '$location',
+     function($filter, $document, $rootScope, translationService, $mdToast, $location) {
         return {
             scope: {
                 portfolio: '=',
@@ -98,6 +98,10 @@ define(['app'], function(app)
                 $scope.$watch(function() { return $rootScope.selectedSingleMaterial }, function(newValue, oldValue) {
                 	handleAddMaterialButton();
                 }, true);
+
+                $scope.navigateTo = function(portfolio) {
+                    $location.path('/portfolio/edit').search({id:  portfolio.id});
+                };
                 
                 function handleAddMaterialButton() {
                 	if($rootScope.selectedMaterials && $rootScope.selectedMaterials.length > 0 || $rootScope.selectedSingleMaterial) {

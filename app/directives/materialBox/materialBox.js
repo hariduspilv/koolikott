@@ -88,6 +88,7 @@ define(['app'], function(app)
                 		$scope.selected = true;
                 	} else {
                 		$rootScope.selectedMaterials.splice(index, 1);
+						$scope.selected = false;
                 	}
                 };
 
