@@ -359,6 +359,7 @@ insert into Translation(translationGroup, translationKey, translation) values (3
 insert into Translation(translationGroup, translationKey, translation) values (3, 'MATERIAL_DELETE', 'Delete material');
 insert into Translation(translationGroup, translationKey, translation) values (3, 'MATERIAL_CONFIRM_DELETE_DIALOG_TITLE', 'Delete material');
 insert into Translation(translationGroup, translationKey, translation) values (3, 'MATERIAL_CONFIRM_DELETE_DIALOG_CONTENT', 'Are you sure that you with to delete this material?');
+insert into Translation(translationGroup, translationKey, translation) values (3, 'MATERIAL_DELETED', 'Material deleted');
 
 -- Add Material tab translations
 insert into Translation(translationGroup, translationKey, translation) values (3, 'MATERIAL_TAB_URL', 'URL');
