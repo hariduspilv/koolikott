@@ -208,7 +208,7 @@
           <div layout="row" flex layout-align="space-between center">
             <md-input-container class="md-block" flex>
               <label data-translate="MATERIAL_PUBLISHER"></label>
-              <input data-ng-model="material.publisher">
+              <input data-ng-model="material.publisher" ng-disabled="creatorIsPublisher">
             </md-input-container>
           </div>
 
