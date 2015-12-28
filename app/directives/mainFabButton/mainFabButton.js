@@ -5,7 +5,7 @@ define(['app'], function(app)
             return {
                 scope: true,
                 templateUrl: 'directives/mainFabButton/mainFabButton.html',
-                controller: function ($scope, $mdDialog, $location) {
+                controller: function ($scope, $mdDialog, $location, authenticatedUserService) {
                     $scope.isOpen = false;
 
                     $scope.showAddPortfolioDialog = function() {
@@ -15,20 +15,20 @@ define(['app'], function(app)
                             templateUrl: 'views/addPortfolioDialog/addPortfolioDialog.html',
                             locals:{portfolio: portfolio}
                         });
-                    }
+                    };
 
                     $scope.showAddMaterialDialog = function() {
                         $mdDialog.show({
                             controller: 'addMaterialDialog',
                             templateUrl: 'views/addMaterialDialog/addMaterialDialog.html'
                         });
-                    }
+                    };
                     
                     $scope.copyPortfolio = function() {
                     	var url = "rest/portfolio/copy";
                     	var portfolio = createPortfolio($route.current.params.id);
         				serverCallService.makePost(url, portfolio, createPortfolioSuccess, createPortfolioFailed);
-                    }
+                    };
 
                     function createPortfolioSuccess(portfolio) {
                     	if (isEmpty(portfolio)) {
@@ -44,6 +44,11 @@ define(['app'], function(app)
         			function createPortfolioFailed() {
         				log('Creating copy of portfolio failed.');
         			}
+
+                    $scope.hasPermission = function() {
+                        return authenticatedUserService.getUser() &&
+                            (authenticatedUserService.getUser().role === 'ADMIN' || authenticatedUserService.getUser().role === 'PUBLISHER');
+                    };
                 }
             };
         }
