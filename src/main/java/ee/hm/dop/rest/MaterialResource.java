@@ -115,7 +115,7 @@ public class MaterialResource extends BaseResource {
     }
 
     @POST
-    @RolesAllowed({ "USER", "ADMIN" })
+    @RolesAllowed({ "USER", "ADMIN", "PUBLISHER" })
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Material createMaterial(Material material) {
