@@ -17,7 +17,7 @@
             <ng-md-icon icon="search"></ng-md-icon>
           </md-button>
           <md-input-container class="" hide show-gt-md flex>
-            <input data-ng-click="showSearchBar()" id="header-show-search-input">
+            <input data-ng-model="searchFields.searchQuery" data-ng-click="showSearchBar()" id="header-show-search-input">
           </md-input-container>
         </div>
         <md-button aria-label="Open Settings" class="md-icon-button" id="header-show-detailed-search-icon" data-ng-click="openDetailedSearch()" >
