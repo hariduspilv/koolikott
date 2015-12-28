@@ -352,6 +352,9 @@ insert into Translation(translationGroup, translationKey, translation) values (2
 insert into Translation(translationGroup, translationKey, translation) values (2, 'MATERIAL_KEY_COMPETENCES', 'Ключевые компетенции');
 insert into Translation(translationGroup, translationKey, translation) values (2, 'MATERIAL_SEARCH_CROSS_CURRICULAR_THEME', 'Поиск по межпредметном тему');
 insert into Translation(translationGroup, translationKey, translation) values (2, 'MATERIAL_CROSS_CURRICULAR_THEMES', 'Межпредметном темы');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'MATERIAL_DELETE', 'Удалить материал');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'MATERIAL_CONFIRM_DELETE_DIALOG_TITLE', 'Удалить материал');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'MATERIAL_CONFIRM_DELETE_DIALOG_CONTENT', 'Вы уверены, что вы с удалить этот материал?');
 
 -- Add Material tab translations
 insert into Translation(translationGroup, translationKey, translation) values (2, 'MATERIAL_TAB_URL', 'URL');
