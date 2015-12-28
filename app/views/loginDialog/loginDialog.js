@@ -1,12 +1,16 @@
 define(['app'], function(app)
 {
-    app.controller('loginController', ['$scope', '$mdDialog', 'authenticationService', '$location', 'translationService',
-        function($scope, $mdDialog, authenticationService, $location, translationService) {
+    app.controller('loginController', ['$scope', '$mdDialog', 'authenticationService', '$location', 'translationService', '$rootScope',
+        function($scope, $mdDialog, authenticationService, $location, translationService, $rootScope) {
 			$scope.mobileId = {};
 			$scope.validation = {
 				error: {}
 			};
 
+			$rootScope.$on('$routeChangeSuccess', function() {
+				$mdDialog.hide();
+            });
+			
             $scope.hideLogin = function() {
             	$mdDialog.hide();
             }
