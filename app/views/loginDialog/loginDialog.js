@@ -7,7 +7,7 @@ define(['app'], function(app)
 				error: {}
 			};
 
-			$scope.$watch(function() { return authenticatedUserService.isAuthenticated }, function(newValue, oldValue) {
+			$scope.$watch(function() { return authenticatedUserService.isAuthenticated() }, function(newValue, oldValue) {
 				if(newValue == true) {
 					$mdDialog.hide();
 				}
