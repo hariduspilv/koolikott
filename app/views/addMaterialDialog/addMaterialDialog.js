@@ -290,6 +290,20 @@ define(['app'], function (app) {
                 serverCallService.makeGet("rest/learningMaterialMetadata/resourceType", {}, getResourceTypeSuccess, getResourceTypeFail);
                 metadataService.loadKeyCompetences(setKeyCompetences);
                 metadataService.loadCrossCurricularThemes(setCrossCurricularThemes);
+
+                prefillMetadata();
+            }
+
+            function prefillMetadata() {
+                if ($rootScope.savedPortfolio) {
+                    if ($rootScope.savedPortfolio.taxon) {
+                        var taxon = Object.create($rootScope.savedPortfolio.taxon);
+                        $scope.material.taxons = [taxon];
+
+                        $scope.isEducationalContextSelected = true;
+                        $scope.educationalContextId = taxon.id;
+                    }
+                }
             }
 
             function setCrossCurricularThemes(data) {
