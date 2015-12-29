@@ -303,6 +303,10 @@ define(['app'], function (app) {
                         $scope.isEducationalContextSelected = true;
                         $scope.educationalContextId = taxon.id;
                     }
+
+                    if ($rootScope.savedPortfolio.tags) {
+                        $scope.material.tags = $rootScope.savedPortfolio.tags;
+                    }
                 }
             }
 
