@@ -113,6 +113,9 @@ public class RepositoryService {
                 material.getRepositoryIdentifier());
 
         material.setRepository(repository);
+        if(repository.isEstonianPublisher()) {
+            material.setEmbeddable(true);
+        }
 
         if (existentMaterial != null) {
             updateMaterial(material, existentMaterial);

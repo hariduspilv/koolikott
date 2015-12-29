@@ -23,6 +23,7 @@ import ee.hm.dop.model.UserLike;
 
 public class MaterialService {
 
+	public static final String PUBLISHER = "PUBLISHER";
 	private Logger logger = LoggerFactory.getLogger(getClass());
 
 	@Inject
@@ -60,6 +61,10 @@ public class MaterialService {
 		material.setCreator(creator);
 		setAuthors(material);
 		setPublishers(material);
+
+		if(creator != null && creator.getRole().toString().equals(PUBLISHER)) {
+			material.setEmbeddable(true);
+		}
 
 		Material createdMaterial = createOrUpdate(material);
 		if (updateSearchIndex) {

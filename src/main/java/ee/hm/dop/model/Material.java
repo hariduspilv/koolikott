@@ -156,8 +156,8 @@ public class Material implements Searchable {
 	@Column(nullable = false)
 	private boolean paid = false;
 
-	@Formula("(select r.isEstonianPublisher from Repository r where r.id = repository)")
-	private Boolean embeddable;
+    @Column(nullable = false)
+    private Boolean embeddable = false;
 
 	@Enumerated(EnumType.STRING)
 	@Column(name = "targetGroup")
