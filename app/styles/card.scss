@@ -84,7 +84,16 @@ md-card {
       font-size: 48px;
       color: #fff;
     }
-    &:hover,
+    &:hover {
+      background-color: #eee;
+      cursor: pointer;
+      .card-hover {
+        opacity: .8;
+        md-icon {
+          color: rgba(255, 255, 255, 1);
+        }
+      }
+    }
     &.active {
       background-color: #eee;
       cursor: pointer;
@@ -92,9 +101,16 @@ md-card {
         opacity: 1;
         md-icon {
           color: rgba(255, 255, 255, 1);
+          &.unchecked {
+            display: none;
+          }
+          &.checked {
+            display: block;
+          }
         }
       }
     }
+
     md-card-content {
       padding-bottom: 12px;
     }
@@ -269,6 +285,7 @@ md-card {
     }
   }
 }
+
 
 md-card .card-menu {
   position: absolute;

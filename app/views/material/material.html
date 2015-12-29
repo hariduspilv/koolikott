@@ -1,6 +1,6 @@
 <div id="page-view-material" flex>
-  <div layout layout-align="center start" flex>
-    <section layout="row" layout-align="center start" class="md-padding" flex flex-gt-md="80">
+  <div layout layout-align="{{$root.isEditPortfolioMode ? 'start' : 'center'}} start" flex>
+    <section layout="row" layout-align="{{$root.isEditPortfolioMode ? 'start' : 'center'}} start" class="md-padding" flex flex-gt-md="{{$root.isEditPortfolioMode ? '100' : '80'}}">
       <article flex="80" flex-sm="100" class="md-padding" role="main">
         <md-card class="card-lg" id="material-card">
           <md-card-content>
@@ -27,6 +27,12 @@
                       <md-icon md-menu-origin>more_vert</md-icon>
                     </md-button>
                     <md-menu-content width="4">
+                      <md-menu-item data-ng-if="isAdmin()">
+                          <md-button data-ng-click="confirmMaterialDeletion()">
+                              <md-icon md-menu-align-target>delete</md-icon>
+                              <span data-translate="MATERIAL_DELETE"></span>
+                          </md-button>
+                      </md-menu-item>
                       <md-menu-item dop-copy-permalink></md-menu-item>
                       <md-menu-divider></md-menu-divider>
                       <md-menu-item dop-recommend></md-menu-item>

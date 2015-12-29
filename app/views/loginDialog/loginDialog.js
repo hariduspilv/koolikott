@@ -1,12 +1,22 @@
 define(['app'], function(app)
 {
-    app.controller('loginController', ['$scope', '$mdDialog', 'authenticationService', '$location', 'translationService',
-        function($scope, $mdDialog, authenticationService, $location, translationService) {
+    app.controller('loginController', ['$scope', '$mdDialog', 'authenticationService', '$location', 'translationService', '$rootScope', 'authenticatedUserService',
+        function($scope, $mdDialog, authenticationService, $location, translationService, $rootScope, authenticatedUserService) {
 			$scope.mobileId = {};
 			$scope.validation = {
 				error: {}
 			};
 
+			$scope.$watch(function() { return authenticatedUserService.isAuthenticated() }, function(newValue, oldValue) {
+				if(newValue == true) {
+					$mdDialog.hide();
+				}
+            }, false);
+			
+			$rootScope.$on('$routeChangeSuccess', function() {
+				$mdDialog.hide();
+            });
+			
             $scope.hideLogin = function() {
             	$mdDialog.hide();
             }

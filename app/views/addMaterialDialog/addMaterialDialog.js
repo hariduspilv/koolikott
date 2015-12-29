@@ -1,8 +1,9 @@
 define(['app'], function (app) {
-    app.controller('addMaterialDialog', ['$scope', '$mdDialog', 'serverCallService', 'translationService', 'metadataService', '$filter', '$location', '$rootScope',
-        function ($scope, $mdDialog, serverCallService, translationService, metadataService, $filter, $location, $rootScope) {
+    app.controller('addMaterialDialog', ['$scope', '$mdDialog', 'serverCallService', 'translationService', 'metadataService', '$filter', '$location', '$rootScope', 'authenticatedUserService',
+        function ($scope, $mdDialog, serverCallService, translationService, metadataService, $filter, $location, $rootScope, authenticatedUserService) {
 
             $scope.showHints = true;
+            $scope.creatorIsPublisher = false;
 
             var preferredLanguage;
 
@@ -277,7 +278,13 @@ define(['app'], function (app) {
                 };
             }
 
+
             function init() {
+                if (authenticatedUserService.getUser() && authenticatedUserService.getUser().role === 'PUBLISHER') {
+                    $scope.material.publisher = authenticatedUserService.getUser().username;
+                    $scope.creatorIsPublisher = true;
+                }
+
                 serverCallService.makeGet("rest/learningMaterialMetadata/language", {}, getLanguagesSuccess, getLanguagesFail, getLanguageFinally);
                 serverCallService.makeGet("rest/learningMaterialMetadata/licenseType", {}, getLicenseTypeSuccess, getLicenseTypeFail);
                 serverCallService.makeGet("rest/learningMaterialMetadata/resourceType", {}, getResourceTypeSuccess, getResourceTypeFail);

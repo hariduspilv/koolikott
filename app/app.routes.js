@@ -25,7 +25,8 @@ define([], function()
                 controller: 'materialController',
                 dependencies: [
                     'views/material/material',
-                    'directives/slideshare/slideshare'
+                    'directives/slideshare/slideshare',
+                    'services/dialogService'
                 ]
             },
             '/help': {

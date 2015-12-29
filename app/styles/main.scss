@@ -21,6 +21,7 @@ ul {
     list-style: none;
 }
 
+@import "alert.scss";
 @import "iconfont.scss";
 @import "typography.scss";
 @import "card.scss";
@@ -93,6 +94,10 @@ h1 {
     -moz-column-count: 2; /* Firefox */
     column-count: 2;
   }
+}
+
+.portfolio-chapter-chapter-materials {
+  margin-bottom: 20px;
 }
 
 .logo-lg {
