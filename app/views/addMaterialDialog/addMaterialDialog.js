@@ -305,7 +305,7 @@ define(['app'], function (app) {
                     }
 
                     if ($rootScope.savedPortfolio.tags) {
-                        $scope.material.tags = $rootScope.savedPortfolio.tags;
+                        $scope.material.tags = $rootScope.savedPortfolio.tags.slice();
                     }
                 }
             }
