@@ -25,8 +25,9 @@ define(['app'], function(app)
                         }).then(closeDialog);
 
                         function closeDialog(material) {
-                            $scope.chapter.materials.push(material);
-
+                            if (material) {
+                                $scope.chapter.materials.push(material);
+                            }
                         }
                     }
                 };
