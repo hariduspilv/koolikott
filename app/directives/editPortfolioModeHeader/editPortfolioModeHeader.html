@@ -68,13 +68,13 @@
             <ng-md-icon icon="search"></ng-md-icon>
           </md-button>
           <md-input-container md-theme="input" flex>
-            <input ng-model="searchFields.searchQuery" data-ng-keydown="$event.which === 13 && searchFieldEnterPressed()" placeholder="Otsi">
+            <input ng-model="searchFields.searchQuery" data-ng-keydown="$event.which === 13 && searchFieldEnterPressed()">
           </md-input-container>
         </div>
 
         <md-button aria-label="Open Settings" class="md-icon-button" ng-click="openDetailedSearch()" data-ng-if="!detailedSearch.isVisible">
           <ng-md-icon icon="filter_list"></ng-md-icon>
-        </md-button> 
+        </md-button>
 
         <md-button ng-click="closeDetailedSearch()" aria-label="Back" class="md-icon-button">
           <ng-md-icon icon="close"></ng-md-icon>
