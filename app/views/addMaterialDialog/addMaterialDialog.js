@@ -98,6 +98,7 @@ define(['app'], function (app) {
             $scope.$watch('material.taxons[0]', function(newValue, oldValue) {
                 if (newValue.level === $rootScope.taxonUtils.constants.EDUCATIONAL_CONTEXT && newValue !== oldValue) {
                     $scope.isEducationalContextSelected = true;
+                    $scope.educationalContextId = newValue.id;
 
                     $scope.material.taxons = $scope.material.taxons.slice(0, 1);
                 }
@@ -135,10 +136,13 @@ define(['app'], function (app) {
                     licenseType: licenseType,
                     resourceTypes: resourceTypes,
                     picture: base64Picture,
-                    taxons: taxons,
-                    keyCompetences: keyCompetences,
-                    crossCurricularThemes: crossCurricularThemes
+                    taxons: taxons
                 };
+
+                if ($scope.educationalContextId === 2 || $scope.educationalContextId === 3) {
+                    newMaterial.keyCompetences = keyCompetences;
+                    newMaterial.crossCurricularThemes = crossCurricularThemes;
+                }
 
                 serverCallService.makePost("rest/material", newMaterial, postMaterialSuccess, postMaterialFail);
             };

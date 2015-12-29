@@ -134,7 +134,7 @@
             </md-chips>
           </div>
 
-          <div layout="row" flex layout-align="center center">
+          <div layout="row" flex layout-align="center center" data-ng-if="educationalContextId === 2 || educationalContextId === 3">
             <md-chips ng-model="material.selectedKeyCompetences" md-autocomplete-snap="" md-require-match="true" flex>
               <md-autocomplete
                 md-no-cache="true"
@@ -157,7 +157,7 @@
             </md-chips>
           </div>
 
-          <div layout="row" flex layout-align="center center">
+          <div layout="row" flex layout-align="center center" data-ng-if="educationalContextId === 2 || educationalContextId === 3">
             <md-chips ng-model="material.selectedCrossCurricularThemes" md-autocomplete-snap="" md-require-match="true" flex>
               <md-autocomplete
                 md-selected-item="material.selectedCrossCurricularTheme"
