@@ -1,8 +1,8 @@
 <div id="page-search-result" flex>
   <div layout layout-align="center start" flex>
-    <section layout="row" layout-sm="column" flex flex-gt-md="100">
+    <section layout="row" layout-sm="column" flex flex-gt-md="80">
 
-      <article flex="75" flex-sm="100" class="md-padding" role="main">
+      <article flex="75" flex-xs="100" flex-sm="100" flex-gt-lg="80" class="md-padding" role="main">
         <h2 class="md-headline" data-ng-if="!searching">
           <span data-ng-if="getNumberOfResults() < 1">
             <span data-translate="SEARCH_RESULT_NO_RESULT"></span>
@@ -23,7 +23,7 @@
           </span>
         </h2>
 
-        <md-grid-list md-cols-xl="7" md-cols-gt-md="4" md-cols-md="3" md-cols-sm="2" md-gutter="10px" md-row-height="280px" data-infinite-scroll="nextPage()" data-infinite-scroll-disabled="searching" data-infinite-scroll-distance="2">
+        <md-grid-list md-cols-gt-md="4" md-cols-md="3" md-cols-sm="2" md-gutter="10px" md-row-height="280px" data-infinite-scroll="nextPage()" data-infinite-scroll-disabled="searching" data-infinite-scroll-distance="2">
           <md-grid-tile data-ng-repeat="item in items">
             <figure data-ng-if="item.type === '.Material'" data-dop-material-box material="item"></figure>
             <figure data-ng-if="item.type === '.Portfolio'" data-dop-portfolio-box portfolio="item"></figure>
