@@ -132,10 +132,6 @@ md-card {
         background-color: $green4;
       }
     }
-    .myblock {
-      display: block;
-
-    }
 
     .card-hover {
       position: absolute;
@@ -285,7 +281,17 @@ md-card {
     }
   }
 }
-
+.corner {
+  background-image: url('../images/corner.png');
+  background-repeat: no-repeat;
+  background-position: right top;
+  position: absolute;
+  right: -2px;
+  top: -1px;
+  height: 48px;
+  width: 48px;
+  z-index: 1;
+}
 
 md-card .card-menu {
   position: absolute;
