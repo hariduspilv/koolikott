@@ -91,9 +91,9 @@ define(['app'], function(app)
                     $mdToast.show($mdToast.simple().position('right top').content(message));
                 }
                 
-                $scope.$watch(function() { return $rootScope.selectedMaterials }, function(newValue, oldValue) {
+                $rootScope.$watchCollection('selectedMaterials', function(newCollection) {
                 	handleAddMaterialButton();
-                }, true);
+                });
                 
                 $rootScope.$watch('selectedSingleMaterial.id', function(newValue, oldValue) {
                 	handleAddMaterialButton();
