@@ -95,7 +95,7 @@ define(['app'], function(app)
                 	handleAddMaterialButton();
                 }, true);
                 
-                $scope.$watch(function() { return $rootScope.selectedSingleMaterial }, function(newValue, oldValue) {
+                $rootScope.$watch('selectedSingleMaterial.id', function(newValue, oldValue) {
                 	handleAddMaterialButton();
                 }, true);
 
