@@ -7,8 +7,8 @@ define(['app'], function(app) {
     var mobileIdLoginFailCallback;
     var mobileIdChallengeReceivedCallback;
     
-    app.factory('authenticationService',['$location', '$rootScope', 'serverCallService', 'authenticatedUserService', 'alertService',
-    function($location, $rootScope, serverCallService, authenticatedUserService, alertService) {
+    app.factory('authenticationService',['$location', '$rootScope', 'serverCallService', 'authenticatedUserService', 'alertService', '$mdDialog',
+    function($location, $rootScope, serverCallService, authenticatedUserService, alertService, $mdDialog) {
 
         function loginSuccess(authenticatedUser) {
             if (isEmpty(authenticatedUser)) {
@@ -35,6 +35,7 @@ define(['app'], function(app) {
 
         function loginFail() {
             log('Logging in failed.');
+            $mdDialog.hide();
             alertService.setErrorAlert('ERROR_LOGIN_FAILED');
             enableLogin();
             

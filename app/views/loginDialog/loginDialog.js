@@ -3,6 +3,7 @@ define(['app'], function(app)
     app.controller('loginController', ['$scope', '$mdDialog', 'authenticationService', '$location', 'translationService', '$rootScope', 'authenticatedUserService',
         function($scope, $mdDialog, authenticationService, $location, translationService, $rootScope, authenticatedUserService) {
 			$scope.mobileId = {};
+			$scope.idCardFlag = false;
 			$scope.validation = {
 				error: {}
 			};
@@ -22,6 +23,7 @@ define(['app'], function(app)
             }
 
 			$scope.idCardAuth = function() {
+				$scope.loginButtonFlag = true;
 				authenticationService.loginWithIdCard();
 			};
 

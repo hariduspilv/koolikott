@@ -43,15 +43,15 @@
                       <span data-ng-if="validation.error.phoneNumber === 'notEstonian'" data-translate="MESSAGE_ERROR_PHONE_NUMBER_NOT_ESTONIAN"></span>
                   </div>
                 </md-input-container>
-                <md-button class="md-raised md-primary" id="login-mobile-id-button" data-ng-click="mobileIdAuth()" flex>
+                <md-button class="md-raised md-primary" id="login-mobile-id-button" data-ng-click="mobileIdAuth()" ng-disabled="loginButtonFlag" flex>
                   <span data-translate="LOGIN_MOBILEID"></span>
                 </md-button>
               </div>
             </div>
-            <md-button class="md-raised md-primary" id="login-id-card-button" data-ng-click="idCardAuth()" flex>
+            <md-button class="md-raised md-primary" id="login-id-card-button" data-ng-click="idCardAuth()" ng-disabled="loginButtonFlag" flex>
               <span data-translate="LOGIN_IDCARD"></span>
             </md-button>
-            <md-button class="md-raised md-primary" id="login-taat-button" data-ng-click="taatAuth()" flex>
+            <md-button class="md-raised md-primary" id="login-taat-button" data-ng-click="taatAuth()" ng-disabled="loginButtonFlag" flex>
               <span data-translate="LOGIN_TAAT"></span>
             </md-button>
           </div>
