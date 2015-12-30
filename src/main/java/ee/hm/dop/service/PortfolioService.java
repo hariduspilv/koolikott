@@ -10,10 +10,12 @@ import javax.inject.Inject;
 
 import org.joda.time.DateTime;
 
+import ee.hm.dop.dao.ImproperContentDAO;
 import ee.hm.dop.dao.PortfolioDAO;
 import ee.hm.dop.dao.UserLikeDAO;
 import ee.hm.dop.model.Chapter;
 import ee.hm.dop.model.Comment;
+import ee.hm.dop.model.ImproperContent;
 import ee.hm.dop.model.Portfolio;
 import ee.hm.dop.model.Role;
 import ee.hm.dop.model.User;
@@ -27,6 +29,9 @@ public class PortfolioService {
 
     @Inject
     private UserLikeDAO userLikeDAO;
+
+    @Inject
+    private ImproperContentDAO improperContentDAO;
 
     @Inject
     private SearchEngineService searchEngineService;
@@ -274,19 +279,11 @@ public class PortfolioService {
     }
 
     private boolean isPortfolioAccessibleToUser(Portfolio portfolio, User loggedInUser) {
-        if (portfolio.getVisibility() != Visibility.PRIVATE) {
-            return true;
-        } else {
-            return isUserPortfolioCreator(portfolio, loggedInUser) || isUserAdmin(loggedInUser);
-        }
+        return portfolio.getVisibility() != Visibility.PRIVATE || isUserPortfolioCreator(portfolio, loggedInUser) || isUserAdmin(loggedInUser);
     }
 
     private boolean isPortfolioVisibleToUser(Portfolio portfolio, User loggedInUser) {
-        if (portfolio.getVisibility() == Visibility.PUBLIC) {
-            return true;
-        } else {
-            return isUserPortfolioCreator(portfolio, loggedInUser) || isUserAdmin(loggedInUser);
-        }
+        return portfolio.getVisibility() == Visibility.PUBLIC || isUserPortfolioCreator(portfolio, loggedInUser) || isUserAdmin(loggedInUser);
     }
 
     private boolean isUserPortfolioCreator(Portfolio portfolio, User loggedInUser) {
@@ -297,4 +294,24 @@ public class PortfolioService {
         return loggedInUser != null && loggedInUser.getRole() == Role.ADMIN;
     }
 
+    public ImproperContent addImproperPortfolio(Portfolio portfolio, User loggedInUser) {
+        if (portfolio == null || portfolio.getId() == null) {
+            throw new RuntimeException("Portfolio not found");
+        }
+        Portfolio originalPortfolio = portfolioDAO.findById(portfolio.getId());
+        if (originalPortfolio == null) {
+            throw new RuntimeException("Portfolio not found");
+        }
+
+        ImproperContent improperContent = new ImproperContent();
+        improperContent.setCreator(loggedInUser);
+        improperContent.setPortfolio(portfolio);
+        improperContent.setAdded(DateTime.now());
+
+        return improperContentDAO.update(improperContent);
+    }
+
+    public List<ImproperContent> getImproperPortfolios() {
+        return improperContentDAO.findImproperPortfolios();
+    }
 }

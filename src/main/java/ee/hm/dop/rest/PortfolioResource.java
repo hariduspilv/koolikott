@@ -17,6 +17,7 @@ import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import ee.hm.dop.model.ImproperContent;
 import ee.hm.dop.model.Portfolio;
 import ee.hm.dop.model.User;
 import ee.hm.dop.model.UserLike;
@@ -142,5 +143,25 @@ public class PortfolioResource extends BaseResource {
     public void delete(Portfolio portfolio) {
         portfolioService.delete(portfolio, getLoggedInUser());
     }
+
+
+    @POST
+    @Path("setImproper")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    @RolesAllowed({ "USER", "ADMIN", "PUBLISHER" })
+    public ImproperContent setImproperPortfolio(Portfolio portfolio) {
+        return portfolioService.addImproperPortfolio(portfolio, getLoggedInUser());
+
+    }
+
+    @GET
+    @Path("getImproper")
+    @Produces(MediaType.APPLICATION_JSON)
+    @RolesAllowed({"ADMIN"})
+    public List<ImproperContent> getImproperPortfolios() {
+        return portfolioService.getImproperPortfolios();
+    }
+
 
 }

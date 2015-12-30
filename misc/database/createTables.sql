@@ -1,6 +1,7 @@
 USE dop;
 
 -- Drop tables
+DROP TABLE IF EXISTS ImproperContent;
 DROP TABLE IF EXISTS UserLike;
 DROP TABLE IF EXISTS Comment;
 DROP TABLE IF EXISTS EstCoreTaxonMapping;
@@ -653,6 +654,27 @@ CREATE TABLE UserLike (
 
   UNIQUE KEY (portfolio, creator),
   UNIQUE KEY (material, creator),
+
+  FOREIGN KEY (creator)
+  REFERENCES User (id)
+    ON DELETE RESTRICT,
+
+  FOREIGN KEY (portfolio)
+  REFERENCES Portfolio (id)
+    ON DELETE RESTRICT,
+
+  FOREIGN KEY (material)
+  REFERENCES Material (id)
+    ON DELETE RESTRICT
+);
+
+
+CREATE TABLE ImproperContent (
+  id        BIGINT    AUTO_INCREMENT PRIMARY KEY,
+  creator   BIGINT NOT NULL,
+  portfolio BIGINT,
+  material  BIGINT,
+  added     TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 
   FOREIGN KEY (creator)
   REFERENCES User (id)

@@ -410,3 +410,6 @@ insert into Portfolio_CrossCurricularTheme(portfolio, crossCurricularTheme) valu
 
 -- Portfolio Key competences
 insert into Portfolio_KeyCompetence(portfolio, keyCompetence) values (1, 1);
+
+-- Improper content
+insert into ImproperContent(id, creator, portfolio, material, added) values (1, 1, 2, null, '2014-06-01 00:00:01');

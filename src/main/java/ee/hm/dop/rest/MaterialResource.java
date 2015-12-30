@@ -61,13 +61,13 @@ public class MaterialResource extends BaseResource {
 
     @POST
     @Path("like")
-    public void likePortfolio(Material material) {
+    public void likeMaterial(Material material) {
         materialService.addUserLike(material, getLoggedInUser(), true);
     }
 
     @POST
     @Path("dislike")
-    public void dislikePortfolio(Material material) {
+    public void dislikeMaterial(Material material) {
         materialService.addUserLike(material, getLoggedInUser(), false);
     }
 
