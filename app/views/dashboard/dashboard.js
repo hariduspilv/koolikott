@@ -38,7 +38,7 @@ define(['app'], function (app) {
         }
         
         function orderImporper(order) {
-            $scope.improper = collection.sort(function(a, b) {
+            $scope.improper = $scope.improper.sort(function(a, b) {
                 if (order === 'bySubmittedAt' || order === '-bySubmittedAt')
                     return new Date(b.added) - new Date(a.added);
                 
