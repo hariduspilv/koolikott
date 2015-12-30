@@ -109,6 +109,10 @@ define(['app'], function(app)
           }, function(language) {
             $scope.setLanguage(language);
           }, true);
+          
+          $scope.isAdmin = function() {
+            return authenticatedUserService.getUser() && authenticatedUserService.getUser().role === 'ADMIN';
+          };
         }
       };
     }]);

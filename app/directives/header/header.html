@@ -76,6 +76,11 @@
               <span data-translate="MY_PROFILE"></span>
             </md-button>
           </md-menu-item>
+          <md-menu-item data-ng-if="isAdmin()" >
+            <md-button data-ng-href="#/dashboard" id="user-menu-logout">
+              <span data-translate="DASHBOARD"></span>
+            </md-button>
+          </md-menu-item>
           <md-menu-divider></md-menu-divider>
           <md-menu-item>
             <md-button data-ng-click="logout()" id="user-menu-logout">

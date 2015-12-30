@@ -69,6 +69,7 @@ define([], function()
             },
             '/dashboard': {
                 templateUrl: 'views/dashboard/dashboard.html',
+                controller: 'dashboardController',
                 dependencies: [
                     'views/dashboard/dashboard'
                 ]
