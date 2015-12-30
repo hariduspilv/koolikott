@@ -113,6 +113,17 @@ h1 {
   background-position: left center;
 }
 
+.logo-sm {
+  display: block;
+  background-image: url('../images/logo_white_sm.svg');
+  margin-top: 5px;
+  margin-left: 5px;
+  background-size: contain;
+  height: 30px;
+  background-repeat: no-repeat;
+  background-position: left center;
+}
+
 md-fab-speed-dial {
   position: fixed !important;
 }

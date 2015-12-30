@@ -39,7 +39,7 @@ md-card {
     }
   }
 
-  md-card-footer {
+  md-card-actions {
     padding-top: 10px;
     padding-bottom: 12px;
     margin-top: 0;
@@ -80,6 +80,7 @@ md-card {
 
   &.card-sm {
     transition: all 0.5s;
+    height: 100%;
     md-icon.icon-kind {
       font-size: 48px;
       color: #fff;
@@ -115,7 +116,7 @@ md-card {
       padding-bottom: 12px;
     }
     .card-cover {
-      height: 150px;
+      height: 50%;
       overflow: hidden;
       position: relative;
       transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
@@ -168,7 +169,7 @@ md-card {
         color: rgba(255, 255, 255, 0.6);
       }
     }
-    md-card-footer {
+    md-card-actions {
       .md-action-icons-list {
         span {
           padding: 0 5px;

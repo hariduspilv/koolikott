@@ -1,4 +1,4 @@
- <md-card class="card-sm md-whiteframe-2dp" ng-class="{ active: selected }" id="material-card-{{material.id}}" data-ng-click="navigateTo(material)">
+<md-card class="card-sm md-whiteframe-2dp" ng-class="{ active: selected }" id="material-card-{{material.id}}" data-ng-click="navigateTo(material)">
   <div class="card-cover  {{getType()}}">
     <img data-ng-if="material.hasPicture" data-ng-src="rest/material/getPicture?materialId={{material.id}}" class="md-card-image" />
     <div data-ng-if="!material.hasPicture" layout="row" layout-fill flex layout-align="center center">
@@ -9,10 +9,10 @@
         <md-icon class="unchecked">radio_button_unchecked</md-icon>
         <md-icon data-ng-click="pickMaterial($event, material)" class="checked">check_circle</md-icon>
       </div>
-        <div class="pick" data-ng-if="isEditPortfolioMode && isEditPortfolioPage">
-            <md-icon class="unchecked">remove_circle_outline</md-icon>
-            <md-icon data-ng-click="removeMaterial($event, material)" class="checked">remove_circle</md-icon>
-        </div>
+      <div class="pick" data-ng-if="isEditPortfolioMode && isEditPortfolioPage">
+        <md-icon class="unchecked">remove_circle_outline</md-icon>
+        <md-icon data-ng-click="removeMaterial($event, material)" class="checked">remove_circle</md-icon>
+      </div>
       <md-icon class="icon-kind" data-ng-bind="getType()"></md-icon>
     </div>
   </div>
@@ -26,22 +26,21 @@
       </span>
     </p>
   </md-card-content>
-    <md-divider></md-divider>
-  <md-card-footer>
-
+  <md-divider></md-divider>
+  <md-card-actions style="background-color: yellow;">
     <div layout="row" flex>
-    <span class="md-action-icons-list md-caption" layout="row" layout-align="start center" flex>
-      <md-icon>thumb_up</md-icon>
-	    <span>{{ material.likes }}</span>
+      <span class="md-action-icons-list md-caption" layout="row" layout-align="start center" flex>
+        <md-icon>thumb_up</md-icon>
+        <span>{{ material.likes }}</span>
 
-      <md-icon>thumb_down</md-icon>
-	    <span>{{ material.dislikes }}</span>
+        <md-icon>thumb_down</md-icon>
+        <span>{{ material.dislikes }}</span>
 
-      <span flex></span>
+        <span flex></span>
 
-      <md-icon>visibility</md-icon>
-      <span data-ng-bind="material.views"></span>
-    </span>
-  </div>
-  </md-card-footer>
+        <md-icon>visibility</md-icon>
+        <span data-ng-bind="material.views"></span>
+      </span>
+    </div>
+  </md-card-actions>
 </md-card>
