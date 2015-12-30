@@ -12,7 +12,8 @@ define(['app.routes', 'services/dependencyResolver', 'utils/taxonUtils'], functi
       'duScroll',
       'infinite-scroll',
       'ngFileUpload',
-      'angular-click-outside'
+      'angular-click-outside',
+      'md.data.table'
     ]);
 
     app.config(

@@ -52,7 +52,8 @@ require.config({
     clipboard: '../bower_components/clipboard/dist/clipboard',
     metadataService: 'services/metadataService',
     linearLayout: 'directives/pageStructure/linearLayout/linearLayout',
-    columnLayout: 'directives/pageStructure/columnLayout/columnLayout'
+    columnLayout: 'directives/pageStructure/columnLayout/columnLayout',
+    'angular-material-data-table': '../bower_components/angular-material-data-table/dist/md-data-table'
   },
   shim: {
     angular: {
@@ -102,6 +103,10 @@ require.config({
     'angular-click-outside': [
       'angular'
     ],
+    'angular-material-data-table': [
+      'angular-material',
+      'angular'
+    ],
     ngInfiniteScroll: [
       'angular',
       'jquery'
@@ -135,6 +140,7 @@ require([
   'angular-screenfull',
   'angular-scroll',
   'angular-click-outside',
+  'angular-material-data-table',
   'ng-file-upload-shim',
   'ng-file-upload',
   'clipboard',

@@ -67,6 +67,12 @@ define([], function()
                     'services/dialogService'
                 ]
             },
+            '/dashboard': {
+                templateUrl: 'views/dashboard/dashboard.html',
+                dependencies: [
+                    'views/dashboard/dashboard'
+                ]
+            },
             '/loginRedirect': {
                 templateUrl: 'views/loginRedirect/loginRedirect.html',
                 controller: 'loginRedirectController',

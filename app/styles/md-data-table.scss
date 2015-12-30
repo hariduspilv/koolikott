@@ -1,0 +1,29 @@
+.md-data-table {
+  & + .md-data-table {
+    margin-top: 20px;
+  }
+  
+  md-toolbar.md-table-toolbar.ng-hide {
+    display: none;
+  }
+  md-toolbar.md-table-toolbar.alternate .md-toolbar-tools {
+    color: #1e88e5;
+    font-size: 16px;
+    background-color: #e3f2fd;
+  }
+  md-toolbar.md-table-toolbar form {
+    margin-left: 16px;
+  }
+  md-toolbar.md-table-toolbar form > input {
+    width: 100%;
+    margin: 0;
+    border: none;
+    color: rgba(0, 0, 0, 0.87);
+  }
+  md-toolbar.md-table-toolbar form > input:focus {
+    outline: none;
+  }
+  table {
+    padding-bottom: 10px;
+  }
+}
