@@ -36,11 +36,11 @@ define(['app'], function(app)
             });
           }
 
-          $scope.toggleShowSearch = function() {
-            if (!$scope.detailedSearch.isVisible) {
-              $scope.showSearch = false
-            }
-          }
+          // $scope.toggleShowSearch = function() {
+          //   if (!$scope.detailedSearch.isVisible) {
+          //     $scope.showSearch = false
+          //   }
+          // }
 
           $scope.logout = function() {
             authenticationService.logout();
