@@ -299,7 +299,7 @@ public class PortfolioService {
             throw new RuntimeException("Portfolio not found");
         }
         Portfolio originalPortfolio = portfolioDAO.findById(portfolio.getId());
-        if (originalPortfolio == null) {
+        if (originalPortfolio == null || !isPortfolioAccessibleToUser(originalPortfolio, loggedInUser)) {
             throw new RuntimeException("Portfolio not found");
         }
 
@@ -319,5 +319,9 @@ public class PortfolioService {
         List<ImproperContent> improperContents = improperContentDAO.findByPortfolioAndUser(portfolioId, loggedInUser);
 
         return improperContents.size() != 0;
+    }
+
+    public void removeImproperPortfolios(Long id) {
+        improperContentDAO.deleteImproperPortfolios(id);
     }
 }

@@ -5,6 +5,7 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
+import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 
 import ee.hm.dop.model.ImproperContent;
@@ -27,18 +28,18 @@ public class ImproperContentDAO {
 
     public List<ImproperContent> getImproperPortfolios() {
 
-        return entityManager.createQuery("FROM ImproperContent i WHERE i.portfolio IS NOT NULL", ImproperContent.class)
+        return entityManager.createQuery("FROM ImproperContent i WHERE i.portfolio IS NOT NULL AND i.deleted = false", ImproperContent.class)
                 .getResultList();
     }
 
     public List<ImproperContent> getImproperMaterials() {
-        return entityManager.createQuery("FROM ImproperContent i WHERE i.material IS NOT NULL", ImproperContent.class)
+        return entityManager.createQuery("FROM ImproperContent i WHERE i.material IS NOT NULL AND i.deleted = false", ImproperContent.class)
                 .getResultList();
     }
 
     public List<ImproperContent> findByMaterialAndUser(long materialId, User loggedInUser) {
         TypedQuery<ImproperContent> findByData = entityManager.createQuery(
-                "FROM ImproperContent i WHERE i.material.id = :materialid AND i.creator = :user", ImproperContent.class);
+                "FROM ImproperContent i WHERE i.material.id = :materialid AND i.creator = :user AND i.deleted = false", ImproperContent.class);
 
         List<ImproperContent> improperContents = null;
         try {
@@ -52,7 +53,7 @@ public class ImproperContentDAO {
 
     public List<ImproperContent> findByPortfolioAndUser(long portfolioId, User loggedInUser) {
         TypedQuery<ImproperContent> findByData = entityManager.createQuery(
-                "FROM ImproperContent i WHERE i.portfolio.id = :portfolioId AND i.creator = :user", ImproperContent.class);
+                "FROM ImproperContent i WHERE i.portfolio.id = :portfolioId AND i.creator = :user AND i.deleted = false", ImproperContent.class);
 
         List<ImproperContent> improperContents = null;
         try {
@@ -62,5 +63,17 @@ public class ImproperContentDAO {
         }
 
         return improperContents;
+    }
+
+    public void deleteImproperPortfolios(Long id) {
+        Query query = entityManager.createQuery("update ImproperContent i set i.deleted = true where i.portfolio.id = :id");
+        query.setParameter("id", id);
+        query.executeUpdate();
+    }
+
+    public void deleteImproperMaterials(Long id) {
+        Query query = entityManager.createQuery("update ImproperContent i set i.deleted = true where i.material.id = :id");
+        query.setParameter("id", id);
+        query.executeUpdate();
     }
 }

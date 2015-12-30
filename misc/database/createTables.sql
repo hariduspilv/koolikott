@@ -675,6 +675,7 @@ CREATE TABLE ImproperContent (
   portfolio BIGINT,
   material  BIGINT,
   added     TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  deleted   BOOLEAN   DEFAULT FALSE,
 
   FOREIGN KEY (creator)
   REFERENCES User (id)

@@ -24,6 +24,8 @@ import javax.persistence.OrderBy;
 import javax.persistence.OrderColumn;
 import javax.persistence.UniqueConstraint;
 
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.Formula;
 import org.hibernate.annotations.Type;
 import org.joda.time.DateTime;
@@ -75,11 +77,13 @@ public class Portfolio implements Searchable {
     private Long views = (long) 0;
 
     @OneToMany(fetch = EAGER, cascade = { MERGE, PERSIST })
+    @Fetch(FetchMode.SELECT)
     @JoinColumn(name = "portfolio")
     @OrderColumn(name = "chapterOrder")
     private List<Chapter> chapters;
 
     @OneToMany(fetch = EAGER, cascade = { MERGE, PERSIST })
+    @Fetch(FetchMode.SELECT)
     @JoinColumn(name = "portfolio")
     @OrderBy("added DESC")
     private List<Comment> comments;
@@ -91,6 +95,7 @@ public class Portfolio implements Searchable {
     private int dislikes;
 
     @ManyToMany(fetch = EAGER, cascade = { MERGE, PERSIST })
+    @Fetch(FetchMode.SELECT)
     @JoinTable(
             name = "Portfolio_Tag",
             joinColumns = { @JoinColumn(name = "portfolio") },
@@ -107,10 +112,12 @@ public class Portfolio implements Searchable {
     @Enumerated(EnumType.STRING)
     @Column(name = "targetGroup")
     @ElementCollection(fetch = EAGER)
+    @Fetch(FetchMode.SELECT)
     @CollectionTable(name = "Portfolio_TargetGroup", joinColumns = @JoinColumn(name = "portfolio") )
     private List<TargetGroup> targetGroups;
 
     @ManyToMany(fetch = EAGER)
+    @Fetch(FetchMode.SELECT)
     @JoinTable(
             name = "Portfolio_CrossCurricularTheme",
             joinColumns = { @JoinColumn(name = "portfolio") },
@@ -119,6 +126,7 @@ public class Portfolio implements Searchable {
     private List<CrossCurricularTheme> crossCurricularThemes;
 
     @ManyToMany(fetch = EAGER)
+    @Fetch(FetchMode.SELECT)
     @JoinTable(
             name = "Portfolio_KeyCompetence",
             joinColumns = { @JoinColumn(name = "portfolio") },

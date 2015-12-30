@@ -27,6 +27,8 @@ import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.NotNull;
 
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.Formula;
 import org.hibernate.annotations.Type;
 import org.joda.time.DateTime;
@@ -51,6 +53,7 @@ public class Material implements Searchable {
 
 	@NotNull
 	@ManyToMany(fetch = EAGER, cascade = { PERSIST, MERGE })
+	@Fetch(FetchMode.SELECT)
 	@JoinTable(name = "Material_Title", joinColumns = { @JoinColumn(name = "material") }, inverseJoinColumns = {
 			@JoinColumn(name = "title") }, uniqueConstraints = @UniqueConstraint(columnNames = { "material",
 					"title" }) )
@@ -61,6 +64,7 @@ public class Material implements Searchable {
 	private Language language;
 
 	@ManyToMany(fetch = EAGER, cascade = { PERSIST, MERGE })
+	@Fetch(FetchMode.SELECT)
 	@JoinTable(name = "Material_Author", joinColumns = { @JoinColumn(name = "material") }, inverseJoinColumns = {
 			@JoinColumn(name = "author") }, uniqueConstraints = @UniqueConstraint(columnNames = { "material",
 					"author" }) )
@@ -71,6 +75,7 @@ public class Material implements Searchable {
 	private IssueDate issueDate;
 
 	@ManyToMany(fetch = EAGER, cascade = { PERSIST, MERGE })
+	@Fetch(FetchMode.SELECT)
 	@JoinTable(name = "Material_Description", joinColumns = { @JoinColumn(name = "material") }, inverseJoinColumns = {
 			@JoinColumn(name = "description") }, uniqueConstraints = @UniqueConstraint(columnNames = { "material",
 					"description" }) )
@@ -80,12 +85,14 @@ public class Material implements Searchable {
 	private String source;
 
 	@ManyToMany(fetch = EAGER)
+	@Fetch(FetchMode.SELECT)
 	@JoinTable(name = "Material_ResourceType", joinColumns = { @JoinColumn(name = "material") }, inverseJoinColumns = {
 			@JoinColumn(name = "resourceType") }, uniqueConstraints = @UniqueConstraint(columnNames = { "material",
 					"resourceType" }) )
 	private List<ResourceType> resourceTypes;
 
 	@ManyToMany(fetch = EAGER)
+	@Fetch(FetchMode.SELECT)
 	@JoinTable(name = "Material_Taxon", joinColumns = { @JoinColumn(name = "material") }, inverseJoinColumns = {
 			@JoinColumn(name = "taxon") }, uniqueConstraints = @UniqueConstraint(columnNames = { "material",
 					"taxon" }) )
@@ -96,6 +103,7 @@ public class Material implements Searchable {
 	private LicenseType licenseType;
 
 	@ManyToMany(fetch = EAGER, cascade = { PERSIST, MERGE })
+	@Fetch(FetchMode.SELECT)
 	@JoinTable(name = "Material_Publisher", joinColumns = { @JoinColumn(name = "material") }, inverseJoinColumns = {
 			@JoinColumn(name = "publisher") }, uniqueConstraints = @UniqueConstraint(columnNames = { "material",
 					"publisher" }) )
@@ -112,11 +120,13 @@ public class Material implements Searchable {
 	private Long views = (long) 0;
 
 	@ManyToMany(fetch = EAGER, cascade = { PERSIST, MERGE })
+	@Fetch(FetchMode.SELECT)
 	@JoinTable(name = "Material_Tag", joinColumns = { @JoinColumn(name = "material") }, inverseJoinColumns = {
 			@JoinColumn(name = "tag") }, uniqueConstraints = @UniqueConstraint(columnNames = { "material", "tag" }) )
 	private List<Tag> tags;
 
 	@OneToMany(fetch = EAGER, cascade = { MERGE, PERSIST })
+	@Fetch(FetchMode.SELECT)
 	@JoinColumn(name = "material")
 	@OrderBy("added DESC")
 	private List<Comment> comments;
@@ -162,6 +172,7 @@ public class Material implements Searchable {
 	@Enumerated(EnumType.STRING)
 	@Column(name = "targetGroup")
 	@ElementCollection(fetch = FetchType.EAGER)
+	@Fetch(FetchMode.SELECT)
 	@CollectionTable(name = "Material_TargetGroup", joinColumns = @JoinColumn(name = "material") )
 	private List<TargetGroup> targetGroups;
 
@@ -169,6 +180,7 @@ public class Material implements Searchable {
 	private boolean isSpecialEducation = false;
 
 	@ManyToMany(fetch = EAGER, cascade = { PERSIST, MERGE })
+	@Fetch(FetchMode.SELECT)
 	@JoinTable(name = "Material_CrossCurricularTheme", joinColumns = {
 			@JoinColumn(name = "material") }, inverseJoinColumns = {
 					@JoinColumn(name = "crossCurricularTheme") }, uniqueConstraints = @UniqueConstraint(columnNames = {
@@ -176,6 +188,7 @@ public class Material implements Searchable {
 	private List<CrossCurricularTheme> crossCurricularThemes;
 
 	@ManyToMany(fetch = EAGER, cascade = { PERSIST, MERGE })
+	@Fetch(FetchMode.SELECT)
 	@JoinTable(name = "Material_KeyCompetence", joinColumns = { @JoinColumn(name = "material") }, inverseJoinColumns = {
 			@JoinColumn(name = "keyCompetence") }, uniqueConstraints = @UniqueConstraint(columnNames = { "material",
 					"keyCompetence" }) )

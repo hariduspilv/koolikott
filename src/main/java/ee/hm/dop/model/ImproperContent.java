@@ -38,11 +38,14 @@ public class ImproperContent {
     @JoinColumn(name = "portfolio")
     private Portfolio portfolio;
 
-    @Column(nullable = false)
+    @Column
     @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
     @JsonSerialize(using = DateTimeSerializer.class)
     @JsonDeserialize(using = DateTimeDeserializer.class)
     private DateTime added;
+
+    @Column(nullable = false)
+    private boolean deleted = false;
 
     public Long getId() {
         return id;
@@ -84,5 +87,13 @@ public class ImproperContent {
 
     public void setPortfolio(Portfolio portfolio) {
         this.portfolio = portfolio;
+    }
+
+    public boolean isDeleted() {
+        return deleted;
+    }
+
+    public void setDeleted(boolean deleted) {
+        this.deleted = deleted;
     }
 }

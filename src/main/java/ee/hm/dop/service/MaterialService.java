@@ -296,7 +296,6 @@ public class MaterialService {
             ImproperContent improperContent = new ImproperContent();
             improperContent.setCreator(loggedInUser);
             improperContent.setMaterial(material);
-            improperContent.setAdded(DateTime.now());
 
             return improperContentDAO.update(improperContent);
     }
