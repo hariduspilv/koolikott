@@ -78,6 +78,8 @@ insert into Taxon(id, name, level) values (11, 'ForeignLanguage', 'DOMAIN');
 insert into Domain(id, educationalContext) values (11, 1);
 insert into Taxon(id, name, level) values (12, 'DomainWithTopics', 'DOMAIN');
 insert into Domain(id, educationalContext) values (12, 6);
+insert into Taxon(id, name, level) values (13, 'SecondaryDomain', 'DOMAIN');
+insert into Domain(id, educationalContext) values (13, 3);
 
 -- Subject
 
@@ -85,6 +87,8 @@ insert into Taxon(id, name, level) values (20, 'Biology', 'SUBJECT');
 insert into Subject(id, domain) values (20, 10);
 insert into Taxon(id, name, level) values (21, 'Mathematics', 'SUBJECT');
 insert into Subject(id, domain) values (21, 10);
+insert into Taxon(id, name, level) values (22, 'SecondarySubject', 'SUBJECT');
+insert into Subject(id, domain) values (22, 13);
 
 -- Topics from Subjects
 

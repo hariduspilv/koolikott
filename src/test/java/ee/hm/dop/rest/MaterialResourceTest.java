@@ -7,8 +7,10 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
+import java.util.Arrays;
 import java.util.List;
 
+import javax.inject.Inject;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.MediaType;
@@ -19,6 +21,9 @@ import org.joda.time.DateTime;
 import org.junit.Test;
 
 import ee.hm.dop.common.test.ResourceIntegrationTestBase;
+import ee.hm.dop.dao.TaxonDAO;
+import ee.hm.dop.model.CrossCurricularTheme;
+import ee.hm.dop.model.KeyCompetence;
 import ee.hm.dop.model.Language;
 import ee.hm.dop.model.LanguageString;
 import ee.hm.dop.model.Material;
@@ -33,6 +38,10 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
     private static final String GET_MATERIAL_PICTURE_URL = "material/getPicture?materialId=%s";
     private static final String GET_MATERIAL_URL = "material?materialId=%s";
     private static final String GET_BY_CREATOR_URL = "material/getByCreator?username=%s";
+    private static final String CREATE_MATERIAL_URL = "material";
+
+    @Inject
+    private TaxonDAO taxonDAO;
 
     @Test
     public void getMaterial() {
@@ -194,8 +203,8 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
     @Test
     public void getByCreator() {
         String username = "mati.maasikas";
-        List<Material> materials = doGet(format(GET_BY_CREATOR_URL, username)).readEntity(
-                new GenericType<List<Material>>() {
+        List<Material> materials = doGet(format(GET_BY_CREATOR_URL, username))
+                .readEntity(new GenericType<List<Material>>() {
                 });
 
         assertEquals(3, materials.size());
@@ -227,11 +236,76 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
     @Test
     public void getByCreatorNoMaterials() {
         String username = "voldemar.vapustav";
-        List<Material> materials = doGet(format(GET_BY_CREATOR_URL, username)).readEntity(
-                new GenericType<List<Material>>() {
+        List<Material> materials = doGet(format(GET_BY_CREATOR_URL, username))
+                .readEntity(new GenericType<List<Material>>() {
                 });
 
         assertEquals(0, materials.size());
+    }
+
+    @Test
+    public void create() {
+        login("89012378912");
+
+        Material material = new Material();
+        material.setSource("http://www.whatisthis.example.com");
+
+        Subject subject = (Subject) taxonDAO.findTaxonById(22L);
+        material.setTaxons(Arrays.asList(subject));
+
+        KeyCompetence keyCompetence = new KeyCompetence();
+        keyCompetence.setId(1L);
+        keyCompetence.setName("Cultural_and_value_competence");
+        material.setKeyCompetences(Arrays.asList(keyCompetence));
+
+        CrossCurricularTheme crossCurricularTheme = new CrossCurricularTheme();
+        crossCurricularTheme.setId(2L);
+        crossCurricularTheme.setName("Environment_and_sustainable_development");
+        material.setCrossCurricularThemes(Arrays.asList(crossCurricularTheme));
+
+        Response response = doPost(CREATE_MATERIAL_URL, Entity.entity(material, MediaType.APPLICATION_JSON_TYPE));
+        assertEquals(Status.OK.getStatusCode(), response.getStatus());
+
+        Material createdMaterial = response.readEntity(Material.class);
+
+        assertNotNull(createdMaterial.getKeyCompetences());
+        assertEquals(1, createdMaterial.getKeyCompetences().size());
+        KeyCompetence createdKeyCompetence = createdMaterial.getKeyCompetences().get(0);
+        assertEquals(keyCompetence.getName(), createdKeyCompetence.getName());
+
+        assertNotNull(createdMaterial.getCrossCurricularThemes());
+        assertEquals(1, createdMaterial.getCrossCurricularThemes().size());
+        CrossCurricularTheme createdCrossCurricularTheme = createdMaterial.getCrossCurricularThemes().get(0);
+        assertEquals(crossCurricularTheme.getName(), createdCrossCurricularTheme.getName());
+    }
+
+    @Test
+    public void createWithKeyCompetencesWhenNotAllowed() {
+        login("89012378912");
+
+        Material material = new Material();
+        material.setSource("http://www.whatisthis.example.com");
+
+        Subject subject = (Subject) taxonDAO.findTaxonById(21L);
+        material.setTaxons(Arrays.asList(subject));
+
+        KeyCompetence keyCompetence = new KeyCompetence();
+        keyCompetence.setId(1L);
+        keyCompetence.setName("Cultural_and_value_competence");
+        material.setKeyCompetences(Arrays.asList(keyCompetence));
+
+        CrossCurricularTheme crossCurricularTheme = new CrossCurricularTheme();
+        crossCurricularTheme.setId(2L);
+        crossCurricularTheme.setName("Environment_and_sustainable_development");
+        material.setCrossCurricularThemes(Arrays.asList(crossCurricularTheme));
+
+        Response response = doPost(CREATE_MATERIAL_URL, Entity.entity(material, MediaType.APPLICATION_JSON_TYPE));
+        assertEquals(Status.OK.getStatusCode(), response.getStatus());
+
+        Material createdMaterial = response.readEntity(Material.class);
+
+        assertNull(createdMaterial.getKeyCompetences());
+        assertNull(createdMaterial.getCrossCurricularThemes());
     }
 
     private void assertMaterial1(Material material) {

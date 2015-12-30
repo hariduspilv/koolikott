@@ -4,6 +4,7 @@ import static java.lang.String.format;
 import static org.apache.commons.lang3.StringUtils.isEmpty;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 
@@ -20,60 +21,65 @@ import ee.hm.dop.model.Publisher;
 import ee.hm.dop.model.Role;
 import ee.hm.dop.model.User;
 import ee.hm.dop.model.UserLike;
+import ee.hm.dop.model.taxon.EducationalContext;
+import ee.hm.dop.utils.TaxonUtils;
 
 public class MaterialService {
 
-	public static final String PUBLISHER = "PUBLISHER";
-	private Logger logger = LoggerFactory.getLogger(getClass());
+    public static final String BASICEDUCATION = "BASICEDUCATION";
+    public static final String SECONDARYEDUCATION = "SECONDARYEDUCATION";
+    public static final String PUBLISHER = "PUBLISHER";
 
-	@Inject
-	private MaterialDAO materialDao;
+    private Logger logger = LoggerFactory.getLogger(getClass());
 
-	@Inject
-	private UserLikeDAO userLikeDAO;
+    @Inject
+    private MaterialDAO materialDao;
 
-	@Inject
-	private AuthorService authorService;
+    @Inject
+    private UserLikeDAO userLikeDAO;
 
-	@Inject
-	private PublisherService publisherService;
+    @Inject
+    private AuthorService authorService;
 
-	@Inject
-	private SearchEngineService searchEngineService;
+    @Inject
+    private PublisherService publisherService;
 
-	public Material get(long materialId) {
-		return materialDao.findById(materialId);
-	}
+    @Inject
+    private SearchEngineService searchEngineService;
 
-	public List<Material> getNewestMaterials(int numberOfMaterials) {
-		return materialDao.findNewestMaterials(numberOfMaterials);
-	}
+    public Material get(long materialId) {
+        return materialDao.findById(materialId);
+    }
 
-	public void increaseViewCount(Material material) {
-		material.setViews(material.getViews() + 1);
-		createOrUpdate(material);
-	}
+    public List<Material> getNewestMaterials(int numberOfMaterials) {
+        return materialDao.findNewestMaterials(numberOfMaterials);
+    }
 
-	public Material createMaterial(Material material, User creator, boolean updateSearchIndex) {
-		if (material.getId() != null) {
-			throw new IllegalArgumentException("Error creating Material, material already exists.");
-		}
-		material.setCreator(creator);
-		setAuthors(material);
-		setPublishers(material);
+    public void increaseViewCount(Material material) {
+        material.setViews(material.getViews() + 1);
+        createOrUpdate(material);
+    }
 
-		if(creator != null && creator.getRole().toString().equals(PUBLISHER)) {
-			material.setEmbeddable(true);
-		}
+    public Material createMaterial(Material material, User creator, boolean updateSearchIndex) {
+        if (material.getId() != null) {
+            throw new IllegalArgumentException("Error creating Material, material already exists.");
+        }
+        material.setCreator(creator);
+        setAuthors(material);
+        setPublishers(material);
 
-		Material createdMaterial = createOrUpdate(material);
-		if (updateSearchIndex) {
-			searchEngineService.updateIndex();
-		}
+        if (creator != null && creator.getRole().toString().equals(PUBLISHER)) {
+            material.setEmbeddable(true);
+        }
 
-		return createdMaterial;
-	}
-	
+        Material createdMaterial = createOrUpdate(material);
+        if (updateSearchIndex) {
+            searchEngineService.updateIndex();
+        }
+
+        return createdMaterial;
+    }
+
     public void delete(Material material, User loggedInUser) {
         if (material.getId() == null) {
             throw new RuntimeException("Material must already exist.");
@@ -92,161 +98,185 @@ public class MaterialService {
         searchEngineService.updateIndex();
     }
 
-	private void setPublishers(Material material) {
-		List<Publisher> publishers = material.getPublishers();
+    private void setPublishers(Material material) {
+        List<Publisher> publishers = material.getPublishers();
 
-		if (publishers != null) {
-			for (int i = 0; i < publishers.size(); i++) {
-				Publisher publisher = publishers.get(i);
-				if (publisher != null) {
-					Publisher returnedPublisher = publisherService.getPublisherByName(publisher.getName());
-					if (returnedPublisher != null) {
-						publishers.set(i, returnedPublisher);
-					} else {
-						returnedPublisher = publisherService.createPublisher(publisher.getName(),
-								publisher.getWebsite());
-						publishers.set(i, returnedPublisher);
-					}
-				}
-			}
-		}
-	}
+        if (publishers != null) {
+            for (int i = 0; i < publishers.size(); i++) {
+                Publisher publisher = publishers.get(i);
+                if (publisher != null) {
+                    Publisher returnedPublisher = publisherService.getPublisherByName(publisher.getName());
+                    if (returnedPublisher != null) {
+                        publishers.set(i, returnedPublisher);
+                    } else {
+                        returnedPublisher = publisherService.createPublisher(publisher.getName(),
+                                publisher.getWebsite());
+                        publishers.set(i, returnedPublisher);
+                    }
+                }
+            }
+        }
+    }
 
-	private void setAuthors(Material material) {
-		List<Author> authors = material.getAuthors();
-		if (authors != null) {
-			for (int i = 0; i < authors.size(); i++) {
-				Author author = authors.get(i);
-				if (author != null) {
-					Author returnedAuthor = authorService.getAuthorByFullName(author.getName(), author.getSurname());
-					if (returnedAuthor != null) {
-						authors.set(i, returnedAuthor);
-					} else {
-						returnedAuthor = authorService.createAuthor(author.getName(), author.getSurname());
-						authors.set(i, returnedAuthor);
-					}
-				}
-			}
-		}
-	}
+    private void setAuthors(Material material) {
+        List<Author> authors = material.getAuthors();
+        if (authors != null) {
+            for (int i = 0; i < authors.size(); i++) {
+                Author author = authors.get(i);
+                if (author != null) {
+                    Author returnedAuthor = authorService.getAuthorByFullName(author.getName(), author.getSurname());
+                    if (returnedAuthor != null) {
+                        authors.set(i, returnedAuthor);
+                    } else {
+                        returnedAuthor = authorService.createAuthor(author.getName(), author.getSurname());
+                        authors.set(i, returnedAuthor);
+                    }
+                }
+            }
+        }
+    }
 
-	public void addComment(Comment comment, Material material) {
-		if (isEmpty(comment.getText())) {
-			throw new RuntimeException("Comment is missing text.");
-		}
+    public void addComment(Comment comment, Material material) {
+        if (isEmpty(comment.getText())) {
+            throw new RuntimeException("Comment is missing text.");
+        }
 
-		if (comment.getId() != null) {
-			throw new RuntimeException("Comment already exists.");
-		}
+        if (comment.getId() != null) {
+            throw new RuntimeException("Comment already exists.");
+        }
 
-		Material originalMaterial = materialDao.findById(material.getId());
-		if (originalMaterial == null) {
-			throw new RuntimeException("Material not found");
-		}
+        Material originalMaterial = materialDao.findById(material.getId());
+        if (originalMaterial == null) {
+            throw new RuntimeException("Material not found");
+        }
 
-		comment.setAdded(DateTime.now());
-		originalMaterial.getComments().add(comment);
-		materialDao.update(originalMaterial);
-	}
+        comment.setAdded(DateTime.now());
+        originalMaterial.getComments().add(comment);
+        materialDao.update(originalMaterial);
+    }
 
-	public UserLike addUserLike(Material material, User loggedInUser, boolean isLiked) {
-		if (material == null || material.getId() == null) {
-			throw new RuntimeException("Material not found");
-		}
-		Material originalMaterial = materialDao.findById(material.getId());
-		if (originalMaterial == null) {
-			throw new RuntimeException("Material not found");
-		}
+    public UserLike addUserLike(Material material, User loggedInUser, boolean isLiked) {
+        if (material == null || material.getId() == null) {
+            throw new RuntimeException("Material not found");
+        }
+        Material originalMaterial = materialDao.findById(material.getId());
+        if (originalMaterial == null) {
+            throw new RuntimeException("Material not found");
+        }
 
-		userLikeDAO.deleteMaterialLike(originalMaterial, loggedInUser);
+        userLikeDAO.deleteMaterialLike(originalMaterial, loggedInUser);
 
-		UserLike like = new UserLike();
-		like.setMaterial(originalMaterial);
-		like.setCreator(loggedInUser);
-		like.setLiked(isLiked);
-		like.setAdded(DateTime.now());
+        UserLike like = new UserLike();
+        like.setMaterial(originalMaterial);
+        like.setCreator(loggedInUser);
+        like.setLiked(isLiked);
+        like.setAdded(DateTime.now());
 
-		return userLikeDAO.update(like);
-	}
+        return userLikeDAO.update(like);
+    }
 
-	public void removeUserLike(Material material, User loggedInUser) {
-		if (material == null || material.getId() == null) {
-			throw new RuntimeException("Material not found");
-		}
-		Material originalMaterial = materialDao.findById(material.getId());
-		if (originalMaterial == null) {
-			throw new RuntimeException("Material not found");
-		}
+    public void removeUserLike(Material material, User loggedInUser) {
+        if (material == null || material.getId() == null) {
+            throw new RuntimeException("Material not found");
+        }
+        Material originalMaterial = materialDao.findById(material.getId());
+        if (originalMaterial == null) {
+            throw new RuntimeException("Material not found");
+        }
 
-		userLikeDAO.deleteMaterialLike(originalMaterial, loggedInUser);
-	}
+        userLikeDAO.deleteMaterialLike(originalMaterial, loggedInUser);
+    }
 
-	public UserLike getUserLike(Material material, User loggedInUser) {
+    public UserLike getUserLike(Material material, User loggedInUser) {
 
-		if (material == null || material.getId() == null) {
-			throw new RuntimeException("Material not found");
-		}
-		Material originalMaterial = materialDao.findById(material.getId());
-		if (originalMaterial == null) {
-			throw new RuntimeException("Material not found");
-		}
+        if (material == null || material.getId() == null) {
+            throw new RuntimeException("Material not found");
+        }
+        Material originalMaterial = materialDao.findById(material.getId());
+        if (originalMaterial == null) {
+            throw new RuntimeException("Material not found");
+        }
 
-		UserLike like = userLikeDAO.findMaterialUserLike(originalMaterial, loggedInUser);
-		return like;
-	}
+        UserLike like = userLikeDAO.findMaterialUserLike(originalMaterial, loggedInUser);
+        return like;
+    }
 
-	public void update(Material material) {
-		Material originalMaterial = materialDao.findById(material.getId());
-		validateMaterialUpdate(material, originalMaterial);
+    public void update(Material material) {
+        Material originalMaterial = materialDao.findById(material.getId());
+        validateMaterialUpdate(material, originalMaterial);
 
-		// Should not be able to update view count
-		material.setViews(originalMaterial.getViews());
-		// Should not be able to update added date, must keep the original
-		material.setAdded(originalMaterial.getAdded());
+        // Should not be able to update view count
+        material.setViews(originalMaterial.getViews());
+        // Should not be able to update added date, must keep the original
+        material.setAdded(originalMaterial.getAdded());
 
-		createOrUpdate(material);
-	}
+        createOrUpdate(material);
+    }
 
-	private void validateMaterialUpdate(Material material, Material originalMaterial) {
-		if (originalMaterial == null) {
-			throw new IllegalArgumentException("Error updating Material: material does not exist.");
-		}
+    private void validateMaterialUpdate(Material material, Material originalMaterial) {
+        if (originalMaterial == null) {
+            throw new IllegalArgumentException("Error updating Material: material does not exist.");
+        }
 
-		final String ErrorModifyRepository = "Error updating Material: Not allowed to modify repository.";
-		if (material.getRepository() == null && originalMaterial.getRepository() != null) {
-			throw new IllegalArgumentException(ErrorModifyRepository);
-		}
+        final String ErrorModifyRepository = "Error updating Material: Not allowed to modify repository.";
+        if (material.getRepository() == null && originalMaterial.getRepository() != null) {
+            throw new IllegalArgumentException(ErrorModifyRepository);
+        }
 
-		if (material.getRepository() != null && !material.getRepository().equals(originalMaterial.getRepository())) {
-			throw new IllegalArgumentException(ErrorModifyRepository);
-		}
-	}
+        if (material.getRepository() != null && !material.getRepository().equals(originalMaterial.getRepository())) {
+            throw new IllegalArgumentException(ErrorModifyRepository);
+        }
+    }
 
-	public byte[] getMaterialPicture(Material material) {
-		return materialDao.findPictureByMaterial(material);
-	}
+    public byte[] getMaterialPicture(Material material) {
+        return materialDao.findPictureByMaterial(material);
+    }
 
-	public List<Material> getByCreator(User creator) {
-		return materialDao.findByCreator(creator);
-	}
+    public List<Material> getByCreator(User creator) {
+        return materialDao.findByCreator(creator);
+    }
 
-	private Material createOrUpdate(Material material) {
-		Long materialId = material.getId();
-		if (materialId != null) {
-			logger.info(format("Updating material %s", materialId));
-		} else {
-			logger.info("Creating material.");
-		}
+    private Material createOrUpdate(Material material) {
+        Long materialId = material.getId();
+        if (materialId != null) {
+            logger.info(format("Updating material %s", materialId));
+        } else {
+            logger.info("Creating material.");
+        }
 
-		return materialDao.update(material);
-	}
+        material = applyRestrictions(material);
+        return materialDao.update(material);
+    }
 
-	public void delete(Material material) {
-		materialDao.delete(material);
-	}
-	
+    public void delete(Material material) {
+        materialDao.delete(material);
+    }
+
+    private Material applyRestrictions(Material material) {
+        boolean areKeyCompetencesAndCrossCurricularThemesAllowed = false;
+
+        if (material.getTaxons() != null && !material.getTaxons().isEmpty()) {
+            List<EducationalContext> educationalContexts = material.getTaxons().stream()
+                    .map(TaxonUtils::getEducationalContext).collect(Collectors.toList());
+
+            for (EducationalContext educationalContext : educationalContexts) {
+                if (educationalContext.getName().equals(BASICEDUCATION)
+                        || educationalContext.getName().equals(SECONDARYEDUCATION)) {
+                    areKeyCompetencesAndCrossCurricularThemesAllowed = true;
+                }
+            }
+        }
+
+        if (!areKeyCompetencesAndCrossCurricularThemesAllowed) {
+            material.setKeyCompetences(null);
+            material.setCrossCurricularThemes(null);
+        }
+
+        return material;
+    }
+
     private boolean isUserAdmin(User loggedInUser) {
         return loggedInUser != null && loggedInUser.getRole() == Role.ADMIN;
     }
-    
+
 }
