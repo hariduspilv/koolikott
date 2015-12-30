@@ -41,7 +41,7 @@ define(['app'], function(app) {
                 }
 
                 return null;
-            },
+            }
         };
 
         return instance;

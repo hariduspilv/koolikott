@@ -35,6 +35,10 @@ define(['app'], function(app)
                     $scope.isAdmin = function() {
                         return authenticatedUserService.getUser() && authenticatedUserService.getUser().role === 'ADMIN';
                     };
+
+                    $scope.isLoggedIn = function() {
+                        return authenticatedUserService.isAuthenticated();
+                    };
  
                     $scope.editPortfolio = function() {
 	                    var portfolioId = $route.current.params.id;

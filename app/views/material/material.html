@@ -37,8 +37,8 @@
                       <md-menu-divider></md-menu-divider>
                       <md-menu-item dop-recommend></md-menu-item>
                       <md-menu-divider></md-menu-divider>
-                      <md-menu-item dop-report-imporper></md-menu-item>
-                      <md-menu-item dop-report-broken-link></md-menu-item>
+                      <md-menu-item data-ng-if="isLoggedIn()" dop-report-improper data-material="material"></md-menu-item>
+                      <md-menu-item data-ng-if="isLoggedIn()" dop-report-broken-link></md-menu-item>
                     </md-menu-content>
                   </md-menu>
                 </div>

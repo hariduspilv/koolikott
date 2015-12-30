@@ -162,6 +162,10 @@ define(['app'], function (app) {
                 $scope.sourceType = 'LINK';
             };
 
+            $scope.isLoggedIn = function() {
+                return authenticatedUserService.isAuthenticated();
+            };
+
             function getSignedUserData() {
                 serverCallService.makeGet("rest/user/getSignedUserData", {}, getSignedUserDataSuccess, getSignedUserDataFail);
             }
