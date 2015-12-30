@@ -12,10 +12,12 @@ import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import ee.hm.dop.dao.ImproperContentDAO;
 import ee.hm.dop.dao.MaterialDAO;
 import ee.hm.dop.dao.UserLikeDAO;
 import ee.hm.dop.model.Author;
 import ee.hm.dop.model.Comment;
+import ee.hm.dop.model.ImproperContent;
 import ee.hm.dop.model.Material;
 import ee.hm.dop.model.Publisher;
 import ee.hm.dop.model.Role;
@@ -46,6 +48,9 @@ public class MaterialService {
 
     @Inject
     private SearchEngineService searchEngineService;
+
+    @Inject
+    private ImproperContentDAO improperContentDAO;
 
     public Material get(long materialId) {
         return materialDao.findById(materialId);
@@ -279,4 +284,30 @@ public class MaterialService {
         return loggedInUser != null && loggedInUser.getRole() == Role.ADMIN;
     }
 
+    public ImproperContent addImproperMaterial(Material material, User loggedInUser) {
+            if (material == null || material.getId() == null) {
+                throw new RuntimeException("Material not found while adding improper material");
+            }
+            Material originalMaterial = materialDao.findById(material.getId());
+            if (originalMaterial == null) {
+                throw new RuntimeException("Material not found while adding improper material");
+            }
+
+            ImproperContent improperContent = new ImproperContent();
+            improperContent.setCreator(loggedInUser);
+            improperContent.setMaterial(material);
+            improperContent.setAdded(DateTime.now());
+
+            return improperContentDAO.update(improperContent);
+    }
+
+    public List<ImproperContent> getImproperMaterials() {
+        return improperContentDAO.getImproperMaterials();
+    }
+
+    public Boolean hasSetImproper(long materialId, User loggedInUser) {
+        List<ImproperContent> improperContents = improperContentDAO.findByMaterialAndUser(materialId, loggedInUser);
+
+        return improperContents.size() != 0;
+    }
 }

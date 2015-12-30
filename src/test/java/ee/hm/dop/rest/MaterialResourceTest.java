@@ -308,6 +308,15 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
         assertNull(createdMaterial.getCrossCurricularThemes());
     }
 
+    @Test
+    public void hasSetImproper() {
+        login("89012378912");
+
+        Boolean bool = doGet(format("material/hasSetImproper?materialId=%s", 2), Boolean.class);
+
+        assertTrue(bool);
+    }
+
     private void assertMaterial1(Material material) {
         assertEquals(2, material.getTitles().size());
         assertEquals("Matemaatika õpik üheksandale klassile", material.getTitles().get(0).getText());

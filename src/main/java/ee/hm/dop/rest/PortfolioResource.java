@@ -152,7 +152,6 @@ public class PortfolioResource extends BaseResource {
     @RolesAllowed({ "USER", "ADMIN", "PUBLISHER" })
     public ImproperContent setImproperPortfolio(Portfolio portfolio) {
         return portfolioService.addImproperPortfolio(portfolio, getLoggedInUser());
-
     }
 
     @GET
@@ -162,6 +161,4 @@ public class PortfolioResource extends BaseResource {
     public List<ImproperContent> getImproperPortfolios() {
         return portfolioService.getImproperPortfolios();
     }
-
-
 }

@@ -312,6 +312,6 @@ public class PortfolioService {
     }
 
     public List<ImproperContent> getImproperPortfolios() {
-        return improperContentDAO.findImproperPortfolios();
+        return improperContentDAO.getImproperPortfolios();
     }
 }

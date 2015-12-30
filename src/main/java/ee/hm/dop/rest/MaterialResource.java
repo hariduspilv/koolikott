@@ -17,6 +17,7 @@ import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import ee.hm.dop.model.ImproperContent;
 import ee.hm.dop.model.Material;
 import ee.hm.dop.model.User;
 import ee.hm.dop.model.UserLike;
@@ -129,6 +130,31 @@ public class MaterialResource extends BaseResource {
     public Material createMaterial(Material material) {
         material = materialService.createMaterial(material, getLoggedInUser(), true);
         return material;
+    }
+
+    @POST
+    @Path("setImproper")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    @RolesAllowed({ "USER", "ADMIN", "PUBLISHER" })
+    public ImproperContent setImproperMaterial(Material material) {
+        return materialService.addImproperMaterial(material, getLoggedInUser());
+    }
+
+    @GET
+    @Path("getImproper")
+    @Produces(MediaType.APPLICATION_JSON)
+    @RolesAllowed({"ADMIN"})
+    public List<ImproperContent> getImproperPortfolios() {
+        return materialService.getImproperMaterials();
+    }
+
+    @GET
+    @Path("hasSetImproper")
+    @Produces(MediaType.APPLICATION_JSON)
+    @RolesAllowed({"USER", "ADMIN", "PUBLISHER"})
+    public Boolean hasSetImproper(@QueryParam("materialId") long materialId) {
+        return materialService.hasSetImproper(materialId, getLoggedInUser());
     }
 
     private void throwBadRequestException(String message) {
