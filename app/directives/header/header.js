@@ -22,25 +22,11 @@ define(['app'], function(app)
           $scope.searchFields = {};
           $scope.searchFields.searchQuery = searchService.getQuery();
           $scope.detailedSearch = {};
-          $scope.showSearch = searchService.queryExists();
 
           $scope.setLanguage = function(language) {
             translationService.setLanguage(language);
             $scope.selectedLanguage = language;
           };
-
-          $scope.showSearchBar = function() {
-            $scope.showSearch = true;
-            $timeout(function() {
-              angular.element('#header-simple-search-input').focus();
-            });
-          }
-
-          // $scope.toggleShowSearch = function() {
-          //   if (!$scope.detailedSearch.isVisible) {
-          //     $scope.showSearch = false
-          //   }
-          // }
 
           $scope.logout = function() {
             authenticationService.logout();
@@ -68,14 +54,12 @@ define(['app'], function(app)
           };
 
           $scope.openDetailedSearch = function() {
-            $scope.showSearch = true;
             $scope.detailedSearch.isVisible = true;
             $scope.detailedSearch.queryIn = $scope.searchFields.searchQuery;
             $scope.searchFields.searchQuery = $scope.detailedSearch.mainField;
           }
 
           $scope.closeDetailedSearch = function() {
-            $scope.showSearch = false;
             $scope.detailedSearch.isVisible = false;
             $scope.searchFields.searchQuery = (($scope.searchFields.searchQuery || "") + " " + $scope.detailedSearch.queryOut).trim();
             $scope.detailedSearch.queryIn = null;
@@ -88,12 +72,16 @@ define(['app'], function(app)
           };
 
           $scope.searchFieldEnterPressed = function() {
-            if ($scope.detailedSearch.isVisible) {
-              $scope.detailedSearch.doSearch();
-            } else {
+            if (!$scope.detailedSearch.isVisible) {
               $scope.search();
             }
           }
+
+          $scope.clickOutside = function() {
+            if ($scope.detailedSearch.isVisible) {
+              $scope.closeDetailedSearch();
+            }
+          };
 
           $scope.$watch('detailedSearch.mainField', function(newValue, oldValue) {
             if (newValue != oldValue) {

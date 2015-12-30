@@ -1,20 +1,23 @@
-<md-toolbar class="md-accent md-whiteframe-1dp" ng-show="!showSearch">
+<md-toolbar class="md-accent md-whiteframe-1dp" id="md-toolbar-header-edit-portfolio" data-click-outside="clickOutside()" outside-if-not="header-show-detailed-search-icon, detailed-search">
   <div layout-align="start start" layout="row" layout-sm="column">
     <div class="md-toolbar-tools" flex="100" flex-gt-sm="90">
       <md-button class="md-icon-button" ng-click="toggleSidenav()" hide-gt-md aria-label="Menu">
         <md-icon>menu</md-icon>
       </md-button>
       <div class="navbar-search" layout="row" flex>
-        <md-button aria-label="Search" class="md-icon-button" ng-click="showSearch = !showSearch">
+        <md-button aria-label="Search" data-ng-click="search()" data-ng-disabled="detailedSearch.isVisible" class="md-icon-button">
           <ng-md-icon icon="search"></ng-md-icon>
         </md-button>
         <md-input-container md-theme="input" flex>
-          <input ng-click="showSearch = !showSearch">
+          <input ng-model="searchFields.searchQuery" data-ng-keydown="$event.which === 13 && searchFieldEnterPressed()">
         </md-input-container>
       </div>
-      <md-button aria-label="Open Settings" class="md-icon-button" ng-click="openDetailedSearch()" >
+      <md-button aria-label="Open Settings" class="md-icon-button" id="header-show-detailed-search-icon" data-ng-click="openDetailedSearch()" data-ng-if="!detailedSearch.isVisible">
         <ng-md-icon icon="filter_list"></ng-md-icon>
       </md-button>
+      <md-button ng-click="closeDetailedSearch()" aria-label="Back" class="md-icon-button" data-ng-if="detailedSearch.isVisible">
+          <ng-md-icon icon="close"></ng-md-icon>
+        </md-button>
       <md-menu>
         <md-button aria-label="Share" class="md-icon-button" ng-click="$mdOpenMenu($event)">
           <md-icon data-ng-if="savedPortfolio.visibility === 'PUBLIC'">visibility</md-icon>
@@ -59,35 +62,11 @@
   </div>
 </md-toolbar>
 
-<div class="md-toolbar-expandable" ng-show="showSearch">
-  <md-toolbar class="md-accent">
-    <div layout-align="start start" layout="row" layout-sm="column">
-      <div class="md-toolbar-tools" flex="100" flex-gt-sm="90">
-        <div class="navbar-search" layout="row" flex>
-          <md-button aria-label="Search" data-ng-click="search()" data-ng-disabled="detailedSearch.isVisible" class="md-icon-button">
-            <ng-md-icon icon="search"></ng-md-icon>
-          </md-button>
-          <md-input-container md-theme="input" flex>
-            <input ng-model="searchFields.searchQuery" data-ng-keydown="$event.which === 13 && searchFieldEnterPressed()">
-          </md-input-container>
-        </div>
 
-        <md-button aria-label="Open Settings" class="md-icon-button" ng-click="openDetailedSearch()" data-ng-if="!detailedSearch.isVisible">
-          <ng-md-icon icon="filter_list"></ng-md-icon>
-        </md-button>
-
-        <md-button ng-click="closeDetailedSearch()" aria-label="Back" class="md-icon-button">
-          <ng-md-icon icon="close"></ng-md-icon>
-        </md-button>
-      </div>
+<div class="md-toolbar-filter" id="detailedSearch" ng-show="detailedSearch.isVisible">
+ <form layout-align="start start" layout="row" layout-sm="column">
+    <div flex="100" flex-gt-md="90" class="md-hue-1  md-whiteframe-1dp" id="detailed-search">
+      <div data-dop-detailed-search query-in="detailedSearch.queryIn" query-out="detailedSearch.queryOut" main-field="detailedSearch.mainField" search-callback="detailedSearch.doSearch()"></div>
     </div>
-  </md-toolbar>
-
-  <div class="md-toolbar-filter" id="detailedSearch" ng-show="detailedSearch.isVisible">
-   <form layout-align="start start" layout="row" layout-sm="column">
-      <div flex="100" flex-gt-md="90" class="md-hue-1  md-whiteframe-1dp">
-        <div data-dop-detailed-search query-in="detailedSearch.queryIn" query-out="detailedSearch.queryOut" main-field="detailedSearch.mainField" search-callback="detailedSearch.doSearch()"></div>
-      </div>
-    </form>
-  </div>
+  </form>
 </div>
