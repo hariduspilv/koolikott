@@ -30,15 +30,11 @@ define(['app'], function (app) {
         
         function orderImporper(order) {
             $scope.improper = collection.sort(function(a, b) {
-                if (order === 'bySubmittedAt' || order === '-bySubmittedAt') {
-                    if (a.portfolio !== undefined && b.portfolio !== undefined)
-                        return a.portfolio.title.localeCompare(b.portfolio.title);
-                    else if (a.material !== undefined && b.material !== undefined)
-                        return $scope.getCorrectLanguageTitle(a.material).localeCompare(b.material);
-                }
+                if (order === 'bySubmittedAt' || order === '-bySubmittedAt')
+                    return new Date(b.added) - new Date(a.added);
                 
                 if (order === 'bySubmittedBy' || order == '-bySubmittedBy')
-                    return 0; //TODO
+                    return (a.creator.name + ' ' + a.creator.surname).localeCompare(b.creator.name + ' ' + b.creator.surname);
                 
                 return 0;
             });
@@ -49,9 +45,9 @@ define(['app'], function (app) {
         
         function filterImproper() {
             $scope.improper = collection.filter(function(improper) {
-                if (improper.portfolio !== undefined)
+                if (improper.portfolio !== null)
                   return improper.portfolio.title.slice(0, $scope.query.filter.length).toLowerCase() === $scope.query.filter.toLowerCase();
-                if (improper.material !== undefined)
+                if (improper.material !== null)
                   return $scope.getCorrectLanguageTitle(improper.material).slice(0, $scope.query.filter.length).toLowerCase() === $scope.query.filter.toLowerCase();
             });
         }
