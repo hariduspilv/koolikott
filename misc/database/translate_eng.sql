@@ -370,4 +370,12 @@ INSERT INTO Translation(translationGroup, translationKey, translation) VALUES
 (3,'VOCATIONALEDUCATION','Vocational education'),
 (3,'WEBLOG','Weblog'),
 (3,'WEBSITE','Website'),
-(3,'WIKI','Wiki');
+(3,'WIKI','Wiki'),
+(3,'HEADER_TOOLTIP_GO_TO_LANDING_PAGE','Go to landing page'),
+(3,'HEADER_TOOLTIP_OPEN_DETAILED_SEARCH','Open detailed search'),
+(3,'HEADER_TOOLTIP_CLOSE_DETAILED_SEARCH','Close detailed search'),
+(3,'HEADER_TOOLTIP_SELECT_LANGUAGE','Select language'),
+(3,'HEADER_TOOLTIP_ENTER','Enter'),
+(3,'HEADER_TOOLTIP_PROFILE','Profile'),
+(3,'HEADER_TOOLTIP_CHANGE_VISIBILITY','Change visibility'),
+(3,'HEADER_TOOLTIP_EXIT_PORTFOLIO_MODE','Exit portfolio mode');

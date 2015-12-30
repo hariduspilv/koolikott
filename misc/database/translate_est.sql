@@ -366,4 +366,12 @@ INSERT INTO Translation(translationGroup, translationKey, translation) VALUES
 (1,'VOCATIONALEDUCATION','Kutseharidus'),
 (1,'WEBLOG','Blogi'),
 (1,'WEBSITE','Veebileht'),
-(1,'WIKI','viki');
+(1,'WIKI','viki'),
+(1,'HEADER_TOOLTIP_GO_TO_LANDING_PAGE','Suundu avalehele'),
+(1,'HEADER_TOOLTIP_OPEN_DETAILED_SEARCH','Ava filter'),
+(1,'HEADER_TOOLTIP_CLOSE_DETAILED_SEARCH','Sulge filter'),
+(1,'HEADER_TOOLTIP_SELECT_LANGUAGE','Vali keel'),
+(1,'HEADER_TOOLTIP_ENTER','Sisene'),
+(1,'HEADER_TOOLTIP_PROFILE','Profiil'),
+(1,'HEADER_TOOLTIP_CHANGE_VISIBILITY','Muuda nähtavust'),
+(1,'HEADER_TOOLTIP_EXIT_PORTFOLIO_MODE','Välju');

@@ -366,4 +366,12 @@ INSERT INTO Translation(translationGroup, translationKey, translation) VALUES
 (2,'VOCATIONALEDUCATION','профессиональное образование'),
 (2,'WEBLOG','сайт вход'),
 (2,'WEBSITE','сайт'),
-(2,'WIKI','энциклопедия');
+(2,'WIKI','энциклопедия'),
+(2,'HEADER_TOOLTIP_GO_TO_LANDING_PAGE','Перейти на целевую страницу'),
+(2,'HEADER_TOOLTIP_OPEN_DETAILED_SEARCH','Открыть детальный поиск'),
+(2,'HEADER_TOOLTIP_CLOSE_DETAILED_SEARCH','Закрыть детальный поиск'),
+(2,'HEADER_TOOLTIP_SELECT_LANGUAGE','Выберите язык'),
+(2,'HEADER_TOOLTIP_ENTER','Войти'),
+(2,'HEADER_TOOLTIP_PROFILE','Профиль'),
+(2,'HEADER_TOOLTIP_CHANGE_VISIBILITY','Изменить видимость'),
+(2,'HEADER_TOOLTIP_EXIT_PORTFOLIO_MODE','Выход');
