@@ -13,13 +13,16 @@
         </md-input-container>
       </div>
       <md-button aria-label="Open Settings" class="md-icon-button" id="header-show-detailed-search-icon" data-ng-click="openDetailedSearch()" data-ng-if="!detailedSearch.isVisible">
+        <md-tooltip><span data-translate="HEADER_TOOLTIP_OPEN_DETAILED_SEARCH"></span></md-tooltip>
         <ng-md-icon icon="filter_list"></ng-md-icon>
       </md-button>
       <md-button ng-click="closeDetailedSearch()" aria-label="Back" class="md-icon-button" data-ng-if="detailedSearch.isVisible">
+          <md-tooltip><span data-translate="HEADER_TOOLTIP_CLOSE_DETAILED_SEARCH"></span></md-tooltip>
           <ng-md-icon icon="close"></ng-md-icon>
         </md-button>
       <md-menu>
         <md-button aria-label="Share" class="md-icon-button" ng-click="$mdOpenMenu($event)">
+          <md-tooltip><span data-translate="HEADER_TOOLTIP_CHANGE_VISIBILITY"></span></md-tooltip>
           <md-icon data-ng-if="savedPortfolio.visibility === 'PUBLIC'">visibility</md-icon>
           <md-icon data-ng-if="savedPortfolio.visibility === 'NOT_LISTED'">link</md-icon>
           <md-icon data-ng-if="savedPortfolio.visibility === 'PRIVATE'">visibility_off</md-icon>
@@ -56,6 +59,7 @@
         </md-menu-content>
       </md-menu>
       <md-button ng-click="exitEditPortfolioMode()" class="md-icon-button" aria-label="close">
+        <md-tooltip><span data-translate="HEADER_TOOLTIP_EXIT_PORTFOLIO_MODE"></span></md-tooltip>
         <md-icon>close</md-icon>
       </md-button>
     </div>
