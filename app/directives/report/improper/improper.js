@@ -16,12 +16,17 @@ define(['app'], function (app) {
                         getHasReported();
                     }, false);
 
+                    $scope.$watch('portfolio', function(newValue, oldValue) {
+                        if(newValue === undefined) return;
+                        getHasReported();
+                    }, false);
+
                     var getHasReported = function () {
                         var url;
 
 
                         if ($scope.portfolio && $scope.portfolio.id) {
-                            url = "rest/portfolio/hasSetImproper?materialId=" + $scope.portfolio.id;
+                            url = "rest/portfolio/hasSetImproper?portfolioId=" + $scope.portfolio.id;
 
                             serverCallService.makeGet(url, {}, requestSuccessful, requestFailed);
                         } else if ($scope.material && $scope.material.id) {
