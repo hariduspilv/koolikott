@@ -112,7 +112,7 @@ define(['app'], function (app) {
         
         serverCallService.makeGet("rest/material/getImproper", {}, base.getImproperSuccess, base.getImproperFail);
 
-        $scope.title = $filter('translate')('DASHBOARD_IMRPOPER_PORTFOLIOS');
+        $scope.title = $filter('translate')('DASHBOARD_IMRPOPER_MATERIALS');
 
         $scope.bindTable = function() {
             base.buildTable('#improper-materials-table', 'views/dashboard/templates/improperMaterialsTable.html');
