@@ -49,4 +49,18 @@ public class ImproperContentDAO {
 
         return improperContents;
     }
+
+    public List<ImproperContent> findByPortfolioAndUser(long portfolioId, User loggedInUser) {
+        TypedQuery<ImproperContent> findByData = entityManager.createQuery(
+                "FROM ImproperContent i WHERE i.portfolio.id = :portfolioId AND i.creator = :user", ImproperContent.class);
+
+        List<ImproperContent> improperContents = null;
+        try {
+            improperContents = findByData.setParameter("portfolioId", portfolioId).setParameter("user", loggedInUser).getResultList();
+        } catch (NoResultException ex) {
+            // ignore
+        }
+
+        return improperContents;
+    }
 }

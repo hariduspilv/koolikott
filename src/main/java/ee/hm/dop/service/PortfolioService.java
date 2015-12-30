@@ -314,4 +314,10 @@ public class PortfolioService {
     public List<ImproperContent> getImproperPortfolios() {
         return improperContentDAO.getImproperPortfolios();
     }
+
+    public Boolean hasSetImproper(long portfolioId, User loggedInUser) {
+        List<ImproperContent> improperContents = improperContentDAO.findByPortfolioAndUser(portfolioId, loggedInUser);
+
+        return improperContents.size() != 0;
+    }
 }

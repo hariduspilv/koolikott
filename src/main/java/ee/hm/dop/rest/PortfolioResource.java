@@ -161,4 +161,12 @@ public class PortfolioResource extends BaseResource {
     public List<ImproperContent> getImproperPortfolios() {
         return portfolioService.getImproperPortfolios();
     }
+
+    @GET
+    @Path("hasSetImproper")
+    @Produces(MediaType.APPLICATION_JSON)
+    @RolesAllowed({"USER", "ADMIN", "PUBLISHER"})
+    public Boolean hasSetImproper(@QueryParam("portfolioId") long portfolioId) {
+        return portfolioService.hasSetImproper(portfolioId, getLoggedInUser());
+    }
 }
