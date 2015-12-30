@@ -9,7 +9,8 @@
           <ng-md-icon icon="search"></ng-md-icon>
         </md-button>
         <md-input-container md-theme="input" flex>
-          <input ng-model="searchFields.searchQuery" data-ng-keydown="$event.which === 13 && searchFieldEnterPressed()">
+          <label hidden="hidden">&nbsp;</label>
+          <input id="header-simple-search-input" data-ng-keydown="$event.which === 13 && searchFieldEnterPressed()" data-ng-model="searchFields.searchQuery" placeholder="{{'SEARCH' | translate}}" />
         </md-input-container>
       </div>
       <md-button aria-label="Open Settings" class="md-icon-button" id="header-show-detailed-search-icon" data-ng-click="openDetailedSearch()" data-ng-if="!detailedSearch.isVisible">
