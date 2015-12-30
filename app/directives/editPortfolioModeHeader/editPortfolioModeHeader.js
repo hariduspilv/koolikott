@@ -65,7 +65,6 @@ define(['app'], function(app)
                 $scope.searchFields = {};
                 $scope.searchFields.searchQuery = "";
                 $scope.detailedSearch = {};
-                $scope.showSearch = searchService.queryExists();
 
                 $scope.search = function() {
                     if (!isEmpty($scope.searchFields.searchQuery)) {
@@ -77,14 +76,12 @@ define(['app'], function(app)
                 };
 
                 $scope.openDetailedSearch = function() {
-                    $scope.showSearch = true;
                     $scope.detailedSearch.isVisible = true;
                     $scope.detailedSearch.queryIn = $scope.searchFields.searchQuery;
                     $scope.searchFields.searchQuery = $scope.detailedSearch.mainField; 
                 }
 
                 $scope.closeDetailedSearch = function() {
-                    $scope.showSearch = false;
                     $scope.detailedSearch.isVisible = false;
                     $scope.searchFields.searchQuery = (($scope.searchFields.searchQuery || "") + " " + $scope.detailedSearch.queryOut).trim();
                     $scope.detailedSearch.queryIn = null;
@@ -97,12 +94,16 @@ define(['app'], function(app)
                 };
 
                 $scope.searchFieldEnterPressed = function() {
-                    if ($scope.detailedSearch.isVisible) {
-                        $scope.detailedSearch.doSearch();
-                    } else {
+                    if (!$scope.detailedSearch.isVisible) {
                         $scope.search();
                     }
-                }
+                };
+
+                $scope.clickOutside = function() {
+                    if ($scope.detailedSearch.isVisible) {
+                        $scope.closeDetailedSearch();
+                    }
+                };
 
                 $scope.$watch('detailedSearch.mainField', function(newValue, oldValue) {
                     if (newValue != oldValue) {

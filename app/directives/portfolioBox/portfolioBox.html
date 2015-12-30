@@ -1,5 +1,8 @@
+
 <md-card class="card-sm md-whiteframe-2dp" id="portfolio-card-{{portfolio.id}}" data-ng-click="navigateTo(portfolio)">
+  <div class="corner"></div>
     <div class="card-cover portfolio">
+
         <img data-ng-if="portfolio.hasPicture" data-ng-src="rest/portfolio/getPicture?portfolioId={{portfolio.id}}" class="md-card-image"/>
         <div data-ng-if="!portfolio.hasPicture" layout="row" layout-fill flex layout-align="center center">
             <md-icon class="icon-kind">book</md-icon>
@@ -23,7 +26,7 @@
             <span class="md-action-icons-list md-caption" layout="row" layout-align="start center" flex>
                 <md-icon>thumb_up</md-icon>
 	                <span>{{ portfolio.likes }}</span>
-      
+
                 <md-icon>thumb_down</md-icon>
                     <span>{{ portfolio.dislikes }}</span>
 

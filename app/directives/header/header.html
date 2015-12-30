@@ -1,4 +1,4 @@
-<md-toolbar data-ng-show="!showSearch" class="md-whiteframe-1dp">
+<md-toolbar id="md-toolbar-header" class="md-whiteframe-1dp" data-click-outside="clickOutside()" outside-if-not="header-show-detailed-search-icon, detailed-search">
   <div class="md-toolbar-tools">
     <div data-ng-hide="isViewPortforlioPage" layout-align="center start" flex-gt-md="15" flex>
       <md-tooltip>Suundu avalehele</md-tooltip>
@@ -10,113 +10,90 @@
       </md-button>
     </span>
 
-    <div flex="85">
+    <div flex="75">
       <div layout="row" layout-align-gt-md="center center" layout-align="center end">
         <div class="navbar-search" layout="row" flex>
-          <md-button aria-label="Search" class="md-icon-button" id="header-show-search-button" data-ng-click="showSearch = !showSearch">
+          <md-button aria-label="Search" class="md-icon-button" id="header-show-search-button">
             <ng-md-icon icon="search"></ng-md-icon>
           </md-button>
-          <md-input-container class="" hide show-gt-md flex>
-            <input data-ng-model="searchFields.searchQuery" data-ng-click="showSearchBar()" id="header-show-search-input">
+          <md-input-container flex>
+              <label hidden="hidden">&nbsp;</label>
+              <input id="header-simple-search-input" data-ng-keydown="$event.which === 13 && searchFieldEnterPressed()" data-ng-model="searchFields.searchQuery" placeholder="{{'SEARCH' | translate}}" />
           </md-input-container>
         </div>
-        <md-button aria-label="Open Settings" class="md-icon-button" id="header-show-detailed-search-icon" data-ng-click="openDetailedSearch()" >
+        <md-button aria-label="Open Settings" class="md-icon-button" id="header-show-detailed-search-icon" data-ng-click="openDetailedSearch()" data-ng-if="!detailedSearch.isVisible">
           <md-tooltip>Ava filter</md-tooltip>
           <ng-md-icon icon="filter_list"></ng-md-icon>
         </md-button>
-
-
-        <md-menu>
-          <md-button aria-label="Open language menu" class="md-icon-button" id="header-language-icon" ng-click="$mdOpenMenu($event)">
-            <md-tooltip>Vali keel</md-tooltip>
-            <span data-ng-if="selectedLanguage === 'est'">ET</span>
-            <span data-ng-if="selectedLanguage === 'rus'">RU</span>
-            <span data-ng-if="selectedLanguage === 'eng'">EN</span>
-          </md-button>
-          <md-menu-content width="4">
-            <md-menu-item id="language-select-et" data-ng-click="setLanguage('est')">
-              <md-button >
-                ET
-              </md-button>
-            </md-menu-item>
-            <md-menu-divider></md-menu-divider>
-            <md-menu-item id="language-select-en" data-ng-click="setLanguage('eng')">
-              <md-button>
-                EN
-              </md-button>
-            </md-menu-item>
-            <md-menu-divider></md-menu-divider>
-            <md-menu-item id="language-select-eng" data-ng-click="setLanguage('rus')">
-              <md-button>
-                RU
-              </md-button>
-            </md-menu-item>
-          </md-menu-content>
-        </md-menu>
-
-        <md-button data-ng-hide="user" aria-label="Login" class="md-icon-button" id="header-login-icon" data-ng-click="showLogin($event)">
-          <ng-md-icon icon="input"></ng-md-icon>
-          <md-tooltip>Sisene</md-tooltip>
-        </md-button>
-
-        <md-menu data-ng-show="user">
-          <md-button aria-label="Open user profile" class="md-icon-button" id="header-user-menu-icon" ng-click="$mdOpenMenu($event)">
-            <md-tooltip>Profiil</md-tooltip>
-            <ng-md-icon icon="account_circle"></ng-md-icon>
-          </md-button>
-          <md-menu-content width="4">
-            <md-menu-item>
-              <md-button data-ng-href="#/{{user.username}}" id="user-menu-view-profile">
-                <span data-translate="MY_PROFILE"></span>
-              </md-button>
-            </md-menu-item>
-            <md-menu-divider></md-menu-divider>
-            <md-menu-item>
-              <md-button data-ng-click="logout()" id="user-menu-logout">
-                <span data-translate="LOGOUT"></span>
-              </md-button>
-            </md-menu-item>
-          </md-menu-content>
-        </md-menu>
-        <md-button data-ng-if="isViewPortforlioPage" ng-click="back()" class="md-icon-button" aria-label="back">
-          <md-icon>close</md-icon>
+        <md-button aria-label="Back" class="md-icon-button" id="header-hide-detailed-search-icon" data-ng-click="closeDetailedSearch()" data-ng-if="detailedSearch.isVisible">
+            <md-tooltip>Sulge filter</md-tooltip>
+            <ng-md-icon icon="close"></ng-md-icon>
         </md-button>
       </div>
     </div>
-  </div>
-</md-toolbar>
-
-<div id="md-toolbar-expandable" class="md-toolbar-expandable md-whiteframe-1dp" data-ng-show="showSearch" data-click-outside="toggleShowSearch()">
-  <md-toolbar class="md-primary">
-    <div layout="row" layout-align="{{isViewPortforlioPage ? 'start' : 'center'}} center">
-      <div flex-gt-md="{{isViewPortforlioPage ? '95' : '75'}}" flex="100">
-        <div class="md-toolbar-tools" layout="row" layout-align="center center">
-          <div class="navbar-search" layout="row" flex>
-            <md-button aria-label="Search" class="md-icon-button" data-ng-click="search()" data-ng-disabled="detailedSearch.isVisible">
-              <ng-md-icon icon="search" id="header-simple-search-button"></ng-md-icon>
+    <div>
+      <md-menu>
+        <md-button aria-label="Open language menu" class="md-icon-button" id="header-language-icon" ng-click="$mdOpenMenu($event)">
+          <md-tooltip>Vali keel</md-tooltip>
+          <span data-ng-if="selectedLanguage === 'est'">ET</span>
+          <span data-ng-if="selectedLanguage === 'rus'">RU</span>
+          <span data-ng-if="selectedLanguage === 'eng'">EN</span>
+        </md-button>
+        <md-menu-content width="4">
+          <md-menu-item id="language-select-et" data-ng-click="setLanguage('est')">
+            <md-button >
+              ET
             </md-button>
+          </md-menu-item>
+          <md-menu-divider></md-menu-divider>
+          <md-menu-item id="language-select-en" data-ng-click="setLanguage('eng')">
+            <md-button>
+              EN
+            </md-button>
+          </md-menu-item>
+          <md-menu-divider></md-menu-divider>
+          <md-menu-item id="language-select-eng" data-ng-click="setLanguage('rus')">
+            <md-button>
+              RU
+            </md-button>
+          </md-menu-item>
+        </md-menu-content>
+      </md-menu>
 
-            <md-input-container flex>
-              <label hidden="hidden">&nbsp;</label>
-              <input id="header-simple-search-input" data-ng-keydown="$event.which === 13 && searchFieldEnterPressed()" data-ng-model="searchFields.searchQuery" placeholder="{{'SEARCH' | translate}}" />
-            </md-input-container>
-          </div>
+      <md-button data-ng-hide="user" aria-label="Login" class="md-icon-button" id="header-login-icon" data-ng-click="showLogin($event)">
+        <ng-md-icon icon="input"></ng-md-icon>
+        <md-tooltip>Sisene</md-tooltip>
+      </md-button>
 
-          <md-button aria-label="Open Settings" class="md-icon-button" id="header-simple-search-toggle-detailed-search-icon" data-ng-click="openDetailedSearch()" data-ng-if="!detailedSearch.isVisible">
-          <ng-md-icon icon="filter_list"></ng-md-icon>
+      <md-menu data-ng-show="user">
+        <md-button aria-label="Open user profile" class="md-icon-button" id="header-user-menu-icon" ng-click="$mdOpenMenu($event)">
+          <md-tooltip>Profiil</md-tooltip>
+          <ng-md-icon icon="account_circle"></ng-md-icon>
         </md-button>
-        <md-button aria-label="Back" class="md-icon-button" id="header-simple-search-close-icon" data-ng-click="closeDetailedSearch()">
-          <md-tooltip>Sulge filter</md-tooltip>
-          <ng-md-icon icon="close"></ng-md-icon>
-        </md-button>
-      </div>
+        <md-menu-content width="4">
+          <md-menu-item>
+            <md-button data-ng-href="#/{{user.username}}" id="user-menu-view-profile">
+              <span data-translate="MY_PROFILE"></span>
+            </md-button>
+          </md-menu-item>
+          <md-menu-divider></md-menu-divider>
+          <md-menu-item>
+            <md-button data-ng-click="logout()" id="user-menu-logout">
+              <span data-translate="LOGOUT"></span>
+            </md-button>
+          </md-menu-item>
+        </md-menu-content>
+      </md-menu>
+      <md-button data-ng-if="isViewPortforlioPage" ng-click="back()" class="md-icon-button" aria-label="back">
+        <md-icon>close</md-icon>
+      </md-button>
     </div>
   </div>
 </md-toolbar>
-</div>
+
 <div class="md-toolbar-filter" id="detailedSearch" data-ng-show="detailedSearch.isVisible">
   <form layout-align="{{isViewPortforlioPage ? 'start' : 'center'}} start" layout="row" layout-sm="column">
-    <div flex="100" flex-xs="100" flex-gt-md="{{isViewPortforlioPage ? '95' : '75'}}" class="md-whiteframe-1dp filter-content">
+    <div flex="100" flex-xs="100" flex-gt-md="{{isViewPortforlioPage ? '95' : '75'}}" class="md-whiteframe-1dp filter-content" id="detailed-search">
       <div data-dop-detailed-search query-in="detailedSearch.queryIn" query-out="detailedSearch.queryOut" main-field="detailedSearch.mainField" search-callback="detailedSearch.doSearch()"></div>
     </div>
   </form>
