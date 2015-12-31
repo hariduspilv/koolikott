@@ -1,11 +1,11 @@
-<md-dialog aria-label="Material" id="dialog-add-material" flex-gt-md="65">
+<md-dialog aria-label="Materiali lisamise modaalaken" id="dialog-add-material" flex-gt-md="65">
   <md-toolbar class="md-accent">
     <div class="md-toolbar-tools" flex>
       <h2>
         <span data-translate="ADD_MATERIAL"></span>
       </h2>
       <span flex></span>
-      <md-button ng-click="cancel()" class="md-icon-button" aria-label="close">
+      <md-button ng-click="cancel()" class="md-icon-button" aria-label="Sulge materiali lisamise modaalaken">
         <ng-md-icon icon="close"></ng-md-icon>
       </md-button>
     </div>
@@ -229,21 +229,21 @@
     </md-tabs>
   </md-dialog-content>
 
-  <div class="md-actions">
-    <md-button data-ng-click="step.previousStep()" data-ng-show="step.currentStep > 0" class="md-primary">
+  <md-dialog-actions>
+    <md-button aria-label="Mine tagasi eelmisse sammu" data-ng-click="step.previousStep()" data-ng-show="step.currentStep > 0" class="md-primary">
       <ng-md-icon icon="arrow_back"></ng-md-icon>
       <span data-translate="BUTTON_PREVIOUS_STEP"></span>
     </md-button>
     <span flex></span>
-    <md-button id="add-material-cancel-button" data-ng-click="cancel()">
+    <md-button aria-label="Tühista materjali lisamine" id="add-material-cancel-button" data-ng-click="cancel()">
       <span data-translate="BUTTON_CANCEL"></span>
     </md-button>
-    <md-button id="add-material-create-button" data-ng-click="createMaterial()" data-ng-disabled="!step.canCreateMaterial()" class="md-primary">
+    <md-button aria-label="Loo materjal" id="add-material-create-button" data-ng-click="createMaterial()" data-ng-disabled="!step.canCreateMaterial()" class="md-primary">
       <span data-translate="BUTTON_CREATE_MATERIAL"></span>
     </md-button>
-    <md-button data-ng-click="step.nextStep()" data-ng-hide="step.isLastStep()" data-ng-disabled="!step.canProceed()" class="md-primary">
+    <md-button aria-label="Liigu järgmisse sammu" data-ng-click="step.nextStep()" data-ng-hide="step.isLastStep()" data-ng-disabled="!step.canProceed()" class="md-primary">
       <span data-translate="BUTTON_NEXT_STEP"></span>
       <ng-md-icon icon="arrow_forward"></ng-md-icon>
     </md-button>
-  </div>
+  </md-dialog-actions>
 </md-dialog>

@@ -22,7 +22,7 @@
   </md-list>
 
   <div layout="row" layout-align="center center" data-ng-show="showMoreCommentsButton()">
-    <md-button md-no-ink class="md-primary" data-ng-click="showMoreComments()">
+    <md-button aria-label="Lae veel kommentaare" md-no-ink class="md-primary" data-ng-click="showMoreComments()">
       Veel kommentaare <span data-ng-bind="getLoadMoreCommentsLabel()"></span>
     </md-button>
   </div>
@@ -34,7 +34,7 @@
       <textarea data-ng-model="comment.text" rows="4"></textarea>
     </md-input-container>
     <div layout="row" layout-align="end center">
-      <md-button data-translate="ADD_COMMENT_BUTTON" data-ng-click="addComment()" class="md-raised md-primary"></md-button>
+      <md-button aria-label="Lisa kommentaar" data-translate="ADD_COMMENT_BUTTON" data-ng-click="addComment()" class="md-raised md-primary"></md-button>
     </div>
   </div>
 </div>

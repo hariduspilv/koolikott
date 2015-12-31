@@ -13,7 +13,7 @@
     <div flex="75">
       <div layout="row" layout-align-gt-md="center center" layout-align="center end">
         <div class="navbar-search" layout="row" flex>
-          <md-button aria-label="Search" class="md-icon-button" id="header-show-search-button">
+          <md-button aria-label="Otsi" class="md-icon-button" id="header-show-search-button">
             <ng-md-icon icon="search"></ng-md-icon>
           </md-button>
           <md-input-container flex>
@@ -21,11 +21,11 @@
               <input id="header-simple-search-input" data-ng-keydown="$event.which === 13 && searchFieldEnterPressed()" data-ng-model="searchFields.searchQuery" placeholder="{{'SEARCH' | translate}}" />
           </md-input-container>
         </div>
-        <md-button aria-label="Open Settings" class="md-icon-button" id="header-show-detailed-search-icon" data-ng-click="openDetailedSearch()" data-ng-if="!detailedSearch.isVisible">
+        <md-button aria-label="Ava detailotsing" class="md-icon-button" id="header-show-detailed-search-icon" data-ng-click="openDetailedSearch()" data-ng-if="!detailedSearch.isVisible">
           <md-tooltip><span data-translate="HEADER_TOOLTIP_OPEN_DETAILED_SEARCH"></span></md-tooltip>
           <ng-md-icon icon="filter_list"></ng-md-icon>
         </md-button>
-        <md-button aria-label="Back" class="md-icon-button" id="header-hide-detailed-search-icon" data-ng-click="closeDetailedSearch()" data-ng-if="detailedSearch.isVisible">
+        <md-button aria-label="Sulge detailotsing" class="md-icon-button" id="header-hide-detailed-search-icon" data-ng-click="closeDetailedSearch()" data-ng-if="detailedSearch.isVisible">
             <md-tooltip><span data-translate="HEADER_TOOLTIP_CLOSE_DETAILED_SEARCH"></span></md-tooltip>
             <ng-md-icon icon="close"></ng-md-icon>
         </md-button>
@@ -33,7 +33,7 @@
     </div>
     <div>
       <md-menu>
-        <md-button aria-label="Open language menu" class="md-icon-button" id="header-language-icon" ng-click="$mdOpenMenu($event)">
+        <md-button aria-label="Ava keelevaliku menüü" class="md-icon-button" id="header-language-icon" ng-click="$mdOpenMenu($event)">
           <md-tooltip><span data-translate="HEADER_TOOLTIP_SELECT_LANGUAGE"></span></md-tooltip>
           <span data-ng-if="selectedLanguage === 'est'">ET</span>
           <span data-ng-if="selectedLanguage === 'rus'">RU</span>
@@ -60,36 +60,36 @@
         </md-menu-content>
       </md-menu>
 
-      <md-button data-ng-hide="user" aria-label="Login" class="md-icon-button" id="header-login-icon" data-ng-click="showLogin($event)">
+      <md-button data-ng-hide="user" aria-label="Ava sisselogimise modaalaken" class="md-icon-button" id="header-login-icon" data-ng-click="showLogin($event)">
         <ng-md-icon icon="input"></ng-md-icon>
         <md-tooltip><span data-translate="HEADER_TOOLTIP_ENTER"></span></md-tooltip>
       </md-button>
 
       <md-menu data-ng-show="user">
-        <md-button aria-label="Open user profile" class="md-icon-button" id="header-user-menu-icon" ng-click="$mdOpenMenu($event)">
+        <md-button aria-label="Ava kasutajamenüü" class="md-icon-button" id="header-user-menu-icon" ng-click="$mdOpenMenu($event)">
           <md-tooltip><span data-translate="HEADER_TOOLTIP_PROFILE"></span></md-tooltip>
           <ng-md-icon icon="account_circle"></ng-md-icon>
         </md-button>
         <md-menu-content width="4">
           <md-menu-item>
-            <md-button data-ng-href="#/{{user.username}}" id="user-menu-view-profile">
+            <md-button aria-label="Mine minu profiile" data-ng-href="#/{{user.username}}" id="user-menu-view-profile">
               <span data-translate="MY_PROFILE"></span>
             </md-button>
           </md-menu-item>
           <md-menu-item data-ng-if="isAdmin()" >
-            <md-button data-ng-href="#/dashboard" id="user-menu-logout">
+            <md-button aria-label="Mine töölauale" data-ng-href="#/dashboard" id="user-menu-dashboard">
               <span data-translate="DASHBOARD"></span>
             </md-button>
           </md-menu-item>
           <md-menu-divider></md-menu-divider>
           <md-menu-item>
-            <md-button data-ng-click="logout()" id="user-menu-logout">
+            <md-butto aria-label="Logi välja" data-ng-click="logout()" id="user-menu-logout">
               <span data-translate="LOGOUT"></span>
             </md-button>
           </md-menu-item>
         </md-menu-content>
       </md-menu>
-      <md-button data-ng-if="isViewPortforlioPage" ng-click="back()" class="md-icon-button" aria-label="back">
+      <md-button data-ng-if="isViewPortforlioPage" ng-click="back()" class="md-icon-button" aria-label="Välju kogumikust">
         <md-tooltip><span data-translate="HEADER_TOOLTIP_EXIT_PORTFOLIO_MODE"></span></md-tooltip>
         <md-icon>close</md-icon>
       </md-button>

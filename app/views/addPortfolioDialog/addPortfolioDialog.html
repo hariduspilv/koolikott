@@ -1,9 +1,9 @@
-<md-dialog aria-label="Metadata" flex-gt-md="75">
+<md-dialog aria-label="Kogumiku lisamise modaalaken" flex-gt-md="75">
   <md-toolbar class="md-accent">
     <div class="md-toolbar-tools" flex>
       <h2 data-translate="PORTFOLIO_METADATA_TOOLBAR_LABEL"></h2>
       <span flex></span>
-      <md-button ng-click="cancel()" class="md-icon-button" aria-label="close">
+      <md-button ng-click="cancel()" class="md-icon-button" aria-label="Sulge kogumiku lisamise modaalaken">
         <ng-md-icon icon="close"></ng-md-icon>
       </md-button>
     </div>
@@ -59,19 +59,20 @@
       </md-input-container>
 
     </md-content>
-    <div class="md-actions">
+    
+    <md-dialog-actions>
       <span flex></span>
-      <md-button id="add-portfolio-cancel-button" data-ng-click="cancel()">
+      <md-button aria-label="Tühista kogumiku lisamine" id="add-portfolio-cancel-button" data-ng-click="cancel()">
         <span data-translate="BUTTON_CANCEL"></span>
       </md-button>
-      <md-button ng-if="!isEditPortfolio" id="add-portfolio-create-button" data-ng-disabled="!newPortfolio.title" ng-click="create()" class="md-primary">
+      <md-button aria-label="Loo kogumik" ng-if="!isEditPortfolio" id="add-portfolio-create-button" data-ng-disabled="!newPortfolio.title" ng-click="create()" class="md-primary">
         <ng-md-icon icon="arrow_forward"></ng-md-icon>
         <span data-translate="BUTTON_CREATE_PORTFOLIO"></span>
       </md-button>
-      <md-button ng-if="isEditPortfolio" id="add-portfolio-create-button" data-ng-disabled="!newPortfolio.title" ng-click="update()" class="md-primary">
+      <md-button aria-label="Muuda kogumikku" ng-if="isEditPortfolio" id="add-portfolio-create-button" data-ng-disabled="!newPortfolio.title" ng-click="update()" class="md-primary">
         <ng-md-icon icon="arrow_forward"></ng-md-icon>
         <span data-translate="BUTTON_EDIT_PORTFOLIO"></span>
       </md-button>
-    </div>
+    </md-dialog-actions>
   </form>
 </md-dialog>
