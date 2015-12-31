@@ -261,6 +261,7 @@ INSERT INTO Translation(translationGroup, translationKey, translation) VALUES
 (1,'REPORT_BROKEN_LINK_CONTENT','Administraatorile saadetakse teavitus katkise materjali kohta.'),
 (1,'REPORT_BROKEN_LINK_TITLE','Kas soovid teavitada katkisest materjalist?'),
 (1,'REPORT_IMPROPER','Teavita ebasobivast sisust'),
+(1,'REPORT_NOT_IMPROPER','Märgi sisu sobivaks'),
 (1,'REPORT_IMPROPER_CONTENT','Administraatorile saadetakse teavitus ebasobiva sisu kohta.'),
 (1,'REPORT_IMPROPER_TITLE','Kas soovid teavitada ebasobivast sisust?'),
 (1,'REPOSITORY_NUMBER','Repositooriumi number'),

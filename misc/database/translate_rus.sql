@@ -261,6 +261,7 @@ INSERT INTO Translation(translationGroup, translationKey, translation) VALUES
 (2,'REPORT_BROKEN_LINK_CONTENT','Администратор получит уведомление ваш и принять необходимые меры.'),
 (2,'REPORT_BROKEN_LINK_TITLE','Хотите, чтобы сообщить о битой материал?'),
 (2,'REPORT_IMPROPER','Сообщите неправильного содержания'),
+(2,'REPORT_NOT_IMPROPER','Содержимое не неадекватное'),
 (2,'REPORT_IMPROPER_CONTENT','Администратор получит уведомление ваш и принять необходимые меры.'),
 (2,'REPORT_IMPROPER_TITLE','Хотите, чтобы сообщить о неправильной контента?'),
 (2,'REPOSITORY_NUMBER','номер хранилища'),
