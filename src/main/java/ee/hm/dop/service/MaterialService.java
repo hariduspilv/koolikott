@@ -309,4 +309,14 @@ public class MaterialService {
 
         return improperContents.size() != 0;
     }
+
+    public void removeImproperMaterials(Long id) {
+        improperContentDAO.deleteImproperMaterials(id);
+    }
+
+    public Boolean isSetImproper(long materialId) {
+        List<ImproperContent> improperContents =improperContentDAO.getByMaterial(materialId);
+
+        return improperContents.size() != 0;
+    }
 }

@@ -11,6 +11,7 @@ import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.WebApplicationException;
@@ -155,6 +156,23 @@ public class MaterialResource extends BaseResource {
     @RolesAllowed({"USER", "ADMIN", "PUBLISHER"})
     public Boolean hasSetImproper(@QueryParam("materialId") long materialId) {
         return materialService.hasSetImproper(materialId, getLoggedInUser());
+    }
+
+    @POST
+    @Path("setNotImproper/{id}")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    @RolesAllowed({"ADMIN"})
+    public void removeImproperPortfolios(@PathParam("id") Long id) {
+        materialService.removeImproperMaterials(id);
+    }
+
+    @GET
+    @Path("isSetImproper")
+    @Produces(MediaType.APPLICATION_JSON)
+    @RolesAllowed({"ADMIN"})
+    public Boolean isSetImproper(@QueryParam("materialId") long materialId) {
+        return materialService.isSetImproper(materialId);
     }
 
     private void throwBadRequestException(String message) {

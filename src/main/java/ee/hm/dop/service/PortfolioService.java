@@ -324,4 +324,11 @@ public class PortfolioService {
     public void removeImproperPortfolios(Long id) {
         improperContentDAO.deleteImproperPortfolios(id);
     }
+
+
+    public Boolean isSetImproper(long portfolioId) {
+        List<ImproperContent> improperContents =improperContentDAO.getByPortfolio(portfolioId);
+
+        return improperContents.size() != 0;
+    }
 }

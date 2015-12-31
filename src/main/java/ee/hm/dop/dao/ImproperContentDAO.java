@@ -76,4 +76,32 @@ public class ImproperContentDAO {
         query.setParameter("id", id);
         query.executeUpdate();
     }
+
+    public List<ImproperContent> getByPortfolio(long portfolioId) {
+        TypedQuery<ImproperContent> findByPortfolio = entityManager.createQuery(
+                "FROM ImproperContent i WHERE i.portfolio.id = :portfolioId AND i.deleted = false", ImproperContent.class);
+
+        List<ImproperContent> improperContents = null;
+        try {
+            improperContents = findByPortfolio.setParameter("portfolioId", portfolioId).getResultList();
+        } catch (NoResultException ex) {
+            // ignore
+        }
+
+        return improperContents;
+    }
+
+    public List<ImproperContent> getByMaterial(long materialId) {
+        TypedQuery<ImproperContent> findByMaterial = entityManager.createQuery(
+                "FROM ImproperContent i WHERE i.material.id = :materialid AND i.deleted = false", ImproperContent.class);
+
+        List<ImproperContent> improperContents = null;
+        try {
+            improperContents = findByMaterial.setParameter("materialid", materialId).getResultList();
+        } catch (NoResultException ex) {
+            // ignore
+        }
+
+        return improperContents;
+    }
 }

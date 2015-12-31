@@ -420,3 +420,5 @@ insert into Portfolio_KeyCompetence(portfolio, keyCompetence) values (1, 1);
 insert into ImproperContent(id, creator, portfolio, material, added) values (1, 1, 2, null, '2014-06-01 00:00:01');
 insert into ImproperContent(id, creator, portfolio, material, added) values (2, 1, null, 2, '2014-06-01 00:00:01');
 insert into ImproperContent(id, creator, portfolio, material, added) values (3, 9, null, 2, '2014-06-01 00:00:01');
+insert into ImproperContent(id, creator, portfolio, material, added) values (4, 9, null, 3, '2014-06-01 00:00:01');
+insert into ImproperContent(id, creator, portfolio, material, added) values (5, 9, 3, null, '2014-06-01 00:00:01');

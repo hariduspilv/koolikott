@@ -507,6 +507,32 @@ public class PortfolioResourceTest extends ResourceIntegrationTestBase {
         logout();
     }
 
+    @Test
+    public void isSetImproper() {
+        login("89898989898");
+
+        Boolean bool = doGet(format("portfolio/isSetImproper?portfolioId=%s", 3), Boolean.class);
+
+        assertTrue(bool);
+    }
+
+    @Test
+    public void setNotImproper() {
+        login("89898989898");
+        Response response1 = doGet("portfolio/getImproper");
+        List<ImproperContent> originalImproperContentList = response1.readEntity(new GenericType<List<ImproperContent>>() {
+        });
+
+        doPost(format("portfolio/setNotImproper/%s", 3), null);
+
+        Response response2 = doGet("portfolio/getImproper");
+        List<ImproperContent> newImproperContentList = response2.readEntity(new GenericType<List<ImproperContent>>() {
+        });
+
+        assertEquals(originalImproperContentList.size(), newImproperContentList.size()+1);
+    }
+
+
     private Portfolio getPortfolio(long id) {
         return doGet(format(GET_PORTFOLIO_URL, id), Portfolio.class);
     }

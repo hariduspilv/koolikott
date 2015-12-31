@@ -179,4 +179,12 @@ public class PortfolioResource extends BaseResource {
     public void removeImproperPortfolios(@PathParam("id") Long id) {
         portfolioService.removeImproperPortfolios(id);
     }
+
+    @GET
+    @Path("isSetImproper")
+    @Produces(MediaType.APPLICATION_JSON)
+    @RolesAllowed({"ADMIN"})
+    public Boolean isSetImproper(@QueryParam("portfolioId") long portfolioId) {
+        return portfolioService.isSetImproper(portfolioId);
+    }
 }
