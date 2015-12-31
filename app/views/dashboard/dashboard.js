@@ -1,13 +1,4 @@
-define(['app'], function (app) {
-    app.controller('dashboardController', ['$scope', '$location', 'authenticatedUserService', function($scope, $location, authenticatedUserService) {
-        $scope.isAdmin = function() {
-            return authenticatedUserService.getUser() && authenticatedUserService.getUser().role === 'ADMIN';
-        };
-        
-        if (!$scope.isAdmin())
-            $location.url('/');
-    }]);
-  
+define(['app'], function (app) {  
     app.controller('baseImporperController', ['$scope', '$sce', '$templateRequest', '$compile', 'translationService', function ($scope, $sce, $templateRequest, $compile, translationService) {
         var collection = null;
        

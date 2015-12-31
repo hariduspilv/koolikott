@@ -88,8 +88,6 @@ define(['app.routes', 'services/dependencyResolver', 'utils/taxonUtils'], functi
 
 // http://stackoverflow.com/questions/30123735/how-to-create-multiple-theme-in-material-angular
     function configureTheme($mdThemingProvider) {
-
-
         var customBlueMap = $mdThemingProvider.extendPalette('blue', {
           'contrastDefaultColor': 'light',
           'contrastDarkColors': ['50'],
@@ -117,7 +115,6 @@ define(['app.routes', 'services/dependencyResolver', 'utils/taxonUtils'], functi
             $rootScope.isViewPortforlioPage = path === '/portfolio';
             $rootScope.isEditPortfolioPage = path === '/portfolio/edit';
 
-
             if (path == "/portfolio/edit") {
             	$rootScope.isEditPortfolioMode = true;
             	if(!$rootScope.selectedMaterials) {
@@ -134,6 +131,25 @@ define(['app.routes', 'services/dependencyResolver', 'utils/taxonUtils'], functi
             }
         });
     });
+    
+    app.run(['$rootScope', 'authenticatedUserService', function($rootScope, authenticatedUserService){
+        $rootScope.$on('$locationChangeStart', function(event, next, current) {
+            for(var i in config.routes) {
+                if(next.indexOf(i) != -1) {
+                    var permissions = config.routes[i].permissions;
+                    
+                    if (permissions === undefined) continue;
+                    
+                    if (!authenticatedUserService.getUser())
+                        return event.preventDefault();
+                        
+                    if (permissions && permissions.indexOf(authenticatedUserService.getUser().role) == -1) {
+                        return event.preventDefault();
+                    }
+                }
+            }
+        });
+    }]);
 
     app.run(function($rootScope, authenticatedUserService) {
     	$rootScope.taxonUtils = taxonUtils;
