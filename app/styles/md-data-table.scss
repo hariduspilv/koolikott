@@ -25,5 +25,9 @@
   }
   table {
     padding-bottom: 10px;
+    
+    & tr > td:last-child {
+      text-align: right;
+    }
   }
 }
