@@ -9,16 +9,16 @@ define(['app'], function (app) {
                 templateUrl: 'directives/report/improper/improper.html',
                 controller: function ($scope, serverCallService) {
                     $scope.isReported = false;
-                    $scope.isReportedByUsed = false;
+                    $scope.isReportedByUser = false;
 
-                    $scope.$watch('material', function(newValue, oldValue) {
-                        if(newValue === undefined) return;
+                    $scope.$watch('material', function (newValue, oldValue) {
+                        if (newValue === undefined) return;
                         getHasReportedByUser();
                         getHasReported();
                     }, false);
 
-                    $scope.$watch('portfolio', function(newValue, oldValue) {
-                        if(newValue === undefined) return;
+                    $scope.$watch('portfolio', function (newValue, oldValue) {
+                        if (newValue === undefined) return;
                         getHasReportedByUser();
                         getHasReported();
                     }, false);
@@ -31,24 +31,68 @@ define(['app'], function (app) {
 
                             serverCallService.makeGet(url, {}, requestSuccessful, requestFailed);
                         } else if ($scope.material && $scope.material.id) {
-                            url = "rest/material/hasSetImproper?materialId="+ $scope.material.id;
+                            url = "rest/material/hasSetImproper?materialId=" + $scope.material.id;
 
                             serverCallService.makeGet(url, {}, requestSuccessful, requestFailed);
                         }
                     }
-                    
-                    function getHasReported() {
-                        //todo: check whether material/portfolio is reported (admin action)
-                    }
 
                     function requestSuccessful(response) {
-                        if(response === true) {
-                            $scope.isReportedByUsed = true;
+                        if (response === true) {
+                            $scope.isReportedByUser = true;
                         }
                     }
 
                     function requestFailed() {
                         console.log("Failed checking if already reported the resource")
+                    }
+
+                    function getHasReported() {
+                        if (authenticatedUserService.isAdmin()) {
+                            var url;
+
+                            if ($scope.portfolio && $scope.portfolio.id) {
+                                url = "rest/portfolio/isSetImproper?portfolioId=" + $scope.portfolio.id;
+
+                                serverCallService.makeGet(url, {}, isReportedSuccessful, isReportedFailed);
+                            } else if ($scope.material && $scope.material.id) {
+                                url = "rest/material/isSetImproper?materialId=" + $scope.material.id;
+
+                                serverCallService.makeGet(url, {}, isReportedSuccessful, isReportedFailed);
+                            }
+                        }
+                    }
+
+                    function isReportedSuccessful(response) {
+                        if (response === true) {
+                            $scope.isReported = true;
+                        } else {
+                            $scope.isReported = false;
+                        }
+                    }
+
+                    function isReportedFailed() {
+                        console.log("Failed checking if resource is reported as improper")
+                    }
+
+
+                    $scope.setNotImproper = function () {
+                        if ($scope.portfolio) {
+                            url = "rest/portfolio/setNotImproper/" + $scope.portfolio.id;
+                        } else if ($scope.material) {
+                            url = "rest/material/setNotImproper/" + $scope.material.id;
+                        }
+
+                        serverCallService.makePost(url, {}, setNotImproperSuccessful, setNotImproperFailed);
+                    };
+
+
+                    function setNotImproperSuccessful() {
+                        $scope.isReported = false;
+                    }
+
+                    function setNotImproperFailed() {
+                        console.log("Setting not improper failed.")
                     }
 
                     $scope.showConfirmationDialog = function () {
@@ -73,15 +117,15 @@ define(['app'], function (app) {
                             serverCallService.makePost(url, entity, setImproperSuccessful, setImproperFailed);
                         });
                     };
-                    
+
                     $scope.isAdmin = authenticatedUserService.isAdmin();
 
                     function setImproperSuccessful() {
-                        $scope.isReportedByUsed = true;
+                        $scope.isReportedByUser = true;
                     }
 
                     function setImproperFailed() {
-                        $scope.isReportedByUsed = false;
+                        $scope.isReportedByUser = false;
                     }
 
                 }
