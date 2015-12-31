@@ -378,4 +378,11 @@ INSERT INTO Translation(translationGroup, translationKey, translation) VALUES
 (3,'HEADER_TOOLTIP_ENTER','Enter'),
 (3,'HEADER_TOOLTIP_PROFILE','Profile'),
 (3,'HEADER_TOOLTIP_CHANGE_VISIBILITY','Change visibility'),
-(3,'HEADER_TOOLTIP_EXIT_PORTFOLIO_MODE','Exit portfolio mode');
+(3,'HEADER_TOOLTIP_EXIT_PORTFOLIO_MODE','Exit portfolio mode'),
+(3,'DASHBOARD','Dashboard'),
+(3,'DASHBOARD_IMRPOPER_MATERIALS','Improper materials'),
+(3,'DASHBOARD_IMRPOPER_PORTFOLIOS','Improper portfolios'),
+(3,'TITLE','Title'),
+(3,'SUBMITTED_AT','Reported at'),
+(3,'SUBMITTED_BY','Reported by'),
+(3,'BUTTON_OPEN','Open');

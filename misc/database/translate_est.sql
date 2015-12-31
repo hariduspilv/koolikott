@@ -374,4 +374,10 @@ INSERT INTO Translation(translationGroup, translationKey, translation) VALUES
 (1,'HEADER_TOOLTIP_ENTER','Sisene'),
 (1,'HEADER_TOOLTIP_PROFILE','Profiil'),
 (1,'HEADER_TOOLTIP_CHANGE_VISIBILITY','Muuda nähtavust'),
-(1,'HEADER_TOOLTIP_EXIT_PORTFOLIO_MODE','Välju');
+(1,'DASHBOARD','Töölaud'),
+(1,'DASHBOARD_IMRPOPER_MATERIALS','Ebasobivad materjalid'),
+(1,'DASHBOARD_IMRPOPER_PORTFOLIOS','Ebasobivad kogumikud'),
+(1,'TITLE','Pealkiri'),
+(1,'SUBMITTED_AT','Raporteeritud'),
+(1,'SUBMITTED_BY','Raporteeris'),
+(1,'BUTTON_OPEN','Ava');
