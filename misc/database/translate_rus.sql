@@ -374,7 +374,7 @@ INSERT INTO Translation(translationGroup, translationKey, translation) VALUES
 (2,'HEADER_TOOLTIP_ENTER','Войти'),
 (2,'HEADER_TOOLTIP_PROFILE','Профиль'),
 (2,'HEADER_TOOLTIP_CHANGE_VISIBILITY','Изменить видимость'),
-(2,'HEADER_TOOLTIP_EXIT_PORTFOLIO_MODE','Выход')
+(2,'HEADER_TOOLTIP_EXIT_PORTFOLIO_MODE','Выход'),
 (2,'HEADER_TOOLTIP_EXIT_PORTFOLIO_MODE','Exit portfolio mode'),
 (2,'DASHBOARD','Панель приборов'),
 (2,'DASHBOARD_IMRPOPER_MATERIALS','Неправильное материалы'),
