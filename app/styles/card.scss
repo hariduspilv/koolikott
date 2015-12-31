@@ -41,7 +41,6 @@ md-card {
 
   md-card-actions {
     padding-top: 10px;
-    padding-bottom: 12px;
     margin-top: 0;
   }
   .md-caption {
@@ -114,6 +113,7 @@ md-card {
 
     md-card-content {
       padding-bottom: 12px;
+      height: 30%;
     }
     .card-cover {
       height: 50%;
@@ -170,6 +170,7 @@ md-card {
       }
     }
     md-card-actions {
+      height: 10%;
       .md-action-icons-list {
         span {
           padding: 0 5px;
