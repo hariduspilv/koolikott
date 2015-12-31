@@ -24,6 +24,10 @@ define(['app'], function(app) {
 
                 return false;
             },
+            
+            isAdmin : function() {
+                return this.getUser() && this.getUser().role === 'ADMIN';
+            },
 
             getUser : function() {
                 var authenticatedUser = getAuthenticatedUser();

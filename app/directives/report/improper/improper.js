@@ -1,6 +1,6 @@
 define(['app'], function (app) {
-    app.directive('dopReportImproper', ['translationService', '$mdDialog', '$translate',
-        function (translationService, $mdDialog, $translate) {
+    app.directive('dopReportImproper', ['translationService', '$mdDialog', '$translate', 'authenticatedUserService',
+        function (translationService, $mdDialog, $translate, authenticatedUserService) {
             return {
                 scope: {
                     material: '=',
@@ -8,22 +8,23 @@ define(['app'], function (app) {
                 },
                 templateUrl: 'directives/report/improper/improper.html',
                 controller: function ($scope, serverCallService) {
-                    $scope.isAlreadyReported = false;
-
+                    $scope.isReported = false;
+                    $scope.isReportedByUsed = false;
 
                     $scope.$watch('material', function(newValue, oldValue) {
                         if(newValue === undefined) return;
+                        getHasReportedByUser();
                         getHasReported();
                     }, false);
 
                     $scope.$watch('portfolio', function(newValue, oldValue) {
                         if(newValue === undefined) return;
+                        getHasReportedByUser();
                         getHasReported();
                     }, false);
 
-                    var getHasReported = function () {
+                    function getHasReportedByUser() {
                         var url;
-
 
                         if ($scope.portfolio && $scope.portfolio.id) {
                             url = "rest/portfolio/hasSetImproper?portfolioId=" + $scope.portfolio.id;
@@ -34,13 +35,15 @@ define(['app'], function (app) {
 
                             serverCallService.makeGet(url, {}, requestSuccessful, requestFailed);
                         }
-
-                        return true;
-                    };
+                    }
+                    
+                    function getHasReported() {
+                        //todo: check whether material/portfolio is reported (admin action)
+                    }
 
                     function requestSuccessful(response) {
                         if(response === true) {
-                            $scope.isAlreadyReported = true;
+                            $scope.isReportedByUsed = true;
                         }
                     }
 
@@ -68,16 +71,18 @@ define(['app'], function (app) {
                             }
 
                             serverCallService.makePost(url, entity, setImproperSuccessful, setImproperFailed);
-                            $scope.isAlreadyReported = true;
                         });
-
-
                     };
+                    
+                    $scope.isAdmin = authenticatedUserService.isAdmin();
 
+                    function setImproperSuccessful() {
+                        $scope.isReportedByUsed = true;
+                    }
 
-                    function setImproperSuccessful() {}
-
-                    function setImproperFailed() {}
+                    function setImproperFailed() {
+                        $scope.isReportedByUsed = false;
+                    }
 
                 }
             };
