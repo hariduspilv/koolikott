@@ -18,8 +18,8 @@
             <ng-md-icon icon="search"></ng-md-icon>
           </md-button>
           <md-input-container flex>
-              <label hidden="hidden">&nbsp;</label>
-              <input id="header-simple-search-input" data-ng-keydown="$event.which === 13 && searchFieldEnterPressed()" data-ng-model="searchFields.searchQuery" placeholder="{{'SEARCH' | translate}}" />
+            <label hidden="hidden">&nbsp;</label>
+            <input id="header-simple-search-input" data-ng-keydown="$event.which === 13 && searchFieldEnterPressed()" data-ng-model="searchFields.searchQuery" placeholder="{{'SEARCH' | translate}}" />
           </md-input-container>
         </div>
         <md-button aria-label="Ava detailotsing" class="md-icon-button" id="header-show-detailed-search-icon" data-ng-click="openDetailedSearch()" data-ng-if="!detailedSearch.isVisible">
@@ -27,12 +27,12 @@
           <ng-md-icon icon="filter_list"></ng-md-icon>
         </md-button>
         <md-button aria-label="Sulge detailotsing" class="md-icon-button" id="header-hide-detailed-search-icon" data-ng-click="closeDetailedSearch()" data-ng-if="detailedSearch.isVisible">
-            <md-tooltip><span data-translate="HEADER_TOOLTIP_CLOSE_DETAILED_SEARCH"></span></md-tooltip>
-            <ng-md-icon icon="close"></ng-md-icon>
+          <md-tooltip><span data-translate="HEADER_TOOLTIP_CLOSE_DETAILED_SEARCH"></span></md-tooltip>
+          <ng-md-icon icon="close"></ng-md-icon>
         </md-button>
       </div>
     </div>
-    <div flex flex-gt-sm="20" flex-gt-md="10">
+    <div flex flex-gt-sm="20" flex-gt-md="15">
       <md-menu>
         <md-button aria-label="Ava keelevaliku menüü" class="md-icon-button" id="header-language-icon" ng-click="$mdOpenMenu($event)">
           <md-tooltip><span data-translate="HEADER_TOOLTIP_SELECT_LANGUAGE"></span></md-tooltip>

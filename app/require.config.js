@@ -53,7 +53,7 @@ require.config({
     metadataService: 'services/metadataService',
     linearLayout: 'directives/pageStructure/linearLayout/linearLayout',
     columnLayout: 'directives/pageStructure/columnLayout/columnLayout',
-    'angular-material-data-table': '../bower_components/angular-material-data-table/dist/md-data-table'
+    'angular-material-data-table': '../bower_components/angular-material-data-table/dist/md-data-table.min'
   },
   shim: {
     angular: {
