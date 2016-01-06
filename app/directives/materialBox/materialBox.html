@@ -1,10 +1,10 @@
 <md-card class="card-sm md-whiteframe-2dp" ng-class="{ active: selected }" id="material-card-{{material.id}}" data-ng-click="navigateTo(material)">
-  <div class="card-cover {{getType()}}" layout="row" layout-fill layout-align="center center">
+  <div class="card-cover {{materialType}}" layout="row" layout-fill layout-align="center center">
     <img data-ng-if="material.hasPicture" data-ng-src="rest/material/getPicture?materialId={{material.id}}" class="md-card-image" />
     <div data-ng-if="!material.hasPicture">
-      <md-icon class="icon-kind" data-ng-bind="getType()"></md-icon>
+      <md-icon class="icon-kind">{{ materialType }}</md-icon>
     </div>
-    <div class="card-hover {{getType()}}">
+    <div class="card-hover {{materialType}}">
       <div class="pick" data-ng-if="isEditPortfolioMode && !isEditPortfolioPage">
         <md-icon class="unchecked">radio_button_unchecked</md-icon>
         <md-icon data-ng-click="pickMaterial($event, material)" class="checked">check_circle</md-icon>
@@ -13,7 +13,7 @@
         <md-icon class="unchecked">remove_circle_outline</md-icon>
         <md-icon data-ng-click="removeMaterial($event, material)" class="checked">remove_circle</md-icon>
       </div>
-      <md-icon class="icon-kind" data-ng-bind="getType()"></md-icon>
+      <md-icon class="icon-kind">{{ materialType }}</md-icon>
     </div>
   </div>
   <md-card-content>

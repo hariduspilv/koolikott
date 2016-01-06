@@ -1,6 +1,6 @@
 define(['app'], function (app) {
-    app.controller('materialController', ['$scope', 'serverCallService', '$route', 'translationService', '$rootScope', 'searchService', '$location', 'alertService', 'authenticatedUserService', 'dialogService', 'toastService',
-        function ($scope, serverCallService, $route, translationService, $rootScope, searchService, $location, alertService, authenticatedUserService, dialogService, toastService) {
+    app.controller('materialController', ['$scope', 'serverCallService', '$route', 'translationService', '$rootScope', 'searchService', '$location', 'alertService', 'authenticatedUserService', 'dialogService', 'toastService', 'iconService',
+        function ($scope, serverCallService, $route, translationService, $rootScope, searchService, $location, alertService, authenticatedUserService, dialogService, toastService, iconService) {
             $scope.showMaterialContent = false;
             $scope.newComment = {};
 
@@ -209,24 +209,10 @@ define(['app'], function (app) {
             }
 
             $scope.getType = function () {
-                if ($scope.material) {
-                    if ($scope.material.resourceTypes) {
-                        var types = $scope.material.resourceTypes;
-                        if (types.length == 0) {
-                            return 'description';
-                        }
-
-                        for (var i = 0; i < types.length; i++) {
-                            if (types[i].name.toLocaleLowerCase().trim() === 'audio')
-                                return 'audiotrack';
-                            if (types[i].name.toLocaleLowerCase().trim() === 'video')
-                                return 'videocam';
-                        }
-                    }
-                }
-
-                return 'description';
-            }
+                if ($scope.material === undefined || $scope.material === null) return '';
+              
+                return iconService.getMaterialIcon($scope.material.resourceTypes);
+            };
             
             $scope.confirmMaterialDeletion = function() {
                 dialogService.showConfirmationDialog(
