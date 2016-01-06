@@ -8,7 +8,8 @@ define([], function()
                 controller: 'homeController',
                 dependencies: [
                     'views/home/home',
-                    'directives/materialBox/materialBox'
+                    'directives/materialBox/materialBox',
+                    'directives/preloaderCard/preloaderCard'
                 ]
             },
             '/search/result': {

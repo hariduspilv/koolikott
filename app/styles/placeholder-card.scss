@@ -1,0 +1,35 @@
+.placeholder-card {
+  background: #f5f5f5;
+  background: linear-gradient(to right, #eeeeee 8%, #dddddd 18%, #eeeeee 33%);
+  background-size: 800px 104px;
+    
+  .card-cover {
+    height: 96px;
+  }
+  md-card-content {
+    position: relative;
+    height: 64px;
+    border: 16px solid #fff;
+    padding: 0 !important;
+    border-bottom-width: 12px;
+    
+    .title-author-spacer {
+      background-color: #fff;
+      height: 32px;
+      margin-top: 18px;
+    }
+    
+    .author-limiter {
+      position: absolute;
+      right: 0;
+      bottom: 0;
+      background: #fff;
+      width: 60px;
+      height: 14px;
+    }
+  }
+  md-card-footer {
+    height: 14px;
+    background-color: #fff;
+  }
+}

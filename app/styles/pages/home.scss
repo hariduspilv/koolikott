@@ -4,3 +4,33 @@
     margin-top: 0;
   }
 }
+
+#newest-materials {
+  position: relative;
+  
+  .materials-grid-list {
+    position: relative;
+    z-index: 0;
+    width: 100%;
+    flex: 0 0 100%;
+  }
+  
+  .placeholders-grid-list {
+    position: relative;
+    top: -1px;
+    z-index: 1;
+    width: 100%;
+    
+    flex: 0 0 100%;
+    transform: translate(-100%, 0);
+  }
+  
+  .materials-grid-list,
+  .placeholders-grid-list {
+    transition: opacity linear 0.5s;
+    
+    &.ng-hide {
+      opacity: 0;
+    }
+  }
+}
