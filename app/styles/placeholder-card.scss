@@ -1,35 +1,26 @@
 .placeholder-card {
-  background: #f5f5f5;
-  background: linear-gradient(to right, #eeeeee 8%, #dddddd 18%, #eeeeee 33%);
-  background-size: 800px 104px;
-    
+  &:hover {
+    background-color: #fff !important;
+    cursor: default !important;
+  }
+  
   .card-cover {
-    height: 96px;
+    background-color: #f5f5f5;
   }
   md-card-content {
     position: relative;
-    height: 64px;
-    border: 16px solid #fff;
-    padding: 0 !important;
-    border-bottom-width: 12px;
     
-    .title-author-spacer {
-      background-color: #fff;
-      height: 32px;
-      margin-top: 18px;
+    .title-placeholder {
+      background-color: #f5f5f5;
+      width: 90%;
+      height: 18px;
     }
     
-    .author-limiter {
-      position: absolute;
-      right: 0;
-      bottom: 0;
-      background: #fff;
-      width: 60px;
-      height: 14px;
+    .author-placeholder {
+      background-color: #f5f5f5;
+      width: 75%;
+      height: 12px;
+      margin-top: 32px;
     }
-  }
-  md-card-footer {
-    height: 14px;
-    background-color: #fff;
   }
 }
