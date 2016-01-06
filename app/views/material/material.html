@@ -89,17 +89,29 @@
                   <p class="md-body-1 description" data-ng-bind="getCorrectLanguageString(material.descriptions)"></p>
                   <!-- TODO: mobile view after stable release -->
 
-                    <div data-ng-if="sourceType === 'YOUTUBE'" class="embed-responsive embed-responsive-16by9">
-                      <div class="video-container">
-                        <youtube-video video-url="material.source" player-width="'768'" player-height="'432'" class="embed-responsive-item"></youtube-video>
-                      </div>
+                  <div data-ng-if="sourceType === 'YOUTUBE'" class="embed-responsive embed-responsive-16by9">
+                    <div class="video-container">
+                      <youtube-video video-url="material.source" player-width="'768'" player-height="'432'" class="embed-responsive-item"></youtube-video>
                     </div>
+                  </div>
 
-                    <div data-ng-if="sourceType === 'SLIDESHARE'" class="embed-responsive embed-responsive-4by3">
-                      <div data-dop-slideshare source="material.source" width="767" height="639" class="embed-responsive-item" fail-callback="slideshareFail()"></div>
-                    </div>
-
-                    <iframe data-ng-src="{{material.iframeSource}}" data-ng-show="showMaterialContent" width="100%" height="100%" ngsf-fullscreen="fullscreenCtrl"></iframe>
+                  <div data-ng-if="sourceType === 'SLIDESHARE'" class="embed-responsive embed-responsive-4by3">
+                    <div data-dop-slideshare source="material.source" width="767" height="639" class="embed-responsive-item" fail-callback="slideshareFail()"></div>
+                  </div>
+                    
+                  <div data-ng-if="sourceType === 'LINK' && !material.embeddable">
+                    <a data-ng-href="{{material.source}}" target="_blank" class="wrapped regular-link md-primary">
+                      <span class="item-link" data-ng-bind="material.source"></span>
+                    </a>
+                  </div>
+ 
+                  <div data-ng-if="sourceType === 'LINK' && material.embeddable">
+                    <a href="#" ng-click="showSourceFullscreen($event)">
+                      <span class="item-link" data-ng-bind="material.source"></span>
+                    </a>
+                  </div>
+                  
+                  <iframe data-ng-src="{{material.iframeSource}}" data-ng-show="showMaterialContent" width="100%" height="100%" ngsf-fullscreen="fullscreenCtrl"></iframe>
                 </div>
 
                 <div data-ng-if="!isNullOrZeroLength(material.tags)">
