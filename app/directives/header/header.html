@@ -19,7 +19,7 @@
           </md-button>
           <md-input-container flex>
             <label hidden="hidden">&nbsp;</label>
-            <input id="header-simple-search-input" data-ng-keydown="$event.which === 13 && searchFieldEnterPressed()" data-ng-model="searchFields.searchQuery" placeholder="{{'SEARCH' | translate}}" />
+            <input id="header-simple-search-input" data-ng-keydown="$event.which === 13 && searchFieldEnterPressed()" data-ng-model="searchFields.searchQuery" />
           </md-input-container>
         </div>
         <md-button aria-label="Ava detailotsing" class="md-icon-button" id="header-show-detailed-search-icon" data-ng-click="openDetailedSearch()" data-ng-if="!detailedSearch.isVisible">
