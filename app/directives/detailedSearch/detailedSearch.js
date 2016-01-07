@@ -26,7 +26,7 @@ define(['app'], function(app)
                     $scope.detailedSearch = {};
 
                     // Languages
-                    serverCallService.makeGet("rest/learningMaterialMetadata/language", {}, getLanguagesSuccess, getLanguagesFail);
+                    metadataService.loadLanguages(setLangugeges);
                     $scope.detailedSearch.language = searchService.getLanguage();
 
                     // Target groups
@@ -391,6 +391,10 @@ define(['app'], function(app)
                 	setEditModePrefill();
                 }, false);
 
+                function setLangugeges(languages) {
+                    $scope.languages = languages;
+                }
+                
                 function setCrossCurricularThemes(crossCurricularThemes) {
                     $scope.crossCurricularThemes = crossCurricularThemes;
                 }

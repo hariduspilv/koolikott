@@ -284,10 +284,10 @@ define(['app'], function (app) {
                     $scope.material.publisher = authenticatedUserService.getUser().username;
                     $scope.creatorIsPublisher = true;
                 }
-
-                serverCallService.makeGet("rest/learningMaterialMetadata/language", {}, getLanguagesSuccess, getLanguagesFail, getLanguageFinally);
-                serverCallService.makeGet("rest/learningMaterialMetadata/licenseType", {}, getLicenseTypeSuccess, getLicenseTypeFail);
-                serverCallService.makeGet("rest/learningMaterialMetadata/resourceType", {}, getResourceTypeSuccess, getResourceTypeFail);
+                
+                metadataService.loadLanguages(setLangugeges);
+                metadataService.loadLicenseTypes(setLicenseTypes);
+                metadataService.loadResourceTypes(setResourceTypes);
                 metadataService.loadKeyCompetences(setKeyCompetences);
                 metadataService.loadCrossCurricularThemes(setCrossCurricularThemes);
 
@@ -312,6 +312,17 @@ define(['app'], function (app) {
                         $scope.material.targetGroups = $rootScope.savedPortfolio.targetGroups.slice();
                     }
                 }
+            }
+            
+            function setLangugeges(data) {
+                $scope.material.languages = data;
+                
+                setDefaultMaterialMetadataLanguage();
+                addNewMetadata();
+            }
+            
+            function setLicenseTypes(data) {
+                $scope.material.licenceTypes = data;
             }
 
             function setCrossCurricularThemes(data) {
@@ -340,40 +351,8 @@ define(['app'], function (app) {
                 console.log('Failed to add material.')
             }
 
-            function getLanguagesSuccess(data) {
-                if (!isEmpty(data)) {
-                    $scope.material.languages = data;
-
-                    setDefaultMaterialMetadataLanguage();
-                }
-            }
-
-            function getLanguagesFail() {
-                console.log('Failed to get languages.')
-            }
-
-            function getLanguageFinally() {
-                addNewMetadata();
-            }
-
-            function getLicenseTypeSuccess(data) {
-                if (!isEmpty(data)) {
-                    $scope.material.licenceTypes = data;
-                }
-            }
-
-            function getLicenseTypeFail() {
-                console.log('Failed to get license types.');
-            }
-
-            function getResourceTypeSuccess(data) {
-                if (!isEmpty(data)) {
-                    $scope.material.resourceTypes = data;
-                }
-            }
-
-            function getResourceTypeFail() {
-                console.log('Failed to get resource types.');
+            function setResourceTypes(data) {
+                $scope.material.resourceTypes = data;
             }
 
             function setDefaultMaterialMetadataLanguage() {
@@ -401,6 +380,5 @@ define(['app'], function (app) {
                         return metadata.title && metadata.title.length !== 0;
                     }).length !== 0;
             }
-
         }])
 });
