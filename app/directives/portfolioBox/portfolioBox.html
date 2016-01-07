@@ -1,36 +1,35 @@
-
 <md-card class="card-sm md-whiteframe-2dp" id="portfolio-card-{{portfolio.id}}" data-ng-click="navigateTo(portfolio)">
   <div class="corner"></div>
-    <div class="card-cover portfolio">
-        <img data-ng-if="portfolio.hasPicture" data-ng-src="rest/portfolio/getPicture?portfolioId={{portfolio.id}}" class="md-card-image"/>
-        <div data-ng-if="!portfolio.hasPicture" layout="row" layout-fill flex layout-align="center center">
-            <md-icon class="icon-kind">book</md-icon>
-        </div>
-        <div class="card-hover portfolio" layout="row" layout-fill flex layout-align="center center">
-            <md-icon class="icon-kind">book</md-icon>
-        </div>
+  <div class="card-cover portfolio" layout="row" layout-align="center center">
+    <img data-ng-if="portfolio.hasPicture" data-ng-src="rest/portfolio/getPicture?portfolioId={{portfolio.id}}" class="md-card-image" />
+    <div data-ng-if="!portfolio.hasPicture">
+      <md-icon class="icon-kind">book</md-icon>
     </div>
-    <md-card-content>
-        <h4 class="md-headline two-rows" data-ng-bind="portfolio.title"></h4>
-        <p class="md-caption one-row">
-            <span data-ng-bind="formatName(portfolio.creator.name)"></span>
-            <span data-ng-bind="formatSurname(portfolio.creator.surname)"></span>
-            <span data-ng-if="portfolio.created">{{ formatDate(portfolio.created) }}</span>
-        </p>
-    </md-card-content>
-    <md-divider></md-divider>
-    <md-card-actions layout="row"  layout-align="start center">
-        <span class="md-action-icons-list md-caption" layout flex>
-            <md-icon>thumb_up</md-icon>
-                          <span>{{ portfolio.likes }}</span>
+    <div class="card-hover portfolio">
+      <md-icon class="icon-kind">book</md-icon>
+    </div>
+  </div>
+  <md-card-content>
+    <h4 class="md-headline two-rows" data-ng-bind="portfolio.title"></h4>
+    <p class="md-caption one-row">
+      <span data-ng-bind="formatName(portfolio.creator.name)"></span>
+      <span data-ng-bind="formatSurname(portfolio.creator.surname)"></span>
+      <span data-ng-if="portfolio.created">{{ formatDate(portfolio.created) }}</span>
+    </p>
+  </md-card-content>
+  <md-divider></md-divider>
+  <md-card-actions layout="row" layout-align="start center">
+    <span class="md-action-icons-list md-caption" layout flex>
+      <md-icon>thumb_up</md-icon>
+      <span>{{ portfolio.likes }}</span>
 
-            <md-icon>thumb_down</md-icon>
-                <span>{{ portfolio.dislikes }}</span>
+      <md-icon>thumb_down</md-icon>
+      <span>{{ portfolio.dislikes }}</span>
 
-            <span flex></span>
+      <span flex></span>
 
-            <md-icon>visibility</md-icon>
-            <span data-ng-bind="portfolio.views"></span>
-        </span>
-    </md-card-actions>
+      <md-icon>visibility</md-icon>
+      <span data-ng-bind="portfolio.views"></span>
+    </span>
+  </md-card-actions>
 </md-card>
