@@ -12,7 +12,7 @@
     <md-content class="md-padding">
       <div layout="row" layout-align="center center">
         <div flex="10" class="md-padding">
-          <div data-ngf-drop ngf-select ng-model="material.picture" class="drop-box"
+          <div data-ngf-drop ngf-select ng-model="newPortfolio.picture" class="drop-box"
             data-ngf-drag-over-class="'dragover'"
             data-ngf-multiple="false"
             data-accept="image/*"
@@ -36,9 +36,9 @@
 
       <!-- image preview -->
       <md-input-container class="md-block">
-        <div data-ng-if="material.picture" class="drop-box-preview">
-          <h3 class="md-subhead" data-translate="MATERIAL_PHOTO_PREVIEW"></h3>
-          <img data-ngf-thumbnail="material.picture" ngf-size="{width: 300, height: 300, quality: 0.9}" alt="photo">
+        <div data-ng-if="newPortfolio.picture" class="drop-box-preview">
+          <h3 class="md-subhead" data-translate="PHOTO_PREVIEW"></h3>
+          <img data-ngf-thumbnail="newPortfolio.picture" ngf-size="{width: 300, height: 300, quality: 0.9}" alt="photo">
         </div>
       </md-input-container>
 
