@@ -6,7 +6,7 @@
       </h2>
       <span flex></span>
       <md-button ng-click="cancel()" class="md-icon-button" aria-label="Sulge materiali lisamise modaalaken">
-        <ng-md-icon icon="close"></ng-md-icon>
+        <md-icon>close</md-icon>
       </md-button>
     </div>
   </md-toolbar>
@@ -231,7 +231,7 @@
 
   <md-dialog-actions>
     <md-button aria-label="Mine tagasi eelmisse sammu" data-ng-click="step.previousStep()" data-ng-show="step.currentStep > 0" class="md-primary">
-      <ng-md-icon icon="arrow_back"></ng-md-icon>
+      <md-icon>arrow_back</md-icon>
       <span data-translate="BUTTON_PREVIOUS_STEP"></span>
     </md-button>
     <span flex></span>
@@ -243,7 +243,7 @@
     </md-button>
     <md-button aria-label="Liigu järgmisse sammu" data-ng-click="step.nextStep()" data-ng-hide="step.isLastStep()" data-ng-disabled="!step.canProceed()" class="md-primary">
       <span data-translate="BUTTON_NEXT_STEP"></span>
-      <ng-md-icon icon="arrow_forward"></ng-md-icon>
+      <md-icon>arrow_forward</md-icon>
     </md-button>
   </md-dialog-actions>
 </md-dialog>

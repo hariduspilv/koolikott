@@ -13,7 +13,7 @@ define(['app'], function(app) {
                             return 'image';
                         case 'VIDEO':
                         case 'BROADCAST':
-                            return 'local_movies';
+                            return 'ondemand_video';
                         case 'DEMONSTRATION':
                         case 'PRESENTATION':
                             return 'dvr';
@@ -22,7 +22,11 @@ define(['app'], function(app) {
                             return 'assessment';
                         case 'TOOL':
                         case 'APPLICATION':
-                            return 'web';
+                            return 'web_asset';
+                        case 'EDUCATIONALGAME':
+                        case 'ROLEPLAY':
+                        case 'SIMULATION':
+                            return 'casino';
                         case 'CASESTUDY':
                         case 'ENQUIRYORIENTEDACTIVITY':
                         case 'EXPERIMENT':

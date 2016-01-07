@@ -15,7 +15,7 @@
       <div layout="row" layout-align-gt-md="center center" layout-align="center end">
         <div class="navbar-search" layout="row" flex>
           <md-button aria-label="Otsi" class="md-icon-button" id="header-show-search-button">
-            <ng-md-icon icon="search"></ng-md-icon>
+            <md-icon>search</md-icon>
           </md-button>
           <md-input-container flex>
             <label hidden="hidden">&nbsp;</label>
@@ -24,11 +24,11 @@
         </div>
         <md-button aria-label="Ava detailotsing" class="md-icon-button" id="header-show-detailed-search-icon" data-ng-click="openDetailedSearch()" data-ng-if="!detailedSearch.isVisible">
           <md-tooltip><span data-translate="HEADER_TOOLTIP_OPEN_DETAILED_SEARCH"></span></md-tooltip>
-          <ng-md-icon icon="filter_list"></ng-md-icon>
+          <md-icon>filter_list</md-icon>
         </md-button>
         <md-button aria-label="Sulge detailotsing" class="md-icon-button" id="header-hide-detailed-search-icon" data-ng-click="closeDetailedSearch()" data-ng-if="detailedSearch.isVisible">
           <md-tooltip><span data-translate="HEADER_TOOLTIP_CLOSE_DETAILED_SEARCH"></span></md-tooltip>
-          <ng-md-icon icon="close"></ng-md-icon>
+          <md-icon>close</md-icon>
         </md-button>
       </div>
     </div>
@@ -62,14 +62,14 @@
       </md-menu>
 
       <md-button data-ng-hide="user" aria-label="Ava sisselogimise modaalaken" class="md-icon-button" id="header-login-icon" data-ng-click="showLogin($event)">
-        <ng-md-icon icon="input"></ng-md-icon>
+        <md-icon>input</md-icon>
         <md-tooltip><span data-translate="HEADER_TOOLTIP_ENTER"></span></md-tooltip>
       </md-button>
 
       <md-menu data-ng-show="user">
         <md-button aria-label="Ava kasutajamenüü" class="md-icon-button" id="header-user-menu-icon" ng-click="$mdOpenMenu($event)">
           <md-tooltip><span data-translate="HEADER_TOOLTIP_PROFILE"></span></md-tooltip>
-          <ng-md-icon icon="account_circle"></ng-md-icon>
+          <md-icon>account_circle</md-icon>
         </md-button>
         <md-menu-content width="4">
           <md-menu-item>
