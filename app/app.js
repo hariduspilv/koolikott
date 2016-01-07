@@ -152,14 +152,27 @@ define(['app.routes', 'services/dependencyResolver', 'utils/taxonUtils'], functi
     }]);
 
     app.run(function($rootScope, authenticatedUserService) {
-    	$rootScope.taxonUtils = taxonUtils;
+        $rootScope.taxonUtils = taxonUtils;
 
-    	$rootScope.$watch(function () {
+        $rootScope.$watch(function () {
             return authenticatedUserService.isAuthenticated();
         }, function (isAuthenticated) {
         	$rootScope.showMainFabButton = isAuthenticated;
         }, true);
-	});
+    });
+    
+    app.run(function ($rootScope, $location) {
+        var history = [];
 
-   return app;
+        $rootScope.$on('$routeChangeSuccess', function() {
+            history.push($location.url());
+        });
+
+        $rootScope.back = function () {
+            var prevUrl = history.length > 1 ? history.splice(-2)[0] : '/';
+            $location.url(prevUrl);
+        };
+    });
+
+    return app;
 });

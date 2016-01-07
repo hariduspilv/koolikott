@@ -33,10 +33,6 @@ define(['app'], function(app)
             $location.url('/');
           };
 
-          $scope.back = function() {
-              $location.url("/");
-          };
-
           $scope.showLogin = function(ev) {
             $mdDialog.show({
               controller: 'loginController',
