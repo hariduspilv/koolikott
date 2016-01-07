@@ -24,10 +24,14 @@ define(['app'], function(app)
             // Get search query and current page
             $scope.searchQuery = searchService.getQuery();
         }
+        
+        function allResultsLoaded() {
+            return $scope.paging.thisPage >= $scope.paging.totalPages;
+        }
 
         function search() {
-            var isTerminal = $scope.paging.thisPage >= $scope.paging.totalPages;
-
+            var isTerminal = allResultsLoaded();
+            
             if (isTerminal) return;
 
             if (!$scope.loadingNextPage)
@@ -108,6 +112,10 @@ define(['app'], function(app)
         $scope.getNumberOfResults = function() {
             return $scope.totalResults || 0;
         };
+        
+        $scope.allResultsLoaded = function() {
+            return allResultsLoaded();
+        }
 
         $scope.nextPage = function() {
             $scope.loadingNextPage = true;

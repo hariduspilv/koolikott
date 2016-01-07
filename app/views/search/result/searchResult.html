@@ -35,7 +35,7 @@
           </md-grid-list>
         </div>
 
-        <div layout="row" layout-align="center center" flex data-ng-show="searching || loadingNextPage">
+        <div layout="row" layout-align="center center" flex data-ng-show="!allResultsLoaded() && (searching || loadingNextPage)">
           <p class="md-body-2 md-button md-primary" data-translate="SEARCH_LOADING"></p>
         </div>
 
