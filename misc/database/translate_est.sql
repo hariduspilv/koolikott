@@ -151,7 +151,7 @@ INSERT INTO Translation(translationGroup, translationKey, translation) VALUES
 (1,'MATERIAL_LIKED','Soovitan materjali'),
 (1,'MATERIAL_PAID','Tasuline'),
 (1,'MATERIAL_PHOTO','Materjali pilt'),
-(1,'MATERIAL_PHOTO_PREVIEW','Eelvaade'),
+(1,'PHOTO_PREVIEW','Eelvaade'),
 (1,'MATERIAL_PHOTO_UPLOAD_HELP','Lohista pilt siia või vali pilt arvutist'),
 (1,'MATERIAL_PUBLISHER','Kirjastaja'),
 (1,'MATERIAL_REMOVE_TAG','Eemalda märksõna'),

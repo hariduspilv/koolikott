@@ -155,7 +155,7 @@ INSERT INTO Translation(translationGroup, translationKey, translation) VALUES
 (3,'MATERIAL_LIKED','Material recommended!'),
 (3,'MATERIAL_PAID','Paid'),
 (3,'MATERIAL_PHOTO','Material picture'),
-(3,'MATERIAL_PHOTO_PREVIEW','Preview'),
+(3,'PHOTO_PREVIEW','Preview'),
 (3,'MATERIAL_PHOTO_UPLOAD_HELP','Drag picture here or select from computer'),
 (3,'MATERIAL_PUBLISHER','Publisher'),
 (3,'MATERIAL_REMOVE_TAG','Remove tag'),

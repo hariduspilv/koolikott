@@ -151,7 +151,7 @@ INSERT INTO Translation(translationGroup, translationKey, translation) VALUES
 (2,'MATERIAL_LIKED','Материал понравился!'),
 (2,'MATERIAL_PAID','Платное'),
 (2,'MATERIAL_PHOTO','Материал картина'),
-(2,'MATERIAL_PHOTO_PREVIEW','предварительный просмотр'),
+(2,'PHOTO_PREVIEW','предварительный просмотр'),
 (2,'MATERIAL_PHOTO_UPLOAD_HELP','Перетащите картина здесь или выберите из компьютера'),
 (2,'MATERIAL_PUBLISHER','издатель'),
 (2,'MATERIAL_REMOVE_TAG','Удалить тег'),
