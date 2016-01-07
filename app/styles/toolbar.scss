@@ -1,18 +1,13 @@
 $border-color: rgba(0,0,0,0.12);
-// .md-toolbar-expandable {
-//   md-toolbar {
-//     background-color: #f6f6f6 !important;
-//
-//     .navbar-search {
-//       background-color: #fff;
-//     }
-//   }
-// }
 
 .upside-down {
   -ms-transform: rotate(180deg); /* IE 9 */
   -webkit-transform: rotate(180deg); /* Chrome, Safari, Opera */
   transform: rotate(180deg);
+}
+
+.filter-wrapper {
+  padding-top: 0;
 }
 
 .filter-content {
