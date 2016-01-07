@@ -274,6 +274,8 @@ INSERT INTO Translation(translationGroup, translationKey, translation) VALUES
 (2,'SEARCH_RESULT_PART_1','Найдены pезультаты поиска: '),
 (2,'SEARCH_RESULT_PART_2','.'),
 (2,'SEARCH_RESULT_PREVIOUS','Предыдущая'),
+(2,'SEARCH_RESULTS','Результаты поиска'),
+(2,'SEARCH_LOADING','Загрузка больше результатов...'),
 (2,'SECONDARYEDUCATION','Среднее образование'),
 (2,'SIMULATION','моделирование'),
 (2,'SOUNDSHARINGPLATFORM','звук платформы для обмена'),

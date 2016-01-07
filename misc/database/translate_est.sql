@@ -274,6 +274,8 @@ INSERT INTO Translation(translationGroup, translationKey, translation) VALUES
 (1,'SEARCH_RESULT_PART_1','Otsingule leidus '),
 (1,'SEARCH_RESULT_PART_2',' vastet.'),
 (1,'SEARCH_RESULT_PREVIOUS','Eelmine'),
+(1,'SEARCH_RESULTS','Otsingu tulemused'),
+(1,'SEARCH_LOADING','Laen veel tulemusi...'),
 (1,'SECONDARYEDUCATION','Keskharidus'),
 (1,'SIMULATION','Simulatsioon'),
 (1,'SOUNDSHARINGPLATFORM','Heliait'),

@@ -278,6 +278,8 @@ INSERT INTO Translation(translationGroup, translationKey, translation) VALUES
 (3,'SEARCH_RESULT_PART_1','Search returned'),
 (3,'SEARCH_RESULT_PART_2',' results.'),
 (3,'SEARCH_RESULT_PREVIOUS','Previous'),
+(3,'SEARCH_RESULTS','Search results'),
+(3,'SEARCH_LOADING','Loading more results...'),
 (3,'SECONDARYEDUCATION','Secondary education'),
 (3,'SIMULATION','Simulation'),
 (3,'SOUNDSHARINGPLATFORM','Sound sharing platform'),
