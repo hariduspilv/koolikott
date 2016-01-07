@@ -112,6 +112,7 @@ INSERT INTO Translation(translationGroup, translationKey, translation) VALUES
 (1,'KEY_COMPETENCE_SELF_MANAGEMENT_COMPETENCE','Enesemääratluspädevus'),
 (1,'KEY_COMPETENCE_SOCIAL_AND_CITIZENSHIP_COMPETENCE','Sotsiaalne ja kodanikupädevus'),
 (1,'LANDING_PAGE_TITLE_NEWEST','Uuemad'),
+(1,'LANDING_PAGE_TITLE_POPULAR','Poplaarsemad'),
 (1,'LANGUAGE','Keel'),
 (1,'LANGUAGE_ENG','Inglise'),
 (1,'LANGUAGE_EST','Eesti'),

@@ -116,6 +116,7 @@ INSERT INTO Translation(translationGroup, translationKey, translation) VALUES
 (3,'KEY_COMPETENCE_SELF_MANAGEMENT_COMPETENCE','Self-management competence'),
 (3,'KEY_COMPETENCE_SOCIAL_AND_CITIZENSHIP_COMPETENCE','Social and citizenship competence'),
 (3,'LANDING_PAGE_TITLE_NEWEST','Newest'),
+(3,'LANDING_PAGE_TITLE_POPULAR','Popular'),
 (3,'LANGUAGE','Language'),
 (3,'LANGUAGE_ENG','English'),
 (3,'LANGUAGE_EST','Estonian'),
