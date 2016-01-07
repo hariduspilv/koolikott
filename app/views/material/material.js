@@ -147,7 +147,9 @@ define(['app'], function (app) {
                 return !arg || !arg.length;
             }
 
-            $scope.getAuthorSearchURL = function (firstName, surName) {
+            $scope.getAuthorSearchURL = function ($event, firstName, surName) {
+                $event.preventDefault();
+                
                 searchService.setSearch('author:"' + firstName + " " + surName + '"');
                 $location.url(searchService.getURL());
             }

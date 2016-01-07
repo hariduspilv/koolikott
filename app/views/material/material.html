@@ -157,7 +157,7 @@
                     <small class="md-caption">
                     <span data-translate="AUTHORS"></span>:
                   </small>
-                    <a href="#" data-ng-click="getAuthorSearchURL(author.name, author.surname)" data-ng-repeat="author in material.authors">
+                    <a href="#" data-ng-click="getAuthorSearchURL($event, author.name, author.surname)" data-ng-repeat="author in material.authors">
                         {{author.name}} {{author.surname}}{{$last ? '' : ', '}}
                     </a>
                   </p>
