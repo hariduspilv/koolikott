@@ -3,36 +3,41 @@
     <section layout="row" layout-sm="column" flex flex-gt-md="80">
 
       <article flex="75" flex-xs="100" flex-sm="100" flex-gt-lg="80" class="md-padding" role="main">
-        <h2 class="md-headline" data-ng-if="!searching">
-          <span data-ng-if="getNumberOfResults() < 1">
-            <span data-translate="SEARCH_RESULT_NO_RESULT"></span>
-          </span>
-          <span data-ng-if="getNumberOfResults() === 1">
-            <span data-translate="SEARCH_RESULT_1_RESULT_PART_1"></span>
-            <strong>
-              <span data-ng-bind="getNumberOfResults()"></span>
-            </strong>
-            <span data-translate="SEARCH_RESULT_1_RESULT_PART_2"></span>
-          </span>
-          <span data-ng-if="getNumberOfResults() > 1">
-            <span data-translate="SEARCH_RESULT_PART_1"></span>
-            <strong>
-              <span data-ng-bind="getNumberOfResults()"></span>
-            </strong>
-            <span data-translate="SEARCH_RESULT_PART_2"></span>
+        <h2 class="md-headline">
+          <span data-ng-if="searching" data-translate="SEARCH_RESULTS"></span>
+          <span data-ng-if="!searching">
+            <span data-ng-if="getNumberOfResults() < 1">
+              <span data-translate="SEARCH_RESULT_NO_RESULT"></span>
+            </span>
+            <span data-ng-if="getNumberOfResults() === 1">
+              <span data-translate="SEARCH_RESULT_1_RESULT_PART_1"></span>
+              <strong>
+                <span data-ng-bind="getNumberOfResults()"></span>
+              </strong>
+              <span data-translate="SEARCH_RESULT_1_RESULT_PART_2"></span>
+            </span>
+            <span data-ng-if="getNumberOfResults() > 1">
+              <span data-translate="SEARCH_RESULT_PART_1"></span>
+              <strong>
+                <span data-ng-bind="getNumberOfResults()"></span>
+              </strong>
+              <span data-translate="SEARCH_RESULT_PART_2"></span>
+            </span>
           </span>
         </h2>
 
-        <md-grid-list md-cols-xs="2" md-cols-gt-md="4" md-cols-md="3" md-cols-sm="2" md-gutter="10px" md-row-height="3:4" data-infinite-scroll="nextPage()" data-infinite-scroll-disabled="searching" data-infinite-scroll-distance="2">
-          <md-grid-tile data-ng-repeat="item in items">
-            <figure data-ng-if="item.type === '.Material'" data-dop-material-box material="item"></figure>
-            <figure data-ng-if="item.type === '.Portfolio'" data-dop-portfolio-box portfolio="item"></figure>
-          </md-grid-tile>
-        </md-grid-list>
+        <div data-infinite-scroll="nextPage()" data-infinite-scroll-disabled="searching">
+          <md-grid-list md-cols-xs="2" md-cols-gt-md="4" md-cols-md="3" md-cols-sm="2" md-gutter="10px" md-row-height="3:4">
+            <md-grid-tile data-ng-repeat="item in items">
+              <figure data-ng-if="item.type === '.Material'" data-dop-material-box material="item"></figure>
+              <figure data-ng-if="item.type === '.Portfolio'" data-dop-portfolio-box portfolio="item"></figure>
+            </md-grid-tile>
+          </md-grid-list>
+        </div>
 
-        <p ng-show="searching">
-          Loading...
-        </p>
+        <div layout="row" layout-align="center center" flex data-ng-show="searching || loadingNextPage">
+          <p class="md-body-2 md-button md-primary" data-translate="SEARCH_LOADING"></p>
+        </div>
 
       </article>
       <div data-dop-sidebar flex="25" flex-xs="100" flex-sm="100" flex-gt-lg="20" class="md-padding" role="sidebar"></div>

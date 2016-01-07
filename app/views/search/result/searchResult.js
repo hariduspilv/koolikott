@@ -2,7 +2,9 @@ define(['app'], function(app)
 {
     app.controller('searchResultController', ['$scope', "serverCallService", 'translationService', '$location', 'searchService',
        function($scope, serverCallService, translationService, $location, searchService) {
-
+        $scope.loadingNextPage = false;
+        $scope.searching = false;
+        
         // Pagination variables
         $scope.paging = {};
         $scope.paging.thisPage = 0;
@@ -28,7 +30,8 @@ define(['app'], function(app)
 
             if (isTerminal) return;
 
-            $scope.searching = true;
+            if (!$scope.loadingNextPage)
+                $scope.searching = true;
 
             start = RESULTS_PER_PAGE * $scope.paging.thisPage;
 
@@ -93,11 +96,13 @@ define(['app'], function(app)
             }
 
             $scope.searching = false;
+            $scope.loadingNextPage = false;
         }
 
         function searchFail() {
             console.log('Search failed.');
             $scope.searching = false;
+            $scope.loadingNextPage = false;
         }
 
         $scope.getNumberOfResults = function() {
@@ -105,6 +110,8 @@ define(['app'], function(app)
         };
 
         $scope.nextPage = function() {
+            $scope.loadingNextPage = true;
+            
             search();
         }
     }]);
