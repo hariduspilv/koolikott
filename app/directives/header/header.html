@@ -114,8 +114,11 @@
 </md-toolbar>
 
 <div class="md-toolbar-filter" id="detailedSearch" data-ng-show="detailedSearch.isVisible">
-  <form layout="row" layout-xs="column" layout-align="{{isViewPortforlioPage ? 'start' : 'center'}} start" flex>
-    <div flex flex-gt-md="{{isViewPortforlioPage ? '95' : '80'}}" class="md-padding filter-wrapper" id="detailed-search">
+  <form layout="row" layout-xs="column"  flex>
+      <!-- <form layout="row" layout-xs="column" layout-align="{{isViewPortforlioPage ? 'start' : 'center'}} start" flex> -->
+    <div layout="row" layout-xs="column" flex="0" flex-gt-sm="15"></div>
+    <div flex flex-gt-sm="{{isViewPortforlioPage ? '95' : '75'}}" class="md-padding filter-wrapper" id="detailed-search">
+      <!-- <div flex flex-gt-md="{{isViewPortforlioPage ? '95' : '80'}}" class="md-padding filter-wrapper" id="detailed-search"> -->
       <div data-dop-detailed-search query-in="detailedSearch.queryIn" query-out="detailedSearch.queryOut" main-field="detailedSearch.mainField" search-callback="detailedSearch.doSearch()"></div>
     </div>
   </form>
