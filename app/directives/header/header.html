@@ -19,7 +19,7 @@
     </span>
 
     <!-- search bar with filter icon -->
-    <div flex-gt-md="{{isViewPortforlioPage ? '80' : '75'}}" flex-gt-sm>
+    <div  flex-gt-xs flex-gt-sm="70" flex-gt-md="{{isViewPortforlioPage ? '80' : '75'}}">
       <div layout="row" layout-align="end center" layout-align-gt-sm="center center">
         <div class="navbar-search" layout="row" flex>
           <md-button aria-label="Otsi" class="md-icon-button" id="header-show-search-button">
@@ -42,7 +42,7 @@
     </div>
 
     <!-- language menu, login and user menu button -->
-    <div flex-gt-sm="20" flex-gt-md="{{isViewPortforlioPage ? '20' : '10'}}">
+    <div flex-gt-xs flex-gt-sm="15" flex-gt-md="{{isViewPortforlioPage ? '20' : '10'}}">
       <!-- change language menu -->
       <md-menu>
         <md-button aria-label="Ava keelevaliku menüü" class="md-icon-button" id="header-language-icon" ng-click="$mdOpenMenu($event)">
