@@ -2,6 +2,7 @@ package ee.hm.dop.rest;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.nio.charset.StandardCharsets;
 
 import javax.inject.Inject;
 import javax.ws.rs.GET;
@@ -102,21 +103,25 @@ public class LogInResource extends BaseResource {
 
     protected String getIdCodeFromRequest() {
         String[] values = getRequest().getHeader("SSL_CLIENT_S_DN").split(",");
-        return values[0].split("=")[1];
+        return getStringInUTF8(values[0].split("=")[1]);
     }
 
     protected String getNameFromRequest() {
         String[] values = getRequest().getHeader("SSL_CLIENT_S_DN").split(",");
-        return values[1].split("=")[1];
+        return getStringInUTF8(values[1].split("=")[1]);
     }
 
     protected String getSurnameFromRequest() {
         String[] values = getRequest().getHeader("SSL_CLIENT_S_DN").split(",");
-        return values[2].split("=")[1];
+        return getStringInUTF8(values[2].split("=")[1]);
     }
 
     private boolean isAuthValid() {
         return "SUCCESS".equals(getRequest().getHeader("SSL_AUTH_VERIFY"));
     }
 
+    private String getStringInUTF8(String item) {
+        byte[] bytes = item.getBytes(StandardCharsets.ISO_8859_1);
+        return new String(bytes, StandardCharsets.UTF_8);
+    }
 }

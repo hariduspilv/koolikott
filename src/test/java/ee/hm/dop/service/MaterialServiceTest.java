@@ -7,6 +7,8 @@ import static org.easymock.EasyMock.verify;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
+import java.util.Arrays;
+
 import org.easymock.EasyMockRunner;
 import org.easymock.Mock;
 import org.easymock.TestSubject;
@@ -17,6 +19,7 @@ import org.junit.runner.RunWith;
 import ee.hm.dop.dao.MaterialDAO;
 import ee.hm.dop.model.Material;
 import ee.hm.dop.model.Repository;
+import ee.hm.dop.model.taxon.EducationalContext;
 
 @RunWith(EasyMockRunner.class)
 public class MaterialServiceTest {
@@ -35,7 +38,7 @@ public class MaterialServiceTest {
         replay(materialDao);
 
         try {
-            materialService.createMaterial(material);
+            materialService.createMaterial(material, null, false);
             fail("Exception expected.");
         } catch (IllegalArgumentException e) {
             assertEquals("Error creating Material, material already exists.", e.getMessage());
@@ -59,6 +62,10 @@ public class MaterialServiceTest {
         expect(material.getRepository()).andReturn(null).times(2);
         material.setAdded(added);
         material.setViews(views);
+
+        EducationalContext educationalContext = new EducationalContext();
+        educationalContext.setName(MaterialService.BASICEDUCATION);
+        expect(material.getTaxons()).andReturn(Arrays.asList(educationalContext)).times(3);
 
         expect(materialDao.findById(materialId)).andReturn(original);
         expect(materialDao.update(material)).andReturn(material);

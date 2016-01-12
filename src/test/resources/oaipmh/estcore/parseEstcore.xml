@@ -100,6 +100,7 @@
                         <learningResourceType>video</learningResourceType>
                         <context>preschoolEducation</context>
                         <context>basicEducation</context>
+                        <context>specialEducation</context>
                         <typicalAgeRange>6-7</typicalAgeRange>
                         <typicalAgeRange>10-13</typicalAgeRange>
                         <typicalAgeRange>14-25</typicalAgeRange>
@@ -146,6 +147,18 @@
                                 <subject>English</subject>
                                 <topic>Eesti ajalugu</topic>
                                 <subtopic>Ajalooallikad</subtopic>
+                            </basicSchoolTaxon>
+                        </taxonPath>
+                        <taxonPath>
+                            <basicSchoolTaxon>
+                                <domain>Cross-curricular themes</domain>
+                                <subject>Lifelong learning and career planning</subject>
+                            </basicSchoolTaxon>
+                        </taxonPath>
+                        <taxonPath>
+                            <basicSchoolTaxon>
+                                <domain>Key competences</domain>
+                                <subject>Cultural and value competence</subject>
                             </basicSchoolTaxon>
                         </taxonPath>
                     </classification>

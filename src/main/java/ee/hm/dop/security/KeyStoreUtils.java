@@ -1,6 +1,17 @@
 package ee.hm.dop.security;
 
-import ee.hm.dop.utils.FileUtils;
+import static ee.hm.dop.utils.ConfigurationProperties.KEYSTORE_FILENAME;
+import static ee.hm.dop.utils.ConfigurationProperties.KEYSTORE_PASSWORD;
+import static ee.hm.dop.utils.ConfigurationProperties.KEYSTORE_SIGNING_ENTITY_ID;
+import static ee.hm.dop.utils.ConfigurationProperties.KEYSTORE_SIGNING_ENTITY_PASSWORD;
+import static java.lang.String.format;
+import static org.apache.commons.io.IOUtils.closeQuietly;
+
+import java.io.InputStream;
+import java.security.KeyStore;
+import java.util.HashMap;
+import java.util.Map;
+
 import org.apache.commons.configuration.Configuration;
 import org.opensaml.xml.security.Criteria;
 import org.opensaml.xml.security.CriteriaSet;
@@ -11,14 +22,7 @@ import org.opensaml.xml.security.x509.X509Credential;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.InputStream;
-import java.security.KeyStore;
-import java.util.HashMap;
-import java.util.Map;
-
-import static ee.hm.dop.utils.ConfigurationProperties.*;
-import static java.lang.String.format;
-import static org.apache.commons.io.IOUtils.closeQuietly;
+import ee.hm.dop.utils.FileUtils;
 
 public class KeyStoreUtils {
 

@@ -1,0 +1,43 @@
+<isik>
+    <isikukood>ISIKUKOOD</isikukood>
+    <eesnimi>EESNIMI</eesnimi>
+    <perenimi>PERENIMI</perenimi>
+    <oppeasutused>
+        <oppeasutus>
+            <id>OPPEASUTUS_ID_1</id>
+            <reg_nr>OPPEASUTUS_REG_NR_1</reg_nr>
+            <nimetus>OPPEASUTUS_1</nimetus>
+            <rollid>
+                <roll>
+                    <nimetus>õpilane</nimetus>
+                    <klass>5</klass>
+                    <paralleel>B</paralleel>
+                </roll>
+            </rollid>
+        </oppeasutus>
+        <oppeasutus>
+            <id>OPPEASUTUS_ID_2</id>
+            <reg_nr>OPPEASUTUS_REG_NR_2</reg_nr>
+            <nimetus>OPPEASUTUS_2</nimetus>
+            <rollid>
+                <roll>
+                    <nimetus>õpetaja</nimetus>\r\n" +
+                </roll>
+                <roll>
+                    <nimetus>õpilane</nimetus>
+                    <klass>12</klass>
+                </roll>
+            </rollid>
+        </oppeasutus>
+        <oppeasutus>
+            <id>OPPEASUTUS_ID_3</id>
+            <reg_nr>OPPEASUTUS_REG_NR_3</reg_nr>
+            <nimetus>OPPEASUTUS_3</nimetus>
+            <rollid>
+                <roll>
+                    <nimetus>direktor</nimetus>
+                </roll>
+            </rollid>
+        </oppeasutus>
+    </oppeasutused>
+</isik>

@@ -24,7 +24,7 @@ public class LogoutServiceTest {
     private AuthenticatedUserDAO authenticatedUserDAO;
 
     @Test
-    public void logout(){
+    public void logout() {
         AuthenticatedUser authenticatedUser = createMock(AuthenticatedUser.class);
 
         authenticatedUserDAO.delete(authenticatedUser);
@@ -38,7 +38,7 @@ public class LogoutServiceTest {
     }
 
     @Test
-    public void logoutNoUser(){
+    public void logoutNoUser() {
         replay(authenticatedUserDAO);
 
         logoutService.logout(null);

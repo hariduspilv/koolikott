@@ -18,12 +18,17 @@ import com.google.common.collect.ImmutableSet;
 
 import ee.hm.dop.dao.MaterialDAO;
 import ee.hm.dop.dao.PortfolioDAO;
+import ee.hm.dop.model.CrossCurricularTheme;
+import ee.hm.dop.model.KeyCompetence;
 import ee.hm.dop.model.Language;
 import ee.hm.dop.model.ResourceType;
+import ee.hm.dop.model.Role;
 import ee.hm.dop.model.SearchFilter;
 import ee.hm.dop.model.SearchResult;
 import ee.hm.dop.model.Searchable;
 import ee.hm.dop.model.TargetGroup;
+import ee.hm.dop.model.User;
+import ee.hm.dop.model.Visibility;
 import ee.hm.dop.model.solr.Document;
 import ee.hm.dop.model.solr.Response;
 import ee.hm.dop.model.solr.SearchResponse;
@@ -54,16 +59,14 @@ public class SearchService {
     @Inject
     private PortfolioDAO portfolioDAO;
 
-    public SearchResult search(String query, long start) {
-        return search(query, start, new SearchFilter());
-    }
-
-    public SearchResult search(String query, SearchFilter searchFilter) {
-        return search(query, 0, searchFilter);
-    }
-
     public SearchResult search(String query, long start, SearchFilter searchFilter) {
+        return search(query, start, searchFilter, null);
+    }
+
+    public SearchResult search(String query, long start, SearchFilter searchFilter, User loggedInUser) {
         SearchResult searchResult = new SearchResult();
+
+        searchFilter.setVisibility(getSearchVisibility(loggedInUser));
 
         SearchResponse searchResponse = doSearch(query, start, searchFilter);
         Response response = searchResponse.getResponse();
@@ -81,6 +84,17 @@ public class SearchService {
         }
 
         return searchResult;
+    }
+
+    private Visibility getSearchVisibility(User loggedInUser) {
+        Visibility visibility = Visibility.PUBLIC;
+
+        if (loggedInUser != null && loggedInUser.getRole() == Role.ADMIN) {
+        	// No visibility filter is applied, so admin can see all searchables
+            visibility = null;
+        }
+
+        return visibility;
     }
 
     private List<Searchable> retrieveSearchedItems(List<Document> documents) {
@@ -174,6 +188,10 @@ public class SearchService {
         filters.add(getTargetGroupsAsQuery(searchFilter));
         filters.add(getResourceTypeAsQuery(searchFilter));
         filters.add(isSpecialEducationAsQuery(searchFilter));
+        filters.add(issuedFromAsQuery(searchFilter));
+        filters.add(getCrossCurricularThemeAsQuery(searchFilter));
+        filters.add(getKeyCompetenceAsQuery(searchFilter));
+        filters.add(getVisibilityAsQuery(searchFilter));
 
         // Remove empty elements
         filters = filters.stream().filter(f -> !f.isEmpty()).collect(Collectors.toList());
@@ -325,6 +343,37 @@ public class SearchService {
     private String isSpecialEducationAsQuery(SearchFilter searchFilter) {
         if (searchFilter.isSpecialEducation()) {
             return "special_education:\"true\"";
+        }
+        return "";
+    }
+
+    private String issuedFromAsQuery(SearchFilter searchFilter) {
+        if (searchFilter.getIssuedFrom() != null) {
+            return format("(issue_date_year:[%s TO *] OR type:\"portfolio\")", searchFilter.getIssuedFrom());
+        }
+        return "";
+    }
+
+    private String getCrossCurricularThemeAsQuery(SearchFilter searchFilter) {
+        CrossCurricularTheme crossCurricularTheme = searchFilter.getCrossCurricularTheme();
+        if (crossCurricularTheme != null) {
+            return format("cross_curricular_theme:\"%s\"", crossCurricularTheme.getName().toLowerCase());
+        }
+        return "";
+    }
+
+    private String getKeyCompetenceAsQuery(SearchFilter searchFilter) {
+        KeyCompetence keyCompetence = searchFilter.getKeyCompetence();
+        if (keyCompetence != null) {
+            return format("key_competence:\"%s\"", keyCompetence.getName().toLowerCase());
+        }
+        return "";
+    }
+
+    private String getVisibilityAsQuery(SearchFilter searchFilter) {
+        Visibility visibility = searchFilter.getVisibility();
+        if (visibility != null) {
+            return format("(visibility:\"%s\" OR type:\"material\")", visibility.toString().toLowerCase());
         }
         return "";
     }

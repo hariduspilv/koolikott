@@ -9,10 +9,6 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.List;
 
-import javax.ws.rs.core.Response;
-import javax.ws.rs.core.Response.Status;
-
-import org.junit.Ignore;
 import org.junit.Test;
 
 import ee.hm.dop.common.test.ResourceIntegrationTestBase;
@@ -26,7 +22,6 @@ import ee.hm.dop.model.taxon.Domain;
 import ee.hm.dop.model.taxon.EducationalContext;
 import ee.hm.dop.model.taxon.Subject;
 
-@Ignore
 public class SearchResourceTest extends ResourceIntegrationTestBase {
 
     private static final int RESULTS_PER_PAGE = 3;
@@ -65,8 +60,11 @@ public class SearchResourceTest extends ResourceIntegrationTestBase {
 
     @Test
     public void searchWithNullQueryAndNullFilter() {
-        Response response = doGet(buildQueryURL(null, 0, new SearchFilter()));
-        assertEquals(Status.INTERNAL_SERVER_ERROR.getStatusCode(), response.getStatus());
+        SearchResult searchResult = doGet(buildQueryURL(null, 0, new SearchFilter()), SearchResult.class);
+
+        assertEquals(2, searchResult.getTotalResults());
+        assertEquals(0, searchResult.getStart());
+        assertMaterialIdentifiers(searchResult.getItems(), 2L, 3L);
     }
 
     @Test
@@ -210,6 +208,18 @@ public class SearchResourceTest extends ResourceIntegrationTestBase {
 
         assertMaterialIdentifiers(searchResult.getItems(), 2L, 3L, 4L);
         assertEquals(3, searchResult.getTotalResults());
+        assertEquals(0, searchResult.getStart());
+    }
+
+    @Test
+    public void searchAsAdmin() {
+        login("89898989898");
+
+        String query = "super";
+        SearchResult searchResult = doGet(buildQueryURL(query, 0, new SearchFilter()), SearchResult.class);
+
+        assertMaterialIdentifiers(searchResult.getItems(), 2L, 4L);
+        assertEquals(2, searchResult.getTotalResults());
         assertEquals(0, searchResult.getStart());
     }
 

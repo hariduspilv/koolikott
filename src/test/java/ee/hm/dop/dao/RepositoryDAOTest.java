@@ -1,16 +1,18 @@
 package ee.hm.dop.dao;
 
-import ee.hm.dop.common.test.DatabaseTestBase;
-import ee.hm.dop.model.Repository;
-import org.joda.time.DateTime;
-import org.junit.Test;
-
-import javax.inject.Inject;
-import java.util.List;
-
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
+
+import java.util.List;
+
+import javax.inject.Inject;
+
+import org.joda.time.DateTime;
+import org.junit.Test;
+
+import ee.hm.dop.common.test.DatabaseTestBase;
+import ee.hm.dop.model.Repository;
 
 public class RepositoryDAOTest extends DatabaseTestBase {
 

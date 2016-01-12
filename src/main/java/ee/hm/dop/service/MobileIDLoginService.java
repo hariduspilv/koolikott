@@ -65,8 +65,7 @@ public class MobileIDLoginService {
         return mobileIDSOAPService.isAuthenticated(authenticationState);
     }
 
-    private AuthenticationState saveResponseToAuthenticationState(
-            MobileAuthenticateResponse mobileAuthenticateResponse) {
+    private AuthenticationState saveResponseToAuthenticationState(MobileAuthenticateResponse mobileAuthenticateResponse) {
         AuthenticationState authenticationState = new AuthenticationState();
         String token = new BigInteger(130, random).toString(32);
         authenticationState.setToken(token);

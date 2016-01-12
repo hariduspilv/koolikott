@@ -1,10 +1,31 @@
 package ee.hm.dop.service;
 
-import ee.hm.dop.dao.AuthenticationStateDAO;
-import ee.hm.dop.model.AuthenticatedUser;
-import ee.hm.dop.model.AuthenticationState;
-import ee.hm.dop.model.User;
-import ee.hm.dop.security.KeyStoreUtils;
+import static ee.hm.dop.utils.ConfigurationProperties.KEYSTORE_FILENAME;
+import static ee.hm.dop.utils.ConfigurationProperties.KEYSTORE_PASSWORD;
+import static ee.hm.dop.utils.ConfigurationProperties.KEYSTORE_SIGNING_ENTITY_ID;
+import static ee.hm.dop.utils.ConfigurationProperties.KEYSTORE_SIGNING_ENTITY_PASSWORD;
+import static ee.hm.dop.utils.ConfigurationProperties.TAAT_ASSERTION_CONSUMER_SERVICE_INDEX;
+import static ee.hm.dop.utils.ConfigurationProperties.TAAT_CONNECTION_ID;
+import static ee.hm.dop.utils.ConfigurationProperties.TAAT_METADATA_ENTITY_ID;
+import static ee.hm.dop.utils.ConfigurationProperties.TAAT_METADATA_FILEPATH;
+import static ee.hm.dop.utils.ConfigurationProperties.TAAT_SSO;
+import static org.easymock.EasyMock.anyObject;
+import static org.easymock.EasyMock.capture;
+import static org.easymock.EasyMock.createMock;
+import static org.easymock.EasyMock.expect;
+import static org.easymock.EasyMock.newCapture;
+import static org.easymock.EasyMock.replay;
+import static org.easymock.EasyMock.verify;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertSame;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+
+import javax.servlet.http.HttpServletResponse;
+
 import org.apache.commons.configuration.Configuration;
 import org.easymock.Capture;
 import org.easymock.EasyMockRunner;
@@ -23,11 +44,11 @@ import org.opensaml.saml2.core.AuthnRequest;
 import org.opensaml.saml2.core.NameIDPolicy;
 import org.opensaml.xml.ConfigurationException;
 
-import javax.servlet.http.HttpServletResponse;
-
-import static ee.hm.dop.utils.ConfigurationProperties.*;
-import static org.easymock.EasyMock.*;
-import static org.junit.Assert.*;
+import ee.hm.dop.dao.AuthenticationStateDAO;
+import ee.hm.dop.model.AuthenticatedUser;
+import ee.hm.dop.model.AuthenticationState;
+import ee.hm.dop.model.User;
+import ee.hm.dop.security.KeyStoreUtils;
 
 @RunWith(EasyMockRunner.class)
 public class TaatServiceTest {
@@ -58,8 +79,8 @@ public class TaatServiceTest {
         Integer assertionConsumerServiceIndex = 3;
         String connectionId = "https://app.website/sp";
 
-        expect(configuration.getString(TAAT_ASSERTION_CONSUMER_SERVICE_INDEX))
-                .andReturn(String.valueOf(assertionConsumerServiceIndex));
+        expect(configuration.getString(TAAT_ASSERTION_CONSUMER_SERVICE_INDEX)).andReturn(
+                String.valueOf(assertionConsumerServiceIndex));
         expect(configuration.getString(TAAT_CONNECTION_ID)).andReturn(connectionId);
 
         HttpServletResponse response = createMock(HttpServletResponse.class);
@@ -72,8 +93,8 @@ public class TaatServiceTest {
         expect(configuration.getString(TAAT_SSO)).andReturn("https://test.taat.ee/notrealurl");
         expect(configuration.getString(KEYSTORE_SIGNING_ENTITY_ID)).andReturn("testAlias");
         expect(configuration.getString(KEYSTORE_SIGNING_ENTITY_PASSWORD)).andReturn("newKeyPass");
-        expect(authenticationStateDAO.createAuthenticationState(anyObject(AuthenticationState.class)))
-                .andReturn(authenticationState);
+        expect(authenticationStateDAO.createAuthenticationState(anyObject(AuthenticationState.class))).andReturn(
+                authenticationState);
 
         replayAll();
         BasicSAMLMessageContext<SAMLObject, AuthnRequest, SAMLObject> context = taatService
@@ -137,8 +158,8 @@ public class TaatServiceTest {
     public void authenticateErrorValidatingSignature() throws Exception {
         String authenticationStateToken = setAuthenticationExpects();
         expect(configuration.getString(TAAT_METADATA_FILEPATH)).andReturn("sarvik_metadata.xml");
-        expect(configuration.getString(TAAT_METADATA_ENTITY_ID))
-                .andReturn("https://reos.taat.edu.ee/saml2/idp/metadata.php");
+        expect(configuration.getString(TAAT_METADATA_ENTITY_ID)).andReturn(
+                "https://reos.taat.edu.ee/saml2/idp/metadata.php");
 
         replayAll();
 
@@ -228,8 +249,8 @@ public class TaatServiceTest {
         authenticationState.setId(1452L);
         authenticationState.setToken(authenticationStateToken);
 
-        expect(authenticationStateDAO.findAuthenticationStateByToken(authenticationStateToken))
-                .andReturn(authenticationState);
+        expect(authenticationStateDAO.findAuthenticationStateByToken(authenticationStateToken)).andReturn(
+                authenticationState);
         authenticationStateDAO.delete(authenticationState);
 
         return authenticationStateToken;
@@ -237,8 +258,8 @@ public class TaatServiceTest {
 
     private void setValidationExpects() {
         expect(configuration.getString(TAAT_METADATA_FILEPATH)).andReturn("reos_metadata.xml");
-        expect(configuration.getString(TAAT_METADATA_ENTITY_ID))
-                .andReturn("https://reos.taat.edu.ee/saml2/idp/metadata.php");
+        expect(configuration.getString(TAAT_METADATA_ENTITY_ID)).andReturn(
+                "https://reos.taat.edu.ee/saml2/idp/metadata.php");
     }
 
     private void replayAll(Object... mocks) {

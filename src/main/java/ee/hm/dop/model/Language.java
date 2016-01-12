@@ -17,6 +17,12 @@ import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+
+import ee.hm.dop.rest.jackson.map.LanguageDeserializer;
+import ee.hm.dop.rest.jackson.map.LanguageSerializer;
+
 /**
  * This is a mapping for ISO 639. For more information @see <a
  * href="http://en.wikipedia.org/wiki/List_of_ISO_639-1_codes" >wikipedia</a>
@@ -24,6 +30,8 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
  * @author Jordan Silva
  */
 @Entity(name = "LanguageTable")
+@JsonSerialize(using = LanguageSerializer.class)
+@JsonDeserialize(using = LanguageDeserializer.class)
 public class Language {
 
     @Id

@@ -1,5 +1,6 @@
 package ee.hm.dop.dao;
 
+import java.security.InvalidParameterException;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -18,8 +19,8 @@ public class PortfolioDAO {
     private EntityManager entityManager;
 
     public Portfolio findById(long portfolioId) {
-        TypedQuery<Portfolio> findById = entityManager.createQuery("SELECT p FROM Portfolio p WHERE p.id = :id",
-                Portfolio.class);
+        TypedQuery<Portfolio> findById = entityManager
+                .createQuery("SELECT p FROM Portfolio p WHERE p.id = :id AND p.deleted = false", Portfolio.class);
 
         TypedQuery<Portfolio> query = findById.setParameter("id", portfolioId);
         return getSingleResult(query);
@@ -34,13 +35,13 @@ public class PortfolioDAO {
      * @return a list of portfolios specified by idList
      */
     public List<Portfolio> findAllById(List<Long> idList) {
-        TypedQuery<Portfolio> findAllByIdList = entityManager.createQuery(
-                "SELECT p FROM Portfolio p WHERE p.id in :idList", Portfolio.class);
+        TypedQuery<Portfolio> findAllByIdList = entityManager
+                .createQuery("SELECT p FROM Portfolio p WHERE p.deleted = false AND p.id in :idList", Portfolio.class);
         return findAllByIdList.setParameter("idList", idList).getResultList();
     }
 
     public List<Portfolio> findByCreator(User creator) {
-        String query = "SELECT p FROM Portfolio p WHERE p.creator.id = :creatorId order by created desc";
+        String query = "SELECT p FROM Portfolio p WHERE p.creator.id = :creatorId AND p.deleted = false order by created desc";
         TypedQuery<Portfolio> findAllByCreator = entityManager.createQuery(query, Portfolio.class);
         return findAllByCreator.setParameter("creatorId", creator.getId()).getResultList();
     }
@@ -58,8 +59,8 @@ public class PortfolioDAO {
     }
 
     public byte[] findPictureByPortfolio(Portfolio portfolio) {
-        TypedQuery<byte[]> findById = entityManager.createQuery("SELECT p.picture FROM Portfolio p WHERE p.id = :id",
-                byte[].class);
+        TypedQuery<byte[]> findById = entityManager
+                .createQuery("SELECT p.picture FROM Portfolio p WHERE p.id = :id AND p.deleted = false", byte[].class);
 
         byte[] picture = null;
         try {
@@ -72,7 +73,7 @@ public class PortfolioDAO {
     }
 
     public synchronized void incrementViewCount(Portfolio portfolio) {
-        entityManager.createQuery("update Portfolio p set p.views = p.views + 1 where p.id = :id")
+        entityManager.createQuery("update Portfolio p set p.views = p.views + 1 where p.id = :id AND p.deleted = false")
                 .setParameter("id", portfolio.getId()).executeUpdate();
         entityManager.flush();
     }
@@ -87,5 +88,14 @@ public class PortfolioDAO {
         Portfolio merged = entityManager.merge(portfolio);
         entityManager.persist(merged);
         return merged;
+    }
+
+    public void delete(Portfolio portfolio) {
+        if (portfolio.getId() == null) {
+            throw new InvalidParameterException("Portfolio does not exist.");
+        }
+
+        portfolio.setDeleted(true);
+        update(portfolio);
     }
 }

@@ -87,7 +87,7 @@ public class MaterialParserWaramu extends MaterialParser {
 
         String value = valueNode.getTextContent().trim().toUpperCase().replaceAll("\\s", "");
 
-        //Waramu specific values
+        // Waramu specific values
         if (value.equals(WEB_PAGE)) {
             value = WEBSITE;
         }
@@ -125,7 +125,7 @@ public class MaterialParserWaramu extends MaterialParser {
     }
 
     @Override
-    protected Taxon setSubject(Node node, Taxon lastTaxon) {
+    protected Taxon setSubject(Node node, Taxon lastTaxon, Material material) {
         return null;
     }
 
@@ -167,12 +167,13 @@ public class MaterialParserWaramu extends MaterialParser {
         material.setTags(tags);
     }
 
+    @Override
     protected void setContributors(Material material, Document doc) {
         List<Author> authors = null;
         try {
             authors = getAuthors(doc);
         } catch (Exception e) {
-            //ignore if there is no authors for a material
+            // ignore if there is no authors for a material
         }
         material.setAuthors(authors);
     }

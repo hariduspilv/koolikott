@@ -20,6 +20,14 @@ public class SearchFilter {
 
     private boolean isSpecialEducation = false;
 
+    private Integer issuedFrom;
+
+    private CrossCurricularTheme crossCurricularTheme;
+
+    private KeyCompetence keyCompetence;
+
+    private Visibility visibility;
+
     public Taxon getTaxon() {
         return taxon;
     }
@@ -74,6 +82,38 @@ public class SearchFilter {
 
     public void setSpecialEducation(boolean isSpecialEducation) {
         this.isSpecialEducation = isSpecialEducation;
+    }
+
+    public Integer getIssuedFrom() {
+        return issuedFrom;
+    }
+
+    public void setIssuedFrom(Integer issuedFrom) {
+        this.issuedFrom = issuedFrom;
+    }
+
+    public CrossCurricularTheme getCrossCurricularTheme() {
+        return crossCurricularTheme;
+    }
+
+    public void setCrossCurricularTheme(CrossCurricularTheme crossCurricularTheme) {
+        this.crossCurricularTheme = crossCurricularTheme;
+    }
+
+    public KeyCompetence getKeyCompetence() {
+        return keyCompetence;
+    }
+
+    public void setKeyCompetence(KeyCompetence keyCompetence) {
+        this.keyCompetence = keyCompetence;
+    }
+
+    public Visibility getVisibility() {
+        return visibility;
+    }
+
+    public void setVisibility(Visibility visibility) {
+        this.visibility = visibility;
     }
 
 }

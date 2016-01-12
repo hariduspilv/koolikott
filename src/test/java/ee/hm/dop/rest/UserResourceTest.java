@@ -1,13 +1,20 @@
 package ee.hm.dop.rest;
 
-import ee.hm.dop.common.test.ResourceIntegrationTestBase;
-import ee.hm.dop.model.User;
-import org.junit.Test;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 
-import javax.ws.rs.core.*;
+import javax.ws.rs.core.GenericType;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.MultivaluedHashMap;
+import javax.ws.rs.core.MultivaluedMap;
+import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
-import static org.junit.Assert.*;
+import org.junit.Test;
+
+import ee.hm.dop.common.test.ResourceIntegrationTestBase;
+import ee.hm.dop.model.User;
 
 public class UserResourceTest extends ResourceIntegrationTestBase {
 

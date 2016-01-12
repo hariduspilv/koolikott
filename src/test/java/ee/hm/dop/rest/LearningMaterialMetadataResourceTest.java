@@ -16,6 +16,8 @@ import javax.ws.rs.core.GenericType;
 import org.junit.Test;
 
 import ee.hm.dop.common.test.ResourceIntegrationTestBase;
+import ee.hm.dop.model.CrossCurricularTheme;
+import ee.hm.dop.model.KeyCompetence;
 import ee.hm.dop.model.Language;
 import ee.hm.dop.model.LicenseType;
 import ee.hm.dop.model.ResourceType;
@@ -34,6 +36,8 @@ public class LearningMaterialMetadataResourceTest extends ResourceIntegrationTes
     private static final String GET_TARGET_GROUPS_URL = "learningMaterialMetadata/targetGroup";
     private static final String GET_RESOURCE_TYPES_URL = "learningMaterialMetadata/resourceType";
     private static final String GET_LICENSE_TYPES_URL = "learningMaterialMetadata/licenseType";
+    private static final String GET_CROSS_CURRICULAR_THEMES_URL = "learningMaterialMetadata/crossCurricularTheme";
+    private static final String GET_KEY_COMPETENCES_URL = "learningMaterialMetadata/keyCompetence";
 
     @Test
     public void getEducationalContext() {
@@ -126,6 +130,34 @@ public class LearningMaterialMetadataResourceTest extends ResourceIntegrationTes
         for (int i = 0; i < licenseTypes.size(); i++) {
             assertValidLicenseType(licenseTypes.get(i));
         }
+    }
+
+    @Test
+    public void getCrossCurricularThemes() {
+        List<CrossCurricularTheme> result = doGet(GET_CROSS_CURRICULAR_THEMES_URL,
+                new GenericType<List<CrossCurricularTheme>>() {
+                });
+
+        assertEquals(2, result.size());
+
+        List<String> expected = Arrays.asList("Lifelong_learning_and_career_planning",
+                "Environment_and_sustainable_development");
+        List<String> actual = result.stream().map(r -> r.getName()).collect(Collectors.toList());
+
+        assertTrue(actual.containsAll(expected));
+    }
+
+    @Test
+    public void getKeyCompetences() {
+        List<KeyCompetence> result = doGet(GET_KEY_COMPETENCES_URL, new GenericType<List<KeyCompetence>>() {
+        });
+
+        assertEquals(2, result.size());
+
+        List<String> expected = Arrays.asList("Cultural_and_value_competence", "Social_and_citizenship_competence");
+        List<String> actual = result.stream().map(r -> r.getName()).collect(Collectors.toList());
+
+        assertTrue(actual.containsAll(expected));
     }
 
     private void assertValidLicenseType(LicenseType licenseType) {

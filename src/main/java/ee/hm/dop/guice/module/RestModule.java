@@ -6,6 +6,7 @@ import com.google.inject.servlet.ServletModule;
 
 import ee.hm.dop.guice.GuiceInjector.Module;
 import ee.hm.dop.service.AuthenticatedUserService;
+import ee.hm.dop.service.CrossCurricularThemeService;
 import ee.hm.dop.service.IssueDateService;
 import ee.hm.dop.service.LanguageService;
 import ee.hm.dop.service.LicenseTypeService;
@@ -50,5 +51,6 @@ public class RestModule extends ServletModule {
         bind(MobileIDSOAPService.class);
         bind(PublisherService.class);
         bind(IssueDateService.class);
+        bind(CrossCurricularThemeService.class);
     }
 }

@@ -7,8 +7,10 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
+import java.util.Arrays;
 import java.util.List;
 
+import javax.inject.Inject;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.MediaType;
@@ -16,10 +18,13 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
 import org.joda.time.DateTime;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import ee.hm.dop.common.test.ResourceIntegrationTestBase;
+import ee.hm.dop.dao.TaxonDAO;
+import ee.hm.dop.model.CrossCurricularTheme;
+import ee.hm.dop.model.ImproperContent;
+import ee.hm.dop.model.KeyCompetence;
 import ee.hm.dop.model.Language;
 import ee.hm.dop.model.LanguageString;
 import ee.hm.dop.model.Material;
@@ -34,6 +39,10 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
     private static final String GET_MATERIAL_PICTURE_URL = "material/getPicture?materialId=%s";
     private static final String GET_MATERIAL_URL = "material?materialId=%s";
     private static final String GET_BY_CREATOR_URL = "material/getByCreator?username=%s";
+    private static final String CREATE_MATERIAL_URL = "material";
+
+    @Inject
+    private TaxonDAO taxonDAO;
 
     @Test
     public void getMaterial() {
@@ -97,7 +106,6 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
 
     }
 
-    @Ignore
     @Test
     public void GetNewestMaterials() {
         Response response = doGet(format(GET_NEWEST_MATERIALS_URL, 8));
@@ -170,7 +178,6 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
         assertEquals(Status.NOT_FOUND.getStatusCode(), response.getStatus());
     }
 
-    @Ignore
     @Test
     public void getMaterialWithSubjects() {
         Material material = getMaterial(6);
@@ -194,7 +201,6 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
         assertEquals(0, taxons.size());
     }
 
-    @Ignore
     @Test
     public void getByCreator() {
         String username = "mati.maasikas";
@@ -238,6 +244,105 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
         assertEquals(0, materials.size());
     }
 
+    @Test
+    public void create() {
+        login("89012378912");
+
+        Material material = new Material();
+        material.setSource("http://www.whatisthis.example.com");
+
+        Subject subject = (Subject) taxonDAO.findTaxonById(22L);
+        material.setTaxons(Arrays.asList(subject));
+
+        KeyCompetence keyCompetence = new KeyCompetence();
+        keyCompetence.setId(1L);
+        keyCompetence.setName("Cultural_and_value_competence");
+        material.setKeyCompetences(Arrays.asList(keyCompetence));
+
+        CrossCurricularTheme crossCurricularTheme = new CrossCurricularTheme();
+        crossCurricularTheme.setId(2L);
+        crossCurricularTheme.setName("Environment_and_sustainable_development");
+        material.setCrossCurricularThemes(Arrays.asList(crossCurricularTheme));
+
+        Response response = doPost(CREATE_MATERIAL_URL, Entity.entity(material, MediaType.APPLICATION_JSON_TYPE));
+        assertEquals(Status.OK.getStatusCode(), response.getStatus());
+
+        Material createdMaterial = response.readEntity(Material.class);
+
+        assertNotNull(createdMaterial.getKeyCompetences());
+        assertEquals(1, createdMaterial.getKeyCompetences().size());
+        KeyCompetence createdKeyCompetence = createdMaterial.getKeyCompetences().get(0);
+        assertEquals(keyCompetence.getName(), createdKeyCompetence.getName());
+
+        assertNotNull(createdMaterial.getCrossCurricularThemes());
+        assertEquals(1, createdMaterial.getCrossCurricularThemes().size());
+        CrossCurricularTheme createdCrossCurricularTheme = createdMaterial.getCrossCurricularThemes().get(0);
+        assertEquals(crossCurricularTheme.getName(), createdCrossCurricularTheme.getName());
+    }
+
+    @Test
+    public void createWithKeyCompetencesWhenNotAllowed() {
+        login("89012378912");
+
+        Material material = new Material();
+        material.setSource("http://www.whatisthis.example.com");
+
+        Subject subject = (Subject) taxonDAO.findTaxonById(21L);
+        material.setTaxons(Arrays.asList(subject));
+
+        KeyCompetence keyCompetence = new KeyCompetence();
+        keyCompetence.setId(1L);
+        keyCompetence.setName("Cultural_and_value_competence");
+        material.setKeyCompetences(Arrays.asList(keyCompetence));
+
+        CrossCurricularTheme crossCurricularTheme = new CrossCurricularTheme();
+        crossCurricularTheme.setId(2L);
+        crossCurricularTheme.setName("Environment_and_sustainable_development");
+        material.setCrossCurricularThemes(Arrays.asList(crossCurricularTheme));
+
+        Response response = doPost(CREATE_MATERIAL_URL, Entity.entity(material, MediaType.APPLICATION_JSON_TYPE));
+        assertEquals(Status.OK.getStatusCode(), response.getStatus());
+
+        Material createdMaterial = response.readEntity(Material.class);
+
+        assertNull(createdMaterial.getKeyCompetences());
+        assertNull(createdMaterial.getCrossCurricularThemes());
+    }
+
+    @Test
+    public void hasSetImproper() {
+        login("89012378912");
+
+        Boolean bool = doGet(format("material/hasSetImproper?materialId=%s", 2), Boolean.class);
+
+        assertTrue(bool);
+    }
+
+    @Test
+    public void isSetImproper() {
+        login("89898989898");
+
+        Boolean bool = doGet(format("material/isSetImproper?materialId=%s", 3), Boolean.class);
+
+        assertTrue(bool);
+    }
+
+    @Test
+    public void setNotImproper() {
+        login("89898989898");
+        Response response1 = doGet("material/getImproper");
+        List<ImproperContent> originalImproperContentList = response1.readEntity(new GenericType<List<ImproperContent>>() {
+        });
+
+        doPost(format("material/setNotImproper/%s", 3), null);
+
+        Response response2 = doGet("material/getImproper");
+        List<ImproperContent> newImproperContentList = response2.readEntity(new GenericType<List<ImproperContent>>() {
+        });
+
+        assertEquals(originalImproperContentList.size(), newImproperContentList.size()+1);
+    }
+
     private void assertMaterial1(Material material) {
         assertEquals(2, material.getTitles().size());
         assertEquals("Matemaatika õpik üheksandale klassile", material.getTitles().get(0).getText());
@@ -245,13 +350,13 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
         assertEquals("Test description in estonian. (Russian available)", material.getDescriptions().get(0).getText());
         Language descriptionLanguage = material.getDescriptions().get(0).getLanguage();
         assertEquals("est", descriptionLanguage.getCode());
-        assertNull(descriptionLanguage.getName());
-        assertNull(descriptionLanguage.getCodes());
+        assertNotNull(descriptionLanguage.getName());
+        assertNotNull(descriptionLanguage.getCodes());
         Language language = material.getLanguage();
         assertNotNull(language);
         assertEquals("est", language.getCode());
-        assertNull(language.getName());
-        assertNull(language.getCodes());
+        assertEquals("Estonian", language.getName());
+        assertNotNull(language.getCodes());
         assertNull(material.getPicture());
         assertNotNull(material.getTaxons());
         assertEquals(2, material.getTaxons().size());
@@ -266,6 +371,8 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
         assertTrue(material.getTargetGroups().contains(TargetGroup.ZERO_FIVE));
         assertTrue(material.getTargetGroups().contains(TargetGroup.SIX_SEVEN));
         assertTrue(material.isSpecialEducation());
+        assertEquals("Lifelong_learning_and_career_planning", material.getCrossCurricularThemes().get(0).getName());
+        assertEquals("Cultural_and_value_competence", material.getKeyCompetences().get(0).getName());
     }
 
     private Material getMaterial(long materialId) {

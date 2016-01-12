@@ -20,360 +20,426 @@ import javax.persistence.JoinTable;
 import javax.persistence.Lob;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+import javax.persistence.OrderBy;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
+import javax.validation.constraints.NotNull;
 
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.Formula;
 import org.hibernate.annotations.Type;
 import org.joda.time.DateTime;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 import ee.hm.dop.model.taxon.Taxon;
 import ee.hm.dop.rest.jackson.map.DateTimeDeserializer;
 import ee.hm.dop.rest.jackson.map.DateTimeSerializer;
-import ee.hm.dop.rest.jackson.map.LanguageDeserializer;
-import ee.hm.dop.rest.jackson.map.LanguageSerializer;
+import ee.hm.dop.rest.jackson.map.PictureDeserializer;
 
 @Entity
 @Table(uniqueConstraints = { @UniqueConstraint(columnNames = { "repositoryIdentifier", "repository" }) })
 public class Material implements Searchable {
 
-    @Id
-    @GeneratedValue
-    private Long id;
+	@Id
+	@GeneratedValue
+	private Long id;
 
-    @ManyToMany(fetch = EAGER, cascade = { PERSIST, MERGE })
-    @JoinTable(
-            name = "Material_Title",
-            joinColumns = { @JoinColumn(name = "material") },
-            inverseJoinColumns = { @JoinColumn(name = "title") },
-            uniqueConstraints = @UniqueConstraint(columnNames = { "material", "title" }) )
-    private List<LanguageString> titles;
+	@NotNull
+	@ManyToMany(fetch = EAGER, cascade = { PERSIST, MERGE })
+	@Fetch(FetchMode.SELECT)
+	@JoinTable(name = "Material_Title", joinColumns = { @JoinColumn(name = "material") }, inverseJoinColumns = {
+			@JoinColumn(name = "title") }, uniqueConstraints = @UniqueConstraint(columnNames = { "material",
+					"title" }) )
+	private List<LanguageString> titles;
 
-    @ManyToOne
-    @JoinColumn(name = "lang")
-    private Language language;
+	@ManyToOne
+	@JoinColumn(name = "lang")
+	private Language language;
 
-    @ManyToMany(fetch = EAGER, cascade = { PERSIST, MERGE })
-    @JoinTable(
-            name = "Material_Author",
-            joinColumns = { @JoinColumn(name = "material") },
-            inverseJoinColumns = { @JoinColumn(name = "author") },
-            uniqueConstraints = @UniqueConstraint(columnNames = { "material", "author" }) )
-    private List<Author> authors;
+	@ManyToMany(fetch = EAGER, cascade = { PERSIST, MERGE })
+	@Fetch(FetchMode.SELECT)
+	@JoinTable(name = "Material_Author", joinColumns = { @JoinColumn(name = "material") }, inverseJoinColumns = {
+			@JoinColumn(name = "author") }, uniqueConstraints = @UniqueConstraint(columnNames = { "material",
+					"author" }) )
+	private List<Author> authors;
 
-    @OneToOne
-    @JoinColumn(name = "issueDate")
-    private IssueDate issueDate;
+	@OneToOne
+	@JoinColumn(name = "issueDate")
+	private IssueDate issueDate;
 
-    @ManyToMany(fetch = EAGER, cascade = { PERSIST, MERGE })
-    @JoinTable(
-            name = "Material_Description",
-            joinColumns = { @JoinColumn(name = "material") },
-            inverseJoinColumns = { @JoinColumn(name = "description") },
-            uniqueConstraints = @UniqueConstraint(columnNames = { "material", "description" }) )
-    private List<LanguageString> descriptions;
+	@ManyToMany(fetch = EAGER, cascade = { PERSIST, MERGE })
+	@Fetch(FetchMode.SELECT)
+	@JoinTable(name = "Material_Description", joinColumns = { @JoinColumn(name = "material") }, inverseJoinColumns = {
+			@JoinColumn(name = "description") }, uniqueConstraints = @UniqueConstraint(columnNames = { "material",
+					"description" }) )
+	private List<LanguageString> descriptions;
 
-    @Column(nullable = false, columnDefinition = "TEXT")
-    private String source;
+	@Column(nullable = false, columnDefinition = "TEXT")
+	private String source;
 
-    @ManyToMany(fetch = EAGER)
-    @JoinTable(
-            name = "Material_ResourceType",
-            joinColumns = { @JoinColumn(name = "material") },
-            inverseJoinColumns = { @JoinColumn(name = "resourceType") },
-            uniqueConstraints = @UniqueConstraint(columnNames = { "material", "resourceType" }) )
-    private List<ResourceType> resourceTypes;
+	@ManyToMany(fetch = EAGER)
+	@Fetch(FetchMode.SELECT)
+	@JoinTable(name = "Material_ResourceType", joinColumns = { @JoinColumn(name = "material") }, inverseJoinColumns = {
+			@JoinColumn(name = "resourceType") }, uniqueConstraints = @UniqueConstraint(columnNames = { "material",
+					"resourceType" }) )
+	private List<ResourceType> resourceTypes;
 
-    @ManyToMany(fetch = EAGER)
-    @JoinTable(
-            name = "Material_Taxon",
-            joinColumns = { @JoinColumn(name = "material") },
-            inverseJoinColumns = { @JoinColumn(name = "taxon") },
-            uniqueConstraints = @UniqueConstraint(columnNames = { "material", "taxon" }) )
-    private List<Taxon> taxons;
+	@ManyToMany(fetch = EAGER)
+	@Fetch(FetchMode.SELECT)
+	@JoinTable(name = "Material_Taxon", joinColumns = { @JoinColumn(name = "material") }, inverseJoinColumns = {
+			@JoinColumn(name = "taxon") }, uniqueConstraints = @UniqueConstraint(columnNames = { "material",
+					"taxon" }) )
+	private List<Taxon> taxons;
 
-    @ManyToOne
-    @JoinColumn(name = "licenseType")
-    private LicenseType licenseType;
+	@ManyToOne
+	@JoinColumn(name = "licenseType")
+	private LicenseType licenseType;
 
-    @ManyToMany(fetch = EAGER, cascade = { PERSIST, MERGE })
-    @JoinTable(
-            name = "Material_Publisher",
-            joinColumns = { @JoinColumn(name = "material") },
-            inverseJoinColumns = { @JoinColumn(name = "publisher") },
-            uniqueConstraints = @UniqueConstraint(columnNames = { "material", "publisher" }) )
-    private List<Publisher> publishers;
+	@ManyToMany(fetch = EAGER, cascade = { PERSIST, MERGE })
+	@Fetch(FetchMode.SELECT)
+	@JoinTable(name = "Material_Publisher", joinColumns = { @JoinColumn(name = "material") }, inverseJoinColumns = {
+			@JoinColumn(name = "publisher") }, uniqueConstraints = @UniqueConstraint(columnNames = { "material",
+					"publisher" }) )
+	private List<Publisher> publishers;
 
-    @Column(nullable = false)
-    @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
-    private DateTime added;
+	@Column(nullable = false)
+	@Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
+	private DateTime added;
 
-    @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
-    private DateTime updated;
+	@Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
+	private DateTime updated;
 
-    @Column(nullable = false)
-    private Long views = (long) 0;
+	@Column(nullable = false)
+	private Long views = (long) 0;
 
-    @ManyToMany(fetch = EAGER, cascade = { PERSIST, MERGE })
-    @JoinTable(
-            name = "Material_Tag",
-            joinColumns = { @JoinColumn(name = "material") },
-            inverseJoinColumns = { @JoinColumn(name = "tag") },
-            uniqueConstraints = @UniqueConstraint(columnNames = { "material", "tag" }) )
-    private List<Tag> tags;
+	@ManyToMany(fetch = EAGER, cascade = { PERSIST, MERGE })
+	@Fetch(FetchMode.SELECT)
+	@JoinTable(name = "Material_Tag", joinColumns = { @JoinColumn(name = "material") }, inverseJoinColumns = {
+			@JoinColumn(name = "tag") }, uniqueConstraints = @UniqueConstraint(columnNames = { "material", "tag" }) )
+	private List<Tag> tags;
 
-    @Lob
-    @JsonIgnore
-    private byte[] picture;
+	@OneToMany(fetch = EAGER, cascade = { MERGE, PERSIST })
+	@Fetch(FetchMode.SELECT)
+	@JoinColumn(name = "material")
+	@OrderBy("added DESC")
+	private List<Comment> comments;
 
-    @Formula("picture is not null")
-    private boolean hasPicture;
+	@Lob
+	private byte[] picture;
 
-    @JsonIgnore
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "repository")
-    private Repository repository;
+	@Formula("picture is not null")
+	private boolean hasPicture;
 
-    /**
-     * The ID in the repository. Null when created in DOP
-     */
-    @JsonIgnore
-    @Column
-    private String repositoryIdentifier;
+	@Formula(value = "(SELECT COUNT(*) FROM UserLike ul WHERE ul.material = id AND ul.isLiked = 1)")
+	private int likes;
 
-    @ManyToOne
-    @JoinColumn(name = "creator")
-    private User creator;
+	@Formula(value = "(SELECT COUNT(*) FROM UserLike ul WHERE ul.material = id AND ul.isLiked = 0)")
+	private int dislikes;
 
-    @JsonIgnore
-    @Column
-    private boolean deleted;
+	@JsonIgnore
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "repository")
+	private Repository repository;
 
-    @Column(nullable = false)
-    private boolean paid = false;
+	/**
+	 * The ID in the repository. Null when created in DOP
+	 */
+	@JsonIgnore
+	@Column
+	private String repositoryIdentifier;
 
-    @Formula("(select r.isEstonianPublisher from Repository r where r.id = repository)")
-    private Boolean embeddable;
+	@ManyToOne
+	@JoinColumn(name = "creator")
+	private User creator;
 
-    @Enumerated(EnumType.STRING)
-    @Column(name = "targetGroup")
-    @ElementCollection(fetch = FetchType.EAGER)
-    @CollectionTable(name = "Material_TargetGroup", joinColumns = @JoinColumn(name = "material") )
-    private List<TargetGroup> targetGroups;
+	@JsonIgnore
+	@Column
+	private boolean deleted;
+
+	@Column(nullable = false)
+	private boolean paid = false;
 
     @Column(nullable = false)
-    private boolean isSpecialEducation = false;
+    private Boolean embeddable = false;
 
-    @Override
-    public Long getId() {
-        return id;
-    }
+	@Enumerated(EnumType.STRING)
+	@Column(name = "targetGroup")
+	@ElementCollection(fetch = FetchType.EAGER)
+	@Fetch(FetchMode.SELECT)
+	@CollectionTable(name = "Material_TargetGroup", joinColumns = @JoinColumn(name = "material") )
+	private List<TargetGroup> targetGroups;
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+	@Column(nullable = false)
+	private boolean isSpecialEducation = false;
 
-    public List<LanguageString> getTitles() {
-        return titles;
-    }
+	@ManyToMany(fetch = EAGER, cascade = { PERSIST, MERGE })
+	@Fetch(FetchMode.SELECT)
+	@JoinTable(name = "Material_CrossCurricularTheme", joinColumns = {
+			@JoinColumn(name = "material") }, inverseJoinColumns = {
+					@JoinColumn(name = "crossCurricularTheme") }, uniqueConstraints = @UniqueConstraint(columnNames = {
+							"material", "crossCurricularTheme" }) )
+	private List<CrossCurricularTheme> crossCurricularThemes;
 
-    public void setTitles(List<LanguageString> titles) {
-        this.titles = titles;
-    }
+	@ManyToMany(fetch = EAGER, cascade = { PERSIST, MERGE })
+	@Fetch(FetchMode.SELECT)
+	@JoinTable(name = "Material_KeyCompetence", joinColumns = { @JoinColumn(name = "material") }, inverseJoinColumns = {
+			@JoinColumn(name = "keyCompetence") }, uniqueConstraints = @UniqueConstraint(columnNames = { "material",
+					"keyCompetence" }) )
+	private List<KeyCompetence> keyCompetences;
 
-    public List<Author> getAuthors() {
-        return authors;
-    }
+	@Override
+	public Long getId() {
+		return id;
+	}
 
-    public void setAuthors(List<Author> authors) {
-        this.authors = authors;
-    }
+	public void setId(Long id) {
+		this.id = id;
+	}
 
-    public IssueDate getIssueDate() {
-        return issueDate;
-    }
+	public List<LanguageString> getTitles() {
+		return titles;
+	}
 
-    public void setIssueDate(IssueDate issueDate) {
-        this.issueDate = issueDate;
-    }
+	public void setTitles(List<LanguageString> titles) {
+		this.titles = titles;
+	}
 
-    public List<LanguageString> getDescriptions() {
-        return descriptions;
-    }
+	public List<Author> getAuthors() {
+		return authors;
+	}
 
-    public void setDescriptions(List<LanguageString> descriptions) {
-        this.descriptions = descriptions;
-    }
+	public void setAuthors(List<Author> authors) {
+		this.authors = authors;
+	}
 
-    @JsonSerialize(using = LanguageSerializer.class)
-    public Language getLanguage() {
-        return language;
-    }
+	public IssueDate getIssueDate() {
+		return issueDate;
+	}
 
-    @JsonDeserialize(using = LanguageDeserializer.class)
-    public void setLanguage(Language language) {
-        this.language = language;
-    }
+	public void setIssueDate(IssueDate issueDate) {
+		this.issueDate = issueDate;
+	}
 
-    public String getSource() {
-        return source;
-    }
+	public List<LanguageString> getDescriptions() {
+		return descriptions;
+	}
 
-    public void setSource(String source) {
-        this.source = source;
-    }
+	public void setDescriptions(List<LanguageString> descriptions) {
+		this.descriptions = descriptions;
+	}
 
-    public List<ResourceType> getResourceTypes() {
-        return resourceTypes;
-    }
+	public Language getLanguage() {
+		return language;
+	}
 
-    public void setResourceTypes(List<ResourceType> resourceTypes) {
-        this.resourceTypes = resourceTypes;
-    }
+	public void setLanguage(Language language) {
+		this.language = language;
+	}
 
-    public List<Taxon> getTaxons() {
-        return taxons;
-    }
+	public String getSource() {
+		return source;
+	}
 
-    public void setTaxons(List<Taxon> taxons) {
-        this.taxons = taxons;
-    }
+	public void setSource(String source) {
+		this.source = source;
+	}
 
-    public LicenseType getLicenseType() {
-        return licenseType;
-    }
+	public List<ResourceType> getResourceTypes() {
+		return resourceTypes;
+	}
 
-    public void setLicenseType(LicenseType licenseType) {
-        this.licenseType = licenseType;
-    }
+	public void setResourceTypes(List<ResourceType> resourceTypes) {
+		this.resourceTypes = resourceTypes;
+	}
 
-    public List<Publisher> getPublishers() {
-        return publishers;
-    }
+	public List<Taxon> getTaxons() {
+		return taxons;
+	}
 
-    public void setPublishers(List<Publisher> publishers) {
-        this.publishers = publishers;
-    }
+	public void setTaxons(List<Taxon> taxons) {
+		this.taxons = taxons;
+	}
 
-    @JsonSerialize(using = DateTimeSerializer.class)
-    public DateTime getAdded() {
-        return added;
-    }
+	public LicenseType getLicenseType() {
+		return licenseType;
+	}
 
-    @JsonDeserialize(using = DateTimeDeserializer.class)
-    public void setAdded(DateTime added) {
-        this.added = added;
-    }
+	public void setLicenseType(LicenseType licenseType) {
+		this.licenseType = licenseType;
+	}
 
-    @JsonSerialize(using = DateTimeSerializer.class)
-    public DateTime getUpdated() {
-        return updated;
-    }
+	public List<Publisher> getPublishers() {
+		return publishers;
+	}
 
-    @JsonDeserialize(using = DateTimeDeserializer.class)
-    public void setUpdated(DateTime updated) {
-        this.updated = updated;
-    }
+	public void setPublishers(List<Publisher> publishers) {
+		this.publishers = publishers;
+	}
 
-    public Long getViews() {
-        return views;
-    }
+	@JsonSerialize(using = DateTimeSerializer.class)
+	public DateTime getAdded() {
+		return added;
+	}
 
-    public void setViews(Long views) {
-        this.views = views;
-    }
+	@JsonDeserialize(using = DateTimeDeserializer.class)
+	public void setAdded(DateTime added) {
+		this.added = added;
+	}
 
-    public List<Tag> getTags() {
-        return tags;
-    }
+	@JsonSerialize(using = DateTimeSerializer.class)
+	public DateTime getUpdated() {
+		return updated;
+	}
 
-    public void setTags(List<Tag> tags) {
-        this.tags = tags;
-    }
+	@JsonDeserialize(using = DateTimeDeserializer.class)
+	public void setUpdated(DateTime updated) {
+		this.updated = updated;
+	}
 
-    public byte[] getPicture() {
-        return picture;
-    }
+	public Long getViews() {
+		return views;
+	}
 
-    public void setPicture(byte[] picture) {
-        this.picture = picture;
-    }
+	public void setViews(Long views) {
+		this.views = views;
+	}
 
-    public boolean getHasPicture() {
-        return hasPicture;
-    }
+	public List<Tag> getTags() {
+		return tags;
+	}
 
-    public void setHasPicture(boolean hasPicture) {
-        this.hasPicture = hasPicture;
-    }
+	public void setTags(List<Tag> tags) {
+		this.tags = tags;
+	}
 
-    public String getRepositoryIdentifier() {
-        return repositoryIdentifier;
-    }
+	public List<Comment> getComments() {
+		return comments;
+	}
 
-    public void setRepositoryIdentifier(String repositoryIdentifier) {
-        this.repositoryIdentifier = repositoryIdentifier;
-    }
+	public void setComments(List<Comment> comments) {
+		this.comments = comments;
+	}
 
-    public Repository getRepository() {
-        return repository;
-    }
+	@JsonIgnore
+	public byte[] getPicture() {
+		return picture;
+	}
 
-    public void setRepository(Repository repository) {
-        this.repository = repository;
-    }
+	@JsonProperty
+	@JsonDeserialize(using = PictureDeserializer.class)
+	public void setPicture(byte[] picture) {
+		this.picture = picture;
+	}
 
-    public User getCreator() {
-        return creator;
-    }
+	public boolean getHasPicture() {
+		return hasPicture;
+	}
 
-    public void setCreator(User creator) {
-        this.creator = creator;
-    }
+	public void setHasPicture(boolean hasPicture) {
+		this.hasPicture = hasPicture;
+	}
 
-    public boolean isDeleted() {
-        return deleted;
-    }
+	public int getLikes() {
+		return likes;
+	}
 
-    public void setDeleted(boolean deleted) {
-        this.deleted = deleted;
-    }
+	public void setLikes(int likes) {
+		this.likes = likes;
+	}
 
-    public boolean isPaid() {
-        return paid;
-    }
+	public int getDislikes() {
+		return dislikes;
+	}
 
-    public void setIsPaid(boolean paid) {
-        this.paid = paid;
-    }
+	public void setDislikes(int dislikes) {
+		this.dislikes = dislikes;
+	}
 
-    public boolean isEmbeddable() {
-        return embeddable != null ? embeddable : false;
-    }
+	public String getRepositoryIdentifier() {
+		return repositoryIdentifier;
+	}
 
-    public void setEmbeddable(Boolean embeddable) {
-        this.embeddable = embeddable;
-    }
+	public void setRepositoryIdentifier(String repositoryIdentifier) {
+		this.repositoryIdentifier = repositoryIdentifier;
+	}
 
-    public List<TargetGroup> getTargetGroups() {
-        return targetGroups;
-    }
+	public Repository getRepository() {
+		return repository;
+	}
 
-    public void setTargetGroups(List<TargetGroup> targetGroups) {
-        this.targetGroups = targetGroups;
-    }
+	public void setRepository(Repository repository) {
+		this.repository = repository;
+	}
 
-    public boolean isSpecialEducation() {
-        return isSpecialEducation;
-    }
+	public User getCreator() {
+		return creator;
+	}
 
-    public void setSpecialEducation(boolean isSpecialEducation) {
-        this.isSpecialEducation = isSpecialEducation;
-    }
+	public void setCreator(User creator) {
+		this.creator = creator;
+	}
+
+	public boolean isDeleted() {
+		return deleted;
+	}
+
+	public void setDeleted(boolean deleted) {
+		this.deleted = deleted;
+	}
+
+	public boolean isPaid() {
+		return paid;
+	}
+
+	public void setIsPaid(boolean paid) {
+		this.paid = paid;
+	}
+
+	public boolean isEmbeddable() {
+		return embeddable != null ? embeddable : false;
+	}
+
+	public void setEmbeddable(Boolean embeddable) {
+		this.embeddable = embeddable;
+	}
+
+	public List<TargetGroup> getTargetGroups() {
+		return targetGroups;
+	}
+
+	public void setTargetGroups(List<TargetGroup> targetGroups) {
+		this.targetGroups = targetGroups;
+	}
+
+	public boolean isSpecialEducation() {
+		return isSpecialEducation;
+	}
+
+	public void setSpecialEducation(boolean isSpecialEducation) {
+		this.isSpecialEducation = isSpecialEducation;
+	}
+
+	public List<CrossCurricularTheme> getCrossCurricularThemes() {
+		return crossCurricularThemes;
+	}
+
+	public void setCrossCurricularThemes(List<CrossCurricularTheme> crossCurricularThemes) {
+		this.crossCurricularThemes = crossCurricularThemes;
+	}
+
+	public List<KeyCompetence> getKeyCompetences() {
+		return keyCompetences;
+	}
+
+	public void setKeyCompetences(List<KeyCompetence> keyCompetences) {
+		this.keyCompetences = keyCompetences;
+	}
 
 }

@@ -1,12 +1,13 @@
 package ee.hm.dop.guice.provider;
 
-import ee.hm.dop.common.test.GuiceTestRunner;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import static org.junit.Assert.assertNotNull;
 
 import javax.inject.Inject;
 
-import static org.junit.Assert.assertNotNull;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+
+import ee.hm.dop.common.test.GuiceTestRunner;
 
 @RunWith(GuiceTestRunner.class)
 public class SOAPConnectionProviderTest {

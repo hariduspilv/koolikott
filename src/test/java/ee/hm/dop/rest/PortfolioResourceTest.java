@@ -8,7 +8,9 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.GenericType;
@@ -17,17 +19,16 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
 import org.joda.time.DateTime;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import ee.hm.dop.common.test.ResourceIntegrationTestBase;
 import ee.hm.dop.model.Chapter;
+import ee.hm.dop.model.ImproperContent;
 import ee.hm.dop.model.Material;
 import ee.hm.dop.model.Portfolio;
 import ee.hm.dop.model.TargetGroup;
-import ee.hm.dop.rest.PortfolioResource.ChapterForm;
-import ee.hm.dop.rest.PortfolioResource.CreatePortfolioForm;
-import ee.hm.dop.rest.PortfolioResource.UpdatePortfolioForm;
+import ee.hm.dop.model.User;
+import ee.hm.dop.model.Visibility;
 
 public class PortfolioResourceTest extends ResourceIntegrationTestBase {
 
@@ -37,15 +38,52 @@ public class PortfolioResourceTest extends ResourceIntegrationTestBase {
     private static final String GET_BY_CREATOR_URL = "portfolio/getByCreator?username=%s";
     private static final String GET_PORTFOLIO_PICTURE_URL = "portfolio/getPicture?portfolioId=%s";
     private static final String PORTFOLIO_INCREASE_VIEW_COUNT_URL = "portfolio/increaseViewCount";
+    private static final String PORTFOLIO_COPY_URL = "portfolio/copy";
+    private static final String DELETE_PORTFOLIO_URL = "portfolio/delete";
 
-    @Ignore
     @Test
     public void getPortfolio() {
         Portfolio portfolio = getPortfolio(1);
         assertPortfolio1(portfolio);
     }
 
-    @Ignore
+    @Test
+    public void getNotExistingPortfolio() {
+        Response response = doGet(format(GET_PORTFOLIO_URL, 2000));
+        assertEquals(Status.NO_CONTENT.getStatusCode(), response.getStatus());
+    }
+
+    @Test
+    public void getPrivatePortfolioAsCreator() {
+        login("38011550077");
+        Long id = 7L;
+
+        Portfolio portfolio = getPortfolio(id);
+
+        assertEquals(id, portfolio.getId());
+        assertEquals("This portfolio is private. ", portfolio.getTitle());
+    }
+
+    @Test
+    public void getPrivatePortfolioAsNotCreator() {
+        login("15066990099");
+        Long id = 7L;
+
+        Response response = doGet(format(GET_PORTFOLIO_URL, id));
+        assertEquals(Status.NO_CONTENT.getStatusCode(), response.getStatus());
+    }
+
+    @Test
+    public void getPrivatePortfolioAsAdmin() {
+        login("89898989898");
+        Long id = 7L;
+
+        Portfolio portfolio = getPortfolio(id);
+
+        assertEquals(id, portfolio.getId());
+        assertEquals("This portfolio is private. ", portfolio.getTitle());
+    }
+
     @Test
     public void getByCreator() {
         String username = "mati.maasikas-vaarikas";
@@ -57,6 +95,47 @@ public class PortfolioResourceTest extends ResourceIntegrationTestBase {
         assertEquals(Long.valueOf(3), portfolios.get(0).getId());
         assertEquals(Long.valueOf(1), portfolios.get(1).getId());
         assertPortfolio1(portfolios.get(1));
+    }
+
+    @Test
+    public void getByCreatorWhenSomeArePrivateOrNotListed() {
+        String username = "my.testuser";
+        List<Portfolio> portfolios = doGet(format(GET_BY_CREATOR_URL, username))
+                .readEntity(new GenericType<List<Portfolio>>() {
+                });
+
+        assertEquals(1, portfolios.size());
+        assertEquals(Long.valueOf(9), portfolios.get(0).getId());
+    }
+
+    @Test
+    public void getByCreatorWhenSomeArePrivateOrNotListedAsCreator() {
+        login("78912378912");
+
+        String username = "my.testuser";
+        List<Portfolio> portfolios = doGet(format(GET_BY_CREATOR_URL, username))
+                .readEntity(new GenericType<List<Portfolio>>() {
+                });
+
+        assertEquals(3, portfolios.size());
+        List<Long> expectedIds = Arrays.asList(9L, 10L, 11L);
+        List<Long> actualIds = portfolios.stream().map(p -> p.getId()).collect(Collectors.toList());
+        assertTrue(actualIds.containsAll(expectedIds));
+    }
+
+    @Test
+    public void getByCreatorWhenSomeArePrivateOrNotListedAsAdmin() {
+        login("89898989898");
+
+        String username = "my.testuser";
+        List<Portfolio> portfolios = doGet(format(GET_BY_CREATOR_URL, username))
+                .readEntity(new GenericType<List<Portfolio>>() {
+                });
+
+        assertEquals(3, portfolios.size());
+        List<Long> expectedIds = Arrays.asList(9L, 10L, 11L);
+        List<Long> actualIds = portfolios.stream().map(p -> p.getId()).collect(Collectors.toList());
+        assertTrue(actualIds.containsAll(expectedIds));
     }
 
     @Test
@@ -115,6 +194,41 @@ public class PortfolioResourceTest extends ResourceIntegrationTestBase {
     }
 
     @Test
+    public void getPortfolioPictureWhenPortfolioIsPrivate() {
+        long portfolioId = 7;
+        Response response = doGet(format(GET_PORTFOLIO_PICTURE_URL, portfolioId), MediaType.WILDCARD_TYPE);
+        assertEquals(Response.Status.NOT_FOUND.getStatusCode(), response.getStatus());
+    }
+
+    @Test
+    public void getPortfolioPictureWhenPortfolioIsPrivateAsCreator() {
+        login("38011550077");
+        long portfolioId = 7;
+        Response response = doGet(format(GET_PORTFOLIO_PICTURE_URL, portfolioId), MediaType.WILDCARD_TYPE);
+        byte[] picture = response.readEntity(new GenericType<byte[]>() {
+        });
+        assertNotNull(picture);
+    }
+
+    @Test
+    public void getPortfolioPictureWhenPortfolioIsPrivateAsNotCreator() {
+        login("39011220011");
+        long portfolioId = 7;
+        Response response = doGet(format(GET_PORTFOLIO_PICTURE_URL, portfolioId), MediaType.WILDCARD_TYPE);
+        assertEquals(Response.Status.NOT_FOUND.getStatusCode(), response.getStatus());
+    }
+
+    @Test
+    public void getPortfolioPictureWhenPortfolioIsPrivateAsAdmin() {
+        login("89898989898");
+        long portfolioId = 7;
+        Response response = doGet(format(GET_PORTFOLIO_PICTURE_URL, portfolioId), MediaType.WILDCARD_TYPE);
+        byte[] picture = response.readEntity(new GenericType<byte[]>() {
+        });
+        assertNotNull(picture);
+    }
+
+    @Test
     public void increaseViewCount() {
         long id = 3;
         Portfolio portfolioBefore = getPortfolio(id);
@@ -143,19 +257,17 @@ public class PortfolioResourceTest extends ResourceIntegrationTestBase {
     @Test
     public void create() {
         login("39011220011");
-
-        CreatePortfolioForm portfolioForm = new CreatePortfolioForm();
+        Long id = 1L;
 
         Portfolio portfolio = new Portfolio();
         portfolio.setTitle("Tere");
 
-        portfolioForm.setPortfolio(portfolio);
-        portfolioForm.setTaxonId(1L);
+        Portfolio createdPortfolio = doPost(CREATE_PORTFOLIO_URL, portfolio, Portfolio.class);
 
-        Response response = doPost(CREATE_PORTFOLIO_URL, Entity.entity(portfolioForm, MediaType.APPLICATION_JSON_TYPE));
-
-        assertEquals(Status.OK.getStatusCode(), response.getStatus());
-
+        assertNotNull(createdPortfolio);
+        assertNotNull(createdPortfolio.getId());
+        assertEquals(id, createdPortfolio.getOriginalCreator().getId());
+        assertEquals(id, createdPortfolio.getCreator().getId());
     }
 
     @Test
@@ -165,17 +277,28 @@ public class PortfolioResourceTest extends ResourceIntegrationTestBase {
         Portfolio portfolio = getPortfolio(5);
         String originalTitle = portfolio.getTitle();
         portfolio.setTitle("New mega nice title that I come with Yesterday night!");
-        UpdatePortfolioForm updatePortfolioForm = getUpdatePortfolioForm(portfolio);
 
-        Response response = doPost(UPDATE_PORTFOLIO_URL,
-                Entity.entity(updatePortfolioForm, MediaType.APPLICATION_JSON_TYPE));
+        Portfolio updatedPortfolio = doPost(UPDATE_PORTFOLIO_URL, portfolio, Portfolio.class);
 
-        assertEquals(Status.OK.getStatusCode(), response.getStatus());
-
-        Portfolio updatedPortfolio = response.readEntity(Portfolio.class);
         assertFalse(originalTitle.equals(updatedPortfolio.getTitle()));
         assertEquals("New mega nice title that I come with Yesterday night!", updatedPortfolio.getTitle());
 
+    }
+
+    @Test
+    public void updateSomeoneElsesPortfolio() {
+        login("38011550077");
+
+        Portfolio portfolio = getPortfolio(5);
+        portfolio.setTitle("This is not my portfolio.");
+
+        // Set creator to the current logged in user
+        User creator = new User();
+        creator.setId(2L);
+        portfolio.setCreator(creator);
+
+        Response response = doPost(UPDATE_PORTFOLIO_URL, Entity.entity(portfolio, MediaType.APPLICATION_JSON_TYPE));
+        assertEquals(Status.INTERNAL_SERVER_ERROR.getStatusCode(), response.getStatus());
     }
 
     @Test
@@ -191,13 +314,7 @@ public class PortfolioResourceTest extends ResourceIntegrationTestBase {
         Portfolio portfolio = getPortfolio(5);
         portfolio.setChapters(chapters);
 
-        UpdatePortfolioForm updatePortfolioForm = getUpdatePortfolioForm(portfolio);
-
-        Response response = doPost(UPDATE_PORTFOLIO_URL,
-                Entity.entity(updatePortfolioForm, MediaType.APPLICATION_JSON_TYPE));
-
-        assertEquals(Status.OK.getStatusCode(), response.getStatus());
-        Portfolio updatedPortfolio = response.readEntity(Portfolio.class);
+        Portfolio updatedPortfolio = doPost(UPDATE_PORTFOLIO_URL, portfolio, Portfolio.class);
         assertFalse(updatedPortfolio.getChapters().isEmpty());
 
     }
@@ -222,15 +339,9 @@ public class PortfolioResourceTest extends ResourceIntegrationTestBase {
         Portfolio portfolio = getPortfolio(5);
         portfolio.setChapters(chapters);
 
-        UpdatePortfolioForm updatePortfolioForm = getUpdatePortfolioForm(portfolio);
+        Portfolio updatedPortfolio = doPost(UPDATE_PORTFOLIO_URL, portfolio, Portfolio.class);
 
-        Response response = doPost(UPDATE_PORTFOLIO_URL,
-                Entity.entity(updatePortfolioForm, MediaType.APPLICATION_JSON_TYPE));
-
-        assertEquals(Status.OK.getStatusCode(), response.getStatus());
-        Portfolio updatedPortfolio = response.readEntity(Portfolio.class);
         assertFalse(updatedPortfolio.getChapters().isEmpty());
-
         assertFalse(updatedPortfolio.getChapters().get(0).getSubchapters().isEmpty());
     }
 
@@ -251,21 +362,176 @@ public class PortfolioResourceTest extends ResourceIntegrationTestBase {
         Portfolio portfolio = getPortfolio(5);
         portfolio.getChapters().add(newChapter);
 
-        UpdatePortfolioForm updatePortfolioForm = getUpdatePortfolioForm(portfolio);
+        Portfolio updatedPortfolio = doPost(UPDATE_PORTFOLIO_URL, portfolio, Portfolio.class);
 
-        Response response = doPost(UPDATE_PORTFOLIO_URL,
-                Entity.entity(updatePortfolioForm, MediaType.APPLICATION_JSON_TYPE));
-
-        assertEquals(Status.OK.getStatusCode(), response.getStatus());
-        Portfolio updatedPortfolio = response.readEntity(Portfolio.class);
         assertFalse(updatedPortfolio.getChapters().isEmpty());
-
         Chapter verify = updatedPortfolio.getChapters().get(updatedPortfolio.getChapters().size() - 1).getSubchapters()
                 .get(0);
-
         assertEquals(verify.getTitle(), "New cool subchapter");
 
     }
+
+    @Test
+    public void updateChangingVisibility() {
+        login("38011550077");
+
+        Portfolio portfolio = getPortfolio(6);
+        portfolio.setVisibility(Visibility.NOT_LISTED);
+
+        Portfolio updatedPortfolio = doPost(UPDATE_PORTFOLIO_URL, portfolio, Portfolio.class);
+
+        assertEquals(Visibility.NOT_LISTED, updatedPortfolio.getVisibility());
+    }
+
+    @Test
+    public void copyPortfolio() {
+        login("38011550077");
+
+        Portfolio portfolio = new Portfolio();
+        portfolio.setId(1L);
+
+        Portfolio copiedPortfolio = doPost(PORTFOLIO_COPY_URL, portfolio, Portfolio.class);
+
+        assertNotNull(copiedPortfolio);
+        assertEquals(Long.valueOf(2), copiedPortfolio.getCreator().getId());
+        assertEquals(Long.valueOf(6), copiedPortfolio.getOriginalCreator().getId());
+    }
+
+    @Test
+    public void copyPrivatePortfolioNotLoggedIn() {
+        Portfolio portfolio = new Portfolio();
+        portfolio.setId(7L);
+
+        Response response = doPost(PORTFOLIO_COPY_URL, Entity.entity(portfolio, MediaType.APPLICATION_JSON_TYPE));
+        assertEquals(Status.UNAUTHORIZED.getStatusCode(), response.getStatus());
+    }
+
+    @Test
+    public void copyPrivatePortfolioLoggedInAsNotCreator() {
+        login("39011220011");
+
+        Portfolio portfolio = new Portfolio();
+        portfolio.setId(7L);
+
+        Response response = doPost(PORTFOLIO_COPY_URL, Entity.entity(portfolio, MediaType.APPLICATION_JSON_TYPE));
+        assertEquals(Status.INTERNAL_SERVER_ERROR.getStatusCode(), response.getStatus());
+    }
+
+    @Test
+    public void copyPrivatePortfolioLoggedInAsCreator() {
+        login("38011550077");
+        Long userId = 2L;
+
+        Portfolio portfolio = new Portfolio();
+        portfolio.setId(7L);
+
+        Response response = doPost(PORTFOLIO_COPY_URL, Entity.entity(portfolio, MediaType.APPLICATION_JSON_TYPE));
+        assertEquals(Status.OK.getStatusCode(), response.getStatus());
+
+        Portfolio copiedPortfolio = response.readEntity(Portfolio.class);
+        assertEquals(userId, copiedPortfolio.getOriginalCreator().getId());
+    }
+
+    @Test
+    public void deletePortfolioAsCreator() {
+        login("89012378912");
+
+        Portfolio portfolio = new Portfolio();
+        portfolio.setId(12L);
+
+        Response response = doPost(DELETE_PORTFOLIO_URL, Entity.entity(portfolio, MediaType.APPLICATION_JSON_TYPE));
+        assertEquals(Status.NO_CONTENT.getStatusCode(), response.getStatus());
+    }
+
+    @Test
+    public void deletePortfolioAsAdmin() {
+        login("89898989898");
+
+        Portfolio portfolio = new Portfolio();
+        portfolio.setId(13L);
+
+        Response response = doPost(DELETE_PORTFOLIO_URL, Entity.entity(portfolio, MediaType.APPLICATION_JSON_TYPE));
+        assertEquals(Status.NO_CONTENT.getStatusCode(), response.getStatus());
+    }
+
+    @Test
+    public void deletePortfolioAsNotCreator() {
+        login("89012378912");
+
+        Portfolio portfolio = new Portfolio();
+        portfolio.setId(1L);
+
+        Response response = doPost(DELETE_PORTFOLIO_URL, Entity.entity(portfolio, MediaType.APPLICATION_JSON_TYPE));
+        assertEquals(Status.INTERNAL_SERVER_ERROR.getStatusCode(), response.getStatus());
+    }
+
+    @Test
+    public void deletePortfolioNotLoggedIn() {
+        Portfolio portfolio = new Portfolio();
+        portfolio.setId(1L);
+
+        Response response = doPost(DELETE_PORTFOLIO_URL, Entity.entity(portfolio, MediaType.APPLICATION_JSON_TYPE));
+        assertEquals(Status.UNAUTHORIZED.getStatusCode(), response.getStatus());
+    }
+
+    @Test
+    public void setImproperPortfolio() {
+        Portfolio portfolio = new Portfolio();
+        portfolio.setId(1L);
+        login("38011550077");
+
+        Response response = doPost("portfolio/setImproper", Entity.entity(portfolio, MediaType.APPLICATION_JSON_TYPE));
+        ImproperContent improperContent = response.readEntity(ImproperContent.class);
+
+        assertNotNull(improperContent);
+        assertNotNull(improperContent.getId());
+        assertNotNull(improperContent.getCreator());
+        assertNotNull(improperContent.getPortfolio());
+        logout();
+
+    }
+
+    @Test
+    public void getImproperPortfolios() {
+        login("89898989898");
+
+        Response response = doGet("portfolio/getImproper");
+        List<ImproperContent> improperContentList = response.readEntity(new GenericType<List<ImproperContent>>() {
+        });
+
+        assertNotNull(improperContentList);
+        assertNotNull(improperContentList.get(0).getId());
+        assertNotNull(improperContentList.get(0).getCreator());
+        assertNotNull(improperContentList.get(0).getPortfolio());
+
+        logout();
+    }
+
+    @Test
+    public void isSetImproper() {
+        login("89898989898");
+
+        Boolean bool = doGet(format("portfolio/isSetImproper?portfolioId=%s", 3), Boolean.class);
+
+        assertTrue(bool);
+    }
+
+    @Test
+    public void setNotImproper() {
+        login("89898989898");
+        Response response1 = doGet("portfolio/getImproper");
+        List<ImproperContent> originalImproperContentList = response1.readEntity(new GenericType<List<ImproperContent>>() {
+        });
+
+        doPost(format("portfolio/setNotImproper/%s", 3), null);
+
+        Response response2 = doGet("portfolio/getImproper");
+        List<ImproperContent> newImproperContentList = response2.readEntity(new GenericType<List<ImproperContent>>() {
+        });
+
+        assertEquals(originalImproperContentList.size(), newImproperContentList.size()+1);
+    }
+
 
     private Portfolio getPortfolio(long id) {
         return doGet(format(GET_PORTFOLIO_URL, id), Portfolio.class);
@@ -280,6 +546,7 @@ public class PortfolioResourceTest extends ResourceIntegrationTestBase {
         assertEquals("Mathematics", portfolio.getTaxon().getName());
         assertEquals(new Long(6), portfolio.getCreator().getId());
         assertEquals("mati.maasikas-vaarikas", portfolio.getCreator().getUsername());
+        assertEquals(new Long(5), portfolio.getOriginalCreator().getId());
         assertEquals("The changes after 2008.", portfolio.getSummary());
         assertEquals(new Long(95455215), portfolio.getViews());
         assertEquals(5, portfolio.getTags().size());
@@ -329,55 +596,9 @@ public class PortfolioResourceTest extends ResourceIntegrationTestBase {
         assertEquals(2, portfolio.getTargetGroups().size());
         assertTrue(portfolio.getTargetGroups().contains(TargetGroup.ZERO_FIVE));
         assertTrue(portfolio.getTargetGroups().contains(TargetGroup.SIX_SEVEN));
+        assertEquals("Lifelong_learning_and_career_planning", portfolio.getCrossCurricularThemes().get(0).getName());
+        assertEquals("Cultural_and_value_competence", portfolio.getKeyCompetences().get(0).getName());
+        assertEquals(Visibility.PUBLIC, portfolio.getVisibility());
+        assertFalse(portfolio.isDeleted());
     }
-
-    private UpdatePortfolioForm getUpdatePortfolioForm(Portfolio portfolio) {
-        UpdatePortfolioForm portfolioForm = new UpdatePortfolioForm();
-        portfolioForm.setPortfolio(portfolio);
-        portfolioForm.setChapters(getChapterForms(portfolio.getChapters()));
-
-        if (portfolio.getTaxon() != null) {
-            portfolioForm.setTaxonId(portfolio.getTaxon().getId());
-            portfolio.setTaxon(null);
-        }
-
-        return portfolioForm;
-    }
-
-    private List<ChapterForm> getChapterForms(List<Chapter> chapters) {
-        List<ChapterForm> chapterForms = new ArrayList<>();
-
-        if (chapters != null) {
-            for (Chapter chapter : chapters) {
-                chapterForms.add(getChapterForm(chapter));
-            }
-        }
-
-        return chapterForms;
-    }
-
-    private ChapterForm getChapterForm(Chapter chapter) {
-        ChapterForm chapterForm = new ChapterForm();
-        chapterForm.setChapter(chapter);
-
-        chapterForm.setMaterials(getMaterialIdsList(chapter.getMaterials()));
-        chapter.setMaterials(null);
-
-        chapterForm.setSubchapters(getChapterForms(chapter.getSubchapters()));
-        chapter.setSubchapters(null);
-
-        return chapterForm;
-    }
-
-    private List<Long> getMaterialIdsList(List<Material> materials) {
-        List<Long> ids = new ArrayList<>();
-        if (materials != null) {
-            for (Material material : materials) {
-                ids.add(material.getId());
-            }
-        }
-
-        return ids;
-    }
-
 }

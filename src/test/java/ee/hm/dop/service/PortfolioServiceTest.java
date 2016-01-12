@@ -15,6 +15,7 @@ import org.junit.runner.RunWith;
 
 import ee.hm.dop.dao.PortfolioDAO;
 import ee.hm.dop.model.Portfolio;
+import ee.hm.dop.model.Visibility;
 
 @RunWith(EasyMockRunner.class)
 public class PortfolioServiceTest {
@@ -33,10 +34,11 @@ public class PortfolioServiceTest {
         int portfolioId = 125;
         Portfolio portfolio = createMock(Portfolio.class);
         expect(portfolioDAO.findById(portfolioId)).andReturn(portfolio);
+        expect(portfolio.getVisibility()).andReturn(Visibility.PUBLIC);
 
         replayAll(portfolio);
 
-        Portfolio result = portfolioService.get(portfolioId);
+        Portfolio result = portfolioService.get(portfolioId, null);
 
         verifyAll(portfolio);
 

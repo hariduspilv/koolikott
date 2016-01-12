@@ -1,13 +1,14 @@
 package ee.hm.dop.dao;
 
-import ee.hm.dop.common.test.DatabaseTestBase;
-import ee.hm.dop.model.Author;
-import org.junit.Test;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 import javax.inject.Inject;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import org.junit.Test;
+
+import ee.hm.dop.common.test.DatabaseTestBase;
+import ee.hm.dop.model.Author;
 
 /**
  * Created by mart on 28.10.15.

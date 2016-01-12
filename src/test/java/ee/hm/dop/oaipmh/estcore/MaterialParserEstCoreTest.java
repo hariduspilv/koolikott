@@ -6,6 +6,7 @@ import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 import java.io.File;
 import java.net.URI;
@@ -27,7 +28,9 @@ import org.junit.runner.RunWith;
 import org.w3c.dom.Document;
 
 import ee.hm.dop.model.Author;
+import ee.hm.dop.model.CrossCurricularTheme;
 import ee.hm.dop.model.IssueDate;
+import ee.hm.dop.model.KeyCompetence;
 import ee.hm.dop.model.Language;
 import ee.hm.dop.model.LanguageString;
 import ee.hm.dop.model.Material;
@@ -43,7 +46,9 @@ import ee.hm.dop.model.taxon.Subtopic;
 import ee.hm.dop.model.taxon.Topic;
 import ee.hm.dop.oaipmh.ParseException;
 import ee.hm.dop.service.AuthorService;
+import ee.hm.dop.service.CrossCurricularThemeService;
 import ee.hm.dop.service.IssueDateService;
+import ee.hm.dop.service.KeyCompetenceService;
 import ee.hm.dop.service.LanguageService;
 import ee.hm.dop.service.PublisherService;
 import ee.hm.dop.service.ResourceTypeService;
@@ -79,6 +84,12 @@ public class MaterialParserEstCoreTest {
 
     @Mock
     private IssueDateService issueDateService;
+
+    @Mock
+    private CrossCurricularThemeService crossCurricularThemeService;
+
+    @Mock
+    private KeyCompetenceService keyCompetenceService;
 
     @Test(expected = ee.hm.dop.oaipmh.ParseException.class)
     public void parseXMLisNull() throws ParseException {
@@ -184,6 +195,20 @@ public class MaterialParserEstCoreTest {
         domains.add(domain4);
         educationalContext3.setDomains(domains);
 
+        Domain domain5 = new Domain();
+        domain5.setName("Cross-curricular_themes");
+        domain5.setEducationalContext(educationalContext2);
+        domains = educationalContext2.getDomains();
+        domains.add(domain5);
+        educationalContext2.setDomains(domains);
+
+        Domain domain6 = new Domain();
+        domain6.setName("Key_competences");
+        domain6.setEducationalContext(educationalContext2);
+        domains = educationalContext2.getDomains();
+        domains.add(domain6);
+        educationalContext2.setDomains(domains);
+
         Subject subject1 = new Subject();
         subject1.setName("Estonian");
         subject1.setDomain(domain4);
@@ -197,6 +222,20 @@ public class MaterialParserEstCoreTest {
         subjects = new HashSet<>();
         subjects.add(subject2);
         domain1.setSubjects(subjects);
+
+        Subject subject3 = new Subject();
+        subject3.setName("Lifelong_learning_and_career_planning");
+        subject3.setDomain(domain5);
+        subjects = new HashSet<>();
+        subjects.add(subject3);
+        domain5.setSubjects(subjects);
+
+        Subject subject4 = new Subject();
+        subject4.setName("Cultural_and_value_competence");
+        subject4.setDomain(domain5);
+        subjects = new HashSet<>();
+        subjects.add(subject4);
+        domain6.setSubjects(subjects);
 
         Topic topic1 = new Topic();
         topic1.setName("Basic_history");
@@ -265,6 +304,12 @@ public class MaterialParserEstCoreTest {
         publisher.setName("BigPublisher");
         publisher.setWebsite("https://www.google.com/");
 
+        CrossCurricularTheme crossCurricularTheme = new CrossCurricularTheme();
+        crossCurricularTheme.setName("Lifelong_learning_and_career_planning");
+
+        KeyCompetence keyCompetence = new KeyCompetence();
+        keyCompetence.setName("Cultural_and_value_competence");
+
         expect(languageService.getLanguage("en")).andReturn(english).times(3);
         expect(languageService.getLanguage("et")).andReturn(estonian).times(2);
         expect(authorService.getAuthorByFullName(author1.getName(), author1.getSurname())).andReturn(author1);
@@ -277,14 +322,15 @@ public class MaterialParserEstCoreTest {
         expect(publisherService.createPublisher(publisher.getName(), publisher.getWebsite())).andReturn(publisher);
         expect(issueDateService.createIssueDate(EasyMock.anyObject(IssueDate.class))).andReturn(new IssueDate());
 
-        //first taxon
+        // first taxon
         expect(taxonService.getTaxonByEstCoreName(educationalContext1.getName(), EducationalContext.class)).andReturn(
                 educationalContext1).anyTimes();
         expect(taxonService.getTaxonByEstCoreName("Mina ja keskkond", Domain.class)).andReturn(domain2);
         expect(taxonService.getTaxonByEstCoreName("Preschool Topic1", Topic.class)).andReturn(topic3);
-        expect(taxonService.getTaxonByEstCoreName("Subtopic for Preschool Topic1", Subtopic.class)).andReturn(subtopic1);
+        expect(taxonService.getTaxonByEstCoreName("Subtopic for Preschool Topic1", Subtopic.class))
+                .andReturn(subtopic1);
 
-        //second taxon
+        // second taxon
         expect(taxonService.getTaxonByEstCoreName(educationalContext3.getName(), EducationalContext.class)).andReturn(
                 educationalContext3).anyTimes();
         expect(taxonService.getTaxonByEstCoreName("Language and literature", Domain.class)).andReturn(domain4);
@@ -292,18 +338,18 @@ public class MaterialParserEstCoreTest {
         expect(taxonService.getTaxonByEstCoreName("Ajaloo algõpetus", Topic.class)).andReturn(topic1);
         expect(taxonService.getTaxonByEstCoreName("Ajaarvamine", Subtopic.class)).andReturn(subtopic2);
 
-
-        //third taxon
+        // third taxon
         expect(taxonService.getTaxonByEstCoreName(educationalContext4.getName(), EducationalContext.class)).andReturn(
                 educationalContext4).anyTimes();
         expect(taxonService.getTaxonByEstCoreName("Computer Science", Domain.class)).andReturn(domain3);
-        expect(taxonService.getTaxonByEstCoreName("Computers and Networks", Specialization.class)).andReturn(specialization);
+        expect(taxonService.getTaxonByEstCoreName("Computers and Networks", Specialization.class)).andReturn(
+                specialization);
         expect(taxonService.getTaxonByEstCoreName("Majanduse alused", Module.class)).andReturn(module);
         expect(taxonService.getTaxonByEstCoreName("Vocational Education Topic1", Topic.class)).andReturn(topic4);
-        expect(taxonService.getTaxonByEstCoreName("Subtopic for Vocational Education", Subtopic.class)).andReturn(subtopic3);
+        expect(taxonService.getTaxonByEstCoreName("Subtopic for Vocational Education", Subtopic.class)).andReturn(
+                subtopic3);
 
-
-        //fourth taxon
+        // fourth taxon
         expect(taxonService.getTaxonByEstCoreName(educationalContext2.getName(), EducationalContext.class)).andReturn(
                 educationalContext2).anyTimes();
         expect(taxonService.getTaxonByEstCoreName("Foreign language", Domain.class)).andReturn(domain1);
@@ -311,7 +357,18 @@ public class MaterialParserEstCoreTest {
         expect(taxonService.getTaxonByEstCoreName("Eesti ajalugu", Topic.class)).andReturn(topic2);
         expect(taxonService.getTaxonByEstCoreName("Ajalooallikad", Subtopic.class)).andReturn(subtopic4);
 
+        // special education taxon
+        expect(taxonService.getTaxonByEstCoreName("SPECIALEDUCATION", EducationalContext.class)).andReturn(null);
 
+        // Cross-curricular themes taxon
+        expect(taxonService.getTaxonByEstCoreName("Cross-curricular themes", Domain.class)).andReturn(domain5);
+        expect(taxonService.getTaxonByEstCoreName("Lifelong learning and career planning", Subject.class)).andReturn(subject3);
+        expect(crossCurricularThemeService.getThemeByName(subject3.getName())).andReturn(crossCurricularTheme);
+
+        // Key competence taxon
+        expect(taxonService.getTaxonByEstCoreName("Key competences", Domain.class)).andReturn(domain6);
+        expect(taxonService.getTaxonByEstCoreName("Cultural and value competence", Subject.class)).andReturn(subject4);
+        expect(keyCompetenceService.findKeyCompetenceByName(subject4.getName())).andReturn(keyCompetence);
 
         LanguageString title1 = new LanguageString();
         title1.setLanguage(english);
@@ -341,12 +398,14 @@ public class MaterialParserEstCoreTest {
         resourceTypes.add(resourceType1);
         resourceTypes.add(resourceType2);
 
-        replay(languageService, authorService, tagService, resourceTypeService, taxonService, publisherService, issueDateService);
+        replay(languageService, authorService, tagService, resourceTypeService, taxonService, publisherService,
+                issueDateService, crossCurricularThemeService, keyCompetenceService);
 
         Document doc = dBuilder.parse(fXmlFile);
         Material material = materialParser.parse(doc);
 
-        verify(languageService, authorService, tagService, resourceTypeService, taxonService, publisherService, issueDateService);
+        verify(languageService, authorService, tagService, resourceTypeService, taxonService, publisherService,
+                issueDateService, crossCurricularThemeService, keyCompetenceService);
 
         assertEquals(titles, material.getTitles());
         assertEquals("https://oxygen.netgroupdigital.com/rest/repoMaterialSource", material.getSource());
@@ -355,11 +414,14 @@ public class MaterialParserEstCoreTest {
         assertEquals(descriptions, material.getDescriptions());
         assertEquals(tags, material.getTags());
         assertEquals(resourceTypes, material.getResourceTypes());
-        assertEquals(4, material.getTaxons().size());
+        assertEquals(6, material.getTaxons().size());
         assertEquals(10, material.getTargetGroups().size());
         assertNotNull(material.getPicture());
         assertEquals(1, material.getPublishers().size());
         assertNotNull(material.getIssueDate());
+        assertTrue(material.isSpecialEducation());
+        assertEquals(1, material.getCrossCurricularThemes().size());
+        assertEquals(1, material.getKeyCompetences().size());
     }
 
     private File getResourceAsFile(String resourcePath) throws URISyntaxException {

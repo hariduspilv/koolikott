@@ -24,17 +24,21 @@ import javax.persistence.OrderBy;
 import javax.persistence.OrderColumn;
 import javax.persistence.UniqueConstraint;
 
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.Formula;
 import org.hibernate.annotations.Type;
 import org.joda.time.DateTime;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 import ee.hm.dop.model.taxon.Taxon;
 import ee.hm.dop.rest.jackson.map.DateTimeDeserializer;
 import ee.hm.dop.rest.jackson.map.DateTimeSerializer;
+import ee.hm.dop.rest.jackson.map.PictureDeserializer;
 
 @Entity
 public class Portfolio implements Searchable {
@@ -62,6 +66,10 @@ public class Portfolio implements Searchable {
     @JoinColumn(name = "creator", nullable = false)
     private User creator;
 
+    @ManyToOne
+    @JoinColumn(name = "originalCreator", nullable = false)
+    private User originalCreator;
+
     @Column(columnDefinition = "TEXT")
     private String summary;
 
@@ -69,16 +77,25 @@ public class Portfolio implements Searchable {
     private Long views = (long) 0;
 
     @OneToMany(fetch = EAGER, cascade = { MERGE, PERSIST })
+    @Fetch(FetchMode.SELECT)
     @JoinColumn(name = "portfolio")
     @OrderColumn(name = "chapterOrder")
     private List<Chapter> chapters;
 
     @OneToMany(fetch = EAGER, cascade = { MERGE, PERSIST })
+    @Fetch(FetchMode.SELECT)
     @JoinColumn(name = "portfolio")
     @OrderBy("added DESC")
     private List<Comment> comments;
 
+    @Formula(value = "(SELECT COUNT(*) FROM UserLike ul WHERE ul.portfolio = id AND ul.isLiked = 1)")
+    private int likes;
+
+    @Formula(value = "(SELECT COUNT(*) FROM UserLike ul WHERE ul.portfolio = id AND ul.isLiked = 0)")
+    private int dislikes;
+
     @ManyToMany(fetch = EAGER, cascade = { MERGE, PERSIST })
+    @Fetch(FetchMode.SELECT)
     @JoinTable(
             name = "Portfolio_Tag",
             joinColumns = { @JoinColumn(name = "portfolio") },
@@ -87,7 +104,6 @@ public class Portfolio implements Searchable {
     private List<Tag> tags;
 
     @Lob
-    @JsonIgnore
     private byte[] picture;
 
     @Formula("picture is not null")
@@ -96,8 +112,35 @@ public class Portfolio implements Searchable {
     @Enumerated(EnumType.STRING)
     @Column(name = "targetGroup")
     @ElementCollection(fetch = EAGER)
+    @Fetch(FetchMode.SELECT)
     @CollectionTable(name = "Portfolio_TargetGroup", joinColumns = @JoinColumn(name = "portfolio") )
     private List<TargetGroup> targetGroups;
+
+    @ManyToMany(fetch = EAGER)
+    @Fetch(FetchMode.SELECT)
+    @JoinTable(
+            name = "Portfolio_CrossCurricularTheme",
+            joinColumns = { @JoinColumn(name = "portfolio") },
+            inverseJoinColumns = { @JoinColumn(name = "crossCurricularTheme") },
+            uniqueConstraints = @UniqueConstraint(columnNames = { "portfolio", "crossCurricularTheme" }) )
+    private List<CrossCurricularTheme> crossCurricularThemes;
+
+    @ManyToMany(fetch = EAGER)
+    @Fetch(FetchMode.SELECT)
+    @JoinTable(
+            name = "Portfolio_KeyCompetence",
+            joinColumns = { @JoinColumn(name = "portfolio") },
+            inverseJoinColumns = { @JoinColumn(name = "keyCompetence") },
+            uniqueConstraints = @UniqueConstraint(columnNames = { "portfolio", "keyCompetence" }) )
+    private List<KeyCompetence> keyCompetences;
+
+    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
+    private Visibility visibility;
+
+    @JsonIgnore
+    @Column
+    private boolean deleted;
 
     @Override
     public Long getId() {
@@ -184,10 +227,13 @@ public class Portfolio implements Searchable {
         this.tags = tags;
     }
 
+    @JsonIgnore
     public byte[] getPicture() {
         return picture;
     }
 
+    @JsonProperty
+    @JsonDeserialize(using = PictureDeserializer.class)
     public void setPicture(byte[] picture) {
         this.picture = picture;
     }
@@ -214,6 +260,62 @@ public class Portfolio implements Searchable {
 
     public void setComments(List<Comment> comments) {
         this.comments = comments;
+    }
+
+    public List<CrossCurricularTheme> getCrossCurricularThemes() {
+        return crossCurricularThemes;
+    }
+
+    public void setCrossCurricularThemes(List<CrossCurricularTheme> crossCurricularThemes) {
+        this.crossCurricularThemes = crossCurricularThemes;
+    }
+
+    public List<KeyCompetence> getKeyCompetences() {
+        return keyCompetences;
+    }
+
+    public void setKeyCompetences(List<KeyCompetence> keyCompetences) {
+        this.keyCompetences = keyCompetences;
+    }
+
+    public Visibility getVisibility() {
+        return visibility;
+    }
+
+    public void setVisibility(Visibility visibility) {
+        this.visibility = visibility;
+    }
+
+    public int getLikes() {
+        return likes;
+    }
+
+    public void setLikes(int likes) {
+        this.likes = likes;
+    }
+
+    public int getDislikes() {
+        return dislikes;
+    }
+
+    public void setDislikes(int dislikes) {
+        this.dislikes = dislikes;
+    }
+
+    public boolean isDeleted() {
+        return deleted;
+    }
+
+    public void setDeleted(boolean deleted) {
+        this.deleted = deleted;
+    }
+
+    public User getOriginalCreator() {
+        return originalCreator;
+    }
+
+    public void setOriginalCreator(User originalCreator) {
+        this.originalCreator = originalCreator;
     }
 
 }

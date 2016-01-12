@@ -57,12 +57,12 @@ The available properties are:
 ### Database
 
 DOP uses **MariaDB** database. Click [here](https://mariadb.com/kb/en/mariadb/getting-installing-and-upgrading-mariadb/) for how to install it.
-In my.ini or my.cnf under [mysqld] add: character-set-server=utf8
 
 * **db.url** - the database url
 * **db.username** - the database username
 * **db.password** - the database password for given username
 
+* After installing, in my.ini or my.cnf under [mysqld] add: **character-set-server=utf8** and **max_allowed_packet = 64M** and **innodb_log_file_size=256M**
 ### Server
 
 * **server.port** - the port that server starts.
@@ -118,7 +118,9 @@ Add all keystore configurations to **custom.properties**. From the example keyto
 ### Exporting the generated public key certificate
 
 To export the public key certificate, which can then be given to the material providers (publishers):
-	*`keytool -export -keystore server.keystore -alias exampleAlias -file EkoolikottPublicKeyCert.cer`
+```
+	keytool -export -keystore server.keystore -alias exampleAlias -file EkoolikottPublicKeyCert.cer
+```
 	
 This EkoolikottPublicKeyCert.cer file can then be used by the material providers to verify, if the user should have the access to the required resource.
 # TAAT authentication setup
@@ -127,8 +129,21 @@ In order to set up TAAT authentication you have to have a keystore set up with a
 
 Create a new connection in [JANUS](https://taeva.taat.edu.ee/module.php/janus/index.php)
 
-* Insert a **Connection ID**. Read how to choose it [here](https://spaces.internet2.edu/display/InCFederation/Entity+IDs). For example: https&#58;//www.example.com/sp
-* Add all required metadata fields and save. Here are some example values:
+* In Connection tab: insert a **Connection ID**. Read how to choose it [here](https://spaces.internet2.edu/display/InCFederation/Entity+IDs). For example: https&#58;//www.example.com/sp
+* In Connection tab: select an **ARP** - this specifies what information is relayed to DOP when an user authenticates with TAAT. If you can see "dop-26-08-15", use that. Otherwise make a new ARP, name it so that it contains your organization's domain name and the current date and make sure the following attributes are selected:
+```
+	eduPersonScopedAffiliation
+	schacHomeOrganization
+	preferredLanguage
+	schacPersonalUniqueID
+	eduPersonAffiliation
+	mail
+	cn
+	sn
+	eduPersonTargetedID
+```
+* In Connection tab: set **Type**: SAML 2.0 SP
+* In Metadata tab: add all required metadata fields and save. Here are some example values:
 	
 Entry | Value
 --- | ---
@@ -156,6 +171,9 @@ Add TAAT configurations to **custom.properties**. For example:
 	taat.assertionConsumerServiceIndex=0
 ```
 
+## Getting ready for production mode
+When your TAAT authentication is working using the test service, you can set your Connection State in JANUS to "Pending QA" ("Kvaliteeditagamise ootel"). After that you will need to contact EENet to join the TAAT service: [how to join (estonian)](http://taat.edu.ee/main/teenusepakkujale/kuidas-liituda/). 
+
 ## Production mode
 When your TAAT connection is changed to production status, you can set
 ```
@@ -166,6 +184,6 @@ and download the metadata from the URL and set **taat.metadata.filepath** to poi
 
 # Mobile ID authentication setup
 
-By default **mobileID.endpoint** is set to the Test DigiDocService at `https://www.openxades.org:9443/DigiDocService`. 
+By default **mobileID.endpoint** is set to the Test DigiDocService at `https://tsp.demo.sk.ee`. 
 Set **mobileID.endpoint** to `https://digidocservice.sk.ee/DigiDocService` to use the real endpoint. 
 Set **mobileID.serviceName** to the name that has been agreed upon with the Mobile ID provider. 

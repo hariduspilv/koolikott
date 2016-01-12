@@ -379,14 +379,14 @@ public class MobileIDSOAPServiceTest {
 
         // Set SOAP expects for 2 SOAP requests
         expect(configuration.getString(MOBILEID_NAMESPACE_PREFIX)).andReturn("prefix").times(2);
-        expect(configuration.getString(MOBILEID_NAMESPACE_URI)).andReturn("http://www.example.com/Service/Service.wsdl")
-                .times(2);
+        expect(configuration.getString(MOBILEID_NAMESPACE_URI))
+                .andReturn("http://www.example.com/Service/Service.wsdl").times(2);
 
         expect(configuration.getString(MOBILEID_ENDPOINT)).andReturn(endpoint).times(2);
-        expect(connection.call(EasyMock.capture(capturedRequest), EasyMock.eq(endpoint)))
-                .andReturn(firstResponseMessage);
-        expect(connection.call(EasyMock.capture(capturedRequest), EasyMock.eq(endpoint)))
-                .andReturn(secondResponseMessage);
+        expect(connection.call(EasyMock.capture(capturedRequest), EasyMock.eq(endpoint))).andReturn(
+                firstResponseMessage);
+        expect(connection.call(EasyMock.capture(capturedRequest), EasyMock.eq(endpoint))).andReturn(
+                secondResponseMessage);
 
         replayAll();
 

@@ -36,6 +36,9 @@ insert into User(id, userName, name, surName, idCode, role) values (3, 'voldemar
 insert into User(id, userName, name, surName, idCode, role) values (4, 'voldemar.vapustav2', 'Voldemar', 'Vapustav', '15066990099', 'USER');
 insert into User(id, userName, name, surName, idCode, role) values (5, 'mati.maasikas2', 'Mäti', 'Maasikas', '39011220012', 'USER');
 insert into User(id, userName, name, surName, idCode, role) values (6, 'mati.maasikas-vaarikas', 'Mati', 'Maasikas-Vaarikas', '39011220013', 'USER');
+insert into User(id, userName, name, surName, idCode, role) values (7, 'my.testuser', 'My', 'Testuser', '78912378912', 'USER');
+insert into User(id, userName, name, surName, idCode, role) values (8, 'admin.admin', 'Admin', 'Admin', '89898989898', 'ADMIN');
+insert into User(id, userName, name, surName, idCode, role) values (9, 'second.testuser', 'Second', 'Testuser', '89012378912', 'USER');
 
 -- AuthenticatedUser
 
@@ -75,6 +78,8 @@ insert into Taxon(id, name, level) values (11, 'ForeignLanguage', 'DOMAIN');
 insert into Domain(id, educationalContext) values (11, 1);
 insert into Taxon(id, name, level) values (12, 'DomainWithTopics', 'DOMAIN');
 insert into Domain(id, educationalContext) values (12, 6);
+insert into Taxon(id, name, level) values (13, 'SecondaryDomain', 'DOMAIN');
+insert into Domain(id, educationalContext) values (13, 3);
 
 -- Subject
 
@@ -82,6 +87,8 @@ insert into Taxon(id, name, level) values (20, 'Biology', 'SUBJECT');
 insert into Subject(id, domain) values (20, 10);
 insert into Taxon(id, name, level) values (21, 'Mathematics', 'SUBJECT');
 insert into Subject(id, domain) values (21, 10);
+insert into Taxon(id, name, level) values (22, 'SecondarySubject', 'SUBJECT');
+insert into Subject(id, domain) values (22, 13);
 
 -- Topics from Subjects
 
@@ -152,7 +159,7 @@ insert into Material(id, lang, issueDate, licenseType, source, repository, repos
 insert into Material(id, lang, issueDate, licenseType, source, repository, repositoryIdentifier, added, updated, views, picture, deleted, paid) values(9, null, null, null, 'http://www.chaging.it.com', null, null, '1911-09-01 00:00:01', null, 0, null, false, false);
 insert into Material(id, lang, issueDate, licenseType, source, repository, repositoryIdentifier, added, updated, views, picture, deleted, paid) values(10, null, null, null, 'http://www.boo.com', null, null, '1911-09-01 00:00:01', null, 0, null, false, false); -- Do not use this material, it is deleted by tests
 insert into Material(id, lang, issueDate, licenseType, source, repository, repositoryIdentifier, added, updated, views, picture, creator, deleted, paid) values(11, 1, null, 1, 'https://www.deleted.com/', 1, 'isssiiaawejdsada4564', '2015-09-02 00:00:01', '2015-09-03 07:00:01', 100, '656b6f6f6c696b6f7474', 1, true, false); -- This material should be amoung the 8 latest materials
-insert into Material(id, lang, issueDate, licenseType, source, repository, repositoryIdentifier, added, updated, views, picture, deleted, paid) values(12, null, null, null, 'http://estRepo.com', 2, null, '1911-09-01 00:00:01', null, 0, null, false, false);
+insert into Material(id, lang, issueDate, licenseType, source, repository, repositoryIdentifier, added, updated, views, picture, deleted, paid, embeddable) values(12, null, null, null, 'http://estRepo.com', 2, null, '1911-09-01 00:00:01', null, 0, null, false, false, true);
 
 -- Authors
 
@@ -274,6 +281,20 @@ insert into Publisher(id, name, website) values (1, 'Koolibri', 'http://www.kool
 insert into Publisher(id, name, website) values (2, 'Pegasus', 'http://www.pegasus.ee');
 insert into Publisher(id, name, website) values (3, 'Varrak', 'http://www.varrak.ee');
 
+-- Cross-curricular themes
+insert into CrossCurricularTheme(id, name) values (1, 'Lifelong_learning_and_career_planning');
+insert into CrossCurricularTheme(id, name) values (2, 'Environment_and_sustainable_development');
+
+-- Key competences
+insert into KeyCompetence(id, name) values (1, 'Cultural_and_value_competence');
+insert into KeyCompetence(id, name) values (2, 'Social_and_citizenship_competence');
+
+-- Material Cross-curricular themes
+insert into Material_CrossCurricularTheme(material, crossCurricularTheme) values (1, 1);
+
+-- Material Key competences
+insert into Material_KeyCompetence(material, keyCompetence) values (1, 1);
+
 -- MaterialPublisher
 
 insert into Material_Publisher(material, publisher) values (1, 1);
@@ -344,10 +365,19 @@ insert into Page(id, name, content, language) VALUES (6, 'Help', '<h1>Help</h1><
 
 -- Portfolio
 
-insert into Portfolio(id, title, taxon, creator, summary, views, created, updated, picture) VALUES (1, 'The new stock market', 21, 6, 'The changes after 2008.', 95455215, '2000-12-29 06:00:01', '2004-12-29 06:00:01', '656b6f6f6c696b6f7474');
-insert into Portfolio(id, title, taxon, creator, summary, views, created, updated, picture) VALUES (2, 'New ways how to do it', null, 4, null, 14, '2012-12-29 06:00:01', null, null);
-insert into Portfolio(id, title, taxon, creator, summary, views, created, updated, picture) VALUES (3, 'The newer stock market', 21, 6, 'A marvellous summary.', 14, '2002-12-29 06:00:01', '2006-12-29 06:00:01', '656b6f6f6c696b6f7474');
-insert into Portfolio(id, title, taxon, creator, summary, views, created, updated, picture) VALUES (4, 'The even newer stock market', null, 1, 'Cool summary.', 100, '2003-10-10 07:00:11', null, null);
+insert into Portfolio(id, title, taxon, creator, originalCreator, summary, views, created, updated, picture, visibility, deleted) VALUES (1, 'The new stock market', 21, 6, 5, 'The changes after 2008.', 95455215, '2000-12-29 06:00:01', '2004-12-29 06:00:01', '656b6f6f6c696b6f7474', 'PUBLIC', false);
+insert into Portfolio(id, title, taxon, creator, originalCreator, summary, views, created, updated, picture, visibility, deleted) VALUES (2, 'New ways how to do it', null, 4, 4, null, 14, '2012-12-29 06:00:01', null, null, 'PUBLIC', false);
+insert into Portfolio(id, title, taxon, creator, originalCreator, summary, views, created, updated, picture, visibility, deleted) VALUES (3, 'The newer stock market', 21, 6, 6, 'A marvellous summary.', 14, '2002-12-29 06:00:01', '2006-12-29 06:00:01', '656b6f6f6c696b6f7474', 'PUBLIC', false);
+insert into Portfolio(id, title, taxon, creator, originalCreator, summary, views, created, updated, picture, visibility, deleted) VALUES (4, 'The even newer stock market', null, 1, 1, 'Cool summary.', 100, '2003-10-10 07:00:11', null, null, 'PUBLIC', false);
+insert into Portfolio(id, title, taxon, creator, originalCreator, summary, views, created, updated, picture, visibility, deleted) VALUES (5, 'Adding comment to a portfolio', null, 1, 1, 'Cool summary.', 100, '2003-10-10 07:00:11', null, null, 'PUBLIC', false);
+insert into Portfolio(id, title, taxon, creator, originalCreator, summary, views, created, updated, picture, visibility, deleted) VALUES (6, 'This portfolio will be changed to not listed in the tests. ', null, 2, 2, 'Summary.', 100, '2003-10-10 07:00:11', null, null, 'PUBLIC', false);
+insert into Portfolio(id, title, taxon, creator, originalCreator, summary, views, created, updated, picture, visibility, deleted) VALUES (7, 'This portfolio is private. ', null, 2, 2, 'Summary. Sum sum sum.', 100, '2003-10-10 07:00:11', null, '656b6f6f6c696b6f7474', 'PRIVATE', false);
+insert into Portfolio(id, title, taxon, creator, originalCreator, summary, views, created, updated, picture, visibility, deleted) VALUES (8, 'This portfolio is public. ', null, 2, 2, 'Summary. Wow.', 100, '2003-10-10 07:00:11', null, null, 'PUBLIC', false);
+insert into Portfolio(id, title, taxon, creator, originalCreator, summary, views, created, updated, picture, visibility, deleted) VALUES (9, 'This portfolio2 is public. ', null, 7, 7, 'Alpha.', 100, '2003-10-10 07:00:11', null, null, 'PUBLIC', false);
+insert into Portfolio(id, title, taxon, creator, originalCreator, summary, views, created, updated, picture, visibility, deleted) VALUES (10, 'This portfolio2 is private. ', null, 7, 7, 'Alpha.', 100, '2003-10-10 07:00:11', null, null, 'PRIVATE', false);
+insert into Portfolio(id, title, taxon, creator, originalCreator, summary, views, created, updated, picture, visibility, deleted) VALUES (11, 'This portfolio2 is not listed. ', null, 7, 7, 'Alpha.', 100, '2003-10-10 07:00:11', null, null, 'NOT_LISTED', false);
+insert into Portfolio(id, title, taxon, creator, originalCreator, summary, views, created, updated, picture, visibility, deleted) VALUES (12, 'This portfolio will be DELETED in tests.', null, 9, 9, 'Alpha.', 100, '2003-10-10 07:00:11', null, null, 'PUBLIC', false);
+insert into Portfolio(id, title, taxon, creator, originalCreator, summary, views, created, updated, picture, visibility, deleted) VALUES (13, 'This portfolio will be DELETED in tests by admin.', null, 9, 9, 'Beta.', 100, '2003-12-10 07:22:11', null, null, 'PUBLIC', false);
 
 -- Chapter
 
@@ -378,3 +408,17 @@ insert into Portfolio_Tag(tag, portfolio) values(5, 1);
 -- Portfolio TargetGroups
 insert into Portfolio_TargetGroup(portfolio, targetGroup) values (1, 'SIX_SEVEN');
 insert into Portfolio_TargetGroup(portfolio, targetGroup) values (1, 'ZERO_FIVE');
+
+-- Portfolio Cross-curricular themes
+insert into Portfolio_CrossCurricularTheme(portfolio, crossCurricularTheme) values (1, 1);
+
+-- Portfolio Key competences
+insert into Portfolio_KeyCompetence(portfolio, keyCompetence) values (1, 1);
+
+-- Improper content
+
+insert into ImproperContent(id, creator, portfolio, material, added) values (1, 1, 2, null, '2014-06-01 00:00:01');
+insert into ImproperContent(id, creator, portfolio, material, added) values (2, 1, null, 2, '2014-06-01 00:00:01');
+insert into ImproperContent(id, creator, portfolio, material, added) values (3, 9, null, 2, '2014-06-01 00:00:01');
+insert into ImproperContent(id, creator, portfolio, material, added) values (4, 9, null, 3, '2014-06-01 00:00:01');
+insert into ImproperContent(id, creator, portfolio, material, added) values (5, 9, 3, null, '2014-06-01 00:00:01');

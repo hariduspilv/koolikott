@@ -106,6 +106,17 @@ public abstract class ResourceIntegrationTestBase extends IntegrationTestBase {
      * POST
      */
 
+    protected static <T1, T2> T2 doPost(String url, T1 entity, Class<? extends T2> clazz) {
+        Entity<?> requestEntity = Entity.entity(entity, MediaType.APPLICATION_JSON_TYPE);
+        return doPost(url, requestEntity, MediaType.APPLICATION_JSON_TYPE, clazz);
+    }
+
+    protected static <T> T doPost(String url, Entity<?> requestEntity, MediaType mediaType, Class<? extends T> clazz) {
+
+        Response response = doPost(url, requestEntity, mediaType);
+        return response.readEntity(clazz);
+    }
+
     protected static Response doPost(String url, Entity<?> requestEntity) {
         return doPost(url, requestEntity, MediaType.APPLICATION_JSON_TYPE);
     }

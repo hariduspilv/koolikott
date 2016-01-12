@@ -14,8 +14,8 @@ public class ResourceTypeDAO {
     private EntityManager entityManager;
 
     public ResourceType findResourceTypeByName(String name) {
-        TypedQuery<ResourceType> findByName = entityManager
-                .createQuery("SELECT r FROM ResourceType r WHERE r.name = :name", ResourceType.class);
+        TypedQuery<ResourceType> findByName = entityManager.createQuery(
+                "SELECT r FROM ResourceType r WHERE r.name = :name", ResourceType.class);
 
         ResourceType resource = null;
         try {

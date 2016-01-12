@@ -44,7 +44,7 @@ import ezvcard.VCard;
 public abstract class MaterialParser {
 
     protected final Logger logger = LoggerFactory.getLogger(this.getClass());
-    protected static final String[] SCHEMES = {"http", "https"};
+    protected static final String[] SCHEMES = { "http", "https" };
     protected XPathFactory xPathfactory = XPathFactory.newInstance();
     protected XPath xpath = xPathfactory.newXPath();
 
@@ -136,7 +136,7 @@ public abstract class MaterialParser {
             if (name != null && website != null) {
                 Publisher publisher = publisherService.getPublisherByName(name);
                 if (publisher == null) {
-                    publishers.add( publisherService.createPublisher(name, website));
+                    publishers.add(publisherService.createPublisher(name, website));
                 } else if (!publishers.contains(publisher)) {
                     publishers.add(publisher);
                 }
@@ -218,7 +218,7 @@ public abstract class MaterialParser {
         return resourceTypes;
     }
 
-    protected void setEducationalContexts(Document doc, Set<Taxon> taxons, String path) throws XPathExpressionException {
+    protected void setEducationalContexts(Document doc, Set<Taxon> taxons, String path, Material material) throws XPathExpressionException {
         NodeList nl = getNodeList(doc, path);
 
         for (int i = 0; i < nl.getLength(); i++) {
@@ -226,6 +226,8 @@ public abstract class MaterialParser {
             String context = getElementValue(node);
 
             EducationalContext educationalContext = (EducationalContext) getTaxon(context, EducationalContext.class);
+            setIsSpecialEducation(material, context);
+
             if (educationalContext != null) {
                 taxons.add(educationalContext);
             }
@@ -246,7 +248,7 @@ public abstract class MaterialParser {
                 parent = setEducationalContext(taxonPath);
                 parent = setDomain(taxonPath, parent);
 
-                parent = setSubject(taxonPath, parent);
+                parent = setSubject(taxonPath, parent, material);
                 parent = setSpecialization(taxonPath, parent);
                 parent = setModule(taxonPath, parent);
 
@@ -259,8 +261,9 @@ public abstract class MaterialParser {
             taxons.add(parent);
         }
 
+        //Set contexts that are specified separately, not inside the taxon
         try {
-            setEducationalContexts(doc, taxons, getPathToContext());
+            setEducationalContexts(doc, taxons, getPathToContext(), material);
         } catch (XPathExpressionException e) {
             e.printStackTrace();
         }
@@ -269,13 +272,19 @@ public abstract class MaterialParser {
         material.setTaxons(new ArrayList<>(taxons));
     }
 
+    private void setIsSpecialEducation(Material material, String context) {
+        if(context.equals("SPECIALEDUCATION")) {
+            material.setSpecialEducation(true);
+        }
+    }
+
     protected void setLearningResourceType(Material material, Document doc) {
         List<ResourceType> resourceTypes = null;
 
         try {
             resourceTypes = getResourceTypes(doc, getPathToResourceType());
         } catch (Exception e) {
-            //ignore if there is no resource type for a material
+            // ignore if there is no resource type for a material
         }
         material.setResourceTypes(resourceTypes);
     }
@@ -353,7 +362,7 @@ public abstract class MaterialParser {
 
     protected abstract List<Node> getTaxonPathNodes(Document doc);
 
-    protected abstract Taxon setSubject(Node node, Taxon lastTaxon);
+    protected abstract Taxon setSubject(Node node, Taxon lastTaxon, Material material);
 
     protected abstract Taxon setTopic(Node taxonPath, Taxon parent);
 

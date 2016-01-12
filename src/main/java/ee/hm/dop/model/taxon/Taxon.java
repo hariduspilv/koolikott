@@ -51,9 +51,9 @@ public abstract class Taxon {
     public abstract Taxon getParent();
 
     public boolean containsTaxon(Taxon taxon) {
-        if(this.equals(taxon)) {
+        if (this.equals(taxon)) {
             return true;
-        } else if(getParent() != null) {
+        } else if (getParent() != null) {
             return getParent().containsTaxon(taxon);
         }
 

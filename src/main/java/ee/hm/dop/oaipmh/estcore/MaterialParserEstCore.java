@@ -20,7 +20,9 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import ee.hm.dop.model.Author;
+import ee.hm.dop.model.CrossCurricularTheme;
 import ee.hm.dop.model.IssueDate;
+import ee.hm.dop.model.KeyCompetence;
 import ee.hm.dop.model.Language;
 import ee.hm.dop.model.LanguageString;
 import ee.hm.dop.model.Material;
@@ -38,7 +40,9 @@ import ee.hm.dop.model.taxon.Topic;
 import ee.hm.dop.oaipmh.MaterialParser;
 import ee.hm.dop.oaipmh.ParseException;
 import ee.hm.dop.service.AuthorService;
+import ee.hm.dop.service.CrossCurricularThemeService;
 import ee.hm.dop.service.IssueDateService;
+import ee.hm.dop.service.KeyCompetenceService;
 import ee.hm.dop.service.LanguageService;
 import ee.hm.dop.service.PublisherService;
 import ee.hm.dop.service.TagService;
@@ -50,6 +54,8 @@ public class MaterialParserEstCore extends MaterialParser {
     private static final Map<String, String> taxonMap;
     public static final String YES = "YES";
     public static final String PUBLISHER = "PUBLISHER";
+    public static final String CROSS_CURRICULAR_THEMES = "Cross-curricular_themes";
+    public static final String KEY_COMPETENCES = "Key_competences";
 
     static {
         taxonMap = new HashMap<>();
@@ -77,13 +83,19 @@ public class MaterialParserEstCore extends MaterialParser {
     @Inject
     private IssueDateService issueDateService;
 
+    @Inject
+    private CrossCurricularThemeService crossCurricularThemeService;
+
+    @Inject
+    private KeyCompetenceService keyCompetenceService;
+
     @Override
     protected void setContributors(Material material, Document doc) {
         try {
             setAuthors(doc, material);
             setPublishersData(doc, material);
         } catch (Exception e) {
-            //ignore
+            // ignore
         }
     }
 
@@ -98,11 +110,10 @@ public class MaterialParserEstCore extends MaterialParser {
         try {
             tags = getTags(doc);
         } catch (XPathExpressionException e) {
-            //ignore
+            // ignore
         }
         material.setTags(tags);
     }
-
 
     @Override
     protected void setDescriptions(Material material, Document doc) {
@@ -111,7 +122,7 @@ public class MaterialParserEstCore extends MaterialParser {
         try {
             descriptions = getDescriptions(doc);
         } catch (Exception e) {
-            //ignore
+            // ignore
         }
 
         material.setDescriptions(descriptions);
@@ -124,7 +135,7 @@ public class MaterialParserEstCore extends MaterialParser {
         try {
             language = getLanguage(doc);
         } catch (Exception e) {
-            //ignore
+            // ignore
         }
 
         material.setLanguage(language);
@@ -166,7 +177,7 @@ public class MaterialParserEstCore extends MaterialParser {
                     return getTaxon(taxonMap.get(tag), EducationalContext.class);
                 }
             } catch (XPathExpressionException e) {
-                //ignore
+                // ignore
             }
         }
         return null;
@@ -183,17 +194,18 @@ public class MaterialParserEstCore extends MaterialParser {
                     String systemName = getTaxon(node.getTextContent(), Domain.class).getName();
 
                     Taxon taxon = getTaxonByName(domains, systemName);
-                    if (taxon != null) return taxon;
+                    if (taxon != null)
+                        return taxon;
                 }
             } catch (XPathExpressionException e) {
-                //ignore
+                // ignore
             }
         }
         return educationalContext;
     }
 
     @Override
-    protected Taxon setSubject(Node taxonPath, Taxon domain) {
+    protected Taxon setSubject(Node taxonPath, Taxon domain, Material material) {
         for (String tag : taxonMap.keySet()) {
             try {
                 Node node = getNode(taxonPath, "./*[local-name()='" + tag + "']/*[local-name()='subject']");
@@ -201,15 +213,46 @@ public class MaterialParserEstCore extends MaterialParser {
                 if (node != null) {
                     List<Taxon> subjects = new ArrayList<>(((Domain) domain).getSubjects());
                     String systemName = getTaxon(node.getTextContent(), Subject.class).getName();
-
                     Taxon taxon = getTaxonByName(subjects, systemName);
-                    if (taxon != null) return taxon;
+
+                    //Special case for adding to Cross-curricular themes to eKoolikott
+                    setCrossCurricularThemes(domain, material, taxon);
+
+                    //Special case for adding to Key competences to eKoolikott
+                    setKeyCompetences(domain, material, taxon);
+
+                    if (taxon != null)
+                        return taxon;
                 }
             } catch (XPathExpressionException e) {
-                //ignore
+                // ignore
             }
         }
         return domain;
+    }
+
+    private void setKeyCompetences(Taxon domain, Material material, Taxon taxon) {
+        if(taxon != null && domain.getName().equals(KEY_COMPETENCES)) {
+            if(material.getKeyCompetences() == null) {
+                material.setKeyCompetences(new ArrayList<>());
+            }
+
+            List<KeyCompetence> competences = material.getKeyCompetences();
+            competences.add(keyCompetenceService.findKeyCompetenceByName(taxon.getName()));
+            material.setKeyCompetences(competences);
+        }
+    }
+
+    private void setCrossCurricularThemes(Taxon domain, Material material, Taxon taxon) {
+        if(taxon != null && domain.getName().equals(CROSS_CURRICULAR_THEMES)) {
+            if(material.getCrossCurricularThemes() == null) {
+                material.setCrossCurricularThemes(new ArrayList<>());
+            }
+
+            List<CrossCurricularTheme> themes = material.getCrossCurricularThemes();
+            themes.add(crossCurricularThemeService.getThemeByName(taxon.getName()));
+            material.setCrossCurricularThemes(themes);
+        }
     }
 
     @Override
@@ -230,10 +273,11 @@ public class MaterialParserEstCore extends MaterialParser {
 
                     String systemName = getTaxon(node.getTextContent(), Topic.class).getName();
                     Taxon taxon = getTaxonByName(topics, systemName);
-                    if (taxon != null) return taxon;
+                    if (taxon != null)
+                        return taxon;
                 }
             } catch (XPathExpressionException e) {
-                //ignore
+                // ignore
             }
         }
         return parent;
@@ -251,10 +295,11 @@ public class MaterialParserEstCore extends MaterialParser {
 
                     String systemName = getTaxon(node.getTextContent(), Specialization.class).getName();
                     Taxon taxon = getTaxonByName(specializations, systemName);
-                    if (taxon != null) return taxon;
+                    if (taxon != null)
+                        return taxon;
                 }
             } catch (XPathExpressionException e) {
-                //ignore
+                // ignore
             }
         }
         return parent;
@@ -272,10 +317,11 @@ public class MaterialParserEstCore extends MaterialParser {
 
                     String systemName = getTaxon(node.getTextContent(), Module.class).getName();
                     Taxon taxon = getTaxonByName(modules, systemName);
-                    if (taxon != null) return taxon;
+                    if (taxon != null)
+                        return taxon;
                 }
             } catch (XPathExpressionException e) {
-                //ignore
+                // ignore
             }
         }
         return parent;
@@ -293,10 +339,11 @@ public class MaterialParserEstCore extends MaterialParser {
 
                     String systemName = getTaxon(node.getTextContent(), Subtopic.class).getName();
                     Taxon taxon = getTaxonByName(subtopics, systemName);
-                    if (taxon != null) return taxon;
+                    if (taxon != null)
+                        return taxon;
                 }
             } catch (XPathExpressionException e) {
-                //ignore
+                // ignore
             }
         }
         return parent;
@@ -305,7 +352,8 @@ public class MaterialParserEstCore extends MaterialParser {
     @Override
     protected void setIsPaid(Material material, Document doc) {
         try {
-            Node isPaid = getNode(doc, "//*[local-name()='estcore']/*[local-name()='rights']/*[local-name()='cost']/*[local-name()='value']");
+            Node isPaid = getNode(doc,
+                    "//*[local-name()='estcore']/*[local-name()='rights']/*[local-name()='cost']/*[local-name()='value']");
 
             if (isPaid.getTextContent().trim().toUpperCase().equals(YES)) {
                 material.setIsPaid(true);
@@ -321,7 +369,8 @@ public class MaterialParserEstCore extends MaterialParser {
     protected void setTargetGroups(Material material, Document doc) {
         Set<TargetGroup> targetGroups = new HashSet<>();
         try {
-            NodeList ageRanges = getNodeList(doc, "//*[local-name()='estcore']/*[local-name()='educational']/*[local-name()='typicalAgeRange']");
+            NodeList ageRanges = getNodeList(doc,
+                    "//*[local-name()='estcore']/*[local-name()='educational']/*[local-name()='typicalAgeRange']");
 
             for (int i = 0; i < ageRanges.getLength(); i++) {
                 String ageRange = ageRanges.item(i).getTextContent().trim();
@@ -334,7 +383,7 @@ public class MaterialParserEstCore extends MaterialParser {
                 }
             }
         } catch (XPathExpressionException e) {
-            //ignore
+            // ignore
         }
 
         material.setTargetGroups(new ArrayList<>(targetGroups));
@@ -348,7 +397,7 @@ public class MaterialParserEstCore extends MaterialParser {
 
             material.setPicture(bytes);
         } catch (XPathExpressionException e) {
-            //ignore
+            // ignore
         }
     }
 
@@ -366,8 +415,7 @@ public class MaterialParserEstCore extends MaterialParser {
             for (int i = 0; i < classifications.getLength(); i++) {
                 Node classification = classifications.item(i);
 
-                XPathExpression expr2 = xpath
-                        .compile("./*[local-name()='taxonPath']");
+                XPathExpression expr2 = xpath.compile("./*[local-name()='taxonPath']");
                 NodeList nl = (NodeList) expr2.evaluate(classification, XPathConstants.NODESET);
 
                 if (nl != null && nl.getLength() > 0) {
@@ -405,7 +453,8 @@ public class MaterialParserEstCore extends MaterialParser {
 
     private void setAuthors(Document doc, Material material) throws ParseException, XPathExpressionException {
         List<Author> authors = new ArrayList<>();
-        NodeList nodeList = getNodeList(doc, "//*[local-name()='estcore']/*[local-name()='lifeCycle']/*[local-name()='contribute']");
+        NodeList nodeList = getNodeList(doc,
+                "//*[local-name()='estcore']/*[local-name()='lifeCycle']/*[local-name()='contribute']");
 
         for (int i = 0; i < nodeList.getLength(); i++) {
             Node contributorNode = nodeList.item(i);
@@ -423,7 +472,8 @@ public class MaterialParserEstCore extends MaterialParser {
     private void setPublishersData(Document doc, Material material) throws ParseException, XPathExpressionException {
         List<Publisher> publishers = new ArrayList<>();
         IssueDate issueDate = null;
-        NodeList nodeList = getNodeList(doc, "//*[local-name()='estcore']/*[local-name()='lifeCycle']/*[local-name()='contribute']");
+        NodeList nodeList = getNodeList(doc,
+                "//*[local-name()='estcore']/*[local-name()='lifeCycle']/*[local-name()='contribute']");
 
         for (int i = 0; i < nodeList.getLength(); i++) {
             Node contributorNode = nodeList.item(i);
@@ -476,7 +526,6 @@ public class MaterialParserEstCore extends MaterialParser {
         return titles;
     }
 
-
     private List<LanguageString> getDescriptions(Document doc) throws XPathExpressionException {
         List<LanguageString> descriptions;
         Node node = getNode(doc, "//*[local-name()='estcore']/*[local-name()='general']/*[local-name()='description']");
@@ -486,7 +535,8 @@ public class MaterialParserEstCore extends MaterialParser {
     }
 
     private List<Tag> getTags(Document doc) throws XPathExpressionException {
-        NodeList keywords = getNodeList(doc, "//*[local-name()='estcore']/*[local-name()='general']/*[local-name()='keyword']/*[local-name()='string']");
+        NodeList keywords = getNodeList(doc,
+                "//*[local-name()='estcore']/*[local-name()='general']/*[local-name()='keyword']/*[local-name()='string']");
 
         return getTagsFromKeywords(keywords, tagService);
     }

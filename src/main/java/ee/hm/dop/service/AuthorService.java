@@ -1,9 +1,9 @@
 package ee.hm.dop.service;
 
+import javax.inject.Inject;
+
 import ee.hm.dop.dao.AuthorDAO;
 import ee.hm.dop.model.Author;
-
-import javax.inject.Inject;
 
 /**
  * Created by mart on 28.10.15.

@@ -114,8 +114,7 @@ public class MobileIDSOAPService {
 
         SOAPMessage response = sendSOAPMessage(message);
 
-        GetMobileAuthenticateStatusResponse getMobileAuthenticateStatusResponse = parseGetMobileAuthenticateStatusResponse(
-                response);
+        GetMobileAuthenticateStatusResponse getMobileAuthenticateStatusResponse = parseGetMobileAuthenticateStatusResponse(response);
 
         if (getMobileAuthenticateStatusResponse == null) {
             return null;
@@ -186,8 +185,8 @@ public class MobileIDSOAPService {
             return null;
         }
 
-        if (!responseElements.keySet()
-                .containsAll(Arrays.asList("Sesscode", "UserIDCode", "UserGivenname", "UserSurname", "ChallengeID"))) {
+        if (!responseElements.keySet().containsAll(
+                Arrays.asList("Sesscode", "UserIDCode", "UserGivenname", "UserSurname", "ChallengeID"))) {
             logger.warn("MobileAuthenticate response is missing one or more required fields.");
             return null;
         }

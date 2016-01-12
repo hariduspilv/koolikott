@@ -1,8 +1,9 @@
 package ee.hm.dop.utils;
 
-import javax.crypto.Cipher;
 import java.security.PrivateKey;
 import java.security.PublicKey;
+
+import javax.crypto.Cipher;
 
 public class EncryptionUtils {
 

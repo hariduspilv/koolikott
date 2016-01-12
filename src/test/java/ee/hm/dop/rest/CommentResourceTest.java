@@ -25,7 +25,7 @@ public class CommentResourceTest extends ResourceIntegrationTestBase {
         AddCommentForm addCommentForm = new AddCommentForm();
 
         Portfolio portfolio = new Portfolio();
-        long portfolioId = 1L;
+        long portfolioId = 5L;
         portfolio.setId(portfolioId);
         addCommentForm.setPortfolio(portfolio);
 
@@ -56,6 +56,50 @@ public class CommentResourceTest extends ResourceIntegrationTestBase {
                 Entity.entity(addCommentForm, MediaType.APPLICATION_JSON_TYPE));
 
         assertEquals(Status.UNAUTHORIZED.getStatusCode(), response.getStatus());
+    }
+
+    @Test
+    public void addPortfolioCommentToPrivatePortfolioAsCreator() {
+        login("38011550077");
+
+        AddCommentForm addCommentForm = new AddCommentForm();
+
+        Portfolio portfolio = new Portfolio();
+        long portfolioId = 7L;
+        portfolio.setId(portfolioId);
+        addCommentForm.setPortfolio(portfolio);
+
+        Comment comment = new Comment();
+        String commentText = "Such comment.";
+        comment.setText(commentText);
+        addCommentForm.setComment(comment);
+
+        Response response = doPost(POST_COMMENT_PORTFOLIO_URL,
+                Entity.entity(addCommentForm, MediaType.APPLICATION_JSON_TYPE));
+
+        assertEquals(Status.NO_CONTENT.getStatusCode(), response.getStatus());
+    }
+
+    @Test
+    public void addPortfolioCommentToPrivatePortfolioAsNotCreator() {
+        login("39011220011");
+
+        AddCommentForm addCommentForm = new AddCommentForm();
+
+        Portfolio portfolio = new Portfolio();
+        long portfolioId = 7L;
+        portfolio.setId(portfolioId);
+        addCommentForm.setPortfolio(portfolio);
+
+        Comment comment = new Comment();
+        String commentText = "Such comment.";
+        comment.setText(commentText);
+        addCommentForm.setComment(comment);
+
+        Response response = doPost(POST_COMMENT_PORTFOLIO_URL,
+                Entity.entity(addCommentForm, MediaType.APPLICATION_JSON_TYPE));
+
+        assertEquals(Status.INTERNAL_SERVER_ERROR.getStatusCode(), response.getStatus());
     }
 
 }

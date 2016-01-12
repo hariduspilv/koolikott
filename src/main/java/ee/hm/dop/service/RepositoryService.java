@@ -89,8 +89,8 @@ public class RepositoryService {
         long end = System.currentTimeMillis();
         String message = "Updating materials took %s milliseconds. Successfully downloaded %s"
                 + " materials and %s materials failed to download of total %s";
-        logger.info(format(message, end - start, successfulMaterials, failedMaterials, successfulMaterials
-                + failedMaterials));
+        logger.info(format(message, end - start, successfulMaterials, failedMaterials,
+                successfulMaterials + failedMaterials));
 
         updateSolrIndex();
     }
@@ -113,11 +113,14 @@ public class RepositoryService {
                 material.getRepositoryIdentifier());
 
         material.setRepository(repository);
+        if(repository.isEstonianPublisher()) {
+            material.setEmbeddable(true);
+        }
 
         if (existentMaterial != null) {
             updateMaterial(material, existentMaterial);
         } else if (!material.isDeleted()) {
-            materialService.createMaterial(material);
+            materialService.createMaterial(material, null, false);
         }
     }
 

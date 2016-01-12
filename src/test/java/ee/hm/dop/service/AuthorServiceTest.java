@@ -1,18 +1,19 @@
 package ee.hm.dop.service;
 
-import ee.hm.dop.dao.AuthorDAO;
-import ee.hm.dop.model.Author;
+import static org.easymock.EasyMock.anyObject;
+import static org.easymock.EasyMock.expect;
+import static org.easymock.EasyMock.replay;
+import static org.easymock.EasyMock.verify;
+import static org.junit.Assert.assertEquals;
+
 import org.easymock.EasyMockRunner;
 import org.easymock.Mock;
 import org.easymock.TestSubject;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import static org.easymock.EasyMock.anyObject;
-import static org.easymock.EasyMock.expect;
-import static org.easymock.EasyMock.replay;
-import static org.easymock.EasyMock.verify;
-import static org.junit.Assert.assertEquals;
+import ee.hm.dop.dao.AuthorDAO;
+import ee.hm.dop.model.Author;
 
 @RunWith(EasyMockRunner.class)
 public class AuthorServiceTest {

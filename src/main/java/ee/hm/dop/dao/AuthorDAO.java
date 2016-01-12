@@ -1,10 +1,10 @@
 package ee.hm.dop.dao;
 
-import ee.hm.dop.model.Author;
-
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
+
+import ee.hm.dop.model.Author;
 
 /**
  * Created by mart on 28.10.15.
@@ -15,7 +15,8 @@ public class AuthorDAO {
     private EntityManager entityManager;
 
     public Author findAuthorByFullName(String name, String surname) {
-        TypedQuery<Author> findByName = entityManager.createQuery("SELECT a FROM Author a WHERE a.name = :name and a.surname = :surname", Author.class);
+        TypedQuery<Author> findByName = entityManager.createQuery(
+                "SELECT a FROM Author a WHERE a.name = :name and a.surname = :surname", Author.class);
 
         Author author = null;
         try {

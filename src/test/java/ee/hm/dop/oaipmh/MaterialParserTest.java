@@ -108,7 +108,6 @@ public class MaterialParserTest {
         expect(node.getTextContent()).andReturn("");
         expect(languageService.getLanguage("")).andReturn(null);
 
-
         replay(languageService, node, nodeList, namedNodeMap);
 
         List<LanguageString> languageStrings = materialParser.getLanguageStrings(node, languageService);
@@ -204,7 +203,7 @@ public class MaterialParserTest {
         }
 
         @Override
-        protected Taxon setSubject(Node node, Taxon lastTaxon) {
+        protected Taxon setSubject(Node node, Taxon lastTaxon, Material material) {
             return null;
         }
 
@@ -241,4 +240,3 @@ public class MaterialParserTest {
         }
     }
 }
-

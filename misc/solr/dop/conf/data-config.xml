@@ -8,8 +8,8 @@
             deletedPkQuery: must return uniqueKey which will be used to remove document from Solr index.
          -->
         <entity name="Material" pk="uniqueKey"
-            query="select concat('material', id ) as uniqueKey, id, licenseType, paid, 'material' as type, lang, isSpecialEducation as special_education from Material WHERE deleted = false"
-            deltaImportQuery="select concat('material', id ) as uniqueKey, id, licenseType, paid, 'material' as type, lang, isSpecialEducation as special_education from Material where id = '${dih.delta.id}'"
+            query="select concat('material', id ) as uniqueKey, id, licenseType, paid, 'material' as type, lang, isSpecialEducation as special_education, issueDate as issue_date_id from Material WHERE deleted = false"
+            deltaImportQuery="select concat('material', id ) as uniqueKey, id, licenseType, paid, 'material' as type, lang, isSpecialEducation as special_education, issueDate as issue_date_id from Material where id = '${dih.delta.id}'"
             deltaQuery="select concat('material', id ) as uniqueKey, id from Material where (CONVERT_TZ(added, @@session.time_zone, '+00:00') > '${dataimporter.last_index_time}' OR CONVERT_TZ(updated, @@session.time_zone, '+00:00') > '${dataimporter.last_index_time}') AND deleted = false"
             deletedPkQuery="select concat('material', id ) as uniqueKey from Material where (CONVERT_TZ(added, @@session.time_zone, '+00:00') > '${dataimporter.last_index_time}' OR CONVERT_TZ(updated, @@session.time_zone, '+00:00') > '${dataimporter.last_index_time}') AND deleted = true">
             
@@ -219,12 +219,23 @@
             <entity name="Material_Language" query="select code as language from LanguageTable where id='${Material.lang}'" />
 
             <entity name="Material_TargetGroup" query="select targetGroup as target_group from Material_TargetGroup where material='${Material.id}'" />
+
+            <entity name="IssueDate" query="select year as issue_date_year from IssueDate where id='${Material.issue_date_id}'" />
+
+            <entity name="Material_CrossCurricularTheme" query="select crossCurricularTheme as cross_curricular_theme_id from Material_CrossCurricularTheme where material='${Material.id}'">
+                <entity name="CrossCurricularTheme" query="select name as cross_curricular_theme from CrossCurricularTheme where id = '${Material_CrossCurricularTheme.cross_curricular_theme_id}'" />
+            </entity>
+
+            <entity name="Material_KeyCompetence" query="select keyCompetence as key_competence_id from Material_KeyCompetence where material='${Material.id}'">
+                <entity name="KeyCompetence" query="select name as key_competence from KeyCompetence where id = '${Material_KeyCompetence.key_competence_id}'" />
+            </entity>
         </entity>
 
         <entity name="Portfolio" pk="uniqueKey"
-            query="select concat('portfolio', id ) as uniqueKey, id, title, summary, taxon as taxon_id, 'portfolio' as type from Portfolio" 
-            deltaImportQuery="select concat('portfolio', id ) as uniqueKey, id, title, summary, taxon as taxon_id, 'portfolio' as type from Portfolio where id = '${dih.delta.id}'" 
-            deltaQuery="select concat('portfolio', id ) as uniqueKey, id from Portfolio where (CONVERT_TZ(created, @@session.time_zone, '+00:00') > '${dataimporter.last_index_time}' OR CONVERT_TZ(updated, @@session.time_zone, '+00:00') > '${dataimporter.last_index_time}')">
+            query="select concat('portfolio', id ) as uniqueKey, id, title, summary, taxon as taxon_id, 'portfolio' as type, visibility from Portfolio WHERE deleted = false" 
+            deltaImportQuery="select concat('portfolio', id ) as uniqueKey, id, title, summary, taxon as taxon_id, 'portfolio' as type, visibility from Portfolio where id = '${dih.delta.id}'" 
+            deltaQuery="select concat('portfolio', id ) as uniqueKey, id from Portfolio where (CONVERT_TZ(created, @@session.time_zone, '+00:00') > '${dataimporter.last_index_time}' OR CONVERT_TZ(updated, @@session.time_zone, '+00:00') > '${dataimporter.last_index_time}') AND deleted = false" 
+            deletedPkQuery="select concat('portfolio', id ) as uniqueKey, id from Portfolio where (CONVERT_TZ(created, @@session.time_zone, '+00:00') > '${dataimporter.last_index_time}' OR CONVERT_TZ(updated, @@session.time_zone, '+00:00') > '${dataimporter.last_index_time}') AND deleted = true">
 
             <!-- Travel up the taxon path -->
 
@@ -409,6 +420,14 @@
             <entity name="Chapter" query="select title as chapterTitle, textValue as chapterText from Chapter where portfolio = '${Portfolio.id}' or parentChapter in (select id from Chapter where portfolio = '${Portfolio.id}')" />
 
             <entity name="Portfolio_TargetGroup" query="select targetGroup as target_group from Portfolio_TargetGroup where portfolio = '${Portfolio.id}'" />
+
+            <entity name="Portfolio_CrossCurricularTheme" query="select crossCurricularTheme as cross_curricular_theme_id from Portfolio_CrossCurricularTheme where portfolio='${Portfolio.id}'">
+                <entity name="CrossCurricularTheme" query="select name as cross_curricular_theme from CrossCurricularTheme where id = '${Portfolio_CrossCurricularTheme.cross_curricular_theme_id}'" />
+            </entity>
+
+            <entity name="Portfolio_KeyCompetence" query="select keyCompetence as key_competence_id from Portfolio_KeyCompetence where portfolio='${Portfolio.id}'">
+                <entity name="KeyCompetence" query="select name as key_competence from KeyCompetence where id = '${Portfolio_KeyCompetence.key_competence_id}'" />
+            </entity>
         </entity>
     </document>
 </dataConfig>

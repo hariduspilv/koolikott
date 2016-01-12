@@ -25,11 +25,28 @@ public class BaseResource {
     }
 
     protected User getLoggedInUser() {
-        return ((DopPrincipal) securityContext.getUserPrincipal()).getUser();
+        User user = null;
+
+        if (isAuthenticated()) {
+            user = getAuthenticatedUser().getUser();
+        }
+
+        return user;
     }
 
     protected AuthenticatedUser getAuthenticatedUser() {
-        return ((DopPrincipal) securityContext.getUserPrincipal()).getAuthenticatedUser();
+        DopPrincipal dopPrincipal = (DopPrincipal) securityContext.getUserPrincipal();
+
+        AuthenticatedUser authenticatedUser = null;
+        if (dopPrincipal != null) {
+            authenticatedUser = dopPrincipal.getAuthenticatedUser();
+        }
+
+        return authenticatedUser;
+    }
+
+    protected boolean isAuthenticated() {
+        return getAuthenticatedUser() != null;
     }
 
     protected HttpServletRequest getRequest() {
