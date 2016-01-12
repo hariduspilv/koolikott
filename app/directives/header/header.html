@@ -1,7 +1,7 @@
 <md-toolbar id="md-toolbar-header" class="md-whiteframe-1dp" data-click-outside="clickOutside()" outside-if-not="header-show-detailed-search-icon, detailed-search">
   <div class="md-toolbar-tools">
     <!-- logo -->
-    <div data-ng-hide="isViewPortforlioPage" layout-align="center start" flex flex-gt-sm="10">
+    <div data-ng-hide="isViewPortforlioPage" layout-align="end start" flex flex-gt-sm="15">
       <div id="logos">
         <md-tooltip>
           <span data-translate="HEADER_TOOLTIP_GO_TO_LANDING_PAGE"></span>
@@ -10,7 +10,7 @@
         <a href="#/" class="logo-sm" id="logo-sm" hide-gt-sm></a>
       </div>
     </div>
-    
+
     <!-- portfolio page toggle menu icon -->
     <span class="hide-gt-md" data-ng-show="isViewPortforlioPage" flex flex-gt-sm="5">
       <md-button class="md-icon-button" data-ng-click="toggleSidenav('left')" >
@@ -40,9 +40,9 @@
         </md-button>
       </div>
     </div>
-    
+
     <!-- language menu, login and user menu button -->
-    <div flex-gt-sm="20" flex-gt-md="{{isViewPortforlioPage ? '20' : '15'}}">
+    <div flex-gt-sm="20" flex-gt-md="{{isViewPortforlioPage ? '20' : '10'}}">
       <!-- change language menu -->
       <md-menu>
         <md-button aria-label="Ava keelevaliku menüü" class="md-icon-button" id="header-language-icon" ng-click="$mdOpenMenu($event)">
@@ -71,7 +71,7 @@
           </md-menu-item>
         </md-menu-content>
       </md-menu>
-      
+
       <!-- log in menu -->
       <md-button data-ng-hide="user" aria-label="Ava sisselogimise modaalaken" class="md-icon-button" id="header-login-icon" data-ng-click="showLogin($event)">
         <md-icon>input</md-icon>
@@ -103,7 +103,7 @@
           </md-menu-item>
         </md-menu-content>
       </md-menu>
-      
+
       <!-- exit from portfolio page button -->
       <md-button data-ng-if="isViewPortforlioPage" ng-click="back()" class="md-icon-button" aria-label="Välju kogumikust">
         <md-tooltip><span data-translate="HEADER_TOOLTIP_EXIT_PORTFOLIO_MODE"></span></md-tooltip>
