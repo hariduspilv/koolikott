@@ -285,23 +285,27 @@ public class MaterialService {
     }
 
     public ImproperContent addImproperMaterial(Material material, User loggedInUser) {
-            if (material == null || material.getId() == null) {
-                throw new RuntimeException("Material not found while adding improper material");
-            }
-            Material originalMaterial = materialDao.findById(material.getId());
-            if (originalMaterial == null) {
-                throw new RuntimeException("Material not found while adding improper material");
-            }
+        if (material == null || material.getId() == null) {
+            throw new RuntimeException("Material not found while adding improper material");
+        }
+        Material originalMaterial = materialDao.findById(material.getId());
+        if (originalMaterial == null) {
+            throw new RuntimeException("Material not found while adding improper material");
+        }
 
-            ImproperContent improperContent = new ImproperContent();
-            improperContent.setCreator(loggedInUser);
-            improperContent.setMaterial(material);
+        ImproperContent improperContent = new ImproperContent();
+        improperContent.setCreator(loggedInUser);
+        improperContent.setMaterial(material);
 
-            return improperContentDAO.update(improperContent);
+        return improperContentDAO.update(improperContent);
     }
 
     public List<ImproperContent> getImproperMaterials() {
         return improperContentDAO.getImproperMaterials();
+    }
+
+    public List<Material> getDeletedMaterials() {
+        return materialDao.getDeletedMaterials();
     }
 
     public Boolean hasSetImproper(long materialId, User loggedInUser) {
@@ -315,7 +319,7 @@ public class MaterialService {
     }
 
     public Boolean isSetImproper(long materialId) {
-        List<ImproperContent> improperContents =improperContentDAO.getByMaterial(materialId);
+        List<ImproperContent> improperContents = improperContentDAO.getByMaterial(materialId);
 
         return improperContents.size() != 0;
     }

@@ -121,9 +121,9 @@ public class MaterialResource extends BaseResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @RolesAllowed({ "ADMIN" })
     public void delete(Material material) {
-    	materialService.delete(material, getLoggedInUser());
+        materialService.delete(material, getLoggedInUser());
     }
-    
+
     @POST
     @RolesAllowed({ "USER", "ADMIN", "PUBLISHER" })
     @Consumes(MediaType.APPLICATION_JSON)
@@ -145,15 +145,23 @@ public class MaterialResource extends BaseResource {
     @GET
     @Path("getImproper")
     @Produces(MediaType.APPLICATION_JSON)
-    @RolesAllowed({"ADMIN"})
-    public List<ImproperContent> getImproperPortfolios() {
+    @RolesAllowed({ "ADMIN" })
+    public List<ImproperContent> getImproperMaterials() {
         return materialService.getImproperMaterials();
+    }
+
+    @GET
+    @Path("getDeleted")
+    @Produces(MediaType.APPLICATION_JSON)
+    @RolesAllowed({ "ADMIN" })
+    public List<Material> getDeletedMaterials() {
+        return materialService.getDeletedMaterials();
     }
 
     @GET
     @Path("hasSetImproper")
     @Produces(MediaType.APPLICATION_JSON)
-    @RolesAllowed({"USER", "ADMIN", "PUBLISHER"})
+    @RolesAllowed({ "USER", "ADMIN", "PUBLISHER" })
     public Boolean hasSetImproper(@QueryParam("materialId") long materialId) {
         return materialService.hasSetImproper(materialId, getLoggedInUser());
     }
@@ -162,7 +170,7 @@ public class MaterialResource extends BaseResource {
     @Path("setNotImproper/{id}")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    @RolesAllowed({"ADMIN"})
+    @RolesAllowed({ "ADMIN" })
     public void removeImproperPortfolios(@PathParam("id") Long id) {
         materialService.removeImproperMaterials(id);
     }
@@ -170,7 +178,7 @@ public class MaterialResource extends BaseResource {
     @GET
     @Path("isSetImproper")
     @Produces(MediaType.APPLICATION_JSON)
-    @RolesAllowed({"ADMIN"})
+    @RolesAllowed({ "ADMIN" })
     public Boolean isSetImproper(@QueryParam("materialId") long materialId) {
         return materialService.isSetImproper(materialId);
     }
