@@ -1,5 +1,5 @@
 define(['app'], function (app) {  
-    app.controller('baseImporperController', ['$scope', '$sce', '$templateRequest', '$compile', 'translationService', function ($scope, $sce, $templateRequest, $compile, translationService) {
+    app.controller('dashboardController', ['$scope', '$location', '$sce', '$templateRequest', '$compile', 'translationService', function ($scope, $location, $sce, $templateRequest, $compile, translationService) {
         var collection = null;
        
         $scope.filter = {
@@ -65,7 +65,7 @@ define(['app'], function (app) {
             if (item) {
                 return getUserDefinedLanguageString(item.titles, translationService.getLanguage(), item.language);
             }
-				};
+		};
         
         $scope.onReorder = function (order) {
             orderImporper(order);
@@ -91,6 +91,18 @@ define(['app'], function (app) {
             return formatDateToDayMonthYear(date);
         }
         
+        $scope.gotoImproperMaterials = function() {
+    		$location.url("/dashboard/improper/material");
+    	}
+    	
+    	$scope.gotoImproperPortfolios = function() {
+    		$location.url("/dashboard/improper/portfolio");
+    	}
+    	
+    	$scope.gotoDeletedMaterials = function() {
+    		$location.url("/dashboard/deleted/material");
+    	}
+        
         return {
             getImproperSuccess: getImproperSuccess,
             getImproperFail: getImproperFail,
@@ -98,27 +110,4 @@ define(['app'], function (app) {
         }
     }]);
     
-    app.controller('imporperMaterialsController', ['$scope', 'serverCallService', '$controller', '$filter', function ($scope, serverCallService, $controller, $filter) {    
-        var base = $controller('baseImporperController', { $scope: $scope });
-        
-        serverCallService.makeGet("rest/material/getImproper", {}, base.getImproperSuccess, base.getImproperFail);
-
-        $scope.title = $filter('translate')('DASHBOARD_IMRPOPER_MATERIALS');
-
-        $scope.bindTable = function() {
-            base.buildTable('#improper-materials-table', 'views/dashboard/templates/improperMaterialsTable.html');
-        }
-    }]);
-    
-    app.controller('imporperPortfoliosController', ['$scope', 'serverCallService', '$controller', '$filter', function ($scope, serverCallService, $controller, $filter) {    
-        var base = $controller('baseImporperController', { $scope: $scope });
-        
-        serverCallService.makeGet("rest/portfolio/getImproper", {}, base.getImproperSuccess, base.getImproperFail);
-        
-        $scope.title = $filter('translate')('DASHBOARD_IMRPOPER_PORTFOLIOS');
-        
-        $scope.bindTable = function() {
-            base.buildTable('#improper-portfolios-table', 'views/dashboard/templates/improperPortfoliosTable.html');
-        }
-    }]);
 });

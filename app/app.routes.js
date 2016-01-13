@@ -70,9 +70,37 @@ define([], function()
             },
             '/dashboard': {
                 templateUrl: 'views/dashboard/dashboard.html',
+                controller: 'dashboardController',
                 permissions: ['ADMIN'],
                 dependencies: [
-                    'views/dashboard/dashboard'
+                   'views/dashboard/dashboard'
+               ]
+            },
+            '/dashboard/improper/material': {
+                templateUrl: 'views/dashboard/improper/material/improperMaterial.html',
+                controller: 'improperMaterialController',
+                permissions: ['ADMIN'],
+                dependencies: [
+                    'views/dashboard/dashboard',
+                    'views/dashboard/improper/material/improperMaterial'
+                ]
+            },
+            '/dashboard/improper/portfolio': {
+                templateUrl: 'views/dashboard/improper/portfolio/improperPortfolio.html',
+                controller: 'improperPortfolioController',
+                permissions: ['ADMIN'],
+                dependencies: [
+                    'views/dashboard/dashboard',
+                    'views/dashboard/improper/portfolio/improperPortfolio'
+                ]
+            },
+            '/dashboard/deleted/material': {
+                templateUrl: 'views/dashboard/deleted/material/deletedMaterial.html',
+                controller: 'deletedMaterialController',
+                permissions: ['ADMIN'],
+                dependencies: [
+                    'views/dashboard/dashboard',
+                    'views/dashboard/deleted/material/deletedMaterial'
                 ]
             },
             '/loginRedirect': {

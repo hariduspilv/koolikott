@@ -6,9 +6,21 @@
           <h1 data-translate="DASHBOARD"></h1>
         </div>
         
-        <md-card class="md-data-table" id="improper-materials-table" data-ng-include="'views/dashboard/templates/baseTable.html'" data-ng-controller="imporperMaterialsController" onload="bindTable()"></md-card>
+        <div layout="row" class="type-block">
+            <md-button class="md-raised" ng-click="gotoImproperMaterials()">
+                <pan data-translate="DASHBOARD_IMRPOPER_MATERIALS"></pan>
+            </md-button>
+            <md-button class="md-raised" ng-click="gotoImproperPortfolios()">
+                <span data-translate="DASHBOARD_IMRPOPER_PORTFOLIOS"></span>
+            </md-button>
+        </div>
         
-        <md-card class="md-data-table" id="improper-portfolios-table" data-ng-include="'views/dashboard/templates/baseTable.html'" data-ng-controller="imporperPortfoliosController" onload="bindTable()"></md-card>
+        <div layout="row" class="type-block">
+            <md-button class="md-raised" ng-click="gotoDeletedMaterials()">
+                <pan data-translate="DASHBOARD_DELETED_MATERIALS"></pan>
+            </md-button>
+        </div>
+       
       </article>
     </section>
   </div>
