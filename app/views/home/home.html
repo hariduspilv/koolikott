@@ -6,7 +6,7 @@
         <div layout="row" class="type-block">
           <h1 data-translate="LANDING_PAGE_TITLE_NEWEST"></h1>
         </div>
-        <div id="newest-materials" layout="row">
+        <div id="newest-materials">
           <md-grid-list class="materials-grid-list ng-hide" md-cols-xs="2" md-cols-gt-md="4" md-cols-md="3" md-cols-sm="2" md-gutter="10px" md-row-height="3:4" data-ng-show="materials.length != 0">
             <md-grid-tile data-ng-repeat="material in materials">
               <figure data-dop-material-box material="material" layout-fill></figure>
@@ -21,7 +21,7 @@
         <div layout="row" class="type-block">
           <h1 data-translate="LANDING_PAGE_TITLE_POPULAR"></h1>
         </div>
-        <div id="popular-materials" layout="row">
+        <div id="popular-materials">
           <md-grid-list class="materials-grid-list ng-hide" md-cols-xs="2" md-cols-gt-md="4" md-cols-md="3" md-cols-sm="2" md-gutter="10px" md-row-height="3:4" data-ng-show="materials.length != 0">
             <md-grid-tile data-ng-repeat="material in materials">
               <figure data-dop-material-box material="material"></figure>

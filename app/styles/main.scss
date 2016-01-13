@@ -21,6 +21,13 @@ ul {
     list-style: none;
 }
 
+// material bugfixes
+@media (min-width: 960px) {
+.layout-column > .flex-gt-sm-25 {
+    max-width: 25%;
+  }
+}
+
 @import "alert.scss";
 @import "iconfont.scss";
 @import "typography.scss";
