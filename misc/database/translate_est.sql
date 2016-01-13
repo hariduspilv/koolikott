@@ -381,6 +381,7 @@ INSERT INTO Translation(translationGroup, translationKey, translation) VALUES
 (1,'DASHBOARD','Töölaud'),
 (1,'DASHBOARD_IMRPOPER_MATERIALS','Ebasobivad materjalid'),
 (1,'DASHBOARD_IMRPOPER_PORTFOLIOS','Ebasobivad kogumikud'),
+(1,'DASHBOARD_DELETED_MATERIALS','Kustutatud materjalid'),
 (1,'TITLE','Pealkiri'),
 (1,'SUBMITTED_AT','Raporteeritud'),
 (1,'SUBMITTED_BY','Raporteeris'),
