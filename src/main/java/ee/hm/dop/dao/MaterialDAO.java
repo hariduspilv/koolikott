@@ -80,6 +80,15 @@ public class MaterialDAO {
         update(material);
     }
 
+    public void restore(Material material) {
+        if (material.getId() == null) {
+            throw new InvalidParameterException("Material does not exist.");
+        }
+
+        material.setDeleted(false);
+        update(material);
+    }
+
     /**
      * For testing purposes.
      *

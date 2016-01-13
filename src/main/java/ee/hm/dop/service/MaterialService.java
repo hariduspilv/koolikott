@@ -103,6 +103,24 @@ public class MaterialService {
         searchEngineService.updateIndex();
     }
 
+    public void restore(Material material, User loggedInUser) {
+        if (material.getId() == null) {
+            throw new RuntimeException("Material must already exist.");
+        }
+
+        Material originalMaterial = materialDao.findById(material.getId());
+        if (originalMaterial == null) {
+            throw new RuntimeException("Material not found");
+        }
+
+        if (!isUserAdmin(loggedInUser)) {
+            throw new RuntimeException("Logged in user must be an administrator.");
+        }
+
+        materialDao.restore(originalMaterial);
+        searchEngineService.updateIndex();
+    }
+
     private void setPublishers(Material material) {
         List<Publisher> publishers = material.getPublishers();
 
