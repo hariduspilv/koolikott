@@ -12,9 +12,7 @@ define(['app'], function(app)
             	$scope.$watch(function() {
             		return $rootScope.savedPortfolio;
             	}, function(newPortfolio, oldPortfolio) {
-            		if (newPortfolio !== oldPortfolio) {
-            			$scope.portfolio = newPortfolio;
-            		}
+            		$scope.portfolio = newPortfolio;
                 });
 
             	$scope.portfolio = $rootScope.savedPortfolio;

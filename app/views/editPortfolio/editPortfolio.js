@@ -135,6 +135,12 @@ define(['app'], function(app) {
                 }, 20000);
             }
             
+            $scope.$watch(function() {
+        		return $rootScope.savedPortfolio;
+        	}, function(newPortfolio, oldPortfolio) {
+        		$scope.portfolio = newPortfolio;
+            });
+            
             $scope.$on('$destroy', function() {
                 $interval.cancel(autoSaveInterval);
             });
