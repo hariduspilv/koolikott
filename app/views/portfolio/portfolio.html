@@ -1,18 +1,16 @@
-<div layout="column" flex>
-  <section id="main-content" layout="row" layout-sm="column" layout-align="start start">
-    <article class="md-padding" layout="column" flex="75" flex-sm="100" role="main">
+<section id="main-content"  layout="column" layout-gt-sm="row" flex="100" flex-gt-sm="90">
+  <article flex="100" flex-gt-sm="75" flex-gt-lg="80" class="md-padding" role="main">
 
-      <div data-dop-portfolio-summary-card comment="newComment" submit-click="addComment()" data-portfolio="portfolio"></div>
+    <div data-dop-portfolio-summary-card comment="newComment" submit-click="addComment()" data-portfolio="portfolio"></div>
 
-      <!-- <div data-dop-comments-card comments="portfolio.comments" comment="newComment" submit-click="addComment()"></div> -->
+    <!-- <div data-dop-comments-card comments="portfolio.comments" comment="newComment" submit-click="addComment()"></div> -->
 
-      <div id="portfolio-chapters">
-        <div data-ng-repeat="chapter in portfolio.chapters">
-          <div data-dop-chapter data-chapter="chapter" data-index="{{$index}}"></div>
-        </div>
+    <div id="portfolio-chapters">
+      <div data-ng-repeat="chapter in portfolio.chapters">
+        <div data-dop-chapter data-chapter="chapter" data-index="{{$index}}"></div>
       </div>
-    </article>
+    </div>
+  </article>
 
-    <aside data-dop-sidebar flex="25" flex-sm="100" class="md-padding" role="sidebar"></aside>
-  </section>
-</div>
+  <aside data-dop-sidebar flex="100" flex-gt-sm="25" flex-gt-lg="20" class="md-padding" role="sidebar"></aside>
+</section>

@@ -19,8 +19,8 @@
     </span>
 
     <!-- search bar with filter icon -->
-    <div  flex-gt-xs flex-gt-sm="70" flex-gt-md="{{isViewPortforlioPage ? '80' : '75'}}">
-      <div layout="row" layout-align="end center" layout-align-gt-sm="center center">
+    <div  flex-gt-xs flex-gt-sm="70" flex-gt-md="{{isViewPortforlioPage ? '90' : '75'}}">
+      <div layout="row" >
         <div class="navbar-search" layout="row" flex>
           <md-button aria-label="Otsi" class="md-icon-button" id="header-show-search-button">
             <md-icon>search</md-icon>
@@ -42,7 +42,7 @@
     </div>
 
     <!-- language menu, login and user menu button -->
-    <div flex-gt-xs flex-gt-sm="15" flex-gt-md="{{isViewPortforlioPage ? '20' : '10'}}">
+    <div flex-gt-xs flex-gt-sm="15" flex-gt-md="{{isViewPortforlioPage ? '10' : '10'}}">
       <!-- change language menu -->
       <md-menu>
         <md-button aria-label="Ava keelevaliku menüü" class="md-icon-button" id="header-language-icon" ng-click="$mdOpenMenu($event)">
@@ -116,8 +116,8 @@
 <div class="md-toolbar-filter" id="detailedSearch" data-ng-show="detailedSearch.isVisible">
   <form layout="row" layout-xs="column"  flex>
       <!-- <form layout="row" layout-xs="column" layout-align="{{isViewPortforlioPage ? 'start' : 'center'}} start" flex> -->
-    <div layout="row" layout-xs="column" flex="0" flex-gt-sm="15"></div>
-    <div flex flex-gt-sm="{{isViewPortforlioPage ? '95' : '75'}}" class="md-padding filter-wrapper" id="detailed-search">
+    <div data-ng-if="!isViewPortforlioPage" layout="row" layout-xs="column" flex="0" flex-gt-sm="15"></div>
+    <div flex flex-gt-sm="{{isViewPortforlioPage ? '90' : '75'}}" class="md-padding filter-wrapper" id="detailed-search">
       <!-- <div flex flex-gt-md="{{isViewPortforlioPage ? '95' : '80'}}" class="md-padding filter-wrapper" id="detailed-search"> -->
       <div data-dop-detailed-search query-in="detailedSearch.queryIn" query-out="detailedSearch.queryOut" main-field="detailedSearch.mainField" search-callback="detailedSearch.doSearch()"></div>
     </div>

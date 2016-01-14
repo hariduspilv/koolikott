@@ -1,8 +1,9 @@
 <div id="page-search-result" flex>
-  <div layout layout-align="center start" flex>
-    <section layout="row" layout-sm="column" flex flex-gt-md="80">
+  <div layout="row" layout-xs="column" flex>
+    <div layout="row" layout-xs="column" flex="0" flex-gt-sm="15"></div>
+    <section layout="column" layout-gt-sm="row" flex="100" flex-gt-sm="75">
 
-      <article flex="75" flex-xs="100" flex-sm="100" flex-gt-lg="80" class="md-padding" role="main">
+      <article  flex="100" flex-gt-sm="75" flex-gt-lg="80" class="md-padding" role="main">
         <h2 class="md-headline">
           <span data-ng-if="searching" data-translate="SEARCH_RESULTS"></span>
           <span data-ng-if="!searching">
@@ -40,7 +41,7 @@
         </div>
 
       </article>
-      <div data-dop-sidebar flex="25" flex-xs="100" flex-sm="100" flex-gt-lg="20" class="md-padding" role="sidebar"></div>
+      <div data-dop-sidebar flex="100" flex-gt-sm="25" flex-gt-lg="20" class="md-padding" role="sidebar"></div>
     </section>
   </div>
 </div>

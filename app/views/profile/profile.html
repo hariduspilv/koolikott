@@ -1,6 +1,7 @@
 <div id="page-home" flex>
-  <div layout layout-align="center start" flex>
-    <section layout="row" layout-sm="column" flex flex-gt-md="80">
+  <div layout="row" layout-xs="column" flex>
+    <div layout="row" layout-xs="column" flex="0" flex-gt-sm="15"></div>
+    <section layout="column" layout-gt-sm="row" flex="100" flex-gt-sm="75">
       <article flex="75" flex-sm="100" class="md-padding" role="main">
         <h1 class="md-headline" data-ng-if="myProfile" data-translate="MYPROFILE_PAGE_TITLE_PORTFOLIOS"></h1>
         <h1 class="md-headline" data-ng-if="!myProfile" data-translate="PROFILE_PAGE_TITLE_PORTFOLIOS"></h1>
@@ -21,23 +22,21 @@
         </md-grid-list>
       </article>
 
-      <div flex="25" flex-sm="100" class="md-padding" role="sidebar">
-        <aside layout="column" class="sidebar">
-          <h1 class="md-headline" data-ng-if="myProfile" data-translate="MYPROFILE_PAGE_TITLE_MY_DATA"></h1>
+      <aside data-dop-sidebar flex="100" flex-gt-sm="25" flex-gt-lg="20" class="md-padding" role="sidebar">
+        <h1 class="md-headline" data-ng-if="myProfile" data-translate="MYPROFILE_PAGE_TITLE_MY_DATA"></h1>
 
-          <p data-ng-if="myProfile">
-            <strong>{{user.name}} {{user.surname}}</strong><br />
+        <p data-ng-if="myProfile">
+          <strong>{{user.name}} {{user.surname}}</strong><br />
+          Hugo Treffneri Gümnaasium
+        </p>
+
+        <h2 class="md-headline" data-ng-if="!myProfile">
+          {{user.name}} {{user.surname}}
+        </h2>
+        <p data-ng-if="!myProfile">
             Hugo Treffneri Gümnaasium
-          </p>
-
-          <h2 class="md-headline" data-ng-if="!myProfile">
-            {{user.name}} {{user.surname}}
-          </h2>
-          <p data-ng-if="!myProfile">
-              Hugo Treffneri Gümnaasium
-          </p>
-        </aside>
-      </div>
+        </p>
+      </aside>
     </section>
   </div>
 </div>
