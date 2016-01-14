@@ -13,23 +13,23 @@ define(['app'], function (app) {
             order: 'bySubmittedAt',
         };
 
-        function getImproperSuccess(improper) {
+        function getItemsSuccess(improper) {
             if (isEmpty(improper)) {
                 log('No data returned by session search.');
             } else {
                 collection = improper;
-                $scope.improper = improper;
+                $scope.data = improper;
                 
-                orderImporper($scope.query.order);
+                orderItems($scope.query.order);
             }
         }
         
-        function getImproperFail() {
+        function getItemsFail() {
             console.log('Session search failed.')
         }
         
-        function orderImporper(order) {
-            $scope.improper = $scope.improper.sort(function(a, b) {
+        function orderItems(order) {
+            $scope.data = $scope.data.sort(function(a, b) {
                 if (order === 'bySubmittedAt' || order === '-bySubmittedAt')
                     return new Date(b.added) - new Date(a.added);
                 
@@ -40,24 +40,17 @@ define(['app'], function (app) {
             });
 
             if (order.slice(0, 1) === '-')
-                $scope.improper.reverse();
+                $scope.data.reverse();
         }
         
-        function filterImproper() {
-            $scope.improper = collection.filter(function(improper) {
-                if (improper.portfolio !== null)
-                  return improper.portfolio.title.slice(0, $scope.query.filter.length).toLowerCase() === $scope.query.filter.toLowerCase();
-                if (improper.material !== null)
-                  return $scope.getCorrectLanguageTitle(improper.material).slice(0, $scope.query.filter.length).toLowerCase() === $scope.query.filter.toLowerCase();
-            });
-        }
-        
-        function buildTable(tableId, templateUrl) {
-            var url = $sce.getTrustedResourceUrl(templateUrl);
-            var $container = angular.element(tableId).find('.table-container');
-            
-            $templateRequest(url).then(function(template) {
-                $container.html($compile(template)($scope));
+        function filterItems() {
+            $scope.data = collection.filter(function(data) {
+                if (data.portfolio != null)
+                  return data.portfolio.title.slice(0, $scope.query.filter.length).toLowerCase() === $scope.query.filter.toLowerCase();
+                if (data.material != null)
+                  return $scope.getCorrectLanguageTitle(data.material).slice(0, $scope.query.filter.length).toLowerCase() === $scope.query.filter.toLowerCase();
+                if (data.type == ".Material")
+                  return $scope.getCorrectLanguageTitle(data).slice(0, $scope.query.filter.length).toLowerCase() === $scope.query.filter.toLowerCase();
             });
         }
         
@@ -68,13 +61,13 @@ define(['app'], function (app) {
 		};
         
         $scope.onReorder = function (order) {
-            orderImporper(order);
+            orderItems(order);
         };
         
         $scope.removeFilter = function () {
             $scope.filter.show = false;
             $scope.query.filter = '';
-            $scope.improper = collection;
+            $scope.data = collection;
             
             if ($scope.filter.form.$dirty) {
                 $scope.filter.form.$setPristine();
@@ -83,8 +76,7 @@ define(['app'], function (app) {
         
         $scope.$watch('query.filter', function (newValue, oldValue) {
             if (newValue === oldValue) return;
-            
-            filterImproper();
+            filterItems();
         });
         
         $scope.formatDate = function(date) {
@@ -104,9 +96,8 @@ define(['app'], function (app) {
     	}
         
         return {
-            getImproperSuccess: getImproperSuccess,
-            getImproperFail: getImproperFail,
-            buildTable: buildTable
+            getItemsSuccess: getItemsSuccess,
+            getItemsFail: getItemsFail
         }
     }]);
     
