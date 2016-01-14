@@ -1,8 +1,14 @@
 // Card
 $green1: #00838f;
 $green2: #00695c;
-$green3: #43a047;
+$greengrass: #43a047;
 $green4: #CDDC39;
+$pinky: #985984;
+$violet: #584D78;
+$navy: #274156;
+$cyan: #00498E;
+$salad: #36AA7A;
+$royal: #2C47B2;
 
 $heading-color: #212121;
 $link-color: #15c;
@@ -125,14 +131,26 @@ md-card {
       &.description {
         background-color: $green1;
       }
-      &.videocam {
+      &.assessment {
         background-color: $green2;
       }
-      &.audiotrack {
-        background-color: $green3;
+      &.dvr {
+        background-color: $greengrass;
       }
       &.portfolio {
-        background-color: $green4;
+        background-color: $royal;
+      }
+      &.casino {
+        background-color: $violet;
+      }
+      &.web_asset {
+        background-color: $navy;
+      }
+      &.audiotrack {
+        background-color: $cyan;
+      }
+      &.ondemand_video {
+        background-color: $salad;
       }
     }
 
