@@ -86,10 +86,6 @@ public class MaterialService {
     }
 
     public void delete(Material material, User loggedInUser) {
-        if (material.getId() == null) {
-            throw new RuntimeException("Material must already exist.");
-        }
-
         Material originalMaterial = materialDao.findById(material.getId());
         if (originalMaterial == null) {
             throw new RuntimeException("Material not found");
@@ -104,10 +100,6 @@ public class MaterialService {
     }
 
     public void restore(Material material, User loggedInUser) {
-        if (material.getId() == null) {
-            throw new RuntimeException("Material must already exist.");
-        }
-
         Material originalMaterial = materialDao.findDeletedById(material.getId());
         if (originalMaterial == null) {
             throw new RuntimeException("Material not found");

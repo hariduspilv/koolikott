@@ -20,26 +20,21 @@ public class MaterialDAO {
     private EntityManager entityManager;
 
     public Material findById(long materialId) {
-        TypedQuery<Material> findByCode = entityManager
-                .createQuery("SELECT m FROM Material m WHERE m.id = :id AND m.deleted = false", Material.class);
-
-        Material material = null;
-        try {
-            material = findByCode.setParameter("id", materialId).getSingleResult();
-        } catch (NoResultException ex) {
-            // ignore
-        }
-
-        return material;
+        return findById(materialId, false);
     }
 
     public Material findDeletedById(long materialId) {
-        TypedQuery<Material> findByCode = entityManager
-                .createQuery("SELECT m FROM Material m WHERE m.id = :id AND m.deleted = true", Material.class);
+        return findById(materialId, true);
+    }
+
+    private Material findById(long materialId, boolean includeDeleted) {
+        TypedQuery<Material> findByCode = entityManager.createQuery(
+                "SELECT m FROM Material m WHERE m.id = :id AND m.deleted = :includeDeleted", Material.class);
 
         Material material = null;
         try {
-            material = findByCode.setParameter("id", materialId).getSingleResult();
+            material = findByCode.setParameter("id", materialId).setParameter("includeDeleted", includeDeleted)
+                    .getSingleResult();
         } catch (NoResultException ex) {
             // ignore
         }
@@ -86,20 +81,19 @@ public class MaterialDAO {
     }
 
     public void delete(Material material) {
-        if (material.getId() == null) {
-            throw new InvalidParameterException("Material does not exist.");
-        }
-
-        material.setDeleted(true);
-        update(material);
+        setDeleted(material, true);
     }
 
     public void restore(Material material) {
+        setDeleted(material, false);
+    }
+
+    private void setDeleted(Material material, boolean deleted) {
         if (material.getId() == null) {
             throw new InvalidParameterException("Material does not exist.");
         }
 
-        material.setDeleted(false);
+        material.setDeleted(deleted);
         update(material);
     }
 
