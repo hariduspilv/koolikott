@@ -45,18 +45,22 @@ define(['app'], function (app) {
         
         function filterItems() {
             $scope.data = collection.filter(function(data) {
-                if (data.portfolio != null)
+                if (data && data.portfolio != null)
                   return data.portfolio.title.slice(0, $scope.query.filter.length).toLowerCase() === $scope.query.filter.toLowerCase();
-                if (data.material != null)
+                if (data && data.material != null)
                   return $scope.getCorrectLanguageTitle(data.material).slice(0, $scope.query.filter.length).toLowerCase() === $scope.query.filter.toLowerCase();
-                if (data.type == ".Material")
+                if (data && data.type == ".Material")
                   return $scope.getCorrectLanguageTitle(data).slice(0, $scope.query.filter.length).toLowerCase() === $scope.query.filter.toLowerCase();
             });
         }
         
         $scope.getCorrectLanguageTitle = function (item) {
             if (item) {
-                return getUserDefinedLanguageString(item.titles, translationService.getLanguage(), item.language);
+                var result = getUserDefinedLanguageString(item.titles, translationService.getLanguage(), item.language);
+                if(!result) {
+                	return "";
+                }
+                return result;
             }
 		};
         
