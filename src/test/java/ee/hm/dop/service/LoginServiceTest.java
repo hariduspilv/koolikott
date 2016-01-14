@@ -1,5 +1,6 @@
 package ee.hm.dop.service;
 
+import static org.easymock.EasyMock.anyObject;
 import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.newCapture;
@@ -29,6 +30,7 @@ import ee.hm.dop.exceptions.DuplicateTokenException;
 import ee.hm.dop.model.AuthenticatedUser;
 import ee.hm.dop.model.AuthenticationState;
 import ee.hm.dop.model.User;
+import ee.hm.dop.service.LoginService.LoginForm;
 
 @RunWith(EasyMockRunner.class)
 public class LoginServiceTest {
@@ -49,18 +51,49 @@ public class LoginServiceTest {
     private AuthenticationStateDAO authenticationStateDAO;
 
     @Test
-    public void logInNullUser() {
+    public void logIn() throws NoSuchMethodException {
+        String idCode = "idCode";
+        User user = createMock(User.class);
+        AuthenticatedUser authenticatedUser = createMock(AuthenticatedUser.class);
+
+        expect(userService.getUserByIdCode(idCode)).andReturn(user);
+        expect(authenticatedUserDAO.createAuthenticatedUser(EasyMock.anyObject(AuthenticatedUser.class))).andReturn(
+                authenticatedUser);
+
+        expect(authenticatedUser.getUser()).andReturn(user);
+        expect(user.getUsername()).andReturn("username");
+
+        replayAll(user, authenticatedUser);
+
+        loginService.logIn(createLoginForm(idCode));
+
+        verifyAll(user, authenticatedUser);
+    }
+
+    @Test
+    public void logInFirstTime() {
         String idCode = "idCode";
 
-        expect(userService.getUserByIdCode(idCode)).andReturn(null).anyTimes();
+        expect(userService.getUserByIdCode(idCode)).andReturn(null);
+        User user = createMock(User.class);
+        expect(userService.create(idCode, null, null)).andReturn(user);
+        expect(userService.getUserByIdCode(idCode)).andReturn(user);
 
-        replayAll();
+        AuthenticatedUser authenticatedUserMock = createMock(AuthenticatedUser.class);
+        expect(authenticatedUserDAO.createAuthenticatedUser(anyObject(AuthenticatedUser.class))).andReturn(
+                authenticatedUserMock);
+        authenticatedUserMock.setFirstLogin(true);
+        expect(authenticatedUserMock.getUser()).andReturn(user);
+        expect(user.getUsername()).andReturn("firstTimeLoginUser");
 
-        AuthenticatedUser authenticatedUser = loginService.logIn(idCode);
+        replayAll(user, authenticatedUserMock);
 
-        verifyAll();
+        AuthenticatedUser authenticatedUser = loginService.logIn(createLoginForm(idCode));
 
-        assertNull(authenticatedUser);
+        verifyAll(user, authenticatedUserMock);
+
+        assertNotNull(authenticatedUser);
+        assertSame(authenticatedUserMock, authenticatedUser);
     }
 
     @Test
@@ -75,7 +108,7 @@ public class LoginServiceTest {
         replayAll(user);
 
         try {
-            loginService.logIn(idCode);
+            loginService.logIn(createLoginForm(idCode));
             fail("Exception expected");
         } catch (DuplicateTokenException e) {
             // Everything ok
@@ -96,28 +129,14 @@ public class LoginServiceTest {
         expect(authenticatedUserDAO.createAuthenticatedUser(EasyMock.anyObject(AuthenticatedUser.class))).andReturn(
                 authenticatedUser);
 
-        replayAll(user);
+        expect(authenticatedUser.getUser()).andReturn(user);
+        expect(user.getUsername()).andReturn("username");
 
-        loginService.logIn(idCode);
+        replayAll(user, authenticatedUser);
 
-        verifyAll(user);
-    }
+        loginService.logIn(createLoginForm(idCode));
 
-    @Test
-    public void logIn() throws NoSuchMethodException {
-        String idCode = "idCode";
-        User user = createMock(User.class);
-        AuthenticatedUser authenticatedUser = createMock(AuthenticatedUser.class);
-
-        expect(userService.getUserByIdCode(idCode)).andReturn(user);
-        expect(authenticatedUserDAO.createAuthenticatedUser(EasyMock.anyObject(AuthenticatedUser.class))).andReturn(
-                authenticatedUser);
-
-        replayAll(user);
-
-        loginService.logIn(idCode);
-
-        verifyAll(user);
+        verifyAll(user, authenticatedUser);
     }
 
     @Test
@@ -205,6 +224,10 @@ public class LoginServiceTest {
         verifyAll();
 
         assertNull(returnedAuthenticatedUser);
+    }
+
+    private LoginForm createLoginForm(String idCode) {
+        return new LoginForm(idCode, null, null);
     }
 
     private void expectCreateAuthenticatedUser(Capture<AuthenticatedUser> capturedAuthenticatedUser) {

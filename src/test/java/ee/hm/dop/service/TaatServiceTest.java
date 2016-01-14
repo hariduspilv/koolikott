@@ -10,16 +10,13 @@ import static ee.hm.dop.utils.ConfigurationProperties.TAAT_METADATA_ENTITY_ID;
 import static ee.hm.dop.utils.ConfigurationProperties.TAAT_METADATA_FILEPATH;
 import static ee.hm.dop.utils.ConfigurationProperties.TAAT_SSO;
 import static org.easymock.EasyMock.anyObject;
-import static org.easymock.EasyMock.capture;
 import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.expect;
-import static org.easymock.EasyMock.newCapture;
 import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
@@ -27,7 +24,6 @@ import static org.junit.Assert.fail;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.configuration.Configuration;
-import org.easymock.Capture;
 import org.easymock.EasyMockRunner;
 import org.easymock.Mock;
 import org.easymock.TestSubject;
@@ -47,8 +43,8 @@ import org.opensaml.xml.ConfigurationException;
 import ee.hm.dop.dao.AuthenticationStateDAO;
 import ee.hm.dop.model.AuthenticatedUser;
 import ee.hm.dop.model.AuthenticationState;
-import ee.hm.dop.model.User;
 import ee.hm.dop.security.KeyStoreUtils;
+import ee.hm.dop.service.LoginService.LoginForm;
 
 @RunWith(EasyMockRunner.class)
 public class TaatServiceTest {
@@ -64,9 +60,6 @@ public class TaatServiceTest {
 
     @Mock
     private LoginService loginService;
-
-    @Mock
-    private UserService userService;
 
     @BeforeClass
     public static void init() throws ConfigurationException {
@@ -174,66 +167,26 @@ public class TaatServiceTest {
     }
 
     @Test
-    public void authenticateFirstTimeLogin() throws Exception {
+    public void authenticate() throws Exception {
         String authenticationStateToken = setAuthenticationExpects();
         setValidationExpects();
 
         String idCode = "11111111111";
-        expect(userService.getUserByIdCode(idCode)).andReturn(null);
 
-        User newUser = createMock(User.class);
-        Capture<AuthenticatedUser> authenticatedUserCapture = newCapture();
-        expect(userService.create(idCode, "TestTäisnimi", "TestPerenimi")).andReturn(newUser);
-
+        LoginForm loginForm = new LoginForm(idCode, "TestTäisnimi", "TestPerenimi") //
+                .withAffiliations("member,student") //
+                .withHomeOrganization("eenet.ee") //
+                .withMails("test@testmail.ee") //
+                .withScopedAffiliations("student@bak.studylevel.taat.edu.ee");
         AuthenticatedUser authenticatedUser = createMock(AuthenticatedUser.class);
-        expect(loginService.createAuthenticatedUser(capture(authenticatedUserCapture))).andReturn(authenticatedUser);
+        expect(loginService.logIn(loginForm)).andReturn(authenticatedUser);
 
-        replayAll(newUser, authenticatedUser);
+        replayAll(authenticatedUser);
 
         AuthenticatedUser returnedAuthenticatedUser = taatService.authenticate(getSAMLResponse(),
                 authenticationStateToken);
 
-        verifyAll(newUser, authenticatedUser);
-
-        AuthenticatedUser createdAuthenticatedUser = authenticatedUserCapture.getValue();
-        assertEquals("member,student", createdAuthenticatedUser.getAffiliations());
-        assertEquals("test@testmail.ee", createdAuthenticatedUser.getMails());
-        assertEquals("student@bak.studylevel.taat.edu.ee", createdAuthenticatedUser.getScopedAffiliations());
-        assertEquals("eenet.ee", createdAuthenticatedUser.getHomeOrganization());
-        assertSame(newUser, createdAuthenticatedUser.getUser());
-        assertNull(createdAuthenticatedUser.getToken());
-
-        assertSame(authenticatedUser, returnedAuthenticatedUser);
-
-    }
-
-    @Test
-    public void authenticateOldUser() throws Exception {
-        String authenticationStateToken = setAuthenticationExpects();
-        setValidationExpects();
-
-        String idCode = "11111111111";
-        User user = createMock(User.class);
-        expect(userService.getUserByIdCode(idCode)).andReturn(user);
-
-        Capture<AuthenticatedUser> authenticatedUserCapture = newCapture();
-        AuthenticatedUser authenticatedUser = createMock(AuthenticatedUser.class);
-        expect(loginService.createAuthenticatedUser(capture(authenticatedUserCapture))).andReturn(authenticatedUser);
-
-        replayAll(user, authenticatedUser);
-
-        AuthenticatedUser returnedAuthenticatedUser = taatService.authenticate(getSAMLResponse(),
-                authenticationStateToken);
-
-        verifyAll(user, authenticatedUser);
-
-        AuthenticatedUser createdAuthenticatedUser = authenticatedUserCapture.getValue();
-        assertEquals("member,student", createdAuthenticatedUser.getAffiliations());
-        assertEquals("test@testmail.ee", createdAuthenticatedUser.getMails());
-        assertEquals("student@bak.studylevel.taat.edu.ee", createdAuthenticatedUser.getScopedAffiliations());
-        assertEquals("eenet.ee", createdAuthenticatedUser.getHomeOrganization());
-        assertSame(user, createdAuthenticatedUser.getUser());
-        assertNull(createdAuthenticatedUser.getToken());
+        verifyAll(authenticatedUser);
 
         assertSame(authenticatedUser, returnedAuthenticatedUser);
 
@@ -263,7 +216,7 @@ public class TaatServiceTest {
     }
 
     private void replayAll(Object... mocks) {
-        replay(configuration, loginService, userService, authenticationStateDAO);
+        replay(configuration, loginService, authenticationStateDAO);
 
         if (mocks != null) {
             for (Object object : mocks) {
@@ -273,7 +226,7 @@ public class TaatServiceTest {
     }
 
     private void verifyAll(Object... mocks) {
-        verify(configuration, loginService, userService, authenticationStateDAO);
+        verify(configuration, loginService, authenticationStateDAO);
 
         if (mocks != null) {
             for (Object object : mocks) {

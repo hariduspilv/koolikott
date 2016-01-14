@@ -26,6 +26,7 @@ import ee.hm.dop.model.mobileid.MobileIDSecurityCodes;
 import ee.hm.dop.service.AuthenticatedUserService;
 import ee.hm.dop.service.LanguageService;
 import ee.hm.dop.service.LoginService;
+import ee.hm.dop.service.LoginService.LoginForm;
 import ee.hm.dop.service.TaatService;
 
 @Path("login")
@@ -53,8 +54,8 @@ public class LogInResource extends BaseResource {
         AuthenticatedUser authenticatedUser = null;
 
         if (isAuthValid()) {
-            authenticatedUser = loginService.logIn(getIdCodeFromRequest(), getNameFromRequest(),
-                    getSurnameFromRequest());
+            LoginForm loginForm = new LoginForm(getIdCodeFromRequest(), getNameFromRequest(), getSurnameFromRequest());
+            authenticatedUser = loginService.logIn(loginForm);
         }
 
         return authenticatedUser;
@@ -63,7 +64,7 @@ public class LogInResource extends BaseResource {
     @GET
     @Path("/taat")
     @Produces(MediaType.APPLICATION_JSON)
-    public void makeTaatRequest() throws MessageEncodingException {
+    public void taatLogin() throws MessageEncodingException {
         BasicSAMLMessageContext<SAMLObject, AuthnRequest, SAMLObject> context = taatService
                 .buildMessageContext(getResponse());
         encoder.encode(context);
@@ -80,16 +81,9 @@ public class LogInResource extends BaseResource {
     }
 
     @GET
-    @Path("/getAuthenticatedUser")
-    @Produces(MediaType.APPLICATION_JSON)
-    public AuthenticatedUser getAuthenticatedUser(@QueryParam("token") String token) {
-        return authenticatedUserService.getAuthenticatedUserByToken(token);
-    }
-
-    @GET
     @Path("/mobileId")
     @Produces(MediaType.APPLICATION_JSON)
-    public MobileIDSecurityCodes mobileIDAuthenticate(@QueryParam("phoneNumber") String phoneNumber,
+    public MobileIDSecurityCodes mobileIDLogin(@QueryParam("phoneNumber") String phoneNumber,
             @QueryParam("idCode") String idCode, @QueryParam("language") String languageCode) throws Exception {
         return loginService.mobileIDAuthenticate(phoneNumber, idCode, languageService.getLanguage(languageCode));
     }
@@ -97,21 +91,28 @@ public class LogInResource extends BaseResource {
     @GET
     @Path("/mobileId/isValid")
     @Produces(MediaType.APPLICATION_JSON)
-    public AuthenticatedUser validateMobileIDAuthentication(@QueryParam("token") String token) throws SOAPException {
+    public AuthenticatedUser mobileIDAuthenticate(@QueryParam("token") String token) throws SOAPException {
         return loginService.validateMobileIDAuthentication(token);
     }
 
-    protected String getIdCodeFromRequest() {
+    @GET
+    @Path("/getAuthenticatedUser")
+    @Produces(MediaType.APPLICATION_JSON)
+    public AuthenticatedUser getAuthenticatedUser(@QueryParam("token") String token) {
+        return authenticatedUserService.getAuthenticatedUserByToken(token);
+    }
+
+    private String getIdCodeFromRequest() {
         String[] values = getRequest().getHeader("SSL_CLIENT_S_DN").split(",");
         return getStringInUTF8(values[0].split("=")[1]);
     }
 
-    protected String getNameFromRequest() {
+    private String getNameFromRequest() {
         String[] values = getRequest().getHeader("SSL_CLIENT_S_DN").split(",");
         return getStringInUTF8(values[1].split("=")[1]);
     }
 
-    protected String getSurnameFromRequest() {
+    private String getSurnameFromRequest() {
         String[] values = getRequest().getHeader("SSL_CLIENT_S_DN").split(",");
         return getStringInUTF8(values[2].split("=")[1]);
     }

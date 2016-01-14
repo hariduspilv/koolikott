@@ -54,9 +54,9 @@ import org.w3c.dom.Element;
 import ee.hm.dop.dao.AuthenticationStateDAO;
 import ee.hm.dop.model.AuthenticatedUser;
 import ee.hm.dop.model.AuthenticationState;
-import ee.hm.dop.model.User;
 import ee.hm.dop.security.KeyStoreUtils;
 import ee.hm.dop.security.MetadataUtils;
+import ee.hm.dop.service.LoginService.LoginForm;
 
 public class TaatService {
 
@@ -82,9 +82,6 @@ public class TaatService {
 
     @Inject
     private LoginService loginService;
-
-    @Inject
-    private UserService userService;
 
     private static final SecureRandom random = new SecureRandom();
 
@@ -133,18 +130,12 @@ public class TaatService {
         validateResponseSignature(response);
 
         Map<String, String> dataMap = parseAttributes(response);
+        return login(dataMap);
+    }
 
-        AuthenticatedUser authenticatedUser = getAuthenticatedUser(dataMap);
-
-        User user = userService.getUserByIdCode(dataMap.get(ID_CODE));
-        if (user == null) {
-            user = userService.create(dataMap.get(ID_CODE), dataMap.get(NAME), dataMap.get(SURNAME));
-            authenticatedUser.setFirstLogin(true);
-        }
-
-        authenticatedUser.setUser(user);
-
-        return loginService.createAuthenticatedUser(authenticatedUser);
+    private AuthenticatedUser login(Map<String, String> dataMap) {
+        LoginForm loginForm = buildLoginForm(dataMap);
+        return loginService.logIn(loginForm);
     }
 
     private void validateAuthenticationToken(String authenticationStateToken) {
@@ -198,13 +189,12 @@ public class TaatService {
         return authenticationStateDAO.createAuthenticationState(authenticationState);
     }
 
-    private AuthenticatedUser getAuthenticatedUser(Map<String, String> dataMap) {
-        AuthenticatedUser authenticatedUser = new AuthenticatedUser();
-        authenticatedUser.setMails(dataMap.get(MAIL));
-        authenticatedUser.setAffiliations(dataMap.get(AFFILIATION));
-        authenticatedUser.setScopedAffiliations(dataMap.get(SCOPED_AFFILIATION));
-        authenticatedUser.setHomeOrganization(dataMap.get(HOME_ORGANIZATION));
-        return authenticatedUser;
+    private LoginForm buildLoginForm(Map<String, String> dataMap) {
+        return new LoginForm(dataMap.get(ID_CODE), dataMap.get(NAME), dataMap.get(SURNAME)) //
+                .withMails(dataMap.get(MAIL)) //
+                .withAffiliations(dataMap.get(AFFILIATION)) //
+                .withScopedAffiliations(dataMap.get(SCOPED_AFFILIATION)) //
+                .withHomeOrganization(dataMap.get(HOME_ORGANIZATION));
     }
 
     private Map<String, String> parseAttributes(Response response) {
