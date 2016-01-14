@@ -17,11 +17,13 @@ import ee.hm.dop.model.ehis.Role;
 
 public class EhisParserTest {
 
+    private EhisParser ehisParser = new EhisParser();
+
     @Test
     public void testParse() {
         String xml = readFileAsString("ehis/person_39201210144.xml");
 
-        Person person = EhisParser.parse(xml);
+        Person person = ehisParser.parse(xml);
 
         List<Institution> institutions = person.getInstitutions();
         assertEquals(3, institutions.size());

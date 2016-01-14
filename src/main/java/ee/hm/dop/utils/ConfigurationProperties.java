@@ -36,4 +36,12 @@ public interface ConfigurationProperties {
     String MOBILEID_NAMESPACE_URI = "mobileID.namespace.uri";
     String MOBILEID_MESSAGE_TO_DISPLAY = "mobileID.messageToDisplay";
 
+    // EHIS
+    String XTEE_NAMESPACE_PREFIX = "xtee.namespace.prefix";
+    String XTEE_NAMESPACE_URI = "xtee.namespace.uri";
+    String EHIS_ENDPOINT = "ehis.endpoint";
+    String EHIS_INSTITUTION = "ehis.institution";
+    String EHIS_SYSTEM_NAME = "ehis.system.name";
+    String EHIS_SERVICE_NAME = "ehis.service.name";
+    String EHIS_REQUESTER_ID_CODE = "ehis.requester.idCode";
 }

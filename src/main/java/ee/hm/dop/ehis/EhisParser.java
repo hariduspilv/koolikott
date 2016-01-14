@@ -26,7 +26,7 @@ public class EhisParser {
 
     private static XPath xpath = XPathFactory.newInstance().newXPath();
 
-    public static Person parse(String input) {
+    public Person parse(String input) {
         Person person = null;
 
         try {
@@ -40,13 +40,13 @@ public class EhisParser {
         return person;
     }
 
-    private static Person parse(Document doc) {
+    private Person parse(Document doc) {
         Person person = new Person();
         person.setInstitutions(getInstitutions(doc));
         return person;
     }
 
-    private static List<Institution> getInstitutions(Document doc) {
+    private List<Institution> getInstitutions(Document doc) {
         List<Institution> institutions = new ArrayList<>();
 
         NodeList institutionsNode = getNodeList(doc,
@@ -60,7 +60,7 @@ public class EhisParser {
         return institutions;
     }
 
-    private static Institution getInstitution(Node institutionNode) {
+    private Institution getInstitution(Node institutionNode) {
         Institution institution = new Institution();
         institution.setId(getInstitutionId((Element) institutionNode));
         institution.setRoles(getRoles(institutionNode));
@@ -68,7 +68,7 @@ public class EhisParser {
         return institution;
     }
 
-    private static List<Role> getRoles(Node institutionNode) {
+    private List<Role> getRoles(Node institutionNode) {
         List<Role> roles = new ArrayList<>();
 
         NodeList roleNodes = getNodeList(institutionNode, "./*[local-name()='rollid']//*[local-name()='roll']");
@@ -79,7 +79,7 @@ public class EhisParser {
         return roles;
     }
 
-    private static Role getRole(Element roleElement) {
+    private Role getRole(Element roleElement) {
         Role role = new Role();
         role.setInstitutionalRole(getInstitutionalRole(roleElement));
         role.setSchoolYear(getSchoolYear(roleElement));
@@ -88,12 +88,12 @@ public class EhisParser {
         return role;
     }
 
-    private static InstitutionalRole getInstitutionalRole(Element roleElement) {
+    private InstitutionalRole getInstitutionalRole(Element roleElement) {
         String estonianRoleName = roleElement.getElementsByTagName("nimetus").item(0).getTextContent();
         return InstitutionalRole.byEstonianName(estonianRoleName);
     }
 
-    private static String getSchoolYear(Element roleElement) {
+    private String getSchoolYear(Element roleElement) {
         String schoolYear = null;
 
         NodeList schoolYearNodeList = roleElement.getElementsByTagName("klass");
@@ -104,7 +104,7 @@ public class EhisParser {
         return schoolYear;
     }
 
-    private static String getSchoolClass(Element roleElement) {
+    private String getSchoolClass(Element roleElement) {
         String schoolClass = null;
 
         NodeList schoolClassNodeList = roleElement.getElementsByTagName("paralleel");
@@ -115,11 +115,11 @@ public class EhisParser {
         return schoolClass;
     }
 
-    private static String getInstitutionId(Element institutionElement) {
+    private String getInstitutionId(Element institutionElement) {
         return institutionElement.getElementsByTagName("id").item(0).getTextContent();
     }
 
-    private static NodeList getNodeList(Object item, String path) {
+    private NodeList getNodeList(Object item, String path) {
         try {
             XPathExpression expr = xpath.compile(path);
             return (NodeList) expr.evaluate(item, XPathConstants.NODESET);
