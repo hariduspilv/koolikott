@@ -108,7 +108,7 @@ public class MaterialService {
             throw new RuntimeException("Material must already exist.");
         }
 
-        Material originalMaterial = materialDao.findById(material.getId());
+        Material originalMaterial = materialDao.findDeletedById(material.getId());
         if (originalMaterial == null) {
             throw new RuntimeException("Material not found");
         }

@@ -128,7 +128,7 @@ public class MaterialResource extends BaseResource {
     @Path("restore")
     @Consumes(MediaType.APPLICATION_JSON)
     @RolesAllowed({ "ADMIN" })
-    public void restart(Material material) {
+    public void restore(Material material) {
         materialService.restore(material, getLoggedInUser());
     }
 

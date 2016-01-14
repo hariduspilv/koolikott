@@ -386,4 +386,5 @@ INSERT INTO Translation(translationGroup, translationKey, translation) VALUES
 (2,'TITLE','заглавие'),
 (2,'SUBMITTED_AT','Зафиксирован в'),
 (2,'SUBMITTED_BY','Сообщает'),
-(2,'BUTTON_OPEN','Oткрыто');
+(2,'BUTTON_OPEN','Oткрыто'),
+(2,'BUTTON_RESTORE','Восстановить');

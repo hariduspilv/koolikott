@@ -33,6 +33,20 @@ public class MaterialDAO {
         return material;
     }
 
+    public Material findDeletedById(long materialId) {
+        TypedQuery<Material> findByCode = entityManager
+                .createQuery("SELECT m FROM Material m WHERE m.id = :id AND m.deleted = true", Material.class);
+
+        Material material = null;
+        try {
+            material = findByCode.setParameter("id", materialId).getSingleResult();
+        } catch (NoResultException ex) {
+            // ignore
+        }
+
+        return material;
+    }
+
     public List<Material> getDeletedMaterials() {
         TypedQuery<Material> query = entityManager.createQuery("SELECT m FROM Material m WHERE m.deleted = true",
                 Material.class);

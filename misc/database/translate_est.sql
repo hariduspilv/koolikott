@@ -385,4 +385,5 @@ INSERT INTO Translation(translationGroup, translationKey, translation) VALUES
 (1,'TITLE','Pealkiri'),
 (1,'SUBMITTED_AT','Raporteeritud'),
 (1,'SUBMITTED_BY','Raporteeris'),
-(1,'BUTTON_OPEN','Ava');
+(1,'BUTTON_OPEN','Ava'),
+(1,'BUTTON_RESTORE','Taasta');
