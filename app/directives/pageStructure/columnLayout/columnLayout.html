@@ -1,5 +1,5 @@
 <div data-layout="row" data-flex layout-fill>
-  <md-sidenav layout="column" class="md-sidenav-left" md-component-id="left" md-is-locked-open="$mdMedia('gt-md')" flex="20">
+  <md-sidenav layout="column" class="md-sidenav-left" md-component-id="left" md-is-locked-open="$mdMedia('gt-md')" flex="15">
     <md-toolbar class="{{isEditPortfolioMode ? 'md-accent' : 'md-primary'}}">
       <h6 class="md-toolbar-tools md-subhead">
         <div layout-align="center start" flex>
@@ -10,7 +10,7 @@
     </md-toolbar>
 
     <div id="alert" data-dop-alert></div>
-    
+
     <md-content layout="column" flex role="navigation" class="sidenav md-whiteframe-z2">
       <div data-dop-table-of-contents data-portfolio="portfolio" data-readonly="!isEditPortfolioMode"></div>
     </md-content>
