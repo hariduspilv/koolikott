@@ -273,17 +273,22 @@ public class PortfolioService {
         originalPortfolio.setTargetGroups(portfolio.getTargetGroups());
         originalPortfolio.setTaxon(portfolio.getTaxon());
         originalPortfolio.setChapters(portfolio.getChapters());
-        originalPortfolio.setPicture(portfolio.getPicture());
+        if (portfolio.getPicture() != null || !portfolio.getHasPicture()) {
+            originalPortfolio.setPicture(portfolio.getPicture());
+            originalPortfolio.setHasPicture(true);
+        }
         originalPortfolio.setVisibility(portfolio.getVisibility());
         return originalPortfolio;
     }
 
     private boolean isPortfolioAccessibleToUser(Portfolio portfolio, User loggedInUser) {
-        return portfolio.getVisibility() != Visibility.PRIVATE || isUserPortfolioCreator(portfolio, loggedInUser) || isUserAdmin(loggedInUser);
+        return portfolio.getVisibility() != Visibility.PRIVATE || isUserPortfolioCreator(portfolio, loggedInUser)
+                || isUserAdmin(loggedInUser);
     }
 
     private boolean isPortfolioVisibleToUser(Portfolio portfolio, User loggedInUser) {
-        return portfolio.getVisibility() == Visibility.PUBLIC || isUserPortfolioCreator(portfolio, loggedInUser) || isUserAdmin(loggedInUser);
+        return portfolio.getVisibility() == Visibility.PUBLIC || isUserPortfolioCreator(portfolio, loggedInUser)
+                || isUserAdmin(loggedInUser);
     }
 
     private boolean isUserPortfolioCreator(Portfolio portfolio, User loggedInUser) {
@@ -325,9 +330,8 @@ public class PortfolioService {
         improperContentDAO.deleteImproperPortfolios(id);
     }
 
-
     public Boolean isSetImproper(long portfolioId) {
-        List<ImproperContent> improperContents =improperContentDAO.getByPortfolio(portfolioId);
+        List<ImproperContent> improperContents = improperContentDAO.getByPortfolio(portfolioId);
 
         return improperContents.size() != 0;
     }
