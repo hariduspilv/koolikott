@@ -1,9 +1,15 @@
 package ee.hm.dop.model.ehis;
 
+import javax.persistence.Column;
+import javax.persistence.Embeddable;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+
+@Embeddable
 public class Role {
 
     public static enum InstitutionalRole {
-        PRINCIPAL("direktor"), TEACHER("õpetaja"), STUDENT("õpilane");
+        PRINCIPAL("koolijuht"), TEACHER("õpetaja"), STUDENT("õpilane");
 
         private final String estonianName;
 
@@ -20,10 +26,13 @@ public class Role {
                     break;
                 }
             }
+
             return result;
         }
     }
 
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     private InstitutionalRole institutionalRole;
     private String schoolYear;
     private String schoolClass;

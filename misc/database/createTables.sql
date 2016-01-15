@@ -31,6 +31,9 @@ DROP TABLE IF EXISTS LanguageKeyCodes;
 DROP TABLE IF EXISTS Material;
 DROP TABLE IF EXISTS AuthenticationState;
 DROP TABLE IF EXISTS AuthenticatedUser;
+DROP TABLE IF EXISTS Institution_Roles;
+DROP TABLE IF EXISTS Institution;
+DROP TABLE IF EXISTS Person;
 DROP TABLE IF EXISTS User;
 DROP TABLE IF EXISTS Repository;
 DROP TABLE IF EXISTS LicenseType;
@@ -225,6 +228,31 @@ CREATE TABLE User (
   role     VARCHAR(255)        NOT NULL
 );
 
+CREATE TABLE Person (
+  id        BIGINT  AUTO_INCREMENT PRIMARY KEY
+);
+
+CREATE TABLE Institution (
+  id        BIGINT  AUTO_INCREMENT PRIMARY KEY,
+  ehisId    VARCHAR(255)              NOT NULL,
+  person        BIGINT,
+
+  FOREIGN KEY (person)
+  REFERENCES Person (id)
+    ON DELETE CASCADE
+);
+
+CREATE TABLE Institution_Roles (
+  institution       BIGINT          NOT NULL,
+  institutionalRole VARCHAR(255)    NOT NULL,
+  schoolClass       varchar(255),
+  schoolYear        varchar(255),
+
+  FOREIGN KEY (institution)
+  REFERENCES Institution (id)
+    ON DELETE CASCADE
+);
+
 CREATE TABLE AuthenticatedUser (
   id                 BIGINT  AUTO_INCREMENT PRIMARY KEY,
   user_id            BIGINT              NOT NULL,
@@ -234,10 +262,15 @@ CREATE TABLE AuthenticatedUser (
   mails              VARCHAR(255),
   affiliations       VARCHAR(255),
   scopedAffiliations VARCHAR(255),
+  person             BIGINT,
 
   FOREIGN KEY (user_id)
   REFERENCES User (id)
-    ON DELETE RESTRICT
+    ON DELETE RESTRICT,
+    
+  FOREIGN KEY (person)
+  REFERENCES Person (id)
+    ON DELETE CASCADE
 );
 
 CREATE TABLE AuthenticationState (

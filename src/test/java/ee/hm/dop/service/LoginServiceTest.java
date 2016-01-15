@@ -30,6 +30,7 @@ import ee.hm.dop.exceptions.DuplicateTokenException;
 import ee.hm.dop.model.AuthenticatedUser;
 import ee.hm.dop.model.AuthenticationState;
 import ee.hm.dop.model.User;
+import ee.hm.dop.model.ehis.Person;
 import ee.hm.dop.service.LoginService.LoginForm;
 
 @RunWith(EasyMockRunner.class)
@@ -50,6 +51,9 @@ public class LoginServiceTest {
     @Mock
     private AuthenticationStateDAO authenticationStateDAO;
 
+    @Mock
+    private EhisSOAPService ehisSOAPService;
+
     @Test
     public void logIn() throws NoSuchMethodException {
         String idCode = "idCode";
@@ -62,6 +66,9 @@ public class LoginServiceTest {
 
         expect(authenticatedUser.getUser()).andReturn(user);
         expect(user.getUsername()).andReturn("username");
+
+        expect(user.getIdCode()).andReturn(idCode);
+        expect(ehisSOAPService.getPersonInformation(idCode)).andReturn(null);
 
         replayAll(user, authenticatedUser);
 
@@ -86,11 +93,15 @@ public class LoginServiceTest {
         expect(authenticatedUserMock.getUser()).andReturn(user);
         expect(user.getUsername()).andReturn("firstTimeLoginUser");
 
-        replayAll(user, authenticatedUserMock);
+        expect(user.getIdCode()).andReturn(idCode);
+        Person person = createMock(Person.class);
+        expect(ehisSOAPService.getPersonInformation(idCode)).andReturn(person);
+
+        replayAll(user, authenticatedUserMock, person);
 
         AuthenticatedUser authenticatedUser = loginService.logIn(createLoginForm(idCode));
 
-        verifyAll(user, authenticatedUserMock);
+        verifyAll(user, authenticatedUserMock, person);
 
         assertNotNull(authenticatedUser);
         assertSame(authenticatedUserMock, authenticatedUser);
@@ -104,6 +115,9 @@ public class LoginServiceTest {
         expect(userService.getUserByIdCode(idCode)).andReturn(user);
         expect(authenticatedUserDAO.createAuthenticatedUser(EasyMock.anyObject(AuthenticatedUser.class))).andThrow(
                 new DuplicateTokenException()).times(2);
+
+        expect(user.getIdCode()).andReturn(idCode);
+        expect(ehisSOAPService.getPersonInformation(idCode)).andReturn(null);
 
         replayAll(user);
 
@@ -131,6 +145,9 @@ public class LoginServiceTest {
 
         expect(authenticatedUser.getUser()).andReturn(user);
         expect(user.getUsername()).andReturn("username");
+
+        expect(user.getIdCode()).andReturn(idCode);
+        expect(ehisSOAPService.getPersonInformation(idCode)).andReturn(null);
 
         replayAll(user, authenticatedUser);
 
@@ -174,7 +191,8 @@ public class LoginServiceTest {
         String token = "725abc";
 
         User user = new User();
-        user.setIdCode("66677788899");
+        String idCode = "66677788899";
+        user.setIdCode(idCode);
         user.setName("Jaan");
         user.setSurname("Sepp");
 
@@ -192,6 +210,8 @@ public class LoginServiceTest {
         expect(userService.getUserByIdCode(user.getIdCode())).andReturn(user);
         expectCreateAuthenticatedUser(capturedAuthenticatedUser);
         authenticationStateDAO.delete(authenticationState);
+
+        expect(ehisSOAPService.getPersonInformation(idCode)).andReturn(null);
 
         replayAll();
 
@@ -241,7 +261,7 @@ public class LoginServiceTest {
     }
 
     private void replayAll(Object... mocks) {
-        replay(userService, mobileIDLoginService, authenticatedUserDAO, authenticationStateDAO);
+        replay(userService, mobileIDLoginService, authenticatedUserDAO, authenticationStateDAO, ehisSOAPService);
 
         if (mocks != null) {
             for (Object object : mocks) {
@@ -251,7 +271,7 @@ public class LoginServiceTest {
     }
 
     private void verifyAll(Object... mocks) {
-        verify(userService, mobileIDLoginService, authenticatedUserDAO, authenticationStateDAO);
+        verify(userService, mobileIDLoginService, authenticatedUserDAO, authenticationStateDAO, ehisSOAPService);
 
         if (mocks != null) {
             for (Object object : mocks) {

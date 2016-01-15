@@ -1,12 +1,18 @@
 package ee.hm.dop.model;
 
+import static javax.persistence.CascadeType.ALL;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import ee.hm.dop.model.ehis.Person;
 
 @Entity
 public class AuthenticatedUser {
@@ -36,6 +42,10 @@ public class AuthenticatedUser {
 
     @Column
     private String scopedAffiliations;
+
+    @OneToOne(cascade = ALL)
+    @JoinColumn(name = "person")
+    private Person person;
 
     public Long getId() {
         return id;
@@ -99,5 +109,13 @@ public class AuthenticatedUser {
 
     public void setScopedAffiliations(String scopedAffiliations) {
         this.scopedAffiliations = scopedAffiliations;
+    }
+
+    public Person getPerson() {
+        return person;
+    }
+
+    public void setPerson(Person person) {
+        this.person = person;
     }
 }

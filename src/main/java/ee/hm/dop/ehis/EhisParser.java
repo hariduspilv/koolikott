@@ -62,7 +62,7 @@ public class EhisParser {
 
     private Institution getInstitution(Node institutionNode) {
         Institution institution = new Institution();
-        institution.setId(getInstitutionId((Element) institutionNode));
+        institution.setEhisId(getInstitutionId((Element) institutionNode));
         institution.setRoles(getRoles(institutionNode));
 
         return institution;

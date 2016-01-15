@@ -32,6 +32,7 @@ import javax.xml.transform.stream.StreamResult;
 import org.apache.commons.configuration.Configuration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.w3c.dom.Node;
 
 import ee.hm.dop.ehis.EhisParser;
 import ee.hm.dop.model.ehis.Person;
@@ -118,7 +119,8 @@ public class EhisSOAPService {
             throw new RuntimeException("SOAPResponse Fault " + faultString + ": " + detailMessage);
         }
 
-        DOMSource source = new DOMSource(body);
+        Node person = body.getElementsByTagName("isik").item(0);
+        DOMSource source = new DOMSource(person);
         StringWriter stringResult = new StringWriter();
         TransformerFactory.newInstance().newTransformer().transform(source, new StreamResult(stringResult));
         return stringResult.toString();

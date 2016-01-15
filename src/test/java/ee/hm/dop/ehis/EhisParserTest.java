@@ -30,7 +30,7 @@ public class EhisParserTest {
 
         Institution institution1 = institutions.get(0);
         Role roleInstitution1 = institution1.getRoles().get(0);
-        assertEquals("OPPEASUTUS_ID_1", institution1.getId());
+        assertEquals("OPPEASUTUS_ID_1", institution1.getEhisId());
         assertEquals(STUDENT, roleInstitution1.getInstitutionalRole());
         assertEquals("5", roleInstitution1.getSchoolYear());
         assertEquals("B", roleInstitution1.getSchoolClass());
@@ -38,7 +38,7 @@ public class EhisParserTest {
         Institution institution2 = institutions.get(1);
         Role role1Institution2 = institution2.getRoles().get(0);
         Role role2Institution2 = institution2.getRoles().get(1);
-        assertEquals("OPPEASUTUS_ID_2", institution2.getId());
+        assertEquals("OPPEASUTUS_ID_2", institution2.getEhisId());
         // Role 1
         assertEquals(TEACHER, role1Institution2.getInstitutionalRole());
         assertNull(role1Institution2.getSchoolYear());
@@ -50,7 +50,7 @@ public class EhisParserTest {
 
         Institution institution3 = institutions.get(2);
         Role roleInstitution3 = institution3.getRoles().get(0);
-        assertEquals("OPPEASUTUS_ID_3", institution3.getId());
+        assertEquals("OPPEASUTUS_ID_3", institution3.getEhisId());
         assertEquals(PRINCIPAL, roleInstitution3.getInstitutionalRole());
         assertNull(roleInstitution3.getSchoolYear());
         assertNull(roleInstitution3.getSchoolClass());

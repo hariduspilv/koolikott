@@ -23,6 +23,7 @@ import ee.hm.dop.model.AuthenticatedUser;
 import ee.hm.dop.model.AuthenticationState;
 import ee.hm.dop.model.Language;
 import ee.hm.dop.model.User;
+import ee.hm.dop.model.ehis.Person;
 import ee.hm.dop.model.mobileid.MobileIDSecurityCodes;
 
 public class LoginService {
@@ -42,6 +43,9 @@ public class LoginService {
 
     @Inject
     private AuthenticationStateDAO authenticationStateDAO;
+
+    @Inject
+    private EhisSOAPService ehisSOAPService;
 
     private SecureRandom random = new SecureRandom();
 
@@ -118,6 +122,11 @@ public class LoginService {
         authenticatedUser.setHomeOrganization(loginForm.homeOrganization);
         authenticatedUser.setMails(loginForm.mails);
         authenticatedUser.setScopedAffiliations(loginForm.scopedAffiliations);
+
+        Person person = ehisSOAPService.getPersonInformation(user.getIdCode());
+        if (person != null) {
+            authenticatedUser.setPerson(person);
+        }
 
         return createAuthenticatedUser(authenticatedUser);
     }

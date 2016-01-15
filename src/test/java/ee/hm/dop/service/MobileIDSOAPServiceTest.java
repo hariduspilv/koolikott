@@ -46,6 +46,8 @@ import ee.hm.dop.model.mobileid.soap.MobileAuthenticateResponse;
 @RunWith(EasyMockRunner.class)
 public class MobileIDSOAPServiceTest {
 
+    private static final String MOBILE_ID_ENDPOINT = "https://www.example.com:9876/Service";
+
     @TestSubject
     private MobileIDSOAPServicePartialMock mobileIDSOAPService = new MobileIDSOAPServicePartialMock();
 
@@ -66,7 +68,6 @@ public class MobileIDSOAPServiceTest {
         language.setCode("rus");
         String serviceName = "ServiceNameHere";
         String messageToDisplay = "Special message";
-        String endpoint = "https://www.example.com:9876/Service";
 
         Capture<SOAPMessage> capturedRequest = newCapture();
 
@@ -82,8 +83,9 @@ public class MobileIDSOAPServiceTest {
 
         SOAPMessage responseMessage = createMobileAuthenticateResponse(response);
 
-        expectConfiguration(serviceName, messageToDisplay, endpoint);
-        expect(connection.call(EasyMock.capture(capturedRequest), EasyMock.eq(endpoint))).andReturn(responseMessage);
+        expectConfiguration(serviceName, messageToDisplay, MOBILE_ID_ENDPOINT);
+        expect(connection.call(EasyMock.capture(capturedRequest), EasyMock.eq(MOBILE_ID_ENDPOINT))).andReturn(
+                responseMessage);
 
         replayAll();
 
@@ -113,7 +115,6 @@ public class MobileIDSOAPServiceTest {
         language.setCode("www");
         String serviceName = "ServiceNameHere";
         String messageToDisplay = "";
-        String endpoint = "https://www.example.com:9876/Service";
 
         Capture<SOAPMessage> capturedRequest = newCapture();
 
@@ -133,8 +134,9 @@ public class MobileIDSOAPServiceTest {
 
         SOAPMessage responseMessage = createMobileAuthenticateResponse(response);
 
-        expectConfiguration(serviceName, messageToDisplay, endpoint);
-        expect(connection.call(EasyMock.capture(capturedRequest), EasyMock.eq(endpoint))).andReturn(responseMessage);
+        expectConfiguration(serviceName, messageToDisplay, MOBILE_ID_ENDPOINT);
+        expect(connection.call(EasyMock.capture(capturedRequest), EasyMock.eq(MOBILE_ID_ENDPOINT))).andReturn(
+                responseMessage);
 
         replayAll();
 
@@ -162,7 +164,6 @@ public class MobileIDSOAPServiceTest {
         Language language = null;
         String serviceName = "ServiceNameHere";
         String messageToDisplay = "Special message";
-        String endpoint = "https://www.example.com:9876/Service";
 
         Capture<SOAPMessage> capturedRequest = newCapture();
 
@@ -182,8 +183,9 @@ public class MobileIDSOAPServiceTest {
 
         SOAPMessage responseMessage = createMobileAuthenticateResponse(response);
 
-        expectConfiguration(serviceName, messageToDisplay, endpoint);
-        expect(connection.call(EasyMock.capture(capturedRequest), EasyMock.eq(endpoint))).andReturn(responseMessage);
+        expectConfiguration(serviceName, messageToDisplay, MOBILE_ID_ENDPOINT);
+        expect(connection.call(EasyMock.capture(capturedRequest), EasyMock.eq(MOBILE_ID_ENDPOINT))).andReturn(
+                responseMessage);
 
         replayAll();
 
@@ -213,7 +215,6 @@ public class MobileIDSOAPServiceTest {
         language.setCode("rus");
         String serviceName = "ServiceNameHere";
         String messageToDisplay = "Special message";
-        String endpoint = "https://www.example.com:9876/Service";
 
         Capture<SOAPMessage> capturedRequest = newCapture();
 
@@ -234,8 +235,9 @@ public class MobileIDSOAPServiceTest {
         InputStream is = new ByteArrayInputStream(message.getBytes());
         SOAPMessage responseMessage = MessageFactory.newInstance().createMessage(null, is);
 
-        expectConfiguration(serviceName, messageToDisplay, endpoint);
-        expect(connection.call(EasyMock.capture(capturedRequest), EasyMock.eq(endpoint))).andReturn(responseMessage);
+        expectConfiguration(serviceName, messageToDisplay, MOBILE_ID_ENDPOINT);
+        expect(connection.call(EasyMock.capture(capturedRequest), EasyMock.eq(MOBILE_ID_ENDPOINT))).andReturn(
+                responseMessage);
 
         replayAll();
 
@@ -255,7 +257,6 @@ public class MobileIDSOAPServiceTest {
         language.setCode("rus");
         String serviceName = "ServiceNameHere";
         String messageToDisplay = "Special message";
-        String endpoint = "https://www.example.com:9876/Service";
 
         Capture<SOAPMessage> capturedRequest = newCapture();
 
@@ -272,8 +273,9 @@ public class MobileIDSOAPServiceTest {
         InputStream is = new ByteArrayInputStream(message.getBytes());
         SOAPMessage responseMessage = MessageFactory.newInstance().createMessage(null, is);
 
-        expectConfiguration(serviceName, messageToDisplay, endpoint);
-        expect(connection.call(EasyMock.capture(capturedRequest), EasyMock.eq(endpoint))).andReturn(responseMessage);
+        expectConfiguration(serviceName, messageToDisplay, MOBILE_ID_ENDPOINT);
+        expect(connection.call(EasyMock.capture(capturedRequest), EasyMock.eq(MOBILE_ID_ENDPOINT))).andReturn(
+                responseMessage);
 
         replayAll();
 
@@ -293,7 +295,6 @@ public class MobileIDSOAPServiceTest {
         language.setCode("rus");
         String serviceName = "ServiceNameHere";
         String messageToDisplay = "Special message";
-        String endpoint = "https://www.example.com:9876/Service";
 
         Capture<SOAPMessage> capturedRequest = newCapture();
 
@@ -309,8 +310,9 @@ public class MobileIDSOAPServiceTest {
 
         SOAPMessage responseMessage = createMobileAuthenticateResponse(response);
 
-        expectConfiguration(serviceName, messageToDisplay, endpoint);
-        expect(connection.call(EasyMock.capture(capturedRequest), EasyMock.eq(endpoint))).andReturn(responseMessage);
+        expectConfiguration(serviceName, messageToDisplay, MOBILE_ID_ENDPOINT);
+        expect(connection.call(EasyMock.capture(capturedRequest), EasyMock.eq(MOBILE_ID_ENDPOINT))).andReturn(
+                responseMessage);
 
         replayAll();
 
@@ -328,8 +330,6 @@ public class MobileIDSOAPServiceTest {
         AuthenticationState authenticationState = new AuthenticationState();
         authenticationState.setSessionCode(sessionCode);
 
-        String endpoint = "https://www.example.com:9876/Service";
-
         Capture<SOAPMessage> capturedRequest = newCapture();
 
         Map<String, String> response = new HashMap<>();
@@ -341,8 +341,9 @@ public class MobileIDSOAPServiceTest {
         expect(configuration.getString(MOBILEID_NAMESPACE_URI))
                 .andReturn("http://www.example.com/Service/Service.wsdl");
 
-        expect(configuration.getString(MOBILEID_ENDPOINT)).andReturn(endpoint);
-        expect(connection.call(EasyMock.capture(capturedRequest), EasyMock.eq(endpoint))).andReturn(responseMessage);
+        expect(configuration.getString(MOBILEID_ENDPOINT)).andReturn(MOBILE_ID_ENDPOINT);
+        expect(connection.call(EasyMock.capture(capturedRequest), EasyMock.eq(MOBILE_ID_ENDPOINT))).andReturn(
+                responseMessage);
 
         replayAll();
 
@@ -365,8 +366,6 @@ public class MobileIDSOAPServiceTest {
         AuthenticationState authenticationState = new AuthenticationState();
         authenticationState.setSessionCode(sessionCode);
 
-        String endpoint = "https://www.example.com:9876/Service";
-
         Capture<SOAPMessage> capturedRequest = newCapture();
 
         Map<String, String> firstResponse = new HashMap<>();
@@ -382,10 +381,10 @@ public class MobileIDSOAPServiceTest {
         expect(configuration.getString(MOBILEID_NAMESPACE_URI))
                 .andReturn("http://www.example.com/Service/Service.wsdl").times(2);
 
-        expect(configuration.getString(MOBILEID_ENDPOINT)).andReturn(endpoint).times(2);
-        expect(connection.call(EasyMock.capture(capturedRequest), EasyMock.eq(endpoint))).andReturn(
+        expect(configuration.getString(MOBILEID_ENDPOINT)).andReturn(MOBILE_ID_ENDPOINT).times(2);
+        expect(connection.call(EasyMock.capture(capturedRequest), EasyMock.eq(MOBILE_ID_ENDPOINT))).andReturn(
                 firstResponseMessage);
-        expect(connection.call(EasyMock.capture(capturedRequest), EasyMock.eq(endpoint))).andReturn(
+        expect(connection.call(EasyMock.capture(capturedRequest), EasyMock.eq(MOBILE_ID_ENDPOINT))).andReturn(
                 secondResponseMessage);
 
         replayAll();
@@ -409,8 +408,6 @@ public class MobileIDSOAPServiceTest {
         AuthenticationState authenticationState = new AuthenticationState();
         authenticationState.setSessionCode(sessionCode);
 
-        String endpoint = "https://www.example.com:9876/Service";
-
         Capture<SOAPMessage> capturedRequest = newCapture();
 
         String message = "<SOAP-ENV:Envelope xmlns:SOAP-ENV=\"http://schemas.xmlsoap.org/soap/envelope/\" " //
@@ -430,8 +427,9 @@ public class MobileIDSOAPServiceTest {
         expect(configuration.getString(MOBILEID_NAMESPACE_URI))
                 .andReturn("http://www.example.com/Service/Service.wsdl");
 
-        expect(configuration.getString(MOBILEID_ENDPOINT)).andReturn(endpoint);
-        expect(connection.call(EasyMock.capture(capturedRequest), EasyMock.eq(endpoint))).andReturn(responseMessage);
+        expect(configuration.getString(MOBILEID_ENDPOINT)).andReturn(MOBILE_ID_ENDPOINT);
+        expect(connection.call(EasyMock.capture(capturedRequest), EasyMock.eq(MOBILE_ID_ENDPOINT))).andReturn(
+                responseMessage);
 
         replayAll();
 
@@ -454,8 +452,6 @@ public class MobileIDSOAPServiceTest {
         AuthenticationState authenticationState = new AuthenticationState();
         authenticationState.setSessionCode(sessionCode);
 
-        String endpoint = "https://www.example.com:9876/Service";
-
         Capture<SOAPMessage> capturedRequest = newCapture();
 
         Map<String, String> response = new HashMap<>();
@@ -467,8 +463,9 @@ public class MobileIDSOAPServiceTest {
         expect(configuration.getString(MOBILEID_NAMESPACE_URI))
                 .andReturn("http://www.example.com/Service/Service.wsdl");
 
-        expect(configuration.getString(MOBILEID_ENDPOINT)).andReturn(endpoint);
-        expect(connection.call(EasyMock.capture(capturedRequest), EasyMock.eq(endpoint))).andReturn(responseMessage);
+        expect(configuration.getString(MOBILEID_ENDPOINT)).andReturn(MOBILE_ID_ENDPOINT);
+        expect(connection.call(EasyMock.capture(capturedRequest), EasyMock.eq(MOBILE_ID_ENDPOINT))).andReturn(
+                responseMessage);
 
         mobileIDSOAPService.setShouldThrowException(true);
 
