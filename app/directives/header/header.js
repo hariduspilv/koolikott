@@ -59,6 +59,7 @@ define(['app'], function(app)
             $scope.detailedSearch.isVisible = false;
             $scope.searchFields.searchQuery = (($scope.searchFields.searchQuery || "") + " " + $scope.detailedSearch.queryOut).trim();
             $scope.detailedSearch.queryIn = null;
+            $scope.searchFields.searchQuery = "";
           };
 
           $scope.detailedSearch.doSearch = function() {
