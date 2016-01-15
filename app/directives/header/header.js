@@ -69,9 +69,7 @@ define(['app'], function(app)
           };
 
           $scope.searchFieldEnterPressed = function() {
-            if (!$scope.detailedSearch.isVisible) {
               $scope.search();
-            }
           }
 
           $scope.clickOutside = function() {
