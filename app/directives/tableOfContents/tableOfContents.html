@@ -1,12 +1,7 @@
 <md-toolbar class="md-hue-1">
-  <h6 data-ng-hide="readonly" class="md-toolbar-tools md-button"  data-ng-click="navigateTo(portfolio)">
+  <h6 class="md-toolbar-tools md-button"  data-ng-click="navigateTo($event, portfolio)">
     <span class="transform-none">{{ portfolio.title }}</span>
   </h6>
-
-  <h6 data-ng-hide="!readonly" class="md-toolbar-tools">
-    <span>{{ portfolio.title }}</span>
-  </h6>
-
 </md-toolbar>
 
 <ul class="sidenav-menu toc" data-du-scroll-container="scrollable-content">

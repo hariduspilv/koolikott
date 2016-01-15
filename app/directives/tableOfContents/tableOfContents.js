@@ -99,8 +99,15 @@ define(['app'], function(app)
                 	handleAddMaterialButton();
                 }, true);
 
-                $scope.navigateTo = function(portfolio) {
-                    $location.path('/portfolio/edit').search({id:  portfolio.id});
+                $scope.navigateTo = function(e, portfolio) {
+                	e.preventDefault();
+                	if($location.path() == '/portfolio/edit' || $location.path() == '/portfolio') {
+                		var $element = angular.element(document.getElementById('portfolio-card'));
+                        var $context = angular.element(document.getElementById('scrollable-content'));
+                        $context.scrollToElement($element, 30, 200);
+                	} else {
+                		$location.path('/portfolio/edit').search({id:  portfolio.id});
+                	}
                 };
                 
                 function handleAddMaterialButton() {
