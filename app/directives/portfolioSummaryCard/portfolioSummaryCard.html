@@ -1,7 +1,7 @@
 <md-card class="card-lg" id="portfolio-card">
     <md-card-content>
         <div layout="row">
-            <div layout="column" flex="75">
+            <div layout="column" flex="50" flex-gt-xs="75">
                 <div layout="row">
                     <h1 flex data-ng-bind="portfolio.title"></h1>
                     <md-menu>
@@ -35,7 +35,6 @@
                         </md-menu-content>
                     </md-menu>
                 </div>
-
                 <div layout="row" class="on-left">
                     <div flex>
                         <p class="md-body-2 meta">
@@ -80,7 +79,7 @@
                 </p>
             </div>
 
-            <div layout="column" flex="25" class="divider-left" layout-align="start start">
+            <div layout="column" flex="50" flex-gt-xs="25" class="divider-left" layout-align="start start">
               <div class="corner"></div>
                 <div class="card-cover">
                     <img data-ng-if="portfolio.hasPicture"

@@ -1,7 +1,7 @@
 <div id="page-search-result" flex>
   <div layout="row" layout-xs="column" flex>
-    <div layout="row" layout-xs="column" flex="0" flex-gt-sm="15"></div>
-    <section layout="column" layout-gt-sm="row" flex="100" flex-gt-sm="75">
+    <div data-ng-if="!isEditPortfolioMode" layout="row" layout-xs="column" flex="0" flex-gt-md="15"></div>
+    <section layout="column" layout-gt-sm="row" flex="100"  flex-gt-md="{{$root.isEditPortfolioMode ? '90' : '75'}}">
 
       <article  flex="100" flex-gt-sm="75" flex-gt-lg="80" class="md-padding" role="main">
         <h2 class="md-headline">
@@ -28,7 +28,7 @@
         </h2>
 
         <div data-infinite-scroll="nextPage()" data-infinite-scroll-disabled="searching">
-          <md-grid-list md-cols-xs="2" md-cols-gt-md="4" md-cols-md="3" md-cols-sm="2" md-gutter="10px" md-row-height="3:4">
+          <md-grid-list md-cols-xs="2" md-cols-gt-xs="3" md-cols-gt-md="4" md-gutter="10px" md-row-height="3:4">
             <md-grid-tile data-ng-repeat="item in items">
               <figure data-ng-if="item.type === '.Material'" data-dop-material-box material="item"></figure>
               <figure data-ng-if="item.type === '.Portfolio'" data-dop-portfolio-box portfolio="item"></figure>

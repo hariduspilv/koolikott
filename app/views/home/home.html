@@ -1,13 +1,13 @@
 <div id="page-home" flex>
   <div layout="row" layout-xs="column" flex>
-    <div layout="row" layout-xs="column" flex="0" flex-gt-sm="15"></div>
-    <section layout="column" layout-gt-sm="row" flex="100" flex-gt-sm="75">
+    <div layout="row" layout-xs="column" flex="0" flex-gt-md="15"></div>
+    <section layout="column" layout-gt-sm="row" flex="100" flex-gt-md="75">
       <article flex="100" flex-gt-sm="75" flex-gt-lg="80" class="md-padding" role="main">
         <div layout="row" class="type-block">
           <h1 data-translate="LANDING_PAGE_TITLE_NEWEST"></h1>
         </div>
         <div id="newest-materials">
-          <md-grid-list class="materials-grid-list ng-hide" md-cols-xs="2" md-cols-gt-md="4" md-cols-md="3" md-cols-sm="2" md-gutter="10px" md-row-height="3:4" data-ng-show="materials.length != 0">
+          <md-grid-list class="materials-grid-list ng-hide" md-cols-xs="2" md-cols-gt-xs="3" md-cols-gt-md="4"md-gutter="10px" md-row-height="3:4" data-ng-show="materials.length != 0">
             <md-grid-tile data-ng-repeat="material in materials">
               <figure data-dop-material-box material="material" layout-fill></figure>
             </md-grid-tile>
@@ -22,7 +22,7 @@
           <h1 data-translate="LANDING_PAGE_TITLE_POPULAR"></h1>
         </div>
         <div id="popular-materials">
-          <md-grid-list class="materials-grid-list ng-hide" md-cols-xs="2" md-cols-gt-md="4" md-cols-md="3" md-cols-sm="2" md-gutter="10px" md-row-height="3:4" data-ng-show="materials.length != 0">
+          <md-grid-list class="materials-grid-list ng-hide" md-cols-xs="2" md-cols-gt-xs="3" md-cols-gt-md="4"md-gutter="10px" md-row-height="3:4" data-ng-show="materials.length != 0">
             <md-grid-tile data-ng-repeat="material in materials">
               <figure data-dop-material-box material="material"></figure>
             </md-grid-tile>

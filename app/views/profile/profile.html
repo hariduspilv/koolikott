@@ -1,7 +1,7 @@
 <div id="page-home" flex>
   <div layout="row" layout-xs="column" flex>
-    <div layout="row" layout-xs="column" flex="0" flex-gt-sm="15"></div>
-    <section layout="column" layout-gt-sm="row" flex="100" flex-gt-sm="75">
+    <div layout="row" layout-xs="column" flex="0" flex-gt-md="15"></div>
+    <section layout="column" layout-gt-sm="row" flex="100" flex-gt-md="75">
       <article flex="75" flex-sm="100" class="md-padding" role="main">
         <h1 class="md-headline" data-ng-if="myProfile" data-translate="MYPROFILE_PAGE_TITLE_PORTFOLIOS"></h1>
         <h1 class="md-headline" data-ng-if="!myProfile" data-translate="PROFILE_PAGE_TITLE_PORTFOLIOS"></h1>
@@ -15,7 +15,7 @@
         <h2 class="md-headline" data-ng-if="myProfile" data-translate="MYPROFILE_PAGE_TITLE_MATERIALS"></h2>
         <h2 class="md-headline" data-ng-if="!myProfile" data-translate="PROFILE_PAGE_TITLE_MATERIALS"></h2>
 
-        <md-grid-list md-cols-xs="2" md-cols-gt-md="4" md-cols-md="3" md-cols-sm="2" md-gutter="10px" md-row-height="3:4">
+        <md-grid-list md-cols-xs="2" md-cols-gt-xs="3" md-cols-gt-md="4"  md-gutter="10px" md-row-height="3:4">
           <md-grid-tile data-ng-repeat="material in materials">
             <figure data-dop-material-box material="material"></figure>
           </md-grid-tile>

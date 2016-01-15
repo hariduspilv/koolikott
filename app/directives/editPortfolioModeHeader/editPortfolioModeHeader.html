@@ -6,7 +6,7 @@
     </md-button>
 
     <!-- search bar -->
-    <div  flex-gt-xs flex-gt-sm="70" flex-gt-md="90">
+    <div  flex-gt-xs flex-gt-sm="90">
       <div layout="row" >
         <div class="navbar-search" layout="row" flex>
           <md-button aria-label="Otsi" data-ng-click="search()" data-ng-disabled="detailedSearch.isVisible" class="md-icon-button">
@@ -29,7 +29,7 @@
     </div>
 
     <!-- right buttons -->
-    <div flex-gt-xs flex-gt-sm="15" flex-gt-md="10">
+    <div flex-gt-xs flex-gt-md="15" >
     <md-menu>
       <md-button aria-label="Jaga" class="md-icon-button" ng-click="$mdOpenMenu($event)">
         <md-tooltip><span data-translate="HEADER_TOOLTIP_CHANGE_VISIBILITY"></span></md-tooltip>
@@ -68,10 +68,10 @@
         </md-menu-item>
       </md-menu-content>
     </md-menu>
-    <md-button ng-click="exitEditPortfolioMode()" class="md-icon-button" aria-label="Välju kogumiku loomise/muutmise vaatest">
+    <!-- <md-button ng-click="exitEditPortfolioMode()" class="md-icon-button" aria-label="Välju kogumiku loomise/muutmise vaatest">
       <md-tooltip><span data-translate="HEADER_TOOLTIP_EXIT_PORTFOLIO_MODE"></span></md-tooltip>
       <md-icon>close</md-icon>
-    </md-button>
+    </md-button> -->
     </div>
   </div>
 </md-toolbar>
@@ -79,8 +79,8 @@
 
 <div class="md-toolbar-filter" id="detailedSearch" ng-show="detailedSearch.isVisible">
   <form layout-align="start start" layout="row" layout-sm="column">
-    <div data-ng-if="!isEditPortfolioMode" layout="row" layout-xs="column" flex="0" flex-gt-sm="15"></div>
-    <div flex flex-gt-sm="{{isEditPortfolioMode ? '90' : '75'}}" class="md-padding filter-wrapper" id="detailed-search">
+    <div data-ng-if="!isEditPortfolioMode" layout="row" layout-xs="column" flex="0" flex-gt-md="15"></div>
+    <div flex flex-gt-md="{{isEditPortfolioMode ? '90' : '75'}}" class="md-padding filter-wrapper" id="detailed-search">
       <div data-dop-detailed-search query-in="detailedSearch.queryIn" query-out="detailedSearch.queryOut" main-field="detailedSearch.mainField" search-callback="detailedSearch.doSearch()"></div>
     </div>
   </form>
