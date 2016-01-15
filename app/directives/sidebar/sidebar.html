@@ -1,29 +1,26 @@
 <div layout="column" class="sidebar">
-  <h2 class="md-headline">eKoolikott</h2>
-  <md-list>
+  <md-list id="guidlines">
     <md-list-item>
-      <md-button aria-label="Mine Mis on e-Koolikott leheküljele" ng-href="#/about" class="md-primary" data-translate="ABOUT_PAGE_LINK_TITLE"></md-button>
+      <a aria-label="Mine Mis on e-Koolikott leheküljele" ng-href="#/about"  data-translate="ABOUT_PAGE_LINK_TITLE"></a>
     </md-list-item>
     <md-list-item>
-      <md-button aria-label="Mine Kuidas e-Koolikotti kasutada leheküljele" ng-href="#/help" class="md-primary" data-translate="HELP_PAGE_LINK_TITLE"></md-button>
+      <a aria-label="Mine Kuidas e-Koolikotti kasutada leheküljele" ng-href="#/help" data-translate="HELP_PAGE_LINK_TITLE"></a>
+    </md-list-item>
+    <md-list-item>
+      <a aria-label="Anna tagasisidet e-Koolikoti kohta" href="mailto:mailto:ekoolikott@hm.ee?subject=Tagasiside e-koolikotist">Anna tagasisidet e-Koolikoti kohta</a>
     </md-list-item>
   </md-list>
 
-  <h2 class="md-headline">Soovitused</h2>
-  <md-list>
-    <md-list-item md-ink-ripple="#03A9F4" class="md-3-line md-clickable" layout="row" data-ng-repeat="item in recommendations">
-      <div class="md-list-item-text" layout="column">
-        <h3>{{item.what}}</h3>
-        <p class="one-row">{{item.notes}}</p>
-        <h4>{{item.who}}</h4>
+  <h2>Soovitused</h2>
+  <md-list id="recommendations">
+    <md-list-item  data-ng-repeat="item in recommendations" ng-href="#/help" >
+      <div layout="column" class="listblock">
+        <h4 class="one-row">{{item.what}}</h4>
+        <span class="one-row">{{item.who}}</span>
       </div>
       <md-divider ng-if="!$last"></md-divider>
     </md-list-item>
   </md-list>
-  <md-button layout layout-align="start center" flex class="md-primary">
-    <md-icon>arrow_forward</md-icon>
-    Veel soovitusi
-  </md-button>
   <md-list>
     <md-list-item
         ng-repeat="section in ::admin.sections"
