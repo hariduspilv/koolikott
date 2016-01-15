@@ -8,10 +8,10 @@ define(['app'], function(app)
       return val;
     };
   });
-  
+
   app.controller('homeController', ['$scope', "serverCallService", 'translationService', function($scope, serverCallService, translationService) {
     $scope.showHints = true;
-    
+
     var params = {};
     serverCallService.makeGet("rest/material/getNewestMaterials?numberOfMaterials=8", params, getNewestMaterialsSuccess, getNewestMaterialsFail);
 
