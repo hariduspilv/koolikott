@@ -7,12 +7,12 @@
 
     <!-- search bar -->
     <div  flex-gt-xs flex-gt-sm="90">
-      <div layout="row" >
+      <div layout="row" layout-align="center center">
         <div class="navbar-search" layout="row" flex>
-          <md-button aria-label="Otsi" data-ng-click="search()" data-ng-disabled="detailedSearch.isVisible" class="md-icon-button">
+          <md-button aria-label="Otsi" data-ng-click="search()" class="md-icon-button">
             <md-icon>search</md-icon>
           </md-button>
-          <md-input-container md-theme="input" flex>
+          <md-input-container flex>
             <label hidden="hidden">&nbsp;</label>
             <input id="header-simple-search-input" data-ng-keydown="$event.which === 13 && searchFieldEnterPressed()" data-ng-model="searchFields.searchQuery" placeholder="{{'SEARCH' | translate}}" />
           </md-input-container>
