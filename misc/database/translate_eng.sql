@@ -388,6 +388,7 @@ INSERT INTO Translation(translationGroup, translationKey, translation) VALUES
 (3,'DASHBOARD_IMRPOPER_MATERIALS','Improper materials'),
 (3,'DASHBOARD_IMRPOPER_PORTFOLIOS','Improper portfolios'),
 (3,'DASHBOARD_DELETED_MATERIALS','Deleted materials'),
+(3,'DASHBOARD_DELETED_PORTFOLIOS','Deleted portfolios'),
 (3,'TITLE','Title'),
 (3,'SUBMITTED_AT','Reported at'),
 (3,'SUBMITTED_BY','Reported by'),

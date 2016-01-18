@@ -63,12 +63,16 @@ public class PortfolioResource extends BaseResource {
     @GET
     @Path("/getPicture")
     @Produces("image/png")
-    public Response getPictureById(@QueryParam("portfolioId") long id) {
+    public Response getPictureById(@QueryParam("portfolioId") long id, @QueryParam("base64") boolean base64) {
         Portfolio portfolio = new Portfolio();
         portfolio.setId(id);
         User loggedInUser = getLoggedInUser();
-        byte[] pictureData = portfolioService.getPortfolioPicture(portfolio, loggedInUser);
-
+        Object pictureData = null;
+        if (base64) {
+            pictureData = portfolioService.getPortfolioPictureBase64(portfolio, loggedInUser);
+        } else {
+            pictureData = portfolioService.getPortfolioPicture(portfolio, loggedInUser);
+        }
         if (pictureData != null) {
             return Response.ok(pictureData).build();
         } else {
@@ -145,7 +149,6 @@ public class PortfolioResource extends BaseResource {
         portfolioService.delete(portfolio, getLoggedInUser());
     }
 
-
     @POST
     @Path("setImproper")
     @Consumes(MediaType.APPLICATION_JSON)
@@ -158,15 +161,23 @@ public class PortfolioResource extends BaseResource {
     @GET
     @Path("getImproper")
     @Produces(MediaType.APPLICATION_JSON)
-    @RolesAllowed({"ADMIN"})
+    @RolesAllowed({ "ADMIN" })
     public List<ImproperContent> getImproperPortfolios() {
         return portfolioService.getImproperPortfolios();
     }
 
     @GET
+    @Path("getDeleted")
+    @Produces(MediaType.APPLICATION_JSON)
+    @RolesAllowed({ "ADMIN" })
+    public List<Portfolio> getDeletedPortfolios() {
+        return portfolioService.getDeletedPortfolios();
+    }
+
+    @GET
     @Path("hasSetImproper")
     @Produces(MediaType.APPLICATION_JSON)
-    @RolesAllowed({"USER", "ADMIN", "PUBLISHER"})
+    @RolesAllowed({ "USER", "ADMIN", "PUBLISHER" })
     public Boolean hasSetImproper(@QueryParam("portfolioId") long portfolioId) {
         return portfolioService.hasSetImproper(portfolioId, getLoggedInUser());
     }
@@ -175,7 +186,7 @@ public class PortfolioResource extends BaseResource {
     @Path("setNotImproper/{id}")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    @RolesAllowed({"ADMIN"})
+    @RolesAllowed({ "ADMIN" })
     public void removeImproperPortfolios(@PathParam("id") Long id) {
         portfolioService.removeImproperPortfolios(id);
     }
@@ -183,7 +194,7 @@ public class PortfolioResource extends BaseResource {
     @GET
     @Path("isSetImproper")
     @Produces(MediaType.APPLICATION_JSON)
-    @RolesAllowed({"ADMIN"})
+    @RolesAllowed({ "ADMIN" })
     public Boolean isSetImproper(@QueryParam("portfolioId") long portfolioId) {
         return portfolioService.isSetImproper(portfolioId);
     }

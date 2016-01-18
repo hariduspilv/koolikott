@@ -21,6 +21,7 @@ import ee.hm.dop.model.Role;
 import ee.hm.dop.model.User;
 import ee.hm.dop.model.UserLike;
 import ee.hm.dop.model.Visibility;
+import ezvcard.util.org.apache.commons.codec.binary.Base64;
 
 public class PortfolioService {
 
@@ -63,6 +64,18 @@ public class PortfolioService {
         }
 
         return portfolioDAO.findPictureByPortfolio(portfolio);
+    }
+
+    public String getPortfolioPictureBase64(Portfolio portfolio, User loggedInUser) {
+        Portfolio actualPortfolio = portfolioDAO.findById(portfolio.getId());
+
+        if (actualPortfolio != null && !isPortfolioAccessibleToUser(actualPortfolio, loggedInUser)) {
+            return null;
+        }
+
+        byte[] picture = portfolioDAO.findPictureByPortfolio(portfolio);
+        String response = Base64.encodeBase64String(picture);
+        return response;
     }
 
     public void incrementViewCount(Portfolio portfolio) {
@@ -318,6 +331,10 @@ public class PortfolioService {
 
     public List<ImproperContent> getImproperPortfolios() {
         return improperContentDAO.getImproperPortfolios();
+    }
+
+    public List<Portfolio> getDeletedPortfolios() {
+        return portfolioDAO.getDeletedPortfolios();
     }
 
     public Boolean hasSetImproper(long portfolioId, User loggedInUser) {

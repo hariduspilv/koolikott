@@ -384,6 +384,7 @@ INSERT INTO Translation(translationGroup, translationKey, translation) VALUES
 (2,'DASHBOARD_IMRPOPER_MATERIALS','Неправильное материалы'),
 (2,'DASHBOARD_IMRPOPER_PORTFOLIOS','Неправильное портфели'),
 (2,'DASHBOARD_DELETED_MATERIALS','Удаленные материалы'),
+(2,'DASHBOARD_DELETED_PORTFOLIOS','Удаленные портфели'),
 (2,'TITLE','заглавие'),
 (2,'SUBMITTED_AT','Зафиксирован в'),
 (2,'SUBMITTED_BY','Сообщает'),

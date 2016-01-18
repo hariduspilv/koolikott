@@ -26,6 +26,12 @@ public class PortfolioDAO {
         return getSingleResult(query);
     }
 
+    public List<Portfolio> getDeletedPortfolios() {
+        TypedQuery<Portfolio> query = entityManager.createQuery("SELECT p FROM Portfolio p WHERE p.deleted = true",
+                Portfolio.class);
+        return query.getResultList();
+    }
+
     /**
      * Finds all portfolios contained in the idList. There is no guarantee about
      * in which order the portfolios will be in the result list.
