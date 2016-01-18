@@ -63,16 +63,12 @@ public class PortfolioResource extends BaseResource {
     @GET
     @Path("/getPicture")
     @Produces("image/png")
-    public Response getPictureById(@QueryParam("portfolioId") long id, @QueryParam("base64") boolean base64) {
+    public Response getPictureById(@QueryParam("portfolioId") long id) {
         Portfolio portfolio = new Portfolio();
         portfolio.setId(id);
         User loggedInUser = getLoggedInUser();
-        Object pictureData = null;
-        if (base64) {
-            pictureData = portfolioService.getPortfolioPictureBase64(portfolio, loggedInUser);
-        } else {
-            pictureData = portfolioService.getPortfolioPicture(portfolio, loggedInUser);
-        }
+        Object pictureData = portfolioService.getPortfolioPictureBase64(portfolio, loggedInUser);
+
         if (pictureData != null) {
             return Response.ok(pictureData).build();
         } else {

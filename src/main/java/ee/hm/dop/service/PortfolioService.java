@@ -289,7 +289,10 @@ public class PortfolioService {
         safePortfolio.setTags(portfolio.getTags());
         safePortfolio.setTargetGroups(portfolio.getTargetGroups());
         safePortfolio.setTaxon(portfolio.getTaxon());
-        safePortfolio.setPicture(portfolio.getPicture());
+        if (portfolio.getPicture() != null || !portfolio.getHasPicture()) {
+            safePortfolio.setPicture(portfolio.getPicture());
+            safePortfolio.setHasPicture(true);
+        }
         return safePortfolio;
     }
 
