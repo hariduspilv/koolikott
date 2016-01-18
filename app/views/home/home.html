@@ -3,36 +3,25 @@
     <div layout="row" layout-xs="column" flex="0" flex-gt-md="15"></div>
     <section layout="column" layout-gt-sm="row" flex="100" flex-gt-md="75">
       <article flex="100" flex-gt-sm="75" flex-gt-lg="80" class="md-padding" role="main">
-        <div layout="row" class="type-block">
+        <div class="type-block">
           <h1 data-translate="LANDING_PAGE_TITLE_NEWEST"></h1>
         </div>
-        <div id="newest-materials">
-          <md-grid-list class="materials-grid-list ng-hide" md-cols="2" md-cols-gt-xs="4" md-gutter="10px" md-row-height="3:4" data-ng-show="materials.length != 0">
-            <md-grid-tile data-ng-repeat="material in materials">
-              <figure data-dop-material-box material="material" layout-fill></figure>
-            </md-grid-tile>
-          </md-grid-list>
-          <md-grid-list class="placeholders-grid-list"  md-cols="2" md-cols-gt-xs="4" md-gutter="10px" md-row-height="3:4" data-ng-hide="materials.length > 0">
-            <md-grid-tile data-ng-repeat="n in [] | range:8">
-              <figure data-dop-preloader-card></figure>
-            </md-grid-tile>
-          </md-grid-list>
-        </div>
-        <div layout="row" class="type-block">
+
+        <md-grid-list md-cols="2" md-cols-gt-xs="4" md-gutter="10px" md-row-height="3:4">
+          <md-grid-tile data-ng-repeat="material in materials">
+            <figure data-dop-material-box material="material"></figure>
+          </md-grid-tile>
+        </md-grid-list>
+        
+        <div class="type-block">
           <h1 data-translate="LANDING_PAGE_TITLE_POPULAR"></h1>
         </div>
-        <div id="popular-materials">
-          <md-grid-list class="materials-grid-list ng-hide"  md-cols="2" md-cols-gt-xs="4" md-gutter="10px" md-row-height="3:4" data-ng-show="materials.length != 0">
-            <md-grid-tile data-ng-repeat="material in materials">
-              <figure data-dop-material-box material="material"></figure>
-            </md-grid-tile>
-          </md-grid-list>
-          <md-grid-list class="placeholders-grid-list"  md-cols="2" md-cols-gt-xs="4" md-gutter="10px" md-row-height="3:4" data-ng-hide="materials.length > 0">
-            <md-grid-tile data-ng-repeat="n in [] | range:8">
-              <figure data-dop-preloader-card></figure>
-            </md-grid-tile>
-          </md-grid-list>
-        </div>
+        
+        <md-grid-list md-cols="2" md-cols-gt-xs="4" md-gutter="10px" md-row-height="3:4">
+          <md-grid-tile data-ng-repeat="material in materials">
+            <figure data-dop-material-box material="material"></figure>
+          </md-grid-tile>
+        </md-grid-list>
       </article>
       <aside data-dop-sidebar flex="100" flex-gt-sm="25" flex-gt-lg="20" class="md-padding" role="sidebar"></aside>
     </section>
