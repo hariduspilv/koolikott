@@ -387,4 +387,6 @@ INSERT INTO Translation(translationGroup, translationKey, translation) VALUES
 (2,'SUBMITTED_AT','Зафиксирован в'),
 (2,'SUBMITTED_BY','Сообщает'),
 (2,'BUTTON_OPEN','Oткрыто'),
-(2,'BUTTON_RESTORE','Восстановить');
+(2,'BUTTON_RESTORE','Восстановить'),
+(3,'GIVE_FEEDBACK_LINK', 'Дайте обратную связь о e-Koolikott'),
+(3,'RECOMMENDATIONS', 'Рекомендации');

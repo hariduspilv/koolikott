@@ -386,4 +386,6 @@ INSERT INTO Translation(translationGroup, translationKey, translation) VALUES
 (1,'SUBMITTED_AT','Raporteeritud'),
 (1,'SUBMITTED_BY','Raporteeris'),
 (1,'BUTTON_OPEN','Ava'),
-(1,'BUTTON_RESTORE','Taasta');
+(1,'BUTTON_RESTORE','Taasta'),
+(1,'GIVE_FEEDBACK_LINK', 'Anna tagasisidet e-Koolikoti kohta'),
+(1,'RECOMMENDATIONS', 'Soovitused');

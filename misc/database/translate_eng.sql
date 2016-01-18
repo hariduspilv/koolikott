@@ -391,4 +391,6 @@ INSERT INTO Translation(translationGroup, translationKey, translation) VALUES
 (3,'SUBMITTED_AT','Reported at'),
 (3,'SUBMITTED_BY','Reported by'),
 (3,'BUTTON_OPEN','Open'),
-(3,'BUTTON_RESTORE','Restore');
+(3,'BUTTON_RESTORE','Restore'),
+(3,'GIVE_FEEDBACK_LINK', 'Give feedback about e-Koolikott'),
+(3,'RECOMMENDATIONS', 'Recommendations');
