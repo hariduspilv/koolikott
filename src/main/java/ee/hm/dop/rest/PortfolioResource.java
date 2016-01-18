@@ -150,6 +150,14 @@ public class PortfolioResource extends BaseResource {
     }
 
     @POST
+    @Path("restore")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @RolesAllowed({ "ADMIN" })
+    public void restore(Portfolio portfolio) {
+        portfolioService.restore(portfolio, getLoggedInUser());
+    }
+
+    @POST
     @Path("setImproper")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)

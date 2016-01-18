@@ -250,6 +250,20 @@ public class PortfolioService {
         searchEngineService.updateIndex();
     }
 
+    public void restore(Portfolio portfolio, User loggedInUser) {
+        Portfolio originalPortfolio = portfolioDAO.findDeletedById(portfolio.getId());
+        if (originalPortfolio == null) {
+            throw new RuntimeException("Portfolio not found");
+        }
+
+        if (!isUserAdmin(loggedInUser)) {
+            throw new RuntimeException("Logged in user must be an administrator.");
+        }
+
+        portfolioDAO.restore(originalPortfolio);
+        searchEngineService.updateIndex();
+    }
+
     private List<Chapter> copyChapters(List<Chapter> chapters) {
         List<Chapter> copyChapters = new ArrayList<>();
 

@@ -19,10 +19,19 @@ public class PortfolioDAO {
     private EntityManager entityManager;
 
     public Portfolio findById(long portfolioId) {
-        TypedQuery<Portfolio> findById = entityManager
-                .createQuery("SELECT p FROM Portfolio p WHERE p.id = :id AND p.deleted = false", Portfolio.class);
+        return findById(portfolioId, false);
+    }
 
-        TypedQuery<Portfolio> query = findById.setParameter("id", portfolioId);
+    public Portfolio findDeletedById(long portfolioId) {
+        return findById(portfolioId, true);
+    }
+
+    private Portfolio findById(long portfolioId, boolean includeDeleted) {
+        TypedQuery<Portfolio> findById = entityManager.createQuery(
+                "SELECT p FROM Portfolio p WHERE p.id = :id AND p.deleted = :includeDeleted", Portfolio.class);
+
+        TypedQuery<Portfolio> query = findById.setParameter("id", portfolioId).setParameter("includeDeleted",
+                includeDeleted);
         return getSingleResult(query);
     }
 
@@ -97,11 +106,19 @@ public class PortfolioDAO {
     }
 
     public void delete(Portfolio portfolio) {
+        setDeleted(portfolio, true);
+    }
+
+    public void restore(Portfolio portfolio) {
+        setDeleted(portfolio, false);
+    }
+
+    private void setDeleted(Portfolio portfolio, boolean deleted) {
         if (portfolio.getId() == null) {
             throw new InvalidParameterException("Portfolio does not exist.");
         }
 
-        portfolio.setDeleted(true);
+        portfolio.setDeleted(deleted);
         update(portfolio);
     }
 }
