@@ -121,7 +121,7 @@ define([], function()
             },
             '/dev/login/:idCode': {
                 templateUrl: 'views/dev/login/login.html',
-                controller: 'loginController',
+                controller: 'devLoginController',
                 dependencies: [
                     'views/dev/login/login'
                 ]

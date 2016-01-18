@@ -1,6 +1,6 @@
 define(['app'], function(app)
 {
-    app.controller('loginController', ['$scope', 'serverCallService', '$route', 'authenticatedUserService', '$location',
+    app.controller('devLoginController', ['$scope', 'serverCallService', '$route', 'authenticatedUserService', '$location',
        function($scope, serverCallService, $route, authenticatedUserService, $location) {
         var idCode = $route.current.params.idCode;
         var params = {};
