@@ -13,10 +13,16 @@
 
   <h2>Soovitused</h2>
   <md-list id="recommendations">
-    <md-list-item  data-ng-repeat="item in recommendations" ng-href="#/help" >
+    <md-list-item  data-ng-repeat="item in recommendations" ng-href="#/material?materialId={{item.id}}" >
       <div layout="column" class="listblock">
-        <h4 class="one-row">{{item.what}}</h4>
-        <span class="one-row">{{item.who}}</span>
+        <h4 class="one-row" data-ng-bind="getCorrectLanguageString(item.titles, item.language)"></h4>
+        <span class="one-row">
+          <span data-ng-repeat="author in item.authors">
+            <span data-ng-bind="formatName(author.name)"></span>
+            <span data-ng-bind="formatSurname(author.surname)"></span>
+            <span data-ng-bind="$index < item.authors.length - 1 ? ', ' : ''"></span>
+          </span>
+        </span>
       </div>
       <md-divider ng-if="!$last"></md-divider>
     </md-list-item>
