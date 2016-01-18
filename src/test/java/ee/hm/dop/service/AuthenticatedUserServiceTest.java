@@ -1,5 +1,6 @@
 package ee.hm.dop.service;
 
+import static ee.hm.dop.model.ehis.Role.InstitutionalRole.STUDENT;
 import static ee.hm.dop.utils.ConfigurationProperties.KEYSTORE_FILENAME;
 import static ee.hm.dop.utils.ConfigurationProperties.KEYSTORE_PASSWORD;
 import static ee.hm.dop.utils.ConfigurationProperties.KEYSTORE_SIGNING_ENTITY_ID;
@@ -9,7 +10,11 @@ import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.configuration.Configuration;
@@ -21,7 +26,12 @@ import org.json.JSONObject;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import ee.hm.dop.model.AuthenticatedUser;
+import ee.hm.dop.model.ehis.Institution;
+import ee.hm.dop.model.ehis.Person;
+import ee.hm.dop.model.ehis.Role;
 import ee.hm.dop.security.KeyStoreUtils;
 import ee.hm.dop.utils.EncryptionUtils;
 
@@ -35,11 +45,29 @@ public class AuthenticatedUserServiceTest {
     private Configuration configuration;
 
     @Test
-    public void getSignedUserData() {
+    public void getSignedUserData() throws Exception {
+        Role role = new Role();
+        role.setInstitutionalRole(STUDENT);
+        role.setSchoolYear("2");
+        role.setSchoolClass("S");
+
+        List<Role> roles = new ArrayList<>();
+        roles.add(role);
+
+        Institution institution = new Institution();
+        institution.setEhisId("123");
+        institution.setRoles(roles);
+
+        List<Institution> institutions = new ArrayList<>();
+        institutions.add(institution);
+
+        Person person = new Person();
+        person.setId(412L);
+        person.setInstitutions(institutions);
+
         AuthenticatedUser authenticatedUser = new AuthenticatedUser();
         authenticatedUser.setToken("uniqueToken");
-        authenticatedUser.setHomeOrganization("htg.tartu.ee");
-        authenticatedUser.setAffiliations("member,student");
+        authenticatedUser.setPerson(person);
 
         expect(configuration.getString(KEYSTORE_FILENAME)).andReturn("test.keystore").anyTimes();
         expect(configuration.getString(KEYSTORE_PASSWORD)).andReturn("newKeyStorePass").anyTimes();
@@ -63,8 +91,20 @@ public class AuthenticatedUserServiceTest {
         assertTrue(dateTime.isBefore(DateTime.now()) && dateTime.isAfter(DateTime.now().getMillis() - 5000));
 
         JSONObject authenticationContext = userDataObject.getJSONObject("authCtx");
-        assertEquals("member,student", authenticationContext.getString("roles"));
-        assertEquals("htg.tartu.ee", authenticationContext.getString("schacHomeOrganization"));
+        ObjectMapper mapper = new ObjectMapper();
+        Person authenticatedPerson = mapper.readValue(authenticationContext.toString(), Person.class);
+        assertNull(authenticatedPerson.getId());
+        assertEquals(person.getInstitutions().size(), authenticatedPerson.getInstitutions().size());
+
+        Institution authenticatedInstitution = authenticatedPerson.getInstitutions().get(0);
+        assertNull(authenticatedInstitution.getId());
+        assertEquals(institution.getEhisId(), authenticatedInstitution.getEhisId());
+        assertEquals(authenticatedInstitution.getRoles().size(), authenticatedInstitution.getRoles().size());
+
+        Role authenticatedRole = authenticatedInstitution.getRoles().get(0);
+        assertEquals(role.getInstitutionalRole(), authenticatedRole.getInstitutionalRole());
+        assertEquals(role.getSchoolClass(), authenticatedRole.getSchoolClass());
+        assertEquals(role.getSchoolYear(), authenticatedRole.getSchoolYear());
     }
 
     private void replayAll(Object... mocks) {

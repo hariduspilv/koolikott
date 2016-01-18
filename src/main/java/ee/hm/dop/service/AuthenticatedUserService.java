@@ -1,5 +1,7 @@
 package ee.hm.dop.service;
 
+import static org.joda.time.DateTime.now;
+
 import java.security.PrivateKey;
 
 import javax.inject.Inject;
@@ -7,10 +9,15 @@ import javax.inject.Inject;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.configuration.Configuration;
 import org.joda.time.DateTime;
-import org.json.JSONObject;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 import ee.hm.dop.dao.AuthenticatedUserDAO;
 import ee.hm.dop.model.AuthenticatedUser;
+import ee.hm.dop.model.ehis.Person;
+import ee.hm.dop.rest.jackson.map.DateTimeSerializer;
 import ee.hm.dop.security.KeyStoreUtils;
 import ee.hm.dop.utils.EncryptionUtils;
 
@@ -29,20 +36,46 @@ public class AuthenticatedUserService {
     }
 
     public String signUserData(AuthenticatedUser authenticatedUser) {
-        DateTime createdAt = DateTime.now();
+        UserData userData = new UserData(authenticatedUser.getPerson());
+        ObjectMapper mapper = new ObjectMapper();
 
-        JSONObject authenticationContext = new JSONObject();
-        authenticationContext.put("schacHomeOrganization", authenticatedUser.getHomeOrganization());
-        authenticationContext.put("roles", authenticatedUser.getAffiliations());
-
-        JSONObject userDataObject = new JSONObject();
-        userDataObject.put("createdAt", createdAt);
-        userDataObject.put("authProvider", TAAT);
-        userDataObject.put("authCtx", authenticationContext);
+        String userDataStr;
+        try {
+            userDataStr = mapper.writeValueAsString(userData);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
 
         PrivateKey privateKey = KeyStoreUtils.getDOPSigningCredential(configuration).getPrivateKey();
-        final byte[] cipherText = EncryptionUtils.encrypt(userDataObject.toString(), privateKey);
+        final byte[] cipherText = EncryptionUtils.encrypt(userDataStr, privateKey);
 
         return Base64.encodeBase64String(cipherText);
+    }
+
+    @SuppressWarnings("unused")
+    private final class UserData {
+
+        @JsonSerialize(using = DateTimeSerializer.class)
+        private DateTime createdAt;
+        private String authProvider;
+        private Person authCtx;
+
+        UserData(Person authCtx) {
+            this.authCtx = authCtx;
+            authProvider = TAAT;
+            createdAt = now();
+        }
+
+        public DateTime getCreatedAt() {
+            return createdAt;
+        }
+
+        public String getAuthProvider() {
+            return authProvider;
+        }
+
+        public Person getAuthCtx() {
+            return authCtx;
+        }
     }
 }
