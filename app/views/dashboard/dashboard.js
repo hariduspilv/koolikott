@@ -51,6 +51,8 @@ define(['app'], function (app) {
                   return $scope.getCorrectLanguageTitle(data.material).slice(0, $scope.query.filter.length).toLowerCase() === $scope.query.filter.toLowerCase();
                 if (data && data.type == ".Material")
                   return $scope.getCorrectLanguageTitle(data).slice(0, $scope.query.filter.length).toLowerCase() === $scope.query.filter.toLowerCase();
+                if (data && data.type == ".Portfolio")
+                    return data.title.slice(0, $scope.query.filter.length).toLowerCase() === $scope.query.filter.toLowerCase();
             });
         }
         
