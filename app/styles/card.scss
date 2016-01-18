@@ -15,6 +15,14 @@ $link-color: #15c;
 $card-lg-padding: 25px;
 $border-color: rgba(0, 0, 0, 0.12);
 
+
+// responsive aspect ratio, http://codepen.io/jakob-e/pen/LEdWNB
+@mixin aspect-ratio($ratio-or-width, $height: null) {
+  $padding: if($height, percentage($height/$ratio-or-width), percentage(1/$ratio-or-width));
+  &:before { content:''; float: left; padding-bottom: $padding;  }
+  &:after  { content:''; display: table; clear: both;  }
+}
+
 md-card {
   position: relative;
   margin: 0;
@@ -83,6 +91,37 @@ md-card {
     }
   }
 
+  &.card-sm .card-cover,
+  &.card-lg .card-cover {
+    &.imaged {
+      background-color: transparent !important;
+    }
+    &.description {
+      background-color: $green1;
+    }
+    &.assessment {
+      background-color: $green2;
+    }
+    &.dvr {
+      background-color: $greengrass;
+    }
+    &.portfolio {
+      background-color: $royal;
+    }
+    &.casino {
+      background-color: $violet;
+    }
+    &.web_asset {
+      background-color: $navy;
+    }
+    &.audiotrack {
+      background-color: $cyan;
+    }
+    &.ondemand_video {
+      background-color: $salad;
+    }
+  }
+
   &.card-sm {
     transition: all 0.5s;
     height: 100%;
@@ -128,30 +167,7 @@ md-card {
       position: relative;
       transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
       background-color: $green1;
-      &.description {
-        background-color: $green1;
-      }
-      &.assessment {
-        background-color: $green2;
-      }
-      &.dvr {
-        background-color: $greengrass;
-      }
-      &.portfolio {
-        background-color: $royal;
-      }
-      &.casino {
-        background-color: $violet;
-      }
-      &.web_asset {
-        background-color: $navy;
-      }
-      &.audiotrack {
-        background-color: $cyan;
-      }
-      &.ondemand_video {
-        background-color: $salad;
-      }
+
     }
 
     .card-hover {
@@ -252,7 +268,8 @@ md-card {
       }
     }
     .card-cover {
-      height: 180px;
+      @include aspect-ratio(3,2);
+      max-height: 500px;
       background: $green2;
       overflow: hidden;
       position: relative;
