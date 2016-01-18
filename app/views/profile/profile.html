@@ -3,8 +3,8 @@
     <div layout="row" layout-xs="column" flex="0" flex-gt-md="15"></div>
     <section layout="column" layout-gt-sm="row" flex="100" flex-gt-md="75">
       <article flex="75" flex-sm="100" class="md-padding" role="main">
-        <h1 class="md-headline" data-ng-if="myProfile" data-translate="MYPROFILE_PAGE_TITLE_PORTFOLIOS"></h1>
-        <h1 class="md-headline" data-ng-if="!myProfile" data-translate="PROFILE_PAGE_TITLE_PORTFOLIOS"></h1>
+        <h1 data-ng-if="myProfile" data-translate="MYPROFILE_PAGE_TITLE_PORTFOLIOS"></h1>
+        <h1 data-ng-if="!myProfile" data-translate="PROFILE_PAGE_TITLE_PORTFOLIOS"></h1>
 
         <md-grid-list md-cols="2" md-cols-gt-xs="4" md-gutter="10px" md-row-height="3:4">
           <md-grid-tile data-ng-repeat="portfolio in portfolios">
@@ -12,8 +12,8 @@
           </md-grid-tile>
         </md-grid-list>
 
-        <h2 class="md-headline" data-ng-if="myProfile" data-translate="MYPROFILE_PAGE_TITLE_MATERIALS"></h2>
-        <h2 class="md-headline" data-ng-if="!myProfile" data-translate="PROFILE_PAGE_TITLE_MATERIALS"></h2>
+        <h1 class="type-block" data-ng-if="myProfile" data-translate="MYPROFILE_PAGE_TITLE_MATERIALS"></h1>
+        <h1 class="type-block"  data-ng-if="!myProfile" data-translate="PROFILE_PAGE_TITLE_MATERIALS"></h1>
 
         <md-grid-list md-cols="2" md-cols-gt-xs="4" md-gutter="10px" md-row-height="3:4">
           <md-grid-tile data-ng-repeat="material in materials">
@@ -23,7 +23,7 @@
       </article>
 
       <aside data-dop-sidebar flex="100" flex-gt-sm="25" flex-gt-lg="20" class="md-padding" role="sidebar">
-        <h1 class="md-headline" data-ng-if="myProfile" data-translate="MYPROFILE_PAGE_TITLE_MY_DATA"></h1>
+        <h1 data-ng-if="myProfile" data-translate="MYPROFILE_PAGE_TITLE_MY_DATA"></h1>
 
         <p data-ng-if="myProfile">
           <strong>{{user.name}} {{user.surname}}</strong><br />
