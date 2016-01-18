@@ -62,7 +62,9 @@
             <form name="materialTitleForm">
               <div layout="row" layout-align="center center">
                 <md-input-container flex>
-                  <label data-translate="MATERIAL_TITLE"></label>
+                  <label>
+                    <span data-translate="MATERIAL_TITLE"></span> *
+                  </label>
                   <input data-ng-model="metadata.title" name="title" required>
                   <div data-ng-messages="materialTitleForm.title.$error" data-ng-show="materialTitleForm.title.$dirty">
                     <div data-ng-message="required" data-ng-show="materialTitleForm.title.$error.required" data-translate="MATERIAL_TITLE_IS_MANDATORY"></div>
