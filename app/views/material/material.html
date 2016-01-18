@@ -89,13 +89,15 @@
                   <!-- TODO: mobile view after stable release -->
 
                   <div data-ng-if="sourceType === 'YOUTUBE'" class="embed-responsive embed-responsive-16by9">
-                    <div class="video-container">
+                    <div class="embed-responsive-container">
                       <youtube-video video-url="material.source" player-width="'768'" player-height="'432'" class="embed-responsive-item"></youtube-video>
                     </div>
                   </div>
 
                   <div data-ng-if="sourceType === 'SLIDESHARE'" class="embed-responsive embed-responsive-4by3">
-                    <div data-dop-slideshare source="material.source" width="767" height="639" class="embed-responsive-item" fail-callback="slideshareFail()"></div>
+                    <div class="embed-responsive-container">
+                      <div data-dop-slideshare source="material.source" class="embed-responsive-item" fail-callback="slideshareFail()"></div>
+                    </div>
                   </div>
 
                   <div data-ng-if="sourceType === 'LINK' && !material.embeddable">
