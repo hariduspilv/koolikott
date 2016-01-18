@@ -28,7 +28,7 @@
 <md-input-container data-ng-show="taxonPath.educationalContext && taxonPath.educationalContext.name === 'BASICEDUCATION'" class="md-block" flex>
   <label for="taxonDomainSubjectsSelect" data-translate="TAXON_PATH_DOMAIN_AND_SUBJECT"></label>
   <md-select data-ng-model="taxonPath.domainSubject" id="taxonDomainSubjectsSelect" ng-model-options="{trackBy: '$value.id'}">
-      <md-option data-translate="ALL" ng-click="reset(taxonPath.domain)"></md-option>
+      <md-option data-translate="ALL" ng-click="reset(taxonPath.educationalContext)"></md-option>
       <md-option class="stepped-select" data-ng-class="{ 'child' : domainSubject.level === '.Subject'}" ng-value="domainSubject" ng-repeat="domainSubject in basicEducationDomainSubjects" data-translate="{{(domainSubject.level === '.Domain' ? 'DOMAIN_' : 'SUBJECT_') + domainSubject.name.toUpperCase()}}"></md-option>
   </md-select>
 </md-input-container>
