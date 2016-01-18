@@ -27,7 +27,7 @@
           </span>
         </h2>
 
-        <div data-infinite-scroll="nextPage()" data-infinite-scroll-disabled="searching">
+        <div data-infinite-scroll="nextPage()" data-infinite-scroll-disabled="searching" data-infinite-scroll-container="scrollContainer">
           <md-grid-list md-cols="2" md-cols-gt-xs="4"  md-gutter="10px" md-row-height="3:4">
             <md-grid-tile data-ng-repeat="item in items">
               <figure data-ng-if="item.type === '.Material'" data-dop-material-box material="item"></figure>

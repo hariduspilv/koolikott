@@ -19,6 +19,8 @@
   <div data-layout="column" data-flex>
     <div data-ng-if="!isEditPortfolioMode" id="navmenu" data-dop-header></div>
     <div data-ng-if="isEditPortfolioMode" id="navmenu" data-dop-edit-portfolio-mode-header></div>
-    <div data-ng-view layout="row" flex id="scrollable-content"></div>
+    <div layout="row" flex id="scrollable-content" data-layout-fill>
+      <div data-ng-view></div>
+    </div>
   </div>
 </div>
