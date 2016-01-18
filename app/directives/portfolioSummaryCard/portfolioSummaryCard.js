@@ -10,9 +10,12 @@ define(['app'], function(app)
                 },
                 templateUrl: 'directives/portfolioSummaryCard/portfolioSummaryCard.html',
                 controller: function ($scope, $location) {
-                	$scope.isViewPortforlioPage = $rootScope.isViewPortforlioPage;
-                	$scope.isEditPortfolioMode = $rootScope.isEditPortfolioMode;
-
+                	
+                	function init() {
+                		$scope.isViewPortforlioPage = $rootScope.isViewPortforlioPage;
+                    	$scope.isEditPortfolioMode = $rootScope.isEditPortfolioMode;
+                	}
+                	
                     $scope.getEducationalContext = function() {
                         var educationalContext = $rootScope.taxonUtils.getEducationalContext($scope.portfolio.taxon);
                         if(educationalContext) {
@@ -84,6 +87,33 @@ define(['app'], function(app)
                     	$scope.showEditMetadataDialog();
                     	$rootScope.openMetadataDialog = null;
                     }
+                    
+                    function fetchImage() {       	
+                    	if(!$scope.pictureLock) {
+                    		serverCallService.makeGet("rest/portfolio/getPicture?portfolioId=" + $scope.portfolio.id, {}, fetchImageSuccess, fetchImageFail, fetchImageFinally);
+                    		$scope.pictureLock = true;
+                    	}
+                	}
+                    
+                    function fetchImageSuccess(data) {
+                    	$scope.portfolio.picture = "data:image/jpeg;base64,"+data;
+                    }
+                    
+                    function fetchImageFail(data) {
+                    	log("Getting portfolio image failed");
+                    }
+                    
+                    function fetchImageFinally() {
+                    	$scope.pictureLock = false;
+                    }
+                    
+                    $scope.$watch('portfolio', function(newValue, oldValue) {
+                    	if(newValue && newValue.hasPicture && newValue.picture == null) {
+                    		fetchImage();
+                    	}
+                    }, true);
+                    
+                    init();
                     
                 }
             };

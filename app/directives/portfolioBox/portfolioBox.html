@@ -12,7 +12,7 @@
   </div>
   <!-- image -->
   <div data-ng-if="portfolio.hasPicture"  class="card-cover imaged" layout="row"  layout-align="start start">
-    <img data-ng-src="rest/portfolio/getPicture?portfolioId={{portfolio.id}}" class="md-card-image" />
+    <img data-ng-src="{{portfolio.picture}}" class="md-card-image" />
     <div class="card-hover portfolio">
       <md-icon class="icon-kind">book</md-icon>
     </div>

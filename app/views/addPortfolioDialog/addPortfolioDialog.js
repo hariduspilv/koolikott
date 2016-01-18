@@ -18,7 +18,6 @@ define(['app'], function(app) {
                     $scope.newPortfolio.taxon = portfolioClone.taxon;
                     $scope.newPortfolio.targetGroups = portfolioClone.targetGroups;
                     $scope.newPortfolio.tags = portfolioClone.tags;
-
                 }
             }
 
@@ -66,7 +65,6 @@ define(['app'], function(app) {
                 $scope.portfolio.targetGroups = $scope.newPortfolio.targetGroups;
                 $scope.portfolio.tags = $scope.newPortfolio.tags;
                 $scope.portfolio.picture = getPicture($scope.newPortfolio);
-
                 serverCallService.makePost(url, $scope.portfolio, updatePortfolioSuccess, createPortfolioFailed, savePortfolioFinally);
             };
 

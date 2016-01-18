@@ -81,8 +81,7 @@
               <div class="corner"></div>
               <!-- imaged -->
                 <div data-ng-if="portfolio.hasPicture" class="card-cover imaged">
-                    <img
-                         data-ng-src="rest/portfolio/getPicture?portfolioId={{portfolio.id}}"/>
+                    <img data-ng-src="{{portfolio.picture}}"/>
                 </div>
                 <!-- noimage -->
                 <div data-ng-if="!portfolio.hasPicture" class="card-cover porfolio">
