@@ -1,40 +1,40 @@
-<!-- TODO: arrow changes direction right/down-->
 <!-- TODO: no parenthesis if no comments. or number 0 -->
-<!-- TODO: add translations if UI is finalized -->
-<md-button data-ng-class="{'toggled': showComments}" data-ng-click="showComments = !showComments">
-  <span data-translate="COMMENTS_TITLE"></span>
-  <span>({{comments.length}})</span>
-  <md-icon class="md-primary" >
-    keyboard_arrow_right
-  </md-icon>
-</md-button>
+<div id="comments">
+  <md-button class="comments-card-title" data-ng-class="{'toggled': showComments}" data-ng-click="showComments = !showComments">
+    <span data-translate="COMMENTS_TITLE"></span>
+    <span>({{comments.length}})</span>
+    <md-icon class="md-primary" >
+      keyboard_arrow_right
+    </md-icon>
+  </md-button>
 
-<div data-ng-show="showComments">
-  <md-list>
-    <md-list-item class="md-3-line" ng-repeat="comment in comments | limitTo: visibleCommentsCount">
-      <md-icon class="md-avatar-icon">person</md-icon>
-      <div class="md-list-item-text" layout="column">
-        <h3>{{comment.creator.name}} {{comment.creator.surname}}</h3>
-        <h4>{{comment.added | date:'dd.MM.yyyy HH:mm'}}</h4>
-        <p>{{comment.text}}</p>
+  <div data-ng-show="showComments">
+    <md-list>
+      <md-list-item class="md-3-line" ng-repeat="comment in comments | limitTo: visibleCommentsCount">
+        <md-icon class="md-avatar-icon">person</md-icon>
+        <div class="md-list-item-text" layout="column">
+          <h3>{{comment.creator.name}} {{comment.creator.surname}}</h3>
+          <h4>{{comment.added | date:'dd.MM.yyyy HH:mm'}}</h4>
+          <p>{{comment.text}}</p>
+        </div>
+      </md-list-item>
+    </md-list>
+
+    <div layout="row" layout-align="center center" data-ng-show="showMoreCommentsButton()">
+      <md-button aria-label="Lae veel kommentaare" md-no-ink class="md-primary" data-ng-click="showMoreComments()">
+        <span>LOAD_MORE_COMMENTS</span> <span data-ng-bind="getLoadMoreCommentsLabel()"></span>
+      </md-button>
+    </div>
+    
+    <div data-ng-if="authorized">
+      <h6 data-translate="ADD_COMMENT_TITLE"></h6>
+      <md-input-container class="md-block">
+        <label data-translate="COMMENT"></label>
+        <textarea data-ng-model="comment.text" rows="4"></textarea>
+      </md-input-container>
+      <div layout="row" layout-align="end center">
+        <md-button aria-label="Lisa kommentaar" data-translate="ADD_COMMENT_BUTTON" data-ng-click="addComment()" class="md-raised md-primary"></md-button>
       </div>
-    </md-list-item>
-  </md-list>
-
-  <div layout="row" layout-align="center center" data-ng-show="showMoreCommentsButton()">
-    <md-button aria-label="Lae veel kommentaare" md-no-ink class="md-primary" data-ng-click="showMoreComments()">
-      Veel kommentaare <span data-ng-bind="getLoadMoreCommentsLabel()"></span>
-    </md-button>
-  </div>
-  
-  <div data-ng-if="authorized">
-    <h6 data-translate="ADD_COMMENT_TITLE"></h6>
-    <md-input-container class="md-block">
-      <label data-translate="COMMENT"></label>
-      <textarea data-ng-model="comment.text" rows="4"></textarea>
-    </md-input-container>
-    <div layout="row" layout-align="end center">
-      <md-button aria-label="Lisa kommentaar" data-translate="ADD_COMMENT_BUTTON" data-ng-click="addComment()" class="md-raised md-primary"></md-button>
     </div>
   </div>
 </div>
