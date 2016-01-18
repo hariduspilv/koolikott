@@ -34,7 +34,7 @@
     </md-card>
 
     <div class="portfolio-chapter-chapter-materials" ng-show="chapter.materials.length">
-      <md-grid-list md-cols="6" md-cols-gt-lg="6"  md-cols-gt-sm="4" md-cols-sm="4" md-cols-xs="2" md-gutter="10px" md-row-height="280px">
+      <md-grid-list md-cols="2" md-cols-gt-xs="4" md-gutter="10px" md-row-height="3:4">
         <md-grid-tile data-ng-repeat="material in chapter.materials">
           <figure data-dop-material-box material="material" chapter="chapter"></figure>
         </md-grid-tile>
@@ -78,7 +78,7 @@
       </md-card>
 
       <div class="portfolio-chapter-subchapter-materials" ng-show="subchapter.materials.length">
-        <md-grid-list md-cols="6" md-cols-gt-lg="6" md-cols-gt-sm="4" md-cols-sm="4" md-cols-xs="2" md-gutter="10px" md-row-height="280px">
+        <md-grid-list md-cols="2" md-cols-gt-xs="4" md-gutter="10px" md-row-height="3:4">
           <md-grid-tile data-ng-repeat="material in subchapter.materials">
             <figure data-dop-material-box material="material" chapter="subchapter"></figure>
           </md-grid-tile>
