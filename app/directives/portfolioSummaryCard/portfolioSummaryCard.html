@@ -139,7 +139,7 @@
         <md-divider class="md-default-theme"></md-divider>
 
         <div layout="row" class="actions" layout-align="start start">
-            <div ng-if="!isEditPortfolioMode && portfolio.type">
+            <div ng-if="!isEditPortfolioMode && portfolio.type" flex="50" flex-gt-xs="75">
                 <div data-dop-comments-card comments="portfolio.comments" comment="comment" submit-click="addComment()"></div>
             </div>
             <span flex></span>
