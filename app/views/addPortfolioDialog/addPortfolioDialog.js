@@ -1,25 +1,24 @@
-define(['app'], function(app)
-{
+define(['app'], function(app) {
     app.controller('addPortfolioDialog', ['$scope', '$mdDialog', '$location', 'serverCallService', '$rootScope', 'portfolio',
         function($scope, $mdDialog, $location, serverCallService, $rootScope, portfolio) {
-
-          $scope.showHints = true;
+            $scope.saving = false;
+            $scope.showHints = true;
 
             function init() {
-            	$scope.newPortfolio = createPortfolio();
+                $scope.newPortfolio = createPortfolio();
                 $scope.portfolio = portfolio;
 
-                if($scope.portfolio.id != null) {
+                if ($scope.portfolio.id != null) {
                     $scope.isEditPortfolio = true;
-                    
+
                     var portfolioClone = angular.copy(portfolio);
-                    
+
                     $scope.newPortfolio.title = portfolioClone.title;
                     $scope.newPortfolio.summary = portfolioClone.summary;
                     $scope.newPortfolio.taxon = portfolioClone.taxon;
                     $scope.newPortfolio.targetGroups = portfolioClone.targetGroups;
                     $scope.newPortfolio.tags = portfolioClone.tags;
-                    
+
                 }
             }
 
@@ -28,10 +27,12 @@ define(['app'], function(app)
             };
 
             $scope.create = function() {
-            	var url = "rest/portfolio/create";
+                $scope.saving = true;
+              
+                var url = "rest/portfolio/create";
                 $scope.newPortfolio.picture = getPicture($scope.newPortfolio);
 
-				serverCallService.makePost(url, $scope.newPortfolio, createPortfolioSuccess, createPortfolioFailed);
+                serverCallService.makePost(url, $scope.newPortfolio, createPortfolioSuccess, createPortfolioFailed, savePortfolioFinally);
             };
 
             function getPicture(portfolio) {
@@ -42,20 +43,22 @@ define(['app'], function(app)
             }
 
             function createPortfolioSuccess(portfolio) {
-            	if (isEmpty(portfolio)) {
-            		createPortfolioFailed();
-	            } else {
-	            	$rootScope.savedPortfolio = portfolio;
-	            	$mdDialog.hide();
-	                $location.url('/portfolio/edit?id=' + portfolio.id);
-	            }
-			}
+                if (isEmpty(portfolio)) {
+                    createPortfolioFailed();
+                } else {
+                    $rootScope.savedPortfolio = portfolio;
+                    $mdDialog.hide();
+                    $location.url('/portfolio/edit?id=' + portfolio.id);
+                }
+            }
 
-			function createPortfolioFailed(){
-				log('Creating portfolio failed.');
-			}
+            function createPortfolioFailed() {
+                log('Creating portfolio failed.');
+            }
 
             $scope.update = function() {
+                $scope.saving = true;
+              
                 var url = "rest/portfolio/update";
                 $scope.portfolio.title = $scope.newPortfolio.title;
                 $scope.portfolio.summary = $scope.newPortfolio.summary;
@@ -64,7 +67,7 @@ define(['app'], function(app)
                 $scope.portfolio.tags = $scope.newPortfolio.tags;
                 $scope.portfolio.picture = getPicture($scope.newPortfolio);
 
-                serverCallService.makePost(url, $scope.portfolio, updatePortfolioSuccess, createPortfolioFailed);
+                serverCallService.makePost(url, $scope.portfolio, updatePortfolioSuccess, createPortfolioFailed, savePortfolioFinally);
             };
 
             function updatePortfolioSuccess(portfolio) {
@@ -75,6 +78,10 @@ define(['app'], function(app)
                     $scope.portfolio = portfolio;
                     $mdDialog.hide();
                 }
+            }
+            
+            function savePortfolioFinally() {
+                $scope.saving = false;
             }
 
             init();

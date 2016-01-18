@@ -1,21 +1,28 @@
 .drop-box {
-    border: 1px dashed #dedede;
-    height: 60px;
-    width: 60px;
-    text-align: center;
-  	cursor: pointer;
-  	border-radius: 4px;
-  	transition: all .25s;
+  border: 1px dashed #dedede;
+  height: 60px;
+  width: 60px;
+  text-align: center;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: all .25s;
 
-    background: #eee;
+  background: #eee;
 
 	&.dragover,
   &:hover {
-    	border-style: solid;
-      background: #e0e0e0;
+    border-style: solid;
+    background: #e0e0e0;
 	}
 
 	&.dragover-err {
-    	border-color: red;
+    border-color: red;
 	}
+}
+
+.drop-box-preview {
+  img {
+    max-width: 300px;
+    max-height: 300px;
+  }
 }
