@@ -31,7 +31,6 @@ import ee.hm.dop.model.AuthenticatedUser;
 import ee.hm.dop.model.AuthenticationState;
 import ee.hm.dop.model.User;
 import ee.hm.dop.model.ehis.Person;
-import ee.hm.dop.service.LoginService.LoginForm;
 
 @RunWith(EasyMockRunner.class)
 public class LoginServiceTest {
@@ -72,7 +71,7 @@ public class LoginServiceTest {
 
         replayAll(user, authenticatedUser);
 
-        loginService.logIn(createLoginForm(idCode));
+        loginService.logIn(idCode, null, null);
 
         verifyAll(user, authenticatedUser);
     }
@@ -99,7 +98,7 @@ public class LoginServiceTest {
 
         replayAll(user, authenticatedUserMock, person);
 
-        AuthenticatedUser authenticatedUser = loginService.logIn(createLoginForm(idCode));
+        AuthenticatedUser authenticatedUser = loginService.logIn(idCode, null, null);
 
         verifyAll(user, authenticatedUserMock, person);
 
@@ -122,7 +121,7 @@ public class LoginServiceTest {
         replayAll(user);
 
         try {
-            loginService.logIn(createLoginForm(idCode));
+            loginService.logIn(idCode, null, null);
             fail("Exception expected");
         } catch (DuplicateTokenException e) {
             // Everything ok
@@ -151,7 +150,7 @@ public class LoginServiceTest {
 
         replayAll(user, authenticatedUser);
 
-        loginService.logIn(createLoginForm(idCode));
+        loginService.logIn(idCode, null, null);
 
         verifyAll(user, authenticatedUser);
     }
@@ -244,10 +243,6 @@ public class LoginServiceTest {
         verifyAll();
 
         assertNull(returnedAuthenticatedUser);
-    }
-
-    private LoginForm createLoginForm(String idCode) {
-        return new LoginForm(idCode, null, null);
     }
 
     private void expectCreateAuthenticatedUser(Capture<AuthenticatedUser> capturedAuthenticatedUser) {

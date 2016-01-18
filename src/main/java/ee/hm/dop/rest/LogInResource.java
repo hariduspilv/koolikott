@@ -26,7 +26,6 @@ import ee.hm.dop.model.mobileid.MobileIDSecurityCodes;
 import ee.hm.dop.service.AuthenticatedUserService;
 import ee.hm.dop.service.LanguageService;
 import ee.hm.dop.service.LoginService;
-import ee.hm.dop.service.LoginService.LoginForm;
 import ee.hm.dop.service.TaatService;
 
 @Path("login")
@@ -54,8 +53,8 @@ public class LogInResource extends BaseResource {
         AuthenticatedUser authenticatedUser = null;
 
         if (isAuthValid()) {
-            LoginForm loginForm = new LoginForm(getIdCodeFromRequest(), getNameFromRequest(), getSurnameFromRequest());
-            authenticatedUser = loginService.logIn(loginForm);
+            authenticatedUser = loginService.logIn(getIdCodeFromRequest(), getNameFromRequest(),
+                    getSurnameFromRequest());
         }
 
         return authenticatedUser;

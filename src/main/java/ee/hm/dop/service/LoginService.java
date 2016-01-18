@@ -8,8 +8,6 @@ import java.security.SecureRandom;
 import javax.inject.Inject;
 import javax.xml.soap.SOAPException;
 
-import org.apache.commons.lang.builder.EqualsBuilder;
-import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.joda.time.DateTime;
 import org.joda.time.Duration;
 import org.joda.time.Interval;
@@ -53,27 +51,26 @@ public class LoginService {
      * Try to log in with the given id code and if that fails, create a new user
      * and log in with that.
      */
-    public AuthenticatedUser logIn(LoginForm loginForm) {
-        AuthenticatedUser authenticatedUser = doLogin(loginForm);
+    public AuthenticatedUser logIn(String idCode, String name, String surname) {
+        AuthenticatedUser authenticatedUser = login(idCode);
 
         if (authenticatedUser != null) {
-            logger.info(format("User %s with id %s logged in.", authenticatedUser.getUser().getUsername(),
-                    loginForm.idCode));
+            logger.info(format("User %s with id %s logged in.", authenticatedUser.getUser().getUsername(), idCode));
         } else {
-            logger.info(format("User with id %s could not log in, trying to create account. ", loginForm.idCode));
+            logger.info(format("User with id %s could not log in, trying to create account. ", idCode));
 
             // Create new user account
-            userService.create(loginForm.idCode, loginForm.name, loginForm.surname);
-            authenticatedUser = doLogin(loginForm);
+            userService.create(idCode, name, surname);
+            authenticatedUser = login(idCode);
 
             if (authenticatedUser == null) {
                 throw new RuntimeException(format(
-                        "User with id %s tried to log in after creating account, but failed.", loginForm.idCode));
+                        "User with id %s tried to log in after creating account, but failed.", idCode));
             }
 
             authenticatedUser.setFirstLogin(true);
             logger.info(format("User %s with id %s logged in for the first time.", authenticatedUser.getUser()
-                    .getUsername(), loginForm.idCode));
+                    .getUsername(), idCode));
         }
 
         return authenticatedUser;
@@ -96,32 +93,26 @@ public class LoginService {
             return null;
         }
 
-        LoginForm loginForm = new LoginForm(authenticationState.getIdCode(), authenticationState.getName(),
+        AuthenticatedUser authenticatedUser = logIn(authenticationState.getIdCode(), authenticationState.getName(),
                 authenticationState.getSurname());
-
-        AuthenticatedUser authenticatedUser = logIn(loginForm);
 
         authenticationStateDAO.delete(authenticationState);
 
         return authenticatedUser;
     }
 
-    private AuthenticatedUser doLogin(LoginForm loginForm) {
-        User user = userService.getUserByIdCode(loginForm.idCode);
+    private AuthenticatedUser login(String idCode) {
+        User user = userService.getUserByIdCode(idCode);
         if (user == null) {
             return null;
         }
 
-        return createAuthenticatedUser(user, loginForm);
+        return createAuthenticatedUser(user);
     }
 
-    private AuthenticatedUser createAuthenticatedUser(User user, LoginForm loginForm) {
+    private AuthenticatedUser createAuthenticatedUser(User user) {
         AuthenticatedUser authenticatedUser = new AuthenticatedUser();
         authenticatedUser.setUser(user);
-        authenticatedUser.setAffiliations(loginForm.affiliations);
-        authenticatedUser.setHomeOrganization(loginForm.homeOrganization);
-        authenticatedUser.setMails(loginForm.mails);
-        authenticatedUser.setScopedAffiliations(loginForm.scopedAffiliations);
 
         Person person = ehisSOAPService.getPersonInformation(user.getIdCode());
         if (person != null) {
@@ -157,52 +148,5 @@ public class LoginService {
         }
         AuthenticationState authenticationState = authenticationStateDAO.findAuthenticationStateByToken(token);
         return logIn(authenticationState);
-    }
-
-    public static final class LoginForm {
-
-        private String idCode;
-        private String name;
-        private String surname;
-        private String homeOrganization;
-        private String mails;
-        private String affiliations;
-        private String scopedAffiliations;
-
-        public LoginForm(String idCode, String name, String surname) {
-            this.idCode = idCode;
-            this.name = name;
-            this.surname = surname;
-        }
-
-        public LoginForm withHomeOrganization(String homeOrganization) {
-            this.homeOrganization = homeOrganization;
-            return this;
-        }
-
-        public LoginForm withMails(String mails) {
-            this.mails = mails;
-            return this;
-        }
-
-        public LoginForm withAffiliations(String affiliations) {
-            this.affiliations = affiliations;
-            return this;
-        }
-
-        public LoginForm withScopedAffiliations(String scopedAffiliations) {
-            this.scopedAffiliations = scopedAffiliations;
-            return this;
-        }
-
-        @Override
-        public int hashCode() {
-            return HashCodeBuilder.reflectionHashCode(this);
-        }
-
-        @Override
-        public boolean equals(Object obj) {
-            return EqualsBuilder.reflectionEquals(this, obj);
-        }
     }
 }

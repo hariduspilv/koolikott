@@ -13,7 +13,6 @@ import java.security.SecureRandom;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.StringJoiner;
 
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletResponse;
@@ -56,17 +55,8 @@ import ee.hm.dop.model.AuthenticatedUser;
 import ee.hm.dop.model.AuthenticationState;
 import ee.hm.dop.security.KeyStoreUtils;
 import ee.hm.dop.security.MetadataUtils;
-import ee.hm.dop.service.LoginService.LoginForm;
 
 public class TaatService {
-
-    private static final String SCOPED_AFFILIATION = "urn:mace:dir:attribute-def:eduPersonScopedAffiliation";
-
-    private static final String AFFILIATION = "urn:mace:dir:attribute-def:eduPersonAffiliation";
-
-    private static final String MAIL = "urn:mace:dir:attribute-def:mail";
-
-    private static final String HOME_ORGANIZATION = "schacHomeOrganization";
 
     private static final String NAME = "urn:mace:dir:attribute-def:cn";
 
@@ -134,8 +124,7 @@ public class TaatService {
     }
 
     private AuthenticatedUser login(Map<String, String> dataMap) {
-        LoginForm loginForm = buildLoginForm(dataMap);
-        return loginService.logIn(loginForm);
+        return loginService.logIn(dataMap.get(ID_CODE), dataMap.get(NAME), dataMap.get(SURNAME));
     }
 
     private void validateAuthenticationToken(String authenticationStateToken) {
@@ -189,21 +178,9 @@ public class TaatService {
         return authenticationStateDAO.createAuthenticationState(authenticationState);
     }
 
-    private LoginForm buildLoginForm(Map<String, String> dataMap) {
-        return new LoginForm(dataMap.get(ID_CODE), dataMap.get(NAME), dataMap.get(SURNAME)) //
-                .withMails(dataMap.get(MAIL)) //
-                .withAffiliations(dataMap.get(AFFILIATION)) //
-                .withScopedAffiliations(dataMap.get(SCOPED_AFFILIATION)) //
-                .withHomeOrganization(dataMap.get(HOME_ORGANIZATION));
-    }
-
     private Map<String, String> parseAttributes(Response response) {
         Assertion assertion = response.getAssertions().get(0);
         List<Attribute> attributes = assertion.getAttributeStatements().get(0).getAttributes();
-
-        StringJoiner mails = new StringJoiner(",");
-        StringJoiner affiliations = new StringJoiner(",");
-        StringJoiner scopedAffiliations = new StringJoiner(",");
 
         Map<String, String> attributeMap = new HashMap<>();
 
@@ -222,25 +199,9 @@ public class TaatService {
                     case NAME:
                         attributeMap.put(NAME, value);
                         break;
-                    case HOME_ORGANIZATION:
-                        attributeMap.put(HOME_ORGANIZATION, value);
-                        break;
-                    case MAIL:
-                        mails.add(value);
-                        break;
-                    case AFFILIATION:
-                        affiliations.add(value);
-                        break;
-                    case SCOPED_AFFILIATION:
-                        scopedAffiliations.add(value);
-                        break;
                     default:
                         break;
                 }
-
-                attributeMap.put(MAIL, mails.toString());
-                attributeMap.put(AFFILIATION, affiliations.toString());
-                attributeMap.put(SCOPED_AFFILIATION, scopedAffiliations.toString());
             }
         }
 

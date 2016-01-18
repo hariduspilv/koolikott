@@ -44,7 +44,6 @@ import ee.hm.dop.dao.AuthenticationStateDAO;
 import ee.hm.dop.model.AuthenticatedUser;
 import ee.hm.dop.model.AuthenticationState;
 import ee.hm.dop.security.KeyStoreUtils;
-import ee.hm.dop.service.LoginService.LoginForm;
 
 @RunWith(EasyMockRunner.class)
 public class TaatServiceTest {
@@ -172,14 +171,8 @@ public class TaatServiceTest {
         setValidationExpects();
 
         String idCode = "11111111111";
-
-        LoginForm loginForm = new LoginForm(idCode, "TestTäisnimi", "TestPerenimi") //
-                .withAffiliations("member,student") //
-                .withHomeOrganization("eenet.ee") //
-                .withMails("test@testmail.ee") //
-                .withScopedAffiliations("student@bak.studylevel.taat.edu.ee");
         AuthenticatedUser authenticatedUser = createMock(AuthenticatedUser.class);
-        expect(loginService.logIn(loginForm)).andReturn(authenticatedUser);
+        expect(loginService.logIn(idCode, "TestTäisnimi", "TestPerenimi")).andReturn(authenticatedUser);
 
         replayAll(authenticatedUser);
 
