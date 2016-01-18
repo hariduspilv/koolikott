@@ -1,7 +1,7 @@
 define(['app'], function(app)
 {
-    app.controller('searchResultController', ['$scope', "serverCallService", 'translationService', '$location', 'searchService',
-       function($scope, serverCallService, translationService, $location, searchService) {
+    app.controller('searchResultController', ['$scope', "serverCallService", 'translationService', '$location', 'searchService', '$rootScope',
+       function($scope, serverCallService, translationService, $location, searchService, $rootScope) {
         $scope.loadingNextPage = false;
         $scope.searching = false;
         
@@ -122,5 +122,7 @@ define(['app'], function(app)
             
             search();
         }
+        
+        $scope.scrollContainer = $rootScope.isEditPortfolioMode ? '#scrollable-content' : '';
     }]);
 });
