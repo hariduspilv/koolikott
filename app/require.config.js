@@ -34,7 +34,6 @@ require.config({
     'angular-aria': '../bower_components/angular-aria/angular-aria',
     'angular-click-outside': '../bower_components/angular-click-outside/clickoutside.directive',
     'angular-material': '../bower_components/angular-material/angular-material',
-    'angular-material-icons': '../bower_components/angular-material-icons/angular-material-icons.min',
     'angular-resource': '../bower_components/angular-resource/angular-resource',
     'angular-route': '../bower_components/angular-route/angular-route',
     'angular-translate': '../bower_components/angular-translate/angular-translate',
@@ -54,7 +53,7 @@ require.config({
     metadataService: 'services/metadataService',
     linearLayout: 'directives/pageStructure/linearLayout/linearLayout',
     columnLayout: 'directives/pageStructure/columnLayout/columnLayout',
-    'angular-material-data-table': '../bower_components/angular-material-data-table/dist/md-data-table.min'
+    'angular-material-data-table': '../bower_components/angular-material-data-table/dist/md-data-table'
   },
   shim: {
     angular: {
@@ -137,7 +136,6 @@ require([
   'angular-youtube-mb',
   'angular-route',
   'angular-material',
-  'angular-material-icons',
   'angular-screenfull',
   'angular-scroll',
   'angular-click-outside',

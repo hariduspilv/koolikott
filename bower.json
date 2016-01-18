@@ -23,8 +23,7 @@
     "ng-file-upload-shim": "10.0.2",
     "ngInfiniteScroll": "1.0.0",
     "requirejs": "2.1.17",
-    "screenfull": "2.0.0",
-    "angular-material-icons": "0.6.0"
+    "screenfull": "2.0.0"
   },
   "appPath": "app",
   "moduleName": "ranitsApp",

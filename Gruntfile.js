@@ -347,17 +347,7 @@ module.exports = function (grunt) {
         'svgmin'
       ]
     },
-
-    // Settings for grunt-bower-requirejs
-    bower: {
-      app: {
-        rjsConfig: '<%= yeoman.app %>/require.config.js',
-        options: {
-          exclude: ['material-design-icons']
-        }
-      }
-    },
-
+    
     replace: {
       dist: {
         src: '<%= yeoman.dist.app %>/index.html',
@@ -426,7 +416,6 @@ module.exports = function (grunt) {
     grunt.task.run([
       'clean:server',
       'wiredep',
-      'bower:app',
       'concurrent:server',
       'autoprefixer:server',
       'configureProxies:server',

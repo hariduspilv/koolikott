@@ -5,7 +5,6 @@ define(['app.routes', 'services/dependencyResolver', 'utils/taxonUtils'], functi
     var app = angular.module('app', [
       'ngRoute',
       'ngMaterial',
-      'ngMdIcons',
       'pascalprecht.translate',
       'youtube-embed',
       'angularScreenfull',
