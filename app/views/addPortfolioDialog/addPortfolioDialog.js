@@ -35,7 +35,7 @@ define(['app'], function(app) {
             };
 
             function getPicture(portfolio) {
-                if (portfolio.picture) {
+                if (portfolio && portfolio.picture) {
                     var base64Picture = portfolio.picture.$ngfDataUrl;
                 }
                 return base64Picture;
@@ -44,7 +44,7 @@ define(['app'], function(app) {
             function createPortfolioSuccess(portfolio) {
                 if (isEmpty(portfolio)) {
                     createPortfolioFailed();
-                } else {
+                } else {p
                     $rootScope.savedPortfolio = portfolio;
                     $mdDialog.hide();
                     $location.url('/portfolio/edit?id=' + portfolio.id);
