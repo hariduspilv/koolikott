@@ -1,7 +1,7 @@
 -- Page
 
 -- Estonian
-insert into Page(id, name, content, language) VALUES (1, 'About', '<h1>Mis on E-koolikott?</h1>
+insert into Page(id, name, content, language) VALUES (1, 'about', '<h1>Mis on E-koolikott?</h1>
 <p>E-koolikott on veebikeskkond, mis koondab kokku erinevates keskkondades asuvad digitaalsed õppematerjalid ning 
 teeb need kasutajatele kättesaadavaks. Õppematerjalide hulk ei ole sealjuures piiratud – E-koolikott sisaldab hõlmab
 nii õpetajate kui õpilaste poolt koostatud õppematerjale kui ka kirjastuste poolt avaldatud digiformaadis õpikuid ja õppematerjale.</p>
@@ -26,7 +26,7 @@ meeldimise/mittemeeldimise märke lisamise teel. Õppematerjale ja kogumikke ait
 vajalike materjalide ja kogumike leidmiseks on võimalik kasutada nii lihtotsingut kui ka detailotsingut.</p>', 1);
 
 -- Russian
-insert into Page(id, name, content, language) VALUES (2, 'About', '<h1>Что eKoolikott?</h1>
+insert into Page(id, name, content, language) VALUES (2, 'about', '<h1>Что eKoolikott?</h1>
 <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque congue tempus urna. 
 Morbi non diam ac dui molestie auctor sed at erat. Suspendisse potenti. Integer volutpat tellus 
 eu mauris porta dapibus id ac dolor. Etiam interdum ut lorem in gravida. Morbi scelerisque augue 
@@ -68,7 +68,7 @@ eu mauris porta dapibus id ac dolor.
 ', 2);
 
 -- English
-insert into Page(id, name, content, language) VALUES (3, 'About', '<h1>What is eKoolikott?</h1>
+insert into Page(id, name, content, language) VALUES (3, 'about', '<h1>What is eKoolikott?</h1>
 <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque congue tempus urna. 
 Morbi non diam ac dui molestie auctor sed at erat. Suspendisse potenti. Integer volutpat tellus 
 eu mauris porta dapibus id ac dolor. Etiam interdum ut lorem in gravida. Morbi scelerisque augue 
