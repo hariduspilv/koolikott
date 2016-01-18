@@ -5,12 +5,23 @@
       display: block;
     }
   }
-  
+
   .add-materials-to-chapter {
-	  display: block;		
+	  display: block;
+  }
+
+  .md-button.one-row {
+    white-space: nowrap;
+  }
+  li {
+    max-width: 200px;
   }
 }
 
 .transform-none {
   text-transform: none;
+}
+
+.sidenav-menu .md-button.one-row {
+  display: block;
 }
