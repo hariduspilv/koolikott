@@ -392,4 +392,5 @@ INSERT INTO Translation(translationGroup, translationKey, translation) VALUES
 (2,'BUTTON_RESTORE','Восстановить'),
 (2,'GIVE_FEEDBACK_LINK','Дайте обратную связь о e-Koolikott'),
 (2,'RECOMMENDATIONS','Рекомендации'),
-(2,'ALL','Все');
+(2,'ALL','Все'),
+(2,'LOAD_MORE_COMMENTS','Загрузите больше комментариев');

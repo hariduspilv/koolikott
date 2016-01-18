@@ -391,4 +391,5 @@ INSERT INTO Translation(translationGroup, translationKey, translation) VALUES
 (1,'BUTTON_RESTORE','Taasta'),
 (1,'GIVE_FEEDBACK_LINK','Anna tagasisidet e-Koolikoti kohta'),
 (1,'RECOMMENDATIONS','Soovitused'),
-(1,'ALL','Kõik');
+(1,'ALL','Kõik'),
+(1,'LOAD_MORE_COMMENTS','Veel kommentaare');
