@@ -99,6 +99,10 @@ define(['app'], function (app) {
     		$location.url("/dashboard/deleted/material");
     	}
         
+    	$scope.gotoDeletedPortfolios = function() {
+    		$location.url("/dashboard/deleted/portfolio");
+    	}
+    	
         return {
             getItemsSuccess: getItemsSuccess,
             getItemsFail: getItemsFail

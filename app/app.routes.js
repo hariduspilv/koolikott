@@ -103,6 +103,15 @@ define([], function()
                     'views/dashboard/deleted/material/deletedMaterial'
                 ]
             },
+            '/dashboard/deleted/portfolio': {
+                templateUrl: 'views/dashboard/deleted/portfolio/deletedPortfolio.html',
+                controller: 'deletedPortfolioController',
+                permissions: ['ADMIN'],
+                dependencies: [
+                    'views/dashboard/dashboard',
+                    'views/dashboard/deleted/portfolio/deletedPortfolio'
+                ]
+            },
             '/loginRedirect': {
                 templateUrl: 'views/loginRedirect/loginRedirect.html',
                 controller: 'loginRedirectController',
