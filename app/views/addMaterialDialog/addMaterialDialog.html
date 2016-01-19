@@ -32,7 +32,9 @@
               <md-tooltip><span data-translate="MATERIAL_PHOTO_UPLOAD_HELP"></span></md-tooltip>
             </div>
             <md-input-container flex>
-              <label data-translate="MATERIAL_LINK"></label>
+              <label>
+                <span data-translate="MATERIAL_LINK"></span> *
+              </label>
               <input data-ng-model="material.url" name="url" id="add-material-url-input" type="url" required>
               <div data-ng-messages="materialUrlForm.url.$error" data-ng-show="materialUrlForm.url.$dirty" multiple>
                 <div data-ng-message="required" data-ng-show="materialUrlForm.url.$error.required" data-translate="MATERIAL_URL_IS_MANDATORY"></div>
