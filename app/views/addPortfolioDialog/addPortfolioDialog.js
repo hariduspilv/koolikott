@@ -44,7 +44,7 @@ define(['app'], function(app) {
             function createPortfolioSuccess(portfolio) {
                 if (isEmpty(portfolio)) {
                     createPortfolioFailed();
-                } else {p
+                } else {
                     $rootScope.savedPortfolio = portfolio;
                     $mdDialog.hide();
                     $location.url('/portfolio/edit?id=' + portfolio.id);
