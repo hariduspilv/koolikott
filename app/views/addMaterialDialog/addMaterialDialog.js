@@ -139,7 +139,8 @@ define(['app'], function (app) {
                     resourceTypes: resourceTypes,
                     picture: base64Picture,
                     taxons: taxons,
-                    issueDate: issueDate
+                    issueDate: issueDate,
+                    specialEducation: material.specialEducation
                 };
 
                 if ($scope.educationalContextId === 2 || $scope.educationalContextId === 3) {

@@ -126,6 +126,10 @@
               <md-tooltip md-direction="top"><span data-translate="MATERIAL_TAB_REMOVE_TAXON"></span></md-tooltip>
             </md-button>
           </div>
+          
+          <md-checkbox data-ng-if="educationalContextId === 2" data-ng-model="material.specialEducation" aria-label="{{'MATERIAL_SPECIAL_EDUCATION' | translate}}" class="md-primary" flex>
+            <span data-translate="MATERIAL_SPECIAL_EDUCATION"></span>
+          </md-checkbox>
 
           <div layout="row" flex layout-align="space-between center">
             <div data-dop-target-group-selector data-target-groups="material.targetGroups" flex="20"></div>
