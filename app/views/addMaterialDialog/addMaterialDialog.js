@@ -122,7 +122,8 @@ define(['app'], function (app) {
                 var taxons = getTaxons(material);
                 var keyCompetences = material.selectedKeyCompetences;
                 var crossCurricularThemes = material.selectedCrossCurricularThemes;
-
+                var issueDate = getIssueDate(material);
+                
                 var newMaterial = {
                     type: '.Material',
                     source: material.url,
@@ -137,7 +138,8 @@ define(['app'], function (app) {
                     licenseType: licenseType,
                     resourceTypes: resourceTypes,
                     picture: base64Picture,
-                    taxons: taxons
+                    taxons: taxons,
+                    issueDate: issueDate
                 };
 
                 if ($scope.educationalContextId === 2 || $scope.educationalContextId === 3) {
@@ -147,6 +149,16 @@ define(['app'], function (app) {
 
                 serverCallService.makePost("rest/material", newMaterial, postMaterialSuccess, postMaterialFail);
             };
+            
+            function getIssueDate(material) {
+                var date = new Date(material.issueDate);
+                
+                return {
+                    day: date.getDate(),
+                    month: date.getMonth() + 1,
+                    year: date.getFullYear()
+                };
+            }
 
             function getAuthors(material) {
                 var authors = [];

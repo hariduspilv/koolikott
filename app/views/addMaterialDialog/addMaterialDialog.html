@@ -212,6 +212,8 @@
               <label data-translate="MATERIAL_PUBLISHER"></label>
               <input data-ng-model="material.publisher" ng-disabled="creatorIsPublisher">
             </md-input-container>
+            
+            <md-datepicker ng-model="material.issueDate" md-placeholder="{{ 'MATERIAL_ISSUE_DATE' | translate }}"></md-datepicker>
           </div>
 
           <div layout="row" flex layout-align="space-between center">
