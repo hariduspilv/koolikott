@@ -8,14 +8,14 @@
       <a href="#/" class="logo" id="logo"></a>
     </div>
     
-    <span flex-xs data-ng-hide="isViewPortforlioPage"></span>
-
     <!-- portfolio page toggle menu icon -->
-    <span class="hide-gt-md" data-ng-show="isViewPortforlioPage" flex flex-gt-sm="5">
+    <span class="hide-gt-md" data-ng-show="isViewPortforlioPage">
       <md-button class="md-icon-button" data-ng-click="toggleSidenav('left')" >
         <md-icon class="md-48">menu</md-icon>
       </md-button>
     </span>
+    
+    <span flex-xs></span>
 
     <!-- search bar with filter icon -->
     <div flex-gt-xs="70" flex-gt-md="{{isViewPortforlioPage ? '85' : '75'}}">
