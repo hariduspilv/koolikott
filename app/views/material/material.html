@@ -23,6 +23,8 @@
                         <span data-translate="MATERIAL_VIEW_LINK_TO_MATERIAL"></span>
                       </md-tooltip>
                     </a>
+                    
+                    <h1 data-ng-if="sourceType !== 'LINK'" data-ng-bind="getCorrectLanguageString(material.titles)"></h1>
 
                     <md-menu>
                       <md-button class="md-icon-button" ng-click="$mdOpenMenu($event)">
