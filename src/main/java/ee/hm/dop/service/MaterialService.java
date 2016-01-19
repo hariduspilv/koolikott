@@ -60,6 +60,10 @@ public class MaterialService {
         return materialDao.findNewestMaterials(numberOfMaterials);
     }
 
+    public List<Material> getPopularMaterials(int numberOfMaterials) {
+        return materialDao.findPopularMaterials(numberOfMaterials);
+    }
+
     public void increaseViewCount(Material material) {
         material.setViews(material.getViews() + 1);
         createOrUpdate(material);

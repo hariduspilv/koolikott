@@ -47,6 +47,13 @@ public class MaterialResource extends BaseResource {
         return materialService.getNewestMaterials(numberOfMaterials);
     }
 
+    @GET
+    @Path("getPopularMaterials")
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<Material> getPopularMaterials(@QueryParam("numberOfMaterials") int numberOfMaterials) {
+        return materialService.getPopularMaterials(numberOfMaterials);
+    }
+
     @POST
     @Path("increaseViewCount")
     public Response increaseViewCount(Material material) {
