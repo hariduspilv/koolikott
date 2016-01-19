@@ -172,6 +172,7 @@ public class MaterialParserWaramuTest {
         assertEquals(resourceTypes, material.getResourceTypes());
         assertEquals(educationalContexts, material.getTaxons());
         assertEquals(authors, material.getAuthors());
+        assertEquals(4, material.getTargetGroups().size());
     }
 
     @Test

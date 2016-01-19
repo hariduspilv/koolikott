@@ -232,6 +232,11 @@ public class MaterialParserTest {
         }
 
         @Override
+        protected String getPathToTargetGroups() {
+            return null;
+        }
+
+        @Override
         protected void setTargetGroups(Material material, Document doc) {
         }
 

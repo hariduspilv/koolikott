@@ -154,7 +154,8 @@ public class MaterialParserWaramu extends MaterialParser {
     }
 
     @Override
-    protected void setTargetGroups(Material material, Document doc) {
+    protected String getPathToTargetGroups() {
+        return "//*[local-name()='lom']/*[local-name()='educational']/*[local-name()='typicalAgeRange']/*[local-name()='string']";
     }
 
     @Override

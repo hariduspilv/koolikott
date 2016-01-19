@@ -31,6 +31,7 @@ import ee.hm.dop.model.Material;
 import ee.hm.dop.model.Publisher;
 import ee.hm.dop.model.ResourceType;
 import ee.hm.dop.model.Tag;
+import ee.hm.dop.model.TargetGroup;
 import ee.hm.dop.model.taxon.EducationalContext;
 import ee.hm.dop.model.taxon.Taxon;
 import ee.hm.dop.service.AuthorService;
@@ -44,7 +45,7 @@ import ezvcard.VCard;
 public abstract class MaterialParser {
 
     protected final Logger logger = LoggerFactory.getLogger(this.getClass());
-    protected static final String[] SCHEMES = { "http", "https" };
+    protected static final String[] SCHEMES = {"http", "https"};
     protected XPathFactory xPathfactory = XPathFactory.newInstance();
     protected XPath xpath = xPathfactory.newXPath();
 
@@ -273,7 +274,7 @@ public abstract class MaterialParser {
     }
 
     private void setIsSpecialEducation(Material material, String context) {
-        if(context.equals("SPECIALEDUCATION")) {
+        if (context.equals("SPECIALEDUCATION")) {
             material.setSpecialEducation(true);
         }
     }
@@ -338,6 +339,29 @@ public abstract class MaterialParser {
         return (Node) expr.evaluate(node, XPathConstants.NODE);
     }
 
+    protected void setTargetGroups(Material material, Document doc) {
+        Set<TargetGroup> targetGroups = new HashSet<>();
+        try {
+
+            NodeList ageRanges = getNodeList(doc, getPathToTargetGroups());
+
+            for (int i = 0; i < ageRanges.getLength(); i++) {
+                String ageRange = ageRanges.item(i).getTextContent().trim();
+                String[] ranges = ageRange.split("-");
+
+                if (ranges.length == 2) {
+                    int from = Integer.parseInt(ranges[0].trim());
+                    int to = Integer.parseInt(ranges[1].trim());
+                    targetGroups.addAll(TargetGroup.getTargetGroupsByAge(from, to));
+                }
+            }
+        } catch (XPathExpressionException e) {
+            // ignore
+        }
+
+        material.setTargetGroups(new ArrayList<>(targetGroups));
+    }
+
     protected abstract void setContributors(Material material, Document doc);
 
     protected abstract void setTags(Material material, Document doc);
@@ -374,7 +398,7 @@ public abstract class MaterialParser {
 
     protected abstract void setIsPaid(Material material, Document doc);
 
-    protected abstract void setTargetGroups(Material material, Document doc);
+    protected abstract String getPathToTargetGroups();
 
     protected abstract void setPicture(Material material, Document doc);
 }
