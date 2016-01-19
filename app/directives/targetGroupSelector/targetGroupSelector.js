@@ -4,10 +4,11 @@ define(['app'], function(app)
      function() {
         return {
             scope: {
-                targetGroups: '='
+                targetGroups: '=',
+                taxon: '='
             },
             templateUrl: 'directives/targetGroupSelector/targetGroupSelector.html',
-            controller: function ($scope) {
+            controller: function ($scope, $rootScope) {
 
                 var preschoolGroups = ['PRESCHOOL', 'ZERO_FIVE', 'SIX_SEVEN'];                
                 var level1Groups = ['LEVEL1', 'GRADE1', 'GRADE2', 'GRADE3'];
@@ -43,11 +44,34 @@ define(['app'], function(app)
                             selectValue();
                         }
                     }, false);
+                    
+                    $scope.$watch('taxon', function(newTaxon, oldTaxon) {
+                        if (newTaxon !== oldTaxon) {
+                        	var newEdCtx = $rootScope.taxonUtils.getEducationalContext(newTaxon);
+                        	var oldEdCtx = $rootScope.taxonUtils.getEducationalContext(oldTaxon);
+                        	
+                        	if (!oldEdCtx || newEdCtx.name !== oldEdCtx.name) {
+                        		fill();
+                        	}
+                        }
+                    });
             	}
 
-              function fill() {
-                  $scope.groups = map(preschoolGroups).concat(map(level1Groups), map(level2Groups), map(level3Groups), map(secondaryGroups));
-              }
+				function fill() {
+					var educationalContext = $rootScope.taxonUtils.getEducationalContext($scope.taxon);
+					  
+					if (educationalContext) {
+						if (educationalContext.name === 'PRESCHOOLEDUCATION') {
+							$scope.groups = map(preschoolGroups);
+						} else if (educationalContext.name === 'BASICEDUCATION') {
+							$scope.groups = map(level1Groups).concat(map(level2Groups), map(level3Groups));
+						} else if (educationalContext.name === 'SECONDARYEDUCATION') {
+							$scope.groups = map(secondaryGroups);
+						}
+					} else {
+						$scope.groups = map(preschoolGroups).concat(map(level1Groups), map(level2Groups), map(level3Groups), map(secondaryGroups));
+					}
+              	}
               
               function map(group) {
                   return group.map(function(item, index) {
