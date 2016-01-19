@@ -7,7 +7,8 @@ define(['app'], function(app)
                 queryIn: '=',
                 queryOut: '=',
                 mainField: '=',
-                searchCallback: '&'
+                searchCallback: '&',
+                accessor: '='
             },
             templateUrl: 'directives/detailedSearch/detailedSearch.html',
             controller: function ($scope, $rootScope) {
@@ -355,8 +356,8 @@ define(['app'], function(app)
                         $scope.detailedSearch.targetGroups = [];
                     }
                 }
-
-                $scope.clear = function() {
+                
+                $scope.clear = $scope.accessor.clear = function() {
                     $scope.detailedSearch = {
                         'paid': true,
                         'onlyBooks': false,

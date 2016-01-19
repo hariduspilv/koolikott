@@ -1,7 +1,7 @@
 define(['app'], function(app)
 {
-    app.directive('dopEditPortfolioModeHeader', ['translationService', '$location', '$mdSidenav', '$mdDialog', '$rootScope', 'serverCallService', 'searchService', 'toastService',
-     function(translationService, $location, $mdSidenav, $mdDialog, $rootScope, serverCallService, searchService, toastService) {
+    app.directive('dopEditPortfolioModeHeader', ['translationService', '$location', '$mdSidenav', '$mdDialog', '$rootScope', 'serverCallService', 'searchService', 'toastService', '$timeout',
+     function(translationService, $location, $mdSidenav, $mdDialog, $rootScope, serverCallService, searchService, toastService, $timeout) {
         return {
             scope: true,
             templateUrl: 'directives/editPortfolioModeHeader/editPortfolioModeHeader.html',
@@ -65,7 +65,8 @@ define(['app'], function(app)
                 $scope.searchFields = {};
                 $scope.searchFields.searchQuery = "";
                 $scope.detailedSearch = {};
-
+                $scope.detailedSearch.accessor = {};
+                
                 $scope.search = function() {
                     if (!isEmpty($scope.searchFields.searchQuery)) {
                         searchService.setSearch($scope.searchFields.searchQuery);
@@ -82,6 +83,10 @@ define(['app'], function(app)
                 }
 
                 $scope.closeDetailedSearch = function() {
+                    $timeout(function() {
+                      $scope.detailedSearch.accessor.clear();
+                    }, 500);
+
                     $scope.detailedSearch.isVisible = false;
                     $scope.searchFields.searchQuery = (($scope.searchFields.searchQuery || "") + " " + $scope.detailedSearch.queryOut).trim();
                     $scope.detailedSearch.queryIn = null;

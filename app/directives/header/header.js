@@ -22,6 +22,7 @@ define(['app'], function(app)
           $scope.searchFields = {};
           $scope.searchFields.searchQuery = searchService.getQuery();
           $scope.detailedSearch = {};
+          $scope.detailedSearch.accessor = {};
 
           $scope.setLanguage = function(language) {
             translationService.setLanguage(language);
@@ -56,6 +57,10 @@ define(['app'], function(app)
           }
 
           $scope.closeDetailedSearch = function() {
+            $timeout(function() {
+              $scope.detailedSearch.accessor.clear();
+            }, 500);
+            
             $scope.detailedSearch.isVisible = false;
             $scope.searchFields.searchQuery = (($scope.searchFields.searchQuery || "") + " " + $scope.detailedSearch.queryOut).trim();
             $scope.detailedSearch.queryIn = null;

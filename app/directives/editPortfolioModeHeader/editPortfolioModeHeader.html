@@ -68,10 +68,6 @@
         </md-menu-item>
       </md-menu-content>
     </md-menu>
-    <!-- <md-button ng-click="exitEditPortfolioMode()" class="md-icon-button" aria-label="Välju kogumiku loomise/muutmise vaatest">
-      <md-tooltip><span data-translate="HEADER_TOOLTIP_EXIT_PORTFOLIO_MODE"></span></md-tooltip>
-      <md-icon>close</md-icon>
-    </md-button> -->
     </div>
   </div>
 </md-toolbar>
@@ -81,7 +77,7 @@
   <form layout-align="start start" layout="row" layout-sm="column">
     <div data-ng-if="!isEditPortfolioMode" layout="row" layout-xs="column" flex="0" flex-gt-md="15"></div>
     <div flex flex-gt-md="{{isEditPortfolioMode ? '90' : '75'}}" class="md-padding filter-wrapper" id="detailed-search">
-      <div data-dop-detailed-search query-in="detailedSearch.queryIn" query-out="detailedSearch.queryOut" main-field="detailedSearch.mainField" search-callback="detailedSearch.doSearch()"></div>
+      <div data-dop-detailed-search query-in="detailedSearch.queryIn" query-out="detailedSearch.queryOut" main-field="detailedSearch.mainField" search-callback="detailedSearch.doSearch()" accessor="detailedSearch.accessor"></div>
     </div>
   </form>
 </div>

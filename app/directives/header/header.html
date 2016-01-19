@@ -103,23 +103,15 @@
           </md-menu-item>
         </md-menu-content>
       </md-menu>
-
-      <!-- exit from portfolio page button -->
-      <!-- <md-button data-ng-if="isViewPortforlioPage" ng-click="back()" class="md-icon-button" aria-label="Välju kogumikust">
-        <md-tooltip><span data-translate="HEADER_TOOLTIP_EXIT_PORTFOLIO_MODE"></span></md-tooltip>
-        <md-icon>close</md-icon>
-      </md-button> -->
     </div>
   </div>
 </md-toolbar>
 
 <div class="md-toolbar-filter" id="detailedSearch" data-ng-show="detailedSearch.isVisible">
   <form layout="row" layout-xs="column"  flex>
-      <!-- <form layout="row" layout-xs="column" layout-align="{{isViewPortforlioPage ? 'start' : 'center'}} start" flex> -->
     <div data-ng-if="!isViewPortforlioPage" layout="row" layout-xs="column" flex="0" flex-gt-md="15"></div>
     <div flex flex-gt-md="{{isViewPortforlioPage ? '85' : '75'}}" class="md-padding filter-wrapper" id="detailed-search">
-      <!-- <div flex flex-gt-md="{{isViewPortforlioPage ? '95' : '80'}}" class="md-padding filter-wrapper" id="detailed-search"> -->
-      <div data-dop-detailed-search query-in="detailedSearch.queryIn" query-out="detailedSearch.queryOut" main-field="detailedSearch.mainField" search-callback="detailedSearch.doSearch()"></div>
+      <div data-dop-detailed-search query-in="detailedSearch.queryIn" query-out="detailedSearch.queryOut" main-field="detailedSearch.mainField" search-callback="detailedSearch.doSearch()" accessor="detailedSearch.accessor"></div>
     </div>
   </form>
 </div>
