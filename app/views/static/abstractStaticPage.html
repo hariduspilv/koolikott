@@ -2,10 +2,12 @@
   <div layout="row" layout-xs="column"  flex>
     <div layout="row" layout-xs="column" flex="0" flex-gt-md="15"></div>
     <section layout="column" layout-gt-sm="row"  flex="100" flex-gt-md="75">
-      <article flex="100" flex-gt-sm="75" flex-gt-lg="80" class="md-padding" role="main">
-        <div flex layout-padding ng-bind-html="pageContent"></div>
-      </article>
-      <aside data-dop-sidebar flex="100" flex-gt-sm="25" flex-gt-lg="20" class="md-padding" role="sidebar"></aside>
+      <div>
+        <article flex="100" flex-gt-sm="75" flex-gt-lg="80" class="md-padding" role="main">
+          <div flex layout-padding ng-bind-html="pageContent"></div>
+        </article>
+        <aside data-dop-sidebar flex="100" flex-gt-sm="25" flex-gt-lg="20" class="md-padding" role="sidebar"></aside>
+      </div>
     </section>
   </div>
 </div>

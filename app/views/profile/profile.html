@@ -2,46 +2,48 @@
   <div layout="row" layout-xs="column" flex>
     <div layout="row" layout-xs="column" flex="0" flex-gt-md="15"></div>
     <section layout="column" layout-gt-sm="row" flex="100" flex-gt-md="75">
-      <article flex="75" flex-sm="100" class="md-padding" role="main">
-        <h1 data-ng-if="myProfile" data-translate="MYPROFILE_PAGE_TITLE_PORTFOLIOS"></h1>
-        <h1 data-ng-if="!myProfile" data-translate="PROFILE_PAGE_TITLE_PORTFOLIOS"></h1>
+      <div>
+        <article flex="75" flex-sm="100" class="md-padding" role="main">
+          <h1 data-ng-if="myProfile" data-translate="MYPROFILE_PAGE_TITLE_PORTFOLIOS"></h1>
+          <h1 data-ng-if="!myProfile" data-translate="PROFILE_PAGE_TITLE_PORTFOLIOS"></h1>
 
-        <md-grid-list md-cols="2" md-cols-gt-xs="4" md-gutter="10px" md-row-height="3:4">
-          <md-grid-tile data-ng-repeat="portfolio in portfolios">
-            <figure data-dop-portfolio-box portfolio="portfolio"></figure>
-          </md-grid-tile>
-        </md-grid-list>
+          <md-grid-list md-cols="2" md-cols-gt-xs="4" md-gutter="10px" md-row-height="3:4">
+            <md-grid-tile data-ng-repeat="portfolio in portfolios">
+              <figure data-dop-portfolio-box portfolio="portfolio"></figure>
+            </md-grid-tile>
+          </md-grid-list>
 
-        <h1 class="type-block" data-ng-if="myProfile" data-translate="MYPROFILE_PAGE_TITLE_MATERIALS"></h1>
-        <h1 class="type-block"  data-ng-if="!myProfile" data-translate="PROFILE_PAGE_TITLE_MATERIALS"></h1>
+          <h1 class="type-block" data-ng-if="myProfile" data-translate="MYPROFILE_PAGE_TITLE_MATERIALS"></h1>
+          <h1 class="type-block"  data-ng-if="!myProfile" data-translate="PROFILE_PAGE_TITLE_MATERIALS"></h1>
 
-        <md-grid-list md-cols="2" md-cols-gt-xs="4" md-gutter="10px" md-row-height="3:4">
-          <md-grid-tile data-ng-repeat="material in materials">
-            <figure data-dop-material-box material="material"></figure>
-          </md-grid-tile>
-        </md-grid-list>
-      </article>
+          <md-grid-list md-cols="2" md-cols-gt-xs="4" md-gutter="10px" md-row-height="3:4">
+            <md-grid-tile data-ng-repeat="material in materials">
+              <figure data-dop-material-box material="material"></figure>
+            </md-grid-tile>
+          </md-grid-list>
+        </article>
 
-      <aside flex="100" flex-gt-sm="25" flex-gt-lg="20" class="md-padding" role="sidebar">
-        <div id="user-data">
-          <h2 data-ng-if="myProfile" data-translate="MYPROFILE_PAGE_TITLE_MY_DATA"></h2>
+        <aside flex="100" flex-gt-sm="25" flex-gt-lg="20" class="md-padding" role="sidebar">
+          <div id="user-data">
+            <h2 data-ng-if="myProfile" data-translate="MYPROFILE_PAGE_TITLE_MY_DATA"></h2>
 
-          <p data-ng-if="myProfile">
-            <strong>{{user.name}} {{user.surname}}</strong><br />
-            Hugo Treffneri Gümnaasium
-          </p>
-
-          <h2 class="md-headline" data-ng-if="!myProfile">
-            {{user.name}} {{user.surname}}
-          </h2>
-          <p data-ng-if="!myProfile">
+            <p data-ng-if="myProfile">
+              <strong>{{user.name}} {{user.surname}}</strong><br />
               Hugo Treffneri Gümnaasium
-          </p>
-          <md-divider></md-divider>
-        </div>
+            </p>
 
-        <div data-dop-sidebar></div>
-      </aside>
+            <h2 class="md-headline" data-ng-if="!myProfile">
+              {{user.name}} {{user.surname}}
+            </h2>
+            <p data-ng-if="!myProfile">
+              Hugo Treffneri Gümnaasium
+            </p>
+            <md-divider></md-divider>
+          </div>
+
+          <div data-dop-sidebar></div>
+        </aside>
+      </div>
     </section>
   </div>
 </div>

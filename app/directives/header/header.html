@@ -19,13 +19,13 @@
     </span>
 
     <!-- search bar with filter icon -->
-    <div  flex-xs="30" flex-gt-xs="70" flex-gt-md="{{isViewPortforlioPage ? '90' : '75'}}">
+    <div  flex-xs="30" flex-gt-xs="70" flex-gt-md="{{isViewPortforlioPage ? '85' : '75'}}">
       <div layout="row" layout-align="center center">
-        <div class="navbar-search" layout="row" flex>
+        <div class="navbar-search" layout="row" hide show-gt-xs flex>
           <md-button aria-label="Otsi" class="md-icon-button" id="header-show-search-button">
             <md-icon>search</md-icon>
           </md-button>
-          <md-input-container hide show-gt-xs flex>
+          <md-input-container flex>
             <label hidden="hidden">&nbsp;</label>
             <input id="header-simple-search-input" data-ng-keydown="$event.which === 13 && searchFieldEnterPressed()" data-ng-model="searchFields.searchQuery" />
           </md-input-container>
@@ -117,7 +117,7 @@
   <form layout="row" layout-xs="column"  flex>
       <!-- <form layout="row" layout-xs="column" layout-align="{{isViewPortforlioPage ? 'start' : 'center'}} start" flex> -->
     <div data-ng-if="!isViewPortforlioPage" layout="row" layout-xs="column" flex="0" flex-gt-md="15"></div>
-    <div flex flex-gt-md="{{isViewPortforlioPage ? '90' : '75'}}" class="md-padding filter-wrapper" id="detailed-search">
+    <div flex flex-gt-md="{{isViewPortforlioPage ? '85' : '75'}}" class="md-padding filter-wrapper" id="detailed-search">
       <!-- <div flex flex-gt-md="{{isViewPortforlioPage ? '95' : '80'}}" class="md-padding filter-wrapper" id="detailed-search"> -->
       <div data-dop-detailed-search query-in="detailedSearch.queryIn" query-out="detailedSearch.queryOut" main-field="detailedSearch.mainField" search-callback="detailedSearch.doSearch()"></div>
     </div>

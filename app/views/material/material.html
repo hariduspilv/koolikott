@@ -2,279 +2,281 @@
   <div  layout="row" layout-xs="column" flex>
     <div data-ng-if="!isEditPortfolioMode" layout="row" layout-xs="column" flex="0" flex-gt-md="15"></div>
     <section layout="column" layout-gt-sm="row"  flex="100" flex-gt-md="{{$root.isEditPortfolioMode ? '90' : '75'}}">
-      <article flex="100" flex-gt-sm="75" flex-gt-lg="80" class="md-padding" role="main">
-        <md-card class="card-lg" id="material-card">
-          <md-card-content>
-            <div layout="row">
-              <div layout="column" flex="50" flex-gt-xs="75">
-                <div layout="row">
+      <div>
+        <article flex="100" flex-gt-sm="75" flex-gt-lg="80" class="md-padding" role="main">
+          <md-card class="card-lg" id="material-card">
+            <md-card-content>
+              <div layout="row">
+                <div layout="column" flex="50" flex-gt-xs="75">
+                  <div layout="row">
 
                     <a flex data-ng-if="sourceType === 'LINK' && !material.embeddable" data-ng-href="{{material.source}}" target="_blank">
                       <h1 data-ng-bind="getCorrectLanguageString(material.titles)"></h1>
                       <md-tooltip md-direction="left">
-                          <span data-translate="MATERIAL_VIEW_LINK_TO_MATERIAL">Open material</span>
+                        <span data-translate="MATERIAL_VIEW_LINK_TO_MATERIAL">Open material</span>
                       </md-tooltip>
                     </a>
 
                     <a flex data-ng-if="sourceType === 'LINK' && material.embeddable" data-ng-href="#" ng-click="showSourceFullscreen($event)">
                       <h1 data-ng-bind="getCorrectLanguageString(material.titles)"></h1>
                       <md-tooltip md-direction="left">
-                          <span data-translate="MATERIAL_VIEW_LINK_TO_MATERIAL"></span>
+                        <span data-translate="MATERIAL_VIEW_LINK_TO_MATERIAL"></span>
                       </md-tooltip>
                     </a>
 
-                  <md-menu>
-                    <md-button class="md-icon-button" ng-click="$mdOpenMenu($event)">
-                      <md-icon md-menu-origin>more_vert</md-icon>
-                    </md-button>
-                    <md-menu-content width="4">
-                      <md-menu-item data-ng-if="isAdmin()">
+                    <md-menu>
+                      <md-button class="md-icon-button" ng-click="$mdOpenMenu($event)">
+                        <md-icon md-menu-origin>more_vert</md-icon>
+                      </md-button>
+                      <md-menu-content width="4">
+                        <md-menu-item data-ng-if="isAdmin()">
                           <md-button data-ng-click="confirmMaterialDeletion()">
-                              <md-icon md-menu-align-target>delete</md-icon>
-                              <span data-translate="MATERIAL_DELETE"></span>
+                            <md-icon md-menu-align-target>delete</md-icon>
+                            <span data-translate="MATERIAL_DELETE"></span>
                           </md-button>
-                      </md-menu-item>
-                      <md-menu-item dop-copy-permalink></md-menu-item>
-                      <md-menu-divider></md-menu-divider>
-                      <md-menu-item data-ng-if="isLoggedIn()" dop-report-improper data-material="material"></md-menu-item>
-                      <md-menu-item data-ng-if="isLoggedIn()" dop-report-broken-link></md-menu-item>
-                    </md-menu-content>
-                  </md-menu>
-                </div>
-
-                <div layout="row" class="on-left">
-                  <div flex>
-                    <p class="md-body-2 meta">
-                      <small class="md-caption">
-                        <span data-translate="DETAIL_VIEW_SUBJECT"></span>
-                      </small>
-                      <br/>
-                      <span data-ng-repeat="subject in material.subjects">
-                        {{'SUBJECT_' + subject.name.toUpperCase() | translate}}{{$last ? '' : ', '}}
-                      </span>
-                      <span data-ng-if="!material.subjects.length" data-translate="UNKNOWN">Unknown</span>
-                    </p>
+                        </md-menu-item>
+                        <md-menu-item dop-copy-permalink></md-menu-item>
+                        <md-menu-divider></md-menu-divider>
+                        <md-menu-item data-ng-if="isLoggedIn()" dop-report-improper data-material="material"></md-menu-item>
+                        <md-menu-item data-ng-if="isLoggedIn()" dop-report-broken-link></md-menu-item>
+                      </md-menu-content>
+                    </md-menu>
                   </div>
-                  <div flex>
+
+                  <div layout="row" class="on-left">
+                    <div flex>
+                      <p class="md-body-2 meta">
+                        <small class="md-caption">
+                          <span data-translate="DETAIL_VIEW_SUBJECT"></span>
+                        </small>
+                        <br/>
+                        <span data-ng-repeat="subject in material.subjects">
+                          {{'SUBJECT_' + subject.name.toUpperCase() | translate}}{{$last ? '' : ', '}}
+                        </span>
+                        <span data-ng-if="!material.subjects.length" data-translate="UNKNOWN">Unknown</span>
+                      </p>
+                    </div>
+                    <div flex>
+                      <p class="md-body-2 meta">
+                        <small class="md-caption">
+                          <span data-translate="MATERIAL_VIEW_RESOURCE_TYPE"></span>
+                        </small>
+                        <br>
+                        <span data-ng-repeat="resourceType in material.resourceTypes">
+                          {{resourceType.name.toUpperCase() | translate}}{{$last ? '' : ', '}}
+                        </span>
+                        <span data-ng-if="isNullOrZeroLength(material.resourceTypes)" data-translate="UNKNOWN">Unknown</span>
+                      </p>
+                    </div>
+                    <div flex>
+                      <p class="md-body-2 meta">
+                        <small class="md-caption">
+                          <span data-translate="DETAIL_VIEW_EDUCATIONAL_CONTEXT"></span>:
+                        </small>
+                        <br>
+                        <span data-ng-repeat="educationalContext in material.educationalContexts">
+                          {{educationalContext.name.toUpperCase() | translate}}{{$last ? '' : ', '}}
+                        </span>
+                        <span data-ng-if="isNullOrZeroLength(material.educationalContexts)" data-translate="UNKNOWN">Unknown</span>
+                      </p>
+                    </div>
+
+                  </div>
+
+                  <md-divider class="md-default-theme"></md-divider>
+
+                  <div layout="column" class="on-left" flex>
+                    <p class="md-body-1 description" data-ng-bind="getCorrectLanguageString(material.descriptions)"></p>
+                    <!-- TODO: mobile view after stable release -->
+
+                    <div data-ng-if="sourceType === 'YOUTUBE'" class="embed-responsive embed-responsive-16by9">
+                      <div class="embed-responsive-container">
+                        <youtube-video video-url="material.source" player-width="'768'" player-height="'432'" class="embed-responsive-item"></youtube-video>
+                      </div>
+                    </div>
+
+                    <div data-ng-if="sourceType === 'SLIDESHARE'" class="embed-responsive embed-responsive-4by3">
+                      <div class="embed-responsive-container">
+                        <div data-dop-slideshare source="material.source" class="embed-responsive-item" fail-callback="slideshareFail()"></div>
+                      </div>
+                    </div>
+
+                    <div data-ng-if="sourceType === 'LINK' && !material.embeddable">
+                      <a data-ng-href="{{material.source}}" target="_blank" class="wrapped regular-link md-primary">
+                        <span class="item-link" data-ng-bind="material.source"></span>
+                      </a>
+                    </div>
+
+                    <div data-ng-if="sourceType === 'LINK' && material.embeddable">
+                      <a href="#" ng-click="showSourceFullscreen($event)">
+                        <span class="item-link" data-ng-bind="material.source"></span>
+                      </a>
+                    </div>
+
+                    <iframe data-ng-src="{{material.iframeSource}}" data-ng-show="showMaterialContent" width="100%" height="100%" ngsf-fullscreen="fullscreenCtrl"></iframe>
+                  </div>
+
+                  <div data-ng-if="!isNullOrZeroLength(material.tags)">
                     <p class="md-body-2 meta">
                       <small class="md-caption">
-                        <span data-translate="MATERIAL_VIEW_RESOURCE_TYPE"></span>
+                        <span data-translate="DETAIL_VIEW_TAGS"></span>:
                       </small>
                       <br>
-                      <span data-ng-repeat="resourceType in material.resourceTypes">
-                        {{resourceType.name.toUpperCase() | translate}}{{$last ? '' : ', '}}
-                      </span>
-                      <span data-ng-if="isNullOrZeroLength(material.resourceTypes)" data-translate="UNKNOWN">Unknown</span>
+                      <span data-ng-repeat="tag in material.tags">{{tag}}{{$last ? '' : ', '}}</span>
                     </p>
                   </div>
-                  <div flex>
-                    <p class="md-body-2 meta">
+                </div>
+
+                <div layout="column" flex="50" flex-gt-xs="25" class="divider-left" layout-align="start start">
+                  <div  data-ng-if="!material.hasPicture" class="card-cover  {{materialType}}">
+                    <span>
+                      <md-icon class="icon-kind" data-ng-bind="getType()"></md-icon>
+                    </span>
+
+
+                    <span data-ng-if="sourceType === 'LINK' && !material.embeddable">
+                      <a class="card-hover" data-ng-href="{{material.source}}" target="_blank">
+                        <md-icon>send</md-icon>
+                        <md-tooltip md-direction="bottom">
+                          <span data-translate="MATERIAL_VIEW_LINK_TO_MATERIAL">Open material</span>
+                        </md-tooltip>
+                      </a>
+                    </span>
+
+                    <span data-ng-if="sourceType === 'LINK' && material.embeddable">
+                      <a class="card-hover" data-ng-href="#" ng-click="showSourceFullscreen($event)">
+                        <md-icon>send</md-icon>
+                        <md-tooltip md-direction="bottom">
+                          <span data-translate="MATERIAL_VIEW_LINK_TO_MATERIAL"></span>
+                        </md-tooltip>
+                      </a>
+                    </span>
+                  </div>
+
+                  <div  data-ng-if="material.hasPicture"  class="card-cover imaged">
+                    <img data-ng-src="rest/material/getPicture?materialId={{material.id}}"/>
+                    <span data-ng-if="sourceType === 'LINK' && !material.embeddable">
+                      <a class="card-hover" data-ng-href="{{material.source}}" target="_blank">
+                        <md-icon>send</md-icon>
+                        <md-tooltip md-direction="bottom">
+                          <span data-translate="MATERIAL_VIEW_LINK_TO_MATERIAL">Open material</span>
+                        </md-tooltip>
+                      </a>
+                    </span>
+
+                    <span data-ng-if="sourceType === 'LINK' && material.embeddable">
+                      <a class="card-hover" data-ng-href="#" ng-click="showSourceFullscreen($event)">
+                        <md-icon>send</md-icon>
+                        <md-tooltip md-direction="bottom">
+                          <span data-translate="MATERIAL_VIEW_LINK_TO_MATERIAL"></span>
+                        </md-tooltip>
+                      </a>
+                    </span>
+                  </div>
+
+                  <md-content>
+                    <p class="md-body-2 meta" data-ng-if="!isNullOrZeroLength(material.authors)">
                       <small class="md-caption">
-                        <span data-translate="DETAIL_VIEW_EDUCATIONAL_CONTEXT"></span>:
+                        <span data-translate="AUTHORS"></span>:
                       </small>
-                      <br>
-                      <span data-ng-repeat="educationalContext in material.educationalContexts">
-                        {{educationalContext.name.toUpperCase() | translate}}{{$last ? '' : ', '}}
-                      </span>
-                      <span data-ng-if="isNullOrZeroLength(material.educationalContexts)" data-translate="UNKNOWN">Unknown</span>
-                    </p>
-                  </div>
-
-                </div>
-
-                <md-divider class="md-default-theme"></md-divider>
-
-                <div layout="column" class="on-left" flex>
-                  <p class="md-body-1 description" data-ng-bind="getCorrectLanguageString(material.descriptions)"></p>
-                  <!-- TODO: mobile view after stable release -->
-
-                  <div data-ng-if="sourceType === 'YOUTUBE'" class="embed-responsive embed-responsive-16by9">
-                    <div class="embed-responsive-container">
-                      <youtube-video video-url="material.source" player-width="'768'" player-height="'432'" class="embed-responsive-item"></youtube-video>
-                    </div>
-                  </div>
-
-                  <div data-ng-if="sourceType === 'SLIDESHARE'" class="embed-responsive embed-responsive-4by3">
-                    <div class="embed-responsive-container">
-                      <div data-dop-slideshare source="material.source" class="embed-responsive-item" fail-callback="slideshareFail()"></div>
-                    </div>
-                  </div>
-
-                  <div data-ng-if="sourceType === 'LINK' && !material.embeddable">
-                    <a data-ng-href="{{material.source}}" target="_blank" class="wrapped regular-link md-primary">
-                      <span class="item-link" data-ng-bind="material.source"></span>
-                    </a>
-                  </div>
-
-                  <div data-ng-if="sourceType === 'LINK' && material.embeddable">
-                    <a href="#" ng-click="showSourceFullscreen($event)">
-                      <span class="item-link" data-ng-bind="material.source"></span>
-                    </a>
-                  </div>
-
-                  <iframe data-ng-src="{{material.iframeSource}}" data-ng-show="showMaterialContent" width="100%" height="100%" ngsf-fullscreen="fullscreenCtrl"></iframe>
-                </div>
-
-                <div data-ng-if="!isNullOrZeroLength(material.tags)">
-                  <p class="md-body-2 meta">
-                    <small class="md-caption">
-                      <span data-translate="DETAIL_VIEW_TAGS"></span>:
-                    </small>
-                    <br>
-                    <span data-ng-repeat="tag in material.tags">{{tag}}{{$last ? '' : ', '}}</span>
-                  </p>
-                </div>
-              </div>
-
-              <div layout="column" flex="50" flex-gt-xs="25" class="divider-left" layout-align="start start">
-                <div  data-ng-if="!material.hasPicture" class="card-cover  {{materialType}}">
-                  <span>
-                    <md-icon class="icon-kind" data-ng-bind="getType()"></md-icon>
-                  </span>
-
-
-                  <span data-ng-if="sourceType === 'LINK' && !material.embeddable">
-                    <a class="card-hover" data-ng-href="{{material.source}}" target="_blank">
-                      <md-icon>send</md-icon>
-                      <md-tooltip md-direction="bottom">
-                        <span data-translate="MATERIAL_VIEW_LINK_TO_MATERIAL">Open material</span>
-                      </md-tooltip>
-                    </a>
-                  </span>
-
-                  <span data-ng-if="sourceType === 'LINK' && material.embeddable">
-                    <a class="card-hover" data-ng-href="#" ng-click="showSourceFullscreen($event)">
-                      <md-icon>send</md-icon>
-                      <md-tooltip md-direction="bottom">
-                        <span data-translate="MATERIAL_VIEW_LINK_TO_MATERIAL"></span>
-                      </md-tooltip>
-                    </a>
-                  </span>
-                </div>
-
-                <div  data-ng-if="material.hasPicture"  class="card-cover imaged">
-                  <img data-ng-src="rest/material/getPicture?materialId={{material.id}}"/>
-                  <span data-ng-if="sourceType === 'LINK' && !material.embeddable">
-                    <a class="card-hover" data-ng-href="{{material.source}}" target="_blank">
-                      <md-icon>send</md-icon>
-                      <md-tooltip md-direction="bottom">
-                        <span data-translate="MATERIAL_VIEW_LINK_TO_MATERIAL">Open material</span>
-                      </md-tooltip>
-                    </a>
-                  </span>
-
-                  <span data-ng-if="sourceType === 'LINK' && material.embeddable">
-                    <a class="card-hover" data-ng-href="#" ng-click="showSourceFullscreen($event)">
-                      <md-icon>send</md-icon>
-                      <md-tooltip md-direction="bottom">
-                        <span data-translate="MATERIAL_VIEW_LINK_TO_MATERIAL"></span>
-                      </md-tooltip>
-                    </a>
-                  </span>
-                </div>
-
-                <md-content>
-                  <p class="md-body-2 meta" data-ng-if="!isNullOrZeroLength(material.authors)">
-                    <small class="md-caption">
-                    <span data-translate="AUTHORS"></span>:
-                  </small>
-                    <a href="#" data-ng-click="getAuthorSearchURL($event, author.name, author.surname)" data-ng-repeat="author in material.authors">
+                      <a href="#" data-ng-click="getAuthorSearchURL($event, author.name, author.surname)" data-ng-repeat="author in material.authors">
                         {{author.name}} {{author.surname}}{{$last ? '' : ', '}}
-                    </a>
-                  </p>
+                      </a>
+                    </p>
 
-                  <p class="md-body-2 meta" data-ng-if="isNullOrZeroLength(material.authors)">
-                    <small class="md-caption">
-                      <span data-translate="CREATOR"></span>:
-                    </small>
-                    <a href="#/{{material.creator.username}}">
-                      {{material.creator.name}} {{material.creator.surname}}
-                    </a>
-                  </p>
+                    <p class="md-body-2 meta" data-ng-if="isNullOrZeroLength(material.authors)">
+                      <small class="md-caption">
+                        <span data-translate="CREATOR"></span>:
+                      </small>
+                      <a href="#/{{material.creator.username}}">
+                        {{material.creator.name}} {{material.creator.surname}}
+                      </a>
+                    </p>
 
-                  <p class="md-body-2 meta" data-ng-if="material.added">
-                    <small class="md-caption">
-                      <span data-translate="ADDED"></span>:
-                    </small>
-                    {{formatMaterialUpdatedDate(material.added)}}
-                  </p>
+                    <p class="md-body-2 meta" data-ng-if="material.added">
+                      <small class="md-caption">
+                        <span data-translate="ADDED"></span>:
+                      </small>
+                      {{formatMaterialUpdatedDate(material.added)}}
+                    </p>
 
-                  <p class="md-body-2 meta" data-ng-if="material.updated">
-                    <small class="md-caption">
-                      <span data-translate="UPDATED"></span>:
-                    </small>
-                    {{formatMaterialUpdatedDate(material.updated)}}
-                  </p>
+                    <p class="md-body-2 meta" data-ng-if="material.updated">
+                      <small class="md-caption">
+                        <span data-translate="UPDATED"></span>:
+                      </small>
+                      {{formatMaterialUpdatedDate(material.updated)}}
+                    </p>
 
-                  <p class="md-body-2 meta">
-                    <small class="md-caption">
-                      <span data-translate="CREATED"></span>:
-                    </small>
+                    <p class="md-body-2 meta">
+                      <small class="md-caption">
+                        <span data-translate="CREATED"></span>:
+                      </small>
 
-                    <span data-ng-if="material.issueDate.year >= 100">
-                      {{formatMaterialIssueDate(material.issueDate)}}
-                    </span>
+                      <span data-ng-if="material.issueDate.year >= 100">
+                        {{formatMaterialIssueDate(material.issueDate)}}
+                      </span>
                       <span data-ng-if="material.issueDate.year > 0 && material.issueDate.year < 100">
-                      {{formatMaterialIssueDate(material.issueDate)}} AD
-                    </span>
+                        {{formatMaterialIssueDate(material.issueDate)}} AD
+                      </span>
                       <span data-ng-if="material.issueDate.year < 0">
-                      {{formatMaterialIssueDate(material.issueDate)}} BC
-                    </span>
-                    <span data-ng-if="!material.issueDate.year">
-                      <span data-translate="UNKNOWN"></span>
-                    </span>
-                  </p>
+                        {{formatMaterialIssueDate(material.issueDate)}} BC
+                      </span>
+                      <span data-ng-if="!material.issueDate.year">
+                        <span data-translate="UNKNOWN"></span>
+                      </span>
+                    </p>
 
-                  <p class="md-body-2 meta">
-                    <small class="md-caption">
-                      <span data-translate="MATERIAL_VIEW_LICENSE_TYPE"></span>:
-                    </small>
-                    <br>
-                    <span data-ng-if="material.licenseType" data-translate="LICENSETYPE_{{material.licenseType.name.toUpperCase()}}"></span>
-                    <span data-ng-if="!material.licenseType" data-translate="LICENSETYPE_ALLRIGHTSRESERVED"></span>
-                  </p>
+                    <p class="md-body-2 meta">
+                      <small class="md-caption">
+                        <span data-translate="MATERIAL_VIEW_LICENSE_TYPE"></span>:
+                      </small>
+                      <br>
+                      <span data-ng-if="material.licenseType" data-translate="LICENSETYPE_{{material.licenseType.name.toUpperCase()}}"></span>
+                      <span data-ng-if="!material.licenseType" data-translate="LICENSETYPE_ALLRIGHTSRESERVED"></span>
+                    </p>
 
-                  <p class="md-body-2 meta" data-ng-if="material.publishers">
-                    <small class="md-caption">
-                      <span data-ng-if="material.publishers && material.publishers.length === 1" data-translate="PUBLISHER"></span>
-                      <span data-ng-if="material.publishers && material.publishers.length > 1" data-translate="PUBLISHERS"></span>
-                    </small>
-                    <br>
-                    <span data-ng-repeat="publisher in material.publishers">
+                    <p class="md-body-2 meta" data-ng-if="material.publishers">
+                      <small class="md-caption">
+                        <span data-ng-if="material.publishers && material.publishers.length === 1" data-translate="PUBLISHER"></span>
+                        <span data-ng-if="material.publishers && material.publishers.length > 1" data-translate="PUBLISHERS"></span>
+                      </small>
+                      <br>
+                      <span data-ng-repeat="publisher in material.publishers">
                         {{publisher.name}}{{$last ? '' : ', '}}
-                    </span>
-                  </p>
+                      </span>
+                    </p>
 
-                  <p class="md-body-2 meta" data-ng-if="material.paid">
-                    <span data-translate="MATERIAL_PAID"></span>
-                  </p>
+                    <p class="md-body-2 meta" data-ng-if="material.paid">
+                      <span data-translate="MATERIAL_PAID"></span>
+                    </p>
 
-                  <p class="md-body-2 meta">
-                    <small class="md-caption">
-                      <span data-translate="VIEW_COUNT"></span>:
-                    </small>
-                    <span data-ng-bind="material.views"></span>
-                  </p>
-                </md-content>
+                    <p class="md-body-2 meta">
+                      <small class="md-caption">
+                        <span data-translate="VIEW_COUNT"></span>:
+                      </small>
+                      <span data-ng-bind="material.views"></span>
+                    </p>
+                  </md-content>
+                </div>
               </div>
-            </div>
 
-            <md-divider class="md-default-theme"></md-divider>
+              <md-divider class="md-default-theme"></md-divider>
 
-            <div layout="row" class="actions" layout-align="start start">
-              <!-- comment control -->
-              <div data-dop-comments-card comments="material.comments" comment="newComment" submit-click="addComment()" flex="50" flex-gt-xs="75"></div>
-              <span flex></span>
-              <!-- rating control -->
-              <div data-ng-if="material.type">
-                <div data-ng-if="material" data-dop-rating data-material="material" like-message="{{ 'MATERIAL_LIKED' | translate }}"  dislike-message="{{ 'MATERIAL_DISLIKED' | translate }}"></div>
+              <div layout="row" class="actions" layout-align="start start">
+                <!-- comment control -->
+                <div data-dop-comments-card comments="material.comments" comment="newComment" submit-click="addComment()" flex="50" flex-gt-xs="75"></div>
+                <span flex></span>
+                <!-- rating control -->
+                <div data-ng-if="material.type">
+                  <div data-ng-if="material" data-dop-rating data-material="material" like-message="{{ 'MATERIAL_LIKED' | translate }}"  dislike-message="{{ 'MATERIAL_DISLIKED' | translate }}"></div>
+                </div>
               </div>
-            </div>
-          </md-card-content>
-        </md-card>
-      </article>
+            </md-card-content>
+          </md-card>
+        </article>
 
-      <div data-dop-sidebar flex="100" flex-gt-sm="25" flex-gt-lg="20" class="md-padding" role="sidebar"></div>
+        <div data-dop-sidebar flex="100" flex-gt-sm="25" flex-gt-lg="20" class="md-padding" role="sidebar"></div>
+      </div>
     </section>
   </div>
 </div>
