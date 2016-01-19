@@ -69,6 +69,13 @@ define(['app'], function(app) {
                     var index = $scope.chapter.materials.indexOf(material);
                     $scope.chapter.materials.splice(index, 1);
                 }
+                
+                $rootScope.$watch('selectedMaterials', function (newValue, oldValue) {
+                    if(newValue && newValue.length == 0) {
+                    	$scope.selected = false;
+                    }
+                });
+                
             }
         };
     }]);
