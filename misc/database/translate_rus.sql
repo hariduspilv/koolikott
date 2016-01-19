@@ -185,6 +185,7 @@ INSERT INTO Translation(translationGroup, translationKey, translation) VALUES
 (2,'MATERIAL_VIEW_RESOURCE_TYPE','Тип'),
 (2,'MATERIAL_LINK','Гиперссылка'),
 (2,'MATERIAL_ISSUE_DATE','Дата выпуска'),
+(2,'MATERIAL_SPECIAL_EDUCATION', 'упрощённый учебный план'),
 (2,'MESSAGE_ERROR_PERSONAL_CODE_INVALID','Персональный код является недействительным'),
 (2,'MESSAGE_ERROR_PERSONAL_CODE_REQUIRED','Персональный код требуется'),
 (2,'MESSAGE_ERROR_PHONE_NUMBER_NOT_ESTONIAN','телефонный номер должен быть кодом Эстонии'),
