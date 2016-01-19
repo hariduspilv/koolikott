@@ -72,6 +72,9 @@ define(['app'], function(app) {
                 if (isEmpty(portfolio)) {
                     createPortfolioFailed();
                 } else {
+                	var picture = $scope.portfolio.picture;
+                	portfolio.picture = picture;
+                	
                     $rootScope.savedPortfolio = portfolio;
                     $scope.portfolio = portfolio;
                     $mdDialog.hide();

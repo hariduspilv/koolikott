@@ -1,7 +1,7 @@
 define(['app'], function(app)
 {
 
-	app.directive('dopPortfolioBox', ['translationService', 'serverCallService', function(translationService, serverCallService) {
+	app.directive('dopPortfolioBox', ['translationService', 'serverCallService', '$rootScope', function(translationService, serverCallService, $rootScope) {
 		return {
 			scope: {
 				portfolio: '='

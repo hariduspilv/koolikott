@@ -100,14 +100,17 @@ define(['app'], function(app) {
             }
 
             function setPortfolio(portfolio) {
+            	log("setportfolio");
                 $scope.portfolio = portfolio;
                 $rootScope.savedPortfolio = portfolio;
+                if(portfolio && portfolio.hasPicture && !portfolio.picture) {
+                	fetchImage();
+                }
             }
             
             function showWarning() {
                 var setPrivate = function() {
                     $scope.savedPortfolio.visibility = 'PRIVATE';
-                    
                     updatePortfolio();
                 }
                 
@@ -144,6 +147,25 @@ define(['app'], function(app) {
             $scope.$on('$destroy', function() {
                 $interval.cancel(autoSaveInterval);
             });
+            
+            function fetchImage() {       	
+            	if(!$scope.pictureLock) {
+            		serverCallService.makeGet("rest/portfolio/getPicture?portfolioId=" + $scope.portfolio.id, {}, fetchImageSuccess, fetchImageFail, fetchImageFinally);
+            		$scope.pictureLock = true;
+            	}
+        	}
+            
+            function fetchImageSuccess(data) {
+            	$scope.portfolio.picture = "data:image/jpeg;base64,"+data;
+            }
+            
+            function fetchImageFail(data) {
+            	log("Getting portfolio image failed");
+            }
+            
+            function fetchImageFinally() {
+            	$scope.pictureLock = false;
+            }
 
             init();
         }
