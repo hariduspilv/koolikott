@@ -1,16 +1,5 @@
 define(['app'], function(app)
 {
-  app.directive('showFocus', function($timeout) {
-    return function(scope, element, attrs) {
-      scope.$watch(attrs.showFocus,
-        function (newValue) {
-          $timeout(function() {
-            newValue && elementt[0].focus();
-          });
-        },true);
-      };
-    });
-
     app.directive('dopHeader', ['translationService', '$location', 'searchService', 'authenticationService', 'authenticatedUserService', '$timeout', '$mdDialog',
     function(translationService, $location, searchService, authenticationService, authenticatedUserService, $timeout, $mdDialog) {
       return {

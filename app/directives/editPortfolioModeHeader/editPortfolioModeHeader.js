@@ -11,10 +11,6 @@ define(['app'], function(app)
                     $mdSidenav('left').toggle();
                 };
 
-                $scope.exitEditPortfolioMode = function() {
-                    $location.url("/");
-                };
-
                 $scope.makePublic = function() {
                     $rootScope.savedPortfolio.visibility = 'PUBLIC';
                     updatePortfolio();
