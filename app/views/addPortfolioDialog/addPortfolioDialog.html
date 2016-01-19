@@ -1,4 +1,4 @@
-<md-dialog aria-label="Kogumiku lisamise modaalaken" flex-gt-md="75">
+<md-dialog aria-label="Kogumiku lisamise modaalaken" flex-gt-sm="75" flex>
   <md-toolbar class="md-accent">
     <div class="md-toolbar-tools" flex>
       <h2 data-translate="PORTFOLIO_METADATA_TOOLBAR_LABEL"></h2>
@@ -11,7 +11,7 @@
   <form name="addPortfolioForm">
     <md-content class="md-padding">
       <div layout="row" layout-align="center center">
-        <div flex="10" class="md-padding">
+        <div flex="nogrow" class="md-padding">
           <div data-ngf-drop ngf-select ng-model="newPortfolio.picture" class="drop-box"
             data-ngf-drag-over-class="'dragover'"
             data-ngf-multiple="false"
