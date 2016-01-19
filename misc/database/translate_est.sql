@@ -184,6 +184,7 @@ INSERT INTO Translation(translationGroup, translationKey, translation) VALUES
 (1,'MATERIAL_VIEW_LINK_TO_MATERIAL','Ava õppematerjal'),
 (1,'MATERIAL_VIEW_RESOURCE_TYPE','Tüüp'),
 (1,'MATERIAL_LINK','Link'),
+(1,'MATERIAL_ISSUE_DATE','Väljastamise kp'),
 (1,'MESSAGE_ERROR_PERSONAL_CODE_INVALID','Isikukood ei ole korrektne'),
 (1,'MESSAGE_ERROR_PERSONAL_CODE_REQUIRED','Isikukood on nõutud'),
 (1,'MESSAGE_ERROR_PHONE_NUMBER_NOT_ESTONIAN','Telefoninumber peab algama Eesti koodiga'),

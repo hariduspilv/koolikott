@@ -188,6 +188,7 @@ INSERT INTO Translation(translationGroup, translationKey, translation) VALUES
 (3,'MATERIAL_VIEW_LINK_TO_MATERIAL','Open material'),
 (3,'MATERIAL_VIEW_RESOURCE_TYPE','Type'),
 (3,'MATERIAL_LINK','Hyperlink'),
+(3,'MATERIAL_ISSUE_DATE','Issue date'),
 (3,'MESSAGE_ERROR_PERSONAL_CODE_INVALID','Personal code is invalid'),
 (3,'MESSAGE_ERROR_PERSONAL_CODE_REQUIRED','Personal code is required'),
 (3,'MESSAGE_ERROR_PHONE_NUMBER_NOT_ESTONIAN','Country code must be Estonian'),
