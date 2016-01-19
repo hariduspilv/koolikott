@@ -1,4 +1,4 @@
-<md-dialog aria-label="Materiali lisamise modaalaken" id="dialog-add-material" flex-gt-md="65">
+<md-dialog aria-label="Materiali lisamise modaalaken" id="dialog-add-material" flex-gt-sm="75" flex>
   <md-toolbar class="md-accent">
     <div class="md-toolbar-tools" flex>
       <h2>
@@ -17,7 +17,7 @@
         <md-content class="md-padding">
           <!-- url & lang-->
           <form name="materialUrlForm" layout="row" flex layout-align="start center">
-            <div flex="10" class="md-padding">
+            <div flex="nogrow" class="md-padding">
               <div data-ngf-drop ngf-select ng-model="material.picture" class="drop-box"
                 data-ngf-drag-over-class="'dragover'"
                 data-ngf-multiple="false"
@@ -41,7 +41,7 @@
                 <div data-ng-message="url" data-ng-show="materialUrlForm.url.$error.url" data-translate="MATERIAL_URL_IS_INVALID"></div>
               </div>
             </md-input-container>
-            <md-input-container flex="20" class="md-padding">
+            <md-input-container flex="20" flex-xs="35" class="md-padding">
               <label data-translate="LANGUAGE"></label>
               <md-select data-ng-model="material.language" id="add-material-language-select">
                 <md-option data-ng-repeat="language in material.languages" value="{{language}}">
@@ -72,7 +72,7 @@
                     <div data-ng-message="required" data-ng-show="materialTitleForm.title.$error.required" data-translate="MATERIAL_TITLE_IS_MANDATORY"></div>
                   </div>
                 </md-input-container>
-                <md-input-container flex="20" class="md-padding">
+                <md-input-container flex="20" flex-xs="35" class="md-padding">
                   <label data-translate="LANGUAGE"></label>
                   <md-select data-ng-model="metadata.language" id="add-material-title-language-select">
                     <md-option data-ng-repeat="language in material.languages" value="{{language}}">
