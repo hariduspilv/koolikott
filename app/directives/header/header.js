@@ -60,6 +60,7 @@ define(['app'], function(app)
             $scope.searchFields.searchQuery = (($scope.searchFields.searchQuery || "") + " " + $scope.detailedSearch.queryOut).trim();
             $scope.detailedSearch.queryIn = null;
             $scope.searchFields.searchQuery = "";
+            $scope.detailedSearch.mainField = "";
           };
 
           $scope.detailedSearch.doSearch = function() {
