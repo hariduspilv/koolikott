@@ -1,9 +1,8 @@
 <div id="page-search-result" flex>
   <div layout="row" layout-xs="column" flex>
     <div data-ng-if="!isEditPortfolioMode" layout="row" layout-xs="column" flex="0" flex-gt-md="15"></div>
-    <section layout="column" layout-gt-sm="row" flex="100"  flex-gt-md="{{$root.isEditPortfolioMode ? '90' : '75'}}">
-
-      <div>
+    <section flex flex-gt-md="{{$root.isEditPortfolioMode ? '85' : '75'}}">
+      <div layout-gt-sm>
         <article  flex="100" flex-gt-sm="75" flex-gt-lg="80" class="md-padding" role="main">
           <h2 class="md-headline">
             <span data-ng-if="searching" data-translate="SEARCH_RESULTS"></span>
@@ -42,7 +41,7 @@
           </div>
 
         </article>
-        <div data-dop-sidebar flex="100" flex-gt-sm="25" flex-gt-lg="20" class="md-padding" role="sidebar"></div>
+        <div data-dop-sidebar flex flex-gt-sm="25" flex-gt-lg="20" class="md-padding" role="sidebar"></div>
       </div>
     </section>
   </div>

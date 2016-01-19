@@ -1,8 +1,8 @@
 <div id="page-profile" flex>
   <div layout="row" layout-xs="column" flex>
     <div layout="row" layout-xs="column" flex="0" flex-gt-md="15"></div>
-    <section layout="column" layout-gt-sm="row" flex="100" flex-gt-md="75">
-      <div>
+    <section flex flex-gt-md="75">
+      <div  layout-gt-sm>
         <article flex="75" flex-sm="100" class="md-padding" role="main">
           <h1 data-ng-if="myProfile" data-translate="MYPROFILE_PAGE_TITLE_PORTFOLIOS"></h1>
           <h1 data-ng-if="!myProfile" data-translate="PROFILE_PAGE_TITLE_PORTFOLIOS"></h1>
@@ -23,7 +23,7 @@
           </md-grid-list>
         </article>
 
-        <aside flex="100" flex-gt-sm="25" flex-gt-lg="20" class="md-padding" role="sidebar">
+        <aside flex flex-gt-sm="25" flex-gt-lg="20" class="md-padding" role="sidebar">
           <div id="user-data">
             <h2 data-ng-if="myProfile" data-translate="MYPROFILE_PAGE_TITLE_MY_DATA"></h2>
 
