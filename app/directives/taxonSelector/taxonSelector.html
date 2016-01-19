@@ -10,7 +10,7 @@
 <md-input-container data-ng-show="taxonPath.educationalContext && taxonPath.educationalContext.name !== 'BASICEDUCATION'" class="md-block" flex>
   <label for="taxonDomainSelect" data-translate="TAXON_PATH_DOMAIN"></label>
   <md-select data-ng-model="taxonPath.domain" id="taxonDomainSelect" ng-model-options="{trackBy: '$value.id'}">
-      <md-option data-translate="ALL" ng-click="reset(taxonPath.educationalContext)"></md-option>
+      <md-option data-translate="SELECT_DOMAIN" ng-click="reset(taxonPath.educationalContext)"></md-option>
       <md-option ng-value="domain" ng-repeat="domain in taxonPath.educationalContext.domains" data-translate="DOMAIN_{{domain.name.toUpperCase()}}"></md-option>
   </md-select>
 </md-input-container>
@@ -19,7 +19,7 @@
 <md-input-container data-ng-show="taxonPath.educationalContext.name !== 'BASICEDUCATION' && taxonPath.domain && taxonPath.domain.subjects.length > 0" class="md-block" flex>
   <label for="taxonSubjectSelect" data-translate="DETAIL_VIEW_SUBJECT"></label>
   <md-select data-ng-model="taxonPath.subject" id="taxonSubjectSelect" ng-model-options="{trackBy: '$value.id'}">
-      <md-option data-translate="ALL" ng-click="reset(taxonPath.domain)"></md-option>
+      <md-option data-translate="SELECT_SUBJECT" ng-click="reset(taxonPath.domain)"></md-option>
       <md-option ng-value="subject" ng-repeat="subject in taxonPath.domain.subjects" data-translate="SUBJECT_{{subject.name.toUpperCase()}}"></md-option>
   </md-select>
 </md-input-container>
@@ -28,7 +28,7 @@
 <md-input-container data-ng-show="taxonPath.educationalContext && taxonPath.educationalContext.name === 'BASICEDUCATION'" class="md-block" flex>
   <label for="taxonDomainSubjectsSelect" data-translate="TAXON_PATH_DOMAIN_AND_SUBJECT"></label>
   <md-select data-ng-model="taxonPath.domainSubject" id="taxonDomainSubjectsSelect" ng-model-options="{trackBy: '$value.id'}">
-      <md-option data-translate="ALL" ng-click="reset(taxonPath.educationalContext)"></md-option>
+      <md-option data-translate="SELECT_DOMAIN_AND_SUBJECT" ng-click="reset(taxonPath.educationalContext)"></md-option>
       <md-option class="stepped-select" data-ng-class="{ 'child' : domainSubject.level === '.Subject'}" ng-value="domainSubject" ng-repeat="domainSubject in basicEducationDomainSubjects" data-translate="{{(domainSubject.level === '.Domain' ? 'DOMAIN_' : 'SUBJECT_') + domainSubject.name.toUpperCase()}}"></md-option>
   </md-select>
 </md-input-container>
@@ -37,7 +37,7 @@
 <md-input-container data-ng-show="taxonPath.domain && taxonPath.domain.specializations.length > 0" class="md-block" flex>
   <label for="taxonSpecializationSelect" data-translate="TAXON_PATH_SPECIALIZATION"></label>
   <md-select data-ng-model="taxonPath.specialization" id="taxonSpecializationSelect" ng-model-options="{trackBy: '$value.id'}">
-      <md-option data-translate="ALL" ng-click="reset(taxonPath.domain)"></md-option>
+      <md-option data-translate="SELECT_SPECIALIZATION" ng-click="reset(taxonPath.domain)"></md-option>
       <md-option ng-value="specialization" ng-repeat="specialization in taxonPath.domain.specializations" data-translate="SPECIALIZATION_{{specialization.name.toUpperCase()}}"></md-option>
   </md-select>
 </md-input-container>
@@ -46,35 +46,35 @@
 <md-input-container data-ng-show="taxonPath.specialization && taxonPath.specialization.modules.length > 0" class="md-block" flex>
   <label for="taxonModuleSelect" data-translate="TAXON_PATH_MODULE"></label>
   <md-select data-ng-model="taxonPath.module" id="taxonModuleSelect" ng-model-options="{trackBy: '$value.id'}">
-      <md-option data-translate="ALL" ng-click="reset(taxonPath.specialization)"></md-option>
+      <md-option data-translate="SELECT_MODULE" ng-click="reset(taxonPath.specialization)"></md-option>
       <md-option ng-value="module" ng-repeat="module in taxonPath.specialization.modules" data-translate="MODULE_{{module.name.toUpperCase()}}"></md-option>
   </md-select>
 </md-input-container>
 <md-input-container data-ng-show="taxonPath.subject && taxonPath.subject.topics.length > 0" class="md-block" flex>
   <label for="taxonTopicSelect" data-translate="TAXON_PATH_TOPIC"></label>
   <md-select data-ng-model="taxonPath.topic" id="taxonTopicSelect" ng-model-options="{trackBy: '$value.id'}">
-      <md-option data-translate="ALL" ng-click="reset(taxonPath.subject)"></md-option>
+      <md-option data-translate="SELECT_TOPIC" ng-click="reset(taxonPath.subject)"></md-option>
       <md-option ng-value="topic" ng-repeat="topic in taxonPath.subject.topics" data-translate="TOPIC_{{topic.name.toUpperCase()}}"></md-option>
   </md-select>
 </md-input-container>
 <md-input-container data-ng-show="taxonPath.domain && taxonPath.domain.topics.length > 0" class="md-block" flex>
   <label for="taxonTopicSelect" data-translate="TAXON_PATH_TOPIC"></label>
   <md-select data-ng-model="taxonPath.topic" id="taxonTopicSelect" ng-model-options="{trackBy: '$value.id'}">
-      <md-option data-translate="ALL" ng-click="reset(taxonPath.domain)"></md-option>
+      <md-option data-translate="SELECT_TOPIC" ng-click="reset(taxonPath.domain)"></md-option>
       <md-option ng-value="topic" ng-repeat="topic in taxonPath.domain.topics" data-translate="TOPIC_{{topic.name.toUpperCase()}}"></md-option>
   </md-select>
 </md-input-container>
 <md-input-container data-ng-show="taxonPath.module && taxonPath.module.topics.length > 0" class="md-block" flex>
   <label for="taxonTopicSelect" data-translate="TAXON_PATH_TOPIC"></label>
   <md-select data-ng-model="taxonPath.topic" id="taxonTopicSelect" ng-model-options="{trackBy: '$value.id'}">
-      <md-option data-translate="ALL" ng-click="reset(taxonPath.module)"></md-option>
+      <md-option data-translate="SELECT_TOPIC" ng-click="reset(taxonPath.module)"></md-option>
       <md-option ng-value="topic" ng-repeat="topic in taxonPath.module.topics" data-translate="TOPIC_{{topic.name.toUpperCase()}}"></md-option>
   </md-select>
 </md-input-container>
 <md-input-container data-ng-show="taxonPath.topic && taxonPath.topic.subtopics.length > 0" class="md-block" flex>
   <label for="taxonSubtopicSelect" data-translate="TAXON_PATH_SUBTOPIC"></label>
   <md-select data-ng-model="taxonPath.subtopic" id="taxonSubtopicSelect" ng-model-options="{trackBy: '$value.id'}">
-      <md-option data-translate="ALL" ng-click="reset(taxonPath.topic)"></md-option>
+      <md-option data-translate="SELECT_SUBTOPIC" ng-click="reset(taxonPath.topic)"></md-option>
       <md-option ng-value="subtopic" ng-repeat="subtopic in taxonPath.topic.subtopics" data-translate="SUBTOPIC_{{subtopic.name.toUpperCase()}}"></md-option>
   </md-select>
 </md-input-container>

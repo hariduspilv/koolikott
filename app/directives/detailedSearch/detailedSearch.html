@@ -24,7 +24,7 @@
       <md-input-container class="md-block" data-ng-if="detailedSearch.educationalContext.id === 2 || detailedSearch.educationalContext.id === 3">
         <label data-translate="DETAILED_SEARCH_CROSS_CURRICULAR_THEME"></label>
         <md-select data-ng-model="detailedSearch.crossCurricularTheme">
-          <md-option data-translate="ALL" data-ng-value="null"></md-option>
+          <md-option data-translate="SELECT_CROSS_CURRICULAR_THEME" data-ng-value="null"></md-option>
           <md-option data-ng-repeat="crossCurricularTheme in crossCurricularThemes" value="{{crossCurricularTheme.id}}" data-translate="CROSS_CURRICULAR_THEME_{{crossCurricularTheme.name.toUpperCase()}}"></md-option>
         </md-select>
       </md-input-container>
@@ -32,7 +32,7 @@
       <md-input-container class="md-block" data-ng-if="detailedSearch.educationalContext.id === 2 || detailedSearch.educationalContext.id === 3">
         <label data-translate="DETAILED_SEARCH_KEY_COMPETENCE"></label>
         <md-select data-ng-model="detailedSearch.keyCompetence">
-          <md-option data-translate="ALL" data-ng-value="null"></md-option>
+          <md-option data-translate="SELECT_KEY_COMPETENCE" data-ng-value="null"></md-option>
           <md-option data-ng-repeat="keyCompetence in keyCompetences" value="{{keyCompetence.id}}" data-translate="KEY_COMPETENCE_{{keyCompetence.name.toUpperCase()}}"></md-option>
         </md-select>
       </md-input-container>
