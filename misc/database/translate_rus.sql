@@ -392,5 +392,13 @@ INSERT INTO Translation(translationGroup, translationKey, translation) VALUES
 (2,'BUTTON_RESTORE','Восстановить'),
 (2,'GIVE_FEEDBACK_LINK','Дайте обратную связь о e-Koolikott'),
 (2,'RECOMMENDATIONS','Рекомендации'),
-(2,'ALL','Все'),
-(2,'LOAD_MORE_COMMENTS','Загрузите больше комментариев');
+(2,'LOAD_MORE_COMMENTS','Загрузите больше комментариев'),
+(2,'SELECT_CROSS_CURRICULAR_THEME','Выберите кросс-учебных программ тему'),
+(2,'SELECT_KEY_COMPETENCE','Выберите ключевые компетенции'),
+(2,'SELECT_DOMAIN','Выберите доменное'),
+(2,'SELECT_SUBJECT','Выберите тему'),
+(2,'SELECT_DOMAIN_AND_SUBJECT','Выберите область и подлежит'),
+(2,'SELECT_SPECIALIZATION','Выберите специализация'),
+(2,'SELECT_MODULE','Выберите модуль'),
+(2,'SELECT_TOPIC','Выберите тему'),
+(2,'SELECT_SUBTOPIC','Выберите подраздел');

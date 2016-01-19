@@ -391,5 +391,13 @@ INSERT INTO Translation(translationGroup, translationKey, translation) VALUES
 (1,'BUTTON_RESTORE','Taasta'),
 (1,'GIVE_FEEDBACK_LINK','Anna tagasisidet e-Koolikoti kohta'),
 (1,'RECOMMENDATIONS','Soovitused'),
-(1,'ALL','Kõik'),
-(1,'LOAD_MORE_COMMENTS','Veel kommentaare');
+(1,'LOAD_MORE_COMMENTS','Veel kommentaare'),
+(1,'SELECT_CROSS_CURRICULAR_THEME','Vali läbiv teema'),
+(1,'SELECT_KEY_COMPETENCE','Vali üldpädevus'),
+(1,'SELECT_DOMAIN','Vali valdkond'),
+(1,'SELECT_SUBJECT','Vali teema'),
+(1,'SELECT_DOMAIN_AND_SUBJECT','Vali ainevaldkond'),
+(1,'SELECT_SPECIALIZATION','Vali eriala'),
+(1,'SELECT_MODULE','Vali moodul'),
+(1,'SELECT_TOPIC','Vali teema'),
+(1,'SELECT_SUBTOPIC','Vali alateema');
