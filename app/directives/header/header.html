@@ -1,15 +1,14 @@
 <md-toolbar id="md-toolbar-header" class="md-whiteframe-1dp" data-click-outside="clickOutside()" outside-if-not="header-show-detailed-search-icon, detailed-search">
   <div class="md-toolbar-tools">
     <!-- logo -->
-    <div data-ng-hide="isViewPortforlioPage" layout-align="end start" flex-xs="40" flex-gt-xs="10" flex-gt-sm="15">
-      <div id="logos">
-        <md-tooltip>
-          <span data-translate="HEADER_TOOLTIP_GO_TO_LANDING_PAGE"></span>
-        </md-tooltip>
-        <a href="#/" class="logo-lg" id="logo" hide show-gt-sm></a>
-        <a href="#/" class="logo-sm" id="logo-sm" hide-gt-sm></a>
-      </div>
+    <div data-ng-hide="isViewPortforlioPage" layout-align="center start" flex="10" flex-gt-sm="15">
+      <md-tooltip>
+        <span data-translate="HEADER_TOOLTIP_GO_TO_LANDING_PAGE"></span>
+      </md-tooltip>
+      <a href="#/" class="logo" id="logo"></a>
     </div>
+    
+    <span flex-xs data-ng-hide="isViewPortforlioPage"></span>
 
     <!-- portfolio page toggle menu icon -->
     <span class="hide-gt-md" data-ng-show="isViewPortforlioPage" flex flex-gt-sm="5">
@@ -19,7 +18,7 @@
     </span>
 
     <!-- search bar with filter icon -->
-    <div  flex-xs="30" flex-gt-xs="70" flex-gt-md="{{isViewPortforlioPage ? '85' : '75'}}">
+    <div flex-gt-xs="70" flex-gt-md="{{isViewPortforlioPage ? '85' : '75'}}">
       <div layout="row" layout-align="center center">
         <div class="navbar-search" layout="row" hide show-gt-xs flex>
           <md-button aria-label="Otsi" class="md-icon-button" id="header-show-search-button" ng-click="search()">
@@ -42,7 +41,7 @@
     </div>
 
     <!-- language menu, login and user menu button -->
-    <div flex>
+    <div>
       <!-- change language menu -->
       <md-menu>
         <md-button aria-label="Ava keelevaliku menüü" class="md-icon-button" id="header-language-icon" ng-click="$mdOpenMenu($event)">

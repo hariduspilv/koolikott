@@ -116,26 +116,25 @@ h2 {
   margin-bottom: 20px;
 }
 
-.logo-lg {
-  display: block;
-  background-image: url('../images/logo_white.svg');
-  margin-top: 5px;
-  margin-left: 5px;
-  background-size: contain;
-  height: 35px;
-  background-repeat: no-repeat;
-  background-position: left center;
-}
-
-.logo-sm {
+.logo {
   display: block;
   background-image: url('../images/logo_white_sm.svg');
-  margin-top: 5px;
-  margin-left: 5px;
-  background-size: contain;
   height: 30px;
+  background-size: contain;
   background-repeat: no-repeat;
   background-position: left center;
+  
+  @media (min-width: 960px) {
+    background-image: url('../images/logo_white.svg');
+    height: 35px;
+    margin-top: 5px;
+  }
+}
+
+.logo-lg {
+  background-image: url('../images/logo_white.svg');
+  height: 35px;
+  margin-top: 5px;
 }
 
 md-fab-speed-dial {
