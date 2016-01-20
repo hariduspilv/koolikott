@@ -3,7 +3,7 @@ define(['app'], function(app) {
     app.factory('searchService',['$location', function($location) {
         var searchURLbase = "search/result?q=";
         var taxonURL = "&taxon=";
-        var paidURL = "&paid=";
+        var onlyPaidURL = "&onlyPaid=";
         var typeURL = "&type="
         var languageURL = "&language=";
         var targetGroupsURL = "&targetGroup=";
@@ -15,7 +15,7 @@ define(['app'], function(app) {
 
         var searchQuery = "";
         var searchTaxon = "";
-        var searchPaid = "";
+        var searchOnlyPaid = "";
         var searchType = "";
         var searchLanguage = "";
         var searchTargetGroups = [];
@@ -90,8 +90,8 @@ define(['app'], function(app) {
                 searchTaxon = taxon;
             },
 
-            setPaid : function(paid) {
-                searchPaid = paid;
+            setOnlyPaid : function(paid) {
+                searchOnlyPaid = paid;
             },
 
             setType : function(type) {
@@ -137,8 +137,8 @@ define(['app'], function(app) {
                 if (searchTaxon) {
                     searchURL += taxonURL + searchTaxon;
                 }
-                if (searchPaid === false) {
-                    searchURL += paidURL + searchPaid;
+                if (searchOnlyPaid === true) {
+                    searchURL += onlyPaidURL + searchOnlyPaid;
                 }
                 if (searchType && this.isValidType(searchType)) {
                     searchURL += typeURL + searchType;
@@ -172,7 +172,7 @@ define(['app'], function(app) {
 
             queryExists : function() {
                 var searchObject = $location.search();
-                if (searchObject.q || searchObject.taxon || searchObject.paid === false ||
+                if (searchObject.q || searchObject.taxon || searchObject.onlyPaid === true ||
                     (searchObject.type && this.isValidType(searchObject.type)) || searchObject.language || searchObject.targetGroup ||
                     searchObject.resourceType || searchObject.specialEducation || searchObject.issuedFrom || searchObject.crossCurricularTheme ||
                     searchObject.keyCompetence) {
@@ -204,15 +204,15 @@ define(['app'], function(app) {
                 return searchTaxon;
             },
 
-            isPaid : function() {
-                if (searchPaid === "") {
+            isOnlyPaid : function() {
+                if (searchOnlyPaid === "") {
                     var searchObject = $location.search();
-                    if (searchObject.paid) {
-                        return searchObject.paid === 'true' ? true : false;
+                    if (searchObject.onlyPaid) {
+                        return searchObject.onlyPaid === 'true' ? true : false;
                     }
                 }
 
-                return searchPaid;
+                return searchOnlyPaid;
             },
 
             getType : function() {
@@ -305,7 +305,7 @@ define(['app'], function(app) {
 
             clearFieldsNotInSimpleSearch : function() {
                 searchTaxon = '';
-                searchPaid = '';
+                searchOnlyPaid = '';
                 searchType = '';
                 searchLanguage = '';
                 searchTargetGroups = '';

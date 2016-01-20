@@ -48,8 +48,8 @@ define(['app'], function(app)
                 params.taxon = searchService.getTaxon();
             }
 
-            if (searchService.isPaid() === false) {
-                params.paid = searchService.isPaid();
+            if (searchService.isOnlyPaid() === true) {
+                params.onlyPaid = searchService.isOnlyPaid();
             }
 
             if (searchService.getType() && searchService.isValidType(searchService.getType())) {
