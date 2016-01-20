@@ -259,6 +259,7 @@ INSERT INTO Translation(translationGroup, translationKey, translation) VALUES
 (1,'RATING_LIKE','Soovitan'),
 (1,'RATING_LIKE_REMOVED','Soovitus eemaldatud'),
 (1,'RECOMMEND','Lisa soovituste nimekirja'),
+(1,'RECOMMEND_REMOVE','Eemalda soovituste nimekirjast'),
 (1,'REFERENCE','Teabeallikas'),
 (1,'REFERENCESHARINGPLATFORM','Lingikogu'),
 (1,'REPORT_BROKEN_LINK','Teavita katkisest materjalist'),

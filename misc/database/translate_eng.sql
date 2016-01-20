@@ -263,6 +263,7 @@ INSERT INTO Translation(translationGroup, translationKey, translation) VALUES
 (3,'RATING_LIKE','Recommend this'),
 (3,'RATING_LIKE_REMOVED','Recommendation removed'),
 (3,'RECOMMEND','Add to recommendation list'),
+(3,'RECOMMEND_REMOVE','Remove from recommendation list'),
 (3,'REFERENCE','Reference'),
 (3,'REFERENCESHARINGPLATFORM','Reference sharing platform'),
 (3,'REPORT_BROKEN_LINK','Report broken material'),
