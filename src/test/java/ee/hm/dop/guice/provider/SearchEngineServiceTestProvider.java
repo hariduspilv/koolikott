@@ -51,6 +51,7 @@ class SearchEngineServiceMock implements SearchEngineService {
         addQueryWithTaxonSubjectAndPaidFilterFalse();
         addQueryWithTaxonSubjectAndTypeFilter();
         addQueryWithPaidFalseAndTypeFilter();
+        addIssuedFromQuery();
         addQueryWithAllFilters();
 
         addQueryWithLanguage();
@@ -140,6 +141,7 @@ class SearchEngineServiceMock implements SearchEngineService {
     private static void addQueryWithAllFilters() {
         String filteredQuery = "(john*) AND educational_context:\"basiceducation\""
                 + " AND (paid:\"false\" OR type:\"portfolio\") AND type:\"portfolio\""
+                + " AND (issue_date_year:[2011 TO *] OR (created:[2011-01-01T00:00:00Z TO *] AND type:\"portfolio\"))"
                 + " AND (visibility:\"public\" OR type:\"material\")";
         List<Document> filteredSearchResult = createDocumentsWithIdentifiers(2L, 3L, 4L);
         searchResponses.put(filteredQuery, filteredSearchResult);
@@ -161,6 +163,13 @@ class SearchEngineServiceMock implements SearchEngineService {
     private static void addAdminQuery() {
         String query = "super*";
         List<Document> result = createDocumentsWithIdentifiers(2L, 4L);
+        searchResponses.put(query, result);
+    }
+
+    private static void addIssuedFromQuery() {
+        String query = "(car) AND (issue_date_year:[2011 TO *] OR (created:[2011-01-01T00:00:00Z TO *] AND type:\"portfolio\"))"
+                + " AND (visibility:\"public\" OR type:\"material\")";
+        List<Document> result = createDocumentsWithIdentifiers(2L, 5L);
         searchResponses.put(query, result);
     }
 
