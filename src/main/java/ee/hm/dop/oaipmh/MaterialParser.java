@@ -67,6 +67,8 @@ public abstract class MaterialParser {
             setTags(material, doc);
             setLearningResourceType(material, doc);
             setTaxon(material, doc);
+            setCrossCurricularThemes(material, doc);
+            setKeyCompetences(material, doc);
             setContributors(material, doc);
             setIsPaid(material, doc);
             setTargetGroups(material, doc);
@@ -401,4 +403,8 @@ public abstract class MaterialParser {
     protected abstract String getPathToTargetGroups();
 
     protected abstract void setPicture(Material material, Document doc);
+
+    protected abstract void setCrossCurricularThemes(Material material, Document doc);
+
+    protected abstract void setKeyCompetences(Material material, Document doc);
 }

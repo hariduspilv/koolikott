@@ -161,7 +161,7 @@ public class MaterialParserEstCoreTest {
         educationalContext4.setName("vocationalEducation");
 
         Domain domain1 = new Domain();
-        domain1.setName("Me_and_the_environment");
+        domain1.setName("Foreign_language");
         domain1.setEducationalContext(educationalContext2);
         Set<Domain> domains = new HashSet<>();
         domains.add(domain1);
@@ -294,7 +294,7 @@ public class MaterialParserEstCoreTest {
         topic4.setSubtopics(subtopics);
 
         Subtopic subtopic4 = new Subtopic();
-        subtopic4.setName("Ajaarvamine");
+        subtopic4.setName("Ajalooallikad");
         subtopic4.setTopic(topic2);
         subtopics = new HashSet<>();
         subtopics.add(subtopic4);
@@ -360,15 +360,11 @@ public class MaterialParserEstCoreTest {
         // special education taxon
         expect(taxonService.getTaxonByEstCoreName("SPECIALEDUCATION", EducationalContext.class)).andReturn(null);
 
-        // Cross-curricular themes taxon
-        expect(taxonService.getTaxonByEstCoreName("Cross-curricular themes", Domain.class)).andReturn(domain5);
-        expect(taxonService.getTaxonByEstCoreName("Lifelong learning and career planning", Subject.class)).andReturn(subject3);
-        expect(crossCurricularThemeService.getThemeByName(subject3.getName())).andReturn(crossCurricularTheme);
+        // Cross-curricular themes
+        expect(crossCurricularThemeService.getThemeByName(crossCurricularTheme.getName())).andReturn(crossCurricularTheme);
 
-        // Key competence taxon
-        expect(taxonService.getTaxonByEstCoreName("Key competences", Domain.class)).andReturn(domain6);
-        expect(taxonService.getTaxonByEstCoreName("Cultural and value competence", Subject.class)).andReturn(subject4);
-        expect(keyCompetenceService.findKeyCompetenceByName(subject4.getName())).andReturn(keyCompetence);
+        // Key competence
+        expect(keyCompetenceService.findKeyCompetenceByName(keyCompetence.getName())).andReturn(keyCompetence);
 
         LanguageString title1 = new LanguageString();
         title1.setLanguage(english);
@@ -414,7 +410,7 @@ public class MaterialParserEstCoreTest {
         assertEquals(descriptions, material.getDescriptions());
         assertEquals(tags, material.getTags());
         assertEquals(resourceTypes, material.getResourceTypes());
-        assertEquals(5, material.getTaxons().size());
+        assertEquals(4, material.getTaxons().size());
         assertEquals(10, material.getTargetGroups().size());
         assertNotNull(material.getPicture());
         assertEquals(1, material.getPublishers().size());

@@ -243,5 +243,15 @@ public class MaterialParserTest {
         @Override
         protected void setPicture(Material material, Document doc) {
         }
+
+        @Override
+        protected void setCrossCurricularThemes(Material material, Document doc) {
+
+        }
+
+        @Override
+        protected void setKeyCompetences(Material material, Document doc) {
+
+        }
     }
 }

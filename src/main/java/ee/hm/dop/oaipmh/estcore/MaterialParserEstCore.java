@@ -51,8 +51,6 @@ public class MaterialParserEstCore extends MaterialParser {
     private static final Map<String, String> taxonMap;
     public static final String YES = "YES";
     public static final String PUBLISHER = "PUBLISHER";
-    public static final String CROSS_CURRICULAR_THEMES = "Cross-curricular_themes";
-    public static final String KEY_COMPETENCES = "Key_competences";
 
     static {
         taxonMap = new HashMap<>();
@@ -212,12 +210,6 @@ public class MaterialParserEstCore extends MaterialParser {
                     String systemName = getTaxon(node.getTextContent(), Subject.class).getName();
                     Taxon taxon = getTaxonByName(subjects, systemName);
 
-                    //Special case for adding to Cross-curricular themes to eKoolikott
-                    setCrossCurricularThemes(domain, material, taxon);
-
-                    //Special case for adding to Key competences to eKoolikott
-                    setKeyCompetences(domain, material, taxon);
-
                     if (taxon != null)
                         return taxon;
                 }
@@ -226,30 +218,6 @@ public class MaterialParserEstCore extends MaterialParser {
             }
         }
         return domain;
-    }
-
-    private void setKeyCompetences(Taxon domain, Material material, Taxon taxon) {
-        if(taxon != null && domain.getName().equals(KEY_COMPETENCES)) {
-            if(material.getKeyCompetences() == null) {
-                material.setKeyCompetences(new ArrayList<>());
-            }
-
-            List<KeyCompetence> competences = material.getKeyCompetences();
-            competences.add(keyCompetenceService.findKeyCompetenceByName(taxon.getName()));
-            material.setKeyCompetences(competences);
-        }
-    }
-
-    private void setCrossCurricularThemes(Taxon domain, Material material, Taxon taxon) {
-        if(taxon != null && domain.getName().equals(CROSS_CURRICULAR_THEMES)) {
-            if(material.getCrossCurricularThemes() == null) {
-                material.setCrossCurricularThemes(new ArrayList<>());
-            }
-
-            List<CrossCurricularTheme> themes = material.getCrossCurricularThemes();
-            themes.add(crossCurricularThemeService.getThemeByName(taxon.getName()));
-            material.setCrossCurricularThemes(themes);
-        }
     }
 
     @Override
@@ -377,6 +345,62 @@ public class MaterialParserEstCore extends MaterialParser {
         } catch (XPathExpressionException e) {
             // ignore
         }
+    }
+
+    @Override
+    protected void setCrossCurricularThemes(Material material, Document doc) {
+
+        List<CrossCurricularTheme> crossCurricularThemes = new ArrayList<>();
+        try {
+            NodeList classifications = getNodeList(doc, "//*[local-name()='estcore']/*[local-name()='classification']");
+
+            for (int i = 0; i < classifications.getLength(); i++) {
+                Node classification = classifications.item(i);
+
+                XPathExpression expr2 = xpath.compile("./*[local-name()='crossCurricularThemesAndCompetences']/*[local-name()='crossCurricularTheme']/*[local-name()='subject']");
+                NodeList nl = (NodeList) expr2.evaluate(classification, XPathConstants.NODESET);
+
+                if (nl != null && nl.getLength() > 0) {
+                    for (int j = 0; j < nl.getLength(); j++) {
+                        CrossCurricularTheme crossCurricularTheme = crossCurricularThemeService.getThemeByName(nl.item(j).getTextContent().trim().replace(" ", "_"));
+                        crossCurricularThemes.add(crossCurricularTheme);
+                    }
+                }
+            }
+
+        } catch (XPathExpressionException e) {
+            e.printStackTrace();
+        }
+
+        material.setCrossCurricularThemes(crossCurricularThemes);
+    }
+
+    @Override
+    protected void setKeyCompetences(Material material, Document doc) {
+
+        List<KeyCompetence> keyCompetences = new ArrayList<>();
+        try {
+            NodeList classifications = getNodeList(doc, "//*[local-name()='estcore']/*[local-name()='classification']");
+
+            for (int i = 0; i < classifications.getLength(); i++) {
+                Node classification = classifications.item(i);
+
+                XPathExpression expr2 = xpath.compile("./*[local-name()='crossCurricularThemesAndCompetences']/*[local-name()='keyCompetence']/*[local-name()='subject']");
+                NodeList nl = (NodeList) expr2.evaluate(classification, XPathConstants.NODESET);
+
+                if (nl != null && nl.getLength() > 0) {
+                    for (int j = 0; j < nl.getLength(); j++) {
+                        KeyCompetence keyCompetence = keyCompetenceService.findKeyCompetenceByName(nl.item(j).getTextContent().trim().replace(" ", "_"));
+                        keyCompetences.add(keyCompetence);
+                    }
+                }
+            }
+
+        } catch (XPathExpressionException e) {
+            e.printStackTrace();
+        }
+
+        material.setKeyCompetences(keyCompetences);
     }
 
     @Override

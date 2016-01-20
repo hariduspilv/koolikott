@@ -163,6 +163,16 @@ public class MaterialParserWaramu extends MaterialParser {
 
     }
 
+    @Override
+    protected void setCrossCurricularThemes(Material material, Document doc) {
+
+    }
+
+    @Override
+    protected void setKeyCompetences(Material material, Document doc) {
+
+    }
+
     private void setTags(Material material, Element lom) {
         List<Tag> tags = getTags(lom);
         material.setTags(tags);

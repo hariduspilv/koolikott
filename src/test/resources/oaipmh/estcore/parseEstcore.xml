@@ -147,18 +147,18 @@
                                 <subtopic>Ajalooallikad</subtopic>
                             </basicSchoolTaxon>
                         </taxonPath>
-                        <taxonPath>
-                            <basicSchoolTaxon>
-                                <domain>Cross-curricular themes</domain>
-                                <subject>Lifelong learning and career planning</subject>
-                            </basicSchoolTaxon>
-                        </taxonPath>
-                        <taxonPath>
-                            <basicSchoolTaxon>
-                                <domain>Key competences</domain>
+                        <crossCurricularThemesAndCompetences>
+                            <keyCompetence>
                                 <subject>Cultural and value competence</subject>
-                            </basicSchoolTaxon>
-                        </taxonPath>
+                            </keyCompetence>
+                        </crossCurricularThemesAndCompetences>
+                    </classification>
+                    <classification>
+                        <crossCurricularThemesAndCompetences>
+                            <crossCurricularTheme>
+                                <subject>Lifelong learning and career planning</subject>
+                            </crossCurricularTheme>
+                        </crossCurricularThemesAndCompetences>
                     </classification>
                     <imgSrc>ZGVmYXVsdA==</imgSrc>
                 </xm:estcore>
