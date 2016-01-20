@@ -98,8 +98,6 @@
                     <educational>
                         <learningResourceType>audio</learningResourceType>
                         <learningResourceType>video</learningResourceType>
-                        <context>preschoolEducation</context>
-                        <context>basicEducation</context>
                         <context>specialEducation</context>
                         <typicalAgeRange>6-7</typicalAgeRange>
                         <typicalAgeRange>10-13</typicalAgeRange>

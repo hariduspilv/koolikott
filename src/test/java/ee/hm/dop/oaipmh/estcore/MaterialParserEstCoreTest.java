@@ -149,16 +149,16 @@ public class MaterialParserEstCoreTest {
         resourceType2.setName("VIDEO");
 
         EducationalContext educationalContext1 = new EducationalContext();
-        educationalContext1.setName("PRESCHOOLEDUCATION");
+        educationalContext1.setName("preschoolEducation");
 
         EducationalContext educationalContext2 = new EducationalContext();
-        educationalContext2.setName("BASICEDUCATION");
+        educationalContext2.setName("basicEducation");
 
         EducationalContext educationalContext3 = new EducationalContext();
-        educationalContext3.setName("SECONDARYEDUCATION");
+        educationalContext3.setName("secondaryEducation");
 
         EducationalContext educationalContext4 = new EducationalContext();
-        educationalContext4.setName("VOCATIONALEDUCATION");
+        educationalContext4.setName("vocationalEducation");
 
         Domain domain1 = new Domain();
         domain1.setName("Me_and_the_environment");
@@ -414,7 +414,7 @@ public class MaterialParserEstCoreTest {
         assertEquals(descriptions, material.getDescriptions());
         assertEquals(tags, material.getTags());
         assertEquals(resourceTypes, material.getResourceTypes());
-        assertEquals(6, material.getTaxons().size());
+        assertEquals(5, material.getTaxons().size());
         assertEquals(10, material.getTargetGroups().size());
         assertNotNull(material.getPicture());
         assertEquals(1, material.getPublishers().size());
