@@ -16,10 +16,10 @@
     </md-content>
   </md-sidenav>
 
-  <div data-layout="column" data-flex>
+  <div id="column-layout" data-layout="column" data-flex>
     <div data-ng-if="!isEditPortfolioMode" id="navmenu" data-dop-header></div>
     <div data-ng-if="isEditPortfolioMode" id="navmenu" data-dop-edit-portfolio-mode-header></div>
-    <div layout="row" flex id="scrollable-content" data-layout-fill>
+    <div flex id="scrollable-content" data-layout-fill>
       <div data-ng-view></div>
     </div>
   </div>

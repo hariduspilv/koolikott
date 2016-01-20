@@ -1,6 +1,11 @@
 .navbar-search {
+  margin: 0 5px;
   border-radius: 2px;
   padding: 4px 0;
+  
+  @media screen and (min-width: 600px) {
+    background: rgba(255,255,255,.15);
+  }
 
   md-input-container {
     padding: 0;
@@ -23,8 +28,8 @@
   }
 }
 
-@media screen and (min-width: 600px) {
+#column-layout {
   .navbar-search {
-    background: rgba(255,255,255,.15);
+    margin: 0;
   }
 }
