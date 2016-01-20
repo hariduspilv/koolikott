@@ -644,12 +644,11 @@ public class SearchServiceTest {
     }
 
     @Test
-    public void searchWithPaidFilterFalse() {
+    public void searchWithOnlyPaidFilterTrue() {
         String query = "textbooks";
         SearchFilter searchFilter = new SearchFilter();
-        searchFilter.setPaid(false);
-        String tokenizedQuery = "(textbooks*) AND (paid:\"false\" OR type:\"portfolio\")"
-                + " AND (visibility:\"public\" OR type:\"material\")";
+        searchFilter.setOnlyPaid(true);
+        String tokenizedQuery = "(textbooks*) AND paid:\"true\" AND (visibility:\"public\" OR type:\"material\")";
         long start = 0;
 
         List<Searchable> searchables = Arrays.asList(createMaterial(9L), createMaterial(2L), createPortfolio(2L));
@@ -658,10 +657,10 @@ public class SearchServiceTest {
     }
 
     @Test
-    public void searchWithPaidFilterTrue() {
+    public void searchWithOnlyPaidFilterFalse() {
         String query = "textbooks";
         SearchFilter searchFilter = new SearchFilter();
-        searchFilter.setPaid(true);
+        searchFilter.setOnlyPaid(false);
         String tokenizedQuery = "(textbooks*) AND (visibility:\"public\" OR type:\"material\")";
         long start = 0;
 
@@ -704,8 +703,8 @@ public class SearchServiceTest {
         educationalContext.setId(2L);
         educationalContext.setName("PRESCHOOL");
         searchFilter.setTaxon(educationalContext);
-        searchFilter.setPaid(false);
-        String tokenizedQuery = "(pythagoras*) AND educational_context:\"preschool\" AND (paid:\"false\" OR type:\"portfolio\")"
+        searchFilter.setOnlyPaid(true);
+        String tokenizedQuery = "(pythagoras*) AND educational_context:\"preschool\" AND paid:\"true\""
                 + " AND (visibility:\"public\" OR type:\"material\")";
         long start = 0;
 
@@ -736,9 +735,9 @@ public class SearchServiceTest {
     public void searchWithPaidAndTypeFilter() {
         String query = "pythagoras";
         SearchFilter searchFilter = new SearchFilter();
-        searchFilter.setPaid(false);
+        searchFilter.setOnlyPaid(true);
         searchFilter.setType("material");
-        String tokenizedQuery = "(pythagoras*) AND (paid:\"false\" OR type:\"portfolio\") AND type:\"material\""
+        String tokenizedQuery = "(pythagoras*) AND paid:\"true\" AND type:\"material\""
                 + " AND (visibility:\"public\" OR type:\"material\")";
         long start = 0;
 
@@ -774,7 +773,7 @@ public class SearchServiceTest {
 
         searchFilter.setTaxon(topic);
 
-        searchFilter.setPaid(false);
+        searchFilter.setOnlyPaid(true);
         searchFilter.setType("material");
 
         ResourceType resourceType = new ResourceType();
@@ -798,7 +797,7 @@ public class SearchServiceTest {
 
         String tokenizedQuery = "(pythagoras*) AND topic:\"cool_topic\" AND subject:\"cool_subject\""
                 + " AND domain:\"cool_domain\" AND educational_context:\"preschool\""
-                + " AND (paid:\"false\" OR type:\"portfolio\") AND type:\"material\" AND resource_type:\"extrabook\""
+                + " AND paid:\"true\" AND type:\"material\" AND resource_type:\"extrabook\""
                 + " AND special_education:\"true\""
                 + " AND (issue_date_year:[2010 TO *] OR (created:[2010-01-01T00:00:00Z TO *] AND type:\"portfolio\"))"
                 + " AND cross_curricular_theme:\"test_theme\""
