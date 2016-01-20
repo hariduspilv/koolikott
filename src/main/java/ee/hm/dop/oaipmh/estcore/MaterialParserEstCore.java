@@ -56,10 +56,10 @@ public class MaterialParserEstCore extends MaterialParser {
 
     static {
         taxonMap = new HashMap<>();
-        taxonMap.put("preschoolTaxon", "PRESCHOOLEDUCATION");
-        taxonMap.put("basicSchoolTaxon", "BASICEDUCATION");
-        taxonMap.put("gymnasiumTaxon", "SECONDARYEDUCATION");
-        taxonMap.put("vocationalTaxon", "VOCATIONALEDUCATION");
+        taxonMap.put("preschoolTaxon", "preschoolEducation");
+        taxonMap.put("basicSchoolTaxon", "basicEducation");
+        taxonMap.put("gymnasiumTaxon", "secondaryEducation");
+        taxonMap.put("vocationalTaxon", "vocationalEducation");
     }
 
     @Inject
