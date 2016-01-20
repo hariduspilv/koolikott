@@ -259,6 +259,7 @@ INSERT INTO Translation(translationGroup, translationKey, translation) VALUES
 (2,'RATING_LIKE','Мне это нравится'),
 (2,'RATING_LIKE_REMOVED','Как удалить'),
 (2,'RECOMMEND','Рекомендовать'),
+(2,'RECOMMEND_REMOVE','Удалить из списка рекомендаций'),
 (2,'REFERENCE','справка'),
 (2,'REFERENCESHARINGPLATFORM','справка платформа по обмену'),
 (2,'REPORT_BROKEN_LINK','Сообщить о неработающей материал'),

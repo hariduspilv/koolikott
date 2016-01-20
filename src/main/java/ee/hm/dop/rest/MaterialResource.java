@@ -81,6 +81,20 @@ public class MaterialResource extends BaseResource {
     }
 
     @POST
+    @Path("recommend")
+    @RolesAllowed({ "ADMIN" })
+    public void recommendMaterial(Material material) {
+        materialService.addRecommendation(material, getLoggedInUser());
+    }
+
+    @POST
+    @Path("removeRecommendation")
+    @RolesAllowed({ "ADMIN" })
+    public void removedMaterialRecommendation(Material material) {
+        materialService.removeRecommendation(material, getLoggedInUser());
+    }
+
+    @POST
     @Path("getUserLike")
     public UserLike getUserLike(Material material) {
         return materialService.getUserLike(material, getLoggedInUser());
