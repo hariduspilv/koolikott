@@ -90,7 +90,7 @@ public class SearchService {
         Visibility visibility = Visibility.PUBLIC;
 
         if (loggedInUser != null && loggedInUser.getRole() == Role.ADMIN) {
-        	// No visibility filter is applied, so admin can see all searchables
+            // No visibility filter is applied, so admin can see all searchables
             visibility = null;
         }
 
@@ -183,7 +183,7 @@ public class SearchService {
 
         filters.add(getLanguageAsQuery(searchFilter));
         filters.add(getTaxonsAsQuery(searchFilter));
-        filters.add(isPaidAsQuery(searchFilter));
+        filters.add(isOnlyPaidAsQuery(searchFilter));
         filters.add(getTypeAsQuery(searchFilter));
         filters.add(getTargetGroupsAsQuery(searchFilter));
         filters.add(getResourceTypeAsQuery(searchFilter));
@@ -207,9 +207,9 @@ public class SearchService {
         return "";
     }
 
-    private String isPaidAsQuery(SearchFilter searchFilter) {
-        if (!searchFilter.isPaid()) {
-            return "(paid:\"false\" OR type:\"portfolio\")";
+    private String isOnlyPaidAsQuery(SearchFilter searchFilter) {
+        if (searchFilter.isOnlyPaid()) {
+            return "paid:\"true\"";
         }
         return "";
     }
@@ -349,7 +349,8 @@ public class SearchService {
 
     private String issuedFromAsQuery(SearchFilter searchFilter) {
         if (searchFilter.getIssuedFrom() != null) {
-            return format("(issue_date_year:[%s TO *] OR type:\"portfolio\")", searchFilter.getIssuedFrom());
+            return format("(issue_date_year:[%s TO *] OR (created:[%s-01-01T00:00:00Z TO *] AND type:\"portfolio\"))",
+                    searchFilter.getIssuedFrom(), searchFilter.getIssuedFrom());
         }
         return "";
     }

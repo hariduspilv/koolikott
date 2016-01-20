@@ -44,13 +44,14 @@ class SearchEngineServiceMock implements SearchEngineService {
         addEmptyQueryWithTaxonEducationalContextFilter();
 
         addQueryWithEducationalContextFilter();
-        addQueryWithPaidFilterTrue();
-        addQueryWithPaidFilterFalse();
+        addQueryWithOnlyPaidFilterTrue();
+        addQueryWithOnlyPaidFilterFalse();
         addQueryWithTypeFilter();
         addQueryWithTypeFilterAll();
-        addQueryWithTaxonSubjectAndPaidFilterFalse();
+        addQueryWithTaxonSubjectAndOnlyPaidFilterTrue();
         addQueryWithTaxonSubjectAndTypeFilter();
-        addQueryWithPaidFalseAndTypeFilter();
+        addQueryWithOnlyPaidTrueAndTypeFilter();
+        addIssuedFromQuery();
         addQueryWithAllFilters();
 
         addQueryWithLanguage();
@@ -88,16 +89,15 @@ class SearchEngineServiceMock implements SearchEngineService {
         searchResponses.put(filteredQuery, filteredSearchResult);
     }
 
-    private static void addQueryWithPaidFilterTrue() {
+    private static void addQueryWithOnlyPaidFilterFalse() {
         String filteredQuery = "(dop) AND (visibility:\"public\" OR type:\"material\")";
-        List<Document> filteredSearchResult = createDocumentsWithIdentifiers(1L, 3L);
+        List<Document> filteredSearchResult = createDocumentsWithIdentifiers(1L, 4L);
         searchResponses.put(filteredQuery, filteredSearchResult);
     }
 
-    private static void addQueryWithPaidFilterFalse() {
-        String filteredQuery = "(dop) AND (paid:\"false\" OR type:\"portfolio\")"
-                + " AND (visibility:\"public\" OR type:\"material\")";
-        List<Document> filteredSearchResult = createDocumentsWithIdentifiers(1L, 4L);
+    private static void addQueryWithOnlyPaidFilterTrue() {
+        String filteredQuery = "(dop) AND paid:\"true\" AND (visibility:\"public\" OR type:\"material\")";
+        List<Document> filteredSearchResult = createDocumentsWithIdentifiers(1L, 3L);
         searchResponses.put(filteredQuery, filteredSearchResult);
     }
 
@@ -114,9 +114,9 @@ class SearchEngineServiceMock implements SearchEngineService {
         searchResponses.put(filteredQuery, filteredSearchResult);
     }
 
-    private static void addQueryWithTaxonSubjectAndPaidFilterFalse() {
+    private static void addQueryWithTaxonSubjectAndOnlyPaidFilterTrue() {
         String filteredQuery = "(dop) AND subject:\"biology\" AND domain:\"mathematics\""
-                + " AND educational_context:\"preschooleducation\" AND (paid:\"false\" OR type:\"portfolio\")"
+                + " AND educational_context:\"preschooleducation\" AND paid:\"true\""
                 + " AND (visibility:\"public\" OR type:\"material\")";
         List<Document> filteredSearchResult = createDocumentsWithIdentifiers(1L, 6L);
         searchResponses.put(filteredQuery, filteredSearchResult);
@@ -130,8 +130,8 @@ class SearchEngineServiceMock implements SearchEngineService {
         searchResponses.put(filteredQuery, filteredSearchResult);
     }
 
-    private static void addQueryWithPaidFalseAndTypeFilter() {
-        String filteredQuery = "(weird*) AND (paid:\"false\" OR type:\"portfolio\") AND type:\"material\""
+    private static void addQueryWithOnlyPaidTrueAndTypeFilter() {
+        String filteredQuery = "(weird*) AND paid:\"true\" AND type:\"material\""
                 + " AND (visibility:\"public\" OR type:\"material\")";
         List<Document> filteredSearchResult = createDocumentsWithIdentifiers(1L, 8L);
         searchResponses.put(filteredQuery, filteredSearchResult);
@@ -139,7 +139,8 @@ class SearchEngineServiceMock implements SearchEngineService {
 
     private static void addQueryWithAllFilters() {
         String filteredQuery = "(john*) AND educational_context:\"basiceducation\""
-                + " AND (paid:\"false\" OR type:\"portfolio\") AND type:\"portfolio\""
+                + " AND paid:\"true\" AND type:\"portfolio\""
+                + " AND (issue_date_year:[2011 TO *] OR (created:[2011-01-01T00:00:00Z TO *] AND type:\"portfolio\"))"
                 + " AND (visibility:\"public\" OR type:\"material\")";
         List<Document> filteredSearchResult = createDocumentsWithIdentifiers(2L, 3L, 4L);
         searchResponses.put(filteredQuery, filteredSearchResult);
@@ -161,6 +162,13 @@ class SearchEngineServiceMock implements SearchEngineService {
     private static void addAdminQuery() {
         String query = "super*";
         List<Document> result = createDocumentsWithIdentifiers(2L, 4L);
+        searchResponses.put(query, result);
+    }
+
+    private static void addIssuedFromQuery() {
+        String query = "(car) AND (issue_date_year:[2011 TO *] OR (created:[2011-01-01T00:00:00Z TO *] AND type:\"portfolio\"))"
+                + " AND (visibility:\"public\" OR type:\"material\")";
+        List<Document> result = createDocumentsWithIdentifiers(2L, 5L);
         searchResponses.put(query, result);
     }
 

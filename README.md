@@ -32,6 +32,32 @@ If you started the application using a **custom configuration** file, use the sa
 
 	java -jar -Dconfig="/path/to/custom.properties" dop.jar stop
 
+# SQL
+Using a database client and the [source](https://dev.mysql.com/doc/refman/5.7/en/mysql-batch-commands.html) command, execute the sql files in the following order. 
+
+Do **NOT** run testData.sql, as that is only for testing and development purposes. 
+
+Only run repositories.sql if you wish to import materials from repositories (for example Waramu).
+
+```
+	misc/database/createDatabase.sql
+	misc/database/createTables.sql;
+	misc/database/resourceTypes.sql;
+	misc/database/taxon.sql;
+	misc/database/taxonMappings.sql;
+	misc/database/licenseTypes.sql;
+	misc/database/crossCurricularThemes.sql;
+	misc/database/keyCompetences.sql;
+	misc/database/language.sql;
+	misc/database/translationGroups.sql;
+	misc/database/translate_est.sql;
+	misc/database/translate_rus.sql;
+	misc/database/translate_eng.sql;
+	misc/database/pageAbout.sql;
+	misc/database/pageHelp.sql;
+	misc/database/repositories.sql;
+```
+
 # Search engine
 
 The application uses Solr as search engine and Solr must be available and configured.
@@ -63,6 +89,7 @@ DOP uses **MariaDB** database. Click [here](https://mariadb.com/kb/en/mariadb/ge
 * **db.password** - the database password for given username
 
 * After installing, in my.ini or my.cnf under [mysqld] add: **character-set-server=utf8** and **max_allowed_packet = 64M** and **innodb_log_file_size=256M**
+
 ### Server
 
 * **server.port** - the port that server starts.

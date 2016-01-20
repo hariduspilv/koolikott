@@ -14,12 +14,14 @@ import org.slf4j.LoggerFactory;
 
 import ee.hm.dop.dao.ImproperContentDAO;
 import ee.hm.dop.dao.MaterialDAO;
+import ee.hm.dop.dao.RecommendationDAO;
 import ee.hm.dop.dao.UserLikeDAO;
 import ee.hm.dop.model.Author;
 import ee.hm.dop.model.Comment;
 import ee.hm.dop.model.ImproperContent;
 import ee.hm.dop.model.Material;
 import ee.hm.dop.model.Publisher;
+import ee.hm.dop.model.Recommendation;
 import ee.hm.dop.model.Role;
 import ee.hm.dop.model.User;
 import ee.hm.dop.model.UserLike;
@@ -39,6 +41,9 @@ public class MaterialService {
 
     @Inject
     private UserLikeDAO userLikeDAO;
+
+    @Inject
+    private RecommendationDAO recommendationeDAO;
 
     @Inject
     private AuthorService authorService;
@@ -192,6 +197,41 @@ public class MaterialService {
         like.setAdded(DateTime.now());
 
         return userLikeDAO.update(like);
+    }
+
+    public Recommendation addRecommendation(Material material, User loggedInUser) {
+        if (!isUserAdmin(loggedInUser)) {
+            throw new RuntimeException("Logged in user must be an administrator.");
+        }
+        if (material == null || material.getId() == null) {
+            throw new RuntimeException("Material not found");
+        }
+        Material originalMaterial = materialDao.findById(material.getId());
+        if (originalMaterial == null) {
+            throw new RuntimeException("Material not found");
+        }
+
+        Recommendation recommendation = new Recommendation();
+        recommendation.setMaterial(originalMaterial);
+        recommendation.setCreator(loggedInUser);
+        recommendation.setAdded(DateTime.now());
+
+        return recommendationeDAO.update(recommendation);
+    }
+
+    public void removeRecommendation(Material material, User loggedInUser) {
+        if (!isUserAdmin(loggedInUser)) {
+            throw new RuntimeException("Logged in user must be an administrator.");
+        }
+        if (material == null || material.getId() == null) {
+            throw new RuntimeException("Material not found");
+        }
+        Material originalMaterial = materialDao.findById(material.getId());
+        if (originalMaterial == null) {
+            throw new RuntimeException("Material not found");
+        }
+
+        recommendationeDAO.deleteMaterialRecommendation(originalMaterial);
     }
 
     public void removeUserLike(Material material, User loggedInUser) {
