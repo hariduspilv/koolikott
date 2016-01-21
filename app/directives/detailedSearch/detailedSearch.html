@@ -1,6 +1,10 @@
 <div class="md-whiteframe-1dp filter-content">
   <div layout="column" layout-gt-sm="row">
     <div flex class="md-padding">
+      <md-input-container class="hide-gt-xs md-block">
+        <label data-translate="DETAILED_SEARCH_DESCRIPTION"></label>
+        <input data-ng-model="detailedSearch.combinedDescription"/>
+      </md-input-container>
       <md-input-container class="md-block">
         <label data-translate="DETAILED_SEARCH_TITLE"></label>
         <input data-ng-model="detailedSearch.title" />

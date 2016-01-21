@@ -7,14 +7,14 @@
       </md-tooltip>
       <a href="#/" class="logo" id="logo"></a>
     </div>
-    
+
     <!-- portfolio page toggle menu icon -->
     <span class="hide-gt-md" data-ng-show="isViewPortforlioPage">
       <md-button class="md-icon-button" data-ng-click="toggleSidenav('left')" >
         <md-icon class="md-48">menu</md-icon>
       </md-button>
     </span>
-    
+
     <span flex-xs></span>
 
     <!-- search bar with filter icon -->
@@ -31,7 +31,8 @@
         </div>
         <md-button aria-label="Ava detailotsing" class="md-icon-button" id="header-show-detailed-search-icon" data-ng-click="openDetailedSearch()" data-ng-if="!detailedSearch.isVisible">
           <md-tooltip><span data-translate="HEADER_TOOLTIP_OPEN_DETAILED_SEARCH"></span></md-tooltip>
-          <md-icon>filter_list</md-icon>
+          <md-icon hide show-gt-xs>filter_list</md-icon>
+          <md-icon hide-gt-xs>search</md-icon>
         </md-button>
         <md-button aria-label="Sulge detailotsing" class="md-icon-button" id="header-hide-detailed-search-icon" data-ng-click="closeDetailedSearch()" data-ng-if="detailedSearch.isVisible">
           <md-tooltip><span data-translate="HEADER_TOOLTIP_CLOSE_DETAILED_SEARCH"></span></md-tooltip>

@@ -19,7 +19,8 @@
         </div>
         <md-button aria-label="Ava detailotsing" class="md-icon-button" id="header-show-detailed-search-icon" data-ng-click="openDetailedSearch()" data-ng-if="!detailedSearch.isVisible">
           <md-tooltip><span data-translate="HEADER_TOOLTIP_OPEN_DETAILED_SEARCH"></span></md-tooltip>
-          <md-icon>filter_list</md-icon>
+          <md-icon hide show-gt-xs>filter_list</md-icon>
+          <md-icon hide-gt-xs>search</md-icon>
         </md-button>
         <md-button ng-click="closeDetailedSearch()" aria-label="Sulge detailotsing" class="md-icon-button" data-ng-if="detailedSearch.isVisible">
           <md-tooltip><span data-translate="HEADER_TOOLTIP_CLOSE_DETAILED_SEARCH"></span></md-tooltip>
