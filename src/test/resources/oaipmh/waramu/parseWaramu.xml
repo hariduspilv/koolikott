@@ -49,6 +49,15 @@
 								]]>
 							</entity>
 						</contribute>
+						<contribute>
+							<role>
+								<source>LOMv1.0</source>
+								<value>publisher</value>
+							</role>
+							<date uniqueElementName="date">
+								<dateTime>2009-08-14T17:00:19Z</dateTime>
+							</date>
+						</contribute>
 					</lifeCycle>
 					<metaMetadata>
 						<language>et</language>

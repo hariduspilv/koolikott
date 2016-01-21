@@ -4,9 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
-import javax.xml.xpath.XPathConstants;
-import javax.xml.xpath.XPathExpression;
-import javax.xml.xpath.XPathExpressionException;
 
 import org.w3c.dom.CharacterData;
 import org.w3c.dom.Document;
@@ -22,7 +19,6 @@ import ee.hm.dop.model.Tag;
 import ee.hm.dop.model.taxon.Taxon;
 import ee.hm.dop.oaipmh.MaterialParser;
 import ee.hm.dop.oaipmh.ParseException;
-import ee.hm.dop.service.AuthorService;
 import ee.hm.dop.service.LanguageService;
 import ee.hm.dop.service.TagService;
 import ee.hm.dop.service.TaxonService;
@@ -37,9 +33,6 @@ public class MaterialParserWaramu extends MaterialParser {
 
     @Inject
     private TagService tagService;
-
-    @Inject
-    private AuthorService authorService;
 
     @Inject
     private TaxonService taxonService;
@@ -81,9 +74,8 @@ public class MaterialParserWaramu extends MaterialParser {
     }
 
     @Override
-    protected String getElementValue(Node node) throws XPathExpressionException {
-        XPathExpression rolePath = xpath.compile("./*[local-name()='value']");
-        Node valueNode = (Node) rolePath.evaluate(node, XPathConstants.NODE);
+    protected String getElementValue(Node node) {
+        Node valueNode = getNode(node, "./*[local-name()='value']");
 
         String value = valueNode.getTextContent().trim().toUpperCase().replaceAll("\\s", "");
 
@@ -95,6 +87,23 @@ public class MaterialParserWaramu extends MaterialParser {
     }
 
     @Override
+    protected void setAuthors(Document doc, Material material) {
+        List<Author> authors = new ArrayList<>();
+        NodeList nl = getNodeList(doc, getPathToContribute() + "/*[local-name()='entity']");
+        NodeList authorNodes = nl.item(0).getChildNodes();
+
+        for (int i = 0; i < authorNodes.getLength(); i++) {
+
+            CharacterData characterData = (CharacterData) authorNodes.item(i);
+            String data = getVCardWithNewLines(characterData);
+
+            setAuthorFromVCard(authors, data);
+        }
+
+        material.setAuthors(authors);
+    }
+
+    @Override
     protected String getPathToContext() {
         return "//*[local-name()='lom']/*[local-name()='educational']/*[local-name()='context']";
     }
@@ -102,6 +111,16 @@ public class MaterialParserWaramu extends MaterialParser {
     @Override
     protected String getPathToLocation() {
         return "//*[local-name()='lom']/*[local-name()='technical']/*[local-name()='location']";
+    }
+
+    @Override
+    protected String getPathToContribute() {
+        return "//*[local-name()='lom']/*[local-name()='lifeCycle']/*[local-name()='contribute']";
+    }
+
+    @Override
+    protected String getPathToTargetGroups() {
+        return "//*[local-name()='lom']/*[local-name()='educational']/*[local-name()='typicalAgeRange']/*[local-name()='string']";
     }
 
     @Override
@@ -154,39 +173,20 @@ public class MaterialParserWaramu extends MaterialParser {
     }
 
     @Override
-    protected String getPathToTargetGroups() {
-        return "//*[local-name()='lom']/*[local-name()='educational']/*[local-name()='typicalAgeRange']/*[local-name()='string']";
-    }
-
-    @Override
     protected void setPicture(Material material, Document doc) {
-
     }
 
     @Override
     protected void setCrossCurricularThemes(Material material, Document doc) {
-
     }
 
     @Override
     protected void setKeyCompetences(Material material, Document doc) {
-
     }
 
     private void setTags(Material material, Element lom) {
         List<Tag> tags = getTags(lom);
         material.setTags(tags);
-    }
-
-    @Override
-    protected void setContributors(Material material, Document doc) {
-        List<Author> authors = null;
-        try {
-            authors = getAuthors(doc);
-        } catch (Exception e) {
-            // ignore if there is no authors for a material
-        }
-        material.setAuthors(authors);
     }
 
     private void setDescriptions(Material material, Element lom) {
@@ -207,26 +207,6 @@ public class MaterialParserWaramu extends MaterialParser {
         }
 
         material.setTitles(titles);
-    }
-
-    private List<Author> getAuthors(Document doc) throws XPathExpressionException {
-        List<Author> authors = new ArrayList<>();
-
-        XPathExpression expr = xpath
-                .compile("//*[local-name()='lom']/*[local-name()='lifeCycle']/*[local-name()='contribute']/*[local-name()='entity']");
-        NodeList nl = (NodeList) expr.evaluate(doc, XPathConstants.NODESET);
-
-        NodeList authorNodes = nl.item(0).getChildNodes();
-
-        for (int i = 0; i < authorNodes.getLength(); i++) {
-
-            CharacterData characterData = (CharacterData) authorNodes.item(i);
-            String data = getVCardWithNewLines(characterData);
-
-            setAuthorFromVCard(authors, data, authorService);
-        }
-
-        return authors;
     }
 
     private List<Tag> getTags(Element lom) {
