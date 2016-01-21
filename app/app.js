@@ -117,6 +117,7 @@ define(['app.routes', 'services/dependencyResolver', 'utils/taxonUtils'], functi
             if (path == "/portfolio/edit") {
             	$rootScope.isEditPortfolioMode = true;
             	$rootScope.selectedMaterials = [];
+            	$rootScope.selectedSingleMaterial = null;
             } else if(editModeAllowed.indexOf(path) != -1) {
             	if(path != "/material") {
             		$rootScope.selectedSingleMaterial = null;
