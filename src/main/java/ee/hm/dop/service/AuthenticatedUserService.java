@@ -57,21 +57,15 @@ public class AuthenticatedUserService {
 
         @JsonSerialize(using = DateTimeSerializer.class)
         private DateTime createdAt;
-        private String authProvider;
         private Person authCtx;
 
         UserData(Person authCtx) {
             this.authCtx = authCtx;
-            authProvider = TAAT;
             createdAt = now();
         }
 
         public DateTime getCreatedAt() {
             return createdAt;
-        }
-
-        public String getAuthProvider() {
-            return authProvider;
         }
 
         public Person getAuthCtx() {
