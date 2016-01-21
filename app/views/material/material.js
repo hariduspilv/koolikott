@@ -167,6 +167,10 @@ define(['app'], function (app) {
             $scope.isLoggedIn = function() {
                 return authenticatedUserService.isAuthenticated();
             };
+            
+            $scope.isAdmin = function() {
+                return authenticatedUserService.getUser() && authenticatedUserService.getUser().role === 'ADMIN';
+            };
 
             function getSignedUserData() {
                 serverCallService.makeGet("rest/user/getSignedUserData", {}, getSignedUserDataSuccess, getSignedUserDataFail);

@@ -38,9 +38,9 @@
                           </md-button>
                         </md-menu-item>
                         <md-menu-item dop-copy-permalink></md-menu-item>
-                        <md-menu-divider></md-menu-divider>
-                        <md-menu-item dop-recommend data-material="material"></md-menu-item>
-                        <md-menu-divider></md-menu-divider>
+                        <md-menu-divider data-ng-if="isAdmin()"></md-menu-divider>
+                        <md-menu-item data-ng-if="isAdmin()" dop-recommend data-material="material"></md-menu-item>
+                        <md-menu-divider data-ng-if="isLoggedIn()"></md-menu-divider>
                         <md-menu-item data-ng-if="isLoggedIn()" dop-report-improper data-material="material"></md-menu-item>
                         <md-menu-item data-ng-if="isLoggedIn()" dop-report-broken-link></md-menu-item>
                       </md-menu-content>
