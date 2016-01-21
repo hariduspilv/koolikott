@@ -259,10 +259,8 @@ md-card {
     }
     .divider-left {
       display: block;
-      border-left-width: 1px;
-      border-left-style: solid;
-      padding-left: $card-lg-padding;
-      border-left-color: $border-color;
+      border-left: none;
+      padding-left: 0;
       md-content {
         margin-top: 20px;
       }
@@ -274,7 +272,7 @@ md-card {
       overflow: hidden;
       position: relative;
       margin-right: -$card-lg-padding;
-      margin-top: -$card-lg-padding;
+      margin-top: 0;
       margin-left: -$card-lg-padding;
       text-align: center;
       md-icon {
@@ -309,6 +307,19 @@ md-card {
         .icon-kind {
           color: rgba(255, 255, 255, 0);
         }
+      }
+    }
+    @media (min-width: 600px) {
+      .card-cover {
+
+        margin-top: -$card-lg-padding;
+
+      }
+      .divider-left {
+        border-left-width: 1px;
+        border-left-style: solid;
+        padding-left: $card-lg-padding;
+        border-left-color: $border-color;
       }
     }
     .actions {
