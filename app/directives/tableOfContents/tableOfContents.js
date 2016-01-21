@@ -1,7 +1,7 @@
 define(['app'], function(app)
 {
-    app.directive('dopTableOfContents', ['$filter', '$document', '$rootScope', 'translationService', '$mdToast', '$location',
-     function($filter, $document, $rootScope, translationService, $mdToast, $location) {
+    app.directive('dopTableOfContents', ['$filter', '$document', '$rootScope', 'translationService', '$mdToast', '$location', '$timeout',
+     function($filter, $document, $rootScope, translationService, $mdToast, $location, $timeout) {
         return {
             scope: {
                 portfolio: '=',
@@ -14,18 +14,28 @@ define(['app'], function(app)
                 $scope.gotoChapter = function(e, chapterId, subchapterId) {
                     e.preventDefault();
 
-                    if (!$rootScope.isViewPortforlioPage && !$rootScope.isEditPortfolioPage) return;
-
-                    var combinedId = 'chapter-' + chapterId;
-                    
+                    var combinedId = 'chapter-' + chapterId;           
                     if (subchapterId != null) {
                     	combinedId += '-' + subchapterId;
                     }
-                    
                     var $chapter = angular.element(document.getElementById(combinedId));
                     var $context = angular.element(document.getElementById('scrollable-content'));
-
-                    $context.scrollToElement($chapter, 30, 200);
+                    
+                    if (!$rootScope.isViewPortforlioPage && !$rootScope.isEditPortfolioPage) {
+                    	$location.path('/portfolio/edit').search({id:  $scope.portfolio.id});
+                		var watchPage = $scope.$watch(function() { return document.getElementById(combinedId) }, function( newValue ) {
+                			if(newValue != null) {
+                				$timeout(function() {
+	            					$chapter = angular.element(document.getElementById(combinedId));
+	                                $context = angular.element(document.getElementById('scrollable-content'));
+	                				$context.scrollToElement($chapter, 30, 0);
+	                				watchPage();
+            					}, 0);	
+                			}
+                        });
+                    } else {
+                    	$context.scrollToElement($chapter, 30, 200);
+                    }
                 };
 
                 $scope.addNewSubChapter = function(index) {
