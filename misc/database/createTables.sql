@@ -727,6 +727,7 @@ CREATE TABLE ImproperContent (
 CREATE TABLE Recommendation (
   id        BIGINT    AUTO_INCREMENT PRIMARY KEY,
   creator   BIGINT  NOT NULL,
+  portfolio BIGINT UNIQUE,
   material  BIGINT UNIQUE,
   added     TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 
@@ -734,6 +735,10 @@ CREATE TABLE Recommendation (
   REFERENCES User (id)
     ON DELETE RESTRICT,
 
+  FOREIGN KEY (portfolio)
+  REFERENCES Portfolio (id)
+    ON DELETE RESTRICT,
+    
   FOREIGN KEY (material)
   REFERENCES Material (id)
     ON DELETE RESTRICT

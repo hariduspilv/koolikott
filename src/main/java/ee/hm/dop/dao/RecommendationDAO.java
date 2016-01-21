@@ -9,6 +9,7 @@ import javax.persistence.TypedQuery;
 import org.joda.time.DateTime;
 
 import ee.hm.dop.model.Material;
+import ee.hm.dop.model.Portfolio;
 import ee.hm.dop.model.Recommendation;
 
 public class RecommendationDAO {
@@ -34,6 +35,27 @@ public class RecommendationDAO {
     public void deleteMaterialRecommendation(Material material) {
         Query query = entityManager.createQuery("DELETE Recommendation r WHERE r.material = :mid");
         query.setParameter("mid", material);
+        query.executeUpdate();
+    }
+
+    public Recommendation findPortfolioRecommendation(Portfolio portfolio) {
+        TypedQuery<Recommendation> findReccomendation = entityManager
+                .createQuery("SELECT r FROM Reccomendation r WHERE r.portfolio = :pid", Recommendation.class);
+
+        Recommendation reccomendation = null;
+        try {
+            findReccomendation.setParameter("pid", portfolio);
+            reccomendation = findReccomendation.getSingleResult();
+        } catch (NoResultException ex) {
+            // ignore
+        }
+
+        return reccomendation;
+    }
+
+    public void deletePortfolioRecommendation(Portfolio portfolio) {
+        Query query = entityManager.createQuery("DELETE Recommendation r WHERE r.portfolio = :pid");
+        query.setParameter("pid", portfolio);
         query.executeUpdate();
     }
 

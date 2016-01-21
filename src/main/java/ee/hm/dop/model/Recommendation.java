@@ -34,6 +34,10 @@ public class Recommendation {
     @JoinColumn(name = "material")
     private Material material;
 
+    @ManyToOne
+    @JoinColumn(name = "portfolio")
+    private Portfolio portfolio;
+
     @Column(nullable = false)
     @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
     @JsonSerialize(using = DateTimeSerializer.class)
@@ -62,6 +66,14 @@ public class Recommendation {
 
     public void setMaterial(Material material) {
         this.material = material;
+    }
+
+    public Portfolio getPortfolio() {
+        return portfolio;
+    }
+
+    public void setPortfolio(Portfolio portfolio) {
+        this.portfolio = portfolio;
     }
 
     public DateTime getAdded() {
