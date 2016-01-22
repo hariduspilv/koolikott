@@ -36,9 +36,9 @@ define(['app'], function(app)
                     // Paid
                     var isPaid = searchService.isPaid();
                     if (isPaid === true  || isPaid === false) {
-                        $scope.detailedSearch.paid = isPaid;
+                        $scope.detailedSearch.paid = !isPaid;
                     } else {
-                        $scope.detailedSearch.paid = true;
+                        $scope.detailedSearch.paid = false;
                     }
 
                     // Type
@@ -119,7 +119,7 @@ define(['app'], function(app)
                 };
 
                 function addIsPaidToSearch() {
-                    searchService.setPaid($scope.detailedSearch.paid);
+                    searchService.setPaid(!$scope.detailedSearch.paid);
                 }
 
                 function addTypeToSearch() {
