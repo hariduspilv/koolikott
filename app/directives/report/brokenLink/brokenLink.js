@@ -1,11 +1,24 @@
 define(['app'], function(app)
 {
-    app.directive('dopReportBrokenLink', ['translationService', '$mdDialog', '$translate',
-     function(translationService, $mdDialog, $translate) {
+    app.directive('dopReportBrokenLink', ['translationService', '$mdDialog', '$translate', 'authenticatedUserService', 'serverCallService',
+     function(translationService, $mdDialog, $translate, authenticatedUserService, serverCallService) {
         return {
             scope: false,
             templateUrl: 'directives/report/brokenLink/brokenLink.html',
             controller: function($scope) {
+            	
+            	$scope.isAdmin = authenticatedUserService.isAdmin();
+            	
+            	$scope.$watch('material', function (newValue, oldValue) {
+                    if (newValue && newValue.type == ".Material") {
+                    	if($scope.isAdmin) {
+                    		serverCallService.makeGet("rest/material/isBroken?materialId="+newValue.id, {}, isBrokenSuccess, queryFailed);  	
+                    	} else {
+                    		serverCallService.makeGet("rest/material/hasSetBroken?materialId="+newValue.id, {}, hasSetBrokenSuccess, queryFailed);  	
+                    	}
+                    }
+                }, false);
+            	
                 $scope.showConfirmationDialog = function() {
                     var confirm = $mdDialog.confirm()
                         .title($translate.instant('REPORT_BROKEN_LINK_TITLE'))
@@ -14,9 +27,29 @@ define(['app'], function(app)
                         .cancel($translate.instant('BUTTON_CANCEL'));
             
                     $mdDialog.show(confirm).then(function() {
-                        // todo: when user user clicks "OK" button send the notification
+                    	url = "rest/material/setBroken";
+                    	serverCallService.makePost(url, $scope.material, setBrokenSuccessful, queryFailed);
+                    	
                     });
                 }
+
+                function isBrokenSuccess(data) {
+                	$scope.isBroken = data;
+                	$scope.isBrokenReportedByUser = data;
+                }
+                
+                function hasSetBrokenSuccess(data) {
+                	$scope.isBrokenReportedByUser = data;
+                }
+                
+                function setBrokenSuccessful() {
+                	$scope.isBrokenReportedByUser = true;
+                }     
+                
+                function queryFailed() {
+                	log("Request failed");
+                }
+                
             }
         };
     }]);
