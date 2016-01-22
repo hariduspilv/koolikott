@@ -383,6 +383,10 @@ public class MaterialService {
         return materialDao.getDeletedMaterials();
     }
 
+    public List<BrokenContent> getBrokenMaterials() {
+        return brokenContentDAO.getBrokenMaterials();
+    }
+
     public void setMaterialNotBroken(Long id) {
         brokenContentDAO.deleteBrokenMaterials(id);
     }

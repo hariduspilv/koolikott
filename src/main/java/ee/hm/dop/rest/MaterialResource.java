@@ -190,6 +190,14 @@ public class MaterialResource extends BaseResource {
     }
 
     @GET
+    @Path("getBroken")
+    @Produces(MediaType.APPLICATION_JSON)
+    @RolesAllowed({ "ADMIN" })
+    public List<BrokenContent> getBrokenMaterial() {
+        return materialService.getBrokenMaterials();
+    }
+
+    @GET
     @Path("setNotBroken")
     @Produces(MediaType.APPLICATION_JSON)
     @RolesAllowed({ "ADMIN" })
