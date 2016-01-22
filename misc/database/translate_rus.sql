@@ -262,6 +262,8 @@ INSERT INTO Translation(translationGroup, translationKey, translation) VALUES
 (2,'RECOMMEND_REMOVE','Удалить из списка рекомендаций'),
 (2,'REFERENCE','справка'),
 (2,'REFERENCESHARINGPLATFORM','справка платформа по обмену'),
+(2,'BROKEN_MATERIALS','Сломанные материалы'),
+(2,'REPORT_BROKEN_LINK_CORRECT','Отметить сломанный материал, правильно'),
 (2,'REPORT_BROKEN_LINK','Сообщить о неработающей материал'),
 (2,'REPORT_BROKEN_LINK_CONTENT','Администратор получит уведомление ваш и принять необходимые меры.'),
 (2,'REPORT_BROKEN_LINK_TITLE','Хотите, чтобы сообщить о битой материал?'),

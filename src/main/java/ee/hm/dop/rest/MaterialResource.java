@@ -18,6 +18,7 @@ import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import ee.hm.dop.model.BrokenContent;
 import ee.hm.dop.model.ImproperContent;
 import ee.hm.dop.model.Material;
 import ee.hm.dop.model.User;
@@ -177,6 +178,31 @@ public class MaterialResource extends BaseResource {
     @RolesAllowed({ "ADMIN" })
     public List<ImproperContent> getImproperMaterials() {
         return materialService.getImproperMaterials();
+    }
+
+    @POST
+    @Path("setBroken")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    @RolesAllowed({ "USER", "ADMIN", "PUBLISHER" })
+    public BrokenContent setBrokenMaterial(Material material) {
+        return materialService.addBrokenMaterial(material, getLoggedInUser());
+    }
+
+    @GET
+    @Path("hasSetBroken")
+    @Produces(MediaType.APPLICATION_JSON)
+    @RolesAllowed({ "USER", "ADMIN", "PUBLISHER" })
+    public Boolean hasSetBroken(@QueryParam("materialId") long materialId) {
+        return materialService.hasSetBroken(materialId, getLoggedInUser());
+    }
+
+    @GET
+    @Path("isBroken")
+    @Produces(MediaType.APPLICATION_JSON)
+    @RolesAllowed({ "ADMIN" })
+    public Boolean isBroken(@QueryParam("materialId") long materialId) {
+        return materialService.isBroken(materialId, getLoggedInUser());
     }
 
     @GET

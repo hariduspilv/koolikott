@@ -12,11 +12,13 @@ import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import ee.hm.dop.dao.BrokenContentDAO;
 import ee.hm.dop.dao.ImproperContentDAO;
 import ee.hm.dop.dao.MaterialDAO;
 import ee.hm.dop.dao.RecommendationDAO;
 import ee.hm.dop.dao.UserLikeDAO;
 import ee.hm.dop.model.Author;
+import ee.hm.dop.model.BrokenContent;
 import ee.hm.dop.model.Comment;
 import ee.hm.dop.model.ImproperContent;
 import ee.hm.dop.model.Material;
@@ -56,6 +58,9 @@ public class MaterialService {
 
     @Inject
     private ImproperContentDAO improperContentDAO;
+
+    @Inject
+    private BrokenContentDAO brokenContentDAO;
 
     public Material get(long materialId) {
         return materialDao.findById(materialId);
@@ -358,13 +363,38 @@ public class MaterialService {
         return improperContentDAO.getImproperMaterials();
     }
 
+    public BrokenContent addBrokenMaterial(Material material, User loggedInUser) {
+        if (material == null || material.getId() == null) {
+            throw new RuntimeException("Material not found while adding broken material");
+        }
+        Material originalMaterial = materialDao.findById(material.getId());
+        if (originalMaterial == null) {
+            throw new RuntimeException("Material not found while adding broken material");
+        }
+
+        BrokenContent brokenContent = new BrokenContent();
+        brokenContent.setCreator(loggedInUser);
+        brokenContent.setMaterial(material);
+
+        return brokenContentDAO.update(brokenContent);
+    }
+
     public List<Material> getDeletedMaterials() {
         return materialDao.getDeletedMaterials();
     }
 
     public Boolean hasSetImproper(long materialId, User loggedInUser) {
         List<ImproperContent> improperContents = improperContentDAO.findByMaterialAndUser(materialId, loggedInUser);
+        return improperContents.size() != 0;
+    }
 
+    public Boolean hasSetBroken(long materialId, User loggedInUser) {
+        List<BrokenContent> improperContents = brokenContentDAO.findByMaterialAndUser(materialId, loggedInUser);
+        return improperContents.size() != 0;
+    }
+
+    public Boolean isBroken(long materialId, User loggedInUser) {
+        List<BrokenContent> improperContents = brokenContentDAO.findByMaterial(materialId);
         return improperContents.size() != 0;
     }
 

@@ -262,6 +262,8 @@ INSERT INTO Translation(translationGroup, translationKey, translation) VALUES
 (1,'RECOMMEND_REMOVE','Eemalda soovituste nimekirjast'),
 (1,'REFERENCE','Teabeallikas'),
 (1,'REFERENCESHARINGPLATFORM','Lingikogu'),
+(1,'BROKEN_MATERIALS','Katkised materjalid'),
+(1,'REPORT_BROKEN_LINK_CORRECT','Märgi katkine sisu korras olevaks'),
 (1,'REPORT_BROKEN_LINK','Teavita katkisest materjalist'),
 (1,'REPORT_BROKEN_LINK_CONTENT','Administraatorile saadetakse teavitus katkise materjali kohta.'),
 (1,'REPORT_BROKEN_LINK_TITLE','Kas soovid teavitada katkisest materjalist?'),
