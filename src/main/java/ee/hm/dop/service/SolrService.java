@@ -57,7 +57,7 @@ public class SolrService implements SearchEngineService {
 
     public boolean isIndexingInProgress() {
         SearchResponse response = executeCommand(SOLR_DATAIMPORT_STATUS);
-        return response.getStatus() == SOLR_STATUS_BUSY;
+        return response.getStatus().equals(SOLR_STATUS_BUSY);
     }
 
     protected SearchResponse executeCommand(String command) {
