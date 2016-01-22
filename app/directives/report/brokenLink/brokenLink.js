@@ -32,7 +32,11 @@ define(['app'], function(app)
                     	
                     });
                 }
-
+                
+                $scope.markMaterialCorrect = function() {
+                	serverCallService.makeGet("rest/material/setNotBroken?materialId="+$scope.material.id, {}, markCorrectSuccess, queryFailed);  	
+                }
+                
                 function isBrokenSuccess(data) {
                 	$scope.isBroken = data;
                 	$scope.isBrokenReportedByUser = data;
@@ -44,7 +48,12 @@ define(['app'], function(app)
                 
                 function setBrokenSuccessful() {
                 	$scope.isBrokenReportedByUser = true;
-                }     
+                }
+                
+                function markCorrectSuccess() {
+                	$scope.isBroken = false;
+                	$scope.isBrokenReportedByUser = false;
+                }
                 
                 function queryFailed() {
                 	log("Request failed");

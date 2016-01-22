@@ -2,3 +2,7 @@
   <md-icon md-menu-align-target>block</md-icon>
   <span data-translate="REPORT_BROKEN_LINK"></span>
 </md-button>
+<md-button data-ng-click="markMaterialCorrect()" data-ng-disabled="!isBroken" data-ng-if="isAdmin">
+  <md-icon md-menu-align-target>block</md-icon>
+  <span data-translate="REPORT_BROKEN_LINK_CORRECT"></span>
+</md-button>
