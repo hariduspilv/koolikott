@@ -100,7 +100,7 @@ public class SolrService implements SearchEngineService {
     private class SolrIndexThread extends Thread {
         private boolean updateIndex;
 
-        public void updateIndex() {
+        public synchronized void updateIndex() {
             updateIndex = true;
         }
 
