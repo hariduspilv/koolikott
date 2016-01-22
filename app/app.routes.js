@@ -94,6 +94,15 @@ define([], function()
                     'views/dashboard/improper/portfolio/improperPortfolio'
                 ]
             },
+            '/dashboard/broken/material': {
+                templateUrl: 'views/dashboard/broken/material/brokenMaterial.html',
+                controller: 'brokenMaterialController',
+                permissions: ['ADMIN'],
+                dependencies: [
+                    'views/dashboard/dashboard',
+                    'views/dashboard/broken/material/brokenMaterial'
+                ]
+            },
             '/dashboard/deleted/material': {
                 templateUrl: 'views/dashboard/deleted/material/deletedMaterial.html',
                 controller: 'deletedMaterialController',

@@ -105,6 +105,10 @@ define(['app'], function (app) {
     		$location.url("/dashboard/deleted/portfolio");
     	}
     	
+    	$scope.gotoBrokenMaterials = function() {
+    		$location.url("/dashboard/broken/material");
+    	}
+    	
         return {
             getItemsSuccess: getItemsSuccess,
             getItemsFail: getItemsFail
