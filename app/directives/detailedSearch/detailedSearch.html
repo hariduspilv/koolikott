@@ -57,8 +57,8 @@
         <md-checkbox data-ng-if="detailedSearch.educationalContext.id == 4" data-ng-model="detailedSearch.specialEducationalNeed" aria-label="{{'DETAILED_SEARCH_SPECIAL_EDUCATIONAL_NEED' | translate}}" class="md-primary" flex>
           <span data-translate="DETAILED_SEARCH_SPECIAL_EDUCATIONAL_NEED"></span>
         </md-checkbox>
-        <md-checkbox data-ng-model="detailedSearch.onlyPaid" class="md-primary" flex>
-          <span data-translate="DETAILED_SEARCH_ONLY_PAID"></span>
+        <md-checkbox data-ng-model="detailedSearch.paid" class="md-primary" flex>
+          <span data-translate="DETAILED_SEARCH_INCLUDE_PAID"></span>
         </md-checkbox>
         <md-radio-group data-ng-model="detailedSearch.type">
           <md-radio-button ng-disabled="$root.isEditPortfolioMode" value="all" class="md-primary md-checked">

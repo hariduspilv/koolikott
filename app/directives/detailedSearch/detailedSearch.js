@@ -34,11 +34,11 @@ define(['app'], function(app)
                     $scope.detailedSearch.targetGroups = searchService.getTargetGroups();
 
                     // Paid
-                    var onlyPaid = searchService.isOnlyPaid();
-                    if (onlyPaid === true  || onlyPaid === false) {
-                        $scope.detailedSearch.onlyPaid = onlyPaid;
+                    var isPaid = searchService.isPaid();
+                    if (isPaid === true  || isPaid === false) {
+                        $scope.detailedSearch.paid = isPaid;
                     } else {
-                        $scope.detailedSearch.onlyPaid = false;
+                        $scope.detailedSearch.paid = true;
                     }
 
                     // Type
@@ -104,7 +104,7 @@ define(['app'], function(app)
                 $scope.search = function() {
                     searchService.setSearch(createSimpleSearchQuery());
 
-                    addOnlyPaidToSearch();
+                    addIsPaidToSearch();
                     addTypeToSearch();
                     addLanguageToSearch();
                     addTaxonToSearch();
@@ -118,8 +118,8 @@ define(['app'], function(app)
                     $scope.searchCallback();
                 };
 
-                function addOnlyPaidToSearch() {
-                    searchService.setOnlyPaid($scope.detailedSearch.onlyPaid);
+                function addIsPaidToSearch() {
+                    searchService.setPaid($scope.detailedSearch.paid);
                 }
 
                 function addTypeToSearch() {
@@ -359,7 +359,7 @@ define(['app'], function(app)
                 
                 $scope.clear = $scope.accessor.clear = function() {
                     $scope.detailedSearch = {
-                        'onlyPaid': false,
+                        'paid': true,
                         'onlyBooks': false,
                         'CLIL': false,
                         'targetGroups': [],
