@@ -1,7 +1,7 @@
 <div id="page-view-material" flex>
-  <div layout="column" layout-gt-xs="row" flex>
+  <div layout="row" layout-xs="column" flex>
     <div data-ng-if="!isEditPortfolioMode" layout="row" layout-xs="column" flex="0" flex-gt-md="15"></div>
-    <section fle flex-gt-md="{{$root.isEditPortfolioMode ? '90' : '75'}}">
+    <section flex flex-gt-md="{{$root.isEditPortfolioMode ? '90' : '75'}}">
       <div  layout-gt-sm>
         <article flex="100" flex-gt-sm="75" flex-gt-lg="80" class="md-padding" role="main">
           <md-card class="card-lg" id="material-card">
@@ -48,7 +48,7 @@
                     </md-menu>
                   </div>
                   <!-- left meta  -->
-                  <div layout="row" layout-gt-xs="row" class="on-left">
+                  <div layout="row" class="on-left">
                     <div flex>
                       <p class="md-body-2 meta">
                         <small class="md-caption">

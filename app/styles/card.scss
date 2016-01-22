@@ -68,17 +68,11 @@ md-card {
     &.meta {
       line-height: 1.2;
       color: #333;
-
       md-icon.material-icons {
         font-size: inherit;
         vertical-align: baseline;
       }
     }
-    @media (min-width: 600px) {
-        // &.meta {
-        //   margin-top: 1em;
-        // }
-      }
     .md-caption {
       font-weight: 300;
     }
