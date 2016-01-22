@@ -44,13 +44,13 @@ class SearchEngineServiceMock implements SearchEngineService {
         addEmptyQueryWithTaxonEducationalContextFilter();
 
         addQueryWithEducationalContextFilter();
-        addQueryWithOnlyPaidFilterTrue();
-        addQueryWithOnlyPaidFilterFalse();
+        addQueryWithPaidFilterTrue();
+        addQueryWithPaidFilterFalse();
         addQueryWithTypeFilter();
         addQueryWithTypeFilterAll();
-        addQueryWithTaxonSubjectAndOnlyPaidFilterTrue();
+        addQueryWithTaxonSubjectAndPaidFilterFalse();
         addQueryWithTaxonSubjectAndTypeFilter();
-        addQueryWithOnlyPaidTrueAndTypeFilter();
+        addQueryWithPaidFalseAndTypeFilter();
         addIssuedFromQuery();
         addQueryWithAllFilters();
 
@@ -89,15 +89,16 @@ class SearchEngineServiceMock implements SearchEngineService {
         searchResponses.put(filteredQuery, filteredSearchResult);
     }
 
-    private static void addQueryWithOnlyPaidFilterFalse() {
+    private static void addQueryWithPaidFilterTrue() {
         String filteredQuery = "(dop) AND (visibility:\"public\" OR type:\"material\")";
-        List<Document> filteredSearchResult = createDocumentsWithIdentifiers(1L, 4L);
+        List<Document> filteredSearchResult = createDocumentsWithIdentifiers(1L, 3L);
         searchResponses.put(filteredQuery, filteredSearchResult);
     }
 
-    private static void addQueryWithOnlyPaidFilterTrue() {
-        String filteredQuery = "(dop) AND paid:\"true\" AND (visibility:\"public\" OR type:\"material\")";
-        List<Document> filteredSearchResult = createDocumentsWithIdentifiers(1L, 3L);
+    private static void addQueryWithPaidFilterFalse() {
+        String filteredQuery = "(dop) AND (paid:\"false\" OR type:\"portfolio\")"
+                + " AND (visibility:\"public\" OR type:\"material\")";
+        List<Document> filteredSearchResult = createDocumentsWithIdentifiers(1L, 4L);
         searchResponses.put(filteredQuery, filteredSearchResult);
     }
 
@@ -114,9 +115,9 @@ class SearchEngineServiceMock implements SearchEngineService {
         searchResponses.put(filteredQuery, filteredSearchResult);
     }
 
-    private static void addQueryWithTaxonSubjectAndOnlyPaidFilterTrue() {
+    private static void addQueryWithTaxonSubjectAndPaidFilterFalse() {
         String filteredQuery = "(dop) AND subject:\"biology\" AND domain:\"mathematics\""
-                + " AND educational_context:\"preschooleducation\" AND paid:\"true\""
+                + " AND educational_context:\"preschooleducation\" AND (paid:\"false\" OR type:\"portfolio\")"
                 + " AND (visibility:\"public\" OR type:\"material\")";
         List<Document> filteredSearchResult = createDocumentsWithIdentifiers(1L, 6L);
         searchResponses.put(filteredQuery, filteredSearchResult);
@@ -130,8 +131,8 @@ class SearchEngineServiceMock implements SearchEngineService {
         searchResponses.put(filteredQuery, filteredSearchResult);
     }
 
-    private static void addQueryWithOnlyPaidTrueAndTypeFilter() {
-        String filteredQuery = "(weird*) AND paid:\"true\" AND type:\"material\""
+    private static void addQueryWithPaidFalseAndTypeFilter() {
+        String filteredQuery = "(weird*) AND (paid:\"false\" OR type:\"portfolio\") AND type:\"material\""
                 + " AND (visibility:\"public\" OR type:\"material\")";
         List<Document> filteredSearchResult = createDocumentsWithIdentifiers(1L, 8L);
         searchResponses.put(filteredQuery, filteredSearchResult);
@@ -139,7 +140,7 @@ class SearchEngineServiceMock implements SearchEngineService {
 
     private static void addQueryWithAllFilters() {
         String filteredQuery = "(john*) AND educational_context:\"basiceducation\""
-                + " AND paid:\"true\" AND type:\"portfolio\""
+                + " AND (paid:\"false\" OR type:\"portfolio\") AND type:\"portfolio\""
                 + " AND (issue_date_year:[2011 TO *] OR (created:[2011-01-01T00:00:00Z TO *] AND type:\"portfolio\"))"
                 + " AND (visibility:\"public\" OR type:\"material\")";
         List<Document> filteredSearchResult = createDocumentsWithIdentifiers(2L, 3L, 4L);

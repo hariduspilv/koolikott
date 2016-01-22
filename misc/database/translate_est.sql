@@ -55,7 +55,7 @@ INSERT INTO Translation(translationGroup, translationKey, translation) VALUES
 (1,'DETAILED_SEARCH_CLIL','Lõimitud aine- ja keeleõpe'),
 (1,'DETAILED_SEARCH_CROSS_CURRICULAR_THEME','Läbivad teemad'),
 (1,'DETAILED_SEARCH_DESCRIPTION','Kirjeldus'),
-(1,'DETAILED_SEARCH_ONLY_PAID','Ainult tasuline õppevara'),
+(1,'DETAILED_SEARCH_INCLUDE_PAID','Tasulised materjalid'),
 (1,'DETAILED_SEARCH_ISSUE_DATE_FROM','Välja antud'),
 (1,'DETAILED_SEARCH_ISSUE_DATE_OR_LATER',' või hiljem.'),
 (1,'DETAILED_SEARCH_KEY_COMPETENCE','Üldpädevused'),

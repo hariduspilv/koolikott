@@ -8,7 +8,7 @@ public class SearchFilter {
 
     private Taxon taxon;
 
-    private boolean onlyPaid = false;
+    private boolean paid = true;
 
     private String type;
 
@@ -36,12 +36,12 @@ public class SearchFilter {
         this.taxon = taxon;
     }
 
-    public boolean isOnlyPaid() {
-        return onlyPaid;
+    public boolean isPaid() {
+        return paid;
     }
 
-    public void setOnlyPaid(boolean paid) {
-        this.onlyPaid = paid;
+    public void setPaid(boolean paid) {
+        this.paid = paid;
     }
 
     public String getType() {

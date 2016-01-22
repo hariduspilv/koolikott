@@ -99,10 +99,10 @@ public class SearchResourceTest extends ResourceIntegrationTestBase {
     }
 
     @Test
-    public void searchWithOnlyPaidFilterTrue() {
+    public void searchWithPaidFilterTrue() {
         String query = "dop";
         SearchFilter searchFilter = new SearchFilter();
-        searchFilter.setOnlyPaid(true);
+        searchFilter.setPaid(true);
         SearchResult searchResult = doGet(buildQueryURL(query, 0, searchFilter), SearchResult.class);
 
         assertMaterialIdentifiers(searchResult.getItems(), 1L, 3L);
@@ -111,10 +111,10 @@ public class SearchResourceTest extends ResourceIntegrationTestBase {
     }
 
     @Test
-    public void searchWithOnlyPaidFilterFalse() {
+    public void searchWithPaidFilterFalse() {
         String query = "dop";
         SearchFilter searchFilter = new SearchFilter();
-        searchFilter.setOnlyPaid(false);
+        searchFilter.setPaid(false);
         SearchResult searchResult = doGet(buildQueryURL(query, 0, searchFilter), SearchResult.class);
 
         assertMaterialIdentifiers(searchResult.getItems(), 1L, 4L);
@@ -149,14 +149,14 @@ public class SearchResourceTest extends ResourceIntegrationTestBase {
     }
 
     @Test
-    public void searchWithTaxonSubjectAndOnlyPaidFilterTrue() {
+    public void searchWithTaxonSubjectAndPaidFilterFalse() {
         String query = "dop";
         SearchFilter searchFilter = new SearchFilter();
         Subject subject = new Subject();
         subject.setId(20L);
         subject.setName("Biology");
         searchFilter.setTaxon(subject);
-        searchFilter.setOnlyPaid(true);
+        searchFilter.setPaid(false);
         SearchResult searchResult = doGet(buildQueryURL(query, 0, searchFilter), SearchResult.class);
 
         assertMaterialIdentifiers(searchResult.getItems(), 1L, 6L);
@@ -182,10 +182,10 @@ public class SearchResourceTest extends ResourceIntegrationTestBase {
     }
 
     @Test
-    public void searchWithOnlyPaidTrueAndTypeFilter() {
+    public void searchWithPaidFalseAndTypeFilter() {
         String query = "weird";
         SearchFilter searchFilter = new SearchFilter();
-        searchFilter.setOnlyPaid(true);
+        searchFilter.setPaid(false);
         searchFilter.setType("material");
         SearchResult searchResult = doGet(buildQueryURL(query, 0, searchFilter), SearchResult.class);
 
@@ -214,7 +214,7 @@ public class SearchResourceTest extends ResourceIntegrationTestBase {
         educationalContext.setId(2L);
         educationalContext.setName("BASICEDUCATION");
         searchFilter.setTaxon(educationalContext);
-        searchFilter.setOnlyPaid(true);
+        searchFilter.setPaid(false);
         searchFilter.setType("portfolio");
         searchFilter.setIssuedFrom(2011);
         SearchResult searchResult = doGet(buildQueryURL(query, 0, searchFilter), SearchResult.class);
@@ -262,8 +262,8 @@ public class SearchResourceTest extends ResourceIntegrationTestBase {
         if (searchFilter.getTaxon() != null) {
             queryURL += "&taxon=" + searchFilter.getTaxon().getId();
         }
-        if (searchFilter.isOnlyPaid() == true) {
-            queryURL += "&onlyPaid=true";
+        if (searchFilter.isPaid() == false) {
+            queryURL += "&paid=false";
         }
         if (searchFilter.getType() != null) {
             queryURL += "&type=" + encodeQuery(searchFilter.getType());

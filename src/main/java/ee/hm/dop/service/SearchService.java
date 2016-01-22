@@ -183,7 +183,7 @@ public class SearchService {
 
         filters.add(getLanguageAsQuery(searchFilter));
         filters.add(getTaxonsAsQuery(searchFilter));
-        filters.add(isOnlyPaidAsQuery(searchFilter));
+        filters.add(isPaidAsQuery(searchFilter));
         filters.add(getTypeAsQuery(searchFilter));
         filters.add(getTargetGroupsAsQuery(searchFilter));
         filters.add(getResourceTypeAsQuery(searchFilter));
@@ -207,9 +207,9 @@ public class SearchService {
         return "";
     }
 
-    private String isOnlyPaidAsQuery(SearchFilter searchFilter) {
-        if (searchFilter.isOnlyPaid()) {
-            return "paid:\"true\"";
+    private String isPaidAsQuery(SearchFilter searchFilter) {
+        if (!searchFilter.isPaid()) {
+            return "(paid:\"false\" OR type:\"portfolio\")";
         }
         return "";
     }

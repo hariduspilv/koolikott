@@ -49,7 +49,7 @@ public class SearchResource extends BaseResource {
     @Produces(MediaType.APPLICATION_JSON)
     public SearchResult search(@QueryParam("q") String query, @QueryParam("start") Long start, //
             @QueryParam("taxon") Long taxonId, //
-            @QueryParam("onlyPaid") Boolean onlyPaid, //
+            @QueryParam("paid") Boolean paid, //
             @QueryParam("type") String type, //
             @QueryParam("language") String languageCode, //
             @QueryParam("targetGroup") List<TargetGroup> targetGroups, //
@@ -66,8 +66,8 @@ public class SearchResource extends BaseResource {
                 .getCrossCurricularThemeById(crossCurricularThemeId);
         KeyCompetence keyCompetence = keyCompetenceService.getKeyCompetenceById(keyCompetenceId);
 
-        if (onlyPaid == null) {
-            onlyPaid = false;
+        if (paid == null) {
+            paid = true;
         }
 
         if (isSpecialEducation == null) {
@@ -80,7 +80,7 @@ public class SearchResource extends BaseResource {
 
         SearchFilter searchFilter = new SearchFilter();
         searchFilter.setTaxon(taxon);
-        searchFilter.setOnlyPaid(onlyPaid);
+        searchFilter.setPaid(paid);
         searchFilter.setType(type);
         searchFilter.setLanguage(language);
         searchFilter.setTargetGroups(targetGroups);
