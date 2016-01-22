@@ -41,6 +41,7 @@ public class SearchResponseTest {
                 "      \"indent\":\"true\",\n" + //
                 "      \"wt\":\"python\",\n" + //
                 "      \"_\":\"1435915217768\"}},\n" + //
+                "  \"status\":\"testStatus\",\n" + //
                 "  \"response\":{\"numFound\":8,\"start\":0,\"docs\":[\n" + //
                 "      {\n" + //
                 "        \"id\":\"6\",\n" + //
@@ -71,6 +72,7 @@ public class SearchResponseTest {
         SearchResponse searchResponse = mapper.readValue(searchResult, SearchResponse.class);
         assertNotNull(searchResponse);
         assertNotNull(searchResponse.getResponse());
+        assertEquals("testStatus", searchResponse.getStatus());
 
         List<Document> documents = searchResponse.getResponse().getDocuments();
         assertEquals(8, documents.size());
@@ -103,6 +105,7 @@ public class SearchResponseTest {
                 "            \"_\": \"1435920941028\"\n" + //
                 "          }\n" + //
                 "        },\n" + //
+                "        \"status\":\"testStatus\",\n" + //
                 "        \"response\": {\n" + //
                 "          \"numFound\": 0,\n" + //
                 "          \"start\": 0,\n" + //
@@ -117,6 +120,7 @@ public class SearchResponseTest {
         assertEquals(0, searchResponse.getResponse().getDocuments().size());
         assertEquals(0, searchResponse.getResponse().getTotalResults());
         assertEquals(0, searchResponse.getResponse().getStart());
+        assertEquals("testStatus", searchResponse.getStatus());
 
         ResponseHeader responseHeader = searchResponse.getResponseHeader();
         assertNotNull(responseHeader);
@@ -125,23 +129,27 @@ public class SearchResponseTest {
 
     @Test
     public void deserializeErrorResponse() throws Exception {
-        String searchResult = "{\n"
-                + "        \"responseHeader\": {\n"
-                + "          \"status\": 400,\n"
-                + "          \"QTime\": 1,\n"
-                + "          \"params\": {\n"
-                + "            \"q\": \"\\\"\",\n"
-                + "            \"wt\": \"json\",\n"
-                + "            \"_\": \"1435934978154\"\n"
-                + "          }\n"
-                + "        },\n"
-                + "        \"error\": {\n"
-                + "          \"msg\": \"org.apache.solr.search.SyntaxError: Cannot parse '\\\"': Lexical error at line 1, column 2.  Encountered: <EOF> after : \\\"\\\"\",\n"
-                + "          \"code\": 400\n" + "        }\n" + "      }";
+        String searchResult = "{\n" + //
+                "        \"responseHeader\": {\n" + //
+                "          \"status\": 400,\n" + //
+                "          \"QTime\": 1,\n" + //
+                "          \"params\": {\n" + //
+                "            \"q\": \"\\\"\",\n" + //
+                "            \"wt\": \"json\",\n" + //
+                "            \"_\": \"1435934978154\"\n" + //
+                "          }\n" + //
+                "        },\n" + //
+                "        \"status\":\"testStatus\",\n" + //
+                "        \"error\": {\n" + //
+                "          \"msg\": \"org.apache.solr.search.SyntaxError: Cannot parse '\\\"': Lexical " + //
+                "error at line 1, column 2.  Encountered: <EOF> after : \\\"\\\"\",\n" + //
+                "          \"code\": 400\n" + "        }\n" + //
+                "      }";
 
         SearchResponse searchResponse = mapper.readValue(searchResult, SearchResponse.class);
         assertNotNull(searchResponse);
         assertNull(searchResponse.getResponse());
+        assertEquals("testStatus", searchResponse.getStatus());
 
         ResponseHeader responseHeader = searchResponse.getResponseHeader();
         assertNotNull(responseHeader);
