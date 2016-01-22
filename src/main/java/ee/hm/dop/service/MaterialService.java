@@ -383,6 +383,10 @@ public class MaterialService {
         return materialDao.getDeletedMaterials();
     }
 
+    public void setMaterialNotBroken(Long id) {
+        brokenContentDAO.deleteBrokenMaterials(id);
+    }
+
     public Boolean hasSetImproper(long materialId, User loggedInUser) {
         List<ImproperContent> improperContents = improperContentDAO.findByMaterialAndUser(materialId, loggedInUser);
         return improperContents.size() != 0;

@@ -5,6 +5,7 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
+import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 
 import org.joda.time.DateTime;
@@ -25,6 +26,13 @@ public class BrokenContentDAO {
         merged = entityManager.merge(brokenontent);
         entityManager.persist(merged);
         return merged;
+    }
+
+    public void deleteBrokenMaterials(Long id) {
+        Query query = entityManager
+                .createQuery("UPDATE BrokenContent b set b.deleted = true WHERE b.material.id = :id");
+        query.setParameter("id", id);
+        query.executeUpdate();
     }
 
     public List<BrokenContent> findByMaterialAndUser(long materialId, User loggedInUser) {
