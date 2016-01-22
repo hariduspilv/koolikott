@@ -1,7 +1,9 @@
 <md-card class="card-lg" id="portfolio-card">
     <md-card-content>
         <div layout="column" layout-gt-xs="row" >
-            <div layout="column" flex flex-gt-xs="75">
+          <!-- left large side  -->
+            <div flex flex-gt-xs="75">
+              <!-- left headline -->
                 <div layout="row">
                     <h1 flex data-ng-bind="portfolio.title"></h1>
                     <md-menu>
@@ -35,7 +37,8 @@
                         </md-menu-content>
                     </md-menu>
                 </div>
-                <div layout="column" layout-gt-xs="row" class="on-left">
+                <!-- left meta  -->
+                <div layout="row" class="on-left">
                     <div flex>
                         <p class="md-body-2 meta">
                             <small class="md-caption">
@@ -64,12 +67,12 @@
                 </div>
 
                 <md-divider class="md-default-theme"></md-divider>
-
+                <!-- left description  -->
                 <div layout="column" class="on-left" flex>
                     <p class="md-body-1 description" data-ng-bind="portfolio.summary"></p>
                 </div>
 
-
+                <!-- left tags  -->
                 <p class="md-body-2 meta">
                     <small class="md-caption">
                         <span data-translate="DETAIL_VIEW_TAGS"></span>:
@@ -79,6 +82,7 @@
                 </p>
             </div>
 
+            <!-- right small side  -->
             <div layout="column" flex flex-gt-xs="25" class="divider-left" layout-align="start start">
               <div class="corner"></div>
               <!-- imaged -->
@@ -139,7 +143,7 @@
 
         <md-divider class="md-default-theme"></md-divider>
 
-        <div layout="column" layout-gt-xs="row" class="actions" layout-align="start start">
+        <div layout="column" layout-gt-xs="row" class="actions">
             <div ng-if="!isEditPortfolioMode && portfolio.type" flex="50" flex-gt-xs="75">
                 <div data-dop-comments-card comments="portfolio.comments" comment="comment" submit-click="addComment()"></div>
             </div>

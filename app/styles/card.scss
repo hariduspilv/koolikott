@@ -68,11 +68,17 @@ md-card {
     &.meta {
       line-height: 1.2;
       color: #333;
+
       md-icon.material-icons {
         font-size: inherit;
         vertical-align: baseline;
       }
     }
+    @media (min-width: 600px) {
+        // &.meta {
+        //   margin-top: 1em;
+        // }
+      }
     .md-caption {
       font-weight: 300;
     }
@@ -226,14 +232,18 @@ md-card {
     margin-bottom: 20px;
     h1 {
       font-weight: 300;
-      font-size: 34px;
       color: $heading-color;
-      font-size: 30px;
+      font-size: 24px;
       margin: 0 0 10px 0;
       font-weight: 300;
-      line-height: 35px;
+      line-height: 28px;
     }
-
+    @media (min-width: 600px) {
+      h1 {
+        font-size: 30px;
+        line-height: 35px;
+      }
+    }
     h2 {
       color: $heading-color;
       font-size: 20px;
@@ -267,7 +277,7 @@ md-card {
     }
     .card-cover {
       @include aspect-ratio(3,2);
-      max-height: 500px;
+      max-height: auto;
       background: $green2;
       overflow: hidden;
       position: relative;
@@ -311,7 +321,7 @@ md-card {
     }
     @media (min-width: 600px) {
       .card-cover {
-
+        max-height: 500px;
         margin-top: -$card-lg-padding;
 
       }
