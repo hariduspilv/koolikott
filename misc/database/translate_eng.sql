@@ -55,7 +55,7 @@ INSERT INTO Translation(translationGroup, translationKey, translation) VALUES
 (3,'DETAILED_SEARCH_CLIL','Content and language integrated learning'),
 (3,'DETAILED_SEARCH_CROSS_CURRICULAR_THEME','Cross-curricular theme'),
 (3,'DETAILED_SEARCH_DESCRIPTION','Description'),
-(3,'DETAILED_SEARCH_INCLUDE_PAID','Include Paid'),
+(3,'DETAILED_SEARCH_ONLY_FREE','Show only free materials'),
 (3,'DETAILED_SEARCH_ISSUE_DATE_FROM','Issued from '),
 (3,'DETAILED_SEARCH_ISSUE_DATE_OR_LATER',' or later.'),
 (3,'DETAILED_SEARCH_KEY_COMPETENCE','Key competence'),
