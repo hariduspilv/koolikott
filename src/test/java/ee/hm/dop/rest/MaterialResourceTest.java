@@ -22,6 +22,7 @@ import org.junit.Test;
 
 import ee.hm.dop.common.test.ResourceIntegrationTestBase;
 import ee.hm.dop.dao.TaxonDAO;
+import ee.hm.dop.model.BrokenContent;
 import ee.hm.dop.model.CrossCurricularTheme;
 import ee.hm.dop.model.ImproperContent;
 import ee.hm.dop.model.KeyCompetence;
@@ -40,6 +41,11 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
     private static final String GET_MATERIAL_URL = "material?materialId=%s";
     private static final String GET_BY_CREATOR_URL = "material/getByCreator?username=%s";
     private static final String CREATE_MATERIAL_URL = "material";
+    private static final String MATERIAL_SET_BROKEN = "material/setBroken";
+    private static final String MATERIAL_GET_BROKEN = "material/getBroken";
+    private static final String MATERIAL_SET_NOT_BROKEN = "material/setNotBroken";
+    private static final String MATERIAL_HAS_SET_BROKEN = "material/hasSetBroken";
+    private static final String MATERIAL_IS_BROKEN = "material/isBroken";
 
     @Inject
     private TaxonDAO taxonDAO;
@@ -331,8 +337,9 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
     public void setNotImproper() {
         login("89898989898");
         Response response1 = doGet("material/getImproper");
-        List<ImproperContent> originalImproperContentList = response1.readEntity(new GenericType<List<ImproperContent>>() {
-        });
+        List<ImproperContent> originalImproperContentList = response1
+                .readEntity(new GenericType<List<ImproperContent>>() {
+                });
 
         doPost(format("material/setNotImproper/%s", 3), null);
 
@@ -340,7 +347,106 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
         List<ImproperContent> newImproperContentList = response2.readEntity(new GenericType<List<ImproperContent>>() {
         });
 
-        assertEquals(originalImproperContentList.size(), newImproperContentList.size()+1);
+        assertEquals(originalImproperContentList.size(), newImproperContentList.size() + 1);
+    }
+
+    @Test
+    public void setBrokenMaterial() {
+        login("89012378912");
+        long materialId = 5;
+
+        Material material = getMaterial(materialId);
+
+        Response response = doPost(MATERIAL_SET_BROKEN, Entity.entity(material, MediaType.APPLICATION_JSON_TYPE));
+        assertEquals(Status.OK.getStatusCode(), response.getStatus());
+    }
+
+    @Test
+    public void setNotBroken() {
+        login("89012378912");
+        long materialId = 5;
+
+        Material material = getMaterial(materialId);
+
+        Response response = doGet(MATERIAL_SET_NOT_BROKEN + "?materialId=" + material.getId(),
+                MediaType.APPLICATION_JSON_TYPE);
+        assertEquals(Status.FORBIDDEN.getStatusCode(), response.getStatus());
+
+        login("89898989898");
+        Response responseAdmin = doGet(MATERIAL_SET_NOT_BROKEN + "?materialId=" + material.getId(),
+                MediaType.APPLICATION_JSON_TYPE);
+        assertEquals(Status.NO_CONTENT.getStatusCode(), responseAdmin.getStatus());
+
+        Response hasBrokenResponse = doGet(MATERIAL_IS_BROKEN + "?materialId=" + material.getId(),
+                MediaType.APPLICATION_JSON_TYPE);
+        assertEquals(Status.OK.getStatusCode(), hasBrokenResponse.getStatus());
+
+        assertEquals(hasBrokenResponse.readEntity(Boolean.class), false);
+    }
+
+    @Test
+    public void hasSetBroken() {
+        login("89012378912");
+        long materialId = 5;
+
+        Material material = getMaterial(materialId);
+
+        Response response = doPost(MATERIAL_SET_BROKEN, Entity.entity(material, MediaType.APPLICATION_JSON_TYPE));
+        assertEquals(Status.OK.getStatusCode(), response.getStatus());
+
+        Response hasBrokenResponse = doGet(MATERIAL_HAS_SET_BROKEN + "?materialId=" + material.getId(),
+                MediaType.APPLICATION_JSON_TYPE);
+        assertEquals(Status.OK.getStatusCode(), response.getStatus());
+
+        assertEquals(hasBrokenResponse.readEntity(Boolean.class), true);
+    }
+
+    @Test
+    public void isBroken() {
+        login("89012378912");
+        long materialId = 5;
+
+        Material material = getMaterial(materialId);
+
+        Response response = doPost(MATERIAL_SET_BROKEN, Entity.entity(material, MediaType.APPLICATION_JSON_TYPE));
+        assertEquals(Status.OK.getStatusCode(), response.getStatus());
+
+        Response isBrokenResponse = doGet(MATERIAL_IS_BROKEN + "?materialId=" + material.getId(),
+                MediaType.APPLICATION_JSON_TYPE);
+        assertEquals(Status.FORBIDDEN.getStatusCode(), isBrokenResponse.getStatus());
+
+        login("89898989898");
+
+        Response isBrokenResponseAdmin = doGet(MATERIAL_IS_BROKEN + "?materialId=" + material.getId(),
+                MediaType.APPLICATION_JSON_TYPE);
+        assertEquals(Status.OK.getStatusCode(), isBrokenResponseAdmin.getStatus());
+
+        assertEquals(isBrokenResponseAdmin.readEntity(Boolean.class), true);
+    }
+
+    @Test
+    public void getBroken() {
+        login("89012378912");
+        Response getBrokenResponse = doGet(MATERIAL_GET_BROKEN, MediaType.APPLICATION_JSON_TYPE);
+        assertEquals(Status.FORBIDDEN.getStatusCode(), getBrokenResponse.getStatus());
+
+        login("89898989898");
+
+        long materialId = 5;
+        Material material = getMaterial(materialId);
+        Response response = doPost(MATERIAL_SET_BROKEN, Entity.entity(material, MediaType.APPLICATION_JSON_TYPE));
+        assertEquals(Status.OK.getStatusCode(), response.getStatus());
+
+        Response getBrokenResponseAdmin = doGet(MATERIAL_GET_BROKEN, MediaType.APPLICATION_JSON_TYPE);
+        List<BrokenContent> brokenMaterials = getBrokenResponseAdmin.readEntity(new GenericType<List<BrokenContent>>() {
+        });
+        boolean containsMaterial = false;
+        for (BrokenContent brokenContent : brokenMaterials) {
+            if (brokenContent.getMaterial().getId() == materialId) {
+                containsMaterial = true;
+            }
+        }
+        assertEquals(containsMaterial, true);
     }
 
     private void assertMaterial1(Material material) {
