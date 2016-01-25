@@ -554,6 +554,38 @@ public class PortfolioResourceTest extends ResourceIntegrationTestBase {
 
     }
 
+    @Test
+    public void removedPortfolioRecommendation() {
+        login("38011550077");
+        Portfolio portfolio = getPortfolio(1L);
+        Response response = doPost(RECOMMEND_PORTFOLIO_URL, Entity.entity(portfolio, MediaType.APPLICATION_JSON_TYPE));
+        assertEquals(Status.FORBIDDEN.getStatusCode(), response.getStatus());
+        logout();
+
+        login("89898989898");
+        Response responseAdmin = doPost(RECOMMEND_PORTFOLIO_URL,
+                Entity.entity(portfolio, MediaType.APPLICATION_JSON_TYPE));
+        assertEquals(Status.NO_CONTENT.getStatusCode(), responseAdmin.getStatus());
+
+        Portfolio portfolioAfterRecommend = getPortfolio(1L);
+        assertEquals(portfolioAfterRecommend.isRecommended(), true);
+
+        logout();
+        login("38011550077");
+        Response responseRemoveRecommendation = doPost(REMOVE_PORTFOLIO_RECOMMENDATION_URL,
+                Entity.entity(portfolio, MediaType.APPLICATION_JSON_TYPE));
+        assertEquals(Status.FORBIDDEN.getStatusCode(), responseRemoveRecommendation.getStatus());
+
+        logout();
+        login("89898989898");
+        Response responseRemoveRecommendationAdmin = doPost(REMOVE_PORTFOLIO_RECOMMENDATION_URL,
+                Entity.entity(portfolio, MediaType.APPLICATION_JSON_TYPE));
+        assertEquals(Status.NO_CONTENT.getStatusCode(), responseRemoveRecommendationAdmin.getStatus());
+
+        Portfolio portfolioAfterRemoveRecommend = getPortfolio(1L);
+        assertEquals(portfolioAfterRemoveRecommend.isRecommended(), false);
+    }
+
     private Portfolio getPortfolio(long id) {
         return doGet(format(GET_PORTFOLIO_URL, id), Portfolio.class);
     }
