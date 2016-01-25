@@ -387,8 +387,16 @@ public class MaterialService {
         return brokenContentDAO.getBrokenMaterials();
     }
 
-    public void setMaterialNotBroken(Long id) {
-        brokenContentDAO.deleteBrokenMaterials(id);
+    public void setMaterialNotBroken(Material material) {
+        if (material == null || material.getId() == null) {
+            throw new RuntimeException("Material not found while adding broken material");
+        }
+        Material originalMaterial = materialDao.findById(material.getId());
+        if (originalMaterial == null) {
+            throw new RuntimeException("Material not found while adding broken material");
+        }
+
+        brokenContentDAO.deleteBrokenMaterials(originalMaterial.getId());
     }
 
     public Boolean hasSetImproper(long materialId, User loggedInUser) {

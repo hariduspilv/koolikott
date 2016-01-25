@@ -197,12 +197,12 @@ public class MaterialResource extends BaseResource {
         return materialService.getBrokenMaterials();
     }
 
-    @GET
+    @POST
     @Path("setNotBroken")
     @Produces(MediaType.APPLICATION_JSON)
     @RolesAllowed({ "ADMIN" })
-    public void setNotBroken(@QueryParam("materialId") long materialId) {
-        materialService.setMaterialNotBroken(materialId);
+    public void setNotBroken(Material material) {
+        materialService.setMaterialNotBroken(material);
     }
 
     @GET

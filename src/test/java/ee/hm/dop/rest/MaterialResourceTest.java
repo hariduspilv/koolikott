@@ -368,13 +368,12 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
 
         Material material = getMaterial(materialId);
 
-        Response response = doGet(MATERIAL_SET_NOT_BROKEN + "?materialId=" + material.getId(),
-                MediaType.APPLICATION_JSON_TYPE);
+        Response response = doPost(MATERIAL_SET_NOT_BROKEN, Entity.entity(material, MediaType.APPLICATION_JSON_TYPE));
         assertEquals(Status.FORBIDDEN.getStatusCode(), response.getStatus());
 
         login("89898989898");
-        Response responseAdmin = doGet(MATERIAL_SET_NOT_BROKEN + "?materialId=" + material.getId(),
-                MediaType.APPLICATION_JSON_TYPE);
+        Response responseAdmin = doPost(MATERIAL_SET_NOT_BROKEN,
+                Entity.entity(material, MediaType.APPLICATION_JSON_TYPE));
         assertEquals(Status.NO_CONTENT.getStatusCode(), responseAdmin.getStatus());
 
         Response hasBrokenResponse = doGet(MATERIAL_IS_BROKEN + "?materialId=" + material.getId(),
