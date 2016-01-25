@@ -34,7 +34,7 @@ define(['app'], function(app)
                 }
                 
                 $scope.markMaterialCorrect = function() {
-                	serverCallService.makeGet("rest/material/setNotBroken?materialId="+$scope.material.id, {}, markCorrectSuccess, queryFailed);  	
+                	serverCallService.makePost("rest/material/setNotBroken", $scope.material, markCorrectSuccess, queryFailed);  	
                 }
                 
                 function isBrokenSuccess(data) {
