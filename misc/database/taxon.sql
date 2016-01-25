@@ -46,10 +46,6 @@ insert into Taxon(id, name, level) values (114, 'Physical_education', 'DOMAIN');
 insert into Domain(id, educationalContext) values (114, 2);
 insert into Taxon(id, name, level) values (115, 'Electives', 'DOMAIN');
 insert into Domain(id, educationalContext) values (115, 2);
-insert into Taxon(id, name, level) values (116, 'Cross-curricular_themes', 'DOMAIN');
-insert into Domain(id, educationalContext) values (116, 2);
-insert into Taxon(id, name, level) values (117, 'Key_competences', 'DOMAIN');
-insert into Domain(id, educationalContext) values (117, 2);
 
 -- Secondary school
 insert into Taxon(id, name, level) values (118, 'Language_and_literature', 'DOMAIN');
@@ -68,10 +64,7 @@ insert into Taxon(id, name, level) values (124, 'Physical_education', 'DOMAIN');
 insert into Domain(id, educationalContext) values (124, 3);
 insert into Taxon(id, name, level) values (125, 'Electives', 'DOMAIN');
 insert into Domain(id, educationalContext) values (125, 3);
-insert into Taxon(id, name, level) values (126, 'Cross-curricular_themes', 'DOMAIN');
-insert into Domain(id, educationalContext) values (126, 3);
-insert into Taxon(id, name, level) values (127, 'Key_competences', 'DOMAIN');
-insert into Domain(id, educationalContext) values (127, 3);
+
 
 -- Computer Science
 insert into Taxon(id, name, level) values (129, 'Computer_science', 'DOMAIN');
@@ -169,42 +162,6 @@ insert into Subject(id, domain) values (1032, 115);
 insert into Taxon(id, name, level) values (1033, 'Other', 'SUBJECT');
 insert into Subject(id, domain) values (1033, 115);
 
--- Cross-curricular themes
-insert into Taxon(id, name, level) values (1034, 'Lifelong_learning_and_career_planning', 'SUBJECT');
-insert into Subject(id, domain) values (1034, 116);
-insert into Taxon(id, name, level) values (1035, 'Environment_and_sustainable_development', 'SUBJECT');
-insert into Subject(id, domain) values (1035, 116);
-insert into Taxon(id, name, level) values (1036, 'Civic_initiative_and_entrepreneurship', 'SUBJECT');
-insert into Subject(id, domain) values (1036, 116);
-insert into Taxon(id, name, level) values (1037, 'Cultural_identity', 'SUBJECT');
-insert into Subject(id, domain) values (1037, 116);
-insert into Taxon(id, name, level) values (1038, 'Information_environment', 'SUBJECT');
-insert into Subject(id, domain) values (1038, 116);
-insert into Taxon(id, name, level) values (1039, 'Technology_and_innovation', 'SUBJECT');
-insert into Subject(id, domain) values (1039, 116);
-insert into Taxon(id, name, level) values (1040, 'Health_and_safety', 'SUBJECT');
-insert into Subject(id, domain) values (1040, 116);
-insert into Taxon(id, name, level) values (1041, 'Values_and_moral', 'SUBJECT');
-insert into Subject(id, domain) values (1041, 116);
-
--- Key competences
-insert into Taxon(id, name, level) values (1042, 'Cultural_and_value_competence', 'SUBJECT');
-insert into Subject(id, domain) values (1042, 117);
-insert into Taxon(id, name, level) values (1043, 'Social_and_citizenship_competence', 'SUBJECT');
-insert into Subject(id, domain) values (1043, 117);
-insert into Taxon(id, name, level) values (1044, 'Self_management_competence', 'SUBJECT');
-insert into Subject(id, domain) values (1044, 117);
-insert into Taxon(id, name, level) values (1045, 'Learning_to_learn_competence', 'SUBJECT');
-insert into Subject(id, domain) values (1045, 117);
-insert into Taxon(id, name, level) values (1046, 'Communication_competence', 'SUBJECT');
-insert into Subject(id, domain) values (1046, 117);
-insert into Taxon(id, name, level) values (1047, 'Mathematics_natural_sciences_and_technology_competence', 'SUBJECT');
-insert into Subject(id, domain) values (1047, 117);
-insert into Taxon(id, name, level) values (1048, 'Entrepreneurship_competence', 'SUBJECT');
-insert into Subject(id, domain) values (1048, 117);
-insert into Taxon(id, name, level) values (1049, 'Digital_competence', 'SUBJECT');
-insert into Subject(id, domain) values (1049, 117);
-
 -- End of Basic Education Subjects
 
 -- Secondary Education
@@ -295,45 +252,7 @@ insert into Subject(id, domain) values (1086, 125);
 insert into Taxon(id, name, level) values (1087, 'Other', 'SUBJECT');
 insert into Subject(id, domain) values (1087, 125);
 
--- Cross-curricular themes
-insert into Taxon(id, name, level) values (1088, 'Lifelong_learning_and_career_planning', 'SUBJECT');
-insert into Subject(id, domain) values (1088, 126);
-insert into Taxon(id, name, level) values (1089, 'Environment_and_sustainable_development', 'SUBJECT');
-insert into Subject(id, domain) values (1089, 126);
-insert into Taxon(id, name, level) values (1090, 'Civic_initiative_and_entrepreneurship', 'SUBJECT');
-insert into Subject(id, domain) values (1090, 126);
-insert into Taxon(id, name, level) values (1091, 'Cultural_identity', 'SUBJECT');
-insert into Subject(id, domain) values (1091, 126);
-insert into Taxon(id, name, level) values (1092, 'Information_environment', 'SUBJECT');
-insert into Subject(id, domain) values (1092, 126);
-insert into Taxon(id, name, level) values (1093, 'Technology_and_innovation', 'SUBJECT');
-insert into Subject(id, domain) values (1093, 126);
-insert into Taxon(id, name, level) values (1094, 'Health_and_safety', 'SUBJECT');
-insert into Subject(id, domain) values (1094, 126);
-insert into Taxon(id, name, level) values (1095, 'Values_and_moral', 'SUBJECT');
-insert into Subject(id, domain) values (1095, 126);
-
--- Key competences
-insert into Taxon(id, name, level) values (1096, 'Cultural_and_value_competence', 'SUBJECT');
-insert into Subject(id, domain) values (1096, 127);
-insert into Taxon(id, name, level) values (1097, 'Social_and_citizenship_competence', 'SUBJECT');
-insert into Subject(id, domain) values (1097, 127);
-insert into Taxon(id, name, level) values (1098, 'Self_management_competence', 'SUBJECT');
-insert into Subject(id, domain) values (1098, 127);
-insert into Taxon(id, name, level) values (1099, 'Learning_to_learn_competence', 'SUBJECT');
-insert into Subject(id, domain) values (1099, 127);
-insert into Taxon(id, name, level) values (1100, 'Communication_competence', 'SUBJECT');
-insert into Subject(id, domain) values (1100, 127);
-insert into Taxon(id, name, level) values (1101, 'Mathematics_natural_sciences_and_technology_competence', 'SUBJECT');
-insert into Subject(id, domain) values (1101, 127);
-insert into Taxon(id, name, level) values (1102, 'Entrepreneurship_competence', 'SUBJECT');
-insert into Subject(id, domain) values (1102, 127);
-insert into Taxon(id, name, level) values (1103, 'Digital_competence', 'SUBJECT');
-insert into Subject(id, domain) values (1103, 127);
-
 -- End of Secondary Education Subjects
-
-
 
 -- Specialization
 

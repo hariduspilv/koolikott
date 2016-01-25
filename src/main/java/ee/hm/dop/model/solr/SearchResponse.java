@@ -6,6 +6,8 @@ public class SearchResponse {
 
     private ResponseHeader responseHeader;
 
+    private String status;
+
     public Response getResponse() {
         return response;
     }
@@ -21,4 +23,13 @@ public class SearchResponse {
     public void setResponseHeader(ResponseHeader responseHeader) {
         this.responseHeader = responseHeader;
     }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
 }

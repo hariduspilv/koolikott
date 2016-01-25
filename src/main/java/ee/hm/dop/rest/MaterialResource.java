@@ -18,6 +18,7 @@ import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import ee.hm.dop.model.BrokenContent;
 import ee.hm.dop.model.ImproperContent;
 import ee.hm.dop.model.Material;
 import ee.hm.dop.model.User;
@@ -47,6 +48,13 @@ public class MaterialResource extends BaseResource {
         return materialService.getNewestMaterials(numberOfMaterials);
     }
 
+    @GET
+    @Path("getPopularMaterials")
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<Material> getPopularMaterials(@QueryParam("numberOfMaterials") int numberOfMaterials) {
+        return materialService.getPopularMaterials(numberOfMaterials);
+    }
+
     @POST
     @Path("increaseViewCount")
     public Response increaseViewCount(Material material) {
@@ -71,6 +79,20 @@ public class MaterialResource extends BaseResource {
     @Path("dislike")
     public void dislikeMaterial(Material material) {
         materialService.addUserLike(material, getLoggedInUser(), false);
+    }
+
+    @POST
+    @Path("recommend")
+    @RolesAllowed({ "ADMIN" })
+    public void recommendMaterial(Material material) {
+        materialService.addRecommendation(material, getLoggedInUser());
+    }
+
+    @POST
+    @Path("removeRecommendation")
+    @RolesAllowed({ "ADMIN" })
+    public void removedMaterialRecommendation(Material material) {
+        materialService.removeRecommendation(material, getLoggedInUser());
     }
 
     @POST
@@ -156,6 +178,47 @@ public class MaterialResource extends BaseResource {
     @RolesAllowed({ "ADMIN" })
     public List<ImproperContent> getImproperMaterials() {
         return materialService.getImproperMaterials();
+    }
+
+    @POST
+    @Path("setBroken")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    @RolesAllowed({ "USER", "ADMIN", "PUBLISHER" })
+    public BrokenContent setBrokenMaterial(Material material) {
+        return materialService.addBrokenMaterial(material, getLoggedInUser());
+    }
+
+    @GET
+    @Path("getBroken")
+    @Produces(MediaType.APPLICATION_JSON)
+    @RolesAllowed({ "ADMIN" })
+    public List<BrokenContent> getBrokenMaterial() {
+        return materialService.getBrokenMaterials();
+    }
+
+    @POST
+    @Path("setNotBroken")
+    @Produces(MediaType.APPLICATION_JSON)
+    @RolesAllowed({ "ADMIN" })
+    public void setNotBroken(Material material) {
+        materialService.setMaterialNotBroken(material);
+    }
+
+    @GET
+    @Path("hasSetBroken")
+    @Produces(MediaType.APPLICATION_JSON)
+    @RolesAllowed({ "USER", "ADMIN", "PUBLISHER" })
+    public Boolean hasSetBroken(@QueryParam("materialId") long materialId) {
+        return materialService.hasSetBroken(materialId, getLoggedInUser());
+    }
+
+    @GET
+    @Path("isBroken")
+    @Produces(MediaType.APPLICATION_JSON)
+    @RolesAllowed({ "ADMIN" })
+    public Boolean isBroken(@QueryParam("materialId") long materialId) {
+        return materialService.isBroken(materialId, getLoggedInUser());
     }
 
     @GET

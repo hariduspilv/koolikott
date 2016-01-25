@@ -232,8 +232,8 @@
         </entity>
 
         <entity name="Portfolio" pk="uniqueKey"
-            query="select concat('portfolio', id ) as uniqueKey, id, title, summary, taxon as taxon_id, 'portfolio' as type, visibility from Portfolio WHERE deleted = false" 
-            deltaImportQuery="select concat('portfolio', id ) as uniqueKey, id, title, summary, taxon as taxon_id, 'portfolio' as type, visibility from Portfolio where id = '${dih.delta.id}'" 
+            query="select concat('portfolio', id ) as uniqueKey, id, title, summary, taxon as taxon_id, 'portfolio' as type, visibility, created from Portfolio WHERE deleted = false" 
+            deltaImportQuery="select concat('portfolio', id ) as uniqueKey, id, title, summary, taxon as taxon_id, 'portfolio' as type, visibility, created from Portfolio where id = '${dih.delta.id}'" 
             deltaQuery="select concat('portfolio', id ) as uniqueKey, id from Portfolio where (CONVERT_TZ(created, @@session.time_zone, '+00:00') > '${dataimporter.last_index_time}' OR CONVERT_TZ(updated, @@session.time_zone, '+00:00') > '${dataimporter.last_index_time}') AND deleted = false" 
             deletedPkQuery="select concat('portfolio', id ) as uniqueKey, id from Portfolio where (CONVERT_TZ(created, @@session.time_zone, '+00:00') > '${dataimporter.last_index_time}' OR CONVERT_TZ(updated, @@session.time_zone, '+00:00') > '${dataimporter.last_index_time}') AND deleted = true">
 

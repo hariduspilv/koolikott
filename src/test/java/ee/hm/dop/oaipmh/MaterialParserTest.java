@@ -148,7 +148,7 @@ public class MaterialParserTest {
     private class MaterialParserImpl extends MaterialParser {
 
         @Override
-        protected void setContributors(Material material, Document doc) {
+        protected void setContributorsData(Material material, Document doc) {
         }
 
         @Override
@@ -179,6 +179,11 @@ public class MaterialParserTest {
 
         @Override
         protected String getPathToLocation() {
+            return null;
+        }
+
+        @Override
+        protected String getPathToContribute() {
             return null;
         }
 
@@ -232,11 +237,26 @@ public class MaterialParserTest {
         }
 
         @Override
+        protected String getPathToTargetGroups() {
+            return null;
+        }
+
+        @Override
         protected void setTargetGroups(Material material, Document doc) {
         }
 
         @Override
         protected void setPicture(Material material, Document doc) {
+        }
+
+        @Override
+        protected void setCrossCurricularThemes(Material material, Document doc) {
+
+        }
+
+        @Override
+        protected void setKeyCompetences(Material material, Document doc) {
+
         }
     }
 }

@@ -1,8 +1,10 @@
 package ee.hm.dop.service;
 
+import static ee.hm.dop.service.SolrService.SOLR_DATAIMPORT_STATUS;
+import static ee.hm.dop.service.SolrService.SOLR_IMPORT_PARTIAL;
+import static ee.hm.dop.service.SolrService.SOLR_STATUS_BUSY;
 import static ee.hm.dop.utils.ConfigurationProperties.SEARCH_SERVER;
 import static org.easymock.EasyMock.createMock;
-import static org.easymock.EasyMock.createMockBuilder;
 import static org.easymock.EasyMock.eq;
 import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.replay;
@@ -10,7 +12,6 @@ import static org.easymock.EasyMock.verify;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,6 +35,12 @@ import ee.hm.dop.model.solr.SearchResponse;
 @RunWith(EasyMockRunner.class)
 public class SolrServiceTest {
 
+    private final String serverUrl = "server/url/";
+
+    private static final int RESULTS_PER_PAGE = 24;
+
+    private static final String SOLR_STATUS_IDLE = "idle";
+
     @Mock
     private Client client;
 
@@ -48,12 +55,6 @@ public class SolrServiceTest {
 
     @Mock
     private Builder builder;
-
-    private final String serverUrl = "server/url/";
-
-    private static final int RESULTS_PER_PAGE = 24;
-
-    private static final String SOLR_IMPORT_PARTIAL = "dataimport?command=delta-import&wt=json";
 
     @Test
     public void search() {
@@ -225,20 +226,43 @@ public class SolrServiceTest {
     }
 
     @Test
-    public void updateIndex() throws NoSuchMethodException {
-        SearchResponse searchResponse = new SearchResponse();
+    public void updateIndex() throws Exception {
+        ResponseHeader responseHeader = new ResponseHeader();
+        responseHeader.setStatus(0);
 
-        SolrService partialMockSolrService = getSolrServiceWithMockedExecuteCommand();
+        SearchResponse importResponse = new SearchResponse();
+        importResponse.setResponseHeader(responseHeader);
 
-        expect(partialMockSolrService.executeCommand(SOLR_IMPORT_PARTIAL)).andReturn(searchResponse);
+        SearchResponse statusResponseBusy = new SearchResponse();
+        statusResponseBusy.setStatus(SOLR_STATUS_BUSY);
+        statusResponseBusy.setResponseHeader(responseHeader);
+
+        SearchResponse statusResponseIdle = new SearchResponse();
+        statusResponseIdle.setStatus(SOLR_STATUS_IDLE);
+        statusResponseIdle.setResponseHeader(responseHeader);
+
+        String solrLocation = "http://solr.example.com/";
+
+        expect(configuration.getString(SEARCH_SERVER)).andReturn(solrLocation).times(3);
+        expect(client.target(solrLocation + SOLR_IMPORT_PARTIAL)).andReturn(target);
+        expect(target.request(MediaType.APPLICATION_JSON)).andReturn(builder);
+        expect(builder.get(eq(SearchResponse.class))).andReturn(importResponse);
+
+        expect(client.target(solrLocation + SOLR_DATAIMPORT_STATUS)).andReturn(target);
+        expect(target.request(MediaType.APPLICATION_JSON)).andReturn(builder);
+        expect(builder.get(eq(SearchResponse.class))).andReturn(statusResponseBusy);
+
+        expect(client.target(solrLocation + SOLR_DATAIMPORT_STATUS)).andReturn(target);
+        expect(target.request(MediaType.APPLICATION_JSON)).andReturn(builder);
+        expect(builder.get(eq(SearchResponse.class))).andReturn(statusResponseIdle);
 
         replayAll();
-        replay(partialMockSolrService);
 
-        partialMockSolrService.updateIndex();
+        solrService.updateIndex();
+
+        Thread.sleep(3000);
 
         verifyAll();
-        verify(partialMockSolrService);
     }
 
     @Test
@@ -258,29 +282,34 @@ public class SolrServiceTest {
 
         expect(searchResponse.getResponseHeader()).andReturn(responseHeader).anyTimes();
 
-        replayAll();
-        replay(searchResponse);
+        replayAll(searchResponse);
 
         SearchResponse result = solrService.executeCommand(command);
 
-        verifyAll();
-        verify(searchResponse);
+        verifyAll(searchResponse);
 
         assertEquals(searchResponse, result);
         assertEquals(status, result.getResponseHeader().getStatus());
     }
 
-    private void verifyAll() {
+    private void verifyAll(Object... mocks) {
         verify(client, configuration, target, builder);
+
+        if (mocks != null) {
+            for (Object object : mocks) {
+                verify(object);
+            }
+        }
     }
 
-    private void replayAll() {
+    private void replayAll(Object... mocks) {
         replay(client, configuration, target, builder);
-    }
 
-    private SolrService getSolrServiceWithMockedExecuteCommand() throws NoSuchMethodException {
-        Method executeCommand = SolrService.class.getDeclaredMethod("executeCommand", String.class);
-        return createMockBuilder(SolrService.class).addMockedMethod(executeCommand).createMock();
+        if (mocks != null) {
+            for (Object object : mocks) {
+                replay(object);
+            }
+        }
     }
 
 }

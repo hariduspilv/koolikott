@@ -68,6 +68,11 @@ public class MaterialDAO {
                 .setMaxResults(numberOfMaterials).getResultList();
     }
 
+    public List<Material> findPopularMaterials(int numberOfMaterials) {
+        return entityManager.createQuery("FROM Material m WHERE m.deleted = false ORDER BY views DESC", Material.class)
+                .setMaxResults(numberOfMaterials).getResultList();
+    }
+
     public Material update(Material material) {
         if (material.getId() != null) {
             material.setUpdated(DateTime.now());

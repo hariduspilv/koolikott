@@ -19,7 +19,6 @@ import java.util.Set;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
-import org.easymock.EasyMock;
 import org.easymock.EasyMockRunner;
 import org.easymock.Mock;
 import org.easymock.TestSubject;
@@ -29,7 +28,6 @@ import org.w3c.dom.Document;
 
 import ee.hm.dop.model.Author;
 import ee.hm.dop.model.CrossCurricularTheme;
-import ee.hm.dop.model.IssueDate;
 import ee.hm.dop.model.KeyCompetence;
 import ee.hm.dop.model.Language;
 import ee.hm.dop.model.LanguageString;
@@ -47,7 +45,6 @@ import ee.hm.dop.model.taxon.Topic;
 import ee.hm.dop.oaipmh.ParseException;
 import ee.hm.dop.service.AuthorService;
 import ee.hm.dop.service.CrossCurricularThemeService;
-import ee.hm.dop.service.IssueDateService;
 import ee.hm.dop.service.KeyCompetenceService;
 import ee.hm.dop.service.LanguageService;
 import ee.hm.dop.service.PublisherService;
@@ -81,9 +78,6 @@ public class MaterialParserEstCoreTest {
 
     @Mock
     private PublisherService publisherService;
-
-    @Mock
-    private IssueDateService issueDateService;
 
     @Mock
     private CrossCurricularThemeService crossCurricularThemeService;
@@ -149,19 +143,19 @@ public class MaterialParserEstCoreTest {
         resourceType2.setName("VIDEO");
 
         EducationalContext educationalContext1 = new EducationalContext();
-        educationalContext1.setName("PRESCHOOLEDUCATION");
+        educationalContext1.setName("preschoolEducation");
 
         EducationalContext educationalContext2 = new EducationalContext();
-        educationalContext2.setName("BASICEDUCATION");
+        educationalContext2.setName("basicEducation");
 
         EducationalContext educationalContext3 = new EducationalContext();
-        educationalContext3.setName("SECONDARYEDUCATION");
+        educationalContext3.setName("secondaryEducation");
 
         EducationalContext educationalContext4 = new EducationalContext();
-        educationalContext4.setName("VOCATIONALEDUCATION");
+        educationalContext4.setName("vocationalEducation");
 
         Domain domain1 = new Domain();
-        domain1.setName("Me_and_the_environment");
+        domain1.setName("Foreign_language");
         domain1.setEducationalContext(educationalContext2);
         Set<Domain> domains = new HashSet<>();
         domains.add(domain1);
@@ -294,7 +288,7 @@ public class MaterialParserEstCoreTest {
         topic4.setSubtopics(subtopics);
 
         Subtopic subtopic4 = new Subtopic();
-        subtopic4.setName("Ajaarvamine");
+        subtopic4.setName("Ajalooallikad");
         subtopic4.setTopic(topic2);
         subtopics = new HashSet<>();
         subtopics.add(subtopic4);
@@ -320,7 +314,6 @@ public class MaterialParserEstCoreTest {
         expect(resourceTypeService.getResourceTypeByName(resourceType2.getName())).andReturn(resourceType2);
         expect(publisherService.getPublisherByName(publisher.getName())).andReturn(null);
         expect(publisherService.createPublisher(publisher.getName(), publisher.getWebsite())).andReturn(publisher);
-        expect(issueDateService.createIssueDate(EasyMock.anyObject(IssueDate.class))).andReturn(new IssueDate());
 
         // first taxon
         expect(taxonService.getTaxonByEstCoreName(educationalContext1.getName(), EducationalContext.class)).andReturn(
@@ -360,15 +353,11 @@ public class MaterialParserEstCoreTest {
         // special education taxon
         expect(taxonService.getTaxonByEstCoreName("SPECIALEDUCATION", EducationalContext.class)).andReturn(null);
 
-        // Cross-curricular themes taxon
-        expect(taxonService.getTaxonByEstCoreName("Cross-curricular themes", Domain.class)).andReturn(domain5);
-        expect(taxonService.getTaxonByEstCoreName("Lifelong learning and career planning", Subject.class)).andReturn(subject3);
-        expect(crossCurricularThemeService.getThemeByName(subject3.getName())).andReturn(crossCurricularTheme);
+        // Cross-curricular themes
+        expect(crossCurricularThemeService.getThemeByName(crossCurricularTheme.getName())).andReturn(crossCurricularTheme);
 
-        // Key competence taxon
-        expect(taxonService.getTaxonByEstCoreName("Key competences", Domain.class)).andReturn(domain6);
-        expect(taxonService.getTaxonByEstCoreName("Cultural and value competence", Subject.class)).andReturn(subject4);
-        expect(keyCompetenceService.findKeyCompetenceByName(subject4.getName())).andReturn(keyCompetence);
+        // Key competence
+        expect(keyCompetenceService.findKeyCompetenceByName(keyCompetence.getName())).andReturn(keyCompetence);
 
         LanguageString title1 = new LanguageString();
         title1.setLanguage(english);
@@ -399,13 +388,13 @@ public class MaterialParserEstCoreTest {
         resourceTypes.add(resourceType2);
 
         replay(languageService, authorService, tagService, resourceTypeService, taxonService, publisherService,
-                issueDateService, crossCurricularThemeService, keyCompetenceService);
+                crossCurricularThemeService, keyCompetenceService);
 
         Document doc = dBuilder.parse(fXmlFile);
         Material material = materialParser.parse(doc);
 
         verify(languageService, authorService, tagService, resourceTypeService, taxonService, publisherService,
-                issueDateService, crossCurricularThemeService, keyCompetenceService);
+                crossCurricularThemeService, keyCompetenceService);
 
         assertEquals(titles, material.getTitles());
         assertEquals("https://oxygen.netgroupdigital.com/rest/repoMaterialSource", material.getSource());
@@ -414,7 +403,7 @@ public class MaterialParserEstCoreTest {
         assertEquals(descriptions, material.getDescriptions());
         assertEquals(tags, material.getTags());
         assertEquals(resourceTypes, material.getResourceTypes());
-        assertEquals(6, material.getTaxons().size());
+        assertEquals(4, material.getTaxons().size());
         assertEquals(10, material.getTargetGroups().size());
         assertNotNull(material.getPicture());
         assertEquals(1, material.getPublishers().size());

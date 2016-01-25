@@ -31,18 +31,6 @@ public class AuthenticatedUser {
     @Column
     private boolean firstLogin = false;
 
-    @Column
-    private String homeOrganization;
-
-    @Column
-    private String mails;
-
-    @Column
-    private String affiliations;
-
-    @Column
-    private String scopedAffiliations;
-
     @OneToOne(cascade = ALL)
     @JoinColumn(name = "person")
     private Person person;
@@ -77,38 +65,6 @@ public class AuthenticatedUser {
 
     public void setFirstLogin(boolean firstLogin) {
         this.firstLogin = firstLogin;
-    }
-
-    public String getHomeOrganization() {
-        return homeOrganization;
-    }
-
-    public void setHomeOrganization(String homeOrganization) {
-        this.homeOrganization = homeOrganization;
-    }
-
-    public String getMails() {
-        return mails;
-    }
-
-    public void setMails(String mails) {
-        this.mails = mails;
-    }
-
-    public String getAffiliations() {
-        return affiliations;
-    }
-
-    public void setAffiliations(String affiliations) {
-        this.affiliations = affiliations;
-    }
-
-    public String getScopedAffiliations() {
-        return scopedAffiliations;
-    }
-
-    public void setScopedAffiliations(String scopedAffiliations) {
-        this.scopedAffiliations = scopedAffiliations;
     }
 
     public Person getPerson() {

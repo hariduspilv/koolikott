@@ -12,15 +12,18 @@ import org.joda.time.DateTime;
 
 import ee.hm.dop.dao.ImproperContentDAO;
 import ee.hm.dop.dao.PortfolioDAO;
+import ee.hm.dop.dao.RecommendationDAO;
 import ee.hm.dop.dao.UserLikeDAO;
 import ee.hm.dop.model.Chapter;
 import ee.hm.dop.model.Comment;
 import ee.hm.dop.model.ImproperContent;
 import ee.hm.dop.model.Portfolio;
+import ee.hm.dop.model.Recommendation;
 import ee.hm.dop.model.Role;
 import ee.hm.dop.model.User;
 import ee.hm.dop.model.UserLike;
 import ee.hm.dop.model.Visibility;
+import ezvcard.util.org.apache.commons.codec.binary.Base64;
 
 public class PortfolioService {
 
@@ -29,6 +32,9 @@ public class PortfolioService {
 
     @Inject
     private UserLikeDAO userLikeDAO;
+
+    @Inject
+    private RecommendationDAO recommendationeDAO;
 
     @Inject
     private ImproperContentDAO improperContentDAO;
@@ -63,6 +69,18 @@ public class PortfolioService {
         }
 
         return portfolioDAO.findPictureByPortfolio(portfolio);
+    }
+
+    public String getPortfolioPictureBase64(Portfolio portfolio, User loggedInUser) {
+        Portfolio actualPortfolio = portfolioDAO.findById(portfolio.getId());
+
+        if (actualPortfolio != null && !isPortfolioAccessibleToUser(actualPortfolio, loggedInUser)) {
+            return null;
+        }
+
+        byte[] picture = portfolioDAO.findPictureByPortfolio(portfolio);
+        String response = Base64.encodeBase64String(picture);
+        return response;
     }
 
     public void incrementViewCount(Portfolio portfolio) {
@@ -152,6 +170,41 @@ public class PortfolioService {
         return like;
     }
 
+    public Recommendation addRecommendation(Portfolio portfoliol, User loggedInUser) {
+        if (!isUserAdmin(loggedInUser)) {
+            throw new RuntimeException("Logged in user must be an administrator.");
+        }
+        if (portfoliol == null || portfoliol.getId() == null) {
+            throw new RuntimeException("Portfolio not found");
+        }
+        Portfolio originalPortfolio = portfolioDAO.findById(portfoliol.getId());
+        if (originalPortfolio == null) {
+            throw new RuntimeException("Portfolio not found");
+        }
+
+        Recommendation recommendation = new Recommendation();
+        recommendation.setPortfolio(originalPortfolio);
+        recommendation.setCreator(loggedInUser);
+        recommendation.setAdded(DateTime.now());
+
+        return recommendationeDAO.update(recommendation);
+    }
+
+    public void removeRecommendation(Portfolio portfolio, User loggedInUser) {
+        if (!isUserAdmin(loggedInUser)) {
+            throw new RuntimeException("Logged in user must be an administrator.");
+        }
+        if (portfolio == null || portfolio.getId() == null) {
+            throw new RuntimeException("Portfolio not found");
+        }
+        Portfolio originalPortfolio = portfolioDAO.findById(portfolio.getId());
+        if (originalPortfolio == null) {
+            throw new RuntimeException("Portfolio not found");
+        }
+
+        recommendationeDAO.deletePortfolioRecommendation(originalPortfolio);
+    }
+
     public Portfolio create(Portfolio portfolio, User creator) {
         if (portfolio.getId() != null) {
             throw new RuntimeException("Portfolio already exists.");
@@ -237,6 +290,20 @@ public class PortfolioService {
         searchEngineService.updateIndex();
     }
 
+    public void restore(Portfolio portfolio, User loggedInUser) {
+        Portfolio originalPortfolio = portfolioDAO.findDeletedById(portfolio.getId());
+        if (originalPortfolio == null) {
+            throw new RuntimeException("Portfolio not found");
+        }
+
+        if (!isUserAdmin(loggedInUser)) {
+            throw new RuntimeException("Logged in user must be an administrator.");
+        }
+
+        portfolioDAO.restore(originalPortfolio);
+        searchEngineService.updateIndex();
+    }
+
     private List<Chapter> copyChapters(List<Chapter> chapters) {
         List<Chapter> copyChapters = new ArrayList<>();
 
@@ -262,7 +329,10 @@ public class PortfolioService {
         safePortfolio.setTags(portfolio.getTags());
         safePortfolio.setTargetGroups(portfolio.getTargetGroups());
         safePortfolio.setTaxon(portfolio.getTaxon());
-        safePortfolio.setPicture(portfolio.getPicture());
+        if (portfolio.getPicture() != null) {
+            safePortfolio.setPicture(portfolio.getPicture());
+            safePortfolio.setHasPicture(true);
+        }
         return safePortfolio;
     }
 
@@ -318,6 +388,10 @@ public class PortfolioService {
 
     public List<ImproperContent> getImproperPortfolios() {
         return improperContentDAO.getImproperPortfolios();
+    }
+
+    public List<Portfolio> getDeletedPortfolios() {
+        return portfolioDAO.getDeletedPortfolios();
     }
 
     public Boolean hasSetImproper(long portfolioId, User loggedInUser) {

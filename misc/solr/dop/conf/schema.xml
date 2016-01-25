@@ -138,6 +138,7 @@
    <field name="target_group" type="text_general" indexed="true" stored="false" multiValued="true"/>
    <field name="cross_curricular_theme" type="text_general" indexed="true" stored="false" multiValued="true"/>
    <field name="key_competence" type="text_general" indexed="true" stored="false" multiValued="true"/>
+   <field name="created" type="tdate" indexed="true" stored="false" multiValued="false"/>
 
    <!-- Material -->
    <field name="description" type="text_general" indexed="true" stored="false" multiValued="true"/>
@@ -154,7 +155,7 @@
    <field name="chapterTitle" type="text_general" indexed="true" stored="false" multiValued="true"/>
    <field name="chapterText" type="text_general" indexed="true" stored="false" multiValued="true"/>
    <field name="visibility" type="text_general" indexed="true" stored="false" multiValued="true"/>
-   
+
    <!-- catchall field, containing all other searchable text fields (implemented
         via copyField further on in this schema  -->
    <field name="text" type="text_general" indexed="true" stored="false" multiValued="true"/>

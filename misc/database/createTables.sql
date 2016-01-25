@@ -1,6 +1,8 @@
 USE dop;
 
 -- Drop tables
+DROP TABLE IF EXISTS BrokenContent;
+DROP TABLE IF EXISTS Recommendation;
 DROP TABLE IF EXISTS ImproperContent;
 DROP TABLE IF EXISTS UserLike;
 DROP TABLE IF EXISTS Comment;
@@ -716,6 +718,42 @@ CREATE TABLE ImproperContent (
 
   FOREIGN KEY (portfolio)
   REFERENCES Portfolio (id)
+    ON DELETE RESTRICT,
+
+  FOREIGN KEY (material)
+  REFERENCES Material (id)
+    ON DELETE RESTRICT
+);
+
+CREATE TABLE Recommendation (
+  id        BIGINT    AUTO_INCREMENT PRIMARY KEY,
+  creator   BIGINT  NOT NULL,
+  portfolio BIGINT UNIQUE,
+  material  BIGINT UNIQUE,
+  added     TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+
+  FOREIGN KEY (creator)
+  REFERENCES User (id)
+    ON DELETE RESTRICT,
+
+  FOREIGN KEY (portfolio)
+  REFERENCES Portfolio (id)
+    ON DELETE RESTRICT,
+    
+  FOREIGN KEY (material)
+  REFERENCES Material (id)
+    ON DELETE RESTRICT
+);
+
+CREATE TABLE BrokenContent (
+  id        BIGINT    AUTO_INCREMENT PRIMARY KEY,
+  creator   BIGINT NOT NULL,
+  material  BIGINT,
+  added     TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  deleted   BOOLEAN   DEFAULT FALSE,
+
+  FOREIGN KEY (creator)
+  REFERENCES User (id)
     ON DELETE RESTRICT,
 
   FOREIGN KEY (material)

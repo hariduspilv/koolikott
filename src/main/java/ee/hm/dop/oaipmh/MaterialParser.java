@@ -16,6 +16,7 @@ import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
 
 import org.apache.commons.validator.routines.UrlValidator;
+import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.CharacterData;
@@ -25,12 +26,14 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import ee.hm.dop.model.Author;
+import ee.hm.dop.model.IssueDate;
 import ee.hm.dop.model.Language;
 import ee.hm.dop.model.LanguageString;
 import ee.hm.dop.model.Material;
 import ee.hm.dop.model.Publisher;
 import ee.hm.dop.model.ResourceType;
 import ee.hm.dop.model.Tag;
+import ee.hm.dop.model.TargetGroup;
 import ee.hm.dop.model.taxon.EducationalContext;
 import ee.hm.dop.model.taxon.Taxon;
 import ee.hm.dop.service.AuthorService;
@@ -44,12 +47,20 @@ import ezvcard.VCard;
 public abstract class MaterialParser {
 
     protected final Logger logger = LoggerFactory.getLogger(this.getClass());
-    protected static final String[] SCHEMES = { "http", "https" };
+    protected static final String[] SCHEMES = {"http", "https"};
+    public static final String PUBLISHER = "PUBLISHER";
+    private static final String AUTHOR = "AUTHOR";
     protected XPathFactory xPathfactory = XPathFactory.newInstance();
     protected XPath xpath = xPathfactory.newXPath();
 
     @Inject
     private ResourceTypeService resourceTypeService;
+
+    @Inject
+    private PublisherService publisherService;
+
+    @Inject
+    private AuthorService authorService;
 
     public Material parse(Document doc) throws ParseException {
         Material material;
@@ -59,6 +70,7 @@ public abstract class MaterialParser {
             doc.getDocumentElement().normalize();
 
             setIdentifier(material, doc);
+            setContributorsData(material, doc);
             setTitles(material, doc);
             setLanguage(material, doc);
             setDescriptions(material, doc);
@@ -66,7 +78,8 @@ public abstract class MaterialParser {
             setTags(material, doc);
             setLearningResourceType(material, doc);
             setTaxon(material, doc);
-            setContributors(material, doc);
+            setCrossCurricularThemes(material, doc);
+            setKeyCompetences(material, doc);
             setIsPaid(material, doc);
             setTargetGroups(material, doc);
             setPicture(material, doc);
@@ -78,6 +91,15 @@ public abstract class MaterialParser {
         }
 
         return material;
+    }
+
+    protected void setContributorsData(Material material, Document doc) {
+        try {
+            setAuthors(doc, material);
+            setPublishersData(doc, material);
+        } catch (Exception e) {
+            // ignore
+        }
     }
 
     private void removeDuplicateTaxons(Material material) {
@@ -106,7 +128,7 @@ public abstract class MaterialParser {
         material.setRepositoryIdentifier(identifier.getTextContent().trim());
     }
 
-    protected void setAuthorFromVCard(List<Author> authors, String data, AuthorService authorService) {
+    protected void setAuthorFromVCard(List<Author> authors, String data) {
         if (data.length() > 0) {
             VCard vcard = Ezvcard.parse(data).first();
             String name = vcard.getStructuredName().getGiven();
@@ -123,8 +145,8 @@ public abstract class MaterialParser {
         }
     }
 
-    protected void setPublisherFromVCard(List<Publisher> publishers, String data, PublisherService publisherService) {
-        if (data.length() > 0) {
+    protected void setPublisherFromVCard(List<Publisher> publishers, String data) {
+        if (data != null && data.length() > 0) {
             VCard vcard = Ezvcard.parse(data).first();
             String name = vcard.getFormattedName().getValue();
             String website = null;
@@ -200,7 +222,7 @@ public abstract class MaterialParser {
         return tags;
     }
 
-    protected List<ResourceType> getResourceTypes(Document doc, String path) throws XPathExpressionException {
+    protected List<ResourceType> getResourceTypes(Document doc, String path) {
         List<ResourceType> resourceTypes = new ArrayList<>();
 
         NodeList nl = getNodeList(doc, path);
@@ -218,7 +240,7 @@ public abstract class MaterialParser {
         return resourceTypes;
     }
 
-    protected void setEducationalContexts(Document doc, Set<Taxon> taxons, String path, Material material) throws XPathExpressionException {
+    protected void setEducationalContexts(Document doc, Set<Taxon> taxons, String path, Material material) {
         NodeList nl = getNodeList(doc, path);
 
         for (int i = 0; i < nl.getLength(); i++) {
@@ -234,7 +256,7 @@ public abstract class MaterialParser {
         }
     }
 
-    protected String getElementValue(Node node) throws XPathExpressionException {
+    protected String getElementValue(Node node) {
         return node.getTextContent().trim().toUpperCase();
     }
 
@@ -262,18 +284,15 @@ public abstract class MaterialParser {
         }
 
         //Set contexts that are specified separately, not inside the taxon
-        try {
-            setEducationalContexts(doc, taxons, getPathToContext(), material);
-        } catch (XPathExpressionException e) {
-            e.printStackTrace();
-        }
+        setEducationalContexts(doc, taxons, getPathToContext(), material);
+
 
         taxons.removeAll(Collections.singleton(null));
         material.setTaxons(new ArrayList<>(taxons));
     }
 
     private void setIsSpecialEducation(Material material, String context) {
-        if(context.equals("SPECIALEDUCATION")) {
+        if (context.equals("SPECIALEDUCATION")) {
             material.setSpecialEducation(true);
         }
     }
@@ -301,7 +320,7 @@ public abstract class MaterialParser {
         material.setSource(source);
     }
 
-    private String getSource(Document doc) throws ParseException, XPathExpressionException, URISyntaxException {
+    private String getSource(Document doc) throws ParseException, URISyntaxException {
         String source;
 
         NodeList nodeList = getNodeList(doc, getPathToLocation());
@@ -328,17 +347,122 @@ public abstract class MaterialParser {
         return source;
     }
 
-    protected NodeList getNodeList(Document doc, String path) throws XPathExpressionException {
-        XPathExpression expr = xpath.compile(path);
-        return (NodeList) expr.evaluate(doc, XPathConstants.NODESET);
+    protected void setTargetGroups(Material material, Document doc) {
+        Set<TargetGroup> targetGroups = new HashSet<>();
+
+        NodeList ageRanges = getNodeList(doc, getPathToTargetGroups());
+
+        for (int i = 0; i < ageRanges.getLength(); i++) {
+            String ageRange = ageRanges.item(i).getTextContent().trim();
+            String[] ranges = ageRange.split("-");
+
+            if (ranges.length == 2) {
+                int from = Integer.parseInt(ranges[0].trim());
+                int to = Integer.parseInt(ranges[1].trim());
+                targetGroups.addAll(TargetGroup.getTargetGroupsByAge(from, to));
+            }
+        }
+
+
+        material.setTargetGroups(new ArrayList<>(targetGroups));
     }
 
-    protected Node getNode(Node node, String path) throws XPathExpressionException {
-        XPathExpression expr = xpath.compile(path);
-        return (Node) expr.evaluate(node, XPathConstants.NODE);
+    protected void setAuthors(Document doc, Material material) throws ParseException {
+        List<Author> authors = new ArrayList<>();
+        NodeList nodeList = getNodeList(doc,
+                getPathToContribute());
+
+        for (int i = 0; i < nodeList.getLength(); i++) {
+            Node contributorNode = nodeList.item(i);
+            String role = getRoleString(contributorNode);
+
+            if (AUTHOR.equals(role)) {
+                String vCard = getVCard(contributorNode);
+                setAuthorFromVCard(authors, vCard);
+            }
+        }
+
+        material.setAuthors(authors);
     }
 
-    protected abstract void setContributors(Material material, Document doc);
+    protected void setPublishersData(Document doc, Material material) throws ParseException {
+        List<Publisher> publishers = new ArrayList<>();
+        IssueDate issueDate = null;
+        NodeList nodeList = getNodeList(doc, getPathToContribute());
+
+        for (int i = 0; i < nodeList.getLength(); i++) {
+            Node contributorNode = nodeList.item(i);
+            String role = getRoleString(contributorNode);
+
+            if (PUBLISHER.equals(role)) {
+                String vCard = getVCard(contributorNode);
+                setPublisherFromVCard(publishers, vCard);
+
+                Node issueDateNode = getNode(contributorNode, "./*[local-name()='date']/*[local-name()='dateTime']");
+                if (issueDateNode != null) {
+                    DateTime dateTime = new DateTime(issueDateNode.getTextContent().trim());
+                    issueDate = new IssueDate();
+
+                    issueDate.setDay((short) dateTime.getDayOfMonth());
+                    issueDate.setMonth((short) dateTime.getMonthOfYear());
+                    issueDate.setYear(dateTime.getYear());
+                }
+            }
+        }
+
+        material.setPublishers(publishers);
+        material.setIssueDate(issueDate);
+    }
+
+    protected String getRoleString(Node contributorNode) {
+        String role;
+
+        Node roleNode = getNode(contributorNode, "./*[local-name()='role']/*[local-name()='value']");
+        role = roleNode.getTextContent().trim().toUpperCase();
+
+        return role;
+    }
+
+    protected String getVCard(Node contributorNode) {
+        String vCard = "";
+        Node node = getNode(contributorNode, "./*[local-name()='entity']");
+
+        if (node != null) {
+            NodeList authorNodes = node.getChildNodes();
+
+            for (int j = 0; j < authorNodes.getLength(); j++) {
+                if (!authorNodes.item(j).getTextContent().trim().isEmpty()) {
+                    CharacterData characterData = (CharacterData) authorNodes.item(j);
+                    return getVCardWithNewLines(characterData);
+                }
+            }
+        }
+
+        return vCard;
+    }
+
+    protected NodeList getNodeList(Document doc, String path) {
+        NodeList nodeList = null;
+        try {
+            XPathExpression expr = xpath.compile(path);
+            nodeList = (NodeList) expr.evaluate(doc, XPathConstants.NODESET);
+        } catch (XPathExpressionException e) {
+            //ignore
+        }
+
+        return nodeList;
+    }
+
+    protected Node getNode(Node parent, String path) {
+        Node node = null;
+        try {
+            XPathExpression expr = xpath.compile(path);
+            node = (Node) expr.evaluate(parent, XPathConstants.NODE);
+        } catch (XPathExpressionException e) {
+            //ignore
+        }
+        return node;
+    }
 
     protected abstract void setTags(Material material, Document doc);
 
@@ -353,6 +477,8 @@ public abstract class MaterialParser {
     protected abstract String getPathToResourceType();
 
     protected abstract String getPathToLocation();
+
+    protected abstract String getPathToContribute();
 
     protected abstract Taxon setEducationalContext(Node node);
 
@@ -374,7 +500,11 @@ public abstract class MaterialParser {
 
     protected abstract void setIsPaid(Material material, Document doc);
 
-    protected abstract void setTargetGroups(Material material, Document doc);
+    protected abstract String getPathToTargetGroups();
 
     protected abstract void setPicture(Material material, Document doc);
+
+    protected abstract void setCrossCurricularThemes(Material material, Document doc);
+
+    protected abstract void setKeyCompetences(Material material, Document doc);
 }
