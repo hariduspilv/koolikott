@@ -135,6 +135,7 @@ INSERT INTO Translation(translationGroup, translationKey, translation) VALUES
 (2,'LOGIN_MOBILEID_CODE','Ваш код'),
 (2,'LOGIN_SMS','Убедитесь, что SMS-ящик для кода проверки матче, который отображается на экране компьютера.'),
 (2,'LOGIN_TAAT','TAAT'),
+(2,'LOGIN_EKOOL','eKool'),
 (2,'LOGOUT','Выйти'),
 (2,'MATERIAL_ADDITIONAL_DATA','Дополнительная название'),
 (2,'MATERIAL_ADD_TAG','Добавить тег'),

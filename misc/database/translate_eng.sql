@@ -139,6 +139,7 @@ INSERT INTO Translation(translationGroup, translationKey, translation) VALUES
 (3,'LOGIN_MOBILEID_CODE','Your code is'),
 (3,'LOGIN_SMS','Make sure that the SMS inbox for verification code match that shown on the computer screen.'),
 (3,'LOGIN_TAAT','TAAT'),
+(3,'LOGIN_EKOOL','eKool'),
 (3,'LOGOUT','Log out'),
 (3,'MATERIAL_ADDITIONAL_DATA','Additional title'),
 (3,'MATERIAL_ADD_TAG','Add tag'),

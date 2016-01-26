@@ -135,6 +135,7 @@ INSERT INTO Translation(translationGroup, translationKey, translation) VALUES
 (1,'LOGIN_MOBILEID_CODE','Sinu kood on'),
 (1,'LOGIN_SMS','Kontrollige, et SMSi teel saabunud kontrollkood ühtiks arvutiekraanil näidatuga.'),
 (1,'LOGIN_TAAT','TAAT'),
+(1,'LOGIN_EKOOL','eKool'),
 (1,'LOGOUT','Välju'),
 (1,'MATERIAL_ADDITIONAL_DATA','Lisaandmed'),
 (1,'MATERIAL_ADD_TAG','Lisa märksõna'),
