@@ -1,6 +1,5 @@
 define([
     'angularAMD',
-    'angular-scroll',
     'services/translationService'
 ], function(angularAMD) {
     angularAMD.directive('dopTableOfContents', ['$filter', '$document', '$rootScope', 'translationService', '$mdToast', '$location', '$timeout', function($filter, $document, $rootScope, translationService, $mdToast, $location, $timeout) {

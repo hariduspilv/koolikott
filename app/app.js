@@ -9,6 +9,7 @@ define([
     'angular-material',
     'angular-route',
     'angular-click-outside',
+    'angular-scroll',
     'jsog',
     'utils/commons',
     
@@ -31,7 +32,8 @@ define([
         'ngRoute',
         'ngMaterial',
         'pascalprecht.translate',
-        'angular-click-outside'
+        'angular-click-outside',
+        'duScroll'
     ]);
 
     app.config(function($routeProvider, $locationProvider, $controllerProvider, $compileProvider, $filterProvider, $provide, $translateProvider, $sceProvider, $mdThemingProvider, $httpProvider) {
