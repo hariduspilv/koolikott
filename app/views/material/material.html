@@ -32,12 +32,21 @@
                         <md-icon md-menu-origin>more_vert</md-icon>
                       </md-button>
                       <md-menu-content width="4">
+
+                        <md-menu-item data-ng-if="isAdmin() && isNotImported()">
+                          <md-button data-ng-click="edit()">
+                            <md-icon md-menu-align-target>edit</md-icon>
+                            <span data-translate="MATERIAL_EDIT"></span>
+                          </md-button>
+                        </md-menu-item>
+
                         <md-menu-item data-ng-if="isAdmin()">
                           <md-button data-ng-click="confirmMaterialDeletion()">
                             <md-icon md-menu-align-target>delete</md-icon>
                             <span data-translate="MATERIAL_DELETE"></span>
                           </md-button>
                         </md-menu-item>
+
                         <md-menu-item dop-copy-permalink></md-menu-item>
                         <md-menu-divider data-ng-if="isAdmin()"></md-menu-divider>
                         <md-menu-item data-ng-if="isAdmin()" dop-recommend data-material="material"></md-menu-item>
@@ -160,7 +169,7 @@
                   </div>
 
                   <div  data-ng-if="material.hasPicture"  class="card-cover imaged">
-                    <img data-ng-src="rest/material/getPicture?materialId={{material.id}}"/>
+                    <img data-ng-src="{{material.picture}}"/>
                     <span data-ng-if="sourceType === 'LINK' && !material.embeddable">
                       <a class="card-hover" data-ng-href="{{material.source}}" target="_blank">
                         <md-icon>send</md-icon>

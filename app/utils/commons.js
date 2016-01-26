@@ -162,6 +162,23 @@ function formatIssueDate(issueDate) {
     }
 }
 
+function issueDateToDate(issueDate) {
+	if (!issueDate) {
+		return;
+	}
+
+	if (issueDate.day && issueDate.month && issueDate.year) {
+		// full date
+		return new Date(issueDate.year, issueDate.month - 1, issueDate.day);
+	} else if (issueDate.month && issueDate.year) {
+		// month date
+		return new Date(issueDate.year, issueDate.month - 1, 1);
+	} else if (issueDate.year) {
+		// year date
+		return new Date(issueDate.year, 0, 1);
+	}
+}
+
 function formatDay(day) {
     return day > 9 ? "" + day : "0" + day; 
 }

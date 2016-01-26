@@ -4,400 +4,374 @@ define([
     'services/serverCallService',
     'services/translationService',
     'services/metadataService',
-    'services/authenticatedUserService'
-], function(app) {
-    return ['$scope', '$mdDialog', 'serverCallService', 'translationService', 'metadataService', '$filter', '$location', '$rootScope', 'authenticatedUserService', function($scope, $mdDialog, serverCallService, translationService, metadataService, $filter, $location, $rootScope, authenticatedUserService) {
+    'services/authenticatedUserService',
+    'services/storageService'
+], function (app) {
+    return ['$scope', '$mdDialog', 'serverCallService', 'translationService', 'metadataService', '$filter', '$location', '$rootScope', 'authenticatedUserService', 'Upload', 'storageService',
+        function ($scope, $mdDialog, serverCallService, translationService, metadataService, $filter, $location, $rootScope, authenticatedUserService, Upload, storageService) {
 
-        $scope.showHints = true;
-        $scope.creatorIsPublisher = false;
+            $scope.showHints = true;
+            $scope.creatorIsPublisher = false;
 
-        var preferredLanguage;
+            var preferredLanguage;
+            var TABS_COUNT = 2;
 
-        var TABS_COUNT = 2;
-        if ($scope.material === undefined) {
-            $scope.material = {};
-        }
+            $scope.isUpdateMode = false;
+            $scope.step = {};
+            $scope.step.currentStep = 0;
+            $scope.step.canProceed = false;
+            $scope.step.isMaterialUrlStepValid = false;
+            $scope.step.isMetadataStepValid = false;
+            $scope.titleDescriptionGroups = [];
 
-        $scope.material.metadata = [];
-        $scope.material.tags = [];
-        $scope.material.taxons = [{}];
-        $scope.material.authors = [{}];
-        $scope.material.selectedKeyCompetences = [];
-        $scope.material.selectedCrossCurricularThemes = [];
+            init(storageService.getMaterial());
 
-        $scope.step = {};
-        $scope.step.currentStep = 0;
-        $scope.step.canProceed = false;
-        $scope.step.isMaterialUrlStepValid = false;
-        $scope.step.isMetadataStepValid = false;
+            $scope.step.nextStep = function () {
+                $scope.step.currentStep += 1;
+            };
 
-        $scope.isEducationalContextSelected = false;
+            $scope.step.previousStep = function () {
+                $scope.step.currentStep -= 1;
+            };
 
-        init();
+            $scope.step.isTabDisabled = function (index) {
+                if (index == 0)
+                    return false;
 
-        $scope.step.nextStep = function() {
-            $scope.step.currentStep += 1;
-        };
+                return !isStepValid(index - 1);
+            };
 
-        $scope.step.previousStep = function() {
-            $scope.step.currentStep -= 1;
-        };
+            $scope.step.canProceed = function () {
+                return isStepValid($scope.step.currentStep);
+            };
 
-        $scope.step.isTabDisabled = function(index) {
-            if (index == 0)
-                return false;
+            $scope.step.canCreateMaterial = function () {
+                return isStepValid(1);
+            };
 
-            return !isStepValid(index - 1);
-        };
+            $scope.step.isLastStep = function () {
+                return $scope.step.currentStep === TABS_COUNT;
+            };
 
-        $scope.step.canProceed = function() {
-            return isStepValid($scope.step.currentStep);
-        };
-
-        $scope.step.canCreateMaterial = function() {
-            return isStepValid(1);
-        };
-
-        $scope.step.isLastStep = function() {
-            return $scope.step.currentStep === TABS_COUNT;
-        };
-
-        $scope.$watch('materialUrlForm.$valid', function(isValid) {
-            $scope.step.isMaterialUrlStepValid = isValid;
-        });
-
-        $scope.addNewMetadata = function() {
-            $scope.material.metadata.forEach(function(item) {
-                item.expanded = false
+            $scope.$watch('materialUrlForm.$valid', function (isValid) {
+                $scope.step.isMaterialUrlStepValid = isValid;
             });
 
-            addNewMetadata();
-        };
+            $scope.addNewMetadata = function () {
+                $scope.titleDescriptionGroups.forEach(function (item) {
+                    item.expanded = false
+                });
 
-        $scope.addNewAuthor = function() {
-            $scope.material.authors.push({});
-        };
-
-        $scope.deleteAuthor = function(index) {
-            $scope.material.authors.splice(index, 1);
-        };
-
-        $scope.deleteMetadata = function(index) {
-            $scope.material.metadata.splice(index, 1);
-        };
-
-        $scope.addNewTaxon = function() {
-            var educationalContext = $rootScope.taxonUtils.getEducationalContext($scope.material.taxons[0]);
-
-            $scope.material.taxons.push(educationalContext);
-        };
-
-        $scope.deleteTaxon = function(index) {
-            $scope.material.taxons.splice(index, 1);
-        };
-
-        $scope.getLanguageById = function(id) {
-            return $scope.material.languages.filter(function(language) {
-                return language.id == id;
-            })[0].name;
-        };
-
-        $scope.$watch('material.taxons[0]', function(newValue, oldValue) {
-            if (newValue.level === $rootScope.taxonUtils.constants.EDUCATIONAL_CONTEXT && newValue !== oldValue) {
-                $scope.isEducationalContextSelected = true;
-                $scope.educationalContextId = newValue.id;
-
-                $scope.material.taxons = $scope.material.taxons.slice(0, 1);
-            }
-        }, false);
-
-        $scope.cancel = function() {
-            $mdDialog.hide();
-        };
-
-        $scope.createMaterial = function() {
-            var material = $scope.material;
-            var metadata = getMetadata(material);
-            var titles = metadata.titles;
-            var descriptions = metadata.descriptions;
-            var publisher = getPublisher(material);
-            var authors = getAuthors(material);
-            var licenseType = getLicenseType(material);
-            var resourceTypes = getResourceTypes(material);
-            var base64Picture = getPicture(material);
-            var taxons = getTaxons(material);
-            var keyCompetences = material.selectedKeyCompetences;
-            var crossCurricularThemes = material.selectedCrossCurricularThemes;
-            var issueDate = getIssueDate(material);
-
-            var newMaterial = {
-                type: '.Material',
-                source: material.url,
-                language: material.language,
-                titles: titles,
-                descriptions: descriptions,
-                tags: material.tags,
-                paid: material.paid,
-                publishers: [publisher],
-                authors: authors,
-                targetGroups: material.targetGroups,
-                licenseType: licenseType,
-                resourceTypes: resourceTypes,
-                picture: base64Picture,
-                taxons: taxons,
-                issueDate: issueDate,
-                specialEducation: material.specialEducation
+                addNewMetadata();
             };
 
-            if ($scope.educationalContextId === 2 || $scope.educationalContextId === 3) {
-                newMaterial.keyCompetences = keyCompetences;
-                newMaterial.crossCurricularThemes = crossCurricularThemes;
+            $scope.addNewAuthor = function () {
+                $scope.material.authors.push({});
+            };
+
+            $scope.deleteAuthor = function (index) {
+                $scope.material.authors.splice(index, 1);
+            };
+
+            $scope.deleteMetadata = function (index) {
+                $scope.material.metadata.splice(index, 1);
+            };
+
+            $scope.addNewTaxon = function () {
+                var educationalContext = $rootScope.taxonUtils.getEducationalContext($scope.material.taxons[0]);
+
+                $scope.material.taxons.push(educationalContext);
+            };
+
+            $scope.deleteTaxon = function (index) {
+                $scope.material.taxons.splice(index, 1);
+            };
+
+            $scope.getLanguageById = function (id) {
+                return $scope.languages.filter(function (language) {
+                    return language.id == id;
+                })[0].name;
+            };
+
+            $scope.$watch('material.taxons[0]', function (newValue, oldValue) {
+                if (newValue && newValue.level === $rootScope.taxonUtils.constants.EDUCATIONAL_CONTEXT && newValue !== oldValue) {
+                    $scope.educationalContextId = newValue.id;
+                    $scope.material.taxons = $scope.material.taxons.slice(0, 1);
+                }
+            }, false);
+
+            $scope.cancel = function () {
+                $mdDialog.hide();
+            };
+
+            $scope.createMaterial = function () {
+                makeCall("rest/material");
+            };
+
+            $scope.updateMaterial = function () {
+                makeCall("rest/material/update");
+            };
+
+            function makeCall(url) {
+                var metadata = getTitlesAndDecriptions();
+                $scope.material.titles = metadata.titles;
+                $scope.material.descriptions = metadata.descriptions;
+                $scope.material.type = ".Material";
+
+                serverCallService.makePost(url, $scope.material, postMaterialSuccess, postMaterialFail);
             }
 
-            serverCallService.makePost("rest/material", newMaterial, postMaterialSuccess, postMaterialFail);
-        };
+            function getIssueDate() {
+                var date = new Date($scope.issueDate);
 
-        function getIssueDate(material) {
-            var date = new Date(material.issueDate);
+                return {
+                    day: date.getDate(),
+                    month: date.getMonth() + 1,
+                    year: date.getFullYear()
+                };
+            }
 
-            return {
-                day: date.getDate(),
-                month: date.getMonth() + 1,
-                year: date.getFullYear()
+
+            function getTitlesAndDecriptions() {
+                var titles = [];
+                var descriptions = [];
+
+                $scope.titleDescriptionGroups.forEach(function (item) {
+                    if (item.title) {
+                        var title = {
+                            language: item.language,
+                            text: item.title
+                        };
+
+                        titles.push(title);
+                    }
+
+                    if (item.description) {
+                        var description = {
+                            language: item.language,
+                            text: item.description
+                        };
+
+                        descriptions.push(description);
+                    }
+                });
+
+                return {
+                    titles: titles,
+                    descriptions: descriptions
+                };
+            }
+
+            function isStepValid(index) {
+                switch (index) {
+                    case 0:
+                        return $scope.step.isMaterialUrlStepValid && isMetadataStepValid();
+                    default:
+                        return isStepValid(index - 1);
+                }
+            }
+
+            $scope.translate = function (item, prefix) {
+                return $filter("translate")(prefix + item.toUpperCase());
             };
-        }
 
-        function getAuthors(material) {
-            var authors = [];
+            /**
+             * Search for keyCompetences.
+             */
+            $scope.searchKeyCompetences = function (query) {
+                return query ? $scope.keyCompetences
+                    .filter(searchFilter(query, "KEY_COMPETENCE_")) : $scope.keyCompetences;
+            };
 
-            material.authors.forEach(function(author) {
-                if (author.name && author.surname) {
-                    authors.push(author);
+            /**
+             * Search for CrossCurricularThemes.
+             */
+            $scope.searchCrossCurricularThemes = function (query) {
+                return query ? $scope.crossCurricularThemes
+                    .filter(searchFilter(query, "CROSS_CURRICULAR_THEME_")) : $scope.crossCurricularThemes;
+            };
+
+            /**
+             * Create filter function for a query string
+             */
+            function searchFilter(query, translationPrefix) {
+                var lowercaseQuery = angular.lowercase(query);
+
+                return function filterFn(filterSearchObject) {
+                    var lowercaseItem = $scope.translate(filterSearchObject.name, translationPrefix);
+                    lowercaseItem = angular.lowercase(lowercaseItem);
+
+                    if (lowercaseItem.indexOf(lowercaseQuery) === 0) {
+                        return filterSearchObject;
+                    }
+                };
+            }
+
+            function loadMetadata() {
+                metadataService.loadLanguages(setLangugeges);
+                metadataService.loadLicenseTypes(setLicenseTypes);
+                metadataService.loadResourceTypes(setResourceTypes);
+                metadataService.loadKeyCompetences(setKeyCompetences);
+                metadataService.loadCrossCurricularThemes(setCrossCurricularThemes);
+            }
+
+            function initEmptyMaterial() {
+                $scope.material = {};
+                $scope.material.tags = [];
+                $scope.material.taxons = [{}];
+                $scope.material.authors = [{}];
+                $scope.material.keyCompetences = [];
+                $scope.material.crossCurricularThemes = [];
+            }
+
+            function init(material) {
+                if (authenticatedUserService.getUser() && authenticatedUserService.getUser().role === 'PUBLISHER') {
+                    $scope.material.publisher = authenticatedUserService.getUser().username;
+                    $scope.creatorIsPublisher = true;
+                }
+
+                if (material) {
+                    preSetMaterial(material);
+                } else {
+                    initEmptyMaterial();
+                    prefillMetadataFromPortfolio();
+                }
+
+                loadMetadata();
+            }
+
+            $scope.issueDateListener = function () {
+                $scope.material.issueDate = getIssueDate();
+            };
+
+            $scope.$watch(function () {
+                return $scope.picture;
+            }, function (newPicture, oldPicture) {
+                if (newPicture !== oldPicture) {
+                    Upload.dataUrl($scope.picture, true).then(function () {
+                        $scope.material.picture = $scope.picture.$ngfDataUrl;
+                    });
                 }
             });
 
-            return authors;
-        }
+            function preSetMaterial(material) {
+                $scope.isUpdateMode = true;
+                $scope.material = material;
 
-        function getTaxons(material) {
-            if (material.taxons[0].id) {
-                var taxons = material.taxons
+                for (var i = 0; i < material.titles.length; i++) {
+                    if (material.descriptions[i]) {
+                        var desc = material.descriptions[i].text;
+                    }
+
+                    var meta = {
+                        title: material.titles[i].text,
+                        description: desc,
+                        language: material.titles[i].language
+                    };
+
+                    $scope.titleDescriptionGroups.push(meta);
+                }
+
+                if (material.issueDate) {
+                    $scope.issueDate = issueDateToDate(material.issueDate);
+                }
+
+                if (!$scope.material.authors[0]) {
+                    $scope.material.authors = [{}];
+                }
+
+                if (!$scope.material.taxons[0]) {
+                    $scope.material.taxons = [{}];
+                }
+
+                var taxon = $rootScope.taxonUtils.getEducationalContext($scope.material.taxons[0])
+                $scope.educationalContextId = taxon.id;
             }
-            return taxons;
-        }
 
-        function getPicture(material) {
-            if (material.picture) {
-                var base64Picture = material.picture.$ngfDataUrl;
-            }
-            return base64Picture;
-        }
+            function prefillMetadataFromPortfolio() {
+                if ($rootScope.savedPortfolio) {
+                    if ($rootScope.savedPortfolio.taxon) {
+                        var taxon = Object.create($rootScope.savedPortfolio.taxon);
+                        $scope.material.taxons = [taxon];
 
-        function getPublisher(material) {
-            if (material.publisher) {
-                var publisher = {
-                    name: material.publisher
+                        $scope.educationalContextId = taxon.id;
+                    }
+
+                    if ($rootScope.savedPortfolio.tags) {
+                        $scope.material.tags = $rootScope.savedPortfolio.tags.slice();
+                    }
+
+                    if ($rootScope.savedPortfolio.targetGroups) {
+                        $scope.material.targetGroups = $rootScope.savedPortfolio.targetGroups.slice();
+                    }
                 }
             }
-            return publisher;
-        }
 
-        function getLicenseType(material) {
-            if (material.licenseType) {
-                var licenseType = JSON.parse(material.licenseType)
+            function setLangugeges(data) {
+                $scope.languages = data;
+
+                setDefaultMaterialMetadataLanguage();
+                addNewMetadata();
             }
-            return licenseType;
-        }
 
-        function getResourceTypes(material) {
-            var resourceTypes = [];
+            function setLicenseTypes(data) {
+                $scope.licenceTypes = data;
+            }
 
-            if (material.selectedResourceTypes) {
-                material.selectedResourceTypes.forEach(function(resourceType) {
-                    resourceTypes.push(JSON.parse(resourceType));
+            function setCrossCurricularThemes(data) {
+                if (!isEmpty(data)) {
+                    $scope.crossCurricularThemes = data;
+                }
+            }
+
+            function setKeyCompetences(data) {
+                if (!isEmpty(data)) {
+                    $scope.keyCompetences = data;
+                }
+            }
+
+            function postMaterialSuccess(data) {
+                if (!isEmpty(data)) {
+                    $mdDialog.hide(data);
+                    console.log("material added");
+                    if (!$scope.isChapterMaterial) {
+                        $location.url('/material?materialId=' + data.id);
+                    }
+                }
+            }
+
+            function postMaterialFail() {
+                console.log('Failed to add material.')
+            }
+
+            function setResourceTypes(data) {
+                $scope.resourceTypes = data;
+            }
+
+            function setDefaultMaterialMetadataLanguage() {
+                var userLanguage = translationService.getLanguage();
+
+                preferredLanguage = $scope.languages.filter(function (language) {
+                    return language == userLanguage;
                 });
             }
 
-            return resourceTypes;
-        }
+            function addNewMetadata() {
+                var metadata = {
+                    expanded: true,
+                    title: ''
+                };
 
-        function getMetadata(material) {
-            var titles = [];
-            var descriptions = [];
+                if (preferredLanguage !== null && preferredLanguage !== undefined)
+                    metadata.language = preferredLanguage[0];
 
-
-            material.metadata.forEach(function(item) {
-                if (item.title) {
-                    var title = {
-                        language: item.language,
-                        text: item.title
-                    };
-
-                    titles.push(title);
-                }
-
-                if (item.description) {
-                    var description = {
-                        language: item.language,
-                        text: item.description
-                    };
-
-                    descriptions.push(description);
-                }
-            });
-
-            return {
-                titles: titles,
-                descriptions: descriptions
-            };
-        }
-
-        function isStepValid(index) {
-            switch (index) {
-                case 0:
-                    return $scope.step.isMaterialUrlStepValid && isMetadataStepValid();
-                default:
-                    return isStepValid(index - 1);
-            }
-        }
-
-        $scope.translate = function(item, prefix) {
-            return $filter("translate")(prefix + item.toUpperCase());
-        };
-
-        /**
-         * Search for keyCompetences.
-         */
-        $scope.searchKeyCompetences = function(query) {
-            return query ? $scope.material.keyCompetences
-                .filter(searchFilter(query, "KEY_COMPETENCE_")) : $scope.material.keyCompetences;
-        };
-
-        /**
-         * Search for CrossCurricularThemes.
-         */
-        $scope.searchCrossCurricularThemes = function(query) {
-            return query ? $scope.material.crossCurricularThemes
-                .filter(searchFilter(query, "CROSS_CURRICULAR_THEME_")) : $scope.material.crossCurricularThemes;
-        };
-
-        /**
-         * Create filter function for a query string
-         */
-        function searchFilter(query, translationPrefix) {
-            var lowercaseQuery = angular.lowercase(query);
-
-            return function filterFn(filterSearchObject) {
-                var lowercaseItem = $scope.translate(filterSearchObject.name, translationPrefix);
-                lowercaseItem = angular.lowercase(lowercaseItem);
-
-                if (lowercaseItem.indexOf(lowercaseQuery) === 0) {
-                    return filterSearchObject;
-                }
-            };
-        }
-
-
-        function init() {
-            if (authenticatedUserService.getUser() && authenticatedUserService.getUser().role === 'PUBLISHER') {
-                $scope.material.publisher = authenticatedUserService.getUser().username;
-                $scope.creatorIsPublisher = true;
+                $scope.titleDescriptionGroups.push(metadata);
             }
 
-            metadataService.loadLanguages(setLangugeges);
-            metadataService.loadLicenseTypes(setLicenseTypes);
-            metadataService.loadResourceTypes(setResourceTypes);
-            metadataService.loadKeyCompetences(setKeyCompetences);
-            metadataService.loadCrossCurricularThemes(setCrossCurricularThemes);
-
-            prefillMetadata();
-        }
-
-        function prefillMetadata() {
-            if ($rootScope.savedPortfolio) {
-                if ($rootScope.savedPortfolio.taxon) {
-                    var taxon = Object.create($rootScope.savedPortfolio.taxon);
-                    $scope.material.taxons = [taxon];
-
-                    $scope.isEducationalContextSelected = true;
-                    $scope.educationalContextId = taxon.id;
-                }
-
-                if ($rootScope.savedPortfolio.tags) {
-                    $scope.material.tags = $rootScope.savedPortfolio.tags.slice();
-                }
-
-                if ($rootScope.savedPortfolio.targetGroups) {
-                    $scope.material.targetGroups = $rootScope.savedPortfolio.targetGroups.slice();
-                }
+            function isMetadataStepValid() {
+                return $scope.titleDescriptionGroups.filter(function (metadata) {
+                        return metadata.title && metadata.title.length !== 0;
+                    }).length !== 0;
             }
-        }
-
-        function setLangugeges(data) {
-            $scope.material.languages = data;
-
-            setDefaultMaterialMetadataLanguage();
-            addNewMetadata();
-        }
-
-        function setLicenseTypes(data) {
-            $scope.material.licenceTypes = data;
-        }
-
-        function setCrossCurricularThemes(data) {
-            if (!isEmpty(data)) {
-                $scope.material.crossCurricularThemes = data;
-            }
-        }
-
-        function setKeyCompetences(data) {
-            if (!isEmpty(data)) {
-                $scope.material.keyCompetences = data;
-            }
-        }
-
-        function postMaterialSuccess(data) {
-            if (!isEmpty(data)) {
-                $mdDialog.hide(data);
-                console.log("material added");
-                if (!$scope.isChapterMaterial) {
-                    $location.url('/material?materialId=' + data.id);
-                }
-            }
-        }
-
-        function postMaterialFail() {
-            console.log('Failed to add material.')
-        }
-
-        function setResourceTypes(data) {
-            $scope.material.resourceTypes = data;
-        }
-
-        function setDefaultMaterialMetadataLanguage() {
-            var userLanguage = translationService.getLanguage();
-
-            preferredLanguage = $scope.material.languages.filter(function(language) {
-                return language == userLanguage;
-            });
-        }
-
-        function addNewMetadata() {
-            var metadata = {
-                expanded: true,
-                title: ''
-            };
-
-            if (preferredLanguage !== null && preferredLanguage !== undefined)
-                metadata.language = preferredLanguage[0];
-
-            $scope.material.metadata.push(metadata);
-        }
-
-        function isMetadataStepValid() {
-            return $scope.material.metadata.filter(function(metadata) {
-                return metadata.title && metadata.title.length !== 0;
-            }).length !== 0;
-        }
-    }];
+        }];
 });

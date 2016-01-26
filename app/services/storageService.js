@@ -1,6 +1,7 @@
 define(['angularAMD'], function(angularAMD) {    
     angularAMD.factory('storageService', function() {
         var portfolio = null;
+        var material = null;
         var storageService = {};
         
         storageService.setPortfolio = function(item) {
@@ -10,8 +11,14 @@ define(['angularAMD'], function(angularAMD) {
         storageService.getPortfolio = function() {
             return portfolio;
         };
-        
-        //TODO: same logic for material too (hence the service name)
+
+        storageService.setMaterial = function(item) {
+            material = item;
+        };
+
+        storageService.getMaterial = function() {
+            return material;
+        };
         
         return storageService;
     });

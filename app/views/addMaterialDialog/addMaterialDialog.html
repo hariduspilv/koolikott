@@ -18,7 +18,7 @@
           <!-- url & lang-->
           <form name="materialUrlForm" layout="row" flex layout-align="start center">
             <div flex="nogrow" class="md-padding">
-              <div data-ngf-drop ngf-select ng-model="material.picture" class="drop-box"
+              <div data-ngf-drop ngf-select ng-model="picture" class="drop-box"
                 data-ngf-drag-over-class="'dragover'"
                 data-ngf-multiple="false"
                 data-accept="image/*"
@@ -35,16 +35,16 @@
               <label>
                 <span data-translate="MATERIAL_LINK"></span> *
               </label>
-              <input data-ng-model="material.url" name="url" id="add-material-url-input" type="url" required>
-              <div data-ng-messages="materialUrlForm.url.$error" data-ng-show="materialUrlForm.url.$dirty" multiple>
-                <div data-ng-message="required" data-ng-show="materialUrlForm.url.$error.required" data-translate="MATERIAL_URL_IS_MANDATORY"></div>
-                <div data-ng-message="url" data-ng-show="materialUrlForm.url.$error.url" data-translate="MATERIAL_URL_IS_INVALID"></div>
+              <input data-ng-model="material.source" name="source" id="add-material-url-input" type="url" required>
+              <div data-ng-messages="materialUrlForm.source.$error" data-ng-show="materialUrlForm.source.$dirty" multiple>
+                <div data-ng-message="required" data-ng-show="materialUrlForm.source.$error.required" data-translate="MATERIAL_URL_IS_MANDATORY"></div>
+                <div data-ng-message="source" data-ng-show="materialUrlForm.source.$error.source" data-translate="MATERIAL_URL_IS_INVALID"></div>
               </div>
             </md-input-container>
             <md-input-container flex="20" flex-xs="35" class="md-padding">
               <label data-translate="LANGUAGE"></label>
               <md-select data-ng-model="material.language" id="add-material-language-select">
-                <md-option data-ng-repeat="language in material.languages" value="{{language}}">
+                <md-option data-ng-repeat="language in languages" value="{{language}}">
                   <span data-translate="LANGUAGE_{{language.toUpperCase()}}" />
                 </md-option>
               </md-select>
@@ -55,12 +55,13 @@
           <div layout="row" flex layout-align="space-between center">
             <div data-ng-if="material.picture" class="drop-box-preview">
               <h3 class="md-subhead" data-translate="PHOTO_PREVIEW"></h3>
-              <img data-ngf-thumbnail="material.picture" ngf-size="{width: 300, height: 300, quality: 0.9}" alt="photo">
+              <img data-ng-src="{{material.picture}}" class="md-card-image" />
+              <!--<img data-ngf-thumbnail="picture" ngf-size="{width: 300, height: 300, quality: 0.9}" alt="photo">-->
             </div>
           </div>
 
           <!-- heading-desc-lang group -->
-          <div class="form-group" data-ng-repeat="metadata in material.metadata">
+          <div class="form-group" data-ng-repeat="metadata in titleDescriptionGroups">
             <form name="materialTitleForm">
               <div layout="row" layout-align="center center">
                 <md-input-container flex>
@@ -75,7 +76,7 @@
                 <md-input-container flex="20" flex-xs="35" class="md-padding">
                   <label data-translate="LANGUAGE"></label>
                   <md-select data-ng-model="metadata.language" id="add-material-title-language-select">
-                    <md-option data-ng-repeat="language in material.languages" value="{{language}}">
+                    <md-option data-ng-repeat="language in languages" value="{{language}}">
                       <span data-translate="LANGUAGE_{{language.toUpperCase()}}" />
                     </md-option>
                   </md-select>
@@ -88,11 +89,11 @@
                 <label data-translate="MATERIAL_DESCRIPTION"></label>
                 <textarea ng-model="metadata.description" rows="2"></textarea>
               </md-input-container>
-              <md-button class="md-icon-button md-primary" data-ng-show="$index+1 === material.metadata.length" data-ng-click="addNewMetadata()">
+              <md-button class="md-icon-button md-primary" data-ng-show="$index+1 === titleDescriptionGroups.length" data-ng-click="addNewMetadata()">
                 <md-icon>add_circle</md-icon>
                 <md-tooltip md-direction="top"><span data-translate="MATERIAL_TAB_NEW_TITLE_AND_DESC"></span></md-tooltip>
               </md-button>
-              <md-button class="md-icon-button" data-ng-show="material.metadata.length > 1" data-ng-click="deleteMetadata($index)">
+              <md-button class="md-icon-button" data-ng-show="titleDescriptionGroups.length > 1" data-ng-click="deleteMetadata($index)">
                 <md-icon>remove_circle</md-icon>
                 <md-tooltip md-direction="top"><span data-translate="MATERIAL_TAB_REMOVE"></span></md-tooltip>
               </md-button>
@@ -102,10 +103,8 @@
           <div layout="row" flex layout-align="space-between center">
             <md-input-container flex>
               <label data-translate="MATERIAL_VIEW_RESOURCE_TYPE"></label>
-              <md-select data-ng-model="material.selectedResourceTypes" multiple>
-                <md-option data-ng-repeat="resourceType in material.resourceTypes" value="{{resourceType}}">
-                  <span data-translate="{{resourceType.name}}" />
-                </md-option>
+              <md-select data-ng-model="material.resourceTypes" id="resourceTypeSelect" ng-model-options="{trackBy: '$value.id'}" multiple="true">
+                <md-option ng-value="resourceType" data-ng-repeat="resourceType in resourceTypes" data-translate="{{resourceType.name}}"></md-option>
               </md-select>
             </md-input-container>
           </div>
@@ -117,7 +116,7 @@
         <md-content class="md-padding">
           <div layout="row" flex layout-align="space-between center" data-ng-repeat="taxon in material.taxons track by $index">
             <div data-dop-taxon-selector data-taxon="material.taxons[$index]" data-disable-educational-context="!$first" layout="row" layout-sm="column" flex></div>
-            <md-button class="md-icon-button md-primary" data-ng-click="addNewTaxon()" data-ng-disabled="!isEducationalContextSelected">
+            <md-button class="md-icon-button md-primary" data-ng-click="addNewTaxon()" data-ng-disabled="material.taxon">
               <md-icon>add_circle</md-icon>
               <md-tooltip md-direction="top"><span data-translate="MATERIAL_TAB_ADD_TAXON"></span></md-tooltip>
             </md-button>
@@ -126,7 +125,7 @@
               <md-tooltip md-direction="top"><span data-translate="MATERIAL_TAB_REMOVE_TAXON"></span></md-tooltip>
             </md-button>
           </div>
-          
+
           <md-checkbox data-ng-if="educationalContextId === 2" data-ng-model="material.specialEducation" aria-label="{{'MATERIAL_SPECIAL_EDUCATION' | translate}}" class="md-primary" flex>
             <span data-translate="MATERIAL_SPECIAL_EDUCATION"></span>
           </md-checkbox>
@@ -143,17 +142,17 @@
           </div>
 
           <div layout="row" flex layout-align="center center" data-ng-if="educationalContextId === 2 || educationalContextId === 3">
-            <md-chips ng-model="material.selectedKeyCompetences" md-autocomplete-snap="" md-require-match="true" flex>
+            <md-chips ng-model="material.keyCompetences" md-autocomplete-snap="" md-require-match="true" flex>
               <md-autocomplete
                 md-no-cache="true"
-                md-selected-item="material.selectedKeyCompetence"
-                md-search-text="material.competenceSearchText"
-                md-items="keyCompetence in searchKeyCompetences(material.competenceSearchText)"
+                md-selected-item="selectedKeyCompetence"
+                md-search-text="competenceSearchText"
+                md-items="keyCompetence in searchKeyCompetences(competenceSearchText)"
                 md-item-text="translate(keyCompetence.name, 'KEY_COMPETENCE_')"
                 placeholder="{{ 'MATERIAL_KEY_COMPETENCES' | translate }}"
                 md-min-length="0"
                 md-autoselect>
-                <span md-highlight-text="material.competenceSearchText" md-highlight-flags="^i">
+                <span md-highlight-text="competenceSearchText" md-highlight-flags="^i">
                   {{translate(keyCompetence.name, 'KEY_COMPETENCE_')}}
                 </span>
               </md-autocomplete>
@@ -166,16 +165,16 @@
           </div>
 
           <div layout="row" flex layout-align="center center" data-ng-if="educationalContextId === 2 || educationalContextId === 3">
-            <md-chips ng-model="material.selectedCrossCurricularThemes" md-autocomplete-snap="" md-require-match="true" flex>
+            <md-chips ng-model="material.crossCurricularThemes" md-autocomplete-snap="" md-require-match="true" flex>
               <md-autocomplete
-                md-selected-item="material.selectedCrossCurricularTheme"
-                md-search-text="material.crossCurricularSearchText"
-                md-items="crossCurricularTheme in searchCrossCurricularThemes(material.crossCurricularSearchText)"
+                md-selected-item="selectedCrossCurricularTheme"
+                md-search-text="crossCurricularSearchText"
+                md-items="crossCurricularTheme in searchCrossCurricularThemes(crossCurricularSearchText)"
                 md-item-text="translate(crossCurricularTheme.name, 'CROSS_CURRICULAR_THEME_')"
                 placeholder="{{ 'MATERIAL_CROSS_CURRICULAR_THEMES' | translate }}"
                 md-min-length="0"
                 md-autoselect>
-                <span md-highlight-text="material.crossCurricularSearchText" md-highlight-flags="^i">
+                <span md-highlight-text="crossCurricularSearchText" md-highlight-flags="^i">
                   {{translate(crossCurricularTheme.name, 'CROSS_CURRICULAR_THEME_')}}
                 </span>
               </md-autocomplete>
@@ -216,17 +215,17 @@
           <div layout="row" flex layout-align="space-between center">
             <md-input-container class="md-block" flex>
               <label data-translate="MATERIAL_PUBLISHER"></label>
-              <input data-ng-model="material.publisher" ng-disabled="creatorIsPublisher">
+              <input data-ng-model="material.publishers[0].name" ng-disabled="creatorIsPublisher">
             </md-input-container>
-            
-            <md-datepicker ng-model="material.issueDate" md-placeholder="{{ 'MATERIAL_ISSUE_DATE' | translate }}"></md-datepicker>
+
+            <md-datepicker ng-model="issueDate" ng-change="issueDateListener()" md-placeholder="{{ 'MATERIAL_ISSUE_DATE' | translate }}"></md-datepicker>
           </div>
 
           <div layout="row" flex layout-align="space-between center">
             <md-input-container flex>
               <label data-translate="MATERIAL_VIEW_LICENSE_TYPE"></label>
-              <md-select data-ng-model="material.licenseType">
-                <md-option data-ng-repeat="licenceType in material.licenceTypes" value="{{licenceType}}" data-translate="LICENSETYPE_{{licenceType.name.toUpperCase()}}">
+              <md-select data-ng-model="material.licenseType" id="licenceTypeSelect" ng-model-options="{trackBy: '$value.id'}">
+                <md-option ng-value="licenceType"  data-ng-repeat="licenceType in licenceTypes" data-translate="LICENSETYPE_{{licenceType.name.toUpperCase()}}">
                 </md-option>
               </md-select>
             </md-input-container>
@@ -248,8 +247,11 @@
     <md-button aria-label="Tühista materjali lisamine" id="add-material-cancel-button" data-ng-click="cancel()">
       <span data-translate="BUTTON_CANCEL"></span>
     </md-button>
-    <md-button aria-label="Loo materjal" id="add-material-create-button" data-ng-click="createMaterial()" data-ng-disabled="!step.canCreateMaterial()" class="md-primary">
+    <md-button data-ng-if="!isUpdateMode" aria-label="Loo materjal" id="add-material-create-button" data-ng-click="createMaterial()" data-ng-disabled="!step.canCreateMaterial()" class="md-primary">
       <span data-translate="BUTTON_CREATE_MATERIAL"></span>
+    </md-button>
+    <md-button data-ng-if="isUpdateMode" aria-label="Muuda materjali" id="add-material-update-button" data-ng-click="updateMaterial()" data-ng-disabled="!step.canCreateMaterial()" class="md-primary">
+      <span data-translate="BUTTON_UPDATE_MATERIAL"></span>
     </md-button>
     <md-button aria-label="Liigu järgmisse sammu" data-ng-click="step.nextStep()" data-ng-hide="step.isLastStep()" data-ng-disabled="!step.canProceed()" class="md-primary">
       <span data-translate="BUTTON_NEXT_STEP"></span>

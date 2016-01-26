@@ -18,7 +18,7 @@
   </div>
 <!-- image -->
   <div  data-ng-if="material.hasPicture"  class="card-cover imaged {{materialType}}" layout="row" layout-fill layout-align="start start">
-    <img data-ng-src="rest/material/getPicture?materialId={{material.id}}" class="md-card-image" />
+    <img data-ng-src="{{material.picture}}" class="md-card-image" />
     <div class="card-hover {{materialType}}">
       <div class="pick" data-ng-if="isEditPortfolioMode && !isEditPortfolioPage">
         <md-icon class="unchecked">radio_button_unchecked</md-icon>
