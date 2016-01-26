@@ -48,7 +48,7 @@ define(['angularAMD'], function(angularAMD) {
                             var newEdCtx = $rootScope.taxonUtils.getEducationalContext(newTaxon);
                             var oldEdCtx = $rootScope.taxonUtils.getEducationalContext(oldTaxon);
 
-                            if (!oldEdCtx || newEdCtx.name !== oldEdCtx.name) {
+                            if (!oldEdCtx || (newEdCtx && newEdCtx.name !== oldEdCtx.name)) {
                                 fill();
                             }
                         }
