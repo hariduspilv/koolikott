@@ -407,6 +407,7 @@ INSERT INTO Translation(translationGroup, translationKey, translation) VALUES
 (1,'SELECT_MODULE','Kõik'),
 (1,'SELECT_TOPIC','Kõik'),
 (1,'SELECT_SUBTOPIC','Kõik'),
+(1,'SELECT_EDUCATIONAL_CONTEXT', 'Kõik'),
 (1,'DOMAIN_ESTONIAN','Eesti keel'),
 (1,'DOMAIN_MOVEMENT','Liikumine'),
 (1,'DOMAIN_ME_AND_THE_ENVIRONMENT','Mina ja keskkond'),
