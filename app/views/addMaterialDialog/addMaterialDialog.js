@@ -9,7 +9,7 @@ define([
 ], function (app) {
     return ['$scope', '$mdDialog', 'serverCallService', 'translationService', 'metadataService', '$filter', '$location', '$rootScope', 'authenticatedUserService', 'Upload', 'storageService',
         function ($scope, $mdDialog, serverCallService, translationService, metadataService, $filter, $location, $rootScope, authenticatedUserService, Upload, storageService) {
-
+            $scope.isSaving = false;
             $scope.showHints = true;
             $scope.creatorIsPublisher = false;
 
@@ -113,6 +113,8 @@ define([
             };
 
             function makeCall(url) {
+                $scope.isSaving = true;
+              
                 var metadata = getTitlesAndDecriptions();
                 $scope.material.titles = metadata.titles;
                 $scope.material.descriptions = metadata.descriptions;
@@ -338,10 +340,14 @@ define([
                         $location.url('/material?materialId=' + data.id);
                     }
                 }
+                
+                $scope.isSaving = false;
             }
 
             function postMaterialFail() {
-                console.log('Failed to add material.')
+                console.log('Failed to add material.');
+                
+                $scope.isSaving = false;
             }
 
             function setResourceTypes(data) {
