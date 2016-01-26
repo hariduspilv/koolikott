@@ -1,4 +1,9 @@
-define(['app'], function(app) {
+define([
+  'app',
+  'services/serverCallService',
+  'services/translationService',
+  'services/iconService'
+], function(app) {
 
     app.directive('dopMaterialBox', ['translationService', 'serverCallService', '$rootScope', 'iconService', function(translationService, serverCallService, $rootScope, iconService) {
         return {

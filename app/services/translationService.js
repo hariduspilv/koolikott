@@ -1,29 +1,28 @@
-define(['app'], function(app) {
+define(['angularAMD'], function(angularAMD) {
 
-	app.factory('translationService', ["$rootScope", "$translate", function($rootScope, $translate) {
-		var instance;
-		
-   		$rootScope.$watch(function () {
-                return localStorage.getItem("userPreferredLanguage");
-            }, function(newLanguage, oldLanguage) {
-            	if (newLanguage !== oldLanguage) {
-            		instance.setLanguage(newLanguage);
-            	}
+    angularAMD.factory('translationService', ["$rootScope", "$translate", function($rootScope, $translate) {
+        var instance;
+
+        $rootScope.$watch(function() {
+            return localStorage.getItem("userPreferredLanguage");
+        }, function(newLanguage, oldLanguage) {
+            if (newLanguage !== oldLanguage) {
+                instance.setLanguage(newLanguage);
+            }
         }, true);
 
-		instance = {
-			
-			setLanguage : function(language) {
-				$translate.use(language);
-				localStorage.setItem("userPreferredLanguage", language);
-			},
-			
-	        getLanguage : function() {
-	        	var language = localStorage.getItem("userPreferredLanguage");
-	        	return $translate.proposedLanguage() || $translate.use() || $translate.preferredLanguage();
-	        }
-	    };
+        instance = {
+            setLanguage: function(language) {
+                $translate.use(language);
+                localStorage.setItem("userPreferredLanguage", language);
+            },
 
-	    return instance;
-	}]);
+            getLanguage: function() {
+                var language = localStorage.getItem("userPreferredLanguage");
+                return $translate.proposedLanguage() || $translate.use() || $translate.preferredLanguage();
+            }
+        };
+
+        return instance;
+    }]);
 });

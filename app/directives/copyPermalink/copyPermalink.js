@@ -1,10 +1,11 @@
-define(['app', 'clipboard'], function(app, Clipboard)
-{
-    app.directive('dopCopyPermalink', ['translationService',
-     function(translationService) {
+define([
+    'angularAMD',
+    'clipboard'
+], function(angularAMD, Clipboard) {
+    angularAMD.directive('dopCopyPermalink', function() {
         return {
             scope: {
-              url: "="
+                url: "="
             },
             templateUrl: 'directives/copyPermalink/copyPermalink.html',
             link: function(scope, element) {
@@ -19,10 +20,8 @@ define(['app', 'clipboard'], function(app, Clipboard)
             },
             controller: function($scope, $location) {
                 if (!$scope.url)
-                  $scope.url = $location.absUrl();
+                    $scope.url = $location.absUrl();
             }
         };
-    }]);
-
-    return app;
+    });
 });

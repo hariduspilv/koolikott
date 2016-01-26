@@ -1,7 +1,7 @@
-define(['app'], function(app) {
+define(['angularAMD'], function(angularAMD) {
     var instance;
 
-    app.factory('serverCallService', ["$http", "$location", "authenticatedUserService",
+    angularAMD.factory('serverCallService', ['$http', '$location', 'authenticatedUserService',
         function($http, $location, authenticatedUserService) {
 
             instance = {

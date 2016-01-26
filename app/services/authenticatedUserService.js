@@ -1,53 +1,54 @@
-define(['app'], function(app) {
+define(['angularAMD'], function(angularAMD) {
     var instance;
 
-    app.factory('authenticatedUserService',['$location',
-    function($location) {
+    angularAMD.factory('authenticatedUserService', ['$location',
+        function($location) {
 
-        function getAuthenticatedUser() {
-            return JSON.parse(localStorage.getItem("authenticatedUser"));
-        }
-
-        instance = {
-            setAuthenticatedUser : function(authenticatedUser) {
-                localStorage.setItem("authenticatedUser", JSON.stringify(authenticatedUser));
-            },
-
-            removeAuthenticatedUser : function() {
-                localStorage.removeItem("authenticatedUser");
-            },
-
-            isAuthenticated : function() {
-                if(getAuthenticatedUser()) {
-                    return true;
-                }
-
-                return false;
-            },
-            
-            isAdmin : function() {
-                return this.getUser() && this.getUser().role === 'ADMIN';
-            },
-
-            getUser : function() {
-                var authenticatedUser = getAuthenticatedUser();
-                if (authenticatedUser) {
-                    return authenticatedUser.user;
-                }
-
-                return null;
-            },
-
-            getToken : function() {
-                var authenticatedUser = getAuthenticatedUser();
-                if (authenticatedUser) {
-                    return authenticatedUser.token;
-                }
-
-                return null;
+            function getAuthenticatedUser() {
+                return JSON.parse(localStorage.getItem("authenticatedUser"));
             }
-        };
 
-        return instance;
-    }]);
+            instance = {
+                setAuthenticatedUser: function(authenticatedUser) {
+                    localStorage.setItem("authenticatedUser", JSON.stringify(authenticatedUser));
+                },
+
+                removeAuthenticatedUser: function() {
+                    localStorage.removeItem("authenticatedUser");
+                },
+
+                isAuthenticated: function() {
+                    if (getAuthenticatedUser()) {
+                        return true;
+                    }
+
+                    return false;
+                },
+
+                isAdmin: function() {
+                    return this.getUser() && this.getUser().role === 'ADMIN';
+                },
+
+                getUser: function() {
+                    var authenticatedUser = getAuthenticatedUser();
+                    if (authenticatedUser) {
+                        return authenticatedUser.user;
+                    }
+
+                    return null;
+                },
+
+                getToken: function() {
+                    var authenticatedUser = getAuthenticatedUser();
+                    if (authenticatedUser) {
+                        return authenticatedUser.token;
+                    }
+
+                    return null;
+                }
+            };
+
+            return instance;
+        }
+    ]);
 });

@@ -4,7 +4,6 @@
  * @author Jordan Silva
  * 
  */
-
 var LOGIN_ORIGIN = "loginOrigin"; 
 
 function log() {

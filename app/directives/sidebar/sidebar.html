@@ -13,7 +13,7 @@
 
   <h2 data-translate="RECOMMENDATIONS"></h2>
   <md-list id="recommendations">
-    <md-list-item  data-ng-repeat="item in recommendations" ng-href="#/material?materialId={{item.id}}" >
+    <md-list-item data-ng-repeat="item in recommendations" ng-href="#/material?materialId={{item.id}}" aria-label="Ava soovitatud materjal">
       <div layout="column" class="listblock">
         <h4 class="one-row" data-ng-bind="getCorrectLanguageString(item.titles, item.language)"></h4>
         <span class="one-row">

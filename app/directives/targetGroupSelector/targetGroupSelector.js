@@ -1,16 +1,14 @@
-define(['app'], function(app)
-{
-    app.directive('dopTargetGroupSelector', [
-     function() {
+define(['angularAMD'], function(angularAMD) {
+    angularAMD.directive('dopTargetGroupSelector', function() {
         return {
             scope: {
                 targetGroups: '=',
                 taxon: '='
             },
             templateUrl: 'directives/targetGroupSelector/targetGroupSelector.html',
-            controller: function ($scope, $rootScope) {
+            controller: function($scope, $rootScope) {
 
-                var preschoolGroups = ['PRESCHOOL', 'ZERO_FIVE', 'SIX_SEVEN'];                
+                var preschoolGroups = ['PRESCHOOL', 'ZERO_FIVE', 'SIX_SEVEN'];
                 var level1Groups = ['LEVEL1', 'GRADE1', 'GRADE2', 'GRADE3'];
                 var level2Groups = ['LEVEL2', 'GRADE4', 'GRADE5', 'GRADE6'];
                 var level3Groups = ['LEVEL3', 'GRADE7', 'GRADE8', 'GRADE9'];
@@ -22,12 +20,12 @@ define(['app'], function(app)
                     fill();
                     addListeners();
                     selectValue();
-            	}
-            	
-            	function addListeners() {
-            		$scope.$watch('selectedTargetGroup', function(newGroup, oldGroup) {
+                }
+
+                function addListeners() {
+                    $scope.$watch('selectedTargetGroup', function(newGroup, oldGroup) {
                         if (newGroup !== oldGroup) {
-                       		parseSelectedTargetGroup();
+                            parseSelectedTargetGroup();
                         }
                     }, false);
 
@@ -44,46 +42,46 @@ define(['app'], function(app)
                             selectValue();
                         }
                     }, false);
-                    
+
                     $scope.$watch('taxon', function(newTaxon, oldTaxon) {
                         if (newTaxon !== oldTaxon) {
-                        	var newEdCtx = $rootScope.taxonUtils.getEducationalContext(newTaxon);
-                        	var oldEdCtx = $rootScope.taxonUtils.getEducationalContext(oldTaxon);
-                        	
-                        	if (!oldEdCtx || newEdCtx.name !== oldEdCtx.name) {
-                        		fill();
-                        	}
+                            var newEdCtx = $rootScope.taxonUtils.getEducationalContext(newTaxon);
+                            var oldEdCtx = $rootScope.taxonUtils.getEducationalContext(oldTaxon);
+
+                            if (!oldEdCtx || newEdCtx.name !== oldEdCtx.name) {
+                                fill();
+                            }
                         }
                     });
-            	}
+                }
 
-				function fill() {
-					var educationalContext = $rootScope.taxonUtils.getEducationalContext($scope.taxon);
-					  
-					if (educationalContext) {
-						if (educationalContext.name === 'PRESCHOOLEDUCATION') {
-							$scope.groups = map(preschoolGroups);
-						} else if (educationalContext.name === 'BASICEDUCATION') {
-							$scope.groups = map(level1Groups).concat(map(level2Groups), map(level3Groups));
-						} else if (educationalContext.name === 'SECONDARYEDUCATION') {
-							$scope.groups = map(secondaryGroups);
-						}
-					} else {
-						$scope.groups = map(preschoolGroups).concat(map(level1Groups), map(level2Groups), map(level3Groups), map(secondaryGroups));
-					}
-              	}
-              
-              function map(group) {
-                  return group.map(function(item, index) {
-                      return {
-                          name: item,
-                          parent: index === 0
-                      };
-                  });
-              }
-            	
-            	function parseSelectedTargetGroup() {
-                    switch($scope.selectedTargetGroup) {
+                function fill() {
+                    var educationalContext = $rootScope.taxonUtils.getEducationalContext($scope.taxon);
+
+                    if (educationalContext) {
+                        if (educationalContext.name === 'PRESCHOOLEDUCATION') {
+                            $scope.groups = map(preschoolGroups);
+                        } else if (educationalContext.name === 'BASICEDUCATION') {
+                            $scope.groups = map(level1Groups).concat(map(level2Groups), map(level3Groups));
+                        } else if (educationalContext.name === 'SECONDARYEDUCATION') {
+                            $scope.groups = map(secondaryGroups);
+                        }
+                    } else {
+                        $scope.groups = map(preschoolGroups).concat(map(level1Groups), map(level2Groups), map(level3Groups), map(secondaryGroups));
+                    }
+                }
+
+                function map(group) {
+                    return group.map(function(item, index) {
+                        return {
+                            name: item,
+                            parent: index === 0
+                        };
+                    });
+                }
+
+                function parseSelectedTargetGroup() {
+                    switch ($scope.selectedTargetGroup) {
                         case 'PRESCHOOL':
                             $scope.targetGroups = preschoolGroups.slice();
                             $scope.targetGroups.splice(0, 1); // Remove PRESCHOOL label
@@ -105,7 +103,7 @@ define(['app'], function(app)
                             $scope.targetGroups.push($scope.selectedTargetGroup);
                             break;
                     }
-            	}
+                }
 
                 function selectValue() {
                     if ($scope.targetGroups) {
@@ -145,7 +143,5 @@ define(['app'], function(app)
 
             }
         };
-    }]);
-
-    return app;
+    });
 });

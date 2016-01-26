@@ -97,7 +97,20 @@ module.exports = function (grunt) {
       dist: {
         options: {
           open: true,
-          base: '<%= yeoman.dist.app %>'
+          middleware: function (connect, options, middlewares) {
+            // Setup the proxy
+            var proxy = require('grunt-connect-proxy/lib/utils').proxyRequest;
+            middlewares.push(proxy);
+
+            // gzip
+            var compression = require('compression');
+            middlewares.unshift(compression({ level: 9 }));
+
+            // Make directory browse-able.
+            middlewares.unshift(connect.static(appConfig.dist.app));
+
+            return middlewares;
+          }
         }
       }
     },
@@ -376,8 +389,16 @@ module.exports = function (grunt) {
           mainConfigFile: '.tmp/<%= yeoman.app %>/require.config.js',
           optimize: 'uglify2',
           uglify2: {
-            mangle: false
-          }
+            mangle: true,
+            dead_code: true,
+            drop_debugger: true
+          },
+          onBuildWrite: function (moduleName, path, contents) {
+            if (moduleName === 'require.config') {
+                return contents.replace('baseUrl: \'./\'', 'baseUrl: \'./scripts\'');
+            }
+            return contents;
+        },
         }
       }
     },
@@ -410,7 +431,7 @@ module.exports = function (grunt) {
 
   grunt.registerTask('serve', 'Compile then start a connect web server', function (target) {
     if (target === 'dist') {
-      return grunt.task.run(['build', 'connect:dist:keepalive']);
+      return grunt.task.run(['build', 'configureProxies:server', 'connect:dist:keepalive']);
     }
 
     grunt.task.run([

@@ -1,10 +1,14 @@
-define(['app'], function(app)
-{
-    app.controller('profileController', ['$scope', '$route', 'authenticatedUserService', 'serverCallService', '$location', 'alertService',
-        function($scope, $route, authenticatedUserService, serverCallService, $location, alertService) {
-
-    	function init() {
-    		isMyProfilePage();
+define([
+    'app',
+    'directives/materialBox/materialBox',
+    'directives/portfolioBox/portfolioBox',
+    'services/authenticatedUserService',
+    'services/serverCallService',
+    'services/alertService'
+], function(app) {
+    return ['$scope', '$route', 'authenticatedUserService', 'serverCallService', '$location', 'alertService', function($scope, $route, authenticatedUserService, serverCallService, $location, alertService) {
+        function init() {
+            isMyProfilePage();
 
             if (!$scope.user) {
                 getUser();
@@ -12,7 +16,7 @@ define(['app'], function(app)
 
             getUsersMaterials();
             getUsersPortfolios();
-    	}
+        }
 
         function isMyProfilePage() {
             if (authenticatedUserService.isAuthenticated()) {
@@ -40,7 +44,7 @@ define(['app'], function(app)
                 $scope.user = user;
             }
         }
-        
+
         function getUserFail() {
             console.log('Getting user failed.');
             alertService.setErrorAlert('ERROR_GETTING_USER_FAILED');
@@ -62,7 +66,7 @@ define(['app'], function(app)
                 $scope.materials = data;
             }
         }
-        
+
         function getUsersMaterialsFail() {
             console.log('Failed to get materials.');
         }
@@ -82,11 +86,11 @@ define(['app'], function(app)
                 $scope.portfolios = data;
             }
         }
-        
+
         function getUsersPortfoliosFail() {
             console.log('Failed to get portfolios.');
         }
 
-    	init();
-    }]);
+        init();
+    }];
 });

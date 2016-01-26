@@ -1,6 +1,6 @@
-define(['app'], function(app) {
+define(['angularAMD'], function(angularAMD) {
 
-    app.factory('searchService',['$location', function($location) {
+    angularAMD.factory('searchService', ['$location', function($location) {
         var searchURLbase = "search/result?q=";
         var taxonURL = "&taxon=";
         var paidURL = "&paid=";
@@ -82,51 +82,51 @@ define(['app'], function(app) {
 
         return {
 
-            setSearch : function(query) {
+            setSearch: function(query) {
                 searchQuery = query;
             },
 
-            setTaxon : function(taxon) {
+            setTaxon: function(taxon) {
                 searchTaxon = taxon;
             },
 
-            setPaid : function(paid) {
+            setPaid: function(paid) {
                 searchPaid = paid;
             },
 
-            setType : function(type) {
+            setType: function(type) {
                 searchType = type;
             },
 
-            setLanguage : function(language) {
+            setLanguage: function(language) {
                 searchLanguage = language;
             },
 
-            setTargetGroups : function(targetGroups) {
+            setTargetGroups: function(targetGroups) {
                 searchTargetGroups = arrayToLowerCase(asArray(targetGroups));
             },
 
-            setResourceType : function(resourceType) {
+            setResourceType: function(resourceType) {
                 searchResourceType = resourceType;
             },
 
-            setIsSpecialEducation : function(isSpecialEducation) {
+            setIsSpecialEducation: function(isSpecialEducation) {
                 searchIsSpecialEducation = isSpecialEducation;
             },
 
-            setIssuedFrom : function(issuedFrom) {
+            setIssuedFrom: function(issuedFrom) {
                 searchIssuedFrom = issuedFrom;
             },
 
-            setCrossCurricularTheme : function(crossCurricularTheme) {
+            setCrossCurricularTheme: function(crossCurricularTheme) {
                 searchCrossCurricularTheme = crossCurricularTheme;
             },
 
-            setKeyCompetence : function(keyCompetence) {
+            setKeyCompetence: function(keyCompetence) {
                 searchKeyCompetence = keyCompetence;
             },
 
-            getURL : function() {
+            getURL: function() {
                 var searchURL;
                 if (searchQuery) {
                     searchURL = searchURLbase + escapeQuery(searchQuery)
@@ -170,7 +170,7 @@ define(['app'], function(app) {
                 return searchURL;
             },
 
-            queryExists : function() {
+            queryExists: function() {
                 var searchObject = $location.search();
                 if (searchObject.q || searchObject.taxon || searchObject.paid === false ||
                     (searchObject.type && this.isValidType(searchObject.type)) || searchObject.language || searchObject.targetGroup ||
@@ -182,8 +182,8 @@ define(['app'], function(app) {
                 }
             },
 
-            getQuery : function() {
-                if(searchQuery === ""){
+            getQuery: function() {
+                if (searchQuery === "") {
                     var searchObject = $location.search();
                     if (searchObject.q) {
                         searchQuery = unescapeQuery(searchObject.q);
@@ -204,7 +204,7 @@ define(['app'], function(app) {
                 return searchTaxon;
             },
 
-            isPaid : function() {
+            isPaid: function() {
                 if (searchPaid === "") {
                     var searchObject = $location.search();
                     if (searchObject.paid) {
@@ -215,7 +215,7 @@ define(['app'], function(app) {
                 return searchPaid;
             },
 
-            getType : function() {
+            getType: function() {
                 if (searchType === "") {
                     var searchObject = $location.search();
                     if (searchObject.type) {
@@ -226,7 +226,7 @@ define(['app'], function(app) {
                 return searchType;
             },
 
-            getLanguage : function() {
+            getLanguage: function() {
                 if (searchLanguage === "") {
                     var searchObject = $location.search();
                     if (searchObject.language) {
@@ -237,18 +237,18 @@ define(['app'], function(app) {
                 return searchLanguage;
             },
 
-            getTargetGroups : function() {
+            getTargetGroups: function() {
                 if (!searchTargetGroups || searchTargetGroups.length === 0) {
                     var searchObject = $location.search();
                     if (searchObject.targetGroup) {
-                       return arrayToUpperCase(asArray(searchObject.targetGroup));
+                        return arrayToUpperCase(asArray(searchObject.targetGroup));
                     }
-                } 
+                }
 
                 return arrayToUpperCase(searchTargetGroups);
             },
 
-            getResourceType : function() {
+            getResourceType: function() {
                 if (searchResourceType === "") {
                     var searchObject = $location.search();
                     if (searchObject.resourceType) {
@@ -259,7 +259,7 @@ define(['app'], function(app) {
                 return searchResourceType;
             },
 
-            isSpecialEducation : function() {
+            isSpecialEducation: function() {
                 if (searchIsSpecialEducation === "") {
                     var searchObject = $location.search();
                     if (searchObject.specialEducation) {
@@ -270,7 +270,7 @@ define(['app'], function(app) {
                 return searchIsSpecialEducation;
             },
 
-            getIssuedFrom : function() {
+            getIssuedFrom: function() {
                 if (searchIssuedFrom === "") {
                     var searchObject = $location.search();
                     if (searchObject.issuedFrom) {
@@ -281,7 +281,7 @@ define(['app'], function(app) {
                 return searchIssuedFrom;
             },
 
-            getCrossCurricularTheme : function() {
+            getCrossCurricularTheme: function() {
                 if (searchCrossCurricularTheme === "") {
                     var searchObject = $location.search();
                     if (searchObject.crossCurricularTheme) {
@@ -292,7 +292,7 @@ define(['app'], function(app) {
                 return searchCrossCurricularTheme;
             },
 
-            getKeyCompetence : function() {
+            getKeyCompetence: function() {
                 if (searchKeyCompetence === "") {
                     var searchObject = $location.search();
                     if (searchObject.keyCompetence) {
@@ -303,7 +303,7 @@ define(['app'], function(app) {
                 return searchKeyCompetence;
             },
 
-            clearFieldsNotInSimpleSearch : function() {
+            clearFieldsNotInSimpleSearch: function() {
                 searchTaxon = '';
                 searchPaid = '';
                 searchType = '';
@@ -316,7 +316,7 @@ define(['app'], function(app) {
                 searchKeyCompetence = '';
             },
 
-            isValidType : function(type) {
+            isValidType: function(type) {
                 return type === 'material' || type === 'portfolio' || type === 'all';
             }
         };

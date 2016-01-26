@@ -1,52 +1,62 @@
-define(['app.routes', 'services/dependencyResolver', 'utils/taxonUtils'], function(config, dependencyResolver, taxonUtils)
-{
-    "use strict";
+define([
+    'angularAMD',
+    
+    'app.routes',
+    'utils/taxonUtils',
+    
+    'angular-translate',
+    'angular-translate-loader-url',
+    'angular-material',
+    'angular-route',
+    'angular-click-outside',
+    'jsog',
+    'utils/commons',
+    
+    /* app wide modules */
+    'directives/header/header',
+    'directives/editPortfolioModeHeader/editPortfolioModeHeader',
+    'directives/detailedSearch/detailedSearch',
+    'directives/mainFabButton/mainFabButton',
+    'directives/sidebar/sidebar',
+    
+    /* TODO: we could save more request if layout system is built in another way */
+    'directives/pageStructure/columnLayout/columnLayout',
+    'directives/pageStructure/linearLayout/linearLayout',
+    
+    'services/authenticatedUserService',
+], function(angularAMD, config, taxonUtils) {
+    'use strict';
 
     var app = angular.module('app', [
-      'ngRoute',
-      'ngMaterial',
-      'pascalprecht.translate',
-      'youtube-embed',
-      'angularScreenfull',
-      'duScroll',
-      'infinite-scroll',
-      'ngFileUpload',
-      'angular-click-outside',
-      'md.data.table'
+        'ngRoute',
+        'ngMaterial',
+        'pascalprecht.translate',
+        'angular-click-outside'
     ]);
 
-    app.config(
-    [
-        '$routeProvider',
-        '$locationProvider',
-        '$controllerProvider',
-        '$compileProvider',
-        '$filterProvider',
-        '$provide',
-        '$translateProvider',
-        '$sceProvider',
-        '$mdThemingProvider',
-        '$httpProvider',
-
-        function($routeProvider, $locationProvider, $controllerProvider, $compileProvider, $filterProvider, $provide, $translateProvider, $sceProvider, $mdThemingProvider, $httpProvider)
-        {
+    app.config(function($routeProvider, $locationProvider, $controllerProvider, $compileProvider, $filterProvider, $provide, $translateProvider, $sceProvider, $mdThemingProvider, $httpProvider) {
             app.controller = $controllerProvider.register;
-            app.directive  = $compileProvider.directive;
-            app.filter     = $filterProvider.register;
-            app.factory    = $provide.factory;
-            app.service    = $provide.service;
+            app.directive = $compileProvider.directive;
+            app.filter = $filterProvider.register;
+            app.factory = $provide.factory;
+            app.service = $provide.service;
 
-            if(config.routes !== undefined)
-            {
-                angular.forEach(config.routes, function(route, path)
-                {
-                    $routeProvider.when(path, {templateUrl:route.templateUrl, controller:route.controller, resolve:dependencyResolver(route.dependencies)});
+            if (config.routes !== undefined) {
+                angular.forEach(config.routes, function(route, path) {
+                    $routeProvider.when(
+                        path,
+                        angularAMD.route({
+                            templateUrl: route.templateUrl,
+                            controllerUrl: route.controllerUrl
+                        })
+                    );
                 });
             }
 
-            if(config.defaultRoutePath !== undefined)
-            {
-                $routeProvider.otherwise({redirectTo:config.defaultRoutePath});
+            if (config.defaultRoutePath !== undefined) {
+                $routeProvider.otherwise({
+                    redirectTo: config.defaultRoutePath
+                });
             }
 
             configureTranslationService($translateProvider);
@@ -56,11 +66,11 @@ define(['app.routes', 'services/dependencyResolver', 'utils/taxonUtils'], functi
             $httpProvider.defaults.transformResponse.splice(0, 0, parseJSONResponse);
             $httpProvider.defaults.transformRequest = serializeRequest;
         }
-    ]);
+    );
 
     function serializeRequest(data, headersGetter) {
         if (data && headersGetter()['content-type'].contains('application/json')) {
-        	return JSOG.stringify(data);
+            return JSOG.stringify(data);
         }
 
         return data;
@@ -75,7 +85,7 @@ define(['app.routes', 'services/dependencyResolver', 'utils/taxonUtils'], functi
     }
 
     function configureTranslationService($translateProvider) {
-    	$translateProvider.useUrlLoader('rest/translation');
+        $translateProvider.useUrlLoader('rest/translation');
         var language = localStorage.getItem("userPreferredLanguage");
         if (!language) {
             language = 'est';
@@ -85,32 +95,32 @@ define(['app.routes', 'services/dependencyResolver', 'utils/taxonUtils'], functi
         $translateProvider.useSanitizeValueStrategy('escaped');
     }
 
-// http://stackoverflow.com/questions/30123735/how-to-create-multiple-theme-in-material-angular
+    // http://stackoverflow.com/questions/30123735/how-to-create-multiple-theme-in-material-angular
     function configureTheme($mdThemingProvider) {
         var customBlueMap = $mdThemingProvider.extendPalette('blue', {
-          'contrastDefaultColor': 'light',
-          'contrastDarkColors': ['50'],
-          '50': 'ffffff'
+            'contrastDefaultColor': 'light',
+            'contrastDarkColors': ['50'],
+            '50': 'ffffff'
         });
 
         $mdThemingProvider.definePalette('customBlue', customBlueMap);
         $mdThemingProvider.theme('default')
-        .primaryPalette('customBlue', {
-          'default': '500',
-          'hue-1': '50'
-        })
-        .accentPalette('purple',  {
-          'default': '500'
-        });
+            .primaryPalette('customBlue', {
+                'default': '500',
+                'hue-1': '50'
+            })
+            .accentPalette('purple', {
+                'default': '500'
+            });
 
         $mdThemingProvider.theme('input', 'default').primaryPalette('grey');
     }
 
     app.run(function($rootScope, $location) {
-    	$rootScope.$on('$routeChangeSuccess', function() {
-    		var path = $location.path();
+        $rootScope.$on('$routeChangeSuccess', function() {
+            var path = $location.path();
             var editModeAllowed = ["/portfolio/edit", "/search/result", "/material"];
-            
+
             $rootScope.isViewPortforlioPage = path === '/portfolio';
             $rootScope.isEditPortfolioPage = path === '/portfolio/edit';
 
@@ -123,24 +133,37 @@ define(['app.routes', 'services/dependencyResolver', 'utils/taxonUtils'], functi
             		$rootScope.selectedSingleMaterial = null;
             	}
             } else {
-            	$rootScope.isEditPortfolioMode = false;
-            	$rootScope.savedPortfolio = null;
-            	$rootScope.selectedMaterials = null;
+                $rootScope.isEditPortfolioMode = false;
+                $rootScope.savedPortfolio = null;
+                $rootScope.selectedMaterials = null;
             }
         });
     });
     
-    app.run(['$rootScope', 'authenticatedUserService', function($rootScope, authenticatedUserService){
+    app.run(function($rootScope, $location) {
+        var history = [];
+
+        $rootScope.$on('$routeChangeSuccess', function() {
+            history.push($location.url());
+        });
+
+        $rootScope.back = function() {
+            var prevUrl = history.length > 1 ? history.splice(-2)[0] : '/';
+            $location.url(prevUrl);
+        };
+    });
+    
+    app.run(['$rootScope', 'authenticatedUserService', function($rootScope, authenticatedUserService) {
         $rootScope.$on('$locationChangeStart', function(event, next, current) {
-            for(var i in config.routes) {
-                if(next.indexOf(i) != -1) {
+            for (var i in config.routes) {
+                if (next.indexOf(i) != -1) {
                     var permissions = config.routes[i].permissions;
-                    
+
                     if (permissions === undefined) continue;
-                    
+
                     if (!authenticatedUserService.getUser())
                         return event.preventDefault();
-                        
+
                     if (permissions && permissions.indexOf(authenticatedUserService.getUser().role) == -1) {
                         return event.preventDefault();
                     }
@@ -149,28 +172,15 @@ define(['app.routes', 'services/dependencyResolver', 'utils/taxonUtils'], functi
         });
     }]);
 
-    app.run(function($rootScope, authenticatedUserService) {
+    app.run(['$rootScope', 'authenticatedUserService', function($rootScope, authenticatedUserService) {
         $rootScope.taxonUtils = taxonUtils;
 
-        $rootScope.$watch(function () {
+        $rootScope.$watch(function() {
             return authenticatedUserService.isAuthenticated();
-        }, function (isAuthenticated) {
-        	$rootScope.showMainFabButton = isAuthenticated;
+        }, function(isAuthenticated) {
+            $rootScope.showMainFabButton = isAuthenticated;
         }, true);
-    });
+    }]);
     
-    app.run(function ($rootScope, $location) {
-        var history = [];
-
-        $rootScope.$on('$routeChangeSuccess', function() {
-            history.push($location.url());
-        });
-
-        $rootScope.back = function () {
-            var prevUrl = history.length > 1 ? history.splice(-2)[0] : '/';
-            $location.url(prevUrl);
-        };
-    });
-
-    return app;
+    return angularAMD.bootstrap(app);
 });
