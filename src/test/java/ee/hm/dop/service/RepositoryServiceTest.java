@@ -145,7 +145,7 @@ public class RepositoryServiceTest {
                 .andReturn(originalMaterial);
         expect(material.isDeleted()).andReturn(false);
         material.setId(originalMaterialId);
-        materialService.update(material);
+        expect(materialService.update(material, true)).andReturn(material);
 
         expectUpdateRepository(repository);
 

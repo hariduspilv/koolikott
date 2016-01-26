@@ -169,7 +169,6 @@ public class Material implements Searchable {
     /**
      * The ID in the repository. Null when created in DOP
      */
-    @JsonIgnore
     @Column
     private String repositoryIdentifier;
 

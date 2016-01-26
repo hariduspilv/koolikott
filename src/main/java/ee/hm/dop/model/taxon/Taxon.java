@@ -15,13 +15,14 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import com.fasterxml.jackson.databind.annotation.NoClass;
 import com.voodoodyne.jackson.jsog.JSOGGenerator;
 
 @Entity
 @DiscriminatorColumn(name = "level")
 @Inheritance(strategy = JOINED)
 @JsonIdentityInfo(generator = JSOGGenerator.class)
-@JsonTypeInfo(use = JsonTypeInfo.Id.MINIMAL_CLASS, include = JsonTypeInfo.As.PROPERTY, property = "level")
+@JsonTypeInfo(use = JsonTypeInfo.Id.MINIMAL_CLASS, include = JsonTypeInfo.As.PROPERTY, property = "level", defaultImpl = NoClass.class)
 public abstract class Taxon {
 
     @Id

@@ -30,6 +30,9 @@ public class MaterialServiceTest {
     @Mock
     private MaterialDAO materialDao;
 
+    @Mock
+    private SearchEngineService searchEngineService;
+
     @Test
     public void createMaterialWithNotNullId() {
         Material material = new Material();
@@ -60,6 +63,10 @@ public class MaterialServiceTest {
         Material material = createMock(Material.class);
         expect(material.getId()).andReturn(materialId).times(2);
         expect(material.getRepository()).andReturn(null).times(2);
+        expect(material.getAuthors()).andReturn(null);
+        expect(material.getPublishers()).andReturn(null);
+        searchEngineService.updateIndex();
+
         material.setAdded(added);
         material.setViews(views);
 
@@ -70,11 +77,11 @@ public class MaterialServiceTest {
         expect(materialDao.findById(materialId)).andReturn(original);
         expect(materialDao.update(material)).andReturn(material);
 
-        replay(materialDao, material);
+        replay(materialDao, material, searchEngineService);
 
-        materialService.update(material);
+        materialService.update(material, true);
 
-        verify(materialDao, material);
+        verify(materialDao, material, searchEngineService);
     }
 
     @Test
@@ -87,7 +94,7 @@ public class MaterialServiceTest {
         replay(materialDao, material);
 
         try {
-            materialService.update(material);
+            materialService.update(material, false);
             fail("Exception expected.");
         } catch (IllegalArgumentException ex) {
             assertEquals("Error updating Material: material does not exist.", ex.getMessage());
@@ -110,7 +117,7 @@ public class MaterialServiceTest {
         replay(materialDao, material);
 
         try {
-            materialService.update(material);
+            materialService.update(material, false);
             fail("Exception expected.");
         } catch (IllegalArgumentException ex) {
             assertEquals("Error updating Material: Not allowed to modify repository.", ex.getMessage());
@@ -138,7 +145,7 @@ public class MaterialServiceTest {
         replay(materialDao, material);
 
         try {
-            materialService.update(material);
+            materialService.update(material, false);
             fail("Exception expected.");
         } catch (IllegalArgumentException ex) {
             assertEquals("Error updating Material: Not allowed to modify repository.", ex.getMessage());

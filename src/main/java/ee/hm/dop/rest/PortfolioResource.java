@@ -67,7 +67,7 @@ public class PortfolioResource extends BaseResource {
         Portfolio portfolio = new Portfolio();
         portfolio.setId(id);
         User loggedInUser = getLoggedInUser();
-        Object pictureData = portfolioService.getPortfolioPictureBase64(portfolio, loggedInUser);
+        String pictureData = portfolioService.getPortfolioPicture(portfolio, loggedInUser);
 
         if (pictureData != null) {
             return Response.ok(pictureData).build();

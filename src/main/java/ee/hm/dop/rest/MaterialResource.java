@@ -113,7 +113,7 @@ public class MaterialResource extends BaseResource {
     public Response getPictureById(@QueryParam("materialId") long id) {
         Material material = new Material();
         material.setId(id);
-        byte[] pictureData = materialService.getMaterialPicture(material);
+        String pictureData = materialService.getMaterialPicture(material);
 
         if (pictureData != null) {
             return Response.ok(pictureData).build();
@@ -160,6 +160,15 @@ public class MaterialResource extends BaseResource {
     @Produces(MediaType.APPLICATION_JSON)
     public Material createMaterial(Material material) {
         material = materialService.createMaterial(material, getLoggedInUser(), true);
+        return material;
+    }
+
+    @POST
+    @Path("update")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Material updateMaterial(Material material) {
+        material = materialService.update(material, true);
         return material;
     }
 

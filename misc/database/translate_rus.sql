@@ -406,4 +406,6 @@ INSERT INTO Translation(translationGroup, translationKey, translation) VALUES
 (2,'SELECT_SPECIALIZATION','Выберите специализация'),
 (2,'SELECT_MODULE','Выберите модуль'),
 (2,'SELECT_TOPIC','Выберите тему'),
-(2,'SELECT_SUBTOPIC','Выберите подраздел');
+(2,'SELECT_SUBTOPIC','Выберите подраздел'),
+(2,'MATERIAL_EDIT','редактирования материала'),
+(2,'BUTTON_UPDATE_MATERIAL','Обновление материалов');

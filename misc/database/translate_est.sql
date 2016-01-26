@@ -430,4 +430,6 @@ INSERT INTO Translation(translationGroup, translationKey, translation) VALUES
 (1,'MODULE_IT_ÕIGUS','IT õigus'),
 (1,'MODULE_KOMMUNIKATSIOON','Kommunikatsioon'),
 (1,'TOPIC_VOCATIONAL_EDUCATION_TOPIC1','Kutsehariduse teema 1'),
-(1,'SUBTOPIC_SUBTOPIC_FOR_VOCATIONAL_EDUCATION','Kutsehariduse alateema');
+(1,'SUBTOPIC_SUBTOPIC_FOR_VOCATIONAL_EDUCATION','Kutsehariduse alateema'),
+(1,'MATERIAL_EDIT','Muuda materjali'),
+(1,'BUTTON_UPDATE_MATERIAL','Uuenda materjali');

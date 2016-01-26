@@ -468,7 +468,7 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
         assertEquals(new Long(2), material.getTaxons().get(0).getId());
         assertEquals(new Long(20), material.getTaxons().get(1).getId());
         assertNull(material.getRepository());
-        assertNull(material.getRepositoryIdentifier());
+        assertNotNull(material.getRepositoryIdentifier());
         assertEquals(new Long(1), material.getCreator().getId());
         assertFalse(material.isEmbeddable());
 

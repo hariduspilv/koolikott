@@ -61,17 +61,7 @@ public class PortfolioService {
         return portfolios;
     }
 
-    public byte[] getPortfolioPicture(Portfolio portfolio, User loggedInUser) {
-        Portfolio actualPortfolio = portfolioDAO.findById(portfolio.getId());
-
-        if (actualPortfolio != null && !isPortfolioAccessibleToUser(actualPortfolio, loggedInUser)) {
-            return null;
-        }
-
-        return portfolioDAO.findPictureByPortfolio(portfolio);
-    }
-
-    public String getPortfolioPictureBase64(Portfolio portfolio, User loggedInUser) {
+    public String getPortfolioPicture(Portfolio portfolio, User loggedInUser) {
         Portfolio actualPortfolio = portfolioDAO.findById(portfolio.getId());
 
         if (actualPortfolio != null && !isPortfolioAccessibleToUser(actualPortfolio, loggedInUser)) {
@@ -79,8 +69,7 @@ public class PortfolioService {
         }
 
         byte[] picture = portfolioDAO.findPictureByPortfolio(portfolio);
-        String response = Base64.encodeBase64String(picture);
-        return response;
+        return Base64.encodeBase64String(picture);
     }
 
     public void incrementViewCount(Portfolio portfolio) {

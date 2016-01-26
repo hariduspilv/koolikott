@@ -23,8 +23,6 @@ import ee.hm.dop.utils.EncryptionUtils;
 
 public class AuthenticatedUserService {
 
-    public static final String TAAT = "TAAT";
-
     @Inject
     private AuthenticatedUserDAO authenticatedUserDAO;
 

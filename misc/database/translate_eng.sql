@@ -410,4 +410,6 @@ INSERT INTO Translation(translationGroup, translationKey, translation) VALUES
 (3,'SELECT_SPECIALIZATION','Select specialization'),
 (3,'SELECT_MODULE','Select module'),
 (3,'SELECT_TOPIC','Select topic'),
-(3,'SELECT_SUBTOPIC','Select subtopic');
+(3,'SELECT_SUBTOPIC','Select subtopic'),
+(3,'MATERIAL_EDIT','Edit material'),
+(3,'BUTTON_UPDATE_MATERIAL','Update material');
