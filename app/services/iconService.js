@@ -34,6 +34,19 @@ define(['app'], function(app) {
                         case 'OPENACTIVITY':
                         case 'PROJECT':
                             return 'assignment';
+                        case 'WEBSITE':
+                        case 'WEBLOG':
+                        case 'WIKI':
+                        case 'GLOSSARY':
+                        case 'REFERENCE':
+                        case 'BOOKMARKSHARINGPLATFORM':
+                        case 'IMAGESHARINGPLATFORM':
+                        case 'REFERENCESHARINGPLATFORM':
+                        case 'SOUNDSHARINGPLATFORM':
+                        case 'VIDEOSHARINGPLATFORM':
+                        case 'OTHER':
+                        case 'DATA':
+                            return 'web';
                     }
                 }
 
