@@ -47,12 +47,8 @@ define(function() {
             },
             '/dashboard/broken/material': {
                 templateUrl: 'views/dashboard/broken/material/brokenMaterial.html',
-                controller: 'brokenMaterialController',
+                controllerUrl: 'views/dashboard/broken/material/brokenMaterial',
                 permissions: ['ADMIN'],
-                dependencies: [
-                    'views/dashboard/dashboard',
-                    'views/dashboard/broken/material/brokenMaterial'
-                ]
             },
             '/dashboard/deleted/material': {
                 templateUrl: 'views/dashboard/deleted/material/deletedMaterial.html',
