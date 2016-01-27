@@ -280,8 +280,15 @@ define([
                 log('Deleting material failed.');
             }
 
-            $scope.isPublisher = function () {
-                return authenticatedUserService.isPublisher();
+            $scope.isPublishersMaterial = function () {
+                if ($scope.material) {
+                    var userID = authenticatedUserService.getUser().id;
+                    var creator = $scope.material.creator;
+
+                    if (creator && creator.id === userID) {
+                        return authenticatedUserService.isPublisher() && $scope.material.repositoryIdentifier === null;
+                    }
+                }
             };
 
             $scope.isNotImported = function () {
