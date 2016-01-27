@@ -33,11 +33,16 @@ define([
 
         function orderItems(order) {
             $scope.data = $scope.data.sort(function(a, b) {
-                if (order === 'bySubmittedAt' || order === '-bySubmittedAt')
-                    return new Date(b.added) - new Date(a.added);
+                if(a && b) {
+                    if (order === 'bySubmittedAt' || order === '-bySubmittedAt')
+                        return new Date(b.added) - new Date(a.added);
 
-                if (order === 'bySubmittedBy' || order == '-bySubmittedBy')
-                    return (a.creator.name + ' ' + a.creator.surname).localeCompare(b.creator.name + ' ' + b.creator.surname);
+                    if (order === 'byUpdatedAt' || order === '-byUpdatedAt')
+                        return new Date(b.updated) - new Date(a.updated);
+
+                    if ((order === 'bySubmittedBy' || order == '-bySubmittedBy') && a.creator && b.creator)
+                        return (a.creator.name + ' ' + a.creator.surname).localeCompare(b.creator.name + ' ' + b.creator.surname);
+                }
 
                 return 0;
             });

@@ -321,5 +321,17 @@ define([
                 $scope.pictureLock = false;
             }
 
+            $scope.restoreMaterial = function() {
+                serverCallService.makePost("rest/material/restore", $scope.material, restoreSuccess, restoreFail);
+            };
+
+            function restoreSuccess() {
+                $scope.material.deleted = false;
+                toastService.showOnRouteChange('MATERIAL_RESTORED');
+            }
+
+            function restoreFail() {
+                log("Restoring material failed");
+            }
         }];
 });

@@ -14,19 +14,8 @@ define([
 
             $scope.title = $filter('translate')('DASHBOARD_DELETED_MATERIALS');
 
-            $scope.restoreMaterial = function(material) {
-                serverCallService.makePost("rest/material/restore", material, function() {
-                    restoreSuccess(material)
-                }, restoreFail);
-            }
-
-            function restoreSuccess(material) {
-                var index = $scope.data.indexOf(material);
-                $scope.data.splice(index, 1);
-            }
-
-            function restoreFail() {
-                log("Restoring material failed");
+            $scope.formatMaterialUpdatedDate = function (updatedDate) {
+                return formatDateToDayMonthYear(updatedDate);
             }
         }
     ];

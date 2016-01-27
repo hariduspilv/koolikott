@@ -40,7 +40,14 @@
                           </md-button>
                         </md-menu-item>
 
-                        <md-menu-item data-ng-if="isAdmin()">
+                        <md-menu-item data-ng-if="isAdmin() && material.deleted">
+                          <md-button data-ng-click="restoreMaterial()">
+                            <md-icon md-menu-align-target>undo</md-icon>
+                            <span data-translate="BUTTON_RESTORE"></span>
+                          </md-button>
+                        </md-menu-item>
+
+                        <md-menu-item data-ng-if="isAdmin() && !material.deleted">
                           <md-button data-ng-click="confirmMaterialDeletion()">
                             <md-icon md-menu-align-target>delete</md-icon>
                             <span data-translate="MATERIAL_DELETE"></span>
