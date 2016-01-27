@@ -165,9 +165,18 @@ public class MaterialResource extends BaseResource {
 
     @POST
     @Path("update")
+    @RolesAllowed({ "ADMIN", "PUBLISHER" })
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Material updateMaterial(Material material) {
+        if(material == null) {
+            throwBadRequestException("Material id parameter is mandatory");
+        }
+        Material originalMaterial = materialService.get(material.getId());
+
+        if(originalMaterial.getRepository() != null) {
+            throwBadRequestException("Can't update external repository material");
+        }
         material = materialService.update(material, true);
         return material;
     }
