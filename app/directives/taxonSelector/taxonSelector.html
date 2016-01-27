@@ -2,6 +2,7 @@
  <md-input-container class="md-block" flex>
   <label for="taxonEducationalSelect" data-translate="DETAIL_VIEW_EDUCATIONAL_CONTEXT"></label>
   <md-select data-ng-model="taxonPath.educationalContext" id="taxonEducationalSelect" ng-model-options="{trackBy: '$value.id'}" data-ng-disabled="disableEducationalContext">
+      <md-option data-translate="SELECT_EDUCATIONAL_CONTEXT" ng-value="null" ng-click="reset(null)"></md-option>
       <md-option ng-value="educationalContext" ng-repeat="educationalContext in educationalContexts" data-translate="{{educationalContext.name.toUpperCase()}}"></md-option>
   </md-select>
 </md-input-container>
@@ -16,7 +17,7 @@
 </md-input-container>
 
 <!-- Subject -->
-<md-input-container data-ng-show="taxonPath.educationalContext.name !== 'BASICEDUCATION' && taxonPath.domain && taxonPath.domain.subjects.length > 0" class="md-block" flex>
+<md-input-container data-ng-show="taxonPath.domain && taxonPath.educationalContext.name !== 'BASICEDUCATION' && taxonPath.domain.subjects.length > 0" class="md-block" flex>
   <label for="taxonSubjectSelect" data-translate="DETAIL_VIEW_SUBJECT"></label>
   <md-select data-ng-model="taxonPath.subject" id="taxonSubjectSelect" ng-model-options="{trackBy: '$value.id'}">
       <md-option data-translate="SELECT_SUBJECT" ng-click="reset(taxonPath.domain)"></md-option>

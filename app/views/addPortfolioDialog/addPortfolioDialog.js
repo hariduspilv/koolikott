@@ -5,7 +5,7 @@ define([
     'services/storageService'
 ], function(app) {
     return ['$scope', '$mdDialog', '$location', 'serverCallService', '$rootScope', 'storageService', function($scope, $mdDialog, $location, serverCallService, $rootScope, storageService) {
-        $scope.saving = false;
+        $scope.isSaving = false;
         $scope.showHints = true;
 
         function init() {
@@ -32,7 +32,7 @@ define([
         };
 
         $scope.create = function() {
-            $scope.saving = true;
+            $scope.isSaving = true;
 
             var url = "rest/portfolio/create";
             $scope.newPortfolio.picture = getPicture($scope.newPortfolio);
@@ -62,7 +62,7 @@ define([
         }
 
         $scope.update = function() {
-            $scope.saving = true;
+            $scope.isSaving = true;
 
             var url = "rest/portfolio/update";
             $scope.portfolio.title = $scope.newPortfolio.title;
@@ -88,7 +88,7 @@ define([
         }
 
         function savePortfolioFinally() {
-            $scope.saving = false;
+            $scope.isSaving = false;
         }
 
         init();

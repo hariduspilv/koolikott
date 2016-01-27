@@ -239,7 +239,7 @@
   </md-dialog-content>
 
   <md-dialog-actions>
-    <md-button aria-label="Mine tagasi eelmisse sammu" data-ng-click="step.previousStep()" data-ng-show="step.currentStep > 0" class="md-primary">
+    <md-button aria-label="Mine tagasi eelmisse sammu" data-ng-click="step.previousStep()" data-ng-show="step.currentStep > 0" data-ng-hide="isSaving" class="md-primary">
       <md-icon>arrow_back</md-icon>
       <span data-translate="BUTTON_PREVIOUS_STEP"></span>
     </md-button>
@@ -247,15 +247,16 @@
     <md-button aria-label="Tühista materjali lisamine" id="add-material-cancel-button" data-ng-click="cancel()">
       <span data-translate="BUTTON_CANCEL"></span>
     </md-button>
-    <md-button data-ng-if="!isUpdateMode" aria-label="Loo materjal" id="add-material-create-button" data-ng-click="createMaterial()" data-ng-disabled="!step.canCreateMaterial()" class="md-primary">
+    <md-button data-ng-if="!isUpdateMode" aria-label="Loo materjal" id="add-material-create-button" data-ng-click="createMaterial()" data-ng-disabled="!step.canCreateMaterial()" data-ng-hide="isSaving" class="md-primary">
       <span data-translate="BUTTON_CREATE_MATERIAL"></span>
     </md-button>
-    <md-button data-ng-if="isUpdateMode" aria-label="Muuda materjali" id="add-material-update-button" data-ng-click="updateMaterial()" data-ng-disabled="!step.canCreateMaterial()" class="md-primary">
+    <md-button data-ng-if="isUpdateMode" aria-label="Muuda materjali" id="add-material-update-button" data-ng-click="updateMaterial()" data-ng-disabled="!step.canCreateMaterial()" data-ng-hide="isSaving" class="md-primary">
       <span data-translate="BUTTON_UPDATE_MATERIAL"></span>
     </md-button>
-    <md-button aria-label="Liigu järgmisse sammu" data-ng-click="step.nextStep()" data-ng-hide="step.isLastStep()" data-ng-disabled="!step.canProceed()" class="md-primary">
+    <md-button aria-label="Liigu järgmisse sammu" data-ng-click="step.nextStep()" data-ng-hide="step.isLastStep() || isSaving" data-ng-disabled="!step.canProceed()" class="md-primary">
       <span data-translate="BUTTON_NEXT_STEP"></span>
       <md-icon>arrow_forward</md-icon>
     </md-button>
+    <md-progress-circular class="md-accent ng-hide" md-mode="indeterminate" md-diameter="40" data-ng-show="isSaving"></md-progress-circular>
   </md-dialog-actions>
 </md-dialog>
