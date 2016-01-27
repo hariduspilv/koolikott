@@ -109,6 +109,7 @@ define([
             };
 
             $scope.updateMaterial = function () {
+                storageService.setMaterial($scope.material);
                 makeCall("rest/material/update");
             };
 
@@ -224,19 +225,25 @@ define([
                 $scope.material.crossCurricularThemes = [];
             }
 
-            function init(material) {
+            function setPublisher() {
                 if (authenticatedUserService.getUser() && authenticatedUserService.getUser().role === 'PUBLISHER') {
-                    $scope.material.publisher = authenticatedUserService.getUser().username;
+                    $scope.material.publishers = [{}];
+                    $scope.material.publishers[0].name = authenticatedUserService.getUser().username;
                     $scope.creatorIsPublisher = true;
                 }
+            }
+
+            function init(material) {
 
                 if (material) {
+                    storageService.setMaterial(null);
                     preSetMaterial(material);
                 } else {
                     initEmptyMaterial();
                     prefillMetadataFromPortfolio();
                 }
 
+                setPublisher();
                 loadMetadata();
             }
 
@@ -284,8 +291,11 @@ define([
                     $scope.material.taxons = [{}];
                 }
 
-                var taxon = $rootScope.taxonUtils.getEducationalContext($scope.material.taxons[0])
-                $scope.educationalContextId = taxon.id;
+                var taxon = $rootScope.taxonUtils.getEducationalContext($scope.material.taxons[0]);
+
+                if (taxon) {
+                    $scope.educationalContextId = taxon.id;
+                }
             }
 
             function prefillMetadataFromPortfolio() {

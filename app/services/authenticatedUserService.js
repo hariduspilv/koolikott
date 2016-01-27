@@ -1,23 +1,23 @@
-define(['angularAMD'], function(angularAMD) {
+define(['angularAMD'], function (angularAMD) {
     var instance;
 
     angularAMD.factory('authenticatedUserService', ['$location',
-        function($location) {
+        function ($location) {
 
             function getAuthenticatedUser() {
                 return JSON.parse(localStorage.getItem("authenticatedUser"));
             }
 
             instance = {
-                setAuthenticatedUser: function(authenticatedUser) {
+                setAuthenticatedUser: function (authenticatedUser) {
                     localStorage.setItem("authenticatedUser", JSON.stringify(authenticatedUser));
                 },
 
-                removeAuthenticatedUser: function() {
+                removeAuthenticatedUser: function () {
                     localStorage.removeItem("authenticatedUser");
                 },
 
-                isAuthenticated: function() {
+                isAuthenticated: function () {
                     if (getAuthenticatedUser()) {
                         return true;
                     }
@@ -25,11 +25,15 @@ define(['angularAMD'], function(angularAMD) {
                     return false;
                 },
 
-                isAdmin: function() {
+                isAdmin: function () {
                     return this.getUser() && this.getUser().role === 'ADMIN';
                 },
 
-                getUser: function() {
+                isPublisher: function () {
+                    return this.getUser() && this.getUser().role === 'PUBLISHER';
+                },
+
+                getUser: function () {
                     var authenticatedUser = getAuthenticatedUser();
                     if (authenticatedUser) {
                         return authenticatedUser.user;
@@ -38,7 +42,7 @@ define(['angularAMD'], function(angularAMD) {
                     return null;
                 },
 
-                getToken: function() {
+                getToken: function () {
                     var authenticatedUser = getAuthenticatedUser();
                     if (authenticatedUser) {
                         return authenticatedUser.token;

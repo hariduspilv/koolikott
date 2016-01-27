@@ -195,7 +195,7 @@ define([
             };
 
             $scope.isAdmin = function () {
-                return authenticatedUserService.getUser() && authenticatedUserService.getUser().role === 'ADMIN';
+                return authenticatedUserService.isAdmin();
             };
 
             function getSignedUserData() {
@@ -280,8 +280,8 @@ define([
                 log('Deleting material failed.');
             }
 
-            $scope.isAdmin = function () {
-                return authenticatedUserService.getUser() && authenticatedUserService.getUser().role === 'ADMIN';
+            $scope.isPublisher = function () {
+                return authenticatedUserService.isPublisher();
             };
 
             $scope.isNotImported = function () {
