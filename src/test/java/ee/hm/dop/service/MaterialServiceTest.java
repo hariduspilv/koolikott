@@ -77,7 +77,7 @@ public class MaterialServiceTest {
         educationalContext.setName(MaterialService.BASICEDUCATION);
         expect(material.getTaxons()).andReturn(Arrays.asList(educationalContext)).times(3);
 
-        expect(materialDao.findById(materialId)).andReturn(original);
+        expect(materialDao.findByIdNotDeleted(materialId)).andReturn(original);
         expect(materialDao.update(material)).andReturn(material);
 
         replay(materialDao, material, searchEngineService);
@@ -92,7 +92,7 @@ public class MaterialServiceTest {
         long materialId = 1;
         Material material = createMock(Material.class);
         expect(material.getId()).andReturn(materialId);
-        expect(materialDao.findById(materialId)).andReturn(null);
+        expect(materialDao.findByIdNotDeleted(materialId)).andReturn(null);
 
         replay(materialDao, material);
 
@@ -115,7 +115,7 @@ public class MaterialServiceTest {
         expect(material.getId()).andReturn(materialId);
         expect(material.getRepository()).andReturn(new Repository()).times(3);
 
-        expect(materialDao.findById(materialId)).andReturn(original);
+        expect(materialDao.findByIdNotDeleted(materialId)).andReturn(original);
 
         replay(materialDao, material);
 
@@ -143,7 +143,7 @@ public class MaterialServiceTest {
         newRepository.setBaseURL("some.com");
         expect(material.getRepository()).andReturn(newRepository).times(3);
 
-        expect(materialDao.findById(materialId)).andReturn(original);
+        expect(materialDao.findByIdNotDeleted(materialId)).andReturn(original);
 
         replay(materialDao, material);
 
@@ -190,7 +190,7 @@ public class MaterialServiceTest {
         User user = createMock(User.class);
         Material material = createMock(Material.class);
         expect(material.getId()).andReturn(1L);
-        expect(materialDao.findById(1L)).andReturn(material);
+        expect(materialDao.findByIdNotDeleted(1L)).andReturn(material);
         expect(material.getRepository()).andReturn(new Repository());
 
         replay(material, user, materialDao);
@@ -212,7 +212,7 @@ public class MaterialServiceTest {
         material.setId(1L);
         material.setRepository(null);
 
-        expect(materialDao.findById(material.getId())).andReturn(material).anyTimes();
+        expect(materialDao.findByIdNotDeleted(material.getId())).andReturn(material).anyTimes();
         expect(user.getRole()).andReturn(Role.ADMIN).anyTimes();
         expect(materialDao.update(material)).andReturn(new Material());
 
@@ -232,7 +232,7 @@ public class MaterialServiceTest {
         material.setRepository(null);
         material.setCreator(user);
 
-        expect(materialDao.findById(material.getId())).andReturn(material).anyTimes();
+        expect(materialDao.findByIdNotDeleted(material.getId())).andReturn(material).anyTimes();
         expect(user.getRole()).andReturn(Role.PUBLISHER).anyTimes();
         expect(materialDao.update(material)).andReturn(new Material());
         expect(user.getUsername()).andReturn("username").anyTimes();

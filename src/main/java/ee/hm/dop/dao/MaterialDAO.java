@@ -19,22 +19,28 @@ public class MaterialDAO {
     @Inject
     private EntityManager entityManager;
 
-    public Material findById(long materialId) {
-        return findById(materialId, false);
-    }
-
-    public Material findDeletedById(long materialId) {
-        return findById(materialId, true);
-    }
-
-    private Material findById(long materialId, boolean includeDeleted) {
+    public Material findByIdNotDeleted(long materialId) {
         TypedQuery<Material> findByCode = entityManager.createQuery(
-                "SELECT m FROM Material m WHERE m.id = :id AND m.deleted = :includeDeleted", Material.class);
+                "SELECT m FROM Material m WHERE m.id = :id AND m.deleted = false", Material.class);
 
         Material material = null;
         try {
-            material = findByCode.setParameter("id", materialId).setParameter("includeDeleted", includeDeleted)
+            material = findByCode.setParameter("id", materialId)
                     .getSingleResult();
+        } catch (NoResultException ex) {
+            // ignore
+        }
+
+        return material;
+    }
+
+    public Material findById(long materialId) {
+        TypedQuery<Material> findByCode = entityManager.createQuery(
+                "SELECT m FROM Material m WHERE m.id = :id", Material.class);
+
+        Material material = null;
+        try {
+            material = findByCode.setParameter("id", materialId).getSingleResult();
         } catch (NoResultException ex) {
             // ignore
         }
@@ -111,9 +117,23 @@ public class MaterialDAO {
         entityManager.remove(material);
     }
 
-    public byte[] findPictureByMaterial(Material material) {
+    public byte[] findNotDeletedPictureByMaterial(Material material) {
         TypedQuery<byte[]> findById = entityManager
                 .createQuery("SELECT m.picture FROM Material m WHERE m.id = :id AND m.deleted = false", byte[].class);
+
+        byte[] picture = null;
+        try {
+            picture = findById.setParameter("id", material.getId()).getSingleResult();
+        } catch (NoResultException ex) {
+            // ignore
+        }
+
+        return picture;
+    }
+
+    public byte[] findPictureByMaterial(Material material) {
+        TypedQuery<byte[]> findById = entityManager
+                .createQuery("SELECT m.picture FROM Material m WHERE m.id = :id", byte[].class);
 
         byte[] picture = null;
         try {

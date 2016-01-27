@@ -414,4 +414,6 @@ INSERT INTO Translation(translationGroup, translationKey, translation) VALUES
 (3,'SELECT_SUBTOPIC','All'),
 (3,'SELECT_EDUCATIONAL_CONTEXT', 'All'),
 (3,'MATERIAL_EDIT','Edit material'),
-(3,'BUTTON_UPDATE_MATERIAL','Update material');
+(3,'BUTTON_UPDATE_MATERIAL','Update material'),
+(3,'MATERIAL_RESTORED','Material restored'),
+(3,'PORTFOLIO_RESTORED','Portfolio restored');
