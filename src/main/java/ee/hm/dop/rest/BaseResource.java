@@ -1,8 +1,12 @@
 package ee.hm.dop.rest;
 
+import java.net.HttpURLConnection;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Context;
+import javax.ws.rs.core.Response;
 import javax.ws.rs.core.SecurityContext;
 
 import ee.hm.dop.model.AuthenticatedUser;
@@ -55,5 +59,9 @@ public class BaseResource {
 
     protected HttpServletResponse getResponse() {
         return response;
+    }
+
+    protected void throwBadRequestException(String message) {
+        throw new WebApplicationException(Response.status(HttpURLConnection.HTTP_BAD_REQUEST).entity(message).build());
     }
 }

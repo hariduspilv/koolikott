@@ -27,6 +27,7 @@ import org.glassfish.jersey.client.ClientConfig;
 import org.glassfish.jersey.client.ClientProperties;
 import org.glassfish.jersey.filter.LoggingFilter;
 import org.glassfish.jersey.jackson.JacksonFeature;
+import org.glassfish.jersey.media.multipart.MultiPartFeature;
 import org.junit.After;
 
 import com.google.inject.Inject;
@@ -147,6 +148,7 @@ public abstract class ResourceIntegrationTestBase extends IntegrationTestBase {
         clientConfig.property(ClientProperties.READ_TIMEOUT, 60000); // ms
         clientConfig.property(ClientProperties.CONNECT_TIMEOUT, 60000); // ms
         clientConfig.property(ClientProperties.FOLLOW_REDIRECTS, false);
+        clientConfig.register(MultiPartFeature.class);
 
         Client client = ClientBuilder.newClient(clientConfig);
         client.register(JacksonFeature.class);

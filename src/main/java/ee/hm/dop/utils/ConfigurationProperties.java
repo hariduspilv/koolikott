@@ -44,4 +44,6 @@ public interface ConfigurationProperties {
     String EHIS_SYSTEM_NAME = "ehis.system.name";
     String EHIS_SERVICE_NAME = "ehis.service.name";
     String EHIS_REQUESTER_ID_CODE = "ehis.requester.idCode";
+
+    String MAX_FILE_SIZE = "file.upload.max.size";
 }

@@ -7,6 +7,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -18,6 +19,8 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
+import org.glassfish.jersey.media.multipart.FormDataMultiPart;
+import org.glassfish.jersey.media.multipart.file.FileDataBodyPart;
 import org.joda.time.DateTime;
 import org.junit.Test;
 
@@ -29,6 +32,7 @@ import ee.hm.dop.model.Portfolio;
 import ee.hm.dop.model.TargetGroup;
 import ee.hm.dop.model.User;
 import ee.hm.dop.model.Visibility;
+import ee.hm.dop.utils.FileUtils;
 
 public class PortfolioResourceTest extends ResourceIntegrationTestBase {
 
@@ -87,8 +91,8 @@ public class PortfolioResourceTest extends ResourceIntegrationTestBase {
     @Test
     public void getByCreator() {
         String username = "mati.maasikas-vaarikas";
-        List<Portfolio> portfolios = doGet(format(GET_BY_CREATOR_URL, username))
-                .readEntity(new GenericType<List<Portfolio>>() {
+        List<Portfolio> portfolios = doGet(format(GET_BY_CREATOR_URL, username)).readEntity(
+                new GenericType<List<Portfolio>>() {
                 });
 
         assertEquals(2, portfolios.size());
@@ -100,8 +104,8 @@ public class PortfolioResourceTest extends ResourceIntegrationTestBase {
     @Test
     public void getByCreatorWhenSomeArePrivateOrNotListed() {
         String username = "my.testuser";
-        List<Portfolio> portfolios = doGet(format(GET_BY_CREATOR_URL, username))
-                .readEntity(new GenericType<List<Portfolio>>() {
+        List<Portfolio> portfolios = doGet(format(GET_BY_CREATOR_URL, username)).readEntity(
+                new GenericType<List<Portfolio>>() {
                 });
 
         assertEquals(1, portfolios.size());
@@ -113,8 +117,8 @@ public class PortfolioResourceTest extends ResourceIntegrationTestBase {
         login("78912378912");
 
         String username = "my.testuser";
-        List<Portfolio> portfolios = doGet(format(GET_BY_CREATOR_URL, username))
-                .readEntity(new GenericType<List<Portfolio>>() {
+        List<Portfolio> portfolios = doGet(format(GET_BY_CREATOR_URL, username)).readEntity(
+                new GenericType<List<Portfolio>>() {
                 });
 
         assertEquals(3, portfolios.size());
@@ -128,8 +132,8 @@ public class PortfolioResourceTest extends ResourceIntegrationTestBase {
         login("89898989898");
 
         String username = "my.testuser";
-        List<Portfolio> portfolios = doGet(format(GET_BY_CREATOR_URL, username))
-                .readEntity(new GenericType<List<Portfolio>>() {
+        List<Portfolio> portfolios = doGet(format(GET_BY_CREATOR_URL, username)).readEntity(
+                new GenericType<List<Portfolio>>() {
                 });
 
         assertEquals(3, portfolios.size());
@@ -163,8 +167,8 @@ public class PortfolioResourceTest extends ResourceIntegrationTestBase {
     @Test
     public void getByCreatorNoMaterials() {
         String username = "voldemar.vapustav";
-        List<Portfolio> portfolios = doGet(format(GET_BY_CREATOR_URL, username))
-                .readEntity(new GenericType<List<Portfolio>>() {
+        List<Portfolio> portfolios = doGet(format(GET_BY_CREATOR_URL, username)).readEntity(
+                new GenericType<List<Portfolio>>() {
                 });
 
         assertEquals(0, portfolios.size());
@@ -204,9 +208,7 @@ public class PortfolioResourceTest extends ResourceIntegrationTestBase {
     public void getPortfolioPictureWhenPortfolioIsPrivateAsCreator() {
         login("38011550077");
         long portfolioId = 7;
-        Response response = doGet(format(GET_PORTFOLIO_PICTURE_URL, portfolioId), MediaType.WILDCARD_TYPE);
-        byte[] picture = response.readEntity(new GenericType<byte[]>() {
-        });
+        byte[] picture = getPortfolioPicture(portfolioId);
         assertNotNull(picture);
     }
 
@@ -222,9 +224,7 @@ public class PortfolioResourceTest extends ResourceIntegrationTestBase {
     public void getPortfolioPictureWhenPortfolioIsPrivateAsAdmin() {
         login("89898989898");
         long portfolioId = 7;
-        Response response = doGet(format(GET_PORTFOLIO_PICTURE_URL, portfolioId), MediaType.WILDCARD_TYPE);
-        byte[] picture = response.readEntity(new GenericType<byte[]>() {
-        });
+        byte[] picture = getPortfolioPicture(portfolioId);
         assertNotNull(picture);
     }
 
@@ -520,8 +520,9 @@ public class PortfolioResourceTest extends ResourceIntegrationTestBase {
     public void setNotImproper() {
         login("89898989898");
         Response response1 = doGet("portfolio/getImproper");
-        List<ImproperContent> originalImproperContentList = response1.readEntity(new GenericType<List<ImproperContent>>() {
-        });
+        List<ImproperContent> originalImproperContentList = response1
+                .readEntity(new GenericType<List<ImproperContent>>() {
+                });
 
         doPost(format("portfolio/setNotImproper/%s", 3), null);
 
@@ -529,9 +530,38 @@ public class PortfolioResourceTest extends ResourceIntegrationTestBase {
         List<ImproperContent> newImproperContentList = response2.readEntity(new GenericType<List<ImproperContent>>() {
         });
 
-        assertEquals(originalImproperContentList.size(), newImproperContentList.size()+1);
+        assertEquals(originalImproperContentList.size(), newImproperContentList.size() + 1);
     }
 
+    @Test
+    public void addPicture() throws IOException {
+        long portfolioId = 1;
+        login("39011220013");
+
+        final FileDataBodyPart filePart = new FileDataBodyPart("picture", FileUtils.getFile("bookCover.jpg"));
+        @SuppressWarnings("resource")
+        FormDataMultiPart formDataMultiPart = (FormDataMultiPart) new FormDataMultiPart().bodyPart(filePart);
+
+        Response response = doPost(format("portfolio/addPicture?portfolioId=%s", portfolioId),
+                Entity.entity(formDataMultiPart, formDataMultiPart.getMediaType()));
+
+        formDataMultiPart.close();
+
+        assertEquals(204, response.getStatus());
+
+        Portfolio portfolio = getPortfolio(portfolioId);
+        assertTrue(portfolio.getHasPicture());
+
+        byte[] picture = getPortfolioPicture(portfolioId);
+        assertNotNull(picture);
+    }
+
+    private byte[] getPortfolioPicture(long portfolioId) {
+        Response response = doGet(format(GET_PORTFOLIO_PICTURE_URL, portfolioId), MediaType.WILDCARD_TYPE);
+        byte[] picture = response.readEntity(new GenericType<byte[]>() {
+        });
+        return picture;
+    }
 
     private Portfolio getPortfolio(long id) {
         return doGet(format(GET_PORTFOLIO_URL, id), Portfolio.class);

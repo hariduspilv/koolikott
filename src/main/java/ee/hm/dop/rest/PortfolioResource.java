@@ -1,10 +1,14 @@
 package ee.hm.dop.rest;
 
+import static ee.hm.dop.utils.ConfigurationProperties.MAX_FILE_SIZE;
+import static ee.hm.dop.utils.FileUtils.read;
 import static org.apache.commons.lang3.StringUtils.isBlank;
 
+import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.util.List;
 
+import javax.annotation.security.PermitAll;
 import javax.annotation.security.RolesAllowed;
 import javax.inject.Inject;
 import javax.ws.rs.Consumes;
@@ -14,9 +18,11 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
-import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+
+import org.apache.commons.configuration.Configuration;
+import org.glassfish.jersey.media.multipart.FormDataParam;
 
 import ee.hm.dop.model.ImproperContent;
 import ee.hm.dop.model.Portfolio;
@@ -33,6 +39,9 @@ public class PortfolioResource extends BaseResource {
 
     @Inject
     private UserService userService;
+
+    @Inject
+    private Configuration configuration;
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
@@ -76,8 +85,22 @@ public class PortfolioResource extends BaseResource {
         }
     }
 
-    private void throwBadRequestException(String message) {
-        throw new WebApplicationException(Response.status(HttpURLConnection.HTTP_BAD_REQUEST).entity(message).build());
+    @POST
+    @Path("addPicture")
+    @Consumes(MediaType.MULTIPART_FORM_DATA)
+    @PermitAll
+    public void uploadPicture(@QueryParam("portfolioId") long portfolioId,
+            @FormDataParam("picture") InputStream fileInputStream) {
+        byte[] picture = read(fileInputStream, configuration.getInt(MAX_FILE_SIZE));
+
+        User loggedInUser = getLoggedInUser();
+
+        Portfolio portfolio = new Portfolio();
+        portfolio.setId(portfolioId);
+        portfolio.setPicture(picture);
+        portfolio.setHasPicture(true);
+
+        portfolioService.updatePicture(portfolio, loggedInUser);
     }
 
     @POST

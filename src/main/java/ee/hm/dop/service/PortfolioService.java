@@ -187,6 +187,29 @@ public class PortfolioService {
     }
 
     public Portfolio update(Portfolio portfolio, User loggedInUser) {
+        Portfolio originalPortfolio = validateUpdate(portfolio, loggedInUser);
+
+        originalPortfolio = setPortfolioUpdatableFields(originalPortfolio, portfolio);
+
+        Portfolio updatedPortfolio = portfolioDAO.update(originalPortfolio);
+        searchEngineService.updateIndex();
+
+        return updatedPortfolio;
+    }
+
+    public Portfolio updatePicture(Portfolio portfolio, User loggedInUser) {
+        Portfolio originalPortfolio = portfolioDAO.findById(portfolio.getId());
+
+        if (originalPortfolio == null) {
+            throw new RuntimeException("Portfolio not found");
+        }
+
+        originalPortfolio.setPicture(portfolio.getPicture());
+        originalPortfolio.setHasPicture(portfolio.getPicture() != null);
+        return portfolioDAO.update(originalPortfolio);
+    }
+
+    private Portfolio validateUpdate(Portfolio portfolio, User loggedInUser) {
         if (portfolio.getId() == null) {
             throw new RuntimeException("Portfolio must already exist.");
         }
@@ -203,13 +226,7 @@ public class PortfolioService {
         if (originalPortfolio.getCreator().getId() != loggedInUser.getId()) {
             throw new RuntimeException("Logged in user must be the creator of this portfolio.");
         }
-
-        originalPortfolio = setPortfolioUpdatableFields(originalPortfolio, portfolio);
-
-        Portfolio updatedPortfolio = portfolioDAO.update(originalPortfolio);
-        searchEngineService.updateIndex();
-
-        return updatedPortfolio;
+        return originalPortfolio;
     }
 
     public Portfolio copy(Portfolio portfolio, User loggedInUser) {
@@ -303,10 +320,6 @@ public class PortfolioService {
         originalPortfolio.setTargetGroups(portfolio.getTargetGroups());
         originalPortfolio.setTaxon(portfolio.getTaxon());
         originalPortfolio.setChapters(portfolio.getChapters());
-        if (portfolio.getPicture() != null || !portfolio.getHasPicture()) {
-            originalPortfolio.setPicture(portfolio.getPicture());
-            originalPortfolio.setHasPicture(true);
-        }
         originalPortfolio.setVisibility(portfolio.getVisibility());
         return originalPortfolio;
     }

@@ -14,7 +14,6 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
-import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
@@ -196,9 +195,5 @@ public class MaterialResource extends BaseResource {
     @RolesAllowed({ "ADMIN" })
     public Boolean isSetImproper(@QueryParam("materialId") long materialId) {
         return materialService.isSetImproper(materialId);
-    }
-
-    private void throwBadRequestException(String message) {
-        throw new WebApplicationException(Response.status(HttpURLConnection.HTTP_BAD_REQUEST).entity(message).build());
     }
 }
