@@ -1,84 +1,92 @@
 define(['app'], function(app) {
     var instance;
 
-    app.factory('serverCallService', ["$http", "$location", "authenticatedUserService",
-        function($http, $location, authenticatedUserService) {
+    app.factory('serverCallService', ["$http", "$location", "authenticatedUserService", "Upload",
+        function($http, $location, authenticatedUserService, Upload) {
 
+	    	function makeCall(url, method, params, includeAuthentication, successCallback, errorCallback, finallyCallback, transformRequest) {
+	    		headers = {};
+	    		
+	    		if (includeAuthentication) {
+	    			setAuthorization(headers);
+	    		}
+	
+	            var config = {
+	                method: method,
+	                url: url,
+	                headers: headers
+	            }
+	            
+	            if (method === 'POST') {
+	            	config.data = params;
+	            } else {
+	            	config.params = params;
+	            }
+	            
+	            if (transformRequest) {
+	                config.transformRequest = transformRequest
+	            }
+	            
+	            $http(config).
+	            success(function(data) {
+	                successCallback(data);
+	            }).
+	            error(function(data, status, headers, config) {
+	                if (status == '419') {
+	                    authenticatedUserService.removeAuthenticatedUser();
+	                    instance.makePost(url, data, successCallback, errorCallback);
+	                } else {
+	                    errorCallback(data, status);
+	                }
+	            }).finally(finallyCallback);
+	        }
+	    	
+	    	function setAuthorization(headers) {
+	            if (authenticatedUserService.isAuthenticated()) {
+	            	var user = authenticatedUserService.getUser();
+	                headers.Authentication = authenticatedUserService.getToken();
+	                headers.Username = user.username;
+	            }
+	    	}
+	    	
             instance = {
                 makePost: function(url, data, successCallback, errorCallback, finallyCallback) {
-                    var headers = {};
-                    var user = authenticatedUserService.getUser();
-
-                    if (authenticatedUserService.isAuthenticated()) {
-                        headers.Authentication = authenticatedUserService.getToken();
-                        headers.Username = user.username;
-                    }
-
-                    $http({
-                        method: 'POST',
-                        url: url,
-                        data: data,
-                        headers: headers
-                    }).
-                    success(function(data) {
-                        successCallback(data);
-                    }).
-                    error(function(data, status, headers, config) {
-                        if (status == '419') {
-                            authenticatedUserService.removeAuthenticatedUser();
-                            instance.makePost(url, data, successCallback, errorCallback);
-                        } else {
-                            errorCallback(data, status);
-                        }
-                    }).finally(finallyCallback);
+                	makeCall(url, 'POST', data, true, successCallback, errorCallback, finallyCallback);
                 },
 
                 makeGet: function(url, params, successCallback, errorCallback, finallyCallback) {
-                    var headers = {};
-                    var user = authenticatedUserService.getUser();
-
-                    if (authenticatedUserService.isAuthenticated()) {
-                        headers.Authentication = authenticatedUserService.getToken();
-                        headers.Username = user.username;
-                    }
-
-                    $http({
-                        method: 'GET',
-                        url: url,
-                        params: params,
-                        headers: headers
-                    }).
-                    success(function(data) {
-                        successCallback(data);
-                    }).
-                    error(function(data, status, headers, config) {
-                        if (status == '419') {
-                            authenticatedUserService.removeAuthenticatedUser();
-                            instance.makeGet(url, params, successCallback, errorCallback);
-                        } else {
-                            errorCallback(data, status);
-                        }
-                    }).finally(finallyCallback);
+                	makeCall(url, 'GET', params, true, successCallback, errorCallback, finallyCallback);
                 },
 
-                makeJsonp: function(url, params, successCallback, errorCallback) {
-                    var headers = {};
-
-                    $http({
-                        method: 'JSONP',
+                makeJsonp: function(url, params, successCallback, errorCallback, finallyCallback) {
+                	makeCall(url, 'JSONP', params, false, successCallback, errorCallback, finallyCallback);
+                },
+                
+                upload: function(url, data, successCallback, errorCallback, finallyCallback) {
+                	var headers = {};
+                	setAuthorization(headers);
+                	
+                	Upload.upload({
                         url: url,
-                        params: params,
+                        data: data,
                         headers: headers
-                    }).
-                    success(function(data) {
-                        successCallback(data);
-                    }).
-                    error(function(data, status, headers, config) {
-                        errorCallback(data, status);
-                    });
+                    }).then(successCallback, errorCallback, function (evt) {
+                        var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
+                        console.log('progress: ' + progressPercentage + '% ' + evt.config.data.file.name);
+                    }).finally(finallyCallback);
                 }
             };
 
+            
+            var transformaRequest = function (postData, headersGetter) {
+                var formData = new FormData();
+                angular.forEach(postData, function (value, key) {
+                    formData.append(key, value);
+                });
+
+                return formData;
+            }
+            
             return instance;
         }
     ]);
