@@ -4,11 +4,12 @@
     <section flex flex-gt-md="{{$root.isEditPortfolioMode ? '90' : '75'}}">
       <div  layout-gt-sm>
         <article flex="100" flex-gt-sm="75" flex-gt-lg="80" class="md-padding" role="main">
+          <!-- same as portfolioSummaryCard in directives -->
           <md-card class="card-lg" id="material-card">
             <md-card-content>
               <div layout="column" layout-gt-xs="row">
                 <!-- left large side  -->
-                <div flex flex-gt-xs="75">
+                <div layout="column"  flex flex-gt-xs="75">
                   <!-- left headline  -->
                   <div layout="row">
                     <a flex data-ng-if="sourceType === 'LINK' && !material.embeddable" data-ng-href="{{material.source}}" target="_blank">
@@ -136,15 +137,74 @@
                     <iframe data-ng-src="{{material.iframeSource}}" data-ng-show="showMaterialContent" width="100%" height="100%" ngsf-fullscreen="fullscreenCtrl"></iframe>
                   </div>
 
-                  <!-- left tags  -->
-                  <div data-ng-if="!isNullOrZeroLength(material.tags)">
+                  <!-- left tags data-ng-if="!isNullOrZeroLength(material.tags)" -->
+                  <span flex></span>
+                  <div >
                     <p class="md-body-2 meta">
                       <small class="md-caption">
                         <span data-translate="DETAIL_VIEW_TAGS"></span>:
                       </small>
                       <br>
-                      <span data-ng-repeat="tag in material.tags">{{tag}}{{$last ? '' : ', '}}</span>
+                      <span class="tag tag-loggedin tag-owner">
+                        <md-button>Apple</md-button>
+                        <md-button>
+                          <md-tooltip>
+                            Õige märksõna!
+                          </md-tooltip>
+                        </md-button>
+                      </span>
+                      <span class="tag tag-loggedin">
+                        <md-button>Mathematics</md-button>
+                        <md-button>
+                          <md-tooltip>
+                            Õige märksõna!
+                          </md-tooltip>
+                        </md-button>
+                      </span>
+                      <span class="tag tag-loggedin tag-owner">
+                        <md-button>Mathematics</md-button>
+                        <md-button>
+                          <md-tooltip>
+                            Kustuta märksõna
+                          </md-tooltip>
+                        </md-button>
+                      </span>
+                      <span class="tag tag-loggedin">
+                        <md-button>Mathematics</md-button>
+                        <md-button>
+                          <md-tooltip>
+                            Õige märksõna!
+                          </md-tooltip>
+                        </md-button>
+                      </span>
+                      <span class="tag tag-loggedin">
+                        <md-button>Mathematics</md-button>
+                        <md-button>
+                          <md-tooltip>
+                            Õige märksõna!
+                          </md-tooltip>
+                        </md-button>
+                      </span>
+                      <span class="tag">
+                        <md-button>Mathematics</md-button>
+                      </span>
+                      <span class="tag">
+                        <md-button>Biology</md-button>
+                      </span>
+
+                      <!-- <span data-ng-repeat="tag in material.tags">{{tag}}{{$last ? '' : ', '}}</span> -->
                     </p>
+                    <form action="">
+                      <div layout="row">
+                        <md-input-container class="md-block" flex>
+                          <label>Lisa märksõna</label>
+                          <input>
+                        </md-input-container>
+                        <md-input-container class="md-block" flex>
+                          <md-button class="md-primary">Lisa</md-button>
+                        </md-input-container>
+                      </div>
+                    </form>
                   </div>
                 </div>
 
