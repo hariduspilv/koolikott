@@ -33,7 +33,7 @@
                       </md-button>
                       <md-menu-content width="4">
 
-                        <md-menu-item data-ng-if="isAdmin() || isPublishersMaterial()">
+                        <md-menu-item data-ng-if="(isAdmin() || isPublishersMaterial()) && isNotImported()">
                           <md-button data-ng-click="edit()">
                             <md-icon md-menu-align-target>edit</md-icon>
                             <span data-translate="MATERIAL_EDIT"></span>

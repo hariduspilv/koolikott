@@ -291,7 +291,7 @@ define([
                     var creator = $scope.material.creator;
 
                     if (creator && creator.id === userID) {
-                        return authenticatedUserService.isPublisher() && $scope.material.repositoryIdentifier === null;
+                        return authenticatedUserService.isPublisher();
                     }
                 }
             };
