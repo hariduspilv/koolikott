@@ -242,6 +242,11 @@ public class MaterialParserTest {
         }
 
         @Override
+        protected String getPathToCurriculumLiterature() {
+            return null;
+        }
+
+        @Override
         protected void setTargetGroups(Material material, Document doc) {
         }
 

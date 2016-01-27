@@ -214,6 +214,9 @@ public class Material implements Searchable {
             uniqueConstraints = @UniqueConstraint(columnNames = { "material", "keyCompetence" }) )
     private List<KeyCompetence> keyCompetences;
 
+    @Column(nullable = false)
+    private boolean curriculumLiterature = false;
+
     @Override
     public Long getId() {
         return id;
@@ -470,4 +473,11 @@ public class Material implements Searchable {
         this.keyCompetences = keyCompetences;
     }
 
+    public boolean isCurriculumLiterature() {
+        return curriculumLiterature;
+    }
+
+    public void setCurriculumLiterature(boolean curriculumLiterature) {
+        this.curriculumLiterature = curriculumLiterature;
+    }
 }
