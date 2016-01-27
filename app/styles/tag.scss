@@ -1,4 +1,4 @@
-.tag, .md-chips .md-chip {
+.tag {
 		white-space: nowrap;
 		.md-button {
 			margin: 5px 0;
@@ -20,22 +20,26 @@
 					border-radius: 0 3px 3px 0;
 					margin-left: -5px;
 					border-left: none;
+					&:before {
+						content: "+";
+					}
 			}
-			&.upvote:before {
-				content: "+";
-			}
-			&.remove:before {
-				content: "-";
-			}
+
 
 			&:not([disabled]):hover {
 				    background-color: rgba(193, 193, 193, 0.3);
 				    color: rgba(44, 65, 164, 0.96);
 				    transition: 0.3s;
 						border: 1px solid  #15c;
-
-
 				}
+		}
+		&.my-tag {
+			.md-button {
+				background-color: rgba(33,150,243, .1);
+				&:last-of-type:before {
+					content: "-";
+				}
+			}
 		}
 
 }
