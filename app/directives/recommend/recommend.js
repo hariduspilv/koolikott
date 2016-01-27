@@ -62,7 +62,6 @@ define([
                 });
 
                 $scope.$watch("portfolio", function(newValue, oldValue) {
-                    log(newValue);
                     if (newValue && newValue.recommended != null) {
                         $scope.portfolio = newValue;
                         $scope.isRecommended = $scope.portfolio.recommended;
