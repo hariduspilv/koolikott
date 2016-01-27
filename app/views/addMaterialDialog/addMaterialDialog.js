@@ -236,9 +236,9 @@ define([
             }
 
             function init(material) {
+                storageService.setMaterial(null);
 
                 if (material) {
-                    storageService.setMaterial(null);
                     preSetMaterial(material);
                 } else {
                     initEmptyMaterial();

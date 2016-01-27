@@ -73,7 +73,9 @@ define([
             }
 
             function processMaterial() {
-                setSourceType();
+                if($scope.material) {
+                    setSourceType();
+                }
 
                 if ($scope.material.taxons) {
                     preprocessMaterialSubjects();
