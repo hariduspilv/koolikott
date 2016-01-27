@@ -73,20 +73,20 @@ define([
             }
 
             function processMaterial() {
-                if($scope.material) {
+                if ($scope.material) {
                     setSourceType();
-                }
 
-                if ($scope.material.taxons) {
-                    preprocessMaterialSubjects();
-                    preprocessMaterialEducationalContexts();
-                }
+                    if ($scope.material.taxons) {
+                        preprocessMaterialSubjects();
+                        preprocessMaterialEducationalContexts();
+                    }
 
-                if ($scope.material.embeddable && $scope.sourceType === 'LINK') {
-                    if (authenticatedUserService.isAuthenticated()) {
-                        getSignedUserData()
-                    } else {
-                        $scope.material.iframeSource = $scope.material.source;
+                    if ($scope.material.embeddable && $scope.sourceType === 'LINK') {
+                        if (authenticatedUserService.isAuthenticated()) {
+                            getSignedUserData()
+                        } else {
+                            $scope.material.iframeSource = $scope.material.source;
+                        }
                     }
                 }
             }
@@ -234,8 +234,11 @@ define([
                     templateUrl: 'views/addMaterialDialog/addMaterialDialog.html',
                     controllerUrl: 'views/addMaterialDialog/addMaterialDialog'
                 })).then(function () {
-                    $scope.material = storageService.getMaterial();
-                    processMaterial();
+                    var material = storageService.getMaterial();
+                    if (material) {
+                        $scope.material = material;
+                        processMaterial();
+                    }
                 });
             };
 
