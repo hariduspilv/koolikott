@@ -5,6 +5,7 @@ import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.fail;
 
 import java.util.Arrays;
@@ -19,6 +20,8 @@ import org.junit.runner.RunWith;
 import ee.hm.dop.dao.MaterialDAO;
 import ee.hm.dop.model.Material;
 import ee.hm.dop.model.Repository;
+import ee.hm.dop.model.Role;
+import ee.hm.dop.model.User;
 import ee.hm.dop.model.taxon.EducationalContext;
 
 @RunWith(EasyMockRunner.class)
@@ -79,7 +82,7 @@ public class MaterialServiceTest {
 
         replay(materialDao, material, searchEngineService);
 
-        materialService.update(material, true);
+        materialService.update(material);
 
         verify(materialDao, material, searchEngineService);
     }
@@ -94,7 +97,7 @@ public class MaterialServiceTest {
         replay(materialDao, material);
 
         try {
-            materialService.update(material, false);
+            materialService.update(material);
             fail("Exception expected.");
         } catch (IllegalArgumentException ex) {
             assertEquals("Error updating Material: material does not exist.", ex.getMessage());
@@ -117,7 +120,7 @@ public class MaterialServiceTest {
         replay(materialDao, material);
 
         try {
-            materialService.update(material, false);
+            materialService.update(material);
             fail("Exception expected.");
         } catch (IllegalArgumentException ex) {
             assertEquals("Error updating Material: Not allowed to modify repository.", ex.getMessage());
@@ -145,7 +148,7 @@ public class MaterialServiceTest {
         replay(materialDao, material);
 
         try {
-            materialService.update(material, false);
+            materialService.update(material);
             fail("Exception expected.");
         } catch (IllegalArgumentException ex) {
             assertEquals("Error updating Material: Not allowed to modify repository.", ex.getMessage());
@@ -164,5 +167,81 @@ public class MaterialServiceTest {
         materialService.delete(material);
 
         verify(materialDao, material);
+    }
+
+    @Test
+    public void updateByUserNullMaterial() {
+        User user = createMock(User.class);
+
+        replay(user);
+
+        try {
+            materialService.updateByUser(null, user);
+            fail("Exception expected.");
+        } catch (IllegalArgumentException ex) {
+            assertEquals("Material id parameter is mandatory", ex.getMessage());
+        }
+
+        verify(user);
+    }
+
+    @Test
+    public void updateByUserRepoMaterial() {
+        User user = createMock(User.class);
+        Material material = createMock(Material.class);
+        expect(material.getId()).andReturn(1L);
+        expect(materialDao.findById(1L)).andReturn(material);
+        expect(material.getRepository()).andReturn(new Repository());
+
+        replay(material, user, materialDao);
+
+        try {
+            materialService.updateByUser(material, user);
+            fail("Exception expected.");
+        } catch (IllegalArgumentException ex) {
+            assertEquals("Can't update external repository material", ex.getMessage());
+        }
+
+        verify(material, user, materialDao);
+    }
+
+    @Test
+    public void updateByUserIsAdmin() throws NoSuchMethodException {
+        User user = createMock(User.class);
+        Material material = new Material();
+        material.setId(1L);
+        material.setRepository(null);
+
+        expect(materialDao.findById(material.getId())).andReturn(material).anyTimes();
+        expect(user.getRole()).andReturn(Role.ADMIN).anyTimes();
+        expect(materialDao.update(material)).andReturn(new Material());
+
+        replay(user, materialDao);
+
+        Material returned = materialService.updateByUser(material, user);
+
+        assertNotNull(returned);
+        verify(user, materialDao);
+    }
+
+    @Test
+    public void updateByUserIsPublisher() throws NoSuchMethodException {
+        User user = createMock(User.class);
+        Material material = new Material();
+        material.setId(1L);
+        material.setRepository(null);
+        material.setCreator(user);
+
+        expect(materialDao.findById(material.getId())).andReturn(material).anyTimes();
+        expect(user.getRole()).andReturn(Role.PUBLISHER).anyTimes();
+        expect(materialDao.update(material)).andReturn(new Material());
+        expect(user.getUsername()).andReturn("username").anyTimes();
+
+        replay(user, materialDao);
+
+        Material returned = materialService.updateByUser(material, user);
+
+        assertNotNull(returned);
+        verify(user, materialDao);
     }
 }

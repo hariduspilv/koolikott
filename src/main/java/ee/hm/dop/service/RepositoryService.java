@@ -129,7 +129,7 @@ public class RepositoryService {
             materialService.delete(existentMaterial);
         } else {
             material.setId(existentMaterial.getId());
-            materialService.update(material, true);
+            materialService.update(material);
         }
     }
 

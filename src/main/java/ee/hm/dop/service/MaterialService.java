@@ -267,11 +267,32 @@ public class MaterialService {
             throw new RuntimeException("Material not found");
         }
 
-        UserLike like = userLikeDAO.findMaterialUserLike(originalMaterial, loggedInUser);
-        return like;
+        return userLikeDAO.findMaterialUserLike(originalMaterial, loggedInUser);
     }
 
-    public Material update(Material material, boolean update) {
+    public Material updateByUser(Material material, User user) {
+        Material returned = null;
+        if (material == null) {
+            throw new IllegalArgumentException("Material id parameter is mandatory");
+        }
+        Material originalMaterial = materialDao.findById(material.getId());
+
+        if (originalMaterial != null && originalMaterial.getRepository() != null) {
+            throw new IllegalArgumentException("Can't update external repository material");
+        }
+
+        if (isUserAdmin(user) || isThisPublisherMaterial(user, originalMaterial)) {
+            returned = update(material);
+        }
+
+        return returned;
+    }
+
+    private boolean isThisPublisherMaterial(User user, Material originalMaterial) {
+        return originalMaterial.getCreator().getUsername().equals(user.getUsername()) && isUserPublisher(user);
+    }
+
+    public Material update(Material material) {
         Material originalMaterial = materialDao.findById(material.getId());
         validateMaterialUpdate(material, originalMaterial);
 
@@ -281,9 +302,8 @@ public class MaterialService {
         material.setAdded(originalMaterial.getAdded());
 
         Material returnedMaterial = createOrUpdate(material);
-        if(update) {
-            searchEngineService.updateIndex();
-        }
+
+        searchEngineService.updateIndex();
 
         return returnedMaterial;
     }
@@ -355,6 +375,10 @@ public class MaterialService {
 
     private boolean isUserAdmin(User loggedInUser) {
         return loggedInUser != null && loggedInUser.getRole() == Role.ADMIN;
+    }
+
+    private boolean isUserPublisher(User loggedInUser) {
+        return loggedInUser != null && loggedInUser.getRole() == Role.PUBLISHER;
     }
 
     public ImproperContent addImproperMaterial(Material material, User loggedInUser) {
