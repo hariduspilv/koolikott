@@ -283,7 +283,7 @@ define([
             }
 
             $scope.isPublishersMaterial = function () {
-                if ($scope.material) {
+                if ($scope.material && authenticatedUserService.isAuthenticated()) {
                     var userID = authenticatedUserService.getUser().id;
                     var creator = $scope.material.creator;
 
