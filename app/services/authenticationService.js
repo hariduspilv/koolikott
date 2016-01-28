@@ -107,6 +107,8 @@ define([
                 },
                 
                 loginWithEkool : function() {
+                	localStorage.removeItem(LOGIN_ORIGIN);
+                    localStorage.setItem(LOGIN_ORIGIN, $location.url());
                 	window.location = "/rest/login/ekool";
                 },
                 
