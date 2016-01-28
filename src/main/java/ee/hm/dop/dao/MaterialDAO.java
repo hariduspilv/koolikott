@@ -121,13 +121,18 @@ public class MaterialDAO {
         TypedQuery<byte[]> findById = entityManager
                 .createQuery("SELECT m.picture FROM Material m WHERE m.id = :id AND m.deleted = false", byte[].class);
 
+        byte[] picture = getBytes(material, findById);
+
+        return picture;
+    }
+
+    private byte[] getBytes(Material material, TypedQuery<byte[]> findById) {
         byte[] picture = null;
         try {
             picture = findById.setParameter("id", material.getId()).getSingleResult();
         } catch (NoResultException ex) {
             // ignore
         }
-
         return picture;
     }
 
@@ -135,12 +140,7 @@ public class MaterialDAO {
         TypedQuery<byte[]> findById = entityManager
                 .createQuery("SELECT m.picture FROM Material m WHERE m.id = :id", byte[].class);
 
-        byte[] picture = null;
-        try {
-            picture = findById.setParameter("id", material.getId()).getSingleResult();
-        } catch (NoResultException ex) {
-            // ignore
-        }
+        byte[] picture = getBytes(material, findById);
 
         return picture;
     }

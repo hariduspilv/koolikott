@@ -35,6 +35,14 @@ public class PortfolioDAO {
         return getSingleResult(query);
     }
 
+    public Portfolio findByIdFromAll(long portfolioId) {
+        TypedQuery<Portfolio> findById = entityManager.createQuery(
+                "SELECT p FROM Portfolio p WHERE p.id = :id", Portfolio.class);
+
+        TypedQuery<Portfolio> query = findById.setParameter("id", portfolioId);
+        return getSingleResult(query);
+    }
+
     public List<Portfolio> getDeletedPortfolios() {
         TypedQuery<Portfolio> query = entityManager.createQuery("SELECT p FROM Portfolio p WHERE p.deleted = true",
                 Portfolio.class);
@@ -73,16 +81,30 @@ public class PortfolioDAO {
         return singleResult;
     }
 
-    public byte[] findPictureByPortfolio(Portfolio portfolio) {
+    public byte[] findPictureByNotDeletedPortfolio(Portfolio portfolio) {
         TypedQuery<byte[]> findById = entityManager
                 .createQuery("SELECT p.picture FROM Portfolio p WHERE p.id = :id AND p.deleted = false", byte[].class);
 
+        byte[] picture = getBytes(portfolio, findById);
+
+        return picture;
+    }
+
+    private byte[] getBytes(Portfolio portfolio, TypedQuery<byte[]> findById) {
         byte[] picture = null;
         try {
             picture = findById.setParameter("id", portfolio.getId()).getSingleResult();
         } catch (NoResultException ex) {
             // ignore
         }
+        return picture;
+    }
+
+    public byte[] findPictureByPortfolio(Portfolio portfolio) {
+        TypedQuery<byte[]> findById = entityManager
+                .createQuery("SELECT p.picture FROM Portfolio p WHERE p.id = :id", byte[].class);
+
+        byte[] picture = getBytes(portfolio, findById);
 
         return picture;
     }
