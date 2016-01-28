@@ -19,7 +19,7 @@
               <tr md-row ng-repeat="item in data">
                 <td md-cell data-ng-bind="getCorrectLanguageTitle(item)"></td>
                 <td md-cell>{{item.creator.name}} {{item.creator.surname}}</td>
-                <td md-cell>{{formatMaterialUpdatedDate(item.added)}}</td>
+                <td md-cell>{{formatMaterialUpdatedDate(item.updated)}}</td>
                 <td md-cell>
                   <md-button aria-label="Ava material" href="#/material?materialId={{item.id}}" class="md-raised md-default" data-translate="BUTTON_OPEN"></md-button>
                 </td>

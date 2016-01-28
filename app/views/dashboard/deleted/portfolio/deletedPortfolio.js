@@ -14,21 +14,9 @@ define([
 
             $scope.title = $filter('translate')('DASHBOARD_DELETED_PORTFOLIOS');
 
-            $scope.restorePortfolio = function(portfolio) {
-                serverCallService.makePost("rest/portfolio/restore", portfolio, function() {
-                    restoreSuccess(portfolio)
-                }, restoreFail);
+            $scope.formatMaterialUpdatedDate = function (updatedDate) {
+                return formatDateToDayMonthYear(updatedDate);
             }
-
-            function restoreSuccess(portfolio) {
-                var index = $scope.data.indexOf(portfolio);
-                $scope.data.splice(index, 1);
-            }
-
-            function restoreFail() {
-                log("Restoring portfolio failed");
-            }
-
         }
     ];
 });
