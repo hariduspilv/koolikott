@@ -9,6 +9,7 @@ public interface ConfigurationProperties {
 
     // Server
     String SERVER_PORT = "server.port";
+    String SERVER_ADDRESS = "server.address";
     String COMMAND_LISTENER_PORT = "command.listener.port";
 
     // Search
@@ -44,6 +45,13 @@ public interface ConfigurationProperties {
     String EHIS_SYSTEM_NAME = "ehis.system.name";
     String EHIS_SERVICE_NAME = "ehis.service.name";
     String EHIS_REQUESTER_ID_CODE = "ehis.requester.idCode";
+
+    // EKool
+    String EKOOL_CLIENT_ID = "ekool.client.id";
+    String EKOOL_CLIENT_SECRET = "ekool.client.secret";
+    String EKOOL_URL_AUTHORIZE = "ekool.url.authorize";
+    String EKOOL_URL_TOKEN = "ekool.url.token";
+    String EKOOL_URL_GENERALDATA = "ekool.url.generaldata";
 
     String MAX_FILE_SIZE = "file.upload.max.size";
 }

@@ -2,6 +2,7 @@ package ee.hm.dop.rest;
 
 import java.net.HttpURLConnection;
 
+import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.WebApplicationException;
@@ -9,9 +10,12 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.SecurityContext;
 
+import org.apache.commons.configuration.Configuration;
+
 import ee.hm.dop.model.AuthenticatedUser;
 import ee.hm.dop.model.User;
 import ee.hm.dop.rest.filter.DopPrincipal;
+import ee.hm.dop.utils.ConfigurationProperties;
 
 public class BaseResource {
 
@@ -20,6 +24,9 @@ public class BaseResource {
 
     @Context
     private HttpServletResponse response;
+
+    @Inject
+    private Configuration configuration;
 
     private SecurityContext securityContext;
 
@@ -63,5 +70,9 @@ public class BaseResource {
 
     protected void throwBadRequestException(String message) {
         throw new WebApplicationException(Response.status(HttpURLConnection.HTTP_BAD_REQUEST).entity(message).build());
+    }
+
+    protected String getServerAddress() {
+        return configuration.getString(ConfigurationProperties.SERVER_ADDRESS);
     }
 }
