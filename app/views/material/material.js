@@ -73,20 +73,20 @@ define([
             }
 
             function processMaterial() {
-                if($scope.material) {
+                if ($scope.material) {
                     setSourceType();
-                }
 
-                if ($scope.material.taxons) {
-                    preprocessMaterialSubjects();
-                    preprocessMaterialEducationalContexts();
-                }
+                    if ($scope.material.taxons) {
+                        preprocessMaterialSubjects();
+                        preprocessMaterialEducationalContexts();
+                    }
 
-                if ($scope.material.embeddable && $scope.sourceType === 'LINK') {
-                    if (authenticatedUserService.isAuthenticated()) {
-                        getSignedUserData()
-                    } else {
-                        $scope.material.iframeSource = $scope.material.source;
+                    if ($scope.material.embeddable && $scope.sourceType === 'LINK') {
+                        if (authenticatedUserService.isAuthenticated()) {
+                            getSignedUserData()
+                        } else {
+                            $scope.material.iframeSource = $scope.material.source;
+                        }
                     }
                 }
             }
@@ -234,8 +234,11 @@ define([
                     templateUrl: 'views/addMaterialDialog/addMaterialDialog.html',
                     controllerUrl: 'views/addMaterialDialog/addMaterialDialog'
                 })).then(function () {
-                    $scope.material = storageService.getMaterial();
-                    processMaterial();
+                    var material = storageService.getMaterial();
+                    if (material) {
+                        $scope.material = material;
+                        processMaterial();
+                    }
                 });
             };
 
@@ -283,12 +286,12 @@ define([
             }
 
             $scope.isPublishersMaterial = function () {
-                if ($scope.material) {
+                if ($scope.material && authenticatedUserService.isAuthenticated()) {
                     var userID = authenticatedUserService.getUser().id;
                     var creator = $scope.material.creator;
 
                     if (creator && creator.id === userID) {
-                        return authenticatedUserService.isPublisher() && $scope.material.repositoryIdentifier === null;
+                        return authenticatedUserService.isPublisher();
                     }
                 }
             };
@@ -318,5 +321,17 @@ define([
                 $scope.pictureLock = false;
             }
 
+            $scope.restoreMaterial = function() {
+                serverCallService.makePost("rest/material/restore", $scope.material, restoreSuccess, restoreFail);
+            };
+
+            function restoreSuccess() {
+                $scope.material.deleted = false;
+                toastService.showOnRouteChange('MATERIAL_RESTORED');
+            }
+
+            function restoreFail() {
+                log("Restoring material failed");
+            }
         }];
 });

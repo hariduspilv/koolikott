@@ -97,6 +97,19 @@ define([
                     log('Deleting portfolio failed.');
                 }
 
+                $scope.restorePortfolio = function() {
+                    serverCallService.makePost("rest/portfolio/restore", $scope.portfolio, restoreSuccess, restoreFail);
+                };
+
+                function restoreSuccess() {
+                    $scope.portfolio.deleted = false;
+                    toastService.showOnRouteChange('PORTFOLIO_RESTORED');
+                }
+
+                function restoreFail() {
+                    log("Restoring portfolio failed");
+                }
+
                 if ($rootScope.openMetadataDialog) {
                     $scope.showEditMetadataDialog();
                     $rootScope.openMetadataDialog = null;

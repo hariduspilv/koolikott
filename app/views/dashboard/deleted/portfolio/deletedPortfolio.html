@@ -9,14 +9,18 @@
             <thead md-head md-order="query.order" md-on-reorder="onReorder">
               <tr md-row>
                 <th md-column><span data-translate="TITLE"></span></th>
+                <th md-column md-order-by="bySubmittedBy"><span data-translate="CREATOR"></span></th>
+                <th md-column md-order-by="byUpdatedAt"><span data-translate="UPDATED"></span></th>
                 <th md-column></th>
               </tr>
             </thead>
             <tbody md-body>
               <tr md-row ng-repeat="item in data">
                 <td md-cell>{{item.title}}</td>
+                <td md-cell>{{item.creator.name}} {{item.creator.surname}}</td>
+                <td md-cell>{{formatMaterialUpdatedDate(item.updated)}}</td>
                 <td md-cell>
-                  <md-button aria-label="Taasta kogumik" ng-click="restorePortfolio(item)" class="md-raised md-default" data-translate="BUTTON_RESTORE"></md-button>
+                  <md-button aria-label="Ava kogumik" href="#/portfolio?id={{item.id}}" class="md-raised md-default" data-translate="BUTTON_OPEN"></md-button>
                 </td>
               </tr>
             </tbody>

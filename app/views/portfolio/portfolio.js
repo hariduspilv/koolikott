@@ -55,8 +55,10 @@ define([
               *  So we cancel it in case the page is destroyed so the new one that will be create makes the valid call.
               */
             increaseViewCountPromise = $timeout(function() {
-                var portfolio = createPortfolio($scope.portfolio.id);
-                serverCallService.makePost("rest/portfolio/increaseViewCount", portfolio, function success() {}, function fail() {});
+                if($scope.portfolio) {
+                    var portfolio = createPortfolio($scope.portfolio.id);
+                    serverCallService.makePost("rest/portfolio/increaseViewCount", portfolio, function success() {}, function fail() {});
+                }
             }, 1000);
         }
 
@@ -113,7 +115,9 @@ define([
         }
 
         function fetchImageSuccess(data) {
-            $scope.portfolio.picture = "data:image/jpeg;base64," + data;
+            if($scope.portfolio) {
+                $scope.portfolio.picture = "data:image/jpeg;base64," + data;
+            }
         }
 
         function fetchImageFail(data) {
