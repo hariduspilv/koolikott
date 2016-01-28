@@ -10,7 +10,9 @@ import static org.junit.Assert.assertTrue;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import javax.ws.rs.client.Entity;
@@ -44,6 +46,8 @@ public class PortfolioResourceTest extends ResourceIntegrationTestBase {
     private static final String PORTFOLIO_INCREASE_VIEW_COUNT_URL = "portfolio/increaseViewCount";
     private static final String PORTFOLIO_COPY_URL = "portfolio/copy";
     private static final String DELETE_PORTFOLIO_URL = "portfolio/delete";
+    private static final String RECOMMEND_PORTFOLIO_URL = "portfolio/recommend";
+    private static final String REMOVE_PORTFOLIO_RECOMMENDATION_URL = "portfolio/removeRecommendation";
 
     @Test
     public void getPortfolio() {
@@ -95,10 +99,18 @@ public class PortfolioResourceTest extends ResourceIntegrationTestBase {
                 new GenericType<List<Portfolio>>() {
                 });
 
-        assertEquals(2, portfolios.size());
-        assertEquals(Long.valueOf(3), portfolios.get(0).getId());
-        assertEquals(Long.valueOf(1), portfolios.get(1).getId());
-        assertPortfolio1(portfolios.get(1));
+        assertEquals(3, portfolios.size());
+
+        Set<Long> expectedPortfolios = new HashSet<>();
+        expectedPortfolios.add(Long.valueOf(3));
+        expectedPortfolios.add(Long.valueOf(1));
+        expectedPortfolios.add(Long.valueOf(14));
+
+        expectedPortfolios.remove(portfolios.get(0).getId());
+        expectedPortfolios.remove(portfolios.get(1).getId());
+        expectedPortfolios.remove(portfolios.get(2).getId());
+
+        assertTrue(expectedPortfolios.isEmpty());
     }
 
     @Test
@@ -535,7 +547,7 @@ public class PortfolioResourceTest extends ResourceIntegrationTestBase {
 
     @Test
     public void addPicture() throws IOException {
-        long portfolioId = 1;
+        long portfolioId = 14;
         login("39011220013");
 
         final FileDataBodyPart filePart = new FileDataBodyPart("picture", FileUtils.getFile("bookCover.jpg"));
@@ -554,6 +566,57 @@ public class PortfolioResourceTest extends ResourceIntegrationTestBase {
 
         byte[] picture = getPortfolioPicture(portfolioId);
         assertNotNull(picture);
+    }
+
+    @Test
+    public void recommendPortfolio() {
+
+        login("38011550077");
+        Portfolio portfolio = getPortfolio(1L);
+        Response response = doPost(RECOMMEND_PORTFOLIO_URL, Entity.entity(portfolio, MediaType.APPLICATION_JSON_TYPE));
+        assertEquals(Status.FORBIDDEN.getStatusCode(), response.getStatus());
+        logout();
+
+        login("89898989898");
+        Response responseAdmin = doPost(RECOMMEND_PORTFOLIO_URL,
+                Entity.entity(portfolio, MediaType.APPLICATION_JSON_TYPE));
+        assertEquals(Status.NO_CONTENT.getStatusCode(), responseAdmin.getStatus());
+
+        Portfolio portfolioAfterRecommend = getPortfolio(1L);
+        assertEquals(portfolioAfterRecommend.isRecommended(), true);
+
+    }
+
+    @Test
+    public void removedPortfolioRecommendation() {
+        login("38011550077");
+        Portfolio portfolio = getPortfolio(1L);
+        Response response = doPost(RECOMMEND_PORTFOLIO_URL, Entity.entity(portfolio, MediaType.APPLICATION_JSON_TYPE));
+        assertEquals(Status.FORBIDDEN.getStatusCode(), response.getStatus());
+        logout();
+
+        login("89898989898");
+        Response responseAdmin = doPost(RECOMMEND_PORTFOLIO_URL,
+                Entity.entity(portfolio, MediaType.APPLICATION_JSON_TYPE));
+        assertEquals(Status.NO_CONTENT.getStatusCode(), responseAdmin.getStatus());
+
+        Portfolio portfolioAfterRecommend = getPortfolio(1L);
+        assertEquals(portfolioAfterRecommend.isRecommended(), true);
+
+        logout();
+        login("38011550077");
+        Response responseRemoveRecommendation = doPost(REMOVE_PORTFOLIO_RECOMMENDATION_URL,
+                Entity.entity(portfolio, MediaType.APPLICATION_JSON_TYPE));
+        assertEquals(Status.FORBIDDEN.getStatusCode(), responseRemoveRecommendation.getStatus());
+
+        logout();
+        login("89898989898");
+        Response responseRemoveRecommendationAdmin = doPost(REMOVE_PORTFOLIO_RECOMMENDATION_URL,
+                Entity.entity(portfolio, MediaType.APPLICATION_JSON_TYPE));
+        assertEquals(Status.NO_CONTENT.getStatusCode(), responseRemoveRecommendationAdmin.getStatus());
+
+        Portfolio portfolioAfterRemoveRecommend = getPortfolio(1L);
+        assertEquals(portfolioAfterRemoveRecommend.isRecommended(), false);
     }
 
     private byte[] getPortfolioPicture(long portfolioId) {

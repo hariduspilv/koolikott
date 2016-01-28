@@ -85,7 +85,6 @@ public class AuthenticatedUserServiceTest {
         verifyAll();
 
         JSONObject userDataObject = new JSONObject(userData);
-        assertEquals("TAAT", userDataObject.getString("authProvider"));
 
         DateTime dateTime = new DateTime(userDataObject.getString("createdAt"));
         assertTrue(dateTime.isBefore(DateTime.now()) && dateTime.isAfter(DateTime.now().getMillis() - 5000));

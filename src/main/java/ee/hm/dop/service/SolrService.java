@@ -27,13 +27,23 @@ public class SolrService implements SearchEngineService {
     private static final int RESULTS_PER_PAGE = 24;
     private static final String SEARCH_PATH = "select?q=%s&wt=json&start=%d&rows=" + RESULTS_PER_PAGE;
 
-    private static final String SOLR_IMPORT_PARTIAL = "dataimport?command=delta-import&wt=json";
+    protected static final String SOLR_IMPORT_PARTIAL = "dataimport?command=delta-import&wt=json";
+    protected static final String SOLR_DATAIMPORT_STATUS = "dataimport?command=status&wt=json";
+
+    protected static final String SOLR_STATUS_BUSY = "busy";
 
     @Inject
     private Client client;
 
     @Inject
     private Configuration configuration;
+
+    private SolrIndexThread indexThread;
+
+    public SolrService() {
+        indexThread = new SolrIndexThread();
+        indexThread.start();
+    }
 
     @Override
     public SearchResponse search(String query, long start) {
@@ -42,8 +52,12 @@ public class SolrService implements SearchEngineService {
 
     @Override
     public void updateIndex() {
-        logger.info("Updating Solr index.");
-        executeCommand(SOLR_IMPORT_PARTIAL);
+        indexThread.updateIndex();
+    }
+
+    public boolean isIndexingInProgress() {
+        SearchResponse response = executeCommand(SOLR_DATAIMPORT_STATUS);
+        return response.getStatus().equals(SOLR_STATUS_BUSY);
     }
 
     protected SearchResponse executeCommand(String command) {
@@ -81,5 +95,36 @@ public class SolrService implements SearchEngineService {
         }
 
         return encodedQuery;
+    }
+
+    private class SolrIndexThread extends Thread {
+        private boolean updateIndex;
+
+        public synchronized void updateIndex() {
+            updateIndex = true;
+        }
+
+        @Override
+        public void run() {
+            try {
+                while (true) {
+                    if (updateIndex) {
+                        updateIndex = false;
+                        logger.info("Updating Solr index.");
+                        executeCommand(SOLR_IMPORT_PARTIAL);
+                        waitForCommandToFinish();
+                    }
+                    sleep(1000);
+                }
+            } catch (InterruptedException e) {
+                logger.info("Solr indexing thread interrupted.");
+            }
+        }
+
+        private void waitForCommandToFinish() throws InterruptedException {
+            while (isIndexingInProgress()) {
+                sleep(1000);
+            }
+        }
     }
 }

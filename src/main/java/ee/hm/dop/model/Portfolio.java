@@ -94,6 +94,9 @@ public class Portfolio implements Searchable {
     @Formula(value = "(SELECT COUNT(*) FROM UserLike ul WHERE ul.portfolio = id AND ul.isLiked = 0)")
     private int dislikes;
 
+    @Formula(value = "(SELECT COUNT(*) > 0 FROM Recommendation r WHERE r.portfolio = id)")
+    private boolean recommended;
+
     @ManyToMany(fetch = EAGER, cascade = { MERGE, PERSIST })
     @Fetch(FetchMode.SELECT)
     @JoinTable(
@@ -300,6 +303,14 @@ public class Portfolio implements Searchable {
 
     public void setDislikes(int dislikes) {
         this.dislikes = dislikes;
+    }
+
+    public boolean isRecommended() {
+        return recommended;
+    }
+
+    public void setRecommended(boolean recommended) {
+        this.recommended = recommended;
     }
 
     public boolean isDeleted() {

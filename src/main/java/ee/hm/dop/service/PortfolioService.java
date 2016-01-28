@@ -12,11 +12,13 @@ import org.joda.time.DateTime;
 
 import ee.hm.dop.dao.ImproperContentDAO;
 import ee.hm.dop.dao.PortfolioDAO;
+import ee.hm.dop.dao.RecommendationDAO;
 import ee.hm.dop.dao.UserLikeDAO;
 import ee.hm.dop.model.Chapter;
 import ee.hm.dop.model.Comment;
 import ee.hm.dop.model.ImproperContent;
 import ee.hm.dop.model.Portfolio;
+import ee.hm.dop.model.Recommendation;
 import ee.hm.dop.model.Role;
 import ee.hm.dop.model.User;
 import ee.hm.dop.model.UserLike;
@@ -30,6 +32,9 @@ public class PortfolioService {
 
     @Inject
     private UserLikeDAO userLikeDAO;
+
+    @Inject
+    private RecommendationDAO recommendationeDAO;
 
     @Inject
     private ImproperContentDAO improperContentDAO;
@@ -56,17 +61,7 @@ public class PortfolioService {
         return portfolios;
     }
 
-    public byte[] getPortfolioPicture(Portfolio portfolio, User loggedInUser) {
-        Portfolio actualPortfolio = portfolioDAO.findById(portfolio.getId());
-
-        if (actualPortfolio != null && !isPortfolioAccessibleToUser(actualPortfolio, loggedInUser)) {
-            return null;
-        }
-
-        return portfolioDAO.findPictureByPortfolio(portfolio);
-    }
-
-    public String getPortfolioPictureBase64(Portfolio portfolio, User loggedInUser) {
+    public String getPortfolioPicture(Portfolio portfolio, User loggedInUser) {
         Portfolio actualPortfolio = portfolioDAO.findById(portfolio.getId());
 
         if (actualPortfolio != null && !isPortfolioAccessibleToUser(actualPortfolio, loggedInUser)) {
@@ -74,8 +69,7 @@ public class PortfolioService {
         }
 
         byte[] picture = portfolioDAO.findPictureByPortfolio(portfolio);
-        String response = Base64.encodeBase64String(picture);
-        return response;
+        return Base64.encodeBase64String(picture);
     }
 
     public void incrementViewCount(Portfolio portfolio) {
@@ -163,6 +157,41 @@ public class PortfolioService {
 
         UserLike like = userLikeDAO.findPortfolioUserLike(originalPortfolio, loggedInUser);
         return like;
+    }
+
+    public Recommendation addRecommendation(Portfolio portfoliol, User loggedInUser) {
+        if (!isUserAdmin(loggedInUser)) {
+            throw new RuntimeException("Logged in user must be an administrator.");
+        }
+        if (portfoliol == null || portfoliol.getId() == null) {
+            throw new RuntimeException("Portfolio not found");
+        }
+        Portfolio originalPortfolio = portfolioDAO.findById(portfoliol.getId());
+        if (originalPortfolio == null) {
+            throw new RuntimeException("Portfolio not found");
+        }
+
+        Recommendation recommendation = new Recommendation();
+        recommendation.setPortfolio(originalPortfolio);
+        recommendation.setCreator(loggedInUser);
+        recommendation.setAdded(DateTime.now());
+
+        return recommendationeDAO.update(recommendation);
+    }
+
+    public void removeRecommendation(Portfolio portfolio, User loggedInUser) {
+        if (!isUserAdmin(loggedInUser)) {
+            throw new RuntimeException("Logged in user must be an administrator.");
+        }
+        if (portfolio == null || portfolio.getId() == null) {
+            throw new RuntimeException("Portfolio not found");
+        }
+        Portfolio originalPortfolio = portfolioDAO.findById(portfolio.getId());
+        if (originalPortfolio == null) {
+            throw new RuntimeException("Portfolio not found");
+        }
+
+        recommendationeDAO.deletePortfolioRecommendation(originalPortfolio);
     }
 
     public Portfolio create(Portfolio portfolio, User creator) {

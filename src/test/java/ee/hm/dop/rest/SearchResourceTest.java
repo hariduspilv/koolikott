@@ -195,6 +195,18 @@ public class SearchResourceTest extends ResourceIntegrationTestBase {
     }
 
     @Test
+    public void searchWithIssuedFromFilter() {
+        String query = "car";
+        SearchFilter searchFilter = new SearchFilter();
+        searchFilter.setIssuedFrom(2011);
+        SearchResult searchResult = doGet(buildQueryURL(query, 0, searchFilter), SearchResult.class);
+
+        assertMaterialIdentifiers(searchResult.getItems(), 2L, 5L);
+        assertEquals(2, searchResult.getTotalResults());
+        assertEquals(0, searchResult.getStart());
+    }
+
+    @Test
     public void searchWithAllFilters() {
         String query = "john";
         SearchFilter searchFilter = new SearchFilter();
@@ -204,6 +216,7 @@ public class SearchResourceTest extends ResourceIntegrationTestBase {
         searchFilter.setTaxon(educationalContext);
         searchFilter.setPaid(false);
         searchFilter.setType("portfolio");
+        searchFilter.setIssuedFrom(2011);
         SearchResult searchResult = doGet(buildQueryURL(query, 0, searchFilter), SearchResult.class);
 
         assertMaterialIdentifiers(searchResult.getItems(), 2L, 3L, 4L);
@@ -257,6 +270,9 @@ public class SearchResourceTest extends ResourceIntegrationTestBase {
         }
         if (searchFilter.getLanguage() != null) {
             queryURL += "&language=" + searchFilter.getLanguage().getCode();
+        }
+        if (searchFilter.getIssuedFrom() != null) {
+            queryURL += "&issuedFrom=" + searchFilter.getIssuedFrom();
         }
         return queryURL;
     }

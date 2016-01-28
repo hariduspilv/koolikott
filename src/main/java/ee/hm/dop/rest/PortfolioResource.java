@@ -76,7 +76,7 @@ public class PortfolioResource extends BaseResource {
         Portfolio portfolio = new Portfolio();
         portfolio.setId(id);
         User loggedInUser = getLoggedInUser();
-        Object pictureData = portfolioService.getPortfolioPictureBase64(portfolio, loggedInUser);
+        String pictureData = portfolioService.getPortfolioPicture(portfolio, loggedInUser);
 
         if (pictureData != null) {
             return Response.ok(pictureData).build();
@@ -119,6 +119,20 @@ public class PortfolioResource extends BaseResource {
     @Path("dislike")
     public void dislikePortfolio(Portfolio portfolio) {
         portfolioService.addUserLike(portfolio, getLoggedInUser(), false);
+    }
+
+    @POST
+    @Path("recommend")
+    @RolesAllowed({ "ADMIN" })
+    public void recommendPortfolio(Portfolio portfolio) {
+        portfolioService.addRecommendation(portfolio, getLoggedInUser());
+    }
+
+    @POST
+    @Path("removeRecommendation")
+    @RolesAllowed({ "ADMIN" })
+    public void removedPortfolioRecommendation(Portfolio portfolio) {
+        portfolioService.removeRecommendation(portfolio, getLoggedInUser());
     }
 
     @POST

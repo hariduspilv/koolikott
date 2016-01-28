@@ -4,6 +4,7 @@ import static java.lang.String.format;
 import static org.apache.commons.lang3.StringUtils.isEmpty;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 import javax.inject.Inject;
@@ -12,19 +13,24 @@ import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import ee.hm.dop.dao.BrokenContentDAO;
 import ee.hm.dop.dao.ImproperContentDAO;
 import ee.hm.dop.dao.MaterialDAO;
+import ee.hm.dop.dao.RecommendationDAO;
 import ee.hm.dop.dao.UserLikeDAO;
 import ee.hm.dop.model.Author;
+import ee.hm.dop.model.BrokenContent;
 import ee.hm.dop.model.Comment;
 import ee.hm.dop.model.ImproperContent;
 import ee.hm.dop.model.Material;
 import ee.hm.dop.model.Publisher;
+import ee.hm.dop.model.Recommendation;
 import ee.hm.dop.model.Role;
 import ee.hm.dop.model.User;
 import ee.hm.dop.model.UserLike;
 import ee.hm.dop.model.taxon.EducationalContext;
 import ee.hm.dop.utils.TaxonUtils;
+import ezvcard.util.org.apache.commons.codec.binary.Base64;
 
 public class MaterialService {
 
@@ -41,6 +47,9 @@ public class MaterialService {
     private UserLikeDAO userLikeDAO;
 
     @Inject
+    private RecommendationDAO recommendationeDAO;
+
+    @Inject
     private AuthorService authorService;
 
     @Inject
@@ -51,6 +60,9 @@ public class MaterialService {
 
     @Inject
     private ImproperContentDAO improperContentDAO;
+
+    @Inject
+    private BrokenContentDAO brokenContentDAO;
 
     public Material get(long materialId) {
         return materialDao.findById(materialId);
@@ -73,10 +85,8 @@ public class MaterialService {
         if (material.getId() != null) {
             throw new IllegalArgumentException("Error creating Material, material already exists.");
         }
-        material.setCreator(creator);
-        setAuthors(material);
-        setPublishers(material);
 
+        material.setCreator(creator);
         if (creator != null && creator.getRole().toString().equals(PUBLISHER)) {
             material.setEmbeddable(true);
         }
@@ -123,7 +133,7 @@ public class MaterialService {
         if (publishers != null) {
             for (int i = 0; i < publishers.size(); i++) {
                 Publisher publisher = publishers.get(i);
-                if (publisher != null) {
+                if (publisher != null && publisher.getName() != null) {
                     Publisher returnedPublisher = publisherService.getPublisherByName(publisher.getName());
                     if (returnedPublisher != null) {
                         publishers.set(i, returnedPublisher);
@@ -132,8 +142,11 @@ public class MaterialService {
                                 publisher.getWebsite());
                         publishers.set(i, returnedPublisher);
                     }
+                } else {
+                    publishers.remove(i);
                 }
             }
+            material.setPublishers(publishers);
         }
     }
 
@@ -142,7 +155,7 @@ public class MaterialService {
         if (authors != null) {
             for (int i = 0; i < authors.size(); i++) {
                 Author author = authors.get(i);
-                if (author != null) {
+                if (author != null && author.getName() != null && author.getSurname() != null) {
                     Author returnedAuthor = authorService.getAuthorByFullName(author.getName(), author.getSurname());
                     if (returnedAuthor != null) {
                         authors.set(i, returnedAuthor);
@@ -150,8 +163,11 @@ public class MaterialService {
                         returnedAuthor = authorService.createAuthor(author.getName(), author.getSurname());
                         authors.set(i, returnedAuthor);
                     }
+                } else {
+                    authors.remove(i);
                 }
             }
+            material.setAuthors(authors);
         }
     }
 
@@ -194,6 +210,41 @@ public class MaterialService {
         return userLikeDAO.update(like);
     }
 
+    public Recommendation addRecommendation(Material material, User loggedInUser) {
+        if (!isUserAdmin(loggedInUser)) {
+            throw new RuntimeException("Logged in user must be an administrator.");
+        }
+        if (material == null || material.getId() == null) {
+            throw new RuntimeException("Material not found");
+        }
+        Material originalMaterial = materialDao.findById(material.getId());
+        if (originalMaterial == null) {
+            throw new RuntimeException("Material not found");
+        }
+
+        Recommendation recommendation = new Recommendation();
+        recommendation.setMaterial(originalMaterial);
+        recommendation.setCreator(loggedInUser);
+        recommendation.setAdded(DateTime.now());
+
+        return recommendationeDAO.update(recommendation);
+    }
+
+    public void removeRecommendation(Material material, User loggedInUser) {
+        if (!isUserAdmin(loggedInUser)) {
+            throw new RuntimeException("Logged in user must be an administrator.");
+        }
+        if (material == null || material.getId() == null) {
+            throw new RuntimeException("Material not found");
+        }
+        Material originalMaterial = materialDao.findById(material.getId());
+        if (originalMaterial == null) {
+            throw new RuntimeException("Material not found");
+        }
+
+        recommendationeDAO.deleteMaterialRecommendation(originalMaterial);
+    }
+
     public void removeUserLike(Material material, User loggedInUser) {
         if (material == null || material.getId() == null) {
             throw new RuntimeException("Material not found");
@@ -216,11 +267,32 @@ public class MaterialService {
             throw new RuntimeException("Material not found");
         }
 
-        UserLike like = userLikeDAO.findMaterialUserLike(originalMaterial, loggedInUser);
-        return like;
+        return userLikeDAO.findMaterialUserLike(originalMaterial, loggedInUser);
     }
 
-    public void update(Material material) {
+    public Material updateByUser(Material material, User user) {
+        Material returned = null;
+        if (material == null) {
+            throw new IllegalArgumentException("Material id parameter is mandatory");
+        }
+        Material originalMaterial = materialDao.findById(material.getId());
+
+        if (originalMaterial != null && originalMaterial.getRepository() != null) {
+            throw new IllegalArgumentException("Can't update external repository material");
+        }
+
+        if (isUserAdmin(user) || isThisPublisherMaterial(user, originalMaterial)) {
+            returned = update(material);
+        }
+
+        return returned;
+    }
+
+    private boolean isThisPublisherMaterial(User user, Material originalMaterial) {
+        return originalMaterial.getCreator().getUsername().equals(user.getUsername()) && isUserPublisher(user);
+    }
+
+    public Material update(Material material) {
         Material originalMaterial = materialDao.findById(material.getId());
         validateMaterialUpdate(material, originalMaterial);
 
@@ -229,7 +301,11 @@ public class MaterialService {
         // Should not be able to update added date, must keep the original
         material.setAdded(originalMaterial.getAdded());
 
-        createOrUpdate(material);
+        Material returnedMaterial = createOrUpdate(material);
+
+        searchEngineService.updateIndex();
+
+        return returnedMaterial;
     }
 
     private void validateMaterialUpdate(Material material, Material originalMaterial) {
@@ -247,8 +323,9 @@ public class MaterialService {
         }
     }
 
-    public byte[] getMaterialPicture(Material material) {
-        return materialDao.findPictureByMaterial(material);
+    public String getMaterialPicture(Material material) {
+        byte[] picture = materialDao.findPictureByMaterial(material);
+        return Base64.encodeBase64String(picture);
     }
 
     public List<Material> getByCreator(User creator) {
@@ -263,6 +340,8 @@ public class MaterialService {
             logger.info("Creating material.");
         }
 
+        setAuthors(material);
+        setPublishers(material);
         material = applyRestrictions(material);
         return materialDao.update(material);
     }
@@ -276,7 +355,7 @@ public class MaterialService {
 
         if (material.getTaxons() != null && !material.getTaxons().isEmpty()) {
             List<EducationalContext> educationalContexts = material.getTaxons().stream()
-                    .map(TaxonUtils::getEducationalContext).collect(Collectors.toList());
+                    .map(TaxonUtils::getEducationalContext).filter(Objects::nonNull).collect(Collectors.toList());
 
             for (EducationalContext educationalContext : educationalContexts) {
                 if (educationalContext.getName().equals(BASICEDUCATION)
@@ -296,6 +375,10 @@ public class MaterialService {
 
     private boolean isUserAdmin(User loggedInUser) {
         return loggedInUser != null && loggedInUser.getRole() == Role.ADMIN;
+    }
+
+    private boolean isUserPublisher(User loggedInUser) {
+        return loggedInUser != null && loggedInUser.getRole() == Role.PUBLISHER;
     }
 
     public ImproperContent addImproperMaterial(Material material, User loggedInUser) {
@@ -318,13 +401,54 @@ public class MaterialService {
         return improperContentDAO.getImproperMaterials();
     }
 
+    public BrokenContent addBrokenMaterial(Material material, User loggedInUser) {
+        if (material == null || material.getId() == null) {
+            throw new RuntimeException("Material not found while adding broken material");
+        }
+        Material originalMaterial = materialDao.findById(material.getId());
+        if (originalMaterial == null) {
+            throw new RuntimeException("Material not found while adding broken material");
+        }
+
+        BrokenContent brokenContent = new BrokenContent();
+        brokenContent.setCreator(loggedInUser);
+        brokenContent.setMaterial(material);
+
+        return brokenContentDAO.update(brokenContent);
+    }
+
     public List<Material> getDeletedMaterials() {
         return materialDao.getDeletedMaterials();
     }
 
+    public List<BrokenContent> getBrokenMaterials() {
+        return brokenContentDAO.getBrokenMaterials();
+    }
+
+    public void setMaterialNotBroken(Material material) {
+        if (material == null || material.getId() == null) {
+            throw new RuntimeException("Material not found while adding broken material");
+        }
+        Material originalMaterial = materialDao.findById(material.getId());
+        if (originalMaterial == null) {
+            throw new RuntimeException("Material not found while adding broken material");
+        }
+
+        brokenContentDAO.deleteBrokenMaterials(originalMaterial.getId());
+    }
+
     public Boolean hasSetImproper(long materialId, User loggedInUser) {
         List<ImproperContent> improperContents = improperContentDAO.findByMaterialAndUser(materialId, loggedInUser);
+        return improperContents.size() != 0;
+    }
 
+    public Boolean hasSetBroken(long materialId, User loggedInUser) {
+        List<BrokenContent> improperContents = brokenContentDAO.findByMaterialAndUser(materialId, loggedInUser);
+        return improperContents.size() != 0;
+    }
+
+    public Boolean isBroken(long materialId, User loggedInUser) {
+        List<BrokenContent> improperContents = brokenContentDAO.findByMaterial(materialId);
         return improperContents.size() != 0;
     }
 

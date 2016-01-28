@@ -17,6 +17,7 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import ee.hm.dop.model.BrokenContent;
 import ee.hm.dop.model.ImproperContent;
 import ee.hm.dop.model.Material;
 import ee.hm.dop.model.User;
@@ -80,6 +81,20 @@ public class MaterialResource extends BaseResource {
     }
 
     @POST
+    @Path("recommend")
+    @RolesAllowed({ "ADMIN" })
+    public void recommendMaterial(Material material) {
+        materialService.addRecommendation(material, getLoggedInUser());
+    }
+
+    @POST
+    @Path("removeRecommendation")
+    @RolesAllowed({ "ADMIN" })
+    public void removedMaterialRecommendation(Material material) {
+        materialService.removeRecommendation(material, getLoggedInUser());
+    }
+
+    @POST
     @Path("getUserLike")
     public UserLike getUserLike(Material material) {
         return materialService.getUserLike(material, getLoggedInUser());
@@ -97,7 +112,7 @@ public class MaterialResource extends BaseResource {
     public Response getPictureById(@QueryParam("materialId") long id) {
         Material material = new Material();
         material.setId(id);
-        byte[] pictureData = materialService.getMaterialPicture(material);
+        String pictureData = materialService.getMaterialPicture(material);
 
         if (pictureData != null) {
             return Response.ok(pictureData).build();
@@ -148,6 +163,16 @@ public class MaterialResource extends BaseResource {
     }
 
     @POST
+    @Path("update")
+    @RolesAllowed({ "ADMIN", "PUBLISHER" })
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Material updateMaterial(Material material) {
+        material = materialService.updateByUser(material, getLoggedInUser());
+        return material;
+    }
+
+    @POST
     @Path("setImproper")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
@@ -162,6 +187,47 @@ public class MaterialResource extends BaseResource {
     @RolesAllowed({ "ADMIN" })
     public List<ImproperContent> getImproperMaterials() {
         return materialService.getImproperMaterials();
+    }
+
+    @POST
+    @Path("setBroken")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    @RolesAllowed({ "USER", "ADMIN", "PUBLISHER" })
+    public BrokenContent setBrokenMaterial(Material material) {
+        return materialService.addBrokenMaterial(material, getLoggedInUser());
+    }
+
+    @GET
+    @Path("getBroken")
+    @Produces(MediaType.APPLICATION_JSON)
+    @RolesAllowed({ "ADMIN" })
+    public List<BrokenContent> getBrokenMaterial() {
+        return materialService.getBrokenMaterials();
+    }
+
+    @POST
+    @Path("setNotBroken")
+    @Produces(MediaType.APPLICATION_JSON)
+    @RolesAllowed({ "ADMIN" })
+    public void setNotBroken(Material material) {
+        materialService.setMaterialNotBroken(material);
+    }
+
+    @GET
+    @Path("hasSetBroken")
+    @Produces(MediaType.APPLICATION_JSON)
+    @RolesAllowed({ "USER", "ADMIN", "PUBLISHER" })
+    public Boolean hasSetBroken(@QueryParam("materialId") long materialId) {
+        return materialService.hasSetBroken(materialId, getLoggedInUser());
+    }
+
+    @GET
+    @Path("isBroken")
+    @Produces(MediaType.APPLICATION_JSON)
+    @RolesAllowed({ "ADMIN" })
+    public Boolean isBroken(@QueryParam("materialId") long materialId) {
+        return materialService.isBroken(materialId, getLoggedInUser());
     }
 
     @GET
