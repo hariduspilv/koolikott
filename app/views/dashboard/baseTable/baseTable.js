@@ -1,7 +1,8 @@
 define([
     'app',
+    'jquery',
     'services/translationService',
-], function(app) {
+], function(app, $) {
     app.controller('baseTableController', ['$scope', '$location', '$sce', '$templateRequest', '$compile', 'translationService', function($scope, $location, $sce, $templateRequest, $compile, translationService) {
         var collection = null;
         var filtredCollection = null;
@@ -76,7 +77,7 @@ define([
         
         function buildTable(tableId, templateUrl) {
             var url = $sce.getTrustedResourceUrl(templateUrl);
-            var $container = angular.element(tableId).find('.table-container');
+            var $container = $(tableId).find('.table-container');
             
             $templateRequest(url).then(function(template) {
                 $container.html($compile(template)($scope));
