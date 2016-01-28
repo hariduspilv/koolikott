@@ -176,7 +176,6 @@ public class Material implements Searchable {
     @JoinColumn(name = "creator")
     private User creator;
 
-    @JsonIgnore
     @Column
     private boolean deleted;
 
@@ -213,6 +212,9 @@ public class Material implements Searchable {
             inverseJoinColumns = { @JoinColumn(name = "keyCompetence") },
             uniqueConstraints = @UniqueConstraint(columnNames = { "material", "keyCompetence" }) )
     private List<KeyCompetence> keyCompetences;
+
+    @Column(nullable = false)
+    private boolean curriculumLiterature = false;
 
     @Override
     public Long getId() {
@@ -470,4 +472,11 @@ public class Material implements Searchable {
         this.keyCompetences = keyCompetences;
     }
 
+    public boolean isCurriculumLiterature() {
+        return curriculumLiterature;
+    }
+
+    public void setCurriculumLiterature(boolean curriculumLiterature) {
+        this.curriculumLiterature = curriculumLiterature;
+    }
 }

@@ -269,7 +269,7 @@ public class MaterialParserEstCore extends MaterialParser {
         Node isPaid = getNode(doc,
                 "//*[local-name()='estcore']/*[local-name()='rights']/*[local-name()='cost']/*[local-name()='value']");
 
-        if (isPaid.getTextContent().trim().toUpperCase().equals(YES)) {
+        if (isPaid != null && isPaid.getTextContent().trim().toUpperCase().equals(YES)) {
             material.setIsPaid(true);
         } else {
             material.setIsPaid(false);
@@ -279,6 +279,11 @@ public class MaterialParserEstCore extends MaterialParser {
     @Override
     protected String getPathToTargetGroups() {
         return "//*[local-name()='estcore']/*[local-name()='educational']/*[local-name()='typicalAgeRange']";
+    }
+
+    @Override
+    protected String getPathToCurriculumLiterature() {
+        return "//*[local-name()='estcore']/*[local-name()='educational']/*[local-name()='curriculumLiterature']";
     }
 
     @Override

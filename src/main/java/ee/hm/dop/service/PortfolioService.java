@@ -34,7 +34,7 @@ public class PortfolioService {
     private UserLikeDAO userLikeDAO;
 
     @Inject
-    private RecommendationDAO recommendationeDAO;
+    private RecommendationDAO recommendationDAO;
 
     @Inject
     private ImproperContentDAO improperContentDAO;
@@ -43,10 +43,15 @@ public class PortfolioService {
     private SearchEngineService searchEngineService;
 
     public Portfolio get(long portfolioId, User loggedInUser) {
-        Portfolio portfolio = portfolioDAO.findById(portfolioId);
+        Portfolio portfolio;
+        if (isUserAdmin(loggedInUser)) {
+            portfolio = portfolioDAO.findByIdFromAll(portfolioId);
+        } else {
+            portfolio = portfolioDAO.findById(portfolioId);
 
-        if (portfolio != null && !isPortfolioAccessibleToUser(portfolio, loggedInUser)) {
-            portfolio = null;
+            if (portfolio != null && !isPortfolioAccessibleToUser(portfolio, loggedInUser)) {
+                portfolio = null;
+            }
         }
 
         return portfolio;
@@ -61,19 +66,19 @@ public class PortfolioService {
         return portfolios;
     }
 
-    public String getPortfolioPicture(Portfolio portfolio, User loggedInUser) {
-        Portfolio actualPortfolio = portfolioDAO.findById(portfolio.getId());
+    public String getPortfolioPicture(Long id, User loggedInUser) {
+        byte[] picture = null;
+        Portfolio portfolio = portfolioDAO.findByIdFromAll(id);
 
-        if (actualPortfolio != null && !isPortfolioAccessibleToUser(actualPortfolio, loggedInUser)) {
-            return null;
+        if (portfolio != null && isPortfolioAccessibleToUser(portfolio, loggedInUser)) {
+            picture = portfolioDAO.findPictureByPortfolio(portfolio);
         }
 
-        byte[] picture = portfolioDAO.findPictureByPortfolio(portfolio);
         return Base64.encodeBase64String(picture);
     }
 
     public void incrementViewCount(Portfolio portfolio) {
-        Portfolio originalPortfolio = portfolioDAO.findById(portfolio.getId());
+        Portfolio originalPortfolio = portfolioDAO.findByIdFromAll(portfolio.getId());
         if (originalPortfolio == null) {
             throw new RuntimeException("Portfolio not found");
         }
@@ -147,7 +152,7 @@ public class PortfolioService {
         if (portfolio == null || portfolio.getId() == null) {
             throw new RuntimeException("Portfolio not found");
         }
-        Portfolio originalPortfolio = portfolioDAO.findById(portfolio.getId());
+        Portfolio originalPortfolio = portfolioDAO.findByIdFromAll(portfolio.getId());
         if (originalPortfolio == null) {
             throw new RuntimeException("Portfolio not found");
         }
@@ -176,7 +181,7 @@ public class PortfolioService {
         recommendation.setCreator(loggedInUser);
         recommendation.setAdded(DateTime.now());
 
-        return recommendationeDAO.update(recommendation);
+        return recommendationDAO.update(recommendation);
     }
 
     public void removeRecommendation(Portfolio portfolio, User loggedInUser) {
@@ -191,7 +196,7 @@ public class PortfolioService {
             throw new RuntimeException("Portfolio not found");
         }
 
-        recommendationeDAO.deletePortfolioRecommendation(originalPortfolio);
+        recommendationDAO.deletePortfolioRecommendation(originalPortfolio);
     }
 
     public Portfolio create(Portfolio portfolio, User creator) {
@@ -354,7 +359,7 @@ public class PortfolioService {
     }
 
     private boolean isPortfolioAccessibleToUser(Portfolio portfolio, User loggedInUser) {
-        return portfolio.getVisibility() != Visibility.PRIVATE || isUserPortfolioCreator(portfolio, loggedInUser)
+        return (portfolio.getVisibility() != Visibility.PRIVATE || isUserPortfolioCreator(portfolio, loggedInUser) && !portfolio.isDeleted())
                 || isUserAdmin(loggedInUser);
     }
 

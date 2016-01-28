@@ -124,6 +124,11 @@ public class MaterialParserWaramu extends MaterialParser {
     }
 
     @Override
+    protected String getPathToCurriculumLiterature() {
+        return "//*[local-name()='lom']/*[local-name()='educational']/*[local-name()='curriculumLiterature']";
+    }
+
+    @Override
     protected Taxon setEducationalContext(Node node) {
         return null;
     }

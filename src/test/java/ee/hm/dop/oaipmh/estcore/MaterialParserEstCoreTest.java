@@ -411,6 +411,7 @@ public class MaterialParserEstCoreTest {
         assertTrue(material.isSpecialEducation());
         assertEquals(1, material.getCrossCurricularThemes().size());
         assertEquals(1, material.getKeyCompetences().size());
+        assertTrue(material.isCurriculumLiterature());
     }
 
     private File getResourceAsFile(String resourcePath) throws URISyntaxException {

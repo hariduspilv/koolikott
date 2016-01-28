@@ -141,7 +141,6 @@ public class Portfolio implements Searchable {
     @Enumerated(EnumType.STRING)
     private Visibility visibility;
 
-    @JsonIgnore
     @Column
     private boolean deleted;
 

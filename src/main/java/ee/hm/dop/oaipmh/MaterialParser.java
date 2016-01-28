@@ -46,6 +46,7 @@ import ezvcard.VCard;
 
 public abstract class MaterialParser {
 
+    public static final String TRUE = "TRUE";
     protected final Logger logger = LoggerFactory.getLogger(this.getClass());
     protected static final String[] SCHEMES = {"http", "https"};
     public static final String PUBLISHER = "PUBLISHER";
@@ -83,6 +84,7 @@ public abstract class MaterialParser {
             setIsPaid(material, doc);
             setTargetGroups(material, doc);
             setPicture(material, doc);
+            setIsCurriculumLiterature(material, doc);
             removeDuplicateTaxons(material);
         } catch (RuntimeException e) {
             logger.error("Unexpected error while parsing document. Document may not"
@@ -91,6 +93,15 @@ public abstract class MaterialParser {
         }
 
         return material;
+    }
+
+    private void setIsCurriculumLiterature(Material material, Document doc) {
+        Node node = getNode(doc,
+                getPathToCurriculumLiterature());
+
+        if (node != null && node.getTextContent().trim().toUpperCase().equals(TRUE)) {
+            material.setCurriculumLiterature(true);
+        }
     }
 
     protected void setContributorsData(Material material, Document doc) {
@@ -501,6 +512,8 @@ public abstract class MaterialParser {
     protected abstract void setIsPaid(Material material, Document doc);
 
     protected abstract String getPathToTargetGroups();
+
+    protected abstract String getPathToCurriculumLiterature();
 
     protected abstract void setPicture(Material material, Document doc);
 

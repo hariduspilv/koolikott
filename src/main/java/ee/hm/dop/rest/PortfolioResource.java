@@ -46,9 +46,8 @@ public class PortfolioResource extends BaseResource {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Portfolio get(@QueryParam("id") long portfolioId) {
-        User loggedInUser = getLoggedInUser();
 
-        return portfolioService.get(portfolioId, loggedInUser);
+        return portfolioService.get(portfolioId,  getLoggedInUser());
     }
 
     @GET
@@ -73,10 +72,7 @@ public class PortfolioResource extends BaseResource {
     @Path("/getPicture")
     @Produces("image/png")
     public Response getPictureById(@QueryParam("portfolioId") long id) {
-        Portfolio portfolio = new Portfolio();
-        portfolio.setId(id);
-        User loggedInUser = getLoggedInUser();
-        String pictureData = portfolioService.getPortfolioPicture(portfolio, loggedInUser);
+        String pictureData = portfolioService.getPortfolioPicture(id,  getLoggedInUser());
 
         if (pictureData != null) {
             return Response.ok(pictureData).build();

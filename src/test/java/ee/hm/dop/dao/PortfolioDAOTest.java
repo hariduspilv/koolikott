@@ -197,7 +197,7 @@ public class PortfolioDAOTest extends DatabaseTestBase {
     public void findPictureByPortfolio() {
         Portfolio portfolio = new Portfolio();
         portfolio.setId((long) 1);
-        byte[] picture = portfolioDAO.findPictureByPortfolio(portfolio);
+        byte[] picture = portfolioDAO.findPictureByNotDeletedPortfolio(portfolio);
         assertNotNull(picture);
     }
 
@@ -205,7 +205,7 @@ public class PortfolioDAOTest extends DatabaseTestBase {
     public void findPictureByPortfolioNoPicture() {
         Portfolio portfolio = new Portfolio();
         portfolio.setId((long) 2);
-        byte[] picture = portfolioDAO.findPictureByPortfolio(portfolio);
+        byte[] picture = portfolioDAO.findPictureByNotDeletedPortfolio(portfolio);
         assertNull(picture);
     }
 
@@ -213,7 +213,7 @@ public class PortfolioDAOTest extends DatabaseTestBase {
     public void findPictureByPortfoNullId() {
         Portfolio portfolio = new Portfolio();
         portfolio.setId(null);
-        byte[] picture = portfolioDAO.findPictureByPortfolio(portfolio);
+        byte[] picture = portfolioDAO.findPictureByNotDeletedPortfolio(portfolio);
         assertNull(picture);
     }
 

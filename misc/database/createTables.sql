@@ -302,6 +302,7 @@ CREATE TABLE Material (
   paid                 BOOLEAN            DEFAULT FALSE,
   isSpecialEducation   BOOLEAN            DEFAULT FALSE,
   embeddable           BOOLEAN            DEFAULT FALSE,
+  curriculumLiterature           BOOLEAN            DEFAULT FALSE,
 
   UNIQUE KEY (repositoryIdentifier, repository),
 
