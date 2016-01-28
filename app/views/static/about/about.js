@@ -1,9 +1,11 @@
-define(['app'], function(app)
-{
-    app.controller('aboutController', ['$scope', "$controller",
-        function($scope, $controller) {
-                    
-            $scope.pageName = 'about';
-            $controller('abstractStaticPageController', {$scope: $scope});
-    }]);
+define([
+    'app',
+    'views/static/abstractStaticPage'
+], function(app) {
+    return ['$scope', '$controller', function($scope, $controller) {
+        $scope.pageName = 'about';
+        $controller('abstractStaticPageController', {
+            $scope: $scope
+        });
+    }];
 });

@@ -1,7 +1,12 @@
-define(['app'], function(app)
-{
-    app.directive('dopEditPortfolioModeHeader', ['translationService', '$location', '$mdSidenav', '$mdDialog', '$rootScope', 'serverCallService', 'searchService', 'toastService', '$timeout',
-     function(translationService, $location, $mdSidenav, $mdDialog, $rootScope, serverCallService, searchService, toastService, $timeout) {
+define([
+  'angularAMD',
+  'services/translationService',
+  'services/serverCallService',
+  'services/searchService',
+  'services/toastService',
+  'directives/copyPermalink/copyPermalink'
+], function(angularAMD) {
+    angularAMD.directive('dopEditPortfolioModeHeader', ['translationService', '$location', '$mdSidenav', '$mdDialog', '$rootScope', 'serverCallService', 'searchService', 'toastService', '$timeout', function(translationService, $location, $mdSidenav, $mdDialog, $rootScope, serverCallService, searchService, toastService, $timeout) {
         return {
             scope: true,
             templateUrl: 'directives/editPortfolioModeHeader/editPortfolioModeHeader.html',
@@ -115,7 +120,5 @@ define(['app'], function(app)
             }
         };
     }]);
-
-    return app;
 });
  

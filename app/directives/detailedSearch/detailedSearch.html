@@ -1,6 +1,10 @@
 <div class="md-whiteframe-1dp filter-content">
   <div layout="column" layout-gt-sm="row">
     <div flex class="md-padding">
+      <md-input-container class="hide-gt-xs md-block">
+        <label data-translate="DETAILED_SEARCH_DESCRIPTION"></label>
+        <input data-ng-model="detailedSearch.combinedDescription"/>
+      </md-input-container>
       <md-input-container class="md-block">
         <label data-translate="DETAILED_SEARCH_TITLE"></label>
         <input data-ng-model="detailedSearch.title" />
@@ -53,8 +57,8 @@
         <md-checkbox data-ng-if="detailedSearch.educationalContext.id == 4" data-ng-model="detailedSearch.specialEducationalNeed" aria-label="{{'DETAILED_SEARCH_SPECIAL_EDUCATIONAL_NEED' | translate}}" class="md-primary" flex>
           <span data-translate="DETAILED_SEARCH_SPECIAL_EDUCATIONAL_NEED"></span>
         </md-checkbox>
-        <md-checkbox data-ng-model="detailedSearch.onlyPaid" class="md-primary" flex>
-          <span data-translate="DETAILED_SEARCH_ONLY_PAID"></span>
+        <md-checkbox data-ng-model="detailedSearch.paid" class="md-primary" flex>
+          <span data-translate="DETAILED_SEARCH_ONLY_FREE"></span>
         </md-checkbox>
         <md-radio-group data-ng-model="detailedSearch.type">
           <md-radio-button ng-disabled="$root.isEditPortfolioMode" value="all" class="md-primary md-checked">
@@ -78,7 +82,7 @@
       </div>
     </div>
   </div>
-  <div class="md-actions" layout="row" layout-xs="column" layout-align="end start">
+  <div class="md-actions" layout="row" layout-align="end start">
     <md-button data-ng-click="clear()" data-translate="DETAILED_SEARCH_CLEAR" aria-label="{{'DETAILED_SEARCH_CLEAR' | translate}}"></md-button>
     <md-button type="submit" class="md-primary md-button" data-ng-click="search()" data-translate="DETAILED_SEARCH_SUBMIT" aria-label="{{'DETAILED_SEARCH_SUBMIT' | translate}}"></md-button>
   </div>

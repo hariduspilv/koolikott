@@ -1,4 +1,7 @@
-define(['app'], function(app) {
+define([
+  'angularAMD',
+  'services/serverCallService'
+], function(angularAMD) {
     var instance;
 
     var CROSS_CURRICULAR_THEMES;
@@ -13,7 +16,7 @@ define(['app'], function(app) {
     var licenseTypesCallbacks = [];
     var resourceTypesCallbacks = [];
 
-    app.factory('metadataService', ["serverCallService",
+    angularAMD.factory('metadataService', ['serverCallService',
         function(serverCallService) {
 
             init();
@@ -55,7 +58,7 @@ define(['app'], function(app) {
             function getKeyCompetencesFail() {
                 console.log('Failed to get key comptences.')
             }
-            
+
             function getLanguagesSuccess(data) {
                 if (isEmpty(data)) {
                     getLanguagesFail();
@@ -66,11 +69,11 @@ define(['app'], function(app) {
                     });
                 }
             }
-            
+
             function getLanguagesFail() {
                 console.log('Failed to get languages.')
             }
-            
+
             function getLicenseTypeSuccess(data) {
                 if (!isEmpty(data)) {
                     LICENSE_TYPES = data;
@@ -83,7 +86,7 @@ define(['app'], function(app) {
             function getLicenseTypeFail() {
                 console.log('Failed to get license types.');
             }
-            
+
             function getResourceTypeSuccess(data) {
                 if (!isEmpty(data)) {
                     RESOURCE_TYPES = data;
@@ -116,7 +119,7 @@ define(['app'], function(app) {
                         keyCompetencesCallbacks.push(callback);
                     }
                 },
-                
+
                 loadLanguages: function(callback) {
                     if (LANGUGAGES) {
                         callback(LANGUGAGES);
@@ -125,7 +128,7 @@ define(['app'], function(app) {
                         langugagesCallbacks.push(callback);
                     }
                 },
-                
+
                 loadLicenseTypes: function(callback) {
                     if (LICENSE_TYPES) {
                         callback(LICENSE_TYPES);
@@ -134,7 +137,7 @@ define(['app'], function(app) {
                         licenseTypesCallbacks.push(callback);
                     }
                 },
-                
+
                 loadResourceTypes: function(callback) {
                     if (RESOURCE_TYPES) {
                         callback(RESOURCE_TYPES);

@@ -1,7 +1,10 @@
-define(['app'], function(app)
-{
-    app.directive('dopChapter', ['translationService', '$rootScope', 'dialogService',
-     function(translationService, $rootScope, dialogService) {
+define([
+    'app',
+    'services/translationService',
+    'services/dialogService',
+    'directives/chapter/addChapterMaterial/addChapterMaterial'
+], function(app) {
+    app.directive('dopChapter', ['translationService', '$rootScope', 'dialogService', function(translationService, $rootScope, dialogService) {
         return {
             scope: {
                 chapter: '=',
@@ -19,9 +22,9 @@ define(['app'], function(app)
                     };
 
                     dialogService.showDeleteConfirmationDialog(
-                    'PORTFOLIO_DELETE_SUB_CHAPTER_CONFIRM_TITLE',
-                    'PORTFOLIO_DELETE_SUB_CHAPTER_CONFIRM_MESSAGE',
-                    deleteSubChapter);
+                        'PORTFOLIO_DELETE_SUB_CHAPTER_CONFIRM_TITLE',
+                        'PORTFOLIO_DELETE_SUB_CHAPTER_CONFIRM_MESSAGE',
+                        deleteSubChapter);
 
                 };
 
@@ -31,6 +34,4 @@ define(['app'], function(app)
             }
         };
     }]);
-
-    return app;
 });

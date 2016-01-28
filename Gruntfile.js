@@ -30,7 +30,11 @@ module.exports = function (grunt) {
         tasks: ['wiredep']
       },
       js: {
-        files: ['<%= yeoman.app %>/**/**/**/*.js'],
+        files: [
+          '<%= yeoman.app %>/directives/**/**/*.js',
+          '<%= yeoman.app %>/services/**/**/*.js',
+          '<%= yeoman.app %>/views/**/**/*.js'
+        ],
         tasks: ['newer:jshint:all'],
         options: {
           livereload: '<%= connect.options.livereload %>'
@@ -79,10 +83,6 @@ module.exports = function (grunt) {
             middlewares.push(connect.static('.tmp'));
 
             middlewares.push(connect().use(
-              '/bower_components',
-              connect.static('./bower_components')
-            ));
-            middlewares.push(connect().use(
               '/app/styles',
               connect.static('./app/styles')
             ));
@@ -97,7 +97,20 @@ module.exports = function (grunt) {
       dist: {
         options: {
           open: true,
-          base: '<%= yeoman.dist.app %>'
+          middleware: function (connect, options, middlewares) {
+            // Setup the proxy
+            var proxy = require('grunt-connect-proxy/lib/utils').proxyRequest;
+            middlewares.push(proxy);
+
+            // gzip
+            var compression = require('compression');
+            middlewares.unshift(compression({ level: 9 }));
+
+            // Make directory browse-able.
+            middlewares.unshift(connect.static(appConfig.dist.app));
+
+            return middlewares;
+          }
         }
       }
     },
@@ -166,7 +179,7 @@ module.exports = function (grunt) {
       },
       sass: {
         src: ['<%= yeoman.app %>/styles/{,*/}*.{scss,sass}'],
-        ignorePath: /(\.\.\/){1,2}bower_components\//
+        ignorePath: /(\.\.\/){1,2}<%= yeoman.app %>\/libs\//
       }
     },
 
@@ -179,7 +192,7 @@ module.exports = function (grunt) {
         imagesDir: '<%= yeoman.app %>/images',
         javascriptsDir: '<%= yeoman.app %>/scripts',
         fontsDir: '<%= yeoman.app %>/styles/fonts',
-        importPath: './bower_components',
+        importPath: '<%= yeoman.app %>/libs',
         httpImagesPath: '/images',
         httpGeneratedImagesPath: '/images/generated',
         httpFontsPath: '/fonts',
@@ -280,7 +293,11 @@ module.exports = function (grunt) {
         files: [{
           expand: true,
           src: [
-            '<%= yeoman.app %>/**/**/**/*.js'
+            '<%= yeoman.app %>/*.js',
+            '<%= yeoman.app %>/directives/**/**/*.js',
+            '<%= yeoman.app %>/services/**/**/*.js',
+            '<%= yeoman.app %>/views/**/**/*.js',
+            '<%= yeoman.app %>/utils/**/**/*.js'
           ],
           dest: '.tmp'
         }]
@@ -311,12 +328,12 @@ module.exports = function (grunt) {
             'fonts/{,*/}*.*',
             'directives/**/**/*.html'
           ]
-        },{
+        }, {
           expand: true,
-          cwd: '.',
-          dest: '.tmp',
+          cwd: '<%= yeoman.app %>/libs',
+          dest: '.tmp/<%= yeoman.app %>/libs',
           src: [
-            'bower_components/**/*.js'
+            '**/*.js'
           ]
         }, {
           expand: true,
@@ -347,36 +364,25 @@ module.exports = function (grunt) {
         'svgmin'
       ]
     },
-    
-    replace: {
-      dist: {
-        src: '<%= yeoman.dist.app %>/index.html',
-        overwrite: true,
-        replacements: [{
-          from: 'bower_components/requirejs/require.js',
-          to: 'scripts/requirejs.js'
-        }, {
-          from: 'require.config',
-          to: 'scripts/require.config'
-        }]
-      }
-    },
 
     // r.js compile config
     requirejs: {
       dist: {
         options: {
-          dir: '<%= yeoman.dist.app %>/scripts',
+          baseUrl: '.tmp/<%= yeoman.app %>',
+          mainConfigFile: '.tmp/<%= yeoman.app %>/require.config.js',
+          dir: '<%= yeoman.dist.app %>',
           modules: [{
             name: 'require.config'
           }],
           preserveLicenseComments: false, // remove all comments
           removeCombined: true,
-          baseUrl: '.tmp/<%= yeoman.app %>',
-          mainConfigFile: '.tmp/<%= yeoman.app %>/require.config.js',
+          keepBuildDir: true,
           optimize: 'uglify2',
           uglify2: {
-            mangle: false
+            mangle: true,
+            dead_code: true,
+            drop_debugger: true
           }
         }
       }
@@ -410,7 +416,7 @@ module.exports = function (grunt) {
 
   grunt.registerTask('serve', 'Compile then start a connect web server', function (target) {
     if (target === 'dist') {
-      return grunt.task.run(['build', 'connect:dist:keepalive']);
+      return grunt.task.run(['configureProxies:server', 'connect:dist:keepalive']);
     }
 
     grunt.task.run([
@@ -433,7 +439,6 @@ module.exports = function (grunt) {
     'concat',
     'ngAnnotate',
     'copy:dist',
-    'replace:dist',
     'cdnify',
     'cssmin',
     'filerev',

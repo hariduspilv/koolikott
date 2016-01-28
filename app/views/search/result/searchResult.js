@@ -1,10 +1,15 @@
-define(['app'], function(app)
-{
-    app.controller('searchResultController', ['$scope', "serverCallService", 'translationService', '$location', 'searchService', '$rootScope',
-       function($scope, serverCallService, translationService, $location, searchService, $rootScope) {
+define([
+    'app',
+    'ngInfiniteScroll',
+    'services/serverCallService',
+    'services/searchService',
+    'directives/materialBox/materialBox',
+    'directives/portfolioBox/portfolioBox'
+], function(app) {
+    return ['$scope', 'serverCallService', 'translationService', '$location', 'searchService', '$rootScope', function($scope, serverCallService, translationService, $location, searchService, $rootScope) {
         $scope.loadingNextPage = false;
         $scope.searching = false;
-        
+
         // Pagination variables
         $scope.paging = {};
         $scope.paging.thisPage = 0;
@@ -24,14 +29,14 @@ define(['app'], function(app)
             // Get search query and current page
             $scope.searchQuery = searchService.getQuery();
         }
-        
+
         function allResultsLoaded() {
             return $scope.paging.thisPage >= $scope.paging.totalPages;
         }
 
         function search() {
             var isTerminal = allResultsLoaded();
-            
+
             if (isTerminal) return;
 
             if (!$scope.loadingNextPage)
@@ -48,8 +53,8 @@ define(['app'], function(app)
                 params.taxon = searchService.getTaxon();
             }
 
-            if (searchService.isOnlyPaid() === true) {
-                params.onlyPaid = searchService.isOnlyPaid();
+            if (searchService.isPaid() === false) {
+                params.paid = searchService.isPaid();
             }
 
             if (searchService.getType() && searchService.isValidType(searchService.getType())) {
@@ -112,17 +117,17 @@ define(['app'], function(app)
         $scope.getNumberOfResults = function() {
             return $scope.totalResults || 0;
         };
-        
+
         $scope.allResultsLoaded = function() {
             return allResultsLoaded();
         }
 
         $scope.nextPage = function() {
             $scope.loadingNextPage = true;
-            
+
             search();
         }
-        
+
         $scope.scrollContainer = $rootScope.isEditPortfolioMode ? '#scrollable-content' : '';
-    }]);
+    }];
 });

@@ -1,7 +1,7 @@
-define(['app'], function(app) {
+define(['angularAMD'], function(angularAMD) {
     var instance;
 
-    app.factory('serverCallService', ["$http", "$location", "authenticatedUserService", "Upload",
+    angularAMD.factory('serverCallService', ['$http', '$location', 'authenticatedUserService', "Upload",
         function($http, $location, authenticatedUserService, Upload) {
 
 	    	function makeCall(url, method, params, includeAuthentication, successCallback, errorCallback, finallyCallback, transformRequest) {
@@ -70,10 +70,7 @@ define(['app'], function(app) {
                         url: url,
                         data: data,
                         headers: headers
-                    }).then(successCallback, errorCallback, function (evt) {
-                        var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
-                        console.log('progress: ' + progressPercentage + '% ' + evt.config.data.file.name);
-                    }).finally(finallyCallback);
+                    }).then(successCallback, errorCallback).finally(finallyCallback);
                 }
             };
 

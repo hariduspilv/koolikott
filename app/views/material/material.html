@@ -1,15 +1,16 @@
 <div id="page-view-material" flex>
-  <div  layout="row" layout-xs="column" flex>
+  <div layout="row" layout-xs="column" flex>
     <div data-ng-if="!isEditPortfolioMode" layout="row" layout-xs="column" flex="0" flex-gt-md="15"></div>
-    <section fle flex-gt-md="{{$root.isEditPortfolioMode ? '90' : '75'}}">
+    <section flex flex-gt-md="{{$root.isEditPortfolioMode ? '90' : '75'}}">
       <div  layout-gt-sm>
         <article flex="100" flex-gt-sm="75" flex-gt-lg="80" class="md-padding" role="main">
           <md-card class="card-lg" id="material-card">
             <md-card-content>
-              <div layout="row">
-                <div layout="column" flex="50" flex-gt-xs="75">
+              <div layout="column" layout-gt-xs="row">
+                <!-- left large side  -->
+                <div flex flex-gt-xs="75">
+                  <!-- left headline  -->
                   <div layout="row">
-
                     <a flex data-ng-if="sourceType === 'LINK' && !material.embeddable" data-ng-href="{{material.source}}" target="_blank">
                       <h1 data-ng-bind="getCorrectLanguageString(material.titles)"></h1>
                       <md-tooltip md-direction="left">
@@ -23,7 +24,7 @@
                         <span data-translate="MATERIAL_VIEW_LINK_TO_MATERIAL"></span>
                       </md-tooltip>
                     </a>
-                    
+
                     <h1 data-ng-if="sourceType !== 'LINK'" data-ng-bind="getCorrectLanguageString(material.titles)"></h1>
 
                     <md-menu>
@@ -31,12 +32,21 @@
                         <md-icon md-menu-origin>more_vert</md-icon>
                       </md-button>
                       <md-menu-content width="4">
+
+                        <md-menu-item data-ng-if="isAdmin() || isPublishersMaterial()">
+                          <md-button data-ng-click="edit()">
+                            <md-icon md-menu-align-target>edit</md-icon>
+                            <span data-translate="MATERIAL_EDIT"></span>
+                          </md-button>
+                        </md-menu-item>
+
                         <md-menu-item data-ng-if="isAdmin()">
                           <md-button data-ng-click="confirmMaterialDeletion()">
                             <md-icon md-menu-align-target>delete</md-icon>
                             <span data-translate="MATERIAL_DELETE"></span>
                           </md-button>
                         </md-menu-item>
+
                         <md-menu-item dop-copy-permalink></md-menu-item>
                         <md-menu-divider data-ng-if="isAdmin()"></md-menu-divider>
                         <md-menu-item data-ng-if="isAdmin()" dop-recommend data-material="material"></md-menu-item>
@@ -46,7 +56,7 @@
                       </md-menu-content>
                     </md-menu>
                   </div>
-
+                  <!-- left meta  -->
                   <div layout="row" class="on-left">
                     <div flex>
                       <p class="md-body-2 meta">
@@ -88,10 +98,9 @@
                   </div>
 
                   <md-divider class="md-default-theme"></md-divider>
-
+                  <!-- left descriptiom  -->
                   <div class="on-left" flex>
                     <p class="md-body-1 description" data-ng-bind="getCorrectLanguageString(material.descriptions)"></p>
-                    <!-- TODO: mobile view after stable release -->
 
                     <div data-ng-if="sourceType === 'YOUTUBE'" class="embed-responsive embed-responsive-16by9">
                       <div class="embed-responsive-container">
@@ -120,6 +129,7 @@
                     <iframe data-ng-src="{{material.iframeSource}}" data-ng-show="showMaterialContent" width="100%" height="100%" ngsf-fullscreen="fullscreenCtrl"></iframe>
                   </div>
 
+                  <!-- left tags  -->
                   <div data-ng-if="!isNullOrZeroLength(material.tags)">
                     <p class="md-body-2 meta">
                       <small class="md-caption">
@@ -131,7 +141,8 @@
                   </div>
                 </div>
 
-                <div layout="column" flex="50" flex-gt-xs="25" class="divider-left" layout-align="start start">
+                <!-- right small side  -->
+                <div layout="column" flex flex-gt-xs="25" class="divider-left" layout-align="start start">
                   <div  data-ng-if="!material.hasPicture" class="card-cover  {{materialType}}">
                     <span>
                       <md-icon class="icon-kind" data-ng-bind="getType()"></md-icon>
@@ -158,7 +169,7 @@
                   </div>
 
                   <div  data-ng-if="material.hasPicture"  class="card-cover imaged">
-                    <img data-ng-src="rest/material/getPicture?materialId={{material.id}}"/>
+                    <img data-ng-src="{{material.picture}}"/>
                     <span data-ng-if="sourceType === 'LINK' && !material.embeddable">
                       <a class="card-hover" data-ng-href="{{material.source}}" target="_blank">
                         <md-icon>send</md-icon>
@@ -266,7 +277,7 @@
 
               <md-divider class="md-default-theme"></md-divider>
 
-              <div layout="row" class="actions" layout-align="start start">
+              <div layout="column" layout-gt-xs="row" class="actions">
                 <!-- comment control -->
                 <div data-dop-comments-card comments="material.comments" comment="newComment" submit-click="addComment()" flex="50" flex-gt-xs="75"></div>
                 <span flex></span>

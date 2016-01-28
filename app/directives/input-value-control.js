@@ -1,36 +1,33 @@
-define(['app'], function(app)
-{
-    app.directive('inputValueControl', [
-        function() {
-            return {
-              require: '?ngModel',
-              scope: {
+define(['app'], function(app) {
+    app.directive('inputValueControl', function() {
+        return {
+            require: '?ngModel',
+            scope: {
                 "inputPattern": '@'
-              },
-              link: function(scope, element, attrs, ngModelCtrl) {
+            },
+            link: function(scope, element, attrs, ngModelCtrl) {
 
                 var regexp = null;
 
                 if (scope.inputPattern !== undefined) {
-                  regexp = new RegExp(scope.inputPattern, "g");
+                    regexp = new RegExp(scope.inputPattern, "g");
                 }
 
-                if(!ngModelCtrl) {
-                  return;
+                if (!ngModelCtrl) {
+                    return;
                 }
 
                 ngModelCtrl.$parsers.push(function(val) {
-                  if (regexp) {
-                    var clean = val.replace(regexp, '');
-                    if (val !== clean) {
-                      ngModelCtrl.$setViewValue(clean);
-                      ngModelCtrl.$render();
+                    if (regexp) {
+                        var clean = val.replace(regexp, '');
+                        if (val !== clean) {
+                            ngModelCtrl.$setViewValue(clean);
+                            ngModelCtrl.$render();
+                        }
+                        return clean;
+                    } else {
+                        return val;
                     }
-                    return clean;
-                  }
-                  else {
-                    return val;
-                  }
 
                 });
 
@@ -39,8 +36,7 @@ define(['app'], function(app)
                         return false;
                     }
                 });
-              }
             }
         }
-    ]);
+    });
 });

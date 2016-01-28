@@ -1,7 +1,12 @@
-define(['app'], function(app)
-{
-    app.directive('dopDetailedSearch', [ '$location', 'searchService', 'translationService', '$filter', 'serverCallService', 'metadataService', '$rootScope',
-     function($location, searchService, translationService, $filter, serverCallService, metadataService, $rootScope) {
+define([
+    'angularAMD',
+    'directives/taxonSelector/taxonSelector',
+    'directives/targetGroupSelector/targetGroupSelector',
+    'services/searchService',
+    'services/translationService',
+    'services/metadataService'
+], function(angularAMD) {
+    angularAMD.directive('dopDetailedSearch', ['$location', 'searchService', 'translationService', '$filter', 'serverCallService', 'metadataService', '$rootScope', function($location, searchService, translationService, $filter, serverCallService, metadataService, $rootScope) {
         return {
             scope: {
                 queryIn: '=',
@@ -11,7 +16,7 @@ define(['app'], function(app)
                 accessor: '='
             },
             templateUrl: 'directives/detailedSearch/detailedSearch.html',
-            controller: function ($scope, $rootScope) {
+            controller: function($scope, $rootScope) {
 
                 var BASIC_EDUCATION_ID = 2;
                 var SECONDARY_EDUCATION_ID = 3;
@@ -34,11 +39,11 @@ define(['app'], function(app)
                     $scope.detailedSearch.targetGroups = searchService.getTargetGroups();
 
                     // Paid
-                    var onlyPaid = searchService.isOnlyPaid();
-                    if (onlyPaid === true  || onlyPaid === false) {
-                        $scope.detailedSearch.onlyPaid = onlyPaid;
+                    var isPaid = searchService.isPaid();
+                    if (isPaid === true  || isPaid === false) {
+                        $scope.detailedSearch.paid = !isPaid;
                     } else {
-                        $scope.detailedSearch.onlyPaid = false;
+                        $scope.detailedSearch.paid = false;
                     }
 
                     // Type
@@ -82,13 +87,13 @@ define(['app'], function(app)
                     if (keyCompetence) {
                         $scope.detailedSearch.keyCompetence = keyCompetence;
                     }
-  
+
                     if ($rootScope.isEditPortfolioMode && $rootScope.savedPortfolio) {
-                    	setEditModePrefill();
+                        setEditModePrefill();
                     } else {
                         // Taxon
                         if (searchService.getTaxon()) {
-                        	getTaxonById(searchService.getTaxon());
+                            getTaxonById(searchService.getTaxon());
                         }
                     }
                 }
@@ -104,7 +109,7 @@ define(['app'], function(app)
                 $scope.search = function() {
                     searchService.setSearch(createSimpleSearchQuery());
 
-                    addOnlyPaidToSearch();
+                    addIsPaidToSearch();
                     addTypeToSearch();
                     addLanguageToSearch();
                     addTaxonToSearch();
@@ -118,8 +123,8 @@ define(['app'], function(app)
                     $scope.searchCallback();
                 };
 
-                function addOnlyPaidToSearch() {
-                    searchService.setOnlyPaid($scope.detailedSearch.onlyPaid);
+                function addIsPaidToSearch() {
+                    searchService.setPaid(!$scope.detailedSearch.paid);
                 }
 
                 function addTypeToSearch() {
@@ -131,7 +136,7 @@ define(['app'], function(app)
                 }
 
                 function addTaxonToSearch() {
-                   if ($scope.detailedSearch.taxon) {
+                    if ($scope.detailedSearch.taxon) {
                         searchService.setTaxon($scope.detailedSearch.taxon.id);
                     } else {
                         searchService.setTaxon(null);
@@ -190,8 +195,7 @@ define(['app'], function(app)
                         query += 'title:' + addQuotesIfNecessary($scope.detailedSearch.title);
                     }
                     if ($scope.detailedSearch.combinedDescription) {
-                        query += ' description:' + addQuotesIfNecessary($scope.detailedSearch.combinedDescription)
-                            + ' summary:' + addQuotesIfNecessary($scope.detailedSearch.combinedDescription);
+                        query += ' description:' + addQuotesIfNecessary($scope.detailedSearch.combinedDescription) + ' summary:' + addQuotesIfNecessary($scope.detailedSearch.combinedDescription);
                     }
                     if ($scope.detailedSearch.author) {
                         query += ' author:' + addQuotesIfNecessary($scope.detailedSearch.author);
@@ -238,7 +242,7 @@ define(['app'], function(app)
                         var firstAuthor;
                         var main = query;
 
-                        while(title = titleRegex.exec(query)) {
+                        while (title = titleRegex.exec(query)) {
                             // Remove token from main query
                             main = main.replace(title[2], '');
 
@@ -248,26 +252,26 @@ define(['app'], function(app)
                             }
                         }
 
-                        while(description = descriptionRegex.exec(query)) {
+                        while (description = descriptionRegex.exec(query)) {
                             main = main.replace(description[2], '');
                             if (!firstDescription) {
                                 firstDescription = description[3] || description[4] || description[5] || description[6];
                             }
                         }
 
-                        while(author = authorRegex.exec(query)) {
+                        while (author = authorRegex.exec(query)) {
                             main = main.replace(author[2], '');
                             if (!firstAuthor) {
                                 firstAuthor = author[3] || author[4];
                             }
                         }
 
-                        while(keyword = clilRegex.exec(query)) {
+                        while (keyword = clilRegex.exec(query)) {
                             main = main.replace(keyword[2], '');
                             $scope.detailedSearch.CLIL = true;
                         }
 
-                        while(keyword = specialEducationalNeedRegex.exec(query)) {
+                        while (keyword = specialEducationalNeedRegex.exec(query)) {
                             main = main.replace(keyword[2], '');
                             $scope.detailedSearch.specialEducationalNeed = true;
                         }
@@ -282,7 +286,7 @@ define(['app'], function(app)
                 }
 
                 function removeExtraWhitespace(str) {
-                    return str.replace(/\s{2,}/g,' ');
+                    return str.replace(/\s{2,}/g, ' ');
                 }
 
                 function hasWhitespace(str) {
@@ -335,8 +339,8 @@ define(['app'], function(app)
                     // Only books checkbox
                     if (!educationalContext ||
                         (educationalContext.id != BASIC_EDUCATION_ID &&
-                         educationalContext.id != SECONDARY_EDUCATION_ID &&
-                         educationalContext.id != VOCATIONAL_EDUCATION_ID)) {
+                            educationalContext.id != SECONDARY_EDUCATION_ID &&
+                            educationalContext.id != VOCATIONAL_EDUCATION_ID)) {
                         $scope.detailedSearch.onlyBooks = false;
                     }
 
@@ -356,10 +360,10 @@ define(['app'], function(app)
                         $scope.detailedSearch.targetGroups = [];
                     }
                 }
-                
+
                 $scope.clear = $scope.accessor.clear = function() {
                     $scope.detailedSearch = {
-                        'onlyPaid': false,
+                        'paid': true,
                         'onlyBooks': false,
                         'CLIL': false,
                         'targetGroups': [],
@@ -369,12 +373,15 @@ define(['app'], function(app)
                         'type': 'all'
                     };
 
-                    if($rootScope.isEditPortfolioMode) {
-                    	$scope.detailedSearch.type = "material";
+                    if ($rootScope.isEditPortfolioMode) {
+                        $scope.detailedSearch.type = "material";
                     }
                 };
 
                 $scope.$watch('detailedSearch.taxon.id', function(newTaxon, oldTaxon) {
+                    if (!$scope.detailedSearch.taxon)
+                        $scope.detailedSearch.educationalContext = null;
+                        
                     if (newTaxon !== oldTaxon && $scope.detailedSearch.taxon) {
                         var taxon = Object.create($scope.detailedSearch.taxon);
                         $scope.detailedSearch.educationalContext = $rootScope.taxonUtils.getEducationalContext(taxon);
@@ -387,15 +394,17 @@ define(['app'], function(app)
                         return $scope.detailedSearch.issueDate;
                     }
                 }
-                
-                $scope.$watch(function() { return $rootScope.savedPortfolio }, function(newValue, oldValue) {
-                	setEditModePrefill();
+
+                $scope.$watch(function() {
+                    return $rootScope.savedPortfolio
+                }, function(newValue, oldValue) {
+                    setEditModePrefill();
                 }, false);
 
                 function setLangugeges(languages) {
                     $scope.languages = languages;
                 }
-                
+
                 function setCrossCurricularThemes(crossCurricularThemes) {
                     $scope.crossCurricularThemes = crossCurricularThemes;
                 }
@@ -403,20 +412,18 @@ define(['app'], function(app)
                 function setKeyCompetences(keyCompetences) {
                     $scope.keyCompetences = keyCompetences;
                 }
-                
+
                 function setEditModePrefill() {
-                	if ($rootScope.isEditPortfolioMode && $rootScope.savedPortfolio) {
-                		try {
-		                	$scope.detailedSearch.taxon = Object.create($rootScope.savedPortfolio).taxon;
-		                	$scope.detailedSearch.targetGroups = Object.create($rootScope.savedPortfolio.targetGroups);
-                		}catch(e){}
-                		$scope.detailedSearch.type = "material";
-                	}
+                    if ($rootScope.isEditPortfolioMode && $rootScope.savedPortfolio) {
+                        try {
+                            $scope.detailedSearch.taxon = Object.create($rootScope.savedPortfolio).taxon;
+                            $scope.detailedSearch.targetGroups = Object.create($rootScope.savedPortfolio.targetGroups);
+                        } catch (e) {}
+                        $scope.detailedSearch.type = "material";
+                    }
                 }
 
             }
         };
     }]);
-
-    return app;
 });

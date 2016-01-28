@@ -1,6 +1,27 @@
-define(['app'], function (app) {
-    app.controller('materialController', ['$scope', 'serverCallService', '$route', 'translationService', '$rootScope', 'searchService', '$location', 'alertService', 'authenticatedUserService', 'dialogService', 'toastService', 'iconService',
-        function ($scope, serverCallService, $route, translationService, $rootScope, searchService, $location, alertService, authenticatedUserService, dialogService, toastService, iconService) {
+define([
+    'app',
+    'angularAMD',
+    'angular-youtube-mb',
+    'angular-screenfull',
+    'directives/copyPermalink/copyPermalink',
+    'directives/report/improper/improper',
+    'directives/report/brokenLink/brokenLink',
+    'directives/recommend/recommend',
+    'directives/rating/rating',
+    'directives/commentsCard/commentsCard',
+    'directives/slideshare/slideshare',
+    'services/serverCallService',
+    'services/translationService',
+    'services/searchService',
+    'services/alertService',
+    'services/authenticatedUserService',
+    'services/dialogService',
+    'services/iconService',
+    'services/toastService',
+    'services/storageService'
+], function (app, angularAMD) {
+    return ['$scope', 'serverCallService', '$route', 'translationService', '$rootScope', 'searchService', '$location', 'alertService', 'authenticatedUserService', 'dialogService', 'toastService', 'iconService', '$mdDialog', 'storageService',
+        function ($scope, serverCallService, $route, translationService, $rootScope, searchService, $location, alertService, authenticatedUserService, dialogService, toastService, iconService, $mdDialog, storageService) {
             $scope.showMaterialContent = false;
             $scope.newComment = {};
 
@@ -13,11 +34,11 @@ define(['app'], function (app) {
             if ($rootScope.savedMaterial) {
                 $scope.material = $rootScope.savedMaterial;
                 $rootScope.savedMaterial = null;
-                
-                if($rootScope.isEditPortfolioMode) {
-                	$rootScope.selectedSingleMaterial = $scope.material;
+
+                if ($rootScope.isEditPortfolioMode) {
+                    $rootScope.selectedSingleMaterial = $scope.material;
                 }
-                
+
                 init();
             } else {
                 getMaterial(getMaterialSuccess, getMaterialFail);
@@ -38,8 +59,8 @@ define(['app'], function (app) {
                     $location.url("/");
                 } else {
                     $scope.material = material;
-                    if($rootScope.isEditPortfolioMode) {
-                    	$rootScope.selectedSingleMaterial = $scope.material;
+                    if ($rootScope.isEditPortfolioMode) {
+                        $rootScope.selectedSingleMaterial = $scope.material;
                     }
                     init();
                 }
@@ -51,8 +72,10 @@ define(['app'], function (app) {
                 $location.url("/");
             }
 
-            function init() {
-                setSourceType();
+            function processMaterial() {
+                if($scope.material) {
+                    setSourceType();
+                }
 
                 if ($scope.material.taxons) {
                     preprocessMaterialSubjects();
@@ -66,6 +89,11 @@ define(['app'], function (app) {
                         $scope.material.iframeSource = $scope.material.source;
                     }
                 }
+            }
+
+            function init() {
+                fetchImage();
+                processMaterial();
 
                 var params = {
                     'type': '.Material',
@@ -111,7 +139,7 @@ define(['app'], function (app) {
                 if (languageStringList) {
                     return getUserDefinedLanguageString(languageStringList, translationService.getLanguage(), $scope.material.language);
                 }
-            }
+            };
 
             function isYoutubeVideo(url) {
                 // regex taken from http://stackoverflow.com/questions/2964678/jquery-youtube-url-validation-with-regex #ULTIMATE YOUTUBE REGEX
@@ -149,7 +177,7 @@ define(['app'], function (app) {
 
             $scope.getAuthorSearchURL = function ($event, firstName, surName) {
                 $event.preventDefault();
-                
+
                 searchService.setSearch('author:"' + firstName + " " + surName + '"');
                 $location.url(searchService.getURL());
             }
@@ -164,12 +192,12 @@ define(['app'], function (app) {
                 $scope.sourceType = 'LINK';
             };
 
-            $scope.isLoggedIn = function() {
+            $scope.isLoggedIn = function () {
                 return authenticatedUserService.isAuthenticated();
             };
-            
-            $scope.isAdmin = function() {
-                return authenticatedUserService.getUser() && authenticatedUserService.getUser().role === 'ADMIN';
+
+            $scope.isAdmin = function () {
+                return authenticatedUserService.isAdmin();
             };
 
             function getSignedUserData() {
@@ -200,6 +228,17 @@ define(['app'], function (app) {
                 serverCallService.makePost(url, params, addCommentSuccess, addCommentFailed);
             };
 
+            $scope.edit = function () {
+                storageService.setMaterial($scope.material);
+                $mdDialog.show(angularAMD.route({
+                    templateUrl: 'views/addMaterialDialog/addMaterialDialog.html',
+                    controllerUrl: 'views/addMaterialDialog/addMaterialDialog'
+                })).then(function () {
+                    $scope.material = storageService.getMaterial();
+                    processMaterial();
+                });
+            };
+
             function addCommentSuccess() {
                 $scope.newComment.text = "";
 
@@ -216,11 +255,11 @@ define(['app'], function (app) {
 
             $scope.getType = function () {
                 if ($scope.material === undefined || $scope.material === null) return '';
-              
+
                 return iconService.getMaterialIcon($scope.material.resourceTypes);
             };
-            
-            $scope.confirmMaterialDeletion = function() {
+
+            $scope.confirmMaterialDeletion = function () {
                 dialogService.showConfirmationDialog(
                     'MATERIAL_CONFIRM_DELETE_DIALOG_TITLE',
                     'MATERIAL_CONFIRM_DELETE_DIALOG_CONTENT',
@@ -242,10 +281,42 @@ define(['app'], function (app) {
             function deleteMaterialFailed() {
                 log('Deleting material failed.');
             }
-            
-            $scope.isAdmin = function() {
-                return authenticatedUserService.getUser() && authenticatedUserService.getUser().role === 'ADMIN';
+
+            $scope.isPublishersMaterial = function () {
+                if ($scope.material) {
+                    var userID = authenticatedUserService.getUser().id;
+                    var creator = $scope.material.creator;
+
+                    if (creator && creator.id === userID) {
+                        return authenticatedUserService.isPublisher() && $scope.material.repositoryIdentifier === null;
+                    }
+                }
             };
-            
-        }]);
+
+            $scope.isNotImported = function () {
+                if ($scope.material) {
+                    return $scope.material.repositoryIdentifier === null;
+                }
+            };
+
+            function fetchImage() {
+                if (!$scope.material.picture && $scope.material.hasPicture && !$scope.pictureLock && $route.current.params.materialId) {
+                    serverCallService.makeGet("rest/material/getPicture?materialId=" + $route.current.params.materialId, {}, fetchImageSuccess, fetchImageFail, fetchImageFinally);
+                    $scope.pictureLock = true;
+                }
+            }
+
+            function fetchImageSuccess(data) {
+                $scope.material.picture = "data:image/jpeg;base64," + data;
+            }
+
+            function fetchImageFail(data) {
+                log("Getting material image failed");
+            }
+
+            function fetchImageFinally() {
+                $scope.pictureLock = false;
+            }
+
+        }];
 });

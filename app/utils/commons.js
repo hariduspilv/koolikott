@@ -4,7 +4,6 @@
  * @author Jordan Silva
  * 
  */
-
 var LOGIN_ORIGIN = "loginOrigin"; 
 
 function log() {
@@ -161,6 +160,23 @@ function formatIssueDate(issueDate) {
         // year date
         return formatYear(issueDate.year); 
     }
+}
+
+function issueDateToDate(issueDate) {
+	if (!issueDate) {
+		return;
+	}
+
+	if (issueDate.day && issueDate.month && issueDate.year) {
+		// full date
+		return new Date(issueDate.year, issueDate.month - 1, issueDate.day);
+	} else if (issueDate.month && issueDate.year) {
+		// month date
+		return new Date(issueDate.year, issueDate.month - 1, 1);
+	} else if (issueDate.year) {
+		// year date
+		return new Date(issueDate.year, 0, 1);
+	}
 }
 
 function formatDay(day) {
