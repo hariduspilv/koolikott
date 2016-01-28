@@ -4,6 +4,7 @@ define([
     'app.routes',
     'utils/taxonUtils',
     
+    'jquery',
     'angular-translate',
     'angular-translate-loader-url',
     'angular-material',

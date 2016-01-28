@@ -6,30 +6,16 @@
           <h1 data-translate="DASHBOARD"></h1>
         </div>
         
-        <div layout="row" class="type-block">
-            <md-button class="md-raised" ng-click="gotoImproperMaterials()">
-                <pan data-translate="DASHBOARD_IMRPOPER_MATERIALS"></pan>
-            </md-button>
-            <md-button class="md-raised" ng-click="gotoImproperPortfolios()">
-                <span data-translate="DASHBOARD_IMRPOPER_PORTFOLIOS"></span>
-            </md-button>
-        </div>
+        <md-card class="md-data-table" id="improper-materials-table" data-ng-include="'views/dashboard/baseTable/baseTable.html'" data-ng-controller="improperMaterialsController" onload="bindTable()"></md-card>
         
-        <div layout="row" class="type-block">
-            <md-button class="md-raised" ng-click="gotoDeletedMaterials()">
-                <pan data-translate="DASHBOARD_DELETED_MATERIALS"></pan>
-            </md-button>
-            <md-button class="md-raised" ng-click="gotoDeletedPortfolios()">
-                <pan data-translate="DASHBOARD_DELETED_PORTFOLIOS"></pan>
-            </md-button>
-        </div>
+        <md-card class="md-data-table" id="improper-portfolios-table" data-ng-include="'views/dashboard/baseTable/baseTable.html'" data-ng-controller="imporperPortfoliosController" onload="bindTable()"></md-card>
         
-        <div layout="row" class="type-block">
-            <md-button class="md-raised" ng-click="gotoBrokenMaterials()">
-                <pan data-translate="BROKEN_MATERIALS"></pan>
-            </md-button>
-        </div>
-       
+        <md-card class="md-data-table" id="broken-materials-table" data-ng-include="'views/dashboard/baseTable/baseTable.html'" data-ng-controller="brokenMaterialsController" onload="bindTable()"></md-card>
+        
+        <md-card class="md-data-table" id="deleted-materials-table" data-ng-include="'views/dashboard/baseTable/baseTable.html'" data-ng-controller="deletedMaterialsController" onload="bindTable()"></md-card>
+
+        <md-card class="md-data-table" id="deleted-portfolios-table" data-ng-include="'views/dashboard/baseTable/baseTable.html'" data-ng-controller="deletedPortfoliosController" onload="bindTable()"></md-card>
+
       </article>
     </section>
   </div>

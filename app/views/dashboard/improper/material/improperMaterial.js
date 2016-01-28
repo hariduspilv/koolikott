@@ -1,18 +1,22 @@
 define([
     'app',
-    'angular-material-data-table',
+    'ngload!angular-material-data-table',
     'services/serverCallService',
-    'views/dashboard/dashboard'
+    'views/dashboard/baseTable/baseTable'
 ], function(app) {
-    return ['$scope', 'serverCallService', '$controller', '$filter',
+    app.controller('improperMaterialsController', ['$scope', 'serverCallService', '$controller', '$filter',
         function($scope, serverCallService, $controller, $filter) {
-            var base = $controller('dashboardController', {
+            var base = $controller('baseTableController', {
                 $scope: $scope
             });
 
             serverCallService.makeGet("rest/material/getImproper", {}, base.getItemsSuccess, base.getItemsFail);
 
             $scope.title = $filter('translate')('DASHBOARD_IMRPOPER_MATERIALS');
+            
+            $scope.bindTable = function() {
+              base.buildTable('#improper-materials-table', 'views/dashboard/improper/material/improperMaterial.html');
+            }
         }
-    ];
+    ]);
 });

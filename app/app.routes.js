@@ -35,31 +35,6 @@ define(function() {
                 controllerUrl: 'views/dashboard/dashboard',
                 permissions: ['ADMIN']
             },
-            '/dashboard/improper/material': {
-                templateUrl: 'views/dashboard/improper/material/improperMaterial.html',
-                controllerUrl: 'views/dashboard/improper/material/improperMaterial',
-                permissions: ['ADMIN']
-            },
-            '/dashboard/improper/portfolio': {
-                templateUrl: 'views/dashboard/improper/portfolio/improperPortfolio.html',
-                controllerUrl: 'views/dashboard/improper/portfolio/improperPortfolio',
-                permissions: ['ADMIN']
-            },
-            '/dashboard/broken/material': {
-                templateUrl: 'views/dashboard/broken/material/brokenMaterial.html',
-                controllerUrl: 'views/dashboard/broken/material/brokenMaterial',
-                permissions: ['ADMIN'],
-            },
-            '/dashboard/deleted/material': {
-                templateUrl: 'views/dashboard/deleted/material/deletedMaterial.html',
-                controllerUrl: 'views/dashboard/deleted/material/deletedMaterial',
-                permissions: ['ADMIN']
-            },
-            '/dashboard/deleted/portfolio': {
-                templateUrl: 'views/dashboard/deleted/portfolio/deletedPortfolio.html',
-                controllerUrl: 'views/dashboard/deleted/portfolio/deletedPortfolio',
-                permissions: ['ADMIN']
-            },
             '/loginRedirect': {
                 templateUrl: 'views/loginRedirect/loginRedirect.html',
                 controllerUrl: 'views/loginRedirect/loginRedirect'

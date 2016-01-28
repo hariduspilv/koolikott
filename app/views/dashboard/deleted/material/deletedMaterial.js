@@ -2,21 +2,24 @@ define([
     'app',
     'angular-material-data-table',
     'services/serverCallService',
-    'views/dashboard/dashboard'
+    'views/dashboard/baseTable/baseTable'
 ], function(app) {
-    return ['$scope', 'serverCallService', '$controller', '$filter',
-        function($scope, serverCallService, $controller, $filter) {
-            var base = $controller('dashboardController', {
-                $scope: $scope
-            });
+    app.controller('deletedMaterialsController', ['$scope', 'serverCallService', '$controller', '$filter',
+      function($scope, serverCallService, $controller, $filter) {
+          var base = $controller('baseTableController', {
+              $scope: $scope
+          });
 
-            serverCallService.makeGet("rest/material/getDeleted", {}, base.getItemsSuccess, base.getItemsFail);
+          serverCallService.makeGet("rest/material/getDeleted", {}, base.getItemsSuccess, base.getItemsFail);
 
-            $scope.title = $filter('translate')('DASHBOARD_DELETED_MATERIALS');
+          $scope.title = $filter('translate')('DASHBOARD_DELETED_MATERIALS');
 
-            $scope.formatMaterialUpdatedDate = function (updatedDate) {
-                return formatDateToDayMonthYear(updatedDate);
-            }
-        }
-    ];
+          $scope.formatMaterialUpdatedDate = function (updatedDate) {
+              return formatDateToDayMonthYear(updatedDate);
+          }
+          
+          $scope.bindTable = function() {
+              base.buildTable('#deleted-materials-table', 'views/dashboard/deleted/material/deletedMaterial.html');
+          }
+    }]);
 });

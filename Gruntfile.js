@@ -123,7 +123,7 @@ module.exports = function (grunt) {
       },
       all: {
         src: [
-          'Gruntfile.js',
+          //'Gruntfile.js',
           // Commented out because .jshintrc is not correctly configured to follow DÖP developers style
           //'<%= yeoman.app %>/**/**/*.js'
         ]
