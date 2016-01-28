@@ -105,7 +105,11 @@ define([
                     localStorage.setItem(LOGIN_ORIGIN, $location.url());
                     window.location = "/rest/login/taat";
                 },
-
+                
+                loginWithEkool : function() {
+                	window.location = "/rest/login/ekool";
+                },
+                
                 authenticateUsingOAuth: function(token) {
                     var params = {
                         'token': token

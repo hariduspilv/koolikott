@@ -36,6 +36,10 @@ define([
             authenticationService.loginWithTaat();
         };
 
+        $scope.ekoolAuth = function() {
+			authenticationService.loginWithEkool();
+		};
+		
         $scope.mobileIdAuth = function() {
             var idCodeValid = validateIdCode();
             var phoneNumberValid = validatePhoneNumber();
