@@ -15,6 +15,7 @@ import java.util.Arrays;
 import org.easymock.Capture;
 import org.easymock.EasyMock;
 import org.easymock.EasyMockRunner;
+import org.easymock.IAnswer;
 import org.easymock.Mock;
 import org.easymock.TestSubject;
 import org.joda.time.DateTime;
@@ -81,7 +82,6 @@ public class MaterialServiceTest {
         EducationalContext educationalContext = new EducationalContext();
         educationalContext.setName(MaterialService.BASICEDUCATION);
         expect(material.getTaxons()).andReturn(Arrays.asList(educationalContext)).times(3);
-
 
         expect(materialDAO.findByIdNotDeleted(materialId)).andReturn(original);
         expect(materialDAO.update(material)).andReturn(material);
@@ -263,7 +263,7 @@ public class MaterialServiceTest {
 
         expect(materialDAO.findByIdNotDeleted(material.getId())).andReturn(material).anyTimes();
         expect(user.getRole()).andReturn(Role.ADMIN).anyTimes();
-        expect(materialDAO.update(EasyMock.capture(capturedMaterial))).andReturn(new Material());
+        expectMaterialUpdate(capturedMaterial);
         searchEngineService.updateIndex();
 
         replayAll(user);
@@ -276,6 +276,15 @@ public class MaterialServiceTest {
         assertNotNull(recommendation);
         assertEquals(user, recommendation.getCreator());
         assertEquals(recommendation, returnedRecommendation);
+    }
+
+    private void expectMaterialUpdate(Capture<Material> capturedMaterial) {
+        expect(materialDAO.update(EasyMock.capture(capturedMaterial))).andAnswer(new IAnswer<Material>() {
+            @Override
+            public Material answer() throws Throwable {
+                return capturedMaterial.getValue();
+            }
+        });
     }
 
     @Test
@@ -294,7 +303,7 @@ public class MaterialServiceTest {
 
         expect(materialDAO.findByIdNotDeleted(material.getId())).andReturn(material).anyTimes();
         expect(user.getRole()).andReturn(Role.ADMIN).anyTimes();
-        expect(materialDAO.update(EasyMock.capture(capturedMaterial))).andReturn(new Material());
+        expectMaterialUpdate(capturedMaterial);
         searchEngineService.updateIndex();
 
         replayAll(user);

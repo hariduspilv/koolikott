@@ -14,6 +14,7 @@ import static org.junit.Assert.fail;
 import org.easymock.Capture;
 import org.easymock.EasyMock;
 import org.easymock.EasyMockRunner;
+import org.easymock.IAnswer;
 import org.easymock.Mock;
 import org.easymock.TestSubject;
 import org.junit.Test;
@@ -109,7 +110,7 @@ public class PortfolioServiceTest {
         originalPortfolio.setCreator(user);
 
         expect(portfolioDAO.findById(1L)).andReturn(originalPortfolio);
-        expect(portfolioDAO.update(EasyMock.capture(capturedPortfolio))).andReturn(new Portfolio());
+        expectPortfolioUpdate(capturedPortfolio);
         searchEngineService.updateIndex();
 
         replayAll();
@@ -122,6 +123,15 @@ public class PortfolioServiceTest {
         assertNotNull(recommendation);
         assertEquals(admin.getId(), recommendation.getCreator().getId());
         assertEquals(recommendation, returnedRecommendation);
+    }
+
+    private void expectPortfolioUpdate(Capture<Portfolio> capturedPortfolio) {
+        expect(portfolioDAO.update(EasyMock.capture(capturedPortfolio))).andAnswer(new IAnswer<Portfolio>() {
+            @Override
+            public Portfolio answer() throws Throwable {
+                return capturedPortfolio.getValue();
+            }
+        });
     }
 
     @Test
@@ -146,7 +156,7 @@ public class PortfolioServiceTest {
         originalPortfolio.setCreator(user);
 
         expect(portfolioDAO.findById(1L)).andReturn(originalPortfolio);
-        expect(portfolioDAO.update(EasyMock.capture(capturedPortfolio))).andReturn(new Portfolio());
+        expectPortfolioUpdate(capturedPortfolio);
         searchEngineService.updateIndex();
 
         replayAll();
