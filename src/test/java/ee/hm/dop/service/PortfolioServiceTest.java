@@ -59,7 +59,7 @@ public class PortfolioServiceTest {
         Portfolio portfolio = new Portfolio();
         portfolio.setId(99L);
         Portfolio originalPortfolio = createMock(Portfolio.class);
-        expect(portfolioDAO.findById(portfolio.getId())).andReturn(originalPortfolio);
+        expect(portfolioDAO.findByIdFromAll(portfolio.getId())).andReturn(originalPortfolio);
         portfolioDAO.incrementViewCount(originalPortfolio);
 
         replayAll(originalPortfolio);
@@ -73,7 +73,7 @@ public class PortfolioServiceTest {
     public void incrementViewCountPortfolioNotFound() {
         Portfolio portfolio = new Portfolio();
         portfolio.setId(99L);
-        expect(portfolioDAO.findById(portfolio.getId())).andReturn(null);
+        expect(portfolioDAO.findByIdFromAll(portfolio.getId())).andReturn(null);
 
         replayAll();
 

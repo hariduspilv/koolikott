@@ -31,6 +31,7 @@ import ee.hm.dop.model.LanguageString;
 import ee.hm.dop.model.Material;
 import ee.hm.dop.model.Recommendation;
 import ee.hm.dop.model.TargetGroup;
+import ee.hm.dop.model.User;
 import ee.hm.dop.model.taxon.Subject;
 import ee.hm.dop.model.taxon.Taxon;
 import ee.hm.dop.service.MaterialService;
@@ -325,9 +326,9 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
     @Test
     public void addRecommendation() {
         String idCode = "89898989898";
-        login(idCode);
+        User user = login(idCode);
 
-        Material material = materialService.get(3L);
+        Material material = materialService.get(3L, user);
 
         Response response = doPost(MATERIAL_ADD_RECOMMENDATION,
                 Entity.entity(material, MediaType.APPLICATION_JSON_TYPE));
@@ -341,9 +342,9 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
     @Test
     public void removeRecommendation() {
         String idCode = "89898989898";
-        login(idCode);
+        User user = login(idCode);
 
-        Material material = materialService.get(3L);
+        Material material = materialService.get(3L, user);
 
         Response response = doPost(MATERIAL_REMOVE_RECOMMENDATION,
                 Entity.entity(material, MediaType.APPLICATION_JSON_TYPE));

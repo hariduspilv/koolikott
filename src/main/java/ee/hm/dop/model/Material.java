@@ -177,7 +177,6 @@ public class Material implements Searchable {
     @JoinColumn(name = "creator")
     private User creator;
 
-    @JsonIgnore
     @Column
     private boolean deleted;
 

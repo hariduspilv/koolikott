@@ -388,7 +388,7 @@ insert into Portfolio(id, title, taxon, creator, originalCreator, summary, views
 insert into Portfolio(id, title, taxon, creator, originalCreator, summary, views, created, updated, picture, visibility, deleted, recommendation) VALUES (11, 'This portfolio2 is not listed. ', null, 7, 7, 'Alpha.', 100, '2003-10-10 07:00:11', null, null, 'NOT_LISTED', false, 6);
 insert into Portfolio(id, title, taxon, creator, originalCreator, summary, views, created, updated, picture, visibility, deleted, recommendation) VALUES (12, 'This portfolio will be DELETED in tests.', null, 9, 9, 'Alpha.', 100, '2003-10-10 07:00:11', null, null, 'PUBLIC', false, null);
 insert into Portfolio(id, title, taxon, creator, originalCreator, summary, views, created, updated, picture, visibility, deleted, recommendation) VALUES (13, 'This portfolio will be DELETED in tests by admin.', null, 9, 9, 'Beta.', 100, '2003-12-10 07:22:11', null, null, 'PUBLIC', false, null);
-insert into Portfolio(id, title, taxon, creator, originalCreator, summary, views, created, updated, picture, visibility, deleted, recommendation) VALUES (14, 'This portfolio is DELETED.', null, 9, 9, 'Delta.', 100, '2001-11-10 05:05:05', null, null, 'PUBLIC', true, 4);
+insert into Portfolio(id, title, taxon, creator, originalCreator, summary, views, created, updated, picture, visibility, deleted, recommendation) VALUES (14, 'Uploading picture to it', null, 6, 6, 'Beta.', 100, '2003-12-10 07:22:11', null, null, 'PUBLIC', false, 4);
 
 -- Chapter
 

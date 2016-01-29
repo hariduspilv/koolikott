@@ -39,10 +39,15 @@ public class PortfolioService {
     private SearchEngineService searchEngineService;
 
     public Portfolio get(long portfolioId, User loggedInUser) {
-        Portfolio portfolio = portfolioDAO.findById(portfolioId);
+        Portfolio portfolio;
+        if (isUserAdmin(loggedInUser)) {
+            portfolio = portfolioDAO.findByIdFromAll(portfolioId);
+        } else {
+            portfolio = portfolioDAO.findById(portfolioId);
 
-        if (portfolio != null && !isPortfolioAccessibleToUser(portfolio, loggedInUser)) {
-            portfolio = null;
+            if (portfolio != null && !isPortfolioAccessibleToUser(portfolio, loggedInUser)) {
+                portfolio = null;
+            }
         }
 
         return portfolio;
@@ -57,19 +62,19 @@ public class PortfolioService {
         return portfolios;
     }
 
-    public String getPortfolioPicture(Portfolio portfolio, User loggedInUser) {
-        Portfolio actualPortfolio = portfolioDAO.findById(portfolio.getId());
+    public String getPortfolioPicture(Long id, User loggedInUser) {
+        byte[] picture = null;
+        Portfolio portfolio = portfolioDAO.findByIdFromAll(id);
 
-        if (actualPortfolio != null && !isPortfolioAccessibleToUser(actualPortfolio, loggedInUser)) {
-            return null;
+        if (portfolio != null && isPortfolioAccessibleToUser(portfolio, loggedInUser)) {
+            picture = portfolioDAO.findPictureByPortfolio(portfolio);
         }
 
-        byte[] picture = portfolioDAO.findPictureByPortfolio(portfolio);
         return Base64.encodeBase64String(picture);
     }
 
     public void incrementViewCount(Portfolio portfolio) {
-        Portfolio originalPortfolio = portfolioDAO.findById(portfolio.getId());
+        Portfolio originalPortfolio = portfolioDAO.findByIdFromAll(portfolio.getId());
         if (originalPortfolio == null) {
             throw new RuntimeException("Portfolio not found");
         }
@@ -143,7 +148,7 @@ public class PortfolioService {
         if (portfolio == null || portfolio.getId() == null) {
             throw new RuntimeException("Portfolio not found");
         }
-        Portfolio originalPortfolio = portfolioDAO.findById(portfolio.getId());
+        Portfolio originalPortfolio = portfolioDAO.findByIdFromAll(portfolio.getId());
         if (originalPortfolio == null) {
             throw new RuntimeException("Portfolio not found");
         }
@@ -215,6 +220,29 @@ public class PortfolioService {
     }
 
     public Portfolio update(Portfolio portfolio, User loggedInUser) {
+        Portfolio originalPortfolio = validateUpdate(portfolio, loggedInUser);
+
+        originalPortfolio = setPortfolioUpdatableFields(originalPortfolio, portfolio);
+
+        Portfolio updatedPortfolio = portfolioDAO.update(originalPortfolio);
+        searchEngineService.updateIndex();
+
+        return updatedPortfolio;
+    }
+
+    public Portfolio updatePicture(Portfolio portfolio, User loggedInUser) {
+        Portfolio originalPortfolio = portfolioDAO.findById(portfolio.getId());
+
+        if (originalPortfolio == null) {
+            throw new RuntimeException("Portfolio not found");
+        }
+
+        originalPortfolio.setPicture(portfolio.getPicture());
+        originalPortfolio.setHasPicture(portfolio.getPicture() != null);
+        return portfolioDAO.update(originalPortfolio);
+    }
+
+    private Portfolio validateUpdate(Portfolio portfolio, User loggedInUser) {
         if (portfolio.getId() == null) {
             throw new RuntimeException("Portfolio must already exist.");
         }
@@ -232,12 +260,7 @@ public class PortfolioService {
             throw new RuntimeException("Logged in user must be the creator of this portfolio.");
         }
 
-        originalPortfolio = setPortfolioUpdatableFields(originalPortfolio, portfolio, loggedInUser);
-
-        Portfolio updatedPortfolio = portfolioDAO.update(originalPortfolio);
-        searchEngineService.updateIndex();
-
-        return updatedPortfolio;
+        return originalPortfolio;
     }
 
     public Portfolio copy(Portfolio portfolio, User loggedInUser) {
@@ -324,23 +347,19 @@ public class PortfolioService {
         return safePortfolio;
     }
 
-    private Portfolio setPortfolioUpdatableFields(Portfolio originalPortfolio, Portfolio portfolio, User loggedInUser) {
+    private Portfolio setPortfolioUpdatableFields(Portfolio originalPortfolio, Portfolio portfolio) {
         originalPortfolio.setTitle(portfolio.getTitle());
         originalPortfolio.setSummary(portfolio.getSummary());
         originalPortfolio.setTags(portfolio.getTags());
         originalPortfolio.setTargetGroups(portfolio.getTargetGroups());
         originalPortfolio.setTaxon(portfolio.getTaxon());
         originalPortfolio.setChapters(portfolio.getChapters());
-        if (portfolio.getPicture() != null || !portfolio.getHasPicture()) {
-            originalPortfolio.setPicture(portfolio.getPicture());
-            originalPortfolio.setHasPicture(true);
-        }
         originalPortfolio.setVisibility(portfolio.getVisibility());
         return originalPortfolio;
     }
 
     private boolean isPortfolioAccessibleToUser(Portfolio portfolio, User loggedInUser) {
-        return portfolio.getVisibility() != Visibility.PRIVATE || isUserPortfolioCreator(portfolio, loggedInUser)
+        return (portfolio.getVisibility() != Visibility.PRIVATE || isUserPortfolioCreator(portfolio, loggedInUser) && !portfolio.isDeleted())
                 || isUserAdmin(loggedInUser);
     }
 

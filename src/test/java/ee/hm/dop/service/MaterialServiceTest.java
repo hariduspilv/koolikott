@@ -82,7 +82,8 @@ public class MaterialServiceTest {
         educationalContext.setName(MaterialService.BASICEDUCATION);
         expect(material.getTaxons()).andReturn(Arrays.asList(educationalContext)).times(3);
 
-        expect(materialDAO.findById(materialId)).andReturn(original);
+
+        expect(materialDAO.findByIdNotDeleted(materialId)).andReturn(original);
         expect(materialDAO.update(material)).andReturn(material);
 
         replay(materialDAO, material, searchEngineService);
@@ -97,7 +98,8 @@ public class MaterialServiceTest {
         long materialId = 1;
         Material material = createMock(Material.class);
         expect(material.getId()).andReturn(materialId);
-        expect(materialDAO.findById(materialId)).andReturn(null);
+
+        expect(materialDAO.findByIdNotDeleted(materialId)).andReturn(null);
 
         replay(materialDAO, material);
 
@@ -120,7 +122,7 @@ public class MaterialServiceTest {
         expect(material.getId()).andReturn(materialId);
         expect(material.getRepository()).andReturn(new Repository()).times(3);
 
-        expect(materialDAO.findById(materialId)).andReturn(original);
+        expect(materialDAO.findByIdNotDeleted(materialId)).andReturn(original);
 
         replay(materialDAO, material);
 
@@ -148,7 +150,7 @@ public class MaterialServiceTest {
         newRepository.setBaseURL("some.com");
         expect(material.getRepository()).andReturn(newRepository).times(3);
 
-        expect(materialDAO.findById(materialId)).andReturn(original);
+        expect(materialDAO.findByIdNotDeleted(materialId)).andReturn(original);
 
         replay(materialDAO, material);
 
@@ -195,7 +197,7 @@ public class MaterialServiceTest {
         User user = createMock(User.class);
         Material material = createMock(Material.class);
         expect(material.getId()).andReturn(1L);
-        expect(materialDAO.findById(1L)).andReturn(material);
+        expect(materialDAO.findByIdNotDeleted(1L)).andReturn(material);
         expect(material.getRepository()).andReturn(new Repository());
 
         replay(material, user, materialDAO);
@@ -217,7 +219,7 @@ public class MaterialServiceTest {
         material.setId(1L);
         material.setRepository(null);
 
-        expect(materialDAO.findById(material.getId())).andReturn(material).anyTimes();
+        expect(materialDAO.findByIdNotDeleted(material.getId())).andReturn(material).anyTimes();
         expect(user.getRole()).andReturn(Role.ADMIN).anyTimes();
         expect(materialDAO.update(material)).andReturn(new Material());
 
@@ -237,7 +239,7 @@ public class MaterialServiceTest {
         material.setRepository(null);
         material.setCreator(user);
 
-        expect(materialDAO.findById(material.getId())).andReturn(material).anyTimes();
+        expect(materialDAO.findByIdNotDeleted(material.getId())).andReturn(material).anyTimes();
         expect(user.getRole()).andReturn(Role.PUBLISHER).anyTimes();
         expect(materialDAO.update(material)).andReturn(new Material());
         expect(user.getUsername()).andReturn("username").anyTimes();
@@ -259,7 +261,7 @@ public class MaterialServiceTest {
         material.setId(1L);
         material.setRepository(null);
 
-        expect(materialDAO.findById(material.getId())).andReturn(material).anyTimes();
+        expect(materialDAO.findByIdNotDeleted(material.getId())).andReturn(material).anyTimes();
         expect(user.getRole()).andReturn(Role.ADMIN).anyTimes();
         expect(materialDAO.update(EasyMock.capture(capturedMaterial))).andReturn(new Material());
         searchEngineService.updateIndex();
@@ -290,7 +292,7 @@ public class MaterialServiceTest {
         material.setRepository(null);
         material.setRecommendation(recommendation);
 
-        expect(materialDAO.findById(material.getId())).andReturn(material).anyTimes();
+        expect(materialDAO.findByIdNotDeleted(material.getId())).andReturn(material).anyTimes();
         expect(user.getRole()).andReturn(Role.ADMIN).anyTimes();
         expect(materialDAO.update(EasyMock.capture(capturedMaterial))).andReturn(new Material());
         searchEngineService.updateIndex();

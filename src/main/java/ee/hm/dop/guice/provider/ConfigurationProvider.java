@@ -14,6 +14,8 @@ import org.slf4j.LoggerFactory;
 import com.google.inject.Provider;
 import com.google.inject.Singleton;
 
+import ee.hm.dop.utils.FileUtils;
+
 /**
  * Guice provider of application configuration.
  */
@@ -50,12 +52,12 @@ public class ConfigurationProvider implements Provider<Configuration> {
     private Configuration loadCustomConfiguration() {
         Configuration configuration = null;
 
-        String configurationPath = System.getProperty("config");
+        String configurationPath = getCustonConfigurationFilePath();
         if (configurationPath != null) {
             logger.info(format("Loading custom configuration file from [%s].", configurationPath));
 
             try {
-                File config = new File(configurationPath);
+                File config = FileUtils.getFile(configurationPath);
                 configuration = new PropertiesConfiguration(config);
                 logger.info(format("Custom configuration loaded from [%s]", config.getAbsolutePath()));
             } catch (Exception e) {
@@ -83,7 +85,11 @@ public class ConfigurationProvider implements Provider<Configuration> {
         return configuration;
     }
 
-    protected String getConfigurationFileName() {
+    private String getConfigurationFileName() {
         return DEFAULT_CONFIGURATION_FILE_NAME;
+    }
+
+    protected String getCustonConfigurationFilePath() {
+        return System.getProperty("config");
     }
 }

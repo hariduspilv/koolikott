@@ -2,16 +2,12 @@ package ee.hm.dop.rest;
 
 import static org.apache.commons.lang3.StringUtils.isBlank;
 
-import java.net.HttpURLConnection;
-
 import javax.inject.Inject;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
-import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
 
 import ee.hm.dop.model.Language;
 import ee.hm.dop.model.Page;
@@ -19,7 +15,7 @@ import ee.hm.dop.service.LanguageService;
 import ee.hm.dop.service.PageService;
 
 @Path("page")
-public class PageResource {
+public class PageResource extends BaseResource {
 
     @Inject
     private PageService pageService;
@@ -44,9 +40,5 @@ public class PageResource {
         }
 
         return pageService.getPage(name, language);
-    }
-
-    private void throwBadRequestException(String message) {
-        throw new WebApplicationException(Response.status(HttpURLConnection.HTTP_BAD_REQUEST).entity(message).build());
     }
 }

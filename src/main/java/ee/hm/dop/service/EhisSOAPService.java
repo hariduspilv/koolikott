@@ -116,7 +116,7 @@ public class EhisSOAPService {
             Detail detail = fault.getDetail();
             String detailMessage = detail.getFirstChild().getTextContent();
 
-            throw new RuntimeException("SOAPResponse Fault " + faultString + ": " + detailMessage);
+            throw new RuntimeException("Error retrieving information from EHIS: " + faultString + ": " + detailMessage);
         }
 
         Node person = body.getElementsByTagName("isik").item(0);

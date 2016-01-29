@@ -14,7 +14,6 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
-import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
@@ -39,7 +38,7 @@ public class MaterialResource extends BaseResource {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Material get(@QueryParam("materialId") long materialId) {
-        return materialService.get(materialId);
+        return materialService.get(materialId, getLoggedInUser());
     }
 
     @GET
@@ -61,7 +60,7 @@ public class MaterialResource extends BaseResource {
     public Response increaseViewCount(Material material) {
         Long materialId = material.getId();
 
-        Material originalMaterial = materialService.get(materialId);
+        Material originalMaterial = materialService.get(materialId, getLoggedInUser());
         if (originalMaterial == null) {
             return Response.status(HttpURLConnection.HTTP_BAD_REQUEST).entity("Invalid material").build();
         }
@@ -114,7 +113,7 @@ public class MaterialResource extends BaseResource {
     public Response getPictureById(@QueryParam("materialId") long id) {
         Material material = new Material();
         material.setId(id);
-        String pictureData = materialService.getMaterialPicture(material);
+        String pictureData = materialService.getMaterialPicture(material, getLoggedInUser());
 
         if (pictureData != null) {
             return Response.ok(pictureData).build();
@@ -263,9 +262,5 @@ public class MaterialResource extends BaseResource {
     @RolesAllowed({ "ADMIN" })
     public Boolean isSetImproper(@QueryParam("materialId") long materialId) {
         return materialService.isSetImproper(materialId);
-    }
-
-    private void throwBadRequestException(String message) {
-        throw new WebApplicationException(Response.status(HttpURLConnection.HTTP_BAD_REQUEST).entity(message).build());
     }
 }

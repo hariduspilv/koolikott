@@ -4,6 +4,7 @@ import javax.inject.Inject;
 
 import org.glassfish.hk2.api.ServiceLocator;
 import org.glassfish.jersey.jackson.JacksonFeature;
+import org.glassfish.jersey.media.multipart.MultiPartFeature;
 import org.glassfish.jersey.server.ResourceConfig;
 import org.glassfish.jersey.server.filter.RolesAllowedDynamicFeature;
 import org.jvnet.hk2.guice.bridge.api.GuiceBridge;
@@ -27,5 +28,6 @@ public class DOPApplication extends ResourceConfig {
         register(JacksonFeature.class);
         register(ObjectMapperProvider.class);
         register(RolesAllowedDynamicFeature.class);
+        register(MultiPartFeature.class);
     }
 }

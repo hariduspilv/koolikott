@@ -10,6 +10,9 @@
 		<slf4j.version>1.7.12</slf4j.version>
         <log4j.version>2.3</log4j.version>
 		<hibernate.version>4.3.10.Final</hibernate.version>
+        <jetty.version>9.3.7.v20160115</jetty.version>
+        <jackson.version>2.7.0</jackson.version>
+        <jersey.version>2.21</jersey.version>
 	</properties>
 	
 	<dependencies>
@@ -17,8 +20,13 @@
 		<dependency>
 			<groupId>org.glassfish.jersey.containers</groupId>
 			<artifactId>jersey-container-servlet</artifactId>
-			<version>2.21</version>
+			<version>${jersey.version}</version>
 		</dependency>
+        <dependency>
+            <groupId>org.glassfish.jersey.media</groupId>
+            <artifactId>jersey-media-multipart</artifactId>
+            <version>${jersey.version}</version>
+        </dependency>
 		<dependency>
 			<groupId>org.glassfish.hk2</groupId>
 			<artifactId>guice-bridge</artifactId>
@@ -33,7 +41,7 @@
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
-            <version>2.7.0-rc2</version>
+            <version>${jackson.version}</version>
         </dependency>
 		<dependency>
 			<groupId>org.glassfish.jersey.media</groupId>
@@ -43,12 +51,12 @@
         <dependency>
             <groupId>com.fasterxml.jackson.jaxrs</groupId>
             <artifactId>jackson-jaxrs-base</artifactId>
-            <version>2.7.0-rc2</version>
+            <version>${jackson.version}</version>
         </dependency>
         <dependency>
             <groupId>com.fasterxml.jackson.jaxrs</groupId>
             <artifactId>jackson-jaxrs-json-provider</artifactId>
-            <version>2.7.0-rc2</version>
+            <version>${jackson.version}</version>
         </dependency>
         <dependency>
             <groupId>com.voodoodyne.jackson.jsog</groupId>
@@ -61,12 +69,12 @@
 		<dependency>
 			<groupId>org.eclipse.jetty</groupId>
 			<artifactId>jetty-server</artifactId>
-			<version>9.2.10.v20150310</version>
+			<version>${jetty.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.eclipse.jetty</groupId>
 			<artifactId>jetty-webapp</artifactId>
-			<version>9.2.10.v20150310</version>
+			<version>${jetty.version}</version>
 		</dependency>
 		
 		<!-- MySQL Database connector -->

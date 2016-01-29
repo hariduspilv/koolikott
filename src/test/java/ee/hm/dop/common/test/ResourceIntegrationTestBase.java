@@ -27,11 +27,13 @@ import org.glassfish.jersey.client.ClientConfig;
 import org.glassfish.jersey.client.ClientProperties;
 import org.glassfish.jersey.filter.LoggingFilter;
 import org.glassfish.jersey.jackson.JacksonFeature;
+import org.glassfish.jersey.media.multipart.MultiPartFeature;
 import org.junit.After;
 
 import com.google.inject.Inject;
 
 import ee.hm.dop.model.AuthenticatedUser;
+import ee.hm.dop.model.User;
 
 /**
  * Base class for all resource integration tests.
@@ -45,7 +47,7 @@ public abstract class ResourceIntegrationTestBase extends IntegrationTestBase {
 
     private static AuthenticationFilter authenticationFilter;
 
-    protected void login(String idCode) {
+    protected User login(String idCode) {
         Response response = doGet("dev/login/" + idCode);
         AuthenticatedUser authenticatedUser = response.readEntity(new GenericType<AuthenticatedUser>() {
         });
@@ -54,6 +56,8 @@ public abstract class ResourceIntegrationTestBase extends IntegrationTestBase {
         assertNotNull("Login failed", authenticatedUser.getUser().getUsername());
 
         authenticationFilter = new AuthenticationFilter(authenticatedUser);
+
+        return authenticatedUser.getUser();
     }
 
     @After
@@ -147,6 +151,7 @@ public abstract class ResourceIntegrationTestBase extends IntegrationTestBase {
         clientConfig.property(ClientProperties.READ_TIMEOUT, 60000); // ms
         clientConfig.property(ClientProperties.CONNECT_TIMEOUT, 60000); // ms
         clientConfig.property(ClientProperties.FOLLOW_REDIRECTS, false);
+        clientConfig.register(MultiPartFeature.class);
 
         Client client = ClientBuilder.newClient(clientConfig);
         client.register(JacksonFeature.class);
