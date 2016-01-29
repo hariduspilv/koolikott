@@ -6,8 +6,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.Table;
-import javax.persistence.UniqueConstraint;
 
 import org.hibernate.annotations.Type;
 import org.joda.time.DateTime;
@@ -19,7 +17,6 @@ import ee.hm.dop.rest.jackson.map.DateTimeDeserializer;
 import ee.hm.dop.rest.jackson.map.DateTimeSerializer;
 
 @Entity
-@Table(uniqueConstraints = { @UniqueConstraint(columnNames = { "material" }) })
 public class Recommendation {
 
     @Id
@@ -29,14 +26,6 @@ public class Recommendation {
     @ManyToOne
     @JoinColumn(name = "creator", nullable = false)
     private User creator;
-
-    @ManyToOne
-    @JoinColumn(name = "material")
-    private Material material;
-
-    @ManyToOne
-    @JoinColumn(name = "portfolio")
-    private Portfolio portfolio;
 
     @Column(nullable = false)
     @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
@@ -58,22 +47,6 @@ public class Recommendation {
 
     public void setCreator(User creator) {
         this.creator = creator;
-    }
-
-    public Material getMaterial() {
-        return material;
-    }
-
-    public void setMaterial(Material material) {
-        this.material = material;
-    }
-
-    public Portfolio getPortfolio() {
-        return portfolio;
-    }
-
-    public void setPortfolio(Portfolio portfolio) {
-        this.portfolio = portfolio;
     }
 
     public DateTime getAdded() {

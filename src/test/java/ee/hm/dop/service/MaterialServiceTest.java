@@ -2,14 +2,18 @@ package ee.hm.dop.service;
 
 import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.expect;
+import static org.easymock.EasyMock.newCapture;
 import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.fail;
 
 import java.util.Arrays;
 
+import org.easymock.Capture;
+import org.easymock.EasyMock;
 import org.easymock.EasyMockRunner;
 import org.easymock.Mock;
 import org.easymock.TestSubject;
@@ -19,6 +23,7 @@ import org.junit.runner.RunWith;
 
 import ee.hm.dop.dao.MaterialDAO;
 import ee.hm.dop.model.Material;
+import ee.hm.dop.model.Recommendation;
 import ee.hm.dop.model.Repository;
 import ee.hm.dop.model.Role;
 import ee.hm.dop.model.User;
@@ -31,7 +36,7 @@ public class MaterialServiceTest {
     private MaterialService materialService = new MaterialService();
 
     @Mock
-    private MaterialDAO materialDao;
+    private MaterialDAO materialDAO;
 
     @Mock
     private SearchEngineService searchEngineService;
@@ -41,7 +46,7 @@ public class MaterialServiceTest {
         Material material = new Material();
         material.setId(123L);
 
-        replay(materialDao);
+        replay(materialDAO);
 
         try {
             materialService.createMaterial(material, null, false);
@@ -50,7 +55,7 @@ public class MaterialServiceTest {
             assertEquals("Error creating Material, material already exists.", e.getMessage());
         }
 
-        verify(materialDao);
+        verify(materialDAO);
     }
 
     @Test
@@ -77,14 +82,14 @@ public class MaterialServiceTest {
         educationalContext.setName(MaterialService.BASICEDUCATION);
         expect(material.getTaxons()).andReturn(Arrays.asList(educationalContext)).times(3);
 
-        expect(materialDao.findById(materialId)).andReturn(original);
-        expect(materialDao.update(material)).andReturn(material);
+        expect(materialDAO.findById(materialId)).andReturn(original);
+        expect(materialDAO.update(material)).andReturn(material);
 
-        replay(materialDao, material, searchEngineService);
+        replay(materialDAO, material, searchEngineService);
 
         materialService.update(material);
 
-        verify(materialDao, material, searchEngineService);
+        verify(materialDAO, material, searchEngineService);
     }
 
     @Test
@@ -92,9 +97,9 @@ public class MaterialServiceTest {
         long materialId = 1;
         Material material = createMock(Material.class);
         expect(material.getId()).andReturn(materialId);
-        expect(materialDao.findById(materialId)).andReturn(null);
+        expect(materialDAO.findById(materialId)).andReturn(null);
 
-        replay(materialDao, material);
+        replay(materialDAO, material);
 
         try {
             materialService.update(material);
@@ -103,7 +108,7 @@ public class MaterialServiceTest {
             assertEquals("Error updating Material: material does not exist.", ex.getMessage());
         }
 
-        verify(materialDao, material);
+        verify(materialDAO, material);
     }
 
     @Test
@@ -115,9 +120,9 @@ public class MaterialServiceTest {
         expect(material.getId()).andReturn(materialId);
         expect(material.getRepository()).andReturn(new Repository()).times(3);
 
-        expect(materialDao.findById(materialId)).andReturn(original);
+        expect(materialDAO.findById(materialId)).andReturn(original);
 
-        replay(materialDao, material);
+        replay(materialDAO, material);
 
         try {
             materialService.update(material);
@@ -126,7 +131,7 @@ public class MaterialServiceTest {
             assertEquals("Error updating Material: Not allowed to modify repository.", ex.getMessage());
         }
 
-        verify(materialDao, material);
+        verify(materialDAO, material);
     }
 
     @Test
@@ -143,9 +148,9 @@ public class MaterialServiceTest {
         newRepository.setBaseURL("some.com");
         expect(material.getRepository()).andReturn(newRepository).times(3);
 
-        expect(materialDao.findById(materialId)).andReturn(original);
+        expect(materialDAO.findById(materialId)).andReturn(original);
 
-        replay(materialDao, material);
+        replay(materialDAO, material);
 
         try {
             materialService.update(material);
@@ -154,19 +159,19 @@ public class MaterialServiceTest {
             assertEquals("Error updating Material: Not allowed to modify repository.", ex.getMessage());
         }
 
-        verify(materialDao, material);
+        verify(materialDAO, material);
     }
 
     @Test
     public void delete() {
         Material material = createMock(Material.class);
-        materialDao.delete(material);
+        materialDAO.delete(material);
 
-        replay(materialDao, material);
+        replay(materialDAO, material);
 
         materialService.delete(material);
 
-        verify(materialDao, material);
+        verify(materialDAO, material);
     }
 
     @Test
@@ -190,10 +195,10 @@ public class MaterialServiceTest {
         User user = createMock(User.class);
         Material material = createMock(Material.class);
         expect(material.getId()).andReturn(1L);
-        expect(materialDao.findById(1L)).andReturn(material);
+        expect(materialDAO.findById(1L)).andReturn(material);
         expect(material.getRepository()).andReturn(new Repository());
 
-        replay(material, user, materialDao);
+        replay(material, user, materialDAO);
 
         try {
             materialService.updateByUser(material, user);
@@ -202,7 +207,7 @@ public class MaterialServiceTest {
             assertEquals("Can't update external repository material", ex.getMessage());
         }
 
-        verify(material, user, materialDao);
+        verify(material, user, materialDAO);
     }
 
     @Test
@@ -212,16 +217,16 @@ public class MaterialServiceTest {
         material.setId(1L);
         material.setRepository(null);
 
-        expect(materialDao.findById(material.getId())).andReturn(material).anyTimes();
+        expect(materialDAO.findById(material.getId())).andReturn(material).anyTimes();
         expect(user.getRole()).andReturn(Role.ADMIN).anyTimes();
-        expect(materialDao.update(material)).andReturn(new Material());
+        expect(materialDAO.update(material)).andReturn(new Material());
 
-        replay(user, materialDao);
+        replay(user, materialDAO);
 
         Material returned = materialService.updateByUser(material, user);
 
         assertNotNull(returned);
-        verify(user, materialDao);
+        verify(user, materialDAO);
     }
 
     @Test
@@ -232,16 +237,90 @@ public class MaterialServiceTest {
         material.setRepository(null);
         material.setCreator(user);
 
-        expect(materialDao.findById(material.getId())).andReturn(material).anyTimes();
+        expect(materialDAO.findById(material.getId())).andReturn(material).anyTimes();
         expect(user.getRole()).andReturn(Role.PUBLISHER).anyTimes();
-        expect(materialDao.update(material)).andReturn(new Material());
+        expect(materialDAO.update(material)).andReturn(new Material());
         expect(user.getUsername()).andReturn("username").anyTimes();
 
-        replay(user, materialDao);
+        replay(user, materialDAO);
 
         Material returned = materialService.updateByUser(material, user);
 
         assertNotNull(returned);
-        verify(user, materialDao);
+        verify(user, materialDAO);
+    }
+
+    @Test
+    public void addRecommendation() {
+        Capture<Material> capturedMaterial = newCapture();
+
+        User user = createMock(User.class);
+        Material material = new Material();
+        material.setId(1L);
+        material.setRepository(null);
+
+        expect(materialDAO.findById(material.getId())).andReturn(material).anyTimes();
+        expect(user.getRole()).andReturn(Role.ADMIN).anyTimes();
+        expect(materialDAO.update(EasyMock.capture(capturedMaterial))).andReturn(new Material());
+        searchEngineService.updateIndex();
+
+        replayAll(user);
+
+        Recommendation returnedRecommendation = materialService.addRecommendation(material, user);
+
+        verifyAll(user);
+
+        Recommendation recommendation = capturedMaterial.getValue().getRecommendation();
+        assertNotNull(recommendation);
+        assertEquals(user, recommendation.getCreator());
+        assertEquals(recommendation, returnedRecommendation);
+    }
+
+    @Test
+    public void removeRecommendation() {
+        Capture<Material> capturedMaterial = newCapture();
+
+        Recommendation recommendation = new Recommendation();
+        recommendation.setCreator(new User());
+        recommendation.setAdded(DateTime.now());
+
+        User user = createMock(User.class);
+        Material material = new Material();
+        material.setId(1L);
+        material.setRepository(null);
+        material.setRecommendation(recommendation);
+
+        expect(materialDAO.findById(material.getId())).andReturn(material).anyTimes();
+        expect(user.getRole()).andReturn(Role.ADMIN).anyTimes();
+        expect(materialDAO.update(EasyMock.capture(capturedMaterial))).andReturn(new Material());
+        searchEngineService.updateIndex();
+
+        replayAll(user);
+
+        materialService.removeRecommendation(material, user);
+
+        assertNull(capturedMaterial.getValue().getRecommendation());
+
+        verifyAll(user);
+    }
+
+    private void replayAll(Object... mocks) {
+        replay(materialDAO, searchEngineService);
+
+        if (mocks != null) {
+            for (Object object : mocks) {
+                replay(object);
+            }
+        }
+    }
+
+    private void verifyAll(Object... mocks) {
+        verify(materialDAO, searchEngineService);
+
+        if (mocks != null) {
+            for (Object object : mocks) {
+                verify(object);
+            }
+        }
     }
 }

@@ -20,6 +20,7 @@ import ee.hm.dop.model.Chapter;
 import ee.hm.dop.model.Comment;
 import ee.hm.dop.model.Material;
 import ee.hm.dop.model.Portfolio;
+import ee.hm.dop.model.Recommendation;
 import ee.hm.dop.model.TargetGroup;
 import ee.hm.dop.model.User;
 import ee.hm.dop.model.taxon.Subject;
@@ -191,6 +192,10 @@ public class PortfolioDAOTest extends DatabaseTestBase {
         assertEquals("Lifelong_learning_and_career_planning", portfolio.getCrossCurricularThemes().get(0).getName());
         assertEquals("Cultural_and_value_competence", portfolio.getKeyCompetences().get(0).getName());
         assertFalse(portfolio.isDeleted());
+
+        Recommendation recommendation = portfolio.getRecommendation();
+        assertNotNull(recommendation);
+        assertEquals(Long.valueOf(3), recommendation.getId());
     }
 
     @Test

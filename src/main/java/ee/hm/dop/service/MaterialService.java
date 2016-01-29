@@ -16,7 +16,6 @@ import org.slf4j.LoggerFactory;
 import ee.hm.dop.dao.BrokenContentDAO;
 import ee.hm.dop.dao.ImproperContentDAO;
 import ee.hm.dop.dao.MaterialDAO;
-import ee.hm.dop.dao.RecommendationDAO;
 import ee.hm.dop.dao.UserLikeDAO;
 import ee.hm.dop.model.Author;
 import ee.hm.dop.model.BrokenContent;
@@ -45,9 +44,6 @@ public class MaterialService {
 
     @Inject
     private UserLikeDAO userLikeDAO;
-
-    @Inject
-    private RecommendationDAO recommendationeDAO;
 
     @Inject
     private AuthorService authorService;
@@ -211,38 +207,29 @@ public class MaterialService {
     }
 
     public Recommendation addRecommendation(Material material, User loggedInUser) {
-        if (!isUserAdmin(loggedInUser)) {
-            throw new RuntimeException("Logged in user must be an administrator.");
-        }
         if (material == null || material.getId() == null) {
-            throw new RuntimeException("Material not found");
-        }
-        Material originalMaterial = materialDao.findById(material.getId());
-        if (originalMaterial == null) {
             throw new RuntimeException("Material not found");
         }
 
         Recommendation recommendation = new Recommendation();
-        recommendation.setMaterial(originalMaterial);
         recommendation.setCreator(loggedInUser);
         recommendation.setAdded(DateTime.now());
 
-        return recommendationeDAO.update(recommendation);
+        material.setRecommendation(recommendation);
+
+        material = updateByUser(material, loggedInUser);
+
+        return material.getRecommendation();
     }
 
     public void removeRecommendation(Material material, User loggedInUser) {
-        if (!isUserAdmin(loggedInUser)) {
-            throw new RuntimeException("Logged in user must be an administrator.");
-        }
         if (material == null || material.getId() == null) {
             throw new RuntimeException("Material not found");
         }
-        Material originalMaterial = materialDao.findById(material.getId());
-        if (originalMaterial == null) {
-            throw new RuntimeException("Material not found");
-        }
 
-        recommendationeDAO.deleteMaterialRecommendation(originalMaterial);
+        material.setRecommendation(null);
+
+        updateByUser(material, loggedInUser);
     }
 
     public void removeUserLike(Material material, User loggedInUser) {
@@ -270,15 +257,34 @@ public class MaterialService {
         return userLikeDAO.findMaterialUserLike(originalMaterial, loggedInUser);
     }
 
+    public String getMaterialPicture(Material material) {
+        byte[] picture = materialDao.findPictureByMaterial(material);
+        return Base64.encodeBase64String(picture);
+    }
+
+    public List<Material> getByCreator(User creator) {
+        return materialDao.findByCreator(creator);
+    }
+
+    public void delete(Material material) {
+        materialDao.delete(material);
+    }
+
     public Material updateByUser(Material material, User user) {
         Material returned = null;
+
         if (material == null) {
             throw new IllegalArgumentException("Material id parameter is mandatory");
         }
+
         Material originalMaterial = materialDao.findById(material.getId());
 
         if (originalMaterial != null && originalMaterial.getRepository() != null) {
             throw new IllegalArgumentException("Can't update external repository material");
+        }
+
+        if (!isUserAdmin(user)) {
+            material.setRecommendation(originalMaterial.getRecommendation());
         }
 
         if (isUserAdmin(user) || isThisPublisherMaterial(user, originalMaterial)) {
@@ -323,15 +329,6 @@ public class MaterialService {
         }
     }
 
-    public String getMaterialPicture(Material material) {
-        byte[] picture = materialDao.findPictureByMaterial(material);
-        return Base64.encodeBase64String(picture);
-    }
-
-    public List<Material> getByCreator(User creator) {
-        return materialDao.findByCreator(creator);
-    }
-
     private Material createOrUpdate(Material material) {
         Long materialId = material.getId();
         if (materialId != null) {
@@ -344,10 +341,6 @@ public class MaterialService {
         setPublishers(material);
         material = applyRestrictions(material);
         return materialDao.update(material);
-    }
-
-    public void delete(Material material) {
-        materialDao.delete(material);
     }
 
     private Material applyRestrictions(Material material) {

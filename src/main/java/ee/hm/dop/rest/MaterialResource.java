@@ -21,6 +21,7 @@ import javax.ws.rs.core.Response;
 import ee.hm.dop.model.BrokenContent;
 import ee.hm.dop.model.ImproperContent;
 import ee.hm.dop.model.Material;
+import ee.hm.dop.model.Recommendation;
 import ee.hm.dop.model.User;
 import ee.hm.dop.model.UserLike;
 import ee.hm.dop.service.MaterialService;
@@ -84,8 +85,8 @@ public class MaterialResource extends BaseResource {
     @POST
     @Path("recommend")
     @RolesAllowed({ "ADMIN" })
-    public void recommendMaterial(Material material) {
-        materialService.addRecommendation(material, getLoggedInUser());
+    public Recommendation recommendMaterial(Material material) {
+        return materialService.addRecommendation(material, getLoggedInUser());
     }
 
     @POST

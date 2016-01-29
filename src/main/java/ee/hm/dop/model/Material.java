@@ -158,8 +158,9 @@ public class Material implements Searchable {
     @Formula(value = "(SELECT COUNT(*) FROM UserLike ul WHERE ul.material = id AND ul.isLiked = 0)")
     private int dislikes;
 
-    @Formula(value = "(SELECT COUNT(*) > 0 FROM Recommendation ul WHERE ul.material = id)")
-    private boolean recommended;
+    @OneToOne(cascade = { PERSIST, MERGE })
+    @JoinColumn(name = "recommendation")
+    private Recommendation recommendation;
 
     @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
@@ -385,12 +386,12 @@ public class Material implements Searchable {
         this.dislikes = dislikes;
     }
 
-    public boolean isRecommended() {
-        return recommended;
+    public Recommendation getRecommendation() {
+        return recommendation;
     }
 
-    public void setRecommended(boolean recommended) {
-        this.recommended = recommended;
+    public void setRecommendation(Recommendation recommendation) {
+        this.recommendation = recommendation;
     }
 
     public String getRepositoryIdentifier() {

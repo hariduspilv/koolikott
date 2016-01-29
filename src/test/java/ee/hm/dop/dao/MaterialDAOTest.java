@@ -23,6 +23,7 @@ import ee.hm.dop.common.test.DatabaseTestBase;
 import ee.hm.dop.model.Language;
 import ee.hm.dop.model.LicenseType;
 import ee.hm.dop.model.Material;
+import ee.hm.dop.model.Recommendation;
 import ee.hm.dop.model.Repository;
 import ee.hm.dop.model.ResourceType;
 import ee.hm.dop.model.TargetGroup;
@@ -594,5 +595,9 @@ public class MaterialDAOTest extends DatabaseTestBase {
         assertTrue(material.isSpecialEducation());
         assertEquals("Lifelong_learning_and_career_planning", material.getCrossCurricularThemes().get(0).getName());
         assertEquals("Cultural_and_value_competence", material.getKeyCompetences().get(0).getName());
+
+        Recommendation recommendation = material.getRecommendation();
+        assertNotNull(recommendation);
+        assertEquals(Long.valueOf(1L), recommendation.getId());
     }
 }

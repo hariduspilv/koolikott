@@ -20,6 +20,7 @@ import javax.ws.rs.core.Response;
 
 import ee.hm.dop.model.ImproperContent;
 import ee.hm.dop.model.Portfolio;
+import ee.hm.dop.model.Recommendation;
 import ee.hm.dop.model.User;
 import ee.hm.dop.model.UserLike;
 import ee.hm.dop.service.PortfolioService;
@@ -101,8 +102,8 @@ public class PortfolioResource extends BaseResource {
     @POST
     @Path("recommend")
     @RolesAllowed({ "ADMIN" })
-    public void recommendPortfolio(Portfolio portfolio) {
-        portfolioService.addRecommendation(portfolio, getLoggedInUser());
+    public Recommendation recommendPortfolio(Portfolio portfolio) {
+        return portfolioService.addRecommendation(portfolio, getLoggedInUser());
     }
 
     @POST
