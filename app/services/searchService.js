@@ -12,6 +12,8 @@ define(['angularAMD'], function(angularAMD) {
         var issuedFromURL = "&issuedFrom=";
         var crossCurricularThemeURL = "&crossCurricularTheme=";
         var keyCompetenceURL = "&keyCompetence="
+        var sortURL = "&sort=";
+        var sortDirectionURL = "&sortDirection=";
 
         var searchQuery = "";
         var searchTaxon = "";
@@ -24,6 +26,8 @@ define(['angularAMD'], function(angularAMD) {
         var searchIssuedFrom = "";
         var searchCrossCurricularTheme = "";
         var searchKeyCompetence = "";
+        var searchSort = "";
+        var searchSortDirection = "";
 
         function escapeQuery(query) {
             //replace backslashes
@@ -126,6 +130,14 @@ define(['angularAMD'], function(angularAMD) {
                 searchKeyCompetence = keyCompetence;
             },
 
+            setSort: function(sort) {
+                searchSort = sort;
+            },
+
+            setSortDirection: function(sortDirection) {
+                searchSortDirection = sortDirection;
+            },
+
             getURL: function() {
                 var searchURL;
                 if (searchQuery) {
@@ -166,6 +178,9 @@ define(['angularAMD'], function(angularAMD) {
                 if (searchKeyCompetence) {
                     searchURL += keyCompetenceURL + searchKeyCompetence;
                 }
+                if (searchSort && searchSortDirection) {
+                    searchURL += sortURL + searchSort + sortDirectionURL + searchSortDirection;
+                }
 
                 return searchURL;
             },
@@ -175,7 +190,7 @@ define(['angularAMD'], function(angularAMD) {
                 if (searchObject.q || searchObject.taxon || searchObject.paid === false ||
                     (searchObject.type && this.isValidType(searchObject.type)) || searchObject.language || searchObject.targetGroup ||
                     searchObject.resourceType || searchObject.specialEducation || searchObject.issuedFrom || searchObject.crossCurricularTheme ||
-                    searchObject.keyCompetence) {
+                    searchObject.keyCompetence || (searchObject.sort && searchObject.sortDirection)) {
                     return true;
                 } else {
                     return false;
@@ -303,6 +318,28 @@ define(['angularAMD'], function(angularAMD) {
                 return searchKeyCompetence;
             },
 
+            getSort: function() {
+                if (searchSort === "") {
+                    var searchObject = $location.search();
+                    if (searchObject.sort) {
+                        return searchObject.sort;
+                    }
+                }
+
+                return searchSort;
+            },
+
+            getSortDirection: function() {
+                if (searchSortDirection === "") {
+                    var searchObject = $location.search();
+                    if (searchObject.sortDirection) {
+                        return searchObject.sortDirection;
+                    }
+                }
+
+                return searchSortDirection;
+            },
+
             clearFieldsNotInSimpleSearch: function() {
                 searchTaxon = '';
                 searchPaid = '';
@@ -314,6 +351,8 @@ define(['angularAMD'], function(angularAMD) {
                 searchIssuedFrom = '';
                 searchCrossCurricularTheme = '';
                 searchKeyCompetence = '';
+                searchSort = '';
+                searchSortDirection = '';
             },
 
             isValidType: function(type) {

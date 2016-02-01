@@ -89,6 +89,11 @@ define([
                 params.keyCompetence = searchService.getKeyCompetence();
             }
 
+            if (searchService.getSort() && searchService.getSortDirection()) {
+                params.sort = searchService.getSort();
+                params.sortDirection = searchService.getSortDirection();
+            }
+
             serverCallService.makeGet("rest/search", params, searchSuccess, searchFail);
         }
 
