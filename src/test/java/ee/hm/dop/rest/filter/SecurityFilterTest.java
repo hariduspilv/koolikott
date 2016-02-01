@@ -24,6 +24,7 @@ import javax.ws.rs.core.UriInfo;
 import org.easymock.Capture;
 import org.easymock.EasyMock;
 import org.easymock.EasyMockRunner;
+import org.joda.time.DateTime;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -31,6 +32,7 @@ import org.junit.runner.RunWith;
 import ee.hm.dop.model.AuthenticatedUser;
 import ee.hm.dop.model.User;
 import ee.hm.dop.service.AuthenticatedUserService;
+import ee.hm.dop.service.LogoutService;
 
 @RunWith(EasyMockRunner.class)
 public class SecurityFilterTest {
@@ -45,12 +47,14 @@ public class SecurityFilterTest {
     private Capture<SecurityContext> capturedSecurityContext;
     private Capture<Response> capturedResponse;
     private AuthenticatedUserService authenticatedUserService;
+    private LogoutService logoutService;
 
     @Before
     public void setup() throws NoSuchMethodException {
         request = createMock(HttpServletRequest.class);
         session = createMock(HttpSession.class);
         authenticatedUserService = createMock(AuthenticatedUserService.class);
+        logoutService = createMock(LogoutService.class);
 
         context = createMock(ContainerRequestContext.class);
         capturedSecurityContext = newCapture();
@@ -177,10 +181,33 @@ public class SecurityFilterTest {
 
     }
 
+    @Test
+    public void filterSessionTimeout() throws IOException, URISyntaxException {
+        String token = "token";
+        AuthenticatedUser authenticatedUser = createMock(AuthenticatedUser.class);
+        User user = createMock(User.class);
+        context.abortWith(EasyMock.capture(capturedResponse));
+
+        expect(request.getHeader("Authentication")).andReturn(token);
+        expect(authenticatedUserService.getAuthenticatedUserByToken(token)).andReturn(authenticatedUser);
+        expect(authenticatedUser.getUser()).andReturn(user);
+        expect(authenticatedUser.getLoginDate()).andReturn(DateTime.now().minusDays(1).minusSeconds(1));
+        expect(request.getHeader("Username")).andReturn("realUsername");
+        expect(user.getUsername()).andReturn("realUsername");
+
+        replay(uriInfo, request, session, context, authenticatedUserService, authenticatedUser, user);
+        filter.filter(context);
+        assertEquals(HTTP_AUTHENTICATION_TIMEOUT, capturedResponse.getValue().getStatus());
+
+        verify(uriInfo, request, session, context, authenticatedUserService, authenticatedUser, user);
+
+    }
+
     private void setExpects(String token, AuthenticatedUser authenticatedUser, User user, String returnedUser) {
         expect(request.getHeader("Authentication")).andReturn(token);
         expect(authenticatedUserService.getAuthenticatedUserByToken(token)).andReturn(authenticatedUser);
         expect(authenticatedUser.getUser()).andReturn(user);
+        expect(authenticatedUser.getLoginDate()).andReturn(DateTime.now().minusHours(2)).times(0, 1);
         expect(request.getHeader("Username")).andReturn(returnedUser);
         expect(user.getUsername()).andReturn("realUsername");
     }
@@ -194,6 +221,11 @@ public class SecurityFilterTest {
         @Override
         protected AuthenticatedUserService newAuthenticatedUserService() {
             return authenticatedUserService;
+        }
+
+        @Override
+        protected LogoutService newLogoutService() {
+            return logoutService;
         }
     }
 }

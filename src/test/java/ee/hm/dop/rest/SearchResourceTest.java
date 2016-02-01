@@ -251,6 +251,20 @@ public class SearchResourceTest extends ResourceIntegrationTestBase {
         assertEquals(start, searchResult.getStart());
     }
 
+    @Test
+    public void searchWithSorting() {
+        String query = "tuesday";
+        SearchFilter searchFilter = new SearchFilter();
+        searchFilter.setSort("somefield");
+        searchFilter.setSortDirection("desc");
+        int start = 0;
+        SearchResult searchResult = doGet(buildQueryURL(query, start, searchFilter), SearchResult.class);
+
+        assertMaterialIdentifiers(searchResult.getItems(), 2L, 6L);
+        assertEquals(2, searchResult.getTotalResults());
+        assertEquals(start, searchResult.getStart());
+    }
+
     private String buildQueryURL(String query, int start, SearchFilter searchFilter) {
         String queryURL = "search?";
         if (query != null) {
@@ -273,6 +287,12 @@ public class SearchResourceTest extends ResourceIntegrationTestBase {
         }
         if (searchFilter.getIssuedFrom() != null) {
             queryURL += "&issuedFrom=" + searchFilter.getIssuedFrom();
+        }
+        if (searchFilter.getSort() != null) {
+            queryURL += "&sort=" + searchFilter.getSort();
+        }
+        if (searchFilter.getSortDirection() != null) {
+            queryURL += "&sortDirection=" + searchFilter.getSortDirection();
         }
         return queryURL;
     }

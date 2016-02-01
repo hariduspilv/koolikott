@@ -1,6 +1,7 @@
 package ee.hm.dop.model;
 
 import static javax.persistence.CascadeType.ALL;
+import static org.joda.time.DateTime.now;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -9,6 +10,9 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
+
+import org.hibernate.annotations.Type;
+import org.joda.time.DateTime;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -34,6 +38,11 @@ public class AuthenticatedUser {
     @OneToOne(cascade = ALL)
     @JoinColumn(name = "person")
     private Person person;
+
+    @JsonIgnore
+    @Column(nullable = false)
+    @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
+    private DateTime loginDate = now();
 
     public Long getId() {
         return id;
@@ -73,5 +82,13 @@ public class AuthenticatedUser {
 
     public void setPerson(Person person) {
         this.person = person;
+    }
+
+    public DateTime getLoginDate() {
+        return loginDate;
+    }
+
+    public void setLoginDate(DateTime loginDate) {
+        this.loginDate = loginDate;
     }
 }

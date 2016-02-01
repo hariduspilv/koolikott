@@ -266,6 +266,7 @@ CREATE TABLE AuthenticatedUser (
   affiliations       VARCHAR(255),
   scopedAffiliations VARCHAR(255),
   person             BIGINT,
+  loginDate          TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 
   FOREIGN KEY (user_id)
   REFERENCES User (id)

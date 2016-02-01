@@ -14,8 +14,11 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 import javax.ws.rs.ext.Provider;
 
+import org.joda.time.DateTime;
+
 import ee.hm.dop.model.AuthenticatedUser;
 import ee.hm.dop.service.AuthenticatedUserService;
+import ee.hm.dop.service.LogoutService;
 
 @Provider
 @Priority(Priorities.AUTHENTICATION)
@@ -39,14 +42,27 @@ public class SecurityFilter implements ContainerRequestFilter {
             AuthenticatedUserService authenticatedUserService = newAuthenticatedUserService();
             AuthenticatedUser authenticatedUser = authenticatedUserService.getAuthenticatedUserByToken(token);
             if (authenticatedUser != null && isCorrectUser(authenticatedUser)) {
-                DopPrincipal principal = new DopPrincipal(authenticatedUser);
-                DopSecurityContext securityContext = new DopSecurityContext(principal, uriInfo);
-                requestContext.setSecurityContext(securityContext);
+                if (isSessionValid(authenticatedUser)) {
+                    DopPrincipal principal = new DopPrincipal(authenticatedUser);
+                    DopSecurityContext securityContext = new DopSecurityContext(principal, uriInfo);
+                    requestContext.setSecurityContext(securityContext);
+                } else {
+                    newLogoutService().logout(authenticatedUser);
+                    abortWithAuthenticationTimeout(requestContext);
+                }
             } else {
-                requestContext.abortWith(Response.status(HTTP_AUTHENTICATION_TIMEOUT).build());
+                abortWithAuthenticationTimeout(requestContext);
             }
         }
+    }
 
+    private void abortWithAuthenticationTimeout(ContainerRequestContext requestContext) {
+        requestContext.abortWith(Response.status(HTTP_AUTHENTICATION_TIMEOUT).build());
+    }
+
+    private boolean isSessionValid(AuthenticatedUser authenticatedUser) {
+        DateTime yesterday = DateTime.now().minusDays(1);
+        return yesterday.isBefore(authenticatedUser.getLoginDate());
     }
 
     protected AuthenticatedUserService newAuthenticatedUserService() {
@@ -57,4 +73,7 @@ public class SecurityFilter implements ContainerRequestFilter {
         return authenticatedUser.getUser().getUsername().equals(request.getHeader("Username"));
     }
 
+    protected LogoutService newLogoutService() {
+        return getInjector().getInstance(LogoutService.class);
+    }
 }

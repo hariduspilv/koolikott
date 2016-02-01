@@ -57,7 +57,9 @@ public class SearchResource extends BaseResource {
             @QueryParam("specialEducation") Boolean isSpecialEducation, //
             @QueryParam("issuedFrom") Integer issuedFrom, //
             @QueryParam("crossCurricularTheme") Long crossCurricularThemeId, //
-            @QueryParam("keyCompetence") Long keyCompetenceId) {
+            @QueryParam("keyCompetence") Long keyCompetenceId, //
+            @QueryParam("sort") String sort, //
+            @QueryParam("sortDirection") String sortDirection) {
 
         Taxon taxon = taxonService.getTaxonById(taxonId);
         Language language = languageService.getLanguage(languageCode);
@@ -89,6 +91,8 @@ public class SearchResource extends BaseResource {
         searchFilter.setIssuedFrom(issuedFrom);
         searchFilter.setCrossCurricularTheme(crossCurricularTheme);
         searchFilter.setKeyCompetence(keyCompetence);
+        searchFilter.setSort(sort);
+        searchFilter.setSortDirection(sortDirection);
 
         return searchService.search(query, start, searchFilter, getLoggedInUser());
     }

@@ -67,7 +67,7 @@ public class SearchServiceTest {
         List<Searchable> searchables = Arrays.asList(createMaterial(7L), createMaterial(1L), createPortfolio(4L),
                 createPortfolio(2L));
 
-        testSearch(query, tokenizedQuery, searchables, start, searchFilter);
+        testSearch(query, tokenizedQuery, null, searchables, start, searchFilter);
     }
 
     // To test asynchronous problems that may occur when search returns deleted
@@ -104,7 +104,7 @@ public class SearchServiceTest {
         searchables.remove(material1);
         searchables.remove(portfolio2);
 
-        expect(searchEngineService.search(tokenizedQuery, start)).andReturn(searchResponse);
+        expect(searchEngineService.search(tokenizedQuery, start, null)).andReturn(searchResponse);
         expect(materialDAO.findAllById(materialIdentifiers)).andReturn(materials);
         expect(portfolioDAO.findAllById(portfoliosIdentifiers)).andReturn(portfolios);
 
@@ -127,7 +127,7 @@ public class SearchServiceTest {
 
         SearchResponse searchResponse = createSearchResponseWithDocuments(new ArrayList<>(), 0, 0);
 
-        expect(searchEngineService.search(tokenizedQuery, 0)).andReturn(searchResponse);
+        expect(searchEngineService.search(tokenizedQuery, 0, null)).andReturn(searchResponse);
 
         replayAll();
 
@@ -145,7 +145,7 @@ public class SearchServiceTest {
         long start = 0;
         SearchResponse searchResponse = new SearchResponse();
 
-        expect(searchEngineService.search(tokenizedQuery, start)).andReturn(searchResponse);
+        expect(searchEngineService.search(tokenizedQuery, start, null)).andReturn(searchResponse);
 
         replayAll();
 
@@ -161,7 +161,7 @@ public class SearchServiceTest {
         long start = 0;
         SearchResponse searchResponse = new SearchResponse();
 
-        expect(searchEngineService.search(tokenizedQuery, start)).andReturn(searchResponse);
+        expect(searchEngineService.search(tokenizedQuery, start, null)).andReturn(searchResponse);
 
         replayAll();
 
@@ -177,7 +177,7 @@ public class SearchServiceTest {
         long start = 0;
         SearchResponse searchResponse = new SearchResponse();
 
-        expect(searchEngineService.search(tokenizedQuery, start)).andReturn(searchResponse);
+        expect(searchEngineService.search(tokenizedQuery, start, null)).andReturn(searchResponse);
 
         replayAll();
 
@@ -219,7 +219,7 @@ public class SearchServiceTest {
 
         List<Searchable> searchables = Arrays.asList(createMaterial(3L), createMaterial(4L));
 
-        testSearch(query, tokenizedQuery, searchables, start, searchFilter);
+        testSearch(query, tokenizedQuery, null, searchables, start, searchFilter);
     }
 
     @Test
@@ -232,7 +232,7 @@ public class SearchServiceTest {
 
         List<Searchable> searchables = Arrays.asList(createMaterial(9L), createMaterial(2L), createPortfolio(2L));
 
-        testSearch(query, tokenizedQuery, searchables, start, searchFilter);
+        testSearch(query, tokenizedQuery, null, searchables, start, searchFilter);
     }
 
     @Test
@@ -268,7 +268,7 @@ public class SearchServiceTest {
 
         List<Searchable> searchables = Arrays.asList(createMaterial(3L), createMaterial(4L));
 
-        testSearch(query, tokenizedQuery, searchables, start, searchFilter);
+        testSearch(query, tokenizedQuery, null, searchables, start, searchFilter);
     }
 
     @Test
@@ -280,7 +280,7 @@ public class SearchServiceTest {
 
         List<Searchable> searchables = Arrays.asList(createMaterial(9L), createMaterial(2L), createPortfolio(2L));
 
-        testSearch(query, tokenizedQuery, searchables, start, searchFilter);
+        testSearch(query, tokenizedQuery, null, searchables, start, searchFilter);
     }
 
     @Test
@@ -297,7 +297,7 @@ public class SearchServiceTest {
 
         List<Searchable> searchables = Arrays.asList(createMaterial(9L), createMaterial(2L), createPortfolio(2L));
 
-        testSearch(query, tokenizedQuery, searchables, start, searchFilter);
+        testSearch(query, tokenizedQuery, null, searchables, start, searchFilter);
     }
 
     @Test
@@ -321,7 +321,7 @@ public class SearchServiceTest {
 
         List<Searchable> searchables = Arrays.asList(createMaterial(9L), createMaterial(2L), createPortfolio(2L));
 
-        testSearch(query, tokenizedQuery, searchables, start, searchFilter);
+        testSearch(query, tokenizedQuery, null, searchables, start, searchFilter);
     }
 
     @Test
@@ -351,7 +351,7 @@ public class SearchServiceTest {
 
         List<Searchable> searchables = Arrays.asList(createMaterial(9L), createMaterial(2L), createPortfolio(2L));
 
-        testSearch(query, tokenizedQuery, searchables, start, searchFilter);
+        testSearch(query, tokenizedQuery, null, searchables, start, searchFilter);
     }
 
     @Test
@@ -381,7 +381,7 @@ public class SearchServiceTest {
 
         List<Searchable> searchables = Arrays.asList(createMaterial(9L), createMaterial(2L), createPortfolio(2L));
 
-        testSearch(query, tokenizedQuery, searchables, start, searchFilter);
+        testSearch(query, tokenizedQuery, null, searchables, start, searchFilter);
     }
 
     @Test
@@ -416,7 +416,7 @@ public class SearchServiceTest {
 
         List<Searchable> searchables = Arrays.asList(createMaterial(9L), createMaterial(2L), createPortfolio(2L));
 
-        testSearch(query, tokenizedQuery, searchables, start, searchFilter);
+        testSearch(query, tokenizedQuery, null, searchables, start, searchFilter);
     }
 
     @Test
@@ -445,7 +445,7 @@ public class SearchServiceTest {
 
         List<Searchable> searchables = Arrays.asList(createMaterial(9L), createMaterial(2L), createPortfolio(2L));
 
-        testSearch(query, tokenizedQuery, searchables, start, searchFilter);
+        testSearch(query, tokenizedQuery, null, searchables, start, searchFilter);
     }
 
     @Test
@@ -479,7 +479,7 @@ public class SearchServiceTest {
 
         List<Searchable> searchables = Arrays.asList(createMaterial(9L), createMaterial(2L), createPortfolio(2L));
 
-        testSearch(query, tokenizedQuery, searchables, start, searchFilter);
+        testSearch(query, tokenizedQuery, null, searchables, start, searchFilter);
     }
 
     @Test
@@ -520,7 +520,7 @@ public class SearchServiceTest {
 
         List<Searchable> searchables = Arrays.asList(createMaterial(9L), createMaterial(2L), createPortfolio(2L));
 
-        testSearch(query, tokenizedQuery, searchables, start, searchFilter);
+        testSearch(query, tokenizedQuery, null, searchables, start, searchFilter);
     }
 
     @Test
@@ -554,7 +554,7 @@ public class SearchServiceTest {
 
         List<Searchable> searchables = Arrays.asList(createMaterial(9L), createMaterial(2L), createPortfolio(2L));
 
-        testSearch(query, tokenizedQuery, searchables, start, searchFilter);
+        testSearch(query, tokenizedQuery, null, searchables, start, searchFilter);
     }
 
     @Test
@@ -594,7 +594,7 @@ public class SearchServiceTest {
 
         List<Searchable> searchables = Arrays.asList(createMaterial(9L), createMaterial(2L), createPortfolio(2L));
 
-        testSearch(query, tokenizedQuery, searchables, start, searchFilter);
+        testSearch(query, tokenizedQuery, null, searchables, start, searchFilter);
     }
 
     @Test
@@ -640,7 +640,7 @@ public class SearchServiceTest {
 
         List<Searchable> searchables = Arrays.asList(createMaterial(9L), createMaterial(2L), createPortfolio(2L));
 
-        testSearch(query, tokenizedQuery, searchables, start, searchFilter);
+        testSearch(query, tokenizedQuery, null, searchables, start, searchFilter);
     }
 
     @Test
@@ -654,7 +654,7 @@ public class SearchServiceTest {
 
         List<Searchable> searchables = Arrays.asList(createMaterial(9L), createMaterial(2L), createPortfolio(2L));
 
-        testSearch(query, tokenizedQuery, searchables, start, searchFilter);
+        testSearch(query, tokenizedQuery, null, searchables, start, searchFilter);
     }
 
     @Test
@@ -667,7 +667,7 @@ public class SearchServiceTest {
 
         List<Searchable> searchables = Arrays.asList(createMaterial(9L), createMaterial(2L), createPortfolio(2L));
 
-        testSearch(query, tokenizedQuery, searchables, start, searchFilter);
+        testSearch(query, tokenizedQuery, null, searchables, start, searchFilter);
     }
 
     @Test
@@ -680,7 +680,7 @@ public class SearchServiceTest {
 
         List<Searchable> searchables = Arrays.asList(createMaterial(9L), createMaterial(2L), createPortfolio(2L));
 
-        testSearch(query, tokenizedQuery, searchables, start, searchFilter);
+        testSearch(query, tokenizedQuery, null, searchables, start, searchFilter);
     }
 
     @Test
@@ -693,7 +693,7 @@ public class SearchServiceTest {
 
         List<Searchable> searchables = Arrays.asList(createMaterial(9L), createMaterial(2L), createPortfolio(2L));
 
-        testSearch(query, tokenizedQuery, searchables, start, searchFilter);
+        testSearch(query, tokenizedQuery, null, searchables, start, searchFilter);
     }
 
     @Test
@@ -711,7 +711,7 @@ public class SearchServiceTest {
 
         List<Searchable> searchables = Arrays.asList(createMaterial(9L), createMaterial(2L), createPortfolio(2L));
 
-        testSearch(query, tokenizedQuery, searchables, start, searchFilter);
+        testSearch(query, tokenizedQuery, null, searchables, start, searchFilter);
     }
 
     @Test
@@ -729,7 +729,7 @@ public class SearchServiceTest {
 
         List<Searchable> searchables = Arrays.asList(createMaterial(9L), createMaterial(2L), createPortfolio(2L));
 
-        testSearch(query, tokenizedQuery, searchables, start, searchFilter);
+        testSearch(query, tokenizedQuery, null, searchables, start, searchFilter);
     }
 
     @Test
@@ -744,7 +744,7 @@ public class SearchServiceTest {
 
         List<Searchable> searchables = Arrays.asList(createMaterial(9L), createMaterial(2L), createPortfolio(2L));
 
-        testSearch(query, tokenizedQuery, searchables, start, searchFilter);
+        testSearch(query, tokenizedQuery, null, searchables, start, searchFilter);
     }
 
     @Test
@@ -807,7 +807,7 @@ public class SearchServiceTest {
 
         List<Searchable> searchables = Arrays.asList(createMaterial(9L), createMaterial(2L), createPortfolio(2L));
 
-        testSearch(query, tokenizedQuery, searchables, start, searchFilter);
+        testSearch(query, tokenizedQuery, null, searchables, start, searchFilter);
     }
 
     @Test
@@ -823,7 +823,7 @@ public class SearchServiceTest {
 
         List<Searchable> searchables = Arrays.asList(createMaterial(9L), createMaterial(2L), createPortfolio(2L));
 
-        testSearch(query, tokenizedQuery, searchables, start, searchFilter);
+        testSearch(query, tokenizedQuery, null, searchables, start, searchFilter);
     }
 
     @Test
@@ -836,7 +836,7 @@ public class SearchServiceTest {
 
         List<Searchable> searchables = Arrays.asList(createMaterial(9L), createMaterial(2L), createPortfolio(2L));
 
-        testSearch(query, tokenizedQuery, searchables, start, searchFilter);
+        testSearch(query, tokenizedQuery, null, searchables, start, searchFilter);
     }
 
     @Test
@@ -850,7 +850,7 @@ public class SearchServiceTest {
 
         List<Searchable> searchables = Arrays.asList(createMaterial(9L), createMaterial(2L), createPortfolio(2L));
 
-        testSearch(query, tokenizedQuery, searchables, start, searchFilter);
+        testSearch(query, tokenizedQuery, null, searchables, start, searchFilter);
     }
 
     @Test
@@ -866,7 +866,7 @@ public class SearchServiceTest {
 
         List<Searchable> searchables = Arrays.asList(createMaterial(9L), createMaterial(2L), createPortfolio(2L));
 
-        testSearch(query, tokenizedQuery, searchables, start, searchFilter);
+        testSearch(query, tokenizedQuery, null, searchables, start, searchFilter);
     }
 
     @Test
@@ -879,7 +879,7 @@ public class SearchServiceTest {
 
         List<Searchable> searchables = Arrays.asList(createMaterial(9L), createMaterial(2L), createPortfolio(2L));
 
-        testSearch(query, tokenizedQuery, searchables, start, searchFilter);
+        testSearch(query, tokenizedQuery, null, searchables, start, searchFilter);
     }
 
     @Test
@@ -895,7 +895,7 @@ public class SearchServiceTest {
 
         List<Searchable> searchables = Arrays.asList(createMaterial(9L), createMaterial(2L), createPortfolio(2L));
 
-        testSearch(query, tokenizedQuery, searchables, start, searchFilter);
+        testSearch(query, tokenizedQuery, null, searchables, start, searchFilter);
     }
 
     @Test
@@ -911,7 +911,7 @@ public class SearchServiceTest {
 
         List<Searchable> searchables = Arrays.asList(createMaterial(9L), createMaterial(2L), createPortfolio(2L));
 
-        testSearch(query, tokenizedQuery, searchables, start, searchFilter);
+        testSearch(query, tokenizedQuery, null, searchables, start, searchFilter);
     }
 
     @Test
@@ -930,7 +930,7 @@ public class SearchServiceTest {
 
         List<Searchable> searchables = Arrays.asList(createMaterial(9L), createMaterial(2L));
 
-        testSearch(query, tokenizedQuery, searchables, start, searchables.size(), searchFilter, loggedInUser);
+        testSearch(query, tokenizedQuery, null, searchables, start, searchables.size(), searchFilter, loggedInUser);
     }
 
     @Test
@@ -945,7 +945,22 @@ public class SearchServiceTest {
 
         List<Searchable> searchables = Arrays.asList(createMaterial(9L), createMaterial(2L), createPortfolio(2L));
 
-        testSearch(query, tokenizedQuery, searchables, start, searchFilter);
+        testSearch(query, tokenizedQuery, null, searchables, start, searchFilter);
+    }
+
+    @Test
+    public void searchWithSorting() {
+        String query = "english language";
+        SearchFilter searchFilter = new SearchFilter();
+        searchFilter.setSort("somefield");
+        searchFilter.setSortDirection("desc");
+        String tokenizedQuery = "(english* language*) AND (visibility:\"public\" OR type:\"material\")";
+        String expectedSort = "somefield desc";
+        long start = 0;
+
+        List<Searchable> searchables = Arrays.asList(createMaterial(9L), createMaterial(2L), createPortfolio(2L));
+
+        testSearch(query, tokenizedQuery, expectedSort, searchables, start, searchFilter);
     }
 
     @Test
@@ -957,7 +972,7 @@ public class SearchServiceTest {
 
         List<Searchable> searchables = Arrays.asList(createMaterial(9L), createMaterial(2L), createPortfolio(2L));
 
-        testSearch(query, tokenizedQuery, searchables, start, searchFilter);
+        testSearch(query, tokenizedQuery, null, searchables, start, searchFilter);
     }
 
     @Test
@@ -970,7 +985,7 @@ public class SearchServiceTest {
 
         List<Searchable> searchables = Arrays.asList(createMaterial(9L), createMaterial(2L), createPortfolio(2L));
 
-        testSearch(query, tokenizedQuery, searchables, start, totalResults, searchFilter, null);
+        testSearch(query, tokenizedQuery, null, searchables, start, totalResults, searchFilter, null);
     }
 
     @Test
@@ -982,7 +997,7 @@ public class SearchServiceTest {
 
         List<Searchable> searchables = Arrays.asList(createMaterial(9L), createMaterial(2L));
 
-        testSearch(query, tokenizedQuery, searchables, start, searchFilter);
+        testSearch(query, tokenizedQuery, null, searchables, start, searchFilter);
     }
 
     @Test
@@ -994,7 +1009,7 @@ public class SearchServiceTest {
 
         List<Searchable> searchables = Arrays.asList(createPortfolio(9L), createPortfolio(2L));
 
-        testSearch(query, tokenizedQuery, searchables, start, searchFilter);
+        testSearch(query, tokenizedQuery, null, searchables, start, searchFilter);
     }
 
     @Test
@@ -1006,18 +1021,18 @@ public class SearchServiceTest {
 
         List<Searchable> searchables = Arrays.asList(createPortfolio(9L), createMaterial(9L));
 
-        testSearch(query, tokenizedQuery, searchables, start, searchFilter);
+        testSearch(query, tokenizedQuery, null, searchables, start, searchFilter);
     }
 
-    private void testSearch(String query, String tokenizedQuery, List<Searchable> searchables, long start,
-            long totalResults, SearchFilter searchFilter, User loggedInUser) {
+    private void testSearch(String query, String tokenizedQuery, String expectedSort, List<Searchable> searchables,
+            long start, long totalResults, SearchFilter searchFilter, User loggedInUser) {
         SearchResponse searchResponse = createSearchResponseWithDocuments(searchables, start, totalResults);
         List<Material> materials = collectMaterialsFrom(searchables);
         List<Long> materialIdentifiers = getIdentifiers(materials);
         List<Portfolio> portfolios = collectPortfoliosFrom(searchables);
         List<Long> portfoliosIdentifiers = getIdentifiers(portfolios);
 
-        expect(searchEngineService.search(tokenizedQuery, start)).andReturn(searchResponse);
+        expect(searchEngineService.search(tokenizedQuery, start, expectedSort)).andReturn(searchResponse);
 
         if (!materialIdentifiers.isEmpty()) {
             expect(materialDAO.findAllById(materialIdentifiers)).andReturn(materials);
@@ -1038,9 +1053,9 @@ public class SearchServiceTest {
         assertEquals(start, result.getStart());
     }
 
-    private void testSearch(String query, String tokenizedQuery, List<Searchable> searchables, long start,
-            SearchFilter searchFilter) {
-        testSearch(query, tokenizedQuery, searchables, start, searchables.size(), searchFilter, null);
+    private void testSearch(String query, String tokenizedQuery, String expectedSort, List<Searchable> searchables,
+            long start, SearchFilter searchFilter) {
+        testSearch(query, tokenizedQuery, expectedSort, searchables, start, searchables.size(), searchFilter, null);
     }
 
     private List<Long> getIdentifiers(List<? extends Searchable> searchables) {
