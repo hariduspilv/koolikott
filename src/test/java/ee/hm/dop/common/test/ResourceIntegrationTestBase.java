@@ -33,6 +33,7 @@ import org.junit.After;
 import com.google.inject.Inject;
 
 import ee.hm.dop.model.AuthenticatedUser;
+import ee.hm.dop.model.User;
 
 /**
  * Base class for all resource integration tests.
@@ -46,7 +47,7 @@ public abstract class ResourceIntegrationTestBase extends IntegrationTestBase {
 
     private static AuthenticationFilter authenticationFilter;
 
-    protected void login(String idCode) {
+    protected User login(String idCode) {
         Response response = doGet("dev/login/" + idCode);
         AuthenticatedUser authenticatedUser = response.readEntity(new GenericType<AuthenticatedUser>() {
         });
@@ -55,6 +56,8 @@ public abstract class ResourceIntegrationTestBase extends IntegrationTestBase {
         assertNotNull("Login failed", authenticatedUser.getUser().getUsername());
 
         authenticationFilter = new AuthenticationFilter(authenticatedUser);
+
+        return authenticatedUser.getUser();
     }
 
     @After

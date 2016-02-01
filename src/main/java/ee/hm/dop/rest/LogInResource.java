@@ -1,5 +1,7 @@
 package ee.hm.dop.rest;
 
+import static java.lang.String.format;
+
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
@@ -24,6 +26,7 @@ import org.opensaml.ws.message.encoder.MessageEncodingException;
 import ee.hm.dop.model.AuthenticatedUser;
 import ee.hm.dop.model.mobileid.MobileIDSecurityCodes;
 import ee.hm.dop.service.AuthenticatedUserService;
+import ee.hm.dop.service.EkoolService;
 import ee.hm.dop.service.LanguageService;
 import ee.hm.dop.service.LoginService;
 import ee.hm.dop.service.TaatService;
@@ -31,11 +34,17 @@ import ee.hm.dop.service.TaatService;
 @Path("login")
 public class LogInResource extends BaseResource {
 
+    private static final String EKOOL_CALLBACK_PATH = "/rest/login/ekool/success";
+    private static final String EKOOL_AUTHENTICATION_URL = "%s?client_id=%s&redirect_uri=%s&scope=read&response_type=code";
+
     @Inject
     private LoginService loginService;
 
     @Inject
     private TaatService taatService;
+
+    @Inject
+    private EkoolService ekoolService;
 
     @Inject
     private HTTPRedirectDeflateEncoder encoder;
@@ -77,6 +86,27 @@ public class LogInResource extends BaseResource {
         URI location = new URI("../#/loginRedirect?token=" + authenticatedUser.getToken());
 
         return Response.temporaryRedirect(location).build();
+    }
+
+    @GET
+    @Path("ekool")
+    public Response ekoolAuthenticate() throws URISyntaxException {
+        URI authenticationUri = getEkoolAuthenticationURI();
+        return Response.temporaryRedirect(authenticationUri).build();
+    }
+
+    @GET
+    @Path("ekool/success")
+    public Response ekoolAuthenticateSuccess(@QueryParam("code") String code) throws URISyntaxException {
+
+        try {
+            AuthenticatedUser authenticatedUser = ekoolService.authenticate(code, getEkoolCallbackUrl());
+            URI location = new URI("../#/loginRedirect?token=" + authenticatedUser.getToken());
+            return Response.temporaryRedirect(location).build();
+        } catch (Exception e) {
+            URI location = new URI("../#/loginRedirect");
+            return Response.temporaryRedirect(location).build();
+        }
     }
 
     @GET
@@ -123,5 +153,14 @@ public class LogInResource extends BaseResource {
     private String getStringInUTF8(String item) {
         byte[] bytes = item.getBytes(StandardCharsets.ISO_8859_1);
         return new String(bytes, StandardCharsets.UTF_8);
+    }
+
+    private URI getEkoolAuthenticationURI() throws URISyntaxException {
+        return new URI(format(EKOOL_AUTHENTICATION_URL, ekoolService.getAuthorizationUrl(), ekoolService.getClientId(),
+                getEkoolCallbackUrl()));
+    }
+
+    private String getEkoolCallbackUrl() {
+        return getServerAddress() + EKOOL_CALLBACK_PATH;
     }
 }

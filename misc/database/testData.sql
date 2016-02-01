@@ -34,10 +34,20 @@ insert into User(id, userName, name, surName, idCode, role) values (8, 'admin.ad
 insert into User(id, userName, name, surName, idCode, role) values (9, 'smallPublisher', 'Publisher', 'Publisher', '12345678900', 'PUBLISHER');
 insert into User(id, userName, name, surName, idCode, role) values (10, 'second.admin', 'Second', 'Admin', '89898989899', 'ADMIN');
 
+-- Recommendations
+
+insert into Recommendation(id, creator, added) values (1, 8, '2015-12-12 13:14:15');
+insert into Recommendation(id, creator, added) values (2, 8, '2015-12-12 13:14:16');
+insert into Recommendation(id, creator, added) values (3, 8, '2015-12-12 13:14:17');
+insert into Recommendation(id, creator, added) values (4, 8, '2015-12-12 13:14:18'); -- deleted portfolio
+insert into Recommendation(id, creator, added) values (5, 8, '2015-12-12 13:14:19'); -- private portfolio
+insert into Recommendation(id, creator, added) values (6, 8, '2015-12-12 13:14:20'); -- not listed portfolio
+insert into Recommendation(id, creator, added) values (7, 8, '2015-12-12 13:14:21'); -- deleted material
+
 -- Materials
 
-insert into Material(id, lang, issueDate, licenseType, source, added, updated, views, picture, creator, deleted, paid, isSpecialEducation) values(1, 1, 1, 1, 'https://www.youtube.com/watch?v=gSWbx3CvVUk', '1999-02-02 06:00:01', '2000-03-01 07:00:01', 333456, 1, 1, false, true, true);
-insert into Material(id, lang, issueDate, licenseType, source, added, updated, picture, creator, deleted, paid, repository) values(2, 2, 2, 2, 'https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes', '1992-02-03 06:00:01', '2017-07-12 09:00:01', null, 1, false, true, 2);
+insert into Material(id, lang, issueDate, licenseType, source, added, updated, views, picture, creator, deleted, paid, isSpecialEducation, recommendation) values(1, 1, 1, 1, 'https://www.youtube.com/watch?v=gSWbx3CvVUk', '1999-02-02 06:00:01', '2000-03-01 07:00:01', 333456, 1, 1, false, true, true, 1);
+insert into Material(id, lang, issueDate, licenseType, source, added, updated, picture, creator, deleted, paid, repository, recommendation) values(2, 2, 2, 2, 'https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes', '1992-02-03 06:00:01', '2017-07-12 09:00:01', null, 1, false, true, 2, 2);
 insert into Material(id, lang, issueDate, licenseType, source, added, updated, picture, creator, deleted, paid) values(3, 4, 3, 3,  'http://eloquentjavascript.net/Eloquent_JavaScript.pdf', '2009-02-17 08:00:01', '2017-01-10 19:00:01', null, 1, false, false);
 insert into Material(id, lang, issueDate, licenseType, source, added, updated, picture, creator, deleted, paid) values(4, 3, 4, 1,  'https://en.wikipedia.org/wiki/Power_Architecture', '2012-02-02 09:00:01', '2017-08-28 22:40:01', null, 1, false, false);
 insert into Material(id, lang, issueDate, licenseType, source, added, updated, picture, creator, deleted, paid) values(5, 3, 5, 2,  'https://en.wikipedia.org/wiki/Power_Architecture', '2011-09-15 08:00:01', '2017-11-04 09:30:01', null, 1, false, false);
@@ -75,6 +85,7 @@ insert into Material(id, lang, issueDate, licenseType, source, added, deleted, p
 insert into Material(id, lang, issueDate, licenseType, source, added, deleted, paid) values(37, 1, 2, 3, '<script>alert(1)</script>', '2001-07-16 06:00:01', false, false);
 insert into Material(id, lang, issueDate, licenseType, source, added, deleted, paid) values(3919, 1, 2, 3, 'http://pilditu.audio.ee', '2001-07-16 06:00:01', false, false);
 insert into Material(id, lang, issueDate, licenseType, source, added, updated, picture, creator, deleted, paid) values(3920, 2, 2, 2, 'https://oxygen.netgroupdigital.com/rest/repoMaterialSource', '1992-02-03 06:00:01', '1995-07-12 09:00:01', null, 1, false, true);
+insert into Material(id, lang, issueDate, licenseType, source, added, updated, picture, creator, deleted, paid, recommendation) values(3921, 3, 2, 2, 'https://www.example.com/deleted', '1992-02-03 06:00:01', '1995-07-12 09:00:01', null, 1, true, false, 7);
 
 -- Authors
 
@@ -400,23 +411,24 @@ insert into Material_KeyCompetence(material, keyCompetence) values (36, 1);
 
 -- Portfolio
 
-insert into Portfolio(id, title, taxon, creator, originalCreator, summary, views, created, updated, picture, visibility, deleted) VALUES (1, 'The new stock market', 1000, 1, 2, 'Some new stufff coming soon.', 325698, '1999-05-02 06:00:01', '2002-05-02 06:00:01', null, 'PUBLIC', false);
-insert into Portfolio(id, title, taxon, creator, originalCreator, summary, views, created, updated, picture, visibility, deleted) VALUES (2, 'Math for my students', 1001, 5, 5, "You have to read all the textbooks in this portfolio. Don't forgert to make ALL exercices.", 7951, '2000-12-29 16:00:01', '2003-05-02 06:00:01', null, 'PUBLIC', false);
-insert into Portfolio(id, title, taxon, creator, originalCreator, summary, views, created, updated, picture, visibility, deleted) VALUES (3, 'The new World', null, 3, 3, null, 0, '2014-12-29 10:00:01', null, null, 'PUBLIC', false);
-insert into Portfolio(id, title, taxon, creator, originalCreator, summary, views, created, updated, picture, visibility, deleted) VALUES (4, 'Biology for my students', 1016, 6, 6, 'A marvellous summary.', 2, '2000-12-29 16:00:01', '2003-05-02 06:00:01', null, 'PUBLIC', false);
-insert into Portfolio(id, title, taxon, creator, originalCreator, summary, views, created, updated, picture, visibility, deleted) VALUES (5, 'Sports for my students', 1028, 6, 6, 'A brilliant summary.', 3, '2003-12-29 16:00:01', '2003-05-02 06:00:01', null, 'PUBLIC', false);
-insert into Portfolio(id, title, taxon, creator, originalCreator, summary, views, created, updated, picture, visibility, deleted) VALUES (6, 'English for my students', 1054, 6, 6, 'An intriguing summary.', 4, '2007-12-29 16:00:01', '2003-05-02 06:00:01', null, 'PUBLIC', false);
-insert into Portfolio(id, title, taxon, creator, originalCreator, summary, views, created, updated, picture, visibility, deleted) VALUES (7, 'Automated test resource title. DO NOT TOUCH!!! Title in estonian', 1002, 6, 6, 'An intriguing summary.', 4, '2017-12-29 16:00:01', '2003-05-02 06:00:01', null, 'PUBLIC', false);
-insert into Portfolio(id, title, taxon, creator, originalCreator, summary, views, created, updated, picture, visibility, deleted) VALUES (8, 'Test portfolio number 8', 10100, 6, 6, 'Bla bla bla.', 1, '2017-12-29 11:00:01', '2001-05-02 06:01:01', null, 'PUBLIC', false);
-insert into Portfolio(id, title, taxon, creator, originalCreator, summary, views, created, updated, picture, visibility, deleted) VALUES (9, 'Test portfolio number 9', 20000, 6, 6, 'Blabla2.', 1, '2017-12-29 11:00:01', '2001-05-02 06:01:01', null, 'PUBLIC', false);
-insert into Portfolio(id, title, taxon, creator, originalCreator, summary, views, created, updated, picture, visibility, deleted) VALUES (10, 'Test portfolio number 10', 20100, 6, 6, 'Blabla3.', 1, '2015-12-29 11:00:01', '2001-05-02 06:01:01', null, 'PUBLIC', false);
-insert into Portfolio(id, title, taxon, creator, originalCreator, summary, views, created, updated, picture, visibility, deleted) VALUES (11, 'Test portfolio number 11', 10300, 6, 6, 'Blabla4.', 1, '2014-12-29 11:00:01', '2001-05-02 06:01:01', null, 'PUBLIC', false);
-insert into Portfolio(id, title, taxon, creator, originalCreator, summary, views, created, updated, picture, visibility, deleted) VALUES (12, 'Test portfolio number 12', 15020, 6, 6, 'Blabla4.', 1, '2017-12-29 11:00:01', '2001-05-02 06:01:01', null, 'PUBLIC', false);
-insert into Portfolio(id, title, taxon, creator, originalCreator, summary, views, created, updated, picture, visibility, deleted) VALUES (13, 'Test portfolio number 13', 15000, 6, 6, 'Blabla5.', 1, '2017-12-29 11:00:01', '2001-05-02 06:01:01', null, 'PUBLIC', false);
-insert into Portfolio(id, title, taxon, creator, originalCreator, summary, views, created, updated, picture, visibility, deleted) VALUES (14, 'Test portfolio number 14', 15030, 6, 6, 'Blabla6.', 1, '2017-12-29 11:00:01', '2001-05-02 06:01:01', null, 'PUBLIC', false);
-insert into Portfolio(id, title, taxon, creator, originalCreator, summary, views, created, updated, picture, visibility, deleted) VALUES (15, 'Test portfolio number 15', 15040, 6, 6, 'Blabla7.', 1, '2013-12-29 11:00:01', '2001-05-02 06:01:01', null, 'PUBLIC', false);
-insert into Portfolio(id, title, taxon, creator, originalCreator, summary, views, created, updated, picture, visibility, deleted) VALUES (16, 'Test not listed portfolio number 16', 2, 6, 6, 'Blabla8.', 1, '2001-12-29 11:00:01', '2001-05-02 06:01:01', null, 'NOT_LISTED', false);
-insert into Portfolio(id, title, taxon, creator, originalCreator, summary, views, created, updated, picture, visibility, deleted) VALUES (17, 'Test private portfolio number 17', 3, 6, 6, 'Blabla9.', 1, '2001-12-29 11:00:01', '2001-05-02 06:01:01', null, 'PRIVATE', false);
+insert into Portfolio(id, title, taxon, creator, originalCreator, summary, views, created, updated, picture, visibility, deleted, recommendation) VALUES (1, 'The new stock market', 1000, 1, 2, 'Some new stufff coming soon.', 325698, '1999-05-02 06:00:01', '2002-05-02 06:00:01', null, 'PUBLIC', false, 3);
+insert into Portfolio(id, title, taxon, creator, originalCreator, summary, views, created, updated, picture, visibility, deleted, recommendation) VALUES (2, 'Math for my students', 1001, 5, 5, "You have to read all the textbooks in this portfolio. Don't forgert to make ALL exercices.", 7951, '2000-12-29 16:00:01', '2003-05-02 06:00:01', null, 'PUBLIC', false, null);
+insert into Portfolio(id, title, taxon, creator, originalCreator, summary, views, created, updated, picture, visibility, deleted, recommendation) VALUES (3, 'The new World', null, 3, 3, null, 0, '2014-12-29 10:00:01', null, null, 'PUBLIC', false, null);
+insert into Portfolio(id, title, taxon, creator, originalCreator, summary, views, created, updated, picture, visibility, deleted, recommendation) VALUES (4, 'Biology for my students', 1016, 6, 6, 'A marvellous summary.', 2, '2000-12-29 16:00:01', '2003-05-02 06:00:01', null, 'PUBLIC', false, null);
+insert into Portfolio(id, title, taxon, creator, originalCreator, summary, views, created, updated, picture, visibility, deleted, recommendation) VALUES (5, 'Sports for my students', 1028, 6, 6, 'A brilliant summary.', 3, '2003-12-29 16:00:01', '2003-05-02 06:00:01', null, 'PUBLIC', false, null);
+insert into Portfolio(id, title, taxon, creator, originalCreator, summary, views, created, updated, picture, visibility, deleted, recommendation) VALUES (6, 'English for my students', 1054, 6, 6, 'An intriguing summary.', 4, '2007-12-29 16:00:01', '2003-05-02 06:00:01', null, 'PUBLIC', false, null);
+insert into Portfolio(id, title, taxon, creator, originalCreator, summary, views, created, updated, picture, visibility, deleted, recommendation) VALUES (7, 'Automated test resource title. DO NOT TOUCH!!! Title in estonian', 1002, 6, 6, 'An intriguing summary.', 4, '2017-12-29 16:00:01', '2003-05-02 06:00:01', null, 'PUBLIC', false, null);
+insert into Portfolio(id, title, taxon, creator, originalCreator, summary, views, created, updated, picture, visibility, deleted, recommendation) VALUES (8, 'Test portfolio number 8', 10100, 6, 6, 'Bla bla bla.', 1, '2017-12-29 11:00:01', '2001-05-02 06:01:01', null, 'PUBLIC', false, null);
+insert into Portfolio(id, title, taxon, creator, originalCreator, summary, views, created, updated, picture, visibility, deleted, recommendation) VALUES (9, 'Test portfolio number 9', 20000, 6, 6, 'Blabla2.', 1, '2017-12-29 11:00:01', '2001-05-02 06:01:01', null, 'PUBLIC', false, null);
+insert into Portfolio(id, title, taxon, creator, originalCreator, summary, views, created, updated, picture, visibility, deleted, recommendation) VALUES (10, 'Test portfolio number 10', 20100, 6, 6, 'Blabla3.', 1, '2015-12-29 11:00:01', '2001-05-02 06:01:01', null, 'PUBLIC', false, null);
+insert into Portfolio(id, title, taxon, creator, originalCreator, summary, views, created, updated, picture, visibility, deleted, recommendation) VALUES (11, 'Test portfolio number 11', 10300, 6, 6, 'Blabla4.', 1, '2014-12-29 11:00:01', '2001-05-02 06:01:01', null, 'PUBLIC', false, null);
+insert into Portfolio(id, title, taxon, creator, originalCreator, summary, views, created, updated, picture, visibility, deleted, recommendation) VALUES (12, 'Test portfolio number 12', 15020, 6, 6, 'Blabla4.', 1, '2017-12-29 11:00:01', '2001-05-02 06:01:01', null, 'PUBLIC', false, null);
+insert into Portfolio(id, title, taxon, creator, originalCreator, summary, views, created, updated, picture, visibility, deleted, recommendation) VALUES (13, 'Test portfolio number 13', 15000, 6, 6, 'Blabla5.', 1, '2017-12-29 11:00:01', '2001-05-02 06:01:01', null, 'PUBLIC', false, null);
+insert into Portfolio(id, title, taxon, creator, originalCreator, summary, views, created, updated, picture, visibility, deleted, recommendation) VALUES (14, 'Test portfolio number 14', 15030, 6, 6, 'Blabla6.', 1, '2017-12-29 11:00:01', '2001-05-02 06:01:01', null, 'PUBLIC', false, null);
+insert into Portfolio(id, title, taxon, creator, originalCreator, summary, views, created, updated, picture, visibility, deleted, recommendation) VALUES (15, 'Test portfolio number 15', 15040, 6, 6, 'Blabla7.', 1, '2013-12-29 11:00:01', '2001-05-02 06:01:01', null, 'PUBLIC', false, null);
+insert into Portfolio(id, title, taxon, creator, originalCreator, summary, views, created, updated, picture, visibility, deleted, recommendation) VALUES (16, 'Test not listed portfolio number 16', 2, 6, 6, 'Blabla8.', 1, '2001-12-29 11:00:01', '2001-05-02 06:01:01', null, 'NOT_LISTED', false, 6);
+insert into Portfolio(id, title, taxon, creator, originalCreator, summary, views, created, updated, picture, visibility, deleted, recommendation) VALUES (17, 'Test private portfolio number 17', 3, 6, 6, 'Blabla9.', 1, '2001-12-29 11:00:01', '2001-05-02 06:01:01', null, 'PRIVATE', false, 5);
+insert into Portfolio(id, title, taxon, creator, originalCreator, summary, views, created, updated, picture, visibility, deleted, recommendation) VALUES (18, 'Test deleted portfolio number 18', 3, 6, 6, 'Blabla10.', 1, '2001-12-29 11:00:01', '2001-05-02 06:01:01', null, 'PUBLIC', true, 4);
 
 -- Pictures
 
@@ -507,3 +519,4 @@ insert into Portfolio_KeyCompetence(portfolio, keyCompetence) values (6, 1);
 -- Improper content
 insert into ImproperContent(id, creator, portfolio, material, added) values (1, 1, 2, null, '2014-06-01 00:00:01');
 insert into ImproperContent(id, creator, portfolio, material, added) values (2, 1, null, 2, '2014-06-01 00:00:01');
+

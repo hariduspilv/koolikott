@@ -20,6 +20,7 @@ import javax.persistence.Lob;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.OrderBy;
 import javax.persistence.OrderColumn;
 import javax.persistence.UniqueConstraint;
@@ -94,8 +95,9 @@ public class Portfolio implements Searchable {
     @Formula(value = "(SELECT COUNT(*) FROM UserLike ul WHERE ul.portfolio = id AND ul.isLiked = 0)")
     private int dislikes;
 
-    @Formula(value = "(SELECT COUNT(*) > 0 FROM Recommendation r WHERE r.portfolio = id)")
-    private boolean recommended;
+    @OneToOne(cascade = { PERSIST, MERGE })
+    @JoinColumn(name = "recommendation")
+    private Recommendation recommendation;
 
     @ManyToMany(fetch = EAGER, cascade = { MERGE, PERSIST })
     @Fetch(FetchMode.SELECT)
@@ -304,12 +306,12 @@ public class Portfolio implements Searchable {
         this.dislikes = dislikes;
     }
 
-    public boolean isRecommended() {
-        return recommended;
+    public Recommendation getRecommendation() {
+        return recommendation;
     }
 
-    public void setRecommended(boolean recommended) {
-        this.recommended = recommended;
+    public void setRecommendation(Recommendation recommendation) {
+        this.recommendation = recommendation;
     }
 
     public boolean isDeleted() {

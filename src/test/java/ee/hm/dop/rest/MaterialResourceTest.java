@@ -29,9 +29,12 @@ import ee.hm.dop.model.KeyCompetence;
 import ee.hm.dop.model.Language;
 import ee.hm.dop.model.LanguageString;
 import ee.hm.dop.model.Material;
+import ee.hm.dop.model.Recommendation;
 import ee.hm.dop.model.TargetGroup;
+import ee.hm.dop.model.User;
 import ee.hm.dop.model.taxon.Subject;
 import ee.hm.dop.model.taxon.Taxon;
+import ee.hm.dop.service.MaterialService;
 
 public class MaterialResourceTest extends ResourceIntegrationTestBase {
 
@@ -46,6 +49,11 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
     private static final String MATERIAL_SET_NOT_BROKEN = "material/setNotBroken";
     private static final String MATERIAL_HAS_SET_BROKEN = "material/hasSetBroken";
     private static final String MATERIAL_IS_BROKEN = "material/isBroken";
+    private static final String MATERIAL_ADD_RECOMMENDATION = "material/recommend";
+    private static final String MATERIAL_REMOVE_RECOMMENDATION = "material/removeRecommendation";
+
+    @Inject
+    private MaterialService materialService;
 
     @Inject
     private TaxonDAO taxonDAO;
@@ -313,6 +321,34 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
 
         assertNull(createdMaterial.getKeyCompetences());
         assertNull(createdMaterial.getCrossCurricularThemes());
+    }
+
+    @Test
+    public void addRecommendation() {
+        String idCode = "89898989898";
+        User user = login(idCode);
+
+        Material material = materialService.get(3L, user);
+
+        Response response = doPost(MATERIAL_ADD_RECOMMENDATION,
+                Entity.entity(material, MediaType.APPLICATION_JSON_TYPE));
+        assertEquals(Status.OK.getStatusCode(), response.getStatus());
+
+        Recommendation recommendation = response.readEntity(Recommendation.class);
+        assertNotNull(recommendation);
+        assertEquals(Long.valueOf(8), recommendation.getCreator().getId());
+    }
+
+    @Test
+    public void removeRecommendation() {
+        String idCode = "89898989898";
+        User user = login(idCode);
+
+        Material material = materialService.get(3L, user);
+
+        Response response = doPost(MATERIAL_REMOVE_RECOMMENDATION,
+                Entity.entity(material, MediaType.APPLICATION_JSON_TYPE));
+        assertEquals(Status.NO_CONTENT.getStatusCode(), response.getStatus());
     }
 
     @Test

@@ -2,7 +2,6 @@ USE dop;
 
 -- Drop tables
 DROP TABLE IF EXISTS BrokenContent;
-DROP TABLE IF EXISTS Recommendation;
 DROP TABLE IF EXISTS ImproperContent;
 DROP TABLE IF EXISTS UserLike;
 DROP TABLE IF EXISTS Comment;
@@ -31,6 +30,7 @@ DROP TABLE IF EXISTS Material_Author;
 DROP TABLE IF EXISTS LanguageString;
 DROP TABLE IF EXISTS LanguageKeyCodes;
 DROP TABLE IF EXISTS Material;
+DROP TABLE IF EXISTS Recommendation;
 DROP TABLE IF EXISTS AuthenticationState;
 DROP TABLE IF EXISTS AuthenticatedUser;
 DROP TABLE IF EXISTS Institution_Roles;
@@ -285,6 +285,16 @@ CREATE TABLE AuthenticationState (
   sessionCode VARCHAR(255)
 );
 
+CREATE TABLE Recommendation (
+  id        BIGINT     AUTO_INCREMENT PRIMARY KEY,
+  creator   BIGINT     NOT NULL,
+  added     TIMESTAMP  DEFAULT CURRENT_TIMESTAMP,
+
+  FOREIGN KEY (creator)
+  REFERENCES User (id)
+    ON DELETE RESTRICT
+);
+
 CREATE TABLE Material (
   id                   BIGINT             AUTO_INCREMENT PRIMARY KEY,
   lang                 BIGINT,
@@ -302,7 +312,8 @@ CREATE TABLE Material (
   paid                 BOOLEAN            DEFAULT FALSE,
   isSpecialEducation   BOOLEAN            DEFAULT FALSE,
   embeddable           BOOLEAN            DEFAULT FALSE,
-  curriculumLiterature           BOOLEAN            DEFAULT FALSE,
+  curriculumLiterature BOOLEAN            DEFAULT FALSE,
+  recommendation       BIGINT,
 
   UNIQUE KEY (repositoryIdentifier, repository),
 
@@ -320,6 +331,10 @@ CREATE TABLE Material (
 
   FOREIGN KEY (creator)
   REFERENCES User (id)
+    ON DELETE RESTRICT,
+
+  FOREIGN KEY (recommendation)
+  REFERENCES Recommendation (id)
     ON DELETE RESTRICT
 );
 
@@ -535,6 +550,7 @@ CREATE TABLE Portfolio (
   picture         LONGBLOB              DEFAULT NULL,
   visibility      VARCHAR(255) NOT NULL,
   deleted         BOOLEAN,
+  recommendation  BIGINT, 
 
   FOREIGN KEY (creator)
   REFERENCES User (id)
@@ -546,6 +562,10 @@ CREATE TABLE Portfolio (
 
   FOREIGN KEY (taxon)
   REFERENCES Taxon (id)
+    ON DELETE RESTRICT,
+
+  FOREIGN KEY (recommendation)
+  REFERENCES Recommendation (id)
     ON DELETE RESTRICT
 );
 
@@ -721,26 +741,6 @@ CREATE TABLE ImproperContent (
   REFERENCES Portfolio (id)
     ON DELETE RESTRICT,
 
-  FOREIGN KEY (material)
-  REFERENCES Material (id)
-    ON DELETE RESTRICT
-);
-
-CREATE TABLE Recommendation (
-  id        BIGINT    AUTO_INCREMENT PRIMARY KEY,
-  creator   BIGINT  NOT NULL,
-  portfolio BIGINT UNIQUE,
-  material  BIGINT UNIQUE,
-  added     TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-
-  FOREIGN KEY (creator)
-  REFERENCES User (id)
-    ON DELETE RESTRICT,
-
-  FOREIGN KEY (portfolio)
-  REFERENCES Portfolio (id)
-    ON DELETE RESTRICT,
-    
   FOREIGN KEY (material)
   REFERENCES Material (id)
     ON DELETE RESTRICT
