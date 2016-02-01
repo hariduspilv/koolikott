@@ -8,14 +8,27 @@ define([
             scope: true,
             templateUrl: 'directives/sidebar/sidebar.html',
             controller: function($scope, serverCallService) {
-                //TODO: replace with recommended materials call after service is finished
-                serverCallService.makeGet("rest/material/getNewestMaterials?numberOfMaterials=5", {}, getRecommendationsSuccess, getRecommendationsFail);
+                
+                var RECOMMENDED_ITEMS = 5;
+
+                var params = {
+                    q: 'recommended:true',
+                    start: 0,
+                    sort: 'recommendation_timestamp',
+                    sortDirection: 'desc'
+                };
+
+                serverCallService.makeGet("rest/search", params, getRecommendationsSuccess, getRecommendationsFail);
 
                 function getRecommendationsSuccess(data) {
                     if (isEmpty(data)) {
                         log('No data returned by session search.');
                     } else {
-                        $scope.recommendations = data;
+                        if (data.items.length > RECOMMENDED_ITEMS) {
+                            $scope.recommendations = data.items.slice(0, RECOMMENDED_ITEMS);
+                        } else {
+                            $scope.recommendations = data.items;
+                        }
                     }
                 }
 
@@ -38,6 +51,14 @@ define([
                 $scope.formatSurname = function(surname) {
                     if (surname) {
                         return formatSurnameToInitialsButLast(surname);
+                    }
+                };
+
+                $scope.getItemLink = function(item) {
+                    if (item.type === '.Material') {
+                        return "#/material?materialId={{item.id}}";
+                    } else if (item.type === '.Portfolio') {
+                        return "#/portfolio?id={{item.id}}";
                     }
                 };
             }
