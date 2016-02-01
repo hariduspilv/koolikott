@@ -59,7 +59,7 @@ public class SolrServiceTest {
     @Test
     public void search() {
         long start = 0;
-        String urlQuery = "select?q=math&wt=json&start=" + start + "&rows=" + RESULTS_PER_PAGE;
+        String urlQuery = "select?q=math&sort=&wt=json&start=" + start + "&rows=" + RESULTS_PER_PAGE;
         String query = "math";
 
         Document doc1 = new Document();
@@ -78,7 +78,7 @@ public class SolrServiceTest {
 
         replayAll();
 
-        SearchResponse searchResponse = solrService.search(query, 0);
+        SearchResponse searchResponse = solrService.search(query, 0, null);
         List<Document> result = searchResponse.getResponse().getDocuments();
 
         verifyAll();
@@ -95,9 +95,35 @@ public class SolrServiceTest {
     }
 
     @Test
+    public void searchWithSorting() {
+        long start = 0;
+        String urlQuery = "select?q=math&sort=author+asc&wt=json&start=" + start + "&rows=" + RESULTS_PER_PAGE;
+        String query = "math";
+
+        Document doc5 = new Document();
+        doc5.setId("5");
+
+        setUpSearch(urlQuery, 1L, start, doc5);
+
+        replayAll();
+
+        SearchResponse searchResponse = solrService.search(query, 0, "author asc");
+        List<Document> result = searchResponse.getResponse().getDocuments();
+
+        verifyAll();
+
+        assertNotNull(result);
+        assertEquals(1, result.size());
+        assertEquals(Long.valueOf(5), Long.valueOf(result.get(0).getId()));
+        assertEquals(Long.valueOf(1), Long.valueOf(searchResponse.getResponse().getTotalResults()));
+        assertEquals(Long.valueOf(start), Long.valueOf(searchResponse.getResponse().getStart()));
+        assertEquals(0, searchResponse.getResponseHeader().getStatus());
+    }
+
+    @Test
     public void searchGetSecondPage() {
         int start = RESULTS_PER_PAGE;
-        String urlQuery = "select?q=math&wt=json&start=" + start + "&rows=" + RESULTS_PER_PAGE;
+        String urlQuery = "select?q=math&sort=&wt=json&start=" + start + "&rows=" + RESULTS_PER_PAGE;
         String query = "math";
 
         Document doc1 = new Document();
@@ -110,7 +136,7 @@ public class SolrServiceTest {
 
         replayAll();
 
-        SearchResponse searchResponse = solrService.search(query, start);
+        SearchResponse searchResponse = solrService.search(query, start, null);
         List<Document> result = searchResponse.getResponse().getDocuments();
 
         verifyAll();
@@ -126,7 +152,7 @@ public class SolrServiceTest {
 
     @Test
     public void searchNoResult() {
-        String urlQuery = "select?q=math&wt=json&start=0&rows=" + RESULTS_PER_PAGE;
+        String urlQuery = "select?q=math&sort=&wt=json&start=0&rows=" + RESULTS_PER_PAGE;
         String query = "math";
 
         noResultSearch(urlQuery, query, 0L);
@@ -134,7 +160,7 @@ public class SolrServiceTest {
 
     @Test
     public void searchURLEncodingQuotes() {
-        String urlQuery = "select?q=%22&wt=json&start=0&rows=" + RESULTS_PER_PAGE;
+        String urlQuery = "select?q=%22&sort=&wt=json&start=0&rows=" + RESULTS_PER_PAGE;
         String query = "\"";
 
         noResultSearch(urlQuery, query, 0L);
@@ -142,7 +168,7 @@ public class SolrServiceTest {
 
     @Test
     public void searchURLEncodingQuotesAndSpace() {
-        String urlQuery = "select?q=%22this+search%22&wt=json&start=0&rows=" + RESULTS_PER_PAGE;
+        String urlQuery = "select?q=%22this+search%22&sort=&wt=json&start=0&rows=" + RESULTS_PER_PAGE;
         String query = "\"this search\"";
 
         noResultSearch(urlQuery, query, 0L);
@@ -150,7 +176,7 @@ public class SolrServiceTest {
 
     @Test
     public void searchURLEncodingPlusAndMinus() {
-        String urlQuery = "select?q=%2Bmath+-port&wt=json&start=0&rows=" + RESULTS_PER_PAGE;
+        String urlQuery = "select?q=%2Bmath+-port&sort=&wt=json&start=0&rows=" + RESULTS_PER_PAGE;
         String query = "+math -port";
 
         noResultSearch(urlQuery, query, 0L);
@@ -158,7 +184,7 @@ public class SolrServiceTest {
 
     @Test
     public void searchErrorInSearch() {
-        String urlQuery = "select?q=%2Bmath+-port&wt=json&start=0&rows=" + RESULTS_PER_PAGE;
+        String urlQuery = "select?q=%2Bmath+-port&sort=&wt=json&start=0&rows=" + RESULTS_PER_PAGE;
         String query = "+math -port";
 
         ResponseHeader responseHeader = new ResponseHeader();
@@ -175,7 +201,7 @@ public class SolrServiceTest {
 
         replayAll();
 
-        SearchResponse resultResponse = solrService.search(query, 0);
+        SearchResponse resultResponse = solrService.search(query, 0, null);
 
         verifyAll();
 
@@ -189,7 +215,7 @@ public class SolrServiceTest {
 
         replayAll();
 
-        SearchResponse searchResponse = solrService.search(query, 0);
+        SearchResponse searchResponse = solrService.search(query, 0, null);
         List<Document> result = searchResponse.getResponse().getDocuments();
 
         verifyAll();

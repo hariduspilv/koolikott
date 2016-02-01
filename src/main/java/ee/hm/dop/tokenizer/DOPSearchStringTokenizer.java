@@ -8,6 +8,9 @@ public class DOPSearchStringTokenizer {
     private static final String TITLE_KEYWORD = "title:";
     private static final String DESCRIPTION_KEYWORD = "description:";
     private static final String SUMMARY_KEYWORD = "summary:";
+    private static final String RECOMMENDED_KEYWORD = "recommended:";
+    private static final String TRUE = "true";
+    private static final String FALSE = "false";
     private static final char QUOTES = '"';
 
     private String source;
@@ -52,6 +55,8 @@ public class DOPSearchStringTokenizer {
                 token = parseAuthor();
             } else if (c == 'd') {
                 token = parseDescription();
+            } else if (c == 'r') {
+                token = parseRecommended();
             } else if (c == 's') {
                 token = parseSummary();
             } else if (c == 't') {
@@ -109,6 +114,15 @@ public class DOPSearchStringTokenizer {
         }
 
         return new DescriptionToken(value);
+    }
+
+    private DOPToken parseRecommended() {
+        String value = extractTokenValue(RECOMMENDED_KEYWORD);
+        if (value == null || (!value.equals(TRUE) && !value.equals(FALSE))) {
+            return null;
+        }
+
+        return new RecommendedToken(value);
     }
 
     private DOPToken parseSummary() {

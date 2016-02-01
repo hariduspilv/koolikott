@@ -25,7 +25,7 @@ public class SolrService implements SearchEngineService {
     private static final Logger logger = LoggerFactory.getLogger(SolrService.class);
 
     private static final int RESULTS_PER_PAGE = 24;
-    private static final String SEARCH_PATH = "select?q=%s&wt=json&start=%d&rows=" + RESULTS_PER_PAGE;
+    private static final String SEARCH_PATH = "select?q=%s&sort=%s&wt=json&start=%d&rows=" + RESULTS_PER_PAGE;
 
     protected static final String SOLR_IMPORT_PARTIAL = "dataimport?command=delta-import&wt=json";
     protected static final String SOLR_DATAIMPORT_STATUS = "dataimport?command=status&wt=json";
@@ -46,8 +46,8 @@ public class SolrService implements SearchEngineService {
     }
 
     @Override
-    public SearchResponse search(String query, long start) {
-        return executeCommand(format(SEARCH_PATH, encodeQuery(query), start));
+    public SearchResponse search(String query, long start, String sort) {
+        return executeCommand(format(SEARCH_PATH, encodeQuery(query), formatSort(sort), start));
     }
 
     @Override
@@ -95,6 +95,14 @@ public class SolrService implements SearchEngineService {
         }
 
         return encodedQuery;
+    }
+
+    private String formatSort(String sort) {
+        if (sort != null) {
+            return encodeQuery(sort);
+        } else {
+            return "";
+        }
     }
 
     private class SolrIndexThread extends Thread {

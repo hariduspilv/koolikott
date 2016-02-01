@@ -436,4 +436,5 @@ INSERT INTO Translation(translationGroup, translationKey, translation) VALUES
 (1,'MATERIAL_EDIT','Muuda materjali'),
 (1,'BUTTON_UPDATE_MATERIAL','Uuenda materjali'),
 (1,'MATERIAL_RESTORED','Materjal taastatud'),
-(1,'PORTFOLIO_RESTORED','Kogumik taastatud');
+(1,'PORTFOLIO_RESTORED','Kogumik taastatud'),
+(1,'SHOW_MORE', 'Näita veel');

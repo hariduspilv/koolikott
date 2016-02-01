@@ -219,4 +219,20 @@ public class DOPSearchStringTokenizerTest {
         assertEquals("jose* -maria* - jesus*", searchQuery);
     }
 
+    @Test
+    public void recommendedTrue() {
+        DOPSearchStringTokenizer tokenizer = new DOPSearchStringTokenizer("recommended:true");
+        String searchQuery = consumeTokenizer(tokenizer);
+
+        assertEquals("recommended:\"true\"", searchQuery);
+    }
+
+    @Test
+    public void recommendedFalse() {
+        DOPSearchStringTokenizer tokenizer = new DOPSearchStringTokenizer("recommended:false");
+        String searchQuery = consumeTokenizer(tokenizer);
+
+        assertEquals("recommended:\"false\"", searchQuery);
+    }
+
 }

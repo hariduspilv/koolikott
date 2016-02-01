@@ -140,7 +140,15 @@ public class SearchService {
             throw new RuntimeException("No query string and filters present.");
         }
 
-        return searchEngineService.search(queryString, start);
+        return searchEngineService.search(queryString, start, getSort(searchFilter));
+    }
+
+    private String getSort(SearchFilter searchFilter) {
+        String sort = null;
+        if (searchFilter.getSort() != null && searchFilter.getSortDirection() != null) {
+            sort = String.join(" ", searchFilter.getSort(), searchFilter.getSortDirection());
+        }
+        return sort;
     }
 
     private List<Searchable> sortSearchable(List<Document> indexList, List<Searchable> unsortedSearchable) {

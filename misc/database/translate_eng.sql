@@ -416,4 +416,5 @@ INSERT INTO Translation(translationGroup, translationKey, translation) VALUES
 (3,'MATERIAL_EDIT','Edit material'),
 (3,'BUTTON_UPDATE_MATERIAL','Update material'),
 (3,'MATERIAL_RESTORED','Material restored'),
-(3,'PORTFOLIO_RESTORED','Portfolio restored');
+(3,'PORTFOLIO_RESTORED','Portfolio restored'),
+(3,'SHOW_MORE', 'Show more');

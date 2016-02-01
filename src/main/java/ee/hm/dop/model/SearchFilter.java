@@ -28,6 +28,10 @@ public class SearchFilter {
 
     private Visibility visibility;
 
+    private String sort;
+
+    private String sortDirection;
+
     public Taxon getTaxon() {
         return taxon;
     }
@@ -114,6 +118,22 @@ public class SearchFilter {
 
     public void setVisibility(Visibility visibility) {
         this.visibility = visibility;
+    }
+
+    public String getSort() {
+        return sort;
+    }
+
+    public void setSort(String sort) {
+        this.sort = sort;
+    }
+
+    public String getSortDirection() {
+        return sortDirection;
+    }
+
+    public void setSortDirection(String sortDirection) {
+        this.sortDirection = sortDirection;
     }
 
 }

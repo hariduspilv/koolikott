@@ -140,6 +140,8 @@
    <field name="cross_curricular_theme" type="text_general" indexed="true" stored="false" multiValued="true"/>
    <field name="key_competence" type="text_general" indexed="true" stored="false" multiValued="true"/>
    <field name="created" type="tdate" indexed="true" stored="false" multiValued="false"/>
+   <field name="recommended" type="boolean" indexed="true" stored="false" multiValued="false"/>
+   <field name="recommendation_timestamp" type="tdate" indexed="true" stored="false" multiValued="false"/>
 
    <!-- Material -->
    <field name="description" type="text_general" indexed="true" stored="false" multiValued="true"/>

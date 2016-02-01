@@ -7,6 +7,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.google.common.collect.HashBasedTable;
+import com.google.common.collect.Table;
 import com.google.inject.Provider;
 import com.google.inject.Singleton;
 
@@ -30,6 +32,8 @@ public class SearchEngineServiceTestProvider implements Provider<SearchEngineSer
 class SearchEngineServiceMock implements SearchEngineService {
 
     private static final Map<String, List<Document>> searchResponses;
+
+    private static final Table<String, String, List<Document>> sortedSearchResponses = HashBasedTable.create();
 
     private static final Long[] portfolioIds = { 1L, 2L, 3L, 4L };
 
@@ -57,6 +61,8 @@ class SearchEngineServiceMock implements SearchEngineService {
         addQueryWithLanguage();
         addQueryWithVisibility();
         addAdminQuery();
+
+        addSortedQuery();
     }
 
     private static void addArabicQuery() {
@@ -173,13 +179,41 @@ class SearchEngineServiceMock implements SearchEngineService {
         searchResponses.put(query, result);
     }
 
+    private static void addSortedQuery() {
+        String query = "(tuesday*) AND (visibility:\"public\" OR type:\"material\")";
+        String sort = "somefield desc";
+        List<Document> result = createDocumentsWithIdentifiers(2L, 6L);
+        sortedSearchResponses.put(query, sort, result);
+    }
+
     @Override
-    public SearchResponse search(String query, long start) {
+    public SearchResponse search(String query, long start, String sort) {
+        if (sort == null) {
+            return searchWithoutSorting(query, start);
+        } else {
+            return searchWithSorting(query, sort, start);
+        }
+    }
+
+    private SearchResponse searchWithoutSorting(String query, long start) {
         if (!searchResponses.containsKey(query)) {
             return new SearchResponse();
         }
 
         List<Document> allDocuments = searchResponses.get(query);
+        return getSearchResponse(start, allDocuments);
+    }
+
+    private SearchResponse searchWithSorting(String query, String sort, long start) {
+        if (!sortedSearchResponses.contains(query, sort)) {
+            return new SearchResponse();
+        }
+
+        List<Document> allDocuments = sortedSearchResponses.get(query, sort);
+        return getSearchResponse(start, allDocuments);
+    }
+
+    private SearchResponse getSearchResponse(long start, List<Document> allDocuments) {
         List<Document> selectedDocuments = new ArrayList<>();
         for (int i = 0; i < allDocuments.size(); i++) {
             if (i >= start && i < start + RESULTS_PER_PAGE) {
