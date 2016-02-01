@@ -116,7 +116,7 @@
         <md-content class="md-padding">
           <div layout="row" flex layout-align="space-between center" data-ng-repeat="taxon in material.taxons track by $index">
             <div data-dop-taxon-selector data-taxon="material.taxons[$index]" data-disable-educational-context="!$first" layout="row" layout-sm="column" flex></div>
-            <md-button class="md-icon-button md-primary" data-ng-click="addNewTaxon()" data-ng-disabled="material.taxon">
+            <md-button class="md-icon-button md-primary" data-ng-show="$index+1 === material.taxons.length" data-ng-click="addNewTaxon()" data-ng-disabled="material.taxon">
               <md-icon>add_circle</md-icon>
               <md-tooltip md-direction="top"><span data-translate="MATERIAL_TAB_ADD_TAXON"></span></md-tooltip>
             </md-button>
