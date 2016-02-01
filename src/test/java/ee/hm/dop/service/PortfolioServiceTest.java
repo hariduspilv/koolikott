@@ -43,7 +43,7 @@ public class PortfolioServiceTest {
     public void get() {
         int portfolioId = 125;
         Portfolio portfolio = createMock(Portfolio.class);
-        expect(portfolioDAO.findById(portfolioId)).andReturn(portfolio);
+        expect(portfolioDAO.findByIdNotDeleted(portfolioId)).andReturn(portfolio);
         expect(portfolio.getVisibility()).andReturn(Visibility.PUBLIC);
 
         replayAll(portfolio);
@@ -109,7 +109,7 @@ public class PortfolioServiceTest {
         originalPortfolio.setTitle("Super title");
         originalPortfolio.setCreator(user);
 
-        expect(portfolioDAO.findById(1L)).andReturn(originalPortfolio);
+        expect(portfolioDAO.findByIdNotDeleted(1L)).andReturn(originalPortfolio);
         expectPortfolioUpdate(capturedPortfolio);
         searchEngineService.updateIndex();
 
@@ -155,7 +155,7 @@ public class PortfolioServiceTest {
         originalPortfolio.setTitle("Super title");
         originalPortfolio.setCreator(user);
 
-        expect(portfolioDAO.findById(1L)).andReturn(originalPortfolio);
+        expect(portfolioDAO.findByIdNotDeleted(1L)).andReturn(originalPortfolio);
         expectPortfolioUpdate(capturedPortfolio);
         searchEngineService.updateIndex();
 

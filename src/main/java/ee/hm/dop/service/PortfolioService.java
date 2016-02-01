@@ -43,7 +43,7 @@ public class PortfolioService {
         if (isUserAdmin(loggedInUser)) {
             portfolio = portfolioDAO.findByIdFromAll(portfolioId);
         } else {
-            portfolio = portfolioDAO.findById(portfolioId);
+            portfolio = portfolioDAO.findByIdNotDeleted(portfolioId);
 
             if (portfolio != null && !isPortfolioAccessibleToUser(portfolio, loggedInUser)) {
                 portfolio = null;
@@ -91,7 +91,7 @@ public class PortfolioService {
             throw new RuntimeException("Comment already exists.");
         }
 
-        Portfolio originalPortfolio = portfolioDAO.findById(portfolio.getId());
+        Portfolio originalPortfolio = portfolioDAO.findByIdNotDeleted(portfolio.getId());
         if (originalPortfolio == null) {
             throw new RuntimeException("Portfolio not found");
         }
@@ -109,7 +109,7 @@ public class PortfolioService {
         if (portfolio == null || portfolio.getId() == null) {
             throw new RuntimeException("Portfolio not found");
         }
-        Portfolio originalPortfolio = portfolioDAO.findById(portfolio.getId());
+        Portfolio originalPortfolio = portfolioDAO.findByIdNotDeleted(portfolio.getId());
         if (originalPortfolio == null) {
             throw new RuntimeException("Portfolio not found");
         }
@@ -132,7 +132,7 @@ public class PortfolioService {
         if (portfolio == null || portfolio.getId() == null) {
             throw new RuntimeException("Portfolio not found");
         }
-        Portfolio originalPortfolio = portfolioDAO.findById(portfolio.getId());
+        Portfolio originalPortfolio = portfolioDAO.findByIdNotDeleted(portfolio.getId());
         if (originalPortfolio == null) {
             throw new RuntimeException("Portfolio not found");
         }
@@ -165,7 +165,7 @@ public class PortfolioService {
             throw new RuntimeException("Portfolio not found");
         }
 
-        Portfolio originalPortfolio = portfolioDAO.findById(portfolio.getId());
+        Portfolio originalPortfolio = portfolioDAO.findByIdNotDeleted(portfolio.getId());
         if (originalPortfolio == null || !isUserAdmin(loggedInUser)) {
             throw new RuntimeException("Portfolio not found");
         }
@@ -187,7 +187,7 @@ public class PortfolioService {
             throw new RuntimeException("Portfolio not found");
         }
 
-        Portfolio originalPortfolio = portfolioDAO.findById(portfolio.getId());
+        Portfolio originalPortfolio = portfolioDAO.findByIdNotDeleted(portfolio.getId());
         if (originalPortfolio == null || !isUserAdmin(loggedInUser)) {
             throw new RuntimeException("Portfolio not found");
         }
@@ -231,7 +231,7 @@ public class PortfolioService {
     }
 
     public Portfolio updatePicture(Portfolio portfolio, User loggedInUser) {
-        Portfolio originalPortfolio = portfolioDAO.findById(portfolio.getId());
+        Portfolio originalPortfolio = portfolioDAO.findByIdNotDeleted(portfolio.getId());
 
         if (originalPortfolio == null) {
             throw new RuntimeException("Portfolio not found");
@@ -251,7 +251,7 @@ public class PortfolioService {
             throw new RuntimeException("Required field title must be filled.");
         }
 
-        Portfolio originalPortfolio = portfolioDAO.findById(portfolio.getId());
+        Portfolio originalPortfolio = portfolioDAO.findByIdNotDeleted(portfolio.getId());
         if (originalPortfolio == null) {
             throw new RuntimeException("Portfolio not found");
         }
@@ -268,7 +268,7 @@ public class PortfolioService {
             throw new RuntimeException("Portfolio not found");
         }
 
-        Portfolio originalPortfolio = portfolioDAO.findById(portfolio.getId());
+        Portfolio originalPortfolio = portfolioDAO.findByIdNotDeleted(portfolio.getId());
         if (originalPortfolio == null) {
             throw new RuntimeException("Portfolio not found");
         }
@@ -288,7 +288,7 @@ public class PortfolioService {
             throw new RuntimeException("Portfolio must already exist.");
         }
 
-        Portfolio originalPortfolio = portfolioDAO.findById(portfolio.getId());
+        Portfolio originalPortfolio = portfolioDAO.findByIdNotDeleted(portfolio.getId());
         if (originalPortfolio == null) {
             throw new RuntimeException("Portfolio not found");
         }
@@ -380,7 +380,7 @@ public class PortfolioService {
         if (portfolio == null || portfolio.getId() == null) {
             throw new RuntimeException("Portfolio not found");
         }
-        Portfolio originalPortfolio = portfolioDAO.findById(portfolio.getId());
+        Portfolio originalPortfolio = portfolioDAO.findByIdNotDeleted(portfolio.getId());
         if (originalPortfolio == null || !isPortfolioAccessibleToUser(originalPortfolio, loggedInUser)) {
             throw new RuntimeException("Portfolio not found");
         }

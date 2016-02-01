@@ -520,3 +520,9 @@ insert into Portfolio_KeyCompetence(portfolio, keyCompetence) values (6, 1);
 insert into ImproperContent(id, creator, portfolio, material, added) values (1, 1, 2, null, '2014-06-01 00:00:01');
 insert into ImproperContent(id, creator, portfolio, material, added) values (2, 1, null, 2, '2014-06-01 00:00:01');
 
+-- TagUpVotes
+
+insert into TagUpVote(id, user, portfolio, material, tag) values (1, 1, 1, null, 1);
+insert into TagUpVote(id, user, portfolio, material, tag) values (2, 1, null, 1, 1);
+
+

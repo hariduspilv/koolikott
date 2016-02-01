@@ -135,6 +135,18 @@ public abstract class ResourceIntegrationTestBase extends IntegrationTestBase {
     }
 
     /*
+     * PUT
+     */
+
+    protected static Response doPut(String url, Entity<?> requestEntity) {
+        return doPut(url, requestEntity, MediaType.APPLICATION_JSON_TYPE);
+    }
+
+    protected static Response doPut(String url, Entity<?> requestEntity, MediaType mediaType) {
+        return getTarget(url).request().accept(mediaType).put(requestEntity);
+    }
+
+    /*
      * Target
      */
 

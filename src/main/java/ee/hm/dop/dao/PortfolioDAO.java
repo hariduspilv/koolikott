@@ -18,7 +18,7 @@ public class PortfolioDAO {
     @Inject
     private EntityManager entityManager;
 
-    public Portfolio findById(long portfolioId) {
+    public Portfolio findByIdNotDeleted(long portfolioId) {
         return findById(portfolioId, false);
     }
 

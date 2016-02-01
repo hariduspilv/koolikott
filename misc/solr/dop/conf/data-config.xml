@@ -31,6 +31,8 @@
                 <entity name="Tag" query="select name as tag from Tag where id = '${Material_Tag.tag_id}'" />
             </entity>
 
+            <entity name="TagUpVote" query="select concat(t.name, '_', count(*)) as tag_up_vote from TagUpVote tuv, Tag t where tuv.tag = t.id AND tuv.material = '${Material.id}' GROUP BY name" />
+
             <entity name="Material_Taxon" query="select taxon as taxon_id from Material_Taxon where material = '${Material.id}'">
                 <!-- Travel up the taxon path -->
 

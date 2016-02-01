@@ -1,6 +1,7 @@
 USE dop;
 
 -- Drop tables
+DROP TABLE IF EXISTS TagUpVote;
 DROP TABLE IF EXISTS BrokenContent;
 DROP TABLE IF EXISTS ImproperContent;
 DROP TABLE IF EXISTS UserLike;
@@ -231,13 +232,13 @@ CREATE TABLE User (
 );
 
 CREATE TABLE Person (
-  id        BIGINT  AUTO_INCREMENT PRIMARY KEY
+  id BIGINT AUTO_INCREMENT PRIMARY KEY
 );
 
 CREATE TABLE Institution (
-  id        BIGINT  AUTO_INCREMENT PRIMARY KEY,
-  ehisId    VARCHAR(255)              NOT NULL,
-  person        BIGINT,
+  id     BIGINT AUTO_INCREMENT PRIMARY KEY,
+  ehisId VARCHAR(255) NOT NULL,
+  person BIGINT,
 
   FOREIGN KEY (person)
   REFERENCES Person (id)
@@ -245,10 +246,10 @@ CREATE TABLE Institution (
 );
 
 CREATE TABLE Institution_Roles (
-  institution       BIGINT          NOT NULL,
-  institutionalRole VARCHAR(255)    NOT NULL,
-  schoolClass       varchar(255),
-  schoolYear        varchar(255),
+  institution       BIGINT       NOT NULL,
+  institutionalRole VARCHAR(255) NOT NULL,
+  schoolClass       VARCHAR(255),
+  schoolYear        VARCHAR(255),
 
   FOREIGN KEY (institution)
   REFERENCES Institution (id)
@@ -269,7 +270,7 @@ CREATE TABLE AuthenticatedUser (
   FOREIGN KEY (user_id)
   REFERENCES User (id)
     ON DELETE RESTRICT,
-    
+
   FOREIGN KEY (person)
   REFERENCES Person (id)
     ON DELETE CASCADE
@@ -747,11 +748,11 @@ CREATE TABLE ImproperContent (
 );
 
 CREATE TABLE BrokenContent (
-  id        BIGINT    AUTO_INCREMENT PRIMARY KEY,
-  creator   BIGINT NOT NULL,
-  material  BIGINT,
-  added     TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  deleted   BOOLEAN   DEFAULT FALSE,
+  id       BIGINT    AUTO_INCREMENT PRIMARY KEY,
+  creator  BIGINT NOT NULL,
+  material BIGINT,
+  added    TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  deleted  BOOLEAN   DEFAULT FALSE,
 
   FOREIGN KEY (creator)
   REFERENCES User (id)
@@ -759,5 +760,30 @@ CREATE TABLE BrokenContent (
 
   FOREIGN KEY (material)
   REFERENCES Material (id)
+    ON DELETE RESTRICT
+);
+
+CREATE TABLE TagUpVote (
+  id        BIGINT  AUTO_INCREMENT PRIMARY KEY,
+  user      BIGINT NOT NULL,
+  material  BIGINT,
+  portfolio BIGINT,
+  tag       BIGINT NOT NULL,
+  deleted   BOOLEAN DEFAULT FALSE,
+
+  FOREIGN KEY (user)
+  REFERENCES User (id)
+    ON DELETE RESTRICT,
+
+  FOREIGN KEY (material)
+  REFERENCES Material (id)
+    ON DELETE RESTRICT,
+
+  FOREIGN KEY (portfolio)
+  REFERENCES Portfolio (id)
+    ON DELETE RESTRICT,
+
+  FOREIGN KEY (tag)
+  REFERENCES Tag (id)
     ON DELETE RESTRICT
 );
