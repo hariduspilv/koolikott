@@ -91,6 +91,8 @@ public class MaterialService {
             material.setEmbeddable(true);
         }
 
+        material.setRecommendation(null);
+
         Material createdMaterial = createOrUpdate(material);
         if (updateSearchIndex) {
             searchEngineService.updateIndex();
@@ -101,9 +103,7 @@ public class MaterialService {
 
     public void delete(Material material, User loggedInUser) {
         Material originalMaterial = materialDao.findByIdNotDeleted(material.getId());
-        if (originalMaterial == null) {
-            throw new RuntimeException("Material not found");
-        }
+        validateMaterialNotNull(originalMaterial);
 
         if (!isUserAdmin(loggedInUser)) {
             throw new RuntimeException("Logged in user must be an administrator.");
@@ -115,9 +115,7 @@ public class MaterialService {
 
     public void restore(Material material, User loggedInUser) {
         Material originalMaterial = materialDao.findById(material.getId());
-        if (originalMaterial == null) {
-            throw new RuntimeException("Material not found");
-        }
+        validateMaterialNotNull(originalMaterial);
 
         if (!isUserAdmin(loggedInUser)) {
             throw new RuntimeException("Logged in user must be an administrator.");
@@ -181,9 +179,7 @@ public class MaterialService {
         }
 
         Material originalMaterial = materialDao.findByIdNotDeleted(material.getId());
-        if (originalMaterial == null) {
-            throw new RuntimeException("Material not found");
-        }
+        validateMaterialNotNull(originalMaterial);
 
         comment.setAdded(DateTime.now());
         originalMaterial.getComments().add(comment);
@@ -191,13 +187,9 @@ public class MaterialService {
     }
 
     public UserLike addUserLike(Material material, User loggedInUser, boolean isLiked) {
-        if (material == null || material.getId() == null) {
-            throw new RuntimeException("Material not found");
-        }
+        validateMaterialAndIdNotNull(material);
         Material originalMaterial = materialDao.findByIdNotDeleted(material.getId());
-        if (originalMaterial == null) {
-            throw new RuntimeException("Material not found");
-        }
+        validateMaterialNotNull(originalMaterial);
 
         userLikeDAO.deleteMaterialLike(originalMaterial, loggedInUser);
 
@@ -211,48 +203,52 @@ public class MaterialService {
     }
 
     public Recommendation addRecommendation(Material material, User loggedInUser) {
-        if (material == null || material.getId() == null) {
-            throw new RuntimeException("Material not found");
-        }
+        validateMaterialAndIdNotNull(material);
+
+        validateUserIsAdmin(loggedInUser);
+
+        Material originalMaterial = materialDao.findByIdNotDeleted(material.getId());
+
+        validateMaterialNotNull(originalMaterial);
 
         Recommendation recommendation = new Recommendation();
         recommendation.setCreator(loggedInUser);
         recommendation.setAdded(DateTime.now());
+        originalMaterial.setRecommendation(recommendation);
 
-        material.setRecommendation(recommendation);
+        originalMaterial = materialDao.update(originalMaterial);
 
-        material = updateByUser(material, loggedInUser);
+        searchEngineService.updateIndex();
 
-        return material.getRecommendation();
+        return originalMaterial.getRecommendation();
     }
 
     public void removeRecommendation(Material material, User loggedInUser) {
-        if (material == null || material.getId() == null) {
-            throw new RuntimeException("Material not found");
-        }
+        validateMaterialAndIdNotNull(material);
 
-        material.setRecommendation(null);
+        validateUserIsAdmin(loggedInUser);
 
-        updateByUser(material, loggedInUser);
+        Material originalMaterial = materialDao.findByIdNotDeleted(material.getId());
+
+        validateMaterialNotNull(originalMaterial);
+
+        originalMaterial.setRecommendation(null);
+
+        materialDao.update(originalMaterial);
+
+        searchEngineService.updateIndex();
     }
 
     public void removeUserLike(Material material, User loggedInUser) {
-        if (material == null || material.getId() == null) {
-            throw new RuntimeException("Material not found");
-        }
+        validateMaterialAndIdNotNull(material);
         Material originalMaterial = materialDao.findByIdNotDeleted(material.getId());
-        if (originalMaterial == null) {
-            throw new RuntimeException("Material not found");
-        }
+        validateMaterialNotNull(originalMaterial);
 
         userLikeDAO.deleteMaterialLike(originalMaterial, loggedInUser);
     }
 
     public UserLike getUserLike(Material material, User loggedInUser) {
-
-        if (material == null || material.getId() == null) {
-            throw new RuntimeException("Material not found");
-        }
+        validateMaterialAndIdNotNull(material);
         Material originalMaterial = materialDao.findByIdNotDeleted(material.getId());
         if (originalMaterial == null && !isUserAdmin(loggedInUser)) {
             throw new RuntimeException("Material not found");
@@ -468,5 +464,23 @@ public class MaterialService {
         List<ImproperContent> improperContents = improperContentDAO.getByMaterial(materialId);
 
         return improperContents.size() != 0;
+    }
+
+    private void validateMaterialAndIdNotNull(Material material) {
+        if (material == null || material.getId() == null) {
+            throw new RuntimeException("Material not found");
+        }
+    }
+
+    private void validateMaterialNotNull(Material material) {
+        if (material == null) {
+            throw new RuntimeException("Material not found");
+        }
+    }
+
+    private void validateUserIsAdmin(User loggedInUser) {
+        if (!isUserAdmin(loggedInUser)) {
+            throw new RuntimeException("Only admin can do this");
+        }
     }
 }
