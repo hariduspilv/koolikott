@@ -327,7 +327,7 @@ define([
 
             function restoreSuccess() {
                 $scope.material.deleted = false;
-                toastService.showOnRouteChange('MATERIAL_RESTORED');
+                toastService.show('MATERIAL_RESTORED');
             }
 
             function restoreFail() {

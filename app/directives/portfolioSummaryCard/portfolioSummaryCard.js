@@ -103,7 +103,7 @@ define([
 
                 function restoreSuccess() {
                     $scope.portfolio.deleted = false;
-                    toastService.showOnRouteChange('PORTFOLIO_RESTORED');
+                    toastService.show('PORTFOLIO_RESTORED');
                 }
 
                 function restoreFail() {
