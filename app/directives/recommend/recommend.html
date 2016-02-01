@@ -1,8 +1,8 @@
-<md-button data-ng-if="!isRecommended" data-ng-click="recommend()">
+<md-button data-ng-if="!material.recommendation && !portfolio.recommendation" data-ng-click="recommend()">
 	  <md-icon md-menu-align-target>favorite</md-icon>
 	  <span data-translate="RECOMMEND"></span>
 </md-button>
-<md-button data-ng-if="isRecommended" data-ng-click="removeRecommendation()">
+<md-button data-ng-if="material.recommendation || portfolio.recommendation" data-ng-click="removeRecommendation()">
       <md-icon md-menu-align-target>favorite_outline</md-icon>
-      <span data-ng-if="isRecommended" data-translate="RECOMMEND_REMOVE"></span>
+      <span data-translate="RECOMMEND_REMOVE"></span>
 </md-button>
