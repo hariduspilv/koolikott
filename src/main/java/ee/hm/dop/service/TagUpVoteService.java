@@ -30,23 +30,47 @@ public class TagUpVoteService {
     private TagUpVoteDAO tagUpVoteDAO;
 
     public TagUpVote upVote(TagUpVote tagUpVote, User user) {
-        Material material = null;
-        Portfolio portfolio = null;
+        tagUpVote = createTagUpVote(tagUpVote, user);
 
+        if(tagUpVote.getUser() != null && tagUpVote.getTag() != null && (tagUpVote.getMaterial() != null || tagUpVote.getPortfolio() != null) ) {
+           return tagUpVoteDAO.update(tagUpVote);
+        }  else {
+            throw new RuntimeException("No material or portfolio or tag or user found when upvoting tag");
+        }
+    }
+
+    private TagUpVote createTagUpVote(TagUpVote tagUpVote, User user) {
+        Material material;
+        Portfolio portfolio;
         if (tagUpVote.getMaterial() != null) {
             material = materialDAO.findByIdNotDeleted(tagUpVote.getMaterial().getId());
+            tagUpVote.setMaterial(material);
         } else if (tagUpVote.getPortfolio() != null) {
             portfolio = portfolioDAO.findByIdNotDeleted(tagUpVote.getPortfolio().getId());
+            tagUpVote.setPortfolio(portfolio);
         }
 
         tagUpVote.setUser(user);
         Tag tag = tagDAO.findTagByName(tagUpVote.getTag().getName());
         tagUpVote.setTag(tag);
+        return tagUpVote;
+    }
 
-        if(user != null && tag != null && (material != null || portfolio != null) ) {
-           return tagUpVoteDAO.update(tagUpVote);
-        }  else {
-            throw new RuntimeException("No material or portfolio or tag or user found when upvoting tag");
-        }
+    public void removeUpVoteFromMaterial(Long tagID, Long materialID, User loggedInUser) {
+        Material material = materialDAO.findByIdNotDeleted(materialID);
+        Tag tag = tagDAO.findTagByID(tagID);
+
+        TagUpVote tagUpVote = tagUpVoteDAO.getTagUpVote(tag, loggedInUser, material);
+
+        tagUpVoteDAO.setDeleted(tagUpVote);
+    }
+
+    public void removeUpVoteFromPortfolio(Long tagID, Long portfolioID, User loggedInUser) {
+        Portfolio portfolio = portfolioDAO.findByIdNotDeleted(portfolioID);
+        Tag tag = tagDAO.findTagByID(tagID);
+
+        TagUpVote tagUpVote = tagUpVoteDAO.getTagUpVote(tag, loggedInUser, portfolio);
+
+        tagUpVoteDAO.setDeleted(tagUpVote);
     }
 }

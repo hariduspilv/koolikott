@@ -146,6 +146,14 @@ public abstract class ResourceIntegrationTestBase extends IntegrationTestBase {
         return getTarget(url).request().accept(mediaType).put(requestEntity);
     }
 
+     /*
+     * DELETE
+     */
+
+    protected static Response doDelete(String url) {
+        return getTarget(url).request().delete();
+    }
+
     /*
      * Target
      */

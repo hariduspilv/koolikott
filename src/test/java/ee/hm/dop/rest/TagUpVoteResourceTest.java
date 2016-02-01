@@ -38,5 +38,8 @@ public class TagUpVoteResourceTest extends ResourceIntegrationTestBase {
 
         assertNotNull(returnedTagUpVote);
         assertNotNull(returnedTagUpVote.getId());
+
+        response = doDelete("tagUpVotes/tags/1/materials/1");
+        assertEquals(Response.Status.NO_CONTENT.getStatusCode(), response.getStatus());
     }
 }
