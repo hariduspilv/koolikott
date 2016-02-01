@@ -14,7 +14,7 @@ define([
             controller: function($scope, $location) {
 
                 $scope.recommend = function() {
-                    if (authenticatedUserService.isAdmin())
+                    if (authenticatedUserService.isAdmin()) {
                         if ($scope.material) {
                             var url = "rest/material/recommend";
                             serverCallService.makePost(url, $scope.material, querySuccess, queryFail);
@@ -26,7 +26,7 @@ define([
                 }
 
                 $scope.removeRecommendation = function() {
-                    if (authenticatedUserService.isAdmin())
+                    if (authenticatedUserService.isAdmin()) {
                         if ($scope.material) {
                             var url = "rest/material/removeRecommendation";
                             serverCallService.makePost(url, $scope.material, querySuccess, queryFail);
