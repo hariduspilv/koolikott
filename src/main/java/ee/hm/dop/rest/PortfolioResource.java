@@ -157,7 +157,7 @@ public class PortfolioResource extends BaseResource {
     @Path("update")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    @RolesAllowed({ "USER", "ADMIN", "PUBLISHER", "RESTRICTED" })
+    @RolesAllowed({ "USER", "ADMIN", "PUBLISHER" })
     public Portfolio update(Portfolio portfolio) {
         return portfolioService.update(portfolio, getLoggedInUser());
     }
