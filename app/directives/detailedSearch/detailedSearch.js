@@ -52,10 +52,9 @@ define([
                         $scope.detailedSearch.type = searchService.getType();
                     }
 
-                    // ResourceType
-                    var resourceType = searchService.getResourceType();
-                    if (resourceType && resourceType.toLowerCase() === 'textbook') {
-                        $scope.detailedSearch.onlyBooks = true;
+                    // Curriculum literature
+                    if (searchService.isCurriculumLiterature()) {
+                        $scope.detailedSearch.onlyCurriculumLiterature = true;
                     }
 
                     // Special education
@@ -114,7 +113,7 @@ define([
                     addLanguageToSearch();
                     addTaxonToSearch();
                     addTargetGroupsToSearch();
-                    addOnlyBooksCheckboxToSearch();
+                    addOnlyCurriculumLiteratureCheckboxToSearch();
                     addSpecialEducationCheckboxToSearch();
                     addIssueDateToSearch();
                     addCrossCurricularThemeToSearch();
@@ -151,11 +150,11 @@ define([
                     }
                 }
 
-                function addOnlyBooksCheckboxToSearch() {
-                    if ($scope.detailedSearch.onlyBooks) {
-                        searchService.setResourceType('textbook');
+                function addOnlyCurriculumLiteratureCheckboxToSearch() {
+                    if ($scope.detailedSearch.onlyCurriculumLiterature) {
+                        searchService.setCurriculumLiterature(true);
                     } else {
-                        searchService.setResourceType(null);
+                        searchService.setCurriculumLiterature(null);
                     }
                 }
 

@@ -73,6 +73,10 @@ define([
                 params.resourceType = searchService.getResourceType();
             }
 
+            if (searchService.isCurriculumLiterature()) {
+                params.curriculumLiterature = searchService.isCurriculumLiterature();
+            }
+
             if (searchService.isSpecialEducation() === true) {
                 params.specialEducation = searchService.isSpecialEducation();
             }

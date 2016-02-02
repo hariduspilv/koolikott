@@ -12,6 +12,7 @@ define(['angularAMD'], function(angularAMD) {
         var issuedFromURL = "&issuedFrom=";
         var crossCurricularThemeURL = "&crossCurricularTheme=";
         var keyCompetenceURL = "&keyCompetence="
+        var isCurriculumLiteratureURL = "&curriculumLiterature=";
         var sortURL = "&sort=";
         var sortDirectionURL = "&sortDirection=";
 
@@ -26,6 +27,7 @@ define(['angularAMD'], function(angularAMD) {
         var searchIssuedFrom = "";
         var searchCrossCurricularTheme = "";
         var searchKeyCompetence = "";
+        var searchIsCurriculumLiterature = "";
         var searchSort = "";
         var searchSortDirection = "";
 
@@ -130,6 +132,10 @@ define(['angularAMD'], function(angularAMD) {
                 searchKeyCompetence = keyCompetence;
             },
 
+            setCurriculumLiterature: function(isCurriculumLiterature) {
+                searchIsCurriculumLiterature = isCurriculumLiterature;
+            },
+
             setSort: function(sort) {
                 searchSort = sort;
             },
@@ -178,6 +184,9 @@ define(['angularAMD'], function(angularAMD) {
                 if (searchKeyCompetence) {
                     searchURL += keyCompetenceURL + searchKeyCompetence;
                 }
+                if (searchIsCurriculumLiterature) {
+                    searchURL += isCurriculumLiteratureURL + searchIsCurriculumLiterature;
+                }
                 if (searchSort && searchSortDirection) {
                     searchURL += sortURL + searchSort + sortDirectionURL + searchSortDirection;
                 }
@@ -190,7 +199,7 @@ define(['angularAMD'], function(angularAMD) {
                 if (searchObject.q || searchObject.taxon || searchObject.paid === false ||
                     (searchObject.type && this.isValidType(searchObject.type)) || searchObject.language || searchObject.targetGroup ||
                     searchObject.resourceType || searchObject.specialEducation || searchObject.issuedFrom || searchObject.crossCurricularTheme ||
-                    searchObject.keyCompetence || (searchObject.sort && searchObject.sortDirection)) {
+                    searchObject.keyCompetence || searchObject.curriculumLiterature || (searchObject.sort && searchObject.sortDirection)) {
                     return true;
                 } else {
                     return false;
@@ -340,6 +349,17 @@ define(['angularAMD'], function(angularAMD) {
                 return searchSortDirection;
             },
 
+            isCurriculumLiterature: function() {
+                if (searchIsCurriculumLiterature === "") {
+                    var searchObject = $location.search();
+                    if (searchObject.curriculumLiterature) {
+                        return searchObject.curriculumLiterature === 'true' ? true : false;
+                    }
+                }
+
+                return searchIsCurriculumLiterature;
+            },
+
             clearFieldsNotInSimpleSearch: function() {
                 searchTaxon = '';
                 searchPaid = '';
@@ -351,6 +371,7 @@ define(['angularAMD'], function(angularAMD) {
                 searchIssuedFrom = '';
                 searchCrossCurricularTheme = '';
                 searchKeyCompetence = '';
+                searchIsCurriculumLiterature = '';
                 searchSort = '';
                 searchSortDirection = '';
             },
