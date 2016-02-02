@@ -48,13 +48,13 @@ define([
                     log('Creating copy of portfolio failed.');
                 }
 
-                $scope.hasPermission = function() {
+                $scope.hasAddMaterialPermission = function() {
                     return authenticatedUserService.getUser() &&
                         (authenticatedUserService.getUser().role === 'ADMIN' || authenticatedUserService.getUser().role === 'PUBLISHER');
                 };
                 
-                $scope.hasCopyPermission = function() {
-                    return $scope.isViewPortforlioPage && $scope.hasPermission();
+                $scope.hasPermission = function() {
+                    return authenticatedUserService.getUser() && authenticatedUserService.getUser().role !== 'RESTRICTED';
                 };
             }
         };

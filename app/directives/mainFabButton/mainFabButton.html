@@ -1,4 +1,4 @@
-<md-fab-speed-dial class="md-fab-bottom-right md-scale main-fab-button" md-open="isOpen" md-direction="up" data-ng-mouseenter="isOpen = true" data-ng-mouseleave="isOpen = false">
+<md-fab-speed-dial data-ng-if="hasPermission()" class="md-fab-bottom-right md-scale main-fab-button" md-open="isOpen" md-direction="up" data-ng-mouseenter="isOpen = true" data-ng-mouseleave="isOpen = false">
   <md-fab-trigger>
     <md-button aria-label="Lisa kogumik" class="md-fab " data-ng-click="showAddPortfolioDialog($event)">
       <md-tooltip md-direction="left">
@@ -8,13 +8,13 @@
     </md-button>
   </md-fab-trigger>
   <md-fab-actions>
-    <md-button aria-label="Lisa material" class="md-fab md-raised md-mini" data-ng-click="showAddMaterialDialog($event)" data-ng-if="hasPermission()">
+    <md-button aria-label="Lisa material" class="md-fab md-raised md-mini" data-ng-click="showAddMaterialDialog($event)" data-ng-if="hasAddMaterialPermission()">
       <md-tooltip md-direction="left">
         <span data-translate="ADD_MATERIAL"></span>
       </md-tooltip>
       <md-icon>description</md-icon>
     </md-button>
-    <md-button aria-label="Kopeeri kogumik" class="md-fab md-raised md-mini" data-ng-click="copyPortfolio()" data-ng-if="hasCopyPermission()">
+    <md-button aria-label="Kopeeri kogumik" class="md-fab md-raised md-mini" data-ng-click="copyPortfolio()" data-ng-if="isViewPortforlioPage">
       <md-tooltip md-direction="left">
         <span data-translate="COPY_PORTFOLIO"></span>
       </md-tooltip>
