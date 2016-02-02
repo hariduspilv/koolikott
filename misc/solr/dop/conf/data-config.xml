@@ -37,6 +37,10 @@
             
             <entity name="Material_Recommendatation_Timestamp" query="select added as recommendation_timestamp from Recommendation where id = '${Material.recommendation}'" />
 
+            <entity name="Material_Publisher" query="select publisher as publisher_id from Material_Publisher where material='${Material.id}'">
+                <entity name="Publisher" query="select name as publisher from Publisher where id = '${Material_Publisher.publisher_id}'" />
+            </entity>
+
             <entity name="Material_Taxon" query="select taxon as taxon_id from Material_Taxon where material = '${Material.id}'">
                 <!-- Travel up the taxon path -->
 
