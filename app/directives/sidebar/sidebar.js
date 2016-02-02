@@ -15,20 +15,17 @@ define([
                     q: 'recommended:true',
                     start: 0,
                     sort: 'recommendation_timestamp',
-                    sortDirection: 'desc'
+                    sortDirection: 'desc',
+                    limit: RECOMMENDED_ITEMS
                 };
 
                 serverCallService.makeGet("rest/search", params, getRecommendationsSuccess, getRecommendationsFail);
 
                 function getRecommendationsSuccess(data) {
                     if (isEmpty(data)) {
-                        log('No data returned by session search.');
+                        log('No data returned by recommended item search.');
                     } else {
-                        if (data.items.length > RECOMMENDED_ITEMS) {
-                            $scope.recommendations = data.items.slice(0, RECOMMENDED_ITEMS);
-                        } else {
-                            $scope.recommendations = data.items;
-                        }
+                        $scope.recommendations = data.items;
                     }
                 }
 
