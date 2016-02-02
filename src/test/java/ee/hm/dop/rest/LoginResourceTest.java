@@ -1,5 +1,7 @@
 package ee.hm.dop.rest;
 
+import static ee.hm.dop.utils.ConfigurationProperties.STUUDIUM_CLIENT_ID;
+import static ee.hm.dop.utils.ConfigurationProperties.STUUDIUM_URL_AUTHORIZE;
 import static ee.hm.dop.utils.ConfigurationProperties.TAAT_ASSERTION_CONSUMER_SERVICE_INDEX;
 import static ee.hm.dop.utils.ConfigurationProperties.TAAT_CONNECTION_ID;
 import static ee.hm.dop.utils.ConfigurationProperties.TAAT_SSO;
@@ -301,6 +303,15 @@ public class LoginResourceTest extends ResourceIntegrationTestBase {
         String token = "2";
         Response isValid = doGet(String.format("login/mobileId/isValid?token=%s", token));
         assertEquals(204, isValid.getStatus());
+    }
+
+    @Test
+    public void stuudiumAuthenticate() {
+        Response response = doGet("login/stuudium");
+        String url = response.getHeaderString("Location");
+        assertEquals(307, response.getStatus());
+        assertEquals(configuration.getString(STUUDIUM_URL_AUTHORIZE) + "client_id="
+                + configuration.getString(STUUDIUM_CLIENT_ID), url);
     }
 
     private AuthnRequest decodeAuthnRequest(String request) throws Exception {

@@ -53,5 +53,9 @@ public interface ConfigurationProperties {
     String EKOOL_URL_TOKEN = "ekool.url.token";
     String EKOOL_URL_GENERALDATA = "ekool.url.generaldata";
 
+    // Stuudium
+    String STUUDIUM_CLIENT_ID = "stuudium.client.id";
+    String STUUDIUM_URL_AUTHORIZE = "stuudium.url.authorize";
+
     String MAX_FILE_SIZE = "file.upload.max.size";
 }

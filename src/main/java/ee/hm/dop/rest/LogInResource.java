@@ -29,6 +29,7 @@ import ee.hm.dop.service.AuthenticatedUserService;
 import ee.hm.dop.service.EkoolService;
 import ee.hm.dop.service.LanguageService;
 import ee.hm.dop.service.LoginService;
+import ee.hm.dop.service.StuudiumService;
 import ee.hm.dop.service.TaatService;
 
 @Path("login")
@@ -36,6 +37,8 @@ public class LogInResource extends BaseResource {
 
     private static final String EKOOL_CALLBACK_PATH = "/rest/login/ekool/success";
     private static final String EKOOL_AUTHENTICATION_URL = "%s?client_id=%s&redirect_uri=%s&scope=read&response_type=code";
+
+    private static final String STUUDIUM_AUTHENTICATION_URL = "%sclient_id=%s";
 
     @Inject
     private LoginService loginService;
@@ -45,6 +48,9 @@ public class LogInResource extends BaseResource {
 
     @Inject
     private EkoolService ekoolService;
+
+    @Inject
+    private StuudiumService stuudiumService;
 
     @Inject
     private HTTPRedirectDeflateEncoder encoder;
@@ -110,6 +116,13 @@ public class LogInResource extends BaseResource {
     }
 
     @GET
+    @Path("stuudium")
+    public Response stuudiumAuthenticate() throws URISyntaxException {
+        URI authenticationUri = getStuudiumAuthenticationURI();
+        return Response.temporaryRedirect(authenticationUri).build();
+    }
+
+    @GET
     @Path("/mobileId")
     @Produces(MediaType.APPLICATION_JSON)
     public MobileIDSecurityCodes mobileIDLogin(@QueryParam("phoneNumber") String phoneNumber,
@@ -158,6 +171,11 @@ public class LogInResource extends BaseResource {
     private URI getEkoolAuthenticationURI() throws URISyntaxException {
         return new URI(format(EKOOL_AUTHENTICATION_URL, ekoolService.getAuthorizationUrl(), ekoolService.getClientId(),
                 getEkoolCallbackUrl()));
+    }
+
+    private URI getStuudiumAuthenticationURI() throws URISyntaxException {
+        return new URI(format(STUUDIUM_AUTHENTICATION_URL, stuudiumService.getAuthorizationUrl(),
+                stuudiumService.getClientId()));
     }
 
     private String getEkoolCallbackUrl() {
