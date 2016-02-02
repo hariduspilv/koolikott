@@ -48,7 +48,7 @@ public class PortfolioResource extends BaseResource {
     @Produces(MediaType.APPLICATION_JSON)
     public Portfolio get(@QueryParam("id") long portfolioId) {
 
-        return portfolioService.get(portfolioId,  getLoggedInUser());
+        return portfolioService.get(portfolioId, getLoggedInUser());
     }
 
     @GET
@@ -73,7 +73,7 @@ public class PortfolioResource extends BaseResource {
     @Path("/getPicture")
     @Produces("image/png")
     public Response getPictureById(@QueryParam("portfolioId") long id) {
-        String pictureData = portfolioService.getPortfolioPicture(id,  getLoggedInUser());
+        String pictureData = portfolioService.getPortfolioPicture(id, getLoggedInUser());
 
         if (pictureData != null) {
             return Response.ok(pictureData).build();
@@ -148,7 +148,7 @@ public class PortfolioResource extends BaseResource {
     @Path("create")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    @RolesAllowed({ "USER", "ADMIN", "PUBLISHER" })
+    @RolesAllowed({ "USER", "ADMIN", "PUBLISHER", "RESTRICTED" })
     public Portfolio create(Portfolio portfolio) {
         return portfolioService.create(portfolio, getLoggedInUser());
     }
@@ -157,7 +157,7 @@ public class PortfolioResource extends BaseResource {
     @Path("update")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    @RolesAllowed({ "USER", "ADMIN", "PUBLISHER" })
+    @RolesAllowed({ "USER", "ADMIN", "PUBLISHER", "RESTRICTED" })
     public Portfolio update(Portfolio portfolio) {
         return portfolioService.update(portfolio, getLoggedInUser());
     }
@@ -166,7 +166,7 @@ public class PortfolioResource extends BaseResource {
     @Path("copy")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    @RolesAllowed({ "USER", "ADMIN", "PUBLISHER" })
+    @RolesAllowed({ "USER", "ADMIN", "PUBLISHER", "RESTRICTED" })
     public Portfolio copy(Portfolio portfolio) {
         return portfolioService.copy(portfolio, getLoggedInUser());
     }
@@ -174,7 +174,7 @@ public class PortfolioResource extends BaseResource {
     @POST
     @Path("delete")
     @Consumes(MediaType.APPLICATION_JSON)
-    @RolesAllowed({ "USER", "ADMIN", "PUBLISHER" })
+    @RolesAllowed({ "USER", "ADMIN", "PUBLISHER", "RESTRICTED" })
     public void delete(Portfolio portfolio) {
         portfolioService.delete(portfolio, getLoggedInUser());
     }
@@ -191,7 +191,7 @@ public class PortfolioResource extends BaseResource {
     @Path("setImproper")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    @RolesAllowed({ "USER", "ADMIN", "PUBLISHER" })
+    @RolesAllowed({ "USER", "ADMIN", "PUBLISHER", "RESTRICTED" })
     public ImproperContent setImproperPortfolio(Portfolio portfolio) {
         return portfolioService.addImproperPortfolio(portfolio, getLoggedInUser());
     }
@@ -215,7 +215,7 @@ public class PortfolioResource extends BaseResource {
     @GET
     @Path("hasSetImproper")
     @Produces(MediaType.APPLICATION_JSON)
-    @RolesAllowed({ "USER", "ADMIN", "PUBLISHER" })
+    @RolesAllowed({ "USER", "ADMIN", "PUBLISHER", "RESTRICTED" })
     public Boolean hasSetImproper(@QueryParam("portfolioId") long portfolioId) {
         return portfolioService.hasSetImproper(portfolioId, getLoggedInUser());
     }

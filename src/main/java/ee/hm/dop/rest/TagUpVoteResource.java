@@ -14,6 +14,7 @@ import ee.hm.dop.model.TagUpVote;
 import ee.hm.dop.service.TagUpVoteService;
 
 @Path("tagUpVotes")
+@RolesAllowed({ "USER", "ADMIN", "PUBLISHER", "RESTRICTED" })
 public class TagUpVoteResource extends BaseResource {
 
     @Inject
@@ -22,7 +23,6 @@ public class TagUpVoteResource extends BaseResource {
     @PUT
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    @RolesAllowed({ "USER", "ADMIN", "PUBLISHER" })
     public TagUpVote upVote(TagUpVote tagUpVote) {
         return tagUpVoteService.upVote(tagUpVote, getLoggedInUser());
     }
@@ -31,7 +31,6 @@ public class TagUpVoteResource extends BaseResource {
     @Path("tags/{tagID}/materials/{materialID}")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    @RolesAllowed({ "USER", "ADMIN", "PUBLISHER" })
     public void removeVoteMaterial(@PathParam("tagID") Long tagID, @PathParam("materialID") Long materialID) {
         tagUpVoteService.removeUpVoteFromMaterial(tagID, materialID, getLoggedInUser());
     }
@@ -40,7 +39,6 @@ public class TagUpVoteResource extends BaseResource {
     @Path("tags/{tagID}/portfolios/{portfolioID}")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    @RolesAllowed({ "USER", "ADMIN", "PUBLISHER" })
     public void removeVotePortfolio(@PathParam("tagID") Long tagID, @PathParam("portfolioID") Long portfolioID) {
         tagUpVoteService.removeUpVoteFromPortfolio(tagID, portfolioID, getLoggedInUser());
     }

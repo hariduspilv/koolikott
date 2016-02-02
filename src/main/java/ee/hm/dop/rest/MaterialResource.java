@@ -155,7 +155,7 @@ public class MaterialResource extends BaseResource {
     }
 
     @POST
-    @RolesAllowed({ "USER", "ADMIN", "PUBLISHER" })
+    @RolesAllowed({ "USER", "ADMIN", "PUBLISHER", "RESTRICTED" })
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Material createMaterial(Material material) {
@@ -177,7 +177,7 @@ public class MaterialResource extends BaseResource {
     @Path("setImproper")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    @RolesAllowed({ "USER", "ADMIN", "PUBLISHER" })
+    @RolesAllowed({ "USER", "ADMIN", "PUBLISHER", "RESTRICTED" })
     public ImproperContent setImproperMaterial(Material material) {
         return materialService.addImproperMaterial(material, getLoggedInUser());
     }
@@ -194,7 +194,7 @@ public class MaterialResource extends BaseResource {
     @Path("setBroken")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    @RolesAllowed({ "USER", "ADMIN", "PUBLISHER" })
+    @RolesAllowed({ "USER", "ADMIN", "PUBLISHER", "RESTRICTED" })
     public BrokenContent setBrokenMaterial(Material material) {
         return materialService.addBrokenMaterial(material, getLoggedInUser());
     }
@@ -218,7 +218,7 @@ public class MaterialResource extends BaseResource {
     @GET
     @Path("hasSetBroken")
     @Produces(MediaType.APPLICATION_JSON)
-    @RolesAllowed({ "USER", "ADMIN", "PUBLISHER" })
+    @RolesAllowed({ "USER", "ADMIN", "PUBLISHER", "RESTRICTED" })
     public Boolean hasSetBroken(@QueryParam("materialId") long materialId) {
         return materialService.hasSetBroken(materialId, getLoggedInUser());
     }
@@ -242,7 +242,7 @@ public class MaterialResource extends BaseResource {
     @GET
     @Path("hasSetImproper")
     @Produces(MediaType.APPLICATION_JSON)
-    @RolesAllowed({ "USER", "ADMIN", "PUBLISHER" })
+    @RolesAllowed({ "USER", "ADMIN", "PUBLISHER", "RESTRICTED" })
     public Boolean hasSetImproper(@QueryParam("materialId") long materialId) {
         return materialService.hasSetImproper(materialId, getLoggedInUser());
     }

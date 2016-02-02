@@ -14,7 +14,7 @@ import ee.hm.dop.model.AuthenticatedUser;
 import ee.hm.dop.service.LogoutService;
 
 @Path("logout")
-@RolesAllowed({ "USER", "ADMIN", "PUBLISHER" })
+@RolesAllowed({ "USER", "ADMIN", "PUBLISHER", "RESTRICTED" })
 public class LogoutResource extends BaseResource {
 
     private static Logger logger = LoggerFactory.getLogger(LogoutResource.class);

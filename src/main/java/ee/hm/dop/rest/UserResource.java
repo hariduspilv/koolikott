@@ -48,7 +48,7 @@ public class UserResource extends BaseResource {
 
     @GET
     @Path("getSignedUserData")
-    @RolesAllowed({ "USER", "ADMIN", "PUBLISHER" })
+    @RolesAllowed({ "USER", "ADMIN", "PUBLISHER", "RESTRICTED" })
     @Produces(MediaType.TEXT_PLAIN)
     public String getSignedUserData() {
         AuthenticatedUser authenticatedUser = getAuthenticatedUser();
