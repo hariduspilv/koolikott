@@ -335,12 +335,12 @@ define([
                 function clearHiddenFields() {
                     var educationalContext = $scope.detailedSearch.educationalContext;
 
-                    // Only books checkbox
+                    // Only curriculum literature checkbox
                     if (!educationalContext ||
                         (educationalContext.id != BASIC_EDUCATION_ID &&
                             educationalContext.id != SECONDARY_EDUCATION_ID &&
                             educationalContext.id != VOCATIONAL_EDUCATION_ID)) {
-                        $scope.detailedSearch.onlyBooks = false;
+                        $scope.detailedSearch.onlyCurriculumLiterature = false;
                     }
 
                     // Special education checkbox
@@ -363,7 +363,7 @@ define([
                 $scope.clear = $scope.accessor.clear = function() {
                     $scope.detailedSearch = {
                         'paid': true,
-                        'onlyBooks': false,
+                        'onlyCurriculumLiterature': false,
                         'CLIL': false,
                         'targetGroups': [],
                         'specialEducation': false,
