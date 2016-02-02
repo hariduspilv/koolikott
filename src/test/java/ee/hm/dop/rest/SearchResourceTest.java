@@ -217,6 +217,7 @@ public class SearchResourceTest extends ResourceIntegrationTestBase {
         searchFilter.setPaid(false);
         searchFilter.setType("portfolio");
         searchFilter.setIssuedFrom(2011);
+        searchFilter.setCurriculumLiterature(true);
         SearchResult searchResult = doGet(buildQueryURL(query, 0, searchFilter), SearchResult.class);
 
         assertMaterialIdentifiers(searchResult.getItems(), 2L, 3L, 4L);
@@ -265,6 +266,30 @@ public class SearchResourceTest extends ResourceIntegrationTestBase {
         assertEquals(start, searchResult.getStart());
     }
 
+    @Test
+    public void searchWithCurriculumLiteratureTrue() {
+        String query = "data";
+        SearchFilter searchFilter = new SearchFilter();
+        searchFilter.setCurriculumLiterature(true);
+        SearchResult searchResult = doGet(buildQueryURL(query, 0, searchFilter), SearchResult.class);
+
+        assertMaterialIdentifiers(searchResult.getItems(), 2L, 7L);
+        assertEquals(2, searchResult.getTotalResults());
+        assertEquals(0, searchResult.getStart());
+    }
+
+    @Test
+    public void searchWithCurriculumLiteratureFalse() {
+        String query = "data";
+        SearchFilter searchFilter = new SearchFilter();
+        searchFilter.setCurriculumLiterature(false);
+        SearchResult searchResult = doGet(buildQueryURL(query, 0, searchFilter), SearchResult.class);
+
+        assertMaterialIdentifiers(searchResult.getItems(), 2L, 8L);
+        assertEquals(2, searchResult.getTotalResults());
+        assertEquals(0, searchResult.getStart());
+    }
+
     private String buildQueryURL(String query, int start, SearchFilter searchFilter) {
         String queryURL = "search?";
         if (query != null) {
@@ -287,6 +312,9 @@ public class SearchResourceTest extends ResourceIntegrationTestBase {
         }
         if (searchFilter.getIssuedFrom() != null) {
             queryURL += "&issuedFrom=" + searchFilter.getIssuedFrom();
+        }
+        if (searchFilter.isCurriculumLiterature() != null) {
+            queryURL += "&curriculumLiterature=" + searchFilter.isCurriculumLiterature().toString();
         }
         if (searchFilter.getSort() != null) {
             queryURL += "&sort=" + searchFilter.getSort();

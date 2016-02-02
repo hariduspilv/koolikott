@@ -28,6 +28,8 @@ public class SearchFilter {
 
     private Visibility visibility;
 
+    private Boolean isCurriculumLiterature;
+
     private String sort;
 
     private String sortDirection;
@@ -118,6 +120,14 @@ public class SearchFilter {
 
     public void setVisibility(Visibility visibility) {
         this.visibility = visibility;
+    }
+
+    public Boolean isCurriculumLiterature() {
+        return isCurriculumLiterature;
+    }
+
+    public void setCurriculumLiterature(Boolean isCurriculumLiterature) {
+        this.isCurriculumLiterature = isCurriculumLiterature;
     }
 
     public String getSort() {

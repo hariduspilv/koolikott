@@ -964,6 +964,34 @@ public class SearchServiceTest {
     }
 
     @Test
+    public void searchWithCurriculumLiteratureTrue() {
+        String query = "german language";
+        SearchFilter searchFilter = new SearchFilter();
+        searchFilter.setCurriculumLiterature(true);
+        String tokenizedQuery = "(german* language*) AND curriculum_literature:\"true\""
+                + " AND (visibility:\"public\" OR type:\"material\")";
+        long start = 0;
+
+        List<Searchable> searchables = Arrays.asList(createMaterial(9L), createMaterial(2L), createPortfolio(2L));
+
+        testSearch(query, tokenizedQuery, null, searchables, start, searchFilter);
+    }
+
+    @Test
+    public void searchWithCurriculumLiteratureFalse() {
+        String query = "german language";
+        SearchFilter searchFilter = new SearchFilter();
+        searchFilter.setCurriculumLiterature(false);
+        String tokenizedQuery = "(german* language*) AND curriculum_literature:\"false\""
+                + " AND (visibility:\"public\" OR type:\"material\")";
+        long start = 0;
+
+        List<Searchable> searchables = Arrays.asList(createMaterial(9L), createMaterial(2L), createPortfolio(2L));
+
+        testSearch(query, tokenizedQuery, null, searchables, start, searchFilter);
+    }
+
+    @Test
     public void searchNotFromStart() {
         String query = "people";
         String tokenizedQuery = "(people*) AND (visibility:\"public\" OR type:\"material\")";

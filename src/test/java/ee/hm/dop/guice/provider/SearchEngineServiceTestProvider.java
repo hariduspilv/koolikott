@@ -59,6 +59,8 @@ class SearchEngineServiceMock implements SearchEngineService {
         addQueryWithAllFilters();
 
         addQueryWithLanguage();
+        addQueryWithCurriculumLiteratureTrue();
+        addQueryWithCurriculumLiteratureFalse();
         addQueryWithVisibility();
         addAdminQuery();
 
@@ -148,7 +150,7 @@ class SearchEngineServiceMock implements SearchEngineService {
         String filteredQuery = "(john*) AND educational_context:\"basiceducation\""
                 + " AND (paid:\"false\" OR type:\"portfolio\") AND type:\"portfolio\""
                 + " AND (issue_date_year:[2011 TO *] OR (created:[2011-01-01T00:00:00Z TO *] AND type:\"portfolio\"))"
-                + " AND (visibility:\"public\" OR type:\"material\")";
+                + " AND curriculum_literature:\"true\" AND (visibility:\"public\" OR type:\"material\")";
         List<Document> filteredSearchResult = createDocumentsWithIdentifiers(2L, 3L, 4L);
         searchResponses.put(filteredQuery, filteredSearchResult);
     }
@@ -157,6 +159,20 @@ class SearchEngineServiceMock implements SearchEngineService {
         String filteredQuery = "(monday*) AND (language:\"eng\" OR type:\"portfolio\")"
                 + " AND (visibility:\"public\" OR type:\"material\")";
         List<Document> filteredSearchResult = createDocumentsWithIdentifiers(2L, 1L);
+        searchResponses.put(filteredQuery, filteredSearchResult);
+    }
+
+    private static void addQueryWithCurriculumLiteratureTrue() {
+        String filteredQuery = "(data*) AND curriculum_literature:\"true\""
+                + " AND (visibility:\"public\" OR type:\"material\")";
+        List<Document> filteredSearchResult = createDocumentsWithIdentifiers(2L, 7L);
+        searchResponses.put(filteredQuery, filteredSearchResult);
+    }
+
+    private static void addQueryWithCurriculumLiteratureFalse() {
+        String filteredQuery = "(data*) AND curriculum_literature:\"false\""
+                + " AND (visibility:\"public\" OR type:\"material\")";
+        List<Document> filteredSearchResult = createDocumentsWithIdentifiers(2L, 8L);
         searchResponses.put(filteredQuery, filteredSearchResult);
     }
 

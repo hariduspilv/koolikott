@@ -199,6 +199,7 @@ public class SearchService {
         filters.add(issuedFromAsQuery(searchFilter));
         filters.add(getCrossCurricularThemeAsQuery(searchFilter));
         filters.add(getKeyCompetenceAsQuery(searchFilter));
+        filters.add(isCurriculumLiteratureAsQuery(searchFilter));
         filters.add(getVisibilityAsQuery(searchFilter));
 
         // Remove empty elements
@@ -375,6 +376,16 @@ public class SearchService {
         KeyCompetence keyCompetence = searchFilter.getKeyCompetence();
         if (keyCompetence != null) {
             return format("key_competence:\"%s\"", keyCompetence.getName().toLowerCase());
+        }
+        return "";
+    }
+
+    private String isCurriculumLiteratureAsQuery(SearchFilter searchFilter) {
+        Boolean isCurriculumLiterature = searchFilter.isCurriculumLiterature();
+        if (Boolean.TRUE.equals(isCurriculumLiterature)) {
+            return "curriculum_literature:\"true\"";
+        } else if (Boolean.FALSE.equals(isCurriculumLiterature)) {
+            return "curriculum_literature:\"false\"";
         }
         return "";
     }

@@ -58,6 +58,7 @@ public class SearchResource extends BaseResource {
             @QueryParam("issuedFrom") Integer issuedFrom, //
             @QueryParam("crossCurricularTheme") Long crossCurricularThemeId, //
             @QueryParam("keyCompetence") Long keyCompetenceId, //
+            @QueryParam("curriculumLiterature") Boolean isCurriculumLiterature, //
             @QueryParam("sort") String sort, //
             @QueryParam("sortDirection") String sortDirection) {
 
@@ -91,6 +92,7 @@ public class SearchResource extends BaseResource {
         searchFilter.setIssuedFrom(issuedFrom);
         searchFilter.setCrossCurricularTheme(crossCurricularTheme);
         searchFilter.setKeyCompetence(keyCompetence);
+        searchFilter.setCurriculumLiterature(isCurriculumLiterature);
         searchFilter.setSort(sort);
         searchFilter.setSortDirection(sortDirection);
 
