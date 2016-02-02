@@ -618,4 +618,5 @@ INSERT INTO Translation(translationGroup, translationKey, translation) VALUES
 (1,'LANGUAGE_YID','Yiddish'),
 (1,'LANGUAGE_YOR','Yoruba'),
 (1,'LANGUAGE_ZHA','Zhuang'),
-(1,'LANGUAGE_ZUL','Zulu');
+(1,'LANGUAGE_ZUL','Zulu'),
+(1,'LOGIN_STUUDIUM','Stuudium');
