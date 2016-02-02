@@ -11,7 +11,7 @@
                             <md-icon md-menu-origin>more_vert</md-icon>
                         </md-button>
                         <md-menu-content width="4">
-                            <md-menu-item data-ng-if="!isEditPortfolioMode && isOwner()">
+                            <md-menu-item data-ng-if="!isEditPortfolioMode && canEdit()">
                                 <md-button data-ng-click="editPortfolio()">
                                     <md-icon md-menu-align-target>edit</md-icon>
                                     <span data-translate="EDIT_PORTFOLIO"></span>

@@ -47,6 +47,10 @@ define([
                         return creatorId === userId;
                     }
                 };
+                
+                $scope.canEdit = function() {
+                    return $scope.isOwner() && authenticatedUserService.getUser().role !== 'RESTRICTED';
+                };
 
                 $scope.isAdmin = function() {
                     return authenticatedUserService.getUser() && authenticatedUserService.getUser().role === 'ADMIN';

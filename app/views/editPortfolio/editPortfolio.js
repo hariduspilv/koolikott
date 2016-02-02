@@ -123,7 +123,8 @@ define([
         }
 
         function checkAuthorized(portfolio) {
-            if (authenticatedUserService.getUser().id != portfolio.creator.id) {
+        	var user = authenticatedUserService.getUser();
+            if (user.id != portfolio.creator.id || user.role === 'RESTRICTED') {
                 $location.url("/");
                 return false;
             }
