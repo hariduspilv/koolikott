@@ -148,7 +148,7 @@ public class PortfolioResource extends BaseResource {
     @Path("create")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    @RolesAllowed({ "USER", "ADMIN", "PUBLISHER", "RESTRICTED" })
+    @RolesAllowed({ "USER", "ADMIN", "PUBLISHER" })
     public Portfolio create(Portfolio portfolio) {
         return portfolioService.create(portfolio, getLoggedInUser());
     }
