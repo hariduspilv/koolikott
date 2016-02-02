@@ -52,6 +52,10 @@ define([
                     return authenticatedUserService.getUser() &&
                         (authenticatedUserService.getUser().role === 'ADMIN' || authenticatedUserService.getUser().role === 'PUBLISHER');
                 };
+                
+                $scope.hasCopyPermission = function() {
+                    return $scope.isViewPortforlioPage && $scope.hasPermission();
+                };
             }
         };
     }]);
