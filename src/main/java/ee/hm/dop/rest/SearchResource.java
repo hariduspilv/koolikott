@@ -60,7 +60,8 @@ public class SearchResource extends BaseResource {
             @QueryParam("keyCompetence") Long keyCompetenceId, //
             @QueryParam("curriculumLiterature") Boolean isCurriculumLiterature, //
             @QueryParam("sort") String sort, //
-            @QueryParam("sortDirection") String sortDirection) {
+            @QueryParam("sortDirection") String sortDirection, //
+            @QueryParam("limit") Long limit) {
 
         Taxon taxon = taxonService.getTaxonById(taxonId);
         Language language = languageService.getLanguage(languageCode);
@@ -96,7 +97,7 @@ public class SearchResource extends BaseResource {
         searchFilter.setSort(sort);
         searchFilter.setSortDirection(sortDirection);
 
-        return searchService.search(query, start, searchFilter, getLoggedInUser());
+        return searchService.search(query, start, limit, searchFilter, getLoggedInUser());
     }
 
 }

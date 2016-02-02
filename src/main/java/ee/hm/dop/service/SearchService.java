@@ -59,16 +59,16 @@ public class SearchService {
     @Inject
     private PortfolioDAO portfolioDAO;
 
-    public SearchResult search(String query, long start, SearchFilter searchFilter) {
-        return search(query, start, searchFilter, null);
+    public SearchResult search(String query, long start, Long limit, SearchFilter searchFilter) {
+        return search(query, start, limit, searchFilter, null);
     }
 
-    public SearchResult search(String query, long start, SearchFilter searchFilter, User loggedInUser) {
+    public SearchResult search(String query, long start, Long limit, SearchFilter searchFilter, User loggedInUser) {
         SearchResult searchResult = new SearchResult();
 
         searchFilter.setVisibility(getSearchVisibility(loggedInUser));
 
-        SearchResponse searchResponse = doSearch(query, start, searchFilter);
+        SearchResponse searchResponse = doSearch(query, start, limit, searchFilter);
         Response response = searchResponse.getResponse();
 
         if (response != null) {
@@ -124,7 +124,7 @@ public class SearchService {
         return unsortedSearchable;
     }
 
-    private SearchResponse doSearch(String query, long start, SearchFilter searchFilter) {
+    private SearchResponse doSearch(String query, long start, Long limit, SearchFilter searchFilter) {
         String queryString = getTokenizedQueryString(query);
 
         String filtersAsQuery = getFiltersAsQuery(searchFilter);
@@ -140,7 +140,11 @@ public class SearchService {
             throw new RuntimeException("No query string and filters present.");
         }
 
-        return searchEngineService.search(queryString, start, getSort(searchFilter));
+        if (limit == null) {
+            return searchEngineService.search(queryString, start, getSort(searchFilter));
+        } else {
+            return searchEngineService.search(queryString, start, limit, getSort(searchFilter));
+        }
     }
 
     private String getSort(SearchFilter searchFilter) {

@@ -203,36 +203,41 @@ class SearchEngineServiceMock implements SearchEngineService {
     }
 
     @Override
-    public SearchResponse search(String query, long start, String sort) {
+    public SearchResponse search(String query, long start, long limit, String sort) {
         if (sort == null) {
-            return searchWithoutSorting(query, start);
+            return searchWithoutSorting(query, start, limit);
         } else {
-            return searchWithSorting(query, sort, start);
+            return searchWithSorting(query, sort, start, limit);
         }
     }
 
-    private SearchResponse searchWithoutSorting(String query, long start) {
+    @Override
+    public SearchResponse search(String query, long start, String sort) {
+        return search(query, start, RESULTS_PER_PAGE, sort);
+    }
+
+    private SearchResponse searchWithoutSorting(String query, long start, long limit) {
         if (!searchResponses.containsKey(query)) {
             return new SearchResponse();
         }
 
         List<Document> allDocuments = searchResponses.get(query);
-        return getSearchResponse(start, allDocuments);
+        return getSearchResponse(start, limit, allDocuments);
     }
 
-    private SearchResponse searchWithSorting(String query, String sort, long start) {
+    private SearchResponse searchWithSorting(String query, String sort, long start, long limit) {
         if (!sortedSearchResponses.contains(query, sort)) {
             return new SearchResponse();
         }
 
         List<Document> allDocuments = sortedSearchResponses.get(query, sort);
-        return getSearchResponse(start, allDocuments);
+        return getSearchResponse(start, limit, allDocuments);
     }
 
-    private SearchResponse getSearchResponse(long start, List<Document> allDocuments) {
+    private SearchResponse getSearchResponse(long start, long limit, List<Document> allDocuments) {
         List<Document> selectedDocuments = new ArrayList<>();
         for (int i = 0; i < allDocuments.size(); i++) {
-            if (i >= start && i < start + RESULTS_PER_PAGE) {
+            if (i >= start && i < start + RESULTS_PER_PAGE && selectedDocuments.size() < limit) {
                 selectedDocuments.add(allDocuments.get(i));
             }
         }

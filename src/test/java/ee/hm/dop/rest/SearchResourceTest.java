@@ -29,7 +29,7 @@ public class SearchResourceTest extends ResourceIntegrationTestBase {
     @Test
     public void search() {
         String query = "المدرسية";
-        SearchResult searchResult = doGet(buildQueryURL(query, 0, new SearchFilter()), SearchResult.class);
+        SearchResult searchResult = doGet(buildQueryURL(query, 0, null, new SearchFilter()), SearchResult.class);
 
         assertMaterialIdentifiers(searchResult.getItems(), 1L);
         assertEquals(1, searchResult.getTotalResults());
@@ -40,7 +40,7 @@ public class SearchResourceTest extends ResourceIntegrationTestBase {
     public void searchGetSecondPage() {
         String query = "thishasmanyresults";
         int start = RESULTS_PER_PAGE;
-        SearchResult searchResult = doGet(buildQueryURL(query, start, new SearchFilter()), SearchResult.class);
+        SearchResult searchResult = doGet(buildQueryURL(query, start, null, new SearchFilter()), SearchResult.class);
 
         assertEquals(RESULTS_PER_PAGE, searchResult.getItems().size());
         for (int i = 0; i < RESULTS_PER_PAGE; i++) {
@@ -53,14 +53,14 @@ public class SearchResourceTest extends ResourceIntegrationTestBase {
     @Test
     public void searchNoResult() {
         String query = "no+results";
-        SearchResult searchResult = doGet(buildQueryURL(query, 0, new SearchFilter()), SearchResult.class);
+        SearchResult searchResult = doGet(buildQueryURL(query, 0, null, new SearchFilter()), SearchResult.class);
 
         assertEquals(0, searchResult.getItems().size());
     }
 
     @Test
     public void searchWithNullQueryAndNullFilter() {
-        SearchResult searchResult = doGet(buildQueryURL(null, 0, new SearchFilter()), SearchResult.class);
+        SearchResult searchResult = doGet(buildQueryURL(null, 0, null, new SearchFilter()), SearchResult.class);
 
         assertEquals(2, searchResult.getTotalResults());
         assertEquals(0, searchResult.getStart());
@@ -75,7 +75,7 @@ public class SearchResourceTest extends ResourceIntegrationTestBase {
         educationalContext.setId(1L);
         educationalContext.setName("PRESCHOOLEDUCATION");
         searchFilter.setTaxon(educationalContext);
-        SearchResult searchResult = doGet(buildQueryURL(query, 0, searchFilter), SearchResult.class);
+        SearchResult searchResult = doGet(buildQueryURL(query, 0, null, searchFilter), SearchResult.class);
 
         assertMaterialIdentifiers(searchResult.getItems(), 2L);
         assertEquals(1, searchResult.getTotalResults());
@@ -90,7 +90,7 @@ public class SearchResourceTest extends ResourceIntegrationTestBase {
         domain.setId(10L);
         domain.setName("Mathematics");
         searchFilter.setTaxon(domain);
-        String queryURL = buildQueryURL(query, 0, searchFilter);
+        String queryURL = buildQueryURL(query, 0, null, searchFilter);
         SearchResult searchResult = doGet(queryURL, SearchResult.class);
 
         assertMaterialIdentifiers(searchResult.getItems(), 1L, 2L);
@@ -103,7 +103,7 @@ public class SearchResourceTest extends ResourceIntegrationTestBase {
         String query = "dop";
         SearchFilter searchFilter = new SearchFilter();
         searchFilter.setPaid(true);
-        SearchResult searchResult = doGet(buildQueryURL(query, 0, searchFilter), SearchResult.class);
+        SearchResult searchResult = doGet(buildQueryURL(query, 0, null, searchFilter), SearchResult.class);
 
         assertMaterialIdentifiers(searchResult.getItems(), 1L, 3L);
         assertEquals(2, searchResult.getTotalResults());
@@ -115,7 +115,7 @@ public class SearchResourceTest extends ResourceIntegrationTestBase {
         String query = "dop";
         SearchFilter searchFilter = new SearchFilter();
         searchFilter.setPaid(false);
-        SearchResult searchResult = doGet(buildQueryURL(query, 0, searchFilter), SearchResult.class);
+        SearchResult searchResult = doGet(buildQueryURL(query, 0, null, searchFilter), SearchResult.class);
 
         assertMaterialIdentifiers(searchResult.getItems(), 1L, 4L);
         assertEquals(2, searchResult.getTotalResults());
@@ -128,7 +128,7 @@ public class SearchResourceTest extends ResourceIntegrationTestBase {
         SearchFilter searchFilter = new SearchFilter();
         searchFilter.setType("portfolio");
         int start = 0;
-        SearchResult searchResult = doGet(buildQueryURL(query, start, searchFilter), SearchResult.class);
+        SearchResult searchResult = doGet(buildQueryURL(query, start, null, searchFilter), SearchResult.class);
 
         assertMaterialIdentifiers(searchResult.getItems(), 1L, 2L, 3L);
         assertEquals(3, searchResult.getTotalResults());
@@ -141,7 +141,7 @@ public class SearchResourceTest extends ResourceIntegrationTestBase {
         SearchFilter searchFilter = new SearchFilter();
         searchFilter.setType("all");
         int start = 0;
-        SearchResult searchResult = doGet(buildQueryURL(query, start, searchFilter), SearchResult.class);
+        SearchResult searchResult = doGet(buildQueryURL(query, start, null, searchFilter), SearchResult.class);
 
         assertMaterialIdentifiers(searchResult.getItems(), 1L, 5L);
         assertEquals(2, searchResult.getTotalResults());
@@ -157,7 +157,7 @@ public class SearchResourceTest extends ResourceIntegrationTestBase {
         subject.setName("Biology");
         searchFilter.setTaxon(subject);
         searchFilter.setPaid(false);
-        SearchResult searchResult = doGet(buildQueryURL(query, 0, searchFilter), SearchResult.class);
+        SearchResult searchResult = doGet(buildQueryURL(query, 0, null, searchFilter), SearchResult.class);
 
         assertMaterialIdentifiers(searchResult.getItems(), 1L, 6L);
         assertEquals(2, searchResult.getTotalResults());
@@ -173,7 +173,7 @@ public class SearchResourceTest extends ResourceIntegrationTestBase {
         subject.setName("Mathematics");
         searchFilter.setTaxon(subject);
         searchFilter.setType("material");
-        String queryURL = buildQueryURL(query, 0, searchFilter);
+        String queryURL = buildQueryURL(query, 0, null, searchFilter);
         SearchResult searchResult = doGet(queryURL, SearchResult.class);
 
         assertMaterialIdentifiers(searchResult.getItems(), 1L, 7L);
@@ -187,7 +187,7 @@ public class SearchResourceTest extends ResourceIntegrationTestBase {
         SearchFilter searchFilter = new SearchFilter();
         searchFilter.setPaid(false);
         searchFilter.setType("material");
-        SearchResult searchResult = doGet(buildQueryURL(query, 0, searchFilter), SearchResult.class);
+        SearchResult searchResult = doGet(buildQueryURL(query, 0, null, searchFilter), SearchResult.class);
 
         assertMaterialIdentifiers(searchResult.getItems(), 1L, 8L);
         assertEquals(2, searchResult.getTotalResults());
@@ -199,7 +199,7 @@ public class SearchResourceTest extends ResourceIntegrationTestBase {
         String query = "car";
         SearchFilter searchFilter = new SearchFilter();
         searchFilter.setIssuedFrom(2011);
-        SearchResult searchResult = doGet(buildQueryURL(query, 0, searchFilter), SearchResult.class);
+        SearchResult searchResult = doGet(buildQueryURL(query, 0, null, searchFilter), SearchResult.class);
 
         assertMaterialIdentifiers(searchResult.getItems(), 2L, 5L);
         assertEquals(2, searchResult.getTotalResults());
@@ -218,7 +218,7 @@ public class SearchResourceTest extends ResourceIntegrationTestBase {
         searchFilter.setType("portfolio");
         searchFilter.setIssuedFrom(2011);
         searchFilter.setCurriculumLiterature(true);
-        SearchResult searchResult = doGet(buildQueryURL(query, 0, searchFilter), SearchResult.class);
+        SearchResult searchResult = doGet(buildQueryURL(query, 0, null, searchFilter), SearchResult.class);
 
         assertMaterialIdentifiers(searchResult.getItems(), 2L, 3L, 4L);
         assertEquals(3, searchResult.getTotalResults());
@@ -230,7 +230,7 @@ public class SearchResourceTest extends ResourceIntegrationTestBase {
         login("89898989898");
 
         String query = "super";
-        SearchResult searchResult = doGet(buildQueryURL(query, 0, new SearchFilter()), SearchResult.class);
+        SearchResult searchResult = doGet(buildQueryURL(query, 0, null, new SearchFilter()), SearchResult.class);
 
         assertMaterialIdentifiers(searchResult.getItems(), 2L, 4L);
         assertEquals(2, searchResult.getTotalResults());
@@ -245,7 +245,7 @@ public class SearchResourceTest extends ResourceIntegrationTestBase {
         language.setCode("eng");
         searchFilter.setLanguage(language);
         int start = 0;
-        SearchResult searchResult = doGet(buildQueryURL(query, start, searchFilter), SearchResult.class);
+        SearchResult searchResult = doGet(buildQueryURL(query, start, null, searchFilter), SearchResult.class);
 
         assertMaterialIdentifiers(searchResult.getItems(), 2L, 1L);
         assertEquals(2, searchResult.getTotalResults());
@@ -259,7 +259,7 @@ public class SearchResourceTest extends ResourceIntegrationTestBase {
         searchFilter.setSort("somefield");
         searchFilter.setSortDirection("desc");
         int start = 0;
-        SearchResult searchResult = doGet(buildQueryURL(query, start, searchFilter), SearchResult.class);
+        SearchResult searchResult = doGet(buildQueryURL(query, start, null, searchFilter), SearchResult.class);
 
         assertMaterialIdentifiers(searchResult.getItems(), 2L, 6L);
         assertEquals(2, searchResult.getTotalResults());
@@ -271,7 +271,7 @@ public class SearchResourceTest extends ResourceIntegrationTestBase {
         String query = "data";
         SearchFilter searchFilter = new SearchFilter();
         searchFilter.setCurriculumLiterature(true);
-        SearchResult searchResult = doGet(buildQueryURL(query, 0, searchFilter), SearchResult.class);
+        SearchResult searchResult = doGet(buildQueryURL(query, 0, null, searchFilter), SearchResult.class);
 
         assertMaterialIdentifiers(searchResult.getItems(), 2L, 7L);
         assertEquals(2, searchResult.getTotalResults());
@@ -283,20 +283,35 @@ public class SearchResourceTest extends ResourceIntegrationTestBase {
         String query = "data";
         SearchFilter searchFilter = new SearchFilter();
         searchFilter.setCurriculumLiterature(false);
-        SearchResult searchResult = doGet(buildQueryURL(query, 0, searchFilter), SearchResult.class);
+        SearchResult searchResult = doGet(buildQueryURL(query, 0, null, searchFilter), SearchResult.class);
 
         assertMaterialIdentifiers(searchResult.getItems(), 2L, 8L);
         assertEquals(2, searchResult.getTotalResults());
         assertEquals(0, searchResult.getStart());
     }
 
-    private String buildQueryURL(String query, int start, SearchFilter searchFilter) {
+    @Test
+    public void searchWithCurriculumLiteratureFalseAndLimit1() {
+        String query = "data";
+        SearchFilter searchFilter = new SearchFilter();
+        searchFilter.setCurriculumLiterature(false);
+        SearchResult searchResult = doGet(buildQueryURL(query, 0, 1L, searchFilter), SearchResult.class);
+
+        assertMaterialIdentifiers(searchResult.getItems(), 2L);
+        assertEquals(2, searchResult.getTotalResults());
+        assertEquals(0, searchResult.getStart());
+    }
+
+    private String buildQueryURL(String query, int start, Long limit, SearchFilter searchFilter) {
         String queryURL = "search?";
         if (query != null) {
             queryURL += "q=" + encodeQuery(query);
         }
         if (start != 0) {
             queryURL += "&start=" + start;
+        }
+        if (limit != null) {
+            queryURL += "&limit=" + limit;
         }
         if (searchFilter.getTaxon() != null) {
             queryURL += "&taxon=" + searchFilter.getTaxon().getId();

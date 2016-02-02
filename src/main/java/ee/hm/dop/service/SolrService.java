@@ -25,7 +25,7 @@ public class SolrService implements SearchEngineService {
     private static final Logger logger = LoggerFactory.getLogger(SolrService.class);
 
     private static final int RESULTS_PER_PAGE = 24;
-    private static final String SEARCH_PATH = "select?q=%s&sort=%s&wt=json&start=%d&rows=" + RESULTS_PER_PAGE;
+    private static final String SEARCH_PATH = "select?q=%s&sort=%s&wt=json&start=%d&rows=%d";
 
     protected static final String SOLR_IMPORT_PARTIAL = "dataimport?command=delta-import&wt=json";
     protected static final String SOLR_DATAIMPORT_STATUS = "dataimport?command=status&wt=json";
@@ -47,7 +47,13 @@ public class SolrService implements SearchEngineService {
 
     @Override
     public SearchResponse search(String query, long start, String sort) {
-        return executeCommand(format(SEARCH_PATH, encodeQuery(query), formatSort(sort), start));
+        return search(query, start, RESULTS_PER_PAGE, sort);
+    }
+
+    @Override
+    public SearchResponse search(String query, long start, long limit, String sort) {
+        return executeCommand(
+                format(SEARCH_PATH, encodeQuery(query), formatSort(sort), start, Math.min(limit, RESULTS_PER_PAGE)));
     }
 
     @Override
