@@ -111,6 +111,12 @@ define([
                     localStorage.setItem(LOGIN_ORIGIN, $location.url());
                 	window.location = "/rest/login/ekool";
                 },
+
+                loginWithStuudium : function() {
+                    localStorage.removeItem(LOGIN_ORIGIN);
+                    localStorage.setItem(LOGIN_ORIGIN, $location.url());
+                    window.location = "/rest/login/stuudium";
+                },
                 
                 authenticateUsingOAuth: function(token) {
                     var params = {

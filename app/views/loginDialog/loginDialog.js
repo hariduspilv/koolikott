@@ -39,6 +39,10 @@ define([
         $scope.ekoolAuth = function() {
 			authenticationService.loginWithEkool();
 		};
+
+        $scope.stuudiumAuth = function() {
+            authenticationService.loginWithStuudium();
+        };
 		
         $scope.mobileIdAuth = function() {
             var idCodeValid = validateIdCode();
