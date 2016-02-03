@@ -1,9 +1,9 @@
 define([
-    'app',
+    'angularAMD',
     'services/translationService',
     'services/alertService'
-], function(app) {
-    app.directive('dopAlert', ['translationService', '$rootScope', 'alertService', function(translationService, $rootScope, alertService) {
+], function(angularAMD) {
+	angularAMD.directive('dopAlert', ['translationService', '$rootScope', 'alertService', function(translationService, $rootScope, alertService) {
         return {
             scope: true,
             templateUrl: 'directives/alert/alert.html',

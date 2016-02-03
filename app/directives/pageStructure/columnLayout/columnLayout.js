@@ -1,6 +1,7 @@
 define([
   'angularAMD',
-  'directives/tableOfContents/tableOfContents'
+  'directives/tableOfContents/tableOfContents',
+  'directives/alert/alert'
  ], function(angularAMD) {
     angularAMD.directive('dopColumnLayout', function() {
         return {

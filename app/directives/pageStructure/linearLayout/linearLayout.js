@@ -1,4 +1,6 @@
-define(['angularAMD'], function(angularAMD) {
+define(['angularAMD',
+        'directives/alert/alert'
+], function(angularAMD) {
     angularAMD.directive('dopLinearLayout',
         function() {
             return {
