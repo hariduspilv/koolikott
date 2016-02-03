@@ -1,19 +1,19 @@
 define([
     'angularAMD',
     'services/translationService',
-    'services/alertService'
+    'services/alertService',
+    'services/toastService',
 ], function(angularAMD) {
-	angularAMD.directive('dopAlert', ['translationService', '$rootScope', 'alertService', function(translationService, $rootScope, alertService) {
+	angularAMD.directive('dopAlert', ['translationService', '$rootScope', 'alertService', 'toastService', function(translationService, $rootScope, alertService, toastService) {
         return {
             scope: true,
-            templateUrl: 'directives/alert/alert.html',
             controller: function($scope, $timeout) {
                 $scope.$watch(function() {
                         return alertService.getAlert();
                     },
                     function(newValue) {
                         if (newValue.message) {
-                            $scope.alert = newValue;
+                        	toastService.show(newValue.message);
                             alertService.clearMessage();
 
                             $timeout(function() {
