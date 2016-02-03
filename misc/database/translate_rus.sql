@@ -595,5 +595,5 @@ INSERT INTO Translation(translationGroup, translationKey, translation) VALUES
 (2,'LANGUAGE_YOR','Yoruba'),
 (2,'LANGUAGE_ZHA','Zhuang'),
 (2,'LANGUAGE_ZUL','Zulu'),
-(2,'LOGIN_STUUDIUM','Stuudium');
+(2,'LOGIN_STUUDIUM','Stuudium'),
 (2,'LOGIN_SUCCESS','Вы вошли в систему');
