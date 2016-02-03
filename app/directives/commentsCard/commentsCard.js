@@ -19,7 +19,11 @@ define([
             controller: function($scope) {
                 var COMMENTS_PER_PAGE = 5;
 
-                $scope.authorized = authenticatedUserService.isAuthenticated();
+                $scope.isAuthorized = function() {
+                	return authenticatedUserService.isAuthenticated() &&
+                		authenticatedUserService.getUser().role !== 'RESTRICTED';
+                }
+                
                 $scope.visibleCommentsCount = COMMENTS_PER_PAGE;
 
                 $scope.getLoadMoreCommentsLabel = function() {
