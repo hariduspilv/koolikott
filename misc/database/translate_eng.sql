@@ -600,3 +600,4 @@ INSERT INTO Translation(translationGroup, translationKey, translation) VALUES
 (3,'LANGUAGE_ZHA','Zhuang'),
 (3,'LANGUAGE_ZUL','Zulu'),
 (3,'LOGIN_STUUDIUM','Stuudium');
+(3,'LOGIN_SUCCESS','You are logged in');

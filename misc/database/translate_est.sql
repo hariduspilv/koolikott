@@ -620,3 +620,4 @@ INSERT INTO Translation(translationGroup, translationKey, translation) VALUES
 (1,'LANGUAGE_ZHA','Zhuang'),
 (1,'LANGUAGE_ZUL','Zulu'),
 (1,'LOGIN_STUUDIUM','Stuudium');
+(1,'LOGIN_SUCCESS','Oled sisse loginud');
