@@ -206,7 +206,54 @@ public class LoginResourceTest extends ResourceIntegrationTestBase {
         assertEquals(307, response.getStatus());
         assertEquals("loginRedirect?token", tokens[4]);
     }
+    
+    /*
+    @Test
+    public void ekoolAuthenticateSuccess() {
+        Response response = doGet("login/ekool/success?code=123456789");
+        String url = response.getHeaderString("Location");
+        boolean hasToken = false;
+        if (url.indexOf("token") != -1) {
+            hasToken = true;
+        }
+        assertEquals(true, hasToken);
+        assertEquals(307, response.getStatus());
+        
+        logout();
 
+    }
+    
+    @Test
+    public void ekoolAuthenticateSuccessTwo() {
+        
+        Response response = doGet("login/ekool/success?code=987654321");
+        String url = response.getHeaderString("Location");
+
+        boolean hasToken = false;
+        if (url.indexOf("token") != -1) {
+            hasToken = true;
+        }
+        assertEquals(true, hasToken);
+        assertEquals(307, response.getStatus());
+
+        logout();
+    }
+    
+    @Test
+    public void ekoolAuthenticateFail() {
+        
+    	Response response = doGet("login/ekool/success?code=000000");
+        String url = response.getHeaderString("Location");
+
+        boolean hasToken = false;
+        if (url.indexOf("token") != -1) {
+            hasToken = true;
+        }
+        assertEquals(false, hasToken);
+        assertEquals(307, response.getStatus());
+
+    }
+     */
     @Test
     public void getAuthenticatedUser() {
         String token = "token";
