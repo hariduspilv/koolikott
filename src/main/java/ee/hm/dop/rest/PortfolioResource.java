@@ -174,7 +174,7 @@ public class PortfolioResource extends BaseResource {
     @POST
     @Path("delete")
     @Consumes(MediaType.APPLICATION_JSON)
-    @RolesAllowed({ "USER", "ADMIN", "PUBLISHER", "RESTRICTED" })
+    @RolesAllowed({ "USER", "ADMIN", "PUBLISHER" })
     public void delete(Portfolio portfolio) {
         portfolioService.delete(portfolio, getLoggedInUser());
     }
