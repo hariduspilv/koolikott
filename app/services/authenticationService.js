@@ -29,6 +29,7 @@ define([
                     enableLogin();
                     localStorage.removeItem(LOGIN_ORIGIN);
                     isOAuthAuthentication = false;
+                    alertService.setErrorAlert('LOGIN_SUCCESS');
 
                     if (mobileIdLoginSuccessCallback) {
                         mobileIdLoginSuccessCallback();
