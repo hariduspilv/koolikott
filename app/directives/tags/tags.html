@@ -20,6 +20,11 @@
                         <md-icon>plus_one</md-icon>
                     </md-button>
 
+                    <md-button data-ng-if="$chip.hasUpVoted && isLoggedIn()" class="md-icon-button"
+                               ng-click="removeUpVote($chip)">
+                        <md-icon>undo</md-icon>
+                    </md-button>
+
                     <button data-ng-if="false" class="md-chip-remove" ng-click="deleteTag($chip)" md-chip-remove>
                         <md-icon md-svg-icon="md-close"></md-icon>
                     </button>

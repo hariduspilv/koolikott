@@ -65,6 +65,33 @@ define([
 
                 $scope.isNullOrZeroLength = function (arg) {
                     return !arg || !arg.length;
+                };
+
+                $scope.removeUpVote = function (tag) {
+                    $scope.upVoteRemovedTag = tag;
+                    $scope.upVoteRemovedTag.hasUpVoted = false;
+                    if ($scope.material && $scope.material.id) {
+                        var removeUpVotesParams = {
+                            'material': $scope.material.id,
+                            'tag': tag.tag
+                        };
+                    } else if ($scope.portfolio && $scope.portfolio.id) {
+                        removeUpVotesParams = {
+                            'portfolio': $scope.portfolio.id,
+                            'tag': tag.tag
+                        };
+                    }
+
+                    serverCallService.makeDelete("rest/tagUpVotes", removeUpVotesParams, removeUpVoteSuccess, removeUpVoteFail);
+                };
+
+                function removeUpVoteSuccess() {
+                    $scope.upVoteRemovedTag.upVoteCount = $scope.upVoteRemovedTag.upVoteCount - 1;
+                    $scope.tags = sortTags($scope.tags);
+                }
+
+                function removeUpVoteFail() {
+                    $scope.upVoteRemovedTag.hasUpVoted = true;
                 }
 
                 init();
