@@ -1,29 +1,21 @@
 package ee.hm.dop.guice.provider;
 
-import static ee.hm.dop.utils.ConfigurationProperties.EKOOL_URL_TOKEN;
 import static ee.hm.dop.utils.ConfigurationProperties.EKOOL_URL_GENERALDATA;
+import static ee.hm.dop.utils.ConfigurationProperties.EKOOL_URL_TOKEN;
 import static org.easymock.EasyMock.createNiceMock;
 import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.replay;
 
 import javax.inject.Inject;
 import javax.ws.rs.client.Client;
-import javax.ws.rs.client.ClientBuilder;
-import javax.ws.rs.client.ClientRequestFilter;
 
 import org.apache.commons.configuration.Configuration;
-import org.glassfish.jersey.client.ClientConfig;
-import org.glassfish.jersey.client.ClientProperties;
-import org.glassfish.jersey.filter.LoggingFilter;
-import org.glassfish.jersey.jackson.JacksonFeature;
-import org.glassfish.jersey.media.multipart.MultiPartFeature;
 
 import com.google.inject.Provider;
 import com.google.inject.Singleton;
 
 import ee.hm.dop.guice.provider.mock.ekool.person.EkoolPersonWebTarget;
 import ee.hm.dop.guice.provider.mock.ekool.token.EkoolTokenWebTarget;
-import ee.hm.dop.utils.ConfigurationProperties;
 
 /**
  * Provider for Client.
@@ -50,11 +42,12 @@ public class HttpClientTestProvider implements Provider<Client> {
      */
     protected void initClient() {
         client = createNiceMock(Client.class);
-        
-        expect(client.target(configuration.getString(EKOOL_URL_TOKEN))).andReturn(new EkoolTokenWebTarget());
-        expect(client.target(configuration.getString(EKOOL_URL_GENERALDATA))).andReturn(new EkoolPersonWebTarget());
-        
+
+        expect(client.target(configuration.getString(EKOOL_URL_TOKEN))).andReturn(new EkoolTokenWebTarget()).anyTimes();
+        expect(client.target(configuration.getString(EKOOL_URL_GENERALDATA))).andReturn(new EkoolPersonWebTarget())
+                .anyTimes();
+
         replay(client);
     }
-    
+
 }

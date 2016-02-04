@@ -206,8 +206,7 @@ public class LoginResourceTest extends ResourceIntegrationTestBase {
         assertEquals(307, response.getStatus());
         assertEquals("loginRedirect?token", tokens[4]);
     }
-    
-    /*
+
     @Test
     public void ekoolAuthenticateSuccess() {
         Response response = doGet("login/ekool/success?code=123456789");
@@ -218,14 +217,14 @@ public class LoginResourceTest extends ResourceIntegrationTestBase {
         }
         assertEquals(true, hasToken);
         assertEquals(307, response.getStatus());
-        
+
         logout();
 
     }
-    
+
     @Test
     public void ekoolAuthenticateSuccessTwo() {
-        
+
         Response response = doGet("login/ekool/success?code=987654321");
         String url = response.getHeaderString("Location");
 
@@ -238,11 +237,11 @@ public class LoginResourceTest extends ResourceIntegrationTestBase {
 
         logout();
     }
-    
+
     @Test
     public void ekoolAuthenticateFail() {
-        
-    	Response response = doGet("login/ekool/success?code=000000");
+
+        Response response = doGet("login/ekool/success?code=000000");
         String url = response.getHeaderString("Location");
 
         boolean hasToken = false;
@@ -253,7 +252,7 @@ public class LoginResourceTest extends ResourceIntegrationTestBase {
         assertEquals(307, response.getStatus());
 
     }
-     */
+
     @Test
     public void getAuthenticatedUser() {
         String token = "token";
@@ -357,8 +356,9 @@ public class LoginResourceTest extends ResourceIntegrationTestBase {
         Response response = doGet("login/stuudium");
         String url = response.getHeaderString("Location");
         assertEquals(307, response.getStatus());
-        assertEquals(configuration.getString(STUUDIUM_URL_AUTHORIZE) + "client_id="
-                + configuration.getString(STUUDIUM_CLIENT_ID), url);
+        assertEquals(
+                configuration.getString(STUUDIUM_URL_AUTHORIZE) + "client_id="
+                        + configuration.getString(STUUDIUM_CLIENT_ID), url);
     }
 
     private AuthnRequest decodeAuthnRequest(String request) throws Exception {

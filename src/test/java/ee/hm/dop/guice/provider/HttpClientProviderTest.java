@@ -8,10 +8,9 @@ import javax.ws.rs.client.Client;
 import javax.ws.rs.core.Configuration;
 
 import org.glassfish.jersey.jackson.JacksonFeature;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-
-import com.google.inject.Injector;
 
 import ee.hm.dop.common.test.GuiceTestRunner;
 import ee.hm.dop.guice.GuiceInjector;
@@ -19,10 +18,16 @@ import ee.hm.dop.guice.GuiceInjector;
 @RunWith(GuiceTestRunner.class)
 public class HttpClientProviderTest {
 
+    private HttpClientProvider httpClientProvider;
+
+    @Before
+    public void setup() {
+        httpClientProvider = GuiceInjector.getInjector().getInstance(HttpClientProvider.class);
+    }
+
     @Test
     public void get() {
-        Client client = GuiceInjector.getInjector().getInstance(Client.class);
-
+        Client client = httpClientProvider.get();
         assertNotNull(client);
         Configuration configuration = client.getConfiguration();
         assertTrue(configuration.isRegistered(JacksonFeature.class));
@@ -31,11 +36,10 @@ public class HttpClientProviderTest {
 
     @Test
     public void getAlwaysReturnSameObject() {
-        Injector injector = GuiceInjector.getInjector();
-        Client client = injector.getInstance(Client.class);
+        Client client = httpClientProvider.get();
 
         for (int i = 0; i < 10; i++) {
-            assertSame(client, injector.getInstance(Client.class));
+            assertSame(client, httpClientProvider.get());
         }
     }
 }

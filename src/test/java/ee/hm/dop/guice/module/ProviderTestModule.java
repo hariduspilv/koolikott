@@ -2,7 +2,6 @@ package ee.hm.dop.guice.module;
 
 import javax.persistence.EntityManagerFactory;
 import javax.ws.rs.client.Client;
-import javax.ws.rs.core.Response;
 import javax.xml.soap.SOAPConnection;
 
 import org.apache.commons.configuration.Configuration;
@@ -29,6 +28,6 @@ public class ProviderTestModule extends AbstractModule {
         bind(SearchEngineService.class).toProvider(SearchEngineServiceTestProvider.class);
         bind(ObjectMapper.class).toProvider(ObjectMapperGuiceProvider.class);
         bind(SOAPConnection.class).toProvider(SOAPConnectionTestProvider.class);
-       // bind(Client.class).toProvider(HttpClientTestProvider.class);
+        bind(Client.class).toProvider(HttpClientTestProvider.class);
     }
 }
