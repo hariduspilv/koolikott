@@ -427,6 +427,8 @@
                 <entity name="Tag" query="select name as tag from Tag where id = '${Portfolio_Tag.tag_id}'" />
             </entity>
 
+            <entity name="TagUpVote" query="select concat(t.name, '_', count(*)) as tag_up_vote from TagUpVote tuv, Tag t where tuv.tag = t.id AND tuv.portfolio = '${Portfolio.id}' GROUP BY name" />
+
             <entity name="Chapter" query="select title as chapterTitle, textValue as chapterText from Chapter where portfolio = '${Portfolio.id}' or parentChapter in (select id from Chapter where portfolio = '${Portfolio.id}')" />
 
             <entity name="Portfolio_TargetGroup" query="select targetGroup as target_group from Portfolio_TargetGroup where portfolio = '${Portfolio.id}'" />
