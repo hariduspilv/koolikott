@@ -89,4 +89,24 @@ public class TagUpVoteDAOTest extends DatabaseTestBase {
         assertNotNull(tagUpVote);
         assertNotNull(tagUpVote.getId());
     }
+
+    @Test
+    public void getMaterialTagUpVotes() {
+        Tag tag = tagDAO.findTagByName("matemaatika");
+        Material material = materialDAO.findById(1l);
+
+        List<TagUpVote> tagUpVotes = tagUpVoteDAO.getMaterialTagUpVotes(material, tag);
+        assertNotNull(tagUpVotes);
+        assertEquals(1, tagUpVotes.size());
+    }
+
+    @Test
+    public void getPortfolioTagUpVotes() {
+        Tag tag = tagDAO.findTagByName("matemaatika");
+        Portfolio portfolio = portfolioDAO.findByIdFromAll(1l);
+
+        List<TagUpVote> tagUpVotes = tagUpVoteDAO.getPortfolioTagUpVotes(portfolio, tag);
+        assertNotNull(tagUpVotes);
+        assertEquals(1, tagUpVotes.size());
+    }
 }
