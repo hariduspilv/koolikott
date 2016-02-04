@@ -10,6 +10,7 @@ define([
     'directives/rating/rating',
     'directives/commentsCard/commentsCard',
     'directives/slideshare/slideshare',
+    'directives/tags/tags',
     'services/serverCallService',
     'services/translationService',
     'services/searchService',
@@ -95,15 +96,6 @@ define([
                 fetchImage();
                 processMaterial();
 
-                $scope.newTags = [];
-
-                var upVotesParams = {
-                    'material': $scope.material.id
-                };
-
-                serverCallService.makeGet("rest/tagUpVotes", upVotesParams, getTagUpVotesSuccess, function () {
-                });
-
                 var viewCountParams = {
                     'type': '.Material',
                     'id': $scope.material.id
@@ -114,15 +106,6 @@ define([
                 });
             }
 
-            function getTagUpVotesSuccess(upVoteForms) {
-                $scope.tags = sortTags(upVoteForms);
-            }
-
-            function sortTags(upVoteForms) {
-                return upVoteForms.sort(function (a, b) {
-                    return a.upVoteCount < b.upVoteCount;
-                });
-            }
 
             function preprocessMaterialSubjects() {
                 $scope.material.subjects = [];
@@ -348,26 +331,6 @@ define([
 
             function restoreFail() {
                 log("Restoring material failed");
-            }
-
-            $scope.upVote = function (tag) {
-                $scope.upVotedTag = tag;
-                $scope.upVotedTag.hasUpVoted = true;
-                var tagUpVote = {
-                    material: $scope.material,
-                    tag: tag
-                };
-
-                serverCallService.makePut("rest/tagUpVotes", tagUpVote, upVoteSuccess, upVoteFail);
-            };
-
-            function upVoteSuccess() {
-                $scope.upVotedTag.upVoteCount = $scope.upVotedTag.upVoteCount + 1;
-                $scope.tags = sortTags($scope.tags);
-            }
-
-            function upVoteFail() {
-                $scope.upVotedTag.hasUpVoted = false;
             }
         }];
 });

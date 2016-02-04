@@ -96,18 +96,6 @@ define([
             if (portfolio && portfolio.hasPicture && !portfolio.picture) {
                 fetchImage();
             }
-            if($scope.portfolio) {
-                var upVotesParams = {
-                    'portfolio': $scope.portfolio.id
-                };
-
-                serverCallService.makeGet("rest/tagUpVotes", upVotesParams, getTagUpVotesSuccess, function () {
-                });
-            }
-        }
-
-        function getTagUpVotesSuccess(upVoteForms) {
-            $scope.tags = sortTags(upVoteForms);
         }
 
         $scope.$on('$routeChangeStart', function () {

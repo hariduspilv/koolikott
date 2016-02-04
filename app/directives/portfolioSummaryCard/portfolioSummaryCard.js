@@ -12,6 +12,7 @@ define([
     'directives/report/brokenLink/brokenLink',
     'directives/recommend/recommend',
     'directives/rating/rating',
+    'directives/tags/tags',
     'directives/commentsCard/commentsCard'
 ], function (app, angularAMD) {
     app.directive('dopPortfolioSummaryCard', ['translationService', '$location', '$mdSidenav', '$mdDialog', '$rootScope', 'authenticatedUserService', '$route', 'dialogService', 'serverCallService', 'toastService', 'storageService',

@@ -135,48 +135,10 @@
                     </div>
 
                     <iframe data-ng-src="{{material.iframeSource}}" data-ng-show="showMaterialContent" width="100%" height="100%" ngsf-fullscreen="fullscreenCtrl"></iframe>
+
+                    <div data-ng-if="material && material.id" data-dop-tags data-material="material"></div>
+
                   </div>
-
-                    <div data-ng-if="!isNullOrZeroLength(material.tags)">
-                        <p class="md-body-2 meta">
-                            <small class="md-caption">
-                                <span data-translate="DETAIL_VIEW_TAGS"></span>:
-                            </small>
-                            <br>
-
-                            <div layout="row">
-                                <md-chips ng-model="tags" readonly="true">
-                                    <md-chip-template>
-                                        <div>
-
-                                            <md-button data-ng-if="isLoggedIn()" class="md-icon-button">
-                                                <md-icon>error_outline</md-icon>
-                                            </md-button>
-                                            <a href="#" class="link">{{$chip.tag}}</a>
-
-                                            <md-button data-ng-if="!$chip.hasUpVoted && isLoggedIn()" class="md-icon-button" ng-click="upVote($chip)">
-                                                <md-icon>plus_one</md-icon>
-                                            </md-button>
-
-                                          <button data-ng-if="false" class="md-chip-remove" ng-click="deleteTag($chip)" md-chip-remove>
-                                            <md-icon md-svg-icon="md-close"></md-icon>
-                                          </button>
-                                        </div>
-                                    </md-chip-template>
-                                </md-chips>
-                            </div>
-
-                            <md-chips ng-model="newTags"
-                                    placeholder="{{ 'MATERIAL_ADD_TAG' | translate }}" delete-button-label="{{ 'BUTTON_REMOVE' | translate }}"
-                                    secondary-placeholder="{{ 'MATERIAL_ADD_TAG' | translate }}"
-                                    md-transform-chip="addTag($chip)">
-                              <md-chip-template>
-                                <a href="#">{{$chip}}</a>
-                              </md-chip-template>
-                            </md-chips>
-
-                        </p>
-                    </div>
                 </div>
 
                 <!-- right small side  -->
