@@ -1,5 +1,8 @@
 package ee.hm.dop.service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.inject.Inject;
 
 import ee.hm.dop.dao.MaterialDAO;
@@ -10,6 +13,7 @@ import ee.hm.dop.model.Material;
 import ee.hm.dop.model.Portfolio;
 import ee.hm.dop.model.Tag;
 import ee.hm.dop.model.TagUpVote;
+import ee.hm.dop.model.TagUpVoteForm;
 import ee.hm.dop.model.User;
 
 /**
@@ -32,10 +36,16 @@ public class TagUpVoteService {
     public TagUpVote upVote(TagUpVote tagUpVote, User user) {
         tagUpVote = createTagUpVote(tagUpVote, user);
 
-        if(tagUpVote.getUser() != null && tagUpVote.getTag() != null && (tagUpVote.getMaterial() != null || tagUpVote.getPortfolio() != null) ) {
-           return tagUpVoteDAO.update(tagUpVote);
-        }  else {
-            throw new RuntimeException("No material or portfolio or tag or user found when upvoting tag");
+        if (tagUpVoteDAO.getTagUpVote(tagUpVote.getTag(), user, tagUpVote.getMaterial()) == null
+                && tagUpVoteDAO.getTagUpVote(tagUpVote.getTag(), user, tagUpVote.getPortfolio()) == null) {
+            if (tagUpVote.getUser() != null && tagUpVote.getTag() != null && (tagUpVote.getMaterial() != null || tagUpVote.getPortfolio() != null)) {
+                return tagUpVoteDAO.update(tagUpVote);
+            } else {
+                throw new RuntimeException("No material or portfolio or tag or user found when upvoting tag");
+            }
+        } else {
+            throw new RuntimeException("Only one upVote allowed");
+
         }
     }
 
@@ -56,21 +66,49 @@ public class TagUpVoteService {
         return tagUpVote;
     }
 
-    public void removeUpVoteFromMaterial(Long tagID, Long materialID, User loggedInUser) {
-        Material material = materialDAO.findByIdNotDeleted(materialID);
-        Tag tag = tagDAO.findTagByID(tagID);
-
+    public void removeUpVoteFromMaterial(Tag tag, Material material, User loggedInUser) {
         TagUpVote tagUpVote = tagUpVoteDAO.getTagUpVote(tag, loggedInUser, material);
 
         tagUpVoteDAO.setDeleted(tagUpVote);
     }
 
-    public void removeUpVoteFromPortfolio(Long tagID, Long portfolioID, User loggedInUser) {
-        Portfolio portfolio = portfolioDAO.findByIdNotDeleted(portfolioID);
-        Tag tag = tagDAO.findTagByID(tagID);
-
+    public void removeUpVoteFromPortfolio(Tag tag, Portfolio portfolio, User loggedInUser) {
         TagUpVote tagUpVote = tagUpVoteDAO.getTagUpVote(tag, loggedInUser, portfolio);
 
         tagUpVoteDAO.setDeleted(tagUpVote);
+    }
+
+    public List<TagUpVoteForm> getMaterialTagUpVotes(Material material, User loggedInUser) {
+        List<TagUpVoteForm> tagUpVoteForms = new ArrayList<>();
+        if(material != null) {
+            for(Tag tag : material.getTags()) {
+                List<TagUpVote> materialTagUpVotes = tagUpVoteDAO.getMaterialTagUpVotes(material, tag);
+                TagUpVote userTagUpVote = tagUpVoteDAO.getTagUpVote(tag, loggedInUser, material);
+                boolean hasUserUpVoted = userTagUpVote != null;
+                int count = materialTagUpVotes != null ? materialTagUpVotes.size() : 0;
+
+                TagUpVoteForm tagUpVoteForm = new TagUpVoteForm(tag, count, hasUserUpVoted);
+                tagUpVoteForms.add(tagUpVoteForm);
+            }
+        }
+
+        return tagUpVoteForms;
+    }
+
+    public List<TagUpVoteForm> getPortfolioTagUpVotes(Portfolio portfolio, User loggedInUser) {
+        List<TagUpVoteForm> tagUpVoteForms = new ArrayList<>();
+        if(portfolio != null) {
+            for(Tag tag : portfolio.getTags()) {
+                List<TagUpVote> portfolioTagUpVotes = tagUpVoteDAO.getPortfolioTagUpVotes(portfolio, tag);
+                TagUpVote userTagUpVote = tagUpVoteDAO.getTagUpVote(tag, loggedInUser, portfolio);
+                boolean hasUserUpVoted = userTagUpVote != null;
+                int count = portfolioTagUpVotes != null ? portfolioTagUpVotes.size() : 0;
+
+                TagUpVoteForm tagUpVoteForm = new TagUpVoteForm(tag, count, hasUserUpVoted);
+                tagUpVoteForms.add(tagUpVoteForm);
+            }
+        }
+
+        return tagUpVoteForms;
     }
 }

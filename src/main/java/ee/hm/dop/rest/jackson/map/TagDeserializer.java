@@ -3,7 +3,6 @@ package ee.hm.dop.rest.jackson.map;
 import java.io.IOException;
 
 import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonDeserializer;
 
@@ -20,7 +19,7 @@ import ee.hm.dop.service.TagService;
 public class TagDeserializer extends JsonDeserializer<Tag> {
 
     @Override
-    public Tag deserialize(JsonParser jp, DeserializationContext ctxt) throws IOException, JsonProcessingException {
+    public Tag deserialize(JsonParser jp, DeserializationContext ctxt) throws IOException {
         TagService tagService = GuiceInjector.getInjector().getInstance(TagService.class);
 
         String tagName = jp.getText();

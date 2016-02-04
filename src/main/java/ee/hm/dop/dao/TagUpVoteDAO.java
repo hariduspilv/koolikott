@@ -5,7 +5,6 @@ import java.util.List;
 
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
-import javax.persistence.TypedQuery;
 
 import ee.hm.dop.model.Material;
 import ee.hm.dop.model.Portfolio;
@@ -46,36 +45,69 @@ public class TagUpVoteDAO {
     }
 
     public List<TagUpVote> getNotDeletedUpVotes() {
-        TypedQuery<TagUpVote> query = entityManager.createQuery("SELECT t FROM TagUpVote t WHERE t.deleted = false",
-                TagUpVote.class);
-        return query.getResultList();
+        return entityManager.createQuery("SELECT t FROM TagUpVote t WHERE t.deleted = false",
+                TagUpVote.class).getResultList();
     }
 
     public TagUpVote getTagUpVote(Tag tag, User user, Material material) {
-        TypedQuery<TagUpVote> query;
-        if (material != null) {
-            query = entityManager
-                    .createQuery("SELECT t FROM TagUpVote t WHERE t.deleted = false and t.material = :material and t.user = :user and t.tag = :tag",
-                            TagUpVote.class).setParameter("material", material).setParameter("user", user).setParameter("tag", tag);
-        } else {
-            throw new InvalidParameterException("Missing material");
-
+        TagUpVote tagUpVote = null;
+        if (material != null && tag != null && user != null) {
+            try{
+                tagUpVote = entityManager
+                        .createQuery("SELECT t FROM TagUpVote t WHERE t.deleted = false and t.material = :material and t.user = :user and t.tag = :tag",
+                                TagUpVote.class).setParameter("material", material).setParameter("user", user).setParameter("tag", tag)
+                        .getSingleResult();
+            } catch (Exception e) {
+                //ignore
+            }
         }
 
-        return query.getSingleResult();
+        return tagUpVote;
     }
 
     public TagUpVote getTagUpVote(Tag tag, User user, Portfolio portfolio) {
-        TypedQuery<TagUpVote> query;
-        if (portfolio != null) {
-            query = entityManager
-                    .createQuery("SELECT t FROM TagUpVote t WHERE t.deleted = false and t.portfolio = :portfolio and t.user = :user and t.tag = :tag",
-                            TagUpVote.class).setParameter("portfolio", portfolio).setParameter("user", user).setParameter("tag", tag);
-        } else {
-            throw new InvalidParameterException("Missing portfolio");
-
+        TagUpVote tagUpVote = null;
+        if (portfolio != null && tag != null && user != null) {
+            try{
+                tagUpVote = entityManager
+                        .createQuery("SELECT t FROM TagUpVote t WHERE t.deleted = false and t.portfolio = :portfolio and t.user = :user and t.tag = :tag",
+                                TagUpVote.class).setParameter("portfolio", portfolio).setParameter("user", user).setParameter("tag", tag)
+                        .getSingleResult();
+            } catch (Exception e) {
+                //ignore
+            }
         }
 
-        return query.getSingleResult();
+        return tagUpVote;
+    }
+
+    public List<TagUpVote> getMaterialTagUpVotes(Material material, Tag tag) {
+        List<TagUpVote> tagUpVotes = null;
+        if (material != null && tag != null) {
+            try {
+                tagUpVotes = entityManager
+                        .createQuery("SELECT t FROM TagUpVote t WHERE t.deleted = false and t.material = :material and t.tag = :tag",
+                                TagUpVote.class).setParameter("material", material).setParameter("tag", tag).getResultList();
+            } catch (Exception e) {
+                //ignore
+            }
+        }
+
+        return tagUpVotes;
+    }
+
+    public List<TagUpVote> getPortfolioTagUpVotes(Portfolio portfolio, Tag tag) {
+        List<TagUpVote> tagUpVotes = null;
+        if (portfolio != null && tag != null) {
+            try {
+                tagUpVotes = entityManager
+                        .createQuery("SELECT t FROM TagUpVote t WHERE t.deleted = false and t.portfolio = :portfolio and t.tag = :tag",
+                                TagUpVote.class).setParameter("portfolio", portfolio).setParameter("tag", tag).getResultList();
+            } catch (Exception e) {
+                //ignore
+            }
+        }
+
+        return tagUpVotes;
     }
 }
