@@ -10,12 +10,13 @@ define([
     'directives/chapter/chapter',
     'directives/materialBox/materialBox',
     'directives/tableOfContents/tableOfContents'
-], function(app, angularAMD) {
+], function(app) {
     app.run(['$anchorScroll', function($anchorScroll) {
         $anchorScroll.yOffset = 50;
     }]);
 
-    return ['$scope', 'translationService', 'serverCallService', '$route', '$location', 'alertService', '$rootScope', 'authenticatedUserService', 'dialogService', 'toastService', '$mdDialog', '$interval', function($scope, translationService, serverCallService, $route, $location, alertService, $rootScope, authenticatedUserService, dialogService, toastService, $mdDialog, $interval) {
+    return ['$scope', 'translationService', 'serverCallService', '$route', '$location', 'alertService', '$rootScope', 'authenticatedUserService', 'dialogService', 'toastService', '$mdDialog', '$interval',
+        function($scope, translationService, serverCallService, $route, $location, alertService, $rootScope, authenticatedUserService, dialogService, toastService, $mdDialog, $interval) {
         var isAutoSaving = false;
         var autoSaveInterval;
 
@@ -77,7 +78,7 @@ define([
             isAutoSaving = false;
 
             updatePortfolio();
-        }
+        };
 
         function updatePortfolio() {
             var url = "rest/portfolio/update";
@@ -100,19 +101,29 @@ define([
         }
 
         function setPortfolio(portfolio) {
-            log("setportfolio");
             $scope.portfolio = portfolio;
             $rootScope.savedPortfolio = portfolio;
             if (portfolio && portfolio.hasPicture && !portfolio.picture) {
                 fetchImage();
             }
+
+            var upVotesParams = {
+                'portfolio': $scope.portfolio.id
+            };
+
+            serverCallService.makeGet("rest/tagUpVotes", upVotesParams, getTagUpVotesSuccess, function () {
+            });
+        }
+
+        function getTagUpVotesSuccess(upVoteForms) {
+            $scope.tags = sortTags(upVoteForms);
         }
 
         function showWarning() {
             var setPrivate = function() {
                 $scope.savedPortfolio.visibility = 'PRIVATE';
                 updatePortfolio();
-            }
+            };
 
             dialogService.showConfirmationDialog(
                 "{{'PORTFOLIO_MAKE_PRIVATE' | translate}}",
@@ -141,7 +152,7 @@ define([
 
         $scope.$watch(function() {
             return $rootScope.savedPortfolio;
-        }, function(newPortfolio, oldPortfolio) {
+        }, function(newPortfolio) {
             $scope.portfolio = newPortfolio;
         });
 

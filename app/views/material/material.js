@@ -95,11 +95,33 @@ define([
                 fetchImage();
                 processMaterial();
 
-                var params = {
+                $scope.newTags = [];
+
+                var upVotesParams = {
+                    'material': $scope.material.id
+                };
+
+                serverCallService.makeGet("rest/tagUpVotes", upVotesParams, getTagUpVotesSuccess, function () {
+                });
+
+                var viewCountParams = {
                     'type': '.Material',
                     'id': $scope.material.id
                 };
-                serverCallService.makePost("rest/material/increaseViewCount", params, countViewSuccess, countViewFail);
+
+                serverCallService.makePost("rest/material/increaseViewCount", viewCountParams, function () {
+                }, function () {
+                });
+            }
+
+            function getTagUpVotesSuccess(upVoteForms) {
+                $scope.tags = sortTags(upVoteForms);
+            }
+
+            function sortTags(upVoteForms) {
+                return upVoteForms.sort(function (a, b) {
+                    return a.upVoteCount < b.upVoteCount;
+                });
             }
 
             function preprocessMaterialSubjects() {
@@ -127,12 +149,6 @@ define([
                         material.educationalContexts[j++] = educationalContext;
                     }
                 }
-            }
-
-            function countViewSuccess(data) {
-            }
-
-            function countViewFail(data, status) {
             }
 
             $scope.getCorrectLanguageString = function (languageStringList) {
@@ -321,7 +337,7 @@ define([
                 $scope.pictureLock = false;
             }
 
-            $scope.restoreMaterial = function() {
+            $scope.restoreMaterial = function () {
                 serverCallService.makePost("rest/material/restore", $scope.material, restoreSuccess, restoreFail);
             };
 
@@ -332,6 +348,26 @@ define([
 
             function restoreFail() {
                 log("Restoring material failed");
+            }
+
+            $scope.upVote = function (tag) {
+                $scope.upVotedTag = tag;
+                $scope.upVotedTag.hasUpVoted = true;
+                var tagUpVote = {
+                    material: $scope.material,
+                    tag: tag
+                };
+
+                serverCallService.makePut("rest/tagUpVotes", tagUpVote, upVoteSuccess, upVoteFail);
+            };
+
+            function upVoteSuccess() {
+                $scope.upVotedTag.upVoteCount = $scope.upVotedTag.upVoteCount + 1;
+                $scope.tags = sortTags($scope.tags);
+            }
+
+            function upVoteFail() {
+                $scope.upVotedTag.hasUpVoted = false;
             }
         }];
 });

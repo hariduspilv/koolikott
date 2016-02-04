@@ -15,9 +15,9 @@ define(['angularAMD'], function(angularAMD) {
 	                method: method,
 	                url: url,
 	                headers: headers
-	            }
+	            };
 	            
-	            if (method === 'POST') {
+	            if (method === 'POST' || method === 'PUT') {
 	            	config.data = params;
 	            } else {
 	            	config.params = params;
@@ -58,6 +58,13 @@ define(['angularAMD'], function(angularAMD) {
                 	makeCall(url, 'GET', params, true, successCallback, errorCallback, finallyCallback);
                 },
 
+				makePut: function(url, data, successCallback, errorCallback, finallyCallback) {
+					makeCall(url, 'PUT', data, true, successCallback, errorCallback, finallyCallback);
+				},
+				makeDelete: function(url, data, successCallback, errorCallback, finallyCallback) {
+					makeCall(url, 'DELETE', data, true, successCallback, errorCallback, finallyCallback);
+				},
+
                 makeJsonp: function(url, params, successCallback, errorCallback, finallyCallback) {
                 	makeCall(url, 'JSONP', params, false, successCallback, errorCallback, finallyCallback);
                 },
@@ -82,7 +89,7 @@ define(['angularAMD'], function(angularAMD) {
                 });
 
                 return formData;
-            }
+            };
             
             return instance;
         }

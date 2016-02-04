@@ -12,9 +12,10 @@ define([
     'services/serverCallService',
     'services/translationService',
     'services/alertService',
-    'services/authenticatedUserService',
-], function(app) {
-    return ['$scope', 'translationService', 'serverCallService', '$route', '$location', 'alertService', '$rootScope', 'authenticatedUserService', '$timeout', function($scope, translationService, serverCallService, $route, $location, alertService, $rootScope, authenticatedUserService, $timeout) {
+    'services/authenticatedUserService'
+], function (app) {
+    return ['$scope', 'translationService', 'serverCallService', '$route', '$location', 'alertService', '$rootScope', 'authenticatedUserService', '$timeout',
+        function ($scope, translationService, serverCallService, $route, $location, alertService, $rootScope, authenticatedUserService, $timeout) {
         var increaseViewCountPromise;
 
         function init() {
@@ -51,18 +52,20 @@ define([
 
         function increaseViewCount() {
             /*
-              *  It is needed to have it in a timeout because of double call caused by using two different page structure.
-              *  So we cancel it in case the page is destroyed so the new one that will be create makes the valid call.
-              */
-            increaseViewCountPromise = $timeout(function() {
-                if($scope.portfolio) {
+             *  It is needed to have it in a timeout because of double call caused by using two different page structure.
+             *  So we cancel it in case the page is destroyed so the new one that will be create makes the valid call.
+             */
+            increaseViewCountPromise = $timeout(function () {
+                if ($scope.portfolio) {
                     var portfolio = createPortfolio($scope.portfolio.id);
-                    serverCallService.makePost("rest/portfolio/increaseViewCount", portfolio, function success() {}, function fail() {});
+                    serverCallService.makePost("rest/portfolio/increaseViewCount", portfolio, function success() {
+                    }, function fail() {
+                    });
                 }
             }, 1000);
         }
 
-        $scope.addComment = function() {
+        $scope.addComment = function () {
             var url = "rest/comment/portfolio";
 
             var portfolio = createPortfolio($scope.portfolio.id);
@@ -76,9 +79,9 @@ define([
         function addCommentSuccess() {
             $scope.newComment.text = "";
 
-            getPortfolio(function(portfolio) {
+            getPortfolio(function (portfolio) {
                 $scope.portfolio = portfolio;
-            }, function() {
+            }, function () {
                 log("Comment success, but failed to reload portfolio.");
             });
         }
@@ -93,18 +96,30 @@ define([
             if (portfolio && portfolio.hasPicture && !portfolio.picture) {
                 fetchImage();
             }
+            if($scope.portfolio) {
+                var upVotesParams = {
+                    'portfolio': $scope.portfolio.id
+                };
+
+                serverCallService.makeGet("rest/tagUpVotes", upVotesParams, getTagUpVotesSuccess, function () {
+                });
+            }
         }
 
-        $scope.$on('$routeChangeStart', function() {
+        function getTagUpVotesSuccess(upVoteForms) {
+            $scope.tags = sortTags(upVoteForms);
+        }
+
+        $scope.$on('$routeChangeStart', function () {
             if (!$location.url().startsWith("/portfolio/edit?id=")) {
                 setPortfolio(null);
-            }    
+            }
         });
 
-        $scope.$on('$destroy', function() {
+        $scope.$on('$destroy', function () {
             if (increaseViewCountPromise) {
                 $timeout.cancel(increaseViewCountPromise);
-            }    
+            }
         });
 
         function fetchImage() {
@@ -115,12 +130,12 @@ define([
         }
 
         function fetchImageSuccess(data) {
-            if($scope.portfolio) {
+            if ($scope.portfolio) {
                 $scope.portfolio.picture = "data:image/jpeg;base64," + data;
             }
         }
 
-        function fetchImageFail(data) {
+        function fetchImageFail() {
             log("Getting portfolio image failed");
         }
 

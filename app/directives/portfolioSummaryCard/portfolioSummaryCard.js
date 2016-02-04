@@ -13,30 +13,34 @@ define([
     'directives/recommend/recommend',
     'directives/rating/rating',
     'directives/commentsCard/commentsCard'
-], function(app, angularAMD) {
-    app.directive('dopPortfolioSummaryCard', ['translationService', '$location', '$mdSidenav', '$mdDialog', '$rootScope', 'authenticatedUserService', '$route', 'dialogService', 'serverCallService', 'toastService', 'storageService', function(translationService, $location, $mdSidenav, $mdDialog, $rootScope, authenticatedUserService, $route, dialogService, serverCallService, toastService, storageService) {
+], function (app, angularAMD) {
+    app.directive('dopPortfolioSummaryCard', ['translationService', '$location', '$mdSidenav', '$mdDialog', '$rootScope', 'authenticatedUserService', '$route', 'dialogService', 'serverCallService', 'toastService', 'storageService',
+        function (translationService, $location, $mdSidenav, $mdDialog, $rootScope, authenticatedUserService, $route, dialogService, serverCallService, toastService, storageService) {
         return {
             scope: {
                 portfolio: '=',
                 comment: '=',
-                submitClick: "&"
+                submitClick: "&",
+                tags: '='
             },
             templateUrl: 'directives/portfolioSummaryCard/portfolioSummaryCard.html',
-            controller: function($scope, $location) {
+            controller: function ($scope, $location) {
 
                 function init() {
                     $scope.isViewPortforlioPage = $rootScope.isViewPortforlioPage;
                     $scope.isEditPortfolioMode = $rootScope.isEditPortfolioMode;
+
+                    $scope.newTags = [];
                 }
 
-                $scope.getEducationalContext = function() {
+                $scope.getEducationalContext = function () {
                     var educationalContext = $rootScope.taxonUtils.getEducationalContext($scope.portfolio.taxon);
                     if (educationalContext) {
                         return educationalContext.name.toUpperCase();
                     }
                 };
 
-                $scope.isOwner = function() {
+                $scope.isOwner = function () {
                     if (!authenticatedUserService.isAuthenticated()) {
                         return false;
                     }
@@ -47,38 +51,38 @@ define([
                         return creatorId === userId;
                     }
                 };
-                
-                $scope.canEdit = function() {
+
+                $scope.canEdit = function () {
                     return $scope.isOwner() && authenticatedUserService.getUser().role !== 'RESTRICTED';
                 };
 
-                $scope.isAdmin = function() {
-                    return authenticatedUserService.getUser() && authenticatedUserService.getUser().role === 'ADMIN';
+                $scope.isAdmin = function () {
+                    return authenticatedUserService.isAdmin();
                 };
 
-                $scope.isLoggedIn = function() {
+                $scope.isLoggedIn = function () {
                     return authenticatedUserService.isAuthenticated();
                 };
 
-                $scope.editPortfolio = function() {
+                $scope.editPortfolio = function () {
                     var portfolioId = $route.current.params.id;
                     $location.url("/portfolio/edit?id=" + portfolioId);
                 };
 
-                $scope.showEditMetadataDialog = function() {
+                $scope.showEditMetadataDialog = function () {
                     storageService.setPortfolio($scope.portfolio);
-                    
+
                     $mdDialog.show(angularAMD.route({
                         templateUrl: 'views/addPortfolioDialog/addPortfolioDialog.html',
                         controllerUrl: 'views/addPortfolioDialog/addPortfolioDialog'
                     }));
                 };
 
-                $scope.addComment = function() {
+                $scope.addComment = function () {
                     $scope.submitClick();
                 };
 
-                $scope.confirmPortfolioDeletion = function() {
+                $scope.confirmPortfolioDeletion = function () {
                     dialogService.showConfirmationDialog(
                         'PORTFOLIO_CONFIRM_DELETE_DIALOG_TITLE',
                         'PORTFOLIO_CONFIRM_DELETE_DIALOG_CONTENT',
@@ -101,7 +105,7 @@ define([
                     log('Deleting portfolio failed.');
                 }
 
-                $scope.restorePortfolio = function() {
+                $scope.restorePortfolio = function () {
                     serverCallService.makePost("rest/portfolio/restore", $scope.portfolio, restoreSuccess, restoreFail);
                 };
 
@@ -114,13 +118,32 @@ define([
                     log("Restoring portfolio failed");
                 }
 
+                $scope.upVote = function (tag) {
+                    $scope.upVotedTag = tag;
+                    $scope.upVotedTag.hasUpVoted = true;
+                    var tagUpVote = {
+                        portfolio: $scope.portfolio,
+                        tag: tag
+                    };
+
+                    serverCallService.makePut("rest/tagUpVotes", tagUpVote, upVoteSuccess, upVoteFail);
+                };
+
+                function upVoteSuccess() {
+                    $scope.upVotedTag.upVoteCount = $scope.upVotedTag.upVoteCount + 1;
+                    $scope.tags = sortTags($scope.tags);
+                }
+
+                function upVoteFail() {
+                    $scope.upVotedTag.hasUpVoted = false;
+                }
+
                 if ($rootScope.openMetadataDialog) {
                     $scope.showEditMetadataDialog();
                     $rootScope.openMetadataDialog = null;
                 }
 
                 init();
-
             }
         };
     }]);

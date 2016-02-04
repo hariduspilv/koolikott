@@ -287,3 +287,9 @@ function createPortfolio(id) {
 	}
 	return portfolio;
 }
+
+function sortTags(upVoteForms) {
+	return upVoteForms.sort(function (a, b) {
+		return a.upVoteCount < b.upVoteCount;
+	});
+}
