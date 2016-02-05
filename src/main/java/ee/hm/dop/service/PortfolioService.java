@@ -237,6 +237,10 @@ public class PortfolioService {
             throw new RuntimeException("Portfolio not found");
         }
 
+        if (originalPortfolio.getCreator().getId() != loggedInUser.getId()) {
+            throw new RuntimeException("Logged in user must be the creator of this portfolio.");
+        }
+
         originalPortfolio.setPicture(portfolio.getPicture());
         originalPortfolio.setHasPicture(portfolio.getPicture() != null);
         return portfolioDAO.update(originalPortfolio);
@@ -359,7 +363,8 @@ public class PortfolioService {
     }
 
     private boolean isPortfolioAccessibleToUser(Portfolio portfolio, User loggedInUser) {
-        return (portfolio.getVisibility() != Visibility.PRIVATE || isUserPortfolioCreator(portfolio, loggedInUser) && !portfolio.isDeleted())
+        return (portfolio.getVisibility() != Visibility.PRIVATE || isUserPortfolioCreator(portfolio, loggedInUser)
+                && !portfolio.isDeleted())
                 || isUserAdmin(loggedInUser);
     }
 
