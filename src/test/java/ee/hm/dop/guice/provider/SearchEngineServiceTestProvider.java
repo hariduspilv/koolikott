@@ -68,13 +68,13 @@ class SearchEngineServiceMock implements SearchEngineService {
     }
 
     private static void addArabicQuery() {
-        String arabicQuery = "(المدرسية*) AND (visibility:\"public\" OR type:\"material\")";
+        String arabicQuery = "(المدرسية) AND (visibility:\"public\" OR type:\"material\")";
         List<Document> arabicSearchResult = createDocumentsWithIdentifiers(1L);
         searchResponses.put(arabicQuery, arabicSearchResult);
     }
 
     private static void addBigQuery() {
-        String bigQuery = "(thishasmanyresults*) AND (visibility:\"public\" OR type:\"material\")";
+        String bigQuery = "(thishasmanyresults) AND (visibility:\"public\" OR type:\"material\")";
         ArrayList<Document> bigQueryDocuments = new ArrayList<>();
         for (long i = 0; i < 8; i++) {
             addNewDocument(bigQueryDocuments, i);
@@ -91,7 +91,7 @@ class SearchEngineServiceMock implements SearchEngineService {
     }
 
     private static void addQueryWithEducationalContextFilter() {
-        String filteredQuery = "(beethoven*) AND domain:\"mathematics\" AND educational_context:\"preschooleducation\""
+        String filteredQuery = "(beethoven) AND domain:\"mathematics\" AND educational_context:\"preschooleducation\""
                 + " AND (visibility:\"public\" OR type:\"material\")";
         List<Document> filteredSearchResult = createDocumentsWithIdentifiers(1L, 2L);
         searchResponses.put(filteredQuery, filteredSearchResult);
@@ -111,13 +111,13 @@ class SearchEngineServiceMock implements SearchEngineService {
     }
 
     private static void addQueryWithTypeFilter() {
-        String filteredQuery = "(weird*) AND type:\"portfolio\" AND (visibility:\"public\" OR type:\"material\")";
+        String filteredQuery = "(weird) AND type:\"portfolio\" AND (visibility:\"public\" OR type:\"material\")";
         List<Document> filteredSearchResult = createDocumentsWithIdentifiers(1L, 2L, 3L);
         searchResponses.put(filteredQuery, filteredSearchResult);
     }
 
     private static void addQueryWithTypeFilterAll() {
-        String filteredQuery = "(weird*) AND (type:\"material\" OR type:\"portfolio\")"
+        String filteredQuery = "(weird) AND (type:\"material\" OR type:\"portfolio\")"
                 + " AND (visibility:\"public\" OR type:\"material\")";
         List<Document> filteredSearchResult = createDocumentsWithIdentifiers(1L, 5L);
         searchResponses.put(filteredQuery, filteredSearchResult);
@@ -132,7 +132,7 @@ class SearchEngineServiceMock implements SearchEngineService {
     }
 
     private static void addQueryWithTaxonSubjectAndTypeFilter() {
-        String filteredQuery = "(beethoven*) AND subject:\"mathematics\" AND domain:\"mathematics\""
+        String filteredQuery = "(beethoven) AND subject:\"mathematics\" AND domain:\"mathematics\""
                 + " AND educational_context:\"preschooleducation\" AND type:\"material\""
                 + " AND (visibility:\"public\" OR type:\"material\")";
         List<Document> filteredSearchResult = createDocumentsWithIdentifiers(1L, 7L);
@@ -140,14 +140,14 @@ class SearchEngineServiceMock implements SearchEngineService {
     }
 
     private static void addQueryWithPaidFalseAndTypeFilter() {
-        String filteredQuery = "(weird*) AND (paid:\"false\" OR type:\"portfolio\") AND type:\"material\""
+        String filteredQuery = "(weird) AND (paid:\"false\" OR type:\"portfolio\") AND type:\"material\""
                 + " AND (visibility:\"public\" OR type:\"material\")";
         List<Document> filteredSearchResult = createDocumentsWithIdentifiers(1L, 8L);
         searchResponses.put(filteredQuery, filteredSearchResult);
     }
 
     private static void addQueryWithAllFilters() {
-        String filteredQuery = "(john*) AND educational_context:\"basiceducation\""
+        String filteredQuery = "(john) AND educational_context:\"basiceducation\""
                 + " AND (paid:\"false\" OR type:\"portfolio\") AND type:\"portfolio\""
                 + " AND (issue_date_year:[2011 TO *] OR (created:[2011-01-01T00:00:00Z TO *] AND type:\"portfolio\"))"
                 + " AND curriculum_literature:\"true\" AND (visibility:\"public\" OR type:\"material\")";
@@ -156,21 +156,21 @@ class SearchEngineServiceMock implements SearchEngineService {
     }
 
     private static void addQueryWithLanguage() {
-        String filteredQuery = "(monday*) AND (language:\"eng\" OR type:\"portfolio\")"
+        String filteredQuery = "(monday) AND (language:\"eng\" OR type:\"portfolio\")"
                 + " AND (visibility:\"public\" OR type:\"material\")";
         List<Document> filteredSearchResult = createDocumentsWithIdentifiers(2L, 1L);
         searchResponses.put(filteredQuery, filteredSearchResult);
     }
 
     private static void addQueryWithCurriculumLiteratureTrue() {
-        String filteredQuery = "(data*) AND curriculum_literature:\"true\""
+        String filteredQuery = "(data) AND curriculum_literature:\"true\""
                 + " AND (visibility:\"public\" OR type:\"material\")";
         List<Document> filteredSearchResult = createDocumentsWithIdentifiers(2L, 7L);
         searchResponses.put(filteredQuery, filteredSearchResult);
     }
 
     private static void addQueryWithCurriculumLiteratureFalse() {
-        String filteredQuery = "(data*) AND curriculum_literature:\"false\""
+        String filteredQuery = "(data) AND curriculum_literature:\"false\""
                 + " AND (visibility:\"public\" OR type:\"material\")";
         List<Document> filteredSearchResult = createDocumentsWithIdentifiers(2L, 8L);
         searchResponses.put(filteredQuery, filteredSearchResult);
@@ -183,7 +183,7 @@ class SearchEngineServiceMock implements SearchEngineService {
     }
 
     private static void addAdminQuery() {
-        String query = "super*";
+        String query = "super";
         List<Document> result = createDocumentsWithIdentifiers(2L, 4L);
         searchResponses.put(query, result);
     }
@@ -196,7 +196,7 @@ class SearchEngineServiceMock implements SearchEngineService {
     }
 
     private static void addSortedQuery() {
-        String query = "(tuesday*) AND (visibility:\"public\" OR type:\"material\")";
+        String query = "(tuesday) AND (visibility:\"public\" OR type:\"material\")";
         String sort = "somefield desc";
         List<Document> result = createDocumentsWithIdentifiers(2L, 6L);
         sortedSearchResponses.put(query, sort, result);

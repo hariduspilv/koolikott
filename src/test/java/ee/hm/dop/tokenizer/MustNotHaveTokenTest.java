@@ -10,7 +10,7 @@ public class MustNotHaveTokenTest {
     public void testToString() {
         RegularToken content = new RegularToken("test");
         MustNotHaveToken token = new MustNotHaveToken(content);
-        assertEquals("-test*", token.toString());
+        assertEquals("-test", token.toString());
 
         AuthorToken authorToken = new AuthorToken("Leonardo Fibonacci");
         MustNotHaveToken mustNotHaveToken = new MustNotHaveToken(authorToken);

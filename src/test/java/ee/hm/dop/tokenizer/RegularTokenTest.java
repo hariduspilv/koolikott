@@ -12,9 +12,9 @@ public class RegularTokenTest {
     @Test
     public void testToString() {
         RegularToken token = new RegularToken("test");
-        assertEquals("test*", token.toString());
+        assertEquals("test", token.toString());
 
         token = new RegularToken("\"test123/!");
-        assertEquals("\\\"test123\\/\\!*", token.toString());
+        assertEquals("\\\"test123\\/\\!", token.toString());
     }
 }

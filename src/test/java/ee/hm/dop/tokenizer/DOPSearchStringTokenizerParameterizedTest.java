@@ -44,14 +44,14 @@ public class DOPSearchStringTokenizerParameterizedTest {
     public void tokenizeExactMatchMissingClosingQuotes() {
         DOPSearchStringTokenizer tokenizer = new DOPSearchStringTokenizer(tokenKeyword + ":\"Leonardo Fibonacci");
         String searchQuery = consumeTokenizer(tokenizer);
-        assertEquals(tokenKeyword + ":\"leonardo\" fibonacci*", searchQuery);
+        assertEquals(tokenKeyword + ":\"leonardo\" fibonacci", searchQuery);
     }
 
     @Test
     public void tokenizeMissingColon() {
         DOPSearchStringTokenizer tokenizer = new DOPSearchStringTokenizer(tokenKeyword + "\"Leonardo Fibonacci\"");
         String searchQuery = consumeTokenizer(tokenizer);
-        assertEquals(tokenKeyword + "\\\"leonardo* fibonacci\\\"*", searchQuery);
+        assertEquals(tokenKeyword + "\\\"leonardo fibonacci\\\"", searchQuery);
     }
 
     @Test
@@ -59,9 +59,9 @@ public class DOPSearchStringTokenizerParameterizedTest {
         DOPSearchStringTokenizer tokenizer = new DOPSearchStringTokenizer(tokenKeyword + " \"Leonardo Fibonacci");
         String searchQuery = consumeTokenizer(tokenizer);
         if (tokenKeyword.length() > 3) {
-            assertEquals(tokenKeyword + "* \\\"leonardo* fibonacci*", searchQuery);
+            assertEquals(tokenKeyword + " \\\"leonardo fibonacci", searchQuery);
         } else {
-            assertEquals(tokenKeyword + " \\\"leonardo* fibonacci*", searchQuery);
+            assertEquals(tokenKeyword + " \\\"leonardo fibonacci", searchQuery);
         }
     }
 
@@ -78,7 +78,7 @@ public class DOPSearchStringTokenizerParameterizedTest {
         DOPSearchStringTokenizer tokenizer = new DOPSearchStringTokenizer("math " + tokenKeyword + ":Fibonacci");
         String searchQuery = consumeTokenizer(tokenizer);
 
-        assertEquals("math* " + tokenKeyword + ":\"fibonacci\"", searchQuery);
+        assertEquals("math " + tokenKeyword + ":\"fibonacci\"", searchQuery);
     }
 
     @Test
@@ -86,7 +86,7 @@ public class DOPSearchStringTokenizerParameterizedTest {
         DOPSearchStringTokenizer tokenizer = new DOPSearchStringTokenizer("math " + tokenKeyword + ":\"Fibonacci\"");
         String searchQuery = consumeTokenizer(tokenizer);
 
-        assertEquals("math* " + tokenKeyword + ":\"fibonacci\"", searchQuery);
+        assertEquals("math " + tokenKeyword + ":\"fibonacci\"", searchQuery);
     }
 
     @Test
@@ -95,9 +95,9 @@ public class DOPSearchStringTokenizerParameterizedTest {
         String searchQuery = consumeTokenizer(tokenizer);
 
         if (tokenKeyword.length() > 3) {
-            assertEquals(tokenKeyword + "* rest*", searchQuery);
+            assertEquals(tokenKeyword + " rest", searchQuery);
         } else {
-            assertEquals(tokenKeyword + " rest*", searchQuery);
+            assertEquals(tokenKeyword + " rest", searchQuery);
         }
     }
 
