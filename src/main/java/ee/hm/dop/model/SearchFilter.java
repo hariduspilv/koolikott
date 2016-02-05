@@ -32,7 +32,7 @@ public class SearchFilter {
 
     private String sort;
 
-    private String sortDirection;
+    private SortDirection sortDirection;
 
     public Taxon getTaxon() {
         return taxon;
@@ -138,12 +138,35 @@ public class SearchFilter {
         this.sort = sort;
     }
 
-    public String getSortDirection() {
+    public SortDirection getSortDirection() {
         return sortDirection;
     }
 
-    public void setSortDirection(String sortDirection) {
+    public void setSortDirection(SortDirection sortDirection) {
         this.sortDirection = sortDirection;
+    }
+
+    public enum SortDirection {
+        ASCENDING("asc"), DESCENDING("desc");
+
+        private String direction;
+
+        private SortDirection(String direction) {
+            this.direction = direction;
+        }
+
+        public String getValue() {
+            return direction;
+        }
+
+        public static SortDirection getByValue(String value) {
+            for (SortDirection sortDirection : SortDirection.values()) {
+                if (sortDirection.getValue().equalsIgnoreCase(value)) {
+                    return sortDirection;
+                }
+            }
+            return null;
+        }
     }
 
 }

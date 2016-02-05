@@ -257,7 +257,7 @@ public class SearchResourceTest extends ResourceIntegrationTestBase {
         String query = "tuesday";
         SearchFilter searchFilter = new SearchFilter();
         searchFilter.setSort("somefield");
-        searchFilter.setSortDirection("desc");
+        searchFilter.setSortDirection(SearchFilter.SortDirection.DESCENDING);
         int start = 0;
         SearchResult searchResult = doGet(buildQueryURL(query, start, null, searchFilter), SearchResult.class);
 
@@ -335,7 +335,7 @@ public class SearchResourceTest extends ResourceIntegrationTestBase {
             queryURL += "&sort=" + searchFilter.getSort();
         }
         if (searchFilter.getSortDirection() != null) {
-            queryURL += "&sortDirection=" + searchFilter.getSortDirection();
+            queryURL += "&sortDirection=" + searchFilter.getSortDirection().getValue();
         }
         return queryURL;
     }

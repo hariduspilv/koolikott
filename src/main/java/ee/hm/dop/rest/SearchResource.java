@@ -95,7 +95,7 @@ public class SearchResource extends BaseResource {
         searchFilter.setKeyCompetence(keyCompetence);
         searchFilter.setCurriculumLiterature(isCurriculumLiterature);
         searchFilter.setSort(sort);
-        searchFilter.setSortDirection(sortDirection);
+        searchFilter.setSortDirection(SearchFilter.SortDirection.getByValue(sortDirection));
 
         return searchService.search(query, start, limit, searchFilter, getLoggedInUser());
     }

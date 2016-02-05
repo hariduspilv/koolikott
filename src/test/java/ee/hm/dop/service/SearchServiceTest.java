@@ -954,7 +954,7 @@ public class SearchServiceTest {
         String query = "english language";
         SearchFilter searchFilter = new SearchFilter();
         searchFilter.setSort("somefield");
-        searchFilter.setSortDirection("desc");
+        searchFilter.setSortDirection(SearchFilter.SortDirection.DESCENDING);
         String tokenizedQuery = "(english language) AND (visibility:\"public\" OR type:\"material\")";
         String expectedSort = "somefield desc";
         long start = 0;

@@ -150,7 +150,7 @@ public class SearchService {
     private String getSort(SearchFilter searchFilter) {
         String sort = null;
         if (searchFilter.getSort() != null && searchFilter.getSortDirection() != null) {
-            sort = String.join(" ", searchFilter.getSort(), searchFilter.getSortDirection());
+            sort = String.join(" ", searchFilter.getSort(), searchFilter.getSortDirection().getValue());
         }
         return sort;
     }
