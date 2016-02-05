@@ -86,6 +86,12 @@ define([
                 }
             }
 
+            function loginWithOAuth(path) {
+                localStorage.removeItem(LOGIN_ORIGIN);
+                localStorage.setItem(LOGIN_ORIGIN, $location.url());
+                window.location = path;
+            }
+
             return {
 
                 logout: function() {
@@ -102,21 +108,15 @@ define([
                 },
 
                 loginWithTaat: function() {
-                    localStorage.removeItem(LOGIN_ORIGIN);
-                    localStorage.setItem(LOGIN_ORIGIN, $location.url());
-                    window.location = "/rest/login/taat";
+                    loginWithOAuth("/rest/login/taat");
                 },
                 
                 loginWithEkool : function() {
-                	localStorage.removeItem(LOGIN_ORIGIN);
-                    localStorage.setItem(LOGIN_ORIGIN, $location.url());
-                	window.location = "/rest/login/ekool";
+                    loginWithOAuth("/rest/login/ekool");
                 },
 
                 loginWithStuudium : function() {
-                    localStorage.removeItem(LOGIN_ORIGIN);
-                    localStorage.setItem(LOGIN_ORIGIN, $location.url());
-                    window.location = "/rest/login/stuudium";
+                    loginWithOAuth("/rest/login/stuudium");
                 },
                 
                 authenticateUsingOAuth: function(token) {
