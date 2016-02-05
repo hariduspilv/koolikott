@@ -22,7 +22,7 @@ public class DOPSearchStringTokenizerParameterizedTest {
     @Parameters
     public static Collection<Object[]> getTokenKeywords() {
         return Arrays.asList(
-                new Object[][] { { "author" }, { "title" }, { "description" }, { "summary" }, { "publisher" } });
+                new Object[][] { { "author" }, { "title" }, { "description" }, { "summary" }, { "publisher" }, { "tag" } });
     }
 
     @Test

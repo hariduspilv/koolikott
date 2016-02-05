@@ -10,6 +10,7 @@ public class DOPSearchStringTokenizer {
     private static final String SUMMARY_KEYWORD = "summary:";
     private static final String RECOMMENDED_KEYWORD = "recommended:";
     private static final String PUBLISHER_KEYWORD = "publisher:";
+    private static final String TAG_KEYWORD = "tag:";
     private static final String TRUE = "true";
     private static final String FALSE = "false";
     private static final char QUOTES = '"';
@@ -64,6 +65,9 @@ public class DOPSearchStringTokenizer {
                 token = parseSummary();
             } else if (c == 't') {
                 token = parseTitle();
+                if(token == null) {
+                    token = parseTag();
+                }
             } else if (c == '+') {
                 token = parseMustHave();
             } else if (c == '-') {
@@ -76,6 +80,15 @@ public class DOPSearchStringTokenizer {
         }
 
         return token;
+    }
+
+    private DOPToken parseTag() {
+        String value = extractTokenValue(TAG_KEYWORD);
+        if (value == null) {
+            return null;
+        }
+
+        return new TagToken(value);
     }
 
     private DOPToken parseMustHave() {
