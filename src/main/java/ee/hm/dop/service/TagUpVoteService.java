@@ -33,13 +33,19 @@ public class TagUpVoteService {
     @Inject
     private TagUpVoteDAO tagUpVoteDAO;
 
+    @Inject
+    private SearchEngineService searchEngineService;
+
     public TagUpVote upVote(TagUpVote tagUpVote, User user) {
         tagUpVote = createTagUpVote(tagUpVote, user);
 
         if (tagUpVoteDAO.getTagUpVote(tagUpVote.getTag(), user, tagUpVote.getMaterial()) == null
                 && tagUpVoteDAO.getTagUpVote(tagUpVote.getTag(), user, tagUpVote.getPortfolio()) == null) {
             if (tagUpVote.getUser() != null && tagUpVote.getTag() != null && (tagUpVote.getMaterial() != null || tagUpVote.getPortfolio() != null)) {
-                return tagUpVoteDAO.update(tagUpVote);
+                TagUpVote returntagUpVote = tagUpVoteDAO.update(tagUpVote);
+                searchEngineService.updateIndex();
+
+                return returntagUpVote;
             } else {
                 throw new RuntimeException("No material or portfolio or tag or user found when upvoting tag");
             }
@@ -70,12 +76,14 @@ public class TagUpVoteService {
         TagUpVote tagUpVote = tagUpVoteDAO.getTagUpVote(tag, loggedInUser, material);
 
         tagUpVoteDAO.setDeleted(tagUpVote);
+        searchEngineService.updateIndex();
     }
 
     public void removeUpVoteFromPortfolio(Tag tag, Portfolio portfolio, User loggedInUser) {
         TagUpVote tagUpVote = tagUpVoteDAO.getTagUpVote(tag, loggedInUser, portfolio);
 
         tagUpVoteDAO.setDeleted(tagUpVote);
+        searchEngineService.updateIndex();
     }
 
     public List<TagUpVoteForm> getMaterialTagUpVotes(Material material, User loggedInUser) {
