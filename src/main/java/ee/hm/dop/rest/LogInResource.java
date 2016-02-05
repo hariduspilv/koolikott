@@ -117,9 +117,12 @@ public class LogInResource extends BaseResource {
 
     @GET
     @Path("stuudium")
-    public Response stuudiumAuthenticate() throws URISyntaxException {
-        URI authenticationUri = getStuudiumAuthenticationURI();
-        return Response.temporaryRedirect(authenticationUri).build();
+    public Response stuudiumAuthenticate(@QueryParam("token") String token) throws URISyntaxException {
+        if (token == null) {
+            return redirectToStuudium();
+        } else {
+            return authenticateWithStuudiumToken(token);
+        }
     }
 
     @GET
@@ -142,6 +145,22 @@ public class LogInResource extends BaseResource {
     @Produces(MediaType.APPLICATION_JSON)
     public AuthenticatedUser getAuthenticatedUser(@QueryParam("token") String token) {
         return authenticatedUserService.getAuthenticatedUserByToken(token);
+    }
+
+    private Response redirectToStuudium() throws URISyntaxException {
+        URI authenticationUri = getStuudiumAuthenticationURI();
+        return Response.temporaryRedirect(authenticationUri).build();
+    }
+
+    private Response authenticateWithStuudiumToken(String token) throws URISyntaxException {
+        URI location;
+        try {
+            AuthenticatedUser authenticatedUser = stuudiumService.authenticate(token);
+            location = new URI("../#/loginRedirect?token=" + authenticatedUser.getToken());
+        } catch (Exception e) {
+            location = new URI("../#/loginRedirect");
+        }
+        return Response.temporaryRedirect(location).build();
     }
 
     private String getIdCodeFromRequest() {

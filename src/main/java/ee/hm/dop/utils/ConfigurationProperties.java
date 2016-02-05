@@ -55,7 +55,9 @@ public interface ConfigurationProperties {
 
     // Stuudium
     String STUUDIUM_CLIENT_ID = "stuudium.client.id";
+    String STUUDIUM_CLIENT_SECRET = "stuudium.client.secret";
     String STUUDIUM_URL_AUTHORIZE = "stuudium.url.authorize";
+    String STUUDIUM_URL_GENERALDATA = "stuudium.url.generaldata";
 
     String MAX_FILE_SIZE = "file.upload.max.size";
 }
