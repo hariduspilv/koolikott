@@ -2,16 +2,17 @@ define([
     'app',
     'services/translationService',
     'services/serverCallService',
+    'services/searchService',
     'services/authenticatedUserService'
 ], function (app) {
-    app.directive('dopTags', function (translationService, $mdToast, $translate, serverCallService, authenticatedUserService) {
+    app.directive('dopTags', function (translationService, $mdToast, $translate, serverCallService, searchService, authenticatedUserService, $location) {
         return {
             scope: {
                 material: '=',
                 portfolio: '='
             },
             templateUrl: 'directives/tags/tags.html',
-            controller: function ($scope, $mdToast, $translate, serverCallService, authenticatedUserService) {
+            controller: function ($scope, $mdToast, $translate, serverCallService, searchService, authenticatedUserService, $location) {
 
                 function init() {
                     $scope.newTags = [];
@@ -93,6 +94,13 @@ define([
                 function removeUpVoteFail() {
                     $scope.upVoteRemovedTag.hasUpVoted = true;
                 }
+
+                $scope.getTagSearchURL = function ($event, tag) {
+                    $event.preventDefault();
+
+                    searchService.setSearch('tag:"' + tag + '"');
+                    $location.url(searchService.getURL());
+                };
 
                 init();
             }

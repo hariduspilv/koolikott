@@ -13,7 +13,7 @@
                     <md-button data-ng-if="isLoggedIn()" class="md-icon-button">
                         <md-icon>error_outline</md-icon>
                     </md-button>
-                    <a href="#" class="link">{{$chip.tag}}</a>
+                    <a href="#" class="link" data-ng-click="getTagSearchURL($event, $chip.tag)">{{$chip.tag}}</a>
 
                     <md-button data-ng-if="!$chip.hasUpVoted && isLoggedIn()" class="md-icon-button"
                                ng-click="upVote($chip)">
