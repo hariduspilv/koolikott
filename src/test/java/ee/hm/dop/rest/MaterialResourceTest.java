@@ -324,6 +324,25 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
     }
 
     @Test
+    public void createWithCurriculumLiteratureAsAdmin() {
+        login("89898989898");
+
+        Material material = new Material();
+        material.setSource("http://curriculum.example.com/2");
+        material.setCurriculumLiterature(true);
+
+        Response response = doPost(CREATE_MATERIAL_URL, Entity.entity(material, MediaType.APPLICATION_JSON_TYPE));
+        assertEquals(Status.OK.getStatusCode(), response.getStatus());
+
+        Material createdMaterial = response.readEntity(Material.class);
+
+        assertNotNull(createdMaterial);
+        assertTrue(createdMaterial.isCurriculumLiterature());
+
+        logout();
+    }
+
+    @Test
     public void createWithCurriculumLiteratureAsPublisher() {
         login("77007700770");
 
@@ -338,6 +357,8 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
 
         assertNotNull(createdMaterial);
         assertTrue(createdMaterial.isCurriculumLiterature());
+
+        logout();
     }
 
     @Test

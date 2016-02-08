@@ -95,7 +95,7 @@ public class MaterialService {
 
         material.setRecommendation(null);
 
-        if (!isUserPublisher(creator)) {
+        if (!isUserAdmin(creator) && !isUserPublisher(creator)) {
             material.setCurriculumLiterature(false);
         }
 
