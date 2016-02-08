@@ -25,6 +25,7 @@ require.config({
     'clipboard': 'libs/clipboard/dist/clipboard.min'
   },
   shim: {
+    'angular': ['jquery'],
     'angularAMD': ['angular'],
     'ngload': ['angularAMD'],
     'angular-animate': ['angular'],

@@ -7,8 +7,8 @@ define([
     'services/authenticatedUserService',
     'services/storageService'
 ], function (app) {
-    return ['$scope', '$mdDialog', 'serverCallService', 'translationService', 'metadataService', '$filter', '$location', '$rootScope', 'authenticatedUserService', 'Upload', 'storageService',
-        function ($scope, $mdDialog, serverCallService, translationService, metadataService, $filter, $location, $rootScope, authenticatedUserService, Upload, storageService) {
+    return ['$scope', '$mdDialog', 'serverCallService', 'translationService', 'metadataService', '$filter', '$location', '$rootScope', 'authenticatedUserService', 'Upload', 'storageService', '$timeout',
+        function ($scope, $mdDialog, serverCallService, translationService, metadataService, $filter, $location, $rootScope, authenticatedUserService, Upload, storageService, $timeout) {
             $scope.isSaving = false;
             $scope.showHints = true;
             $scope.creatorIsPublisher = false;
@@ -67,6 +67,9 @@ define([
 
             $scope.addNewAuthor = function () {
                 $scope.material.authors.push({});
+                $timeout(function() {
+                    angular.element('#material-author-' + ($scope.material.authors.length - 1) + '-name').focus();
+                });
             };
 
             $scope.deleteAuthor = function (index) {
