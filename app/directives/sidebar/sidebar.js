@@ -52,10 +52,12 @@ define([
                 };
 
                 $scope.getItemLink = function(item) {
-                    if (item.type === '.Material') {
-                        return "#/material?materialId={{item.id}}";
-                    } else if (item.type === '.Portfolio') {
-                        return "#/portfolio?id={{item.id}}";
+                    if (item && item.type && item.id) {
+                        if (item.type === '.Material') {
+                            return "#/material?materialId=" + item.id;
+                        } else if (item.type === '.Portfolio') {
+                            return "#/portfolio?id=" + item.id;
+                        }
                     }
                 };
             }

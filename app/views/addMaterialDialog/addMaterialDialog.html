@@ -132,6 +132,9 @@
 
           <div layout="row" flex layout-align="space-between center">
             <div data-dop-target-group-selector data-target-groups="material.targetGroups" flex="20"></div>
+            <md-switch data-ng-if="isAdmin() || creatorIsPublisher" class="md-primary md-block md-padding" md-no-ink data-ng-model="material.curriculumLiterature">
+              <span data-translate="MATERIAL_CURRICULUM_LITERATURE"></span>
+            </md-switch>
             <md-chips class="md-padding"
               data-ng-model="material.tags"
               delete-button-label="{{ 'MATERIAL_REMOVE_TAG' | translate }}"
@@ -185,6 +188,7 @@
               </md-chip-template>
             </md-chips>
           </div>
+
         </md-content>
       </md-tab>
 

@@ -113,6 +113,10 @@ define([
                 makeCall("rest/material/update");
             };
 
+            $scope.isAdmin = function() {
+                return authenticatedUserService.isAdmin();
+            };
+
             function makeCall(url) {
                 $scope.isSaving = true;
               

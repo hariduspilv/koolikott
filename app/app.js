@@ -38,7 +38,7 @@ define([
         'ngFileUpload'
     ]);
 
-    app.config(function($routeProvider, $locationProvider, $controllerProvider, $compileProvider, $filterProvider, $provide, $translateProvider, $sceProvider, $mdThemingProvider, $httpProvider) {
+    app.config(function($routeProvider, $locationProvider, $controllerProvider, $compileProvider, $filterProvider, $provide, $translateProvider, $sceProvider, $mdThemingProvider, $httpProvider, $mdDateLocaleProvider) {
             app.controller = $controllerProvider.register;
             app.directive = $compileProvider.directive;
             app.filter = $filterProvider.register;
@@ -65,6 +65,7 @@ define([
 
             configureTranslationService($translateProvider);
             configureTheme($mdThemingProvider)
+            configureDateLocale($mdDateLocaleProvider);
             $sceProvider.enabled(false);
 
             $httpProvider.defaults.transformResponse.splice(0, 0, parseJSONResponse);
@@ -118,6 +119,10 @@ define([
             });
 
         $mdThemingProvider.theme('input', 'default').primaryPalette('grey');
+    }
+
+    function configureDateLocale($mdDateLocaleProvider) {
+        $mdDateLocaleProvider.firstDayOfWeek = 1;
     }
 
     app.run(function($rootScope, $location) {
