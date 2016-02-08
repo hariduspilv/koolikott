@@ -324,6 +324,12 @@ public class PortfolioService {
         searchEngineService.updateIndex();
     }
 
+    public boolean isPortfolioAccessibleToUser(Portfolio portfolio, User loggedInUser) {
+        return (portfolio.getVisibility() != Visibility.PRIVATE || isUserPortfolioCreator(portfolio, loggedInUser)
+                && !portfolio.isDeleted())
+                || isUserAdmin(loggedInUser);
+    }
+
     private List<Chapter> copyChapters(List<Chapter> chapters) {
         List<Chapter> copyChapters = new ArrayList<>();
 
@@ -365,12 +371,6 @@ public class PortfolioService {
         originalPortfolio.setChapters(portfolio.getChapters());
         originalPortfolio.setVisibility(portfolio.getVisibility());
         return originalPortfolio;
-    }
-
-    private boolean isPortfolioAccessibleToUser(Portfolio portfolio, User loggedInUser) {
-        return (portfolio.getVisibility() != Visibility.PRIVATE || isUserPortfolioCreator(portfolio, loggedInUser)
-                && !portfolio.isDeleted())
-                || isUserAdmin(loggedInUser);
     }
 
     private boolean isPortfolioVisibleToUser(Portfolio portfolio, User loggedInUser) {
