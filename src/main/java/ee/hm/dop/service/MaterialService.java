@@ -86,12 +86,18 @@ public class MaterialService {
             throw new IllegalArgumentException("Error creating Material, material already exists.");
         }
 
+        validateUserNotNull(creator);
         material.setCreator(creator);
-        if (creator != null && creator.getRole().toString().equals(PUBLISHER)) {
+
+        if (isUserPublisher(creator)) {
             material.setEmbeddable(true);
         }
 
         material.setRecommendation(null);
+
+        if (!isUserPublisher(creator)) {
+            material.setCurriculumLiterature(false);
+        }
 
         Material createdMaterial = createOrUpdate(material);
         if (updateSearchIndex) {
@@ -481,6 +487,12 @@ public class MaterialService {
     private void validateUserIsAdmin(User loggedInUser) {
         if (!isUserAdmin(loggedInUser)) {
             throw new RuntimeException("Only admin can do this");
+        }
+    }
+
+    private void validateUserNotNull(User user) {
+        if (user == null) {
+            throw new IllegalArgumentException("User not found");
         }
     }
 }

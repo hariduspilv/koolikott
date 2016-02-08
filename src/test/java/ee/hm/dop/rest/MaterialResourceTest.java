@@ -324,6 +324,43 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
     }
 
     @Test
+    public void createWithCurriculumLiteratureAsPublisher() {
+        login("77007700770");
+
+        Material material = new Material();
+        material.setSource("http://curriculum.example.com/3");
+        material.setCurriculumLiterature(true);
+
+        Response response = doPost(CREATE_MATERIAL_URL, Entity.entity(material, MediaType.APPLICATION_JSON_TYPE));
+        assertEquals(Status.OK.getStatusCode(), response.getStatus());
+
+        Material createdMaterial = response.readEntity(Material.class);
+
+        assertNotNull(createdMaterial);
+        assertTrue(createdMaterial.isCurriculumLiterature());
+    }
+
+    @Test
+    public void createWithCurriculumLiteratureWhenNotAllowed() {
+        // Regular user
+        login("89012378912");
+
+        Material material = new Material();
+        material.setSource("http://curriculum.example.com");
+        material.setCurriculumLiterature(true);
+
+        Response response = doPost(CREATE_MATERIAL_URL, Entity.entity(material, MediaType.APPLICATION_JSON_TYPE));
+        assertEquals(Status.OK.getStatusCode(), response.getStatus());
+
+        Material createdMaterial = response.readEntity(Material.class);
+
+        assertNotNull(createdMaterial);
+        assertFalse(createdMaterial.isCurriculumLiterature());
+
+        logout();
+    }
+
+    @Test
     public void addRecommendation() {
         String idCode = "89898989898";
         User user = login(idCode);

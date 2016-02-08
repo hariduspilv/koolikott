@@ -8,6 +8,8 @@ import static org.easymock.EasyMock.verify;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertSame;
+import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 import java.util.Arrays;
@@ -41,6 +43,37 @@ public class MaterialServiceTest {
 
     @Mock
     private SearchEngineService searchEngineService;
+
+    @Test
+    public void create() {
+        Capture<Material> capturedMaterial = newCapture();
+
+        User creator = new User();
+        creator.setId(2000L);
+        creator.setName("First");
+        creator.setSurname("Last");
+        creator.setRole(Role.PUBLISHER);
+
+        Material material = new Material();
+        String source = "http://creatematerial.example.com";
+        material.setSource(source);
+        material.setCurriculumLiterature(true);
+        material.setRecommendation(new Recommendation());
+
+        expectMaterialUpdate(capturedMaterial);
+        searchEngineService.updateIndex();
+
+        replayAll();
+
+        Material createdMaterial = materialService.createMaterial(material, creator, true);
+
+        verifyAll();
+
+        assertSame(capturedMaterial.getValue(), createdMaterial);
+        assertNull(createdMaterial.getRecommendation());
+        assertTrue(createdMaterial.isCurriculumLiterature());
+        assertEquals(source, createdMaterial.getSource());
+    }
 
     @Test
     public void createMaterialWithNotNullId() {
