@@ -55,23 +55,6 @@ public class TagUpVoteService {
         }
     }
 
-    private TagUpVote createTagUpVote(TagUpVote tagUpVote, User user) {
-        Material material;
-        Portfolio portfolio;
-        if (tagUpVote.getMaterial() != null) {
-            material = materialDAO.findByIdAndNotDeleted(tagUpVote.getMaterial().getId());
-            tagUpVote.setMaterial(material);
-        } else if (tagUpVote.getPortfolio() != null) {
-            portfolio = portfolioDAO.findByIdNotDeleted(tagUpVote.getPortfolio().getId());
-            tagUpVote.setPortfolio(portfolio);
-        }
-
-        tagUpVote.setUser(user);
-        Tag tag = tagDAO.findTagByName(tagUpVote.getTag().getName());
-        tagUpVote.setTag(tag);
-        return tagUpVote;
-    }
-
     public void removeUpVoteFromMaterial(Tag tag, Material material, User loggedInUser) {
         TagUpVote tagUpVote = tagUpVoteDAO.getTagUpVote(tag, loggedInUser, material);
 
@@ -118,5 +101,24 @@ public class TagUpVoteService {
         }
 
         return tagUpVoteForms;
+    }
+
+    private TagUpVote createTagUpVote(TagUpVote tagUpVote, User user) {
+        Material material;
+        Portfolio portfolio;
+        if (tagUpVote.getMaterial() != null) {
+            material = materialDAO.findByIdNotDeleted(tagUpVote.getMaterial().getId());
+            tagUpVote.setMaterial(material);
+        } else if (tagUpVote.getPortfolio() != null) {
+            portfolio = portfolioDAO.findByIdNotDeleted(tagUpVote.getPortfolio().getId());
+            tagUpVote.setPortfolio(portfolio);
+        }
+
+        tagUpVote.setUser(user);
+        if(tagUpVote.getTag() != null) {
+            Tag tag = tagDAO.findTagByName(tagUpVote.getTag().getName());
+            tagUpVote.setTag(tag);
+        }
+        return tagUpVote;
     }
 }

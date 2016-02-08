@@ -19,6 +19,8 @@ import ee.hm.dop.model.ImproperContent;
 import ee.hm.dop.model.Portfolio;
 import ee.hm.dop.model.Recommendation;
 import ee.hm.dop.model.Role;
+import ee.hm.dop.model.Tag;
+import ee.hm.dop.model.TagUpVote;
 import ee.hm.dop.model.User;
 import ee.hm.dop.model.UserLike;
 import ee.hm.dop.model.Visibility;
@@ -37,6 +39,9 @@ public class PortfolioService {
 
     @Inject
     private SearchEngineService searchEngineService;
+
+    @Inject
+    private TagUpVoteService tagUpVoteService;
 
     public Portfolio get(long portfolioId, User loggedInUser) {
         Portfolio portfolio;
@@ -420,5 +425,27 @@ public class PortfolioService {
         List<ImproperContent> improperContents = improperContentDAO.getByPortfolio(portfolioId);
 
         return improperContents.size() != 0;
+    }
+
+    public Portfolio addTag(Portfolio portfolio, Tag tag, User loggedInUser) {
+        if(portfolio == null) {
+            throw new RuntimeException("Portfolio not found");
+        }
+
+        List<Tag> tags = portfolio.getTags();
+        if(!tags.contains(tag)) {
+            tags.add(tag);
+            portfolio.setTags(tags);
+
+            portfolio = portfolioDAO.update(portfolio);
+        } else {
+            TagUpVote tagUpVote = new TagUpVote();
+            tagUpVote.setPortfolio(portfolio);
+            tagUpVote.setTag(tag);
+
+            tagUpVoteService.upVote(tagUpVote, loggedInUser);
+        }
+
+        return portfolio;
     }
 }

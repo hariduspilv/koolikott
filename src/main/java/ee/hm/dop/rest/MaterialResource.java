@@ -10,6 +10,7 @@ import javax.inject.Inject;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -21,9 +22,11 @@ import ee.hm.dop.model.BrokenContent;
 import ee.hm.dop.model.ImproperContent;
 import ee.hm.dop.model.Material;
 import ee.hm.dop.model.Recommendation;
+import ee.hm.dop.model.Tag;
 import ee.hm.dop.model.User;
 import ee.hm.dop.model.UserLike;
 import ee.hm.dop.service.MaterialService;
+import ee.hm.dop.service.TagService;
 import ee.hm.dop.service.UserService;
 
 @Path("material")
@@ -34,6 +37,9 @@ public class MaterialResource extends BaseResource {
 
     @Inject
     private UserService userService;
+
+    @Inject
+    private TagService tagService;
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
@@ -228,7 +234,7 @@ public class MaterialResource extends BaseResource {
     @Produces(MediaType.APPLICATION_JSON)
     @RolesAllowed({ "ADMIN" })
     public Boolean isBroken(@QueryParam("materialId") long materialId) {
-        return materialService.isBroken(materialId, getLoggedInUser());
+        return materialService.isBroken(materialId);
     }
 
     @GET
@@ -262,5 +268,20 @@ public class MaterialResource extends BaseResource {
     @RolesAllowed({ "ADMIN" })
     public Boolean isSetImproper(@QueryParam("materialId") long materialId) {
         return materialService.isSetImproper(materialId);
+    }
+
+    @PUT
+    @Path("{materialId}/tag")
+    @RolesAllowed({ "USER", "ADMIN", "PUBLISHER"})
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Material addTag(@PathParam("materialId") Long materialId, Tag tagString) {
+        Material material = materialService.get(materialId, getLoggedInUser());
+        Tag tag = tagService.getTagByName(tagString.getName());
+        if(tag == null) {
+            tag = tagString;
+        }
+
+        return materialService.addTag(material, tag, getLoggedInUser());
     }
 }

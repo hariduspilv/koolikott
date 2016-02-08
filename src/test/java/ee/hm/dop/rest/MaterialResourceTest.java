@@ -30,6 +30,7 @@ import ee.hm.dop.model.Language;
 import ee.hm.dop.model.LanguageString;
 import ee.hm.dop.model.Material;
 import ee.hm.dop.model.Recommendation;
+import ee.hm.dop.model.Tag;
 import ee.hm.dop.model.TargetGroup;
 import ee.hm.dop.model.User;
 import ee.hm.dop.model.taxon.Subject;
@@ -482,6 +483,56 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
             }
         }
         assertEquals(containsMaterial, true);
+    }
+
+    @Test
+    public void addTagNoMaterial() {
+        login("38011550077");
+        Tag tag = new Tag();
+        tag.setName("timshel");
+
+        Response response = doPut("material/99999/tag", Entity.entity(tag, MediaType.APPLICATION_JSON_TYPE));
+        assertEquals(Status.INTERNAL_SERVER_ERROR.getStatusCode(), response.getStatus());
+    }
+
+    @Test
+    public void addTag() {
+        login("38011550077");
+
+        Material material = createMaterial();
+        Long id = material.getId();
+        Tag tag = new Tag();
+        tag.setName("timshel");
+
+        Response response = doPut("material/" + id + "/tag", Entity.entity(tag, MediaType.APPLICATION_JSON_TYPE));
+        assertEquals(Status.OK.getStatusCode(), response.getStatus());
+    }
+
+
+    @Test
+    public void addTagAndUpVoteOnlyOnce() {
+        login("38011550077");
+
+        Material material = createMaterial();
+        Long id = material.getId();
+        Tag tag = new Tag();
+        tag.setName("timshel");
+
+        Response response = doPut("material/" + id + "/tag", Entity.entity(tag, MediaType.APPLICATION_JSON_TYPE));
+        assertEquals(Status.OK.getStatusCode(), response.getStatus());
+
+        response = doPut("material/" + id + "/tag", Entity.entity(tag, MediaType.APPLICATION_JSON_TYPE));
+        assertEquals(Status.OK.getStatusCode(), response.getStatus());
+
+        response = doPut("material/" + id + "/tag", Entity.entity(tag, MediaType.APPLICATION_JSON_TYPE));
+        assertEquals(Status.INTERNAL_SERVER_ERROR.getStatusCode(), response.getStatus());
+    }
+
+    private Material createMaterial() {
+        Material material = new Material();
+        material.setSource("http://www.neti.ee");
+
+        return doPost(CREATE_MATERIAL_URL, Entity.entity(material, MediaType.APPLICATION_JSON_TYPE)).readEntity(Material.class);
     }
 
     private void assertMaterial1(Material material) {
