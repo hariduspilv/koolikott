@@ -98,6 +98,7 @@ define([
                 $scope.getTagSearchURL = function ($event, tag) {
                     $event.preventDefault();
 
+                    searchService.clearFieldsNotInSimpleSearch();
                     searchService.setSearch('tag:"' + tag + '"');
                     $location.url(searchService.getURL());
                 };
