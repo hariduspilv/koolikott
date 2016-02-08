@@ -1,11 +1,12 @@
 define([
-    'app',
+    'angularAMD',
     'services/translationService',
     'services/serverCallService',
     'services/searchService',
     'services/authenticatedUserService'
-], function (app) {
-    app.directive('dopTags', function (translationService, $mdToast, $translate, serverCallService, searchService, authenticatedUserService, $location) {
+], function (angularAMD) {
+    angularAMD.directive('dopTags',['translationService', '$mdToast', '$translate', 'serverCallService', 'searchService', 'authenticatedUserService', '$location', '$rootScope',
+        function (translationService, $mdToast, $translate, serverCallService, searchService, authenticatedUserService, $location, $rootScope) {
         return {
             scope: {
                 material: '=',
@@ -15,7 +16,6 @@ define([
             controller: function ($scope, $mdToast, $translate, serverCallService, searchService, authenticatedUserService, $location) {
 
                 function init() {
-                    $scope.newTags = [];
 
                     if ($scope.material && $scope.material.id) {
                         var upVotesParams = {
@@ -102,8 +102,35 @@ define([
                     $location.url(searchService.getURL());
                 };
 
+                $scope.addTag = function () {
+                    var url;
+                    if ($scope.material && $scope.material.id) {
+                        url = "rest/material/" + $scope.material.id + "/tag";
+                    } else if ($scope.portfolio && $scope.portfolio.id) {
+                        url = "rest/portfolio/" + $scope.portfolio.id + "/tag";
+                    }
+                    console.log($scope.newTag)
+                    serverCallService.makePut(url, $scope.newTag, addTagSuccess, addTagFail);
+                    $scope.newTag = null;
+                };
+
+                function addTagSuccess(data) {
+                    if(data && data.type === ".Portfolio") {
+                        $scope.portfolio = data;
+                        $rootScope.savedPortfolio = data;
+                    } else if(data && data.type === ".Material") {
+                        $scope.material = data;
+                    }
+
+                    init();
+                }
+
+                function addTagFail() {
+                    console.log("Adding tag failed")
+                }
+
                 init();
             }
         };
-    });
+    }]);
 });

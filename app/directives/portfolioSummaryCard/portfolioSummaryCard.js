@@ -21,8 +21,7 @@ define([
             scope: {
                 portfolio: '=',
                 comment: '=',
-                submitClick: "&",
-                tags: '='
+                submitClick: "&"
             },
             templateUrl: 'directives/portfolioSummaryCard/portfolioSummaryCard.html',
             controller: function ($scope, $location) {
@@ -30,8 +29,6 @@ define([
                 function init() {
                     $scope.isViewPortforlioPage = $rootScope.isViewPortforlioPage;
                     $scope.isEditPortfolioMode = $rootScope.isEditPortfolioMode;
-
-                    $scope.newTags = [];
                 }
 
                 $scope.getEducationalContext = function () {
@@ -117,26 +114,6 @@ define([
 
                 function restoreFail() {
                     log("Restoring portfolio failed");
-                }
-
-                $scope.upVote = function (tag) {
-                    $scope.upVotedTag = tag;
-                    $scope.upVotedTag.hasUpVoted = true;
-                    var tagUpVote = {
-                        portfolio: $scope.portfolio,
-                        tag: tag
-                    };
-
-                    serverCallService.makePut("rest/tagUpVotes", tagUpVote, upVoteSuccess, upVoteFail);
-                };
-
-                function upVoteSuccess() {
-                    $scope.upVotedTag.upVoteCount = $scope.upVotedTag.upVoteCount + 1;
-                    $scope.tags = sortTags($scope.tags);
-                }
-
-                function upVoteFail() {
-                    $scope.upVotedTag.hasUpVoted = false;
                 }
 
                 if ($rootScope.openMetadataDialog) {

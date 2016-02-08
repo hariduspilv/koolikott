@@ -1,15 +1,13 @@
-<div data-ng-if="!isNullOrZeroLength(material.tags) || !isNullOrZeroLength(portfolio.tags)">
+<div>
     <p class="md-body-2 meta">
         <small class="md-caption">
             <span data-translate="DETAIL_VIEW_TAGS"></span>:
         </small>
         <br>
-
     <div layout="row">
         <md-chips ng-model="tags" readonly="true">
             <md-chip-template>
                 <div>
-
                     <md-button data-ng-if="isLoggedIn()" class="md-icon-button">
                         <md-icon>error_outline</md-icon>
                     </md-button>
@@ -32,15 +30,11 @@
             </md-chip-template>
         </md-chips>
     </div>
-
-    <md-chips ng-model="newTags"
-              placeholder="{{ 'MATERIAL_ADD_TAG' | translate }}" delete-button-label="{{ 'BUTTON_REMOVE' | translate }}"
-              secondary-placeholder="{{ 'MATERIAL_ADD_TAG' | translate }}"
-              md-transform-chip="addTag($chip)">
-        <md-chip-template>
-            <a href="#">{{$chip}}</a>
-        </md-chip-template>
-    </md-chips>
-
+    <form name="addTagForm" data-ng-show="isLoggedIn()" ng-submit="addTag()">
+        <md-input-container>
+            <label data-translate="MATERIAL_ADD_TAG"></label>
+            <input name="tag" ng-model="newTag"/>
+        </md-input-container>
+    </form>
     </p>
 </div>
