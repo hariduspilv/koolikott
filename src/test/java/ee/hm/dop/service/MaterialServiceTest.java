@@ -83,7 +83,7 @@ public class MaterialServiceTest {
         educationalContext.setName(MaterialService.BASICEDUCATION);
         expect(material.getTaxons()).andReturn(Arrays.asList(educationalContext)).times(3);
 
-        expect(materialDAO.findByIdNotDeleted(materialId)).andReturn(original);
+        expect(materialDAO.findByIdAndNotDeleted(materialId)).andReturn(original);
         expect(materialDAO.update(material)).andReturn(material);
 
         replay(materialDAO, material, searchEngineService);
@@ -99,7 +99,7 @@ public class MaterialServiceTest {
         Material material = createMock(Material.class);
         expect(material.getId()).andReturn(materialId);
 
-        expect(materialDAO.findByIdNotDeleted(materialId)).andReturn(null);
+        expect(materialDAO.findByIdAndNotDeleted(materialId)).andReturn(null);
 
         replay(materialDAO, material);
 
@@ -122,7 +122,7 @@ public class MaterialServiceTest {
         expect(material.getId()).andReturn(materialId);
         expect(material.getRepository()).andReturn(new Repository()).times(3);
 
-        expect(materialDAO.findByIdNotDeleted(materialId)).andReturn(original);
+        expect(materialDAO.findByIdAndNotDeleted(materialId)).andReturn(original);
 
         replay(materialDAO, material);
 
@@ -150,7 +150,7 @@ public class MaterialServiceTest {
         newRepository.setBaseURL("some.com");
         expect(material.getRepository()).andReturn(newRepository).times(3);
 
-        expect(materialDAO.findByIdNotDeleted(materialId)).andReturn(original);
+        expect(materialDAO.findByIdAndNotDeleted(materialId)).andReturn(original);
 
         replay(materialDAO, material);
 
@@ -197,7 +197,7 @@ public class MaterialServiceTest {
         User user = createMock(User.class);
         Material material = createMock(Material.class);
         expect(material.getId()).andReturn(1L);
-        expect(materialDAO.findByIdNotDeleted(1L)).andReturn(material);
+        expect(materialDAO.findByIdAndNotDeleted(1L)).andReturn(material);
         expect(material.getRepository()).andReturn(new Repository());
 
         replay(material, user, materialDAO);
@@ -219,7 +219,7 @@ public class MaterialServiceTest {
         material.setId(1L);
         material.setRepository(null);
 
-        expect(materialDAO.findByIdNotDeleted(material.getId())).andReturn(material).anyTimes();
+        expect(materialDAO.findByIdAndNotDeleted(material.getId())).andReturn(material).anyTimes();
         expect(user.getRole()).andReturn(Role.ADMIN).anyTimes();
         expect(materialDAO.update(material)).andReturn(new Material());
 
@@ -239,7 +239,7 @@ public class MaterialServiceTest {
         material.setRepository(null);
         material.setCreator(user);
 
-        expect(materialDAO.findByIdNotDeleted(material.getId())).andReturn(material).anyTimes();
+        expect(materialDAO.findByIdAndNotDeleted(material.getId())).andReturn(material).anyTimes();
         expect(user.getRole()).andReturn(Role.PUBLISHER).anyTimes();
         expect(materialDAO.update(material)).andReturn(new Material());
         expect(user.getUsername()).andReturn("username").anyTimes();
@@ -261,7 +261,7 @@ public class MaterialServiceTest {
         material.setId(1L);
         material.setRepository(null);
 
-        expect(materialDAO.findByIdNotDeleted(material.getId())).andReturn(material).anyTimes();
+        expect(materialDAO.findByIdAndNotDeleted(material.getId())).andReturn(material).anyTimes();
         expect(user.getRole()).andReturn(Role.ADMIN).anyTimes();
         expectMaterialUpdate(capturedMaterial);
         searchEngineService.updateIndex();
@@ -301,7 +301,7 @@ public class MaterialServiceTest {
         material.setRepository(null);
         material.setRecommendation(recommendation);
 
-        expect(materialDAO.findByIdNotDeleted(material.getId())).andReturn(material).anyTimes();
+        expect(materialDAO.findByIdAndNotDeleted(material.getId())).andReturn(material).anyTimes();
         expect(user.getRole()).andReturn(Role.ADMIN).anyTimes();
         expectMaterialUpdate(capturedMaterial);
         searchEngineService.updateIndex();

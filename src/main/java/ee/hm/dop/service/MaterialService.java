@@ -64,7 +64,7 @@ public class MaterialService {
         if (isUserAdmin(loggedInUser)) {
             return materialDao.findById(materialId);
         } else {
-            return materialDao.findByIdNotDeleted(materialId);
+            return materialDao.findByIdAndNotDeleted(materialId);
         }
     }
 
@@ -102,7 +102,7 @@ public class MaterialService {
     }
 
     public void delete(Material material, User loggedInUser) {
-        Material originalMaterial = materialDao.findByIdNotDeleted(material.getId());
+        Material originalMaterial = materialDao.findByIdAndNotDeleted(material.getId());
         validateMaterialNotNull(originalMaterial);
 
         if (!isUserAdmin(loggedInUser)) {
@@ -178,7 +178,7 @@ public class MaterialService {
             throw new RuntimeException("Comment already exists.");
         }
 
-        Material originalMaterial = materialDao.findByIdNotDeleted(material.getId());
+        Material originalMaterial = materialDao.findByIdAndNotDeleted(material.getId());
         validateMaterialNotNull(originalMaterial);
 
         comment.setAdded(DateTime.now());
@@ -188,7 +188,7 @@ public class MaterialService {
 
     public UserLike addUserLike(Material material, User loggedInUser, boolean isLiked) {
         validateMaterialAndIdNotNull(material);
-        Material originalMaterial = materialDao.findByIdNotDeleted(material.getId());
+        Material originalMaterial = materialDao.findByIdAndNotDeleted(material.getId());
         validateMaterialNotNull(originalMaterial);
 
         userLikeDAO.deleteMaterialLike(originalMaterial, loggedInUser);
@@ -207,7 +207,7 @@ public class MaterialService {
 
         validateUserIsAdmin(loggedInUser);
 
-        Material originalMaterial = materialDao.findByIdNotDeleted(material.getId());
+        Material originalMaterial = materialDao.findByIdAndNotDeleted(material.getId());
 
         validateMaterialNotNull(originalMaterial);
 
@@ -228,7 +228,7 @@ public class MaterialService {
 
         validateUserIsAdmin(loggedInUser);
 
-        Material originalMaterial = materialDao.findByIdNotDeleted(material.getId());
+        Material originalMaterial = materialDao.findByIdAndNotDeleted(material.getId());
 
         validateMaterialNotNull(originalMaterial);
 
@@ -241,7 +241,7 @@ public class MaterialService {
 
     public void removeUserLike(Material material, User loggedInUser) {
         validateMaterialAndIdNotNull(material);
-        Material originalMaterial = materialDao.findByIdNotDeleted(material.getId());
+        Material originalMaterial = materialDao.findByIdAndNotDeleted(material.getId());
         validateMaterialNotNull(originalMaterial);
 
         userLikeDAO.deleteMaterialLike(originalMaterial, loggedInUser);
@@ -249,7 +249,7 @@ public class MaterialService {
 
     public UserLike getUserLike(Material material, User loggedInUser) {
         validateMaterialAndIdNotNull(material);
-        Material originalMaterial = materialDao.findByIdNotDeleted(material.getId());
+        Material originalMaterial = materialDao.findByIdAndNotDeleted(material.getId());
         if (originalMaterial == null && !isUserAdmin(loggedInUser)) {
             throw new RuntimeException("Material not found");
         }
@@ -273,7 +273,7 @@ public class MaterialService {
             throw new IllegalArgumentException("Material id parameter is mandatory");
         }
 
-        Material originalMaterial = materialDao.findByIdNotDeleted(material.getId());
+        Material originalMaterial = materialDao.findByIdAndNotDeleted(material.getId());
 
         if (originalMaterial != null && originalMaterial.getRepository() != null) {
             throw new IllegalArgumentException("Can't update external repository material");
@@ -295,7 +295,7 @@ public class MaterialService {
     }
 
     public Material update(Material material) {
-        Material originalMaterial = materialDao.findByIdNotDeleted(material.getId());
+        Material originalMaterial = materialDao.findByIdAndNotDeleted(material.getId());
         validateMaterialUpdate(material, originalMaterial);
 
         // Should not be able to update view count
@@ -389,7 +389,7 @@ public class MaterialService {
         if (material == null || material.getId() == null) {
             throw new RuntimeException("Material not found while adding improper material");
         }
-        Material originalMaterial = materialDao.findByIdNotDeleted(material.getId());
+        Material originalMaterial = materialDao.findByIdAndNotDeleted(material.getId());
         if (originalMaterial == null) {
             throw new RuntimeException("Material not found while adding improper material");
         }
@@ -409,7 +409,7 @@ public class MaterialService {
         if (material == null || material.getId() == null) {
             throw new RuntimeException("Material not found while adding broken material");
         }
-        Material originalMaterial = materialDao.findByIdNotDeleted(material.getId());
+        Material originalMaterial = materialDao.findByIdAndNotDeleted(material.getId());
         if (originalMaterial == null) {
             throw new RuntimeException("Material not found while adding broken material");
         }
@@ -433,7 +433,7 @@ public class MaterialService {
         if (material == null || material.getId() == null) {
             throw new RuntimeException("Material not found while adding broken material");
         }
-        Material originalMaterial = materialDao.findByIdNotDeleted(material.getId());
+        Material originalMaterial = materialDao.findByIdAndNotDeleted(material.getId());
         if (originalMaterial == null) {
             throw new RuntimeException("Material not found while adding broken material");
         }

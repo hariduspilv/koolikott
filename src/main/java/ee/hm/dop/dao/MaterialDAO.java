@@ -19,7 +19,7 @@ public class MaterialDAO {
     @Inject
     private EntityManager entityManager;
 
-    public Material findByIdNotDeleted(long materialId) {
+    public Material findByIdAndNotDeleted(long materialId) {
         TypedQuery<Material> findByCode = entityManager.createQuery(
                 "SELECT m FROM Material m WHERE m.id = :id AND m.deleted = false", Material.class);
 

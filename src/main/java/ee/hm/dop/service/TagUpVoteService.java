@@ -59,7 +59,7 @@ public class TagUpVoteService {
         Material material;
         Portfolio portfolio;
         if (tagUpVote.getMaterial() != null) {
-            material = materialDAO.findByIdNotDeleted(tagUpVote.getMaterial().getId());
+            material = materialDAO.findByIdAndNotDeleted(tagUpVote.getMaterial().getId());
             tagUpVote.setMaterial(material);
         } else if (tagUpVote.getPortfolio() != null) {
             portfolio = portfolioDAO.findByIdNotDeleted(tagUpVote.getPortfolio().getId());
