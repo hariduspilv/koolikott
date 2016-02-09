@@ -39,6 +39,7 @@ insert into User(id, userName, name, surName, idCode, role) values (6, 'mati.maa
 insert into User(id, userName, name, surName, idCode, role) values (7, 'my.testuser', 'My', 'Testuser', '78912378912', 'USER');
 insert into User(id, userName, name, surName, idCode, role) values (8, 'admin.admin', 'Admin', 'Admin', '89898989898', 'ADMIN');
 insert into User(id, userName, name, surName, idCode, role) values (9, 'second.testuser', 'Second', 'Testuser', '89012378912', 'USER');
+insert into User(id, userName, name, surName, idCode, role) values (10, 'super.publisher', 'Super', 'Publisher', '77007700770', 'PUBLISHER');
 
 -- AuthenticatedUser
 

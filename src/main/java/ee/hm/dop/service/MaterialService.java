@@ -25,6 +25,8 @@ import ee.hm.dop.model.Material;
 import ee.hm.dop.model.Publisher;
 import ee.hm.dop.model.Recommendation;
 import ee.hm.dop.model.Role;
+import ee.hm.dop.model.Tag;
+import ee.hm.dop.model.TagUpVote;
 import ee.hm.dop.model.User;
 import ee.hm.dop.model.UserLike;
 import ee.hm.dop.model.taxon.EducationalContext;
@@ -60,11 +62,14 @@ public class MaterialService {
     @Inject
     private BrokenContentDAO brokenContentDAO;
 
+    @Inject
+    private TagUpVoteService tagUpVoteService;
+
     public Material get(long materialId, User loggedInUser) {
         if (isUserAdmin(loggedInUser)) {
             return materialDao.findById(materialId);
         } else {
-            return materialDao.findByIdAndNotDeleted(materialId);
+            return materialDao.findByIdNotDeleted(materialId);
         }
     }
 
@@ -86,12 +91,18 @@ public class MaterialService {
             throw new IllegalArgumentException("Error creating Material, material already exists.");
         }
 
+        validateUserNotNull(creator);
         material.setCreator(creator);
-        if (creator != null && creator.getRole().toString().equals(PUBLISHER)) {
+
+        if (isUserPublisher(creator)) {
             material.setEmbeddable(true);
         }
 
         material.setRecommendation(null);
+
+        if (!isUserAdmin(creator) && !isUserPublisher(creator)) {
+            material.setCurriculumLiterature(false);
+        }
 
         Material createdMaterial = createOrUpdate(material);
         if (updateSearchIndex) {
@@ -102,7 +113,7 @@ public class MaterialService {
     }
 
     public void delete(Material material, User loggedInUser) {
-        Material originalMaterial = materialDao.findByIdAndNotDeleted(material.getId());
+        Material originalMaterial = materialDao.findByIdNotDeleted(material.getId());
         validateMaterialNotNull(originalMaterial);
 
         if (!isUserAdmin(loggedInUser)) {
@@ -178,7 +189,7 @@ public class MaterialService {
             throw new RuntimeException("Comment already exists.");
         }
 
-        Material originalMaterial = materialDao.findByIdAndNotDeleted(material.getId());
+        Material originalMaterial = materialDao.findByIdNotDeleted(material.getId());
         validateMaterialNotNull(originalMaterial);
 
         comment.setAdded(DateTime.now());
@@ -188,7 +199,7 @@ public class MaterialService {
 
     public UserLike addUserLike(Material material, User loggedInUser, boolean isLiked) {
         validateMaterialAndIdNotNull(material);
-        Material originalMaterial = materialDao.findByIdAndNotDeleted(material.getId());
+        Material originalMaterial = materialDao.findByIdNotDeleted(material.getId());
         validateMaterialNotNull(originalMaterial);
 
         userLikeDAO.deleteMaterialLike(originalMaterial, loggedInUser);
@@ -207,7 +218,7 @@ public class MaterialService {
 
         validateUserIsAdmin(loggedInUser);
 
-        Material originalMaterial = materialDao.findByIdAndNotDeleted(material.getId());
+        Material originalMaterial = materialDao.findByIdNotDeleted(material.getId());
 
         validateMaterialNotNull(originalMaterial);
 
@@ -228,7 +239,7 @@ public class MaterialService {
 
         validateUserIsAdmin(loggedInUser);
 
-        Material originalMaterial = materialDao.findByIdAndNotDeleted(material.getId());
+        Material originalMaterial = materialDao.findByIdNotDeleted(material.getId());
 
         validateMaterialNotNull(originalMaterial);
 
@@ -241,7 +252,7 @@ public class MaterialService {
 
     public void removeUserLike(Material material, User loggedInUser) {
         validateMaterialAndIdNotNull(material);
-        Material originalMaterial = materialDao.findByIdAndNotDeleted(material.getId());
+        Material originalMaterial = materialDao.findByIdNotDeleted(material.getId());
         validateMaterialNotNull(originalMaterial);
 
         userLikeDAO.deleteMaterialLike(originalMaterial, loggedInUser);
@@ -249,7 +260,7 @@ public class MaterialService {
 
     public UserLike getUserLike(Material material, User loggedInUser) {
         validateMaterialAndIdNotNull(material);
-        Material originalMaterial = materialDao.findByIdAndNotDeleted(material.getId());
+        Material originalMaterial = materialDao.findByIdNotDeleted(material.getId());
         if (originalMaterial == null && !isUserAdmin(loggedInUser)) {
             throw new RuntimeException("Material not found");
         }
@@ -273,7 +284,7 @@ public class MaterialService {
             throw new IllegalArgumentException("Material id parameter is mandatory");
         }
 
-        Material originalMaterial = materialDao.findByIdAndNotDeleted(material.getId());
+        Material originalMaterial = materialDao.findByIdNotDeleted(material.getId());
 
         if (originalMaterial != null && originalMaterial.getRepository() != null) {
             throw new IllegalArgumentException("Can't update external repository material");
@@ -295,7 +306,7 @@ public class MaterialService {
     }
 
     public Material update(Material material) {
-        Material originalMaterial = materialDao.findByIdAndNotDeleted(material.getId());
+        Material originalMaterial = materialDao.findByIdNotDeleted(material.getId());
         validateMaterialUpdate(material, originalMaterial);
 
         // Should not be able to update view count
@@ -389,7 +400,7 @@ public class MaterialService {
         if (material == null || material.getId() == null) {
             throw new RuntimeException("Material not found while adding improper material");
         }
-        Material originalMaterial = materialDao.findByIdAndNotDeleted(material.getId());
+        Material originalMaterial = materialDao.findByIdNotDeleted(material.getId());
         if (originalMaterial == null) {
             throw new RuntimeException("Material not found while adding improper material");
         }
@@ -409,7 +420,7 @@ public class MaterialService {
         if (material == null || material.getId() == null) {
             throw new RuntimeException("Material not found while adding broken material");
         }
-        Material originalMaterial = materialDao.findByIdAndNotDeleted(material.getId());
+        Material originalMaterial = materialDao.findByIdNotDeleted(material.getId());
         if (originalMaterial == null) {
             throw new RuntimeException("Material not found while adding broken material");
         }
@@ -433,7 +444,7 @@ public class MaterialService {
         if (material == null || material.getId() == null) {
             throw new RuntimeException("Material not found while adding broken material");
         }
-        Material originalMaterial = materialDao.findByIdAndNotDeleted(material.getId());
+        Material originalMaterial = materialDao.findByIdNotDeleted(material.getId());
         if (originalMaterial == null) {
             throw new RuntimeException("Material not found while adding broken material");
         }
@@ -451,7 +462,7 @@ public class MaterialService {
         return improperContents.size() != 0;
     }
 
-    public Boolean isBroken(long materialId, User loggedInUser) {
+    public Boolean isBroken(long materialId) {
         List<BrokenContent> improperContents = brokenContentDAO.findByMaterial(materialId);
         return improperContents.size() != 0;
     }
@@ -482,5 +493,33 @@ public class MaterialService {
         if (!isUserAdmin(loggedInUser)) {
             throw new RuntimeException("Only admin can do this");
         }
+    }
+
+    private void validateUserNotNull(User user) {
+        if (user == null) {
+            throw new IllegalArgumentException("User not found");
+        }
+    }
+
+    public Material addTag(Material material, Tag tag, User loggedInUser) {
+        if(material == null) {
+            throw new RuntimeException("Material not found");
+        }
+
+        List<Tag> tags = material.getTags();
+        if(!tags.contains(tag)) {
+            tags.add(tag);
+            material.setTags(tags);
+
+            material = materialDao.update(material);
+        } else {
+            TagUpVote tagUpVote = new TagUpVote();
+            tagUpVote.setMaterial(material);
+            tagUpVote.setTag(tag);
+
+            tagUpVoteService.upVote(tagUpVote, loggedInUser);
+        }
+
+        return material;
     }
 }

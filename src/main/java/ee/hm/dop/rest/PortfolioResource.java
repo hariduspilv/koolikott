@@ -14,6 +14,7 @@ import javax.inject.Inject;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -27,9 +28,11 @@ import org.glassfish.jersey.media.multipart.FormDataParam;
 import ee.hm.dop.model.ImproperContent;
 import ee.hm.dop.model.Portfolio;
 import ee.hm.dop.model.Recommendation;
+import ee.hm.dop.model.Tag;
 import ee.hm.dop.model.User;
 import ee.hm.dop.model.UserLike;
 import ee.hm.dop.service.PortfolioService;
+import ee.hm.dop.service.TagService;
 import ee.hm.dop.service.UserService;
 
 @Path("portfolio")
@@ -43,6 +46,9 @@ public class PortfolioResource extends BaseResource {
 
     @Inject
     private Configuration configuration;
+
+    @Inject
+    private TagService tagService;
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
@@ -235,5 +241,20 @@ public class PortfolioResource extends BaseResource {
     @RolesAllowed({ "ADMIN" })
     public Boolean isSetImproper(@QueryParam("portfolioId") long portfolioId) {
         return portfolioService.isSetImproper(portfolioId);
+    }
+
+    @PUT
+    @Path("{portfolioId}/tag")
+    @RolesAllowed({ "USER", "ADMIN", "PUBLISHER"})
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Portfolio addTag(@PathParam("portfolioId") Long portfolioId, Tag tagString) {
+        Portfolio portfolio = portfolioService.get(portfolioId, getLoggedInUser());
+        Tag tag = tagService.getTagByName(tagString.getName());
+        if(tag == null) {
+            tag = tagString;
+        }
+
+        return portfolioService.addTag(portfolio, tag, getLoggedInUser());
     }
 }

@@ -146,4 +146,24 @@ public class TagUpVoteResourceTest extends ResourceIntegrationTestBase {
         assertEquals(Response.Status.NO_CONTENT.getStatusCode(), response.getStatus());
         logout();
     }
+
+    @Test
+    public void upVoteGettingPrivatePortfolio() {
+        login("89012378912"); // Regular user
+
+        Portfolio portfolio = new Portfolio();
+        portfolio.setId(10L);
+
+        Tag tag = new Tag();
+        tag.setName("matemaatika");
+
+        TagUpVote tagUpVote = new TagUpVote();
+        tagUpVote.setTag(tag);
+        tagUpVote.setPortfolio(portfolio);
+
+        Response response = doPut(TAG_UP_VOTES, Entity.entity(tagUpVote, MediaType.APPLICATION_JSON_TYPE));
+        assertEquals(Response.Status.INTERNAL_SERVER_ERROR.getStatusCode(), response.getStatus());
+
+        logout();
+    }
 }

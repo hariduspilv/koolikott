@@ -32,6 +32,7 @@ import ee.hm.dop.model.ImproperContent;
 import ee.hm.dop.model.Material;
 import ee.hm.dop.model.Portfolio;
 import ee.hm.dop.model.Recommendation;
+import ee.hm.dop.model.Tag;
 import ee.hm.dop.model.TargetGroup;
 import ee.hm.dop.model.User;
 import ee.hm.dop.model.Visibility;
@@ -272,10 +273,7 @@ public class PortfolioResourceTest extends ResourceIntegrationTestBase {
         login("39011220011");
         Long id = 1L;
 
-        Portfolio portfolio = new Portfolio();
-        portfolio.setTitle("Tere");
-
-        Portfolio createdPortfolio = doPost(CREATE_PORTFOLIO_URL, portfolio, Portfolio.class);
+        Portfolio createdPortfolio = createPortfolio();
 
         assertNotNull(createdPortfolio);
         assertNotNull(createdPortfolio.getId());
@@ -626,11 +624,59 @@ public class PortfolioResourceTest extends ResourceIntegrationTestBase {
         assertNull(portfolioAfterRemoveRecommend.getRecommendation());
     }
 
+    @Test
+    public void addTagNoPortfolio() {
+        login("38011550077");
+        Tag tag = new Tag();
+        tag.setName("timshel");
+
+        Response response = doPut("portfolio/99999/tag", Entity.entity(tag, MediaType.APPLICATION_JSON_TYPE));
+        assertEquals(Status.INTERNAL_SERVER_ERROR.getStatusCode(), response.getStatus());
+    }
+
+    @Test
+    public void addTag() {
+        login("38011550077");
+
+        Portfolio createdPortfolio = createPortfolio();
+        Long id = createdPortfolio.getId();
+        Tag tag = new Tag();
+        tag.setName("timshel");
+
+        Response response = doPut("portfolio/" + id + "/tag", Entity.entity(tag, MediaType.APPLICATION_JSON_TYPE));
+        assertEquals(Status.OK.getStatusCode(), response.getStatus());
+    }
+
+    @Test
+    public void addTagAndUpVoteOnce() {
+        login("38011550077");
+
+        Portfolio createdPortfolio = createPortfolio();
+        Long id = createdPortfolio.getId();
+        Tag tag = new Tag();
+        tag.setName("timshel");
+
+        Response response = doPut("portfolio/" + id + "/tag", Entity.entity(tag, MediaType.APPLICATION_JSON_TYPE));
+        assertEquals(Status.OK.getStatusCode(), response.getStatus());
+
+        response = doPut("portfolio/" + id + "/tag", Entity.entity(tag, MediaType.APPLICATION_JSON_TYPE));
+        assertEquals(Status.OK.getStatusCode(), response.getStatus());
+
+        response = doPut("portfolio/" + id + "/tag", Entity.entity(tag, MediaType.APPLICATION_JSON_TYPE));
+        assertEquals(Status.INTERNAL_SERVER_ERROR.getStatusCode(), response.getStatus());
+    }
+
+    private Portfolio createPortfolio() {
+        Portfolio portfolio = new Portfolio();
+        portfolio.setTitle("Tere");
+
+        return doPost(CREATE_PORTFOLIO_URL, portfolio, Portfolio.class);
+    }
+
     private byte[] getPortfolioPicture(long portfolioId) {
         Response response = doGet(format(GET_PORTFOLIO_PICTURE_URL, portfolioId), MediaType.WILDCARD_TYPE);
-        byte[] picture = response.readEntity(new GenericType<byte[]>() {
+        return response.readEntity(new GenericType<byte[]>() {
         });
-        return picture;
     }
 
     private Portfolio getPortfolio(long id) {

@@ -79,6 +79,4 @@ public class TagUpVoteResource extends BaseResource {
             tagUpVoteService.removeUpVoteFromPortfolio(tag, portfolio, getLoggedInUser());
         }
     }
-
-
 }
