@@ -244,7 +244,7 @@ public class SolrServiceTest {
         searchResponse.setResponse(response);
         searchResponse.setResponseHeader(responseHeader);
 
-        expect(configuration.getString(SEARCH_SERVER)).andReturn(serverUrl);
+        expect(configuration.getString(SEARCH_SERVER)).andReturn(serverUrl).anyTimes();
 
         expect(client.target(serverUrl + urlQuery)).andReturn(target);
         expect(target.request(MediaType.APPLICATION_JSON)).andReturn(builder);
@@ -269,7 +269,7 @@ public class SolrServiceTest {
 
         String solrLocation = "http://solr.example.com/";
 
-        expect(configuration.getString(SEARCH_SERVER)).andReturn(solrLocation).times(3);
+        expect(configuration.getString(SEARCH_SERVER)).andReturn(solrLocation).anyTimes();
         expect(client.target(solrLocation + SOLR_IMPORT_PARTIAL)).andReturn(target);
         expect(target.request(MediaType.APPLICATION_JSON)).andReturn(builder);
         expect(builder.get(eq(SearchResponse.class))).andReturn(importResponse);
