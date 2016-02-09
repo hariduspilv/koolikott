@@ -14,7 +14,7 @@ public class UserLikeService {
     @Inject
     private UserLikeDAO userLikeDAO;
 
-    public List<Searchable> getMostLikedSince(int maxResults) {
+    public List<Searchable> getMostLiked(int maxResults) {
         return userLikeDAO.findMostLikedSince(now().minusYears(1), maxResults);
     }
 }

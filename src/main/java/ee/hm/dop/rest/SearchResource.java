@@ -110,7 +110,7 @@ public class SearchResource extends BaseResource {
     @Path("mostLiked")
     @Produces(MediaType.APPLICATION_JSON)
     public List<Searchable> getMostLiked(@PathParam("maxResults") int maxResults) {
-        return userLikeService.getMostLikedSince(maxResults);
+        return userLikeService.getMostLiked(maxResults);
     }
 
 }
