@@ -1,9 +1,9 @@
 define([
     'angularAMD',
-    'services/translationService',
-    'services/serverCallService'
+    'services/serverCallService',
+    'directives/learningObjectRow/learningObjectRow'
 ], function(angularAMD) {
-    angularAMD.directive('dopSidebar', ['translationService', '$location', 'serverCallService', function(translationService, $location) {
+    angularAMD.directive('dopSidebar', ['serverCallService', function() {
         return {
             scope: true,
             templateUrl: 'directives/sidebar/sidebar.html',
@@ -43,41 +43,13 @@ define([
                     if (isEmpty(data)) {
                     	getMostLikedFail();
                     } else {
-                        $scope.mostLiked = data;
+                        $scope.mostLikedList = data;
                     }
                 }
 
                 function getMostLikedFail() {
                     console.log('Most liked search failed.')
                 }
-
-                $scope.getCorrectLanguageString = function(languageStringList, language) {
-                    if (languageStringList) {
-                        return getUserDefinedLanguageString(languageStringList, translationService.getLanguage(), language);
-                    }
-                }
-
-                $scope.formatName = function(name) {
-                    if (name) {
-                        return formatNameToInitials(name);
-                    }
-                };
-
-                $scope.formatSurname = function(surname) {
-                    if (surname) {
-                        return formatSurnameToInitialsButLast(surname);
-                    }
-                };
-
-                $scope.getItemLink = function(item) {
-                    if (item && item.type && item.id) {
-                        if (item.type === '.Material') {
-                            return "#/material?materialId=" + item.id;
-                        } else if (item.type === '.Portfolio') {
-                            return "#/portfolio?id=" + item.id;
-                        }
-                    }
-                };
             }
         }
     }]);

@@ -212,10 +212,16 @@ function wordToInitial(name) {
 }
 
 function formatNameToInitials(name) {
-    return arrayToInitials(name.split(" "));
+	if (name) {
+		return arrayToInitials(name.split(" "));
+	}
 }
 
 function formatSurnameToInitialsButLast(surname) {
+	if (!surname) {
+		return;
+	}
+	
     var array = surname.split(" ");
     var last = array.length - 1;
     var res = "";
