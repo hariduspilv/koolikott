@@ -1,9 +1,9 @@
 define([
     'angularAMD',
-    
+
     'app.routes',
     'utils/taxonUtils',
-    
+
     'angular-translate',
     'angular-translate-loader-url',
     'angular-material',
@@ -13,18 +13,18 @@ define([
     'jsog',
     'utils/commons',
     'ng-file-upload',
-    
+
     /* app wide modules */
     'directives/header/header',
     'directives/editPortfolioModeHeader/editPortfolioModeHeader',
     'directives/detailedSearch/detailedSearch',
     'directives/mainFabButton/mainFabButton',
     'directives/sidebar/sidebar',
-    
+
     /* TODO: we could save more request if layout system is built in another way */
     'directives/pageStructure/columnLayout/columnLayout',
     'directives/pageStructure/linearLayout/linearLayout',
-    
+
     'services/authenticatedUserService',
 ], function(angularAMD, config, taxonUtils) {
     'use strict';
@@ -102,7 +102,7 @@ define([
 
     // http://stackoverflow.com/questions/30123735/how-to-create-multiple-theme-in-material-angular
     function configureTheme($mdThemingProvider) {
-        var customBlueMap = $mdThemingProvider.extendPalette('blue', {
+        var customBlueMap = $mdThemingProvider.extendPalette('light-blue', {
             'contrastDefaultColor': 'light',
             'contrastDarkColors': ['50'],
             '50': 'ffffff'
@@ -148,7 +148,7 @@ define([
             }
         });
     });
-    
+
     app.run(function($rootScope, $location) {
         var history = [];
 
@@ -161,7 +161,7 @@ define([
             $location.url(prevUrl);
         };
     });
-    
+
     app.run(['$rootScope', 'authenticatedUserService', function($rootScope, authenticatedUserService) {
         $rootScope.$on('$locationChangeStart', function(event, next, current) {
             for (var i in config.routes) {
@@ -190,6 +190,6 @@ define([
             $rootScope.showMainFabButton = isAuthenticated;
         }, true);
     }]);
-    
+
     return angularAMD.bootstrap(app);
 });
