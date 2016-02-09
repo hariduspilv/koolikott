@@ -91,10 +91,9 @@ public class MaterialService {
             throw new IllegalArgumentException("Error creating Material, material already exists.");
         }
 
-        validateUserNotNull(creator);
         material.setCreator(creator);
 
-        if (isUserPublisher(creator)) {
+        if (creator != null && isUserPublisher(creator)) {
             material.setEmbeddable(true);
         }
 
@@ -495,19 +494,13 @@ public class MaterialService {
         }
     }
 
-    private void validateUserNotNull(User user) {
-        if (user == null) {
-            throw new IllegalArgumentException("User not found");
-        }
-    }
-
     public Material addTag(Material material, Tag tag, User loggedInUser) {
-        if(material == null) {
+        if (material == null) {
             throw new RuntimeException("Material not found");
         }
 
         List<Tag> tags = material.getTags();
-        if(!tags.contains(tag)) {
+        if (!tags.contains(tag)) {
             tags.add(tag);
             material.setTags(tags);
 
