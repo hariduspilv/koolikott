@@ -460,4 +460,4 @@ insert into UserLike(id, creator, portfolio, material, isLiked, added) values (1
 
 -- In the far past, should not count when looking for the most liked ones
 insert into UserLike(id, creator, portfolio, material, isLiked, added) values (14, 2, null, 3, 0, '2014-06-01 00:00:01');
-insert into UserLike(id, creator, portfolio, material, isLiked, added) values (15, 4, , 1, null, '2014-06-01 00:00:01');
+insert into UserLike(id, creator, portfolio, material, isLiked, added) values (15, 4, 1, null, 0, '2014-06-01 00:00:01');
