@@ -451,13 +451,14 @@ insert into UserLike(id, creator, portfolio, material, isLiked, added) values (5
 insert into UserLike(id, creator, portfolio, material, isLiked, added) values (6, 1, null, 2, 1, null);
 insert into UserLike(id, creator, portfolio, material, isLiked, added) values (7, 2, null, 2, 1, null);
 
-insert into UserLike(id, creator, portfolio, material, isLiked, added) values (8, 1, 1, null, 1, null);
-insert into UserLike(id, creator, portfolio, material, isLiked, added) values (9, 2, 1, null, 1, null);
-insert into UserLike(id, creator, portfolio, material, isLiked, added) values (10, 3, 1, null, 1, null);
-insert into UserLike(id, creator, portfolio, material, isLiked, added) values (11, 5, 1, null, 1, null);
-insert into UserLike(id, creator, portfolio, material, isLiked, added) values (12, 1, 2, null, 0, null);
-insert into UserLike(id, creator, portfolio, material, isLiked, added) values (13, 2, 2, null, 0, null);
+insert into UserLike(id, creator, portfolio, material, isLiked, added) values (8, 1, 3, null, 1, null);
+insert into UserLike(id, creator, portfolio, material, isLiked, added) values (9, 2, 3, null, 1, null);
+insert into UserLike(id, creator, portfolio, material, isLiked, added) values (10, 3, 3, null, 1, null);
+insert into UserLike(id, creator, portfolio, material, isLiked, added) values (11, 5, 3, null, 1, null);
+insert into UserLike(id, creator, portfolio, material, isLiked, added) values (12, 1, 4, null, 0, null);
+insert into UserLike(id, creator, portfolio, material, isLiked, added) values (13, 2, 4, null, 0, null);
 
 -- In the far past, should not count when looking for the most liked ones
 insert into UserLike(id, creator, portfolio, material, isLiked, added) values (14, 2, null, 3, 0, '2014-06-01 00:00:01');
-insert into UserLike(id, creator, portfolio, material, isLiked, added) values (15, 4, 1, null, 0, '2014-06-01 00:00:01');
+insert into UserLike(id, creator, portfolio, material, isLiked, added) values (15, 4, 3, null, 0, '2014-06-01 00:00:01');
+insert into UserLike(id, creator, portfolio, material, isLiked, added) values (16, 6, 3, null, 0, '2015-01-11 00:00:01');
