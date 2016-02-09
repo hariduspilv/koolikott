@@ -5,6 +5,7 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
@@ -15,6 +16,7 @@ import ee.hm.dop.model.Language;
 import ee.hm.dop.model.ResourceType;
 import ee.hm.dop.model.SearchFilter;
 import ee.hm.dop.model.SearchResult;
+import ee.hm.dop.model.Searchable;
 import ee.hm.dop.model.TargetGroup;
 import ee.hm.dop.model.taxon.Taxon;
 import ee.hm.dop.service.CrossCurricularThemeService;
@@ -23,6 +25,7 @@ import ee.hm.dop.service.LanguageService;
 import ee.hm.dop.service.ResourceTypeService;
 import ee.hm.dop.service.SearchService;
 import ee.hm.dop.service.TaxonService;
+import ee.hm.dop.service.UserLikeService;
 
 @Path("search")
 public class SearchResource extends BaseResource {
@@ -44,6 +47,9 @@ public class SearchResource extends BaseResource {
 
     @Inject
     private KeyCompetenceService keyCompetenceService;
+
+    @Inject
+    private UserLikeService userLikeService;
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
@@ -98,6 +104,13 @@ public class SearchResource extends BaseResource {
         searchFilter.setSortDirection(SearchFilter.SortDirection.getByValue(sortDirection));
 
         return searchService.search(query, start, limit, searchFilter, getLoggedInUser());
+    }
+
+    @GET
+    @Path("mostLiked")
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<Searchable> getMostLiked(@PathParam("maxResults") int maxResults) {
+        return userLikeService.getMostLikedSince(maxResults);
     }
 
 }

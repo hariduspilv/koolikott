@@ -102,7 +102,7 @@ insert into Topic(id, subject) values (31, 21);
 insert into Taxon(id, name, level) values (32, 'EstoniaAndTheWould', 'TOPIC');
 insert into Topic(id, domain) values (32, 12);
 insert into Taxon(id, name, level) values (33, 'VogaisTonicas', 'TOPIC');
-insert into Topic(id, subject) values (33, 12);
+insert into Topic(id, domain) values (33, 12);
 
 -- EstCore taxon mapping
 
@@ -434,9 +434,29 @@ insert into ImproperContent(id, creator, portfolio, material, added) values (3, 
 insert into ImproperContent(id, creator, portfolio, material, added) values (4, 9, null, 3, '2014-06-01 00:00:01');
 insert into ImproperContent(id, creator, portfolio, material, added) values (5, 9, 3, null, '2014-06-01 00:00:01');
 
-insert into ImproperContent(id, creator, portfolio, material, added) values (5, 9, 3, null, '2014-06-01 00:00:01');
 
 -- TagUpVotes
 
 insert into TagUpVote(id, user, portfolio, material, tag, deleted) values (1, 1, 1, null, 1, false);
 insert into TagUpVote(id, user, portfolio, material, tag, deleted) values (2, 1, null, 1, 1, false);
+
+-- UserLike
+
+insert into UserLike(id, creator, portfolio, material, isLiked, added) values (1, 1, null, 1, 1, null);
+insert into UserLike(id, creator, portfolio, material, isLiked, added) values (2, 2, null, 1, 1, null);
+insert into UserLike(id, creator, portfolio, material, isLiked, added) values (3, 3, null, 1, 1, null);
+insert into UserLike(id, creator, portfolio, material, isLiked, added) values (4, 4, null, 1, 0, null);
+insert into UserLike(id, creator, portfolio, material, isLiked, added) values (5, 5, null, 1, 1, null);
+insert into UserLike(id, creator, portfolio, material, isLiked, added) values (6, 1, null, 2, 1, null);
+insert into UserLike(id, creator, portfolio, material, isLiked, added) values (7, 2, null, 2, 1, null);
+
+insert into UserLike(id, creator, portfolio, material, isLiked, added) values (8, 1, 1, null, 1, null);
+insert into UserLike(id, creator, portfolio, material, isLiked, added) values (9, 2, 1, null, 1, null);
+insert into UserLike(id, creator, portfolio, material, isLiked, added) values (10, 3, 1, null, 1, null);
+insert into UserLike(id, creator, portfolio, material, isLiked, added) values (11, 5, 1, null, 1, null);
+insert into UserLike(id, creator, portfolio, material, isLiked, added) values (12, 1, 2, null, 0, null);
+insert into UserLike(id, creator, portfolio, material, isLiked, added) values (13, 2, 2, null, 0, null);
+
+-- In the far past, should not count when looking for the most liked ones
+insert into UserLike(id, creator, portfolio, material, isLiked, added) values (14, 2, null, 3, 0, '2014-06-01 00:00:01');
+insert into UserLike(id, creator, portfolio, material, isLiked, added) values (15, 4, , 1, null, '2014-06-01 00:00:01');
