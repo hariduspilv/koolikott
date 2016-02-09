@@ -63,6 +63,7 @@ public class SolrService implements SearchEngineService {
 
     public boolean isIndexingInProgress() {
         SearchResponse response = executeCommand(SOLR_DATAIMPORT_STATUS);
+        logger.info("Status: " + response.getStatus());
         return response.getStatus().equals(SOLR_STATUS_BUSY);
     }
 
@@ -77,10 +78,8 @@ public class SolrService implements SearchEngineService {
 
     protected void logCommand(String command, SearchResponse searchResponse) {
         long responseCode = searchResponse.getResponseHeader().getStatus();
-        if (responseCode != 0) {
-            logger.warn("Solr responded with code " + responseCode + ", url was "
-                    + configuration.getString(SEARCH_SERVER) + command);
-        }
+        logger.info("Solr responded with code " + responseCode + ", url was " + configuration.getString(SEARCH_SERVER)
+                + command);
     }
 
     private WebTarget getTarget(String path) {
@@ -114,8 +113,15 @@ public class SolrService implements SearchEngineService {
     private class SolrIndexThread extends Thread {
         private boolean updateIndex;
 
-        public synchronized void updateIndex() {
-            updateIndex = true;
+        private final Object lock = new Object();
+
+        public void updateIndex() {
+            logger.info("getting lock to updateIndex _= true");
+            synchronized (lock) {
+                logger.info("got lock to updateIndex _= true");
+                updateIndex = true;
+            }
+            logger.info("lock released to updateIndex _= true");
         }
 
         @Override
@@ -123,11 +129,19 @@ public class SolrService implements SearchEngineService {
             try {
                 while (true) {
                     if (updateIndex) {
-                        updateIndex = false;
-                        logger.info("Updating Solr index.");
-                        executeCommand(SOLR_IMPORT_PARTIAL);
-                        waitForCommandToFinish();
+                        logger.info("getting lock to updateIndex _= false");
+                        synchronized (lock) {
+                            logger.info("got lock to updateIndex _= false");
+                            updateIndex = false;
+                            lock.notifyAll();
+                            logger.info("lock released to updateIndex _= false using notifyAll");
+                            logger.info("Updating Solr index.");
+                            executeCommand(SOLR_IMPORT_PARTIAL);
+                            waitForCommandToFinish();
+                        }
+                        logger.info("lock released to updateIndex _= false end of sync block");
                     }
+
                     sleep(1000);
                 }
             } catch (InterruptedException e) {
