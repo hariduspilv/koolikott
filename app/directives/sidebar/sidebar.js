@@ -9,17 +9,23 @@ define([
             templateUrl: 'directives/sidebar/sidebar.html',
             controller: function($scope, serverCallService) {
                 
-                var RECOMMENDED_ITEMS = 5;
+                var SIDE_ITEMS_AMOUNT = 5;
 
                 var params = {
                     q: 'recommended:true',
                     start: 0,
                     sort: 'recommendation_timestamp',
                     sortDirection: 'desc',
-                    limit: RECOMMENDED_ITEMS
+                    limit: SIDE_ITEMS_AMOUNT
                 };
 
                 serverCallService.makeGet("rest/search", params, getRecommendationsSuccess, getRecommendationsFail);
+                
+                var params = {
+                    maxResults: SIDE_ITEMS_AMOUNT
+                };
+
+                serverCallService.makeGet("rest/search/mostLiked", params, getMostLikedSuccess, getMostLikedFail);
 
                 function getRecommendationsSuccess(data) {
                     if (isEmpty(data)) {
@@ -31,6 +37,18 @@ define([
 
                 function getRecommendationsFail(data, status) {
                     console.log('Session search failed.')
+                }
+                
+                function getMostLikedSuccess(data) {
+                    if (isEmpty(data)) {
+                    	getMostLikedFail();
+                    } else {
+                        $scope.mostLiked = data;
+                    }
+                }
+
+                function getMostLikedFail() {
+                    console.log('Most liked search failed.')
                 }
 
                 $scope.getCorrectLanguageString = function(languageStringList, language) {
