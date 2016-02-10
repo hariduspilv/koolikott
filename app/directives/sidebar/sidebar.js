@@ -1,13 +1,14 @@
 define([
     'angularAMD',
     'services/serverCallService',
+    'services/searchService',
     'directives/learningObjectRow/learningObjectRow'
 ], function(angularAMD) {
-    angularAMD.directive('dopSidebar', ['serverCallService', function() {
+    angularAMD.directive('dopSidebar', ['serverCallService', '$location', 'searchService', function() {
         return {
             scope: true,
             templateUrl: 'directives/sidebar/sidebar.html',
-            controller: function($scope, serverCallService) {
+            controller: function($scope, serverCallService, $location, searchService) {
                 
                 var SIDE_ITEMS_AMOUNT = 5;
 
@@ -21,11 +22,30 @@ define([
 
                 serverCallService.makeGet("rest/search", params, getRecommendationsSuccess, getRecommendationsFail);
                 
-                var params = {
-                    maxResults: SIDE_ITEMS_AMOUNT
-                };
+                
+                function isSearchResultPage() {
+                	return $location.url().startsWith('/' + searchService.getSearchURLbase());
+                }
 
-                serverCallService.makeGet("rest/search/mostLiked", params, getMostLikedSuccess, getMostLikedFail);
+                if (isSearchResultPage()) {
+                	var params = {
+                		limit: SIDE_ITEMS_AMOUNT
+                	};
+                	
+                	searchService.setSort('like_score');
+                	searchService.setSortDirection('desc');
+                	var searchUrl = searchService.getQueryURL();
+                	searchService.setSort(null);
+                	searchService.setSortDirection(null);
+                	
+                	serverCallService.makeGet("rest/search?" + searchUrl, params, searchMostLikedSuccess, getMostLikedFail);
+                } else {
+                	var params = {
+                		maxResults: SIDE_ITEMS_AMOUNT
+                	};
+                	
+                	serverCallService.makeGet("rest/search/mostLiked", params, getMostLikedSuccess, getMostLikedFail);
+                }
 
                 function getRecommendationsSuccess(data) {
                     if (isEmpty(data)) {
@@ -49,6 +69,14 @@ define([
 
                 function getMostLikedFail() {
                     console.log('Most liked search failed.')
+                }
+                
+                function searchMostLikedSuccess(data) {
+                    if (isEmpty(data)) {
+                    	getMostLikedFail();
+                    } else {
+                        $scope.mostLikedList = data.items;
+                    }
                 }
             }
         }

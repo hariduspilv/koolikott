@@ -1,7 +1,7 @@
 define(['angularAMD'], function(angularAMD) {
 
     angularAMD.factory('searchService', ['$location', function($location) {
-        var searchURLbase = "search/result?q=";
+        var searchURLbase = "search/result?";
         var taxonURL = "&taxon=";
         var paidURL = "&paid=";
         var typeURL = "&type="
@@ -145,11 +145,13 @@ define(['angularAMD'], function(angularAMD) {
             },
 
             getURL: function() {
-                var searchURL;
+                return searchURLbase + this.getQueryURL();;
+            },
+
+            getQueryURL: function() {
+                var searchURL = 'q=';
                 if (searchQuery) {
-                    searchURL = searchURLbase + escapeQuery(searchQuery)
-                } else {
-                    searchURL = searchURLbase;
+                    searchURL += escapeQuery(searchQuery)
                 }
 
                 if (searchTaxon) {
@@ -378,6 +380,10 @@ define(['angularAMD'], function(angularAMD) {
 
             isValidType: function(type) {
                 return type === 'material' || type === 'portfolio' || type === 'all';
+            },
+            
+            getSearchURLbase: function() {
+            	return searchURLbase;
             }
         };
     }]);
