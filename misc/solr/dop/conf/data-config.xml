@@ -239,6 +239,8 @@
             <entity name="Material_KeyCompetence" query="select keyCompetence as key_competence_id from Material_KeyCompetence where material='${Material.id}'">
                 <entity name="KeyCompetence" query="select name as key_competence from KeyCompetence where id = '${Material_KeyCompetence.key_competence_id}'" />
             </entity>
+
+            <entity name="Material_Score" query="select 2 * SUM(ul.isLiked) - COUNT(*) as like_score from UserLike ul where ul.material='${Material.id}'" />
         </entity>
 
         <entity name="Portfolio" pk="uniqueKey"
@@ -444,6 +446,8 @@
             <entity name="Portfolio_Recommended" query="select if ((select recommendation from Portfolio where id='${Portfolio.id}') is not null, 1, 0) as recommended" />
             
             <entity name="Portfolio_Recommendatation_Timestamp" query="select added as recommendation_timestamp from Recommendation where id = '${Portfolio.recommendation}'" />
+
+            <entity name="Portfolio_Score" query="select 2 * SUM(ul.isLiked) - COUNT(*) as like_score from UserLike ul where ul.portfolio='${Portfolio.id}'" />
         </entity>
     </document>
 </dataConfig>
