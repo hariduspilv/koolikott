@@ -1,75 +1,17 @@
-.tag {
-	white-space: nowrap;
-	.md-button {
-		margin: 5px 0;
-		padding: 0 10px;
-		color: rgb(49, 46, 46);
-		text-transform: none;
-		font-weight: 500;
-		min-width: 30px;
-		line-height: 30px;
-		min-height: 30px;
-		border: 1px solid rgba(33,150,243, .5);
-		border-radius: 3px;
-
-		&:not([disabled]):hover {
-			background-color: rgba(193, 193, 193, 0.3);
-			color: rgba(44, 65, 164, 0.96);
-			transition: 0.3s;
-			border: 1px solid  #15c;
-		}
-	}
-
-	&.tag-loggedin {
-		.md-button {
-			&:first-of-type {
-				border-radius: 3px 0 0 3px;
-			}
-
-			&:last-of-type {
-				border-radius: 0 3px 3px 0;
-				margin-left: -5px;
-				border-left: none;
-				&:before {
-					content: "+";
-				}
-			}
-
-			&:not([disabled]):hover {
-				background-color: rgba(193, 193, 193, 0.3);
-				color: rgba(44, 65, 164, 0.96);
-				transition: 0.3s;
-				border: 1px solid  #15c;
-			}
-		}
-	}
-
-	&.tag-owner {
-		.md-button {
-			background-color: rgba(33,150,243, .1);
-			&:last-of-type:before {
-				content: "-";
-			}
-		}
-	}
-
-}
-
-md-chips.md-default-theme .md-chips, md-chips .md-chips {
-	box-shadow: none;
-}
-
 .tags {
 	.meta {
-		margin: 15px 0 5px 0;
+			margin: 20px 0 0 0;
+	}
+	md-input-container {
+		margin: 5px 0;
+	}
+	md-chips.md-default-theme .md-chips,
+	md-chips .md-chips {
+		box-shadow: none;
 	}
 }
 
-md-input-container.tags {
-	margin: 5px 0;
-}
-
-
+md-chips,
 .md-chips {
 	display: block;
 	font-size: 13px;
@@ -80,6 +22,17 @@ md-input-container.tags {
 		height: 28px;
 		line-height: 28px;
 		background: darken(#f3f6fb, 3%);
+		button.md-chip-remove md-icon	{
+			top: 45%;
+			left: 45%;
+			transform: translate3d(-45%, -45%, 0);
+			fill: lighten(#15c, 30%);
+			transition: color .3s ease;
+			&:hover {
+				fill: #15c;
+			}
+		}
+		button.md-chip-remove md-icon,
 		.md-button.md-icon-button {
 			line-height: 1;
 			margin: 0px 3px;
@@ -87,14 +40,17 @@ md-input-container.tags {
 			width: 16px;
 			min-height: 15px;
 			padding: 0;
-			.material-icons {
-				font-size: 16px;
-				line-height: inherit;
+			.material-icons,
+			md-icon {
 				color: lighten(#15c, 30%);
 				transition: color .3s ease;
 				&:hover {
 					color: #15c;
 				}
+			}
+			.material-icons {
+				font-size: 16px;
+				line-height: inherit;
 			}
 			a {
 				line-height: 20px;
