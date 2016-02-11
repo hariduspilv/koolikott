@@ -17,7 +17,7 @@ define([
                         var addMaterialScope = $scope.$new(true);
 
                         addMaterialScope.material = {};
-                        addMaterialScope.material.url = $scope.chapter.resourcePermalink;
+                        addMaterialScope.material.source = $scope.chapter.resourcePermalink;
                         addMaterialScope.isChapterMaterial = true;
 
                         $mdDialog.show(angularAMD.route({
@@ -27,6 +27,9 @@ define([
                         })).then(closeDialog);
 
                         function closeDialog(material) {
+                            $scope.chapter.resourcePermalink = "";
+                            $scope.resourcePermalinkForm.url.$setPristine();
+                            $scope.resourcePermalinkForm.url.$setUntouched();
                             if (material) {
                                 $scope.chapter.materials.push(material);
                             }
