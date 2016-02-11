@@ -1,10 +1,14 @@
 package ee.hm.dop.rest;
 
+import static ee.hm.dop.utils.ConfigurationProperties.MAX_FILE_SIZE;
+import static ee.hm.dop.utils.FileUtils.read;
 import static org.apache.commons.lang3.StringUtils.isBlank;
 
+import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.util.List;
 
+import javax.annotation.security.PermitAll;
 import javax.annotation.security.RolesAllowed;
 import javax.inject.Inject;
 import javax.ws.rs.Consumes;
@@ -17,6 +21,9 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+
+import org.apache.commons.configuration.Configuration;
+import org.glassfish.jersey.media.multipart.FormDataParam;
 
 import ee.hm.dop.model.BrokenContent;
 import ee.hm.dop.model.Material;
@@ -39,6 +46,9 @@ public class MaterialResource extends BaseResource {
 
     @Inject
     private TagService tagService;
+
+    @Inject
+    private Configuration configuration;
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
@@ -125,6 +135,24 @@ public class MaterialResource extends BaseResource {
         } else {
             return Response.status(HttpURLConnection.HTTP_NOT_FOUND).build();
         }
+    }
+
+    @POST
+    @Path("addPicture")
+    @Consumes(MediaType.MULTIPART_FORM_DATA)
+    @PermitAll
+    public void uploadPicture(@QueryParam("materialId") long materialId,
+            @FormDataParam("picture") InputStream fileInputStream) {
+        byte[] picture = read(fileInputStream, configuration.getInt(MAX_FILE_SIZE));
+
+        User loggedInUser = getLoggedInUser();
+
+        Material material = new Material();
+        material.setId(materialId);
+        material.setPicture(picture);
+        material.setHasPicture(true);
+
+        materialService.updatePicture(material, loggedInUser);
     }
 
     @GET
@@ -229,13 +257,13 @@ public class MaterialResource extends BaseResource {
 
     @PUT
     @Path("{materialId}/tag")
-    @RolesAllowed({ "USER", "ADMIN", "PUBLISHER"})
+    @RolesAllowed({ "USER", "ADMIN", "PUBLISHER" })
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Material addTag(@PathParam("materialId") Long materialId, Tag tagString) {
         Material material = materialService.get(materialId, getLoggedInUser());
         Tag tag = tagService.getTagByName(tagString.getName());
-        if(tag == null) {
+        if (tag == null) {
             tag = tagString;
         }
 

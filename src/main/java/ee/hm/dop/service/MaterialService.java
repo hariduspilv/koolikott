@@ -86,14 +86,16 @@ public class MaterialService {
             throw new IllegalArgumentException("Error creating Material, material already exists.");
         }
 
-        validateUserNotNull(creator);
         material.setCreator(creator);
 
-        if (isUserPublisher(creator)) {
+        if (creator != null && isUserPublisher(creator)) {
             material.setEmbeddable(true);
         }
 
         material.setRecommendation(null);
+
+        // Do not upload picture when creating material
+        material.setPicture(null);
 
         if (!isUserAdmin(creator) && !isUserPublisher(creator)) {
             material.setCurriculumLiterature(false);
@@ -289,6 +291,9 @@ public class MaterialService {
             material.setRecommendation(originalMaterial.getRecommendation());
         }
 
+        // We do not update/upload picture in this method
+        material.setPicture(originalMaterial.getPicture());
+
         if (isUserAdmin(user) || isThisPublisherMaterial(user, originalMaterial)) {
             returned = update(material);
         }
@@ -314,6 +319,22 @@ public class MaterialService {
         searchEngineService.updateIndex();
 
         return returnedMaterial;
+    }
+
+    public Material updatePicture(Material material, User loggedInUser) {
+        Material originalMaterial = materialDao.findByIdNotDeleted(material.getId());
+
+        if (originalMaterial == null) {
+            throw new RuntimeException("Material not found");
+        }
+
+        if (originalMaterial.getCreator().getId() != loggedInUser.getId()) {
+            throw new RuntimeException("Logged in user must be the creator of this material.");
+        }
+
+        originalMaterial.setPicture(material.getPicture());
+        originalMaterial.setHasPicture(material.getPicture() != null);
+        return materialDao.update(originalMaterial);
     }
 
     private void validateMaterialUpdate(Material material, Material originalMaterial) {
@@ -452,12 +473,6 @@ public class MaterialService {
     private void validateUserIsAdmin(User loggedInUser) {
         if (!isUserAdmin(loggedInUser)) {
             throw new RuntimeException("Only admin can do this");
-        }
-    }
-
-    private void validateUserNotNull(User user) {
-        if (user == null) {
-            throw new IllegalArgumentException("User not found");
         }
     }
 
