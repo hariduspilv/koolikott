@@ -112,7 +112,6 @@ define([
             };
 
             $scope.updateMaterial = function () {
-                storageService.setMaterial($scope.material);
                 makeCall("rest/material/update");
             };
 
@@ -127,6 +126,8 @@ define([
                 $scope.material.titles = metadata.titles;
                 $scope.material.descriptions = metadata.descriptions;
                 $scope.material.type = ".Material";
+                $scope.oldPicture = $scope.material.picture;
+                $scope.material.picture = null;
 
                 serverCallService.makePost(url, $scope.material, postMaterialSuccess, postMaterialFail);
             }
@@ -261,11 +262,11 @@ define([
             };
 
             $scope.$watch(function () {
-                return $scope.picture;
+                return $scope.newPicture;
             }, function (newPicture, oldPicture) {
                 if (newPicture !== oldPicture) {
-                    Upload.dataUrl($scope.picture, true).then(function () {
-                        $scope.material.picture = $scope.picture.$ngfDataUrl;
+                    Upload.dataUrl($scope.newPicture, true).then(function () {
+                        $scope.material.picture = $scope.newPicture.$ngfDataUrl;
                     });
                 }
             });
@@ -349,22 +350,48 @@ define([
                 }
             }
 
-            function postMaterialSuccess(data) {
-                if (!isEmpty(data)) {
-                    $mdDialog.hide(data);
-                    console.log("material added");
-                    if (!$scope.isChapterMaterial) {
-                        $location.url('/material?materialId=' + data.id);
+            function postMaterialSuccess(material) {
+                if (!isEmpty(material)) {
+                	$scope.material = material;
+                	
+                	if ($scope.newPicture) {
+                    	material.hasPicture = true;
+                    	material.picture = $scope.newPicture.$ngfDataUrl;
+                    	uploadPicture(material);                    	
+                    } else {
+                    	$scope.material.picture = $scope.oldPicture;
+                    	redirectToMaterialPage();
+                    	saveMaterialFinally();
                     }
                 }
+            }
+            
+            function uploadPicture(material) {
+            	var url = "rest/material/addPicture?materialId=" + material.id;
+            	picture = $scope.newPicture;
+                var data = {
+                		picture: picture
+                }
+                serverCallService.upload(url, data, redirectToMaterialPage, postMaterialFail, saveMaterialFinally);
+            }
+
+            function redirectToMaterialPage() {
+                $mdDialog.hide();
                 
-                $scope.isSaving = false;
+                if (!$scope.isChapterMaterial) {
+                	$location.url('/material?materialId=' + $scope.material.id);
+                }
             }
 
             function postMaterialFail() {
                 console.log('Failed to add material.');
-                
-                $scope.isSaving = false;
+                $scope.material.picture = $scope.oldPicture;
+                saveMaterialFinally();
+            }
+            
+            function saveMaterialFinally() {
+                storageService.setMaterial($scope.material);
+                $scope.saving = false;
             }
 
             function setResourceTypes(data) {
