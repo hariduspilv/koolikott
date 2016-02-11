@@ -110,7 +110,6 @@ define([
                     } else if ($scope.portfolio && $scope.portfolio.id) {
                         url = "rest/portfolio/" + $scope.portfolio.id + "/tag";
                     }
-                    console.log($scope.newTag)
                     serverCallService.makePut(url, $scope.newTag, addTagSuccess, addTagFail);
                     $scope.newTag = null;
                 };
@@ -159,7 +158,6 @@ define([
                 }
 
                 function requestSuccessful(response) {
-                    console.log(response);
                     if (!$scope.isAdmin) {
                         $scope.isReportedByUser = response === true;
                     }
