@@ -19,7 +19,6 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import ee.hm.dop.model.BrokenContent;
-import ee.hm.dop.model.ImproperContent;
 import ee.hm.dop.model.Material;
 import ee.hm.dop.model.Recommendation;
 import ee.hm.dop.model.Tag;
@@ -180,23 +179,6 @@ public class MaterialResource extends BaseResource {
     }
 
     @POST
-    @Path("setImproper")
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
-    @RolesAllowed({ "USER", "ADMIN", "PUBLISHER", "RESTRICTED" })
-    public ImproperContent setImproperMaterial(Material material) {
-        return materialService.addImproperMaterial(material, getLoggedInUser());
-    }
-
-    @GET
-    @Path("getImproper")
-    @Produces(MediaType.APPLICATION_JSON)
-    @RolesAllowed({ "ADMIN" })
-    public List<ImproperContent> getImproperMaterials() {
-        return materialService.getImproperMaterials();
-    }
-
-    @POST
     @Path("setBroken")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
@@ -222,14 +204,6 @@ public class MaterialResource extends BaseResource {
     }
 
     @GET
-    @Path("hasSetBroken")
-    @Produces(MediaType.APPLICATION_JSON)
-    @RolesAllowed({ "USER", "ADMIN", "PUBLISHER", "RESTRICTED" })
-    public Boolean hasSetBroken(@QueryParam("materialId") long materialId) {
-        return materialService.hasSetBroken(materialId, getLoggedInUser());
-    }
-
-    @GET
     @Path("isBroken")
     @Produces(MediaType.APPLICATION_JSON)
     @RolesAllowed({ "ADMIN" })
@@ -238,36 +212,19 @@ public class MaterialResource extends BaseResource {
     }
 
     @GET
+    @Path("hasSetBroken")
+    @Produces(MediaType.APPLICATION_JSON)
+    @RolesAllowed({ "USER", "ADMIN", "PUBLISHER", "RESTRICTED" })
+    public Boolean hasSetBroken(@QueryParam("materialId") long materialId) {
+        return materialService.hasSetBroken(materialId, getLoggedInUser());
+    }
+
+    @GET
     @Path("getDeleted")
     @Produces(MediaType.APPLICATION_JSON)
     @RolesAllowed({ "ADMIN" })
     public List<Material> getDeletedMaterials() {
         return materialService.getDeletedMaterials();
-    }
-
-    @GET
-    @Path("hasSetImproper")
-    @Produces(MediaType.APPLICATION_JSON)
-    @RolesAllowed({ "USER", "ADMIN", "PUBLISHER", "RESTRICTED" })
-    public Boolean hasSetImproper(@QueryParam("materialId") long materialId) {
-        return materialService.hasSetImproper(materialId, getLoggedInUser());
-    }
-
-    @POST
-    @Path("setNotImproper/{id}")
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
-    @RolesAllowed({ "ADMIN" })
-    public void removeImproperPortfolios(@PathParam("id") Long id) {
-        materialService.removeImproperMaterials(id);
-    }
-
-    @GET
-    @Path("isSetImproper")
-    @Produces(MediaType.APPLICATION_JSON)
-    @RolesAllowed({ "ADMIN" })
-    public Boolean isSetImproper(@QueryParam("materialId") long materialId) {
-        return materialService.isSetImproper(materialId);
     }
 
     @PUT

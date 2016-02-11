@@ -14,13 +14,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import ee.hm.dop.dao.BrokenContentDAO;
-import ee.hm.dop.dao.ImproperContentDAO;
 import ee.hm.dop.dao.MaterialDAO;
 import ee.hm.dop.dao.UserLikeDAO;
 import ee.hm.dop.model.Author;
 import ee.hm.dop.model.BrokenContent;
 import ee.hm.dop.model.Comment;
-import ee.hm.dop.model.ImproperContent;
 import ee.hm.dop.model.Material;
 import ee.hm.dop.model.Publisher;
 import ee.hm.dop.model.Recommendation;
@@ -55,9 +53,6 @@ public class MaterialService {
 
     @Inject
     private SearchEngineService searchEngineService;
-
-    @Inject
-    private ImproperContentDAO improperContentDAO;
 
     @Inject
     private BrokenContentDAO brokenContentDAO;
@@ -396,26 +391,6 @@ public class MaterialService {
         return loggedInUser != null && loggedInUser.getRole() == Role.PUBLISHER;
     }
 
-    public ImproperContent addImproperMaterial(Material material, User loggedInUser) {
-        if (material == null || material.getId() == null) {
-            throw new RuntimeException("Material not found while adding improper material");
-        }
-        Material originalMaterial = materialDao.findByIdNotDeleted(material.getId());
-        if (originalMaterial == null) {
-            throw new RuntimeException("Material not found while adding improper material");
-        }
-
-        ImproperContent improperContent = new ImproperContent();
-        improperContent.setCreator(loggedInUser);
-        improperContent.setMaterial(material);
-
-        return improperContentDAO.update(improperContent);
-    }
-
-    public List<ImproperContent> getImproperMaterials() {
-        return improperContentDAO.getImproperMaterials();
-    }
-
     public BrokenContent addBrokenMaterial(Material material, User loggedInUser) {
         if (material == null || material.getId() == null) {
             throw new RuntimeException("Material not found while adding broken material");
@@ -452,29 +427,14 @@ public class MaterialService {
         brokenContentDAO.deleteBrokenMaterials(originalMaterial.getId());
     }
 
-    public Boolean hasSetImproper(long materialId, User loggedInUser) {
-        List<ImproperContent> improperContents = improperContentDAO.findByMaterialAndUser(materialId, loggedInUser);
-        return improperContents.size() != 0;
-    }
-
     public Boolean hasSetBroken(long materialId, User loggedInUser) {
-        List<BrokenContent> improperContents = brokenContentDAO.findByMaterialAndUser(materialId, loggedInUser);
-        return improperContents.size() != 0;
+        List<BrokenContent> brokenContents = brokenContentDAO.findByMaterialAndUser(materialId, loggedInUser);
+        return brokenContents.size() != 0;
     }
 
     public Boolean isBroken(long materialId) {
-        List<BrokenContent> improperContents = brokenContentDAO.findByMaterial(materialId);
-        return improperContents.size() != 0;
-    }
-
-    public void removeImproperMaterials(Long id) {
-        improperContentDAO.deleteImproperMaterials(id);
-    }
-
-    public Boolean isSetImproper(long materialId) {
-        List<ImproperContent> improperContents = improperContentDAO.getByMaterial(materialId);
-
-        return improperContents.size() != 0;
+        List<BrokenContent> brokenContents = brokenContentDAO.findByMaterial(materialId);
+        return brokenContents.size() != 0;
     }
 
     private void validateMaterialAndIdNotNull(Material material) {
@@ -502,12 +462,12 @@ public class MaterialService {
     }
 
     public Material addTag(Material material, Tag tag, User loggedInUser) {
-        if(material == null) {
+        if (material == null) {
             throw new RuntimeException("Material not found");
         }
 
         List<Tag> tags = material.getTags();
-        if(!tags.contains(tag)) {
+        if (!tags.contains(tag)) {
             tags.add(tag);
             material.setTags(tags);
 

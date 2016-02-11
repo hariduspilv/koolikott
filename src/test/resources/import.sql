@@ -434,7 +434,6 @@ insert into ImproperContent(id, creator, portfolio, material, added) values (2, 
 insert into ImproperContent(id, creator, portfolio, material, added) values (3, 9, null, 2, '2014-06-01 00:00:01');
 insert into ImproperContent(id, creator, portfolio, material, added) values (4, 9, null, 3, '2014-06-01 00:00:01');
 insert into ImproperContent(id, creator, portfolio, material, added) values (5, 9, 3, null, '2014-06-01 00:00:01');
-
 insert into ImproperContent(id, creator, portfolio, material, added) values (5, 9, 3, null, '2014-06-01 00:00:01');
 
 -- TagUpVotes

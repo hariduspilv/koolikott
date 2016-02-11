@@ -10,12 +10,10 @@ import javax.inject.Inject;
 
 import org.joda.time.DateTime;
 
-import ee.hm.dop.dao.ImproperContentDAO;
 import ee.hm.dop.dao.PortfolioDAO;
 import ee.hm.dop.dao.UserLikeDAO;
 import ee.hm.dop.model.Chapter;
 import ee.hm.dop.model.Comment;
-import ee.hm.dop.model.ImproperContent;
 import ee.hm.dop.model.Portfolio;
 import ee.hm.dop.model.Recommendation;
 import ee.hm.dop.model.Role;
@@ -33,9 +31,6 @@ public class PortfolioService {
 
     @Inject
     private UserLikeDAO userLikeDAO;
-
-    @Inject
-    private ImproperContentDAO improperContentDAO;
 
     @Inject
     private SearchEngineService searchEngineService;
@@ -386,45 +381,8 @@ public class PortfolioService {
         return loggedInUser != null && loggedInUser.getRole() == Role.ADMIN;
     }
 
-    public ImproperContent addImproperPortfolio(Portfolio portfolio, User loggedInUser) {
-        if (portfolio == null || portfolio.getId() == null) {
-            throw new RuntimeException("Portfolio not found");
-        }
-        Portfolio originalPortfolio = portfolioDAO.findByIdNotDeleted(portfolio.getId());
-        if (originalPortfolio == null || !isPortfolioAccessibleToUser(originalPortfolio, loggedInUser)) {
-            throw new RuntimeException("Portfolio not found");
-        }
-
-        ImproperContent improperContent = new ImproperContent();
-        improperContent.setCreator(loggedInUser);
-        improperContent.setPortfolio(portfolio);
-        improperContent.setAdded(DateTime.now());
-
-        return improperContentDAO.update(improperContent);
-    }
-
-    public List<ImproperContent> getImproperPortfolios() {
-        return improperContentDAO.getImproperPortfolios();
-    }
-
     public List<Portfolio> getDeletedPortfolios() {
         return portfolioDAO.getDeletedPortfolios();
-    }
-
-    public Boolean hasSetImproper(long portfolioId, User loggedInUser) {
-        List<ImproperContent> improperContents = improperContentDAO.findByPortfolioAndUser(portfolioId, loggedInUser);
-
-        return improperContents.size() != 0;
-    }
-
-    public void removeImproperPortfolios(Long id) {
-        improperContentDAO.deleteImproperPortfolios(id);
-    }
-
-    public Boolean isSetImproper(long portfolioId) {
-        List<ImproperContent> improperContents = improperContentDAO.getByPortfolio(portfolioId);
-
-        return improperContents.size() != 0;
     }
 
     public Portfolio addTag(Portfolio portfolio, Tag tag, User loggedInUser) {

@@ -28,7 +28,6 @@ import org.junit.Test;
 
 import ee.hm.dop.common.test.ResourceIntegrationTestBase;
 import ee.hm.dop.model.Chapter;
-import ee.hm.dop.model.ImproperContent;
 import ee.hm.dop.model.Material;
 import ee.hm.dop.model.Portfolio;
 import ee.hm.dop.model.Recommendation;
@@ -483,65 +482,6 @@ public class PortfolioResourceTest extends ResourceIntegrationTestBase {
 
         Response response = doPost(DELETE_PORTFOLIO_URL, Entity.entity(portfolio, MediaType.APPLICATION_JSON_TYPE));
         assertEquals(Status.UNAUTHORIZED.getStatusCode(), response.getStatus());
-    }
-
-    @Test
-    public void setImproperPortfolio() {
-        Portfolio portfolio = new Portfolio();
-        portfolio.setId(1L);
-        login("38011550077");
-
-        Response response = doPost("portfolio/setImproper", Entity.entity(portfolio, MediaType.APPLICATION_JSON_TYPE));
-        ImproperContent improperContent = response.readEntity(ImproperContent.class);
-
-        assertNotNull(improperContent);
-        assertNotNull(improperContent.getId());
-        assertNotNull(improperContent.getCreator());
-        assertNotNull(improperContent.getPortfolio());
-        logout();
-
-    }
-
-    @Test
-    public void getImproperPortfolios() {
-        login("89898989898");
-
-        Response response = doGet("portfolio/getImproper");
-        List<ImproperContent> improperContentList = response.readEntity(new GenericType<List<ImproperContent>>() {
-        });
-
-        assertNotNull(improperContentList);
-        assertNotNull(improperContentList.get(0).getId());
-        assertNotNull(improperContentList.get(0).getCreator());
-        assertNotNull(improperContentList.get(0).getPortfolio());
-
-        logout();
-    }
-
-    @Test
-    public void isSetImproper() {
-        login("89898989898");
-
-        Boolean bool = doGet(format("portfolio/isSetImproper?portfolioId=%s", 3), Boolean.class);
-
-        assertTrue(bool);
-    }
-
-    @Test
-    public void setNotImproper() {
-        login("89898989898");
-        Response response1 = doGet("portfolio/getImproper");
-        List<ImproperContent> originalImproperContentList = response1
-                .readEntity(new GenericType<List<ImproperContent>>() {
-                });
-
-        doPost(format("portfolio/setNotImproper/%s", 3), null);
-
-        Response response2 = doGet("portfolio/getImproper");
-        List<ImproperContent> newImproperContentList = response2.readEntity(new GenericType<List<ImproperContent>>() {
-        });
-
-        assertEquals(originalImproperContentList.size(), newImproperContentList.size() + 1);
     }
 
     @Test

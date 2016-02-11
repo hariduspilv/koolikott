@@ -26,13 +26,12 @@ public class ImproperContentDAO {
         return merged;
     }
 
-    public List<ImproperContent> getImproperPortfolios() {
-
+    public List<ImproperContent> findImproperPortfolios() {
         return entityManager.createQuery("FROM ImproperContent i WHERE i.portfolio IS NOT NULL AND i.deleted = false", ImproperContent.class)
                 .getResultList();
     }
 
-    public List<ImproperContent> getImproperMaterials() {
+    public List<ImproperContent> findImproperMaterials() {
         return entityManager.createQuery("FROM ImproperContent i WHERE i.material IS NOT NULL AND i.deleted = false", ImproperContent.class)
                 .getResultList();
     }

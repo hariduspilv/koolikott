@@ -24,7 +24,6 @@ import ee.hm.dop.common.test.ResourceIntegrationTestBase;
 import ee.hm.dop.dao.TaxonDAO;
 import ee.hm.dop.model.BrokenContent;
 import ee.hm.dop.model.CrossCurricularTheme;
-import ee.hm.dop.model.ImproperContent;
 import ee.hm.dop.model.KeyCompetence;
 import ee.hm.dop.model.Language;
 import ee.hm.dop.model.LanguageString;
@@ -408,41 +407,6 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
         Response response = doPost(MATERIAL_REMOVE_RECOMMENDATION,
                 Entity.entity(material, MediaType.APPLICATION_JSON_TYPE));
         assertEquals(Status.NO_CONTENT.getStatusCode(), response.getStatus());
-    }
-
-    @Test
-    public void hasSetImproper() {
-        login("89012378912");
-
-        Boolean bool = doGet(format("material/hasSetImproper?materialId=%s", 2), Boolean.class);
-
-        assertTrue(bool);
-    }
-
-    @Test
-    public void isSetImproper() {
-        login("89898989898");
-
-        Boolean bool = doGet(format("material/isSetImproper?materialId=%s", 3), Boolean.class);
-
-        assertTrue(bool);
-    }
-
-    @Test
-    public void setNotImproper() {
-        login("89898989898");
-        Response response1 = doGet("material/getImproper");
-        List<ImproperContent> originalImproperContentList = response1
-                .readEntity(new GenericType<List<ImproperContent>>() {
-                });
-
-        doPost(format("material/setNotImproper/%s", 3), null);
-
-        Response response2 = doGet("material/getImproper");
-        List<ImproperContent> newImproperContentList = response2.readEntity(new GenericType<List<ImproperContent>>() {
-        });
-
-        assertEquals(originalImproperContentList.size(), newImproperContentList.size() + 1);
     }
 
     @Test

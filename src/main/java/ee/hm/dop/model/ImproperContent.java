@@ -47,6 +47,9 @@ public class ImproperContent {
     @Column(nullable = false)
     private boolean deleted = false;
 
+    @Column
+    private String reason;
+
     public Long getId() {
         return id;
     }
@@ -95,5 +98,13 @@ public class ImproperContent {
 
     public void setDeleted(boolean deleted) {
         this.deleted = deleted;
+    }
+
+    public String getReason() {
+        return reason;
+    }
+
+    public void setReason(String reason) {
+        this.reason = reason;
     }
 }

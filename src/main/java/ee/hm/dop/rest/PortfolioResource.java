@@ -25,7 +25,6 @@ import javax.ws.rs.core.Response;
 import org.apache.commons.configuration.Configuration;
 import org.glassfish.jersey.media.multipart.FormDataParam;
 
-import ee.hm.dop.model.ImproperContent;
 import ee.hm.dop.model.Portfolio;
 import ee.hm.dop.model.Recommendation;
 import ee.hm.dop.model.Tag;
@@ -193,54 +192,12 @@ public class PortfolioResource extends BaseResource {
         portfolioService.restore(portfolio, getLoggedInUser());
     }
 
-    @POST
-    @Path("setImproper")
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
-    @RolesAllowed({ "USER", "ADMIN", "PUBLISHER", "RESTRICTED" })
-    public ImproperContent setImproperPortfolio(Portfolio portfolio) {
-        return portfolioService.addImproperPortfolio(portfolio, getLoggedInUser());
-    }
-
-    @GET
-    @Path("getImproper")
-    @Produces(MediaType.APPLICATION_JSON)
-    @RolesAllowed({ "ADMIN" })
-    public List<ImproperContent> getImproperPortfolios() {
-        return portfolioService.getImproperPortfolios();
-    }
-
     @GET
     @Path("getDeleted")
     @Produces(MediaType.APPLICATION_JSON)
     @RolesAllowed({ "ADMIN" })
     public List<Portfolio> getDeletedPortfolios() {
         return portfolioService.getDeletedPortfolios();
-    }
-
-    @GET
-    @Path("hasSetImproper")
-    @Produces(MediaType.APPLICATION_JSON)
-    @RolesAllowed({ "USER", "ADMIN", "PUBLISHER", "RESTRICTED" })
-    public Boolean hasSetImproper(@QueryParam("portfolioId") long portfolioId) {
-        return portfolioService.hasSetImproper(portfolioId, getLoggedInUser());
-    }
-
-    @POST
-    @Path("setNotImproper/{id}")
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
-    @RolesAllowed({ "ADMIN" })
-    public void removeImproperPortfolios(@PathParam("id") Long id) {
-        portfolioService.removeImproperPortfolios(id);
-    }
-
-    @GET
-    @Path("isSetImproper")
-    @Produces(MediaType.APPLICATION_JSON)
-    @RolesAllowed({ "ADMIN" })
-    public Boolean isSetImproper(@QueryParam("portfolioId") long portfolioId) {
-        return portfolioService.isSetImproper(portfolioId);
     }
 
     @PUT

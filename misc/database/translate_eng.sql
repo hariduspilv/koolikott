@@ -601,4 +601,5 @@ INSERT INTO Translation(translationGroup, translationKey, translation) VALUES
 (3,'LANGUAGE_ZUL','Zulu'),
 (3,'LOGIN_STUUDIUM','Stuudium'),
 (3,'LOGIN_SUCCESS','You are logged in'),
-(3,'MATERIAL_CURRICULUM_LITERATURE','Curriculum literature');
+(3,'MATERIAL_CURRICULUM_LITERATURE','Curriculum literature'),
+(3,'REASON','Reason');

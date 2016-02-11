@@ -734,6 +734,7 @@ CREATE TABLE ImproperContent (
   material  BIGINT,
   added     TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   deleted   BOOLEAN   DEFAULT FALSE,
+  reason    VARCHAR(255),
 
   FOREIGN KEY (creator)
   REFERENCES User (id)
