@@ -3,9 +3,11 @@ package ee.hm.dop.model;
 import static javax.persistence.CascadeType.MERGE;
 import static javax.persistence.CascadeType.PERSIST;
 import static javax.persistence.FetchType.EAGER;
+import static javax.persistence.FetchType.LAZY;
 
 import java.util.List;
 
+import javax.persistence.Basic;
 import javax.persistence.CollectionTable;
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
@@ -58,7 +60,7 @@ public class Material implements Searchable {
             name = "Material_Title",
             joinColumns = { @JoinColumn(name = "material") },
             inverseJoinColumns = { @JoinColumn(name = "title") },
-            uniqueConstraints = @UniqueConstraint(columnNames = { "material", "title" }) )
+            uniqueConstraints = @UniqueConstraint(columnNames = { "material", "title" }))
     private List<LanguageString> titles;
 
     @ManyToOne
@@ -71,7 +73,7 @@ public class Material implements Searchable {
             name = "Material_Author",
             joinColumns = { @JoinColumn(name = "material") },
             inverseJoinColumns = { @JoinColumn(name = "author") },
-            uniqueConstraints = @UniqueConstraint(columnNames = { "material", "author" }) )
+            uniqueConstraints = @UniqueConstraint(columnNames = { "material", "author" }))
     private List<Author> authors;
 
     @OneToOne(cascade = { PERSIST, MERGE })
@@ -84,7 +86,7 @@ public class Material implements Searchable {
             name = "Material_Description",
             joinColumns = { @JoinColumn(name = "material") },
             inverseJoinColumns = { @JoinColumn(name = "description") },
-            uniqueConstraints = @UniqueConstraint(columnNames = { "material", "description" }) )
+            uniqueConstraints = @UniqueConstraint(columnNames = { "material", "description" }))
     private List<LanguageString> descriptions;
 
     @Column(nullable = false, columnDefinition = "TEXT")
@@ -96,7 +98,7 @@ public class Material implements Searchable {
             name = "Material_ResourceType",
             joinColumns = { @JoinColumn(name = "material") },
             inverseJoinColumns = { @JoinColumn(name = "resourceType") },
-            uniqueConstraints = @UniqueConstraint(columnNames = { "material", "resourceType" }) )
+            uniqueConstraints = @UniqueConstraint(columnNames = { "material", "resourceType" }))
     private List<ResourceType> resourceTypes;
 
     @ManyToMany(fetch = EAGER)
@@ -105,7 +107,7 @@ public class Material implements Searchable {
             name = "Material_Taxon",
             joinColumns = { @JoinColumn(name = "material") },
             inverseJoinColumns = { @JoinColumn(name = "taxon") },
-            uniqueConstraints = @UniqueConstraint(columnNames = { "material", "taxon" }) )
+            uniqueConstraints = @UniqueConstraint(columnNames = { "material", "taxon" }))
     private List<Taxon> taxons;
 
     @ManyToOne
@@ -118,7 +120,7 @@ public class Material implements Searchable {
             name = "Material_Publisher",
             joinColumns = { @JoinColumn(name = "material") },
             inverseJoinColumns = { @JoinColumn(name = "publisher") },
-            uniqueConstraints = @UniqueConstraint(columnNames = { "material", "publisher" }) )
+            uniqueConstraints = @UniqueConstraint(columnNames = { "material", "publisher" }))
     private List<Publisher> publishers;
 
     @Column(nullable = false)
@@ -137,7 +139,7 @@ public class Material implements Searchable {
             name = "Material_Tag",
             joinColumns = { @JoinColumn(name = "material") },
             inverseJoinColumns = { @JoinColumn(name = "tag") },
-            uniqueConstraints = @UniqueConstraint(columnNames = { "material", "tag" }) )
+            uniqueConstraints = @UniqueConstraint(columnNames = { "material", "tag" }))
     private List<Tag> tags;
 
     @OneToMany(fetch = EAGER, cascade = { MERGE, PERSIST })
@@ -146,6 +148,7 @@ public class Material implements Searchable {
     @OrderBy("added DESC")
     private List<Comment> comments;
 
+    @Basic(fetch = LAZY)
     @Lob
     private byte[] picture;
 
@@ -163,7 +166,7 @@ public class Material implements Searchable {
     private Recommendation recommendation;
 
     @JsonIgnore
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "repository")
     private Repository repository;
 
@@ -190,7 +193,7 @@ public class Material implements Searchable {
     @Column(name = "targetGroup")
     @ElementCollection(fetch = FetchType.EAGER)
     @Fetch(FetchMode.SELECT)
-    @CollectionTable(name = "Material_TargetGroup", joinColumns = @JoinColumn(name = "material") )
+    @CollectionTable(name = "Material_TargetGroup", joinColumns = @JoinColumn(name = "material"))
     private List<TargetGroup> targetGroups;
 
     @Column(nullable = false)
@@ -202,7 +205,7 @@ public class Material implements Searchable {
             name = "Material_CrossCurricularTheme",
             joinColumns = { @JoinColumn(name = "material") },
             inverseJoinColumns = { @JoinColumn(name = "crossCurricularTheme") },
-            uniqueConstraints = @UniqueConstraint(columnNames = { "material", "crossCurricularTheme" }) )
+            uniqueConstraints = @UniqueConstraint(columnNames = { "material", "crossCurricularTheme" }))
     private List<CrossCurricularTheme> crossCurricularThemes;
 
     @ManyToMany(fetch = EAGER, cascade = { PERSIST, MERGE })
@@ -211,7 +214,7 @@ public class Material implements Searchable {
             name = "Material_KeyCompetence",
             joinColumns = { @JoinColumn(name = "material") },
             inverseJoinColumns = { @JoinColumn(name = "keyCompetence") },
-            uniqueConstraints = @UniqueConstraint(columnNames = { "material", "keyCompetence" }) )
+            uniqueConstraints = @UniqueConstraint(columnNames = { "material", "keyCompetence" }))
     private List<KeyCompetence> keyCompetences;
 
     @Column(nullable = false)

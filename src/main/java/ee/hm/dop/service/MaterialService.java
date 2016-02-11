@@ -99,6 +99,9 @@ public class MaterialService {
 
         material.setRecommendation(null);
 
+        // Do not upload picture when creating material
+        material.setPicture(null);
+
         if (!isUserAdmin(creator) && !isUserPublisher(creator)) {
             material.setCurriculumLiterature(false);
         }
@@ -293,6 +296,9 @@ public class MaterialService {
             material.setRecommendation(originalMaterial.getRecommendation());
         }
 
+        // We do not update/upload picture in this method
+        material.setPicture(originalMaterial.getPicture());
+
         if (isUserAdmin(user) || isThisPublisherMaterial(user, originalMaterial)) {
             returned = update(material);
         }
@@ -318,6 +324,22 @@ public class MaterialService {
         searchEngineService.updateIndex();
 
         return returnedMaterial;
+    }
+
+    public Material updatePicture(Material material, User loggedInUser) {
+        Material originalMaterial = materialDao.findByIdNotDeleted(material.getId());
+
+        if (originalMaterial == null) {
+            throw new RuntimeException("Material not found");
+        }
+
+        if (originalMaterial.getCreator().getId() != loggedInUser.getId()) {
+            throw new RuntimeException("Logged in user must be the creator of this material.");
+        }
+
+        originalMaterial.setPicture(material.getPicture());
+        originalMaterial.setHasPicture(material.getPicture() != null);
+        return materialDao.update(originalMaterial);
     }
 
     private void validateMaterialUpdate(Material material, Material originalMaterial) {
