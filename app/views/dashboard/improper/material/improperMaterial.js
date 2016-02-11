@@ -10,7 +10,7 @@ define([
                 $scope: $scope
             });
 
-            serverCallService.makeGet("rest/material/getImproper", {}, base.getItemsSuccess, base.getItemsFail);
+            serverCallService.makeGet("rest/impropers?with=material", {}, base.getItemsSuccess, base.getItemsFail);
 
             $scope.title = $filter('translate')('DASHBOARD_IMRPOPER_MATERIALS');
             

@@ -6,7 +6,7 @@
 <div layout="row tags">
   <md-chips ng-model="tags" readonly="true">
     <md-chip-template>
-      <md-button data-ng-if="isLoggedIn()" class="md-icon-button">
+      <md-button data-ng-if="(isLoggedIn() && !isReportedByUser) && !isAdmin()" class="md-icon-button" ng-click="reportTag($chip.tag)">
         <md-icon>error_outline</md-icon>
       </md-button>
 
@@ -32,50 +32,3 @@
     </md-input-container>
   </form>
 </div>
-
-<!-- 1. pole ühel real sest form on rowst väljas. row on block vaikimisi 100% lai.
-2. p ainult teksti [mber]. br kasutatakse TEKSTI reavaheks, mitte divi. Kui sa enteriga trepid, ei tööta normaalne treppimine enam minul]
-semantiline html tähendab, et atribuut  kirjeldab, mida ta sisaldab. hetkel tagides on sul kogu asi wrapitud p sisse. peaks olema divi sees, p on alamelement. div on ülene block element.
-suvakaid dive pole vaja kui väljas on div (see väline)
--->
-
-<!-- <div>
-<p class="md-body-2 meta">
-<small class="md-caption">
-<span data-translate="DETAIL_VIEW_TAGS"></span>:
-</small>
-<br>
-<div layout="row">
-<md-chips ng-model="tags" readonly="true">
-<md-chip-template>
-<div>
-<md-button data-ng-if="isLoggedIn()" class="md-icon-button">
-<md-icon>error_outline</md-icon>
-</md-button>
-<a href="#" class="link" data-ng-click="getTagSearchURL($event, $chip.tag)">{{$chip.tag}}</a>
-
-<md-button data-ng-if="!$chip.hasUpVoted && isLoggedIn()" class="md-icon-button"
-ng-click="upVote($chip)">
-<md-icon>plus_one</md-icon>
-</md-button>
-
-<md-button data-ng-if="$chip.hasUpVoted && isLoggedIn()" class="md-icon-button"
-ng-click="removeUpVote($chip)">
-<md-icon>undo</md-icon>
-</md-button>
-
-<button data-ng-if="false" class="md-chip-remove" ng-click="deleteTag($chip)" md-chip-remove>
-<md-icon md-svg-icon="md-close"></md-icon>
-</button>
-</div>
-</md-chip-template>
-</md-chips>
-</div>
-<form name="addTagForm" data-ng-show="isLoggedIn()" ng-submit="addTag()">
-<md-input-container>
-<label data-translate="MATERIAL_ADD_TAG"></label>
-<input name="tag" ng-model="newTag"/>
-</md-input-container>
-</form>
-</p>
-</div> -->

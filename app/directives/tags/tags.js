@@ -16,7 +16,6 @@ define([
             controller: function ($scope, $mdToast, $translate, serverCallService, searchService, authenticatedUserService, $location) {
 
                 function init() {
-
                     if ($scope.material && $scope.material.id) {
                         var upVotesParams = {
                             'material': $scope.material.id
@@ -27,6 +26,7 @@ define([
                         };
                     }
 
+                    getHasReported();
                     serverCallService.makeGet("rest/tagUpVotes", upVotesParams, getTagUpVotesSuccess, function () {
                     });
                 }
@@ -128,6 +128,45 @@ define([
 
                 function addTagFail() {
                     console.log("Adding tag failed")
+                }
+
+                $scope.reportTag = function (tag) {
+                    var entity = {
+                        material: $scope.material,
+                        portfolio: $scope.portfolio,
+                        reason: "Tag: " + tag
+                    };
+
+                    serverCallService.makePut("rest/impropers", entity, setImproperSuccessful, function() {});
+                };
+
+                function setImproperSuccessful() {
+                    $scope.isReportedByUser = true;
+                }
+
+                function getHasReported() {
+                    var url;
+
+                    if ($scope.portfolio && $scope.portfolio.id) {
+                        url = "rest/impropers/portfolios/" + $scope.portfolio.id;
+
+                        serverCallService.makeGet(url, {}, requestSuccessful, requestFailed);
+                    } else if ($scope.material && $scope.material.id) {
+                        url = "rest/impropers/materials/" + $scope.material.id;
+
+                        serverCallService.makeGet(url, {}, requestSuccessful, requestFailed);
+                    }
+                }
+
+                function requestSuccessful(response) {
+                    console.log(response);
+                    if (!$scope.isAdmin) {
+                        $scope.isReportedByUser = response === true;
+                    }
+                }
+
+                function requestFailed() {
+                    console.log("Failed checking if already reported the resource")
                 }
 
                 init();

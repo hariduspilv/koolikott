@@ -4,6 +4,8 @@
       <th md-column><span data-translate="TITLE"></span></th>
       <th md-column md-order-by="bySubmittedAt"><span data-translate="SUBMITTED_AT"></span></th>
       <th md-column md-order-by="bySubmittedBy"><span data-translate="SUBMITTED_BY"></span></th>
+      <th md-column><span data-translate="REASON"></span></th>
+
       <th md-column></th>
     </tr>
   </thead>
@@ -12,6 +14,7 @@
       <td md-cell>{{item.portfolio.title}}</td>
       <td md-cell data-ng-bind="formatDate(item.added)"></td>
       <td md-cell>{{item.creator.name}} {{item.creator.surname}}</td>
+      <td md-cell>{{item.reason}}</td>
       <td md-cell>
         <md-button aria-label="Ava kogumik" href="#/portfolio?id={{item.portfolio.id}}" class="md-raised md-default" data-translate="BUTTON_OPEN"></md-button>
       </td>

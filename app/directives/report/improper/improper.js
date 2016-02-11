@@ -2,47 +2,47 @@ define([
     'app',
     'services/translationService',
     'services/authenticatedUserService'
-], function(app) {
-    app.directive('dopReportImproper', ['translationService', '$mdDialog', '$translate', 'authenticatedUserService', function(translationService, $mdDialog, $translate, authenticatedUserService) {
+], function (app) {
+    app.directive('dopReportImproper', ['translationService', '$mdDialog', '$translate', 'authenticatedUserService', function (translationService, $mdDialog, $translate, authenticatedUserService) {
         return {
             scope: {
                 material: '=',
                 portfolio: '='
             },
             templateUrl: 'directives/report/improper/improper.html',
-            controller: function($scope, serverCallService) {
+            controller: function ($scope, serverCallService) {
                 $scope.isReported = false;
                 $scope.isReportedByUser = false;
 
-                $scope.$watch('material', function(newValue, oldValue) {
+                $scope.$watch('material', function (newValue, oldValue) {
                     if (newValue === undefined) return;
-                    getHasReportedByUser();
                     getHasReported();
                 }, false);
 
-                $scope.$watch('portfolio', function(newValue, oldValue) {
+                $scope.$watch('portfolio', function (newValue, oldValue) {
                     if (newValue === undefined) return;
-                    getHasReportedByUser();
                     getHasReported();
                 }, false);
 
-                function getHasReportedByUser() {
+                function getHasReported() {
                     var url;
 
                     if ($scope.portfolio && $scope.portfolio.id) {
-                        url = "rest/portfolio/hasSetImproper?portfolioId=" + $scope.portfolio.id;
+                        url = "rest/impropers/portfolios/" + $scope.portfolio.id;
 
                         serverCallService.makeGet(url, {}, requestSuccessful, requestFailed);
                     } else if ($scope.material && $scope.material.id) {
-                        url = "rest/material/hasSetImproper?materialId=" + $scope.material.id;
+                        url = "rest/impropers/materials/" + $scope.material.id;
 
                         serverCallService.makeGet(url, {}, requestSuccessful, requestFailed);
                     }
                 }
 
                 function requestSuccessful(response) {
-                    if (response === true) {
-                        $scope.isReportedByUser = true;
+                    if ($scope.isAdmin) {
+                        $scope.isReported = response === true;
+                    } else {
+                        $scope.isReportedByUser = response === true;
                     }
                 }
 
@@ -50,45 +50,18 @@ define([
                     console.log("Failed checking if already reported the resource")
                 }
 
-                function getHasReported() {
-                    if (authenticatedUserService.isAdmin()) {
-                        var url;
-
-                        if ($scope.portfolio && $scope.portfolio.id) {
-                            url = "rest/portfolio/isSetImproper?portfolioId=" + $scope.portfolio.id;
-
-                            serverCallService.makeGet(url, {}, isReportedSuccessful, isReportedFailed);
-                        } else if ($scope.material && $scope.material.id) {
-                            url = "rest/material/isSetImproper?materialId=" + $scope.material.id;
-
-                            serverCallService.makeGet(url, {}, isReportedSuccessful, isReportedFailed);
+                $scope.setNotImproper = function () {
+                    if($scope.isAdmin) {
+                        if ($scope.portfolio) {
+                            url = "rest/impropers?portfolio=" + $scope.portfolio.id;
+                        } else if ($scope.material) {
+                            url = "rest/impropers?material=" + $scope.material.id;
                         }
-                    }
-                }
 
-                function isReportedSuccessful(response) {
-                    if (response === true) {
-                        $scope.isReported = true;
-                    } else {
-                        $scope.isReported = false;
-                    }
-                }
-
-                function isReportedFailed() {
-                    console.log("Failed checking if resource is reported as improper")
-                }
-
-
-                $scope.setNotImproper = function() {
-                    if ($scope.portfolio) {
-                        url = "rest/portfolio/setNotImproper/" + $scope.portfolio.id;
-                    } else if ($scope.material) {
-                        url = "rest/material/setNotImproper/" + $scope.material.id;
+                        serverCallService.makeDelete(url, {}, setNotImproperSuccessful, setNotImproperFailed);
                     }
 
-                    serverCallService.makePost(url, {}, setNotImproperSuccessful, setNotImproperFailed);
                 };
-
 
                 function setNotImproperSuccessful() {
                     $scope.isReported = false;
@@ -98,26 +71,20 @@ define([
                     console.log("Setting not improper failed.")
                 }
 
-                $scope.showConfirmationDialog = function() {
+                $scope.showConfirmationDialog = function () {
                     var confirm = $mdDialog.confirm()
                         .title($translate.instant('REPORT_IMPROPER_TITLE'))
                         .content($translate.instant('REPORT_IMPROPER_CONTENT'))
                         .ok($translate.instant('BUTTON_NOTIFY'))
                         .cancel($translate.instant('BUTTON_CANCEL'));
 
-                    $mdDialog.show(confirm).then(function() {
-                        var url;
-                        var entity;
+                    $mdDialog.show(confirm).then(function () {
+                        var entity = {
+                            material: $scope.material,
+                            portfolio: $scope.portfolio
+                        };
 
-                        if ($scope.portfolio) {
-                            url = "rest/portfolio/setImproper";
-                            entity = $scope.portfolio;
-                        } else if ($scope.material) {
-                            url = "rest/material/setImproper";
-                            entity = $scope.material;
-                        }
-
-                        serverCallService.makePost(url, entity, setImproperSuccessful, setImproperFailed);
+                        serverCallService.makePut("rest/impropers", entity, setImproperSuccessful, setImproperFailed);
                     });
                 };
 
@@ -130,7 +97,6 @@ define([
                 function setImproperFailed() {
                     $scope.isReportedByUser = false;
                 }
-
             }
         };
     }]);

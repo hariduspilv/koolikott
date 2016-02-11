@@ -2,11 +2,11 @@ define([
     'app',
     'jquery',
     'services/translationService',
-], function(app, $) {
-    app.controller('baseTableController', ['$scope', '$location', '$sce', '$templateRequest', '$compile', 'translationService', function($scope, $location, $sce, $templateRequest, $compile, translationService) {
+], function (app, $) {
+    app.controller('baseTableController', ['$scope', '$location', '$sce', '$templateRequest', '$compile', 'translationService', function ($scope, $location, $sce, $templateRequest, $compile, translationService) {
         var collection = null;
         var filtredCollection = null;
-        
+
         $scope.itemsCount = 0;
 
         $scope.filter = {
@@ -24,24 +24,25 @@ define([
 
         function getItemsSuccess(data) {
             if (isEmpty(data)) {
-                log('No data returned by session search.');
+                log('Getting data failed.');
             } else {
                 collection = data;
                 $scope.itemsCount = data.length;
-                
+
                 orderItems(data, $scope.query.order);
-                
+
                 $scope.data = data.slice(0, $scope.query.limit);
             }
         }
 
         function getItemsFail() {
-            console.log('Session search failed.')
+            console.log('Getting data failed.')
         }
 
         function orderItems(data, order) {
-            data = data.sort(function(a, b) {
-                if(a && b) {
+            data = data.sort(function (a, b) {
+                if (a && b) {
+
                     if (order === 'bySubmittedAt' || order === '-bySubmittedAt')
                         return new Date(b.added) - new Date(a.added);
 
@@ -60,7 +61,7 @@ define([
         }
 
         function filterItems() {
-            filtredCollection = collection.filter(function(data) {
+            filtredCollection = collection.filter(function (data) {
                 if (data && data.portfolio != null)
                     return data.portfolio.title.slice(0, $scope.query.filter.length).toLowerCase() === $scope.query.filter.toLowerCase();
                 if (data && data.material != null)
@@ -70,21 +71,21 @@ define([
                 if (data && data.type == ".Portfolio")
                     return data.title.slice(0, $scope.query.filter.length).toLowerCase() === $scope.query.filter.toLowerCase();
             });
-            
+
             $scope.itemsCount = filtredCollection.length;
             $scope.data = filtredCollection;
         }
-        
+
         function buildTable(tableId, templateUrl) {
             var url = $sce.getTrustedResourceUrl(templateUrl);
             var $container = $(tableId).find('.table-container');
-            
-            $templateRequest(url).then(function(template) {
+
+            $templateRequest(url).then(function (template) {
                 $container.html($compile(template)($scope));
             });
         }
 
-        $scope.getCorrectLanguageTitle = function(item) {
+        $scope.getCorrectLanguageTitle = function (item) {
             if (item) {
                 var result = getUserDefinedLanguageString(item.titles, translationService.getLanguage(), item.language);
                 if (!result) {
@@ -94,35 +95,35 @@ define([
             }
         };
 
-        $scope.onReorder = function(order) {
+        $scope.onReorder = function (order) {
             if (filtredCollection !== null)
                 orderItems(filtredCollection, order);
             else
                 orderItems(collection, order);
-            
+
             $scope.data = paginate($scope.query.page, $scope.query.limit);
         };
-        
+
         function paginate(page, limit) {
             var skip = (page - 1) * limit;
             var take = skip + limit;
-            
+
             if (filtredCollection !== null)
                 return filtredCollection.slice(skip, take);
-            
+
             return collection.slice(skip, take);
         }
-        
-        $scope.onPaginate = function (page, limit) {            
+
+        $scope.onPaginate = function (page, limit) {
             $scope.data = paginate(page, limit);
         };
 
-        $scope.removeFilter = function() {
+        $scope.removeFilter = function () {
             $scope.filter.show = false;
             $scope.query.filter = '';
             $scope.itemsCount = collection.length;
             filtredCollection = null;
-            
+
             $scope.data = paginate($scope.query.page, $scope.query.limit);
 
             if ($scope.filter.form.$dirty) {
@@ -130,12 +131,12 @@ define([
             }
         };
 
-        $scope.$watch('query.filter', function(newValue, oldValue) {
+        $scope.$watch('query.filter', function (newValue, oldValue) {
             if (newValue === oldValue) return;
-              filterItems();
+            filterItems();
         });
 
-        $scope.formatDate = function(date) {
+        $scope.formatDate = function (date) {
             return formatDateToDayMonthYear(date);
         }
 
