@@ -56,8 +56,8 @@ define([
                     $scope.upVotedTag.hasUpVoted = false;
                 }
 
-                $scope.isLoggedIn = function () {
-                    return authenticatedUserService.isAuthenticated();
+                $scope.isAllowed = function () {
+                    return authenticatedUserService.isAuthenticated() && !authenticatedUserService.isRestricted();
                 };
 
                 $scope.isAdmin = function () {

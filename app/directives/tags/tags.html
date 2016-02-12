@@ -6,17 +6,17 @@
 <div layout="row tags">
   <md-chips ng-model="tags" readonly="true">
     <md-chip-template>
-      <md-button data-ng-if="(isLoggedIn() && !isReportedByUser) && !isAdmin()" class="md-icon-button" ng-click="reportTag($chip.tag)">
+      <md-button data-ng-if="(isAllowed() && !isReportedByUser) && !isAdmin()" class="md-icon-button" ng-click="reportTag($chip.tag)">
         <md-icon>error_outline</md-icon>
       </md-button>
 
       <a href="#" data-ng-click="getTagSearchURL($event, $chip.tag)">{{$chip.tag}}
       </a>
 
-      <md-button data-ng-if="!$chip.hasUpVoted && isLoggedIn()" class="md-icon-button" ng-click="upVote($chip)">
+      <md-button data-ng-if="!$chip.hasUpVoted && isAllowed()" class="md-icon-button" ng-click="upVote($chip)">
         <md-icon>plus_one</md-icon>
       </md-button>
-      <md-button data-ng-if="$chip.hasUpVoted && isLoggedIn()" class="md-icon-button" ng-click="removeUpVote($chip)">
+      <md-button data-ng-if="$chip.hasUpVoted && isAllowed()" class="md-icon-button" ng-click="removeUpVote($chip)">
         <md-icon>undo</md-icon>
       </md-button>
 
@@ -25,7 +25,7 @@
       </button>
     </md-chip-template>
   </md-chips>
-  <form name="addTagForm" data-ng-show="isLoggedIn()" ng-submit="addTag()">
+  <form name="addTagForm" data-ng-show="isAllowed()" ng-submit="addTag()">
     <md-input-container class="tags">
       <label data-translate="MATERIAL_ADD_TAG"></label>
       <input name="tag" ng-model="newTag"/>

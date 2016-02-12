@@ -54,7 +54,7 @@ define([
                 };
                 
                 $scope.hasPermission = function() {
-                    return authenticatedUserService.getUser() && authenticatedUserService.getUser().role !== 'RESTRICTED';
+                    return authenticatedUserService.getUser() && !authenticatedUserService.isRestricted();
                 };
             }
         };

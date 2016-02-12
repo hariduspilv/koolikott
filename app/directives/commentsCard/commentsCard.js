@@ -21,7 +21,7 @@ define([
 
                 $scope.isAuthorized = function() {
                 	return authenticatedUserService.isAuthenticated() &&
-                		authenticatedUserService.getUser().role !== 'RESTRICTED';
+                		!authenticatedUserService.isRestricted();
                 }
                 
                 $scope.visibleCommentsCount = COMMENTS_PER_PAGE;
