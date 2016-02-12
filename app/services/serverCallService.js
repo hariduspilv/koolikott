@@ -34,17 +34,7 @@ define(['angularAMD'], function(angularAMD) {
                 error(function(data, status, headers, config) {
                     if (status == '419') {
                         authenticatedUserService.removeAuthenticatedUser();
-
-                        config.headers = {};
-
-                        $http(config).
-                        success(function(data) {
-                            successCallback(data);
-                        }).
-                        error(function(data, status, headers, config) {
-                            errorCallback(data, status);
-                        }).finally(finallyCallback);
-
+                        makeCall(url, method, params, false, successCallback, errorCallback, finallyCallback, transformRequest);
                     } else {
                         errorCallback(data, status);
                     }
@@ -89,16 +79,6 @@ define(['angularAMD'], function(angularAMD) {
                         headers: headers
                     }).then(successCallback, errorCallback).finally(finallyCallback);
                 }
-            };
-
-            
-            var transformaRequest = function (postData, headersGetter) {
-                var formData = new FormData();
-                angular.forEach(postData, function (value, key) {
-                    formData.append(key, value);
-                });
-
-                return formData;
             };
             
             return instance;
