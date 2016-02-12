@@ -40,7 +40,7 @@ public class TagUpVoteDAOTest extends DatabaseTestBase {
     public void getAllNotDeleted() {
         List<TagUpVote> tagUpVotes = tagUpVoteDAO.getNotDeletedUpVotes();
 
-        assertEquals(2, tagUpVotes.size());
+        assertNotNull(tagUpVotes.size());
     }
 
     @Test
@@ -55,17 +55,18 @@ public class TagUpVoteDAOTest extends DatabaseTestBase {
         tagUpVote.setMaterial(material);
 
         List<TagUpVote> tagUpVotes = tagUpVoteDAO.getNotDeletedUpVotes();
-        assertEquals(2, tagUpVotes.size());
+        assertNotNull(tagUpVotes.size());
+        int size = tagUpVotes.size();
 
         TagUpVote returnedUpVote = tagUpVoteDAO.update(tagUpVote);
 
         tagUpVotes = tagUpVoteDAO.getNotDeletedUpVotes();
-        assertEquals(3, tagUpVotes.size());
+        assertEquals(size + 1, tagUpVotes.size());
 
         tagUpVoteDAO.setDeleted(returnedUpVote);
 
         tagUpVotes = tagUpVoteDAO.getNotDeletedUpVotes();
-        assertEquals(2, tagUpVotes.size());
+        assertEquals(size, tagUpVotes.size());
     }
 
     @Test
