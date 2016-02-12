@@ -487,6 +487,7 @@ public class MaterialService {
             material.setTags(tags);
 
             material = materialDao.update(material);
+            searchEngineService.updateIndex();
         } else {
             TagUpVote tagUpVote = new TagUpVote();
             tagUpVote.setMaterial(material);
