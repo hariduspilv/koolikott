@@ -77,7 +77,7 @@ define([
             };
 
             $scope.deleteMetadata = function (index) {
-                $scope.material.metadata.splice(index, 1);
+                $scope.titleDescriptionGroups.splice(index, 1);
             };
 
             $scope.addNewTaxon = function () {
