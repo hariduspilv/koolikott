@@ -244,7 +244,10 @@ define([
             }
 
             function init(material) {
-                var addChapterMaterialUrl = $scope.material.source;
+                if($scope.material) {
+                    var addChapterMaterialUrl = $scope.material.source;
+                }
+
                 storageService.setMaterial(null);
 
                 if (material) {
