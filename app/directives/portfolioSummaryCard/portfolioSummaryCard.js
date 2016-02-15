@@ -62,6 +62,10 @@ define([
                     return authenticatedUserService.isAuthenticated();
                 };
 
+                $scope.isRestricted = function () {
+                    return authenticatedUserService.isRestricted();
+                };
+
                 $scope.editPortfolio = function () {
                     var portfolioId = $route.current.params.id;
                     $location.url("/portfolio/edit?id=" + portfolioId);

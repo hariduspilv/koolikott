@@ -199,6 +199,10 @@ define([
                 return authenticatedUserService.isAdmin();
             };
 
+            $scope.isRestricted = function () {
+                return authenticatedUserService.isRestricted();
+            };
+
             function getSignedUserData() {
                 serverCallService.makeGet("rest/user/getSignedUserData", {}, getSignedUserDataSuccess, getSignedUserDataFail);
             }
