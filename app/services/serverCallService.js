@@ -35,6 +35,8 @@ define(['angularAMD'], function(angularAMD) {
                     if (status == '419') {
                         authenticatedUserService.removeAuthenticatedUser();
                         makeCall(url, method, params, false, successCallback, errorCallback, finallyCallback, transformRequest);
+                    } else if (status == '401') {
+                        $location.url('/');
                     } else {
                         errorCallback(data, status);
                     }
