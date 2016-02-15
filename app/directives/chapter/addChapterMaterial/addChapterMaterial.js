@@ -36,6 +36,9 @@ define([
                                 $scope.chapter.materials.push(material);
                             }
                         }
+                    } else {
+                        $scope.resourcePermalinkForm.url.$setDirty();
+                        $scope.resourcePermalinkForm.url.$setTouched();
                     }
                 };
             }
