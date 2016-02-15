@@ -233,6 +233,7 @@ define([
                 $scope.material.authors = [{}];
                 $scope.material.keyCompetences = [];
                 $scope.material.crossCurricularThemes = [];
+                $scope.material.publishers = [];
             }
 
             function setPublisher() {

@@ -21,6 +21,7 @@ define([
                 };
 
                 $scope.showAddMaterialDialog = function() {
+                    storageService.setMaterial(null);
                     $mdDialog.show(angularAMD.route({
                         templateUrl: 'views/addMaterialDialog/addMaterialDialog.html',
                         controllerUrl: 'views/addMaterialDialog/addMaterialDialog'

@@ -25,8 +25,10 @@ define([
                             'portfolio': $scope.portfolio.id
                         };
                     }
+                    if($scope.isAllowed()) {
+                        getHasReported();
+                    }
 
-                    getHasReported();
                     serverCallService.makeGet("rest/tagUpVotes", upVotesParams, getTagUpVotesSuccess, function () {
                     });
                 }
@@ -158,7 +160,7 @@ define([
                 }
 
                 function requestSuccessful(response) {
-                    if (!$scope.isAdmin) {
+                    if (!$scope.isAdmin()) {
                         $scope.isReportedByUser = response === true;
                     }
                 }
