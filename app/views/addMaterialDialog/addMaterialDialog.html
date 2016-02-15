@@ -2,7 +2,8 @@
   <md-toolbar class="md-accent">
     <div class="md-toolbar-tools" flex>
       <h2>
-        <span data-translate="ADD_MATERIAL"></span>
+        <span data-ng-if="!isUpdateMode" data-translate="ADD_MATERIAL"></span>
+        <span data-ng-if="isUpdateMode" data-translate="MATERIAL_EDIT"></span>
       </h2>
       <span flex></span>
       <md-button ng-click="cancel()" class="md-icon-button" aria-label="Sulge materiali lisamise modaalaken">
