@@ -320,8 +320,8 @@ public class PortfolioService {
     }
 
     public boolean isPortfolioAccessibleToUser(Portfolio portfolio, User loggedInUser) {
-        return (portfolio.getVisibility() != Visibility.PRIVATE || isUserPortfolioCreator(portfolio, loggedInUser)
-                && !portfolio.isDeleted())
+        return (portfolio.getVisibility() != Visibility.PRIVATE
+                || isUserPortfolioCreator(portfolio, loggedInUser) && !portfolio.isDeleted())
                 || isUserAdmin(loggedInUser);
     }
 
@@ -386,16 +386,17 @@ public class PortfolioService {
     }
 
     public Portfolio addTag(Portfolio portfolio, Tag tag, User loggedInUser) {
-        if(portfolio == null) {
+        if (portfolio == null) {
             throw new RuntimeException("Portfolio not found");
         }
 
         List<Tag> tags = portfolio.getTags();
-        if(!tags.contains(tag)) {
+        if (!tags.contains(tag)) {
             tags.add(tag);
             portfolio.setTags(tags);
 
             portfolio = portfolioDAO.update(portfolio);
+            searchEngineService.updateIndex();
         } else {
             TagUpVote tagUpVote = new TagUpVote();
             tagUpVote.setPortfolio(portfolio);
