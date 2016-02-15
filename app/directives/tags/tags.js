@@ -14,8 +14,10 @@ define([
             },
             templateUrl: 'directives/tags/tags.html',
             controller: function ($scope, $mdToast, $translate, serverCallService, searchService, authenticatedUserService, $location) {
+                var allTags;
 
                 function init() {
+                    $scope.showMoreTags = false;
                     if ($scope.material && $scope.material.id) {
                         var upVotesParams = {
                             'material': $scope.material.id
@@ -34,7 +36,14 @@ define([
                 }
 
                 function getTagUpVotesSuccess(upVoteForms) {
-                    $scope.tags = sortTags(upVoteForms);
+                    var tags = sortTags(upVoteForms);
+                    if(tags.length > 9) {
+                        $scope.tags = tags.slice(0, 10);
+                        $scope.showMoreTags = true;
+                        allTags = tags;
+                    } else {
+                        $scope.tags = tags;
+                    }
                 }
 
                 $scope.upVote = function (tag) {
@@ -139,6 +148,16 @@ define([
                     };
 
                     serverCallService.makePut("rest/impropers", entity, setImproperSuccessful, function() {});
+                };
+
+                $scope.showMore = function () {
+                    $scope.tags = allTags;
+                    $scope.showMoreTags = false;
+                };
+
+                $scope.showLess = function () {
+                    $scope.tags = allTags.slice(0, 10);
+                    $scope.showMoreTags = true;
                 };
 
                 function setImproperSuccessful() {

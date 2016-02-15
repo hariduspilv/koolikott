@@ -32,3 +32,18 @@
     </md-input-container>
   </form>
 </div>
+<div layout="row">
+  <md-button data-ng-show="showMoreTags" ng-click="showMore()">
+    <span data-translate="SHOW_MORE"></span>
+    <md-icon class="md-primary" >
+      keyboard_arrow_right
+    </md-icon>
+  </md-button>
+
+  <md-button data-ng-show="!showMoreTags && tags.length > 10" ng-click="showLess()">
+    <span data-translate="SHOW_LESS"></span>
+    <md-icon class="md-primary" >
+      keyboard_arrow_right
+    </md-icon>
+  </md-button>
+</div>
