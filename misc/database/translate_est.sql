@@ -622,4 +622,5 @@ INSERT INTO Translation(translationGroup, translationKey, translation) VALUES
 (1,'LOGIN_STUUDIUM','Stuudium'),
 (1,'LOGIN_SUCCESS','Oled sisse loginud'),
 (1,'MATERIAL_CURRICULUM_LITERATURE','Õppekirjandus'),
-(1,'REASON','Põhjus');
+(1,'REASON','Põhjus'),
+(1,'SHOW_LESS','Näita vähem');

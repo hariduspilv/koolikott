@@ -598,4 +598,5 @@ INSERT INTO Translation(translationGroup, translationKey, translation) VALUES
 (2,'LOGIN_STUUDIUM','Stuudium'),
 (2,'LOGIN_SUCCESS','Вы вошли в систему'),
 (2,'MATERIAL_CURRICULUM_LITERATURE','Учебная литература'),
-(2,'REASON','Причина');
+(2,'REASON','Причина'),
+(2,'SHOW_LESS','Показывай меньше');
