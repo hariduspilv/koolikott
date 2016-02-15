@@ -41,7 +41,7 @@ public class ImproperContentResource extends BaseResource {
     @PUT
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    @RolesAllowed({"USER", "ADMIN", "PUBLISHER", "RESTRICTED"})
+    @RolesAllowed({"USER", "ADMIN", "PUBLISHER"})
     public ImproperContent setImproper(ImproperContent improperContent) {
         if (improperContent.getMaterial() != null && improperContent.getMaterial().getId() != null) {
             Material material = materialService.get(improperContent.getMaterial().getId(), getLoggedInUser());
