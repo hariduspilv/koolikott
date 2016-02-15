@@ -3,7 +3,8 @@ define([
     'angularAMD',
     'services/translationService'
 ], function(app, angularAMD) {
-    app.directive('dopAddChapterMaterial', ['translationService', '$mdDialog', '$rootScope', function(translationService, $mdDialog, $rootScope) {
+    app.directive('dopAddChapterMaterial', ['translationService', '$mdDialog', '$rootScope', 'storageService',
+        function(translationService, $mdDialog, $rootScope, storageService) {
         return {
             scope: {
                 chapter: '='
@@ -19,6 +20,7 @@ define([
                         addMaterialScope.material = {};
                         addMaterialScope.material.source = $scope.chapter.resourcePermalink;
                         addMaterialScope.isChapterMaterial = true;
+                        storageService.setMaterial(null);
 
                         $mdDialog.show(angularAMD.route({
                           templateUrl: 'views/addMaterialDialog/addMaterialDialog.html',
