@@ -5,8 +5,8 @@ define([
     'services/searchService',
     'services/authenticatedUserService'
 ], function (angularAMD) {
-    angularAMD.directive('dopTags',['translationService', '$mdToast', '$translate', 'serverCallService', 'searchService', 'authenticatedUserService', '$location', '$rootScope',
-        function (translationService, $mdToast, $translate, serverCallService, searchService, authenticatedUserService, $location, $rootScope) {
+    angularAMD.directive('dopTags',['translationService', '$mdToast', '$translate', 'serverCallService', 'searchService', 'authenticatedUserService', '$location', '$rootScope', '$mdDialog',
+        function (translationService, $mdToast, $translate, serverCallService, searchService, authenticatedUserService, $location, $rootScope, $mdDialog) {
         return {
             scope: {
                 material: '=',
@@ -141,13 +141,22 @@ define([
                 }
 
                 $scope.reportTag = function (tag) {
-                    var entity = {
-                        material: $scope.material,
-                        portfolio: $scope.portfolio,
-                        reason: "Tag: " + tag
-                    };
 
-                    serverCallService.makePut("rest/impropers", entity, setImproperSuccessful, function() {});
+                    var confirm = $mdDialog.confirm()
+                        .title($translate.instant('REPORT_IMPROPER_TITLE'))
+                        .content($translate.instant('REPORT_IMPROPER_CONTENT') + " " + $translate.instant('REASON') + ": " + tag)
+                        .ok($translate.instant('BUTTON_NOTIFY'))
+                        .cancel($translate.instant('BUTTON_CANCEL'));
+
+                    $mdDialog.show(confirm).then(function () {
+                        var entity = {
+                            material: $scope.material,
+                            portfolio: $scope.portfolio,
+                            reason: "Tag: " + tag
+                        };
+
+                        serverCallService.makePut("rest/impropers", entity, setImproperSuccessful, function () {});
+                    });
                 };
 
                 $scope.showMore = function () {
