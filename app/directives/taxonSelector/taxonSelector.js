@@ -11,7 +11,7 @@ define([
                 disableEducationalContext: '='
             },
             templateUrl: 'directives/taxonSelector/taxonSelector.html',
-            controller: function($scope, serverCallService, $rootScope) {
+            controller: function($scope, serverCallService, $rootScope, $timeout) {
 
                 // get educational contexts
                 if (!EDUCATIONAL_CONTEXTS) {
@@ -30,7 +30,14 @@ define([
 
                 $scope.reset = function(taxon) {
                     $scope.taxon = taxon;
-                }
+                };
+
+                $scope.selectEducationalContext = function() {
+                    $rootScope.dontCloseSearch = true;
+                    $timeout(function() {
+                        $rootScope.dontCloseSearch = false;
+                    }, 500);
+                };
 
                 function addTaxonPathListeners() {
                     /*

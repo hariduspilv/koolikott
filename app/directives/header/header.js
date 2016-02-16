@@ -10,7 +10,7 @@ define([
             return {
                 scope: true,
                 templateUrl: 'directives/header/header.html',
-                controller: function($scope, $location, authenticationService, authenticatedUserService) {
+                controller: function($scope, $location, authenticationService, authenticatedUserService, $rootScope) {
                     $scope.showLanguageSelection = false;
                     $scope.selectedLanguage = translationService.getLanguage();
                     $scope.searchFields = {};
@@ -73,8 +73,10 @@ define([
                     }
 
                     $scope.clickOutside = function() {
-                        if ($scope.detailedSearch.isVisible) {
+                        if ($scope.detailedSearch.isVisible && !$rootScope.dontCloseSearch) {
                             $scope.closeDetailedSearch();
+                        } else if ( $rootScope.dontCloseSearch) {
+                            $rootScope.dontCloseSearch = false;
                         }
                     };
 

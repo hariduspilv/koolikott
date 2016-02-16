@@ -10,7 +10,7 @@ define([
         return {
             scope: true,
             templateUrl: 'directives/editPortfolioModeHeader/editPortfolioModeHeader.html',
-            controller: function ($scope, $location) {
+            controller: function ($scope, $location, $rootScope) {
 
                 $scope.toggleSidenav = function() {
                     $mdSidenav('left').toggle();
@@ -106,8 +106,10 @@ define([
                 };
 
                 $scope.clickOutside = function() {
-                    if ($scope.detailedSearch.isVisible) {
+                    if ($scope.detailedSearch.isVisible &&  !$rootScope.dontCloseSearch) {
                         $scope.closeDetailedSearch();
+                    } else if ( $rootScope.dontCloseSearch) {
+                        $rootScope.dontCloseSearch = false;
                     }
                 };
 
