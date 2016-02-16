@@ -603,4 +603,5 @@ INSERT INTO Translation(translationGroup, translationKey, translation) VALUES
 (3,'LOGIN_SUCCESS','You are logged in'),
 (3,'MATERIAL_CURRICULUM_LITERATURE','Curriculum literature'),
 (3,'REASON','Reason'),
-(3,'SHOW_LESS','Show less');
+(3,'SHOW_LESS','Show less'),
+(3,'MOST_LIKED','Preferred');
