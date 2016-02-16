@@ -24,13 +24,17 @@
           </div>
           <md-tooltip><span data-translate="PORTFOLIO_PHOTO_UPLOAD_HELP"></span></md-tooltip>
         </div>
-        <md-input-container flex="90">
-          <label data-translate="PORTFOLIO_TITLE">Pealkiri</label>
-          <input data-ng-model="newPortfolio.title" id="add-portfolio-title-input" name="title" required>
-          <div data-ng-messages="addPortfolioForm.title.$error" data-ng-show="addPortfolioForm.title.$dirty" multiple>
-            <div data-ng-message="required" data-ng-show="addPortfolioForm.title.$error.required" data-translate="PORTFOLIO_TITLE_IS_MANDATORY"></div>
-          </div>
-        </md-input-container>
+        <form name="addPortfolioForm" flex="90">
+          <md-input-container class="md-block">
+            <label>
+              <span data-translate="PORTFOLIO_TITLE"></span> *
+            </label>
+            <input data-ng-model="newPortfolio.title" id="add-portfolio-title-input" name="title" required>
+            <div data-ng-messages="addPortfolioForm.title.$error" data-ng-show="addPortfolioForm.title.$dirty || addPortfolioForm.title.$touched">
+              <div data-ng-message="required" data-ng-show="addPortfolioForm.title.$error.required" data-translate="PORTFOLIO_TITLE_IS_MANDATORY"></div>
+            </div>
+          </md-input-container>
+        </form>
       </div>
 
       <!-- image preview -->
