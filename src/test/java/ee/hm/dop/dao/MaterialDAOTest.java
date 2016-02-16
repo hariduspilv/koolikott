@@ -21,6 +21,7 @@ import org.junit.Test;
 
 import ee.hm.dop.common.test.DatabaseTestBase;
 import ee.hm.dop.model.Language;
+import ee.hm.dop.model.LearningObject;
 import ee.hm.dop.model.LicenseType;
 import ee.hm.dop.model.Material;
 import ee.hm.dop.model.Recommendation;
@@ -135,12 +136,12 @@ public class MaterialDAOTest extends DatabaseTestBase {
         List<Long> expectedIdList = new ArrayList<>(idList);
         idList.add((long) 11); // deleted, should not return
 
-        List<Material> result = materialDAO.findAllById(idList);
+        List<LearningObject> result = materialDAO.findAllById(idList);
 
         assertNotNull(result);
         assertEquals(3, result.size());
 
-        for (Material material : result) {
+        for (LearningObject material : result) {
             expectedIdList.remove(material.getId());
         }
 
@@ -152,7 +153,7 @@ public class MaterialDAOTest extends DatabaseTestBase {
         List<Long> idList = new ArrayList<>();
         idList.add((long) 1155);
 
-        List<Material> result = materialDAO.findAllById(idList);
+        List<LearningObject> result = materialDAO.findAllById(idList);
 
         assertNotNull(result);
         assertEquals(0, result.size());
@@ -160,7 +161,7 @@ public class MaterialDAOTest extends DatabaseTestBase {
 
     @Test
     public void findAllByIdEmptyList() {
-        List<Material> result = materialDAO.findAllById(new ArrayList<>());
+        List<LearningObject> result = materialDAO.findAllById(new ArrayList<>());
 
         assertNotNull(result);
         assertEquals(0, result.size());
@@ -200,7 +201,7 @@ public class MaterialDAOTest extends DatabaseTestBase {
         byte[] picture = data.getBytes();
         material.setPicture(picture);
 
-        Material updated = materialDAO.update(material);
+        Material updated = (Material) materialDAO.update(material);
 
         Material newMaterial = materialDAO.findByIdNotDeleted(updated.getId());
 
@@ -342,14 +343,14 @@ public class MaterialDAOTest extends DatabaseTestBase {
         User creator = new User();
         creator.setId(1L);
 
-        List<Material> materials = materialDAO.findByCreator(creator);
+        List<LearningObject> materials = materialDAO.findByCreator(creator);
 
         // Should not return material 11 which is deleted
         assertEquals(3, materials.size());
         assertEquals(Long.valueOf(8), materials.get(0).getId());
         assertEquals(Long.valueOf(4), materials.get(1).getId());
         assertEquals(Long.valueOf(1), materials.get(2).getId());
-        assertMaterial1(materials.get(2));
+        assertMaterial1((Material) materials.get(2));
     }
 
     @Test
@@ -525,7 +526,7 @@ public class MaterialDAOTest extends DatabaseTestBase {
             materialDAO.delete(material);
             fail("Exception expected");
         } catch (InvalidParameterException e) {
-            assertEquals("Material does not exist.", e.getMessage());
+            assertEquals("LearningObject does not exist.", e.getMessage());
         }
     }
 

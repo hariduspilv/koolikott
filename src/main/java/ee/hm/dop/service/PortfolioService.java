@@ -54,12 +54,13 @@ public class PortfolioService {
     }
 
     public List<Portfolio> getByCreator(User creator, User loggedInUser) {
-        List<Portfolio> portfolios = portfolioDAO.findByCreator(creator);
+        List<Portfolio> portfolios = new ArrayList<>();
+        portfolioDAO.findByCreator(creator).stream().forEach(portfolio -> portfolios.add((Portfolio) portfolio));
 
-        portfolios = portfolios.stream().filter(p -> isPortfolioVisibleToUser(p, loggedInUser))
+        List<Portfolio> visiblePortfolios = portfolios.stream().filter(p -> isPortfolioVisibleToUser(p, loggedInUser))
                 .collect(Collectors.toList());
 
-        return portfolios;
+        return visiblePortfolios;
     }
 
     public String getPortfolioPicture(Long id, User loggedInUser) {
@@ -120,7 +121,7 @@ public class PortfolioService {
         userLikeDAO.deletePortfolioLike(originalPortfolio, loggedInUser);
 
         UserLike like = new UserLike();
-        like.setPortfolio(originalPortfolio);
+        like.setLearningObject(originalPortfolio);
         like.setCreator(loggedInUser);
         like.setLiked(isLiked);
         like.setAdded(DateTime.now());
@@ -176,7 +177,7 @@ public class PortfolioService {
 
         originalPortfolio.setRecommendation(recommendation);
 
-        originalPortfolio = portfolioDAO.update(originalPortfolio);
+        originalPortfolio = (Portfolio) portfolioDAO.update(originalPortfolio);
         searchEngineService.updateIndex();
 
         return originalPortfolio.getRecommendation();
@@ -213,7 +214,7 @@ public class PortfolioService {
         portfolio.setOriginalCreator(originalCreator);
         portfolio.setVisibility(Visibility.PRIVATE);
 
-        Portfolio createdPortfolio = portfolioDAO.update(portfolio);
+        Portfolio createdPortfolio = (Portfolio) portfolioDAO.update(portfolio);
         searchEngineService.updateIndex();
 
         return createdPortfolio;
@@ -224,7 +225,7 @@ public class PortfolioService {
 
         originalPortfolio = setPortfolioUpdatableFields(originalPortfolio, portfolio);
 
-        Portfolio updatedPortfolio = portfolioDAO.update(originalPortfolio);
+        Portfolio updatedPortfolio = (Portfolio) portfolioDAO.update(originalPortfolio);
         searchEngineService.updateIndex();
 
         return updatedPortfolio;
@@ -243,7 +244,7 @@ public class PortfolioService {
 
         originalPortfolio.setPicture(portfolio.getPicture());
         originalPortfolio.setHasPicture(portfolio.getPicture() != null);
-        return portfolioDAO.update(originalPortfolio);
+        return (Portfolio) portfolioDAO.update(originalPortfolio);
     }
 
     private Portfolio validateUpdate(Portfolio portfolio, User loggedInUser) {
@@ -320,8 +321,8 @@ public class PortfolioService {
     }
 
     public boolean isPortfolioAccessibleToUser(Portfolio portfolio, User loggedInUser) {
-        return (portfolio.getVisibility() != Visibility.PRIVATE
-                || isUserPortfolioCreator(portfolio, loggedInUser) && !portfolio.isDeleted())
+        return (portfolio.getVisibility() != Visibility.PRIVATE || isUserPortfolioCreator(portfolio, loggedInUser)
+                && !portfolio.isDeleted())
                 || isUserAdmin(loggedInUser);
     }
 
@@ -382,7 +383,9 @@ public class PortfolioService {
     }
 
     public List<Portfolio> getDeletedPortfolios() {
-        return portfolioDAO.getDeletedPortfolios();
+        List<Portfolio> portfolios = new ArrayList<>();
+        portfolioDAO.getDeletedPortfolios().stream().forEach(portfolio -> portfolios.add((Portfolio) portfolio));
+        return portfolios;
     }
 
     public Portfolio addTag(Portfolio portfolio, Tag tag, User loggedInUser) {
@@ -395,7 +398,7 @@ public class PortfolioService {
             tags.add(tag);
             portfolio.setTags(tags);
 
-            portfolio = portfolioDAO.update(portfolio);
+            portfolio = (Portfolio) portfolioDAO.update(portfolio);
             searchEngineService.updateIndex();
         } else {
             TagUpVote tagUpVote = new TagUpVote();

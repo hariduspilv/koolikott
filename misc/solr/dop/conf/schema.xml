@@ -121,9 +121,15 @@
      installations. See the <uniqueKey> declaration below where <uniqueKey> is set to "id".
    -->   
   <!-- Common to ALL entities -->
-   <field name="uniqueKey" type="string" indexed="true" stored="true" required="true"/>
-   <field name="id" type="string" indexed="true" stored="true" required="true" multiValued="false" />
-   <field name="type" type="string" indexed="true" stored="true" required="true" multiValued="false" />
+  <field name="id" type="string" indexed="true" stored="true" required="true" multiValued="false" />
+  <field name="type" type="string" indexed="true" stored="true" required="true" multiValued="false" />
+
+  <!-- Learning Object -->
+  <field name="target_group" type="text_general" indexed="true" stored="false" multiValued="true"/>
+  <field name="cross_curricular_theme" type="text_general" indexed="true" stored="false" multiValued="true"/>
+  <field name="key_competence" type="text_general" indexed="true" stored="false" multiValued="true"/>
+  <field name="tag" type="text_general" indexed="true" stored="false" multiValued="true" omitNorms="true"/>
+  <field name="like_score" type="int" indexed="true" stored="true" multiValued="false"/>
 
    <!-- Material & Portfolio -->
    <field name="title" type="text_general" indexed="true" stored="false" multiValued="true"/>
@@ -134,15 +140,10 @@
    <field name="subtopic" type="text_general" indexed="true" stored="false" multiValued="true"/>
    <field name="specialization" type="text_general" indexed="true" stored="false" multiValued="true"/>
    <field name="module" type="text_general" indexed="true" stored="false" multiValued="true"/>
-   <field name="tag" type="text_general" indexed="true" stored="false" multiValued="true" omitNorms="true"/>
    <field name="tag_up_vote" type="text_general" indexed="false" stored="false" multiValued="true"/>
-   <field name="target_group" type="text_general" indexed="true" stored="false" multiValued="true"/>
-   <field name="cross_curricular_theme" type="text_general" indexed="true" stored="false" multiValued="true"/>
-   <field name="key_competence" type="text_general" indexed="true" stored="false" multiValued="true"/>
    <field name="created" type="tdate" indexed="true" stored="false" multiValued="false"/>
    <field name="recommended" type="boolean" indexed="true" stored="false" multiValued="false"/>
    <field name="recommendation_timestamp" type="tdate" indexed="true" stored="false" multiValued="false"/>
-   <field name="like_score" type="int" indexed="true" stored="false" multiValued="false"/>
 
    <!-- Material -->
    <field name="description" type="text_general" indexed="true" stored="false" multiValued="true"/>
@@ -174,7 +175,7 @@
  <!-- Field to use to determine and enforce document uniqueness. 
       Unless this field is marked with required="false", it will be a required field
    -->
- <uniqueKey>uniqueKey</uniqueKey>
+ <uniqueKey>id</uniqueKey>
 
   <!-- copyField commands copy one field to another at the time a document
         is added to the index.  It's used either to index the same field differently,

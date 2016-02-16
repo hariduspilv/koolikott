@@ -52,8 +52,8 @@ public class PortfolioResourceTest extends ResourceIntegrationTestBase {
 
     @Test
     public void getPortfolio() {
-        Portfolio portfolio = getPortfolio(1);
-        assertPortfolio1(portfolio);
+        Portfolio portfolio = getPortfolio(101);
+        assertPortfolio101(portfolio);
     }
 
     @Test
@@ -65,7 +65,7 @@ public class PortfolioResourceTest extends ResourceIntegrationTestBase {
     @Test
     public void getPrivatePortfolioAsCreator() {
         login("38011550077");
-        Long id = 7L;
+        Long id = 107L;
 
         Portfolio portfolio = getPortfolio(id);
 
@@ -85,7 +85,7 @@ public class PortfolioResourceTest extends ResourceIntegrationTestBase {
     @Test
     public void getPrivatePortfolioAsAdmin() {
         login("89898989898");
-        Long id = 7L;
+        Long id = 107L;
 
         Portfolio portfolio = getPortfolio(id);
 
@@ -103,9 +103,9 @@ public class PortfolioResourceTest extends ResourceIntegrationTestBase {
         assertEquals(3, portfolios.size());
 
         Set<Long> expectedPortfolios = new HashSet<>();
-        expectedPortfolios.add(Long.valueOf(3));
-        expectedPortfolios.add(Long.valueOf(1));
-        expectedPortfolios.add(Long.valueOf(14));
+        expectedPortfolios.add(Long.valueOf(103));
+        expectedPortfolios.add(Long.valueOf(101));
+        expectedPortfolios.add(Long.valueOf(114));
 
         expectedPortfolios.remove(portfolios.get(0).getId());
         expectedPortfolios.remove(portfolios.get(1).getId());
@@ -122,7 +122,7 @@ public class PortfolioResourceTest extends ResourceIntegrationTestBase {
                 });
 
         assertEquals(1, portfolios.size());
-        assertEquals(Long.valueOf(9), portfolios.get(0).getId());
+        assertEquals(Long.valueOf(109), portfolios.get(0).getId());
     }
 
     @Test
@@ -135,7 +135,7 @@ public class PortfolioResourceTest extends ResourceIntegrationTestBase {
                 });
 
         assertEquals(3, portfolios.size());
-        List<Long> expectedIds = Arrays.asList(9L, 10L, 11L);
+        List<Long> expectedIds = Arrays.asList(109L, 110L, 111L);
         List<Long> actualIds = portfolios.stream().map(p -> p.getId()).collect(Collectors.toList());
         assertTrue(actualIds.containsAll(expectedIds));
     }
@@ -150,7 +150,7 @@ public class PortfolioResourceTest extends ResourceIntegrationTestBase {
                 });
 
         assertEquals(3, portfolios.size());
-        List<Long> expectedIds = Arrays.asList(9L, 10L, 11L);
+        List<Long> expectedIds = Arrays.asList(109L, 110L, 111L);
         List<Long> actualIds = portfolios.stream().map(p -> p.getId()).collect(Collectors.toList());
         assertTrue(actualIds.containsAll(expectedIds));
     }
@@ -189,7 +189,7 @@ public class PortfolioResourceTest extends ResourceIntegrationTestBase {
 
     @Test
     public void getPortfolioPicture() {
-        long portfolioId = 1;
+        long portfolioId = 101;
         Response response = doGet(format(GET_PORTFOLIO_PICTURE_URL, portfolioId), MediaType.WILDCARD_TYPE);
         byte[] picture = response.readEntity(new GenericType<byte[]>() {
         });
@@ -243,7 +243,7 @@ public class PortfolioResourceTest extends ResourceIntegrationTestBase {
 
     @Test
     public void increaseViewCount() {
-        long id = 3;
+        long id = 103;
         Portfolio portfolioBefore = getPortfolio(id);
 
         Portfolio portfolio = new Portfolio();
@@ -284,7 +284,7 @@ public class PortfolioResourceTest extends ResourceIntegrationTestBase {
     public void updateChanginMetadataNoChapters() {
         login("39011220011");
 
-        Portfolio portfolio = getPortfolio(5);
+        Portfolio portfolio = getPortfolio(105);
         String originalTitle = portfolio.getTitle();
         portfolio.setTitle("New mega nice title that I come with Yesterday night!");
 
@@ -299,7 +299,7 @@ public class PortfolioResourceTest extends ResourceIntegrationTestBase {
     public void updateSomeoneElsesPortfolio() {
         login("38011550077");
 
-        Portfolio portfolio = getPortfolio(5);
+        Portfolio portfolio = getPortfolio(105);
         portfolio.setTitle("This is not my portfolio.");
 
         // Set creator to the current logged in user
@@ -321,7 +321,7 @@ public class PortfolioResourceTest extends ResourceIntegrationTestBase {
         newChapter.setTitle("New chapter 1");
         chapters.add(newChapter);
 
-        Portfolio portfolio = getPortfolio(5);
+        Portfolio portfolio = getPortfolio(105);
         portfolio.setChapters(chapters);
 
         Portfolio updatedPortfolio = doPost(UPDATE_PORTFOLIO_URL, portfolio, Portfolio.class);
@@ -346,7 +346,7 @@ public class PortfolioResourceTest extends ResourceIntegrationTestBase {
 
         chapters.add(newChapter);
 
-        Portfolio portfolio = getPortfolio(5);
+        Portfolio portfolio = getPortfolio(105);
         portfolio.setChapters(chapters);
 
         Portfolio updatedPortfolio = doPost(UPDATE_PORTFOLIO_URL, portfolio, Portfolio.class);
@@ -369,7 +369,7 @@ public class PortfolioResourceTest extends ResourceIntegrationTestBase {
         subchapters.add(subChapter);
         newChapter.setSubchapters(subchapters);
 
-        Portfolio portfolio = getPortfolio(5);
+        Portfolio portfolio = getPortfolio(105);
         portfolio.getChapters().add(newChapter);
 
         Portfolio updatedPortfolio = doPost(UPDATE_PORTFOLIO_URL, portfolio, Portfolio.class);
@@ -385,7 +385,7 @@ public class PortfolioResourceTest extends ResourceIntegrationTestBase {
     public void updateChangingVisibility() {
         login("38011550077");
 
-        Portfolio portfolio = getPortfolio(6);
+        Portfolio portfolio = getPortfolio(106);
         portfolio.setVisibility(Visibility.NOT_LISTED);
 
         Portfolio updatedPortfolio = doPost(UPDATE_PORTFOLIO_URL, portfolio, Portfolio.class);
@@ -398,7 +398,7 @@ public class PortfolioResourceTest extends ResourceIntegrationTestBase {
         login("38011550077");
 
         Portfolio portfolio = new Portfolio();
-        portfolio.setId(1L);
+        portfolio.setId(101L);
 
         Portfolio copiedPortfolio = doPost(PORTFOLIO_COPY_URL, portfolio, Portfolio.class);
 
@@ -410,7 +410,7 @@ public class PortfolioResourceTest extends ResourceIntegrationTestBase {
     @Test
     public void copyPrivatePortfolioNotLoggedIn() {
         Portfolio portfolio = new Portfolio();
-        portfolio.setId(7L);
+        portfolio.setId(107L);
 
         Response response = doPost(PORTFOLIO_COPY_URL, Entity.entity(portfolio, MediaType.APPLICATION_JSON_TYPE));
         assertEquals(Status.UNAUTHORIZED.getStatusCode(), response.getStatus());
@@ -421,7 +421,7 @@ public class PortfolioResourceTest extends ResourceIntegrationTestBase {
         login("39011220011");
 
         Portfolio portfolio = new Portfolio();
-        portfolio.setId(7L);
+        portfolio.setId(107L);
 
         Response response = doPost(PORTFOLIO_COPY_URL, Entity.entity(portfolio, MediaType.APPLICATION_JSON_TYPE));
         assertEquals(Status.INTERNAL_SERVER_ERROR.getStatusCode(), response.getStatus());
@@ -433,7 +433,7 @@ public class PortfolioResourceTest extends ResourceIntegrationTestBase {
         Long userId = 2L;
 
         Portfolio portfolio = new Portfolio();
-        portfolio.setId(7L);
+        portfolio.setId(107L);
 
         Response response = doPost(PORTFOLIO_COPY_URL, Entity.entity(portfolio, MediaType.APPLICATION_JSON_TYPE));
         assertEquals(Status.OK.getStatusCode(), response.getStatus());
@@ -447,7 +447,7 @@ public class PortfolioResourceTest extends ResourceIntegrationTestBase {
         login("89012378912");
 
         Portfolio portfolio = new Portfolio();
-        portfolio.setId(12L);
+        portfolio.setId(112L);
 
         Response response = doPost(DELETE_PORTFOLIO_URL, Entity.entity(portfolio, MediaType.APPLICATION_JSON_TYPE));
         assertEquals(Status.NO_CONTENT.getStatusCode(), response.getStatus());
@@ -458,7 +458,7 @@ public class PortfolioResourceTest extends ResourceIntegrationTestBase {
         login("89898989898");
 
         Portfolio portfolio = new Portfolio();
-        portfolio.setId(13L);
+        portfolio.setId(113L);
 
         Response response = doPost(DELETE_PORTFOLIO_URL, Entity.entity(portfolio, MediaType.APPLICATION_JSON_TYPE));
         assertEquals(Status.NO_CONTENT.getStatusCode(), response.getStatus());
@@ -469,7 +469,7 @@ public class PortfolioResourceTest extends ResourceIntegrationTestBase {
         login("89012378912");
 
         Portfolio portfolio = new Portfolio();
-        portfolio.setId(1L);
+        portfolio.setId(101L);
 
         Response response = doPost(DELETE_PORTFOLIO_URL, Entity.entity(portfolio, MediaType.APPLICATION_JSON_TYPE));
         assertEquals(Status.INTERNAL_SERVER_ERROR.getStatusCode(), response.getStatus());
@@ -478,7 +478,7 @@ public class PortfolioResourceTest extends ResourceIntegrationTestBase {
     @Test
     public void deletePortfolioNotLoggedIn() {
         Portfolio portfolio = new Portfolio();
-        portfolio.setId(1L);
+        portfolio.setId(101L);
 
         Response response = doPost(DELETE_PORTFOLIO_URL, Entity.entity(portfolio, MediaType.APPLICATION_JSON_TYPE));
         assertEquals(Status.UNAUTHORIZED.getStatusCode(), response.getStatus());
@@ -486,7 +486,7 @@ public class PortfolioResourceTest extends ResourceIntegrationTestBase {
 
     @Test
     public void addPicture() throws IOException {
-        long portfolioId = 14;
+        long portfolioId = 114;
         login("39011220013");
 
         final FileDataBodyPart filePart = new FileDataBodyPart("picture", FileUtils.getFile("bookCover.jpg"));
@@ -509,7 +509,7 @@ public class PortfolioResourceTest extends ResourceIntegrationTestBase {
 
     @Test
     public void recommendPortfolio() {
-        long portfolioId = 3L;
+        long portfolioId = 103L;
 
         login("38011550077");
         Portfolio portfolio = getPortfolio(portfolioId);
@@ -530,7 +530,7 @@ public class PortfolioResourceTest extends ResourceIntegrationTestBase {
 
     @Test
     public void removedPortfolioRecommendation() {
-        long portfolioId = 3L;
+        long portfolioId = 103L;
 
         login("38011550077");
         Portfolio portfolio = getPortfolio(portfolioId);
@@ -623,11 +623,11 @@ public class PortfolioResourceTest extends ResourceIntegrationTestBase {
         return doGet(format(GET_PORTFOLIO_URL, id), Portfolio.class);
     }
 
-    private void assertPortfolio1(Portfolio portfolio) {
+    private void assertPortfolio101(Portfolio portfolio) {
         assertNotNull(portfolio);
-        assertEquals(Long.valueOf(1), portfolio.getId());
+        assertEquals(Long.valueOf(101), portfolio.getId());
         assertEquals("The new stock market", portfolio.getTitle());
-        assertEquals(new DateTime("2000-12-29T08:00:01.000+02:00"), portfolio.getCreated());
+        assertEquals(new DateTime("2000-12-29T08:00:01.000+02:00"), portfolio.getAdded());
         assertEquals(new DateTime("2004-12-29T08:00:01.000+02:00"), portfolio.getUpdated());
         assertEquals("Mathematics", portfolio.getTaxon().getName());
         assertEquals(new Long(6), portfolio.getCreator().getId());

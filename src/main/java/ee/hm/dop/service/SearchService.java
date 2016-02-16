@@ -16,8 +16,7 @@ import org.apache.solr.client.solrj.util.ClientUtils;
 
 import com.google.common.collect.ImmutableSet;
 
-import ee.hm.dop.dao.MaterialDAO;
-import ee.hm.dop.dao.PortfolioDAO;
+import ee.hm.dop.dao.LearningObjectDAO;
 import ee.hm.dop.model.CrossCurricularTheme;
 import ee.hm.dop.model.KeyCompetence;
 import ee.hm.dop.model.Language;
@@ -54,10 +53,7 @@ public class SearchService {
     private SearchEngineService searchEngineService;
 
     @Inject
-    private MaterialDAO materialDAO;
-
-    @Inject
-    private PortfolioDAO portfolioDAO;
+    private LearningObjectDAO learningObjectDAO;
 
     public SearchResult search(String query, long start, Long limit, SearchFilter searchFilter) {
         return search(query, start, limit, searchFilter, null);
@@ -98,27 +94,16 @@ public class SearchService {
     }
 
     private List<Searchable> retrieveSearchedItems(List<Document> documents) {
-        List<Long> materialIds = new ArrayList<>();
-        List<Long> portfolioIds = new ArrayList<>();
+        List<Long> learningObjectIds = new ArrayList<>();
         for (Document document : documents) {
-            switch (document.getType()) {
-                case MATERIAL_TYPE:
-                    materialIds.add(document.getId());
-                    break;
-                case PORTFOLIO_TYPE:
-                    portfolioIds.add(document.getId());
-                    break;
-            }
+            learningObjectIds.add(document.getId());
         }
 
         List<Searchable> unsortedSearchable = new ArrayList<>();
 
-        if (!materialIds.isEmpty()) {
-            unsortedSearchable.addAll(materialDAO.findAllById(materialIds));
-        }
-
-        if (!portfolioIds.isEmpty()) {
-            unsortedSearchable.addAll(portfolioDAO.findAllById(portfolioIds));
+        if (!learningObjectIds.isEmpty()) {
+            learningObjectDAO.findAllById(learningObjectIds).stream()
+                    .forEach(learningObject -> unsortedSearchable.add((Searchable) learningObject));
         }
 
         return unsortedSearchable;

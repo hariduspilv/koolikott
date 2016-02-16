@@ -1,57 +1,30 @@
 package ee.hm.dop.dao;
 
-import java.security.InvalidParameterException;
 import java.util.List;
 
-import javax.inject.Inject;
-import javax.persistence.EntityManager;
-import javax.persistence.NoResultException;
 import javax.persistence.TypedQuery;
 
-import org.joda.time.DateTime;
-
+import ee.hm.dop.model.LearningObject;
 import ee.hm.dop.model.Material;
 import ee.hm.dop.model.Repository;
 import ee.hm.dop.model.User;
 
-public class MaterialDAO {
+public class MaterialDAO extends LearningObjectDAO {
 
-    @Inject
-    private EntityManager entityManager;
-
+    @Override
     public Material findByIdNotDeleted(long materialId) {
-        TypedQuery<Material> findByCode = entityManager.createQuery(
-                "SELECT m FROM Material m WHERE m.id = :id AND m.deleted = false", Material.class);
-
-        Material material = null;
-        try {
-            material = findByCode.setParameter("id", materialId)
-                    .getSingleResult();
-        } catch (NoResultException ex) {
-            // ignore
-        }
-
-        return material;
+        return castTo(Material.class, super.findByIdNotDeleted(materialId));
     }
 
+    @Override
     public Material findById(long materialId) {
-        TypedQuery<Material> findByCode = entityManager.createQuery(
-                "SELECT m FROM Material m WHERE m.id = :id", Material.class);
-
-        Material material = null;
-        try {
-            material = findByCode.setParameter("id", materialId).getSingleResult();
-        } catch (NoResultException ex) {
-            // ignore
-        }
-
-        return material;
+        return castTo(Material.class, super.findById(materialId));
     }
 
-    public List<Material> getDeletedMaterials() {
-        TypedQuery<Material> query = entityManager.createQuery("SELECT m FROM Material m WHERE m.deleted = true",
-                Material.class);
-        return query.getResultList();
+    public List<LearningObject> getDeletedMaterials() {
+        List<LearningObject> learningObjects = super.getDeletedLearningObjects();
+        removeNot(Material.class, learningObjects);
+        return learningObjects;
     }
 
     /**
@@ -62,10 +35,11 @@ public class MaterialDAO {
      *            the list with materials id
      * @return a list of materials specified by idList
      */
-    public List<Material> findAllById(List<Long> idList) {
-        TypedQuery<Material> findAllByIdList = entityManager
-                .createQuery("SELECT m FROM Material m WHERE m.deleted = false AND m.id in :idList", Material.class);
-        return findAllByIdList.setParameter("idList", idList).getResultList();
+    @Override
+    public List<LearningObject> findAllById(List<Long> idList) {
+        List<LearningObject> learningObjects = super.findAllById(idList);
+        removeNot(Material.class, learningObjects);
+        return learningObjects;
     }
 
     public List<Material> findNewestMaterials(int numberOfMaterials) {
@@ -79,70 +53,18 @@ public class MaterialDAO {
                 .setMaxResults(numberOfMaterials).getResultList();
     }
 
-    public Material update(Material material) {
-        if (material.getId() != null) {
-            material.setUpdated(DateTime.now());
-        } else {
-            material.setAdded(DateTime.now());
-        }
-
-        Material merged = entityManager.merge(material);
-        entityManager.persist(merged);
-        return merged;
-    }
-
-    public void delete(Material material) {
-        setDeleted(material, true);
-    }
-
-    public void restore(Material material) {
-        setDeleted(material, false);
-    }
-
-    private void setDeleted(Material material, boolean deleted) {
-        if (material.getId() == null) {
-            throw new InvalidParameterException("Material does not exist.");
-        }
-
-        material.setDeleted(deleted);
-        update(material);
-    }
-
-    /**
-     * For testing purposes.
-     *
-     * @param material
-     */
-    protected void remove(Material material) {
-        entityManager.remove(material);
-    }
-
     public byte[] findNotDeletedPictureByMaterial(Material material) {
-        TypedQuery<byte[]> findById = entityManager
-                .createQuery("SELECT m.picture FROM Material m WHERE m.id = :id AND m.deleted = false", byte[].class);
+        TypedQuery<byte[]> findById = entityManager.createQuery(
+                "SELECT m.picture FROM Material m WHERE m.id = :id AND m.deleted = false", byte[].class);
 
-        byte[] picture = getBytes(material, findById);
-
-        return picture;
-    }
-
-    private byte[] getBytes(Material material, TypedQuery<byte[]> findById) {
-        byte[] picture = null;
-        try {
-            picture = findById.setParameter("id", material.getId()).getSingleResult();
-        } catch (NoResultException ex) {
-            // ignore
-        }
-        return picture;
+        return getBytes(material, findById);
     }
 
     public byte[] findPictureByMaterial(Material material) {
-        TypedQuery<byte[]> findById = entityManager
-                .createQuery("SELECT m.picture FROM Material m WHERE m.id = :id", byte[].class);
+        TypedQuery<byte[]> findById = entityManager.createQuery("SELECT m.picture FROM Material m WHERE m.id = :id",
+                byte[].class);
 
-        byte[] picture = getBytes(material, findById);
-
-        return picture;
+        return getBytes(material, findById);
     }
 
     public Material findByRepositoryAndRepositoryIdentifier(Repository repository, String repositoryIdentifier) {
@@ -156,18 +78,6 @@ public class MaterialDAO {
         return getSingleResult(query);
     }
 
-    private <T> T getSingleResult(TypedQuery<T> query) {
-        T singleResult = null;
-
-        try {
-            singleResult = query.getSingleResult();
-        } catch (NoResultException ex) {
-            // ignore
-        }
-
-        return singleResult;
-    }
-
     /**
      * Find all materials with the specified creator. Materials are ordered by
      * added date with newest first.
@@ -176,9 +86,10 @@ public class MaterialDAO {
      *            User who created the materials
      * @return A list of materials
      */
-    public List<Material> findByCreator(User creator) {
-        String query = "SELECT m FROM Material m WHERE m.creator.id = :creatorId AND m.deleted = false order by added desc";
-        TypedQuery<Material> findAllByCreator = entityManager.createQuery(query, Material.class);
-        return findAllByCreator.setParameter("creatorId", creator.getId()).getResultList();
+    @Override
+    public List<LearningObject> findByCreator(User creator) {
+        List<LearningObject> learningObjects = super.findByCreator(creator);
+        removeNot(Material.class, learningObjects);
+        return learningObjects;
     }
 }

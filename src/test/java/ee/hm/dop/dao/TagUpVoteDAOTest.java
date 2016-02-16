@@ -84,7 +84,7 @@ public class TagUpVoteDAOTest extends DatabaseTestBase {
     public void getUpVoteForPortfolio() {
         User user = userDAO.findUserByIdCode("39011220011");
         Tag tag = tagDAO.findTagByName("matemaatika");
-        Portfolio portfolio = portfolioDAO.findByIdFromAll(1l);
+        Portfolio portfolio = portfolioDAO.findByIdFromAll(101l);
 
         TagUpVote tagUpVote = tagUpVoteDAO.getTagUpVote(tag, user, portfolio);
         assertNotNull(tagUpVote);
@@ -104,7 +104,7 @@ public class TagUpVoteDAOTest extends DatabaseTestBase {
     @Test
     public void getPortfolioTagUpVotes() {
         Tag tag = tagDAO.findTagByName("matemaatika");
-        Portfolio portfolio = portfolioDAO.findByIdFromAll(1l);
+        Portfolio portfolio = portfolioDAO.findByIdFromAll(101l);
 
         List<TagUpVote> tagUpVotes = tagUpVoteDAO.getPortfolioTagUpVotes(portfolio, tag);
         assertNotNull(tagUpVotes);

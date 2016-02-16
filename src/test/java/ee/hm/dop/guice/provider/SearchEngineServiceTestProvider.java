@@ -35,7 +35,7 @@ class SearchEngineServiceMock implements SearchEngineService {
 
     private static final Table<String, String, List<Document>> sortedSearchResponses = HashBasedTable.create();
 
-    private static final Long[] portfolioIds = { 1L, 2L, 3L, 4L };
+    private static final Long[] portfolioIds = { 101L, 102L, 103L, 104L };
 
     private static final int RESULTS_PER_PAGE = 3;
 

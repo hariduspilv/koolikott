@@ -18,11 +18,11 @@ import org.easymock.TestSubject;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import ee.hm.dop.dao.MaterialDAO;
-import ee.hm.dop.dao.PortfolioDAO;
+import ee.hm.dop.dao.LearningObjectDAO;
 import ee.hm.dop.model.CrossCurricularTheme;
 import ee.hm.dop.model.KeyCompetence;
 import ee.hm.dop.model.Language;
+import ee.hm.dop.model.LearningObject;
 import ee.hm.dop.model.Material;
 import ee.hm.dop.model.Portfolio;
 import ee.hm.dop.model.ResourceType;
@@ -50,10 +50,7 @@ public class SearchServiceTest {
     private SearchEngineService searchEngineService;
 
     @Mock
-    private MaterialDAO materialDAO;
-
-    @Mock
-    private PortfolioDAO portfolioDAO;
+    private LearningObjectDAO learningObjectDAO;
 
     @TestSubject
     private SearchService searchService = new SearchService();
@@ -91,13 +88,16 @@ public class SearchServiceTest {
         searchables.add(portfolio2);
 
         SearchResponse searchResponse = createSearchResponseWithDocuments(searchables, start, searchables.size());
+        List<Long> learningObjectIdentifiers = getIdentifiers(searchables);
+        List<LearningObject> learningObjects = new ArrayList<>();
+
         List<Material> materials = collectMaterialsFrom(searchables);
-        List<Long> materialIdentifiers = getIdentifiers(materials);
-        materials.remove(material1);
+        learningObjects.addAll(materials);
+        learningObjects.remove(material1);
 
         List<Portfolio> portfolios = collectPortfoliosFrom(searchables);
-        List<Long> portfoliosIdentifiers = getIdentifiers(portfolios);
-        portfolios.remove(portfolio2);
+        learningObjects.addAll(portfolios);
+        learningObjects.remove(portfolio2);
 
         // Have to remove from searchables as well so we can compare the return
         // with the expected
@@ -105,8 +105,7 @@ public class SearchServiceTest {
         searchables.remove(portfolio2);
 
         expect(searchEngineService.search(tokenizedQuery, start, null)).andReturn(searchResponse);
-        expect(materialDAO.findAllById(materialIdentifiers)).andReturn(materials);
-        expect(portfolioDAO.findAllById(portfoliosIdentifiers)).andReturn(portfolios);
+        expect(learningObjectDAO.findAllById(learningObjectIdentifiers)).andReturn(learningObjects);
 
         replayAll();
 
@@ -1072,10 +1071,13 @@ public class SearchServiceTest {
             long start, Long limit, long totalResults, SearchFilter searchFilter, User loggedInUser) {
         SearchResponse searchResponse = createSearchResponseWithDocuments(searchables, start, totalResults);
 
+        List<LearningObject> learningObjects = new ArrayList<>();
+        List<Long> learningObjectIdentifiers = getIdentifiers(searchables);
+
         List<Material> materials = collectMaterialsFrom(searchables);
-        List<Long> materialIdentifiers = getIdentifiers(materials);
+        learningObjects.addAll(materials);
         List<Portfolio> portfolios = collectPortfoliosFrom(searchables);
-        List<Long> portfoliosIdentifiers = getIdentifiers(portfolios);
+        learningObjects.addAll(portfolios);
 
         if (limit == null) {
             expect(searchEngineService.search(tokenizedQuery, start, expectedSort)).andReturn(searchResponse);
@@ -1083,13 +1085,7 @@ public class SearchServiceTest {
             expect(searchEngineService.search(tokenizedQuery, start, limit, expectedSort)).andReturn(searchResponse);
         }
 
-        if (!materialIdentifiers.isEmpty()) {
-            expect(materialDAO.findAllById(materialIdentifiers)).andReturn(materials);
-        }
-
-        if (!portfoliosIdentifiers.isEmpty()) {
-            expect(portfolioDAO.findAllById(portfoliosIdentifiers)).andReturn(portfolios);
-        }
+        expect(learningObjectDAO.findAllById(learningObjectIdentifiers)).andReturn(learningObjects);
 
         replayAll();
 
@@ -1105,21 +1101,20 @@ public class SearchServiceTest {
     private void testSearch(String query, String tokenizedQuery, String expectedSort, List<Searchable> searchables,
             long start, Long limit, SearchFilter searchFilter) {
         if (limit == null) {
-            testSearch(query, tokenizedQuery, expectedSort, searchables, start, limit, searchables.size(), searchFilter,
-                    null);
+            testSearch(query, tokenizedQuery, expectedSort, searchables, start, limit, searchables.size(),
+                    searchFilter, null);
         } else {
             testSearch(query, tokenizedQuery, expectedSort, searchables, start, limit, limit, searchFilter, null);
         }
     }
 
-    private List<Long> getIdentifiers(List<? extends Searchable> searchables) {
+    private List<Long> getIdentifiers(List<Searchable> searchables) {
         List<Long> identifiers = new ArrayList<>();
         searchables.stream().forEach(s -> identifiers.add(s.getId()));
         return identifiers;
     }
 
-    private SearchResponse createSearchResponseWithDocuments(List<Searchable> searchables, long start,
-            long totalResults) {
+    private SearchResponse createSearchResponseWithDocuments(List<Searchable> searchables, long start, long totalResults) {
         List<Document> documents = new ArrayList<>();
         for (Searchable searchable : searchables) {
             Document newDocument = new Document();
@@ -1170,11 +1165,11 @@ public class SearchServiceTest {
     }
 
     private void replayAll() {
-        replay(searchEngineService, materialDAO, portfolioDAO);
+        replay(searchEngineService, learningObjectDAO);
     }
 
     private void verifyAll() {
-        verify(searchEngineService, materialDAO, portfolioDAO);
+        verify(searchEngineService, learningObjectDAO);
     }
 
     private Material createMaterial(Long id) {

@@ -3,6 +3,7 @@ package ee.hm.dop.service;
 import static java.lang.String.format;
 import static org.apache.commons.lang3.StringUtils.isEmpty;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -202,7 +203,7 @@ public class MaterialService {
         userLikeDAO.deleteMaterialLike(originalMaterial, loggedInUser);
 
         UserLike like = new UserLike();
-        like.setMaterial(originalMaterial);
+        like.setLearningObject(originalMaterial);
         like.setCreator(loggedInUser);
         like.setLiked(isLiked);
         like.setAdded(DateTime.now());
@@ -224,7 +225,7 @@ public class MaterialService {
         recommendation.setAdded(DateTime.now());
         originalMaterial.setRecommendation(recommendation);
 
-        originalMaterial = materialDao.update(originalMaterial);
+        originalMaterial = (Material) materialDao.update(originalMaterial);
 
         searchEngineService.updateIndex();
 
@@ -334,7 +335,7 @@ public class MaterialService {
 
         originalMaterial.setPicture(material.getPicture());
         originalMaterial.setHasPicture(material.getPicture() != null);
-        return materialDao.update(originalMaterial);
+        return (Material) materialDao.update(originalMaterial);
     }
 
     private void validateMaterialUpdate(Material material, Material originalMaterial) {
@@ -364,7 +365,9 @@ public class MaterialService {
     }
 
     public List<Material> getByCreator(User creator) {
-        return materialDao.findByCreator(creator);
+        List<Material> materials = new ArrayList<>();
+        materialDao.findByCreator(creator).stream().forEach(material -> materials.add((Material) material));
+        return materials;
     }
 
     private Material createOrUpdate(Material material) {
@@ -378,7 +381,7 @@ public class MaterialService {
         setAuthors(material);
         setPublishers(material);
         material = applyRestrictions(material);
-        return materialDao.update(material);
+        return (Material) materialDao.update(material);
     }
 
     private Material applyRestrictions(Material material) {
@@ -429,7 +432,9 @@ public class MaterialService {
     }
 
     public List<Material> getDeletedMaterials() {
-        return materialDao.getDeletedMaterials();
+        List<Material> materials = new ArrayList<>();
+        materialDao.getDeletedMaterials().stream().forEach(material -> materials.add((Material) material));
+        return materials;
     }
 
     public List<BrokenContent> getBrokenMaterials() {
@@ -486,7 +491,7 @@ public class MaterialService {
             tags.add(tag);
             material.setTags(tags);
 
-            material = materialDao.update(material);
+            material = (Material) materialDao.update(material);
             searchEngineService.updateIndex();
         } else {
             TagUpVote tagUpVote = new TagUpVote();

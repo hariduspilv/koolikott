@@ -18,6 +18,7 @@ import org.junit.Test;
 import ee.hm.dop.common.test.DatabaseTestBase;
 import ee.hm.dop.model.Chapter;
 import ee.hm.dop.model.Comment;
+import ee.hm.dop.model.LearningObject;
 import ee.hm.dop.model.Material;
 import ee.hm.dop.model.Portfolio;
 import ee.hm.dop.model.Recommendation;
@@ -37,7 +38,7 @@ public class PortfolioDAOTest extends DatabaseTestBase {
 
     @Test
     public void findById() {
-        Portfolio portfolio = portfolioDAO.findByIdNotDeleted(1);
+        Portfolio portfolio = portfolioDAO.findByIdNotDeleted(101);
 
         assertPortfolio1(portfolio);
     }
@@ -50,13 +51,13 @@ public class PortfolioDAOTest extends DatabaseTestBase {
 
     @Test
     public void findByIdOnlyMandatoryFields() {
-        Long id = new Long(2);
+        Long id = new Long(102);
         Portfolio portfolio = portfolioDAO.findByIdNotDeleted(id);
 
         assertNotNull(portfolio);
         assertEquals(id, portfolio.getId());
         assertEquals("New ways how to do it", portfolio.getTitle());
-        assertEquals(new DateTime("2012-12-29T08:00:01.000+02:00"), portfolio.getCreated());
+        assertEquals(new DateTime("2012-12-29T08:00:01.000+02:00"), portfolio.getAdded());
         assertNull(portfolio.getTaxon());
         assertEquals(new Long(4), portfolio.getCreator().getId());
         assertEquals("voldemar.vapustav2", portfolio.getCreator().getUsername());
@@ -69,15 +70,15 @@ public class PortfolioDAOTest extends DatabaseTestBase {
     @Test
     public void findAllById() {
         List<Long> idList = new ArrayList<>();
-        idList.add(1L);
-        idList.add(2L);
-        idList.add(3L);
+        idList.add(101L);
+        idList.add(102L);
+        idList.add(103L);
 
-        List<Portfolio> result = portfolioDAO.findAllById(idList);
+        List<LearningObject> result = portfolioDAO.findAllById(idList);
 
         assertEquals(3, result.size());
 
-        for (Portfolio portfolio : result) {
+        for (LearningObject portfolio : result) {
             idList.remove(portfolio.getId());
         }
 
@@ -89,14 +90,14 @@ public class PortfolioDAOTest extends DatabaseTestBase {
         List<Long> idList = new ArrayList<>();
         idList.add((long) 90123);
 
-        List<Portfolio> result = portfolioDAO.findAllById(idList);
+        List<LearningObject> result = portfolioDAO.findAllById(idList);
 
         assertEquals(0, result.size());
     }
 
     @Test
     public void findAllByIdEmptyList() {
-        List<Portfolio> result = portfolioDAO.findAllById(new ArrayList<>());
+        List<LearningObject> result = portfolioDAO.findAllById(new ArrayList<>());
 
         assertEquals(0, result.size());
     }
@@ -106,29 +107,29 @@ public class PortfolioDAOTest extends DatabaseTestBase {
         User creator = new User();
         creator.setId(6L);
 
-        List<Portfolio> portfolios = portfolioDAO.findByCreator(creator);
+        List<LearningObject> portfolios = portfolioDAO.findByCreator(creator);
         assertEquals(3, portfolios.size());
         DateTime previous = null;
 
-        for (Portfolio portfolio : portfolios) {
+        for (LearningObject portfolio : portfolios) {
             assertEquals("mati.maasikas-vaarikas", portfolio.getCreator().getUsername());
-            if (portfolio.getId().equals(Long.valueOf(1))) {
-                assertPortfolio1(portfolio);
+            if (portfolio.getId().equals(Long.valueOf(101))) {
+                assertPortfolio1((Portfolio) portfolio);
             }
 
             if (previous != null) {
-                assertTrue(previous.isAfter(portfolio.getCreated()));
+                assertTrue(previous.isAfter(portfolio.getAdded()));
             }
 
-            previous = portfolio.getCreated();
+            previous = portfolio.getAdded();
         }
     }
 
     private void assertPortfolio1(Portfolio portfolio) {
         assertNotNull(portfolio);
-        assertEquals(Long.valueOf(1), portfolio.getId());
+        assertEquals(Long.valueOf(101), portfolio.getId());
         assertEquals("The new stock market", portfolio.getTitle());
-        assertEquals(new DateTime("2000-12-29T08:00:01.000+02:00"), portfolio.getCreated());
+        assertEquals(new DateTime("2000-12-29T08:00:01.000+02:00"), portfolio.getAdded());
         assertEquals(new DateTime("2004-12-29T08:00:01.000+02:00"), portfolio.getUpdated());
 
         Subject mathematics = (Subject) portfolio.getTaxon();
@@ -201,7 +202,7 @@ public class PortfolioDAOTest extends DatabaseTestBase {
     @Test
     public void findPictureByPortfolio() {
         Portfolio portfolio = new Portfolio();
-        portfolio.setId((long) 1);
+        portfolio.setId((long) 101);
         byte[] picture = portfolioDAO.findPictureByNotDeletedPortfolio(portfolio);
         assertNotNull(picture);
     }
@@ -209,7 +210,7 @@ public class PortfolioDAOTest extends DatabaseTestBase {
     @Test
     public void findPictureByPortfolioNoPicture() {
         Portfolio portfolio = new Portfolio();
-        portfolio.setId((long) 2);
+        portfolio.setId((long) 102);
         byte[] picture = portfolioDAO.findPictureByNotDeletedPortfolio(portfolio);
         assertNull(picture);
     }
@@ -224,30 +225,30 @@ public class PortfolioDAOTest extends DatabaseTestBase {
 
     @Test
     public void getHasPictureTrue() {
-        Portfolio portfolio = portfolioDAO.findByIdNotDeleted(1);
+        Portfolio portfolio = portfolioDAO.findByIdNotDeleted(101);
         assertTrue(portfolio.getHasPicture());
     }
 
     @Test
     public void getHasPictureNoPicture() {
-        Portfolio portfolio = portfolioDAO.findByIdNotDeleted(2);
+        Portfolio portfolio = portfolioDAO.findByIdNotDeleted(102);
         assertFalse(portfolio.getHasPicture());
     }
 
     @Test
     public void increaseViewCount() {
-        Portfolio portfolio = portfolioDAO.findByIdNotDeleted(2);
+        Portfolio portfolio = portfolioDAO.findByIdNotDeleted(102);
         long originalViews = portfolio.getViews();
         assertSame(14L, originalViews);
 
         portfolio.setViews(++originalViews);
         portfolioDAO.incrementViewCount(portfolio);
 
-        Portfolio returnedPortfolio = portfolioDAO.findByIdNotDeleted(2);
+        Portfolio returnedPortfolio = portfolioDAO.findByIdNotDeleted(102);
         assertSame(15L, returnedPortfolio.getViews());
 
         returnedPortfolio.setViews(14L);
-        Portfolio originalPortfolio = portfolioDAO.update(returnedPortfolio);
+        Portfolio originalPortfolio = (Portfolio) portfolioDAO.update(returnedPortfolio);
         assertSame(14L, originalPortfolio.getViews());
     }
 
@@ -283,8 +284,8 @@ public class PortfolioDAOTest extends DatabaseTestBase {
             }
         }
 
-        Portfolio newPortfolio = portfolioDAO.findByIdNotDeleted(2L);
-        assertSame(114L, newPortfolio.getViews());
+        Portfolio newPortfolio = portfolioDAO.findByIdNotDeleted(102L);
+        assertSame(14L, newPortfolio.getViews());
 
         newPortfolio.setViews(14L);
         portfolioDAO.update(newPortfolio);
@@ -302,7 +303,7 @@ public class PortfolioDAOTest extends DatabaseTestBase {
         comment.setCreator(user);
         comment.setAdded(DateTime.now());
 
-        Portfolio newPortfolio = portfolioDAO.findByIdNotDeleted(2L);
+        Portfolio newPortfolio = portfolioDAO.findByIdNotDeleted(102L);
         newPortfolio.getComments().add(comment);
 
         portfolioDAO.update(newPortfolio);

@@ -10,18 +10,14 @@ DROP TABLE IF EXISTS EstCoreTaxonMapping;
 DROP TABLE IF EXISTS WaramuTaxonMapping;
 DROP TABLE IF EXISTS Chapter_Material;
 DROP TABLE IF EXISTS Chapter;
-DROP TABLE IF EXISTS Portfolio_KeyCompetence;
-DROP TABLE IF EXISTS Portfolio_CrossCurricularTheme;
-DROP TABLE IF EXISTS Portfolio_TargetGroup;
-DROP TABLE IF EXISTS Portfolio_Tag;
 DROP TABLE IF EXISTS Portfolio;
 DROP TABLE IF EXISTS Page;
 DROP TABLE IF EXISTS Translation;
 DROP TABLE IF EXISTS TranslationGroup;
-DROP TABLE IF EXISTS Material_TargetGroup;
-DROP TABLE IF EXISTS Material_KeyCompetence;
-DROP TABLE IF EXISTS Material_CrossCurricularTheme;
-DROP TABLE IF EXISTS Material_Tag;
+DROP TABLE IF EXISTS LearningObject_TargetGroup;
+DROP TABLE IF EXISTS LearningObject_KeyCompetence;
+DROP TABLE IF EXISTS LearningObject_CrossCurricularTheme;
+DROP TABLE IF EXISTS LearningObject_Tag;
 DROP TABLE IF EXISTS Material_Taxon;
 DROP TABLE IF EXISTS Material_ResourceType;
 DROP TABLE IF EXISTS Material_Description;
@@ -31,6 +27,7 @@ DROP TABLE IF EXISTS Material_Author;
 DROP TABLE IF EXISTS LanguageString;
 DROP TABLE IF EXISTS LanguageKeyCodes;
 DROP TABLE IF EXISTS Material;
+DROP TABLE IF EXISTS LearningObject;
 DROP TABLE IF EXISTS Recommendation;
 DROP TABLE IF EXISTS AuthenticationState;
 DROP TABLE IF EXISTS AuthenticatedUser;
@@ -297,27 +294,43 @@ CREATE TABLE Recommendation (
     ON DELETE RESTRICT
 );
 
-CREATE TABLE Material (
+CREATE TABLE LearningObject (
   id                   BIGINT             AUTO_INCREMENT PRIMARY KEY,
+  added                TIMESTAMP          DEFAULT CURRENT_TIMESTAMP,
+  deleted              BOOLEAN,
+  picture              LONGBLOB           DEFAULT NULL,
+  updated              TIMESTAMP NULL     DEFAULT NULL,
+  views                BIGINT    NOT NULL DEFAULT 0,
+  creator              BIGINT,
+  recommendation       BIGINT,
+
+  FOREIGN KEY (creator)
+  REFERENCES User (id)
+    ON DELETE RESTRICT,
+
+  FOREIGN KEY (recommendation)
+  REFERENCES Recommendation (id)
+    ON DELETE RESTRICT
+);
+
+CREATE TABLE Material (
+  id                   BIGINT             PRIMARY KEY,
   lang                 BIGINT,
   issueDate            BIGINT,
   licenseType          BIGINT,
   source               TEXT      NOT NULL,
-  added                TIMESTAMP          DEFAULT CURRENT_TIMESTAMP,
-  updated              TIMESTAMP NULL     DEFAULT NULL,
-  views                BIGINT    NOT NULL DEFAULT 0,
-  picture              LONGBLOB           DEFAULT NULL,
   repositoryIdentifier VARCHAR(255),
   repository           BIGINT,
-  creator              BIGINT,
-  deleted              BOOLEAN,
   paid                 BOOLEAN            DEFAULT FALSE,
   isSpecialEducation   BOOLEAN            DEFAULT FALSE,
   embeddable           BOOLEAN            DEFAULT FALSE,
   curriculumLiterature BOOLEAN            DEFAULT FALSE,
-  recommendation       BIGINT,
 
   UNIQUE KEY (repositoryIdentifier, repository),
+
+  FOREIGN KEY (id)
+  REFERENCES LearningObject (id)
+    ON DELETE RESTRICT,
 
   FOREIGN KEY (lang)
   REFERENCES LanguageTable (id)
@@ -329,14 +342,6 @@ CREATE TABLE Material (
 
   FOREIGN KEY (repository)
   REFERENCES Repository (id)
-    ON DELETE RESTRICT,
-
-  FOREIGN KEY (creator)
-  REFERENCES User (id)
-    ON DELETE RESTRICT,
-
-  FOREIGN KEY (recommendation)
-  REFERENCES Recommendation (id)
     ON DELETE RESTRICT
 );
 
@@ -449,14 +454,14 @@ CREATE TABLE Material_Taxon (
     ON DELETE RESTRICT
 );
 
-CREATE TABLE Material_Tag (
-  material BIGINT NOT NULL,
+CREATE TABLE LearningObject_Tag (
+  learningObject BIGINT NOT NULL,
   tag      BIGINT NOT NULL,
 
-  PRIMARY KEY (material, tag),
+  PRIMARY KEY (learningObject, tag),
 
-  FOREIGN KEY (material)
-  REFERENCES Material (id)
+  FOREIGN KEY (learningObject)
+  REFERENCES LearningObject (id)
     ON DELETE RESTRICT,
 
   FOREIGN KEY (tag)
@@ -464,14 +469,14 @@ CREATE TABLE Material_Tag (
     ON DELETE RESTRICT
 );
 
-CREATE TABLE Material_CrossCurricularTheme (
-  material             BIGINT NOT NULL,
+CREATE TABLE LearningObject_CrossCurricularTheme (
+  learningObject             BIGINT NOT NULL,
   crossCurricularTheme BIGINT NOT NULL,
 
-  PRIMARY KEY (material, crossCurricularTheme),
+  PRIMARY KEY (learningObject, crossCurricularTheme),
 
-  FOREIGN KEY (material)
-  REFERENCES Material (id)
+  FOREIGN KEY (learningObject)
+  REFERENCES LearningObject (id)
     ON DELETE RESTRICT,
 
   FOREIGN KEY (crossCurricularTheme)
@@ -479,14 +484,14 @@ CREATE TABLE Material_CrossCurricularTheme (
     ON DELETE RESTRICT
 );
 
-CREATE TABLE Material_KeyCompetence (
-  material      BIGINT NOT NULL,
+CREATE TABLE LearningObject_KeyCompetence (
+  learningObject      BIGINT NOT NULL,
   keyCompetence BIGINT NOT NULL,
 
-  PRIMARY KEY (material, keyCompetence),
+  PRIMARY KEY (learningObject, keyCompetence),
 
-  FOREIGN KEY (material)
-  REFERENCES Material (id)
+  FOREIGN KEY (learningObject)
+  REFERENCES LearningObject (id)
     ON DELETE RESTRICT,
 
   FOREIGN KEY (keyCompetence)
@@ -494,14 +499,14 @@ CREATE TABLE Material_KeyCompetence (
     ON DELETE RESTRICT
 );
 
-CREATE TABLE Material_TargetGroup (
-  material    BIGINT NOT NULL,
+CREATE TABLE LearningObject_TargetGroup (
+  learningObject    BIGINT NOT NULL,
   targetGroup VARCHAR(255),
 
-  PRIMARY KEY (material, targetGroup),
+  PRIMARY KEY (learningObject, targetGroup),
 
-  FOREIGN KEY (material)
-  REFERENCES Material (id)
+  FOREIGN KEY (learningObject)
+  REFERENCES LearningObject (id)
     ON DELETE RESTRICT
 );
 
@@ -540,22 +545,15 @@ CREATE TABLE Page (
 );
 
 CREATE TABLE Portfolio (
-  id              BIGINT                AUTO_INCREMENT PRIMARY KEY,
+  id              BIGINT       PRIMARY KEY,
   title           VARCHAR(255) NOT NULL,
   taxon           BIGINT,
-  creator         BIGINT       NOT NULL,
   originalCreator BIGINT       NOT NULL,
   summary         TEXT,
-  views           BIGINT       NOT NULL DEFAULT 0,
-  created         TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  updated         TIMESTAMP    NULL     DEFAULT NULL,
-  picture         LONGBLOB              DEFAULT NULL,
   visibility      VARCHAR(255) NOT NULL,
-  deleted         BOOLEAN,
-  recommendation  BIGINT, 
 
-  FOREIGN KEY (creator)
-  REFERENCES User (id)
+  FOREIGN KEY (id)
+  REFERENCES LearningObject (id)
     ON DELETE RESTRICT,
 
   FOREIGN KEY (originalCreator)
@@ -564,10 +562,6 @@ CREATE TABLE Portfolio (
 
   FOREIGN KEY (taxon)
   REFERENCES Taxon (id)
-    ON DELETE RESTRICT,
-
-  FOREIGN KEY (recommendation)
-  REFERENCES Recommendation (id)
     ON DELETE RESTRICT
 );
 
@@ -587,63 +581,6 @@ CREATE TABLE Chapter (
   REFERENCES Chapter (id)
     ON DELETE RESTRICT
 );
-
-CREATE TABLE Portfolio_Tag (
-  portfolio BIGINT NOT NULL,
-  tag       BIGINT NOT NULL,
-
-  PRIMARY KEY (portfolio, tag),
-
-  FOREIGN KEY (portfolio)
-  REFERENCES Portfolio (id)
-    ON DELETE RESTRICT,
-
-  FOREIGN KEY (tag)
-  REFERENCES Tag (id)
-    ON DELETE RESTRICT
-);
-
-CREATE TABLE Portfolio_TargetGroup (
-  portfolio   BIGINT NOT NULL,
-  targetGroup VARCHAR(255),
-
-  PRIMARY KEY (portfolio, targetGroup),
-
-  FOREIGN KEY (portfolio)
-  REFERENCES Portfolio (id)
-    ON DELETE RESTRICT
-);
-
-CREATE TABLE Portfolio_CrossCurricularTheme (
-  portfolio            BIGINT NOT NULL,
-  crossCurricularTheme BIGINT NOT NULL,
-
-  PRIMARY KEY (portfolio, crossCurricularTheme),
-
-  FOREIGN KEY (portfolio)
-  REFERENCES Portfolio (id)
-    ON DELETE RESTRICT,
-
-  FOREIGN KEY (crossCurricularTheme)
-  REFERENCES CrossCurricularTheme (id)
-    ON DELETE RESTRICT
-);
-
-CREATE TABLE Portfolio_KeyCompetence (
-  portfolio     BIGINT NOT NULL,
-  keyCompetence BIGINT NOT NULL,
-
-  PRIMARY KEY (portfolio, keyCompetence),
-
-  FOREIGN KEY (portfolio)
-  REFERENCES Portfolio (id)
-    ON DELETE RESTRICT,
-
-  FOREIGN KEY (keyCompetence)
-  REFERENCES KeyCompetence (id)
-    ON DELETE RESTRICT
-);
-
 
 CREATE TABLE Chapter_Material (
   chapter       BIGINT  NOT NULL,
@@ -682,47 +619,36 @@ CREATE TABLE EstCoreTaxonMapping (
 );
 
 CREATE TABLE Comment (
-  id        BIGINT    AUTO_INCREMENT PRIMARY KEY,
-  text      TEXT   NOT NULL,
-  creator   BIGINT NOT NULL,
-  portfolio BIGINT,
-  material  BIGINT,
-  added     TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  id                BIGINT    AUTO_INCREMENT PRIMARY KEY,
+  text              TEXT   NOT NULL,
+  creator           BIGINT NOT NULL,
+  learningObject    BIGINT,
+  added             TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 
   FOREIGN KEY (creator)
   REFERENCES User (id)
     ON DELETE RESTRICT,
 
-  FOREIGN KEY (portfolio)
-  REFERENCES Portfolio (id)
-    ON DELETE RESTRICT,
-
-  FOREIGN KEY (material)
-  REFERENCES Material (id)
+  FOREIGN KEY (learningObject)
+  REFERENCES LearningObject (id)
     ON DELETE RESTRICT
 );
 
 CREATE TABLE UserLike (
-  id        BIGINT    AUTO_INCREMENT PRIMARY KEY,
-  creator   BIGINT  NOT NULL,
-  portfolio BIGINT,
-  material  BIGINT,
-  isLiked   BOOLEAN NOT NULL,
-  added     TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  id                BIGINT    AUTO_INCREMENT PRIMARY KEY,
+  creator           BIGINT  NOT NULL,
+  learningObject    BIGINT,
+  isLiked           BOOLEAN NOT NULL,
+  added             TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 
-  UNIQUE KEY (portfolio, creator),
-  UNIQUE KEY (material, creator),
+  UNIQUE KEY (learningObject, creator),
 
   FOREIGN KEY (creator)
   REFERENCES User (id)
     ON DELETE RESTRICT,
 
-  FOREIGN KEY (portfolio)
-  REFERENCES Portfolio (id)
-    ON DELETE RESTRICT,
-
-  FOREIGN KEY (material)
-  REFERENCES Material (id)
+  FOREIGN KEY (learningObject)
+  REFERENCES LearningObject (id)
     ON DELETE RESTRICT
 );
 

@@ -21,7 +21,6 @@ import ee.hm.dop.model.TagUpVoteForm;
 
 public class TagUpVoteResourceTest extends ResourceIntegrationTestBase {
 
-
     public static final String TAG_UP_VOTES_MATERIAL_1_TAG_MATEMAATIKA = "tagUpVotes?material=1&tag=matemaatika";
     public static final String TAG_UP_VOTES = "tagUpVotes";
 
@@ -94,7 +93,7 @@ public class TagUpVoteResourceTest extends ResourceIntegrationTestBase {
 
     @Test
     public void getTagUpVotesPortfolio() {
-        Response response = doGet("tagUpVotes?portfolio=1");
+        Response response = doGet("tagUpVotes?portfolio=101");
         List<TagUpVoteForm> tagUpVoteForms = response.readEntity(new GenericType<List<TagUpVoteForm>>() {
         });
 
@@ -148,7 +147,7 @@ public class TagUpVoteResourceTest extends ResourceIntegrationTestBase {
         login("89012378912");
 
         Portfolio portfolio = new Portfolio();
-        portfolio.setId(1l);
+        portfolio.setId(101l);
 
         Tag tag = new Tag();
         tag.setName("matemaatika");
@@ -157,7 +156,7 @@ public class TagUpVoteResourceTest extends ResourceIntegrationTestBase {
         tagUpVote.setTag(tag);
         tagUpVote.setPortfolio(portfolio);
 
-        Response response = doGet("tagUpVotes?portfolio=1");
+        Response response = doGet("tagUpVotes?portfolio=101");
         List<TagUpVoteForm> tagUpVoteForms = response.readEntity(new GenericType<List<TagUpVoteForm>>() {
         });
         int size = tagUpVoteForms.size();
@@ -170,9 +169,9 @@ public class TagUpVoteResourceTest extends ResourceIntegrationTestBase {
         assertNotNull(returnedTagUpVote);
         assertNotNull(returnedTagUpVote.getId());
 
-        response = doDelete("tagUpVotes?portfolio=1&tag=matemaatika");
+        response = doDelete("tagUpVotes?portfolio=101&tag=matemaatika");
         assertEquals(Response.Status.NO_CONTENT.getStatusCode(), response.getStatus());
-        response = doGet("tagUpVotes?portfolio=1");
+        response = doGet("tagUpVotes?portfolio=101");
         tagUpVoteForms = response.readEntity(new GenericType<List<TagUpVoteForm>>() {
         });
 

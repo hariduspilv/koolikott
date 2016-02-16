@@ -136,20 +136,20 @@ public class ImproperContentResourceTest extends ResourceIntegrationTestBase {
 
         ImproperContent improperContent = new ImproperContent();
         Portfolio portfolio = new Portfolio();
-        portfolio.setId(1L);
+        portfolio.setId(101L);
         improperContent.setPortfolio(portfolio);
 
         Response response = doPut(IMPROPERS, Entity.entity(improperContent, MediaType.APPLICATION_JSON_TYPE));
         assertEquals(Response.Status.OK.getStatusCode(), response.getStatus());
 
-        response = doGet("impropers/portfolios/1");
+        response = doGet("impropers/portfolios/101");
         Boolean bool = response.readEntity(Boolean.class);
         assertTrue(bool);
 
-        response = doDelete("impropers?portfolio=1");
+        response = doDelete("impropers?portfolio=101");
         assertEquals(Response.Status.NO_CONTENT.getStatusCode(), response.getStatus());
 
-        response = doGet("impropers/portfolios/1");
+        response = doGet("impropers/portfolios/101");
         bool = response.readEntity(Boolean.class);
         assertTrue(!bool);
 
