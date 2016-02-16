@@ -310,32 +310,32 @@ insert into Material_Title(title, material) values(10834, 3919);
 -- Material_Taxon
 
 insert into Material_Taxon(material, taxon) values(1, 1); -- PRESCHOOLEDUCATION
-insert into Material_Taxon(material, taxon) values(1, 1016); -- BASICEDUCATION - Natural sciences - Biology
-insert into Material_Taxon(material, taxon) values(1, 10001); -- BASICEDUCATION - Social_studies - History - Estonian_history (topic)
+insert into Material_Taxon(material, taxon) values(1, 1011); -- BASICEDUCATION - loodusained - bioloogia
+insert into Material_Taxon(material, taxon) values(1, 30001); -- BASICEDUCATION - keel_ja_kirjandus - eesti_keel - kirjutamine (topic)
 insert into Material_Taxon(material, taxon) values(1, 10300); -- VOCATIONALEDUCATION - Computer_science - Computers_and_Networks - Majanduse_alused - Vocational_Education_Topic1
-insert into Material_Taxon(material, taxon) values(2, 1066); -- SECONDARYEDUCATION - Natural sciences - Biology
+insert into Material_Taxon(material, taxon) values(2, 1061); -- SECONDARYEDUCATION - loodusained - bioloogia
 insert into Material_Taxon(material, taxon) values(3, 4); -- VOCATIONALEDUCATION
-insert into Material_Taxon(material, taxon) values(4, 1066); -- SECONDARYEDUCATION - Natural sciences - Biology
-insert into Material_Taxon(material, taxon) values(5, 1064); -- SECONDARYEDUCATION - Mathematics - Mathematics
+insert into Material_Taxon(material, taxon) values(4, 1061); -- SECONDARYEDUCATION - loodusained - bioloogia
+insert into Material_Taxon(material, taxon) values(5, 1060); -- SECONDARYEDUCATION - matemaatika - matemaatika
 insert into Material_Taxon(material, taxon) values(6, 1014); -- BASICEDUCATION - Mathematics - Mathematics
-insert into Material_Taxon(material, taxon) values(6, 1066); -- SECONDARYEDUCATION - Natural sciences - Biology
+insert into Material_Taxon(material, taxon) values(6, 1061); -- SECONDARYEDUCATION - loodusained - bioloogia
 insert into Material_Taxon(material, taxon) values(10, 103); -- PRESCHOOLEDUCATION - Mathematics
 insert into Material_Taxon(material, taxon) values(11, 103); -- PRESCHOOLEDUCATION - Mathematics
 
 
 insert into Material_Taxon(material, taxon) values(12, 15020); -- PRESCHOOLEDUCATION - Me_and_the_environment - Preschool_Topic1 - Subtopic_for_Preschool_Topic1
-insert into Material_Taxon(material, taxon) values(13, 15000); --  BASICEDUCATION - Social_studies - History - Basic_history - Ajaarvamine (subtopic)
-insert into Material_Taxon(material, taxon) values(14, 15030); --  SECONDARYEDUCATION - Electives - Religious_studies - Secondary_Education_Topic1 - Subtopic_for_Secondary_Education_Topic1
+insert into Material_Taxon(material, taxon) values(13, 40000); --  BASICEDUCATION -     keel_ja_kirjandus - eesti_keel - keel_ja_ühiskond - eesti_keel_ja_teised_keeled (subtopic)
+insert into Material_Taxon(material, taxon) values(14, 60000); --  SECONDARYEDUCATION - keel_ja_kirjandus - eesti_keel - keel_ja_ühiskond - eesti_keel_ja_teised_keeled (subtopic)
 insert into Material_Taxon(material, taxon) values(15, 15040); -- VOCATIONALEDUCATION - Computer_science - Computers_and_Networks - Majanduse_alused - Vocational_Education_Topic1 - Subtopic_for_Vocational_Education
 
-insert into Material_Taxon(material, taxon) values(30, 10001); -- BASICEDUCATION - Social_studies - History - Estonian_history (topic)
+insert into Material_Taxon(material, taxon) values(30, 30001); -- BASICEDUCATION - keel_ja_kirjandus - eesti_keel - kirjutamine (topic)
 insert into Material_Taxon(material, taxon) values(31, 20000); -- VOCATIONALEDUCATION - Computer_science - Computers_and_Networks (specialization)
 insert into Material_Taxon(material, taxon) values(32, 20100); -- VOCATIONALEDUCATION - Computer_science - Computers_and_Networks - Majanduse_alused (module)
 insert into Material_Taxon(material, taxon) values(33, 10300); -- VOCATIONALEDUCATION - Computer_science - Computers_and_Networks - Majanduse_alused - Vocational_Education_Topic1
 insert into Material_Taxon(material, taxon) values(36, 1); -- PRESCHOOLEDUCATION
-insert into Material_Taxon(material, taxon) values(36, 1018); -- BASICEDUCATION - Natural sciences - Physics
+insert into Material_Taxon(material, taxon) values(36, 1013); -- BASICEDUCATION - loodusained - füüsika
 insert into Material_Taxon(material, taxon) values(37, 103); -- PRESCHOOLEDUCATION - Mathematics
-insert into Material_Taxon(material, taxon) values(3919, 1053); -- SECONDARYEDUCATION - Foreign language - Estonian
+insert into Material_Taxon(material, taxon) values(3919, 1054); -- SECONDARYEDUCATION - võõrkeeled - eesti_keel_teise_keelena
 
 
 -- Material_ResourceType
@@ -456,17 +456,17 @@ insert into LearningObject_KeyCompetence(learningObject, keyCompetence) values (
 insert into LearningObject(id, creator, views, added, updated, picture, deleted, recommendation) VALUES (101, 1, 325698, '1999-05-02 06:00:01', '2002-05-02 06:00:01', null, false, 3);
 insert into Portfolio(id, title, taxon, originalCreator, summary, visibility) VALUES (101, 'The new stock market', 1000,  2, 'Some new stufff coming soon.', 'PUBLIC');
 insert into LearningObject(id, creator, views, added, updated, picture, deleted, recommendation) VALUES (102, 5, 7951, '2000-12-29 16:00:01', '2003-05-02 06:00:01', null, false, null);
-insert into Portfolio(id, title, taxon, originalCreator, summary, visibility) VALUES (102, 'Math for my students', 1001, 5, "You have to read all the textbooks in this portfolio. Don't forgert to make ALL exercices.", 'PUBLIC');
+insert into Portfolio(id, title, taxon, originalCreator, summary, visibility) VALUES (102, 'Math for my students', 1002, 5, "You have to read all the textbooks in this portfolio. Don't forgert to make ALL exercices.", 'PUBLIC');
 insert into LearningObject(id, creator, views, added, updated, picture, deleted, recommendation) VALUES (103, 3, 0, '2014-12-29 10:00:01', null, null, false, null);
 insert into Portfolio(id, title, taxon, originalCreator, summary, visibility) VALUES (103, 'The new World', null, 3, null, 'PUBLIC');
 insert into LearningObject(id, creator, views, added, updated, picture, deleted, recommendation) VALUES (104, 6, 2, '2000-12-29 16:00:01', '2003-05-02 06:00:01', null, false, null);
-insert into Portfolio(id, title, taxon, originalCreator, summary, visibility) VALUES (104, 'Biology for my students', 1016, 6, 'A marvellous summary.', 'PUBLIC');
+insert into Portfolio(id, title, taxon, originalCreator, summary, visibility) VALUES (104, 'Biology for my students', 1011, 6, 'A marvellous summary.', 'PUBLIC');
 insert into LearningObject(id, creator, views, added, updated, picture, deleted, recommendation) VALUES (105, 6, 3, '2003-12-29 16:00:01', '2003-05-02 06:00:01', null, false, null);
-insert into Portfolio(id, title, taxon, originalCreator, summary, visibility) VALUES (105, 'Sports for my students', 1028, 6, 'A brilliant summary.', 'PUBLIC');
+insert into Portfolio(id, title, taxon, originalCreator, summary, visibility) VALUES (105, 'Sports for my students', 1024, 6, 'A brilliant summary.', 'PUBLIC');
 insert into LearningObject(id, creator, views, added, updated, picture, deleted, recommendation) VALUES (106, 6, 4, '2007-12-29 16:00:01', '2003-05-02 06:00:01', null, false, null);
-insert into Portfolio(id, title, taxon, originalCreator, summary, visibility) VALUES (106, 'English for my students', 1054, 6, 'An intriguing summary.', 'PUBLIC');
+insert into Portfolio(id, title, taxon, originalCreator, summary, visibility) VALUES (106, 'English for my students', 1055, 6, 'An intriguing summary.', 'PUBLIC');
 insert into LearningObject(id, creator, views, added, updated, picture, deleted, recommendation) VALUES (107, 6, 4, '2017-12-29 16:00:01', '2003-05-02 06:00:01', null, false, null);
-insert into Portfolio(id, title, taxon, originalCreator, summary, visibility) VALUES (107, 'Automated test resource title. DO NOT TOUCH!!! Title in estonian', 1002, 6, 'An intriguing summary.', 'PUBLIC');
+insert into Portfolio(id, title, taxon, originalCreator, summary, visibility) VALUES (107, 'Automated test resource title. DO NOT TOUCH!!! Title in estonian', 1001, 6, 'An intriguing summary.', 'PUBLIC');
 insert into LearningObject(id, creator, views, added, updated, picture, deleted, recommendation) VALUES (108, 6, 1, '2017-12-29 11:00:01', '2001-05-02 06:01:01', null, false, null);
 insert into Portfolio(id, title, taxon, originalCreator, summary, visibility) VALUES (108, 'Test portfolio number 8', 10100, 6,'Bla bla bla.', 'PUBLIC');
 insert into LearningObject(id, creator, views, added, updated, picture, deleted, recommendation) VALUES (109, 6, 1, '2017-12-29 11:00:01', '2001-05-02 06:01:01', null, false, null);
@@ -478,11 +478,11 @@ insert into Portfolio(id, title, taxon, originalCreator, summary, visibility) VA
 insert into LearningObject(id, creator, views, added, updated, picture, deleted, recommendation) VALUES (112, 6, 1, '2017-12-29 11:00:01', '2001-05-02 06:01:01', null, false, null);
 insert into Portfolio(id, title, taxon, originalCreator, summary, visibility) VALUES (112, 'Test portfolio number 12', 15020, 6,'Blabla4.', 'PUBLIC');
 insert into LearningObject(id, creator, views, added, updated, picture, deleted, recommendation) VALUES (113, 6, 1, '2017-12-29 11:00:01', '2001-05-02 06:01:01', null, false, null);
-insert into Portfolio(id, title, taxon, originalCreator, summary, visibility) VALUES (113, 'Test portfolio number 13', 15000, 6,'Blabla5.', 'PUBLIC');
+insert into Portfolio(id, title, taxon, originalCreator, summary, visibility) VALUES (113, 'Test portfolio number 13', 30000, 6,'Blabla5.', 'PUBLIC');
 insert into LearningObject(id, creator, views, added, updated, picture, deleted, recommendation) VALUES (114, 6, 1, '2017-12-29 11:00:01', '2001-05-02 06:01:01', null, false, null);
-insert into Portfolio(id, title, taxon, originalCreator, summary, visibility) VALUES (114, 'Test portfolio number 14', 15030, 6,'Blabla6.', 'PUBLIC');
+insert into Portfolio(id, title, taxon, originalCreator, summary, visibility) VALUES (114, 'Test portfolio number 14', 40000, 6,'Blabla6.', 'PUBLIC');
 insert into LearningObject(id, creator, views, added, updated, picture, deleted, recommendation) VALUES (115, 6, 1, '2013-12-29 11:00:01', '2001-05-02 06:01:01', null, false, null);
-insert into Portfolio(id, title, taxon, originalCreator, summary, visibility) VALUES (115, 'Test portfolio number 15', 15040, 6,'Blabla7.', 'PUBLIC');
+insert into Portfolio(id, title, taxon, originalCreator, summary, visibility) VALUES (115, 'Test portfolio number 15', 50000, 6,'Blabla7.', 'PUBLIC');
 insert into LearningObject(id, creator, views, added, updated, picture, deleted, recommendation) VALUES (116, 6, 1, '2001-12-29 11:00:01', '2001-05-02 06:01:01', null, false, 6);
 insert into Portfolio(id, title, taxon, originalCreator, summary, visibility) VALUES (116, 'Test not listed portfolio number 16', 2, 6,'Blabla8.', 'NOT_LISTED');
 insert into LearningObject(id, creator, views, added, updated, picture, deleted, recommendation) VALUES (117, 6, 1, '2001-12-29 11:00:01', '2001-05-02 06:01:01', null, false, 5);
