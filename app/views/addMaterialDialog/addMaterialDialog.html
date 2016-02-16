@@ -2,7 +2,8 @@
   <md-toolbar class="md-accent">
     <div class="md-toolbar-tools" flex>
       <h2>
-        <span data-translate="ADD_MATERIAL"></span>
+        <span data-ng-if="!isUpdateMode" data-translate="ADD_MATERIAL"></span>
+        <span data-ng-if="isUpdateMode" data-translate="MATERIAL_EDIT"></span>
       </h2>
       <span flex></span>
       <md-button ng-click="cancel()" class="md-icon-button" aria-label="Sulge materiali lisamise modaalaken">
@@ -56,15 +57,8 @@
             <div data-ng-if="material.picture" class="drop-box-preview">
               <h3 class="md-subhead" data-translate="PHOTO_PREVIEW"></h3>
               <img data-ng-src="{{material.picture}}" class="md-card-image" />
-              <!-- <img data-ngf-thumbnail="picture" ngf-size="{width: 300, height: 300, quality: 0.9}" alt="photo"> -->
             </div>
           </div>
-          <!-- <md-input-container class="md-block">
-            <div data-ng-if="newPicture" class="drop-box-preview">
-              <h3 class="md-subhead" data-translate="PHOTO_PREVIEW"></h3>
-              <img data-ngf-thumbnail="newPicture" ngf-size="{width: 300, height: 300, quality: 0.9}" alt="photo">
-            </div>
-          </md-input-container> -->
 
           <!-- heading-desc-lang group -->
           <div class="form-group" data-ng-repeat="metadata in titleDescriptionGroups">

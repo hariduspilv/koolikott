@@ -3,7 +3,8 @@ define([
     'angularAMD',
     'services/translationService'
 ], function(app, angularAMD) {
-    app.directive('dopAddChapterMaterial', ['translationService', '$mdDialog', '$rootScope', function(translationService, $mdDialog, $rootScope) {
+    app.directive('dopAddChapterMaterial', ['translationService', '$mdDialog', '$rootScope', 'storageService',
+        function(translationService, $mdDialog, $rootScope, storageService) {
         return {
             scope: {
                 chapter: '='
@@ -17,8 +18,9 @@ define([
                         var addMaterialScope = $scope.$new(true);
 
                         addMaterialScope.material = {};
-                        addMaterialScope.material.url = $scope.chapter.resourcePermalink;
+                        addMaterialScope.material.source = $scope.chapter.resourcePermalink;
                         addMaterialScope.isChapterMaterial = true;
+                        storageService.setMaterial(null);
 
                         $mdDialog.show(angularAMD.route({
                           templateUrl: 'views/addMaterialDialog/addMaterialDialog.html',
@@ -27,10 +29,16 @@ define([
                         })).then(closeDialog);
 
                         function closeDialog(material) {
+                            $scope.chapter.resourcePermalink = "";
+                            $scope.resourcePermalinkForm.url.$setPristine();
+                            $scope.resourcePermalinkForm.url.$setUntouched();
                             if (material) {
                                 $scope.chapter.materials.push(material);
                             }
                         }
+                    } else {
+                        $scope.resourcePermalinkForm.url.$setDirty();
+                        $scope.resourcePermalinkForm.url.$setTouched();
                     }
                 };
             }

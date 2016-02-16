@@ -33,6 +33,10 @@ define(['angularAMD'], function (angularAMD) {
                     return this.getUser() && this.getUser().role === 'PUBLISHER';
                 },
 
+                isRestricted: function () {
+                    return this.getUser() && this.getUser().role === 'RESTRICTED';
+                },
+
                 getUser: function () {
                     var authenticatedUser = getAuthenticatedUser();
                     if (authenticatedUser) {

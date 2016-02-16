@@ -21,6 +21,7 @@ define([
                 };
 
                 $scope.showAddMaterialDialog = function() {
+                    storageService.setMaterial(null);
                     $mdDialog.show(angularAMD.route({
                         templateUrl: 'views/addMaterialDialog/addMaterialDialog.html',
                         controllerUrl: 'views/addMaterialDialog/addMaterialDialog'
@@ -54,7 +55,7 @@ define([
                 };
                 
                 $scope.hasPermission = function() {
-                    return authenticatedUserService.getUser() && authenticatedUserService.getUser().role !== 'RESTRICTED';
+                    return authenticatedUserService.getUser() && !authenticatedUserService.isRestricted();
                 };
             }
         };

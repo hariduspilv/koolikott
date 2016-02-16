@@ -51,7 +51,7 @@ define([
                 };
 
                 $scope.canEdit = function () {
-                    return $scope.isOwner() && authenticatedUserService.getUser().role !== 'RESTRICTED';
+                    return $scope.isOwner() && !authenticatedUserService.isRestricted();
                 };
 
                 $scope.isAdmin = function () {
@@ -60,6 +60,10 @@ define([
 
                 $scope.isLoggedIn = function () {
                     return authenticatedUserService.isAuthenticated();
+                };
+
+                $scope.isRestricted = function () {
+                    return authenticatedUserService.isRestricted();
                 };
 
                 $scope.editPortfolio = function () {

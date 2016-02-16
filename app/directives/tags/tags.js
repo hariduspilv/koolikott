@@ -5,8 +5,8 @@ define([
     'services/searchService',
     'services/authenticatedUserService'
 ], function (angularAMD) {
-    angularAMD.directive('dopTags',['translationService', '$mdToast', '$translate', 'serverCallService', 'searchService', 'authenticatedUserService', '$location', '$rootScope',
-        function (translationService, $mdToast, $translate, serverCallService, searchService, authenticatedUserService, $location, $rootScope) {
+    angularAMD.directive('dopTags',['translationService', '$mdToast', '$translate', 'serverCallService', 'searchService', 'authenticatedUserService', '$location', '$rootScope', '$mdDialog',
+        function (translationService, $mdToast, $translate, serverCallService, searchService, authenticatedUserService, $location, $rootScope, $mdDialog) {
         return {
             scope: {
                 material: '=',
@@ -14,9 +14,10 @@ define([
             },
             templateUrl: 'directives/tags/tags.html',
             controller: function ($scope, $mdToast, $translate, serverCallService, searchService, authenticatedUserService, $location) {
+                var allTags;
 
                 function init() {
-
+                    $scope.showMoreTags = false;
                     if ($scope.material && $scope.material.id) {
                         var upVotesParams = {
                             'material': $scope.material.id
@@ -26,13 +27,23 @@ define([
                             'portfolio': $scope.portfolio.id
                         };
                     }
+                    if($scope.isAllowed()) {
+                        getHasReported();
+                    }
 
                     serverCallService.makeGet("rest/tagUpVotes", upVotesParams, getTagUpVotesSuccess, function () {
                     });
                 }
 
                 function getTagUpVotesSuccess(upVoteForms) {
-                    $scope.tags = sortTags(upVoteForms);
+                    var tags = sortTags(upVoteForms);
+                    if(tags.length > 9) {
+                        $scope.tags = tags.slice(0, 10);
+                        $scope.showMoreTags = true;
+                        allTags = tags;
+                    } else {
+                        $scope.tags = tags;
+                    }
                 }
 
                 $scope.upVote = function (tag) {
@@ -56,8 +67,8 @@ define([
                     $scope.upVotedTag.hasUpVoted = false;
                 }
 
-                $scope.isLoggedIn = function () {
-                    return authenticatedUserService.isAuthenticated();
+                $scope.isAllowed = function () {
+                    return authenticatedUserService.isAuthenticated() && !authenticatedUserService.isRestricted();
                 };
 
                 $scope.isAdmin = function () {
@@ -110,7 +121,6 @@ define([
                     } else if ($scope.portfolio && $scope.portfolio.id) {
                         url = "rest/portfolio/" + $scope.portfolio.id + "/tag";
                     }
-                    console.log($scope.newTag)
                     serverCallService.makePut(url, $scope.newTag, addTagSuccess, addTagFail);
                     $scope.newTag = null;
                 };
@@ -128,6 +138,63 @@ define([
 
                 function addTagFail() {
                     console.log("Adding tag failed")
+                }
+
+                $scope.reportTag = function (tag) {
+
+                    var confirm = $mdDialog.confirm()
+                        .title($translate.instant('REPORT_IMPROPER_TITLE'))
+                        .content($translate.instant('REPORT_IMPROPER_CONTENT') + " " + $translate.instant('REASON') + ": " + tag)
+                        .ok($translate.instant('BUTTON_NOTIFY'))
+                        .cancel($translate.instant('BUTTON_CANCEL'));
+
+                    $mdDialog.show(confirm).then(function () {
+                        var entity = {
+                            material: $scope.material,
+                            portfolio: $scope.portfolio,
+                            reason: "Tag: " + tag
+                        };
+
+                        serverCallService.makePut("rest/impropers", entity, setImproperSuccessful, function () {});
+                    });
+                };
+
+                $scope.showMore = function () {
+                    $scope.tags = allTags;
+                    $scope.showMoreTags = false;
+                };
+
+                $scope.showLess = function () {
+                    $scope.tags = allTags.slice(0, 10);
+                    $scope.showMoreTags = true;
+                };
+
+                function setImproperSuccessful() {
+                    $scope.isReportedByUser = true;
+                }
+
+                function getHasReported() {
+                    var url;
+
+                    if ($scope.portfolio && $scope.portfolio.id) {
+                        url = "rest/impropers/portfolios/" + $scope.portfolio.id;
+
+                        serverCallService.makeGet(url, {}, requestSuccessful, requestFailed);
+                    } else if ($scope.material && $scope.material.id) {
+                        url = "rest/impropers/materials/" + $scope.material.id;
+
+                        serverCallService.makeGet(url, {}, requestSuccessful, requestFailed);
+                    }
+                }
+
+                function requestSuccessful(response) {
+                    if (!$scope.isAdmin()) {
+                        $scope.isReportedByUser = response === true;
+                    }
+                }
+
+                function requestFailed() {
+                    console.log("Failed checking if already reported the resource")
                 }
 
                 init();
