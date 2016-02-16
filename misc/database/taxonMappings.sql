@@ -14,6 +14,12 @@ INSERT INTO EstCoreTaxonMapping (id, taxon, name) VALUES (106, 106, 'Liikumine')
 
 INSERT INTO EstCoreTaxonMapping (id, taxon, name) VALUES (129, 129, 'Computer Science');
 
+INSERT INTO EstCoreTaxonMapping (id, taxon, name) VALUES (10100, 10100, 'Preschool Topic1');
+INSERT INTO EstCoreTaxonMapping (id, taxon, name) VALUES (10101, 10101, 'Preschool Topic2');
+INSERT INTO EstCoreTaxonMapping (id, taxon, name) VALUES (10300, 10300, 'Vocational Education Topic1');
+INSERT INTO EstCoreTaxonMapping (id, taxon, name) VALUES (15020, 15020, 'Subtopic for Preschool Topic1');
+INSERT INTO EstCoreTaxonMapping (id, taxon, name) VALUES (15040, 15040, 'Subtopic for Vocational Education');
+
 INSERT INTO EstCoreTaxonMapping (id, taxon, name) VALUES (20000, 20000, 'Computers and Networks');
 INSERT INTO EstCoreTaxonMapping (id, taxon, name) VALUES (20100, 20100, 'Majanduse alused');
 INSERT INTO EstCoreTaxonMapping (id, taxon, name) VALUES (20101, 20101, 'Ettevõtluse alused');
@@ -4426,6 +4432,12 @@ INSERT INTO WaramuTaxonMapping (id, taxon, name) VALUES (105, 105, 'Music');
 INSERT INTO WaramuTaxonMapping (id, taxon, name) VALUES (106, 106, 'Movement');
 
 INSERT INTO WaramuTaxonMapping (id, taxon, name) VALUES (129, 129, 'Computer_science');
+
+INSERT INTO WaramuTaxonMapping (id, taxon, name) VALUES (10100, 10100, 'Preschool_Topic1');
+INSERT INTO WaramuTaxonMapping (id, taxon, name) VALUES (10101, 10101, 'Preschool_Topic2');
+INSERT INTO WaramuTaxonMapping (id, taxon, name) VALUES (10300, 10300, 'Vocational Education Topic1');
+INSERT INTO WaramuTaxonMapping (id, taxon, name) VALUES (15020, 15020, 'Subtopic_for_Preschool_Topic1');
+INSERT INTO WaramuTaxonMapping (id, taxon, name) VALUES (15040, 15040, 'Subtopic_for_Vocational_Education');
 
 INSERT INTO WaramuTaxonMapping (id, taxon, name) VALUES (20000, 20000, 'Computers_and_Networks');
 INSERT INTO WaramuTaxonMapping (id, taxon, name) VALUES (20100, 20100, 'Majanduse_alused');
