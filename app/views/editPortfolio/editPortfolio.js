@@ -74,12 +74,6 @@ define([
                 deleteChapter);
         };
 
-        $scope.savePortfolio = function() {
-            isAutoSaving = false;
-
-            updatePortfolio();
-        };
-
         function updatePortfolio() {
             var url = "rest/portfolio/update";
             serverCallService.makePost(url, $scope.portfolio, updatePortfolioSuccess, updatePortfolioFailed);

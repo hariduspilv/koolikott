@@ -6,7 +6,7 @@
     </md-button>
 
     <!-- search bar -->
-    <div  flex-gt-xs flex-gt-sm="90">
+    <div  flex-gt-xs="70" flex-gt-md="85">
       <div layout="row" layout-align="center center">
         <div class="navbar-search" layout="row" flex>
           <md-button aria-label="Otsi" data-ng-click="search()" class="md-icon-button">
@@ -24,13 +24,13 @@
         </md-button>
         <md-button ng-click="closeDetailedSearch()" aria-label="Sulge detailotsing" class="md-icon-button" data-ng-if="detailedSearch.isVisible">
           <md-tooltip><span data-translate="HEADER_TOOLTIP_CLOSE_DETAILED_SEARCH"></span></md-tooltip>
-          <md-icon>close</md-icon>
+          <md-icon class="upside-down">filter_list</md-icon>
         </md-button>
       </div>
     </div>
 
     <!-- right buttons -->
-    <div flex-gt-xs flex-gt-md="15" >
+    <div>
     <md-menu>
       <md-button aria-label="Jaga" class="md-icon-button" ng-click="$mdOpenMenu($event)">
         <md-tooltip><span data-translate="HEADER_TOOLTIP_CHANGE_VISIBILITY"></span></md-tooltip>
@@ -69,6 +69,10 @@
         </md-menu-item>
       </md-menu-content>
     </md-menu>
+      <md-button data-ng-click="saveAndExitPortfolio()" aria-label="Salvesta ja välju" class="md-icon-button">
+        <md-tooltip><span data-translate="HEADER_TOOLTIP_EXIT_PORTFOLIO_MODE"></span></md-tooltip>
+        <md-icon >close</md-icon>
+      </md-button>
     </div>
   </div>
 </md-toolbar>

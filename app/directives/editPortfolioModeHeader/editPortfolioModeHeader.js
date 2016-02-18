@@ -48,7 +48,7 @@ define([
                     var url = "rest/portfolio/update";
                     serverCallService.makePost(url, $rootScope.savedPortfolio, updatePortfolioSuccess, updatePortfolioFailed);
                 }
-                
+
                 function updatePortfolioSuccess(portfolio) {
                     if (isEmpty(portfolio)) {
                         updatePortfolioFailed();
@@ -56,7 +56,7 @@ define([
                         log('Portfolio updated.');
                     }
                 }
-                
+
                 function updatePortfolioFailed() {
                     log('Updating portfolio failed.');
                 }
@@ -104,6 +104,19 @@ define([
                 $scope.searchFieldEnterPressed = function() {
                     $scope.search();
                 };
+
+                $scope.saveAndExitPortfolio = function() {
+                    var url = "rest/portfolio/update";
+                    serverCallService.makePost(url, $rootScope.savedPortfolio, saveAndExitPortfolioSuccess, updatePortfolioFailed);
+                };
+
+
+                function saveAndExitPortfolioSuccess(portfolio) {
+                    if (!isEmpty(portfolio)) {
+                        toastService.show('PORTFOLIO_SAVED');
+                        $location.url('/portfolio?id=' + portfolio.id);
+                    }
+                }
 
                 $scope.clickOutside = function() {
                     if ($scope.detailedSearch.isVisible &&  !$rootScope.dontCloseSearch) {
