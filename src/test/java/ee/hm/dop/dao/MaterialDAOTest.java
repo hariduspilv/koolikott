@@ -407,9 +407,6 @@ public class MaterialDAOTest extends DatabaseTestBase {
         }
     }
 
-    @Inject
-    LanguageDAO languageDAO;
-
     @Test
     public void updateCreatingNewResourceType() {
         Material originalMaterial = materialDAO.findByIdNotDeleted(1);
@@ -559,6 +556,12 @@ public class MaterialDAOTest extends DatabaseTestBase {
     public void isEmbeddedWhenNotEstonianRepo() {
         Material material = materialDAO.findByIdNotDeleted(1);
         assertFalse(material.isEmbeddable());
+    }
+
+    @Test
+    public void getMaterialsBySource() {
+        List<Material> materials = materialDAO.findBySource("https://en.wikipedia.org/wiki/Power_Architecture");
+        assertEquals(2, materials.size());
     }
 
     private void assertMaterial1(Material material) {

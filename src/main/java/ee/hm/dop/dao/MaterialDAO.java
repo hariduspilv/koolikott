@@ -31,8 +31,7 @@ public class MaterialDAO extends LearningObjectDAO {
      * finds all materials contained in the idList. There is no guarantee about
      * in which order the materials will be in the result list.
      *
-     * @param idList
-     *            the list with materials id
+     * @param idList the list with materials id
      * @return a list of materials specified by idList
      */
     @Override
@@ -82,8 +81,7 @@ public class MaterialDAO extends LearningObjectDAO {
      * Find all materials with the specified creator. Materials are ordered by
      * added date with newest first.
      *
-     * @param creator
-     *            User who created the materials
+     * @param creator User who created the materials
      * @return A list of materials
      */
     @Override
@@ -91,5 +89,10 @@ public class MaterialDAO extends LearningObjectDAO {
         List<LearningObject> learningObjects = super.findByCreator(creator);
         removeNot(Material.class, learningObjects);
         return learningObjects;
+    }
+
+    public List<Material> findBySource(String materialSource) {
+        return entityManager.createQuery("FROM Material m WHERE m.deleted = false AND m.source = :source", Material.class)
+                .setParameter("source", materialSource).getResultList();
     }
 }

@@ -550,6 +550,42 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
         assertEquals(Status.INTERNAL_SERVER_ERROR.getStatusCode(), response.getStatus());
     }
 
+    @Test
+    public void GetMaterialsByNullSource() {
+        login("38011550077");
+
+        Response response = doGet("material/getBySource?source=");
+
+        List<Material> materials = response.readEntity(new GenericType<List<Material>>() {
+        });
+
+        assertEquals(0, materials.size());
+    }
+
+    @Test
+    public void GetMaterialsByNonExistantSource() {
+        login("38011550077");
+
+        Response response = doGet("material/getBySource?source=https://www.youtube.com/watch?v=5_Ar7VXXsro");
+
+        List<Material> materials = response.readEntity(new GenericType<List<Material>>() {
+        });
+
+        assertEquals(0, materials.size());
+    }
+
+    @Test
+    public void GetMaterialsBySource() {
+        login("38011550077");
+
+        Response response = doGet("material/getBySource?source=https://en.wikipedia.org/wiki/Power_Architecture");
+
+        List<Material> materials = response.readEntity(new GenericType<List<Material>>() {
+        });
+
+        assertEquals(2, materials.size());
+    }
+
     private Material createMaterial() {
         Material material = new Material();
         material.setSource("http://www.neti.ee");

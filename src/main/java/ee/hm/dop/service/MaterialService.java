@@ -503,4 +503,12 @@ public class MaterialService {
 
         return material;
     }
+
+    public List<Material> getBySource(String materialSource) {
+        if(materialSource != null){
+            return materialDao.findBySource(materialSource);
+        } else {
+            throw new RuntimeException("No material source link provided");
+        }
+    }
 }
