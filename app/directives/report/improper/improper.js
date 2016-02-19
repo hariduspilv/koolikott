@@ -6,43 +6,34 @@ define([
     app.directive('dopReportImproper', ['translationService', '$mdDialog', '$translate', 'authenticatedUserService', function (translationService, $mdDialog, $translate, authenticatedUserService) {
         return {
             scope: {
-                material: '=',
-                portfolio: '='
+                learningObject: '='
             },
             templateUrl: 'directives/report/improper/improper.html',
             controller: function ($scope, serverCallService) {
                 $scope.isReported = false;
                 $scope.isReportedByUser = false;
 
-                $scope.$watch('material', function (newValue, oldValue) {
-                    if (newValue === undefined) return;
-                    getHasReported();
-                }, false);
-
-                $scope.$watch('portfolio', function (newValue, oldValue) {
-                    if (newValue === undefined) return;
-                    getHasReported();
+                $scope.$watch('learningObject', function (newLearningObject, oldLearningObject) {
+                    if (newLearningObject) {
+                    	getHasReported();
+                    }
                 }, false);
 
                 function getHasReported() {
                     var url;
 
-                    if ($scope.portfolio && $scope.portfolio.id) {
-                        url = "rest/impropers/portfolios/" + $scope.portfolio.id;
-
-                        serverCallService.makeGet(url, {}, requestSuccessful, requestFailed);
-                    } else if ($scope.material && $scope.material.id) {
-                        url = "rest/impropers/materials/" + $scope.material.id;
-
+                    if ($scope.learningObject && $scope.learningObject.id) {
+                        url = "rest/impropers?learningObject=" + $scope.learningObject.id;
                         serverCallService.makeGet(url, {}, requestSuccessful, requestFailed);
                     }
                 }
 
-                function requestSuccessful(response) {
+                function requestSuccessful(improper) {
+                	var isImproper = improper.length > 0 ? true : false;
                     if ($scope.isAdmin) {
-                        $scope.isReported = response === true;
+                        $scope.isReported = isImproper;
                     } else {
-                        $scope.isReportedByUser = response === true;
+                        $scope.isReportedByUser = isImproper;
                     }
                 }
 
@@ -51,16 +42,10 @@ define([
                 }
 
                 $scope.setNotImproper = function () {
-                    if($scope.isAdmin) {
-                        if ($scope.portfolio) {
-                            url = "rest/impropers?portfolio=" + $scope.portfolio.id;
-                        } else if ($scope.material) {
-                            url = "rest/impropers?material=" + $scope.material.id;
-                        }
-
+                    if($scope.isAdmin && $scope.learningObject) {
+                        url = "rest/impropers?learningObject=" + $scope.learningObject.id;
                         serverCallService.makeDelete(url, {}, setNotImproperSuccessful, setNotImproperFailed);
                     }
-
                 };
 
                 function setNotImproperSuccessful() {
@@ -80,8 +65,7 @@ define([
 
                     $mdDialog.show(confirm).then(function () {
                         var entity = {
-                            material: $scope.material,
-                            portfolio: $scope.portfolio
+                            learningObject: $scope.learningObject
                         };
 
                         serverCallService.makePut("rest/impropers", entity, setImproperSuccessful, setImproperFailed);
@@ -90,8 +74,12 @@ define([
 
                 $scope.isAdmin = authenticatedUserService.isAdmin();
 
-                function setImproperSuccessful() {
-                    $scope.isReportedByUser = true;
+                function setImproperSuccessful(improper) {
+                	if (!improper) {
+                		setImproperFailed();
+                	} else {
+                		$scope.isReportedByUser = true;
+                	}
                 }
 
                 function setImproperFailed() {
