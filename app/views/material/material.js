@@ -316,7 +316,7 @@ define([
                 $scope.material.picture = "data:image/jpeg;base64," + data;
             }
 
-            function fetchImageFail(data) {
+            function fetchImageFail() {
                 log("Getting material image failed");
             }
 
