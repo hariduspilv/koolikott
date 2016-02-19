@@ -4,8 +4,6 @@ import java.security.InvalidParameterException;
 import java.util.Iterator;
 import java.util.List;
 
-import javax.inject.Inject;
-import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 
 import org.joda.time.DateTime;
@@ -13,13 +11,10 @@ import org.joda.time.DateTime;
 import ee.hm.dop.model.LearningObject;
 import ee.hm.dop.model.User;
 
-public class LearningObjectDAO extends BaseDAO {
-
-    @Inject
-    protected EntityManager entityManager;
+public class LearningObjectDAO extends BaseDAO<LearningObject> {
 
     public LearningObject findByIdNotDeleted(long objectId) {
-        TypedQuery<LearningObject> findByCode = entityManager.createQuery(
+        TypedQuery<LearningObject> findByCode = createQuery(
                 "SELECT lo FROM LearningObject lo WHERE lo.id = :id AND lo.deleted = false", LearningObject.class) //
                 .setParameter("id", objectId);
 
@@ -27,16 +22,16 @@ public class LearningObjectDAO extends BaseDAO {
     }
 
     public LearningObject findById(long objectId) {
-        TypedQuery<LearningObject> findByCode = entityManager.createQuery(
-                "SELECT lo FROM LearningObject lo WHERE lo.id = :id", LearningObject.class) //
+        TypedQuery<LearningObject> findByCode = createQuery("SELECT lo FROM LearningObject lo WHERE lo.id = :id",
+                LearningObject.class) //
                 .setParameter("id", objectId);
 
         return getSingleResult(findByCode);
     }
 
     public List<LearningObject> getDeletedLearningObjects() {
-        TypedQuery<LearningObject> query = entityManager.createQuery(
-                "SELECT lo FROM LearningObject lo WHERE lo.deleted = true", LearningObject.class);
+        TypedQuery<LearningObject> query = createQuery("SELECT lo FROM LearningObject lo WHERE lo.deleted = true",
+                LearningObject.class);
         return query.getResultList();
     }
 
@@ -49,24 +44,23 @@ public class LearningObjectDAO extends BaseDAO {
      * @return a list of LearningObject specified by idList
      */
     public List<LearningObject> findAllById(List<Long> idList) {
-        TypedQuery<LearningObject> findAllByIdList = entityManager.createQuery(
+        TypedQuery<LearningObject> findAllByIdList = createQuery(
                 "SELECT lo FROM LearningObject lo WHERE lo.deleted = false AND lo.id in :idList", LearningObject.class);
         return findAllByIdList.setParameter("idList", idList).getResultList();
     }
 
     public List<LearningObject> findNewestLearningObjects(int numberOfLearningObjects) {
 
-        return entityManager
-                .createQuery("FROM LearningObject lo WHERE lo.deleted = false ORDER BY added desc",
-                        LearningObject.class).setMaxResults(numberOfLearningObjects).getResultList();
+        return createQuery("FROM LearningObject lo WHERE lo.deleted = false ORDER BY added desc", LearningObject.class)
+                .setMaxResults(numberOfLearningObjects).getResultList();
     }
 
     public List<LearningObject> findPopularLearningObjects(int numberOfLearningObjects) {
-        return entityManager
-                .createQuery("FROM LearningObject lo WHERE lo.deleted = false ORDER BY views DESC",
-                        LearningObject.class).setMaxResults(numberOfLearningObjects).getResultList();
+        return createQuery("FROM LearningObject lo WHERE lo.deleted = false ORDER BY views DESC", LearningObject.class)
+                .setMaxResults(numberOfLearningObjects).getResultList();
     }
 
+    @Override
     public LearningObject update(LearningObject learningObject) {
         if (learningObject.getId() != null) {
             learningObject.setUpdated(DateTime.now());
@@ -74,9 +68,7 @@ public class LearningObjectDAO extends BaseDAO {
             learningObject.setAdded(DateTime.now());
         }
 
-        LearningObject merged = entityManager.merge(learningObject);
-        entityManager.persist(merged);
-        return merged;
+        return super.update(learningObject);
     }
 
     public void delete(LearningObject learningObject) {
@@ -96,18 +88,9 @@ public class LearningObjectDAO extends BaseDAO {
         update(learningObject);
     }
 
-    /**
-     * For testing purposes.
-     *
-     * @param learningObject
-     */
-    protected void remove(LearningObject learningObject) {
-        entityManager.remove(learningObject);
-    }
-
     protected byte[] getBytes(LearningObject learningObject, TypedQuery<byte[]> findById) {
         findById.setParameter("id", learningObject.getId());
-        return getSingleResult(findById);
+        return getSingleResult(findById, byte[].class);
     }
 
     /**
@@ -120,7 +103,7 @@ public class LearningObjectDAO extends BaseDAO {
      */
     public List<LearningObject> findByCreator(User creator) {
         String query = "SELECT lo FROM LearningObject lo WHERE lo.creator.id = :creatorId AND lo.deleted = false order by added desc";
-        TypedQuery<LearningObject> findAllByCreator = entityManager.createQuery(query, LearningObject.class);
+        TypedQuery<LearningObject> findAllByCreator = createQuery(query, LearningObject.class);
         return findAllByCreator.setParameter("creatorId", creator.getId()).getResultList();
     }
 
@@ -143,10 +126,10 @@ public class LearningObjectDAO extends BaseDAO {
     }
 
     public synchronized void incrementViewCount(LearningObject learningObject) {
-        entityManager
+        getEntityManager()
                 .createQuery(
                         "update LearningObject lo set lo.views = lo.views + 1 where lo.id = :id AND lo.deleted = false")
                 .setParameter("id", learningObject.getId()).executeUpdate();
-        entityManager.flush();
+        flush();
     }
 }

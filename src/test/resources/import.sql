@@ -456,11 +456,13 @@ insert into LearningObject_KeyCompetence(learningObject, keyCompetence) values (
 
 -- Improper content
 
-insert into ImproperContent(id, creator, portfolio, material, added) values (1, 1, 102, null, '2014-06-01 00:00:01');
-insert into ImproperContent(id, creator, portfolio, material, added) values (2, 1, null, 2, '2014-06-01 00:00:01');
-insert into ImproperContent(id, creator, portfolio, material, added) values (3, 9, null, 2, '2014-06-01 00:00:01');
-insert into ImproperContent(id, creator, portfolio, material, added) values (4, 9, null, 3, '2014-06-01 00:00:01');
-insert into ImproperContent(id, creator, portfolio, material, added) values (5, 9, 103, null, '2014-06-01 00:00:01');
+insert into ImproperContent(id, creator, learningObject, added, deleted) values (1, 1, 102,'2014-06-01 00:00:01', false);
+insert into ImproperContent(id, creator, learningObject, added, deleted) values (2, 1,  2, '2014-06-01 00:00:01', false);
+insert into ImproperContent(id, creator, learningObject, added, deleted) values (3, 9, 2, '2014-06-01 00:00:01', false);
+insert into ImproperContent(id, creator, learningObject, added, deleted) values (4, 9, 3, '2014-06-01 00:00:01', false);
+insert into ImproperContent(id, creator, learningObject, added, deleted) values (5, 9, 103, '2014-06-01 00:00:01', false);
+insert into ImproperContent(id, creator, learningObject, added, deleted) values (6, 9, 104, '2014-06-01 00:00:01', true);
+insert into ImproperContent(id, creator, learningObject, added, deleted) values (7, 9, 4, '2014-06-01 00:00:01', true);
 
 
 -- TagUpVotes

@@ -8,64 +8,109 @@ import org.joda.time.DateTime;
 
 import ee.hm.dop.dao.ImproperContentDAO;
 import ee.hm.dop.model.ImproperContent;
-import ee.hm.dop.model.Role;
+import ee.hm.dop.model.LearningObject;
 import ee.hm.dop.model.User;
 
-/**
- * Created by mart on 9.02.16.
- */
 public class ImproperContentService {
 
     @Inject
     private ImproperContentDAO improperContentDAO;
 
-    public ImproperContent addImproper(ImproperContent improperContent, User loggedInUser) {
-        improperContent.setCreator(loggedInUser);
-        improperContent.setAdded(DateTime.now());
+    @Inject
+    private LearningObjectService learningObjectService;
 
-        return improperContentDAO.update(improperContent);
-    }
-
-    public List<ImproperContent> getImproperPortfolios() {
-        return improperContentDAO.findImproperPortfolios();
-    }
-
-    public List<ImproperContent> getImproperMaterials() {
-        return improperContentDAO.findImproperMaterials();
-    }
-
-    public Boolean hasSetImproperPortfolio(long portfolioId, User loggedInUser) {
-        List<ImproperContent> improperContents;
-        if (isUserAdmin(loggedInUser)) {
-            improperContents = improperContentDAO.getByPortfolio(portfolioId);
-        } else {
-            improperContents = improperContentDAO.findByPortfolioAndUser(portfolioId, loggedInUser);
+    public ImproperContent addImproper(ImproperContent improperContent, User creator) {
+        if (improperContent == null || improperContent.getLearningObject() == null) {
+            throw new RuntimeException("Invalid Improper object.");
         }
 
-        return improperContents.size() != 0;
-    }
+        LearningObject learningObject = learningObjectService.get(improperContent.getLearningObject().getId(), creator);
 
-    public Boolean hasSetImproperMaterial(long materialId, User loggedInUser) {
-        List<ImproperContent> improperContents;
-        if (isUserAdmin(loggedInUser)) {
-            improperContents = improperContentDAO.getByMaterial(materialId);
-        } else {
-            improperContents = improperContentDAO.findByMaterialAndUser(materialId, loggedInUser);
+        if (learningObject == null) {
+            throw new RuntimeException("LearningObject does not exists.");
         }
 
-        return improperContents.size() != 0;
+        ImproperContent improper = new ImproperContent();
+        improper.setCreator(creator);
+        improper.setAdded(DateTime.now());
+        improper.setLearningObject(learningObject);
+
+        return improperContentDAO.update(improper);
     }
 
-    public void deleteByMaterial(long materialId) {
-        improperContentDAO.deleteImproperMaterials(materialId);
+    /**
+     * @param improperContentId
+     * @param user
+     *            who wants access to the list
+     * @return the ImproperContent if user has rights to access
+     */
+    public ImproperContent get(long improperContentId, User user) {
+        ImproperContent improperContent = improperContentDAO.findById(improperContentId);
 
+        if (improperContent != null && !learningObjectService.hasAccess(user, improperContent.getLearningObject())) {
+            improperContent = null;
+        }
+
+        return improperContent;
     }
 
-    public void deleteByPortfolio(long portfolioId) {
-        improperContentDAO.deleteImproperPortfolios(portfolioId);
+    /**
+     * @param user
+     *            who wants access to the list
+     * @return a list of improperContent that user has rights to access
+     */
+    public List<ImproperContent> getAll(User user) {
+        List<ImproperContent> impropers = improperContentDAO.findAll();
+        removeIfHasNoAccess(user, impropers);
+
+        return impropers;
     }
 
-    private boolean isUserAdmin(User loggedInUser) {
-        return loggedInUser != null && loggedInUser.getRole() == Role.ADMIN;
+    /**
+     * 
+     * @param learningObject
+     * @param creator
+     *            who created the ImproperContent
+     * @param user
+     *            who wants access to the list
+     * @return the ImproperContent which refers to learningObject, created by
+     *         creator and user has rights to access
+     */
+    public ImproperContent getByLearningObjectAndCreator(LearningObject learningObject, User creator, User user) {
+        ImproperContent improperContent = improperContentDAO.findByLearningObjectAndCreator(learningObject, creator);
+
+        if (improperContent != null && !learningObjectService.hasAccess(user, improperContent.getLearningObject())) {
+            improperContent = null;
+        }
+
+        return improperContent;
+    }
+
+    /**
+     * @param user
+     *            who wants access to the list
+     * @return a list of improperContent which refers to learningObject and user
+     *         has rights to access
+     */
+    public List<ImproperContent> getByLearningObject(LearningObject learningObject, User user) {
+        List<ImproperContent> impropers = improperContentDAO.findByLearningObject(learningObject);
+        removeIfHasNoAccess(user, impropers);
+
+        return impropers;
+    }
+
+    /**
+     * @param impropers
+     *            the list of ImproperContent to be deleted
+     * @param user
+     *            who wants to delete the improper
+     */
+    public void deleteAll(List<ImproperContent> impropers, User user) {
+        removeIfHasNoAccess(user, impropers);
+        improperContentDAO.deleteAll(impropers);
+    }
+
+    private void removeIfHasNoAccess(User user, List<ImproperContent> impropers) {
+        impropers.removeIf(improper -> !learningObjectService.hasAccess(user, improper.getLearningObject()));
     }
 }

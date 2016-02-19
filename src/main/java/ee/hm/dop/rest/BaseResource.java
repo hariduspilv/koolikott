@@ -1,6 +1,7 @@
 package ee.hm.dop.rest;
 
-import java.net.HttpURLConnection;
+import static java.net.HttpURLConnection.HTTP_BAD_REQUEST;
+import static java.net.HttpURLConnection.HTTP_NOT_FOUND;
 
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
@@ -69,7 +70,15 @@ public class BaseResource {
     }
 
     protected void throwBadRequestException(String message) {
-        throw new WebApplicationException(Response.status(HttpURLConnection.HTTP_BAD_REQUEST).entity(message).build());
+        throw new WebApplicationException(Response.status(HTTP_BAD_REQUEST).entity(message).build());
+    }
+
+    protected void throwNotFoundException(String message) {
+        throw new WebApplicationException(Response.status(HTTP_NOT_FOUND).entity(message).build());
+    }
+
+    protected void throwNotFoundException() {
+        throw new WebApplicationException(Response.status(HTTP_NOT_FOUND).build());
     }
 
     protected String getServerAddress() {

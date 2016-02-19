@@ -1,5 +1,6 @@
 package ee.hm.dop.service;
 
+import static ee.hm.dop.utils.UserUtils.isAdmin;
 import static java.lang.String.format;
 import static org.apache.commons.lang3.StringUtils.isEmpty;
 
@@ -20,6 +21,7 @@ import ee.hm.dop.dao.UserLikeDAO;
 import ee.hm.dop.model.Author;
 import ee.hm.dop.model.BrokenContent;
 import ee.hm.dop.model.Comment;
+import ee.hm.dop.model.LearningObject;
 import ee.hm.dop.model.Material;
 import ee.hm.dop.model.Publisher;
 import ee.hm.dop.model.Recommendation;
@@ -29,10 +31,15 @@ import ee.hm.dop.model.TagUpVote;
 import ee.hm.dop.model.User;
 import ee.hm.dop.model.UserLike;
 import ee.hm.dop.model.taxon.EducationalContext;
+import ee.hm.dop.service.LearningObjectService.LearningObjectHandlerFactory;
 import ee.hm.dop.utils.TaxonUtils;
 import ezvcard.util.org.apache.commons.codec.binary.Base64;
 
-public class MaterialService {
+public class MaterialService implements LearningObjectHandler {
+
+    static {
+        LearningObjectHandlerFactory.register(MaterialService.class, Material.class);
+    }
 
     public static final String BASICEDUCATION = "BASICEDUCATION";
     public static final String SECONDARYEDUCATION = "SECONDARYEDUCATION";
@@ -502,5 +509,16 @@ public class MaterialService {
         }
 
         return material;
+    }
+
+    @Override
+    public boolean hasAccess(User user, LearningObject learningObject) {
+        if (!(learningObject instanceof Material)) {
+            return false;
+        }
+
+        Material material = (Material) learningObject;
+
+        return !material.isDeleted() || isAdmin(user);
     }
 }

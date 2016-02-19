@@ -44,25 +44,24 @@ public class MaterialDAO extends LearningObjectDAO {
 
     public List<Material> findNewestMaterials(int numberOfMaterials) {
 
-        return entityManager.createQuery("FROM Material m WHERE m.deleted = false ORDER BY added desc", Material.class)
+        return createQuery("FROM Material m WHERE m.deleted = false ORDER BY added desc", Material.class)
                 .setMaxResults(numberOfMaterials).getResultList();
     }
 
     public List<Material> findPopularMaterials(int numberOfMaterials) {
-        return entityManager.createQuery("FROM Material m WHERE m.deleted = false ORDER BY views DESC", Material.class)
+        return createQuery("FROM Material m WHERE m.deleted = false ORDER BY views DESC", Material.class)
                 .setMaxResults(numberOfMaterials).getResultList();
     }
 
     public byte[] findNotDeletedPictureByMaterial(Material material) {
-        TypedQuery<byte[]> findById = entityManager.createQuery(
+        TypedQuery<byte[]> findById = createQuery(
                 "SELECT m.picture FROM Material m WHERE m.id = :id AND m.deleted = false", byte[].class);
 
         return getBytes(material, findById);
     }
 
     public byte[] findPictureByMaterial(Material material) {
-        TypedQuery<byte[]> findById = entityManager.createQuery("SELECT m.picture FROM Material m WHERE m.id = :id",
-                byte[].class);
+        TypedQuery<byte[]> findById = createQuery("SELECT m.picture FROM Material m WHERE m.id = :id", byte[].class);
 
         return getBytes(material, findById);
     }
@@ -70,12 +69,12 @@ public class MaterialDAO extends LearningObjectDAO {
     public Material findByRepositoryAndRepositoryIdentifier(Repository repository, String repositoryIdentifier) {
         String select = "SELECT m FROM Material m WHERE m.repository.id = :repositoryId"
                 + " AND m.repositoryIdentifier = :repositoryIdentifier AND m.deleted = false";
-        TypedQuery<Material> query = entityManager.createQuery(select, Material.class);
+        TypedQuery<Material> query = createQuery(select, Material.class);
 
         query.setParameter("repositoryId", repository.getId()) //
                 .setParameter("repositoryIdentifier", repositoryIdentifier);
 
-        return getSingleResult(query);
+        return getSingleResult(query, Material.class);
     }
 
     /**

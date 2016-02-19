@@ -6,7 +6,7 @@ import javax.persistence.TypedQuery;
 
 import ee.hm.dop.model.CrossCurricularTheme;
 
-public class CrossCurricularThemeDAO extends BaseDAO {
+public class CrossCurricularThemeDAO extends BaseDAO<CrossCurricularTheme> {
 
     public CrossCurricularTheme findCrossCurricularThemeById(Long id) {
         TypedQuery<CrossCurricularTheme> findById = createQuery("FROM CrossCurricularTheme c WHERE c.id = :id",
@@ -25,5 +25,4 @@ public class CrossCurricularThemeDAO extends BaseDAO {
 
         return getSingleResult(findByName);
     }
-
 }

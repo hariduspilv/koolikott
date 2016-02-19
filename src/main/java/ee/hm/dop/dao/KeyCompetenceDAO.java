@@ -6,7 +6,7 @@ import javax.persistence.TypedQuery;
 
 import ee.hm.dop.model.KeyCompetence;
 
-public class KeyCompetenceDAO extends BaseDAO {
+public class KeyCompetenceDAO extends BaseDAO<KeyCompetence> {
 
     public KeyCompetence findKeyCompetenceById(Long id) {
         TypedQuery<KeyCompetence> findById = createQuery("FROM KeyCompetence k WHERE k.id = :id", KeyCompetence.class)
@@ -20,9 +20,8 @@ public class KeyCompetenceDAO extends BaseDAO {
     }
 
     public KeyCompetence findKeyCompetenceByName(String name) {
-        TypedQuery<KeyCompetence> findById = createQuery("FROM KeyCompetence k WHERE k.name = :name", KeyCompetence.class)
-                .setParameter("name", name);
-
+        TypedQuery<KeyCompetence> findById = createQuery("FROM KeyCompetence k WHERE k.name = :name",
+                KeyCompetence.class).setParameter("name", name);
 
         return getSingleResult(findById);
     }

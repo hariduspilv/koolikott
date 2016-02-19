@@ -654,24 +654,19 @@ CREATE TABLE UserLike (
 
 
 CREATE TABLE ImproperContent (
-  id        BIGINT    AUTO_INCREMENT PRIMARY KEY,
-  creator   BIGINT NOT NULL,
-  portfolio BIGINT,
-  material  BIGINT,
-  added     TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  deleted   BOOLEAN   DEFAULT FALSE,
-  reason    VARCHAR(255),
+  id                BIGINT    AUTO_INCREMENT PRIMARY KEY,
+  creator           BIGINT NOT NULL,
+  learningObject    BIGINT,
+  added             TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  deleted           BOOLEAN   DEFAULT FALSE,
+  reason            VARCHAR(255),
 
   FOREIGN KEY (creator)
   REFERENCES User (id)
     ON DELETE RESTRICT,
 
-  FOREIGN KEY (portfolio)
-  REFERENCES Portfolio (id)
-    ON DELETE RESTRICT,
-
-  FOREIGN KEY (material)
-  REFERENCES Material (id)
+  FOREIGN KEY (learningObject)
+  REFERENCES LearningObject (id)
     ON DELETE RESTRICT
 );
 

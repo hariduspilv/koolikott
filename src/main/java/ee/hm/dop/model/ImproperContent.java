@@ -31,12 +31,8 @@ public class ImproperContent {
     private User creator;
 
     @ManyToOne
-    @JoinColumn(name = "material")
-    private Material material;
-
-    @ManyToOne
-    @JoinColumn(name = "portfolio")
-    private Portfolio portfolio;
+    @JoinColumn(name = "learningObject")
+    private LearningObject learningObject;
 
     @Column
     @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
@@ -66,14 +62,6 @@ public class ImproperContent {
         this.creator = creator;
     }
 
-    public Material getMaterial() {
-        return material;
-    }
-
-    public void setMaterial(Material material) {
-        this.material = material;
-    }
-
     @JsonSerialize(using = DateTimeSerializer.class)
     public DateTime getAdded() {
         return added;
@@ -82,14 +70,6 @@ public class ImproperContent {
     @JsonDeserialize(using = DateTimeDeserializer.class)
     public void setAdded(DateTime added) {
         this.added = added;
-    }
-
-    public Portfolio getPortfolio() {
-        return portfolio;
-    }
-
-    public void setPortfolio(Portfolio portfolio) {
-        this.portfolio = portfolio;
     }
 
     public boolean isDeleted() {
@@ -106,5 +86,13 @@ public class ImproperContent {
 
     public void setReason(String reason) {
         this.reason = reason;
+    }
+
+    public LearningObject getLearningObject() {
+        return learningObject;
+    }
+
+    public void setLearningObject(LearningObject learningObject) {
+        this.learningObject = learningObject;
     }
 }

@@ -138,6 +138,11 @@ public abstract class ResourceIntegrationTestBase extends IntegrationTestBase {
      * PUT
      */
 
+    protected static <T> T doPut(String url, Entity<?> requestEntity, Class<? extends T> clazz) {
+        Response response = doPut(url, requestEntity, MediaType.APPLICATION_JSON_TYPE);
+        return response.readEntity(clazz);
+    }
+
     protected static Response doPut(String url, Entity<?> requestEntity) {
         return doPut(url, requestEntity, MediaType.APPLICATION_JSON_TYPE);
     }
@@ -146,7 +151,7 @@ public abstract class ResourceIntegrationTestBase extends IntegrationTestBase {
         return getTarget(url).request().accept(mediaType).put(requestEntity);
     }
 
-     /*
+    /*
      * DELETE
      */
 

@@ -9,7 +9,7 @@ import javax.persistence.TypedQuery;
 import ee.hm.dop.model.taxon.EducationalContext;
 import ee.hm.dop.model.taxon.Taxon;
 
-public class TaxonDAO extends BaseDAO {
+public class TaxonDAO extends BaseDAO<Taxon> {
 
     public Taxon findTaxonById(Long id) {
         TypedQuery<Taxon> findById = createQuery("FROM Taxon t WHERE t.id = :id", Taxon.class) //
@@ -39,7 +39,7 @@ public class TaxonDAO extends BaseDAO {
         return educationalContexts;
     }
 
-    public Taxon findTaxonByRepoName(String name, String repoTable, Class level) {
+    public Taxon findTaxonByRepoName(String name, String repoTable, Class<? extends Taxon> level) {
         List<Taxon> taxons = createQuery("SELECT t.taxon FROM " + repoTable + " t WHERE t.name = :name", Taxon.class)
                 .setParameter("name", name).getResultList();
         List<Taxon> res = taxons.stream().filter(t -> (t.getClass().equals(level))).collect(Collectors.toList());

@@ -1,5 +1,7 @@
 package ee.hm.dop.service;
 
+import static ee.hm.dop.model.Visibility.PRIVATE;
+import static ee.hm.dop.utils.UserUtils.isAdmin;
 import static org.apache.commons.lang3.StringUtils.isEmpty;
 
 import java.util.ArrayList;
@@ -14,6 +16,7 @@ import ee.hm.dop.dao.PortfolioDAO;
 import ee.hm.dop.dao.UserLikeDAO;
 import ee.hm.dop.model.Chapter;
 import ee.hm.dop.model.Comment;
+import ee.hm.dop.model.LearningObject;
 import ee.hm.dop.model.Portfolio;
 import ee.hm.dop.model.Recommendation;
 import ee.hm.dop.model.Role;
@@ -22,9 +25,14 @@ import ee.hm.dop.model.TagUpVote;
 import ee.hm.dop.model.User;
 import ee.hm.dop.model.UserLike;
 import ee.hm.dop.model.Visibility;
+import ee.hm.dop.service.LearningObjectService.LearningObjectHandlerFactory;
 import ezvcard.util.org.apache.commons.codec.binary.Base64;
 
-public class PortfolioService {
+public class PortfolioService implements LearningObjectHandler {
+
+    static {
+        LearningObjectHandlerFactory.register(PortfolioService.class, Portfolio.class);
+    }
 
     @Inject
     private PortfolioDAO portfolioDAO;
@@ -409,5 +417,26 @@ public class PortfolioService {
         }
 
         return portfolio;
+    }
+
+    @Override
+    public boolean hasAccess(User user, LearningObject learningObject) {
+        if (!(learningObject instanceof Portfolio)) {
+            return false;
+        }
+
+        Portfolio portfolio = (Portfolio) learningObject;
+
+        if (!isAdmin(user)) {
+            if (portfolio.isDeleted()) {
+                return false;
+            }
+
+            if (portfolio.getVisibility() == PRIVATE && portfolio.getCreator().getId() != user.getId()) {
+                return false;
+            }
+        }
+
+        return true;
     }
 }

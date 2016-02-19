@@ -20,12 +20,12 @@ public class PortfolioDAO extends LearningObjectDAO {
     }
 
     private Portfolio findById(long portfolioId, boolean includeDeleted) {
-        TypedQuery<Portfolio> findById = entityManager.createQuery(
+        TypedQuery<Portfolio> findById = createQuery(
                 "SELECT p FROM Portfolio p WHERE p.id = :id AND p.deleted = :includeDeleted", Portfolio.class);
 
         TypedQuery<Portfolio> query = findById.setParameter("id", portfolioId).setParameter("includeDeleted",
                 includeDeleted);
-        return getSingleResult(query);
+        return getSingleResult(query, Portfolio.class);
     }
 
     public Portfolio findByIdFromAll(long portfolioId) {
@@ -61,15 +61,14 @@ public class PortfolioDAO extends LearningObjectDAO {
     }
 
     public byte[] findPictureByNotDeletedPortfolio(Portfolio portfolio) {
-        TypedQuery<byte[]> findById = entityManager.createQuery(
+        TypedQuery<byte[]> findById = createQuery(
                 "SELECT p.picture FROM Portfolio p WHERE p.id = :id AND p.deleted = false", byte[].class);
 
         return getBytes(portfolio, findById);
     }
 
     public byte[] findPictureByPortfolio(Portfolio portfolio) {
-        TypedQuery<byte[]> findById = entityManager.createQuery("SELECT p.picture FROM Portfolio p WHERE p.id = :id",
-                byte[].class);
+        TypedQuery<byte[]> findById = createQuery("SELECT p.picture FROM Portfolio p WHERE p.id = :id", byte[].class);
 
         return getBytes(portfolio, findById);
     }

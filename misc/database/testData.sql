@@ -576,8 +576,8 @@ insert into LearningObject_KeyCompetence(learningObject, keyCompetence) values (
 insert into LearningObject_KeyCompetence(learningObject, keyCompetence) values (106, 1);
 
 -- Improper content
-insert into ImproperContent(id, creator, portfolio, material, added) values (1, 1, 102, null, '2014-06-01 00:00:01');
-insert into ImproperContent(id, creator, portfolio, material, added) values (2, 1, null, 2, '2014-06-01 00:00:01');
+insert into ImproperContent(id, creator, learningObject, added) values (1, 1, 102, '2014-06-01 00:00:01');
+insert into ImproperContent(id, creator, learningObject, added) values (2, 1, 2, '2014-06-01 00:00:01');
 
 -- TagUpVotes
 
