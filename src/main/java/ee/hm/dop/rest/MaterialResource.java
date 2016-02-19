@@ -5,13 +5,16 @@ import static ee.hm.dop.utils.FileUtils.read;
 import static org.apache.commons.lang3.StringUtils.isBlank;
 
 import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
+import java.net.URLDecoder;
 import java.util.List;
 
 import javax.annotation.security.PermitAll;
 import javax.annotation.security.RolesAllowed;
 import javax.inject.Inject;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.Encoded;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
@@ -54,6 +57,15 @@ public class MaterialResource extends BaseResource {
     @Produces(MediaType.APPLICATION_JSON)
     public Material get(@QueryParam("materialId") long materialId) {
         return materialService.get(materialId, getLoggedInUser());
+    }
+
+    @GET
+    @Path("getBySource")
+    @RolesAllowed({ "USER", "ADMIN", "PUBLISHER"})
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<Material> getMaterialsByUrl(@QueryParam("source") @Encoded String materialSource) throws UnsupportedEncodingException {
+        materialSource = URLDecoder.decode(materialSource, "UTF-8");
+        return materialService.getBySource(materialSource);
     }
 
     @GET

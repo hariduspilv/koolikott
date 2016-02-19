@@ -91,4 +91,9 @@ public class MaterialDAO extends LearningObjectDAO {
         removeNot(Material.class, learningObjects);
         return learningObjects;
     }
+
+    public List<Material> findBySource(String materialSource) {
+        return createQuery("FROM Material m WHERE m.deleted = false AND m.source = :source", Material.class)
+                .setParameter("source", materialSource).getResultList();
+    }
 }
