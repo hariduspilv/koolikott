@@ -1,5 +1,6 @@
 .tags {
 	margin-right: 20px;
+	margin-bottom: 10px;
 	.meta {
 			margin: 20px 0 0 0;
 	}
@@ -34,6 +35,15 @@ md-chips,
 				fill: #15c;
 			}
 		}
+		.md-chip-remove-container {
+			right: 6px;
+			line-height: 32px;
+		}
+		.md-chip-remove {
+			width: 16px;
+			height: 16px;
+			position: static;
+		}
 		.md-button.md-icon-button {
 			line-height: 1;
 			margin: 0px 3px;
@@ -41,6 +51,14 @@ md-chips,
 			width: 16px;
 			min-height: 15px;
 			padding: 0;
+			&:first-child {
+				margin-right: 3px;
+				margin-left: 0px;
+			}
+			&:last-child {
+				margin-left: 3px;
+				margin-right: 0px;
+			}
 			.material-icons,
 			md-icon {
 				color: lighten(#15c, 30%);
