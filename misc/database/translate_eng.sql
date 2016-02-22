@@ -601,8 +601,12 @@ INSERT INTO Translation(translationGroup, translationKey, translation) VALUES
 (3,'MODULE_ÕIGUSE_ALUSED','Basics of law'),
 (3,'MODULE_IT_ÕIGUS','IT law'),
 (3,'MODULE_KOMMUNIKATSIOON','Communication'),
-(3,'MOST_LIKED','Preferred');
-
+(3,'MOST_LIKED','Preferred'),
+(3,'PORTFOLIO_AGE_GROUP_REQUIRED','Target group is mandatory'),
+(3,'PORTFOLIO_DOMAIN_REQUIRED','Domain is required'),
+(3,'PORTFOLIO_EDUCATIONAL_CONTEXT_REQUIRED','Educational context is required'),
+(3,'MATERIAL_LANGUAGE','Material language'),
+(3,'TITLE_AND_DESCRIPTION_LANGUAGE','Title and description language');
 
 
 INSERT INTO Translation(translationGroup, translationKey, translation) VALUES 
@@ -4527,7 +4531,4 @@ INSERT INTO Translation(translationGroup, translationKey, translation) VALUES
 (3,'SUBTOPIC_VÕÕRNIMEDE_ÕIGEKIRI','Võõrnimede õigekiri'),
 (3,'SUBTOPIC_MAAILMAMERE_REOSTUMINE','Maailmamere reostumine'),
 (3,'SUBTOPIC_BALTHASAR_RUSSOWI_KROONIKA','Balthasar Russowi kroonika'),
-(3,'SUBTOPIC_LINNAKESKKOND','Linnakeskkond'),
-(3,'PORTFOLIO_AGE_GROUP_REQUIRED','Target group is mandatory'),
-(3,'PORTFOLIO_DOMAIN_REQUIRED','Domain is required'),
-(3,'PORTFOLIO_EDUCATIONAL_CONTEXT_REQUIRED','Educational context is required');
+(3,'SUBTOPIC_LINNAKESKKOND','Linnakeskkond');

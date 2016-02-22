@@ -555,7 +555,13 @@ INSERT INTO Translation(translationGroup, translationKey, translation) VALUES
 (1,'MATERIAL_CURRICULUM_LITERATURE','Õppekirjandus'),
 (1,'REASON','Põhjus'),
 (1,'SHOW_LESS','Näita vähem'),
-(1,'MOST_LIKED','Eelistatud');
+(1,'MOST_LIKED','Eelistatud'),
+(1,'PORTFOLIO_AGE_GROUP_REQUIRED','Vanuserühm on kohustuslik'),
+(1,'PORTFOLIO_DOMAIN_REQUIRED','Valdkond on kohustuslik'),
+(1,'PORTFOLIO_EDUCATIONAL_CONTEXT_REQUIRED','Haridustase on kohustuslik'),
+(1,'MATERIAL_LANGUAGE','Õppematerjali keel'),
+(1,'TITLE_AND_DESCRIPTION_LANGUAGE','Pealkirja ja kirjelduse keel');
+
 
 INSERT INTO Translation(translationGroup, translationKey, translation) VALUES 
 (1,'TOPIC_MUUTUSED_MAAILMAMAJANDUSES','Muutused maailmamajanduses'),
@@ -4479,7 +4485,4 @@ INSERT INTO Translation(translationGroup, translationKey, translation) VALUES
 (1,'SUBTOPIC_VÕÕRNIMEDE_ÕIGEKIRI','Võõrnimede õigekiri'),
 (1,'SUBTOPIC_MAAILMAMERE_REOSTUMINE','Maailmamere reostumine'),
 (1,'SUBTOPIC_BALTHASAR_RUSSOWI_KROONIKA','Balthasar Russowi kroonika'),
-(1,'SUBTOPIC_LINNAKESKKOND','Linnakeskkond'),
-(1,'PORTFOLIO_AGE_GROUP_REQUIRED','Vanuserühm on kohustuslik'),
-(1,'PORTFOLIO_DOMAIN_REQUIRED','Valdkond on kohustuslik'),
-(1,'PORTFOLIO_EDUCATIONAL_CONTEXT_REQUIRED','Haridustase on kohustuslik');
+(1,'SUBTOPIC_LINNAKESKKOND','Linnakeskkond');
