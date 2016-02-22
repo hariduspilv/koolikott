@@ -338,6 +338,12 @@ define([
 
                 setDefaultMaterialMetadataLanguage();
                 addNewMetadata();
+                setMaterialLanguage();
+            }
+
+            function setMaterialLanguage() {
+                if (preferredLanguage !== null && preferredLanguage !== undefined)
+                    $scope.material.language = preferredLanguage[0];
             }
 
             function setLicenseTypes(data) {
