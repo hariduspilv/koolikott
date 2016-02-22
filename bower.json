@@ -28,7 +28,6 @@
   "appPath": "app",
   "moduleName": "ranitsApp",
   "resolutions": {
-    "angular": "1.4.8",
-    "angular-material": "1.0.1"
+    "angular": "1.4.8"
   }
 }
