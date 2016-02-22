@@ -32,11 +32,13 @@ define([
                 		limit: SIDE_ITEMS_AMOUNT
                 	};
                 	
+                	var originalSort = searchService.getSort();
+                	var originalSortDirection = searchService.getSortDirection();
                 	searchService.setSort('like_score');
                 	searchService.setSortDirection('desc');
                 	var searchUrl = searchService.getQueryURL();
-                	searchService.setSort(null);
-                	searchService.setSortDirection(null);
+                	searchService.setSort(originalSort);
+                	searchService.setSortDirection(originalSortDirection);
                 	
                 	serverCallService.makeGet("rest/search?" + searchUrl, params, searchMostLikedSuccess, getMostLikedFail);
                 } else {
