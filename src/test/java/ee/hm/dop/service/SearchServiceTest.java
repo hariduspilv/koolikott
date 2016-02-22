@@ -799,7 +799,7 @@ public class SearchServiceTest {
                 + " AND domain:\"cool_domain\" AND educational_context:\"preschool\""
                 + " AND (paid:\"false\" OR type:\"portfolio\") AND type:\"material\" AND resource_type:\"extrabook\""
                 + " AND special_education:\"true\""
-                + " AND (issue_date_year:[2010 TO *] OR (created:[2010-01-01T00:00:00Z TO *] AND type:\"portfolio\"))"
+                + " AND (issue_date_year:[2010 TO *] OR (added:[2010-01-01T00:00:00Z TO *] AND type:\"portfolio\"))"
                 + " AND cross_curricular_theme:\"test_theme\""
                 + " AND key_competence:\"test_competence\" AND (visibility:\"public\" OR type:\"material\")";
         long start = 0;
@@ -939,7 +939,7 @@ public class SearchServiceTest {
         SearchFilter searchFilter = new SearchFilter();
         searchFilter.setIssuedFrom(2012);
         String tokenizedQuery = "(airplane) AND (issue_date_year:[2012 TO *]"
-                + " OR (created:[2012-01-01T00:00:00Z TO *] AND type:\"portfolio\"))"
+                + " OR (added:[2012-01-01T00:00:00Z TO *] AND type:\"portfolio\"))"
                 + " AND (visibility:\"public\" OR type:\"material\")";
         long start = 0;
 

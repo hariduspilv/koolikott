@@ -130,6 +130,9 @@
   <field name="key_competence" type="text_general" indexed="true" stored="false" multiValued="true"/>
   <field name="tag" type="text_general" indexed="true" stored="false" multiValued="true" omitNorms="true"/>
   <field name="like_score" type="int" indexed="true" stored="true" multiValued="false"/>
+   <field name="added" type="tdate" indexed="true" stored="false" multiValued="false"/>
+  <field name="recommended" type="boolean" indexed="true" stored="false" multiValued="false"/>
+  <field name="recommendation_timestamp" type="tdate" indexed="true" stored="false" multiValued="false"/>
 
    <!-- Material & Portfolio -->
    <field name="title" type="text_general" indexed="true" stored="false" multiValued="true"/>
@@ -141,9 +144,6 @@
    <field name="specialization" type="text_general" indexed="true" stored="false" multiValued="true"/>
    <field name="module" type="text_general" indexed="true" stored="false" multiValued="true"/>
    <field name="tag_up_vote" type="text_general" indexed="false" stored="false" multiValued="true"/>
-   <field name="created" type="tdate" indexed="true" stored="false" multiValued="false"/>
-   <field name="recommended" type="boolean" indexed="true" stored="false" multiValued="false"/>
-   <field name="recommendation_timestamp" type="tdate" indexed="true" stored="false" multiValued="false"/>
 
    <!-- Material -->
    <field name="description" type="text_general" indexed="true" stored="false" multiValued="true"/>
