@@ -62,7 +62,7 @@ public class UserLikeDAO extends BaseDAO<UserLike> {
     public List<Searchable> findMostLikedSince(DateTime date, int numberOfMaterials) {
         List<Object[]> resultList = createQuery("SELECT ul.learningObject, 2 * SUM(ul.isLiked) - COUNT(*) AS score" //
                 + " FROM UserLike ul" //
-                + " WHERE ul.added > :from" //
+                + " WHERE ul.added > :from AND ul.learningObject.deleted = false" //
                 + " GROUP BY ul.learningObject" //
                 + " ORDER BY score DESC", Object[].class) //
                 .setParameter("from", date) //

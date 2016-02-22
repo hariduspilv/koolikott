@@ -487,6 +487,13 @@ insert into UserLike(id, creator, learningObject, isLiked, added) values (11, 5,
 insert into UserLike(id, creator, learningObject, isLiked, added) values (12, 1, 104, 0, null);
 insert into UserLike(id, creator, learningObject, isLiked, added) values (13, 2, 104, 0, null);
 
+-- deleted material
+insert into UserLike(id, creator, learningObject, isLiked, added) values (14, 4, 11, 0, null);
+insert into UserLike(id, creator, learningObject, isLiked, added) values (15, 5, 11, 1, null);
+insert into UserLike(id, creator, learningObject, isLiked, added) values (16, 1, 11, 1, null);
+insert into UserLike(id, creator, learningObject, isLiked, added) values (17, 2, 11, 1, null);
+
+
 -- In the far past, should not count when looking for the most liked ones
 insert into UserLike(id, creator, learningObject, isLiked, added) values (14, 2, 3, 0, '2014-06-01 00:00:01');
 insert into UserLike(id, creator, learningObject, isLiked, added) values (15, 4, 103, 0, '2014-06-01 00:00:01');
