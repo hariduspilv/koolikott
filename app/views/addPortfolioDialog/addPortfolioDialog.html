@@ -68,11 +68,11 @@
       <md-button aria-label="Tühista kogumiku lisamine" id="add-portfolio-cancel-button" data-ng-disabled="isSaving" data-ng-click="cancel()">
         <span data-translate="BUTTON_CANCEL"></span>
       </md-button>
-      <md-button aria-label="Loo kogumik" data-ng-if="!isEditPortfolio" id="add-portfolio-create-button" data-ng-disabled="isValid()" data-ng-click="create()" data-ng-hide="isSaving" class="md-primary">
+      <md-button aria-label="Loo kogumik" data-ng-if="!isEditPortfolio" id="add-portfolio-create-button" data-ng-disabled="!isValid()" data-ng-click="create()" data-ng-hide="isSaving" class="md-primary">
         <md-icon>arrow_forward</md-icon>
         <span data-translate="BUTTON_CREATE_PORTFOLIO"></span>
       </md-button>
-      <md-button aria-label="Muuda kogumikku" data-ng-if="isEditPortfolio" id="add-portfolio-edit-button" data-ng-disabled="isValid()" data-ng-click="update()" data-ng-hide="isSaving" class="md-primary">
+      <md-button aria-label="Muuda kogumikku" data-ng-if="isEditPortfolio" id="add-portfolio-edit-button" data-ng-disabled="!isValid()" data-ng-click="update()" data-ng-hide="isSaving" class="md-primary">
         <md-icon>arrow_forward</md-icon>
         <span data-translate="BUTTON_EDIT_PORTFOLIO"></span>
       </md-button>

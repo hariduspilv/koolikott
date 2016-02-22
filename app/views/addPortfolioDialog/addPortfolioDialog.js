@@ -88,7 +88,7 @@ define([
             $scope.isValid = function() {
                 var portfolio = $scope.newPortfolio;
                 var hasCorrectTaxon = portfolio.taxon && portfolio.taxon.level !== ".EducationalContext";
-                return !portfolio.title || !portfolio.targetGroups[0] || !hasCorrectTaxon;
+                return portfolio.title && portfolio.targetGroups[0] && hasCorrectTaxon;
             };
             
             function savePortfolioFinally() {
