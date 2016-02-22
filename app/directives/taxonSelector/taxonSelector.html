@@ -22,7 +22,7 @@
 
     <!-- Domain -->
     <md-input-container
-            data-ng-show="taxonPath.educationalContext && taxonPath.educationalContext.name !== 'BASICEDUCATION'"
+            data-ng-show="taxonPath.educationalContext && taxonPath.educationalContext.name !== 'BASICEDUCATION' && taxonPath.educationalContext.name !== 'SECONDARYEDUCATION'"
             class="md-block" flex>
         <label for="taxonDomainSelect">
             <span data-translate="TAXON_PATH_DOMAIN"></span>
@@ -42,7 +42,7 @@
 
     <!-- Subject -->
     <md-input-container
-            data-ng-show="taxonPath.domain && taxonPath.educationalContext.name !== 'BASICEDUCATION' && taxonPath.domain.subjects.length > 0"
+            data-ng-show="taxonPath.domain && taxonPath.educationalContext.name !== 'BASICEDUCATION' && taxonPath.educationalContext.name !== 'SECONDARYEDUCATION' && taxonPath.domain.subjects.length > 0"
             class="md-block" flex>
         <label for="taxonSubjectSelect" data-translate="DETAIL_VIEW_SUBJECT"></label>
         <md-select data-ng-model="taxonPath.subject" id="taxonSubjectSelect" ng-model-options="{trackBy: '$value.id'}">
@@ -54,7 +54,7 @@
 
     <!-- Domain and Subject together -->
     <md-input-container
-            data-ng-show="taxonPath.educationalContext && taxonPath.educationalContext.name === 'BASICEDUCATION'"
+            data-ng-show="taxonPath.educationalContext && (taxonPath.educationalContext.name === 'BASICEDUCATION' || taxonPath.educationalContext.name === 'SECONDARYEDUCATION')"
             class="md-block" flex>
         <label for="taxonDomainSubjectsSelect">
             <span data-translate="TAXON_PATH_DOMAIN_AND_SUBJECT"></span>
