@@ -8,8 +8,8 @@
             deletedPkQuery: must return uniqueKey which will be used to remove document from Solr index.
          -->
         <entity name="LearningObject" pk="id"
-            query="select id, recommendation from LearningObject WHERE deleted = false"
-                deltaImportQuery="select id, recommendation from LearningObject where id = '${dih.delta.id}'"
+            query="select id, added from LearningObject WHERE deleted = false"
+                deltaImportQuery="select id, added from LearningObject where id = '${dih.delta.id}'"
                 deltaQuery="select id from LearningObject where (CONVERT_TZ(added, @@session.time_zone, '+00:00') > '${dataimporter.last_index_time}' OR CONVERT_TZ(updated, @@session.time_zone, '+00:00') > '${dataimporter.last_index_time}') AND deleted = false"
                 deletedPkQuery="select id from LearningObject where (CONVERT_TZ(added, @@session.time_zone, '+00:00') > '${dataimporter.last_index_time}' OR CONVERT_TZ(updated, @@session.time_zone, '+00:00') > '${dataimporter.last_index_time}') AND deleted = true">
 
@@ -29,7 +29,7 @@
 
             <entity name="LearningObject_Score" query="select 2 * SUM(ul.isLiked) - COUNT(*) as like_score from UserLike ul where ul.learningObject='${LearningObject.id}'" />
 
-            <entity name="LearningObject_Recommended" query="select r.added as recommendation_timestamp, if (lo.recommendation is not null, 1, 0) as recommended from Recommendation r right join LearningObject lo on r.id = lo.recommendation where lo.id = '${LearningObject.recommendation}'" />
+            <entity name="LearningObject_Recommended" query="select r.added as recommendation_timestamp, if (lo.recommendation is not null, 1, 0) as recommended from Recommendation r right join LearningObject lo on r.id = lo.recommendation where lo.id = '${LearningObject.id}'" />
             
             <entity name="Material" query="select id, licenseType, paid, lang, isSpecialEducation as special_education, issueDate as issue_date_id, curriculumLiterature as curriculum_literature from Material where id='${LearningObject.id}'">
             

@@ -347,7 +347,7 @@ public class SearchService {
 
     private String issuedFromAsQuery(SearchFilter searchFilter) {
         if (searchFilter.getIssuedFrom() != null) {
-            return format("(issue_date_year:[%s TO *] OR (created:[%s-01-01T00:00:00Z TO *] AND type:\"portfolio\"))",
+            return format("(issue_date_year:[%s TO *] OR (added:[%s-01-01T00:00:00Z TO *] AND type:\"portfolio\"))",
                     searchFilter.getIssuedFrom(), searchFilter.getIssuedFrom());
         }
         return "";
