@@ -102,8 +102,10 @@ public class MaterialService implements LearningObjectHandler {
 
         material.setRecommendation(null);
 
-        // Do not upload picture when creating material
-        material.setPicture(null);
+        // Do not upload picture when creating material from Web
+        if (creator != null) {
+            material.setPicture(null);
+        }
 
         if (!isUserAdmin(creator) && !isUserPublisher(creator)) {
             material.setCurriculumLiterature(false);
