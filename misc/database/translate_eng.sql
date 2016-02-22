@@ -4527,4 +4527,7 @@ INSERT INTO Translation(translationGroup, translationKey, translation) VALUES
 (3,'SUBTOPIC_VÕÕRNIMEDE_ÕIGEKIRI','Võõrnimede õigekiri'),
 (3,'SUBTOPIC_MAAILMAMERE_REOSTUMINE','Maailmamere reostumine'),
 (3,'SUBTOPIC_BALTHASAR_RUSSOWI_KROONIKA','Balthasar Russowi kroonika'),
-(3,'SUBTOPIC_LINNAKESKKOND','Linnakeskkond');
+(3,'SUBTOPIC_LINNAKESKKOND','Linnakeskkond'),
+(3,'PORTFOLIO_AGE_GROUP_REQUIRED','Target group is mandatory'),
+(3,'PORTFOLIO_DOMAIN_REQUIRED','Требуется домен'),
+(3,'PORTFOLIO_EDUCATIONAL_CONTEXT_REQUIRED','Обучающие контекст требуется');
