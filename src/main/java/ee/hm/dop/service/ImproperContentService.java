@@ -34,6 +34,7 @@ public class ImproperContentService {
         improper.setCreator(creator);
         improper.setAdded(DateTime.now());
         improper.setLearningObject(learningObject);
+        improper.setReason(improperContent.getReason());
 
         return improperContentDAO.update(improper);
     }
