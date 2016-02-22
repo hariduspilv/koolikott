@@ -59,7 +59,7 @@
                         <md-menu-divider data-ng-if="isAdmin()"></md-menu-divider>
                         <md-menu-item data-ng-if="isAdmin()" dop-recommend data-material="material"></md-menu-item>
                         <md-menu-divider data-ng-if="isLoggedIn() && !isRestricted()"></md-menu-divider>
-                        <md-menu-item data-ng-if="isLoggedIn() && !isRestricted()" dop-report-improper data-material="material"></md-menu-item>
+                        <md-menu-item data-ng-if="isLoggedIn() && !isRestricted()" dop-report-improper data-learning-object="material"></md-menu-item>
                         <md-menu-item data-ng-if="isLoggedIn() && !isRestricted()" dop-report-broken-link></md-menu-item>
                       </md-menu-content>
                     </md-menu>

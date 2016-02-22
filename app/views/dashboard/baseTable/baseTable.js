@@ -143,7 +143,8 @@ define([
         return {
             getItemsSuccess: getItemsSuccess,
             getItemsFail: getItemsFail,
-            buildTable: buildTable
+            buildTable: buildTable,
+            getCorrectLanguageTitle: $scope.getCorrectLanguageTitle
         };
     }]);
 });

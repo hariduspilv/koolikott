@@ -11,12 +11,12 @@
   </thead>
   <tbody md-body>
     <tr md-row ng-repeat="item in data">
-      <td md-cell>{{item.portfolio.title}}</td>
+      <td md-cell>{{getLearningObjectTitle(item.learningObject)}}</td>
       <td md-cell data-ng-bind="formatDate(item.added)"></td>
       <td md-cell>{{item.creator.name}} {{item.creator.surname}}</td>
       <td md-cell>{{item.reason}}</td>
       <td md-cell>
-        <md-button aria-label="Ava kogumik" href="#/portfolio?id={{item.portfolio.id}}" class="md-raised md-default" data-translate="BUTTON_OPEN"></md-button>
+        <md-button aria-label="Ava kogumik" href="{{getLearningObjectUrl(item.learningObject)}}" class="md-raised md-default" data-translate="BUTTON_OPEN"></md-button>
       </td>
     </tr>
   </tbody>

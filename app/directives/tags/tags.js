@@ -149,9 +149,9 @@ define([
                         .cancel($translate.instant('BUTTON_CANCEL'));
 
                     $mdDialog.show(confirm).then(function () {
+                    	var learningObject = $scope.material ? $scope.material : $scope.portfolio;
                         var entity = {
-                            material: $scope.material,
-                            portfolio: $scope.portfolio,
+                            learningObject: learningObject,
                             reason: "Tag: " + tag
                         };
 
@@ -172,24 +172,18 @@ define([
                 function setImproperSuccessful() {
                     $scope.isReportedByUser = true;
                 }
-
+                
                 function getHasReported() {
-                    var url;
-
-                    if ($scope.portfolio && $scope.portfolio.id) {
-                        url = "rest/impropers/portfolios/" + $scope.portfolio.id;
-
-                        serverCallService.makeGet(url, {}, requestSuccessful, requestFailed);
-                    } else if ($scope.material && $scope.material.id) {
-                        url = "rest/impropers/materials/" + $scope.material.id;
-
+                	var learningObject = $scope.material ? $scope.material : $scope.portfolio;
+                    if (learningObject && learningObject.id) {
+                        var url = "rest/impropers?learningObject=" + learningObject.id;
                         serverCallService.makeGet(url, {}, requestSuccessful, requestFailed);
                     }
                 }
 
-                function requestSuccessful(response) {
+                function requestSuccessful(improper) {
                     if (!$scope.isAdmin()) {
-                        $scope.isReportedByUser = response === true;
+                        $scope.isReportedByUser = improper.length > 0;
                     }
                 }
 
