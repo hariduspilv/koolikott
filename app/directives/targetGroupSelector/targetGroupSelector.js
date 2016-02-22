@@ -3,10 +3,11 @@ define(['angularAMD'], function(angularAMD) {
         return {
             scope: {
                 targetGroups: '=',
-                taxon: '='
+                taxon: '=',
+                isAddPortfolioView: '='
             },
             templateUrl: 'directives/targetGroupSelector/targetGroupSelector.html',
-            controller: function($scope, $rootScope) {
+            controller: function($scope, $rootScope, $timeout) {
 
                 var preschoolGroups = ['PRESCHOOL', 'ZERO_FIVE', 'SIX_SEVEN'];
                 var level1Groups = ['LEVEL1', 'GRADE1', 'GRADE2', 'GRADE3'];
@@ -20,6 +21,9 @@ define(['angularAMD'], function(angularAMD) {
                     fill();
                     addListeners();
                     selectValue();
+                    $timeout(function(){
+                        $scope.isReady = true;
+                    })
                 }
 
                 function addListeners() {

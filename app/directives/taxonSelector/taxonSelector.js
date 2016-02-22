@@ -8,7 +8,8 @@ define([
         return {
             scope: {
                 taxon: '=',
-                disableEducationalContext: '='
+                disableEducationalContext: '=',
+                isAddPortfolioView: '='
             },
             templateUrl: 'directives/taxonSelector/taxonSelector.html',
             controller: function($scope, serverCallService, $rootScope, $timeout) {
@@ -26,6 +27,9 @@ define([
                     addTaxonPathListeners();
 
                     $scope.basicEducationDomainSubjects = EDUCATIONAL_CONTEXTS.basicEducationDomainSubjects;
+                    $timeout(function(){
+                        $scope.isReady = true;
+                    })
                 }
 
                 $scope.reset = function(taxon) {

@@ -50,9 +50,9 @@
         <textarea id="add-portfolio-description-input" data-ng-model="newPortfolio.summary" columns="1" md-maxlength="150"></textarea>
       </md-input-container>
 
-      <div data-dop-taxon-selector data-taxon="newPortfolio.taxon" data-layout="row" data-layout-sm="column" flex></div>
+      <div data-dop-taxon-selector data-taxon="newPortfolio.taxon" data-is-add-portfolio-view="true" data-layout="row" data-layout-sm="column" flex></div>
 
-      <div data-dop-target-group-selector data-target-groups="newPortfolio.targetGroups"></div>
+      <div data-dop-target-group-selector data-target-groups="newPortfolio.targetGroups" data-is-add-portfolio-view="true"></div>
 
       <md-input-container class="md-block">
         <label>&nbsp;</label>
@@ -68,11 +68,11 @@
       <md-button aria-label="Tühista kogumiku lisamine" id="add-portfolio-cancel-button" data-ng-disabled="isSaving" data-ng-click="cancel()">
         <span data-translate="BUTTON_CANCEL"></span>
       </md-button>
-      <md-button aria-label="Loo kogumik" data-ng-if="!isEditPortfolio" id="add-portfolio-create-button" data-ng-disabled="!newPortfolio.title" data-ng-click="create()" data-ng-hide="isSaving" class="md-primary">
+      <md-button aria-label="Loo kogumik" data-ng-if="!isEditPortfolio" id="add-portfolio-create-button" data-ng-disabled="isValid()" data-ng-click="create()" data-ng-hide="isSaving" class="md-primary">
         <md-icon>arrow_forward</md-icon>
         <span data-translate="BUTTON_CREATE_PORTFOLIO"></span>
       </md-button>
-      <md-button aria-label="Muuda kogumikku" data-ng-if="isEditPortfolio" id="add-portfolio-edit-button" data-ng-disabled="!newPortfolio.title" data-ng-click="update()" data-ng-hide="isSaving" class="md-primary">
+      <md-button aria-label="Muuda kogumikku" data-ng-if="isEditPortfolio" id="add-portfolio-edit-button" data-ng-disabled="isValid()" data-ng-click="update()" data-ng-hide="isSaving" class="md-primary">
         <md-icon>arrow_forward</md-icon>
         <span data-translate="BUTTON_EDIT_PORTFOLIO"></span>
       </md-button>

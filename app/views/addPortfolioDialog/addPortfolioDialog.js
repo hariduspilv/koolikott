@@ -46,7 +46,7 @@ define([
                     
                     if ($scope.newPicture) {
                     	portfolio.hasPicture = true;
-                    	portfolio.picture = $scope.newPicture.$ngfDataUrl
+                    	portfolio.picture = $scope.newPicture.$ngfDataUrl;
                     	uploadPicture(portfolio);                    	
                     } else {
                     	redirectToEditPage();
@@ -61,10 +61,10 @@ define([
             
             function uploadPicture(portfolio) {
             	var url = "rest/portfolio/addPicture?portfolioId=" + portfolio.id;
-            	picture = $scope.newPicture;
+            	var picture = $scope.newPicture;
                 var data = {
                 		picture: picture
-                }
+                };
                 serverCallService.upload(url, data, redirectToEditPage, createPortfolioFailed, savePortfolioFinally);
             }
 
@@ -83,6 +83,12 @@ define([
                 $scope.portfolio.targetGroups = $scope.newPortfolio.targetGroups;
                 $scope.portfolio.tags = $scope.newPortfolio.tags;
                 serverCallService.makePost(url, $scope.portfolio, createPortfolioSuccess, createPortfolioFailed);
+            };
+
+            $scope.isValid = function() {
+                var portfolio = $scope.newPortfolio;
+                var hasCorrectTaxon = portfolio.taxon && portfolio.taxon.level !== ".EducationalContext";
+                return !portfolio.title || !portfolio.targetGroups[0] || !hasCorrectTaxon;
             };
             
             function savePortfolioFinally() {
