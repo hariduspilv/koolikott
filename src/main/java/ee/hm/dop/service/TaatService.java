@@ -2,8 +2,6 @@ package ee.hm.dop.service;
 
 import static ee.hm.dop.utils.ConfigurationProperties.TAAT_ASSERTION_CONSUMER_SERVICE_INDEX;
 import static ee.hm.dop.utils.ConfigurationProperties.TAAT_CONNECTION_ID;
-import static ee.hm.dop.utils.ConfigurationProperties.TAAT_METADATA_ENTITY_ID;
-import static ee.hm.dop.utils.ConfigurationProperties.TAAT_METADATA_FILEPATH;
 import static ee.hm.dop.utils.ConfigurationProperties.TAAT_SSO;
 import static org.opensaml.xml.Configuration.getUnmarshallerFactory;
 
@@ -42,8 +40,6 @@ import org.opensaml.xml.io.Unmarshaller;
 import org.opensaml.xml.io.UnmarshallerFactory;
 import org.opensaml.xml.io.UnmarshallingException;
 import org.opensaml.xml.schema.impl.XSStringImpl;
-import org.opensaml.xml.security.credential.Credential;
-import org.opensaml.xml.security.x509.X509Credential;
 import org.opensaml.xml.signature.Signature;
 import org.opensaml.xml.signature.SignatureValidator;
 import org.opensaml.xml.validation.ValidationException;
@@ -54,7 +50,6 @@ import ee.hm.dop.dao.AuthenticationStateDAO;
 import ee.hm.dop.model.AuthenticatedUser;
 import ee.hm.dop.model.AuthenticationState;
 import ee.hm.dop.security.KeyStoreUtils;
-import ee.hm.dop.security.MetadataUtils;
 
 public class TaatService {
 
@@ -73,13 +68,14 @@ public class TaatService {
     @Inject
     private LoginService loginService;
 
+    @Inject
+    private SignatureValidator validator;
+
     private static final SecureRandom random = new SecureRandom();
 
-    private static Credential credential;
-
     private AuthnRequest buildAuthnRequest() {
-        int assertionConsumerServiceIndex = Integer.valueOf(configuration
-                .getString(TAAT_ASSERTION_CONSUMER_SERVICE_INDEX));
+        int assertionConsumerServiceIndex = Integer
+                .valueOf(configuration.getString(TAAT_ASSERTION_CONSUMER_SERVICE_INDEX));
 
         Issuer issuer = getIssuer(configuration.getString(TAAT_CONNECTION_ID));
         NameIDPolicy nameIdPolicy = getNameIdPolicy();
@@ -141,7 +137,6 @@ public class TaatService {
         Signature sig = response.getSignature();
 
         try {
-            SignatureValidator validator = new SignatureValidator(getCredential());
             validator.validate(sig);
         } catch (ValidationException e) {
             throw new RuntimeException("Error validating signature", e);
@@ -236,16 +231,4 @@ public class TaatService {
         return document.getDocumentElement();
     }
 
-    private X509Credential getCredential() {
-        if (credential == null) {
-            try {
-                return MetadataUtils.getCredential(configuration.getString(TAAT_METADATA_FILEPATH),
-                        configuration.getString(TAAT_METADATA_ENTITY_ID));
-            } catch (Exception e) {
-                throw new RuntimeException("Error getting credential.", e);
-            }
-        }
-
-        return (X509Credential) credential;
-    }
 }

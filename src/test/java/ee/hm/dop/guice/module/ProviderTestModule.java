@@ -5,6 +5,7 @@ import javax.ws.rs.client.Client;
 import javax.xml.soap.SOAPConnection;
 
 import org.apache.commons.configuration.Configuration;
+import org.opensaml.xml.signature.SignatureValidator;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.inject.AbstractModule;
@@ -16,6 +17,7 @@ import ee.hm.dop.guice.provider.HttpClientTestProvider;
 import ee.hm.dop.guice.provider.ObjectMapperGuiceProvider;
 import ee.hm.dop.guice.provider.SOAPConnectionTestProvider;
 import ee.hm.dop.guice.provider.SearchEngineServiceTestProvider;
+import ee.hm.dop.guice.provider.SignatureValidatorTestProvider;
 import ee.hm.dop.service.SearchEngineService;
 
 @Module(override = ProviderModule.class)
@@ -29,5 +31,6 @@ public class ProviderTestModule extends AbstractModule {
         bind(ObjectMapper.class).toProvider(ObjectMapperGuiceProvider.class);
         bind(SOAPConnection.class).toProvider(SOAPConnectionTestProvider.class);
         bind(Client.class).toProvider(HttpClientTestProvider.class);
+        bind(SignatureValidator.class).toProvider(SignatureValidatorTestProvider.class);
     }
 }
