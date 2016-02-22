@@ -43,8 +43,8 @@ public class UserLikeDAO extends BaseDAO<UserLike> {
     }
 
     private void deleteByLearningObjectAndUser(LearningObject learningObject, User user) {
-        Query query = createQuery("DELETE UserLike ul WHERE ul.learningObject = :loid and ul.creator = :uid",
-                UserLike.class);
+        Query query = getEntityManager().createQuery(
+                "DELETE UserLike ul WHERE ul.learningObject = :loid and ul.creator = :uid");
         query.setParameter("loid", learningObject);
         query.setParameter("uid", user);
         query.executeUpdate();
