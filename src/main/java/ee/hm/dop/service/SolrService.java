@@ -6,6 +6,8 @@ import static java.nio.charset.StandardCharsets.UTF_8;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.util.Map.Entry;
+import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -78,8 +80,15 @@ public class SolrService implements SearchEngineService {
 
     protected void logCommand(String command, SearchResponse searchResponse) {
         long responseCode = searchResponse.getResponseHeader().getStatus();
-        logger.info("Solr responded with code " + responseCode + ", url was " + configuration.getString(SEARCH_SERVER)
-                + command);
+
+        String statusMessages = "";
+        if (searchResponse.getStatusMessages() != null) {
+            statusMessages = "Status messages: " + searchResponse.getStatusMessages().entrySet() //
+                    .stream().map(Entry::toString).collect(Collectors.joining(";", "[", "]"));
+        }
+
+        logger.info(String.format("Solr responded with code %s, url was %s %s", responseCode,
+                configuration.getString(SEARCH_SERVER) + command, statusMessages));
     }
 
     private WebTarget getTarget(String path) {
