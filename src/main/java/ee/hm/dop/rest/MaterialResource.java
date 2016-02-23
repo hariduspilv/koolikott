@@ -98,12 +98,14 @@ public class MaterialResource extends BaseResource {
 
     @POST
     @Path("like")
+    @RolesAllowed({ "USER", "ADMIN", "PUBLISHER"})
     public void likeMaterial(Material material) {
         materialService.addUserLike(material, getLoggedInUser(), true);
     }
 
     @POST
     @Path("dislike")
+    @RolesAllowed({ "USER", "ADMIN", "PUBLISHER"})
     public void dislikeMaterial(Material material) {
         materialService.addUserLike(material, getLoggedInUser(), false);
     }
