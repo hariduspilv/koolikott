@@ -328,6 +328,7 @@ INSERT INTO Translation(translationGroup, translationKey, translation) VALUES
 (1,'HEADER_TOOLTIP_ENTER','Sisene'),
 (1,'HEADER_TOOLTIP_PROFILE','Profiil'),
 (1,'HEADER_TOOLTIP_CHANGE_VISIBILITY','Muuda nähtavust'),
+(1,'HEADER_TOOLTIP_EXIT_PORTFOLIO_MODE','Salvesta ja välju'),
 (1,'DASHBOARD','Töölaud'),
 (1,'DASHBOARD_IMRPOPER_MATERIALS','Ebasobivad materjalid'),
 (1,'DASHBOARD_IMRPOPER_PORTFOLIOS','Ebasobivad kogumikud'),

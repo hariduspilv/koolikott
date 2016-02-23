@@ -380,7 +380,7 @@ INSERT INTO Translation(translationGroup, translationKey, translation) VALUES
 (3,'HEADER_TOOLTIP_ENTER','Enter'),
 (3,'HEADER_TOOLTIP_PROFILE','Profile'),
 (3,'HEADER_TOOLTIP_CHANGE_VISIBILITY','Change visibility'),
-(3,'HEADER_TOOLTIP_EXIT_PORTFOLIO_MODE','Exit portfolio mode'),
+(3,'HEADER_TOOLTIP_EXIT_PORTFOLIO_MODE','Save and exit portfolio edit mode'),
 (3,'DASHBOARD','Dashboard'),
 (3,'DASHBOARD_IMRPOPER_MATERIALS','Improper materials'),
 (3,'DASHBOARD_IMRPOPER_PORTFOLIOS','Improper portfolios'),
