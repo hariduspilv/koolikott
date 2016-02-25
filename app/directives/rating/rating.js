@@ -36,7 +36,7 @@ define([
                         $scope.url = "rest/material/";
                     }
 
-                    if (authenticatedUserService.isAuthenticated() && $scope.entity && $scope.entity.type) {
+                    if (authenticatedUserService.isAuthenticated() && $scope.entity && $scope.entity.type && !authenticatedUserService.isRestricted()) {
                         getUserLike();
                     }
                 }
