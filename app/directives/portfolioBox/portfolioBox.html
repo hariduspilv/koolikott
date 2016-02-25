@@ -1,7 +1,7 @@
-<md-card class="card-sm md-whiteframe-2dp" id="portfolio-card-{{portfolio.id}}" data-ng-click="navigateTo(portfolio)">
+<md-card class="card-sm md-whiteframe-2dp" id="portfolio-card-{{portfolio.id}}" data-ng-click="navigateTo(portfolio, $event)">
   <div class="corner"></div>
     <!-- noimage -->
-  <div data-ng-if="!portfolio.hasPicture" class="card-cover portfolio" layout="row" layout-align="center center">
+  <a href="{{'#/portfolio?id=' + portfolio.id}}" data-ng-if="!portfolio.hasPicture" class="card-cover portfolio" layout="row" layout-align="center center">
     <div>
       <md-icon class="icon-kind">book</md-icon>
     </div>
@@ -9,14 +9,14 @@
     <div class="card-hover portfolio">
       <md-icon class="icon-kind">book</md-icon>
     </div>
-  </div>
+  </a>
   <!-- image -->
-  <div data-ng-if="portfolio.hasPicture"  class="card-cover imaged" layout="row"  layout-align="start start">
+  <a href="{{'#/portfolio?id=' + portfolio.id}}" data-ng-if="portfolio.hasPicture"  class="card-cover imaged" layout="row"  layout-align="start start">
     <img data-ng-src="{{portfolio.picture}}" class="md-card-image" />
     <div class="card-hover portfolio">
       <md-icon class="icon-kind">book</md-icon>
     </div>
-  </div>
+  </a>
 
   <md-card-content>
     <h4 class="md-headline two-rows" data-ng-bind="portfolio.title"></h4>

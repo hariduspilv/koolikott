@@ -19,7 +19,8 @@ define([
                     $scope.isEditPortfolioPage = $rootScope.isEditPortfolioPage;
                     $scope.isEditPortfolioMode = $rootScope.isEditPortfolioMode;
 
-                    $scope.navigateTo = function (material) {
+                    $scope.navigateTo = function (material, $event) {
+                        $event.preventDefault();
                         $rootScope.savedMaterial = material;
 
                         $location.path('/material').search({

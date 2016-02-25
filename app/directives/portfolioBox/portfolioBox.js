@@ -10,7 +10,8 @@ define([
             },
             templateUrl: 'directives/portfolioBox/portfolioBox.html',
             controller: function($scope, $location, $rootScope) {
-                $scope.navigateTo = function(portfolio) {
+                $scope.navigateTo = function(portfolio, $event) {
+                    $event.preventDefault();
                     $rootScope.savedPortfolio = portfolio;
 
                     $location.path('/portfolio').search({
