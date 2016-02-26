@@ -80,6 +80,15 @@ define([
                         $scope.mostLikedList = data.items;
                     }
                 }
+
+                $scope.showMoreRecommendations = function() {
+                    searchService.setSearch('recommended:true');
+                    searchService.clearFieldsNotInSimpleSearch();
+                    searchService.setSort('recommendation_timestamp');
+                    searchService.setSortDirection('desc');
+
+                    $location.url('/' + searchService.getSearchURLbase() + searchService.getQueryURL());
+                }
             }
         }
     }]);
