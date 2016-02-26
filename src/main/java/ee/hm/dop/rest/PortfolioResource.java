@@ -106,12 +106,14 @@ public class PortfolioResource extends BaseResource {
 
     @POST
     @Path("like")
+    @RolesAllowed({ "USER", "ADMIN", "PUBLISHER"})
     public void likePortfolio(Portfolio portfolio) {
         portfolioService.addUserLike(portfolio, getLoggedInUser(), true);
     }
 
     @POST
     @Path("dislike")
+    @RolesAllowed({ "USER", "ADMIN", "PUBLISHER"})
     public void dislikePortfolio(Portfolio portfolio) {
         portfolioService.addUserLike(portfolio, getLoggedInUser(), false);
     }

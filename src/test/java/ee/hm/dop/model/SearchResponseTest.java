@@ -5,6 +5,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 
 import java.util.List;
+import java.util.Map;
 
 import javax.inject.Inject;
 
@@ -110,6 +111,11 @@ public class SearchResponseTest {
                 "          \"numFound\": 0,\n" + //
                 "          \"start\": 0,\n" + //
                 "          \"docs\": []\n" + //
+                "        },\n" + //
+                "        \"statusMessages\": {\n" + //
+                "          \"Total Documents Processed\": \"17\",\n" + //
+                "          \"Delta Dump started\": \"2016-02-23 10:50:59\",\n" + //
+                "          \"Total Changed Documents\": \"17\"\n" + //
                 "        }\n" + //
                 "      }";
 
@@ -121,6 +127,12 @@ public class SearchResponseTest {
         assertEquals(0, searchResponse.getResponse().getTotalResults());
         assertEquals(0, searchResponse.getResponse().getStart());
         assertEquals("testStatus", searchResponse.getStatus());
+
+        Map<String, String> messages = searchResponse.getStatusMessages();
+        assertNotNull(messages.size());
+        assertEquals("17", messages.get("Total Documents Processed"));
+        assertEquals("2016-02-23 10:50:59", messages.get("Delta Dump started"));
+        assertEquals("17", messages.get("Total Changed Documents"));
 
         ResponseHeader responseHeader = searchResponse.getResponseHeader();
         assertNotNull(responseHeader);

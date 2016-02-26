@@ -1,5 +1,7 @@
 package ee.hm.dop.model.solr;
 
+import java.util.Map;
+
 public class SearchResponse {
 
     private Response response;
@@ -11,6 +13,8 @@ public class SearchResponse {
     public Response getResponse() {
         return response;
     }
+
+    public Map<String, String> statusMessages;
 
     public void setResponse(Response response) {
         this.response = response;
@@ -30,6 +34,14 @@ public class SearchResponse {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public Map<String, String> getStatusMessages() {
+        return statusMessages;
+    }
+
+    public void setStatusMessages(Map<String, String> statusMessages) {
+        this.statusMessages = statusMessages;
     }
 
 }

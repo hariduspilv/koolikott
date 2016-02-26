@@ -307,6 +307,7 @@ public class SolrServiceTest {
         expect(builder.get(eq(SearchResponse.class))).andReturn(searchResponse);
 
         expect(searchResponse.getResponseHeader()).andReturn(responseHeader).anyTimes();
+        expect(searchResponse.getStatusMessages()).andReturn(null);
 
         replayAll(searchResponse);
 
