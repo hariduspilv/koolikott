@@ -10,6 +10,8 @@ import org.opensaml.xml.signature.SignatureValidator;
 
 import com.google.inject.AbstractModule;
 
+import ee.hm.dop.db.DatabaseMigrator;
+import ee.hm.dop.db.FlywayDbMigrator;
 import ee.hm.dop.guice.GuiceInjector.Module;
 import ee.hm.dop.guice.provider.ConfigurationProvider;
 import ee.hm.dop.guice.provider.EntityManagerFactoryProvider;
@@ -32,5 +34,6 @@ public class ProviderModule extends AbstractModule {
         bind(SearchEngineService.class).toProvider(SearchEngineServiceProvider.class);
         bind(SOAPConnection.class).toProvider(SOAPConnectionProvider.class);
         bind(SignatureValidator.class).toProvider(SignatureValidatorProvider.class);
+        bind(DatabaseMigrator.class).to(FlywayDbMigrator.class);
     }
 }

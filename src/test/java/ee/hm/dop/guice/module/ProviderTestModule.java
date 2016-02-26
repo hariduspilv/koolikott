@@ -10,6 +10,8 @@ import org.opensaml.xml.signature.SignatureValidator;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.inject.AbstractModule;
 
+import ee.hm.dop.db.DatabaseMigrator;
+import ee.hm.dop.db.InactiveDbMigrator;
 import ee.hm.dop.guice.GuiceInjector.Module;
 import ee.hm.dop.guice.provider.ConfigurationTestProvider;
 import ee.hm.dop.guice.provider.EntityManagerFactoryTestProvider;
@@ -32,5 +34,6 @@ public class ProviderTestModule extends AbstractModule {
         bind(SOAPConnection.class).toProvider(SOAPConnectionTestProvider.class);
         bind(Client.class).toProvider(HttpClientTestProvider.class);
         bind(SignatureValidator.class).toProvider(SignatureValidatorTestProvider.class);
+        bind(DatabaseMigrator.class).to(InactiveDbMigrator.class);
     }
 }

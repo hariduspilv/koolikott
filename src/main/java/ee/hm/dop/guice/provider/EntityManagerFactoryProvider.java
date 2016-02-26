@@ -19,6 +19,8 @@ import com.google.inject.Inject;
 import com.google.inject.Provider;
 import com.google.inject.Singleton;
 
+import ee.hm.dop.db.DatabaseMigrator;
+
 /**
  * Guice provider of Entity Manager Factory.
  */
@@ -30,12 +32,20 @@ public class EntityManagerFactoryProvider implements Provider<EntityManagerFacto
     @Inject
     private Configuration configuration;
 
+    @Inject
+    private DatabaseMigrator databaseMigrator;
+
     private EntityManagerFactory emf;
 
     @Override
     public synchronized EntityManagerFactory get() {
 
         if (emf == null) {
+
+            // Must be done before initiating database so schema validation does
+            // not fail
+            databaseMigrator.migrate();
+
             Map<String, String> properties = getDatabaseProperties();
             logger.info(String.format("Initializing EntityManagerFactory properties [%s]", properties));
 
