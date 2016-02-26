@@ -467,8 +467,8 @@ insert into ImproperContent(id, creator, learningObject, added, deleted) values 
 
 -- TagUpVotes
 
-insert into TagUpVote(id, user, portfolio, material, tag, deleted) values (1, 1, 101, null, 1, false);
-insert into TagUpVote(id, user, portfolio, material, tag, deleted) values (2, 1, null, 1, 1, false);
+insert into TagUpVote(id, user, learningObject, tag, deleted) values (1, 1, 101, 1, false);
+insert into TagUpVote(id, user, learningObject, tag, deleted) values (2, 1, 1, 1, false);
 
 -- UserLike
 

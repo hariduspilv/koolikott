@@ -1,34 +1,14 @@
 package ee.hm.dop.service;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import javax.inject.Inject;
 
-import ee.hm.dop.dao.MaterialDAO;
-import ee.hm.dop.dao.PortfolioDAO;
-import ee.hm.dop.dao.TagDAO;
 import ee.hm.dop.dao.TagUpVoteDAO;
-import ee.hm.dop.model.Material;
-import ee.hm.dop.model.Portfolio;
+import ee.hm.dop.model.LearningObject;
 import ee.hm.dop.model.Tag;
 import ee.hm.dop.model.TagUpVote;
-import ee.hm.dop.model.TagUpVoteForm;
 import ee.hm.dop.model.User;
 
-/**
- * Created by mart on 29.01.16.
- */
 public class TagUpVoteService {
-
-    @Inject
-    private MaterialDAO materialDAO;
-
-    @Inject
-    private PortfolioDAO portfolioDAO;
-
-    @Inject
-    private TagDAO tagDAO;
 
     @Inject
     private TagUpVoteDAO tagUpVoteDAO;
@@ -37,24 +17,30 @@ public class TagUpVoteService {
     private SearchEngineService searchEngineService;
 
     @Inject
-    private PortfolioService portfolioService;
+    private LearningObjectService learningObjectService;
+
+    /**
+     * 
+     * @param id
+     *            the TagUpVote id
+     * @param user
+     *            the user who wants access to the TagUpVote
+     * @return the tagUpVote if user has access
+     */
+    public TagUpVote get(long id, User user) {
+        TagUpVote tagUpVote = tagUpVoteDAO.findById(id);
+
+        if (tagUpVote != null) {
+            validateIfUserHasAccessAndThrowExceptionIfNot(tagUpVote, user);
+        }
+
+        return tagUpVote;
+    }
 
     public TagUpVote upVote(TagUpVote tagUpVote, User user) {
-        tagUpVote = createTagUpVote(tagUpVote, user);
-        TagUpVote materialUpVote = tagUpVoteDAO.getTagUpVote(tagUpVote.getTag(), user, tagUpVote.getMaterial());
-        TagUpVote portfolioUpVote = tagUpVoteDAO.getTagUpVote(tagUpVote.getTag(), user, tagUpVote.getPortfolio());
+        validateIfUserHasAccessAndThrowExceptionIfNot(tagUpVote, user);
 
-        if (tagUpVote.getPortfolio() != null && !portfolioService.isPortfolioAccessibleToUser(tagUpVote.getPortfolio(), user)) {
-            throw new RuntimeException("Private portfolio upVote is not allowed");
-        }
-
-        if (materialUpVote != null || portfolioUpVote != null) {
-            throw new RuntimeException("Only one upVote allowed");
-        }
-
-        if (tagUpVote.getUser() == null || tagUpVote.getTag() == null || (tagUpVote.getMaterial() == null && tagUpVote.getPortfolio() == null)) {
-            throw new RuntimeException("No material or portfolio or tag or user found when upvoting tag");
-        }
+        tagUpVote.setUser(user);
 
         TagUpVote returnTagUpVote = tagUpVoteDAO.update(tagUpVote);
         searchEngineService.updateIndex();
@@ -62,70 +48,28 @@ public class TagUpVoteService {
         return returnTagUpVote;
     }
 
-    public void removeUpVoteFromMaterial(Tag tag, Material material, User loggedInUser) {
-        TagUpVote tagUpVote = tagUpVoteDAO.getTagUpVote(tag, loggedInUser, material);
-
+    public void delete(TagUpVote tagUpVote, User user) {
+        validateIfUserHasAccessAndThrowExceptionIfNot(tagUpVote, user);
         tagUpVoteDAO.setDeleted(tagUpVote);
         searchEngineService.updateIndex();
     }
 
-    public void removeUpVoteFromPortfolio(Tag tag, Portfolio portfolio, User loggedInUser) {
-        TagUpVote tagUpVote = tagUpVoteDAO.getTagUpVote(tag, loggedInUser, portfolio);
-
-        tagUpVoteDAO.setDeleted(tagUpVote);
-        searchEngineService.updateIndex();
+    public int getUpVoteCountFor(Tag tag, LearningObject learningObject) {
+        return tagUpVoteDAO.findByLearningObjectAndTag(learningObject, tag).size();
     }
 
-    public List<TagUpVoteForm> getMaterialTagUpVotes(Material material, User loggedInUser) {
-        List<TagUpVoteForm> tagUpVoteForms = new ArrayList<>();
-        if (material != null) {
-            for (Tag tag : material.getTags()) {
-                List<TagUpVote> materialTagUpVotes = tagUpVoteDAO.getMaterialTagUpVotes(material, tag);
-                TagUpVote userTagUpVote = tagUpVoteDAO.getTagUpVote(tag, loggedInUser, material);
-                boolean hasUserUpVoted = userTagUpVote != null;
-                int count = materialTagUpVotes != null ? materialTagUpVotes.size() : 0;
-
-                TagUpVoteForm tagUpVoteForm = new TagUpVoteForm(tag, count, hasUserUpVoted);
-                tagUpVoteForms.add(tagUpVoteForm);
-            }
+    public TagUpVote getTagUpVote(Tag tag, LearningObject learningObject, User user) {
+        if (!learningObjectService.hasAccess(user, learningObject)) {
+            return null;
         }
 
-        return tagUpVoteForms;
+        return tagUpVoteDAO.findByTagAndUserAndLearningObject(tag, user, learningObject);
     }
 
-    public List<TagUpVoteForm> getPortfolioTagUpVotes(Portfolio portfolio, User loggedInUser) {
-        List<TagUpVoteForm> tagUpVoteForms = new ArrayList<>();
-        if (portfolio != null) {
-            for (Tag tag : portfolio.getTags()) {
-                List<TagUpVote> portfolioTagUpVotes = tagUpVoteDAO.getPortfolioTagUpVotes(portfolio, tag);
-                TagUpVote userTagUpVote = tagUpVoteDAO.getTagUpVote(tag, loggedInUser, portfolio);
-                boolean hasUserUpVoted = userTagUpVote != null;
-                int count = portfolioTagUpVotes != null ? portfolioTagUpVotes.size() : 0;
-
-                TagUpVoteForm tagUpVoteForm = new TagUpVoteForm(tag, count, hasUserUpVoted);
-                tagUpVoteForms.add(tagUpVoteForm);
-            }
+    private void validateIfUserHasAccessAndThrowExceptionIfNot(TagUpVote tagUpVote, User user) {
+        if ((tagUpVote.getId() != null && user.getId() != tagUpVote.getUser().getId())
+                || !learningObjectService.hasAccess(user, tagUpVote.getLearningObject())) {
+            throw new RuntimeException("Access denied");
         }
-
-        return tagUpVoteForms;
-    }
-
-    private TagUpVote createTagUpVote(TagUpVote tagUpVote, User user) {
-        Material material;
-        Portfolio portfolio;
-        if (tagUpVote.getMaterial() != null) {
-            material = materialDAO.findByIdNotDeleted(tagUpVote.getMaterial().getId());
-            tagUpVote.setMaterial(material);
-        } else if (tagUpVote.getPortfolio() != null) {
-            portfolio = portfolioDAO.findByIdNotDeleted(tagUpVote.getPortfolio().getId());
-            tagUpVote.setPortfolio(portfolio);
-        }
-
-        tagUpVote.setUser(user);
-        if (tagUpVote.getTag() != null) {
-            Tag tag = tagDAO.findTagByName(tagUpVote.getTag().getName());
-            tagUpVote.setTag(tag);
-        }
-        return tagUpVote;
     }
 }

@@ -14,13 +14,9 @@ public class TagUpVote {
     @GeneratedValue
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "material")
-    private Material material;
-
-    @ManyToOne
-    @JoinColumn(name = "portfolio")
-    private Portfolio portfolio;
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "learningObject")
+    private LearningObject learningObject;
 
     @JoinColumn(name = "user")
     @ManyToOne(optional = false)
@@ -33,28 +29,12 @@ public class TagUpVote {
     @Column
     private boolean deleted = false;
 
-    public Material getMaterial() {
-        return material;
-    }
-
-    public void setMaterial(Material material) {
-        this.material = material;
-    }
-
     public Long getId() {
         return id;
     }
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public Portfolio getPortfolio() {
-        return portfolio;
-    }
-
-    public void setPortfolio(Portfolio portfolio) {
-        this.portfolio = portfolio;
     }
 
     public User getUser() {
@@ -79,5 +59,13 @@ public class TagUpVote {
 
     public void setDeleted(boolean deleted) {
         this.deleted = deleted;
+    }
+
+    public LearningObject getLearningObject() {
+        return learningObject;
+    }
+
+    public void setLearningObject(LearningObject learningObject) {
+        this.learningObject = learningObject;
     }
 }

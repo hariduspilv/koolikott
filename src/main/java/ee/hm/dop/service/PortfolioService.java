@@ -3,6 +3,7 @@ package ee.hm.dop.service;
 import static ee.hm.dop.model.Visibility.PRIVATE;
 import static ee.hm.dop.utils.UserUtils.isAdmin;
 import static org.apache.commons.lang3.StringUtils.isEmpty;
+import static org.joda.time.DateTime.now;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,19 +21,13 @@ import ee.hm.dop.model.LearningObject;
 import ee.hm.dop.model.Portfolio;
 import ee.hm.dop.model.Recommendation;
 import ee.hm.dop.model.Role;
-import ee.hm.dop.model.Tag;
-import ee.hm.dop.model.TagUpVote;
 import ee.hm.dop.model.User;
 import ee.hm.dop.model.UserLike;
 import ee.hm.dop.model.Visibility;
-import ee.hm.dop.service.LearningObjectService.LearningObjectHandlerFactory;
+import ee.hm.dop.service.learningObject.LearningObjectHandler;
 import ezvcard.util.org.apache.commons.codec.binary.Base64;
 
 public class PortfolioService implements LearningObjectHandler {
-
-    static {
-        LearningObjectHandlerFactory.register(PortfolioService.class, Portfolio.class);
-    }
 
     @Inject
     private PortfolioDAO portfolioDAO;
@@ -42,9 +37,6 @@ public class PortfolioService implements LearningObjectHandler {
 
     @Inject
     private SearchEngineService searchEngineService;
-
-    @Inject
-    private TagUpVoteService tagUpVoteService;
 
     public Portfolio get(long portfolioId, User loggedInUser) {
         Portfolio portfolio;
@@ -221,6 +213,7 @@ public class PortfolioService implements LearningObjectHandler {
         portfolio.setCreator(creator);
         portfolio.setOriginalCreator(originalCreator);
         portfolio.setVisibility(Visibility.PRIVATE);
+        portfolio.setAdded(now());
 
         Portfolio createdPortfolio = (Portfolio) portfolioDAO.update(portfolio);
         searchEngineService.updateIndex();
@@ -232,6 +225,7 @@ public class PortfolioService implements LearningObjectHandler {
         Portfolio originalPortfolio = validateUpdate(portfolio, loggedInUser);
 
         originalPortfolio = setPortfolioUpdatableFields(originalPortfolio, portfolio);
+        originalPortfolio.setUpdated(now());
 
         Portfolio updatedPortfolio = (Portfolio) portfolioDAO.update(originalPortfolio);
         searchEngineService.updateIndex();
@@ -394,29 +388,6 @@ public class PortfolioService implements LearningObjectHandler {
         List<Portfolio> portfolios = new ArrayList<>();
         portfolioDAO.getDeletedPortfolios().stream().forEach(portfolio -> portfolios.add((Portfolio) portfolio));
         return portfolios;
-    }
-
-    public Portfolio addTag(Portfolio portfolio, Tag tag, User loggedInUser) {
-        if (portfolio == null) {
-            throw new RuntimeException("Portfolio not found");
-        }
-
-        List<Tag> tags = portfolio.getTags();
-        if (!tags.contains(tag)) {
-            tags.add(tag);
-            portfolio.setTags(tags);
-
-            portfolio = (Portfolio) portfolioDAO.update(portfolio);
-            searchEngineService.updateIndex();
-        } else {
-            TagUpVote tagUpVote = new TagUpVote();
-            tagUpVote.setPortfolio(portfolio);
-            tagUpVote.setTag(tag);
-
-            tagUpVoteService.upVote(tagUpVote, loggedInUser);
-        }
-
-        return portfolio;
     }
 
     @Override

@@ -31,7 +31,6 @@ import ee.hm.dop.model.Chapter;
 import ee.hm.dop.model.Material;
 import ee.hm.dop.model.Portfolio;
 import ee.hm.dop.model.Recommendation;
-import ee.hm.dop.model.Tag;
 import ee.hm.dop.model.TargetGroup;
 import ee.hm.dop.model.User;
 import ee.hm.dop.model.Visibility;
@@ -562,48 +561,6 @@ public class PortfolioResourceTest extends ResourceIntegrationTestBase {
 
         Portfolio portfolioAfterRemoveRecommend = getPortfolio(portfolioId);
         assertNull(portfolioAfterRemoveRecommend.getRecommendation());
-    }
-
-    @Test
-    public void addTagNoPortfolio() {
-        login("38011550077");
-        Tag tag = new Tag();
-        tag.setName("timshel");
-
-        Response response = doPut("portfolio/99999/tag", Entity.entity(tag, MediaType.APPLICATION_JSON_TYPE));
-        assertEquals(Status.INTERNAL_SERVER_ERROR.getStatusCode(), response.getStatus());
-    }
-
-    @Test
-    public void addTag() {
-        login("38011550077");
-
-        Portfolio createdPortfolio = createPortfolio();
-        Long id = createdPortfolio.getId();
-        Tag tag = new Tag();
-        tag.setName("timshel");
-
-        Response response = doPut("portfolio/" + id + "/tag", Entity.entity(tag, MediaType.APPLICATION_JSON_TYPE));
-        assertEquals(Status.OK.getStatusCode(), response.getStatus());
-    }
-
-    @Test
-    public void addTagAndUpVoteOnce() {
-        login("38011550077");
-
-        Portfolio createdPortfolio = createPortfolio();
-        Long id = createdPortfolio.getId();
-        Tag tag = new Tag();
-        tag.setName("timshel");
-
-        Response response = doPut("portfolio/" + id + "/tag", Entity.entity(tag, MediaType.APPLICATION_JSON_TYPE));
-        assertEquals(Status.OK.getStatusCode(), response.getStatus());
-
-        response = doPut("portfolio/" + id + "/tag", Entity.entity(tag, MediaType.APPLICATION_JSON_TYPE));
-        assertEquals(Status.OK.getStatusCode(), response.getStatus());
-
-        response = doPut("portfolio/" + id + "/tag", Entity.entity(tag, MediaType.APPLICATION_JSON_TYPE));
-        assertEquals(Status.INTERNAL_SERVER_ERROR.getStatusCode(), response.getStatus());
     }
 
     private Portfolio createPortfolio() {

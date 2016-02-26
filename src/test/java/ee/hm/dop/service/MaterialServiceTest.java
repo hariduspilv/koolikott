@@ -1,10 +1,12 @@
 package ee.hm.dop.service;
 
+import static org.easymock.EasyMock.capture;
 import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.newCapture;
 import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
+import static org.joda.time.DateTime.now;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
@@ -94,6 +96,7 @@ public class MaterialServiceTest {
 
     @Test
     public void update() {
+        DateTime startOfTest = now();
         DateTime added = new DateTime("2001-10-04T10:15:45.937");
         Long views = 124l;
 
@@ -112,6 +115,9 @@ public class MaterialServiceTest {
         material.setAdded(added);
         material.setViews(views);
 
+        Capture<DateTime> capturedUpdateDate = newCapture();
+        material.setUpdated(capture(capturedUpdateDate));
+
         EducationalContext educationalContext = new EducationalContext();
         educationalContext.setName(MaterialService.BASICEDUCATION);
         expect(material.getTaxons()).andReturn(Arrays.asList(educationalContext)).times(3);
@@ -124,6 +130,11 @@ public class MaterialServiceTest {
         materialService.update(material);
 
         verify(materialDAO, material, searchEngineService);
+
+        DateTime updatedDate = capturedUpdateDate.getValue();
+        DateTime maxFuture = now().plusSeconds(20);
+        assertTrue(startOfTest.isBefore(updatedDate) || startOfTest.isEqual(updatedDate));
+        assertTrue(updatedDate.isBefore(maxFuture));
     }
 
     @Test

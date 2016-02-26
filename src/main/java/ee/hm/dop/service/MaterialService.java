@@ -1,8 +1,8 @@
 package ee.hm.dop.service;
 
 import static ee.hm.dop.utils.UserUtils.isAdmin;
-import static java.lang.String.format;
 import static org.apache.commons.lang3.StringUtils.isEmpty;
+import static org.joda.time.DateTime.now;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,20 +26,14 @@ import ee.hm.dop.model.Material;
 import ee.hm.dop.model.Publisher;
 import ee.hm.dop.model.Recommendation;
 import ee.hm.dop.model.Role;
-import ee.hm.dop.model.Tag;
-import ee.hm.dop.model.TagUpVote;
 import ee.hm.dop.model.User;
 import ee.hm.dop.model.UserLike;
 import ee.hm.dop.model.taxon.EducationalContext;
-import ee.hm.dop.service.LearningObjectService.LearningObjectHandlerFactory;
+import ee.hm.dop.service.learningObject.LearningObjectHandler;
 import ee.hm.dop.utils.TaxonUtils;
 import ezvcard.util.org.apache.commons.codec.binary.Base64;
 
 public class MaterialService implements LearningObjectHandler {
-
-    static {
-        LearningObjectHandlerFactory.register(MaterialService.class, Material.class);
-    }
 
     public static final String BASICEDUCATION = "BASICEDUCATION";
     public static final String SECONDARYEDUCATION = "SECONDARYEDUCATION";
@@ -64,9 +58,6 @@ public class MaterialService implements LearningObjectHandler {
 
     @Inject
     private BrokenContentDAO brokenContentDAO;
-
-    @Inject
-    private TagUpVoteService tagUpVoteService;
 
     public Material get(long materialId, User loggedInUser) {
         if (isUserAdmin(loggedInUser)) {
@@ -323,6 +314,7 @@ public class MaterialService implements LearningObjectHandler {
         material.setViews(originalMaterial.getViews());
         // Should not be able to update added date, must keep the original
         material.setAdded(originalMaterial.getAdded());
+        material.setUpdated(now());
 
         Material returnedMaterial = createOrUpdate(material);
 
@@ -381,10 +373,9 @@ public class MaterialService implements LearningObjectHandler {
 
     private Material createOrUpdate(Material material) {
         Long materialId = material.getId();
-        if (materialId != null) {
-            logger.info(format("Updating material %s", materialId));
-        } else {
-            logger.info("Creating material.");
+        if (materialId == null) {
+            logger.info("Creating material");
+            material.setAdded(now());
         }
 
         setAuthors(material);
@@ -488,29 +479,6 @@ public class MaterialService implements LearningObjectHandler {
         if (!isUserAdmin(loggedInUser)) {
             throw new RuntimeException("Only admin can do this");
         }
-    }
-
-    public Material addTag(Material material, Tag tag, User loggedInUser) {
-        if (material == null) {
-            throw new RuntimeException("Material not found");
-        }
-
-        List<Tag> tags = material.getTags();
-        if (!tags.contains(tag)) {
-            tags.add(tag);
-            material.setTags(tags);
-
-            material = (Material) materialDao.update(material);
-            searchEngineService.updateIndex();
-        } else {
-            TagUpVote tagUpVote = new TagUpVote();
-            tagUpVote.setMaterial(material);
-            tagUpVote.setTag(tag);
-
-            tagUpVoteService.upVote(tagUpVote, loggedInUser);
-        }
-
-        return material;
     }
 
     @Override

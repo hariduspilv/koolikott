@@ -1,12 +1,12 @@
 package ee.hm.dop.dao;
 
+import static org.joda.time.DateTime.now;
+
 import java.security.InvalidParameterException;
 import java.util.Iterator;
 import java.util.List;
 
 import javax.persistence.TypedQuery;
-
-import org.joda.time.DateTime;
 
 import ee.hm.dop.model.LearningObject;
 import ee.hm.dop.model.User;
@@ -60,17 +60,6 @@ public class LearningObjectDAO extends BaseDAO<LearningObject> {
                 .setMaxResults(numberOfLearningObjects).getResultList();
     }
 
-    @Override
-    public LearningObject update(LearningObject learningObject) {
-        if (learningObject.getId() != null) {
-            learningObject.setUpdated(DateTime.now());
-        } else {
-            learningObject.setAdded(DateTime.now());
-        }
-
-        return super.update(learningObject);
-    }
-
     public void delete(LearningObject learningObject) {
         setDeleted(learningObject, true);
     }
@@ -85,6 +74,7 @@ public class LearningObjectDAO extends BaseDAO<LearningObject> {
         }
 
         learningObject.setDeleted(deleted);
+        learningObject.setUpdated(now());
         update(learningObject);
     }
 

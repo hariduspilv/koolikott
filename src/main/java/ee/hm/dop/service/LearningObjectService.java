@@ -1,19 +1,23 @@
 package ee.hm.dop.service;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.List;
 
 import javax.inject.Inject;
 
 import ee.hm.dop.dao.LearningObjectDAO;
-import ee.hm.dop.guice.GuiceInjector;
 import ee.hm.dop.model.LearningObject;
+import ee.hm.dop.model.Tag;
 import ee.hm.dop.model.User;
+import ee.hm.dop.service.learningObject.LearningObjectHandler;
+import ee.hm.dop.service.learningObject.LearningObjectHandlerFactory;
 
 public class LearningObjectService {
 
     @Inject
     private LearningObjectDAO learningObjectDAO;
+
+    @Inject
+    private SearchEngineService searchEngineService;
 
     public LearningObject get(long learningObjectId, User user) {
         LearningObject learningObject = learningObjectDAO.findById(learningObjectId);
@@ -26,26 +30,26 @@ public class LearningObjectService {
     }
 
     public boolean hasAccess(User user, LearningObject learningObject) {
+        if (learningObject == null) {
+            return false;
+        }
+
         LearningObjectHandler learningObjectHandler = LearningObjectHandlerFactory.get(learningObject.getClass());
         return learningObjectHandler.hasAccess(user, learningObject);
     }
 
-    protected static class LearningObjectHandlerFactory {
-
-        private static Map<Class<? extends LearningObject>, Class<? extends LearningObjectHandler>> map = new HashMap<>();
-
-        public static void register(Class<? extends LearningObjectHandler> learningObjectHandlerClass,
-                Class<? extends LearningObject> learningObjectClass) {
-            map.put(learningObjectClass, learningObjectHandlerClass);
+    public void addTag(LearningObject learningObject, Tag tag, User user) {
+        if (!hasAccess(user, learningObject)) {
+            throw new RuntimeException("Access denied");
         }
 
-        public static LearningObjectHandler get(Class<? extends LearningObject> clazz) {
-            return GuiceInjector.getInjector().getInstance(map.get(clazz));
+        List<Tag> tags = learningObject.getTags();
+        if (tags.contains(tag)) {
+            throw new RuntimeException("Learning Object already contains tag");
+        } else {
+            tags.add(tag);
+            learningObject = learningObjectDAO.update(learningObject);
+            searchEngineService.updateIndex();
         }
     }
-}
-
-interface LearningObjectHandler {
-
-    public boolean hasAccess(User user, LearningObject learningObject);
 }

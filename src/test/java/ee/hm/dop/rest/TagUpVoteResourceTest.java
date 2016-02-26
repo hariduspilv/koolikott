@@ -2,6 +2,7 @@ package ee.hm.dop.rest;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 
 import java.util.List;
 
@@ -17,65 +18,88 @@ import ee.hm.dop.model.Material;
 import ee.hm.dop.model.Portfolio;
 import ee.hm.dop.model.Tag;
 import ee.hm.dop.model.TagUpVote;
-import ee.hm.dop.model.TagUpVoteForm;
+import ee.hm.dop.rest.TagUpVoteResource.TagUpVoteForm;
 
 public class TagUpVoteResourceTest extends ResourceIntegrationTestBase {
 
-    public static final String TAG_UP_VOTES_MATERIAL_1_TAG_MATEMAATIKA = "tagUpVotes?material=1&tag=matemaatika";
     public static final String TAG_UP_VOTES = "tagUpVotes";
 
     @Test
     public void upVote() {
-        login("89012378912");
+        String idCode = "89012378912";
+        login(idCode);
 
         Material material = new Material();
         material.setId(1l);
 
         Tag tag = new Tag();
-        tag.setName("matemaatika");
+        String tagName = "matemaatika";
+        tag.setName(tagName);
 
         TagUpVote tagUpVote = new TagUpVote();
         tagUpVote.setTag(tag);
-        tagUpVote.setMaterial(material);
+        tagUpVote.setLearningObject(material);
 
-        Response response = doGet("tagUpVotes?material=1");
-        List<TagUpVoteForm> tagUpVoteForms = response.readEntity(new GenericType<List<TagUpVoteForm>>() {
-        });
-        int size = tagUpVoteForms.size();
-
-        response = doPut(TAG_UP_VOTES, Entity.entity(tagUpVote, MediaType.APPLICATION_JSON_TYPE));
-        assertEquals(Response.Status.OK.getStatusCode(), response.getStatus());
-
-        TagUpVote returnedTagUpVote = response.readEntity(TagUpVote.class);
+        TagUpVote returnedTagUpVote = doPut(TAG_UP_VOTES, Entity.entity(tagUpVote, MediaType.APPLICATION_JSON_TYPE),
+                TagUpVote.class);
 
         assertNotNull(returnedTagUpVote);
         assertNotNull(returnedTagUpVote.getId());
+        assertEquals(idCode, returnedTagUpVote.getUser().getIdCode());
+        assertEquals(tagName, returnedTagUpVote.getTag().getName());
+        assertEquals(material.getId(), returnedTagUpVote.getLearningObject().getId());
 
-        response = doDelete(TAG_UP_VOTES_MATERIAL_1_TAG_MATEMAATIKA);
+        Response response = doDelete(TAG_UP_VOTES + "/" + returnedTagUpVote.getId());
         assertEquals(Response.Status.NO_CONTENT.getStatusCode(), response.getStatus());
-
-        response = doGet("tagUpVotes?material=1");
-        tagUpVoteForms = response.readEntity(new GenericType<List<TagUpVoteForm>>() {
-        });
-        assertEquals(size, tagUpVoteForms.size());
-
-        logout();
     }
 
     @Test
-    public void getTagUpVotesMaterial() {
-        Response response = doGet("tagUpVotes?material=1");
+    public void reportNotLoggedIn() {
+        Response response = doGet("tagUpVotes/report?learningObject=1");
         List<TagUpVoteForm> tagUpVoteForms = response.readEntity(new GenericType<List<TagUpVoteForm>>() {
         });
 
         assertEquals(5, tagUpVoteForms.size());
-        assertEquals(1, tagUpVoteForms.get(0).getUpVoteCount());
-        assertEquals(0, tagUpVoteForms.get(1).getUpVoteCount());
+
+        for (TagUpVoteForm form : tagUpVoteForms) {
+            assertNotNull(form.getTag());
+            assertNull(form.getTagUpVote());
+
+            if (form.getTag().getId() == 1) {
+                assertEquals(1, form.getUpVoteCount());
+            } else {
+                assertEquals(0, form.getUpVoteCount());
+            }
+        }
     }
 
     @Test
-    public void getTagUpVotesNoMaterial() {
-        Response response = doGet("tagUpVotes?material=99");
+    public void report() {
+        login("39011220011");
+
+        Response response = doGet("tagUpVotes/report?learningObject=1");
+        List<TagUpVoteForm> tagUpVoteForms = response.readEntity(new GenericType<List<TagUpVoteForm>>() {
+        });
+
+        assertEquals(5, tagUpVoteForms.size());
+
+        for (TagUpVoteForm form : tagUpVoteForms) {
+            assertNotNull(form.getTag());
+
+            if (form.getTag().getId() == 1) {
+                assertEquals(1, form.getUpVoteCount());
+                assertNotNull(form.getTagUpVote());
+                assertEquals(new Long(2), form.getTagUpVote().getId());
+            } else {
+                assertEquals(0, form.getUpVoteCount());
+                assertNull(form.getTagUpVote());
+            }
+        }
+    }
+
+    @Test
+    public void reportNoLearningObject() {
+        Response response = doGet("tagUpVotes/report?learningObject=99");
         List<TagUpVoteForm> tagUpVoteForms = response.readEntity(new GenericType<List<TagUpVoteForm>>() {
         });
 
@@ -84,7 +108,7 @@ public class TagUpVoteResourceTest extends ResourceIntegrationTestBase {
 
     @Test
     public void getTagUpVotesNoTags() {
-        Response response = doGet("tagUpVotes?material=3");
+        Response response = doGet("tagUpVotes/report?learningObject=3");
         List<TagUpVoteForm> tagUpVoteForms = response.readEntity(new GenericType<List<TagUpVoteForm>>() {
         });
 
@@ -92,58 +116,7 @@ public class TagUpVoteResourceTest extends ResourceIntegrationTestBase {
     }
 
     @Test
-    public void getTagUpVotesPortfolio() {
-        Response response = doGet("tagUpVotes?portfolio=101");
-        List<TagUpVoteForm> tagUpVoteForms = response.readEntity(new GenericType<List<TagUpVoteForm>>() {
-        });
-
-        assertEquals(5, tagUpVoteForms.size());
-        assertEquals(1, tagUpVoteForms.get(0).getUpVoteCount());
-        assertEquals(0, tagUpVoteForms.get(1).getUpVoteCount());
-
-    }
-
-    @Test
-    public void removeUpVoteMaterial() {
-        login("89012378912");
-
-        Material material = new Material();
-        material.setId(1l);
-
-        Tag tag = new Tag();
-        tag.setName("põhikool");
-
-        TagUpVote tagUpVote = new TagUpVote();
-        tagUpVote.setTag(tag);
-        tagUpVote.setMaterial(material);
-
-        Response response = doGet("tagUpVotes?material=1");
-        List<TagUpVoteForm> tagUpVoteForms = response.readEntity(new GenericType<List<TagUpVoteForm>>() {
-        });
-        int size = tagUpVoteForms.size();
-
-        response = doPut(TAG_UP_VOTES, Entity.entity(tagUpVote, MediaType.APPLICATION_JSON_TYPE));
-        assertEquals(Response.Status.OK.getStatusCode(), response.getStatus());
-
-        TagUpVote returnedTagUpVote = response.readEntity(TagUpVote.class);
-
-        assertNotNull(returnedTagUpVote);
-        assertNotNull(returnedTagUpVote.getId());
-
-        response = doDelete("tagUpVotes?material=1&tag=põhikool");
-        assertEquals(Response.Status.NO_CONTENT.getStatusCode(), response.getStatus());
-
-        response = doGet("tagUpVotes?material=1");
-        tagUpVoteForms = response.readEntity(new GenericType<List<TagUpVoteForm>>() {
-        });
-
-        assertEquals(size, tagUpVoteForms.size());
-
-        logout();
-    }
-
-    @Test
-    public void removeUpVotePortfolio() {
+    public void removeUpVote() {
         login("89012378912");
 
         Portfolio portfolio = new Portfolio();
@@ -154,30 +127,16 @@ public class TagUpVoteResourceTest extends ResourceIntegrationTestBase {
 
         TagUpVote tagUpVote = new TagUpVote();
         tagUpVote.setTag(tag);
-        tagUpVote.setPortfolio(portfolio);
+        tagUpVote.setLearningObject(portfolio);
 
-        Response response = doGet("tagUpVotes?portfolio=101");
-        List<TagUpVoteForm> tagUpVoteForms = response.readEntity(new GenericType<List<TagUpVoteForm>>() {
-        });
-        int size = tagUpVoteForms.size();
-
-        response = doPut(TAG_UP_VOTES, Entity.entity(tagUpVote, MediaType.APPLICATION_JSON_TYPE));
-        assertEquals(Response.Status.OK.getStatusCode(), response.getStatus());
-
-        TagUpVote returnedTagUpVote = response.readEntity(TagUpVote.class);
+        TagUpVote returnedTagUpVote = doPut(TAG_UP_VOTES, Entity.entity(tagUpVote, MediaType.APPLICATION_JSON_TYPE),
+                TagUpVote.class);
 
         assertNotNull(returnedTagUpVote);
         assertNotNull(returnedTagUpVote.getId());
 
-        response = doDelete("tagUpVotes?portfolio=101&tag=matemaatika");
+        Response response = doDelete(TAG_UP_VOTES + "/" + returnedTagUpVote.getId());
         assertEquals(Response.Status.NO_CONTENT.getStatusCode(), response.getStatus());
-        response = doGet("tagUpVotes?portfolio=101");
-        tagUpVoteForms = response.readEntity(new GenericType<List<TagUpVoteForm>>() {
-        });
-
-        assertEquals(size, tagUpVoteForms.size());
-
-        logout();
     }
 
     @Test
@@ -185,18 +144,16 @@ public class TagUpVoteResourceTest extends ResourceIntegrationTestBase {
         login("89012378912"); // Regular user
 
         Portfolio portfolio = new Portfolio();
-        portfolio.setId(10L);
+        portfolio.setId(110L);
 
         Tag tag = new Tag();
         tag.setName("matemaatika");
 
         TagUpVote tagUpVote = new TagUpVote();
         tagUpVote.setTag(tag);
-        tagUpVote.setPortfolio(portfolio);
+        tagUpVote.setLearningObject(portfolio);
 
         Response response = doPut(TAG_UP_VOTES, Entity.entity(tagUpVote, MediaType.APPLICATION_JSON_TYPE));
-        assertEquals(Response.Status.INTERNAL_SERVER_ERROR.getStatusCode(), response.getStatus());
-
-        logout();
+        assertEquals(Response.Status.BAD_REQUEST.getStatusCode(), response.getStatus());
     }
 }
