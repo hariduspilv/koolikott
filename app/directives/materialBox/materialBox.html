@@ -1,6 +1,6 @@
 <md-card class="card-sm md-whiteframe-2dp" ng-class="{ active: selected }" id="material-card-{{material.id}}" data-ng-click="navigateTo(material, $event)">
 <!-- noimage -->
-  <a href="{{'/material?materialId=' + material.id}}" data-ng-if="!material.hasPicture" class="card-cover {{materialType}}" layout="row" layout-fill layout-align="center center">
+  <a data-ng-href="{{'/material?materialId=' + material.id}}" data-ng-if="!material.hasPicture" class="card-cover {{materialType}}" layout="row" layout-fill layout-align="center center">
     <div>
       <md-icon class="icon-kind">{{ materialType }}</md-icon>
     </div>
@@ -17,7 +17,7 @@
     </div>
   </a>
 <!-- image -->
-  <a href="{{'/material?materialId=' + material.id}}"  data-ng-if="material.hasPicture"  class="card-cover imaged {{materialType}}" layout="row" layout-fill layout-align="start start">
+  <a data-ng-href="{{'/material?materialId=' + material.id}}"  data-ng-if="material.hasPicture"  class="card-cover imaged {{materialType}}" layout="row" layout-fill layout-align="start start">
     <img data-ng-src="{{material.picture}}" class="md-card-image" />
     <div class="card-hover {{materialType}}">
       <div class="pick" data-ng-if="isEditPortfolioMode && !isEditPortfolioPage">
