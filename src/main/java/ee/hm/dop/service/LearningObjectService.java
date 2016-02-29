@@ -38,7 +38,8 @@ public class LearningObjectService {
         return learningObjectHandler.hasAccess(user, learningObject);
     }
 
-    public void addTag(LearningObject learningObject, Tag tag, User user) {
+    public LearningObject addTag(LearningObject learningObject, Tag tag, User user) {
+        LearningObject updatedLearningObject = null;
         if (!hasAccess(user, learningObject)) {
             throw new RuntimeException("Access denied");
         }
@@ -48,8 +49,10 @@ public class LearningObjectService {
             throw new RuntimeException("Learning Object already contains tag");
         } else {
             tags.add(tag);
-            learningObject = learningObjectDAO.update(learningObject);
+            updatedLearningObject = learningObjectDAO.update(learningObject);
             searchEngineService.updateIndex();
         }
+
+        return updatedLearningObject;
     }
 }

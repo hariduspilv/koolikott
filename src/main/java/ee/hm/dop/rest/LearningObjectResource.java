@@ -39,7 +39,6 @@ public class LearningObjectResource extends BaseResource {
             tag = newTag;
         }
 
-        learningObjectService.addTag(learningObject, tag, getLoggedInUser());
-        return learningObject;
+        return learningObjectService.addTag(learningObject, tag, getLoggedInUser());
     }
 }
