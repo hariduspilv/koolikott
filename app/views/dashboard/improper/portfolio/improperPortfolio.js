@@ -37,7 +37,7 @@ define([
             }
             
             $scope.getLearningObjectUrl = function(learningObject) {
-            	return "#/portfolio?id=" + learningObject.id;
+            	return "/portfolio?id=" + learningObject.id;
             }
         }
     ]);

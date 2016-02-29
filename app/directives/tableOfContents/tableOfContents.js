@@ -12,6 +12,22 @@ define([
             controller: function($scope, $rootScope, $document) {
                 $scope.isReadOnly = angular.isDefined($scope.isReadOnly) ? $scope.isReadOnly : false;
 
+                function init() {
+                    // Scroll to hash
+                    if ($location.hash()) {
+                        var listener = $scope.$watch(function() {
+                            return document.getElementById($location.hash())
+                        }, function(newValue) {
+                            if (newValue != null) {
+                                $timeout(function() {
+                                    goToElement($location.hash());
+                                    listener();
+                                });
+                            }
+                        });
+                    }
+                }
+
                 $scope.gotoChapter = function(e, chapterId, subchapterId) {
                     e.preventDefault();
 
@@ -20,7 +36,11 @@ define([
                         combinedId += '-' + subchapterId;
                     }
 
-                    var $chapter = angular.element(document.getElementById(combinedId));
+                    goToElement(combinedId);
+                };
+
+                function goToElement(elementID) {
+                    var $chapter = angular.element(document.getElementById(elementID));
                     var $context = angular.element(document.getElementById('scrollable-content'));
 
                     if (!$rootScope.isViewPortforlioPage && !$rootScope.isEditPortfolioPage) {
@@ -28,11 +48,11 @@ define([
                             id: $scope.portfolio.id
                         });
                         var watchPage = $scope.$watch(function() {
-                            return document.getElementById(combinedId)
+                            return document.getElementById(elementID)
                         }, function(newValue) {
                             if (newValue != null) {
                                 $timeout(function() {
-                                    $chapter = angular.element(document.getElementById(combinedId));
+                                    $chapter = angular.element(document.getElementById(elementID));
                                     $context = angular.element(document.getElementById('scrollable-content'));
                                     $context.scrollToElement($chapter, 30, 0);
                                     watchPage();
@@ -42,7 +62,7 @@ define([
                     } else {
                         $context.scrollToElement($chapter, 30, 200);
                     }
-                };
+                }
 
                 $scope.addNewSubChapter = function(index) {
                     var subChapters = $scope.portfolio.chapters[index].subchapters;
@@ -135,6 +155,8 @@ define([
                     }
                     $scope.showAddMaterialButton = false;
                 }
+
+                init();
 
             }
         };

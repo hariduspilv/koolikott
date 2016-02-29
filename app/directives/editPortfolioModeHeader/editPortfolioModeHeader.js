@@ -38,7 +38,7 @@ define([
                 function buildShareUrl() {
                     var protocol = $location.protocol();
                     var host = $location.host();
-                    var path = '/#/porftolio'
+                    var path = '/portfolio'
                     var params = $location.search();
 
                     return protocol + '://' + host + path + '?id=' + params.id;
