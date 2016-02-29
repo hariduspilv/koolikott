@@ -82,10 +82,6 @@
 							<source>LREv3.0</source>
 							<value>learner</value>
 						</intendedEndUserRole>
-						<context>
-							<source>LREv3.0</source>
-							<value>compulsory education</value>
-						</context>
 					</educational>
 					<rights>
 						<cost>
@@ -113,6 +109,56 @@
 								<id>129851</id>
 							</taxon>
 						</taxonPath>
+					</classification>
+					<classification>
+						<taxonPath>
+							<preschoolTaxon>
+								<domain>Mina ja keskkond</domain>
+								<topic>Preschool Topic1</topic>
+								<subtopic>Subtopic for Preschool Topic1</subtopic>
+							</preschoolTaxon>
+						</taxonPath>
+						<taxonPath>
+							<gymnasiumTaxon>
+								<curriculum>KLRÕK2011</curriculum>
+								<domain>Language and literature</domain>
+								<subject>Estonian</subject>
+								<topic>Ajaloo algõpetus</topic>
+								<subtopic>Ajaarvamine</subtopic>
+							</gymnasiumTaxon>
+						</taxonPath>
+						<taxonPath>
+							<vocationalTaxon>
+								<domain>Computer Science</domain>
+								<specialization>Computers and Networks</specialization>
+								<module>Majanduse alused</module>
+								<topic>Vocational Education Topic1</topic>
+								<subtopic>Subtopic for Vocational Education</subtopic>
+							</vocationalTaxon>
+						</taxonPath>
+					</classification>
+					<classification>
+						<taxonPath>
+							<basicSchoolTaxon>
+								<curriculum>KLRÕK2011</curriculum>
+								<domain>Foreign language</domain>
+								<subject>English</subject>
+								<topic>Eesti ajalugu</topic>
+								<subtopic>Ajalooallikad</subtopic>
+							</basicSchoolTaxon>
+						</taxonPath>
+						<crossCurricularThemesAndCompetences>
+							<keyCompetence>
+								<subject>Cultural and value competence</subject>
+							</keyCompetence>
+						</crossCurricularThemesAndCompetences>
+					</classification>
+					<classification>
+						<crossCurricularThemesAndCompetences>
+							<crossCurricularTheme>
+								<subject>Lifelong learning and career planning</subject>
+							</crossCurricularTheme>
+						</crossCurricularThemesAndCompetences>
 					</classification>
 				</lom>
 			</metadata>

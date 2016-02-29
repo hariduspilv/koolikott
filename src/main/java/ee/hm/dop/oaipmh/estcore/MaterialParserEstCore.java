@@ -1,19 +1,12 @@
 package ee.hm.dop.oaipmh.estcore;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import javax.inject.Inject;
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpression;
 import javax.xml.xpath.XPathExpressionException;
-
-import org.apache.commons.codec.binary.Base64;
-import org.w3c.dom.Document;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
 
 import ee.hm.dop.model.CrossCurricularTheme;
 import ee.hm.dop.model.KeyCompetence;
@@ -21,14 +14,7 @@ import ee.hm.dop.model.Language;
 import ee.hm.dop.model.LanguageString;
 import ee.hm.dop.model.Material;
 import ee.hm.dop.model.Tag;
-import ee.hm.dop.model.taxon.Domain;
-import ee.hm.dop.model.taxon.EducationalContext;
-import ee.hm.dop.model.taxon.Module;
-import ee.hm.dop.model.taxon.Specialization;
-import ee.hm.dop.model.taxon.Subject;
-import ee.hm.dop.model.taxon.Subtopic;
 import ee.hm.dop.model.taxon.Taxon;
-import ee.hm.dop.model.taxon.Topic;
 import ee.hm.dop.oaipmh.MaterialParser;
 import ee.hm.dop.oaipmh.ParseException;
 import ee.hm.dop.service.CrossCurricularThemeService;
@@ -36,19 +22,15 @@ import ee.hm.dop.service.KeyCompetenceService;
 import ee.hm.dop.service.LanguageService;
 import ee.hm.dop.service.TagService;
 import ee.hm.dop.service.TaxonService;
+import org.apache.commons.codec.binary.Base64;
+import org.w3c.dom.Document;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 public class MaterialParserEstCore extends MaterialParser {
 
-    private static final Map<String, String> taxonMap;
     public static final String YES = "YES";
 
-    static {
-        taxonMap = new HashMap<>();
-        taxonMap.put("preschoolTaxon", "preschoolEducation");
-        taxonMap.put("basicSchoolTaxon", "basicEducation");
-        taxonMap.put("gymnasiumTaxon", "secondaryEducation");
-        taxonMap.put("vocationalTaxon", "vocationalEducation");
-    }
 
     @Inject
     private LanguageService languageService;
@@ -57,13 +39,13 @@ public class MaterialParserEstCore extends MaterialParser {
     private TagService tagService;
 
     @Inject
-    private TaxonService taxonService;
-
-    @Inject
     private CrossCurricularThemeService crossCurricularThemeService;
 
     @Inject
     private KeyCompetenceService keyCompetenceService;
+
+    @Inject
+    private TaxonService taxonService;
 
     @Override
     protected String getPathToResourceType() {
@@ -134,137 +116,6 @@ public class MaterialParserEstCore extends MaterialParser {
     }
 
     @Override
-    protected Taxon setEducationalContext(Node taxonPath) {
-        for (String tag : taxonMap.keySet()) {
-            Node node = getNode(taxonPath, "./*[local-name()='" + tag + "']");
-
-            if (node != null) {
-                return getTaxon(taxonMap.get(tag), EducationalContext.class);
-            }
-
-        }
-        return null;
-    }
-
-    @Override
-    protected Taxon setDomain(Node taxonPath, Taxon educationalContext) {
-        for (String tag : taxonMap.keySet()) {
-            Node node = getNode(taxonPath, "./*[local-name()='" + tag + "']/*[local-name()='domain']");
-
-            if (node != null) {
-                List<Taxon> domains = new ArrayList<>(((EducationalContext) educationalContext).getDomains());
-                String systemName = getTaxon(node.getTextContent(), Domain.class).getName();
-
-                Taxon taxon = getTaxonByName(domains, systemName);
-                if (taxon != null)
-                    return taxon;
-            }
-        }
-
-        return educationalContext;
-    }
-
-    @Override
-    protected Taxon setSubject(Node taxonPath, Taxon domain, Material material) {
-        for (String tag : taxonMap.keySet()) {
-            Node node = getNode(taxonPath, "./*[local-name()='" + tag + "']/*[local-name()='subject']");
-
-            if (node != null) {
-                List<Taxon> subjects = new ArrayList<>(((Domain) domain).getSubjects());
-                String systemName = getTaxon(node.getTextContent(), Subject.class).getName();
-                Taxon taxon = getTaxonByName(subjects, systemName);
-
-                if (taxon != null)
-                    return taxon;
-            }
-        }
-
-        return domain;
-    }
-
-    @Override
-    protected Taxon setTopic(Node taxonPath, Taxon parent) {
-        for (String tag : taxonMap.keySet()) {
-            Node node = getNode(taxonPath, "./*[local-name()='" + tag + "']/*[local-name()='topic']");
-
-            if (node != null) {
-                List<Taxon> topics = null;
-                if (parent instanceof Module && tag.equals("vocationalTaxon")) {
-                    topics = new ArrayList<>(((Module) parent).getTopics());
-                } else if (parent instanceof Domain && tag.equals("preschoolTaxon")) {
-                    topics = new ArrayList<>(((Domain) parent).getTopics());
-                } else if (parent instanceof Subject) {
-                    topics = new ArrayList<>(((Subject) parent).getTopics());
-                }
-
-                String systemName = getTaxon(node.getTextContent(), Topic.class).getName();
-                Taxon taxon = getTaxonByName(topics, systemName);
-                if (taxon != null)
-                    return taxon;
-            }
-        }
-
-        return parent;
-    }
-
-    @Override
-    protected Taxon setSpecialization(Node taxonPath, Taxon parent) {
-        for (String tag : taxonMap.keySet()) {
-            Node node = getNode(taxonPath, "./*[local-name()='" + tag + "']/*[local-name()='specialization']");
-
-            if (node != null) {
-                List<Taxon> specializations;
-                specializations = new ArrayList<>(((Domain) parent).getSpecializations());
-
-                String systemName = getTaxon(node.getTextContent(), Specialization.class).getName();
-                Taxon taxon = getTaxonByName(specializations, systemName);
-                if (taxon != null)
-                    return taxon;
-            }
-        }
-
-        return parent;
-    }
-
-    @Override
-    protected Taxon setModule(Node taxonPath, Taxon parent) {
-        for (String tag : taxonMap.keySet()) {
-            Node node = getNode(taxonPath, "./*[local-name()='" + tag + "']/*[local-name()='module']");
-
-            if (node != null) {
-                List<Taxon> modules;
-                modules = new ArrayList<>(((Specialization) parent).getModules());
-
-                String systemName = getTaxon(node.getTextContent(), Module.class).getName();
-                Taxon taxon = getTaxonByName(modules, systemName);
-                if (taxon != null)
-                    return taxon;
-            }
-        }
-
-        return parent;
-    }
-
-    @Override
-    protected Taxon setSubTopic(Node taxonPath, Taxon parent) {
-        for (String tag : taxonMap.keySet()) {
-            Node node = getNode(taxonPath, "./*[local-name()='" + tag + "']/*[local-name()='subtopic']");
-
-            if (node != null) {
-                List<Taxon> subtopics;
-                subtopics = new ArrayList<>(((Topic) parent).getSubtopics());
-
-                String systemName = getTaxon(node.getTextContent(), Subtopic.class).getName();
-                Taxon taxon = getTaxonByName(subtopics, systemName);
-                if (taxon != null)
-                    return taxon;
-            }
-        }
-
-        return parent;
-    }
-
-    @Override
     protected void setIsPaid(Material material, Document doc) {
         Node isPaid = getNode(doc,
                 "//*[local-name()='estcore']/*[local-name()='rights']/*[local-name()='cost']/*[local-name()='value']");
@@ -284,6 +135,11 @@ public class MaterialParserEstCore extends MaterialParser {
     @Override
     protected String getPathToCurriculumLiterature() {
         return "//*[local-name()='estcore']/*[local-name()='educational']/*[local-name()='curriculumLiterature']";
+    }
+
+    @Override
+    protected String getPathToClassification() {
+        return "//*[local-name()='estcore']/*[local-name()='classification']";
     }
 
     @Override
@@ -350,44 +206,8 @@ public class MaterialParserEstCore extends MaterialParser {
         material.setKeyCompetences(keyCompetences);
     }
 
-    @Override
     protected Taxon getTaxon(String context, Class level) {
         return taxonService.getTaxonByEstCoreName(context, level);
-    }
-
-    @Override
-    protected List<Node> getTaxonPathNodes(Document doc) {
-        List<Node> nodes = new ArrayList<>();
-        try {
-            NodeList classifications = getNodeList(doc, "//*[local-name()='estcore']/*[local-name()='classification']");
-
-            for (int i = 0; i < classifications.getLength(); i++) {
-                Node classification = classifications.item(i);
-
-                XPathExpression expr2 = xpath.compile("./*[local-name()='taxonPath']");
-                NodeList nl = (NodeList) expr2.evaluate(classification, XPathConstants.NODESET);
-
-                if (nl != null && nl.getLength() > 0) {
-                    for (int j = 0; j < nl.getLength(); j++) {
-                        nodes.add(nl.item(j));
-                    }
-                }
-            }
-
-        } catch (XPathExpressionException e) {
-            // ignore
-        }
-
-        return nodes;
-    }
-
-    private Taxon getTaxonByName(List<Taxon> topics, String systemName) {
-        for (Taxon taxon : topics) {
-            if (taxon.getName().equals(systemName)) {
-                return taxon;
-            }
-        }
-        return null;
     }
 
     private Language getLanguage(Document doc) {

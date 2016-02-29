@@ -29,3 +29,6 @@ RENAME TABLE TagUpVoteAux TO TagUpVote;
 -- TagUpVote end
 
 SET foreign_key_checks = 1;
+
+-- Remove Waramu taxon mappings, as they should be est-core now
+DROP TABLE WaramuTaxonMapping;

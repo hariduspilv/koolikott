@@ -5,12 +5,6 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import org.w3c.dom.CharacterData;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-
 import ee.hm.dop.model.Author;
 import ee.hm.dop.model.Language;
 import ee.hm.dop.model.LanguageString;
@@ -22,6 +16,11 @@ import ee.hm.dop.oaipmh.ParseException;
 import ee.hm.dop.service.LanguageService;
 import ee.hm.dop.service.TagService;
 import ee.hm.dop.service.TaxonService;
+import org.w3c.dom.CharacterData;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 public class MaterialParserWaramu extends MaterialParser {
 
@@ -129,48 +128,13 @@ public class MaterialParserWaramu extends MaterialParser {
     }
 
     @Override
-    protected Taxon setEducationalContext(Node node) {
-        return null;
-    }
-
-    @Override
-    protected Taxon setDomain(Node node, Taxon lastTaxon) {
-        return null;
+    protected String getPathToClassification() {
+        return "//*[local-name()='lom']/*[local-name()='classification']";
     }
 
     @Override
     protected Taxon getTaxon(String context, Class level) {
-        return taxonService.getTaxonByWaramuName(context, level);
-    }
-
-    @Override
-    protected List<Node> getTaxonPathNodes(Document doc) {
-        return null;
-    }
-
-    @Override
-    protected Taxon setSubject(Node node, Taxon lastTaxon, Material material) {
-        return null;
-    }
-
-    @Override
-    protected Taxon setTopic(Node taxonPath, Taxon parent) {
-        return null;
-    }
-
-    @Override
-    protected Taxon setSpecialization(Node taxonPath, Taxon parent) {
-        return null;
-    }
-
-    @Override
-    protected Taxon setModule(Node taxonPath, Taxon parent) {
-        return null;
-    }
-
-    @Override
-    protected Taxon setSubTopic(Node taxonPath, Taxon parent) {
-        return null;
+        return taxonService.getTaxonByEstCoreName(context, level);
     }
 
     @Override

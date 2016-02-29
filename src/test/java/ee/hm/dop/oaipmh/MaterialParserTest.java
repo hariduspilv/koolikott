@@ -10,6 +10,11 @@ import static org.junit.Assert.assertNull;
 
 import java.util.List;
 
+import ee.hm.dop.model.Language;
+import ee.hm.dop.model.LanguageString;
+import ee.hm.dop.model.Material;
+import ee.hm.dop.model.taxon.Taxon;
+import ee.hm.dop.service.LanguageService;
 import org.easymock.EasyMockRunner;
 import org.easymock.Mock;
 import org.easymock.TestSubject;
@@ -19,12 +24,6 @@ import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-
-import ee.hm.dop.model.Language;
-import ee.hm.dop.model.LanguageString;
-import ee.hm.dop.model.Material;
-import ee.hm.dop.model.taxon.Taxon;
-import ee.hm.dop.service.LanguageService;
 
 /**
  * Created by mart on 10.11.15.
@@ -203,36 +202,6 @@ public class MaterialParserTest {
         }
 
         @Override
-        protected List<Node> getTaxonPathNodes(Document doc) {
-            return null;
-        }
-
-        @Override
-        protected Taxon setSubject(Node node, Taxon lastTaxon, Material material) {
-            return null;
-        }
-
-        @Override
-        protected Taxon setTopic(Node taxonPath, Taxon parent) {
-            return null;
-        }
-
-        @Override
-        protected Taxon setSpecialization(Node taxonPath, Taxon parent) {
-            return null;
-        }
-
-        @Override
-        protected Taxon setModule(Node taxonPath, Taxon parent) {
-            return null;
-        }
-
-        @Override
-        protected Taxon setSubTopic(Node taxonPath, Taxon parent) {
-            return null;
-        }
-
-        @Override
         protected void setIsPaid(Material material, Document doc) {
         }
 
@@ -262,6 +231,11 @@ public class MaterialParserTest {
         @Override
         protected void setKeyCompetences(Material material, Document doc) {
 
+        }
+
+        @Override
+        protected String getPathToClassification() {
+            return null;
         }
     }
 }
