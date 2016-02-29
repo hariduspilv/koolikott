@@ -4,25 +4,20 @@
   </small>
 </p>
 <div layout="row tags">
-  <md-chips ng-model="tags" readonly="true">
+  <md-chips ng-model="upVoteForms" readonly="true">
     <md-chip-template>
       <md-button data-ng-if="(isAllowed() && !isReportedByUser) && !isAdmin()" class="md-icon-button" ng-click="reportTag($chip.tag)">
         <md-icon>error_outline</md-icon>
       </md-button>
 
-      <a href="#" data-ng-click="getTagSearchURL($event, $chip.tag)">{{$chip.tag}}
-      </a>
+      <a href="#" data-ng-click="getTagSearchURL($event, $chip.tag)">{{$chip.tag}}</a>
 
-      <md-button data-ng-if="!$chip.hasUpVoted && isAllowed()" class="md-icon-button" ng-click="upVote($chip)">
+      <md-button data-ng-if="!$chip.tagUpVote && isAllowed()" class="md-icon-button" ng-click="upVote($chip)">
         <md-icon>plus_one</md-icon>
       </md-button>
-      <md-button data-ng-if="$chip.hasUpVoted && isAllowed()" class="md-icon-button" ng-click="removeUpVote($chip)">
+      <md-button data-ng-if="$chip.tagUpVote && isAllowed()" class="md-icon-button" ng-click="removeUpVote($chip)">
         <md-icon>undo</md-icon>
       </md-button>
-
-      <button data-ng-if="false" class="md-chip-remove" ng-click="deleteTag($chip)" md-chip-remove>
-        <md-icon md-svg-icon="md-close"></md-icon>
-      </button>
     </md-chip-template>
   </md-chips>
   <form name="addTagForm" data-ng-show="isAllowed()" ng-submit="addTag()">
@@ -40,7 +35,7 @@
     </md-icon>
   </md-button>
 
-  <md-button data-ng-show="!showMoreTags && tags.length > 10" ng-click="showLess()">
+  <md-button data-ng-show="!showMoreTags && upVoteForms.length > 10" ng-click="showLess()">
     <span data-translate="SHOW_LESS"></span>
     <md-icon class="md-primary" >
       keyboard_arrow_right

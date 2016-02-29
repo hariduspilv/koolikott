@@ -30,15 +30,14 @@ define(['angularAMD'], function(angularAMD) {
                 $http(config).
                 success(function(data) {
                     successCallback(data);
-                }).
-                error(function(data, status, headers, config) {
+                }).error(function(data, status, headers, config) {
                     if (status == '419') {
                         authenticatedUserService.removeAuthenticatedUser();
                         makeCall(url, method, params, false, successCallback, errorCallback, finallyCallback, transformRequest);
                     } else if (status == '401') {
                         $location.url('/');
-                    } else {
-                        errorCallback(data, status);
+                    } else if (errorCallback) {
+                   		errorCallback(data, status);
                     }
                 }).finally(finallyCallback);
             }

@@ -9,62 +9,58 @@ define([
         function (translationService, $mdToast, $translate, serverCallService, searchService, authenticatedUserService, $location, $rootScope, $mdDialog) {
         return {
             scope: {
-                material: '=',
-                portfolio: '='
+                learningObject: '='
             },
             templateUrl: 'directives/tags/tags.html',
             controller: function ($scope, $mdToast, $translate, serverCallService, searchService, authenticatedUserService, $location) {
-                var allTags;
+                var allUpVoteForms;
 
                 function init() {
                     $scope.showMoreTags = false;
-                    if ($scope.material && $scope.material.id) {
-                        var upVotesParams = {
-                            'material': $scope.material.id
+                    if ($scope.learningObject && $scope.learningObject.id) {
+                        var reportParams = {
+                            learningObject: $scope.learningObject.id
                         };
-                    } else if ($scope.portfolio && $scope.portfolio.id) {
-                        upVotesParams = {
-                            'portfolio': $scope.portfolio.id
-                        };
+                        
+                        serverCallService.makeGet("rest/tagUpVotes/report", reportParams, getTagUpVotesReportSuccess);
                     }
+                    
+                    
                     if($scope.isAllowed()) {
-                        getHasReported();
+                    	getHasReportedImproper();
                     }
-
-                    serverCallService.makeGet("rest/tagUpVotes", upVotesParams, getTagUpVotesSuccess, function () {
-                    });
                 }
 
-                function getTagUpVotesSuccess(upVoteForms) {
-                    var tags = sortTags(upVoteForms);
-                    if(tags.length > 9) {
-                        $scope.tags = tags.slice(0, 10);
+                function getTagUpVotesReportSuccess(upVoteForms) {
+                    var sortedForms = sortTags(upVoteForms);
+                    if(sortedForms.length > 9) {
+                        $scope.upVoteForms = sortedForms.slice(0, 10);
                         $scope.showMoreTags = true;
-                        allTags = tags;
+                        allUpVoteForms = sortedForms;
                     } else {
-                        $scope.tags = tags;
+                        $scope.upVoteForms = sortedForms;
                     }
                 }
 
-                $scope.upVote = function (tag) {
-                    $scope.upVotedTag = tag;
-                    $scope.upVotedTag.hasUpVoted = true;
+                $scope.upVote = function (upVoteForm) {
+                    $scope.beingUpVotedForm = upVoteForm;
                     var tagUpVote = {
-                        material: $scope.material,
-                        portfolio: $scope.portfolio,
-                        tag: tag
+                    	learningObject: $scope.learningObject,
+                        tag: upVoteForm.tag,
+                        user: authenticatedUserService.getUser()
                     };
 
                     serverCallService.makePut("rest/tagUpVotes", tagUpVote, upVoteSuccess, upVoteFail);
                 };
 
-                function upVoteSuccess() {
-                    $scope.upVotedTag.upVoteCount = $scope.upVotedTag.upVoteCount + 1;
-                    $scope.tags = sortTags($scope.tags);
+                function upVoteSuccess(tagUpVote) {
+                	$scope.beingUpVotedForm.tagUpVote = tagUpVote;
+                    $scope.beingUpVotedForm.upVoteCount++;
+                    $scope.upVoteForms = sortTags($scope.upVoteForms);
                 }
 
                 function upVoteFail() {
-                    $scope.upVotedTag.hasUpVoted = false;
+                    log("Failed to up vote.");
                 }
 
                 $scope.isAllowed = function () {
@@ -79,31 +75,23 @@ define([
                     return !arg || !arg.length;
                 };
 
-                $scope.removeUpVote = function (tag) {
-                    $scope.upVoteRemovedTag = tag;
-                    $scope.upVoteRemovedTag.hasUpVoted = false;
-                    if ($scope.material && $scope.material.id) {
-                        var removeUpVotesParams = {
-                            'material': $scope.material.id,
-                            'tag': tag.tag
-                        };
-                    } else if ($scope.portfolio && $scope.portfolio.id) {
-                        removeUpVotesParams = {
-                            'portfolio': $scope.portfolio.id,
-                            'tag': tag.tag
-                        };
-                    }
+                $scope.removeUpVote = function (upVoteForm) {
+                	var removeUpVoteUrl = "rest/tagUpVotes/" + upVoteForm.tagUpVote.id;
+                	serverCallService.makeDelete(removeUpVoteUrl, {}, removeUpVoteSuccess, removeUpVoteFail);
 
-                    serverCallService.makeDelete("rest/tagUpVotes", removeUpVotesParams, removeUpVoteSuccess, removeUpVoteFail);
+                	$scope.removedUpVoteForm = upVoteForm;
                 };
 
                 function removeUpVoteSuccess() {
-                    $scope.upVoteRemovedTag.upVoteCount = $scope.upVoteRemovedTag.upVoteCount - 1;
-                    $scope.tags = sortTags($scope.tags);
+                	$scope.removedUpVoteForm.tagUpVote = null;
+                    $scope.removedUpVoteForm.upVoteCount--;
+                    $scope.upVoteForms = sortTags($scope.upVoteForms);
+                    $scope.removedUpVoteForm = null;
                 }
 
                 function removeUpVoteFail() {
-                    $scope.upVoteRemovedTag.hasUpVoted = true;
+                	log("Failed to remove upVote.");
+                    $scope.removedUpVoteForm = null;
                 }
 
                 $scope.getTagSearchURL = function ($event, tag) {
@@ -115,22 +103,17 @@ define([
                 };
 
                 $scope.addTag = function () {
-                    var url;
-                    if ($scope.material && $scope.material.id) {
-                        url = "rest/material/" + $scope.material.id + "/tag";
-                    } else if ($scope.portfolio && $scope.portfolio.id) {
-                        url = "rest/portfolio/" + $scope.portfolio.id + "/tag";
+                    if ($scope.learningObject && $scope.learningObject.id) {
+                        var url = "rest/learningObjects/" + $scope.learningObject.id + "/tags";
+                        serverCallService.makePut(url, $scope.newTag, addTagSuccess, addTagFail);
+                        $scope.newTag = null;
                     }
-                    serverCallService.makePut(url, $scope.newTag, addTagSuccess, addTagFail);
-                    $scope.newTag = null;
                 };
 
-                function addTagSuccess(data) {
-                    if(data && data.type === ".Portfolio") {
-                        $scope.portfolio = data;
-                        $rootScope.savedPortfolio = data;
-                    } else if(data && data.type === ".Material") {
-                        $scope.material = data;
+                function addTagSuccess(learningObject) {
+                	$scope.learningObject = learningObject;
+                    if(learningObject && learningObject.type === ".Portfolio") {
+                        $rootScope.savedPortfolio = learningObject;
                     }
 
                     init();
@@ -149,9 +132,8 @@ define([
                         .cancel($translate.instant('BUTTON_CANCEL'));
 
                     $mdDialog.show(confirm).then(function () {
-                    	var learningObject = $scope.material ? $scope.material : $scope.portfolio;
                         var entity = {
-                            learningObject: learningObject,
+                            learningObject: $scope.learningObject,
                             reason: "Tag: " + tag
                         };
 
@@ -160,12 +142,12 @@ define([
                 };
 
                 $scope.showMore = function () {
-                    $scope.tags = allTags;
+                    $scope.upVoteForms = allUpVoteForms;
                     $scope.showMoreTags = false;
                 };
 
                 $scope.showLess = function () {
-                    $scope.tags = allTags.slice(0, 10);
+                    $scope.upVoteForms = allUpVoteForms.slice(0, 10);
                     $scope.showMoreTags = true;
                 };
 
@@ -173,11 +155,13 @@ define([
                     $scope.isReportedByUser = true;
                 }
                 
-                function getHasReported() {
-                	var learningObject = $scope.material ? $scope.material : $scope.portfolio;
-                    if (learningObject && learningObject.id) {
-                        var url = "rest/impropers?learningObject=" + learningObject.id;
-                        serverCallService.makeGet(url, {}, requestSuccessful, requestFailed);
+                function getHasReportedImproper() {
+                    if ($scope.learningObject && $scope.learningObject.id) {
+                    	var improperParams = {
+                    			learningObject: $scope.learningObject.id
+                    	}
+                    	
+                        serverCallService.makeGet("rest/impropers", improperParams, requestSuccessful, requestFailed);
                     }
                 }
 
