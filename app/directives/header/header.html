@@ -5,7 +5,7 @@
       <md-tooltip>
         <span data-translate="HEADER_TOOLTIP_GO_TO_LANDING_PAGE"></span>
       </md-tooltip>
-      <a href="#/" class="logo" id="logo"></a>
+      <a href="/" class="logo" id="logo"></a>
     </div>
 
     <!-- portfolio page toggle menu icon -->
@@ -86,12 +86,12 @@
         </md-button>
         <md-menu-content width="4">
           <md-menu-item>
-            <md-button aria-label="Mine minu profiile" data-ng-href="#/{{user.username}}" id="user-menu-view-profile">
+            <md-button aria-label="Mine minu profiile" data-ng-href="/{{user.username}}" id="user-menu-view-profile">
               <span data-translate="MY_PROFILE"></span>
             </md-button>
           </md-menu-item>
           <md-menu-item data-ng-if="isAdmin()" >
-            <md-button aria-label="Mine töölauale" data-ng-href="#/dashboard" id="user-menu-dashboard">
+            <md-button aria-label="Mine töölauale" data-ng-href="/dashboard" id="user-menu-dashboard">
               <span data-translate="DASHBOARD"></span>
             </md-button>
           </md-menu-item>

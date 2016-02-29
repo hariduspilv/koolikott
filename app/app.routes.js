@@ -24,11 +24,13 @@ define(function() {
             },
             '/portfolio': {
                 templateUrl: 'views/portfolio/portfolio.html',
-                controllerUrl: 'views/portfolio/portfolio'
+                controllerUrl: 'views/portfolio/portfolio',
+                reloadOnSearch: false
             },
             '/portfolio/edit': {
                 templateUrl: 'views/editPortfolio/editPortfolio.html',
-                controllerUrl: 'views/editPortfolio/editPortfolio'
+                controllerUrl: 'views/editPortfolio/editPortfolio',
+                reloadOnSearch: false
             },
             '/dashboard': {
                 templateUrl: 'views/dashboard/dashboard.html',

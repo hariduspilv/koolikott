@@ -38,7 +38,7 @@ define([
         'ngFileUpload'
     ]);
 
-    app.config(function($routeProvider, $locationProvider, $controllerProvider, $compileProvider, $filterProvider, $provide, $translateProvider, $sceProvider, $mdThemingProvider, $httpProvider, $mdDateLocaleProvider) {
+    app.config(function($routeProvider, $locationProvider, $controllerProvider, $compileProvider, $filterProvider, $provide, $translateProvider, $sceProvider, $mdThemingProvider, $httpProvider, $mdDateLocaleProvider, $anchorScrollProvider) {
             app.controller = $controllerProvider.register;
             app.directive = $compileProvider.directive;
             app.filter = $filterProvider.register;
@@ -51,7 +51,8 @@ define([
                         path,
                         angularAMD.route({
                             templateUrl: route.templateUrl,
-                            controllerUrl: route.controllerUrl
+                            controllerUrl: route.controllerUrl,
+                            reloadOnSearch: angular.isDefined(route.reloadOnSearch) ? route.reloadOnSearch : undefined
                         })
                     );
                 });
@@ -70,6 +71,9 @@ define([
 
             $httpProvider.defaults.transformResponse.splice(0, 0, parseJSONResponse);
             $httpProvider.defaults.transformRequest = serializeRequest;
+
+            $locationProvider.html5Mode(true);
+            $anchorScrollProvider.disableAutoScrolling();
         }
     );
 
@@ -160,6 +164,24 @@ define([
             var prevUrl = history.length > 1 ? history.splice(-2)[0] : '/';
             $location.url(prevUrl);
         };
+    });
+
+    app.run(function($rootScope, $location, $timeout, $document) {
+        if(!window.history || !history.replaceState) {
+            return;
+        }
+
+        $rootScope.$on('duScrollspy:becameActive', function($event, $element, $target) {
+            //Automatically update location
+            var hash = $element.prop('hash');
+            if (hash) {
+                $timeout(function() {
+                    // replace hash
+                    var newUrl = $location.url().split('#', 1);
+                    history.replaceState('', '', newUrl[0] + hash);
+                });
+            }
+        });
     });
 
     app.run(['$rootScope', 'authenticatedUserService', function($rootScope, authenticatedUserService) {
