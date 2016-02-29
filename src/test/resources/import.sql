@@ -126,27 +126,6 @@ insert into EstCoreTaxonMapping(id, taxon, name) values (31, 31, 'Trigonometria'
 insert into EstCoreTaxonMapping(id, taxon, name) values (32, 32, 'EstoniaAndTheWould');
 insert into EstCoreTaxonMapping(id, taxon, name) values (33, 33, 'VogaisTonicas');
 
--- Waramu taxon mapping
-
-insert into WaramuTaxonMapping(id, taxon, name) values (1, 1, 'PRESCHOOLEDUCATION');
-insert into WaramuTaxonMapping(id, taxon, name) values (2, 2, 'COMPULSORYEDUCATION');
-insert into WaramuTaxonMapping(id, taxon, name) values (3, 3, 'SECONDARYEDUCATION');
-insert into WaramuTaxonMapping(id, taxon, name) values (4, 4, 'HIGHEREDUCATION');
-insert into WaramuTaxonMapping(id, taxon, name) values (5, 5, 'VOCATIONALEDUCATION');
-insert into WaramuTaxonMapping(id, taxon, name) values (6, 6, 'CONTINUINGEDUCATION');
-insert into WaramuTaxonMapping(id, taxon, name) values (7, 7, 'TEACHEREDUCATION');
-insert into WaramuTaxonMapping(id, taxon, name) values (8, 8, 'SPECIALEDUCATION');
-insert into WaramuTaxonMapping(id, taxon, name) values (9, 9, 'OTHER');
-insert into WaramuTaxonMapping(id, taxon, name) values (10, 10, 'Mathematics');
-insert into WaramuTaxonMapping(id, taxon, name) values (11, 11, 'Foreign language');
-insert into WaramuTaxonMapping(id, taxon, name) values (12, 12, 'DomainWithTopics');
-insert into WaramuTaxonMapping(id, taxon, name) values (20, 20, 'Biology');
-insert into WaramuTaxonMapping(id, taxon, name) values (21, 21, 'Mathematics');
-insert into WaramuTaxonMapping(id, taxon, name) values (30, 30, 'Algebra');
-insert into WaramuTaxonMapping(id, taxon, name) values (31, 31, 'Trigonometria');
-insert into WaramuTaxonMapping(id, taxon, name) values (32, 32, 'EstoniaAndTheWould');
-insert into WaramuTaxonMapping(id, taxon, name) values (33, 33, 'VogaisTonicas');
-
 -- Recommendations
 
 insert into Recommendation(id, creator, added) values (1, 8, '2015-12-12 13:14:15');

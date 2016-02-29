@@ -7,11 +7,10 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import org.junit.Test;
-
 import ee.hm.dop.common.test.DatabaseTestBase;
 import ee.hm.dop.model.taxon.Domain;
 import ee.hm.dop.model.taxon.EducationalContext;
+import org.junit.Test;
 
 public class TaxonDAOTest extends DatabaseTestBase {
 
@@ -48,30 +47,5 @@ public class TaxonDAOTest extends DatabaseTestBase {
     public void findAllEducationalContext() {
         List<EducationalContext> educationalContexts = taxonDAO.findAllEducationalContext();
         assertEquals(9, educationalContexts.stream().distinct().count());
-    }
-
-    @Test
-    public void findEducationalContextByRepoName() {
-        Long id = 2L;
-        String waramuName = "COMPULSORYEDUCATION";
-        String systemName = "BASICEDUCATION";
-
-        EducationalContext educationalContext = (EducationalContext) taxonDAO.findTaxonByRepoName(waramuName,
-                "WaramuTaxonMapping", EducationalContext.class);
-
-        assertNotNull(educationalContext);
-        assertNotNull(educationalContext.getId());
-        assertEquals(id, educationalContext.getId());
-        assertEquals(systemName, educationalContext.getName());
-        assertEquals(0, educationalContext.getDomains().size());
-
-        educationalContext = (EducationalContext) taxonDAO.findTaxonByRepoName("basicEducation", "EstCoreTaxonMapping",
-                EducationalContext.class);
-
-        assertNotNull(educationalContext);
-        assertNotNull(educationalContext.getId());
-        assertEquals(id, educationalContext.getId());
-        assertEquals(systemName, educationalContext.getName());
-        assertEquals(0, educationalContext.getDomains().size());
     }
 }
