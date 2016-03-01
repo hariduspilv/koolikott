@@ -37,9 +37,10 @@ INSERT INTO Translation(translationGroup, translationKey, translation) VALUES (3
 INSERT INTO Translation(translationGroup, translationKey, translation) VALUES (1,'ADD_TO_NEW_PORTFOLIO','Lisa materjalid uude kogumikku');
 INSERT INTO Translation(translationGroup, translationKey, translation) VALUES (2,'ADD_TO_NEW_PORTFOLIO','Добавить материалы в новый портфель');
 
-INSERT INTO Translation(translationGroup, translationKey, translation) VALUES (3,'ADD_MATERIAL_TO_EXISTING_PORTFOLIO','Add materials to new portfolio');
-INSERT INTO Translation(translationGroup, translationKey, translation) VALUES (1,'ADD_MATERIAL_TO_EXISTING_PORTFOLIO','Lisa materjalid uude kogumikku');
-INSERT INTO Translation(translationGroup, translationKey, translation) VALUES (2,'ADD_MATERIAL_TO_EXISTING_PORTFOLIO','Добавить материалы в новый портфель');
+INSERT INTO Translation(translationGroup, translationKey, translation) VALUES (1,'ADD_TO_EXISTING_PORTFOLIO','Lisa materjal olemasolevasse kogumikku');
+INSERT INTO Translation(translationGroup, translationKey, translation) VALUES (2,'ADD_TO_EXISTING_PORTFOLIO','Добавить материалы к существующему портфелю');
+INSERT INTO Translation(translationGroup, translationKey, translation) VALUES (3,'ADD_TO_EXISTING_PORTFOLIO','Add materials to existing portfolio');
+
 
 INSERT INTO Translation(translationGroup, translationKey, translation) VALUES (3,'CHOOSE_PORTFOLIO','Add materials to new portfolio');
 INSERT INTO Translation(translationGroup, translationKey, translation) VALUES (1,'CHOOSE_PORTFOLIO','Lisa materjalid uude kogumikku');
