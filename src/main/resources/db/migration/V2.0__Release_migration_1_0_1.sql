@@ -37,4 +37,9 @@ INSERT INTO Translation(translationGroup, translationKey, translation) VALUES (3
 INSERT INTO Translation(translationGroup, translationKey, translation) VALUES (1,'ADD_TO_NEW_PORTFOLIO','Lisa materjalid uude kogumikku');
 INSERT INTO Translation(translationGroup, translationKey, translation) VALUES (2,'ADD_TO_NEW_PORTFOLIO','Добавить материалы в новый портфель');
 
+INSERT INTO Translation(translationGroup, translationKey, translation) VALUES (1,'ADD_TO_EXISTING_PORTFOLIO','Lisa materjale olemasoleva portfelli');
+INSERT INTO Translation(translationGroup, translationKey, translation) VALUES (2,'ADD_TO_EXISTING_PORTFOLIO','Добавить материалы к существующему портфелю');
+INSERT INTO Translation(translationGroup, translationKey, translation) VALUES (3,'ADD_TO_EXISTING_PORTFOLIO','Add materials to existing portfolio');
+
+
 SET foreign_key_checks = 1;
