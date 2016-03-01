@@ -36,7 +36,7 @@ define([
                 $scope.material = $rootScope.savedMaterial;
                 $rootScope.savedMaterial = null;
 
-                if ($rootScope.isEditPortfolioMode) {
+                if ($rootScope.isEditPortfolioMode || authenticatedUserService.isAuthenticated()) {
                     $rootScope.selectedSingleMaterial = $scope.material;
                 }
 
@@ -60,7 +60,7 @@ define([
                     $location.url("/");
                 } else {
                     $scope.material = material;
-                    if ($rootScope.isEditPortfolioMode) {
+                    if ($rootScope.isEditPortfolioMode || authenticatedUserService.isAuthenticated()) {
                         $rootScope.selectedSingleMaterial = $scope.material;
                     }
                     init();

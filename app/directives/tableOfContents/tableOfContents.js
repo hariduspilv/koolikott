@@ -9,7 +9,7 @@ define([
                 readonly: '=readonly'
             },
             templateUrl: 'directives/tableOfContents/tableOfContents.html',
-            controller: function($scope, $rootScope, $document) {
+            controller: function($scope, $rootScope) {
                 $scope.isReadOnly = angular.isDefined($scope.isReadOnly) ? $scope.isReadOnly : false;
 
                 function init() {
@@ -107,11 +107,10 @@ define([
                             if (pushed) {
                                 showToast($filter('translate')('PORTFOLIO_ADD_MATERIAL_SUCCESS'));
                             }
-
                         }
                     }
                     $rootScope.selectedMaterials = [];
-                }
+                };
 
                 function containsMaterial(materials, selectedMaterial) {
                     for (var i = 0; i < materials.length; i++) {

@@ -4,22 +4,46 @@ define([
     'services/authenticatedUserService',
     'services/storageService'
 ], function(angularAMD) {
-    angularAMD.directive('dopMainFabButton', ['$rootScope', 'serverCallService', '$route', 'storageService', function($rootScope, serverCallService, $route, storageService) {
+    angularAMD.directive('dopMainFabButton', ['$rootScope', 'serverCallService', '$route', 'storageService', '$filter',
+        function($rootScope, serverCallService, $route, storageService, $filter) {
         return {
             scope: true,
             templateUrl: 'directives/mainFabButton/mainFabButton.html',
-            controller: function($scope, $mdDialog, $location, authenticatedUserService, $rootScope) {
+            controller: function($scope, $mdDialog, $location, authenticatedUserService, $rootScope, $filter) {
                 $scope.isOpen = false;
                 $scope.userHasSelectedMaterials = false;
+
                 $rootScope.$watch('selectedMaterials.length', function (newValue) {
-                    if (newValue > 0) {
-                        $scope.userHasSelectedMaterials = true;
-                    } else {
-                        $scope.userHasSelectedMaterials = false;
-                    }
+                    $scope.userHasSelectedMaterials = newValue > 0;
                 },true);
+
+                $rootScope.$watch('selectedSingleMaterial', function (newValue) {
+                        $scope.userHasSelectedMaterials = newValue !== null;
+                },true);
+
                 $scope.showAddPortfolioDialog = function() {
-                    storageService.setPortfolio(createPortfolio());
+                    var emptyPortfolio = createPortfolio();
+
+                    if($scope.userHasSelectedMaterials || $rootScope.selectedSingleMaterial) {
+                        emptyPortfolio.chapters = [];
+
+                        emptyPortfolio.chapters.push({
+                            title: $filter('translate')('PORTFOLIO_DEFAULT_NEW_CHAPTER_TITLE'),
+                            subchapters: [],
+                            materials: []
+                        });
+
+                        if ($rootScope.selectedMaterials && $rootScope.selectedMaterials.length > 0) {
+                            for (var i = 0; i < $rootScope.selectedMaterials.length; i++) {
+                                var selectedMaterial = $rootScope.selectedMaterials[i];
+                                emptyPortfolio.chapters[0].materials.push(selectedMaterial);
+                            }
+                        } else if($rootScope.selectedSingleMaterial != null) {
+                            emptyPortfolio.chapters[0].materials.push($rootScope.selectedSingleMaterial);
+                        }
+                    }
+
+                    storageService.setPortfolio(emptyPortfolio);
 
                     $mdDialog.show(angularAMD.route({
                         templateUrl: 'views/addPortfolioDialog/addPortfolioDialog.html',

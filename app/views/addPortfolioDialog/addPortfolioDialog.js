@@ -8,18 +8,19 @@ define([
     	function($scope, $mdDialog, $location, serverCallService, $rootScope, storageService) {
 	        $scope.isSaving = false;
 	        $scope.showHints = true;
-	
+
 	        function init() {
 	            var portfolio = storageService.getPortfolio();
-	          
+
 	            $scope.newPortfolio = createPortfolio();
 	            $scope.portfolio = portfolio;
-	
-	            if ($scope.portfolio.id != null) {
+                $scope.newPortfolio.chapters = portfolio.chapters;
+
+                if ($scope.portfolio.id != null) {
 	                $scope.isEditPortfolio = true;
-	
+
 	                var portfolioClone = angular.copy(portfolio);
-	
+
 	                $scope.newPortfolio.title = portfolioClone.title;
 	                $scope.newPortfolio.summary = portfolioClone.summary;
 	                $scope.newPortfolio.taxon = portfolioClone.taxon;
@@ -43,11 +44,11 @@ define([
                     createPortfolioFailed();
                 } else {
                     $rootScope.savedPortfolio = portfolio;
-                    
+
                     if ($scope.newPicture) {
                     	portfolio.hasPicture = true;
                     	portfolio.picture = $scope.newPicture.$ngfDataUrl;
-                    	uploadPicture(portfolio);                    	
+                    	uploadPicture(portfolio);
                     } else {
                     	redirectToEditPage();
                     	savePortfolioFinally()
@@ -58,7 +59,7 @@ define([
             function createPortfolioFailed() {
                 log('Creating portfolio failed.');
             }
-            
+
             function uploadPicture(portfolio) {
             	var url = "rest/portfolio/addPicture?portfolioId=" + portfolio.id;
             	var picture = $scope.newPicture;
@@ -75,7 +76,7 @@ define([
 
             $scope.update = function() {
                 $scope.saving = true;
-              
+
                 var url = "rest/portfolio/update";
                 $scope.portfolio.title = $scope.newPortfolio.title;
                 $scope.portfolio.summary = $scope.newPortfolio.summary;
@@ -90,11 +91,11 @@ define([
                 var hasCorrectTaxon = portfolio.taxon && portfolio.taxon.level !== ".EducationalContext";
                 return portfolio.title && portfolio.targetGroups[0] && hasCorrectTaxon;
             };
-            
+
             function savePortfolioFinally() {
                 $scope.saving = false;
             }
-            
+
             init();
     	}
     ];
