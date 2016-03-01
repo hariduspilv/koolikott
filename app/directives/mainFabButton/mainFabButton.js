@@ -4,12 +4,12 @@ define([
     'services/authenticatedUserService',
     'services/storageService'
 ], function(angularAMD) {
-    angularAMD.directive('dopMainFabButton', ['$rootScope', 'serverCallService', '$route', 'storageService', '$filter',
-        function($rootScope, serverCallService, $route, storageService, $filter) {
+    angularAMD.directive('dopMainFabButton', ['$rootScope', 'serverCallService', '$route', 'storageService', '$filter',  'toastService',
+        function($rootScope, serverCallService, $route, storageService, $filter, toastService) {
         return {
             scope: true,
             templateUrl: 'directives/mainFabButton/mainFabButton.html',
-            controller: function($scope, $mdDialog, $location, authenticatedUserService, $rootScope, $filter) {
+            controller: function($scope, $mdDialog, $location, authenticatedUserService, $rootScope) {
                 $scope.isOpen = false;
                 $scope.userHasSelectedMaterials = false;
 
@@ -41,6 +41,7 @@ define([
                         } else if($rootScope.selectedSingleMaterial != null) {
                             emptyPortfolio.chapters[0].materials.push($rootScope.selectedSingleMaterial);
                         }
+                        toastService.showOnRouteChange('PORTFOLIO_ADD_MATERIAL_SUCCESS');
                     }
 
                     storageService.setPortfolio(emptyPortfolio);
