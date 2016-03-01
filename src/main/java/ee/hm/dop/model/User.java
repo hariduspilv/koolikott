@@ -7,6 +7,8 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 public class User {
 
@@ -23,6 +25,7 @@ public class User {
     @Column(nullable = false)
     private String surname;
 
+    @JsonIgnore
     @Column(unique = true, nullable = false)
     private String idCode;
 
