@@ -2,7 +2,8 @@
   <md-fab-trigger>
     <md-button aria-label="Lisa kogumik" class="md-fab " data-ng-click="showAddPortfolioDialog($event)">
       <md-tooltip md-direction="left">
-        <span data-translate="ADD_PORTFOLIO"></span>
+        <span data-ng-show="userHasSelectedMaterials" data-translate="ADD_TO_NEW_PORTFOLIO"></span>
+        <span data-ng-show="!userHasSelectedMaterials" data-translate="ADD_PORTFOLIO"></span>
       </md-tooltip>
       <md-icon>book</md-icon>
     </md-button>

@@ -144,8 +144,11 @@ define([
             } else if(editModeAllowed.indexOf(path) != -1) {
             	if(path != "/material") {
             		$rootScope.selectedSingleMaterial = null;
+                    $rootScope.selectedMaterials = [];
             	}
-            } else if(authenticatedUserService.isAuthenticated() && path !== "/material") {
+            } else if(authenticatedUserService.isAuthenticated() && path != "/material") {
+                $rootScope.isEditPortfolioMode = false;
+                $rootScope.selectedSingleMaterial = null;
                 $rootScope.selectedMaterials = [];
             } else {
                 $rootScope.isEditPortfolioMode = false;

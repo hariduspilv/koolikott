@@ -8,12 +8,19 @@ define([
         return {
             scope: true,
             templateUrl: 'directives/mainFabButton/mainFabButton.html',
-            controller: function($scope, $mdDialog, $location, authenticatedUserService) {
+            controller: function($scope, $mdDialog, $location, authenticatedUserService, $rootScope) {
                 $scope.isOpen = false;
-
-                $scope.showAddPortfolioDialog = function() {                        
+                $scope.userHasSelectedMaterials = false;
+                $rootScope.$watch('selectedMaterials.length', function (newValue) {
+                    if (newValue > 0) {
+                        $scope.userHasSelectedMaterials = true;
+                    } else {
+                        $scope.userHasSelectedMaterials = false;
+                    }
+                },true);
+                $scope.showAddPortfolioDialog = function() {
                     storageService.setPortfolio(createPortfolio());
-                    
+
                     $mdDialog.show(angularAMD.route({
                         templateUrl: 'views/addPortfolioDialog/addPortfolioDialog.html',
                         controllerUrl: 'views/addPortfolioDialog/addPortfolioDialog'
@@ -53,7 +60,7 @@ define([
                     return authenticatedUserService.getUser() &&
                         (authenticatedUserService.getUser().role === 'ADMIN' || authenticatedUserService.getUser().role === 'PUBLISHER');
                 };
-                
+
                 $scope.hasPermission = function() {
                     return authenticatedUserService.getUser() && !authenticatedUserService.isRestricted();
                 };

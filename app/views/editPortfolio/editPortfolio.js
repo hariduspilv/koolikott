@@ -100,17 +100,6 @@ define([
             if (portfolio && portfolio.hasPicture && !portfolio.picture) {
                 fetchImage();
             }
-
-            var upVotesParams = {
-                'portfolio': $scope.portfolio.id
-            };
-
-            serverCallService.makeGet("rest/tagUpVotes", upVotesParams, getTagUpVotesSuccess, function () {
-            });
-        }
-
-        function getTagUpVotesSuccess(upVoteForms) {
-            $scope.tags = sortTags(upVoteForms);
         }
 
         function showWarning() {
@@ -165,7 +154,7 @@ define([
             $scope.portfolio.picture = "data:image/jpeg;base64," + data;
         }
 
-        function fetchImageFail(data) {
+        function fetchImageFail() {
             log("Getting portfolio image failed");
         }
 
