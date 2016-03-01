@@ -29,7 +29,7 @@ public class LearningObjectDAO extends BaseDAO<LearningObject> {
         return getSingleResult(findByCode);
     }
 
-    public List<LearningObject> getDeletedLearningObjects() {
+    public List<LearningObject> findDeletedLearningObjects() {
         TypedQuery<LearningObject> query = createQuery("SELECT lo FROM LearningObject lo WHERE lo.deleted = true",
                 LearningObject.class);
         return query.getResultList();

@@ -386,7 +386,7 @@ public class PortfolioService implements LearningObjectHandler {
 
     public List<Portfolio> getDeletedPortfolios() {
         List<Portfolio> portfolios = new ArrayList<>();
-        portfolioDAO.getDeletedPortfolios().stream().forEach(portfolio -> portfolios.add((Portfolio) portfolio));
+        portfolioDAO.findDeletedPortfolios().stream().forEach(portfolio -> portfolios.add((Portfolio) portfolio));
         return portfolios;
     }
 

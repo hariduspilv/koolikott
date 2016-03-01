@@ -21,8 +21,8 @@ public class MaterialDAO extends LearningObjectDAO {
         return castTo(Material.class, super.findById(materialId));
     }
 
-    public List<LearningObject> getDeletedMaterials() {
-        List<LearningObject> learningObjects = super.getDeletedLearningObjects();
+    public List<LearningObject> findDeletedMaterials() {
+        List<LearningObject> learningObjects = super.findDeletedLearningObjects();
         removeNot(Material.class, learningObjects);
         return learningObjects;
     }
