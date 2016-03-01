@@ -6,7 +6,7 @@ define([
   'services/toastService',
   'directives/copyPermalink/copyPermalink'
 ], function(angularAMD) {
-    angularAMD.directive('dopEditPortfolioModeHeader', ['translationService', '$location', '$mdSidenav', '$mdDialog', '$rootScope', 'serverCallService', 'searchService', 'toastService', '$timeout', function(translationService, $location, $mdSidenav, $mdDialog, $rootScope, serverCallService, searchService, toastService, $timeout) {
+    angularAMD.directive('dopEditPortfolioModeHeader', ['translationService', '$location', '$mdSidenav', '$mdDialog', '$rootScope', 'serverCallService', 'searchService', 'toastService', '$timeout', '$route', function(translationService, $location, $mdSidenav, $mdDialog, $rootScope, serverCallService, searchService, toastService, $timeout, $route) {
         return {
             scope: true,
             templateUrl: 'directives/editPortfolioModeHeader/editPortfolioModeHeader.html',
@@ -19,7 +19,7 @@ define([
                 $scope.makePublic = function() {
                     $rootScope.savedPortfolio.visibility = 'PUBLIC';
                     updatePortfolio();
-                    
+
                     toastService.show('PORTFOLIO_HAS_BEEN_MADE_PUBLIC');
                 };
 
@@ -32,9 +32,9 @@ define([
                     $rootScope.savedPortfolio.visibility = 'PRIVATE';
                     updatePortfolio();
                 };
-                
+
                 $scope.getShareUrl = buildShareUrl();
-                
+
                 function buildShareUrl() {
                     var protocol = $location.protocol();
                     var host = $location.host();
@@ -67,21 +67,22 @@ define([
                 $scope.searchFields.searchQuery = "";
                 $scope.detailedSearch = {};
                 $scope.detailedSearch.accessor = {};
-                
+
                 $scope.search = function() {
                     if (!isEmpty($scope.searchFields.searchQuery)) {
                         searchService.setSearch($scope.searchFields.searchQuery);
                         searchService.clearFieldsNotInSimpleSearch();
                         searchService.setType('material');
                         $location.url(searchService.getURL());
+                        $route.reload();
                     }
                 };
 
                 $scope.openDetailedSearch = function() {
                     $scope.detailedSearch.isVisible = true;
                     $scope.detailedSearch.queryIn = $scope.searchFields.searchQuery;
-                    $scope.searchFields.searchQuery = $scope.detailedSearch.mainField; 
-                }
+                    $scope.searchFields.searchQuery = $scope.detailedSearch.mainField;
+                };
 
                 $scope.closeDetailedSearch = function() {
                     $timeout(function() {
@@ -99,6 +100,7 @@ define([
                     var query = ($scope.searchFields.searchQuery || "") + " " + $scope.detailedSearch.queryOut;
                     searchService.setSearch(query.trim());
                     $location.url(searchService.getURL());
+                    $route.reload();
                 };
 
                 $scope.searchFieldEnterPressed = function() {
@@ -115,6 +117,7 @@ define([
                     if (!isEmpty(portfolio)) {
                         toastService.show('PORTFOLIO_SAVED');
                         $location.url('/portfolio?id=' + portfolio.id);
+                        $route.reload();
                     }
                 }
 
@@ -136,4 +139,3 @@ define([
         };
     }]);
 });
- 
