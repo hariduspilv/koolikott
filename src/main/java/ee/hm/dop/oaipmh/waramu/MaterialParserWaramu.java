@@ -24,8 +24,8 @@ import org.w3c.dom.NodeList;
 
 public class MaterialParserWaramu extends MaterialParser {
 
-    protected static final String WEB_PAGE = "WEBPAGE";
-    protected static final String WEBSITE = "WEBSITE";
+    private static final String WEB_PAGE = "WEBPAGE";
+    private static final String WEBSITE = "WEBSITE";
 
     @Inject
     private LanguageService languageService;

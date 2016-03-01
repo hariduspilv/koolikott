@@ -298,7 +298,7 @@ public abstract class MaterialParser {
                 parent = setEducationalContext(taxonPath);
                 parent = setDomain(taxonPath, parent);
 
-                parent = setSubject(taxonPath, parent, material);
+                parent = setSubject(taxonPath, parent);
                 parent = setSpecialization(taxonPath, parent);
                 parent = setModule(taxonPath, parent);
 
@@ -413,7 +413,7 @@ public abstract class MaterialParser {
         material.setAuthors(authors);
     }
 
-    protected void setPublishersData(Document doc, Material material) throws ParseException {
+    protected void setPublishersData(Document doc, Material material){
         List<Publisher> publishers = new ArrayList<>();
         IssueDate issueDate = null;
         NodeList nodeList = getNodeList(doc, getPathToContribute());
@@ -546,7 +546,7 @@ public abstract class MaterialParser {
         return educationalContext;
     }
 
-    protected Taxon setSubject(Node taxonPath, Taxon domain, Material material) {
+    protected Taxon setSubject(Node taxonPath, Taxon domain) {
         for (String tag : taxonMap.keySet()) {
             Node node = getNode(taxonPath, "./*[local-name()='" + tag + "']/*[local-name()='subject']");
 

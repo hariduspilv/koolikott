@@ -29,8 +29,7 @@ import org.w3c.dom.NodeList;
 
 public class MaterialParserEstCore extends MaterialParser {
 
-    public static final String YES = "YES";
-
+    private static final String YES = "YES";
 
     @Inject
     private LanguageService languageService;
@@ -205,7 +204,7 @@ public class MaterialParserEstCore extends MaterialParser {
 
         material.setKeyCompetences(keyCompetences);
     }
-
+    @Override
     protected Taxon getTaxon(String context, Class level) {
         return taxonService.getTaxonByEstCoreName(context, level);
     }
@@ -220,7 +219,7 @@ public class MaterialParserEstCore extends MaterialParser {
         return language;
     }
 
-    private List<LanguageString> getTitles(Document doc) throws ParseException {
+    private List<LanguageString> getTitles(Document doc) {
         List<LanguageString> titles;
         Node node = getNode(doc, "//*[local-name()='estcore']/*[local-name()='general']/*[local-name()='title']");
         titles = getLanguageStrings(node, languageService);
