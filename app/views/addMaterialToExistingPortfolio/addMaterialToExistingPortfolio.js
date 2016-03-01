@@ -20,7 +20,12 @@ define([
             };
 
             $scope.chooseChapter = function (selectedPortfolio) {
+                $scope.selectedPortfolio = selectedPortfolio;
                 $scope.step.currentStep = 1;
+            };
+
+            $scope.addMaterialsToChapter = function (chapter) {
+
             };
 
             function getUsersPortfolios() {

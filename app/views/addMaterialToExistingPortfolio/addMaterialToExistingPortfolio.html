@@ -15,7 +15,7 @@
 
     <md-tabs md-dynamic-height md-border-bottom md-autoselect md-stretch-tabs="always" md-selected="step.currentStep">
       <md-tab label="{{ 'CHOOSE_PORTFOLIO' | translate }}">
-        <md-content>
+        <md-content class="md-padding">
           <md-list-item ng-click="chooseChapter(portfolio)" ng-repeat="portfolio in portfolios">
             <p>{{$index + 1}}. {{portfolio.title}}</p>
           </md-list-item>
@@ -25,7 +25,18 @@
       <md-tab label="{{'CHOOSE_PORTFOLIO_CHAPTER' | translate}}" data-ng-disabled="step.currentStep < 1">
         <md-content class="md-padding">
 
+          <div ng-repeat="chapter in selectedPortfolio.chapters">
+            <md-list-item ng-click="addMaterialsToChapter(chapter)">
+              <p>{{$index + 1}}. {{chapter.title}}</p>
+            </md-list-item>
 
+            <div data-ng-show="chapter.subchapters.length > 0">
+              <md-list-item ng-click="addMaterialsToChapter(subchapter)"
+                            ng-repeat="subchapter in chapter.subchapters" flex-offset="5">
+                <p>{{$index + 1}}. {{subchapter.title}}</p>
+              </md-list-item>
+            </div>
+          </div>
         </md-content>
       </md-tab>
     </md-tabs>
