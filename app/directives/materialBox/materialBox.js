@@ -5,8 +5,8 @@ define([
     'services/iconService'
 ], function (app) {
 
-    app.directive('dopMaterialBox', ['translationService', 'serverCallService', '$rootScope', 'iconService',
-        function (translationService, serverCallService, $rootScope, iconService) {
+    app.directive('dopMaterialBox', ['translationService', 'serverCallService', '$rootScope', 'iconService', 'authenticatedUserService',
+        function (translationService, serverCallService, $rootScope, iconService, authenticatedUserService) {
             return {
                 scope: {
                     material: '=',
@@ -18,6 +18,7 @@ define([
                     $scope.selected = false;
                     $scope.isEditPortfolioPage = $rootScope.isEditPortfolioPage;
                     $scope.isEditPortfolioMode = $rootScope.isEditPortfolioMode;
+                    isAuthenticated();
 
                     $scope.navigateTo = function (material, $event) {
                         $event.preventDefault();
@@ -60,7 +61,9 @@ define([
                     $scope.materialType = iconService.getMaterialIcon($scope.material.resourceTypes);
 
                     $scope.pickMaterial = function ($event, material) {
+                        $event.preventDefault();
                         $event.stopPropagation();
+
                         var index = $rootScope.selectedMaterials.indexOf(material);
                         if (index == -1) {
                             $rootScope.selectedMaterials.push(material);
@@ -77,7 +80,11 @@ define([
                         $scope.chapter.materials.splice(index, 1);
                     };
 
-                    $rootScope.$watch('selectedMaterials', function (newValue, oldValue) {
+                    function isAuthenticated() {
+                        $scope.isAuthenticated = authenticatedUserService.isAuthenticated();
+                    }
+
+                    $rootScope.$watch('selectedMaterials', function (newValue) {
                         if (newValue && newValue.length == 0) {
                             $scope.selected = false;
                         }

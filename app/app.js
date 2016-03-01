@@ -129,7 +129,7 @@ define([
         $mdDateLocaleProvider.firstDayOfWeek = 1;
     }
 
-    app.run(function($rootScope, $location) {
+    app.run(function($rootScope, $location, authenticatedUserService) {
         $rootScope.$on('$routeChangeSuccess', function() {
             var path = $location.path();
             var editModeAllowed = ["/portfolio/edit", "/search/result", "/material"];
@@ -145,6 +145,8 @@ define([
             	if(path != "/material") {
             		$rootScope.selectedSingleMaterial = null;
             	}
+            } else if(authenticatedUserService.isAuthenticated() && path !== "/material") {
+                $rootScope.selectedMaterials = [];
             } else {
                 $rootScope.isEditPortfolioMode = false;
                 $rootScope.savedPortfolio = null;
