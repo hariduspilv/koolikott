@@ -52,6 +52,13 @@ define([
                     }));
                 };
 
+                $scope.showAddMaterialsToPortfolioDialog = function() {
+                    $mdDialog.show(angularAMD.route({
+                        templateUrl: 'views/addMaterialToExistingPortfolio/addMaterialToExistingPortfolio.html',
+                        controllerUrl: 'views/addMaterialToExistingPortfolio/addMaterialToExistingPortfolio'
+                    }));
+                };
+
                 $scope.showAddMaterialDialog = function() {
                     storageService.setMaterial(null);
                     $mdDialog.show(angularAMD.route({
