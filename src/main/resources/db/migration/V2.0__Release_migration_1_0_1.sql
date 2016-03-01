@@ -32,4 +32,9 @@ RENAME TABLE TagUpVoteAux TO TagUpVote;
 -- Remove Waramu taxon mappings, as they should be est-core now
 DROP TABLE IF EXISTS WaramuTaxonMapping;
 
+-- Add new translations
+INSERT INTO Translation(translationGroup, translationKey, translation) VALUES (3,'ADD_TO_NEW_PORTFOLIO','Add materials to new portfolio');
+INSERT INTO Translation(translationGroup, translationKey, translation) VALUES (1,'ADD_TO_NEW_PORTFOLIO','Lisa materjalid uude kogumikku');
+INSERT INTO Translation(translationGroup, translationKey, translation) VALUES (2,'ADD_TO_NEW_PORTFOLIO','Добавить материалы в новый портфель');
+
 SET foreign_key_checks = 1;
