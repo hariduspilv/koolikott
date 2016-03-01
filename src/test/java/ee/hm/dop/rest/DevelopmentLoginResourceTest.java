@@ -2,6 +2,7 @@ package ee.hm.dop.rest;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 
 import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.Response;
@@ -25,7 +26,7 @@ public class DevelopmentLoginResourceTest extends ResourceIntegrationTestBase {
         assertEquals("Mati", authenticatedUser.getUser().getName());
         assertEquals("Maasikas", authenticatedUser.getUser().getSurname());
         assertEquals("mati.maasikas", authenticatedUser.getUser().getUsername());
-        assertEquals("39011220011", authenticatedUser.getUser().getIdCode());
+        assertNull(authenticatedUser.getUser().getIdCode());
     }
 
     @Test

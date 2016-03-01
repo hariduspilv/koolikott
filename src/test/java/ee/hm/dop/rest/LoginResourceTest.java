@@ -257,12 +257,12 @@ public class LoginResourceTest extends ResourceIntegrationTestBase {
     public void stuudiumAuthenticateSuccess() {
         Response response = doGet("login/stuudium?token=987654");
         String url = response.getHeaderString("Location");
-        
+
         boolean hasToken = false;
         if (url.indexOf("token") != -1) {
             hasToken = true;
         }
-        
+
         assertEquals(true, hasToken);
         assertEquals(307, response.getStatus());
 
@@ -273,12 +273,12 @@ public class LoginResourceTest extends ResourceIntegrationTestBase {
     public void stuudiumAuthenticateFail() {
         Response response = doGet("login/stuudium?token=000000");
         String url = response.getHeaderString("Location");
-        
+
         boolean hasToken = false;
         if (url.indexOf("token") != -1) {
             hasToken = true;
         }
-        
+
         assertEquals(false, hasToken);
         assertEquals(307, response.getStatus());
     }
@@ -321,7 +321,7 @@ public class LoginResourceTest extends ResourceIntegrationTestBase {
 
         assertNotNull(authenticatedUser.getToken());
         User user = authenticatedUser.getUser();
-        assertEquals(idCode, user.getIdCode());
+        assertNull(user.getIdCode());
         assertEquals("Matt", user.getName());
         assertEquals("Smith", user.getSurname());
         assertNotNull(user.getUsername());
@@ -386,8 +386,9 @@ public class LoginResourceTest extends ResourceIntegrationTestBase {
         Response response = doGet("login/stuudium");
         String url = response.getHeaderString("Location");
         assertEquals(307, response.getStatus());
-        assertEquals(configuration.getString(STUUDIUM_URL_AUTHORIZE) + "client_id="
-                + configuration.getString(STUUDIUM_CLIENT_ID), url);
+        assertEquals(
+                configuration.getString(STUUDIUM_URL_AUTHORIZE) + "client_id="
+                        + configuration.getString(STUUDIUM_CLIENT_ID), url);
     }
 
     private AuthnRequest decodeAuthnRequest(String request) throws Exception {

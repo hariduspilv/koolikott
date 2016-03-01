@@ -45,7 +45,7 @@ public class TagUpVoteResourceTest extends ResourceIntegrationTestBase {
 
         assertNotNull(returnedTagUpVote);
         assertNotNull(returnedTagUpVote.getId());
-        assertEquals(idCode, returnedTagUpVote.getUser().getIdCode());
+        assertNull(returnedTagUpVote.getUser().getIdCode());
         assertEquals(tagName, returnedTagUpVote.getTag().getName());
         assertEquals(material.getId(), returnedTagUpVote.getLearningObject().getId());
 
