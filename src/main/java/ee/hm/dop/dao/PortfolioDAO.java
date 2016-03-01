@@ -32,8 +32,8 @@ public class PortfolioDAO extends LearningObjectDAO {
         return castTo(Portfolio.class, super.findById(portfolioId));
     }
 
-    public List<LearningObject> getDeletedPortfolios() {
-        List<LearningObject> learningObjects = super.getDeletedLearningObjects();
+    public List<LearningObject> findDeletedPortfolios() {
+        List<LearningObject> learningObjects = super.findDeletedLearningObjects();
         removeNot(Portfolio.class, learningObjects);
         return learningObjects;
     }

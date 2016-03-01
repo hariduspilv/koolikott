@@ -433,7 +433,7 @@ public class MaterialService implements LearningObjectHandler {
 
     public List<Material> getDeletedMaterials() {
         List<Material> materials = new ArrayList<>();
-        materialDao.getDeletedMaterials().stream().forEach(material -> materials.add((Material) material));
+        materialDao.findDeletedMaterials().stream().forEach(material -> materials.add((Material) material));
         return materials;
     }
 
