@@ -27,6 +27,8 @@
                 <entity name="Tag" query="select name as tag from Tag where id = '${LearningObject_Tag.tag_id}'" />
             </entity>
 
+            <entity name="TagUpVote" query="select concat(t.name, '_', count(*)) as tag_up_vote from TagUpVote tuv, Tag t where tuv.tag = t.id AND tuv.learningObject = '${LearningObject.id}' AND tuv.deleted = false GROUP BY name" />
+
             <entity name="LearningObject_Score" query="select 2 * SUM(ul.isLiked) - COUNT(*) as like_score from UserLike ul where ul.learningObject='${LearningObject.id}'" />
 
             <entity name="LearningObject_Recommended" query="select r.added as recommendation_timestamp, if (lo.recommendation is not null, 1, 0) as recommended from Recommendation r right join LearningObject lo on r.id = lo.recommendation where lo.id = '${LearningObject.id}'" />
@@ -48,8 +50,6 @@
                         <field column="fullname" name="author" />
                     </entity>
                 </entity>
-
-                <entity name="TagUpVote" query="select concat(t.name, '_', count(*)) as tag_up_vote from TagUpVote tuv, Tag t where tuv.tag = t.id AND tuv.material = '${Material.id}' AND tuv.deleted = false GROUP BY name" />
 
                 <entity name="Material_Publisher" query="select publisher as publisher_id from Material_Publisher where material='${Material.id}'">
                     <entity name="Publisher" query="select name as publisher from Publisher where id = '${Material_Publisher.publisher_id}'" />
@@ -424,9 +424,7 @@
                 <entity name="EducationalContext" query="select name as educational_context from Taxon where level = 'EDUCATIONAL_CONTEXT' and id = '${Portfolio.taxon_id}'">
                     <entity name="Translation" query="select translation as educational_context from Translation where translationKey = '${EducationalContext.educational_context}'" />
                 </entity>
-
-                <entity name="TagUpVote" query="select concat(t.name, '_', count(*)) as tag_up_vote from TagUpVote tuv, Tag t where tuv.tag = t.id AND tuv.portfolio = '${Portfolio.id}' AND tuv.deleted = false GROUP BY name" />
-
+                
                 <entity name="Chapter" query="select title as chapterTitle, textValue as chapterText from Chapter where portfolio = '${Portfolio.id}' or parentChapter in (select id from Chapter where portfolio = '${Portfolio.id}')" />
             </entity>
         </entity>        
