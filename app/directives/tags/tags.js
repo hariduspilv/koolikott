@@ -3,10 +3,11 @@ define([
     'services/translationService',
     'services/serverCallService',
     'services/searchService',
-    'services/authenticatedUserService'
+    'services/authenticatedUserService',
+    'services/storageService'
 ], function (angularAMD) {
-    angularAMD.directive('dopTags',['translationService', '$mdToast', '$translate', 'serverCallService', 'searchService', 'authenticatedUserService', '$location', '$rootScope', '$mdDialog',
-        function (translationService, $mdToast, $translate, serverCallService, searchService, authenticatedUserService, $location, $rootScope, $mdDialog) {
+    angularAMD.directive('dopTags',['translationService', '$mdToast', '$translate', 'serverCallService', 'searchService', 'authenticatedUserService', '$location', '$rootScope', '$mdDialog', 'storageService',
+        function (translationService, $mdToast, $translate, serverCallService, searchService, authenticatedUserService, $location, $rootScope, $mdDialog, storageService) {
         return {
             scope: {
                 learningObject: '='
@@ -111,12 +112,18 @@ define([
                 };
 
                 function addTagSuccess(learningObject) {
-                	$scope.learningObject = learningObject;
-                    if(learningObject && learningObject.type === ".Portfolio") {
-                        $rootScope.savedPortfolio = learningObject;
-                    }
-
-                    init();
+                	if (!learningObject) {
+                		addTagFail();
+                	} else {
+                		$scope.learningObject = learningObject;
+                		if(learningObject.type === ".Portfolio") {
+                			$rootScope.savedPortfolio = learningObject;
+                		} else if (learningObject.type === ".Material") {
+                			storageService.setMaterial($scope.learningObject);
+                		}
+                		
+                		init();
+                	}
                 }
 
                 function addTagFail() {

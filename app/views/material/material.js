@@ -31,6 +31,14 @@ define([
                     $scope.showMaterialContent = !$scope.showMaterialContent;
                 });
             });
+            
+            $scope.$watch(function() {
+            	return storageService.getMaterial();
+            }, function(newMaterial, oldMaterial) {
+            	if (newMaterial !== oldMaterial) {
+            		$scope.material = newMaterial;
+            	}
+            });
 
             if ($rootScope.savedMaterial) {
                 $scope.material = $rootScope.savedMaterial;
@@ -105,7 +113,6 @@ define([
                 }, function () {
                 });
             }
-
 
             function preprocessMaterialSubjects() {
                 $scope.material.subjects = [];
