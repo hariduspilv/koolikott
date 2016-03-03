@@ -238,9 +238,9 @@ define([
             }
 
             function setPublisher() {
-                if (authenticatedUserService.getUser() && authenticatedUserService.getUser().role === 'PUBLISHER') {
+                if (authenticatedUserService.isPublisher()) {
                     $scope.material.publishers = [{}];
-                    $scope.material.publishers[0].name = authenticatedUserService.getUser().username;
+                    $scope.material.publishers[0].name = authenticatedUserService.getUser().publisher.name;
                     $scope.creatorIsPublisher = true;
                 }
             }
