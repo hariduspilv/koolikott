@@ -89,8 +89,7 @@ define([
                 }
 
                 $scope.hasAddMaterialPermission = function() {
-                    return authenticatedUserService.getUser() &&
-                        (authenticatedUserService.getUser().role === 'ADMIN' || authenticatedUserService.getUser().role === 'PUBLISHER');
+                    return authenticatedUserService.isAdmin() || authenticatedUserService.isPublisher();
                 };
 
                 $scope.hasPermission = function() {

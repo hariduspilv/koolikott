@@ -136,14 +136,14 @@
             <span data-translate="MATERIAL_CURRICULUM_LITERATURE"></span>
           </md-switch>
           <md-chips class="md-padding"
-          data-ng-model="material.tags"
-          delete-button-label="{{ 'MATERIAL_REMOVE_TAG' | translate }}"
-          delete-hint="{{ 'MATERIAL_REMOVE_TAG_HINT' | translate }}"
-          secondary-placeholder="{{'MATERIAL_TAB_PRESS_ENTER_TO_ADD_TAG' | translate}}"
-          placeholder="{{'MATERIAL_TAB_PRESS_ENTER_TO_ADD_TAG' | translate}}"
-          flex>
-        </md-chips>
-      </div>
+            data-ng-model="material.tags"
+            delete-button-label="{{ 'MATERIAL_REMOVE_TAG' | translate }}"
+            delete-hint="{{ 'MATERIAL_REMOVE_TAG_HINT' | translate }}"
+            secondary-placeholder="{{'MATERIAL_TAB_PRESS_ENTER_TO_ADD_TAG' | translate}}"
+            placeholder="{{'MATERIAL_TAB_PRESS_ENTER_TO_ADD_TAG' | translate}}"
+            flex>
+          </md-chips>
+        </div>
 
       <div layout="row" flex layout-align="center center" data-ng-if="educationalContextId === 2 || educationalContextId === 3">
         <md-chips ng-model="material.keyCompetences" md-autocomplete-snap="" md-require-match="true" flex>
