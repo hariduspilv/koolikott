@@ -50,7 +50,11 @@ INSERT INTO Translation(translationGroup, translationKey, translation) VALUES (3
 INSERT INTO Translation(translationGroup, translationKey, translation) VALUES (1,'CHOOSE_PORTFOLIO_CHAPTER','Lisa materjalid uude kogumikku');
 INSERT INTO Translation(translationGroup, translationKey, translation) VALUES (2,'CHOOSE_PORTFOLIO_CHAPTER','Добавить материалы в новый портфель');
 
--- Changin Publisher role structure
+INSERT INTO Translation(translationGroup, translationKey, translation) VALUES (3,'PORTFOLIO_ADD_MATERIAL_FAIL','Adding material(s) to portfolio failed');
+INSERT INTO Translation(translationGroup, translationKey, translation) VALUES (1,'PORTFOLIO_ADD_MATERIAL_FAIL','Materjali(de) lisamine kogumikku ebaõnnestus');
+INSERT INTO Translation(translationGroup, translationKey, translation) VALUES (2,'PORTFOLIO_ADD_MATERIAL_FAIL','Добавление материалов в портфель не удалось.');
+
+-- Changing Publisher role structure
 
 ALTER TABLE User
     ADD publisher BIGINT,
