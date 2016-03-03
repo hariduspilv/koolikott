@@ -112,16 +112,6 @@ define([
                     $rootScope.selectedMaterials = [];
                 };
 
-                function containsMaterial(materials, selectedMaterial) {
-                    for (var i = 0; i < materials.length; i++) {
-                        var material = materials[i];
-                        if (material.id == selectedMaterial.id) {
-                            return true;
-                        }
-                    }
-                    return false;
-                }
-
                 function showToast(message) {
                     $mdToast.show($mdToast.simple().position('right top').content(message));
                 }

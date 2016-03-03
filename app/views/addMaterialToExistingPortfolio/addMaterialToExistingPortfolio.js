@@ -24,9 +24,39 @@ define([
                 $scope.step.currentStep = 1;
             };
 
-            $scope.addMaterialsToChapter = function (chapter) {
+            $scope.addMaterialsToChapter = function (chapter, portfolio) {
+                if (chapter && chapter.materials) {
 
+                    if ($rootScope.selectedSingleMaterial) {
+                        if (!containsMaterial(chapter.materials, $rootScope.selectedSingleMaterial)) {
+                            chapter.materials.push($rootScope.selectedSingleMaterial);
+                        }
+                    } else {
+                        for (var i = 0; i < $rootScope.selectedMaterials.length; i++) {
+                            var selectedMaterial = $rootScope.selectedMaterials[i];
+                            if (!containsMaterial(chapter.materials, selectedMaterial)) {
+                                chapter.materials.push(selectedMaterial);
+                            }
+                        }
+
+                    }
+                }
+                $rootScope.selectedMaterials = [];
+
+                serverCallService.makePost("rest/portfolio/update", portfolio, updatePortfolioSuccess, updatePortfolioFailed);
             };
+
+            function updatePortfolioSuccess(portfolio) {
+                if (isEmpty(portfolio)) {
+                    updatePortfolioFailed();
+                } else {
+                    //toast
+                }
+            }
+
+            function updatePortfolioFailed() {
+                log('Adding materials to portfolio failed.');
+            }
 
             function getUsersPortfolios() {
                 var user = authenticatedUserService.getUser();

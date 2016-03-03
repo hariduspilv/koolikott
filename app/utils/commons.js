@@ -221,7 +221,7 @@ function formatSurnameToInitialsButLast(surname) {
 	if (!surname) {
 		return;
 	}
-	
+
     var array = surname.split(" ");
     var last = array.length - 1;
     var res = "";
@@ -298,4 +298,14 @@ function sortTags(upVoteForms) {
             return a.upVoteCount < b.upVoteCount;
         });
     }
+}
+
+function containsMaterial(materials, selectedMaterial) {
+    for (var i = 0; i < materials.length; i++) {
+        var material = materials[i];
+        if (material.id == selectedMaterial.id) {
+            return true;
+        }
+    }
+    return false;
 }

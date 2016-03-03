@@ -26,16 +26,14 @@
         <md-content class="md-padding">
 
           <div ng-repeat="chapter in selectedPortfolio.chapters">
-            <md-list-item ng-click="addMaterialsToChapter(chapter)">
+            <md-list-item ng-click="addMaterialsToChapter(chapter, selectedPortfolio)">
               <p>{{$index + 1}}. {{chapter.title}}</p>
             </md-list-item>
 
-            <div data-ng-show="chapter.subchapters.length > 0">
-              <md-list-item ng-click="addMaterialsToChapter(subchapter)"
-                            ng-repeat="subchapter in chapter.subchapters" flex-offset="5">
-                <p>{{$index + 1}}. {{subchapter.title}}</p>
-              </md-list-item>
-            </div>
+            <md-list-item ng-click="addMaterialsToChapter(subchapter, selectedPortfolio)"
+                          ng-repeat="subchapter in chapter.subchapters" flex-offset="5">
+              <p>{{$index + 1}}. {{subchapter.title}}</p>
+            </md-list-item>
           </div>
         </md-content>
       </md-tab>
