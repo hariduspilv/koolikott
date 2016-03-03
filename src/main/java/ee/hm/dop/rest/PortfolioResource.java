@@ -106,14 +106,14 @@ public class PortfolioResource extends BaseResource {
 
     @POST
     @Path("like")
-    @RolesAllowed({ "USER", "ADMIN", "PUBLISHER"})
+    @RolesAllowed({ "USER", "ADMIN" })
     public void likePortfolio(Portfolio portfolio) {
         portfolioService.addUserLike(portfolio, getLoggedInUser(), true);
     }
 
     @POST
     @Path("dislike")
-    @RolesAllowed({ "USER", "ADMIN", "PUBLISHER"})
+    @RolesAllowed({ "USER", "ADMIN" })
     public void dislikePortfolio(Portfolio portfolio) {
         portfolioService.addUserLike(portfolio, getLoggedInUser(), false);
     }
@@ -148,7 +148,7 @@ public class PortfolioResource extends BaseResource {
     @Path("create")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    @RolesAllowed({ "USER", "ADMIN", "PUBLISHER" })
+    @RolesAllowed({ "USER", "ADMIN" })
     public Portfolio create(Portfolio portfolio) {
         return portfolioService.create(portfolio, getLoggedInUser());
     }
@@ -157,7 +157,7 @@ public class PortfolioResource extends BaseResource {
     @Path("update")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    @RolesAllowed({ "USER", "ADMIN", "PUBLISHER" })
+    @RolesAllowed({ "USER", "ADMIN" })
     public Portfolio update(Portfolio portfolio) {
         return portfolioService.update(portfolio, getLoggedInUser());
     }
@@ -166,7 +166,7 @@ public class PortfolioResource extends BaseResource {
     @Path("copy")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    @RolesAllowed({ "USER", "ADMIN", "PUBLISHER" })
+    @RolesAllowed({ "USER", "ADMIN" })
     public Portfolio copy(Portfolio portfolio) {
         return portfolioService.copy(portfolio, getLoggedInUser());
     }
@@ -174,7 +174,7 @@ public class PortfolioResource extends BaseResource {
     @POST
     @Path("delete")
     @Consumes(MediaType.APPLICATION_JSON)
-    @RolesAllowed({ "USER", "ADMIN", "PUBLISHER" })
+    @RolesAllowed({ "USER", "ADMIN" })
     public void delete(Portfolio portfolio) {
         portfolioService.delete(portfolio, getLoggedInUser());
     }

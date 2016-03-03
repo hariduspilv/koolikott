@@ -37,7 +37,6 @@ public class MaterialService implements LearningObjectHandler {
 
     public static final String BASICEDUCATION = "BASICEDUCATION";
     public static final String SECONDARYEDUCATION = "SECONDARYEDUCATION";
-    public static final String PUBLISHER = "PUBLISHER";
 
     private Logger logger = LoggerFactory.getLogger(getClass());
 
@@ -412,7 +411,7 @@ public class MaterialService implements LearningObjectHandler {
     }
 
     private boolean isUserPublisher(User loggedInUser) {
-        return loggedInUser != null && loggedInUser.getRole() == Role.PUBLISHER;
+        return loggedInUser != null && loggedInUser.getPublisher() != null;
     }
 
     public BrokenContent addBrokenMaterial(Material material, User loggedInUser) {

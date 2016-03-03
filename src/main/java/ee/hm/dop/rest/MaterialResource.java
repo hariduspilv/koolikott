@@ -54,7 +54,7 @@ public class MaterialResource extends BaseResource {
 
     @GET
     @Path("getBySource")
-    @RolesAllowed({ "USER", "ADMIN", "PUBLISHER" })
+    @RolesAllowed({ "USER", "ADMIN" })
     @Produces(MediaType.APPLICATION_JSON)
     public List<Material> getMaterialsByUrl(@QueryParam("source") @Encoded String materialSource)
             throws UnsupportedEncodingException {
@@ -92,14 +92,14 @@ public class MaterialResource extends BaseResource {
 
     @POST
     @Path("like")
-    @RolesAllowed({ "USER", "ADMIN", "PUBLISHER"})
+    @RolesAllowed({ "USER", "ADMIN" })
     public void likeMaterial(Material material) {
         materialService.addUserLike(material, getLoggedInUser(), true);
     }
 
     @POST
     @Path("dislike")
-    @RolesAllowed({ "USER", "ADMIN", "PUBLISHER"})
+    @RolesAllowed({ "USER", "ADMIN" })
     public void dislikeMaterial(Material material) {
         materialService.addUserLike(material, getLoggedInUser(), false);
     }
@@ -196,7 +196,7 @@ public class MaterialResource extends BaseResource {
     }
 
     @POST
-    @RolesAllowed({ "USER", "ADMIN", "PUBLISHER", "RESTRICTED" })
+    @RolesAllowed({ "USER", "ADMIN", "RESTRICTED" })
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Material createMaterial(Material material) {
@@ -206,7 +206,7 @@ public class MaterialResource extends BaseResource {
 
     @POST
     @Path("update")
-    @RolesAllowed({ "ADMIN", "PUBLISHER" })
+    @RolesAllowed({ "ADMIN", "USER" })
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Material updateMaterial(Material material) {
@@ -218,7 +218,7 @@ public class MaterialResource extends BaseResource {
     @Path("setBroken")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    @RolesAllowed({ "USER", "ADMIN", "PUBLISHER" })
+    @RolesAllowed({ "USER", "ADMIN" })
     public BrokenContent setBrokenMaterial(Material material) {
         return materialService.addBrokenMaterial(material, getLoggedInUser());
     }
@@ -250,7 +250,7 @@ public class MaterialResource extends BaseResource {
     @GET
     @Path("hasSetBroken")
     @Produces(MediaType.APPLICATION_JSON)
-    @RolesAllowed({ "USER", "ADMIN", "PUBLISHER", "RESTRICTED" })
+    @RolesAllowed({ "USER", "ADMIN", "RESTRICTED" })
     public Boolean hasSetBroken(@QueryParam("materialId") long materialId) {
         return materialService.hasSetBroken(materialId, getLoggedInUser());
     }

@@ -25,7 +25,7 @@ public class LearningObjectResource extends BaseResource {
 
     @PUT
     @Path("{learningObjectId}/tags")
-    @RolesAllowed({ "USER", "ADMIN", "PUBLISHER" })
+    @RolesAllowed({ "USER", "ADMIN" })
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public LearningObject addTag(@PathParam("learningObjectId") Long learningObjectId, Tag newTag) {

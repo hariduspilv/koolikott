@@ -28,6 +28,7 @@ import org.junit.runner.RunWith;
 
 import ee.hm.dop.dao.MaterialDAO;
 import ee.hm.dop.model.Material;
+import ee.hm.dop.model.Publisher;
 import ee.hm.dop.model.Recommendation;
 import ee.hm.dop.model.Repository;
 import ee.hm.dop.model.Role;
@@ -50,11 +51,13 @@ public class MaterialServiceTest {
     public void create() {
         Capture<Material> capturedMaterial = newCapture();
 
+        Publisher publisher = new Publisher();
+
         User creator = new User();
         creator.setId(2000L);
         creator.setName("First");
         creator.setSurname("Last");
-        creator.setRole(Role.PUBLISHER);
+        creator.setPublisher(publisher);
 
         Material material = new Material();
         String source = "http://creatematerial.example.com";
@@ -283,8 +286,11 @@ public class MaterialServiceTest {
         material.setRepository(null);
         material.setCreator(user);
 
+        Publisher publisher = new Publisher();
+
         expect(materialDAO.findByIdNotDeleted(material.getId())).andReturn(material).anyTimes();
-        expect(user.getRole()).andReturn(Role.PUBLISHER).anyTimes();
+        expect(user.getRole()).andReturn(Role.USER).anyTimes();
+        expect(user.getPublisher()).andReturn(publisher);
         expect(materialDAO.update(material)).andReturn(new Material());
         expect(user.getUsername()).andReturn("username").anyTimes();
 

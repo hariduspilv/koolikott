@@ -28,18 +28,24 @@ insert into LicenseType(id, name) values (3, 'CCBYND');
 insert into Repository(id, baseURL, lastSynchronization, schemaName, isEstonianPublisher) values (1, 'http://repo1.ee', null, 'waramu', false);
 insert into Repository(id, baseURL, lastSynchronization, schemaName, isEstonianPublisher) values (2, 'http://estonianPublisher.ee/OAIHandler', null, 'estCore', true);
 
+-- Publishers
+
+insert into Publisher(id, name, website) values (1, 'Koolibri', 'http://www.koolibri.ee');
+insert into Publisher(id, name, website) values (2, 'Pegasus', 'http://www.pegasus.ee');
+insert into Publisher(id, name, website) values (3, 'Varrak', 'http://www.varrak.ee');
+
 -- User
 
-insert into User(id, userName, name, surName, idCode, role) values (1, 'mati.maasikas', 'Mati', 'Maasikas', '39011220011', 'USER');
-insert into User(id, userName, name, surName, idCode, role) values (2, 'peeter.paan', 'Peeter', 'Paan', '38011550077', 'USER');
-insert into User(id, userName, name, surName, idCode, role) values (3, 'voldemar.vapustav', 'Voldemar', 'Vapustav', '37066990099', 'USER');
-insert into User(id, userName, name, surName, idCode, role) values (4, 'voldemar.vapustav2', 'Voldemar', 'Vapustav', '15066990099', 'USER');
-insert into User(id, userName, name, surName, idCode, role) values (5, 'mati.maasikas2', 'Mäti', 'Maasikas', '39011220012', 'USER');
-insert into User(id, userName, name, surName, idCode, role) values (6, 'mati.maasikas-vaarikas', 'Mati', 'Maasikas-Vaarikas', '39011220013', 'USER');
-insert into User(id, userName, name, surName, idCode, role) values (7, 'my.testuser', 'My', 'Testuser', '78912378912', 'USER');
-insert into User(id, userName, name, surName, idCode, role) values (8, 'admin.admin', 'Admin', 'Admin', '89898989898', 'ADMIN');
-insert into User(id, userName, name, surName, idCode, role) values (9, 'second.testuser', 'Second', 'Testuser', '89012378912', 'USER');
-insert into User(id, userName, name, surName, idCode, role) values (10, 'super.publisher', 'Super', 'Publisher', '77007700770', 'PUBLISHER');
+insert into User(id, userName, name, surName, idCode, role, publisher) values (1, 'mati.maasikas', 'Mati', 'Maasikas', '39011220011', 'USER', null);
+insert into User(id, userName, name, surName, idCode, role, publisher) values (2, 'peeter.paan', 'Peeter', 'Paan', '38011550077', 'USER', null);
+insert into User(id, userName, name, surName, idCode, role, publisher) values (3, 'voldemar.vapustav', 'Voldemar', 'Vapustav', '37066990099', 'USER', null);
+insert into User(id, userName, name, surName, idCode, role, publisher) values (4, 'voldemar.vapustav2', 'Voldemar', 'Vapustav', '15066990099', 'USER', null);
+insert into User(id, userName, name, surName, idCode, role, publisher) values (5, 'mati.maasikas2', 'Mäti', 'Maasikas', '39011220012', 'USER', null);
+insert into User(id, userName, name, surName, idCode, role, publisher) values (6, 'mati.maasikas-vaarikas', 'Mati', 'Maasikas-Vaarikas', '39011220013', 'USER', null);
+insert into User(id, userName, name, surName, idCode, role, publisher) values (7, 'my.testuser', 'My', 'Testuser', '78912378912', 'USER', null);
+insert into User(id, userName, name, surName, idCode, role, publisher) values (8, 'admin.admin', 'Admin', 'Admin', '89898989898', 'ADMIN', null);
+insert into User(id, userName, name, surName, idCode, role, publisher) values (9, 'second.testuser', 'Second', 'Testuser', '89012378912', 'USER', null);
+insert into User(id, userName, name, surName, idCode, role, publisher) values (10, 'super.publisher', 'Super', 'Publisher', '77007700770', 'USER', 1);
 
 -- AuthenticatedUser
 
@@ -277,12 +283,6 @@ insert into Material_ResourceType(material, resourceType) values (4, 1005);
 insert into Material_ResourceType(material, resourceType) values (5, 1003);
 insert into Material_ResourceType(material, resourceType) values (6, 1002);
 insert into Material_ResourceType(material, resourceType) values (7, 1004);
-
--- Publishers
-
-insert into Publisher(id, name, website) values (1, 'Koolibri', 'http://www.koolibri.ee');
-insert into Publisher(id, name, website) values (2, 'Pegasus', 'http://www.pegasus.ee');
-insert into Publisher(id, name, website) values (3, 'Varrak', 'http://www.varrak.ee');
 
 -- Cross-curricular themes
 insert into CrossCurricularTheme(id, name) values (1, 'Lifelong_learning_and_career_planning');
