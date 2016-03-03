@@ -50,6 +50,7 @@ define([
                 if (isEmpty(portfolio)) {
                     updatePortfolioFailed();
                 } else {
+                    $mdDialog.hide();
                     //toast
                 }
             }
