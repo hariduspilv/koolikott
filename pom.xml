@@ -324,6 +324,14 @@
 						</configuration>
 					</plugin>
 				</plugins>
+                <resources>
+                    <resource>
+                        <directory>src/main/resources</directory>
+                        <excludes>
+                            <exclude>db/migration/V*__Test_data_migration_*.sql</exclude>
+                        </excludes>
+                    </resource>
+                </resources>
 			</build>
 		</profile>
     </profiles>
