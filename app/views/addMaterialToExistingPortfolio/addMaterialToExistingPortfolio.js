@@ -5,8 +5,8 @@ define([
     'services/metadataService',
     'services/authenticatedUserService'
 ], function (app) {
-    return ['$scope', '$mdDialog', 'serverCallService', 'translationService', 'metadataService', '$rootScope', 'authenticatedUserService',
-        function ($scope, $mdDialog, serverCallService, translationService, metadataService, $rootScope, authenticatedUserService) {
+    return ['$scope', '$mdDialog', 'serverCallService', 'translationService', 'metadataService', '$rootScope', 'authenticatedUserService', 'toastService',
+        function ($scope, $mdDialog, serverCallService, translationService, metadataService, $rootScope, authenticatedUserService, toastService) {
             $scope.step = {};
             $scope.step.currentStep = 0;
             getUsersPortfolios();
@@ -51,12 +51,12 @@ define([
                     updatePortfolioFailed();
                 } else {
                     $mdDialog.hide();
-                    //toast
+                    toastService.show('PORTFOLIO_ADD_MATERIAL_SUCCESS');
                 }
             }
 
             function updatePortfolioFailed() {
-                log('Adding materials to portfolio failed.');
+                toastService.show('PORTFOLIO_ADD_MATERIAL_FAIL');
             }
 
             function getUsersPortfolios() {
