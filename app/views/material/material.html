@@ -141,7 +141,7 @@
 
                 <!-- right small side  -->
                 <div layout="column" flex flex-gt-xs="25" class="divider-left" layout-align="start start">
-                  <div  data-ng-if="!material.hasPicture" class="card-cover  {{materialType}}">
+                  <div  data-ng-if="!material.hasPicture" class="card-cover  {{getType()}}">
                     <span>
                       <md-icon class="icon-kind" data-ng-bind="getType()"></md-icon>
                     </span>
