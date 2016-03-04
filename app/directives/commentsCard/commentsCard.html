@@ -9,8 +9,8 @@
   </md-button>
 
   <div data-ng-show="showComments">
-    <md-list>
-      <md-list-item class="md-3-line" ng-repeat="comment in comments | limitTo: visibleCommentsCount">
+    <md-list role="list">
+      <md-list-item class="md-3-line" ng-repeat="comment in comments | limitTo: visibleCommentsCount" role="listitem">
         <md-icon class="md-avatar-icon">person</md-icon>
         <div class="md-list-item-text" layout="column">
           <h3>{{comment.creator.name}} {{comment.creator.surname}}</h3>
@@ -25,7 +25,7 @@
         <span>LOAD_MORE_COMMENTS</span> <span data-ng-bind="getLoadMoreCommentsLabel()"></span>
       </md-button>
     </div>
-    
+
     <div data-ng-if="isAuthorized()">
       <h6 data-translate="ADD_COMMENT_TITLE"></h6>
       <md-input-container class="md-block">

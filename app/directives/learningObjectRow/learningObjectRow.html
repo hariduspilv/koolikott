@@ -1,5 +1,5 @@
-<md-list class="recommendations">
-  <md-list-item data-ng-repeat="item in learningObjects" ng-href="{{getItemLink(item)}}" aria-label="Ava soovitatud materjal">
+<md-list class="recommendations" role="list">
+  <md-list-item data-ng-repeat="item in learningObjects" ng-href="{{getItemLink(item)}}" role="listitem" aria-label="Ava soovitatud materjal" >
     <div data-ng-if="item.type === '.Material'" layout="column" class="listblock">
       <h4 class="one-row" data-ng-bind="getCorrectLanguageString(item.titles, item.language)"></h4>
       <span class="one-row">

@@ -1,13 +1,17 @@
 <div layout="column" class="sidebar">
   <md-list id="guidlines">
     <md-list-item>
-      <a aria-label="Mine Mis on e-Koolikott leheküljele" data-ng-href="/about"  data-translate="ABOUT_PAGE_LINK_TITLE"></a>
+      <a aria-label="Mine Mis on e-Koolikott leheküljele" data-ng-href="/about"
+         data-translate="ABOUT_PAGE_LINK_TITLE"></a>
     </md-list-item>
     <md-list-item>
-      <a aria-label="Mine Kuidas e-Koolikotti kasutada leheküljele" data-ng-href="/help" data-translate="HELP_PAGE_LINK_TITLE"></a>
+      <a aria-label="Mine Kuidas e-Koolikotti kasutada leheküljele" data-ng-href="/help"
+         data-translate="HELP_PAGE_LINK_TITLE"></a>
     </md-list-item>
     <md-list-item>
-      <a aria-label="Anna tagasisidet e-Koolikoti kohta" data-ng-href="mailto:ekoolikott@hm.ee?subject=Tagasiside e-koolikotist" data-translate="GIVE_FEEDBACK_LINK"></a>
+      <a aria-label="Anna tagasisidet e-Koolikoti kohta"
+         data-ng-href="mailto:ekoolikott@hm.ee?subject=Tagasiside e-koolikotist"
+         data-translate="GIVE_FEEDBACK_LINK"></a>
     </md-list-item>
   </md-list>
 
@@ -17,7 +21,7 @@
     <span flex></span>
     <md-button data-ng-click="showMoreRecommendations()">
       <span data-translate="SHOW_MORE"></span>
-      <md-icon class="md-primary" >
+      <md-icon class="md-primary">
         keyboard_arrow_right
       </md-icon>
     </md-button>
@@ -26,15 +30,16 @@
   <h2 data-translate="MOST_LIKED"></h2>
   <div data-dop-learning-object-row data-learning-objects="mostLikedList"></div>
 
-  <md-list>
+  <md-list role="list">
     <md-list-item
-    ng-repeat="section in ::admin.sections"
-    ng-class="{
+      role="listitem"
+      ng-repeat="section in ::admin.sections"
+      ng-class="{
       'active': $state.includes(section.active),
       'disabled': section.disabled
     }"
-    ng-click="!section.disabled && $state.go(section.state)">
-    <span ng-bind="::section.label"></span>
-  </md-list-item>
-</md-list>
+      ng-click="!section.disabled && $state.go(section.state)">
+      <span ng-bind="::section.label"></span>
+    </md-list-item>
+  </md-list>
 </div>
