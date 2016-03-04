@@ -52,6 +52,10 @@ md-card {
       line-height: 24px;
     }
   }
+  .no-link, .no-link:hover {
+    text-decoration: none;
+    color: inherit;
+  }
 
   md-card-actions {
     padding-top: 10px;
