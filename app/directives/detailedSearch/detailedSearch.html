@@ -57,17 +57,17 @@
         <md-checkbox data-ng-if="detailedSearch.educationalContext.id == 4" data-ng-model="detailedSearch.specialEducationalNeed" aria-label="{{'DETAILED_SEARCH_SPECIAL_EDUCATIONAL_NEED' | translate}}" class="md-primary" flex>
           <span data-translate="DETAILED_SEARCH_SPECIAL_EDUCATIONAL_NEED"></span>
         </md-checkbox>
-        <md-checkbox data-ng-model="detailedSearch.paid" class="md-primary" flex>
+        <md-checkbox data-ng-model="detailedSearch.paid" class="md-primary" aria-label="Ainult tasuta õppevara" flex>
           <span data-translate="DETAILED_SEARCH_ONLY_FREE"></span>
         </md-checkbox>
         <md-radio-group data-ng-model="detailedSearch.type">
-          <md-radio-button ng-disabled="$root.isEditPortfolioMode" value="all" class="md-primary md-checked">
+          <md-radio-button ng-disabled="$root.isEditPortfolioMode" value="all" class="md-primary md-checked" aria-label="Kõik õppematerjalid">
             <span data-translate="DETAILED_SEARCH_ALL"></span>
           </md-radio-button>
-          <md-radio-button value="material" class="md-primary">
+          <md-radio-button value="material" class="md-primary" aria-label="Ainult materjalid">
             <span data-translate="DETAILED_SEARCH_MATERIALS"></span>
           </md-radio-button>
-          <md-radio-button ng-disabled="$root.isEditPortfolioMode" value="portfolio" class="md-primary">
+          <md-radio-button ng-disabled="$root.isEditPortfolioMode" value="portfolio" class="md-primary" aria-label="Ainult kogumikud">
             <span data-translate="DETAILED_SEARCH_PORTFOLIOS"></span>
           </md-radio-button>
         </md-radio-group>
@@ -76,7 +76,7 @@
         <div flex="25" layout layout-align="start center">
           <span class="md-body-1">Avaldatud <br> (alates)</span>
         </div>
-        <md-slider  class="md-primary" flex md-discrete ng-model="detailedSearch.issueDate" step="1" min="{{issueDateFirstYear}}" max="{{issueDateLastYear}}" aria-label="{{DETAILED_SEARCH_ISSUE_DATE_FROM | translate}}">
+        <md-slider  class="md-primary" flex md-discrete ng-model="detailedSearch.issueDate" step="1" min="{{issueDateFirstYear}}" max="{{issueDateLastYear}}" aria-label="{{DETAILED_SEARCH_ISSUE_DATE_FROM | translate}}" aria-valuenow="2009">
         </md-slider>
         <!-- TODO: Can we leave the slider tooltip visible if dirty? -->
       </div>

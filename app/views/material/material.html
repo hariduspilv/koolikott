@@ -26,7 +26,7 @@
                       </md-tooltip>
                     </a>
 
-                    <h1 data-ng-if="sourceType !== 'LINK'" data-ng-bind="getCorrectLanguageString(material.titles)"></h1>
+                    <h1 flex data-ng-if="sourceType !== 'LINK'" data-ng-bind="getCorrectLanguageString(material.titles)"></h1>
 
                     <md-menu>
                       <md-button class="md-icon-button" ng-click="$mdOpenMenu($event)">
@@ -141,7 +141,7 @@
 
                 <!-- right small side  -->
                 <div layout="column" flex flex-gt-xs="25" class="divider-left" layout-align="start start">
-                  <div  data-ng-if="!material.hasPicture" class="card-cover  {{materialType}}">
+                  <div  data-ng-if="!material.hasPicture" class="card-cover  {{getType()}}">
                     <span>
                       <md-icon class="icon-kind" data-ng-bind="getType()"></md-icon>
                     </span>
@@ -288,7 +288,7 @@
           </md-card>
         </article>
 
-        <div data-dop-sidebar flex flex-gt-sm="25" flex-gt-lg="20" class="md-padding" role="sidebar"></div>
+        <div data-dop-sidebar flex flex-gt-sm="25" flex-gt-lg="20" class="md-padding" ></div>
       </div>
     </section>
   </div>
