@@ -18,7 +18,12 @@ import javax.persistence.OrderColumn;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+
 import ee.hm.dop.model.taxon.Taxon;
+import ee.hm.dop.rest.jackson.map.TaxonDeserializer;
+import ee.hm.dop.rest.jackson.map.TaxonSerializer;
 
 @Entity
 public class Portfolio extends LearningObject implements Searchable {
@@ -28,6 +33,8 @@ public class Portfolio extends LearningObject implements Searchable {
 
     @ManyToOne
     @JoinColumn(name = "taxon")
+    @JsonSerialize(using = TaxonSerializer.class)
+    @JsonDeserialize(using = TaxonDeserializer.class)
     private Taxon taxon;
 
     @Column(columnDefinition = "TEXT")
