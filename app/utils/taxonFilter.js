@@ -89,6 +89,9 @@ define(function () {
                 if (replacementTaxon) {
                     learningObject.taxons[taxonIndex] = replacementTaxon;
                 }
+                if (!taxon || isObjectEmpty(taxon)) {
+                    learningObject.taxons.splice(taxonIndex, 1);
+                }
             });
         }
 
@@ -96,6 +99,9 @@ define(function () {
             var replacementTaxon = replacementFunction(learningObject.taxon);
             if (replacementTaxon) {
                 learningObject.taxon = replacementTaxon;
+            }
+            if (!learningObject.taxon || isObjectEmpty(learningObject.taxon)) {
+                learningObject.taxon = null;
             }
         }
 
@@ -113,6 +119,9 @@ define(function () {
                     var replacementTaxon = replacementFunction(taxon);
                     if (replacementTaxon) {
                         material.taxons[taxonIndex] = replacementTaxon;
+                    }
+                    if (!taxon || isObjectEmpty(taxon)) {
+                        material.taxons.splice(taxonIndex, 1);
                     }
                 });
             });
