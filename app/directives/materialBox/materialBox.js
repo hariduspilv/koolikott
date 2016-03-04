@@ -18,7 +18,6 @@ define([
                     $scope.selected = false;
                     $scope.isEditPortfolioPage = $rootScope.isEditPortfolioPage;
                     $scope.isEditPortfolioMode = $rootScope.isEditPortfolioMode;
-                    isAuthenticated();
 
                     $scope.navigateTo = function (material, $event) {
                         $event.preventDefault();
@@ -80,9 +79,14 @@ define([
                         $scope.chapter.materials.splice(index, 1);
                     };
 
-                    function isAuthenticated() {
-                        $scope.isAuthenticated = authenticatedUserService.isAuthenticated();
-                    }
+                    $scope.isAuthenticated = function () {
+                        var authenticated = authenticatedUserService.getUser() && !authenticatedUserService.isRestricted() && !$rootScope.isEditPortfolioPage;
+                        if(!authenticated) {
+                            $scope.selected = false;
+                        }
+
+                        return authenticated;
+                    };
 
                     $rootScope.$watch('selectedMaterials', function (newValue) {
                         if (newValue && newValue.length == 0) {

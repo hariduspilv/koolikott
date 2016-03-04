@@ -5,7 +5,7 @@
       <md-icon class="icon-kind">{{ materialType }}</md-icon>
     </div>
     <div class="card-hover {{materialType}}">
-      <div class="pick" data-ng-if="isAuthenticated && !isEditPortfolioPage">
+      <div class="pick" data-ng-if="isAuthenticated()">
         <md-icon class="unchecked">radio_button_unchecked</md-icon>
         <md-icon data-ng-click="pickMaterial($event, material)" class="checked">check_circle</md-icon>
       </div>
@@ -20,7 +20,7 @@
   <a data-ng-href="{{'/material?materialId=' + material.id}}"  data-ng-if="material.hasPicture"  class="card-cover imaged {{materialType}}" layout="row" layout-fill layout-align="start start">
     <img data-ng-src="{{material.picture}}" class="md-card-image" />
     <div class="card-hover {{materialType}}">
-      <div class="pick" data-ng-if="isAuthenticated && !isEditPortfolioPage">
+      <div class="pick" data-ng-if="isAuthenticated()">
         <md-icon class="unchecked">radio_button_unchecked</md-icon>
         <md-icon data-ng-click="pickMaterial($event, material)" class="checked">check_circle</md-icon>
       </div>
