@@ -2,7 +2,7 @@
          data-ng-click="navigateTo(material, $event)" layout="column" layout-fill>
   <!-- noimage -->
   <a data-ng-href="{{'/material?materialId=' + material.id}}" data-ng-if="!material.hasPicture"
-     class="card-cover {{materialType}}" layout-align="center center">
+     class="card-cover {{materialType}}" layout="row" layout-align="center center">
     <div>
       <md-icon class="icon-kind">{{ materialType }}</md-icon>
     </div>
