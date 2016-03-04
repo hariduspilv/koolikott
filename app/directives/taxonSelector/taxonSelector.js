@@ -4,7 +4,8 @@ define([
 ], function(angularAMD) {
     var EDUCATIONAL_CONTEXTS;
 
-    angularAMD.directive('dopTaxonSelector', ['serverCallService', function() {
+
+    angularAMD.directive('dopTaxonSelector', ['serverCallService', 'metadataService', function() {
         return {
             scope: {
                 taxon: '=',
@@ -12,11 +13,11 @@ define([
                 isAddPortfolioView: '='
             },
             templateUrl: 'directives/taxonSelector/taxonSelector.html',
-            controller: function($scope, serverCallService, $rootScope, $timeout) {
+            controller: function($scope, serverCallService, $rootScope, $timeout, metadataService) {
 
                 // get educational contexts
                 if (!EDUCATIONAL_CONTEXTS) {
-                    serverCallService.makeGet("rest/learningMaterialMetadata/educationalContext", {}, getEducationalContextSuccess, getEducationalContextFail);
+                    metadataService.loadEducationalContexts(getEducationalContextsSuccess)
                 } else {
                     init();
                 }
@@ -103,10 +104,8 @@ define([
                     }, true);
                 }
 
-                function getEducationalContextSuccess(educationalContexts) {
-                    if (isEmpty(educationalContexts)) {
-                        getEducationalContextFail();
-                    } else {
+                function getEducationalContextsSuccess(educationalContexts) {
+                    if (!isEmpty(educationalContexts)) {
                         EDUCATIONAL_CONTEXTS = educationalContexts;
                         buildBasicEducationDomainSubjects(educationalContexts);
                         init();
@@ -131,10 +130,6 @@ define([
                             break;
                         }
                     }
-                }
-
-                function getEducationalContextFail() {
-                    console.log('Failed to get educational contexts.')
                 }
 
                 function setEducationalContexts() {

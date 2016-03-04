@@ -3,6 +3,7 @@ define([
 
     'app.routes',
     'utils/taxonUtils',
+    'utils/taxonFilter',
 
     'angular-translate',
     'angular-translate-loader-url',
@@ -26,7 +27,7 @@ define([
     'directives/pageStructure/linearLayout/linearLayout',
 
     'services/authenticatedUserService',
-], function(angularAMD, config, taxonUtils) {
+], function(angularAMD, config, taxonUtils, taxonFilter) {
     'use strict';
 
     var app = angular.module('app', [
@@ -65,7 +66,7 @@ define([
             }
 
             configureTranslationService($translateProvider);
-            configureTheme($mdThemingProvider)
+            configureTheme($mdThemingProvider);
             configureDateLocale($mdDateLocaleProvider);
             $sceProvider.enabled(false);
 
@@ -79,6 +80,8 @@ define([
 
     function serializeRequest(data, headersGetter) {
         if (data && headersGetter()['content-type'].contains('application/json')) {
+            data = angular.copy(data);
+            taxonFilter.transformToMinimalTaxons(data);
             return JSOG.stringify(data);
         }
 
@@ -87,7 +90,9 @@ define([
 
     function parseJSONResponse(data, headersGetter) {
         if (data && (headersGetter()['content-type'] === 'application/json')) {
-            return JSOG.parse(data);
+            data = JSOG.parse(data);
+            taxonFilter.transformToFullTaxons(data);
+            return data;
         }
 
         return data;
@@ -128,6 +133,10 @@ define([
     function configureDateLocale($mdDateLocaleProvider) {
         $mdDateLocaleProvider.firstDayOfWeek = 1;
     }
+
+    app.run(function($rootScope, metadataService) {
+        metadataService.loadEducationalContexts(taxonFilter.setTaxons);
+    });
 
     app.run(function($rootScope, $location, authenticatedUserService) {
         $rootScope.$on('$routeChangeSuccess', function() {

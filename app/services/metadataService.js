@@ -1,6 +1,6 @@
 define([
-  'angularAMD',
-  'services/serverCallService'
+    'angularAMD',
+    'services/serverCallService'
 ], function(angularAMD) {
     var instance;
 
@@ -9,12 +9,14 @@ define([
     var LANGUGAGES;
     var LICENSE_TYPES;
     var RESOURCE_TYPES;
+    var EDUCATIONAL_CONTEXTS;
 
     var crossCurricularThemesCallbacks = [];
     var keyCompetencesCallbacks = [];
     var langugagesCallbacks = [];
     var licenseTypesCallbacks = [];
     var resourceTypesCallbacks = [];
+    var educationalContextsCallbacks = [];
 
     angularAMD.factory('metadataService', ['serverCallService',
         function(serverCallService) {
@@ -22,6 +24,7 @@ define([
             init();
 
             function init() {
+                serverCallService.makeGet("rest/learningMaterialMetadata/educationalContext", {}, getEducationalContextSuccess, getEducationalContextFail);
                 serverCallService.makeGet("rest/learningMaterialMetadata/crossCurricularTheme", {}, getCrossCurricularThemesSuccess, getCrossCurricularThemesFail);
                 serverCallService.makeGet("rest/learningMaterialMetadata/keyCompetence", {}, getKeyCompetencesSuccess, getKeyCompetencesFail);
                 serverCallService.makeGet("rest/learningMaterialMetadata/language", {}, getLanguagesSuccess, getLanguagesFail);
@@ -100,6 +103,19 @@ define([
                 console.log('Failed to get resource types.');
             }
 
+            function getEducationalContextSuccess(data) {
+                if (!isEmpty(data)) {
+                    EDUCATIONAL_CONTEXTS = data;
+                    educationalContextsCallbacks.forEach(function(callback) {
+                        callback(data);
+                    });
+                }
+            }
+
+            function getEducationalContextFail() {
+                console.log('Failed to get educational contexts.');
+            }
+
             instance = {
 
                 loadCrossCurricularThemes: function(callback) {
@@ -145,8 +161,16 @@ define([
                         // Save callback, call it when data arrives
                         resourceTypesCallbacks.push(callback);
                     }
-                }
+                },
 
+                loadEducationalContexts: function(callback) {
+                    if (EDUCATIONAL_CONTEXTS) {
+                        callback(EDUCATIONAL_CONTEXTS);
+                    } else {
+                        // Save callback, call it when data arrives
+                        educationalContextsCallbacks.push(callback);
+                    }
+                }
             };
 
             return instance;
