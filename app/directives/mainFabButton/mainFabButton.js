@@ -15,11 +15,11 @@ define([
 
                 $rootScope.$watch('selectedMaterials.length', function (newValue) {
                     $scope.userHasSelectedMaterials = newValue > 0;
-                },true);
+                },false);
 
                 $rootScope.$watch('selectedSingleMaterial', function (newValue) {
                         $scope.userHasSelectedMaterials = newValue !== null;
-                },true);
+                },false);
 
                 $scope.showAddPortfolioDialog = function() {
                     var emptyPortfolio = createPortfolio();
