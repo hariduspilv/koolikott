@@ -42,13 +42,13 @@ INSERT INTO Translation(translationGroup, translationKey, translation) VALUES (2
 INSERT INTO Translation(translationGroup, translationKey, translation) VALUES (3,'ADD_TO_EXISTING_PORTFOLIO','Add materials to existing portfolio');
 
 
-INSERT INTO Translation(translationGroup, translationKey, translation) VALUES (3,'CHOOSE_PORTFOLIO','Add materials to new portfolio');
-INSERT INTO Translation(translationGroup, translationKey, translation) VALUES (1,'CHOOSE_PORTFOLIO','Lisa materjalid uude kogumikku');
-INSERT INTO Translation(translationGroup, translationKey, translation) VALUES (2,'CHOOSE_PORTFOLIO','Добавить материалы в новый портфель');
+INSERT INTO Translation(translationGroup, translationKey, translation) VALUES (3,'CHOOSE_PORTFOLIO','Choose portfolio');
+INSERT INTO Translation(translationGroup, translationKey, translation) VALUES (1,'CHOOSE_PORTFOLIO','Vali kogumik');
+INSERT INTO Translation(translationGroup, translationKey, translation) VALUES (2,'CHOOSE_PORTFOLIO','Выберите портфель');
 
-INSERT INTO Translation(translationGroup, translationKey, translation) VALUES (3,'CHOOSE_PORTFOLIO_CHAPTER','Add materials to new portfolio');
-INSERT INTO Translation(translationGroup, translationKey, translation) VALUES (1,'CHOOSE_PORTFOLIO_CHAPTER','Lisa materjalid uude kogumikku');
-INSERT INTO Translation(translationGroup, translationKey, translation) VALUES (2,'CHOOSE_PORTFOLIO_CHAPTER','Добавить материалы в новый портфель');
+INSERT INTO Translation(translationGroup, translationKey, translation) VALUES (3,'CHOOSE_PORTFOLIO_CHAPTER','Choose porfolio chapter');
+INSERT INTO Translation(translationGroup, translationKey, translation) VALUES (1,'CHOOSE_PORTFOLIO_CHAPTER','Vali kogumiku peatükk');
+INSERT INTO Translation(translationGroup, translationKey, translation) VALUES (2,'CHOOSE_PORTFOLIO_CHAPTER','Выбрать главу портфеля');
 
 INSERT INTO Translation(translationGroup, translationKey, translation) VALUES (3,'PORTFOLIO_ADD_MATERIAL_FAIL','Adding material(s) to portfolio failed');
 INSERT INTO Translation(translationGroup, translationKey, translation) VALUES (1,'PORTFOLIO_ADD_MATERIAL_FAIL','Materjali(de) lisamine kogumikku ebaõnnestus');
