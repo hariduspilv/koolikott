@@ -74,7 +74,9 @@ define([
                     };
 
                     $scope.removeMaterial = function ($event, material) {
+                        $event.preventDefault();
                         $event.stopPropagation();
+
                         var index = $scope.chapter.materials.indexOf(material);
                         $scope.chapter.materials.splice(index, 1);
                     };
