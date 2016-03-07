@@ -31,6 +31,7 @@ public class User {
     @Column(unique = true, nullable = false)
     private String idCode;
 
+    @JsonIgnore
     @Enumerated(EnumType.STRING)
     private Role role;
 

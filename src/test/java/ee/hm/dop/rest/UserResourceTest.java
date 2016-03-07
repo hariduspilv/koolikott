@@ -14,6 +14,7 @@ import javax.ws.rs.core.Response.Status;
 import org.junit.Test;
 
 import ee.hm.dop.common.test.ResourceIntegrationTestBase;
+import ee.hm.dop.model.Role;
 import ee.hm.dop.model.User;
 
 public class UserResourceTest extends ResourceIntegrationTestBase {
@@ -79,6 +80,26 @@ public class UserResourceTest extends ResourceIntegrationTestBase {
     public void getSignedUserDataNotLoggedIn() {
         Response response = doGet("user/getSignedUserData", MediaType.TEXT_PLAIN_TYPE);
         assertEquals(Status.UNAUTHORIZED.getStatusCode(), response.getStatus());
+    }
+
+    @Test
+    public void getRoleUser() {
+        String idCode = "89012378912";
+        login(idCode);
+
+        Response response = doGet("user/role", MediaType.TEXT_PLAIN_TYPE);
+        String roleString = response.readEntity(String.class);
+        assertEquals(Role.USER.toString(), roleString);
+    }
+
+    @Test
+    public void getRoleAdmin() {
+        String idCode = "89898989898";
+        login(idCode);
+
+        Response response = doGet("user/role", MediaType.TEXT_PLAIN_TYPE);
+        String roleString = response.readEntity(String.class);
+        assertEquals(Role.ADMIN.toString(), roleString);
     }
 
     private User getUser(String username) {

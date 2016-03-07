@@ -55,4 +55,12 @@ public class UserResource extends BaseResource {
 
         return authenticatedUserService.signUserData(authenticatedUser);
     }
+
+    @GET
+    @Path("role")
+    @RolesAllowed({ "USER", "ADMIN", "RESTRICTED" })
+    @Produces(MediaType.TEXT_PLAIN)
+    public String getUserRole() {
+        return getLoggedInUser().getRole().toString();
+    }
 }
