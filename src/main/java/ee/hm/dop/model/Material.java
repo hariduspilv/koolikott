@@ -22,8 +22,12 @@ import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 import ee.hm.dop.model.taxon.Taxon;
+import ee.hm.dop.rest.jackson.map.TaxonDeserializer;
+import ee.hm.dop.rest.jackson.map.TaxonSerializer;
 
 @Entity
 @Table(uniqueConstraints = { @UniqueConstraint(columnNames = { "repositoryIdentifier", "repository" }) })
@@ -36,7 +40,7 @@ public class Material extends LearningObject implements Searchable {
             name = "Material_Title",
             joinColumns = { @JoinColumn(name = "material") },
             inverseJoinColumns = { @JoinColumn(name = "title") },
-            uniqueConstraints = @UniqueConstraint(columnNames = { "material", "title" }))
+            uniqueConstraints = @UniqueConstraint(columnNames = { "material", "title" }) )
     private List<LanguageString> titles;
 
     @ManyToOne
@@ -49,7 +53,7 @@ public class Material extends LearningObject implements Searchable {
             name = "Material_Author",
             joinColumns = { @JoinColumn(name = "material") },
             inverseJoinColumns = { @JoinColumn(name = "author") },
-            uniqueConstraints = @UniqueConstraint(columnNames = { "material", "author" }))
+            uniqueConstraints = @UniqueConstraint(columnNames = { "material", "author" }) )
     private List<Author> authors;
 
     @OneToOne(cascade = { PERSIST, MERGE })
@@ -62,7 +66,7 @@ public class Material extends LearningObject implements Searchable {
             name = "Material_Description",
             joinColumns = { @JoinColumn(name = "material") },
             inverseJoinColumns = { @JoinColumn(name = "description") },
-            uniqueConstraints = @UniqueConstraint(columnNames = { "material", "description" }))
+            uniqueConstraints = @UniqueConstraint(columnNames = { "material", "description" }) )
     private List<LanguageString> descriptions;
 
     @Column(nullable = false, columnDefinition = "TEXT")
@@ -74,7 +78,7 @@ public class Material extends LearningObject implements Searchable {
             name = "Material_ResourceType",
             joinColumns = { @JoinColumn(name = "material") },
             inverseJoinColumns = { @JoinColumn(name = "resourceType") },
-            uniqueConstraints = @UniqueConstraint(columnNames = { "material", "resourceType" }))
+            uniqueConstraints = @UniqueConstraint(columnNames = { "material", "resourceType" }) )
     private List<ResourceType> resourceTypes;
 
     @ManyToMany(fetch = EAGER)
@@ -83,7 +87,9 @@ public class Material extends LearningObject implements Searchable {
             name = "Material_Taxon",
             joinColumns = { @JoinColumn(name = "material") },
             inverseJoinColumns = { @JoinColumn(name = "taxon") },
-            uniqueConstraints = @UniqueConstraint(columnNames = { "material", "taxon" }))
+            uniqueConstraints = @UniqueConstraint(columnNames = { "material", "taxon" }) )
+    @JsonSerialize(contentUsing = TaxonSerializer.class)
+    @JsonDeserialize(contentUsing = TaxonDeserializer.class)
     private List<Taxon> taxons;
 
     @ManyToOne
@@ -96,7 +102,7 @@ public class Material extends LearningObject implements Searchable {
             name = "Material_Publisher",
             joinColumns = { @JoinColumn(name = "material") },
             inverseJoinColumns = { @JoinColumn(name = "publisher") },
-            uniqueConstraints = @UniqueConstraint(columnNames = { "material", "publisher" }))
+            uniqueConstraints = @UniqueConstraint(columnNames = { "material", "publisher" }) )
     private List<Publisher> publishers;
 
     @JsonIgnore
