@@ -1,5 +1,5 @@
 <md-card class="card-sm md-whiteframe-2dp" id="portfolio-card-{{portfolio.id}}"
-         data-ng-click="navigateTo(portfolio, $event)" layout="column" layout-fill>
+         data-ng-click="navigateTo(portfolio, $event)" layout="column">
   <div class="corner"></div>
   <!-- noimage -->
   <a data-ng-href="{{'/portfolio?id=' + portfolio.id}}" data-ng-if="!portfolio.hasPicture" class="card-cover portfolio"
@@ -20,7 +20,7 @@
       <md-icon class="icon-kind">book</md-icon>
     </div>
   </a>
-  <a data-ng-href="{{'/portfolio?id=' + portfolio.id}}" class="no-link" layout="column">
+  <a data-ng-href="{{'/portfolio?id=' + portfolio.id}}" class="no-link" flex layout="column">
     <md-card-content flex>
       <h4 class="md-headline two-rows" data-ng-bind="portfolio.title"></h4>
       <p class="md-caption one-row">
