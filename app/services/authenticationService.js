@@ -13,27 +13,14 @@ define([
     angularAMD.factory('authenticationService', ['$location', '$rootScope', 'serverCallService', 'authenticatedUserService', 'alertService', '$mdDialog',
         function($location, $rootScope, serverCallService, authenticatedUserService, alertService, $mdDialog) {
 
-            function loginSuccess(authenticatedUser) {
-                if (isEmpty(authenticatedUser)) {
+            var authenticatedUser;
+
+            function loginSuccess(authUser) {
+                if (isEmpty(authUser)) {
                     loginFail();
                 } else {
-                    authenticatedUserService.setAuthenticatedUser(authenticatedUser);
-
-                    if (authenticatedUser.firstLogin) {
-                        $location.url('/' + authenticatedUser.user.username);
-                    } else if (isOAuthAuthentication) {
-                        var url = localStorage.getItem(LOGIN_ORIGIN);
-                        $location.url(url);
-                    }
-
-                    enableLogin();
-                    localStorage.removeItem(LOGIN_ORIGIN);
-                    isOAuthAuthentication = false;
-                    alertService.setErrorAlert('LOGIN_SUCCESS');
-
-                    if (mobileIdLoginSuccessCallback) {
-                        mobileIdLoginSuccessCallback();
-                    }
+                    authenticatedUser = authUser;
+                    getRole();
                 }
             }
 
@@ -42,16 +29,37 @@ define([
                 $mdDialog.hide();
                 alertService.setErrorAlert('ERROR_LOGIN_FAILED');
                 enableLogin();
+                authenticatedUserService.removeAuthenticatedUser();
 
                 if (isOAuthAuthentication) {
                     localStorage.removeItem(LOGIN_ORIGIN);
                     $location.url('/');
                 }
 
-                isOAuthAuthentication = false
+                isOAuthAuthentication = false;
 
                 if (mobileIdLoginFailCallback) {
                     mobileIdLoginFailCallback();
+                }
+            }
+
+            function finishLogin() {
+                authenticatedUserService.setAuthenticatedUser(authenticatedUser);
+
+                if (authenticatedUser.firstLogin) {
+                    $location.url('/' + authenticatedUser.user.username);
+                } else if (isOAuthAuthentication) {
+                    var url = localStorage.getItem(LOGIN_ORIGIN);
+                    $location.url(url);
+                }
+
+                enableLogin();
+                localStorage.removeItem(LOGIN_ORIGIN);
+                isOAuthAuthentication = false;
+                alertService.setErrorAlert('LOGIN_SUCCESS');
+
+                if (mobileIdLoginSuccessCallback) {
+                    mobileIdLoginSuccessCallback();
                 }
             }
 
@@ -92,6 +100,21 @@ define([
                 window.location = path;
             }
 
+            function getRole() {
+                authenticatedUserService.setAuthenticatedUser(authenticatedUser);
+                serverCallService.makeGet("rest/user/role", {}, getRoleSuccess, loginFail);
+            }
+
+            function getRoleSuccess(data) {
+                if (isEmpty(data)) {
+                    loginFail();
+                } else {
+                    authenticatedUserService.removeAuthenticatedUser();
+                    authenticatedUser.user.role = data;
+                    finishLogin();
+                }
+            }
+
             return {
 
                 logout: function() {
@@ -110,7 +133,7 @@ define([
                 loginWithTaat: function() {
                     loginWithOAuth("/rest/login/taat");
                 },
-                
+
                 loginWithEkool : function() {
                     loginWithOAuth("/rest/login/ekool");
                 },
@@ -118,7 +141,7 @@ define([
                 loginWithStuudium : function() {
                     loginWithOAuth("/rest/login/stuudium");
                 },
-                
+
                 authenticateUsingOAuth: function(token) {
                     var params = {
                         'token': token
