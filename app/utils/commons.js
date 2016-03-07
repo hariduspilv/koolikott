@@ -295,7 +295,7 @@ function createPortfolio(id) {
 function sortTags(upVoteForms) {
     if (upVoteForms) {
         return upVoteForms.sort(function (a, b) {
-            return a.upVoteCount < b.upVoteCount;
+            return b.upVoteCount - a.upVoteCount;
         });
     }
 }
