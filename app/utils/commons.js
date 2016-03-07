@@ -313,3 +313,10 @@ function containsMaterial(materials, selectedMaterial) {
 function isObjectEmpty(obj) {
     return Object.keys(obj).length === 0 && JSON.stringify(obj) === JSON.stringify({});
 }
+
+// This is a workaround for angular circular reference problem. It is not efficient.
+function clone(object) {
+    var json = JSOG.stringify(object);
+    return JSOG.parse(json)
+}
+

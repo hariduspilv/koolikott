@@ -3,7 +3,7 @@ define([
 
     'app.routes',
     'utils/taxonUtils',
-    'utils/taxonFilter',
+    'utils/taxonParser',
 
     'angular-translate',
     'angular-translate-loader-url',
@@ -27,7 +27,7 @@ define([
     'directives/pageStructure/linearLayout/linearLayout',
 
     'services/authenticatedUserService',
-], function(angularAMD, config, taxonUtils, taxonFilter) {
+], function(angularAMD, config, taxonUtils, taxonParser) {
     'use strict';
 
     var app = angular.module('app', [
@@ -80,8 +80,8 @@ define([
 
     function serializeRequest(data, headersGetter) {
         if (data && headersGetter()['content-type'].contains('application/json')) {
-            data = angular.copy(data);
-            taxonFilter.transformToMinimalTaxons(data);
+            data = clone(data);
+            taxonParser.serialize(data);
             return JSOG.stringify(data);
         }
 
@@ -91,7 +91,7 @@ define([
     function parseJSONResponse(data, headersGetter) {
         if (data && (headersGetter()['content-type'] === 'application/json')) {
             data = JSOG.parse(data);
-            taxonFilter.transformToFullTaxons(data);
+            taxonParser.parse(data);
             return data;
         }
 
@@ -135,7 +135,7 @@ define([
     }
 
     app.run(function($rootScope, metadataService) {
-        metadataService.loadEducationalContexts(taxonFilter.setTaxons);
+        metadataService.loadEducationalContexts(taxonParser.setTaxons);
     });
 
     app.run(function($rootScope, $location, authenticatedUserService) {
