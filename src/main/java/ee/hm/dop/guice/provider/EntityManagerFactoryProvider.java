@@ -11,15 +11,13 @@ import java.util.Map;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 
-import org.apache.commons.configuration.Configuration;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.google.inject.Inject;
 import com.google.inject.Provider;
 import com.google.inject.Singleton;
-
 import ee.hm.dop.db.DatabaseMigrator;
+import org.apache.commons.configuration.Configuration;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Guice provider of Entity Manager Factory.
@@ -71,10 +69,10 @@ public class EntityManagerFactoryProvider implements Provider<EntityManagerFacto
         properties.put("hibernate.c3p0.initialpoolsize", "5");
         properties.put("hibernate.c3p0.acquire_increment", "1");
         properties.put("hibernate.c3p0.timeout", "300");
-        properties.put("hibernate.c3p0.max_statements", "50");
         properties.put("hibernate.c3p0.idle_test_period", "400");
         properties.put("hibernate.c3p0.testConnectionOnCheckin", "true");
         properties.put("hibernate.c3p0.preferredTestQuery", "SELECT 1");
+        properties.put("hibernate.c3p0.numHelperThreads", "11");
 
         // Configurable options
         properties.put("hibernate.connection.url", configuration.getString(DATABASE_URL));
