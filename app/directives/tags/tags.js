@@ -18,19 +18,25 @@ define([
 
                 function init() {
                     $scope.showMoreTags = false;
+
                     if ($scope.learningObject && $scope.learningObject.id) {
                         var reportParams = {
                             learningObject: $scope.learningObject.id
                         };
-                        
-                        serverCallService.makeGet("rest/tagUpVotes/report", reportParams, getTagUpVotesReportSuccess);
+
+                        serverCallService.makeGet("rest/tagUpVotes/report", reportParams, getTagUpVotesReportSuccess)
                     }
-                    
-                    
+
                     if($scope.isAllowed()) {
                     	getHasReportedImproper();
                     }
                 }
+
+                $scope.$watch('learningObject', function (newLearningObject, oldLearningObject) {
+                    if (newLearningObject != oldLearningObject) {
+                        init();
+                    }
+                }, false);
 
                 function getTagUpVotesReportSuccess(upVoteForms) {
                     var sortedForms = sortTags(upVoteForms);
@@ -121,7 +127,7 @@ define([
                 		} else if (learningObject.type === ".Material") {
                 			storageService.setMaterial($scope.learningObject);
                 		}
-                		
+
                 		init();
                 	}
                 }
@@ -159,22 +165,22 @@ define([
                 };
 
                 function setImproperSuccessful() {
-                    $scope.isReportedByUser = true;
+                    $rootScope.isReportedByUser = true;
                 }
-                
+
                 function getHasReportedImproper() {
                     if ($scope.learningObject && $scope.learningObject.id) {
                     	var improperParams = {
                     			learningObject: $scope.learningObject.id
-                    	}
-                    	
+                    	};
+
                         serverCallService.makeGet("rest/impropers", improperParams, requestSuccessful, requestFailed);
                     }
                 }
 
                 function requestSuccessful(improper) {
                     if (!$scope.isAdmin()) {
-                        $scope.isReportedByUser = improper.length > 0;
+                        $rootScope.isReportedByUser = improper.length > 0;
                     }
                 }
 

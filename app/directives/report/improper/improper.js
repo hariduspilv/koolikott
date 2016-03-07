@@ -3,7 +3,8 @@ define([
     'services/translationService',
     'services/authenticatedUserService'
 ], function (app) {
-    app.directive('dopReportImproper', ['translationService', '$mdDialog', '$translate', 'authenticatedUserService', function (translationService, $mdDialog, $translate, authenticatedUserService) {
+    app.directive('dopReportImproper', ['translationService', '$mdDialog', '$translate', 'authenticatedUserService', '$rootScope',
+        function (translationService, $mdDialog, $translate, authenticatedUserService, $rootScope) {
         return {
             scope: {
                 learningObject: '='
@@ -11,9 +12,8 @@ define([
             templateUrl: 'directives/report/improper/improper.html',
             controller: function ($scope, serverCallService) {
                 $scope.isReported = false;
-                $scope.isReportedByUser = false;
 
-                $scope.$watch('learningObject', function (newLearningObject, oldLearningObject) {
+                $scope.$watch('learningObject', function (newLearningObject) {
                     if (newLearningObject) {
                     	getHasReported();
                     }
@@ -29,11 +29,11 @@ define([
                 }
 
                 function requestSuccessful(improper) {
-                	var isImproper = improper.length > 0 ? true : false;
+                	var isImproper = improper.length > 0;
                     if ($scope.isAdmin) {
                         $scope.isReported = isImproper;
                     } else {
-                        $scope.isReportedByUser = isImproper;
+                        $rootScope.isReportedByUser = isImproper;
                     }
                 }
 
@@ -78,12 +78,12 @@ define([
                 	if (!improper) {
                 		setImproperFailed();
                 	} else {
-                		$scope.isReportedByUser = true;
+                        $rootScope.isReportedByUser = true;
                 	}
                 }
 
                 function setImproperFailed() {
-                    $scope.isReportedByUser = false;
+                    $rootScope.isReportedByUser = false;
                 }
             }
         };

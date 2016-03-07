@@ -31,7 +31,7 @@ define([
                     $scope.showMaterialContent = !$scope.showMaterialContent;
                 });
             });
-            
+
             $scope.$watch(function() {
             	return storageService.getMaterial();
             }, function(newMaterial, oldMaterial) {
@@ -75,7 +75,7 @@ define([
                 }
             }
 
-            function getMaterialFail(material, status) {
+            function getMaterialFail() {
                 log('Getting materials failed. Redirecting to landing page');
                 alertService.setErrorAlert('ERROR_MATERIAL_NOT_FOUND');
                 $location.url("/");
