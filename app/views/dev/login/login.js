@@ -8,19 +8,42 @@ define([
         var params = {};
         serverCallService.makeGet("rest/dev/login/" + idCode, params, loginSuccess, loginFail);
 
-        function loginSuccess(authenticatedUser) {
-            if (isEmpty(authenticatedUser)) {
+        var authenticatedUser;
+
+        function loginSuccess(authUser) {
+            if (isEmpty(authUser)) {
                 log("No data returned by logging in with id code:" + idCode);
                 $location.url('/');
             } else {
-                authenticatedUserService.setAuthenticatedUser(authenticatedUser);
-                $location.url('/' + authenticatedUser.user.username);
+                authenticatedUser = authUser;
+                getRole();
             }
         }
 
-        function loginFail(authenticatedUser, status) {
+        function loginFail() {
             log('Login failed.');
+            authenticatedUserService.removeAuthenticatedUser();
             $location.url('/');
+        }
+
+        function finishLogin() {
+            authenticatedUserService.setAuthenticatedUser(authenticatedUser);
+            $location.url('/' + authenticatedUser.user.username);
+        }
+
+        function getRole() {
+            authenticatedUserService.setAuthenticatedUser(authenticatedUser);
+            serverCallService.makeGet("rest/user/role", {}, getRoleSuccess, loginFail);
+        }
+
+        function getRoleSuccess(data) {
+            if (isEmpty(data)) {
+                loginFail();
+            } else {
+                authenticatedUserService.removeAuthenticatedUser();
+                authenticatedUser.user.role = data;
+                finishLogin();
+            }
         }
     }];
 });
