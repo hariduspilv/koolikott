@@ -13,14 +13,12 @@ define([
     angularAMD.factory('authenticationService', ['$location', '$rootScope', 'serverCallService', 'authenticatedUserService', 'alertService', '$mdDialog',
         function($location, $rootScope, serverCallService, authenticatedUserService, alertService, $mdDialog) {
 
-            var authenticatedUser;
-
-            function loginSuccess(authUser) {
-                if (isEmpty(authUser)) {
+            function loginSuccess(authenticatedUser) {
+                if (isEmpty(authenticatedUser)) {
                     loginFail();
                 } else {
-                    authenticatedUser = authUser;
-                    getRole();
+                    authenticatedUserService.setAuthenticatedUser(authenticatedUser);
+                    serverCallService.makeGet("rest/user/role", {}, getRoleSuccess, loginFail);
                 }
             }
 
@@ -43,7 +41,7 @@ define([
                 }
             }
 
-            function finishLogin() {
+            function finishLogin(authenticatedUser) {
                 authenticatedUserService.setAuthenticatedUser(authenticatedUser);
 
                 if (authenticatedUser.firstLogin) {
@@ -100,18 +98,13 @@ define([
                 window.location = path;
             }
 
-            function getRole() {
-                authenticatedUserService.setAuthenticatedUser(authenticatedUser);
-                serverCallService.makeGet("rest/user/role", {}, getRoleSuccess, loginFail);
-            }
-
             function getRoleSuccess(data) {
                 if (isEmpty(data)) {
                     loginFail();
                 } else {
-                    authenticatedUserService.removeAuthenticatedUser();
+                    var authenticatedUser = authenticatedUserService.getAuthenticatedUser();
                     authenticatedUser.user.role = data;
-                    finishLogin();
+                    finishLogin(authenticatedUser);
                 }
             }
 

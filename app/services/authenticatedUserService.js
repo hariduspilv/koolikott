@@ -4,13 +4,13 @@ define(['angularAMD'], function (angularAMD) {
     angularAMD.factory('authenticatedUserService', ['$location',
         function ($location) {
 
-            function getAuthenticatedUser() {
-                return JSON.parse(localStorage.getItem("authenticatedUser"));
-            }
-
             instance = {
                 setAuthenticatedUser: function (authenticatedUser) {
                     localStorage.setItem("authenticatedUser", JSON.stringify(authenticatedUser));
+                },
+
+                getAuthenticatedUser: function () {
+                    return JSON.parse(localStorage.getItem("authenticatedUser"));
                 },
 
                 removeAuthenticatedUser: function () {
@@ -18,7 +18,7 @@ define(['angularAMD'], function (angularAMD) {
                 },
 
                 isAuthenticated: function () {
-                    if (getAuthenticatedUser()) {
+                    if (instance.getAuthenticatedUser()) {
                         return true;
                     }
 
@@ -41,7 +41,7 @@ define(['angularAMD'], function (angularAMD) {
                 },
 
                 getUser: function () {
-                    var authenticatedUser = getAuthenticatedUser();
+                    var authenticatedUser = instance.getAuthenticatedUser();
                     if (authenticatedUser) {
                         return authenticatedUser.user;
                     }
@@ -50,7 +50,7 @@ define(['angularAMD'], function (angularAMD) {
                 },
 
                 getToken: function () {
-                    var authenticatedUser = getAuthenticatedUser();
+                    var authenticatedUser = instance.getAuthenticatedUser();
                     if (authenticatedUser) {
                         return authenticatedUser.token;
                     }
