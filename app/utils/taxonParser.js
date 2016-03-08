@@ -59,7 +59,7 @@ define(function () {
     }
 
     function objectIsTaxon(obj) {
-        return obj.level && TAXON_LEVELS.indexOf(obj.level) !== -1;
+        return obj && obj.level && TAXON_LEVELS.indexOf(obj.level) !== -1;
     }
 
     function getFullTaxon(taxon) {
