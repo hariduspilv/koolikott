@@ -32,7 +32,7 @@ define([
                         $mdDialog.show(angularAMD.route({
                             templateUrl: 'views/loginDialog/loginDialog.html',
                             controllerUrl: 'views/loginDialog/loginDialog',
-                            targetEvent: ev,
+                            targetEvent: ev
                         }));
                     };
 

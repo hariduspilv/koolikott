@@ -60,11 +60,18 @@ define([
                 };
 
                 $scope.showAddMaterialDialog = function() {
+                    var oldMaterial = storageService.getMaterial();
                     storageService.setMaterial(null);
+
                     $mdDialog.show(angularAMD.route({
                         templateUrl: 'views/addMaterialDialog/addMaterialDialog.html',
                         controllerUrl: 'views/addMaterialDialog/addMaterialDialog'
-                    }));
+                    })).then( function() {
+                        if(!storageService.getMaterial()) {
+                            storageService.setMaterial(oldMaterial);
+                        }
+                    }
+                    )
                 };
 
                 $scope.copyPortfolio = function() {

@@ -24,6 +24,12 @@ define([
             $scope.step.isMetadataStepValid = false;
             $scope.titleDescriptionGroups = [];
 
+            $scope.$on('$destroy', function() {
+                if($scope.isUpdateMode) {
+                    storageService.setMaterial($scope.material);
+                }
+            });
+
             init(storageService.getMaterial());
 
             $scope.step.nextStep = function () {
@@ -250,9 +256,8 @@ define([
                     var addChapterMaterialUrl = $scope.material.source;
                 }
 
-                storageService.setMaterial(null);
-
                 if (material) {
+                    storageService.setMaterial(null);
                     preSetMaterial(material);
                 } else {
                     initEmptyMaterial();
