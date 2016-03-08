@@ -62,4 +62,8 @@ ALTER TABLE User
 
 UPDATE User SET role = 'USER' where role = 'PUBLISHER';
 
+-- Adding a way to track changes in the LearningObject table
+
+ALTER TABLE LearningObject ADD lastInteraction TIMESTAMP NULL DEFAULT NULL;
+
 SET foreign_key_checks = 1;

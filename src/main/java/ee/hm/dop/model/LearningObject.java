@@ -138,6 +138,15 @@ public abstract class LearningObject {
     @Formula(value = "(SELECT COUNT(*) FROM UserLike ul WHERE ul.learningObject = id AND ul.isLiked = 0)")
     private int dislikes;
 
+    /**
+     * Last time when something was done to this LearningObject. It includes
+     * tagging, up-voting, recommending and so on
+     */
+    @JsonIgnore
+    @Column
+    @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
+    private DateTime lastInteraction;
+
     public Long getId() {
         return id;
     }
@@ -268,5 +277,13 @@ public abstract class LearningObject {
 
     public void setDislikes(int dislikes) {
         this.dislikes = dislikes;
+    }
+
+    public DateTime getLastInteraction() {
+        return lastInteraction;
+    }
+
+    public void setLastInteraction(DateTime lastInteraction) {
+        this.lastInteraction = lastInteraction;
     }
 }

@@ -10,8 +10,8 @@
         <entity name="LearningObject" pk="id"
             query="select id, added from LearningObject WHERE deleted = false"
                 deltaImportQuery="select id, added from LearningObject where id = '${dih.delta.id}'"
-                deltaQuery="select id from LearningObject where (CONVERT_TZ(added, @@session.time_zone, '+00:00') > '${dataimporter.last_index_time}' OR CONVERT_TZ(updated, @@session.time_zone, '+00:00') > '${dataimporter.last_index_time}') AND deleted = false"
-                deletedPkQuery="select id from LearningObject where (CONVERT_TZ(added, @@session.time_zone, '+00:00') > '${dataimporter.last_index_time}' OR CONVERT_TZ(updated, @@session.time_zone, '+00:00') > '${dataimporter.last_index_time}') AND deleted = true">
+                deltaQuery="select id from LearningObject where (CONVERT_TZ(added, @@session.time_zone, '+00:00') > '${dataimporter.last_index_time}' OR CONVERT_TZ(lastInteraction, @@session.time_zone, '+00:00') > '${dataimporter.last_index_time}') AND deleted = false"
+                deletedPkQuery="select id from LearningObject where (CONVERT_TZ(added, @@session.time_zone, '+00:00') > '${dataimporter.last_index_time}' OR CONVERT_TZ(lastInteraction, @@session.time_zone, '+00:00') > '${dataimporter.last_index_time}') AND deleted = true">
 
             <entity name="LearningObject_TargetGroup" query="select targetGroup as target_group from LearningObject_TargetGroup where learningObject='${LearningObject.id}'" />
 

@@ -122,4 +122,11 @@ public class LearningObjectDAO extends BaseDAO<LearningObject> {
                 .setParameter("id", learningObject.getId()).executeUpdate();
         flush();
     }
+
+    @Override
+    public LearningObject update(LearningObject learningObject) {
+        learningObject.setLastInteraction(now());
+
+        return super.update(learningObject);
+    }
 }
