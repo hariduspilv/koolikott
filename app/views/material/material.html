@@ -106,7 +106,7 @@
                   </div>
 
                   <md-divider class="md-default-theme"></md-divider>
-                  <!-- left descriptiom  -->
+                  <!-- left description  -->
                   <div class="on-left" flex>
                     <p class="md-body-1 description" data-ng-bind="getCorrectLanguageString(material.descriptions)"></p>
 
@@ -158,6 +158,15 @@
 
                     <span data-ng-if="sourceType === 'LINK' && material.embeddable">
                       <a class="card-hover" data-ng-href="#" ng-click="showSourceFullscreen($event)">
+                        <md-icon>send</md-icon>
+                        <md-tooltip md-direction="bottom">
+                          <span data-translate="MATERIAL_VIEW_LINK_TO_MATERIAL"></span>
+                        </md-tooltip>
+                      </a>
+                    </span>
+
+                    <span data-ng-if="sourceType !== 'LINK' && !material.embeddable">
+                      <a class="card-hover" data-ng-href="{{material.source}}" target="_blank">
                         <md-icon>send</md-icon>
                         <md-tooltip md-direction="bottom">
                           <span data-translate="MATERIAL_VIEW_LINK_TO_MATERIAL"></span>
