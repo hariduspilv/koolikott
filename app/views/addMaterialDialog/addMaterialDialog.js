@@ -24,13 +24,7 @@ define([
             $scope.step.isMetadataStepValid = false;
             $scope.titleDescriptionGroups = [];
 
-            $scope.$on('$destroy', function() {
-                if($scope.isUpdateMode) {
-                    storageService.setMaterial($scope.material);
-                }
-            });
-
-            init(storageService.getMaterial());
+            init();
 
             $scope.step.nextStep = function () {
                 $scope.step.currentStep += 1;
@@ -251,14 +245,13 @@ define([
                 }
             }
 
-            function init(material) {
-                if($scope.material) {
+            function init() {
+                if($scope.isChapterMaterial) {
                     var addChapterMaterialUrl = $scope.material.source;
                 }
 
-                if (material) {
-                    storageService.setMaterial(null);
-                    preSetMaterial(material);
+                if ($scope.material && !$scope.isChapterMaterial) {
+                    preSetMaterial($scope.material);
                 } else {
                     initEmptyMaterial();
                     prefillMetadataFromPortfolio();
@@ -409,7 +402,6 @@ define([
             }
 
             function saveMaterialFinally() {
-                storageService.setMaterial($scope.material);
                 $scope.saving = false;
             }
 

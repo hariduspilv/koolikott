@@ -240,15 +240,14 @@ define([
             };
 
             $scope.edit = function () {
-                if(!storageService.getMaterial()) {
-                    storageService.setMaterial($scope.material);
-                }
+                var editMaterialScope = $scope.$new(true);
+                editMaterialScope.material = $scope.material;
 
                 $mdDialog.show(angularAMD.route({
                     templateUrl: 'views/addMaterialDialog/addMaterialDialog.html',
-                    controllerUrl: 'views/addMaterialDialog/addMaterialDialog'
-                })).then(function () {
-                    var material = storageService.getMaterial();
+                    controllerUrl: 'views/addMaterialDialog/addMaterialDialog',
+                    scope: editMaterialScope
+                })).then(function (material) {
                     if (material) {
                         $scope.material = material;
                         processMaterial();
