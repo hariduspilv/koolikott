@@ -65,7 +65,8 @@ define([
 
                     $mdDialog.show(confirm).then(function () {
                         var entity = {
-                            learningObject: $scope.learningObject
+                            learningObject: $scope.learningObject,
+                            reason: $scope.learningObject.type.slice(1)
                         };
 
                         serverCallService.makePut("rest/impropers", entity, setImproperSuccessful, setImproperFailed);
