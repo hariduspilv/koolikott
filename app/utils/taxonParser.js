@@ -5,6 +5,8 @@ define(function () {
 
     var taxonMap;
 
+    var learningObjectsToParse = [];
+
     function mapTaxon(taxon) {
         taxonMap['t' + taxon.id] = taxon;
 
@@ -75,11 +77,17 @@ define(function () {
     }
 
     function parse(learningObject) {
-        replaceTaxons(learningObject, getFullTaxon);
+        if (taxonMap) {
+            replaceTaxons(learningObject, getFullTaxon);
+        } else {
+            learningObjectsToParse.push(learningObject);
+        }
     }
 
     function serialize(learningObject) {
-        replaceTaxons(learningObject, getMinimalTaxon);
+        if (taxonMap) {
+            replaceTaxons(learningObject, getMinimalTaxon);
+        }
     }
 
     function replaceTaxons(learningObject, replacementFunction) {
@@ -107,17 +115,13 @@ define(function () {
     }
 
     function transform(objects, transformFunction) {
-        if (taxonMap) {
-            if (Array.isArray(objects)) {
-                objects.forEach(function(obj, index) {
-                    objects[index] = transformFunction(obj);
-                });
-            } else {
-                objects = transformFunction(objects);
-            }
+        if (Array.isArray(objects)) {
+            objects.forEach(function(obj, index) {
+                objects[index] = transformFunction(obj);
+            });
+        } else {
+            objects = transformFunction(objects);
         }
-
-        return objects;
     }
 
     return {
@@ -135,6 +139,10 @@ define(function () {
             taxonMap = Object.create(null);
             educationalContexts.forEach(function(educationalContext) {
                 mapTaxon(educationalContext);
+            });
+
+            learningObjectsToParse.forEach(function(learningObject) {
+                replaceTaxons(learningObject, getFullTaxon);
             });
         }
     }

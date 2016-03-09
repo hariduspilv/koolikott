@@ -33,11 +33,22 @@ define([
             });
 
             $scope.$watch(function() {
-            	return storageService.getMaterial();
+                return storageService.getMaterial();
             }, function(newMaterial, oldMaterial) {
-            	if (newMaterial !== oldMaterial) {
-            		$scope.material = newMaterial;
-            	}
+                if (newMaterial !== oldMaterial) {
+                    $scope.material = newMaterial;
+                }
+            });
+
+            // Find educational contexts and subjects in case the material taxons are loaded later
+            $scope.taxonWatcher = $scope.$watchCollection('material.taxons', function(newTaxons, oldTaxons) {
+                if (newTaxons !== oldTaxons) {
+                    preprocessMaterialSubjects();
+                    preprocessMaterialEducationalContexts();
+                    if ($scope.material.educationalContexts.length > 0 || $scope.material.subjects.length > 0) {
+                        $scope.taxonWatcher();
+                    }
+                }
             });
 
             if ($rootScope.savedMaterial) {
