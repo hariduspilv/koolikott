@@ -103,6 +103,7 @@ define([
             function init() {
                 fetchImage();
                 processMaterial();
+                storageService.setMaterial(null);
 
                 var viewCountParams = {
                     'type': '.Material',
@@ -239,7 +240,10 @@ define([
             };
 
             $scope.edit = function () {
-                storageService.setMaterial($scope.material);
+                if(!storageService.getMaterial()) {
+                    storageService.setMaterial($scope.material);
+                }
+
                 $mdDialog.show(angularAMD.route({
                     templateUrl: 'views/addMaterialDialog/addMaterialDialog.html',
                     controllerUrl: 'views/addMaterialDialog/addMaterialDialog'

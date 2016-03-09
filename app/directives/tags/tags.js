@@ -121,6 +121,7 @@ define([
                 	if (!learningObject) {
                 		addTagFail();
                 	} else {
+                        learningObject.picture = $scope.learningObject.picture;
                 		$scope.learningObject = learningObject;
                 		if(learningObject.type === ".Portfolio") {
                 			$rootScope.savedPortfolio = learningObject;
