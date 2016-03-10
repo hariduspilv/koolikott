@@ -40,7 +40,7 @@ define([
 
                 function getTagUpVotesReportSuccess(upVoteForms) {
                     var sortedForms = sortTags(upVoteForms);
-                    if(sortedForms.length > 9) {
+                    if(sortedForms.length > 10) {
                         $scope.upVoteForms = sortedForms.slice(0, 10);
                         $scope.showMoreTags = true;
                         allUpVoteForms = sortedForms;

@@ -25,7 +25,7 @@ define([
             }
         }
 
-        function requestFailed(data, status) {
+        function requestFailed() {
             console.log('Session search failed.')
         }
     }];
