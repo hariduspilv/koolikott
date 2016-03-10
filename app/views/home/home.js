@@ -1,13 +1,14 @@
 define([
     'services/serverCallService',
-    'directives/materialBox/materialBox'
+    'directives/materialBox/materialBox',
+    'directives/portfolioBox/portfolioBox'
 ], function(serverCallService) {
     return ['$scope', 'serverCallService', function ($scope, serverCallService) {
         $scope.showHints = true;
 
         serverCallService.makeGet("rest/material/getNewestMaterials?numberOfMaterials=8", {}, getNewestMaterialsSuccess, requestFailed);
-        serverCallService.makeGet("rest/material/getPopularMaterials?numberOfMaterials=8", {}, getPopularMaterialsSuccess, requestFailed);
-        
+        serverCallService.makeGet("rest/learningObjects/getPopular?count=8", {}, getPopularLearningObjectsSuccess, requestFailed);
+
         function getNewestMaterialsSuccess(data) {
             if (isEmpty(data)) {
                 console.log('No data returned by session search.');
@@ -16,11 +17,11 @@ define([
             }
         }
 
-        function getPopularMaterialsSuccess(data) {
+        function getPopularLearningObjectsSuccess(data) {
             if (isEmpty(data)) {
                 console.log('No data returned by session search.');
             } else {
-                $scope.popularMaterials = data;
+                $scope.popularItems = data;
             }
         }
 

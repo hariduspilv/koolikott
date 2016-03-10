@@ -16,8 +16,9 @@
             <h1 data-translate="LANDING_PAGE_TITLE_POPULAR"></h1>
           </div>
           <md-grid-list md-cols="2" md-cols-gt-xs="4" md-gutter="10px" md-row-height="3:4">
-            <md-grid-tile data-ng-repeat="material in popularMaterials">
-              <figure data-dop-material-box material="material"></figure>
+            <md-grid-tile data-ng-repeat="item in popularItems">
+              <figure data-ng-if="item.type === '.Material'" data-dop-material-box material="item"></figure>
+              <figure data-ng-if="item.type === '.Portfolio'" data-dop-portfolio-box portfolio="item"></figure>
             </md-grid-tile>
           </md-grid-list>
         </article>
