@@ -1,13 +1,16 @@
 package ee.hm.dop.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
 
 import ee.hm.dop.dao.LearningObjectDAO;
 import ee.hm.dop.model.LearningObject;
+import ee.hm.dop.model.Portfolio;
 import ee.hm.dop.model.Tag;
 import ee.hm.dop.model.User;
+import ee.hm.dop.model.Visibility;
 import ee.hm.dop.service.learningObject.LearningObjectHandler;
 import ee.hm.dop.service.learningObject.LearningObjectHandlerFactory;
 
@@ -39,7 +42,7 @@ public class LearningObjectService {
     }
 
     public LearningObject addTag(LearningObject learningObject, Tag tag, User user) {
-        LearningObject updatedLearningObject = null;
+        LearningObject updatedLearningObject;
         if (!hasAccess(user, learningObject)) {
             throw new RuntimeException("Access denied");
         }
@@ -54,5 +57,28 @@ public class LearningObjectService {
         }
 
         return updatedLearningObject;
+    }
+
+    public List<LearningObject> getPopularLearningObjects(int numberOfLearningObjects) {
+        List<LearningObject> returnableLearningObjects = new ArrayList<>();
+        int startPosition = 0;
+        int count = numberOfLearningObjects;
+        while(returnableLearningObjects.size() != numberOfLearningObjects) {
+            List<LearningObject> learningObjects = learningObjectDAO.findPopularLearningObjects(count, startPosition);
+            if(learningObjects.size() == 0){
+                throw new RuntimeException("No LearningObjects found.");
+            }
+
+            learningObjects.removeIf(this::isNotPublic);
+            returnableLearningObjects.addAll(learningObjects);
+            startPosition = count;
+            count = numberOfLearningObjects - returnableLearningObjects.size();
+        }
+
+        return returnableLearningObjects;
+    }
+
+    private boolean isNotPublic(LearningObject learningObject) {
+        return learningObject instanceof Portfolio && ((Portfolio) learningObject).getVisibility() != Visibility.PUBLIC;
     }
 }

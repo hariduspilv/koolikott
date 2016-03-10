@@ -55,9 +55,9 @@ public class LearningObjectDAO extends BaseDAO<LearningObject> {
                 .setMaxResults(numberOfLearningObjects).getResultList();
     }
 
-    public List<LearningObject> findPopularLearningObjects(int numberOfLearningObjects) {
+    public List<LearningObject> findPopularLearningObjects(int numberOfLearningObjects, int startPosition) {
         return createQuery("FROM LearningObject lo WHERE lo.deleted = false ORDER BY views DESC", LearningObject.class)
-                .setMaxResults(numberOfLearningObjects).getResultList();
+                .setFirstResult(startPosition).setMaxResults(numberOfLearningObjects).getResultList();
     }
 
     public void delete(LearningObject learningObject) {

@@ -2,20 +2,26 @@ package ee.hm.dop.rest;
 
 import static java.lang.String.format;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+
+import java.util.List;
 
 import javax.ws.rs.client.Entity;
+import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
-import org.junit.Test;
-
 import ee.hm.dop.common.test.ResourceIntegrationTestBase;
+import ee.hm.dop.model.LearningObject;
 import ee.hm.dop.model.Tag;
+import org.junit.Test;
 
 public class LearningObjectResourceTest extends ResourceIntegrationTestBase {
 
     private static final String ADD_TAG_URL = "learningObjects/%s/tags";
+    public static final String LEARNING_OBJECTS_GET_POPULAR_COUNT = "learningObjects/getPopular?count=";
 
     @Test
     public void addTag() {
@@ -39,5 +45,29 @@ public class LearningObjectResourceTest extends ResourceIntegrationTestBase {
 
         Response response = doPut(format(ADD_TAG_URL, id), Entity.entity(tag, MediaType.APPLICATION_JSON_TYPE));
         assertEquals(Status.NOT_FOUND.getStatusCode(), response.getStatus());
+    }
+
+    @Test
+    public void getPopular8() {
+        Response response = doGet(LEARNING_OBJECTS_GET_POPULAR_COUNT + "8");
+        List<LearningObject> learningObjects = response.readEntity(new GenericType<List<LearningObject>>() {
+        });
+
+        assertNotNull(learningObjects);
+        assertEquals(8, learningObjects.size());
+        assertTrue(learningObjects.get(0).getViews() > learningObjects.get(1).getViews());
+    }
+
+    @Test
+    public void getPopular20() {
+        Response response = doGet(LEARNING_OBJECTS_GET_POPULAR_COUNT + "20");
+        List<LearningObject> learningObjects = response.readEntity(new GenericType<List<LearningObject>>() {
+        });
+
+        assertNotNull(learningObjects);
+        assertEquals(20, learningObjects.size());
+        assertTrue(learningObjects.get(0).getViews() > learningObjects.get(1).getViews());
+        assertTrue(learningObjects.get(9).getViews() >= learningObjects.get(10).getViews());
+
     }
 }

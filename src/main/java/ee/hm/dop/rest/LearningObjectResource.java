@@ -1,12 +1,16 @@
 package ee.hm.dop.rest;
 
+import java.util.List;
+
 import javax.annotation.security.RolesAllowed;
 import javax.inject.Inject;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.GET;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
 import ee.hm.dop.model.LearningObject;
@@ -40,5 +44,12 @@ public class LearningObjectResource extends BaseResource {
         }
 
         return learningObjectService.addTag(learningObject, tag, getLoggedInUser());
+    }
+
+    @GET
+    @Path("getPopular")
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<LearningObject> getPopularMaterials(@QueryParam("count") int numberOfMaterials) {
+        return learningObjectService.getPopularLearningObjects(numberOfMaterials);
     }
 }

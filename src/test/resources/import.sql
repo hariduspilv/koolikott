@@ -386,7 +386,7 @@ insert into LearningObject(id, added, updated, views, picture, creator, deleted,
 insert into Portfolio(id, title, taxon, originalCreator, summary, visibility) VALUES (108, 'This portfolio is public. ', null, 2, 'Summary. Wow.', 'PUBLIC');
 insert into LearningObject(id, added, updated, views, picture, creator, deleted, recommendation) VALUES (109, '2003-10-10 07:00:11', null, 100, null, 7, false, null);
 insert into Portfolio(id, title, taxon, originalCreator, summary, visibility) VALUES (109, 'This portfolio2 is public. ', null, 7, 'Alpha.', 'PUBLIC');
-insert into LearningObject(id, added, updated, views, picture, creator, deleted, recommendation) VALUES (110, '2003-10-10 07:00:11', null, 100, null, 7, false, 5);
+insert into LearningObject(id, added, updated, views, picture, creator, deleted, recommendation) VALUES (110, '2003-10-10 07:00:11', null, 95455216, null, 7, false, 5);
 insert into Portfolio(id, title, taxon, originalCreator, summary, visibility) VALUES (110, 'This portfolio2 is private. ', null, 7, 'Alpha.', 'PRIVATE');
 insert into LearningObject(id, added, updated, views, picture, creator, deleted, recommendation) VALUES (111, '2003-10-10 07:00:11', null, 100, null, 7, false, 6);
 insert into Portfolio(id, title, taxon, originalCreator, summary, visibility) VALUES (111, 'This portfolio2 is not listed. ', null, 7, 'Alpha.', 'NOT_LISTED');
