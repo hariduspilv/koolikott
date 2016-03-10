@@ -8,6 +8,9 @@
     <md-chip-template>
       <md-button data-ng-if="(isAllowed() && !$root.isReportedByUser) && !isAdmin()" class="md-icon-button" ng-click="reportTag($chip.tag)">
         <md-icon>error_outline</md-icon>
+        <md-tooltip>
+          <span data-translate="TAG_TOOLTIP_REPORT_AS_IMPROPER"></span>
+        </md-tooltip>
       </md-button>
 
       <a href="#" data-ng-click="getTagSearchURL($event, $chip.tag)">{{$chip.tag}}</a>
