@@ -6,27 +6,27 @@ define([
     return ['$scope', 'serverCallService', function ($scope, serverCallService) {
         $scope.showHints = true;
 
-        serverCallService.makeGet("rest/material/getNewestMaterials?numberOfMaterials=8", {}, getNewestMaterialsSuccess, requestFailed);
+        serverCallService.makeGet("rest/learningObjects/getNewest?count=8", {}, getNewestLearningObjectsSuccess, requestFailed);
         serverCallService.makeGet("rest/learningObjects/getPopular?count=8", {}, getPopularLearningObjectsSuccess, requestFailed);
 
-        function getNewestMaterialsSuccess(data) {
+        function getNewestLearningObjectsSuccess(data) {
             if (isEmpty(data)) {
-                console.log('No data returned by session search.');
+                console.log('Failed to get newest learning objects.');
             } else {
-                $scope.materials = data;
+                $scope.newestItems = data;
             }
         }
 
         function getPopularLearningObjectsSuccess(data) {
             if (isEmpty(data)) {
-                console.log('No data returned by session search.');
+                console.log('Failed to get most popular learning objects');
             } else {
                 $scope.popularItems = data;
             }
         }
 
         function requestFailed() {
-            console.log('Session search failed.')
+            console.log('Failed to get learning objects.')
         }
     }];
 });
