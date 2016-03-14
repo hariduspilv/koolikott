@@ -66,10 +66,6 @@ public class MaterialService implements LearningObjectHandler {
         }
     }
 
-    public List<Material> getNewestMaterials(int numberOfMaterials) {
-        return materialDao.findNewestMaterials(numberOfMaterials);
-    }
-
     public List<Material> getPopularMaterials(int numberOfMaterials) {
         return materialDao.findPopularMaterials(numberOfMaterials);
     }

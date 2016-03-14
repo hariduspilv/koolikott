@@ -13,14 +13,16 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
+import org.junit.Test;
+
 import ee.hm.dop.common.test.ResourceIntegrationTestBase;
 import ee.hm.dop.model.LearningObject;
 import ee.hm.dop.model.Tag;
-import org.junit.Test;
 
 public class LearningObjectResourceTest extends ResourceIntegrationTestBase {
 
     private static final String ADD_TAG_URL = "learningObjects/%s/tags";
+    public static final String LEARNING_OBJECTS_GET_NEWEST = "learningObjects/getNewest?count=";
     public static final String LEARNING_OBJECTS_GET_POPULAR_COUNT = "learningObjects/getPopular?count=";
 
     @Test
@@ -48,6 +50,28 @@ public class LearningObjectResourceTest extends ResourceIntegrationTestBase {
     }
 
     @Test
+    public void getNewest() {
+        Response response = doGet(LEARNING_OBJECTS_GET_NEWEST + "8");
+        List<LearningObject> learningObjects = response.readEntity(new GenericType<List<LearningObject>>() {
+        });
+
+        assertNotNull(learningObjects);
+        assertEquals(8, learningObjects.size());
+        validateNewestAreFirst(learningObjects);
+    }
+
+    @Test
+    public void getNewest20() {
+        Response response = doGet(LEARNING_OBJECTS_GET_NEWEST + "20");
+        List<LearningObject> learningObjects = response.readEntity(new GenericType<List<LearningObject>>() {
+        });
+
+        assertNotNull(learningObjects);
+        assertEquals(20, learningObjects.size());
+        validateNewestAreFirst(learningObjects);
+    }
+
+    @Test
     public void getPopular8() {
         Response response = doGet(LEARNING_OBJECTS_GET_POPULAR_COUNT + "8");
         List<LearningObject> learningObjects = response.readEntity(new GenericType<List<LearningObject>>() {
@@ -69,5 +93,19 @@ public class LearningObjectResourceTest extends ResourceIntegrationTestBase {
         assertTrue(learningObjects.get(0).getViews() > learningObjects.get(1).getViews());
         assertTrue(learningObjects.get(9).getViews() >= learningObjects.get(10).getViews());
 
+    }
+
+    private void validateNewestAreFirst(List<LearningObject> learningObjects) {
+        LearningObject last = null;
+        for (LearningObject learningObject : learningObjects) {
+            if (last != null) {
+                // Check that the learningObjects are from newest to oldest
+                assertTrue(last.getAdded().isAfter(learningObject.getAdded())
+                        || last.getAdded().isEqual(learningObject.getAdded()));
+            }
+
+            last = learningObject;
+            assertNotNull(learningObject.getAdded());
+        }
     }
 }

@@ -47,6 +47,13 @@ public class LearningObjectResource extends BaseResource {
     }
 
     @GET
+    @Path("getNewest")
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<LearningObject> getNewestLearningObjects(@QueryParam("count") int numberOfLearningObjects) {
+        return learningObjectService.getNewestLearningObjects(numberOfLearningObjects);
+    }
+
+    @GET
     @Path("getPopular")
     @Produces(MediaType.APPLICATION_JSON)
     public List<LearningObject> getPopularMaterials(@QueryParam("count") int numberOfMaterials) {

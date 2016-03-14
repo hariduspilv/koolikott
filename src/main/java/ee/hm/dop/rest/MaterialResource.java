@@ -63,13 +63,6 @@ public class MaterialResource extends BaseResource {
     }
 
     @GET
-    @Path("getNewestMaterials")
-    @Produces(MediaType.APPLICATION_JSON)
-    public List<Material> getNewestMaterials(@QueryParam("numberOfMaterials") int numberOfMaterials) {
-        return materialService.getNewestMaterials(numberOfMaterials);
-    }
-
-    @GET
     @Path("getPopularMaterials")
     @Produces(MediaType.APPLICATION_JSON)
     public List<Material> getPopularMaterials(@QueryParam("numberOfMaterials") int numberOfMaterials) {

@@ -2,6 +2,7 @@ package ee.hm.dop.service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.BiFunction;
 
 import javax.inject.Inject;
 
@@ -59,14 +60,15 @@ public class LearningObjectService {
         return updatedLearningObject;
     }
 
-    public List<LearningObject> getPopularLearningObjects(int numberOfLearningObjects) {
+    private List<LearningObject> getPublicLearningObjects(int numberOfLearningObjects,
+            BiFunction<Integer, Integer, List<LearningObject>> functionToGetLearningObjects) {
         List<LearningObject> returnableLearningObjects = new ArrayList<>();
         int startPosition = 0;
         int count = numberOfLearningObjects;
-        while(returnableLearningObjects.size() != numberOfLearningObjects) {
-            List<LearningObject> learningObjects = learningObjectDAO.findPopularLearningObjects(count, startPosition);
-            if(learningObjects.size() == 0){
-                throw new RuntimeException("No LearningObjects found.");
+        while (returnableLearningObjects.size() != numberOfLearningObjects) {
+            List<LearningObject> learningObjects = functionToGetLearningObjects.apply(count, startPosition);
+            if (learningObjects.size() == 0) {
+                break;
             }
 
             learningObjects.removeIf(this::isNotPublic);
@@ -76,6 +78,14 @@ public class LearningObjectService {
         }
 
         return returnableLearningObjects;
+    }
+
+    public List<LearningObject> getNewestLearningObjects(int numberOfLearningObjects) {
+        return getPublicLearningObjects(numberOfLearningObjects, learningObjectDAO::findNewestLearningObjects);
+    }
+
+    public List<LearningObject> getPopularLearningObjects(int numberOfLearningObjects) {
+        return getPublicLearningObjects(numberOfLearningObjects, learningObjectDAO::findPopularLearningObjects);
     }
 
     private boolean isNotPublic(LearningObject learningObject) {

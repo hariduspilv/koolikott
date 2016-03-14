@@ -42,12 +42,6 @@ public class MaterialDAO extends LearningObjectDAO {
         return learningObjects;
     }
 
-    public List<Material> findNewestMaterials(int numberOfMaterials) {
-
-        return createQuery("FROM Material m WHERE m.deleted = false ORDER BY added desc", Material.class)
-                .setMaxResults(numberOfMaterials).getResultList();
-    }
-
     public List<Material> findPopularMaterials(int numberOfMaterials) {
         return createQuery("FROM Material m WHERE m.deleted = false ORDER BY views DESC", Material.class)
                 .setMaxResults(numberOfMaterials).getResultList();

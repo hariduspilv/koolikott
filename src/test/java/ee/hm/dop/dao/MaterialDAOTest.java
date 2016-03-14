@@ -16,7 +16,6 @@ import javax.inject.Inject;
 import javax.persistence.RollbackException;
 
 import org.joda.time.DateTime;
-import org.junit.Assert;
 import org.junit.Test;
 
 import ee.hm.dop.common.test.DatabaseTestBase;
@@ -50,26 +49,6 @@ public class MaterialDAOTest extends DatabaseTestBase {
         long materialId = 11;
         Material material = materialDAO.findByIdNotDeleted(materialId);
         assertNull(material);
-    }
-
-    @Test
-    public void findNewestMaterials() {
-        List<Material> materials = materialDAO.findNewestMaterials(8);
-        assertEquals(8, materials.size());
-        Material last = null;
-        for (Material material : materials) {
-            if (last != null) {
-
-                // Check that the materials are in the newest to oldest order
-                assertTrue(last.getAdded().compareTo(material.getAdded()) == 1);
-            }
-
-            last = material;
-            assertNotNull(material.getAdded());
-
-            // Cannot be material 11 because it is deleted
-            Assert.assertNotEquals(new Long(11), material.getId());
-        }
     }
 
     @Test

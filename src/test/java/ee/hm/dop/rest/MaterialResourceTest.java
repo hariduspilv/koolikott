@@ -37,7 +37,6 @@ import ee.hm.dop.service.MaterialService;
 
 public class MaterialResourceTest extends ResourceIntegrationTestBase {
 
-    private static final String GET_NEWEST_MATERIALS_URL = "material/getNewestMaterials?numberOfMaterials=%s";
     private static final String MATERIAL_INCREASE_VIEW_COUNT_URL = "material/increaseViewCount";
     private static final String GET_MATERIAL_PICTURE_URL = "material/getPicture?materialId=%s";
     private static final String GET_MATERIAL_URL = "material?materialId=%s";
@@ -119,25 +118,6 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
     }
 
     @Test
-    public void GetNewestMaterials() {
-        Response response = doGet(format(GET_NEWEST_MATERIALS_URL, 8));
-
-        List<Material> materials = response.readEntity(new GenericType<List<Material>>() {
-        });
-
-        assertEquals(8, materials.size());
-
-        DateTime added = null;
-        for (Material material : materials) {
-            if (added != null) {
-                added.isAfter(material.getAdded());
-            }
-
-            added = material.getAdded();
-        }
-    }
-
-    @Test
     public void increaseViewCount() {
         long materialId = 5;
 
@@ -216,8 +196,8 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
     @Test
     public void getByCreator() {
         String username = "mati.maasikas";
-        List<Material> materials = doGet(format(GET_BY_CREATOR_URL, username)).readEntity(
-                new GenericType<List<Material>>() {
+        List<Material> materials = doGet(format(GET_BY_CREATOR_URL, username))
+                .readEntity(new GenericType<List<Material>>() {
                 });
 
         assertEquals(3, materials.size());
@@ -249,8 +229,8 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
     @Test
     public void getByCreatorNoMaterials() {
         String username = "voldemar.vapustav";
-        List<Material> materials = doGet(format(GET_BY_CREATOR_URL, username)).readEntity(
-                new GenericType<List<Material>>() {
+        List<Material> materials = doGet(format(GET_BY_CREATOR_URL, username))
+                .readEntity(new GenericType<List<Material>>() {
                 });
 
         assertEquals(0, materials.size());

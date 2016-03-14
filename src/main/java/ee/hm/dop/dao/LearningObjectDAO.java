@@ -16,7 +16,7 @@ public class LearningObjectDAO extends BaseDAO<LearningObject> {
     public LearningObject findByIdNotDeleted(long objectId) {
         TypedQuery<LearningObject> findByCode = createQuery(
                 "SELECT lo FROM LearningObject lo WHERE lo.id = :id AND lo.deleted = false", LearningObject.class) //
-                .setParameter("id", objectId);
+                        .setParameter("id", objectId);
 
         return getSingleResult(findByCode);
     }
@@ -24,7 +24,7 @@ public class LearningObjectDAO extends BaseDAO<LearningObject> {
     public LearningObject findById(long objectId) {
         TypedQuery<LearningObject> findByCode = createQuery("SELECT lo FROM LearningObject lo WHERE lo.id = :id",
                 LearningObject.class) //
-                .setParameter("id", objectId);
+                        .setParameter("id", objectId);
 
         return getSingleResult(findByCode);
     }
@@ -49,10 +49,9 @@ public class LearningObjectDAO extends BaseDAO<LearningObject> {
         return findAllByIdList.setParameter("idList", idList).getResultList();
     }
 
-    public List<LearningObject> findNewestLearningObjects(int numberOfLearningObjects) {
-
+    public List<LearningObject> findNewestLearningObjects(int numberOfLearningObjects, int startPosition) {
         return createQuery("FROM LearningObject lo WHERE lo.deleted = false ORDER BY added desc", LearningObject.class)
-                .setMaxResults(numberOfLearningObjects).getResultList();
+                .setFirstResult(startPosition).setMaxResults(numberOfLearningObjects).getResultList();
     }
 
     public List<LearningObject> findPopularLearningObjects(int numberOfLearningObjects, int startPosition) {
