@@ -48,7 +48,7 @@ define([
                         $scope.detailedSearch.isVisible = true;
                         $scope.detailedSearch.queryIn = $scope.searchFields.searchQuery;
                         $scope.searchFields.searchQuery = $scope.detailedSearch.mainField;
-                    }
+                    };
 
                     $scope.closeDetailedSearch = function() {
                         $timeout(function() {
@@ -69,8 +69,12 @@ define([
                     };
 
                     $scope.searchFieldEnterPressed = function() {
-                        $scope.search();
-                    }
+                        if ($scope.detailedSearch.isVisible) {
+                            $scope.detailedSearch.accessor.search();
+                        } else {
+                            $scope.search();
+                        }
+                    };
 
                     $scope.clickOutside = function() {
                         if ($scope.detailedSearch.isVisible && !$rootScope.dontCloseSearch) {

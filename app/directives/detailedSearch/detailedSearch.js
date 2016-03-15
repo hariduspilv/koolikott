@@ -105,7 +105,7 @@ define([
                     serverCallService.makeGet("rest/learningMaterialMetadata/taxon", params, getTaxonSuccess, getTaxonFail);
                 }
 
-                $scope.search = function() {
+                $scope.search = $scope.accessor.search = function() {
                     searchService.setSearch(createSimpleSearchQuery());
 
                     addIsPaidToSearch();
@@ -380,7 +380,7 @@ define([
                 $scope.$watch('detailedSearch.taxon.id', function(newTaxon, oldTaxon) {
                     if (!$scope.detailedSearch.taxon)
                         $scope.detailedSearch.educationalContext = null;
-                        
+
                     if (newTaxon !== oldTaxon && $scope.detailedSearch.taxon) {
                         var taxon = Object.create($scope.detailedSearch.taxon);
                         $scope.detailedSearch.educationalContext = $rootScope.taxonUtils.getEducationalContext(taxon);
