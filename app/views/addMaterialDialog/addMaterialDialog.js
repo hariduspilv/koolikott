@@ -341,7 +341,7 @@ define([
             }
 
             function setMaterialLanguage() {
-                if (preferredLanguage !== null && preferredLanguage !== undefined)
+                if (!$scope.material.language && preferredLanguage !== null && preferredLanguage !== undefined)
                     $scope.material.language = preferredLanguage[0];
             }
 
