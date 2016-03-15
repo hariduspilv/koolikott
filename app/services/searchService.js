@@ -4,7 +4,7 @@ define(['angularAMD'], function(angularAMD) {
         var searchURLbase = "search/result?";
         var taxonURL = "&taxon=";
         var paidURL = "&paid=";
-        var typeURL = "&type="
+        var typeURL = "&type=";
         var languageURL = "&language=";
         var targetGroupsURL = "&targetGroup=";
         var resourceTypeURL = "&resourceType=";
@@ -16,20 +16,35 @@ define(['angularAMD'], function(angularAMD) {
         var sortURL = "&sort=";
         var sortDirectionURL = "&sortDirection=";
 
-        var searchQuery = "";
-        var searchTaxon = "";
-        var searchPaid = "";
-        var searchType = "";
-        var searchLanguage = "";
-        var searchTargetGroups = [];
-        var searchResourceType = "";
-        var searchIsSpecialEducation = "";
-        var searchIssuedFrom = "";
-        var searchCrossCurricularTheme = "";
-        var searchKeyCompetence = "";
-        var searchIsCurriculumLiterature = "";
-        var searchSort = "";
-        var searchSortDirection = "";
+        var search = {
+            query: '',
+            taxon: '',
+            paid: '',
+            type: '',
+            language: '',
+            targetGroups: [],
+            resourceType: '',
+            isSpecialEducation: '',
+            issuedFrom: '',
+            crossCurricularTheme: '',
+            keyCompetence: '',
+            isCurriculumLiterature: '',
+            sort: '',
+            sortDirection: ''
+        };
+
+        function init() {
+            var searchObject = $location.search();
+            for (var property in searchObject) {
+                if (searchObject.hasOwnProperty(property) && searchObject[property] != null) {
+                    if (property === 'targetGroup') {
+                        search['targetGroups'] = arrayToLowerCase(asArray(searchObject[property]));
+                    } else {
+                        search[property] = searchObject[property];
+                    }
+                }
+            }
+        }
 
         function escapeQuery(query) {
             //replace backslashes
@@ -86,111 +101,118 @@ define(['angularAMD'], function(angularAMD) {
             }
         }
 
+        init();
+
         return {
 
             setSearch: function(query) {
-                searchQuery = query;
+                search.query = query;
             },
 
             setTaxon: function(taxon) {
-                searchTaxon = taxon;
+                search.taxon = taxon;
             },
 
             setPaid: function(paid) {
-                searchPaid = paid;
+                search.paid = paid;
             },
 
             setType: function(type) {
-                searchType = type;
+                search.type = type;
             },
 
             setLanguage: function(language) {
-                searchLanguage = language;
+                search.language = language;
             },
 
             setTargetGroups: function(targetGroups) {
-                searchTargetGroups = arrayToLowerCase(asArray(targetGroups));
+                search.targetGroups = arrayToLowerCase(asArray(targetGroups));
             },
 
             setResourceType: function(resourceType) {
-                searchResourceType = resourceType;
+                search.resourceType = resourceType;
             },
 
             setIsSpecialEducation: function(isSpecialEducation) {
-                searchIsSpecialEducation = isSpecialEducation;
+                search.isSpecialEducation = isSpecialEducation;
             },
 
             setIssuedFrom: function(issuedFrom) {
-                searchIssuedFrom = issuedFrom;
+                search.issuedFrom = issuedFrom;
             },
 
             setCrossCurricularTheme: function(crossCurricularTheme) {
-                searchCrossCurricularTheme = crossCurricularTheme;
+                search.crossCurricularTheme = crossCurricularTheme;
             },
 
             setKeyCompetence: function(keyCompetence) {
-                searchKeyCompetence = keyCompetence;
+                search.keyCompetence = keyCompetence;
             },
 
             setCurriculumLiterature: function(isCurriculumLiterature) {
-                searchIsCurriculumLiterature = isCurriculumLiterature;
+                search.curriculumLiterature = isCurriculumLiterature;
             },
 
             setSort: function(sort) {
-                searchSort = sort;
+                search.sort = sort;
             },
 
             setSortDirection: function(sortDirection) {
-                searchSortDirection = sortDirection;
+                search.sortDirection = sortDirection;
             },
 
             getURL: function() {
                 return searchURLbase + this.getQueryURL();;
             },
 
-            getQueryURL: function() {
+            getQueryURL: function(isBackendQuery) {
                 var searchURL = 'q=';
-                if (searchQuery) {
-                    searchURL += escapeQuery(searchQuery)
+                if (search.query) {
+                    searchURL += escapeQuery(search.query)
                 }
 
-                if (searchTaxon) {
-                    searchURL += taxonURL + searchTaxon;
+                if (search.taxon) {
+                    searchURL += taxonURL + search.taxon;
                 }
-                if (searchPaid === false) {
-                    searchURL += paidURL + searchPaid;
+                if (search.paid === false) {
+                    searchURL += paidURL + search.paid;
                 }
-                if (searchType && this.isValidType(searchType)) {
-                    searchURL += typeURL + searchType;
+                if (search.type && this.isValidType(search.type)) {
+                    searchURL += typeURL + search.type;
                 }
-                if (searchLanguage) {
-                    searchURL += languageURL + searchLanguage;
+                if (search.language) {
+                    searchURL += languageURL + search.language;
                 }
-                if (searchTargetGroups) {
-                    for (i = 0; i < searchTargetGroups.length; i++) {
-                        searchURL += targetGroupsURL + searchTargetGroups[i];
+                if (search.targetGroups) {
+                    for (var i = 0; i < search.targetGroups.length; i++) {
+                        if (isBackendQuery && search.targetGroups[i]) {
+                            // Enums are case sensitive, so they must be uppercase for the back-end query
+                            searchURL += targetGroupsURL + search.targetGroups[i].toUpperCase();
+                        } else {
+                            searchURL += targetGroupsURL + search.targetGroups[i];
+                        }
                     }
                 }
-                if (searchResourceType) {
-                    searchURL += resourceTypeURL + searchResourceType;
+                if (search.resourceType) {
+                    searchURL += resourceTypeURL + search.resourceType;
                 }
-                if (searchIsSpecialEducation === true) {
-                    searchURL += isSpecialEducationURL + searchIsSpecialEducation;
+                if (search.isSpecialEducation === true) {
+                    searchURL += isSpecialEducationURL + search.isSpecialEducation;
                 }
-                if (searchIssuedFrom) {
-                    searchURL += issuedFromURL + searchIssuedFrom;
+                if (search.issuedFrom) {
+                    searchURL += issuedFromURL + search.issuedFrom;
                 }
-                if (searchCrossCurricularTheme) {
-                    searchURL += crossCurricularThemeURL + searchCrossCurricularTheme;
+                if (search.crossCurricularTheme) {
+                    searchURL += crossCurricularThemeURL + search.crossCurricularTheme;
                 }
-                if (searchKeyCompetence) {
-                    searchURL += keyCompetenceURL + searchKeyCompetence;
+                if (search.keyCompetence) {
+                    searchURL += keyCompetenceURL + search.keyCompetence;
                 }
-                if (searchIsCurriculumLiterature) {
-                    searchURL += isCurriculumLiteratureURL + searchIsCurriculumLiterature;
+                if (search.isCurriculumLiterature) {
+                    searchURL += isCurriculumLiteratureURL + search.isCurriculumLiterature;
                 }
-                if (searchSort && searchSortDirection) {
-                    searchURL += sortURL + searchSort + sortDirectionURL + searchSortDirection;
+                if (search.sort && search.sortDirection) {
+                    searchURL += sortURL + search.sort + sortDirectionURL + search.sortDirection;
                 }
 
                 return searchURL;
@@ -209,181 +231,181 @@ define(['angularAMD'], function(angularAMD) {
             },
 
             getQuery: function() {
-                if (searchQuery === "") {
+                if (search.query === "") {
                     var searchObject = $location.search();
                     if (searchObject.q) {
-                        searchQuery = unescapeQuery(searchObject.q);
+                        search.query = unescapeQuery(searchObject.q);
                     }
                 }
 
-                return searchQuery;
+                return search.query;
             },
 
             getTaxon: function() {
-                if (searchTaxon === "") {
+                if (search.taxon === "") {
                     var searchObject = $location.search();
                     if (searchObject.taxon) {
                         return searchObject.taxon;
                     }
                 }
 
-                return searchTaxon;
+                return search.taxon;
             },
 
             isPaid: function() {
-                if (searchPaid === "") {
+                if (search.paid === "") {
                     var searchObject = $location.search();
                     if (searchObject.paid) {
-                        return searchObject.paid === 'true' ? true : false;
+                        return searchObject.paid === 'true';
                     }
                 }
 
-                return searchPaid;
+                return search.paid;
             },
 
             getType: function() {
-                if (searchType === "") {
+                if (search.type === "") {
                     var searchObject = $location.search();
                     if (searchObject.type) {
                         return searchObject.type;
                     }
                 }
 
-                return searchType;
+                return search.type;
             },
 
             getLanguage: function() {
-                if (searchLanguage === "") {
+                if (search.language === "") {
                     var searchObject = $location.search();
                     if (searchObject.language) {
                         return searchObject.language;
                     }
                 }
 
-                return searchLanguage;
+                return search.language;
             },
 
             getTargetGroups: function() {
-                if (!searchTargetGroups || searchTargetGroups.length === 0) {
+                if (!search.targetGroups || search.targetGroups.length === 0) {
                     var searchObject = $location.search();
                     if (searchObject.targetGroup) {
                         return arrayToUpperCase(asArray(searchObject.targetGroup));
                     }
                 }
 
-                return arrayToUpperCase(searchTargetGroups);
+                return arrayToUpperCase(search.targetGroups);
             },
 
             getResourceType: function() {
-                if (searchResourceType === "") {
+                if (search.resourceType === "") {
                     var searchObject = $location.search();
                     if (searchObject.resourceType) {
                         return searchObject.resourceType;
                     }
                 }
 
-                return searchResourceType;
+                return search.resourceType;
             },
 
             isSpecialEducation: function() {
-                if (searchIsSpecialEducation === "") {
+                if (search.isSpecialEducation === "") {
                     var searchObject = $location.search();
                     if (searchObject.specialEducation) {
-                        return searchObject.specialEducation === 'true' ? true : false;
+                        return searchObject.specialEducation === 'true';
                     }
                 }
 
-                return searchIsSpecialEducation;
+                return search.isSpecialEducation;
             },
 
             getIssuedFrom: function() {
-                if (searchIssuedFrom === "") {
+                if (search.issuedFrom === "") {
                     var searchObject = $location.search();
                     if (searchObject.issuedFrom) {
                         return searchObject.issuedFrom;
                     }
                 }
 
-                return searchIssuedFrom;
+                return search.issuedFrom;
             },
 
             getCrossCurricularTheme: function() {
-                if (searchCrossCurricularTheme === "") {
+                if (search.crossCurricularTheme === "") {
                     var searchObject = $location.search();
                     if (searchObject.crossCurricularTheme) {
                         return searchObject.crossCurricularTheme;
                     }
                 }
 
-                return searchCrossCurricularTheme;
+                return search.crossCurricularTheme;
             },
 
             getKeyCompetence: function() {
-                if (searchKeyCompetence === "") {
+                if (search.keyCompetence === "") {
                     var searchObject = $location.search();
                     if (searchObject.keyCompetence) {
                         return searchObject.keyCompetence;
                     }
                 }
 
-                return searchKeyCompetence;
+                return search.keyCompetence;
             },
 
             getSort: function() {
-                if (searchSort === "") {
+                if (search.sort === "") {
                     var searchObject = $location.search();
                     if (searchObject.sort) {
                         return searchObject.sort;
                     }
                 }
 
-                return searchSort;
+                return search.sort;
             },
 
             getSortDirection: function() {
-                if (searchSortDirection === "") {
+                if (search.sortDirection === "") {
                     var searchObject = $location.search();
                     if (searchObject.sortDirection) {
                         return searchObject.sortDirection;
                     }
                 }
 
-                return searchSortDirection;
+                return search.sortDirection;
             },
 
             isCurriculumLiterature: function() {
-                if (searchIsCurriculumLiterature === "") {
+                if (search.isCurriculumLiterature === "") {
                     var searchObject = $location.search();
                     if (searchObject.curriculumLiterature) {
-                        return searchObject.curriculumLiterature === 'true' ? true : false;
+                        return searchObject.curriculumLiterature === 'true';
                     }
                 }
 
-                return searchIsCurriculumLiterature;
+                return search.isCurriculumLiterature;
             },
 
             clearFieldsNotInSimpleSearch: function() {
-                searchTaxon = '';
-                searchPaid = '';
-                searchType = '';
-                searchLanguage = '';
-                searchTargetGroups = '';
-                searchResourceType = '';
-                searchIsSpecialEducation = '';
-                searchIssuedFrom = '';
-                searchCrossCurricularTheme = '';
-                searchKeyCompetence = '';
-                searchIsCurriculumLiterature = '';
-                searchSort = '';
-                searchSortDirection = '';
+                search.taxon = '';
+                search.paid = '';
+                search.type = '';
+                search.language = '';
+                search.targetGroups = '';
+                search.resourceType = '';
+                search.isSpecialEducation = '';
+                search.issuedFrom = '';
+                search.crossCurricularTheme = '';
+                search.keyCompetence = '';
+                search.isCurriculumLiterature = '';
+                search.sort = '';
+                search.sortDirection = '';
             },
 
             isValidType: function(type) {
                 return type === 'material' || type === 'portfolio' || type === 'all';
             },
-            
+
             getSearchURLbase: function() {
-            	return searchURLbase;
+                return searchURLbase;
             }
         };
     }]);
