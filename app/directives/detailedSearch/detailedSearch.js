@@ -21,7 +21,6 @@ define([
                 var BASIC_EDUCATION_ID = 2;
                 var SECONDARY_EDUCATION_ID = 3;
                 var VOCATIONAL_EDUCATION_ID = 4;
-                var SPECIAL_EDUCATION_ID = 5;
 
                 var taxon;
 
@@ -32,7 +31,7 @@ define([
                     $scope.detailedSearch = {};
 
                     // Languages
-                    metadataService.loadLanguages(setLangugeges);
+                    metadataService.loadLanguages(setLanguages);
                     $scope.detailedSearch.language = searchService.getLanguage();
 
                     // Target groups
@@ -92,17 +91,13 @@ define([
                     } else {
                         // Taxon
                         if (searchService.getTaxon()) {
-                            getTaxonById(searchService.getTaxon());
+                            $rootScope.taxonParser.loadTaxonMap(setTaxonMap);
                         }
                     }
                 }
 
-                function getTaxonById(taxonId) {
-                    var params = {
-                        'taxonId': taxonId
-                    };
-                    log('Getting taxon.');
-                    serverCallService.makeGet("rest/learningMaterialMetadata/taxon", params, getTaxonSuccess, getTaxonFail);
+                function setTaxonMap(taxonMap) {
+                    $scope.detailedSearch.taxon = Object.create(taxonMap['t' + searchService.getTaxon()]);
                 }
 
                 $scope.search = $scope.accessor.search = function() {
@@ -304,30 +299,6 @@ define([
                     $scope.queryOut = createSimpleSearchQuery();
                 });
 
-                function getTaxonSuccess(data) {
-                    if (isEmpty(data)) {
-                        getTaxonFail();
-                    } else {
-                        $scope.detailedSearch.taxon = Object.create(data);
-                    }
-                }
-
-                function getTaxonFail() {
-                    console.log('Failed to get taxon.')
-                }
-
-                function getLanguagesSuccess(data) {
-                    if (isEmpty(data)) {
-                        getLanguagesFail();
-                    } else {
-                        $scope.languages = data;
-                    }
-                }
-
-                function getLanguagesFail() {
-                    console.log('Failed to get languages.')
-                }
-
                 $scope.getLanguageTranslationKey = function(languageCode) {
                     return 'LANGUAGE_' + languageCode.toUpperCase();
                 };
@@ -400,7 +371,7 @@ define([
                     setEditModePrefill();
                 }, false);
 
-                function setLangugeges(languages) {
+                function setLanguages(languages) {
                     $scope.languages = languages;
                 }
 

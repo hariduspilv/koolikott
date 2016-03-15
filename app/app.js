@@ -135,6 +135,7 @@ define([
     }
 
     app.run(function($rootScope, metadataService) {
+        $rootScope.taxonParser = taxonParser;
         metadataService.loadEducationalContexts(taxonParser.setTaxons);
     });
 

@@ -50,9 +50,7 @@ define([
                      */
 
                     $scope.$watch('taxon.id', function(newTaxon, oldTaxon) {
-                        if (newTaxon !== oldTaxon) {
-                            buildTaxonPath();
-                        }
+                        buildTaxonPath();
                     }, true);
 
                     $scope.$watch('taxonPath.educationalContext.id', function(newEducationalContext, oldEducationalContext) {

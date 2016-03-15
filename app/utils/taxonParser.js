@@ -4,6 +4,7 @@ define(function () {
     var TAXON_LEVELS = ['.EducationalContext', '.Domain', '.Subject', '.Topic', 'Subtopic', '.Module', '.Specialization'];
 
     var taxonMap;
+    var taxonMapCallbacks = [];
 
     var learningObjectsToParse = [];
 
@@ -144,6 +145,19 @@ define(function () {
             learningObjectsToParse.forEach(function(learningObject) {
                 replaceTaxons(learningObject, getFullTaxon);
             });
+
+            taxonMapCallbacks.forEach(function(callback) {
+                callback(taxonMap);
+            });
+        },
+
+        loadTaxonMap: function(callback) {
+            if (taxonMap) {
+                callback(taxonMap);
+            } else {
+                // Save callback, call it when data is available
+                taxonMapCallbacks.push(callback);
+            }
         }
     }
 });
