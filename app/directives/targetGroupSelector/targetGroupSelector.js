@@ -52,8 +52,9 @@ define(['angularAMD'], function(angularAMD) {
                             var newEdCtx = $rootScope.taxonUtils.getEducationalContext(newTaxon);
                             var oldEdCtx = $rootScope.taxonUtils.getEducationalContext(oldTaxon);
 
-                            if (!oldEdCtx || (newEdCtx && newEdCtx.name !== oldEdCtx.name)) {
+                            if (!oldEdCtx || (newEdCtx && newEdCtx.name !== oldEdCtx.name) || !newEdCtx) {
                                 fill();
+                                resetIfInvalid();
                             }
                         }
                     });
@@ -142,6 +143,20 @@ define(['angularAMD'], function(angularAMD) {
                         }
                     } else {
                         $scope.selectedTargetGroup = null;
+                    }
+                }
+
+                function resetIfInvalid() {
+                    var groupNames = [];
+                    $scope.groups.forEach(function(group) {
+                        if (group && group.name) {
+                            groupNames.push(group.name);
+                        }
+                    });
+
+                    if (groupNames.indexOf($scope.selectedTargetGroup) === -1) {
+                        $scope.selectedTargetGroup = null;
+                        $scope.targetGroups = [];
                     }
                 }
 

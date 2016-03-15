@@ -101,7 +101,7 @@ define([
                     var params = {
                         'taxonId': taxonId
                     };
-                    log('Getting taxon.')
+                    log('Getting taxon.');
                     serverCallService.makeGet("rest/learningMaterialMetadata/taxon", params, getTaxonSuccess, getTaxonFail);
                 }
 
@@ -330,7 +330,7 @@ define([
 
                 $scope.getLanguageTranslationKey = function(languageCode) {
                     return 'LANGUAGE_' + languageCode.toUpperCase();
-                }
+                };
 
                 function clearHiddenFields() {
                     var educationalContext = $scope.detailedSearch.educationalContext;
@@ -392,7 +392,7 @@ define([
                     if ($scope.detailedSearch.issueDate && $scope.detailedSearch.issueDate != $scope.issueDateFirstYear) {
                         return $scope.detailedSearch.issueDate;
                     }
-                }
+                };
 
                 $scope.$watch(function() {
                     return $rootScope.savedPortfolio
