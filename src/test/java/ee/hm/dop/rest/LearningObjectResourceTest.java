@@ -67,7 +67,6 @@ public class LearningObjectResourceTest extends ResourceIntegrationTestBase {
 
         assertNotNull(learningObjects);
         assertEquals(20, learningObjects.size());
-        validateNewestAreFirst(learningObjects);
     }
 
     @Test
