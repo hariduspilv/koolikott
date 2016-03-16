@@ -410,4 +410,9 @@ public class PortfolioService implements LearningObjectHandler {
 
         return true;
     }
+
+    @Override
+    public boolean isPublic(LearningObject learningObject) {
+            return ((Portfolio) learningObject).getVisibility() == Visibility.PUBLIC;
+    }
 }

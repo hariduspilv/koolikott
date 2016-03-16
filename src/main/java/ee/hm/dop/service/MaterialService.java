@@ -11,10 +11,6 @@ import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 
-import org.joda.time.DateTime;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import ee.hm.dop.dao.BrokenContentDAO;
 import ee.hm.dop.dao.MaterialDAO;
 import ee.hm.dop.dao.UserLikeDAO;
@@ -32,6 +28,9 @@ import ee.hm.dop.model.taxon.EducationalContext;
 import ee.hm.dop.service.learningObject.LearningObjectHandler;
 import ee.hm.dop.utils.TaxonUtils;
 import ezvcard.util.org.apache.commons.codec.binary.Base64;
+import org.joda.time.DateTime;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class MaterialService implements LearningObjectHandler {
 
@@ -66,9 +65,6 @@ public class MaterialService implements LearningObjectHandler {
         }
     }
 
-    public List<Material> getPopularMaterials(int numberOfMaterials) {
-        return materialDao.findPopularMaterials(numberOfMaterials);
-    }
 
     public void increaseViewCount(Material material) {
         material.setViews(material.getViews() + 1);
@@ -485,6 +481,11 @@ public class MaterialService implements LearningObjectHandler {
         Material material = (Material) learningObject;
 
         return !material.isDeleted() || isAdmin(user);
+    }
+
+    @Override
+    public boolean isPublic(LearningObject learningObject) {
+        return true;
     }
 
     public List<Material> getBySource(String materialSource) {

@@ -42,11 +42,6 @@ public class MaterialDAO extends LearningObjectDAO {
         return learningObjects;
     }
 
-    public List<Material> findPopularMaterials(int numberOfMaterials) {
-        return createQuery("FROM Material m WHERE m.deleted = false ORDER BY views DESC", Material.class)
-                .setMaxResults(numberOfMaterials).getResultList();
-    }
-
     public byte[] findNotDeletedPictureByMaterial(Material material) {
         TypedQuery<byte[]> findById = createQuery(
                 "SELECT m.picture FROM Material m WHERE m.id = :id AND m.deleted = false", byte[].class);

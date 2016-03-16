@@ -23,9 +23,6 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import org.apache.commons.configuration.Configuration;
-import org.glassfish.jersey.media.multipart.FormDataParam;
-
 import ee.hm.dop.model.BrokenContent;
 import ee.hm.dop.model.Material;
 import ee.hm.dop.model.Recommendation;
@@ -33,6 +30,8 @@ import ee.hm.dop.model.User;
 import ee.hm.dop.model.UserLike;
 import ee.hm.dop.service.MaterialService;
 import ee.hm.dop.service.UserService;
+import org.apache.commons.configuration.Configuration;
+import org.glassfish.jersey.media.multipart.FormDataParam;
 
 @Path("material")
 public class MaterialResource extends BaseResource {
@@ -60,13 +59,6 @@ public class MaterialResource extends BaseResource {
             throws UnsupportedEncodingException {
         materialSource = URLDecoder.decode(materialSource, "UTF-8");
         return materialService.getBySource(materialSource);
-    }
-
-    @GET
-    @Path("getPopularMaterials")
-    @Produces(MediaType.APPLICATION_JSON)
-    public List<Material> getPopularMaterials(@QueryParam("numberOfMaterials") int numberOfMaterials) {
-        return materialService.getPopularMaterials(numberOfMaterials);
     }
 
     @POST

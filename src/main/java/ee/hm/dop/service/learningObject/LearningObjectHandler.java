@@ -5,5 +5,7 @@ import ee.hm.dop.model.User;
 
 public interface LearningObjectHandler {
 
-    public boolean hasAccess(User user, LearningObject learningObject);
+    boolean hasAccess(User user, LearningObject learningObject);
+
+    boolean isPublic(LearningObject learningObject);
 }

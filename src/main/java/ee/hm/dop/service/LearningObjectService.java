@@ -8,10 +8,8 @@ import javax.inject.Inject;
 
 import ee.hm.dop.dao.LearningObjectDAO;
 import ee.hm.dop.model.LearningObject;
-import ee.hm.dop.model.Portfolio;
 import ee.hm.dop.model.Tag;
 import ee.hm.dop.model.User;
-import ee.hm.dop.model.Visibility;
 import ee.hm.dop.service.learningObject.LearningObjectHandler;
 import ee.hm.dop.service.learningObject.LearningObjectHandlerFactory;
 
@@ -71,7 +69,7 @@ public class LearningObjectService {
                 break;
             }
 
-            learningObjects.removeIf(this::isNotPublic);
+            learningObjects.removeIf(learningObject -> !LearningObjectHandlerFactory.get(learningObject.getClass()).isPublic(learningObject));
             returnableLearningObjects.addAll(learningObjects);
             startPosition = count;
             count = numberOfLearningObjects - returnableLearningObjects.size();
@@ -86,9 +84,5 @@ public class LearningObjectService {
 
     public List<LearningObject> getPopularLearningObjects(int numberOfLearningObjects) {
         return getPublicLearningObjects(numberOfLearningObjects, learningObjectDAO::findPopularLearningObjects);
-    }
-
-    private boolean isNotPublic(LearningObject learningObject) {
-        return learningObject instanceof Portfolio && ((Portfolio) learningObject).getVisibility() != Visibility.PUBLIC;
     }
 }
