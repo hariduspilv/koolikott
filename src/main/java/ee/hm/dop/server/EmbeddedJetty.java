@@ -16,6 +16,7 @@ import org.slf4j.LoggerFactory;
 import com.google.inject.servlet.GuiceFilter;
 
 import ee.hm.dop.config.DOPApplication;
+import ee.hm.dop.rest.filter.TransactionFilter;
 
 public class EmbeddedJetty {
     private static final Logger logger = LoggerFactory.getLogger(EmbeddedJetty.class);
@@ -63,6 +64,7 @@ public class EmbeddedJetty {
     private void addFilters(ServletContextHandler servletContextHandler) {
         // Filter to inject object into other filters. Must be above all others.
         servletContextHandler.addFilter(GuiceFilter.class, "/*", EnumSet.allOf(DispatcherType.class));
+        servletContextHandler.addFilter(TransactionFilter.class, "/rest/*", EnumSet.allOf(DispatcherType.class));
     }
 
     public void stop() throws Exception {

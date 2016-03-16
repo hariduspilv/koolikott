@@ -1,5 +1,7 @@
 package ee.hm.dop.model.taxon;
 
+import static javax.persistence.FetchType.LAZY;
+
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
@@ -11,7 +13,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 @DiscriminatorValue("SUBTOPIC")
 public class Subtopic extends Taxon {
 
-    @ManyToOne
+    @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "topic", nullable = false)
     private Topic topic;
 

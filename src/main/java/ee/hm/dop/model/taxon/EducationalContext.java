@@ -1,7 +1,5 @@
 package ee.hm.dop.model.taxon;
 
-import static javax.persistence.FetchType.EAGER;
-
 import java.util.Set;
 
 import javax.persistence.DiscriminatorValue;
@@ -14,7 +12,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 @DiscriminatorValue("EDUCATIONAL_CONTEXT")
 public class EducationalContext extends Taxon {
 
-    @OneToMany(fetch = EAGER, mappedBy = "educationalContext")
+    @OneToMany(mappedBy = "educationalContext")
     private Set<Domain> domains;
 
     public Set<Domain> getDomains() {

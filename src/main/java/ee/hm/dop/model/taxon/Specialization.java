@@ -1,6 +1,6 @@
 package ee.hm.dop.model.taxon;
 
-import static javax.persistence.FetchType.EAGER;
+import static javax.persistence.FetchType.LAZY;
 
 import java.util.Set;
 
@@ -16,10 +16,10 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 @DiscriminatorValue("SPECIALIZATION")
 public class Specialization extends Taxon {
 
-    @OneToMany(fetch = EAGER, mappedBy = "specialization")
+    @OneToMany(mappedBy = "specialization")
     private Set<Module> modules;
 
-    @ManyToOne
+    @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "domain", nullable = false)
     private Domain domain;
 

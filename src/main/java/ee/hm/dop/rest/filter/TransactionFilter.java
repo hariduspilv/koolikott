@@ -6,36 +6,34 @@ import static ee.hm.dop.utils.DbUtils.getTransaction;
 
 import java.io.IOException;
 
-import javax.annotation.Priority;
-import javax.ws.rs.container.ContainerRequestContext;
-import javax.ws.rs.container.ContainerRequestFilter;
-import javax.ws.rs.container.ContainerResponseContext;
-import javax.ws.rs.container.ContainerResponseFilter;
-import javax.ws.rs.ext.Provider;
+import javax.servlet.Filter;
+import javax.servlet.FilterChain;
+import javax.servlet.FilterConfig;
+import javax.servlet.ServletException;
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
 
 /**
  * Manage database transactions.
  */
-@Provider
-@Priority(100)
-public class TransactionFilter implements ContainerRequestFilter, ContainerResponseFilter {
+public class TransactionFilter implements Filter {
 
-    /**
-     * Starts transaction
-     */
     @Override
-    public void filter(ContainerRequestContext requestContext) throws IOException {
+    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException,
+            ServletException {
         getTransaction().begin();
-    }
 
-    /**
-     * Finish transaction. If transaction is marked as rollback only, rollback
-     * is performed. Otherwise transaction is committed.
-     */
-    @Override
-    public void filter(ContainerRequestContext requestContext, ContainerResponseContext responseContext)
-            throws IOException {
+        chain.doFilter(request, response);
+
         closeTransaction();
         closeEntityManager();
+    }
+
+    @Override
+    public void init(FilterConfig filterConfig) throws ServletException {
+    }
+
+    @Override
+    public void destroy() {
     }
 }
