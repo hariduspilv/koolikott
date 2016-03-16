@@ -20,8 +20,8 @@ public class TaxonDAO extends BaseDAO<Taxon> {
 
     public EducationalContext findEducationalContextByName(String name) {
         TypedQuery<Taxon> findByName = createQuery(
-                "FROM Taxon t WHERE t.name = :name and level = 'EDUCATIONAL_CONTEXT'", Taxon.class) //
-                .setParameter("name", name);
+                "FROM Taxon t WHERE lower(t.name) = :name and level = 'EDUCATIONAL_CONTEXT'", Taxon.class) //
+                .setParameter("name", name.toLowerCase());
 
         return (EducationalContext) getSingleResult(findByName);
     }
@@ -40,8 +40,8 @@ public class TaxonDAO extends BaseDAO<Taxon> {
     }
 
     public Taxon findTaxonByRepoName(String name, String repoTable, Class<? extends Taxon> level) {
-        List<Taxon> taxons = createQuery("SELECT t.taxon FROM " + repoTable + " t WHERE t.name = :name", Taxon.class)
-                .setParameter("name", name).getResultList();
+        List<Taxon> taxons = createQuery("SELECT t.taxon FROM " + repoTable + " t WHERE lower(t.name) = :name", Taxon.class)
+                .setParameter("name", name.toLowerCase()).getResultList();
         List<Taxon> res = taxons.stream().filter(t -> (t.getClass().equals(level))).collect(Collectors.toList());
 
         if (res != null && !res.isEmpty()) {
