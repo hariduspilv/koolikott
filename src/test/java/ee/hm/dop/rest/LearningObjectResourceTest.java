@@ -97,14 +97,13 @@ public class LearningObjectResourceTest extends ResourceIntegrationTestBase {
     private void validateNewestAreFirst(List<LearningObject> learningObjects) {
         LearningObject last = null;
         for (LearningObject learningObject : learningObjects) {
-            if (last != null && learningObject != null) {
+            if (last != null && learningObject != null && last.getAdded() != null && learningObject.getAdded() != null) {
                 // Check that the learningObjects are from newest to oldest
-                assertTrue(last.getAdded().isAfter(learningObject.getAdded())
-                        || last.getAdded().isEqual(learningObject.getAdded()));
+                assertTrue(last.getAdded().isAfter(learningObject.getAdded()) || last.getAdded().isEqual(learningObject.getAdded()));
             }
 
-            last = learningObject;
-            if(learningObject != null){
+            if (learningObject != null) {
+                last = learningObject;
                 assertNotNull(learningObject.getAdded());
             }
         }
