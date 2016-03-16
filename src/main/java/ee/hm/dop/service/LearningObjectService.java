@@ -22,7 +22,7 @@ public class LearningObjectService {
     private SearchEngineService searchEngineService;
 
     public LearningObject get(long learningObjectId, User user) {
-        LearningObject learningObject = learningObjectDAO.findById(learningObjectId);
+        LearningObject learningObject = getLearningObjectDAO().findById(learningObjectId);
 
         if (!hasAccess(user, learningObject)) {
             learningObject = null;
@@ -36,7 +36,7 @@ public class LearningObjectService {
             return false;
         }
 
-        LearningObjectHandler learningObjectHandler = LearningObjectHandlerFactory.get(learningObject.getClass());
+        LearningObjectHandler learningObjectHandler = getLearningObjectHandler(learningObject);
         return learningObjectHandler.hasAccess(user, learningObject);
     }
 
@@ -51,7 +51,7 @@ public class LearningObjectService {
             throw new RuntimeException("Learning Object already contains tag");
         } else {
             tags.add(tag);
-            updatedLearningObject = learningObjectDAO.update(learningObject);
+            updatedLearningObject = getLearningObjectDAO().update(learningObject);
             searchEngineService.updateIndex();
         }
 
@@ -69,7 +69,7 @@ public class LearningObjectService {
                 break;
             }
 
-            learningObjects.removeIf(learningObject -> !LearningObjectHandlerFactory.get(learningObject.getClass()).isPublic(learningObject));
+            learningObjects.removeIf(learningObject -> !getLearningObjectHandler(learningObject).isPublic(learningObject));
             returnableLearningObjects.addAll(learningObjects);
             startPosition = count;
             count = numberOfLearningObjects - returnableLearningObjects.size();
@@ -79,10 +79,18 @@ public class LearningObjectService {
     }
 
     public List<LearningObject> getNewestLearningObjects(int numberOfLearningObjects) {
-        return getPublicLearningObjects(numberOfLearningObjects, learningObjectDAO::findNewestLearningObjects);
+        return getPublicLearningObjects(numberOfLearningObjects, getLearningObjectDAO()::findNewestLearningObjects);
     }
 
     public List<LearningObject> getPopularLearningObjects(int numberOfLearningObjects) {
-        return getPublicLearningObjects(numberOfLearningObjects, learningObjectDAO::findPopularLearningObjects);
+        return getPublicLearningObjects(numberOfLearningObjects, getLearningObjectDAO()::findPopularLearningObjects);
+    }
+
+    protected LearningObjectHandler getLearningObjectHandler(LearningObject learningObject) {
+        return LearningObjectHandlerFactory.get(learningObject.getClass());
+    }
+
+    protected LearningObjectDAO getLearningObjectDAO() {
+        return learningObjectDAO;
     }
 }
