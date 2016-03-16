@@ -13,11 +13,10 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
-import org.junit.Test;
-
 import ee.hm.dop.common.test.ResourceIntegrationTestBase;
 import ee.hm.dop.model.LearningObject;
 import ee.hm.dop.model.Tag;
+import org.junit.Test;
 
 public class LearningObjectResourceTest extends ResourceIntegrationTestBase {
 
@@ -98,14 +97,16 @@ public class LearningObjectResourceTest extends ResourceIntegrationTestBase {
     private void validateNewestAreFirst(List<LearningObject> learningObjects) {
         LearningObject last = null;
         for (LearningObject learningObject : learningObjects) {
-            if (last != null) {
+            if (last != null && learningObject != null) {
                 // Check that the learningObjects are from newest to oldest
                 assertTrue(last.getAdded().isAfter(learningObject.getAdded())
                         || last.getAdded().isEqual(learningObject.getAdded()));
             }
 
             last = learningObject;
-            assertNotNull(learningObject.getAdded());
+            if(learningObject != null){
+                assertNotNull(learningObject.getAdded());
+            }
         }
     }
 }
