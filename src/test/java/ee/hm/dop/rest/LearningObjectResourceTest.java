@@ -71,17 +71,6 @@ public class LearningObjectResourceTest extends ResourceIntegrationTestBase {
     }
 
     @Test
-    public void getNewest15() {
-        Response response = doGet(LEARNING_OBJECTS_GET_NEWEST + "15");
-        List<LearningObject> learningObjects = response.readEntity(new GenericType<List<LearningObject>>() {
-        });
-
-        assertNotNull(learningObjects);
-        assertEquals(15, learningObjects.size());
-        validateNewestAreFirst(learningObjects);
-    }
-
-    @Test
     public void getPopular8() {
         Response response = doGet(LEARNING_OBJECTS_GET_POPULAR_COUNT + "8");
         List<LearningObject> learningObjects = response.readEntity(new GenericType<List<LearningObject>>() {
