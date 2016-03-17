@@ -6,8 +6,8 @@ define([
     return ['$scope', 'serverCallService', function ($scope, serverCallService) {
         $scope.showHints = true;
 
-        serverCallService.makeGet("rest/learningObjects/getNewest?count=8", {}, getNewestLearningObjectsSuccess, requestFailed);
-        serverCallService.makeGet("rest/learningObjects/getPopular?count=8", {}, getPopularLearningObjectsSuccess, requestFailed);
+        serverCallService.makeGet("rest/learningObjects/getNewest?maxResults=8", {}, getNewestLearningObjectsSuccess, requestFailed);
+        serverCallService.makeGet("rest/learningObjects/getPopular?maxResults=8", {}, getPopularLearningObjectsSuccess, requestFailed);
 
         function getNewestLearningObjectsSuccess(data) {
             if (isEmpty(data)) {
