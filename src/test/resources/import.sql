@@ -384,7 +384,7 @@ insert into LearningObject(id, added, updated, views, picture, creator, deleted,
 insert into Portfolio(id, title, taxon, originalCreator, summary, visibility) VALUES (107, 'This portfolio is private. ', null, 2, 'Summary. Sum sum sum.', 'PRIVATE');
 insert into LearningObject(id, added, updated, views, picture, creator, deleted, recommendation) VALUES (108, '2003-10-10 07:00:11', null, 100, null, 2, false, null);
 insert into Portfolio(id, title, taxon, originalCreator, summary, visibility) VALUES (108, 'This portfolio is public. ', null, 2, 'Summary. Wow.', 'PUBLIC');
-insert into LearningObject(id, added, updated, views, picture, creator, deleted, recommendation) VALUES (109, '2003-10-10 07:00:11', null, 100, null, 7, false, null);
+insert into LearningObject(id, added, updated, views, picture, creator, deleted, recommendation) VALUES (109, '2011-10-10 07:00:11', null, 100, null, 7, false, null);
 insert into Portfolio(id, title, taxon, originalCreator, summary, visibility) VALUES (109, 'This portfolio2 is public. ', null, 7, 'Alpha.', 'PUBLIC');
 insert into LearningObject(id, added, updated, views, picture, creator, deleted, recommendation) VALUES (110, '2003-10-10 07:00:11', null, 95455216, null, 7, false, 5);
 insert into Portfolio(id, title, taxon, originalCreator, summary, visibility) VALUES (110, 'This portfolio2 is private. ', null, 7, 'Alpha.', 'PRIVATE');
@@ -392,9 +392,9 @@ insert into LearningObject(id, added, updated, views, picture, creator, deleted,
 insert into Portfolio(id, title, taxon, originalCreator, summary, visibility) VALUES (111, 'This portfolio2 is not listed. ', null, 7, 'Alpha.', 'NOT_LISTED');
 insert into LearningObject(id, added, updated, views, picture, creator, deleted, recommendation) VALUES (112, '2003-10-10 07:00:11', null, 100, null, 9, false, null);
 insert into Portfolio(id, title, taxon, originalCreator, summary, visibility) VALUES (112, 'This portfolio will be DELETED in tests.', null, 9, 'Alpha.', 'PUBLIC');
-insert into LearningObject(id, added, updated, views, picture, creator, deleted, recommendation) VALUES (113, '2003-12-10 07:22:11', null, 100, null, 9, false, null);
+insert into LearningObject(id, added, updated, views, picture, creator, deleted, recommendation) VALUES (113, '2003-12-10 06:21:10', null, 100, null, 9, false, null);
 insert into Portfolio(id, title, taxon, originalCreator, summary, visibility) VALUES (113, 'This portfolio will be DELETED in tests by admin.', null, 9, 'Beta.', 'PUBLIC');
-insert into LearningObject(id, added, updated, views, picture, creator, deleted, recommendation) VALUES (114, '2003-12-10 07:22:11', null, 100, null, 6, false, 4);
+insert into LearningObject(id, added, updated, views, picture, creator, deleted, recommendation) VALUES (114, '2003-10-10 07:00:09', null, 100, null, 6, false, 4);
 insert into Portfolio(id, title, taxon, originalCreator, summary, visibility) VALUES (114, 'Uploading picture to it', null, 6, 'Beta.', 'PUBLIC');
 
 -- Chapter

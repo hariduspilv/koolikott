@@ -67,6 +67,18 @@ public class LearningObjectResourceTest extends ResourceIntegrationTestBase {
 
         assertNotNull(learningObjects);
         assertEquals(20, learningObjects.size());
+        validateNewestAreFirst(learningObjects);
+    }
+
+    @Test
+    public void getNewest15() {
+        Response response = doGet(LEARNING_OBJECTS_GET_NEWEST + "15");
+        List<LearningObject> learningObjects = response.readEntity(new GenericType<List<LearningObject>>() {
+        });
+
+        assertNotNull(learningObjects);
+        assertEquals(15, learningObjects.size());
+        validateNewestAreFirst(learningObjects);
     }
 
     @Test

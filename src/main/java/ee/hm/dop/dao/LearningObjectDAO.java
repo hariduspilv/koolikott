@@ -50,12 +50,12 @@ public class LearningObjectDAO extends BaseDAO<LearningObject> {
     }
 
     public List<LearningObject> findNewestLearningObjects(int numberOfLearningObjects, int startPosition) {
-        return createQuery("FROM LearningObject lo WHERE lo.deleted = false ORDER BY added desc", LearningObject.class)
+        return createQuery("FROM LearningObject lo WHERE lo.deleted = false ORDER BY added DESC, id DESC", LearningObject.class)
                 .setFirstResult(startPosition).setMaxResults(numberOfLearningObjects).getResultList();
     }
 
     public List<LearningObject> findPopularLearningObjects(int numberOfLearningObjects, int startPosition) {
-        return createQuery("FROM LearningObject lo WHERE lo.deleted = false ORDER BY views DESC", LearningObject.class)
+        return createQuery("FROM LearningObject lo WHERE lo.deleted = false ORDER BY views DESC, id DESC", LearningObject.class)
                 .setFirstResult(startPosition).setMaxResults(numberOfLearningObjects).getResultList();
     }
 
