@@ -89,8 +89,8 @@
                         <span data-translate="DETAIL_VIEW_TARGET_GROUP"></span>
                       </small>
                       <br/>
-                            <span data-ng-repeat="targetGroup in portfolio.targetGroups">
-                               {{'TARGET_GROUP_' + targetGroup | translate}}{{$last ? '' : ', '}}
+                            <span data-ng-repeat="targetGroup in getTargetGroups()">
+                                {{'TARGET_GROUP_' + targetGroup | translate}}{{$last ? '' : ', '}}
                             </span>
                             <span data-ng-if="!portfolio.targetGroups || !portfolio.targetGroups.length"
                                   data-translate="UNKNOWN">Unknown</span>

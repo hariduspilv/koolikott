@@ -114,6 +114,24 @@ define([
                     }
 
                     return selectedTargetGroup;
+                },
+
+                /**
+                 * Get the label that represents all the selected target groups.
+                 * If there is no such label, return all target groups.
+                 */
+                getLabelByTargetGroupsOrAll : function(targetGroups) {
+                    if (!targetGroups) {
+                        return [];
+                    }
+
+                    var label = this.getLabelByTargetGroups(targetGroups);
+
+                    if (label) {
+                        return [label];
+                    } else {
+                        return targetGroups;
+                    }
                 }
 
             };

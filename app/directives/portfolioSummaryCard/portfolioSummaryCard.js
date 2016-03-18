@@ -7,6 +7,7 @@ define([
     'services/serverCallService',
     'services/toastService',
     'services/storageService',
+    'services/targetGroupService',
     'directives/copyPermalink/copyPermalink',
     'directives/report/improper/improper',
     'directives/report/brokenLink/brokenLink',
@@ -15,8 +16,8 @@ define([
     'directives/tags/tags',
     'directives/commentsCard/commentsCard'
 ], function (app, angularAMD) {
-    app.directive('dopPortfolioSummaryCard', ['translationService', '$location', '$mdSidenav', '$mdDialog', '$rootScope', 'authenticatedUserService', '$route', 'dialogService', 'serverCallService', 'toastService', 'storageService',
-        function (translationService, $location, $mdSidenav, $mdDialog, $rootScope, authenticatedUserService, $route, dialogService, serverCallService, toastService, storageService) {
+    app.directive('dopPortfolioSummaryCard', ['translationService', '$location', '$mdSidenav', '$mdDialog', '$rootScope', 'authenticatedUserService', '$route', 'dialogService', 'serverCallService', 'toastService', 'storageService', 'targetGroupService',
+        function (translationService, $location, $mdSidenav, $mdDialog, $rootScope, authenticatedUserService, $route, dialogService, serverCallService, toastService, storageService, targetGroupService) {
         return {
             scope: {
                 portfolio: '=',
@@ -124,6 +125,12 @@ define([
                     $scope.showEditMetadataDialog();
                     $rootScope.openMetadataDialog = null;
                 }
+
+                $scope.getTargetGroups = function() {
+                    if ($scope.portfolio) {
+                        return targetGroupService.getLabelByTargetGroupsOrAll($scope.portfolio.targetGroups);
+                    }
+                };
 
                 init();
             }
