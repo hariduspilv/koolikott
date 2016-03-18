@@ -19,10 +19,11 @@ define([
     'services/dialogService',
     'services/iconService',
     'services/toastService',
-    'services/storageService'
+    'services/storageService',
+    'services/targetGroupService'
 ], function (app, angularAMD) {
-    return ['$scope', 'serverCallService', '$route', 'translationService', '$rootScope', 'searchService', '$location', 'alertService', 'authenticatedUserService', 'dialogService', 'toastService', 'iconService', '$mdDialog', 'storageService',
-        function ($scope, serverCallService, $route, translationService, $rootScope, searchService, $location, alertService, authenticatedUserService, dialogService, toastService, iconService, $mdDialog, storageService) {
+    return ['$scope', 'serverCallService', '$route', 'translationService', '$rootScope', 'searchService', '$location', 'alertService', 'authenticatedUserService', 'dialogService', 'toastService', 'iconService', '$mdDialog', 'storageService', 'targetGroupService',
+        function ($scope, serverCallService, $route, translationService, $rootScope, searchService, $location, alertService, authenticatedUserService, dialogService, toastService, iconService, $mdDialog, storageService, targetGroupService) {
             $scope.showMaterialContent = false;
             $scope.newComment = {};
 
@@ -153,6 +154,25 @@ define([
                 }
             }
 
+            $scope.getMaterialDomains = function() {
+                var domains = [];
+
+                if (!$scope.material || !$scope.material.taxons) {
+                    return [];
+                }
+
+                for (var i = 0, j = 0; i < $scope.material.taxons.length; i++) {
+                    var taxon = $scope.material.taxons[i];
+                    var domain = $rootScope.taxonUtils.getDomain(taxon);
+
+                    if (domain) {
+                        domains[j++] = domain;
+                    }
+                }
+
+                return domains;
+            };
+
             $scope.getCorrectLanguageString = function (languageStringList) {
                 if (languageStringList) {
                     return getUserDefinedLanguageString(languageStringList, translationService.getLanguage(), $scope.material.language);
@@ -252,7 +272,7 @@ define([
 
             $scope.edit = function () {
                 var editMaterialScope = $scope.$new(true);
-                editMaterialScope.material = $scope.material;
+                editMaterialScope.material = clone($scope.material);
 
                 $mdDialog.show(angularAMD.route({
                     templateUrl: 'views/addMaterialDialog/addMaterialDialog.html',
@@ -357,5 +377,7 @@ define([
             function restoreFail() {
                 log("Restoring material failed");
             }
+
+            $scope.getLabelByTargetGroups = targetGroupService.getLabelByTargetGroups;
         }];
 });

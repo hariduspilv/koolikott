@@ -69,13 +69,36 @@
                     <div flex>
                       <p class="md-body-2 meta">
                         <small class="md-caption">
+                          <span data-translate="DETAIL_VIEW_EDUCATIONAL_CONTEXT"></span>:
+                        </small>
+                        <br>
+                        <span data-ng-repeat="educationalContext in material.educationalContexts">
+                          {{educationalContext.name.toUpperCase() | translate}}{{$last ? '' : ', '}}
+                        </span>
+                        <span data-ng-if="isNullOrZeroLength(material.educationalContexts)" data-translate="UNKNOWN">Unknown</span>
+                      </p>
+                    </div>
+                    <div flex data-ng-if="!material.subjects.length">
+                      <p class="md-body-2 meta">
+                        <small class="md-caption">
+                          <span data-translate="DETAIL_VIEW_DOMAIN"></span>
+                        </small>
+                        <br/>
+                        <span data-ng-repeat="domain in getMaterialDomains()">
+                          {{'DOMAIN_' + domain.name.toUpperCase() | translate}}{{$last ? '' : ', '}}
+                        </span>
+                        <span data-ng-if="!getMaterialDomains().length" data-translate="UNKNOWN">Unknown</span>
+                      </p>
+                    </div>
+                    <div flex data-ng-if="material.subjects.length">
+                      <p class="md-body-2 meta">
+                        <small class="md-caption">
                           <span data-translate="DETAIL_VIEW_SUBJECT"></span>
                         </small>
                         <br/>
                         <span data-ng-repeat="subject in material.subjects">
                           {{'SUBJECT_' + subject.name.toUpperCase() | translate}}{{$last ? '' : ', '}}
                         </span>
-                        <span data-ng-if="!material.subjects.length" data-translate="UNKNOWN">Unknown</span>
                       </p>
                     </div>
                     <div flex>
@@ -93,13 +116,13 @@
                     <div flex>
                       <p class="md-body-2 meta">
                         <small class="md-caption">
-                          <span data-translate="DETAIL_VIEW_EDUCATIONAL_CONTEXT"></span>:
+                          <span data-translate="DETAIL_VIEW_TARGET_GROUP"></span>
                         </small>
                         <br>
-                        <span data-ng-repeat="educationalContext in material.educationalContexts">
-                          {{educationalContext.name.toUpperCase() | translate}}{{$last ? '' : ', '}}
+                        <span data-ng-if="!isNullOrZeroLength(material.targetGroups)">
+                          {{'TARGET_GROUP_' + getLabelByTargetGroups(material.targetGroups) | translate}}
                         </span>
-                        <span data-ng-if="isNullOrZeroLength(material.educationalContexts)" data-translate="UNKNOWN">Unknown</span>
+                        <span data-ng-if="isNullOrZeroLength(material.targetGroups)" data-translate="UNKNOWN">Unknown</span>
                       </p>
                     </div>
 
