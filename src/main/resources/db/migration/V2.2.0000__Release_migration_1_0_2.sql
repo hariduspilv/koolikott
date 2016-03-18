@@ -9,3 +9,11 @@ INSERT INTO Translation(translationGroup, translationKey, translation) VALUES (2
 INSERT INTO Translation(translationGroup, translationKey, translation) VALUES (3,'TOOLTIP_LOG_IN_TO_RATE','Log in to rate');
 INSERT INTO Translation(translationGroup, translationKey, translation) VALUES (1,'TOOLTIP_LOG_IN_TO_RATE','Logi sisse, et hinnata');
 INSERT INTO Translation(translationGroup, translationKey, translation) VALUES (2,'TOOLTIP_LOG_IN_TO_RATE','Войти, чтобы оценить');
+
+INSERT INTO Translation(translationGroup, translationKey, translation) VALUES (3,'DETAIL_VIEW_DOMAIN','Domain');
+INSERT INTO Translation(translationGroup, translationKey, translation) VALUES (1,'DETAIL_VIEW_DOMAIN','Valdkond');
+INSERT INTO Translation(translationGroup, translationKey, translation) VALUES (2,'DETAIL_VIEW_DOMAIN','Домен');
+
+INSERT INTO Translation(translationGroup, translationKey, translation) VALUES (3,'DETAIL_VIEW_TARGET_GROUP','Age group');
+INSERT INTO Translation(translationGroup, translationKey, translation) VALUES (1,'DETAIL_VIEW_TARGET_GROUP','Vanus');
+INSERT INTO Translation(translationGroup, translationKey, translation) VALUES (2,'DETAIL_VIEW_TARGET_GROUP','Возрастная группа');
