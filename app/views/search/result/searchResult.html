@@ -5,7 +5,7 @@
       <div layout-gt-sm>
         <article  flex="100" flex-gt-sm="75" flex-gt-lg="80" class="md-padding" role="main">
 
-          <div layout="row"  layout-align="space-between center">
+          <div layout="row" layout-xs="column">
             <h2 class="md-headline">
               <span data-ng-if="searching" data-translate="SEARCH_RESULTS"></span>
             <span data-ng-if="!searching">
@@ -28,10 +28,11 @@
               </span>
             </span>
             </h2>
+            <span flex></span>
 
-            <md-input-container>
+            <md-input-container flex-gt-xs="20">
               <md-select ng-model="sortDropdown" placeholder="{{'SORT_PLACEHOLDER' | translate}}">
-                <md-option ng-value="sortOption" ng-repeat="sortOption in sortOptions">{{ sortOption }}</md-option>
+                <md-option ng-value="sortOption" ng-repeat="sortOption in sortOptions">{{ sortOption | translate }}</md-option>
               </md-select>
             </md-input-container>
           </div>
