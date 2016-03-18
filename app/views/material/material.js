@@ -378,6 +378,10 @@ define([
                 log("Restoring material failed");
             }
 
-            $scope.getLabelByTargetGroups = targetGroupService.getLabelByTargetGroups;
+            $scope.getTargetGroups = function() {
+                if ($scope.material) {
+                    return targetGroupService.getLabelByTargetGroupsOrAll($scope.material.targetGroups);
+                }
+            };
         }];
 });
