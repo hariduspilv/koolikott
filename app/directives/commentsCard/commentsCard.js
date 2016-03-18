@@ -22,8 +22,12 @@ define([
                 $scope.isAuthorized = function() {
                 	return authenticatedUserService.isAuthenticated() &&
                 		!authenticatedUserService.isRestricted();
-                }
-                
+                };
+
+                $scope.isAuthenticated = function() {
+                    return authenticatedUserService.isAuthenticated()
+                };
+
                 $scope.visibleCommentsCount = COMMENTS_PER_PAGE;
 
                 $scope.getLoadMoreCommentsLabel = function() {

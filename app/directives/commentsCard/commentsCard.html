@@ -6,6 +6,9 @@
     <md-icon class="md-primary" >
       keyboard_arrow_right
     </md-icon>
+    <md-tooltip data-ng-if="!isAuthenticated()" md-direction="bottom">
+      <span data-translate="TOOLTIP_LOG_IN_TO_COMMENT">Log in to add a comment</span>
+    </md-tooltip>
   </md-button>
 
   <div data-ng-show="showComments">
