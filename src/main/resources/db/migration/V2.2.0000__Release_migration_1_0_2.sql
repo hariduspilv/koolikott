@@ -21,3 +21,23 @@ INSERT INTO Translation(translationGroup, translationKey, translation) VALUES (2
 INSERT INTO Translation(translationGroup, translationKey, translation) VALUES (3,'DETAIL_VIEW_TARGET_GROUP','Age group');
 INSERT INTO Translation(translationGroup, translationKey, translation) VALUES (1,'DETAIL_VIEW_TARGET_GROUP','Vanus');
 INSERT INTO Translation(translationGroup, translationKey, translation) VALUES (2,'DETAIL_VIEW_TARGET_GROUP','Возрастная группа');
+
+INSERT INTO Translation(translationGroup, translationKey, translation) VALUES (3,'SORT_PLACEHOLDER','Sort by');
+INSERT INTO Translation(translationGroup, translationKey, translation) VALUES (1,'SORT_PLACEHOLDER','Sorteeri');
+INSERT INTO Translation(translationGroup, translationKey, translation) VALUES (2,'SORT_PLACEHOLDER','Сортировать');
+
+INSERT INTO Translation(translationGroup, translationKey, translation) VALUES (3,'VIEW_COUNT_ASC','Least viewed');
+INSERT INTO Translation(translationGroup, translationKey, translation) VALUES (1,'VIEW_COUNT_ASC','Vähim vaadatud');
+INSERT INTO Translation(translationGroup, translationKey, translation) VALUES (2,'VIEW_COUNT_ASC','Наименее рассматривается');
+
+INSERT INTO Translation(translationGroup, translationKey, translation) VALUES (3,'VIEW_COUNT_DESC','Most viewed');
+INSERT INTO Translation(translationGroup, translationKey, translation) VALUES (1,'VIEW_COUNT_DESC','Enim vaadatud');
+INSERT INTO Translation(translationGroup, translationKey, translation) VALUES (2,'VIEW_COUNT_DESC','Наиболее просматриваемые');
+
+INSERT INTO Translation(translationGroup, translationKey, translation) VALUES (3,'ADDED_DATE_ASC','Oldest first');
+INSERT INTO Translation(translationGroup, translationKey, translation) VALUES (1,'ADDED_DATE_ASC','Vanimad eespool');
+INSERT INTO Translation(translationGroup, translationKey, translation) VALUES (2,'ADDED_DATE_ASC','Старейший первый');
+
+INSERT INTO Translation(translationGroup, translationKey, translation) VALUES (3,'ADDED_DATE_DESC','Newest first');
+INSERT INTO Translation(translationGroup, translationKey, translation) VALUES (1,'ADDED_DATE_DESC','Uusimad eespool');
+INSERT INTO Translation(translationGroup, translationKey, translation) VALUES (2,'ADDED_DATE_DESC','Новички вперед');
