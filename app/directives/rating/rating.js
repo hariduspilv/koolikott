@@ -15,10 +15,12 @@ define([
             templateUrl: 'directives/rating/rating.html',
             controller: function($scope, $mdToast, $translate, serverCallService, authenticatedUserService) {
 
+                $scope.isAuthenticated = authenticatedUserService.isAuthenticated;
+
                 function init() {
                     $scope.allowRequests = false;
-                    $scope.likeFunction = function() {}
-                    $scope.dislikeFunction = function() {}
+                    $scope.likeFunction = function() {};
+                    $scope.dislikeFunction = function() {};
                     $scope.rating = {};
 
                     if ($scope.portfolio) {
@@ -47,7 +49,7 @@ define([
                         stateMachine();
                         $scope.likeFunction();
                     }
-                }
+                };
 
                 $scope.dislike = function() {
                     if ($scope.allowRequests) {
@@ -55,7 +57,7 @@ define([
                         stateMachine();
                         $scope.dislikeFunction();
                     }
-                }
+                };
 
                 function getUserLike() {
                     serverCallService.makePost($scope.url + "getUserLike", $scope.entity, getUserLikeSuccess, function() {});
