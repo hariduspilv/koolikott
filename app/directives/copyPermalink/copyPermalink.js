@@ -18,9 +18,14 @@ define([
 
                 new Clipboard('#' + _id);
             },
-            controller: function($scope, $location) {
-                if (!$scope.url)
+            controller: function($scope, $location, toastService) {
+                if (!$scope.url) {
                     $scope.url = $location.absUrl();
+                }
+
+                $scope.showToast = function () {
+                    toastService.show("COPY_PERMALINK_SUCCESS")
+                };
             }
         };
     });

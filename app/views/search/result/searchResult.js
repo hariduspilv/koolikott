@@ -6,7 +6,8 @@ define([
     'directives/materialBox/materialBox',
     'directives/portfolioBox/portfolioBox'
 ], function(app) {
-    return ['$scope', 'serverCallService', 'translationService', '$location', 'searchService', '$rootScope', function($scope, serverCallService, translationService, $location, searchService, $rootScope) {
+    return ['$scope', 'serverCallService', 'translationService', '$location', 'searchService', '$rootScope',
+        function($scope, serverCallService, translationService, $location, searchService, $rootScope) {
         $scope.loadingNextPage = false;
         $scope.searching = false;
 
