@@ -15,6 +15,8 @@ define([
         $scope.paging = {};
         $scope.paging.thisPage = 0;
 
+        $scope.sortOptions = ["VIEW_COUNT_ASC", "VIEW_COUNT_DESC", "ADDED_DATE_ASC", "ADDED_DATE_DESC"];
+
         var RESULTS_PER_PAGE = 24;
         var start = 0;
 

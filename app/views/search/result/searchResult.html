@@ -4,8 +4,10 @@
     <section flex flex-gt-md="{{$root.isEditPortfolioMode ? '85' : '75'}}">
       <div layout-gt-sm>
         <article  flex="100" flex-gt-sm="75" flex-gt-lg="80" class="md-padding" role="main">
-          <h2 class="md-headline">
-            <span data-ng-if="searching" data-translate="SEARCH_RESULTS"></span>
+
+          <div layout="row"  layout-align="space-between center">
+            <h2 class="md-headline">
+              <span data-ng-if="searching" data-translate="SEARCH_RESULTS"></span>
             <span data-ng-if="!searching">
               <span data-ng-if="getNumberOfResults() < 1">
                 <span data-translate="SEARCH_RESULT_NO_RESULT"></span>
@@ -25,7 +27,14 @@
                 <span data-translate="SEARCH_RESULT_PART_2"></span>
               </span>
             </span>
-          </h2>
+            </h2>
+
+            <md-input-container>
+              <md-select ng-model="sortDropdown" placeholder="{{'SORT_PLACEHOLDER' | translate}}">
+                <md-option ng-value="sortOption" ng-repeat="sortOption in sortOptions">{{ sortOption }}</md-option>
+              </md-select>
+            </md-input-container>
+          </div>
 
           <div data-infinite-scroll="nextPage()" data-infinite-scroll-disabled="searching" data-infinite-scroll-container="scrollContainer">
             <md-grid-list md-cols="2" md-cols-gt-xs="4"  md-gutter="10px" md-row-height="3:4">
