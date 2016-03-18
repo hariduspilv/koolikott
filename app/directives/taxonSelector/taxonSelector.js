@@ -28,6 +28,7 @@ define([
                     addTaxonPathListeners();
 
                     $scope.basicEducationDomainSubjects = EDUCATIONAL_CONTEXTS.basicEducationDomainSubjects;
+                    $scope.secondaryEducationDomainSubjects = EDUCATIONAL_CONTEXTS.secondaryEducationDomainSubjects;
                     $timeout(function(){
                         $scope.isReady = true;
                     })
@@ -46,7 +47,7 @@ define([
 
                 function addTaxonPathListeners() {
                     /*
-                     * The other of the watchers is important and should be the same as the three.
+                     * The order of the watchers is important and should be the same as the tree.
                      */
 
                     $scope.$watch('taxon.id', function(newTaxon, oldTaxon) {
@@ -105,29 +106,33 @@ define([
                 function getEducationalContextsSuccess(educationalContexts) {
                     if (!isEmpty(educationalContexts)) {
                         EDUCATIONAL_CONTEXTS = educationalContexts;
-                        buildBasicEducationDomainSubjects(educationalContexts);
+                        buildDomainSubjects(educationalContexts);
                         init();
                     }
                 }
 
-                function buildBasicEducationDomainSubjects(educationalContexts) {
+                function buildDomainSubjects(educationalContexts) {
                     for (var i = 0; i < educationalContexts.length; i++) {
-                        // Find basic education
                         if (educationalContexts[i].name === 'BASICEDUCATION') {
-                            var domains = educationalContexts[i].domains;
-                            EDUCATIONAL_CONTEXTS.basicEducationDomainSubjects = [];
-
-                            // for every Domain add it to the list and its children.
-                            for (var j = 0; j < domains.length; j++) {
-                                var domain = domains[j];
-                                EDUCATIONAL_CONTEXTS.basicEducationDomainSubjects.push(domain);
-                                // Merge the second array into the first one
-                                Array.prototype.push.apply(EDUCATIONAL_CONTEXTS.basicEducationDomainSubjects, domain.subjects);
-                            }
-
-                            break;
+                            EDUCATIONAL_CONTEXTS.basicEducationDomainSubjects = getDomainsAndSubjects(educationalContexts[i]);
+                        } else if (educationalContexts[i].name === 'SECONDARYEDUCATION') {
+                            EDUCATIONAL_CONTEXTS.secondaryEducationDomainSubjects = getDomainsAndSubjects(educationalContexts[i]);
                         }
                     }
+                }
+
+                function getDomainsAndSubjects(educationalContext) {
+                    var results = [];
+
+                    // for every Domain add it to the list and its children.
+                    for (var j = 0; j < educationalContext.domains.length; j++) {
+                        var domain = educationalContext.domains[j];
+                        results.push(domain);
+                        // Merge the second array into the first one
+                        Array.prototype.push.apply(results, domain.subjects);
+                    }
+
+                    return results;
                 }
 
                 function setEducationalContexts() {

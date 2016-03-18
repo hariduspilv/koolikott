@@ -77,13 +77,16 @@ define([
 
                 function resetIfInvalid() {
                     var groupNames = [];
-                    $scope.groups.forEach(function(group) {
-                        if (group && group.name) {
-                            groupNames.push(group.name);
-                        }
-                    });
 
-                    if (groupNames.indexOf($scope.selectedTargetGroup) === -1) {
+                    if ($scope.groups) {
+                        $scope.groups.forEach(function(group) {
+                            if (group && group.name) {
+                                groupNames.push(group.name);
+                            }
+                        });
+                    }
+
+                    if (groupNames.indexOf($scope.selectedTargetGroup) === -1 || !$scope.groups) {
                         $scope.selectedTargetGroup = null;
                         $scope.targetGroups = [];
                     }

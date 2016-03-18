@@ -50,9 +50,9 @@
         </md-select>
     </md-input-container>
 
-    <!-- Domain and Subject together -->
+    <!-- Domain and Subject together for Basic Education -->
     <md-input-container
-            data-ng-show="taxonPath.educationalContext && (taxonPath.educationalContext.name === 'BASICEDUCATION' || taxonPath.educationalContext.name === 'SECONDARYEDUCATION')"
+            data-ng-show="taxonPath.educationalContext && taxonPath.educationalContext.name === 'BASICEDUCATION'"
             class="md-block" flex>
         <label for="taxonDomainSubjectsSelect">
             <span data-translate="TAXON_PATH_DOMAIN_AND_SUBJECT"></span>
@@ -70,6 +70,28 @@
              data-ng-show="isAddPortfolioView && taxonForm.domainAndSubject.$touched && taxonForm.domainAndSubject.$error.required">
             <div ng-message="required" data-ng-if="isReady" data-translate="PORTFOLIO_DOMAIN_REQUIRED"></div>
         </div>
+    </md-input-container>
+
+    <!-- Domain and Subject together for Secondary Education -->
+    <md-input-container
+      data-ng-show="taxonPath.educationalContext && taxonPath.educationalContext.name === 'SECONDARYEDUCATION'"
+      class="md-block" flex>
+      <label for="taxonSecondaryEducationDomainSubjectsSelect">
+        <span data-translate="TAXON_PATH_DOMAIN_AND_SUBJECT"></span>
+        <span data-ng-if="isAddPortfolioView">*</span>
+      </label>
+      <md-select data-ng-model="taxonPath.domainSubject" id="taxonSecondaryEducationDomainSubjectsSelect"
+                 name="secondaryEducationDomainAndSubject" ng-required="isAddPortfolioView">
+        <md-option data-translate="SELECT_DOMAIN_AND_SUBJECT"
+                   ng-click="reset(taxonPath.educationalContext)"></md-option>
+        <md-option class="stepped-select" data-ng-class="{ 'child' : domainSubject.level === '.Subject'}"
+                   ng-value="domainSubject" ng-repeat="domainSubject in secondaryEducationDomainSubjects"
+                   data-translate="{{(domainSubject.level === '.Domain' ? 'DOMAIN_' : 'SUBJECT_') + domainSubject.name.toUpperCase()}}"></md-option>
+      </md-select>
+      <div ng-messages="taxonForm.secondaryEducationDomainAndSubject.$error"
+           data-ng-show="isAddPortfolioView && taxonForm.secondaryEducationDomainAndSubject.$touched && taxonForm.secondaryEducationDomainAndSubject.$error.required">
+        <div ng-message="required" data-ng-if="isReady" data-translate="PORTFOLIO_DOMAIN_REQUIRED"></div>
+      </div>
     </md-input-container>
 
     <!-- Specialization-->
