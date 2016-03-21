@@ -17,11 +17,11 @@ define([
 
             $scope.sortOptions = [{
                 option: 'VIEW_COUNT_ASC',
-                field: 'viewcount',
+                field: 'views',
                 direction: 'asc'
             },{
                 option: 'VIEW_COUNT_DESC',
-                field: 'viewcount',
+                field: 'views',
                 direction: 'desc'
             }, {
                 option: 'ADDED_DATE_ASC',
