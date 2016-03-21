@@ -7,7 +7,7 @@ define([
         $scope.showHints = true;
 
         serverCallService.makeGet("rest/learningObjects/getNewest?maxResults=8", {}, getNewestLearningObjectsSuccess, requestFailed);
-        serverCallService.makeGet("rest/learningObjects/getPopular?maxResults=8", {}, getPopularLearningObjectsSuccess, requestFailed);
+        serverCallService.makeGet("rest/search?q=&sort=views&sortDirection=desc&start=0&limit=8", {}, getPopularLearningObjectsSuccess, requestFailed);
 
         function getNewestLearningObjectsSuccess(data) {
             if (isEmpty(data)) {
@@ -21,7 +21,7 @@ define([
             if (isEmpty(data)) {
                 console.log('Failed to get most popular learning objects');
             } else {
-                $scope.popularItems = data;
+                $scope.popularItems = data.items;
             }
         }
 
