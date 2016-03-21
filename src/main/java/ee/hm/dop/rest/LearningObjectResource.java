@@ -52,11 +52,4 @@ public class LearningObjectResource extends BaseResource {
     public List<LearningObject> getNewestLearningObjects(@QueryParam("maxResults") int numberOfLearningObjects) {
         return learningObjectService.getNewestLearningObjects(numberOfLearningObjects);
     }
-
-    @GET
-    @Path("getPopular")
-    @Produces(MediaType.APPLICATION_JSON)
-    public List<LearningObject> getPopularLearningObjects(@QueryParam("maxResults") int numberOfLearningObjects) {
-        return learningObjectService.getPopularLearningObjects(numberOfLearningObjects);
-    }
 }

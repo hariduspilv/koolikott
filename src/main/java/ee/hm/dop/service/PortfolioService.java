@@ -11,6 +11,8 @@ import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 
+import org.joda.time.DateTime;
+
 import ee.hm.dop.dao.PortfolioDAO;
 import ee.hm.dop.dao.UserLikeDAO;
 import ee.hm.dop.model.Chapter;
@@ -24,7 +26,6 @@ import ee.hm.dop.model.UserLike;
 import ee.hm.dop.model.Visibility;
 import ee.hm.dop.service.learningObject.LearningObjectHandler;
 import ezvcard.util.org.apache.commons.codec.binary.Base64;
-import org.joda.time.DateTime;
 
 public class PortfolioService implements LearningObjectHandler {
 
@@ -80,6 +81,8 @@ public class PortfolioService implements LearningObjectHandler {
         }
 
         portfolioDAO.incrementViewCount(originalPortfolio);
+
+        searchEngineService.updateIndex();
     }
 
     public void addComment(Comment comment, Portfolio portfolio, User loggedInUser) {
@@ -413,6 +416,6 @@ public class PortfolioService implements LearningObjectHandler {
 
     @Override
     public boolean isPublic(LearningObject learningObject) {
-            return ((Portfolio) learningObject).getVisibility() == Visibility.PUBLIC;
+        return ((Portfolio) learningObject).getVisibility() == Visibility.PUBLIC;
     }
 }

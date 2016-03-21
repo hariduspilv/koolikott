@@ -69,7 +69,8 @@ public class LearningObjectService {
                 break;
             }
 
-            learningObjects.removeIf(learningObject -> !getLearningObjectHandler(learningObject).isPublic(learningObject));
+            learningObjects.removeIf(learningObject -> !getLearningObjectHandler(learningObject).isPublic(
+                    learningObject));
             returnableLearningObjects.addAll(learningObjects);
             startPosition = count;
             count = numberOfLearningObjects - returnableLearningObjects.size();
@@ -80,10 +81,6 @@ public class LearningObjectService {
 
     public List<LearningObject> getNewestLearningObjects(int numberOfLearningObjects) {
         return getPublicLearningObjects(numberOfLearningObjects, getLearningObjectDAO()::findNewestLearningObjects);
-    }
-
-    public List<LearningObject> getPopularLearningObjects(int numberOfLearningObjects) {
-        return getPublicLearningObjects(numberOfLearningObjects, getLearningObjectDAO()::findPopularLearningObjects);
     }
 
     protected LearningObjectHandler getLearningObjectHandler(LearningObject learningObject) {

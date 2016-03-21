@@ -11,6 +11,10 @@ import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 
+import org.joda.time.DateTime;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import ee.hm.dop.dao.BrokenContentDAO;
 import ee.hm.dop.dao.MaterialDAO;
 import ee.hm.dop.dao.UserLikeDAO;
@@ -28,9 +32,6 @@ import ee.hm.dop.model.taxon.EducationalContext;
 import ee.hm.dop.service.learningObject.LearningObjectHandler;
 import ee.hm.dop.utils.TaxonUtils;
 import ezvcard.util.org.apache.commons.codec.binary.Base64;
-import org.joda.time.DateTime;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class MaterialService implements LearningObjectHandler {
 
@@ -65,10 +66,11 @@ public class MaterialService implements LearningObjectHandler {
         }
     }
 
-
     public void increaseViewCount(Material material) {
         material.setViews(material.getViews() + 1);
         createOrUpdate(material);
+
+        searchEngineService.updateIndex();
     }
 
     public Material createMaterial(Material material, User creator, boolean updateSearchIndex) {

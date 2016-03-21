@@ -62,6 +62,7 @@ public class PortfolioServiceTest {
         Portfolio originalPortfolio = createMock(Portfolio.class);
         expect(portfolioDAO.findByIdFromAll(portfolio.getId())).andReturn(originalPortfolio);
         portfolioDAO.incrementViewCount(originalPortfolio);
+        searchEngineService.updateIndex();
 
         replayAll(originalPortfolio);
 

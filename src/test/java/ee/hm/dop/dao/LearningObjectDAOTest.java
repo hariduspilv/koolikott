@@ -35,18 +35,6 @@ public class LearningObjectDAOTest extends DatabaseTestBase {
         validateNewestAreFirst(learningObjects);
     }
 
-    @Test
-    public void getPopularFromZero() {
-        List<LearningObject> learningObjects = learningObjectDAO.findPopularLearningObjects(8, 0);
-        assertEquals(8, learningObjects.size());
-    }
-
-    @Test
-    public void getPopularFromThird() {
-        List<LearningObject> learningObjects = learningObjectDAO.findPopularLearningObjects(6, 3);
-        assertEquals(6, learningObjects.size());
-    }
-
     private void validateNewestAreFirst(List<LearningObject> learningObjects) {
         LearningObject last = null;
         for (LearningObject learningObject : learningObjects) {

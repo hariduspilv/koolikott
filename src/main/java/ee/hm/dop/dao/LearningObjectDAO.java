@@ -16,7 +16,7 @@ public class LearningObjectDAO extends BaseDAO<LearningObject> {
     public LearningObject findByIdNotDeleted(long objectId) {
         TypedQuery<LearningObject> findByCode = createQuery(
                 "SELECT lo FROM LearningObject lo WHERE lo.id = :id AND lo.deleted = false", LearningObject.class) //
-                        .setParameter("id", objectId);
+                .setParameter("id", objectId);
 
         return getSingleResult(findByCode);
     }
@@ -24,7 +24,7 @@ public class LearningObjectDAO extends BaseDAO<LearningObject> {
     public LearningObject findById(long objectId) {
         TypedQuery<LearningObject> findByCode = createQuery("SELECT lo FROM LearningObject lo WHERE lo.id = :id",
                 LearningObject.class) //
-                        .setParameter("id", objectId);
+                .setParameter("id", objectId);
 
         return getSingleResult(findByCode);
     }
@@ -50,13 +50,9 @@ public class LearningObjectDAO extends BaseDAO<LearningObject> {
     }
 
     public List<LearningObject> findNewestLearningObjects(int numberOfLearningObjects, int startPosition) {
-        return createQuery("FROM LearningObject lo WHERE lo.deleted = false ORDER BY added DESC, id DESC", LearningObject.class)
-                .setFirstResult(startPosition).setMaxResults(numberOfLearningObjects).getResultList();
-    }
-
-    public List<LearningObject> findPopularLearningObjects(int numberOfLearningObjects, int startPosition) {
-        return createQuery("FROM LearningObject lo WHERE lo.deleted = false ORDER BY views DESC, id DESC", LearningObject.class)
-                .setFirstResult(startPosition).setMaxResults(numberOfLearningObjects).getResultList();
+        return createQuery("FROM LearningObject lo WHERE lo.deleted = false ORDER BY added DESC, id DESC",
+                LearningObject.class).setFirstResult(startPosition).setMaxResults(numberOfLearningObjects)
+                .getResultList();
     }
 
     public void delete(LearningObject learningObject) {
@@ -117,7 +113,8 @@ public class LearningObjectDAO extends BaseDAO<LearningObject> {
     public synchronized void incrementViewCount(LearningObject learningObject) {
         getEntityManager()
                 .createQuery(
-                        "update LearningObject lo set lo.views = lo.views + 1 where lo.id = :id AND lo.deleted = false")
+                        "update LearningObject lo set lo.views = lo.views + 1, lo.lastInteraction = CURRENT_TIMESTAMP "
+                                + "where lo.id = :id AND lo.deleted = false")
                 .setParameter("id", learningObject.getId()).executeUpdate();
         flush();
     }
