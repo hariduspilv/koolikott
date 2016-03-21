@@ -8,7 +8,7 @@
             deletedPkQuery: must return uniqueKey which will be used to remove document from Solr index.
          -->
         <entity name="LearningObject" pk="id"
-            query="select id, added from LearningObject WHERE deleted = false"
+            query="select id, added, views from LearningObject WHERE deleted = false"
                 deltaImportQuery="select id, added from LearningObject where id = '${dih.delta.id}'"
                 deltaQuery="select id from LearningObject where (CONVERT_TZ(added, @@session.time_zone, '+00:00') > '${dataimporter.last_index_time}' OR CONVERT_TZ(lastInteraction, @@session.time_zone, '+00:00') > '${dataimporter.last_index_time}') AND deleted = false"
                 deletedPkQuery="select id from LearningObject where (CONVERT_TZ(added, @@session.time_zone, '+00:00') > '${dataimporter.last_index_time}' OR CONVERT_TZ(lastInteraction, @@session.time_zone, '+00:00') > '${dataimporter.last_index_time}') AND deleted = true">
