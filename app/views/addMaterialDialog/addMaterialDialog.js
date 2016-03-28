@@ -5,7 +5,8 @@ define([
     'services/translationService',
     'services/metadataService',
     'services/authenticatedUserService',
-    'services/storageService'
+    'services/storageService',
+    'directives/validate/validateUrl'
 ], function (app) {
     return ['$scope', '$mdDialog', 'serverCallService', 'translationService', 'metadataService', '$filter', '$location', '$rootScope', 'authenticatedUserService', 'Upload', 'storageService', '$timeout',
         function ($scope, $mdDialog, serverCallService, translationService, metadataService, $filter, $location, $rootScope, authenticatedUserService, Upload, storageService, $timeout) {

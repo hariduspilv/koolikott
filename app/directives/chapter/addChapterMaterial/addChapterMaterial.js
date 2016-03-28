@@ -1,7 +1,8 @@
 define([
     'app',
     'angularAMD',
-    'services/translationService'
+    'services/translationService',
+    'directives/validate/validateUrl'
 ], function(app, angularAMD) {
     app.directive('dopAddChapterMaterial', ['translationService', '$mdDialog', '$rootScope', 'storageService', 'serverCallService',
         function(translationService, $mdDialog, $rootScope, storageService, serverCallService) {
@@ -29,7 +30,7 @@ define([
                         $scope.chapter.resourcePermalink = "";
                         $scope.resourcePermalinkForm.url.$setPristine();
                         $scope.resourcePermalinkForm.url.$setUntouched();
-                        
+
                         if (!containsMaterial(materials[0])) {
                         	$scope.chapter.materials.push(materials[0]);
                         }
@@ -37,13 +38,13 @@ define([
                         getByUrlFail();
                     }
                 }
-                
+
                 function containsMaterial(material) {
                 	return $scope.chapter.materials.indexOfWithComparator(material, function(obj1, obj2) {
                 		return obj1.id - obj2.id;
                 	}) >= 0;
                 }
-                
+
                 function getByUrlFail() {
                     var addMaterialScope = $scope.$new(true);
 

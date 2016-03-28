@@ -2,7 +2,7 @@
   <form name="resourcePermalinkForm" layout="row" layout-align="start center">
 	  <md-input-container flex>
       <label data-translate="PORTFOLIO_CREATE_NEW_MATERIAL_URL"></label>
-      <input data-ng-model="chapter.resourcePermalink" name="url" id="resource-permalink-url-input" type="url" required>
+      <input data-ng-model="chapter.resourcePermalink" name="url" id="resource-permalink-url-input" type="text" required dop-validate-url>
       <div data-ng-messages="resourcePermalinkForm.url.$error" data-ng-show="resourcePermalinkForm.url.$dirty" multiple>
         <div data-ng-message="required" data-ng-show="resourcePermalinkForm.url.$error.required" data-translate="MATERIAL_URL_IS_MANDATORY"></div>
         <div data-ng-message="url" data-ng-show="resourcePermalinkForm.url.$error.url" data-translate="MATERIAL_URL_IS_INVALID"></div>

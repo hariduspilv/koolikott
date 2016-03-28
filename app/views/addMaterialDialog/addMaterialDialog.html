@@ -36,12 +36,12 @@
               <label>
                 <span data-translate="MATERIAL_LINK"></span> *
               </label>
-              <input data-ng-model="material.source" name="source" id="add-material-url-input" type="url" required>
+              <input data-ng-model="material.source" name="source" id="add-material-url-input" type="text" required dop-validate-url>
               <div data-ng-messages="materialUrlForm.source.$error" data-ng-show="materialUrlForm.source.$dirty"
                    multiple>
                 <div data-ng-message="required" data-ng-show="materialUrlForm.source.$error.required"
                      data-translate="MATERIAL_URL_IS_MANDATORY"></div>
-                <div data-ng-message="source" data-ng-show="materialUrlForm.source.$error.source"
+                <div data-ng-message="url" data-ng-show="materialUrlForm.source.$error.url"
                      data-translate="MATERIAL_URL_IS_INVALID"></div>
               </div>
             </md-input-container>
