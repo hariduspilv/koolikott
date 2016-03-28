@@ -7,7 +7,7 @@ define([
         $scope.showHints = true;
 
         serverCallService.makeGet("rest/learningObjects/getNewest?maxResults=8", {}, getNewestLearningObjectsSuccess, requestFailed);
-        serverCallService.makeGet("rest/search?q=&sort=views&sortDirection=desc&start=0&limit=8", {}, getPopularLearningObjectsSuccess, requestFailed);
+        serverCallService.makeGet("rest/search?q=&type=all&sort=views&sortDirection=desc&start=0&limit=8", {}, getPopularLearningObjectsSuccess, requestFailed);
 
         function getNewestLearningObjectsSuccess(data) {
             if (isEmpty(data)) {
