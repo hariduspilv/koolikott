@@ -141,7 +141,7 @@ define([
 
                     var confirm = $mdDialog.confirm()
                         .title($translate.instant('REPORT_IMPROPER_TITLE'))
-                        .content($translate.instant('REPORT_IMPROPER_CONTENT') + " " + $translate.instant('REASON') + ": " + tag)
+                        .content($translate.instant('REPORT_IMPROPER_CONTENT') + " " + $translate.instant('REASON_IMPROPER_TAG'))
                         .ok($translate.instant('BUTTON_NOTIFY'))
                         .cancel($translate.instant('BUTTON_CANCEL'));
 
