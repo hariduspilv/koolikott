@@ -71,6 +71,10 @@ define([
                         title: $filter('translate')('PORTFOLIO_DEFAULT_NEW_SUBCHAPTER_TITLE'),
                         materials: []
                     });
+
+                    $timeout(function() {
+                        goToElement('chapter-' + index + '-' + (subChapters.length - 1))
+                    }, 0);
                 };
 
                 $scope.addNewChapter = function(index) {
@@ -83,6 +87,10 @@ define([
                         subchapters: [],
                         materials: []
                     });
+
+                    $timeout(function() {
+                        goToElement('chapter-' + ($scope.portfolio.chapters.length - 1));
+                    }, 0);
                 };
 
                 $scope.addMaterialsToChapter = function($event, chapter) {
