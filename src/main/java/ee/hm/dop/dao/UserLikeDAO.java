@@ -28,8 +28,8 @@ public class UserLikeDAO extends BaseDAO<UserLike> {
     private UserLike findByLearningObjectAndUser(LearningObject learningObject, User user) {
         TypedQuery<UserLike> findLike = createQuery(
                 "SELECT ul FROM UserLike ul WHERE ul.learningObject = :loid and ul.creator = :uid", UserLike.class) //
-                .setParameter("loid", learningObject) //
-                .setParameter("uid", user);
+                        .setParameter("loid", learningObject) //
+                        .setParameter("uid", user);
 
         return getSingleResult(findLike);
     }
@@ -43,8 +43,8 @@ public class UserLikeDAO extends BaseDAO<UserLike> {
     }
 
     private void deleteByLearningObjectAndUser(LearningObject learningObject, User user) {
-        Query query = getEntityManager().createQuery(
-                "DELETE UserLike ul WHERE ul.learningObject = :loid and ul.creator = :uid");
+        Query query = getEntityManager()
+                .createQuery("DELETE UserLike ul WHERE ul.learningObject = :loid and ul.creator = :uid");
         query.setParameter("loid", learningObject);
         query.setParameter("uid", user);
         query.executeUpdate();
@@ -64,10 +64,11 @@ public class UserLikeDAO extends BaseDAO<UserLike> {
                 + " FROM UserLike ul" //
                 + " WHERE ul.added > :from AND ul.learningObject.deleted = false" //
                 + " GROUP BY ul.learningObject" //
+                + " HAVING (2 * SUM(ul.isLiked) - COUNT(*)) > 0" //
                 + " ORDER BY score DESC", Object[].class) //
-                .setParameter("from", date) //
-                .setMaxResults(numberOfMaterials) //
-                .getResultList();
+                        .setParameter("from", date) //
+                        .setMaxResults(numberOfMaterials) //
+                        .getResultList();
 
         List<Searchable> results = new ArrayList<>();
 
