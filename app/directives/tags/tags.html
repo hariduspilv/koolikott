@@ -19,6 +19,9 @@
         <md-icon>plus_one</md-icon>
       </md-button>
       <md-button data-ng-if="$chip.tagUpVote && isAllowed()" class="md-icon-button" ng-click="removeUpVote($chip)">
+        <md-tooltip>
+          <span data-translate="TAG_TOOLTIP_REMOVE_UPVOTE"></span>
+        </md-tooltip>
         <md-icon>undo</md-icon>
       </md-button>
     </md-chip-template>
