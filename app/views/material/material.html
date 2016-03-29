@@ -164,7 +164,7 @@
 
                 <!-- right small side  -->
                 <div layout="column" flex flex-gt-xs="25" class="divider-left" layout-align="start start">
-                  <div  data-ng-if="!material.hasPicture" class="card-cover  {{getType()}}">
+                  <div  data-ng-if="!material.picture" class="card-cover  {{getType()}}">
                     <span>
                       <md-icon class="icon-kind" data-ng-bind="getType()"></md-icon>
                     </span>
@@ -198,8 +198,8 @@
                     </span>
                   </div>
 
-                  <div  data-ng-if="material.hasPicture"  class="card-cover imaged">
-                    <img data-ng-src="{{material.picture}}"/>
+                  <div  data-ng-if="material.picture"  class="card-cover imaged">
+                    <img data-ng-src="rest/picture/{{material.picture.name}}"/>
                     <span data-ng-if="sourceType === 'LINK' && !material.embeddable">
                       <a class="card-hover" data-ng-href="{{material.source}}" target="_blank">
                         <md-icon>send</md-icon>

@@ -2,7 +2,7 @@
          data-ng-click="navigateTo(portfolio, $event)" layout="column">
   <div class="corner"></div>
   <!-- noimage -->
-  <a data-ng-href="{{'/portfolio?id=' + portfolio.id}}" data-ng-if="!portfolio.hasPicture" class="card-cover portfolio"
+  <a data-ng-href="{{'/portfolio?id=' + portfolio.id}}" data-ng-if="!portfolio.picture" class="card-cover portfolio"
      layout="row" layout-align="center center">
     <div>
       <md-icon class="icon-kind">book</md-icon>
@@ -13,9 +13,9 @@
     </div>
   </a>
   <!-- image -->
-  <a data-ng-href="{{'/portfolio?id=' + portfolio.id}}" data-ng-if="portfolio.hasPicture" class="card-cover imaged"
+  <a data-ng-href="{{'/portfolio?id=' + portfolio.id}}" data-ng-if="portfolio.picture" class="card-cover imaged"
      layout="row" layout-align="start start">
-    <img data-ng-src="{{portfolio.picture}}" class="md-card-image"/>
+    <img data-ng-src="rest/picture/{{portfolio.picture.name}}" class="md-card-image"/>
     <div class="card-hover portfolio">
       <md-icon class="icon-kind">book</md-icon>
     </div>

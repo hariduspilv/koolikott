@@ -113,11 +113,11 @@
             <div layout="column" flex flex-gt-xs="25" class="divider-left" layout-align="start start">
               <div class="corner"></div>
               <!-- imaged -->
-                <div data-ng-if="portfolio.hasPicture" class="card-cover imaged">
-                    <img data-ng-src="{{portfolio.picture}}"/>
+                <div data-ng-if="portfolio.picture" class="card-cover imaged">
+                    <img data-ng-src="rest/picture/{{portfolio.picture.name}}"/>
                 </div>
                 <!-- noimage -->
-                <div data-ng-if="!portfolio.hasPicture" class="card-cover portfolio">
+                <div data-ng-if="!portfolio.picture" class="card-cover portfolio">
                   <span>
                     <md-icon>book</md-icon>
                   </span>
