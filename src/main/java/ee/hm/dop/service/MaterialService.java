@@ -31,7 +31,6 @@ import ee.hm.dop.model.UserLike;
 import ee.hm.dop.model.taxon.EducationalContext;
 import ee.hm.dop.service.learningObject.LearningObjectHandler;
 import ee.hm.dop.utils.TaxonUtils;
-import ezvcard.util.org.apache.commons.codec.binary.Base64;
 
 public class MaterialService implements LearningObjectHandler {
 
@@ -85,11 +84,6 @@ public class MaterialService implements LearningObjectHandler {
         }
 
         material.setRecommendation(null);
-
-        // Do not upload picture when creating material from Web
-        if (creator != null) {
-            material.setPicture(null);
-        }
 
         if (!isUserAdmin(creator) && !isUserPublisher(creator)) {
             material.setCurriculumLiterature(false);
@@ -259,49 +253,23 @@ public class MaterialService implements LearningObjectHandler {
         return userLikeDAO.findMaterialUserLike(originalMaterial, loggedInUser);
     }
 
-    public String getMaterialPicture(Material material) {
-        byte[] picture = materialDao.findPictureByMaterial(material);
-        return Base64.encodeBase64String(picture);
-    }
-
     public void delete(Material material) {
         materialDao.delete(material);
     }
 
-    public Material updateByUser(Material material, User user) {
-        Material returned = null;
+    public Material update(Material material, User changer) {
+        Material updatedMaterial = null;
 
-        if (material == null) {
+        if (material == null || material.getId() == null) {
             throw new IllegalArgumentException("Material id parameter is mandatory");
         }
 
         Material originalMaterial = materialDao.findByIdNotDeleted(material.getId());
+        validateMaterialUpdate(material, originalMaterial, changer);
 
-        if (originalMaterial != null && originalMaterial.getRepository() != null) {
-            throw new IllegalArgumentException("Can't update external repository material");
-        }
-
-        if (!isUserAdmin(user)) {
+        if (!isUserAdmin(changer)) {
             material.setRecommendation(originalMaterial.getRecommendation());
         }
-
-        // We do not update/upload picture in this method
-        material.setPicture(originalMaterial.getPicture());
-
-        if (isUserAdmin(user) || isThisPublisherMaterial(user, originalMaterial)) {
-            returned = update(material);
-        }
-
-        return returned;
-    }
-
-    private boolean isThisPublisherMaterial(User user, Material originalMaterial) {
-        return originalMaterial.getCreator().getUsername().equals(user.getUsername()) && isUserPublisher(user);
-    }
-
-    public Material update(Material material) {
-        Material originalMaterial = materialDao.findByIdNotDeleted(material.getId());
-        validateMaterialUpdate(material, originalMaterial);
 
         // Should not be able to update view count
         material.setViews(originalMaterial.getViews());
@@ -309,32 +277,26 @@ public class MaterialService implements LearningObjectHandler {
         material.setAdded(originalMaterial.getAdded());
         material.setUpdated(now());
 
-        Material returnedMaterial = createOrUpdate(material);
-
-        searchEngineService.updateIndex();
-
-        return returnedMaterial;
-    }
-
-    public Material updatePicture(Material material, User loggedInUser) {
-        Material originalMaterial = materialDao.findByIdNotDeleted(material.getId());
-
-        if (originalMaterial == null) {
-            throw new RuntimeException("Material not found");
+        if (changer == null || isUserAdmin(changer) || isThisPublisherMaterial(changer, originalMaterial)) {
+            updatedMaterial = createOrUpdate(material);
+            searchEngineService.updateIndex();
         }
 
-        if (originalMaterial.getCreator().getId() != loggedInUser.getId()) {
-            throw new RuntimeException("Logged in user must be the creator of this material.");
-        }
-
-        originalMaterial.setPicture(material.getPicture());
-        originalMaterial.setHasPicture(material.getPicture() != null);
-        return (Material) materialDao.update(originalMaterial);
+        return updatedMaterial;
     }
 
-    private void validateMaterialUpdate(Material material, Material originalMaterial) {
+    private boolean isThisPublisherMaterial(User user, Material originalMaterial) {
+        return user != null && originalMaterial.getCreator().getUsername().equals(user.getUsername())
+                && isUserPublisher(user);
+    }
+
+    private void validateMaterialUpdate(Material material, Material originalMaterial, User changer) {
         if (originalMaterial == null) {
             throw new IllegalArgumentException("Error updating Material: material does not exist.");
+        }
+
+        if (originalMaterial.getRepository() != null && changer != null) {
+            throw new IllegalArgumentException("Can't update external repository material");
         }
 
         final String ErrorModifyRepository = "Error updating Material: Not allowed to modify repository.";
@@ -345,17 +307,6 @@ public class MaterialService implements LearningObjectHandler {
         if (material.getRepository() != null && !material.getRepository().equals(originalMaterial.getRepository())) {
             throw new IllegalArgumentException(ErrorModifyRepository);
         }
-    }
-
-    public String getMaterialPicture(Material material, User loggedInUser) {
-        byte[] picture;
-        if (isUserAdmin(loggedInUser)) {
-            picture = materialDao.findPictureByMaterial(material);
-        } else {
-            picture = materialDao.findNotDeletedPictureByMaterial(material);
-        }
-
-        return Base64.encodeBase64String(picture);
     }
 
     public List<Material> getByCreator(User creator) {

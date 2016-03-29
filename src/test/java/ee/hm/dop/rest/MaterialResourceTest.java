@@ -154,16 +154,6 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
     }
 
     @Test
-    public void getMaterialPicture() {
-        long materialId = 1;
-        Response response = doGet(format(GET_MATERIAL_PICTURE_URL, materialId), MediaType.WILDCARD_TYPE);
-        byte[] picture = response.readEntity(new GenericType<byte[]>() {
-        });
-        assertNotNull(picture);
-        assertEquals(Status.OK.getStatusCode(), response.getStatus());
-    }
-
-    @Test
     public void getMaterialPictureNull() {
         long materialId = 999;
         Response response = doGet(format(GET_MATERIAL_PICTURE_URL, materialId), MediaType.WILDCARD_TYPE);
@@ -196,8 +186,8 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
     @Test
     public void getByCreator() {
         String username = "mati.maasikas";
-        List<Material> materials = doGet(format(GET_BY_CREATOR_URL, username))
-                .readEntity(new GenericType<List<Material>>() {
+        List<Material> materials = doGet(format(GET_BY_CREATOR_URL, username)).readEntity(
+                new GenericType<List<Material>>() {
                 });
 
         assertEquals(3, materials.size());
@@ -229,8 +219,8 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
     @Test
     public void getByCreatorNoMaterials() {
         String username = "voldemar.vapustav";
-        List<Material> materials = doGet(format(GET_BY_CREATOR_URL, username))
-                .readEntity(new GenericType<List<Material>>() {
+        List<Material> materials = doGet(format(GET_BY_CREATOR_URL, username)).readEntity(
+                new GenericType<List<Material>>() {
                 });
 
         assertEquals(0, materials.size());
@@ -535,7 +525,9 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
         assertEquals("est", language.getCode());
         assertEquals("Estonian", language.getName());
         assertNotNull(language.getCodes());
-        assertNull(material.getPicture());
+        assertEquals(new Long(1), material.getPicture().getId());
+        assertEquals("picture1", material.getPicture().getName());
+        assertNull(material.getPicture().getData());
         assertNotNull(material.getTaxons());
         assertEquals(2, material.getTaxons().size());
         assertEquals(new Long(2), material.getTaxons().get(0).getId());

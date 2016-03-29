@@ -25,7 +25,6 @@ import ee.hm.dop.model.User;
 import ee.hm.dop.model.UserLike;
 import ee.hm.dop.model.Visibility;
 import ee.hm.dop.service.learningObject.LearningObjectHandler;
-import ezvcard.util.org.apache.commons.codec.binary.Base64;
 
 public class PortfolioService implements LearningObjectHandler {
 
@@ -61,17 +60,6 @@ public class PortfolioService implements LearningObjectHandler {
                 .collect(Collectors.toList());
 
         return visiblePortfolios;
-    }
-
-    public String getPortfolioPicture(Long id, User loggedInUser) {
-        byte[] picture = null;
-        Portfolio portfolio = portfolioDAO.findByIdFromAll(id);
-
-        if (portfolio != null && isPortfolioAccessibleToUser(portfolio, loggedInUser)) {
-            picture = portfolioDAO.findPictureByPortfolio(portfolio);
-        }
-
-        return Base64.encodeBase64String(picture);
     }
 
     public void incrementViewCount(Portfolio portfolio) {
@@ -235,22 +223,6 @@ public class PortfolioService implements LearningObjectHandler {
         return updatedPortfolio;
     }
 
-    public Portfolio updatePicture(Portfolio portfolio, User loggedInUser) {
-        Portfolio originalPortfolio = portfolioDAO.findByIdNotDeleted(portfolio.getId());
-
-        if (originalPortfolio == null) {
-            throw new RuntimeException("Portfolio not found");
-        }
-
-        if (originalPortfolio.getCreator().getId() != loggedInUser.getId()) {
-            throw new RuntimeException("Logged in user must be the creator of this portfolio.");
-        }
-
-        originalPortfolio.setPicture(portfolio.getPicture());
-        originalPortfolio.setHasPicture(portfolio.getPicture() != null);
-        return (Portfolio) portfolioDAO.update(originalPortfolio);
-    }
-
     private Portfolio validateUpdate(Portfolio portfolio, User loggedInUser) {
         if (portfolio.getId() == null) {
             throw new RuntimeException("Portfolio must already exist.");
@@ -356,10 +328,8 @@ public class PortfolioService implements LearningObjectHandler {
         safePortfolio.setTargetGroups(portfolio.getTargetGroups());
         safePortfolio.setTaxon(portfolio.getTaxon());
         safePortfolio.setChapters(portfolio.getChapters());
-        if (portfolio.getPicture() != null) {
-            safePortfolio.setPicture(portfolio.getPicture());
-            safePortfolio.setHasPicture(true);
-        }
+        safePortfolio.setPicture(portfolio.getPicture());
+
         return safePortfolio;
     }
 

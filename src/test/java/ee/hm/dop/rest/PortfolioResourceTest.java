@@ -7,7 +7,6 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -21,8 +20,6 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
-import org.glassfish.jersey.media.multipart.FormDataMultiPart;
-import org.glassfish.jersey.media.multipart.file.FileDataBodyPart;
 import org.joda.time.DateTime;
 import org.junit.Test;
 
@@ -34,7 +31,6 @@ import ee.hm.dop.model.Recommendation;
 import ee.hm.dop.model.TargetGroup;
 import ee.hm.dop.model.User;
 import ee.hm.dop.model.Visibility;
-import ee.hm.dop.utils.FileUtils;
 
 public class PortfolioResourceTest extends ResourceIntegrationTestBase {
 
@@ -187,16 +183,6 @@ public class PortfolioResourceTest extends ResourceIntegrationTestBase {
     }
 
     @Test
-    public void getPortfolioPicture() {
-        long portfolioId = 101;
-        Response response = doGet(format(GET_PORTFOLIO_PICTURE_URL, portfolioId), MediaType.WILDCARD_TYPE);
-        byte[] picture = response.readEntity(new GenericType<byte[]>() {
-        });
-        assertNotNull(picture);
-        assertEquals(Response.Status.OK.getStatusCode(), response.getStatus());
-    }
-
-    @Test
     public void getPortfolioPictureNull() {
         long portfolioId = 2;
         Response response = doGet(format(GET_PORTFOLIO_PICTURE_URL, portfolioId), MediaType.WILDCARD_TYPE);
@@ -222,14 +208,6 @@ public class PortfolioResourceTest extends ResourceIntegrationTestBase {
         long portfolioId = 7;
         byte[] picture = getPortfolioPicture(portfolioId);
         assertNotNull(picture);
-    }
-
-    @Test
-    public void getPortfolioPictureWhenPortfolioIsPrivateAsNotCreator() {
-        login("39011220011");
-        long portfolioId = 7;
-        Response response = doGet(format(GET_PORTFOLIO_PICTURE_URL, portfolioId), MediaType.WILDCARD_TYPE);
-        assertEquals(Response.Status.NOT_FOUND.getStatusCode(), response.getStatus());
     }
 
     @Test
@@ -481,29 +459,6 @@ public class PortfolioResourceTest extends ResourceIntegrationTestBase {
 
         Response response = doPost(DELETE_PORTFOLIO_URL, Entity.entity(portfolio, MediaType.APPLICATION_JSON_TYPE));
         assertEquals(Status.UNAUTHORIZED.getStatusCode(), response.getStatus());
-    }
-
-    @Test
-    public void addPicture() throws IOException {
-        long portfolioId = 114;
-        login("39011220013");
-
-        final FileDataBodyPart filePart = new FileDataBodyPart("picture", FileUtils.getFile("bookCover.jpg"));
-        @SuppressWarnings("resource")
-        FormDataMultiPart formDataMultiPart = (FormDataMultiPart) new FormDataMultiPart().bodyPart(filePart);
-
-        Response response = doPost(format("portfolio/addPicture?portfolioId=%s", portfolioId),
-                Entity.entity(formDataMultiPart, formDataMultiPart.getMediaType()));
-
-        formDataMultiPart.close();
-
-        assertEquals(204, response.getStatus());
-
-        Portfolio portfolio = getPortfolio(portfolioId);
-        assertTrue(portfolio.getHasPicture());
-
-        byte[] picture = getPortfolioPicture(portfolioId);
-        assertNotNull(picture);
     }
 
     @Test

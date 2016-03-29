@@ -47,11 +47,4 @@ public class ImproperContentDAO extends BaseDAO<ImproperContent> {
                 .setParameter("impropers", ids) //
                 .executeUpdate();
     }
-
-    public List<ImproperContent> findByLearningObject(long learningObject) {
-        return createQuery("FROM ImproperContent i WHERE i.learningObject = :learningObject AND i.deleted = false",
-                ImproperContent.class) //
-                .setParameter("learningObject", learningObject) //
-                .getResultList();
-    }
 }

@@ -73,11 +73,6 @@ public class LearningObjectDAO extends BaseDAO<LearningObject> {
         update(learningObject);
     }
 
-    protected byte[] getBytes(LearningObject learningObject, TypedQuery<byte[]> findById) {
-        findById.setParameter("id", learningObject.getId());
-        return getSingleResult(findById, byte[].class);
-    }
-
     /**
      * Find all LearningObjects with the specified creator. LearningObjects are
      * ordered by added date with newest first.

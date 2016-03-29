@@ -3,11 +3,9 @@ package ee.hm.dop.model;
 import static javax.persistence.CascadeType.MERGE;
 import static javax.persistence.CascadeType.PERSIST;
 import static javax.persistence.FetchType.EAGER;
-import static javax.persistence.FetchType.LAZY;
 
 import java.util.List;
 
-import javax.persistence.Basic;
 import javax.persistence.CollectionTable;
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
@@ -20,7 +18,6 @@ import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
-import javax.persistence.Lob;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
@@ -35,7 +32,6 @@ import org.hibernate.annotations.Type;
 import org.joda.time.DateTime;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
@@ -43,7 +39,6 @@ import com.fasterxml.jackson.databind.annotation.NoClass;
 
 import ee.hm.dop.rest.jackson.map.DateTimeDeserializer;
 import ee.hm.dop.rest.jackson.map.DateTimeSerializer;
-import ee.hm.dop.rest.jackson.map.PictureDeserializer;
 
 @JsonTypeInfo(
         use = JsonTypeInfo.Id.MINIMAL_CLASS,
@@ -92,12 +87,9 @@ public abstract class LearningObject {
             uniqueConstraints = @UniqueConstraint(columnNames = { "learningObject", "tag" }))
     private List<Tag> tags;
 
-    @Basic(fetch = LAZY)
-    @Lob
-    private byte[] picture;
-
-    @Formula("picture is not null")
-    private boolean hasPicture;
+    @ManyToOne
+    @JoinColumn(name = "picture")
+    private Picture picture;
 
     @OneToOne(cascade = { PERSIST, MERGE })
     @JoinColumn(name = "recommendation")
@@ -187,23 +179,12 @@ public abstract class LearningObject {
         this.tags = tags;
     }
 
-    @JsonIgnore
-    public byte[] getPicture() {
+    public Picture getPicture() {
         return picture;
     }
 
-    @JsonProperty
-    @JsonDeserialize(using = PictureDeserializer.class)
-    public void setPicture(byte[] picture) {
+    public void setPicture(Picture picture) {
         this.picture = picture;
-    }
-
-    public boolean getHasPicture() {
-        return hasPicture;
-    }
-
-    public void setHasPicture(boolean hasPicture) {
-        this.hasPicture = hasPicture;
     }
 
     public Recommendation getRecommendation() {

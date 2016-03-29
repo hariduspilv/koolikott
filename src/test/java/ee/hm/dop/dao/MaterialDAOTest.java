@@ -1,7 +1,6 @@
 package ee.hm.dop.dao;
 
 import static junit.framework.TestCase.assertNull;
-import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
@@ -23,6 +22,7 @@ import ee.hm.dop.model.Language;
 import ee.hm.dop.model.LearningObject;
 import ee.hm.dop.model.LicenseType;
 import ee.hm.dop.model.Material;
+import ee.hm.dop.model.Picture;
 import ee.hm.dop.model.Recommendation;
 import ee.hm.dop.model.Repository;
 import ee.hm.dop.model.ResourceType;
@@ -176,8 +176,9 @@ public class MaterialDAOTest extends DatabaseTestBase {
         material.setSource("asd");
         material.setAdded(new DateTime());
         material.setViews((long) 123);
-        String data = "picture";
-        byte[] picture = data.getBytes();
+
+        Picture picture = new Picture();
+        picture.setId(1);
         material.setPicture(picture);
 
         Material updated = (Material) materialDAO.update(material);
@@ -187,68 +188,10 @@ public class MaterialDAOTest extends DatabaseTestBase {
         assertEquals(material.getSource(), newMaterial.getSource());
         assertEquals(material.getAdded(), newMaterial.getAdded());
         assertEquals(material.getViews(), newMaterial.getViews());
-        assertArrayEquals(material.getPicture(), newMaterial.getPicture());
-        assertEquals(material.getHasPicture(), newMaterial.getHasPicture());
+        assertEquals(material.getPicture().getId(), newMaterial.getPicture().getId());
         assertNull(newMaterial.getUpdated());
 
         materialDAO.remove(newMaterial);
-    }
-
-    @Test
-    public void findPictureByMaterial() {
-        Material material = new Material();
-        material.setId((long) 1);
-        byte[] picture = materialDAO.findNotDeletedPictureByMaterial(material);
-        assertNotNull(picture);
-    }
-
-    @Test
-    public void findPictureByMaterialWhenMaterialIsDeleted() {
-        Material material = new Material();
-        material.setId(11L);
-        byte[] picture = materialDAO.findNotDeletedPictureByMaterial(material);
-        assertNull(picture);
-    }
-
-    @Test
-    public void findPictureByMaterialNoPicture() {
-        Material material = new Material();
-        material.setId((long) 2);
-        byte[] picture = materialDAO.findNotDeletedPictureByMaterial(material);
-        assertNull(picture);
-    }
-
-    @Test
-    public void getHasPictureTrue() {
-        Material material = materialDAO.findByIdNotDeleted(1);
-        assertTrue(material.getHasPicture());
-    }
-
-    @Test
-    public void getHasPictureNoPicture() {
-        Material material = materialDAO.findByIdNotDeleted(2);
-        assertFalse(material.getHasPicture());
-    }
-
-    @Test
-    public void getHasPicture() {
-        Material material = materialDAO.findByIdNotDeleted(1);
-        assertTrue(material.getHasPicture());
-        byte[] picture = material.getPicture();
-
-        material.setPicture(null);
-        material.setHasPicture(false);
-        materialDAO.update(material);
-        Material material2 = materialDAO.findByIdNotDeleted(1);
-        assertFalse(material2.getHasPicture());
-
-        material2.setPicture(picture);
-        material2.setHasPicture(true);
-        materialDAO.update(material2);
-
-        Material material3 = materialDAO.findByIdNotDeleted(1);
-        assertTrue(material3.getHasPicture());
-        assertNotNull(material3.getPicture());
     }
 
     @Test

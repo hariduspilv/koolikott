@@ -43,21 +43,17 @@ import ee.hm.dop.tokenizer.DOPSearchStringTokenizer;
 
 public class SearchService {
 
-    protected static final String MATERIAL_TYPE = "material";
+    private static final String MATERIAL_TYPE = "material";
 
-    protected static final String PORTFOLIO_TYPE = "portfolio";
+    private static final String PORTFOLIO_TYPE = "portfolio";
 
-    protected static final String ALL_TYPE = "all";
+    private static final String ALL_TYPE = "all";
 
     @Inject
     private SearchEngineService searchEngineService;
 
     @Inject
     private LearningObjectDAO learningObjectDAO;
-
-    public SearchResult search(String query, long start, Long limit, SearchFilter searchFilter) {
-        return search(query, start, limit, searchFilter, null);
-    }
 
     public SearchResult search(String query, long start, Long limit, SearchFilter searchFilter, User loggedInUser) {
         SearchResult searchResult = new SearchResult();
@@ -127,9 +123,9 @@ public class SearchService {
 
         if (limit == null) {
             return searchEngineService.search(queryString, start, getSort(searchFilter));
-        } else {
-            return searchEngineService.search(queryString, start, limit, getSort(searchFilter));
         }
+
+        return searchEngineService.search(queryString, start, limit, getSort(searchFilter));
     }
 
     private String getSort(SearchFilter searchFilter) {
@@ -221,11 +217,12 @@ public class SearchService {
             if (types.contains(type)) {
                 if (type.equals("all")) {
                     return "(type:\"material\" OR type:\"portfolio\")";
-                } else {
-                    return format("type:\"%s\"", type);
                 }
+
+                return format("type:\"%s\"", type);
             }
         }
+
         return "";
     }
 
@@ -240,10 +237,11 @@ public class SearchService {
 
             if (filters.size() == 1) {
                 return filters.get(0);
-            } else {
-                return "(" + StringUtils.join(filters, " OR ") + ")";
             }
+
+            return "(" + StringUtils.join(filters, " OR ") + ")";
         }
+
         return "";
     }
 

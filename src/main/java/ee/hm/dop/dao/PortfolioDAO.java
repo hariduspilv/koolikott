@@ -59,17 +59,4 @@ public class PortfolioDAO extends LearningObjectDAO {
         removeNot(Portfolio.class, learningObjects);
         return learningObjects;
     }
-
-    public byte[] findPictureByNotDeletedPortfolio(Portfolio portfolio) {
-        TypedQuery<byte[]> findById = createQuery(
-                "SELECT p.picture FROM Portfolio p WHERE p.id = :id AND p.deleted = false", byte[].class);
-
-        return getBytes(portfolio, findById);
-    }
-
-    public byte[] findPictureByPortfolio(Portfolio portfolio) {
-        TypedQuery<byte[]> findById = createQuery("SELECT p.picture FROM Portfolio p WHERE p.id = :id", byte[].class);
-
-        return getBytes(portfolio, findById);
-    }
 }

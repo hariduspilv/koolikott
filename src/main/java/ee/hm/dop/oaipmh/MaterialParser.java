@@ -17,6 +17,16 @@ import javax.xml.xpath.XPathExpression;
 import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
 
+import org.apache.commons.validator.routines.UrlValidator;
+import org.joda.time.DateTime;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.w3c.dom.CharacterData;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+
 import ee.hm.dop.model.Author;
 import ee.hm.dop.model.IssueDate;
 import ee.hm.dop.model.Language;
@@ -41,15 +51,6 @@ import ee.hm.dop.service.ResourceTypeService;
 import ee.hm.dop.service.TagService;
 import ezvcard.Ezvcard;
 import ezvcard.VCard;
-import org.apache.commons.validator.routines.UrlValidator;
-import org.joda.time.DateTime;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.w3c.dom.CharacterData;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
 
 public abstract class MaterialParser {
 

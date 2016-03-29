@@ -8,11 +8,17 @@ import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpression;
 import javax.xml.xpath.XPathExpressionException;
 
+import org.apache.commons.codec.binary.Base64;
+import org.w3c.dom.Document;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+
 import ee.hm.dop.model.CrossCurricularTheme;
 import ee.hm.dop.model.KeyCompetence;
 import ee.hm.dop.model.Language;
 import ee.hm.dop.model.LanguageString;
 import ee.hm.dop.model.Material;
+import ee.hm.dop.model.Picture;
 import ee.hm.dop.model.Tag;
 import ee.hm.dop.model.taxon.Taxon;
 import ee.hm.dop.oaipmh.MaterialParser;
@@ -22,10 +28,6 @@ import ee.hm.dop.service.KeyCompetenceService;
 import ee.hm.dop.service.LanguageService;
 import ee.hm.dop.service.TagService;
 import ee.hm.dop.service.TaxonService;
-import org.apache.commons.codec.binary.Base64;
-import org.w3c.dom.Document;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
 
 public class MaterialParserEstCore extends MaterialParser {
 
@@ -143,10 +145,17 @@ public class MaterialParserEstCore extends MaterialParser {
 
     @Override
     protected void setPicture(Material material, Document doc) {
+        Picture picture = null;
+
         Node imageNode = getNode(doc, "//*[local-name()='estcore']/*[local-name()='imgSrc']");
         byte[] bytes = Base64.decodeBase64(imageNode.getTextContent());
 
-        material.setPicture(bytes);
+        if (bytes.length > 0) {
+            picture = new Picture();
+            picture.setData(bytes);
+        }
+
+        material.setPicture(picture);
     }
 
     @Override
@@ -159,12 +168,14 @@ public class MaterialParserEstCore extends MaterialParser {
             for (int i = 0; i < classifications.getLength(); i++) {
                 Node classification = classifications.item(i);
 
-                XPathExpression expr2 = xpath.compile("./*[local-name()='crossCurricularThemesAndCompetences']/*[local-name()='crossCurricularTheme']/*[local-name()='subject']");
+                XPathExpression expr2 = xpath
+                        .compile("./*[local-name()='crossCurricularThemesAndCompetences']/*[local-name()='crossCurricularTheme']/*[local-name()='subject']");
                 NodeList nl = (NodeList) expr2.evaluate(classification, XPathConstants.NODESET);
 
                 if (nl != null && nl.getLength() > 0) {
                     for (int j = 0; j < nl.getLength(); j++) {
-                        CrossCurricularTheme crossCurricularTheme = crossCurricularThemeService.getThemeByName(nl.item(j).getTextContent().trim().replace(" ", "_"));
+                        CrossCurricularTheme crossCurricularTheme = crossCurricularThemeService.getThemeByName(nl
+                                .item(j).getTextContent().trim().replace(" ", "_"));
                         crossCurricularThemes.add(crossCurricularTheme);
                     }
                 }
@@ -187,12 +198,14 @@ public class MaterialParserEstCore extends MaterialParser {
             for (int i = 0; i < classifications.getLength(); i++) {
                 Node classification = classifications.item(i);
 
-                XPathExpression expr2 = xpath.compile("./*[local-name()='crossCurricularThemesAndCompetences']/*[local-name()='keyCompetence']/*[local-name()='subject']");
+                XPathExpression expr2 = xpath
+                        .compile("./*[local-name()='crossCurricularThemesAndCompetences']/*[local-name()='keyCompetence']/*[local-name()='subject']");
                 NodeList nl = (NodeList) expr2.evaluate(classification, XPathConstants.NODESET);
 
                 if (nl != null && nl.getLength() > 0) {
                     for (int j = 0; j < nl.getLength(); j++) {
-                        KeyCompetence keyCompetence = keyCompetenceService.findKeyCompetenceByName(nl.item(j).getTextContent().trim().replace(" ", "_"));
+                        KeyCompetence keyCompetence = keyCompetenceService.findKeyCompetenceByName(nl.item(j)
+                                .getTextContent().trim().replace(" ", "_"));
                         keyCompetences.add(keyCompetence);
                     }
                 }
@@ -204,6 +217,7 @@ public class MaterialParserEstCore extends MaterialParser {
 
         material.setKeyCompetences(keyCompetences);
     }
+
     @Override
     protected Taxon getTaxon(String context, Class level) {
         return taxonService.getTaxonByEstCoreName(context, level);

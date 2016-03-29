@@ -10,11 +10,6 @@ import static org.junit.Assert.assertNull;
 
 import java.util.List;
 
-import ee.hm.dop.model.Language;
-import ee.hm.dop.model.LanguageString;
-import ee.hm.dop.model.Material;
-import ee.hm.dop.model.taxon.Taxon;
-import ee.hm.dop.service.LanguageService;
 import org.easymock.EasyMockRunner;
 import org.easymock.Mock;
 import org.easymock.TestSubject;
@@ -24,6 +19,12 @@ import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+
+import ee.hm.dop.model.Language;
+import ee.hm.dop.model.LanguageString;
+import ee.hm.dop.model.Material;
+import ee.hm.dop.model.taxon.Taxon;
+import ee.hm.dop.service.LanguageService;
 
 /**
  * Created by mart on 10.11.15.

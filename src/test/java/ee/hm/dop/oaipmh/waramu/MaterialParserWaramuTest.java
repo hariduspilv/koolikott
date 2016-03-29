@@ -21,6 +21,14 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
+import org.easymock.EasyMockRunner;
+import org.easymock.Mock;
+import org.easymock.TestSubject;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.w3c.dom.Document;
+import org.xml.sax.SAXException;
+
 import ee.hm.dop.model.Author;
 import ee.hm.dop.model.Language;
 import ee.hm.dop.model.LanguageString;
@@ -40,13 +48,6 @@ import ee.hm.dop.service.LanguageService;
 import ee.hm.dop.service.ResourceTypeService;
 import ee.hm.dop.service.TagService;
 import ee.hm.dop.service.TaxonService;
-import org.easymock.EasyMockRunner;
-import org.easymock.Mock;
-import org.easymock.TestSubject;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.w3c.dom.Document;
-import org.xml.sax.SAXException;
 
 @RunWith(EasyMockRunner.class)
 public class MaterialParserWaramuTest {

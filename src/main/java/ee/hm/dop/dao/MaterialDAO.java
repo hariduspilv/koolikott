@@ -42,19 +42,6 @@ public class MaterialDAO extends LearningObjectDAO {
         return learningObjects;
     }
 
-    public byte[] findNotDeletedPictureByMaterial(Material material) {
-        TypedQuery<byte[]> findById = createQuery(
-                "SELECT m.picture FROM Material m WHERE m.id = :id AND m.deleted = false", byte[].class);
-
-        return getBytes(material, findById);
-    }
-
-    public byte[] findPictureByMaterial(Material material) {
-        TypedQuery<byte[]> findById = createQuery("SELECT m.picture FROM Material m WHERE m.id = :id", byte[].class);
-
-        return getBytes(material, findById);
-    }
-
     public Material findByRepositoryAndRepositoryIdentifier(Repository repository, String repositoryIdentifier) {
         String select = "SELECT m FROM Material m WHERE m.repository.id = :repositoryId"
                 + " AND m.repositoryIdentifier = :repositoryIdentifier AND m.deleted = false";
