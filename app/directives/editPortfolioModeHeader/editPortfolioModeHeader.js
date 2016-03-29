@@ -66,7 +66,11 @@ define([
                 $scope.searchFields = {};
                 $scope.searchFields.searchQuery = "";
                 $scope.detailedSearch = {};
-                $scope.detailedSearch.accessor = {};
+                $scope.detailedSearch.accessor = {
+                    clearSimpleSearch : function() {
+                        $scope.searchFields.searchQuery = '';
+                    }
+                };
 
                 $scope.search = function() {
                     if (!isEmpty($scope.searchFields.searchQuery)) {
@@ -104,7 +108,11 @@ define([
                 };
 
                 $scope.searchFieldEnterPressed = function() {
-                    $scope.search();
+                    if ($scope.detailedSearch.isVisible) {
+                        $scope.detailedSearch.accessor.search();
+                    } else {
+                        $scope.search();
+                    }
                 };
 
                 $scope.saveAndExitPortfolio = function() {

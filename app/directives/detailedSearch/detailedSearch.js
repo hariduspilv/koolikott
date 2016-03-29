@@ -209,11 +209,10 @@ define([
                 }
 
                 function createSimpleSearchQuery() {
-                    var query = '';
                     var textFields = getTextFieldsAsQuery();
                     var checkboxes = getCheckboxesAsQuery();
 
-                    query = (textFields + ' ' + checkboxes).trim();
+                    var query = (textFields + ' ' + checkboxes).trim();
 
                     return query.trim();
                 }
@@ -333,7 +332,8 @@ define([
 
                 $scope.clear = $scope.accessor.clear = function() {
                     $scope.detailedSearch = {
-                        'paid': true,
+                        'mainField': '',
+                        'paid': false,
                         'onlyCurriculumLiterature': false,
                         'CLIL': false,
                         'targetGroups': [],
@@ -346,6 +346,8 @@ define([
                     if ($rootScope.isEditPortfolioMode) {
                         $scope.detailedSearch.type = "material";
                     }
+
+                    $scope.accessor.clearSimpleSearch();
                 };
 
                 $scope.$watch('detailedSearch.taxon.id', function(newTaxon, oldTaxon) {

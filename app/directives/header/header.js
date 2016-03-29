@@ -16,7 +16,11 @@ define([
                     $scope.searchFields = {};
                     $scope.searchFields.searchQuery = searchService.getQuery();
                     $scope.detailedSearch = {};
-                    $scope.detailedSearch.accessor = {};
+                    $scope.detailedSearch.accessor = {
+                        clearSimpleSearch : function() {
+                            $scope.searchFields.searchQuery = '';
+                        }
+                    };
 
                     $scope.setLanguage = function(language) {
                         translationService.setLanguage(language);
@@ -111,9 +115,7 @@ define([
                         $scope.setLanguage(language);
                     }, true);
 
-                    $scope.isAdmin = function() {
-                        return authenticatedUserService.getUser() && authenticatedUserService.getUser().role === 'ADMIN';
-                    };
+                    $scope.isAdmin = authenticatedUserService.isAdmin;
                 }
             };
         }

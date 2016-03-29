@@ -26,17 +26,17 @@ define(['angularAMD'], function (angularAMD) {
                 },
 
                 isAdmin: function () {
-                	var user = this.getUser();
+                	var user = instance.getUser();
                     return user && user.role === 'ADMIN';
                 },
 
                 isPublisher: function () {
-                	var user = this.getUser();
+                	var user = instance.getUser();
                     return user && isDefined(user.publisher);
                 },
 
                 isRestricted: function () {
-                	var user = this.getUser();
+                	var user = instance.getUser();
                     return user && user.role === 'RESTRICTED';
                 },
 
