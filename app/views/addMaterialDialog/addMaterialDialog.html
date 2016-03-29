@@ -145,7 +145,8 @@
           </md-checkbox>
 
           <div layout="row" flex layout-align="space-between center">
-            <div data-dop-target-group-selector data-target-groups="material.targetGroups" flex="20"></div>
+            <div data-dop-target-group-selector data-target-groups="material.targetGroups"
+                 data-ng-if="educationalContextId !== 4" data-taxon="material.taxons[0]" flex="20"></div>
             <md-switch data-ng-if="isAdmin() || creatorIsPublisher" class="md-primary md-block md-padding" md-no-ink
                        data-ng-model="material.curriculumLiterature"
                        aria-label="{{'MATERIAL_CURRICULUM_LITERATURE' | translate}}">
