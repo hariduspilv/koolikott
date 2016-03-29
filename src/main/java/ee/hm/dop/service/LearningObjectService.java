@@ -7,6 +7,7 @@ import java.util.function.BiFunction;
 import javax.inject.Inject;
 
 import ee.hm.dop.dao.LearningObjectDAO;
+import ee.hm.dop.dao.PictureDAO;
 import ee.hm.dop.model.LearningObject;
 import ee.hm.dop.model.Tag;
 import ee.hm.dop.model.User;
@@ -17,6 +18,9 @@ public class LearningObjectService {
 
     @Inject
     private LearningObjectDAO learningObjectDAO;
+
+    @Inject
+    private PictureDAO pictureDAO;
 
     @Inject
     private SearchEngineService searchEngineService;
@@ -49,11 +53,11 @@ public class LearningObjectService {
         List<Tag> tags = learningObject.getTags();
         if (tags.contains(tag)) {
             throw new RuntimeException("Learning Object already contains tag");
-        } else {
-            tags.add(tag);
-            updatedLearningObject = getLearningObjectDAO().update(learningObject);
-            searchEngineService.updateIndex();
         }
+
+        tags.add(tag);
+        updatedLearningObject = getLearningObjectDAO().update(learningObject);
+        searchEngineService.updateIndex();
 
         return updatedLearningObject;
     }

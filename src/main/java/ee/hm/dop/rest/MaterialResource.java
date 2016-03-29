@@ -1,16 +1,12 @@
 package ee.hm.dop.rest;
 
-import static ee.hm.dop.utils.ConfigurationProperties.MAX_FILE_SIZE;
-import static ee.hm.dop.utils.FileUtils.read;
 import static org.apache.commons.lang3.StringUtils.isBlank;
 
-import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URLDecoder;
 import java.util.List;
 
-import javax.annotation.security.PermitAll;
 import javax.annotation.security.RolesAllowed;
 import javax.inject.Inject;
 import javax.ws.rs.Consumes;
@@ -30,8 +26,6 @@ import ee.hm.dop.model.User;
 import ee.hm.dop.model.UserLike;
 import ee.hm.dop.service.MaterialService;
 import ee.hm.dop.service.UserService;
-import org.apache.commons.configuration.Configuration;
-import org.glassfish.jersey.media.multipart.FormDataParam;
 
 @Path("material")
 public class MaterialResource extends BaseResource {
@@ -41,9 +35,6 @@ public class MaterialResource extends BaseResource {
 
     @Inject
     private UserService userService;
-
-    @Inject
-    private Configuration configuration;
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
@@ -116,39 +107,6 @@ public class MaterialResource extends BaseResource {
     }
 
     @GET
-    @Path("/getPicture")
-    @Produces("image/png")
-    public Response getPictureById(@QueryParam("materialId") long id) {
-        Material material = new Material();
-        material.setId(id);
-        String pictureData = materialService.getMaterialPicture(material, getLoggedInUser());
-
-        if (pictureData != null) {
-            return Response.ok(pictureData).build();
-        } else {
-            return Response.status(HttpURLConnection.HTTP_NOT_FOUND).build();
-        }
-    }
-
-    @POST
-    @Path("addPicture")
-    @Consumes(MediaType.MULTIPART_FORM_DATA)
-    @PermitAll
-    public void uploadPicture(@QueryParam("materialId") long materialId,
-            @FormDataParam("picture") InputStream fileInputStream) {
-        byte[] picture = read(fileInputStream, configuration.getInt(MAX_FILE_SIZE));
-
-        User loggedInUser = getLoggedInUser();
-
-        Material material = new Material();
-        material.setId(materialId);
-        material.setPicture(picture);
-        material.setHasPicture(true);
-
-        materialService.updatePicture(material, loggedInUser);
-    }
-
-    @GET
     @Path("getByCreator")
     @Produces(MediaType.APPLICATION_JSON)
     public List<Material> getByCreator(@QueryParam("username") String username) {
@@ -195,7 +153,7 @@ public class MaterialResource extends BaseResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Material updateMaterial(Material material) {
-        material = materialService.updateByUser(material, getLoggedInUser());
+        material = materialService.update(material, getLoggedInUser());
         return material;
     }
 

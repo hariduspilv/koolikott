@@ -143,9 +143,17 @@ insert into Recommendation(id, creator, added) values (6, 8, '2015-12-12 13:14:1
 insert into Recommendation(id, creator, added) values (7, 8, '2015-12-12 13:14:17'); -- deleted material
 
 
+-- Picture
+
+insert into Picture(id, name, data) values(1, 'picture1', '656b6f6f6c696b6f7474');
+insert into Picture(id, name, data) values(2, 'picture2', '556b6f6f6c696b6f7474');
+insert into Picture(id, name, data) values(3, 'picture3', '77b6f6f6c696b65f7474');
+insert into Picture(id, name, data) values(4, 'picture4', '65425284561965bf7474');
+insert into Picture(id, name, data) values(5, 'picture5', '656b6f6f6c6967896215');
+
 -- Materials
 
-insert into LearningObject(id, added, updated, views, picture, creator, deleted, recommendation) values(1, '1999-01-01 00:00:01', '2000-03-01 07:00:01', 100, '656b6f6f6c696b6f7474', 1, false, 1);
+insert into LearningObject(id, added, updated, views, picture, creator, deleted, recommendation) values(1, '1999-01-01 00:00:01', '2000-03-01 07:00:01', 100, 1, 1, false, 1);
 insert into Material(id, lang, issueDate, licenseType, source, repository, repositoryIdentifier, paid, isSpecialEducation, embeddable) values(1, 1, 1, 1, 'https://www.youtube.com/watch?v=gSWbx3CvVUk', 1, 'isssiiaawej', true, true, false);
 insert into LearningObject(id, added, updated, views, picture, creator, deleted, recommendation) values(2, '1970-01-01 00:00:01', '1995-07-12 09:00:01', 200, null, 2, false, 2);
 insert into Material(id, lang, issueDate, licenseType, source, repository, repositoryIdentifier, paid, isSpecialEducation, embeddable) values(2, 2, 2, 2, 'https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes', 1, 'isssiidosa00dsa', true, false, false);
@@ -165,7 +173,7 @@ insert into LearningObject(id, added, updated, views, picture, creator, deleted,
 insert into Material(id, lang, issueDate, licenseType, source, repository, repositoryIdentifier, paid, isSpecialEducation, embeddable) values(9, null, null, null, 'http://www.chaging.it.com', null, null, false, false, false);
 insert into LearningObject(id, added, updated, views, picture, creator, deleted, recommendation) values(10, '1911-09-01 00:00:01', null, 0, null, null, false, null);
 insert into Material(id, lang, issueDate, licenseType, source, repository, repositoryIdentifier, paid, isSpecialEducation, embeddable) values(10, null, null, null, 'http://www.boo.com', null, null, false, false, false); -- Do not use this material, it is deleted by tests
-insert into LearningObject(id, added, updated, views, picture, creator, deleted, recommendation) values(11, '2015-09-02 00:00:01', '2015-09-03 07:00:01', 100, '656b6f6f6c696b6f7474', 1, true, 7);
+insert into LearningObject(id, added, updated, views, picture, creator, deleted, recommendation) values(11, '2015-09-02 00:00:01', '2015-09-03 07:00:01', 100, 2, 1, true, 7);
 insert into Material(id, lang, issueDate, licenseType, source, repository, repositoryIdentifier, paid, isSpecialEducation, embeddable) values(11, 1, null, 1, 'https://www.deleted.com/', 1, 'isssiiaawejdsada4564', false, false, false); -- This material should be amoung the 8 latest materials
 insert into LearningObject(id, added, updated, views, picture, creator, deleted, recommendation) values(12, '1911-09-01 00:00:01', null, 0, null, null, false, null);
 insert into Material(id, lang, issueDate, licenseType, source, repository, repositoryIdentifier, paid, isSpecialEducation, embeddable) values(12, null, null, null, 'http://estRepo.com', 2, null, false, false, true);
@@ -368,11 +376,11 @@ insert into Page(id, name, content, language) VALUES (6, 'Help', '<h1>Help</h1><
 
 -- Portfolio
 
-insert into LearningObject(id, added, updated, views, picture, creator, deleted, recommendation) VALUES (101, '2000-12-29 06:00:01', '2004-12-29 06:00:01', 95455215, '656b6f6f6c696b6f7474', 6, false, 3);
+insert into LearningObject(id, added, updated, views, picture, creator, deleted, recommendation) VALUES (101, '2000-12-29 06:00:01', '2004-12-29 06:00:01', 95455215, 3, 6, false, 3);
 insert into Portfolio(id, title, taxon, originalCreator, summary, visibility) VALUES (101, 'The new stock market', 21, 5, 'The changes after 2008.', 'PUBLIC');
 insert into LearningObject(id, added, updated, views, picture, creator, deleted, recommendation) VALUES (102, '2012-12-29 06:00:01', null, 14, null, 4, false, null);
 insert into Portfolio(id, title, taxon, originalCreator, summary, visibility) VALUES (102, 'New ways how to do it', null, 4, null, 'PUBLIC');
-insert into LearningObject(id, added, updated, views, picture, creator, deleted, recommendation) VALUES (103, '2002-12-29 06:00:01', '2006-12-29 06:00:01', 14, '656b6f6f6c696b6f7474', 6, false, null);
+insert into LearningObject(id, added, updated, views, picture, creator, deleted, recommendation) VALUES (103, '2002-12-29 06:00:01', '2006-12-29 06:00:01', 14, 4, 6, false, null);
 insert into Portfolio(id, title, taxon, originalCreator, summary, visibility) VALUES (103, 'The newer stock market', 21, 6, 'A marvellous summary.', 'PUBLIC');
 insert into LearningObject(id, added, updated, views, picture, creator, deleted, recommendation) VALUES (104, '2003-10-10 07:00:11', null, 100, null, 1, false, null);
 insert into Portfolio(id, title, taxon, originalCreator, summary, visibility) VALUES (104, 'The even newer stock market', null, 1, 'Cool summary.', 'PUBLIC');
@@ -380,7 +388,7 @@ insert into LearningObject(id, added, updated, views, picture, creator, deleted,
 insert into Portfolio(id, title, taxon, originalCreator, summary, visibility) VALUES (105, 'Adding comment to a portfolio', null, 1, 'Cool summary.', 'PUBLIC');
 insert into LearningObject(id, added, updated, views, picture, creator, deleted, recommendation) VALUES (106, '2003-10-10 07:00:11', null, 100, null, 2, false, null);
 insert into Portfolio(id, title, taxon, originalCreator, summary, visibility) VALUES (106, 'This portfolio will be changed to not listed in the tests. ', null, 2, 'Summary.', 'PUBLIC');
-insert into LearningObject(id, added, updated, views, picture, creator, deleted, recommendation) VALUES (107, '2003-10-10 07:00:11', null, 100, '656b6f6f6c696b6f7474', 2, false, null);
+insert into LearningObject(id, added, updated, views, picture, creator, deleted, recommendation) VALUES (107, '2003-10-10 07:00:11', null, 100, 5, 2, false, null);
 insert into Portfolio(id, title, taxon, originalCreator, summary, visibility) VALUES (107, 'This portfolio is private. ', null, 2, 'Summary. Sum sum sum.', 'PRIVATE');
 insert into LearningObject(id, added, updated, views, picture, creator, deleted, recommendation) VALUES (108, '2003-10-10 07:00:11', null, 100, null, 2, false, null);
 insert into Portfolio(id, title, taxon, originalCreator, summary, visibility) VALUES (108, 'This portfolio is public. ', null, 2, 'Summary. Wow.', 'PUBLIC');

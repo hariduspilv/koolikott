@@ -14,6 +14,7 @@ import org.slf4j.LoggerFactory;
 import ee.hm.dop.dao.MaterialDAO;
 import ee.hm.dop.dao.RepositoryDAO;
 import ee.hm.dop.model.Material;
+import ee.hm.dop.model.Picture;
 import ee.hm.dop.model.Repository;
 import ee.hm.dop.oaipmh.MaterialIterator;
 import ee.hm.dop.oaipmh.RepositoryManager;
@@ -36,6 +37,9 @@ public class RepositoryService {
 
     @Inject
     private MaterialDAO materialDAO;
+
+    @Inject
+    private PictureService pictureService;
 
     @Inject
     private SearchEngineService searchEngineService;
@@ -89,8 +93,8 @@ public class RepositoryService {
         long end = System.currentTimeMillis();
         String message = "Updating materials took %s milliseconds. Successfully downloaded %s"
                 + " materials and %s materials failed to download of total %s";
-        logger.info(format(message, end - start, successfulMaterials, failedMaterials,
-                successfulMaterials + failedMaterials));
+        logger.info(format(message, end - start, successfulMaterials, failedMaterials, successfulMaterials
+                + failedMaterials));
 
         updateSolrIndex();
     }
@@ -113,15 +117,24 @@ public class RepositoryService {
                 material.getRepositoryIdentifier());
 
         material.setRepository(repository);
-        if(repository.isEstonianPublisher()) {
+        if (repository.isEstonianPublisher()) {
             material.setEmbeddable(true);
         }
 
         if (existentMaterial != null) {
             updateMaterial(material, existentMaterial);
         } else if (!material.isDeleted()) {
-            materialService.createMaterial(material, null, false);
+            createMaterial(material);
         }
+    }
+
+    private void createMaterial(Material material) {
+        if (material.getPicture() != null) {
+            Picture picture = pictureService.create(material.getPicture());
+            material.setPicture(picture);
+        }
+
+        materialService.createMaterial(material, null, false);
     }
 
     private void updateMaterial(Material material, Material existentMaterial) {
@@ -129,7 +142,7 @@ public class RepositoryService {
             materialService.delete(existentMaterial);
         } else {
             material.setId(existentMaterial.getId());
-            materialService.update(material);
+            materialService.update(material, null);
         }
     }
 

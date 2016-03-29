@@ -10,17 +10,13 @@ import ee.hm.dop.model.taxon.Taxon;
 
 public class TaxonService {
 
-    public static final String EST_CORE_TAXON_MAPPING = "EstCoreTaxonMapping";
+    private static final String EST_CORE_TAXON_MAPPING = "EstCoreTaxonMapping";
 
     @Inject
     private TaxonDAO taxonDAO;
 
     public Taxon getTaxonById(Long id) {
         return taxonDAO.findTaxonById(id);
-    }
-
-    public EducationalContext getEducationalContextByName(String name) {
-        return taxonDAO.findEducationalContextByName(name);
     }
 
     public List<EducationalContext> getAllEducationalContext() {
@@ -30,5 +26,4 @@ public class TaxonService {
     public Taxon getTaxonByEstCoreName(String name, Class level) {
         return taxonDAO.findTaxonByRepoName(name, EST_CORE_TAXON_MAPPING, level);
     }
-
 }

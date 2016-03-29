@@ -13,16 +13,17 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-import ee.hm.dop.dao.LearningObjectDAO;
-import ee.hm.dop.model.LearningObject;
-import ee.hm.dop.model.Material;
-import ee.hm.dop.model.Portfolio;
-import ee.hm.dop.model.Visibility;
 import org.easymock.EasyMockRunner;
 import org.easymock.Mock;
 import org.easymock.TestSubject;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+
+import ee.hm.dop.dao.LearningObjectDAO;
+import ee.hm.dop.model.LearningObject;
+import ee.hm.dop.model.Material;
+import ee.hm.dop.model.Portfolio;
+import ee.hm.dop.model.Visibility;
 
 @RunWith(EasyMockRunner.class)
 public class LearningObjectServiceTest {

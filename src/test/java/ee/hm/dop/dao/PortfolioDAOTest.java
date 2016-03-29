@@ -200,42 +200,6 @@ public class PortfolioDAOTest extends DatabaseTestBase {
     }
 
     @Test
-    public void findPictureByPortfolio() {
-        Portfolio portfolio = new Portfolio();
-        portfolio.setId((long) 101);
-        byte[] picture = portfolioDAO.findPictureByNotDeletedPortfolio(portfolio);
-        assertNotNull(picture);
-    }
-
-    @Test
-    public void findPictureByPortfolioNoPicture() {
-        Portfolio portfolio = new Portfolio();
-        portfolio.setId((long) 102);
-        byte[] picture = portfolioDAO.findPictureByNotDeletedPortfolio(portfolio);
-        assertNull(picture);
-    }
-
-    @Test
-    public void findPictureByPortfoNullId() {
-        Portfolio portfolio = new Portfolio();
-        portfolio.setId(null);
-        byte[] picture = portfolioDAO.findPictureByNotDeletedPortfolio(portfolio);
-        assertNull(picture);
-    }
-
-    @Test
-    public void getHasPictureTrue() {
-        Portfolio portfolio = portfolioDAO.findByIdNotDeleted(101);
-        assertTrue(portfolio.getHasPicture());
-    }
-
-    @Test
-    public void getHasPictureNoPicture() {
-        Portfolio portfolio = portfolioDAO.findByIdNotDeleted(102);
-        assertFalse(portfolio.getHasPicture());
-    }
-
-    @Test
     public void increaseViewCount() {
         Portfolio portfolio = portfolioDAO.findByIdNotDeleted(102);
         long originalViews = portfolio.getViews();

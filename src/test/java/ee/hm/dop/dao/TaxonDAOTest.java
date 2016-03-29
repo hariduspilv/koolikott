@@ -7,11 +7,12 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import org.junit.Test;
+
 import ee.hm.dop.common.test.DatabaseTestBase;
 import ee.hm.dop.model.taxon.Domain;
 import ee.hm.dop.model.taxon.EducationalContext;
 import ee.hm.dop.model.taxon.Taxon;
-import org.junit.Test;
 
 public class TaxonDAOTest extends DatabaseTestBase {
 

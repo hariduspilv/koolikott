@@ -30,12 +30,4 @@ public class TagDAOTest extends DatabaseTestBase {
         assertEquals(id, returnedTag.getId());
         assertEquals(name, returnedTag.getName());
     }
-
-    @Test
-    public void findTagById() {
-        Tag returnedTag = tagDAO.findTagByID(1l);
-
-        assertNotNull(returnedTag);
-        assertNotNull(returnedTag.getId());
-    }
 }

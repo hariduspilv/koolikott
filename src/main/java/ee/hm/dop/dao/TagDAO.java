@@ -23,17 +23,4 @@ public class TagDAO {
 
         return tag;
     }
-
-    public Tag findTagByID(Long id) {
-        TypedQuery<Tag> findByName = entityManager.createQuery("SELECT t FROM Tag t WHERE t.id = :id", Tag.class);
-
-        Tag tag = null;
-        try {
-            tag = findByName.setParameter("id", id).getSingleResult();
-        } catch (Exception e) {
-            // ignore
-        }
-
-        return tag;
-    }
 }
