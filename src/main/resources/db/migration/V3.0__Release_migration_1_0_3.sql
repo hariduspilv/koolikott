@@ -20,7 +20,7 @@ ALTER TABLE LearningObject DROP picture;
 
 ALTER TABLE LearningObject
     ADD picture BIGINT,
-    ADD CONSTRAINT FOREIGN KEY (picture) REFERENCES Picture(id);
+    ADD CONSTRAINT FOREIGN KEY (picture) REFERENCES Picture(id) ON DELETE RESTRICT;
 
 UPDATE LearningObject SET picture = pic WHERE pic is not null;
 
