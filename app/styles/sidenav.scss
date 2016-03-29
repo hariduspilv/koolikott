@@ -64,6 +64,9 @@ md-sidenav {
       }
     }
   }
+  .md-button.with-icon {
+    padding: 0px 48px 0px 16px;
+  }
 }
 
 .sidenav-menu-toggle-list {
@@ -102,6 +105,10 @@ md-sidenav {
     text-transform: none;
     text-rendering: optimizeLegibility;
     font-weight: 500;
+  }
+
+  a.md-button.with-icon {
+    padding: 0 48px;
   }
 }
 

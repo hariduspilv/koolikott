@@ -7,7 +7,12 @@
   }
 
   .add-materials-to-chapter {
+    position: absolute;
+    right: 16px;
 
+    md-icon {
+      z-index: 2;
+    }
   }
 
   .md-button.one-row {
