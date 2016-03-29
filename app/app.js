@@ -4,6 +4,7 @@ define([
     'app.routes',
     'utils/taxonUtils',
     'utils/taxonParser',
+    'moment',
 
     'angular-translate',
     'angular-translate-loader-url',
@@ -27,7 +28,7 @@ define([
     'directives/pageStructure/linearLayout/linearLayout',
 
     'services/authenticatedUserService',
-], function(angularAMD, config, taxonUtils, taxonParser) {
+], function(angularAMD, config, taxonUtils, taxonParser, moment) {
     'use strict';
 
     var app = angular.module('app', [
@@ -132,6 +133,15 @@ define([
 
     function configureDateLocale($mdDateLocaleProvider) {
         $mdDateLocaleProvider.firstDayOfWeek = 1;
+
+        $mdDateLocaleProvider.formatDate = function(date) {
+            return date ? moment(date).format('DD.MM.YYYY') : '';
+        };
+
+        $mdDateLocaleProvider.parseDate = function(dateString) {
+            var m = moment(dateString, 'DD.MM.YYYY', true);
+            return m.isValid() ? m.toDate() : new Date(NaN);
+        };
     }
 
     app.run(function($rootScope, metadataService) {

@@ -22,7 +22,8 @@ require.config({
     'ngInfiniteScroll': 'libs/ngInfiniteScroll/build/ng-infinite-scroll.min',
     'jquery': 'libs/jquery/dist/jquery.min',
     'ng-file-upload': 'libs/ng-file-upload/ng-file-upload.min',
-    'clipboard': 'libs/clipboard/dist/clipboard.min'
+    'clipboard': 'libs/clipboard/dist/clipboard.min',
+    'moment': 'libs/moment/min/moment.min'
   },
   shim: {
     'angular': ['jquery'],
