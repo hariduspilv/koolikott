@@ -95,27 +95,6 @@ define([
                             $scope.selected = false;
                         }
                     });
-
-                    function fetchImage() {
-                        if (!$scope.pictureLock && $scope.material.hasPicture) {
-                            serverCallService.makeGet("rest/material/getPicture?materialId=" + $scope.material.id, {}, fetchImageSuccess, fetchImageFail, fetchImageFinally);
-                            $scope.pictureLock = true;
-                        }
-                    }
-
-                    function fetchImageSuccess(data) {
-                        $scope.material.picture = "data:image/jpeg;base64," + data;
-                    }
-
-                    function fetchImageFail(data) {
-                        log("Getting material image failed");
-                    }
-
-                    function fetchImageFinally() {
-                        $scope.pictureLock = false;
-                    }
-
-                    fetchImage()
                 }
             };
         }]);

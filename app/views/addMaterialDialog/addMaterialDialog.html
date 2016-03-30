@@ -57,9 +57,9 @@
 
           <!-- image preview -->
           <div layout="row" flex layout-align="space-between center">
-            <div data-ng-if="material.picture" class="drop-box-preview">
+            <div data-ng-if="newPicture.$ngfDataUrl" class="drop-box-preview">
               <h3 class="md-subhead" data-translate="PHOTO_PREVIEW"></h3>
-              <img data-ng-src="{{material.picture}}" class="md-card-image"/>
+              <img data-ng-src="{{newPicture.$ngfDataUrl}}" class="md-card-image"/>
             </div>
           </div>
 
@@ -277,15 +277,11 @@
     <md-button aria-label="Tühista materjali lisamine" id="add-material-cancel-button" data-ng-click="cancel()">
       <span data-translate="BUTTON_CANCEL"></span>
     </md-button>
-    <md-button data-ng-if="!isUpdateMode" aria-label="Loo materjal" id="add-material-create-button"
-               data-ng-click="createMaterial()" data-ng-disabled="!step.canCreateMaterial()" data-ng-hide="isSaving"
+    <md-button aria-label="Loo materjal" id="add-material-create-button"
+               data-ng-click="save()" data-ng-disabled="!step.canCreateMaterial()" data-ng-hide="isSaving"
                class="md-primary">
-      <span data-translate="BUTTON_CREATE_MATERIAL"></span>
-    </md-button>
-    <md-button data-ng-if="isUpdateMode" aria-label="Muuda materjali" id="add-material-update-button"
-               data-ng-click="updateMaterial()" data-ng-disabled="!step.canCreateMaterial()" data-ng-hide="isSaving"
-               class="md-primary">
-      <span data-translate="BUTTON_UPDATE_MATERIAL"></span>
+      <span data-ng-if="!isUpdateMode" data-translate="BUTTON_CREATE_MATERIAL"></span>
+      <span data-ng-if="isUpdateMode"  data-translate="BUTTON_UPDATE_MATERIAL"></span>
     </md-button>
     <md-button aria-label="Liigu järgmisse sammu" data-ng-click="step.nextStep()"
                data-ng-hide="step.isLastStep() || isSaving" data-ng-disabled="!step.canProceed()" class="md-primary">

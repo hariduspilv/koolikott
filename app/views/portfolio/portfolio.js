@@ -93,9 +93,6 @@ define([
         function setPortfolio(portfolio) {
             $scope.portfolio = portfolio;
             $rootScope.savedPortfolio = portfolio;
-            if (portfolio && portfolio.hasPicture && !portfolio.picture) {
-                fetchImage();
-            }
         }
 
         $scope.$on('$routeChangeStart', function () {
@@ -109,27 +106,6 @@ define([
                 $timeout.cancel(increaseViewCountPromise);
             }
         });
-
-        function fetchImage() {
-            if (!$scope.pictureLock) {
-                serverCallService.makeGet("rest/portfolio/getPicture?portfolioId=" + $scope.portfolio.id, {}, fetchImageSuccess, fetchImageFail, fetchImageFinally);
-                $scope.pictureLock = true;
-            }
-        }
-
-        function fetchImageSuccess(data) {
-            if ($scope.portfolio) {
-                $scope.portfolio.picture = "data:image/jpeg;base64," + data;
-            }
-        }
-
-        function fetchImageFail() {
-            log("Getting portfolio image failed");
-        }
-
-        function fetchImageFinally() {
-            $scope.pictureLock = false;
-        }
 
         init();
     }];

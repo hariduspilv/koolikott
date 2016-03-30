@@ -1,21 +1,22 @@
 define([
     'app',
-    'ng-file-upload',
     'services/serverCallService',
     'services/translationService',
     'services/metadataService',
     'services/authenticatedUserService',
     'services/storageService',
+    'services/pictureUploadService',
     'directives/validate/validateUrl'
 ], function (app) {
-    return ['$scope', '$mdDialog', 'serverCallService', 'translationService', 'metadataService', '$filter', '$location', '$rootScope', 'authenticatedUserService', 'Upload', 'storageService', '$timeout',
-        function ($scope, $mdDialog, serverCallService, translationService, metadataService, $filter, $location, $rootScope, authenticatedUserService, Upload, storageService, $timeout) {
+    return ['$scope', '$mdDialog', 'serverCallService', 'translationService', 'metadataService', '$filter', '$location', '$rootScope', 'authenticatedUserService', 'storageService', '$timeout', 'pictureUploadService',
+        function ($scope, $mdDialog, serverCallService, translationService, metadataService, $filter, $location, $rootScope, authenticatedUserService, storageService, $timeout, pictureUploadService) {
             $scope.isSaving = false;
             $scope.showHints = true;
             $scope.creatorIsPublisher = false;
 
             var preferredLanguage;
             var TABS_COUNT = 2;
+            var uploadingPicture = false;
 
             $scope.isUpdateMode = false;
             $scope.step = {};
@@ -108,30 +109,24 @@ define([
                 $mdDialog.hide();
             };
 
-            $scope.createMaterial = function () {
-                makeCall("rest/material");
-            };
+            $scope.save = function () {
+                $scope.isSaving = true;
 
-            $scope.updateMaterial = function () {
-                makeCall("rest/material/update");
+                if (uploadingPicture) {
+                	$timeout($scope.save, 500, false);
+                } else {
+                	var metadata = getTitlesAndDecriptions();
+                	$scope.material.titles = metadata.titles;
+                	$scope.material.descriptions = metadata.descriptions;
+                	$scope.material.type = ".Material";
+                	
+                	serverCallService.makePut('rest/material', $scope.material, saveMaterialSuccess, saveMaterialFail, saveMaterialFinally);
+                }                
             };
 
             $scope.isAdmin = function () {
                 return authenticatedUserService.isAdmin();
             };
-
-            function makeCall(url) {
-                $scope.isSaving = true;
-
-                var metadata = getTitlesAndDecriptions();
-                $scope.material.titles = metadata.titles;
-                $scope.material.descriptions = metadata.descriptions;
-                $scope.material.type = ".Material";
-                $scope.oldPicture = $scope.material.picture;
-                $scope.material.picture = null;
-
-                serverCallService.makePost(url, $scope.material, postMaterialSuccess, postMaterialFail);
-            }
 
             function getIssueDate() {
                 var date = new Date($scope.issueDate);
@@ -270,13 +265,24 @@ define([
             $scope.$watch(function () {
                 return $scope.newPicture;
             }, function (newPicture, oldPicture) {
-                if (newPicture !== oldPicture) {
-                    Upload.dataUrl($scope.newPicture, true).then(function () {
-                        $scope.material.picture = $scope.newPicture.$ngfDataUrl;
-                    });
+                if (newPicture) {
+                	uploadingPicture = true;
+                	pictureUploadService.upload(newPicture, pictureUploadSuccess, pictureUploadFailed, pictureUploadFinally);
                 }
             });
-
+            
+            function pictureUploadSuccess(picture) {
+            	$scope.material.picture = picture;
+            }
+            
+            function pictureUploadFailed() {
+            	log('Picture upload failed.');
+            }
+            
+            function pictureUploadFinally() {
+            	uploadingPicture = false;
+            }
+            
             function preSetMaterial(material) {
                 $scope.isUpdateMode = true;
                 $scope.material = material;
@@ -362,44 +368,16 @@ define([
                 }
             }
 
-            function postMaterialSuccess(material) {
-                if (!isEmpty(material)) {
-                    $scope.material = material;
-
-                    if ($scope.newPicture) {
-                        material.hasPicture = true;
-                        material.picture = $scope.newPicture.$ngfDataUrl;
-                        uploadPicture(material);
-                    } else {
-                        $scope.material.picture = $scope.oldPicture;
-                        redirectToMaterialPage();
-                        saveMaterialFinally();
-                    }
-                }
-            }
-
-            function uploadPicture(material) {
-                var url = "rest/material/addPicture?materialId=" + material.id;
-                var picture = $scope.newPicture;
-                var data = {
-                    picture: picture
-                };
-
-                serverCallService.upload(url, data, redirectToMaterialPage, postMaterialFail, saveMaterialFinally);
-            }
-
-            function redirectToMaterialPage() {
+            function saveMaterialSuccess(material) {
                 $mdDialog.hide($scope.material);
 
                 if (!$scope.isChapterMaterial) {
-                    $location.url('/material?materialId=' + $scope.material.id);
+                    $location.url('/material?materialId=' + material.id);
                 }
             }
 
-            function postMaterialFail() {
+            function saveMaterialFail() {
                 console.log('Failed to add material.');
-                $scope.material.picture = $scope.oldPicture;
-                saveMaterialFinally();
             }
 
             function saveMaterialFinally() {

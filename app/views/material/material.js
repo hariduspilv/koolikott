@@ -113,7 +113,6 @@ define([
             }
 
             function init() {
-                fetchImage();
                 processMaterial();
                 storageService.setMaterial(null);
 
@@ -345,25 +344,6 @@ define([
                     return $scope.material.repositoryIdentifier === null;
                 }
             };
-
-            function fetchImage() {
-                if (!$scope.material.picture && $scope.material.hasPicture && !$scope.pictureLock && $route.current.params.materialId) {
-                    serverCallService.makeGet("rest/material/getPicture?materialId=" + $route.current.params.materialId, {}, fetchImageSuccess, fetchImageFail, fetchImageFinally);
-                    $scope.pictureLock = true;
-                }
-            }
-
-            function fetchImageSuccess(data) {
-                $scope.material.picture = "data:image/jpeg;base64," + data;
-            }
-
-            function fetchImageFail() {
-                log("Getting material image failed");
-            }
-
-            function fetchImageFinally() {
-                $scope.pictureLock = false;
-            }
 
             $scope.restoreMaterial = function () {
                 serverCallService.makePost("rest/material/restore", $scope.material, restoreSuccess, restoreFail);
