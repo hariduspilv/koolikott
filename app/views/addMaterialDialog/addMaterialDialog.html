@@ -56,12 +56,12 @@
           </form>
 
           <!-- image preview -->
-          <div layout="row" flex layout-align="space-between center">
-            <div data-ng-if="newPicture.$ngfDataUrl" class="drop-box-preview">
+          <md-input-container class="md-block">
+            <div data-ng-if="newPicture" class="drop-box-preview">
               <h3 class="md-subhead" data-translate="PHOTO_PREVIEW"></h3>
-              <img data-ng-src="{{newPicture.$ngfDataUrl}}" class="md-card-image"/>
+              <img data-ngf-thumbnail="newPicture" ngf-size="{width: 300, height: 300, quality: 0.9}" alt="photo">
             </div>
-          </div>
+          </md-input-container>
 
           <!-- heading-desc-lang group -->
           <div class="form-group" data-ng-repeat="metadata in titleDescriptionGroups">

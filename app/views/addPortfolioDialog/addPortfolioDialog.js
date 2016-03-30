@@ -2,12 +2,15 @@ define([
     'app',
     'ng-file-upload',
     'services/serverCallService',
-    'services/storageService'
+    'services/storageService',
+    'services/pictureUploadService'
 ], function(app) {
-    return ['$scope', '$mdDialog', '$location', 'serverCallService', '$rootScope', 'storageService',
-    	function($scope, $mdDialog, $location, serverCallService, $rootScope, storageService) {
+    return ['$scope', '$mdDialog', '$location', 'serverCallService', '$rootScope', 'storageService', '$timeout', 'pictureUploadService',
+    	function($scope, $mdDialog, $location, serverCallService, $rootScope, storageService, $timeout, pictureUploadService) {
 	        $scope.isSaving = false;
 	        $scope.showHints = true;
+	        
+	        var uploadingPicture = false;
 
 	        function init() {
 	            var portfolio = storageService.getPortfolio();
@@ -32,11 +35,37 @@ define([
         	$scope.cancel = function() {
                 $mdDialog.hide();
             };
+            
+            $scope.$watch(function () {
+                return $scope.newPicture;
+            }, function (newPicture) {
+                if (newPicture) {
+                	uploadingPicture = true;
+                	pictureUploadService.upload(newPicture, pictureUploadSuccess, pictureUploadFailed, pictureUploadFinally);
+                }
+            });
+            
+            function pictureUploadSuccess(picture) {
+            	$scope.newPortfolio.picture = picture;
+            }
+            
+            function pictureUploadFailed() {
+            	log('Picture upload failed.');
+            }
+            
+            function pictureUploadFinally() {
+            	uploadingPicture = false;
+            }            
 
             $scope.create = function() {
                 $scope.saving = true;
-                var url = "rest/portfolio/create";
-                serverCallService.makePost(url, $scope.newPortfolio, createPortfolioSuccess, createPortfolioFailed);
+                
+                if (uploadingPicture) {
+                	$timeout($scope.create, 500, false);
+                } else {
+	                var url = "rest/portfolio/create";
+	                serverCallService.makePost(url, $scope.newPortfolio, createPortfolioSuccess, createPortfolioFailed, savePortfolioFinally);
+                }
             };
 
             function createPortfolioSuccess(portfolio) {
@@ -44,15 +73,8 @@ define([
                     createPortfolioFailed();
                 } else {
                     $rootScope.savedPortfolio = portfolio;
-
-                    if ($scope.newPicture) {
-                    	portfolio.hasPicture = true;
-                    	portfolio.picture = $scope.newPicture.$ngfDataUrl;
-                    	uploadPicture(portfolio);
-                    } else {
-                    	redirectToEditPage();
-                    	savePortfolioFinally()
-                    }
+                    $mdDialog.hide();
+                    $location.url('/portfolio/edit?id=' + $rootScope.savedPortfolio.id);
                 }
             }
 
@@ -60,30 +82,25 @@ define([
                 log('Creating portfolio failed.');
             }
 
-            function uploadPicture(portfolio) {
-            	var url = "rest/portfolio/addPicture?portfolioId=" + portfolio.id;
-            	var picture = $scope.newPicture;
-                var data = {
-                		picture: picture
-                };
-                serverCallService.upload(url, data, redirectToEditPage, createPortfolioFailed, savePortfolioFinally);
-            }
-
-            function redirectToEditPage() {
-                $mdDialog.hide();
-                $location.url('/portfolio/edit?id=' + $rootScope.savedPortfolio.id);
-            }
-
             $scope.update = function() {
                 $scope.saving = true;
-
-                var url = "rest/portfolio/update";
-                $scope.portfolio.title = $scope.newPortfolio.title;
-                $scope.portfolio.summary = $scope.newPortfolio.summary;
-                $scope.portfolio.taxon = $scope.newPortfolio.taxon;
-                $scope.portfolio.targetGroups = $scope.newPortfolio.targetGroups;
-                $scope.portfolio.tags = $scope.newPortfolio.tags;
-                serverCallService.makePost(url, $scope.portfolio, createPortfolioSuccess, createPortfolioFailed);
+                
+                if (uploadingPicture) {
+                	$timeout($scope.create, 500, false);
+                } else {
+	                var url = "rest/portfolio/update";
+	                $scope.portfolio.title = $scope.newPortfolio.title;
+	                $scope.portfolio.summary = $scope.newPortfolio.summary;
+	                $scope.portfolio.taxon = $scope.newPortfolio.taxon;
+	                $scope.portfolio.targetGroups = $scope.newPortfolio.targetGroups;
+	                $scope.portfolio.tags = $scope.newPortfolio.tags;
+	                
+	                if ($scope.newPortfolio.picture) {
+	                	$scope.portfolio.picture = $scope.newPortfolio.picture;
+	                }
+	                
+	                serverCallService.makePost(url, $scope.portfolio, createPortfolioSuccess, createPortfolioFailed, savePortfolioFinally);
+                }
             };
 
             $scope.isValid = function() {

@@ -264,7 +264,7 @@ define([
 
             $scope.$watch(function () {
                 return $scope.newPicture;
-            }, function (newPicture, oldPicture) {
+            }, function (newPicture) {
                 if (newPicture) {
                 	uploadingPicture = true;
                 	pictureUploadService.upload(newPicture, pictureUploadSuccess, pictureUploadFailed, pictureUploadFinally);
