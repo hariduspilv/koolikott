@@ -13,6 +13,7 @@ import javax.ws.rs.Consumes;
 import javax.ws.rs.Encoded;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
@@ -138,23 +139,20 @@ public class MaterialResource extends BaseResource {
         materialService.restore(material, getLoggedInUser());
     }
 
-    @POST
+    @PUT
     @RolesAllowed({ "USER", "ADMIN", "RESTRICTED" })
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Material createMaterial(Material material) {
-        material = materialService.createMaterial(material, getLoggedInUser(), true);
-        return material;
-    }
+    public Material createOrUpdateMaterial(Material material) {
+        Material newMaterial = null;
 
-    @POST
-    @Path("update")
-    @RolesAllowed({ "ADMIN", "USER" })
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
-    public Material updateMaterial(Material material) {
-        material = materialService.update(material, getLoggedInUser());
-        return material;
+        if (material.getId() == null) {
+            newMaterial = materialService.createMaterial(material, getLoggedInUser(), true);
+        } else {
+            newMaterial = materialService.update(material, getLoggedInUser());
+        }
+
+        return newMaterial;
     }
 
     @POST

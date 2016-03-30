@@ -261,7 +261,7 @@ public class MaterialServiceTest {
     }
 
     @Test
-    public void updateByUserIsAdmin() throws NoSuchMethodException {
+    public void updateByUserIsAdmin() {
         User user = createMock(User.class);
         Material material = new Material();
         material.setId(1L);
@@ -280,7 +280,7 @@ public class MaterialServiceTest {
     }
 
     @Test
-    public void updateByUserIsPublisher() throws NoSuchMethodException {
+    public void updateByUserIsPublisher() {
         User user = createMock(User.class);
         Material material = new Material();
         material.setId(1L);

@@ -2,6 +2,7 @@ package ee.hm.dop.rest;
 
 import static ee.hm.dop.utils.ConfigurationProperties.MAX_FILE_SIZE;
 import static ee.hm.dop.utils.FileUtils.read;
+import static org.apache.commons.codec.binary.Base64.decodeBase64;
 
 import java.io.InputStream;
 import java.net.HttpURLConnection;
@@ -10,7 +11,7 @@ import javax.annotation.security.RolesAllowed;
 import javax.inject.Inject;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
-import javax.ws.rs.PUT;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -47,12 +48,13 @@ public class PictureResource extends BaseResource {
         return Response.status(HttpURLConnection.HTTP_NOT_FOUND).build();
     }
 
-    @PUT
+    @POST
     @RolesAllowed({ "USER", "ADMIN" })
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     public Picture uploadPicture(@FormDataParam("picture") InputStream fileInputStream) {
-        byte[] data = read(fileInputStream, configuration.getInt(MAX_FILE_SIZE));
+        byte[] dataBase64 = read(fileInputStream, configuration.getInt(MAX_FILE_SIZE));
+        byte[] data = decodeBase64(dataBase64);
 
         Picture picture = new Picture();
         picture.setData(data);

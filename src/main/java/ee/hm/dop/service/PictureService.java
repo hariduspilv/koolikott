@@ -12,6 +12,8 @@ public class PictureService {
     @Inject
     private PictureDAO pictureDAO;
 
+    private static final Object lock = new Object();
+
     public Picture getByName(String name) {
         return pictureDAO.findByName(name);
     }
@@ -23,12 +25,17 @@ public class PictureService {
 
         String name = sha1Hex(picture.getData());
 
-        Picture existingPicture = getByName(name);
-        if (existingPicture != null) {
-            return existingPicture;
+        Picture newPicture = null;
+        synchronized (lock) {
+            Picture existingPicture = getByName(name);
+            if (existingPicture != null) {
+                newPicture = existingPicture;
+            } else {
+                picture.setName(name);
+                newPicture = pictureDAO.update(picture);
+            }
         }
 
-        picture.setName(name);
-        return pictureDAO.update(picture);
+        return newPicture;
     }
 }

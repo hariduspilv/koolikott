@@ -38,7 +38,6 @@ import ee.hm.dop.service.MaterialService;
 public class MaterialResourceTest extends ResourceIntegrationTestBase {
 
     private static final String MATERIAL_INCREASE_VIEW_COUNT_URL = "material/increaseViewCount";
-    private static final String GET_MATERIAL_PICTURE_URL = "material/getPicture?materialId=%s";
     private static final String GET_MATERIAL_URL = "material?materialId=%s";
     private static final String GET_BY_CREATOR_URL = "material/getByCreator?username=%s";
     private static final String CREATE_MATERIAL_URL = "material";
@@ -154,13 +153,6 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
     }
 
     @Test
-    public void getMaterialPictureNull() {
-        long materialId = 999;
-        Response response = doGet(format(GET_MATERIAL_PICTURE_URL, materialId), MediaType.WILDCARD_TYPE);
-        assertEquals(Status.NOT_FOUND.getStatusCode(), response.getStatus());
-    }
-
-    @Test
     public void getMaterialWithSubjects() {
         Material material = getMaterial(6);
 
@@ -246,7 +238,7 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
         crossCurricularTheme.setName("Environment_and_sustainable_development");
         material.setCrossCurricularThemes(Arrays.asList(crossCurricularTheme));
 
-        Response response = doPost(CREATE_MATERIAL_URL, Entity.entity(material, MediaType.APPLICATION_JSON_TYPE));
+        Response response = createMaterial(material);
         assertEquals(Status.OK.getStatusCode(), response.getStatus());
 
         Material createdMaterial = response.readEntity(Material.class);
@@ -282,7 +274,7 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
         crossCurricularTheme.setName("Environment_and_sustainable_development");
         material.setCrossCurricularThemes(Arrays.asList(crossCurricularTheme));
 
-        Response response = doPost(CREATE_MATERIAL_URL, Entity.entity(material, MediaType.APPLICATION_JSON_TYPE));
+        Response response = createMaterial(material);
         assertEquals(Status.OK.getStatusCode(), response.getStatus());
 
         Material createdMaterial = response.readEntity(Material.class);
@@ -299,7 +291,7 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
         material.setSource("http://curriculum.example.com/2");
         material.setCurriculumLiterature(true);
 
-        Response response = doPost(CREATE_MATERIAL_URL, Entity.entity(material, MediaType.APPLICATION_JSON_TYPE));
+        Response response = createMaterial(material);
         assertEquals(Status.OK.getStatusCode(), response.getStatus());
 
         Material createdMaterial = response.readEntity(Material.class);
@@ -318,7 +310,7 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
         material.setSource("http://curriculum.example.com/3");
         material.setCurriculumLiterature(true);
 
-        Response response = doPost(CREATE_MATERIAL_URL, Entity.entity(material, MediaType.APPLICATION_JSON_TYPE));
+        Response response = createMaterial(material);
         assertEquals(Status.OK.getStatusCode(), response.getStatus());
 
         Material createdMaterial = response.readEntity(Material.class);
@@ -327,6 +319,10 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
         assertTrue(createdMaterial.isCurriculumLiterature());
 
         logout();
+    }
+
+    private Response createMaterial(Material material) {
+        return doPut(CREATE_MATERIAL_URL, Entity.entity(material, MediaType.APPLICATION_JSON_TYPE));
     }
 
     @Test
@@ -338,7 +334,7 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
         material.setSource("http://curriculum.example.com");
         material.setCurriculumLiterature(true);
 
-        Response response = doPost(CREATE_MATERIAL_URL, Entity.entity(material, MediaType.APPLICATION_JSON_TYPE));
+        Response response = createMaterial(material);
         assertEquals(Status.OK.getStatusCode(), response.getStatus());
 
         Material createdMaterial = response.readEntity(Material.class);

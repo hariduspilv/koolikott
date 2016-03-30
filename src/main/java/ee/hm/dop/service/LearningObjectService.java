@@ -7,7 +7,6 @@ import java.util.function.BiFunction;
 import javax.inject.Inject;
 
 import ee.hm.dop.dao.LearningObjectDAO;
-import ee.hm.dop.dao.PictureDAO;
 import ee.hm.dop.model.LearningObject;
 import ee.hm.dop.model.Tag;
 import ee.hm.dop.model.User;
@@ -18,9 +17,6 @@ public class LearningObjectService {
 
     @Inject
     private LearningObjectDAO learningObjectDAO;
-
-    @Inject
-    private PictureDAO pictureDAO;
 
     @Inject
     private SearchEngineService searchEngineService;

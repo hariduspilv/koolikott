@@ -58,7 +58,7 @@ public class PictureResourceTest extends ResourceIntegrationTestBase {
         @SuppressWarnings("resource")
         FormDataMultiPart formDataMultiPart = (FormDataMultiPart) new FormDataMultiPart().bodyPart(filePart);
 
-        Response response = doPut("picture", Entity.entity(formDataMultiPart, formDataMultiPart.getMediaType()));
+        Response response = doPost("picture", Entity.entity(formDataMultiPart, formDataMultiPart.getMediaType()));
 
         formDataMultiPart.close();
 

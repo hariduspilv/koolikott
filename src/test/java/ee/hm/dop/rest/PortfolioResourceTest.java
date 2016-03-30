@@ -38,7 +38,6 @@ public class PortfolioResourceTest extends ResourceIntegrationTestBase {
     private static final String UPDATE_PORTFOLIO_URL = "portfolio/update";
     private static final String GET_PORTFOLIO_URL = "portfolio?id=%s";
     private static final String GET_BY_CREATOR_URL = "portfolio/getByCreator?username=%s";
-    private static final String GET_PORTFOLIO_PICTURE_URL = "portfolio/getPicture?portfolioId=%s";
     private static final String PORTFOLIO_INCREASE_VIEW_COUNT_URL = "portfolio/increaseViewCount";
     private static final String PORTFOLIO_COPY_URL = "portfolio/copy";
     private static final String DELETE_PORTFOLIO_URL = "portfolio/delete";
@@ -180,42 +179,6 @@ public class PortfolioResourceTest extends ResourceIntegrationTestBase {
                 });
 
         assertEquals(0, portfolios.size());
-    }
-
-    @Test
-    public void getPortfolioPictureNull() {
-        long portfolioId = 2;
-        Response response = doGet(format(GET_PORTFOLIO_PICTURE_URL, portfolioId), MediaType.WILDCARD_TYPE);
-        assertEquals(Response.Status.NOT_FOUND.getStatusCode(), response.getStatus());
-    }
-
-    @Test
-    public void getPortfolioPictureIdNull() {
-        Response response = doGet(format(GET_PORTFOLIO_PICTURE_URL, "null"), MediaType.WILDCARD_TYPE);
-        assertEquals(Response.Status.NOT_FOUND.getStatusCode(), response.getStatus());
-    }
-
-    @Test
-    public void getPortfolioPictureWhenPortfolioIsPrivate() {
-        long portfolioId = 7;
-        Response response = doGet(format(GET_PORTFOLIO_PICTURE_URL, portfolioId), MediaType.WILDCARD_TYPE);
-        assertEquals(Response.Status.NOT_FOUND.getStatusCode(), response.getStatus());
-    }
-
-    @Test
-    public void getPortfolioPictureWhenPortfolioIsPrivateAsCreator() {
-        login("38011550077");
-        long portfolioId = 7;
-        byte[] picture = getPortfolioPicture(portfolioId);
-        assertNotNull(picture);
-    }
-
-    @Test
-    public void getPortfolioPictureWhenPortfolioIsPrivateAsAdmin() {
-        login("89898989898");
-        long portfolioId = 7;
-        byte[] picture = getPortfolioPicture(portfolioId);
-        assertNotNull(picture);
     }
 
     @Test
@@ -523,12 +486,6 @@ public class PortfolioResourceTest extends ResourceIntegrationTestBase {
         portfolio.setTitle("Tere");
 
         return doPost(CREATE_PORTFOLIO_URL, portfolio, Portfolio.class);
-    }
-
-    private byte[] getPortfolioPicture(long portfolioId) {
-        Response response = doGet(format(GET_PORTFOLIO_PICTURE_URL, portfolioId), MediaType.WILDCARD_TYPE);
-        return response.readEntity(new GenericType<byte[]>() {
-        });
     }
 
     private Portfolio getPortfolio(long id) {
