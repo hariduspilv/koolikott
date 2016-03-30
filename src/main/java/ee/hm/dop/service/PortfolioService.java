@@ -341,6 +341,7 @@ public class PortfolioService implements LearningObjectHandler {
         originalPortfolio.setTaxon(portfolio.getTaxon());
         originalPortfolio.setChapters(portfolio.getChapters());
         originalPortfolio.setVisibility(portfolio.getVisibility());
+        originalPortfolio.setPicture(portfolio.getPicture());
         return originalPortfolio;
     }
 
