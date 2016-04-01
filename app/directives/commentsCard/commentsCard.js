@@ -37,7 +37,7 @@ define([
                         return '(' + commentsLeft + ')'
 
                     return '(' + COMMENTS_PER_PAGE + '/' + commentsLeft + ')';
-                }
+                };
 
                 $scope.showMoreComments = function() {
                     var commentsLeft = getLeftCommentsCount();
@@ -46,11 +46,11 @@ define([
                         $scope.visibleCommentsCount += COMMENTS_PER_PAGE
                     else
                         $scope.visibleCommentsCount = $scope.comments.length;
-                }
+                };
 
                 $scope.showMoreCommentsButton = function() {
                     return getLeftCommentsCount() > 0;
-                }
+                };
 
                 function getLeftCommentsCount() {
                     if ($scope.comments) {
