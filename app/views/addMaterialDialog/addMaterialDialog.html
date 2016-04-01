@@ -56,10 +56,11 @@
           </form>
 
           <!-- image preview -->
-          <md-input-container class="md-block">
-            <div data-ng-if="newPicture" class="drop-box-preview">
+          <md-input-container data-ng-if="newPicture || material.picture" class="md-block">
+            <div class="drop-box-preview">
               <h3 class="md-subhead" data-translate="PHOTO_PREVIEW"></h3>
-              <img data-ngf-thumbnail="newPicture" ngf-size="{width: 300, height: 300, quality: 0.9}" alt="photo">
+              <img data-ng-if="newPicture" data-ngf-thumbnail="newPicture" ngf-size="{width: 300, height: 300, quality: 0.9}" alt="photo">
+              <img data-ng-if="!newPicture && material.picture" data-ng-src="rest/picture/{{material.picture.name}}" ngf-size="{width: 300, height: 300, quality: 0.9}" alt="photo">
             </div>
           </md-input-container>
 
