@@ -3,8 +3,8 @@ define([
     'services/translationService',
     'services/authenticatedUserService'
 ], function (app) {
-    app.directive('dopReportImproper', ['translationService', '$mdDialog', '$translate', 'authenticatedUserService', '$rootScope',
-        function (translationService, $mdDialog, $translate, authenticatedUserService, $rootScope) {
+    app.directive('dopReportImproper', ['translationService', '$mdDialog', '$translate', 'authenticatedUserService', '$rootScope', 'toastService',
+        function (translationService, $mdDialog, $translate, authenticatedUserService, $rootScope, toastService) {
         return {
             scope: {
                 learningObject: '='
@@ -80,6 +80,7 @@ define([
                 		setImproperFailed();
                 	} else {
                         $rootScope.isReportedByUser = true;
+                        toastService.show('TOAST_NOTIFICATION_SENT_TO_ADMIN');
                 	}
                 }
 
