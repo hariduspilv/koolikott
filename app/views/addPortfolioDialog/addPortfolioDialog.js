@@ -29,6 +29,7 @@ define([
 	                $scope.newPortfolio.taxon = portfolioClone.taxon;
 	                $scope.newPortfolio.targetGroups = portfolioClone.targetGroups;
 	                $scope.newPortfolio.tags = portfolioClone.tags;
+	                $scope.newPortfolio.picture = portfolioClone.picture;
 	            }
 	        }
 
