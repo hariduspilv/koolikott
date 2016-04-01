@@ -27,4 +27,8 @@ ALTER TABLE LearningObject DROP pic;
 
 -- Moving LearningObject picture to a separate table end
 
+INSERT INTO Translation(translationGroup, translationKey, translation) VALUES (3,'TOAST_NOTIFICATION_SENT_TO_ADMIN','Notification sent to administrator');
+INSERT INTO Translation(translationGroup, translationKey, translation) VALUES (1,'TOAST_NOTIFICATION_SENT_TO_ADMIN','Teade saadetud administraatorile');
+INSERT INTO Translation(translationGroup, translationKey, translation) VALUES (2,'TOAST_NOTIFICATION_SENT_TO_ADMIN','Администратор уведомляется');
+
 SET foreign_key_checks = 1;
