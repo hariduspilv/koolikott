@@ -140,7 +140,7 @@ public class MaterialResource extends BaseResource {
     }
 
     @PUT
-    @RolesAllowed({ "USER", "ADMIN", "RESTRICTED" })
+    @RolesAllowed({ "USER", "ADMIN" })
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Material createOrUpdateMaterial(Material material) {

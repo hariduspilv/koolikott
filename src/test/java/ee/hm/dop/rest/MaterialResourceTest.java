@@ -178,8 +178,8 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
     @Test
     public void getByCreator() {
         String username = "mati.maasikas";
-        List<Material> materials = doGet(format(GET_BY_CREATOR_URL, username)).readEntity(
-                new GenericType<List<Material>>() {
+        List<Material> materials = doGet(format(GET_BY_CREATOR_URL, username))
+                .readEntity(new GenericType<List<Material>>() {
                 });
 
         assertEquals(3, materials.size());
@@ -211,8 +211,8 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
     @Test
     public void getByCreatorNoMaterials() {
         String username = "voldemar.vapustav";
-        List<Material> materials = doGet(format(GET_BY_CREATOR_URL, username)).readEntity(
-                new GenericType<List<Material>>() {
+        List<Material> materials = doGet(format(GET_BY_CREATOR_URL, username))
+                .readEntity(new GenericType<List<Material>>() {
                 });
 
         assertEquals(0, materials.size());
@@ -343,6 +343,17 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
         assertFalse(createdMaterial.isCurriculumLiterature());
 
         logout();
+    }
+
+    @Test
+    public void createOrUpdateAsRestrictedUser() {
+        login("89898989890");
+
+        Material material = new Material();
+        material.setSource("http://example.com/restricted");
+
+        Response response = createMaterial(material);
+        assertEquals(Status.FORBIDDEN.getStatusCode(), response.getStatus());
     }
 
     @Test

@@ -46,6 +46,7 @@ insert into User(id, userName, name, surName, idCode, role, publisher) values (7
 insert into User(id, userName, name, surName, idCode, role, publisher) values (8, 'admin.admin', 'Admin', 'Admin', '89898989898', 'ADMIN', null);
 insert into User(id, userName, name, surName, idCode, role, publisher) values (9, 'second.testuser', 'Second', 'Testuser', '89012378912', 'USER', null);
 insert into User(id, userName, name, surName, idCode, role, publisher) values (10, 'super.publisher', 'Super', 'Publisher', '77007700770', 'USER', 1);
+insert into User(id, userName, name, surName, idCode, role, publisher) values (11, 'restricted.user', 'Restricted', 'User', '89898989890', 'RESTRICTED', null);
 
 -- AuthenticatedUser
 
