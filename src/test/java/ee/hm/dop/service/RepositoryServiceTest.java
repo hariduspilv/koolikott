@@ -138,6 +138,7 @@ public class RepositoryServiceTest {
         expect(materialIterator.next()).andReturn(material);
         String repositoryIdentifier = "123456Identifier";
         expect(material.getRepositoryIdentifier()).andReturn(repositoryIdentifier);
+        expect(material.getPicture()).andReturn(null);
         material.setRepository(repository);
 
         Material originalMaterial = new Material();
