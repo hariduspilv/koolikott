@@ -31,4 +31,12 @@ INSERT INTO Translation(translationGroup, translationKey, translation) VALUES (3
 INSERT INTO Translation(translationGroup, translationKey, translation) VALUES (1,'TOAST_NOTIFICATION_SENT_TO_ADMIN','Teade saadetud administraatorile');
 INSERT INTO Translation(translationGroup, translationKey, translation) VALUES (2,'TOAST_NOTIFICATION_SENT_TO_ADMIN','Администратор уведомляется');
 
+INSERT INTO Translation(translationGroup, translationKey, translation) VALUES (3,'REPORT_COUNT','Report count');
+INSERT INTO Translation(translationGroup, translationKey, translation) VALUES (1,'REPORT_COUNT','Raporteerimiste arv');
+INSERT INTO Translation(translationGroup, translationKey, translation) VALUES (2,'REPORT_COUNT','Количество докладов');
+
+INSERT INTO Translation(translationGroup, translationKey, translation) VALUES (3,'REPORTED_BY_MULTIPLE_USERS','Multiple users');
+INSERT INTO Translation(translationGroup, translationKey, translation) VALUES (1,'REPORTED_BY_MULTIPLE_USERS','Mitmed kasutajad');
+INSERT INTO Translation(translationGroup, translationKey, translation) VALUES (2,'REPORTED_BY_MULTIPLE_USERS','Несколько пользователей');
+
 SET foreign_key_checks = 1;
