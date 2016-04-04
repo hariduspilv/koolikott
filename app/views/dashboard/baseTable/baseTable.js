@@ -24,16 +24,20 @@ define([
             page: 1
         };
 
-        function getItemsSuccess(data, order) {
+        function getItemsSuccess(data, order, merge) {
             if (isEmpty(data)) {
                 log('Getting data failed.');
             } else {
-                collection = data;
-                $scope.itemsCount = data.length;
-
                 if (order) {
                     $scope.query.order = order;
                 }
+                if (merge) {
+                    data = mergeReports(data);
+                }
+
+                collection = data;
+                $scope.itemsCount = data.length;
+
                 orderItems(data, $scope.query.order);
 
                 $scope.data = data.slice(0, $scope.query.limit);
@@ -171,6 +175,40 @@ define([
 
         $scope.formatDate = function (date) {
             return formatDateToDayMonthYear(date);
+        };
+
+        /**
+         *  Merge reports so that every learning object is represented by only 1 row in the table.
+         */
+        function mergeReports(items) {
+            var merged = [];
+
+            for (var i = 0; i < items.length; i++) {
+                var item = items[i];
+                var isAlreadyReported = false;
+
+                for (var j = 0; j < merged.length; j++) {
+                    if (merged[j].learningObject.id === item.learningObject.id) {
+                        isAlreadyReported = true;
+
+                        merged[j].reportCount++;
+
+                        // show the newest date
+                        if (new Date(merged[j].added) < new Date(item.added)) {
+                            merged[j].added = item.added;
+                        }
+
+                        break;
+                    }
+                }
+
+                if (!isAlreadyReported) {
+                    item.reportCount = 1;
+                    merged.push(item);
+                }
+            }
+
+            return merged;
         }
 
         return {

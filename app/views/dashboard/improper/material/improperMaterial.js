@@ -22,35 +22,12 @@ define([
             	var improperMaterials = [];
 
             	for (var i = 0; i < impropers.length; i++) {
-            		var improper = impropers[i];
-
-            		if (improper.learningObject.type === '.Material') {
-                        // collect duplicates
-                        var isAlreadyReported = false;
-
-                        for (var j = 0; j < improperMaterials.length; j++) {
-                            if (improperMaterials[j].learningObject.id === improper.learningObject.id) {
-                                isAlreadyReported = true;
-
-                                improperMaterials[j].reportCount++;
-
-                                // show the newest date
-                                if (new Date(improperMaterials[j].added) < new Date(improper.added)) {
-                                    improperMaterials[j].added = improper.added;
-                                }
-
-                                break;
-                            }
-                        }
-
-                        if (!isAlreadyReported) {
-                            improper.reportCount = 1;
-            			    improperMaterials.push(improper);
-                        }
+            		if (impropers[i].learningObject.type === '.Material') {
+                        improperMaterials.push(impropers[i]);
             		}
             	}
 
-            	base.getItemsSuccess(improperMaterials, 'byReportCount');
+            	base.getItemsSuccess(improperMaterials, 'byReportCount', true);
             }
 
             $scope.getLearningObjectTitle = function(material)  {
