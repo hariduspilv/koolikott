@@ -78,14 +78,31 @@ define([
 
         function filterItems() {
             filtredCollection = collection.filter(function (data) {
-                if (data && data.portfolio != null)
-                    return data.portfolio.title.slice(0, $scope.query.filter.length).toLowerCase() === $scope.query.filter.toLowerCase();
-                if (data && data.material != null)
-                    return $scope.getCorrectLanguageTitle(data.material).slice(0, $scope.query.filter.length).toLowerCase() === $scope.query.filter.toLowerCase();
-                if (data && data.type == ".Material")
-                    return $scope.getCorrectLanguageTitle(data).slice(0, $scope.query.filter.length).toLowerCase() === $scope.query.filter.toLowerCase();
-                if (data && data.type == ".Portfolio")
-                    return data.title.slice(0, $scope.query.filter.length).toLowerCase() === $scope.query.filter.toLowerCase();
+                if (!data) {
+                    return;
+                }
+
+                var text;
+
+                if (data.learningObject && data.learningObject.type) {
+                    if (data.learningObject.type === '.Material')
+                        text = $scope.getCorrectLanguageTitle(data.learningObject);
+                    if (data.learningObject.type === '.Portfolio')
+                        text = data.learningObject.title;
+                }
+
+                if (data.material)
+                    text = $scope.getCorrectLanguageTitle(data.material);
+
+                if (data.type === '.Material')
+                    text = $scope.getCorrectLanguageTitle(data);
+
+                if (data.type === '.Portfolio')
+                    text = data.title;
+
+                if (text) {
+                    return text.toLowerCase().indexOf($scope.query.filter.toLowerCase()) !== -1;
+                }
             });
 
             $scope.itemsCount = filtredCollection.length;
