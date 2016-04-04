@@ -39,21 +39,25 @@ public class SecurityFilter implements ContainerRequestFilter {
         String token = request.getHeader("Authentication");
 
         if (token != null) {
-            AuthenticatedUserService authenticatedUserService = newAuthenticatedUserService();
-            AuthenticatedUser authenticatedUser = authenticatedUserService.getAuthenticatedUserByToken(token);
+            AuthenticatedUser authenticatedUser = getAuthenticatedUserByToken(token);
             if (authenticatedUser != null && isCorrectUser(authenticatedUser)) {
                 if (isSessionValid(authenticatedUser)) {
                     DopPrincipal principal = new DopPrincipal(authenticatedUser);
                     DopSecurityContext securityContext = new DopSecurityContext(principal, uriInfo);
                     requestContext.setSecurityContext(securityContext);
                 } else {
-                    newLogoutService().logout(authenticatedUser);
                     abortWithAuthenticationTimeout(requestContext);
                 }
             } else {
                 abortWithAuthenticationTimeout(requestContext);
             }
         }
+    }
+
+    private AuthenticatedUser getAuthenticatedUserByToken(String token) {
+        AuthenticatedUserService authenticatedUserService = newAuthenticatedUserService();
+        AuthenticatedUser authenticatedUser = authenticatedUserService.getAuthenticatedUserByToken(token);
+        return authenticatedUser;
     }
 
     private void abortWithAuthenticationTimeout(ContainerRequestContext requestContext) {

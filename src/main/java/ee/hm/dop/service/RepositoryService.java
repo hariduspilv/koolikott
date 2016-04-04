@@ -129,12 +129,16 @@ public class RepositoryService {
     }
 
     private void createMaterial(Material material) {
+        createPicture(material);
+
+        materialService.createMaterial(material, null, false);
+    }
+
+    private void createPicture(Material material) {
         if (material.getPicture() != null) {
             Picture picture = pictureService.create(material.getPicture());
             material.setPicture(picture);
         }
-
-        materialService.createMaterial(material, null, false);
     }
 
     private void updateMaterial(Material material, Material existentMaterial) {
@@ -142,6 +146,7 @@ public class RepositoryService {
             materialService.delete(existentMaterial);
         } else {
             material.setId(existentMaterial.getId());
+            createPicture(material);
             materialService.update(material, null);
         }
     }

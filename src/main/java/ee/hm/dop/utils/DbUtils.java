@@ -5,7 +5,12 @@ import static ee.hm.dop.guice.GuiceInjector.getInjector;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class DbUtils {
+
+    private static final Logger logger = LoggerFactory.getLogger(DbUtils.class);
 
     public static EntityTransaction getTransaction() {
         return getEntityManager().getTransaction();
@@ -35,13 +40,18 @@ public class DbUtils {
      * If transaction is not active anymore, nothing is done.
      */
     public static void closeTransaction() {
-        EntityTransaction transaction = getTransaction();
-        if (transaction.isActive()) {
-            if (transaction.getRollbackOnly()) {
-                transaction.rollback();
-            } else {
-                transaction.commit();
+        try {
+            EntityTransaction transaction = getTransaction();
+
+            if (transaction.isActive()) {
+                if (transaction.getRollbackOnly()) {
+                    transaction.rollback();
+                } else {
+                    transaction.commit();
+                }
             }
+        } catch (Exception ex) {
+            logger.error("Error while closing transaction.", ex);
         }
     }
 }
