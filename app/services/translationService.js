@@ -20,6 +20,10 @@ define(['angularAMD'], function(angularAMD) {
             getLanguage: function() {
                 var language = localStorage.getItem("userPreferredLanguage");
                 return $translate.proposedLanguage() || $translate.use() || $translate.preferredLanguage();
+            },
+
+            instant : function(translationId, interpolateParams, interpolationId, forceLanguage) {
+                return $translate.instant(translationId, interpolateParams, interpolationId, forceLanguage);
             }
         };
 

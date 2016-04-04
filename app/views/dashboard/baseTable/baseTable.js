@@ -3,7 +3,9 @@ define([
     'jquery',
     'services/translationService',
 ], function (app, $) {
-    app.controller('baseTableController', ['$scope', '$location', '$sce', '$templateRequest', '$compile', 'translationService', function ($scope, $location, $sce, $templateRequest, $compile, translationService) {
+    app.controller('baseTableController', ['$scope', '$location', '$sce', '$templateRequest', '$compile', 'translationService',
+        function ($scope, $location, $sce, $templateRequest, $compile, translationService) {
+
         var collection = null;
         var filtredCollection = null;
 
@@ -22,13 +24,16 @@ define([
             page: 1
         };
 
-        function getItemsSuccess(data) {
+        function getItemsSuccess(data, order) {
             if (isEmpty(data)) {
                 log('Getting data failed.');
             } else {
                 collection = data;
                 $scope.itemsCount = data.length;
 
+                if (order) {
+                    $scope.query.order = order;
+                }
                 orderItems(data, $scope.query.order);
 
                 $scope.data = data.slice(0, $scope.query.limit);
@@ -49,8 +54,19 @@ define([
                     if (order === 'byUpdatedAt' || order === '-byUpdatedAt')
                         return new Date(b.updated) - new Date(a.updated);
 
-                    if ((order === 'bySubmittedBy' || order == '-bySubmittedBy') && a.creator && b.creator)
-                        return (a.creator.name + ' ' + a.creator.surname).localeCompare(b.creator.name + ' ' + b.creator.surname);
+                    if ((order === 'bySubmittedBy' || order == '-bySubmittedBy') && a.creator && b.creator) {
+                        var aName = a.creator.name + ' ' + a.creator.surname;
+                        var bName = b.creator.name + ' ' + b.creator.surname;
+                        if (a.reportCount > 1)
+                            aName = translationService.instant('REPORTED_BY_MULTIPLE_USERS');
+                        if (b.reportCount > 1)
+                            bName = translationService.instant('REPORTED_BY_MULTIPLE_USERS');
+
+                        return aName.localeCompare(bName);
+                    }
+
+                    if (order === 'byReportCount' || order === '-byReportCount')
+                        return b.reportCount - a.reportCount;
                 }
 
                 return 0;
