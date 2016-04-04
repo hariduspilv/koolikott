@@ -3,6 +3,7 @@
     <tr md-row>
       <th md-column><span data-translate="TITLE"></span></th>
       <th md-column md-order-by="bySubmittedAt"><span data-translate="SUBMITTED_AT"></span></th>
+      <th md-column md-order-by="byReportCount"><span data-translate="REPORT_COUNT"></span></th>
       <th md-column md-order-by="bySubmittedBy"><span data-translate="SUBMITTED_BY"></span></th>
       <th md-column></th>
     </tr>
@@ -11,7 +12,9 @@
     <tr md-row ng-repeat="item in data">
       <td md-cell data-ng-bind="getCorrectLanguageTitle(item.material)"></td>
       <td md-cell data-ng-bind="formatDate(item.added)"></td>
-      <td md-cell>{{item.creator.name}} {{item.creator.surname}}</td>
+      <td md-cell>{{item.reportCount}}</td>
+      <td md-cell data-ng-if="item.reportCount === 1">{{item.creator.name}} {{item.creator.surname}}
+      <td md-cell data-ng-if="item.reportCount > 1"><span data-translate="REPORTED_BY_MULTIPLE_USERS"></span></td>
       <td md-cell>
         <md-button aria-label="Ava material" data-ng-href="/material?materialId={{item.material.id}}" class="md-raised md-default" data-translate="BUTTON_OPEN"></md-button>
       </td>

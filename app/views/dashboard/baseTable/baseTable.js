@@ -188,7 +188,7 @@ define([
                 var isAlreadyReported = false;
 
                 for (var j = 0; j < merged.length; j++) {
-                    if (merged[j].learningObject.id === item.learningObject.id) {
+                    if (reportsContainSameLearningObject(merged[j], item)) {
                         isAlreadyReported = true;
 
                         merged[j].reportCount++;
@@ -209,6 +209,24 @@ define([
             }
 
             return merged;
+        }
+
+        function reportsContainSameLearningObject(report1, report2) {
+            var id1, id2;
+
+            if (report1.learningObject) {
+                id1 = report1.learningObject.id;
+            } else if (report1.material) {
+                id1 = report1.material.id;
+            }
+
+            if (report2.learningObject) {
+                id2 = report2.learningObject.id;
+            } else if (report2.material) {
+                id2 = report2.material.id;
+            }
+
+            return id1 === id2;
         }
 
         return {
