@@ -18,6 +18,7 @@ import ee.hm.dop.model.Picture;
 import ee.hm.dop.model.Repository;
 import ee.hm.dop.oaipmh.MaterialIterator;
 import ee.hm.dop.oaipmh.RepositoryManager;
+import ee.hm.dop.oaipmh.SynchronizationAudit;
 import ee.hm.dop.utils.DbUtils;
 
 public class RepositoryService {
@@ -57,8 +58,8 @@ public class RepositoryService {
     public void synchronize(Repository repository) {
         logger.info(format("Updating materials for %s", repository));
 
-        long failedMaterials = 0;
-        long successfulMaterials = 0;
+        SynchronizationAudit audit = new SynchronizationAudit();
+
         long start = System.currentTimeMillis();
         DateTime startSyncDateTime;
 
@@ -76,12 +77,16 @@ public class RepositoryService {
             try {
                 Material material = materials.next();
                 if (material != null) {
-                    handleMaterial(repository, material);
-                    successfulMaterials++;
+                    handleMaterial(repository, material, audit);
+                    audit.successfullyDownloaded();
+
+                    if (material.isDeleted()) {
+                        audit.deletedMaterialDownloaded();
+                    }
                 }
             } catch (Exception e) {
                 logger.error("An error occurred while getting the next material from repository.", e);
-                failedMaterials++;
+                audit.failedToDownload();
             }
 
             count = getCount(count);
@@ -92,9 +97,11 @@ public class RepositoryService {
 
         long end = System.currentTimeMillis();
         String message = "Updating materials took %s milliseconds. Successfully downloaded %s"
-                + " materials and %s materials failed to download of total %s";
-        logger.info(format(message, end - start, successfulMaterials, failedMaterials, successfulMaterials
-                + failedMaterials));
+                + " materials (of which %s are deleted materials) and %s materials failed to download of total %s";
+        logger.info(format(message, end - start, audit.getSuccessfullyDownloaded(), audit.getDeletedMaterialsDownloaded(),
+                audit.getFailedToDownload(), audit.getSuccessfullyDownloaded() + audit.getFailedToDownload()));
+        logger.info(format("%s new materials were created, %s existing materials were updated and %s existing materials were deleted",
+                audit.getNewMaterialsCreated(), audit.getExistingMaterialsUpdated(), audit.getExistingMaterialsDeleted()));
 
         updateSolrIndex();
     }
@@ -112,7 +119,7 @@ public class RepositoryService {
         return count;
     }
 
-    private void handleMaterial(Repository repository, Material material) {
+    private void handleMaterial(Repository repository, Material material, SynchronizationAudit audit) {
         Material existentMaterial = materialDAO.findByRepositoryAndRepositoryIdentifier(repository,
                 material.getRepositoryIdentifier());
 
@@ -122,15 +129,15 @@ public class RepositoryService {
         }
 
         if (existentMaterial != null) {
-            updateMaterial(material, existentMaterial);
+            updateMaterial(material, existentMaterial, audit);
         } else if (!material.isDeleted()) {
             createMaterial(material);
+            audit.newMaterialCreated();
         }
     }
 
     private void createMaterial(Material material) {
         createPicture(material);
-
         materialService.createMaterial(material, null, false);
     }
 
@@ -141,13 +148,15 @@ public class RepositoryService {
         }
     }
 
-    private void updateMaterial(Material material, Material existentMaterial) {
+    private void updateMaterial(Material material, Material existentMaterial, SynchronizationAudit audit) {
         if (material.isDeleted()) {
             materialService.delete(existentMaterial);
+            audit.existingMaterialDeleted();
         } else {
             material.setId(existentMaterial.getId());
             createPicture(material);
             materialService.update(material, null);
+            audit.existingMaterialUpdated();
         }
     }
 
