@@ -40,18 +40,14 @@ public class DbUtils {
      * If transaction is not active anymore, nothing is done.
      */
     public static void closeTransaction() {
-        try {
-            EntityTransaction transaction = getTransaction();
+        EntityTransaction transaction = getTransaction();
 
-            if (transaction.isActive()) {
-                if (transaction.getRollbackOnly()) {
-                    transaction.rollback();
-                } else {
-                    transaction.commit();
-                }
+        if (transaction.isActive()) {
+            if (transaction.getRollbackOnly()) {
+                transaction.rollback();
+            } else {
+                transaction.commit();
             }
-        } catch (Exception ex) {
-            logger.error("Error while closing transaction.", ex);
         }
     }
 }
