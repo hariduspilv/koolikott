@@ -18,8 +18,6 @@ public class MaterialIterator implements Iterator<Material> {
 
     private static final Logger logger = LoggerFactory.getLogger(MaterialIterator.class);
 
-    private static final String METADATA_PREFIX = "oai_lom";
-
     @Inject
     private ListIdentifiersConnector listIdentifiersConnector;
 
@@ -32,8 +30,9 @@ public class MaterialIterator implements Iterator<Material> {
 
     public Iterator<Material> connect(Repository repository) throws Exception {
         this.repository = repository;
-        identifierIterator = listIdentifiersConnector.connect(repository.getBaseURL(),
-                repository.getLastSynchronization(), METADATA_PREFIX).iterator();
+        identifierIterator = listIdentifiersConnector
+                .connect(repository.getBaseURL(), repository.getLastSynchronization(), repository.getMetadataPrefix())
+                .iterator();
         return this;
     }
 
@@ -54,7 +53,7 @@ public class MaterialIterator implements Iterator<Material> {
         }
 
         try {
-            Document doc = getMaterialConnector.getMaterial(repository, identifier, METADATA_PREFIX);
+            Document doc = getMaterialConnector.getMaterial(repository, identifier, repository.getMetadataPrefix());
             material = materialParser.parse(doc);
         } catch (Exception e) {
             String message = "Error getting material (id = %s) from repository (url = %s).";

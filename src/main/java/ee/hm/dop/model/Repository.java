@@ -42,6 +42,9 @@ public class Repository {
     @Column
     private boolean isEstonianPublisher;
 
+    @Column(nullable = false)
+    private String metadataPrefix;
+
     public Long getId() {
         return id;
     }
@@ -84,11 +87,20 @@ public class Repository {
         this.isEstonianPublisher = isEstonianPublisher;
     }
 
+    public String getMetadataPrefix() {
+        return metadataPrefix;
+    }
+
+    public void setMetadataPrefix(String metadataPrefix) {
+        this.metadataPrefix = metadataPrefix;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, SHORT_PREFIX_STYLE).append(id) //
                 .append(schema) //
                 .append(baseURL) //
+                .append(metadataPrefix) //
                 .build();
     }
 

@@ -63,9 +63,8 @@ public class MaterialIteratorTest {
     public void connect() throws Exception {
         Repository repository = getRepository();
 
-        expect(
-                listIdentifiersConnector.connect(repository.getBaseURL(), repository.getLastSynchronization(),
-                        "oai_lom")).andReturn(listIdentifiersConnector);
+        expect(listIdentifiersConnector.connect(repository.getBaseURL(), repository.getLastSynchronization(),
+                repository.getMetadataPrefix())).andReturn(listIdentifiersConnector);
         expect(listIdentifiersConnector.iterator()).andReturn(identifierIterator);
 
         replayAll();
@@ -96,10 +95,10 @@ public class MaterialIteratorTest {
     @Test
     public void nextNullDocument() throws Exception {
         Repository repository = getRepository();
-        String metadataPrefix = "oai_lom";
 
-        expectsForNext(repository, metadataPrefix, null);
-        expect(getMaterialConnector.getMaterial(repository, "identifier", metadataPrefix)).andReturn(null);
+        expectsForNext(repository, null);
+        expect(getMaterialConnector.getMaterial(repository, "identifier", repository.getMetadataPrefix()))
+                .andReturn(null);
 
         replayAll();
 
@@ -118,10 +117,10 @@ public class MaterialIteratorTest {
     @Test
     public void nextNullMaterial() throws Exception {
         Repository repository = getRepository();
-        String metadataPrefix = "oai_lom";
 
-        expectsForNext(repository, metadataPrefix, null);
-        expect(getMaterialConnector.getMaterial(repository, "identifier", metadataPrefix)).andReturn(document);
+        expectsForNext(repository, null);
+        expect(getMaterialConnector.getMaterial(repository, "identifier", repository.getMetadataPrefix()))
+                .andReturn(document);
 
         MaterialParserWaramu materialParserWaramu = createMock(MaterialParserWaramu.class);
         String errorMessage = "Very bad code here :)";
@@ -145,12 +144,12 @@ public class MaterialIteratorTest {
     @Test
     public void nextMaterial() throws Exception {
         Repository repository = getRepository();
-        String metadataPrefix = "oai_lom";
         Material material = new Material();
         MaterialParserWaramu materialParserWaramu = createMock(MaterialParserWaramu.class);
 
-        expectsForNext(repository, metadataPrefix, null);
-        expect(getMaterialConnector.getMaterial(repository, "identifier", metadataPrefix)).andReturn(document);
+        expectsForNext(repository, null);
+        expect(getMaterialConnector.getMaterial(repository, "identifier", repository.getMetadataPrefix()))
+                .andReturn(document);
         expect(materialParserWaramu.parse(document)).andReturn(material);
 
         replayAll(materialParserWaramu);
@@ -167,9 +166,8 @@ public class MaterialIteratorTest {
     @Test
     public void nextDeletedMaterial() throws Exception {
         Repository repository = getRepository();
-        String metadataPrefix = "oai_lom";
 
-        expectsForNext(repository, metadataPrefix, "deleted");
+        expectsForNext(repository, "deleted");
 
         replayAll();
 
@@ -182,15 +180,14 @@ public class MaterialIteratorTest {
         assertEquals("identifier", newMaterial.getRepositoryIdentifier());
     }
 
-    private void expectsForNext(Repository repository, String metadataPrefix, String status) throws Exception {
+    private void expectsForNext(Repository repository, String status) throws Exception {
         expect(identifierIterator.next()).andReturn(header);
         expect(header.getElementsByTagName("identifier")).andReturn(identifiers);
         expect(header.getAttribute("status")).andReturn(status);
         expect(identifiers.item(0)).andReturn(identifier);
         expect(identifier.getTextContent()).andReturn("identifier");
-        expect(
-                listIdentifiersConnector.connect(repository.getBaseURL(), repository.getLastSynchronization(),
-                        metadataPrefix)).andReturn(listIdentifiersConnector);
+        expect(listIdentifiersConnector.connect(repository.getBaseURL(), repository.getLastSynchronization(),
+                repository.getMetadataPrefix())).andReturn(listIdentifiersConnector);
         expect(listIdentifiersConnector.iterator()).andReturn(identifierIterator);
     }
 
@@ -199,6 +196,7 @@ public class MaterialIteratorTest {
         repository.setBaseURL("http://koolitaja.eenet.ee:57219/Waramu3Web/OAIHandler");
         repository.setSchema("waramu");
         repository.setLastSynchronization(new DateTime("2015-01-27T08:14:27"));
+        repository.setMetadataPrefix("oai_estcore");
         return repository;
     }
 

@@ -25,8 +25,8 @@ insert into LicenseType(id, name) values (3, 'CCBYND');
 
 -- Repository. Do not use real URLs here
 
-insert into Repository(id, baseURL, lastSynchronization, schemaName, isEstonianPublisher) values (1, 'http://repo1.ee', null, 'waramu', false);
-insert into Repository(id, baseURL, lastSynchronization, schemaName, isEstonianPublisher) values (2, 'http://estonianPublisher.ee/OAIHandler', null, 'estCore', true);
+insert into Repository(id, baseURL, lastSynchronization, schemaName, isEstonianPublisher, metadataPrefix) values (1, 'http://repo1.ee', null, 'waramu', false, 'oai_estcore');
+insert into Repository(id, baseURL, lastSynchronization, schemaName, isEstonianPublisher, metadataPrefix) values (2, 'http://estonianPublisher.ee/OAIHandler', null, 'estCore', true, 'oai_estcore');
 
 -- Publishers
 

@@ -4,7 +4,7 @@
          xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/
     http://www.openarchives.org/OAI/2.0/OAI-PMH.xsd">
     <responseDate>2015-09-22T13:43:05Z</responseDate>
-    <request verb="GetRecord" identifier="6d0a950c264cbbae4947a6c3f67f9a3aa7aab89d" metadataPrefix="oai_lom">
+    <request verb="GetRecord" identifier="6d0a950c264cbbae4947a6c3f67f9a3aa7aab89d" metadataPrefix="oai_estcore">
         http://koolitaja.eenet.ee:57219/Waramu3Web/OAIHandler
     </request>
     <GetRecord>
