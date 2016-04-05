@@ -39,6 +39,10 @@ INSERT INTO Translation(translationGroup, translationKey, translation) VALUES (3
 INSERT INTO Translation(translationGroup, translationKey, translation) VALUES (1,'REPORTED_BY_MULTIPLE_USERS','Mitmed kasutajad');
 INSERT INTO Translation(translationGroup, translationKey, translation) VALUES (2,'REPORTED_BY_MULTIPLE_USERS','Несколько пользователей');
 
+INSERT INTO Translation(translationGroup, translationKey, translation) VALUES (3,'FEEDBACK_ABOUT_EKOOLIKOTT_SUBJECT','Feedback about e-Koolikott');
+INSERT INTO Translation(translationGroup, translationKey, translation) VALUES (1,'FEEDBACK_ABOUT_EKOOLIKOTT_SUBJECT','Tagasiside e-Koolikotist');
+INSERT INTO Translation(translationGroup, translationKey, translation) VALUES (2,'FEEDBACK_ABOUT_EKOOLIKOTT_SUBJECT','Обратная связь о e-Koolikott');
+
 -- Repository table migration
 
 CREATE TABLE Repository_Aux (
