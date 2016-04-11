@@ -13,6 +13,8 @@ import ee.hm.dop.model.User;
 
 public class LearningObjectDAO extends BaseDAO<LearningObject> {
 
+    private static final Object lock = new Object();
+
     public LearningObject findByIdNotDeleted(long objectId) {
         TypedQuery<LearningObject> findByCode = createQuery(
                 "SELECT lo FROM LearningObject lo WHERE lo.id = :id AND lo.deleted = false", LearningObject.class) //
@@ -105,13 +107,14 @@ public class LearningObjectDAO extends BaseDAO<LearningObject> {
         return null;
     }
 
-    public synchronized void incrementViewCount(LearningObject learningObject) {
-        getEntityManager()
-                .createQuery(
-                        "update LearningObject lo set lo.views = lo.views + 1, lo.lastInteraction = CURRENT_TIMESTAMP "
-                                + "where lo.id = :id AND lo.deleted = false")
-                .setParameter("id", learningObject.getId()).executeUpdate();
-        flush();
+    public void incrementViewCount(LearningObject learningObject) {
+        synchronized (lock) {
+            getEntityManager()
+                    .createQuery(
+                            "update LearningObject lo set lo.views = lo.views + 1, lo.lastInteraction = CURRENT_TIMESTAMP "
+                                    + "where lo.id = :id AND lo.deleted = false")
+                    .setParameter("id", learningObject.getId()).executeUpdate();
+        }
     }
 
     @Override
