@@ -2,6 +2,7 @@ package ee.hm.dop.rest;
 
 import static java.lang.String.format;
 import static java.net.HttpURLConnection.HTTP_NOT_FOUND;
+import static java.net.HttpURLConnection.HTTP_OK;
 import static javax.ws.rs.core.MediaType.WILDCARD_TYPE;
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
@@ -67,5 +68,12 @@ public class PictureResourceTest extends ResourceIntegrationTestBase {
         assertNotNull(picture.getId());
         assertNotNull(picture.getName());
         assertNull(picture.getData());
+    }
+
+    @Test
+    public void getMaxSize() {
+        Response response = doGet("picture/maxSize");
+        assertEquals(HTTP_OK, response.getStatus());
+        assertEquals(Long.valueOf(23), response.readEntity(Long.class));
     }
 }

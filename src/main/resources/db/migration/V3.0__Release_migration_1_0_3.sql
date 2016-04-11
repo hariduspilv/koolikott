@@ -43,6 +43,10 @@ INSERT INTO Translation(translationGroup, translationKey, translation) VALUES (3
 INSERT INTO Translation(translationGroup, translationKey, translation) VALUES (1,'FEEDBACK_ABOUT_EKOOLIKOTT_SUBJECT','Tagasiside e-Koolikotist');
 INSERT INTO Translation(translationGroup, translationKey, translation) VALUES (2,'FEEDBACK_ABOUT_EKOOLIKOTT_SUBJECT','Обратная связь о e-Koolikott');
 
+INSERT INTO Translation(translationGroup, translationKey, translation) VALUES (3,'MAX_SIZE','Max size');
+INSERT INTO Translation(translationGroup, translationKey, translation) VALUES (1,'MAX_SIZE','Maksimaalne suurus');
+INSERT INTO Translation(translationGroup, translationKey, translation) VALUES (2,'MAX_SIZE','Максимальный размер');
+
 -- Repository table migration
 
 CREATE TABLE Repository_Aux (

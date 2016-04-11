@@ -60,4 +60,11 @@ public class PictureResource extends BaseResource {
         picture.setData(data);
         return pictureService.create(picture);
     }
+
+    @GET
+    @Path("/maxSize")
+    @Produces(MediaType.APPLICATION_JSON)
+    public int getMaxSize() {
+        return configuration.getInt(MAX_FILE_SIZE);
+    }
 }
