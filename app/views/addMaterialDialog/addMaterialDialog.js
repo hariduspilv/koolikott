@@ -119,9 +119,9 @@ define([
                 	$scope.material.titles = metadata.titles;
                 	$scope.material.descriptions = metadata.descriptions;
                 	$scope.material.type = ".Material";
-                	
+
                 	serverCallService.makePut('rest/material', $scope.material, saveMaterialSuccess, saveMaterialFail, saveMaterialFinally);
-                }                
+                }
             };
 
             $scope.isAdmin = function () {
@@ -256,6 +256,7 @@ define([
 
                 setPublisher();
                 loadMetadata();
+                getMaxPictureSize();
             }
 
             $scope.issueDateListener = function () {
@@ -270,19 +271,19 @@ define([
                 	pictureUploadService.upload(newPicture, pictureUploadSuccess, pictureUploadFailed, pictureUploadFinally);
                 }
             });
-            
+
             function pictureUploadSuccess(picture) {
             	$scope.material.picture = picture;
             }
-            
+
             function pictureUploadFailed() {
             	log('Picture upload failed.');
             }
-            
+
             function pictureUploadFinally() {
             	uploadingPicture = false;
             }
-            
+
             function preSetMaterial(material) {
                 $scope.isUpdateMode = true;
                 $scope.material = material;
@@ -413,5 +414,32 @@ define([
                         return metadata.title && metadata.title.length !== 0;
                     }).length !== 0;
             }
+
+            $scope.$watchCollection('invalidPicture', function(newValue, oldValue) {
+                if (newValue !== oldValue) {
+                    if (newValue && newValue.length > 0) {
+                        if ($scope.newPicture || $scope.material.picture) {
+                            $scope.showErrorOverlay = true;
+                            $timeout(function() {
+                                    $scope.showErrorOverlay = false;
+                            }, 6000);
+                        }
+                    }
+                }
+            });
+
+            function getMaxPictureSize() {
+                serverCallService.makeGet('/rest/picture/maxSize', {}, getMaxPictureSizeSuccess, getMaxPictureSizeFail);
+            }
+
+            function getMaxPictureSizeSuccess(data) {
+                $scope.maxPictureSize = data;
+            }
+
+            function getMaxPictureSizeFail() {
+                $scope.maxPictureSize = 10;
+                console.log('Failed to get max picture size, using 10MB as default.');
+            }
+
         }];
 });

@@ -9,7 +9,7 @@ define([
     	function($scope, $mdDialog, $location, serverCallService, $rootScope, storageService, $timeout, pictureUploadService) {
 	        $scope.isSaving = false;
 	        $scope.showHints = true;
-	        
+
 	        var uploadingPicture = false;
 
 	        function init() {
@@ -31,12 +31,14 @@ define([
 	                $scope.newPortfolio.tags = portfolioClone.tags;
 	                $scope.newPortfolio.picture = portfolioClone.picture;
 	            }
+
+                getMaxPictureSize();
 	        }
 
         	$scope.cancel = function() {
                 $mdDialog.hide();
             };
-            
+
             $scope.$watch(function () {
                 return $scope.newPicture;
             }, function (newPicture) {
@@ -45,22 +47,22 @@ define([
                 	pictureUploadService.upload(newPicture, pictureUploadSuccess, pictureUploadFailed, pictureUploadFinally);
                 }
             });
-            
+
             function pictureUploadSuccess(picture) {
             	$scope.newPortfolio.picture = picture;
             }
-            
+
             function pictureUploadFailed() {
             	log('Picture upload failed.');
             }
-            
+
             function pictureUploadFinally() {
             	uploadingPicture = false;
-            }            
+            }
 
             $scope.create = function() {
                 $scope.saving = true;
-                
+
                 if (uploadingPicture) {
                 	$timeout($scope.create, 500, false);
                 } else {
@@ -85,7 +87,7 @@ define([
 
             $scope.update = function() {
                 $scope.saving = true;
-                
+
                 if (uploadingPicture) {
                 	$timeout($scope.create, 500, false);
                 } else {
@@ -95,11 +97,11 @@ define([
 	                $scope.portfolio.taxon = $scope.newPortfolio.taxon;
 	                $scope.portfolio.targetGroups = $scope.newPortfolio.targetGroups;
 	                $scope.portfolio.tags = $scope.newPortfolio.tags;
-	                
+
 	                if ($scope.newPortfolio.picture) {
 	                	$scope.portfolio.picture = $scope.newPortfolio.picture;
 	                }
-	                
+
 	                serverCallService.makePost(url, $scope.portfolio, createPortfolioSuccess, createPortfolioFailed, savePortfolioFinally);
                 }
             };
@@ -112,6 +114,32 @@ define([
 
             function savePortfolioFinally() {
                 $scope.saving = false;
+            }
+
+            $scope.$watchCollection('invalidPicture', function(newValue, oldValue) {
+                if (newValue !== oldValue) {
+                    if (newValue && newValue.length > 0) {
+                        if ($scope.newPicture || $scope.newPortfolio.picture) {
+                            $scope.showErrorOverlay = true;
+                            $timeout(function() {
+                                $scope.showErrorOverlay = false;
+                            }, 6000);
+                        }
+                    }
+                }
+            });
+
+            function getMaxPictureSize() {
+                serverCallService.makeGet('/rest/picture/maxSize', {}, getMaxPictureSizeSuccess, getMaxPictureSizeFail);
+            }
+
+            function getMaxPictureSizeSuccess(data) {
+                $scope.maxPictureSize = data;
+            }
+
+            function getMaxPictureSizeFail() {
+                $scope.maxPictureSize = 10;
+                console.log('Failed to get max picture size, using 10MB as default.');
             }
 
             init();

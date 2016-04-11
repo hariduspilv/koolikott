@@ -17,35 +17,57 @@
       <md-tab label="{{ 'MATERIAL_TAB_MAIN_DATA' | translate }}" data-ng-disabled="step.isTabDisabled(0)">
         <md-content class="md-padding">
           <!-- url & lang-->
-          <form name="materialUrlForm" layout="row" flex layout-align="start center">
-            <div flex="nogrow" class="md-padding">
-              <div data-ngf-drop ngf-select ng-model="newPicture" class="drop-box"
+          <div flex layout-xs="column" layout="row" layout-align-xs="start stretch" layout-align="start center">
+            <form name="pictureForm" flex-sm="25" flex-md="20" flex-gt-md="15" class="md-padding">
+              <div flex data-ngf-drop ngf-select ng-model="newPicture" class="drop-box"
                    data-ngf-drag-over-class="'dragover'"
                    data-ngf-multiple="false"
                    data-accept="image/*"
                    data-ngf-pattern="'image/*'"
+                   data-ngf-max-size="{{maxPictureSize + 'MB'}}"
+                   ngf-model-invalid="invalidPicture"
                    layout="row"
                    layout-align="center center" flex>
-              <span flex>
-                <md-icon>insert_photo</md-icon>
-              </span>
+
+                <span flex data-ng-if="!newPicture && !material.picture">
+                  <md-icon>insert_photo</md-icon><br />
+                  <span data-ng-class="{'error-text': (invalidPicture && invalidPicture.length > 0)}">
+                    <span data-translate="MAX_SIZE"></span> {{maxPictureSize}}MB
+                  </span>
+                </span>
+
+                <!-- image preview -->
+                <md-input-container data-ng-if="newPicture || material.picture" class="md-block drop-box-preview-container">
+                  <div class="drop-box-preview">
+                    <img data-ng-if="newPicture" data-ngf-thumbnail="newPicture" ngf-size="{width: 300, height: 300, quality: 0.9}" alt="photo">
+                    <img data-ng-if="!newPicture && material.picture" data-ng-src="rest/picture/{{material.picture.name}}" ngf-size="{width: 300, height: 300, quality: 0.9}" alt="photo">
+                  </div>
+                </md-input-container>
+
+                <span flex class="error-overlay" data-ng-if="showErrorOverlay">
+                  <span class="error-text">
+                    <span data-translate="MAX_SIZE"></span> {{maxPictureSize}}MB
+                  </span>
+                </span>
               </div>
               <md-tooltip><span data-translate="MATERIAL_PHOTO_UPLOAD_HELP"></span></md-tooltip>
-            </div>
-            <md-input-container flex>
-              <label>
-                <span data-translate="MATERIAL_LINK"></span> *
-              </label>
-              <input data-ng-model="material.source" name="source" id="add-material-url-input" type="text" required dop-validate-url>
-              <div data-ng-messages="materialUrlForm.source.$error" data-ng-show="materialUrlForm.source.$dirty"
-                   multiple>
-                <div data-ng-message="required" data-ng-show="materialUrlForm.source.$error.required"
-                     data-translate="MATERIAL_URL_IS_MANDATORY"></div>
-                <div data-ng-message="url" data-ng-show="materialUrlForm.source.$error.url"
-                     data-translate="MATERIAL_URL_IS_INVALID"></div>
-              </div>
-            </md-input-container>
-            <md-input-container flex="20" flex-xs="35" class="md-padding">
+            </form>
+            <form name="materialUrlForm" flex>
+              <md-input-container flex layout-fill>
+                <label>
+                  <span data-translate="MATERIAL_LINK"></span> *
+                </label>
+                <input data-ng-model="material.source" name="source" id="add-material-url-input" type="text" required dop-validate-url>
+                <div data-ng-messages="materialUrlForm.source.$error" data-ng-show="materialUrlForm.source.$dirty"
+                     multiple>
+                  <div data-ng-message="required" data-ng-show="materialUrlForm.source.$error.required"
+                       data-translate="MATERIAL_URL_IS_MANDATORY"></div>
+                  <div data-ng-message="url" data-ng-show="materialUrlForm.source.$error.url"
+                       data-translate="MATERIAL_URL_IS_INVALID"></div>
+                </div>
+              </md-input-container>
+            </form>
+            <md-input-container flex-gt-xs="20" class="md-padding">
               <label data-translate="MATERIAL_LANGUAGE"></label>
               <md-select data-ng-model="material.language" id="add-material-language-select">
                 <md-option data-ng-repeat="language in languages" value="{{language}}">
@@ -53,22 +75,13 @@
                 </md-option>
               </md-select>
             </md-input-container>
-          </form>
-
-          <!-- image preview -->
-          <md-input-container data-ng-if="newPicture || material.picture" class="md-block">
-            <div class="drop-box-preview">
-              <h3 class="md-subhead" data-translate="PHOTO_PREVIEW"></h3>
-              <img data-ng-if="newPicture" data-ngf-thumbnail="newPicture" ngf-size="{width: 300, height: 300, quality: 0.9}" alt="photo">
-              <img data-ng-if="!newPicture && material.picture" data-ng-src="rest/picture/{{material.picture.name}}" ngf-size="{width: 300, height: 300, quality: 0.9}" alt="photo">
-            </div>
-          </md-input-container>
+          </div>
 
           <!-- heading-desc-lang group -->
           <div class="form-group" data-ng-repeat="metadata in titleDescriptionGroups">
             <form name="materialTitleForm">
-              <div layout="row" layout-align="center center">
-                <md-input-container flex>
+              <div layout-xs="column" layout="row" layout-align-xs="start stretch" layout-align="center center">
+                <md-input-container flex flex-order-xs="2">
                   <label>
                     <span data-translate="MATERIAL_TITLE"></span> *
                   </label>
@@ -78,7 +91,7 @@
                          data-translate="MATERIAL_TITLE_IS_MANDATORY"></div>
                   </div>
                 </md-input-container>
-                <md-input-container flex="20" flex-xs="35" class="md-padding">
+                <md-input-container flex-gt-xs="20" flex-order-xs="1" class="md-padding">
                   <label data-translate="TITLE_AND_DESCRIPTION_LANGUAGE"></label>
                   <md-select data-ng-model="metadata.language" id="add-material-title-language-select">
                     <md-option data-ng-repeat="language in languages" value="{{language}}">
@@ -109,7 +122,7 @@
           </div>
 
           <div layout="row">
-            <md-input-container flex-gt-xs="95">
+            <md-input-container flex-xs="100" flex-gt-xs="95">
               <label data-translate="MATERIAL_VIEW_RESOURCE_TYPE"></label>
               <md-select data-ng-model="material.resourceTypes" id="resourceTypeSelect"
                          ng-model-options="{trackBy: '$value.id'}" multiple="true">
