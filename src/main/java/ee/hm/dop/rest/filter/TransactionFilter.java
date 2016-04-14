@@ -1,9 +1,5 @@
 package ee.hm.dop.rest.filter;
 
-import static ee.hm.dop.utils.DbUtils.closeEntityManager;
-import static ee.hm.dop.utils.DbUtils.closeTransaction;
-import static ee.hm.dop.utils.DbUtils.getTransaction;
-
 import java.io.IOException;
 
 import javax.servlet.Filter;
@@ -13,20 +9,33 @@ import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import ee.hm.dop.utils.DbUtils;
+
 /**
  * Manage database transactions.
  */
 public class TransactionFilter implements Filter {
 
+    private static final Logger logger = LoggerFactory.getLogger(TransactionFilter.class);
+
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException,
             ServletException {
-        getTransaction().begin();
+        beginTransaction();
 
         chain.doFilter(request, response);
 
-        closeTransaction();
-        closeEntityManager();
+        try {
+            closeTransaction();
+        } catch (Exception e) {
+            logger.error("Error closing transaction", e);
+            throw new RuntimeException("Error closing transaction");
+        } finally {
+            closeEntityManager();
+        }
     }
 
     @Override
@@ -35,5 +44,17 @@ public class TransactionFilter implements Filter {
 
     @Override
     public void destroy() {
+    }
+
+    protected void beginTransaction() {
+        DbUtils.getTransaction().begin();
+    }
+
+    protected void closeTransaction() {
+        DbUtils.closeTransaction();
+    }
+
+    protected void closeEntityManager() {
+        DbUtils.closeEntityManager();
     }
 }
