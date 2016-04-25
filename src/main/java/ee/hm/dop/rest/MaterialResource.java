@@ -10,11 +10,13 @@ import java.util.List;
 import javax.annotation.security.RolesAllowed;
 import javax.inject.Inject;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.Encoded;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
@@ -123,12 +125,11 @@ public class MaterialResource extends BaseResource {
         return materialService.getByCreator(creator);
     }
 
-    @POST
-    @Path("delete")
-    @Consumes(MediaType.APPLICATION_JSON)
+    @DELETE
+    @Path("{materialID}")
     @RolesAllowed({ "ADMIN" })
-    public void delete(Material material) {
-        materialService.delete(material, getLoggedInUser());
+    public void delete(@PathParam("materialID") Long materialID) {
+        materialService.delete(materialID, getLoggedInUser());
     }
 
     @POST

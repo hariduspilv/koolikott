@@ -225,6 +225,104 @@ public class MaterialServiceTest {
     }
 
     @Test
+    public void deleteByAdmin() {
+        Long materialID = 15L;
+
+        Material originalMaterial = new Material();
+        originalMaterial.setId(15L);
+
+        User user = new User();
+        user.setRole(Role.ADMIN);
+
+        expect(materialDAO.findByIdNotDeleted(materialID)).andReturn(originalMaterial);
+        materialDAO.delete(originalMaterial);
+        searchEngineService.updateIndex();
+
+        replayAll();
+
+        materialService.delete(materialID, user);
+
+        verifyAll();
+    }
+
+    @Test
+    public void adminCanNotDeleteRepositoryMaterial() {
+        Long materialID = 15L;
+
+        Material originalMaterial = new Material();
+        originalMaterial.setId(materialID);
+        originalMaterial.setRepository(new Repository());
+        originalMaterial.setRepositoryIdentifier("asd");
+
+        User user = new User();
+        user.setRole(Role.ADMIN);
+
+        expect(materialDAO.findByIdNotDeleted(materialID)).andReturn(originalMaterial);
+
+        replayAll();
+
+        try {
+            materialService.delete(materialID, user);
+        } catch (RuntimeException e) {
+            assertEquals("Can not delete external repository material", e.getMessage());
+        }
+
+        verifyAll();
+    }
+
+    @Test
+    public void restore() {
+        Long materialID = 15L;
+
+        Material material = new Material();
+        material.setId(materialID);
+
+        Material originalMaterial = new Material();
+        originalMaterial.setId(15L);
+
+        User user = new User();
+        user.setRole(Role.ADMIN);
+
+        expect(materialDAO.findById(materialID)).andReturn(originalMaterial);
+        materialDAO.restore(originalMaterial);
+        searchEngineService.updateIndex();
+
+        replayAll();
+
+        materialService.restore(material, user);
+
+        verifyAll();
+    }
+
+    @Test
+    public void adminCanNotRestoreRepositoryMaterial() {
+        Long materialID = 15L;
+
+        Material material = new Material();
+        material.setId(materialID);
+
+        Material originalMaterial = new Material();
+        originalMaterial.setId(materialID);
+        originalMaterial.setRepository(new Repository());
+        originalMaterial.setRepositoryIdentifier("asd");
+
+        User user = new User();
+        user.setRole(Role.ADMIN);
+
+        expect(materialDAO.findById(materialID)).andReturn(originalMaterial);
+
+        replayAll();
+
+        try {
+            materialService.restore(material, user);
+        } catch (RuntimeException e) {
+            assertEquals("Can not restore external repository material", e.getMessage());
+        }
+
+        verifyAll();
+    }
+
+    @Test
     public void updateByUserNullMaterial() {
         User user = createMock(User.class);
 

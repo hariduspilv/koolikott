@@ -97,12 +97,16 @@ public class MaterialService implements LearningObjectHandler {
         return createdMaterial;
     }
 
-    public void delete(Material material, User loggedInUser) {
-        Material originalMaterial = materialDao.findByIdNotDeleted(material.getId());
+    public void delete(Long materialID, User loggedInUser) {
+        Material originalMaterial = materialDao.findByIdNotDeleted(materialID);
         validateMaterialNotNull(originalMaterial);
 
         if (!isUserAdmin(loggedInUser)) {
             throw new RuntimeException("Logged in user must be an administrator.");
+        }
+
+        if (originalMaterial.getRepository() != null || originalMaterial.getRepositoryIdentifier() != null) {
+            throw new RuntimeException("Can not delete external repository material");
         }
 
         materialDao.delete(originalMaterial);
@@ -115,6 +119,10 @@ public class MaterialService implements LearningObjectHandler {
 
         if (!isUserAdmin(loggedInUser)) {
             throw new RuntimeException("Logged in user must be an administrator.");
+        }
+
+        if (originalMaterial.getRepository() != null || originalMaterial.getRepositoryIdentifier() != null) {
+            throw new RuntimeException("Can not restore external repository material");
         }
 
         materialDao.restore(originalMaterial);

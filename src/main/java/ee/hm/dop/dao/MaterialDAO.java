@@ -44,7 +44,7 @@ public class MaterialDAO extends LearningObjectDAO {
 
     public Material findByRepositoryAndRepositoryIdentifier(Repository repository, String repositoryIdentifier) {
         String select = "SELECT m FROM Material m WHERE m.repository.id = :repositoryId"
-                + " AND m.repositoryIdentifier = :repositoryIdentifier AND m.deleted = false";
+                + " AND m.repositoryIdentifier = :repositoryIdentifier";
         TypedQuery<Material> query = createQuery(select, Material.class);
 
         query.setParameter("repositoryId", repository.getId()) //

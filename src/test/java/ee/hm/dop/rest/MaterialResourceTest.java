@@ -48,6 +48,7 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
     private static final String MATERIAL_IS_BROKEN = "material/isBroken";
     private static final String MATERIAL_ADD_RECOMMENDATION = "material/recommend";
     private static final String MATERIAL_REMOVE_RECOMMENDATION = "material/removeRecommendation";
+    private static final String RESTORE_MATERIAL = "material/restore";
 
     @Inject
     private MaterialService materialService;
@@ -516,6 +517,45 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
         });
 
         assertEquals(2, materials.size());
+    }
+
+    @Test
+    public void deleteAndRestore() {
+        login("89898989898");
+
+        Long materialId = 13L;
+
+        Material material = new Material();
+        material.setId(materialId);
+
+        Response response = doDelete("material/" + materialId);
+        assertEquals(Status.NO_CONTENT.getStatusCode(), response.getStatus());
+
+        response = doPost(RESTORE_MATERIAL, Entity.entity(material, MediaType.APPLICATION_JSON_TYPE));
+        assertEquals(Status.NO_CONTENT.getStatusCode(), response.getStatus());
+    }
+
+    @Test
+    public void adminCanNotDeleteRepositoryMaterial() {
+        login("89898989898");
+
+        Long materialId = 12L;
+
+        Response response = doDelete("material/" + materialId);
+        assertEquals(Status.INTERNAL_SERVER_ERROR.getStatusCode(), response.getStatus());
+    }
+
+    @Test
+    public void adminCanNotRestoreRepositoryMaterial() {
+        login("89898989898");
+
+        Long materialId = 14L;
+
+        Material material = new Material();
+        material.setId(materialId);
+
+        Response response = doPost(RESTORE_MATERIAL, Entity.entity(material, MediaType.APPLICATION_JSON_TYPE));
+        assertEquals(Status.INTERNAL_SERVER_ERROR.getStatusCode(), response.getStatus());
     }
 
     private void assertMaterial1(Material material) {

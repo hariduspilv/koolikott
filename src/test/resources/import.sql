@@ -178,6 +178,10 @@ insert into LearningObject(id, added, updated, views, picture, creator, deleted,
 insert into Material(id, lang, issueDate, licenseType, source, repository, repositoryIdentifier, paid, isSpecialEducation, embeddable) values(11, 1, null, 1, 'https://www.deleted.com/', 1, 'isssiiaawejdsada4564', false, false, false); -- This material should be amoung the 8 latest materials
 insert into LearningObject(id, added, updated, views, picture, creator, deleted, recommendation) values(12, '1911-09-01 00:00:01', null, 0, null, null, false, null);
 insert into Material(id, lang, issueDate, licenseType, source, repository, repositoryIdentifier, paid, isSpecialEducation, embeddable) values(12, null, null, null, 'http://estRepo.com', 2, null, false, false, true);
+insert into LearningObject(id, added, updated, views, picture, creator, deleted, recommendation) values(13, '2005-09-02 00:00:31', null, 0, null, null, false, null);
+insert into Material(id, lang, issueDate, licenseType, source, repository, repositoryIdentifier, paid, isSpecialEducation, embeddable) values(13, null, null, null, 'http://example.com/123', null, null, false, false, false);
+insert into LearningObject(id, added, updated, views, picture, creator, deleted, recommendation) values(14, '2005-09-02 04:00:31', null, 0, null, null, true, null);
+insert into Material(id, lang, issueDate, licenseType, source, repository, repositoryIdentifier, paid, isSpecialEducation, embeddable) values(14, null, null, null, 'http://example.com/456', null, 1, 'asd', false, false);
 
 -- Authors
 

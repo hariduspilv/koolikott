@@ -240,7 +240,7 @@ public class MaterialDAOTest extends DatabaseTestBase {
         repository.setId(1L);
 
         Material material = materialDAO.findByRepositoryAndRepositoryIdentifier(repository, "isssiiaawejdsada4564");
-        assertNull(material);
+        assertNotNull(material);
     }
 
     @Test

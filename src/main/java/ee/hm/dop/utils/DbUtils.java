@@ -44,6 +44,7 @@ public class DbUtils {
 
         if (transaction.isActive()) {
             if (transaction.getRollbackOnly()) {
+                logger.warn("Rolling back transaction");
                 transaction.rollback();
             } else {
                 transaction.commit();
