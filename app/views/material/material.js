@@ -315,8 +315,8 @@ define([
             };
 
             function deleteMaterial() {
-                var url = "rest/material/delete";
-                serverCallService.makePost(url, $scope.material, deleteMaterialSuccess, deleteMaterialFailed);
+                var url = "rest/material/" + $scope.material.id;
+                serverCallService.makeDelete(url, {}, deleteMaterialSuccess, deleteMaterialFailed);
             }
 
             function deleteMaterialSuccess() {
