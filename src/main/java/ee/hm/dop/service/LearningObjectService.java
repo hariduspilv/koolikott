@@ -72,7 +72,7 @@ public class LearningObjectService {
             learningObjects.removeIf(learningObject -> !getLearningObjectHandler(learningObject).isPublic(
                     learningObject));
             returnableLearningObjects.addAll(learningObjects);
-            startPosition = count;
+            startPosition += count;
             count = numberOfLearningObjects - returnableLearningObjects.size();
         }
 
