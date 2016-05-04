@@ -14,7 +14,7 @@
         <input data-ng-model="detailedSearch.author" />
       </md-input-container>
       <md-input-container class="md-block">
-        <label>Keel</label>
+        <label data-translate="DETAILED_SEARCH_LANGUAGE"></label>
         <md-select data-ng-model="detailedSearch.language">
           <md-option data-ng-repeat="language in languages" value="{{language}}">
             <span data-translate="{{getLanguageTranslationKey(language)}}"/>
@@ -74,7 +74,7 @@
       </div>
       <div layout>
         <div flex="25" layout layout-align="start center">
-          <span class="md-body-1">Avaldatud <br> (alates)</span>
+          <span data-translate="DETAILED_SEARCH_ISSUE_DATE"></span>
         </div>
         <md-slider  class="md-primary" flex md-discrete ng-model="detailedSearch.issueDate" step="1" min="{{issueDateFirstYear}}" max="{{issueDateLastYear}}" aria-label="{{DETAILED_SEARCH_ISSUE_DATE_FROM | translate}}" aria-valuenow="2009">
         </md-slider>
