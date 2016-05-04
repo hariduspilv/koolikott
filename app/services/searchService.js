@@ -150,7 +150,7 @@ define(['angularAMD'], function(angularAMD) {
             },
 
             setCurriculumLiterature: function(isCurriculumLiterature) {
-                search.curriculumLiterature = isCurriculumLiterature;
+                search.isCurriculumLiterature = isCurriculumLiterature;
             },
 
             setSort: function(sort) {
