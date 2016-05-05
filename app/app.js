@@ -41,7 +41,8 @@ define([
     ]);
 
     app.config(function($routeProvider, $locationProvider, $controllerProvider, $compileProvider, $filterProvider, $provide, $translateProvider, $sceProvider, $mdThemingProvider, $httpProvider, $mdDateLocaleProvider, $anchorScrollProvider) {
-            app.controller = $controllerProvider.register;
+    		$compileProvider.debugInfoEnabled(false);
+    		app.controller = $controllerProvider.register;
             app.directive = $compileProvider.directive;
             app.filter = $filterProvider.register;
             app.factory = $provide.factory;

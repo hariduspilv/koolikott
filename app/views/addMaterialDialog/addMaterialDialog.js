@@ -344,7 +344,6 @@ define([
                 $scope.languages = data;
 
                 setDefaultMaterialMetadataLanguage();
-                addNewMetadata();
                 setMaterialLanguage();
             }
 
