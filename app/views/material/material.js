@@ -129,12 +129,12 @@ define([
             function preprocessMaterialSubjects() {
                 $scope.material.subjects = [];
 
-                for (var i = 0, j = 0; i < $scope.material.taxons.length; i++) {
+                for (var i = 0; i < $scope.material.taxons.length; i++) {
                     var taxon = $scope.material.taxons[i];
                     var subject = $rootScope.taxonUtils.getSubject(taxon);
 
-                    if (subject) {
-                        $scope.material.subjects[j++] = subject;
+                    if (subject && !containsObject(subject, $scope.material.subjects)) {
+                        $scope.material.subjects.push(subject);
                     }
                 }
             }
