@@ -231,6 +231,8 @@ define([
                 $scope.material.crossCurricularThemes = [];
                 $scope.material.publishers = [];
                 $scope.material.resourceTypes = [];
+                
+                addNewMetadata();
             }
 
             function setPublisher() {
@@ -253,7 +255,7 @@ define([
                     prefillMetadataFromPortfolio();
                     $scope.material.source = addChapterMaterialUrl;
                 }
-
+                
                 setPublisher();
                 loadMetadata();
                 getMaxPictureSize();
