@@ -22,7 +22,7 @@ define([
             	var improperMaterials = [];
 
             	for (var i = 0; i < impropers.length; i++) {
-            		if (impropers[i].learningObject.type === '.Material') {
+            		if (impropers[i].learningObject.type === '.Material' && !impropers[i].learningObject.deleted) {
                         improperMaterials.push(impropers[i]);
             		}
             	}

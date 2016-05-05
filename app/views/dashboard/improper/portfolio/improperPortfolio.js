@@ -22,7 +22,7 @@ define([
             	var improperPortfolios = [];
 
             	for (var i = 0; i < impropers.length; i++) {
-            		if (impropers[i].learningObject.type === '.Portfolio') {
+            		if (impropers[i].learningObject.type === '.Portfolio' && !impropers[i].learningObject.deleted) {
             			improperPortfolios.push(impropers[i]);
             		}
             	}
