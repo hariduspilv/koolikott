@@ -65,7 +65,7 @@ public class DOPSearchStringTokenizer {
                 token = parseSummary();
             } else if (c == 't') {
                 token = parseTitle();
-                if(token == null) {
+                if (token == null) {
                     token = parseTag();
                 }
             } else if (c == '+') {
@@ -142,8 +142,10 @@ public class DOPSearchStringTokenizer {
     }
 
     private DOPToken parseRecommended() {
+        int currentPosition = this.currentPosition;
         String value = extractTokenValue(RECOMMENDED_KEYWORD);
         if (value == null || (!value.equals(TRUE) && !value.equals(FALSE))) {
+            this.currentPosition = currentPosition;
             return null;
         }
 
@@ -171,7 +173,7 @@ public class DOPSearchStringTokenizer {
     private String extractTokenValue(String keyword) {
         int position = currentPosition;
 
-        if (position + keyword.length() - 1 >= maxPosition) {
+        if (position + keyword.length() >= maxPosition) {
             return null;
         }
 

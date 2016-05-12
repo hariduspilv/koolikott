@@ -113,13 +113,10 @@ public class DOPSearchStringTokenizerTest {
         while (tokenizer.hasMoreTokens()) {
             DOPToken token = tokenizer.nextToken();
             searchQuery.append(token);
-
-            if (tokenizer.hasMoreTokens()) {
-                searchQuery.append(" ");
-            }
+            searchQuery.append(" ");
         }
 
-        return searchQuery.toString();
+        return searchQuery.toString().trim();
     }
 
     @Test
@@ -235,4 +232,19 @@ public class DOPSearchStringTokenizerTest {
         assertEquals("recommended:\"false\"", searchQuery);
     }
 
+    @Test
+    public void recommendedWithoutValue() {
+        DOPSearchStringTokenizer tokenizer = new DOPSearchStringTokenizer("recommended:");
+        String searchQuery = consumeTokenizer(tokenizer);
+
+        assertEquals("recommended\\:", searchQuery);
+    }
+
+    @Test
+    public void recommendedWithInvalidValue() {
+        DOPSearchStringTokenizer tokenizer = new DOPSearchStringTokenizer("recommended:verdadeiro");
+        String searchQuery = consumeTokenizer(tokenizer);
+
+        assertEquals("recommended\\:verdadeiro", searchQuery);
+    }
 }
