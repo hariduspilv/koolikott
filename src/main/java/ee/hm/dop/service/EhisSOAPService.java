@@ -2,12 +2,13 @@ package ee.hm.dop.service;
 
 import static ee.hm.dop.utils.ConfigurationProperties.EHIS_ENDPOINT;
 import static ee.hm.dop.utils.ConfigurationProperties.EHIS_INSTITUTION;
-import static ee.hm.dop.utils.ConfigurationProperties.EHIS_REQUESTER_ID_CODE;
 import static ee.hm.dop.utils.ConfigurationProperties.EHIS_SERVICE_NAME;
 import static ee.hm.dop.utils.ConfigurationProperties.EHIS_SYSTEM_NAME;
 import static ee.hm.dop.utils.ConfigurationProperties.XTEE_NAMESPACE_PREFIX;
 import static ee.hm.dop.utils.ConfigurationProperties.XTEE_NAMESPACE_URI;
+import static java.lang.String.format;
 
+import java.io.ByteArrayOutputStream;
 import java.io.StringWriter;
 import java.util.HashMap;
 import java.util.Map;
@@ -53,9 +54,20 @@ public class EhisSOAPService {
     public Person getPersonInformation(String idCode) {
         Person person = null;
         try {
-            SOAPMessage getPersonInformationMessage = createGetPersonInformationSOAPMessage(idCode);
-            SOAPMessage response = sendSOAPMessage(getPersonInformationMessage);
+            SOAPMessage message = createGetPersonInformationSOAPMessage(idCode);
+
+            if (logger.isInfoEnabled()) {
+                ByteArrayOutputStream out = new ByteArrayOutputStream();
+                message.writeTo(out);
+                String strMsg = new String(out.toByteArray());
+                logger.info(format("Sending message to EHIS: %s", strMsg));
+            }
+
+            SOAPMessage response = sendSOAPMessage(message);
             String xmlResponse = parseSOAPResponse(response);
+
+            logger.info(format("Received response from EHIS: %s", xmlResponse));
+
             person = ehisParser.parse(xmlResponse);
         } catch (Exception e) {
             logger.error("Error getting User information from EHIS.", e);
@@ -68,20 +80,20 @@ public class EhisSOAPService {
         SOAPMessage message = MessageFactory.newInstance().createMessage();
 
         SOAPEnvelope envelope = message.getSOAPPart().getEnvelope();
-        populateHeader(envelope);
+        populateHeader(envelope, idCode);
         populateBody(idCode, envelope);
 
         return message;
     }
 
-    private void populateHeader(SOAPEnvelope envelope) throws SOAPException {
+    private void populateHeader(SOAPEnvelope envelope, String idCode) throws SOAPException {
         String namespacePrefix = configuration.getString(XTEE_NAMESPACE_PREFIX);
         String namespaceURI = configuration.getString(XTEE_NAMESPACE_URI);
 
         Map<String, String> headerValues = new HashMap<>();
         headerValues.put("asutus", configuration.getString(EHIS_INSTITUTION));
         headerValues.put("andmekogu", configuration.getString(EHIS_SYSTEM_NAME));
-        headerValues.put("isikukood", configuration.getString(EHIS_REQUESTER_ID_CODE));
+        headerValues.put("isikukood", idCode);
         headerValues.put("id", UUID.randomUUID().toString());
         headerValues.put("nimi", configuration.getString(EHIS_SERVICE_NAME));
 

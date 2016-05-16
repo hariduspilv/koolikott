@@ -44,7 +44,6 @@ public interface ConfigurationProperties {
     String EHIS_INSTITUTION = "ehis.institution";
     String EHIS_SYSTEM_NAME = "ehis.system.name";
     String EHIS_SERVICE_NAME = "ehis.service.name";
-    String EHIS_REQUESTER_ID_CODE = "ehis.requester.idCode";
 
     // EKool
     String EKOOL_CLIENT_ID = "ekool.client.id";
