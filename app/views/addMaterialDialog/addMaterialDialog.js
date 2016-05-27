@@ -371,7 +371,7 @@ define([
             }
 
             function saveMaterialSuccess(material) {
-                $mdDialog.hide($scope.material);
+                $mdDialog.hide(material);
 
                 if (!$scope.isChapterMaterial) {
                     $location.url('/material?materialId=' + material.id);
