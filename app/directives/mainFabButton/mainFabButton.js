@@ -87,10 +87,6 @@ define([
                     log('Creating copy of portfolio failed.');
                 }
 
-                $scope.hasAddMaterialPermission = function() {
-                    return authenticatedUserService.isAdmin() || authenticatedUserService.isPublisher();
-                };
-
                 $scope.hasPermission = function() {
                     return authenticatedUserService.getUser() && !authenticatedUserService.isRestricted();
                 };
