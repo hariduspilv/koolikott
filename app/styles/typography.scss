@@ -46,8 +46,8 @@ $lines-to-show2: 2;
 }
 
 .hide-overflow {
-  min-width: 0;display: block;
-  white-space: nowrap;
+  min-width: 0;
+  display: block;
   overflow: hidden !important;
   text-overflow: ellipsis;
 }
