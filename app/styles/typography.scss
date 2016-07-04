@@ -44,3 +44,10 @@ $lines-to-show2: 2;
   font-weight: 300;
   color: $heading-color;
 }
+
+.hide-overflow {
+  min-width: 0;display: block;
+  white-space: nowrap;
+  overflow: hidden !important;
+  text-overflow: ellipsis;
+}

@@ -72,7 +72,7 @@
                           <span data-translate="DETAIL_VIEW_EDUCATIONAL_CONTEXT"></span>:
                         </small>
                         <br>
-                        <span data-ng-repeat="educationalContext in material.educationalContexts">
+                        <span class="hide-overflow" data-ng-repeat="educationalContext in material.educationalContexts" >
                           {{educationalContext.name.toUpperCase() | translate}}{{$last ? '' : ', '}}
                         </span>
                         <span data-ng-if="isNullOrZeroLength(material.educationalContexts)" data-translate="UNKNOWN">Unknown</span>
@@ -84,7 +84,7 @@
                           <span data-translate="DETAIL_VIEW_DOMAIN"></span>
                         </small>
                         <br/>
-                        <span data-ng-repeat="domain in getMaterialDomains()">
+                        <span class="hide-overflow" data-ng-repeat="domain in getMaterialDomains()">
                           {{'DOMAIN_' + domain.name.toUpperCase() | translate}}{{$last ? '' : ', '}}
                         </span>
                         <span data-ng-if="!getMaterialDomains().length" data-translate="UNKNOWN">Unknown</span>
@@ -96,7 +96,7 @@
                           <span data-translate="DETAIL_VIEW_SUBJECT"></span>
                         </small>
                         <br/>
-                        <span data-ng-repeat="subject in material.subjects">
+                        <span class="hide-overflow" data-ng-repeat="subject in material.subjects">
                           {{'SUBJECT_' + subject.name.toUpperCase() | translate}}{{$last ? '' : ', '}}
                         </span>
                       </p>
@@ -107,7 +107,7 @@
                           <span data-translate="MATERIAL_VIEW_RESOURCE_TYPE"></span>
                         </small>
                         <br>
-                        <span data-ng-repeat="resourceType in material.resourceTypes">
+                        <span class="hide-overflow" class="hide-overflow" data-ng-repeat="resourceType in material.resourceTypes">
                           {{resourceType.name.toUpperCase() | translate}}{{$last ? '' : ', '}}
                         </span>
                         <span data-ng-if="isNullOrZeroLength(material.resourceTypes)" data-translate="UNKNOWN">Unknown</span>
