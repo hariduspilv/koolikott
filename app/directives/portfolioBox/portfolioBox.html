@@ -21,18 +21,23 @@
     </div>
   </a>
 
-  <a data-ng-href="{{'/portfolio?id=' + portfolio.id}}" class="no-link">
-  <div flex>
-    <md-card-content layout="column">
+  <!-- content -->
+
+  <md-card-content layout="column" class="minContentHeight">
+    <a data-ng-href="{{'/portfolio?id=' + portfolio.id}}" class="no-link">
       <h4 class="md-headline two-rows" data-ng-bind="portfolio.title"></h4>
       <p class="md-caption one-row">
         <span data-ng-bind="formatName(portfolio.creator.name)"></span>
         <span data-ng-bind="formatSurname(portfolio.creator.surname)"></span>
         <span data-ng-if="portfolio.added">{{ formatDate(portfolio.added) }}</span>
       </p>
-    </md-card-content>
-    <md-divider></md-divider>
-    <md-card-actions layout="row" layout-align="start center">
+    </a>
+  </md-card-content>
+
+  <md-divider></md-divider>
+
+  <md-card-actions layout="row" layout-align="start center">
+    <a data-ng-href="{{'/portfolio?id=' + portfolio.id}}" class="no-link">
     <span class="md-action-icons-list md-caption" flex layout>
       <md-icon>thumb_up</md-icon>
       <span>{{ portfolio.likes }}</span>
@@ -45,7 +50,6 @@
       <md-icon>visibility</md-icon>
       <span data-ng-bind="portfolio.views"></span>
     </span>
-    </md-card-actions>
-  </div>
-  </a>
+    </a>
+  </md-card-actions>
 </md-card>

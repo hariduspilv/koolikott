@@ -34,33 +34,39 @@
       <md-icon class="icon-kind">{{ materialType }}</md-icon>
     </div>
   </a>
-  <a data-ng-href="{{'/material?materialId=' + material.id}}" class="no-link">
-    <div flex>
-      <md-card-content flex layout="column">
-        <h4 class="md-headline two-rows" data-ng-bind="getCorrectLanguageTitle(material)"></h4>
-        <p class="md-caption one-row">
+
+  <!-- content -->
+
+  <md-card-content flex layout="column" class="minContentHeight">
+    <a data-ng-href="{{'/material?materialId=' + material.id}}" class="no-link">
+      <h4 class="md-headline two-rows" data-ng-bind="getCorrectLanguageTitle(material)"></h4>
+      <p class="md-caption one-row">
       <span data-ng-repeat="author in material.authors">
         <span data-ng-bind="formatName(author.name)"></span>
         <span data-ng-bind="formatSurname(author.surname)"></span>
         <span data-ng-bind="$index < material.authors.length - 1 ? ', ' : ''"></span>
       </span>
-        </p>
-      </md-card-content>
-      <md-divider></md-divider>
-      <md-card-actions layout="row" layout-align="start center">
-        <div class="md-action-icons-list md-caption" flex layout>
-          <md-icon>thumb_up</md-icon>
-          <span>{{ material.likes }}</span>
+      </p>
+    </a>
+  </md-card-content>
 
-          <md-icon>thumb_down</md-icon>
-          <span>{{ material.dislikes }}</span>
+  <md-divider></md-divider>
 
-          <span flex></span>
+  <md-card-actions layout="row" layout-align="start center">
+    <a data-ng-href="{{'/material?materialId=' + material.id}}" class="no-link">
 
-          <md-icon>visibility</md-icon>
-          <span data-ng-bind="material.views"></span>
-        </div>
-      </md-card-actions>
-    </div>
-  </a>
+      <div class="md-action-icons-list md-caption" flex layout>
+        <md-icon>thumb_up</md-icon>
+        <span>{{ material.likes }}</span>
+
+        <md-icon>thumb_down</md-icon>
+        <span>{{ material.dislikes }}</span>
+
+        <span flex></span>
+
+        <md-icon>visibility</md-icon>
+        <span data-ng-bind="material.views"></span>
+      </div>
+    </a>
+  </md-card-actions>
 </md-card>
