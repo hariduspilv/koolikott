@@ -48,7 +48,7 @@ define([
             };
 
             $scope.step.canCreateMaterial = function () {
-                return isStepValid(1);
+                return isStepValid(1) && $rootScope.selectedTopics.length > 0 && $scope.material.targetGroups.length > 0;
             };
 
             $scope.step.isLastStep = function () {
@@ -89,6 +89,9 @@ define([
             };
 
             $scope.deleteTaxon = function (index) {
+                var taxon = $scope.material.taxons[index];
+                $rootScope.selectedTopics = $rootScope.selectedTopics.filter(topic => topic.id !== taxon.id);
+
                 $scope.material.taxons.splice(index, 1);
             };
 
@@ -113,14 +116,20 @@ define([
                 $scope.isSaving = true;
 
                 if (uploadingPicture) {
-                	$timeout($scope.save, 500, false);
+                    $timeout($scope.save, 500, false);
                 } else {
-                	var metadata = getTitlesAndDecriptions();
-                	$scope.material.titles = metadata.titles;
-                	$scope.material.descriptions = metadata.descriptions;
-                	$scope.material.type = ".Material";
+                    var metadata = getTitlesAndDecriptions();
+                    $scope.material.titles = metadata.titles;
+                    $scope.material.descriptions = metadata.descriptions;
+                    $scope.material.type = ".Material";
 
-                	serverCallService.makePut('rest/material', $scope.material, saveMaterialSuccess, saveMaterialFail, saveMaterialFinally);
+                    $scope.material.crossCurricularThemes = $scope.material.crossCurricularThemes
+                        .filter(theme => theme.name !== "NOT_RELEVANT");
+
+                    $scope.material.keyCompetences = $scope.material.keyCompetences
+                        .filter(competence => competence.name !== "NOT_RELEVANT");
+
+                    serverCallService.makePut('rest/material', $scope.material, saveMaterialSuccess, saveMaterialFail, saveMaterialFinally);
                 }
             };
 
@@ -231,7 +240,7 @@ define([
                 $scope.material.crossCurricularThemes = [];
                 $scope.material.publishers = [];
                 $scope.material.resourceTypes = [];
-                
+
                 addNewMetadata();
             }
 
@@ -244,7 +253,7 @@ define([
             }
 
             function init() {
-                if($scope.isChapterMaterial) {
+                if ($scope.isChapterMaterial) {
                     var addChapterMaterialUrl = $scope.material.source;
                 }
 
@@ -255,10 +264,20 @@ define([
                     prefillMetadataFromPortfolio();
                     $scope.material.source = addChapterMaterialUrl;
                 }
-                
+
                 setPublisher();
                 loadMetadata();
                 getMaxPictureSize();
+                setSelectedTopics();
+            }
+
+            function setSelectedTopics() {
+                $rootScope.selectedTopics = [];
+                $scope.material.taxons.forEach(function (taxon) {
+                    if (taxon.level === $rootScope.taxonUtils.constants.TOPIC) {
+                        $rootScope.selectedTopics.push(taxon);
+                    }
+                })
             }
 
             $scope.issueDateListener = function () {
@@ -269,21 +288,21 @@ define([
                 return $scope.newPicture;
             }, function (newPicture) {
                 if (newPicture) {
-                	uploadingPicture = true;
-                	pictureUploadService.upload(newPicture, pictureUploadSuccess, pictureUploadFailed, pictureUploadFinally);
+                    uploadingPicture = true;
+                    pictureUploadService.upload(newPicture, pictureUploadSuccess, pictureUploadFailed, pictureUploadFinally);
                 }
             });
 
             function pictureUploadSuccess(picture) {
-            	$scope.material.picture = picture;
+                $scope.material.picture = picture;
             }
 
             function pictureUploadFailed() {
-            	log('Picture upload failed.');
+                log('Picture upload failed.');
             }
 
             function pictureUploadFinally() {
-            	uploadingPicture = false;
+                uploadingPicture = false;
             }
 
             function preSetMaterial(material) {
@@ -303,6 +322,7 @@ define([
 
                     $scope.titleDescriptionGroups.push(meta);
                 }
+                if (!$scope.titleDescriptionGroups[0]) $scope.titleDescriptionGroups.push({});
 
                 if (material.issueDate) {
                     $scope.issueDate = issueDateToDate(material.issueDate);
@@ -350,8 +370,14 @@ define([
             }
 
             function setMaterialLanguage() {
-                if (!$scope.material.language && preferredLanguage !== null && preferredLanguage !== undefined)
+                if (!$scope.material.language && preferredLanguage !== null && preferredLanguage !== undefined) {
+
+                    if ($scope.titleDescriptionGroups[0] && !$scope.titleDescriptionGroups[0].language) {
+                        $scope.titleDescriptionGroups[0].language = preferredLanguage[0];
+                    }
+
                     $scope.material.language = preferredLanguage[0];
+                }
             }
 
             function setLicenseTypes(data) {
@@ -361,12 +387,18 @@ define([
             function setCrossCurricularThemes(data) {
                 if (!isEmpty(data)) {
                     $scope.crossCurricularThemes = data;
+                    if ($scope.crossCurricularThemes[0].name !== "NOT_RELEVANT") {
+                        $scope.crossCurricularThemes.unshift({name: "NOT_RELEVANT"})
+                    }
                 }
             }
 
             function setKeyCompetences(data) {
                 if (!isEmpty(data)) {
                     $scope.keyCompetences = data;
+                    if ($scope.keyCompetences[0].name !== "NOT_RELEVANT") {
+                        $scope.keyCompetences.unshift({name: "NOT_RELEVANT"})
+                    }
                 }
             }
 
@@ -387,7 +419,11 @@ define([
             }
 
             function setResourceTypes(data) {
-                $scope.resourceTypes = data;
+                $scope.resourceTypes = data.sort(function (a, b) {
+                    if ($filter('translate')(a.name) < $filter('translate')(b.name)) return -1;
+                    if ($filter('translate')(a.name) > $filter('translate')(b.name)) return 1;
+                    return 0;
+                });
             }
 
             function setDefaultMaterialMetadataLanguage() {
@@ -404,9 +440,6 @@ define([
                     title: ''
                 };
 
-                if (preferredLanguage !== null && preferredLanguage !== undefined)
-                    metadata.language = preferredLanguage[0];
-
                 $scope.titleDescriptionGroups.push(metadata);
             }
 
@@ -416,13 +449,13 @@ define([
                     }).length !== 0;
             }
 
-            $scope.$watchCollection('invalidPicture', function(newValue, oldValue) {
+            $scope.$watchCollection('invalidPicture', function (newValue, oldValue) {
                 if (newValue !== oldValue) {
                     if (newValue && newValue.length > 0) {
                         if ($scope.newPicture || $scope.material.picture) {
                             $scope.showErrorOverlay = true;
-                            $timeout(function() {
-                                    $scope.showErrorOverlay = false;
+                            $timeout(function () {
+                                $scope.showErrorOverlay = false;
                             }, 6000);
                         }
                     }

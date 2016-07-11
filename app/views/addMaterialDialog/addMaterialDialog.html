@@ -30,17 +30,21 @@
                    layout-align="center center" flex>
 
                 <span flex data-ng-if="!newPicture && !material.picture">
-                  <md-icon>insert_photo</md-icon><br />
+                  <md-icon>insert_photo</md-icon><br/>
                   <span data-ng-class="{'error-text': (invalidPicture && invalidPicture.length > 0)}">
                     <span data-translate="MAX_SIZE"></span> {{maxPictureSize}}MB
                   </span>
                 </span>
 
                 <!-- image preview -->
-                <md-input-container data-ng-if="newPicture || material.picture" class="md-block drop-box-preview-container">
+                <md-input-container data-ng-if="newPicture || material.picture"
+                                    class="md-block drop-box-preview-container">
                   <div class="drop-box-preview">
-                    <img data-ng-if="newPicture" data-ngf-thumbnail="newPicture" ngf-size="{width: 300, height: 300, quality: 0.9}" alt="photo">
-                    <img data-ng-if="!newPicture && material.picture" data-ng-src="rest/picture/{{material.picture.name}}" ngf-size="{width: 300, height: 300, quality: 0.9}" alt="photo">
+                    <img data-ng-if="newPicture" data-ngf-thumbnail="newPicture"
+                         ngf-size="{width: 300, height: 300, quality: 0.9}" alt="photo">
+                    <img data-ng-if="!newPicture && material.picture"
+                         data-ng-src="rest/picture/{{material.picture.name}}"
+                         ngf-size="{width: 300, height: 300, quality: 0.9}" alt="photo">
                   </div>
                 </md-input-container>
 
@@ -57,7 +61,8 @@
                 <label>
                   <span data-translate="MATERIAL_LINK"></span> *
                 </label>
-                <input data-ng-model="material.source" name="source" id="add-material-url-input" type="text" required dop-validate-url>
+                <input data-ng-model="material.source" name="source" id="add-material-url-input" type="text" required
+                       dop-validate-url>
                 <div data-ng-messages="materialUrlForm.source.$error" data-ng-show="materialUrlForm.source.$dirty"
                      multiple>
                   <div data-ng-message="required" data-ng-show="materialUrlForm.source.$error.required"
@@ -122,7 +127,7 @@
           </div>
 
           <div layout="row">
-            <md-input-container flex-xs="100" flex-gt-xs="95">
+            <md-input-container flex-xs="100" flex-gt-xs="55">
               <label data-translate="MATERIAL_VIEW_RESOURCE_TYPE"></label>
               <md-select data-ng-model="material.resourceTypes" id="resourceTypeSelect"
                          ng-model-options="{trackBy: '$value.id'}" multiple="true">
@@ -139,8 +144,8 @@
         <md-content class="md-padding">
           <div layout="row" flex layout-align="space-between center"
                data-ng-repeat="taxon in material.taxons track by $index">
-            <div data-dop-taxon-selector data-taxon="material.taxons[$index]" data-disable-educational-context="!$first"
-                 layout="row" layout-sm="column" flex></div>
+            <div data-dop-taxon-selector data-taxon="material.taxons[$index]" layout="row" layout-sm="column"
+                 flex></div>
             <md-button class="md-icon-button md-primary" data-ng-show="$index+1 === material.taxons.length"
                        data-ng-click="addNewTaxon()" data-ng-disabled="material.taxon">
               <md-icon>add_circle</md-icon>
@@ -159,7 +164,7 @@
           </md-checkbox>
 
           <div layout="row" flex layout-align="space-between center">
-            <div data-dop-target-group-selector data-target-groups="material.targetGroups"
+            <div data-dop-target-group-selector data-target-groups="material.targetGroups" data-is-required="true"
                  data-ng-if="educationalContextId !== 4" data-taxon="material.taxons[0]" flex="20"></div>
             <md-switch data-ng-if="isAdmin() || creatorIsPublisher" class="md-primary md-block md-padding" md-no-ink
                        data-ng-model="material.curriculumLiterature"
@@ -176,6 +181,7 @@
             </md-chips>
           </div>
 
+          <!--Key competences-->
           <div layout="row" flex layout-align="center center"
                data-ng-if="educationalContextId === 2 || educationalContextId === 3">
             <md-chips ng-model="material.keyCompetences" md-autocomplete-snap="" md-require-match="true" flex>
@@ -200,6 +206,7 @@
             </md-chips>
           </div>
 
+          <!--Cross-curricular themes-->
           <div layout="row" flex layout-align="center center"
                data-ng-if="educationalContextId === 2 || educationalContextId === 3">
             <md-chips ng-model="material.crossCurricularThemes" md-autocomplete-snap="" md-require-match="true" flex>
@@ -272,7 +279,8 @@
                 </md-option>
               </md-select>
             </md-input-container>
-            <md-switch class="md-primary md-block md-padding" md-no-ink data-ng-model="material.paid"  aria-label="{{'MATERIAL_PAID' | translate}}">
+            <md-switch class="md-primary md-block md-padding" md-no-ink data-ng-model="material.paid"
+                       aria-label="{{'MATERIAL_PAID' | translate}}">
               <span data-translate="MATERIAL_PAID"></span>
             </md-switch>
           </div>
@@ -295,7 +303,7 @@
                data-ng-click="save()" data-ng-disabled="!step.canCreateMaterial()" data-ng-hide="isSaving"
                class="md-primary">
       <span data-ng-if="!isUpdateMode" data-translate="BUTTON_CREATE_MATERIAL"></span>
-      <span data-ng-if="isUpdateMode"  data-translate="BUTTON_UPDATE_MATERIAL"></span>
+      <span data-ng-if="isUpdateMode" data-translate="BUTTON_UPDATE_MATERIAL"></span>
     </md-button>
     <md-button aria-label="Liigu järgmisse sammu" data-ng-click="step.nextStep()"
                data-ng-hide="step.isLastStep() || isSaving" data-ng-disabled="!step.canProceed()" class="md-primary">

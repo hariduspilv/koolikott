@@ -7,7 +7,7 @@ define([
             scope: {
                 targetGroups: '=',
                 taxon: '=',
-                isAddPortfolioView: '='
+                isRequired: '='
             },
             templateUrl: 'directives/targetGroupSelector/targetGroupSelector.html',
             controller: function($scope, $rootScope, $timeout, targetGroupService) {
@@ -89,6 +89,9 @@ define([
                     if (groupNames.indexOf($scope.selectedTargetGroup) === -1 || !$scope.groups) {
                         $scope.selectedTargetGroup = null;
                         $scope.targetGroups = [];
+                        if($scope.groups.length === 1) {
+                            $scope.targetGroupForm.targetGroup.$setPristine();
+                        }
                     }
                 }
 
