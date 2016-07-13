@@ -149,7 +149,7 @@
     <md-select data-ng-model="taxonPath.topic" id="taxonTopicSelect" name="topic" ng-required="topicRequired">
       <md-option data-translate="SELECT_TOPIC"
                  ng-click="reset(taxonPath.subject || taxonPath.domain || taxonPath.module, taxonPath)"></md-option>
-      <md-option ng-value="topic" ng-repeat="topic in getTopics()"
+      <md-option ng-value="topic" ng-repeat="topic in getTopics()" ng-selected="{{topic.id === taxonPath.topic.id}}"
                  data-translate="TOPIC_{{topic.name.toUpperCase()}}"></md-option>
     </md-select>
     <div ng-messages="taxonForm.topic.$error"

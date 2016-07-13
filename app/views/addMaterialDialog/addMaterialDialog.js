@@ -8,8 +8,8 @@ define([
     'services/pictureUploadService',
     'directives/validate/validateUrl'
 ], function (app) {
-    return ['$scope', '$mdDialog', 'serverCallService', 'translationService', 'metadataService', '$filter', '$location', '$rootScope', 'authenticatedUserService', 'storageService', '$timeout', 'pictureUploadService',
-        function ($scope, $mdDialog, serverCallService, translationService, metadataService, $filter, $location, $rootScope, authenticatedUserService, storageService, $timeout, pictureUploadService) {
+    return ['$scope', '$mdDialog', '$mdDateLocale', 'serverCallService', 'translationService', 'metadataService', '$filter', '$location', '$rootScope', 'authenticatedUserService', 'storageService', '$timeout', 'pictureUploadService',
+        function ($scope, $mdDialog, $mdDateLocale, serverCallService, translationService, metadataService, $filter, $location, $rootScope, authenticatedUserService, storageService, $timeout, pictureUploadService) {
             $scope.isSaving = false;
             $scope.showHints = true;
             $scope.creatorIsPublisher = false;
@@ -48,7 +48,7 @@ define([
             };
 
             $scope.step.canCreateMaterial = function () {
-                return isStepValid(1) && $rootScope.selectedTopics.length > 0 && $scope.material.targetGroups.length > 0;
+                return isStepValid(0) && isStepValid(1) && isStepValid(2);
             };
 
             $scope.step.isLastStep = function () {
@@ -137,9 +137,7 @@ define([
                 return authenticatedUserService.isAdmin();
             };
 
-            function getIssueDate() {
-                var date = new Date($scope.issueDate);
-
+            function getIssueDate(date) {
                 return {
                     day: date.getDate(),
                     month: date.getMonth() + 1,
@@ -182,6 +180,13 @@ define([
                 switch (index) {
                     case 0:
                         return $scope.step.isMaterialUrlStepValid && isMetadataStepValid();
+                    case 1:
+                        return $rootScope.selectedTopics && $rootScope.selectedTopics.length > 0 && $scope.material.targetGroups.length > 0
+                            && ($scope.isBasicOrSecondaryEducation() ? $scope.material.keyCompetences.length > 0 && $scope.material.crossCurricularThemes.length > 0 : true);
+                    case 2:
+                        return (($scope.material.publishers[0] && $scope.material.publishers[0].name)
+                            || ($scope.material.authors[0].name && $scope.material.authors[0].surname))
+                            && $scope.material.licenseType && $scope.material.issueDate.year;
                     default:
                         return isStepValid(index - 1);
                 }
@@ -223,6 +228,8 @@ define([
                 };
             }
 
+            $scope.isBasicOrSecondaryEducation = () => $scope.educationalContextId === 2 || $scope.educationalContextId === 3;
+
             function loadMetadata() {
                 metadataService.loadLanguages(setLangugeges);
                 metadataService.loadLicenseTypes(setLicenseTypes);
@@ -240,6 +247,7 @@ define([
                 $scope.material.crossCurricularThemes = [];
                 $scope.material.publishers = [];
                 $scope.material.resourceTypes = [];
+                $scope.issueDate = new Date();
 
                 addNewMetadata();
             }
@@ -280,9 +288,20 @@ define([
                 })
             }
 
-            $scope.issueDateListener = function () {
-                $scope.material.issueDate = getIssueDate();
-            };
+            $scope.$watch(() => {
+                var a = document.getElementsByClassName("md-datepicker-input");
+                if (a[0]) return a[0].value;
+            }, function (newDate, oldDate) {
+                if (newDate !== oldDate) {
+                    var dateObj = $mdDateLocale.parseDate(newDate)
+                    $scope.material.issueDate = getIssueDate(dateObj);
+
+                    //Set date for datepicker, which needs a full date
+                    if ($scope.material.issueDate && $scope.material.issueDate.year) {
+                        $scope.issueDate = dateObj;
+                    }
+                }
+            }, true);
 
             $scope.$watch(function () {
                 return $scope.newPicture;
@@ -382,6 +401,7 @@ define([
 
             function setLicenseTypes(data) {
                 $scope.licenceTypes = data;
+                $scope.allRightsReserved = data.filter(type => type.name.toUpperCase() === "ALLRIGHTSRESERVED")[0];
             }
 
             function setCrossCurricularThemes(data) {

@@ -140,7 +140,7 @@
         </md-content>
       </md-tab>
 
-      <md-tab label="{{'MATERIAL_TAB_TAXON' | translate}}" data-ng-disabled="step.isTabDisabled(2)">
+      <md-tab label="{{'MATERIAL_TAB_TAXON' | translate}}" data-ng-disabled="step.isTabDisabled(1)">
         <md-content class="md-padding">
           <div layout="row" flex layout-align="space-between center"
                data-ng-repeat="taxon in material.taxons track by $index">
@@ -164,13 +164,20 @@
           </md-checkbox>
 
           <div layout="row" flex layout-align="space-between center">
+
+            <!--Target groups-->
             <div data-dop-target-group-selector data-target-groups="material.targetGroups" data-is-required="true"
-                 data-ng-if="educationalContextId !== 4" data-taxon="material.taxons[0]" flex="20"></div>
+                 data-ng-if="educationalContextId !== 4" data-taxon="material.taxons[0]" flex="20">
+            </div>
+
+            <!--Curriculum literature switch-->
             <md-switch data-ng-if="isAdmin() || creatorIsPublisher" class="md-primary md-block md-padding" md-no-ink
                        data-ng-model="material.curriculumLiterature"
                        aria-label="{{'MATERIAL_CURRICULUM_LITERATURE' | translate}}">
               <span data-translate="MATERIAL_CURRICULUM_LITERATURE"></span>
             </md-switch>
+
+            <!--Tags-->
             <md-chips class="md-padding"
                       data-ng-model="material.tags"
                       delete-button-label="{{ 'MATERIAL_REMOVE_TAG' | translate }}"
@@ -183,15 +190,15 @@
 
           <!--Key competences-->
           <div layout="row" flex layout-align="center center"
-               data-ng-if="educationalContextId === 2 || educationalContextId === 3">
-            <md-chips ng-model="material.keyCompetences" md-autocomplete-snap="" md-require-match="true" flex>
+               data-ng-if="isBasicOrSecondaryEducation()">
+            <md-chips ng-model="material.keyCompetences" md-autocomplete-snap="" md-require-match="true" flex required>
               <md-autocomplete
                 md-no-cache="true"
                 md-selected-item="selectedKeyCompetence"
                 md-search-text="competenceSearchText"
                 md-items="keyCompetence in searchKeyCompetences(competenceSearchText)"
                 md-item-text="translate(keyCompetence.name, 'KEY_COMPETENCE_')"
-                placeholder="{{ 'MATERIAL_KEY_COMPETENCES' | translate }}"
+                placeholder="{{ 'MATERIAL_KEY_COMPETENCES' | translate }}*"
                 md-min-length="0"
                 md-autoselect>
           <span md-highlight-text="competenceSearchText" md-highlight-flags="^i">
@@ -199,33 +206,29 @@
           </span>
               </md-autocomplete>
               <md-chip-template>
-          <span>
-            <span data-translate="KEY_COMPETENCE_{{$chip.name.toUpperCase()}}"></span>
-          </span>
+                <span data-translate="KEY_COMPETENCE_{{$chip.name.toUpperCase()}}"/>
               </md-chip-template>
             </md-chips>
           </div>
 
           <!--Cross-curricular themes-->
-          <div layout="row" flex layout-align="center center"
-               data-ng-if="educationalContextId === 2 || educationalContextId === 3">
+
+          <div data-ng-show="isBasicOrSecondaryEducation()" layout="row" flex
+               layout-align="center center">
             <md-chips ng-model="material.crossCurricularThemes" md-autocomplete-snap="" md-require-match="true" flex>
-              <md-autocomplete
-                md-selected-item="selectedCrossCurricularTheme"
-                md-search-text="crossCurricularSearchText"
-                md-items="crossCurricularTheme in searchCrossCurricularThemes(crossCurricularSearchText)"
-                md-item-text="translate(crossCurricularTheme.name, 'CROSS_CURRICULAR_THEME_')"
-                placeholder="{{ 'MATERIAL_CROSS_CURRICULAR_THEMES' | translate }}"
-                md-min-length="0"
-                md-autoselect>
-        <span md-highlight-text="crossCurricularSearchText" md-highlight-flags="^i">
-          {{translate(crossCurricularTheme.name, 'CROSS_CURRICULAR_THEME_')}}
-        </span>
+              <md-autocomplete md-selected-item="selectedCrossCurricularTheme"
+                               md-search-text="crossCurricularSearchText"
+                               md-items="crossCurricularTheme in searchCrossCurricularThemes(crossCurricularSearchText)"
+                               md-item-text="translate(crossCurricularTheme.name, 'CROSS_CURRICULAR_THEME_')"
+                               placeholder="{{ 'MATERIAL_CROSS_CURRICULAR_THEMES' | translate }}*"
+                               md-min-length="0"
+                               md-autoselect>
+                    <span md-highlight-text="crossCurricularSearchText" md-highlight-flags="^i">
+                      {{translate(crossCurricularTheme.name, 'CROSS_CURRICULAR_THEME_')}}
+                    </span>
               </md-autocomplete>
               <md-chip-template>
-        <span>
-          <span data-translate="CROSS_CURRICULAR_THEME_{{$chip.name.toUpperCase()}}"></span>
-        </span>
+                <span data-translate="CROSS_CURRICULAR_THEME_{{$chip.name.toUpperCase()}}"/>
               </md-chip-template>
             </md-chips>
           </div>
@@ -233,17 +236,23 @@
         </md-content>
       </md-tab>
 
-      <md-tab label="{{ 'MATERIAL_TAB_ADDITIONAL_DATA' | translate }}" data-ng-disabled="step.isTabDisabled(1)">
+      <md-tab label="{{ 'MATERIAL_TAB_ADDITIONAL_DATA' | translate }}" data-ng-disabled="step.isTabDisabled(2)">
         <md-content class="md-padding">
 
           <div class="form-group" data-ng-repeat="author in material.authors">
             <div layout="row" layout-align="space-between center">
               <md-input-container flex>
-                <label data-translate="MATERIAL_AUTHOR_NAME"></label>
+                <label>
+                  <span data-translate="MATERIAL_AUTHOR_NAME"></span>
+                  <span data-ng-hide="material.publishers[0].name || $index > 0">*</span>
+                </label>
                 <input data-ng-model="author.name" id="material-author-{{$index}}-name">
               </md-input-container>
               <md-input-container flex>
-                <label data-translate="MATERIAL_AUTHOR_SURNAME"></label>
+                <label>
+                  <span data-translate="MATERIAL_AUTHOR_SURNAME"></span>
+                  <span data-ng-hide="material.publishers[0].name || $index > 0">*</span>
+                </label>
                 <input data-ng-model="author.surname" ng-required="author.name">
               </md-input-container>
               <md-button class="md-icon-button md-primary" data-ng-show="$index+1 === material.authors.length"
@@ -261,29 +270,49 @@
 
           <div layout="row" flex layout-align="space-between center">
             <md-input-container class="md-block" flex>
-              <label data-translate="MATERIAL_PUBLISHER"></label>
+              <label>
+                <span data-translate="MATERIAL_PUBLISHER"></span>
+                <span data-ng-hide="material.authors[0].name && material.authors[0].surname">*</span>
+              </label>
               <input data-ng-model="material.publishers[0].name" ng-disabled="creatorIsPublisher">
             </md-input-container>
 
-            <md-datepicker ng-model="issueDate" ng-change="issueDateListener()"
-                           md-placeholder="{{ 'MATERIAL_ISSUE_DATE' | translate }}"></md-datepicker>
+            <!--Issue date-->
+            <form name="dateForm">
+              <md-datepicker ng-model="issueDate" name="issueDate" required
+                             md-placeholder="{{ 'MATERIAL_ISSUE_DATE' | translate }}"></md-datepicker>
+              <div data-ng-messages="dateForm.issueDate.$error"
+                   data-ng-show="!material.issueDate.year && dateForm.issueDate.$touched">
+                <div class="validation-messages" data-ng-message="required">This date is required!</div>
+              </div>
+            </form>
           </div>
 
-          <div layout="row" flex layout-align="space-between center">
+          <form name="priceForm" layout="row" flex layout-align="space-between center">
+            <!--License type-->
             <md-input-container flex>
-              <label data-translate="MATERIAL_VIEW_LICENSE_TYPE"></label>
-              <md-select data-ng-model="material.licenseType" id="licenceTypeSelect"
-                         ng-model-options="{trackBy: '$value.id'}">
+              <label>
+                <span data-translate="MATERIAL_VIEW_LICENSE_TYPE"></span>*
+              </label>
+              <md-select data-ng-model="material.licenseType" id="licenceTypeSelect" name="licenseType"
+                         ng-model-options="{trackBy: '$value.id'}" required>
+                <md-option ng-value="allRightsReserved" data-translate="LICENSETYPE_CANT_CHOOSE"></md-option>
                 <md-option ng-value="licenceType" data-ng-repeat="licenceType in licenceTypes"
                            data-translate="LICENSETYPE_{{licenceType.name.toUpperCase()}}">
                 </md-option>
               </md-select>
+              <div data-ng-messages="priceForm.licenseType.$error"
+                   data-ng-show="!material.licenseType && priceForm.licenseType.$touched">
+                <div data-ng-message="required" data-translate="MATERIAL_LICENSE_TYPE_MANDATORY"></div>
+              </div>
             </md-input-container>
+
+            <!--Paid-->
             <md-switch class="md-primary md-block md-padding" md-no-ink data-ng-model="material.paid"
                        aria-label="{{'MATERIAL_PAID' | translate}}">
               <span data-translate="MATERIAL_PAID"></span>
             </md-switch>
-          </div>
+          </form>
         </md-content>
       </md-tab>
     </md-tabs>

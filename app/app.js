@@ -140,8 +140,8 @@ define([
         };
 
         $mdDateLocaleProvider.parseDate = function(dateString) {
-            var m = moment(dateString, 'DD.MM.YYYY', true);
-            return m.isValid() ? m.toDate() : new Date(NaN);
+            var m = moment(dateString, ['DD.MM.YYYY', 'MM.YYYY', 'YYYY', 'DD-MM-YYYY', 'DD/MM/YYYY'], true);
+            return m.isValid() ? m.toDate() : new Date(NaN)
         };
     }
 

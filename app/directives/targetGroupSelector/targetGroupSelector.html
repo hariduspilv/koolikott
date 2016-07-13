@@ -6,7 +6,7 @@
         </label>
         <md-select data-ng-model="selectedTargetGroup" name="targetGroup" ng-required="isRequired">
             <md-option class="stepped-select" data-ng-class="{ 'child' : !group.parent }"
-                       data-ng-repeat="group in groups" value="{{group.name}}" data-ng-selected="groups.length === 1">
+                       data-ng-repeat="group in groups" value="{{group.name}}">
                 <span data-translate="TARGET_GROUP_{{group.name.toUpperCase()}}"/>
             </md-option>
         </md-select>

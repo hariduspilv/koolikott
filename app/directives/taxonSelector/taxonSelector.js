@@ -14,7 +14,6 @@ define([
             },
             templateUrl: 'directives/taxonSelector/taxonSelector.html',
             controller: function ($scope, serverCallService, $rootScope, $timeout, metadataService) {
-
                 // get educational contexts
                 if (!EDUCATIONAL_CONTEXTS) {
                     metadataService.loadEducationalContexts(getEducationalContextsSuccess)
@@ -32,7 +31,6 @@ define([
                     $timeout(function () {
                         $scope.isReady = true;
                     });
-
                     $scope.topicRequired = isTopicNotSet();
                 }
 
@@ -91,7 +89,7 @@ define([
                         buildTaxonPath();
 
                         //When choosing parent taxon, old topic needs to be removed
-                        removeTopic(oldTaxon);
+                        if(newTaxon !== oldTaxon) removeTopic(oldTaxon);
                         if (!$scope.topicRequired && !$scope.taxonPath.topic && isTopicNotSet()) {
                             $scope.topicRequired = true;
                         }
@@ -143,14 +141,14 @@ define([
                         if (newTopic !== undefined && newTopic !== oldTopic) {
                             $scope.taxon = Object.create($scope.taxonPath.topic);
                             $scope.taxonForm.topic.$setPristine();
-
+                            
                             if (!containsObjectWithId($rootScope.selectedTopics, $scope.taxonPath.topic.id)) {
                                 $rootScope.selectedTopics.push($scope.taxonPath.topic);
                                 $scope.topicRequired = false;
                             }
                         }
                     }, true);
-
+                    
                     $scope.$watch('taxonPath.subtopic.id', function (newSubtopic, oldSubtopic) {
                         if (newSubtopic !== undefined && newSubtopic !== oldSubtopic) {
                             $scope.taxon = Object.create($scope.taxonPath.subtopic);
