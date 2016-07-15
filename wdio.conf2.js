@@ -30,24 +30,14 @@ exports.config = {
         {
             browserName: 'chrome',
             specs: [
-                './app/tests/general_tests.js'
-            ]
-        },
-        {
-            browserName: 'chrome',
-            specs: [
+                './app/tests/general_tests.js',
                 './app/tests/material_tests.js'
             ]
         },
         {
             browserName: 'chrome',
             specs: [
-                './app/tests/portfolio_tests.js'
-            ]
-        },
-        {
-            browserName: 'chrome',
-            specs: [
+                './app/tests/portfolio_tests.js',
                 './app/tests/profile_tests.js'
             ]
         }
