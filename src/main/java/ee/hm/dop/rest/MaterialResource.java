@@ -145,7 +145,7 @@ public class MaterialResource extends BaseResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Material createOrUpdateMaterial(Material material) {
-        Material newMaterial = null;
+        Material newMaterial;
 
         if (material.getId() == null) {
             newMaterial = materialService.createMaterial(material, getLoggedInUser(), true);
