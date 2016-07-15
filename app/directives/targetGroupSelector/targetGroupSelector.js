@@ -1,36 +1,38 @@
 define([
     'angularAMD',
     'services/targetGroupService'
-], function(angularAMD) {
-    angularAMD.directive('dopTargetGroupSelector', function() {
+], function (angularAMD) {
+    angularAMD.directive('dopTargetGroupSelector', function () {
         return {
             scope: {
                 targetGroups: '=',
                 taxon: '=',
-                isAddPortfolioView: '='
+                isRequired: '=',
+                markRequired: '='
             },
             templateUrl: 'directives/targetGroupSelector/targetGroupSelector.html',
-            controller: function($scope, $rootScope, $timeout, targetGroupService) {
+            controller: function ($scope, $rootScope, $timeout, targetGroupService) {
 
                 init();
 
                 function init() {
+                    $scope.selectedTargetGroup = targetGroupService.getLabelByTargetGroups($scope.targetGroups);
                     fill();
                     addListeners();
                     selectValue();
-                    $timeout(function(){
+                    $timeout(function () {
                         $scope.isReady = true;
-                    })
+                    });
                 }
 
                 function addListeners() {
-                    $scope.$watch('selectedTargetGroup', function(newGroup, oldGroup) {
+                    $scope.$watch('selectedTargetGroup', function (newGroup, oldGroup) {
                         if (newGroup !== oldGroup) {
                             parseSelectedTargetGroup();
                         }
                     }, false);
 
-                    $scope.$watch('targetGroups', function(newGroups, oldGroups) {
+                    $scope.$watch('targetGroups', function (newGroups, oldGroups) {
                         if (newGroups !== oldGroups) {
                             // Check that input is an array
                             if (!Array.isArray(newGroups)) {
@@ -44,7 +46,7 @@ define([
                         }
                     }, false);
 
-                    $scope.$watch('taxon', function(newTaxon, oldTaxon) {
+                    $scope.$watch('taxon', function (newTaxon, oldTaxon) {
                         if (newTaxon !== oldTaxon) {
                             var newEdCtx = $rootScope.taxonUtils.getEducationalContext(newTaxon);
                             var oldEdCtx = $rootScope.taxonUtils.getEducationalContext(oldTaxon);
@@ -79,7 +81,7 @@ define([
                     var groupNames = [];
 
                     if ($scope.groups) {
-                        $scope.groups.forEach(function(group) {
+                        $scope.groups.forEach(function (group) {
                             if (group && group.name) {
                                 groupNames.push(group.name);
                             }
@@ -89,6 +91,10 @@ define([
                     if (groupNames.indexOf($scope.selectedTargetGroup) === -1 || !$scope.groups) {
                         $scope.selectedTargetGroup = null;
                         $scope.targetGroups = [];
+                        if ($scope.groups && $scope.groups.length === 1) {
+                            $scope.selectedTargetGroup =  $scope.groups[0].name;
+                            $scope.targetGroupForm.targetGroup.$setPristine();
+                        }
                     }
                 }
 

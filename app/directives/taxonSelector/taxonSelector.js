@@ -1,20 +1,20 @@
 define([
     'angularAMD',
     'services/serverCallService'
-], function(angularAMD) {
+], function (angularAMD) {
     var EDUCATIONAL_CONTEXTS;
 
-
-    angularAMD.directive('dopTaxonSelector', ['serverCallService', 'metadataService', function() {
+    angularAMD.directive('dopTaxonSelector', ['serverCallService', 'metadataService', function () {
         return {
             scope: {
                 taxon: '=',
                 disableEducationalContext: '=',
-                isAddPortfolioView: '='
+                isAddPortfolioView: '=',
+                isAddMaterialView: '=',
+                markRequired: '='
             },
             templateUrl: 'directives/taxonSelector/taxonSelector.html',
-            controller: function($scope, serverCallService, $rootScope, $timeout, metadataService) {
-
+            controller: function ($scope, serverCallService, $rootScope, $timeout, metadataService) {
                 // get educational contexts
                 if (!EDUCATIONAL_CONTEXTS) {
                     metadataService.loadEducationalContexts(getEducationalContextsSuccess)
@@ -29,78 +29,147 @@ define([
 
                     $scope.basicEducationDomainSubjects = EDUCATIONAL_CONTEXTS.basicEducationDomainSubjects;
                     $scope.secondaryEducationDomainSubjects = EDUCATIONAL_CONTEXTS.secondaryEducationDomainSubjects;
-                    $timeout(function(){
+                    $timeout(function () {
                         $scope.isReady = true;
-                    })
+                    });
+                    $scope.topicRequired = $scope.isAddMaterialView ? isTopicNotSet() : false;
                 }
 
-                $scope.reset = function(taxon) {
-                    $scope.taxon = taxon;
+                function isTopicNotSet() {
+                    return !$rootScope.selectedTopics || $rootScope.selectedTopics.length === 0;
+                }
+
+                function removeTopic(originalId) {
+                    if ($rootScope.selectedTopics) {
+                        $rootScope.selectedTopics = $rootScope.selectedTopics
+                            .filter(topic => topic.id !== originalId);
+                    }
+                }
+
+                $scope.reset = function (parentTaxon, original) {
+                    $scope.taxon = parentTaxon;
+
+                    if (original) {
+                        removeTopic(original.topic.id);
+                    }
                 };
 
-                $scope.selectEducationalContext = function() {
+                $rootScope.$watch('selectedTopics', function (newValue, oldValue) {
+                    if (newValue && newValue.length > 0 && newValue !== oldValue) {
+                        $scope.topicRequired = false;
+                    }
+
+                    if (newValue && oldValue && newValue.length === 0 && oldValue.length !== 0 && $scope.isAddMaterialView) {
+                        $scope.topicRequired = true;
+                    }
+                }, false);
+
+
+                $scope.selectEducationalContext = function () {
                     $rootScope.dontCloseSearch = true;
-                    $timeout(function() {
+                    $timeout(function () {
                         $rootScope.dontCloseSearch = false;
                     }, 500);
                 };
+
+                $scope.getTopics = function () {
+                    if (!$scope.taxonPath) return;
+                    var path = $scope.taxonPath;
+
+                    if (path.subject && path.subject.topics && path.subject.topics.length > 0) return path.subject.topics;
+                    if (path.domain && path.domain.topics && path.domain.topics.length > 0) return path.domain.topics;
+                    if (path.module && path.module.topics && path.module.topics.length > 0) return path.module.topics;
+                };
+
+                $scope.isRequired = () => $scope.isAddPortfolioView || $scope.topicRequired;
+
+                $scope.showErrors = element => $scope.isRequired() && $scope.shouldShowErrors(element);
+
+                $scope.shouldShowErrors = element => element && (element.$touched || $scope.markRequired) && element.$error.required;
 
                 function addTaxonPathListeners() {
                     /*
                      * The order of the watchers is important and should be the same as the tree.
                      */
 
-                    $scope.$watch('taxon.id', function(newTaxon, oldTaxon) {
+                    $scope.$watch('taxon.id', function (newTaxon, oldTaxon) {
                         buildTaxonPath();
+
+                        //When choosing parent taxon, old topic needs to be removed
+                        if (newTaxon !== oldTaxon) removeTopic(oldTaxon);
+                        if (!$scope.topicRequired && !$scope.taxonPath.topic && isTopicNotSet() && $scope.isAddMaterialView) {
+                            $scope.topicRequired = true;
+                        }
+
                     }, true);
 
-                    $scope.$watch('taxonPath.educationalContext.id', function(newEducationalContext, oldEducationalContext) {
+                    $scope.$watch('taxonPath.educationalContext.id', function (newEducationalContext, oldEducationalContext) {
                         if (newEducationalContext !== undefined && newEducationalContext !== oldEducationalContext) {
                             $scope.taxon = Object.create($scope.taxonPath.educationalContext);
                         }
                     }, true);
 
-                    $scope.$watch('taxonPath.domain.id', function(newDomain, oldDomain) {
+                    $scope.$watch('taxonPath.domain.id', function (newDomain, oldDomain) {
                         if (newDomain !== undefined && newDomain !== oldDomain) {
                             $scope.taxon = Object.create($scope.taxonPath.domain);
                         }
                     }, true);
 
-                    $scope.$watch('taxonPath.subject.id', function(newSubject, oldSubject) {
+                    $scope.$watch('taxonPath.subject.id', function (newSubject, oldSubject) {
                         if (newSubject !== undefined && newSubject !== oldSubject) {
                             $scope.taxon = Object.create($scope.taxonPath.subject);
                         }
                     }, true);
 
-                    $scope.$watch('taxonPath.domainSubject.id', function(newDomainSubject, oldDomainSubject) {
+                    $scope.$watch('taxonPath.domainSubject.id', function (newDomainSubject, oldDomainSubject) {
                         if (newDomainSubject !== undefined && newDomainSubject !== oldDomainSubject) {
                             $scope.taxon = Object.create($scope.taxonPath.domainSubject);
+                            $scope.taxonForm.domainAndSubject.$setPristine();
+                            $scope.taxonForm.secondaryEducationDomainAndSubject.$setPristine();
+
                         }
                     }, true);
 
-                    $scope.$watch('taxonPath.specialization.id', function(newSpecialization, oldSpecialization) {
+                    $scope.$watch('taxonPath.specialization.id', function (newSpecialization, oldSpecialization) {
                         if (newSpecialization !== undefined && newSpecialization !== oldSpecialization) {
                             $scope.taxon = Object.create($scope.taxonPath.specialization);
                         }
                     }, true);
 
-                    $scope.$watch('taxonPath.module.id', function(newModule, oldModule) {
+                    $scope.$watch('taxonPath.module.id', function (newModule, oldModule) {
                         if (newModule !== undefined && newModule !== oldModule) {
                             $scope.taxon = Object.create($scope.taxonPath.module);
+                            $scope.taxonForm.module.$setPristine();
+
                         }
                     }, true);
 
-                    $scope.$watch('taxonPath.topic.id', function(newTopic, oldTopic) {
+                    $scope.$watch('taxonPath.topic.id', function (newTopic, oldTopic) {
                         if (newTopic !== undefined && newTopic !== oldTopic) {
                             $scope.taxon = Object.create($scope.taxonPath.topic);
+                            $scope.taxonForm.topic.$setPristine();
+
+                            if (!containsObjectWithId($rootScope.selectedTopics, $scope.taxonPath.topic.id)) {
+                                $rootScope.selectedTopics.push($scope.taxonPath.topic);
+                                $scope.topicRequired = false;
+                            }
                         }
                     }, true);
 
-                    $scope.$watch('taxonPath.subtopic.id', function(newSubtopic, oldSubtopic) {
+                    $scope.$watch('taxonPath.subtopic.id', function (newSubtopic, oldSubtopic) {
                         if (newSubtopic !== undefined && newSubtopic !== oldSubtopic) {
                             $scope.taxon = Object.create($scope.taxonPath.subtopic);
                         }
                     }, true);
+                }
+
+                function containsObjectWithId(array, id) {
+                    var res = false;
+                    array.forEach(function (element) {
+                        if (element.id === id) res = true;
+                    });
+
+                    return res;
                 }
 
                 function getEducationalContextsSuccess(educationalContexts) {
@@ -137,7 +206,7 @@ define([
 
                 function setEducationalContexts() {
                     $scope.educationalContexts = EDUCATIONAL_CONTEXTS;
-                    $scope.educationalContexts.sort(function(context1, context2) {
+                    $scope.educationalContexts.sort(function (context1, context2) {
                         return context1.id - context2.id;
                     });
                 }
@@ -158,7 +227,6 @@ define([
                     $scope.taxonPath.module = $rootScope.taxonUtils.getModule($scope.taxon);
                     $scope.taxonPath.topic = $rootScope.taxonUtils.getTopic($scope.taxon);
                     $scope.taxonPath.subtopic = $rootScope.taxonUtils.getSubtopic($scope.taxon);
-
                 }
             }
         };
