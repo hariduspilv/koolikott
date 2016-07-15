@@ -11,7 +11,7 @@
             </md-option>
         </md-select>
         <div ng-messages="targetGroupForm.targetGroup.$error"
-             data-ng-show="isRequired && targetGroupForm.targetGroup.$touched && targetGroupForm.targetGroup.$error.required">
+             data-ng-show="isRequired && (targetGroupForm.targetGroup.$touched || markRequired) && targetGroupForm.targetGroup.$error.required">
             <div ng-message="required" data-ng-if="isReady" data-translate="PORTFOLIO_AGE_GROUP_REQUIRED"></div>
         </div>
     </md-input-container>

@@ -7,7 +7,8 @@ define([
             scope: {
                 targetGroups: '=',
                 taxon: '=',
-                isRequired: '='
+                isRequired: '=',
+                markRequired: '='
             },
             templateUrl: 'directives/targetGroupSelector/targetGroupSelector.html',
             controller: function ($scope, $rootScope, $timeout, targetGroupService) {

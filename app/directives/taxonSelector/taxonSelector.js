@@ -4,13 +4,14 @@ define([
 ], function (angularAMD) {
     var EDUCATIONAL_CONTEXTS;
 
-
     angularAMD.directive('dopTaxonSelector', ['serverCallService', 'metadataService', function () {
         return {
             scope: {
                 taxon: '=',
                 disableEducationalContext: '=',
-                isAddPortfolioView: '='
+                isAddPortfolioView: '=',
+                isAddMaterialView: '=',
+                markRequired: '='
             },
             templateUrl: 'directives/taxonSelector/taxonSelector.html',
             controller: function ($scope, serverCallService, $rootScope, $timeout, metadataService) {
@@ -31,7 +32,7 @@ define([
                     $timeout(function () {
                         $scope.isReady = true;
                     });
-                    $scope.topicRequired = isTopicNotSet();
+                    $scope.topicRequired = $scope.isAddMaterialView ? isTopicNotSet() : false;
                 }
 
                 function isTopicNotSet() {
@@ -58,7 +59,7 @@ define([
                         $scope.topicRequired = false;
                     }
 
-                    if (newValue && oldValue && newValue.length === 0 && oldValue.length !== 0) {
+                    if (newValue && oldValue && newValue.length === 0 && oldValue.length !== 0 && $scope.isAddMaterialView) {
                         $scope.topicRequired = true;
                     }
                 }, false);
@@ -75,10 +76,16 @@ define([
                     if (!$scope.taxonPath) return;
                     var path = $scope.taxonPath;
 
-                    if (path.subject && path.subject.topics.length > 0) return path.subject.topics;
-                    if (path.domain && path.domain.topics.length > 0) return path.domain.topics;
-                    if (path.module && path.module.topics.length > 0) return path.module.topics;
+                    if (path.subject && path.subject.topics && path.subject.topics.length > 0) return path.subject.topics;
+                    if (path.domain && path.domain.topics && path.domain.topics.length > 0) return path.domain.topics;
+                    if (path.module && path.module.topics && path.module.topics.length > 0) return path.module.topics;
                 };
+
+                $scope.isRequired = () => $scope.isAddPortfolioView || $scope.topicRequired;
+
+                $scope.showErrors = element => $scope.isRequired() && $scope.shouldShowErrors(element);
+
+                $scope.shouldShowErrors = element => element && (element.$touched || $scope.markRequired) && element.$error.required;
 
                 function addTaxonPathListeners() {
                     /*
@@ -89,8 +96,8 @@ define([
                         buildTaxonPath();
 
                         //When choosing parent taxon, old topic needs to be removed
-                        if(newTaxon !== oldTaxon) removeTopic(oldTaxon);
-                        if (!$scope.topicRequired && !$scope.taxonPath.topic && isTopicNotSet()) {
+                        if (newTaxon !== oldTaxon) removeTopic(oldTaxon);
+                        if (!$scope.topicRequired && !$scope.taxonPath.topic && isTopicNotSet() && $scope.isAddMaterialView) {
                             $scope.topicRequired = true;
                         }
 
@@ -141,14 +148,14 @@ define([
                         if (newTopic !== undefined && newTopic !== oldTopic) {
                             $scope.taxon = Object.create($scope.taxonPath.topic);
                             $scope.taxonForm.topic.$setPristine();
-                            
+
                             if (!containsObjectWithId($rootScope.selectedTopics, $scope.taxonPath.topic.id)) {
                                 $rootScope.selectedTopics.push($scope.taxonPath.topic);
                                 $scope.topicRequired = false;
                             }
                         }
                     }, true);
-                    
+
                     $scope.$watch('taxonPath.subtopic.id', function (newSubtopic, oldSubtopic) {
                         if (newSubtopic !== undefined && newSubtopic !== oldSubtopic) {
                             $scope.taxon = Object.create($scope.taxonPath.subtopic);
@@ -220,7 +227,6 @@ define([
                     $scope.taxonPath.module = $rootScope.taxonUtils.getModule($scope.taxon);
                     $scope.taxonPath.topic = $rootScope.taxonUtils.getTopic($scope.taxon);
                     $scope.taxonPath.subtopic = $rootScope.taxonUtils.getSubtopic($scope.taxon);
-
                 }
             }
         };

@@ -55,7 +55,7 @@ define([
                 return $scope.step.currentStep === TABS_COUNT;
             };
 
-            $scope.$watch('materialUrlForm.$valid', function (isValid) {
+            $scope.$watch('addMaterialForm.source.$valid', function (isValid) {
                 $scope.step.isMaterialUrlStepValid = isValid;
             });
 
@@ -133,6 +133,18 @@ define([
                 }
             };
 
+            $scope.isTouchedOrSubmitted = element => (element && element.$touched) || ($scope.addMaterialForm && $scope.addMaterialForm.$submitted);
+
+            $scope.showCompetencesWarning = element => {
+                if ($scope.isTouchedOrSubmitted(element)) return $scope.material.keyCompetences.length === 0;
+            };
+
+            $scope.showThemesWarning = element => {
+                if ($scope.isTouchedOrSubmitted(element)) return $scope.material.crossCurricularThemes.length === 0;
+            };
+
+            $scope.isAuthorOrPublisherSet = () => ($scope.material.authors[0].name && $scope.material.authors[0].surname) || $scope.material.publishers[0];
+
             $scope.isAdmin = function () {
                 return authenticatedUserService.isAdmin();
             };
@@ -176,17 +188,25 @@ define([
                 };
             }
 
+            $scope.isTabTwoValid = () => {
+                return $rootScope.selectedTopics && $rootScope.selectedTopics.length > 0 && $scope.material.targetGroups.length > 0
+                    && ($scope.isBasicOrSecondaryEducation() ? $scope.material.keyCompetences.length > 0 && $scope.material.crossCurricularThemes.length > 0 : true);
+            };
+
+            $scope.isTabThreeValid = () => {
+                return (($scope.material.publishers[0] && $scope.material.publishers[0].name)
+                    || ($scope.material.authors[0].name && $scope.material.authors[0].surname))
+                    && $scope.material.licenseType && $scope.material.issueDate.year;
+            };
+
             function isStepValid(index) {
                 switch (index) {
                     case 0:
                         return $scope.step.isMaterialUrlStepValid && isMetadataStepValid();
                     case 1:
-                        return $rootScope.selectedTopics && $rootScope.selectedTopics.length > 0 && $scope.material.targetGroups.length > 0
-                            && ($scope.isBasicOrSecondaryEducation() ? $scope.material.keyCompetences.length > 0 && $scope.material.crossCurricularThemes.length > 0 : true);
+                        return $scope.isTabTwoValid();
                     case 2:
-                        return (($scope.material.publishers[0] && $scope.material.publishers[0].name)
-                            || ($scope.material.authors[0].name && $scope.material.authors[0].surname))
-                            && $scope.material.licenseType && $scope.material.issueDate.year;
+                        return $scope.isTabThreeValid();
                     default:
                         return isStepValid(index - 1);
                 }
