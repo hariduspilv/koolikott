@@ -124,9 +124,10 @@ define([
                     $scope.$watch('taxonPath.domainSubject.id', function (newDomainSubject, oldDomainSubject) {
                         if (newDomainSubject !== undefined && newDomainSubject !== oldDomainSubject) {
                             $scope.taxon = Object.create($scope.taxonPath.domainSubject);
-                            $scope.taxonForm.domainAndSubject.$setPristine();
-                            $scope.taxonForm.secondaryEducationDomainAndSubject.$setPristine();
-
+                            if ($scope.taxonForm) {
+                                $scope.taxonForm.domainAndSubject.$setPristine();
+                                $scope.taxonForm.secondaryEducationDomainAndSubject.$setPristine();
+                            }
                         }
                     }, true);
 
@@ -147,9 +148,9 @@ define([
                     $scope.$watch('taxonPath.topic.id', function (newTopic, oldTopic) {
                         if (newTopic !== undefined && newTopic !== oldTopic) {
                             $scope.taxon = Object.create($scope.taxonPath.topic);
-                            $scope.taxonForm.topic.$setPristine();
+                            if ($scope.taxonForm) $scope.taxonForm.topic.$setPristine();
 
-                            if (!containsObjectWithId($rootScope.selectedTopics, $scope.taxonPath.topic.id)) {
+                            if ($rootScope.selectedTopics && !containsObjectWithId($rootScope.selectedTopics, $scope.taxonPath.topic.id)) {
                                 $rootScope.selectedTopics.push($scope.taxonPath.topic);
                                 $scope.topicRequired = false;
                             }

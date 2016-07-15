@@ -292,7 +292,6 @@ define([
                     prefillMetadataFromPortfolio();
                     $scope.material.source = addChapterMaterialUrl;
                 }
-
                 setPublisher();
                 loadMetadata();
                 getMaxPictureSize();
@@ -302,8 +301,11 @@ define([
             function setSelectedTopics() {
                 $rootScope.selectedTopics = [];
                 $scope.material.taxons.forEach(function (taxon) {
-                    if (taxon.level === $rootScope.taxonUtils.constants.TOPIC) {
+                    const TOPIC = $rootScope.taxonUtils.constants.TOPIC;
+                    if (taxon.level === TOPIC) {
                         $rootScope.selectedTopics.push(taxon);
+                    } else if ($rootScope.taxonUtils.getTopic(taxon).level === TOPIC) {
+                        $rootScope.selectedTopics.push($rootScope.taxonUtils.getTopic(taxon));
                     }
                 })
             }
@@ -375,10 +377,10 @@ define([
                     $scope.material.taxons = [{}];
                 }
 
-                var taxon = $rootScope.taxonUtils.getEducationalContext($scope.material.taxons[0]);
+                var educationalContext = $rootScope.taxonUtils.getEducationalContext($scope.material.taxons[0]);
 
-                if (taxon) {
-                    $scope.educationalContextId = taxon.id;
+                if (educationalContext) {
+                    $scope.educationalContextId = educationalContext.id;
                 }
             }
 
@@ -387,8 +389,11 @@ define([
                     if ($rootScope.savedPortfolio.taxon) {
                         var taxon = Object.create($rootScope.savedPortfolio.taxon);
                         $scope.material.taxons = [taxon];
+                        var educationalContext = $rootScope.taxonUtils.getEducationalContext(taxon);
 
-                        $scope.educationalContextId = taxon.id;
+                        if (educationalContext) {
+                            $scope.educationalContextId = educationalContext.id;
+                        }
                     }
 
                     if ($rootScope.savedPortfolio.tags) {
