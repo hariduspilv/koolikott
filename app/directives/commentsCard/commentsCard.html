@@ -1,6 +1,6 @@
 <!-- TODO: no parenthesis if no comments. or number 0 -->
 <div id="comments">
-  <md-button class="comments-card-title" data-ng-class="{'toggled': showComments}" data-ng-click="showComments = !showComments">
+  <md-button class="comments-card-title" data-ng-class="{'toggled': showComments}" data-ng-click="showComments = !showComments" id="show-comments">
     <span data-translate="COMMENTS_TITLE"></span>
     <span>({{comments.length}})</span>
     <md-icon class="md-primary" >
@@ -11,7 +11,7 @@
     </md-tooltip>
   </md-button>
 
-  <div data-ng-show="showComments">
+  <div data-ng-show="showComments" id="comment-list">
     <div data-ng-if="isAuthorized()">
       <h6 data-translate="ADD_COMMENT_TITLE"></h6>
       <md-input-container class="md-block">

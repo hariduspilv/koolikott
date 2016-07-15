@@ -3,7 +3,7 @@
     <div layout="row" layout-xs="column" flex="0" flex-gt-md="15"></div>
     <section flex flex-gt-md="75">
       <div  layout-gt-sm>
-        <article flex="100" flex-sm="100" class="md-padding" role="main">
+        <article flex="100" flex-sm="100" class="md-padding" role="main" id="main-content">
           <h1 data-ng-if="myProfile" data-translate="MYPROFILE_PAGE_TITLE_PORTFOLIOS"></h1>
           <h1 data-ng-if="!myProfile" data-translate="PROFILE_PAGE_TITLE_PORTFOLIOS"></h1>
 
@@ -23,7 +23,7 @@
           </md-grid-list>
         </article>
 
-        <aside flex flex-gt-sm="25" flex-gt-lg="20" class="md-padding" >
+        <aside flex flex-gt-sm="25" flex-gt-lg="20" class="md-padding" id="sidebar">
           <div id="user-data">
             <h2 data-ng-if="myProfile" data-translate="MYPROFILE_PAGE_TITLE_MY_DATA"></h2>
 

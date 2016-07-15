@@ -1,7 +1,7 @@
 <md-fab-speed-dial data-ng-if="hasPermission()" class="md-fab-bottom-right md-scale main-fab-button" md-open="isOpen"
                    md-direction="up" data-ng-mouseenter="isOpen = true" data-ng-mouseleave="isOpen = false">
   <md-fab-trigger>
-    <md-button aria-label="Lisa kogumik" class="md-fab " data-ng-click="showAddPortfolioDialog($event)">
+    <md-button aria-label="Lisa kogumik" class="md-fab " data-ng-click="showAddPortfolioDialog($event)" id="add-portfolio">
       <md-tooltip md-direction="left">
         <span data-ng-show="userHasSelectedMaterials" data-translate="ADD_TO_NEW_PORTFOLIO"></span>
         <span data-ng-show="!userHasSelectedMaterials" data-translate="ADD_PORTFOLIO"></span>
@@ -18,7 +18,7 @@
       <md-icon>book</md-icon>
     </md-button>
     <md-button aria-label="Lisa material" class="md-fab md-raised md-mini" data-ng-click="showAddMaterialDialog($event)"
-               data-ng-if="hasPermission()">
+               data-ng-if="hasPermission()" id="add-material">
       <md-tooltip md-direction="left">
         <span data-translate="ADD_MATERIAL"></span>
       </md-tooltip>
