@@ -10,6 +10,10 @@ To build the project you need to have installed on your machine NodeJS, NPM, Bow
 
         npm install -g grunt-cli
 
+## Compass installation (depends on ruby)
+
+        sudo apt-get install ruby-full
+        sudo gem install compass
 
 # Build
 
@@ -19,6 +23,10 @@ Run commands from project root directory.
 
 	npm install
 	bower install
+
+## Compile sass files to css
+
+    grunt compass
 
 ## Building
 
@@ -35,6 +43,15 @@ If project building fails with message like ">> Local Npm module "XXXXXX" not fo
 Generates project deliverable artifact. builds the project (grunt build) and create dop.tar.gz file which contains the project artifacts.
 
 	grunt package
+	
+## Visual regression testing
+
+    sudo apt-get install xvfb
+    sudo apt-get install graphicsmagick
+    
+##  Run visual regression tests
+
+    grunt regression-test
 
 # Front and Back end integration
 
@@ -47,6 +64,14 @@ To have and usable application is needed to connect to back end server. For that
 ## Installing proxy http module to redirect rest calls to back end servlet
 
 	sudo a2enmod proxy_http
+	
+## Installing ssl https module to allow ssl connections
+
+	sudo a2enmod ssl
+	
+## Installing rewrite module to allow url rewriting
+
+	sudo a2enmod rewrite
 	
 ## Configuring Apache
 ### Serving project files
