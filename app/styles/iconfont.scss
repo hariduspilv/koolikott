@@ -2,3 +2,39 @@
   width: 1em;
   height: 1em;
 }
+
+md-toolbar .material-icons, md-card-actions .material-icons {
+  min-height: 0;
+  min-width: 0;
+}
+
+md-chip-template .material-icons {
+    font-weight: normal;
+    font-style: normal;
+    font-size: 16px;
+    line-height: 1;
+    letter-spacing: normal;
+    text-transform: none;
+    display: inline-block;
+    white-space: nowrap;
+    word-wrap: normal;
+    direction: ltr;
+    -webkit-font-feature-settings: 'liga';
+    -webkit-font-smoothing: antialiased;
+    min-height: 0;
+    min-width: 0;
+}
+
+md-chip-template .md-button.md-icon-button {
+  min-height: 16px;
+  min-width: 16px;
+  height: 16px;
+  width: 16px;
+}
+.language-icon {
+  float: left;
+}
+
+md-toolbar .md-button.md-icon-button md-icon, button.md-button.md-fab md-icon {
+    font-size: 24px;
+}

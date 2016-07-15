@@ -116,3 +116,17 @@ animation for toggle search:*/
   animation-timing-function: ease-out;
   -webkit-animation-timing-function: ease-out;
 }
+
+md-checkbox.md-checked .md-icon {
+    background-color: rgba(3,169,244,0.87);
+}
+md-checkbox.md-checked .md-icon {
+    border: 1px solid rgba(3,169,244,0.87);
+}
+.filter-content md-radio-button {
+    display: block;
+}
+md-slider.md-default-theme.md-min[md-discrete] .md-thumb:after, md-slider.md-min[md-discrete] .md-thumb:after {
+    border-color: rgb(3,169,244);
+    background-color: white;
+}

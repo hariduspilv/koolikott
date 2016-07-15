@@ -1,6 +1,6 @@
 <div class="md-whiteframe-1dp filter-content">
-  <div layout="column" layout-gt-sm="row">
-    <div flex class="md-padding">
+  <div layout="column" layout-gt-sm="row" layout-wrap>
+    <div flex="33" class="md-padding">
       <md-input-container class="hide-gt-xs md-block">
         <label data-translate="DETAILED_SEARCH_DESCRIPTION"></label>
         <input data-ng-model="detailedSearch.combinedDescription"/>
@@ -23,7 +23,7 @@
       </md-input-container>
     </div>
 
-    <div data-flex class="md-padding">
+    <div flex="33" class="md-padding">
       <div data-dop-taxon-selector data-taxon="detailedSearch.taxon"></div>
       <md-input-container class="md-block" data-ng-if="detailedSearch.educationalContext.id === 2 || detailedSearch.educationalContext.id === 3">
         <label data-translate="DETAILED_SEARCH_CROSS_CURRICULAR_THEME"></label>
@@ -42,7 +42,7 @@
       </md-input-container>
     </div>
 
-    <div flex class="md-padding">
+    <div flex="33" class="md-padding">
       <div data-dop-target-group-selector data-target-groups="detailedSearch.targetGroups" data-taxon="detailedSearch.taxon" data-ng-if="detailedSearch.educationalContext.id != 4"></div>
       <div layout="column" layout-align="end start">
         <md-checkbox data-ng-if="detailedSearch.educationalContext.id === 2" data-ng-model="detailedSearch.CLIL" aria-label="{{'DETAILED_SEARCH_CLIL' | translate}}" class="md-primary" flex>
@@ -76,7 +76,7 @@
         <div flex="25" layout layout-align="start center">
           <span data-translate="DETAILED_SEARCH_ISSUE_DATE"></span>
         </div>
-        <md-slider  class="md-primary" flex md-discrete ng-model="detailedSearch.issueDate" step="1" min="{{issueDateFirstYear}}" max="{{issueDateLastYear}}" aria-label="{{DETAILED_SEARCH_ISSUE_DATE_FROM | translate}}" aria-valuenow="2009">
+        <md-slider  class="md-primary" id="blue-slider" aira-label="blue" flex md-discrete ng-model="detailedSearch.issueDate" step="1" min="{{issueDateFirstYear}}" max="{{issueDateLastYear}}" aria-label="{{DETAILED_SEARCH_ISSUE_DATE_FROM | translate}}" aria-valuenow="2009">
         </md-slider>
         <!-- TODO: Can we leave the slider tooltip visible if dirty? -->
       </div>
