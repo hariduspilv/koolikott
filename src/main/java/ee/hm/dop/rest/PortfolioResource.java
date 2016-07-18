@@ -63,14 +63,14 @@ public class PortfolioResource extends BaseResource {
 
     @POST
     @Path("like")
-    @RolesAllowed({ "USER", "ADMIN" })
+    @RolesAllowed({ "USER", "ADMIN", "MODERATOR" })
     public void likePortfolio(Portfolio portfolio) {
         portfolioService.addUserLike(portfolio, getLoggedInUser(), true);
     }
 
     @POST
     @Path("dislike")
-    @RolesAllowed({ "USER", "ADMIN" })
+    @RolesAllowed({ "USER", "ADMIN", "MODERATOR" })
     public void dislikePortfolio(Portfolio portfolio) {
         portfolioService.addUserLike(portfolio, getLoggedInUser(), false);
     }
@@ -105,7 +105,7 @@ public class PortfolioResource extends BaseResource {
     @Path("create")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    @RolesAllowed({ "USER", "ADMIN" })
+    @RolesAllowed({ "USER", "ADMIN", "MODERATOR" })
     public Portfolio create(Portfolio portfolio) {
         return portfolioService.create(portfolio, getLoggedInUser());
     }
@@ -114,7 +114,7 @@ public class PortfolioResource extends BaseResource {
     @Path("update")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    @RolesAllowed({ "USER", "ADMIN" })
+    @RolesAllowed({ "USER", "ADMIN", "MODERATOR" })
     public Portfolio update(Portfolio portfolio) {
         return portfolioService.update(portfolio, getLoggedInUser());
     }
@@ -123,7 +123,7 @@ public class PortfolioResource extends BaseResource {
     @Path("copy")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    @RolesAllowed({ "USER", "ADMIN" })
+    @RolesAllowed({ "USER", "ADMIN", "MODERATOR" })
     public Portfolio copy(Portfolio portfolio) {
         return portfolioService.copy(portfolio, getLoggedInUser());
     }
@@ -131,7 +131,7 @@ public class PortfolioResource extends BaseResource {
     @POST
     @Path("delete")
     @Consumes(MediaType.APPLICATION_JSON)
-    @RolesAllowed({ "USER", "ADMIN" })
+    @RolesAllowed({ "USER", "ADMIN", "MODERATOR" })
     public void delete(Portfolio portfolio) {
         portfolioService.delete(portfolio, getLoggedInUser());
     }
@@ -147,7 +147,7 @@ public class PortfolioResource extends BaseResource {
     @GET
     @Path("getDeleted")
     @Produces(MediaType.APPLICATION_JSON)
-    @RolesAllowed({ "ADMIN" })
+    @RolesAllowed({ "ADMIN", "MODERATOR" })
     public List<Portfolio> getDeletedPortfolios() {
         return portfolioService.getDeletedPortfolios();
     }

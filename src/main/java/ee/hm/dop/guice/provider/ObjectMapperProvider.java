@@ -6,6 +6,7 @@ import javax.ws.rs.ext.ContextResolver;
 import javax.ws.rs.ext.Provider;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.hibernate4.Hibernate4Module;
@@ -26,6 +27,7 @@ public class ObjectMapperProvider implements ContextResolver<ObjectMapper> {
 
         mapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
         mapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+        mapper.disable(MapperFeature.USE_GETTERS_AS_SETTERS);
 
         Hibernate4Module hibernate4Module = new Hibernate4Module();
         hibernate4Module.enable(Hibernate4Module.Feature.FORCE_LAZY_LOADING);

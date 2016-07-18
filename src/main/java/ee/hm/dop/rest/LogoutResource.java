@@ -7,14 +7,13 @@ import javax.inject.Inject;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 
+import ee.hm.dop.model.AuthenticatedUser;
+import ee.hm.dop.service.LogoutService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import ee.hm.dop.model.AuthenticatedUser;
-import ee.hm.dop.service.LogoutService;
-
 @Path("logout")
-@RolesAllowed({ "USER", "ADMIN", "RESTRICTED" })
+@RolesAllowed({ "USER", "ADMIN", "RESTRICTED", "MODERATOR" })
 public class LogoutResource extends BaseResource {
 
     private static Logger logger = LoggerFactory.getLogger(LogoutResource.class);

@@ -25,7 +25,7 @@ import ee.hm.dop.service.TagService;
 import ee.hm.dop.service.TagUpVoteService;
 
 @Path("tagUpVotes")
-@RolesAllowed({ "USER", "ADMIN" })
+@RolesAllowed({ "USER", "ADMIN", "MODERATOR" })
 public class TagUpVoteResource extends BaseResource {
 
     @Inject

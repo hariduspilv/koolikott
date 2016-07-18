@@ -34,6 +34,8 @@ insert into User(id, userName, name, surName, idCode, role) values (8, 'admin.ad
 insert into User(id, userName, name, surName, idCode, role) values (9, 'smallPublisher', 'Publisher', 'Publisher', '12345678900', 'PUBLISHER');
 insert into User(id, userName, name, surName, idCode, role) values (10, 'second.admin', 'Second', 'Admin', '89898989899', 'ADMIN');
 insert into User(id, userName, name, surName, idCode, role) values (11, 'restricted.user', 'Restricted', 'User', '89898989890', 'RESTRICTED');
+insert into User(id, userName, name, surName, idCode, role) values (13, 'moderator.moderator', 'Moderator', 'Moderator', '35012025932', 'MODERATOR');
+
 
 -- Recommendations
 

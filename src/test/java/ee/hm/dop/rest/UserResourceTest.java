@@ -4,6 +4,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 
+import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.MultivaluedHashMap;
@@ -11,11 +12,10 @@ import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
-import org.junit.Test;
-
 import ee.hm.dop.common.test.ResourceIntegrationTestBase;
 import ee.hm.dop.model.Role;
 import ee.hm.dop.model.User;
+import org.junit.Test;
 
 public class UserResourceTest extends ResourceIntegrationTestBase {
 
@@ -101,6 +101,68 @@ public class UserResourceTest extends ResourceIntegrationTestBase {
         String roleString = response.readEntity(String.class);
         assertEquals(Role.ADMIN.toString(), roleString);
     }
+
+    @Test
+    public void restrictUserWithModerator() {
+        String moderatorIdCode = "38211120031";
+        login(moderatorIdCode);
+        Response userResponse = doGet("user?username=user.to.be.banned1");
+        User userToRestrict = userResponse.readEntity(new GenericType<User>() {
+        });
+
+        Response response = doPost("user/restrictUser", Entity.entity(userToRestrict, MediaType.APPLICATION_JSON_TYPE), MediaType.APPLICATION_JSON_TYPE);
+
+        User restrictedUser = response.readEntity(User.class);
+
+        assertEquals(Role.RESTRICTED, restrictedUser.getRole());
+    }
+
+    @Test
+    public void restrictUserWithAdmin() {
+        String adminIdCode = "89898989898";
+        login(adminIdCode);
+
+        Response userResponse = doGet("user?username=user.to.be.banned2");
+        User userToRestrict = userResponse.readEntity(new GenericType<User>() {
+        });
+
+        Response response = doPost("user/restrictUser", Entity.entity(userToRestrict, MediaType.APPLICATION_JSON_TYPE), MediaType.APPLICATION_JSON_TYPE);
+
+        User restrictedUser = response.readEntity(User.class);
+
+        assertEquals(Role.RESTRICTED, restrictedUser.getRole());
+    }
+
+    @Test
+    public void restrictUserNotAllowed() {
+        String idCode = "39011220011";
+        login(idCode);
+
+        Response userResponse = doGet("user?username=user.to.be.banned");
+        User userToRestrict = userResponse.readEntity(new GenericType<User>() {
+        });
+
+        Response response = doPost("user/restrictUser", Entity.entity(userToRestrict, MediaType.APPLICATION_JSON_TYPE), MediaType.APPLICATION_JSON_TYPE);
+
+        assertEquals(Status.FORBIDDEN.getStatusCode(), response.getStatus());
+    }
+
+    @Test
+    public void removeRestrictionWithAdmin() {
+        String adminIdCode = "89898989898";
+        login(adminIdCode);
+
+        Response userResponse = doGet("user?username=restricted.user");
+        User userToRemoveRestrictionFrom = userResponse.readEntity(new GenericType<User>() {
+        });
+
+        Response response = doPost("user/removeRestriction", Entity.entity(userToRemoveRestrictionFrom, MediaType.APPLICATION_JSON_TYPE), MediaType.APPLICATION_JSON_TYPE);
+
+        User nonRestrictedUser = response.readEntity(User.class);
+
+        assertEquals(Role.USER, nonRestrictedUser.getRole());
+    }
+
 
     private User getUser(String username) {
         Response response = doGet("user?username=" + username);

@@ -6,13 +6,12 @@ import java.text.Normalizer;
 
 import javax.inject.Inject;
 
-import org.apache.commons.lang3.text.WordUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import ee.hm.dop.dao.UserDAO;
 import ee.hm.dop.model.Role;
 import ee.hm.dop.model.User;
+import org.apache.commons.lang3.text.WordUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class UserService {
 
@@ -67,4 +66,34 @@ public class UserService {
         return username;
     }
 
+    public Role getUserRole(String userName) {
+        User user = userDAO.findUserByUsername(userName);
+        return user.getRole();
+    }
+
+    // Only users with role 'USER' can be restricted
+    public User restrictUser(User user) {
+        user = getUserByUsername(user.getUsername());
+        if (user.getRole().equals(Role.USER)) {
+            return setUserRole(user, Role.RESTRICTED);
+        }
+
+        return null;
+    }
+
+    private User setUserRole(User user, Role newRole) {
+        user.setRole(newRole);
+        logger.info(format("Setting user %s, with id code %s role to: %s", user.getUsername(), user.getIdCode(), newRole.toString()));
+        return userDAO.update(user);
+    }
+
+    //Only users with role 'RESTRICTED' can be set to role 'USER'
+    public User removeRestriction(User user) {
+        user = getUserByUsername(user.getUsername());
+        if (user.getRole().equals(Role.RESTRICTED)) {
+            return setUserRole(user, Role.USER);
+        }
+
+        return null;
+    }
 }

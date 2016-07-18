@@ -11,10 +11,6 @@ import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 
-import org.joda.time.DateTime;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import ee.hm.dop.dao.BrokenContentDAO;
 import ee.hm.dop.dao.MaterialDAO;
 import ee.hm.dop.dao.UserLikeDAO;
@@ -31,6 +27,9 @@ import ee.hm.dop.model.UserLike;
 import ee.hm.dop.model.taxon.EducationalContext;
 import ee.hm.dop.service.learningObject.LearningObjectHandler;
 import ee.hm.dop.utils.TaxonUtils;
+import org.joda.time.DateTime;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class MaterialService implements LearningObjectHandler {
 
@@ -285,7 +284,7 @@ public class MaterialService implements LearningObjectHandler {
         material.setAdded(originalMaterial.getAdded());
         material.setUpdated(now());
 
-        if (changer == null || isUserAdmin(changer) || isThisPublisherMaterial(changer, originalMaterial)) {
+        if (changer == null || isUserAdmin(changer) || isUserModerator(changer) || isThisPublisherMaterial(changer, originalMaterial)) {
             updatedMaterial = createOrUpdate(material);
             searchEngineService.updateIndex();
         }
@@ -361,6 +360,10 @@ public class MaterialService implements LearningObjectHandler {
 
     private boolean isUserAdmin(User loggedInUser) {
         return loggedInUser != null && loggedInUser.getRole() == Role.ADMIN;
+    }
+
+    private boolean isUserModerator(User loggedInUser) {
+        return loggedInUser != null && loggedInUser.getRole() == Role.MODERATOR;
     }
 
     private boolean isUserPublisher(User loggedInUser) {

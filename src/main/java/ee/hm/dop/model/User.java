@@ -10,6 +10,9 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import ee.hm.dop.rest.jackson.map.RoleSerializer;
 
 @Entity
 public class User {
@@ -31,7 +34,6 @@ public class User {
     @Column(unique = true, nullable = false)
     private String idCode;
 
-    @JsonIgnore
     @Enumerated(EnumType.STRING)
     private Role role;
 
@@ -79,10 +81,13 @@ public class User {
         this.username = username;
     }
 
+    @JsonProperty
+    @JsonSerialize(using = RoleSerializer.class)
     public Role getRole() {
         return role;
     }
 
+    @JsonIgnore
     public void setRole(Role role) {
         this.role = role;
     }

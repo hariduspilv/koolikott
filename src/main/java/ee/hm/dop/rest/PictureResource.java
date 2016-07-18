@@ -18,12 +18,11 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import ee.hm.dop.model.Picture;
+import ee.hm.dop.service.PictureService;
 import org.apache.commons.configuration.Configuration;
 import org.apache.http.HttpHeaders;
 import org.glassfish.jersey.media.multipart.FormDataParam;
-
-import ee.hm.dop.model.Picture;
-import ee.hm.dop.service.PictureService;
 
 @Path("picture")
 public class PictureResource extends BaseResource {
@@ -49,7 +48,7 @@ public class PictureResource extends BaseResource {
     }
 
     @POST
-    @RolesAllowed({ "USER", "ADMIN" })
+    @RolesAllowed({ "USER", "ADMIN", "MODERATOR" })
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     public Picture uploadPicture(@FormDataParam("picture") InputStream fileInputStream) {
