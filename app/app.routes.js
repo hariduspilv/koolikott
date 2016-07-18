@@ -35,7 +35,7 @@ define(function() {
             '/dashboard': {
                 templateUrl: 'views/dashboard/dashboard.html',
                 controllerUrl: 'views/dashboard/dashboard',
-                permissions: ['ADMIN']
+                permissions: ['ADMIN', 'MODERATOR']
             },
             '/loginRedirect': {
                 templateUrl: 'views/loginRedirect/loginRedirect.html',

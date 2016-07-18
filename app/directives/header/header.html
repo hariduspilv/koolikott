@@ -90,7 +90,7 @@
               <span data-translate="MY_PROFILE"></span>
             </md-button>
           </md-menu-item>
-          <md-menu-item data-ng-if="isAdmin()" >
+          <md-menu-item data-ng-if="isAdmin() || isModerator()" >
             <md-button aria-label="Mine töölauale" data-ng-href="/dashboard" id="user-menu-dashboard">
               <span data-translate="DASHBOARD"></span>
             </md-button>
