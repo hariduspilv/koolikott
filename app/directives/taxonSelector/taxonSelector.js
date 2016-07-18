@@ -91,12 +91,14 @@ define([
                     /*
                      * The order of the watchers is important and should be the same as the tree.
                      */
-
-                    $scope.$watch('taxon.id', function (newTaxon, oldTaxon) {
+                    $scope.$watchGroup(['taxon.id', 'taxon.level'], function (newTaxon, oldTaxon) {
                         buildTaxonPath();
 
                         //When choosing parent taxon, old topic needs to be removed
-                        if (newTaxon !== oldTaxon) removeTopic(oldTaxon);
+                        if (newTaxon[0] !== oldTaxon[0] && newTaxon[1] !== $rootScope.taxonUtils.constants.SUBTOPIC) {
+                            removeTopic(oldTaxon[0]);
+                        }
+
                         if (!$scope.topicRequired && !$scope.taxonPath.topic && isTopicNotSet() && $scope.isAddMaterialView) {
                             $scope.topicRequired = true;
                         }
@@ -160,6 +162,13 @@ define([
                     $scope.$watch('taxonPath.subtopic.id', function (newSubtopic, oldSubtopic) {
                         if (newSubtopic !== undefined && newSubtopic !== oldSubtopic) {
                             $scope.taxon = Object.create($scope.taxonPath.subtopic);
+
+                            var topic = $rootScope.taxonUtils.getTopic($scope.taxon);
+
+                            if ($rootScope.selectedTopics && !containsObjectWithId($rootScope.selectedTopics, topic.id)) {
+                                $rootScope.selectedTopics.push(topic);
+                                $scope.topicRequired = false;
+                            }
                         }
                     }, true);
                 }
