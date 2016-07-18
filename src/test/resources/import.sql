@@ -50,7 +50,7 @@ insert into User(id, userName, name, surName, idCode, role, publisher) values (1
 insert into User(id, userName, name, surName, idCode, role, publisher) values (12, 'biffy.clyro', 'Biffy', 'Clyro', '38211120031', 'MODERATOR', null);
 insert into User(id, userName, name, surName, idCode, role, publisher) values (13, 'user.to.be.banned1', 'Whiskey', 'Tango', '38256133107', 'USER', null);
 insert into User(id, userName, name, surName, idCode, role, publisher) values (14, 'user.to.be.banned2', 'November', 'Juliet', '38256133108', 'USER', null);
-
+insert into User(id, userName, name, surName, idCode, role, publisher) values (15, 'restricted.user2', 'Restricted', 'User', '89898989892', 'RESTRICTED', null);
 
 -- AuthenticatedUser
 

@@ -152,7 +152,7 @@ public class UserResourceTest extends ResourceIntegrationTestBase {
         String adminIdCode = "89898989898";
         login(adminIdCode);
 
-        Response userResponse = doGet("user?username=restricted.user");
+        Response userResponse = doGet("user?username=restricted.user2");
         User userToRemoveRestrictionFrom = userResponse.readEntity(new GenericType<User>() {
         });
 
