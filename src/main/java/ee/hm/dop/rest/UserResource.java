@@ -61,8 +61,7 @@ public class UserResource extends BaseResource {
     @Produces(MediaType.APPLICATION_JSON)
     public User restrictUser(User user) {
         if (user == null) throwBadRequestException("No user to restrict received!");
-        user = userService.restrictUser(user);
-        return user;
+        return userService.restrictUser(user);
     }
 
     @POST
@@ -72,8 +71,6 @@ public class UserResource extends BaseResource {
     @Produces(MediaType.APPLICATION_JSON)
     public User removeRestriction(User user) {
         if (user == null) throwBadRequestException("No user received!");
-        User v =  userService.removeRestriction(user);
-
-        return v;
+        return userService.removeRestriction(user);
     }
 }
