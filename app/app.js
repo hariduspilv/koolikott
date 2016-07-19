@@ -16,6 +16,8 @@ define([
     'utils/commons',
     'ng-file-upload',
 
+    'angular-bootstrap',
+
     /* app wide modules */
     'directives/header/header',
     'directives/editPortfolioModeHeader/editPortfolioModeHeader',
@@ -37,7 +39,8 @@ define([
         'pascalprecht.translate',
         'angular-click-outside',
         'duScroll',
-        'ngFileUpload'
+        'ngFileUpload',
+        'ui.bootstrap'
     ]);
 
     app.config(function($routeProvider, $locationProvider, $controllerProvider, $compileProvider, $filterProvider, $provide, $translateProvider, $sceProvider, $mdThemingProvider, $httpProvider, $mdDateLocaleProvider, $anchorScrollProvider) {

@@ -14,6 +14,13 @@ define([
             templateUrl: 'directives/chapter/chapter.html',
             controller: function($scope, $rootScope) {
                 $scope.isEditable = $rootScope.isEditPortfolioMode;
+                $scope.isCollapsed = true;
+                $scope.subisCollapsed = true;
+
+                $scope.toggle = function(e) {
+                  var item = $("div.chapter-arrow");
+                  $(e.currentTarget).find(item).toggleClass('toggled');
+                }
 
                 $scope.onDeleteSubChapter = function(subChapter) {
 

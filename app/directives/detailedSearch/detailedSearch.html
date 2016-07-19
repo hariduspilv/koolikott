@@ -1,19 +1,19 @@
 <div class="md-whiteframe-1dp filter-content">
-  <div layout="column" layout-gt-sm="row" layout-wrap>
-    <div flex="33" class="md-padding">
+  <div layout="row" layout-sm="column" layout-xs="column" >
+    <div flex class="md-padding">
       <md-input-container class="hide-gt-xs md-block">
         <label data-translate="DETAILED_SEARCH_DESCRIPTION"></label>
         <input data-ng-model="detailedSearch.combinedDescription"/>
       </md-input-container>
-      <md-input-container class="md-block">
+      <md-input-container md-no-float class="md-block">
         <label data-translate="DETAILED_SEARCH_TITLE"></label>
         <input data-ng-model="detailedSearch.title" />
       </md-input-container>
-      <md-input-container class="md-block">
+      <md-input-container md-no-float class="md-block">
         <label data-translate="DETAILED_SEARCH_AUTHOR"></label>
         <input data-ng-model="detailedSearch.author" />
       </md-input-container>
-      <md-input-container class="md-block">
+      <md-input-container md-no-float class="md-block">
         <label data-translate="DETAILED_SEARCH_LANGUAGE"></label>
         <md-select data-ng-model="detailedSearch.language">
           <md-option data-ng-repeat="language in languages" value="{{language}}">
@@ -23,7 +23,7 @@
       </md-input-container>
     </div>
 
-    <div flex="33" class="md-padding">
+    <div flex class="md-padding">
       <div data-dop-taxon-selector data-taxon="detailedSearch.taxon"></div>
       <md-input-container class="md-block" data-ng-if="detailedSearch.educationalContext.id === 2 || detailedSearch.educationalContext.id === 3">
         <label data-translate="DETAILED_SEARCH_CROSS_CURRICULAR_THEME"></label>
@@ -42,7 +42,7 @@
       </md-input-container>
     </div>
 
-    <div flex="33" class="md-padding">
+    <div flex class="md-padding">
       <div data-dop-target-group-selector data-target-groups="detailedSearch.targetGroups" data-taxon="detailedSearch.taxon" data-ng-if="detailedSearch.educationalContext.id != 4"></div>
       <div layout="column" layout-align="end start">
         <md-checkbox data-ng-if="detailedSearch.educationalContext.id === 2" data-ng-model="detailedSearch.CLIL" aria-label="{{'DETAILED_SEARCH_CLIL' | translate}}" class="md-primary" flex>

@@ -1,9 +1,14 @@
 <div class="portfolio-chapter">
   <div id="chapter-{{index}}">
-    <md-card class="card-lg">
-      <md-card-content data-ng-if="!isEditable">
-        <h2>{{chapter.title}}</h2>
-        <p class="md-body-1">{{chapter.text}}</p>
+    <md-card ng-click="toggle($event); isCollapsed = !isCollapsed" class="card-lg">
+      <md-card-content data-ng-if="!isEditable" layout="row">
+        <div flex>
+          <h2>{{chapter.title}}</h2>
+          <p class="md-body-1">{{chapter.text}}</p>
+        </div>
+        <div class="chapter-arrow">
+          <md-icon class="material-icons">keyboard_arrow_right</md-icon>
+        </div>
       </md-card-content>
       <md-card-content data-ng-if="isEditable">
         <div layout="row" layout-align="start center">
@@ -33,7 +38,7 @@
       </md-card-content>
     </md-card>
 
-    <div class="portfolio-chapter-chapter-materials" ng-show="chapter.materials.length">
+    <div class="portfolio-chapter-chapter-materials" ng-show="chapter.materials.length" uib-collapse="isCollapsed">
       <md-grid-list md-cols="2" md-cols-gt-xs="4" md-gutter="10px" md-row-height="3:4">
         <md-grid-tile data-ng-repeat="material in chapter.materials">
           <figure data-dop-material-box material="material" chapter="chapter"></figure>
@@ -44,10 +49,15 @@
 
   <div class="portfolio-chapter-subchapters">
     <div class="portfolio-chapter-subchapter" id="chapter-{{index}}-{{$index}}" data-ng-repeat="subchapter in chapter.subchapters">
-      <md-card class="card-lg">
-        <md-card-content data-ng-if="!isEditable">
-          <h3>{{subchapter.title}}</h3>
-          <p class="md-body-1">{{subchapter.text}}</p>
+      <md-card class="card-lg" ng-click="toggle($event); subisCollapsed = !subisCollapsed">
+        <md-card-content data-ng-if="!isEditable" layout="row">
+          <div flex>
+            <h3>{{subchapter.title}}</h3>
+            <p class="md-body-1">{{subchapter.text}}</p>
+          </div>
+          <div class="chapter-arrow">
+            <md-icon class="material-icons">keyboard_arrow_right</md-icon>
+          </div>
         </md-card-content>
         <md-card-content data-ng-if="isEditable">
           <div layout="row" layout-align="start center">
@@ -77,7 +87,7 @@
         </md-card-content>
       </md-card>
 
-      <div class="portfolio-chapter-subchapter-materials" ng-show="subchapter.materials.length">
+      <div class="portfolio-chapter-subchapter-materials" ng-show="subchapter.materials.length" uib-collapse="subisCollapsed" id="cp-{{index}}-{{$index}}">
         <md-grid-list md-cols="2" md-cols-gt-xs="4" md-gutter="10px" md-row-height="3:4">
           <md-grid-tile data-ng-repeat="material in subchapter.materials">
             <figure data-dop-material-box material="material" chapter="subchapter"></figure>

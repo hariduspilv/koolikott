@@ -85,4 +85,21 @@ md-chips,
 	height: 28px;
 	line-height: 28px;
 	background: darken(#f3f6fb, 3%);
+
+	.md-button.md-icon-button {
+		padding: 4px;
+		position: relative;
+		margin-right: 3px;
+		margin-left: 0;
+	}
+	md-chip-template .material-icons {
+		position: absolute;
+		top: 0;
+		left: 0;
+		color: #81abf5;
+    transition: color .3s ease;
+		&:hover {
+			color: #15c;
+		}
+	}
 }

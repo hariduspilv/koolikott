@@ -23,7 +23,8 @@ require.config({
     'jquery': 'libs/jquery/dist/jquery.min',
     'ng-file-upload': 'libs/ng-file-upload/ng-file-upload.min',
     'clipboard': 'libs/clipboard/dist/clipboard.min',
-    'moment': 'libs/moment/min/moment.min'
+    'moment': 'libs/moment/min/moment.min',
+    'angular-bootstrap': 'utils/ui-bootstrap-custom-tpls-1.3.3.min'
   },
   shim: {
     'angular': ['jquery'],
@@ -55,7 +56,8 @@ require.config({
     'ngInfiniteScroll': [
       'angular',
       'jquery'
-    ]
+    ],
+    'angular-bootstrap': ['angular']
   },
   deps: ['app']
 });

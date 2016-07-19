@@ -47,6 +47,8 @@ ul {
 @import "custom-select.scss";
 @import "md-data-table.scss";
 @import "placeholder-card.scss";
+@import "chapter.scss";
+@import "collapse.scss";
 
 // Page specific stylesheets
 @import "pages/add.scss";
@@ -96,7 +98,7 @@ h2 {
 }
 
 .md-button:not([disabled]):hover {
-  background: darken($bg-gray, 3%);
+  //background: darken($bg-gray, 3%);
 }
 .portfolio-chapter {
   .md-body-1  {

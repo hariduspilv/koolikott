@@ -38,3 +38,17 @@ md-chip-template .md-button.md-icon-button {
 md-toolbar .md-button.md-icon-button md-icon, button.md-button.md-fab md-icon {
     font-size: 24px;
 }
+
+.chapter-arrow {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  md-icon {
+    transition: transform 0.3s ease-in-out;
+  }
+
+  &.toggled md-icon {
+    transform: rotate(88deg);
+  }
+}
