@@ -11,6 +11,7 @@ define([
     'directives/commentsCard/commentsCard',
     'directives/slideshare/slideshare',
     'directives/tags/tags',
+    'directives/restrict/restrict',
     'services/serverCallService',
     'services/translationService',
     'services/searchService',
@@ -235,6 +236,10 @@ define([
 
             $scope.isAdmin = function () {
                 return authenticatedUserService.isAdmin();
+            };
+
+            $scope.isModerator = function () {
+                return authenticatedUserService.isModerator();
             };
 
             $scope.isRestricted = function () {

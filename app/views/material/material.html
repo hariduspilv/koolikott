@@ -37,7 +37,8 @@
                       </md-button>
                       <md-menu-content width="4">
 
-                        <md-menu-item data-ng-if="(isAdmin() || isPublishersMaterial()) && isNotImported()">
+                        <md-menu-item
+                          data-ng-if="(isAdmin() || isPublishersMaterial() || isModerator()) && isNotImported()">
                           <md-button data-ng-click="edit()">
                             <md-icon md-menu-align-target>edit</md-icon>
                             <span data-translate="MATERIAL_EDIT"></span>
@@ -61,11 +62,16 @@
                         <md-menu-item dop-copy-permalink></md-menu-item>
                         <md-menu-divider data-ng-if="isAdmin()"></md-menu-divider>
                         <md-menu-item data-ng-if="isAdmin()" dop-recommend data-material="material"></md-menu-item>
+
                         <md-menu-divider data-ng-if="isLoggedIn() && !isRestricted()"></md-menu-divider>
                         <md-menu-item data-ng-if="isLoggedIn() && !isRestricted()" dop-report-improper
                                       data-learning-object="material"></md-menu-item>
                         <md-menu-item data-ng-if="isLoggedIn() && !isRestricted()"
                                       dop-report-broken-link></md-menu-item>
+
+                        <md-menu-item data-ng-if="material.creator && (isAdmin() || isModerator())" dop-restrict
+                                      data-learning-object="material">
+                        </md-menu-item>
                       </md-menu-content>
                     </md-menu>
                   </div>

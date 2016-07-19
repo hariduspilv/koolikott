@@ -115,7 +115,9 @@ define([
                         $scope.setLanguage(language);
                     }, true);
 
-                    $scope.isAdmin = authenticatedUserService.isAdmin;
+                    $scope.isAdmin = () => authenticatedUserService.isAdmin();
+                    
+                    $scope.isModerator = () => authenticatedUserService.isModerator();
                 }
             };
         }

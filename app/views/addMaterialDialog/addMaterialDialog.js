@@ -304,7 +304,7 @@ define([
                     const TOPIC = $rootScope.taxonUtils.constants.TOPIC;
                     if (taxon.level === TOPIC) {
                         $rootScope.selectedTopics.push(taxon);
-                    } else if ($rootScope.taxonUtils.getTopic(taxon).level === TOPIC) {
+                    } else if ($rootScope.taxonUtils.getTopic(taxon) && $rootScope.taxonUtils.getTopic(taxon).level === TOPIC) {
                         $rootScope.selectedTopics.push($rootScope.taxonUtils.getTopic(taxon));
                     }
                 })

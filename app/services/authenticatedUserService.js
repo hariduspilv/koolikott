@@ -40,6 +40,11 @@ define(['angularAMD'], function (angularAMD) {
                     return user && user.role === 'RESTRICTED';
                 },
 
+                isModerator: function () {
+                    var user = instance.getUser();
+                    return user && user.role === 'MODERATOR';
+                },
+
                 getUser: function () {
                     var authenticatedUser = instance.getAuthenticatedUser();
                     if (authenticatedUser) {
