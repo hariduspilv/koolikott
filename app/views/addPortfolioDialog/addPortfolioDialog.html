@@ -21,7 +21,7 @@
             layout="row"
             layout-align="center center" flex>
 
-            <span flex data-ng-if="!newPicture && !newPortfolio.picture">
+            <span flex data-ng-if="!newPicture && !newPortfolio.picture && !showErrorOverlay">
               <md-icon>insert_photo</md-icon><br />
               <span data-ng-class="{'error-text': (invalidPicture && invalidPicture.length > 0)}">
                 <span data-translate="MAX_SIZE"></span> {{maxPictureSize}}MB
@@ -38,7 +38,7 @@
 
             <span flex class="error-overlay" data-ng-if="showErrorOverlay">
               <span class="error-text">
-                <span data-translate="MAX_SIZE"></span> {{maxPictureSize}}MB
+                <span data-translate="UPLOADED_PICTURE_TOO_BIG"></span>
               </span>
             </span>
           </div>

@@ -20,7 +20,7 @@
 
   <!-- Domain -->
   <md-input-container
-    data-ng-show="taxonPath.educationalContext && taxonPath.educationalContext.name !== 'BASICEDUCATION' && taxonPath.educationalContext.name !== 'SECONDARYEDUCATION'"
+    data-ng-show="taxonPath.educationalContext && !isBasicOrSecondaryEducation()"
     class="md-block" flex>
     <label for="taxonDomainSelect">
       <span data-translate="TAXON_PATH_DOMAIN"></span>
@@ -39,7 +39,7 @@
 
   <!-- Subject -->
   <md-input-container
-    data-ng-show="taxonPath.domain && taxonPath.educationalContext.name !== 'BASICEDUCATION' && taxonPath.educationalContext.name !== 'SECONDARYEDUCATION' && taxonPath.domain.subjects.length > 0"
+    data-ng-show="taxonPath.domain && !isBasicOrSecondaryEducation() && taxonPath.domain.subjects.length > 0"
     class="md-block" flex>
     <label for="taxonSubjectSelect">
       <span data-translate="DETAIL_VIEW_SUBJECT"></span>
@@ -69,6 +69,7 @@
       <md-option data-translate="SELECT_DOMAIN_AND_SUBJECT"
                  ng-click="reset(taxonPath.educationalContext)"></md-option>
       <md-option class="stepped-select" data-ng-class="{ 'child' : domainSubject.level === '.Subject'}"
+                 data-ng-disabled="domainSubject.level !== '.Subject' && isAddMaterialView"
                  ng-value="domainSubject" ng-repeat="domainSubject in basicEducationDomainSubjects"
                  data-translate="{{(domainSubject.level === '.Domain' ? 'DOMAIN_' : 'SUBJECT_') + domainSubject.name.toUpperCase()}}"></md-option>
     </md-select>
@@ -91,6 +92,7 @@
       <md-option data-translate="SELECT_DOMAIN_AND_SUBJECT"
                  ng-click="reset(taxonPath.educationalContext)"></md-option>
       <md-option class="stepped-select" data-ng-class="{ 'child' : domainSubject.level === '.Subject'}"
+                 data-ng-disabled="domainSubject.level !== '.Subject' && isAddMaterialView"
                  ng-value="domainSubject" ng-repeat="domainSubject in secondaryEducationDomainSubjects"
                  data-translate="{{(domainSubject.level === '.Domain' ? 'DOMAIN_' : 'SUBJECT_') + domainSubject.name.toUpperCase()}}"></md-option>
     </md-select>

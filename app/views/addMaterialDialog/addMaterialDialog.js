@@ -104,7 +104,6 @@ define([
             $scope.$watch('material.taxons[0]', function (newValue, oldValue) {
                 if (newValue && newValue.level === $rootScope.taxonUtils.constants.EDUCATIONAL_CONTEXT && newValue !== oldValue) {
                     $scope.educationalContextId = newValue.id;
-                    $scope.material.taxons = $scope.material.taxons.slice(0, 1);
                 }
             }, false);
 
@@ -188,8 +187,10 @@ define([
                 };
             }
 
+            $scope.isTabOneValid = () => $scope.step.isMaterialUrlStepValid && isMetadataStepValid();
+
             $scope.isTabTwoValid = () => {
-                return $rootScope.selectedTopics && $rootScope.selectedTopics.length > 0 && $scope.material.targetGroups.length > 0
+                return $rootScope.selectedTopics && $rootScope.selectedTopics.length > 0 && $scope.material.targetGroups && $scope.material.targetGroups.length > 0
                     && ($scope.isBasicOrSecondaryEducation() ? $scope.material.keyCompetences.length > 0 && $scope.material.crossCurricularThemes.length > 0 : true);
             };
 
@@ -202,7 +203,7 @@ define([
             function isStepValid(index) {
                 switch (index) {
                     case 0:
-                        return $scope.step.isMaterialUrlStepValid && isMetadataStepValid();
+                        return $scope.isTabOneValid();
                     case 1:
                         return $scope.isTabTwoValid();
                     case 2:
@@ -343,6 +344,7 @@ define([
             }
 
             function pictureUploadFinally() {
+                $scope.showErrorOverlay = false;
                 uploadingPicture = false;
             }
 
@@ -497,12 +499,10 @@ define([
             $scope.$watchCollection('invalidPicture', function (newValue, oldValue) {
                 if (newValue !== oldValue) {
                     if (newValue && newValue.length > 0) {
-                        if ($scope.newPicture || $scope.material.picture) {
-                            $scope.showErrorOverlay = true;
-                            $timeout(function () {
-                                $scope.showErrorOverlay = false;
-                            }, 6000);
-                        }
+                        $scope.showErrorOverlay = true;
+                        $timeout(function () {
+                            $scope.showErrorOverlay = false;
+                        }, 6000);
                     }
                 }
             });

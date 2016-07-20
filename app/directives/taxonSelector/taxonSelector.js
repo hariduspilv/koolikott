@@ -54,16 +54,10 @@ define([
                     }
                 };
 
-                $rootScope.$watch('selectedTopics', function (newValue, oldValue) {
-                    if (newValue && newValue.length > 0 && newValue !== oldValue) {
-                        $scope.topicRequired = false;
-                    }
-
-                    if (newValue && oldValue && newValue.length === 0 && oldValue.length !== 0 && $scope.isAddMaterialView) {
-                        $scope.topicRequired = true;
-                    }
-                }, false);
-
+                $rootScope.$watch('selectedTopics.length', function (newValue, oldValue) {
+                    if (newValue > 0 && newValue !== oldValue) $scope.topicRequired = false;
+                    else if (newValue === 0 && oldValue !== 0 && $scope.isAddMaterialView) $scope.topicRequired = true;
+                });
 
                 $scope.selectEducationalContext = function () {
                     $rootScope.dontCloseSearch = true;
@@ -81,11 +75,18 @@ define([
                     if (path.module && path.module.topics && path.module.topics.length > 0) return path.module.topics;
                 };
 
-                $scope.isRequired = () => $scope.isAddPortfolioView || $scope.topicRequired;
+                $scope.isRequired = function () {
+                    return !!$scope.isAddPortfolioView || !!$scope.topicRequired;
+                };
 
                 $scope.showErrors = element => $scope.isRequired() && $scope.shouldShowErrors(element);
 
                 $scope.shouldShowErrors = element => element && (element.$touched || $scope.markRequired) && element.$error.required;
+
+                $scope.isBasicOrSecondaryEducation = () => {
+                    return $scope.taxonPath.educationalContext.name === 'BASICEDUCATION'
+                        || $scope.taxonPath.educationalContext.name === 'SECONDARYEDUCATION';
+                };
 
                 function addTaxonPathListeners() {
                     /*
