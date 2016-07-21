@@ -118,7 +118,7 @@ define([
                 $scope.saving = false;
             }
 
-            $scope.isSet = () => {
+            $scope.isSet = function () {
                 return $scope.newPortfolio.taxon && $scope.newPortfolio.taxon.level && $scope.newPortfolio.taxon.level !== ".EducationalContext";
             };
 

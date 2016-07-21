@@ -43,7 +43,7 @@ define([
                 function removeTopic(originalId) {
                     if ($rootScope.selectedTopics) {
                         $rootScope.selectedTopics = $rootScope.selectedTopics
-                            .filter(function(topic) { topic.id !== originalId });
+                            .filter(function(topic) { return topic.id !== originalId });
                     }
                 }
 
@@ -88,14 +88,14 @@ define([
                      */
 
                     //Triggers on taxon reset
-                    $scope.$watch(() => {
+                    $scope.$watch(function () {
                         if (self.taxon) return [self.taxon.id, self.taxon.level];
                     }, function (newTaxon, oldTaxon) {
                         if (newTaxon && oldTaxon && newTaxon[0] !== oldTaxon[0]) {
                             buildTaxonPath();
 
                             //When choosing parent taxon or setting to null, old topic needs to be removed
-                            if (newTaxon[1] !== $rootScope.taxonUtils.constants.SUBTOPIC || !newTaxon[0]) { //
+                            if (newTaxon[1] !== $rootScope.taxonUtils.constants.SUBTOPIC || !newTaxon[0]) {
                                 removeTopic(oldTaxon[0]);
                             }
 
@@ -106,7 +106,7 @@ define([
                     }, true);
 
                     //EducationalContext
-                    $scope.$watch(() => {
+                    $scope.$watch( function() {
                             if (self.taxonPath && self.taxonPath.educationalContext)
                                 return self.taxonPath.educationalContext.id;
                         }
@@ -117,7 +117,7 @@ define([
                         }, true);
 
                     //Domain
-                    $scope.$watch(() => {
+                    $scope.$watch(function () {
                             if (self.taxonPath && self.taxonPath.domain)
                                 return self.taxonPath.domain.id;
                         }

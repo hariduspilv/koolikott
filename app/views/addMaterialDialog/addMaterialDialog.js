@@ -92,7 +92,9 @@ define([
 
             $scope.deleteTaxon = function (index) {
                 var taxon = $scope.material.taxons[index];
-                $rootScope.selectedTopics = $rootScope.selectedTopics.filter(function(topic) { topic.id !== taxon.id });
+                $rootScope.selectedTopics = $rootScope.selectedTopics.filter(function (topic) {
+                    return topic.id !== taxon.id;
+                });
 
                 $scope.material.taxons.splice(index, 1);
             };
@@ -125,34 +127,42 @@ define([
                     $scope.material.type = ".Material";
 
                     $scope.material.crossCurricularThemes = $scope.material.crossCurricularThemes
-                        .filter(function(theme) { theme.name !== "NOT_RELEVANT" } );
+                        .filter(function (theme) {
+                            return theme.name !== "NOT_RELEVANT";
+                        });
 
                     $scope.material.keyCompetences = $scope.material.keyCompetences
-                        .filter(function(competence) { competence.name !== "NOT_RELEVANT" } );
+                        .filter(function (competence) {
+                            return competence.name !== "NOT_RELEVANT";
+                        });
 
                     serverCallService.makePut('rest/material', $scope.material, saveMaterialSuccess, saveMaterialFail, saveMaterialFinally);
                 }
             };
 
-            $scope.isTouchedOrSubmitted = function(element) {(element && element.$touched) || ($scope.addMaterialForm && $scope.addMaterialForm.$submitted);}
+            $scope.isTouchedOrSubmitted = function (element) {
+                return (element && element.$touched) || ($scope.addMaterialForm && $scope.addMaterialForm.$submitted);
+            };
 
-            $scope.showCompetencesWarning = function(element) {
+            $scope.showCompetencesWarning = function (element) {
                 if ($scope.isTouchedOrSubmitted(element)) return $scope.material.keyCompetences.length === 0;
             };
 
-            $scope.showThemesWarning = function(element) {
+            $scope.showThemesWarning = function (element) {
                 if ($scope.isTouchedOrSubmitted(element)) return $scope.material.crossCurricularThemes.length === 0;
             };
 
-            $scope.isAuthorOrPublisherSet = function() {($scope.material.authors[0].name && $scope.material.authors[0].surname) || $scope.material.publishers[0];}
+            $scope.isAuthorOrPublisherSet = function () {
+                return ($scope.material.authors[0].name && $scope.material.authors[0].surname) || $scope.material.publishers[0];
+            };
 
             $scope.isAdmin = function () {
                 return authenticatedUserService.isAdmin();
             };
 
-            $scope.isTopicNotSet = () => {
+            $scope.isTopicNotSet = function () {
                 return !$rootScope.selectedTopics || $rootScope.selectedTopics.length === 0;
-            }
+            };
 
             function getIssueDate(date) {
                 return {
@@ -193,14 +203,16 @@ define([
                 };
             }
 
-            $scope.isTabOneValid = function() {$scope.step.isMaterialUrlStepValid && isMetadataStepValid();}
+            $scope.isTabOneValid = function () {
+                return $scope.step.isMaterialUrlStepValid && isMetadataStepValid();
+            };
 
-            $scope.isTabTwoValid = function() {
+            $scope.isTabTwoValid = function () {
                 return $rootScope.selectedTopics && $rootScope.selectedTopics.length > 0 && $scope.material.targetGroups && $scope.material.targetGroups.length > 0
                     && ($scope.isBasicOrSecondaryEducation() ? $scope.material.keyCompetences.length > 0 && $scope.material.crossCurricularThemes.length > 0 : true);
             };
 
-            $scope.isTabThreeValid = function() {
+            $scope.isTabThreeValid = function () {
                 return (($scope.material.publishers[0] && $scope.material.publishers[0].name)
                     || ($scope.material.authors[0].name && $scope.material.authors[0].surname))
                     && $scope.material.licenseType && $scope.material.issueDate.year;
@@ -255,7 +267,9 @@ define([
                 };
             }
 
-            $scope.isBasicOrSecondaryEducation = function() {$scope.educationalContextId === 2 || $scope.educationalContextId === 3;}
+            $scope.isBasicOrSecondaryEducation = function () {
+                return $scope.educationalContextId === 2 || $scope.educationalContextId === 3;
+            };
 
             function loadMetadata() {
                 metadataService.loadLanguages(setLangugeges);
@@ -317,7 +331,7 @@ define([
                 })
             }
 
-            $scope.$watch(function() {
+            $scope.$watch(function () {
                 var a = document.getElementsByClassName("md-datepicker-input");
                 if (a[0]) return a[0].value;
             }, function (newDate, oldDate) {
@@ -433,7 +447,9 @@ define([
             }
 
             function setLicenseTypes(data) {
-                var array = data.filter(function(type) { type.name.toUpperCase() === "ALLRIGHTSRESERVED" });
+                var array = data.filter(function (type) {
+                    return type.name.toUpperCase() === "ALLRIGHTSRESERVED"
+                });
                 $scope.licenceTypes = data;
                 $scope.allRightsReserved = array[0];
             }
