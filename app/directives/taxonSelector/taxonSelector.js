@@ -42,7 +42,7 @@ define([
                 function removeTopic(originalId) {
                     if ($rootScope.selectedTopics) {
                         $rootScope.selectedTopics = $rootScope.selectedTopics
-                            .filter(topic => topic.id !== originalId);
+                            .filter(function(topic) { topic.id !== originalId });
                     }
                 }
 
@@ -81,11 +81,11 @@ define([
                     if (path.module && path.module.topics && path.module.topics.length > 0) return path.module.topics;
                 };
 
-                $scope.isRequired = () => $scope.isAddPortfolioView || $scope.topicRequired;
+                $scope.isRequired = function() { $scope.isAddPortfolioView || $scope.topicRequired; }
 
-                $scope.showErrors = element => $scope.isRequired() && $scope.shouldShowErrors(element);
+                $scope.showErrors = function(element) {$scope.isRequired() && $scope.shouldShowErrors(element);} 
 
-                $scope.shouldShowErrors = element => element && (element.$touched || $scope.markRequired) && element.$error.required;
+                $scope.shouldShowErrors = function(element) {element && (element.$touched || $scope.markRequired) && element.$error.required;}
 
                 function addTaxonPathListeners() {
                     /*

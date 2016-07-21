@@ -90,7 +90,7 @@ define([
 
             $scope.deleteTaxon = function (index) {
                 var taxon = $scope.material.taxons[index];
-                $rootScope.selectedTopics = $rootScope.selectedTopics.filter(topic => topic.id !== taxon.id);
+                $rootScope.selectedTopics = $rootScope.selectedTopics.filter(function(topic) { topic.id !== taxon.id });
 
                 $scope.material.taxons.splice(index, 1);
             };
@@ -124,26 +124,26 @@ define([
                     $scope.material.type = ".Material";
 
                     $scope.material.crossCurricularThemes = $scope.material.crossCurricularThemes
-                        .filter(theme => theme.name !== "NOT_RELEVANT");
+                        .filter(function(theme) { theme.name !== "NOT_RELEVANT" } );
 
                     $scope.material.keyCompetences = $scope.material.keyCompetences
-                        .filter(competence => competence.name !== "NOT_RELEVANT");
+                        .filter(function(competence) { competence.name !== "NOT_RELEVANT" } );
 
                     serverCallService.makePut('rest/material', $scope.material, saveMaterialSuccess, saveMaterialFail, saveMaterialFinally);
                 }
             };
 
-            $scope.isTouchedOrSubmitted = element => (element && element.$touched) || ($scope.addMaterialForm && $scope.addMaterialForm.$submitted);
+            $scope.isTouchedOrSubmitted = function(element) {(element && element.$touched) || ($scope.addMaterialForm && $scope.addMaterialForm.$submitted);}
 
-            $scope.showCompetencesWarning = element => {
+            $scope.showCompetencesWarning = function(element) {
                 if ($scope.isTouchedOrSubmitted(element)) return $scope.material.keyCompetences.length === 0;
             };
 
-            $scope.showThemesWarning = element => {
+            $scope.showThemesWarning = function(element) {
                 if ($scope.isTouchedOrSubmitted(element)) return $scope.material.crossCurricularThemes.length === 0;
             };
 
-            $scope.isAuthorOrPublisherSet = () => ($scope.material.authors[0].name && $scope.material.authors[0].surname) || $scope.material.publishers[0];
+            $scope.isAuthorOrPublisherSet = function() {($scope.material.authors[0].name && $scope.material.authors[0].surname) || $scope.material.publishers[0];}
 
             $scope.isAdmin = function () {
                 return authenticatedUserService.isAdmin();
@@ -188,12 +188,12 @@ define([
                 };
             }
 
-            $scope.isTabTwoValid = () => {
+            $scope.isTabTwoValid = function() {
                 return $rootScope.selectedTopics && $rootScope.selectedTopics.length > 0 && $scope.material.targetGroups.length > 0
                     && ($scope.isBasicOrSecondaryEducation() ? $scope.material.keyCompetences.length > 0 && $scope.material.crossCurricularThemes.length > 0 : true);
             };
 
-            $scope.isTabThreeValid = () => {
+            $scope.isTabThreeValid = function() {
                 return (($scope.material.publishers[0] && $scope.material.publishers[0].name)
                     || ($scope.material.authors[0].name && $scope.material.authors[0].surname))
                     && $scope.material.licenseType && $scope.material.issueDate.year;
@@ -248,7 +248,7 @@ define([
                 };
             }
 
-            $scope.isBasicOrSecondaryEducation = () => $scope.educationalContextId === 2 || $scope.educationalContextId === 3;
+            $scope.isBasicOrSecondaryEducation = function() {$scope.educationalContextId === 2 || $scope.educationalContextId === 3;}
 
             function loadMetadata() {
                 metadataService.loadLanguages(setLangugeges);
@@ -310,7 +310,7 @@ define([
                 })
             }
 
-            $scope.$watch(() => {
+            $scope.$watch(function() {
                 var a = document.getElementsByClassName("md-datepicker-input");
                 if (a[0]) return a[0].value;
             }, function (newDate, oldDate) {
@@ -426,7 +426,7 @@ define([
 
             function setLicenseTypes(data) {
                 $scope.licenceTypes = data;
-                $scope.allRightsReserved = data.filter(type => type.name.toUpperCase() === "ALLRIGHTSRESERVED")[0];
+                $scope.allRightsReserved = data.filter(function(type) {type.name.toUpperCase() === "ALLRIGHTSRESERVED")[0];}
             }
 
             function setCrossCurricularThemes(data) {

@@ -17,7 +17,7 @@ define([
                         $scope.isCreatorRestricted = isUserRestricted($scope.learningObject.creator);
                     }
 
-                    $scope.restrictCreator = () => {
+                    $scope.restrictCreator = function() {
                         serverCallService.makePost("rest/user/restrictUser", $scope.learningObject.creator, restrictSuccess, restrictFail)
                     };
 
@@ -34,7 +34,7 @@ define([
                         console.log("Setting creators role to 'RESTRICTED' failed");
                     }
 
-                    $scope.removeCreatorsRestriction = () => {
+                    $scope.removeCreatorsRestriction = function() {
                         serverCallService.makePost("rest/user/removeRestriction", $scope.learningObject.creator, restrictRemoveSuccess, restrictRemoveFail)
 
                     };
