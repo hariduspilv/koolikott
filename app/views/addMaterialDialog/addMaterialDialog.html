@@ -17,7 +17,7 @@
       <md-tabs md-dynamic-height md-border-bottom md-autoselect md-stretch-tabs="always" md-selected="step.currentStep">
         <md-tab>
           <md-tab-label>
-            <span data-ng-class="{'tab-error': (addMaterialForm.$submitted && !isTabOneValid())}">
+            <span data-ng-class="{'error-color': (addMaterialForm.$submitted && !isTabOneValid())}">
               <span data-translate="MATERIAL_TAB_MAIN_DATA"></span>
               <span data-ng-show="addMaterialForm.$submitted && !isTabOneValid()">*</span>
             </span>
@@ -67,7 +67,7 @@
                 <div flex>
                   <md-input-container flex layout-fill>
                     <label>
-                      <span data-translate="MATERIAL_LINK"></span> *
+                      <span data-translate="MATERIAL_LINK"></span>
                     </label>
                     <input data-ng-model="material.source" name="source" id="add-material-url-input" type="text"
                            required
@@ -96,10 +96,7 @@
               <div class="form-group" data-ng-repeat="metadata in titleDescriptionGroups">
                 <div layout-xs="column" layout="row" layout-align-xs="start stretch" layout-align="center center">
                   <md-input-container flex flex-order-xs="2">
-                    <label>
-                      <span data-translate="MATERIAL_TITLE"></span>
-                      <span data-ng-show="$index === 0">*</span>
-                    </label>
+                    <label data-translate="MATERIAL_TITLE"></label>
                     <input data-ng-model="metadata.title" name="title" data-ng-required="$index === 0">
                     <div data-ng-messages="addMaterialForm.title.$error"
                          data-ng-show="addMaterialForm.title.$touched || addMaterialForm.$submitted">
@@ -120,7 +117,7 @@
                 <div layout="row" layout-align="top center">
                   <md-input-container flex>
                     <label data-translate="MATERIAL_DESCRIPTION"></label>
-                    <textarea ng-model="metadata.description" rows="3"></textarea>
+                    <textarea ng-model="metadata.description" rows="2"></textarea>
                   </md-input-container>
                   <md-button class="md-icon-button md-primary" data-ng-show="$index+1 === titleDescriptionGroups.length"
                              data-ng-click="addNewMetadata()">
@@ -154,7 +151,7 @@
         <!--Taxonomy tab-->
         <md-tab data-ng-disabled="step.isTabDisabled(1)">
           <md-tab-label>
-            <span data-ng-class="{'tab-error': (addMaterialForm.$submitted && !isTabTwoValid())}">
+            <span data-ng-class="{'error-color': (addMaterialForm.$submitted && !isTabTwoValid())}">
               <span data-translate="MATERIAL_TAB_TAXON"></span>
               <span data-ng-show="addMaterialForm.$submitted && !isTabTwoValid()">*</span>
             </span>
@@ -164,7 +161,8 @@
               <div layout="row" flex layout-align="space-between center"
                    data-ng-repeat="taxon in material.taxons track by $index">
                 <div data-dop-taxon-selector data-taxon="material.taxons[$index]" layout="row" layout-sm="column"
-                     flex data-mark-required="addMaterialForm.$submitted" data-is-add-material-view="true"></div>
+                     flex data-mark-required="addMaterialForm.$submitted" data-is-add-material-view="true"
+                     data-touched="isTouched"></div>
                 <md-button class="md-icon-button md-primary" data-ng-show="$index+1 === material.taxons.length"
                            data-ng-click="addNewTaxon()" data-ng-disabled="material.taxon">
                   <md-icon>add_circle</md-icon>
@@ -176,6 +174,10 @@
                   <md-tooltip md-direction="top"><span data-translate="MATERIAL_TAB_REMOVE_TAXON"></span></md-tooltip>
                 </md-button>
               </div>
+              <div layout="row" flex layout-align="space-between center"
+                   data-ng-show="(isTouched.trigger || addMaterialForm.$submitted) && isTopicNotSet()">
+                <div class="validation-messages" data-translate="MATERIAL_TOPIC_REQUIRED"></div>
+              </div>
 
               <md-checkbox data-ng-if="educationalContextId === 2" data-ng-model="material.specialEducation"
                            aria-label="{{'MATERIAL_SPECIAL_EDUCATION' | translate}}" class="md-primary" flex>
@@ -185,8 +187,8 @@
               <div layout="row" flex layout-align="space-between center">
 
                 <!--Target groups-->
-                <div data-dop-target-group-selector data-target-groups="material.targetGroups" data-is-required="true"
-                     data-ng-if="educationalContextId !== 4" data-taxon="material.taxons[0]"
+                <div data-dop-target-group-selector data-target-groups="material.targetGroups" data-is-required="{trigger: true}"
+                     data-ng-show="educationalContextId !== 4" data-taxon="material.taxons[0]"
                      data-mark-required="addMaterialForm.$submitted" flex="20">
                 </div>
 
@@ -268,7 +270,7 @@
         <!--Additional data tab-->
         <md-tab data-ng-disabled="step.isTabDisabled(1) || step.isTabDisabled(2)">
           <md-tab-label>
-            <span data-ng-class="{'tab-error': (addMaterialForm.$submitted && !isTabThreeValid())}">
+            <span data-ng-class="{'error-color': (addMaterialForm.$submitted && !isTabThreeValid())}">
               <span data-translate="MATERIAL_TAB_ADDITIONAL_DATA"></span>
               <span data-ng-show="addMaterialForm.$submitted && !isTabThreeValid()">*</span>
             </span>
@@ -346,26 +348,24 @@
 
               <div layout="row" flex layout-align="space-between center">
                 <!--License type-->
-                <md-input-container flex>
+                <md-input-container flex
+                                    data-ng-class="{'error-color': ((addMaterialForm.licenseType.$touched || addMaterialForm.$submitted) && !material.licenseType)}">
                   <label>
                     <span data-translate="MATERIAL_VIEW_LICENSE_TYPE"></span>*
                   </label>
                   <md-select data-ng-model="material.licenseType" id="licenceTypeSelect" name="licenseType"
-                             ng-model-options="{trackBy: '$value.id'}" data-ng-required="true">
+                             ng-model-options="{trackBy: '$value.id'}">
                     <md-option ng-value="allRightsReserved" data-translate="LICENSETYPE_CANT_CHOOSE"></md-option>
-                    <md-option ng-value="licenceType" data-ng-repeat="licenceType in licenceTypes"
+                    <md-option data-ng-value="licenceType" data-ng-repeat="licenceType in licenceTypes"
                                data-translate="LICENSETYPE_{{licenceType.name.toUpperCase()}}">
                     </md-option>
 
                   </md-select>
-                  <div data-ng-messages="addMaterialForm.licenseType.$error"
-                       data-ng-show="!material.licenseType && (addMaterialForm.licenseType.$touched || addMaterialForm.$submitted)">
-                    <div data-ng-message="required" data-translate="MATERIAL_LICENSE_TYPE_MANDATORY"
-                         class="validation-messages"></div>
+                  <div
+                    data-ng-show="(addMaterialForm.licenseType.$touched || addMaterialForm.$submitted) && !material.licenseType">
+                    <div class="validation-messages" data-translate="MATERIAL_LICENSE_TYPE_MANDATORY"></div>
                   </div>
-
                 </md-input-container>
-
 
                 <!--Paid-->
                 <md-switch class="md-primary md-block md-padding" md-no-ink data-ng-model="material.paid"

@@ -9,6 +9,7 @@ define([
         function ($scope, $mdDialog, $location, serverCallService, $rootScope, storageService, $timeout, pictureUploadService) {
             $scope.isSaving = false;
             $scope.showHints = true;
+            $scope.isTouched = {};
 
             var uploadingPicture = false;
 
@@ -109,13 +110,17 @@ define([
 
             $scope.isValid = function () {
                 var portfolio = $scope.newPortfolio;
-                var hasCorrectTaxon = portfolio.taxon && portfolio.taxon.level !== ".EducationalContext";
+                var hasCorrectTaxon = portfolio.taxon && portfolio.taxon.level && portfolio.taxon.level !== ".EducationalContext";
                 return portfolio.title && portfolio.targetGroups[0] && hasCorrectTaxon;
             };
 
             function savePortfolioFinally() {
                 $scope.saving = false;
             }
+
+            $scope.isSet = () => {
+                return $scope.newPortfolio.taxon && $scope.newPortfolio.taxon.level && $scope.newPortfolio.taxon.level !== ".EducationalContext";
+            };
 
             $scope.$watchCollection('invalidPicture', function (newValue, oldValue) {
                 if (newValue !== oldValue) {

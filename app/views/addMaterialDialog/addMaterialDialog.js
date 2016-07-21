@@ -13,6 +13,7 @@ define([
             $scope.isSaving = false;
             $scope.showHints = true;
             $scope.creatorIsPublisher = false;
+            $scope.isTouched = {};
 
             var preferredLanguage;
             var TABS_COUNT = 2;
@@ -58,6 +59,7 @@ define([
             $scope.$watch('addMaterialForm.source.$valid', function (isValid) {
                 $scope.step.isMaterialUrlStepValid = isValid;
             });
+
 
             $scope.addNewMetadata = function () {
                 $scope.titleDescriptionGroups.forEach(function (item) {
@@ -134,7 +136,7 @@ define([
 
             $scope.isTouchedOrSubmitted = element => (element && element.$touched) || ($scope.addMaterialForm && $scope.addMaterialForm.$submitted);
 
-            $scope.showCompetencesWarning = element => {
+            $scope.showCompetencesWarning = function(element) {
                 if ($scope.isTouchedOrSubmitted(element)) return $scope.material.keyCompetences.length === 0;
             };
 
@@ -147,6 +149,10 @@ define([
             $scope.isAdmin = function () {
                 return authenticatedUserService.isAdmin();
             };
+
+            $scope.isTopicNotSet = () => {
+                return !$rootScope.selectedTopics || $rootScope.selectedTopics.length === 0;
+            }
 
             function getIssueDate(date) {
                 return {
