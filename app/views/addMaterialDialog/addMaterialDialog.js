@@ -433,8 +433,9 @@ define([
             }
 
             function setLicenseTypes(data) {
+                var array = data.filter(function(type) { type.name.toUpperCase() === "ALLRIGHTSRESERVED" });
                 $scope.licenceTypes = data;
-                $scope.allRightsReserved = data.filter(function(type) {type.name.toUpperCase() === "ALLRIGHTSRESERVED")[0];}
+                $scope.allRightsReserved = array[0];
             }
 
             function setCrossCurricularThemes(data) {
