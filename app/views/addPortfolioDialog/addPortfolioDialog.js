@@ -4,38 +4,39 @@ define([
     'services/serverCallService',
     'services/storageService',
     'services/pictureUploadService'
-], function(app) {
+], function (app) {
     return ['$scope', '$mdDialog', '$location', 'serverCallService', '$rootScope', 'storageService', '$timeout', 'pictureUploadService',
-    	function($scope, $mdDialog, $location, serverCallService, $rootScope, storageService, $timeout, pictureUploadService) {
-	        $scope.isSaving = false;
-	        $scope.showHints = true;
+        function ($scope, $mdDialog, $location, serverCallService, $rootScope, storageService, $timeout, pictureUploadService) {
+            $scope.isSaving = false;
+            $scope.showHints = true;
+            $scope.isTouched = {};
 
-	        var uploadingPicture = false;
+            var uploadingPicture = false;
 
-	        function init() {
-	            var portfolio = storageService.getPortfolio();
+            function init() {
+                var portfolio = storageService.getPortfolio();
 
-	            $scope.newPortfolio = createPortfolio();
-	            $scope.portfolio = portfolio;
+                $scope.newPortfolio = createPortfolio();
+                $scope.portfolio = portfolio;
                 $scope.newPortfolio.chapters = portfolio.chapters;
 
                 if ($scope.portfolio.id != null) {
-	                $scope.isEditPortfolio = true;
+                    $scope.isEditPortfolio = true;
 
-	                var portfolioClone = angular.copy(portfolio);
+                    var portfolioClone = angular.copy(portfolio);
 
-	                $scope.newPortfolio.title = portfolioClone.title;
-	                $scope.newPortfolio.summary = portfolioClone.summary;
-	                $scope.newPortfolio.taxon = portfolioClone.taxon;
-	                $scope.newPortfolio.targetGroups = portfolioClone.targetGroups;
-	                $scope.newPortfolio.tags = portfolioClone.tags;
-	                $scope.newPortfolio.picture = portfolioClone.picture;
-	            }
+                    $scope.newPortfolio.title = portfolioClone.title;
+                    $scope.newPortfolio.summary = portfolioClone.summary;
+                    $scope.newPortfolio.taxon = portfolioClone.taxon;
+                    $scope.newPortfolio.targetGroups = portfolioClone.targetGroups;
+                    $scope.newPortfolio.tags = portfolioClone.tags;
+                    $scope.newPortfolio.picture = portfolioClone.picture;
+                }
 
                 getMaxPictureSize();
-	        }
+            }
 
-        	$scope.cancel = function() {
+            $scope.cancel = function () {
                 $mdDialog.hide();
             };
 
@@ -43,31 +44,32 @@ define([
                 return $scope.newPicture;
             }, function (newPicture) {
                 if (newPicture) {
-                	uploadingPicture = true;
-                	pictureUploadService.upload(newPicture, pictureUploadSuccess, pictureUploadFailed, pictureUploadFinally);
+                    uploadingPicture = true;
+                    pictureUploadService.upload(newPicture, pictureUploadSuccess, pictureUploadFailed, pictureUploadFinally);
                 }
             });
 
             function pictureUploadSuccess(picture) {
-            	$scope.newPortfolio.picture = picture;
+                $scope.newPortfolio.picture = picture;
             }
 
             function pictureUploadFailed() {
-            	log('Picture upload failed.');
+                log('Picture upload failed.');
             }
 
             function pictureUploadFinally() {
-            	uploadingPicture = false;
+                $scope.showErrorOverlay = false;
+                uploadingPicture = false;
             }
 
-            $scope.create = function() {
+            $scope.create = function () {
                 $scope.saving = true;
 
                 if (uploadingPicture) {
-                	$timeout($scope.create, 500, false);
+                    $timeout($scope.create, 500, false);
                 } else {
-	                var url = "rest/portfolio/create";
-	                serverCallService.makePost(url, $scope.newPortfolio, createPortfolioSuccess, createPortfolioFailed, savePortfolioFinally);
+                    var url = "rest/portfolio/create";
+                    serverCallService.makePost(url, $scope.newPortfolio, createPortfolioSuccess, createPortfolioFailed, savePortfolioFinally);
                 }
             };
 
@@ -85,30 +87,30 @@ define([
                 log('Creating portfolio failed.');
             }
 
-            $scope.update = function() {
+            $scope.update = function () {
                 $scope.saving = true;
 
                 if (uploadingPicture) {
-                	$timeout($scope.create, 500, false);
+                    $timeout($scope.create, 500, false);
                 } else {
-	                var url = "rest/portfolio/update";
-	                $scope.portfolio.title = $scope.newPortfolio.title;
-	                $scope.portfolio.summary = $scope.newPortfolio.summary;
-	                $scope.portfolio.taxon = $scope.newPortfolio.taxon;
-	                $scope.portfolio.targetGroups = $scope.newPortfolio.targetGroups;
-	                $scope.portfolio.tags = $scope.newPortfolio.tags;
+                    var url = "rest/portfolio/update";
+                    $scope.portfolio.title = $scope.newPortfolio.title;
+                    $scope.portfolio.summary = $scope.newPortfolio.summary;
+                    $scope.portfolio.taxon = $scope.newPortfolio.taxon;
+                    $scope.portfolio.targetGroups = $scope.newPortfolio.targetGroups;
+                    $scope.portfolio.tags = $scope.newPortfolio.tags;
 
-	                if ($scope.newPortfolio.picture) {
-	                	$scope.portfolio.picture = $scope.newPortfolio.picture;
-	                }
+                    if ($scope.newPortfolio.picture) {
+                        $scope.portfolio.picture = $scope.newPortfolio.picture;
+                    }
 
-	                serverCallService.makePost(url, $scope.portfolio, createPortfolioSuccess, createPortfolioFailed, savePortfolioFinally);
+                    serverCallService.makePost(url, $scope.portfolio, createPortfolioSuccess, createPortfolioFailed, savePortfolioFinally);
                 }
             };
 
-            $scope.isValid = function() {
+            $scope.isValid = function () {
                 var portfolio = $scope.newPortfolio;
-                var hasCorrectTaxon = portfolio.taxon && portfolio.taxon.level !== ".EducationalContext";
+                var hasCorrectTaxon = portfolio.taxon && portfolio.taxon.level && portfolio.taxon.level !== ".EducationalContext";
                 return portfolio.title && portfolio.targetGroups[0] && hasCorrectTaxon;
             };
 
@@ -116,15 +118,17 @@ define([
                 $scope.saving = false;
             }
 
-            $scope.$watchCollection('invalidPicture', function(newValue, oldValue) {
+            $scope.isSet = () => {
+                return $scope.newPortfolio.taxon && $scope.newPortfolio.taxon.level && $scope.newPortfolio.taxon.level !== ".EducationalContext";
+            };
+
+            $scope.$watchCollection('invalidPicture', function (newValue, oldValue) {
                 if (newValue !== oldValue) {
                     if (newValue && newValue.length > 0) {
-                        if ($scope.newPicture || $scope.newPortfolio.picture) {
-                            $scope.showErrorOverlay = true;
-                            $timeout(function() {
-                                $scope.showErrorOverlay = false;
-                            }, 6000);
-                        }
+                        $scope.showErrorOverlay = true;
+                        $timeout(function () {
+                            $scope.showErrorOverlay = false;
+                        }, 6000);
                     }
                 }
             });
@@ -143,6 +147,6 @@ define([
             }
 
             init();
-    	}
+        }
     ];
 });

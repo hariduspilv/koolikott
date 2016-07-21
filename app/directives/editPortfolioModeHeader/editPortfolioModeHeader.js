@@ -124,6 +124,7 @@ define([
                 function saveAndExitPortfolioSuccess(portfolio) {
                     if (!isEmpty(portfolio)) {
                         toastService.show('PORTFOLIO_SAVED');
+                        $rootScope.savedPortfolio = null;
                         $location.url('/portfolio?id=' + portfolio.id);
                         $route.reload();
                     }
