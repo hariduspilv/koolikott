@@ -66,6 +66,21 @@ define([
                     }))
                 };
 
+                $scope.showAddFileDialog = function() {
+                    var addMaterialScope = $scope.$new(true);
+
+                    addMaterialScope.uploadMode = true;
+                    addMaterialScope.material = {};
+                    addMaterialScope.isChapterMaterial = true;
+                    storageService.setMaterial(null);
+
+                    $mdDialog.show(angularAMD.route({
+                        templateUrl: 'views/addMaterialDialog/addMaterialDialog.html',
+                        controllerUrl: 'views/addMaterialDialog/addMaterialDialog',
+                        scope: addMaterialScope
+                    }));
+                };
+
                 $scope.copyPortfolio = function() {
                     var url = "rest/portfolio/copy";
                     var portfolio = createPortfolio($route.current.params.id);

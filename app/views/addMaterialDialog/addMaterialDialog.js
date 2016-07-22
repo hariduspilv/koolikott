@@ -6,10 +6,11 @@ define([
     'services/authenticatedUserService',
     'services/storageService',
     'services/pictureUploadService',
+    'services/fileUploadService',
     'directives/validate/validateUrl'
 ], function (app) {
-    return ['$scope', '$mdDialog', '$mdDateLocale', 'serverCallService', 'translationService', 'metadataService', '$filter', '$location', '$rootScope', 'authenticatedUserService', 'storageService', '$timeout', 'pictureUploadService',
-        function ($scope, $mdDialog, $mdDateLocale, serverCallService, translationService, metadataService, $filter, $location, $rootScope, authenticatedUserService, storageService, $timeout, pictureUploadService) {
+    return ['$scope', '$mdDialog', '$mdDateLocale', 'serverCallService', 'translationService', 'metadataService', '$filter', '$location', '$rootScope', 'authenticatedUserService', 'storageService', '$timeout', 'pictureUploadService', 'fileUploadService',
+        function ($scope, $mdDialog, $mdDateLocale, serverCallService, translationService, metadataService, $filter, $location, $rootScope, authenticatedUserService, storageService, $timeout, pictureUploadService, fileUploadService) {
             $scope.isSaving = false;
             $scope.showHints = true;
             $scope.creatorIsPublisher = false;
@@ -25,6 +26,8 @@ define([
             $scope.step.isMaterialUrlStepValid = false;
             $scope.step.isMetadataStepValid = false;
             $scope.titleDescriptionGroups = [];
+            $scope.fileUploaded = false;
+            $scope.uploadingFile = false;
 
             init();
 
@@ -128,7 +131,6 @@ define([
 
                     $scope.material.keyCompetences = $scope.material.keyCompetences
                         .filter(competence => competence.name !== "NOT_RELEVANT");
-
                     serverCallService.makePut('rest/material', $scope.material, saveMaterialSuccess, saveMaterialFail, saveMaterialFinally);
                 }
             };
@@ -295,6 +297,7 @@ define([
                 setPublisher();
                 loadMetadata();
                 getMaxPictureSize();
+                getMaxFileSize();
                 setSelectedTopics();
             }
 
@@ -334,6 +337,15 @@ define([
                 }
             });
 
+            $scope.$watch(function () {
+                return $scope.newFile;
+            }, function (newFile) {
+                if (newFile) {
+                    $scope.uploadingFile = true;
+                    fileUploadService.upload(newFile, fileUploadSuccess, fileUploadFailed, fileUploadFinally);
+                }
+            });
+
             function pictureUploadSuccess(picture) {
                 $scope.material.picture = picture;
             }
@@ -344,6 +356,22 @@ define([
 
             function pictureUploadFinally() {
                 uploadingPicture = false;
+            }
+
+            function fileUploadSuccess(file) {
+                $scope.fileUploaded = true;
+                $scope.uploadingFile = false;
+                $scope.material.uploadedFile = file;
+                $scope.material.source = "https://localhost/rest/file/" + file.id;
+                $scope.step.isMaterialUrlStepValid = true;
+            }
+
+            function fileUploadFailed() {
+                log('File upload failed.');
+            }
+
+            function fileUploadFinally() {
+                uploadingFile = false;
             }
 
             function preSetMaterial(material) {
@@ -518,6 +546,19 @@ define([
             function getMaxPictureSizeFail() {
                 $scope.maxPictureSize = 10;
                 console.log('Failed to get max picture size, using 10MB as default.');
+            }
+
+            function getMaxFileSize() {
+                serverCallService.makeGet('/rest/uploadedFile/maxSize', {}, getMaxFileSizeSuccess, getMaxFileSizeFail);
+            }
+
+            function getMaxFileSizeSuccess(data) {
+                $scope.maxPictureSize = data;
+            }
+
+            function getMaxFileSizeFail() {
+                $scope.maxFileSize = 500;
+                console.log('Failed to get max file size, using 500MB as default.');
             }
 
         }];

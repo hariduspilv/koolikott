@@ -42,10 +42,10 @@
                                       class="md-block drop-box-preview-container">
                     <div class="drop-box-preview">
                       <img data-ng-if="newPicture" data-ngf-thumbnail="newPicture"
-                           ngf-size="{width: 300, height: 300, quality: 0.9}" alt="photo">
+                           ngf-size="{width: 300, height: 300, quality: 0.9, autoCrop: true}" alt="photo">
                       <img data-ng-if="!newPicture && material.picture"
                            data-ng-src="rest/picture/{{material.picture.name}}"
-                           ngf-size="{width: 300, height: 300, quality: 0.9}" alt="photo">
+                           ngf-size="{width: 300, height: 300, quality: 0.9, autoCrop: true}" alt="photo">
                     </div>
                   </md-input-container>
 
@@ -57,7 +57,34 @@
                 </div>
                 <md-tooltip><span data-translate="MATERIAL_PHOTO_UPLOAD_HELP"></span></md-tooltip>
               </div>
-              <div flex>
+              <div flex-sm="30" flex-md="25" flex-gt-md="25" class="md-padding">
+                <div flex ngf-select ng-model="newFile"
+                     data-accept="*"
+                     data-ngf-pattern="'*'"
+                     data-ng-upload
+                     data-ngf-max-size="{{maxFileSize + 'MB'}}"
+                     layout="row"
+                     layout-align="center center" flex>
+
+                  <button class="md-raised md-primary md-button md-ink-ripple">
+                    <md-icon>file_upload</md-icon>
+                    <span data-translate="ADD_FILE"></span>
+                  </button>
+                </div>
+                <md-tooltip><span data-translate="MATERIAL_FILE_UPLOAD_HELP"></span></md-tooltip>
+              </div>
+              <div data-ng-show="uploadMode && !fileUploaded && !uploadingFile " flex="25"><h4 data-translate="ADD_FILE_PLACEHOLDER"></h4> </div>
+              <div data-ng-show="uploadMode || fileUploaded" flex-sm="30" flex-md="25" flex-gt-md="25" layout="row" layout-align-xs="start stretch" layout-align="center center">
+                <div data-ng-show="uploadingFile" style="text-align: center;">
+                  <md-progress-circular md-mode="indeterminate" style="margin: 0 auto;"></md-progress-circular>
+                  <h4 data-translate="ADD_FILE_UPLOADING">Laen faili ...</h4>
+                </div>
+                <div data-ng-show="fileUploaded && !uploadingFile" style="text-align: center;">
+                  <h4><span data-translate="ADD_FILE_SUCCESS"></span>: {{ material.uploadedFile.name }}</h4>
+                </div>
+              </div>
+              <div flex layout-fill data-ng-show="uploadMode || fileUploaded"></div>
+              <div flex data-ng-hide="uploadMode || fileUploaded">
                 <md-input-container flex layout-fill>
                   <label>
                     <span data-translate="MATERIAL_LINK"></span> *

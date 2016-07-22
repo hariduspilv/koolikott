@@ -1,13 +1,25 @@
 <div data-ng-show="isEditable">
   <form name="resourcePermalinkForm" layout="row" layout-align="start center">
-	  <md-input-container flex>
-      <label data-translate="PORTFOLIO_CREATE_NEW_MATERIAL_URL"></label>
-      <input data-ng-model="chapter.resourcePermalink" name="url" id="resource-permalink-url-input" type="text" required dop-validate-url>
-      <div data-ng-messages="resourcePermalinkForm.url.$error" data-ng-show="resourcePermalinkForm.url.$dirty" multiple>
-        <div data-ng-message="required" data-ng-show="resourcePermalinkForm.url.$error.required" data-translate="MATERIAL_URL_IS_MANDATORY"></div>
-        <div data-ng-message="url" data-ng-show="resourcePermalinkForm.url.$error.url" data-translate="MATERIAL_URL_IS_INVALID"></div>
+    <md-input-container flex>
+        <label data-translate="PORTFOLIO_CREATE_NEW_MATERIAL_URL"></label>
+        <input data-ng-model="chapter.resourcePermalink" name="url" id="resource-permalink-url-input" type="text"
+               required dop-validate-url>
+        <div data-ng-messages="resourcePermalinkForm.url.$error" data-ng-show="resourcePermalinkForm.url.$dirty"
+             multiple>
+          <div data-ng-message="required" data-ng-show="resourcePermalinkForm.url.$error.required"
+               data-translate="MATERIAL_URL_IS_MANDATORY"></div>
+          <div data-ng-message="url" data-ng-show="resourcePermalinkForm.url.$error.url"
+               data-translate="MATERIAL_URL_IS_INVALID"></div>
+        </div>
+      </md-input-container>
+      <md-button aria-label="Lisa material kogumikku" md-no-ink class="md-primary" data-translate="ADD_MATERIAL"
+                 data-ng-click="addMaterialFromPermalink()"></md-button>
+      <div layout="row" flex-offset="5">
+      <button class="md-raised md-primary md-button md-ink-ripple" type="button" data-ng-click="addMaterialFromFile()">
+        <md-icon>file_upload</md-icon>
+        <span data-translate="ADD_FILE"></span>
+      </button>
       </div>
-	  </md-input-container>
-	  <md-button aria-label="Lisa material kogumikku" md-no-ink class="md-primary" data-translate="ADD_MATERIAL" data-ng-click="addMaterialFromPermalink()"></md-button>
+
   </form>
 </div>
