@@ -1,4 +1,4 @@
-<md-toolbar id="md-toolbar-header" class="md-whiteframe-1dp" data-click-outside="clickOutside()" outside-if-not="header-show-detailed-search-icon, detailed-search">
+<md-toolbar id="md-toolbar-header" class="md-whiteframe-1dp {{isEditPortfolioMode ? 'md-accent' : 'md-primary'}}" data-click-outside="clickOutside()" outside-if-not="header-show-detailed-search-icon, detailed-search">
   <div class="md-toolbar-tools">
     <!-- logo -->
     <div data-ng-hide="isViewPortforlioPage" layout-align="center start" flex="10" flex-gt-sm="15">
@@ -9,16 +9,24 @@
     </div>
 
     <!-- portfolio page toggle menu icon -->
-    <span class="hide-gt-md" data-ng-show="isViewPortforlioPage">
+    <span class="hide-gt-md" data-ng-show="isViewPortforlioPage" flex="10" flex-gt-sm="15" layout-align="center start">
       <md-button class="md-icon-button" data-ng-click="toggleSidenav('left')" >
         <md-icon class="md-48">menu</md-icon>
       </md-button>
     </span>
 
+    <!-- logo for portfolio -->
+    <div class="hide-md hide-sm hide-xs" data-ng-show="isViewPortforlioPage" layout-align="center start" flex="10" flex-gt-sm="15">
+      <md-tooltip>
+        <span data-translate="HEADER_TOOLTIP_GO_TO_LANDING_PAGE"></span>
+      </md-tooltip>
+      <a data-ng-href="/" class="logo" id="logo"></a>
+    </div>
+
     <span flex-xs></span>
 
     <!-- search bar with filter icon -->
-    <div flex-gt-xs="70" flex-gt-md="{{isViewPortforlioPage ? '85' : '75'}}">
+    <div flex-gt-xs="70" flex-gt-md="{{isViewPortforlioPage ? '75' : '75'}}">
       <div layout="row" layout-align="center center">
         <div class="navbar-search" layout="row" hide show-gt-xs flex>
           <md-button aria-label="Otsi" class="md-icon-button" id="header-show-search-button" ng-click="search()">
@@ -108,9 +116,10 @@
 </md-toolbar>
 
 <div class="md-toolbar-filter" id="detailedSearch" data-ng-show="detailedSearch.isVisible">
-  <form layout="row" layout-xs="column"  flex>
+  <form layout="row"
+    flex>
     <div data-ng-if="!isViewPortforlioPage" layout="row" layout-xs="column" flex="0" flex-gt-md="15"></div>
-    <div flex flex-gt-md="{{isViewPortforlioPage ? '85' : '75'}}" class="md-padding filter-wrapper" id="detailed-search">
+    <div flex flex-gt-md="{{isViewPortforlioPage ? '75' : '75'}}" class="md-padding filter-wrapper" id="detailed-search">
       <div data-dop-detailed-search query-in="detailedSearch.queryIn" query-out="detailedSearch.queryOut" main-field="detailedSearch.mainField" search-callback="detailedSearch.doSearch()" accessor="detailedSearch.accessor"></div>
     </div>
   </form>

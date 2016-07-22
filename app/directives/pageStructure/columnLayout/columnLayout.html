@@ -1,27 +1,22 @@
-<div data-layout="row" data-flex layout-fill>
-  <md-sidenav layout="column" class="md-sidenav-left" md-component-id="left" md-is-locked-open="$mdMedia('gt-md')"
-              flex-xs="60" flex-sm="50" flex-md="30" flex-gt-md="15" id="sidebar-left">
-    <md-toolbar class="{{isEditPortfolioMode ? 'md-accent' : 'md-primary'}}">
-      <h6 class="md-toolbar-tools md-subhead">
-        <div layout-align="center start" flex>
-          <md-tooltip><span data-translate="HEADER_TOOLTIP_GO_TO_LANDING_PAGE"></span></md-tooltip>
-          <a data-ng-href="/" class="logo logo-lg" id="logo"></a>
-        </div>
-      </h6>
-    </md-toolbar>
-
-    <div id="alert" data-dop-alert></div>
-
-    <md-content layout="column" flex role="navigation" class="sidenav md-whiteframe-z2">
-      <div data-dop-table-of-contents data-portfolio="portfolio" data-readonly="!isEditPortfolioMode"></div>
-    </md-content>
-  </md-sidenav>
-
-  <div id="column-layout" data-layout="column" data-flex>
-    <div data-ng-if="!isEditPortfolioMode" id="navmenu" data-dop-header></div>
-    <div data-ng-if="isEditPortfolioMode" id="navmenu" data-dop-edit-portfolio-mode-header></div>
-    <div flex id="scrollable-content" data-layout-fill>
-      <div data-ng-view></div>
-    </div>
+<div data-layout="column" data-flex layout-fill>
+  <div data-ng-if="!isEditPortfolioMode" id="navmenu" data-dop-header></div>
+  <div data-ng-if="isEditPortfolioMode" id="navmenu" data-dop-edit-portfolio-mode-header></div>
+  <div id="alert" data-dop-alert></div>
+  <div layout="row" data-flex layout-fill >
+    <md-sidenav flex-gt-md="15" layout="column" class="md-sidenav-left" md-component-id="left" md-is-locked-open="$mdMedia('gt-md')" id="sidebar-left">
+      <md-toolbar class="{{isEditPortfolioMode ? 'md-accent' : 'md-primary'}} hide-gt-md">
+        <h6 class="md-toolbar-tools md-subhead">
+          <div layout-align="center start" flex>
+            <md-tooltip><span data-translate="HEADER_TOOLTIP_GO_TO_LANDING_PAGE"></span></md-tooltip>
+            <a data-ng-href="/" class="logo logo-lg" id="logo"></a>
+          </div>
+        </h6>
+      </md-toolbar>
+      <div id="alert" data-dop-alert></div>
+      <md-content layout="column" flex role="navigation" class="sidenav md-whiteframe-z2">
+        <div data-dop-table-of-contents data-portfolio="portfolio" data-readonly="!isEditPortfolioMode"></div>
+      </md-content>
+    </md-sidenav>
+    <div data-ng-view layout="row" flex="100" flex-gt-md="75"></div>
   </div>
 </div>

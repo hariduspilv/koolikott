@@ -62,7 +62,7 @@
 
 define([
     'angularAMD'
-], function(angularAMD) {
+], function (angularAMD) {
     angularAMD.directive('dopValidateUrl', function () {
 
         // Modified to only validate http and https
@@ -72,9 +72,9 @@ define([
             require: 'ngModel',
             link: function (scope, element, attrs, ctrl) {
                 ctrl.$validators.url = function (modelValue, viewValue) {
-                    if (REGEX.test(viewValue)) {
-                        return true
-                    }
+                    if(scope.material) scope.material.source = viewValue;
+
+                    if (REGEX.test(viewValue)) return true
                     return false;
                 };
             }

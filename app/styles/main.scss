@@ -15,6 +15,7 @@ $link-color: #15c;
 $heading-color: #212121;
 $bg-gray: #f3f6fb;
 $border-color: rgba(0,0,0,0.12);
+$error: #dd2c00;
 
 ul {
     -webkit-padding-start: 0em;
@@ -187,8 +188,12 @@ md-datepicker {
 
 .validation-messages {
   font-size: 12px;
-  color: #dd2c00;
+  color: $error;
   margin-top: 10px;
+}
+
+.error-color {
+  color: $error;
 }
 
 #scrollable-content {

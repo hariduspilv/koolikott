@@ -12,7 +12,6 @@ define([
             },
             templateUrl: 'directives/targetGroupSelector/targetGroupSelector.html',
             controller: function ($scope, $rootScope, $timeout, targetGroupService) {
-
                 init();
 
                 function init() {
@@ -93,7 +92,6 @@ define([
                         $scope.targetGroups = [];
                         if ($scope.groups && $scope.groups.length === 1) {
                             $scope.selectedTargetGroup =  $scope.groups[0].name;
-                            $scope.targetGroupForm.targetGroup.$setPristine();
                         }
                     }
                 }

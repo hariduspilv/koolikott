@@ -14,6 +14,7 @@ define([
             $scope.isSaving = false;
             $scope.showHints = true;
             $scope.creatorIsPublisher = false;
+            $scope.isTouched = {};
 
             var preferredLanguage;
             var TABS_COUNT = 2;
@@ -93,7 +94,9 @@ define([
 
             $scope.deleteTaxon = function (index) {
                 var taxon = $scope.material.taxons[index];
-                $rootScope.selectedTopics = $rootScope.selectedTopics.filter(topic => topic.id !== taxon.id);
+                $rootScope.selectedTopics = $rootScope.selectedTopics.filter(function (topic) {
+                    return topic.id !== taxon.id;
+                });
 
                 $scope.material.taxons.splice(index, 1);
             };
@@ -107,7 +110,6 @@ define([
             $scope.$watch('material.taxons[0]', function (newValue, oldValue) {
                 if (newValue && newValue.level === $rootScope.taxonUtils.constants.EDUCATIONAL_CONTEXT && newValue !== oldValue) {
                     $scope.educationalContextId = newValue.id;
-                    $scope.material.taxons = $scope.material.taxons.slice(0, 1);
                 }
             }, false);
 
@@ -127,28 +129,41 @@ define([
                     $scope.material.type = ".Material";
 
                     $scope.material.crossCurricularThemes = $scope.material.crossCurricularThemes
-                        .filter(theme => theme.name !== "NOT_RELEVANT");
+                        .filter(function (theme) {
+                            return theme.name !== "NOT_RELEVANT";
+                        });
 
                     $scope.material.keyCompetences = $scope.material.keyCompetences
-                        .filter(competence => competence.name !== "NOT_RELEVANT");
+                        .filter(function (competence) {
+                            return competence.name !== "NOT_RELEVANT";
+                        });
+
                     serverCallService.makePut('rest/material', $scope.material, saveMaterialSuccess, saveMaterialFail, saveMaterialFinally);
                 }
             };
 
-            $scope.isTouchedOrSubmitted = element => (element && element.$touched) || ($scope.addMaterialForm && $scope.addMaterialForm.$submitted);
+            $scope.isTouchedOrSubmitted = function (element) {
+                return (element && element.$touched) || ($scope.addMaterialForm && $scope.addMaterialForm.$submitted);
+            };
 
-            $scope.showCompetencesWarning = element => {
+            $scope.showCompetencesWarning = function (element) {
                 if ($scope.isTouchedOrSubmitted(element)) return $scope.material.keyCompetences.length === 0;
             };
 
-            $scope.showThemesWarning = element => {
+            $scope.showThemesWarning = function (element) {
                 if ($scope.isTouchedOrSubmitted(element)) return $scope.material.crossCurricularThemes.length === 0;
             };
 
-            $scope.isAuthorOrPublisherSet = () => ($scope.material.authors[0].name && $scope.material.authors[0].surname) || $scope.material.publishers[0];
+            $scope.isAuthorOrPublisherSet = function () {
+                return ($scope.material.authors[0].name && $scope.material.authors[0].surname) || $scope.material.publishers[0];
+            };
 
             $scope.isAdmin = function () {
                 return authenticatedUserService.isAdmin();
+            };
+
+            $scope.isTopicNotSet = function () {
+                return !$rootScope.selectedTopics || $rootScope.selectedTopics.length === 0;
             };
 
             function getIssueDate(date) {
@@ -190,12 +205,16 @@ define([
                 };
             }
 
-            $scope.isTabTwoValid = () => {
-                return $rootScope.selectedTopics && $rootScope.selectedTopics.length > 0 && $scope.material.targetGroups.length > 0
+            $scope.isTabOneValid = function () {
+                return $scope.step.isMaterialUrlStepValid && isMetadataStepValid();
+            };
+
+            $scope.isTabTwoValid = function () {
+                return $rootScope.selectedTopics && $rootScope.selectedTopics.length > 0 && $scope.material.targetGroups && $scope.material.targetGroups.length > 0
                     && ($scope.isBasicOrSecondaryEducation() ? $scope.material.keyCompetences.length > 0 && $scope.material.crossCurricularThemes.length > 0 : true);
             };
 
-            $scope.isTabThreeValid = () => {
+            $scope.isTabThreeValid = function () {
                 return (($scope.material.publishers[0] && $scope.material.publishers[0].name)
                     || ($scope.material.authors[0].name && $scope.material.authors[0].surname))
                     && $scope.material.licenseType && $scope.material.issueDate.year;
@@ -204,7 +223,7 @@ define([
             function isStepValid(index) {
                 switch (index) {
                     case 0:
-                        return $scope.step.isMaterialUrlStepValid && isMetadataStepValid();
+                        return $scope.isTabOneValid();
                     case 1:
                         return $scope.isTabTwoValid();
                     case 2:
@@ -250,7 +269,9 @@ define([
                 };
             }
 
-            $scope.isBasicOrSecondaryEducation = () => $scope.educationalContextId === 2 || $scope.educationalContextId === 3;
+            $scope.isBasicOrSecondaryEducation = function () {
+                return $scope.educationalContextId === 2 || $scope.educationalContextId === 3;
+            };
 
             function loadMetadata() {
                 metadataService.loadLanguages(setLangugeges);
@@ -313,7 +334,7 @@ define([
                 })
             }
 
-            $scope.$watch(() => {
+            $scope.$watch(function () {
                 var a = document.getElementsByClassName("md-datepicker-input");
                 if (a[0]) return a[0].value;
             }, function (newDate, oldDate) {
@@ -355,6 +376,7 @@ define([
             }
 
             function pictureUploadFinally() {
+                $scope.showErrorOverlay = false;
                 uploadingPicture = false;
             }
 
@@ -453,8 +475,11 @@ define([
             }
 
             function setLicenseTypes(data) {
+                var array = data.filter(function (type) {
+                    return type.name.toUpperCase() === "ALLRIGHTSRESERVED"
+                });
                 $scope.licenceTypes = data;
-                $scope.allRightsReserved = data.filter(type => type.name.toUpperCase() === "ALLRIGHTSRESERVED")[0];
+                $scope.allRightsReserved = array[0];
             }
 
             function setCrossCurricularThemes(data) {
@@ -525,12 +550,10 @@ define([
             $scope.$watchCollection('invalidPicture', function (newValue, oldValue) {
                 if (newValue !== oldValue) {
                     if (newValue && newValue.length > 0) {
-                        if ($scope.newPicture || $scope.material.picture) {
-                            $scope.showErrorOverlay = true;
-                            $timeout(function () {
-                                $scope.showErrorOverlay = false;
-                            }, 6000);
-                        }
+                        $scope.showErrorOverlay = true;
+                        $timeout(function () {
+                            $scope.showErrorOverlay = false;
+                        }, 6000);
                     }
                 }
             });

@@ -1,12 +1,24 @@
 <md-toolbar class="md-accent md-whiteframe-1dp" id="md-toolbar-header-edit-portfolio" data-click-outside="clickOutside()" outside-if-not="header-show-detailed-search-icon, detailed-search">
   <div class="md-toolbar-tools">
-    <!-- toggle sidenav -->
-    <md-button class="md-icon-button" ng-click="toggleSidenav()" hide-gt-md aria-label="Ava menüü">
-      <md-icon>menu</md-icon>
-    </md-button>
+
+    <!-- portfolio page toggle menu icon -->
+    <span class="hide-gt-md" flex="10" flex-gt-sm="15" layout-align="center start">
+      <md-button class="md-icon-button" data-ng-click="toggleSidenav('left')" >
+        <md-icon class="md-48">menu</md-icon>
+      </md-button>
+    </span>
+
+
+    <!-- logo for portfolio -->
+    <div class="hide-md hide-sm hide-xs" layout-align="center start" flex="10" flex-gt-sm="15">
+      <md-tooltip>
+        <span data-translate="HEADER_TOOLTIP_GO_TO_LANDING_PAGE"></span>
+      </md-tooltip>
+      <a data-ng-href="/" class="logo" id="logo"></a>
+    </div>
 
     <!-- search bar -->
-    <div flex-xs="40" flex-gt-xs="70" flex-md="80" flex-gt-md="85">
+    <div flex-gt-xs="70" flex-gt-md="75">
       <div layout="row" layout-align="center center">
         <div class="navbar-search" layout="row" flex>
           <md-button aria-label="Otsi" data-ng-click="search()" class="md-icon-button">

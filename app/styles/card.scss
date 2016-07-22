@@ -31,7 +31,7 @@ md-card {
   min-width: 100%;
   img,
   .card-cover img {
-    height: auto;
+    height: auto !important;
     width: 100%;
   }
   .md-button {

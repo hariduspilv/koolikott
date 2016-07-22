@@ -5,6 +5,9 @@
 md-sidenav {
   overflow: visible;
   background-color: transparent;
+  @media (min-width: 1280px) {
+    z-index: 1;
+  }
 
   .sidenav-menu > li {
     > .md-button {

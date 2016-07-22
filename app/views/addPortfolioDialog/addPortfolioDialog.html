@@ -21,7 +21,7 @@
             layout="row"
             layout-align="center center" flex>
 
-            <span flex data-ng-if="!newPicture && !newPortfolio.picture">
+            <span flex data-ng-if="!newPicture && !newPortfolio.picture && !showErrorOverlay">
               <md-icon>insert_photo</md-icon><br />
               <span data-ng-class="{'error-text': (invalidPicture && invalidPicture.length > 0)}">
                 <span data-translate="MAX_SIZE"></span> {{maxPictureSize}}MB
@@ -38,7 +38,7 @@
 
             <span flex class="error-overlay" data-ng-if="showErrorOverlay">
               <span class="error-text">
-                <span data-translate="MAX_SIZE"></span> {{maxPictureSize}}MB
+                <span data-translate="UPLOADED_PICTURE_TOO_BIG"></span>
               </span>
             </span>
           </div>
@@ -47,7 +47,7 @@
         <form name="addPortfolioForm" flex-gt-xs="90">
           <md-input-container class="md-block" layout-fill>
             <label>
-              <span data-translate="PORTFOLIO_TITLE"></span> *
+              <span data-translate="PORTFOLIO_TITLE"></span>
             </label>
             <input data-ng-model="newPortfolio.title" id="add-portfolio-title-input" name="title" required>
             <div data-ng-messages="addPortfolioForm.title.$error" data-ng-show="addPortfolioForm.title.$dirty || addPortfolioForm.title.$touched">
@@ -62,9 +62,13 @@
         <textarea id="add-portfolio-description-input" data-ng-model="newPortfolio.summary" columns="1" md-maxlength="150"></textarea>
       </md-input-container>
 
-      <div data-dop-taxon-selector data-taxon="newPortfolio.taxon" data-is-add-portfolio-view="true" data-layout="row" data-layout-sm="column" flex></div>
+      <div data-dop-taxon-selector data-taxon="newPortfolio.taxon" data-is-add-portfolio-view="true" data-touched="isTouched" data-layout-sm="column" flex></div>
+      <div layout="row" flex layout-align="space-between center"
+           data-ng-show="isTouched.trigger && !isSet()">
+        <div class="validation-messages" data-translate="PORTFOLIO_EDUCATIONAL_CONTEXT_REQUIRED"></div>
+      </div>
 
-      <div data-dop-target-group-selector data-target-groups="newPortfolio.targetGroups" data-is-required="true"></div>
+      <div data-dop-target-group-selector data-target-groups="newPortfolio.targetGroups" data-is-required="{trigger: true}"></div>
 
       <md-input-container class="md-block">
         <label>&nbsp;</label>
