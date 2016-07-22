@@ -5,7 +5,7 @@
 </p>
 <div layout="row tags">
   <md-chips ng-model="upVoteForms" readonly="true">
-    <md-chip-template flex layout="row">
+    <md-chip-template>
       <md-button data-ng-if="(isAllowed() && !$root.isReportedByUser) && !isAdmin()" class="md-icon-button" ng-click="reportTag($chip.tag)">
         <md-icon class="material-icons md-light md-48">error_outline</md-icon>
         <md-tooltip>

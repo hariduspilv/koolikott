@@ -61,6 +61,15 @@ define([
                 $scope.addComment = function() {
                     $scope.submitClick();
                 }
+
+
+                //Commentbox hotfix
+                setTimeout(commentHotfix, 1000);
+                function commentHotfix() {
+                  $( "#comment-list" ).find( "textarea" ).css('height', '108px');
+                }
+
+
             }
         };
     }]);
