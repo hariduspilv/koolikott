@@ -24,6 +24,20 @@ define([
                     }
                 };
 
+                $scope.addMaterialFromFile = function() {
+                    var addMaterialScope = $scope.$new(true);
+
+                    addMaterialScope.uploadMode = true;
+                    addMaterialScope.material = {};
+                    addMaterialScope.isChapterMaterial = true;
+                    storageService.setMaterial(null);
+
+                    $mdDialog.show(angularAMD.route({
+                        templateUrl: 'views/addMaterialDialog/addMaterialDialog.html',
+                        controllerUrl: 'views/addMaterialDialog/addMaterialDialog',
+                        scope: addMaterialScope
+                    })).then(closeDialog);
+                };
 
                 function getByUrlSuccess(materials) {
                     if(materials && materials[0]) {
@@ -59,13 +73,14 @@ define([
                         scope: addMaterialScope
                     })).then(closeDialog);
 
-                    function closeDialog(material) {
-                        $scope.chapter.resourcePermalink = "";
-                        $scope.resourcePermalinkForm.url.$setPristine();
-                        $scope.resourcePermalinkForm.url.$setUntouched();
-                        if (material) {
-                            $scope.chapter.materials.push(material);
-                        }
+                }
+
+                function closeDialog(material) {
+                    $scope.chapter.resourcePermalink = "";
+                    $scope.resourcePermalinkForm.url.$setPristine();
+                    $scope.resourcePermalinkForm.url.$setUntouched();
+                    if (material) {
+                        $scope.chapter.materials.push(material);
                     }
                 }
             }

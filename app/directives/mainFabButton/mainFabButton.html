@@ -24,6 +24,13 @@
       </md-tooltip>
       <md-icon>description</md-icon>
     </md-button>
+    <md-button aria-label="Faili üleslaadimine" class="md-fab md-raised md-mini" data-ng-click="showAddFileDialog($event)"
+               data-ng-if="hasPermission()" id="add-material">
+      <md-tooltip md-direction="left">
+        <span data-translate="ADD_FILE"></span>
+      </md-tooltip>
+      <md-icon>file_upload</md-icon>
+    </md-button>
     <md-button aria-label="Kopeeri kogumik" class="md-fab md-raised md-mini" data-ng-click="copyPortfolio()"
                data-ng-if="isViewPortforlioPage">
       <md-tooltip md-direction="left">
