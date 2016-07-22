@@ -11,6 +11,10 @@
   display: block;
 }
 
+.chapter-title {
+  margin: 0;
+}
+
 @keyframes come {
   0% { opacity: 0; }
   100% { opacity: 1; height:auto; }

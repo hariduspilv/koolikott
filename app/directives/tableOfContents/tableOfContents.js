@@ -69,7 +69,8 @@ define([
 
                     subChapters.push({
                         title: $filter('translate')('PORTFOLIO_DEFAULT_NEW_SUBCHAPTER_TITLE'),
-                        materials: []
+                        materials: [],
+                        openCloseChapter: true
                     });
 
                     $timeout(function() {
@@ -85,7 +86,8 @@ define([
                     $scope.portfolio.chapters.push({
                         title: $filter('translate')('PORTFOLIO_DEFAULT_NEW_CHAPTER_TITLE'),
                         subchapters: [],
-                        materials: []
+                        materials: [],
+                        openCloseChapter: true
                     });
 
                     $timeout(function() {
