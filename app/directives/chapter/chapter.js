@@ -15,11 +15,28 @@ define([
             controller: function($scope, $rootScope) {
                 $scope.isEditable = $rootScope.isEditPortfolioMode;
                 $scope.isCollapsed = true;
-                $scope.subisCollapsed = true;
+                $scope.subisCollapsed = [];
+                angular.forEach($scope.chapter.subchapters, function(value, key) {
+                  $scope.subisCollapsed[value.$$hashKey] = true;
+                }, log);
+
+                //Open/Close Chapter
+                $scope.ocChapter = function() {
+                  $scope.isCollapsed = !$scope.isCollapsed;
+                }
+
+                //Open/Close SubChapter
+                $scope.ocSubChapter = function(subChapter) {
+                  $scope.subisCollapsed[subChapter.$$hashKey] = !$scope.subisCollapsed[subChapter.$$hashKey];
+                }
 
                 $scope.toggle = function(e) {
                   var item = $("div.chapter-arrow");
                   $(e.currentTarget).find(item).toggleClass('toggled');
+                }
+
+                $scope.editToggle = function(e) {
+                  $(e.currentTarget).toggleClass('toggled');
                 }
 
                 $scope.onDeleteSubChapter = function(subChapter) {

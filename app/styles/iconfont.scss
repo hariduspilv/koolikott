@@ -49,6 +49,11 @@ md-toolbar .md-button.md-icon-button md-icon, button.md-button.md-fab md-icon {
   }
 
   &.toggled md-icon {
-    transform: rotate(88deg);
+    transform: rotate(90deg);
   }
+}
+
+#material-actions .material-icons {
+    float: left;
+    line-height: normal;
 }
