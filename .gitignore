@@ -1,6 +1,6 @@
-/target/
-/.settings/
-/.project
-/.classpath
-/.idea/
-/logs/
+/back-end/target/
+/back-end/.settings/
+/back-end/.project
+/back-end/.classpath
+/back-end/.idea/
+/back-end/logs/
