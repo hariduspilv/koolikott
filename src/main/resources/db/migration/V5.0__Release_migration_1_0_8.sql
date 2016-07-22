@@ -1,8 +1,8 @@
 SET foreign_key_checks = 0;
 
-INSERT INTO Translation(translationGroup, translationKey, translation) VALUES (3,'MATERIAL_TOPIC_REQUIRED','Topic is required');
-INSERT INTO Translation(translationGroup, translationKey, translation) VALUES (1,'MATERIAL_TOPIC_REQUIRED','Teema lisamine on kohustuslik');
-INSERT INTO Translation(translationGroup, translationKey, translation) VALUES (2,'MATERIAL_TOPIC_REQUIRED','Тема требуется');
+INSERT INTO Translation(translationGroup, translationKey, translation) VALUES (3,'MATERIAL_TOPIC_REQUIRED','Topic is required in at least one taxonomy');
+INSERT INTO Translation(translationGroup, translationKey, translation) VALUES (1,'MATERIAL_TOPIC_REQUIRED','Teema lisamine on kohustuslik vähemalt ühel haridustasemel');
+INSERT INTO Translation(translationGroup, translationKey, translation) VALUES (2,'MATERIAL_TOPIC_REQUIRED','Тема требуется, по меньшей мере, одной систематике');
 
 INSERT INTO Translation(translationGroup, translationKey, translation) VALUES (3,'MATERIAL_MODULE_REQUIRED','Module is required');
 INSERT INTO Translation(translationGroup, translationKey, translation) VALUES (1,'MATERIAL_MODULE_REQUIRED','Mooduli lisamine on kohustuslik');
@@ -32,9 +32,9 @@ INSERT INTO Translation(translationGroup, translationKey, translation) VALUES (3
 INSERT INTO Translation(translationGroup, translationKey, translation) VALUES (1,'MATERIAL_DATE_REQUIRED','Väljaandmise kuupäev on kohustuslik');
 INSERT INTO Translation(translationGroup, translationKey, translation) VALUES (2,'MATERIAL_DATE_REQUIRED','Дата выпуска является обязательным');
 
-INSERT INTO Translation(translationGroup, translationKey, translation) VALUES (3,'MATERIAL_PUBLISHER_MANDATORY','Publisher is mandatory');
-INSERT INTO Translation(translationGroup, translationKey, translation) VALUES (1,'MATERIAL_PUBLISHER_MANDATORY','Kirjastaja on kohustuslik');
-INSERT INTO Translation(translationGroup, translationKey, translation) VALUES (2,'MATERIAL_PUBLISHER_MANDATORY','Издательство является обязательным');
+INSERT INTO Translation(translationGroup, translationKey, translation) VALUES (3,'MATERIAL_PUBLISHER_OR_AUTHOR_MANDATORY','Publisher or author is mandatory');
+INSERT INTO Translation(translationGroup, translationKey, translation) VALUES (1,'MATERIAL_PUBLISHER_OR_AUTHOR_MANDATORY','Väljaandja või autor on kohustuslik');
+INSERT INTO Translation(translationGroup, translationKey, translation) VALUES (2,'MATERIAL_PUBLISHER_OR_AUTHOR_MANDATORY','Издатель или автор является обязательным');
 
 INSERT INTO Translation(translationGroup, translationKey, translation) VALUES (3,'MATERIAL_KEY_COMPETENCE_IS_MANDATORY','Key competences are mandatory');
 INSERT INTO Translation(translationGroup, translationKey, translation) VALUES (1,'MATERIAL_KEY_COMPETENCE_IS_MANDATORY','Üldpädevused on kohustuslikud');
