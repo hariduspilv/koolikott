@@ -20,8 +20,7 @@
     class="md-block" flex>
     <label for="taxonDomainSelect">
       <span data-translate="TAXON_PATH_DOMAIN"></span>
-      <span data-ng-if="ctrl.isAddMaterialView">*</span>
-
+      <span data-ng-if="ctrl.isAddPortfolioView || ctrl.isAddMaterialView">*</span>
     </label>
     <md-select data-ng-model="ctrl.taxonPath.domain" id="taxonDomainSelect" name="domain">
       <md-option data-translate="SELECT_DOMAIN" ng-click="ctrl.reset(ctrl.taxonPath.educationalContext)"></md-option>
@@ -51,7 +50,7 @@
     class="md-block" flex>
     <label for="taxonDomainSubjectsSelect">
       <span data-translate="TAXON_PATH_DOMAIN_AND_SUBJECT"></span>
-      <span data-ng-if="ctrl.isAddMaterialView">*</span>
+      <span data-ng-if="ctrl.isAddPortfolioView || ctrl.isAddMaterialView">*</span>
     </label>
     <md-select data-ng-model="ctrl.taxonPath.domainSubject" id="taxonDomainSubjectsSelect"
                name="domainAndSubject">
@@ -72,7 +71,7 @@
     class="md-block" flex>
     <label for="taxonSecondaryEducationDomainSubjectsSelect">
       <span data-translate="TAXON_PATH_DOMAIN_AND_SUBJECT"></span>
-      <span data-ng-if="ctrl.isAddMaterialView">*</span>
+      <span data-ng-if="ctrl.isAddPortfolioView || ctrl.isAddMaterialView">*</span>
     </label>
     <md-select data-ng-model="ctrl.taxonPath.domainSubject" id="taxonSecondaryEducationDomainSubjectsSelect"
                name="secondaryEducationDomainAndSubject">
