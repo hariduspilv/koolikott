@@ -381,10 +381,11 @@ define([
             }
 
             function fileUploadSuccess(file) {
+                log(file);
                 $scope.fileUploaded = true;
                 $scope.uploadingFile = false;
                 $scope.material.uploadedFile = file;
-                $scope.material.source = "https://localhost/rest/file/" + file.id;
+                $scope.material.source = "https://localhost/rest/uploadedFile/" + file.id;
                 $scope.step.isMaterialUrlStepValid = true;
             }
 
