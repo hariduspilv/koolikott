@@ -4,3 +4,9 @@
 /back-end/.classpath
 /back-end/.idea/
 /back-end/logs/
+/solr-indexer/target/
+/solr-indexer/.settings/
+/solr-indexer/.project
+/solr-indexer/.classpath
+/solr-indexer/.idea/
+/solr-indexer/logs/
