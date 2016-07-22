@@ -1,0 +1,46 @@
+.stepped-select {
+  font-weight: bold;
+
+  &.child {
+    font-weight: normal;
+    padding-left: 40px;
+  }
+}
+
+md-select-menu[multiple] md-option[selected=selected]::after {
+  content: "check_box";
+  font-family: 'Material Icons';
+  font-weight: normal;
+  font-style: normal;
+
+  position: absolute;
+  right: 16px;
+  top: 16px;
+  display: block;
+  width: 1em;
+  height: 1em;
+  line-height: 1;
+  text-transform: none;
+  letter-spacing: normal;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+md-select-menu[multiple] md-option::after {
+  content: "check_box_outline_blank";
+  font-family: 'Material Icons';
+  font-weight: normal;
+  font-style: normal;
+
+  position: absolute;
+  right: 16px;
+  top: 16px;
+  display: block;
+  width: 1em;
+  height: 1em;
+  line-height: 1;
+  text-transform: none;
+  letter-spacing: normal;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}

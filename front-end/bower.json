@@ -1,0 +1,34 @@
+{
+  "name": "ranits",
+  "version": "0.0.0",
+  "dependencies": {
+    "angular": "^1.5.7",
+    "angular-animate": "1.4.8",
+    "angular-aria": "1.4.8",
+    "angular-click-outside": "2.2.1",
+    "angular-material": "1.1.0-rc.5",
+    "angular-material-data-table": "0.9.4",
+    "angular-resource": "1.4.8",
+    "angular-route": "1.4.8",
+    "angular-screenfull": "0.1.0",
+    "angular-scroll": "1.0.0",
+    "angular-translate": "2.7.2",
+    "angular-translate-loader-url": "2.7.2",
+    "angular-youtube-mb": "1.0.2",
+    "angularAMD": "0.2.1",
+    "clipboard": "1.5.5",
+    "jquery": "2.1.4",
+    "jsog": "1.0.7",
+    "material-design-icons": "2.0.0",
+    "ng-file-upload": "10.0.2",
+    "ngInfiniteScroll": "1.2.0",
+    "requirejs": "2.1.17",
+    "screenfull": "2.0.0",
+    "moment": "2.12.0"
+  },
+  "appPath": "app",
+  "moduleName": "ranitsApp",
+  "resolutions": {
+    "angular": "1.4.8"
+  }
+}

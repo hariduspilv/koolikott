@@ -1,0 +1,24 @@
+<md-list class="recommendations" role="list">
+  <md-list-item data-ng-repeat="item in learningObjects" ng-href="{{getItemLink(item)}}" role="listitem" aria-label="Ava soovitatud materjal" >
+    <div data-ng-if="item.type === '.Material'" layout="column" class="listblock">
+      <h4 class="one-row" data-ng-bind="getCorrectLanguageString(item.titles, item.language)"></h4>
+      <span class="one-row">
+        <span data-ng-repeat="author in item.authors">
+          <span data-ng-bind="formatName(author.name)"></span>
+          <span data-ng-bind="formatSurname(author.surname)"></span>
+          <span data-ng-bind="$index < item.authors.length - 1 ? ', ' : ''"></span>
+        </span>
+      </span>
+    </div>
+    <div data-ng-if="item.type === '.Portfolio'" layout="column" class="listblock">
+      <h4 class="one-row" data-ng-bind="item.title"></h4>
+      <span class="one-row">
+        <span>
+          <span data-ng-bind="formatName(item.creator.name)"></span>
+          <span data-ng-bind="formatSurname(item.creator.surname)"></span>
+        </span>
+      </span>
+    </div>
+    <md-divider></md-divider>
+  </md-list-item>
+</md-list>

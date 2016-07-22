@@ -1,0 +1,134 @@
+.portfolio-container {
+  min-height: 100%;
+}
+
+
+.md-toolbar-tools {
+  font-size: 18px;
+}
+
+md-sidenav {
+  overflow: visible;
+  background-color: transparent;
+  @media (min-width: 1280px) {
+    z-index: 1;
+  }
+
+  .sidenav-menu > li {
+    > .md-button {
+      font-weight: 400;
+      text-transform: none;
+
+      &.active {
+        background-color: rgba(158,158,158,0.2);
+      }
+    }
+
+    > .sidenav-menu-toggle-list a.md-button {
+      font-weight: 500;
+      text-transform: none;
+      font-size: 12px;
+
+      &:before {
+        content: "-  ";
+      }
+
+      &.active {
+        background-color: rgba(158,158,158,0.2);
+      }
+    }
+  }
+}
+
+.sidenav-menu,
+.sidenav-menu ul {
+  list-style: none;
+  padding: 0;
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+.sidenav-menu {
+  .md-button {
+    border-radius: 0;
+    cursor: pointer;
+    display: flex;
+    align-items: inherit;
+    line-height: 40px;
+    margin: 0;
+    max-height: 40px;
+    overflow: hidden;
+    padding: 0px 16px;
+    text-align: left;
+    text-decoration: none;
+    white-space: normal;
+    width: 100%;
+
+    .md-toggle-icon {
+      transition: transform 0.3s ease-in-out;
+
+      &.toggled {
+        transform: rotate(180deg);
+      }
+    }
+  }
+  .md-button.with-icon {
+    padding: 0px 48px 0px 16px;
+  }
+}
+
+.sidenav-menu-toggle-list {
+  overflow: hidden;
+  position: relative;
+  z-index: 1;
+  max-height: 999px;
+
+  transition: 0.75s cubic-bezier(0.35, 0, 0.25, 1);
+  transition-property: max-height;
+
+
+  &.collapsed {
+    max-height: 0;
+  }
+
+  li {
+    padding: 0;
+    margin-top: 3px;
+    list-style-position: inside;
+
+    &:hover {
+      .menu-item-actions {
+        display: block;
+      }
+    }
+
+    .menu-item-actions {
+      display: none;
+    }
+  }
+
+  a.md-button {
+    display: flex;
+    padding: 0 16px 0 32px;
+    text-transform: none;
+    text-rendering: optimizeLegibility;
+    font-weight: 500;
+  }
+
+  a.md-button.with-icon {
+    padding: 0 48px;
+  }
+}
+
+.md-toolbar-filter .md-whiteframe-1dp {
+  background: #fff;
+}
+
+md-sidenav {
+  md-toolbar.md-primary .md-toolbar-tools.md-subhead {
+    box-shadow: rgba(0, 0, 0, 0.2) -3px 1px 3px 0px, rgba(0, 0, 0, 0.137255) -1px 1px 1px 0px, rgba(0, 0, 0, 0.117647) -1px 2px 1px -1px;
+  }
+  md-content {
+    z-index: -1;
+  }
+}

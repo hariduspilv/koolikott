@@ -1,0 +1,50 @@
+<md-toolbar class="md-hue-1">
+  <h6 class="md-toolbar-tools md-button"  data-ng-click="navigateTo($event, portfolio)">
+    <span class="transform-none one-row">{{ portfolio.title }}</span>
+  </h6>
+  <md-divider class="md-default-theme"></md-divider>
+</md-toolbar>
+
+<ul class="sidenav-menu toc" data-du-scroll-container="scrollable-content">
+  <li ng-repeat="chapter in portfolio.chapters">
+    <a href="#chapter-{{$index}}" class="md-button one-row" id="toc-chapter-{{$index}}" data-offset="150"
+       data-du-scrollspy data-ng-click="gotoChapter($event, $index)" layout="row"
+       data-ng-class="{'with-icon': $root.isEditPortfolioMode && showAddMaterialButton}">
+      {{chapter.title}}
+      <span flex></span>
+      <span class="add-materials-to-chapter" data-ng-if="$root.isEditPortfolioMode && showAddMaterialButton" data-ng-click="addMaterialsToChapter($event, chapter)">
+        <md-tooltip md-direction="right">
+            <span data-translate="PORTFOLIO_ADD_MATERIAL"></span>
+        </md-tooltip>
+        <md-icon>add_circle</md-icon>
+      </span>
+    </a>
+    <ul class="sidenav-menu-toggle-list">
+      <li ng-repeat="subchapter in chapter.subchapters">
+        <a href="#chapter-{{$parent.$index}}-{{$index}}" id="toc-chapter-{{$parent.$index}}-{{$index}}" data-offset="150"
+           data-du-scrollspy class="md-button one-row" layout="row" data-ng-click="gotoChapter($event, $parent.$index, $index)"
+           data-ng-class="{'with-icon': $root.isEditPortfolioMode && showAddMaterialButton}">
+          {{subchapter.title}}
+          <span flex></span>
+          <span class="add-materials-to-chapter" data-ng-if="$root.isEditPortfolioMode && showAddMaterialButton" data-ng-click="addMaterialsToChapter($event, subchapter)">
+            <md-tooltip md-direction="right">
+              <span data-translate="PORTFOLIO_ADD_MATERIAL"></span>
+            </md-tooltip>
+            <md-icon>add_circle</md-icon>
+          </span>
+        </a>
+      </li>
+      <li data-ng-hide="readonly">
+        <a class="md-button md-primary one-row" data-ng-click="addNewSubChapter($index)">
+          <span data-translate="PORTFOLIO_ADD_SUBCHAPTER"></span>
+        </a>
+      </li>
+    </ul>
+  </li>
+  <li data-ng-click="showAddChapterDialog()" data-ng-hide="readonly">
+    <md-button aria-label="Lisa uus peatükk" class="md-primary" data-ng-click="addNewChapter()">
+      <span data-translate="PORTFOLIO_ADD_CHAPTER"></span>
+      <span flex></span>
+    </md-button>
+  </li>
+</ul>

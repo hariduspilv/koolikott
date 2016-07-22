@@ -1,0 +1,10 @@
+<md-button data-ng-if="!material.recommendation && !portfolio.recommendation" data-ng-click="recommend()"
+           data-ng-disabled="material.deleted || portfolio.deleted">
+	  <md-icon md-menu-align-target>favorite</md-icon>
+	  <span data-translate="RECOMMEND"></span>
+</md-button>
+<md-button data-ng-if="material.recommendation || portfolio.recommendation" data-ng-click="removeRecommendation()"
+           data-ng-disabled="material.deleted || portfolio.deleted">
+      <md-icon md-menu-align-target>favorite_outline</md-icon>
+      <span data-translate="RECOMMEND_REMOVE"></span>
+</md-button>

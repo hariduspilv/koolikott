@@ -1,0 +1,89 @@
+<div class="md-whiteframe-1dp filter-content">
+  <div layout="row" layout-sm="column" layout-xs="column" >
+    <div flex class="md-padding">
+      <md-input-container class="hide-gt-xs md-block">
+        <label data-translate="DETAILED_SEARCH_DESCRIPTION"></label>
+        <input data-ng-model="detailedSearch.combinedDescription"/>
+      </md-input-container>
+      <md-input-container md-no-float class="md-block">
+        <label data-translate="DETAILED_SEARCH_TITLE"></label>
+        <input data-ng-model="detailedSearch.title" />
+      </md-input-container>
+      <md-input-container md-no-float class="md-block">
+        <label data-translate="DETAILED_SEARCH_AUTHOR"></label>
+        <input data-ng-model="detailedSearch.author" />
+      </md-input-container>
+      <md-input-container md-no-float class="md-block">
+        <label data-translate="DETAILED_SEARCH_LANGUAGE"></label>
+        <md-select data-ng-model="detailedSearch.language">
+          <md-option data-ng-repeat="language in languages" value="{{language}}">
+            <span data-translate="{{getLanguageTranslationKey(language)}}"/>
+          </md-option>
+        </md-select>
+      </md-input-container>
+    </div>
+
+    <div flex class="md-padding">
+      <div data-dop-taxon-selector data-taxon="detailedSearch.taxon"></div>
+      <md-input-container class="md-block" data-ng-if="detailedSearch.educationalContext.id === 2 || detailedSearch.educationalContext.id === 3">
+        <label data-translate="DETAILED_SEARCH_CROSS_CURRICULAR_THEME"></label>
+        <md-select data-ng-model="detailedSearch.crossCurricularTheme">
+          <md-option data-translate="SELECT_CROSS_CURRICULAR_THEME" data-ng-value="null"></md-option>
+          <md-option data-ng-repeat="crossCurricularTheme in crossCurricularThemes" value="{{crossCurricularTheme.id}}" data-translate="CROSS_CURRICULAR_THEME_{{crossCurricularTheme.name.toUpperCase()}}"></md-option>
+        </md-select>
+      </md-input-container>
+
+      <md-input-container class="md-block" data-ng-if="detailedSearch.educationalContext.id === 2 || detailedSearch.educationalContext.id === 3">
+        <label data-translate="DETAILED_SEARCH_KEY_COMPETENCE"></label>
+        <md-select data-ng-model="detailedSearch.keyCompetence">
+          <md-option data-translate="SELECT_KEY_COMPETENCE" data-ng-value="null"></md-option>
+          <md-option data-ng-repeat="keyCompetence in keyCompetences" value="{{keyCompetence.id}}" data-translate="KEY_COMPETENCE_{{keyCompetence.name.toUpperCase()}}"></md-option>
+        </md-select>
+      </md-input-container>
+    </div>
+
+    <div flex class="md-padding">
+      <div data-dop-target-group-selector data-target-groups="detailedSearch.targetGroups" data-taxon="detailedSearch.taxon" data-ng-if="detailedSearch.educationalContext.id != 4"></div>
+      <div layout="column" layout-align="end start">
+        <md-checkbox data-ng-if="detailedSearch.educationalContext.id === 2" data-ng-model="detailedSearch.CLIL" aria-label="{{'DETAILED_SEARCH_CLIL' | translate}}" class="md-primary" flex>
+          <span data-translate="DETAILED_SEARCH_CLIL"></span>
+        </md-checkbox>
+        <md-checkbox data-ng-if="detailedSearch.educationalContext.id === 2" data-ng-model="detailedSearch.specialEducation" aria-label="{{'DETAILED_SEARCH_SPECIAL_EDUCATION' | translate}}" class="md-primary" flex>
+          <span data-translate="DETAILED_SEARCH_SPECIAL_EDUCATION"></span>
+        </md-checkbox>
+        <md-checkbox data-ng-if="detailedSearch.educationalContext.id >= 2 && detailedSearch.educationalContext.id <= 4" data-ng-model="detailedSearch.onlyCurriculumLiterature" aria-label="{{'DETAILED_SEARCH_ONLY_BOOKS' | translate}}" class="md-primary" flex>
+          <span data-translate="DETAILED_SEARCH_ONLY_BOOKS"></span>
+        </md-checkbox>
+        <md-checkbox data-ng-if="detailedSearch.educationalContext.id == 4" data-ng-model="detailedSearch.specialEducationalNeed" aria-label="{{'DETAILED_SEARCH_SPECIAL_EDUCATIONAL_NEED' | translate}}" class="md-primary" flex>
+          <span data-translate="DETAILED_SEARCH_SPECIAL_EDUCATIONAL_NEED"></span>
+        </md-checkbox>
+        <md-checkbox data-ng-model="detailedSearch.paid" class="md-primary" aria-label="Ainult tasuta õppevara" flex>
+          <span data-translate="DETAILED_SEARCH_ONLY_FREE"></span>
+        </md-checkbox>
+        <md-radio-group data-ng-model="detailedSearch.type">
+          <md-radio-button ng-disabled="$root.isEditPortfolioMode" value="all" class="md-primary md-checked" aria-label="Kõik õppematerjalid">
+            <span data-translate="DETAILED_SEARCH_ALL"></span>
+          </md-radio-button>
+          <md-radio-button value="material" class="md-primary" aria-label="Ainult materjalid">
+            <span data-translate="DETAILED_SEARCH_MATERIALS"></span>
+          </md-radio-button>
+          <md-radio-button ng-disabled="$root.isEditPortfolioMode" value="portfolio" class="md-primary" aria-label="Ainult kogumikud">
+            <span data-translate="DETAILED_SEARCH_PORTFOLIOS"></span>
+          </md-radio-button>
+        </md-radio-group>
+      </div>
+      <div layout>
+        <div flex="25" layout layout-align="start center">
+          <span data-translate="DETAILED_SEARCH_ISSUE_DATE"></span>
+        </div>
+        <md-slider  class="md-primary" id="blue-slider" aira-label="blue" flex md-discrete ng-model="detailedSearch.issueDate" step="1" min="{{issueDateFirstYear}}" max="{{issueDateLastYear}}" aria-label="{{DETAILED_SEARCH_ISSUE_DATE_FROM | translate}}" aria-valuenow="2009">
+        </md-slider>
+        <!-- TODO: Can we leave the slider tooltip visible if dirty? -->
+      </div>
+    </div>
+  </div>
+  <div class="md-actions" layout="row" layout-align="end start">
+    <md-button data-ng-click="clear()" data-translate="DETAILED_SEARCH_CLEAR" aria-label="{{'DETAILED_SEARCH_CLEAR' | translate}}"></md-button>
+    <md-button type="submit" class="md-primary md-button" data-ng-click="search()" data-translate="DETAILED_SEARCH_SUBMIT" aria-label="{{'DETAILED_SEARCH_SUBMIT' | translate}}"></md-button>
+  </div>
+</div>

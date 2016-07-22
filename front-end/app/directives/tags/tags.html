@@ -1,0 +1,50 @@
+<p class="md-body-2 meta tags">
+  <small class="md-caption">
+    <span data-translate="DETAIL_VIEW_TAGS"></span>:
+  </small>
+</p>
+<div layout="row tags">
+  <md-chips ng-model="upVoteForms" readonly="true">
+    <md-chip-template>
+      <md-button data-ng-if="(isAllowed() && !$root.isReportedByUser) && !isAdmin()" class="md-icon-button" ng-click="reportTag($chip.tag)">
+        <md-icon class="material-icons md-light md-48">error_outline</md-icon>
+        <md-tooltip>
+          <span data-translate="TAG_TOOLTIP_REPORT_AS_IMPROPER"></span>
+        </md-tooltip>
+      </md-button>
+
+      <a href="#" data-ng-click="getTagSearchURL($event, $chip.tag)">{{$chip.tag}}</a>
+
+      <md-button data-ng-if="!$chip.tagUpVote && isAllowed()" class="md-icon-button" ng-click="upVote($chip)">
+        <md-icon>plus_one</md-icon>
+      </md-button>
+      <md-button data-ng-if="$chip.tagUpVote && isAllowed()" class="md-icon-button" ng-click="removeUpVote($chip)">
+        <md-tooltip>
+          <span data-translate="TAG_TOOLTIP_REMOVE_UPVOTE"></span>
+        </md-tooltip>
+        <md-icon>undo</md-icon>
+      </md-button>
+    </md-chip-template>
+  </md-chips>
+  <form name="addTagForm" data-ng-show="isAllowed()" ng-submit="addTag()">
+    <md-input-container class="tags">
+      <label data-translate="MATERIAL_ADD_TAG"></label>
+      <input name="tag" ng-model="newTag"/>
+    </md-input-container>
+  </form>
+</div>
+<div layout="row">
+  <md-button data-ng-show="showMoreTags" ng-click="showMore()">
+    <span data-translate="SHOW_MORE"></span>
+    <md-icon class="md-primary" >
+      keyboard_arrow_right
+    </md-icon>
+  </md-button>
+
+  <md-button data-ng-show="!showMoreTags && upVoteForms.length > 10" ng-click="showLess()">
+    <span data-translate="SHOW_LESS"></span>
+    <md-icon class="md-primary" >
+      keyboard_arrow_right
+    </md-icon>
+  </md-button>
+</div>

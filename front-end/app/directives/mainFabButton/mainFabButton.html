@@ -1,0 +1,42 @@
+<md-fab-speed-dial data-ng-if="hasPermission()" class="md-fab-bottom-right md-scale main-fab-button" md-open="isOpen"
+                   md-direction="up" data-ng-mouseenter="isOpen = true" data-ng-mouseleave="isOpen = false">
+  <md-fab-trigger>
+    <md-button aria-label="Lisa kogumik" class="md-fab " data-ng-click="showAddPortfolioDialog($event)" id="add-portfolio">
+      <md-tooltip md-direction="left">
+        <span data-ng-show="userHasSelectedMaterials" data-translate="ADD_TO_NEW_PORTFOLIO"></span>
+        <span data-ng-show="!userHasSelectedMaterials" data-translate="ADD_PORTFOLIO"></span>
+      </md-tooltip>
+      <md-icon>add</md-icon>
+    </md-button>
+  </md-fab-trigger>
+  <md-fab-actions>
+    <md-button aria-label="Lisa material või materjalid olemasolevasse kogumikku" class="md-fab md-raised md-mini"
+               data-ng-click="showAddMaterialsToPortfolioDialog()" data-ng-if="userHasSelectedMaterials && hasPermission()">
+      <md-tooltip md-direction="left">
+        <span data-translate="ADD_TO_EXISTING_PORTFOLIO"></span>
+      </md-tooltip>
+      <md-icon>book</md-icon>
+    </md-button>
+    <md-button aria-label="Lisa material" class="md-fab md-raised md-mini" data-ng-click="showAddMaterialDialog($event)"
+               data-ng-if="hasPermission()" id="add-material">
+      <md-tooltip md-direction="left">
+        <span data-translate="ADD_MATERIAL"></span>
+      </md-tooltip>
+      <md-icon>description</md-icon>
+    </md-button>
+    <md-button aria-label="Faili üleslaadimine" class="md-fab md-raised md-mini" data-ng-click="showAddFileDialog($event)"
+               data-ng-if="hasPermission()" id="add-material">
+      <md-tooltip md-direction="left">
+        <span data-translate="ADD_FILE"></span>
+      </md-tooltip>
+      <md-icon>file_upload</md-icon>
+    </md-button>
+    <md-button aria-label="Kopeeri kogumik" class="md-fab md-raised md-mini" data-ng-click="copyPortfolio()"
+               data-ng-if="isViewPortforlioPage">
+      <md-tooltip md-direction="left">
+        <span data-translate="COPY_PORTFOLIO"></span>
+      </md-tooltip>
+      <md-icon>content_copy</md-icon>
+    </md-button>
+  </md-fab-actions>
+</md-fab-speed-dial>

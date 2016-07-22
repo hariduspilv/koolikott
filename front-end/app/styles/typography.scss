@@ -1,0 +1,53 @@
+// multiline-ellipsis
+$heading-color: #212121;
+
+.one-row {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+$font-size: 26px;
+$line-height: 1.4;
+$lines-to-show: 3;
+
+.three-rows {
+  display: block; /* Fallback for non-webkit */
+  display: -webkit-box;
+  max-width: 400px;
+  height: $font-size*$line-height*$lines-to-show; /* Fallback for non-webkit */
+  margin: 0;
+  font-size: $font-size;
+  line-height: $line-height;
+  -webkit-line-clamp: $lines-to-show;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+$font-size2: 18px;
+$line-height2: 1.2;
+$lines-to-show2: 2;
+
+.two-rows {
+  display: block; /* Fallback for non-webkit */
+  display: -webkit-box;
+  max-width: 200px;
+  height: $font-size2*$line-height2*$lines-to-show2; /* Fallback for non-webkit */
+  margin: 0;
+  font-size: $font-size2;
+  line-height: $line-height2;
+  -webkit-line-clamp: $lines-to-show2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-weight: 300;
+  color: $heading-color;
+}
+
+.hide-overflow {
+  min-width: 0;
+  display: block;
+  overflow: hidden !important;
+  text-overflow: ellipsis;
+}

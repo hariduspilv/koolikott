@@ -1,0 +1,17 @@
+#comments {
+  .comments-card-title {
+    md-icon {
+      transition: transform 0.3s ease-in-out;
+    }
+
+    &.toggled md-icon {
+      transform: rotate(88deg);
+    }
+  }
+
+  h3 {
+    text-transform: initial;
+  }
+
+  
+}

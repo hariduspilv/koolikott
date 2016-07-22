@@ -1,0 +1,132 @@
+$border-color: rgba(0,0,0,0.12);
+
+.upside-down {
+  -ms-transform: rotate(180deg); /* IE 9 */
+  -webkit-transform: rotate(180deg); /* Chrome, Safari, Opera */
+  transform: rotate(180deg);
+}
+
+.filter-wrapper {
+  padding-top: 0;
+}
+
+.filter-content {
+  background: #fff;
+
+  md-radio-button {
+    display: inline-block;
+    margin-right: 10px;
+  }
+  .md-actions {
+    border-top: 1px solid $border-color;
+    padding-top: 10px;
+    margin-top: -10px;
+  }
+}
+
+.md-toolbar-filter {
+  // padding: 0 16px 3px;
+  max-height:999px;
+  overflow:hidden;
+  position:relative;
+  transition:max-height 0.35s ease;
+  padding-bottom: 3px;
+
+  &.ng-hide {
+    max-height:0;
+  }
+
+  &.ng-hide-remove,
+  &.ng-hide-add {
+    display:block!important;
+
+    animation-duration: .5s;
+    -webkit-animation-duration: .5s;
+  }
+
+  &.ng-hide-add {
+    animation-name: hide;
+    -webkit-animation-name: hide;
+
+    animation-timing-function: ease-in;
+    -webkit-animation-timing-function: ease-in;
+  }
+
+  &.ng-hide-remove {
+    animation-name: show;
+    -webkit-animation-name: show;
+
+    animation-timing-function: ease-out;
+    -webkit-animation-timing-function: ease-out;
+  }
+
+  md-input-container {
+    padding-bottom: 13px;
+  }
+}
+.md-toolbar-filter-toggle {
+  cursor: pointer;
+}
+
+
+/*
+animation for toggle search:*/
+
+.slideDown {
+  max-height:999px;
+  transition:max-height 0.35s ease;
+  overflow:hidden;
+  position:relative;
+
+  &.ng-hide {
+    max-height:0;
+  }
+}
+
+.slideDown.ng-hide-remove,
+.slideDown.ng-hide-add {
+  /* remember, the .hg-hide class is added to element
+  when the active class is added causing it to appear
+  as hidden. Therefore set the styling to display=block
+  so that the hide animation is visible */
+  display:block!important;
+}
+
+
+.slideDown.ng-hide-add {
+  animation-name: hide;
+  -webkit-animation-name: hide;
+
+  animation-duration: .5s;
+  -webkit-animation-duration: .5s;
+
+  animation-timing-function: ease-in;
+  -webkit-animation-timing-function: ease-in;
+}
+
+
+
+.slideDown.ng-hide-remove {
+  animation-name: show;
+  -webkit-animation-name: show;
+
+  animation-duration: .5s;
+  -webkit-animation-duration: .5s;
+
+  animation-timing-function: ease-out;
+  -webkit-animation-timing-function: ease-out;
+}
+
+md-checkbox.md-checked .md-icon {
+    background-color: rgba(3,169,244,0.87);
+}
+md-checkbox.md-checked .md-icon {
+    border: 1px solid rgba(3,169,244,0.87);
+}
+.filter-content md-radio-button {
+    display: block;
+}
+md-slider.md-default-theme.md-min[md-discrete] .md-thumb:after, md-slider.md-min[md-discrete] .md-thumb:after {
+    border-color: rgb(3,169,244);
+    background-color: white;
+}

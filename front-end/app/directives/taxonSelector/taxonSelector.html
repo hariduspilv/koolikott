@@ -1,0 +1,145 @@
+<form name="taxonForm" data-layout="row" data-layout-sm="column" flex>
+  <!-- Educational Context -->
+  <md-input-container class="md-block" flex>
+    <label for="taxonEducationalSelect">
+      <span data-translate="DETAIL_VIEW_EDUCATIONAL_CONTEXT"></span>
+      <span data-ng-if="ctrl.isAddPortfolioView || ctrl.isAddMaterialView">*</span>
+    </label>
+    <md-select data-ng-model="ctrl.taxonPath.educationalContext" id="taxonEducationalSelect"
+               data-ng-disabled="ctrl.disableEducationalContext" name="educationalContext">
+      <md-option data-translate="SELECT_EDUCATIONAL_CONTEXT" ng-value="{}" ng-click="ctrl.reset({})"></md-option>
+      <md-option ng-value="educationalContext" ng-repeat="educationalContext in ctrl.educationalContexts"
+                 data-translate="{{educationalContext.name.toUpperCase()}}"
+                 data-ng-click="ctrl.selectEducationalContext()" ng-touch="ctrl.touchEducationalContext()"></md-option>
+    </md-select>
+  </md-input-container>
+
+  <!-- Domain -->
+  <md-input-container
+    data-ng-show="ctrl.taxonPath.educationalContext.id && !ctrl.isBasicOrSecondaryEducation()"
+    class="md-block" flex>
+    <label for="taxonDomainSelect">
+      <span data-translate="TAXON_PATH_DOMAIN"></span>
+      <span data-ng-if="ctrl.isAddPortfolioView || ctrl.isAddMaterialView">*</span>
+    </label>
+    <md-select data-ng-model="ctrl.taxonPath.domain" id="taxonDomainSelect" name="domain">
+      <md-option data-translate="SELECT_DOMAIN" ng-click="ctrl.reset(ctrl.taxonPath.educationalContext)"></md-option>
+      <md-option ng-value="domain" ng-repeat="domain in ctrl.taxonPath.educationalContext.domains"
+                 data-translate="DOMAIN_{{domain.name.toUpperCase()}}"></md-option>
+    </md-select>
+  </md-input-container>
+
+  <!-- Subject -->
+  <md-input-container
+    data-ng-show="ctrl.taxonPath.domain && !ctrl.isBasicOrSecondaryEducation() && ctrl.taxonPath.domain.subjects.length > 0"
+    class="md-block" flex>
+    <label for="taxonSubjectSelect">
+      <span data-translate="DETAIL_VIEW_SUBJECT"></span>
+      <span data-ng-if="ctrl.isAddMaterialView">*</span>
+    </label>
+    <md-select data-ng-model="ctrl.taxonPath.subject" id="taxonSubjectSelect" name="subject">
+      <md-option data-translate="SELECT_SUBJECT" ng-click="ctrl.reset(ctrl.taxonPath.domain)"></md-option>
+      <md-option ng-value="subject" ng-repeat="subject in ctrl.taxonPath.domain.subjects"
+                 data-translate="SUBJECT_{{subject.name.toUpperCase()}}"></md-option>
+    </md-select>
+  </md-input-container>
+
+  <!-- Domain and Subject together for Basic Education -->
+  <md-input-container
+    data-ng-show="ctrl.taxonPath.educationalContext && ctrl.taxonPath.educationalContext.name === 'BASICEDUCATION'"
+    class="md-block" flex>
+    <label for="taxonDomainSubjectsSelect">
+      <span data-translate="TAXON_PATH_DOMAIN_AND_SUBJECT"></span>
+      <span data-ng-if="ctrl.isAddPortfolioView || ctrl.isAddMaterialView">*</span>
+    </label>
+    <md-select data-ng-model="ctrl.taxonPath.domainSubject" id="taxonDomainSubjectsSelect"
+               name="domainAndSubject">
+      <md-option data-translate="SELECT_DOMAIN_AND_SUBJECT"
+                 ng-click="ctrl.reset(ctrl.taxonPath.educationalContext)"></md-option>
+      <md-option ng-repeat="domainSubject in ctrl.basicEducationDomainSubjects" class="stepped-select"
+                 data-ng-class="{ 'child' : domainSubject.level === '.Subject'}"
+                 data-ng-disabled="domainSubject.level !== '.Subject' && ctrl.isAddMaterialView"
+                 ng-value="domainSubject"
+                 data-translate="{{(domainSubject.level === '.Domain' ? 'DOMAIN_' : 'SUBJECT_') + domainSubject.name.toUpperCase()}}">
+      </md-option>
+    </md-select>
+  </md-input-container>
+
+  <!-- Domain and Subject together for Secondary Education -->
+  <md-input-container
+    data-ng-show="ctrl.taxonPath.educationalContext && ctrl.taxonPath.educationalContext.name === 'SECONDARYEDUCATION'"
+    class="md-block" flex>
+    <label for="taxonSecondaryEducationDomainSubjectsSelect">
+      <span data-translate="TAXON_PATH_DOMAIN_AND_SUBJECT"></span>
+      <span data-ng-if="ctrl.isAddPortfolioView || ctrl.isAddMaterialView">*</span>
+    </label>
+    <md-select data-ng-model="ctrl.taxonPath.domainSubject" id="taxonSecondaryEducationDomainSubjectsSelect"
+               name="secondaryEducationDomainAndSubject">
+      <md-option data-translate="SELECT_DOMAIN_AND_SUBJECT"
+                 ng-click="ctrl.reset(ctrl.taxonPath.educationalContext)"></md-option>
+      <md-option class="stepped-select" data-ng-class="{ 'child' : domainSubject.level === '.Subject'}"
+                 data-ng-disabled="domainSubject.level !== '.Subject' && isAddMaterialView"
+                 ng-value="domainSubject" ng-repeat="domainSubject in ctrl.secondaryEducationDomainSubjects"
+                 data-translate="{{(domainSubject.level === '.Domain' ? 'DOMAIN_' : 'SUBJECT_') + domainSubject.name.toUpperCase()}}"></md-option>
+    </md-select>
+  </md-input-container>
+
+  <!-- Specialization-->
+  <md-input-container data-ng-show="ctrl.taxonPath.domain && ctrl.taxonPath.domain.specializations.length > 0"
+                      class="md-block"
+                      flex>
+    <label for="taxonSpecializationSelect">
+      <span data-translate="TAXON_PATH_SPECIALIZATION"></span>
+      <span data-ng-if="ctrl.isAddMaterialView">*</span>
+    </label>
+    <md-select data-ng-model="ctrl.taxonPath.specialization" id="taxonSpecializationSelect" name="specialization"
+    >
+      <md-option data-translate="SELECT_SPECIALIZATION" ng-click="ctrl.reset(ctrl.taxonPath.domain)"></md-option>
+      <md-option ng-value="specialization" ng-repeat="specialization in ctrl.taxonPath.domain.specializations"
+                 data-translate="SPECIALIZATION_{{specialization.name.toUpperCase()}}"></md-option>
+    </md-select>
+  </md-input-container>
+
+  <!-- Module-->
+  <md-input-container data-ng-show="ctrl.taxonPath.specialization && ctrl.taxonPath.specialization.modules.length > 0"
+                      class="md-block" flex>
+    <label for="taxonModuleSelect">
+      <span data-translate="TAXON_PATH_MODULE"></span>
+      <span data-ng-if="ctrl.isAddMaterialView">*</span>
+    </label>
+    <md-select data-ng-model="ctrl.taxonPath.module" id="taxonModuleSelect" name="module"
+    >
+      <md-option data-translate="SELECT_MODULE" ng-click="ctrl.reset(taxonPath.specialization)"></md-option>
+      <md-option ng-value="module" ng-repeat="module in ctrl.taxonPath.specialization.modules"
+                 data-translate="MODULE_{{module.name.toUpperCase()}}"></md-option>
+    </md-select>
+  </md-input-container>
+
+  <!-- Topic -->
+  <md-input-container data-ng-show="ctrl.getTopics()" class="md-block" flex>
+    <label for="taxonTopicSelect">
+      <span data-translate="TAXON_PATH_TOPIC"></span>
+      <span data-ng-if="ctrl.isAddMaterialView">*</span>
+    </label>
+    <md-select data-ng-model="ctrl.taxonPath.topic" id="taxonTopicSelect" name="topic">
+      <md-option data-translate="SELECT_TOPIC"
+                 ng-click="ctrl.reset(ctrl.taxonPath.subject || ctrl.taxonPath.domain || ctrl.taxonPath.module, ctrl.taxonPath)"></md-option>
+      <md-option ng-value="topic" ng-repeat="topic in ctrl.getTopics()"
+                 ng-selected="{{topic.id === ctrl.taxonPath.topic.id}}"
+                 data-translate="TOPIC_{{topic.name.toUpperCase()}}"></md-option>
+    </md-select>
+  </md-input-container>
+
+  <!-- Subtopics-->
+  <md-input-container data-ng-show="ctrl.taxonPath.topic && ctrl.taxonPath.topic.subtopics.length > 0" class="md-block"
+                      flex>
+    <label for="taxonSubtopicSelect" data-translate="TAXON_PATH_SUBTOPIC"></label>
+    <md-select data-ng-model="ctrl.taxonPath.subtopic" id="taxonSubtopicSelect">
+      <md-option data-translate="SELECT_SUBTOPIC" ng-click="ctrl.reset(ctrl.taxonPath.topic)"></md-option>
+      <md-option ng-value="subtopic" ng-repeat="subtopic in ctrl.taxonPath.topic.subtopics"
+                 data-translate="SUBTOPIC_{{subtopic.name.toUpperCase()}}"></md-option>
+    </md-select>
+  </md-input-container>
+</form>
+
+

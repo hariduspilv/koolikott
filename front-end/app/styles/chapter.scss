@@ -1,0 +1,54 @@
+.portfolio-chapter-chapter-materials.ng-hide-remove.ng-hide-remove-active, .portfolio-chapter-subchapter-materials.ng-hide-remove.ng-hide-remove-active {
+  animation:1s cubic-bezier(.17,.67,.83,.67) ease;
+}
+
+.portfolio-chapter-chapter-materials.ng-hide-add-active, .portfolio-chapter-subchapter-materials.ng-hide-add-active {
+  animation:1s cubic-bezier(.17,.67,.83,.67) ease;
+}
+
+.portfolio-slide.ng-hide {
+  height: 0;
+  display: block;
+}
+
+.chapter-title {
+  margin: 0;
+}
+
+@keyframes come {
+  0% { opacity: 0; }
+  100% { opacity: 1; height:auto; }
+}
+
+@keyframes go {
+  0% { opacity: 1; height: auto; }
+  100% { opacity: 0; }
+}
+
+/* Chrome, Safari, Opera */
+@-webkit-keyframes slide-up
+{
+  0%   {height:0;}
+  100%  {height:auto;}
+}
+
+/* Standard syntax */
+@keyframes slide-up
+{
+  0%   {height:0;}
+  100%  {height:auto;}
+}
+
+/* Chrome, Safari, Opera */
+@-webkit-keyframes slide-down
+{
+  0%  {height:auto;}
+  100%   {height:0;}
+}
+
+/* Standard syntax */
+@keyframes slide-down
+{
+  0%  {height:auto;}
+  100%   {height:0;}
+}

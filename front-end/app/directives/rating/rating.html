@@ -1,0 +1,18 @@
+<div class="rating" layout="row" layout-align="end center" flex>
+  <div class="rating-button md-caption" data-ng-click="like()">
+	<md-tooltip md-direction="top">
+	  <span data-ng-if="isAuthenticated()" data-translate="RATING_LIKE"></span>
+    <span data-ng-if="!isAuthenticated()" data-translate="TOOLTIP_LOG_IN_TO_RATE"></span>
+	</md-tooltip>
+	<md-icon data-ng-class="{ 'md-primary' : isLiked }">thumb_up</md-icon>
+	<span>{{ rating.likes }}</span>
+  </div>
+  <div class="rating-button md-caption" data-ng-click="dislike()">
+	<md-tooltip md-direction="top">
+	  <span data-ng-if="isAuthenticated()" data-translate="RATING_DISLIKE"></span>
+    <span data-ng-if="!isAuthenticated()" data-translate="TOOLTIP_LOG_IN_TO_RATE"></span>
+	</md-tooltip>
+	<md-icon data-ng-class="{ 'md-primary' : isDisliked }">thumb_down</md-icon>
+	<span>{{ rating.dislikes }}</span>
+  </div>
+</div>

@@ -1,0 +1,32 @@
+.toc {
+  .md-button,
+  a {
+    &:hover .add-materials-to-chapter {
+
+    }
+  }
+
+  .add-materials-to-chapter {
+    position: absolute;
+    right: 16px;
+
+    md-icon {
+      z-index: 2;
+    }
+  }
+
+  .md-button.one-row {
+    white-space: nowrap;
+  }
+  li {
+
+  }
+}
+
+.transform-none {
+  text-transform: none;
+}
+
+.sidenav-menu .md-button.one-row {
+  display: block;
+}

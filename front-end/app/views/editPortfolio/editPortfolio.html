@@ -1,0 +1,17 @@
+<section id="main-content" flex>
+<div layout-gt-sm>
+  <article flex flex-gt-sm="75" flex-gt-lg="80" class="md-padding" role="main">
+
+    <div data-dop-portfolio-summary-card data-portfolio="portfolio"></div>
+
+    <div id="portfolio-chapters">
+        <div data-ng-repeat="chapter in portfolio.chapters">
+            <div data-dop-chapter data-on-delete="onDeleteChapter" data-chapter="chapter" data-index="{{$index}}"></div>
+        </div>
+    </div>
+
+  </article>
+
+  <aside data-dop-sidebar flex flex-gt-sm="25" flex-gt-lg="20" class="md-padding" ></aside>
+</div>
+</section>

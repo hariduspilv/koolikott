@@ -1,0 +1,58 @@
+<md-dialog aria-label="Materiali või materjalide kogumikku lisamise modaalaken" id="dialog-add-material-to-portfolio"
+           flex-gt-sm="75" flex>
+  <md-toolbar class="md-accent">
+    <div class="md-toolbar-tools" flex>
+      <h2>
+        <span data-translate="ADD_TO_EXISTING_PORTFOLIO"></span>
+      </h2>
+      <span flex></span>
+      <md-button ng-click="cancel()" class="md-icon-button" aria-label="Sulge materiali kogumikku lisamise modaalaken">
+        <md-icon>close</md-icon>
+      </md-button>
+    </div>
+  </md-toolbar>
+  <md-dialog-content layout="column">
+
+    <md-tabs md-dynamic-height md-border-bottom md-autoselect md-stretch-tabs="always" md-selected="step.currentStep">
+      <md-tab label="{{ 'CHOOSE_PORTFOLIO' | translate }}">
+        <md-content class="md-padding">
+          <md-list-item ng-click="chooseChapter(portfolio)" ng-repeat="portfolio in portfolios">
+            <p>{{$index + 1}}. {{portfolio.title}}</p>
+          </md-list-item>
+        </md-content>
+      </md-tab>
+
+      <md-tab label="{{'CHOOSE_PORTFOLIO_CHAPTER' | translate}}" data-ng-disabled="step.currentStep < 1">
+        <md-content class="md-padding">
+
+          <div ng-repeat="chapter in selectedPortfolio.chapters">
+            <md-list-item ng-click="addMaterialsToChapter(chapter, selectedPortfolio)">
+              <p>{{$index + 1}}. {{chapter.title}}</p>
+            </md-list-item>
+
+            <md-list-item ng-click="addMaterialsToChapter(subchapter, selectedPortfolio)"
+                          ng-repeat="subchapter in chapter.subchapters" flex-offset="5">
+              <p>{{$index + 1}}. {{subchapter.title}}</p>
+            </md-list-item>
+          </div>
+        </md-content>
+      </md-tab>
+    </md-tabs>
+  </md-dialog-content>
+
+  <md-dialog-actions>
+    <md-button aria-label="Mine tagasi eelmisse sammu" data-ng-click="step.previousStep()"
+               data-ng-show="step.currentStep > 0" class="md-primary">
+      <md-icon>arrow_back</md-icon>
+      <span data-translate="BUTTON_PREVIOUS_STEP"></span>
+    </md-button>
+    <span flex></span>
+    <md-button aria-label="Tühista materjali lisamine" id="add-material-cancel-button" data-ng-click="cancel()">
+      <span data-translate="BUTTON_CANCEL"></span>
+    </md-button>
+
+
+    <md-progress-circular class="md-accent ng-hide" md-mode="indeterminate" md-diameter="40"
+                          data-ng-show="isSaving"></md-progress-circular>
+  </md-dialog-actions>
+</md-dialog>
