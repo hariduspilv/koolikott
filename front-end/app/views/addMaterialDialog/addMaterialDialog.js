@@ -215,10 +215,20 @@ define([
             };
 
             $scope.isTabThreeValid = function () {
-                return (($scope.material.publishers[0] && $scope.material.publishers[0].name)
-                    || ($scope.material.authors[0].name && $scope.material.authors[0].surname))
+                return (($scope.material.publishers[0] && $scope.material.publishers[0].name) || areAuthorsValid())
                     && $scope.material.licenseType && $scope.material.issueDate.year;
             };
+
+            function areAuthorsValid() {
+                var res = true;
+
+                $scope.material.authors.forEach(function (author) {
+                    if (author.name && !author.surname) res = false;
+                    else if (author.surname && !author.name) res = false;
+                });
+
+                return res;
+            }
 
             function isStepValid(index) {
                 switch (index) {

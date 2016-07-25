@@ -10,3 +10,12 @@
 /solr-indexer/.classpath
 /solr-indexer/.idea/
 /solr-indexer/logs/
+/front-end/node_modules
+/front-end/dist
+/front-end/.tmp
+/front-end/.sass-cache
+/front-end/app/libs
+/front-end/.DS_Store
+/front-end/.idea/
+/front-end/.project
+/front-end/DOP-Front-End.iml
