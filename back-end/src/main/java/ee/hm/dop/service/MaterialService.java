@@ -57,7 +57,7 @@ public class MaterialService implements LearningObjectHandler {
     private BrokenContentDAO brokenContentDAO;
 
     public Material get(long materialId, User loggedInUser) {
-        if (isUserAdmin(loggedInUser)) {
+        if (isUserAdmin(loggedInUser) || isUserModerator(loggedInUser)) {
             return materialDao.findById(materialId);
         } else {
             return materialDao.findByIdNotDeleted(materialId);

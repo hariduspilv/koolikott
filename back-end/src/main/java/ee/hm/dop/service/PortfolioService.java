@@ -38,7 +38,7 @@ public class PortfolioService implements LearningObjectHandler {
 
     public Portfolio get(long portfolioId, User loggedInUser) {
         Portfolio portfolio;
-        if (isUserAdmin(loggedInUser)) {
+        if (isUserAdmin(loggedInUser) || isUserModerator(loggedInUser)) {
             portfolio = portfolioDAO.findByIdFromAll(portfolioId);
         } else {
             portfolio = portfolioDAO.findByIdNotDeleted(portfolioId);
@@ -355,6 +355,10 @@ public class PortfolioService implements LearningObjectHandler {
 
     private boolean isUserAdmin(User loggedInUser) {
         return loggedInUser != null && loggedInUser.getRole() == Role.ADMIN;
+    }
+
+    private boolean isUserModerator(User loggedInUser) {
+        return loggedInUser != null && loggedInUser.getRole() == Role.MODERATOR;
     }
 
     public List<Portfolio> getDeletedPortfolios() {
