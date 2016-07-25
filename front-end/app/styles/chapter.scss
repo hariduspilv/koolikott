@@ -11,6 +11,23 @@
   display: block;
 }
 
+.portfolio-noedit-item {
+  cursor: pointer;
+}
+
+.portfolio-chapter {
+  h2 {
+    margin: 0;
+  }
+  h3 {
+    margin: 0;
+    margin-top: 4px;
+  }
+  .md-body-1 {
+    margin-bottom: 0;
+  }
+}
+
 .chapter-title {
   margin: 0;
 }

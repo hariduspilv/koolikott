@@ -20,6 +20,10 @@ define([
                   $scope.subisCollapsed[value.$$hashKey] = true;
                 }, log);
 
+                if($scope.chapter.openCloseChapter == true){
+                  $scope.isCollapsed = false;
+                }
+
                 //Open/Close Chapter
                 $scope.ocChapter = function() {
                   $scope.isCollapsed = !$scope.isCollapsed;
@@ -55,6 +59,12 @@ define([
                 $scope.deleteChapter = function() {
                     $scope.onDelete()($scope.chapter);
                 };
+
+                //Textarea hotfix
+                setTimeout(textareaHotfix, 1000);
+                function textareaHotfix() {
+                  $( ".chapter-content-textarea" ).css('height', '140px');
+                }
             }
         };
     }]);

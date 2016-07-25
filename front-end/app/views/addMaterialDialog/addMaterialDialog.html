@@ -315,14 +315,14 @@
                       <span data-translate="MATERIAL_AUTHOR_NAME"></span>
                       <span data-ng-hide="material.publishers[0].name || $index > 0">*</span>
                     </label>
-                    <input data-ng-model="author.name" id="material-author-{{$index}}-name" name="firstname" md-maxlength="50">
+                    <input data-ng-model="author.name" id="material-author-{{$index}}-name" name="firstname" md-maxlength="50" maxlength="50">
                   </md-input-container>
                   <md-input-container flex>
                     <label>
                       <span data-translate="MATERIAL_AUTHOR_SURNAME"></span>
                       <span data-ng-hide="material.publishers[0].name || $index > 0">*</span>
                     </label>
-                    <input data-ng-model="author.surname" data-ng-required="author.name" name="surname" md-maxlength="50">
+                    <input data-ng-model="author.surname" data-ng-required="author.name" name="surname" md-maxlength="50" maxlength="50">
                     <div ng-messages="addMaterialForm.surname.$error" data-ng-show="author.name && !author.surname">
                       <div ng-message="required" data-translate="LAST_NAME_REQUIRED"></div>
                     </div>
@@ -354,7 +354,7 @@
                     <span data-translate="MATERIAL_PUBLISHER"></span>
                     <span data-ng-hide="material.authors[0].name && material.authors[0].surname">*</span>
                   </label>
-                  <input name="publisher" data-ng-model="material.publishers[0].name" ng-disabled="creatorIsPublisher" md-maxlength="50">
+                  <input name="publisher" data-ng-model="material.publishers[0].name" ng-disabled="creatorIsPublisher" md-maxlength="50" maxlength="50">
                   <div data-ng-messages="addMaterialForm.publisher.$error"
                        data-ng-show="!isAuthorOrPublisherSet() && (addMaterialForm.publisher.$touched || addMaterialForm.$submitted)">
                     <div data-ng-message="required" data-translate="MATERIAL_PUBLISHER_OR_AUTHOR_MANDATORY"

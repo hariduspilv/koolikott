@@ -66,7 +66,7 @@ define([
                 //Commentbox hotfix
                 setTimeout(commentHotfix, 1000);
                 function commentHotfix() {
-                  $( "#comment-list" ).find( "textarea" ).css('height', '108px');
+                  $( "#comment-list" ).find( "textarea" ).css('height', '112px');
                 }
 
 

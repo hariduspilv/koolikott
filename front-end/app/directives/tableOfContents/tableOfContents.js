@@ -28,15 +28,17 @@ define([
                     }
                 }
 
+                //For some reason the logic started to work when i commented out the code
                 $scope.gotoChapter = function(e, chapterId, subchapterId) {
-                    e.preventDefault();
-
-                    var combinedId = 'chapter-' + chapterId;
-                    if (subchapterId != null) {
-                        combinedId += '-' + subchapterId;
-                    }
-
-                    goToElement(combinedId);
+                    // console.log(e + " " + chapterId + " " + subchapter);
+                    // e.preventDefault();
+                    //
+                    // var combinedId = 'chapter-' + chapterId;
+                    // if (subchapterId != null) {
+                    //     combinedId += '-' + subchapterId;
+                    // }
+                    //
+                    // goToElement(combinedId);
                 };
 
                 function goToElement(elementID) {
