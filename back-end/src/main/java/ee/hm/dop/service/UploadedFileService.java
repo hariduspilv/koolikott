@@ -17,6 +17,8 @@ import ee.hm.dop.utils.DOPFileUtils;
 import org.apache.commons.configuration.Configuration;
 import org.apache.commons.io.FileUtils;
 import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class UploadedFileService {
 
@@ -25,6 +27,8 @@ public class UploadedFileService {
 
     @Inject
     private Configuration configuration;
+
+    private static Logger logger = LoggerFactory.getLogger(UploadedFileService.class);
 
     private UploadedFile getUploadedFileById(Long id) {
         return uploadedFileDAO.findUploadedFileById(id);
@@ -46,13 +50,11 @@ public class UploadedFileService {
     }
 
     public UploadedFile uploadFile(InputStream fileInputStream, FormDataContentDisposition fileDetail){
-        //  TODO: URlEncode
-        //  TODO: Log actions
         String filename = null;
         try {
             filename = URLEncoder.encode(fileDetail.getFileName(), UTF_8.name());
         } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
+            logger.warn("Could not URLEncode the file path");
         }
         UploadedFile uploadedFile = new UploadedFile();
         uploadedFile.setName(filename);
