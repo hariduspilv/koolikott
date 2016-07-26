@@ -78,21 +78,19 @@
                       <span data-translate="ADD_FILE"></span>
                     </button>
                   </div>
-                  <md-tooltip><span data-translate="MATERIAL_FILE_UPLOAD_HELP"></span></md-tooltip>
                 </div>
-                <div data-ng-show="uploadMode && !fileUploaded && !uploadingFile " flex="40" flex-sm="30" flex-md="35" flex-gt-md="40" class="upload-file-placeholder"><h4 data-translate="ADD_FILE_PLACEHOLDER"></h4> </div>
-                <div layout-fill data-ng-if="uploadMode && (fileUploaded || uploadingFile)" flex-sm="30" flex-md="25" flex-gt-md="25" layout="row" layout-align-xs="start stretch" layout-align="center center">
+                <div flex-sm="25" flex-md="35" flex-gt-md="40" data-ng-show="uploadMode && !fileUploaded && !uploadingFile " class="upload-file-placeholder"><h5 data-translate="ADD_FILE_PLACEHOLDER"></h5> </div>
+                <div flex-sm="25" flex-md="35" flex-gt-md="40" data-ng-if="fileUploaded || uploadingFile" layout-align="center center">
                   <div data-ng-show="uploadingFile" class="upload-file-uploading">
-                    <md-progress-circular class="uploading-file-progress" md-mode="indeterminate"></md-progress-circular>
-                    <h4 data-translate="ADD_FILE_UPLOADING"></h4>
+                    <h5 data-translate="ADD_FILE_UPLOADING"></h5>
                   </div>
                   <div data-ng-show="fileUploaded && !uploadingFile" class="upload-file-success">
-                    <h4><span data-translate="ADD_FILE_SUCCESS"></span>: {{ material.uploadedFile.name }}</h4>
+                    <h5><span data-translate="ADD_FILE_SUCCESS"></span>: {{ material.uploadedFile.name }}</h5>
                   </div>
                 </div>
                 <div flex data-ng-hide="uploadMode || fileUploaded">
                   <div flex data-ng-hide="uploadMode || fileUploaded">
-                    <md-input-container flex layout-fill>
+                    <md-input-container flex layout-fill layout="column">
                       <label>
                         <span data-translate="MATERIAL_LINK"></span>
                       </label>
@@ -102,7 +100,7 @@
                       <div data-ng-messages="addMaterialForm.source.$error" multiple
                            data-ng-show="addMaterialForm.source.$touched || addMaterialForm.$submitted">
                         <div data-ng-message="required" data-ng-show="addMaterialForm.source.$error.required"
-                             data-translate="MATERIAL_URL_IS_MANDATORY"></div>
+                             data-translate="MATERIAL_URL_OR_FILE_INVALID"></div>
                         <div data-ng-message="url"
                              data-ng-show="addMaterialForm.source.$error.url && material.source.length > 0"
                              data-translate="MATERIAL_URL_IS_INVALID"></div>
@@ -110,7 +108,7 @@
                     </md-input-container>
                   </div>
                 </div>
-                <md-input-container flex-gt-xs="20" class="md-padding">
+                <md-input-container flex-gt-xs="20" flex="20" class="md-padding">
                   <label data-translate="MATERIAL_LANGUAGE"></label>
                   <md-select data-ng-model="material.language" id="add-material-language-select">
                     <md-option data-ng-repeat="language in languages" value="{{language}}">

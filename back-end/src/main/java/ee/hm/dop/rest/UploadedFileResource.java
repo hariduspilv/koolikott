@@ -1,5 +1,7 @@
 package ee.hm.dop.rest;
 
+import static ee.hm.dop.utils.ConfigurationProperties.DOCUMENT_MAX_FILE_SIZE;
+
 import java.io.InputStream;
 
 import javax.annotation.security.RolesAllowed;
@@ -15,11 +17,15 @@ import javax.ws.rs.core.Response;
 
 import ee.hm.dop.model.UploadedFile;
 import ee.hm.dop.service.UploadedFileService;
+import org.apache.commons.configuration.Configuration;
 import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
 import org.glassfish.jersey.media.multipart.FormDataParam;
 
 @Path("uploadedFile")
 public class UploadedFileResource extends BaseResource {
+
+    @Inject
+    private Configuration configuration;
 
     @Inject
     UploadedFileService uploadedFileService;
@@ -38,6 +44,13 @@ public class UploadedFileResource extends BaseResource {
     @Path("{id}")
     public Response getFile(@PathParam("id") Long fileId) {
         return uploadedFileService.getFile(fileId);
+    }
+
+    @GET
+    @Path("/maxSize")
+    @Produces(MediaType.APPLICATION_JSON)
+    public int getMaxSize() {
+        return configuration.getInt(DOCUMENT_MAX_FILE_SIZE);
     }
 
 }
