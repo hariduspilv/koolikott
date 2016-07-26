@@ -220,13 +220,13 @@ define([
             };
 
             function areAuthorsValid() {
-                var res = true;
+                var res = !!$scope.material.authors[0].name;
 
                 $scope.material.authors.forEach(function (author) {
                     if (author.name && !author.surname) res = false;
                     else if (author.surname && !author.name) res = false;
                 });
-
+                
                 return res;
             }
 
