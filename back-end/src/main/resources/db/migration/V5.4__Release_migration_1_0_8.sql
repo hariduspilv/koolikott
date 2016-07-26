@@ -1,0 +1,3 @@
+INSERT INTO Translation(translationGroup, translationKey, translation) VALUES (1,'MATERIAL_URL_OR_FILE_INVALID','Palun sisestage link materjalile või laadige üles materjali fail');
+INSERT INTO Translation(translationGroup, translationKey, translation) VALUES (3,'MATERIAL_URL_OR_FILE_INVALID','Please insert a link to the material or upload the material file');
+INSERT INTO Translation(translationGroup, translationKey, translation) VALUES (2,'MATERIAL_URL_OR_FILE_INVALID','Пожалуйста, вставьте ссылку на материал или загрузить файл материала');
