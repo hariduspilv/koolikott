@@ -3,11 +3,13 @@
     <md-card class="card-lg">
       <md-card-content class="portfolio-noedit-item" data-ng-if="!isEditable" layout="row" ng-click="toggle($event); ocChapter()">
         <div flex>
-          <h2 ng-class="{'chapter-title': chapter.text.length == undefined}">{{chapter.title}}</h2>
-          <p class="md-body-1" ng-class="{'hide': chapter.text.length == undefined}">{{chapter.text}}</p>
-        </div>
-        <div class="chapter-arrow">
-          <md-icon class="material-icons">keyboard_arrow_right</md-icon>
+          <div flex layout="row">
+            <h2 ng-class="{'chapter-title': chapter.text.length == undefined || chapter.text.length == 0}">{{chapter.title}}</h2>
+              <div class="chapter-arrow">
+                <md-icon class="material-icons md-primary">keyboard_arrow_right</md-icon>
+              </div>
+          </div>
+          <p class="md-body-1" ng-class="{'hide': chapter.text.length == undefined || chapter.text.length == 0}">{{chapter.text}}</p>
         </div>
         <md-tooltip md-direction="bottom">
           <span data-ng-if="isCollapsed" data-translate="TOOLTIP_OPEN_CHAPTER">Open chapter</span>
@@ -17,7 +19,7 @@
       <md-card-content data-ng-if="isEditable">
         <div layout="row" layout-align="start center">
           <div class="chapter-arrow" ng-class="{'toggled': chapter.openCloseChapter}" ng-click="editToggle($event); ocChapter()">
-            <md-icon class="material-icons">keyboard_arrow_right</md-icon>
+            <md-icon class="material-icons md-primary">keyboard_arrow_right</md-icon>
             <md-tooltip md-direction="bottom">
               <span data-ng-if="isCollapsed" data-translate="TOOLTIP_OPEN_CHAPTER">Open chapter</span>
               <span data-ng-if="!isCollapsed" data-translate="TOOLTIP_CLOSE_CHAPTER">Close chapter</span>
@@ -65,11 +67,13 @@
       <md-card class="card-lg">
         <md-card-content class="portfolio-noedit-item" data-ng-if="!isEditable" layout="row" ng-click="toggle($event); ocSubChapter(subchapter)">
           <div flex>
-            <h3>{{subchapter.title}}</h3>
-            <p class="md-body-1" ng-class="{'hide': subchapter.text.length == undefined}">{{subchapter.text}}</p>
-          </div>
-          <div class="chapter-arrow" >
-            <md-icon class="material-icons">keyboard_arrow_right</md-icon>
+            <div layout="row">
+              <h3>{{subchapter.title}}</h3>
+              <div class="chapter-arrow" >
+                <md-icon class="material-icons md-primary">keyboard_arrow_right</md-icon>
+              </div>
+            </div>
+            <p class="md-body-1" ng-class="{'hide': subchapter.text.length == undefined || subchapter.text.length == 0}">{{subchapter.text}}</p>
           </div>
           <md-tooltip md-direction="bottom">
             <span data-ng-if="subisCollapsed[subchapter.$$hashKey]" data-translate="TOOLTIP_OPEN_SUBCHAPTER">Open subchapter</span>
@@ -79,7 +83,7 @@
         <md-card-content data-ng-if="isEditable">
           <div layout="row" layout-align="start center">
             <div class="chapter-arrow" ng-click="editToggle($event); ocSubChapter(subchapter)" ng-class="{'toggled': subchapter.openCloseChapter}">
-              <md-icon class="material-icons">keyboard_arrow_right</md-icon>
+              <md-icon class="material-icons md-primary">keyboard_arrow_right</md-icon>
               <md-tooltip md-direction="bottom">
                 <span data-ng-if="subisCollapsed[subchapter.$$hashKey]" data-translate="TOOLTIP_OPEN_SUBCHAPTER">Open subchapter</span>
                 <span data-ng-if="!subisCollapsed[subchapter.$$hashKey]" data-translate="TOOLTIP_CLOSE_SUBCHAPTER">Close subchapter</span>
@@ -106,7 +110,7 @@
           <div uib-collapse="subisCollapsed[subchapter.$$hashKey]">
             <md-input-container class="md-block">
               <label></label>
-              <textarea placeholder="{{ 'PORTFOLIO_SUB_CHAPTER_CONTENT' | translate }}" data-ng-model="subchapter.text" class="chapter-content-textarea" columns="1" rows="5"></textarea>
+              <textarea placeholder="{{ 'PORTFOLIO_SUB_CHAPTER_CONTENT' | translate }}" data-ng-model="subchapter.text" columns="1" rows="5"></textarea>
             </md-input-container>
             <div dop-add-chapter-material chapter="subchapter"></div>
           </div>
