@@ -25,6 +25,6 @@ INSERT INTO Translation(translationGroup, translationKey, translation) VALUES (1
 INSERT INTO Translation(translationGroup, translationKey, translation) VALUES (3,'ADD_FILE_UPLOADING','Uploading file ...');
 INSERT INTO Translation(translationGroup, translationKey, translation) VALUES (2,'ADD_FILE_UPLOADING','при загрузке файла');
 
-INSERT INTO Translation(translationGroup, translationKey, translation) VALUES (1,'ADD_FILE_PLACEHOLDER','Palun laadige üles materjali fail');
+INSERT INTO Translation(translationGroup, translationKey, translation) VALUES (1,'ADD_FILE_PLACEHOLDER','Palun laadige üles materiali fail');
 INSERT INTO Translation(translationGroup, translationKey, translation) VALUES (3,'ADD_FILE_PLACEHOLDER','Please upload a material file');
 INSERT INTO Translation(translationGroup, translationKey, translation) VALUES (2,'ADD_FILE_PLACEHOLDER','Пожалуйста, загрузите файл материалa');
