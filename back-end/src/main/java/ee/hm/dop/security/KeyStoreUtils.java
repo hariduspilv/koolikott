@@ -12,7 +12,7 @@ import java.security.KeyStore;
 import java.util.HashMap;
 import java.util.Map;
 
-import ee.hm.dop.utils.FileUtils;
+import ee.hm.dop.utils.DOPFileUtils;
 import org.apache.commons.configuration.Configuration;
 import org.opensaml.xml.security.Criteria;
 import org.opensaml.xml.security.CriteriaSet;
@@ -34,7 +34,7 @@ public class KeyStoreUtils {
         InputStream inputStream = null;
 
         try {
-            inputStream = FileUtils.getFileAsStream(filename);
+            inputStream = DOPFileUtils.getFileAsStream(filename);
             if (inputStream == null) {
                 throw new RuntimeException(format("Failed to load keystore in path: %s", filename));
             }

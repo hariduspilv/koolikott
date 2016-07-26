@@ -59,4 +59,5 @@ public interface ConfigurationProperties {
     String STUUDIUM_URL_GENERALDATA = "stuudium.url.generaldata";
 
     String MAX_FILE_SIZE = "file.upload.max.size";
+    String FILE_UPLOAD_DIRECTORY = "file.upload.directory";
 }

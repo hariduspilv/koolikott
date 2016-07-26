@@ -1,7 +1,7 @@
 package ee.hm.dop.service;
 
-import static ee.hm.dop.utils.FileUtils.getFileAsStream;
-import static ee.hm.dop.utils.FileUtils.read;
+import static ee.hm.dop.utils.DOPFileUtils.getFileAsStream;
+import static ee.hm.dop.utils.DOPFileUtils.read;
 import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;

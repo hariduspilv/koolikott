@@ -3,7 +3,7 @@ package ee.hm.dop.ehis;
 import static ee.hm.dop.model.ehis.Role.InstitutionalRole.PRINCIPAL;
 import static ee.hm.dop.model.ehis.Role.InstitutionalRole.STUDENT;
 import static ee.hm.dop.model.ehis.Role.InstitutionalRole.TEACHER;
-import static ee.hm.dop.utils.FileUtils.readFileAsString;
+import static ee.hm.dop.utils.DOPFileUtils.readFileAsString;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 

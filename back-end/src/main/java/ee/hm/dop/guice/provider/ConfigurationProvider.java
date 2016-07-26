@@ -7,7 +7,7 @@ import java.net.URL;
 
 import com.google.inject.Provider;
 import com.google.inject.Singleton;
-import ee.hm.dop.utils.FileUtils;
+import ee.hm.dop.utils.DOPFileUtils;
 import org.apache.commons.configuration.CompositeConfiguration;
 import org.apache.commons.configuration.Configuration;
 import org.apache.commons.configuration.PropertiesConfiguration;
@@ -55,7 +55,7 @@ public class ConfigurationProvider implements Provider<Configuration> {
             logger.info(format("Loading custom configuration file from [%s].", configurationPath));
 
             try {
-                File config = FileUtils.getFile(configurationPath);
+                File config = DOPFileUtils.getFile(configurationPath);
                 configuration = new PropertiesConfiguration(config);
                 logger.info(format("Custom configuration loaded from [%s]", config.getAbsolutePath()));
             } catch (Exception e) {

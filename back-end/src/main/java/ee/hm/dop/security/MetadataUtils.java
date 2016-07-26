@@ -9,7 +9,7 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
-import ee.hm.dop.utils.FileUtils;
+import ee.hm.dop.utils.DOPFileUtils;
 import org.opensaml.common.xml.SAMLConstants;
 import org.opensaml.saml2.metadata.IDPSSODescriptor;
 import org.opensaml.saml2.metadata.provider.DOMMetadataProvider;
@@ -61,7 +61,7 @@ public class MetadataUtils {
         Element metadataRoot = null;
         InputStream inputStream = null;
         try {
-            inputStream = FileUtils.getFileAsStream(credentialPath);
+            inputStream = DOPFileUtils.getFileAsStream(credentialPath);
             if (inputStream == null) {
                 throw new RuntimeException(format("Failed to load credentials in path: %s", credentialPath));
             }

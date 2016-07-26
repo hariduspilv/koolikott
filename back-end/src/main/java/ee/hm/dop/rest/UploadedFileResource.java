@@ -1,0 +1,43 @@
+package ee.hm.dop.rest;
+
+import java.io.InputStream;
+
+import javax.annotation.security.RolesAllowed;
+import javax.inject.Inject;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.GET;
+import javax.ws.rs.POST;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+
+import ee.hm.dop.model.UploadedFile;
+import ee.hm.dop.service.UploadedFileService;
+import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
+import org.glassfish.jersey.media.multipart.FormDataParam;
+
+@Path("uploadedFile")
+public class UploadedFileResource extends BaseResource {
+
+    @Inject
+    UploadedFileService uploadedFileService;
+
+    @POST
+    @RolesAllowed({"USER", "ADMIN", "MODERATOR"})
+    @Consumes(MediaType.MULTIPART_FORM_DATA)
+    @Produces(MediaType.APPLICATION_JSON)
+    public UploadedFile uploadFile(@FormDataParam("file") InputStream fileInputStream,
+                                   @FormDataParam("file") FormDataContentDisposition fileDetail) {
+        return uploadedFileService.uploadFile(fileInputStream, fileDetail);
+    }
+
+    @GET
+    @Produces(MediaType.APPLICATION_OCTET_STREAM)
+    @Path("{id}")
+    public Response getFile(@PathParam("id") Long fileId) {
+        return uploadedFileService.getFile(fileId);
+    }
+
+}

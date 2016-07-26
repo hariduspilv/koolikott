@@ -11,13 +11,14 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.Arrays;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.Charsets;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class FileUtils {
-    private static final Logger logger = LoggerFactory.getLogger(FileUtils.class);
+public class DOPFileUtils {
+    private static final Logger logger = LoggerFactory.getLogger(DOPFileUtils.class);
 
     private static final int MB_TO_B_MULTIPLIER = 1024 * 1024;
 
@@ -35,7 +36,7 @@ public class FileUtils {
 
         logger.info(format("File %s does not exist. Trying to load from classpath.", filePath));
 
-        return FileUtils.class.getClassLoader().getResourceAsStream(filePath);
+        return DOPFileUtils.class.getClassLoader().getResourceAsStream(filePath);
     }
 
     public static File getFile(String filePath) {
@@ -45,7 +46,7 @@ public class FileUtils {
         if (!file.exists()) {
             logger.info(format("File %s does not exist. Trying to load from classpath.", filePath));
 
-            URL resource = FileUtils.class.getClassLoader().getResource(filePath);
+            URL resource = DOPFileUtils.class.getClassLoader().getResource(filePath);
             if (resource != null) {
                 try {
                     file = new File(resource.toURI());
@@ -96,5 +97,18 @@ public class FileUtils {
         }
 
         return Arrays.copyOf(bytes, read);
+    }
+
+    public static void writeToFile(InputStream inputStream, String location) {
+
+        try {
+            File targetFile = new File(location);
+            targetFile.getParentFile().mkdirs();
+            FileUtils.copyInputStreamToFile(inputStream, targetFile);
+        } catch (IOException e) {
+            e.printStackTrace();
+            logger.warn("Unable to write file: " + location);
+        }
+
     }
 }

@@ -7,6 +7,7 @@ import static javax.persistence.FetchType.LAZY;
 
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
@@ -102,6 +103,10 @@ public class Material extends LearningObject implements Searchable {
             inverseJoinColumns = { @JoinColumn(name = "publisher") },
             uniqueConstraints = @UniqueConstraint(columnNames = { "material", "publisher" }) )
     private List<Publisher> publishers;
+
+    @OneToOne(cascade = {CascadeType.ALL})
+    @JoinColumn(name = "uploadedFile")
+    private UploadedFile uploadedFile;
 
     @JsonIgnore
     @ManyToOne(fetch = LAZY)
@@ -252,5 +257,13 @@ public class Material extends LearningObject implements Searchable {
 
     public void setCurriculumLiterature(boolean curriculumLiterature) {
         this.curriculumLiterature = curriculumLiterature;
+    }
+
+    public UploadedFile getUploadedFile() {
+        return uploadedFile;
+    }
+
+    public void setUploadedFile(UploadedFile uploadedFile) {
+        this.uploadedFile = uploadedFile;
     }
 }

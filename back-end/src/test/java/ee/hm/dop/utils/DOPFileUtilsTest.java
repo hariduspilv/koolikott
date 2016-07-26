@@ -13,11 +13,11 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 @RunWith(EasyMockRunner.class)
-public class FileUtilsTest {
+public class DOPFileUtilsTest {
 
     @Test
     public void getFileAsStreamNoFile() {
-        InputStream inputStream = FileUtils.getFileAsStream("wrong.xml");
+        InputStream inputStream = DOPFileUtils.getFileAsStream("wrong.xml");
         assertNull(inputStream);
     }
 
@@ -30,7 +30,7 @@ public class FileUtilsTest {
         writer.close();
         tempFile.deleteOnExit();
 
-        InputStream inputStream = FileUtils.getFileAsStream(tempFile.getAbsolutePath());
+        InputStream inputStream = DOPFileUtils.getFileAsStream(tempFile.getAbsolutePath());
         assertNotNull(inputStream);
     }
 }

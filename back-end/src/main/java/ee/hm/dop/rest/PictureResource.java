@@ -1,7 +1,7 @@
 package ee.hm.dop.rest;
 
 import static ee.hm.dop.utils.ConfigurationProperties.MAX_FILE_SIZE;
-import static ee.hm.dop.utils.FileUtils.read;
+import static ee.hm.dop.utils.DOPFileUtils.read;
 import static org.apache.commons.codec.binary.Base64.decodeBase64;
 
 import java.io.InputStream;

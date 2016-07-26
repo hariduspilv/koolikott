@@ -16,7 +16,7 @@ import javax.ws.rs.core.Response;
 
 import ee.hm.dop.common.test.ResourceIntegrationTestBase;
 import ee.hm.dop.model.Picture;
-import ee.hm.dop.utils.FileUtils;
+import ee.hm.dop.utils.DOPFileUtils;
 import org.apache.commons.codec.binary.Hex;
 import org.apache.http.HttpHeaders;
 import org.glassfish.jersey.media.multipart.FormDataMultiPart;
@@ -54,7 +54,7 @@ public class PictureResourceTest extends ResourceIntegrationTestBase {
     public void addPicture() throws IOException {
         login("39011220013");
 
-        final FileDataBodyPart filePart = new FileDataBodyPart("picture", FileUtils.getFile("bookCover.jpg"));
+        final FileDataBodyPart filePart = new FileDataBodyPart("picture", DOPFileUtils.getFile("bookCover.jpg"));
         @SuppressWarnings("resource")
         FormDataMultiPart formDataMultiPart = (FormDataMultiPart) new FormDataMultiPart().bodyPart(filePart);
 
