@@ -28,7 +28,3 @@ INSERT INTO Translation(translationGroup, translationKey, translation) VALUES (2
 INSERT INTO Translation(translationGroup, translationKey, translation) VALUES (1,'ADD_FILE_PLACEHOLDER','Palun laadige üles materjali fail');
 INSERT INTO Translation(translationGroup, translationKey, translation) VALUES (3,'ADD_FILE_PLACEHOLDER','Please upload a material file');
 INSERT INTO Translation(translationGroup, translationKey, translation) VALUES (2,'ADD_FILE_PLACEHOLDER','Пожалуйста, загрузите файл материалa');
-
-INSERT INTO Translation(translationGroup, translationKey, translation) VALUES (1,'MATERIAL_URL_OR_FILE_INVALID','Palun lisage viide materjalile või laadige üles fail');
-INSERT INTO Translation(translationGroup, translationKey, translation) VALUES (3,'MATERIAL_URL_OR_FILE_INVALID','Please provide a link to the material or upload a file');
-INSERT INTO Translation(translationGroup, translationKey, translation) VALUES (2,'MATERIAL_URL_OR_FILE_INVALID','Пожалуйста, включите справочные материалы , или загрузить файл');

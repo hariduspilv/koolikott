@@ -391,6 +391,7 @@ define([
             }
 
             function fileUploadSuccess(file) {
+                log(file);
                 $scope.fileUploaded = true;
                 $scope.uploadingFile = false;
                 $scope.material.uploadedFile = file;
