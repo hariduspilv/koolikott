@@ -314,6 +314,9 @@
                       <span data-ng-hide="material.publishers[0].name || $index > 0">*</span>
                     </label>
                     <input data-ng-model="author.name" id="material-author-{{$index}}-name" name="firstname" md-maxlength="50" maxlength="50">
+                    <div ng-messages="addMaterialForm.name.$error" data-ng-show="!author.name && author.surname">
+                      <div ng-message="required" data-translate="FIRST_NAME_REQUIRED"></div>
+                    </div>
                   </md-input-container>
                   <md-input-container flex>
                     <label>
