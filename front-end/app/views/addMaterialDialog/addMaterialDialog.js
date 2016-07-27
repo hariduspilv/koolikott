@@ -586,7 +586,7 @@ define([
             }
 
             function getMaxFileSizeSuccess(data) {
-                $scope.maxPictureSize = data;
+                $scope.maxFileSize = data;
             }
 
             function getMaxFileSizeFail() {

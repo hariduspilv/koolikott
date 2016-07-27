@@ -64,13 +64,14 @@
                   </div>
                   <md-tooltip><span data-translate="MATERIAL_PHOTO_UPLOAD_HELP"></span></md-tooltip>
                 </div>
-                <div flex-sm="30" flex-md="25" flex-gt-md="25" class="md-padding">
+                <div flex-sm="30" flex-md="25" flex-gt-md="25" class="md-padding" layout="column">
                   <div flex ngf-select ng-model="newFile"
                        data-accept="*"
                        data-ngf-pattern="'*'"
                        data-ng-upload
                        data-ngf-max-size="{{maxFileSize + 'MB'}}"
                        layout="row"
+                       ngf-model-invalid="invalidFile"
                        layout-align="center center" flex>
 
                     <button class="md-raised md-primary md-button md-ink-ripple">
@@ -78,9 +79,12 @@
                       <span data-translate="ADD_FILE"></span>
                     </button>
                   </div>
+                  <div data-ng-message="file"
+                       data-ng-show="!fileUploaded && uploadMode && addMaterialForm.$submitted"
+                       data-translate="ADD_FILE_PLACEHOLDER" class="upload-file-error"></div>
                 </div>
-                <div flex-sm="25" flex-md="35" flex-gt-md="40" data-ng-show="uploadMode && !fileUploaded && !uploadingFile " class="upload-file-placeholder"><h5 data-translate="ADD_FILE_PLACEHOLDER"></h5> </div>
-                <div flex-sm="25" flex-md="35" flex-gt-md="40" data-ng-if="fileUploaded || uploadingFile" layout-align="center center">
+                <div flex-sm="25" flex-md="35" flex-gt-md="40" data-ng-show="uploadMode && !fileUploaded && !uploadingFile " class="upload-file-placeholder"></div>
+                <div flex-sm="25" flex-md="35" flex-gt-md="40" layout-align="center center">
                   <div data-ng-show="uploadingFile" class="upload-file-uploading">
                     <h5 data-translate="ADD_FILE_UPLOADING"></h5>
                   </div>
@@ -89,7 +93,7 @@
                   </div>
                 </div>
                 <div flex data-ng-hide="uploadMode || fileUploaded">
-                  <div flex data-ng-hide="uploadMode || fileUploaded">
+                  <div flex>
                     <md-input-container flex layout-fill layout="column">
                       <label>
                         <span data-translate="MATERIAL_LINK"></span>
