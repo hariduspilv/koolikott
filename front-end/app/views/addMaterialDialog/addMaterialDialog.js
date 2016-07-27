@@ -226,7 +226,7 @@ define([
                     if (author.name && !author.surname) res = false;
                     else if (author.surname && !author.name) res = false;
                 });
-                
+
                 return res;
             }
 
@@ -394,7 +394,7 @@ define([
                 $scope.fileUploaded = true;
                 $scope.uploadingFile = false;
                 $scope.material.uploadedFile = file;
-                $scope.material.source = "https://localhost/rest/uploadedFile/" + file.id;
+                $scope.material.source = "https://" + window.location.hostname + "/rest/uploadedFile/" + file.id;
                 $scope.step.isMaterialUrlStepValid = true;
             }
 
