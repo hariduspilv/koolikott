@@ -64,5 +64,14 @@ md-toolbar .md-button.md-icon-button md-icon, button.md-button.md-fab md-icon {
       float: left;
     }
   }
-
+  .material-menu-icon md-menu-item {
+    .material-icons {
+        position: absolute;
+        top: 12px;
+        left: 12px;
+    }
+    span {
+      margin-left: 30px;
+    }
+  }
 }
