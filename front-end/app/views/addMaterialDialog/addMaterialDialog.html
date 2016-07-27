@@ -83,8 +83,11 @@
                        data-ng-show="!fileUploaded && uploadMode && addMaterialForm.$submitted"
                        data-translate="ADD_FILE_PLACEHOLDER" class="upload-file-error"></div>
                 </div>
-                <div flex-sm="25" flex-md="35" flex-gt-md="40" data-ng-show="uploadMode && !fileUploaded && !uploadingFile " class="upload-file-placeholder"></div>
-                <div flex-sm="25" flex-md="35" flex-gt-md="40" layout-align="center center">
+                <div data-ng-show="uploadMode && (uploadingFile || !fileUploaded)" flex-sm="25" flex-md="35" flex-gt-md="40">
+                </div>
+
+
+                <div flex-sm="25" flex-md="35" flex-gt-md="40" layout-align="center center" data-ng-show="uploadingFile || ( fileUploaded && !uploadingFile )">
                   <div data-ng-show="uploadingFile" class="upload-file-uploading">
                     <h5 data-translate="ADD_FILE_UPLOADING"></h5>
                   </div>

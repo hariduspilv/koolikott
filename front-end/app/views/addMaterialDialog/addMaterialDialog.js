@@ -403,7 +403,7 @@ define([
             }
 
             function fileUploadFinally() {
-                uploadingFile = false;
+                $scope.uploadingFile = false;
             }
 
             function preSetMaterial(material) {
