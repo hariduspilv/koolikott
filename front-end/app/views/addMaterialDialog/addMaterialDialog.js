@@ -215,8 +215,7 @@ define([
             };
 
             $scope.isTabThreeValid = function () {
-                log($scope.material.publishers[0].name.length);
-                return (($scope.material.publishers[0] && $scope.material.publishers[0].name) && areAuthorsValid() || (areAuthorsValid() && $scope.material.publishers[0].name.length == 0))
+                return areAuthorsValid()
                     && $scope.material.licenseType && $scope.material.issueDate.year;
             };
 
@@ -229,8 +228,13 @@ define([
                     else if (author.surname && !author.name) res = false;
                 });
 
+                if($scope.material.authors.length == 1 && !$scope.material.authors[0].name && !$scope.material.authors[0].surname){
+                    res = true;
+                }
+
                 return res;
             }
+
 
             function isStepValid(index) {
                 switch (index) {
