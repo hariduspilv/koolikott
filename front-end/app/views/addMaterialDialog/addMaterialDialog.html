@@ -83,7 +83,7 @@
                        data-ng-show="!fileUploaded && uploadMode && addMaterialForm.$submitted"
                        data-translate="ADD_FILE_PLACEHOLDER" class="upload-file-error"></div>
                 </div>
-                <div data-ng-show="uploadMode && (uploadingFile || !fileUploaded)" flex-sm="25" flex-md="35" flex-gt-md="40">
+                <div data-ng-show="uploadMode && !(uploadingFile || fileUploaded)" flex-sm="25" flex-md="35" flex-gt-md="40">
                 </div>
 
 
@@ -95,7 +95,7 @@
                     <h5><span data-translate="ADD_FILE_SUCCESS"></span>: {{ material.uploadedFile.name }}</h5>
                   </div>
                 </div>
-                <div flex data-ng-hide="uploadMode || fileUploaded">
+                <div flex data-ng-hide="uploadMode || fileUploaded || uploadingFile">
                   <div flex>
                     <md-input-container flex layout-fill layout="column">
                       <label>
@@ -115,7 +115,7 @@
                     </md-input-container>
                   </div>
                 </div>
-                <md-input-container flex-gt-xs="20" flex="20" class="md-padding">
+                <md-input-container flex-gt-xs="20" flex="20" class="md-padding" layout-align="center end">
                   <label data-translate="MATERIAL_LANGUAGE"></label>
                   <md-select data-ng-model="material.language" id="add-material-language-select">
                     <md-option data-ng-repeat="language in languages" value="{{language}}">
@@ -320,7 +320,7 @@
                       <span data-translate="MATERIAL_AUTHOR_NAME"></span>
                       <span data-ng-hide="material.publishers[0].name || $index > 0">*</span>
                     </label>
-                    <input data-ng-model="author.name" id="material-author-{{$index}}-name" name="firstname" md-maxlength="50" maxlength="50">
+                    <input data-ng-model="author.name" id="material-author-{{$index}}-name" data-ng-required="author.name" name="firstname" md-maxlength="50" maxlength="50">
                     <div ng-messages="addMaterialForm.name.$error" data-ng-show="!author.name && author.surname">
                       <div ng-message="required" data-translate="FIRST_NAME_REQUIRED"></div>
                     </div>
