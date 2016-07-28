@@ -237,3 +237,8 @@ md-card.card-sm md-card-actions {
     from { opacity: 0; }
     to   { opacity: 1; }
 }
+
+// Angular material theme override
+md-content.md-default-theme, md-content {
+  background-color: transparent;
+}
