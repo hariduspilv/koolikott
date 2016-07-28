@@ -44,6 +44,9 @@ public class UploadedFileService {
 
     public Response getFile(Long fileId){
         UploadedFile file = getUploadedFileById(fileId);
+        if(file == null){
+            return Response.status(Response.Status.NOT_FOUND).build();
+        }
         return Response.ok(FileUtils.getFile(file.getPath()), MediaType.APPLICATION_OCTET_STREAM)
                     .header("Content-Disposition", "attachment; filename=\"" + file.getName() + "\"" ) //optional
                     .build();
