@@ -39,3 +39,16 @@
     margin: 0;
   }
 }
+
+@media screen and (max-width: 959px) {
+  .allow-scroll {
+    overflow-y: scroll;
+    height: 100%;
+  }
+}
+
+.nav-position {
+  position: fixed;
+  width: 100%;
+  z-index: 10;
+}

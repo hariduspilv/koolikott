@@ -1,10 +1,10 @@
-<div data-layout="column" data-flex layout-wrap class="portfolio-container">
-  <div data-ng-if="!isEditPortfolioMode" id="navmenu" data-dop-header></div>
-  <div data-ng-if="isEditPortfolioMode" id="navmenu" data-dop-edit-portfolio-mode-header></div>
+<div data-layout="column" data-flex layout-fill class="portfolio-container">
+  <div ng-class="{'allow-scroll': detailedSearch.isVisible}" class="nav-position" data-ng-if="!isEditPortfolioMode" id="navmenu" data-dop-header></div>
+  <div ng-class="{'allow-scroll': detailedSearch.isVisible}" class="nav-position" data-ng-if="isEditPortfolioMode" id="navmenu" data-dop-edit-portfolio-mode-header></div>
   <div id="alert" data-dop-alert></div>
   <div layout="row" data-flex layout-fill >
     <md-sidenav flex-gt-md="15" layout="column" class="md-sidenav-left" md-component-id="left" md-is-locked-open="$mdMedia('gt-md')" id="sidebar-left">
-      <md-toolbar class="{{isEditPortfolioMode ? 'md-accent' : 'md-primary'}} hide-gt-md">
+      <md-toolbar class="{{isEditPortfolioMode ? 'md-accent' : 'md-primary'}}">
         <h6 class="md-toolbar-tools md-subhead">
           <div layout-align="center start" flex>
             <md-tooltip><span data-translate="HEADER_TOOLTIP_GO_TO_LANDING_PAGE"></span></md-tooltip>
@@ -17,6 +17,9 @@
         <div data-dop-table-of-contents data-portfolio="portfolio" data-readonly="!isEditPortfolioMode"></div>
       </md-content>
     </md-sidenav>
-    <div data-ng-view layout="row" flex="100" flex-gt-md="75"></div>
+    <div id="scrollable-content" layout="row" layout-fill flex="100">
+      <div layout="row" layout-xs="column" flex="0" flex-gt-md="15"></div>
+      <div class="column-layout-content" layout="row" data-ng-view flex flex-gt-md="75"></div>
+    </div>
   </div>
 </div>

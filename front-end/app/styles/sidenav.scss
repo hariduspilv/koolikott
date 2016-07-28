@@ -132,3 +132,14 @@ md-sidenav {
     z-index: -1;
   }
 }
+
+md-sidenav._md-locked-open, md-sidenav._md-locked-open._md-closed, md-sidenav._md-locked-open._md-closed.md-sidenav-left, md-sidenav._md-locked-open._md-closed, md-sidenav._md-locked-open._md-closed.md-sidenav-right, md-sidenav._md-locked-open-remove._md-closed {
+  position: fixed;
+}
+
+.edit-btn-area {
+  width: 100px;
+  button.md-icon-button{
+    margin: 0;
+  }
+}
