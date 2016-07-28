@@ -75,8 +75,17 @@ define([
             configureDateLocale($mdDateLocaleProvider);
             $sceProvider.enabled(false);
 
+            if (!$httpProvider.defaults.headers.get) {
+                $httpProvider.defaults.headers.get = {};
+            }
+
             $httpProvider.defaults.transformResponse.splice(0, 0, parseJSONResponse);
             $httpProvider.defaults.transformRequest = serializeRequest;
+            //disable IE ajax request caching
+            $httpProvider.defaults.headers.get['If-Modified-Since'] = 'Mon, 26 Jul 1997 05:00:00 GMT';
+            // extra
+            $httpProvider.defaults.headers.get['Cache-Control'] = 'no-cache';
+            $httpProvider.defaults.headers.get['Pragma'] = 'no-cache';
 
             $locationProvider.html5Mode(true);
             $anchorScrollProvider.disableAutoScrolling();
