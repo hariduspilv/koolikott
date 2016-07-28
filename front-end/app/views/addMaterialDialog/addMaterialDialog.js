@@ -215,9 +215,11 @@ define([
             };
 
             $scope.isTabThreeValid = function () {
-                return (($scope.material.publishers[0] && $scope.material.publishers[0].name) || areAuthorsValid())
+                log($scope.material.publishers[0].name.length);
+                return (($scope.material.publishers[0] && $scope.material.publishers[0].name) && areAuthorsValid() || (areAuthorsValid() && $scope.material.publishers[0].name.length == 0))
                     && $scope.material.licenseType && $scope.material.issueDate.year;
             };
+
 
             function areAuthorsValid() {
                 var res = !!$scope.material.authors[0].name;

@@ -104,7 +104,7 @@ public class Material extends LearningObject implements Searchable {
             uniqueConstraints = @UniqueConstraint(columnNames = { "material", "publisher" }) )
     private List<Publisher> publishers;
 
-    @OneToOne(cascade = {CascadeType.ALL})
+    @OneToOne(cascade = {CascadeType.ALL}, orphanRemoval = true)
     @JoinColumn(name = "uploadedFile")
     private UploadedFile uploadedFile;
 
