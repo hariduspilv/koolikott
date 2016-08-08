@@ -28,7 +28,7 @@ public class UploadedFileResource extends BaseResource {
     private Configuration configuration;
 
     @Inject
-    UploadedFileService uploadedFileService;
+    private UploadedFileService uploadedFileService;
 
     @POST
     @RolesAllowed({"USER", "ADMIN", "MODERATOR"})

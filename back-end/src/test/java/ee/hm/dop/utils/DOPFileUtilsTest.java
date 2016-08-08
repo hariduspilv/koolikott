@@ -24,7 +24,7 @@ public class DOPFileUtilsTest {
     @Test
     public void getFileAsStream() throws IOException {
         // create tmp file
-        File tempFile = File.createTempFile("testFileForGetFileAsStrem", ".dop");
+        File tempFile = File.createTempFile("testFileForGetFileAsStream", ".dop");
         PrintWriter writer = new PrintWriter(tempFile, "UTF-8");
         writer.println("bla bla bla");
         writer.close();
