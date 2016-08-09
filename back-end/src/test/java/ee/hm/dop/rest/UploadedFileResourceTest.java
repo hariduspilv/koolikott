@@ -3,6 +3,7 @@ package ee.hm.dop.rest;
 import static ee.hm.dop.utils.ConfigurationProperties.DOCUMENT_MAX_FILE_SIZE;
 import static ee.hm.dop.utils.ConfigurationProperties.FILE_UPLOAD_DIRECTORY;
 import static ee.hm.dop.utils.ConfigurationProperties.SERVER_ADDRESS;
+import static java.net.HttpURLConnection.HTTP_NOT_FOUND;
 import static java.net.HttpURLConnection.HTTP_OK;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -37,7 +38,7 @@ public class UploadedFileResourceTest extends ResourceIntegrationTestBase {
     private Configuration configuration;
 
     @Test
-    public void getUploadedFile() throws IOException {
+    public void getFile() throws IOException {
         Response response = doGet("uploadedFile/1", MediaType.APPLICATION_OCTET_STREAM_TYPE);
 
         InputStream is = response.readEntity(InputStream.class);
@@ -54,6 +55,12 @@ public class UploadedFileResourceTest extends ResourceIntegrationTestBase {
 
         assertTrue(tempFile.exists());
         assertTrue(tempFile.isFile());
+    }
+
+    @Test
+    public void getInvalidIdFile(){
+        Response response = doGet("uploadedFile/1000", MediaType.APPLICATION_OCTET_STREAM_TYPE);
+        assertEquals(HTTP_NOT_FOUND, response.getStatus());
     }
 
     @Test

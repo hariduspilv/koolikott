@@ -20,9 +20,6 @@ import org.junit.runner.RunWith;
 @RunWith(EasyMockRunner.class)
 public class DOPFileUtilsTest {
 
-    @Mock
-    private Configuration configuration;
-
     @Test
     public void getFileAsStreamNoFile() {
         InputStream inputStream = DOPFileUtils.getFileAsStream("wrong.xml");
