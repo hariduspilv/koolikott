@@ -49,6 +49,7 @@ public class UploadedFileService {
         return Response.ok(FileUtils.getFile(file.getPath()), MediaType.APPLICATION_OCTET_STREAM)
                 .header("Content-Disposition", "attachment; filename=\"" + filename + "\"")
                 .build();
+        
     }
 
     public UploadedFile uploadFile(InputStream fileInputStream, FormDataContentDisposition fileDetail) throws UnsupportedEncodingException {
