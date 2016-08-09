@@ -1,5 +1,6 @@
 package ee.hm.dop.model;
 
+import static javax.persistence.CascadeType.ALL;
 import static javax.persistence.CascadeType.MERGE;
 import static javax.persistence.CascadeType.PERSIST;
 import static javax.persistence.FetchType.EAGER;
@@ -7,7 +8,6 @@ import static javax.persistence.FetchType.LAZY;
 
 import java.util.List;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
@@ -68,7 +68,7 @@ public class Material extends LearningObject implements Searchable {
             uniqueConstraints = @UniqueConstraint(columnNames = { "material", "description" }) )
     private List<LanguageString> descriptions;
 
-    @Column(nullable = false, columnDefinition = "TEXT")
+    @Column(columnDefinition = "TEXT")
     private String source;
 
     @ManyToMany(fetch = EAGER)
@@ -104,7 +104,7 @@ public class Material extends LearningObject implements Searchable {
             uniqueConstraints = @UniqueConstraint(columnNames = { "material", "publisher" }) )
     private List<Publisher> publishers;
 
-    @OneToOne(cascade = {CascadeType.ALL}, orphanRemoval = true)
+    @OneToOne(cascade = ALL )
     @JoinColumn(name = "uploadedFile")
     private UploadedFile uploadedFile;
 

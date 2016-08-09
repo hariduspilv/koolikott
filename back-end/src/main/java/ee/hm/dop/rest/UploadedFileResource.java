@@ -3,6 +3,7 @@ package ee.hm.dop.rest;
 import static ee.hm.dop.utils.ConfigurationProperties.DOCUMENT_MAX_FILE_SIZE;
 
 import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
 
 import javax.annotation.security.RolesAllowed;
 import javax.inject.Inject;
@@ -35,15 +36,15 @@ public class UploadedFileResource extends BaseResource {
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     @Produces(MediaType.APPLICATION_JSON)
     public UploadedFile uploadFile(@FormDataParam("file") InputStream fileInputStream,
-                                   @FormDataParam("file") FormDataContentDisposition fileDetail) {
+                                   @FormDataParam("file") FormDataContentDisposition fileDetail) throws UnsupportedEncodingException {
         return uploadedFileService.uploadFile(fileInputStream, fileDetail);
     }
 
     @GET
     @Produces(MediaType.APPLICATION_OCTET_STREAM)
-    @Path("{id}")
-    public Response getFile(@PathParam("id") Long fileId) {
-        return uploadedFileService.getFile(fileId);
+    @Path("{id}/{filename}")
+    public Response getFile(@PathParam("id") Long fileId, @PathParam("filename") String filename) {
+        return uploadedFileService.getFile(fileId, filename);
     }
 
     @GET

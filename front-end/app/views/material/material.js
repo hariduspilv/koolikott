@@ -115,6 +115,7 @@ define([
 
             function init() {
                 processMaterial();
+                $scope.material.source = getSource($scope.material);
                 storageService.setMaterial(null);
 
                 var viewCountParams = {

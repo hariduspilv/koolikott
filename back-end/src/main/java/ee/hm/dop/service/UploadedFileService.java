@@ -1,6 +1,7 @@
 package ee.hm.dop.service;
 
 import static ee.hm.dop.utils.ConfigurationProperties.FILE_UPLOAD_DIRECTORY;
+import static ee.hm.dop.utils.ConfigurationProperties.SERVER_ADDRESS;
 import static ee.hm.dop.utils.DOPFileUtils.writeToFile;
 import static java.nio.charset.StandardCharsets.UTF_8;
 
@@ -28,8 +29,6 @@ public class UploadedFileService {
     @Inject
     private Configuration configuration;
 
-    private static Logger logger = LoggerFactory.getLogger(UploadedFileService.class);
-
     private UploadedFile getUploadedFileById(Long id) {
         return uploadedFileDAO.findUploadedFileById(id);
     }
@@ -42,28 +41,26 @@ public class UploadedFileService {
         return uploadedFileDAO.update(uploadedFile);
     }
 
-    public Response getFile(Long fileId) {
+    public Response getFile(Long fileId, String filename) {
         UploadedFile file = getUploadedFileById(fileId);
         if (file == null) {
             return Response.status(Response.Status.NOT_FOUND).build();
         }
         return Response.ok(FileUtils.getFile(file.getPath()), MediaType.APPLICATION_OCTET_STREAM)
-                .header("Content-Disposition", "attachment; filename=\"" + file.getName() + "\"")
+                .header("Content-Disposition", "attachment; filename=\"" + filename + "\"")
                 .build();
     }
 
-    public UploadedFile uploadFile(InputStream fileInputStream, FormDataContentDisposition fileDetail) {
-        String filename = null;
-        try {
-            filename = URLEncoder.encode(fileDetail.getFileName(), UTF_8.name());
-        } catch (UnsupportedEncodingException e) {
-            logger.warn("Could not URLEncode the file path");
-        }
+    public UploadedFile uploadFile(InputStream fileInputStream, FormDataContentDisposition fileDetail) throws UnsupportedEncodingException {
+        String filename;
+        filename = URLEncoder.encode(fileDetail.getFileName(), UTF_8.name());
         UploadedFile uploadedFile = new UploadedFile();
         uploadedFile.setName(filename);
         UploadedFile newUploadedFile = create(uploadedFile);
-        String path = configuration.getString(FILE_UPLOAD_DIRECTORY) + newUploadedFile.getId() + "/" + filename;
+        String url = configuration.getString(SERVER_ADDRESS) + "/rest/uploadedFile/" + newUploadedFile.getId() + "/" + newUploadedFile.getName();
+        String path = configuration.getString(FILE_UPLOAD_DIRECTORY) +  newUploadedFile.getId() + "/" + filename;
         newUploadedFile.setPath(path);
+        newUploadedFile.setUrl(url);
         update(newUploadedFile);
         writeToFile(fileInputStream, path);
         return newUploadedFile;
