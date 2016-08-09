@@ -209,7 +209,6 @@ define([
             }
 
             $scope.isTabOneValid = function () {
-                console.log($scope.step.isMaterialUrlStepValid);
                 return ( $scope.step.isMaterialUrlStepValid || $scope.fileUploaded) && isMetadataStepValid();
             };
 

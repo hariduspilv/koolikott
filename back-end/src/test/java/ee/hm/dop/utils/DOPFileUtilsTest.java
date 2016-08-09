@@ -10,15 +10,18 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
 
-import org.apache.commons.configuration.Configuration;
 import org.apache.commons.io.FileUtils;
 import org.easymock.EasyMockRunner;
-import org.easymock.Mock;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 
 @RunWith(EasyMockRunner.class)
 public class DOPFileUtilsTest {
+
+    private static final Logger logger = LoggerFactory.getLogger(DOPFileUtilsTest.class);
 
     @Test
     public void getFileAsStreamNoFile() {
@@ -42,7 +45,7 @@ public class DOPFileUtilsTest {
     @Test
     public void writeToFile() {
 
-        final String FILE_CONTENT = "Hello World";
+        final String FILE_CONTENT = "Test content";
         final String FILE_DIRECTORY = "uploads/";
         final String FILE_NAME = "uploadedFileTest.test";
 
@@ -52,7 +55,7 @@ public class DOPFileUtilsTest {
         try {
             FileUtils.forceDelete(new File(FILE_DIRECTORY + FILE_NAME));
         } catch (IOException e) {
-            System.out.println("Unable to delete the test file");
+            logger.error("Could not delete file!");
         }
     }
 }
