@@ -377,7 +377,7 @@
                 <!--Issue date-->
                   <div class="datepicker-container">
                       <md-datepicker ng-model="issueDate" name="issueDate" required
-                                     md-placeholder="Väljaandm. kp">
+                                     md-placeholder="{{ 'MATERIAL_ISSUE_DATE' | translate }}">
                       </md-datepicker>
                       <div data-ng-messages="addMaterialForm.issueDate.$error"
                            data-ng-show="!material.issueDate.year && (addMaterialForm.issueDate.$touched || addMaterialForm.$submitted)">

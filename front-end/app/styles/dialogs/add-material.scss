@@ -62,9 +62,13 @@
 
 .md-button.md-icon-button.md-datepicker-button{
   position: absolute;
-  margin-left: 100px;
+  margin-left: 130px;
   margin-top: -9px;
   z-index: 1;
+}
+
+.md-datepicker-input-container{
+  padding-right: 50px;
 }
 
 .md-datepicker-open .md-button.md-icon-button.md-datepicker-button{
@@ -72,11 +76,7 @@
 }
 
 .datepicker-container .validation-messages{
-  max-width: 140px;
-}
-
-.md-errors-spacer {
-  min-height: 0 !important;
+  max-width: 180px;
 }
 
 
