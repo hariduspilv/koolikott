@@ -37,8 +37,8 @@
 
   <!-- content -->
 
-  <md-card-content flex layout="column" class="minContentHeight">
-    <a data-ng-href="{{'/material?materialId=' + material.id}}" class="no-link">
+  <md-card-content layout="column" class="minContentHeight">
+    <a data-ng-href="{{'/material?materialId=' + material.id}}" class="no-link materialbox-content">
       <h4 class="md-headline two-rows" data-ng-bind="getCorrectLanguageTitle(material)"></h4>
       <p class="md-caption one-row">
       <span data-ng-repeat="author in material.authors">
@@ -53,7 +53,7 @@
   <md-divider></md-divider>
 
   <md-card-actions layout="row" layout-align="start center">
-    <a data-ng-href="{{'/material?materialId=' + material.id}}" class="no-link">
+    <a data-ng-href="{{'/material?materialId=' + material.id}}" class="no-link materialbox-icons">
 
       <div class="md-action-icons-list md-caption" flex layout>
         <md-icon>thumb_up</md-icon>

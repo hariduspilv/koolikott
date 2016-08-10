@@ -1,0 +1,105 @@
+// Scaffolding
+html, body {
+  background: $bg-gray;
+  color: rgba(0,0,0,0.77);
+  line-height: 1.2;
+}
+
+//BrowseHappy
+.browsehappy {
+  margin: 0.2em 0;
+  background: #ccc;
+  color: #000;
+  padding: 0.2em 0;
+}
+
+// reset
+*:focus {
+  outline: none;
+}
+
+
+//
+// TO SORT
+//
+
+ul {
+    -webkit-padding-start: 0em;
+    list-style: none;
+}
+
+// material bugfixes
+@media (min-width: 960px) {
+.layout-column > .flex-gt-sm-25 {
+    max-width: 25%;
+  }
+}
+
+.wrapped {
+  white-space: pre;
+  white-space: pre-wrap;
+  white-space: pre-line;
+  white-space: -pre-wrap;
+  white-space: -o-pre-wrap;
+  white-space: -moz-pre-wrap;
+  white-space: -hp-pre-wrap;
+  word-wrap: break-word;
+}
+
+a {
+  text-decoration: none;
+  color: $link-color;
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+.md-button:not([disabled]):hover {
+  //background: darken($bg-gray, 3%);
+}
+
+.md-errors-spacer {
+  display: none;
+}
+
+
+/* fixes select overflow */
+.md-select-value *:first-child {
+  flex: 1;
+}
+
+md-datepicker {
+  margin-right: 0;
+}
+
+.validation-messages {
+  font-size: 12px;
+  color: $error;
+  margin-top: 10px;
+}
+
+.error-color {
+  color: $error;
+}
+
+#scrollable-content {
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+md-card.card-sm md-card-actions {
+  -webkit-animation: fadein 2s; /* Safari, Chrome and Opera > 12.1 */
+   -moz-animation: fadein 2s; /* Firefox < 16 */
+    -ms-animation: fadein 2s; /* Internet Explorer */
+     -o-animation: fadein 2s; /* Opera < 12.1 */
+        animation: fadein 2s;
+}
+
+// Angular material theme override
+md-content.md-default-theme, md-content {
+  background-color: transparent;
+}
+
+.column-layout-content {
+  margin-top: 60px;
+}

@@ -392,7 +392,7 @@
                 <md-input-container flex
                                     data-ng-class="{'error-color': ((addMaterialForm.licenseType.$touched || addMaterialForm.$submitted) && !material.licenseType)}">
                   <label>
-                    <span data-translate="MATERIAL_VIEW_LICENSE_TYPE"></span>*
+                    <span data-translate="MATERIAL_VIEW_LICENSE_TYPE"></span>
                   </label>
                   <md-select data-ng-model="material.licenseType" id="licenceTypeSelect" name="licenseType"
                              ng-model-options="{trackBy: '$value.id'}">
@@ -400,12 +400,7 @@
                     <md-option data-ng-value="licenceType" data-ng-repeat="licenceType in licenceTypes"
                                data-translate="LICENSETYPE_{{licenceType.name.toUpperCase()}}">
                     </md-option>
-
                   </md-select>
-                  <div
-                    data-ng-show="(addMaterialForm.licenseType.$touched || addMaterialForm.$submitted) && !material.licenseType">
-                    <div class="validation-messages" data-translate="MATERIAL_LICENSE_TYPE_MANDATORY"></div>
-                  </div>
                 </md-input-container>
 
                 <!--Paid-->

@@ -218,22 +218,20 @@ define([
             };
 
             $scope.isTabThreeValid = function () {
-                return areAuthorsValid()
-                    && $scope.material.licenseType && $scope.material.issueDate.year;
+                return areAuthorsValid() && (hasAuthors() || material.publishers[0].name) && $scope.material.issueDate.year;
             };
 
+            function hasAuthors() {
+                return $scope.material.authors.length > 0;
+            }
 
             function areAuthorsValid() {
-                var res = !!$scope.material.authors[0].name;
+                var res = true;
 
                 $scope.material.authors.forEach(function (author) {
                     if (author.name && !author.surname) res = false;
                     else if (author.surname && !author.name) res = false;
                 });
-
-                if($scope.material.authors.length == 1 && !$scope.material.authors[0].name && !$scope.material.authors[0].surname){
-                    res = true;
-                }
 
                 return res;
             }
