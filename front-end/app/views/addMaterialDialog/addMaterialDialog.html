@@ -64,46 +64,12 @@
                   </div>
                   <md-tooltip><span data-translate="MATERIAL_PHOTO_UPLOAD_HELP"></span></md-tooltip>
                 </div>
-                <div flex-sm="30" flex-md="25" flex-gt-md="25" class="md-padding" layout="column">
-                  <div flex ngf-select ng-model="newFile"
-                       data-accept="*"
-                       data-ngf-pattern="'*'"
-                       data-ngf-max-size="{{maxFileSize + 'MB'}}"
-                       layout="row"
-                       ngf-model-invalid="invalidFile"
-                       layout-align="center center" flex>
 
-                    <a class="md-raised md-primary md-button md-ink-ripple">
-                      <md-icon>file_upload</md-icon>
-
-                      <span data-ng-show="material.uploadedFile" data-translate="UPDATE_FILE"></span>
-                      <span data-ng-show="!material.uploadedFile" data-translate="ADD_FILE"></span>
-                    </a>
-                  </div>
-                  <div class="currently-uploaded-file" data-ng-if="material.uploadedFile && !fileUploaded">
-                    <span data-translate="CURRENTLY_UPLOADED_FILE"></span> {{ material.uploadedFile.name }}
-                  </div>
-                  <div data-ng-message="file"
-                       data-ng-show="!fileUploaded && uploadMode && addMaterialForm.$submitted"
-                       data-translate="ADD_FILE_PLACEHOLDER" class="upload-file-error"></div>
-                </div>
-                <div data-ng-if="uploadMode && !(uploadingFile || fileUploaded)" flex-sm="25" flex-md="35" flex-gt-md="40">
-                </div>
-
-
-                <div flex-sm="25" flex-md="35" flex-gt-md="40" layout-align="center center" data-ng-show="uploadingFile || fileUploaded">
-                  <div data-ng-show="uploadingFile" class="upload-file-uploading">
-                    <h5 data-translate="ADD_FILE_UPLOADING"></h5>
-                  </div>
-                  <div data-ng-show="fileUploaded && !uploadingFile" class="upload-file-success">
-                    <h5><span data-translate="ADD_FILE_SUCCESS"></span>: {{ material.uploadedFile.name }}</h5>
-                  </div>
-                </div>
-                <div flex data-ng-hide="uploadMode || fileUploaded || uploadingFile">
+                <div flex data-ng-hide="fileUploaded || uploadingFile">
                   <div flex>
                     <md-input-container flex layout-fill layout="column">
                       <label>
-                        <span data-translate="MATERIAL_LINK"></span>
+                        <span data-translate="MATERIAL_URL_OR_FILE_INVALID"></span>
                       </label>
                       <input data-ng-model="material.source" name="source" id="add-material-url-input" type="text"
                              required
@@ -119,6 +85,40 @@
                     </md-input-container>
                   </div>
                 </div>
+
+                <div flex-sm="25" flex-md="35" flex-gt-md="40" layout-align="center center" data-ng-show="uploadingFile || fileUploaded">
+                  <div data-ng-show="uploadingFile" class="upload-file-uploading">
+                    <h5 data-translate="ADD_FILE_UPLOADING"></h5>
+                  </div>
+                  <div data-ng-show="fileUploaded && !uploadingFile" class="upload-file-success">
+                    <h5><span data-translate="ADD_FILE_SUCCESS"></span>: {{ material.uploadedFile.name }}</h5>
+                  </div>
+                </div>
+
+                <div flex-sm="30" flex-md="25" flex-gt-md="25" class="md-padding" layout="column">
+                  <div flex ngf-select ng-model="newFile"
+                       data-accept="*"
+                       data-ngf-pattern="'*'"
+                       data-ngf-max-size="{{maxFileSize + 'MB'}}"
+                       layout="row"
+                       ngf-model-invalid="invalidFile"
+                       layout-align="start center" flex>
+
+                    <a class="md-raised md-primary md-button md-ink-ripple">
+                      <md-icon>file_upload</md-icon>
+
+                      <span data-ng-show="material.uploadedFile" data-translate="UPDATE_FILE"></span>
+                      <span data-ng-show="!material.uploadedFile" data-translate="ADD_FILE"></span>
+                    </a>
+                  </div>
+                  <div class="currently-uploaded-file" data-ng-if="material.uploadedFile && !fileUploaded">
+                    <span data-translate="CURRENTLY_UPLOADED_FILE"></span> {{ material.uploadedFile.name }}
+                  </div>
+                  <div data-ng-message="file"
+                       data-ng-show="!fileUploaded && addMaterialForm.$submitted"
+                       data-translate="ADD_FILE_PLACEHOLDER" class="upload-file-error"></div>
+                </div>
+
                 <md-input-container flex-gt-xs="20" flex="20" class="md-padding" layout-align="center end">
                   <label data-translate="MATERIAL_LANGUAGE"></label>
                   <md-select data-ng-model="material.language" id="add-material-language-select">
