@@ -167,10 +167,11 @@ md-card {
 
     md-card-content {
       padding-bottom: 12px;
-      height: 30%;
+      max-height: 50%;
+      min-height: 35%;
     }
     .card-cover {
-      height: 40%;
+      height: 50%;
       border-radius: 2px 2px 0 0;
       overflow: hidden;
       position: relative;
@@ -360,4 +361,31 @@ md-card .card-menu {
   position: absolute;
   top: 8px;
   right: 8px;
+}
+
+.placeholder-card {
+  &:hover {
+    background-color: #fff !important;
+    cursor: default !important;
+  }
+
+  .card-cover {
+    background-color: #f5f5f5;
+  }
+  md-card-content {
+    position: relative;
+
+    .title-placeholder {
+      background-color: #f5f5f5;
+      width: 90%;
+      height: 18px;
+    }
+
+    .author-placeholder {
+      background-color: #f5f5f5;
+      width: 75%;
+      height: 12px;
+      margin-top: 32px;
+    }
+  }
 }
