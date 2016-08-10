@@ -14,7 +14,7 @@ define([
                 touched: '='
             },
             bindToController: true,
-            controller: function ($scope, serverCallService, $rootScope, $timeout, metadataService) {
+            controller: function ($scope, serverCallService, $rootScope, $timeout, metadataService, $filter) {
                 var self = this;
                 // get educational contexts
                 if (!EDUCATIONAL_CONTEXTS) {
@@ -43,7 +43,9 @@ define([
                 function removeTopic(originalId) {
                     if ($rootScope.selectedTopics) {
                         $rootScope.selectedTopics = $rootScope.selectedTopics
-                            .filter(function(topic) { return topic.id !== originalId });
+                            .filter(function (topic) {
+                                return topic.id !== originalId;
+                            });
                     }
                 }
 
@@ -55,7 +57,9 @@ define([
                 };
 
                 self.selectEducationalContext = function () {
-                    self.touched.trigger = true;
+                    if(self.touched) {
+                        self.touched.trigger = true;
+                    }
 
                     $rootScope.dontCloseSearch = true;
                     $timeout(function () {
@@ -72,7 +76,7 @@ define([
                     if (path.module && path.module.topics && path.module.topics.length > 0) return path.module.topics;
                 };
 
-                self.isBasicOrSecondaryEducation = function() {
+                self.isBasicOrSecondaryEducation = function () {
                     if (self.taxonPath.educationalContext) {
                         return self.taxonPath.educationalContext.name === 'BASICEDUCATION'
                             || self.taxonPath.educationalContext.name === 'SECONDARYEDUCATION';
@@ -80,6 +84,10 @@ define([
                         return false;
                     }
 
+                };
+
+                self.translateTaxon = function (taxon) {
+                    return $filter('translate')(taxon.level.toUpperCase().substr(1) + "_" + taxon.name.toUpperCase());
                 };
 
                 function addTaxonPathListeners() {
@@ -106,7 +114,7 @@ define([
                     }, true);
 
                     //EducationalContext
-                    $scope.$watch( function() {
+                    $scope.$watch(function () {
                             if (self.taxonPath && self.taxonPath.educationalContext)
                                 return self.taxonPath.educationalContext.id;
                         }
@@ -226,16 +234,29 @@ define([
 
                 function getDomainsAndSubjects(educationalContext) {
                     var results = [];
+                    //sort Domains alphabetically
+                    var domains = sortTaxonAlphabetically("DOMAIN_", educationalContext.domains);
 
                     // for every Domain add it to the list and its children.
-                    for (var j = 0; j < educationalContext.domains.length; j++) {
-                        var domain = educationalContext.domains[j];
+                    for (var j = 0; j < domains.length; j++) {
+                        var domain = domains[j];
                         results.push(domain);
+                        //Sort subjects
+                        var subjects = sortTaxonAlphabetically("SUBJECT_", domain.subjects);
+
                         // Merge the second array into the first one
-                        Array.prototype.push.apply(results, domain.subjects);
+                        Array.prototype.push.apply(results, subjects);
                     }
 
                     return results;
+                }
+
+                function sortTaxonAlphabetically(type, taxons) {
+                    return taxons.sort(function (a, b) {
+                        if ($filter('translate')(type + a.name) < $filter('translate')(type + b.name)) return -1;
+                        if ($filter('translate')(type + a.name) > $filter('translate')(type + b.name)) return 1;
+                        return 0;
+                    });
                 }
 
                 function setEducationalContexts() {
