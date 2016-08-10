@@ -284,7 +284,8 @@ public class MaterialService implements LearningObjectHandler {
         material.setAdded(originalMaterial.getAdded());
         material.setUpdated(now());
 
-        if (changer == null || isUserAdmin(changer) || isUserModerator(changer) || isThisPublisherMaterial(changer, originalMaterial)) {
+        //Null changer is the automated updating of materials during synchronization
+        if (changer == null || isUserAdmin(changer) || isUserModerator(changer) || isThisUserMaterial(changer, originalMaterial)) {
             updatedMaterial = createOrUpdate(material);
             searchEngineService.updateIndex();
         }
@@ -292,9 +293,8 @@ public class MaterialService implements LearningObjectHandler {
         return updatedMaterial;
     }
 
-    private boolean isThisPublisherMaterial(User user, Material originalMaterial) {
-        return user != null && originalMaterial.getCreator().getUsername().equals(user.getUsername())
-                && isUserPublisher(user);
+    private boolean isThisUserMaterial(User user, Material originalMaterial) {
+        return user != null && originalMaterial.getCreator().getUsername().equals(user.getUsername());
     }
 
     private void validateMaterialUpdate(Material material, Material originalMaterial, User changer) {

@@ -384,11 +384,8 @@ public class MaterialServiceTest {
         material.setRepository(null);
         material.setCreator(user);
 
-        Publisher publisher = new Publisher();
-
         expect(materialDAO.findByIdNotDeleted(material.getId())).andReturn(material).anyTimes();
         expect(user.getRole()).andReturn(Role.USER).anyTimes();
-        expect(user.getPublisher()).andReturn(publisher);
         expect(materialDAO.update(material)).andReturn(new Material());
         expect(user.getUsername()).andReturn("username").anyTimes();
 

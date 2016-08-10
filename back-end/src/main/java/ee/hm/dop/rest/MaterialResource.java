@@ -145,12 +145,14 @@ public class MaterialResource extends BaseResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Material createOrUpdateMaterial(Material material) {
-        Material newMaterial;
+        Material newMaterial = null;
 
         if (material.getId() == null) {
             newMaterial = materialService.createMaterial(material, getLoggedInUser(), true);
-        } else {
+        } else if (getLoggedInUser() != null){
             newMaterial = materialService.update(material, getLoggedInUser());
+        } else {
+            throwBadRequestException("Unable to add or update material - can extract get logged in user.");
         }
 
         return newMaterial;
