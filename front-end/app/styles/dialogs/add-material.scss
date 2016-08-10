@@ -55,3 +55,30 @@
   text-align: center;
   margin-top: 15px;
 }
+
+.md-datepicker-triangle-button{
+  display: none;
+}
+
+.md-button.md-icon-button.md-datepicker-button{
+  position: absolute;
+  margin-left: 100px;
+  margin-top: -9px;
+  z-index: 1;
+}
+
+.md-datepicker-open .md-button.md-icon-button.md-datepicker-button{
+  margin-top: 0;
+}
+
+.datepicker-container .validation-messages{
+  max-width: 140px;
+}
+
+.md-errors-spacer {
+  min-height: 0 !important;
+}
+
+
+
+
