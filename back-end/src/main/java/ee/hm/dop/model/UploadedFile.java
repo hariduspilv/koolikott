@@ -22,6 +22,9 @@ public class UploadedFile {
     @Column
     private String path;
 
+    @Column
+    private String url;
+
     public Long getId() {
         return id;
     }
@@ -44,5 +47,13 @@ public class UploadedFile {
 
     public void setPath(String path) {
         this.path = path;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
     }
 }

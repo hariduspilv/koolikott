@@ -1,0 +1,1 @@
+ALTER TABLE dop.Material MODIFY source TEXT;

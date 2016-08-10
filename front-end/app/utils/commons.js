@@ -320,3 +320,14 @@ function clone(object) {
     return JSOG.parse(json)
 }
 
+function getSource(material){
+    if(material.source != null){
+        return material.source;
+    }
+    if(material && material.uploadedFile){
+        return material.uploadedFile.url;
+    }
+    return null;
+}
+
+

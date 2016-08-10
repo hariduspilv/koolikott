@@ -10,9 +10,4 @@ public class UploadedFileDAO extends BaseDAO<UploadedFile> {
                 .setParameter("id", id);
         return getSingleResult(findById);
     }
-
-    @Override
-    public UploadedFile update(UploadedFile uploadedFile) {
-        return super.update(uploadedFile);
-    }
 }

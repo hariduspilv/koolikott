@@ -127,6 +127,9 @@ define([
                     $scope.material.titles = metadata.titles;
                     $scope.material.descriptions = metadata.descriptions;
                     $scope.material.type = ".Material";
+                    if($scope.material.source){
+                       $scope.material.uploadedFile = null;
+                    }
 
                     $scope.material.crossCurricularThemes = $scope.material.crossCurricularThemes
                         .filter(function (theme) {
@@ -206,7 +209,7 @@ define([
             }
 
             $scope.isTabOneValid = function () {
-                return $scope.step.isMaterialUrlStepValid && isMetadataStepValid();
+                return ( $scope.step.isMaterialUrlStepValid || $scope.fileUploaded) && isMetadataStepValid();
             };
 
             $scope.isTabTwoValid = function () {
@@ -215,22 +218,20 @@ define([
             };
 
             $scope.isTabThreeValid = function () {
-                return areAuthorsValid()
-                    && $scope.material.licenseType && $scope.material.issueDate.year;
+                return areAuthorsValid() && (hasAuthors() || material.publishers[0].name) && $scope.material.issueDate.year;
             };
 
+            function hasAuthors() {
+                return $scope.material.authors.length > 0;
+            }
 
             function areAuthorsValid() {
-                var res = !!$scope.material.authors[0].name;
+                var res = true;
 
                 $scope.material.authors.forEach(function (author) {
                     if (author.name && !author.surname) res = false;
                     else if (author.surname && !author.name) res = false;
                 });
-
-                if($scope.material.authors.length == 1 && !$scope.material.authors[0].name && !$scope.material.authors[0].surname){
-                    res = true;
-                }
 
                 return res;
             }
@@ -331,6 +332,10 @@ define([
                     prefillMetadataFromPortfolio();
                     $scope.material.source = addChapterMaterialUrl;
                 }
+                $scope.material.source = getSource($scope.material);
+                if($scope.material.uploadedFile){
+                    $scope.material.source = "";
+                }
                 setPublisher();
                 loadMetadata();
                 getMaxPictureSize();
@@ -397,10 +402,10 @@ define([
             }
 
             function fileUploadSuccess(file) {
+                $scope.material.source = null;
                 $scope.fileUploaded = true;
                 $scope.uploadingFile = false;
                 $scope.material.uploadedFile = file;
-                $scope.material.source = "https://" + window.location.hostname + "/rest/uploadedFile/" + file.id;
                 $scope.step.isMaterialUrlStepValid = true;
             }
 
@@ -518,7 +523,6 @@ define([
 
             function saveMaterialSuccess(material) {
                 $mdDialog.hide(material);
-
                 if (!$scope.isChapterMaterial) {
                     $location.url('/material?materialId=' + material.id);
                 }

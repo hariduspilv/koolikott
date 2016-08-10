@@ -494,3 +494,7 @@ insert into UserLike(id, creator, learningObject, isLiked, added) values (17, 2,
 insert into UserLike(id, creator, learningObject, isLiked, added) values (14, 2, 3, 0, '2014-06-01 00:00:01');
 insert into UserLike(id, creator, learningObject, isLiked, added) values (15, 4, 103, 0, '2014-06-01 00:00:01');
 insert into UserLike(id, creator, learningObject, isLiked, added) values (16, 6, 103, 0, '2015-01-11 00:00:01');
+
+-- Uploaded files
+
+insert into UploadedFile(id, name, path) values(1, 'bookCover.jpg', 'src/test/resources/bookCover.jpg');

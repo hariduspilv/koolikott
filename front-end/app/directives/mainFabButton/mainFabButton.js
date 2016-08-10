@@ -70,8 +70,6 @@ define([
                     var addMaterialScope = $scope.$new(true);
 
                     addMaterialScope.uploadMode = true;
-                    addMaterialScope.material = {};
-                    addMaterialScope.isChapterMaterial = true;
                     storageService.setMaterial(null);
 
                     $mdDialog.show(angularAMD.route({

@@ -68,16 +68,20 @@
                   <div flex ngf-select ng-model="newFile"
                        data-accept="*"
                        data-ngf-pattern="'*'"
-                       data-ng-upload
                        data-ngf-max-size="{{maxFileSize + 'MB'}}"
                        layout="row"
                        ngf-model-invalid="invalidFile"
                        layout-align="center center" flex>
 
-                    <button class="md-raised md-primary md-button md-ink-ripple">
+                    <a class="md-raised md-primary md-button md-ink-ripple">
                       <md-icon>file_upload</md-icon>
-                      <span data-translate="ADD_FILE"></span>
-                    </button>
+
+                      <span data-ng-show="material.uploadedFile" data-translate="UPDATE_FILE"></span>
+                      <span data-ng-show="!material.uploadedFile" data-translate="ADD_FILE"></span>
+                    </a>
+                  </div>
+                  <div class="currently-uploaded-file" data-ng-if="material.uploadedFile && !fileUploaded">
+                    <span data-translate="CURRENTLY_UPLOADED_FILE"></span> {{ material.uploadedFile.name }}
                   </div>
                   <div data-ng-message="file"
                        data-ng-show="!fileUploaded && uploadMode && addMaterialForm.$submitted"
@@ -387,7 +391,7 @@
                 <md-input-container flex
                                     data-ng-class="{'error-color': ((addMaterialForm.licenseType.$touched || addMaterialForm.$submitted) && !material.licenseType)}">
                   <label>
-                    <span data-translate="MATERIAL_VIEW_LICENSE_TYPE"></span>*
+                    <span data-translate="MATERIAL_VIEW_LICENSE_TYPE"></span>
                   </label>
                   <md-select data-ng-model="material.licenseType" id="licenceTypeSelect" name="licenseType"
                              ng-model-options="{trackBy: '$value.id'}">
@@ -395,12 +399,7 @@
                     <md-option data-ng-value="licenceType" data-ng-repeat="licenceType in licenceTypes"
                                data-translate="LICENSETYPE_{{licenceType.name.toUpperCase()}}">
                     </md-option>
-
                   </md-select>
-                  <div
-                    data-ng-show="(addMaterialForm.licenseType.$touched || addMaterialForm.$submitted) && !material.licenseType">
-                    <div class="validation-messages" data-translate="MATERIAL_LICENSE_TYPE_MANDATORY"></div>
-                  </div>
                 </md-input-container>
 
                 <!--Paid-->
