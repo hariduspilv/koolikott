@@ -65,10 +65,12 @@
                   <md-tooltip><span data-translate="MATERIAL_PHOTO_UPLOAD_HELP"></span></md-tooltip>
                 </div>
 
-                <!--Material source-->
-                <div flex data-ng-hide="fileUploaded || uploadingFile">
-                  <div flex>
-                    <md-input-container flex layout-fill layout="column">
+                <!--URL and Upload block-->
+                <div flex layout="row" layout-xs="column" class="md-padding">
+
+                  <!--Material source-->
+                  <div data-ng-hide="fileUploaded || uploadingFile" flex-gt-xs="40" flex-gt-sm="55">
+                    <md-input-container flex layout-fill>
                       <label>
                         <span data-translate="MATERIAL_URL_OR_FILE_INVALID"></span>
                       </label>
@@ -85,51 +87,59 @@
                       </div>
                     </md-input-container>
                   </div>
+
+                  <!--Uploaded file name-->
+                  <div flex-gt-xs="25" flex-gt-sm="40" data-ng-show="uploadingFile || fileUploaded">
+                    <div data-ng-show="uploadingFile" class="upload-file-uploading" flex>
+                      <h5 data-translate="ADD_FILE_UPLOADING"></h5>
+                      <md-progress-linear md-mode="indeterminate" flex></md-progress-linear>
+                    </div>
+                    <div data-ng-show="fileUploaded && !uploadingFile" class="upload-file-success">
+                      <h5>
+                        <span data-translate="ADD_FILE_SUCCESS"></span>:
+                        <span class="ellipsisText">{{ material.uploadedFile.name }}</span>
+                      </h5>
+                    </div>
+                  </div>
+
+                  <div layout="row" flex>
+                    <!--Upload button-->
+                    <div flex-xs="70" flex-gt-xs="40" flex-gt-sm="35" layout-align="start center">
+                      <div ngf-select ng-model="newFile"
+                           data-accept="*"
+                           data-ngf-pattern="'*'"
+                           data-ngf-max-size="{{maxFileSize + 'MB'}}"
+                           ngf-model-invalid="invalidFile">
+
+                        <a class="md-raised md-primary md-button md-ink-ripple">
+                          <md-icon>file_upload</md-icon>
+
+                          <span data-ng-show="material.uploadedFile" data-translate="UPDATE_FILE"></span>
+                          <span data-ng-show="!material.uploadedFile" data-translate="ADD_FILE"></span>
+                        </a>
+                      </div>
+                      <div class="currently-uploaded-file" data-ng-if="material.uploadedFile && !fileUploaded">
+                        <span data-translate="CURRENTLY_UPLOADED_FILE"></span> {{ material.uploadedFile.name }}
+                      </div>
+                      <div data-ng-message="file"
+                           data-ng-show="!fileUploaded && addMaterialForm.$submitted"
+                           data-translate="ADD_FILE_PLACEHOLDER" class="upload-file-error"></div>
+                    </div>
+
+                    <div flex></div>
+
+                    <!--Material language-->
+                    <md-input-container flex-xs="70" flex-gt-xs="45" flex-gt-sm="50" layout-align="end center">
+                      <label data-translate="MATERIAL_LANGUAGE"></label>
+                      <md-select data-ng-model="material.language" id="add-material-language-select">
+                        <md-option data-ng-repeat="language in languages" value="{{language}}">
+                          <span data-translate="LANGUAGE_{{language.toUpperCase()}}"/>
+                        </md-option>
+                      </md-select>
+                    </md-input-container>
+
+                  </div>
                 </div>
-
-                <div flex-sm="25" flex-md="35" flex-gt-md="40" layout-align="center center"
-                     data-ng-show="uploadingFile || fileUploaded">
-                  <div data-ng-show="uploadingFile" class="upload-file-uploading">
-                    <h5 data-translate="ADD_FILE_UPLOADING"></h5>
-                  </div>
-                  <div data-ng-show="fileUploaded && !uploadingFile" class="upload-file-success">
-                    <h5><span data-translate="ADD_FILE_SUCCESS"></span>: {{ material.uploadedFile.name }}</h5>
-                  </div>
-                </div>
-
-                <div flex-sm="30" flex-md="25" flex-gt-md="25" class="md-padding" layout="column">
-                  <div flex ngf-select ng-model="newFile"
-                       data-accept="*"
-                       data-ngf-pattern="'*'"
-                       data-ngf-max-size="{{maxFileSize + 'MB'}}"
-                       layout="row"
-                       ngf-model-invalid="invalidFile"
-                       layout-align="start center" flex>
-
-                    <a class="md-raised md-primary md-button md-ink-ripple">
-                      <md-icon>file_upload</md-icon>
-
-                      <span data-ng-show="material.uploadedFile" data-translate="UPDATE_FILE"></span>
-                      <span data-ng-show="!material.uploadedFile" data-translate="ADD_FILE"></span>
-                    </a>
-                  </div>
-                  <div class="currently-uploaded-file" data-ng-if="material.uploadedFile && !fileUploaded">
-                    <span data-translate="CURRENTLY_UPLOADED_FILE"></span> {{ material.uploadedFile.name }}
-                  </div>
-                  <div data-ng-message="file"
-                       data-ng-show="!fileUploaded && addMaterialForm.$submitted"
-                       data-translate="ADD_FILE_PLACEHOLDER" class="upload-file-error"></div>
-                </div>
-
-                <!--Material language-->
-                <md-input-container flex-gt-xs="20" flex="20" class="md-padding" layout-align="center end">
-                  <label data-translate="MATERIAL_LANGUAGE"></label>
-                  <md-select data-ng-model="material.language" id="add-material-language-select">
-                    <md-option data-ng-repeat="language in languages" value="{{language}}">
-                      <span data-translate="LANGUAGE_{{language.toUpperCase()}}"/>
-                    </md-option>
-                  </md-select>
-                </md-input-container>
               </div>
 
               <!-- heading-desc-lang group -->

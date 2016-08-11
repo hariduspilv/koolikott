@@ -19,6 +19,13 @@ $heading-color: #212121;
   text-overflow: ellipsis;
 }
 
+.ellipsisText {
+  display: block;
+  width: 100%;
+  overflow: hidden !important;
+  text-overflow: ellipsis;
+}
+
 $font-size: 26px;
 $line-height: 1.4;
 $lines-to-show: 3;
