@@ -92,8 +92,6 @@ define([
             };
 
             $scope.deleteTaxon = function (index) {
-                var taxon = $scope.material.taxons[index];
-
                 $scope.material.taxons.splice(index, 1);
             };
 
@@ -123,8 +121,8 @@ define([
                     $scope.material.titles = metadata.titles;
                     $scope.material.descriptions = metadata.descriptions;
                     $scope.material.type = ".Material";
-                    if($scope.material.source){
-                       $scope.material.uploadedFile = null;
+                    if ($scope.material.source) {
+                        $scope.material.uploadedFile = null;
                     }
 
                     $scope.material.crossCurricularThemes = $scope.material.crossCurricularThemes
@@ -210,7 +208,7 @@ define([
             };
 
             $scope.isTabThreeValid = function () {
-                return areAuthorsValid() && (hasAuthors() ||  hasPublisher()) && $scope.material.issueDate.year;
+                return areAuthorsValid() && (hasAuthors() || hasPublisher()) && $scope.material.issueDate.year;
             };
 
             function hasPublisher() {
@@ -329,13 +327,14 @@ define([
                     $scope.material.source = addChapterMaterialUrl;
                 }
                 $scope.material.source = getSource($scope.material);
-                if($scope.material.uploadedFile){
+                if ($scope.material.uploadedFile) {
                     $scope.material.source = "";
                 }
                 setPublisher();
                 loadMetadata();
                 getMaxPictureSize();
                 getMaxFileSize();
+                if ($scope.material.uploadedFile && $scope.material.uploadedFile.id) $scope.fileUploaded = true;
             }
 
             $scope.$watch(function () {
@@ -436,6 +435,9 @@ define([
                 if (educationalContext) {
                     $scope.educationalContextId = educationalContext.id;
                 }
+
+                if (!$scope.crossCurricularThemes) $scope.crossCurricularThemes = [];
+                if (!$scope.keyCompetences) $scope.keyCompetences = [];
             }
 
             function prefillMetadataFromPortfolio() {
@@ -505,6 +507,8 @@ define([
             }
 
             function saveMaterialSuccess(material) {
+                //Pass saved material back to material view
+                material.source = getSource(material);
                 $mdDialog.hide(material);
                 if (!$scope.isChapterMaterial) {
                     $location.url('/material?materialId=' + material.id);

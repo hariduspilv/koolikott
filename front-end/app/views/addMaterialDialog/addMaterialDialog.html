@@ -75,8 +75,7 @@
                         <span data-translate="MATERIAL_URL_OR_FILE_INVALID"></span>
                       </label>
                       <input data-ng-model="material.source" name="source" id="add-material-url-input" type="text"
-                             required
-                             dop-validate-url>
+                             required dop-validate-url>
                       <div data-ng-messages="addMaterialForm.source.$error" multiple
                            data-ng-show="addMaterialForm.source.$touched || addMaterialForm.$submitted">
                         <div data-ng-message="required" data-ng-show="addMaterialForm.source.$error.required"
@@ -440,14 +439,20 @@
       <md-button aria-label="Tühista materjali lisamine" id="add-material-cancel-button" data-ng-click="cancel()">
         <span data-translate="BUTTON_CANCEL"></span>
       </md-button>
+
       <md-button aria-label="Loo materjal" id="add-material-create-button"
-                 data-ng-click="save()" data-ng-hide="!step.canCreateMaterial()" data-ng-hide="isSaving"
+                 data-ng-hide="!step.canCreateMaterial()"
+                 data-ng-disabled="isSaving || uploadingFile"
+                 data-ng-click="save()"
                  class="md-primary">
         <span data-ng-if="!isUpdateMode" data-translate="BUTTON_CREATE_MATERIAL"></span>
         <span data-ng-if="isUpdateMode" data-translate="BUTTON_UPDATE_MATERIAL"></span>
       </md-button>
+
       <md-button aria-label="Ürita luua materjali" id="show-errors-button" class="md-primary"
-                 data-ng-show="!step.canCreateMaterial()" data-ng-click="addMaterialForm.$setSubmitted()">
+                 data-ng-show="!step.canCreateMaterial()"
+                 data-ng-disabled="isSaving || uploadingFile"
+                 data-ng-click="addMaterialForm.$setSubmitted()">
         <span data-ng-show="!isUpdateMode" data-translate="BUTTON_CREATE_MATERIAL"></span>
         <span data-ng-show="isUpdateMode" data-translate="BUTTON_UPDATE_MATERIAL"></span>
       </md-button>

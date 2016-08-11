@@ -212,15 +212,15 @@ function wordToInitial(name) {
 }
 
 function formatNameToInitials(name) {
-	if (name) {
-		return arrayToInitials(name.split(" "));
-	}
+    if (name) {
+        return arrayToInitials(name.split(" "));
+    }
 }
 
 function formatSurnameToInitialsButLast(surname) {
-	if (!surname) {
-		return;
-	}
+    if (!surname) {
+        return;
+    }
 
     var array = surname.split(" ");
     var last = array.length - 1;
@@ -320,11 +320,11 @@ function clone(object) {
     return JSOG.parse(json)
 }
 
-function getSource(material){
-    if(material.source != null){
+function getSource(material) {
+    if (material.source && (material.source !== null && material.source !== undefined && material.source !== "")) {
         return material.source;
     }
-    if(material && material.uploadedFile){
+    if (material && material.uploadedFile) {
         return material.uploadedFile.url;
     }
     return null;
