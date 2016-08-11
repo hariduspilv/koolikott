@@ -14,7 +14,6 @@ define([
             $scope.isSaving = false;
             $scope.showHints = true;
             $scope.creatorIsPublisher = false;
-            $scope.isTouched = {};
 
             var preferredLanguage;
             var TABS_COUNT = 2;
@@ -94,9 +93,6 @@ define([
 
             $scope.deleteTaxon = function (index) {
                 var taxon = $scope.material.taxons[index];
-                $rootScope.selectedTopics = $rootScope.selectedTopics.filter(function (topic) {
-                    return topic.id !== taxon.id;
-                });
 
                 $scope.material.taxons.splice(index, 1);
             };
@@ -165,10 +161,6 @@ define([
                 return authenticatedUserService.isAdmin();
             };
 
-            $scope.isTopicNotSet = function () {
-                return !$rootScope.selectedTopics || $rootScope.selectedTopics.length === 0;
-            };
-
             function getIssueDate(date) {
                 return {
                     day: date.getDate(),
@@ -213,16 +205,20 @@ define([
             };
 
             $scope.isTabTwoValid = function () {
-                return $rootScope.selectedTopics && $rootScope.selectedTopics.length > 0 && $scope.material.targetGroups && $scope.material.targetGroups.length > 0
+                return $scope.material.targetGroups && $scope.material.targetGroups.length > 0
                     && ($scope.isBasicOrSecondaryEducation() ? $scope.material.keyCompetences.length > 0 && $scope.material.crossCurricularThemes.length > 0 : true);
             };
 
             $scope.isTabThreeValid = function () {
-                return areAuthorsValid() && (hasAuthors() || material.publishers[0].name) && $scope.material.issueDate.year;
+                return areAuthorsValid() && (hasAuthors() ||  hasPublisher()) && $scope.material.issueDate.year;
             };
 
+            function hasPublisher() {
+                return $scope.material.publishers[0] && $scope.material.publishers[0].name;
+            }
+
             function hasAuthors() {
-                return $scope.material.authors.length > 0;
+                return $scope.material.authors.length > 0 && $scope.material.authors[0].surname;
             }
 
             function areAuthorsValid() {
@@ -340,19 +336,6 @@ define([
                 loadMetadata();
                 getMaxPictureSize();
                 getMaxFileSize();
-                setSelectedTopics();
-            }
-
-            function setSelectedTopics() {
-                $rootScope.selectedTopics = [];
-                $scope.material.taxons.forEach(function (taxon) {
-                    const TOPIC = $rootScope.taxonUtils.constants.TOPIC;
-                    if (taxon.level === TOPIC) {
-                        $rootScope.selectedTopics.push(taxon);
-                    } else if ($rootScope.taxonUtils.getTopic(taxon) && $rootScope.taxonUtils.getTopic(taxon).level === TOPIC) {
-                        $rootScope.selectedTopics.push($rootScope.taxonUtils.getTopic(taxon));
-                    }
-                })
             }
 
             $scope.$watch(function () {

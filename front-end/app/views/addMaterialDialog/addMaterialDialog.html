@@ -24,7 +24,7 @@
           </md-tab-label>
           <md-tab-body>
             <md-content class="md-padding">
-                <!-- url & lang-->
+              <!-- Image & upload file & url & lang-->
               <div flex layout-xs="column" layout="row" layout-align-xs="start stretch" layout-align="start center">
                 <div flex-sm="25" flex-md="20" flex-gt-md="15" class="md-padding">
                   <div flex data-ngf-drop ngf-select ng-model="newPicture" class="drop-box"
@@ -56,7 +56,7 @@
                       </div>
                     </md-input-container>
 
-                  <span flex class="error-overlay" data-ng-if="showErrorOverlay">
+                    <span flex class="error-overlay" data-ng-if="showErrorOverlay">
                     <span class="error-text">
                       <span data-translate="UPLOADED_PICTURE_TOO_BIG"></span>
                     </span>
@@ -65,6 +65,7 @@
                   <md-tooltip><span data-translate="MATERIAL_PHOTO_UPLOAD_HELP"></span></md-tooltip>
                 </div>
 
+                <!--Material source-->
                 <div flex data-ng-hide="fileUploaded || uploadingFile">
                   <div flex>
                     <md-input-container flex layout-fill layout="column">
@@ -86,7 +87,8 @@
                   </div>
                 </div>
 
-                <div flex-sm="25" flex-md="35" flex-gt-md="40" layout-align="center center" data-ng-show="uploadingFile || fileUploaded">
+                <div flex-sm="25" flex-md="35" flex-gt-md="40" layout-align="center center"
+                     data-ng-show="uploadingFile || fileUploaded">
                   <div data-ng-show="uploadingFile" class="upload-file-uploading">
                     <h5 data-translate="ADD_FILE_UPLOADING"></h5>
                   </div>
@@ -119,6 +121,7 @@
                        data-translate="ADD_FILE_PLACEHOLDER" class="upload-file-error"></div>
                 </div>
 
+                <!--Material language-->
                 <md-input-container flex-gt-xs="20" flex="20" class="md-padding" layout-align="center end">
                   <label data-translate="MATERIAL_LANGUAGE"></label>
                   <md-select data-ng-model="material.language" id="add-material-language-select">
@@ -129,57 +132,57 @@
                 </md-input-container>
               </div>
 
-                <!-- heading-desc-lang group -->
-                <div class="form-group" data-ng-repeat="metadata in titleDescriptionGroups">
-                  <div layout-xs="column" layout="row" layout-align-xs="start stretch" layout-align="center center">
-                    <md-input-container flex flex-order-xs="2">
-                      <label data-translate="MATERIAL_TITLE"></label>
-                      <input data-ng-model="metadata.title" name="title" data-ng-required="$index === 0">
-                      <div data-ng-messages="addMaterialForm.title.$error"
-                           data-ng-show="addMaterialForm.title.$touched || addMaterialForm.$submitted">
-                        <div data-ng-message="required" data-ng-show="$index === 0 && !(metadata.title.length > 0)"
-                             data-translate="MATERIAL_TITLE_IS_MANDATORY"></div>
-                      </div>
-                    </md-input-container>
-                    <md-input-container flex-gt-xs="20" flex-order-xs="1" class="md-padding">
-                      <label data-translate="TITLE_AND_DESCRIPTION_LANGUAGE"></label>
-                      <md-select data-ng-model="metadata.language" id="add-material-title-language-select">
-                        <md-option data-ng-repeat="language in languages" value="{{language}}"
-                                   ng-selected="{{language === material.language}}">
-                          <span data-translate="LANGUAGE_{{language.toUpperCase()}}"> </span>
-                        </md-option>
-                      </md-select>
-                    </md-input-container>
-                  </div>
-                  <div layout="row" layout-align="top center">
-                    <md-input-container flex>
-                      <label data-translate="MATERIAL_DESCRIPTION"></label>
-                      <textarea ng-model="metadata.description" rows="2"></textarea>
-                    </md-input-container>
-                    <md-button class="md-icon-button md-primary" data-ng-show="$index+1 === titleDescriptionGroups.length"
-                               data-ng-click="addNewMetadata()">
-                      <md-icon>add_circle</md-icon>
-                      <md-tooltip md-direction="top"><span data-translate="MATERIAL_TAB_NEW_TITLE_AND_DESC"></span>
-                      </md-tooltip>
-                    </md-button>
-                    <md-button class="md-icon-button" data-ng-show="titleDescriptionGroups.length > 1"
-                               data-ng-click="deleteMetadata($index)">
-                      <md-icon>remove_circle</md-icon>
-                      <md-tooltip md-direction="top"><span data-translate="MATERIAL_TAB_REMOVE"></span></md-tooltip>
-                    </md-button>
-                  </div>
-                </div>
-
-                <div layout="row">
-                  <md-input-container flex-xs="100" flex-gt-xs="55">
-                    <label data-translate="MATERIAL_VIEW_RESOURCE_TYPE"></label>
-                    <md-select data-ng-model="material.resourceTypes" id="resourceTypeSelect"
-                               ng-model-options="{trackBy: '$value.id'}" multiple="true">
-                      <md-option ng-value="resourceType" data-ng-repeat="resourceType in resourceTypes"
-                                 data-translate="{{resourceType.name}}"></md-option>
+              <!-- heading-desc-lang group -->
+              <div class="form-group" data-ng-repeat="metadata in titleDescriptionGroups">
+                <div layout-xs="column" layout="row" layout-align-xs="start stretch" layout-align="center center">
+                  <md-input-container flex flex-order-xs="2">
+                    <label data-translate="MATERIAL_TITLE"></label>
+                    <input data-ng-model="metadata.title" name="title" data-ng-required="$index === 0">
+                    <div data-ng-messages="addMaterialForm.title.$error"
+                         data-ng-show="addMaterialForm.title.$touched || addMaterialForm.$submitted">
+                      <div data-ng-message="required" data-ng-show="$index === 0 && !(metadata.title.length > 0)"
+                           data-translate="MATERIAL_TITLE_IS_MANDATORY"></div>
+                    </div>
+                  </md-input-container>
+                  <md-input-container flex-gt-xs="20" flex-order-xs="1" class="md-padding">
+                    <label data-translate="TITLE_AND_DESCRIPTION_LANGUAGE"></label>
+                    <md-select data-ng-model="metadata.language" id="add-material-title-language-select">
+                      <md-option data-ng-repeat="language in languages" value="{{language}}"
+                                 ng-selected="{{language === material.language}}">
+                        <span data-translate="LANGUAGE_{{language.toUpperCase()}}"> </span>
+                      </md-option>
                     </md-select>
                   </md-input-container>
                 </div>
+                <div layout="row" layout-align="top center">
+                  <md-input-container flex>
+                    <label data-translate="MATERIAL_DESCRIPTION"></label>
+                    <textarea ng-model="metadata.description" rows="2"></textarea>
+                  </md-input-container>
+                  <md-button class="md-icon-button md-primary" data-ng-show="$index+1 === titleDescriptionGroups.length"
+                             data-ng-click="addNewMetadata()">
+                    <md-icon>add_circle</md-icon>
+                    <md-tooltip md-direction="top"><span data-translate="MATERIAL_TAB_NEW_TITLE_AND_DESC"></span>
+                    </md-tooltip>
+                  </md-button>
+                  <md-button class="md-icon-button" data-ng-show="titleDescriptionGroups.length > 1"
+                             data-ng-click="deleteMetadata($index)">
+                    <md-icon>remove_circle</md-icon>
+                    <md-tooltip md-direction="top"><span data-translate="MATERIAL_TAB_REMOVE"></span></md-tooltip>
+                  </md-button>
+                </div>
+              </div>
+
+              <div layout="row">
+                <md-input-container flex-xs="100" flex-gt-xs="55">
+                  <label data-translate="MATERIAL_VIEW_RESOURCE_TYPE"></label>
+                  <md-select data-ng-model="material.resourceTypes" id="resourceTypeSelect"
+                             ng-model-options="{trackBy: '$value.id'}" multiple="true">
+                    <md-option ng-value="resourceType" data-ng-repeat="resourceType in resourceTypes"
+                               data-translate="{{resourceType.name}}"></md-option>
+                  </md-select>
+                </md-input-container>
+              </div>
             </md-content>
           </md-tab-body>
         </md-tab>
@@ -196,9 +199,10 @@
             <md-content class="md-padding">
               <div layout="row" flex layout-align="space-between center"
                    data-ng-repeat="taxon in material.taxons track by $index">
-                <div data-dop-taxon-selector data-taxon="material.taxons[$index]" layout="row" layout-sm="column"
-                     flex data-mark-required="addMaterialForm.$submitted" data-is-add-material-view="true"
-                     data-touched="isTouched"></div>
+                <div data-dop-taxon-selector
+                     data-taxon="material.taxons[$index]"
+                     data-is-add-material-view="true"
+                     layout="row" layout-sm="column" flex></div>
                 <md-button class="md-icon-button md-primary" data-ng-show="$index+1 === material.taxons.length"
                            data-ng-click="addNewTaxon()" data-ng-disabled="material.taxon">
                   <md-icon>add_circle</md-icon>
@@ -210,10 +214,6 @@
                   <md-tooltip md-direction="top"><span data-translate="MATERIAL_TAB_REMOVE_TAXON"></span></md-tooltip>
                 </md-button>
               </div>
-              <div layout="row" flex layout-align="space-between center"
-                   data-ng-show="(isTouched.trigger || addMaterialForm.$submitted) && isTopicNotSet()">
-                <div class="validation-messages" data-translate="MATERIAL_TOPIC_REQUIRED"></div>
-              </div>
 
               <md-checkbox data-ng-if="educationalContextId === 2" data-ng-model="material.specialEducation"
                            aria-label="{{'MATERIAL_SPECIAL_EDUCATION' | translate}}" class="md-primary" flex>
@@ -223,7 +223,8 @@
               <div layout="row" flex layout-align="space-between center">
 
                 <!--Target groups-->
-                <div data-dop-target-group-selector data-target-groups="material.targetGroups" data-is-required="{trigger: true}"
+                <div data-dop-target-group-selector data-target-groups="material.targetGroups"
+                     data-is-required="{trigger: true}"
                      data-ng-show="educationalContextId !== 4" data-taxon="material.taxons[0]"
                      data-mark-required="addMaterialForm.$submitted" flex="20">
                 </div>
@@ -271,7 +272,7 @@
                   </md-chips>
                 </div>
                 <div data-ng-show="showCompetencesWarning(addMaterialForm.keyCompetencesInput)"
-                     class="validation-messages" data-translate="MATERIAL_KEY_COMPETENCE_IS_MANDATORY">
+                     class="validation-messages-chips" data-translate="MATERIAL_KEY_COMPETENCE_IS_MANDATORY">
                 </div>
 
                 <!--Cross-curricular themes-->
@@ -297,7 +298,7 @@
                   </md-chips>
                 </div>
                 <div data-ng-show="showThemesWarning(addMaterialForm.crossCurricularThemesInput)"
-                     class="validation-messages" data-translate="MATERIAL_CROSS_CURRICULAR_THEME_IS_MANDATORY">
+                     class="validation-messages-chips" data-translate="MATERIAL_CROSS_CURRICULAR_THEME_IS_MANDATORY">
                 </div>
               </div>
             </md-content>
@@ -324,7 +325,8 @@
                       <span data-translate="MATERIAL_AUTHOR_NAME"></span>
                       <span data-ng-hide="material.publishers[0].name || $index > 0">*</span>
                     </label>
-                    <input data-ng-model="author.name" id="material-author-{{$index}}-name" data-ng-required="author.name" name="firstname" md-maxlength="50" maxlength="50">
+                    <input data-ng-model="author.name" id="material-author-{{$index}}-name"
+                           data-ng-required="author.name" name="firstname" md-maxlength="50" maxlength="50">
                     <div ng-messages="addMaterialForm.name.$error" data-ng-show="!author.name && author.surname">
                       <div ng-message="required" data-translate="FIRST_NAME_REQUIRED"></div>
                     </div>
@@ -334,7 +336,8 @@
                       <span data-translate="MATERIAL_AUTHOR_SURNAME"></span>
                       <span data-ng-hide="material.publishers[0].name || $index > 0">*</span>
                     </label>
-                    <input data-ng-model="author.surname" data-ng-required="author.name" name="surname" md-maxlength="50" maxlength="50">
+                    <input data-ng-model="author.surname" data-ng-required="author.name" name="surname"
+                           md-maxlength="50" maxlength="50">
                     <div ng-messages="addMaterialForm.surname.$error" data-ng-show="author.name && !author.surname">
                       <div ng-message="required" data-translate="LAST_NAME_REQUIRED"></div>
                     </div>
@@ -366,7 +369,8 @@
                     <span data-translate="MATERIAL_PUBLISHER"></span>
                     <span data-ng-hide="material.authors[0].name && material.authors[0].surname">*</span>
                   </label>
-                  <input name="publisher" data-ng-model="material.publishers[0].name" ng-disabled="creatorIsPublisher" md-maxlength="50" maxlength="50">
+                  <input name="publisher" data-ng-model="material.publishers[0].name" ng-disabled="creatorIsPublisher"
+                         md-maxlength="50" maxlength="50">
                   <div data-ng-messages="addMaterialForm.publisher.$error"
                        data-ng-show="!isAuthorOrPublisherSet() && (addMaterialForm.publisher.$touched || addMaterialForm.$submitted)">
                     <div data-ng-message="required" data-translate="MATERIAL_PUBLISHER_OR_AUTHOR_MANDATORY"
@@ -375,16 +379,16 @@
                 </md-input-container>
 
                 <!--Issue date-->
-                  <div class="datepicker-container">
-                      <md-datepicker ng-model="issueDate" name="issueDate" required
-                                     md-placeholder="{{ 'MATERIAL_ISSUE_DATE' | translate }}">
-                      </md-datepicker>
-                      <div data-ng-messages="addMaterialForm.issueDate.$error"
-                           data-ng-show="!material.issueDate.year && (addMaterialForm.issueDate.$touched || addMaterialForm.$submitted)">
-                        <div class="validation-messages" data-ng-message="required"
-                             data-translate="MATERIAL_DATE_REQUIRED"></div>
-                      </div>
+                <div class="datepicker-container">
+                  <md-datepicker ng-model="issueDate" name="issueDate" required
+                                 md-placeholder="{{ 'MATERIAL_ISSUE_DATE' | translate }}">
+                  </md-datepicker>
+                  <div data-ng-messages="addMaterialForm.issueDate.$error"
+                       data-ng-show="!material.issueDate.year && (addMaterialForm.issueDate.$touched || addMaterialForm.$submitted)">
+                    <div class="validation-messages" data-ng-message="required"
+                         data-translate="MATERIAL_DATE_REQUIRED"></div>
                   </div>
+                </div>
               </div>
 
               <div layout="row" flex layout-align="space-between center">

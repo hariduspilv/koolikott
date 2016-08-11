@@ -3,7 +3,7 @@
   <md-input-container class="md-block" flex>
     <label for="taxonEducationalSelect">
       <span data-translate="DETAIL_VIEW_EDUCATIONAL_CONTEXT"></span>
-      <span data-ng-if="ctrl.isAddPortfolioView || ctrl.isAddMaterialView">*</span>
+      <span data-ng-if="ctrl.isAddPortfolioView">*</span>
     </label>
     <md-select data-ng-model="ctrl.taxonPath.educationalContext" id="taxonEducationalSelect"
                data-ng-disabled="ctrl.disableEducationalContext" name="educationalContext">
@@ -20,7 +20,7 @@
     class="md-block" flex>
     <label for="taxonDomainSelect">
       <span data-translate="TAXON_PATH_DOMAIN"></span>
-      <span data-ng-if="ctrl.isAddPortfolioView || ctrl.isAddMaterialView">*</span>
+      <span data-ng-if="ctrl.isAddPortfolioView">*</span>
     </label>
     <md-select data-ng-model="ctrl.taxonPath.domain" id="taxonDomainSelect" name="domain">
       <md-option data-translate="SELECT_DOMAIN" ng-click="ctrl.reset(ctrl.taxonPath.educationalContext)"></md-option>
@@ -50,7 +50,7 @@
     class="md-block" flex>
     <label for="taxonDomainSubjectsSelect">
       <span data-translate="TAXON_PATH_DOMAIN_AND_SUBJECT"></span>
-      <span data-ng-if="ctrl.isAddPortfolioView || ctrl.isAddMaterialView">*</span>
+      <span data-ng-if="ctrl.isAddPortfolioView">*</span>
     </label>
     <md-select data-ng-model="ctrl.taxonPath.domainSubject" id="taxonDomainSubjectsSelect"
                name="domainAndSubject">
@@ -71,7 +71,7 @@
     class="md-block" flex>
     <label for="taxonSecondaryEducationDomainSubjectsSelect">
       <span data-translate="TAXON_PATH_DOMAIN_AND_SUBJECT"></span>
-      <span data-ng-if="ctrl.isAddPortfolioView || ctrl.isAddMaterialView">*</span>
+      <span data-ng-if="ctrl.isAddPortfolioView">*</span>
     </label>
     <md-select data-ng-model="ctrl.taxonPath.domainSubject" id="taxonSecondaryEducationDomainSubjectsSelect"
                name="secondaryEducationDomainAndSubject">
@@ -90,7 +90,6 @@
                       flex>
     <label for="taxonSpecializationSelect">
       <span data-translate="TAXON_PATH_SPECIALIZATION"></span>
-      <span data-ng-if="ctrl.isAddMaterialView">*</span>
     </label>
     <md-select data-ng-model="ctrl.taxonPath.specialization" id="taxonSpecializationSelect" name="specialization"
     >
@@ -105,7 +104,6 @@
                       class="md-block" flex>
     <label for="taxonModuleSelect">
       <span data-translate="TAXON_PATH_MODULE"></span>
-      <span data-ng-if="ctrl.isAddMaterialView">*</span>
     </label>
     <md-select data-ng-model="ctrl.taxonPath.module" id="taxonModuleSelect" name="module"
     >
@@ -119,7 +117,6 @@
   <md-input-container data-ng-show="ctrl.getTopics()" class="md-block" flex>
     <label for="taxonTopicSelect">
       <span data-translate="TAXON_PATH_TOPIC"></span>
-      <span data-ng-if="ctrl.isAddMaterialView">*</span>
     </label>
     <md-select data-ng-model="ctrl.taxonPath.topic" id="taxonTopicSelect" name="topic">
       <md-option data-translate="SELECT_TOPIC"

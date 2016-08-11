@@ -2,9 +2,9 @@
     <md-input-container class="md-block">
         <label>
           <span data-translate="DETAILED_SEARCH_TARGET_GROUP"></span>
-          <span data-ng-show="isRequired.trigger">*</span>
+          <span data-ng-if="isRequired.trigger">*</span>
         </label>
-        <md-select data-ng-model="selectedTargetGroup" name="targetGroup" ng-required="isRequired.trigger">
+        <md-select data-ng-model="selectedTargetGroup" name="targetGroup" md-no-asterisk ng-required="isRequired.trigger">
             <md-option class="stepped-select" data-ng-class="{ 'child' : !group.parent }"
                        data-ng-repeat="group in groups" value="{{group.name}}">
                 <span data-translate="TARGET_GROUP_{{group.name.toUpperCase()}}"/>
