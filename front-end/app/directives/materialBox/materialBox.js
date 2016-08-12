@@ -83,7 +83,7 @@ define([
 
                     $scope.isAuthenticated = function () {
                         var authenticated = authenticatedUserService.getUser() && !authenticatedUserService.isRestricted() && !$rootScope.isEditPortfolioPage;
-                        if(!authenticated) {
+                        if (!authenticated) {
                             $scope.selected = false;
                         }
 

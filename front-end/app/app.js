@@ -30,7 +30,7 @@ define([
     'directives/pageStructure/linearLayout/linearLayout',
 
     'services/authenticatedUserService',
-], function(angularAMD, config, taxonUtils, taxonParser, moment) {
+], function (angularAMD, config, taxonUtils, taxonParser, moment) {
     'use strict';
 
     var app = angular.module('app', [
@@ -43,9 +43,9 @@ define([
         'ui.bootstrap'
     ]);
 
-    app.config(function($routeProvider, $locationProvider, $controllerProvider, $compileProvider, $filterProvider, $provide, $translateProvider, $sceProvider, $mdThemingProvider, $httpProvider, $mdDateLocaleProvider, $anchorScrollProvider) {
-    		$compileProvider.debugInfoEnabled(false);
-    		app.controller = $controllerProvider.register;
+    app.config(function ($routeProvider, $locationProvider, $controllerProvider, $compileProvider, $filterProvider, $provide, $translateProvider, $sceProvider, $mdThemingProvider, $httpProvider, $mdDateLocaleProvider, $anchorScrollProvider) {
+            $compileProvider.debugInfoEnabled(false);
+            app.controller = $controllerProvider.register;
             app.directive = $compileProvider.directive;
             app.filter = $filterProvider.register;
             app.factory = $provide.factory;
@@ -53,7 +53,7 @@ define([
             $httpProvider.useApplyAsync(true);
 
             if (config.routes !== undefined) {
-                angular.forEach(config.routes, function(route, path) {
+                angular.forEach(config.routes, function (route, path) {
                     $routeProvider.when(
                         path,
                         angularAMD.route({
@@ -148,23 +148,23 @@ define([
     function configureDateLocale($mdDateLocaleProvider) {
         $mdDateLocaleProvider.firstDayOfWeek = 1;
 
-        $mdDateLocaleProvider.formatDate = function(date) {
+        $mdDateLocaleProvider.formatDate = function (date) {
             return date ? moment(date).format('DD.MM.YYYY') : '';
         };
 
-        $mdDateLocaleProvider.parseDate = function(dateString) {
+        $mdDateLocaleProvider.parseDate = function (dateString) {
             var m = moment(dateString, ['DD.MM.YYYY', 'MM.YYYY', 'YYYY', 'DD-MM-YYYY', 'DD/MM/YYYY'], true);
             return m.isValid() ? m.toDate() : new Date(NaN)
         };
     }
 
-    app.run(function($rootScope, metadataService) {
+    app.run(function ($rootScope, metadataService) {
         $rootScope.taxonParser = taxonParser;
         metadataService.loadEducationalContexts(taxonParser.setTaxons);
     });
 
-    app.run(function($rootScope, $location, authenticatedUserService) {
-        $rootScope.$on('$routeChangeSuccess', function() {
+    app.run(function ($rootScope, $location, authenticatedUserService) {
+        $rootScope.$on('$routeChangeSuccess', function () {
             var path = $location.path();
             var editModeAllowed = ["/portfolio/edit", "/search/result", "/material"];
 
@@ -172,15 +172,15 @@ define([
             $rootScope.isEditPortfolioPage = path === '/portfolio/edit';
 
             if (path == "/portfolio/edit") {
-            	$rootScope.isEditPortfolioMode = true;
-            	$rootScope.selectedMaterials = [];
-            	$rootScope.selectedSingleMaterial = null;
-            } else if(editModeAllowed.indexOf(path) != -1) {
-            	if(path != "/material") {
-            		$rootScope.selectedSingleMaterial = null;
+                $rootScope.isEditPortfolioMode = true;
+                $rootScope.selectedMaterials = [];
+                $rootScope.selectedSingleMaterial = null;
+            } else if (editModeAllowed.indexOf(path) != -1) {
+                if (path != "/material") {
+                    $rootScope.selectedSingleMaterial = null;
                     $rootScope.selectedMaterials = [];
-            	}
-            } else if(authenticatedUserService.isAuthenticated() && path != "/material") {
+                }
+            } else if (authenticatedUserService.isAuthenticated() && path != "/material") {
                 $rootScope.isEditPortfolioMode = false;
                 $rootScope.selectedSingleMaterial = null;
                 $rootScope.selectedMaterials = [];
@@ -192,29 +192,29 @@ define([
         });
     });
 
-    app.run(function($rootScope, $location) {
+    app.run(function ($rootScope, $location) {
         var history = [];
 
-        $rootScope.$on('$routeChangeSuccess', function() {
+        $rootScope.$on('$routeChangeSuccess', function () {
             history.push($location.url());
         });
 
-        $rootScope.back = function() {
+        $rootScope.back = function () {
             var prevUrl = history.length > 1 ? history.splice(-2)[0] : '/';
             $location.url(prevUrl);
         };
     });
 
-    app.run(function($rootScope, $location, $timeout, $document) {
-        if(!window.history || !history.replaceState) {
+    app.run(function ($rootScope, $location, $timeout, $document) {
+        if (!window.history || !history.replaceState) {
             return;
         }
 
-        $rootScope.$on('duScrollspy:becameActive', function($event, $element, $target) {
+        $rootScope.$on('duScrollspy:becameActive', function ($event, $element, $target) {
             //Automatically update location
             var hash = $element.prop('hash');
             if (hash) {
-                $timeout(function() {
+                $timeout(function () {
                     // replace hash
                     var newUrl = $location.url().split('#', 1);
                     history.replaceState('', '', newUrl[0] + hash);
@@ -223,8 +223,8 @@ define([
         });
     });
 
-    app.run(['$rootScope', 'authenticatedUserService', function($rootScope, authenticatedUserService) {
-        $rootScope.$on('$locationChangeStart', function(event, next, current) {
+    app.run(['$rootScope', 'authenticatedUserService', function ($rootScope, authenticatedUserService) {
+        $rootScope.$on('$locationChangeStart', function (event, next, current) {
             for (var i in config.routes) {
                 if (next.indexOf(i) != -1) {
                     var permissions = config.routes[i].permissions;
@@ -242,21 +242,21 @@ define([
         });
     }]);
 
-    app.run(['$rootScope', 'authenticatedUserService', function($rootScope, authenticatedUserService) {
+    app.run(['$rootScope', 'authenticatedUserService', function ($rootScope, authenticatedUserService) {
         $rootScope.taxonUtils = taxonUtils;
 
-        $rootScope.$watch(function() {
+        $rootScope.$watch(function () {
             return authenticatedUserService.isAuthenticated();
-        }, function(isAuthenticated) {
+        }, function (isAuthenticated) {
             $rootScope.showMainFabButton = isAuthenticated;
         }, true);
     }]);
 
-    app.run(function($templateCache, $sce, $templateRequest) {
+    app.run(function ($templateCache, $sce, $templateRequest) {
         var addMaterialDialog = $sce.getTrustedResourceUrl('views/addMaterialDialog/addMaterialDialog.html');
-        $templateRequest(addMaterialDialog).then(function(template) {
+        $templateRequest(addMaterialDialog).then(function (template) {
             $templateCache.put('addMaterialDialog.html', template);
-        }, function() {
+        }, function () {
             console.log("Failed to load addMaterialDialog.html template")
         });
     });
