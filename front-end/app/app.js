@@ -50,6 +50,7 @@ define([
             app.filter = $filterProvider.register;
             app.factory = $provide.factory;
             app.service = $provide.service;
+            $httpProvider.useApplyAsync(true);
 
             if (config.routes !== undefined) {
                 angular.forEach(config.routes, function(route, path) {
@@ -250,6 +251,15 @@ define([
             $rootScope.showMainFabButton = isAuthenticated;
         }, true);
     }]);
+
+    app.run(function($templateCache, $sce, $templateRequest) {
+        var addMaterialDialog = $sce.getTrustedResourceUrl('views/addMaterialDialog/addMaterialDialog.html');
+        $templateRequest(addMaterialDialog).then(function(template) {
+            $templateCache.put('addMaterialDialog.html', template);
+        }, function() {
+            console.log("Failed to load addMaterialDialog.html template")
+        });
+    });
 
     return angularAMD.bootstrap(app);
 });

@@ -280,7 +280,7 @@ define([
                 editMaterialScope.material = clone($scope.material);
 
                 $mdDialog.show(angularAMD.route({
-                    templateUrl: 'views/addMaterialDialog/addMaterialDialog.html',
+                    templateUrl: 'addMaterialDialog.html',
                     controllerUrl: 'views/addMaterialDialog/addMaterialDialog',
                     scope: editMaterialScope
                 })).then(function (material) {

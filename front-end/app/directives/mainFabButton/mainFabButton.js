@@ -61,7 +61,7 @@ define([
 
                 $scope.showAddMaterialDialog = function() {
                     $mdDialog.show(angularAMD.route({
-                        templateUrl: 'views/addMaterialDialog/addMaterialDialog.html',
+                        templateUrl: 'addMaterialDialog.html',
                         controllerUrl: 'views/addMaterialDialog/addMaterialDialog'
                     }))
                 };
