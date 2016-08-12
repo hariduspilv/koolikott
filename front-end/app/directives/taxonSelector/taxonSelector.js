@@ -26,7 +26,7 @@ define([
                 function init() {
                     setEducationalContexts();
                     buildTaxonPath();
-                    addTaxonPathListeners();
+                    $timeout(addTaxonPathListeners());
 
                     self.basicEducationDomainSubjects = EDUCATIONAL_CONTEXTS.basicEducationDomainSubjects;
                     self.secondaryEducationDomainSubjects = EDUCATIONAL_CONTEXTS.secondaryEducationDomainSubjects;
@@ -40,7 +40,7 @@ define([
                 };
 
                 self.selectEducationalContext = function () {
-                    if(self.touched) {
+                    if (self.touched) {
                         self.touched.trigger = true;
                     }
 
