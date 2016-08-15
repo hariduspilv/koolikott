@@ -122,7 +122,7 @@
                       </div>
                       <div data-ng-message="file"
                            data-ng-show="invalidFile && invalidFile.length > 0"
-                           data-translate="DOCUMENT_MAX_SIZE" class="upload-file-error"></div>
+                           class="upload-file-error"><span data-translate="DOCUMENT_MAX_SIZE"> {{maxFileSize}}MB</span></div>
                     </div>
 
                     <div flex></div>
