@@ -13,6 +13,10 @@ html, body {
   padding: 0.2em 0;
 }
 
+.text-break {
+  word-wrap: break-word;
+}
+
 // reset
 *:focus {
   outline: none;
