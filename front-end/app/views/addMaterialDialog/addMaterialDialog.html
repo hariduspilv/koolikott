@@ -121,8 +121,8 @@
                         <span data-translate="CURRENTLY_UPLOADED_FILE"></span> {{ material.uploadedFile.name }}
                       </div>
                       <div data-ng-message="file"
-                           data-ng-show="!fileUploaded && addMaterialForm.$submitted"
-                           data-translate="ADD_FILE_PLACEHOLDER" class="upload-file-error"></div>
+                           data-ng-show="invalidFile && invalidFile.length > 0"
+                           data-translate="DOCUMENT_MAX_SIZE" class="upload-file-error"></div>
                     </div>
 
                     <div flex></div>
@@ -449,7 +449,7 @@
         <span data-ng-if="isUpdateMode" data-translate="BUTTON_UPDATE_MATERIAL"></span>
       </md-button>
 
-      <md-button aria-label="Ürita luua materjali" id="show-errors-button" class="md-primary"
+      <md-button aria-label="Ürita luua materjali" id="create-material-button" class="md-primary"
                  data-ng-if="!step.canCreateMaterial()"
                  data-ng-disabled="isSaving || uploadingFile"
                  data-ng-click="addMaterialForm.$setSubmitted()">

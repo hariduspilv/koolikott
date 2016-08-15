@@ -66,10 +66,9 @@ public class UploadedFileResourceTest extends ResourceIntegrationTestBase {
     @Test
     public void uploadFile() throws IOException {
 
-        final String REGEX = "[^/]+$";
+        final String REGEX = "(\\d+)(?!.*\\d)";
         final String FILE_NAME = "testFileForPostUploadedFile";
         final String FILE_EXTENSION = ".dop";
-        final Long FILE_ID = 2L;
         final File tempFile = File.createTempFile(FILE_NAME, FILE_EXTENSION);
         final FileDataBodyPart filePart = new FileDataBodyPart("file", tempFile);
         FormDataMultiPart formDataMultiPart = (FormDataMultiPart) new FormDataMultiPart().bodyPart(filePart);
@@ -79,17 +78,14 @@ public class UploadedFileResourceTest extends ResourceIntegrationTestBase {
         Response response = doPost("uploadedFile", Entity.entity(formDataMultiPart,
                 MediaType.MULTIPART_FORM_DATA), MediaType.APPLICATION_JSON_TYPE);
 
-        UploadedFile fileResult = response.readEntity(UploadedFile.class);
-        assertEquals(FILE_ID, fileResult.getId());
-        Pattern pattern = Pattern.compile(REGEX);
-        Matcher matcher = pattern.matcher(fileResult.getPath());
-        matcher.find();
-        String filename = matcher.group(0).replaceAll("[0-9]", "");
+        UploadedFile uploadedFile = response.readEntity(UploadedFile.class);
+        Long id = uploadedFile.getId();
+        assertNotNull(id);
+        String filename = uploadedFile.getPath().replaceAll(REGEX, "");
         assertEquals(HTTP_OK, response.getStatus());
-        assertNotNull(fileResult.getId());
-        assertEquals(filename, FILE_NAME + FILE_EXTENSION);
-        assertEquals(configuration.getString(SERVER_ADDRESS) + "/rest/uploadedFile/" + FILE_ID + "/" + fileResult.getName(), fileResult.getUrl());
-        assertEquals(configuration.getString(FILE_UPLOAD_DIRECTORY) + "/" + filename, fileResult.getPath().replaceAll("[0-9]", ""));
+        assertNotNull(uploadedFile.getId());
+        assertEquals(configuration.getString(SERVER_ADDRESS) + "/rest/uploadedFile/" + id + "/" + uploadedFile.getName(), uploadedFile.getUrl());
+        assertEquals(filename, uploadedFile.getPath().replaceAll(REGEX, ""));
     }
 
     @Test
