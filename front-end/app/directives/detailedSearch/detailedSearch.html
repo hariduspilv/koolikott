@@ -43,7 +43,11 @@
     </div>
 
     <div flex class="md-padding">
-      <div data-dop-target-group-selector data-target-groups="detailedSearch.targetGroups" data-taxon="detailedSearch.taxon" data-ng-if="detailedSearch.educationalContext.id != 4"></div>
+      <div data-dop-target-group-selector
+           data-target-groups="detailedSearch.targetGroups"
+           data-is-required="{trigger: false}"
+           data-taxon="detailedSearch.taxon" data-ng-if="detailedSearch.educationalContext.id != 4">
+      </div>
       <div layout="column" layout-align="end start">
         <md-checkbox data-ng-if="detailedSearch.educationalContext.id === 2" data-ng-model="detailedSearch.CLIL" aria-label="{{'DETAILED_SEARCH_CLIL' | translate}}" class="md-primary" flex>
           <span data-translate="DETAILED_SEARCH_CLIL"></span>

@@ -33,7 +33,7 @@ define([
                     storageService.setMaterial(null);
 
                     $mdDialog.show(angularAMD.route({
-                        templateUrl: 'views/addMaterialDialog/addMaterialDialog.html',
+                        templateUrl: 'addMaterialDialog.html',
                         controllerUrl: 'views/addMaterialDialog/addMaterialDialog',
                         scope: addMaterialScope
                     })).then(closeDialog);
@@ -68,7 +68,7 @@ define([
                     storageService.setMaterial(null);
 
                     $mdDialog.show(angularAMD.route({
-                        templateUrl: 'views/addMaterialDialog/addMaterialDialog.html',
+                        templateUrl: 'addMaterialDialog.html',
                         controllerUrl: 'views/addMaterialDialog/addMaterialDialog',
                         scope: addMaterialScope
                     })).then(closeDialog);

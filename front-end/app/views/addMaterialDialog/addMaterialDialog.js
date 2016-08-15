@@ -9,12 +9,11 @@ define([
     'services/fileUploadService',
     'directives/validate/validateUrl'
 ], function (app) {
-    return ['$scope', '$mdDialog', '$mdDateLocale', 'serverCallService', 'translationService', 'metadataService', '$filter', '$location', '$rootScope', 'authenticatedUserService', 'storageService', '$timeout', 'pictureUploadService', 'fileUploadService',
-        function ($scope, $mdDialog, $mdDateLocale, serverCallService, translationService, metadataService, $filter, $location, $rootScope, authenticatedUserService, storageService, $timeout, pictureUploadService, fileUploadService) {
+    return ['$scope', '$mdDialog', '$mdDateLocale', 'serverCallService', 'translationService', 'metadataService', '$filter', '$location', '$rootScope', 'authenticatedUserService', '$timeout', 'pictureUploadService', 'fileUploadService',
+        function ($scope, $mdDialog, $mdDateLocale, serverCallService, translationService, metadataService, $filter, $location, $rootScope, authenticatedUserService, $timeout, pictureUploadService, fileUploadService) {
             $scope.isSaving = false;
             $scope.showHints = true;
             $scope.creatorIsPublisher = false;
-            $scope.isTouched = {};
 
             var preferredLanguage;
             var TABS_COUNT = 2;
@@ -29,6 +28,7 @@ define([
             $scope.titleDescriptionGroups = [];
             $scope.fileUploaded = false;
             $scope.uploadingFile = false;
+            $scope.maxPictureSize = 10; //Initial placeholder
 
             init();
 
@@ -58,10 +58,6 @@ define([
             $scope.step.isLastStep = function () {
                 return $scope.step.currentStep === TABS_COUNT;
             };
-
-            $scope.$watch('addMaterialForm.source.$valid', function (isValid) {
-                $scope.step.isMaterialUrlStepValid = isValid;
-            });
 
             $scope.addNewMetadata = function () {
                 $scope.titleDescriptionGroups.forEach(function (item) {
@@ -93,11 +89,6 @@ define([
             };
 
             $scope.deleteTaxon = function (index) {
-                var taxon = $scope.material.taxons[index];
-                $rootScope.selectedTopics = $rootScope.selectedTopics.filter(function (topic) {
-                    return topic.id !== taxon.id;
-                });
-
                 $scope.material.taxons.splice(index, 1);
             };
 
@@ -106,12 +97,6 @@ define([
                     return language.id == id;
                 })[0].name;
             };
-
-            $scope.$watch('material.taxons[0]', function (newValue, oldValue) {
-                if (newValue && newValue.level === $rootScope.taxonUtils.constants.EDUCATIONAL_CONTEXT && newValue !== oldValue) {
-                    $scope.educationalContextId = newValue.id;
-                }
-            }, false);
 
             $scope.cancel = function () {
                 $mdDialog.hide();
@@ -127,19 +112,23 @@ define([
                     $scope.material.titles = metadata.titles;
                     $scope.material.descriptions = metadata.descriptions;
                     $scope.material.type = ".Material";
-                    if($scope.material.source){
-                       $scope.material.uploadedFile = null;
+                    if ($scope.material.source) {
+                        $scope.material.uploadedFile = null;
                     }
 
-                    $scope.material.crossCurricularThemes = $scope.material.crossCurricularThemes
-                        .filter(function (theme) {
-                            return theme.name !== "NOT_RELEVANT";
-                        });
+                    if ($scope.material.crossCurricularThemes) {
+                        $scope.material.crossCurricularThemes = $scope.material.crossCurricularThemes
+                            .filter(function (theme) {
+                                return theme.name !== "NOT_RELEVANT";
+                            });
+                    }
 
-                    $scope.material.keyCompetences = $scope.material.keyCompetences
-                        .filter(function (competence) {
-                            return competence.name !== "NOT_RELEVANT";
-                        });
+                    if ($scope.material.keyCompetences) {
+                        $scope.material.keyCompetences = $scope.material.keyCompetences
+                            .filter(function (competence) {
+                                return competence.name !== "NOT_RELEVANT";
+                            });
+                    }
 
                     serverCallService.makePut('rest/material', $scope.material, saveMaterialSuccess, saveMaterialFail, saveMaterialFinally);
                 }
@@ -163,10 +152,6 @@ define([
 
             $scope.isAdmin = function () {
                 return authenticatedUserService.isAdmin();
-            };
-
-            $scope.isTopicNotSet = function () {
-                return !$rootScope.selectedTopics || $rootScope.selectedTopics.length === 0;
             };
 
             function getIssueDate(date) {
@@ -213,16 +198,20 @@ define([
             };
 
             $scope.isTabTwoValid = function () {
-                return $rootScope.selectedTopics && $rootScope.selectedTopics.length > 0 && $scope.material.targetGroups && $scope.material.targetGroups.length > 0
+                return $scope.material.targetGroups && $scope.material.targetGroups.length > 0
                     && ($scope.isBasicOrSecondaryEducation() ? $scope.material.keyCompetences.length > 0 && $scope.material.crossCurricularThemes.length > 0 : true);
             };
 
             $scope.isTabThreeValid = function () {
-                return areAuthorsValid() && (hasAuthors() || material.publishers[0].name) && $scope.material.issueDate.year;
+                return areAuthorsValid() && (hasAuthors() || hasPublisher()) && $scope.material.issueDate.year;
             };
 
+            function hasPublisher() {
+                return $scope.material.publishers[0] && $scope.material.publishers[0].name;
+            }
+
             function hasAuthors() {
-                return $scope.material.authors.length > 0;
+                return $scope.material.authors.length > 0 && $scope.material.authors[0].surname;
             }
 
             function areAuthorsValid() {
@@ -291,8 +280,6 @@ define([
             };
 
             function loadMetadata() {
-                metadataService.loadLanguages(setLangugeges);
-                metadataService.loadLicenseTypes(setLicenseTypes);
                 metadataService.loadResourceTypes(setResourceTypes);
                 metadataService.loadKeyCompetences(setKeyCompetences);
                 metadataService.loadCrossCurricularThemes(setCrossCurricularThemes);
@@ -332,27 +319,64 @@ define([
                     prefillMetadataFromPortfolio();
                     $scope.material.source = addChapterMaterialUrl;
                 }
-                $scope.material.source = getSource($scope.material);
-                if($scope.material.uploadedFile){
+
+                if ($scope.material.uploadedFile) {
                     $scope.material.source = "";
+                } else {
+                    $scope.material.source = getSource($scope.material);
                 }
+
+                if ($scope.material.uploadedFile && $scope.material.uploadedFile.id) $scope.fileUploaded = true;
                 setPublisher();
-                loadMetadata();
-                getMaxPictureSize();
-                getMaxFileSize();
-                setSelectedTopics();
+                metadataService.loadLanguages(setLangugeges);
+                metadataService.loadLicenseTypes(setLicenseTypes);
+
+                //Can be loaded later, as they are not in the first tab
+                $timeout(getMaxPictureSize);
+                $timeout(loadMetadata);
+                $timeout(getMaxFileSize);
+                $timeout(setWatches);
             }
 
-            function setSelectedTopics() {
-                $rootScope.selectedTopics = [];
-                $scope.material.taxons.forEach(function (taxon) {
-                    const TOPIC = $rootScope.taxonUtils.constants.TOPIC;
-                    if (taxon.level === TOPIC) {
-                        $rootScope.selectedTopics.push(taxon);
-                    } else if ($rootScope.taxonUtils.getTopic(taxon) && $rootScope.taxonUtils.getTopic(taxon).level === TOPIC) {
-                        $rootScope.selectedTopics.push($rootScope.taxonUtils.getTopic(taxon));
+            function setWatches() {
+                $scope.$watch(function () {
+                    return $scope.newPicture;
+                }, function (newPicture) {
+                    if (newPicture) {
+                        uploadingPicture = true;
+                        pictureUploadService.upload(newPicture, pictureUploadSuccess, pictureUploadFailed, pictureUploadFinally);
                     }
-                })
+                });
+
+                $scope.$watch(function () {
+                    return $scope.newFile;
+                }, function (newFile) {
+                    if (newFile) {
+                        $scope.uploadingFile = true;
+                        fileUploadService.upload(newFile, fileUploadSuccess, fileUploadFailed, fileUploadFinally);
+                    }
+                });
+
+                $scope.$watchCollection('invalidPicture', function (newValue, oldValue) {
+                    if (newValue !== oldValue) {
+                        if (newValue && newValue.length > 0) {
+                            $scope.showErrorOverlay = true;
+                            $timeout(function () {
+                                $scope.showErrorOverlay = false;
+                            }, 6000);
+                        }
+                    }
+                });
+
+                $scope.$watch('addMaterialForm.source.$valid', function (isValid) {
+                    $scope.step.isMaterialUrlStepValid = isValid;
+                });
+
+                $scope.$watch('material.taxons[0]', function (newValue, oldValue) {
+                    if (newValue && newValue.level === $rootScope.taxonUtils.constants.EDUCATIONAL_CONTEXT && newValue !== oldValue) {
+                        $scope.educationalContextId = newValue.id;
+                    }
+                }, false);
             }
 
             $scope.$watch(function () {
@@ -369,24 +393,6 @@ define([
                     }
                 }
             }, true);
-
-            $scope.$watch(function () {
-                return $scope.newPicture;
-            }, function (newPicture) {
-                if (newPicture) {
-                    uploadingPicture = true;
-                    pictureUploadService.upload(newPicture, pictureUploadSuccess, pictureUploadFailed, pictureUploadFinally);
-                }
-            });
-
-            $scope.$watch(function () {
-                return $scope.newFile;
-            }, function (newFile) {
-                if (newFile) {
-                    $scope.uploadingFile = true;
-                    fileUploadService.upload(newFile, fileUploadSuccess, fileUploadFailed, fileUploadFinally);
-                }
-            });
 
             function pictureUploadSuccess(picture) {
                 $scope.material.picture = picture;
@@ -453,6 +459,9 @@ define([
                 if (educationalContext) {
                     $scope.educationalContextId = educationalContext.id;
                 }
+
+                if (!$scope.crossCurricularThemes) $scope.crossCurricularThemes = [];
+                if (!$scope.keyCompetences) $scope.keyCompetences = [];
             }
 
             function prefillMetadataFromPortfolio() {
@@ -522,6 +531,8 @@ define([
             }
 
             function saveMaterialSuccess(material) {
+                //Pass saved material back to material view
+                material.source = getSource(material);
                 $mdDialog.hide(material);
                 if (!$scope.isChapterMaterial) {
                     $location.url('/material?materialId=' + material.id);
@@ -566,17 +577,6 @@ define([
                         return metadata.title && metadata.title.length !== 0;
                     }).length !== 0;
             }
-
-            $scope.$watchCollection('invalidPicture', function (newValue, oldValue) {
-                if (newValue !== oldValue) {
-                    if (newValue && newValue.length > 0) {
-                        $scope.showErrorOverlay = true;
-                        $timeout(function () {
-                            $scope.showErrorOverlay = false;
-                        }, 6000);
-                    }
-                }
-            });
 
             function getMaxPictureSize() {
                 serverCallService.makeGet('/rest/picture/maxSize', {}, getMaxPictureSizeSuccess, getMaxPictureSizeFail);

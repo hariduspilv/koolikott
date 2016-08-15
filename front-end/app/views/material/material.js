@@ -34,16 +34,16 @@ define([
                 });
             });
 
-            $scope.$watch(function() {
+            $scope.$watch(function () {
                 return storageService.getMaterial();
-            }, function(newMaterial, oldMaterial) {
+            }, function (newMaterial, oldMaterial) {
                 if (newMaterial !== oldMaterial) {
                     $scope.material = newMaterial;
                 }
             });
 
             // Find educational contexts and subjects in case the material taxons are loaded later
-            $scope.taxonWatcher = $scope.$watchCollection('material.taxons', function(newTaxons, oldTaxons) {
+            $scope.taxonWatcher = $scope.$watchCollection('material.taxons', function (newTaxons, oldTaxons) {
                 if (newTaxons !== oldTaxons) {
                     preprocessMaterialSubjects();
                     preprocessMaterialEducationalContexts();
@@ -155,7 +155,7 @@ define([
                 }
             }
 
-            $scope.getMaterialDomains = function() {
+            $scope.getMaterialDomains = function () {
                 var domains = [];
 
                 if (!$scope.material || !$scope.material.taxons) {
@@ -280,7 +280,7 @@ define([
                 editMaterialScope.material = clone($scope.material);
 
                 $mdDialog.show(angularAMD.route({
-                    templateUrl: 'views/addMaterialDialog/addMaterialDialog.html',
+                    templateUrl: 'addMaterialDialog.html',
                     controllerUrl: 'views/addMaterialDialog/addMaterialDialog',
                     scope: editMaterialScope
                 })).then(function (material) {
@@ -334,14 +334,12 @@ define([
                 log('Deleting material failed.');
             }
 
-            $scope.isPublishersMaterial = function () {
-                if ($scope.material && authenticatedUserService.isAuthenticated()) {
+            $scope.isUsersMaterial = function () {
+                if ($scope.material && authenticatedUserService.isAuthenticated() && !authenticatedUserService.isRestricted()) {
                     var userID = authenticatedUserService.getUser().id;
                     var creator = $scope.material.creator;
 
-                    if (creator && creator.id === userID) {
-                        return authenticatedUserService.isPublisher();
-                    }
+                    return creator && creator.id === userID
                 }
             };
 
@@ -364,7 +362,7 @@ define([
                 log("Restoring material failed");
             }
 
-            $scope.getTargetGroups = function() {
+            $scope.getTargetGroups = function () {
                 if ($scope.material) {
                     return targetGroupService.getLabelByTargetGroupsOrAll($scope.material.targetGroups);
                 }

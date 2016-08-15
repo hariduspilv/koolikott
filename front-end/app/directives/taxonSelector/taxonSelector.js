@@ -26,38 +26,21 @@ define([
                 function init() {
                     setEducationalContexts();
                     buildTaxonPath();
-                    addTaxonPathListeners();
+                    $timeout(addTaxonPathListeners());
 
                     self.basicEducationDomainSubjects = EDUCATIONAL_CONTEXTS.basicEducationDomainSubjects;
                     self.secondaryEducationDomainSubjects = EDUCATIONAL_CONTEXTS.secondaryEducationDomainSubjects;
                     $timeout(function () {
                         self.isReady = true;
                     });
-                    self.topicRequired = self.isAddMaterialView ? isTopicNotSet() : false;
-                }
-
-                function isTopicNotSet() {
-                    return !$rootScope.selectedTopics || $rootScope.selectedTopics.length === 0;
-                }
-
-                function removeTopic(originalId) {
-                    if ($rootScope.selectedTopics) {
-                        $rootScope.selectedTopics = $rootScope.selectedTopics
-                            .filter(function (topic) {
-                                return topic.id !== originalId;
-                            });
-                    }
                 }
 
                 self.reset = function (parentTaxon, original) {
                     self.taxon = parentTaxon;
-                    if (original) {
-                        removeTopic(original.topic.id);
-                    }
                 };
 
                 self.selectEducationalContext = function () {
-                    if(self.touched) {
+                    if (self.touched) {
                         self.touched.trigger = true;
                     }
 
@@ -101,15 +84,6 @@ define([
                     }, function (newTaxon, oldTaxon) {
                         if (newTaxon && oldTaxon && newTaxon[0] !== oldTaxon[0]) {
                             buildTaxonPath();
-
-                            //When choosing parent taxon or setting to null, old topic needs to be removed
-                            if (newTaxon[1] !== $rootScope.taxonUtils.constants.SUBTOPIC || !newTaxon[0]) {
-                                removeTopic(oldTaxon[0]);
-                            }
-
-                            if (!self.topicRequired && !self.taxonPath.topic && isTopicNotSet() && self.isAddMaterialView) {
-                                self.topicRequired = true;
-                            }
                         }
                     }, true);
 
@@ -183,9 +157,6 @@ define([
                     }, function (newTopic, oldTopic) {
                         if (newTopic !== undefined && newTopic !== oldTopic) {
                             self.taxon = self.taxonPath.topic;
-                            if ($rootScope.selectedTopics && !containsObjectWithId($rootScope.selectedTopics, self.taxonPath.topic.id)) {
-                                $rootScope.selectedTopics.push(self.taxonPath.topic);
-                            }
                         }
                     }, true);
 
@@ -196,22 +167,8 @@ define([
                     }, function (newSubtopic, oldSubtopic) {
                         if (newSubtopic !== undefined && newSubtopic !== oldSubtopic) {
                             self.taxon = self.taxonPath.subtopic;
-                            var topic = $rootScope.taxonUtils.getTopic(self.taxon);
-
-                            if ($rootScope.selectedTopics && !containsObjectWithId($rootScope.selectedTopics, topic.id)) {
-                                $rootScope.selectedTopics.push(topic);
-                            }
                         }
                     }, true);
-                }
-
-                function containsObjectWithId(array, id) {
-                    var res = false;
-                    array.forEach(function (element) {
-                        if (element.id === id) res = true;
-                    });
-
-                    return res;
                 }
 
                 function getEducationalContextsSuccess(educationalContexts) {

@@ -61,22 +61,9 @@ define([
 
                 $scope.showAddMaterialDialog = function() {
                     $mdDialog.show(angularAMD.route({
-                        templateUrl: 'views/addMaterialDialog/addMaterialDialog.html',
+                        templateUrl: 'addMaterialDialog.html',
                         controllerUrl: 'views/addMaterialDialog/addMaterialDialog'
                     }))
-                };
-
-                $scope.showAddFileDialog = function() {
-                    var addMaterialScope = $scope.$new(true);
-
-                    addMaterialScope.uploadMode = true;
-                    storageService.setMaterial(null);
-
-                    $mdDialog.show(angularAMD.route({
-                        templateUrl: 'views/addMaterialDialog/addMaterialDialog.html',
-                        controllerUrl: 'views/addMaterialDialog/addMaterialDialog',
-                        scope: addMaterialScope
-                    }));
                 };
 
                 $scope.copyPortfolio = function() {
