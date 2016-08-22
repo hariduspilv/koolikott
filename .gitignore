@@ -4,12 +4,15 @@
 /back-end/.classpath
 /back-end/.idea/
 /back-end/logs/
+back-end/dop.iml
+
 /solr-indexer/target/
 /solr-indexer/.settings/
 /solr-indexer/.project
 /solr-indexer/.classpath
 /solr-indexer/.idea/
 /solr-indexer/logs/
+
 /front-end/node_modules
 /front-end/dist
 /front-end/.tmp
@@ -20,4 +23,3 @@
 /front-end/.project
 /front-end/DOP-Front-End.iml
 .idea/
-back-end/dop.iml
