@@ -343,12 +343,6 @@ define([
                 }
             };
 
-            $scope.isNotImported = function () {
-                if ($scope.material) {
-                    return $scope.material.repositoryIdentifier === null;
-                }
-            };
-
             $scope.restoreMaterial = function () {
                 serverCallService.makePost("rest/material/restore", $scope.material, restoreSuccess, restoreFail);
             };
