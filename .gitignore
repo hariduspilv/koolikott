@@ -6,11 +6,11 @@
 /back-end/logs/
 back-end/dop.iml
 
-/solr-indexer/target/
 /solr-indexer/.settings/
 /solr-indexer/.project
 /solr-indexer/.classpath
 /solr-indexer/.idea/
+solr-indexer/DOP-Solr-indexer.iml
 /solr-indexer/logs/
 
 /front-end/node_modules
