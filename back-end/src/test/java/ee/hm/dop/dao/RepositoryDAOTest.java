@@ -25,6 +25,7 @@ public class RepositoryDAOTest extends DatabaseTestBase {
         assertEquals(2, repositories.size());
         assertEquals("http://repo1.ee", repositories.get(0).getBaseURL());
         assertNull(repositories.get(0).getLastSynchronization());
+        assertEquals(2, repositories.get(0).getRepositoryURLs().size());
     }
 
     @Test

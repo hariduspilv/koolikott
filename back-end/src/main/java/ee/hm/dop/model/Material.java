@@ -266,4 +266,12 @@ public class Material extends LearningObject implements Searchable {
     public void setUploadedFile(UploadedFile uploadedFile) {
         this.uploadedFile = uploadedFile;
     }
+
+    public void setPaid(boolean paid) {
+        this.paid = paid;
+    }
+
+    public Boolean getEmbeddable() {
+        return embeddable;
+    }
 }

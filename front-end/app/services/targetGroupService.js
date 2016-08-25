@@ -110,6 +110,9 @@ define([
                                 targetGroups.indexOf('GRADE9') > -1) {
                                 selectedTargetGroup = 'LEVEL3';
                             }
+                        } else if (targetGroups.length > 3) {
+                            //TODO: If more than one target group show multiple selected groups
+                            selectedTargetGroup = 'LEVEL2';
                         }
                     }
 

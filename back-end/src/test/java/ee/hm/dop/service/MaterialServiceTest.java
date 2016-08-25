@@ -109,9 +109,9 @@ public class MaterialServiceTest {
         long materialId = 1;
         Material material = createMock(Material.class);
         expect(material.getId()).andReturn(materialId).times(3);
-        expect(material.getRepository()).andReturn(null).times(2);
         expect(material.getAuthors()).andReturn(null);
         expect(material.getPublishers()).andReturn(null);
+        material.setRepository(null);
         material.setRecommendation(null);
         searchEngineService.updateIndex();
 
@@ -163,51 +163,30 @@ public class MaterialServiceTest {
     @Test
     public void updateAddingRepository() {
         Material original = new Material();
+        Repository repository = new Repository();
+        original.setRepository(repository);
 
         long materialId = 1;
         Material material = createMock(Material.class);
-        expect(material.getId()).andReturn(materialId).times(2);
-        expect(material.getRepository()).andReturn(new Repository()).times(3);
-
+        expect(material.getId()).andReturn(materialId).times(3);
+        material.setRecommendation(null);
         expect(materialDAO.findByIdNotDeleted(materialId)).andReturn(original);
+        material.setRepository(repository);
+        expect(materialDAO.update(material)).andReturn(material);
+        material.setViews(0L);
+        material.setAdded(null);
+        material.setUpdated(EasyMock.anyObject(DateTime.class));
+        expect(material.getAuthors()).andReturn(null);
+        expect(material.getPublishers()).andReturn(null);
+        expect(material.getTaxons()).andReturn(null);
+        material.setKeyCompetences(null);
+        material.setCrossCurricularThemes(null);
 
         replay(materialDAO, material);
 
-        try {
-            materialService.update(material, null);
-            fail("Exception expected.");
-        } catch (IllegalArgumentException ex) {
-            assertEquals("Error updating Material: Not allowed to modify repository.", ex.getMessage());
-        }
+        Material returned = materialService.update(material, null);
 
-        verify(materialDAO, material);
-    }
-
-    @Test
-    public void updateChangingRepository() {
-        Material original = new Material();
-        Repository originalRepository = new Repository();
-        originalRepository.setBaseURL("original.com");
-        original.setRepository(originalRepository);
-
-        long materialId = 1;
-        Material material = createMock(Material.class);
-        expect(material.getId()).andReturn(materialId).times(2);
-        Repository newRepository = new Repository();
-        newRepository.setBaseURL("some.com");
-        expect(material.getRepository()).andReturn(newRepository).times(3);
-
-        expect(materialDAO.findByIdNotDeleted(materialId)).andReturn(original);
-
-        replay(materialDAO, material);
-
-        try {
-            materialService.update(material, null);
-            fail("Exception expected.");
-        } catch (IllegalArgumentException ex) {
-            assertEquals("Error updating Material: Not allowed to modify repository.", ex.getMessage());
-        }
-
+        assertNotNull(returned);
         verify(materialDAO, material);
     }
 
@@ -335,26 +314,6 @@ public class MaterialServiceTest {
         }
 
         verify(user);
-    }
-
-    @Test
-    public void updateByUserRepoMaterial() {
-        User user = createMock(User.class);
-        Material material = createMock(Material.class);
-        expect(material.getId()).andReturn(1L).times(2);
-        expect(materialDAO.findByIdNotDeleted(1L)).andReturn(material);
-        expect(material.getRepository()).andReturn(new Repository());
-
-        replay(material, user, materialDAO);
-
-        try {
-            materialService.update(material, user);
-            fail("Exception expected.");
-        } catch (IllegalArgumentException ex) {
-            assertEquals("Can't update external repository material", ex.getMessage());
-        }
-
-        verify(material, user, materialDAO);
     }
 
     @Test

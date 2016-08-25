@@ -116,6 +116,10 @@ define([
                         $scope.material.uploadedFile = null;
                     }
 
+                    if (!$scope.material.publishers[0].name) {
+                        $scope.material.publishers[0] = null;
+                    }
+
                     if ($scope.material.crossCurricularThemes) {
                         $scope.material.crossCurricularThemes = $scope.material.crossCurricularThemes
                             .filter(function (theme) {
@@ -319,6 +323,7 @@ define([
                     prefillMetadataFromPortfolio();
                     $scope.material.source = addChapterMaterialUrl;
                 }
+                console.log($scope.material);
 
                 if ($scope.material.uploadedFile) {
                     $scope.material.source = "";

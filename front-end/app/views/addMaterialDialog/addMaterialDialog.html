@@ -157,7 +157,7 @@
                     <label data-translate="TITLE_AND_DESCRIPTION_LANGUAGE"></label>
                     <md-select data-ng-model="metadata.language" id="add-material-title-language-select">
                       <md-option data-ng-repeat="language in languages" value="{{language}}"
-                                 ng-selected="{{language === material.language}}">
+                                 ng-selected="{{metadata.language ? language === metadata.language : language === material.language}}">
                         <span data-translate="LANGUAGE_{{language.toUpperCase()}}"> </span>
                       </md-option>
                     </md-select>

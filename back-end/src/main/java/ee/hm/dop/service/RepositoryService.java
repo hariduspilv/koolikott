@@ -2,6 +2,8 @@ package ee.hm.dop.service;
 
 import static java.lang.String.format;
 
+import java.lang.reflect.InvocationTargetException;
+import java.net.URI;
 import java.util.Collections;
 import java.util.List;
 
@@ -12,10 +14,12 @@ import ee.hm.dop.dao.RepositoryDAO;
 import ee.hm.dop.model.Material;
 import ee.hm.dop.model.Picture;
 import ee.hm.dop.model.Repository;
+import ee.hm.dop.model.RepositoryURL;
 import ee.hm.dop.oaipmh.MaterialIterator;
 import ee.hm.dop.oaipmh.RepositoryManager;
 import ee.hm.dop.oaipmh.SynchronizationAudit;
 import ee.hm.dop.utils.DbUtils;
+import org.apache.commons.beanutils.BeanUtilsBean;
 import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -128,11 +132,44 @@ public class RepositoryService {
         }
 
         if (existentMaterial != null) {
-            updateMaterial(material, existentMaterial, audit);
+            boolean isRepoMaterial = isRepoMaterial(repository, existentMaterial);
+
+            updateMaterial(material, existentMaterial, audit, isRepoMaterial);
         } else if (!material.isDeleted()) {
             createMaterial(material);
             audit.newMaterialCreated();
         }
+    }
+
+    protected boolean isRepoMaterial(Repository repository, Material existentMaterial) {
+        boolean isRepoMaterial = false;
+        String domainName = getDomainName(existentMaterial.getSource());
+        if (domainName != null && !domainName.isEmpty()) {
+            for (RepositoryURL repositoryURL : repository.getRepositoryURLs()) {
+                if (getDomainName(repositoryURL.getBaseURL()).equals(domainName)) {
+                    isRepoMaterial = true;
+                }
+            }
+        }
+
+        return isRepoMaterial;
+    }
+
+    protected String getDomainName(String url) {
+        try {
+            URI uri = new URI(url);
+            if (uri.getScheme() == null) {
+                uri = new URI("http://" + url);
+            }
+
+            String domain = uri.getHost().trim();
+            return domain.startsWith("www.") ? domain.substring(4) : domain;
+
+        } catch (Exception e) {
+            logger.error("Could not get domain name from material during synchronization - updating all metafields of the material");
+        }
+
+        return null;
     }
 
     private void createMaterial(Material material) {
@@ -147,19 +184,65 @@ public class RepositoryService {
         }
     }
 
-    private void updateMaterial(Material material, Material existentMaterial, SynchronizationAudit audit) {
-        if (material.isDeleted()) {
+    protected Material updateMaterial(Material newMaterial, Material existentMaterial, SynchronizationAudit audit, boolean isRepoMaterial) {
+        Material updatedMaterial = null;
+
+        if (newMaterial.isDeleted() && isRepoMaterial) {
+            logger.info("Deleting material, as it was deleted in it's repository and is owned by the repo (has repo baseLink)");
             materialService.delete(existentMaterial);
             audit.existingMaterialDeleted();
-        } else {
-            material.setId(existentMaterial.getId());
-            createPicture(material);
-            materialService.update(material, null);
+        } else if (isRepoMaterial) {
+            logger.info("Updating material with repository link - updating all fields, that are not null in the new imported material");
+            createPicture(newMaterial);
+            mergeTwoObjects(newMaterial, existentMaterial);
+
+            updatedMaterial = materialService.update(existentMaterial, null);
             audit.existingMaterialUpdated();
+
+        } else {
+            logger.info("Updating material with external link - updating all fields that are currently null in DB");
+            createPicture(newMaterial);
+            mergeTwoObjects(existentMaterial, newMaterial);
+
+            updatedMaterial = materialService.update(newMaterial, null);
+            audit.existingMaterialUpdated();
+        }
+
+        return updatedMaterial;
+    }
+
+    /**
+     * Data from the source will be copied to the destination.
+     * If the source data is not null or empty, then existing data in the destination will be overwritten
+     *
+     * @param source Data being copied to the destination
+     * @param dest   Object into which data will be copied and overwritten
+     */
+    private void mergeTwoObjects(Object source, Object dest) {
+        try {
+            new BeanUtilsBean() {
+                @Override
+                public void copyProperty(Object dest, String name, Object value)
+                        throws IllegalAccessException, InvocationTargetException {
+                    if (value != null && !isEmpty(value)) {
+                        super.copyProperty(dest, name, value);
+                    }
+                }
+            }.copyProperties(dest, source);
+        } catch (Exception e) {
+            logger.error("Unable to merge existing material and downloaded material from the repository", e);
         }
     }
 
-    public void updateRepositoryData(Repository repository) {
+    private boolean isEmpty(Object value) {
+        if (value instanceof List) {
+            return ((List) value).isEmpty();
+        } else {
+            return value instanceof String && ((String) value).isEmpty();
+        }
+    }
+
+    private void updateRepositoryData(Repository repository) {
         repositoryDAO.updateRepository(repository);
     }
 }

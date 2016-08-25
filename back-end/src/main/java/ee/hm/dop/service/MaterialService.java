@@ -272,11 +272,13 @@ public class MaterialService implements LearningObjectHandler {
         }
 
         Material originalMaterial = materialDao.findByIdNotDeleted(material.getId());
-        validateMaterialUpdate(material, originalMaterial, changer);
+        validateMaterialUpdate(originalMaterial, changer);
 
         if (!isUserAdmin(changer)) {
             material.setRecommendation(originalMaterial.getRecommendation());
         }
+        //Should not be able to update repository
+        material.setRepository(originalMaterial.getRepository());
 
         // Should not be able to update view count
         material.setViews(originalMaterial.getViews());
@@ -297,22 +299,13 @@ public class MaterialService implements LearningObjectHandler {
         return user != null && originalMaterial.getCreator().getUsername().equals(user.getUsername());
     }
 
-    private void validateMaterialUpdate(Material material, Material originalMaterial, User changer) {
+    private void validateMaterialUpdate(Material originalMaterial, User changer) {
         if (originalMaterial == null) {
             throw new IllegalArgumentException("Error updating Material: material does not exist.");
         }
 
-        if (originalMaterial.getRepository() != null && changer != null) {
+        if (originalMaterial.getRepository() != null && changer != null && !isUserAdminOrPublisher(changer)) {
             throw new IllegalArgumentException("Can't update external repository material");
-        }
-
-        final String ErrorModifyRepository = "Error updating Material: Not allowed to modify repository.";
-        if (material.getRepository() == null && originalMaterial.getRepository() != null) {
-            throw new IllegalArgumentException(ErrorModifyRepository);
-        }
-
-        if (material.getRepository() != null && !material.getRepository().equals(originalMaterial.getRepository())) {
-            throw new IllegalArgumentException(ErrorModifyRepository);
         }
     }
 
@@ -368,6 +361,10 @@ public class MaterialService implements LearningObjectHandler {
 
     private boolean isUserPublisher(User loggedInUser) {
         return loggedInUser != null && loggedInUser.getPublisher() != null;
+    }
+
+    private boolean isUserAdminOrPublisher(User loggedInUser) {
+        return isUserModerator(loggedInUser) || isUserAdmin(loggedInUser);
     }
 
     public BrokenContent addBrokenMaterial(Material material, User loggedInUser) {
