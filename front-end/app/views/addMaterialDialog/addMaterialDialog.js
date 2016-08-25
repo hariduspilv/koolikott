@@ -323,7 +323,6 @@ define([
                     prefillMetadataFromPortfolio();
                     $scope.material.source = addChapterMaterialUrl;
                 }
-                console.log($scope.material);
 
                 if ($scope.material.uploadedFile) {
                     $scope.material.source = "";
