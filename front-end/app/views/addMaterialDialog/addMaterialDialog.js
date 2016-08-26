@@ -116,7 +116,7 @@ define([
                         $scope.material.uploadedFile = null;
                     }
 
-                    if (!$scope.material.publishers[0].name) {
+                    if ($scope.material.publishers[0] && !$scope.material.publishers[0].name) {
                         $scope.material.publishers[0] = null;
                     }
 
