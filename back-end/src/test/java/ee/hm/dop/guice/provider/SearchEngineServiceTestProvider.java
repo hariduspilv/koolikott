@@ -34,7 +34,7 @@ class SearchEngineServiceMock implements SearchEngineService {
 
     private static final Table<String, String, List<Document>> sortedSearchResponses = HashBasedTable.create();
 
-    private static final Long[] portfolioIds = { 101L, 102L, 103L, 104L };
+    private static final Long[] portfolioIds = {101L, 102L, 103L, 104L};
 
     private static final int RESULTS_PER_PAGE = 3;
 
@@ -64,6 +64,7 @@ class SearchEngineServiceMock implements SearchEngineService {
         addAdminQuery();
 
         addSortedQuery();
+        addResourceTypeQuery();
     }
 
     private static void addArabicQuery() {
@@ -199,6 +200,12 @@ class SearchEngineServiceMock implements SearchEngineService {
         String sort = "somefield desc";
         List<Document> result = createDocumentsWithIdentifiers(2L, 6L);
         sortedSearchResponses.put(query, sort, result);
+    }
+
+    private static void addResourceTypeQuery() {
+        String query = "(ditmas) AND resource_type:\"experiment1\" AND (visibility:\"public\" OR type:\"material\")";
+        List<Document> result = createDocumentsWithIdentifiers(1L, 6L);
+        searchResponses.put(query, result);
     }
 
     @Override

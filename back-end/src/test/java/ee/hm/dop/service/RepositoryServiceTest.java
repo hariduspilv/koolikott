@@ -463,7 +463,7 @@ public class RepositoryServiceTest {
 
         verifyAll();
 
-        assertEquals(picture2, returnedMaterial.getPicture());
+        assertEquals(picture2.getId(), returnedMaterial.getPicture().getId());
     }
 
     private Repository getRepository() {

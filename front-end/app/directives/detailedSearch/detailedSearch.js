@@ -34,6 +34,9 @@ define([
                     metadataService.loadLanguages(setLanguages);
                     $scope.detailedSearch.language = searchService.getLanguage();
 
+                    // ResourceTypes
+                    metadataService.loadResourceTypes(setResourceTypes);
+
                     // Target groups
                     $scope.detailedSearch.targetGroups = searchService.getTargetGroups();
 
@@ -108,6 +111,7 @@ define([
                     addLanguageToSearch();
                     addTaxonToSearch();
                     addTargetGroupsToSearch();
+                    addResourceTypeToSearch();
                     addOnlyCurriculumLiteratureCheckboxToSearch();
                     addSpecialEducationCheckboxToSearch();
                     addIssueDateToSearch();
@@ -142,6 +146,14 @@ define([
                         searchService.setTargetGroups($scope.detailedSearch.targetGroups);
                     } else {
                         searchService.setTargetGroups(null);
+                    }
+                }
+
+                function addResourceTypeToSearch() {
+                    if ($scope.detailedSearch.resourceType) {
+                        searchService.setResourceType($scope.detailedSearch.resourceType);
+                    } else {
+                        searchService.setResourceType(null);
                     }
                 }
 
@@ -375,6 +387,10 @@ define([
 
                 function setLanguages(languages) {
                     $scope.languages = languages;
+                }
+
+                function setResourceTypes(resourceTypes) {
+                    $scope.resourceTypes = resourceTypes;
                 }
 
                 function setCrossCurricularThemes(crossCurricularThemes) {

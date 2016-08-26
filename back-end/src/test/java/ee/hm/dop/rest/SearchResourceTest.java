@@ -13,6 +13,7 @@ import ee.hm.dop.common.test.ResourceIntegrationTestBase;
 import ee.hm.dop.model.Language;
 import ee.hm.dop.model.Material;
 import ee.hm.dop.model.Portfolio;
+import ee.hm.dop.model.ResourceType;
 import ee.hm.dop.model.SearchFilter;
 import ee.hm.dop.model.SearchResult;
 import ee.hm.dop.model.Searchable;
@@ -301,6 +302,21 @@ public class SearchResourceTest extends ResourceIntegrationTestBase {
         assertEquals(0, searchResult.getStart());
     }
 
+    @Test
+    public void searchWithResourceType() {
+        String query = "ditmas";
+        SearchFilter searchFilter = new SearchFilter();
+        ResourceType resourceType = new ResourceType();
+        resourceType.setId(1L);
+        resourceType.setName("EXPERIMENT1");
+        searchFilter.setResourceType(resourceType);
+        SearchResult searchResult = doGet(buildQueryURL(query, 0, 10L, searchFilter), SearchResult.class);
+
+        assertMaterialIdentifiers(searchResult.getItems(), 1L, 6L);
+        assertEquals(2, searchResult.getTotalResults());
+        assertEquals(0, searchResult.getStart());
+    }
+
     private String buildQueryURL(String query, int start, Long limit, SearchFilter searchFilter) {
         String queryURL = "search?";
         if (query != null) {
@@ -320,6 +336,9 @@ public class SearchResourceTest extends ResourceIntegrationTestBase {
         }
         if (searchFilter.getType() != null) {
             queryURL += "&type=" + encodeQuery(searchFilter.getType());
+        }
+        if (searchFilter.getResourceType() != null) {
+            queryURL += "&resourceType=" + encodeQuery(searchFilter.getResourceType().getName());
         }
         if (searchFilter.getLanguage() != null) {
             queryURL += "&language=" + searchFilter.getLanguage().getCode();
