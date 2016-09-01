@@ -1,34 +1,37 @@
 <!doctype html>
 <html class="no-js">
-  <head>
-    <meta charset="utf-8">
-    <title>e-Koolikott</title>
-    <meta name="description" content="">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <!-- build:css(app) /styles/vendor.css -->
-    <!-- bower:css -->
-    <link rel="stylesheet" href="libs/angular-material/angular-material.css" />
-    <link rel="stylesheet" href="libs/angular-material-data-table/dist/md-data-table.min.css" />
-    <!-- endbower -->
-    <!-- endbuild -->
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,400italic">
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <!-- build:css(.tmp) /styles/main.css -->
-    <link rel="stylesheet" href="/styles/main.css">
-    <!-- endbuild -->
-     <base href="/">
-  </head>
-  <body layout="column">
-    <!--[if lt IE 7]>
-      <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
-    <![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>e-Koolikott</title>
+  <meta name="description" content="e-Koolikott is a single web environment comprising digital learning material arranged by keywords on the basis of the curriculum.
+  The portal allows finding educational materials located in different digital tool collections.
+  The primary purpose of e-Koolikott is to allow accessing digital learning materials from a single point - the user no longer needs to search for materials in different portals.">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- build:css(app) /styles/vendor.css -->
+  <!-- bower:css -->
+  <link rel="stylesheet" href="libs/angular-material/angular-material.css"/>
+  <link rel="stylesheet" href="libs/angular-material-data-table/dist/md-data-table.min.css"/>
+  <!-- endbower -->
+  <!-- endbuild -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,400italic">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <!-- build:css(.tmp) /styles/main.css -->
+  <link rel="stylesheet" href="/styles/main.css">
+  <!-- endbuild -->
+  <base href="/">
+</head>
+<body layout="column">
+<!--[if lt IE 7]>
+<p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade
+  your browser</a> to improve your experience.</p>
+<![endif]-->
 
-    <div data-ng-if="isEditPortfolioMode || isViewPortforlioPage" data-dop-column-layout layout-fill></div>
-    <div data-ng-if="!isEditPortfolioMode && !isViewPortforlioPage" data-dop-linear-layout layout-fill></div>
+<div data-ng-if="isEditPortfolioMode || isViewPortforlioPage" data-dop-column-layout layout-fill></div>
+<div data-ng-if="!isEditPortfolioMode && !isViewPortforlioPage" data-dop-linear-layout layout-fill></div>
 
-    <div data-ng-show="showMainFabButton && !isEditPortfolioMode" data-dop-main-fab-button></div>
+<div data-ng-show="showMainFabButton && !isEditPortfolioMode" data-dop-main-fab-button></div>
 
-    <script src="/libs/requirejs/require.js" data-main="require.config.js"></script>
-    <script src="https://www.youtube.com/iframe_api"></script>
-  </body>
+<script src="/libs/requirejs/require.js" data-main="require.config.js"></script>
+<script src="https://www.youtube.com/iframe_api"></script>
+</body>
 </html>

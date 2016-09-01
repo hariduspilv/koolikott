@@ -1,11 +1,21 @@
 package ee.hm.dop.model;
 
+import static javax.persistence.CascadeType.MERGE;
+import static javax.persistence.CascadeType.PERSIST;
+import static javax.persistence.FetchType.EAGER;
 import static org.apache.commons.lang3.builder.ToStringStyle.SHORT_PREFIX_STYLE;
 
+import java.util.List;
+
+import javax.persistence.CollectionTable;
 import javax.persistence.Column;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
+import javax.persistence.OrderBy;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
@@ -14,6 +24,8 @@ import ee.hm.dop.rest.jackson.map.DateTimeSerializer;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.Type;
 import org.joda.time.DateTime;
 
@@ -42,6 +54,11 @@ public class Repository {
 
     @Column(nullable = false)
     private String metadataPrefix;
+
+    @OneToMany(fetch = EAGER, cascade = { MERGE, PERSIST })
+    @Fetch(FetchMode.SELECT)
+    @JoinColumn(name = "repository")
+    private List<RepositoryURL> repositoryURLs;
 
     public Long getId() {
         return id;
@@ -91,6 +108,14 @@ public class Repository {
 
     public void setMetadataPrefix(String metadataPrefix) {
         this.metadataPrefix = metadataPrefix;
+    }
+
+    public List<RepositoryURL> getRepositoryURLs() {
+        return repositoryURLs;
+    }
+
+    public void setRepositoryURLs(List<RepositoryURL> repositoryURLs) {
+        this.repositoryURLs = repositoryURLs;
     }
 
     @Override

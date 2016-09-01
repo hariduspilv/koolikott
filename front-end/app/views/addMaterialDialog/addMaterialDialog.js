@@ -116,6 +116,10 @@ define([
                         $scope.material.uploadedFile = null;
                     }
 
+                    if ($scope.material.publishers[0] && !$scope.material.publishers[0].name) {
+                        $scope.material.publishers[0] = null;
+                    }
+
                     if ($scope.material.crossCurricularThemes) {
                         $scope.material.crossCurricularThemes = $scope.material.crossCurricularThemes
                             .filter(function (theme) {

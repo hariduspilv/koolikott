@@ -498,3 +498,8 @@ insert into UserLike(id, creator, learningObject, isLiked, added) values (16, 6,
 -- Uploaded files
 
 insert into UploadedFile(id, name, path) values(1, 'bookCover.jpg', 'src/test/resources/bookCover.jpg');
+
+-- Repository material URL-s
+
+insert into RepositoryURL(id, baseURL, repository) values(1, 'koolielu.ee', 1);
+insert into RepositoryURL(id, baseURL, repository) values(2, 'koolitaja.eenet.ee', 1);
