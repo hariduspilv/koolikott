@@ -13,13 +13,14 @@ html, body {
   padding: 0.2em 0;
 }
 
-.text-break {
-  word-wrap: break-word;
-}
-
 // reset
 *:focus {
   outline: none;
+}
+
+// Angular material theme override
+md-content.md-default-theme, md-content {
+  background-color: transparent;
 }
 
 
@@ -39,16 +40,6 @@ ul {
   }
 }
 
-.wrapped {
-  white-space: pre;
-  white-space: pre-wrap;
-  white-space: pre-line;
-  white-space: -pre-wrap;
-  white-space: -o-pre-wrap;
-  white-space: -moz-pre-wrap;
-  white-space: -hp-pre-wrap;
-  word-wrap: break-word;
-}
 
 a {
   text-decoration: none;
@@ -88,28 +79,14 @@ md-datepicker {
   margin-top: 10px;
 }
 
-.error-color {
-  color: $error;
-}
-
 #scrollable-content {
   overflow-y: auto;
   overflow-x: hidden;
 }
 
-md-card.card-sm md-card-actions {
-  -webkit-animation: fadein 2s; /* Safari, Chrome and Opera > 12.1 */
-   -moz-animation: fadein 2s; /* Firefox < 16 */
-    -ms-animation: fadein 2s; /* Internet Explorer */
-     -o-animation: fadein 2s; /* Opera < 12.1 */
-        animation: fadein 2s;
-}
 
-// Angular material theme override
-md-content.md-default-theme, md-content {
-  background-color: transparent;
-}
 
+//TODO
 .column-layout-content {
   margin-top: 60px;
 }
