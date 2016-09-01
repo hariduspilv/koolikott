@@ -91,10 +91,9 @@ define([
                     $scope.$watch(function () {
                             if (self.taxonPath && self.taxonPath.educationalContext)
                                 return self.taxonPath.educationalContext.id;
-                        }
-                        , function (newEducationalContext, oldEducationalContext) {
+                        }, function (newEducationalContext, oldEducationalContext) {
                             if (newEducationalContext !== undefined && newEducationalContext !== oldEducationalContext) {
-                                self.taxon = self.taxonPath.educationalContext;
+                                self.taxon = Object.create(self.taxonPath.educationalContext);
                             }
                         }, true);
 
@@ -102,10 +101,9 @@ define([
                     $scope.$watch(function () {
                             if (self.taxonPath && self.taxonPath.domain)
                                 return self.taxonPath.domain.id;
-                        }
-                        , function (newDomain, oldDomain) {
+                        }, function (newDomain, oldDomain) {
                             if (newDomain !== undefined && newDomain !== oldDomain) {
-                                self.taxon = self.taxonPath.domain;
+                                self.taxon = Object.create(self.taxonPath.domain);
                             }
                         }, true);
 
@@ -115,7 +113,7 @@ define([
                             return self.taxonPath.subject.id;
                     }, function (newSubject, oldSubject) {
                         if (newSubject !== undefined && newSubject !== oldSubject) {
-                            self.taxon = self.taxonPath.subject;
+                            self.taxon = Object.create(self.taxonPath.subject);
                         }
                     }, true);
 
@@ -125,7 +123,7 @@ define([
                             return self.taxonPath.domainSubject.id;
                     }, function (newDomainSubject, oldDomainSubject) {
                         if (newDomainSubject !== undefined && newDomainSubject !== oldDomainSubject) {
-                            self.taxon = self.taxonPath.domainSubject;
+                            self.taxon = Object.create(self.taxonPath.domainSubject);
                         }
                     }, true);
 
@@ -135,8 +133,7 @@ define([
                             return self.taxonPath.specialization.id;
                     }, function (newSpecialization, oldSpecialization) {
                         if (newSpecialization !== undefined && newSpecialization !== oldSpecialization) {
-
-                            self.taxon = self.taxonPath.specialization;
+                            self.taxon = Object.create(self.taxonPath.specialization);
                         }
                     }, true);
 
@@ -146,7 +143,7 @@ define([
                             return self.taxonPath.module.id;
                     }, function (newModule, oldModule) {
                         if (newModule !== undefined && newModule !== oldModule) {
-                            self.taxon = self.taxonPath.module;
+                            self.taxon = Object.create(self.taxonPath.module);
                         }
                     }, true);
 
@@ -156,7 +153,7 @@ define([
                             return self.taxonPath.topic.id;
                     }, function (newTopic, oldTopic) {
                         if (newTopic !== undefined && newTopic !== oldTopic) {
-                            self.taxon = self.taxonPath.topic;
+                            self.taxon = Object.create(self.taxonPath.topic);
                         }
                     }, true);
 
@@ -166,7 +163,7 @@ define([
                             return self.taxonPath.subtopic.id;
                     }, function (newSubtopic, oldSubtopic) {
                         if (newSubtopic !== undefined && newSubtopic !== oldSubtopic) {
-                            self.taxon = self.taxonPath.subtopic;
+                            self.taxon = Object.create(self.taxonPath.subtopic);
                         }
                     }, true);
                 }
@@ -225,20 +222,22 @@ define([
 
                 function buildTaxonPath() {
                     self.taxonPath = {};
-                    self.taxonPath.educationalContext = $rootScope.taxonUtils.getEducationalContext(self.taxon);
-                    self.taxonPath.domain = $rootScope.taxonUtils.getDomain(self.taxon);
-                    self.taxonPath.subject = $rootScope.taxonUtils.getSubject(self.taxon);
+                    if (self.taxon) {
+                        self.taxonPath.educationalContext = $rootScope.taxonUtils.getEducationalContext(self.taxon);
+                        self.taxonPath.domain = $rootScope.taxonUtils.getDomain(self.taxon);
+                        self.taxonPath.subject = $rootScope.taxonUtils.getSubject(self.taxon);
 
-                    if (self.taxonPath.subject) {
-                        self.taxonPath.domainSubject = self.taxonPath.subject;
-                    } else {
-                        self.taxonPath.domainSubject = self.taxonPath.domain;
+                        if (self.taxonPath.subject) {
+                            self.taxonPath.domainSubject = Object.create(self.taxonPath.subject);
+                        } else if (self.taxonPath.domain) {
+                            self.taxonPath.domainSubject = Object.create(self.taxonPath.domain);
+                        }
+
+                        self.taxonPath.specialization = $rootScope.taxonUtils.getSpecialization(self.taxon);
+                        self.taxonPath.module = $rootScope.taxonUtils.getModule(self.taxon);
+                        self.taxonPath.topic = $rootScope.taxonUtils.getTopic(self.taxon);
+                        self.taxonPath.subtopic = $rootScope.taxonUtils.getSubtopic(self.taxon);
                     }
-
-                    self.taxonPath.specialization = $rootScope.taxonUtils.getSpecialization(self.taxon);
-                    self.taxonPath.module = $rootScope.taxonUtils.getModule(self.taxon);
-                    self.taxonPath.topic = $rootScope.taxonUtils.getTopic(self.taxon);
-                    self.taxonPath.subtopic = $rootScope.taxonUtils.getSubtopic(self.taxon);
                 }
             },
             controllerAs: 'ctrl',

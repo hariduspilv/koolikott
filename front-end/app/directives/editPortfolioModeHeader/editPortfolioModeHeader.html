@@ -50,7 +50,7 @@
           <md-icon data-ng-if="savedPortfolio.visibility === 'PRIVATE'">visibility_off</md-icon>
         </md-button>
         <md-menu-content width="4">
-          <md-menu-item dop-copy-permalink url="getShareUrl"></md-menu-item>
+          <md-menu-item dop-copy-permalink data-url="getShareUrl"></md-menu-item>
           <md-menu-divider></md-menu-divider>
           <md-menu-item>
             <md-button data-ng-if="savedPortfolio.visibility === 'PUBLIC'" aria-label="{{PORTFOLIO_VISIBILITY_PUBLIC | translate}}">
@@ -89,11 +89,15 @@
 </md-toolbar>
 
 
-<div class="md-toolbar-filter" id="detailedSearch" ng-show="detailedSearch.isVisible">
+<div class="md-toolbar-filter ng-cloak" id="detailedSearch" data-ng-show="detailedSearch.isVisible" ng-cloak>
   <form layout-align="start start" layout="row" layout-sm="column">
-    <div data-ng-if="!isEditPortfolioMode" layout="row" layout-xs="column" flex="0" flex-gt-md="15"></div>
-    <div flex flex-gt-md="{{isEditPortfolioMode ? '90' : '75'}}" class="md-padding filter-wrapper" id="detailed-search">
-      <div data-dop-detailed-search query-in="detailedSearch.queryIn" query-out="detailedSearch.queryOut" main-field="detailedSearch.mainField" search-callback="detailedSearch.doSearch()" accessor="detailedSearch.accessor"></div>
+    <div data-ng-show="!isEditPortfolioMode" layout="row" layout-xs="column" flex="0" flex-gt-md="15" ng-cloak></div>
+    <div flex flex-gt-md="{{isEditPortfolioMode ? '90' : '75'}}" class="md-padding filter-wrapper ng-cloak" id="detailed-search" ng-cloak>
+      <div data-dop-detailed-search
+           data-query-in="detailedSearch.queryIn"
+           data-query-out="detailedSearch.queryOut"
+           data-main-field="detailedSearch.mainField"
+           data-accessor="detailedSearch.accessor"></div>
     </div>
   </form>
 </div>

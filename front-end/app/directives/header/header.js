@@ -11,11 +11,12 @@ define([
                 scope: true,
                 templateUrl: 'directives/header/header.html',
                 controller: function ($scope, $location, authenticationService, authenticatedUserService, $rootScope) {
+                    $scope.detailedSearch = {};
+                    $scope.detailedSearch.isVisible = false;
                     $scope.showLanguageSelection = false;
                     $scope.selectedLanguage = translationService.getLanguage();
                     $scope.searchFields = {};
                     $scope.searchFields.searchQuery = searchService.getQuery();
-                    $scope.detailedSearch = {};
                     $scope.detailedSearch.accessor = {
                         clearSimpleSearch: function () {
                             $scope.searchFields.searchQuery = '';
@@ -51,7 +52,6 @@ define([
                     $scope.openDetailedSearch = function () {
                         $scope.detailedSearch.isVisible = true;
                         $scope.detailedSearch.queryIn = $scope.searchFields.searchQuery;
-                        $scope.searchFields.searchQuery = $scope.detailedSearch.mainField;
                     };
 
                     $scope.closeDetailedSearch = function () {
@@ -66,20 +66,6 @@ define([
                         $scope.detailedSearch.mainField = "";
                     };
 
-                    $scope.detailedSearch.doSearch = function () {
-                        var query = ($scope.searchFields.searchQuery || "") + " " + $scope.detailedSearch.queryOut;
-                        searchService.setSearch(query.trim());
-                        $location.url(searchService.getURL());
-                    };
-
-                    $scope.searchFieldEnterPressed = function () {
-                        if ($scope.detailedSearch.isVisible) {
-                            $scope.detailedSearch.accessor.search();
-                        } else {
-                            $scope.search();
-                        }
-                    };
-
                     $scope.clickOutside = function () {
                         if ($scope.detailedSearch.isVisible && !$rootScope.dontCloseSearch) {
                             $scope.closeDetailedSearch();
@@ -91,6 +77,15 @@ define([
                     $scope.$watch('detailedSearch.mainField', function (newValue, oldValue) {
                         if (newValue != oldValue) {
                             $scope.searchFields.searchQuery = newValue || "";
+                        }
+                    }, true);
+
+
+                    $scope.$watch('searchFields.searchQuery', function (newValue, oldValue) {
+                        if (newValue && newValue != oldValue && newValue.length > 1 && !$scope.detailedSearch.isVisible) {
+                            $scope.search();
+                        } else if ($scope.detailedSearch.isVisible && $scope.searchFields.searchQuery) {
+                            $scope.detailedSearch.queryIn = $scope.searchFields.searchQuery;
                         }
                     }, true);
 

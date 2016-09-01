@@ -3,15 +3,15 @@
     <div flex class="md-padding">
       <md-input-container class="hide-gt-xs md-block">
         <label data-translate="DETAILED_SEARCH_DESCRIPTION"></label>
-        <input data-ng-model="detailedSearch.combinedDescription"/>
+        <input data-ng-model="detailedSearch.combinedDescription" data-ng-model-options="{debounce: 300}"/>
       </md-input-container>
       <md-input-container md-no-float class="md-block">
         <label data-translate="DETAILED_SEARCH_TITLE"></label>
-        <input data-ng-model="detailedSearch.title" />
+        <input data-ng-model="detailedSearch.title" data-ng-model-options="{debounce: 300}"/>
       </md-input-container>
       <md-input-container md-no-float class="md-block">
         <label data-translate="DETAILED_SEARCH_AUTHOR"></label>
-        <input data-ng-model="detailedSearch.author" />
+        <input data-ng-model="detailedSearch.author" data-ng-model-options="{debounce: 300}"/>
       </md-input-container>
       <md-input-container md-no-float class="md-block">
         <label data-translate="DETAILED_SEARCH_LANGUAGE"></label>
@@ -96,6 +96,5 @@
   </div>
   <div class="md-actions" layout="row" layout-align="end start">
     <md-button data-ng-click="clear()" data-translate="DETAILED_SEARCH_CLEAR" aria-label="{{'DETAILED_SEARCH_CLEAR' | translate}}"></md-button>
-    <md-button type="submit" class="md-primary md-button" data-ng-click="search()" data-translate="DETAILED_SEARCH_SUBMIT" aria-label="{{'DETAILED_SEARCH_SUBMIT' | translate}}"></md-button>
   </div>
 </div>

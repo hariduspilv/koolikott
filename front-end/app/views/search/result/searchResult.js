@@ -5,11 +5,12 @@ define([
     'services/searchService',
     'directives/materialBox/materialBox',
     'directives/portfolioBox/portfolioBox'
-], function(app) {
+], function (app) {
     return ['$scope', 'serverCallService', 'translationService', '$location', 'searchService', '$rootScope',
-        function($scope, serverCallService, translationService, $location, searchService, $rootScope) {
+        function ($scope, serverCallService, translationService, $location, searchService, $rootScope) {
             $scope.loadingNextPage = false;
             $scope.searching = false;
+            $scope.canLoadMore = false;
 
             // Pagination variables
             $scope.paging = {};
@@ -19,7 +20,7 @@ define([
                 option: 'VIEW_COUNT_ASC',
                 field: 'views',
                 direction: 'asc'
-            },{
+            }, {
                 option: 'VIEW_COUNT_DESC',
                 field: 'views',
                 direction: 'desc'
@@ -45,9 +46,6 @@ define([
                     $location.url('/');
                 }
 
-                // Get search query and current page
-                $scope.searchQuery = searchService.getQuery();
-
                 initSortDropdown();
             }
 
@@ -55,18 +53,20 @@ define([
                 return $scope.paging.thisPage >= $scope.paging.totalPages;
             }
 
-            function search() {
+            function search(isNewSearch) {
+                if ($scope.searching) {
+                    return;
+                }
                 var isTerminal = allResultsLoaded();
 
-                if (isTerminal) return;
+                if (isTerminal && !isNewSearch) return;
 
-                if (!$scope.loadingNextPage)
-                    $scope.searching = true;
+                $scope.searching = true;
 
                 start = RESULTS_PER_PAGE * $scope.paging.thisPage;
 
                 var params = {
-                    'q': $scope.searchQuery,
+                    'q': searchService.getQuery(),
                     'start': start
                 };
 
@@ -144,23 +144,26 @@ define([
                 $scope.loadingNextPage = false;
             }
 
-            $scope.getNumberOfResults = function() {
+            $scope.getNumberOfResults = function () {
                 return $scope.totalResults || 0;
             };
 
-            $scope.allResultsLoaded = function() {
+            $scope.allResultsLoaded = function () {
                 return allResultsLoaded();
             };
 
-            $scope.nextPage = function() {
-                $scope.loadingNextPage = true;
+            $scope.nextPage = function () {
+                if ($scope.canLoadMore) {
+                    $scope.loadingNextPage = true;
+                    search();
+                }
 
-                search();
+                $scope.canLoadMore = true;
             };
 
             $scope.scrollContainer = $rootScope.isEditPortfolioMode ? '#scrollable-content' : '';
 
-            $scope.$watch('sortDropdown', function(newValue) {
+            $scope.$watch('sortDropdown', function (newValue) {
                 if (!newValue)
                     return;
 
@@ -176,6 +179,19 @@ define([
                 searchService.setSortDirection(direction);
                 $location.url(searchService.getURL());
             }
+
+            $scope.$watch(function () {
+                return $location.search();
+            }, function (newValue, oldValue) {
+                if (newValue !== oldValue && (newValue.q || newValue.taxon)) {
+                    $scope.items = null;
+                    $scope.paging = {};
+                    $scope.paging.thisPage = 0;
+                    searchService.setSearch(newValue.q);
+                    search(true);
+                }
+
+            }, true);
 
             /**
              * Set drop down value from url

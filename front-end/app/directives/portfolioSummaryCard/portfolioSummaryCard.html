@@ -35,7 +35,7 @@
                                     <span data-translate="BUTTON_RESTORE"></span>
                                 </md-button>
                             </md-menu-item>
-                            <md-menu-item data-ng-if="isViewPortforlioPage" dop-copy-permalink></md-menu-item>
+                            <md-menu-item data-ng-if="isViewPortforlioPage" dop-copy-permalink data-url="pageUrl"></md-menu-item>
                             <md-menu-divider data-ng-if="isAdmin()"></md-menu-divider>
                             <md-menu-item data-ng-if="isAdmin()" dop-recommend data-portfolio="portfolio"></md-menu-item>
                             <md-menu-divider data-ng-if="isViewPortforlioPage && isLoggedIn()"></md-menu-divider>
@@ -57,7 +57,7 @@
                             <span class="hide-overflow" data-ng-if="!portfolio.taxon" data-translate="UNKNOWN">Unknown</span>
                         </p>
                     </div>
-                    <div flex data-ng-if="!$root.taxonUtils.getSubject(portfolio.taxon)">
+                    <div flex data-ng-if="!portfolioSubject">
                         <p class="md-body-2 meta">
                             <small class="md-caption">
                                 <span data-translate="DETAIL_VIEW_DOMAIN"></span>
@@ -70,16 +70,16 @@
                                   data-translate="UNKNOWN">Unknown</span>
                         </p>
                     </div>
-                  <div flex data-ng-if="$root.taxonUtils.getSubject(portfolio.taxon)">
+                  <div flex data-ng-if="portfolioSubject">
                     <p class="md-body-2 meta">
                       <small class="md-caption">
                         <span data-translate="DETAIL_VIEW_SUBJECT"></span>
                       </small>
                       <br/>
-                            <span class="hide-overflow" data-ng-if="$root.taxonUtils.getSubject(portfolio.taxon)"
-                                  data-translate="{{'SUBJECT_' + $root.taxonUtils.getSubject(portfolio.taxon).name.toUpperCase()}}">
+                            <span class="hide-overflow" data-ng-if="portfolioSubject"
+                                  data-translate="{{'SUBJECT_' + portfolioSubject.name.toUpperCase()}}">
                             </span>
-                            <span class="hide-overflow" data-ng-if="!$root.taxonUtils.getSubject(portfolio.taxon)"
+                            <span class="hide-overflow" data-ng-if="!portfolioSubject"
                                   data-translate="UNKNOWN">Unknown</span>
                     </p>
                   </div>
@@ -171,8 +171,8 @@
         <md-divider class="md-default-theme"></md-divider>
 
         <div layout="column" layout-gt-xs="row" class="actions">
-            <div ng-if="!isEditPortfolioMode && portfolio.type" flex="50" flex-gt-xs="75">
-                <div data-dop-comments-card comments="portfolio.comments" comment="comment" submit-click="addComment()"></div>
+            <div data-ng-if="!isEditPortfolioMode && portfolio.type" flex="50" flex-gt-xs="75" class="ng-cloak" ng-cloak>
+                <div data-dop-comments-card comments="portfolio.comments" comment="comment" submit-click="addComment()" class="ng-cloak" ng-cloak></div>
             </div>
             <span flex></span>
             <!-- rating control -->
