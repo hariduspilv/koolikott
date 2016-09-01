@@ -67,8 +67,8 @@ public class SolrService implements SolrEngineService {
 
     @Override
     public SearchResponse search(String query, long start, long limit, String sort) {
-        return (SearchResponse) executeCommand(
-                format(SEARCH_PATH, encodeQuery(query), formatSort(sort), start, Math.min(limit, RESULTS_PER_PAGE)), SearchResponse.class);
+        return executeCommand(
+                format(SEARCH_PATH, encodeQuery(query), formatSort(sort), start, Math.min(limit, RESULTS_PER_PAGE)));
     }
 
     @Override
@@ -97,19 +97,16 @@ public class SolrService implements SolrEngineService {
         indexThread.updateIndex();
     }
 
-    boolean isIndexingInProgress() {
-        SearchResponse response = (SearchResponse) executeCommand(SOLR_DATAIMPORT_STATUS, SearchResponse.class);
+    public boolean isIndexingInProgress() {
+        SearchResponse response = executeCommand(SOLR_DATAIMPORT_STATUS);
         return response.getStatus().equals(SOLR_STATUS_BUSY);
     }
 
-    Object executeCommand(String command, Class objectClass) {
-        Object searchResponse = null;
-        try {
-            searchResponse = getTarget(command).request(MediaType.APPLICATION_JSON)
-                    .get(objectClass.newInstance().getClass());
-        } catch (InstantiationException | IllegalAccessException e) {
-            logger.error("Unable to instantiate class");
-        }
+    protected SearchResponse executeCommand(String command) {
+        SearchResponse searchResponse = getTarget(command).request(MediaType.APPLICATION_JSON)
+                .get(SearchResponse.class);
+
+        logCommand(command, searchResponse);
 
         return searchResponse;
     }
@@ -195,7 +192,7 @@ public class SolrService implements SolrEngineService {
                             updateIndex = false;
                             lock.notifyAll();
                             logger.info("Updating Solr index.");
-                            executeCommand(SOLR_IMPORT_PARTIAL, SearchResponse.class);
+                            executeCommand(SOLR_IMPORT_PARTIAL);
                             waitForCommandToFinish();
                         }
                     }

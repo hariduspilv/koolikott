@@ -314,7 +314,7 @@ public class SolrServiceTest {
 
         replayAll(searchResponse);
 
-        SearchResponse result = (SearchResponse) solrService.executeCommand(command, SearchResponse.class);
+        SearchResponse result = solrService.executeCommand(command);
 
         verifyAll(searchResponse);
 
