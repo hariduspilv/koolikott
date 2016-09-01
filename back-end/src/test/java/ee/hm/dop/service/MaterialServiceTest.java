@@ -44,7 +44,7 @@ public class MaterialServiceTest {
     private MaterialDAO materialDAO;
 
     @Mock
-    private SearchEngineService searchEngineService;
+    private SolrEngineService solrEngineService;
 
     @Test
     public void create() {
@@ -65,7 +65,7 @@ public class MaterialServiceTest {
         material.setRecommendation(new Recommendation());
 
         expectMaterialUpdate(capturedMaterial);
-        searchEngineService.updateIndex();
+        solrEngineService.updateIndex();
 
         replayAll();
 
@@ -113,7 +113,7 @@ public class MaterialServiceTest {
         expect(material.getPublishers()).andReturn(null);
         material.setRepository(null);
         material.setRecommendation(null);
-        searchEngineService.updateIndex();
+        solrEngineService.updateIndex();
 
         material.setAdded(added);
         material.setViews(views);
@@ -128,11 +128,11 @@ public class MaterialServiceTest {
         expect(materialDAO.findByIdNotDeleted(materialId)).andReturn(original);
         expect(materialDAO.update(material)).andReturn(material);
 
-        replay(materialDAO, material, searchEngineService);
+        replay(materialDAO, material, solrEngineService);
 
         materialService.update(material, null);
 
-        verify(materialDAO, material, searchEngineService);
+        verify(materialDAO, material, solrEngineService);
 
         DateTime updatedDate = capturedUpdateDate.getValue();
         DateTime maxFuture = now().plusSeconds(20);
@@ -214,7 +214,7 @@ public class MaterialServiceTest {
 
         expect(materialDAO.findByIdNotDeleted(materialID)).andReturn(originalMaterial);
         materialDAO.delete(originalMaterial);
-        searchEngineService.updateIndex();
+        solrEngineService.updateIndex();
 
         replayAll();
 
@@ -263,7 +263,7 @@ public class MaterialServiceTest {
 
         expect(materialDAO.findById(materialID)).andReturn(originalMaterial);
         materialDAO.restore(originalMaterial);
-        searchEngineService.updateIndex();
+        solrEngineService.updateIndex();
 
         replayAll();
 
@@ -368,7 +368,7 @@ public class MaterialServiceTest {
         expect(materialDAO.findByIdNotDeleted(material.getId())).andReturn(material).anyTimes();
         expect(user.getRole()).andReturn(Role.ADMIN).anyTimes();
         expectMaterialUpdate(capturedMaterial);
-        searchEngineService.updateIndex();
+        solrEngineService.updateIndex();
 
         replayAll(user);
 
@@ -408,7 +408,7 @@ public class MaterialServiceTest {
         expect(materialDAO.findByIdNotDeleted(material.getId())).andReturn(material).anyTimes();
         expect(user.getRole()).andReturn(Role.ADMIN).anyTimes();
         expectMaterialUpdate(capturedMaterial);
-        searchEngineService.updateIndex();
+        solrEngineService.updateIndex();
 
         replayAll(user);
 
@@ -420,7 +420,7 @@ public class MaterialServiceTest {
     }
 
     private void replayAll(Object... mocks) {
-        replay(materialDAO, searchEngineService);
+        replay(materialDAO, solrEngineService);
 
         if (mocks != null) {
             for (Object object : mocks) {
@@ -430,7 +430,7 @@ public class MaterialServiceTest {
     }
 
     private void verifyAll(Object... mocks) {
-        verify(materialDAO, searchEngineService);
+        verify(materialDAO, solrEngineService);
 
         if (mocks != null) {
             for (Object object : mocks) {

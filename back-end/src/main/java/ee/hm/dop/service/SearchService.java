@@ -1,5 +1,6 @@
 package ee.hm.dop.service;
 
+import static ee.hm.dop.service.SolrService.getTokenizedQueryString;
 import static java.lang.String.format;
 import static org.apache.commons.lang3.StringUtils.isBlank;
 
@@ -48,7 +49,7 @@ public class SearchService {
     private static final String ALL_TYPE = "all";
 
     @Inject
-    private SearchEngineService searchEngineService;
+    private SolrEngineService solrEngineService;
 
     @Inject
     private LearningObjectDAO learningObjectDAO;
@@ -120,10 +121,10 @@ public class SearchService {
         }
 
         if (limit == null) {
-            return searchEngineService.search(queryString, start, getSort(searchFilter));
+            return solrEngineService.search(queryString, start, getSort(searchFilter));
         }
 
-        return searchEngineService.search(queryString, start, limit, getSort(searchFilter));
+        return solrEngineService.search(queryString, start, limit, getSort(searchFilter));
     }
 
     private String getSort(SearchFilter searchFilter) {
@@ -150,20 +151,6 @@ public class SearchService {
         }
 
         return sortedSearchable;
-    }
-
-    private String getTokenizedQueryString(String query) {
-        StringBuilder sb = new StringBuilder();
-        if (!isBlank(query)) {
-            DOPSearchStringTokenizer tokenizer = new DOPSearchStringTokenizer(query);
-            while (tokenizer.hasMoreTokens()) {
-                sb.append(tokenizer.nextToken());
-                if (tokenizer.hasMoreTokens()) {
-                    sb.append(" ");
-                }
-            }
-        }
-        return sb.toString();
     }
 
     /*

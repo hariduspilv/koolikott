@@ -36,7 +36,7 @@ public class PortfolioServiceTest {
     private PortfolioDAO portfolioDAO;
 
     @Mock
-    private SearchEngineService searchEngineService;
+    private SolrEngineService solrEngineService;
 
     @Test
     public void get() {
@@ -61,7 +61,7 @@ public class PortfolioServiceTest {
         Portfolio originalPortfolio = createMock(Portfolio.class);
         expect(portfolioDAO.findByIdFromAll(portfolio.getId())).andReturn(originalPortfolio);
         portfolioDAO.incrementViewCount(originalPortfolio);
-        searchEngineService.updateIndex();
+        solrEngineService.updateIndex();
 
         replayAll(originalPortfolio);
 
@@ -111,7 +111,7 @@ public class PortfolioServiceTest {
 
         expect(portfolioDAO.findByIdNotDeleted(1L)).andReturn(originalPortfolio);
         expectPortfolioUpdate(capturedPortfolio);
-        searchEngineService.updateIndex();
+        solrEngineService.updateIndex();
 
         replayAll();
 
@@ -157,7 +157,7 @@ public class PortfolioServiceTest {
 
         expect(portfolioDAO.findByIdNotDeleted(1L)).andReturn(originalPortfolio);
         expectPortfolioUpdate(capturedPortfolio);
-        searchEngineService.updateIndex();
+        solrEngineService.updateIndex();
 
         replayAll();
 
@@ -170,7 +170,7 @@ public class PortfolioServiceTest {
     }
 
     private void replayAll(Object... mocks) {
-        replay(portfolioDAO, searchEngineService);
+        replay(portfolioDAO, solrEngineService);
 
         if (mocks != null) {
             for (Object object : mocks) {
@@ -180,7 +180,7 @@ public class PortfolioServiceTest {
     }
 
     private void verifyAll(Object... mocks) {
-        verify(portfolioDAO, searchEngineService);
+        verify(portfolioDAO, solrEngineService);
 
         if (mocks != null) {
             for (Object object : mocks) {

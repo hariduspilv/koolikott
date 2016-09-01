@@ -51,7 +51,7 @@ public class MaterialService implements LearningObjectHandler {
     private PublisherService publisherService;
 
     @Inject
-    private SearchEngineService searchEngineService;
+    private SolrEngineService solrEngineService;
 
     @Inject
     private BrokenContentDAO brokenContentDAO;
@@ -68,7 +68,7 @@ public class MaterialService implements LearningObjectHandler {
         material.setViews(material.getViews() + 1);
         createOrUpdate(material);
 
-        searchEngineService.updateIndex();
+        solrEngineService.updateIndex();
     }
 
     public Material createMaterial(Material material, User creator, boolean updateSearchIndex) {
@@ -90,7 +90,7 @@ public class MaterialService implements LearningObjectHandler {
 
         Material createdMaterial = createOrUpdate(material);
         if (updateSearchIndex) {
-            searchEngineService.updateIndex();
+            solrEngineService.updateIndex();
         }
 
         return createdMaterial;
@@ -109,7 +109,7 @@ public class MaterialService implements LearningObjectHandler {
         }
 
         materialDao.delete(originalMaterial);
-        searchEngineService.updateIndex();
+        solrEngineService.updateIndex();
     }
 
     public void restore(Material material, User loggedInUser) {
@@ -125,7 +125,7 @@ public class MaterialService implements LearningObjectHandler {
         }
 
         materialDao.restore(originalMaterial);
-        searchEngineService.updateIndex();
+        solrEngineService.updateIndex();
     }
 
     private void setPublishers(Material material) {
@@ -221,7 +221,7 @@ public class MaterialService implements LearningObjectHandler {
 
         originalMaterial = (Material) materialDao.update(originalMaterial);
 
-        searchEngineService.updateIndex();
+        solrEngineService.updateIndex();
 
         return originalMaterial.getRecommendation();
     }
@@ -239,7 +239,7 @@ public class MaterialService implements LearningObjectHandler {
 
         materialDao.update(originalMaterial);
 
-        searchEngineService.updateIndex();
+        solrEngineService.updateIndex();
     }
 
     public void removeUserLike(Material material, User loggedInUser) {
@@ -289,7 +289,7 @@ public class MaterialService implements LearningObjectHandler {
         //Null changer is the automated updating of materials during synchronization
         if (changer == null || isUserAdmin(changer) || isUserModerator(changer) || isThisUserMaterial(changer, originalMaterial)) {
             updatedMaterial = createOrUpdate(material);
-            searchEngineService.updateIndex();
+            solrEngineService.updateIndex();
         }
 
         return updatedMaterial;

@@ -16,7 +16,7 @@ import ee.hm.dop.guice.provider.HttpClientProvider;
 import ee.hm.dop.guice.provider.SOAPConnectionProvider;
 import ee.hm.dop.guice.provider.SearchEngineServiceProvider;
 import ee.hm.dop.guice.provider.SignatureValidatorProvider;
-import ee.hm.dop.service.SearchEngineService;
+import ee.hm.dop.service.SolrEngineService;
 import org.apache.commons.configuration.Configuration;
 import org.opensaml.xml.signature.SignatureValidator;
 
@@ -29,7 +29,7 @@ public class ProviderModule extends AbstractModule {
         bind(EntityManagerFactory.class).toProvider(EntityManagerFactoryProvider.class);
         bind(EntityManager.class).toProvider(EntityManagerProvider.class);
         bind(Client.class).toProvider(HttpClientProvider.class);
-        bind(SearchEngineService.class).toProvider(SearchEngineServiceProvider.class);
+        bind(SolrEngineService.class).toProvider(SearchEngineServiceProvider.class);
         bind(SOAPConnection.class).toProvider(SOAPConnectionProvider.class);
         bind(SignatureValidator.class).toProvider(SignatureValidatorProvider.class);
         bind(DatabaseMigrator.class).to(FlywayDbMigrator.class);
