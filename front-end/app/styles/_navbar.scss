@@ -73,3 +73,15 @@
   height: 35px;
   margin-top: 5px;
 }
+
+#header-simple-search-input{
+  background-color: transparent;
+}
+
+#header-simple-search-input > md-autocomplete-wrap{
+  box-shadow: none;
+}
+
+#header-simple-search-input > md-autocomplete-wrap > button {
+  display: none;
+}

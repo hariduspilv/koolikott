@@ -3,10 +3,11 @@ define([
     'services/serverCallService',
     'services/authenticationService',
     'services/searchService',
-    'services/translationService'
-], function (angularAMD) {
-    angularAMD.directive('dopHeader', ['translationService', '$location', 'searchService', 'authenticationService', 'authenticatedUserService', '$timeout', '$mdDialog',
-        function (translationService, $location, searchService, authenticationService, authenticatedUserService, $timeout, $mdDialog) {
+    'services/translationService',
+    'services/suggestService'
+], function (angularAMD, mod1, mod2, mod3, mod4, mod5, $http) {
+    angularAMD.directive('dopHeader', ['translationService', '$location', 'searchService', 'authenticationService', 'authenticatedUserService', '$timeout', '$mdDialog', 'suggestService', '$http',
+        function (translationService, $location, searchService, authenticationService, authenticatedUserService, $timeout, $mdDialog, suggestService, $http) {
             return {
                 scope: true,
                 templateUrl: 'directives/header/header.html',
@@ -16,6 +17,9 @@ define([
                     $scope.searchFields = {};
                     $scope.searchFields.searchQuery = searchService.getQuery();
                     $scope.detailedSearch = {};
+                    $scope.suggest = {};
+                    $scope.suggest.suggestions = null;
+                    $scope.suggest.selectedItem = null;
                     $scope.detailedSearch.accessor = {
                         clearSimpleSearch: function () {
                             $scope.searchFields.searchQuery = '';
@@ -72,6 +76,13 @@ define([
                         $location.url(searchService.getURL());
                     };
 
+                    $scope.suggest.doSuggest = function () {
+                        suggestService.setSuggest($scope.searchFields.searchQuery);
+                        $http.get(suggestService.getURL()).then(function (result) {
+                            $scope.suggest.suggestions = result.data.alternatives;
+                        });
+                    };
+
                     $scope.searchFieldEnterPressed = function () {
                         if ($scope.detailedSearch.isVisible) {
                             $scope.detailedSearch.accessor.search();
@@ -122,6 +133,10 @@ define([
                     $scope.isModerator = function () {
                         return authenticatedUserService.isModerator();
                     };
+
+                    $('#myDiv').on('classChange', function() {
+                        alert("selected item");
+                    });
                 }
             };
         }

@@ -34,7 +34,7 @@ public class PortfolioService implements LearningObjectHandler {
     private UserLikeDAO userLikeDAO;
 
     @Inject
-    private SearchEngineService searchEngineService;
+    private SolrEngineService solrEngineService;
 
     public Portfolio get(long portfolioId, User loggedInUser) {
         Portfolio portfolio;
@@ -69,7 +69,7 @@ public class PortfolioService implements LearningObjectHandler {
 
         portfolioDAO.incrementViewCount(originalPortfolio);
 
-        searchEngineService.updateIndex();
+        solrEngineService.updateIndex();
     }
 
     public void addComment(Comment comment, Portfolio portfolio, User loggedInUser) {
@@ -167,7 +167,7 @@ public class PortfolioService implements LearningObjectHandler {
         originalPortfolio.setRecommendation(recommendation);
 
         originalPortfolio = (Portfolio) portfolioDAO.update(originalPortfolio);
-        searchEngineService.updateIndex();
+        solrEngineService.updateIndex();
 
         return originalPortfolio.getRecommendation();
     }
@@ -185,7 +185,7 @@ public class PortfolioService implements LearningObjectHandler {
         originalPortfolio.setRecommendation(null);
 
         portfolioDAO.update(originalPortfolio);
-        searchEngineService.updateIndex();
+        solrEngineService.updateIndex();
     }
 
     public Portfolio create(Portfolio portfolio, User creator) {
@@ -205,7 +205,7 @@ public class PortfolioService implements LearningObjectHandler {
         portfolio.setAdded(now());
 
         Portfolio createdPortfolio = (Portfolio) portfolioDAO.update(portfolio);
-        searchEngineService.updateIndex();
+        solrEngineService.updateIndex();
 
         return createdPortfolio;
     }
@@ -217,7 +217,7 @@ public class PortfolioService implements LearningObjectHandler {
         originalPortfolio.setUpdated(now());
 
         Portfolio updatedPortfolio = (Portfolio) portfolioDAO.update(originalPortfolio);
-        searchEngineService.updateIndex();
+        solrEngineService.updateIndex();
 
         return updatedPortfolio;
     }
@@ -278,7 +278,7 @@ public class PortfolioService implements LearningObjectHandler {
         }
 
         portfolioDAO.delete(originalPortfolio);
-        searchEngineService.updateIndex();
+        solrEngineService.updateIndex();
     }
 
     public void restore(Portfolio portfolio, User loggedInUser) {
@@ -292,7 +292,7 @@ public class PortfolioService implements LearningObjectHandler {
         }
 
         portfolioDAO.restore(originalPortfolio);
-        searchEngineService.updateIndex();
+        solrEngineService.updateIndex();
     }
 
     public boolean isPortfolioAccessibleToUser(Portfolio portfolio, User loggedInUser) {

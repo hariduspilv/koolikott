@@ -14,21 +14,23 @@ import com.google.inject.Singleton;
 import ee.hm.dop.model.solr.Document;
 import ee.hm.dop.model.solr.Response;
 import ee.hm.dop.model.solr.SearchResponse;
-import ee.hm.dop.service.SearchEngineService;
+import ee.hm.dop.service.SolrEngineService;
+import org.apache.solr.client.solrj.response.QueryResponse;
+import org.apache.solr.client.solrj.response.SpellCheckResponse;
 
 /**
  * Guice provider of Search Engine Service.
  */
 @Singleton
-public class SearchEngineServiceTestProvider implements Provider<SearchEngineService> {
+public class SearchEngineServiceTestProvider implements Provider<SolrEngineService> {
 
     @Override
-    public synchronized SearchEngineService get() {
-        return new SearchEngineServiceMock();
+    public synchronized SolrEngineService get() {
+        return new SolrEngineServiceMock();
     }
 }
 
-class SearchEngineServiceMock implements SearchEngineService {
+class SolrEngineServiceMock implements SolrEngineService {
 
     private static final Map<String, List<Document>> searchResponses;
 
@@ -208,6 +210,11 @@ class SearchEngineServiceMock implements SearchEngineService {
         } else {
             return searchWithSorting(query, sort, start, limit);
         }
+    }
+
+    @Override
+    public SpellCheckResponse.Suggestion suggest(String query) {
+        return null;
     }
 
     @Override

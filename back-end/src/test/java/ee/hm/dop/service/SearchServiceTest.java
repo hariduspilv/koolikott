@@ -36,6 +36,8 @@ import ee.hm.dop.model.taxon.Specialization;
 import ee.hm.dop.model.taxon.Subject;
 import ee.hm.dop.model.taxon.Subtopic;
 import ee.hm.dop.model.taxon.Topic;
+import org.apache.solr.client.solrj.SolrClient;
+import org.apache.solr.client.solrj.response.QueryResponse;
 import org.easymock.EasyMockRunner;
 import org.easymock.Mock;
 import org.easymock.TestSubject;
@@ -46,7 +48,7 @@ import org.junit.runner.RunWith;
 public class SearchServiceTest {
 
     @Mock
-    private SearchEngineService searchEngineService;
+    private SolrEngineService solrEngineService;
 
     @Mock
     private LearningObjectDAO learningObjectDAO;
@@ -961,9 +963,9 @@ public class SearchServiceTest {
         learningObjects.addAll(portfolios);
 
         if (limit == null) {
-            expect(searchEngineService.search(tokenizedQuery, start, expectedSort)).andReturn(searchResponse);
+            expect(solrEngineService.search(tokenizedQuery, start, expectedSort)).andReturn(searchResponse);
         } else {
-            expect(searchEngineService.search(tokenizedQuery, start, limit, expectedSort)).andReturn(searchResponse);
+            expect(solrEngineService.search(tokenizedQuery, start, limit, expectedSort)).andReturn(searchResponse);
         }
 
         expect(learningObjectDAO.findAllById(learningObjectIdentifiers)).andReturn(learningObjects);
@@ -987,6 +989,10 @@ public class SearchServiceTest {
         } else {
             testSearch(query, tokenizedQuery, expectedSort, searchables, start, limit, limit, searchFilter, null);
         }
+    }
+
+    private void testSuggest(String query, List<Searchable> searchables){
+
     }
 
     private List<Long> getIdentifiers(List<Searchable> searchables) {
@@ -1046,11 +1052,11 @@ public class SearchServiceTest {
     }
 
     private void replayAll() {
-        replay(searchEngineService, learningObjectDAO);
+        replay(solrEngineService, learningObjectDAO);
     }
 
     private void verifyAll() {
-        verify(searchEngineService, learningObjectDAO);
+        verify(solrEngineService, learningObjectDAO);
     }
 
     private Material createMaterial(Long id) {
