@@ -70,3 +70,18 @@ $lines-to-show2: 2;
   overflow: hidden !important;
   text-overflow: ellipsis;
 }
+
+.wrapped {
+  white-space: pre;
+  white-space: pre-wrap;
+  white-space: pre-line;
+  white-space: -pre-wrap;
+  white-space: -o-pre-wrap;
+  white-space: -moz-pre-wrap;
+  white-space: -hp-pre-wrap;
+  word-wrap: break-word;
+}
+
+.error-color {
+  color: $error;
+}

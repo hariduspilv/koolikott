@@ -17,7 +17,15 @@
         <label data-translate="DETAILED_SEARCH_LANGUAGE"></label>
         <md-select data-ng-model="detailedSearch.language">
           <md-option data-ng-repeat="language in languages" value="{{language}}">
-            <span data-translate="{{getLanguageTranslationKey(language)}}"/>
+            <span data-translate="{{getLanguageTranslationKey(language)}}"></span>
+          </md-option>
+        </md-select>
+      </md-input-container>
+      <md-input-container md-no-float class="md-block">
+        <label data-translate="DETAILED_SEARCH_RESOURCE_TYPE"></label>
+        <md-select data-ng-model="detailedSearch.resourceType">
+          <md-option data-ng-repeat="resourceType in resourceTypes" value="{{resourceType.name}}">
+            <span data-translate="{{resourceType.name}}"></span>
           </md-option>
         </md-select>
       </md-input-container>
