@@ -183,7 +183,7 @@ define([
             $scope.$watch(function () {
                 return $location.search();
             }, function (newValue, oldValue) {
-                if (newValue !== oldValue && (newValue.q || newValue.taxon)) {
+                if (newValue !== oldValue && (newValue.q || newValue.taxon || newValue.targetGroup || newValue.type)) {
                     $scope.items = null;
                     $scope.paging = {};
                     $scope.paging.thisPage = 0;
