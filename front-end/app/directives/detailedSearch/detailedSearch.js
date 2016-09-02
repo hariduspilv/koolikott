@@ -5,22 +5,23 @@ define([
     'services/searchService',
     'services/translationService',
     'services/metadataService'
-], function(angularAMD) {
-    angularAMD.directive('dopDetailedSearch', ['$location', 'searchService', 'translationService', '$filter', 'serverCallService', 'metadataService', '$rootScope', function($location, searchService, translationService, $filter, serverCallService, metadataService, $rootScope) {
+], function (angularAMD) {
+    angularAMD.directive('dopDetailedSearch', ['$location', 'searchService', 'translationService', '$filter', 'serverCallService', 'metadataService', '$rootScope', function ($location, searchService, translationService, $filter, serverCallService, metadataService, $rootScope) {
         return {
             scope: {
                 queryIn: '=',
                 queryOut: '=',
                 mainField: '=',
-                searchCallback: '&',
-                accessor: '='
+                accessor: '=',
+                isVisible: '='
             },
-            templateUrl: 'directives/detailedSearch/detailedSearch.html',
-            controller: function($scope, $rootScope) {
+            templateUrl: 'detailedSearch.html',
+            controller: function ($scope, $rootScope, $timeout) {
 
                 var BASIC_EDUCATION_ID = 2;
                 var SECONDARY_EDUCATION_ID = 3;
                 var VOCATIONAL_EDUCATION_ID = 4;
+                var initiated = false;
 
                 var taxon;
 
@@ -42,7 +43,7 @@ define([
 
                     // Paid
                     var isPaid = searchService.isPaid();
-                    if (isPaid === true  || isPaid === false) {
+                    if (isPaid === true || isPaid === false) {
                         $scope.detailedSearch.paid = !isPaid;
                     } else {
                         $scope.detailedSearch.paid = false;
@@ -103,7 +104,7 @@ define([
                     $scope.detailedSearch.taxon = Object.create(taxonMap['t' + searchService.getTaxon()]);
                 }
 
-                $scope.search = $scope.accessor.search = function() {
+                $scope.search = function () {
                     searchService.setSearch(createSimpleSearchQuery());
 
                     addIsPaidToSearch();
@@ -118,7 +119,7 @@ define([
                     addCrossCurricularThemeToSearch();
                     addKeyCompetenceToSearch();
 
-                    $scope.searchCallback();
+                    $location.url(searchService.getURL());
                 };
 
                 function addIsPaidToSearch() {
@@ -223,18 +224,12 @@ define([
                 function createSimpleSearchQuery() {
                     var textFields = getTextFieldsAsQuery();
                     var checkboxes = getCheckboxesAsQuery();
+                    var main = $scope.detailedSearch.main ? $scope.detailedSearch.main : "";
 
-                    var query = (textFields + ' ' + checkboxes).trim();
-
-                    return query.trim();
+                    return (main + ' ' + textFields + ' ' + checkboxes).trim();
                 }
 
                 function parseSimpleSearchQuery(query) {
-                    $scope.detailedSearch.main = '';
-                    $scope.detailedSearch.title = '';
-                    $scope.detailedSearch.combinedDescription = '';
-                    $scope.detailedSearch.author = '';
-
                     if (query) {
                         var titleRegex = /(^|\s)(title:([^\s\"]\S*)|title:\"(.*?)\"|title:)/g;
                         var descriptionRegex = /(^|\s)(description:([^\s\"]\S*)|description:\"(.*?)\"|description:|summary:([^\s\"]\S*)|summary:\"(.*?)\"|summary:)/g;
@@ -281,10 +276,10 @@ define([
                             $scope.detailedSearch.specialEducationalNeed = true;
                         }
 
-                        $scope.detailedSearch.main = removeExtraWhitespace(main).trim();
-                        $scope.detailedSearch.title = firstTitle;
-                        $scope.detailedSearch.combinedDescription = firstDescription;
-                        $scope.detailedSearch.author = firstAuthor;
+                        $scope.detailedSearch.main = removeExtraWhitespace(main).trim() || $scope.detailedSearch.main || "";
+                        $scope.detailedSearch.title = firstTitle || $scope.detailedSearch.title || "";
+                        $scope.detailedSearch.combinedDescription = firstDescription || $scope.detailedSearch.combinedDescription || "";
+                        $scope.detailedSearch.author = firstAuthor || $scope.detailedSearch.author || "";
 
                         $scope.mainField = $scope.detailedSearch.main;
                     }
@@ -302,15 +297,45 @@ define([
                     return hasWhitespace(str) ? '"' + str + '"' : str;
                 }
 
-                $scope.$watch('queryIn', function(queryIn) {
-                    parseSimpleSearchQuery(queryIn);
+                $scope.$watch('isVisible', function () {
+                    if (!initiated) {
+                        initWatches()
+                        initiated = true;
+                    }
                 }, true);
 
-                $scope.$watchCollection('detailedSearch', function() {
-                    $scope.queryOut = createSimpleSearchQuery();
-                });
+                function initWatches() {
+                    $scope.$watch('queryIn', function (queryIn, oldQueryIn) {
+                        if (queryIn && queryIn !== oldQueryIn && $scope.isVisible) {
+                            parseSimpleSearchQuery(queryIn);
+                        }
+                    }, true);
 
-                $scope.getLanguageTranslationKey = function(languageCode) {
+                    $scope.$watch('detailedSearch.taxon.id', function (newTaxon, oldTaxon) {
+                        if (!$scope.detailedSearch.taxon)
+                            $scope.detailedSearch.educationalContext = null;
+
+                        if (newTaxon !== oldTaxon && $scope.detailedSearch.taxon) {
+                            $scope.detailedSearch.educationalContext = $rootScope.taxonUtils.getEducationalContext($scope.detailedSearch.taxon);
+                            clearHiddenFields();
+                            $scope.search();
+                        }
+                    }, true);
+
+                    $scope.$watch('detailedSearch', function (newValue, oldValue) {
+                        if ($scope.isVisible && newValue !== oldValue) {
+                            $scope.search();
+                        }
+                    }, true);
+
+                    $scope.$watch(function () {
+                        return $rootScope.savedPortfolio
+                    }, function () {
+                        setEditModePrefill();
+                    }, false);
+                }
+
+                $scope.getLanguageTranslationKey = function (languageCode) {
                     return 'LANGUAGE_' + languageCode.toUpperCase();
                 };
 
@@ -320,8 +345,8 @@ define([
                     // Only curriculum literature checkbox
                     if (!educationalContext ||
                         (educationalContext.id != BASIC_EDUCATION_ID &&
-                            educationalContext.id != SECONDARY_EDUCATION_ID &&
-                            educationalContext.id != VOCATIONAL_EDUCATION_ID)) {
+                        educationalContext.id != SECONDARY_EDUCATION_ID &&
+                        educationalContext.id != VOCATIONAL_EDUCATION_ID)) {
                         $scope.detailedSearch.onlyCurriculumLiterature = false;
                     }
 
@@ -342,7 +367,7 @@ define([
                     }
                 }
 
-                $scope.clear = $scope.accessor.clear = function() {
+                $scope.clear = $scope.accessor.clear = function () {
                     $scope.detailedSearch = {
                         'mainField': '',
                         'paid': false,
@@ -362,28 +387,11 @@ define([
                     $scope.accessor.clearSimpleSearch();
                 };
 
-                $scope.$watch('detailedSearch.taxon.id', function(newTaxon, oldTaxon) {
-                    if (!$scope.detailedSearch.taxon)
-                        $scope.detailedSearch.educationalContext = null;
-
-                    if (newTaxon !== oldTaxon && $scope.detailedSearch.taxon) {
-                        var taxon = Object.create($scope.detailedSearch.taxon);
-                        $scope.detailedSearch.educationalContext = $rootScope.taxonUtils.getEducationalContext(taxon);
-                        clearHiddenFields();
-                    }
-                }, true);
-
-                $scope.getEffectiveIssueDate = function() {
+                $scope.getEffectiveIssueDate = function () {
                     if ($scope.detailedSearch.issueDate && $scope.detailedSearch.issueDate != $scope.issueDateFirstYear) {
                         return $scope.detailedSearch.issueDate;
                     }
                 };
-
-                $scope.$watch(function() {
-                    return $rootScope.savedPortfolio
-                }, function(newValue, oldValue) {
-                    setEditModePrefill();
-                }, false);
 
                 function setLanguages(languages) {
                     $scope.languages = languages;
@@ -406,7 +414,8 @@ define([
                         try {
                             $scope.detailedSearch.taxon = Object.create($rootScope.savedPortfolio).taxon;
                             $scope.detailedSearch.targetGroups = Object.create($rootScope.savedPortfolio.targetGroups);
-                        } catch (e) {}
+                        } catch (e) {
+                        }
                         $scope.detailedSearch.type = "material";
                     }
                 }

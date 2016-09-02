@@ -5,13 +5,15 @@ define([
     'services/searchService',
     'services/translationService',
     'services/suggestService'
-], function (angularAMD, mod1, mod2, mod3, mod4, mod5, $http) {
+], function (angularAMD, $http) {
     angularAMD.directive('dopHeader', ['translationService', '$location', 'searchService', 'authenticationService', 'authenticatedUserService', '$timeout', '$mdDialog', 'suggestService', '$http',
         function (translationService, $location, searchService, authenticationService, authenticatedUserService, $timeout, $mdDialog, suggestService, $http) {
             return {
                 scope: true,
                 templateUrl: 'directives/header/header.html',
                 controller: function ($scope, $location, authenticationService, authenticatedUserService, $rootScope) {
+                    $scope.detailedSearch = {};
+                    $scope.detailedSearch.isVisible = false;
                     $scope.showLanguageSelection = false;
                     $scope.selectedLanguage = translationService.getLanguage();
                     $scope.searchFields = {};
@@ -55,7 +57,6 @@ define([
                     $scope.openDetailedSearch = function () {
                         $scope.detailedSearch.isVisible = true;
                         $scope.detailedSearch.queryIn = $scope.searchFields.searchQuery;
-                        $scope.searchFields.searchQuery = $scope.detailedSearch.mainField;
                     };
 
                     $scope.closeDetailedSearch = function () {
@@ -105,6 +106,15 @@ define([
                         }
                     }, true);
 
+
+                    $scope.$watch('searchFields.searchQuery', function (newValue, oldValue) {
+                        if (newValue && newValue != oldValue && newValue.length > 1 && !$scope.detailedSearch.isVisible) {
+                            $scope.search();
+                        } else if ($scope.detailedSearch.isVisible && $scope.searchFields.searchQuery) {
+                            $scope.detailedSearch.queryIn = $scope.searchFields.searchQuery;
+                        }
+                    }, true);
+
                     $scope.$watch(function () {
                         return authenticatedUserService.getUser();
                     }, function (user) {
@@ -133,10 +143,6 @@ define([
                     $scope.isModerator = function () {
                         return authenticatedUserService.isModerator();
                     };
-
-                    $('#myDiv').on('classChange', function() {
-                        alert("selected item");
-                    });
                 }
             };
         }

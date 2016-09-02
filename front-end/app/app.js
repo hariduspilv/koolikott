@@ -159,6 +159,7 @@ define([
     }
 
     app.run(function ($rootScope, metadataService) {
+        $rootScope.hasAppInitated = false;
         $rootScope.taxonParser = taxonParser;
         metadataService.loadEducationalContexts(taxonParser.setTaxons);
     });
@@ -189,6 +190,8 @@ define([
                 $rootScope.savedPortfolio = null;
                 $rootScope.selectedMaterials = null;
             }
+
+            $rootScope.hasAppInitated = true;
         });
     });
 
@@ -258,6 +261,13 @@ define([
             $templateCache.put('addMaterialDialog.html', template);
         }, function () {
             console.log("Failed to load addMaterialDialog.html template")
+        });
+
+        var detailedSearch = $sce.getTrustedResourceUrl('directives/detailedSearch/detailedSearch.html');
+        $templateRequest(detailedSearch).then(function (template) {
+            $templateCache.put('detailedSearch.html', template);
+        }, function () {
+            console.log("Failed to load detailedSearch.html template")
         });
     });
 

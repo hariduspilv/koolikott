@@ -8,7 +8,8 @@ define(function() {
             },
             '/search/result': {
                 templateUrl: 'views/search/result/searchResult.html',
-                controllerUrl: 'views/search/result/searchResult'
+                controllerUrl: 'views/search/result/searchResult',
+                reloadOnSearch : false
             },
             '/material': {
                 templateUrl: 'views/material/material.html',
