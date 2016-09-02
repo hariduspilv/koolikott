@@ -213,7 +213,7 @@
     <copyField source="language" dest="suggest_phrase"/>
     <copyField source="publisher" dest="suggest_phrase"/>
 
-    <!-- New field type for suggestions. Whitespace tokenizer is used to get single word results (te -> test)
+    <!-- New field type for suggestions. Standard tokenizer is used to get single word results (te -> test)
     however this is not reliable for phrases as each word results in a seperate query ("test port" would result as two
     seperate queries test->test and port->portfolio) but we need responses for the whole string "test port". The
     solution to it is ShingleFilterFactory which queries the whole word ("test port"->"test portfolio") as the
@@ -221,7 +221,7 @@
 
     <fieldType name="suggest_phrase" class="solr.TextField" positionIncrementGap="100">
         <analyzer>
-            <tokenizer class="solr.WhitespaceTokenizerFactory"/>
+            <tokenizer class="solr.StandardTokenizerFactory"/>
             <filter class="solr.ShingleFilterFactory" maxShingleSize="3" outputUnigrams="true"/>
             <filter class="solr.LowerCaseFilterFactory" />
         </analyzer>

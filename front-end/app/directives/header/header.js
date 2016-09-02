@@ -4,10 +4,11 @@ define([
     'services/authenticationService',
     'services/searchService',
     'services/translationService',
-    'services/suggestService'
+    'services/suggestService',
+    'services/serverCallService'
 ], function (angularAMD, $http) {
-    angularAMD.directive('dopHeader', ['translationService', '$location', 'searchService', 'authenticationService', 'authenticatedUserService', '$timeout', '$mdDialog', 'suggestService', '$http',
-        function (translationService, $location, searchService, authenticationService, authenticatedUserService, $timeout, $mdDialog, suggestService, $http) {
+    angularAMD.directive('dopHeader', ['translationService', '$location', 'searchService', 'authenticationService', 'authenticatedUserService', '$timeout', '$mdDialog', 'suggestService', 'serverCallService', '$http',
+        function (translationService, $location, searchService, authenticationService, authenticatedUserService, $timeout, $mdDialog, suggestService, serverCallService, $http) {
             return {
                 scope: true,
                 templateUrl: 'directives/header/header.html',
@@ -77,12 +78,20 @@ define([
                         $location.url(searchService.getURL());
                     };
 
-                    $scope.suggest.doSuggest = function () {
-                        suggestService.setSuggest($scope.searchFields.searchQuery);
-                        $http.get(suggestService.getURL()).then(function (result) {
-                            $scope.suggest.suggestions = result.data.alternatives;
+                    $scope.suggest.doSuggest = function (query) {
+                        if(query == null){return null;}
+                        return $http.get(suggestService.getURL(query)).then( function (response){
+                            return response.data.alternatives;
                         });
                     };
+
+                    function suggestSuccess(data){
+                        return data.alternatives;
+                    }
+
+                    function suggestFailure(){
+                        console.log("Failed to obtain data from Solr");
+                    }
 
                     $scope.searchFieldEnterPressed = function () {
                         if ($scope.detailedSearch.isVisible) {
@@ -110,10 +119,18 @@ define([
                     $scope.$watch('searchFields.searchQuery', function (newValue, oldValue) {
                         if (newValue && newValue != oldValue && newValue.length > 1 && !$scope.detailedSearch.isVisible) {
                             $scope.search();
+                            doSuggest();
                         } else if ($scope.detailedSearch.isVisible && $scope.searchFields.searchQuery) {
                             $scope.detailedSearch.queryIn = $scope.searchFields.searchQuery;
                         }
                     }, true);
+
+                    // $scope.$watch('suggest.suggestions', function (newValue, oldValue) {
+                    //     if (newValue && newValue != oldValue && newValue.length > 1) {
+                    //         $scope.suggest.doSuggest();
+                    //         console.log("Suggest value changed, doing query to Solr");
+                    //     }
+                    // });
 
                     $scope.$watch(function () {
                         return authenticatedUserService.getUser();

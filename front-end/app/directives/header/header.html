@@ -40,15 +40,12 @@
             <md-autocomplete md-autoselect md-selected-item="suggest.selectedItem"
                              md-autofocus
                              md-item-text="suggestion.term"
-                             md-items="suggestion in suggest.suggestions"
-                             md-search-text-change="suggest.doSuggest()"
+                             md-items="suggestion in suggest.doSuggest(searchFields.searchQuery)"
                              md-search-text="searchFields.searchQuery"
                              md-input-maxlength="100"
-                             md-input-minlength="3"
-                             md-input-name="suggestion"
+                             md-input-minlength="0"
                              id="header-simple-search-input"
-                             data-ng-keydown="$event.which === 13 && searchFieldEnterPressed()"
-                             data-ng-model="searchFields.searchQuery">
+                             data-ng-keydown="$event.which === 13 && searchFieldEnterPressed()">
               <md-item-template>
                 <span md-highlight-text="searchFields.searchQuery">{{ suggestion }}</span>
               </md-item-template>
