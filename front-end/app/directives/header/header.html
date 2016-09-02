@@ -1,4 +1,5 @@
-<md-toolbar id="md-toolbar-header" class="md-whiteframe-1dp {{isEditPortfolioMode ? 'md-accent' : 'md-primary'}}" data-click-outside="clickOutside()" outside-if-not="header-show-detailed-search-icon, detailed-search">
+<md-toolbar id="md-toolbar-header" class="md-whiteframe-1dp {{isEditPortfolioMode ? 'md-accent' : 'md-primary'}}"
+            data-click-outside="clickOutside()" outside-if-not="header-show-detailed-search-icon, detailed-search">
   <div class="md-toolbar-tools">
     <!-- logo -->
     <div data-ng-hide="isViewPortforlioPage" layout-align="center start" flex="10" flex-gt-sm="15">
@@ -10,13 +11,14 @@
 
     <!-- portfolio page toggle menu icon -->
     <span class="hide-gt-md" data-ng-show="isViewPortforlioPage" flex="10" flex-gt-sm="15" layout-align="center start">
-      <md-button class="md-icon-button" data-ng-click="toggleSidenav('left')" >
+      <md-button class="md-icon-button" data-ng-click="toggleSidenav('left')">
         <md-icon class="md-48">menu</md-icon>
       </md-button>
     </span>
 
     <!-- logo for portfolio -->
-    <div class="hide-md hide-sm hide-xs" data-ng-show="isViewPortforlioPage" layout-align="center start" flex="10" flex-gt-sm="15">
+    <div class="hide-md hide-sm hide-xs" data-ng-show="isViewPortforlioPage" layout-align="center start" flex="10"
+         flex-gt-sm="15">
       <md-tooltip>
         <span data-translate="HEADER_TOOLTIP_GO_TO_LANDING_PAGE"></span>
       </md-tooltip>
@@ -36,30 +38,31 @@
           <md-input-container flex>
             <label hidden="hidden">&nbsp;</label>
             <md-autocomplete md-autoselect md-selected-item="suggest.selectedItem"
-              md-autofocus
-              md-item-text="suggestion.term"
-              md-items="suggestion in suggest.suggestions"
-              md-search-text-change="suggest.doSuggest()"
-              md-search-text="searchFields.searchQuery"
-              md-input-maxlength="100"
-              md-input-minlength="3"
-              md-input-name="suggestion"
-              id="header-simple-search-input"
-              data-ng-keydown="$event.which === 13 && searchFieldEnterPressed()"
-              data-ng-model="searchFields.searchQuery" data-ng-model-options="{debounce: 300}"
-            >
+                             md-autofocus
+                             md-item-text="suggestion.term"
+                             md-items="suggestion in suggest.suggestions"
+                             md-search-text-change="suggest.doSuggest()"
+                             md-search-text="searchFields.searchQuery"
+                             md-input-maxlength="100"
+                             md-input-minlength="3"
+                             md-input-name="suggestion"
+                             id="header-simple-search-input"
+                             data-ng-keydown="$event.which === 13 && searchFieldEnterPressed()"
+                             data-ng-model="searchFields.searchQuery">
               <md-item-template>
                 <span md-highlight-text="searchFields.searchQuery">{{ suggestion }}</span>
               </md-item-template>
             </md-autocomplete>
           </md-input-container>
         </div>
-        <md-button aria-label="Ava detailotsing" class="md-icon-button" id="header-show-detailed-search-icon" data-ng-click="openDetailedSearch()" data-ng-if="!detailedSearch.isVisible">
+        <md-button aria-label="Ava detailotsing" class="md-icon-button" id="header-show-detailed-search-icon"
+                   data-ng-click="openDetailedSearch()" data-ng-if="!detailedSearch.isVisible">
           <md-tooltip><span data-translate="HEADER_TOOLTIP_OPEN_DETAILED_SEARCH"></span></md-tooltip>
           <md-icon hide show-gt-xs>filter_list</md-icon>
           <md-icon hide-gt-xs>search</md-icon>
         </md-button>
-        <md-button aria-label="Sulge detailotsing" class="md-icon-button" id="header-hide-detailed-search-icon" data-ng-click="closeDetailedSearch()" data-ng-if="detailedSearch.isVisible">
+        <md-button aria-label="Sulge detailotsing" class="md-icon-button" id="header-hide-detailed-search-icon"
+                   data-ng-click="closeDetailedSearch()" data-ng-if="detailedSearch.isVisible">
           <md-tooltip><span data-translate="HEADER_TOOLTIP_CLOSE_DETAILED_SEARCH"></span></md-tooltip>
           <md-icon>close</md-icon>
         </md-button>
@@ -70,7 +73,8 @@
     <div>
       <!-- change language menu -->
       <md-menu>
-        <md-button aria-label="Ava keelevaliku menüü" class="md-icon-button language-icon" id="header-language-icon" ng-click="$mdOpenMenu($event)">
+        <md-button aria-label="Ava keelevaliku menüü" class="md-icon-button language-icon" id="header-language-icon"
+                   ng-click="$mdOpenMenu($event)">
           <md-tooltip><span data-translate="HEADER_TOOLTIP_SELECT_LANGUAGE"></span></md-tooltip>
           <span data-ng-if="selectedLanguage === 'est'">ET</span>
           <span data-ng-if="selectedLanguage === 'rus'">RU</span>
@@ -78,7 +82,7 @@
         </md-button>
         <md-menu-content width="4">
           <md-menu-item id="language-select-et" data-ng-click="setLanguage('est')">
-            <md-button >
+            <md-button>
               ET
             </md-button>
           </md-menu-item>
@@ -98,14 +102,16 @@
       </md-menu>
 
       <!-- log in menu -->
-      <md-button data-ng-hide="user" aria-label="Ava sisselogimise modaalaken" class="md-icon-button" id="header-login-icon" data-ng-click="showLogin($event)">
+      <md-button data-ng-hide="user" aria-label="Ava sisselogimise modaalaken" class="md-icon-button"
+                 id="header-login-icon" data-ng-click="showLogin($event)">
         <md-icon>input</md-icon>
         <md-tooltip><span data-translate="HEADER_TOOLTIP_ENTER"></span></md-tooltip>
       </md-button>
 
       <!-- logged in user menu -->
       <md-menu data-ng-show="user">
-        <md-button aria-label="Ava kasutajamenüü" class="md-icon-button" id="header-user-menu-icon" ng-click="$mdOpenMenu($event)">
+        <md-button aria-label="Ava kasutajamenüü" class="md-icon-button" id="header-user-menu-icon"
+                   ng-click="$mdOpenMenu($event)">
           <md-tooltip><span data-translate="HEADER_TOOLTIP_PROFILE"></span></md-tooltip>
           <md-icon>account_circle</md-icon>
         </md-button>
@@ -115,7 +121,7 @@
               <span data-translate="MY_PROFILE"></span>
             </md-button>
           </md-menu-item>
-          <md-menu-item data-ng-if="isAdmin() || isModerator()" >
+          <md-menu-item data-ng-if="isAdmin() || isModerator()">
             <md-button aria-label="Mine töölauale" data-ng-href="/dashboard" id="user-menu-dashboard">
               <span data-translate="DASHBOARD"></span>
             </md-button>
@@ -134,9 +140,10 @@
 
 <div class="md-toolbar-filter ng-cloak" id="detailedSearch" data-ng-show="detailedSearch.isVisible" ng-cloak>
   <form layout="row"
-    flex>
+        flex>
     <div layout="row" layout-xs="column" flex="0" flex-gt-md="15" ng-cloak></div>
-    <div flex flex-gt-md="{{isViewPortforlioPage ? '75' : '75'}}" class="md-padding filter-wrapper ng-cloak" id="detailed-search" ng-cloak>
+    <div flex flex-gt-md="{{isViewPortforlioPage ? '75' : '75'}}" class="md-padding filter-wrapper ng-cloak"
+         id="detailed-search" ng-cloak>
       <div data-dop-detailed-search
            data-is-visible="detailedSearch.isVisible"
            data-query-in="detailedSearch.queryIn"
