@@ -32,10 +32,10 @@ public class StuudiumService {
     }
 
     private StuudiumUser getStuudiumUser(String token) {
-        Response response = client.target(getUserDataUrl()) //
-                .queryParam("token", token) //
-                .queryParam("client_id", getClientId()) //
-                .queryParam("signature", HmacUtils.hmacSha1Hex(getClientSecret(), token)) //
+        Response response = client.target(getUserDataUrl())
+                .queryParam("token", token)
+                .queryParam("client_id", getClientId())
+                .queryParam("signature", HmacUtils.hmacSha1Hex(getClientSecret(), token))
                 .request().accept(MediaType.APPLICATION_JSON).get();
 
         return response.readEntity(StuudiumUser.class);
