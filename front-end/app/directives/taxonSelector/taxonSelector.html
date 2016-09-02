@@ -6,7 +6,7 @@
       <span data-ng-if="ctrl.isAddPortfolioView">*</span>
     </label>
     <md-select data-ng-model="ctrl.taxonPath.educationalContext" id="taxonEducationalSelect"
-               data-ng-disabled="ctrl.disableEducationalContext" name="educationalContext">
+               data-ng-disabled="ctrl.disableEducationalContext" name="educationalContext" aria-label="Haridustase">
       <md-option data-translate="SELECT_EDUCATIONAL_CONTEXT" ng-value="{}" ng-click="ctrl.reset({})"></md-option>
       <md-option ng-value="educationalContext" ng-repeat="educationalContext in ctrl.educationalContexts"
                  data-translate="{{educationalContext.name.toUpperCase()}}"
@@ -22,7 +22,7 @@
       <span data-translate="TAXON_PATH_DOMAIN"></span>
       <span data-ng-if="ctrl.isAddPortfolioView">*</span>
     </label>
-    <md-select data-ng-model="ctrl.taxonPath.domain" id="taxonDomainSelect" name="domain">
+    <md-select data-ng-model="ctrl.taxonPath.domain" id="taxonDomainSelect" name="domain" aria-label="Ainevaldkond">
       <md-option data-translate="SELECT_DOMAIN" ng-click="ctrl.reset(ctrl.taxonPath.educationalContext)"></md-option>
       <md-option ng-value="domain" ng-repeat="domain in ctrl.taxonPath.educationalContext.domains | orderBy: ctrl.translateTaxon"
                  data-translate="DOMAIN_{{domain.name.toUpperCase()}}"></md-option>
@@ -37,7 +37,7 @@
       <span data-translate="DETAIL_VIEW_SUBJECT"></span>
       <span data-ng-if="ctrl.isAddMaterialView">*</span>
     </label>
-    <md-select data-ng-model="ctrl.taxonPath.subject" id="taxonSubjectSelect" name="subject">
+    <md-select data-ng-model="ctrl.taxonPath.subject" id="taxonSubjectSelect" name="subject" aria-label="Teema">
       <md-option data-translate="SELECT_SUBJECT" ng-click="ctrl.reset(ctrl.taxonPath.domain)"></md-option>
       <md-option ng-value="subject" ng-repeat="subject in ctrl.taxonPath.domain.subjects | orderBy: ctrl.translateTaxon"
                  data-translate="SUBJECT_{{subject.name.toUpperCase()}}"></md-option>
@@ -53,7 +53,7 @@
       <span data-ng-if="ctrl.isAddPortfolioView">*</span>
     </label>
     <md-select data-ng-model="ctrl.taxonPath.domainSubject" id="taxonDomainSubjectsSelect"
-               name="domainAndSubject">
+               name="domainAndSubject" aria-label="Ainevaldkond ja teema">
       <md-option data-translate="SELECT_DOMAIN_AND_SUBJECT"
                  ng-click="ctrl.reset(ctrl.taxonPath.educationalContext)"></md-option>
       <md-option ng-repeat="domainSubject in ctrl.basicEducationDomainSubjects" class="stepped-select"
@@ -74,7 +74,7 @@
       <span data-ng-if="ctrl.isAddPortfolioView">*</span>
     </label>
     <md-select data-ng-model="ctrl.taxonPath.domainSubject" id="taxonSecondaryEducationDomainSubjectsSelect"
-               name="secondaryEducationDomainAndSubject">
+               name="secondaryEducationDomainAndSubject" aria-label="Ainevaldkond ja teema">
       <md-option data-translate="SELECT_DOMAIN_AND_SUBJECT"
                  ng-click="ctrl.reset(ctrl.taxonPath.educationalContext)"></md-option>
       <md-option class="stepped-select" data-ng-class="{ 'child' : domainSubject.level === '.Subject'}"
@@ -91,8 +91,7 @@
     <label for="taxonSpecializationSelect">
       <span data-translate="TAXON_PATH_SPECIALIZATION"></span>
     </label>
-    <md-select data-ng-model="ctrl.taxonPath.specialization" id="taxonSpecializationSelect" name="specialization"
-    >
+    <md-select data-ng-model="ctrl.taxonPath.specialization" id="taxonSpecializationSelect" name="specialization" aria-label="Eriala">
       <md-option data-translate="SELECT_SPECIALIZATION" ng-click="ctrl.reset(ctrl.taxonPath.domain)"></md-option>
       <md-option ng-value="specialization" ng-repeat="specialization in ctrl.taxonPath.domain.specializations | orderBy: ctrl.translateTaxon"
                  data-translate="SPECIALIZATION_{{specialization.name.toUpperCase()}}"></md-option>
@@ -105,8 +104,7 @@
     <label for="taxonModuleSelect">
       <span data-translate="TAXON_PATH_MODULE"></span>
     </label>
-    <md-select data-ng-model="ctrl.taxonPath.module" id="taxonModuleSelect" name="module"
-    >
+    <md-select data-ng-model="ctrl.taxonPath.module" id="taxonModuleSelect" name="module" aria-label="Moodul">
       <md-option data-translate="SELECT_MODULE" ng-click="ctrl.reset(taxonPath.specialization)"></md-option>
       <md-option ng-value="module" ng-repeat="module in ctrl.taxonPath.specialization.modules | orderBy: ctrl.translateTaxon"
                  data-translate="MODULE_{{module.name.toUpperCase()}}"></md-option>
@@ -118,7 +116,7 @@
     <label for="taxonTopicSelect">
       <span data-translate="TAXON_PATH_TOPIC"></span>
     </label>
-    <md-select data-ng-model="ctrl.taxonPath.topic" id="taxonTopicSelect" name="topic">
+    <md-select data-ng-model="ctrl.taxonPath.topic" id="taxonTopicSelect" name="topic" aria-label="Teema">
       <md-option data-translate="SELECT_TOPIC"
                  ng-click="ctrl.reset(ctrl.taxonPath.subject || ctrl.taxonPath.domain || ctrl.taxonPath.module, ctrl.taxonPath)"></md-option>
       <md-option ng-value="topic" ng-repeat="topic in ctrl.getTopics() | orderBy: ctrl.translateTaxon"
@@ -131,7 +129,7 @@
   <md-input-container data-ng-show="ctrl.taxonPath.topic && ctrl.taxonPath.topic.subtopics.length > 0" class="md-block"
                       flex>
     <label for="taxonSubtopicSelect" data-translate="TAXON_PATH_SUBTOPIC"></label>
-    <md-select data-ng-model="ctrl.taxonPath.subtopic" id="taxonSubtopicSelect">
+    <md-select data-ng-model="ctrl.taxonPath.subtopic" id="taxonSubtopicSelect" aria-label="Alamteema">
       <md-option data-translate="SELECT_SUBTOPIC" ng-click="ctrl.reset(ctrl.taxonPath.topic)"></md-option>
       <md-option ng-value="subtopic" ng-repeat="subtopic in ctrl.taxonPath.topic.subtopics | orderBy: ctrl.translateTaxon"
                  data-translate="SUBTOPIC_{{subtopic.name.toUpperCase()}}"></md-option>

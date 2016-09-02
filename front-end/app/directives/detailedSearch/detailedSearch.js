@@ -377,7 +377,8 @@ define([
                         'specialEducation': false,
                         'specialEducationalNeed': false,
                         'issueDate': $scope.issueDateFirstYear,
-                        'type': 'all'
+                        'type': 'all',
+                        'taxon': {}
                     };
 
                     if ($rootScope.isEditPortfolioMode) {
