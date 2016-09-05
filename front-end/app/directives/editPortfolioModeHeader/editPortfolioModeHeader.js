@@ -73,13 +73,12 @@ define([
                 };
 
                 $scope.search = function () {
-                    if (!isEmpty($scope.searchFields.searchQuery)) {
-                        searchService.setSearch($scope.searchFields.searchQuery);
-                        searchService.clearFieldsNotInSimpleSearch();
-                        searchService.setType('material');
-                        $location.url(searchService.getURL());
-                        $route.reload();
-                    }
+                    searchService.setSearch($scope.searchFields.searchQuery);
+                    searchService.clearFieldsNotInSimpleSearch();
+                    searchService.setType('material');
+                    $location.url(searchService.getURL());
+                    $route.reload();
+
                 };
 
                 $scope.openDetailedSearch = function () {
@@ -129,7 +128,8 @@ define([
                 }, true);
 
                 $scope.$watch('searchFields.searchQuery', function (newValue, oldValue) {
-                    if (newValue && newValue != oldValue && newValue.length > 1 && !$scope.detailedSearch.isVisible) {
+                    $scope.searchFields.searchQuery = newValue || "";
+                    if (newValue != oldValue && !$scope.detailedSearch.isVisible) {
                         $scope.search();
                     } else if ($scope.detailedSearch.isVisible) {
                         $scope.detailedSearch.queryIn = $scope.searchFields.searchQuery;

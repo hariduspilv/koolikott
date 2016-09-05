@@ -230,59 +230,58 @@ define([
                 }
 
                 function parseSimpleSearchQuery(query) {
-                    if (query) {
-                        var titleRegex = /(^|\s)(title:([^\s\"]\S*)|title:\"(.*?)\"|title:)/g;
-                        var descriptionRegex = /(^|\s)(description:([^\s\"]\S*)|description:\"(.*?)\"|description:|summary:([^\s\"]\S*)|summary:\"(.*?)\"|summary:)/g;
-                        var authorRegex = /(^|\s)(author:([^\s\"]\S*)|author:\"(.*?)\"|author:)/g;
-                        var clilRegex = /(^|\s)(LAK|"Lõimitud aine- ja keeleõpe")(?=\s|$)/g;
-                        var specialEducationalNeedRegex = /(^|\s)(HEV|"Hariduslik erivajadus")(?=\s|$)/g;
+                    var titleRegex = /(^|\s)(title:([^\s\"]\S*)|title:\"(.*?)\"|title:)/g;
+                    var descriptionRegex = /(^|\s)(description:([^\s\"]\S*)|description:\"(.*?)\"|description:|summary:([^\s\"]\S*)|summary:\"(.*?)\"|summary:)/g;
+                    var authorRegex = /(^|\s)(author:([^\s\"]\S*)|author:\"(.*?)\"|author:)/g;
+                    var clilRegex = /(^|\s)(LAK|"Lõimitud aine- ja keeleõpe")(?=\s|$)/g;
+                    var specialEducationalNeedRegex = /(^|\s)(HEV|"Hariduslik erivajadus")(?=\s|$)/g;
 
-                        var firstTitle;
-                        var firstDescription;
-                        var firstAuthor;
-                        var main = query;
+                    var firstTitle;
+                    var firstDescription;
+                    var firstAuthor;
+                    var main = query;
 
-                        while (title = titleRegex.exec(query)) {
-                            // Remove token from main query
-                            main = main.replace(title[2], '');
+                    while (title = titleRegex.exec(query)) {
+                        // Remove token from main query
+                        main = main.replace(title[2], '');
 
-                            if (!firstTitle) {
-                                // Get token content
-                                firstTitle = title[3] || title[4];
-                            }
+                        if (!firstTitle) {
+                            // Get token content
+                            firstTitle = title[3] || title[4];
                         }
-
-                        while (description = descriptionRegex.exec(query)) {
-                            main = main.replace(description[2], '');
-                            if (!firstDescription) {
-                                firstDescription = description[3] || description[4] || description[5] || description[6];
-                            }
-                        }
-
-                        while (author = authorRegex.exec(query)) {
-                            main = main.replace(author[2], '');
-                            if (!firstAuthor) {
-                                firstAuthor = author[3] || author[4];
-                            }
-                        }
-
-                        while (keyword = clilRegex.exec(query)) {
-                            main = main.replace(keyword[2], '');
-                            $scope.detailedSearch.CLIL = true;
-                        }
-
-                        while (keyword = specialEducationalNeedRegex.exec(query)) {
-                            main = main.replace(keyword[2], '');
-                            $scope.detailedSearch.specialEducationalNeed = true;
-                        }
-
-                        $scope.detailedSearch.main = removeExtraWhitespace(main).trim() || $scope.detailedSearch.main || "";
-                        $scope.detailedSearch.title = firstTitle || $scope.detailedSearch.title || "";
-                        $scope.detailedSearch.combinedDescription = firstDescription || $scope.detailedSearch.combinedDescription || "";
-                        $scope.detailedSearch.author = firstAuthor || $scope.detailedSearch.author || "";
-
-                        $scope.mainField = $scope.detailedSearch.main;
                     }
+
+                    while (description = descriptionRegex.exec(query)) {
+                        main = main.replace(description[2], '');
+                        if (!firstDescription) {
+                            firstDescription = description[3] || description[4] || description[5] || description[6];
+                        }
+                    }
+
+                    while (author = authorRegex.exec(query)) {
+                        main = main.replace(author[2], '');
+                        if (!firstAuthor) {
+                            firstAuthor = author[3] || author[4];
+                        }
+                    }
+
+                    while (keyword = clilRegex.exec(query)) {
+                        main = main.replace(keyword[2], '');
+                        $scope.detailedSearch.CLIL = true;
+                    }
+
+                    while (keyword = specialEducationalNeedRegex.exec(query)) {
+                        main = main.replace(keyword[2], '');
+                        $scope.detailedSearch.specialEducationalNeed = true;
+                    }
+
+                    $scope.detailedSearch.main = removeExtraWhitespace(main).trim() || "";
+                    $scope.detailedSearch.title = firstTitle || $scope.detailedSearch.title || "";
+                    $scope.detailedSearch.combinedDescription = firstDescription || $scope.detailedSearch.combinedDescription || "";
+                    $scope.detailedSearch.author = firstAuthor || $scope.detailedSearch.author || "";
+
+                    $scope.mainField = $scope.detailedSearch.main;
+
                 }
 
                 function removeExtraWhitespace(str) {
@@ -306,7 +305,7 @@ define([
 
                 function initWatches() {
                     $scope.$watch('queryIn', function (queryIn, oldQueryIn) {
-                        if (queryIn && queryIn !== oldQueryIn && $scope.isVisible) {
+                        if (queryIn !== oldQueryIn && $scope.isVisible) {
                             parseSimpleSearchQuery(queryIn);
                         }
                     }, true);

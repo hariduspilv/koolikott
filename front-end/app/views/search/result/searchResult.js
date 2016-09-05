@@ -180,15 +180,22 @@ define([
                 $location.url(searchService.getURL());
             }
 
+            function resetAndSearch(newValue) {
+                $scope.items = null;
+                $scope.paging = {};
+                $scope.paging.thisPage = 0;
+                searchService.setSearch(newValue.q);
+                search(true);
+            }
+
             $scope.$watch(function () {
                 return $location.search();
             }, function (newValue, oldValue) {
-                if (newValue !== oldValue && (newValue.q || newValue.taxon || newValue.targetGroup || newValue.type)) {
-                    $scope.items = null;
-                    $scope.paging = {};
-                    $scope.paging.thisPage = 0;
-                    searchService.setSearch(newValue.q);
-                    search(true);
+                if (newValue !== oldValue && (newValue.q || newValue.taxon || newValue.targetGroup || newValue.type )) {
+                    resetAndSearch(newValue);
+                } else if (newValue !== oldValue && newValue.q === "") {
+                    searchService.setType('all');
+                    resetAndSearch(newValue);
                 }
 
             }, true);

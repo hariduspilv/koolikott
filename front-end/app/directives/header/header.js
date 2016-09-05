@@ -48,16 +48,13 @@ define([
                     };
 
                     $scope.search = function () {
-                        if (!isEmpty($scope.searchFields.searchQuery)) {
-                            searchService.setSearch($scope.searchFields.searchQuery);
-                            searchService.clearFieldsNotInSimpleSearch();
-                            $location.url(searchService.getURL());
-                        }
+                        searchService.setSearch($scope.searchFields.searchQuery);
+                        searchService.clearFieldsNotInSimpleSearch();
+                        $location.url(searchService.getURL());
                     };
 
                     $scope.openDetailedSearch = function () {
                         $scope.detailedSearch.isVisible = true;
-                        $scope.detailedSearch.queryIn = $scope.searchFields.searchQuery;
                     };
 
                     $scope.closeDetailedSearch = function () {
@@ -117,20 +114,13 @@ define([
 
 
                     $scope.$watch('searchFields.searchQuery', function (newValue, oldValue) {
-                        if (newValue && newValue != oldValue && newValue.length > 1 && !$scope.detailedSearch.isVisible) {
+                        $scope.searchFields.searchQuery = newValue || "";
+                        if (newValue !== oldValue && !$scope.detailedSearch.isVisible) {
                             $scope.search();
-                            doSuggest();
-                        } else if ($scope.detailedSearch.isVisible && $scope.searchFields.searchQuery) {
+                        } else if ($scope.detailedSearch.isVisible) {
                             $scope.detailedSearch.queryIn = $scope.searchFields.searchQuery;
                         }
                     }, true);
-
-                    // $scope.$watch('suggest.suggestions', function (newValue, oldValue) {
-                    //     if (newValue && newValue != oldValue && newValue.length > 1) {
-                    //         $scope.suggest.doSuggest();
-                    //         console.log("Suggest value changed, doing query to Solr");
-                    //     }
-                    // });
 
                     $scope.$watch(function () {
                         return authenticatedUserService.getUser();
