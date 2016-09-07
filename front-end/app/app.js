@@ -30,6 +30,7 @@ define([
     'directives/pageStructure/linearLayout/linearLayout',
 
     'services/authenticatedUserService',
+    'DOPconstants',
 ], function (angularAMD, config, taxonUtils, taxonParser, moment) {
     'use strict';
 
@@ -40,7 +41,8 @@ define([
         'angular-click-outside',
         'duScroll',
         'ngFileUpload',
-        'ui.bootstrap'
+        'ui.bootstrap',
+        'DOPconstants'
     ]);
 
     app.config(function ($routeProvider, $locationProvider, $controllerProvider, $compileProvider, $filterProvider, $provide, $translateProvider, $sceProvider, $mdThemingProvider, $httpProvider, $mdDateLocaleProvider, $anchorScrollProvider) {
@@ -158,7 +160,8 @@ define([
         };
     }
 
-    app.run(function ($rootScope, metadataService) {
+    app.run(function ($rootScope, metadataService, APP_VERSION) {
+        $rootScope.APP_VERSION = APP_VERSION;
         $rootScope.hasAppInitated = false;
         $rootScope.taxonParser = taxonParser;
         metadataService.loadEducationalContexts(taxonParser.setTaxons);

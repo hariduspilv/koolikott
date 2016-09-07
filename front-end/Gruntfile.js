@@ -454,7 +454,19 @@ module.exports = function (grunt) {
             xvfb: {
                 DISPLAY: ':99'
             }
-        }
+        },
+
+        ngconstant: {
+            dist: {
+                options: {
+                    dest: 'dist/dop/constants.js',
+                    name: 'DOPconstants'
+                },
+                constants: {
+                    APP_VERSION: grunt.file.readJSON('package.json').version
+                }
+            }
+        },
     });
 
     grunt.registerTask('serve', 'Compile then start a connect web server', function (target) {
@@ -482,6 +494,7 @@ module.exports = function (grunt) {
         'concat',
         'ngAnnotate',
         'copy:dist',
+        'ngconstant:dist',
         'cdnify',
         'cssmin',
         'filerev',
