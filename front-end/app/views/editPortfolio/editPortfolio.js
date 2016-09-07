@@ -63,6 +63,10 @@ define([
             $mdSidenav(menuId).toggle();
         };
 
+        $scope.closeSidenav = function(menuId) {
+            $mdSidenav(menuId).close();
+        };
+
         $scope.onDeleteChapter = function(chapter) {
             var deleteChapter = function() {
                 $scope.portfolio.chapters.splice($scope.portfolio.chapters.indexOf(chapter), 1);

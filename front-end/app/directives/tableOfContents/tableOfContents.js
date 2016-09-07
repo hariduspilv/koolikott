@@ -9,7 +9,7 @@ define([
                 readonly: '=readonly'
             },
             templateUrl: 'directives/tableOfContents/tableOfContents.html',
-            controller: function($scope, $rootScope) {
+            controller: function($scope, $rootScope, $mdSidenav) {
                 $scope.isReadOnly = angular.isDefined($scope.isReadOnly) ? $scope.isReadOnly : false;
 
                 function init() {
@@ -54,13 +54,13 @@ define([
                                 $timeout(function() {
                                     $chapter = angular.element(document.getElementById(elementID));
                                     $context = angular.element(document.getElementById('scrollable-content'));
-                                    $context.scrollToElement($chapter, 30, 0);
+                                    $context.scrollToElement($chapter, 60, 0);
                                     watchPage();
                                 }, 0);
                             }
                         });
                     } else {
-                        $context.scrollToElement($chapter, 30, 200);
+                        $context.scrollToElement($chapter, 60, 200);
                     }
                 }
 
@@ -154,6 +154,11 @@ define([
                     }
                     $scope.showAddMaterialButton = false;
                 }
+
+                $scope.closeSidenav = function(id) {
+                  $mdSidenav(id)
+                   .close();
+                };
 
                 init();
 
