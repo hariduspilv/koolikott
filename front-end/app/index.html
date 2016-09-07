@@ -30,6 +30,8 @@
   <div data-ng-if="!isEditPortfolioMode && !isViewPortforlioPage" data-dop-linear-layout layout-fill></div>
 </div>
 
+<div class="version-number" ><span>Version: </span><span ng-bind="APP_VERSION"></span>
+</div>
 <div data-ng-show="showMainFabButton && !isEditPortfolioMode" data-dop-main-fab-button></div>
 
 <script src="/libs/requirejs/require.js" data-main="require.config.js"></script>

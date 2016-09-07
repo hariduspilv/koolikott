@@ -42,7 +42,8 @@
     "mocha": "^2.3.4",
     "time-grunt": "^1.0.0",
     "webdrivercss": "^2.0.0-beta-rc1",
-    "webdriverio": "^3.4.0"
+    "webdriverio": "^3.4.0",
+    "grunt-ng-constant": "^2.0.1"
   },
   "engines": {
     "node": ">=0.10.0"
