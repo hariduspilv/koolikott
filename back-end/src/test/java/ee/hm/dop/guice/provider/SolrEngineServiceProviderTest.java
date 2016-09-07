@@ -9,7 +9,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 @RunWith(GuiceTestRunner.class)
-public class SearchEngineServiceProviderTest {
+public class SolrEngineServiceProviderTest {
 
     @Inject
     private SearchEngineServiceProvider searchEngineServiceProvider;

@@ -125,15 +125,15 @@
   <field name="type" type="string" indexed="true" stored="true" required="true" multiValued="false" />
 
   <!-- Learning Object -->
-  <field name="target_group" type="text_general" indexed="true" stored="false" multiValued="true"/>
-  <field name="cross_curricular_theme" type="text_general" indexed="true" stored="false" multiValued="true"/>
-  <field name="key_competence" type="text_general" indexed="true" stored="false" multiValued="true"/>
-  <field name="tag" type="text_general" indexed="true" stored="false" multiValued="true" omitNorms="true"/>
-  <field name="like_score" type="int" indexed="true" stored="true" multiValued="false"/>
-  <field name="recommended" type="boolean" indexed="true" stored="false" multiValued="false"/>
-  <field name="recommendation_timestamp" type="tdate" indexed="true" stored="false" multiValued="false"/>
-  <field name="added" type="tdate" indexed="true" stored="false" multiValued="false"/>
-  <field name="views" type="int" indexed="true" stored="false" multiValued="false"/>
+    <field name="target_group" type="text_general" indexed="true" stored="false" multiValued="true"/>
+    <field name="cross_curricular_theme" type="text_general" indexed="true" stored="false" multiValued="true"/>
+    <field name="key_competence" type="text_general" indexed="true" stored="false" multiValued="true"/>
+    <field name="tag" type="text_general" indexed="true" stored="false" multiValued="true" omitNorms="true"/>
+    <field name="like_score" type="int" indexed="true" stored="true" multiValued="false"/>
+    <field name="added" type="tdate" indexed="true" stored="false" multiValued="false"/>
+    <field name="recommended" type="boolean" indexed="true" stored="false" multiValued="false"/>
+    <field name="recommendation_timestamp" type="tdate" indexed="true" stored="false" multiValued="false"/>
+    <field name="views" type="int" indexed="true" stored="false" multiValued="false"/>
 
    <!-- Material & Portfolio -->
    <field name="title" type="text_general" indexed="true" stored="false" multiValued="true"/>
@@ -167,6 +167,7 @@
    <!-- catchall field, containing all other searchable text fields (implemented
         via copyField further on in this schema  -->
    <field name="text" type="text_general" indexed="true" stored="false" multiValued="true"/>
+    <field name="suggest_phrase" type="suggest_phrase" indexed="true" stored="false" multiValued="true"/>
 
    <!-- catchall text field that indexes tokens both normally and in reverse for efficient
         leading wildcard queries. -->
@@ -196,6 +197,42 @@
    <copyField source="chapterText" dest="text"/>
    <copyField source="language" dest="text"/>
    <copyField source="publisher" dest="text"/>
+
+    <copyField source="title" dest="suggest_phrase"/>
+    <copyField source="description" dest="suggest_phrase"/>
+    <copyField source="author" dest="suggest_phrase"/>
+    <copyField source="tag" dest="suggest_phrase"/>
+    <copyField source="educational_context" dest="suggest_phrase" />
+    <copyField source="domain" dest="suggest_phrase" />
+    <copyField source="subject" dest="suggest_phrase" />
+    <copyField source="resource_type" dest="suggest_phrase" />
+    <copyField source="license_type" dest="suggest_phrase" />
+    <copyField source="summary" dest="suggest_phrase"/>
+    <copyField source="chapterTitle" dest="suggest_phrase"/>
+    <copyField source="chapterText" dest="suggest_phrase"/>
+    <copyField source="language" dest="suggest_phrase"/>
+    <copyField source="publisher" dest="suggest_phrase"/>
+
+    <!-- New field type for suggestions. Standard tokenizer is used to get single word results (te -> test)
+    however this is not reliable for phrases as each word results in a seperate query ("test port" would result as two
+    seperate queries test->test and port->portfolio) but we need responses for the whole string "test port". The
+    solution to it is ShingleFilterFactory which queries the whole word ("test port"->"test portfolio") as the
+    indexing process splits it into shingles -->
+
+    <fieldType name="suggest_phrase" class="solr.TextField" positionIncrementGap="100">
+        <analyzer>
+            <tokenizer class="solr.StandardTokenizerFactory"/>
+            <filter class="solr.ShingleFilterFactory" maxShingleSize="3" outputUnigrams="true"/>
+            <filter class="solr.LowerCaseFilterFactory" />
+        </analyzer>
+    </fieldType>
+
+    <fieldType name="suggest_analyzer" class="solr.TextField" positionIncrementGap="100">
+        <analyzer>
+            <tokenizer class="solr.KeywordTokenizerFactory"/>
+            <filter class="solr.LowerCaseFilterFactory"/>
+        </analyzer>
+    </fieldType>
 
    <!-- Above, multiple source fields are copied to the [text] field.
     Another way to map multiple source fields to the same

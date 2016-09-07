@@ -81,7 +81,7 @@
 			<artifactId>jetty-webapp</artifactId>
 			<version>${jetty.version}</version>
 		</dependency>
-		
+
 		<!-- MySQL Database connector -->
 		<dependency>
 			<groupId>mysql</groupId>
@@ -186,7 +186,7 @@
 		<dependency>
 			<groupId>org.apache.solr</groupId>
 			<artifactId>solr-solrj</artifactId>
-			<version>5.2.1</version>
+			<version>6.1.0</version>
 		</dependency>
 		<dependency>
 			<groupId>org.opensaml</groupId>

@@ -3,7 +3,9 @@ package ee.hm.dop.service;
 import static ee.hm.dop.utils.ConfigurationProperties.SEARCH_SERVER;
 import static java.lang.String.format;
 import static java.nio.charset.StandardCharsets.UTF_8;
+import static org.apache.commons.lang3.StringUtils.isBlank;
 
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.Map.Entry;
@@ -16,16 +18,25 @@ import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
 
 import ee.hm.dop.model.solr.SearchResponse;
+import ee.hm.dop.tokenizer.DOPSearchStringTokenizer;
 import org.apache.commons.configuration.Configuration;
+import org.apache.solr.client.solrj.SolrClient;
+import org.apache.solr.client.solrj.SolrQuery;
+import org.apache.solr.client.solrj.SolrRequest;
+import org.apache.solr.client.solrj.SolrServerException;
+import org.apache.solr.client.solrj.impl.HttpSolrClient;
+import org.apache.solr.client.solrj.response.QueryResponse;
+import org.apache.solr.client.solrj.response.SpellCheckResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 @Singleton
-public class SolrService implements SearchEngineService {
+public class SolrService implements SolrEngineService {
 
     private static final Logger logger = LoggerFactory.getLogger(SolrService.class);
 
     private static final int RESULTS_PER_PAGE = 24;
+    private static final int SUGGEST_COUNT = 5;
     private static final String SEARCH_PATH = "select?q=%s&sort=%s&wt=json&start=%d&rows=%d";
 
     protected static final String SOLR_IMPORT_PARTIAL = "dataimport?command=delta-import&wt=json";
@@ -39,9 +50,12 @@ public class SolrService implements SearchEngineService {
     @Inject
     private Configuration configuration;
 
+    private SolrClient solrClient;
+
     private SolrIndexThread indexThread;
 
     public SolrService() {
+        solrClient = new HttpSolrClient("http://localhost:8983/solr/dop");
         indexThread = new SolrIndexThread();
         indexThread.start();
     }
@@ -55,6 +69,27 @@ public class SolrService implements SearchEngineService {
     public SearchResponse search(String query, long start, long limit, String sort) {
         return executeCommand(
                 format(SEARCH_PATH, encodeQuery(query), formatSort(sort), start, Math.min(limit, RESULTS_PER_PAGE)));
+    }
+
+    @Override
+    public SpellCheckResponse.Suggestion suggest(String query) {
+        if(query.isEmpty()){
+            return null;
+        }
+        QueryResponse qr = null;
+        SolrQuery solrQuery = new SolrQuery();
+        solrQuery.setRequestHandler("/suggest");
+        solrQuery.set("spellcheck.q", query);
+        solrQuery.set("suggest.count", SUGGEST_COUNT);
+        try {
+            qr = solrClient.query(solrQuery, SolrRequest.METHOD.POST);
+        } catch (SolrServerException | IOException e) {
+            logger.error("The SolrServer encountered an error.");
+        }
+
+        String queryString = query.replaceAll("\\+", " ").toLowerCase();
+
+        return qr.getSpellCheckResponse().getSuggestion(queryString);
     }
 
     @Override
@@ -102,6 +137,20 @@ public class SolrService implements SearchEngineService {
     private String getFullURL(String path) {
         String serverUrl = configuration.getString(SEARCH_SERVER);
         return serverUrl + path;
+    }
+
+    static String getTokenizedQueryString(String query) {
+        StringBuilder sb = new StringBuilder();
+        if (!isBlank(query)) {
+            DOPSearchStringTokenizer tokenizer = new DOPSearchStringTokenizer(query);
+            while (tokenizer.hasMoreTokens()) {
+                sb.append(tokenizer.nextToken());
+                if (tokenizer.hasMoreTokens()) {
+                    sb.append(" ");
+                }
+            }
+        }
+        return sb.toString();
     }
 
     private String encodeQuery(String query) {

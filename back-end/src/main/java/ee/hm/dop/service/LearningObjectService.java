@@ -19,7 +19,7 @@ public class LearningObjectService {
     private LearningObjectDAO learningObjectDAO;
 
     @Inject
-    private SearchEngineService searchEngineService;
+    private SolrEngineService solrEngineService;
 
     public LearningObject get(long learningObjectId, User user) {
         LearningObject learningObject = getLearningObjectDAO().findById(learningObjectId);
@@ -53,7 +53,7 @@ public class LearningObjectService {
 
         tags.add(tag);
         updatedLearningObject = getLearningObjectDAO().update(learningObject);
-        searchEngineService.updateIndex();
+        solrEngineService.updateIndex();
 
         return updatedLearningObject;
     }

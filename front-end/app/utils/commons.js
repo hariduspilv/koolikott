@@ -271,7 +271,7 @@ function isIdCodeValid(idCode) {
 function containsObject(obj, list) {
     var x;
     for (x in list) {
-        if (list.hasOwnProperty(x) && list[x] === obj) {
+        if (list.hasOwnProperty(x) && (list[x] === obj || list[x].__proto__ === obj.__proto__)) {
             return true;
         }
     }

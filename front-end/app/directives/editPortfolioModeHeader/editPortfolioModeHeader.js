@@ -1,34 +1,34 @@
 define([
-  'angularAMD',
-  'services/translationService',
-  'services/serverCallService',
-  'services/searchService',
-  'services/toastService',
-  'directives/copyPermalink/copyPermalink'
-], function(angularAMD) {
-    angularAMD.directive('dopEditPortfolioModeHeader', ['translationService', '$location', '$mdSidenav', '$mdDialog', '$rootScope', 'serverCallService', 'searchService', 'toastService', '$timeout', '$route', function(translationService, $location, $mdSidenav, $mdDialog, $rootScope, serverCallService, searchService, toastService, $timeout, $route) {
+    'angularAMD',
+    'services/translationService',
+    'services/serverCallService',
+    'services/searchService',
+    'services/toastService',
+    'directives/copyPermalink/copyPermalink'
+], function (angularAMD) {
+    angularAMD.directive('dopEditPortfolioModeHeader', ['translationService', '$location', '$mdSidenav', '$mdDialog', '$rootScope', 'serverCallService', 'searchService', 'toastService', '$timeout', '$route', function (translationService, $location, $mdSidenav, $mdDialog, $rootScope, serverCallService, searchService, toastService, $timeout, $route) {
         return {
             scope: true,
             templateUrl: 'directives/editPortfolioModeHeader/editPortfolioModeHeader.html',
             controller: function ($scope, $location, $rootScope) {
 
-                $scope.toggleSidenav = function() {
+                $scope.toggleSidenav = function () {
                     $mdSidenav('left').toggle();
                 };
 
-                $scope.makePublic = function() {
+                $scope.makePublic = function () {
                     $rootScope.savedPortfolio.visibility = 'PUBLIC';
                     updatePortfolio();
 
                     toastService.show('PORTFOLIO_HAS_BEEN_MADE_PUBLIC');
                 };
 
-                $scope.makeNotListed = function() {
+                $scope.makeNotListed = function () {
                     $rootScope.savedPortfolio.visibility = 'NOT_LISTED';
                     updatePortfolio();
                 };
 
-                $scope.makePrivate = function() {
+                $scope.makePrivate = function () {
                     $rootScope.savedPortfolio.visibility = 'PRIVATE';
                     updatePortfolio();
                 };
@@ -67,30 +67,28 @@ define([
                 $scope.searchFields.searchQuery = "";
                 $scope.detailedSearch = {};
                 $scope.detailedSearch.accessor = {
-                    clearSimpleSearch : function() {
+                    clearSimpleSearch: function () {
                         $scope.searchFields.searchQuery = '';
                     }
                 };
 
-                $scope.search = function() {
-                    if (!isEmpty($scope.searchFields.searchQuery)) {
-                        searchService.setSearch($scope.searchFields.searchQuery);
-                        searchService.clearFieldsNotInSimpleSearch();
-                        searchService.setType('material');
-                        $location.url(searchService.getURL());
-                        $route.reload();
-                    }
+                $scope.search = function () {
+                    searchService.setSearch($scope.searchFields.searchQuery);
+                    searchService.clearFieldsNotInSimpleSearch();
+                    searchService.setType('material');
+                    $location.url(searchService.getURL());
+                    $route.reload();
+
                 };
 
-                $scope.openDetailedSearch = function() {
+                $scope.openDetailedSearch = function () {
                     $scope.detailedSearch.isVisible = true;
                     $scope.detailedSearch.queryIn = $scope.searchFields.searchQuery;
-                    $scope.searchFields.searchQuery = $scope.detailedSearch.mainField;
                 };
 
-                $scope.closeDetailedSearch = function() {
-                    $timeout(function() {
-                      $scope.detailedSearch.accessor.clear();
+                $scope.closeDetailedSearch = function () {
+                    $timeout(function () {
+                        $scope.detailedSearch.accessor.clear();
                     }, 500);
 
                     $scope.detailedSearch.isVisible = false;
@@ -100,22 +98,7 @@ define([
                     $scope.detailedSearch.mainField = "";
                 };
 
-                $scope.detailedSearch.doSearch = function() {
-                    var query = ($scope.searchFields.searchQuery || "") + " " + $scope.detailedSearch.queryOut;
-                    searchService.setSearch(query.trim());
-                    $location.url(searchService.getURL());
-                    $route.reload();
-                };
-
-                $scope.searchFieldEnterPressed = function() {
-                    if ($scope.detailedSearch.isVisible) {
-                        $scope.detailedSearch.accessor.search();
-                    } else {
-                        $scope.search();
-                    }
-                };
-
-                $scope.saveAndExitPortfolio = function() {
+                $scope.saveAndExitPortfolio = function () {
                     var url = "rest/portfolio/update";
                     serverCallService.makePost(url, $rootScope.savedPortfolio, saveAndExitPortfolioSuccess, updatePortfolioFailed);
                 };
@@ -130,17 +113,26 @@ define([
                     }
                 }
 
-                $scope.clickOutside = function() {
-                    if ($scope.detailedSearch.isVisible &&  !$rootScope.dontCloseSearch) {
+                $scope.clickOutside = function () {
+                    if ($scope.detailedSearch.isVisible && !$rootScope.dontCloseSearch) {
                         $scope.closeDetailedSearch();
-                    } else if ( $rootScope.dontCloseSearch) {
+                    } else if ($rootScope.dontCloseSearch) {
                         $rootScope.dontCloseSearch = false;
                     }
                 };
 
-                $scope.$watch('detailedSearch.mainField', function(newValue, oldValue) {
+                $scope.$watch('detailedSearch.mainField', function (newValue, oldValue) {
                     if (newValue != oldValue) {
                         $scope.searchFields.searchQuery = newValue || "";
+                    }
+                }, true);
+
+                $scope.$watch('searchFields.searchQuery', function (newValue, oldValue) {
+                    $scope.searchFields.searchQuery = newValue || "";
+                    if (newValue != oldValue && !$scope.detailedSearch.isVisible) {
+                        $scope.search();
+                    } else if ($scope.detailedSearch.isVisible) {
+                        $scope.detailedSearch.queryIn = $scope.searchFields.searchQuery;
                     }
                 }, true);
 

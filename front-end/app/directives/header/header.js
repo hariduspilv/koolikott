@@ -3,19 +3,26 @@ define([
     'services/serverCallService',
     'services/authenticationService',
     'services/searchService',
-    'services/translationService'
-], function (angularAMD) {
-    angularAMD.directive('dopHeader', ['translationService', '$location', 'searchService', 'authenticationService', 'authenticatedUserService', '$timeout', '$mdDialog',
-        function (translationService, $location, searchService, authenticationService, authenticatedUserService, $timeout, $mdDialog) {
+    'services/translationService',
+    'services/suggestService',
+    'services/serverCallService'
+], function (angularAMD, $http) {
+    angularAMD.directive('dopHeader', ['translationService', '$location', 'searchService', 'authenticationService', 'authenticatedUserService', '$timeout', '$mdDialog', 'suggestService', 'serverCallService', '$http',
+        function (translationService, $location, searchService, authenticationService, authenticatedUserService, $timeout, $mdDialog, suggestService, serverCallService, $http) {
             return {
                 scope: true,
                 templateUrl: 'directives/header/header.html',
                 controller: function ($scope, $location, authenticationService, authenticatedUserService, $rootScope) {
+                    $scope.detailedSearch = {};
+                    $scope.detailedSearch.isVisible = false;
                     $scope.showLanguageSelection = false;
                     $scope.selectedLanguage = translationService.getLanguage();
                     $scope.searchFields = {};
                     $scope.searchFields.searchQuery = searchService.getQuery();
                     $scope.detailedSearch = {};
+                    $scope.suggest = {};
+                    $scope.suggest.suggestions = null;
+                    $scope.suggest.selectedItem = null;
                     $scope.detailedSearch.accessor = {
                         clearSimpleSearch: function () {
                             $scope.searchFields.searchQuery = '';
@@ -41,17 +48,13 @@ define([
                     };
 
                     $scope.search = function () {
-                        if (!isEmpty($scope.searchFields.searchQuery)) {
-                            searchService.setSearch($scope.searchFields.searchQuery);
-                            searchService.clearFieldsNotInSimpleSearch();
-                            $location.url(searchService.getURL());
-                        }
+                        searchService.setSearch($scope.searchFields.searchQuery);
+                        searchService.clearFieldsNotInSimpleSearch();
+                        $location.url(searchService.getURL());
                     };
 
                     $scope.openDetailedSearch = function () {
                         $scope.detailedSearch.isVisible = true;
-                        $scope.detailedSearch.queryIn = $scope.searchFields.searchQuery;
-                        $scope.searchFields.searchQuery = $scope.detailedSearch.mainField;
                     };
 
                     $scope.closeDetailedSearch = function () {
@@ -72,6 +75,21 @@ define([
                         $location.url(searchService.getURL());
                     };
 
+                    $scope.suggest.doSuggest = function (query) {
+                        if(query == null){return null;}
+                        return $http.get(suggestService.getURL(query)).then( function (response){
+                            return response.data.alternatives;
+                        });
+                    };
+
+                    function suggestSuccess(data){
+                        return data.alternatives;
+                    }
+
+                    function suggestFailure(){
+                        console.log("Failed to obtain data from Solr");
+                    }
+
                     $scope.searchFieldEnterPressed = function () {
                         if ($scope.detailedSearch.isVisible) {
                             $scope.detailedSearch.accessor.search();
@@ -91,6 +109,16 @@ define([
                     $scope.$watch('detailedSearch.mainField', function (newValue, oldValue) {
                         if (newValue != oldValue) {
                             $scope.searchFields.searchQuery = newValue || "";
+                        }
+                    }, true);
+
+
+                    $scope.$watch('searchFields.searchQuery', function (newValue, oldValue) {
+                        $scope.searchFields.searchQuery = newValue || "";
+                        if (newValue !== oldValue && !$scope.detailedSearch.isVisible) {
+                            $scope.search();
+                        } else if ($scope.detailedSearch.isVisible) {
+                            $scope.detailedSearch.queryIn = $scope.searchFields.searchQuery;
                         }
                     }, true);
 

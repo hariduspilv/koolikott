@@ -34,7 +34,7 @@ public class LearningObjectServiceTest {
     private LearningObjectDAO learningObjectDAO;
 
     @Mock
-    private SearchEngineService searchEngineService;
+    private SolrEngineService solrEngineService;
 
     public LearningObjectServiceTest() throws NoSuchMethodException {
         learningObjectService = getLearningObjectService();
@@ -133,7 +133,7 @@ public class LearningObjectServiceTest {
     }
 
     private void replayAll(Object... mocks) {
-        replay(learningObjectDAO, searchEngineService);
+        replay(learningObjectDAO, solrEngineService);
 
         if (mocks != null) {
             for (Object object : mocks) {
@@ -143,7 +143,7 @@ public class LearningObjectServiceTest {
     }
 
     private void verifyAll(Object... mocks) {
-        verify(learningObjectDAO, searchEngineService);
+        verify(learningObjectDAO, solrEngineService);
 
         if (mocks != null) {
             for (Object object : mocks) {

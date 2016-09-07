@@ -46,7 +46,7 @@ public class RepositoryService {
     private PictureService pictureService;
 
     @Inject
-    private SearchEngineService searchEngineService;
+    private SolrEngineService solrEngineService;
 
     public List<Repository> getAllRepositorys() {
         List<Repository> repositories = repositoryDAO.findAll();
@@ -111,7 +111,7 @@ public class RepositoryService {
 
     private void updateSolrIndex() {
         logger.info("Updating Search Engine index...");
-        searchEngineService.updateIndex();
+        solrEngineService.updateIndex();
     }
 
     private int getCount(int count) {

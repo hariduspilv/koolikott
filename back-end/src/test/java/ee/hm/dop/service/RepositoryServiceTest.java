@@ -58,7 +58,7 @@ public class RepositoryServiceTest {
     private MaterialDAO materialDao;
 
     @Mock
-    private SearchEngineService searchEngineService;
+    private SolrEngineService solrEngineService;
 
     @Mock
     private PictureService pictureService;
@@ -84,7 +84,7 @@ public class RepositoryServiceTest {
         expect(materialIterator.hasNext()).andReturn(false);
         expectUpdateRepository(repository);
 
-        searchEngineService.updateIndex();
+        solrEngineService.updateIndex();
 
         replayAll();
 
@@ -128,7 +128,7 @@ public class RepositoryServiceTest {
 
         expect(materialIterator.hasNext()).andReturn(false);
 
-        searchEngineService.updateIndex();
+        solrEngineService.updateIndex();
 
         replayAll(material1, material2);
 
@@ -166,7 +166,7 @@ public class RepositoryServiceTest {
 
         expect(materialIterator.hasNext()).andReturn(false);
 
-        searchEngineService.updateIndex();
+        solrEngineService.updateIndex();
 
         replayAll(material);
 
@@ -209,7 +209,7 @@ public class RepositoryServiceTest {
 
         expect(materialIterator.hasNext()).andReturn(false);
 
-        searchEngineService.updateIndex();
+        solrEngineService.updateIndex();
 
         replayAll(material);
 
@@ -237,7 +237,7 @@ public class RepositoryServiceTest {
         material.setRepository(repository);
         expect(materialDao.findByRepositoryAndRepositoryIdentifier(repository, repositoryIdentifier)).andReturn(null);
 
-        searchEngineService.updateIndex();
+        solrEngineService.updateIndex();
 
         expectUpdateRepository(repository);
 
@@ -476,7 +476,7 @@ public class RepositoryServiceTest {
     }
 
     private void replayAll(Object... mocks) {
-        replay(repositoryManager, materialIterator, materialService, repositoryDAO, materialDao, searchEngineService, pictureService);
+        replay(repositoryManager, materialIterator, materialService, repositoryDAO, materialDao, solrEngineService, pictureService);
 
         if (mocks != null) {
             for (Object object : mocks) {
@@ -486,7 +486,7 @@ public class RepositoryServiceTest {
     }
 
     private void verifyAll(Object... mocks) {
-        verify(repositoryManager, materialIterator, materialService, repositoryDAO, materialDao, searchEngineService, pictureService);
+        verify(repositoryManager, materialIterator, materialService, repositoryDAO, materialDao, solrEngineService, pictureService);
 
         if (mocks != null) {
             for (Object object : mocks) {

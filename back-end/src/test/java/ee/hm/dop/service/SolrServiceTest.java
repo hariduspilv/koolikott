@@ -12,6 +12,7 @@ import static org.easymock.EasyMock.verify;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,6 +26,9 @@ import ee.hm.dop.model.solr.Response;
 import ee.hm.dop.model.solr.ResponseHeader;
 import ee.hm.dop.model.solr.SearchResponse;
 import org.apache.commons.configuration.Configuration;
+import org.apache.solr.client.solrj.SolrServerException;
+import org.apache.solr.client.solrj.response.QueryResponse;
+import org.apache.solr.common.util.SimpleOrderedMap;
 import org.easymock.EasyMockRunner;
 import org.easymock.Mock;
 import org.easymock.TestSubject;
@@ -317,6 +321,8 @@ public class SolrServiceTest {
         assertEquals(searchResponse, result);
         assertEquals(status, result.getResponseHeader().getStatus());
     }
+
+
 
     private void verifyAll(Object... mocks) {
         verify(client, configuration, target, builder);

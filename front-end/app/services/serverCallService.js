@@ -6,27 +6,27 @@ define(['angularAMD'], function(angularAMD) {
 
             function makeCall(url, method, params, includeAuthentication, successCallback, errorCallback, finallyCallback, transformRequest) {
                 headers = {};
-                
+
                 if (includeAuthentication) {
                     setAuthorization(headers);
                 }
-    
+
                 var config = {
                     method: method,
                     url: url,
                     headers: headers
                 };
-                
+
                 if (method === 'POST' || method === 'PUT') {
                     config.data = params;
                 } else {
                     config.params = params;
                 }
-                
+
                 if (transformRequest) {
                     config.transformRequest = transformRequest
                 }
-                
+
                 $http(config).
                 success(function(data) {
                     successCallback(data);
@@ -41,7 +41,7 @@ define(['angularAMD'], function(angularAMD) {
                     }
                 }).finally(finallyCallback);
             }
-            
+
             function setAuthorization(headers) {
                 if (authenticatedUserService.isAuthenticated()) {
                     var user = authenticatedUserService.getUser();
@@ -49,7 +49,7 @@ define(['angularAMD'], function(angularAMD) {
                     headers.Username = user.username;
                 }
             }
-            
+
             instance = {
                 makePost: function(url, data, successCallback, errorCallback, finallyCallback) {
                     makeCall(url, 'POST', data, true, successCallback, errorCallback, finallyCallback);
@@ -69,11 +69,11 @@ define(['angularAMD'], function(angularAMD) {
                 makeJsonp: function(url, params, successCallback, errorCallback, finallyCallback) {
                     makeCall(url, 'JSONP', params, false, successCallback, errorCallback, finallyCallback);
                 },
-                
+
                 upload: function(url, data, successCallback, errorCallback, finallyCallback) {
                     var headers = {};
                     setAuthorization(headers);
-                    
+
                     Upload.upload({
                         url: url,
                         data: data,
@@ -81,7 +81,7 @@ define(['angularAMD'], function(angularAMD) {
                     }).then(successCallback, errorCallback).finally(finallyCallback);
                 }
             };
-            
+
             return instance;
         }
     ]);

@@ -14,7 +14,7 @@ public class TagUpVoteService {
     private TagUpVoteDAO tagUpVoteDAO;
 
     @Inject
-    private SearchEngineService searchEngineService;
+    private SolrEngineService solrEngineService;
 
     @Inject
     private LearningObjectService learningObjectService;
@@ -43,7 +43,7 @@ public class TagUpVoteService {
         tagUpVote.setUser(user);
 
         TagUpVote returnTagUpVote = tagUpVoteDAO.update(tagUpVote);
-        searchEngineService.updateIndex();
+        solrEngineService.updateIndex();
 
         return returnTagUpVote;
     }
@@ -51,7 +51,7 @@ public class TagUpVoteService {
     public void delete(TagUpVote tagUpVote, User user) {
         validateIfUserHasAccessAndThrowExceptionIfNot(tagUpVote, user);
         tagUpVoteDAO.setDeleted(tagUpVote);
-        searchEngineService.updateIndex();
+        solrEngineService.updateIndex();
     }
 
     public int getUpVoteCountFor(Tag tag, LearningObject learningObject) {

@@ -16,7 +16,7 @@ import ee.hm.dop.guice.provider.ObjectMapperGuiceProvider;
 import ee.hm.dop.guice.provider.SOAPConnectionTestProvider;
 import ee.hm.dop.guice.provider.SearchEngineServiceTestProvider;
 import ee.hm.dop.guice.provider.SignatureValidatorTestProvider;
-import ee.hm.dop.service.SearchEngineService;
+import ee.hm.dop.service.SolrEngineService;
 import org.apache.commons.configuration.Configuration;
 import org.opensaml.xml.signature.SignatureValidator;
 
@@ -27,7 +27,7 @@ public class ProviderTestModule extends AbstractModule {
     protected void configure() {
         bind(EntityManagerFactory.class).toProvider(EntityManagerFactoryTestProvider.class);
         bind(Configuration.class).toProvider(ConfigurationTestProvider.class);
-        bind(SearchEngineService.class).toProvider(SearchEngineServiceTestProvider.class);
+        bind(SolrEngineService.class).toProvider(SearchEngineServiceTestProvider.class);
         bind(ObjectMapper.class).toProvider(ObjectMapperGuiceProvider.class);
         bind(SOAPConnection.class).toProvider(SOAPConnectionTestProvider.class);
         bind(Client.class).toProvider(HttpClientTestProvider.class);
