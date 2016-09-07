@@ -1,17 +1,16 @@
+<section flex>
+  <div  layout-gt-sm>
+    <article flex flex-gt-sm="75" flex-gt-lg="80" class="md-padding" role="main" id="main-content">
 
-    <section flex>
-      <div  layout-gt-sm>
-        <article flex flex-gt-sm="75" flex-gt-lg="80" class="md-padding" role="main" id="main-content">
+      <div data-dop-portfolio-summary-card comment="newComment" submit-click="addComment()" data-portfolio="portfolio"></div>
 
-          <div data-dop-portfolio-summary-card comment="newComment" submit-click="addComment()" data-portfolio="portfolio"></div>
-
-          <div id="portfolio-chapters">
-            <div data-ng-repeat="chapter in portfolio.chapters">
-              <div data-dop-chapter data-chapter="chapter" data-index="{{$index}}"></div>
-            </div>
-          </div>
-        </article>
-
-        <aside data-dop-sidebar flex id="sidebar-right" flex-gt-sm="25" flex-gt-lg="20" class="md-padding" ></aside>
+      <div id="portfolio-chapters">
+        <div data-ng-repeat="chapter in portfolio.chapters">
+          <div data-dop-chapter data-chapter="chapter" data-index="{{$index}}"></div>
+        </div>
       </div>
-    </section>
+    </article>
+
+    <aside data-dop-sidebar flex id="sidebar-right" flex-gt-sm="25" flex-gt-lg="20" class="md-padding" ></aside>
+  </div>
+</section>
