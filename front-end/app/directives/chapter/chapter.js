@@ -14,10 +14,10 @@ define([
             templateUrl: 'directives/chapter/chapter.html',
             controller: function($scope, $rootScope) {
                 $scope.isEditable = $rootScope.isEditPortfolioMode;
-                $scope.isCollapsed = true;
+                $scope.isCollapsed = false;
                 $scope.subisCollapsed = [];
                 angular.forEach($scope.chapter.subchapters, function(value, key) {
-                  $scope.subisCollapsed[value.$$hashKey] = true;
+                  $scope.subisCollapsed[value.$$hashKey] = false;
                 }, log);
 
                 if($scope.chapter.openCloseChapter == true){

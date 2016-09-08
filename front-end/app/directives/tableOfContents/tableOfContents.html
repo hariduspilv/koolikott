@@ -8,7 +8,7 @@
 <ul class="sidenav-menu toc" data-du-scroll-container="scrollable-content">
   <li ng-repeat="chapter in portfolio.chapters">
     <a href="#chapter-{{$index}}" class="md-button one-row" id="toc-chapter-{{$index}}" data-offset="130"
-       data-du-scrollspy data-ng-click="gotoChapter($event, $index)" layout="row"
+       data-du-scrollspy data-ng-click="gotoChapter($event, $index); closeSidenav('left');" layout="row"
        data-ng-class="{'with-icon': $root.isEditPortfolioMode && showAddMaterialButton}">
       {{chapter.title}}
       <span flex></span>
@@ -22,7 +22,7 @@
     <ul class="sidenav-menu-toggle-list">
       <li ng-repeat="subchapter in chapter.subchapters">
         <a href="#chapter-{{$parent.$index}}-{{$index}}" id="toc-chapter-{{$parent.$index}}-{{$index}}" data-offset="120"
-           data-du-scrollspy class="md-button one-row" layout="row" data-ng-click="gotoChapter($event, $parent.$index, $index)"
+           data-du-scrollspy class="md-button one-row" layout="row" data-ng-click="gotoChapter($event, $parent.$index, $index); closeSidenav('left');"
            data-ng-class="{'with-icon': $root.isEditPortfolioMode && showAddMaterialButton}">
           {{subchapter.title}}
           <span flex></span>

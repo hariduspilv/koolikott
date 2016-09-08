@@ -5,7 +5,7 @@
         <div flex>
           <div flex layout="row">
             <h2 ng-class="{'chapter-title': chapter.text.length == undefined || chapter.text.length == 0}">{{chapter.title}}</h2>
-              <div class="chapter-arrow">
+              <div class="chapter-arrow toggled">
                 <md-icon class="material-icons md-primary">keyboard_arrow_right</md-icon>
               </div>
           </div>
@@ -18,7 +18,7 @@
       </md-card-content>
       <md-card-content data-ng-if="isEditable">
         <div layout="row" layout-align="start center">
-          <div class="chapter-arrow" ng-class="{'toggled': chapter.openCloseChapter}" ng-click="editToggle($event); ocChapter()">
+          <div class="chapter-arrow toggled" ng-click="editToggle($event); ocChapter()">
             <md-icon class="material-icons md-primary">keyboard_arrow_right</md-icon>
             <md-tooltip md-direction="bottom">
               <span data-ng-if="isCollapsed" data-translate="TOOLTIP_OPEN_CHAPTER">Open chapter</span>
@@ -69,7 +69,7 @@
           <div flex>
             <div layout="row">
               <h3>{{subchapter.title}}</h3>
-              <div class="chapter-arrow" >
+              <div class="chapter-arrow toggled" >
                 <md-icon class="material-icons md-primary">keyboard_arrow_right</md-icon>
               </div>
             </div>
@@ -82,7 +82,7 @@
         </md-card-content>
         <md-card-content data-ng-if="isEditable">
           <div layout="row" layout-align="start center">
-            <div class="chapter-arrow" ng-click="editToggle($event); ocSubChapter(subchapter)" ng-class="{'toggled': subchapter.openCloseChapter}">
+            <div class="chapter-arrow toggled" ng-click="editToggle($event); ocSubChapter(subchapter)">
               <md-icon class="material-icons md-primary">keyboard_arrow_right</md-icon>
               <md-tooltip md-direction="bottom">
                 <span data-ng-if="subisCollapsed[subchapter.$$hashKey]" data-translate="TOOLTIP_OPEN_SUBCHAPTER">Open subchapter</span>
