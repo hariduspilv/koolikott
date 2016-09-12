@@ -80,9 +80,7 @@ define([
                             return null;
                         }
                         return $http.get(suggestService.getURL(query)).then(function (response) {
-                            if(response && response.data){
-                                return response.data.alternatives;
-                            }
+                            return response.data.alternatives;
                         });
                     };
 

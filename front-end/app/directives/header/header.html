@@ -44,7 +44,8 @@
                              md-search-text="searchFields.searchQuery"
                              md-input-maxlength="100"
                              md-input-minlength="0"
-                             id="header-simple-search-input">
+                             id="header-simple-search-input"
+                             ng-model-options="{debounce: 200}">
               <md-item-template>
                 <span md-highlight-text="searchFields.searchQuery">{{ suggestion }}</span>
               </md-item-template>
