@@ -76,26 +76,14 @@ define([
                     };
 
                     $scope.suggest.doSuggest = function (query) {
-                        if(query == null){return null;}
-                        return $http.get(suggestService.getURL(query)).then( function (response){
-                            return response.data.alternatives;
-                        });
-                    };
-
-                    function suggestSuccess(data){
-                        return data.alternatives;
-                    }
-
-                    function suggestFailure(){
-                        console.log("Failed to obtain data from Solr");
-                    }
-
-                    $scope.searchFieldEnterPressed = function () {
-                        if ($scope.detailedSearch.isVisible) {
-                            $scope.detailedSearch.accessor.search();
-                        } else {
-                            $scope.search();
+                        if (query == null) {
+                            return null;
                         }
+                        return $http.get(suggestService.getURL(query)).then(function (response) {
+                            if(response && response.data){
+                                return response.data.alternatives;
+                            }
+                        });
                     };
 
                     $scope.clickOutside = function () {
