@@ -37,7 +37,8 @@
 
           <md-input-container flex>
             <label hidden="hidden">&nbsp;</label>
-            <md-autocomplete md-autoselect md-selected-item="suggest.selectedItem"
+            <md-autocomplete md-autoselect
+                             md-selected-item="suggest.selectedItem"
                              md-autofocus
                              md-item-text="suggestion.term"
                              md-items="suggestion in suggest.doSuggest(searchFields.searchQuery)"
@@ -45,7 +46,7 @@
                              md-input-maxlength="100"
                              md-input-minlength="0"
                              id="header-simple-search-input"
-                             ng-model-options="{debounce: 200}">
+                             ng-model-options="{debounce: 100}">
               <md-item-template>
                 <span md-highlight-text="searchFields.searchQuery">{{ suggestion }}</span>
               </md-item-template>

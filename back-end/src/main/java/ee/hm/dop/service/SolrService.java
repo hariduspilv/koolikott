@@ -73,7 +73,7 @@ public class SolrService implements SolrEngineService {
 
     @Override
     public SpellCheckResponse.Suggestion suggest(String query) {
-        if(query.isEmpty()){
+        if (query.isEmpty()) {
             return null;
         }
         QueryResponse qr = null;
@@ -88,8 +88,12 @@ public class SolrService implements SolrEngineService {
         }
 
         String queryString = query.replaceAll("\\+", " ").toLowerCase();
+        SpellCheckResponse spellCheckResponse = qr.getSpellCheckResponse();
+        if (spellCheckResponse != null) {
+            return spellCheckResponse.getSuggestion(queryString);
+        }
 
-        return qr.getSpellCheckResponse().getSuggestion(queryString);
+        return null;
     }
 
     @Override

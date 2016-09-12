@@ -77,10 +77,10 @@ define([
 
                     $scope.suggest.doSuggest = function (query) {
                         if (query == null) {
-                            return null;
+                            return [];
                         }
                         return $http.get(suggestService.getURL(query)).then(function (response) {
-                            return response.data.alternatives;
+                            return response.data.alternatives || [];
                         });
                     };
 
