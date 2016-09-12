@@ -13,7 +13,7 @@
         </md-tooltip>
       </md-button>
 
-      <a href="#" data-ng-click="getTagSearchURL($event, $chip.tag)">{{$chip.tag}}</a>
+      <a href="search/result?q=tag:'{{$chip.tag}}'" data-ng-click="getTagSearchURL($event, $chip.tag)">{{$chip.tag}}</a>
 
       <md-button data-ng-if="!$chip.tagUpVote && isAllowed()" class="md-icon-button" ng-click="upVote($chip)">
         <md-icon>plus_one</md-icon>
