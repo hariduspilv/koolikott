@@ -5,8 +5,8 @@ define([
     'services/authenticatedUserService',
     'services/serverCallService',
     'services/alertService'
-], function(app) {
-    return ['$scope', '$route', 'authenticatedUserService', 'serverCallService', '$location', 'alertService', function($scope, $route, authenticatedUserService, serverCallService, $location, alertService) {
+], function (app) {
+    return ['$scope', '$route', 'authenticatedUserService', 'serverCallService', '$location', 'alertService', function ($scope, $route, authenticatedUserService, serverCallService, $location, alertService) {
         function init() {
             isMyProfilePage();
 
@@ -14,8 +14,10 @@ define([
                 getUser();
             }
 
-            getUsersMaterials();
-            getUsersPortfolios();
+            if ($route.current.params.username) {
+                getUsersMaterials();
+                getUsersPortfolios();
+            }
         }
 
         function isMyProfilePage() {
@@ -47,7 +49,6 @@ define([
 
         function getUserFail() {
             console.log('Getting user failed.');
-            alertService.setErrorAlert('ERROR_GETTING_USER_FAILED');
             $location.url('/');
         }
 
