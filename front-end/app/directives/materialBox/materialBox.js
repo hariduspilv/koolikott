@@ -47,13 +47,13 @@ define([
 
                     $scope.formatName = function (name) {
                         if (name) {
-                            return formatNameToInitials(name);
+                            return formatNameToInitials(name.trim());
                         }
                     };
 
                     $scope.formatSurname = function (surname) {
                         if (surname) {
-                            return formatSurnameToInitialsButLast(surname);
+                            return formatSurnameToInitialsButLast(surname.trim());
                         }
                     };
 

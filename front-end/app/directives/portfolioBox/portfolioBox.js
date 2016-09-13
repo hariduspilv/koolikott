@@ -17,15 +17,15 @@ define([
                     $location.path('/portfolio').search({
                         id: portfolio.id
                     });
-                }
+                };
 
                 $scope.formatName = function(name) {
-                    return formatNameToInitials(name);
-                }
+                    return formatNameToInitials(name.trim());
+                };
 
                 $scope.formatSurname = function(surname) {
-                    return formatSurnameToInitialsButLast(surname);
-                }
+                    return formatSurnameToInitialsButLast(surname.trim());
+                };
 
                 $scope.formatDate = function(date) {
                     return formatDateToDayMonthYear(date);
