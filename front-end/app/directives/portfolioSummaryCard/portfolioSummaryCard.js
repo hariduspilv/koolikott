@@ -144,7 +144,7 @@ define([
                         if (newValue !== oldValue && $scope.portfolio) {
                             $scope.portfolioSubject = getSubject($scope.portfolio.taxon);
                         }
-                    }, true)
+                    }, true);
 
                     init();
                 }

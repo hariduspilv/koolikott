@@ -22,6 +22,7 @@ define([
                 var SECONDARY_EDUCATION_ID = 3;
                 var VOCATIONAL_EDUCATION_ID = 4;
                 var initiated = false;
+                var prefilling = false;
 
                 var taxon;
 
@@ -241,6 +242,7 @@ define([
                     var firstAuthor;
                     var main = query;
 
+                    var title;
                     while (title = titleRegex.exec(query)) {
                         // Remove token from main query
                         main = main.replace(title[2], '');
@@ -251,6 +253,7 @@ define([
                         }
                     }
 
+                    var description;
                     while (description = descriptionRegex.exec(query)) {
                         main = main.replace(description[2], '');
                         if (!firstDescription) {
@@ -258,6 +261,7 @@ define([
                         }
                     }
 
+                    var author;
                     while (author = authorRegex.exec(query)) {
                         main = main.replace(author[2], '');
                         if (!firstAuthor) {
@@ -265,6 +269,7 @@ define([
                         }
                     }
 
+                    var keyword;
                     while (keyword = clilRegex.exec(query)) {
                         main = main.replace(keyword[2], '');
                         $scope.detailedSearch.CLIL = true;
@@ -311,15 +316,18 @@ define([
                     }, true);
 
                     $scope.$watch('detailedSearch.taxon.id', function (newTaxon, oldTaxon) {
-                        if (!$scope.detailedSearch.taxon)
+                        if (!$scope.detailedSearch.taxon) {
                             $scope.detailedSearch.educationalContext = null;
+                        }
 
-                        if (newTaxon !== oldTaxon && $scope.detailedSearch.taxon) {
+                        if (newTaxon !== oldTaxon && $scope.detailedSearch.taxon && !prefilling) {
                             $scope.detailedSearch.educationalContext = $rootScope.taxonUtils.getEducationalContext($scope.detailedSearch.taxon);
                             clearHiddenFields();
                             $scope.search();
+                        } else if(prefilling) {
+                            prefilling = false;
                         }
-                    }, true);
+                    }, false);
 
                     $scope.$watch('detailedSearch', function (newValue, oldValue) {
                         if ($scope.isVisible && newValue !== oldValue) {
@@ -327,10 +335,10 @@ define([
                         }
                     }, true);
 
-                    $scope.$watch(function () {
-                        return $rootScope.savedPortfolio
-                    }, function () {
-                        setEditModePrefill();
+                    $rootScope.$watch('savedPortfolio', function (newValue, oldValue) {
+                        if (newValue && oldValue && newValue !== oldValue) {
+                            setEditModePrefill();
+                        }
                     }, false);
                 }
 
@@ -412,8 +420,9 @@ define([
                 function setEditModePrefill() {
                     if ($rootScope.isEditPortfolioMode && $rootScope.savedPortfolio) {
                         try {
-                            $scope.detailedSearch.taxon = Object.create($rootScope.savedPortfolio).taxon;
+                            $scope.detailedSearch.taxon = Object.create($rootScope.savedPortfolio.taxon);
                             $scope.detailedSearch.targetGroups = Object.create($rootScope.savedPortfolio.targetGroups);
+                            prefilling = true;
                         } catch (e) {
                         }
                         $scope.detailedSearch.type = "material";
