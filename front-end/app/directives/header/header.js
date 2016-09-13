@@ -23,6 +23,7 @@ define([
                     $scope.suggest = {};
                     $scope.suggest.suggestions = null;
                     $scope.suggest.selectedItem = null;
+                    var dontSearch = false;
                     $scope.detailedSearch.accessor = {
                         clearSimpleSearch: function () {
                             $scope.searchFields.searchQuery = '';
@@ -61,12 +62,9 @@ define([
                         $timeout(function () {
                             $scope.detailedSearch.accessor.clear();
                         }, 500);
-
+                        dontSearch = true;
                         $scope.detailedSearch.isVisible = false;
-                        $scope.searchFields.searchQuery = (($scope.searchFields.searchQuery || "") + " " + $scope.detailedSearch.queryOut).trim();
                         $scope.detailedSearch.queryIn = null;
-                        $scope.searchFields.searchQuery = "";
-                        $scope.detailedSearch.mainField = "";
                     };
 
                     $scope.detailedSearch.doSearch = function () {
@@ -79,7 +77,8 @@ define([
                         if (query == null) {
                             return [];
                         }
-                        return $http.get(suggestService.getURL(query)).then(function (response) {
+
+                        return $http.get(suggestService.getURL(query), {cache: true}).then(function (response) {
                             return response.data.alternatives || [];
                         });
                     };
@@ -101,11 +100,13 @@ define([
 
                     $scope.$watch('searchFields.searchQuery', function (newValue, oldValue) {
                         $scope.searchFields.searchQuery = newValue || "";
-                        if (newValue !== oldValue && !$scope.detailedSearch.isVisible) {
+                        if (newValue !== oldValue && !$scope.detailedSearch.isVisible && !dontSearch) {
                             $scope.search();
                         } else if ($scope.detailedSearch.isVisible) {
                             $scope.detailedSearch.queryIn = $scope.searchFields.searchQuery;
                         }
+
+                        if (dontSearch) dontSearch = false;
                     }, true);
 
                     $scope.$watch(function () {
