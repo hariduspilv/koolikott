@@ -14,11 +14,13 @@ h2 {
 $heading-color: #212121;
 
 .one-row {
-  min-height: 15px;
-  line-height: 15px;
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
+  .authors {
+    min-height: 15px;
+    line-height: 15px;
+  }
 }
 
 .ellipsisText {

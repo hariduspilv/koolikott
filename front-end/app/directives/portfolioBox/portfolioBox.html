@@ -27,9 +27,11 @@
     <a data-ng-href="{{'/portfolio?id=' + portfolio.id}}" class="no-link materialbox-content">
       <h4 class="md-headline two-rows" data-ng-bind="portfolio.title"></h4>
       <p class="md-caption one-row">
-        <span data-ng-bind="formatName(portfolio.creator.name)"></span>
-        <span data-ng-bind="formatSurname(portfolio.creator.surname)"></span>
-        <span data-ng-if="portfolio.added">{{ formatDate(portfolio.added) }}</span>
+        <span class="authors">
+          <span data-ng-bind="formatName(portfolio.creator.name)"></span>
+          <span data-ng-bind="formatSurname(portfolio.creator.surname)"></span>
+          <span data-ng-if="portfolio.added">{{ formatDate(portfolio.added) }}</span>
+        </span>
       </p>
     </a>
   </md-card-content>
