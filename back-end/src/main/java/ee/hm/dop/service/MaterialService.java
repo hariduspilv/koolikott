@@ -328,15 +328,18 @@ public class MaterialService implements LearningObjectHandler {
         setAuthors(material);
         setPublishers(material);
         material = applyRestrictions(material);
-        material.setDescriptions(getSanitizedHTML(material.getDescriptions()));
+        if (material.getDescriptions() != null) {
+            material.setDescriptions(getSanitizedHTML(material.getDescriptions()));
+        }
         return (Material) materialDao.update(material);
     }
 
     private List<LanguageString> getSanitizedHTML(List<LanguageString> descriptions) {
         PolicyFactory policy = Sanitizers.FORMATTING.and(Sanitizers.FORMATTING.and(Sanitizers.BLOCKS).and(Sanitizers.STYLES).and(Sanitizers.TABLES));
-        for (LanguageString description : descriptions) {
-            description.setText(policy.sanitize(description.getText()));
-        }
+        descriptions
+                .stream()
+                .filter(description -> description.getText() != null)
+                .forEach(description -> description.setText(policy.sanitize(description.getText())));
 
         return descriptions;
     }

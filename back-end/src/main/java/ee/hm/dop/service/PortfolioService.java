@@ -348,8 +348,10 @@ public class PortfolioService implements LearningObjectHandler {
     }
 
     private String getSanitizedHTML(String summary) {
-        PolicyFactory policy = Sanitizers.FORMATTING.and(Sanitizers.FORMATTING.and(Sanitizers.BLOCKS).and(Sanitizers.STYLES).and(Sanitizers.TABLES));
-        summary = policy.sanitize(summary);
+        if (summary != null) {
+            PolicyFactory policy = Sanitizers.FORMATTING.and(Sanitizers.FORMATTING.and(Sanitizers.BLOCKS).and(Sanitizers.STYLES).and(Sanitizers.TABLES));
+            summary = policy.sanitize(summary);
+        }
 
         return summary;
     }

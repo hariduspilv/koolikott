@@ -124,6 +124,7 @@ public class MaterialServiceTest {
         EducationalContext educationalContext = new EducationalContext();
         educationalContext.setName(MaterialService.BASICEDUCATION);
         expect(material.getTaxons()).andReturn(Arrays.asList(educationalContext)).times(3);
+        expect(material.getDescriptions()).andReturn(null);
 
         expect(materialDAO.findByIdNotDeleted(materialId)).andReturn(original);
         expect(materialDAO.update(material)).andReturn(material);
@@ -179,6 +180,7 @@ public class MaterialServiceTest {
         expect(material.getAuthors()).andReturn(null);
         expect(material.getPublishers()).andReturn(null);
         expect(material.getTaxons()).andReturn(null);
+        expect(material.getDescriptions()).andReturn(null);
         material.setKeyCompetences(null);
         material.setCrossCurricularThemes(null);
 
