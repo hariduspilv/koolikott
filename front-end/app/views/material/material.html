@@ -35,7 +35,7 @@
                       <md-button class="md-icon-button" ng-click="$mdOpenMenu($event)">
                         <md-icon md-menu-origin>more_vert</md-icon>
                       </md-button>
-                      <md-menu-content width="4" class="material-menu-icon" >
+                      <md-menu-content width="4" class="material-menu-icon">
 
                         <md-menu-item
                           data-ng-if="isAdmin() || isUsersMaterial() || isModerator()">
@@ -145,7 +145,8 @@
                   <md-divider class="md-default-theme"></md-divider>
                   <!-- left description  -->
                   <div class="on-left" flex>
-                    <p class="md-body-1 description" data-ng-bind-html="getCorrectLanguageString(material.descriptions)"></p>
+                    <p class="md-body-1 description"
+                       data-ng-bind-html="getCorrectLanguageString(material.descriptions)"></p>
 
                     <div data-ng-if="sourceType === 'YOUTUBE'" class="embed-responsive embed-responsive-16by9">
                       <div class="embed-responsive-container">
