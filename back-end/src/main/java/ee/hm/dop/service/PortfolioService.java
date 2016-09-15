@@ -15,6 +15,7 @@ import ee.hm.dop.dao.PortfolioDAO;
 import ee.hm.dop.dao.UserLikeDAO;
 import ee.hm.dop.model.Chapter;
 import ee.hm.dop.model.Comment;
+import ee.hm.dop.model.LanguageString;
 import ee.hm.dop.model.LearningObject;
 import ee.hm.dop.model.Portfolio;
 import ee.hm.dop.model.Recommendation;
@@ -24,6 +25,8 @@ import ee.hm.dop.model.UserLike;
 import ee.hm.dop.model.Visibility;
 import ee.hm.dop.service.learningObject.LearningObjectHandler;
 import org.joda.time.DateTime;
+import org.owasp.html.PolicyFactory;
+import org.owasp.html.Sanitizers;
 
 public class PortfolioService implements LearningObjectHandler {
 
@@ -322,7 +325,7 @@ public class PortfolioService implements LearningObjectHandler {
     private Portfolio getPortfolioWithAllowedFieldsOnCreate(Portfolio portfolio) {
         Portfolio safePortfolio = new Portfolio();
         safePortfolio.setTitle(portfolio.getTitle());
-        safePortfolio.setSummary(portfolio.getSummary());
+        safePortfolio.setSummary(getSanitizedHTML(portfolio.getSummary()));
         safePortfolio.setTags(portfolio.getTags());
         safePortfolio.setTargetGroups(portfolio.getTargetGroups());
         safePortfolio.setTaxon(portfolio.getTaxon());
@@ -334,7 +337,7 @@ public class PortfolioService implements LearningObjectHandler {
 
     private Portfolio setPortfolioUpdatableFields(Portfolio originalPortfolio, Portfolio portfolio) {
         originalPortfolio.setTitle(portfolio.getTitle());
-        originalPortfolio.setSummary(portfolio.getSummary());
+        originalPortfolio.setSummary(getSanitizedHTML(portfolio.getSummary()));
         originalPortfolio.setTags(portfolio.getTags());
         originalPortfolio.setTargetGroups(portfolio.getTargetGroups());
         originalPortfolio.setTaxon(portfolio.getTaxon());
@@ -342,6 +345,13 @@ public class PortfolioService implements LearningObjectHandler {
         originalPortfolio.setVisibility(portfolio.getVisibility());
         originalPortfolio.setPicture(portfolio.getPicture());
         return originalPortfolio;
+    }
+
+    private String getSanitizedHTML(String summary) {
+        PolicyFactory policy = Sanitizers.FORMATTING.and(Sanitizers.FORMATTING.and(Sanitizers.BLOCKS).and(Sanitizers.STYLES).and(Sanitizers.TABLES));
+        summary = policy.sanitize(summary);
+
+        return summary;
     }
 
     private boolean isPortfolioVisibleToUser(Portfolio portfolio, User loggedInUser) {
