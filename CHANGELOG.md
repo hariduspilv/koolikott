@@ -39,4 +39,5 @@
 * Materialboxi jalus ülemõõduline https://github.com/e-koolikott/DOP/issues/9
 * Detailvaate metaväljad katki mobiilis https://github.com/e-koolikott/DOP/issues/10
 
+
 ### varasemad versioonid muudatuste logis ei kajastu
