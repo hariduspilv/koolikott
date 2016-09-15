@@ -11,7 +11,7 @@
 * eKoolist sisse logides tuleb error https://github.com/e-koolikott/DOP/issues/39
 * Otsingu lehel ei tühista "Tühista valikud" haridustaset https://github.com/e-koolikott/DOP/issues/47
 * Kogumiku peatükkide sisu ei ole näha https://github.com/e-koolikott/DOP/issues/55
-* * Firefox lõikab video serva https://github.com/e-koolikott/DOP/issues/63
+* Firefox lõikab video serva https://github.com/e-koolikott/DOP/issues/63
 
 ## e-Koolikott 1.1.1 (12.08.2016)
 
