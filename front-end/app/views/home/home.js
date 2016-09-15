@@ -4,7 +4,8 @@ define([
     'directives/portfolioBox/portfolioBox',
     'services/storageService'
 ], function (serverCallService) {
-    return ['$scope', 'serverCallService', '$rootScope', 'storageService', '$timeout', function ($scope, serverCallService, $rootScope, storageService, $timeout) {
+    return ['$scope', 'serverCallService', '$rootScope', 'storageService', '$timeout',
+        function ($scope, serverCallService, $rootScope, storageService, $timeout) {
         $scope.showHints = true;
         $rootScope.savedPortfolio = null;
         $scope.newestItems = storageService.getNewestItems();

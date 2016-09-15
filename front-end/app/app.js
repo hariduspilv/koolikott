@@ -17,6 +17,7 @@ define([
     'ng-file-upload',
 
     'angular-bootstrap',
+    'textAngular',
 
     /* app wide modules */
     'directives/header/header',
@@ -42,10 +43,16 @@ define([
         'duScroll',
         'ngFileUpload',
         'ui.bootstrap',
-        'DOPconstants'
+        'DOPconstants',
+        'textAngular'
     ]);
 
     app.config(function ($routeProvider, $locationProvider, $controllerProvider, $compileProvider, $filterProvider, $provide, $translateProvider, $sceProvider, $mdThemingProvider, $httpProvider, $mdDateLocaleProvider, $anchorScrollProvider) {
+            //Add rangy manually to the window from the rangy-core, as textAngular needs it and requireJS can't add it
+            require(['rangy-core'], function (rangy) {
+                window.rangy = rangy;
+            });
+
             $compileProvider.debugInfoEnabled(false);
             app.controller = $controllerProvider.register;
             app.directive = $compileProvider.directive;
@@ -92,6 +99,49 @@ define([
 
             $locationProvider.html5Mode(true);
             $anchorScrollProvider.disableAutoScrolling();
+
+        $provide.decorator('taOptions', ['$delegate', function(taOptions){
+            taOptions.forceTextAngularSanitize = true;
+            taOptions.keyMappings = [];
+            taOptions.toolbar = [
+                ['h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'p', 'pre', 'quote'],
+                ['bold', 'italics', 'underline', 'ul', 'ol', 'redo', 'undo', 'clear'],
+                ['justifyLeft','justifyCenter','justifyRight', 'justifyFull']
+            ];
+            // TODO: Mare/Aleks valib välja ikoonid ja loob uue visuaali
+
+            taOptions.classes = {
+                focussed: 'focussed',
+                toolbar: 'btn-toolbar',
+                toolbarGroup: 'btn-group',
+                toolbarButton: 'btn btn-default',
+                toolbarButtonActive: 'active',
+                disabled: 'disabled',
+                textEditor: 'form-control',
+                htmlEditor: 'form-control'
+            };
+            return taOptions; // whatever you return will be the taOptions
+        }]);
+        // TODO: Mare/Aleks valib välja ikoonid ja loob uue visuaali
+
+        $provide.decorator('taTools', ['$delegate', function(taTools){
+            // taTools.bold.iconclass = 'icon-bold';
+            // taTools.italics.iconclass = 'icon-italic';
+            // taTools.underline.iconclass = 'icon-underline';
+            // taTools.ul.iconclass = 'icon-list-ul';
+            // taTools.ol.iconclass = 'icon-list-ol';
+            // taTools.undo.iconclass = 'icon-undo';
+            // taTools.redo.iconclass = 'icon-repeat';
+            // taTools.justifyLeft.iconclass = 'icon-align-left';
+            // taTools.justifyRight.iconclass = 'icon-align-right';
+            // taTools.justifyCenter.iconclass = 'icon-align-center';
+            // taTools.clear.iconclass = 'icon-ban-circle';
+            // taTools.insertLink.iconclass = 'icon-link';
+            // taTools.insertImage.iconclass = 'icon-picture';
+            // delete taTools.quote.iconclass;
+            // taTools.quote.buttontext = 'quote';
+            return taTools;
+        }]);
         }
     );
 

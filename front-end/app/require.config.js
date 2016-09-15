@@ -26,6 +26,11 @@ require.config({
         'moment': 'libs/moment/min/moment.min',
         'angular-bootstrap': 'utils/ui-bootstrap-custom-tpls-1.3.3.min',
         'DOPconstants': 'constants',
+        'rangy-core': 'libs/rangy/rangy-core.min',
+        'rangy-selectionsaverestore': 'libs/rangy/rangy-selectionsaverestore.min',
+        'textAngular-sanitize': 'libs/textAngular/dist/textAngular-sanitize.min',
+        'textAngularSetup': 'libs/textAngular/dist/textAngularSetup',
+        'textAngular': 'libs/textAngular/dist/textAngular'
     },
     shim: {
         'angular': ['jquery'],
@@ -59,7 +64,12 @@ require.config({
             'jquery'
         ],
         'angular-bootstrap': ['angular'],
-        'DOPconstants': ['angular']
+        'DOPconstants': ['angular'],
+        'rangy-core': ['angularAMD'],
+        'rangy-selectionsaverestore': ['rangy-core'],
+        'textAngular-sanitize': ['angular', 'rangy-selectionsaverestore'],
+        'textAngularSetup': ['angular', 'rangy-selectionsaverestore'],
+        'textAngular': ['angular', 'rangy-selectionsaverestore', 'textAngular-sanitize', 'textAngularSetup']
     },
     deps: ['app']
 });

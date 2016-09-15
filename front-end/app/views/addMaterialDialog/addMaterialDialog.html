@@ -122,7 +122,8 @@
                       </div>
                       <div data-ng-message="file"
                            data-ng-show="invalidFile && invalidFile.length > 0"
-                           class="upload-file-error"><span data-translate="DOCUMENT_MAX_SIZE"> {{maxFileSize}}MB</span></div>
+                           class="upload-file-error"><span data-translate="DOCUMENT_MAX_SIZE"> {{maxFileSize}}MB</span>
+                      </div>
                     </div>
 
                     <div flex></div>
@@ -164,10 +165,8 @@
                   </md-input-container>
                 </div>
                 <div layout="row" layout-align="top center">
-                  <md-input-container flex>
-                    <label data-translate="MATERIAL_DESCRIPTION"></label>
-                    <textarea ng-model="metadata.description" rows="2"></textarea>
-                  </md-input-container>
+                  <div text-angular id="add-material-description-input"
+                       placeholder="{{'MATERIAL_DESCRIPTION' | translate}}" ng-model="metadata.description"></div>
                   <md-button class="md-icon-button md-primary" data-ng-show="$index+1 === titleDescriptionGroups.length"
                              data-ng-click="addNewMetadata()">
                     <md-icon>add_circle</md-icon>

@@ -3,96 +3,112 @@
     <div class="md-toolbar-tools" flex>
       <h2 data-translate="PORTFOLIO_METADATA_TOOLBAR_LABEL"></h2>
       <span flex></span>
-      <md-button ng-click="cancel()" id="add-portfolio-close" class="md-icon-button" aria-label="Sulge kogumiku lisamise modaalaken">
+      <md-button ng-click="cancel()" id="add-portfolio-close" class="md-icon-button"
+                 aria-label="Sulge kogumiku lisamise modaalaken">
         <md-icon>close</md-icon>
       </md-button>
     </div>
   </md-toolbar>
-    <md-content class="md-padding">
-      <div layout="row" layout-align="center center" layout-xs="column" layout-align-xs="start stretch">
-        <div flex flex-sm="25" flex-md="20" flex-gt-md="15" class="md-padding">
-          <div data-ngf-drop ngf-select ng-model="newPicture" class="drop-box"
-            data-ngf-drag-over-class="'dragover'"
-            data-ngf-multiple="false"
-            data-accept="image/*"
-            data-ngf-pattern="'image/*'"
-            data-ngf-max-size="{{maxPictureSize + 'MB'}}"
-            ngf-model-invalid="invalidPicture"
-            layout="row"
-            layout-align="center center" flex>
+  <md-content class="md-padding">
+    <div layout="row" layout-align="center center" layout-xs="column" layout-align-xs="start stretch">
+      <div flex flex-sm="25" flex-md="20" flex-gt-md="15" class="md-padding">
+        <div data-ngf-drop ngf-select ng-model="newPicture" class="drop-box"
+             data-ngf-drag-over-class="'dragover'"
+             data-ngf-multiple="false"
+             data-accept="image/*"
+             data-ngf-pattern="'image/*'"
+             data-ngf-max-size="{{maxPictureSize + 'MB'}}"
+             ngf-model-invalid="invalidPicture"
+             layout="row"
+             layout-align="center center" flex>
 
             <span flex data-ng-if="!newPicture && !newPortfolio.picture && !showErrorOverlay">
-              <md-icon>insert_photo</md-icon><br />
+              <md-icon>insert_photo</md-icon><br/>
               <span data-ng-class="{'error-text': (invalidPicture && invalidPicture.length > 0)}">
                 <span data-translate="MAX_SIZE"></span> {{maxPictureSize}}MB
               </span>
             </span>
 
-            <!-- image preview -->
-            <md-input-container data-ng-if="newPicture || newPortfolio.picture" class="md-block drop-box-preview-container">
-              <div class="drop-box-preview">
-                <img data-ng-if="newPicture" data-ngf-thumbnail="newPicture" ngf-size="{width: 300, height: 300, quality: 0.9}" alt="photo">
-                <img data-ng-if="!newPicture && newPortfolio.picture" data-ng-src="rest/picture/{{newPortfolio.picture.name}}" ngf-size="{width: 300, height: 300, quality: 0.9}" alt="photo">
-              </div>
-            </md-input-container>
+          <!-- image preview -->
+          <md-input-container data-ng-if="newPicture || newPortfolio.picture"
+                              class="md-block drop-box-preview-container">
+            <div class="drop-box-preview">
+              <img data-ng-if="newPicture" data-ngf-thumbnail="newPicture"
+                   ngf-size="{width: 300, height: 300, quality: 0.9}" alt="photo">
+              <img data-ng-if="!newPicture && newPortfolio.picture"
+                   data-ng-src="rest/picture/{{newPortfolio.picture.name}}"
+                   ngf-size="{width: 300, height: 300, quality: 0.9}" alt="photo">
+            </div>
+          </md-input-container>
 
-            <span flex class="error-overlay" data-ng-if="showErrorOverlay">
+          <span flex class="error-overlay" data-ng-if="showErrorOverlay">
               <span class="error-text">
                 <span data-translate="UPLOADED_PICTURE_TOO_BIG"></span>
               </span>
             </span>
-          </div>
-          <md-tooltip><span data-translate="PORTFOLIO_PHOTO_UPLOAD_HELP"></span></md-tooltip>
         </div>
-        <form name="addPortfolioForm" flex-gt-xs="90">
-          <md-input-container class="md-block" layout-fill>
-            <label>
-              <span data-translate="PORTFOLIO_TITLE"></span>
-            </label>
-            <input data-ng-model="newPortfolio.title" id="add-portfolio-title-input" name="title" required>
-            <div data-ng-messages="addPortfolioForm.title.$error" data-ng-show="addPortfolioForm.title.$dirty || addPortfolioForm.title.$touched">
-              <div data-ng-message="required" data-ng-show="addPortfolioForm.title.$error.required" data-translate="PORTFOLIO_TITLE_IS_MANDATORY"></div>
-            </div>
-          </md-input-container>
-        </form>
+        <md-tooltip><span data-translate="PORTFOLIO_PHOTO_UPLOAD_HELP"></span></md-tooltip>
       </div>
+      <form name="addPortfolioForm" flex-gt-xs="90">
+        <md-input-container class="md-block" layout-fill>
+          <label>
+            <span data-translate="PORTFOLIO_TITLE"></span>
+          </label>
+          <input data-ng-model="newPortfolio.title" id="add-portfolio-title-input" name="title" required>
+          <div data-ng-messages="addPortfolioForm.title.$error"
+               data-ng-show="addPortfolioForm.title.$dirty || addPortfolioForm.title.$touched">
+            <div data-ng-message="required" data-ng-show="addPortfolioForm.title.$error.required"
+                 data-translate="PORTFOLIO_TITLE_IS_MANDATORY"></div>
+          </div>
+        </md-input-container>
+      </form>
+    </div>
 
-      <md-input-container class="md-block">
-        <label data-translate="PORTFOLIO_SUMMARY">Kirjeldus</label>
-        <textarea id="add-portfolio-description-input" data-ng-model="newPortfolio.summary" columns="1" md-maxlength="150"></textarea>
-      </md-input-container>
+    <md-input-container class="md-block">
+      <div text-angular id="add-portfolio-description-input" placeholder="{{'PORTFOLIO_SUMMARY' | translate}}"
+           ng-model="newPortfolio.summary"></div>
 
-      <div data-dop-taxon-selector data-taxon="newPortfolio.taxon" data-is-add-portfolio-view="true" data-touched="isTouched" data-layout-sm="column" flex></div>
-      <div layout="row" flex layout-align="space-between center"
-           data-ng-show="isTouched.trigger && !isSet()">
-        <div class="validation-messages" data-translate="PORTFOLIO_DOMAIN_REQUIRED"></div>
-      </div>
+    </md-input-container>
 
-      <div data-dop-target-group-selector data-target-groups="newPortfolio.targetGroups" data-is-required="{trigger: true}"></div>
+    <div data-dop-taxon-selector data-taxon="newPortfolio.taxon" data-is-add-portfolio-view="true"
+         data-touched="isTouched" data-layout-sm="column" flex></div>
+    <div layout="row" flex layout-align="space-between center"
+         data-ng-show="isTouched.trigger && !isSet()">
+      <div class="validation-messages" data-translate="PORTFOLIO_DOMAIN_REQUIRED"></div>
+    </div>
 
-      <md-input-container class="md-block">
-        <label>&nbsp;</label>
-        <md-chips data-ng-model="newPortfolio.tags" delete-button-label="{{'ADD_PORTFOLIO_REMOVE_TAG' | translate}}"
-                  delete-hint="{{'ADD_PORTFOLIO_REMOVE_TAG_HINT' | translate}}" secondary-placeholder="{{'ADD_PORTFOLIO_PRESS_ENTER' | translate}}" placeholder="{{'ADD_PORTFOLIO_PRESS_ENTER' | translate}}">
-        </md-chips>
-      </md-input-container>
+    <div data-dop-target-group-selector data-target-groups="newPortfolio.targetGroups"
+         data-is-required="{trigger: true}"></div>
 
-    </md-content>
+    <md-input-container class="md-block">
+      <label>&nbsp;</label>
+      <md-chips data-ng-model="newPortfolio.tags" delete-button-label="{{'ADD_PORTFOLIO_REMOVE_TAG' | translate}}"
+                delete-hint="{{'ADD_PORTFOLIO_REMOVE_TAG_HINT' | translate}}"
+                secondary-placeholder="{{'ADD_PORTFOLIO_PRESS_ENTER' | translate}}"
+                placeholder="{{'ADD_PORTFOLIO_PRESS_ENTER' | translate}}">
+      </md-chips>
+    </md-input-container>
 
-    <md-dialog-actions>
-      <span flex></span>
-      <md-button aria-label="Tühista kogumiku lisamine" id="add-portfolio-cancel-button" data-ng-disabled="isSaving" data-ng-click="cancel()">
-        <span data-translate="BUTTON_CANCEL"></span>
-      </md-button>
-      <md-button aria-label="Loo kogumik" data-ng-if="!isEditPortfolio" id="add-portfolio-create-button" data-ng-disabled="!isValid()" data-ng-click="create()" data-ng-hide="isSaving" class="md-primary">
-        <md-icon>arrow_forward</md-icon>
-        <span data-translate="BUTTON_CREATE_PORTFOLIO"></span>
-      </md-button>
-      <md-button aria-label="Muuda kogumikku" data-ng-if="isEditPortfolio" id="add-portfolio-edit-button" data-ng-disabled="!isValid()" data-ng-click="update()" data-ng-hide="isSaving" class="md-primary">
-        <md-icon>arrow_forward</md-icon>
-        <span data-translate="BUTTON_EDIT_PORTFOLIO"></span>
-      </md-button>
-      <md-progress-circular class="md-accent ng-hide" md-mode="indeterminate" md-diameter="40" data-ng-show="isSaving"></md-progress-circular>
-    </md-dialog-actions>
+  </md-content>
+
+  <md-dialog-actions>
+    <span flex></span>
+    <md-button aria-label="Tühista kogumiku lisamine" id="add-portfolio-cancel-button" data-ng-disabled="isSaving"
+               data-ng-click="cancel()">
+      <span data-translate="BUTTON_CANCEL"></span>
+    </md-button>
+    <md-button aria-label="Loo kogumik" data-ng-if="!isEditPortfolio" id="add-portfolio-create-button"
+               data-ng-disabled="!isValid()" data-ng-click="create()" data-ng-hide="isSaving" class="md-primary">
+      <md-icon>arrow_forward</md-icon>
+      <span data-translate="BUTTON_CREATE_PORTFOLIO"></span>
+    </md-button>
+    <md-button aria-label="Muuda kogumikku" data-ng-if="isEditPortfolio" id="add-portfolio-edit-button"
+               data-ng-disabled="!isValid()" data-ng-click="update()" data-ng-hide="isSaving" class="md-primary">
+      <md-icon>arrow_forward</md-icon>
+      <span data-translate="BUTTON_EDIT_PORTFOLIO"></span>
+    </md-button>
+    <md-progress-circular class="md-accent ng-hide" md-mode="indeterminate" md-diameter="40"
+                          data-ng-show="isSaving"></md-progress-circular>
+  </md-dialog-actions>
   </form>
 </md-dialog>

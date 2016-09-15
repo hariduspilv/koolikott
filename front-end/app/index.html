@@ -9,8 +9,15 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <!-- build:css(app) /styles/vendor.css -->
   <!-- bower:css -->
-  <link rel="stylesheet" href="/libs/angular-material/angular-material.css" />
-  <link rel="stylesheet" href="/libs/angular-material-data-table/dist/md-data-table.min.css" />
+  <link rel="stylesheet" href="/libs/angular-material/angular-material.css"/>
+  <link rel="stylesheet" href="/libs/angular-material-data-table/dist/md-data-table.min.css"/>
+
+  <!--TODO: Original textAngular styles, remove when custom design is added - they BREAK angular-material-->
+  <link rel='stylesheet' href='/libs/textAngular/dist/textAngular.css'>
+  <!--<link rel="stylesheet" href="/libs/bootstrap-css-only/css/bootstrap.min.css"/>-->
+  <link rel="stylesheet" href="/libs/bootstrap-css-only/css/bootstrap-theme.min.css"/>
+  <link rel="stylesheet" href="/libs/font-awesome/css/font-awesome.min.css"/>
+
   <!-- endbower -->
   <!-- endbuild -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,400italic">
@@ -31,7 +38,8 @@
 </div>
 
 <div class="version-number" hide-xs hide-sm hide-md>
-  <a target="_blank" href="https://github.com/e-koolikott/DOP/blob/master/CHANGELOG.md"><span  data-translate="APP_VERSION"></span> <span ng-bind="APP_VERSION"></span></a>
+  <a target="_blank" href="https://github.com/e-koolikott/DOP/blob/master/CHANGELOG.md"><span
+    data-translate="APP_VERSION"></span> <span ng-bind="APP_VERSION"></span></a>
 </div>
 <div data-ng-show="showMainFabButton && !isEditPortfolioMode" data-dop-main-fab-button></div>
 
