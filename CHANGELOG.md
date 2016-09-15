@@ -1,6 +1,6 @@
 ## e-Koolikott 1.2.0 (15.09.2016)
 
-### Uus
+### Lisandunud
 * Tarkvarajärgu kuvamine https://github.com/e-koolikott/DOP/issues/25
 * Suggest-As-You-Type rakendamine https://github.com/e-koolikott/DOP/issues/7
 * Search-As-You-Type rakendamine https://github.com/e-koolikott/DOP/issues/6
@@ -28,7 +28,7 @@
 
 ## e-Koolikott 1.1.0 (22.07.2016)
 
-### Uus
+### Lisandunud
 * Materjali lisamisel väljade kohustuslikkus karmimaks https://github.com/e-koolikott/DOP/issues/3
 * Materjali faili üleslaadimine https://github.com/e-koolikott/DOP/issues/4
 * Kogumiku detailvaade avab vaid meta https://github.com/e-koolikott/DOP/issues/17
