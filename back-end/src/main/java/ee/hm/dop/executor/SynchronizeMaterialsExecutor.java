@@ -59,6 +59,7 @@ public class SynchronizeMaterialsExecutor {
 
             @Override
             public void run() {
+                logger.info("Starting new material synchronization process.");
                 synchronizeMaterials();
             }
         };

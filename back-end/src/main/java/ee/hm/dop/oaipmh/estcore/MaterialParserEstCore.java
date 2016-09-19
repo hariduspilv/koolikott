@@ -90,14 +90,14 @@ public class MaterialParserEstCore extends MaterialParser {
 
         try {
             titles = getTitles(doc);
-            if (titles.isEmpty()) {
+            if (titles == null || titles.isEmpty()) {
                 throw new ParseException("No titles found.");
             }
-        } catch (Exception e) {
-            throw new ParseException("Error parsing document title.");
-        }
 
-        material.setTitles(titles);
+            material.setTitles(titles);
+        } catch (Exception e) {
+            throw new ParseException("Error parsing and setting document titles, repository id: " + material.getRepositoryIdentifier());
+        }
     }
 
     @Override
