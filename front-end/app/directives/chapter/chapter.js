@@ -60,11 +60,6 @@ define([
                     $scope.onDelete()($scope.chapter);
                 };
 
-                //Textarea hotfix
-                setTimeout(textareaHotfix, 1000);
-                function textareaHotfix() {
-                  $( ".chapter-content-textarea" ).css('height', '140px');
-                }
             }
         };
     }]);

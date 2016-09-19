@@ -81,7 +81,7 @@
 
 
 // Input container styles
-.description-input-container {
+.description-input-container, md-body-1.description {
   width: 100%;
 
   margin: 30px 0;
@@ -90,32 +90,8 @@
   border: 1px solid #ddd;
   overflow: hidden;
 
-  // Styling of different elements
-  pre {
-    display: block;
-    padding: 9.5px;
-    margin: 0 0 10px;
-    font-size: 13px;
-    line-height: 1.428571429;
-    word-break: break-all;
-    word-wrap: break-word;
-    color: #333;
-    background-color: #f5f5f5;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-  }
-  blockquote {
-    padding: 10px 20px;
-    margin: 0 0 20px;
-    font-size: 17.5px;
-    border-left: 5px solid #eee;
-  }
-  p:first-child {
-    margin-top: 0;
-  }
-  ul {
-    list-style: initial;
-    padding-left: 20px;
+  md-icon {
+    margin-top: 2px;
   }
 
   // Button styling

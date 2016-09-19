@@ -13,8 +13,8 @@
               <md-icon class="material-icons md-primary">keyboard_arrow_right</md-icon>
             </div>
           </div>
-          <p class="md-body-1" ng-class="{'hide': chapter.text.length == undefined || chapter.text.length == 0}"
-             data-ng-bind-html="chapter.text"></p>
+          <div class="md-body-1 description-textarea" ng-class="{'hide': chapter.text.length == undefined || chapter.text.length == 0}"
+             data-ng-bind-html="chapter.text"></div>
         </div>
         <md-tooltip md-direction="bottom">
           <span data-ng-if="isCollapsed" data-translate="TOOLTIP_OPEN_CHAPTER">Open chapter</span>
