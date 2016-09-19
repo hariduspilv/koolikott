@@ -79,7 +79,10 @@ public class RepositoryService {
         while (materials.hasNext()) {
             try {
                 Material material = materials.next();
+
                 if (material != null) {
+                    logger.info("Trying to update next material with repo id: " + material.getRepositoryIdentifier());
+
                     handleMaterial(repository, material, audit);
                     audit.successfullyDownloaded();
 
@@ -138,6 +141,8 @@ public class RepositoryService {
         } else if (!material.isDeleted()) {
             createMaterial(material);
             audit.newMaterialCreated();
+        } else {
+            logger.error("Material (" + material.getId() + ") set as deleted, not updating or creating, repository id: " + material.getRepositoryIdentifier());
         }
     }
 
