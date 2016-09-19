@@ -104,9 +104,7 @@ define([
                 taOptions.forceTextAngularSanitize = true;
                 taOptions.keyMappings = [];
                 taOptions.toolbar = [
-                    ['h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'p', 'pre', 'quote'],
-                    ['bold', 'italics', 'underline', 'ul', 'ol', 'redo', 'undo', 'clear'],
-                    ['justifyLeft', 'justifyCenter', 'justifyRight', 'justifyFull']
+                    ['bold', 'italics', 'underline', 'ul', 'ol', 'pre', 'quote']
                 ];
                 // TODO: Mare/Aleks valib välja ikoonid ja loob uue visuaali
 
@@ -125,21 +123,23 @@ define([
             // TODO: Mare/Aleks valib välja ikoonid ja loob uue visuaali
 
             $provide.decorator('taTools', ['$delegate', function (taTools) {
-                // taTools.bold.iconclass = 'icon-bold';
-                // taTools.italics.iconclass = 'icon-italic';
-                // taTools.underline.iconclass = 'icon-underline';
-                // taTools.ul.iconclass = 'icon-list-ul';
-                // taTools.ol.iconclass = 'icon-list-ol';
-                // taTools.undo.iconclass = 'icon-undo';
-                // taTools.redo.iconclass = 'icon-repeat';
-                // taTools.justifyLeft.iconclass = 'icon-align-left';
-                // taTools.justifyRight.iconclass = 'icon-align-right';
-                // taTools.justifyCenter.iconclass = 'icon-align-center';
-                // taTools.clear.iconclass = 'icon-ban-circle';
-                // taTools.insertLink.iconclass = 'icon-link';
-                // taTools.insertImage.iconclass = 'icon-picture';
+                taTools.bold.buttontext = '<md-icon>format_bold</md-icon>';
+                taTools.italics.buttontext = '<md-icon>format_italic</md-icon>';
+                taTools.underline.buttontext = '<md-icon>format_underline</md-icon>';
+                taTools.ul.buttontext = '<md-icon>format_list_bulleted</md-icon>';
+                taTools.ol.buttontext = '<md-icon>format_list_numbered</md-icon>';
+                taTools.undo.buttontext = '<md-icon>undo</md-icon>';
+                taTools.redo.buttontext = '<md-icon>redo</md-icon>';
+                taTools.justifyLeft.buttontext = '<md-icon>format_align_left</md-icon>';
+                taTools.justifyRight.buttontext = '<md-icon>format_align_right</md-icon>';
+                taTools.justifyCenter.buttontext = '<md-icon>format_align_center</md-icon>';
+                taTools.justifyFull.buttontext = '<md-icon>format_align_justify</md-icon>'
+                taTools.clear.buttontext = '<md-icon>clear</md-icon>';
+                taTools.insertLink.buttontext = '<md-icon>insert_link</md-icon>';
+                taTools.insertImage.buttontext = '<md-icon>insert_photo</md-icon>';
+                taTools.pre.buttontext = '&nbsp;<md-icon>crop_16_9</md-icon>';
                 // delete taTools.quote.iconclass;
-                // taTools.quote.buttontext = 'quote';
+                taTools.quote.buttontext = '<md-icon>format_quote</md-icon>';
                 return taTools;
             }]);
         }
