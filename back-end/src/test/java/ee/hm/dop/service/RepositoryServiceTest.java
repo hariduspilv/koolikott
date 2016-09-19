@@ -104,7 +104,7 @@ public class RepositoryServiceTest {
         expect(materialIterator.hasNext()).andReturn(true);
         expect(materialIterator.next()).andReturn(material1);
         String repositoryIdentifier1 = "123456Identifier";
-        expect(material1.getRepositoryIdentifier()).andReturn(repositoryIdentifier1);
+        expect(material1.getRepositoryIdentifier()).andReturn(repositoryIdentifier1).anyTimes();
         expect(material1.isDeleted()).andReturn(false).anyTimes();
         expect(material1.getPicture()).andReturn(null);
         material1.setRepository(repository);
@@ -117,7 +117,7 @@ public class RepositoryServiceTest {
         expect(materialIterator.hasNext()).andReturn(true);
         expect(materialIterator.next()).andReturn(material2);
         String repositoryIdentifier2 = "123456Identifier2";
-        expect(material2.getRepositoryIdentifier()).andReturn(repositoryIdentifier2);
+        expect(material2.getRepositoryIdentifier()).andReturn(repositoryIdentifier2).anyTimes();
         expect(material2.isDeleted()).andReturn(false).anyTimes();
         expect(material2.getPicture()).andReturn(null);
         material2.setRepository(repository);
@@ -150,7 +150,7 @@ public class RepositoryServiceTest {
         expect(materialIterator.hasNext()).andReturn(true);
         expect(materialIterator.next()).andReturn(material);
         String repositoryIdentifier = "123456Identifier";
-        expect(material.getRepositoryIdentifier()).andReturn(repositoryIdentifier);
+        expect(material.getRepositoryIdentifier()).andReturn(repositoryIdentifier).anyTimes();
         expect(material.getPicture()).andReturn(null);
         material.setRepository(repository);
 
@@ -188,7 +188,7 @@ public class RepositoryServiceTest {
         expect(materialIterator.hasNext()).andReturn(true);
         expect(materialIterator.next()).andReturn(material);
         String repositoryIdentifier = "123456Identifier";
-        expect(material.getRepositoryIdentifier()).andReturn(repositoryIdentifier);
+        expect(material.getRepositoryIdentifier()).andReturn(repositoryIdentifier).anyTimes();
         RepositoryURL repositoryURL = new RepositoryURL();
         repositoryURL.setBaseURL("http://www.xray24.ru");
         repository.setRepositoryURLs(Collections.singletonList(repositoryURL));
@@ -231,7 +231,7 @@ public class RepositoryServiceTest {
         expect(materialIterator.hasNext()).andReturn(false);
 
         String repositoryIdentifier = "123456Identifier";
-        expect(material.getRepositoryIdentifier()).andReturn(repositoryIdentifier);
+        expect(material.getRepositoryIdentifier()).andReturn(repositoryIdentifier).anyTimes();
         expect(material.isDeleted()).andReturn(false).anyTimes();
         expect(material.getPicture()).andReturn(null);
         material.setRepository(repository);
