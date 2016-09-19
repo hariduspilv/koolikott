@@ -6,6 +6,7 @@ import java.util.Iterator;
 
 import javax.inject.Inject;
 
+import ee.hm.dop.model.LanguageString;
 import ee.hm.dop.model.Material;
 import ee.hm.dop.model.Repository;
 import org.slf4j.Logger;
@@ -46,6 +47,7 @@ public class MaterialIterator implements Iterator<Material> {
 
         Element header = identifierIterator.next();
         String identifier = header.getElementsByTagName("identifier").item(0).getTextContent();
+        logger.info("Next material identifier is: " + identifier);
 
         if (isDeleted(header)) {
             return buildDeletedMaterial(identifier);
