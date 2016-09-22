@@ -10,16 +10,22 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 
+import javax.inject.Inject;
+
 import com.google.inject.Singleton;
 import ee.hm.dop.guice.GuiceInjector;
 import ee.hm.dop.model.Repository;
 import ee.hm.dop.service.RepositoryService;
+import ee.hm.dop.service.SolrEngineService;
 import ee.hm.dop.utils.DbUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 @Singleton
 public class SynchronizeMaterialsExecutor {
+
+    @Inject
+    private SolrEngineService solrEngineService;
 
     private static final Logger logger = LoggerFactory.getLogger(SynchronizeMaterialsExecutor.class);
 
@@ -29,24 +35,33 @@ public class SynchronizeMaterialsExecutor {
 
     public synchronized void synchronizeMaterials() {
         try {
-            beginTransaction();
-
             RepositoryService repositoryService = newRepositoryService();
             List<Repository> repositories = repositoryService.getAllRepositorys();
 
             logger.info(format("Synchronizing %d repositories...", repositories.size()));
 
             for (Repository repository : repositories) {
-                logger.info(format("synchonizing repository %S:", repository));
+                logger.info(format("Synchonizing repository %S:", repository));
+                //For every repository make a new transaction - one fail will not roll back all repositories
+                beginTransaction();
+
                 repositoryService.synchronize(repository);
+
+                closeTransaction();
             }
 
             logger.info("Synchronization repository service finished execution.");
         } catch (Exception e) {
-            logger.error("Unexpected error while synchronizing materials.", e);
+            logger.error("Unexpected error while synchronizing materials.");
+            e.printStackTrace();
         } finally {
-            closeTransaction();
+            updateSolrIndex();
         }
+    }
+
+    private void updateSolrIndex() {
+        logger.info("Updating Search Engine index...");
+        solrEngineService.updateIndex();
     }
 
     public synchronized void scheduleExecution(int hourOfDayToExecute) {
@@ -55,13 +70,9 @@ public class SynchronizeMaterialsExecutor {
             return;
         }
 
-        final Runnable executor = new Runnable() {
-
-            @Override
-            public void run() {
-                logger.info("Starting new material synchronization process.");
-                synchronizeMaterials();
-            }
+        final Runnable executor = () -> {
+            logger.info("Starting new material synchronization process.");
+            synchronizeMaterials();
         };
 
         long initialDelay = getInitialDelay(hourOfDayToExecute);

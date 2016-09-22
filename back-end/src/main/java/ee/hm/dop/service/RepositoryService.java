@@ -45,9 +45,6 @@ public class RepositoryService {
     @Inject
     private PictureService pictureService;
 
-    @Inject
-    private SolrEngineService solrEngineService;
-
     public List<Repository> getAllRepositorys() {
         List<Repository> repositories = repositoryDAO.findAll();
 
@@ -81,7 +78,7 @@ public class RepositoryService {
                 Material material = materials.next();
 
                 if (material != null) {
-                    logger.info("Trying to update next material with repo id: " + material.getRepositoryIdentifier());
+                    logger.info("Trying to update or create next material with repo id: " + material.getRepositoryIdentifier());
 
                     handleMaterial(repository, material, audit);
                     audit.successfullyDownloaded();
@@ -108,13 +105,6 @@ public class RepositoryService {
                 audit.getFailedToDownload(), audit.getSuccessfullyDownloaded() + audit.getFailedToDownload()));
         logger.info(format("%s new materials were created, %s existing materials were updated and %s existing materials were deleted",
                 audit.getNewMaterialsCreated(), audit.getExistingMaterialsUpdated(), audit.getExistingMaterialsDeleted()));
-
-        updateSolrIndex();
-    }
-
-    private void updateSolrIndex() {
-        logger.info("Updating Search Engine index...");
-        solrEngineService.updateIndex();
     }
 
     private int getCount(int count) {
@@ -142,8 +132,10 @@ public class RepositoryService {
             createMaterial(material);
             audit.newMaterialCreated();
         } else {
-            logger.error("Material (" + material.getId() + ") set as deleted, not updating or creating, repository id: " + material.getRepositoryIdentifier());
+            logger.error("Material set as deleted, not updating or creating, repository id: " + material.getRepositoryIdentifier());
         }
+
+        logger.info("Material handled, repository id: " + material.getRepositoryIdentifier());
     }
 
     protected boolean isRepoMaterial(Repository repository, Material existentMaterial) {
@@ -178,6 +170,7 @@ public class RepositoryService {
     }
 
     private void createMaterial(Material material) {
+        logger.info("Creating material, with repo id: ", material.getRepositoryIdentifier());
         createPicture(material);
         materialService.createMaterial(material, null, false);
     }
@@ -201,7 +194,7 @@ public class RepositoryService {
             createPicture(newMaterial);
             mergeTwoObjects(newMaterial, existentMaterial);
 
-            updatedMaterial = materialService.update(existentMaterial, null);
+            updatedMaterial = materialService.update(existentMaterial, null, false);
             audit.existingMaterialUpdated();
 
         } else {
@@ -209,7 +202,7 @@ public class RepositoryService {
             createPicture(newMaterial);
             mergeTwoObjects(existentMaterial, newMaterial);
 
-            updatedMaterial = materialService.update(newMaterial, null);
+            updatedMaterial = materialService.update(newMaterial, null, false);
             audit.existingMaterialUpdated();
         }
 

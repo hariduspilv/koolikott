@@ -267,7 +267,7 @@ public class MaterialService implements LearningObjectHandler {
         materialDao.delete(material);
     }
 
-    public Material update(Material material, User changer) {
+    public Material update(Material material, User changer, boolean updateSearchIndex) {
         Material updatedMaterial = null;
 
         if (material == null || material.getId() == null) {
@@ -292,7 +292,7 @@ public class MaterialService implements LearningObjectHandler {
         //Null changer is the automated updating of materials during synchronization
         if (changer == null || isUserAdmin(changer) || isUserModerator(changer) || isThisUserMaterial(changer, originalMaterial)) {
             updatedMaterial = createOrUpdate(material);
-            solrEngineService.updateIndex();
+            if (updateSearchIndex) solrEngineService.updateIndex();
         }
 
         return updatedMaterial;
@@ -323,6 +323,8 @@ public class MaterialService implements LearningObjectHandler {
         if (materialId == null) {
             logger.info("Creating material");
             material.setAdded(now());
+        } else {
+            logger.info("Updating material");
         }
 
         setAuthors(material);

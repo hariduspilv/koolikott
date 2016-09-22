@@ -1,5 +1,6 @@
 package ee.hm.dop.model;
 
+import javax.persistence.Cacheable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -8,6 +9,7 @@ import javax.persistence.Id;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
+@Cacheable
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class ResourceType {
 

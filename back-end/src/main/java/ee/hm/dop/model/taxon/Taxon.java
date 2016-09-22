@@ -2,6 +2,7 @@ package ee.hm.dop.model.taxon;
 
 import static javax.persistence.InheritanceType.JOINED;
 
+import javax.persistence.Cacheable;
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorColumn;
 import javax.persistence.Entity;
@@ -18,6 +19,7 @@ import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
 @Entity
+@Cacheable
 @DiscriminatorColumn(name = "level")
 @Inheritance(strategy = JOINED)
 @JsonIdentityInfo(generator = JSOGGenerator.class)

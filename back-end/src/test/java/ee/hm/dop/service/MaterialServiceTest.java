@@ -131,7 +131,7 @@ public class MaterialServiceTest {
 
         replay(materialDAO, material, solrEngineService);
 
-        materialService.update(material, null);
+        materialService.update(material, null, true);
 
         verify(materialDAO, material, solrEngineService);
 
@@ -152,7 +152,7 @@ public class MaterialServiceTest {
         replay(materialDAO, material);
 
         try {
-            materialService.update(material, null);
+            materialService.update(material, null, true);
             fail("Exception expected.");
         } catch (IllegalArgumentException ex) {
             assertEquals("Error updating Material: material does not exist.", ex.getMessage());
@@ -186,7 +186,7 @@ public class MaterialServiceTest {
 
         replay(materialDAO, material);
 
-        Material returned = materialService.update(material, null);
+        Material returned = materialService.update(material, null, true);
 
         assertNotNull(returned);
         verify(materialDAO, material);
@@ -309,7 +309,7 @@ public class MaterialServiceTest {
         replay(user);
 
         try {
-            materialService.update(null, user);
+            materialService.update(null, user, true);
             fail("Exception expected.");
         } catch (IllegalArgumentException ex) {
             assertEquals("Material id parameter is mandatory", ex.getMessage());
@@ -331,7 +331,7 @@ public class MaterialServiceTest {
 
         replay(user, materialDAO);
 
-        Material returned = materialService.update(material, user);
+        Material returned = materialService.update(material, user, true);
 
         assertNotNull(returned);
         verify(user, materialDAO);
@@ -352,7 +352,7 @@ public class MaterialServiceTest {
 
         replay(user, materialDAO);
 
-        Material returned = materialService.update(material, user);
+        Material returned = materialService.update(material, user, true);
 
         assertNotNull(returned);
         verify(user, materialDAO);

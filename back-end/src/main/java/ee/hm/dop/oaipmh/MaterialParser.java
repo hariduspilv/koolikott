@@ -126,7 +126,7 @@ public abstract class MaterialParser {
             setAuthors(doc, material);
             setPublishersData(doc, material);
         } catch (Exception e) {
-            // ignore
+            logger.debug("Error while setting authors or publishers.", e.getMessage());
         }
     }
 
@@ -413,7 +413,7 @@ public abstract class MaterialParser {
         material.setAuthors(authors);
     }
 
-    protected void setPublishersData(Document doc, Material material){
+    protected void setPublishersData(Document doc, Material material) {
         List<Publisher> publishers = new ArrayList<>();
         IssueDate issueDate = null;
         NodeList nodeList = getNodeList(doc, getPathToContribute());
@@ -443,10 +443,13 @@ public abstract class MaterialParser {
     }
 
     protected String getRoleString(Node contributorNode) {
-        String role;
-
-        Node roleNode = getNode(contributorNode, "./*[local-name()='role']/*[local-name()='value']");
-        role = roleNode.getTextContent().trim().toUpperCase();
+        String role = null;
+        try {
+            Node roleNode = getNode(contributorNode, "./*[local-name()='role']/*[local-name()='value']");
+            role = roleNode.getTextContent().trim().toUpperCase();
+        } catch (Exception e) {
+            //ignore
+        }
 
         return role;
     }

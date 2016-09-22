@@ -26,7 +26,7 @@ public class TagUpVote {
     @ManyToOne(optional = false)
     private Tag tag;
 
-    @Column
+    @Column(nullable = false)
     private boolean deleted = false;
 
     public Long getId() {

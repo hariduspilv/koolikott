@@ -5,6 +5,7 @@ import static org.apache.commons.lang3.builder.ToStringStyle.SHORT_PREFIX_STYLE;
 
 import java.util.List;
 
+import javax.persistence.Cacheable;
 import javax.persistence.CollectionTable;
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
@@ -28,6 +29,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
  * @author Jordan Silva
  */
 @Entity(name = "LanguageTable")
+@Cacheable
 @JsonSerialize(using = LanguageSerializer.class)
 @JsonDeserialize(using = LanguageDeserializer.class)
 public class Language {

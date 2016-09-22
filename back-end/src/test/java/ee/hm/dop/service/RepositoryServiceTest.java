@@ -84,7 +84,6 @@ public class RepositoryServiceTest {
         expect(materialIterator.hasNext()).andReturn(false);
         expectUpdateRepository(repository);
 
-        solrEngineService.updateIndex();
 
         replayAll();
 
@@ -128,8 +127,6 @@ public class RepositoryServiceTest {
 
         expect(materialIterator.hasNext()).andReturn(false);
 
-        solrEngineService.updateIndex();
-
         replayAll(material1, material2);
 
         repositoryService.synchronize(repository);
@@ -160,14 +157,12 @@ public class RepositoryServiceTest {
         expect(materialDao.findByRepositoryAndRepositoryIdentifier(repository, repositoryIdentifier)).andReturn(
                 originalMaterial);
         expect(material.isDeleted()).andReturn(false).anyTimes();
-        expect(materialService.update(material, null)).andReturn(material);
+        expect(materialService.update(material, null, false)).andReturn(material);
 
         expectUpdateRepository(repository);
 
         expect(materialIterator.hasNext()).andReturn(false);
-
-        solrEngineService.updateIndex();
-
+        
         replayAll(material);
 
         repositoryService.synchronize(repository);
@@ -209,8 +204,6 @@ public class RepositoryServiceTest {
 
         expect(materialIterator.hasNext()).andReturn(false);
 
-        solrEngineService.updateIndex();
-
         replayAll(material);
 
         repositoryService.synchronize(repository);
@@ -236,8 +229,6 @@ public class RepositoryServiceTest {
         expect(material.getPicture()).andReturn(null);
         material.setRepository(repository);
         expect(materialDao.findByRepositoryAndRepositoryIdentifier(repository, repositoryIdentifier)).andReturn(null);
-
-        solrEngineService.updateIndex();
 
         expectUpdateRepository(repository);
 
@@ -358,7 +349,7 @@ public class RepositoryServiceTest {
         newMaterial.setEmbeddable(null);
         newMaterial.setTitles(new ArrayList<>());
 
-        expect(materialService.update(existentMaterial, null)).andReturn(existentMaterial);
+        expect(materialService.update(existentMaterial, null, false)).andReturn(existentMaterial);
 
         replayAll();
 
@@ -389,7 +380,7 @@ public class RepositoryServiceTest {
         newMaterial.setEmbeddable(true);
         newMaterial.setTitles(new ArrayList<>());
 
-        expect(materialService.update(newMaterial, null)).andReturn(newMaterial);
+        expect(materialService.update(newMaterial, null, false)).andReturn(newMaterial);
 
         replayAll();
 
@@ -410,7 +401,7 @@ public class RepositoryServiceTest {
         existentMaterial.setPicture(new Picture());
         newMaterial.setPicture(null);
 
-        expect(materialService.update(existentMaterial, null)).andReturn(existentMaterial);
+        expect(materialService.update(existentMaterial, null, false)).andReturn(existentMaterial);
 
         replayAll();
 
@@ -431,7 +422,7 @@ public class RepositoryServiceTest {
         existentMaterial.setPicture(picture);
         newMaterial.setPicture(null);
 
-        expect(materialService.update(newMaterial, null)).andReturn(newMaterial);
+        expect(materialService.update(newMaterial, null, false)).andReturn(newMaterial);
 
         replayAll();
 
@@ -454,7 +445,7 @@ public class RepositoryServiceTest {
         existentMaterial.setPicture(picture1);
         newMaterial.setPicture(picture2);
 
-        expect(materialService.update(existentMaterial, null)).andReturn(existentMaterial);
+        expect(materialService.update(existentMaterial, null, false)).andReturn(existentMaterial);
         expect(pictureService.create(picture2)).andReturn(picture2);
 
         replayAll();

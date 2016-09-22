@@ -2,6 +2,7 @@ package ee.hm.dop.model;
 
 import static org.apache.commons.lang3.builder.ToStringStyle.SHORT_PREFIX_STYLE;
 
+import javax.persistence.Cacheable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -16,6 +17,7 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
 @Entity
+@Cacheable
 @JsonDeserialize(using = TagDeserializer.class)
 @JsonSerialize(using = TagSerializer.class)
 public class Tag {

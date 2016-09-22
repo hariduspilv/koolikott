@@ -17,6 +17,7 @@ import java.util.concurrent.ScheduledFuture;
 
 import ee.hm.dop.model.Repository;
 import ee.hm.dop.service.RepositoryService;
+import ee.hm.dop.service.SolrEngineService;
 import org.easymock.EasyMock;
 import org.easymock.EasyMockRunner;
 import org.easymock.Mock;
@@ -35,6 +36,9 @@ public class SynchronizeMaterialsExecutorTest {
 
     @Mock
     private RepositoryService repositoryService;
+
+    @Mock
+    private SolrEngineService solrEngineService;
 
     private Object lock = new Object();
 
@@ -81,10 +85,6 @@ public class SynchronizeMaterialsExecutorTest {
         synchronizeMaterialsExecutor.synchronizeMaterials();
 
         verify(repositoryService);
-
-        SynchronizeMaterialsExecutorMock mockExecutor = (SynchronizeMaterialsExecutorMock) synchronizeMaterialsExecutor;
-        assertTrue(mockExecutor.transactionWasStarted);
-        assertFalse(mockExecutor.transactionStarted);
     }
 
     @Test
@@ -103,8 +103,9 @@ public class SynchronizeMaterialsExecutorTest {
 
         repositoryService.synchronize(repository1);
         repositoryService.synchronize(repository2);
+        solrEngineService.updateIndex();
 
-        replay(repositoryService, repository1, repository2);
+        replay(repositoryService, repository1, repository2, solrEngineService);
 
         synchronizeMaterialsExecutor.scheduleExecution(1);
 
@@ -116,7 +117,7 @@ public class SynchronizeMaterialsExecutorTest {
             }
         }
 
-        verify(repositoryService, repository1, repository2);
+        verify(repositoryService, repository1, repository2, solrEngineService);
 
         SynchronizeMaterialsExecutorMock mockExecutor = (SynchronizeMaterialsExecutorMock) synchronizeMaterialsExecutor;
         assertTrue(mockExecutor.transactionWasStarted);
@@ -127,8 +128,9 @@ public class SynchronizeMaterialsExecutorTest {
     public void scheduleExecutionDoubleInitialization() {
         List<Repository> repositories = Collections.emptyList();
         expect(repositoryService.getAllRepositorys()).andReturn(repositories);
+        solrEngineService.updateIndex();
 
-        replay(repositoryService);
+        replay(repositoryService, solrEngineService);
 
         synchronizeMaterialsExecutor.scheduleExecution(1);
         synchronizeMaterialsExecutor.scheduleExecution(1);
@@ -141,7 +143,7 @@ public class SynchronizeMaterialsExecutorTest {
             }
         }
 
-        verify(repositoryService);
+        verify(repositoryService, solrEngineService);
     }
 
     @Test

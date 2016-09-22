@@ -103,8 +103,8 @@ public abstract class LearningObject {
     @JoinColumn(name = "creator")
     private User creator;
 
-    @Column
-    private boolean deleted;
+    @Column(nullable = false)
+    private boolean deleted = false;
 
     // The date when the Learning Object was added to the system
     @Column(nullable = false)

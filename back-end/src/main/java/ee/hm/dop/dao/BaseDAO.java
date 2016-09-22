@@ -1,10 +1,18 @@
 package ee.hm.dop.dao;
 
+import java.util.logging.Logger;
+
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.TypedQuery;
 
+import ee.hm.dop.service.RepositoryService;
+import org.slf4j.LoggerFactory;
+
 public abstract class BaseDAO<T> {
+
+    private final org.slf4j.Logger logger = LoggerFactory.getLogger(getClass());
 
     @Inject
     private EntityManager entityManager;
@@ -22,8 +30,8 @@ public abstract class BaseDAO<T> {
 
         try {
             result = query.getSingleResult();
-        } catch (Exception e) {
-            // ignore
+        } catch (NoResultException e) {
+            logger.debug("Query had no results.");
         }
 
         return result;
@@ -34,8 +42,8 @@ public abstract class BaseDAO<T> {
 
         try {
             result = query.getSingleResult();
-        } catch (Exception e) {
-            // ignore
+        } catch (NoResultException e) {
+            logger.debug("Query had no results.");
         }
 
         return result;

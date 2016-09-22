@@ -1,5 +1,6 @@
 package ee.hm.dop.model;
 
+import javax.persistence.Cacheable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -10,6 +11,7 @@ import javax.persistence.OneToOne;
 import ee.hm.dop.model.taxon.Taxon;
 
 @Entity
+@Cacheable
 public class EstCoreTaxonMapping {
 
     @Id
