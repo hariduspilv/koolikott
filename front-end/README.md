@@ -40,7 +40,7 @@ If project building fails with message like ">> Local Npm module "XXXXXX" not fo
 
 ## Package
 
-Generates project deliverable artifact. builds the project (grunt build) and create dop.tar.gz file which contains the project artifacts.
+Generates project deliverable artifact. builds the project (grunt build) and create kott.tar.gz file which contains the project artifacts.
 
 	grunt package
 	

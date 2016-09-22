@@ -400,7 +400,7 @@ module.exports = function (grunt) {
         compress: {
             dev: {
                 options: {
-                    archive: '<%= yeoman.dist.folder %>/dop.tar.gz',
+                    archive: '<%= yeoman.dist.folder %>/kott.tar.gz',
                     mode: 'tgz'
                 },
                 expand: true,
@@ -409,7 +409,7 @@ module.exports = function (grunt) {
             },
             live: {
                 options: {
-                    archive: '<%= yeoman.dist.folder %>/dop.tar.gz',
+                    archive: '<%= yeoman.dist.folder %>/kott.tar.gz',
                     mode: 'tgz'
                 },
                 expand: true,
