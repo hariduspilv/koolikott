@@ -11,7 +11,7 @@ define([
         $scope.newestItems = storageService.getNewestItems();
         $scope.popularItems = storageService.getPopularItems();
 
-        serverCallService.makeGet("rest/learningObjects/getNewest?maxResults=8",
+        serverCallService.makeGet("rest/learningObject/getNewest?maxResults=8",
             {}, getNewestLearningObjectsSuccess, requestFailed);
         $timeout(serverCallService.makeGet("rest/search?q=&type=all&sort=views&sortDirection=desc&start=0&limit=8",
             {}, getPopularLearningObjectsSuccess, requestFailed));

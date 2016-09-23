@@ -2,9 +2,9 @@ define([
     'app',
     'services/serverCallService',
     'services/translationService',
-    'services/iconService'
+    'services/iconService',
+    'directives/favorite/favorite',
 ], function (app) {
-
     app.directive('dopMaterialBox', ['translationService', 'serverCallService', '$rootScope', 'iconService', 'authenticatedUserService',
         function (translationService, serverCallService, $rootScope, iconService, authenticatedUserService) {
             return {

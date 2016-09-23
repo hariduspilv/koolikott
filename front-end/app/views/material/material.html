@@ -30,7 +30,7 @@
 
                     <h1 flex data-ng-if="sourceType !== 'LINK'"
                         data-ng-bind="getCorrectLanguageString(material.titles)"></h1>
-
+                    <div data-dop-favorite data-learning-object="material" class="favorite"></div>
                     <md-menu>
                       <md-button class="md-icon-button" ng-click="$mdOpenMenu($event)">
                         <md-icon md-menu-origin>more_vert</md-icon>
@@ -146,7 +146,7 @@
                   <!-- left description  -->
                   <div class="on-left" flex>
                     <div class="md-body-1 description description-textarea"
-                       data-ng-bind-html="getCorrectLanguageString(material.descriptions)"></div>
+                         data-ng-bind-html="getCorrectLanguageString(material.descriptions)"></div>
 
                     <div data-ng-if="sourceType === 'YOUTUBE'" class="embed-responsive embed-responsive-16by9">
                       <div class="embed-responsive-container">

@@ -8,7 +8,8 @@
       <md-icon class="icon-kind">book</md-icon>
     </div>
 
-    <div class="card-hover portfolio">
+    <div class="card-hover portfolio" layout="row">
+      <div data-ng-if="isAuthenticated()" data-dop-favorite data-learning-object="portfolio" layout-align="start start"></div>
       <md-icon class="icon-kind">book</md-icon>
     </div>
   </a>
@@ -16,7 +17,8 @@
   <a data-ng-href="{{'/portfolio?id=' + portfolio.id}}" data-ng-if="portfolio.picture" class="card-cover imaged"
      layout="row" layout-align="start start">
     <img data-ng-src="rest/picture/{{portfolio.picture.name}}" class="md-card-image"/>
-    <div class="card-hover portfolio">
+    <div class="card-hover portfolio" layout="row">
+      <div data-ng-if="isAuthenticated()" data-dop-favorite data-learning-object="portfolio" layout-align="start start"></div>
       <md-icon class="icon-kind">book</md-icon>
     </div>
   </a>
