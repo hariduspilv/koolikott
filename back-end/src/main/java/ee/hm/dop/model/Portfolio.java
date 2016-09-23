@@ -73,7 +73,8 @@ public class Portfolio extends LearningObject implements Searchable {
     }
 
     public void setSummary(String summary) {
-        this.summary = summary;
+
+        this.summary = getSanitizedHTML(summary);
     }
 
     public List<Chapter> getChapters() {
@@ -98,5 +99,13 @@ public class Portfolio extends LearningObject implements Searchable {
 
     public void setOriginalCreator(User originalCreator) {
         this.originalCreator = originalCreator;
+    }
+
+    private String getSanitizedHTML(String summary) {
+        if (summary != null) {
+            summary = ALLOWED_HTML_TAGS_POLICY.sanitize(summary);
+        }
+
+        return summary;
     }
 }

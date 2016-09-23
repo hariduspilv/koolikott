@@ -29,43 +29,43 @@ import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
 @Entity
-@Table(uniqueConstraints = { @UniqueConstraint(columnNames = { "repositoryIdentifier", "repository" }) })
+@Table(uniqueConstraints = {@UniqueConstraint(columnNames = {"repositoryIdentifier", "repository"})})
 public class Material extends LearningObject implements Searchable {
 
     @NotNull
-    @ManyToMany(fetch = EAGER, cascade = { PERSIST, MERGE })
+    @ManyToMany(fetch = EAGER, cascade = {PERSIST, MERGE})
     @Fetch(FetchMode.SELECT)
     @JoinTable(
             name = "Material_Title",
-            joinColumns = { @JoinColumn(name = "material") },
-            inverseJoinColumns = { @JoinColumn(name = "title") },
-            uniqueConstraints = @UniqueConstraint(columnNames = { "material", "title" }) )
+            joinColumns = {@JoinColumn(name = "material")},
+            inverseJoinColumns = {@JoinColumn(name = "title")},
+            uniqueConstraints = @UniqueConstraint(columnNames = {"material", "title"}))
     private List<LanguageString> titles;
 
     @ManyToOne
     @JoinColumn(name = "lang")
     private Language language;
 
-    @ManyToMany(fetch = EAGER, cascade = { PERSIST, MERGE })
+    @ManyToMany(fetch = EAGER, cascade = {PERSIST, MERGE})
     @Fetch(FetchMode.SELECT)
     @JoinTable(
             name = "Material_Author",
-            joinColumns = { @JoinColumn(name = "material") },
-            inverseJoinColumns = { @JoinColumn(name = "author") },
-            uniqueConstraints = @UniqueConstraint(columnNames = { "material", "author" }) )
+            joinColumns = {@JoinColumn(name = "material")},
+            inverseJoinColumns = {@JoinColumn(name = "author")},
+            uniqueConstraints = @UniqueConstraint(columnNames = {"material", "author"}))
     private List<Author> authors;
 
-    @OneToOne(cascade = { PERSIST, MERGE })
+    @OneToOne(cascade = {PERSIST, MERGE})
     @JoinColumn(name = "issueDate")
     private IssueDate issueDate;
 
-    @ManyToMany(fetch = EAGER, cascade = { PERSIST, MERGE })
+    @ManyToMany(fetch = EAGER, cascade = {PERSIST, MERGE})
     @Fetch(FetchMode.SELECT)
     @JoinTable(
             name = "Material_Description",
-            joinColumns = { @JoinColumn(name = "material") },
-            inverseJoinColumns = { @JoinColumn(name = "description") },
-            uniqueConstraints = @UniqueConstraint(columnNames = { "material", "description" }) )
+            joinColumns = {@JoinColumn(name = "material")},
+            inverseJoinColumns = {@JoinColumn(name = "description")},
+            uniqueConstraints = @UniqueConstraint(columnNames = {"material", "description"}))
     private List<LanguageString> descriptions;
 
     @Column(columnDefinition = "TEXT")
@@ -75,18 +75,18 @@ public class Material extends LearningObject implements Searchable {
     @Fetch(FetchMode.SELECT)
     @JoinTable(
             name = "Material_ResourceType",
-            joinColumns = { @JoinColumn(name = "material") },
-            inverseJoinColumns = { @JoinColumn(name = "resourceType") },
-            uniqueConstraints = @UniqueConstraint(columnNames = { "material", "resourceType" }) )
+            joinColumns = {@JoinColumn(name = "material")},
+            inverseJoinColumns = {@JoinColumn(name = "resourceType")},
+            uniqueConstraints = @UniqueConstraint(columnNames = {"material", "resourceType"}))
     private List<ResourceType> resourceTypes;
 
     @ManyToMany(fetch = EAGER)
     @Fetch(FetchMode.SELECT)
     @JoinTable(
             name = "Material_Taxon",
-            joinColumns = { @JoinColumn(name = "material") },
-            inverseJoinColumns = { @JoinColumn(name = "taxon") },
-            uniqueConstraints = @UniqueConstraint(columnNames = { "material", "taxon" }) )
+            joinColumns = {@JoinColumn(name = "material")},
+            inverseJoinColumns = {@JoinColumn(name = "taxon")},
+            uniqueConstraints = @UniqueConstraint(columnNames = {"material", "taxon"}))
     @JsonSerialize(contentUsing = TaxonSerializer.class)
     @JsonDeserialize(contentUsing = TaxonDeserializer.class)
     private List<Taxon> taxons;
@@ -95,16 +95,16 @@ public class Material extends LearningObject implements Searchable {
     @JoinColumn(name = "licenseType")
     private LicenseType licenseType;
 
-    @ManyToMany(fetch = EAGER, cascade = { PERSIST, MERGE })
+    @ManyToMany(fetch = EAGER, cascade = {PERSIST, MERGE})
     @Fetch(FetchMode.SELECT)
     @JoinTable(
             name = "Material_Publisher",
-            joinColumns = { @JoinColumn(name = "material") },
-            inverseJoinColumns = { @JoinColumn(name = "publisher") },
-            uniqueConstraints = @UniqueConstraint(columnNames = { "material", "publisher" }) )
+            joinColumns = {@JoinColumn(name = "material")},
+            inverseJoinColumns = {@JoinColumn(name = "publisher")},
+            uniqueConstraints = @UniqueConstraint(columnNames = {"material", "publisher"}))
     private List<Publisher> publishers;
 
-    @OneToOne(cascade = ALL )
+    @OneToOne(cascade = ALL)
     @JoinColumn(name = "uploadedFile")
     private UploadedFile uploadedFile;
 
@@ -160,7 +160,7 @@ public class Material extends LearningObject implements Searchable {
     }
 
     public void setDescriptions(List<LanguageString> descriptions) {
-        this.descriptions = descriptions;
+        this.descriptions = getSanitizedHTML(descriptions);
     }
 
     public Language getLanguage() {
@@ -273,5 +273,16 @@ public class Material extends LearningObject implements Searchable {
 
     public Boolean getEmbeddable() {
         return embeddable;
+    }
+
+    private List<LanguageString> getSanitizedHTML(List<LanguageString> descriptions) {
+        if (descriptions != null) {
+            descriptions
+                    .stream()
+                    .filter(description -> description.getText() != null)
+                    .forEach(description -> description.setText(ALLOWED_HTML_TAGS_POLICY.sanitize(description.getText())));
+        }
+
+        return descriptions;
     }
 }
