@@ -32,7 +32,7 @@ public class UserFavoriteDAO extends BaseDAO<UserFavorite> {
     }
 
     public List<LearningObject> findUsersFavoritedLearningObjects(User user) {
-        String query = "SELECT uf.learningObject FROM UserFavorite uf WHERE uf.creator = :creator order by uf.learningObject.added desc";
+        String query = "SELECT uf.learningObject FROM UserFavorite uf WHERE uf.creator = :creator and uf.learningObject.deleted = false order by uf.learningObject.added desc";
         TypedQuery<LearningObject> findAllByCreator = createQuery(query, LearningObject.class);
         return findAllByCreator.setParameter("creator", user).getResultList();
     }
