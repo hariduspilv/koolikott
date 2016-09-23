@@ -101,7 +101,7 @@
 			<artifactId>hibernate-c3p0</artifactId>
 			<version>${hibernate.version}</version>
 		</dependency>
-        
+
         <!-- Database migration -->
         <dependency>
             <groupId>org.flywaydb</groupId>
@@ -273,7 +273,7 @@
 	                    <mainClass>ee.hm.dop.ApplicationLauncher</mainClass>
 	                  </manifest>
 	                </archive>
-	               	<finalName>dop</finalName>
+	               	<finalName>kott</finalName>
 	                <appendAssemblyId>false</appendAssemblyId>
 	            </configuration>
 	            <executions>
