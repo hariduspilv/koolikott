@@ -12,7 +12,9 @@ define([
             controller: function ($scope, serverCallService, authenticatedUserService) {
                 $scope.hasFavorited = false;
 
-                serverCallService.makeGet("rest/learningObject/favorite", {'id': $scope.learningObject.id}, getFavoriteSuccess, getFavoriteFail);
+                if(isLoggedIn()) {
+                    serverCallService.makeGet("rest/learningObject/favorite", {'id': $scope.learningObject.id}, getFavoriteSuccess, getFavoriteFail);
+                }
 
                 function getFavoriteSuccess(data) {
                     if (data && data.id) {
