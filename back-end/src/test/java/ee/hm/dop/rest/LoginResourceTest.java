@@ -51,6 +51,7 @@ import org.apache.http.client.utils.URLEncodedUtils;
 import org.glassfish.jersey.internal.util.collection.MultivaluedStringMap;
 import org.joda.time.DateTime;
 import org.joda.time.Interval;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.opensaml.saml2.core.AuthnRequest;
 import org.opensaml.xml.XMLObject;
@@ -93,6 +94,7 @@ public class LoginResourceTest extends ResourceIntegrationTestBase {
         assertEquals("peeter.paan2", authenticatedUser.getUser().getUsername());
     }
 
+    @Ignore("TAAT is not used currently and the test is unstable")
     @Test
     public void makeTaatRequest() throws Exception {
         Response response = doGet("login/taat");
