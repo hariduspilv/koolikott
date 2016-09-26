@@ -5,7 +5,9 @@ import java.util.List;
 import javax.annotation.security.RolesAllowed;
 import javax.inject.Inject;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -15,10 +17,11 @@ import javax.ws.rs.core.MediaType;
 
 import ee.hm.dop.model.LearningObject;
 import ee.hm.dop.model.Tag;
+import ee.hm.dop.model.UserFavorite;
 import ee.hm.dop.service.LearningObjectService;
 import ee.hm.dop.service.TagService;
 
-@Path("learningObjects")
+@Path("learningObject")
 public class LearningObjectResource extends BaseResource {
 
     @Inject
@@ -29,7 +32,7 @@ public class LearningObjectResource extends BaseResource {
 
     @PUT
     @Path("{learningObjectId}/tags")
-    @RolesAllowed({ "USER", "ADMIN", "MODERATOR" })
+    @RolesAllowed({"USER", "ADMIN", "MODERATOR"})
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public LearningObject addTag(@PathParam("learningObjectId") Long learningObjectId, Tag newTag) {
@@ -51,5 +54,36 @@ public class LearningObjectResource extends BaseResource {
     @Produces(MediaType.APPLICATION_JSON)
     public List<LearningObject> getNewestLearningObjects(@QueryParam("maxResults") int numberOfLearningObjects) {
         return learningObjectService.getNewestLearningObjects(numberOfLearningObjects);
+    }
+
+    @GET
+    @Path("favorite")
+    @RolesAllowed({"USER", "ADMIN", "MODERATOR", "RESTRICTED"})
+    public UserFavorite hasSetFavorite(@QueryParam("id") Long id) {
+        return learningObjectService.hasFavorited(id, getLoggedInUser());
+
+
+    }
+
+    @GET
+    @Path("usersFavorite")
+    @RolesAllowed({"USER", "ADMIN", "MODERATOR", "RESTRICTED"})
+    public List<LearningObject> getUsersFavorites() {
+        return learningObjectService.getUserFavorites(getLoggedInUser());
+    }
+
+    @POST
+    @Path("favorite")
+    @Produces(MediaType.APPLICATION_JSON)
+    @RolesAllowed({"USER", "ADMIN", "MODERATOR"})
+    public UserFavorite favoriteLearningObject(LearningObject learningObject) {
+        return learningObjectService.addUserFavorite(learningObject, getLoggedInUser());
+    }
+
+    @DELETE
+    @Path("favorite")
+    @RolesAllowed({"USER", "ADMIN", "MODERATOR"})
+    public void removeUserFavorite(@QueryParam("id") long id) {
+        learningObjectService.removeUserFavorite(id, getLoggedInUser());
     }
 }

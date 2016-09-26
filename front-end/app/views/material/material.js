@@ -12,6 +12,7 @@ define([
     'directives/slideshare/slideshare',
     'directives/tags/tags',
     'directives/restrict/restrict',
+    'directives/favorite/favorite',
     'services/serverCallService',
     'services/translationService',
     'services/searchService',
@@ -28,6 +29,19 @@ define([
             $scope.showMaterialContent = false;
             $scope.newComment = {};
             $scope.pageUrl = $location.absUrl();
+
+            if ($rootScope.savedMaterial) {
+                $scope.material = $rootScope.savedMaterial;
+                $rootScope.savedMaterial = null;
+
+                if ($rootScope.isEditPortfolioMode || authenticatedUserService.isAuthenticated()) {
+                    $rootScope.selectedSingleMaterial = $scope.material;
+                }
+
+                init();
+            } else {
+                getMaterial(getMaterialSuccess, getMaterialFail);
+            }
 
             $rootScope.$on('fullscreenchange', function () {
                 $scope.$apply(function () {
@@ -53,19 +67,6 @@ define([
                     }
                 }
             });
-
-            if ($rootScope.savedMaterial) {
-                $scope.material = $rootScope.savedMaterial;
-                $rootScope.savedMaterial = null;
-
-                if ($rootScope.isEditPortfolioMode || authenticatedUserService.isAuthenticated()) {
-                    $rootScope.selectedSingleMaterial = $scope.material;
-                }
-
-                init();
-            } else {
-                getMaterial(getMaterialSuccess, getMaterialFail);
-            }
 
             function getMaterial(success, fail) {
                 var materialId = $route.current.params.materialId;

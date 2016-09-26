@@ -390,6 +390,13 @@ md-card .card-menu {
   }
 }
 
+.favorite {
+  margin-top: -15px!important;
+}
+.gold {
+  color: gold!important;
+}
+
 md-card.card-sm md-card-actions {
   -webkit-animation: fadein 2s; /* Safari, Chrome and Opera > 12.1 */
    -moz-animation: fadein 2s; /* Firefox < 16 */

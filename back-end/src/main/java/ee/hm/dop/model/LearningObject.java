@@ -37,6 +37,8 @@ import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.Formula;
 import org.hibernate.annotations.Type;
 import org.joda.time.DateTime;
+import org.owasp.html.HtmlPolicyBuilder;
+import org.owasp.html.PolicyFactory;
 
 @JsonTypeInfo(
         use = JsonTypeInfo.Id.MINIMAL_CLASS,
@@ -47,6 +49,8 @@ import org.joda.time.DateTime;
 @Inheritance(strategy = InheritanceType.JOINED)
 public abstract class LearningObject {
 
+    static PolicyFactory ALLOWED_HTML_TAGS_POLICY = new HtmlPolicyBuilder().allowStandardUrlProtocols()
+            .allowElements("p", "b", "br", "i", "ul", "li", "div", "ol", "pre", "blockquote").toFactory();
     @Id
     @GeneratedValue
     private Long id;
@@ -58,42 +62,42 @@ public abstract class LearningObject {
     @CollectionTable(name = "LearningObject_TargetGroup", joinColumns = @JoinColumn(name = "learningObject"))
     private List<TargetGroup> targetGroups;
 
-    @ManyToMany(fetch = EAGER, cascade = { PERSIST, MERGE })
+    @ManyToMany(fetch = EAGER, cascade = {PERSIST, MERGE})
     @Fetch(FetchMode.SELECT)
     @JoinTable(
             name = "LearningObject_CrossCurricularTheme",
-            joinColumns = { @JoinColumn(name = "learningObject") },
-            inverseJoinColumns = { @JoinColumn(name = "crossCurricularTheme") },
-            uniqueConstraints = @UniqueConstraint(columnNames = { "learningObject", "crossCurricularTheme" }))
+            joinColumns = {@JoinColumn(name = "learningObject")},
+            inverseJoinColumns = {@JoinColumn(name = "crossCurricularTheme")},
+            uniqueConstraints = @UniqueConstraint(columnNames = {"learningObject", "crossCurricularTheme"}))
     private List<CrossCurricularTheme> crossCurricularThemes;
 
-    @ManyToMany(fetch = EAGER, cascade = { PERSIST, MERGE })
+    @ManyToMany(fetch = EAGER, cascade = {PERSIST, MERGE})
     @Fetch(FetchMode.SELECT)
     @JoinTable(
             name = "LearningObject_KeyCompetence",
-            joinColumns = { @JoinColumn(name = "learningObject") },
-            inverseJoinColumns = { @JoinColumn(name = "keyCompetence") },
-            uniqueConstraints = @UniqueConstraint(columnNames = { "learningObject", "keyCompetence" }))
+            joinColumns = {@JoinColumn(name = "learningObject")},
+            inverseJoinColumns = {@JoinColumn(name = "keyCompetence")},
+            uniqueConstraints = @UniqueConstraint(columnNames = {"learningObject", "keyCompetence"}))
     private List<KeyCompetence> keyCompetences;
 
-    @ManyToMany(fetch = EAGER, cascade = { PERSIST, MERGE })
+    @ManyToMany(fetch = EAGER, cascade = {PERSIST, MERGE})
     @Fetch(FetchMode.SELECT)
     @JoinTable(
             name = "LearningObject_Tag",
-            joinColumns = { @JoinColumn(name = "learningObject") },
-            inverseJoinColumns = { @JoinColumn(name = "tag") },
-            uniqueConstraints = @UniqueConstraint(columnNames = { "learningObject", "tag" }))
+            joinColumns = {@JoinColumn(name = "learningObject")},
+            inverseJoinColumns = {@JoinColumn(name = "tag")},
+            uniqueConstraints = @UniqueConstraint(columnNames = {"learningObject", "tag"}))
     private List<Tag> tags;
 
     @ManyToOne
     @JoinColumn(name = "picture")
     private Picture picture;
 
-    @OneToOne(cascade = { PERSIST, MERGE })
+    @OneToOne(cascade = {PERSIST, MERGE})
     @JoinColumn(name = "recommendation")
     private Recommendation recommendation;
 
-    @OneToMany(fetch = EAGER, cascade = { MERGE, PERSIST })
+    @OneToMany(fetch = EAGER, cascade = {MERGE, PERSIST})
     @Fetch(FetchMode.SELECT)
     @JoinColumn(name = "learningObject")
     @OrderBy("added DESC")

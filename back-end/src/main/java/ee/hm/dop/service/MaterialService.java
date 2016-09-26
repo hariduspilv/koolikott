@@ -17,7 +17,6 @@ import ee.hm.dop.dao.UserLikeDAO;
 import ee.hm.dop.model.Author;
 import ee.hm.dop.model.BrokenContent;
 import ee.hm.dop.model.Comment;
-import ee.hm.dop.model.LanguageString;
 import ee.hm.dop.model.LearningObject;
 import ee.hm.dop.model.Material;
 import ee.hm.dop.model.Publisher;
@@ -29,8 +28,6 @@ import ee.hm.dop.model.taxon.EducationalContext;
 import ee.hm.dop.service.learningObject.LearningObjectHandler;
 import ee.hm.dop.utils.TaxonUtils;
 import org.joda.time.DateTime;
-import org.owasp.html.PolicyFactory;
-import org.owasp.html.Sanitizers;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -330,20 +327,8 @@ public class MaterialService implements LearningObjectHandler {
         setAuthors(material);
         setPublishers(material);
         material = applyRestrictions(material);
-        if (material.getDescriptions() != null) {
-            material.setDescriptions(getSanitizedHTML(material.getDescriptions()));
-        }
+
         return (Material) materialDao.update(material);
-    }
-
-    private List<LanguageString> getSanitizedHTML(List<LanguageString> descriptions) {
-        PolicyFactory policy = Sanitizers.FORMATTING.and(Sanitizers.FORMATTING.and(Sanitizers.BLOCKS).and(Sanitizers.STYLES).and(Sanitizers.TABLES));
-        descriptions
-                .stream()
-                .filter(description -> description.getText() != null)
-                .forEach(description -> description.setText(policy.sanitize(description.getText())));
-
-        return descriptions;
     }
 
     private Material applyRestrictions(Material material) {

@@ -1,9 +1,11 @@
 define([
     'app',
     'services/translationService',
-    'services/serverCallService'
+    'services/serverCallService',
+    'directives/favorite/favorite',
 ], function(app) {
-    app.directive('dopPortfolioBox', ['translationService', 'serverCallService', '$rootScope', function(translationService, serverCallService, $rootScope) {
+    app.directive('dopPortfolioBox', ['translationService', 'serverCallService', '$rootScope', 'authenticatedUserService',
+        function(translationService, serverCallService, $rootScope, authenticatedUserService) {
         return {
             scope: {
                 portfolio: '='
@@ -29,6 +31,10 @@ define([
 
                 $scope.formatDate = function(date) {
                     return formatDateToDayMonthYear(date);
+                };
+
+                $scope.isAuthenticated = function () {
+                    return authenticatedUserService.getUser() && !authenticatedUserService.isRestricted();
                 }
             }
         };

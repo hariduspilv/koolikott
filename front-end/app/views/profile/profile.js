@@ -27,9 +27,26 @@ define([
                 if (user && $route.current.params.username === user.username) {
                     $scope.user = user;
                     $scope.myProfile = true;
+                    getUsersFavorites();
                 }
             }
         }
+
+
+        function getUsersFavorites() {
+            serverCallService.makeGet("rest/learningObject/usersFavorite", {}, getFavoritesSuccess, getFavoritesFail)
+        }
+
+        function getFavoritesSuccess(data) {
+            if(data) {
+                $scope.favorites = data
+            }
+        }
+
+        function getFavoritesFail() {
+            console.log("failed to retrieve learning objects favorited by the user")
+        }
+
 
         function getUser() {
             var params = {

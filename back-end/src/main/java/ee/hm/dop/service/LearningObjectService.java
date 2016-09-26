@@ -7,11 +7,14 @@ import java.util.function.BiFunction;
 import javax.inject.Inject;
 
 import ee.hm.dop.dao.LearningObjectDAO;
+import ee.hm.dop.dao.UserFavoriteDAO;
 import ee.hm.dop.model.LearningObject;
 import ee.hm.dop.model.Tag;
 import ee.hm.dop.model.User;
+import ee.hm.dop.model.UserFavorite;
 import ee.hm.dop.service.learningObject.LearningObjectHandler;
 import ee.hm.dop.service.learningObject.LearningObjectHandlerFactory;
+import org.joda.time.DateTime;
 
 public class LearningObjectService {
 
@@ -20,6 +23,9 @@ public class LearningObjectService {
 
     @Inject
     private SolrEngineService solrEngineService;
+
+    @Inject
+    private UserFavoriteDAO userFavoriteDAO;
 
     public LearningObject get(long learningObjectId, User user) {
         LearningObject learningObject = getLearningObjectDAO().findById(learningObjectId);
@@ -89,5 +95,38 @@ public class LearningObjectService {
 
     protected LearningObjectDAO getLearningObjectDAO() {
         return learningObjectDAO;
+    }
+
+    public UserFavorite addUserFavorite(LearningObject learningObject, User loggedInUser) {
+        validateLearningObjectAndIdNotNull(learningObject);
+
+        UserFavorite userFavorite = new UserFavorite();
+        userFavorite.setAdded(DateTime.now());
+        userFavorite.setCreator(loggedInUser);
+        userFavorite.setLearningObject(learningObject);
+
+        return userFavoriteDAO.update(userFavorite);
+    }
+
+    public void removeUserFavorite(Long id, User loggedInUser) {
+        LearningObject learningObject = learningObjectDAO.findById(id);
+
+        validateLearningObjectAndIdNotNull(learningObject);
+        userFavoriteDAO.deleteByLearningObjectAndUser(learningObject, loggedInUser);
+    }
+
+    public UserFavorite hasFavorited(Long id, User loggedInUser) {
+        LearningObject learningObject = learningObjectDAO.findById(id);
+        return userFavoriteDAO.findFavoriteByUserAndLearningObject(learningObject, loggedInUser);
+    }
+
+    public List<LearningObject> getUserFavorites(User loggedInUser) {
+        return userFavoriteDAO.findUsersFavoritedLearningObjects(loggedInUser);
+    }
+
+    private void validateLearningObjectAndIdNotNull(LearningObject learningObject) {
+        if (learningObject == null || learningObject.getId() == null) {
+            throw new RuntimeException("LearningObject not found");
+        }
     }
 }

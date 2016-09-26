@@ -5,7 +5,7 @@ define(['angularAMD'], function(angularAMD) {
         function($http, $location, authenticatedUserService, Upload) {
 
             function makeCall(url, method, params, includeAuthentication, successCallback, errorCallback, finallyCallback, transformRequest) {
-                headers = {};
+                var headers = {};
 
                 if (includeAuthentication) {
                     setAuthorization(headers);

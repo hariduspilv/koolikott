@@ -20,8 +20,8 @@ import org.junit.Test;
 
 public class LearningObjectResourceTest extends ResourceIntegrationTestBase {
 
-    private static final String ADD_TAG_URL = "learningObjects/%s/tags";
-    public static final String LEARNING_OBJECTS_GET_NEWEST = "learningObjects/getNewest?maxResults=";
+    private static final String ADD_TAG_URL = "learningObject/%s/tags";
+    public static final String LEARNING_OBJECTS_GET_NEWEST = "learningObject/getNewest?maxResults=";
 
     @Test
     public void addTag() {

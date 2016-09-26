@@ -14,7 +14,8 @@ define([
     'directives/recommend/recommend',
     'directives/rating/rating',
     'directives/tags/tags',
-    'directives/commentsCard/commentsCard'
+    'directives/commentsCard/commentsCard',
+    'directives/favorite/favorite'
 ], function (app, angularAMD) {
     app.directive('dopPortfolioSummaryCard', ['translationService', '$location', '$mdSidenav', '$mdDialog', '$rootScope', 'authenticatedUserService', '$route', 'dialogService', 'serverCallService', 'toastService', 'storageService', 'targetGroupService',
         function (translationService, $location, $mdSidenav, $mdDialog, $rootScope, authenticatedUserService, $route, dialogService, serverCallService, toastService, storageService, targetGroupService) {
