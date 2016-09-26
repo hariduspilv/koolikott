@@ -13,7 +13,7 @@
               <md-icon class="material-icons md-primary">keyboard_arrow_right</md-icon>
             </div>
           </div>
-          <div class="md-body-1 description-textarea" ng-class="{'hide': chapter.text.length == undefined || chapter.text.length == 0}"
+          <div class="md-body-1 textangular-view" ng-class="{'hide': chapter.text.length == undefined || chapter.text.length == 0}"
              data-ng-bind-html="chapter.text"></div>
         </div>
         <md-tooltip md-direction="bottom">
@@ -53,7 +53,7 @@
         </div>
         <div uib-collapse="isCollapsed">
           <md-input-container class="md-block">
-            <div text-angular id="add-material-description-input" class="chapter-content-textarea description-input-container"
+            <div text-angular id="add-material-description-input" class="chapter-content-textarea textangular-editor"
                  placeholder="{{'PORTFOLIO_CHAPTER_CONTENT' | translate}}" data-ng-model="chapter.text"></div>
           </md-input-container>
           <div dop-add-chapter-material chapter="chapter"></div>
@@ -126,7 +126,7 @@
           <div uib-collapse="subisCollapsed[subchapter.$$hashKey]">
             <md-input-container class="md-block">
 
-              <div text-angular id="subchapter-input" placeholder="{{'PORTFOLIO_SUB_CHAPTER_CONTENT' | translate}}"
+              <div text-angular class="textangular-editor" id="subchapter-input" placeholder="{{'PORTFOLIO_SUB_CHAPTER_CONTENT' | translate}}"
                    data-ng-model="subchapter.text"></div>
             </md-input-container>
             <div dop-add-chapter-material chapter="subchapter"></div>

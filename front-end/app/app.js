@@ -112,7 +112,7 @@ define([
                     focussed: 'focussed',
                     toolbar: 'btn-toolbar',
                     toolbarGroup: 'btn-group',
-                    toolbarButton: 'btn btn-default',
+                    toolbarButton: 'btn btn-textangular',
                     toolbarButtonActive: 'active',
                     disabled: 'disabled',
                     textEditor: 'form-control',
@@ -124,22 +124,22 @@ define([
 
             $provide.decorator('taTools', ['$delegate', function (taTools) {
                 taTools.bold.buttontext = '<md-icon>format_bold</md-icon>';
+                taTools.bold.iconclass = '';
+                taTools.bold.tooltiptext = '';
                 taTools.italics.buttontext = '<md-icon>format_italic</md-icon>';
+                taTools.italics.iconclass = '';
                 taTools.underline.buttontext = '<md-icon>format_underline</md-icon>';
+                taTools.underline.iconclass = '';
                 taTools.ul.buttontext = '<md-icon>format_list_bulleted</md-icon>';
+                taTools.ul.iconclass = '';
                 taTools.ol.buttontext = '<md-icon>format_list_numbered</md-icon>';
-                taTools.undo.buttontext = '<md-icon>undo</md-icon>';
-                taTools.redo.buttontext = '<md-icon>redo</md-icon>';
-                taTools.justifyLeft.buttontext = '<md-icon>format_align_left</md-icon>';
-                taTools.justifyRight.buttontext = '<md-icon>format_align_right</md-icon>';
-                taTools.justifyCenter.buttontext = '<md-icon>format_align_center</md-icon>';
-                taTools.justifyFull.buttontext = '<md-icon>format_align_justify</md-icon>'
-                taTools.clear.buttontext = '<md-icon>clear</md-icon>';
+                taTools.ol.iconclass = '';
                 taTools.insertLink.buttontext = '<md-icon>insert_link</md-icon>';
                 taTools.insertImage.buttontext = '<md-icon>insert_photo</md-icon>';
-                taTools.pre.buttontext = '&nbsp;<md-icon>crop_16_9</md-icon>';
-                // delete taTools.quote.iconclass;
+                taTools.pre.buttontext = '<md-icon>crop_16_9</md-icon>';
+                taTools.pre.iconclass = '';
                 taTools.quote.buttontext = '<md-icon>format_quote</md-icon>';
+                taTools.quote.iconclass = '';
                 return taTools;
             }]);
         }
