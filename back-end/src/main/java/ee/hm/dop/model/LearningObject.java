@@ -50,7 +50,8 @@ import org.owasp.html.PolicyFactory;
 public abstract class LearningObject {
 
     static PolicyFactory ALLOWED_HTML_TAGS_POLICY = new HtmlPolicyBuilder().allowStandardUrlProtocols()
-            .allowElements("p", "b", "br", "i", "ul", "li", "div", "ol", "pre", "blockquote").toFactory();
+            .allowElements("p", "b", "br", "i", "ul", "li", "div", "ol", "pre", "blockquote", "a").allowAttributes("href", "target").onElements("a")
+            .toFactory();
     @Id
     @GeneratedValue
     private Long id;
