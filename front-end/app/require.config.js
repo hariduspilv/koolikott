@@ -30,7 +30,7 @@ require.config({
         'rangy-selectionsaverestore': 'libs/rangy/rangy-selectionsaverestore.min',
         'textAngular-sanitize': 'libs/textAngular/dist/textAngular-sanitize.min',
         'textAngularSetup': 'libs/textAngular/dist/textAngularSetup',
-        'textAngular': 'libs/textAngular/dist/textAngular'
+        'textAngular': 'utils/koolikottTextAngular'
     },
     shim: {
         'angular': ['jquery'],

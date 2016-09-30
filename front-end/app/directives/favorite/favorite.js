@@ -1,9 +1,10 @@
 define([
     'app',
     'services/serverCallService',
-    'services/authenticatedUserService'
+    'services/authenticatedUserService',
+    'services/toastService'
 ], function (app) {
-    app.directive('dopFavorite', function (serverCallService, authenticatedUserService) {
+    app.directive('dopFavorite', function (serverCallService, authenticatedUserService, toastService) {
         return {
             scope: {
                 learningObject: '='
@@ -38,6 +39,7 @@ define([
 
                 function addFavoriteSuccess(data) {
                     if (data && data.id) {
+                        toastService.show("ADDED_TO_FAVORITES");
                         $scope.hasFavorited = true;
                     }
                 }
@@ -56,6 +58,8 @@ define([
                         }, function () {
                         });
                         $scope.hasFavorited = false;
+                        toastService.show("REMOVED_FROM_FAVORITES");
+
                     }
                 };
 
