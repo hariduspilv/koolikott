@@ -3,8 +3,9 @@ language: java
 jdk:
   - oraclejdk8
 
-script:
-  cd back-end && mvn test
+env:
+  global:
+  - TERM=dumb
 
-after_success:
-  - coveralls:report
+script:
+  cd back-end && mvn clean package

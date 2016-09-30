@@ -75,3 +75,8 @@ md-toolbar .md-button.md-icon-button md-icon, button.md-button.md-fab md-icon {
     }
   }
 }
+
+button.md-chip-remove md-icon{
+  min-width: 0;
+  min-height: 0;
+}

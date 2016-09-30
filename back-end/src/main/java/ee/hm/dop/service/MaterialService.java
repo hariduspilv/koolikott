@@ -271,7 +271,14 @@ public class MaterialService implements LearningObjectHandler {
             throw new IllegalArgumentException("Material id parameter is mandatory");
         }
 
-        Material originalMaterial = materialDao.findByIdNotDeleted(material.getId());
+        Material originalMaterial;
+
+        if( isUserAdmin(changer) || isUserModerator(changer)){
+            originalMaterial = materialDao.findById(material.getId());
+        }else{
+            originalMaterial = materialDao.findByIdNotDeleted(material.getId());
+        }
+
         validateMaterialUpdate(originalMaterial, changer);
 
         if (!isUserAdmin(changer)) {
