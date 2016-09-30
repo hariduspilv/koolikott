@@ -17,6 +17,7 @@ import ee.hm.dop.dao.UserLikeDAO;
 import ee.hm.dop.model.Author;
 import ee.hm.dop.model.BrokenContent;
 import ee.hm.dop.model.Comment;
+import ee.hm.dop.model.Language;
 import ee.hm.dop.model.LearningObject;
 import ee.hm.dop.model.Material;
 import ee.hm.dop.model.Publisher;
@@ -252,12 +253,8 @@ public class MaterialService implements LearningObjectHandler {
 
     public UserLike getUserLike(Material material, User loggedInUser) {
         validateMaterialAndIdNotNull(material);
-        Material originalMaterial = materialDao.findByIdNotDeleted(material.getId());
-        if (originalMaterial == null && !isUserAdmin(loggedInUser)) {
-            throw new RuntimeException("Material not found");
-        }
 
-        return userLikeDAO.findMaterialUserLike(originalMaterial, loggedInUser);
+        return userLikeDAO.findMaterialUserLike(material, loggedInUser);
     }
 
     public void delete(Material material) {
@@ -423,6 +420,10 @@ public class MaterialService implements LearningObjectHandler {
     public Boolean isBroken(long materialId) {
         List<BrokenContent> brokenContents = brokenContentDAO.findByMaterial(materialId);
         return brokenContents.size() != 0;
+    }
+
+    public List<Language> getLanguagesUsedInMaterials() {
+        return materialDao.findLanguagesUsedInMaterials();
     }
 
     private void validateMaterialAndIdNotNull(Material material) {

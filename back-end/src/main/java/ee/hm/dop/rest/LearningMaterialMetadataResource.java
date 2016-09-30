@@ -21,6 +21,7 @@ import ee.hm.dop.service.CrossCurricularThemeService;
 import ee.hm.dop.service.KeyCompetenceService;
 import ee.hm.dop.service.LanguageService;
 import ee.hm.dop.service.LicenseTypeService;
+import ee.hm.dop.service.MaterialService;
 import ee.hm.dop.service.ResourceTypeService;
 import ee.hm.dop.service.TaxonService;
 
@@ -44,6 +45,9 @@ public class LearningMaterialMetadataResource {
 
     @Inject
     private KeyCompetenceService keyCompetenceService;
+
+    @Inject
+    private MaterialService materialservice;
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
@@ -99,6 +103,13 @@ public class LearningMaterialMetadataResource {
     @Produces(MediaType.APPLICATION_JSON)
     public List<KeyCompetence> getAllCompetences() {
         return keyCompetenceService.getAllKeyCompetences();
+    }
+
+    @GET
+    @Path("usedLanguages")
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<Language> getUsedLanguages() {
+        return materialservice.getLanguagesUsedInMaterials();
     }
 
 }

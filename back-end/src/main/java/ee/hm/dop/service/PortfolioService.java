@@ -146,8 +146,7 @@ public class PortfolioService implements LearningObjectHandler {
             throw new RuntimeException("Not authorized");
         }
 
-        UserLike like = userLikeDAO.findPortfolioUserLike(originalPortfolio, loggedInUser);
-        return like;
+        return userLikeDAO.findPortfolioUserLike(originalPortfolio, loggedInUser);
     }
 
     public Recommendation addRecommendation(Portfolio portfolio, User loggedInUser) {

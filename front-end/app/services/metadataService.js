@@ -1,7 +1,7 @@
 define([
     'angularAMD',
     'services/serverCallService'
-], function(angularAMD) {
+], function (angularAMD) {
     var instance;
 
     var CROSS_CURRICULAR_THEMES;
@@ -10,6 +10,7 @@ define([
     var LICENSE_TYPES;
     var RESOURCE_TYPES;
     var EDUCATIONAL_CONTEXTS;
+    var USED_LANGUAGES;
 
     var crossCurricularThemesCallbacks = [];
     var keyCompetencesCallbacks = [];
@@ -17,10 +18,10 @@ define([
     var licenseTypesCallbacks = [];
     var resourceTypesCallbacks = [];
     var educationalContextsCallbacks = [];
+    var usedLanguagesContextsCallbacks = [];
 
-    angularAMD.factory('metadataService', ['serverCallService',
-        function(serverCallService) {
-
+    angularAMD.factory('metadataService', ['serverCallService', '$filter',
+        function (serverCallService, $filter) {
             init();
 
             function init() {
@@ -30,6 +31,31 @@ define([
                 serverCallService.makeGet("rest/learningMaterialMetadata/language", {}, getLanguagesSuccess, getLanguagesFail);
                 serverCallService.makeGet("rest/learningMaterialMetadata/licenseType", {}, getLicenseTypeSuccess, getLicenseTypeFail);
                 serverCallService.makeGet("rest/learningMaterialMetadata/resourceType", {}, getResourceTypeSuccess, getResourceTypeFail);
+                serverCallService.makeGet("rest/learningMaterialMetadata/usedLanguages", {}, getUsedLanguagesSuccess, getUsedLanguagesFail);
+            }
+
+            function getUsedLanguagesSuccess(data) {
+                if (isEmpty(data)) {
+                    getUsedLanguagesFail();
+                } else {
+                    data = data.sort(function (a, b) {
+                        if ($filter('translate')(getLanguage(a)) < $filter('translate')(getLanguage(b))) return -1;
+                        if ($filter('translate')(getLanguage(a)) > $filter('translate')(getLanguage(b))) return 1;
+                        return 0;
+                    });
+                    USED_LANGUAGES = data;
+                    usedLanguagesContextsCallbacks.forEach(function (callback) {
+                        callback(data);
+                    });
+                }
+            }
+
+            function getLanguage(languageCode) {
+                return 'LANGUAGE_' + languageCode.toUpperCase();
+            }
+
+            function getUsedLanguagesFail() {
+                console.log("failed to get used languages.")
             }
 
             function getCrossCurricularThemesSuccess(data) {
@@ -37,7 +63,7 @@ define([
                     getCrossCurricularThemesFail();
                 } else {
                     CROSS_CURRICULAR_THEMES = data;
-                    crossCurricularThemesCallbacks.forEach(function(callback) {
+                    crossCurricularThemesCallbacks.forEach(function (callback) {
                         callback(data);
                     });
                 }
@@ -52,7 +78,7 @@ define([
                     getKeyCompetencesFail();
                 } else {
                     KEY_COMPETENCES = data;
-                    keyCompetencesCallbacks.forEach(function(callback) {
+                    keyCompetencesCallbacks.forEach(function (callback) {
                         callback(data);
                     });
                 }
@@ -67,7 +93,7 @@ define([
                     getLanguagesFail();
                 } else {
                     LANGUGAGES = data;
-                    langugagesCallbacks.forEach(function(callback) {
+                    langugagesCallbacks.forEach(function (callback) {
                         callback(data);
                     });
                 }
@@ -80,7 +106,7 @@ define([
             function getLicenseTypeSuccess(data) {
                 if (!isEmpty(data)) {
                     LICENSE_TYPES = data;
-                    licenseTypesCallbacks.forEach(function(callback) {
+                    licenseTypesCallbacks.forEach(function (callback) {
                         callback(data);
                     });
                 }
@@ -93,7 +119,7 @@ define([
             function getResourceTypeSuccess(data) {
                 if (!isEmpty(data)) {
                     RESOURCE_TYPES = data;
-                    resourceTypesCallbacks.forEach(function(callback) {
+                    resourceTypesCallbacks.forEach(function (callback) {
                         callback(data);
                     });
                 }
@@ -106,7 +132,7 @@ define([
             function getEducationalContextSuccess(data) {
                 if (!isEmpty(data)) {
                     EDUCATIONAL_CONTEXTS = data;
-                    educationalContextsCallbacks.forEach(function(callback) {
+                    educationalContextsCallbacks.forEach(function (callback) {
                         callback(data);
                     });
                 }
@@ -118,7 +144,7 @@ define([
 
             instance = {
 
-                loadCrossCurricularThemes: function(callback) {
+                loadCrossCurricularThemes: function (callback) {
                     if (CROSS_CURRICULAR_THEMES) {
                         callback(CROSS_CURRICULAR_THEMES);
                     } else {
@@ -127,7 +153,7 @@ define([
                     }
                 },
 
-                loadKeyCompetences: function(callback) {
+                loadKeyCompetences: function (callback) {
                     if (KEY_COMPETENCES) {
                         callback(KEY_COMPETENCES);
                     } else {
@@ -136,7 +162,7 @@ define([
                     }
                 },
 
-                loadLanguages: function(callback) {
+                loadLanguages: function (callback) {
                     if (LANGUGAGES) {
                         callback(LANGUGAGES);
                     } else {
@@ -145,7 +171,7 @@ define([
                     }
                 },
 
-                loadLicenseTypes: function(callback) {
+                loadLicenseTypes: function (callback) {
                     if (LICENSE_TYPES) {
                         callback(LICENSE_TYPES);
                     } else {
@@ -154,7 +180,7 @@ define([
                     }
                 },
 
-                loadResourceTypes: function(callback) {
+                loadResourceTypes: function (callback) {
                     if (RESOURCE_TYPES) {
                         callback(RESOURCE_TYPES);
                     } else {
@@ -163,12 +189,21 @@ define([
                     }
                 },
 
-                loadEducationalContexts: function(callback) {
+                loadEducationalContexts: function (callback) {
                     if (EDUCATIONAL_CONTEXTS) {
                         callback(EDUCATIONAL_CONTEXTS);
                     } else {
                         // Save callback, call it when data arrives
                         educationalContextsCallbacks.push(callback);
+                    }
+                },
+
+                loadUsedLanguages: function (callback) {
+                    if (USED_LANGUAGES) {
+                        callback(USED_LANGUAGES);
+                    } else {
+                        // Save callback, call it when data arrives
+                        usedLanguagesContextsCallbacks.push(callback);
                     }
                 }
             };

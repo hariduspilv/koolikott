@@ -73,6 +73,8 @@ public class EntityManagerFactoryProvider implements Provider<EntityManagerFacto
         properties.put("hibernate.c3p0.testConnectionOnCheckin", "true");
         properties.put("hibernate.c3p0.preferredTestQuery", "SELECT 1");
         properties.put("hibernate.c3p0.numHelperThreads", "11");
+        properties.put("hibernate.cache.use_query_cache", "true");
+        properties.put("hibernate.cache.region.factory_class", "org.hibernate.cache.ehcache.EhCacheRegionFactory");
 
         // Configurable options
         properties.put("hibernate.connection.url", configuration.getString(DATABASE_URL));

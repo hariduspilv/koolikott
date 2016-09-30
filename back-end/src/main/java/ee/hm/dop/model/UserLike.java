@@ -9,6 +9,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import ee.hm.dop.rest.jackson.map.DateTimeDeserializer;
@@ -25,6 +26,7 @@ public class UserLike {
     private Long id;
 
     @ManyToOne
+    @JsonIgnore
     @JoinColumn(name = "creator", nullable = false)
     private User creator;
 
@@ -32,6 +34,7 @@ public class UserLike {
     private boolean isLiked;
 
     @ManyToOne
+    @JsonIgnore
     @JoinColumn(name = "learningObject")
     private LearningObject learningObject;
 

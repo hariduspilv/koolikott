@@ -13,7 +13,7 @@ public class EntityManagerFactoryTestProvider extends EntityManagerFactoryProvid
 
     @Override
     protected Map<String, String> getDatabaseProperties() {
-        Map<String, String> properties = new HashMap<>();
+        Map<String, String> properties = super.getDatabaseProperties();
         properties.put("hibernate.connection.driver_class", "org.h2.Driver");
         properties.put("hibernate.dialect", "org.hibernate.dialect.H2Dialect");
         properties.put("hibernate.show_sql", "true");

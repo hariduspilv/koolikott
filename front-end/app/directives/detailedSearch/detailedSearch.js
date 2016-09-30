@@ -33,7 +33,7 @@ define([
                     $scope.detailedSearch = {};
 
                     // Languages
-                    metadataService.loadLanguages(setLanguages);
+                    metadataService.loadUsedLanguages(setLanguages);
                     $scope.detailedSearch.language = searchService.getLanguage();
 
                     // ResourceTypes
@@ -324,7 +324,7 @@ define([
                             $scope.detailedSearch.educationalContext = $rootScope.taxonUtils.getEducationalContext($scope.detailedSearch.taxon);
                             clearHiddenFields();
                             $scope.search();
-                        } else if(prefilling) {
+                        } else if (prefilling) {
                             prefilling = false;
                         }
                     }, false);
@@ -347,20 +347,20 @@ define([
                 };
 
                 function hasSearchChanged(newValue, oldValue) {
-                    if(newValue.main !== oldValue.main) return true;
-                    if(newValue.title !== oldValue.title) return true;
-                    if(newValue.language !== oldValue.language) return true;
-                    if(newValue.resourceType !== oldValue.resourceType) return true;
-                    if(newValue.targetGroups !== oldValue.targetGroups) return true;
-                    if(newValue.onlyCurriculumLiterature !== oldValue.onlyCurriculumLiterature) return true;
-                    if(newValue.specialEducation !== oldValue.specialEducation) return true;
-                    if(newValue.paid !== oldValue.paid) return true;
-                    if(newValue.type !== oldValue.type) return true;
-                    if(newValue.issueDate !== oldValue.issueDate) return true;
-                    if(newValue.crossCurricularTheme !== oldValue.crossCurricularTheme) return true;
-                    if(newValue.keyCompetence !== oldValue.keyCompetence) return true;
-                    if(newValue.specialEducationalNeed !== oldValue.specialEducationalNeed) return true;
-                    if(newValue.CLIL !== oldValue.CLIL) return true;
+                    if (newValue.main !== oldValue.main) return true;
+                    if (newValue.title !== oldValue.title) return true;
+                    if (newValue.language !== oldValue.language) return true;
+                    if (newValue.resourceType !== oldValue.resourceType) return true;
+                    if (newValue.targetGroups !== oldValue.targetGroups) return true;
+                    if (newValue.onlyCurriculumLiterature !== oldValue.onlyCurriculumLiterature) return true;
+                    if (newValue.specialEducation !== oldValue.specialEducation) return true;
+                    if (newValue.paid !== oldValue.paid) return true;
+                    if (newValue.type !== oldValue.type) return true;
+                    if (newValue.issueDate !== oldValue.issueDate) return true;
+                    if (newValue.crossCurricularTheme !== oldValue.crossCurricularTheme) return true;
+                    if (newValue.keyCompetence !== oldValue.keyCompetence) return true;
+                    if (newValue.specialEducationalNeed !== oldValue.specialEducationalNeed) return true;
+                    if (newValue.CLIL !== oldValue.CLIL) return true;
                 }
 
                 function clearHiddenFields() {

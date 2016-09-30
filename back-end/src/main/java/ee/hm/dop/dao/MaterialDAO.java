@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.persistence.TypedQuery;
 
+import ee.hm.dop.model.Language;
 import ee.hm.dop.model.LearningObject;
 import ee.hm.dop.model.Material;
 import ee.hm.dop.model.Repository;
@@ -71,5 +72,10 @@ public class MaterialDAO extends LearningObjectDAO {
     public List<Material> findBySource(String materialSource) {
         return createQuery("FROM Material m WHERE m.deleted = false AND m.source = :source", Material.class)
                 .setParameter("source", materialSource).getResultList();
+    }
+
+    public List<Language> findLanguagesUsedInMaterials() {
+        return createQuery("SELECT DISTINCT m.language FROM Material m WHERE m.deleted = false", Language.class)
+                .getResultList();
     }
 }
