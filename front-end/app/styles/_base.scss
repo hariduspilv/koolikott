@@ -92,3 +92,5 @@ md-datepicker {
 .column-layout-content {
   margin-top: 60px;
 }
+
+body.md-toast-animating { overflow: auto !important; }
