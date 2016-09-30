@@ -53,6 +53,12 @@
     margin: 0;
     padding: 0 20px;
   }
+  .ta-bind > a {
+    margin-bottom: 16px;
+  }
+  .popover {
+    display: none !important;
+  }
 }
 
 //
@@ -124,6 +130,9 @@
     padding: 12px 12px;
     height: 100%;
     word-break: break-word;
+    a:hover {
+      text-decoration: none;
+    }
   }
 
   // Textarea / text container
