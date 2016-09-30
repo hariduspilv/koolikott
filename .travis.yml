@@ -4,7 +4,4 @@ jdk:
   - oraclejdk8
 
 script:
-  cd back-end && mvn test
-
-after_success:
-  - coveralls:report
+  cd back-end && mvn clean package
