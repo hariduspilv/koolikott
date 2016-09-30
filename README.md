@@ -6,4 +6,4 @@ Since catalogued learning objects are hosted externally, the aim is to provide e
 Information about learning objects is gathered automatically from supported OER and commercial repositories using OAI-PMH protocol or added manually by authenticated users.
 
 ## Contributing
-Please do not ask general questions in an issue. Issues are only to report bugs, request enhancements, or request new features. For general questions and discussions, contact via e-koolikott@hm.ee
+Please do not ask general questions in an issue. Issues are only to report bugs, request enhancements and new features. For general questions and discussions, contact via e-koolikott@hm.ee
