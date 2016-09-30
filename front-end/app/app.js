@@ -32,7 +32,7 @@ define([
 
     'services/authenticatedUserService',
     'DOPconstants',
-], function (angularAMD, config, taxonUtils, taxonParser, moment) {
+], function (angularAMD, config, taxonUtils, taxonParser, moment, $translate) {
     'use strict';
 
     var app = angular.module('app', [
@@ -47,6 +47,8 @@ define([
         'textAngular'
     ]);
 
+    var provideProvider = null;
+
     app.config(function ($routeProvider, $locationProvider, $controllerProvider, $compileProvider, $filterProvider, $provide, $translateProvider, $sceProvider, $mdThemingProvider, $httpProvider, $mdDateLocaleProvider, $anchorScrollProvider) {
             //Add rangy manually to the window from the rangy-core, as textAngular needs it and requireJS can't add it
             require(['rangy-core'], function (rangy) {
@@ -60,6 +62,7 @@ define([
             app.factory = $provide.factory;
             app.service = $provide.service;
             $httpProvider.useApplyAsync(true);
+            provideProvider = $provide;
 
             if (config.routes !== undefined) {
                 angular.forEach(config.routes, function (route, path) {
@@ -89,24 +92,12 @@ define([
                 $httpProvider.defaults.headers.get = {};
             }
 
-            $httpProvider.defaults.transformResponse.splice(0, 0, parseJSONResponse);
-            $httpProvider.defaults.transformRequest = serializeRequest;
-            //disable IE ajax request caching
-            $httpProvider.defaults.headers.get['If-Modified-Since'] = 'Mon, 26 Jul 1997 05:00:00 GMT';
-            // extra
-            $httpProvider.defaults.headers.get['Cache-Control'] = 'no-cache';
-            $httpProvider.defaults.headers.get['Pragma'] = 'no-cache';
-
-            $locationProvider.html5Mode(true);
-            $anchorScrollProvider.disableAutoScrolling();
-
             $provide.decorator('taOptions', ['$delegate', function (taOptions) {
                 taOptions.forceTextAngularSanitize = true;
-                taOptions.keyMappings = [];
+
                 taOptions.toolbar = [
-                    ['bold', 'italics', 'underline', 'ul', 'ol', 'pre', 'quote']
+                    ['bold', 'italics', 'ul', 'ol', 'insertLink', 'pre', 'quote']
                 ];
-                // TODO: Mare/Aleks valib välja ikoonid ja loob uue visuaali
 
                 taOptions.classes = {
                     focussed: 'focussed',
@@ -120,28 +111,18 @@ define([
                 };
                 return taOptions; // whatever you return will be the taOptions
             }]);
-            // TODO: Mare/Aleks valib välja ikoonid ja loob uue visuaali
 
-            $provide.decorator('taTools', ['$delegate', function (taTools) {
-                taTools.bold.buttontext = '<md-icon>format_bold</md-icon>';
-                taTools.bold.iconclass = '';
-                taTools.bold.tooltiptext = '';
-                taTools.italics.buttontext = '<md-icon>format_italic</md-icon>';
-                taTools.italics.iconclass = '';
-                taTools.underline.buttontext = '<md-icon>format_underline</md-icon>';
-                taTools.underline.iconclass = '';
-                taTools.ul.buttontext = '<md-icon>format_list_bulleted</md-icon>';
-                taTools.ul.iconclass = '';
-                taTools.ol.buttontext = '<md-icon>format_list_numbered</md-icon>';
-                taTools.ol.iconclass = '';
-                taTools.insertLink.buttontext = '<md-icon>insert_link</md-icon>';
-                taTools.insertImage.buttontext = '<md-icon>insert_photo</md-icon>';
-                taTools.pre.buttontext = '<md-icon>crop_16_9</md-icon>';
-                taTools.pre.iconclass = '';
-                taTools.quote.buttontext = '<md-icon>format_quote</md-icon>';
-                taTools.quote.iconclass = '';
-                return taTools;
-            }]);
+            $httpProvider.defaults.transformResponse.splice(0, 0, parseJSONResponse);
+            $httpProvider.defaults.transformRequest = serializeRequest;
+            //disable IE ajax request caching
+            $httpProvider.defaults.headers.get['If-Modified-Since'] = 'Mon, 26 Jul 1997 05:00:00 GMT';
+            // extra
+            $httpProvider.defaults.headers.get['Cache-Control'] = 'no-cache';
+            $httpProvider.defaults.headers.get['Pragma'] = 'no-cache';
+
+            $locationProvider.html5Mode(true);
+            $anchorScrollProvider.disableAutoScrolling();
+
         }
     );
 
@@ -174,6 +155,7 @@ define([
 
         $translateProvider.preferredLanguage(language);
         $translateProvider.useSanitizeValueStrategy('escaped');
+
     }
 
     // http://stackoverflow.com/questions/30123735/how-to-create-multiple-theme-in-material-angular
@@ -208,6 +190,34 @@ define([
             var m = moment(dateString, ['DD.MM.YYYY', 'MM.YYYY', 'YYYY', 'DD-MM-YYYY', 'DD/MM/YYYY'], true);
             return m.isValid() ? m.toDate() : new Date(NaN)
         };
+    }
+
+    function configureTextAngular($provide, $translate) {
+
+      $provide.decorator('taTools', ['$delegate', function (taTools) {
+          taTools.bold.buttontext = '<md-icon>format_bold</md-icon>';
+          taTools.bold.iconclass = '';
+          taTools.bold.tooltiptext = $translate.instant('TEXTANGULAR_BOLD');
+          taTools.italics.buttontext = '<md-icon>format_italic</md-icon>';
+          taTools.italics.iconclass = '';
+          taTools.italics.tooltiptext = $translate.instant('TEXTANGULAR_ITALICS');
+          taTools.insertLink.buttontext = '<md-icon>insert_link</md-icon>';
+          taTools.insertLink.iconclass = '';
+          taTools.insertLink.tooltiptext = $translate.instant('TEXTANGULAR_INSERT_LINK');
+          taTools.ul.buttontext = '<md-icon>format_list_bulleted</md-icon>';
+          taTools.ul.iconclass = '';
+          taTools.ul.tooltiptext = $translate.instant('TEXTANGULAR_UL');
+          taTools.ol.buttontext = '<md-icon>format_list_numbered</md-icon>';
+          taTools.ol.iconclass = '';
+          taTools.ol.tooltiptext = $translate.instant('TEXTANGULAR_OL');
+          taTools.pre.buttontext = '<md-icon>crop_16_9</md-icon>';
+          taTools.pre.iconclass = '';
+          taTools.pre.tooltiptext = $translate.instant('TEXTANGULAR_PRE');
+          taTools.quote.buttontext = '<md-icon>format_quote</md-icon>';
+          taTools.quote.iconclass = '';
+          taTools.quote.tooltiptext = $translate.instant('TEXTANGULAR_QUOTE');
+          return taTools;
+      }]);
     }
 
     app.run(function ($rootScope, metadataService, APP_VERSION) {
@@ -322,6 +332,10 @@ define([
         }, function () {
             console.log("Failed to load detailedSearch.html template")
         });
+    });
+
+    app.run(function ($translate) {
+        configureTextAngular(provideProvider, $translate);
     });
 
     return angularAMD.bootstrap(app);
