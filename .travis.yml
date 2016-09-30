@@ -3,5 +3,9 @@ language: java
 jdk:
   - oraclejdk8
 
+env:
+  global:
+  - TERM=dumb
+
 script:
   cd back-end && mvn clean package
