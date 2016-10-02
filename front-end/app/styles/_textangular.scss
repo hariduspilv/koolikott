@@ -66,11 +66,18 @@
 //
 
 .textangular-editor {
-  // ReplaceFlex
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
-  flex-direction: column;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -ms-flex-direction: column;
+          flex-direction: column;
   @media (min-width: 600px){
-    flex-direction: row-reverse;
+    -webkit-box-orient: horizontal;
+    -webkit-box-direction: reverse;
+        -ms-flex-direction: row-reverse;
+            flex-direction: row-reverse;
   }
 
   width: 100%;
@@ -99,14 +106,22 @@
 
   // Button group style
   .btn-group {
-    // ReplaceFlex
+    display: -webkit-box;
+    display: -ms-flexbox;
     display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
+    -webkit-box-orient: horizontal;
+    -webkit-box-direction: normal;
+    -ms-flex-direction: row;
+            flex-direction: row;
+    -ms-flex-wrap: wrap;
+        flex-wrap: wrap;
 
     @media (min-width: 600px) {
-      flex-direction: column;
-    }
+       -webkit-box-orient: vertical;
+       -webkit-box-direction: normal;
+           -ms-flex-direction: column;
+               flex-direction: column;
+     }
   }
 
   // Toolbar style ( contains btn-group )
