@@ -32,6 +32,6 @@ public class ExecutorHelperTest {
         int delay = (int) ExecutorHelper.getInitialDelay(hourOfDayToExecute);
         LocalDateTime firstExecution = now.plusMillis(delay);
 
-        assertTrue(Math.abs(firstExecution.toDate().getTime() - expectedExecutionTime.toDate().getTime()) < 500);
+        assertTrue(Math.abs(firstExecution.toDate().getTime() - expectedExecutionTime.toDate().getTime()) < 2000);
     }
 }
