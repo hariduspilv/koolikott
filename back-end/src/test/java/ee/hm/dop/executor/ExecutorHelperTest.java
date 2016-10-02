@@ -24,7 +24,7 @@ public class ExecutorHelperTest {
     @Test
     public void getInitialDelayExecuteToday() {
         LocalDateTime now = now();
-        int hourOfDayToExecute = now.getHourOfDay() + 1;
+        int hourOfDayToExecute = (now.getHourOfDay() + 1) % 23;
         LocalDateTime expectedExecutionTime = now.withHourOfDay(hourOfDayToExecute).withMinuteOfHour(0)
                 .withSecondOfMinute(0).withMillisOfSecond(0);
 
