@@ -323,7 +323,7 @@ public class MaterialServiceTest {
         material.setId(1L);
         material.setRepository(null);
 
-        expect(materialDAO.findByIdNotDeleted(material.getId())).andReturn(material).anyTimes();
+        expect(materialDAO.findById(material.getId())).andReturn(material).anyTimes();
         expect(user.getRole()).andReturn(Role.ADMIN).anyTimes();
         expect(materialDAO.update(material)).andReturn(new Material());
 
