@@ -29,7 +29,7 @@ public class SuggestService {
     private SpellCheckResponse.Suggestion doSuggest(String query){
         String queryString = getTokenizedQueryString(query);
 
-        return solrEngineService.suggest(query);
+        return solrEngineService.suggest(queryString);
     }
 
 }

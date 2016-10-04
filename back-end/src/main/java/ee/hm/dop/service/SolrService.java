@@ -146,6 +146,7 @@ public class SolrService implements SolrEngineService {
     static String getTokenizedQueryString(String query) {
         StringBuilder sb = new StringBuilder();
         if (!isBlank(query)) {
+            query = query.replaceAll("\\+", " ");
             DOPSearchStringTokenizer tokenizer = new DOPSearchStringTokenizer(query);
             while (tokenizer.hasMoreTokens()) {
                 sb.append(tokenizer.nextToken());
