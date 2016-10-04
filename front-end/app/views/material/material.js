@@ -22,10 +22,11 @@ define([
     'services/iconService',
     'services/toastService',
     'services/storageService',
-    'services/targetGroupService'
+    'services/targetGroupService',
+    'services/embedService'
 ], function (app, angularAMD) {
-    return ['$scope', 'serverCallService', '$route', 'translationService', '$rootScope', 'searchService', '$location', 'alertService', 'authenticatedUserService', 'dialogService', 'toastService', 'iconService', '$mdDialog', 'storageService', 'targetGroupService',
-        function ($scope, serverCallService, $route, translationService, $rootScope, searchService, $location, alertService, authenticatedUserService, dialogService, toastService, iconService, $mdDialog, storageService, targetGroupService) {
+    return ['$scope', 'serverCallService', '$route', 'translationService', '$rootScope', 'searchService', '$location', 'alertService', 'authenticatedUserService', 'dialogService', 'toastService', 'iconService', '$mdDialog', 'storageService', 'targetGroupService', 'embedService',
+        function ($scope, serverCallService, $route, translationService, $rootScope, searchService, $location, alertService, authenticatedUserService, dialogService, toastService, iconService, $mdDialog, storageService, targetGroupService, embedService) {
             $scope.showMaterialContent = false;
             $scope.newComment = {};
             $scope.pageUrl = $location.absUrl();
@@ -68,6 +69,19 @@ define([
                 }
             });
 
+            function setEmbedCallback(res) {
+                if (res && res.data) {
+                    $scope.embeddedDataIframe = null;
+                    $scope.embeddedData = null;
+
+                    if (res.data.html.contains("<iframe")) {
+                        $scope.embeddedDataIframe = res.data.html.replace("http:", "");
+                    } else {
+                        $scope.embeddedData = res.data.html.replace("http:", "");
+                    }
+                }
+            }
+
             function getMaterial(success, fail) {
                 var materialId = $route.current.params.materialId;
                 var params = {
@@ -98,6 +112,7 @@ define([
 
             function processMaterial() {
                 if ($scope.material) {
+                    embedService.getEmbed(getSource($scope.material), setEmbedCallback);
                     setSourceType();
 
                     if ($scope.material.taxons) {

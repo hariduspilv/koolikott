@@ -146,7 +146,7 @@
                   <!-- left description  -->
                   <div class="on-left" flex>
                     <div class="md-body-1 description textangular-view"
-                       data-ng-bind-html="getCorrectLanguageString(material.descriptions)"></div>
+                         data-ng-bind-html="getCorrectLanguageString(material.descriptions)"></div>
 
                     <div data-ng-if="sourceType === 'YOUTUBE'" class="embed-responsive embed-responsive-16by9">
                       <div class="embed-responsive-container">
@@ -163,6 +163,20 @@
                     </div>
 
                     <div data-ng-if="sourceType === 'LINK' && !material.embeddable">
+                      <!--Embed iframe-->
+                      <div data-ng-if="embeddedDataIframe" class="embed-responsive">
+                        <div class="embed-responsive-container">
+                          <div class="embed-responsive-item" data-ng-bind-html="embeddedDataIframe"></div>
+                        </div>
+                      </div>
+                      <!--Embed html-->
+                      <div data-ng-if="embeddedData">
+                        <div class="embed-responsive-container">
+                          <div class="embed-responsive-item" data-ng-bind-html="embeddedData"></div>
+                        </div>
+                      </div>
+
+                      <!--Link as backup - if iframe is internally not working-->
                       <a data-ng-href="{{material.source}}" target="_blank" class="wrapped regular-link md-primary">
                         <span class="item-link" data-ng-bind="material.source"></span>
                       </a>

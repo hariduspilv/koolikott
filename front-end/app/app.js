@@ -32,7 +32,7 @@ define([
 
     'services/authenticatedUserService',
     'DOPconstants',
-], function (angularAMD, config, taxonUtils, taxonParser, moment, $translate) {
+], function (angularAMD, config, taxonUtils, taxonParser, moment) {
     'use strict';
 
     var app = angular.module('app', [
@@ -114,15 +114,16 @@ define([
 
             $httpProvider.defaults.transformResponse.splice(0, 0, parseJSONResponse);
             $httpProvider.defaults.transformRequest = serializeRequest;
+
+            //TODO: Enable only for ie
             //disable IE ajax request caching
-            $httpProvider.defaults.headers.get['If-Modified-Since'] = 'Mon, 26 Jul 1997 05:00:00 GMT';
+            // $httpProvider.defaults.headers.get['If-Modified-Since'] = 'Mon, 26 Jul 1997 05:00:00 GMT';
             // extra
-            $httpProvider.defaults.headers.get['Cache-Control'] = 'no-cache';
-            $httpProvider.defaults.headers.get['Pragma'] = 'no-cache';
+            // $httpProvider.defaults.headers.get['Cache-Control'] = 'no-cache';
+            // $httpProvider.defaults.headers.get['Pragma'] = 'no-cache';
 
             $locationProvider.html5Mode(true);
             $anchorScrollProvider.disableAutoScrolling();
-
         }
     );
 
@@ -155,7 +156,6 @@ define([
 
         $translateProvider.preferredLanguage(language);
         $translateProvider.useSanitizeValueStrategy('escaped');
-
     }
 
     // http://stackoverflow.com/questions/30123735/how-to-create-multiple-theme-in-material-angular
@@ -194,30 +194,30 @@ define([
 
     function configureTextAngular($provide, $translate) {
 
-      $provide.decorator('taTools', ['$delegate', function (taTools) {
-          taTools.bold.buttontext = '<md-icon>format_bold</md-icon>';
-          taTools.bold.iconclass = '';
-          taTools.bold.tooltiptext = $translate.instant('TEXTANGULAR_BOLD');
-          taTools.italics.buttontext = '<md-icon>format_italic</md-icon>';
-          taTools.italics.iconclass = '';
-          taTools.italics.tooltiptext = $translate.instant('TEXTANGULAR_ITALICS');
-          taTools.insertLink.buttontext = '<md-icon>insert_link</md-icon>';
-          taTools.insertLink.iconclass = '';
-          taTools.insertLink.tooltiptext = $translate.instant('TEXTANGULAR_INSERT_LINK');
-          taTools.ul.buttontext = '<md-icon>format_list_bulleted</md-icon>';
-          taTools.ul.iconclass = '';
-          taTools.ul.tooltiptext = $translate.instant('TEXTANGULAR_UL');
-          taTools.ol.buttontext = '<md-icon>format_list_numbered</md-icon>';
-          taTools.ol.iconclass = '';
-          taTools.ol.tooltiptext = $translate.instant('TEXTANGULAR_OL');
-          taTools.pre.buttontext = '<md-icon>crop_16_9</md-icon>';
-          taTools.pre.iconclass = '';
-          taTools.pre.tooltiptext = $translate.instant('TEXTANGULAR_PRE');
-          taTools.quote.buttontext = '<md-icon>format_quote</md-icon>';
-          taTools.quote.iconclass = '';
-          taTools.quote.tooltiptext = $translate.instant('TEXTANGULAR_QUOTE');
-          return taTools;
-      }]);
+        $provide.decorator('taTools', ['$delegate', function (taTools) {
+            taTools.bold.buttontext = '<md-icon>format_bold</md-icon>';
+            taTools.bold.iconclass = '';
+            taTools.bold.tooltiptext = $translate.instant('TEXTANGULAR_BOLD');
+            taTools.italics.buttontext = '<md-icon>format_italic</md-icon>';
+            taTools.italics.iconclass = '';
+            taTools.italics.tooltiptext = $translate.instant('TEXTANGULAR_ITALICS');
+            taTools.insertLink.buttontext = '<md-icon>insert_link</md-icon>';
+            taTools.insertLink.iconclass = '';
+            taTools.insertLink.tooltiptext = $translate.instant('TEXTANGULAR_INSERT_LINK');
+            taTools.ul.buttontext = '<md-icon>format_list_bulleted</md-icon>';
+            taTools.ul.iconclass = '';
+            taTools.ul.tooltiptext = $translate.instant('TEXTANGULAR_UL');
+            taTools.ol.buttontext = '<md-icon>format_list_numbered</md-icon>';
+            taTools.ol.iconclass = '';
+            taTools.ol.tooltiptext = $translate.instant('TEXTANGULAR_OL');
+            taTools.pre.buttontext = '<md-icon>crop_16_9</md-icon>';
+            taTools.pre.iconclass = '';
+            taTools.pre.tooltiptext = $translate.instant('TEXTANGULAR_PRE');
+            taTools.quote.buttontext = '<md-icon>format_quote</md-icon>';
+            taTools.quote.iconclass = '';
+            taTools.quote.tooltiptext = $translate.instant('TEXTANGULAR_QUOTE');
+            return taTools;
+        }]);
     }
 
     app.run(function ($rootScope, metadataService, APP_VERSION) {
