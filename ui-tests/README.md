@@ -1,1 +1,0 @@
-# E-Koolikott-UI-Tests
