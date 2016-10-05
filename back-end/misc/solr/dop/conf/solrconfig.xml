@@ -1311,7 +1311,7 @@
             <str name="lookupImpl">FSTLookupFactory</str>
             <str name="field">suggest_phrase</str>
             <str name="fieldType">suggest_phrase</str>
-            <str name="buildOnStartup">true</str>
+            <str name="buildOnCommit">true</str>
         </lst>
     </searchComponent>
 
@@ -1320,7 +1320,6 @@
             <str name="spellcheck">true</str>
             <str name="spellcheck.dictionary">dopSuggester</str>
             <str name="spellcheck.count">5</str>
-            <str name="spellcheck.build">true</str>
             <str name="spellcheck.onlyMorePopular">true</str>
         </lst>
         <arr name="components">
