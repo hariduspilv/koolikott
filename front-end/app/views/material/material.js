@@ -70,7 +70,7 @@ define([
             });
 
             function setEmbedCallback(res) {
-                if (res && res.data) {
+                if (res && res.data.html) {
                     $scope.embeddedDataIframe = null;
                     $scope.embeddedData = null;
 
