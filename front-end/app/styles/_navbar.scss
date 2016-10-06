@@ -1,5 +1,38 @@
+@media (min-width: 1280px) {
+  .navbar-logo-area {
+
+  }
+}
+
+.navbar .md-toolbar-tools {
+  justify-content: space-between;
+}
+
+.navbar-search-area {
+  max-width: 1280px;
+  align-self: center;
+  flex-grow: 1;
+}
+
+.navbar-buttons-area {
+  justify-content: flex-end;
+}
+
+.navbar-logo-main a{
+  min-width: 162px;
+}
+
+.navbar-logo-area {
+}
+
+
+.navbar-content {
+  align-items: center;
+  height: 100%;
+}
+
 .navbar-search {
-  margin: 0 5px;
+  margin: 0 5px 0 0;
   border-radius: 2px;
   padding: 4px 0;
 

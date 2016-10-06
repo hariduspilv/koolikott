@@ -18,6 +18,7 @@ define([
 
     'angular-bootstrap',
     'textAngular',
+    'ivh.treeview',
 
     /* app wide modules */
     'directives/header/header',
@@ -25,6 +26,7 @@ define([
     'directives/detailedSearch/detailedSearch',
     'directives/mainFabButton/mainFabButton',
     'directives/sidebar/sidebar',
+    'directives/sidenav/sidenav',
 
     /* TODO: we could save more request if layout system is built in another way */
     'directives/pageStructure/columnLayout/columnLayout',
@@ -44,7 +46,8 @@ define([
         'ngFileUpload',
         'ui.bootstrap',
         'DOPconstants',
-        'textAngular'
+        'textAngular',
+        'ivh.treeview'
     ]);
 
     var provideProvider = null;
@@ -125,6 +128,16 @@ define([
 
         }
     );
+
+    app.config(function(ivhTreeviewOptionsProvider) {
+        ivhTreeviewOptionsProvider.set({
+            defaultSelectedState: false,
+            validate: true,
+            twistieCollapsedTpl: '<md-icon class="md-primary material-icons">keyboard_arrow_right</md-icon>',
+            twistieExpandedTpl: '<md-icon class="md-primary material-icons">keyboard_arrow_down</md-icon>',
+            twistieLeafTpl: '<span style="cursor: default;">&#8192;&#8192;</span>'
+        });
+    });
 
     function serializeRequest(data, headersGetter) {
         if (data && headersGetter()['content-type'].contains('application/json')) {

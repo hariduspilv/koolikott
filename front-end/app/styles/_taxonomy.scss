@@ -1,0 +1,43 @@
+ul.ivh-treeview {
+  list-style-type: none;
+  padding-left: 0;
+  ul.ivh-treeview {
+    padding-left: 15px;
+  }
+  .ivh-treeview-toggle {
+    font-weight: 400;
+    font-size: 14px;
+    cursor: pointer;
+    span.count {
+      color: #666;
+      font-size: small;
+      float: right;
+    }
+  }
+  .ivh-treeview-node-leaf .ivh-treeview-toggle {
+    cursor: auto;
+  }
+}
+
+.text-bold {
+  font-weight: bold !important;
+}
+
+.listblock h4 md-icon.md-primary {
+  float: right;
+}
+
+.treeview {
+  width: 100%;
+  padding: 8px;
+  box-sizing: border-box;
+  // background-color: #fff;
+}
+
+md-menu-content {
+  max-height: 700px;
+}
+
+.md-button.md-fab {
+  margin-left: 20px;
+}

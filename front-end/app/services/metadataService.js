@@ -104,6 +104,7 @@ define([
             }
 
             function getEducationalContextSuccess(data) {
+              console.log(data);
                 if (!isEmpty(data)) {
                     EDUCATIONAL_CONTEXTS = data;
                     educationalContextsCallbacks.forEach(function(callback) {

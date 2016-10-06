@@ -1,0 +1,233 @@
+[
+  {
+    "label": "keel ja kirjandus",
+    "count": 2012,
+    "children": [
+      {
+        "label":"eesti keel",
+        "count": 20,
+        "children": [
+          {
+            "label": "keel ja ühiskond",
+            "count": 201,
+            "children": [
+              {"label": "eesti keel ja teised keeled", "count": 12},
+              {"label": "eesti keele eripära", "count": 12},
+              {"label": "eesti keele tulevik", "count": 22},
+              {"label": "Eesti mitmekeelsus", "count": 20},
+              {"label": "keel kui märgisüsteem", "count": 22},
+              {"label": "keele ülesanded", "count": 12},
+              {"label": "kirjakeele kujunemine", "count": 12}
+            ]
+          },
+          {
+            "label": "meedia ja mõjutamine",
+            "count": 12,
+            "children": [
+              {"label": "fakt ja arvamus"},
+              {"label": "kommunikatsioon ja meedia"},
+              {"label": "meedia ja mõjutamine"},
+              {"label": "meediažanrid"},
+              {"label": "reklaam"},
+              {"label": "tekstiliigid, meediatekstid"}
+            ]
+          },
+          {
+            "label": "praktiline eesti keel ",
+            "count": 22,
+            "children": [
+              {"label": "kirjutamine"},
+              {"label": "kirjutamine"},
+              {"label": "lugemine"},
+              {"label": "rääkimine"}
+            ]
+          },
+          {
+            "label": "teksti keel ja stiil ",
+            "count": 2012,
+            "children": [
+              {"label": "eesti sõnavara tähendus ja stiilijooned"},
+              {"label": "keele erinevad kasutusvaldkonnad"},
+              {"label": "stiil ja stilistika"},
+              {"label": "teadlik kirjutamine"},
+              {"label": "teadustekst"},
+              {"label": "tekstide võrdlev analüüs"}
+            ]
+          },
+          {
+            "label":"kirjandus ",
+            "count": 2012,
+            "children": [
+              {"label": "19. sajandi kirjandus: romantism ja realismi tekkimine "},
+              {"label": "19. sajandi II poole kirjandus: realism "},
+              {"label": "20. sajandi I poole kirjandus "},
+              {"label": "Eesti kirjandus"},
+              {"label": "kirjandus antiigist 19. sajandini"},
+              {"label": "kirjanduse põhiliigid ja -žanrid"},
+              {"label": "kirjandusteose analüüs ja tõlgendamine"},
+              {"label": "uuem kirjandus"}
+            ]
+          },
+          {
+            "label":"vene keel ",
+            "count": 201,
+            "children": [
+              {"label": "keel, ühiskond, kultuur",
+                "count": 234,
+                "children": [
+                  {"label": "keel ja kõne"},
+                  {"label": "keel ja mõtlemine"},
+                  {"label": "keel ja ühiskond"},
+                  {"label": "keel kui märgisüsteem"},
+                  {"label": "keel kui vaimsete väärtuste kandja"},
+                  {"label": "kirjanduse põhiliigid ja -žanrid"},
+                  {"label": "kirjandusteose analüüs ja tõlgendamine"},
+                  {"label": "uuem kirjandus"}
+                ]
+              },
+              {"label": "kirjaliku teksti vastuvõtt ja loomine",
+                "count" : 450,
+                "children": [
+                  {"label": "keel ja kõne"},
+                  {"label": "keel ja mõtlemine"},
+                  {"label": "keel ja ühiskond"},
+                  {"label": "keel kui märgisüsteem"},
+                  {"label": "keel kui vaimsete väärtuste kandja"},
+                  {"label": "kirjanduse põhiliigid ja -žanrid"},
+                  {"label": "kirjandusteose analüüs ja tõlgendamine"},
+                  {"label": "uuem kirjandus"}
+                ]
+              },
+              {"label": "kõnekultuur ",
+                "count": 456,
+                "children": [
+                  {"label": "keel ja kõne"},
+                  {"label": "keel ja mõtlemine"},
+                  {"label": "keel ja ühiskond"},
+                  {"label": "keel kui märgisüsteem"},
+                  {"label": "keel kui vaimsete väärtuste kandja"},
+                  {"label": "kirjanduse põhiliigid ja -žanrid"},
+                  {"label": "kirjandusteose analüüs ja tõlgendamine"},
+                  {"label": "uuem kirjandus"}
+                ]
+              },
+              {"label": "ortograafia ja interpunktsioon ",
+                "count": 456,
+                "children": [
+                  {"label": "keel ja kõne"},
+                  {"label": "keel ja mõtlemine"},
+                  {"label": "keel ja ühiskond"},
+                  {"label": "keel kui märgisüsteem"},
+                  {"label": "keel kui vaimsete väärtuste kandja"},
+                  {"label": "kirjanduse põhiliigid ja -žanrid"},
+                  {"label": "kirjandusteose analüüs ja tõlgendamine"},
+                  {"label": "uuem kirjandus"}
+                ]
+              },
+              {"label": "suulise teksti vastuvõtt ja loomine ",
+                "count": 456,
+                "children": [
+                  {"label": "keel ja kõne"},
+                  {"label": "keel ja mõtlemine"},
+                  {"label": "keel ja ühiskond"},
+                  {"label": "keel kui märgisüsteem"},
+                  {"label": "keel kui vaimsete väärtuste kandja"},
+                  {"label": "kirjanduse põhiliigid ja -žanrid"},
+                  {"label": "kirjandusteose analüüs ja tõlgendamine"},
+                  {"label": "uuem kirjandus"}
+                ]
+              },
+              {"label": "teksti stilistika ",
+                "count": 456,
+                "children": [
+                  {"label": "keel ja kõne"},
+                  {"label": "keel ja mõtlemine"},
+                  {"label": "keel ja ühiskond"},
+                  {"label": "keel kui märgisüsteem"},
+                  {"label": "keel kui vaimsete väärtuste kandja"},
+                  {"label": "kirjanduse põhiliigid ja -žanrid"},
+                  {"label": "kirjandusteose analüüs ja tõlgendamine"},
+                  {"label": "uuem kirjandus"}
+                ]
+              }
+            ]
+          },
+          {
+            "label":"valikkursused ",
+            "count": 456,
+            "children": [
+              {"label": "keel ja kõne"},
+              {"label": "keel ja mõtlemine"},
+              {"label": "keel ja ühiskond"},
+              {"label": "keel kui märgisüsteem"},
+              {"label": "keel kui vaimsete väärtuste kandja"},
+              {"label": "kirjanduse põhiliigid ja -žanrid"},
+              {"label": "kirjandusteose analüüs ja tõlgendamine"},
+              {"label": "uuem kirjandus"}
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "label": "loodusained",
+    "count": 19202,
+    "children": [
+      {"label":"eesti keel teise keelena "},
+      {"label":"inglise keel "},
+      {"label":"vene keel "},
+      {"label":"saksa keel "},
+      {"label":"prantsuse keel "},
+      {"label":"muu võõrkeel "}
+    ]
+  },
+  {
+    "label": "sotsiaalained",
+    "count": 202,
+    "children": [
+      {"label":"eesti keel teise keelena "},
+      {"label":"inglise keel "},
+      {"label":"vene keel "},
+      {"label":"saksa keel "},
+      {"label":"prantsuse keel "},
+      {"label":"muu võõrkeel "}
+    ]
+  },
+  {
+    "label": "kunstiained",
+    "count": 202,
+    "children": [
+      {"label":"eesti keel teise keelena "},
+      {"label":"inglise keel "},
+      {"label":"vene keel "},
+      {"label":"saksa keel "},
+      {"label":"prantsuse keel "},
+      {"label":"muu võõrkeel "}
+    ]
+  },
+  {
+    "label": "kehaline kasvatus",
+    "count": 202,
+    "children": [
+      {"label":"eesti keel teise keelena "},
+      {"label":"inglise keel "},
+      {"label":"vene keel "},
+      {"label":"saksa keel "},
+      {"label":"prantsuse keel "},
+      {"label":"muu võõrkeel "}
+    ]
+  },
+  {
+    "label": "valikõppeained",
+    "count": 202,
+    "children": [
+      {"label":"eesti keel teise keelena "},
+      {"label":"inglise keel "},
+      {"label":"vene keel "},
+      {"label":"saksa keel "},
+      {"label":"prantsuse keel "},
+      {"label":"muu võõrkeel "}
+    ]
+  }
+]

@@ -1,0 +1,107 @@
+<md-sidenav md-is-open="sideNavOpen" class="md-sidenav-left"  md-component-id="left" md-whiteframe="4" id="sidebar-left">
+  <!-- <header class="nav-header">
+
+  </header>
+  <md-toolbar class="{{isEditPortfolioMode ? 'md-accent' : 'md-primary'}}">
+    <h6 class="md-toolbar-tools md-subhead">
+      <div layout-align="center start" flex>
+        <md-tooltip><span data-translate="HEADER_TOOLTIP_GO_TO_LANDING_PAGE"></span></md-tooltip>
+        <a data-ng-href="/" class="logo logo-lg" id="logo"></a>
+      </div>
+    </h6>
+  </md-toolbar>
+  <div id="alert" data-dop-alert></div>
+  <md-content layout="column" flex role="navigation" class="sidenav md-whiteframe-z2">
+    <div data-dop-table-of-contents data-portfolio="portfolio" data-readonly="!isEditPortfolioMode"></div>
+  </md-content> -->
+
+  <div data-ng-show="taxonomy.isVisible">
+    <h2 data-translate="Taksonoomia"></h2>
+    <md-list class="recommendations">
+      <md-list-item class="secondary-button-padding">
+        <a href="#" ng-click="changeTaxonomyDataAndVisibility('sidebar', 'primary')" class="md-no-style md-button md-ink-ripple">
+          <div class="md-list-item-inner">
+            <div class="listblock" layout="column">
+              <h4 class="one-row">Põhikool  <md-icon data-ng-show="taxonomy.isPrimaryVisible" class="md-primary material-icons">
+                keyboard_arrow_left
+              </md-icon>
+              <md-icon data-ng-show="!taxonomy.isPrimaryVisible" class="md-primary material-icons">
+                keyboard_arrow_right
+              </md-icon></h4>
+            </div>
+          </div>
+        </a>
+        <md-divider></md-divider>
+      </md-list-item>
+      <md-list-item ng-show="taxonomy.isPrimaryVisible" layout="column">
+        <div class="treeview md-padding">
+
+
+          <div ivh-treeview="taxonomy.taxonPrimaryData" ivh-treeview-filter="filterPrimaryTaxon" flex>
+            <script type="text/ng-template">
+            <div title="{{trvw.label(node)}}">
+            <span ivh-treeview-toggle>
+            <span ivh-treeview-twistie></span>
+            </span>
+            <span class="ivh-treeview-node-label" data-ng-class="{'text-bold': trvw.isSelected(node)}" ivh-treeview-toggle>
+            {{trvw.label(node)}}
+            <span class="count">{{node.count}}</span>
+            </span>
+            <div ivh-treeview-children></div>
+            </div>
+            </script>
+          </div>
+        </div>
+      </md-list-item>
+      <!-- <md-list-item class="secondary-button-padding">
+        <a href="#" ng-click="changeTaxonomyDataAndVisibility('sidebar', 'high')" class="md-no-style md-button md-ink-ripple">
+          <div class="md-list-item-inner">
+            <div class="listblock layout-column">
+              <h4 class="one-row" flex>Gümnaasium <md-icon data-ng-show="taxonomy.isHighVisible" class="md-primary material-icons">
+                keyboard_arrow_left
+              </md-icon>
+              <md-icon data-ng-show="!taxonomy.isHighVisible" class="md-primary material-icons">
+                keyboard_arrow_right
+              </md-icon></h4>
+            </div>
+          </div>
+        </a>
+        <md-divider></md-divider>
+      </md-list-item>
+      <md-list-item ng-show="taxonomy.isHighVisible" layout="column">
+        <div class="treeview md-padding">
+          <div layout="row" flex>
+            <md-input-container flex>
+              <label for="">Leia</label>
+              <input type="text" placeholder=" " ng-model="filterHighTaxon">
+            </md-input-container>
+            <md-button class="md-primary" type="button" data-ng-click="toggleAllTaxons('high')">
+              <span data-ng-show="taxonomy.isHighTaxonsOpen">Sulge kõik<md-icon class="material-icons">
+                keyboard_arrow_left
+              </md-icon></span>
+              <span data-ng-show="!taxonomy.isHighTaxonsOpen"> Ava kõik <md-icon class="material-icons">
+                keyboard_arrow_right
+              </md-icon></span>
+            </md-button>
+          </div>
+          <div ivh-treeview="taxonomy.taxonHighData" ivh-treeview-filter="filterHighTaxon" flex>
+            <script type="text/ng-template">
+            <div title="{{trvw.label(node)}}">
+            <span ivh-treeview-toggle>
+            <span ivh-treeview-twistie></span>
+            </span>
+            <span class="ivh-treeview-node-label" data-ng-class="{'text-bold': trvw.isSelected(node)}" ivh-treeview-toggle>
+            {{trvw.label(node)}}
+            <span class="count">({{node.count}})</span>
+            </span>
+            <div ivh-treeview-children></div>
+            </div>
+            </script>
+          </div>
+        </div>
+      </md-list-item> -->
+    </md-list>
+  </div>
+
+
+</md-sidenav>

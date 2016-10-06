@@ -30,7 +30,8 @@ require.config({
         'rangy-selectionsaverestore': 'libs/rangy/rangy-selectionsaverestore.min',
         'textAngular-sanitize': 'libs/textAngular/dist/textAngular-sanitize.min',
         'textAngularSetup': 'libs/textAngular/dist/textAngularSetup',
-        'textAngular': 'utils/koolikottTextAngular'
+        'textAngular': 'utils/koolikottTextAngular',
+        'ivh.treeview': 'libs/angular-ivh-treeview/dist/ivh-treeview.min'
     },
     shim: {
         'angular': ['jquery'],
@@ -54,6 +55,7 @@ require.config({
         ],
         'angular-scroll': ['angular'],
         'ng-file-upload': ['angular'],
+        'ivh.treeview': ['angular'],
         'angular-click-outside': ['angular'],
         'angular-material-data-table': [
             'angular-material',

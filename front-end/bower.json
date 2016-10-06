@@ -26,7 +26,8 @@
     "screenfull": "2.0.0",
     "moment": "2.12.0",
     "textAngular": "^1.5.9",
-    "rangy": "^1.3.0"
+    "rangy": "^1.3.0",
+    "angular-ivh-treeview": "^1.0.4"
   },
   "appPath": "app",
   "moduleName": "ranitsApp",
