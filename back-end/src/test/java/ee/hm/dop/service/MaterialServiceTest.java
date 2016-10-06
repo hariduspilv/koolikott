@@ -14,7 +14,9 @@ import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import ee.hm.dop.dao.MaterialDAO;
 import ee.hm.dop.model.Material;
@@ -63,7 +65,7 @@ public class MaterialServiceTest {
         material.setSource(source);
         material.setCurriculumLiterature(true);
         material.setRecommendation(new Recommendation());
-
+        expect(materialDAO.findBySource("//creatematerial.example.com", true)).andReturn(null);
         expectMaterialUpdate(capturedMaterial);
         solrEngineService.updateIndex();
 
@@ -111,6 +113,7 @@ public class MaterialServiceTest {
         expect(material.getId()).andReturn(materialId).times(3);
         expect(material.getAuthors()).andReturn(null);
         expect(material.getPublishers()).andReturn(null);
+        expect(material.getSource()).andReturn("http://creatematerial.example.com");
         material.setRepository(null);
         material.setRecommendation(null);
         solrEngineService.updateIndex();
@@ -127,6 +130,7 @@ public class MaterialServiceTest {
 
         expect(materialDAO.findByIdNotDeleted(materialId)).andReturn(original);
         expect(materialDAO.update(material)).andReturn(material);
+        expect(materialDAO.findBySource("//creatematerial.example.com", true)).andReturn(null);
 
         replay(materialDAO, material, solrEngineService);
 
@@ -145,8 +149,10 @@ public class MaterialServiceTest {
         long materialId = 1;
         Material material = createMock(Material.class);
         expect(material.getId()).andReturn(materialId).times(2);
+        expect(material.getSource()).andReturn("http://creatematerial.example.com");
 
         expect(materialDAO.findByIdNotDeleted(materialId)).andReturn(null);
+        expect(materialDAO.findBySource("//creatematerial.example.com", true)).andReturn(null);
 
         replay(materialDAO, material);
 
@@ -179,6 +185,8 @@ public class MaterialServiceTest {
         expect(material.getAuthors()).andReturn(null);
         expect(material.getPublishers()).andReturn(null);
         expect(material.getTaxons()).andReturn(null);
+        expect(material.getSource()).andReturn("http://creatematerial.example.com");
+        expect(materialDAO.findBySource("//creatematerial.example.com", true)).andReturn(null);
         material.setKeyCompetences(null);
         material.setCrossCurricularThemes(null);
 
@@ -322,10 +330,12 @@ public class MaterialServiceTest {
         Material material = new Material();
         material.setId(1L);
         material.setRepository(null);
+        material.setSource("http://creatematerial.example.com");
 
         expect(materialDAO.findById(material.getId())).andReturn(material).anyTimes();
         expect(user.getRole()).andReturn(Role.ADMIN).anyTimes();
         expect(materialDAO.update(material)).andReturn(new Material());
+        expect(materialDAO.findBySource("//creatematerial.example.com", true)).andReturn(null);
 
         replay(user, materialDAO);
 
@@ -342,11 +352,13 @@ public class MaterialServiceTest {
         material.setId(1L);
         material.setRepository(null);
         material.setCreator(user);
+        material.setSource("http://creatematerial.example.com");
 
         expect(materialDAO.findByIdNotDeleted(material.getId())).andReturn(material).anyTimes();
         expect(user.getRole()).andReturn(Role.USER).anyTimes();
         expect(materialDAO.update(material)).andReturn(new Material());
         expect(user.getUsername()).andReturn("username").anyTimes();
+        expect(materialDAO.findBySource("//creatematerial.example.com", true)).andReturn(null);
 
         replay(user, materialDAO);
 

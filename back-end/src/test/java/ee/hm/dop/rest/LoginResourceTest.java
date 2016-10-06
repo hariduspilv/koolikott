@@ -260,7 +260,7 @@ public class LoginResourceTest extends ResourceIntegrationTestBase {
         String url = response.getHeaderString("Location");
 
         boolean hasToken = false;
-        if (url.indexOf("token") != -1) {
+        if (url.contains("token")) {
             hasToken = true;
         }
 

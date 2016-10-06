@@ -223,7 +223,7 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
         login("89012378912");
 
         Material material = new Material();
-        material.setSource("http://www.whatisthis.example.com");
+        material.setSource("http://www.whatisthis.example.ru");
 
         Subject subject = (Subject) taxonDAO.findTaxonById(22L);
         material.setTaxons(Arrays.asList(subject));
@@ -482,7 +482,7 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
         assertEquals(containsMaterial, true);
     }
 
-    @Test
+    @Test(expected = RuntimeException.class)
     public void GetMaterialsByNullSource() {
         login("38011550077");
 
@@ -490,8 +490,6 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
 
         List<Material> materials = response.readEntity(new GenericType<List<Material>>() {
         });
-
-        assertEquals(0, materials.size());
     }
 
     @Test

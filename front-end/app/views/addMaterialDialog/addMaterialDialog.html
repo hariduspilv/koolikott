@@ -83,7 +83,12 @@
                         <div data-ng-message="url"
                              data-ng-show="addMaterialForm.source.$error.url && material.source.length > 0"
                              data-translate="MATERIAL_URL_IS_INVALID"></div>
+
+                        <div data-ng-message
+                             data-ng-show="addMaterialForm.source.$error.exists"
+                             data-translate="MATERIAL_ALREADY_EXISTS"></div>
                       </div>
+
                     </md-input-container>
                   </div>
 
