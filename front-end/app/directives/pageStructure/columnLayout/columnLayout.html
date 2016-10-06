@@ -1,6 +1,5 @@
 <div data-layout="row" data-flex layout-fill class="portfolio-container">
-  <div ng-class="{'allow-scroll': detailedSearch.isVisible}" class="nav-position" data-ng-if="!isEditPortfolioMode" id="navmenu" data-dop-header></div>
-  <div ng-class="{'allow-scroll': detailedSearch.isVisible}" class="nav-position" data-ng-if="isEditPortfolioMode" id="navmenu" data-dop-edit-portfolio-mode-header></div>
+  <div ng-class="{'allow-scroll': detailedSearch.isVisible}" class="nav-position" id="navmenu" data-dop-header></div>
   <div id="alert" data-dop-alert></div>
   <div data-dop-sidenav></div>
   <div id="scrollable-content" layout="row" data-flex layout-fill class="scrollable-content-container" ng-class="{'nav-open': sidenavIsOpen() == true}" layout-align="center" >

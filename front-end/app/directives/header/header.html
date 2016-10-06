@@ -11,15 +11,7 @@
           </md-button>
         </span>
         <!-- logo -->
-        <div data-ng-hide="isViewPortforlioPage" layout-align="center start" flex class="navbar-logo-main" >
-          <md-tooltip>
-            <span data-translate="HEADER_TOOLTIP_GO_TO_LANDING_PAGE"></span>
-          </md-tooltip>
-          <a data-ng-href="/" class="logo" id="logo"></a>
-        </div>
-        <!-- logo for portfolio -->
-        <div class="hide-md hide-sm hide-xs" data-ng-show="isViewPortforlioPage" layout-align="center start" flex="10"
-             flex-gt-sm="15">
+        <div layout-align="center start" flex class="navbar-logo-main" >
           <md-tooltip>
             <span data-translate="HEADER_TOOLTIP_GO_TO_LANDING_PAGE"></span>
           </md-tooltip>
@@ -69,7 +61,7 @@
     </div>
     <!-- language menu, login and user menu button -->
     <div class="navbar-buttons-area">
-      <div>
+      <div data-ng-if="!isEditPortfolioMode || isViewPortfolioPage">
         <!-- change language menu -->
         <md-menu>
           <md-button aria-label="Ava keelevaliku menüü" class="md-icon-button language-icon" id="header-language-icon"
@@ -159,6 +151,50 @@
             </md-menu-item>
           </md-menu-content>
         </md-menu>
+      </div>
+      <div data-ng-if="isEditPortfolioMode">
+        <md-menu>
+          <md-button aria-label="Jaga" class="md-icon-button" ng-click="$mdOpenMenu($event)">
+            <md-tooltip><span data-translate="HEADER_TOOLTIP_CHANGE_VISIBILITY"></span></md-tooltip>
+            <md-icon data-ng-if="savedPortfolio.visibility === 'PUBLIC'">visibility</md-icon>
+            <md-icon data-ng-if="savedPortfolio.visibility === 'NOT_LISTED'">link</md-icon>
+            <md-icon data-ng-if="savedPortfolio.visibility === 'PRIVATE'">visibility_off</md-icon>
+          </md-button>
+          <md-menu-content width="4">
+            <md-menu-item dop-copy-permalink data-url="getShareUrl"></md-menu-item>
+            <md-menu-divider></md-menu-divider>
+            <md-menu-item>
+              <md-button data-ng-if="savedPortfolio.visibility === 'PUBLIC'" aria-label="{{PORTFOLIO_VISIBILITY_PUBLIC | translate}}">
+                <md-icon>visibility</md-icon> <span data-translate="PORTFOLIO_VISIBILITY_PUBLIC"></span> <span class="md-alt-text"><md-icon>check</md-icon></span>
+              </md-button>
+              <md-button data-ng-if="savedPortfolio.visibility != 'PUBLIC'" aria-label="{{PORTFOLIO_VISIBILITY_MAKE_PUBLIC | translate}}" data-ng-click="makePublic()">
+                <md-icon>visibility</md-icon> <span data-translate="PORTFOLIO_VISIBILITY_MAKE_PUBLIC"></span>
+              </md-button>
+            </md-menu-item>
+            <md-menu-divider></md-menu-divider>
+            <md-menu-item>
+              <md-button data-ng-if="savedPortfolio.visibility === 'NOT_LISTED'" aria-label="{{PORTFOLIO_VISIBILITY_NOT_LISTED | translate}}">
+                <md-icon>link</md-icon> <span data-translate="PORTFOLIO_VISIBILITY_NOT_LISTED"></span> <span class="md-alt-text"><md-icon>check</md-icon></span>
+              </md-button>
+              <md-button data-ng-if="savedPortfolio.visibility != 'NOT_LISTED'" aria-label="{{PORTFOLIO_VISIBILITY_MAKE_NOT_LISTED | translate}}" data-ng-click="makeNotListed()">
+                <md-icon>link</md-icon> <span data-translate="PORTFOLIO_VISIBILITY_MAKE_NOT_LISTED"></span>
+              </md-button>
+            </md-menu-item>
+            <md-menu-divider></md-menu-divider>
+            <md-menu-item>
+              <md-button data-ng-if="savedPortfolio.visibility === 'PRIVATE'" aria-label="{{PORTFOLIO_VISIBILITY_PRIVATE | translate}}">
+                <md-icon>visibility_off</md-icon> <span data-translate="PORTFOLIO_VISIBILITY_PRIVATE"></span> <span class="md-alt-text"><md-icon>check</md-icon></span>
+              </md-button>
+              <md-button data-ng-if="savedPortfolio.visibility != 'PRIVATE'" aria-label="{{PORTFOLIO_VISIBILITY_MAKE_PRIVATE | translate}}" data-ng-click="makePrivate()">
+                <md-icon>visibility_off</md-icon> <span data-translate="PORTFOLIO_VISIBILITY_MAKE_PRIVATE"></span>
+              </md-button>
+            </md-menu-item>
+          </md-menu-content>
+        </md-menu>
+        <md-button data-ng-click="saveAndExitPortfolio()" aria-label="Salvesta ja välju" class="md-icon-button">
+          <md-tooltip><span data-translate="HEADER_TOOLTIP_EXIT_PORTFOLIO_MODE"></span></md-tooltip>
+          <md-icon >done</md-icon>
+        </md-button>
       </div>
     </div>
   </div>
