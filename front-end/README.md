@@ -25,9 +25,8 @@ Run commands from project root directory.
 	
 Some linux distributions install nodejs not as "node" executable but as "nodejs".
 In this case you can do an easy symlink.
-
     ln -s /usr/bin/nodejs /usr/bin/node
-
+	
 	bower install
 
 ## Compile sass files to css

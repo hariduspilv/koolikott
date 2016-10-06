@@ -47,7 +47,22 @@ define(['angularAMD'], function(angularAMD) {
         }
 
         function escapeQuery(query) {
+            //replace backslashes
+            // query = query.replace(/\\/g, "\\\\");
+
+            //make plus signs into \+
+            // query = query.replace(/\+/g, "\\+");
             query = query.replace(/\+/g, "%2B");
+
+            return query;
+        }
+
+        function unescapeQuery(query) {
+            //get back + sign
+            query = query.replace(/\\ /g, "+");
+
+            //make backslashes singular
+            query = query.replace(/\\\\/g, "\\");
 
             return query;
         }
@@ -220,7 +235,7 @@ define(['angularAMD'], function(angularAMD) {
                 if (search.query === "") {
                     var searchObject = $location.search();
                     if (searchObject.q) {
-                        search.query = searchObject.q;
+                        search.query = unescapeQuery(searchObject.q);
                     }
                 }
 
