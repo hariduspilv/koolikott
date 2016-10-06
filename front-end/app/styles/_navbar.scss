@@ -1,24 +1,38 @@
-@media (min-width: 1280px) {
-  .navbar-logo-area {
+.navbar .md-toolbar-tools {
+  justify-content: space-between;
+}
 
+@media (min-width: 1800px) {
+  .navbar .md-toolbar-tools {
+    justify-content: center;
+  }
+  .navbar-buttons-area {
+    position: absolute;
+    right: 16px;
+  }
+  .navbar-logo-area {
+    position: absolute;
+    left: 16px;
   }
 }
 
-.navbar .md-toolbar-tools {
-  justify-content: space-between;
+.navbar-logo-main {
+  padding-left: 10px;
+  padding-right: 16px;
 }
 
 .navbar-search-area {
   max-width: 1280px;
   align-self: center;
   flex-grow: 1;
+  padding: 0 16px;
 }
 
 .navbar-buttons-area {
   justify-content: flex-end;
 }
 
-.navbar-logo-main a{
+.navbar-logo-main a {
   min-width: 162px;
 }
 
