@@ -12,6 +12,7 @@ define([
     'angular-route',
     'angular-click-outside',
     'angular-scroll',
+    'angular-drag-and-drop-lists',
     'jsog',
     'utils/commons',
     'ng-file-upload',
@@ -31,7 +32,7 @@ define([
     'directives/pageStructure/linearLayout/linearLayout',
 
     'services/authenticatedUserService',
-    'DOPconstants',
+    'DOPconstants'
 ], function (angularAMD, config, taxonUtils, taxonParser, moment) {
     'use strict';
 
@@ -44,7 +45,8 @@ define([
         'ngFileUpload',
         'ui.bootstrap',
         'DOPconstants',
-        'textAngular'
+        'textAngular',
+        'dndLists'
     ]);
 
     var provideProvider = null;
