@@ -113,7 +113,7 @@ public class MaterialServiceTest {
         expect(material.getId()).andReturn(materialId).times(3);
         expect(material.getAuthors()).andReturn(null);
         expect(material.getPublishers()).andReturn(null);
-        expect(material.getSource()).andReturn("http://creatematerial.example.com");
+        expect(material.getSource()).andReturn("http://creatematerial.example.com").times(2);
         material.setRepository(null);
         material.setRecommendation(null);
         solrEngineService.updateIndex();
@@ -149,7 +149,7 @@ public class MaterialServiceTest {
         long materialId = 1;
         Material material = createMock(Material.class);
         expect(material.getId()).andReturn(materialId).times(2);
-        expect(material.getSource()).andReturn("http://creatematerial.example.com");
+        expect(material.getSource()).andReturn("http://creatematerial.example.com").times(2);
 
         expect(materialDAO.findByIdNotDeleted(materialId)).andReturn(null);
         expect(materialDAO.findBySource("//creatematerial.example.com", true)).andReturn(null);
@@ -185,7 +185,7 @@ public class MaterialServiceTest {
         expect(material.getAuthors()).andReturn(null);
         expect(material.getPublishers()).andReturn(null);
         expect(material.getTaxons()).andReturn(null);
-        expect(material.getSource()).andReturn("http://creatematerial.example.com");
+        expect(material.getSource()).andReturn("http://creatematerial.example.com").times(2);
         expect(materialDAO.findBySource("//creatematerial.example.com", true)).andReturn(null);
         material.setKeyCompetences(null);
         material.setCrossCurricularThemes(null);
