@@ -2,7 +2,8 @@ define([
     'app',
     'services/translationService',
     'services/dialogService',
-    'directives/chapter/addChapterMaterial/addChapterMaterial'
+    'directives/chapter/addChapterMaterial/addChapterMaterial',
+    'directives/embeddedMaterial/embeddedMaterial'
 ], function(app) {
     app.directive('dopChapter', ['translationService', '$rootScope', 'dialogService', function(translationService, $rootScope, dialogService) {
         return {

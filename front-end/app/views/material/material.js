@@ -69,7 +69,7 @@ define([
                 }
             });
 
-            function setEmbedCallback(res) {
+            function embedCallback(res) {
                 if (res && res.data.html) {
                     $scope.embeddedDataIframe = null;
                     $scope.embeddedData = null;
@@ -112,7 +112,7 @@ define([
 
             function processMaterial() {
                 if ($scope.material) {
-                    embedService.getEmbed(getSource($scope.material), setEmbedCallback);
+                    embedService.getEmbed(getSource($scope.material), embedCallback);
                     setSourceType();
 
                     if ($scope.material.taxons) {
