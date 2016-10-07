@@ -310,6 +310,8 @@ public class MaterialService implements LearningObjectHandler {
     }
 
     private boolean materialWithSameSourceExists(Material material) {
+        if (material.getSource() == null && material.getUploadedFile() != null) return false;
+
         List<Material> materialsWithGivenSource = getBySource(material.getSource(), true);
         if (materialsWithGivenSource != null && materialsWithGivenSource.size() > 0) {
             if (!materialsWithGivenSource.get(0).getId().equals(material.getId())) {
