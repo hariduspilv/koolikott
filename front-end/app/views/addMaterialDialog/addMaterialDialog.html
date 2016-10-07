@@ -78,8 +78,6 @@
                              required dop-validate-url>
                       <div data-ng-messages="addMaterialForm.source.$error" multiple
                            data-ng-show="addMaterialForm.source.$touched || addMaterialForm.$submitted">
-                        <div data-ng-message="required" data-ng-show="addMaterialForm.source.$error.required"
-                             data-translate="MATERIAL_URL_OR_FILE_INVALID"></div>
                         <div data-ng-message="url"
                              data-ng-show="addMaterialForm.source.$error.url && material.source.length > 0"
                              data-translate="MATERIAL_URL_IS_INVALID"></div>
