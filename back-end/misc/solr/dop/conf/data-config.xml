@@ -55,6 +55,12 @@
                     <entity name="Publisher" query="select name as publisher from Publisher where id = '${Material_Publisher.publisher_id}'" />
                 </entity>
 
+                <entity name="Material_PeerReview" query="select peerReview as peerReview_id from Material_PeerReview where material='${Material.id}'">
+                    <entity name="PeerReview" query="select url from PeerReview where id = '${Material_PeerReview.peerReview_id}'">
+                        <field column="url" name="peerReview" />
+                    </entity>
+                </entity>
+
                 <entity name="Material_Taxon" query="select taxon as taxon_id from Material_Taxon where material = '${Material.id}'">
                     <!-- Travel up the taxon path -->
 

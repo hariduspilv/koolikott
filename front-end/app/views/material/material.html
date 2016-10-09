@@ -314,6 +314,15 @@
                       </span>
                     </p>
 
+                    <p class="md-body-2 meta" data-ng-if="material.peerReviews">
+                      <span data-ng-repeat="peerReview in material.peerReviews">
+                        <span layout="row">
+                          <a ng-show="material.peerReviews.length === 1" target="_blank" data-ng-href="{{ peerReview.url }}" data-translate="MATERIAL_PEER_REVIEW"></a>
+                          <a ng-show="material.peerReviews.length > 1" target="_blank" data-ng-href="{{ peerReview.url }}">{{ 'MATERIAL_PEER_REVIEW' | translate }} {{$index + 1}}</a>
+                       </span>
+                      </span>
+                    </p>
+
                     <p class="md-body-2 meta" data-ng-if="material.paid">
                       <span data-translate="MATERIAL_PAID"></span>
                     </p>

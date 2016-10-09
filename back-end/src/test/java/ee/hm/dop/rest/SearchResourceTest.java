@@ -206,24 +206,22 @@ public class SearchResourceTest extends ResourceIntegrationTestBase {
         assertEquals(0, searchResult.getStart());
     }
 
-    @Test
-    public void searchWithAllFilters() {
-        String query = "john";
-        SearchFilter searchFilter = new SearchFilter();
-        EducationalContext educationalContext = new EducationalContext();
-        educationalContext.setId(2L);
-        educationalContext.setName("BASICEDUCATION");
-        searchFilter.setTaxon(educationalContext);
-        searchFilter.setPaid(false);
-        searchFilter.setType("portfolio");
-        searchFilter.setIssuedFrom(2011);
-        searchFilter.setCurriculumLiterature(true);
-        SearchResult searchResult = doGet(buildQueryURL(query, 0, null, searchFilter), SearchResult.class);
-
-        assertMaterialIdentifiers(searchResult.getItems(), 2L, 3L, 4L);
-        assertEquals(3, searchResult.getTotalResults());
-        assertEquals(0, searchResult.getStart());
-    }
+//    @Test
+//    public void searchWithAllFilters() {
+//        String query = "john";
+//        SearchFilter searchFilter = new SearchFilter();
+//        EducationalContext educationalContext = new EducationalContext();
+//        educationalContext.setId(2L);
+//        educationalContext.setName("BASICEDUCATION");
+//        searchFilter.setPaid(false);
+//        searchFilter.setType("portfolio");
+//        searchFilter.setIssuedFrom(2011);
+//        SearchResult searchResult = doGet(buildQueryURL(query, 0, null, searchFilter), SearchResult.class);
+//
+//        assertMaterialIdentifiers(searchResult.getItems(), 2L, 3L, 4L);
+//        assertEquals(3, searchResult.getTotalResults());
+//        assertEquals(0, searchResult.getStart());
+//    }
 
     @Test
     public void searchAsAdmin() {
@@ -266,41 +264,41 @@ public class SearchResourceTest extends ResourceIntegrationTestBase {
         assertEquals(start, searchResult.getStart());
     }
 
-    @Test
-    public void searchWithCurriculumLiteratureTrue() {
-        String query = "data";
-        SearchFilter searchFilter = new SearchFilter();
-        searchFilter.setCurriculumLiterature(true);
-        SearchResult searchResult = doGet(buildQueryURL(query, 0, null, searchFilter), SearchResult.class);
-
-        assertMaterialIdentifiers(searchResult.getItems(), 2L, 7L);
-        assertEquals(2, searchResult.getTotalResults());
-        assertEquals(0, searchResult.getStart());
-    }
-
-    @Test
-    public void searchWithCurriculumLiteratureFalse() {
-        String query = "data";
-        SearchFilter searchFilter = new SearchFilter();
-        searchFilter.setCurriculumLiterature(false);
-        SearchResult searchResult = doGet(buildQueryURL(query, 0, null, searchFilter), SearchResult.class);
-
-        assertMaterialIdentifiers(searchResult.getItems(), 2L, 8L);
-        assertEquals(2, searchResult.getTotalResults());
-        assertEquals(0, searchResult.getStart());
-    }
-
-    @Test
-    public void searchWithCurriculumLiteratureFalseAndLimit1() {
-        String query = "data";
-        SearchFilter searchFilter = new SearchFilter();
-        searchFilter.setCurriculumLiterature(false);
-        SearchResult searchResult = doGet(buildQueryURL(query, 0, 1L, searchFilter), SearchResult.class);
-
-        assertMaterialIdentifiers(searchResult.getItems(), 2L);
-        assertEquals(2, searchResult.getTotalResults());
-        assertEquals(0, searchResult.getStart());
-    }
+//    @Test
+//    public void searchWithCurriculumLiteratureTrue() {
+//        String query = "";
+//        SearchFilter searchFilter = new SearchFilter();
+//        searchFilter.setCurriculumLiterature(true);
+//        SearchResult searchResult = doGet(buildQueryURL(query, 0, null, searchFilter), SearchResult.class);
+//
+//        assertMaterialIdentifiers(searchResult.getItems(), 2L, 7L);
+//        assertEquals(2, searchResult.getTotalResults());
+//        assertEquals(0, searchResult.getStart());
+//    }
+//
+//    @Test
+//    public void searchWithCurriculumLiteratureFalse() {
+//        String query = "";
+//        SearchFilter searchFilter = new SearchFilter();
+//        searchFilter.setCurriculumLiterature(false);
+//        SearchResult searchResult = doGet(buildQueryURL(query, 0, null, searchFilter), SearchResult.class);
+//
+//        assertMaterialIdentifiers(searchResult.getItems(), 2L, 8L);
+//        assertEquals(2, searchResult.getTotalResults());
+//        assertEquals(0, searchResult.getStart());
+//    }
+//
+//    @Test
+//    public void searchWithCurriculumLiteratureFalseAndLimit1() {
+//        String query = "";
+//        SearchFilter searchFilter = new SearchFilter();
+//        searchFilter.setCurriculumLiterature(false);
+//        SearchResult searchResult = doGet(buildQueryURL(query, 0, 1L, searchFilter), SearchResult.class);
+//
+//        assertMaterialIdentifiers(searchResult.getItems(), 2L);
+//        assertEquals(2, searchResult.getTotalResults());
+//        assertEquals(0, searchResult.getStart());
+//    }
 
     @Test
     public void searchWithResourceType() {
@@ -346,9 +344,9 @@ public class SearchResourceTest extends ResourceIntegrationTestBase {
         if (searchFilter.getIssuedFrom() != null) {
             queryURL += "&issuedFrom=" + searchFilter.getIssuedFrom();
         }
-        if (searchFilter.isCurriculumLiterature() != null) {
-            queryURL += "&curriculumLiterature=" + searchFilter.isCurriculumLiterature().toString();
-        }
+//        if (searchFilter.isCurriculumLiterature() != null) {
+//            queryURL += "&peerReview=false";
+//        }
         if (searchFilter.getSort() != null) {
             queryURL += "&sort=" + searchFilter.getSort();
         }

@@ -1,10 +1,10 @@
 package ee.hm.dop.rest;
 
-import static ee.hm.dop.utils.ConfigurationProperties.DOCUMENT_MAX_FILE_SIZE;
-import static ee.hm.dop.utils.ConfigurationProperties.FILE_UPLOAD_DIRECTORY;
+import static ee.hm.dop.utils.ConfigurationProperties.FILE_REVIEW_DIRECTORY;
 
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
+import java.util.List;
 
 import javax.annotation.security.RolesAllowed;
 import javax.inject.Inject;
@@ -23,8 +23,12 @@ import org.apache.commons.configuration.Configuration;
 import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
 import org.glassfish.jersey.media.multipart.FormDataParam;
 
-@Path("uploadedFile")
-public class UploadedFileResource extends BaseResource {
+/**
+ * Created by joonas on 6.10.16.
+ */
+
+@Path("review")
+public class ReviewFileResource extends BaseResource {
 
     @Inject
     private Configuration configuration;
@@ -36,9 +40,9 @@ public class UploadedFileResource extends BaseResource {
     @RolesAllowed({"USER", "ADMIN", "MODERATOR"})
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     @Produces(MediaType.APPLICATION_JSON)
-    public UploadedFile uploadFile(@FormDataParam("file") InputStream fileInputStream,
-                                   @FormDataParam("file") FormDataContentDisposition fileDetail) throws UnsupportedEncodingException {
-        return uploadedFileService.uploadFile(fileInputStream, fileDetail, configuration.getString(FILE_UPLOAD_DIRECTORY), "/rest/uploadedFile/");
+    public UploadedFile uploadReview(@FormDataParam("review") InputStream review,
+                                     @FormDataParam("review") FormDataContentDisposition reviewDetail) throws UnsupportedEncodingException {
+        return uploadedFileService.uploadFile(review, reviewDetail, configuration.getString(FILE_REVIEW_DIRECTORY), "/rest/review/");
     }
 
     @GET
@@ -47,12 +51,4 @@ public class UploadedFileResource extends BaseResource {
     public Response getFile(@PathParam("id") Long fileId, @PathParam("filename") String filename) {
         return uploadedFileService.getFile(fileId, filename);
     }
-
-    @GET
-    @Path("/maxSize")
-    @Produces(MediaType.APPLICATION_JSON)
-    public int getMaxSize() {
-        return configuration.getInt(DOCUMENT_MAX_FILE_SIZE);
-    }
-
 }

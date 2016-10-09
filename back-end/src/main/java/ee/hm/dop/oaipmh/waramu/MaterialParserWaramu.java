@@ -73,6 +73,11 @@ public class MaterialParserWaramu extends MaterialParser {
     }
 
     @Override
+    protected String getPathToPeerReview() {
+        return "//*[local-name()='lom']/*[local-name()='educational']/*[local-name()='peerReview']";
+    }
+
+    @Override
     protected String getElementValue(Node node) {
         Node valueNode = getNode(node, "./*[local-name()='value']");
 

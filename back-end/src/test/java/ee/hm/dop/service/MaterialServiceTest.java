@@ -14,10 +14,13 @@ import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import ee.hm.dop.dao.MaterialDAO;
 import ee.hm.dop.model.Material;
+import ee.hm.dop.model.PeerReview;
 import ee.hm.dop.model.Publisher;
 import ee.hm.dop.model.Recommendation;
 import ee.hm.dop.model.Repository;
@@ -46,6 +49,9 @@ public class MaterialServiceTest {
     @Mock
     private SolrEngineService solrEngineService;
 
+    @Mock
+    private PeerReviewService peerReviewService;
+
     @Test
     public void create() {
         Capture<Material> capturedMaterial = newCapture();
@@ -61,8 +67,13 @@ public class MaterialServiceTest {
         Material material = new Material();
         String source = "http://creatematerial.example.com";
         material.setSource(source);
-        material.setCurriculumLiterature(true);
+        PeerReview peerReview = new PeerReview();
+        peerReview.setUrl("http://www.azure.com");
+        List<PeerReview> peerReviews = new ArrayList<>();
+        peerReviews.add(peerReview);
         material.setRecommendation(new Recommendation());
+
+        expect(peerReviewService.createPeerReview(peerReview.getUrl())).andReturn(peerReview);
 
         expectMaterialUpdate(capturedMaterial);
         solrEngineService.updateIndex();
@@ -70,6 +81,7 @@ public class MaterialServiceTest {
         replayAll();
 
         Material createdMaterial = materialService.createMaterial(material, creator, true);
+        material.setPeerReviews(peerReviews);
 
         verifyAll();
 
@@ -111,8 +123,10 @@ public class MaterialServiceTest {
         expect(material.getId()).andReturn(materialId).times(3);
         expect(material.getAuthors()).andReturn(null);
         expect(material.getPublishers()).andReturn(null);
+        expect(material.getPeerReviews()).andReturn(null);
         material.setRepository(null);
         material.setRecommendation(null);
+        material.setPeerReviews(null);
         solrEngineService.updateIndex();
 
         material.setAdded(added);
@@ -175,10 +189,12 @@ public class MaterialServiceTest {
         expect(materialDAO.update(material)).andReturn(material);
         material.setViews(0L);
         material.setAdded(null);
+        material.setPeerReviews(null);
         material.setUpdated(EasyMock.anyObject(DateTime.class));
         expect(material.getAuthors()).andReturn(null);
         expect(material.getPublishers()).andReturn(null);
         expect(material.getTaxons()).andReturn(null);
+        expect(material.getPeerReviews()).andReturn(null);
         material.setKeyCompetences(null);
         material.setCrossCurricularThemes(null);
 

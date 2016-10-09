@@ -177,6 +177,11 @@ public class MaterialParserTest {
         }
 
         @Override
+        protected String getPathToPeerReview() {
+            return null;
+        }
+
+        @Override
         protected String getPathToLocation() {
             return null;
         }

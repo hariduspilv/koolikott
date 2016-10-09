@@ -283,66 +283,8 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
         assertNull(createdMaterial.getCrossCurricularThemes());
     }
 
-    @Test
-    public void createWithCurriculumLiteratureAsAdmin() {
-        login("89898989898");
-
-        Material material = new Material();
-        material.setSource("http://curriculum.example.com/2");
-        material.setCurriculumLiterature(true);
-
-        Response response = createMaterial(material);
-        assertEquals(Status.OK.getStatusCode(), response.getStatus());
-
-        Material createdMaterial = response.readEntity(Material.class);
-
-        assertNotNull(createdMaterial);
-        assertTrue(createdMaterial.isCurriculumLiterature());
-
-        logout();
-    }
-
-    @Test
-    public void createWithCurriculumLiteratureAsPublisher() {
-        login("77007700770");
-
-        Material material = new Material();
-        material.setSource("http://curriculum.example.com/3");
-        material.setCurriculumLiterature(true);
-
-        Response response = createMaterial(material);
-        assertEquals(Status.OK.getStatusCode(), response.getStatus());
-
-        Material createdMaterial = response.readEntity(Material.class);
-
-        assertNotNull(createdMaterial);
-        assertTrue(createdMaterial.isCurriculumLiterature());
-
-        logout();
-    }
-
     private Response createMaterial(Material material) {
         return doPut(CREATE_MATERIAL_URL, Entity.entity(material, MediaType.APPLICATION_JSON_TYPE));
-    }
-
-    @Test
-    public void createWithCurriculumLiteratureWhenNotAllowed() {
-        // Regular user
-        login("89012378912");
-
-        Material material = new Material();
-        material.setSource("http://curriculum.example.com");
-        material.setCurriculumLiterature(true);
-
-        Response response = createMaterial(material);
-        assertEquals(Status.OK.getStatusCode(), response.getStatus());
-
-        Material createdMaterial = response.readEntity(Material.class);
-
-        assertNotNull(createdMaterial);
-        assertFalse(createdMaterial.isCurriculumLiterature());
-
-        logout();
     }
 
     @Test

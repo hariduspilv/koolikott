@@ -503,3 +503,13 @@ insert into UploadedFile(id, name, path) values(1, 'bookCover.jpg', 'src/test/re
 
 insert into RepositoryURL(id, baseURL, repository) values(1, 'koolielu.ee', 1);
 insert into RepositoryURL(id, baseURL, repository) values(2, 'koolitaja.eenet.ee', 1);
+
+-- PeerReviews
+
+insert into PeerReview(url) values ('http://postimees.ee');
+insert into PeerReview(url) values ('http://google.com');
+
+-- PeerReview - Material
+
+insert into Material_PeerReview(material, peerReview) values (2, 1);
+insert into Material_PeerReview(material, peerReview) values (3, 2);

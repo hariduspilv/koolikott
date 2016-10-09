@@ -20,6 +20,7 @@ import ee.hm.dop.model.Comment;
 import ee.hm.dop.model.Language;
 import ee.hm.dop.model.LearningObject;
 import ee.hm.dop.model.Material;
+import ee.hm.dop.model.PeerReview;
 import ee.hm.dop.model.Publisher;
 import ee.hm.dop.model.Recommendation;
 import ee.hm.dop.model.Role;
@@ -57,6 +58,9 @@ public class MaterialService implements LearningObjectHandler {
     @Inject
     private BrokenContentDAO brokenContentDAO;
 
+    @Inject
+    private PeerReviewService peerReviewService;
+
     public Material get(long materialId, User loggedInUser) {
         if (isUserAdmin(loggedInUser) || isUserModerator(loggedInUser)) {
             return materialDao.findById(materialId);
@@ -84,10 +88,6 @@ public class MaterialService implements LearningObjectHandler {
         }
 
         material.setRecommendation(null);
-
-        if (!isUserAdmin(creator) && !isUserPublisher(creator)) {
-            material.setCurriculumLiterature(false);
-        }
 
         Material createdMaterial = createOrUpdate(material);
         if (updateSearchIndex) {
@@ -171,6 +171,20 @@ public class MaterialService implements LearningObjectHandler {
             }
             material.setAuthors(authors);
         }
+    }
+
+    private void setPeerReviews(Material material) {
+        List<PeerReview> peerReviews = material.getPeerReviews();
+        if(peerReviews != null){
+            for (int i = 0; i < peerReviews.size(); i++) {
+                PeerReview peerReview = peerReviews.get(i);
+                PeerReview returnedPeerReview = peerReviewService.createPeerReview(peerReview.getUrl());
+                if(returnedPeerReview != null){
+                    peerReviews.set(i, returnedPeerReview);
+                }
+            }
+        }
+        material.setPeerReviews(peerReviews);
     }
 
     public void addComment(Comment comment, Material material) {
@@ -270,9 +284,9 @@ public class MaterialService implements LearningObjectHandler {
 
         Material originalMaterial;
 
-        if( isUserAdmin(changer) || isUserModerator(changer)){
+        if (isUserAdmin(changer) || isUserModerator(changer)) {
             originalMaterial = materialDao.findById(material.getId());
-        }else{
+        } else {
             originalMaterial = materialDao.findByIdNotDeleted(material.getId());
         }
 
@@ -330,6 +344,7 @@ public class MaterialService implements LearningObjectHandler {
 
         setAuthors(material);
         setPublishers(material);
+        setPeerReviews(material);
         material = applyRestrictions(material);
 
         return (Material) materialDao.update(material);

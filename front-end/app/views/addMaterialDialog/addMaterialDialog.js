@@ -28,6 +28,7 @@ define([
             $scope.titleDescriptionGroups = [];
             $scope.fileUploaded = false;
             $scope.uploadingFile = false;
+            $scope.review = {};
             $scope.maxPictureSize = 10; //Initial placeholder
 
             init();
@@ -102,9 +103,19 @@ define([
                 $mdDialog.hide();
             };
 
+            $scope.addNewPeerReview = function () {
+                $scope.material.peerReviews.push({});
+                $timeout(function () {
+                    angular.element('#material-peerReview-' + ($scope.material.authors.length - 1)).focus();
+                });
+            };
+
+            $scope.deletePeerReview = function (index) {
+                $scope.material.peerReviews.splice(index, 1);
+            };
+
             $scope.save = function () {
                 $scope.isSaving = true;
-
                 if (uploadingPicture) {
                     $timeout($scope.save, 500, false);
                 } else {
@@ -294,6 +305,7 @@ define([
                 $scope.material.tags = [];
                 $scope.material.taxons = [{}];
                 $scope.material.authors = [{}];
+                $scope.material.peerReviews = [{}];
                 $scope.material.keyCompetences = [];
                 $scope.material.crossCurricularThemes = [];
                 $scope.material.publishers = [];
@@ -398,6 +410,14 @@ define([
                 }
             }, true);
 
+            $scope.uploadReview = function (index, file){
+                if(file){
+                    $scope.material.peerReviews[index].uploading = true;
+                    $scope.uploadingReviewId = index;
+                    fileUploadService.uploadReview(file, reviewUploadSuccess, reviewUploadFailed, reviewUploadFinally);
+                }
+            };
+
             function pictureUploadSuccess(picture) {
                 $scope.material.picture = picture;
             }
@@ -425,6 +445,20 @@ define([
 
             function fileUploadFinally() {
                 $scope.uploadingFile = false;
+            }
+
+            function reviewUploadSuccess(file) {
+                $scope.material.peerReviews[$scope.uploadingReviewId].name = file.name;
+                $scope.material.peerReviews[$scope.uploadingReviewId].url = file.url;
+                $scope.material.peerReviews[$scope.uploadingReviewId].uploaded = true;
+            }
+
+            function reviewUploadFailed() {
+                log('Review upload failed.');
+            }
+
+            function reviewUploadFinally() {
+                $scope.material.peerReviews[$scope.uploadingReviewId].uploading = false;
             }
 
             function preSetMaterial(material) {

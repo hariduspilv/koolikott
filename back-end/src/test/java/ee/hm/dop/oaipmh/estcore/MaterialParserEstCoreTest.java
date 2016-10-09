@@ -25,6 +25,7 @@ import ee.hm.dop.model.KeyCompetence;
 import ee.hm.dop.model.Language;
 import ee.hm.dop.model.LanguageString;
 import ee.hm.dop.model.Material;
+import ee.hm.dop.model.PeerReview;
 import ee.hm.dop.model.Publisher;
 import ee.hm.dop.model.ResourceType;
 import ee.hm.dop.model.Tag;
@@ -40,6 +41,7 @@ import ee.hm.dop.service.AuthorService;
 import ee.hm.dop.service.CrossCurricularThemeService;
 import ee.hm.dop.service.KeyCompetenceService;
 import ee.hm.dop.service.LanguageService;
+import ee.hm.dop.service.PeerReviewService;
 import ee.hm.dop.service.PublisherService;
 import ee.hm.dop.service.ResourceTypeService;
 import ee.hm.dop.service.TagService;
@@ -83,6 +85,9 @@ public class MaterialParserEstCoreTest {
 
     @Mock
     private KeyCompetenceService keyCompetenceService;
+
+    @Mock
+    private PeerReviewService peerReviewService;
 
     @Test(expected = ee.hm.dop.oaipmh.ParseException.class)
     public void parseXMLisNull() throws ParseException {
@@ -303,6 +308,11 @@ public class MaterialParserEstCoreTest {
         KeyCompetence keyCompetence = new KeyCompetence();
         keyCompetence.setName("Cultural_and_value_competence");
 
+        PeerReview peerReview = new PeerReview();
+        peerReview.setUrl("http://www.facebook.com");
+        List<PeerReview> peerReviews = new ArrayList<>();
+        peerReviews.add(peerReview);
+
         expect(languageService.getLanguage("en")).andReturn(english).times(3);
         expect(languageService.getLanguage("et")).andReturn(estonian).times(2);
         expect(authorService.getAuthorByFullName(author1.getName(), author1.getSurname())).andReturn(author1);
@@ -358,6 +368,9 @@ public class MaterialParserEstCoreTest {
         // Key competence
         expect(keyCompetenceService.findKeyCompetenceByName(keyCompetence.getName())).andReturn(keyCompetence);
 
+        // Peer reviews
+        expect(peerReviewService.getPeerReviewByURL(peerReview.getUrl().toUpperCase())).andReturn(peerReview);
+
         LanguageString title1 = new LanguageString();
         title1.setLanguage(english);
         title1.setText("first title");
@@ -387,13 +400,13 @@ public class MaterialParserEstCoreTest {
         resourceTypes.add(resourceType2);
 
         replay(languageService, authorService, tagService, resourceTypeService, taxonService, publisherService,
-                crossCurricularThemeService, keyCompetenceService);
+                crossCurricularThemeService, keyCompetenceService, peerReviewService);
 
         Document doc = dBuilder.parse(fXmlFile);
         Material material = materialParser.parse(doc);
 
         verify(languageService, authorService, tagService, resourceTypeService, taxonService, publisherService,
-                crossCurricularThemeService, keyCompetenceService);
+                crossCurricularThemeService, keyCompetenceService, peerReviewService);
 
         assertEquals(titles, material.getTitles());
         assertEquals("https://oxygen.netgroupdigital.com/rest/repoMaterialSource", material.getSource());
@@ -410,7 +423,7 @@ public class MaterialParserEstCoreTest {
         assertTrue(material.isSpecialEducation());
         assertEquals(1, material.getCrossCurricularThemes().size());
         assertEquals(1, material.getKeyCompetences().size());
-        assertTrue(material.isCurriculumLiterature());
+        assertEquals(peerReviews, material.getPeerReviews());
     }
 
     private File getResourceAsFile(String resourcePath) throws URISyntaxException {
