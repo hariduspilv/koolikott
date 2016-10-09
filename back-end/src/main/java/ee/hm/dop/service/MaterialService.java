@@ -4,6 +4,8 @@ import static ee.hm.dop.utils.UserUtils.isAdmin;
 import static org.apache.commons.lang3.StringUtils.isEmpty;
 import static org.joda.time.DateTime.now;
 
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -29,6 +31,8 @@ import ee.hm.dop.model.UserLike;
 import ee.hm.dop.model.taxon.EducationalContext;
 import ee.hm.dop.service.learningObject.LearningObjectHandler;
 import ee.hm.dop.utils.TaxonUtils;
+import org.apache.http.client.utils.URIBuilder;
+import org.apache.http.util.TextUtils;
 import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -77,9 +81,11 @@ public class MaterialService implements LearningObjectHandler {
     }
 
     public Material createMaterial(Material material, User creator, boolean updateSearchIndex) {
-        if (material.getId() != null) {
+        if (material.getId() != null || materialWithSameSourceExists(material)) {
             throw new IllegalArgumentException("Error creating Material, material already exists.");
         }
+
+        material.setSource(cleanURL(material.getSource()));
 
         material.setCreator(creator);
 
@@ -282,6 +288,10 @@ public class MaterialService implements LearningObjectHandler {
             throw new IllegalArgumentException("Material id parameter is mandatory");
         }
 
+        if (materialWithSameSourceExists(material)) {
+            throw new IllegalArgumentException("Error updating Material: material with given source already exists");
+        }
+
         Material originalMaterial;
 
         if (isUserAdmin(changer) || isUserModerator(changer)) {
@@ -313,6 +323,19 @@ public class MaterialService implements LearningObjectHandler {
         return updatedMaterial;
     }
 
+    private boolean materialWithSameSourceExists(Material material) {
+        if (material.getSource() == null && material.getUploadedFile() != null) return false;
+
+        List<Material> materialsWithGivenSource = getBySource(material.getSource(), true);
+        if (materialsWithGivenSource != null && materialsWithGivenSource.size() > 0) {
+            if (!materialsWithGivenSource.get(0).getId().equals(material.getId())) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     private boolean isThisUserMaterial(User user, Material originalMaterial) {
         return user != null && originalMaterial.getCreator().getUsername().equals(user.getUsername());
     }
@@ -329,7 +352,7 @@ public class MaterialService implements LearningObjectHandler {
 
     public List<Material> getByCreator(User creator) {
         List<Material> materials = new ArrayList<>();
-        materialDao.findByCreator(creator).stream().forEach(material -> materials.add((Material) material));
+        materialDao.findByCreator(creator).forEach(material -> materials.add((Material) material));
         return materials;
     }
 
@@ -407,7 +430,7 @@ public class MaterialService implements LearningObjectHandler {
 
     public List<Material> getDeletedMaterials() {
         List<Material> materials = new ArrayList<>();
-        materialDao.findDeletedMaterials().stream().forEach(material -> materials.add((Material) material));
+        materialDao.findDeletedMaterials().forEach(material -> materials.add((Material) material));
         return materials;
     }
 
@@ -475,11 +498,60 @@ public class MaterialService implements LearningObjectHandler {
         return true;
     }
 
-    public List<Material> getBySource(String materialSource) {
+    public List<Material> getBySource(String materialSource, boolean deleted) {
+        materialSource = getURLWithoutScheme(cleanURL(materialSource));
         if (materialSource != null) {
-            return materialDao.findBySource(materialSource);
+            return materialDao.findBySource(materialSource, deleted);
         } else {
             throw new RuntimeException("No material source link provided");
         }
     }
+
+
+    private String getURLWithoutScheme(String materialSource) {
+        if (TextUtils.isBlank(materialSource)) return null;
+
+        try {
+            URI uri = new URI(materialSource);
+            uri = new URIBuilder()
+                    .setHost(uri.getHost())
+                    .setPath(uri.getPath())
+                    .setCustomQuery(uri.getQuery())
+                    .build();
+
+            return uri.toString();
+        } catch (URISyntaxException e) {
+            e.printStackTrace();
+            throw new RuntimeException("Failed to fix URL");
+        }
+    }
+
+    private String cleanURL(String materialSource) {
+        if (TextUtils.isBlank(materialSource)) return null;
+
+        try {
+            materialSource = materialSource.replaceAll("/$", "");
+
+            URI uri = new URI(materialSource);
+            if (uri.getScheme() == null) {
+                uri = new URI("http://" +
+                        (materialSource.startsWith("www.") ? materialSource.substring(4) : materialSource));
+            }
+
+            if (uri.getHost().startsWith("www.")) {
+                uri = new URIBuilder()
+                        .setScheme(uri.getScheme())
+                        .setHost(uri.getHost().startsWith("www.") ? uri.getHost().substring(4) : uri.getHost())
+                        .setPath(uri.getPath())
+                        .setCustomQuery(uri.getQuery())
+                        .build();
+            }
+
+            return uri.toString();
+        } catch (URISyntaxException e) {
+            e.printStackTrace();
+            throw new RuntimeException("Failed to fix URL");
+        }
+    }
+
 }

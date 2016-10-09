@@ -97,8 +97,7 @@ public class SearchService {
         List<Searchable> unsortedSearchable = new ArrayList<>();
 
         if (!learningObjectIds.isEmpty()) {
-            learningObjectDAO.findAllById(learningObjectIds).stream()
-                    .forEach(learningObject -> unsortedSearchable.add((Searchable) learningObject));
+            learningObjectDAO.findAllById(learningObjectIds).forEach(learningObject -> unsortedSearchable.add((Searchable) learningObject));
         }
 
         return unsortedSearchable;

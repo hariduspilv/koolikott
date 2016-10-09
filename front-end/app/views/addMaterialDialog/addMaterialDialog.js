@@ -9,8 +9,8 @@ define([
     'services/fileUploadService',
     'directives/validate/validateUrl'
 ], function (app) {
-    return ['$scope', '$mdDialog', '$mdDateLocale', 'serverCallService', 'translationService', 'metadataService', '$filter', '$location', '$rootScope', 'authenticatedUserService', '$timeout', 'pictureUploadService', 'fileUploadService',
-        function ($scope, $mdDialog, $mdDateLocale, serverCallService, translationService, metadataService, $filter, $location, $rootScope, authenticatedUserService, $timeout, pictureUploadService, fileUploadService) {
+    return ['$scope', '$mdDialog', '$mdDateLocale', 'serverCallService', 'translationService', 'metadataService', '$filter', '$location', '$rootScope', 'authenticatedUserService', '$timeout', 'pictureUploadService', 'fileUploadService', 'toastService',
+        function ($scope, $mdDialog, $mdDateLocale, serverCallService, translationService, metadataService, $filter, $location, $rootScope, authenticatedUserService, $timeout, pictureUploadService, fileUploadService, toastService) {
             $scope.isSaving = false;
             $scope.showHints = true;
             $scope.creatorIsPublisher = false;
@@ -409,6 +409,37 @@ define([
                     }
                 }
             }, true);
+
+            $scope.$watch('material.source', function (newValue) {
+                if (newValue && $scope.addMaterialForm.source && ($scope.addMaterialForm.source.$error.url !== true)) {
+                    var encodedUrl   = encodeURIComponent(newValue);
+                    serverCallService.makeGet("rest/material/getAllBySource?source=" + encodedUrl, {}, getByUrlSuccess, getByUrlFail);
+                } else {
+                    getByUrlFail()
+                }
+
+            }, true);
+
+            function getByUrlSuccess(materials) {
+                if((materials && materials[0]) && (materials[0].id !== $scope.material.id)) {
+
+                    if (materials[0].deleted) {
+                        toastService.show("MATERIAL_WITH_SAME_SOURCE_IS_DELETED");
+                    }
+
+                    $scope.addMaterialForm.source.$setTouched();
+                    $scope.addMaterialForm.source.$setValidity("exists", false);
+
+                } else{
+                    getByUrlFail();
+                }
+            }
+
+            function getByUrlFail() {
+                if ($scope.addMaterialForm.source) {
+                    $scope.addMaterialForm.source.$setValidity("exists", true);
+                }
+            }
 
             $scope.uploadReview = function (index, file){
                 if(file){

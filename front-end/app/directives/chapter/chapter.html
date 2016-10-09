@@ -13,8 +13,9 @@
               <md-icon class="material-icons md-primary">keyboard_arrow_right</md-icon>
             </div>
           </div>
-          <div class="md-body-1 textangular-view" ng-class="{'hide': chapter.text.length == undefined || chapter.text.length == 0}"
-             data-ng-bind-html="chapter.text"></div>
+          <div class="md-body-1 textangular-view"
+               ng-class="{'hide': chapter.text.length == undefined || chapter.text.length == 0}"
+               data-ng-bind-html="chapter.text"></div>
         </div>
         <md-tooltip md-direction="bottom">
           <span data-ng-if="isCollapsed" data-translate="TOOLTIP_OPEN_CHAPTER">Open chapter</span>
@@ -61,13 +62,19 @@
       </md-card-content>
     </md-card>
 
-    <div class="portfolio-chapter-chapter-materials" ng-show="chapter.materials.length" uib-collapse="isCollapsed">
-      <md-grid-list md-cols="2" md-cols-gt-xs="4" md-gutter="10px" md-row-height="3:4">
-        <md-grid-tile data-ng-repeat="material in chapter.materials">
-          <figure data-dop-material-box material="material" chapter="chapter"></figure>
-        </md-grid-tile>
-      </md-grid-list>
-    </div>
+    <!--Chapter materials-->
+    <ul ng-show="chapter.materials.length" dnd-list="chapter.materials"
+         class="portfolio-chapter-chapter-materials" uib-collapse="isCollapsed">
+      <li id="chapterMaterial-{{index}}-{{$index}}"
+          ng-repeat="material in chapter.materials"
+          dnd-draggable="getParsedMaterial(material)"
+          dnd-moved="chapter.materials.splice($index, 1)"
+          dnd-effect-allowed="move"
+          data-dop-embedded-material
+          material="material" chapter="chapter" data-flex></li>
+      <!--dnd-selected="models.selected = item"-->
+      <!--ng-class="{'selected': models.selected === item}"-->
+    </ul>
   </div>
 
   <div class="portfolio-chapter-subchapters">
@@ -126,7 +133,8 @@
           <div uib-collapse="subisCollapsed[subchapter.$$hashKey]">
             <md-input-container class="md-block">
 
-              <div text-angular class="textangular-editor" id="subchapter-input" placeholder="{{'PORTFOLIO_SUB_CHAPTER_CONTENT' | translate}}"
+              <div text-angular class="textangular-editor" id="subchapter-input"
+                   placeholder="{{'PORTFOLIO_SUB_CHAPTER_CONTENT' | translate}}"
                    data-ng-model="subchapter.text"></div>
             </md-input-container>
             <div dop-add-chapter-material chapter="subchapter"></div>
@@ -134,13 +142,11 @@
         </md-card-content>
       </md-card>
 
-      <div class="portfolio-chapter-subchapter-materials" ng-show="subchapter.materials.length"
-           uib-collapse="subisCollapsed[subchapter.$$hashKey]" id="cp-{{index}}-{{$index}}">
-        <md-grid-list md-cols="2" md-cols-gt-xs="4" md-gutter="10px" md-row-height="3:4">
-          <md-grid-tile data-ng-repeat="material in subchapter.materials">
-            <figure data-dop-material-box material="material" chapter="subchapter"></figure>
-          </md-grid-tile>
-        </md-grid-list>
+      <!--Subchapter materials-->
+      <div ng-show="subchapter.materials.length" ng-repeat="material in subchapter.materials"
+           class="portfolio-chapter-chapter-materials" uib-collapse="subisCollapsed[subchapter.$$hashKey]">
+        <span id="subchapterMaterial-{{index}}-{{$index}}" data-dop-embedded-material material="material"
+              chapter="subchapter" data-flex></span>
       </div>
     </div>
   </div>
