@@ -145,6 +145,8 @@ define([
                             });
                     }
 
+                    $scope.material.peerReviews = null;
+
                     serverCallService.makePut('rest/material', $scope.material, saveMaterialSuccess, saveMaterialFail, saveMaterialFinally);
                 }
             };
@@ -176,7 +178,6 @@ define([
                     year: date.getFullYear()
                 };
             }
-
 
             function getTitlesAndDecriptions() {
                 var titles = [];
