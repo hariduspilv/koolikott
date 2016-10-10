@@ -24,7 +24,7 @@ require.config({
         'ng-file-upload': 'libs/ng-file-upload/ng-file-upload.min',
         'clipboard': 'libs/clipboard/dist/clipboard.min',
         'moment': 'libs/moment/min/moment.min',
-        'angular-bootstrap': 'utils/ui-bootstrap-custom-tpls-1.3.3.min',
+        'angular-bootstrap': 'utils/ui-bootstrap-custom-tpls.min',
         'DOPconstants': 'constants',
         'rangy-core': 'libs/rangy/rangy-core.min',
         'rangy-selectionsaverestore': 'libs/rangy/rangy-selectionsaverestore.min',

@@ -14,11 +14,9 @@
 
   </md-content>
 
-  <!-- Angular Material Sidenav -->
-  <ul class="menu-nested-list">
-    <!-- Item -->
-    <li>
-      <menu-toggle>
+  <uib-accordion close-others="oneAtATime" class="menu-nested-list">
+    <div uib-accordion-group class="panel-default">
+      <uib-accordion-heading>
         <md-button class="md-hue-1 md-primary-menu">
           <div flex layout="row">
             <span>Minu koolikott</span>
@@ -26,99 +24,99 @@
             <md-icon class="md-primary material-icons">keyboard_arrow_right</md-icon>
           </div>
         </md-button>
-        <!-- Subitems -->
-        <ul>
-          <li>
-            <md-button class="md-hue-1 md-secondary-menu selected">
-              <div flex layout="row">
-                <md-icon class="material-icons">star</md-icon>
-                <span>Minu kogumikud</span>
-                <span class="count">22</span>
-              </div>
-            </md-button>
-          </li>
-          <li>
-            <md-button class="md-hue-1 md-secondary-menu">
-              <div flex layout="row">
-                <md-icon class="material-icons">star</md-icon>
-                <span>Minu materjalid</span>
-                <span class="count">22</span>
-              </div>
-            </md-button>
-          </li>
-          <li>
-            <md-button class="md-hue-1 md-secondary-menu">
-              <div flex layout="row">
-                <md-icon class="material-icons">star</md-icon>
-                <span>Minu lemmikud</span>
-                <span class="count">12</span>
-              </div>
-            </md-button>
-          </li>
-        </ul>
-      </menu-toggle>
-    </li>
-    <li>
-      <menu-toggle>
-        <md-button class="md-hue-1 md-primary-menu" ng-click="swapState()">
+      </uib-accordion-heading>
+      <!-- Subitems -->
+      <ul>
+        <li>
+          <md-button class="md-hue-1 md-secondary-menu selected">
+            <div flex layout="row">
+              <md-icon class="material-icons">star</md-icon>
+              <span>Minu kogumikud</span>
+              <span class="count">22</span>
+            </div>
+          </md-button>
+        </li>
+        <li>
+          <md-button class="md-hue-1 md-secondary-menu">
+            <div flex layout="row">
+              <md-icon class="material-icons">star</md-icon>
+              <span>Minu materjalid</span>
+              <span class="count">22</span>
+            </div>
+          </md-button>
+        </li>
+        <li>
+          <md-button class="md-hue-1 md-secondary-menu">
+            <div flex layout="row">
+              <md-icon class="material-icons">star</md-icon>
+              <span>Minu lemmikud</span>
+              <span class="count">12</span>
+            </div>
+          </md-button>
+        </li>
+      </ul>
+    </div>
+    <div uib-accordion-group class="panel-default">
+      <uib-accordion-heading>
+        <md-button class="md-hue-1 md-primary-menu">
           <div flex layout="row">
             <span>Töölaud</span>
             <span flex></span>
             <md-icon class="md-primary material-icons">keyboard_arrow_right</md-icon>
           </div>
         </md-button>
-        <!-- Subitems -->
-        <ul uib-collapse="status">
-          <li>
-            <md-button class="md-hue-1 md-secondary-menu selected">
-              <div flex layout="row">
-                <md-icon class="material-icons">star</md-icon>
-                <span>Ebasobivad materjalid</span>
-                <span class="count">22</span>
-              </div>
-            </md-button>
-          </li>
-          <li>
-            <md-button class="md-hue-1 md-secondary-menu">
-              <div flex layout="row">
-                <md-icon class="material-icons">star</md-icon>
-                <span>Ebasobivad kogumikud</span>
-                <span class="count">22</span>
-              </div>
-            </md-button>
-          </li>
-          <li>
-            <md-button class="md-hue-1 md-secondary-menu">
-              <div flex layout="row">
-                <md-icon class="material-icons">star</md-icon>
-                <span>Katkised materjalid</span>
-                <span class="count">12</span>
-              </div>
-            </md-button>
-          </li>
-          <li>
-            <md-button class="md-hue-1 md-secondary-menu">
-              <div flex layout="row">
-                <md-icon class="material-icons">star</md-icon>
-                <span>Kustutatud materjalid</span>
-                <span class="count">12</span>
-              </div>
-            </md-button>
-          </li>
-          <li>
-            <md-button class="md-hue-1 md-secondary-menu">
-              <div flex layout="row">
-                <md-icon class="material-icons">star</md-icon>
-                <span>Kustutatud kogumikud</span>
-                <span class="count">12</span>
-              </div>
-            </md-button>
-          </li>
-        </ul>
-      </menu-toggle>
-    </li>
-    <li>
-      <menu-toggle>
+      </uib-accordion-heading>
+      <!-- Subitems -->
+      <ul>
+        <li>
+          <md-button class="md-hue-1 md-secondary-menu selected">
+            <div flex layout="row">
+              <md-icon class="material-icons">star</md-icon>
+              <span>Ebasobivad materjalid</span>
+              <span class="count">22</span>
+            </div>
+          </md-button>
+        </li>
+        <li>
+          <md-button class="md-hue-1 md-secondary-menu">
+            <div flex layout="row">
+              <md-icon class="material-icons">star</md-icon>
+              <span>Ebasobivad kogumikud</span>
+              <span class="count">22</span>
+            </div>
+          </md-button>
+        </li>
+        <li>
+          <md-button class="md-hue-1 md-secondary-menu">
+            <div flex layout="row">
+              <md-icon class="material-icons">star</md-icon>
+              <span>Katkised materjalid</span>
+              <span class="count">12</span>
+            </div>
+          </md-button>
+        </li>
+        <li>
+          <md-button class="md-hue-1 md-secondary-menu">
+            <div flex layout="row">
+              <md-icon class="material-icons">star</md-icon>
+              <span>Kustutatud materjalid</span>
+              <span class="count">12</span>
+            </div>
+          </md-button>
+        </li>
+        <li>
+          <md-button class="md-hue-1 md-secondary-menu">
+            <div flex layout="row">
+              <md-icon class="material-icons">star</md-icon>
+              <span>Kustutatud kogumikud</span>
+              <span class="count">12</span>
+            </div>
+          </md-button>
+        </li>
+      </ul>
+    </div>
+    <div uib-accordion-group class="panel-default" >
+      <uib-accordion-heading>
         <md-button class="md-hue-1 md-primary-menu">
           <div flex layout="row">
             <span>Kogumik</span>
@@ -126,42 +124,42 @@
             <md-icon class="md-primary material-icons">keyboard_arrow_right</md-icon>
           </div>
         </md-button>
-        <!-- Subitems -->
-        <ul>
-          <div data-dop-table-of-contents data-portfolio="portfolio" data-readonly="!isEditPortfolioMode"></div>
-        </ul>
-      </menu-toggle>
-    </li>
-    <li>
-      <menu-toggle>
-        <md-button class="md-hue-1 md-primary-menu" ng-click="changeTaxonomyDataAndVisibility('sidebar', 'primary')">
+      </uib-accordion-heading>
+      <!-- Subitems -->
+      <ul>
+        <div data-dop-table-of-contents data-portfolio="portfolio" data-readonly="!isEditPortfolioMode"></div>
+      </ul>
+    </div>
+    <div uib-accordion-group class="panel-default" >
+      <uib-accordion-heading>
+        <md-button class="md-hue-1 md-primary-menu">
           <div flex layout="row">
             <span>Sisukord</span>
             <span flex></span>
             <md-icon class="md-primary material-icons">keyboard_arrow_right</md-icon>
           </div>
         </md-button>
-        <!-- Subitems -->
-        <ul>
-          <div class="treeview">
-            <div ivh-treeview="taxonomy.taxonPrimaryData" ivh-treeview-filter="filterPrimaryTaxon" flex>
-                <script type="text/ng-template">
-                <div title="{{trvw.label(node)}}">
+      </uib-accordion-heading>
+      <!-- Subitems -->
+      <ul>
+        <div class="treeview">
+          <div ivh-treeview="taxonomy.taxonPrimaryData" ivh-treeview-filter="filterPrimaryTaxon" flex>
+            <script type="text/ng-template">
+              <div title="{{trvw.label(node)}}">
                 <span ivh-treeview-toggle>
                     <span ivh-treeview-twistie></span>
                 </span>
-                  <span class="ivh-treeview-node-label" data-ng-class="{'text-bold': trvw.isSelected(node)}" ivh-treeview-toggle data-translate="{{node.level.toUpperCase().substr(1) + '_' + node.name.toUpperCase();}}">
+                <span class="ivh-treeview-node-label" data-ng-class="{'text-bold': trvw.isSelected(node)}" ivh-treeview-toggle data-translate="{{node.level.toUpperCase().substr(1) + '_' + node.name.toUpperCase();}}">
                   {{trvw.label(node)}}
                   </span>
-                  <span class="count"></span>
-                  <div ivh-treeview-children></div>
-                </div>
-              </script>
-            </div>
+                <span class="count"></span>
+                <div ivh-treeview-children></div>
+              </div>
+            </script>
           </div>
-        </ul>
-      </menu-toggle>
-    </li>
-  </ul>
+        </div>
+      </ul>
+    </div>
+    </uib-accordion>
 
 </md-sidenav>

@@ -10,6 +10,8 @@ define([
             templateUrl: 'directives/sidenav/sidenav.html',
             controller: function ($rootScope, $scope, serverCallService, $location, searchService, $timeout, metadataService) {
 
+                $scope.oneAtATime = true;
+
                 metadataService.loadReducedTaxon(function(callback) {
                     $scope.reducedTaxon = callback;
                     console.log($scope.reducedTaxon);
