@@ -288,6 +288,8 @@ public class MaterialService implements LearningObjectHandler {
             throw new IllegalArgumentException("Material id parameter is mandatory");
         }
 
+        material.setSource(cleanURL(material.getSource()));
+
         if (materialWithSameSourceExists(material)) {
             throw new IllegalArgumentException("Error updating Material: material with given source already exists");
         }

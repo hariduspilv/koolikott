@@ -123,11 +123,12 @@ public class MaterialServiceTest {
         expect(material.getId()).andReturn(materialId).times(3);
         expect(material.getAuthors()).andReturn(null);
         expect(material.getPublishers()).andReturn(null);
-        expect(material.getSource()).andReturn("http://creatematerial.example.com").times(2);
+        expect(material.getSource()).andReturn("http://creatematerial.example.com").times(3);
         expect(material.getPeerReviews()).andReturn(null);
         material.setRepository(null);
         material.setRecommendation(null);
         material.setPeerReviews(null);
+        material.setSource("http://creatematerial.example.com");
         solrEngineService.updateIndex();
 
         material.setAdded(added);
@@ -160,8 +161,9 @@ public class MaterialServiceTest {
     public void updateWhenMaterialDoesNotExist() {
         long materialId = 1;
         Material material = createMock(Material.class);
+        material.setSource("http://creatematerial.example.com");
         expect(material.getId()).andReturn(materialId).times(2);
-        expect(material.getSource()).andReturn("http://creatematerial.example.com").times(2);
+        expect(material.getSource()).andReturn("http://creatematerial.example.com").times(3);
 
         expect(materialDAO.findByIdNotDeleted(materialId)).andReturn(null);
         expect(materialDAO.findBySource("//creatematerial.example.com", true)).andReturn(null);
@@ -194,12 +196,13 @@ public class MaterialServiceTest {
         material.setViews(0L);
         material.setAdded(null);
         material.setPeerReviews(null);
+        material.setSource("http://creatematerial.example.com");
         material.setUpdated(EasyMock.anyObject(DateTime.class));
         expect(material.getAuthors()).andReturn(null);
         expect(material.getPublishers()).andReturn(null);
         expect(material.getTaxons()).andReturn(null);
         expect(material.getPeerReviews()).andReturn(null);
-        expect(material.getSource()).andReturn("http://creatematerial.example.com").times(2);
+        expect(material.getSource()).andReturn("http://creatematerial.example.com").times(3);
         expect(materialDAO.findBySource("//creatematerial.example.com", true)).andReturn(null);
         material.setKeyCompetences(null);
         material.setCrossCurricularThemes(null);
