@@ -2,43 +2,56 @@ define([
     'angularAMD',
     'services/serverCallService',
     'services/searchService',
-    'directives/learningObjectRow/learningObjectRow'
+    'directives/learningObjectRow/learningObjectRow',
+    'directives/sidebarTaxon/sidebarTaxon'
 ], function (angularAMD) {
-    angularAMD.directive('dopSidenav', ['serverCallService', '$location', 'searchService', 'ivhTreeviewMgr', function () {
+    angularAMD.directive('dopSidenav', ['serverCallService', '$location', '$sce','searchService', 'ivhTreeviewMgr', 'authenticatedUserService', function () {
         return {
             scope: true,
             templateUrl: 'directives/sidenav/sidenav.html',
-            controller: function ($rootScope, $scope, serverCallService, $location, searchService, $timeout, metadataService) {
+            controller: function ($rootScope, $scope, $location,serverCallService, $location, searchService, $timeout, metadataService, authenticatedUserService, $sce) {
 
                 $scope.oneAtATime = true;
+
+
+
+                $scope.$watch(function () {
+                    return authenticatedUserService.getUser();
+                }, function (user) {
+                    $scope.user = user;
+                }, true);
+
+                //Checks the location
+                $scope.isLocation = function (location) {
+                    var isLocation = location === $location.path();
+                    return isLocation;
+                }
 
                 metadataService.loadReducedTaxon(function(callback) {
                     $scope.reducedTaxon = callback;
                     console.log($scope.reducedTaxon);
                 });
 
-                $scope.translateTaxon = function(node) {
-                    //node.level.toUpperCase().substr(1) + '_' + node.name.toUpperCase();
-                    console.log(node);
-                    return "MATHEMATICS";
-                }
                 if(window.innerWidth > 1280) {$scope.sideNavOpen = true;}
 
-                // Sidenav dropdown logic
-                var menuItems = [
-                    "myItems",
-                    "portfolio",
-                    "material",
-                    "taxonomy"
-                ]
 
-                for (var obj in menuItems) {
 
+                // TODO: Taxonomy logic
+                // DATA: $scope.reducedTaxon
+
+                $scope.test = function(data) {
+                    if(data.children) {
+                        $scope.asd = data.children;
+                        var html = $sce.trustAsHtml('<li ng-repeat="item in asd">' +
+                            '<div ng-bind-html="test(item)">{{asd}}</div>' +
+                            '</li>')
+                        return html;
+                    }
                 }
 
-                function openMenuItem() {
+                // TAXONOMY LOGIC END
 
-                }
+
 
               $scope.status = true;
 

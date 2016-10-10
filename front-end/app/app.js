@@ -30,7 +30,6 @@ define([
 
     /* TODO: we could save more request if layout system is built in another way */
     'directives/pageStructure/columnLayout/columnLayout',
-    'directives/pageStructure/linearLayout/linearLayout',
 
     'services/authenticatedUserService',
     'DOPconstants',
@@ -250,10 +249,21 @@ define([
     app.run(function ($rootScope, $location, authenticatedUserService) {
         $rootScope.$on('$routeChangeSuccess', function () {
             var path = $location.path();
-            var editModeAllowed = ["/portfolio/edit", "/search/result", "/material"];
 
+            if (path == '/dashboard') {
+                $location.path('/dashboard/improperMaterials');
+            }
+
+            var editModeAllowed = ["/portfolio/edit", "/search/result", "/material"];
+            if (authenticatedUserService.getUser() != null) {
+
+            }
             $rootScope.isViewPortforlioPage = path === '/portfolio';
             $rootScope.isEditPortfolioPage = path === '/portfolio/edit';
+            $rootScope.isViewAdminPanelPage = path === '/dashboard';
+            $rootScope.isViewHomePage = path === '/';
+            $rootScope.isViewMaterialPage = path === '/material';
+            $rootScope.isViewUserPage = path == '/:username';
 
             if (path == "/portfolio/edit") {
                 $rootScope.isEditPortfolioMode = true;

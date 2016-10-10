@@ -14,62 +14,68 @@
 
   </md-content>
 
-  <uib-accordion close-others="oneAtATime" class="menu-nested-list">
-    <div uib-accordion-group class="panel-default">
+  <uib-accordion close-others="oneAtATime" class="menu-nested-list" is-open="isViewUserPage">
+    <div uib-accordion-group class="panel-default" ng-if="user" is-open="isUserPage">
       <uib-accordion-heading>
         <md-button class="md-hue-1 md-primary-menu">
           <div flex layout="row">
             <span>Minu koolikott</span>
             <span flex></span>
-            <md-icon class="md-primary material-icons">keyboard_arrow_right</md-icon>
+            <md-icon class="md-primary material-icons arrow">keyboard_arrow_up</md-icon>
           </div>
         </md-button>
       </uib-accordion-heading>
       <!-- Subitems -->
       <ul>
         <li>
-          <md-button class="md-hue-1 md-secondary-menu selected">
-            <div flex layout="row">
-              <md-icon class="material-icons">star</md-icon>
-              <span>Minu kogumikud</span>
-              <span class="count">22</span>
-            </div>
-          </md-button>
+          <a href="/{{user.username}}">
+            <md-button class="md-hue-1 md-secondary-menu" data-ng-class="{'selected': isLocation('/' + user.username)}">
+              <div flex layout="row">
+                <md-icon class="material-icons">star</md-icon>
+                <span>Minu kogumikud</span>
+                <span class="count">22</span>
+              </div>
+            </md-button>
+          </a>
         </li>
         <li>
-          <md-button class="md-hue-1 md-secondary-menu">
-            <div flex layout="row">
-              <md-icon class="material-icons">star</md-icon>
-              <span>Minu materjalid</span>
-              <span class="count">22</span>
-            </div>
-          </md-button>
+          <a href="/{{user.username}}/materials">
+            <md-button class="md-hue-1 md-secondary-menu" data-ng-class="{'selected': isLocation('/' + user.username + '/materials')}">
+              <div flex layout="row">
+                <md-icon class="material-icons">star</md-icon>
+                <span>Minu materjalid</span>
+                <span class="count">22</span>
+              </div>
+            </md-button>
+          </a>
         </li>
         <li>
-          <md-button class="md-hue-1 md-secondary-menu">
-            <div flex layout="row">
-              <md-icon class="material-icons">star</md-icon>
-              <span>Minu lemmikud</span>
-              <span class="count">12</span>
-            </div>
-          </md-button>
+          <a href="/{{user.username}}/favorites">
+            <md-button class="md-hue-1 md-secondary-menu" data-ng-class="{'selected': isLocation('/' + user.username + '/favorites')}">
+              <div flex layout="row">
+                <md-icon class="material-icons">star</md-icon>
+                <span>Minu lemmikud</span>
+                <span class="count">12</span>
+              </div>
+            </md-button>
+          </a>
         </li>
       </ul>
     </div>
-    <div uib-accordion-group class="panel-default">
+    <div uib-accordion-group class="panel-default" ng-if="isViewAdminPanelPage" is-open="isViewAdminPanelPage">
       <uib-accordion-heading>
         <md-button class="md-hue-1 md-primary-menu">
           <div flex layout="row">
             <span>Töölaud</span>
             <span flex></span>
-            <md-icon class="md-primary material-icons">keyboard_arrow_right</md-icon>
+            <md-icon class="md-primary material-icons arrow">keyboard_arrow_up</md-icon>
           </div>
         </md-button>
       </uib-accordion-heading>
       <!-- Subitems -->
       <ul>
         <li>
-          <md-button class="md-hue-1 md-secondary-menu selected">
+          <md-button class="md-hue-1 md-secondary-menu" >
             <div flex layout="row">
               <md-icon class="material-icons">star</md-icon>
               <span>Ebasobivad materjalid</span>
@@ -115,49 +121,24 @@
         </li>
       </ul>
     </div>
-    <div uib-accordion-group class="panel-default" >
-      <uib-accordion-heading>
-        <md-button class="md-hue-1 md-primary-menu">
-          <div flex layout="row">
-            <span>Kogumik</span>
-            <span flex></span>
-            <md-icon class="md-primary material-icons">keyboard_arrow_right</md-icon>
-          </div>
-        </md-button>
-      </uib-accordion-heading>
-      <!-- Subitems -->
-      <ul>
-        <div data-dop-table-of-contents data-portfolio="portfolio" data-readonly="!isEditPortfolioMode"></div>
-      </ul>
+    <div uib-accordion-group class="panel-default" ng-if="isViewPortforlioPage || isEditPortfolioMode">
+      <div data-dop-table-of-contents data-portfolio="portfolio" data-readonly="!isEditPortfolioMode"></div>
     </div>
-    <div uib-accordion-group class="panel-default" >
+    <div uib-accordion-group class="panel-default" is-open="isViewMaterialPage">
       <uib-accordion-heading>
         <md-button class="md-hue-1 md-primary-menu" ng-click="changeTaxonomyDataAndVisibility('sidebar', 'primary')">
           <div flex layout="row">
             <span>Sisukord</span>
             <span flex></span>
-            <md-icon class="md-primary material-icons">keyboard_arrow_right</md-icon>
+            <md-icon class="md-primary material-icons arrow">keyboard_arrow_up</md-icon>
           </div>
         </md-button>
       </uib-accordion-heading>
       <!-- Subitems -->
       <ul>
-        <div class="treeview" >
-          <div ivh-treeview="taxonomy.taxonPrimaryData" ivh-treeview-filter="filterPrimaryTaxon" flex>
-            <script type="text/ng-template">
-              <div title="{{trvw.label(node)}}">
-                <span ivh-treeview-toggle>
-                    <span ivh-treeview-twistie></span>
-                </span>
-                <span class="ivh-treeview-node-label" data-ng-class="{'text-bold': trvw.isSelected(node)}" ivh-treeview-toggle data-translate="{{node.level.toUpperCase().substr(1) + '_' + node.name.toUpperCase();}}">
-                  {{trvw.label(node)}}
-                  </span>
-                <span class="count"></span>
-                <div ivh-treeview-children></div>
-              </div>
-            </script>
-          </div>
-        </div>
+        <li ng-repeat="item in reducedTaxon">
+          <div dop-sidebar-taxon data-taxon="item"></div>
+        </li>
       </ul>
     </div>
     </uib-accordion>

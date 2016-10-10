@@ -22,17 +22,6 @@ define([
 
                 $scope.portfolio = $rootScope.savedPortfolio;
 
-                $scope.calculatePadding = function() {
-                  // $scope.numero = (window.innerWidth - 1280) / 2 + "px";
-                }
-
-                // $scope.numero = (window.innerWidth - 1280) / 2 + "px";
-
-                console.log($scope.numero);
-
-                angular.element($window).on('resize', $scope.calculatePadding());
-
-
             }
         };
     });

@@ -3,14 +3,6 @@
     <section flex flex-gt-md="100">
       <div layout-gt-sm>
         <article flex flex-gt-sm="75" md-cols-gt-xs="3" md-cols-gt-sm="4" flex-gt-lg="80" class="md-padding" role="main" id="main-content">
-          <h1 data-ng-if="myProfile" data-translate="MYPROFILE_PAGE_TITLE_PORTFOLIOS"></h1>
-          <h1 data-ng-if="!myProfile" data-translate="PROFILE_PAGE_TITLE_PORTFOLIOS"></h1>
-
-          <md-grid-list md-cols="2" md-cols-gt-xs="3" md-cols-gt-sm="4" md-cols-gt-lg="5" md-gutter="10px" md-row-height="3:4">
-            <md-grid-tile data-ng-repeat="portfolio in portfolios">
-              <figure data-dop-portfolio-box portfolio="portfolio"></figure>
-            </md-grid-tile>
-          </md-grid-list>
 
           <h1 class="type-block" data-ng-if="myProfile" data-translate="MYPROFILE_PAGE_TITLE_MATERIALS"></h1>
           <h1 class="type-block" data-ng-if="!myProfile" data-translate="PROFILE_PAGE_TITLE_MATERIALS"></h1>
@@ -20,15 +12,6 @@
               <figure data-dop-material-box material="material"></figure>
             </md-grid-tile>
           </md-grid-list>
-
-          <h1 class="type-block" data-ng-if="myProfile" data-translate="MYPROFILE_PAGE_TITLE_FAVORITES"></h1>
-          <md-grid-list md-cols="2" md-cols-gt-xs="3" md-cols-gt-sm="4" md-cols-gt-lg="5" md-gutter="10px" md-row-height="3:4">
-            <md-grid-tile data-ng-repeat="item in favorites track by item.id">
-              <figure data-ng-if="item.type === '.Material'" data-dop-material-box material="item"></figure>
-              <figure data-ng-if="item.type === '.Portfolio'" data-dop-portfolio-box portfolio="item"></figure>
-            </md-grid-tile>
-          </md-grid-list>
-
 
         </article>
 

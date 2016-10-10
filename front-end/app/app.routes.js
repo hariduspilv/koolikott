@@ -33,17 +33,47 @@ define(function() {
                 controllerUrl: 'views/editPortfolio/editPortfolio',
                 reloadOnSearch: false
             },
-            '/dashboard': {
-                templateUrl: 'views/dashboard/dashboard.html',
+            // Dashboard links
+            '/dashboard/improperMaterials': {
+                templateUrl: 'views/dashboard/pages/improperMaterials.html',
                 controllerUrl: 'views/dashboard/dashboard',
                 permissions: ['ADMIN', 'MODERATOR']
             },
+            '/dashboard/improperPortfolios': {
+                templateUrl: 'views/dashboard/pages/improperPortfolios.html',
+                controllerUrl: 'views/dashboard/dashboard',
+                permissions: ['ADMIN', 'MODERATOR']
+            },
+            '/dashboard/brokenMaterials': {
+                templateUrl: 'views/dashboard/pages/brokenMaterials.html',
+                controllerUrl: 'views/dashboard/dashboard',
+                permissions: ['ADMIN', 'MODERATOR']
+            },
+            '/dashboard/deletedMaterials': {
+                templateUrl: 'views/dashboard/pages/deletedMaterials.html',
+                controllerUrl: 'views/dashboard/dashboard',
+                permissions: ['ADMIN', 'MODERATOR']
+            },
+            '/dashboard/deletedPortfolios': {
+                templateUrl: 'views/dashboard/pages/deletedPortfolios.html',
+                controllerUrl: 'views/dashboard/dashboard',
+                permissions: ['ADMIN', 'MODERATOR']
+            },
+
             '/loginRedirect': {
                 templateUrl: 'views/loginRedirect/loginRedirect.html',
                 controllerUrl: 'views/loginRedirect/loginRedirect'
             },
             '/:username': {
-                templateUrl: 'views/profile/profile.html',
+                templateUrl: 'views/profile/portfolios.html',
+                controllerUrl: 'views/profile/profile'
+            },
+            '/:username/materials': {
+                templateUrl: 'views/profile/materials.html',
+                controllerUrl: 'views/profile/profile'
+            },
+            '/:username/favorites': {
+                templateUrl: 'views/profile/favorites.html',
                 controllerUrl: 'views/profile/profile'
             },
             '/dev/login/:idCode': {

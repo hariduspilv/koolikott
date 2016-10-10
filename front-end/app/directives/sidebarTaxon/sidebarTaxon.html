@@ -1,0 +1,7 @@
+<div style="padding-left: 10px">
+  <span ng-if="hasChildren(taxon)">*</span>
+  <span data-translate="{{getTaxonTranslation(taxon)}}" ng-click="toggleChildren()"></span>
+  <div ng-if="opened" ng-repeat="data in taxon.children">
+    <div dop-sidebar-taxon data-taxon="data"></div>
+  </div>
+</div>
