@@ -132,7 +132,7 @@
     </div>
     <div uib-accordion-group class="panel-default" >
       <uib-accordion-heading>
-        <md-button class="md-hue-1 md-primary-menu">
+        <md-button class="md-hue-1 md-primary-menu" ng-click="changeTaxonomyDataAndVisibility('sidebar', 'primary')">
           <div flex layout="row">
             <span>Sisukord</span>
             <span flex></span>
@@ -142,7 +142,7 @@
       </uib-accordion-heading>
       <!-- Subitems -->
       <ul>
-        <div class="treeview">
+        <div class="treeview" >
           <div ivh-treeview="taxonomy.taxonPrimaryData" ivh-treeview-filter="filterPrimaryTaxon" flex>
             <script type="text/ng-template">
               <div title="{{trvw.label(node)}}">
