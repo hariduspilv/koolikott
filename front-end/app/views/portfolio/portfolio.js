@@ -97,7 +97,7 @@ define([
 
 
             $scope.$watch(function () {
-                return $location.url();
+                return $location.url().replace(window.location.hash, '');
             }, function (newValue, oldValue) {
                 if (newValue !== oldValue) {
                     $route.reload()
