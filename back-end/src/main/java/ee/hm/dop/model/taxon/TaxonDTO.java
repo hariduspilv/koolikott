@@ -14,9 +14,12 @@ public class TaxonDTO {
 
     private Set<TaxonDTO> children;
 
+    private String level;
+
     public TaxonDTO(Taxon taxon) {
         id = taxon.getId();
         name = taxon.getName();
+        level = "." + taxon.getClass().getSimpleName();
         children = new HashSet<>();
 
         Set<? extends Taxon> children = taxon.getChildren();
@@ -51,5 +54,13 @@ public class TaxonDTO {
 
     public void setChildren(Set<TaxonDTO> children) {
         this.children = children;
+    }
+
+    public String getLevel() {
+        return level;
+    }
+
+    public void setLevel(String level) {
+        this.level = level;
     }
 }
