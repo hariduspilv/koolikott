@@ -8,10 +8,40 @@ define([
         return {
             scope: true,
             templateUrl: 'directives/sidenav/sidenav.html',
-            controller: function ($rootScope, $scope, serverCallService, $location, searchService, $timeout) {
+            controller: function ($rootScope, $scope, serverCallService, $location, searchService, $timeout, metadataService) {
 
-              if(window.innerWidth > 1280) {
-                $scope.sideNavOpen = true;
+                metadataService.loadReducedTaxon(function(callback) {
+                    $scope.reducedTaxon = callback;
+                    console.log($scope.reducedTaxon);
+                });
+
+                $scope.translateTaxon = function(node) {
+                    //node.level.toUpperCase().substr(1) + '_' + node.name.toUpperCase();
+                    console.log(node);
+                    return "MATHEMATICS";
+                }
+                if(window.innerWidth > 1280) {$scope.sideNavOpen = true;}
+
+                // Sidenav dropdown logic
+                var menuItems = [
+                    "myItems",
+                    "portfolio",
+                    "material",
+                    "taxonomy"
+                ]
+
+                for (var obj in menuItems) {
+
+                }
+
+                function openMenuItem() {
+
+                }
+
+              $scope.status = true;
+
+              $scope.swapState = function() {
+                  $scope.status = !$scope.status;
               }
 
               var SIDE_ITEMS_AMOUNT = 5;
@@ -97,10 +127,6 @@ define([
                 // Taxon dummy part
                 // ================
                 $rootScope.taxonomy = {};
-                $rootScope.taxonomy.isVisible = false;
-                if ($location.$$path == '/material' || $location.$$path == '/search/result') {
-                    $rootScope.taxonomy.isVisible = true;
-                }
                 $rootScope.taxonomy.isPrimaryVisible = false;
                 $rootScope.taxonomy.isHighVisible = false;
                 $scope.category = 'high';
@@ -112,12 +138,7 @@ define([
                     $scope.category = category;
                     $scope.triggerPlace = triggerPlace;
 
-                    if ($location.$$path == '/material' && category == 'high') {
-                        serverCallService.makeGet("utils/taxon_selected.json", params, getTaxonJsonSuccess, getTaxonJsonFail);
-                    } else {
-                        serverCallService.makeGet("utils/taxon.json", params, getTaxonJsonSuccess, getTaxonJsonFail);
-                    }
-
+                    $scope.taxonomy.taxonPrimaryData = $scope.reducedTaxon;
 
                     if (category == 'high') {
                         if (triggerPlace == 'material') {
@@ -146,6 +167,7 @@ define([
                     console.log(status);
                 }
 
+                // Toggles all tree elements?
                 $scope.toggleAllTaxons = function (category) {
                     if (category == 'high') {
                         $scope.taxonomy.isHighTaxonsOpen = $scope.taxonomy.isHighTaxonsOpen === false ? true : false;

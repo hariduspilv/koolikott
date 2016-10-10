@@ -23,3 +23,56 @@
 		margin-left: 15px;
 	}
 }
+
+.md-button {
+
+	&.md-primary-menu {
+		width: 100%;
+		margin: 0;
+		padding: 0;
+		color: black;
+		height: 52px;
+		text-align: left;
+		padding: 0 22px;
+		text-transform: none;
+		font-size: 15px;
+		font-weight: 400;
+		border-radius: 0;
+		md-icon {
+			color: black;
+		}
+	}
+
+	&.md-secondary-menu {
+		margin: 0;
+		padding: 0 44px 0 70px;
+		width: 100%;
+		overflow: hidden;
+		height: 46px;
+		text-transform: none;
+		font-weight: 400;
+		font-size: 13px;
+		border-radius: 0;
+		.count, md-icon {
+			position: absolute;
+		}
+		md-icon {
+			left: 23px;
+			align-self: center;
+		}
+		.count {
+			right: 29px;
+		}
+
+		&.selected {
+			// TODO: Variables!!
+			background-color: rgba(0,0,0,0.05);
+			color: #03A9F4;
+			md-icon {
+				color: #03A9F4;
+			}
+		}
+	}
+}
+
+

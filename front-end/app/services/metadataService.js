@@ -9,7 +9,6 @@ define([
     var LANGUGAGES;
     var LICENSE_TYPES;
     var RESOURCE_TYPES;
-    var EDUCATIONAL_CONTEXTS;
 
     var crossCurricularThemesCallbacks = [];
     var keyCompetencesCallbacks = [];
@@ -17,6 +16,7 @@ define([
     var licenseTypesCallbacks = [];
     var resourceTypesCallbacks = [];
     var educationalContextsCallbacks = [];
+    var reducedTaxonCallbacks = [];
 
     angularAMD.factory('metadataService', ['serverCallService',
         function(serverCallService) {
@@ -30,6 +30,7 @@ define([
                 serverCallService.makeGet("rest/learningMaterialMetadata/language", {}, getLanguagesSuccess, getLanguagesFail);
                 serverCallService.makeGet("rest/learningMaterialMetadata/licenseType", {}, getLicenseTypeSuccess, getLicenseTypeFail);
                 serverCallService.makeGet("rest/learningMaterialMetadata/resourceType", {}, getResourceTypeSuccess, getResourceTypeFail);
+                serverCallService.makeGet("rest/learningMaterialMetadata/reducedTaxon", {}, getReducedTaxonSuccess, getReducedTaxonFail);
             }
 
             function getCrossCurricularThemesSuccess(data) {
@@ -104,17 +105,31 @@ define([
             }
 
             function getEducationalContextSuccess(data) {
-              console.log(data);
                 if (!isEmpty(data)) {
-                    EDUCATIONAL_CONTEXTS = data;
                     educationalContextsCallbacks.forEach(function(callback) {
                         callback(data);
                     });
+                    var taxon = JSOG.stringify(data);
+                    localStorage.setItem("taxon", taxon);
                 }
             }
 
             function getEducationalContextFail() {
                 console.log('Failed to get educational contexts.');
+            }
+
+            function getReducedTaxonSuccess(data) {
+                if (!isEmpty(data)) {
+                    reducedTaxonCallbacks.forEach(function(callback) {
+                        callback(data);
+                    });
+                    var taxon = JSOG.stringify(data);
+                    localStorage.setItem("reducedTaxon", taxon);
+                }
+            }
+
+            function getReducedTaxonFail() {
+                console.log('Failed to get reduced taxon.');
             }
 
             instance = {
@@ -165,11 +180,24 @@ define([
                 },
 
                 loadEducationalContexts: function(callback) {
-                    if (EDUCATIONAL_CONTEXTS) {
-                        callback(EDUCATIONAL_CONTEXTS);
+                  var taxon = localStorage.getItem("taxon");
+                  taxon = JSOG.parse(taxon);
+                    if (taxon) {
+                        callback(taxon);
                     } else {
                         // Save callback, call it when data arrives
                         educationalContextsCallbacks.push(callback);
+                    }
+                },
+
+                loadReducedTaxon: function(callback) {
+                    var taxon = localStorage.getItem("reducedTaxon");
+                    taxon = JSOG.parse(taxon);
+                    if (taxon) {
+                        callback(taxon);
+                    } else {
+                        // Save callback, call it when data arrives
+                        reducedTaxonCallbacks.push(callback);
                     }
                 }
             };

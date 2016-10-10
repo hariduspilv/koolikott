@@ -4,6 +4,18 @@ md-sidenav {
   max-width: 259px;
   position: fixed;
   min-height: 100%;
+  background-color: #FAFAFA;
+
+  // TODO: Temporary...
+  padding-top: 64px;
+}
+
+.menu-nested-list {
+  padding: 0;
+  margin: 0;
+  & > li {
+    border-bottom: 1px solid gainsboro;
+  }
 }
 
 
@@ -23,6 +35,7 @@ md-sidenav {
 }
 md-sidenav {
   overflow: visible;
+  overflow-y: scroll;
   //background-color: transparent;
   @media (min-width: 1280px) {
     z-index: 1;

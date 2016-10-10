@@ -31,7 +31,7 @@ require.config({
         'textAngular-sanitize': 'libs/textAngular/dist/textAngular-sanitize.min',
         'textAngularSetup': 'libs/textAngular/dist/textAngularSetup',
         'textAngular': 'utils/koolikottTextAngular',
-        'ivh.treeview': 'libs/angular-ivh-treeview/dist/ivh-treeview.min'
+        'ivh.treeview': 'libs/angular-ivh-treeview/dist/ivh-treeview'
     },
     shim: {
         'angular': ['jquery'],

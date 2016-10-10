@@ -132,6 +132,8 @@ define([
     app.config(function(ivhTreeviewOptionsProvider) {
         ivhTreeviewOptionsProvider.set({
             defaultSelectedState: false,
+            labelAttribute: 'name',
+            childrenAttribute: 'children',
             validate: true,
             twistieCollapsedTpl: '<md-icon class="md-primary material-icons">keyboard_arrow_right</md-icon>',
             twistieExpandedTpl: '<md-icon class="md-primary material-icons">keyboard_arrow_down</md-icon>',
@@ -237,7 +239,12 @@ define([
         $rootScope.APP_VERSION = APP_VERSION;
         $rootScope.hasAppInitated = false;
         $rootScope.taxonParser = taxonParser;
-        metadataService.loadEducationalContexts(taxonParser.setTaxons);
+        metadataService.loadEducationalContexts(setTaxons);
+
+        function setTaxons(taxon) {
+          $rootScope.taxon = taxon;
+          taxonParser.setTaxons;
+        }
     });
 
     app.run(function ($rootScope, $location, authenticatedUserService) {
