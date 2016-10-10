@@ -4,6 +4,8 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import ee.hm.dop.dao.TaxonDAO;
 import ee.hm.dop.model.taxon.EducationalContext;
 import ee.hm.dop.model.taxon.Taxon;
@@ -26,4 +28,27 @@ public class TaxonService {
     public Taxon getTaxonByEstCoreName(String name, Class level) {
         return taxonDAO.findTaxonByRepoName(name, EST_CORE_TAXON_MAPPING, level);
     }
+
+    public String getReducedTaxon() {
+        List<EducationalContext> taxons = taxonDAO.findAllEducationalContext();
+        ObjectMapper mapper = new ObjectMapper();
+        String jsonInString = null;
+        try {
+            jsonInString = mapper.writeValueAsString(taxons);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+
+        jsonInString = jsonInString.replaceAll("\"domains\":", "\"children\":");
+        jsonInString = jsonInString.replaceAll("\"subjects\":", "\"children\":");
+        jsonInString = jsonInString.replaceAll("\"topics\":", "\"children\":");
+        jsonInString = jsonInString.replaceAll("\"specializations\":", "\"children\":");
+        jsonInString = jsonInString.replaceAll("\"subtopics\":", "\"children\":");
+        jsonInString = jsonInString.replaceAll("\"modules\":", "\"children\":");
+
+        jsonInString = jsonInString.replaceAll(",\"children\":\\[\\]", "");
+
+        return jsonInString;
+    }
+
 }

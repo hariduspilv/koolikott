@@ -58,6 +58,13 @@ public class LearningMaterialMetadataResource {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
+    @Path("reducedTaxon")
+    public String getReducedTaxon() {
+        return taxonService.getReducedTaxon();
+    }
+
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
     @Path("taxon")
     public Taxon getTaxon(@QueryParam("taxonId") Long taxonId) {
         return taxonService.getTaxonById(taxonId);
