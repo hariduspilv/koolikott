@@ -72,7 +72,7 @@ define([
             require: 'ngModel',
             link: function (scope, element, attrs, ctrl) {
                 ctrl.$validators.url = function (modelValue, viewValue) {
-                    if(scope.material) scope.material.source = viewValue;
+                    // if(scope.material) scope.material.source = viewValue;
 
                     if (REGEX.test(viewValue)) return true;
                     return false;
