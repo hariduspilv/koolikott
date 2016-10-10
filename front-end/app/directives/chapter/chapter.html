@@ -64,16 +64,16 @@
 
     <!--Chapter materials-->
     <ul ng-show="chapter.materials.length" dnd-list="chapter.materials"
-         class="portfolio-chapter-chapter-materials" uib-collapse="isCollapsed">
+        class="portfolio-chapter-chapter-materials" uib-collapse="isCollapsed">
       <li id="chapterMaterial-{{index}}-{{$index}}"
           ng-repeat="material in chapter.materials"
           dnd-draggable="getParsedMaterial(material)"
           dnd-moved="chapter.materials.splice($index, 1)"
           dnd-effect-allowed="move"
+          dnd-selected="models.selected = item"
+          ng-class="{'selected': models.selected === item}"
           data-dop-embedded-material
-          material="material" chapter="chapter" data-flex></li>
-      <!--dnd-selected="models.selected = item"-->
-      <!--ng-class="{'selected': models.selected === item}"-->
+          material="material" chapter="chapter" index="$index" data-flex></li>
     </ul>
   </div>
 
@@ -143,11 +143,18 @@
       </md-card>
 
       <!--Subchapter materials-->
-      <div ng-show="subchapter.materials.length" ng-repeat="material in subchapter.materials"
-           class="portfolio-chapter-chapter-materials" uib-collapse="subisCollapsed[subchapter.$$hashKey]">
-        <span id="subchapterMaterial-{{index}}-{{$index}}" data-dop-embedded-material material="material"
-              chapter="subchapter" data-flex></span>
-      </div>
+      <ul ng-show="subchapter.materials.length" dnd-list="chapter.materials"
+          class="portfolio-chapter-chapter-materials" uib-collapse="subisCollapsed[subchapter.$$hashKey]">
+        <li id="subchapterMaterial-{{index}}-{{$index}}"
+            ng-repeat="material in subchapter.materials"
+            dnd-draggable="getParsedMaterial(material)"
+            dnd-moved="chapter.materials.splice($index, 1)"
+            dnd-effect-allowed="move"
+            dnd-selected="models.selected = item"
+            ng-class="{'selected': models.selected === item}"
+            data-dop-embedded-material
+            material="material" chapter="subchapter" index="$index" data-flex></li>
+      </ul>
     </div>
   </div>
 </div>

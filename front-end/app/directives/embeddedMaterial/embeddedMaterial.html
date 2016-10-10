@@ -14,12 +14,12 @@
         </span>
       </span>
     </md-card-header-text>
-    <div class="pick" layout-align="end start">
+    <div data-ng-if="isEditPortfolioMode && isEditPortfolioPage" class="pick" layout-align="end start">
       <md-icon class="unchecked">remove_circle_outline</md-icon>
       <md-icon data-ng-click="removeMaterial($event, material)" class="checked">remove_circle</md-icon>
     </div>
   </md-card-header>
-  <md-card-content data-ng-if="embeddedDataIframe || embeddedData" class="no-padding">
+  <md-card-content data-ng-if="embeddedDataIframe || embeddedData" class="embed-card-content">
     <!--Embed iframe-->
     <div data-ng-if="embeddedDataIframe" class="embed-responsive">
       <div class="embed-responsive-container">
@@ -33,10 +33,21 @@
       </div>
     </div>
   </md-card-content>
-  <md-card-footer class="embeded-material-footer">
+  <md-card-footer class="embeded-material-footer" layout="row" flex>
     <!--Link as backup - if iframe is internally not working-->
-    <a href="{{material.source}}" class="wrapped regular-link md-primary">
+    <a href="{{material.source}}" class="wrapped regular-link md-primary" layout-align="start center" flex>
       <span class="item-link" data-ng-bind="material.source"></span>
     </a>
+    <!--Up and down-->
+    <div data-ng-if="isEditPortfolioMode && isEditPortfolioPage" layout-align="end center">
+      <md-button ng-disabled="index === 0" class="md-icon-button" aria-label="Liiguta materjali üles"
+                 ng-click="listItemUp(index)">
+        <md-icon class="material-icons">arrow_upward</md-icon>
+      </md-button>
+      <md-button ng-disabled="(chapter.materials.length - 1) == index" class="md-icon-button"
+                 aria-label="Liiguta materjali alla" ng-click="listItemDown(index)">
+        <md-icon class="material-icons">arrow_downward</md-icon>
+      </md-button>
+    </div>
   </md-card-footer>
 </md-card>
