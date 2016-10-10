@@ -145,7 +145,11 @@ define([
                             });
                     }
 
-                    $scope.material.peerReviews = null;
+                    $scope.material.peerReviews.forEach(function(peerReview, i) {
+                       if (!peerReview || !peerReview.url) {
+                           $scope.material.peerReviews.splice(i, 1);
+                       }
+                    });
 
                     serverCallService.makePut('rest/material', $scope.material, saveMaterialSuccess, saveMaterialFail, saveMaterialFinally);
                 }
