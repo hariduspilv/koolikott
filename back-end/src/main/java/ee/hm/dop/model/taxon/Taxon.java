@@ -2,6 +2,8 @@ package ee.hm.dop.model.taxon;
 
 import static javax.persistence.InheritanceType.JOINED;
 
+import java.util.Set;
+
 import javax.persistence.Cacheable;
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorColumn;
@@ -9,6 +11,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Inheritance;
+import javax.persistence.Transient;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -32,6 +35,9 @@ public abstract class Taxon {
 
     @Column(nullable = false, insertable = false)
     private String name;
+
+    @Transient
+    private Set<? extends Taxon> children;
 
     public Long getId() {
         return id;
@@ -60,6 +66,30 @@ public abstract class Taxon {
         }
 
         return false;
+    }
+
+    public Set<? extends Taxon> getChildren() {
+        if (this instanceof EducationalContext) {
+            return ((EducationalContext) this).getDomains();
+        } else if (this instanceof Domain) {
+            if (!((Domain) this).getSpecializations().isEmpty()) {
+                return ((Domain) this).getSpecializations();
+            } else if (!((Domain) this).getSubjects().isEmpty()) {
+                return ((Domain) this).getSubjects();
+            } else if (!((Domain) this).getTopics().isEmpty()) {
+                return ((Domain) this).getTopics();
+            }
+        } else if (this instanceof Specialization) {
+            return ((Specialization) this).getModules();
+        } else if (this instanceof Module) {
+            return ((Module) this).getTopics();
+        } else if (this instanceof Subject) {
+            return ((Subject) this).getTopics();
+        } else if (this instanceof Topic) {
+            return ((Topic) this).getSubtopics();
+        }
+
+        return null;
     }
 
     @Override

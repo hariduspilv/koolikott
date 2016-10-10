@@ -39,6 +39,11 @@ public class TaxonDAO extends BaseDAO<Taxon> {
         return educationalContexts;
     }
 
+    public List<Taxon> findReducedTaxon() {
+        return createQuery("FROM Taxon t WHERE level = 'EDUCATIONAL_CONTEXT'", Taxon.class)
+                .getResultList();
+    }
+
     public Taxon findTaxonByRepoName(String name, String repoTable, Class<? extends Taxon> level) {
         List<Taxon> taxons = createQuery("SELECT t.taxon FROM " + repoTable + " t WHERE lower(t.name) = :name",
                 Taxon.class).setParameter("name", name.toLowerCase()).getResultList();

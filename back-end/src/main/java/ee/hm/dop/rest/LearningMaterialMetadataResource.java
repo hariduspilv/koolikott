@@ -17,6 +17,7 @@ import ee.hm.dop.model.ResourceType;
 import ee.hm.dop.model.TargetGroup;
 import ee.hm.dop.model.taxon.EducationalContext;
 import ee.hm.dop.model.taxon.Taxon;
+import ee.hm.dop.model.taxon.TaxonDTO;
 import ee.hm.dop.service.CrossCurricularThemeService;
 import ee.hm.dop.service.KeyCompetenceService;
 import ee.hm.dop.service.LanguageService;
@@ -59,7 +60,7 @@ public class LearningMaterialMetadataResource {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Path("reducedTaxon")
-    public String getReducedTaxon() {
+    public List<TaxonDTO> getReducedTaxon() {
         return taxonService.getReducedTaxon();
     }
 
