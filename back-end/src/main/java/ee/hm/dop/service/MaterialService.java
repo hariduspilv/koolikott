@@ -111,10 +111,6 @@ public class MaterialService implements LearningObjectHandler {
             throw new RuntimeException("Logged in user must be an administrator.");
         }
 
-        if (originalMaterial.getRepository() != null || originalMaterial.getRepositoryIdentifier() != null) {
-            throw new RuntimeException("Can not delete external repository material");
-        }
-
         materialDao.delete(originalMaterial);
         solrEngineService.updateIndex();
     }
@@ -125,10 +121,6 @@ public class MaterialService implements LearningObjectHandler {
 
         if (!isUserAdmin(loggedInUser)) {
             throw new RuntimeException("Logged in user must be an administrator.");
-        }
-
-        if (originalMaterial.getRepository() != null || originalMaterial.getRepositoryIdentifier() != null) {
-            throw new RuntimeException("Can not restore external repository material");
         }
 
         materialDao.restore(originalMaterial);
@@ -348,7 +340,7 @@ public class MaterialService implements LearningObjectHandler {
         }
 
         if (originalMaterial.getRepository() != null && changer != null && !isUserAdminOrPublisher(changer)) {
-            throw new IllegalArgumentException("Can't update external repository material");
+            throw new IllegalArgumentException("Normal user can't update external repository material");
         }
     }
 
