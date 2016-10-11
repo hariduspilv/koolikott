@@ -2,6 +2,7 @@ define([
     'services/serverCallService',
     'directives/materialBox/materialBox',
     'directives/portfolioBox/portfolioBox',
+    'directives/portfolioBox/portfolioBox',
     'services/storageService'
 ], function (serverCallService) {
     return ['$scope', 'serverCallService', '$rootScope', 'storageService', '$timeout',

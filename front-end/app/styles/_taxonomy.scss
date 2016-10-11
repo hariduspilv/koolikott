@@ -1,0 +1,52 @@
+.taxon-item {
+  width: 100%;
+  .header {
+    transition: 0.2s;
+    height: 46px;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 13px;
+    .taxon-name {
+      padding: 0 90px 0 78px;
+    }
+    .icon-identity {
+      left: 22px;
+      position: absolute;
+    }
+    .icon-arrow {
+      right: 22px;
+      position: absolute;
+      font-size: 21px;
+      &.opened {
+        transform: rotate(180deg);
+      }
+    }
+    .count {
+      right: 69px;
+      position: absolute;
+      font-size: 12px;
+    }
+
+    &.has-children {
+      cursor: pointer;
+    }
+
+    &.has-children:hover {
+      background-color: rgba(158,158,158,0.2);
+    }
+  }
+}
+.sub-taxon-item {
+  background-color: rgba(0,0,0,0.05);
+  .header  {
+    &.opened {
+      background-color: rgba(0,0,0,0.1);
+    }
+    .taxon-name {
+      padding-left: 22px;
+    }
+  }
+  .icon-identity {
+    display: none;
+  }
+}

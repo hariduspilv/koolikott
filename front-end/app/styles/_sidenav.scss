@@ -1,19 +1,19 @@
-.portfolio-container {
-  min-height: 100%;
-}
-
-
-.md-toolbar-tools {
-  font-size: 18px;
-}
-
 md-sidenav {
+  width: 259px;
+  min-width: 259px;
+  max-width: 259px;
+  position: fixed;
+  min-height: 100%;
+  background-color: #FAFAFA;
   overflow: visible;
-  background-color: transparent;
-  @media (min-width: 1280px) {
+  overflow-y: scroll;
+  //background-color: transparent;
+  // TODO: Temporary...
+  padding-top: 64px;
+  @media (min-width: $layout-breakpoint-md) {
+    background-color: transparent;
     z-index: 1;
   }
-
   .sidenav-menu > li {
     > .md-button {
       font-weight: 400;
@@ -37,6 +37,46 @@ md-sidenav {
         background-color: rgba(158,158,158,0.2);
       }
     }
+  }
+}
+
+.menu-nested-list {
+  padding: 0;
+  margin: 0;
+  md-icon {
+    transition: 0.2s;
+  }
+  h4 {
+    margin: 0;
+  }
+  .panel {
+    border-bottom: 1px solid $border-color;
+  }
+  .panel-body ul {
+    margin: 0;
+  }
+  .panel-open {
+    .arrow {
+      transform: rotate(180deg);
+    }
+  }
+  ul li a {
+    text-decoration: none;
+    color: inherit;
+  }
+}
+
+.portfolio-container {
+  min-height: 100%;
+}
+
+.md-toolbar-tools {
+  font-size: 18px;
+}
+
+@media (min-width: $layout-breakpoint-md) {
+  .md-sidenav-backdrop {
+    display: none;
   }
 }
 

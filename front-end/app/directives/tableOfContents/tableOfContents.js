@@ -156,8 +156,10 @@ define([
                 }
 
                 $scope.closeSidenav = function(id) {
-                  $mdSidenav(id)
-                   .close();
+                    if(window.innerWidth < 1280) {
+                        $mdSidenav(id)
+                            .close();
+                    }
                 };
 
                 init();

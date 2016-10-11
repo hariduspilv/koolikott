@@ -8,6 +8,7 @@ define([
     'directives/commentsCard/commentsCard',
     'directives/chapter/chapter',
     'directives/materialBox/materialBox',
+    'directives/errorMessage/errorMessage',
     'directives/portfolioSummaryCard/portfolioSummaryCard',
     'services/serverCallService',
     'services/translationService',
@@ -115,6 +116,14 @@ define([
                     $timeout.cancel(increaseViewCountPromise);
                 }
             });
+
+            $scope.isAdmin = function () {
+                return authenticatedUserService.isAdmin();
+            };
+
+            $scope.isModerator = function () {
+                return authenticatedUserService.isModerator();
+            };
 
             init();
         }];

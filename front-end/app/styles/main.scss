@@ -1,11 +1,7 @@
-$md-primary: #1E88E5;
-$link-color: #15c;
-$heading-color: #212121;
-$bg-gray: #f3f6fb;
-$border-color: rgba(0,0,0,0.12);
-$error: #dd2c00;
+
 
 // Base styles
+@import "_variables";
 @import "_base";
 
 // Components
@@ -29,6 +25,9 @@ $error: #dd2c00;
 @import "_chapter";
 @import "_collapse";
 @import "_textangular";
+@import "_taxonomy";
+@import "_layout";
+@import "_error-message";
 
 // Page specific stylesheets
 @import "pages/add.scss";

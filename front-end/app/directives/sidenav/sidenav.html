@@ -1,0 +1,156 @@
+<md-sidenav md-is-open="sideNavOpen" class="md-sidenav-left"  md-component-id="left" id="sidebar-left">
+
+  <!-- Portfolio Header and Chapters -->
+  <!--<md-toolbar class="{{isEditPortfolioMode ? 'md-accent' : 'md-primary'}}">
+    <h6 class="md-toolbar-tools md-subhead">
+      <div layout-align="center start" flex>
+        <md-tooltip><span data-translate="HEADER_TOOLTIP_GO_TO_LANDING_PAGE"></span></md-tooltip>
+        <a data-ng-href="/" class="logo logo-lg" id="logo"></a>
+      </div>
+    </h6>
+  </md-toolbar>-->
+  <div id="alert" data-dop-alert></div>
+  <md-content layout="column" flex role="navigation" class="sidenav md-whiteframe-z2" ng-if="isViewPortforlioPage">
+
+  </md-content>
+
+  <uib-accordion close-others="oneAtATime" class="menu-nested-list">
+    <div uib-accordion-group class="panel-default" ng-if="user" is-open="isUserPage">
+      <uib-accordion-heading>
+        <md-button class="md-hue-1 md-primary-menu">
+          <div flex layout="row">
+            <span>Minu koolikott</span>
+            <span flex></span>
+            <md-icon class="md-primary material-icons arrow">keyboard_arrow_down</md-icon>
+          </div>
+        </md-button>
+      </uib-accordion-heading>
+      <!-- Subitems -->
+      <ul>
+        <li>
+          <a href="/{{user.username}}">
+            <md-button class="md-hue-1 md-secondary-menu" data-ng-class="{'selected': isLocation('/' + user.username)}">
+              <div flex layout="row">
+                <md-icon class="material-icons">content_copy</md-icon>
+                <span>Minu kogumikud</span>
+                <span class="count"></span>
+              </div>
+            </md-button>
+          </a>
+        </li>
+        <li>
+          <a href="/{{user.username}}/materials">
+            <md-button class="md-hue-1 md-secondary-menu" data-ng-class="{'selected': isLocation('/' + user.username + '/materials')}">
+              <div flex layout="row">
+                <md-icon class="material-icons">description</md-icon>
+                <span>Minu materjalid</span>
+                <span class="count"></span>
+              </div>
+            </md-button>
+          </a>
+        </li>
+        <li>
+          <a href="/{{user.username}}/favorites">
+            <md-button class="md-hue-1 md-secondary-menu" data-ng-class="{'selected': isLocation('/' + user.username + '/favorites')}">
+              <div flex layout="row">
+                <md-icon class="material-icons">star</md-icon>
+                <span>Minu lemmikud</span>
+                <span class="count"></span>
+              </div>
+            </md-button>
+          </a>
+        </li>
+      </ul>
+    </div>
+    <div uib-accordion-group class="panel-default" ng-if="isAdmin || isModerator" is-open="isViewAdminPanelPage">
+      <uib-accordion-heading>
+        <md-button class="md-hue-1 md-primary-menu" >
+          <div flex layout="row">
+            <span>Töölaud</span>
+            <span flex></span>
+            <md-icon class="md-primary material-icons arrow">keyboard_arrow_down</md-icon>
+          </div>
+        </md-button>
+      </uib-accordion-heading>
+      <!-- Subitems -->
+      <ul>
+        <li>
+          <a href="/dashboard/improperMaterials">
+            <md-button class="md-hue-1 md-secondary-menu" data-ng-class="{'selected': isLocation('/dashboard/improperMaterials')}">
+              <div flex layout="row">
+                <md-icon class="material-icons">report</md-icon>
+                <span>Ebasobivad materjalid</span>
+                <span class="count"></span>
+              </div>
+            </md-button>
+          </a>
+        </li>
+        <li>
+          <a href="/dashboard/improperPortfolios">
+            <md-button class="md-hue-1 md-secondary-menu" data-ng-class="{'selected': isLocation('/dashboard/improperPortfolios')}">
+              <div flex layout="row">
+                <md-icon class="material-icons">report</md-icon>
+                <span>Ebasobivad kogumikud</span>
+                <span class="count"></span>
+              </div>
+            </md-button>
+          </a>
+        </li>
+        <li>
+          <a href="/dashboard/brokenMaterials">
+            <md-button class="md-hue-1 md-secondary-menu" data-ng-class="{'selected': isLocation('/dashboard/brokenMaterials')}">
+              <div flex layout="row">
+                <md-icon class="material-icons">content_cut</md-icon>
+                <span>Katkised materjalid</span>
+                <span class="count"></span>
+              </div>
+            </md-button>
+          </a>
+        </li>
+        <li>
+          <a href="/dashboard/deletedMaterials">
+            <md-button class="md-hue-1 md-secondary-menu" data-ng-class="{'selected': isLocation('/dashboard/deletedMaterials')}">
+              <div flex layout="row">
+                <md-icon class="material-icons">delete</md-icon>
+                <span>Kustutatud materjalid</span>
+                <span class="count"></span>
+              </div>
+            </md-button>
+          </a>
+        </li>
+        <li>
+          <a href="/dashboard/deletedPortfolios">
+            <md-button class="md-hue-1 md-secondary-menu" data-ng-class="{'selected': isLocation('/dashboard/deletedPortfolios')}">
+              <div flex layout="row">
+                <md-icon class="material-icons">delete</md-icon>
+                <span>Kustutatud kogumikud</span>
+                <span class="count"></span>
+              </div>
+            </md-button>
+          </a>
+        </li>
+      </ul>
+    </div>
+    <div uib-accordion-group class="panel-default" ng-if="isViewPortforlioPage || isEditPortfolioMode">
+      <div data-dop-table-of-contents data-portfolio="portfolio" data-readonly="!isEditPortfolioMode"></div>
+    </div>
+    <div uib-accordion-group class="panel-default" is-open="isTaxonomyOpen">
+      <uib-accordion-heading>
+        <md-button class="md-hue-1 md-primary-menu" ng-click="changeTaxonomyDataAndVisibility('sidebar', 'primary')">
+          <div flex layout="row">
+            <span>Sisukord</span>
+            <span flex></span>
+            <md-icon class="md-primary material-icons arrow">keyboard_arrow_down</md-icon>
+          </div>
+        </md-button>
+      </uib-accordion-heading>
+      <!-- Subitems -->
+      <ul class="taxon-list">
+        <li ng-repeat="(key, item) in reducedTaxon">
+          <div class="taxon-item" icon="taxonIcons[key]" dop-sidebar-taxon data-taxon="item"></div>
+        </li>
+      </ul>
+    </div>
+    </uib-accordion>
+
+</md-sidenav>

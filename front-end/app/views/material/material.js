@@ -13,6 +13,7 @@ define([
     'directives/tags/tags',
     'directives/restrict/restrict',
     'directives/favorite/favorite',
+    'directives/errorMessage/errorMessage',
     'services/serverCallService',
     'services/translationService',
     'services/searchService',

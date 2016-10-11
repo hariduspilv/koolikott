@@ -22,14 +22,13 @@ define([
 
     /* app wide modules */
     'directives/header/header',
-    'directives/editPortfolioModeHeader/editPortfolioModeHeader',
     'directives/detailedSearch/detailedSearch',
     'directives/mainFabButton/mainFabButton',
     'directives/sidebar/sidebar',
+    'directives/sidenav/sidenav',
 
     /* TODO: we could save more request if layout system is built in another way */
     'directives/pageStructure/columnLayout/columnLayout',
-    'directives/pageStructure/linearLayout/linearLayout',
 
     'services/authenticatedUserService',
     'DOPconstants'
@@ -158,6 +157,7 @@ define([
 
         $translateProvider.preferredLanguage(language);
         $translateProvider.useSanitizeValueStrategy('escaped');
+
     }
 
     // http://stackoverflow.com/questions/30123735/how-to-create-multiple-theme-in-material-angular
@@ -226,16 +226,61 @@ define([
         $rootScope.APP_VERSION = APP_VERSION;
         $rootScope.hasAppInitated = false;
         $rootScope.taxonParser = taxonParser;
-        metadataService.loadEducationalContexts(taxonParser.setTaxons);
+        metadataService.loadEducationalContexts(setTaxons);
+
+        function setTaxons(taxon) {
+          $rootScope.taxon = taxon;
+          taxonParser.setTaxons;
+        }
     });
 
     app.run(function ($rootScope, $location, authenticatedUserService) {
         $rootScope.$on('$routeChangeSuccess', function () {
             var path = $location.path();
+
+            if (path == '/dashboard') {
+                $location.path('/dashboard/improperMaterials');
+            }
+
             var editModeAllowed = ["/portfolio/edit", "/search/result", "/material"];
+            var user = authenticatedUserService.getUser();
+
+            // Prime user is a user which is moderator or admin
+            var primeUser = false;
+            if (user != null) {
+                if (user.role == 'ADMIN' || user.role == 'MODERATOR') {
+                    primeUser = true;
+                }
+            }
 
             $rootScope.isViewPortforlioPage = path === '/portfolio';
             $rootScope.isEditPortfolioPage = path === '/portfolio/edit';
+            $rootScope.isViewHomePage = path === '/';
+            $rootScope.isViewMaterialPage = path === '/material';
+            $rootScope.isViewUserPage = path == '/:username';
+            $rootScope.isBrokenMaterial = null;
+            $rootScope.isImproper = null;
+
+
+            if (path === '/dashboard/improperMaterials' || path === '/dashboard/improperPortfolios' || path === '/dashboard/brokenMaterials' || path === '/dashboard/deletedMaterials' || path === '/dashboard/brokenPortfolios'|| path === '/dashboard/deletedPortfolios') {
+                $rootScope.isViewAdminPanelPage = true;
+            } else {
+                $rootScope.isViewAdminPanelPage = false;
+            }
+
+            if ( primeUser ) {
+                $rootScope.isRedHeaderMode = true;
+            } else {
+                $rootScope.isRedHeaderMode = false;
+            }
+
+
+
+            if (path === '/material' || path === '/') {
+                $rootScope.isTaxonomyOpen = true;
+            } else {
+                $rootScope.isTaxonomyOpen = false;
+            }
 
             if (path == "/portfolio/edit") {
                 $rootScope.isEditPortfolioMode = true;

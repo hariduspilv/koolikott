@@ -1,10 +1,13 @@
-<md-toolbar class="md-hue-1">
-  <h6 class="md-toolbar-tools md-button"  data-ng-click="navigateTo($event, portfolio)">
-    <span class="transform-none one-row">{{ portfolio.title }}</span>
-  </h6>
-  <md-divider class="md-default-theme"></md-divider>
-</md-toolbar>
-
+<uib-accordion-heading>
+  <md-button class="md-hue-1 md-primary-menu" >
+    <div flex layout="row">
+      <span>{{ portfolio.title }}</span>
+      <span flex></span>
+      <md-icon class="md-primary material-icons arrow">keyboard_arrow_down</md-icon>
+    </div>
+  </md-button>
+</uib-accordion-heading>
+<!-- Subitems -->
 <ul class="sidenav-menu toc" data-du-scroll-container="scrollable-content">
   <li ng-repeat="chapter in portfolio.chapters">
     <a href="#chapter-{{$index}}" class="md-button one-row" id="toc-chapter-{{$index}}" data-offset="130"
