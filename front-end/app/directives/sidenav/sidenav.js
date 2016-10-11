@@ -21,6 +21,18 @@ define([
                     $scope.user = user;
                 }, true);
 
+                $scope.$watch(function () {
+                    return authenticatedUserService.getUser();
+                }, function (user) {
+                    if (user.role === 'ADMIN' || user.role === 'MODERATOR') {
+                        $scope.adminPanelAccess = true;
+                    } else {
+                        $scope.adminPanelAccess = false;
+                    }
+                }, true);
+
+
+
                 //Checks the location
                 $scope.isLocation = function (location) {
                     var isLocation = location === $location.path();

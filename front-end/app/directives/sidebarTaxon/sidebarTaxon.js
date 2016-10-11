@@ -13,6 +13,13 @@ define([
             },
             controller: function ($rootScope, $scope) {
 
+                if ($scope.taxon) {
+                    if ($scope.taxon.children.length > 0) {
+                        $scope.hasChildren = true;
+                        $scope.childrenCount = $scope.taxon.children.length;
+                    }
+                }
+
                 $scope.toggleChildren = function() {
                     if($scope.opened == null) {
                         $scope.opened = true;
@@ -20,14 +27,6 @@ define([
                         $scope.opened = false;
                     } else if ($scope.opened == false) {
                         $scope.opened = true;
-                    }
-                }
-
-                $scope.hasChildren = function(data) {
-                    if(data.children.length > 0) {
-                        return true;
-                    } else {
-                        return false;
                     }
                 }
 

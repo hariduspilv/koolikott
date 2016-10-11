@@ -34,6 +34,11 @@ define(function() {
                 reloadOnSearch: false
             },
             // Dashboard links
+            '/dashboard': {
+                templateUrl: 'views/dashboard/dashboard.html',
+                controllerUrl: 'views/dashboard/dashboard',
+                permissions: ['ADMIN', 'MODERATOR']
+            },
             '/dashboard/improperMaterials': {
                 templateUrl: 'views/dashboard/pages/improperMaterials.html',
                 controllerUrl: 'views/dashboard/dashboard',

@@ -2,6 +2,14 @@
   justify-content: space-between;
 }
 
+.navbar.md-red {
+  background-color: #a2134c;
+}
+
+.navbar.md-gray {
+  background-color: #949394;
+}
+
 @media (min-width: 1800px) {
   .navbar .md-toolbar-tools {
     justify-content: center;

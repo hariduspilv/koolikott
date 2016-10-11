@@ -1,49 +1,52 @@
-ul.ivh-treeview {
-  list-style-type: none;
-  padding-left: 0;
-  ul.ivh-treeview {
-    padding-left: 15px;
-  }
-  .ivh-treeview-toggle {
-    font-weight: 400;
-    font-size: 14px;
-    cursor: pointer;
-    span.count {
-      color: #666;
-      font-size: small;
-      float: right;
+.taxon-item {
+  width: 100%;
+  .header {
+    transition: 0.2s;
+    height: 46px;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 13px;
+    .taxon-name {
+      padding: 0 90px 0 78px;
+    }
+    .icon-identity {
+      left: 22px;
+      position: absolute;
+    }
+    .icon-arrow {
+      right: 22px;
+      position: absolute;
+      font-size: 21px;
+      &.opened {
+        transform: rotate(180deg);
+      }
+    }
+    .count {
+      right: 69px;
+      position: absolute;
+      font-size: 12px;
+    }
+
+    &.has-children {
+      cursor: pointer;
+    }
+
+    &:hover {
+      background-color: rgba(158,158,158,0.2);
     }
   }
-  .ivh-treeview-node-leaf .ivh-treeview-toggle {
-    cursor: auto;
+}
+.sub-taxon-item {
+  background-color: rgba(0,0,0,0.05);
+  .header  {
+    &.opened {
+      background-color: rgba(0,0,0,0.1);
+    }
+    .taxon-name {
+      padding-left: 22px;
+    }
   }
-}
-
-.text-bold {
-  font-weight: bold !important;
-}
-
-.listblock h4 md-icon.md-primary {
-  float: right;
-}
-
-.red {
-  color:red;
-}
-.green {
-  color: green;
-}
-
-.treeview {
-  width: 100%;
-  box-sizing: border-box;
-  // background-color: #fff;
-}
-
-md-menu-content {
-  max-height: 700px;
-}
-
-.md-button.md-fab {
-  margin-left: 20px;
+  .icon-identity {
+    display: none;
+  }
 }

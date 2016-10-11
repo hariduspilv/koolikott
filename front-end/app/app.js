@@ -122,7 +122,7 @@ define([
             $httpProvider.defaults.headers.get['Cache-Control'] = 'no-cache';
             $httpProvider.defaults.headers.get['Pragma'] = 'no-cache';
 
-            $locationProvider.html5Mode(true);
+            //$locationProvider.html5Mode(true);
             $anchorScrollProvider.disableAutoScrolling();
 
         }
@@ -255,15 +255,50 @@ define([
             }
 
             var editModeAllowed = ["/portfolio/edit", "/search/result", "/material"];
-            if (authenticatedUserService.getUser() != null) {
+            var user = authenticatedUserService.getUser();
 
+            // Prime user is a user which is moderator or admin
+            var primeUser = false;
+            if (user != null) {
+                if (user.role == 'ADMIN' || user.role == 'MODERATOR') {
+                    primeUser = true;
+                }
             }
+
             $rootScope.isViewPortforlioPage = path === '/portfolio';
             $rootScope.isEditPortfolioPage = path === '/portfolio/edit';
-            $rootScope.isViewAdminPanelPage = path === '/dashboard';
             $rootScope.isViewHomePage = path === '/';
             $rootScope.isViewMaterialPage = path === '/material';
             $rootScope.isViewUserPage = path == '/:username';
+
+
+            if (path === '/dashboard/improperMaterials' || path === '/dashboard/improperPortfolios' || path === '/dashboard/brokenMaterials' || path === '/dashboard/deletedMaterials' || path === '/dashboard/brokenPortfolios') {
+                $rootScope.isViewAdminPanelPage = true;
+            } else {
+                $rootScope.isViewAdminPanelPage = false;
+            }
+
+            // TODO: isRedHeaderMode, isGrayHeaderMode;
+
+            // Conditions for red colored header
+            if ($rootScope.isViewAdminPanelPage == true && primeUser || $rootScope.isBrokenMaterial && $rootScope.isViewMaterialPage && $rootScope.isViewPortforlioPage  && primeUser || $rootScope.isImproper && $rootScope.isViewPortforlioPage && $rootScope.isViewMaterialPage && primeUser ) {
+                $rootScope.isRedHeaderMode = true;
+            } else {
+                $rootScope.isRedHeaderMode = false;
+            }
+
+            // Conditions for gray colored header
+            if ($rootScope.isDeleted && primeUser) {
+                $rootScope.isGrayHeaderMode = true;
+            } else {
+                $rootScope.isGrayHeaderMode = false;
+            }
+
+            if (path === '/material' || path === '/') {
+                $rootScope.isTaxonomyOpen = true;
+            } else {
+                $rootScope.isTaxonomyOpen = false;
+            }
 
             if (path == "/portfolio/edit") {
                 $rootScope.isEditPortfolioMode = true;

@@ -1,4 +1,4 @@
-<md-sidenav md-is-open="sideNavOpen" class="md-sidenav-left"  md-component-id="left" md-whiteframe="4" id="sidebar-left">
+<md-sidenav md-is-open="sideNavOpen" class="md-sidenav-left"  md-component-id="left" id="sidebar-left">
 
   <!-- Portfolio Header and Chapters -->
   <!--<md-toolbar class="{{isEditPortfolioMode ? 'md-accent' : 'md-primary'}}">
@@ -14,7 +14,7 @@
 
   </md-content>
 
-  <uib-accordion close-others="oneAtATime" class="menu-nested-list" is-open="isViewUserPage">
+  <uib-accordion close-others="oneAtATime" class="menu-nested-list">
     <div uib-accordion-group class="panel-default" ng-if="user" is-open="isUserPage">
       <uib-accordion-heading>
         <md-button class="md-hue-1 md-primary-menu">
@@ -62,9 +62,9 @@
         </li>
       </ul>
     </div>
-    <div uib-accordion-group class="panel-default" ng-if="isViewAdminPanelPage" is-open="isViewAdminPanelPage">
+    <div uib-accordion-group class="panel-default" ng-if="adminPanelAccess" is-open="isViewAdminPanelPage">
       <uib-accordion-heading>
-        <md-button class="md-hue-1 md-primary-menu">
+        <md-button class="md-hue-1 md-primary-menu" >
           <div flex layout="row">
             <span>Töölaud</span>
             <span flex></span>
@@ -75,56 +75,66 @@
       <!-- Subitems -->
       <ul>
         <li>
-          <md-button class="md-hue-1 md-secondary-menu" >
-            <div flex layout="row">
-              <md-icon class="material-icons">star</md-icon>
-              <span>Ebasobivad materjalid</span>
-              <span class="count">22</span>
-            </div>
-          </md-button>
+          <a href="/dashboard/improperMaterials">
+            <md-button class="md-hue-1 md-secondary-menu" data-ng-class="{'selected': isLocation('/dashboard/improperMaterials')}">
+              <div flex layout="row">
+                <md-icon class="material-icons">star</md-icon>
+                <span>Ebasobivad materjalid</span>
+                <span class="count">22</span>
+              </div>
+            </md-button>
+          </a>
         </li>
         <li>
-          <md-button class="md-hue-1 md-secondary-menu">
-            <div flex layout="row">
-              <md-icon class="material-icons">star</md-icon>
-              <span>Ebasobivad kogumikud</span>
-              <span class="count">22</span>
-            </div>
-          </md-button>
+          <a href="/dashboard/improperPortfolios">
+            <md-button class="md-hue-1 md-secondary-menu" data-ng-class="{'selected': isLocation('/dashboard/improperPortfolios')}">
+              <div flex layout="row">
+                <md-icon class="material-icons">star</md-icon>
+                <span>Ebasobivad kogumikud</span>
+                <span class="count">22</span>
+              </div>
+            </md-button>
+          </a>
         </li>
         <li>
-          <md-button class="md-hue-1 md-secondary-menu">
-            <div flex layout="row">
-              <md-icon class="material-icons">star</md-icon>
-              <span>Katkised materjalid</span>
-              <span class="count">12</span>
-            </div>
-          </md-button>
+          <a href="/dashboard/brokenMaterials">
+            <md-button class="md-hue-1 md-secondary-menu" data-ng-class="{'selected': isLocation('/dashboard/brokenMaterials')}">
+              <div flex layout="row">
+                <md-icon class="material-icons">star</md-icon>
+                <span>Katkised materjalid</span>
+                <span class="count">12</span>
+              </div>
+            </md-button>
+          </a>
         </li>
         <li>
-          <md-button class="md-hue-1 md-secondary-menu">
-            <div flex layout="row">
-              <md-icon class="material-icons">star</md-icon>
-              <span>Kustutatud materjalid</span>
-              <span class="count">12</span>
-            </div>
-          </md-button>
+          <a href="/dashboard/deletedMaterials">
+            <md-button class="md-hue-1 md-secondary-menu" data-ng-class="{'selected': isLocation('/dashboard/deletedMaterials')}">
+              <div flex layout="row">
+                <md-icon class="material-icons">star</md-icon>
+                <span>Kustutatud materjalid</span>
+                <span class="count">12</span>
+              </div>
+            </md-button>
+          </a>
         </li>
         <li>
-          <md-button class="md-hue-1 md-secondary-menu">
-            <div flex layout="row">
-              <md-icon class="material-icons">star</md-icon>
-              <span>Kustutatud kogumikud</span>
-              <span class="count">12</span>
-            </div>
-          </md-button>
+          <a href="/dashboard/deletedPortfolios">
+            <md-button class="md-hue-1 md-secondary-menu" data-ng-class="{'selected': isLocation('/dashboard/deletedPortfolios')}">
+              <div flex layout="row">
+                <md-icon class="material-icons">star</md-icon>
+                <span>Kustutatud kogumikud</span>
+                <span class="count">12</span>
+              </div>
+            </md-button>
+          </a>
         </li>
       </ul>
     </div>
     <div uib-accordion-group class="panel-default" ng-if="isViewPortforlioPage || isEditPortfolioMode">
       <div data-dop-table-of-contents data-portfolio="portfolio" data-readonly="!isEditPortfolioMode"></div>
     </div>
-    <div uib-accordion-group class="panel-default" is-open="isViewMaterialPage">
+    <div uib-accordion-group class="panel-default" is-open="isTaxonomyOpen">
       <uib-accordion-heading>
         <md-button class="md-hue-1 md-primary-menu" ng-click="changeTaxonomyDataAndVisibility('sidebar', 'primary')">
           <div flex layout="row">
@@ -135,9 +145,9 @@
         </md-button>
       </uib-accordion-heading>
       <!-- Subitems -->
-      <ul>
+      <ul class="taxon-list">
         <li ng-repeat="item in reducedTaxon">
-          <div dop-sidebar-taxon data-taxon="item"></div>
+          <div class="taxon-item" dop-sidebar-taxon data-taxon="item"></div>
         </li>
       </ul>
     </div>

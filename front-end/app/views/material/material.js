@@ -13,6 +13,7 @@ define([
     'directives/tags/tags',
     'directives/restrict/restrict',
     'directives/favorite/favorite',
+    'directives/errorMessage/errorMessage',
     'services/serverCallService',
     'services/translationService',
     'services/searchService',
@@ -22,10 +23,18 @@ define([
     'services/iconService',
     'services/toastService',
     'services/storageService',
-    'services/targetGroupService'
+    'services/targetGroupService',
+    'services/learningObjectHelper'
 ], function (app, angularAMD) {
-    return ['$scope', 'serverCallService', '$route', 'translationService', '$rootScope', 'searchService', '$location', 'alertService', 'authenticatedUserService', 'dialogService', 'toastService', 'iconService', '$mdDialog', 'storageService', 'targetGroupService',
-        function ($scope, serverCallService, $route, translationService, $rootScope, searchService, $location, alertService, authenticatedUserService, dialogService, toastService, iconService, $mdDialog, storageService, targetGroupService) {
+    return ['$scope', 'serverCallService', '$route', 'translationService', '$rootScope', 'searchService', '$location', 'alertService', 'authenticatedUserService', 'dialogService', 'toastService', 'iconService', '$mdDialog', 'storageService', 'targetGroupService', 'learningObjectHelper',
+        function ($scope, serverCallService, $route, translationService, $rootScope, searchService, $location, alertService, authenticatedUserService, dialogService, toastService, iconService, $mdDialog, storageService, targetGroupService, learningObjectHelper) {
+
+            learningObjectHelper.loadBrokenMaterials(setItem);
+
+            function setItem(data) {
+                console.log(data);
+            }
+
             $scope.showMaterialContent = false;
             $scope.newComment = {};
             $scope.pageUrl = $location.absUrl();

@@ -1,4 +1,4 @@
-<md-toolbar id="md-toolbar-header" class="navbar md-whiteframe-1dp {{isEditPortfolioMode ? 'md-accent' : 'md-primary'}}"
+<md-toolbar id="md-toolbar-header" class="navbar md-whiteframe-1dp {{isEditPortfolioMode ? 'md-accent' : 'md-primary'}}" ng-class="{'md-red': isRedHeaderMode, 'md-gray': isGrayHeaderMode}"
             data-click-outside="clickOutside()" outside-if-not="header-show-detailed-search-icon, detailed-search">
   <div class="md-toolbar-tools" flex layout="row">
     <!-- logo and menu button -->
@@ -134,13 +134,8 @@
           </md-button>
           <md-menu-content width="4">
             <md-menu-item>
-              <md-button aria-label="Mine minu profiile" data-ng-href="/{{user.username}}" id="user-menu-view-profile">
-                <span data-translate="MY_PROFILE"></span>
-              </md-button>
-            </md-menu-item>
-            <md-menu-item data-ng-if="isAdmin() || isModerator()">
-              <md-button aria-label="Mine töölauale" data-ng-href="/dashboard" id="user-menu-dashboard">
-                <span data-translate="DASHBOARD"></span>
+              <md-button ng-disabled="true"   aria-label="{{user}}" data-ng-href="/dashboard" id="user-menu-dashboard">
+                <span>Username</span>
               </md-button>
             </md-menu-item>
             <md-menu-divider></md-menu-divider>

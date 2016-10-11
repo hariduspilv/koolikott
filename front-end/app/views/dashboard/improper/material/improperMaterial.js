@@ -19,6 +19,7 @@ define([
             };
 
             function filterResults(impropers) {
+                console.log(impropers);
             	var improperMaterials = [];
 
             	for (var i = 0; i < impropers.length; i++) {

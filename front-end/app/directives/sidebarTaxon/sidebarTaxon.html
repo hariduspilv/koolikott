@@ -1,7 +1,11 @@
-<div style="padding-left: 10px">
-  <span ng-if="hasChildren(taxon)">*</span>
-  <span data-translate="{{getTaxonTranslation(taxon)}}" ng-click="toggleChildren()"></span>
+<div flex layout="column">
+  <div class="header" flex layout="row" ng-click="toggleChildren()" ng-class="{'has-children': hasChildren, 'opened': opened}">
+    <md-icon class="icon-identity" >error</md-icon>
+    <span class="taxon-name" data-translate="{{getTaxonTranslation(taxon)}}"></span>
+    <span class="count">{{childrenCount}}</span>
+    <md-icon class="icon-arrow" ng-if="hasChildren" ng-class="{'opened': opened}">keyboard_arrow_up</md-icon>
+  </div>
   <div ng-if="opened" ng-repeat="data in taxon.children">
-    <div dop-sidebar-taxon data-taxon="data"></div>
+    <div class="sub-taxon-item" dop-sidebar-taxon data-taxon="data"></div>
   </div>
 </div>
