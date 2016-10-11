@@ -3,7 +3,7 @@
       <div layout="row" class="type-block">
         <h1 data-translate="LANDING_PAGE_TITLE_NEWEST"></h1>
       </div>
-      <md-grid-list md-cols="2" md-cols-gt-xs="6" md-gutter="10px" md-row-height="3:4">
+      <md-grid-list md-cols="2" md-cols-gt-xs="3" md-cols-gt-sm="4" md-cols-gt-md="5" md-gutter="10px" md-row-height="3:4">
         <md-grid-tile data-ng-repeat="item in newestItems track by item.id">
           <figure data-ng-if="item.type === '.Material'" data-dop-material-box material="item"></figure>
           <figure data-ng-if="item.type === '.Portfolio'" data-dop-portfolio-box portfolio="item"></figure>
@@ -12,7 +12,7 @@
       <div layout="row" class="type-block">
         <h1 data-translate="LANDING_PAGE_TITLE_POPULAR"></h1>
       </div>
-      <md-grid-list md-cols="2" md-cols-gt-xs="6" md-gutter="10px" md-row-height="3:4">
+      <md-grid-list md-cols="2" md-cols-gt-xs="3" md-cols-gt-sm="4" md-cols-gt-md="5" md-gutter="10px" md-row-height="3:4">
         <md-grid-tile data-ng-repeat="item in popularItems track by item.id">
           <figure data-ng-if="item.type === '.Material'" data-dop-material-box material="item"></figure>
           <figure data-ng-if="item.type === '.Portfolio'" data-dop-portfolio-box portfolio="item"></figure>
