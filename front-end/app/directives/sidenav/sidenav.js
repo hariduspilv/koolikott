@@ -35,6 +35,13 @@ define([
                     return authenticatedUserService.isModerator();
                 };
 
+                $scope.modUser = function() {
+                    if (authenticatedUserService.isModerator() || authenticatedUserService.isAdmin()) {
+                        return true;
+                    } else {
+                        return false;
+                    }
+                }
 
 
                 //Checks the location

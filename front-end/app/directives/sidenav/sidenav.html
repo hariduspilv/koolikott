@@ -62,7 +62,7 @@
         </li>
       </ul>
     </div>
-    <div uib-accordion-group class="panel-default" ng-if="isAdmin || isModerator" is-open="isViewAdminPanelPage">
+    <div uib-accordion-group class="panel-default" ng-if="modUser()" is-open="isViewAdminPanelPage">
       <uib-accordion-heading>
         <md-button class="md-hue-1 md-primary-menu" >
           <div flex layout="row">
