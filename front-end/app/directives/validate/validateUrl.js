@@ -72,7 +72,8 @@ define([
             require: 'ngModel',
             link: function (scope, element, attrs, ctrl) {
                 ctrl.$validators.url = function (modelValue, viewValue) {
-                    return !!REGEX.test(viewValue);
+                    if (!!REGEX.test(viewValue) || viewValue == "" || viewValue == null) return true;
+                    return false;
                 };
             }
         };
