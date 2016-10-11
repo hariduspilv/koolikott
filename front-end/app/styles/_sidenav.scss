@@ -74,10 +74,8 @@ md-sidenav {
   font-size: 18px;
 }
 
-@media (min-width: 1280px) {
-  .md-sidenav-backdrop {
 @media (min-width: $layout-breakpoint-md) {
-  md-backdrop {
+  .md-sidenav-backdrop {
     display: none;
   }
 }
