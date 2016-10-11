@@ -133,6 +133,12 @@ public abstract class LearningObject {
     @Formula(value = "(SELECT COUNT(*) FROM UserLike ul WHERE ul.learningObject = id AND ul.isLiked = 0)")
     private int dislikes;
 
+    @Formula(value = "(SELECT COUNT(*) FROM BrokenContent br WHERE br.material = id AND br.deleted = 0)")
+    private int broken;
+
+    @Formula(value = "(SELECT COUNT(*) FROM ImproperContent ic WHERE ic.learningObject = id AND ic.deleted = 0)")
+    private int improper;
+
     /**
      * Last time when something was done to this LearningObject. It includes
      * tagging, up-voting, recommending and so on
@@ -269,5 +275,13 @@ public abstract class LearningObject {
 
     public void setLastInteraction(DateTime lastInteraction) {
         this.lastInteraction = lastInteraction;
+    }
+
+    public int getBroken() {
+        return broken;
+    }
+
+    public int getImproper() {
+        return improper;
     }
 }
