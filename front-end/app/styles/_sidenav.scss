@@ -4,7 +4,11 @@ md-sidenav {
   max-width: 259px;
   position: fixed;
   min-height: 100%;
-  background-color: transparent;
+  background-color: #FAFAFA;
+
+  @media (min-width: 1280px) {
+    background-color: transparent;
+  }
 
   // TODO: Temporary...
   padding-top: 64px;

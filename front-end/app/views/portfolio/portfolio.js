@@ -8,6 +8,7 @@ define([
     'directives/commentsCard/commentsCard',
     'directives/chapter/chapter',
     'directives/materialBox/materialBox',
+    'directives/errorMessage/errorMessage',
     'directives/portfolioSummaryCard/portfolioSummaryCard',
     'services/serverCallService',
     'services/translationService',

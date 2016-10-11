@@ -1,7 +1,7 @@
 define([
     'angularAMD'
 ], function (angularAMD) {
-    angularAMD.directive('dopErrorMessage', ['metadataService', function (metadataService) {
+    angularAMD.directive('dopErrorMessage', ['$location', function ($location) {
         return {
             scope: {
                 data: '='
@@ -12,9 +12,14 @@ define([
                 $scope.deleted = true;
 
                 // TODO: data.deleted = true/false, data.
-                if ($scope.data) {
-                    console.log($scope.data);
-                }
+
+                $scope.$watch(function(){
+                    return $location.path();
+                }, function(value){
+                    if($scope.data) {
+                        console.log($scope.data);
+                    }
+                });
 
             }
         }

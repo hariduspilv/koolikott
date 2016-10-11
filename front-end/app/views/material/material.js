@@ -23,17 +23,10 @@ define([
     'services/iconService',
     'services/toastService',
     'services/storageService',
-    'services/targetGroupService',
-    'services/learningObjectHelper'
+    'services/targetGroupService'
 ], function (app, angularAMD) {
-    return ['$scope', 'serverCallService', '$route', 'translationService', '$rootScope', 'searchService', '$location', 'alertService', 'authenticatedUserService', 'dialogService', 'toastService', 'iconService', '$mdDialog', 'storageService', 'targetGroupService', 'learningObjectHelper',
-        function ($scope, serverCallService, $route, translationService, $rootScope, searchService, $location, alertService, authenticatedUserService, dialogService, toastService, iconService, $mdDialog, storageService, targetGroupService, learningObjectHelper) {
-
-            learningObjectHelper.loadBrokenMaterials(setItem);
-
-            function setItem(data) {
-                console.log(data);
-            }
+    return ['$scope', 'serverCallService', '$route', 'translationService', '$rootScope', 'searchService', '$location', 'alertService', 'authenticatedUserService', 'dialogService', 'toastService', 'iconService', '$mdDialog', 'storageService', 'targetGroupService',
+        function ($scope, serverCallService, $route, translationService, $rootScope, searchService, $location, alertService, authenticatedUserService, dialogService, toastService, iconService, $mdDialog, storageService, targetGroupService) {
 
             $scope.showMaterialContent = false;
             $scope.newComment = {};

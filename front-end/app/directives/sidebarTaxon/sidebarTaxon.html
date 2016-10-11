@@ -1,5 +1,5 @@
 <div flex layout="column">
-  <div class="header" flex layout="row" ng-click="toggleChildren()" ng-class="{'has-children': hasChildren, 'opened': opened}">
+  <div class="header" flex layout="row" ng-click="toggleChildren()" ng-class="{'has-children': hasChildren, 'opened': opened && hasChildren}">
     <md-icon class="icon-identity" >{{icon}}</md-icon>
     <span class="taxon-name" data-translate="{{getTaxonTranslation(taxon)}}"></span>
     <span class="count">{{childrenCount}}</span>

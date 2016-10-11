@@ -134,8 +134,8 @@
           </md-button>
           <md-menu-content width="4">
             <md-menu-item>
-              <md-button ng-disabled="true"   aria-label="{{user}}" data-ng-href="/dashboard" id="user-menu-dashboard">
-                <span>Username</span>
+              <md-button ng-disabled="true"   aria-label="{{user.username}}" data-ng-href="/dashboard" id="user-menu-dashboard">
+                <span>{{user.name}} {{user.surname}}</span>
               </md-button>
             </md-menu-item>
             <md-menu-divider></md-menu-divider>

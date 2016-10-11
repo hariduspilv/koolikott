@@ -47,7 +47,6 @@ define([
 
                 metadataService.loadReducedTaxon(function(callback) {
                     $scope.reducedTaxon = callback;
-                    console.log($scope.reducedTaxon);
                 });
 
                 if(window.innerWidth > 1280) {$scope.sideNavOpen = true;}
