@@ -22,7 +22,6 @@ define([
 
     /* app wide modules */
     'directives/header/header',
-    'directives/editPortfolioModeHeader/editPortfolioModeHeader',
     'directives/detailedSearch/detailedSearch',
     'directives/mainFabButton/mainFabButton',
     'directives/sidebar/sidebar',
