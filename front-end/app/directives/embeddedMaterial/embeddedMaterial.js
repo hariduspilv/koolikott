@@ -41,7 +41,6 @@ define([
                     };
 
                     $scope.moveItem = function (origin, destination) {
-                        console.log(origin, destination)
                         var temp = $scope.chapter.materials[destination];
                         $scope.chapter.materials[destination] = $scope.chapter.materials[origin];
                         $scope.chapter.materials[origin] = temp;
