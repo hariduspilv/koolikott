@@ -1,5 +1,5 @@
 define(['angularAMD'], function (angularAMD) {
-    angularAMD.factory('embedService', ['serverCallService', '$http', function (serverCallService, $http) {
+    angularAMD.factory('embedService', ['$http', function ($http) {
         const noEmbedUrl = "https://noembed.com/embed?url=";
         var callback;
 
