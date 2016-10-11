@@ -249,7 +249,7 @@ public class MaterialServiceTest {
     }
 
     @Test
-    public void adminCanNotDeleteRepositoryMaterial() {
+    public void userCanNotDeleteRepositoryMaterial() {
         Long materialID = 15L;
 
         Material originalMaterial = new Material();
@@ -258,7 +258,7 @@ public class MaterialServiceTest {
         originalMaterial.setRepositoryIdentifier("asd");
 
         User user = new User();
-        user.setRole(Role.ADMIN);
+        user.setRole(Role.USER);
 
         expect(materialDAO.findByIdNotDeleted(materialID)).andReturn(originalMaterial);
 
@@ -267,7 +267,7 @@ public class MaterialServiceTest {
         try {
             materialService.delete(materialID, user);
         } catch (RuntimeException e) {
-            assertEquals("Can not delete external repository material", e.getMessage());
+            assertEquals("Logged in user must be an administrator.", e.getMessage());
         }
 
         verifyAll();
@@ -298,7 +298,7 @@ public class MaterialServiceTest {
     }
 
     @Test
-    public void adminCanNotRestoreRepositoryMaterial() {
+    public void userCanNotRestoreRepositoryMaterial() {
         Long materialID = 15L;
 
         Material material = new Material();
@@ -310,7 +310,7 @@ public class MaterialServiceTest {
         originalMaterial.setRepositoryIdentifier("asd");
 
         User user = new User();
-        user.setRole(Role.ADMIN);
+        user.setRole(Role.USER);
 
         expect(materialDAO.findById(materialID)).andReturn(originalMaterial);
 
@@ -319,7 +319,7 @@ public class MaterialServiceTest {
         try {
             materialService.restore(material, user);
         } catch (RuntimeException e) {
-            assertEquals("Can not restore external repository material", e.getMessage());
+            assertEquals("Logged in user must be an administrator.", e.getMessage());
         }
 
         verifyAll();

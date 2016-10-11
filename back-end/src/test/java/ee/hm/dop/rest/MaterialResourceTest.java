@@ -475,18 +475,18 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
     }
 
     @Test
-    public void adminCanNotDeleteRepositoryMaterial() {
-        login("89898989898");
+    public void userCanNotDeleteRepositoryMaterial() {
+        login("38011550077");
 
         Long materialId = 12L;
 
         Response response = doDelete("material/" + materialId);
-        assertEquals(Status.INTERNAL_SERVER_ERROR.getStatusCode(), response.getStatus());
+        assertEquals(Status.FORBIDDEN.getStatusCode(), response.getStatus());
     }
 
     @Test
-    public void adminCanNotRestoreRepositoryMaterial() {
-        login("89898989898");
+    public void userCanNotRestoreRepositoryMaterial() {
+        login("38011550077");
 
         Long materialId = 14L;
 
@@ -494,7 +494,7 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
         material.setId(materialId);
 
         Response response = doPost(RESTORE_MATERIAL, Entity.entity(material, MediaType.APPLICATION_JSON_TYPE));
-        assertEquals(Status.INTERNAL_SERVER_ERROR.getStatusCode(), response.getStatus());
+        assertEquals(Status.FORBIDDEN.getStatusCode(), response.getStatus());
     }
 
     private void assertMaterial1(Material material) {
