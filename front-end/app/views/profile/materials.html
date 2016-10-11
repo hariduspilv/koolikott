@@ -7,7 +7,7 @@
           <h1 class="type-block" data-ng-if="myProfile" data-translate="MYPROFILE_PAGE_TITLE_MATERIALS"></h1>
           <h1 class="type-block" data-ng-if="!myProfile" data-translate="PROFILE_PAGE_TITLE_MATERIALS"></h1>
 
-          <md-grid-list md-cols="2" md-cols-gt-xs="3" md-cols-gt-sm="4" md-cols-gt-lg="5" md-gutter="10px" md-row-height="3:4">
+          <md-grid-list md-cols="2" md-cols-gt-xs="3" md-cols-gt-sm="4" md-cols-gt-md="4" md-gutter="10px" md-row-height="3:4">
             <md-grid-tile data-ng-repeat="material in materials">
               <figure data-dop-material-box material="material"></figure>
             </md-grid-tile>
