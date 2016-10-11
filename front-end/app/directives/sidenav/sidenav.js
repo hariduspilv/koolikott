@@ -5,7 +5,7 @@ define([
     'directives/learningObjectRow/learningObjectRow',
     'directives/sidebarTaxon/sidebarTaxon'
 ], function (angularAMD) {
-    angularAMD.directive('dopSidenav', ['serverCallService', '$location', '$sce','searchService', 'ivhTreeviewMgr', 'authenticatedUserService', function () {
+    angularAMD.directive('dopSidenav', ['serverCallService', '$location', '$sce','searchService', 'authenticatedUserService', function () {
         return {
             scope: true,
             templateUrl: 'directives/sidenav/sidenav.html',
@@ -154,67 +154,7 @@ define([
                     $location.url('/' + searchService.getSearchURLbase() + searchService.getQueryURL());
                 }
 
-                // Taxon dummy part
-                // ================
-                $rootScope.taxonomy = {};
-                $rootScope.taxonomy.isPrimaryVisible = false;
-                $rootScope.taxonomy.isHighVisible = false;
-                $scope.category = 'high';
-                $scope.triggerPlace = 'sidebar';
-                $scope.taxonomy.isHighTaxonsOpen = false;
-                $scope.taxonomy.isPrimaryTaxonsOpen = false;
 
-                $rootScope.changeTaxonomyDataAndVisibility = function(triggerPlace, category) {
-                    $scope.category = category;
-                    $scope.triggerPlace = triggerPlace;
-
-                    $scope.taxonomy.taxonPrimaryData = $scope.reducedTaxon;
-
-                    if (category == 'high') {
-                        if (triggerPlace == 'material') {
-                            $rootScope.taxonomy.isHighVisible = true;
-                        } else {
-                            $rootScope.taxonomy.isHighVisible = $rootScope.taxonomy.isHighVisible === false ? true : false;
-                        }
-                    } else if (category == 'primary') {
-                        $rootScope.taxonomy.isPrimaryVisible = $rootScope.taxonomy.isPrimaryVisible === false ? true : false;
-                    }
-                }
-
-                function getTaxonJsonSuccess (data) {
-                    if ($location.$$path == '/material' && $scope.category == 'high') {
-                        $rootScope.taxonomy.taxonHighData = data;
-                        ivhTreeviewMgr.expandTo($rootScope.taxonomy.taxonHighData, 'language_selected');
-                    } else if ($scope.triggerPlace == 'sidebar' && $scope.category == 'high') {
-                        $rootScope.taxonomy.taxonHighData = data;
-                    } else {
-                        $rootScope.taxonomy.taxonPrimaryData = data;
-                    }
-                }
-
-                function getTaxonJsonFail (data, status) {
-                    console.log(data);
-                    console.log(status);
-                }
-
-                // Toggles all tree elements?
-                $scope.toggleAllTaxons = function (category) {
-                    if (category == 'high') {
-                        $scope.taxonomy.isHighTaxonsOpen = $scope.taxonomy.isHighTaxonsOpen === false ? true : false;
-                        if ($scope.taxonomy.isHighTaxonsOpen) {
-                            ivhTreeviewMgr.expandRecursive($rootScope.taxonomy.taxonHighData);
-                        } else {
-                            ivhTreeviewMgr.collapseRecursive($rootScope.taxonomy.taxonHighData);
-                        }
-                    } else {
-                        $scope.taxonomy.isPrimaryTaxonsOpen = $scope.taxonomy.isPrimaryTaxonsOpen === false ? true : false;
-                        if ($scope.taxonomy.isPrimaryTaxonsOpen) {
-                            ivhTreeviewMgr.expandRecursive($rootScope.taxonomy.taxonPrimaryData);
-                        } else {
-                            ivhTreeviewMgr.collapseRecursive($rootScope.taxonomy.taxonPrimaryData);
-                        }
-                    }
-                }
 
             }
         }
