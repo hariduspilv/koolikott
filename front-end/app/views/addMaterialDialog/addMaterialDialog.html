@@ -371,13 +371,10 @@
 
               <div layout="row" layout-align="space-between center" flex data-ng-repeat="peerReview in material.peerReviews">
                 <md-input-container flex ng-show="!peerReview.uploading && !peerReview.uploaded">
-                  <label>
+                  <label ng-show="!peerReview.uploading && !peerReview.uploaded">
                     <span data-translate="MATERIAL_PEER_REVIEW"></span>
                   </label>
                   <input name="peerReview" data-ng-model="peerReview.url" dop-validate-url>
-                  <div data-ng-message="url"
-                       data-ng-show="peerReview.$error.url"
-                       data-translate="MATERIAL_URL_IS_INVALID"></div>
                 </md-input-container>
 
                 <!--Uploaded file name-->
