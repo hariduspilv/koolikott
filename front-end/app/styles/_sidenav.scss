@@ -5,64 +5,15 @@ md-sidenav {
   position: fixed;
   min-height: 100%;
   background-color: #FAFAFA;
-
-  @media (min-width: 1280px) {
-    background-color: transparent;
-  }
-
-  // TODO: Temporary...
-  padding-top: 64px;
-}
-
-.menu-nested-list {
-  md-icon {
-    transition: 0.2s;
-  }
-  h4 {
-    margin: 0;
-  }
-  padding: 0;
-  margin: 0;
-  .panel {
-    border-bottom: 1px solid gainsboro;
-  }
-  .panel-body ul {
-    margin: 0;
-  }
-  .panel-open {
-    .arrow {
-      transform: rotate(180deg);
-    }
-  }
-  ul li a{
-    text-decoration: none;
-    color: inherit;
-  }
-}
-
-
-.portfolio-container {
-  min-height: 100%;
-}
-
-
-.md-toolbar-tools {
-  font-size: 18px;
-}
-
-@media (min-width: 1280px) {
-  .md-sidenav-backdrop {
-    display: none;
-  }
-}
-md-sidenav {
   overflow: visible;
   overflow-y: scroll;
   //background-color: transparent;
-  @media (min-width: 1280px) {
+  // TODO: Temporary...
+  padding-top: 64px;
+  @media (min-width: $layout-breakpoint-md) {
+    background-color: transparent;
     z-index: 1;
   }
-
   .sidenav-menu > li {
     > .md-button {
       font-weight: 400;
@@ -86,6 +37,48 @@ md-sidenav {
         background-color: rgba(158,158,158,0.2);
       }
     }
+  }
+}
+
+.menu-nested-list {
+  padding: 0;
+  margin: 0;
+  md-icon {
+    transition: 0.2s;
+  }
+  h4 {
+    margin: 0;
+  }
+  .panel {
+    border-bottom: 1px solid $border-color;
+  }
+  .panel-body ul {
+    margin: 0;
+  }
+  .panel-open {
+    .arrow {
+      transform: rotate(180deg);
+    }
+  }
+  ul li a {
+    text-decoration: none;
+    color: inherit;
+  }
+}
+
+.portfolio-container {
+  min-height: 100%;
+}
+
+.md-toolbar-tools {
+  font-size: 18px;
+}
+
+@media (min-width: 1280px) {
+  .md-sidenav-backdrop {
+@media (min-width: $layout-breakpoint-md) {
+  md-backdrop {
+    display: none;
   }
 }
 
