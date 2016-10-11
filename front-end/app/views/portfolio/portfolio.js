@@ -96,6 +96,13 @@ define([
                 $rootScope.savedPortfolio = portfolio;
             }
 
+            $scope.modUser = function() {
+                if (authenticatedUserService.isModerator() || authenticatedUserService.isAdmin()) {
+                    return true;
+                } else {
+                    return false;
+                }
+            }
 
             $scope.$watch(function () {
                 return $location.url().replace(window.location.hash, '');

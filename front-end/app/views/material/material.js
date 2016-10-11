@@ -265,6 +265,14 @@ define([
                 return authenticatedUserService.isRestricted();
             };
 
+            $scope.modUser = function() {
+                if (authenticatedUserService.isModerator() || authenticatedUserService.isAdmin()) {
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+
             function getSignedUserData() {
                 serverCallService.makeGet("rest/user/getSignedUserData", {}, getSignedUserDataSuccess, getSignedUserDataFail);
             }
