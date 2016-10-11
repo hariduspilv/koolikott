@@ -299,6 +299,13 @@ define([
                 return $scope.educationalContextId === 2 || $scope.educationalContextId === 3;
             };
 
+            $scope.isURLInvalid = function () {
+                if ($scope.addMaterialForm && $scope.addMaterialForm.source && $scope.addMaterialForm.source.$viewValue) {
+                    $scope.addMaterialForm.source.$setTouched();
+                    return $scope.addMaterialForm.source.$error.url && ($scope.addMaterialForm.source.$viewValue.length > 0);
+                }
+            };
+
             function loadMetadata() {
                 metadataService.loadResourceTypes(setResourceTypes);
                 metadataService.loadKeyCompetences(setKeyCompetences);

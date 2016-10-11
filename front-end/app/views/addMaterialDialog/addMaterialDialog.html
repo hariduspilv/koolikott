@@ -79,7 +79,7 @@
                       <div data-ng-messages="addMaterialForm.source.$error" multiple
                            data-ng-show="addMaterialForm.source.$touched || addMaterialForm.$submitted">
                         <div data-ng-message="url"
-                             data-ng-show="addMaterialForm.source.$error.url && material.source.length > 0"
+                             data-ng-show="isURLInvalid()"
                              data-translate="MATERIAL_URL_IS_INVALID"></div>
 
                         <div data-ng-message
