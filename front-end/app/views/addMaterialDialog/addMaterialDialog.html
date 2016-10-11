@@ -450,7 +450,7 @@
                   <md-datepicker ng-model="issueDate" name="issueDate" required
                                  md-placeholder="{{ 'MATERIAL_ISSUE_DATE' | translate }}">
                   </md-datepicker>
-                  <div data-ng-messages="addMaterialForm.issueDate.$error"
+                  <div class="datepicker-error" data-ng-messages="addMaterialForm.issueDate.$error"
                        data-ng-show="!material.issueDate.year && (addMaterialForm.issueDate.$touched || addMaterialForm.$submitted)">
                     <div class="validation-messages" data-ng-message="required"
                          data-translate="MATERIAL_DATE_REQUIRED"></div>
