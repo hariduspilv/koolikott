@@ -146,8 +146,8 @@
       </uib-accordion-heading>
       <!-- Subitems -->
       <ul class="taxon-list">
-        <li ng-repeat="item in reducedTaxon">
-          <div class="taxon-item" dop-sidebar-taxon data-taxon="item"></div>
+        <li ng-repeat="(key, item) in reducedTaxon">
+          <div class="taxon-item" icon="taxonIcons[key]" dop-sidebar-taxon data-taxon="item"></div>
         </li>
       </ul>
     </div>

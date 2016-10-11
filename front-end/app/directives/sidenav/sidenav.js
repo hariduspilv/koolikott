@@ -13,7 +13,13 @@ define([
 
                 $scope.oneAtATime = true;
 
-
+                // List of taxon icons
+                $scope.taxonIcons = [
+                    'extension',
+                    'accessibility',
+                    'school',
+                    'palette'
+                ]
 
                 $scope.$watch(function () {
                     return authenticatedUserService.getUser();

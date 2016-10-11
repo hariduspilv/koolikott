@@ -5,7 +5,8 @@ define([
     angularAMD.directive('dopSidebarTaxon', ['RecursionHelper', function (RecursionHelper) {
         return {
             scope: {
-                taxon: '='
+                taxon: '=',
+                icon: '='
             },
             templateUrl: 'directives/sidebarTaxon/sidebarTaxon.html',
             compile: function(element) {

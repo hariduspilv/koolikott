@@ -1,6 +1,6 @@
 <div flex layout="column">
   <div class="header" flex layout="row" ng-click="toggleChildren()" ng-class="{'has-children': hasChildren, 'opened': opened}">
-    <md-icon class="icon-identity" >error</md-icon>
+    <md-icon class="icon-identity" >{{icon}}</md-icon>
     <span class="taxon-name" data-translate="{{getTaxonTranslation(taxon)}}"></span>
     <span class="count">{{childrenCount}}</span>
     <md-icon class="icon-arrow" ng-if="hasChildren" ng-class="{'opened': opened}">keyboard_arrow_up</md-icon>
