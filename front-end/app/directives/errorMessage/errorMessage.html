@@ -1,4 +1,12 @@
-<div class="error-message-container md-whiteframe-4dp" flex layout="row" ng-if="showError">
-  <md-icon>{{errorIcon}}</md-icon>
-  <p>{{errorMessage}}</p>
+<div class="error-message-container md-whiteframe-4dp" flex layout="row" ng-if="showDeleted">
+  <md-icon>delete</md-icon>
+  <p data-translate="ERROR_MSG_DELETED"></p>
+</div>
+<div class="error-message-container md-whiteframe-4dp" flex layout="row" ng-if="showBroken">
+  <md-icon>report</md-icon>
+  <p><span data-translate="ERROR_MSG_BROKEN"></span><span class="reason">{{broken.reason}}</span></p>
+</div>
+<div class="error-message-container md-whiteframe-4dp" flex layout="row" ng-if="showImproper">
+  <md-icon>report</md-icon>
+  <p><span data-translate="ERROR_MSG_IMPROPER"></span><span class="reason">{{improper.reason}}</span></p>
 </div>

@@ -12,24 +12,25 @@ define([
                 $scope.deleted = true;
 
                 // TODO: data.deleted = true/false, data.
+                console.log($scope.data);
 
                 function checkItemState(data) {
                     if(data) {
                         if (data.deleted) {
-                            $rootScope.isDeleted = true;
-                            $scope.showError = true;
-                            $scope.errorMessage = 'See kogumik on kustutatud!';
-                            $scope.errorIcon = 'delete';
-                        } else if (data.improper > 0) {
-                            $scope.showError = true;
-                            $scope.errorMessage = 'See kogumik on lubamatu!';
-                            $scope.errorIcon = 'report';
-                        } else if (data.borken > 0) {
-                            $scope.showError = true;
-                            $scope.errorMessage = 'See kogumik on vigane!';
-                            $scope.errorIcon = 'report';
+                            // For header to change color
+                            //  $rootScope.isDeleted = true;
+                            console.log("Deleted");
+                            $scope.showDeleted = true;
                         } else {
                             $rootScope.isDeleted = false;
+                        }
+                        if (data.improper > 0) {
+                            console.log("Improper");
+                            $scope.showImproper = true;
+                        }
+                        if (data.broken > 0) {
+                            console.log("Broken");
+                            $scope.showBroken = true;
                         }
                     }
 
