@@ -13,7 +13,9 @@
       <td md-cell>{{item.creator.name}} {{item.creator.surname}}</td>
       <td md-cell>{{formatMaterialUpdatedDate(item.updated)}}</td>
       <td md-cell>
-        <md-button aria-label="Ava material" data-ng-href="/material?materialId={{item.id}}" class="md-raised md-default" data-translate="BUTTON_OPEN"></md-button>
+        <a ng-href="/material?materialId={{item.id}}">
+          <md-button aria-label="Ava material" class="md-raised md-default" data-translate="BUTTON_OPEN"></md-button>
+        </a>
       </td>
     </tr>
   </tbody>

@@ -117,6 +117,14 @@ define([
                 }
             });
 
+            $scope.isAdmin = function () {
+                return authenticatedUserService.isAdmin();
+            };
+
+            $scope.isModerator = function () {
+                return authenticatedUserService.isModerator();
+            };
+
             init();
         }];
 });

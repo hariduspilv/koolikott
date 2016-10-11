@@ -270,29 +270,23 @@ define([
             $rootScope.isViewHomePage = path === '/';
             $rootScope.isViewMaterialPage = path === '/material';
             $rootScope.isViewUserPage = path == '/:username';
+            $rootScope.isBrokenMaterial = null;
+            $rootScope.isImproper = null;
 
 
-            if (path === '/dashboard/improperMaterials' || path === '/dashboard/improperPortfolios' || path === '/dashboard/brokenMaterials' || path === '/dashboard/deletedMaterials' || path === '/dashboard/brokenPortfolios') {
+            if (path === '/dashboard/improperMaterials' || path === '/dashboard/improperPortfolios' || path === '/dashboard/brokenMaterials' || path === '/dashboard/deletedMaterials' || path === '/dashboard/brokenPortfolios'|| path === '/dashboard/deletedPortfolios') {
                 $rootScope.isViewAdminPanelPage = true;
             } else {
                 $rootScope.isViewAdminPanelPage = false;
             }
 
-            // TODO: isRedHeaderMode, isGrayHeaderMode;
-
-            // Conditions for red colored header
-            if ($rootScope.isViewAdminPanelPage == true && primeUser || $rootScope.isBrokenMaterial && $rootScope.isViewMaterialPage && $rootScope.isViewPortforlioPage  && primeUser || $rootScope.isImproper && $rootScope.isViewPortforlioPage && $rootScope.isViewMaterialPage && primeUser ) {
+            if ( primeUser ) {
                 $rootScope.isRedHeaderMode = true;
             } else {
                 $rootScope.isRedHeaderMode = false;
             }
 
-            // Conditions for gray colored header
-            if ($rootScope.isDeleted && primeUser) {
-                $rootScope.isGrayHeaderMode = true;
-            } else {
-                $rootScope.isGrayHeaderMode = false;
-            }
+
 
             if (path === '/material' || path === '/') {
                 $rootScope.isTaxonomyOpen = true;

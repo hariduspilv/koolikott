@@ -1,5 +1,4 @@
-<div class="error-message-container md-whiteframe-4dp" flex layout="row">
-  <md-icon ng-if="broken">error</md-icon>
-  <md-icon ng-if="deleted">cancel</md-icon>
-  <p>See kogumik on kustutatud!</p>
+<div class="error-message-container md-whiteframe-4dp" flex layout="row" ng-if="showError">
+  <md-icon>{{errorIcon}}</md-icon>
+  <p>{{errorMessage}}</p>
 </div>

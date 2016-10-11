@@ -28,7 +28,7 @@ define([
     return ['$scope', 'serverCallService', '$route', 'translationService', '$rootScope', 'searchService', '$location', 'alertService', 'authenticatedUserService', 'dialogService', 'toastService', 'iconService', '$mdDialog', 'storageService', 'targetGroupService',
         function ($scope, serverCallService, $route, translationService, $rootScope, searchService, $location, alertService, authenticatedUserService, dialogService, toastService, iconService, $mdDialog, storageService, targetGroupService) {
 
-            $scope.showMaterialContent = false;
+        $scope.showMaterialContent = false;
             $scope.newComment = {};
             $scope.pageUrl = $location.absUrl();
 

@@ -21,7 +21,7 @@
           <div flex layout="row">
             <span>Minu koolikott</span>
             <span flex></span>
-            <md-icon class="md-primary material-icons arrow">keyboard_arrow_up</md-icon>
+            <md-icon class="md-primary material-icons arrow">keyboard_arrow_down</md-icon>
           </div>
         </md-button>
       </uib-accordion-heading>
@@ -33,7 +33,7 @@
               <div flex layout="row">
                 <md-icon class="material-icons">content_copy</md-icon>
                 <span>Minu kogumikud</span>
-                <span class="count">22</span>
+                <span class="count"></span>
               </div>
             </md-button>
           </a>
@@ -44,7 +44,7 @@
               <div flex layout="row">
                 <md-icon class="material-icons">description</md-icon>
                 <span>Minu materjalid</span>
-                <span class="count">22</span>
+                <span class="count"></span>
               </div>
             </md-button>
           </a>
@@ -55,20 +55,20 @@
               <div flex layout="row">
                 <md-icon class="material-icons">star</md-icon>
                 <span>Minu lemmikud</span>
-                <span class="count">12</span>
+                <span class="count"></span>
               </div>
             </md-button>
           </a>
         </li>
       </ul>
     </div>
-    <div uib-accordion-group class="panel-default" ng-if="adminPanelAccess" is-open="isViewAdminPanelPage">
+    <div uib-accordion-group class="panel-default" ng-if="isAdmin || isModerator" is-open="isViewAdminPanelPage">
       <uib-accordion-heading>
         <md-button class="md-hue-1 md-primary-menu" >
           <div flex layout="row">
             <span>Töölaud</span>
             <span flex></span>
-            <md-icon class="md-primary material-icons arrow">keyboard_arrow_up</md-icon>
+            <md-icon class="md-primary material-icons arrow">keyboard_arrow_down</md-icon>
           </div>
         </md-button>
       </uib-accordion-heading>
@@ -80,7 +80,7 @@
               <div flex layout="row">
                 <md-icon class="material-icons">report</md-icon>
                 <span>Ebasobivad materjalid</span>
-                <span class="count">22</span>
+                <span class="count"></span>
               </div>
             </md-button>
           </a>
@@ -91,7 +91,7 @@
               <div flex layout="row">
                 <md-icon class="material-icons">report</md-icon>
                 <span>Ebasobivad kogumikud</span>
-                <span class="count">22</span>
+                <span class="count"></span>
               </div>
             </md-button>
           </a>
@@ -102,7 +102,7 @@
               <div flex layout="row">
                 <md-icon class="material-icons">content_cut</md-icon>
                 <span>Katkised materjalid</span>
-                <span class="count">12</span>
+                <span class="count"></span>
               </div>
             </md-button>
           </a>
@@ -113,7 +113,7 @@
               <div flex layout="row">
                 <md-icon class="material-icons">delete</md-icon>
                 <span>Kustutatud materjalid</span>
-                <span class="count">12</span>
+                <span class="count"></span>
               </div>
             </md-button>
           </a>
@@ -124,7 +124,7 @@
               <div flex layout="row">
                 <md-icon class="material-icons">delete</md-icon>
                 <span>Kustutatud kogumikud</span>
-                <span class="count">12</span>
+                <span class="count"></span>
               </div>
             </md-button>
           </a>
@@ -140,7 +140,7 @@
           <div flex layout="row">
             <span>Sisukord</span>
             <span flex></span>
-            <md-icon class="md-primary material-icons arrow">keyboard_arrow_up</md-icon>
+            <md-icon class="md-primary material-icons arrow">keyboard_arrow_down</md-icon>
           </div>
         </md-button>
       </uib-accordion-heading>
