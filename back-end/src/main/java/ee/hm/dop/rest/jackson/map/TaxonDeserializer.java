@@ -8,6 +8,7 @@ import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.jsontype.TypeDeserializer;
 import ee.hm.dop.guice.GuiceInjector;
+import ee.hm.dop.model.taxon.EducationalContext;
 import ee.hm.dop.model.taxon.Taxon;
 import ee.hm.dop.service.TaxonService;
 
@@ -17,11 +18,8 @@ public class TaxonDeserializer extends JsonDeserializer<Taxon> {
     public Taxon deserialize(JsonParser parser, DeserializationContext context) throws IOException {
         TaxonService taxonService = getTaxonService();
 
-        List values = parser.readValueAs(List.class);
-        String idString = values.get(2).toString();
-        Long id = Long.valueOf(idString);
-
-        return taxonService.getTaxonById(id);
+        Taxon taxonID = parser.readValueAs(Taxon.class);
+        return taxonService.getTaxonById(taxonID.getId());
     }
 
     @Override

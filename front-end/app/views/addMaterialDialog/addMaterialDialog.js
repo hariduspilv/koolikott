@@ -145,10 +145,14 @@ define([
                             });
                     }
 
-                    $scope.material.peerReviews.forEach(function(peerReview, i) {
-                       if (!peerReview || !peerReview.url) {
-                           $scope.material.peerReviews.splice(i, 1);
-                       }
+                    $scope.material.peerReviews.forEach(function (peerReview, i) {
+                        if (!peerReview || !peerReview.url) {
+                            $scope.material.peerReviews.splice(i, 1);
+                        }
+                    });
+
+                    $scope.material.taxons = $scope.material.taxons.filter(function (taxon) {
+                        return taxon.name;
                     });
 
                     serverCallService.makePut('rest/material', $scope.material, saveMaterialSuccess, saveMaterialFail, saveMaterialFinally);
@@ -452,8 +456,8 @@ define([
             function getByUrlFail() {
             }
 
-            $scope.uploadReview = function (index, file){
-                if(file){
+            $scope.uploadReview = function (index, file) {
+                if (file) {
                     $scope.material.peerReviews[index].uploading = true;
                     $scope.uploadingReviewId = index;
                     fileUploadService.uploadReview(file, reviewUploadSuccess, reviewUploadFailed, reviewUploadFinally);

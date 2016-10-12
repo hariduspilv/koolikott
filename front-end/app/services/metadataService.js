@@ -9,7 +9,6 @@ define([
     var LANGUGAGES;
     var LICENSE_TYPES;
     var RESOURCE_TYPES;
-    var EDUCATIONAL_CONTEXTS;
     var USED_LANGUAGES;
 
     var crossCurricularThemesCallbacks = [];

@@ -229,8 +229,8 @@ define([
         metadataService.loadEducationalContexts(setTaxons);
 
         function setTaxons(taxon) {
-          $rootScope.taxon = taxon;
-          taxonParser.setTaxons;
+            $rootScope.taxon = taxon;
+            taxonParser.setTaxons;
         }
     });
 
@@ -262,19 +262,17 @@ define([
             $rootScope.isImproper = null;
 
 
-            if (path === '/dashboard/improperMaterials' || path === '/dashboard/improperPortfolios' || path === '/dashboard/brokenMaterials' || path === '/dashboard/deletedMaterials' || path === '/dashboard/brokenPortfolios'|| path === '/dashboard/deletedPortfolios') {
+            if (path === '/dashboard/improperMaterials' || path === '/dashboard/improperPortfolios' || path === '/dashboard/brokenMaterials' || path === '/dashboard/deletedMaterials' || path === '/dashboard/brokenPortfolios' || path === '/dashboard/deletedPortfolios') {
                 $rootScope.isViewAdminPanelPage = true;
             } else {
                 $rootScope.isViewAdminPanelPage = false;
             }
 
-            if ( primeUser ) {
+            if (primeUser) {
                 $rootScope.isRedHeaderMode = true;
             } else {
                 $rootScope.isRedHeaderMode = false;
             }
-
-
 
             if (path === '/material' || path === '/') {
                 $rootScope.isTaxonomyOpen = true;
