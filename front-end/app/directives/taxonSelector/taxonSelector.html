@@ -1,9 +1,12 @@
 <form name="taxonForm" data-layout="row" data-layout-sm="column" flex>
   <!-- Educational Context -->
   <md-input-container class="md-block" flex>
+    <label for="taxonEducationalSelect">
+      <span data-translate="DETAIL_VIEW_EDUCATIONAL_CONTEXT"></span>
+      <span data-ng-if="ctrl.isAddPortfolioView">*</span>
+    </label>
     <md-select data-ng-model="ctrl.taxonPath.educationalContext" id="taxonEducationalSelect"
-               data-ng-disabled="ctrl.disableEducationalContext" name="educationalContext" aria-label="Haridustase"
-               placeholder="{{ 'DETAIL_VIEW_EDUCATIONAL_CONTEXT' | translate }}">
+               data-ng-disabled="ctrl.disableEducationalContext" name="educationalContext" aria-label="Haridustase">
       <md-option data-translate="SELECT_EDUCATIONAL_CONTEXT" ng-value="{}" ng-click="ctrl.reset({})"></md-option>
       <md-option ng-value="educationalContext" ng-repeat="educationalContext in ctrl.educationalContexts"
                  data-translate="{{educationalContext.name.toUpperCase()}}"
