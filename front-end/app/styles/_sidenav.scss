@@ -14,10 +14,11 @@ md-sidenav {
 
   .logo {
     display: block;
-    color: rgba(0, 0, 0, .6);
+    color: rgba(0, 0, 0, .5);
     text-decoration: none;
     margin-left: 22px;
     padding-top: 16px;
+    font-size: 1.8em;
   }
 
   @media (min-width: $layout-breakpoint-md) {

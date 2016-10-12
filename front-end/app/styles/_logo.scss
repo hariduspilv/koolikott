@@ -1,0 +1,39 @@
+a.logo {
+  font-size: 1.9em;
+  color: #fff;
+  display: inline-block;
+  font-style: normal;
+  text-decoration: none;
+  &:before {
+    content: '\e800';
+    display: block;
+    font-family: "fontello";
+  }
+
+  @media (min-width: $layout-breakpoint-sm) {
+    :before  {
+      content: '\e801';
+    }
+  }
+}
+
+.shadow-primary {
+  text-shadow: long-shadow(
+    $direction: 42deg,
+    $length: 60px,
+    $color: darken($color-primary, 10%),
+    $fade: true
+  );
+}
+
+.shadow-admin  {
+  $color: darken(#a2134c, 10%);
+}
+
+.shadow-deleted {
+  $color: darken(#a2134c, 10%);
+}
+
+.shadow-edit  {
+  $color: darken(#a2134c, 10%);
+}
