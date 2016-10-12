@@ -342,7 +342,7 @@ public class SearchResourceTest extends ResourceIntegrationTestBase {
         if (searchFilter.getIssuedFrom() != null) {
             queryURL += "&issuedFrom=" + searchFilter.getIssuedFrom();
         }
-        if (searchFilter.isCurriculumLiterature()) {
+        if (searchFilter.isCurriculumLiterature() != null && searchFilter.isCurriculumLiterature()) {
             queryURL += "&curriculumLiterature=true";
         }
         if (searchFilter.getSort() != null) {

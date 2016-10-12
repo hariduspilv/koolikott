@@ -87,8 +87,11 @@ public class MaterialService implements LearningObjectHandler {
 
         material.setSource(cleanURL(material.getSource()));
 
-        for(PeerReview peerReview : material.getPeerReviews()){
-            peerReview.setUrl(cleanURL(peerReview.getUrl()));
+        List<PeerReview> peerReviews = material.getPeerReviews();
+        if(peerReviews != null){
+            for(PeerReview peerReview : peerReviews){
+                peerReview.setUrl(cleanURL(peerReview.getUrl()));
+            }
         }
 
         material.setCreator(creator);
@@ -286,8 +289,11 @@ public class MaterialService implements LearningObjectHandler {
 
         material.setSource(cleanURL(material.getSource()));
 
-        for(PeerReview peerReview : material.getPeerReviews()){
-            peerReview.setUrl(cleanURL(peerReview.getUrl()));
+        List<PeerReview> peerReviews = material.getPeerReviews();
+        if(peerReviews != null){
+            for(PeerReview peerReview : peerReviews){
+                peerReview.setUrl(cleanURL(peerReview.getUrl()));
+            }
         }
 
         if (materialWithSameSourceExists(material)) {
