@@ -197,6 +197,7 @@
     <copyField source="chapterText" dest="text"/>
     <copyField source="language" dest="text"/>
     <copyField source="publisher" dest="text"/>
+    <copyField source="peerReview" dest="text"/>
 
     <copyField source="title" dest="suggest_phrase"/>
     <copyField source="description" dest="suggest_phrase"/>
@@ -212,7 +213,6 @@
     <copyField source="chapterText" dest="suggest_phrase"/>
     <copyField source="language" dest="suggest_phrase"/>
     <copyField source="publisher" dest="suggest_phrase"/>
-    <copyField source="peerReview" dest="text"/>
 
     <!-- New field type for suggestions. Standard tokenizer is used to get single word results (te -> test)
     however this is not reliable for phrases as each word results in a seperate query ("test port" would result as two
