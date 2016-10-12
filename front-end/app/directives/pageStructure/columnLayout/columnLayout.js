@@ -11,9 +11,11 @@ define([
                 $scope.toggleSidenav = function() {
                     $mdSidenav('left').toggle();
                 };
+
                 $scope.sidenavIsOpen = function() {
                   return $mdSidenav('left').isOpen();
                 };
+
                 $scope.$watch(function() {
                     return $rootScope.savedPortfolio;
                 }, function(newPortfolio, oldPortfolio) {
@@ -21,7 +23,6 @@ define([
                 });
 
                 $scope.portfolio = $rootScope.savedPortfolio;
-
             }
         };
     });
