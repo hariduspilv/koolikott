@@ -1,21 +1,3 @@
-// Card
-$green1: #00838f;
-$green2: #00695c;
-$greengrass: #43a047;
-$green4: #CDDC39;
-$pinky: #985984;
-$violet: #584D78;
-$navy: #274156;
-$cyan: #00498E;
-$salad: #36AA7A;
-$royal: #2C47B2;
-
-$heading-color: #212121;
-$link-color: #15c;
-$card-lg-padding: 25px;
-$border-color: rgba(0, 0, 0, 0.12);
-
-
 // responsive aspect ratio, http://codepen.io/jakob-e/pen/LEdWNB
 @mixin aspect-ratio($ratio-or-width, $height: null) {
   $padding: if($height, percentage($height/$ratio-or-width), percentage(1/$ratio-or-width));
@@ -388,7 +370,7 @@ md-card {
   }
 }
 .corner {
-  background-image: url('../images/corner.png');
+  background-image: url('../images/detail/corner.png');
   background-repeat: no-repeat;
   background-position: right top;
   position: absolute;

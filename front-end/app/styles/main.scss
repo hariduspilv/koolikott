@@ -2,6 +2,10 @@
 @import "../libs/angular-material/angular-material.scss";
 @import "_variables";
 @import "_base";
+@import "fontello-bb1ddced/css/fontello-codes";
+@import "fontello-bb1ddced/css/fontello-embedded";
+@import "fontello-bb1ddced/css/fontello";
+
 
 // Components
 @import "_alert"; // Üle vaadata
@@ -27,6 +31,7 @@
 @import "_taxonomy";
 @import "_layout";
 @import "_error-message";
+@import "_longshadow";
 
 // Page specific stylesheets
 @import "pages/add.scss";

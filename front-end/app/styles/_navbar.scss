@@ -29,6 +29,17 @@
 .navbar-logo-main {
   padding-left: 10px;
   padding-right: 19px;
+
+  a {
+    min-width: 32px;
+    margin-top: 5px;
+  }
+}
+
+@media (min-width: 960px) {
+  .navbar-logo-main a {
+    min-width: 162px;
+  }
 }
 
 .navbar-search-area {
@@ -48,18 +59,6 @@
 .navbar-buttons-area {
   justify-content: flex-end;
 }
-
-.navbar-logo-main a {
-  min-width: 32px;
-  margin-top: 5px;
-}
-
-@media (min-width: 960px) {
-  .navbar-logo-main a {
-    min-width: 162px;
-  }
-}
-
 
 .navbar-content {
   align-items: center;
@@ -119,27 +118,47 @@
   position: fixed;
   width: 100%;
   z-index: 10;
+  overflow: hidden;
 }
+
+// .logo {
+//   display: block;
+//   background-image: url('../images/logo_white_sm.svg');
+//   height: 30px;
+//   background-size: contain;
+//   background-repeat: no-repeat;
+//   background-position: left center;
+//
+//   @media (min-width: 960px) {
+//     background-image: url('../images/logo_white.svg');
+//     height: 35px;
+//     margin-top: 5px;
+//   }
+// }
+//
+// .logo-lg {
+//   background-image: url('../images/logo_white.svg');
+//   height: 35px;
+//   margin-top: 5px;
+// }
 
 .logo {
-  display: block;
-  background-image: url('../images/logo_white_sm.svg');
-  height: 30px;
-  background-size: contain;
-  background-repeat: no-repeat;
-  background-position: left center;
-
-  @media (min-width: 960px) {
-    background-image: url('../images/logo_white.svg');
-    height: 35px;
-    margin-top: 5px;
+  font-size: 1.9em;
+  color: #fff;
+  i {
+      font-style: normal;
+      &:before {
+        content: '\e800';
+        display: block;
+        font-family: "fontello";
+      }
   }
-}
 
-.logo-lg {
-  background-image: url('../images/logo_white.svg');
-  height: 35px;
-  margin-top: 5px;
+  @media (min-width: $layout-breakpoint-sm) {
+    i:before  {
+      content: '\e801';
+    }
+  }
 }
 
 #header-simple-search-input{
