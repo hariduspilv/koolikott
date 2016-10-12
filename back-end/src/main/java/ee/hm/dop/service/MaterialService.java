@@ -87,6 +87,10 @@ public class MaterialService implements LearningObjectHandler {
 
         material.setSource(cleanURL(material.getSource()));
 
+        for(PeerReview peerReview : material.getPeerReviews()){
+            peerReview.setUrl(cleanURL(peerReview.getUrl()));
+        }
+
         material.setCreator(creator);
 
         if (creator != null && isUserPublisher(creator)) {
@@ -281,6 +285,10 @@ public class MaterialService implements LearningObjectHandler {
         }
 
         material.setSource(cleanURL(material.getSource()));
+
+        for(PeerReview peerReview : material.getPeerReviews()){
+            peerReview.setUrl(cleanURL(peerReview.getUrl()));
+        }
 
         if (materialWithSameSourceExists(material)) {
             throw new IllegalArgumentException("Error updating Material: material with given source already exists");

@@ -5,11 +5,11 @@ define([
     'directives/learningObjectRow/learningObjectRow',
     'directives/sidebarTaxon/sidebarTaxon'
 ], function (angularAMD) {
-    angularAMD.directive('dopSidenav', ['serverCallService', '$location', '$sce','searchService', 'authenticatedUserService', function () {
+    angularAMD.directive('dopSidenav', ['serverCallService', '$location', '$sce','searchService', 'authenticatedUserService', '$mdDialog', function () {
         return {
             scope: true,
             templateUrl: 'directives/sidenav/sidenav.html',
-            controller: function ($rootScope, $scope, $location,serverCallService, $location, searchService, $timeout, metadataService, authenticatedUserService, $sce) {
+            controller: function ($rootScope, $scope, $location,serverCallService, $location, searchService, $timeout, metadataService, authenticatedUserService, $sce, $mdDialog) {
 
                 $scope.oneAtATime = true;
 
@@ -33,6 +33,16 @@ define([
 
                 $scope.isModerator = function () {
                     return authenticatedUserService.isModerator();
+                };
+
+                $scope.checkUser = function(e, redirectURL) {
+                    if ($scope.user) {
+                        $location.url('/' + $scope.user.username + redirectURL);
+                    } else {
+                        $rootScope.afterAuthRedirectURL = redirectURL;
+                        $rootScope.sidenavLogin = redirectURL;
+                        openLoginDialog(e);
+                    }
                 };
 
                 $scope.modUser = function() {
@@ -150,6 +160,14 @@ define([
                     } else {
                         $scope.mostLikedList = data.items;
                     }
+                }
+
+                function openLoginDialog(e) {
+                    $mdDialog.show(angularAMD.route({
+                        templateUrl: 'views/loginDialog/loginDialog.html',
+                        controllerUrl: 'views/loginDialog/loginDialog',
+                        targetEvent: e
+                    }));
                 }
 
                 $scope.showMoreRecommendations = function() {
