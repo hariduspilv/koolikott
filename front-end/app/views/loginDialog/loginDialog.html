@@ -27,7 +27,7 @@
             </div>
           </div>
 
-          <div layout="column" data-ng-if="!mobileIdChallenge">
+          <div layout="column" class="login-modal-container" data-ng-if="!mobileIdChallenge">
             <md-input-container class="md-block">
               <label></label>
               <input id="login-personal-code" data-ng-model="mobileId.idCode" placeholder="{{'PERSONAL_CODE' | translate}}" data-input-pattern="[^0-9]+" data-input-value-control maxlength="11">
