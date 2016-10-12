@@ -230,7 +230,7 @@ define([
 
         function setTaxons(taxon) {
             $rootScope.taxon = taxon;
-            taxonParser.setTaxons;
+            taxonParser.setTaxons(taxon);
         }
     });
 

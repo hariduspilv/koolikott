@@ -151,10 +151,6 @@ define([
                         }
                     });
 
-                    $scope.material.taxons = $scope.material.taxons.filter(function (taxon) {
-                        return taxon.name;
-                    });
-
                     serverCallService.makePut('rest/material', $scope.material, saveMaterialSuccess, saveMaterialFail, saveMaterialFinally);
                 }
             };
