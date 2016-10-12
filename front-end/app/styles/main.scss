@@ -34,10 +34,10 @@
 @import "_longshadow";
 
 // Page specific stylesheets
-@import "pages/add.scss";
-@import "pages/home.scss";
-@import "pages/static.scss";
-@import "pages/profile.scss";
+@import "pages/add";
+@import "pages/home";
+@import "pages/static";
+@import "pages/profile";
 
 // Dialog specific stylesheets
-@import "dialogs/add-material.scss";
+@import "dialogs/add-material";

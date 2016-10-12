@@ -151,7 +151,6 @@ md-card {
   }
 
   &.card-sm {
-    transition: all 0.5s;
     height: 100%;
     md-icon.icon-kind {
       font-size: 48px;
@@ -424,17 +423,34 @@ md-card .card-menu {
 .card-container {
   display: flex;
   flex-wrap: wrap;
+  justify-content: space-between;
+
+  @media (min-width: $layout-breakpoint-xs) {
+    justify-content: flex-start;
+  }
 }
 
 .card-container__item {
-  margin: 0 15px 15px 0;
+  margin: 0 0 15px 0;
+  width: 48%;
+
+  @media (min-width: $layout-breakpoint-xs) {
+    margin: 0 15px 15px 0;
+    width: auto;
+  }
 }
 
 md-card.card-sm {
-  width: 190px;
-}
+  @media (min-width: $layout-breakpoint-xs) {
+    width: 190px;
+  }
 
-md-card.card-sm .card-cover {
-  height: 150px;
+  .card-cover {
+    height: 100px;
+
+    @media (min-width: $layout-breakpoint-xs) {
+      height: 150px;
+    }
+  }
 }
 

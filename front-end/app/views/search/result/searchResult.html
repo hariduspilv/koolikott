@@ -37,12 +37,12 @@
           </div>
 
           <div data-infinite-scroll="nextPage()" data-infinite-scroll-disabled="searching" data-infinite-scroll-container="scrollContainer">
-            <md-grid-list md-cols="2" md-cols-gt-xs="4"  md-gutter="10px" md-row-height="3:4">
-              <md-grid-tile data-ng-repeat="item in items">
-                <figure data-ng-if="item.type === '.Material'" data-dop-material-box material="item"></figure>
-                <figure data-ng-if="item.type === '.Portfolio'" data-dop-portfolio-box portfolio="item"></figure>
-              </md-grid-tile>
-            </md-grid-list>
+            <div class="card-container">
+              <div data-ng-repeat="item in items" class="card-container__item">
+                <div data-ng-if="item.type === '.Material'" data-dop-material-box material="item"></div>
+                <div data-ng-if="item.type === '.Portfolio'" data-dop-portfolio-box portfolio="item"></div>
+              </div>
+            </div>
           </div>
 
           <div layout="row" layout-align="center center" flex data-ng-show="!allResultsLoaded() && (searching || loadingNextPage)">
