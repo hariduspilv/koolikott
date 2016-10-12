@@ -1,4 +1,4 @@
-a.logo {
+.logo {
   font-size: 1.9em;
   color: #fff;
   display: inline-block;
@@ -9,11 +9,18 @@ a.logo {
     display: block;
     font-family: "fontello";
   }
-
   @media (min-width: $layout-breakpoint-sm) {
-    :before  {
+    &:before  {
       content: '\e801';
     }
+  }
+}
+
+md-sidenav md-toolbar .logo {
+  color: rgba(0,0,0, .7);
+  font-size: 1.6em;
+  &:before {
+    content: '\e801';
   }
 }
 
@@ -21,19 +28,34 @@ a.logo {
   text-shadow: long-shadow(
     $direction: 42deg,
     $length: 60px,
-    $color: darken($color-primary, 10%),
+    $color: darken($color-primary, 5%),
     $fade: true
   );
 }
 
 .shadow-admin  {
-  $color: darken(#a2134c, 10%);
+  text-shadow: long-shadow(
+    $direction: 42deg,
+    $length: 60px,
+    $color: darken($color-admin, 10%),
+    $fade: true
+  );
 }
 
 .shadow-deleted {
-  $color: darken(#a2134c, 10%);
+  text-shadow: long-shadow(
+    $direction: 42deg,
+    $length: 60px,
+    $color: darken($color-deleted, 10%),
+    $fade: true
+  );
 }
 
 .shadow-edit  {
-  $color: darken(#a2134c, 10%);
+  text-shadow: long-shadow(
+    $direction: 42deg,
+    $length: 60px,
+    $color: darken($color-accent, 10%),
+    $fade: true
+  );
 }

@@ -13,7 +13,7 @@
           <md-tooltip>
             <span data-translate="HEADER_TOOLTIP_GO_TO_LANDING_PAGE"></span>
           </md-tooltip>
-          <a data-ng-href="/" class="logo shadow-admin" id="logo"></a>
+          <a data-ng-href="/" class="logo {{isEditPortfolioMode ? 'shadow-edit' : 'shadow-primary'}}"  ng-class="{'shadow-admin': headerRed, 'shadow-deleted': headerGray}" id="logo"></a>
         </div>
       </div>
     </div>
