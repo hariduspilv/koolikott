@@ -24,6 +24,7 @@ define([
         });
 
         $scope.hideLogin = function() {
+            $rootScope.sidenavLogin = null;
             $mdDialog.hide();
         }
 
@@ -43,7 +44,7 @@ define([
         $scope.stuudiumAuth = function() {
             authenticationService.loginWithStuudium();
         };
-		
+
         $scope.mobileIdAuth = function() {
             var idCodeValid = validateIdCode();
             var phoneNumberValid = validatePhoneNumber();

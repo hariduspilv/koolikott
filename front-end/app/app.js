@@ -274,11 +274,8 @@ define([
                 $rootScope.isRedHeaderMode = false;
             }
 
-            if (path === '/material' || path === '/') {
-                $rootScope.isTaxonomyOpen = true;
-            } else {
-                $rootScope.isTaxonomyOpen = false;
-            }
+            $rootScope.isMySchoolbagOpen = path === '/' || (user && path.startsWith("/" + user.username));
+            $rootScope.isTaxonomyOpen = path === '/material';
 
             if (path == "/portfolio/edit") {
                 $rootScope.isEditPortfolioMode = true;
