@@ -1,18 +1,24 @@
 md-sidenav {
-  width: 259px;
-  min-width: 259px;
-  max-width: 259px;
+  width: $sidenav-width;
+  min-width: $sidenav-width;
+  max-width: $sidenav-width;
   position: fixed;
   min-height: 100%;
   background-color: #FAFAFA;
   overflow: visible;
   overflow-y: scroll;
-  //background-color: transparent;
-  // TODO: Temporary...
-  padding-top: 64px;
+
+  .sidenav-logo-container {
+    height: $desktop-navbar-height - 1px;
+    border-bottom: 1px solid rgba(0,0,0,.2);
+  }
 
   .logo {
+    display: block;
     color: rgba(0, 0, 0, .6);
+    text-decoration: none;
+    margin-left: 22px;
+    padding-top: 16px;
   }
 
   @media (min-width: $layout-breakpoint-md) {

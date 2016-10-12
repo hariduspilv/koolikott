@@ -145,6 +145,8 @@
 .logo {
   font-size: 1.9em;
   color: #fff;
+  display: block;
+  text-decoration: none;
   i {
       font-style: normal;
       &:before {
@@ -152,6 +154,10 @@
         display: block;
         font-family: "fontello";
       }
+  }
+
+  &.one {
+    text-decoration: none;
   }
 
   @media (min-width: $layout-breakpoint-sm) {
