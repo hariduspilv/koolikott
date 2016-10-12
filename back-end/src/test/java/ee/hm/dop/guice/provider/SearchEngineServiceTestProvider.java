@@ -152,7 +152,7 @@ class SolrEngineServiceMock implements SolrEngineService {
         String filteredQuery = "(john) AND educational_context:\"basiceducation\""
                 + " AND (paid:\"false\" OR type:\"portfolio\") AND type:\"portfolio\""
                 + " AND (issue_date_year:[2011 TO *] OR (added:[2011-01-01T00:00:00Z TO *] AND type:\"portfolio\"))"
-                + " AND curriculum_literature:\"true\" AND (visibility:\"public\" OR type:\"material\")";
+                + " AND peerReview:[* TO *] AND (visibility:\"public\" OR type:\"material\")";
         List<Document> filteredSearchResult = createDocumentsWithIdentifiers(2L, 3L, 4L);
         searchResponses.put(filteredQuery, filteredSearchResult);
     }
@@ -165,14 +165,14 @@ class SolrEngineServiceMock implements SolrEngineService {
     }
 
     private static void addQueryWithCurriculumLiteratureTrue() {
-        String filteredQuery = "(data) AND curriculum_literature:\"true\""
+        String filteredQuery = "(data) AND peerReview:[* TO *]"
                 + " AND (visibility:\"public\" OR type:\"material\")";
         List<Document> filteredSearchResult = createDocumentsWithIdentifiers(2L, 7L);
         searchResponses.put(filteredQuery, filteredSearchResult);
     }
 
     private static void addQueryWithCurriculumLiteratureFalse() {
-        String filteredQuery = "(data) AND curriculum_literature:\"false\""
+        String filteredQuery = "(data)"
                 + " AND (visibility:\"public\" OR type:\"material\")";
         List<Document> filteredSearchResult = createDocumentsWithIdentifiers(2L, 8L);
         searchResponses.put(filteredQuery, filteredSearchResult);
