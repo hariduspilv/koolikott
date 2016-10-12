@@ -423,11 +423,15 @@ define([
             }, true);
 
             $scope.$watch('material.source', function (newValue) {
+                if ($scope.addMaterialForm.source) {
+                    $scope.addMaterialForm.source.$setValidity("exists", true);
+                    $scope.addMaterialForm.source.$setValidity("deleted", true);
+                }
+
                 if (newValue && $scope.addMaterialForm.source && ($scope.addMaterialForm.source.$error.url !== true)) {
                     var encodedUrl   = encodeURIComponent(newValue);
-                    serverCallService.makeGet("rest/material/getAllBySource?source=" + encodedUrl, {}, getByUrlSuccess, getByUrlFail);
-                } else {
-                    getByUrlFail()
+                    serverCallService.makeGet("rest/material/getAllBySource?source=" + encodedUrl, {},
+                        getByUrlSuccess, getByUrlFail);
                 }
 
             }, true);
@@ -436,21 +440,16 @@ define([
                 if((materials && materials[0]) && (materials[0].id !== $scope.material.id)) {
 
                     if (materials[0].deleted) {
+                        $scope.addMaterialForm.source.$setValidity("deleted", false);
                         toastService.show("MATERIAL_WITH_SAME_SOURCE_IS_DELETED");
+                    } else {
+                        $scope.addMaterialForm.source.$setTouched();
+                        $scope.addMaterialForm.source.$setValidity("exists", false);
                     }
-
-                    $scope.addMaterialForm.source.$setTouched();
-                    $scope.addMaterialForm.source.$setValidity("exists", false);
-
-                } else{
-                    getByUrlFail();
                 }
             }
 
             function getByUrlFail() {
-                if ($scope.addMaterialForm.source) {
-                    $scope.addMaterialForm.source.$setValidity("exists", true);
-                }
             }
 
             $scope.uploadReview = function (index, file){

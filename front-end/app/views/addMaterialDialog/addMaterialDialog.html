@@ -85,6 +85,9 @@
                         <div data-ng-message
                              data-ng-show="addMaterialForm.source.$error.exists"
                              data-translate="MATERIAL_ALREADY_EXISTS"></div>
+                        <div data-ng-message
+                             data-ng-show="addMaterialForm.source.$error.deleted"
+                             data-translate="MATERIAL_WITH_SAME_SOURCE_IS_DELETED"></div>
                       </div>
 
                     </md-input-container>
