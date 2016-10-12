@@ -11,29 +11,31 @@ define([
 
                 $scope.deleted = true;
 
+                checkItemState($scope.data);
                 // TODO: data.deleted = true/false, data.
                 console.log($scope.data);
 
                 function checkItemState(data) {
                     if(data) {
                         if (data.deleted) {
-                            // For header to change color
-                            //  $rootScope.isDeleted = true;
-                            console.log("Deleted");
                             $scope.showDeleted = true;
+                            $rootScope.isDeleted = true;
                         } else {
                             $rootScope.isDeleted = false;
                         }
-                        if (data.improper > 0) {
-                            console.log("Improper");
+                        if (data.improper == 1 || data.broken == 1) {
+                            $rootScope.isBrokenImproper = true;
+                        } else {
+                            $rootScope.isBrokenImproper = false;
+                        }
+                        if (data.improper == 1) {
                             $scope.showImproper = true;
                         }
-                        if (data.broken > 0) {
-                            console.log("Broken");
+                        if (data.broken == 1) {
                             $scope.showBroken = true;
                         }
                     }
-
+                    $rootScope.forceUpdate = new Date();
                 }
 
                 if($scope.data) {

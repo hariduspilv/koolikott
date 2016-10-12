@@ -236,6 +236,9 @@ define([
 
     app.run(function ($rootScope, $location, authenticatedUserService) {
         $rootScope.$on('$routeChangeSuccess', function () {
+            // Force header to update color
+            $rootScope.forceUpdate = new Date();
+
             var path = $location.path();
 
             if (path == '/dashboard') {
