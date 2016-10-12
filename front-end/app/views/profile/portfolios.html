@@ -7,6 +7,9 @@
           <h1 data-ng-if="!myProfile" data-translate="PROFILE_PAGE_TITLE_PORTFOLIOS"></h1>
 
           <div class="card-container">
+
+            <h3 data-ng-show="portfolios.length === 0" data-translate="TO_ADD_PORTFOLIO_PRESS_ADD_MATERIAL"></h3>
+
             <div data-ng-repeat="portfolio in portfolios" class="card-container__item">
               <div data-dop-portfolio-box portfolio="portfolio"></div>
             </div>

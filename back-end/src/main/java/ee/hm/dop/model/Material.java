@@ -85,12 +85,11 @@ public class Material extends LearningObject implements Searchable {
     private List<ResourceType> resourceTypes;
 
     @OneToMany
-    @JoinTable
-            (
-            name="Material_PeerReview",
-            joinColumns={ @JoinColumn(name="material") },
-            inverseJoinColumns={ @JoinColumn(name="peerReview") }
-            )
+    @JoinTable(
+            name = "Material_PeerReview",
+            joinColumns = {@JoinColumn(name = "material")},
+            inverseJoinColumns = {@JoinColumn(name = "peerReview")},
+            uniqueConstraints = @UniqueConstraint(columnNames = {"material", "peerReview"}))
     private List<PeerReview> peerReviews;
 
     @ManyToMany(fetch = EAGER)

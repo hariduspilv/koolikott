@@ -26,8 +26,6 @@ import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
 
 public class UploadedFileService {
 
-    public static final String REST_UPLOADED_FILE = "/rest/uploadedFile/";
-
     @Inject
     private UploadedFileDAO uploadedFileDAO;
 
