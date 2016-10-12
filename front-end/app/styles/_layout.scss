@@ -12,10 +12,10 @@
 
 .content-container.nav-open {
     @media (min-width: 1500px) {
-      padding: 0 104px 0 259px;
+      padding: 0 104px 0 $sidenav-width;
     }
     @media (min-width: 1280px) {
-      padding-left: 259px;
+      padding-left: $sidenav-width;
       max-width: 1643px; // 1280 + 104 + 259
     }
     @media (min-width: 1800px) {

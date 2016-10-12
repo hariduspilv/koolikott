@@ -1,8 +1,8 @@
 <div class="portfolio-container">
-  <div data-ng-class="{'allow-scroll': detailedSearch.isVisible}" class="nav-position" id="navmenu" data-dop-header></div>
+  <div class="nav-position" id="navmenu" data-dop-header></div>
   <div id="alert" data-dop-alert></div>
   <div data-dop-sidenav></div>
-  <div id="scrollable-content" class="scrollable-content-container" data-ng-class="{'nav-open': sidenavIsOpen() == true}" >
-    <div class="content-container" data-ng-view data-ng-class="{'nav-open': sidenavIsOpen() == true}" flex></div>
+  <div id="scrollable-content" class="scrollable-content-container">
+    <div class="content-container" data-ng-view data-ng-class="{'nav-open': sidenavIsOpen()}" flex></div>
   </div>
 </div>

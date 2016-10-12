@@ -198,9 +198,9 @@
 <div class="md-toolbar-filter ng-cloak" id="detailedSearch" data-ng-show="detailedSearch.isVisible" ng-cloak>
   <form layout="row"
         flex>
-    <div layout="row" layout-xs="column" flex="0" flex-gt-md="15" ng-cloak></div>
+    <div layout="row" layout-xs="column" flex="0" flex-gt-md="15" data-ng-hide="sidenavIsOpen()" ng-cloak></div>
     <div flex flex-gt-md="{{isViewPortforlioPage ? '75' : '75'}}" class="md-padding filter-wrapper ng-cloak"
-         id="detailed-search" ng-cloak>
+         id="detailed-search" data-ng-class="{'nav-open': sidenavIsOpen()}" ng-cloak>
       <div data-dop-detailed-search
            data-is-visible="detailedSearch.isVisible"
            data-query-in="detailedSearch.queryIn"

@@ -8,6 +8,12 @@ $border-color: rgba(0,0,0,0.12);
 
 .filter-wrapper {
   padding-top: 0;
+
+  @media (min-width: $layout-breakpoint-md) {
+    &.nav-open {
+      margin-left: $sidenav-width;
+    }
+  }
 }
 
 .filter-content {
@@ -25,12 +31,15 @@ $border-color: rgba(0,0,0,0.12);
 }
 
 .md-toolbar-filter {
-  // padding: 0 16px 3px;
-  max-height:999px;
-  overflow:hidden;
-  position:relative;
-  transition:max-height 0.35s ease;
-  padding-bottom: 3px;
+  max-height: 999px;
+  position: relative;
+  transition: max-height 0.35s ease;
+  padding-top: 64px;
+  margin-bottom: -64px;
+
+  @media (min-width: $layout-breakpoint-sm) {
+    overflow: hidden;
+  }
 
   &.ng-hide {
     max-height:0;
