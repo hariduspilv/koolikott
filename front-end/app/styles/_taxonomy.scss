@@ -49,6 +49,9 @@
 
     .taxon-name {
       padding-left: 22px;
+      padding-right: 22px;
+      text-overflow: ellipsis;
+      overflow: hidden;
     }
   }
 

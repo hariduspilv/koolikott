@@ -5,8 +5,7 @@ md-sidenav {
   position: fixed;
   min-height: 100%;
   background-color: #FAFAFA;
-  overflow: visible;
-  overflow-y: scroll;
+  overflow-y: auto;
 
   .sidenav-logo-container {
     height: $desktop-navbar-height - 1px;
