@@ -1,5 +1,5 @@
 <md-card class="card-sm md-whiteframe-2dp" ng-class="{ active: selected }" id="material-card-{{material.id}}"
-         data-ng-click="navigateTo(material, $event)" layout="column">
+         data-ng-click="navigateTo(material, $event)">
   <!-- noimage -->
   <a data-ng-href="{{'/material?materialId=' + material.id}}" data-ng-if="!material.picture"
      class="card-cover {{materialType}}" layout="row" layout-align="center center">
