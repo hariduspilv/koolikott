@@ -1,17 +1,15 @@
 <md-toolbar id="md-toolbar-header" class="navbar md-whiteframe-1dp {{isEditPortfolioMode ? 'md-accent' : 'md-primary'}}" ng-class="{'md-red': headerRed, 'md-gray': headerGray}"
             data-click-outside="clickOutside()" outside-if-not="header-show-detailed-search-icon, detailed-search">
-  <div class="md-toolbar-tools" flex layout="row">
+  <div class="md-toolbar-tools" layout="row">
     <!-- logo and menu button -->
     <div class="navbar-logo-area">
-      <div flex layout="row">
+      <div flex layout="row" layout-align="center center">
         <!-- toggle menu icon -->
-        <span layout-align="center start">
-          <md-button class="md-icon-button" data-ng-click="toggleSidenav('left')">
-            <md-icon class="md-48">menu</md-icon>
-          </md-button>
-        </span>
+        <md-button class="md-icon-button" data-ng-click="toggleSidenav('left')">
+          <md-icon class="md-48">menu</md-icon>
+        </md-button>
         <!-- logo -->
-        <div layout-align="center start" flex class="navbar-logo-main" >
+        <div class="navbar-logo-main">
           <md-tooltip>
             <span data-translate="HEADER_TOOLTIP_GO_TO_LANDING_PAGE"></span>
           </md-tooltip>
