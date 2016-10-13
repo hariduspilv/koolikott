@@ -116,18 +116,9 @@ define([
             $httpProvider.defaults.transformResponse.splice(0, 0, parseJSONResponse);
             $httpProvider.defaults.transformRequest = serializeRequest;
 
-            function msieversion()
-            {
-                var ua = window.navigator.userAgent;
-                var msie = ua.indexOf("MSIE ");
+            var isAtLeastIE11 = !!(navigator.userAgent.match(/Trident/) && !navigator.userAgent.match(/MSIE/));
 
-                if (msie > 0) // If Internet Explorer, return version number
-                {
-                    return false;
-                }
-            }
-
-            if (!msieversion()) {
+            if (isAtLeastIE11) {
                 // disable IE ajax request caching
                 $httpProvider.defaults.headers.get['If-Modified-Since'] = 'Mon, 26 Jul 1997 05:00:00 GMT';
                 // extra
