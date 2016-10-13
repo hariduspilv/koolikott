@@ -65,14 +65,14 @@ public class MaterialServiceTest {
         creator.setPublisher(publisher);
 
         Material material = new Material();
-        String source = "http://creatematerial.example.com";
+        String source = "http://www.creatematerial.example.com";
         material.setSource(source);
         PeerReview peerReview = new PeerReview();
         peerReview.setUrl("http://www.azure.com");
         List<PeerReview> peerReviews = new ArrayList<>();
         peerReviews.add(peerReview);
         material.setRecommendation(new Recommendation());
-        expect(materialDAO.findBySource("//creatematerial.example.com", true)).andReturn(null);
+        expect(materialDAO.findBySource("creatematerial.example.com", true)).andReturn(null);
         expect(peerReviewService.createPeerReview(peerReview.getUrl())).andReturn(peerReview);
 
         expectMaterialUpdate(capturedMaterial);
@@ -128,7 +128,7 @@ public class MaterialServiceTest {
         material.setRepository(null);
         material.setRecommendation(null);
         material.setPeerReviews(null);
-        material.setSource("http://creatematerial.example.com");
+        material.setSource("http://www.creatematerial.example.com");
         solrEngineService.updateIndex();
 
         material.setAdded(added);
@@ -143,7 +143,7 @@ public class MaterialServiceTest {
 
         expect(materialDAO.findByIdNotDeleted(materialId)).andReturn(original);
         expect(materialDAO.update(material)).andReturn(material);
-        expect(materialDAO.findBySource("//creatematerial.example.com", true)).andReturn(null);
+        expect(materialDAO.findBySource("creatematerial.example.com", true)).andReturn(null);
 
         replay(materialDAO, material, solrEngineService);
 
@@ -161,12 +161,12 @@ public class MaterialServiceTest {
     public void updateWhenMaterialDoesNotExist() {
         long materialId = 1;
         Material material = createMock(Material.class);
-        material.setSource("http://creatematerial.example.com");
+        material.setSource("http://www.creatematerial.example.com");
         expect(material.getId()).andReturn(materialId).times(2);
         expect(material.getSource()).andReturn("http://creatematerial.example.com").times(3);
 
         expect(materialDAO.findByIdNotDeleted(materialId)).andReturn(null);
-        expect(materialDAO.findBySource("//creatematerial.example.com", true)).andReturn(null);
+        expect(materialDAO.findBySource("creatematerial.example.com", true)).andReturn(null);
         expect(material.getPeerReviews()).andReturn(null);
 
         replay(materialDAO, material);
@@ -197,14 +197,14 @@ public class MaterialServiceTest {
         material.setViews(0L);
         material.setAdded(null);
         material.setPeerReviews(null);
-        material.setSource("http://creatematerial.example.com");
+        material.setSource("http://www.creatematerial.example.com");
         material.setUpdated(EasyMock.anyObject(DateTime.class));
         expect(material.getAuthors()).andReturn(null);
         expect(material.getPublishers()).andReturn(null);
         expect(material.getTaxons()).andReturn(null);
         expect(material.getPeerReviews()).andReturn(null).times(2);
-        expect(material.getSource()).andReturn("http://creatematerial.example.com").times(3);
-        expect(materialDAO.findBySource("//creatematerial.example.com", true)).andReturn(null);
+        expect(material.getSource()).andReturn("http://www.creatematerial.example.com").times(3);
+        expect(materialDAO.findBySource("creatematerial.example.com", true)).andReturn(null);
         material.setKeyCompetences(null);
         material.setCrossCurricularThemes(null);
 
@@ -353,7 +353,7 @@ public class MaterialServiceTest {
         expect(materialDAO.findById(material.getId())).andReturn(material).anyTimes();
         expect(user.getRole()).andReturn(Role.ADMIN).anyTimes();
         expect(materialDAO.update(material)).andReturn(new Material());
-        expect(materialDAO.findBySource("//creatematerial.example.com", true)).andReturn(null);
+        expect(materialDAO.findBySource("creatematerial.example.com", true)).andReturn(null);
 
         replay(user, materialDAO);
 
@@ -376,7 +376,7 @@ public class MaterialServiceTest {
         expect(user.getRole()).andReturn(Role.USER).anyTimes();
         expect(materialDAO.update(material)).andReturn(new Material());
         expect(user.getUsername()).andReturn("username").anyTimes();
-        expect(materialDAO.findBySource("//creatematerial.example.com", true)).andReturn(null);
+        expect(materialDAO.findBySource("creatematerial.example.com", true)).andReturn(null);
 
         replay(user, materialDAO);
 

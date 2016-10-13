@@ -9,6 +9,8 @@ import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import javax.inject.Inject;
@@ -522,12 +524,12 @@ public class MaterialService implements LearningObjectHandler {
         try {
             URI uri = new URI(materialSource);
             uri = new URIBuilder()
-                    .setHost(uri.getHost())
+                    .setHost(uri.getHost().startsWith("www.") ? uri.getHost().substring(4) : uri.getHost())
                     .setPath(uri.getPath())
                     .setCustomQuery(uri.getQuery())
                     .build();
 
-            return uri.toString();
+            return uri.toString().substring(2);
         } catch (URISyntaxException e) {
             e.printStackTrace();
             throw new RuntimeException("Failed to fix URL");
@@ -542,14 +544,14 @@ public class MaterialService implements LearningObjectHandler {
 
             URI uri = new URI(materialSource);
             if (uri.getScheme() == null) {
-                uri = new URI("http://" +
-                        (materialSource.startsWith("www.") ? materialSource.substring(4) : materialSource));
+                uri = new URI("http://" + materialSource);
             }
 
-            if (uri.getHost().startsWith("www.")) {
+            // isValidURL is added to add www to www domains (www.ee) for example
+            if (!uri.getHost().startsWith("www.") || !isValidURL(uri.getHost().substring(4))) {
                 uri = new URIBuilder()
                         .setScheme(uri.getScheme())
-                        .setHost(uri.getHost().startsWith("www.") ? uri.getHost().substring(4) : uri.getHost())
+                        .setHost("www." + uri.getHost())
                         .setPath(uri.getPath())
                         .setCustomQuery(uri.getQuery())
                         .build();
@@ -560,6 +562,12 @@ public class MaterialService implements LearningObjectHandler {
             e.printStackTrace();
             throw new RuntimeException("Failed to fix URL");
         }
+    }
+
+    private boolean isValidURL(String url) {
+        Pattern p = Pattern.compile("^(?:https?://)?(?:\\S+(?::\\S*)?@)?(?:(?!(?:10|127)(?:\\.\\d{1,3}){3})(?!(?:169\\.254|192\\.168)(?:\\.\\d{1,3}){2})(?!172\\.(?:1[6-9]|2\\d|3[0-1])(?:\\.\\d{1,3}){2})(?:[1-9]\\d?|1\\d\\d|2[01]\\d|22[0-3])(?:\\.(?:1?\\d{1,2}|2[0-4]\\d|25[0-5])){2}(?:\\.(?:[1-9]\\d?|1\\d\\d|2[0-4]\\d|25[0-4]))|(?:(?:[a-z\\u00a1-\\uffff0-9]-*)*[a-z\\u00a1-\\uffff0-9]+)(?:\\.(?:[a-z\\u00a1-\\uffff0-9]-*)*[a-z\\u00a1-\\uffff0-9]+)*(?:\\.(?:[a-z\\u00a1-\\uffff]{2,}))\\.?)(?::\\d{2,5})?(?:[/?#]\\S*)?$");
+        Matcher m = p.matcher(url);
+        return m.matches();
     }
 
 }

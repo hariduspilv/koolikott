@@ -72,8 +72,12 @@ public class MaterialDAO extends LearningObjectDAO {
     public List<Material> findBySource(String materialSource, boolean deleted) {
         String queryStart = deleted ? "FROM Material m WHERE " : "FROM Material m WHERE m.deleted = false AND ";
 
-        return createQuery(queryStart + "m.source LIKE :source", Material.class)
-                .setParameter("source", "%" + materialSource).getResultList();
+        return createQuery(queryStart +
+                "m.source='http://www." + materialSource + "' " +
+                        "OR m.source ='https://www." + materialSource + "' " +
+                        "OR m.source='http://" + materialSource + "' " +
+                        "OR m.source='https://" +materialSource + "'",
+                Material.class).getResultList();
     }
 
     public List<Language> findLanguagesUsedInMaterials() {
