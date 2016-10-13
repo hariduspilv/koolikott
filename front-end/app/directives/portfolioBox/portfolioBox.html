@@ -1,47 +1,47 @@
 <md-card class="card-sm md-whiteframe-2dp" id="portfolio-card-{{portfolio.id}}"
-data-ng-click="navigateTo(portfolio, $event)">
-<div class="corner"></div>
-<!-- noimage -->
-<a data-ng-href="{{'/portfolio?id=' + portfolio.id}}" data-ng-if="!portfolio.picture" class="md-card-image"
-layout="row" layout-align="center center">
-<div>
-  <md-icon class="icon-kind">book</md-icon>
-</div>
+         data-ng-click="navigateTo(portfolio, $event)">
+  <div class="corner"></div>
+  <!-- noimage -->
+  <a data-ng-href="{{'/portfolio?id=' + portfolio.id}}" data-ng-if="!portfolio.picture" class="card-cover portfolio"
+     layout="row" layout-align="center center">
+    <div>
+      <md-icon class="icon-kind">book</md-icon>
+    </div>
 
-<div class="card-hover portfolio" layout="row">
-  <div data-ng-if="isAuthenticated()" data-dop-favorite data-learning-object="portfolio" layout-align="start start"></div>
-  <md-icon class="icon-kind">book</md-icon>
-</div>
-</a>
-<!-- image -->
-<a data-ng-href="{{'/portfolio?id=' + portfolio.id}}" data-ng-if="portfolio.picture" class="card-cover imaged"
-layout="row" layout-align="start start">
-<img data-ng-src="rest/picture/{{portfolio.picture.name}}" class="md-card-image"/>
-<div class="card-hover portfolio" layout="row">
-  <div data-ng-if="isAuthenticated()" data-dop-favorite data-learning-object="portfolio" layout-align="start start"></div>
-  <md-icon class="icon-kind">book</md-icon>
-</div>
-</a>
-
-<!-- content -->
-
-<md-card-content layout="column" class="minContentHeight">
-  <a data-ng-href="{{'/portfolio?id=' + portfolio.id}}" class="no-link materialbox-content">
-    <h4 class="md-headline two-rows" data-ng-bind="portfolio.title"></h4>
-    <p class="md-caption one-row">
-      <span class="authors">
-        <span data-ng-bind="formatName(portfolio.creator.name)"></span>
-        <span data-ng-bind="formatSurname(portfolio.creator.surname)"></span>
-        <span data-ng-if="portfolio.added">{{ formatDate(portfolio.added) }}</span>
-      </span>
-    </p>
+    <div class="card-hover portfolio" layout="row">
+      <div data-ng-if="isAuthenticated()" data-dop-favorite data-learning-object="portfolio" layout-align="start start"></div>
+      <md-icon class="icon-kind">book</md-icon>
+    </div>
   </a>
-</md-card-content>
+  <!-- image -->
+  <a data-ng-href="{{'/portfolio?id=' + portfolio.id}}" data-ng-if="portfolio.picture" class="card-cover imaged"
+     layout="row" layout-align="start start">
+    <img data-ng-src="rest/picture/{{portfolio.picture.name}}" class="md-card-image"/>
+    <div class="card-hover portfolio" layout="row">
+      <div data-ng-if="isAuthenticated()" data-dop-favorite data-learning-object="portfolio" layout-align="start start"></div>
+      <md-icon class="icon-kind">book</md-icon>
+    </div>
+  </a>
 
-<md-divider></md-divider>
+  <!-- content -->
 
-<md-card-actions layout="row" layout-align="start center">
-  <a data-ng-href="{{'/portfolio?id=' + portfolio.id}}" class="no-link materialbox-icons">
+  <md-card-content layout="column" class="minContentHeight">
+    <a data-ng-href="{{'/portfolio?id=' + portfolio.id}}" class="no-link materialbox-content">
+      <h4 class="md-headline two-rows" data-ng-bind="portfolio.title"></h4>
+      <p class="md-caption one-row">
+        <span class="authors">
+          <span data-ng-bind="formatName(portfolio.creator.name)"></span>
+          <span data-ng-bind="formatSurname(portfolio.creator.surname)"></span>
+          <span data-ng-if="portfolio.added">{{ formatDate(portfolio.added) }}</span>
+        </span>
+      </p>
+    </a>
+  </md-card-content>
+
+  <md-divider></md-divider>
+
+  <md-card-actions layout="row" layout-align="start center">
+    <a data-ng-href="{{'/portfolio?id=' + portfolio.id}}" class="no-link materialbox-icons">
     <span class="md-action-icons-list md-caption" flex layout>
       <md-icon>thumb_up</md-icon>
       <span>{{ portfolio.likes }}</span>
@@ -54,6 +54,6 @@ layout="row" layout-align="start start">
       <md-icon>visibility</md-icon>
       <span data-ng-bind="portfolio.views"></span>
     </span>
-  </a>
-</md-card-actions>
+    </a>
+  </md-card-actions>
 </md-card>
