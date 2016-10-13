@@ -399,8 +399,8 @@
                 <div ngf-select
                      data-accept="*"
                      data-ngf-pattern="'*'"
-                     data-ngf-max-size="{{maxFileSize + 'MB'}}"
-                     ngf-model-invalid="invalidFile" ngf-change="uploadReview($index, $file)">
+                     data-ngf-max-size="{{maxReviewSize + 'MB'}}"
+                     ngf-model-invalid="invalidReview" ngf-change="uploadReview($index, $file)">
 
                   <a class="md-raised md-primary md-button md-ink-ripple">
                     <md-icon>file_upload</md-icon>
@@ -411,9 +411,10 @@
                 </div>
 
                 <div data-ng-message="file"
-                     data-ng-show="invalidFile && invalidFile.length > 0"
-                     class="upload-file-error"><span data-translate="DOCUMENT_MAX_SIZE"> {{maxFileSize}}MB</span>
+                     data-ng-show="invalidReview && invalidReview.length > 0"
+                     class="upload-file-error"><span data-translate="DOCUMENT_MAX_SIZE"></span> {{maxReviewSize}}MB
                 </div>
+
                 <md-button class="md-icon-button md-primary" data-ng-show="$index+1 === material.peerReviews.length"
                            data-ng-click="addNewPeerReview()">
                   <md-icon>add_circle</md-icon>
@@ -424,6 +425,7 @@
                   <md-icon>remove_circle</md-icon>
                   <md-tooltip md-direction="top"><span data-translate="MATERIAL_TAB_REMOVE"></span></md-tooltip>
                 </md-button>
+
                 <!--Upload button-->
 
               </div>
