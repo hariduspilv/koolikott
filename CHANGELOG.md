@@ -1,3 +1,22 @@
+## e-Koolikott 1.3.0 (13.10.2016)
+
+### Lisandunud
+* Olemasoleva materjali kontroll uue lisamisel #2 https://github.com/hariduspilv/koolikott/issues/2
+* Uute kasutajate kutsumine #78 https://github.com/hariduspilv/koolikott/issues/78
+* Retsensiooni kuvamine #57 https://github.com/hariduspilv/koolikott/issues/57
+* Admin töölaua edasiarendus #21 https://github.com/hariduspilv/koolikott/issues/21
+* Kogumiku layouti ühtlustamine üldisega #20 https://github.com/hariduspilv/koolikott/issues/20
+* Kogumiku vaates vistutatud sisupakettide kuvamine #74 https://github.com/hariduspilv/koolikott/issues/74
+* Õppevara vistutamine #18 https://github.com/hariduspilv/koolikott/issues/18
+* Täpse otsingu keelevaliku muudatus #46 https://github.com/hariduspilv/koolikott/issues/46
+* Lihtne teksti vormindus #13 https://github.com/hariduspilv/koolikott/issues/13
+* Wikisse testimise sektsiooni loomine #48 https://github.com/hariduspilv/koolikott/issues/48
+* Lemmikuks lisamine #42 https://github.com/hariduspilv/koolikott/issues/42
+
+### Parandatud
+* Kustutamine ei toimi #81 https://github.com/hariduspilv/koolikott/issues/81
+* Tõlked peidus #77 https://github.com/hariduspilv/koolikott/issues/77
+
 ## e-Koolikott 1.2.0 (15.09.2016)
 
 ### Lisandunud
