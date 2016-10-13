@@ -1,59 +1,53 @@
 .taxon-item {
   width: 100%;
 
-  .header {
-    transition: 0.2s;
-    height: 46px;
-    justify-content: space-between;
-    align-items: center;
-    font-size: 13px;
+  &--sub {
+    background-color: rgba(0,0,0,0.05);
 
-    .icon-arrow {
-      transform: rotate(0deg) scale(0.8);
+    .taxon__header {
+      &.is-opened {
+        background-color: rgba(0,0,0,0.1);
+      }
 
-      &.opened {
-      transform: rotate(90deg) scale(0.8);
+      .taxon__name {
+        padding-left: 22px;
+        padding-right: 22px;
       }
     }
 
-    .count {
-      font-size: 12px;
-    }
-
-    &.has-children {
-      cursor: pointer;
-    }
-
-    &.has-children:hover {
-      background-color: rgba(158,158,158,0.2);
-    }
-
-    md-icon {
-      &:first-child {
-        margin: 0 0 0 22px;
-      }
-
-      &:last-child {
-        margin: 0 22px 0 0;
-      }
+    .icon-identity {
+      display: none;
     }
   }
 }
-.sub-taxon-item {
-  background-color: rgba(0,0,0,0.05);
 
-  .header  {
-    &.opened {
-      background-color: rgba(0,0,0,0.1);
-    }
+.taxon__header {
+  transition: background 0.2s;
+  height: 46px;
+  font-size: 13px;
+  padding: 0 22px;
 
-    .taxon-name {
-      padding-left: 22px;
-      padding-right: 22px;
+  &.is-opened {
+    background-color: rgba(0,0,0,0.1);
+    color: $color-selected-menu;
+
+    .icon-identity {
+      color: $color-selected-menu;
     }
   }
 
-  .icon-identity {
-    display: none;
+  &.has-children {
+    cursor: pointer;
+    &:hover {
+      background-color: rgba(158,158,158,0.2);
+    }
   }
+}
+
+.taxon__name {
+  margin-left: 10px;
+}
+
+.taxon__count {
+  font-size: 12px;
 }

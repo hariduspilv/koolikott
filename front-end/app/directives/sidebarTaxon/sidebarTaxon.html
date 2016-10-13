@@ -1,15 +1,14 @@
-<div>
-  <a href="search/result?q=&taxon={{taxon.id}}">
-    <div class="header" flex layout="row" ng-click="toggleChildren()" ng-class="{'has-children': hasChildren, 'opened': opened && hasChildren}">
+<div class="taxon">
+  <a class="taxon__header" layout="row" layout-align="space-between center" data-ng-click="toggleChildren(taxon.id)" ng-class="{'has-children': hasChildren, 'is-opened': opened && hasChildren}">
+    <div layout="row" layout-align="center center">
       <md-icon class="icon-identity" >{{icon}}</md-icon>
-      <span class="taxon-name text-truncate" data-translate="{{getTaxonTranslation(taxon)}}"></span>
-      <span class="count">{{childrenCount}}</span>
-      <md-icon class="icon-arrow" ng-if="hasChildren" ng-class="{'opened': opened}">keyboard_arrow_right</md-icon>
+      <span class="taxon__name text-truncate" data-translate="{{getTaxonTranslation(taxon)}}"></span>
     </div>
+    <span class="taxon__count">{{childrenCount}}</span>
   </a>
 
   <!-- (TREE OF IDs), (KEY, THIS.ID) -->
   <div ng-if="opened" ng-repeat="data in taxon.children">
-    <div class="sub-taxon-item" dop-sidebar-taxon data-taxon="data" tree="tree.child"></div>
+    <div class="taxon-item taxon-item--sub" dop-sidebar-taxon data-taxon="data" tree="tree.child"></div>
   </div>
 </div>

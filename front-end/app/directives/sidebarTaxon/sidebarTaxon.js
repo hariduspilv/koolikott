@@ -13,7 +13,7 @@ define([
             compile: function(element) {
               return RecursionHelper.compile(element);
             },
-            controller: function ($rootScope, $scope) {
+            controller: function ($rootScope, $scope, $location) {
 
                 if ($scope.taxon) {
                     if ($scope.taxon.children.length > 0) {
@@ -29,12 +29,14 @@ define([
 
                 }
 
-                $scope.toggleChildren = function() {
-                    if($scope.opened == null) {
+                $scope.toggleChildren = function(id) {
+                    if ($scope.opened == null) {
+                        $location.url('search/result?q=&taxon=' + id);
                         $scope.opened = true;
                     } else if ($scope.opened == true) {
                         $scope.opened = false;
                     } else if ($scope.opened == false) {
+                        $location.url('search/result?q=&taxon=' + id);
                         $scope.opened = true;
                     }
                 }
