@@ -123,7 +123,7 @@ define([
             // $httpProvider.defaults.headers.get['Cache-Control'] = 'no-cache';
             // $httpProvider.defaults.headers.get['Pragma'] = 'no-cache';
 
-            $locationProvider.html5Mode(true);
+            // $locationProvider.html5Mode(true);
             $anchorScrollProvider.disableAutoScrolling();
         }
     );
