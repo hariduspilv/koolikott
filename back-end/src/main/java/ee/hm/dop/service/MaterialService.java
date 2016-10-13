@@ -1,5 +1,6 @@
 package ee.hm.dop.service;
 
+import static ee.hm.dop.utils.ConfigurationProperties.SERVER_ADDRESS;
 import static ee.hm.dop.utils.UserUtils.isAdmin;
 import static org.apache.commons.lang3.StringUtils.isEmpty;
 import static org.joda.time.DateTime.now;
@@ -33,6 +34,7 @@ import ee.hm.dop.model.UserLike;
 import ee.hm.dop.model.taxon.EducationalContext;
 import ee.hm.dop.service.learningObject.LearningObjectHandler;
 import ee.hm.dop.utils.TaxonUtils;
+import org.apache.commons.configuration.Configuration;
 import org.apache.http.client.utils.URIBuilder;
 import org.apache.http.util.TextUtils;
 import org.joda.time.DateTime;
@@ -67,6 +69,9 @@ public class MaterialService implements LearningObjectHandler {
     @Inject
     private PeerReviewService peerReviewService;
 
+    @Inject
+    private Configuration configuration;
+
     public Material get(long materialId, User loggedInUser) {
         if (isUserAdmin(loggedInUser) || isUserModerator(loggedInUser)) {
             return materialDao.findById(materialId);
@@ -92,7 +97,9 @@ public class MaterialService implements LearningObjectHandler {
         List<PeerReview> peerReviews = material.getPeerReviews();
         if(peerReviews != null){
             for(PeerReview peerReview : peerReviews){
-                peerReview.setUrl(cleanURL(peerReview.getUrl()));
+                if(!peerReview.getUrl().contains(configuration.getString(SERVER_ADDRESS))){
+                    peerReview.setUrl(cleanURL(peerReview.getUrl()));
+                }
             }
         }
 
@@ -294,7 +301,9 @@ public class MaterialService implements LearningObjectHandler {
         List<PeerReview> peerReviews = material.getPeerReviews();
         if(peerReviews != null){
             for(PeerReview peerReview : peerReviews){
-                peerReview.setUrl(cleanURL(peerReview.getUrl()));
+                if(!peerReview.getUrl().contains(configuration.getString(SERVER_ADDRESS))){
+                    peerReview.setUrl(cleanURL(peerReview.getUrl()));
+                }
             }
         }
 
@@ -523,8 +532,14 @@ public class MaterialService implements LearningObjectHandler {
 
         try {
             URI uri = new URI(materialSource);
+            String hostName = uri.getHost();
+
+            if (hostName.startsWith("www.") && isValidURL(hostName.substring(4))) {
+                hostName = hostName.substring(4);
+            }
+
             uri = new URIBuilder()
-                    .setHost(uri.getHost().startsWith("www.") ? uri.getHost().substring(4) : uri.getHost())
+                    .setHost(hostName)
                     .setPath(uri.getPath())
                     .setCustomQuery(uri.getQuery())
                     .build();
@@ -545,16 +560,6 @@ public class MaterialService implements LearningObjectHandler {
             URI uri = new URI(materialSource);
             if (uri.getScheme() == null) {
                 uri = new URI("http://" + materialSource);
-            }
-
-            // isValidURL is added to add www to www domains (www.ee) for example
-            if (!uri.getHost().startsWith("www.") || !isValidURL(uri.getHost().substring(4))) {
-                uri = new URIBuilder()
-                        .setScheme(uri.getScheme())
-                        .setHost("www." + uri.getHost())
-                        .setPath(uri.getPath())
-                        .setCustomQuery(uri.getQuery())
-                        .build();
             }
 
             return uri.toString();

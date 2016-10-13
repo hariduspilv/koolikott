@@ -128,7 +128,7 @@ public class MaterialServiceTest {
         material.setRepository(null);
         material.setRecommendation(null);
         material.setPeerReviews(null);
-        material.setSource("http://www.creatematerial.example.com");
+        material.setSource("http://creatematerial.example.com");
         solrEngineService.updateIndex();
 
         material.setAdded(added);
@@ -161,7 +161,7 @@ public class MaterialServiceTest {
     public void updateWhenMaterialDoesNotExist() {
         long materialId = 1;
         Material material = createMock(Material.class);
-        material.setSource("http://www.creatematerial.example.com");
+        material.setSource("http://creatematerial.example.com");
         expect(material.getId()).andReturn(materialId).times(2);
         expect(material.getSource()).andReturn("http://creatematerial.example.com").times(3);
 
