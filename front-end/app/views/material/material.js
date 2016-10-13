@@ -381,8 +381,6 @@ define([
                 $scope.material.deleted = false;
                 toastService.show('MATERIAL_RESTORED');
 
-                console.log("Should reload");
-
                 setTimeout(function () {
                     location.reload();
                 }, 100);
