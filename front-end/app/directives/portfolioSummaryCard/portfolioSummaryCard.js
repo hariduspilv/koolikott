@@ -124,6 +124,7 @@ define([
                     function restoreSuccess() {
                         $scope.portfolio.deleted = false;
                         toastService.show('PORTFOLIO_RESTORED');
+                        $window.location.reload();
                     }
 
                     function restoreFail() {

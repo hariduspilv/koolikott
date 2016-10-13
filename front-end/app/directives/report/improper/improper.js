@@ -50,6 +50,7 @@ define([
 
                 function setNotImproperSuccessful() {
                     $scope.isReported = false;
+                    $window.location.reload();
                 }
 
                 function setNotImproperFailed() {

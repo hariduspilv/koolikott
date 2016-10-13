@@ -56,6 +56,7 @@ define([
                 function markCorrectSuccess() {
                     $scope.isBroken = false;
                     $scope.isBrokenReportedByUser = false;
+                    $window.location.reload();
                 }
 
                 function queryFailed() {

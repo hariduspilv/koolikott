@@ -357,7 +357,7 @@ define([
 
             function deleteMaterialSuccess() {
                 toastService.showOnRouteChange('MATERIAL_DELETED');
-                $location.url('/dashboard/' + authenticatedUserService.getUser().username);
+                $location.url('/dashboard/deletedMaterials');
             }
 
             function deleteMaterialFailed() {
@@ -380,6 +380,7 @@ define([
             function restoreSuccess() {
                 $scope.material.deleted = false;
                 toastService.show('MATERIAL_RESTORED');
+                $window.location.reload();
             }
 
             function restoreFail() {
