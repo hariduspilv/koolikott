@@ -380,7 +380,13 @@ define([
             function restoreSuccess() {
                 $scope.material.deleted = false;
                 toastService.show('MATERIAL_RESTORED');
-                $window.location.reload();
+
+                console.log("Should reload");
+
+                setTimeout(function () {
+                    location.reload();
+                }, 100);
+
             }
 
             function restoreFail() {
