@@ -67,9 +67,9 @@
 		&.selected {
 			// TODO: Variables!!
 			background-color: rgba(0,0,0,0.05);
-			color: #03A9F4;
+			color: $color-selected-menu;
 			md-icon {
-				color: #03A9F4;
+				color: $color-selected-menu;
 			}
 		}
 	}
