@@ -263,10 +263,14 @@ define([
             $rootScope.isEditPortfolioPage = path === '/portfolio/edit';
             $rootScope.isViewHomePage = path === '/';
             $rootScope.isViewMaterialPage = path === '/material';
-            $rootScope.isViewUserPage = path == '/:username';
             $rootScope.isBrokenMaterial = null;
             $rootScope.isImproper = null;
 
+            if ($location.url().indexOf('/' + user.username) != -1) {
+                $rootScope.isViewUserPage = true;
+            } else {
+                $rootScope.isViewUserPage = false;
+            }
 
             if (path === '/dashboard/improperMaterials' || path === '/dashboard/improperPortfolios' || path === '/dashboard/brokenMaterials' || path === '/dashboard/deletedMaterials' || path === '/dashboard/brokenPortfolios' || path === '/dashboard/deletedPortfolios') {
                 $rootScope.isViewAdminPanelPage = true;
@@ -280,8 +284,14 @@ define([
                 $rootScope.isRedHeaderMode = false;
             }
 
-            $rootScope.isMySchoolbagOpen = path === '/' || (user && path.startsWith("/" + user.username));
-            $rootScope.isTaxonomyOpen = path === '/material';
+            $rootScope.isMySchoolbagOpen = path === (user && path.startsWith("/" + user.username));
+
+
+            if(path === '/material' || path === '/') {
+                $rootScope.isTaxonomyOpen = true;
+            } else {
+                $rootScope.isTaxonomyOpen = false;
+            }
 
             if (path == "/portfolio/edit") {
                 $rootScope.isEditPortfolioMode = true;
