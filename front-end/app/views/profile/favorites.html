@@ -7,6 +7,9 @@
           <h1 class="type-block" data-ng-if="myProfile" data-translate="MYPROFILE_PAGE_TITLE_FAVORITES"></h1>
 
           <div class="card-container">
+
+            <h3 data-ng-show="favorites.length === 0" data-translate="NO_FAVORITES"></h3>
+
             <div data-ng-repeat="item in favorites track by item.id" class="card-container__item">
               <div data-ng-if="item.type === '.Material'" data-dop-material-box material="item"></div>
               <div data-ng-if="item.type === '.Portfolio'" data-dop-portfolio-box portfolio="item"></div>

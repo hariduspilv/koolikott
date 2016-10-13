@@ -1,9 +1,4 @@
-// responsive aspect ratio, http://codepen.io/jakob-e/pen/LEdWNB
-@mixin aspect-ratio($ratio-or-width, $height: null) {
-  $padding: if($height, percentage($height/$ratio-or-width), percentage(1/$ratio-or-width));
-  &:before { content:''; float: left; padding-bottom: $padding;  }
-  &:after  { content:''; display: table; clear: both;  }
-}
+
 
 md-card {
   position: relative;
@@ -150,8 +145,12 @@ md-card {
     padding-top: 0px;
   }
 
+
   &.card-sm {
-    height: 100%;
+    height: 270px;
+    @media (min-width: $layout-breakpoint-xs) {
+      width: 190px;
+    }
     md-icon.icon-kind {
       font-size: 48px;
       color: #fff;
@@ -189,13 +188,15 @@ md-card {
       min-height: 35%;
     }
     .card-cover {
-      height: 50%;
+      height: 100px;
       border-radius: 2px 2px 0 0;
       overflow: hidden;
       position: relative;
       transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
       background-color: $green1;
-
+      @media (min-width: $layout-breakpoint-xs) {
+        height: 150px;
+      }
     }
 
     .card-hover {
@@ -235,17 +236,12 @@ md-card {
     }
     md-card-actions {
       height: 10%;
-      .md-action-icons-list {
-        span {
-          padding: 0 5px;
-          &:last-child {
-            padding-right: 0;
-          }
-        }
-        md-icon {
-          color: rgba(0, 0, 0, 0.3);
-          font-size: inherit;
-        }
+      color: rgba(0, 0, 0, 0.4);
+      font-weight: 600;
+      md-icon {
+        margin: 0 3px 0 8px;
+        font-size: $caption-font-size-base;
+        color: rgba(0, 0, 0, 0.3);
       }
     }
   }
@@ -368,6 +364,12 @@ md-card {
     background-color: #fff;
   }
 }
+
+// TODO: remove this if this bug is closed https://trello.com/c/TB5BRU7G/187-bug-issue-18-vistutatud-materjali-kuvamine-on-paigast-ara
+.embed-responsive-item {
+  overflow: hidden;
+}
+
 .corner {
   background-image: url('../images/detail/corner.png');
   background-repeat: no-repeat;
@@ -375,8 +377,8 @@ md-card {
   position: absolute;
   right: -2px;
   top: -1px;
-  height: 48px;
-  width: 48px;
+  height: 60px;
+  width: 60px;
   z-index: 1;
 }
 
@@ -437,19 +439,5 @@ md-card .card-menu {
   @media (min-width: $layout-breakpoint-xs) {
     margin: 0 15px 15px 0;
     width: auto;
-  }
-}
-
-md-card.card-sm {
-  @media (min-width: $layout-breakpoint-xs) {
-    width: 190px;
-  }
-
-  .card-cover {
-    height: 100px;
-
-    @media (min-width: $layout-breakpoint-xs) {
-      height: 150px;
-    }
   }
 }

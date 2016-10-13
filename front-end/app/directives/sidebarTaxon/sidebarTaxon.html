@@ -2,7 +2,7 @@
   <a href="search/result?q=&taxon={{taxon.id}}">
     <div class="header" flex layout="row" ng-click="toggleChildren()" ng-class="{'has-children': hasChildren, 'opened': opened && hasChildren}">
       <md-icon class="icon-identity" >{{icon}}</md-icon>
-      <span class="taxon-name" data-translate="{{getTaxonTranslation(taxon)}}"></span>
+      <span class="taxon-name text-truncate" data-translate="{{getTaxonTranslation(taxon)}}"></span>
       <span class="count">{{childrenCount}}</span>
       <md-icon class="icon-arrow" ng-if="hasChildren" ng-class="{'opened': opened}">keyboard_arrow_right</md-icon>
     </div>
