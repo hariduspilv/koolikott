@@ -104,15 +104,22 @@ define([
 
                 }
 
-                function createTree() {
-
-                }
-
                 $scope.$watch(function() {
                  return $rootScope.currentMaterial;
                  }, function () {
                  makeTreeKey($rootScope.currentMaterial);
                  }, true);
+
+                $scope.$watch(function() {
+                    return $location.url();
+                }, function () {
+                    if( $location.url().indexOf('/portfolio') != -1 ) {
+                        $scope.isViewPortfolioAndEdit = true;
+                    } else {
+                        $scope.isViewPortfolioAndEdit = false;
+                    }
+
+                }, true);
 
                 $scope.$watch(function () {
                     return authenticatedUserService.getUser();
