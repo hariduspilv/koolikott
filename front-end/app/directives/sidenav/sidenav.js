@@ -21,6 +21,99 @@ define([
                     'palette'
                 ]
 
+                // Testdata for opening taxon
+                $scope.taxonTree = {
+                    open: [
+                        {id: 1},
+                        {id: 2}
+                    ],
+                    child: {
+                        open: [
+                            {id: 1},
+                            {id: 2}
+                        ],
+                        child: {
+                            open: [
+                                {id: 1},
+                                {id: 2}
+                            ],
+                            child: {
+                                open: [
+                                    {id: 1},
+                                    {id: 2}
+                                ],
+                            }
+                        }
+                    }
+                }
+
+                // 1. subtopic -> topic -> subject -> domain -> ec
+                // 2. subtopic -> topic -> domain -> ec
+                // 3. subtopic -> topic -> module -> specialization -> domain -> ec
+
+                // TAXON - ei tea mis tase
+                // function nextLevel(taxon) -- if (... != null) {return ...;}
+
+
+                $scope.nextLevel = function(data) {
+                    // Do we need the subtopic part?
+                    if(data.subtopic != null) {
+                        return data.subtopic;
+                    } else if (data.topic != null) {
+                        return data.topic;
+                    } else if (data.subject != null) {
+                        return data.subject;
+                    } else if (data.domain != null) {
+                        return data.domain;
+                    } else if (data.educationalContext != null) {
+                        return data.educationalContext;
+                    } else if (data.module != null) {
+                        return data.module;
+                    } else if (data.specialization != null) {
+                        return data.specialization;
+                    } else {
+                        return null;
+                    }
+                }
+
+                function makeTreeKey(data) {
+                    // I am the data
+                    if ($location.path().indexOf('/material') !== -1 && data) {
+
+                        var list = Array();
+
+                        for(i = 0; i < data.taxons.length; i++) {
+                            var sublist = Array();
+                            var level = data.taxons[i];
+                            while(level != null) {
+                                sublist.push(level.id);
+                                var nextLevel = $scope.nextLevel(level);
+                                level = nextLevel;
+                            }
+                            list.push(sublist.reverse());
+                        }
+
+                        if (list != null) {
+
+                        }
+                        $scope.taxonTree = list[0];
+
+                    } else {
+                        $scope.taxonTree = null;
+                    }
+
+                }
+
+                function createTree() {
+
+                }
+
+                $scope.$watch(function() {
+                 return $rootScope.currentMaterial;
+                 }, function () {
+                 makeTreeKey($rootScope.currentMaterial);
+                 }, true);
+
                 $scope.$watch(function () {
                     return authenticatedUserService.getUser();
                 }, function (user) {

@@ -6,7 +6,8 @@ define([
         return {
             scope: {
                 taxon: '=',
-                icon: '='
+                icon: '=',
+                tree: '='
             },
             templateUrl: 'directives/sidebarTaxon/sidebarTaxon.html',
             compile: function(element) {
@@ -19,6 +20,13 @@ define([
                         $scope.hasChildren = true;
                         $scope.childrenCount = $scope.taxon.children.length;
                     }
+
+                    if($scope.tree) {
+                        if ($scope.taxon.id == $scope.tree.id) {
+                            $scope.opened = true;
+                        }
+                    }
+
                 }
 
                 $scope.toggleChildren = function() {

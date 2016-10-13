@@ -42,7 +42,7 @@ define([
                         };
 
                         // Check if user is on portfolio or material page
-                        if($location.path().indexOf('/portfolio') !== -1 || $location.path().indexOf('/material') !== -1) {
+                        if($location.url().indexOf('/portfolio?') !== -1 || $location.url().indexOf('/material?') !== -1) {
                             $scope.isPortfolioMaterial = true;
                         } else {
                             $scope.isPortfolioMaterial = false;

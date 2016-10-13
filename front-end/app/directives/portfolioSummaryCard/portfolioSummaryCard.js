@@ -110,7 +110,7 @@ define([
 
                     function deletePortfolioSuccess() {
                         toastService.showOnRouteChange('PORTFOLIO_DELETED');
-                        $location.url('/' + authenticatedUserService.getUser().username);
+                        $location.url('/dashboard/deletedPortfolios');
                     }
 
                     function deletePortfolioFailed() {

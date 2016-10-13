@@ -136,6 +136,9 @@ define([
                 $scope.material.source = getSource($scope.material);
                 storageService.setMaterial(null);
 
+                // Giving data to sidenav to open taxon tree
+                $rootScope.currentMaterial = $scope.material;
+
                 var viewCountParams = {
                     'type': '.Material',
                     'id': $scope.material.id
@@ -353,7 +356,7 @@ define([
 
             function deleteMaterialSuccess() {
                 toastService.showOnRouteChange('MATERIAL_DELETED');
-                $location.url('/' + authenticatedUserService.getUser().username);
+                $location.url('/dashboard/deletedMaterials');
             }
 
             function deleteMaterialFailed() {
