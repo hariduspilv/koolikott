@@ -116,12 +116,31 @@ define([
             $httpProvider.defaults.transformResponse.splice(0, 0, parseJSONResponse);
             $httpProvider.defaults.transformRequest = serializeRequest;
 
-            //TODO: Enable only for ie
-            //disable IE ajax request caching
-            // $httpProvider.defaults.headers.get['If-Modified-Since'] = 'Mon, 26 Jul 1997 05:00:00 GMT';
-            // extra
-            // $httpProvider.defaults.headers.get['Cache-Control'] = 'no-cache';
-            // $httpProvider.defaults.headers.get['Pragma'] = 'no-cache';
+            function msieversion()
+            {
+                var ua = window.navigator.userAgent;
+                var msie = ua.indexOf("MSIE ");
+
+                if (msie > 0) // If Internet Explorer, return version number
+                {
+                    alert(parseInt(ua.substring(msie + 5, ua.indexOf(".", msie))));
+                }
+                else  // If another browser, return 0
+                {
+                    alert('otherbrowser');
+                }
+
+                return false;
+            }
+
+            if (!msieversion()) {
+                // disable IE ajax request caching
+                $httpProvider.defaults.headers.get['If-Modified-Since'] = 'Mon, 26 Jul 1997 05:00:00 GMT';
+                // extra
+                $httpProvider.defaults.headers.get['Cache-Control'] = 'no-cache';
+                $httpProvider.defaults.headers.get['Pragma'] = 'no-cache';
+            }
+
 
             $locationProvider.html5Mode(true);
             $anchorScrollProvider.disableAutoScrolling();
