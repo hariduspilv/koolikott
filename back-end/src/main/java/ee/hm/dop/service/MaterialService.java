@@ -523,8 +523,14 @@ public class MaterialService implements LearningObjectHandler {
 
         try {
             URI uri = new URI(materialSource);
+            String hostName = uri.getHost();
+
+            if (hostName.startsWith("www.") && isValidURL(hostName.substring(4))) {
+                hostName = hostName.substring(4);
+            }
+
             uri = new URIBuilder()
-                    .setHost(uri.getHost().startsWith("www.") ? uri.getHost().substring(4) : uri.getHost())
+                    .setHost(hostName)
                     .setPath(uri.getPath())
                     .setCustomQuery(uri.getQuery())
                     .build();
@@ -545,16 +551,6 @@ public class MaterialService implements LearningObjectHandler {
             URI uri = new URI(materialSource);
             if (uri.getScheme() == null) {
                 uri = new URI("http://" + materialSource);
-            }
-
-            // isValidURL is added to add www to www domains (www.ee) for example
-            if (!uri.getHost().startsWith("www.") || !isValidURL(uri.getHost().substring(4))) {
-                uri = new URIBuilder()
-                        .setScheme(uri.getScheme())
-                        .setHost("www." + uri.getHost())
-                        .setPath(uri.getPath())
-                        .setCustomQuery(uri.getQuery())
-                        .build();
             }
 
             return uri.toString();
