@@ -1,21 +1,19 @@
 <md-toolbar id="md-toolbar-header" class="navbar md-whiteframe-1dp {{isEditPortfolioMode ? 'md-accent' : 'md-primary'}}" ng-class="{'md-red': headerRed, 'md-gray': headerGray}"
             data-click-outside="clickOutside()" outside-if-not="header-show-detailed-search-icon, detailed-search">
-  <div class="md-toolbar-tools" flex layout="row">
+  <div class="md-toolbar-tools" layout="row">
     <!-- logo and menu button -->
     <div class="navbar-logo-area">
-      <div flex layout="row">
+      <div flex layout="row" layout-align="center center">
         <!-- toggle menu icon -->
-        <span layout-align="center start">
-          <md-button class="md-icon-button" data-ng-click="toggleSidenav('left')">
-            <md-icon class="md-48">menu</md-icon>
-          </md-button>
-        </span>
+        <md-button class="md-icon-button" data-ng-click="toggleSidenav('left')">
+          <md-icon class="md-48">menu</md-icon>
+        </md-button>
         <!-- logo -->
-        <div layout-align="center start" flex class="navbar-logo-main" >
+        <div class="navbar-logo-main">
           <md-tooltip>
             <span data-translate="HEADER_TOOLTIP_GO_TO_LANDING_PAGE"></span>
           </md-tooltip>
-          <a data-ng-href="/" class="logo one" id="logo"><i></i></a>
+          <a data-ng-href="/" class="logo {{isEditPortfolioMode ? 'shadow-edit' : 'shadow-primary'}}"  ng-class="{'shadow-admin': headerRed, 'shadow-deleted': headerGray}" id="logo"></a>
         </div>
       </div>
     </div>
@@ -198,9 +196,9 @@
 <div class="md-toolbar-filter ng-cloak" id="detailedSearch" data-ng-show="detailedSearch.isVisible" ng-cloak>
   <form layout="row"
         flex>
-    <div layout="row" layout-xs="column" flex="0" flex-gt-md="15" ng-cloak></div>
+    <div layout="row" layout-xs="column" flex="0" flex-gt-md="15" data-ng-hide="sidenavIsOpen()" ng-cloak></div>
     <div flex flex-gt-md="{{isViewPortforlioPage ? '75' : '75'}}" class="md-padding filter-wrapper ng-cloak"
-         id="detailed-search" ng-cloak>
+         id="detailed-search" data-ng-class="{'nav-open': sidenavIsOpen()}" ng-cloak>
       <div data-dop-detailed-search
            data-is-visible="detailedSearch.isVisible"
            data-query-in="detailedSearch.queryIn"

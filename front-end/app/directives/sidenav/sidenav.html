@@ -1,17 +1,15 @@
 <md-sidenav md-is-open="sideNavOpen" class="md-sidenav-left"  md-component-id="left" id="sidebar-left">
 
   <!-- Portfolio Header and Chapters -->
-  <!--<md-toolbar class="{{isEditPortfolioMode ? 'md-accent' : 'md-primary'}}">
-    <h6 class="md-toolbar-tools md-subhead">
-      <div layout-align="center start" flex>
-        <md-tooltip><span data-translate="HEADER_TOOLTIP_GO_TO_LANDING_PAGE"></span></md-tooltip>
-        <a data-ng-href="/" class="logo logo-lg" id="logo"></a>
-      </div>
-    </h6>
-  </md-toolbar>-->
-  <div class="sidenav-logo-container">
-    <a data-ng-href="/" class="logo" id="logo"><i></i></a>
-  </div>
+  <md-toolbar class="md-hue-1">
+    <div layout="row" layout-align="start center">
+      <a data-ng-href="/" class="logo logo-bw" id="logo-sidenav"></a>
+      <md-tooltip><span data-translate="HEADER_TOOLTIP_GO_TO_LANDING_PAGE"></span></md-tooltip>
+      <span flex></span>
+      <md-icon class="material-icons arrow">keyboard_arrow_left</md-icon>
+    </div>
+  </md-toolbar>
+  <md-divider></md-divider>
   <div id="alert" data-dop-alert></div>
 
 
@@ -152,6 +150,6 @@
         </li>
       </ul>
     </div>
-    </uib-accordion>
+  </uib-accordion>
 
 </md-sidenav>

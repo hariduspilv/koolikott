@@ -17,14 +17,12 @@
     <div layout="row" layout-align="center start">
       <div class="md-padding" flex>
         <md-content>
-          <div layout="row" data-ng-if="mobileIdChallenge">
-            <div flex>
+          <div layout="column" data-ng-if="mobileIdChallenge">
               <p>
                 <span data-translate="LOGIN_MOBILEID_CODE"></span>: <strong data-ng-bind="mobileIdChallenge"></strong>
               </p>
 
               <p data-translate="LOGIN_SMS"></p>
-            </div>
           </div>
 
           <div layout="column" class="login-modal-container" data-ng-if="!mobileIdChallenge">
