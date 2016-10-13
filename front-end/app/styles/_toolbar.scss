@@ -37,7 +37,7 @@ $border-color: rgba(0,0,0,0.12);
   padding-top: 64px;
   margin-bottom: -64px;
 
-  @media (min-width: $layout-breakpoint-sm) {
+  @media (min-width: $layout-breakpoint-xs) {
     overflow: hidden;
   }
 

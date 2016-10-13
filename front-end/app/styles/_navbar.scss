@@ -37,13 +37,13 @@
   padding: 0 16px;
   display: none;
 
-  @media (min-width: $layout-breakpoint-sm) {
+  @media (min-width: $layout-breakpoint-xs) {
     display: inline-block;
   }
 }
 
 .navbar-buttons-area {
-  @media (min-width: $layout-breakpoint-sm) {
+  @media (min-width: $layout-breakpoint-xs) {
     flex: 0 0 auto;
   }
 }
@@ -58,7 +58,7 @@
   border-radius: 2px;
   padding: 4px 0;
 
-  @media screen and (min-width: $layout-breakpoint-sm) {
+  @media screen and (min-width: $layout-breakpoint-xs) {
     background: rgba(255,255,255,.15);
   }
 
