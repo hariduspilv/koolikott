@@ -368,6 +368,12 @@ md-card {
     background-color: #fff;
   }
 }
+
+// TODO: remove this if this bug is closed https://trello.com/c/TB5BRU7G/187-bug-issue-18-vistutatud-materjali-kuvamine-on-paigast-ara
+.embed-responsive-item {
+  overflow: hidden;
+}
+
 .corner {
   background-image: url('../images/detail/corner.png');
   background-repeat: no-repeat;

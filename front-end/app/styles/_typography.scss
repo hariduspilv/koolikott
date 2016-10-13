@@ -90,3 +90,8 @@ $lines-to-show2: 2;
 .error-color {
   color: $error;
 }
+
+.text-truncate {
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
