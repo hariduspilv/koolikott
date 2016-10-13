@@ -4,8 +4,8 @@ define([
     'services/iconService',
     'services/embedService'
 ], function (app) {
-    app.directive('dopEmbeddedMaterial', ['translationService', 'iconService', 'embedService', '$rootScope',
-        function (translationService, iconService, embedService, $rootScope) {
+    app.directive('dopEmbeddedMaterial', ['translationService', 'iconService', 'embedService',
+        function (translationService, iconService, embedService) {
             return {
                 scope: {
                     material: '=',
@@ -13,7 +13,7 @@ define([
                     index: '='
                 },
                 templateUrl: 'directives/embeddedMaterial/embeddedMaterial.html',
-                controller: function ($scope, $rootScope) {
+                controller: function ($scope, $rootScope, $location) {
                     init();
 
                     function init() {
@@ -53,6 +53,15 @@ define([
                     $scope.listItemDown = function (itemIndex) {
                         $scope.moveItem(itemIndex, itemIndex + 1);
 
+                    };
+
+                    $scope.navigateToMaterial = function (material, $event) {
+                        $event.preventDefault();
+                        $rootScope.savedMaterial = material;
+
+                        $location.path('/material').search({
+                            materialId: material.id
+                        });
                     };
 
                     function getType() {
