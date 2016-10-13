@@ -12,8 +12,6 @@ define([
                 $scope.deleted = true;
 
                 checkItemState($scope.data);
-                // TODO: data.deleted = true/false, data.
-                console.log($scope.data);
 
                 function checkItemState(data) {
                     if(data) {
