@@ -534,6 +534,10 @@ define([
                     $scope.material.taxons = [{}];
                 }
 
+                if (!$scope.material.peerReviews[0]) {
+                    $scope.material.peerReviews = [{}];
+                }
+
                 var educationalContext = $rootScope.taxonUtils.getEducationalContext($scope.material.taxons[0]);
 
                 if (educationalContext) {
