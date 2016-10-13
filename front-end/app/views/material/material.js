@@ -132,6 +132,7 @@ define([
             }
 
             function init() {
+                console.log($scope.material);
                 processMaterial();
                 $scope.material.source = getSource($scope.material);
                 storageService.setMaterial(null);
@@ -379,6 +380,7 @@ define([
             function restoreSuccess() {
                 $scope.material.deleted = false;
                 toastService.show('MATERIAL_RESTORED');
+                $window.location.reload();
             }
 
             function restoreFail() {

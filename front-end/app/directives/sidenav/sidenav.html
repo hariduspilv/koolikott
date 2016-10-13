@@ -18,7 +18,7 @@
       <uib-accordion-heading>
         <md-button class="md-hue-1 md-primary-menu">
           <div flex layout="row">
-            <span>Minu koolikott</span>
+            <span data-translate="MY_PROFILE"></span>
             <span flex></span>
             <md-icon class="md-primary material-icons arrow">keyboard_arrow_right</md-icon>
           </div>
@@ -31,7 +31,7 @@
             <md-button class="md-hue-1 md-secondary-menu" data-ng-class="{'selected': isLocation('/' + user.username) && user != null}">
               <div flex layout="row">
                 <md-icon class="material-icons">content_copy</md-icon>
-                <span>Minu kogumikud</span>
+                <span data-translate="MY_PORTFOLIOS"></span>
                 <span class="count"></span>
               </div>
             </md-button>
@@ -42,7 +42,7 @@
             <md-button class="md-hue-1 md-secondary-menu" data-ng-class="{'selected': isLocation('/' + user.username + '/materials')}">
               <div flex layout="row">
                 <md-icon class="material-icons">description</md-icon>
-                <span>Minu materjalid</span>
+                <span data-translate="MY_MATERIALS"></span>
                 <span class="count"></span>
               </div>
             </md-button>
@@ -53,7 +53,7 @@
             <md-button class="md-hue-1 md-secondary-menu" data-ng-class="{'selected': isLocation('/' + user.username + '/favorites')}">
               <div flex layout="row">
                 <md-icon class="material-icons">star</md-icon>
-                <span>Minu lemmikud</span>
+                <span data-translate="MY_FAVORITES"></span>
                 <span class="count"></span>
               </div>
             </md-button>
@@ -65,7 +65,7 @@
       <uib-accordion-heading>
         <md-button class="md-hue-1 md-primary-menu" >
           <div flex layout="row">
-            <span>Töölaud</span>
+            <span data-translate="DASHBOARD"></span>
             <span flex></span>
             <md-icon class="md-primary material-icons arrow">keyboard_arrow_right</md-icon>
           </div>
@@ -78,7 +78,7 @@
             <md-button class="md-hue-1 md-secondary-menu" data-ng-class="{'selected': isLocation('/dashboard/improperMaterials')}">
               <div flex layout="row">
                 <md-icon class="material-icons">report</md-icon>
-                <span>Ebasobivad materjalid</span>
+                <span data-translate="IMPROPER_MATERIALS"</span>
                 <span class="count"></span>
               </div>
             </md-button>
@@ -89,7 +89,7 @@
             <md-button class="md-hue-1 md-secondary-menu" data-ng-class="{'selected': isLocation('/dashboard/improperPortfolios')}">
               <div flex layout="row">
                 <md-icon class="material-icons">report</md-icon>
-                <span>Ebasobivad kogumikud</span>
+                <span data-translate="IMPROPER_PORTFOLIOS"></span>
                 <span class="count"></span>
               </div>
             </md-button>
@@ -100,7 +100,7 @@
             <md-button class="md-hue-1 md-secondary-menu" data-ng-class="{'selected': isLocation('/dashboard/brokenMaterials')}">
               <div flex layout="row">
                 <md-icon class="material-icons">content_cut</md-icon>
-                <span>Katkised materjalid</span>
+                <span data-translate="BROKEN_MATERIALS"></span>
                 <span class="count"></span>
               </div>
             </md-button>
@@ -111,7 +111,7 @@
             <md-button class="md-hue-1 md-secondary-menu" data-ng-class="{'selected': isLocation('/dashboard/deletedMaterials')}">
               <div flex layout="row">
                 <md-icon class="material-icons">delete</md-icon>
-                <span>Kustutatud materjalid</span>
+                <span data-translate="DELETED_MATERIALS"></span>
                 <span class="count"></span>
               </div>
             </md-button>
@@ -122,7 +122,7 @@
             <md-button class="md-hue-1 md-secondary-menu" data-ng-class="{'selected': isLocation('/dashboard/deletedPortfolios')}">
               <div flex layout="row">
                 <md-icon class="material-icons">delete</md-icon>
-                <span>Kustutatud kogumikud</span>
+                <span data-translate="DELETED_PORTFOLIOS"></span>
                 <span class="count"></span>
               </div>
             </md-button>
@@ -137,7 +137,7 @@
       <uib-accordion-heading>
         <md-button class="md-hue-1 md-primary-menu" ng-click="changeTaxonomyDataAndVisibility('sidebar', 'primary')">
           <div flex layout="row">
-            <span>Sisukord</span>
+            <span data-translate="TABLE_OF_CONTENTS"></span>
             <span flex></span>
             <md-icon class="md-primary material-icons arrow">keyboard_arrow_right</md-icon>
           </div>
