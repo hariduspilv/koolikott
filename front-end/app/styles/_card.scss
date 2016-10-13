@@ -432,6 +432,10 @@ md-card .card-menu {
   justify-content: space-between;
 
   @media (min-width: $layout-breakpoint-xs) {
+    justify-content: center;
+  }
+
+  @media (min-width: $layout-breakpoint-md) {
     justify-content: flex-start;
   }
 }
@@ -443,6 +447,10 @@ md-card .card-menu {
   @media (min-width: $layout-breakpoint-xs) {
     margin: 0 15px 15px 0;
     width: auto;
+  }
+
+  &--empty {
+    margin: 0 15px 0 0;
   }
 }
 

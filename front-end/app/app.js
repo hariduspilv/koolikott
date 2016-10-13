@@ -116,16 +116,15 @@ define([
             $httpProvider.defaults.transformResponse.splice(0, 0, parseJSONResponse);
             $httpProvider.defaults.transformRequest = serializeRequest;
 
-            var isAtLeastIE11 = !!(navigator.userAgent.match(/Trident/) && !navigator.userAgent.match(/MSIE/));
+            var isIE = (navigator.userAgent.match(/Trident/) || navigator.userAgent.match(/MSIE/));
 
-            if (isAtLeastIE11) {
+            if (isIE) {
                 // disable IE ajax request caching
                 $httpProvider.defaults.headers.get['If-Modified-Since'] = 'Mon, 26 Jul 1997 05:00:00 GMT';
                 // extra
                 $httpProvider.defaults.headers.get['Cache-Control'] = 'no-cache';
                 $httpProvider.defaults.headers.get['Pragma'] = 'no-cache';
             }
-
 
             $locationProvider.html5Mode(true);
             $anchorScrollProvider.disableAutoScrolling();
