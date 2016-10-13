@@ -28,7 +28,7 @@
       <ul>
         <li>
           <a data-ng-click="checkUser($event, '/')">
-            <md-button class="md-hue-1 md-secondary-menu" data-ng-class="{'selected': isLocation('/' + user.username)}">
+            <md-button class="md-hue-1 md-secondary-menu" data-ng-class="{'selected': isLocation('/' + user.username) && user != null}">
               <div flex layout="row">
                 <md-icon class="material-icons">content_copy</md-icon>
                 <span>Minu kogumikud</span>
