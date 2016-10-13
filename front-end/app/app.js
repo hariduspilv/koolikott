@@ -123,14 +123,8 @@ define([
 
                 if (msie > 0) // If Internet Explorer, return version number
                 {
-                    alert(parseInt(ua.substring(msie + 5, ua.indexOf(".", msie))));
+                    return false;
                 }
-                else  // If another browser, return 0
-                {
-                    alert('otherbrowser');
-                }
-
-                return false;
             }
 
             if (!msieversion()) {
