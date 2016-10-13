@@ -1,9 +1,11 @@
+a.logo {
+  text-decoration: none;
+}
+
 .logo {
   font-size: 1.9em;
   color: #fff;
   display: inline-block;
-  font-style: normal;
-  text-decoration: none;
   &:before {
     content: '\e800';
     display: block;
@@ -16,46 +18,50 @@
   }
 }
 
-md-sidenav md-toolbar .logo {
-  color: rgba(0,0,0, .7);
-  font-size: 1.6em;
-  &:before {
-    content: '\e801';
+md-sidenav md-toolbar {
+  padding: 0 8px;
+  .logo {
+    color: rgba(0,0,0, .7);
+    font-size: 1.5em;
+    margin-top: 10px;
+    &:before {
+      content: '\e801';
+    }
   }
 }
 
 .shadow-primary {
   text-shadow: long-shadow(
-    $direction: 42deg,
-    $length: 60px,
-    $color: darken($color-primary, 5%),
-    $fade: true
+  $direction: 42deg,
+  $length: 60px,
+  $color: darken($color-primary, 5%),
+  $fade: true
   );
 }
 
 .shadow-admin  {
   text-shadow: long-shadow(
-    $direction: 42deg,
-    $length: 60px,
-    $color: darken($color-admin, 10%),
-    $fade: true
+  $direction: 42deg,
+  $length: 60px,
+  $color: darken($color-admin, 10%),
+  $fade: true
   );
 }
 
 .shadow-deleted {
   text-shadow: long-shadow(
-    $direction: 42deg,
-    $length: 60px,
-    $color: darken($color-deleted, 10%),
-    $fade: true
+  $direction: 42deg,
+  $length: 60px,
+  $color: darken($color-deleted, 10%),
+  $fade: true
   );
 }
 
 .shadow-edit  {
   text-shadow: long-shadow(
-    $direction: 42deg,
-    $length: 60px,
-    $color: darken($color-accent, 10%),
-    $fade: true
+  $direction: 42deg,
+  $length: 60px,
+  $color: darken($color-accent, 10%),
+  $fade: true
   );
 }

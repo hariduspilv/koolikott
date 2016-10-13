@@ -2,16 +2,19 @@
 
   <!-- Portfolio Header and Chapters -->
   <md-toolbar class="md-hue-1">
-    <md-button class="md-primary-menu">
-      <md-tooltip><span data-translate="HEADER_TOOLTIP_GO_TO_LANDING_PAGE"></span></md-tooltip>
-      <div flex layout="row">
-        <span data-ng-href="/" class="logo" id="logo-sidenav"></span>
-        <span flex></span>
-        <md-icon class="material-icons arrow">keyboard_arrow_left</md-icon>
-      </div>
-      </md-button>
-      <md-divider></md-divider>
+<md-toolbar-tools>
+  <div flex layout="row">
+    <a data-ng-href="/" class="logo" id="logo-sidenav"></a>
+    <md-tooltip><span data-translate="HEADER_TOOLTIP_GO_TO_LANDING_PAGE"></span></md-tooltip>
+    <span flex></span>
+    <md-button>
+      <md-icon class="material-icons arrow">keyboard_arrow_left</md-icon>
+    </md-button>
+  </div>
+</md-toolbar-tools>
+
     </md-toolbar>
+    <md-divider></md-divider>
     <div id="alert" data-dop-alert></div>
 
 

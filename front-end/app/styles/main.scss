@@ -1,6 +1,7 @@
 // Base styles
 @import "../libs/angular-material/angular-material.scss";
 @import "_variables";
+@import "_mixins";
 @import "_base";
 @import "fontello-bb1ddced/css/fontello-codes";
 @import "fontello-bb1ddced/css/fontello-embedded";
@@ -31,7 +32,6 @@
 @import "_taxonomy";
 @import "_layout";
 @import "_error-message";
-@import "_longshadow";
 @import "_logo";
 
 // Page specific stylesheets
