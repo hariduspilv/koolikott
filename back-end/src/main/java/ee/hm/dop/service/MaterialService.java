@@ -1,5 +1,6 @@
 package ee.hm.dop.service;
 
+import static ee.hm.dop.utils.ConfigurationProperties.SERVER_ADDRESS;
 import static ee.hm.dop.utils.UserUtils.isAdmin;
 import static org.apache.commons.lang3.StringUtils.isEmpty;
 import static org.joda.time.DateTime.now;
@@ -33,6 +34,7 @@ import ee.hm.dop.model.UserLike;
 import ee.hm.dop.model.taxon.EducationalContext;
 import ee.hm.dop.service.learningObject.LearningObjectHandler;
 import ee.hm.dop.utils.TaxonUtils;
+import org.apache.commons.configuration.Configuration;
 import org.apache.http.client.utils.URIBuilder;
 import org.apache.http.util.TextUtils;
 import org.joda.time.DateTime;
@@ -67,6 +69,9 @@ public class MaterialService implements LearningObjectHandler {
     @Inject
     private PeerReviewService peerReviewService;
 
+    @Inject
+    private Configuration configuration;
+
     public Material get(long materialId, User loggedInUser) {
         if (isUserAdmin(loggedInUser) || isUserModerator(loggedInUser)) {
             return materialDao.findById(materialId);
@@ -92,7 +97,9 @@ public class MaterialService implements LearningObjectHandler {
         List<PeerReview> peerReviews = material.getPeerReviews();
         if(peerReviews != null){
             for(PeerReview peerReview : peerReviews){
-                peerReview.setUrl(cleanURL(peerReview.getUrl()));
+                if(!peerReview.getUrl().contains(configuration.getString(SERVER_ADDRESS))){
+                    peerReview.setUrl(cleanURL(peerReview.getUrl()));
+                }
             }
         }
 
@@ -294,7 +301,9 @@ public class MaterialService implements LearningObjectHandler {
         List<PeerReview> peerReviews = material.getPeerReviews();
         if(peerReviews != null){
             for(PeerReview peerReview : peerReviews){
-                peerReview.setUrl(cleanURL(peerReview.getUrl()));
+                if(!peerReview.getUrl().contains(configuration.getString(SERVER_ADDRESS))){
+                    peerReview.setUrl(cleanURL(peerReview.getUrl()));
+                }
             }
         }
 
