@@ -40,20 +40,13 @@
 
   <md-divider></md-divider>
 
-  <md-card-actions layout="row" layout-align="start center">
-    <a data-ng-href="{{'/portfolio?id=' + portfolio.id}}" class="no-link materialbox-icons">
-    <span class="md-action-icons-list md-caption" flex layout>
-      <md-icon>thumb_up</md-icon>
-      <span>{{ portfolio.likes }}</span>
-
-      <md-icon>thumb_down</md-icon>
-      <span>{{ portfolio.dislikes }}</span>
-
-      <span flex></span>
-
-      <md-icon>visibility</md-icon>
-      <span data-ng-bind="portfolio.views"></span>
-    </span>
-    </a>
+  <md-card-actions class="md-caption" layout="row" layout-align="start center" data-ng-click="/portfolio?id={{portfolio.id}}">
+    <md-icon>thumb_up</md-icon>
+    <span>{{ portfolio.likes }}</span>
+    <md-icon>thumb_down</md-icon>
+    <span>{{ portfolio.dislikes }}</span>
+    <span flex></span>
+    <md-icon>visibility</md-icon>
+    <span data-ng-bind="portfolio.views"></span>
   </md-card-actions>
 </md-card>
