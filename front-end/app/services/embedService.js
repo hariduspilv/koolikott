@@ -6,7 +6,8 @@ define(['angularAMD'], function (angularAMD) {
         return {
             getEmbed: function (link, cb) {
                 callback = cb;
-                $http.get(noEmbedUrl + link).then(callback);
+                link = link.toLowerCase()
+                $http.get(noEmbedUrl + link.toLowerCase()).then(callback);
             }
         };
     }]);
