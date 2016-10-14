@@ -266,7 +266,7 @@ define([
             $rootScope.isBrokenMaterial = null;
             $rootScope.isImproper = null;
 
-            if ($location.url().indexOf('/' + user.username) != -1) {
+            if (user && $location.url().indexOf('/' + user.username) != -1) {
                 $rootScope.isViewUserPage = true;
             } else {
                 $rootScope.isViewUserPage = false;

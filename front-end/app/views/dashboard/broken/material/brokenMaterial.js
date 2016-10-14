@@ -17,9 +17,9 @@ define([
             };
 
             function getBrokenItemsSuccess(items) {
-                var list = Array();
-                for(i = 0; i < items.length; i++) {
-                    if(items[i].material.deleted != false) {
+                var list = [];
+                for(var i = 0; i < items.length; i++) {
+                    if(items[i].material.deleted == false) {
                         list.push(items[i]);
                     }
                 }
