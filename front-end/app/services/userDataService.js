@@ -47,14 +47,16 @@ define([
                     var params = {
                         'username': authenticatedUserService.getUser().username
                     };
+                    var usercountparam = "?username=" + authenticatedUserService.getUser().username + "&count=true";
+
                     serverCallService.makeGet("rest/learningObject/usersFavorite", {}, getFavoritesSuccess, getItemsFail);
                     serverCallService.makeGet("rest/learningObject/usersFavorite?count=true", {}, getFavoritesCountSuccess, getItemsFail);
 
                     serverCallService.makeGet("rest/material/getByCreator", params, getUsersMaterialsSuccess, getItemsFail);
-                    serverCallService.makeGet("rest/material/getByCreator?count=true", params, getUsersMaterialsCountSuccess, getItemsFail);
+                    serverCallService.makeGet("rest/material/getByCreator" + usercountparam, {}, getUsersMaterialsCountSuccess, getItemsFail);
 
                     serverCallService.makeGet("rest/portfolio/getByCreator", params, getUsersPortfoliosSuccess, getItemsFail);
-                    serverCallService.makeGet("rest/portfolio/getByCreator?count=true", params, getUsersPortfoliosCountSuccess, getItemsFail);
+                    serverCallService.makeGet("rest/portfolio/getByCreator" + usercountparam, {}, getUsersPortfoliosCountSuccess, getItemsFail);
                 }
             }
 
@@ -315,16 +317,14 @@ define([
                     serverCallService.makeGet("rest/material/getByCreator", params, getUsersMaterialsSuccess, getItemsFail);
                 },
                 loadUserMaterialsCount: function(callback) {
-                    var params = {
-                        'username': authenticatedUserService.getUser().username
-                    };
+                    var usercountparam = "?username=" + authenticatedUserService.getUser().username + "&count=true";
                     var string = localStorage.getItem("userMaterialsCount");
                     data = JSOG.parse(string);
                     if (data) {
                         callback(data);
                     }
                     userFavoritesCountCallbacks.push(callback);
-                    serverCallService.makeGet("rest/material/getByCreator?count=true", params, getUsersMaterialsSuccess, getItemsFail);
+                    serverCallService.makeGet("rest/material/getByCreator" + usercountparam, {}, getUsersMaterialsCountSuccess, getItemsFail);
                 },
 
                 // User portfolios
@@ -342,16 +342,14 @@ define([
                     serverCallService.makeGet("rest/portfolio/getByCreator", params, getUsersPortfoliosSuccess, getItemsFail);
                 },
                 loadUserPortfoliosCount: function(callback) {
-                    var params = {
-                        'username': authenticatedUserService.getUser().username
-                    };
+                    var usercountparam = "?username=" + authenticatedUserService.getUser().username + "&count=true";
                     var string = localStorage.getItem("userPortfoliosCount");
                     data = JSOG.parse(string);
                     if (data) {
                         callback(data);
                     }
                     userPortfoliosCountCallbacks.push(callback);
-                    serverCallService.makeGet("rest/portfolio/getByCreator?count=true", params, getUsersPortfoliosSuccess, getItemsFail);
+                    serverCallService.makeGet("rest/portfolio/getByCreator" + usercountparam, {}, getUsersPortfoliosCountSuccess, getItemsFail);
                 },
 
             };
