@@ -93,7 +93,7 @@ define([
 
             function getMaterialSuccess(material) {
                 if (isEmpty(material)) {
-                    log('No data returned by getting material. Redirecting to landing page');
+                    console.log('No data returned by getting material. Redirecting to landing page');
                     alertService.setErrorAlert('ERROR_MATERIAL_NOT_FOUND');
                     $location.url("/");
                 } else {

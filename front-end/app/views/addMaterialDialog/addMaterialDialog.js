@@ -616,11 +616,15 @@ define([
             }
 
             function saveMaterialSuccess(material) {
-                //Pass saved material back to material view
-                material.source = getSource(material);
-                $mdDialog.hide(material);
-                if (!$scope.isChapterMaterial) {
-                    $location.url('/material?materialId=' + material.id);
+                if(!material) {
+                    saveMaterialFail();
+                } else {
+                    //Pass saved material back to material view
+                    material.source = getSource(material);
+                    $mdDialog.hide(material);
+                    if (!$scope.isChapterMaterial) {
+                        $location.url('/material?materialId=' + material.id);
+                    }
                 }
             }
 
