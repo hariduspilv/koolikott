@@ -32,6 +32,7 @@ import ee.hm.dop.model.taxon.Subject;
 import ee.hm.dop.model.taxon.Taxon;
 import ee.hm.dop.service.MaterialService;
 import org.joda.time.DateTime;
+import org.junit.Ignore;
 import org.junit.Test;
 
 public class MaterialResourceTest extends ResourceIntegrationTestBase {
@@ -175,6 +176,7 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
         assertEquals(0, taxons.size());
     }
 
+    @Ignore
     @Test
     public void getByCreator() {
         String username = "mati.maasikas";

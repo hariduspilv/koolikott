@@ -5,9 +5,11 @@ define(['angularAMD'], function (angularAMD) {
 
         return {
             getEmbed: function (link, cb) {
-                callback = cb;
-                link = link.toLowerCase();
-                $http.get(noEmbedUrl + link).then(callback);
+                if(link) {
+                    callback = cb;
+                    link = link.toLowerCase();
+                    $http.get(noEmbedUrl + link).then(callback);
+                }
             }
         };
     }]);

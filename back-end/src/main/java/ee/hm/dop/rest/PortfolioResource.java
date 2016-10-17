@@ -2,28 +2,21 @@ package ee.hm.dop.rest;
 
 import static org.apache.commons.lang3.StringUtils.isBlank;
 
-import java.util.List;
-
 import javax.annotation.security.RolesAllowed;
 import javax.inject.Inject;
-import javax.sound.sampled.Port;
 import javax.ws.rs.Consumes;
-import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
-import ee.hm.dop.model.LearningObject;
-import ee.hm.dop.model.Material;
 import ee.hm.dop.model.Portfolio;
 import ee.hm.dop.model.Recommendation;
 import ee.hm.dop.model.User;
-import ee.hm.dop.model.UserFavorite;
 import ee.hm.dop.model.UserLike;
-import ee.hm.dop.service.LearningObjectService;
 import ee.hm.dop.service.PortfolioService;
 import ee.hm.dop.service.UserService;
 
@@ -46,7 +39,7 @@ public class PortfolioResource extends BaseResource {
     @GET
     @Path("getByCreator")
     @Produces(MediaType.APPLICATION_JSON)
-    public List<Portfolio> getByCreator(@QueryParam("username") String username) {
+    public Response getByCreator(@QueryParam("username") String username, @QueryParam("count") boolean count) {
         if (isBlank(username)) {
             throwBadRequestException("Username parameter is mandatory");
         }
@@ -58,7 +51,11 @@ public class PortfolioResource extends BaseResource {
 
         User loggedInUser = getLoggedInUser();
 
-        return portfolioService.getByCreator(creator, loggedInUser);
+        if(count) {
+            return Response.ok(portfolioService.getByCreator(creator, loggedInUser).size()).build();
+        } else {
+            return Response.ok(portfolioService.getByCreator(creator, loggedInUser)).build();
+        }
     }
 
     @POST
@@ -154,7 +151,10 @@ public class PortfolioResource extends BaseResource {
     @Path("getDeleted")
     @Produces(MediaType.APPLICATION_JSON)
     @RolesAllowed({"ADMIN", "MODERATOR"})
-    public List<Portfolio> getDeletedPortfolios() {
-        return portfolioService.getDeletedPortfolios();
+    public Response getDeletedPortfolios(@QueryParam("count") boolean count) {
+        if (count) {
+            return Response.ok(portfolioService.getDeletedPortfolios().size()).build();
+        }
+        return Response.ok(portfolioService.getDeletedPortfolios()).build();
     }
 }
