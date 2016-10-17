@@ -21,6 +21,7 @@ define([
                             $rootScope.isDeleted = true;
                         } else {
                             $rootScope.isDeleted = false;
+                            $scope.showDeleted = false;
                         }
                         if (data.improper == 1 || data.broken == 1) {
                             $rootScope.isBrokenImproper = true;

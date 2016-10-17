@@ -356,9 +356,7 @@ define([
 
             function deleteMaterialSuccess() {
                 toastService.showOnRouteChange('MATERIAL_DELETED');
-                setTimeout(function () {
-                    location.reload();
-                }, 100);
+                $scope.material.deleted = true;
             }
 
             function deleteMaterialFailed() {
@@ -379,13 +377,8 @@ define([
             };
 
             function restoreSuccess() {
-                $scope.material.deleted = false;
                 toastService.show('MATERIAL_RESTORED');
-
-                setTimeout(function () {
-                    location.reload();
-                }, 100);
-
+                $scope.material.deleted = false;
             }
 
             function restoreFail() {
