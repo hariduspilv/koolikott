@@ -229,3 +229,8 @@ md-sidenav._md-locked-open, md-sidenav._md-locked-open._md-closed, md-sidenav._m
 .sidenav-menu .md-button.one-row {
   display: block;
 }
+
+// Removes faulty backdrop
+.md-sidenav-backdrop {
+  opacity: 0 !important;
+}

@@ -110,7 +110,9 @@ define([
 
                     function deletePortfolioSuccess() {
                         toastService.showOnRouteChange('PORTFOLIO_DELETED');
-                        $location.url('/dashboard/deletedPortfolios');
+                        setTimeout(function () {
+                            location.reload();
+                        }, 100);
                     }
 
                     function deletePortfolioFailed() {
@@ -127,7 +129,6 @@ define([
                         setTimeout(function () {
                             location.reload();
                         }, 100);
-
                     }
 
                     function restoreFail() {

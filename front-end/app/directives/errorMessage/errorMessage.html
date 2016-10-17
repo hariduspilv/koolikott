@@ -8,5 +8,5 @@
 </div>
 <div class="error-message-container md-whiteframe-4dp" flex layout="row" ng-if="showImproper">
   <md-icon>report</md-icon>
-  <p><span data-translate="ERROR_MSG_IMPROPER"></span><span class="reason">{{improper.reason}}</span></p>
+  <p><span data-translate="ERROR_MSG_IMPROPER"></span><span class="reason" ng-if="improperMessage"><span data-translate="ERROR_MSG_REASON"></span>: {{improperMessage}}</span></p>
 </div>

@@ -59,7 +59,20 @@
     </div>
     <!-- language menu, login and user menu button -->
     <div class="navbar-buttons-area">
-      <div data-ng-if="!isEditPortfolioMode || isViewPortfolioPage">
+      <div class="button-container mobile-search-button">
+        <md-button aria-label="Ava detailotsing" class="md-icon-button" id="header-show-detailed-search-icon"
+                   data-ng-click="openDetailedSearch()" data-ng-if="!detailedSearch.isVisible">
+          <md-tooltip><span data-translate="HEADER_TOOLTIP_OPEN_DETAILED_SEARCH"></span></md-tooltip>
+          <md-icon hide show-gt-xs>keyboard_arrow_down</md-icon>
+          <md-icon hide-gt-xs>search</md-icon>
+        </md-button>
+        <md-button aria-label="Sulge detailotsing" class="md-icon-button" id="header-hide-detailed-search-icon"
+                   data-ng-click="closeDetailedSearch()" data-ng-if="detailedSearch.isVisible">
+          <md-tooltip><span data-translate="HEADER_TOOLTIP_CLOSE_DETAILED_SEARCH"></span></md-tooltip>
+          <md-icon>close</md-icon>
+        </md-button>
+      </div>
+      <div class="button-container" data-ng-if="!isEditPortfolioMode || isViewPortfolioPage">
         <!-- change language menu -->
         <md-menu>
           <md-button aria-label="Ava keelevaliku menüü" class="md-icon-button language-icon" id="header-language-icon"
@@ -128,7 +141,8 @@
           <md-button aria-label="Ava kasutajamenüü" class="md-icon-button" id="header-user-menu-icon"
                      ng-click="$mdOpenMenu($event)">
             <md-tooltip><span data-translate="HEADER_TOOLTIP_PROFILE"></span></md-tooltip>
-            <md-icon>account_circle</md-icon>
+            <!--<md-icon>account_circle</md-icon>-->
+            <div class="account__circle">{{user.name[0]}}</div>
           </md-button>
           <md-menu-content width="4">
             <md-menu-item>
@@ -145,7 +159,7 @@
           </md-menu-content>
         </md-menu>
       </div>
-      <div data-ng-if="isEditPortfolioMode">
+      <div class="button-container" data-ng-if="isEditPortfolioMode">
         <md-menu>
           <md-button aria-label="Jaga" class="md-icon-button" ng-click="$mdOpenMenu($event)">
             <md-tooltip><span data-translate="HEADER_TOOLTIP_CHANGE_VISIBILITY"></span></md-tooltip>

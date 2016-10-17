@@ -14,6 +14,9 @@
 
 
   <uib-accordion close-others="oneAtATime" class="menu-nested-list">
+    <div uib-accordion-group class="panel-default" ng-if="isViewPortforlioPage || isEditPortfolioMode" is-open="isViewPortfolioAndEdit">
+      <div data-dop-table-of-contents data-portfolio="portfolio" data-readonly="!isEditPortfolioMode"></div>
+    </div>
     <div uib-accordion-group class="panel-default" is-open="isViewUserPage">
       <uib-accordion-heading>
         <md-button class="md-hue-1 md-primary-menu">
@@ -32,7 +35,7 @@
               <div flex layout="row">
                 <md-icon class="material-icons">content_copy</md-icon>
                 <span data-translate="MY_PORTFOLIOS"></span>
-                <span class="count"></span>
+                <span class="count">{{portfolios.length}}</span>
               </div>
             </md-button>
           </a>
@@ -43,7 +46,7 @@
               <div flex layout="row">
                 <md-icon class="material-icons">description</md-icon>
                 <span data-translate="MY_MATERIALS"></span>
-                <span class="count"></span>
+                <span class="count">{{materials.length}}</span>
               </div>
             </md-button>
           </a>
@@ -54,7 +57,7 @@
               <div flex layout="row">
                 <md-icon class="material-icons">star</md-icon>
                 <span data-translate="MY_FAVORITES"></span>
-                <span class="count"></span>
+                <span class="count">{{favorites.length}}</span>
               </div>
             </md-button>
           </a>
@@ -79,7 +82,7 @@
               <div flex layout="row">
                 <md-icon class="material-icons">report</md-icon>
                 <span data-translate="IMPROPER_MATERIALS"</span>
-                <span class="count"></span>
+                <span class="count">{{improperMaterialsCount}}</span>
               </div>
             </md-button>
           </a>
@@ -90,7 +93,7 @@
               <div flex layout="row">
                 <md-icon class="material-icons">report</md-icon>
                 <span data-translate="IMPROPER_PORTFOLIOS"></span>
-                <span class="count"></span>
+                <span class="count">{{improperPortfoliosCount}}</span>
               </div>
             </md-button>
           </a>
@@ -101,7 +104,7 @@
               <div flex layout="row">
                 <md-icon class="material-icons">content_cut</md-icon>
                 <span data-translate="BROKEN_MATERIALS"></span>
-                <span class="count"></span>
+                <span class="count">{{brokenMaterialsCount}}</span>
               </div>
             </md-button>
           </a>
@@ -112,7 +115,7 @@
               <div flex layout="row">
                 <md-icon class="material-icons">delete</md-icon>
                 <span data-translate="DELETED_MATERIALS"></span>
-                <span class="count"></span>
+                <span class="count">{{deletedMaterialsCount}}</span>
               </div>
             </md-button>
           </a>
@@ -123,15 +126,12 @@
               <div flex layout="row">
                 <md-icon class="material-icons">delete</md-icon>
                 <span data-translate="DELETED_PORTFOLIOS"></span>
-                <span class="count"></span>
+                <span class="count">{{deletedPortfoliosCount}}</span>
               </div>
             </md-button>
           </a>
         </li>
       </ul>
-    </div>
-    <div uib-accordion-group class="panel-default" ng-if="isViewPortforlioPage || isEditPortfolioMode" is-open="isViewPortfolioAndEdit">
-      <div data-dop-table-of-contents data-portfolio="portfolio" data-readonly="!isEditPortfolioMode"></div>
     </div>
     <div uib-accordion-group class="panel-default" is-open="isTaxonomyOpen">
       <uib-accordion-heading>

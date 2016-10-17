@@ -2,7 +2,7 @@
   <div layout="row" layout-xs="column" flex>
     <section flex flex-gt-md="100">
       <div layout-gt-sm>
-        <article flex flex-gt-sm="75" md-cols-gt-xs="3" md-cols-gt-sm="4" flex-gt-lg="80" class="md-padding" role="main" id="main-content">
+        <article md-cols-gt-xs="3" md-cols-gt-sm="4" class="md-padding" role="main" id="main-content">
 
           <h1 class="type-block" data-ng-if="myProfile" data-translate="MYPROFILE_PAGE_TITLE_FAVORITES"></h1>
 
@@ -19,23 +19,6 @@
           </div>
 
         </article>
-
-        <aside flex flex-gt-sm="25" flex-gt-lg="20" class="md-padding" id="sidebar">
-          <div id="user-data">
-            <h2 data-ng-if="myProfile" data-translate="MYPROFILE_PAGE_TITLE_MY_DATA"></h2>
-
-            <p data-ng-if="myProfile">
-              <strong>{{user.name}} {{user.surname}}</strong><br/>
-            </p>
-
-            <h2 class="md-headline" data-ng-if="!myProfile">
-              {{user.name}} {{user.surname}}
-            </h2>
-            <md-divider></md-divider>
-          </div>
-
-          <div data-dop-sidebar></div>
-        </aside>
       </div>
     </section>
   </div>

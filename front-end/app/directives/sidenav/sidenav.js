@@ -125,6 +125,7 @@ define([
                     return authenticatedUserService.getUser();
                 }, function (user) {
                     $scope.user = user;
+                    getNumbersForSidenav();
                 }, true);
 
                 $scope.isAdmin = function () {
@@ -279,6 +280,131 @@ define([
                     $location.url('/' + searchService.getSearchURLbase() + searchService.getQueryURL());
                 }
 
+                // Number for sidenav
+                function getUsersFavorites() {
+                    serverCallService.makeGet("rest/learningObject/usersFavorite", {}, getFavoritesSuccess, getFavoritesFail)
+                }
+
+                function getFavoritesSuccess(data) {
+                    if(data) {
+                        $scope.favorites = data
+                    }
+                }
+
+                function getFavoritesFail() {
+                    console.log("failed to retrieve learning objects favorited by the user")
+                }
+
+                function getUsersMaterials() {
+                    var params = {
+                        'username': $scope.user.username
+                    };
+                    var url = "rest/material/getByCreator";
+                    serverCallService.makeGet(url, params, getUsersMaterialsSuccess, getUsersMaterialsFail);
+                }
+
+                function getUsersMaterialsSuccess(data) {
+                    if (isEmpty(data)) {
+                        getUsersMaterialsFail();
+                    } else {
+                        $scope.materials = data;
+                    }
+                }
+
+                function getUsersMaterialsFail() {
+                    console.log('Failed to get materials.');
+                }
+
+                function getUsersPortfolios() {
+                    var params = {
+                        'username': $scope.user.username
+                    };
+                    var url = "rest/portfolio/getByCreator";
+                    serverCallService.makeGet(url, params, getUsersPortfoliosSuccess, getUsersPortfoliosFail);
+                }
+
+                function getUsersPortfoliosSuccess(data) {
+                    if (isEmpty(data)) {
+                        getUsersPortfoliosFail();
+                    } else {
+                        $scope.portfolios = data;
+                    }
+                }
+
+                function getUsersPortfoliosFail() {
+                    console.log('Failed to get portfolios.');
+                }
+
+
+                function getNumbersForSidenav() {
+                    if($scope.user) {
+                        if($scope.user.role === "ADMIN" || $scope.user.role === "MODERATOR") {
+                            serverCallService.makeGet("rest/material/getBroken", {}, getMaterialsBrokenItemsSuccess, getItemsFail);
+                            serverCallService.makeGet("rest/material/getDeleted", {}, getMaterialsDeletedItemsSuccess, getItemsFail);
+                            serverCallService.makeGet("rest/portfolio/getDeleted", {}, getPortfoliosDeletedItemsSuccess, getItemsFail);
+                            serverCallService.makeGet("rest/impropers", {}, getImproperItemsSuccess, getItemsFail);
+
+                        }
+                        getUsersFavorites();
+                        getUsersMaterials();
+                        getUsersPortfolios();
+                    }
+                }
+
+                function getItemsFail() {
+                    console.log("Failed to get data");
+                }
+
+                // Admin info
+
+                function getMaterialsBrokenItemsSuccess(data) {
+                    var items = data;
+                    var list = [];
+                    for(var i = 0; i < items.length; i++) {
+                        if(items[i].material.deleted == false) {
+                            list.push(items[i]);
+                        }
+                    }
+
+                    $scope.brokenMaterialsCount = list.length;
+                }
+                function getMaterialsDeletedItemsSuccess(data) {
+                    if (isEmpty(data)) {
+                        log('Getting data failed.');
+                    } else {
+                        $scope.deletedMaterialsCount = data.length;
+                    }
+                }
+                function getPortfoliosDeletedItemsSuccess(data) {
+                    if (isEmpty(data)) {
+                        log('Getting data failed.');
+                    } else {
+                        $scope.deletedPortfoliosCount = data.length;
+                    }
+                }
+                function getImproperItemsSuccess(data) {
+                    var impropers = data;
+                    var improperMaterials = [];
+                    var improperPortfolios = [];
+                    for (var i = 0; i < impropers.length; i++) {
+                        if (impropers[i].learningObject.type === '.Material' && !impropers[i].learningObject.deleted) {
+                            improperMaterials.push(impropers[i]);
+                        }
+                        if (impropers[i].learningObject.type === '.Portfolio' && !impropers[i].learningObject.deleted) {
+                            improperPortfolios.push(impropers[i]);
+                        }
+                    }
+                    $scope.improperMaterialsCount = improperMaterials.length;
+                    $scope.improperPortfoliosCount = improperPortfolios.length;
+                }
+
+
+                // Starts header color updated process
+                $scope.$watch(function() {
+                    return $rootScope.forceUpdate;
+                }, function() {
+                    getNumbersForSidenav();
+                }, true);
 
 
             }

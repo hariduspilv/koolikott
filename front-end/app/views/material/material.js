@@ -132,7 +132,6 @@ define([
             }
 
             function init() {
-                console.log($scope.material);
                 processMaterial();
                 $scope.material.source = getSource($scope.material);
                 storageService.setMaterial(null);
@@ -357,7 +356,9 @@ define([
 
             function deleteMaterialSuccess() {
                 toastService.showOnRouteChange('MATERIAL_DELETED');
-                $location.url('/dashboard/deletedMaterials');
+                setTimeout(function () {
+                    location.reload();
+                }, 100);
             }
 
             function deleteMaterialFailed() {

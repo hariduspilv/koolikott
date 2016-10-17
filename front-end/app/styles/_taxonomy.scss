@@ -22,11 +22,15 @@
 }
 
 .taxon__header {
+  cursor: pointer;
   transition: background 0.2s;
   height: 46px;
   font-size: 13px;
   padding: 0 22px;
 
+  &:hover {
+    background-color: rgba(158,158,158,0.2);
+  }
   &.is-opened {
     background-color: rgba(0,0,0,0.1);
     color: $color-selected-menu;
@@ -34,12 +38,16 @@
     .icon-identity {
       color: $color-selected-menu;
     }
+
+    .taxon__arrow {
+      color: $color-selected-menu;
+      transform: rotate(90deg);
+    }
   }
 
   &.has-children {
-    cursor: pointer;
-    &:hover {
-      background-color: rgba(158,158,158,0.2);
+    .taxon__arrow {
+      display: block;
     }
   }
 }
@@ -50,4 +58,8 @@
 
 .taxon__count {
   font-size: 12px;
+}
+.taxon__arrow {
+  color: $color-body;
+  display: none;
 }

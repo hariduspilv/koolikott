@@ -16,6 +16,7 @@ define([
                 templateUrl: 'directives/header/header.html',
                 controller: function ($scope, $location, authenticationService, authenticatedUserService, $rootScope) {
 
+
                     // Starts header color updated process
                     $scope.$watch(function() {
                         return $rootScope.forceUpdate;

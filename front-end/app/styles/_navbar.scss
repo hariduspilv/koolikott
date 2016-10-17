@@ -1,6 +1,17 @@
 .navbar {
   position: fixed;
   overflow: hidden;
+  z-index: 5;
+
+  // Needs redoing after navbar design
+  .md-toolbar-tools {
+    padding: 0;
+  }
+  @media (min-width: 370px) {
+    .md-toolbar-tools {
+      padding: 0 16px;
+    }
+  }
 }
 
 .navbar .md-toolbar-tools {
@@ -16,9 +27,12 @@
 }
 
 .navbar-logo-main {
-  padding-left: 10px;
-  padding-right: 19px;
-
+  padding-left: 6px;
+  padding-right: 17px;
+  @media (min-width: 325px) {
+    padding-left: 10px;
+    padding-right: 19px;
+  }
   a {
     min-width: 32px;
     margin-top: 5px;
@@ -46,6 +60,18 @@
   @media (min-width: $layout-breakpoint-xs) {
     flex: 0 0 auto;
   }
+  .button-container {
+    display: inline-block;
+  }
+  .mobile-search-button {
+    @media (min-width: $layout-breakpoint-xs) {
+    display: none;
+    }
+    button {
+      margin: 0;
+    }
+  }
+
 }
 
 .navbar-content {
@@ -131,4 +157,42 @@
 
 #header-simple-search-input > md-autocomplete-wrap > button {
   display: none;
+}
+
+// Wide/big screen fix
+@media (min-width: 1800px) {
+  .navbar-logo-area {
+    position: absolute;
+    left: 16px;
+  }
+  .navbar-search-area {
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .navbar-buttons-area {
+    position: absolute;
+    right: 16px;
+  }
+}
+
+// Account circle colors
+.md-primary {
+  .account__circle {
+    color: #1E88E5;
+  }
+}
+.md-red {
+  .account__circle {
+    color: #a2134c;
+  }
+}
+.md-gray {
+  .account__circle {
+    color: #949394;
+  }
+}
+.account__circle {
+  background-color: white;
+  border-radius: 50%;
+  font-weight: bold;
 }

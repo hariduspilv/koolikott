@@ -36,6 +36,7 @@ $border-color: rgba(0,0,0,0.12);
   transition: max-height 0.35s ease;
   padding-top: 64px;
   margin-bottom: -64px;
+  z-index: 2;
 
   @media (min-width: $layout-breakpoint-xs) {
     overflow: hidden;
