@@ -27,23 +27,10 @@
 }
 
 .navbar-logo-main {
-  padding-left: 6px;
-  padding-right: 17px;
-  @media (min-width: 325px) {
-    padding-left: 10px;
-    padding-right: 19px;
+  padding-left: 10px;
+  padding-right: 30px;
+  margin-top: 5px;
   }
-  a {
-    min-width: 32px;
-    margin-top: 5px;
-  }
-}
-
-@media (min-width: 960px) {
-  .navbar-logo-main a {
-    min-width: 162px;
-  }
-}
 
 .navbar-search-area {
   width: 100%;

@@ -1,10 +1,10 @@
 a.logo {
   text-decoration: none;
+  color: #fff;
 }
 
 .logo {
-  font-size: 1.9em;
-  color: #fff;
+  font-size: 1.8em;
   display: inline-block;
   &:before {
     content: '\e800';
