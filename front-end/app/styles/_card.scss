@@ -149,6 +149,11 @@ md-card {
   &.card-sm {
     height: 270px;
     width: 190px;
+    @media (min-width: $layout-breakpoint-lg) {
+      height: 330px;
+      width: 248px;
+    }
+
 
     md-icon.icon-kind {
       font-size: 48px;

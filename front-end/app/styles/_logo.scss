@@ -1,6 +1,10 @@
 a.logo {
   text-decoration: none;
   color: #fff;
+  &:hover {
+    color: inherit;
+    transition:color 0.55s $swift-ease-out-timing-function;
+  }
 }
 
 .logo {
