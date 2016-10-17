@@ -287,7 +287,7 @@ define([
             $rootScope.isMySchoolbagOpen = path === (user && path.startsWith("/" + user.username));
 
 
-            if(path === '/material' || path === '/' || ($location.url().indexOf("/search") != -1)) {
+            if(path === '/material' || path === '/' || ($location.url().indexOf("/search") != -1) || !$rootScope.isEditPortfolioPage) {
                 $rootScope.isTaxonomyOpen = true;
             } else {
                 $rootScope.isTaxonomyOpen = false;

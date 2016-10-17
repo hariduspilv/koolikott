@@ -50,9 +50,19 @@ md-sidenav {
   .panel {
     border-bottom: 1px solid $border-color;
   }
+  .panel-heading {
+    button:hover {
+      .panel-title__text {
+        color: black;
+      }
+    }
+  }
   .panel-body ul {
     margin: 0;
     padding: 0;
+    .count {
+      font-size: $font-small;
+    }
   }
   .panel-open {
     .arrow {

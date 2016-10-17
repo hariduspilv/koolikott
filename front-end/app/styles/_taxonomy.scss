@@ -41,7 +41,7 @@
 
     .taxon__arrow {
       color: $color-selected-menu;
-      transform: rotate(90deg);
+      transform: rotate(90deg) scale(0.9);
     }
   }
 
@@ -62,6 +62,7 @@
   font-size: 12px;
 }
 .taxon__arrow {
-  color: $color-body;
+  color: $color-muted;
   display: none;
+  transform: rotate(0deg) scale(0.9);
 }
