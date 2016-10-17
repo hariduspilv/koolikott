@@ -48,6 +48,8 @@
   &.has-children {
     .taxon__arrow {
       display: block;
+      margin-left: 0;
+      margin-right: 0;
     }
   }
 }

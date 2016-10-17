@@ -58,10 +58,17 @@ md-sidenav {
     .arrow {
       transform: rotate(90deg);
     }
+    .panel-title__text, md-icon.panel-title__arrow {
+      color: rgba(0,0,0,1);
+      font-weight: 500;
+    }
   }
   ul li a {
     text-decoration: none;
     color: inherit;
+  }
+  .panel-title__text, md-icon.panel-title__arrow {
+    color: $color-muted;
   }
 }
 
