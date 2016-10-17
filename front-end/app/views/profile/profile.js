@@ -4,9 +4,10 @@ define([
     'directives/portfolioBox/portfolioBox',
     'services/authenticatedUserService',
     'services/serverCallService',
-    'services/alertService'
+    'services/alertService',
+    'services/userDataService'
 ], function (app) {
-    return ['$scope', '$route', 'authenticatedUserService', 'serverCallService', '$location', 'alertService', function ($scope, $route, authenticatedUserService, serverCallService, $location, alertService) {
+    return ['$scope', '$route', 'authenticatedUserService', 'serverCallService', '$location', 'alertService', 'userDataService', function ($scope, $route, authenticatedUserService, serverCallService, $location, alertService, userDataService) {
         function init() {
             isMyProfilePage();
 
@@ -14,7 +15,7 @@ define([
                 getUser();
             }
 
-            if ($route.current.params.username) {
+            if (!authenticatedUserService.isAuthenticated() && $route.current.params.username) {
                 getUsersMaterials();
                 getUsersPortfolios();
             }
@@ -27,13 +28,22 @@ define([
                 if (user && $route.current.params.username === user.username) {
                     $scope.user = user;
                     $scope.myProfile = true;
-                    getUsersFavorites();
                 }
             }
         }
 
+        userDataService.loadUserPortfolios(function(callback) {
+            $scope.portfolios = callback;
+        });
+        userDataService.loadUserMaterials(function(callback) {
+            $scope.materials = callback;
+        });
+        userDataService.loadUserFavorites(function(callback) {
+            $scope.favorites = callback;
+        });
 
-        function getUsersFavorites() {
+
+        /*function getUsersFavorites() {
             serverCallService.makeGet("rest/learningObject/usersFavorite", {}, getFavoritesSuccess, getFavoritesFail)
         }
 
@@ -46,7 +56,7 @@ define([
         function getFavoritesFail() {
             console.log("failed to retrieve learning objects favorited by the user")
         }
-
+*/
 
         function getUser() {
             var params = {

@@ -2,14 +2,15 @@ define([
     'angularAMD',
     'services/serverCallService',
     'services/searchService',
+    'services/userDataService',
     'directives/learningObjectRow/learningObjectRow',
     'directives/sidebarTaxon/sidebarTaxon'
 ], function (angularAMD) {
-    angularAMD.directive('dopSidenav', ['serverCallService', '$location', '$sce','searchService', 'authenticatedUserService', '$mdDialog', function () {
+    angularAMD.directive('dopSidenav', ['serverCallService', '$location', '$sce','searchService', 'authenticatedUserService', 'userDataService', '$mdDialog', function () {
         return {
             scope: true,
             templateUrl: 'directives/sidenav/sidenav.html',
-            controller: function ($rootScope, $scope, $location,serverCallService, $location, searchService, $timeout, metadataService, authenticatedUserService, $sce, $mdDialog) {
+            controller: function ($rootScope, $scope, $location,serverCallService, $location, searchService, $timeout, metadataService, authenticatedUserService, userDataService, $sce, $mdDialog) {
 
                 $scope.oneAtATime = true;
 
@@ -281,6 +282,7 @@ define([
                 }
 
                 // Number for sidenav
+
                 function getUsersFavorites() {
                     serverCallService.makeGet("rest/learningObject/usersFavorite", {}, getFavoritesSuccess, getFavoritesFail)
                 }

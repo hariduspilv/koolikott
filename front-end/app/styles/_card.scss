@@ -187,15 +187,12 @@ md-card {
       min-height: 35%;
     }
     .card-cover {
-      height: 100px;
+      height: 50%;
       border-radius: 2px 2px 0 0;
       overflow: hidden;
       position: relative;
       transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
       background-color: $green1;
-      @media (min-width: $layout-breakpoint-xs) {
-        height: 150px;
-      }
     }
 
     .card-hover {

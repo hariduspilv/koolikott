@@ -19,7 +19,7 @@
     </div>
     <div uib-accordion-group class="panel-default" is-open="isViewUserPage">
       <uib-accordion-heading>
-        <md-button class="md-hue-1 md-primary-menu">
+        <md-button class="md-hue-1 md-primary-menu" id="myProfile">
           <div flex layout="row">
             <span class="panel-title__text" data-translate="MY_PROFILE"></span>
             <span flex></span>
@@ -31,7 +31,7 @@
       <ul>
         <li>
           <a data-ng-click="checkUser($event, '/')">
-            <md-button class="md-hue-1 md-secondary-menu" data-ng-class="{'selected': isLocation('/' + user.username) && user != null}">
+            <md-button id="myPortfolios" class="md-hue-1 md-secondary-menu" data-ng-class="{'selected': isLocation('/' + user.username) && user != null}">
               <div flex layout="row">
                 <md-icon class="material-icons">book</md-icon>
                 <span data-translate="MY_PORTFOLIOS"></span>
@@ -42,7 +42,7 @@
         </li>
         <li>
           <a data-ng-click="checkUser($event, '/materials')">
-            <md-button class="md-hue-1 md-secondary-menu" data-ng-class="{'selected': isLocation('/' + user.username + '/materials')}">
+            <md-button id="myMaterials" class="md-hue-1 md-secondary-menu" data-ng-class="{'selected': isLocation('/' + user.username + '/materials')}">
               <div flex layout="row">
                 <md-icon class="material-icons">description</md-icon>
                 <span data-translate="MY_MATERIALS"></span>
@@ -53,7 +53,7 @@
         </li>
         <li>
           <a data-ng-click="checkUser($event, '/favorites')">
-            <md-button class="md-hue-1 md-secondary-menu" data-ng-class="{'selected': isLocation('/' + user.username + '/favorites')}">
+            <md-button id="myFavorites" class="md-hue-1 md-secondary-menu" data-ng-class="{'selected': isLocation('/' + user.username + '/favorites')}">
               <div flex layout="row">
                 <md-icon class="material-icons">star</md-icon>
                 <span data-translate="MY_FAVORITES"></span>
@@ -66,7 +66,7 @@
     </div>
     <div uib-accordion-group class="panel-default" ng-if="modUser()" is-open="isViewAdminPanelPage">
       <uib-accordion-heading>
-        <md-button class="md-hue-1 md-primary-menu" >
+        <md-button id="dashboard" class="md-hue-1 md-primary-menu" >
           <div flex layout="row">
             <span class="panel-title__text" data-translate="DASHBOARD"></span>
             <span flex></span>
@@ -78,7 +78,7 @@
       <ul>
         <li>
           <a href="/dashboard/improperMaterials">
-            <md-button class="md-hue-1 md-secondary-menu" data-ng-class="{'selected': isLocation('/dashboard/improperMaterials')}">
+            <md-button id="improperMaterials" class="md-hue-1 md-secondary-menu" data-ng-class="{'selected': isLocation('/dashboard/improperMaterials')}">
               <div flex layout="row">
                 <md-icon class="material-icons">report</md-icon>
                 <span data-translate="IMPROPER_MATERIALS"</span>
@@ -89,7 +89,7 @@
         </li>
         <li>
           <a href="/dashboard/improperPortfolios">
-            <md-button class="md-hue-1 md-secondary-menu" data-ng-class="{'selected': isLocation('/dashboard/improperPortfolios')}">
+            <md-button id="improperPortfolios" class="md-hue-1 md-secondary-menu" data-ng-class="{'selected': isLocation('/dashboard/improperPortfolios')}">
               <div flex layout="row">
                 <md-icon class="material-icons">report</md-icon>
                 <span data-translate="IMPROPER_PORTFOLIOS"></span>
@@ -100,7 +100,7 @@
         </li>
         <li>
           <a href="/dashboard/brokenMaterials">
-            <md-button class="md-hue-1 md-secondary-menu" data-ng-class="{'selected': isLocation('/dashboard/brokenMaterials')}">
+            <md-button id="brokenMaterials" class="md-hue-1 md-secondary-menu" data-ng-class="{'selected': isLocation('/dashboard/brokenMaterials')}">
               <div flex layout="row">
                 <md-icon class="material-icons">content_cut</md-icon>
                 <span data-translate="BROKEN_MATERIALS"></span>
@@ -111,7 +111,7 @@
         </li>
         <li>
           <a href="/dashboard/deletedMaterials">
-            <md-button class="md-hue-1 md-secondary-menu" data-ng-class="{'selected': isLocation('/dashboard/deletedMaterials')}">
+            <md-button id="deletedMaterials" class="md-hue-1 md-secondary-menu" data-ng-class="{'selected': isLocation('/dashboard/deletedMaterials')}">
               <div flex layout="row">
                 <md-icon class="material-icons">delete</md-icon>
                 <span data-translate="DELETED_MATERIALS"></span>
@@ -122,7 +122,7 @@
         </li>
         <li>
           <a href="/dashboard/deletedPortfolios">
-            <md-button class="md-hue-1 md-secondary-menu" data-ng-class="{'selected': isLocation('/dashboard/deletedPortfolios')}">
+            <md-button id="deletedPortfolios" class="md-hue-1 md-secondary-menu" data-ng-class="{'selected': isLocation('/dashboard/deletedPortfolios')}">
               <div flex layout="row">
                 <md-icon class="material-icons">delete</md-icon>
                 <span data-translate="DELETED_PORTFOLIOS"></span>
@@ -135,7 +135,7 @@
     </div>
     <div uib-accordion-group class="panel-default" is-open="isTaxonomyOpen">
       <uib-accordion-heading>
-        <md-button class="md-hue-1 md-primary-menu" ng-click="changeTaxonomyDataAndVisibility('sidebar', 'primary')">
+        <md-button id="sidebarTaxon" class="md-hue-1 md-primary-menu" ng-click="changeTaxonomyDataAndVisibility('sidebar', 'primary')">
           <div flex layout="row">
             <span class="panel-title__text" data-translate="TABLE_OF_CONTENTS"></span>
             <span flex></span>
