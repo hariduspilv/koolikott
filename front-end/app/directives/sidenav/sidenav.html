@@ -81,8 +81,8 @@
             <md-button id="improperMaterials" class="md-hue-1 md-secondary-menu" data-ng-class="{'selected': isLocation('/dashboard/improperMaterials')}">
               <div flex layout="row">
                 <md-icon class="material-icons">report</md-icon>
-                <span data-translate="IMPROPER_MATERIALS"</span>
-                <span class="count">{{improperMaterialsCount}}</span>
+                <span data-translate="IMPROPER_MATERIALS"></span>
+                <span class="count" ng-bind="improperMaterialsCount"></span>
               </div>
             </md-button>
           </a>
@@ -93,7 +93,7 @@
               <div flex layout="row">
                 <md-icon class="material-icons">report</md-icon>
                 <span data-translate="IMPROPER_PORTFOLIOS"></span>
-                <span class="count">{{improperPortfoliosCount}}</span>
+                <span class="count" ng-bind="improperPortfoliosCount"></span>
               </div>
             </md-button>
           </a>
@@ -104,7 +104,7 @@
               <div flex layout="row">
                 <md-icon class="material-icons">content_cut</md-icon>
                 <span data-translate="BROKEN_MATERIALS"></span>
-                <span class="count">{{brokenMaterialsCount}}</span>
+                <span class="count" ng-bind="brokenMaterialsCount"></span>
               </div>
             </md-button>
           </a>
@@ -115,7 +115,7 @@
               <div flex layout="row">
                 <md-icon class="material-icons">delete</md-icon>
                 <span data-translate="DELETED_MATERIALS"></span>
-                <span class="count">{{deletedMaterialsCount}}</span>
+                <span class="count" ng-bind="deletedMaterialsCount"></span>
               </div>
             </md-button>
           </a>
@@ -126,7 +126,7 @@
               <div flex layout="row">
                 <md-icon class="material-icons">delete</md-icon>
                 <span data-translate="DELETED_PORTFOLIOS"></span>
-                <span class="count">{{deletedPortfoliosCount}}</span>
+                <span class="count" ng-bind="deletedPortfoliosCount"></span>
               </div>
             </md-button>
           </a>

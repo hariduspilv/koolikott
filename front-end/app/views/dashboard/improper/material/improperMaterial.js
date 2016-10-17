@@ -2,33 +2,32 @@ define([
     'app',
     'ngload!angular-material-data-table',
     'services/serverCallService',
+    'services/userDataService',
     'views/dashboard/baseTable/baseTable'
 ], function(app) {
-    app.controller('improperMaterialsController', ['$scope', 'serverCallService', '$controller', '$filter',
-        function($scope, serverCallService, $controller, $filter) {
+    app.controller('improperMaterialsController', ['$scope', 'serverCallService', '$controller', '$filter', 'userDataService',
+        function($scope, serverCallService, $controller, $filter, userDataService) {
             var base = $controller('baseTableController', {
                 $scope: $scope
             });
 
-            serverCallService.makeGet("rest/impropers", {}, filterResults, base.getItemsFail);
+            userDataService.loadImproperItems(function(impropers) {
+                var improperMaterials = [];
+
+                for (var i = 0; i < impropers.length; i++) {
+                    if (impropers[i].learningObject.type === '.Material' && !impropers[i].learningObject.deleted) {
+                        improperMaterials.push(impropers[i]);
+                    }
+                }
+
+                base.getItemsSuccess(improperMaterials, 'byReportCount', true);
+            });
 
             $scope.title = $filter('translate')('DASHBOARD_IMRPOPER_MATERIALS');
 
             $scope.bindTable = function() {
               base.buildTable('#improper-materials-table', 'views/dashboard/improper/improper.html');
             };
-
-            function filterResults(impropers) {
-            	var improperMaterials = [];
-
-            	for (var i = 0; i < impropers.length; i++) {
-            		if (impropers[i].learningObject.type === '.Material' && !impropers[i].learningObject.deleted) {
-                        improperMaterials.push(impropers[i]);
-            		}
-            	}
-
-            	base.getItemsSuccess(improperMaterials, 'byReportCount', true);
-            }
 
             $scope.getLearningObjectTitle = function(material)  {
             	return base.getCorrectLanguageTitle(material);

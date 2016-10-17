@@ -1,8 +1,9 @@
 define([
     'angularAMD',
     'services/serverCallService',
+    'services/userDataService',
 ], function (angularAMD) {
-    angularAMD.directive('dopErrorMessage', ['$location', 'serverCallService', function ($location, serverCallService) {
+    angularAMD.directive('dopErrorMessage', ['$location', 'serverCallService', 'userDataService', function ($location, serverCallService, userDataService) {
         return {
             scope: {
                 data: '='
@@ -48,20 +49,14 @@ define([
                 }, true);
 
                 function getImproperMessage(id) {
-                    serverCallService.makeGet("rest/impropers", {}, getImproperItemsSuccess, getItemsFail);
-
-                    function getImproperItemsSuccess(impropers) {
+                    userDataService.loadImproperItems(function(impropers) {
                         for (var i = 0; i < impropers.length; i++) {
                             if (impropers[i].learningObject.id == id) {
                                 $scope.improperMessage = impropers[i].reason;
+                                break;
                             }
                         }
-                    }
-                }
-
-
-                function getItemsFail() {
-                    console.log("Failed to get items");
+                    });
                 }
             }
         }

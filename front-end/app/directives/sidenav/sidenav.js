@@ -6,11 +6,11 @@ define([
     'directives/learningObjectRow/learningObjectRow',
     'directives/sidebarTaxon/sidebarTaxon'
 ], function (angularAMD) {
-    angularAMD.directive('dopSidenav', ['serverCallService', '$location', '$sce','searchService', 'authenticatedUserService', 'userDataService', '$mdDialog', function () {
+    angularAMD.directive('dopSidenav', ['serverCallService', '$location', '$sce','searchService', 'authenticatedUserService', '$mdDialog', 'userDataService', function () {
         return {
             scope: true,
             templateUrl: 'directives/sidenav/sidenav.html',
-            controller: function ($rootScope, $scope, $location,serverCallService, $location, searchService, $timeout, metadataService, authenticatedUserService, userDataService, $sce, $mdDialog) {
+            controller: function ($rootScope, $scope, $location,serverCallService, $location, searchService, $timeout, metadataService, authenticatedUserService, $sce, $mdDialog, userDataService) {
 
                 $scope.oneAtATime = true;
 
@@ -283,108 +283,37 @@ define([
 
                 // Number for sidenav
 
-                function getUsersFavorites() {
-                    serverCallService.makeGet("rest/learningObject/usersFavorite", {}, getFavoritesSuccess, getFavoritesFail)
-                }
-
-                function getFavoritesSuccess(data) {
-                    if(data) {
-                        $scope.favorites = data
-                    }
-                }
-
-                function getFavoritesFail() {
-                    console.log("failed to retrieve learning objects favorited by the user")
-                }
-
-                function getUsersMaterials() {
-                    var params = {
-                        'username': $scope.user.username
-                    };
-                    var url = "rest/material/getByCreator";
-                    serverCallService.makeGet(url, params, getUsersMaterialsSuccess, getUsersMaterialsFail);
-                }
-
-                function getUsersMaterialsSuccess(data) {
-                    if (isEmpty(data)) {
-                        getUsersMaterialsFail();
-                    } else {
-                        $scope.materials = data;
-                    }
-                }
-
-                function getUsersMaterialsFail() {
-                    console.log('Failed to get materials.');
-                }
-
-                function getUsersPortfolios() {
-                    var params = {
-                        'username': $scope.user.username
-                    };
-                    var url = "rest/portfolio/getByCreator";
-                    serverCallService.makeGet(url, params, getUsersPortfoliosSuccess, getUsersPortfoliosFail);
-                }
-
-                function getUsersPortfoliosSuccess(data) {
-                    if (isEmpty(data)) {
-                        getUsersPortfoliosFail();
-                    } else {
-                        $scope.portfolios = data;
-                    }
-                }
-
-                function getUsersPortfoliosFail() {
-                    console.log('Failed to get portfolios.');
-                }
-
-
                 function getNumbersForSidenav() {
                     if($scope.user) {
                         if($scope.user.role === "ADMIN" || $scope.user.role === "MODERATOR") {
-                            serverCallService.makeGet("rest/material/getBroken", {}, getMaterialsBrokenItemsSuccess, getItemsFail);
-                            serverCallService.makeGet("rest/material/getDeleted", {}, getMaterialsDeletedItemsSuccess, getItemsFail);
-                            serverCallService.makeGet("rest/portfolio/getDeleted", {}, getPortfoliosDeletedItemsSuccess, getItemsFail);
-                            serverCallService.makeGet("rest/impropers", {}, getImproperItemsSuccess, getItemsFail);
 
+                            // Admin info
+                            userDataService.loadBrokenMaterialsCount(function(data) {
+                                $scope.brokenMaterialsCount = data;
+                            });
+                            userDataService.loadDeletedMaterialsCount(function(data) {
+                                $scope.deletedMaterialsCount = data;
+                            });
+                            userDataService.loadDeletedPortfoliosCount(function(data) {
+                                $scope.deletedPortfoliosCount = data;
+                            });
+                            userDataService.loadImproperItems(function(data) { sortImproperItems(data) });
                         }
-                        getUsersFavorites();
-                        getUsersMaterials();
-                        getUsersPortfolios();
+                        // User info
+                        userDataService.loadUserFavoritesCount(function(data) {
+                            $scope.favorites = data;
+                        });
+                        userDataService.loadUserMaterialsCount(function(data) {
+                            $scope.materials = data;
+                        });
+                        userDataService.loadUserPortfoliosCount(function(data) {
+                            $scope.portfolios = data;
+                        });
+
                     }
                 }
 
-                function getItemsFail() {
-                    console.log("Failed to get data");
-                }
-
-                // Admin info
-
-                function getMaterialsBrokenItemsSuccess(data) {
-                    var items = data;
-                    var list = [];
-                    for(var i = 0; i < items.length; i++) {
-                        if(items[i].material.deleted == false) {
-                            list.push(items[i]);
-                        }
-                    }
-
-                    $scope.brokenMaterialsCount = list.length;
-                }
-                function getMaterialsDeletedItemsSuccess(data) {
-                    if (isEmpty(data)) {
-                        log('Getting data failed.');
-                    } else {
-                        $scope.deletedMaterialsCount = data.length;
-                    }
-                }
-                function getPortfoliosDeletedItemsSuccess(data) {
-                    if (isEmpty(data)) {
-                        log('Getting data failed.');
-                    } else {
-                        $scope.deletedPortfoliosCount = data.length;
-                    }
-                }
-                function getImproperItemsSuccess(data) {
+                function sortImproperItems(data) {
                     var impropers = data;
                     var improperMaterials = [];
                     var improperPortfolios = [];
@@ -396,6 +325,7 @@ define([
                             improperPortfolios.push(impropers[i]);
                         }
                     }
+
                     $scope.improperMaterialsCount = improperMaterials.length;
                     $scope.improperPortfoliosCount = improperPortfolios.length;
                 }

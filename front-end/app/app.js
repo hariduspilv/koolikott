@@ -239,8 +239,7 @@ define([
 
     app.run(function ($rootScope, $location, authenticatedUserService) {
         $rootScope.$on('$routeChangeSuccess', function () {
-            // Force header to update color
-            $rootScope.forceUpdate = new Date();
+
 
             var path = $location.path();
 
@@ -251,13 +250,11 @@ define([
             var editModeAllowed = ["/portfolio/edit", "/search/result", "/material"];
             var user = authenticatedUserService.getUser();
 
-            // Prime user is a user which is moderator or admin
-            var primeUser = false;
-            if (user != null) {
-                if (user.role == 'ADMIN' || user.role == 'MODERATOR') {
-                    primeUser = true;
-                }
+            if(user) {
+                // Force header to update color
+                $rootScope.forceUpdate = new Date();
             }
+
 
             $rootScope.isViewPortforlioPage = path === '/portfolio';
             $rootScope.isEditPortfolioPage = path === '/portfolio/edit';
@@ -276,12 +273,6 @@ define([
                 $rootScope.isViewAdminPanelPage = true;
             } else {
                 $rootScope.isViewAdminPanelPage = false;
-            }
-
-            if (primeUser) {
-                $rootScope.isRedHeaderMode = true;
-            } else {
-                $rootScope.isRedHeaderMode = false;
             }
 
             $rootScope.isMySchoolbagOpen = path === (user && path.startsWith("/" + user.username));

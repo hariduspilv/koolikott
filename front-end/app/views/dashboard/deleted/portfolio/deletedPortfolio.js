@@ -2,22 +2,23 @@ define([
     'app',
     'angular-material-data-table',
     'services/serverCallService',
+    'services/userDataService',
     'views/dashboard/baseTable/baseTable'
 ], function(app) {
-    app.controller('deletedPortfoliosController', ['$scope', 'serverCallService', '$controller', '$filter',
-        function($scope, serverCallService, $controller, $filter) {
+    app.controller('deletedPortfoliosController', ['$scope', 'serverCallService', '$controller', '$filter', 'userDataService',
+        function($scope, serverCallService, $controller, $filter, userDataService) {
             var base = $controller('baseTableController', {
                 $scope: $scope
             });
 
-            serverCallService.makeGet("rest/portfolio/getDeleted", {}, base.getItemsSuccess, base.getItemsFail);
+            userDataService.loadDeletedPortfolios(base.getItemsSuccess);
 
             $scope.title = $filter('translate')('DASHBOARD_DELETED_PORTFOLIOS');
 
             $scope.formatMaterialUpdatedDate = function (updatedDate) {
                 return formatDateToDayMonthYear(updatedDate);
             }
-            
+
             function restoreSuccess(portfolio) {
                 var index = $scope.data.indexOf(portfolio);
                 $scope.data.splice(index, 1);
