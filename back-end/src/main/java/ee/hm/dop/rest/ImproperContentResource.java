@@ -77,15 +77,6 @@ public class ImproperContentResource extends BaseResource {
         return result;
     }
 
-    @GET
-    @Produces(MediaType.APPLICATION_JSON)
-    @Path("count")
-    @RolesAllowed({"USER", "ADMIN", "RESTRICTED", "MODERATOR"})
-    public Response getImpropersCount() {
-        return Response.ok(learningObjectService.getUserFavorites(getLoggedInUser()).size()).build();
-
-    }
-
     @DELETE
     @RolesAllowed({"ADMIN"})
     public void removeImpropers(@QueryParam("learningObject") Long learningObjectId) {
