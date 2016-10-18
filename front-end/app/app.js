@@ -247,9 +247,13 @@ define([
             if (path === '/dashboard') {
                 $location.path('/dashboard/improperMaterials');
             }
-            if (path === '/' + user.username && authenticatedUserService.isAuthenticated()) {
+
+
+            if (user && path === '/' + user.username && authenticatedUserService.isAuthenticated()) {
                 $location.path('/' + user.username + '/materials');
             }
+
+
 
             var editModeAllowed = ["/portfolio/edit", "/search/result", "/material"];
 
@@ -282,7 +286,6 @@ define([
             } else {
                 $rootScope.isTaxonomyOpen = false;
             }
-
             if (path == "/portfolio/edit") {
                 $rootScope.isEditPortfolioMode = true;
                 $rootScope.selectedMaterials = [];
