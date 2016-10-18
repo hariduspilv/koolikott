@@ -29,7 +29,6 @@ define([
             $scope.fileUploaded = false;
             $scope.uploadingFile = false;
             $scope.review = {};
-            $scope.maxPictureSize = 10; //Initial placeholder
             $scope.maxReviewSize = 10;
 
             init();
