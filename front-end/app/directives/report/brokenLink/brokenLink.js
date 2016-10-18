@@ -56,10 +56,7 @@ define([
                 function markCorrectSuccess() {
                     $scope.isBroken = false;
                     $scope.isBrokenReportedByUser = false;
-                    setTimeout(function () {
-                        location.reload();
-                    }, 100);
-
+                    $rootScope.learningObjectBroken = false;
                 }
 
                 function queryFailed() {

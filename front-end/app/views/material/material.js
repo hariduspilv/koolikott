@@ -358,6 +358,7 @@ define([
             function deleteMaterialSuccess() {
                 toastService.showOnRouteChange('MATERIAL_DELETED');
                 $scope.material.deleted = true;
+                $rootScope.learningObjectDeleted = true;
             }
 
             function deleteMaterialFailed() {
@@ -380,6 +381,7 @@ define([
             function restoreSuccess() {
                 toastService.show('MATERIAL_RESTORED');
                 $scope.material.deleted = false;
+                $rootScope.learningObjectDeleted = false;
             }
 
             function restoreFail() {

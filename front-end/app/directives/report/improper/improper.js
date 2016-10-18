@@ -50,9 +50,7 @@ define([
 
                 function setNotImproperSuccessful() {
                     $scope.isReported = false;
-                    setTimeout(function () {
-                        location.reload();
-                    }, 100);
+                    $rootScope.learningObjectImproper = false;
 
                 }
 
