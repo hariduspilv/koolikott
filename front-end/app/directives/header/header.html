@@ -1,4 +1,5 @@
-<md-toolbar id="md-toolbar-header" class="navbar md-whiteframe-1dp {{isEditPortfolioMode ? 'md-accent' : 'md-primary'}}" ng-class="{'md-red': headerRed, 'md-gray': headerGray}"
+<md-toolbar id="md-toolbar-header" class="navbar md-whiteframe-1dp md-primary"
+            ng-class="{'md-accent': isEditPortfolioMode ,'md-red': (isViewAdminPanelPage || (learningObjectImproper && isViewMaterialPortfolioPage) || (learningObjectBroken && isViewMaterialPortfolioPage)), 'md-gray': (learningObjectDeleted && isViewMaterialPortfolioPage)}"
             data-click-outside="clickOutside()" outside-if-not="header-show-detailed-search-icon, detailed-search">
   <div class="md-toolbar-tools" layout="row">
     <!-- logo and menu button -->
@@ -13,7 +14,7 @@
           <md-tooltip>
             <span data-translate="HEADER_TOOLTIP_GO_TO_LANDING_PAGE"></span>
           </md-tooltip>
-          <a data-ng-href="/" class="logo {{isEditPortfolioMode ? 'shadow-edit' : 'shadow-primary'}}"  ng-class="{'shadow-admin': headerRed, 'shadow-deleted': headerGray}" id="logo"></a>
+          <a data-ng-href="/" class="logo {{isEditPortfolioMode ? 'shadow-edit' : 'shadow-primary'}}"  ng-class="{'shadow-admin': (isViewAdminPanelPage || (learningObjectImproper && isViewMaterialPortfolioPage) || (learningObjectBroken && isViewMaterialPortfolioPage)), 'shadow-deleted': (learningObjectDeleted && isViewMaterialPortfolioPage)}" id="logo"></a>
         </div>
       </div>
     </div>

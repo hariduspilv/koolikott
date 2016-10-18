@@ -10,6 +10,8 @@ define([
     var LICENSE_TYPES;
     var RESOURCE_TYPES;
     var USED_LANGUAGES;
+    var EDUCATIONAL_CONTEXT;
+    var REDUCED_EDUCATIONAL_CONTEXT;
 
     var crossCurricularThemesCallbacks = [];
     var keyCompetencesCallbacks = [];
@@ -132,11 +134,10 @@ define([
 
             function getEducationalContextSuccess(data) {
                 if (!isEmpty(data)) {
+                    EDUCATIONAL_CONTEXT = data;
                     educationalContextsCallbacks.forEach(function(callback) {
                         callback(data);
                     });
-                    var taxon = JSOG.stringify(data);
-                    localStorage.setItem("taxon", taxon);
                 }
             }
 
@@ -146,11 +147,10 @@ define([
 
             function getReducedTaxonSuccess(data) {
                 if (!isEmpty(data)) {
+                    REDUCED_EDUCATIONAL_CONTEXT = data;
                     reducedTaxonCallbacks.forEach(function(callback) {
                         callback(data);
                     });
-                    var taxon = JSOG.stringify(data);
-                    localStorage.setItem("reducedTaxon", taxon);
                 }
             }
 
@@ -206,10 +206,8 @@ define([
                 },
 
                 loadEducationalContexts: function(callback) {
-                  var taxon = localStorage.getItem("taxon");
-                  taxon = JSOG.parse(taxon);
-                    if (taxon) {
-                        callback(taxon);
+                    if (EDUCATIONAL_CONTEXT) {
+                        callback(EDUCATIONAL_CONTEXT);
                     } else {
                         // Save callback, call it when data arrives
                         educationalContextsCallbacks.push(callback);
@@ -217,10 +215,8 @@ define([
                 },
 
                 loadReducedTaxon: function(callback) {
-                    var taxon = localStorage.getItem("reducedTaxon");
-                    taxon = JSOG.parse(taxon);
-                    if (taxon) {
-                        callback(taxon);
+                    if (REDUCED_EDUCATIONAL_CONTEXT) {
+                        callback(REDUCED_EDUCATIONAL_CONTEXT);
                     } else {
                         // Save callback, call it when data arrives
                         reducedTaxonCallbacks.push(callback);

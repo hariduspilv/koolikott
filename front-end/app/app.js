@@ -240,7 +240,6 @@ define([
     app.run(function ($rootScope, $location, authenticatedUserService) {
         $rootScope.$on('$routeChangeSuccess', function () {
 
-
             var path = $location.path();
 
             if (path == '/dashboard') {
@@ -277,6 +276,11 @@ define([
 
             $rootScope.isMySchoolbagOpen = path === (user && path.startsWith("/" + user.username));
 
+            if(path === '/material' || path === '/portfolio') {
+                $rootScope.isViewMaterialPortfolioPage = true;
+            } else {
+                $rootScope.isViewMaterialPortfolioPage = false;
+            }
 
             if(path === '/material' || path === '/' || ($location.url().indexOf("/search") != -1) || !$rootScope.isEditPortfolioPage) {
                 $rootScope.isTaxonomyOpen = true;

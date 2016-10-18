@@ -16,65 +16,6 @@ define([
                 templateUrl: 'directives/header/header.html',
                 controller: function ($scope, $location, authenticationService, authenticatedUserService, $rootScope) {
 
-
-                    // Starts header color updated process
-                    $scope.$watch(function() {
-                        return $rootScope.forceUpdate;
-                    }, function() {
-                        updateHeaderColor();
-                    }, true);
-
-                    // In conclusion this function checks different states to decide the color of the header
-                    function updateHeaderColor() {
-                        var currentPath = $location.path();
-                        if($rootScope.isDeleted === undefined) {
-                            $rootScope.isDeleted = false;
-                        }
-                        if($rootScope.isBrokenImproper === undefined) {
-                            $rootScope.isBrokenImproper = false;
-                        }
-
-                        // Get user states
-                        $scope.isAdmin = function () {
-                            return authenticatedUserService.isAdmin();
-                        };
-                        $scope.isModerator = function () {
-                            return authenticatedUserService.isModerator();
-                        };
-
-                        // Check if user is on portfolio or material page
-                        if($location.url().indexOf('/portfolio?') !== -1 || $location.url().indexOf('/material?') !== -1) {
-                            $scope.isPortfolioMaterial = true;
-                        } else {
-                            $scope.isPortfolioMaterial = false;
-                        }
-
-                        // Check if user is on dashboard
-                        if( currentPath.indexOf('/dashboard') !== -1 ) {
-                            $scope.isViewDashboard = true;
-                        } else {
-                            $scope.isViewDashboard = false;
-                        }
-
-                        // If user is admin or moderator, then give colors according to conditions
-                        if($scope.isAdmin && $scope.isModerator) {
-
-                            if ($scope.isPortfolioMaterial && $rootScope.isDeleted) {
-                                $scope.headerGray = true;
-                            } else {
-                                $scope.headerGray = false;
-                            }
-                            if ($scope.isPortfolioMaterial && $rootScope.isBrokenImproper || $scope.isViewDashboard) {
-                                $scope.headerRed = true;
-                            } else {
-                                $scope.headerRed = false;
-                            }
-                        } else {
-                            $scope.headerGray = false;
-                            $scope.headerRed = false;
-                        }
-                    }
-
                     $scope.detailedSearch = {};
                     $scope.detailedSearch.isVisible = false;
                     $scope.showLanguageSelection = false;

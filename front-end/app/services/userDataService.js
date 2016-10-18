@@ -72,7 +72,6 @@ define([
                     });
                     brokenMaterialsCallbacks = [];
                     var string = JSOG.stringify(data);
-                    localStorage.setItem("brokenMaterials", string);
                 }
             }
             function getBrokenMaterialsCountSuccess(data) {
@@ -94,7 +93,6 @@ define([
                     });
                     deletedMaterialsCallbacks = [];
                     var string = JSOG.stringify(data);
-                    localStorage.setItem("deletedMaterials", string);
                 }
             }
             function getDeletedMaterialsCountSuccess(data) {
@@ -116,7 +114,6 @@ define([
                     });
                     deletedPortfoliosCallbacks = [];
                     var string = JSOG.stringify(data);
-                    localStorage.setItem("deletedPortfolios", string);
                 }
             }
             function getDeletedPortfoliosCountSuccess(data) {
@@ -138,7 +135,6 @@ define([
                     });
                     improperItemsCallbacks = [];
                     var string = JSOG.stringify(data);
-                    localStorage.setItem("improperItems", string);
                 }
             }
 
@@ -150,7 +146,6 @@ define([
                     });
                     userFavoritesCallbacks = [];
                     var string = JSOG.stringify(data);
-                    localStorage.setItem("userFavorites", string);
                 }
             }
             function getFavoritesCountSuccess(data) {
@@ -172,7 +167,6 @@ define([
                     });
                     userMaterialsCallbacks = [];
                     var string = JSOG.stringify(data);
-                    localStorage.setItem("userMaterials", string);
                 }
             }
             function getUsersMaterialsCountSuccess(data) {
@@ -194,7 +188,6 @@ define([
                     });
                     userPortfoliosCallbacks = [];
                     var string = JSOG.stringify(data);
-                    localStorage.setItem("userPortfolios", string);
                 }
             }
             function getUsersPortfoliosCountSuccess(data) {
@@ -238,7 +231,7 @@ define([
                     if (data) {
                         callback(data);
                     }
-                    deletedMaterialsCountCallbacks.push(callback);
+                    deletedMaterialsCallbacks.push(callback);
                     serverCallService.makeGet("rest/material/getDeleted", {}, getDeletedMaterialsSuccess, getItemsFail);
                 },
                 loadDeletedMaterialsCount: function(callback) {
@@ -247,7 +240,7 @@ define([
                     if (data) {
                         callback(data);
                     }
-                    deletedMaterialsCallbacks.push(callback);
+                    deletedMaterialsCountCallbacks.push(callback);
                     serverCallService.makeGet("rest/material/getDeleted?count=true", {}, getDeletedMaterialsCountSuccess, getItemsFail);
                 },
 
@@ -313,7 +306,7 @@ define([
                     if (data) {
                         callback(data);
                     }
-                    userFavoritesCallbacks.push(callback);
+                    userMaterialsCallbacks.push(callback);
                     serverCallService.makeGet("rest/material/getByCreator", params, getUsersMaterialsSuccess, getItemsFail);
                 },
                 loadUserMaterialsCount: function(callback) {

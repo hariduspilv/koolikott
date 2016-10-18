@@ -1,3 +1,8 @@
+// 2 ng-view's on screen fix
+.ng-leave.ng-leave-active {
+  display: none;
+}
+
 // Scaffolding
 html, body {
   background: $bg-gray;

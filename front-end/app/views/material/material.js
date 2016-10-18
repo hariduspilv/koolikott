@@ -136,8 +136,9 @@ define([
                 $scope.material.source = getSource($scope.material);
                 storageService.setMaterial(null);
 
-                // Giving data to sidenav to open taxon tree
-                $rootScope.currentMaterial = $scope.material;
+                $rootScope.learningObjectBroken = ($scope.material.broken > 0) ? true : false;
+                $rootScope.learningObjectImproper = ($scope.material.improper > 0) ? true : false;
+                $rootScope.learningObjectDeleted = ($scope.material.deleted == true) ? true : false;
 
                 var viewCountParams = {
                     'type': '.Material',

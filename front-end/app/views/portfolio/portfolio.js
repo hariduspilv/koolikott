@@ -94,6 +94,12 @@ define([
             function setPortfolio(portfolio) {
                 $scope.portfolio = portfolio;
                 $rootScope.savedPortfolio = portfolio;
+
+                if($scope.portfolio) {
+                    $rootScope.learningObjectBroken = ($scope.portfolio.broken > 0) ? true : false;
+                    $rootScope.learningObjectImproper = ($scope.portfolio.improper > 0) ? true : false;
+                    $rootScope.learningObjectDeleted = ($scope.portfolio.deleted == true) ? true : false;
+                }
             }
 
             $scope.modUser = function() {
