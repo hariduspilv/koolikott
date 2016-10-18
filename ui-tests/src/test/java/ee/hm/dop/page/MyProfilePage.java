@@ -21,6 +21,7 @@ public class MyProfilePage extends Page {
 	private By starIcon = By.xpath("//div/md-icon[text()='star_outline']");
 	private By addMaterialToExistingPortfolio = By.xpath("//button[@data-ng-click='showAddMaterialsToPortfolioDialog()']");
 	private By materialMessage = By.cssSelector("div.md-toast-content");
+	private By deletedPortfolioToast = By.cssSelector("span.md-toast-text");
 
 
 	public String getUserName() {
@@ -101,8 +102,13 @@ public class MyProfilePage extends Page {
 	
 
 	public PortfolioPage openPortfolio() {
+		PageHelpers.waitForVisibility(addedPortfolio);
 		getDriver().findElement(addedPortfolio).click();
 		return new PortfolioPage();
+	}
+	
+	public String isPortfolioDeletedToastVisible() {
+		return getDriver().findElement(deletedPortfolioToast).getText();
 	}
 
 }

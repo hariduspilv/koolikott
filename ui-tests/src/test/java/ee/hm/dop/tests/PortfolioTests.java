@@ -21,7 +21,7 @@ public class PortfolioTests {
 				.chooseUserType("User")
 				.clickAddPortfolio()
 				.insertPortfolioTitle()
-				//.uploadPhoto()
+				.uploadPhoto()
 				.addDescription()
 				.selectEducationalContext()
 				.selectSubjectArea()
@@ -42,7 +42,7 @@ public class PortfolioTests {
 				.clickAddPortfolio()
 				.insertPortfolioTitle()
 				.addDescription()
-				//.uploadPhoto()
+				.uploadPhoto()
 				.selectEducationalContext()
 				.selectSubjectArea()
 				.selectAgeGroup()
@@ -55,9 +55,6 @@ public class PortfolioTests {
 				.insertTags()
 				.savePortfolioCopy()
 				.clickExitAndSave()
-				.getUserMenu()
-				.clickMyProfile()
-				.openPortfolio()
 				.wordCopyIsAddedToPortfolioTitle();
 		
 		assertTrue(portfolioCopyWasMade);
@@ -85,7 +82,7 @@ public class PortfolioTests {
 	@Test
 	public void notifyImproperPortfolio() {
 
-		boolean contentsIsNotImproperIsDisplayed = goToLandingPage()
+		boolean contentsIsNotImproperIsDisabled = goToLandingPage()
 				.chooseUserType("User")
 				.openPortfolio()
 				.clickActionsMenu()
@@ -94,16 +91,41 @@ public class PortfolioTests {
 				.getUserMenu()
 				.logOff()
 				.chooseUserType("Admin")
-				.getUserMenu()
+				.getLeftMenu()
+				.checkLeftMenuButtons()
 				.clickDashboard()
+				.clickImproperPortfolios()
+				.getDashboardPage()
 				.clickToOrderImproperPortfolios()
 				.clickOpenPortfolioFromDashboard()
 				.clickActionsMenu()
-				.contentsIsNotImproperIsDisplayed();
+				.setContentIsNotImproper()
+				.clickActionsMenu()
+				.contentsIsNotImproperIsDisabled();
 
-		assertTrue(contentsIsNotImproperIsDisplayed);
+		assertTrue(contentsIsNotImproperIsDisabled);
 
 	}
+	
+	@Test
+	public void removePortfolio() {
+
+		String deletedPortfolioToast = goToLandingPage()
+				.chooseUserType("Admin")
+				.openPortfolio()
+				.clickActionsMenu()
+				.clickRemovePortfolio()
+				.confirmImproperContent()
+				.getLeftMenu()
+				.clickMyThings()
+				.clickMyPortfolios()
+				.getMyProfilePage()
+				.isPortfolioDeletedToastVisible();
+
+		Assert.assertEquals("Kogumik kustutatud", deletedPortfolioToast);
+
+	}
+	
 	
 	@Test
 	public void portfolioIsAddedToRecommendations() {
@@ -113,7 +135,7 @@ public class PortfolioTests {
 				.clickAddPortfolio()
 				.insertPortfolioTitle()
 				.addDescription()
-				//.uploadPhoto()
+				.uploadPhoto()
 				.selectEducationalContext()
 				.selectSubjectArea()
 				.selectAgeGroup()

@@ -2,6 +2,7 @@ package ee.hm.dop.page;
 
 import ee.hm.dop.components.AdvancedSearch;
 import ee.hm.dop.components.Header;
+import ee.hm.dop.components.LeftMenu;
 import ee.hm.dop.components.Logo;
 import ee.hm.dop.components.SimpleSearch;
 import ee.hm.dop.components.UserMenu;
@@ -43,6 +44,12 @@ public abstract class Page extends SeleniumUser {
 
 	public LandingPage getLandingPage() {
 		return landingPage;
+	}
+	
+	private static final LeftMenu leftMenu = new LeftMenu();
+
+	public LeftMenu getLeftMenu() {
+		return leftMenu;
 	}
 
    

@@ -89,7 +89,6 @@ public class EditPortfolioPage extends Page {
 	public EditPortfolioPage setUrlLink() {
 		getDriver().findElement(urlLink).clear();
 		getDriver().findElement(urlLink).sendKeys("http://a" + PageHelpers.generateUrl(30));
-		PageHelpers.getScreenshot();
 		return this;
 	}
 

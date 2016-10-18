@@ -8,6 +8,7 @@ import ee.hm.dop.helpers.PageHelpers;
 import ee.hm.dop.page.EditPortfolioPage;
 
 
+
 public class AdditionalDataPart extends PageComponent {
 	
 	private By createMaterialButton = By.id("add-material-create-button");
@@ -100,6 +101,7 @@ public class AdditionalDataPart extends PageComponent {
 	}
 	
 	public EditPortfolioPage clickAddMaterial() {
+		PageHelpers.waitForVisibility(createMaterialButton);
 		getDriver().findElement(createMaterialButton).click();
 		PageHelpers.waitForSeconds(3500);
 		return new EditPortfolioPage();

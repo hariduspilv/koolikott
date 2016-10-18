@@ -13,6 +13,7 @@ public class PortfolioPage extends Page {
 	private By menuBar = By.xpath("//md-icon[text()='more_vert']");
 	private By editPortfolio = By.xpath("//button[@data-ng-click='editPortfolio()']");
 	private By improperContent = By.xpath("//button[@data-ng-click='showConfirmationDialog()']");
+	private By removeButton = By.xpath("//button[@data-ng-click='confirmPortfolioDeletion()']");
 	private By notImproperContent = By.xpath("//button[@data-ng-click='setNotImproper()']");
 	private By addedTag = By.xpath("//a[@data-ng-click='getTagSearchURL($event, $chip.tag)']");
 	private By recommendationList = By.xpath("//button[@data-ng-click='recommend()']");
@@ -21,10 +22,13 @@ public class PortfolioPage extends Page {
 	private By copyPortfolioButton = By.xpath("//button[@data-ng-click='copyPortfolio()']");
 	private By portfolioTitle = By.xpath("//h1[@data-ng-bind='portfolio.title']");
 	private By creatorName = By.xpath("//p[@data-ng-if='isNullOrZeroLength(material.authors)']");
-	private By materialBox = By.xpath("//h4[@class='md-headline two-rows']");
+	private By materialBox = By.cssSelector("span.md-subhead.ellipsisText");
+	private By notImproperContentDisabled = By.cssSelector("button[data-ng-click='setNotImproper()'][aria-disabled='true']");
+			//By.xpath("//button[contains(@data-ng-click, 'setNotImproper()')][contains(@aria-disabled,'true')]");
 
 
 	public PortfolioPage clickActionsMenu() {
+		PageHelpers.waitForVisibility(menuBar);
 		getDriver().findElement(menuBar).click();
 		PageHelpers.waitForSeconds(1500);
 		return this;
@@ -62,16 +66,31 @@ public class PortfolioPage extends Page {
 		PageHelpers.waitForSeconds(2500);
 		return new ConfirmationDialogPopup();
 	}
+	
+	public ConfirmationDialogPopup clickRemovePortfolio() {
+		getDriver().findElement(removeButton).sendKeys(Keys.ENTER);
+		PageHelpers.waitForSeconds(2500);
+		return new ConfirmationDialogPopup();
+	}
 
 	public boolean removeFromRecommendationListIsDisplayed() {
 		PageHelpers.waitForSeconds(1500);
 		return getDriver().findElement(removeFromRecommendations).isDisplayed();
 
 	}
-
-	public boolean contentsIsNotImproperIsDisplayed() {
+	
+	public PortfolioPage setContentIsNotImproper() {
+		PageHelpers.waitForVisibility(notImproperContent);
+		getDriver().findElement(notImproperContent).click();
 		PageHelpers.waitForSeconds(1500);
-		return getDriver().findElement(notImproperContent).isDisplayed();
+		return this;
+	}
+
+
+	public boolean contentsIsNotImproperIsDisabled() {
+		PageHelpers.waitForVisibility(notImproperContentDisabled);
+        return getDriver().findElement(notImproperContentDisabled).isDisplayed();
+	
 
 	}
 	
@@ -91,6 +110,7 @@ public class PortfolioPage extends Page {
 		return getDriver().findElement(creatorName).getText();
 
 	}
+	
 
 	public boolean isMaterialBoxIsDisplayed() {
 		return getDriver().findElement(materialBox).isDisplayed();

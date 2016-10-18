@@ -22,7 +22,7 @@ public class MaterialTests {
 				.moveCursorToAddPortfolio()
 				.moveCursorToAddMaterial()
 				.clickAddMaterial()
-				.setHyperLink("http://thoughtcatalog.com/reel/")
+				.setHyperLink()
 				//.uploadPhoto()
 				.setMaterialTitle()
 				.addDescription()

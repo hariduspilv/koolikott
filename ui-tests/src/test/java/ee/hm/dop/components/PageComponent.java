@@ -1,6 +1,8 @@
 package ee.hm.dop.components;
 
+import ee.hm.dop.page.ImproperPortfoliosDashboardPage;
 import ee.hm.dop.page.LandingPage;
+import ee.hm.dop.page.MyProfilePage;
 import ee.hm.dop.tests.SeleniumUser;
 
 public abstract class PageComponent extends SeleniumUser {
@@ -21,5 +23,17 @@ public abstract class PageComponent extends SeleniumUser {
 
 	public SimpleSearch getSimpleSearch() {
 		return simpleSearch;
+	}
+	
+	private static final ImproperPortfoliosDashboardPage improperPortfoliosDashboardPage = new ImproperPortfoliosDashboardPage();
+
+	public ImproperPortfoliosDashboardPage getDashboardPage() {
+		return improperPortfoliosDashboardPage;
+	}
+	
+	private static final MyProfilePage myProfilePage = new MyProfilePage();
+
+	public MyProfilePage getMyProfilePage() {
+		return myProfilePage;
 	}
 }

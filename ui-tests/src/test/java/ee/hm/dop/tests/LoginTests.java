@@ -21,7 +21,7 @@ public class LoginTests {
 				.clickLoginWithID() 
 				.clickHideLogin()
 				.getUserMenu()
-				.clickMyProfile()
+				.clickProfileIcon()
 				.getUserName();
 
 		Assert.assertEquals("Seitsmes Testnumber", userName);
@@ -40,7 +40,7 @@ public class LoginTests {
 				.insertUsernameAndPassword("peeter.paan", "parool")
 				.clickSubmitLogin()
 				.getUserMenu()
-				.clickMyProfile()	
+				.clickProfileIcon()
 				.getUserName();
 
 		Assert.assertEquals("Peeter Paan", userName);
@@ -60,7 +60,7 @@ public class LoginTests {
 				.submitStuudium()
 				.clickGivePermissionButton()
 				.getUserMenu()
-				.clickMyProfile()
+				.clickProfileIcon()
 				.getUserName();
 
 		Assert.assertEquals("Netgroup Test Kaks", userName);

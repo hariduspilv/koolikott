@@ -57,8 +57,8 @@ public class AddMaterialMainPart extends PageComponent {
 
 	}
 
-	public AddMaterialMainPart setHyperLink(String hyperLink) {
-		getDriver().findElement(linkField).sendKeys(hyperLink);
+	public AddMaterialMainPart setHyperLink() {
+		getDriver().findElement(linkField).sendKeys("http://a" + PageHelpers.generateUrl(30));
 		return this;
 	}
 	

@@ -37,6 +37,7 @@ public class SimpleSearch extends PageComponent {
 	}
 	
 	public LandingPage insertSearchCriteriaAndSearch1() {
+		PageHelpers.waitForVisibility(simpleSearch);
 		getDriver().findElement(simpleSearch).sendKeys("tag:" + PageHelpers.getDate(0, "dd/MM/yyyy"));
 		getDriver().findElement(simpleSearch).sendKeys(Keys.ENTER);
 		PageHelpers.waitForSeconds(1500);
