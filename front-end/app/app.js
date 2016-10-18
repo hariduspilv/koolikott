@@ -250,7 +250,7 @@ define([
 
 
             if (user && path === '/' + user.username && authenticatedUserService.isAuthenticated()) {
-                $location.path('/' + user.username + '/materials');
+                $location.path('/' + user.username + '/portfolios');
             }
 
 
