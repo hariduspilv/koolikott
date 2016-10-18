@@ -22,6 +22,7 @@ import ee.hm.dop.model.IssueDate;
 import ee.hm.dop.model.Language;
 import ee.hm.dop.model.LanguageString;
 import ee.hm.dop.model.Material;
+import ee.hm.dop.model.PeerReview;
 import ee.hm.dop.model.Publisher;
 import ee.hm.dop.model.ResourceType;
 import ee.hm.dop.model.Tag;
@@ -36,6 +37,7 @@ import ee.hm.dop.model.taxon.Taxon;
 import ee.hm.dop.model.taxon.Topic;
 import ee.hm.dop.service.AuthorService;
 import ee.hm.dop.service.LanguageService;
+import ee.hm.dop.service.PeerReviewService;
 import ee.hm.dop.service.PublisherService;
 import ee.hm.dop.service.ResourceTypeService;
 import ee.hm.dop.service.TagService;
@@ -75,6 +77,9 @@ public abstract class MaterialParser {
     private ResourceTypeService resourceTypeService;
 
     @Inject
+    private PeerReviewService peerReviewService;
+
+    @Inject
     private PublisherService publisherService;
 
     @Inject
@@ -95,13 +100,13 @@ public abstract class MaterialParser {
             setSource(material, doc);
             setTags(material, doc);
             setLearningResourceType(material, doc);
+            setPeerReview(material, doc);
             setTaxon(material, doc);
             setCrossCurricularThemes(material, doc);
             setKeyCompetences(material, doc);
             setIsPaid(material, doc);
             setTargetGroups(material, doc);
             setPicture(material, doc);
-            setIsCurriculumLiterature(material, doc);
             removeDuplicateTaxons(material);
         } catch (RuntimeException e) {
             logger.error("Unexpected error while parsing document. Document may not"
@@ -110,15 +115,6 @@ public abstract class MaterialParser {
         }
 
         return material;
-    }
-
-    private void setIsCurriculumLiterature(Material material, Document doc) {
-        Node node = getNode(doc,
-                getPathToCurriculumLiterature());
-
-        if (node != null && node.getTextContent().trim().toUpperCase().equals(TRUE)) {
-            material.setCurriculumLiterature(true);
-        }
     }
 
     protected void setContributorsData(Material material, Document doc) {
@@ -268,6 +264,24 @@ public abstract class MaterialParser {
         return resourceTypes;
     }
 
+    protected List<PeerReview> getPeerReviews(Document doc, String path){
+        List<PeerReview> peerReviews = new ArrayList<>();
+
+        NodeList nl = getNodeList(doc, path);
+
+        for (int i = 0; i < nl.getLength(); i++){
+            Node node = nl.item(i);
+            String url = getElementValue(node);
+
+            PeerReview peerReview = peerReviewService.getPeerReviewByURL(url);
+            if(!peerReviews.contains(peerReview) && peerReview != null){
+                peerReviews.add(peerReview);
+            }
+        }
+
+        return peerReviews;
+    }
+
     protected void setEducationalContexts(Document doc, Set<Taxon> taxons, String path, Material material) {
         NodeList nl = getNodeList(doc, path);
 
@@ -334,6 +348,17 @@ public abstract class MaterialParser {
             // ignore if there is no resource type for a material
         }
         material.setResourceTypes(resourceTypes);
+    }
+
+    protected void setPeerReview(Material material, Document doc){
+        List<PeerReview> peerReviews = null;
+
+        try{
+            peerReviews = getPeerReviews(doc, getPathToPeerReview());
+        }catch (Exception e){
+            //  ignore if there is no peer review for a material
+        }
+        material.setPeerReviews(peerReviews);
     }
 
     protected void setSource(Material material, Document doc) throws ParseException {
@@ -665,6 +690,8 @@ public abstract class MaterialParser {
     protected abstract String getPathToContext();
 
     protected abstract String getPathToResourceType();
+
+    protected abstract String getPathToPeerReview();
 
     protected abstract String getPathToLocation();
 

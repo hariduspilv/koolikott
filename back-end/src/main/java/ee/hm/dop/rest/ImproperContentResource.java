@@ -16,6 +16,7 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
 import ee.hm.dop.model.ImproperContent;
 import ee.hm.dop.model.LearningObject;
@@ -35,7 +36,7 @@ public class ImproperContentResource extends BaseResource {
     @PUT
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    @RolesAllowed({ "USER", "ADMIN", "MODERATOR" })
+    @RolesAllowed({"USER", "ADMIN", "MODERATOR"})
     public ImproperContent setImproper(ImproperContent improperContent) {
         ImproperContent improper = null;
 
@@ -50,7 +51,7 @@ public class ImproperContentResource extends BaseResource {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    @RolesAllowed({ "USER", "ADMIN", "RESTRICTED", "MODERATOR" })
+    @RolesAllowed({"USER", "ADMIN", "RESTRICTED", "MODERATOR"})
     public List<ImproperContent> getImpropers(@QueryParam("learningObject") Long learningObjectId) {
         List<ImproperContent> result = new ArrayList<>();
         User loggedInUser = getLoggedInUser();
@@ -77,7 +78,7 @@ public class ImproperContentResource extends BaseResource {
     }
 
     @DELETE
-    @RolesAllowed({ "ADMIN" })
+    @RolesAllowed({"ADMIN"})
     public void removeImpropers(@QueryParam("learningObject") Long learningObjectId) {
         if (learningObjectId == null) {
             throwBadRequestException("learningObject query param is required.");
@@ -95,7 +96,7 @@ public class ImproperContentResource extends BaseResource {
 
     @DELETE
     @Path("{improperContentId}")
-    @RolesAllowed({ "ADMIN" })
+    @RolesAllowed({"ADMIN"})
     public void removeImproper(@PathParam("improperContentId") long improperContentId) {
         ImproperContent improper = improperContentService.get(improperContentId, getLoggedInUser());
 

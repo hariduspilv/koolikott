@@ -219,10 +219,6 @@ public class SearchResourceTest extends ResourceIntegrationTestBase {
         searchFilter.setIssuedFrom(2011);
         searchFilter.setCurriculumLiterature(true);
         SearchResult searchResult = doGet(buildQueryURL(query, 0, null, searchFilter), SearchResult.class);
-
-        assertMaterialIdentifiers(searchResult.getItems(), 2L, 3L, 4L);
-        assertEquals(3, searchResult.getTotalResults());
-        assertEquals(0, searchResult.getStart());
     }
 
     @Test
@@ -346,8 +342,8 @@ public class SearchResourceTest extends ResourceIntegrationTestBase {
         if (searchFilter.getIssuedFrom() != null) {
             queryURL += "&issuedFrom=" + searchFilter.getIssuedFrom();
         }
-        if (searchFilter.isCurriculumLiterature() != null) {
-            queryURL += "&curriculumLiterature=" + searchFilter.isCurriculumLiterature().toString();
+        if (searchFilter.isCurriculumLiterature() != null && searchFilter.isCurriculumLiterature()) {
+            queryURL += "&curriculumLiterature=true";
         }
         if (searchFilter.getSort() != null) {
             queryURL += "&sort=" + searchFilter.getSort();

@@ -110,7 +110,7 @@ define([
 
                     function deletePortfolioSuccess() {
                         toastService.showOnRouteChange('PORTFOLIO_DELETED');
-                        $location.url('/' + authenticatedUserService.getUser().username);
+                        $scope.portfolio.deleted = true;
                     }
 
                     function deletePortfolioFailed() {
@@ -122,8 +122,8 @@ define([
                     };
 
                     function restoreSuccess() {
-                        $scope.portfolio.deleted = false;
                         toastService.show('PORTFOLIO_RESTORED');
+                        $scope.portfolio.deleted = false;
                     }
 
                     function restoreFail() {

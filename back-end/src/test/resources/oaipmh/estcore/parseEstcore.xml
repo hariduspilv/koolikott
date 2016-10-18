@@ -102,7 +102,7 @@
                         <typicalAgeRange>6-7</typicalAgeRange>
                         <typicalAgeRange>10-13</typicalAgeRange>
                         <typicalAgeRange>14-25</typicalAgeRange>
-                        <curriculumLiterature>true</curriculumLiterature>
+                        <peerReview>http://www.facebook.com</peerReview>
                     </educational>
                     <rights uniqueElementName="rights">
                         <lom:cost>

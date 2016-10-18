@@ -8,17 +8,13 @@ define([
         function ($scope, serverCallService, $controller, $filter) {
             var base = $controller('baseTableController', { $scope: $scope });
 
-            serverCallService.makeGet("rest/material/getBroken", {}, getBrokenItemsSuccess, base.getItemsFail);
-
             $scope.title = $filter('translate')('BROKEN_MATERIALS');
 
             $scope.bindTable = function() {
                 base.buildTable('#broken-materials-table', 'views/dashboard/broken/material/brokenMaterial.html');
             };
 
-            function getBrokenItemsSuccess(items) {
-                base.getItemsSuccess(items, 'byReportCount', true);
-            }
+            serverCallService.makeGet("rest/material/getBroken", {}, base.getItemsSuccess, base.getItemsFail);
 
         }]);
 });

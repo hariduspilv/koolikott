@@ -10,16 +10,17 @@ define([
               $scope: $scope
           });
 
-          serverCallService.makeGet("rest/material/getDeleted", {}, base.getItemsSuccess, base.getItemsFail);
-
           $scope.title = $filter('translate')('DASHBOARD_DELETED_MATERIALS');
 
           $scope.formatMaterialUpdatedDate = function (updatedDate) {
               return formatDateToDayMonthYear(updatedDate);
           }
-          
+
           $scope.bindTable = function() {
               base.buildTable('#deleted-materials-table', 'views/dashboard/deleted/material/deletedMaterial.html');
           }
+
+          serverCallService.makeGet("rest/material/getDeleted", {}, base.getItemsSuccess, base.getItemsFail);
+
     }]);
 });

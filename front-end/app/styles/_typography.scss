@@ -28,6 +28,7 @@ $heading-color: #212121;
   width: 100%;
   overflow: hidden !important;
   text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 $font-size: 26px;
@@ -88,4 +89,9 @@ $lines-to-show2: 2;
 
 .error-color {
   color: $error;
+}
+
+.text-truncate {
+  text-overflow: ellipsis;
+  overflow: hidden;
 }

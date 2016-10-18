@@ -8,6 +8,7 @@ module.exports = function (grunt) {
     // Time how long tasks take. Can help when optimizing build times
     require('time-grunt')(grunt);
 
+    grunt.loadNpmTasks('grunt-postcss');
     grunt.loadNpmTasks('grunt-webdriver');
     grunt.loadNpmTasks('grunt-selenium-standalone');
     grunt.loadNpmTasks('grunt-shell-spawn');
@@ -47,7 +48,7 @@ module.exports = function (grunt) {
             },
             compass: {
                 files: ['<%= yeoman.app %>/styles/{,*/}*.{scss,sass}'],
-                tasks: ['compass:server', 'autoprefixer']
+                tasks: ['compass:server', 'postcss:dist']
             },
             gruntfile: {
                 files: ['Gruntfile.js']
@@ -151,28 +152,17 @@ module.exports = function (grunt) {
         },
 
         // Add vendor prefixed styles
-        autoprefixer: {
+        postcss: {
             options: {
-                browsers: ['last 1 version']
-            },
-            server: {
-                options: {
-                    map: true,
-                },
-                files: [{
-                    expand: true,
-                    cwd: '.tmp/styles/',
-                    src: '{,*/}*.css',
-                    dest: '.tmp/styles/'
-                }]
+                map: true,
+                processors: [
+                    require('autoprefixer')({
+                        browsers: ['last 2 versions', 'last 3 iOS versions']
+                    })
+                ]
             },
             dist: {
-                files: [{
-                    expand: true,
-                    cwd: '.tmp/styles/',
-                    src: '{,*/}*.css',
-                    dest: '.tmp/styles/'
-                }]
+                src: '.tmp/styles/{,*/}*.css'
             }
         },
 
@@ -478,7 +468,7 @@ module.exports = function (grunt) {
             'clean:server',
             'wiredep',
             'concurrent:server',
-            'autoprefixer:server',
+            'postcss:dist',
             'configureProxies:server',
             'connect:livereload',
             'watch'
@@ -490,7 +480,7 @@ module.exports = function (grunt) {
         'wiredep',
         'useminPrepare',
         'concurrent:dist',
-        'autoprefixer',
+        'postcss:dist',
         'concat',
         'ngAnnotate',
         'copy:dist',

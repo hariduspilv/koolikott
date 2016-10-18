@@ -1,0 +1,15 @@
+<div class="taxon">
+  <a class="taxon__header" layout="row" layout-align="space-between center" data-ng-click="toggleChildren(taxon.id)" ng-class="{'has-children': hasChildren, 'is-opened': opened && hasChildren}">
+    <div layout="row" layout-align="center center">
+      <md-icon class="icon-identity" >{{icon}}</md-icon>
+      <span class="taxon__name text-truncate" data-translate="{{getTaxonTranslation(taxon)}}"></span>
+    </div>
+    <!--<span class="taxon__count">{{childrenCount}}</span>-->
+    <md-icon class="material-icons taxon__arrow">keyboard_arrow_right</md-icon>
+  </a>
+
+  <!-- (TREE OF IDs), (KEY, THIS.ID) -->
+  <div ng-if="opened" ng-repeat="data in taxon.children">
+    <div class="taxon-item taxon-item--sub" dop-sidebar-taxon data-taxon="data" tree="tree.child"></div>
+  </div>
+</div>

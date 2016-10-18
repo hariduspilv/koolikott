@@ -13,6 +13,7 @@ define([
     'directives/tags/tags',
     'directives/restrict/restrict',
     'directives/favorite/favorite',
+    'directives/errorMessage/errorMessage',
     'services/serverCallService',
     'services/translationService',
     'services/searchService',
@@ -69,8 +70,8 @@ define([
                 }
             });
 
-            function setEmbedCallback(res) {
-                if (res && res.data) {
+            function embedCallback(res) {
+                if (res && res.data.html) {
                     $scope.embeddedDataIframe = null;
                     $scope.embeddedData = null;
 
@@ -92,7 +93,7 @@ define([
 
             function getMaterialSuccess(material) {
                 if (isEmpty(material)) {
-                    log('No data returned by getting material. Redirecting to landing page');
+                    console.log('No data returned by getting material. Redirecting to landing page');
                     alertService.setErrorAlert('ERROR_MATERIAL_NOT_FOUND');
                     $location.url("/");
                 } else {
@@ -112,7 +113,7 @@ define([
 
             function processMaterial() {
                 if ($scope.material) {
-                    embedService.getEmbed(getSource($scope.material), setEmbedCallback);
+                    embedService.getEmbed(getSource($scope.material), embedCallback);
                     setSourceType();
 
                     if ($scope.material.taxons) {
@@ -134,6 +135,10 @@ define([
                 processMaterial();
                 $scope.material.source = getSource($scope.material);
                 storageService.setMaterial(null);
+
+                $rootScope.learningObjectBroken = ($scope.material.broken > 0);
+                $rootScope.learningObjectImproper = ($scope.material.improper > 0);
+                $rootScope.learningObjectDeleted = ($scope.material.deleted == true);
 
                 var viewCountParams = {
                     'type': '.Material',
@@ -264,6 +269,14 @@ define([
                 return authenticatedUserService.isRestricted();
             };
 
+            $scope.modUser = function() {
+                if (authenticatedUserService.isModerator() || authenticatedUserService.isAdmin()) {
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+
             function getSignedUserData() {
                 serverCallService.makeGet("rest/user/getSignedUserData", {}, getSignedUserDataSuccess, getSignedUserDataFail);
             }
@@ -344,7 +357,8 @@ define([
 
             function deleteMaterialSuccess() {
                 toastService.showOnRouteChange('MATERIAL_DELETED');
-                $location.url('/' + authenticatedUserService.getUser().username);
+                $scope.material.deleted = true;
+                $rootScope.learningObjectDeleted = true;
             }
 
             function deleteMaterialFailed() {
@@ -365,8 +379,9 @@ define([
             };
 
             function restoreSuccess() {
-                $scope.material.deleted = false;
                 toastService.show('MATERIAL_RESTORED');
+                $scope.material.deleted = false;
+                $rootScope.learningObjectDeleted = false;
             }
 
             function restoreFail() {

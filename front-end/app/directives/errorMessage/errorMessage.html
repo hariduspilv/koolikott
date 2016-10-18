@@ -1,0 +1,12 @@
+<div class="error-message-container md-whiteframe-4dp" flex layout="row" ng-show="$root.learningObjectDeleted == true">
+  <md-icon>delete</md-icon>
+  <p data-translate="ERROR_MSG_DELETED"></p>
+</div>
+<div class="error-message-container md-whiteframe-4dp" flex layout="row" ng-show="$root.learningObjectBroken == true" >
+  <md-icon>report</md-icon>
+  <p><span data-translate="ERROR_MSG_BROKEN"></span><span class="reason"></span></p>
+</div>
+<div class="error-message-container md-whiteframe-4dp" flex layout="row" ng-show="$root.learningObjectImproper == true">
+  <md-icon>report</md-icon>
+  <p><span data-translate="ERROR_MSG_IMPROPER"></span><span class="reason" ng-if="improperMessage"><span data-translate="ERROR_MSG_REASON"></span>: {{improperMessage}}</span></p>
+</div>

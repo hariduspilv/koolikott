@@ -53,6 +53,11 @@ public class MaterialParserEstCore extends MaterialParser {
     }
 
     @Override
+    protected String getPathToPeerReview() {
+        return "//*[local-name()='estcore']/*[local-name()='educational']/*[local-name()='peerReview']";
+    }
+
+    @Override
     protected void setTags(Material material, Document doc) {
         List<Tag> tags = getTags(doc);
         material.setTags(tags);

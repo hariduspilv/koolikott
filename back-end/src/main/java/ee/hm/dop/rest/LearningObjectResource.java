@@ -14,6 +14,7 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
 import ee.hm.dop.model.LearningObject;
 import ee.hm.dop.model.Tag;
@@ -70,6 +71,14 @@ public class LearningObjectResource extends BaseResource {
     @RolesAllowed({"USER", "ADMIN", "MODERATOR", "RESTRICTED"})
     public List<LearningObject> getUsersFavorites() {
         return learningObjectService.getUserFavorites(getLoggedInUser());
+    }
+
+    @GET
+    @Path("usersFavorite/count")
+    @RolesAllowed({"USER", "ADMIN", "MODERATOR", "RESTRICTED"})
+    public Response getUsersFavoritesCount() {
+        return Response.ok(learningObjectService.getUserFavorites(getLoggedInUser()).size()).build();
+
     }
 
     @POST

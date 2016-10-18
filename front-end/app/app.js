@@ -12,6 +12,7 @@ define([
     'angular-route',
     'angular-click-outside',
     'angular-scroll',
+    'angular-drag-and-drop-lists',
     'jsog',
     'utils/commons',
     'ng-file-upload',
@@ -21,17 +22,16 @@ define([
 
     /* app wide modules */
     'directives/header/header',
-    'directives/editPortfolioModeHeader/editPortfolioModeHeader',
     'directives/detailedSearch/detailedSearch',
     'directives/mainFabButton/mainFabButton',
     'directives/sidebar/sidebar',
+    'directives/sidenav/sidenav',
 
     /* TODO: we could save more request if layout system is built in another way */
     'directives/pageStructure/columnLayout/columnLayout',
-    'directives/pageStructure/linearLayout/linearLayout',
 
     'services/authenticatedUserService',
-    'DOPconstants',
+    'DOPconstants'
 ], function (angularAMD, config, taxonUtils, taxonParser, moment) {
     'use strict';
 
@@ -44,7 +44,8 @@ define([
         'ngFileUpload',
         'ui.bootstrap',
         'DOPconstants',
-        'textAngular'
+        'textAngular',
+        'dndLists'
     ]);
 
     var provideProvider = null;
@@ -115,12 +116,15 @@ define([
             $httpProvider.defaults.transformResponse.splice(0, 0, parseJSONResponse);
             $httpProvider.defaults.transformRequest = serializeRequest;
 
-            //TODO: Enable only for ie
-            //disable IE ajax request caching
-            // $httpProvider.defaults.headers.get['If-Modified-Since'] = 'Mon, 26 Jul 1997 05:00:00 GMT';
-            // extra
-            // $httpProvider.defaults.headers.get['Cache-Control'] = 'no-cache';
-            // $httpProvider.defaults.headers.get['Pragma'] = 'no-cache';
+            var isIE = (navigator.userAgent.match(/Trident/) || navigator.userAgent.match(/MSIE/));
+
+            if (isIE) {
+                // disable IE ajax request caching
+                $httpProvider.defaults.headers.get['If-Modified-Since'] = 'Mon, 26 Jul 1997 05:00:00 GMT';
+                // extra
+                $httpProvider.defaults.headers.get['Cache-Control'] = 'no-cache';
+                $httpProvider.defaults.headers.get['Pragma'] = 'no-cache';
+            }
 
             $locationProvider.html5Mode(true);
             $anchorScrollProvider.disableAutoScrolling();
@@ -156,6 +160,7 @@ define([
 
         $translateProvider.preferredLanguage(language);
         $translateProvider.useSanitizeValueStrategy('escaped');
+
     }
 
     // http://stackoverflow.com/questions/30123735/how-to-create-multiple-theme-in-material-angular
@@ -224,17 +229,63 @@ define([
         $rootScope.APP_VERSION = APP_VERSION;
         $rootScope.hasAppInitated = false;
         $rootScope.taxonParser = taxonParser;
-        metadataService.loadEducationalContexts(taxonParser.setTaxons);
+        metadataService.loadEducationalContexts(setTaxons);
+
+        function setTaxons(taxon) {
+            $rootScope.taxon = taxon;
+            taxonParser.setTaxons(taxon);
+        }
     });
 
     app.run(function ($rootScope, $location, authenticatedUserService) {
         $rootScope.$on('$routeChangeSuccess', function () {
+
+            var user = authenticatedUserService.getUser();
+
             var path = $location.path();
+
+            if (path === '/dashboard') {
+                $location.path('/dashboard/improperMaterials');
+            }
+
+
+            if (user && path === '/' + user.username && authenticatedUserService.isAuthenticated()) {
+                $location.path('/' + user.username + '/portfolios');
+            }
+
+
+
             var editModeAllowed = ["/portfolio/edit", "/search/result", "/material"];
+
 
             $rootScope.isViewPortforlioPage = path === '/portfolio';
             $rootScope.isEditPortfolioPage = path === '/portfolio/edit';
+            $rootScope.isViewHomePage = path === '/';
+            $rootScope.isViewMaterialPage = path === '/material';
 
+            if (user && $location.path().indexOf('/' + user.username) != -1) {
+                $rootScope.isViewUserPage = true;
+            } else {
+                $rootScope.isViewUserPage = false;
+            }
+
+            if (path === '/dashboard/improperMaterials' || path === '/dashboard/improperPortfolios' || path === '/dashboard/brokenMaterials' || path === '/dashboard/deletedMaterials' || path === '/dashboard/brokenPortfolios' || path === '/dashboard/deletedPortfolios') {
+                $rootScope.isViewAdminPanelPage = true;
+            } else {
+                $rootScope.isViewAdminPanelPage = false;
+            }
+
+            if(path === '/material' || path === '/portfolio') {
+                $rootScope.isViewMaterialPortfolioPage = true;
+            } else {
+                $rootScope.isViewMaterialPortfolioPage = false;
+            }
+
+            if(path === '/material' || path === '/' || ($location.url().indexOf("/search") != -1) || !$rootScope.isEditPortfolioPage || !$rootScope.isViewPortforlioPage) {
+                $rootScope.isTaxonomyOpen = true;
+            } else {
+                $rootScope.isTaxonomyOpen = false;
+            }
             if (path == "/portfolio/edit") {
                 $rootScope.isEditPortfolioMode = true;
                 $rootScope.selectedMaterials = [];

@@ -1,8 +1,17 @@
+// 2 ng-view's on screen fix
+.ng-leave.ng-leave-active {
+  display: none;
+}
+
 // Scaffolding
 html, body {
   background: $bg-gray;
   color: rgba(0,0,0,0.77);
   line-height: 1.2;
+}
+
+.pointer {
+  cursor: pointer;
 }
 
 //BrowseHappy
@@ -79,7 +88,7 @@ md-datepicker {
   margin-top: 10px;
 }
 
-#scrollable-content {
+.scrollable-content-container {
   overflow-y: auto;
   overflow-x: hidden;
 }
@@ -93,4 +102,6 @@ md-datepicker {
   margin-top: 60px;
 }
 
-body.md-toast-animating { overflow: auto !important; }
+body.md-toast-animating {
+  overflow: auto !important;
+}

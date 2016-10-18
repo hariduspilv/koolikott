@@ -1,12 +1,17 @@
 package ee.hm.dop.service;
 
+import static ee.hm.dop.utils.ConfigurationProperties.SERVER_ADDRESS;
 import static ee.hm.dop.utils.UserUtils.isAdmin;
 import static org.apache.commons.lang3.StringUtils.isEmpty;
 import static org.joda.time.DateTime.now;
 
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import javax.inject.Inject;
@@ -20,6 +25,7 @@ import ee.hm.dop.model.Comment;
 import ee.hm.dop.model.Language;
 import ee.hm.dop.model.LearningObject;
 import ee.hm.dop.model.Material;
+import ee.hm.dop.model.PeerReview;
 import ee.hm.dop.model.Publisher;
 import ee.hm.dop.model.Recommendation;
 import ee.hm.dop.model.Role;
@@ -28,6 +34,9 @@ import ee.hm.dop.model.UserLike;
 import ee.hm.dop.model.taxon.EducationalContext;
 import ee.hm.dop.service.learningObject.LearningObjectHandler;
 import ee.hm.dop.utils.TaxonUtils;
+import org.apache.commons.configuration.Configuration;
+import org.apache.http.client.utils.URIBuilder;
+import org.apache.http.util.TextUtils;
 import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -57,6 +66,12 @@ public class MaterialService implements LearningObjectHandler {
     @Inject
     private BrokenContentDAO brokenContentDAO;
 
+    @Inject
+    private PeerReviewService peerReviewService;
+
+    @Inject
+    private Configuration configuration;
+
     public Material get(long materialId, User loggedInUser) {
         if (isUserAdmin(loggedInUser) || isUserModerator(loggedInUser)) {
             return materialDao.findById(materialId);
@@ -73,8 +88,19 @@ public class MaterialService implements LearningObjectHandler {
     }
 
     public Material createMaterial(Material material, User creator, boolean updateSearchIndex) {
-        if (material.getId() != null) {
+        if (material.getId() != null || materialWithSameSourceExists(material)) {
             throw new IllegalArgumentException("Error creating Material, material already exists.");
+        }
+
+        material.setSource(cleanURL(material.getSource()));
+
+        List<PeerReview> peerReviews = material.getPeerReviews();
+        if(peerReviews != null){
+            for(PeerReview peerReview : peerReviews){
+                if(!peerReview.getUrl().contains(configuration.getString(SERVER_ADDRESS))){
+                    peerReview.setUrl(cleanURL(peerReview.getUrl()));
+                }
+            }
         }
 
         material.setCreator(creator);
@@ -84,10 +110,6 @@ public class MaterialService implements LearningObjectHandler {
         }
 
         material.setRecommendation(null);
-
-        if (!isUserAdmin(creator) && !isUserPublisher(creator)) {
-            material.setCurriculumLiterature(false);
-        }
 
         Material createdMaterial = createOrUpdate(material);
         if (updateSearchIndex) {
@@ -105,10 +127,6 @@ public class MaterialService implements LearningObjectHandler {
             throw new RuntimeException("Logged in user must be an administrator.");
         }
 
-        if (originalMaterial.getRepository() != null || originalMaterial.getRepositoryIdentifier() != null) {
-            throw new RuntimeException("Can not delete external repository material");
-        }
-
         materialDao.delete(originalMaterial);
         solrEngineService.updateIndex();
     }
@@ -119,10 +137,6 @@ public class MaterialService implements LearningObjectHandler {
 
         if (!isUserAdmin(loggedInUser)) {
             throw new RuntimeException("Logged in user must be an administrator.");
-        }
-
-        if (originalMaterial.getRepository() != null || originalMaterial.getRepositoryIdentifier() != null) {
-            throw new RuntimeException("Can not restore external repository material");
         }
 
         materialDao.restore(originalMaterial);
@@ -171,6 +185,20 @@ public class MaterialService implements LearningObjectHandler {
             }
             material.setAuthors(authors);
         }
+    }
+
+    private void setPeerReviews(Material material) {
+        List<PeerReview> peerReviews = material.getPeerReviews();
+        if(peerReviews != null){
+            for (int i = 0; i < peerReviews.size(); i++) {
+                PeerReview peerReview = peerReviews.get(i);
+                PeerReview returnedPeerReview = peerReviewService.createPeerReview(peerReview.getUrl());
+                if(returnedPeerReview != null){
+                    peerReviews.set(i, returnedPeerReview);
+                }
+            }
+        }
+        material.setPeerReviews(peerReviews);
     }
 
     public void addComment(Comment comment, Material material) {
@@ -268,11 +296,26 @@ public class MaterialService implements LearningObjectHandler {
             throw new IllegalArgumentException("Material id parameter is mandatory");
         }
 
+        material.setSource(cleanURL(material.getSource()));
+
+        List<PeerReview> peerReviews = material.getPeerReviews();
+        if(peerReviews != null){
+            for(PeerReview peerReview : peerReviews){
+                if(!peerReview.getUrl().contains(configuration.getString(SERVER_ADDRESS))){
+                    peerReview.setUrl(cleanURL(peerReview.getUrl()));
+                }
+            }
+        }
+
+        if (materialWithSameSourceExists(material)) {
+            throw new IllegalArgumentException("Error updating Material: material with given source already exists");
+        }
+
         Material originalMaterial;
 
-        if( isUserAdmin(changer) || isUserModerator(changer)){
+        if (isUserAdmin(changer) || isUserModerator(changer)) {
             originalMaterial = materialDao.findById(material.getId());
-        }else{
+        } else {
             originalMaterial = materialDao.findByIdNotDeleted(material.getId());
         }
 
@@ -299,6 +342,19 @@ public class MaterialService implements LearningObjectHandler {
         return updatedMaterial;
     }
 
+    private boolean materialWithSameSourceExists(Material material) {
+        if (material.getSource() == null && material.getUploadedFile() != null) return false;
+
+        List<Material> materialsWithGivenSource = getBySource(material.getSource(), true);
+        if (materialsWithGivenSource != null && materialsWithGivenSource.size() > 0) {
+            if (!materialsWithGivenSource.get(0).getId().equals(material.getId())) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     private boolean isThisUserMaterial(User user, Material originalMaterial) {
         return user != null && originalMaterial.getCreator().getUsername().equals(user.getUsername());
     }
@@ -309,13 +365,13 @@ public class MaterialService implements LearningObjectHandler {
         }
 
         if (originalMaterial.getRepository() != null && changer != null && !isUserAdminOrPublisher(changer)) {
-            throw new IllegalArgumentException("Can't update external repository material");
+            throw new IllegalArgumentException("Normal user can't update external repository material");
         }
     }
 
     public List<Material> getByCreator(User creator) {
         List<Material> materials = new ArrayList<>();
-        materialDao.findByCreator(creator).stream().forEach(material -> materials.add((Material) material));
+        materialDao.findByCreator(creator).forEach(material -> materials.add((Material) material));
         return materials;
     }
 
@@ -330,6 +386,7 @@ public class MaterialService implements LearningObjectHandler {
 
         setAuthors(material);
         setPublishers(material);
+        setPeerReviews(material);
         material = applyRestrictions(material);
 
         return (Material) materialDao.update(material);
@@ -392,7 +449,7 @@ public class MaterialService implements LearningObjectHandler {
 
     public List<Material> getDeletedMaterials() {
         List<Material> materials = new ArrayList<>();
-        materialDao.findDeletedMaterials().stream().forEach(material -> materials.add((Material) material));
+        materialDao.findDeletedMaterials().forEach(material -> materials.add((Material) material));
         return materials;
     }
 
@@ -460,11 +517,62 @@ public class MaterialService implements LearningObjectHandler {
         return true;
     }
 
-    public List<Material> getBySource(String materialSource) {
+    public List<Material> getBySource(String materialSource, boolean deleted) {
+        materialSource = getURLWithoutScheme(cleanURL(materialSource));
         if (materialSource != null) {
-            return materialDao.findBySource(materialSource);
+            return materialDao.findBySource(materialSource, deleted);
         } else {
             throw new RuntimeException("No material source link provided");
         }
     }
+
+
+    private String getURLWithoutScheme(String materialSource) {
+        if (TextUtils.isBlank(materialSource)) return null;
+
+        try {
+            URI uri = new URI(materialSource);
+            String hostName = uri.getHost();
+
+            if (hostName.startsWith("www.") && isValidURL(hostName.substring(4))) {
+                hostName = hostName.substring(4);
+            }
+
+            uri = new URIBuilder()
+                    .setHost(hostName)
+                    .setPath(uri.getPath())
+                    .setCustomQuery(uri.getQuery())
+                    .build();
+
+            return uri.toString().substring(2);
+        } catch (URISyntaxException e) {
+            e.printStackTrace();
+            throw new RuntimeException("Failed to fix URL");
+        }
+    }
+
+    private String cleanURL(String materialSource) {
+        if (TextUtils.isBlank(materialSource)) return null;
+
+        try {
+            materialSource = materialSource.replaceAll("/$", "");
+
+            URI uri = new URI(materialSource);
+            if (uri.getScheme() == null) {
+                uri = new URI("http://" + materialSource);
+            }
+
+            return uri.toString();
+        } catch (URISyntaxException e) {
+            e.printStackTrace();
+            throw new RuntimeException("Failed to fix URL");
+        }
+    }
+
+    private boolean isValidURL(String url) {
+        Pattern p = Pattern.compile("^(?:https?://)?(?:\\S+(?::\\S*)?@)?(?:(?!(?:10|127)(?:\\.\\d{1,3}){3})(?!(?:169\\.254|192\\.168)(?:\\.\\d{1,3}){2})(?!172\\.(?:1[6-9]|2\\d|3[0-1])(?:\\.\\d{1,3}){2})(?:[1-9]\\d?|1\\d\\d|2[01]\\d|22[0-3])(?:\\.(?:1?\\d{1,2}|2[0-4]\\d|25[0-5])){2}(?:\\.(?:[1-9]\\d?|1\\d\\d|2[0-4]\\d|25[0-4]))|(?:(?:[a-z\\u00a1-\\uffff0-9]-*)*[a-z\\u00a1-\\uffff0-9]+)(?:\\.(?:[a-z\\u00a1-\\uffff0-9]-*)*[a-z\\u00a1-\\uffff0-9]+)*(?:\\.(?:[a-z\\u00a1-\\uffff]{2,}))\\.?)(?::\\d{2,5})?(?:[/?#]\\S*)?$");
+        Matcher m = p.matcher(url);
+        return m.matches();
+    }
+
 }

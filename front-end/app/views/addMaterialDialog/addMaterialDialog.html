@@ -78,12 +78,18 @@
                              required dop-validate-url>
                       <div data-ng-messages="addMaterialForm.source.$error" multiple
                            data-ng-show="addMaterialForm.source.$touched || addMaterialForm.$submitted">
-                        <div data-ng-message="required" data-ng-show="addMaterialForm.source.$error.required"
-                             data-translate="MATERIAL_URL_OR_FILE_INVALID"></div>
                         <div data-ng-message="url"
-                             data-ng-show="addMaterialForm.source.$error.url && material.source.length > 0"
+                             data-ng-show="isURLInvalid()"
                              data-translate="MATERIAL_URL_IS_INVALID"></div>
+
+                        <div data-ng-message
+                             data-ng-show="addMaterialForm.source.$error.exists"
+                             data-translate="MATERIAL_ALREADY_EXISTS"></div>
+                        <div data-ng-message
+                             data-ng-show="addMaterialForm.source.$error.deleted"
+                             data-translate="MATERIAL_WITH_SAME_SOURCE_IS_DELETED"></div>
                       </div>
+
                     </md-input-container>
                   </div>
 
@@ -168,7 +174,8 @@
                   <div text-angular id="add-material-description-input" class="textangular-editor"
                        placeholder="{{'MATERIAL_DESCRIPTION' | translate}}" ng-model="metadata.description"></div>
                   <div layout="column">
-                    <md-button class="md-icon-button md-primary" data-ng-show="$index+1 === titleDescriptionGroups.length"
+                    <md-button class="md-icon-button md-primary"
+                               data-ng-show="$index+1 === titleDescriptionGroups.length"
                                data-ng-click="addNewMetadata()">
                       <md-icon>add_circle</md-icon>
                       <md-tooltip md-direction="top"><span data-translate="MATERIAL_TAB_NEW_TITLE_AND_DESC"></span>
@@ -238,13 +245,6 @@
                      data-ng-show="educationalContextId !== 4" data-taxon="material.taxons[0]"
                      data-mark-required="addMaterialForm.$submitted" flex="20">
                 </div>
-
-                <!--Curriculum literature switch-->
-                <md-switch data-ng-if="isAdmin() || creatorIsPublisher" class="md-primary md-block md-padding" md-no-ink
-                           data-ng-model="material.curriculumLiterature"
-                           aria-label="{{'MATERIAL_CURRICULUM_LITERATURE' | translate}}">
-                  <span data-translate="MATERIAL_CURRICULUM_LITERATURE"></span>
-                </md-switch>
 
                 <!--Tags-->
                 <md-chips class="md-padding"
@@ -370,6 +370,68 @@
                      class="validation-messages"></div>
               </div>
 
+              <!-- Review -->
+
+              <div layout="row" layout-align="space-between center" flex data-ng-repeat="peerReview in material.peerReviews">
+                <md-input-container flex ng-show="!peerReview.uploading && !peerReview.uploaded">
+                  <label ng-show="!peerReview.uploading && !peerReview.uploaded">
+                    <span data-translate="MATERIAL_PEER_REVIEW"></span>
+                  </label>
+                  <input name="peerReview" data-ng-model="peerReview.url" dop-validate-url>
+                </md-input-container>
+
+                <!--Uploaded file name-->
+                <div layout-fill data-ng-show="peerReview.uploading || peerReview.uploaded" layout-align="center">
+                  <div data-ng-show="peerReview.uploading" class="upload-file-uploading" flex-offset="25" flex="50">
+                    <h5 data-translate="ADD_FILE_UPLOADING"></h5>
+                    <md-progress-linear md-mode="indeterminate" flex></md-progress-linear>
+                  </div>
+                  <div data-ng-show="peerReview.uploaded && !peerReview.uploading" class="upload-file-success">
+                    <h5>
+                      <span data-translate="ADD_FILE_SUCCESS"></span>:
+                      <span class="ellipsisText">{{ peerReview.name }}</span>
+                    </h5>
+                  </div>
+                </div>
+                <!--Uploaded file name-->
+
+                <!--Upload button-->
+                <div ngf-select
+                     data-accept="*"
+                     data-ngf-pattern="'*'"
+                     data-ngf-max-size="{{maxReviewSize + 'MB'}}"
+                     ngf-model-invalid="invalidReview" ngf-change="uploadReview($index, $file)">
+
+                  <a class="md-raised md-primary md-button md-ink-ripple">
+                    <md-icon>file_upload</md-icon>
+
+                    <span data-ng-show="peerReview.uploaded" data-translate="UPDATE_FILE"></span>
+                    <span data-ng-show="!peerReview.uploaded" data-translate="ADD_FILE"></span>
+                  </a>
+                </div>
+
+                <div data-ng-message="file"
+                     data-ng-show="invalidReview && invalidReview.length > 0"
+                     class="upload-file-error"><span data-translate="DOCUMENT_MAX_SIZE"></span> {{maxReviewSize}}MB
+                </div>
+
+                <md-button class="md-icon-button md-primary" data-ng-show="$index+1 === material.peerReviews.length"
+                           data-ng-click="addNewPeerReview()">
+                  <md-icon>add_circle</md-icon>
+                  <md-tooltip md-direction="top"><span data-translate="MATERIAL_TAB_NEW_PEER_REVIEW"></span></md-tooltip>
+                </md-button>
+                <md-button class="md-icon-button" data-ng-show="material.peerReviews.length > 1"
+                           data-ng-click="deletePeerReview($index)">
+                  <md-icon>remove_circle</md-icon>
+                  <md-tooltip md-direction="top"><span data-translate="MATERIAL_TAB_REMOVE"></span></md-tooltip>
+                </md-button>
+
+                <!--Upload button-->
+
+              </div>
+              <!-- Review -->
+
+
               <div layout="row" flex layout-align="space-between center">
 
                 <!--Publisher-->
@@ -379,7 +441,7 @@
                     <span data-translate="MATERIAL_PUBLISHER"></span>
                     <span data-ng-hide="material.authors[0].name && material.authors[0].surname">*</span>
                   </label>
-                  <input name="publisher" data-ng-model="material.publishers[0].name" ng-disabled="creatorIsPublisher"
+                  <input name="publisher" id="material-peerReview-{{$index}}" data-ng-model="material.publishers[0].name" ng-disabled="creatorIsPublisher"
                          md-maxlength="50" maxlength="50">
                   <div data-ng-messages="addMaterialForm.publisher.$error"
                        data-ng-show="!isAuthorOrPublisherSet() && (addMaterialForm.publisher.$touched || addMaterialForm.$submitted)">
@@ -393,7 +455,7 @@
                   <md-datepicker ng-model="issueDate" name="issueDate" required
                                  md-placeholder="{{ 'MATERIAL_ISSUE_DATE' | translate }}">
                   </md-datepicker>
-                  <div data-ng-messages="addMaterialForm.issueDate.$error"
+                  <div class="datepicker-error" data-ng-messages="addMaterialForm.issueDate.$error"
                        data-ng-show="!material.issueDate.year && (addMaterialForm.issueDate.$touched || addMaterialForm.$submitted)">
                     <div class="validation-messages" data-ng-message="required"
                          data-translate="MATERIAL_DATE_REQUIRED"></div>

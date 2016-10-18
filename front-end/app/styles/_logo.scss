@@ -1,0 +1,69 @@
+a.logo {
+  text-decoration: none;
+  color: #fff;
+  &:hover {
+    color: inherit;
+    transition:color 0.55s $swift-ease-out-timing-function;
+  }
+}
+
+.logo {
+  font-size: 1.8em;
+  display: inline-block;
+  &:before {
+    content: '\e800';
+    display: block;
+    font-family: "fontello";
+  }
+  @media (min-width: $layout-breakpoint-sm) {
+    &:before  {
+      content: '\e801';
+    }
+  }
+}
+
+
+.logo.logo-bw {
+  color: rgba(0,0,0, .7);
+  font-size: 1.5em;
+  &:before {
+    content: '\e801';
+  }
+}
+
+
+.shadow-primary {
+  text-shadow: long-shadow(
+  $direction: 42deg,
+  $length: 60px,
+  $color: darken($color-primary, 5%),
+  $fade: true
+  );
+}
+
+.shadow-admin  {
+  text-shadow: long-shadow(
+  $direction: 42deg,
+  $length: 60px,
+  $color: darken($color-admin, 10%),
+  $fade: true
+  );
+}
+
+.shadow-deleted {
+  text-shadow: long-shadow(
+  $direction: 42deg,
+  $length: 60px,
+  $color: darken($color-deleted, 10%),
+  $fade: true
+  );
+}
+
+.shadow-edit  {
+  text-shadow: long-shadow(
+  $direction: 42deg,
+  $length: 60px,
+  $color: darken($color-accent, 10%),
+  $fade: true
+  );
+}

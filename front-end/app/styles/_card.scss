@@ -1,27 +1,4 @@
-// Card
-$green1: #00838f;
-$green2: #00695c;
-$greengrass: #43a047;
-$green4: #CDDC39;
-$pinky: #985984;
-$violet: #584D78;
-$navy: #274156;
-$cyan: #00498E;
-$salad: #36AA7A;
-$royal: #2C47B2;
 
-$heading-color: #212121;
-$link-color: #15c;
-$card-lg-padding: 25px;
-$border-color: rgba(0, 0, 0, 0.12);
-
-
-// responsive aspect ratio, http://codepen.io/jakob-e/pen/LEdWNB
-@mixin aspect-ratio($ratio-or-width, $height: null) {
-  $padding: if($height, percentage($height/$ratio-or-width), percentage(1/$ratio-or-width));
-  &:before { content:''; float: left; padding-bottom: $padding;  }
-  &:after  { content:''; display: table; clear: both;  }
-}
 
 md-card {
   position: relative;
@@ -101,7 +78,8 @@ md-card {
   }
 
   &.card-sm .card-cover,
-  &.card-lg .card-cover {
+  &.card-lg .card-cover,
+  .embeddedMaterial {
     &.imaged {
       background-color: transparent !important;
     }
@@ -131,9 +109,52 @@ md-card {
     }
   }
 
-  &.card-sm {
+  &.embed-card {
     transition: all 0.5s;
-    height: 100%;
+    &:hover {
+      background-color: #eee;
+
+    }
+    &.active {
+      background-color: #eee;
+    }
+  }
+
+  .embed-header {
+    .pick {
+      position: absolute;
+      padding: 10px;
+      right: 0;
+      transition: display 1s cubic-bezier(0.25, 0.8, 0.25, 1);
+      .checked {
+        display: none;
+      }
+      &:hover {
+        cursor: pointer;
+        .checked {
+          display: block;
+        }
+        .unchecked {
+          display: none;
+        }
+      }
+    }
+  }
+
+  .embeded-material-footer {
+    padding-top: 0px;
+  }
+
+
+  &.card-sm {
+    height: 270px;
+    width: 190px;
+    @media (min-width: $layout-breakpoint-lg) {
+      height: 330px;
+      width: 234px;
+    }
+
+
     md-icon.icon-kind {
       font-size: 48px;
       color: #fff;
@@ -177,7 +198,6 @@ md-card {
       position: relative;
       transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
       background-color: $green1;
-
     }
 
     .card-hover {
@@ -217,17 +237,12 @@ md-card {
     }
     md-card-actions {
       height: 10%;
-      .md-action-icons-list {
-        span {
-          padding: 0 5px;
-          &:last-child {
-            padding-right: 0;
-          }
-        }
-        md-icon {
-          color: rgba(0, 0, 0, 0.3);
-          font-size: inherit;
-        }
+      color: rgba(0, 0, 0, 0.4);
+      font-weight: 600;
+      md-icon {
+        margin: 0 3px 0 8px;
+        font-size: $caption-font-size-base;
+        color: rgba(0, 0, 0, 0.3);
       }
     }
   }
@@ -344,16 +359,27 @@ md-card {
       }
     }
   }
+
+  .embed-card-content {
+    padding: 0px;
+    background-color: #fff;
+  }
 }
+
+// TODO: remove this if this bug is closed https://trello.com/c/TB5BRU7G/187-bug-issue-18-vistutatud-materjali-kuvamine-on-paigast-ara
+.embed-responsive-item {
+  overflow: hidden;
+}
+
 .corner {
-  background-image: url('../images/corner.png');
+  background-image: url('../images/detail/corner.png');
   background-repeat: no-repeat;
   background-position: right top;
   position: absolute;
   right: -2px;
   top: -1px;
-  height: 48px;
-  width: 48px;
+  height: 60px;
+  width: 60px;
   z-index: 1;
 }
 
@@ -397,10 +423,37 @@ md-card .card-menu {
   color: gold!important;
 }
 
-md-card.card-sm md-card-actions {
-  -webkit-animation: fadein 2s; /* Safari, Chrome and Opera > 12.1 */
-   -moz-animation: fadein 2s; /* Firefox < 16 */
-    -ms-animation: fadein 2s; /* Internet Explorer */
-     -o-animation: fadein 2s; /* Opera < 12.1 */
-        animation: fadein 2s;
+.card-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+
+  @media (min-width: $layout-breakpoint-md) {
+    justify-content: flex-start;
+  }
+}
+
+.card-container__item {
+  margin: 0 15px 15px 0;
+
+  &--empty {
+    margin: 0 15px 0 0;
+
+    md-card.card-sm {
+      height: 100%;
+    }
+  }
+}
+
+.card__favorite {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 1;
+  &:hover {
+    color: rgba(255, 255, 255, 1);
+  }
+  md-icon {
+    color: transparent;
+  }
 }

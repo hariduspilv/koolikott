@@ -21,6 +21,19 @@ define([
                             successCallback(response.data);
                         }, errorCallback, finallyCallback);
                     });
+                },
+                uploadReview: function (file_input, successCallback, errorCallback, finallyCallback) {
+
+                    Upload.dataUrl(file_input, true).then(function () {
+
+                        var review = {
+                            review: file_input
+                        };
+
+                        serverCallService.upload('rest/review', review, function(response) {
+                            successCallback(response.data);
+                        }, errorCallback, finallyCallback);
+                    });
                 }
             };
 

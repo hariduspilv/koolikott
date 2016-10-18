@@ -8,6 +8,7 @@ define([
     'directives/commentsCard/commentsCard',
     'directives/chapter/chapter',
     'directives/materialBox/materialBox',
+    'directives/errorMessage/errorMessage',
     'directives/portfolioSummaryCard/portfolioSummaryCard',
     'services/serverCallService',
     'services/translationService',
@@ -93,11 +94,24 @@ define([
             function setPortfolio(portfolio) {
                 $scope.portfolio = portfolio;
                 $rootScope.savedPortfolio = portfolio;
+
+                if($scope.portfolio) {
+                    $rootScope.learningObjectBroken = ($scope.portfolio.broken > 0) ? true : false;
+                    $rootScope.learningObjectImproper = ($scope.portfolio.improper > 0) ? true : false;
+                    $rootScope.learningObjectDeleted = ($scope.portfolio.deleted == true) ? true : false;
+                }
             }
 
+            $scope.modUser = function() {
+                if (authenticatedUserService.isModerator() || authenticatedUserService.isAdmin()) {
+                    return true;
+                } else {
+                    return false;
+                }
+            }
 
             $scope.$watch(function () {
-                return $location.url();
+                return $location.url().replace(window.location.hash, '');
             }, function (newValue, oldValue) {
                 if (newValue !== oldValue) {
                     $route.reload()
@@ -115,6 +129,14 @@ define([
                     $timeout.cancel(increaseViewCountPromise);
                 }
             });
+
+            $scope.isAdmin = function () {
+                return authenticatedUserService.isAdmin();
+            };
+
+            $scope.isModerator = function () {
+                return authenticatedUserService.isModerator();
+            };
 
             init();
         }];

@@ -6,24 +6,19 @@ import java.util.List;
 
 import javax.annotation.security.RolesAllowed;
 import javax.inject.Inject;
-import javax.sound.sampled.Port;
 import javax.ws.rs.Consumes;
-import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
-import ee.hm.dop.model.LearningObject;
-import ee.hm.dop.model.Material;
 import ee.hm.dop.model.Portfolio;
 import ee.hm.dop.model.Recommendation;
 import ee.hm.dop.model.User;
-import ee.hm.dop.model.UserFavorite;
 import ee.hm.dop.model.UserLike;
-import ee.hm.dop.service.LearningObjectService;
 import ee.hm.dop.service.PortfolioService;
 import ee.hm.dop.service.UserService;
 
@@ -59,6 +54,13 @@ public class PortfolioResource extends BaseResource {
         User loggedInUser = getLoggedInUser();
 
         return portfolioService.getByCreator(creator, loggedInUser);
+    }
+
+    @GET
+    @Path("getByCreator/count")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getByCreatorCount(@QueryParam("username") String username) {
+        return Response.ok(getByCreator(username).size()).build();
     }
 
     @POST
@@ -156,5 +158,13 @@ public class PortfolioResource extends BaseResource {
     @RolesAllowed({"ADMIN", "MODERATOR"})
     public List<Portfolio> getDeletedPortfolios() {
         return portfolioService.getDeletedPortfolios();
+    }
+
+    @GET
+    @Path("getDeleted/count")
+    @Produces(MediaType.APPLICATION_JSON)
+    @RolesAllowed({"ADMIN", "MODERATOR"})
+    public Response getDeletedPortfoliosCount() {
+        return Response.ok(portfolioService.getDeletedPortfolios().size()).build();
     }
 }

@@ -19,7 +19,9 @@
       <td md-cell data-ng-if="item.reportCount > 1"><span data-translate="REPORTED_BY_MULTIPLE_USERS"></span></td>
       <td md-cell>{{item.reason}}</td>
       <td md-cell>
-        <md-button aria-label="Ava" href="{{getLearningObjectUrl(item.learningObject)}}" class="md-raised md-default" data-translate="BUTTON_OPEN"></md-button>
+        <a ng-href="{{getLearningObjectUrl(item.learningObject)}}">
+          <md-button aria-label="Ava" class="md-raised md-default" data-translate="BUTTON_OPEN"></md-button>
+        </a>
       </td>
     </tr>
   </tbody>

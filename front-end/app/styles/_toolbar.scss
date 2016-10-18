@@ -8,6 +8,12 @@ $border-color: rgba(0,0,0,0.12);
 
 .filter-wrapper {
   padding-top: 0;
+
+  @media (min-width: $layout-breakpoint-md) {
+    &.nav-open {
+      margin-left: $sidenav-width;
+    }
+  }
 }
 
 .filter-content {
@@ -25,12 +31,16 @@ $border-color: rgba(0,0,0,0.12);
 }
 
 .md-toolbar-filter {
-  // padding: 0 16px 3px;
-  max-height:999px;
-  overflow:hidden;
-  position:relative;
-  transition:max-height 0.35s ease;
-  padding-bottom: 3px;
+  max-height: 999px;
+  position: relative;
+  transition: max-height 0.35s ease;
+  padding-top: 64px;
+  margin-bottom: -64px;
+  z-index: 2;
+
+  @media (min-width: $layout-breakpoint-xs) {
+    overflow: hidden;
+  }
 
   &.ng-hide {
     max-height:0;
@@ -129,4 +139,8 @@ md-checkbox.md-checked .md-icon {
 md-slider.md-default-theme.md-min[md-discrete] .md-thumb:after, md-slider.md-min[md-discrete] .md-thumb:after {
     border-color: rgb(3,169,244);
     background-color: white;
+}
+
+.login-modal-container{
+  overflow: hidden;
 }

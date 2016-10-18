@@ -1,0 +1,53 @@
+<md-card class="md-whiteframe-2dp embed-card">
+  <md-card-header class="embed-header">
+    <md-card-avatar>
+      <md-icon class="icon-kind embeddedMaterial" ng-class="materialType">{{materialType}}</md-icon>
+    </md-card-avatar>
+    <md-card-header-text flex="85" data-ng-click="navigateToMaterial(material, $event)">
+      <a data-ng-href="{{'/material?materialId=' + material.id}}" class="md-title no-link ellipsisText"
+         data-ng-bind="getCorrectLanguageTitle(material)">
+      </a>
+      <span class="md-subhead ellipsisText">
+        <span data-ng-repeat="author in material.authors">
+          <span>{{author.name}} {{author.surname}}</span>
+          <span data-ng-bind="$index < material.authors.length - 1 ? ', ' : ''"></span>
+        </span>
+      </span>
+    </md-card-header-text>
+    <div data-ng-if="isEditPortfolioMode && isEditPortfolioPage" class="pick" layout-align="end start">
+      <md-icon class="unchecked">remove_circle_outline</md-icon>
+      <md-icon data-ng-click="removeMaterial($event, material)" class="checked">remove_circle</md-icon>
+    </div>
+  </md-card-header>
+  <md-card-content data-ng-if="embeddedDataIframe || embeddedData" class="embed-card-content">
+    <!--Embed iframe-->
+    <div data-ng-if="embeddedDataIframe" class="embed-responsive">
+      <div class="embed-responsive-container">
+        <div class="embed-responsive-item" data-ng-bind-html="embeddedDataIframe"></div>
+      </div>
+    </div>
+    <!--Embed html-->
+    <div data-ng-if="embeddedData">
+      <div class="embed-responsive-container">
+        <div class="embed-responsive-item" data-ng-bind-html="embeddedData"></div>
+      </div>
+    </div>
+  </md-card-content>
+  <md-card-footer class="embeded-material-footer" layout="row" flex>
+    <!--Link as backup - if iframe is internally not working-->
+    <a href="{{material.source}}" class="wrapped regular-link md-primary" layout-align="start center" flex>
+      <span class="item-link" data-ng-bind="material.source"></span>
+    </a>
+    <!--Up and down-->
+    <div data-ng-if="isEditPortfolioMode && isEditPortfolioPage" layout-align="end center">
+      <md-button ng-disabled="index === 0" class="md-icon-button" aria-label="Liiguta materjali üles"
+                 ng-click="listItemUp(index)">
+        <md-icon class="material-icons">arrow_upward</md-icon>
+      </md-button>
+      <md-button ng-disabled="(chapter.materials.length - 1) == index" class="md-icon-button"
+                 aria-label="Liiguta materjali alla" ng-click="listItemDown(index)">
+        <md-icon class="material-icons">arrow_downward</md-icon>
+      </md-button>
+    </div>
+  </md-card-footer>
+</md-card>

@@ -481,7 +481,7 @@ public class MaterialDAOTest extends DatabaseTestBase {
 
     @Test
     public void getMaterialsBySource() {
-        List<Material> materials = materialDAO.findBySource("https://en.wikipedia.org/wiki/Power_Architecture");
+        List<Material> materials = materialDAO.findBySource("en.wikipedia.org/wiki/Power_Architecture", false);
         assertEquals(2, materials.size());
     }
 

@@ -1,16 +1,14 @@
-.portfolio-container {
-  min-height: 100%;
-}
-
-
-.md-toolbar-tools {
-  font-size: 18px;
-}
-
 md-sidenav {
-  overflow: visible;
-  background-color: transparent;
-  @media (min-width: 1280px) {
+  width: $sidenav-width;
+  min-width: $sidenav-width;
+  max-width: $sidenav-width;
+  position: fixed;
+  min-height: 100%;
+  background-color: #FAFAFA;
+  overflow-y: auto;
+
+  @media (min-width: $layout-breakpoint-md) {
+    background-color: transparent;
     z-index: 1;
   }
 
@@ -37,6 +35,64 @@ md-sidenav {
         background-color: rgba(158,158,158,0.2);
       }
     }
+  }
+}
+
+.menu-nested-list {
+  padding: 0;
+  margin: 0;
+  md-icon {
+    transition: 0.2s;
+  }
+  h4 {
+    margin: 0;
+  }
+  .panel {
+    border-bottom: 1px solid $border-color;
+  }
+  .panel-heading {
+    button:hover {
+      .panel-title__text {
+        color: black;
+      }
+    }
+  }
+  .panel-body ul {
+    margin: 0;
+    padding: 0;
+    .count {
+      font-size: $font-small;
+    }
+  }
+  .panel-open {
+    .arrow {
+      transform: rotate(90deg);
+    }
+    .panel-title__text, md-icon.panel-title__arrow {
+      color: rgba(0,0,0,1);
+      font-weight: 500;
+    }
+  }
+  ul li a {
+    text-decoration: none;
+    color: inherit;
+  }
+  .panel-title__text, md-icon.panel-title__arrow {
+    color: $color-muted;
+  }
+}
+
+.portfolio-container {
+  min-height: 100%;
+}
+
+.md-toolbar-tools {
+  font-size: 18px;
+}
+
+@media (min-width: $layout-breakpoint-md) {
+  .md-sidenav-backdrop {
+    display: none;
   }
 }
 
@@ -125,6 +181,20 @@ md-sidenav {
 }
 
 md-sidenav {
+  md-toolbar {
+    padding: 13px 16px 5px;
+    min-height: 48px;
+  }
+  @media (min-width: $layout-breakpoint-sm) {
+    md-toolbar {
+      min-height: auto;
+    }
+  }
+  @media (min-width: $layout-breakpoint-md) {
+    md-toolbar {
+      min-height: 64px;
+    }
+  }
   md-toolbar.md-primary .md-toolbar-tools.md-subhead {
     box-shadow: rgba(0, 0, 0, 0.2) -3px 1px 3px 0px, rgba(0, 0, 0, 0.137255) -1px 1px 1px 0px, rgba(0, 0, 0, 0.117647) -1px 2px 1px -1px;
   }
@@ -175,4 +245,9 @@ md-sidenav._md-locked-open, md-sidenav._md-locked-open._md-closed, md-sidenav._m
 
 .sidenav-menu .md-button.one-row {
   display: block;
+}
+
+// Removes faulty backdrop
+.md-sidenav-backdrop {
+  opacity: 0 !important;
 }

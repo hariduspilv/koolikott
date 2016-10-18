@@ -1,9 +1,10 @@
 <div id="page-view-material" flex>
   <div layout="row" layout-xs="column" flex>
-    <div data-ng-if="!isEditPortfolioMode" layout="row" layout-xs="column" flex="0" flex-gt-md="15"></div>
-    <section flex flex-gt-md="{{$root.isEditPortfolioMode ? '90' : '75'}}">
+    <section flex flex-gt-md="100">
       <div layout-gt-sm>
-        <article flex="100" flex-gt-sm="75" flex-gt-lg="80" class="md-padding" role="main">
+        <article flex="100" class="md-padding" role="main">
+          <div ng-if="modUser()" dop-error-message></div>
+
           <!-- same as portfolioSummaryCard in directives -->
           <md-card class="card-lg" id="material-card">
             <md-card-content>
@@ -144,7 +145,7 @@
 
                   <md-divider class="md-default-theme"></md-divider>
                   <!-- left description  -->
-                  <div class="on-left" flex>
+                  <div class="on-left">
                     <div class="md-body-1 description textangular-view"
                          data-ng-bind-html="getCorrectLanguageString(material.descriptions)"></div>
 
@@ -328,6 +329,15 @@
                       </span>
                     </p>
 
+                    <p class="md-body-2 meta" data-ng-if="material.peerReviews">
+                      <span data-ng-repeat="peerReview in material.peerReviews">
+                        <span layout="row">
+                          <a ng-show="material.peerReviews.length === 1" target="_blank" data-ng-href="{{ peerReview.url }}" data-translate="MATERIAL_PEER_REVIEW"></a>
+                          <a ng-show="material.peerReviews.length > 1" target="_blank" data-ng-href="{{ peerReview.url }}">{{ 'MATERIAL_PEER_REVIEW' | translate }} {{$index + 1}}</a>
+                       </span>
+                      </span>
+                    </p>
+
                     <p class="md-body-2 meta" data-ng-if="material.paid">
                       <span data-translate="MATERIAL_PAID"></span>
                     </p>
@@ -359,8 +369,6 @@
             </md-card-content>
           </md-card>
         </article>
-
-        <div data-dop-sidebar flex flex-gt-sm="25" flex-gt-lg="20" class="md-padding"></div>
       </div>
     </section>
   </div>

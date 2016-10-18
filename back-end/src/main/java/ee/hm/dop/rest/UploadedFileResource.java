@@ -1,6 +1,7 @@
 package ee.hm.dop.rest;
 
 import static ee.hm.dop.utils.ConfigurationProperties.DOCUMENT_MAX_FILE_SIZE;
+import static ee.hm.dop.utils.ConfigurationProperties.FILE_UPLOAD_DIRECTORY;
 
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
@@ -37,7 +38,7 @@ public class UploadedFileResource extends BaseResource {
     @Produces(MediaType.APPLICATION_JSON)
     public UploadedFile uploadFile(@FormDataParam("file") InputStream fileInputStream,
                                    @FormDataParam("file") FormDataContentDisposition fileDetail) throws UnsupportedEncodingException {
-        return uploadedFileService.uploadFile(fileInputStream, fileDetail);
+        return uploadedFileService.uploadFile(fileInputStream, fileDetail, configuration.getString(FILE_UPLOAD_DIRECTORY), "/rest/uploadedFile/");
     }
 
     @GET

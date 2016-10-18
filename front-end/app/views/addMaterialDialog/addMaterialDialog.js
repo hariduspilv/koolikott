@@ -9,8 +9,8 @@ define([
     'services/fileUploadService',
     'directives/validate/validateUrl'
 ], function (app) {
-    return ['$scope', '$mdDialog', '$mdDateLocale', 'serverCallService', 'translationService', 'metadataService', '$filter', '$location', '$rootScope', 'authenticatedUserService', '$timeout', 'pictureUploadService', 'fileUploadService',
-        function ($scope, $mdDialog, $mdDateLocale, serverCallService, translationService, metadataService, $filter, $location, $rootScope, authenticatedUserService, $timeout, pictureUploadService, fileUploadService) {
+    return ['$scope', '$mdDialog', '$mdDateLocale', 'serverCallService', 'translationService', 'metadataService', '$filter', '$location', '$rootScope', 'authenticatedUserService', '$timeout', 'pictureUploadService', 'fileUploadService', 'toastService',
+        function ($scope, $mdDialog, $mdDateLocale, serverCallService, translationService, metadataService, $filter, $location, $rootScope, authenticatedUserService, $timeout, pictureUploadService, fileUploadService, toastService) {
             $scope.isSaving = false;
             $scope.showHints = true;
             $scope.creatorIsPublisher = false;
@@ -28,7 +28,8 @@ define([
             $scope.titleDescriptionGroups = [];
             $scope.fileUploaded = false;
             $scope.uploadingFile = false;
-            $scope.maxPictureSize = 10; //Initial placeholder
+            $scope.review = {};
+            $scope.maxReviewSize = 10;
 
             init();
 
@@ -102,9 +103,19 @@ define([
                 $mdDialog.hide();
             };
 
+            $scope.addNewPeerReview = function () {
+                $scope.material.peerReviews.push({});
+                $timeout(function () {
+                    angular.element('#material-peerReview-' + ($scope.material.authors.length - 1)).focus();
+                });
+            };
+
+            $scope.deletePeerReview = function (index) {
+                $scope.material.peerReviews.splice(index, 1);
+            };
+
             $scope.save = function () {
                 $scope.isSaving = true;
-
                 if (uploadingPicture) {
                     $timeout($scope.save, 500, false);
                 } else {
@@ -133,6 +144,12 @@ define([
                                 return competence.name !== "NOT_RELEVANT";
                             });
                     }
+
+                    $scope.material.peerReviews.forEach(function (peerReview, i) {
+                        if (!peerReview || !peerReview.url) {
+                            $scope.material.peerReviews.splice(i, 1);
+                        }
+                    });
 
                     serverCallService.makePut('rest/material', $scope.material, saveMaterialSuccess, saveMaterialFail, saveMaterialFinally);
                 }
@@ -165,7 +182,6 @@ define([
                     year: date.getFullYear()
                 };
             }
-
 
             function getTitlesAndDecriptions() {
                 var titles = [];
@@ -283,6 +299,13 @@ define([
                 return $scope.educationalContextId === 2 || $scope.educationalContextId === 3;
             };
 
+            $scope.isURLInvalid = function () {
+                if ($scope.addMaterialForm && $scope.addMaterialForm.source && $scope.addMaterialForm.source.$viewValue) {
+                    $scope.addMaterialForm.source.$setTouched();
+                    return $scope.addMaterialForm.source.$error.url && ($scope.addMaterialForm.source.$viewValue.length > 0);
+                }
+            };
+
             function loadMetadata() {
                 metadataService.loadResourceTypes(setResourceTypes);
                 metadataService.loadKeyCompetences(setKeyCompetences);
@@ -294,6 +317,7 @@ define([
                 $scope.material.tags = [];
                 $scope.material.taxons = [{}];
                 $scope.material.authors = [{}];
+                $scope.material.peerReviews = [{}];
                 $scope.material.keyCompetences = [];
                 $scope.material.crossCurricularThemes = [];
                 $scope.material.publishers = [];
@@ -398,6 +422,44 @@ define([
                 }
             }, true);
 
+            $scope.$watch('material.source', function (newValue) {
+                if ($scope.addMaterialForm.source) {
+                    $scope.addMaterialForm.source.$setValidity("exists", true);
+                    $scope.addMaterialForm.source.$setValidity("deleted", true);
+                }
+
+                if (newValue && $scope.addMaterialForm.source && ($scope.addMaterialForm.source.$error.url !== true)) {
+                    var encodedUrl   = encodeURIComponent(newValue);
+                    serverCallService.makeGet("rest/material/getAllBySource?source=" + encodedUrl, {},
+                        getByUrlSuccess, getByUrlFail);
+                }
+
+            }, true);
+
+            function getByUrlSuccess(materials) {
+                if((materials && materials[0]) && (materials[0].id !== $scope.material.id)) {
+
+                    if (materials[0].deleted) {
+                        $scope.addMaterialForm.source.$setValidity("deleted", false);
+                        toastService.show("MATERIAL_WITH_SAME_SOURCE_IS_DELETED");
+                    } else {
+                        $scope.addMaterialForm.source.$setTouched();
+                        $scope.addMaterialForm.source.$setValidity("exists", false);
+                    }
+                }
+            }
+
+            function getByUrlFail() {
+            }
+
+            $scope.uploadReview = function (index, file) {
+                if (file) {
+                    $scope.material.peerReviews[index].uploading = true;
+                    $scope.uploadingReviewId = index;
+                    fileUploadService.uploadReview(file, reviewUploadSuccess, reviewUploadFailed, reviewUploadFinally);
+                }
+            };
+
             function pictureUploadSuccess(picture) {
                 $scope.material.picture = picture;
             }
@@ -425,6 +487,20 @@ define([
 
             function fileUploadFinally() {
                 $scope.uploadingFile = false;
+            }
+
+            function reviewUploadSuccess(file) {
+                $scope.material.peerReviews[$scope.uploadingReviewId].name = file.name;
+                $scope.material.peerReviews[$scope.uploadingReviewId].url = file.url;
+                $scope.material.peerReviews[$scope.uploadingReviewId].uploaded = true;
+            }
+
+            function reviewUploadFailed() {
+                log('Review upload failed.');
+            }
+
+            function reviewUploadFinally() {
+                $scope.material.peerReviews[$scope.uploadingReviewId].uploading = false;
             }
 
             function preSetMaterial(material) {
@@ -456,6 +532,10 @@ define([
 
                 if (!$scope.material.taxons[0]) {
                     $scope.material.taxons = [{}];
+                }
+
+                if (!$scope.material.peerReviews[0]) {
+                    $scope.material.peerReviews = [{}];
                 }
 
                 var educationalContext = $rootScope.taxonUtils.getEducationalContext($scope.material.taxons[0]);
@@ -535,11 +615,15 @@ define([
             }
 
             function saveMaterialSuccess(material) {
-                //Pass saved material back to material view
-                material.source = getSource(material);
-                $mdDialog.hide(material);
-                if (!$scope.isChapterMaterial) {
-                    $location.url('/material?materialId=' + material.id);
+                if(!material) {
+                    saveMaterialFail();
+                } else {
+                    //Pass saved material back to material view
+                    material.source = getSource(material);
+                    $mdDialog.hide(material);
+                    if (!$scope.isChapterMaterial) {
+                        $location.url('/material?materialId=' + material.id);
+                    }
                 }
             }
 

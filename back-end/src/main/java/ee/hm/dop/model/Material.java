@@ -10,12 +10,15 @@ import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.NotNull;
 
@@ -25,6 +28,7 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import ee.hm.dop.model.taxon.Taxon;
 import ee.hm.dop.rest.jackson.map.TaxonDeserializer;
 import ee.hm.dop.rest.jackson.map.TaxonSerializer;
+import org.apache.xpath.operations.Bool;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
@@ -80,6 +84,14 @@ public class Material extends LearningObject implements Searchable {
             uniqueConstraints = @UniqueConstraint(columnNames = {"material", "resourceType"}))
     private List<ResourceType> resourceTypes;
 
+    @OneToMany
+    @JoinTable(
+            name = "Material_PeerReview",
+            joinColumns = {@JoinColumn(name = "material")},
+            inverseJoinColumns = {@JoinColumn(name = "peerReview")},
+            uniqueConstraints = @UniqueConstraint(columnNames = {"material", "peerReview"}))
+    private List<PeerReview> peerReviews;
+
     @ManyToMany(fetch = EAGER)
     @Fetch(FetchMode.SELECT)
     @JoinTable(
@@ -113,6 +125,9 @@ public class Material extends LearningObject implements Searchable {
     @JoinColumn(name = "repository")
     private Repository repository;
 
+    @Transient
+    private boolean curriculumLiterature;
+
     /**
      * The ID in the repository. Null when created in DOP
      */
@@ -127,9 +142,6 @@ public class Material extends LearningObject implements Searchable {
 
     @Column(nullable = false)
     private boolean isSpecialEducation = false;
-
-    @Column(nullable = false)
-    private boolean curriculumLiterature = false;
 
     public List<LanguageString> getTitles() {
         return titles;
@@ -185,6 +197,14 @@ public class Material extends LearningObject implements Searchable {
 
     public void setResourceTypes(List<ResourceType> resourceTypes) {
         this.resourceTypes = resourceTypes;
+    }
+
+    public List<PeerReview> getPeerReviews() {
+        return peerReviews;
+    }
+
+    public void setPeerReviews(List<PeerReview> peerReviews) {
+        this.peerReviews = peerReviews;
     }
 
     public List<Taxon> getTaxons() {
@@ -251,14 +271,6 @@ public class Material extends LearningObject implements Searchable {
         this.isSpecialEducation = isSpecialEducation;
     }
 
-    public boolean isCurriculumLiterature() {
-        return curriculumLiterature;
-    }
-
-    public void setCurriculumLiterature(boolean curriculumLiterature) {
-        this.curriculumLiterature = curriculumLiterature;
-    }
-
     public UploadedFile getUploadedFile() {
         return uploadedFile;
     }
@@ -273,6 +285,10 @@ public class Material extends LearningObject implements Searchable {
 
     public Boolean getEmbeddable() {
         return embeddable;
+    }
+
+    public Boolean isCurriculumLiterature() {
+        return getPeerReviews() != null;
     }
 
     private List<LanguageString> getSanitizedHTML(List<LanguageString> descriptions) {

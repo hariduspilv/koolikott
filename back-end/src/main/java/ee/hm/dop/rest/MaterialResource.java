@@ -5,6 +5,7 @@ import static org.apache.commons.lang3.StringUtils.isBlank;
 import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URLDecoder;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.security.RolesAllowed;
@@ -26,9 +27,7 @@ import ee.hm.dop.model.BrokenContent;
 import ee.hm.dop.model.Material;
 import ee.hm.dop.model.Recommendation;
 import ee.hm.dop.model.User;
-import ee.hm.dop.model.UserFavorite;
 import ee.hm.dop.model.UserLike;
-import ee.hm.dop.service.LearningObjectService;
 import ee.hm.dop.service.MaterialService;
 import ee.hm.dop.service.UserService;
 
@@ -54,7 +53,17 @@ public class MaterialResource extends BaseResource {
     public List<Material> getMaterialsByUrl(@QueryParam("source") @Encoded String materialSource)
             throws UnsupportedEncodingException {
         materialSource = URLDecoder.decode(materialSource, "UTF-8");
-        return materialService.getBySource(materialSource);
+        return materialService.getBySource(materialSource, false);
+    }
+
+    @GET
+    @Path("getAllBySource")
+    @RolesAllowed({"USER", "ADMIN", "MODERATOR"})
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<Material> getAllMaterialsByUrl(@QueryParam("source") @Encoded String materialSource)
+            throws UnsupportedEncodingException {
+        materialSource = URLDecoder.decode(materialSource, "UTF-8");
+        return materialService.getBySource(materialSource, true);
     }
 
     @POST
@@ -127,6 +136,13 @@ public class MaterialResource extends BaseResource {
         return materialService.getByCreator(creator);
     }
 
+    @GET
+    @Path("getByCreator/count")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getByCreatorCount(@QueryParam("username") String username) {
+        return Response.ok(getByCreator(username).size()).build();
+    }
+
     @DELETE
     @Path("{materialID}")
     @RolesAllowed({"ADMIN"})
@@ -171,10 +187,19 @@ public class MaterialResource extends BaseResource {
 
     @GET
     @Path("getBroken")
-    @Produces(MediaType.APPLICATION_JSON)
     @RolesAllowed({"ADMIN", "MODERATOR"})
+    @Produces(MediaType.APPLICATION_JSON)
     public List<BrokenContent> getBrokenMaterial() {
         return materialService.getBrokenMaterials();
+    }
+
+
+    @GET
+    @Path("getBroken/count")
+    @RolesAllowed({"ADMIN", "MODERATOR"})
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getBrokenMaterialCount() {
+        return Response.ok(materialService.getBrokenMaterials().size()).build();
     }
 
     @POST
@@ -208,4 +233,14 @@ public class MaterialResource extends BaseResource {
     public List<Material> getDeletedMaterials() {
         return materialService.getDeletedMaterials();
     }
+
+    @GET
+    @Path("getDeleted/count")
+    @Produces(MediaType.APPLICATION_JSON)
+    @RolesAllowed({"ADMIN", "MODERATOR"})
+    public Response getDeletedMaterialsCount() {
+        return Response.ok(materialService.getDeletedMaterials().size()).build();
+
+    }
+
 }

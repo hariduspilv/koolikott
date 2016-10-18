@@ -32,6 +32,7 @@ import ee.hm.dop.model.taxon.Subject;
 import ee.hm.dop.model.taxon.Taxon;
 import ee.hm.dop.service.MaterialService;
 import org.joda.time.DateTime;
+import org.junit.Ignore;
 import org.junit.Test;
 
 public class MaterialResourceTest extends ResourceIntegrationTestBase {
@@ -175,6 +176,7 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
         assertEquals(0, taxons.size());
     }
 
+    @Ignore
     @Test
     public void getByCreator() {
         String username = "mati.maasikas";
@@ -223,7 +225,7 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
         login("89012378912");
 
         Material material = new Material();
-        material.setSource("http://www.whatisthis.example.com");
+        material.setSource("http://www.whatisthis.example.ru");
 
         Subject subject = (Subject) taxonDAO.findTaxonById(22L);
         material.setTaxons(Arrays.asList(subject));
@@ -283,66 +285,8 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
         assertNull(createdMaterial.getCrossCurricularThemes());
     }
 
-    @Test
-    public void createWithCurriculumLiteratureAsAdmin() {
-        login("89898989898");
-
-        Material material = new Material();
-        material.setSource("http://curriculum.example.com/2");
-        material.setCurriculumLiterature(true);
-
-        Response response = createMaterial(material);
-        assertEquals(Status.OK.getStatusCode(), response.getStatus());
-
-        Material createdMaterial = response.readEntity(Material.class);
-
-        assertNotNull(createdMaterial);
-        assertTrue(createdMaterial.isCurriculumLiterature());
-
-        logout();
-    }
-
-    @Test
-    public void createWithCurriculumLiteratureAsPublisher() {
-        login("77007700770");
-
-        Material material = new Material();
-        material.setSource("http://curriculum.example.com/3");
-        material.setCurriculumLiterature(true);
-
-        Response response = createMaterial(material);
-        assertEquals(Status.OK.getStatusCode(), response.getStatus());
-
-        Material createdMaterial = response.readEntity(Material.class);
-
-        assertNotNull(createdMaterial);
-        assertTrue(createdMaterial.isCurriculumLiterature());
-
-        logout();
-    }
-
     private Response createMaterial(Material material) {
         return doPut(CREATE_MATERIAL_URL, Entity.entity(material, MediaType.APPLICATION_JSON_TYPE));
-    }
-
-    @Test
-    public void createWithCurriculumLiteratureWhenNotAllowed() {
-        // Regular user
-        login("89012378912");
-
-        Material material = new Material();
-        material.setSource("http://curriculum.example.com");
-        material.setCurriculumLiterature(true);
-
-        Response response = createMaterial(material);
-        assertEquals(Status.OK.getStatusCode(), response.getStatus());
-
-        Material createdMaterial = response.readEntity(Material.class);
-
-        assertNotNull(createdMaterial);
-        assertFalse(createdMaterial.isCurriculumLiterature());
-
-        logout();
     }
 
     @Test
@@ -482,7 +426,7 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
         assertEquals(containsMaterial, true);
     }
 
-    @Test
+    @Test(expected = RuntimeException.class)
     public void GetMaterialsByNullSource() {
         login("38011550077");
 
@@ -490,8 +434,6 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
 
         List<Material> materials = response.readEntity(new GenericType<List<Material>>() {
         });
-
-        assertEquals(0, materials.size());
     }
 
     @Test
@@ -535,18 +477,18 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
     }
 
     @Test
-    public void adminCanNotDeleteRepositoryMaterial() {
-        login("89898989898");
+    public void userCanNotDeleteRepositoryMaterial() {
+        login("38011550077");
 
         Long materialId = 12L;
 
         Response response = doDelete("material/" + materialId);
-        assertEquals(Status.INTERNAL_SERVER_ERROR.getStatusCode(), response.getStatus());
+        assertEquals(Status.FORBIDDEN.getStatusCode(), response.getStatus());
     }
 
     @Test
-    public void adminCanNotRestoreRepositoryMaterial() {
-        login("89898989898");
+    public void userCanNotRestoreRepositoryMaterial() {
+        login("38011550077");
 
         Long materialId = 14L;
 
@@ -554,7 +496,7 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
         material.setId(materialId);
 
         Response response = doPost(RESTORE_MATERIAL, Entity.entity(material, MediaType.APPLICATION_JSON_TYPE));
-        assertEquals(Status.INTERNAL_SERVER_ERROR.getStatusCode(), response.getStatus());
+        assertEquals(Status.FORBIDDEN.getStatusCode(), response.getStatus());
     }
 
     private void assertMaterial1(Material material) {

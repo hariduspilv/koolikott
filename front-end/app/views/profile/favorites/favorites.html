@@ -1,0 +1,25 @@
+<div id="page-profile-favorites" flex>
+  <div layout="row" layout-xs="column" flex>
+    <section flex flex-gt-md="100">
+      <div layout-gt-sm>
+        <article md-cols-gt-xs="3" md-cols-gt-sm="4" class="md-padding" role="main" id="main-content">
+
+          <h1 class="type-block" data-ng-if="myProfile" data-translate="MYPROFILE_PAGE_TITLE_FAVORITES"></h1>
+
+          <div class="card-container">
+
+            <h3 data-ng-show="favorites.length === 0" data-translate="NO_FAVORITES"></h3>
+
+            <div data-ng-repeat="item in favorites track by item.id" class="card-container__item">
+              <div data-ng-if="item.type === '.Material'" data-dop-material-box material="item"></div>
+              <div data-ng-if="item.type === '.Portfolio'" data-dop-portfolio-box portfolio="item"></div>
+            </div>
+
+            <div data-ng-repeat="i in [1,2,3,4]" class="card-container__item card-container__item--empty"><div><md-card class="card-sm"></md-card></div></div>
+          </div>
+
+        </article>
+      </div>
+    </section>
+  </div>
+</div>

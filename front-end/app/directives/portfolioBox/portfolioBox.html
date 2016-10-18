@@ -1,5 +1,6 @@
 <md-card class="card-sm md-whiteframe-2dp" id="portfolio-card-{{portfolio.id}}"
-         data-ng-click="navigateTo(portfolio, $event)" layout="column">
+         data-ng-click="navigateTo(portfolio, $event)">
+  <div data-ng-if="isAuthenticated()" class="card__favorite" data-dop-favorite data-learning-object="portfolio" layout-align="start start"></div>
   <div class="corner"></div>
   <!-- noimage -->
   <a data-ng-href="{{'/portfolio?id=' + portfolio.id}}" data-ng-if="!portfolio.picture" class="card-cover portfolio"
@@ -40,20 +41,13 @@
 
   <md-divider></md-divider>
 
-  <md-card-actions layout="row" layout-align="start center">
-    <a data-ng-href="{{'/portfolio?id=' + portfolio.id}}" class="no-link materialbox-icons">
-    <span class="md-action-icons-list md-caption" flex layout>
-      <md-icon>thumb_up</md-icon>
-      <span>{{ portfolio.likes }}</span>
-
-      <md-icon>thumb_down</md-icon>
-      <span>{{ portfolio.dislikes }}</span>
-
-      <span flex></span>
-
-      <md-icon>visibility</md-icon>
-      <span data-ng-bind="portfolio.views"></span>
-    </span>
-    </a>
+  <md-card-actions class="md-caption" layout="row" layout-align="start center" >
+    <md-icon>thumb_up</md-icon>
+    <span>{{ portfolio.likes }}</span>
+    <md-icon>thumb_down</md-icon>
+    <span>{{ portfolio.dislikes }}</span>
+    <span flex></span>
+    <md-icon>visibility</md-icon>
+    <span data-ng-bind="portfolio.views"></span>
   </md-card-actions>
 </md-card>

@@ -24,13 +24,14 @@ require.config({
         'ng-file-upload': 'libs/ng-file-upload/ng-file-upload.min',
         'clipboard': 'libs/clipboard/dist/clipboard.min',
         'moment': 'libs/moment/min/moment.min',
-        'angular-bootstrap': 'utils/ui-bootstrap-custom-tpls-1.3.3.min',
+        'angular-bootstrap': 'utils/ui-bootstrap-custom-tpls.min',
         'DOPconstants': 'constants',
         'rangy-core': 'libs/rangy/rangy-core.min',
         'rangy-selectionsaverestore': 'libs/rangy/rangy-selectionsaverestore.min',
         'textAngular-sanitize': 'libs/textAngular/dist/textAngular-sanitize.min',
         'textAngularSetup': 'libs/textAngular/dist/textAngularSetup',
-        'textAngular': 'utils/koolikottTextAngular'
+        'textAngular': 'utils/koolikottTextAngular',
+        'angular-drag-and-drop-lists': 'libs/angular-drag-and-drop-lists/angular-drag-and-drop-lists.min'
     },
     shim: {
         'angular': ['jquery'],
@@ -69,7 +70,8 @@ require.config({
         'rangy-selectionsaverestore': ['rangy-core'],
         'textAngular-sanitize': ['angular', 'rangy-selectionsaverestore'],
         'textAngularSetup': ['angular', 'rangy-selectionsaverestore'],
-        'textAngular': ['angular', 'rangy-selectionsaverestore', 'textAngular-sanitize', 'textAngularSetup']
+        'textAngular': ['angular', 'rangy-selectionsaverestore', 'textAngular-sanitize', 'textAngularSetup'],
+        'angular-drag-and-drop-lists': ['angular']
     },
     deps: ['app']
 });

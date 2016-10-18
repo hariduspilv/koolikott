@@ -26,8 +26,6 @@ import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
 
 public class UploadedFileService {
 
-    public static final String REST_UPLOADED_FILE = "/rest/uploadedFile/";
-
     @Inject
     private UploadedFileDAO uploadedFileDAO;
 
@@ -63,7 +61,7 @@ public class UploadedFileService {
                 .build();
     }
 
-    public UploadedFile uploadFile(InputStream fileInputStream, FormDataContentDisposition fileDetail) throws UnsupportedEncodingException {
+    public UploadedFile uploadFile(InputStream fileInputStream, FormDataContentDisposition fileDetail, String rootPath, String restPath) throws UnsupportedEncodingException {
         LimitedSizeInputStream limitedSizeInputStream = new LimitedSizeInputStream(configuration.getInt(DOCUMENT_MAX_FILE_SIZE), fileInputStream);
 
         UploadedFile uploadedFile = new UploadedFile();
@@ -72,8 +70,8 @@ public class UploadedFileService {
         uploadedFile = create(uploadedFile);
 
         //After creating uploaded file object to DB, upload file to server
-        String path = configuration.getString(FILE_UPLOAD_DIRECTORY) + uploadedFile.getId() + "/" + filename;
-        String url = configuration.getString(SERVER_ADDRESS) + REST_UPLOADED_FILE + uploadedFile.getId() + "/" + uploadedFile.getName();
+        String path = rootPath + uploadedFile.getId() + "/" + filename;
+        String url = configuration.getString(SERVER_ADDRESS) + restPath + uploadedFile.getId() + "/" + uploadedFile.getName();
         uploadedFile.setPath(path);
         uploadedFile.setUrl(url);
 

@@ -8,7 +8,6 @@ define([
 ], function (app) {
     return ['$scope', '$route', 'authenticatedUserService', 'serverCallService', '$location', 'alertService', function ($scope, $route, authenticatedUserService, serverCallService, $location, alertService) {
         function init() {
-            isMyProfilePage();
 
             if (!$scope.user) {
                 getUser();
@@ -18,33 +17,6 @@ define([
                 getUsersMaterials();
                 getUsersPortfolios();
             }
-        }
-
-        function isMyProfilePage() {
-            if (authenticatedUserService.isAuthenticated()) {
-                var user = authenticatedUserService.getUser()
-
-                if (user && $route.current.params.username === user.username) {
-                    $scope.user = user;
-                    $scope.myProfile = true;
-                    getUsersFavorites();
-                }
-            }
-        }
-
-
-        function getUsersFavorites() {
-            serverCallService.makeGet("rest/learningObject/usersFavorite", {}, getFavoritesSuccess, getFavoritesFail)
-        }
-
-        function getFavoritesSuccess(data) {
-            if(data) {
-                $scope.favorites = data
-            }
-        }
-
-        function getFavoritesFail() {
-            console.log("failed to retrieve learning objects favorited by the user")
         }
 
 

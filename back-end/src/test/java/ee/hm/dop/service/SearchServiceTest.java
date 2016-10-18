@@ -851,7 +851,7 @@ public class SearchServiceTest {
         String query = "german language";
         SearchFilter searchFilter = new SearchFilter();
         searchFilter.setCurriculumLiterature(true);
-        String tokenizedQuery = "(german language) AND curriculum_literature:\"true\""
+        String tokenizedQuery = "(german language) AND peerReview:[* TO *]"
                 + " AND (visibility:\"public\" OR type:\"material\")";
         long start = 0;
 
@@ -865,7 +865,7 @@ public class SearchServiceTest {
         String query = "german language";
         SearchFilter searchFilter = new SearchFilter();
         searchFilter.setCurriculumLiterature(false);
-        String tokenizedQuery = "(german language) AND curriculum_literature:\"false\""
+        String tokenizedQuery = "(german language)"
                 + " AND (visibility:\"public\" OR type:\"material\")";
         long start = 0;
 
@@ -879,7 +879,7 @@ public class SearchServiceTest {
         String query = "german language";
         SearchFilter searchFilter = new SearchFilter();
         searchFilter.setCurriculumLiterature(false);
-        String tokenizedQuery = "(german language) AND curriculum_literature:\"false\""
+        String tokenizedQuery = "(german language)"
                 + " AND (visibility:\"public\" OR type:\"material\")";
         long start = 0;
         Long limit = 3L;
@@ -989,10 +989,6 @@ public class SearchServiceTest {
         } else {
             testSearch(query, tokenizedQuery, expectedSort, searchables, start, limit, limit, searchFilter, null);
         }
-    }
-
-    private void testSuggest(String query, List<Searchable> searchables){
-
     }
 
     private List<Long> getIdentifiers(List<Searchable> searchables) {

@@ -1,9 +1,77 @@
+.navbar {
+  position: fixed;
+  overflow: hidden;
+  z-index: 5;
+
+  // Needs redoing after navbar design
+  .md-toolbar-tools {
+    padding: 0;
+  }
+  @media (min-width: 370px) {
+    .md-toolbar-tools {
+      padding: 0 16px;
+    }
+  }
+}
+
+.navbar .md-toolbar-tools {
+  justify-content: space-between;
+}
+
+.navbar.md-red {
+  background-color: #a2134c;
+}
+
+.navbar.md-gray {
+  background-color: #949394;
+}
+
+.navbar-logo-main {
+  padding-left: 10px;
+  padding-right: 30px;
+  margin-top: 5px;
+  }
+
+.navbar-search-area {
+  width: 100%;
+  max-width: 1280px;
+  padding: 0 16px;
+  display: none;
+
+  @media (min-width: $layout-breakpoint-xs) {
+    display: inline-block;
+  }
+}
+
+.navbar-buttons-area {
+  @media (min-width: $layout-breakpoint-xs) {
+    flex: 0 0 auto;
+  }
+  .button-container {
+    display: inline-block;
+  }
+  .mobile-search-button {
+    @media (min-width: $layout-breakpoint-xs) {
+    display: none;
+    }
+    button {
+      margin: 0;
+    }
+  }
+
+}
+
+.navbar-content {
+  align-items: center;
+  height: 100%;
+}
+
 .navbar-search {
-  margin: 0 5px;
+  margin: 0 5px 0 0;
   border-radius: 2px;
   padding: 4px 0;
 
-  @media screen and (min-width: 600px) {
+  @media screen and (min-width: $layout-breakpoint-xs) {
     background: rgba(255,255,255,.15);
   }
 
@@ -40,39 +108,31 @@
   }
 }
 
-@media screen and (max-width: 959px) {
-  .allow-scroll {
-    overflow-y: scroll;
-    height: 100%;
-  }
-}
-
 .nav-position {
-  position: fixed;
   width: 100%;
   z-index: 10;
 }
 
-.logo {
-  display: block;
-  background-image: url('../images/logo_white_sm.svg');
-  height: 30px;
-  background-size: contain;
-  background-repeat: no-repeat;
-  background-position: left center;
-
-  @media (min-width: 960px) {
-    background-image: url('../images/logo_white.svg');
-    height: 35px;
-    margin-top: 5px;
-  }
-}
-
-.logo-lg {
-  background-image: url('../images/logo_white.svg');
-  height: 35px;
-  margin-top: 5px;
-}
+// .logo {
+//   display: block;
+//   background-image: url('../images/logo_white_sm.svg');
+//   height: 30px;
+//   background-size: contain;
+//   background-repeat: no-repeat;
+//   background-position: left center;
+//
+//   @media (min-width: 960px) {
+//     background-image: url('../images/logo_white.svg');
+//     height: 35px;
+//     margin-top: 5px;
+//   }
+// }
+//
+// .logo-lg {
+//   background-image: url('../images/logo_white.svg');
+//   height: 35px;
+//   margin-top: 5px;
+// }
 
 #header-simple-search-input{
   background-color: transparent;
@@ -84,4 +144,44 @@
 
 #header-simple-search-input > md-autocomplete-wrap > button {
   display: none;
+}
+
+// Wide/big screen fix
+@media (min-width: 1800px) {
+  .navbar-logo-area {
+    position: absolute;
+    left: 16px;
+    top: 9px;
+  }
+  .navbar-search-area {
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .navbar-buttons-area {
+    position: absolute;
+    right: 16px;
+    top: 9px;
+  }
+}
+
+// Account circle colors
+.md-primary {
+  .account__circle {
+    color: #1E88E5;
+  }
+}
+.md-red {
+  .account__circle {
+    color: #a2134c;
+  }
+}
+.md-gray {
+  .account__circle {
+    color: #949394;
+  }
+}
+.account__circle {
+  background-color: white;
+  border-radius: 50%;
+  font-weight: bold;
 }

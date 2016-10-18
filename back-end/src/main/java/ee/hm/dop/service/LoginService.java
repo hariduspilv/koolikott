@@ -117,6 +117,7 @@ public class LoginService {
         if (person != null) {
             authenticatedUser.setPerson(person);
         }
+        authenticatedUser.setPerson(person);
 
         return createAuthenticatedUser(authenticatedUser);
     }

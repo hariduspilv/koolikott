@@ -354,9 +354,9 @@ public class SearchService {
     private String isCurriculumLiteratureAsQuery(SearchFilter searchFilter) {
         Boolean isCurriculumLiterature = searchFilter.isCurriculumLiterature();
         if (Boolean.TRUE.equals(isCurriculumLiterature)) {
-            return "curriculum_literature:\"true\"";
+            return "peerReview:[* TO *]";
         } else if (Boolean.FALSE.equals(isCurriculumLiterature)) {
-            return "curriculum_literature:\"false\"";
+            return "";
         }
         return "";
     }

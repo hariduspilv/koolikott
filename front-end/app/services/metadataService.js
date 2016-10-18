@@ -9,8 +9,9 @@ define([
     var LANGUGAGES;
     var LICENSE_TYPES;
     var RESOURCE_TYPES;
-    var EDUCATIONAL_CONTEXTS;
     var USED_LANGUAGES;
+    var EDUCATIONAL_CONTEXT;
+    var REDUCED_EDUCATIONAL_CONTEXT;
 
     var crossCurricularThemesCallbacks = [];
     var keyCompetencesCallbacks = [];
@@ -19,6 +20,7 @@ define([
     var resourceTypesCallbacks = [];
     var educationalContextsCallbacks = [];
     var usedLanguagesContextsCallbacks = [];
+    var reducedTaxonCallbacks = [];
 
     angularAMD.factory('metadataService', ['serverCallService', '$filter',
         function (serverCallService, $filter) {
@@ -32,6 +34,7 @@ define([
                 serverCallService.makeGet("rest/learningMaterialMetadata/licenseType", {}, getLicenseTypeSuccess, getLicenseTypeFail);
                 serverCallService.makeGet("rest/learningMaterialMetadata/resourceType", {}, getResourceTypeSuccess, getResourceTypeFail);
                 serverCallService.makeGet("rest/learningMaterialMetadata/usedLanguages", {}, getUsedLanguagesSuccess, getUsedLanguagesFail);
+                serverCallService.makeGet("rest/learningMaterialMetadata/reducedTaxon", {}, getReducedTaxonSuccess, getReducedTaxonFail);
             }
 
             function getUsedLanguagesSuccess(data) {
@@ -131,8 +134,8 @@ define([
 
             function getEducationalContextSuccess(data) {
                 if (!isEmpty(data)) {
-                    EDUCATIONAL_CONTEXTS = data;
-                    educationalContextsCallbacks.forEach(function (callback) {
+                    EDUCATIONAL_CONTEXT = data;
+                    educationalContextsCallbacks.forEach(function(callback) {
                         callback(data);
                     });
                 }
@@ -140,6 +143,19 @@ define([
 
             function getEducationalContextFail() {
                 console.log('Failed to get educational contexts.');
+            }
+
+            function getReducedTaxonSuccess(data) {
+                if (!isEmpty(data)) {
+                    REDUCED_EDUCATIONAL_CONTEXT = data;
+                    reducedTaxonCallbacks.forEach(function(callback) {
+                        callback(data);
+                    });
+                }
+            }
+
+            function getReducedTaxonFail() {
+                console.log('Failed to get reduced taxon.');
             }
 
             instance = {
@@ -189,12 +205,21 @@ define([
                     }
                 },
 
-                loadEducationalContexts: function (callback) {
-                    if (EDUCATIONAL_CONTEXTS) {
-                        callback(EDUCATIONAL_CONTEXTS);
+                loadEducationalContexts: function(callback) {
+                    if (EDUCATIONAL_CONTEXT) {
+                        callback(EDUCATIONAL_CONTEXT);
                     } else {
                         // Save callback, call it when data arrives
                         educationalContextsCallbacks.push(callback);
+                    }
+                },
+
+                loadReducedTaxon: function(callback) {
+                    if (REDUCED_EDUCATIONAL_CONTEXT) {
+                        callback(REDUCED_EDUCATIONAL_CONTEXT);
+                    } else {
+                        // Save callback, call it when data arrives
+                        reducedTaxonCallbacks.push(callback);
                     }
                 },
 
