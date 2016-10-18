@@ -73,7 +73,7 @@ public class LearningObjectResource extends BaseResource {
         return learningObjectService.getUserFavorites(getLoggedInUser());
     }
 
-    @Path("count")
+    @Path("usersFavorite/count")
     @RolesAllowed({"USER", "ADMIN", "MODERATOR", "RESTRICTED"})
     public Response getUsersFavoritesCount() {
         return Response.ok(learningObjectService.getUserFavorites(getLoggedInUser()).size()).build();
