@@ -1,5 +1,8 @@
 .navbar {
-  position: fixed;
+  position: fixed !important;
+  top:0;
+  left:0;
+  right:0;
   overflow: hidden;
   z-index: 5;
 
@@ -151,7 +154,7 @@
   .navbar-logo-area {
     position: absolute;
     left: 16px;
-    top: 9px;
+    top: 11px;
   }
   .navbar-search-area {
     margin-left: auto;
@@ -160,7 +163,7 @@
   .navbar-buttons-area {
     position: absolute;
     right: 16px;
-    top: 9px;
+    top: 11px;
   }
 }
 

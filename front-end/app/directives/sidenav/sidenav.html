@@ -14,9 +14,6 @@
 
 
   <uib-accordion close-others="oneAtATime" class="menu-nested-list">
-    <div uib-accordion-group class="panel-default" ng-if="isViewPortforlioPage || isEditPortfolioMode" is-open="isViewPortfolioAndEdit">
-      <div data-dop-table-of-contents data-portfolio="portfolio" data-readonly="!isEditPortfolioMode"></div>
-    </div>
     <div uib-accordion-group class="panel-default" is-open="isViewUserPage">
       <uib-accordion-heading>
         <md-button class="md-hue-1 md-primary-menu" id="myProfile" ng-click="updateUserCounts()">
@@ -62,21 +59,7 @@
             </md-button>
           </a>
         </li>
-      </ul>
-    </div>
-    <div uib-accordion-group class="panel-default" ng-if="modUser()" is-open="isViewAdminPanelPage">
-      <uib-accordion-heading>
-        <md-button id="dashboard" class="md-hue-1 md-primary-menu" ng-click="updateAdminCounts()">
-          <div flex layout="row">
-            <span class="panel-title__text" data-translate="DASHBOARD"></span>
-            <span flex></span>
-            <md-icon class="md-primary material-icons arrow panel-title__arrow">keyboard_arrow_right</md-icon>
-          </div>
-        </md-button>
-      </uib-accordion-heading>
-      <!-- Subitems -->
-      <ul>
-        <li>
+        <li ng-if="modUser()">
           <a href="/dashboard/improperMaterials" ng-click=updateImproperMarerialsCount()>
             <md-button id="improperMaterials" class="md-hue-1 md-secondary-menu" data-ng-class="{'selected': isLocation('/dashboard/improperMaterials')}">
               <div flex layout="row">
@@ -87,7 +70,7 @@
             </md-button>
           </a>
         </li>
-        <li>
+        <li ng-if="modUser()">
           <a href="/dashboard/improperPortfolios" ng-click="updateImproperPortfoliosCount()">
             <md-button id="improperPortfolios" class="md-hue-1 md-secondary-menu" data-ng-class="{'selected': isLocation('/dashboard/improperPortfolios')}">
               <div flex layout="row">
@@ -98,7 +81,7 @@
             </md-button>
           </a>
         </li>
-        <li>
+        <li ng-if="modUser()">
           <a href="/dashboard/brokenMaterials" ng-click="updateBrokenMaterialsCount()">
             <md-button id="brokenMaterials" class="md-hue-1 md-secondary-menu" data-ng-class="{'selected': isLocation('/dashboard/brokenMaterials')}">
               <div flex layout="row">
@@ -109,7 +92,7 @@
             </md-button>
           </a>
         </li>
-        <li>
+        <li ng-if="modUser()">
           <a href="/dashboard/deletedMaterials" ng-click="updateDeletedMaterialsCount()">
             <md-button id="deletedMaterials" class="md-hue-1 md-secondary-menu" data-ng-class="{'selected': isLocation('/dashboard/deletedMaterials')}">
               <div flex layout="row">
@@ -120,7 +103,7 @@
             </md-button>
           </a>
         </li>
-        <li>
+        <li ng-if="modUser()">
           <a href="/dashboard/deletedPortfolios" ng-click="updateDeletedPortfoliosCount()">
             <md-button id="deletedPortfolios" class="md-hue-1 md-secondary-menu" data-ng-class="{'selected': isLocation('/dashboard/deletedPortfolios')}">
               <div flex layout="row">
@@ -131,9 +114,13 @@
             </md-button>
           </a>
         </li>
+
       </ul>
     </div>
-    <div uib-accordion-group class="panel-default" is-open="isTaxonomyOpen">
+    <div uib-accordion-group class="panel-default" ng-if="isViewPortforlioPage || isEditPortfolioMode" is-open="isViewPortfolioAndEdit">
+      <div data-dop-table-of-contents data-portfolio="portfolio" data-readonly="!isEditPortfolioMode"></div>
+    </div>
+    <div uib-accordion-group class="panel-default" is-open="isTaxonomyOpen" ng-if="!isViewPortforlioPage && !isEditPortfolioMode">
       <uib-accordion-heading>
         <md-button id="sidebarTaxon" class="md-hue-1 md-primary-menu" ng-click="changeTaxonomyDataAndVisibility('sidebar', 'primary')">
           <div flex layout="row">

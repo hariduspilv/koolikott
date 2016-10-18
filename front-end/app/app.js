@@ -239,7 +239,6 @@ define([
 
     app.run(function ($rootScope, $location, authenticatedUserService) {
         $rootScope.$on('$routeChangeSuccess', function () {
-
             var user = authenticatedUserService.getUser();
 
             var path = $location.path();

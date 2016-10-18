@@ -14,11 +14,12 @@ define([
               return RecursionHelper.compile(element);
             },
             controller: function ($rootScope, $scope, $location) {
-
+                $scope.id;
                 if ($scope.taxon) {
                     if ($scope.taxon.children.length > 0) {
                         $scope.hasChildren = true;
                         $scope.childrenCount = $scope.taxon.children.length;
+                        $scope.id = $scope.taxon.id;
                     }
 
                     if($scope.tree) {
@@ -32,13 +33,17 @@ define([
                 $scope.toggleChildren = function(id) {
                     if ($scope.opened == null) {
                         $location.url('search/result?q=&taxon=' + id);
+                        $rootScope.currentlyOpenTaxonId = id;
                         $scope.opened = true;
                     } else if ($scope.opened == true) {
                         $scope.opened = false;
                     } else if ($scope.opened == false) {
                         $location.url('search/result?q=&taxon=' + id);
+                        $rootScope.currentlyOpenTaxonId = id;
                         $scope.opened = true;
                     }
+                    console.log($scope.id);
+                    console.log($rootScope.currentlyOpenTaxonId);
                 }
 
                 $scope.getTaxonTranslation = function(data) {
