@@ -20,7 +20,7 @@ define([
         $scope.query = {
             filter: '',
             order: 'bySubmittedAt',
-            limit: 5,
+            limit: 10,
             page: 1
         };
 
