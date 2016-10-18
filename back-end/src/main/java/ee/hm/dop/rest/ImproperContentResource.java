@@ -52,7 +52,7 @@ public class ImproperContentResource extends BaseResource {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @RolesAllowed({"USER", "ADMIN", "RESTRICTED", "MODERATOR"})
-    public Response getImpropers(@QueryParam("learningObject") Long learningObjectId, @QueryParam("count") boolean count) {
+    public List<ImproperContent> getImpropers(@QueryParam("learningObject") Long learningObjectId) {
         List<ImproperContent> result = new ArrayList<>();
         User loggedInUser = getLoggedInUser();
 
@@ -74,11 +74,16 @@ public class ImproperContentResource extends BaseResource {
             result.addAll(improperContentService.getAll(loggedInUser));
         }
 
-        if(count) {
-            return Response.ok(result.size()).build();
-        } else {
-            return Response.ok(result).build();
-        }
+        return result;
+    }
+
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("count")
+    @RolesAllowed({"USER", "ADMIN", "RESTRICTED", "MODERATOR"})
+    public Response getImpropersCount() {
+        return Response.ok(learningObjectService.getUserFavorites(getLoggedInUser()).size()).build();
+
     }
 
     @DELETE

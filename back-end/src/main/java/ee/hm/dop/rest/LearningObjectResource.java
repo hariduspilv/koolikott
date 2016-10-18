@@ -69,11 +69,15 @@ public class LearningObjectResource extends BaseResource {
     @GET
     @Path("usersFavorite")
     @RolesAllowed({"USER", "ADMIN", "MODERATOR", "RESTRICTED"})
-    public Response getUsersFavorites(@QueryParam("count") boolean count) {
-        if (count) {
-            return Response.ok(learningObjectService.getUserFavorites(getLoggedInUser()).size()).build();
-        }
-        return Response.ok(learningObjectService.getUserFavorites(getLoggedInUser())).build();
+    public List<LearningObject> getUsersFavorites() {
+        return learningObjectService.getUserFavorites(getLoggedInUser());
+    }
+
+    @Path("count")
+    @RolesAllowed({"USER", "ADMIN", "MODERATOR", "RESTRICTED"})
+    public Response getUsersFavoritesCount() {
+        return Response.ok(learningObjectService.getUserFavorites(getLoggedInUser()).size()).build();
+
     }
 
     @POST

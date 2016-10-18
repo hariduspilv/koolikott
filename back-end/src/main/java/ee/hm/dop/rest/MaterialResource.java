@@ -123,7 +123,7 @@ public class MaterialResource extends BaseResource {
     @GET
     @Path("getByCreator")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getByCreator(@QueryParam("username") String username, @QueryParam("count") boolean count) {
+    public List<Material> getByCreator(@QueryParam("username") String username) {
         if (isBlank(username)) {
             throwBadRequestException("Username parameter is mandatory");
         }
@@ -132,14 +132,15 @@ public class MaterialResource extends BaseResource {
         if (creator == null) {
             return null;
         }
-        List<Material> materials = new ArrayList<>();
-        materials = materialService.getByCreator(creator);
 
-        if(count) {
-            return Response.ok(materials.size()).build();
-        } else {
-            return Response.ok(materials).build();
-        }
+        return materialService.getByCreator(creator);
+    }
+
+    @GET
+    @Path("getByCreator/count")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getByCreatorCount(@QueryParam("username") String username) {
+        return Response.ok(getByCreator(username).size()).build();
     }
 
     @DELETE
@@ -188,11 +189,17 @@ public class MaterialResource extends BaseResource {
     @Path("getBroken")
     @RolesAllowed({"ADMIN", "MODERATOR"})
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getBrokenMaterial(@QueryParam("count") boolean count) {
-        if (count) {
-            return Response.ok(materialService.getBrokenMaterials().size()).build();
-        }
-        return Response.ok(materialService.getBrokenMaterials()).build();
+    public List<BrokenContent> getBrokenMaterial() {
+        return materialService.getBrokenMaterials();
+    }
+
+
+    @GET
+    @Path("getBroken/count")
+    @RolesAllowed({"ADMIN", "MODERATOR"})
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getBrokenMaterialCount() {
+        return Response.ok(materialService.getBrokenMaterials().size()).build();
     }
 
     @POST
@@ -223,10 +230,17 @@ public class MaterialResource extends BaseResource {
     @Path("getDeleted")
     @Produces(MediaType.APPLICATION_JSON)
     @RolesAllowed({"ADMIN", "MODERATOR"})
-    public Response getDeletedMaterials(@QueryParam("count") boolean count) {
-        if (count) {
-            return Response.ok(materialService.getDeletedMaterials().size()).build();
-        }
-        return Response.ok(materialService.getDeletedMaterials()).build();
+    public List<Material> getDeletedMaterials() {
+        return materialService.getDeletedMaterials();
     }
+
+    @GET
+    @Path("getDeleted/count")
+    @Produces(MediaType.APPLICATION_JSON)
+    @RolesAllowed({"ADMIN", "MODERATOR"})
+    public Response getDeletedMaterialsCount() {
+        return Response.ok(materialService.getDeletedMaterials().size()).build();
+
+    }
+
 }

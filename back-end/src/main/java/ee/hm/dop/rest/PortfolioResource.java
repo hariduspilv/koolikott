@@ -2,6 +2,8 @@ package ee.hm.dop.rest;
 
 import static org.apache.commons.lang3.StringUtils.isBlank;
 
+import java.util.List;
+
 import javax.annotation.security.RolesAllowed;
 import javax.inject.Inject;
 import javax.ws.rs.Consumes;
@@ -39,7 +41,7 @@ public class PortfolioResource extends BaseResource {
     @GET
     @Path("getByCreator")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getByCreator(@QueryParam("username") String username, @QueryParam("count") boolean count) {
+    public List<Portfolio> getByCreator(@QueryParam("username") String username) {
         if (isBlank(username)) {
             throwBadRequestException("Username parameter is mandatory");
         }
@@ -51,11 +53,14 @@ public class PortfolioResource extends BaseResource {
 
         User loggedInUser = getLoggedInUser();
 
-        if(count) {
-            return Response.ok(portfolioService.getByCreator(creator, loggedInUser).size()).build();
-        } else {
-            return Response.ok(portfolioService.getByCreator(creator, loggedInUser)).build();
-        }
+        return portfolioService.getByCreator(creator, loggedInUser);
+    }
+
+    @GET
+    @Path("getByCreator/count")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getByCreatorCount(@QueryParam("username") String username) {
+        return Response.ok(getByCreator(username).size()).build();
     }
 
     @POST
@@ -151,10 +156,15 @@ public class PortfolioResource extends BaseResource {
     @Path("getDeleted")
     @Produces(MediaType.APPLICATION_JSON)
     @RolesAllowed({"ADMIN", "MODERATOR"})
-    public Response getDeletedPortfolios(@QueryParam("count") boolean count) {
-        if (count) {
-            return Response.ok(portfolioService.getDeletedPortfolios().size()).build();
-        }
-        return Response.ok(portfolioService.getDeletedPortfolios()).build();
+    public List<Portfolio> getDeletedPortfolios() {
+        return portfolioService.getDeletedPortfolios();
+    }
+
+    @GET
+    @Path("getDeleted/count")
+    @Produces(MediaType.APPLICATION_JSON)
+    @RolesAllowed({"ADMIN", "MODERATOR"})
+    public Response getDeletedPortfoliosCount() {
+        return Response.ok(portfolioService.getDeletedPortfolios().size()).build();
     }
 }
