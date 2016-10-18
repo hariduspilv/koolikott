@@ -64,22 +64,28 @@ define(function() {
                 controllerUrl: 'views/dashboard/dashboard',
                 permissions: ['ADMIN', 'MODERATOR']
             },
-
             '/loginRedirect': {
                 templateUrl: 'views/loginRedirect/loginRedirect.html',
                 controllerUrl: 'views/loginRedirect/loginRedirect'
             },
             '/:username': {
-                templateUrl: 'views/profile/portfolios.html',
+                templateUrl: 'views/profile/profile.html',
                 controllerUrl: 'views/profile/profile'
             },
             '/:username/materials': {
-                templateUrl: 'views/profile/materials.html',
-                controllerUrl: 'views/profile/profile'
+                templateUrl: 'views/profile/materials/materials.html',
+                controllerUrl: 'views/profile/materials/materials',
+                permissions: ['USER']
+            },
+            '/:username/portfolios': {
+                templateUrl: 'views/profile/portfolios/portfolios.html',
+                controllerUrl: 'views/profile/portfolios/portfolios',
+                permissions: ['USER']
             },
             '/:username/favorites': {
-                templateUrl: 'views/profile/favorites.html',
-                controllerUrl: 'views/profile/profile'
+                templateUrl: 'views/profile/favorites/favorites.html',
+                controllerUrl: 'views/profile/favorites/favorites',
+                permissions: ['USER']
             },
             '/dev/login/:idCode': {
                 templateUrl: 'views/dev/login/login.html',

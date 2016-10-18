@@ -2,25 +2,15 @@ define([
     'app',
     'angular-material-data-table',
     'services/serverCallService',
-    'services/userDataService',
     'views/dashboard/baseTable/baseTable'
 ], function(app) {
-    app.controller('imporperPortfoliosController', ['$scope', 'serverCallService', '$controller', '$filter', 'userDataService',
-        function($scope, serverCallService, $controller, $filter, userDataService) {
+    app.controller('imporperPortfoliosController', ['$scope', 'serverCallService', '$controller', '$filter',
+        function($scope, serverCallService, $controller, $filter) {
             var base = $controller('baseTableController', {
                 $scope: $scope
             });
 
-            userDataService.loadImproperItems(function(impropers) {
-                var improperPortfolios = [];
-
-                for (var i = 0; i < impropers.length; i++) {
-                    if (impropers[i].learningObject.type === '.Portfolio' && !impropers[i].learningObject.deleted) {
-                        improperPortfolios.push(impropers[i]);
-                    }
-                }
-                base.getItemsSuccess(improperPortfolios, 'byReportCount', true);
-            });
+            serverCallService.makeGet("rest/impropers", {}, sortImpropers, base.getItemsFail);
 
             $scope.title = $filter('translate')('DASHBOARD_IMRPOPER_PORTFOLIOS');
 
@@ -34,6 +24,18 @@ define([
 
             $scope.getLearningObjectUrl = function(learningObject) {
             	return "/portfolio?id=" + learningObject.id;
+            }
+
+            function sortImpropers(impropers) {
+                var improperMaterials = [];
+
+                for (var i = 0; i < impropers.length; i++) {
+                    if (impropers[i].learningObject.type === '.Portfolio' && !impropers[i].learningObject.deleted) {
+                        improperMaterials.push(impropers[i]);
+                    }
+                }
+
+                base.getItemsSuccess(improperMaterials, 'byReportCount', true);
             }
         }
     ]);

@@ -4,59 +4,21 @@ define([
     'directives/portfolioBox/portfolioBox',
     'services/authenticatedUserService',
     'services/serverCallService',
-    'services/alertService',
-    'services/userDataService'
+    'services/alertService'
 ], function (app) {
-    return ['$scope', '$route', 'authenticatedUserService', 'serverCallService', '$location', 'alertService', 'userDataService', function ($scope, $route, authenticatedUserService, serverCallService, $location, alertService, userDataService) {
+    return ['$scope', '$route', 'authenticatedUserService', 'serverCallService', '$location', 'alertService', function ($scope, $route, authenticatedUserService, serverCallService, $location, alertService) {
         function init() {
-            isMyProfilePage();
 
             if (!$scope.user) {
                 getUser();
             }
 
-            if (!authenticatedUserService.isAuthenticated() && $route.current.params.username) {
+            if ($route.current.params.username) {
                 getUsersMaterials();
                 getUsersPortfolios();
             }
         }
 
-        function isMyProfilePage() {
-            if (authenticatedUserService.isAuthenticated()) {
-                var user = authenticatedUserService.getUser()
-
-                if (user && $route.current.params.username === user.username) {
-                    $scope.user = user;
-                    $scope.myProfile = true;
-                }
-            }
-        }
-
-        userDataService.loadUserPortfolios(function(callback) {
-            $scope.portfolios = callback;
-        });
-        userDataService.loadUserMaterials(function(callback) {
-            $scope.materials = callback;
-        });
-        userDataService.loadUserFavorites(function(callback) {
-            $scope.favorites = callback;
-        });
-
-
-        /*function getUsersFavorites() {
-            serverCallService.makeGet("rest/learningObject/usersFavorite", {}, getFavoritesSuccess, getFavoritesFail)
-        }
-
-        function getFavoritesSuccess(data) {
-            if(data) {
-                $scope.favorites = data
-            }
-        }
-
-        function getFavoritesFail() {
-            console.log("failed to retrieve learning objects favorited by the user")
-        }
-*/
 
         function getUser() {
             var params = {

@@ -11,17 +11,7 @@ define([
                 $scope: $scope
             });
 
-            userDataService.loadImproperItems(function(impropers) {
-                var improperMaterials = [];
-
-                for (var i = 0; i < impropers.length; i++) {
-                    if (impropers[i].learningObject.type === '.Material' && !impropers[i].learningObject.deleted) {
-                        improperMaterials.push(impropers[i]);
-                    }
-                }
-
-                base.getItemsSuccess(improperMaterials, 'byReportCount', true);
-            });
+            serverCallService.makeGet("rest/impropers", {}, sortImpropers, base.getItemsFail);
 
             $scope.title = $filter('translate')('DASHBOARD_IMRPOPER_MATERIALS');
 
@@ -35,6 +25,18 @@ define([
 
             $scope.getLearningObjectUrl = function(learningObject) {
             	return "/material?materialId=" + learningObject.id;
+            }
+
+            function sortImpropers(impropers) {
+                var improperMaterials = [];
+
+                for (var i = 0; i < impropers.length; i++) {
+                    if (impropers[i].learningObject.type === '.Material' && !impropers[i].learningObject.deleted) {
+                        improperMaterials.push(impropers[i]);
+                    }
+                }
+
+                base.getItemsSuccess(improperMaterials, 'byReportCount', true);
             }
         }
     ]);

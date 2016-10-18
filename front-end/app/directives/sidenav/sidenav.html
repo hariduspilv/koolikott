@@ -19,7 +19,7 @@
     </div>
     <div uib-accordion-group class="panel-default" is-open="isViewUserPage">
       <uib-accordion-heading>
-        <md-button class="md-hue-1 md-primary-menu" id="myProfile">
+        <md-button class="md-hue-1 md-primary-menu" id="myProfile" ng-click="updateUserCounts()">
           <div flex layout="row">
             <span class="panel-title__text" data-translate="MY_PROFILE"></span>
             <span flex></span>
@@ -30,8 +30,8 @@
       <!-- Subitems -->
       <ul>
         <li>
-          <a data-ng-click="checkUser($event, '/')">
-            <md-button id="myPortfolios" class="md-hue-1 md-secondary-menu" data-ng-class="{'selected': isLocation('/' + user.username) && user != null}">
+          <a data-ng-click="checkUser($event, '/portfolios'); updateUserPortfoliosCount()">
+            <md-button id="myPortfolios" class="md-hue-1 md-secondary-menu" data-ng-class="{'selected': isLocation('/' + user.username + '/portfolios')}">
               <div flex layout="row">
                 <md-icon class="material-icons">book</md-icon>
                 <span data-translate="MY_PORTFOLIOS"></span>
@@ -41,7 +41,7 @@
           </a>
         </li>
         <li>
-          <a data-ng-click="checkUser($event, '/materials')">
+          <a data-ng-click="checkUser($event, '/materials'); updateUserMaterialsCount()">
             <md-button id="myMaterials" class="md-hue-1 md-secondary-menu" data-ng-class="{'selected': isLocation('/' + user.username + '/materials')}">
               <div flex layout="row">
                 <md-icon class="material-icons">description</md-icon>
@@ -52,7 +52,7 @@
           </a>
         </li>
         <li>
-          <a data-ng-click="checkUser($event, '/favorites')">
+          <a data-ng-click="checkUser($event, '/favorites'); updateUserFavoritesCount()">
             <md-button id="myFavorites" class="md-hue-1 md-secondary-menu" data-ng-class="{'selected': isLocation('/' + user.username + '/favorites')}">
               <div flex layout="row">
                 <md-icon class="material-icons">star</md-icon>
@@ -66,7 +66,7 @@
     </div>
     <div uib-accordion-group class="panel-default" ng-if="modUser()" is-open="isViewAdminPanelPage">
       <uib-accordion-heading>
-        <md-button id="dashboard" class="md-hue-1 md-primary-menu" >
+        <md-button id="dashboard" class="md-hue-1 md-primary-menu" ng-click="updateAdminCounts()">
           <div flex layout="row">
             <span class="panel-title__text" data-translate="DASHBOARD"></span>
             <span flex></span>
@@ -77,7 +77,7 @@
       <!-- Subitems -->
       <ul>
         <li>
-          <a href="/dashboard/improperMaterials">
+          <a href="/dashboard/improperMaterials" ng-click=updateImproperMarerialsCount()>
             <md-button id="improperMaterials" class="md-hue-1 md-secondary-menu" data-ng-class="{'selected': isLocation('/dashboard/improperMaterials')}">
               <div flex layout="row">
                 <md-icon class="material-icons">report</md-icon>
@@ -88,7 +88,7 @@
           </a>
         </li>
         <li>
-          <a href="/dashboard/improperPortfolios">
+          <a href="/dashboard/improperPortfolios" ng-click="updateImproperPortfoliosCount()">
             <md-button id="improperPortfolios" class="md-hue-1 md-secondary-menu" data-ng-class="{'selected': isLocation('/dashboard/improperPortfolios')}">
               <div flex layout="row">
                 <md-icon class="material-icons">report</md-icon>
@@ -99,7 +99,7 @@
           </a>
         </li>
         <li>
-          <a href="/dashboard/brokenMaterials">
+          <a href="/dashboard/brokenMaterials" ng-click="updateBrokenMaterialsCount()">
             <md-button id="brokenMaterials" class="md-hue-1 md-secondary-menu" data-ng-class="{'selected': isLocation('/dashboard/brokenMaterials')}">
               <div flex layout="row">
                 <md-icon class="material-icons">content_cut</md-icon>
@@ -110,7 +110,7 @@
           </a>
         </li>
         <li>
-          <a href="/dashboard/deletedMaterials">
+          <a href="/dashboard/deletedMaterials" ng-click="updateDeletedMaterialsCount()">
             <md-button id="deletedMaterials" class="md-hue-1 md-secondary-menu" data-ng-class="{'selected': isLocation('/dashboard/deletedMaterials')}">
               <div flex layout="row">
                 <md-icon class="material-icons">delete</md-icon>
@@ -121,7 +121,7 @@
           </a>
         </li>
         <li>
-          <a href="/dashboard/deletedPortfolios">
+          <a href="/dashboard/deletedPortfolios" ng-click="updateDeletedPortfoliosCount()">
             <md-button id="deletedPortfolios" class="md-hue-1 md-secondary-menu" data-ng-class="{'selected': isLocation('/dashboard/deletedPortfolios')}">
               <div flex layout="row">
                 <md-icon class="material-icons">delete</md-icon>

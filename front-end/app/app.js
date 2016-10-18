@@ -240,29 +240,26 @@ define([
     app.run(function ($rootScope, $location, authenticatedUserService) {
         $rootScope.$on('$routeChangeSuccess', function () {
 
+            var user = authenticatedUserService.getUser();
+
             var path = $location.path();
 
-            if (path == '/dashboard') {
+            if (path === '/dashboard') {
                 $location.path('/dashboard/improperMaterials');
+            }
+            if (path === '/' + user.username && authenticatedUserService.isAuthenticated()) {
+                $location.path('/' + user.username + '/materials');
             }
 
             var editModeAllowed = ["/portfolio/edit", "/search/result", "/material"];
-            var user = authenticatedUserService.getUser();
-
-            if(user) {
-                // Force header to update color
-                $rootScope.forceUpdate = new Date();
-            }
 
 
             $rootScope.isViewPortforlioPage = path === '/portfolio';
             $rootScope.isEditPortfolioPage = path === '/portfolio/edit';
             $rootScope.isViewHomePage = path === '/';
             $rootScope.isViewMaterialPage = path === '/material';
-            $rootScope.isBrokenMaterial = null;
-            $rootScope.isImproper = null;
 
-            if (user && $location.url().indexOf('/' + user.username) != -1) {
+            if (user && $location.path().indexOf('/' + user.username) != -1) {
                 $rootScope.isViewUserPage = true;
             } else {
                 $rootScope.isViewUserPage = false;
@@ -274,15 +271,13 @@ define([
                 $rootScope.isViewAdminPanelPage = false;
             }
 
-            $rootScope.isMySchoolbagOpen = path === (user && path.startsWith("/" + user.username));
-
             if(path === '/material' || path === '/portfolio') {
                 $rootScope.isViewMaterialPortfolioPage = true;
             } else {
                 $rootScope.isViewMaterialPortfolioPage = false;
             }
 
-            if(path === '/material' || path === '/' || ($location.url().indexOf("/search") != -1) || !$rootScope.isEditPortfolioPage) {
+            if(path === '/material' || path === '/' || ($location.url().indexOf("/search") != -1) || !$rootScope.isEditPortfolioPage || !$rootScope.isViewPortforlioPage) {
                 $rootScope.isTaxonomyOpen = true;
             } else {
                 $rootScope.isTaxonomyOpen = false;

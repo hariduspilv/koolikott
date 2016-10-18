@@ -126,7 +126,6 @@ define([
                     return authenticatedUserService.getUser();
                 }, function (user) {
                     $scope.user = user;
-                    getNumbersForSidenav();
                 }, true);
 
                 $scope.isAdmin = function () {
@@ -281,38 +280,6 @@ define([
                     $location.url('/' + searchService.getSearchURLbase() + searchService.getQueryURL());
                 }
 
-                // Number for sidenav
-
-                function getNumbersForSidenav() {
-                    if($scope.user) {
-                        if($scope.user.role === "ADMIN" || $scope.user.role === "MODERATOR") {
-
-                            // Admin info
-                            userDataService.loadBrokenMaterialsCount(function(data) {
-                                $scope.brokenMaterialsCount = data;
-                            });
-                            userDataService.loadDeletedMaterialsCount(function(data) {
-                                $scope.deletedMaterialsCount = data;
-                            });
-                            userDataService.loadDeletedPortfoliosCount(function(data) {
-                                $scope.deletedPortfoliosCount = data;
-                            });
-                            userDataService.loadImproperItems(function(data) { sortImproperItems(data) });
-                        }
-                        // User info
-                        userDataService.loadUserFavoritesCount(function(data) {
-                            $scope.favorites = data;
-                        });
-                        userDataService.loadUserMaterialsCount(function(data) {
-                            $scope.materials = data;
-                        });
-                        userDataService.loadUserPortfoliosCount(function(data) {
-                            $scope.portfolios = data;
-                        });
-
-                    }
-                }
-
                 function sortImproperItems(data) {
                     var impropers = data;
                     var improperMaterials = [];
@@ -330,15 +297,60 @@ define([
                     $scope.improperPortfoliosCount = improperPortfolios.length;
                 }
 
+                $scope.updateBrokenMaterialsCount = function() {
+                    userDataService.loadBrokenMaterialsCount(function(data) {
+                        $scope.brokenMaterialsCount = data;
+                    });
+                }
+                $scope.updateDeletedMaterialsCount = function() {
+                    userDataService.loadDeletedMaterialsCount(function(data) {
+                        $scope.deletedMaterialsCount = data;
+                    });
+                }
+                $scope.updateDeletedPortfoliosCount = function() {
+                    userDataService.loadDeletedPortfoliosCount(function(data) {
+                        $scope.deletedPortfoliosCount = data;
+                    });
+                }
+                $scope.updateImproperMarerialsCount = function() {
+                    userDataService.loadImproperItems(function(data) { sortImproperItems(data) });
+                }
+                $scope.updateImproperPortfoliosCount = function() {
+                    userDataService.loadImproperItems(function(data) { sortImproperItems(data) });
+                }
 
-                // Starts header color updated process
-                $scope.$watch(function() {
-                    return $rootScope.forceUpdate;
-                }, function() {
-                    getNumbersForSidenav();
-                }, true);
+                $scope.updateUserMaterialsCount = function() {
+                    userDataService.loadUserMaterialsCount(function(data) {
+                        $scope.materials = data;
+                    });
+                }
+                $scope.updateUserPortfoliosCount = function() {
+                    userDataService.loadUserPortfoliosCount(function(data) {
+                        $scope.portfolios = data;
+                    });
+                }
+                $scope.updateUserFavoritesCount = function() {
+                    userDataService.loadUserFavoritesCount(function(data) {
+                        $scope.favorites = data;
+                    });
+                }
 
+                $scope.updateUserCounts = function() {
+                    $scope.updateUserFavoritesCount();
+                    $scope.updateUserMaterialsCount();
+                    $scope.updateUserPortfoliosCount();
+                }
 
+                $scope.updateAdminCounts = function() {
+                    $scope.updateBrokenMaterialsCount();
+                    $scope.updateDeletedMaterialsCount();
+                    $scope.updateDeletedPortfoliosCount();
+                    $scope.updateImproperMarerialsCount();
+                    $scope.updateImproperPortfoliosCount();
+                }
+
+                $scope.updateUserCounts();
+                $scope.updateAdminCounts();
             }
         }
     }]);
