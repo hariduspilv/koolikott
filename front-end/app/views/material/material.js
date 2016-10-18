@@ -136,9 +136,9 @@ define([
                 $scope.material.source = getSource($scope.material);
                 storageService.setMaterial(null);
 
-                $rootScope.learningObjectBroken = ($scope.material.broken > 0) ? true : false;
-                $rootScope.learningObjectImproper = ($scope.material.improper > 0) ? true : false;
-                $rootScope.learningObjectDeleted = ($scope.material.deleted == true) ? true : false;
+                $rootScope.learningObjectBroken = ($scope.material.broken > 0);
+                $rootScope.learningObjectImproper = ($scope.material.improper > 0);
+                $rootScope.learningObjectDeleted = ($scope.material.deleted == true);
 
                 var viewCountParams = {
                     'type': '.Material',
