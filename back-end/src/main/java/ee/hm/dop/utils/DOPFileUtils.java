@@ -35,8 +35,10 @@ public class DOPFileUtils {
         }
 
         logger.info(format("File %s does not exist. Trying to load from classpath.", filePath));
+        InputStream inputStream = DOPFileUtils.class.getClassLoader().getResourceAsStream(filePath);
+        if(inputStream == null)logger.info(format("File %s could not be loaded from classpath", file.getName()));
 
-        return DOPFileUtils.class.getClassLoader().getResourceAsStream(filePath);
+        return inputStream;
     }
 
     public static File getFile(String filePath) {
