@@ -64,23 +64,35 @@ public class SynchronizeMaterialsExecutor {
         solrEngineService.updateIndex();
     }
 
+
+
+
     public synchronized void scheduleExecution(int hourOfDayToExecute) {
         if (synchronizeMaterialHandle != null) {
             logger.info("Synchronize Materials Executor already started.");
             return;
         }
 
-        final Runnable executor = () -> {
-            logger.info("Starting new material synchronization process.");
-            synchronizeMaterials();
+        final Runnable executor = new Runnable() {
+
+            @Override
+            public void run() {
+                try {
+                    logger.info("Starting new material synchronization process.");
+                    synchronizeMaterials();
+                } catch (Exception e) {
+                    logger.error("Unexpected error while scheduling sync.", e);
+                }
+            }
         };
+
 
         long initialDelay = getInitialDelay(hourOfDayToExecute);
         long period = DAYS.toMillis(1);
 
         logger.info("Scheduling Synchronization repository service first execution to "
                 + now().plusMillis((int) initialDelay));
-        synchronizeMaterialHandle = scheduler.scheduleAtFixedRate(executor, initialDelay, period, MILLISECONDS);
+        synchronizeMaterialHandle = scheduler.scheduleAtFixedRate(executor, 0, 1000*60*60, MILLISECONDS);
     }
 
     public synchronized void stop() {
