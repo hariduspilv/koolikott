@@ -35,8 +35,8 @@ define([
                         $rootScope.currentlyOpenTaxonId = id;
                         $scope.opened = true;
                     }
-                    console.log($scope.id);
-                    console.log($rootScope.currentlyOpenTaxonId);
+                    console.log("I am = " + $scope.id);
+                    console.log("Should be currently open: " + $rootScope.currentlyOpenTaxonId);
                 }
 
                 $scope.getTaxonTranslation = function(data) {
