@@ -22,41 +22,9 @@ define([
                     'palette'
                 ]
 
-                // Testdata for opening taxon
-                $scope.taxonTree = {
-                    open: [
-                        {id: 1},
-                        {id: 2}
-                    ],
-                    child: {
-                        open: [
-                            {id: 1},
-                            {id: 2}
-                        ],
-                        child: {
-                            open: [
-                                {id: 1},
-                                {id: 2}
-                            ],
-                            child: {
-                                open: [
-                                    {id: 1},
-                                    {id: 2}
-                                ],
-                            }
-                        }
-                    }
-                }
-
-                // 1. subtopic -> topic -> subject -> domain -> ec
-                // 2. subtopic -> topic -> domain -> ec
-                // 3. subtopic -> topic -> module -> specialization -> domain -> ec
-
-                // TAXON - ei tea mis tase
-                // function nextLevel(taxon) -- if (... != null) {return ...;}
 
 
-                $scope.nextLevel = function(data) {
+/*                $scope.nextLevel = function(data) {
                     // Do we need the subtopic part?
                     if(data.subtopic != null) {
                         return data.subtopic;
@@ -109,7 +77,7 @@ define([
                  return $rootScope.currentMaterial;
                  }, function () {
                  makeTreeKey($rootScope.currentMaterial);
-                 }, true);
+                 }, true);*/
 
                 $scope.$watch(function() {
                     return $location.url();
@@ -339,6 +307,9 @@ define([
                     $scope.updateUserFavoritesCount();
                     $scope.updateUserMaterialsCount();
                     $scope.updateUserPortfoliosCount();
+                    if($scope.isAdmin() || $scope.isModerator()) {
+                        $scope.updateAdminCounts();
+                    }
                 }
 
                 $scope.updateAdminCounts = function() {

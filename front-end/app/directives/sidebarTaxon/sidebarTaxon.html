@@ -8,8 +8,7 @@
     <md-icon class="material-icons taxon__arrow"">keyboard_arrow_right</md-icon>{{root.currentlyOpenTaxonId}}
   </a>
 
-  <!-- (TREE OF IDs), (KEY, THIS.ID) -->
   <div ng-if="opened" ng-repeat="data in taxon.children">
-    <div class="taxon-item taxon-item--sub" dop-sidebar-taxon data-taxon="data" tree="tree.child"></div>
+    <div class="taxon-item taxon-item--sub" dop-sidebar-taxon data-taxon="data"></div>
   </div>
 </div>

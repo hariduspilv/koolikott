@@ -280,6 +280,13 @@ define([
                 $rootScope.isViewMaterialPortfolioPage = false;
             }
 
+            if ($rootScope.isViewAdminPanelPage || (user && $location.path().indexOf('/' + user.username) != -1)) {
+                $rootScope.isUserTabOpen = true;
+            } else {
+                $rootScope.isUserTabOpen = false;
+            }
+
+
             if(path === '/material' || path === '/' || ($location.url().indexOf("/search") != -1) || !$rootScope.isEditPortfolioPage || !$rootScope.isViewPortforlioPage) {
                 $rootScope.isTaxonomyOpen = true;
             } else {

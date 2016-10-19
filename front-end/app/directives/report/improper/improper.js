@@ -50,8 +50,7 @@ define([
 
                 function setNotImproperSuccessful() {
                     $scope.isReported = false;
-                    //$rootScope.learningObjectImproper = false;
-
+                    $rootScope.learningObjectImproper = false;
                 }
 
                 function setNotImproperFailed() {

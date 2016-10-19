@@ -136,9 +136,13 @@ define([
                 $scope.material.source = getSource($scope.material);
                 storageService.setMaterial(null);
 
-                $rootScope.learningObjectBroken = ($scope.material.broken > 0);
-                $rootScope.learningObjectImproper = ($scope.material.improper > 0);
-                $rootScope.learningObjectDeleted = ($scope.material.deleted == true);
+                $rootScope.learningObjectBroken = ($scope.material.broken > 0) ? true : false;
+                $rootScope.learningObjectImproper = ($scope.material.improper > 0) ? true : false;
+                $rootScope.learningObjectDeleted = ($scope.material.deleted == true) ? true : false;
+
+                if ($scope.material.improper > 0) {
+                    serverCallService.makeGet("rest/impropers", {}, sortImpropers, getItemsFail);
+                }
 
                 var viewCountParams = {
                     'type': '.Material',
@@ -148,6 +152,22 @@ define([
                 serverCallService.makePost("rest/material/increaseViewCount", viewCountParams, function () {
                 }, function () {
                 });
+            }
+
+            function getItemsFail() {
+                console.log("Failed to get data");
+            }
+
+            function sortImpropers(impropers) {
+                var improper;
+
+                for (var i = 0; i < impropers.length; i++) {
+                    if (impropers[i].learningObject.id === $scope.material.id) {
+                        improper = impropers[i];
+                    }
+                }
+
+                $rootScope.setReason(improper.reason);
             }
 
             function preprocessMaterialSubjects() {

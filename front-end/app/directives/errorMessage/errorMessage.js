@@ -11,7 +11,9 @@ define([
             templateUrl: 'directives/errorMessage/errorMessage.html',
             controller: function ($rootScope, $scope) {
 
-
+                $rootScope.setReason = function (reason) {
+                    $scope.reason = reason;
+                }
 
             }
         }

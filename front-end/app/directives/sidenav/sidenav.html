@@ -14,7 +14,7 @@
 
 
   <uib-accordion close-others="oneAtATime" class="menu-nested-list">
-    <div uib-accordion-group class="panel-default" is-open="isViewUserPage">
+    <div uib-accordion-group class="panel-default" is-open="isUserTabOpen">
       <uib-accordion-heading>
         <md-button class="md-hue-1 md-primary-menu" id="myProfile" ng-click="updateUserCounts()">
           <div flex layout="row">
@@ -133,7 +133,7 @@
       <!-- Subitems -->
       <ul class="taxon-list">
         <li ng-repeat="(key, item) in reducedTaxon">
-          <div class="taxon-item" icon="taxonIcons[key]" tree="taxonTree" dop-sidebar-taxon data-taxon="item"></div>
+          <div class="taxon-item" icon="taxonIcons[key]" dop-sidebar-taxon data-taxon="item"></div>
         </li>
       </ul>
     </div>

@@ -99,7 +99,27 @@ define([
                     $rootScope.learningObjectBroken = ($scope.portfolio.broken > 0) ? true : false;
                     $rootScope.learningObjectImproper = ($scope.portfolio.improper > 0) ? true : false;
                     $rootScope.learningObjectDeleted = ($scope.portfolio.deleted == true) ? true : false;
+
+                    if($scope.portfolio.improper > 0) {
+                        serverCallService.makeGet("rest/impropers", {}, sortImpropers, getItemsFail);
+                    }
                 }
+            }
+
+            function getItemsFail() {
+                console.log("Failed to get data");
+            }
+
+            function sortImpropers(impropers) {
+                var improper;
+
+                for (var i = 0; i < impropers.length; i++) {
+                    if (impropers[i].learningObject.id === $scope.material.id) {
+                        improper = impropers[i];
+                    }
+                }
+
+                $rootScope.setReason(improper.reason);
             }
 
             $scope.modUser = function() {
