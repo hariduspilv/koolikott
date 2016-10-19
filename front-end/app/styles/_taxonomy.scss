@@ -21,6 +21,17 @@
   }
 }
 
+.is-active {
+  color: $color-selected-menu !important;
+  .icon-identity {
+    color: $color-selected-menu;
+  }
+
+  .taxon__arrow {
+    color: $color-selected-menu;
+  }
+}
+
 .taxon__header {
   cursor: pointer;
   transition: background 0.2s;
@@ -33,14 +44,8 @@
   }
   &.is-opened {
     background-color: rgba(0,0,0,0.1);
-    color: $color-selected-menu;
-
-    .icon-identity {
-      color: $color-selected-menu;
-    }
 
     .taxon__arrow {
-      color: $color-selected-menu;
       transform: rotate(90deg) scale(0.9);
     }
   }

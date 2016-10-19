@@ -2,7 +2,7 @@ define([
     'angularAMD',
     'services/recursionHelper',
 ], function (angularAMD) {
-    angularAMD.directive('dopSidebarTaxon', ['RecursionHelper', function (RecursionHelper) {
+    angularAMD.directive('dopSidebarTaxon', ['RecursionHelper', '$location', function (RecursionHelper, $location) {
         return {
             scope: {
                 taxon: '=',
@@ -35,8 +35,6 @@ define([
                         $rootScope.currentlyOpenTaxonId = id;
                         $scope.opened = true;
                     }
-                    console.log("I am = " + $scope.id);
-                    console.log("Should be currently open: " + $rootScope.currentlyOpenTaxonId);
                 }
 
                 $scope.getTaxonTranslation = function(data) {
@@ -47,6 +45,12 @@ define([
                     }
 
                 }
+
+                $scope.$watch(function () {
+                    return $location.url()
+                }, function () {
+                    $scope.isActive = ($location.url() === '/search/result?q=&taxon=' + $scope.taxon.id) ? true : false;
+                });
             }
         }
     }]);
