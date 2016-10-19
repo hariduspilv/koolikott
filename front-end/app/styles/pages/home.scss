@@ -51,9 +51,6 @@
 }
 
 .version-number {
-  position: fixed;
-  bottom: 20px;
-  left: 20px;
   padding: 5px 7px;
   background-color: #ddd;
   transition: all 0.5s ease;
@@ -69,4 +66,3 @@
 .version-number:hover {
   background-color: #03A9F4;
 }
-

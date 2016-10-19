@@ -423,16 +423,6 @@ md-card .card-menu {
   color: gold!important;
 }
 
-.card-container {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-
-  @media (min-width: $layout-breakpoint-md) {
-    justify-content: flex-start;
-  }
-}
-
 .card-container__item {
   margin: 0 15px 15px 0;
 

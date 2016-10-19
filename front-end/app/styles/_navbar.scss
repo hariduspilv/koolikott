@@ -150,7 +150,7 @@
 }
 
 // Wide/big screen fix
-@media (min-width: 1800px) {
+@media (min-width: $layout-breakpoint-lg) {
   .navbar-logo-area {
     position: absolute;
     left: 16px;

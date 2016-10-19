@@ -1,29 +1,44 @@
 .content-container {
     width: 100%;
     margin-top: 64px;
-    margin-left: auto;
-  margin-right: auto;
+    // margin-left: auto;
+    // margin-right: auto;
     transition: 0.2s;
-    padding: 0;
-    @media (min-width: $layout-breakpoint-md) {
-      max-width: 1280px;
-    }
+    // padding: 0;
+    max-width: 1280px;
 }
 
 .content-container.nav-open {
-    @media (min-width: 1500px) {
-      padding: 0 104px 0 $sidenav-width;
-    }
-    @media (min-width: $layout-breakpoint-md) {
-      padding-left: $sidenav-width;
-      max-width: 1643px; // 1280 + 104 + 259
-    }
-    @media (min-width: $layout-breakpoint-lg) {
-      max-width: 1280px;
-      padding: 0;
-    }
+  @media (min-width: $layout-breakpoint-md) {
+    padding-left: $sidenav-width;
+  }
+  @media (min-width: $layout-breakpoint-lg) {
+    padding-left: $sidenav-width;
+  }
+    // @media (min-width: 1500px) {
+    //   padding: 0 104px 0 $sidenav-width;
+    // }
+    // @media (min-width: $layout-breakpoint-md) {
+    //   padding-left: $sidenav-width;
+    //   max-width: 1643px; // 1280 + 104 + 259
+    // }
+    // @media (min-width: $layout-breakpoint-lg) {
+    //   max-width: 1280px;
+    //   padding: 0;
+    // }
 
 }
+
+.card-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+
+  @media (min-width: $layout-breakpoint-lg) {
+    justify-content: flex-start;
+  }
+}
+
 
 // .scrollable-content-container.nav-open  {
 //   -webkit-box-align: flex-start;

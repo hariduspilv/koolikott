@@ -3,13 +3,16 @@ md-sidenav {
   min-width: $sidenav-width;
   max-width: $sidenav-width;
   position: fixed;
-  min-height: 100%;
-  background-color: #FAFAFA;
-  overflow-y: auto;
+  background-color: $sidenav-color;
+  box-shadow: $whiteframe-shadow-6dp;
 
   @media (min-width: $layout-breakpoint-md) {
     background-color: transparent;
+    box-shadow: none;
     z-index: 1;
+    md-content {
+      background-color: transparent;
+    }
   }
 
   .sidenav-menu > li {
