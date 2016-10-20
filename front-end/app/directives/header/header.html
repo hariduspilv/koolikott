@@ -1,225 +1,226 @@
 <md-toolbar id="md-toolbar-header" class="navbar md-whiteframe-1dp md-primary"
-            ng-class="{'md-accent': isEditPortfolioMode ,'md-red': (isViewAdminPanelPage || (learningObjectImproper && isViewMaterialPortfolioPage) || (learningObjectBroken && isViewMaterialPortfolioPage)), 'md-gray': (learningObjectDeleted && isViewMaterialPortfolioPage)}"
-            data-click-outside="clickOutside()" outside-if-not="header-show-detailed-search-icon, detailed-search">
-  <div class="md-toolbar-tools" layout="row">
-    <!-- logo and menu button -->
-    <div class="navbar-logo-area">
-      <div flex layout="row" layout-align="center center">
-        <!-- toggle menu icon -->
-        <md-button class="md-icon-button" data-ng-click="toggleSidenav('left')">
-          <md-icon class="md-48">menu</md-icon>
-        </md-button>
-        <!-- logo -->
-        <div class="navbar-logo-main">
-          <md-tooltip>
-            <span data-translate="HEADER_TOOLTIP_GO_TO_LANDING_PAGE"></span>
-          </md-tooltip>
-          <a data-ng-href="/" class="logo {{isEditPortfolioMode ? 'shadow-edit' : 'shadow-primary'}}"  ng-class="{'shadow-admin': (isViewAdminPanelPage || (learningObjectImproper && isViewMaterialPortfolioPage) || (learningObjectBroken && isViewMaterialPortfolioPage)), 'shadow-deleted': (learningObjectDeleted && isViewMaterialPortfolioPage)}" id="logo"></a>
-        </div>
-      </div>
-    </div>
-    <!-- search bar with filter icon -->
-    <div class="navbar-search-area">
-      <div class="navbar-search" layout="row" hide show-gt-xs flex>
-        <md-button aria-label="Otsi" class="md-icon-button" id="header-show-search-button" ng-click="search()">
-          <md-icon>search</md-icon>
-        </md-button>
-
-        <md-input-container flex>
-          <label hidden="hidden">&nbsp;</label>
-          <md-autocomplete md-autoselect
-                           md-selected-item="suggest.selectedItem"
-                           md-autofocus
-                           md-item-text="suggestion.term"
-                           md-items="suggestion in suggest.doSuggest(searchFields.searchQuery)"
-                           md-search-text="searchFields.searchQuery"
-                           md-input-maxlength="100"
-                           md-input-minlength="0"
-                           id="header-simple-search-input"
-                           ng-model-options="{debounce: 100}">
-            <md-item-template>
-              <span md-highlight-text="searchFields.searchQuery">{{ suggestion }}</span>
-            </md-item-template>
-          </md-autocomplete>
-        </md-input-container>
-        <div>
-             <md-button aria-label="Ava detailotsing" class="md-icon-button" id="header-show-detailed-search-icon"
-                       data-ng-click="openDetailedSearch()" data-ng-if="!detailedSearch.isVisible">
-              <md-tooltip><span data-translate="HEADER_TOOLTIP_OPEN_DETAILED_SEARCH"></span></md-tooltip>
-              <md-icon hide show-gt-xs>filter_list</md-icon>
-              <md-icon hide-gt-xs>search</md-icon>
-            </md-button>
-            <md-button aria-label="Sulge detailotsing" class="md-icon-button" id="header-hide-detailed-search-icon"
-                       data-ng-click="closeDetailedSearch()" data-ng-if="detailedSearch.isVisible">
-              <md-tooltip><span data-translate="HEADER_TOOLTIP_CLOSE_DETAILED_SEARCH"></span></md-tooltip>
-              <md-icon>close</md-icon>
-            </md-button>
-          </div>
-      </div>
-
-    </div>
-    <!-- language menu, login and user menu button -->
-    <div class="navbar-buttons-area">
-      <div class="button-container mobile-search-button">
-        <md-button aria-label="Ava detailotsing" class="md-icon-button" id="header-show-detailed-search-icon"
-                   data-ng-click="openDetailedSearch()" data-ng-if="!detailedSearch.isVisible">
-          <md-tooltip><span data-translate="HEADER_TOOLTIP_OPEN_DETAILED_SEARCH"></span></md-tooltip>
-          <md-icon hide show-gt-xs>filter_list</md-icon>
-          <md-icon hide-gt-xs>search</md-icon>
-        </md-button>
-        <md-button aria-label="Sulge detailotsing" class="md-icon-button" id="header-hide-detailed-search-icon"
-                   data-ng-click="closeDetailedSearch()" data-ng-if="detailedSearch.isVisible">
-          <md-tooltip><span data-translate="HEADER_TOOLTIP_CLOSE_DETAILED_SEARCH"></span></md-tooltip>
-          <md-icon>close</md-icon>
-        </md-button>
-      </div>
-      <div class="button-container" data-ng-if="!isEditPortfolioMode || isViewPortfolioPage">
-        <!-- change language menu -->
-        <md-menu>
-          <md-button aria-label="Ava keelevaliku menüü" class="md-icon-button language-icon" id="header-language-icon"
-                     ng-click="$mdOpenMenu($event)">
-            <md-tooltip><span data-translate="HEADER_TOOLTIP_SELECT_LANGUAGE"></span></md-tooltip>
-            <span data-ng-if="selectedLanguage === 'est'">ET</span>
-            <span data-ng-if="selectedLanguage === 'rus'">RU</span>
-            <span data-ng-if="selectedLanguage === 'eng'">EN</span>
-          </md-button>
-          <md-menu-content width="4">
-            <md-menu-item id="language-select-et" data-ng-click="setLanguage('est')">
-              <md-button>
-                ET
-              </md-button>
-            </md-menu-item>
-            <md-menu-divider></md-menu-divider>
-            <md-menu-item id="language-select-en" data-ng-click="setLanguage('eng')">
-              <md-button>
-                EN
-              </md-button>
-            </md-menu-item>
-            <md-menu-divider></md-menu-divider>
-            <md-menu-item id="language-select-eng" data-ng-click="setLanguage('rus')">
-              <md-button>
-                RU
-              </md-button>
-            </md-menu-item>
-          </md-menu-content>
-        </md-menu>
-
-        <!-- info menu -->
-        <md-menu>
-          <md-button aria-label="Ava abi" class="md-icon-button" id="header-help-icon"
-                     ng-click="$mdOpenMenu($event)">
-            <md-tooltip><span data-translate="HEADER_TOOLTIP_HELP"></span></md-tooltip>
-            <md-icon>help</md-icon>
-          </md-button>
-          <md-menu-content width="4">
-            <md-menu-item>
-              <md-button aria-label="Mine Mis on e-Koolikott leheküljele" data-ng-href="/about" id="help-menu-about">
-                <span data-translate="ABOUT_PAGE_LINK_TITLE"></span>
-              </md-button>
-            </md-menu-item>
-            <md-menu-item >
-              <md-button aria-label="Mine Kuidas e-Koolikotti kasutada leheküljele" data-ng-href="/help" id="help-menu">
-                <span data-translate="HELP_PAGE_LINK_TITLE"></span>
-              </md-button>
-            </md-menu-item>
-            <md-menu-item>
-              <md-button aria-label="Anna tagasisidet e-Koolikoti kohta" data-ng-href="mailto:e-koolikott@hm.ee?subject={{ 'FEEDBACK_ABOUT_EKOOLIKOTT_SUBJECT' | translate }}" id="help-menu-email">
-                <span data-translate="GIVE_FEEDBACK_LINK"></span>
-              </md-button>
-            </md-menu-item>
-          </md-menu-content>
-        </md-menu>
-
-        <!-- log in menu -->
-        <md-button data-ng-hide="user" aria-label="Ava sisselogimise modaalaken" class="md-icon-button"
-                   id="header-login-icon" data-ng-click="showLogin($event)">
-          <md-icon>account_circle</md-icon>
-          <md-tooltip><span data-translate="HEADER_TOOLTIP_ENTER"></span></md-tooltip>
-        </md-button>
-
-        <!-- logged in user menu -->
-        <md-menu data-ng-show="user">
-          <md-button aria-label="Ava kasutajamenüü" class="md-icon-button" id="header-user-menu-icon"
-                     ng-click="$mdOpenMenu($event)">
-            <md-tooltip><span data-translate="HEADER_TOOLTIP_PROFILE"></span></md-tooltip>
-            <!--<md-icon>account_circle</md-icon>-->
-            <div class="account__circle">{{user.name[0]}}</div>
-          </md-button>
-          <md-menu-content width="4">
-            <md-menu-item>
-              <md-button ng-disabled="true"   aria-label="{{user.username}}" data-ng-href="/dashboard" id="user-menu-dashboard">
-                <span>{{user.name}} {{user.surname}}</span>
-              </md-button>
-            </md-menu-item>
-            <md-menu-divider></md-menu-divider>
-            <md-menu-item>
-              <md-button aria-label="Logi välja" data-ng-click="logout()" id="user-menu-logout">
-                <span data-translate="LOGOUT"></span>
-              </md-button>
-            </md-menu-item>
-          </md-menu-content>
-        </md-menu>
-      </div>
-      <div class="button-container" data-ng-if="isEditPortfolioMode">
-        <md-menu>
-          <md-button aria-label="Jaga" class="md-icon-button" ng-click="$mdOpenMenu($event)">
-            <md-tooltip><span data-translate="HEADER_TOOLTIP_CHANGE_VISIBILITY"></span></md-tooltip>
-            <md-icon data-ng-if="savedPortfolio.visibility === 'PUBLIC'">visibility</md-icon>
-            <md-icon data-ng-if="savedPortfolio.visibility === 'NOT_LISTED'">link</md-icon>
-            <md-icon data-ng-if="savedPortfolio.visibility === 'PRIVATE'">visibility_off</md-icon>
-          </md-button>
-          <md-menu-content width="4">
-            <md-menu-item dop-copy-permalink data-url="getShareUrl"></md-menu-item>
-            <md-menu-divider></md-menu-divider>
-            <md-menu-item>
-              <md-button data-ng-if="savedPortfolio.visibility === 'PUBLIC'" aria-label="{{PORTFOLIO_VISIBILITY_PUBLIC | translate}}">
-                <md-icon>visibility</md-icon> <span data-translate="PORTFOLIO_VISIBILITY_PUBLIC"></span> <span class="md-alt-text"><md-icon>check</md-icon></span>
-              </md-button>
-              <md-button data-ng-if="savedPortfolio.visibility != 'PUBLIC'" aria-label="{{PORTFOLIO_VISIBILITY_MAKE_PUBLIC | translate}}" data-ng-click="makePublic()">
-                <md-icon>visibility</md-icon> <span data-translate="PORTFOLIO_VISIBILITY_MAKE_PUBLIC"></span>
-              </md-button>
-            </md-menu-item>
-            <md-menu-divider></md-menu-divider>
-            <md-menu-item>
-              <md-button data-ng-if="savedPortfolio.visibility === 'NOT_LISTED'" aria-label="{{PORTFOLIO_VISIBILITY_NOT_LISTED | translate}}">
-                <md-icon>link</md-icon> <span data-translate="PORTFOLIO_VISIBILITY_NOT_LISTED"></span> <span class="md-alt-text"><md-icon>check</md-icon></span>
-              </md-button>
-              <md-button data-ng-if="savedPortfolio.visibility != 'NOT_LISTED'" aria-label="{{PORTFOLIO_VISIBILITY_MAKE_NOT_LISTED | translate}}" data-ng-click="makeNotListed()">
-                <md-icon>link</md-icon> <span data-translate="PORTFOLIO_VISIBILITY_MAKE_NOT_LISTED"></span>
-              </md-button>
-            </md-menu-item>
-            <md-menu-divider></md-menu-divider>
-            <md-menu-item>
-              <md-button data-ng-if="savedPortfolio.visibility === 'PRIVATE'" aria-label="{{PORTFOLIO_VISIBILITY_PRIVATE | translate}}">
-                <md-icon>visibility_off</md-icon> <span data-translate="PORTFOLIO_VISIBILITY_PRIVATE"></span> <span class="md-alt-text"><md-icon>check</md-icon></span>
-              </md-button>
-              <md-button data-ng-if="savedPortfolio.visibility != 'PRIVATE'" aria-label="{{PORTFOLIO_VISIBILITY_MAKE_PRIVATE | translate}}" data-ng-click="makePrivate()">
-                <md-icon>visibility_off</md-icon> <span data-translate="PORTFOLIO_VISIBILITY_MAKE_PRIVATE"></span>
-              </md-button>
-            </md-menu-item>
-          </md-menu-content>
-        </md-menu>
-        <md-button data-ng-click="saveAndExitPortfolio()" aria-label="Salvesta ja välju" class="md-icon-button">
-          <md-tooltip><span data-translate="HEADER_TOOLTIP_EXIT_PORTFOLIO_MODE"></span></md-tooltip>
-          <md-icon >done</md-icon>
-        </md-button>
+ng-class="{'md-accent': isEditPortfolioMode ,'md-red': (isViewAdminPanelPage || (learningObjectImproper && isViewMaterialPortfolioPage) || (learningObjectBroken && isViewMaterialPortfolioPage)), 'md-gray': (learningObjectDeleted && isViewMaterialPortfolioPage)}"
+data-click-outside="clickOutside()" outside-if-not="header-show-detailed-search-icon, detailed-search">
+<div class="md-toolbar-tools" layout="row" layout-align="start center">
+  <!-- logo and menu button -->
+  <div class="navbar-logo-area">
+    <div flex layout="row" layout-align="start center">
+      <!-- toggle menu icon -->
+      <md-button class="md-icon-button" data-ng-click="toggleSidenav('left')">
+        <md-icon class="md-48">menu</md-icon>
+      </md-button>
+      <!-- logo -->
+      <div class="navbar-logo-main">
+        <md-tooltip>
+          <span data-translate="HEADER_TOOLTIP_GO_TO_LANDING_PAGE"></span>
+        </md-tooltip>
+        <a data-ng-href="/" class="logo {{isEditPortfolioMode ? 'shadow-edit' : 'shadow-primary'}}"  ng-class="{'shadow-admin': (isViewAdminPanelPage || (learningObjectImproper && isViewMaterialPortfolioPage) || (learningObjectBroken && isViewMaterialPortfolioPage)), 'shadow-deleted': (learningObjectDeleted && isViewMaterialPortfolioPage)}" id="logo"></a>
       </div>
     </div>
   </div>
+  <!-- search bar with filter icon -->
+  <div class="navbar-search-area">
+    <div class="navbar-search" layout="row" hide show-gt-xs flex>
+      <md-button aria-label="Otsi" class="md-icon-button" id="header-show-search-button" ng-click="search()">
+        <md-icon>search</md-icon>
+      </md-button>
+
+      <md-input-container flex>
+        <label hidden="hidden">&nbsp;</label>
+        <md-autocomplete md-autoselect
+        md-selected-item="suggest.selectedItem"
+        md-autofocus
+        md-item-text="suggestion.term"
+        md-items="suggestion in suggest.doSuggest(searchFields.searchQuery)"
+        md-search-text="searchFields.searchQuery"
+        md-input-maxlength="100"
+        md-input-minlength="0"
+        id="header-simple-search-input"
+        ng-model-options="{debounce: 100}">
+        <md-item-template>
+          <span md-highlight-text="searchFields.searchQuery">{{ suggestion }}</span>
+        </md-item-template>
+      </md-autocomplete>
+    </md-input-container>
+    <div>
+      <md-button aria-label="Ava detailotsing" class="md-icon-button" id="header-show-detailed-search-icon"
+      data-ng-click="openDetailedSearch()" data-ng-if="!detailedSearch.isVisible">
+      <md-tooltip><span data-translate="HEADER_TOOLTIP_OPEN_DETAILED_SEARCH"></span></md-tooltip>
+      <md-icon hide show-gt-xs>filter_list</md-icon>
+      <md-icon hide-gt-xs>search</md-icon>
+    </md-button>
+    <md-button aria-label="Sulge detailotsing" class="md-icon-button" id="header-hide-detailed-search-icon"
+    data-ng-click="closeDetailedSearch()" data-ng-if="detailedSearch.isVisible">
+    <md-tooltip><span data-translate="HEADER_TOOLTIP_CLOSE_DETAILED_SEARCH"></span></md-tooltip>
+    <md-icon>close</md-icon>
+  </md-button>
+</div>
+</div>
+
+</div>
+<span class="flex" hide-gt-lg></span>
+<!-- language menu, login and user menu button -->
+<div class="navbar-buttons-area">
+  <div class="button-container mobile-search-button">
+    <md-button aria-label="Ava detailotsing" class="md-icon-button" id="header-show-detailed-search-icon"
+    data-ng-click="openDetailedSearch()" data-ng-if="!detailedSearch.isVisible">
+    <md-tooltip><span data-translate="HEADER_TOOLTIP_OPEN_DETAILED_SEARCH"></span></md-tooltip>
+    <md-icon hide show-gt-xs>filter_list</md-icon>
+    <md-icon hide-gt-xs>search</md-icon>
+  </md-button>
+  <md-button aria-label="Sulge detailotsing" class="md-icon-button" id="header-hide-detailed-search-icon"
+  data-ng-click="closeDetailedSearch()" data-ng-if="detailedSearch.isVisible">
+  <md-tooltip><span data-translate="HEADER_TOOLTIP_CLOSE_DETAILED_SEARCH"></span></md-tooltip>
+  <md-icon>close</md-icon>
+</md-button>
+</div>
+<div class="button-container" data-ng-if="!isEditPortfolioMode || isViewPortfolioPage">
+  <!-- change language menu -->
+  <md-menu>
+    <md-button aria-label="Ava keelevaliku menüü" class="md-icon-button language-icon" id="header-language-icon"
+    ng-click="$mdOpenMenu($event)">
+    <md-tooltip><span data-translate="HEADER_TOOLTIP_SELECT_LANGUAGE"></span></md-tooltip>
+    <span data-ng-if="selectedLanguage === 'est'">ET</span>
+    <span data-ng-if="selectedLanguage === 'rus'">RU</span>
+    <span data-ng-if="selectedLanguage === 'eng'">EN</span>
+  </md-button>
+  <md-menu-content width="4">
+    <md-menu-item id="language-select-et" data-ng-click="setLanguage('est')">
+      <md-button>
+        ET
+      </md-button>
+    </md-menu-item>
+    <md-menu-divider></md-menu-divider>
+    <md-menu-item id="language-select-en" data-ng-click="setLanguage('eng')">
+      <md-button>
+        EN
+      </md-button>
+    </md-menu-item>
+    <md-menu-divider></md-menu-divider>
+    <md-menu-item id="language-select-eng" data-ng-click="setLanguage('rus')">
+      <md-button>
+        RU
+      </md-button>
+    </md-menu-item>
+  </md-menu-content>
+</md-menu>
+
+<!-- info menu -->
+<md-menu>
+  <md-button aria-label="Ava abi" class="md-icon-button" id="header-help-icon"
+  ng-click="$mdOpenMenu($event)">
+  <md-tooltip><span data-translate="HEADER_TOOLTIP_HELP"></span></md-tooltip>
+  <md-icon>help</md-icon>
+</md-button>
+<md-menu-content width="4">
+  <md-menu-item>
+    <md-button aria-label="Mine Mis on e-Koolikott leheküljele" data-ng-href="/about" id="help-menu-about">
+      <span data-translate="ABOUT_PAGE_LINK_TITLE"></span>
+    </md-button>
+  </md-menu-item>
+  <md-menu-item >
+    <md-button aria-label="Mine Kuidas e-Koolikotti kasutada leheküljele" data-ng-href="/help" id="help-menu">
+      <span data-translate="HELP_PAGE_LINK_TITLE"></span>
+    </md-button>
+  </md-menu-item>
+  <md-menu-item>
+    <md-button aria-label="Anna tagasisidet e-Koolikoti kohta" data-ng-href="mailto:e-koolikott@hm.ee?subject={{ 'FEEDBACK_ABOUT_EKOOLIKOTT_SUBJECT' | translate }}" id="help-menu-email">
+      <span data-translate="GIVE_FEEDBACK_LINK"></span>
+    </md-button>
+  </md-menu-item>
+</md-menu-content>
+</md-menu>
+
+<!-- log in menu -->
+<md-button data-ng-hide="user" aria-label="Ava sisselogimise modaalaken" class="md-icon-button"
+id="header-login-icon" data-ng-click="showLogin($event)">
+<md-icon>account_circle</md-icon>
+<md-tooltip><span data-translate="HEADER_TOOLTIP_ENTER"></span></md-tooltip>
+</md-button>
+
+<!-- logged in user menu -->
+<md-menu data-ng-show="user">
+  <md-button aria-label="Ava kasutajamenüü" class="md-icon-button" id="header-user-menu-icon"
+  ng-click="$mdOpenMenu($event)">
+  <md-tooltip><span data-translate="HEADER_TOOLTIP_PROFILE"></span></md-tooltip>
+  <!--<md-icon>account_circle</md-icon>-->
+  <div class="account__circle">{{user.name[0]}}</div>
+</md-button>
+<md-menu-content width="4">
+  <md-menu-item>
+    <md-button ng-disabled="true"   aria-label="{{user.username}}" data-ng-href="/dashboard" id="user-menu-dashboard">
+      <span>{{user.name}} {{user.surname}}</span>
+    </md-button>
+  </md-menu-item>
+  <md-menu-divider></md-menu-divider>
+  <md-menu-item>
+    <md-button aria-label="Logi välja" data-ng-click="logout()" id="user-menu-logout">
+      <span data-translate="LOGOUT"></span>
+    </md-button>
+  </md-menu-item>
+</md-menu-content>
+</md-menu>
+</div>
+<div class="button-container" data-ng-if="isEditPortfolioMode">
+  <md-menu>
+    <md-button aria-label="Jaga" class="md-icon-button" ng-click="$mdOpenMenu($event)">
+      <md-tooltip><span data-translate="HEADER_TOOLTIP_CHANGE_VISIBILITY"></span></md-tooltip>
+      <md-icon data-ng-if="savedPortfolio.visibility === 'PUBLIC'">visibility</md-icon>
+      <md-icon data-ng-if="savedPortfolio.visibility === 'NOT_LISTED'">link</md-icon>
+      <md-icon data-ng-if="savedPortfolio.visibility === 'PRIVATE'">visibility_off</md-icon>
+    </md-button>
+    <md-menu-content width="4">
+      <md-menu-item dop-copy-permalink data-url="getShareUrl"></md-menu-item>
+      <md-menu-divider></md-menu-divider>
+      <md-menu-item>
+        <md-button data-ng-if="savedPortfolio.visibility === 'PUBLIC'" aria-label="{{PORTFOLIO_VISIBILITY_PUBLIC | translate}}">
+          <md-icon>visibility</md-icon> <span data-translate="PORTFOLIO_VISIBILITY_PUBLIC"></span> <span class="md-alt-text"><md-icon>check</md-icon></span>
+        </md-button>
+        <md-button data-ng-if="savedPortfolio.visibility != 'PUBLIC'" aria-label="{{PORTFOLIO_VISIBILITY_MAKE_PUBLIC | translate}}" data-ng-click="makePublic()">
+          <md-icon>visibility</md-icon> <span data-translate="PORTFOLIO_VISIBILITY_MAKE_PUBLIC"></span>
+        </md-button>
+      </md-menu-item>
+      <md-menu-divider></md-menu-divider>
+      <md-menu-item>
+        <md-button data-ng-if="savedPortfolio.visibility === 'NOT_LISTED'" aria-label="{{PORTFOLIO_VISIBILITY_NOT_LISTED | translate}}">
+          <md-icon>link</md-icon> <span data-translate="PORTFOLIO_VISIBILITY_NOT_LISTED"></span> <span class="md-alt-text"><md-icon>check</md-icon></span>
+        </md-button>
+        <md-button data-ng-if="savedPortfolio.visibility != 'NOT_LISTED'" aria-label="{{PORTFOLIO_VISIBILITY_MAKE_NOT_LISTED | translate}}" data-ng-click="makeNotListed()">
+          <md-icon>link</md-icon> <span data-translate="PORTFOLIO_VISIBILITY_MAKE_NOT_LISTED"></span>
+        </md-button>
+      </md-menu-item>
+      <md-menu-divider></md-menu-divider>
+      <md-menu-item>
+        <md-button data-ng-if="savedPortfolio.visibility === 'PRIVATE'" aria-label="{{PORTFOLIO_VISIBILITY_PRIVATE | translate}}">
+          <md-icon>visibility_off</md-icon> <span data-translate="PORTFOLIO_VISIBILITY_PRIVATE"></span> <span class="md-alt-text"><md-icon>check</md-icon></span>
+        </md-button>
+        <md-button data-ng-if="savedPortfolio.visibility != 'PRIVATE'" aria-label="{{PORTFOLIO_VISIBILITY_MAKE_PRIVATE | translate}}" data-ng-click="makePrivate()">
+          <md-icon>visibility_off</md-icon> <span data-translate="PORTFOLIO_VISIBILITY_MAKE_PRIVATE"></span>
+        </md-button>
+      </md-menu-item>
+    </md-menu-content>
+  </md-menu>
+  <md-button data-ng-click="saveAndExitPortfolio()" aria-label="Salvesta ja välju" class="md-icon-button">
+    <md-tooltip><span data-translate="HEADER_TOOLTIP_EXIT_PORTFOLIO_MODE"></span></md-tooltip>
+    <md-icon >done</md-icon>
+  </md-button>
+</div>
+</div>
+</div>
 </md-toolbar>
 
 <div class="md-toolbar-filter ng-cloak" id="detailedSearch" data-ng-show="detailedSearch.isVisible" ng-cloak>
-  <form layout="row"
-        flex>
-    <div layout="row" layout-xs="column" flex="0" flex-gt-md="15" data-ng-hide="sidenavIsOpen()" ng-cloak></div>
-    <div flex flex-gt-md="{{isViewPortforlioPage ? '75' : '75'}}" class="md-padding filter-wrapper ng-cloak"
-         id="detailed-search" data-ng-class="{'nav-open': sidenavIsOpen()}" ng-cloak>
-      <div data-dop-detailed-search
-           data-is-visible="detailedSearch.isVisible"
-           data-query-in="detailedSearch.queryIn"
-           data-query-out="detailedSearch.queryOut"
-           data-main-field="detailedSearch.mainField"
-           data-accessor="detailedSearch.accessor"></div>
-    </div>
-  </form>
+  <form layout="row" flex>
+    <div class="lays-out-left" data-ng-hide="sidenavIsOpen()" ng-cloak></div>
+    <!-- <div layout="row" layout-xs="column" flex="0" flex-gt-md="15" data-ng-hide="sidenavIsOpen()" ng-cloak></div> -->
+    <div flex class="filter-wrapper ng-cloak"
+    id="detailed-search" data-ng-class="{'nav-open': sidenavIsOpen()}" ng-cloak>
+    <div data-dop-detailed-search
+    data-is-visible="detailedSearch.isVisible"
+    data-query-in="detailedSearch.queryIn"
+    data-query-out="detailedSearch.queryOut"
+    data-main-field="detailedSearch.mainField"
+    data-accessor="detailedSearch.accessor"></div>
+  </div>
+</form>
 </div>

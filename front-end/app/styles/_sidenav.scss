@@ -15,6 +15,14 @@ md-sidenav {
     }
   }
 
+  .md-button {
+    font-weight: 400;
+    text-transform: none;
+    &.active {
+      background-color: rgba(158,158,158,0.2);
+    }
+  }
+
   .sidenav-menu > li {
     > .md-button {
       font-weight: 400;
