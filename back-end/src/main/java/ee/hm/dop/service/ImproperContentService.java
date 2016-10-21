@@ -1,6 +1,8 @@
 package ee.hm.dop.service;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 
@@ -64,6 +66,30 @@ public class ImproperContentService {
         removeIfHasNoAccess(user, impropers);
 
         return impropers;
+    }
+
+    public List<ImproperContent> getImproperMaterials(User user) {
+        List<ImproperContent> impropers = getAll(user);
+
+        if (impropers == null)
+            return new ArrayList<>();
+
+        return impropers
+                .stream()
+                .filter(imp -> "Material".equals(imp.getLearningObject().getClass().getSimpleName()))
+                .collect(Collectors.toList());
+    }
+
+    public List<ImproperContent> getImproperPortfolios(User user) {
+        List<ImproperContent> impropers = getAll(user);
+
+        if (impropers == null)
+            return new ArrayList<>();
+
+        return impropers
+                .stream()
+                .filter(imp -> "Portfolio".equals(imp.getLearningObject().getClass().getSimpleName()))
+                .collect(Collectors.toList());
     }
 
     /**

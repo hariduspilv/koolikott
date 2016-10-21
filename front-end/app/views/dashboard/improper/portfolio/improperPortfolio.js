@@ -10,7 +10,7 @@ define([
                 $scope: $scope
             });
 
-            serverCallService.makeGet("rest/impropers", {}, sortImpropers, base.getItemsFail);
+            serverCallService.makeGet("rest/impropers/portfolios", {}, getImproperPortfoliosSuccess, base.getItemsFail);
 
             $scope.title = $filter('translate')('DASHBOARD_IMRPOPER_PORTFOLIOS');
 
@@ -24,18 +24,14 @@ define([
 
             $scope.getLearningObjectUrl = function(learningObject) {
             	return "/portfolio?id=" + learningObject.id;
-            }
+            };
 
-            function sortImpropers(impropers) {
-                var improperMaterials = [];
-
-                for (var i = 0; i < impropers.length; i++) {
-                    if (impropers[i].learningObject.type === '.Portfolio' && !impropers[i].learningObject.deleted) {
-                        improperMaterials.push(impropers[i]);
-                    }
+            function getImproperPortfoliosSuccess(impropers) {
+                if (impropers) {
+                    base.getItemsSuccess(impropers, 'byReportCount', true);
+                } else {
+                    base.getItemsFail();
                 }
-
-                base.getItemsSuccess(improperMaterials, 'byReportCount', true);
             }
         }
     ]);

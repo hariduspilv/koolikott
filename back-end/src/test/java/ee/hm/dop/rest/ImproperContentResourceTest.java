@@ -21,6 +21,8 @@ import org.junit.Test;
 public class ImproperContentResourceTest extends ResourceIntegrationTestBase {
 
     private static final String IMPROPERS = "impropers";
+    public static final String IMPROPER_MATERIALS = "impropers/materials";
+    public static final String IMPROPER_PORTFOLIOS = "impropers/portfolios";
 
     @Test
     public void setImproperNoData() {
@@ -75,6 +77,30 @@ public class ImproperContentResourceTest extends ResourceIntegrationTestBase {
 
         assertNotNull(improperContents.size());
         assertEquals(5, improperContents.size());
+    }
+
+    @Test
+    public void getImproperMaterials() {
+        login("89898989898");
+
+        Response response = doGet(IMPROPER_MATERIALS);
+        List<ImproperContent> improperContents = response.readEntity(new GenericType<List<ImproperContent>>() {
+        });
+
+        assertNotNull(improperContents.size());
+        assertEquals(3, improperContents.size());
+    }
+
+    @Test
+    public void getImproperPortfolios() {
+        login("89898989898");
+
+        Response response = doGet(IMPROPER_PORTFOLIOS);
+        List<ImproperContent> improperContents = response.readEntity(new GenericType<List<ImproperContent>>() {
+        });
+
+        assertNotNull(improperContents.size());
+        assertEquals(2, improperContents.size());
     }
 
     @Test

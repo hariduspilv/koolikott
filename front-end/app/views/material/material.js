@@ -136,9 +136,9 @@ define([
                 $scope.material.source = getSource($scope.material);
                 storageService.setMaterial(null);
 
-                $rootScope.learningObjectBroken = ($scope.material.broken > 0) ? true : false;
-                $rootScope.learningObjectImproper = ($scope.material.improper > 0) ? true : false;
-                $rootScope.learningObjectDeleted = ($scope.material.deleted == true) ? true : false;
+                $rootScope.learningObjectBroken = ($scope.material.broken > 0);
+                $rootScope.learningObjectImproper = ($scope.material.improper > 0);
+                $rootScope.learningObjectDeleted = ($scope.material.deleted == true);
 
                 if ($scope.material.improper > 0) {
                     serverCallService.makeGet("rest/impropers", {}, sortImpropers, getItemsFail);
@@ -245,26 +245,25 @@ define([
 
             $scope.formatMaterialIssueDate = function (issueDate) {
                 return formatIssueDate(issueDate);
-
-            }
+            };
 
             $scope.formatMaterialUpdatedDate = function (updatedDate) {
                 return formatDateToDayMonthYear(updatedDate);
-            }
+            };
 
             $scope.isNullOrZeroLength = function (arg) {
                 return !arg || !arg.length;
-            }
+            };
 
             $scope.getAuthorSearchURL = function ($event, firstName, surName) {
                 $event.preventDefault();
 
                 searchService.setSearch('author:"' + firstName + " " + surName + '"');
                 $location.url(searchService.getURL());
-            }
+            };
 
             $scope.showSourceFullscreen = function ($event) {
-                $event.preventDefault()
+                $event.preventDefault();
 
                 $scope.fullscreenCtrl.toggleFullscreen();
             };
@@ -295,7 +294,7 @@ define([
                 } else {
                     return false;
                 }
-            }
+            };
 
             function getSignedUserData() {
                 serverCallService.makeGet("rest/user/getSignedUserData", {}, getSignedUserDataSuccess, getSignedUserDataFail);
