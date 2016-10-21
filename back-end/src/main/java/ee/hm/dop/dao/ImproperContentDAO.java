@@ -41,7 +41,7 @@ public class ImproperContentDAO extends BaseDAO<ImproperContent> {
 
     public void deleteAll(List<ImproperContent> impropers) {
         List<Long> ids = new ArrayList<>();
-        impropers.stream().forEach(improper -> ids.add(improper.getId()));
+        impropers.forEach(improper -> ids.add(improper.getId()));
 
         getEntityManager().createQuery("update ImproperContent i set i.deleted = true where i.id in :impropers") //
                 .setParameter("impropers", ids) //

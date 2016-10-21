@@ -180,7 +180,7 @@ define([
                     if (data) {
                         callback(data);
                     }
-                    userFavoritesCountCallbacks.push(callback);
+                    userMaterialsCountCallbacks.push(callback);
                     serverCallService.makeGet("rest/material/getByCreator/count", params, getUsersMaterialsCountSuccess, getItemsFail);
                 },
                 loadUserPortfoliosCount: function (callback) {
