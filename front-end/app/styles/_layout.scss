@@ -7,13 +7,13 @@
   @media (min-width: $layout-breakpoint-md) {
     margin-left: auto;
     margin-right: auto;
-    padding: 0;
+    padding-left: $sidenav-width + $md-padding;
+    padding-right: $nav-button-area-width;
   }
   @media (min-width: $layout-breakpoint-lg) {
     padding-left: $sidenav-width + $md-padding;
     margin-left: auto;
     margin-right: auto;
-    padding: 0;
   }
   &.nav-open {
     @media (min-width: $layout-breakpoint-md) {
@@ -35,9 +35,9 @@
 .card-container {
   display: flex;
   flex-wrap: wrap;
-  justify-content: center;
+  justify-content: left;
   @media (min-width: $layout-breakpoint-md) {
-    justify-content: center;
+    justify-content: left;
   }
   @media (min-width: $layout-breakpoint-lg) {
     justify-content: left;

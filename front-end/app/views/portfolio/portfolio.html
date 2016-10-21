@@ -1,11 +1,9 @@
-<section class="card-container detail-view">
-  <article role="main" id="main-content">
-    <div ng-if="modUser()" dop-error-message data="portfolio"></div>
-    <div data-dop-portfolio-summary-card comment="newComment" submit-click="addComment()" data-portfolio="portfolio"></div>
-    <div id="portfolio-chapters">
-      <div data-ng-repeat="chapter in portfolio.chapters">
-        <div data-dop-chapter data-chapter="chapter" data-index="{{$index}}"></div>
-      </div>
+<article role="main" id="main-content">
+  <div ng-if="modUser()" dop-error-message data="portfolio"></div>
+  <div data-dop-portfolio-summary-card comment="newComment" submit-click="addComment()" data-portfolio="portfolio"></div>
+  <div id="portfolio-chapters">
+    <div data-ng-repeat="chapter in portfolio.chapters">
+      <div data-dop-chapter data-chapter="chapter" data-index="{{$index}}"></div>
     </div>
-  </article>
-</section>
+  </div>
+</article>
