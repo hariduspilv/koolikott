@@ -128,25 +128,34 @@ define([
                 };
 
                 $scope.updateUserMaterialsCount = function () {
-                    userDataService.loadUserMaterialsCount(function (data) {
-                        if (data >= 0) $scope.materials = data;
-                    });
+                    if (authenticatedUserService.isAuthenticated()) {
+                        userDataService.loadUserMaterialsCount(function (data) {
+                            if (data >= 0) $scope.materials = data;
+                        });
+                    }
                 };
                 $scope.updateUserPortfoliosCount = function () {
-                    userDataService.loadUserPortfoliosCount(function (data) {
-                        if (data >= 0) $scope.portfolios = data;
-                    });
+                    if (authenticatedUserService.isAuthenticated()) {
+                        userDataService.loadUserPortfoliosCount(function (data) {
+                            if (data >= 0) $scope.portfolios = data;
+                        });
+                    }
                 };
                 $scope.updateUserFavoritesCount = function () {
-                    userDataService.loadUserFavoritesCount(function (data) {
-                        if (data >= 0) $scope.favorites = data;
-                    });
+                    if (authenticatedUserService.isAuthenticated()) {
+                        userDataService.loadUserFavoritesCount(function (data) {
+                            if (data >= 0) $scope.favorites = data;
+                        });
+                    }
                 };
 
                 $scope.updateUserCounts = function () {
-                    $scope.updateUserFavoritesCount();
-                    $scope.updateUserMaterialsCount();
-                    $scope.updateUserPortfoliosCount();
+                    if (authenticatedUserService.isAuthenticated()) {
+                        $scope.updateUserFavoritesCount();
+                        $scope.updateUserMaterialsCount();
+                        $scope.updateUserPortfoliosCount();
+                    }
+
                     if ($scope.isAdmin() || $scope.isModerator()) {
                         $scope.updateAdminCounts();
                     }
