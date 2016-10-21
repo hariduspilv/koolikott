@@ -52,7 +52,11 @@
 
 .portfolio-chapter-chapter-materials,
 .portfolio-chapter-subchapter-materials {
-  margin-bottom: 20px;
+  margin-top: 0px;
+}
+
+.chapter-card {
+  margin-bottom: 0px!important;
 }
 
 /**
@@ -103,7 +107,6 @@ ul[dnd-list] .dndPlaceholder {
  */
 ul[dnd-list] li {
   display: block;
-  margin-bottom: 20px;
 }
 
 /**

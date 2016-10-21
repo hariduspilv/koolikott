@@ -1,6 +1,6 @@
 <div class="portfolio-chapter">
   <div id="chapter-{{index}}">
-    <md-card class="card-lg">
+    <md-card class="card-lg chapter-card">
 
       <!--View-->
       <md-card-content class="portfolio-noedit-item" data-ng-if="!isEditable" layout="row"
@@ -80,7 +80,7 @@
   <div class="portfolio-chapter-subchapters">
     <div class="portfolio-chapter-subchapter" id="chapter-{{index}}-{{$index}}"
          data-ng-repeat="subchapter in chapter.subchapters">
-      <md-card class="card-lg">
+      <md-card class="card-lg chapter-card">
 
         <!--View-->
         <md-card-content class="portfolio-noedit-item" data-ng-if="!isEditable" layout="row"
@@ -144,7 +144,7 @@
 
       <!--Subchapter materials-->
       <ul ng-show="subchapter.materials.length" dnd-list="chapter.materials"
-          class="portfolio-chapter-chapter-materials" uib-collapse="subisCollapsed[subchapter.$$hashKey]">
+          class="portfolio-chapter-subchapter-materials" uib-collapse="subisCollapsed[subchapter.$$hashKey]">
         <li id="subchapterMaterial-{{index}}-{{$index}}"
             ng-repeat="material in subchapter.materials"
             dnd-draggable="getParsedMaterial(material)"

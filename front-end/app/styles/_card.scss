@@ -280,7 +280,7 @@ md-card {
     .md-menu {
       margin-top: -15px;
     }
-    md-card-content {
+    md-card-content:not(.noPadding) {
       padding: $card-lg-padding;
     }
     .on-left {

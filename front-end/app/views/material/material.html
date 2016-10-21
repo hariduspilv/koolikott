@@ -148,40 +148,8 @@
                   <div class="on-left">
                     <div class="md-body-1 description textangular-view"
                          data-ng-bind-html="getCorrectLanguageString(material.descriptions)"></div>
-
-                    <div data-ng-if="sourceType === 'YOUTUBE'" class="embed-responsive embed-responsive-16by9">
-                      <div class="embed-responsive-container">
-                        <youtube-video video-url="material.source" player-width="'768'" player-height="'432'"
-                                       class="embed-responsive-item"></youtube-video>
-                      </div>
-                    </div>
-
-                    <div data-ng-if="sourceType === 'SLIDESHARE'" class="embed-responsive embed-responsive-4by3">
-                      <div class="embed-responsive-container">
-                        <div data-dop-slideshare source="material.source" class="embed-responsive-item"
-                             fail-callback="slideshareFail()"></div>
-                      </div>
-                    </div>
-
-                    <div data-ng-if="sourceType === 'LINK' && !material.embeddable">
-                      <!--Embed iframe-->
-                      <div data-ng-if="embeddedDataIframe" class="embed-responsive">
-                        <div class="embed-responsive-container">
-                          <div class="embed-responsive-item" data-ng-bind-html="embeddedDataIframe"></div>
-                        </div>
-                      </div>
-                      <!--Embed html-->
-                      <div data-ng-if="embeddedData">
-                        <div class="embed-responsive-container">
-                          <div class="embed-responsive-item" data-ng-bind-html="embeddedData"></div>
-                        </div>
-                      </div>
-
-                      <!--Link as backup - if iframe is internally not working-->
-                      <a data-ng-href="{{material.source}}" target="_blank" class="wrapped regular-link md-primary">
-                        <span class="item-link" data-ng-bind="material.source"></span>
-                      </a>
-                    </div>
+                    <div data-dop-embedded-material
+                         material="material" data-flex></div>
 
                     <div data-ng-if="sourceType === 'LINK' && material.embeddable">
                       <a data-ng-href="#" ng-click="showSourceFullscreen($event)">
@@ -332,8 +300,10 @@
                     <p class="md-body-2 meta" data-ng-if="material.peerReviews">
                       <span data-ng-repeat="peerReview in material.peerReviews">
                         <span layout="row">
-                          <a ng-show="material.peerReviews.length === 1" target="_blank" data-ng-href="{{ peerReview.url }}" data-translate="MATERIAL_PEER_REVIEW"></a>
-                          <a ng-show="material.peerReviews.length > 1" target="_blank" data-ng-href="{{ peerReview.url }}">{{ 'MATERIAL_PEER_REVIEW' | translate }} {{$index + 1}}</a>
+                          <a ng-show="material.peerReviews.length === 1" target="_blank"
+                             data-ng-href="{{ peerReview.url }}" data-translate="MATERIAL_PEER_REVIEW"></a>
+                          <a ng-show="material.peerReviews.length > 1" target="_blank"
+                             data-ng-href="{{ peerReview.url }}">{{ 'MATERIAL_PEER_REVIEW' | translate }} {{$index + 1}}</a>
                        </span>
                       </span>
                     </p>

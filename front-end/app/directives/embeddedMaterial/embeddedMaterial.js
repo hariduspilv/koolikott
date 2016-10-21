@@ -1,5 +1,7 @@
 define([
     'app',
+    'angular-youtube-mb',
+    'directives/slideshare/slideshare',
     'services/translationService',
     'services/iconService',
     'services/embedService'
@@ -21,8 +23,8 @@ define([
                         $scope.isEditPortfolioMode = $rootScope.isEditPortfolioMode;
 
                         if ($scope.material) {
-                            embedService.getEmbed(getSource($scope.material), embedCallback);
                             $scope.materialType = getType();
+                            getSourceType();
                         }
                     }
 
@@ -63,6 +65,28 @@ define([
                             materialId: material.id
                         });
                     };
+
+                    function getSourceType() {
+                        if (isYoutubeVideo($scope.material.source)) {
+                            $scope.sourceType = 'YOUTUBE';
+                        } else if (isSlideshareLink($scope.material.source)) {
+                            $scope.sourceType = 'SLIDESHARE';
+                        } else {
+                            $scope.sourceType = 'LINK';
+                            embedService.getEmbed(getSource($scope.material), embedCallback);
+                        }
+                    }
+
+                    function isYoutubeVideo(url) {
+                        // regex taken from http://stackoverflow.com/questions/2964678/jquery-youtube-url-validation-with-regex #ULTIMATE YOUTUBE REGEX
+                        var youtubeUrlRegex = /^(?:https?:\/\/)?(?:www\.)?(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))((\w|-){11})(?:\S+)?$/;
+                        return url && url.match(youtubeUrlRegex);
+                    }
+
+                    function isSlideshareLink(url) {
+                        var slideshareUrlRegex = /^https?\:\/\/www\.slideshare\.net\/[a-zA-Z0-9\-]+\/[a-zA-Z0-9\-]+$/;
+                        return url && url.match(slideshareUrlRegex);
+                    }
 
                     function getType() {
                         if ($scope.material === undefined || $scope.material === null) return '';

@@ -1,7 +1,6 @@
 define([
     'app',
     'angularAMD',
-    'angular-youtube-mb',
     'angular-screenfull',
     'directives/copyPermalink/copyPermalink',
     'directives/report/improper/improper',
@@ -9,7 +8,6 @@ define([
     'directives/recommend/recommend',
     'directives/rating/rating',
     'directives/commentsCard/commentsCard',
-    'directives/slideshare/slideshare',
     'directives/tags/tags',
     'directives/restrict/restrict',
     'directives/favorite/favorite',
@@ -24,10 +22,10 @@ define([
     'services/toastService',
     'services/storageService',
     'services/targetGroupService',
-    'services/embedService'
+    'directives/embeddedMaterial/embeddedMaterial'
 ], function (app, angularAMD) {
-    return ['$scope', 'serverCallService', '$route', 'translationService', '$rootScope', 'searchService', '$location', 'alertService', 'authenticatedUserService', 'dialogService', 'toastService', 'iconService', '$mdDialog', 'storageService', 'targetGroupService', 'embedService',
-        function ($scope, serverCallService, $route, translationService, $rootScope, searchService, $location, alertService, authenticatedUserService, dialogService, toastService, iconService, $mdDialog, storageService, targetGroupService, embedService) {
+    return ['$scope', 'serverCallService', '$route', 'translationService', '$rootScope', 'searchService', '$location', 'alertService', 'authenticatedUserService', 'dialogService', 'toastService', 'iconService', '$mdDialog', 'storageService', 'targetGroupService',
+        function ($scope, serverCallService, $route, translationService, $rootScope, searchService, $location, alertService, authenticatedUserService, dialogService, toastService, iconService, $mdDialog, storageService, targetGroupService) {
             $scope.showMaterialContent = false;
             $scope.newComment = {};
             $scope.pageUrl = $location.absUrl();
@@ -70,19 +68,6 @@ define([
                 }
             });
 
-            function embedCallback(res) {
-                if (res && res.data.html) {
-                    $scope.embeddedDataIframe = null;
-                    $scope.embeddedData = null;
-
-                    if (res.data.html.contains("<iframe")) {
-                        $scope.embeddedDataIframe = res.data.html.replace("http:", "");
-                    } else {
-                        $scope.embeddedData = res.data.html.replace("http:", "");
-                    }
-                }
-            }
-
             function getMaterial(success, fail) {
                 var materialId = $route.current.params.materialId;
                 var params = {
@@ -113,7 +98,6 @@ define([
 
             function processMaterial() {
                 if ($scope.material) {
-                    embedService.getEmbed(getSource($scope.material), embedCallback);
                     setSourceType();
 
                     if ($scope.material.taxons) {
@@ -266,10 +250,6 @@ define([
                 $event.preventDefault();
 
                 $scope.fullscreenCtrl.toggleFullscreen();
-            };
-
-            $scope.slideshareFail = function () {
-                $scope.sourceType = 'LINK';
             };
 
             $scope.isLoggedIn = function () {
