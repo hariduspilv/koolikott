@@ -1,35 +1,34 @@
 .content-container {
-    margin-top: $md-toolbar-height + $md-padding;
-    transition: 0.2s;
-    max-width: $layout-breakpoint-md;
-    padding-left: $md-padding;
-    padding-right: $md-padding;
-    @media (min-width: $layout-breakpoint-md) {
-      margin-left: auto;
-      margin-right: auto;
-      padding: 0;
-    }
-    @media (min-width: $layout-breakpoint-lg) {
-      padding-left: $sidenav-width + $md-padding;
-      margin-left: auto;
-      margin-right: auto;
-      padding: 0;
-    }
-    h1 {
-      padding-left: $md-padding;
-    }
-}
-
-.content-container.nav-open {
+  margin-top: $md-toolbar-height + $md-padding;
+  transition: 0.2s;
+  max-width: $layout-breakpoint-md;
+  padding-left: $md-padding;
+  padding-right: $md-padding;
   @media (min-width: $layout-breakpoint-md) {
-    padding-left: $sidenav-width + $md-padding;
-    padding-right: $nav-button-area-width;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 0;
   }
   @media (min-width: $layout-breakpoint-lg) {
     padding-left: $sidenav-width + $md-padding;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 0;
   }
-  .card-container {
-    justify-content: left;
+  &.nav-open {
+    @media (min-width: $layout-breakpoint-md) {
+      padding-left: $sidenav-width + $md-padding;
+      padding-right: $nav-button-area-width;
+    }
+    @media (min-width: $layout-breakpoint-lg) {
+      padding-left: $sidenav-width + $md-padding;
+    }
+    .card-container {
+      justify-content: left;
+    }
+  }
+  h1 {
+    padding-left: $md-padding;
   }
 }
 
