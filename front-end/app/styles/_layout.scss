@@ -10,6 +10,7 @@
       padding: 0;
     }
     @media (min-width: $layout-breakpoint-lg) {
+      padding-left: $sidenav-width + $md-padding;
       margin-left: auto;
       margin-right: auto;
       padding: 0;
@@ -40,7 +41,7 @@
     justify-content: center;
   }
   @media (min-width: $layout-breakpoint-lg) {
-    justify-content: center;
+    justify-content: left;
   }
 }
 
