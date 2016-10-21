@@ -16,9 +16,9 @@ public class UserFavoriteDAO extends BaseDAO<UserFavorite> {
         return super.update(userFavorite);
     }
 
-    public UserFavorite findFavoriteByUserAndLearningObject(LearningObject learningObject, User user) {
-        TypedQuery<UserFavorite> findFavorite = createQuery("SELECT f FROM UserFavorite f WHERE f.learningObject = :loid and f.creator = :uid", UserFavorite.class)
-                .setParameter("loid", learningObject)
+    public UserFavorite findFavoriteByUserAndLearningObject(long id, User user) {
+        TypedQuery<UserFavorite> findFavorite = createQuery("SELECT f FROM UserFavorite f WHERE f.learningObject.id = :loid and f.creator = :uid", UserFavorite.class)
+                .setParameter("loid", id)
                 .setParameter("uid", user);
 
         return getSingleResult(findFavorite);
