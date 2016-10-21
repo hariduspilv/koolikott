@@ -3,6 +3,7 @@
     transition: 0.2s;
     max-width: $layout-breakpoint-md;
     padding-left: $md-padding;
+    padding-right: $md-padding;
     @media (min-width: $layout-breakpoint-md) {
       margin-left: auto;
       margin-right: auto;
