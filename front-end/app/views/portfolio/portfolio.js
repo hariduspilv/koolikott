@@ -114,7 +114,7 @@ define([
                 var improper;
 
                 for (var i = 0; i < impropers.length; i++) {
-                    if (impropers[i].learningObject.id === $scope.material.id) {
+                    if (impropers[i].learningObject.id === $scope.portfolio.id) {
                         improper = impropers[i];
                     }
                 }
