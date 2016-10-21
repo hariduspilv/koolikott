@@ -1,5 +1,5 @@
 <md-toolbar id="md-toolbar-header" class="navbar md-whiteframe-1dp md-primary"
-ng-class="{'md-accent': isEditPortfolioMode ,'md-red': (isViewAdminPanelPage || (learningObjectImproper && isViewMaterialPortfolioPage) || (learningObjectBroken && isViewMaterialPortfolioPage)), 'md-gray': (learningObjectDeleted && isViewMaterialPortfolioPage)}"
+ng-class="{'md-accent': isEditPortfolioMode ,'md-red': ((isAdmin() || isModerator())&&(isViewAdminPanelPage || (learningObjectImproper && isViewMaterialPortfolioPage) || (learningObjectBroken && isViewMaterialPortfolioPage))), 'md-gray': ((isAdmin() || isModerator())&&(learningObjectDeleted && isViewMaterialPortfolioPage))}"
 data-click-outside="clickOutside()" outside-if-not="header-show-detailed-search-icon, detailed-search">
 <div class="md-toolbar-tools" layout="row" layout-align="start center">
   <!-- logo and menu button -->

@@ -62,6 +62,11 @@
   }
   .button-container {
     display: inline-block;
+    @media (max-width: 350px) {
+      .md-icon-button {
+        width: 35px;
+      }
+    }
   }
   .mobile-search-button {
     @media (min-width: $layout-breakpoint-xs) {
