@@ -109,8 +109,9 @@ define([
                     }
 
                     function deletePortfolioSuccess() {
-                        toastService.showOnRouteChange('PORTFOLIO_DELETED');
+                        toastService.show('PORTFOLIO_DELETED');
                         $scope.portfolio.deleted = true;
+                        app.setPortfolio($scope.portfolio);
                     }
 
                     function deletePortfolioFailed() {
@@ -124,6 +125,7 @@ define([
                     function restoreSuccess() {
                         toastService.show('PORTFOLIO_RESTORED');
                         $scope.portfolio.deleted = false;
+                        $rootScope.learningObjectDeleted = false;
                     }
 
                     function restoreFail() {
