@@ -95,6 +95,24 @@ public class ImproperContentResource extends BaseResource {
         return improperContentService.getImproperPortfolios(loggedInUser);
     }
 
+    @GET
+    @Path("materials/count")
+    @Produces(MediaType.APPLICATION_JSON)
+    @RolesAllowed({"USER", "ADMIN", "RESTRICTED", "MODERATOR"})
+    public Response getImproperMaterialsCount() {
+        User loggedInUser = getLoggedInUser();
+        return Response.ok(improperContentService.getImproperMaterials(loggedInUser).size()).build();
+    }
+
+    @GET
+    @Path("portfolios/count")
+    @Produces(MediaType.APPLICATION_JSON)
+    @RolesAllowed({"USER", "ADMIN", "RESTRICTED", "MODERATOR"})
+    public Response getImproperPortfoliosCount() {
+        User loggedInUser = getLoggedInUser();
+        return Response.ok(improperContentService.getImproperPortfolios(loggedInUser).size()).build();
+    }
+
     @DELETE
     @RolesAllowed({"ADMIN"})
     public void removeImpropers(@QueryParam("learningObject") Long learningObjectId) {
