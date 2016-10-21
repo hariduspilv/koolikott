@@ -5,15 +5,15 @@ define([
 ], function (angularAMD) {
     var instance;
 
-    var IMPROPER_ITEMS;
-
     var brokenMaterialsCountCallbacks = [];
     var deletedMaterialsCountCallbacks = [];
     var deletedPortfoliosCountCallbacks = [];
-    var improperItemsCallbacks = [];
+    var improperMaterialsCountCallbacks = [];
+    var improperPortfoliosCountCallbacks = [];
     var userFavoritesCountCallbacks = [];
     var userMaterialsCountCallbacks = [];
     var userPortfoliosCountCallbacks = [];
+
 
     angularAMD.factory('userDataService', ['serverCallService', 'authenticatedUserService',
         function (serverCallService, authenticatedUserService) {
@@ -26,7 +26,8 @@ define([
                     serverCallService.makeGet("rest/material/getBroken/count", {}, getBrokenMaterialsCountSuccess, getItemsFail);
                     serverCallService.makeGet("rest/material/getDeleted/count", {}, getDeletedMaterialsCountSuccess, getItemsFail);
                     serverCallService.makeGet("rest/portfolio/getDeleted/count", {}, getDeletedPortfoliosCountSuccess, getItemsFail);
-                    serverCallService.makeGet("rest/impropers", {}, getImproperItemsSuccess, getItemsFail);
+                    serverCallService.makeGet("rest/impropers/materials/count", {}, getImproperMaterialsCountSuccess, getItemsFail);
+                    serverCallService.makeGet("rest/impropers/portfolios/count", {}, getImproperPortfoliosCountSuccess, getItemsFail);
                 }
                 if (authenticatedUserService.isAuthenticated()) {
                     serverCallService.makeGet("rest/learningObject/usersFavorite/count", {}, getFavoritesCountSuccess, getItemsFail);
@@ -70,13 +71,23 @@ define([
                 }
             }
 
-            // Improper items
-            function getImproperItemsSuccess(data) {
+            function getImproperMaterialsCountSuccess(data) {
                 if (!isEmpty(data)) {
-                    IMPROPER_ITEMS = data;
-                    improperItemsCallbacks.forEach(function (callback) {
+                    improperMaterialsCountCallbacks.forEach(function (callback) {
                         callback(data);
                     });
+                    improperMaterialsCountCallbacks = [];
+                    localStorage.setItem("improperMaterialsCount", data);
+                }
+            }
+
+            function getImproperPortfoliosCountSuccess(data) {
+                if (!isEmpty(data)) {
+                    improperPortfoliosCountCallbacks.forEach(function (callback) {
+                        callback(data);
+                    });
+                    improperPortfoliosCountCallbacks = [];
+                    localStorage.setItem("improperPortfoliosCount", data);
                 }
             }
 
@@ -138,14 +149,24 @@ define([
                     serverCallService.makeGet("rest/portfolio/getDeleted/count", {}, getDeletedPortfoliosCountSuccess, getItemsFail);
                 },
 
-                // Improper items
-                loadImproperItems: function (callback) {
-                    if (IMPROPER_ITEMS) {
-                        callback(IMPROPER_ITEMS);
-                    } else {
-                        improperItemsCallbacks.push(callback);
+                loadImproperMaterialsCount: function (callback) {
+                    var data = localStorage.getItem("improperMaterialsCount");
+                    if (data) {
+                        callback(data);
                     }
+                    improperMaterialsCountCallbacks.push(callback);
+                    serverCallService.makeGet("rest/impropers/materials/count", {}, getImproperMaterialsCountSuccess, getItemsFail);
                 },
+
+                loadImproperPortfoliosCount: function (callback) {
+                    var data = localStorage.getItem("improperPortfoliosCount");
+                    if (data) {
+                        callback(data);
+                    }
+                    improperPortfoliosCountCallbacks.push(callback);
+                    serverCallService.makeGet("rest/impropers/portfolios/count", {}, getImproperPortfoliosCountSuccess, getItemsFail);
+                },
+
                 loadUserFavoritesCount: function (callback) {
                     var data = localStorage.getItem("userFavoritesCount");
                     if (data) {
@@ -169,7 +190,7 @@ define([
                     }
                     userPortfoliosCountCallbacks.push(callback);
                     serverCallService.makeGet("rest/portfolio/getByCreator/count", params, getUsersPortfoliosCountSuccess, getItemsFail);
-                },
+                }
 
             };
 

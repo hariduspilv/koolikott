@@ -84,23 +84,6 @@ define([
                     }));
                 }
 
-                function sortImproperItems(data) {
-                    var impropers = data;
-                    var improperMaterials = [];
-                    var improperPortfolios = [];
-                    for (var i = 0; i < impropers.length; i++) {
-                        if (impropers[i].learningObject.type === '.Material' && !impropers[i].learningObject.deleted) {
-                            improperMaterials.push(impropers[i]);
-                        }
-                        if (impropers[i].learningObject.type === '.Portfolio' && !impropers[i].learningObject.deleted) {
-                            improperPortfolios.push(impropers[i]);
-                        }
-                    }
-
-                    $scope.improperMaterialsCount = improperMaterials.length;
-                    $scope.improperPortfoliosCount = improperPortfolios.length;
-                }
-
                 $scope.updateBrokenMaterialsCount = function () {
                     userDataService.loadBrokenMaterialsCount(function (data) {
                         $scope.brokenMaterialsCount = data;
@@ -116,14 +99,16 @@ define([
                         $scope.deletedPortfoliosCount = data;
                     });
                 };
-                $scope.updateImproperMarerialsCount = function () {
-                    userDataService.loadImproperItems(function (data) {
-                        sortImproperItems(data)
+
+                $scope.updateImproperMaterialsCount = function () {
+                    userDataService.loadImproperMaterialsCount(function (data) {
+                        $scope.improperMaterialsCount = data;
                     });
                 };
+
                 $scope.updateImproperPortfoliosCount = function () {
-                    userDataService.loadImproperItems(function (data) {
-                        sortImproperItems(data)
+                    userDataService.loadImproperPortfoliosCount(function (data) {
+                        $scope.improperPortfoliosCount = data;
                     });
                 };
 
@@ -165,7 +150,7 @@ define([
                     $scope.updateBrokenMaterialsCount();
                     $scope.updateDeletedMaterialsCount();
                     $scope.updateDeletedPortfoliosCount();
-                    $scope.updateImproperMarerialsCount();
+                    $scope.updateImproperMaterialsCount();
                     $scope.updateImproperPortfoliosCount();
                 };
 
