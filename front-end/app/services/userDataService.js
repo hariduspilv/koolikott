@@ -17,6 +17,8 @@ define([
 
     angularAMD.factory('userDataService', ['serverCallService', 'authenticatedUserService',
         function (serverCallService, authenticatedUserService) {
+            var params;
+            if (authenticatedUserService.isAuthenticated()) params = {'username': authenticatedUserService.getUser().username};
             init();
 
             function init() {
@@ -27,10 +29,6 @@ define([
                     serverCallService.makeGet("rest/impropers", {}, getImproperItemsSuccess, getItemsFail);
                 }
                 if (authenticatedUserService.isAuthenticated()) {
-                    var params = {
-                        'username': authenticatedUserService.getUser().username
-                    };
-
                     serverCallService.makeGet("rest/learningObject/usersFavorite/count", {}, getFavoritesCountSuccess, getItemsFail);
                     serverCallService.makeGet("rest/material/getByCreator/count", params, getUsersMaterialsCountSuccess, getItemsFail);
                     serverCallService.makeGet("rest/portfolio/getByCreator/count", params, getUsersPortfoliosCountSuccess, getItemsFail);
@@ -44,61 +42,67 @@ define([
 
             function getBrokenMaterialsCountSuccess(data) {
                 if (!isEmpty(data)) {
-                    brokenMaterialsCountCallbacks.forEach(function(callback) {
+                    brokenMaterialsCountCallbacks.forEach(function (callback) {
                         callback(data);
                     });
                     brokenMaterialsCountCallbacks = [];
                     localStorage.setItem("brokenMaterialsCount", data);
                 }
             }
+
             function getDeletedMaterialsCountSuccess(data) {
                 if (!isEmpty(data)) {
-                    deletedMaterialsCountCallbacks.forEach(function(callback) {
+                    deletedMaterialsCountCallbacks.forEach(function (callback) {
                         callback(data);
                     });
                     deletedMaterialsCountCallbacks = [];
                     localStorage.setItem("deletedMaterialsCount", data);
                 }
             }
+
             function getDeletedPortfoliosCountSuccess(data) {
                 if (!isEmpty(data)) {
-                    deletedPortfoliosCountCallbacks.forEach(function(callback) {
+                    deletedPortfoliosCountCallbacks.forEach(function (callback) {
                         callback(data);
                     });
                     deletedPortfoliosCountCallbacks = [];
                     localStorage.setItem("deletedPortfoliosCount", data);
                 }
             }
+
             // Improper items
             function getImproperItemsSuccess(data) {
                 if (!isEmpty(data)) {
                     IMPROPER_ITEMS = data;
-                    improperItemsCallbacks.forEach(function(callback) {
+                    improperItemsCallbacks.forEach(function (callback) {
                         callback(data);
                     });
                 }
             }
+
             function getFavoritesCountSuccess(data) {
                 if (!isEmpty(data)) {
-                    userFavoritesCountCallbacks.forEach(function(callback) {
+                    userFavoritesCountCallbacks.forEach(function (callback) {
                         callback(data);
                     });
                     userFavoritesCountCallbacks = [];
                     localStorage.setItem("userFavoritesCount", data);
                 }
             }
+
             function getUsersMaterialsCountSuccess(data) {
                 if (!isEmpty(data)) {
-                    userMaterialsCountCallbacks.forEach(function(callback) {
+                    userMaterialsCountCallbacks.forEach(function (callback) {
                         callback(data);
                     });
                     userMaterialsCountCallbacks = [];
                     localStorage.setItem("userMaterialsCount", data);
                 }
             }
+
             function getUsersPortfoliosCountSuccess(data) {
                 if (!isEmpty(data)) {
-                    userPortfoliosCountCallbacks.forEach(function(callback) {
+                    userPortfoliosCountCallbacks.forEach(function (callback) {
                         callback(data);
                     });
                     userPortfoliosCountCallbacks = [];
@@ -107,58 +111,64 @@ define([
             }
 
 
-
             instance = {
-                loadBrokenMaterialsCount: function(callback) {
+                loadBrokenMaterialsCount: function (callback) {
                     var data = localStorage.getItem("brokenMaterialsCount");
                     if (data) {
                         callback(data);
                     }
                     brokenMaterialsCountCallbacks.push(callback);
+                    serverCallService.makeGet("rest/material/getBroken/count", {}, getBrokenMaterialsCountSuccess, getItemsFail);
                 },
-                loadDeletedMaterialsCount: function(callback) {
+                loadDeletedMaterialsCount: function (callback) {
                     var data = localStorage.getItem("deletedMaterialsCount");
                     if (data) {
                         callback(data);
                     }
                     deletedMaterialsCountCallbacks.push(callback);
+                    serverCallService.makeGet("rest/material/getDeleted/count", {}, getDeletedMaterialsCountSuccess, getItemsFail);
+
                 },
-                loadDeletedPortfoliosCount: function(callback) {
+                loadDeletedPortfoliosCount: function (callback) {
                     var data = localStorage.getItem("deletedPortfoliosCount");
                     if (data) {
                         callback(data);
                     }
                     deletedPortfoliosCountCallbacks.push(callback);
+                    serverCallService.makeGet("rest/portfolio/getDeleted/count", {}, getDeletedPortfoliosCountSuccess, getItemsFail);
                 },
 
                 // Improper items
-                loadImproperItems: function(callback) {
+                loadImproperItems: function (callback) {
                     if (IMPROPER_ITEMS) {
                         callback(IMPROPER_ITEMS);
                     } else {
                         improperItemsCallbacks.push(callback);
                     }
                 },
-                loadUserFavoritesCount: function(callback) {
+                loadUserFavoritesCount: function (callback) {
                     var data = localStorage.getItem("userFavoritesCount");
                     if (data) {
                         callback(data);
                     }
                     userFavoritesCountCallbacks.push(callback);
+                    serverCallService.makeGet("rest/learningObject/usersFavorite/count", {}, getFavoritesCountSuccess, getItemsFail);
                 },
-                loadUserMaterialsCount: function(callback) {
+                loadUserMaterialsCount: function (callback) {
                     var data = localStorage.getItem("userMaterialsCount");
                     if (data) {
                         callback(data);
                     }
                     userFavoritesCountCallbacks.push(callback);
+                    serverCallService.makeGet("rest/material/getByCreator/count", params, getUsersMaterialsCountSuccess, getItemsFail);
                 },
-                loadUserPortfoliosCount: function(callback) {
+                loadUserPortfoliosCount: function (callback) {
                     var data = localStorage.getItem("userPortfoliosCount");
                     if (data) {
                         callback(data);
                     }
                     userPortfoliosCountCallbacks.push(callback);
+                    serverCallService.makeGet("rest/portfolio/getByCreator/count", params, getUsersPortfoliosCountSuccess, getItemsFail);
                 },
 
             };

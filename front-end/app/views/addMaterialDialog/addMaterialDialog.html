@@ -82,9 +82,11 @@
                              data-ng-show="isURLInvalid()"
                              data-translate="MATERIAL_URL_IS_INVALID"></div>
 
-                        <div data-ng-message
-                             data-ng-show="addMaterialForm.source.$error.exists"
-                             data-translate="MATERIAL_ALREADY_EXISTS"></div>
+                        <div data-ng-message data-ng-show="addMaterialForm.source.$error.exists">
+                          <span data-translate="MATERIAL_ALREADY_EXISTS"></span>
+                          <a target="_blank" data-ng-href="{{'/material?materialId=' + existingMaterial.id}}"
+                             data-translate="LOOK_AT_EXISTNG_MATERIAL"> </a>
+                        </div>
                         <div data-ng-message
                              data-ng-show="addMaterialForm.source.$error.deleted"
                              data-translate="MATERIAL_WITH_SAME_SOURCE_IS_DELETED"></div>
@@ -372,7 +374,8 @@
 
               <!-- Review -->
 
-              <div layout="row" layout-align="space-between center" flex data-ng-repeat="peerReview in material.peerReviews">
+              <div layout="row" layout-align="space-between center" flex
+                   data-ng-repeat="peerReview in material.peerReviews">
                 <md-input-container flex ng-show="!peerReview.uploading && !peerReview.uploaded">
                   <label ng-show="!peerReview.uploading && !peerReview.uploaded">
                     <span data-translate="MATERIAL_PEER_REVIEW"></span>
@@ -418,7 +421,8 @@
                 <md-button class="md-icon-button md-primary" data-ng-show="$index+1 === material.peerReviews.length"
                            data-ng-click="addNewPeerReview()">
                   <md-icon>add_circle</md-icon>
-                  <md-tooltip md-direction="top"><span data-translate="MATERIAL_TAB_NEW_PEER_REVIEW"></span></md-tooltip>
+                  <md-tooltip md-direction="top"><span data-translate="MATERIAL_TAB_NEW_PEER_REVIEW"></span>
+                  </md-tooltip>
                 </md-button>
                 <md-button class="md-icon-button" data-ng-show="material.peerReviews.length > 1"
                            data-ng-click="deletePeerReview($index)">
@@ -441,7 +445,8 @@
                     <span data-translate="MATERIAL_PUBLISHER"></span>
                     <span data-ng-hide="material.authors[0].name && material.authors[0].surname">*</span>
                   </label>
-                  <input name="publisher" id="material-peerReview-{{$index}}" data-ng-model="material.publishers[0].name" ng-disabled="creatorIsPublisher"
+                  <input name="publisher" id="material-peerReview-{{$index}}"
+                         data-ng-model="material.publishers[0].name" ng-disabled="creatorIsPublisher"
                          md-maxlength="50" maxlength="50">
                   <div data-ng-messages="addMaterialForm.publisher.$error"
                        data-ng-show="!isAuthorOrPublisherSet() && (addMaterialForm.publisher.$touched || addMaterialForm.$submitted)">
