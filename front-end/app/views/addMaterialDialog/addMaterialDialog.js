@@ -445,6 +445,7 @@ define([
                     } else {
                         $scope.addMaterialForm.source.$setTouched();
                         $scope.addMaterialForm.source.$setValidity("exists", false);
+                        $scope.existingMaterial = materials[0];
                     }
                 }
             }

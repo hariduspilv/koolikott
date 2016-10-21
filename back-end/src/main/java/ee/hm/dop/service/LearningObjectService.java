@@ -116,8 +116,7 @@ public class LearningObjectService {
     }
 
     public UserFavorite hasFavorited(Long id, User loggedInUser) {
-        LearningObject learningObject = learningObjectDAO.findById(id);
-        return userFavoriteDAO.findFavoriteByUserAndLearningObject(learningObject, loggedInUser);
+        return userFavoriteDAO.findFavoriteByUserAndLearningObject(id, loggedInUser);
     }
 
     public List<LearningObject> getUserFavorites(User loggedInUser) {
