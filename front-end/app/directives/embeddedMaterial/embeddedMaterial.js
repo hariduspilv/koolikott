@@ -103,6 +103,7 @@ define([
                         if (res && res.data.html) {
                             $scope.embeddedDataIframe = null;
                             $scope.embeddedData = null;
+                            $scope.sourceType = 'NOEMBED';
 
                             if (res.data.html.contains("<iframe")) {
                                 $scope.embeddedDataIframe = res.data.html.replace("http:", "");
