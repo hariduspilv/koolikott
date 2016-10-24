@@ -100,8 +100,10 @@ define([
                     $rootScope.learningObjectImproper = ($scope.portfolio.improper > 0) ? true : false;
                     $rootScope.learningObjectDeleted = ($scope.portfolio.deleted == true) ? true : false;
 
-                    if($scope.portfolio.improper > 0) {
-                        serverCallService.makeGet("rest/impropers", {}, sortImpropers, getItemsFail);
+                    if(authenticatedUserService.isAdmin() || authenticatedUserService.isModerator()) {
+                        if($scope.portfolio.improper > 0) {
+                            serverCallService.makeGet("rest/impropers", {}, sortImpropers, getItemsFail);
+                        }
                     }
                 }
             }

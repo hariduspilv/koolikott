@@ -124,8 +124,10 @@ define([
                 $rootScope.learningObjectImproper = ($scope.material.improper > 0);
                 $rootScope.learningObjectDeleted = ($scope.material.deleted == true);
 
-                if ($scope.material.improper > 0) {
-                    serverCallService.makeGet("rest/impropers", {}, sortImpropers, getItemsFail);
+                if(authenticatedUserService.isAdmin() || authenticatedUserService.isModerator()) {
+                    if ($scope.material.improper > 0) {
+                        serverCallService.makeGet("rest/impropers", {}, sortImpropers, getItemsFail);
+                    }
                 }
 
                 var viewCountParams = {

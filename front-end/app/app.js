@@ -287,7 +287,7 @@ define([
             }
 
 
-            if(path === '/material' || path === '/' || ($location.url().indexOf("/search") != -1) || !$rootScope.isEditPortfolioPage || !$rootScope.isViewPortforlioPage) {
+            if((path === '/material' || path === '/' || ($location.url().indexOf("/search") != -1)) && (!$rootScope.isEditPortfolioPage || !$rootScope.isViewPortforlioPage)) {
                 $rootScope.isTaxonomyOpen = true;
             } else {
                 $rootScope.isTaxonomyOpen = false;
