@@ -17,8 +17,6 @@ define([
 
     angularAMD.factory('userDataService', ['serverCallService', 'authenticatedUserService',
         function (serverCallService, authenticatedUserService) {
-            var params;
-            if (authenticatedUserService.isAuthenticated()) params = {'username': authenticatedUserService.getUser().username};
             init();
 
             function init() {
@@ -31,9 +29,13 @@ define([
                 }
                 if (authenticatedUserService.isAuthenticated()) {
                     serverCallService.makeGet("rest/learningObject/usersFavorite/count", {}, getFavoritesCountSuccess, getItemsFail);
-                    serverCallService.makeGet("rest/material/getByCreator/count", params, getUsersMaterialsCountSuccess, getItemsFail);
-                    serverCallService.makeGet("rest/portfolio/getByCreator/count", params, getUsersPortfoliosCountSuccess, getItemsFail);
+                    serverCallService.makeGet("rest/material/getByCreator/count", getUsername(), getUsersMaterialsCountSuccess, getItemsFail);
+                    serverCallService.makeGet("rest/portfolio/getByCreator/count", getUsername(), getUsersPortfoliosCountSuccess, getItemsFail);
                 }
+            }
+
+            function getUsername() {
+                if (authenticatedUserService.isAuthenticated()) return {'username': authenticatedUserService.getUser().username};
             }
 
             function getItemsFail() {
@@ -178,7 +180,7 @@ define([
                         callback(data);
                     }
                     userMaterialsCountCallbacks.push(callback);
-                    serverCallService.makeGet("rest/material/getByCreator/count", params, getUsersMaterialsCountSuccess, getItemsFail);
+                    serverCallService.makeGet("rest/material/getByCreator/count", getUsername(), getUsersMaterialsCountSuccess, getItemsFail);
                 },
                 loadUserPortfoliosCount: function (callback) {
                     var data = localStorage.getItem("userPortfoliosCount");
@@ -186,7 +188,7 @@ define([
                         callback(data);
                     }
                     userPortfoliosCountCallbacks.push(callback);
-                    serverCallService.makeGet("rest/portfolio/getByCreator/count", params, getUsersPortfoliosCountSuccess, getItemsFail);
+                    serverCallService.makeGet("rest/portfolio/getByCreator/count", getUsername(), getUsersPortfoliosCountSuccess, getItemsFail);
                 }
 
             };
