@@ -262,3 +262,7 @@ md-sidenav._md-locked-open, md-sidenav._md-locked-open._md-closed, md-sidenav._m
 .md-sidenav-backdrop {
   opacity: 0 !important;
 }
+
+.top-divider {
+  border-top: 1px solid rgba(0, 0, 0, 0.12);
+}
