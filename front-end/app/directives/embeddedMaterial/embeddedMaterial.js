@@ -72,7 +72,6 @@ define([
                         } else if (isSlideshareLink($scope.material.source)) {
                             $scope.sourceType = 'SLIDESHARE';
                         } else {
-                            $scope.sourceType = 'LINK';
                             embedService.getEmbed(getSource($scope.material), embedCallback);
                         }
                     }
