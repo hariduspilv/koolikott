@@ -64,9 +64,6 @@ public class SynchronizeMaterialsExecutor {
         solrEngineService.updateIndex();
     }
 
-
-
-
     public synchronized void scheduleExecution(int hourOfDayToExecute) {
         if (synchronizeMaterialHandle != null) {
             logger.info("Synchronize Materials Executor already started.");
@@ -83,6 +80,8 @@ public class SynchronizeMaterialsExecutor {
                 } catch (Exception e) {
                     logger.error("Unexpected error while scheduling sync.", e);
                 }
+
+                logger.info("Finished new material synchronization process.");
             }
         };
 
@@ -92,7 +91,7 @@ public class SynchronizeMaterialsExecutor {
 
         logger.info("Scheduling Synchronization repository service first execution to "
                 + now().plusMillis((int) initialDelay));
-        synchronizeMaterialHandle = scheduler.scheduleAtFixedRate(executor, 0, 1000*60*60, MILLISECONDS);
+        synchronizeMaterialHandle = scheduler.scheduleAtFixedRate(executor, initialDelay, period, MILLISECONDS);
     }
 
     public synchronized void stop() {

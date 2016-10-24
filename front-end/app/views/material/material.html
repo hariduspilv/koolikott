@@ -96,7 +96,8 @@
                 <span class="hide-overflow" data-ng-repeat="domain in getMaterialDomains()">
                   {{'DOMAIN_' + domain.name.toUpperCase() | translate}}{{$last ? '' : ', '}}
                 </span>
-                <span class="hide-overflow" data-ng-if="!getMaterialDomains().length" data-translate="UNKNOWN">Unknown</span>
+                <span class="hide-overflow" data-ng-if="!getMaterialDomains().length"
+                      data-translate="UNKNOWN">Unknown</span>
               </p>
             </div>
             <div flex data-ng-if="material.subjects.length">
@@ -144,9 +145,11 @@
           <div class="on-left">
             <div class="md-body-1 description textangular-view"
                  data-ng-bind-html="getCorrectLanguageString(material.descriptions)"></div>
-            <div data-dop-embedded-material
-                 material="material" data-flex></div>
 
+            <!--Embedded Material-->
+            <div data-ng-if="sourceType !== 'LINK' || !material.embeddable" data-dop-embedded-material data-material="material" data-flex></div>
+
+            <!--Fullscreen material-->
             <div data-ng-if="sourceType === 'LINK' && material.embeddable">
               <a data-ng-href="#" ng-click="showSourceFullscreen($event)">
                 <span class="item-link" data-ng-bind="material.source"></span>
