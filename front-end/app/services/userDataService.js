@@ -92,33 +92,30 @@ define([
             }
 
             function getFavoritesCountSuccess(data) {
-                if (!isEmpty(data)) {
-                    userFavoritesCountCallbacks.forEach(function (callback) {
-                        callback(data);
-                    });
-                    userFavoritesCountCallbacks = [];
-                    localStorage.setItem("userFavoritesCount", data);
-                }
+                userFavoritesCountCallbacks.forEach(function (callback) {
+                    callback(data);
+                });
+                userFavoritesCountCallbacks = [];
+                localStorage.setItem("userFavoritesCount", data);
+
             }
 
             function getUsersMaterialsCountSuccess(data) {
-                if (!isEmpty(data)) {
-                    userMaterialsCountCallbacks.forEach(function (callback) {
-                        callback(data);
-                    });
-                    userMaterialsCountCallbacks = [];
-                    localStorage.setItem("userMaterialsCount", data);
-                }
+                userMaterialsCountCallbacks.forEach(function (callback) {
+                    callback(data);
+                });
+                userMaterialsCountCallbacks = [];
+                localStorage.setItem("userMaterialsCount", data);
+
             }
 
             function getUsersPortfoliosCountSuccess(data) {
-                if (!isEmpty(data)) {
-                    userPortfoliosCountCallbacks.forEach(function (callback) {
-                        callback(data);
-                    });
-                    userPortfoliosCountCallbacks = [];
-                    localStorage.setItem("userPortfoliosCount", data);
-                }
+                userPortfoliosCountCallbacks.forEach(function (callback) {
+                    callback(data);
+                });
+                userPortfoliosCountCallbacks = [];
+                localStorage.setItem("userPortfoliosCount", data);
+
             }
 
 
