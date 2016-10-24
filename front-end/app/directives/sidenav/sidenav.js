@@ -142,6 +142,10 @@ define([
                     }
                 };
 
+                $scope.isAuthenticated = function () {
+                    return authenticatedUserService.isAuthenticated();
+                };
+
                 $scope.updateAdminCounts = function () {
                     $scope.updateBrokenMaterialsCount();
                     $scope.updateDeletedMaterialsCount();

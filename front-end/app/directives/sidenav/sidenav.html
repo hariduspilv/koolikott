@@ -32,7 +32,7 @@
               <div flex layout="row">
                 <md-icon class="material-icons">book</md-icon>
                 <span data-translate="MY_PORTFOLIOS"></span>
-                <span class="count" ng-bind="portfolios"></span>
+                <span data-ng-if="isAuthenticated()" class="count" ng-bind="portfolios"></span>
               </div>
             </md-button>
           </a>
@@ -43,7 +43,7 @@
               <div flex layout="row">
                 <md-icon class="material-icons">description</md-icon>
                 <span data-translate="MY_MATERIALS"></span>
-                <span class="count" ng-bind="materials"></span>
+                <span data-ng-if="isAuthenticated()" class="count" ng-bind="materials"></span>
               </div>
             </md-button>
           </a>
@@ -54,7 +54,7 @@
               <div flex layout="row">
                 <md-icon class="material-icons">star</md-icon>
                 <span data-translate="MY_FAVORITES"></span>
-                <span class="count" ng-bind="favorites"></span>
+                <span data-ng-if="isAuthenticated()" class="count" ng-bind="favorites"></span>
               </div>
             </md-button>
           </a>
