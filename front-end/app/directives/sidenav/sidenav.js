@@ -22,10 +22,6 @@ define([
                     'palette'
                 ];
 
-                function init() {
-                    $scope.updateUserCounts();
-                }
-
                 $scope.$watch(function () {
                     return $location.url();
                 }, function () {
@@ -153,8 +149,6 @@ define([
                     $scope.updateImproperMaterialsCount();
                     $scope.updateImproperPortfoliosCount();
                 };
-
-                init();
             }
         }
     }]);

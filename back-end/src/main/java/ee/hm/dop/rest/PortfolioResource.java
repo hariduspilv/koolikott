@@ -42,25 +42,14 @@ public class PortfolioResource extends BaseResource {
     @Path("getByCreator")
     @Produces(MediaType.APPLICATION_JSON)
     public List<Portfolio> getByCreator(@QueryParam("username") String username) {
-        if (isBlank(username)) {
-            throwBadRequestException("Username parameter is mandatory");
-        }
-
-        User creator = userService.getUserByUsername(username);
-        if (creator == null) {
-            throwBadRequestException("Invalid request");
-        }
-
-        User loggedInUser = getLoggedInUser();
-
-        return portfolioService.getByCreator(creator, loggedInUser);
+        return getPortfoliosByUser(username);
     }
 
     @GET
     @Path("getByCreator/count")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getByCreatorCount(@QueryParam("username") String username) {
-        return Response.ok(getByCreator(username).size()).build();
+        return Response.ok(getPortfoliosByUser(username).size()).build();
     }
 
     @POST
@@ -166,5 +155,20 @@ public class PortfolioResource extends BaseResource {
     @RolesAllowed({"ADMIN", "MODERATOR"})
     public Response getDeletedPortfoliosCount() {
         return Response.ok(portfolioService.getDeletedPortfolios().size()).build();
+    }
+
+    private List<Portfolio> getPortfoliosByUser(String username) {
+        if (isBlank(username)) {
+            throwBadRequestException("Username parameter is mandatory");
+        }
+
+        User creator = userService.getUserByUsername(username);
+        if (creator == null) {
+            throwBadRequestException("Invalid request");
+        }
+
+        User loggedInUser = getLoggedInUser();
+
+        return portfolioService.getByCreator(creator, loggedInUser);
     }
 }
