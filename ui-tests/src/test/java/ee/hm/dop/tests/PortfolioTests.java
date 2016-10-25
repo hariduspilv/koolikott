@@ -18,10 +18,10 @@ public class PortfolioTests {
 	public void createPortfolio() {
 
 		String tagText = goToLandingPage()
-				.chooseUserType("User")
+				.chooseUserType("SmallPublisher")
 				.clickAddPortfolio()
 				.insertPortfolioTitle()
-				.uploadPhoto()
+				//.uploadPhoto()
 				.addDescription()
 				.selectEducationalContext()
 				.selectSubjectArea()
@@ -42,7 +42,7 @@ public class PortfolioTests {
 				.clickAddPortfolio()
 				.insertPortfolioTitle()
 				.addDescription()
-				.uploadPhoto()
+				//.uploadPhoto()
 				.selectEducationalContext()
 				.selectSubjectArea()
 				.selectAgeGroup()
@@ -92,8 +92,8 @@ public class PortfolioTests {
 				.logOff()
 				.chooseUserType("Admin")
 				.getLeftMenu()
-				.checkLeftMenuButtons()
-				.clickDashboard()
+				//.checkLeftMenuButtons()
+				.clickMyThings()
 				.clickImproperPortfolios()
 				.getDashboardPage()
 				.clickToOrderImproperPortfolios()
@@ -126,21 +126,44 @@ public class PortfolioTests {
 
 	}
 	
+	@Test
+	public void addMaterialToFavoritesAndRemoveFromFavorites() {
+
+		boolean starIsSelected = goToLandingPage()
+				.chooseUserType("Moderator")
+				.clickToSelectStar()
+				.openPortfolio()
+				.starIsSelected();
+
+		assertTrue(starIsSelected);
+		
+		boolean starIsUnselected = goToLandingPage()
+				.chooseUserType("Moderator")
+				.openPortfolio()
+				.unselectStar()
+				.starIsUnselected();
+
+		assertTrue(starIsUnselected);
+
+	}
+	
 	
 	@Test
 	public void portfolioIsAddedToRecommendations() {
 
 		boolean removeFromRecommendationListIsDisplayed = goToLandingPage()
-				.chooseUserType("User")
+				.chooseUserType("SmallPublisher")
 				.clickAddPortfolio()
 				.insertPortfolioTitle()
 				.addDescription()
-				.uploadPhoto()
+				//.uploadPhoto()
 				.selectEducationalContext()
 				.selectSubjectArea()
 				.selectAgeGroup()
 				.insertTagAndEnter1()
 				.clickCreatePortfolioButton()
+				.clickVisibilityButton()
+				.selectMakePublic()
 				.clickExitAndSave()
 				.getUserMenu()
 				.logOff()

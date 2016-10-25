@@ -31,7 +31,8 @@ public class LoginDialogPopup extends PageComponent {
     }
     
     public LoginDialogPopup insertMobilePhoneNumber(String mobilePhoneNumber) {
-        getDriver().findElement(mobilePhoneNumberField).sendKeys(mobilePhoneNumber);
+        PageHelpers.waitForVisibility(mobilePhoneNumberField);
+    	getDriver().findElement(mobilePhoneNumberField).sendKeys(mobilePhoneNumber);
         return this;
     }
     

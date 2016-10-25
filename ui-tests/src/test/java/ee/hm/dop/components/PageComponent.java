@@ -36,4 +36,16 @@ public abstract class PageComponent extends SeleniumUser {
 	public MyProfilePage getMyProfilePage() {
 		return myProfilePage;
 	}
+	
+	private static final Header header = new Header();
+
+	public Header getHeader() {
+		return header;
+	}
+	
+	private static final LoginDialogPopup loginDialogPopup = new LoginDialogPopup();
+
+	public LoginDialogPopup getLoginDialogPopup() {
+		return loginDialogPopup;
+	}
 }

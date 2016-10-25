@@ -13,5 +13,6 @@ public class StuudiumConfirmationPage extends Page {
         PageHelpers.waitForSeconds(1500);
         return new LandingPage();
     }
+	
 
 }

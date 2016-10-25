@@ -4,7 +4,6 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import ee.hm.dop.components.AddMaterialMainPart;
-import ee.hm.dop.components.ChooseExistingPortfolioModal;
 import ee.hm.dop.components.AddPortfolioBasic;
 import ee.hm.dop.helpers.PageHelpers;
 
@@ -16,10 +15,8 @@ public class MyProfilePage extends Page {
 	private By addedMaterial = By.xpath("//h4[@data-ng-bind='getCorrectLanguageTitle(material)']");
 	private By addedPortfolio = By.xpath("//h4[@data-ng-bind='portfolio.title']");
 	private By fabButton = By.id("add-portfolio");
-	private By selectMaterial = By.xpath("//div/md-icon[text()='radio_button_unchecked']");
-	private By selectMaterial1 = By.xpath("//div/md-icon[text()='check_circle']");
-	private By starIcon = By.xpath("//div/md-icon[text()='star_outline']");
-	private By addMaterialToExistingPortfolio = By.xpath("//button[@data-ng-click='showAddMaterialsToPortfolioDialog()']");
+	private By selectPortfolio = By.xpath("//div[@data-learning-object='portfolio']");
+	private By starIcon = By.xpath("//div[@aria-label='Lisa lemmikuks']");
 	private By materialMessage = By.cssSelector("div.md-toast-content");
 	private By deletedPortfolioToast = By.cssSelector("span.md-toast-text");
 
@@ -51,35 +48,13 @@ public class MyProfilePage extends Page {
 	
 
 	
-	public MyProfilePage moveCursorToAddMaterialToExistingPortfolio() {
-		Actions builder = new Actions(getDriver());
-		WebElement addMaterialToPortfolio = getDriver().findElement(fabButton);
-		builder.moveToElement(addMaterialToPortfolio).perform();
-		PageHelpers.waitForVisibility(addMaterialToExistingPortfolio);
-		return this;
-	}
-	
-	public MyProfilePage clickToSelectMaterial() {
-		PageHelpers.waitForSeconds(2500);
-		Actions builder = new Actions(getDriver());
-		WebElement selectMaterialElement = getDriver().findElement(selectMaterial);
-		builder.moveToElement(selectMaterialElement).perform();
-		getDriver().findElement(selectMaterial1).click();
-		return this;
-	}
-	
 	public MyProfilePage clickToSelectStar() {
 		PageHelpers.waitForSeconds(3500);
 		Actions builder = new Actions(getDriver());
-		WebElement selectMaterialElement = getDriver().findElement(selectMaterial);
+		WebElement selectMaterialElement = getDriver().findElement(selectPortfolio);
 		builder.moveToElement(selectMaterialElement).perform();
 		getDriver().findElement(starIcon).click();
 		return this;
-	}
-	
-	public ChooseExistingPortfolioModal clickToAddMaterialToExistingPortfolio() {
-		getDriver().findElement(addMaterialToExistingPortfolio).click();
-		return new ChooseExistingPortfolioModal();
 	}
 	
 
@@ -89,6 +64,7 @@ public class MyProfilePage extends Page {
 	}
 
 	public AddPortfolioBasic clickAddPortfolio() {
+		PageHelpers.waitForSeconds(1500);
 		PageHelpers.waitForVisibility(fabButton);
 		getDriver().findElement(fabButton).click();
 		return new AddPortfolioBasic();

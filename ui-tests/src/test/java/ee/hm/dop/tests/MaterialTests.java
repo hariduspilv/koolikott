@@ -36,6 +36,36 @@ public class MaterialTests {
 	}
 	
 	@Test
+	public void checkIfMaterialIsDeleted() {
+
+		String validationError = goToLandingPage()
+				.chooseUserType("SmallPublisher")
+				.moveCursorToAddPortfolio()
+				.moveCursorToAddMaterial()
+				.clickAddMaterial()
+				.insertDeletedMaterialUrl()
+				.getValidationError();
+
+		Assert.assertEquals("Selline link on kustutatud materjalide nimekirjas", validationError);
+
+	}
+	
+	@Test
+	public void checkIfMaterialExists() {
+
+		String existingMaterial = goToLandingPage()
+				.chooseUserType("SmallPublisher")
+				.moveCursorToAddPortfolio()
+				.moveCursorToAddMaterial()
+				.clickAddMaterial()
+				.insertExistingMaterialUrl()
+				.getExistingMaterialValidationError();
+
+		Assert.assertEquals("Selline materjal on juba olemas", existingMaterial);
+
+	}
+	
+	@Test
 	public void createMaterialThroughPortfolioAsAdmin() {
 
 		boolean isMaterialBoxIsDisplayed = goToLandingPage()
@@ -76,10 +106,13 @@ public class MaterialTests {
 
 		boolean materialIsDisplayed = goToLandingPage()
 				.chooseUserType("SmallPublisher")
+				.getLeftMenu()
+				.clickMyMaterials()
 				.clickToSelectMaterial()
 				.clickAddPortfolio()
 				.insertPortfolioTitle()
 				//.uploadPhoto()
+				.addDescription()
 				.selectEducationalContext()
 				.selectSubjectArea()
 				.selectAgeGroup()
@@ -96,6 +129,8 @@ public class MaterialTests {
 
 		boolean successMessage = goToLandingPage()
 				.chooseUserType("SmallPublisher")
+				.getLeftMenu()
+				.clickMyMaterials()
 				.clickToSelectMaterial()
 				.moveCursorToAddMaterialToExistingPortfolio()
 				.clickToAddMaterialToExistingPortfolio()
@@ -112,7 +147,9 @@ public class MaterialTests {
 
 		String likesNumber = goToLandingPage()
 				.chooseUserType("SmallPublisher")
-				.openMaterialPage()
+				.getLeftMenu()
+				.clickMyMaterials()
+				.openSearchResultMaterial()
 				.likeMaterial()
 				.getLikesNumber();
 
@@ -125,7 +162,9 @@ public class MaterialTests {
 
 		String tagText = goToLandingPage()
 				.chooseUserType("SmallPublisher")
-				.openMaterialPage()
+				.getLeftMenu()
+				.clickMyMaterials()
+				.openSearchResultMaterial()
 				.selectActionFromMenu()
 				.clickEditMaterial()
 				.clickNextStep()
@@ -137,12 +176,38 @@ public class MaterialTests {
 
 	}
 	
+	/*@Test
+	public void editMaterialDescription() {
+
+		String tagText = goToLandingPage()
+				.chooseUserType("SmallPublisher")
+				.getLeftMenu()
+				.clickMyMaterials()
+				.openSearchResultMaterial()
+				.selectActionFromMenu()
+				.clickEditMaterial()
+				.clickToSelectDescription()
+				//.clickToSelectBold()
+				.clickToSelectItalic()
+				.clickToSelectUl()
+				.clickToSelectUl()
+				.clickToSelectPre()
+				.clickToInsertLink()
+				.clickToRefreshMaterial()
+				.getTagText();
+
+		Assert.assertEquals("1", tagText);
+
+	}*/
+	
 	@Test
 	public void showMoreButtonIsDisplayed() {
 
 		boolean showMoreButtonIsDisplayed = goToLandingPage()
 				.chooseUserType("SmallPublisher")
-				.openMaterialPage()
+				.getLeftMenu()
+				.clickMyMaterials()
+				.openSearchResultMaterial()
 				.insertTags()
 				.showMoreButtonIsDisplayed();
 				
@@ -151,26 +216,7 @@ public class MaterialTests {
 
 	}
 	
-	@Test
-	public void addMaterialToFavoritesAndRemoveFromFavorites() {
 
-		boolean starIsSelected = goToLandingPage()
-				.chooseUserType("Moderator")
-				.clickToSelectStar()
-				.openMaterialPage()
-				.starIsSelected();
-
-		assertTrue(starIsSelected);
-		
-		boolean starIsUnselected = goToLandingPage()
-				.chooseUserType("Moderator")
-				.openMaterialPage()
-				.unselectStar()
-				.starIsUnselected();
-
-		assertTrue(starIsUnselected);
-
-	}
 
 	
 

@@ -19,10 +19,13 @@ public class PortfolioPage extends Page {
 	private By recommendationList = By.xpath("//button[@data-ng-click='recommend()']");
 	private By removeFromRecommendations = By.xpath("//button[@data-ng-click='removeRecommendation()']");
 	private By fabButton = By.xpath("//md-fab-trigger");
+	private By unselectedStar = By.cssSelector("div.md-icon-button.md-button > md-icon.material-icons");
+	private By selectedStar = By.cssSelector("md-icon.gold.material-icons");
 	private By copyPortfolioButton = By.xpath("//button[@data-ng-click='copyPortfolio()']");
 	private By portfolioTitle = By.xpath("//h1[@data-ng-bind='portfolio.title']");
+	private By addPortfolioMessage = By.cssSelector("h3");
 	private By creatorName = By.xpath("//p[@data-ng-if='isNullOrZeroLength(material.authors)']");
-	private By materialBox = By.cssSelector("span.md-subhead.ellipsisText");
+	private By materialBox = By.cssSelector("md-card-content.portfolio-noedit-item.layout-row");
 	private By notImproperContentDisabled = By.cssSelector("button[data-ng-click='setNotImproper()'][aria-disabled='true']");
 			//By.xpath("//button[contains(@data-ng-click, 'setNotImproper()')][contains(@aria-disabled,'true')]");
 
@@ -38,6 +41,12 @@ public class PortfolioPage extends Page {
 		Actions builder = new Actions(getDriver());
 		WebElement copyPortfolio = getDriver().findElement(fabButton);
 		builder.moveToElement(copyPortfolio).perform();
+		return this;
+	}
+	
+	public PortfolioPage unselectStar() {
+		PageHelpers.waitForVisibility(selectedStar);
+		getDriver().findElement(selectedStar).click();
 		return this;
 	}
 
@@ -94,10 +103,26 @@ public class PortfolioPage extends Page {
 
 	}
 	
+	public boolean starIsSelected() {
+		PageHelpers.waitForVisibility(selectedStar);
+		return getDriver().findElement(selectedStar).isDisplayed();
+
+	}
+	
+	public boolean starIsUnselected() {
+		return getDriver().findElement(unselectedStar).isDisplayed();
+
+	}
+	
 
 	public String getTagText() {
-		getDriver().navigate().refresh();
 		return getDriver().findElement(addedTag).getText();
+
+	}
+	
+	public boolean getAddPortfolioMessageText() {
+		PageHelpers.waitForVisibility(addPortfolioMessage);
+		return getDriver().findElement(addPortfolioMessage).getText().contains("Kogumiku lisamiseks");
 
 	}
 

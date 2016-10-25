@@ -60,6 +60,7 @@ public class LandingPage extends Page {
 	}
 	
 	public MaterialPage openSearchResultMaterial() {
+		PageHelpers.waitForSeconds(2000);
 		PageHelpers.waitForVisibility(searchResultMaterial);
 		getDriver().findElement(searchResultMaterial).click();
 		PageHelpers.waitForSeconds(1500);

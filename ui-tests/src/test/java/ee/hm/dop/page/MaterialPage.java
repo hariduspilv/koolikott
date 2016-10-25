@@ -4,6 +4,11 @@ import java.util.Random;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.interactions.Actions;
+
+import ee.hm.dop.components.AddPortfolioBasic;
+import ee.hm.dop.components.ChooseExistingPortfolioModal;
 import ee.hm.dop.components.EditMaterialMainPart;
 import ee.hm.dop.helpers.PageHelpers;
 
@@ -17,8 +22,11 @@ public class MaterialPage extends Page {
 	private By likeIcon = By.cssSelector("div.rating-button.md-caption > md-icon.material-icons");
 	private By isLiked = By.cssSelector("div.rating-button.md-caption > span");
 	private By tagRow = By.name("tag");
-	private By unselectedStar = By.cssSelector("div.md-icon-button.md-button > md-icon.material-icons");
-	private By selectedStar = By.cssSelector("md-icon.gold.material-icons");
+	private By fabButton = By.id("add-portfolio");
+	private By addMaterialToExistingPortfolio = By.xpath("//button[@data-ng-click='showAddMaterialsToPortfolioDialog()']");
+	private By materialBox = By.xpath("//div/md-icon[text()='radio_button_unchecked']");
+	private By selectMaterial1 = By.xpath("//div/md-icon[text()='check_circle']");
+	private By searchResultMaterial = By.xpath("//h4[@data-ng-bind='getCorrectLanguageTitle(material)']");
 	private By showMoreButton = By.xpath("//button[@ng-click='showMore()']");
 	private By materialDescription = By.xpath("//div[@data-ng-bind-html='getCorrectLanguageString(material.descriptions)']");
 	private By materialType = By.xpath("//md-card[@id='material-card']/md-card-content/div/div/div[2]/div[3]/p/span");
@@ -45,6 +53,44 @@ public class MaterialPage extends Page {
 		}
 		return this;
 	}
+	
+	public MaterialPage moveCursorToAddMaterialToExistingPortfolio() {
+		Actions builder = new Actions(getDriver());
+		WebElement addMaterialToPortfolio = getDriver().findElement(fabButton);
+		builder.moveToElement(addMaterialToPortfolio).perform();
+		PageHelpers.waitForVisibility(addMaterialToExistingPortfolio);
+		return this;
+	}
+	
+	public ChooseExistingPortfolioModal clickToAddMaterialToExistingPortfolio() {
+		getDriver().findElement(addMaterialToExistingPortfolio).click();
+		return new ChooseExistingPortfolioModal();
+	}
+	
+	public AddPortfolioBasic clickAddPortfolio() {
+		PageHelpers.waitForSeconds(1500);
+		PageHelpers.waitForVisibility(fabButton);
+		getDriver().findElement(fabButton).click();
+		return new AddPortfolioBasic();
+	}
+	
+	public MaterialPage openSearchResultMaterial() {
+		PageHelpers.waitForSeconds(2000);
+		PageHelpers.waitForVisibility(searchResultMaterial);
+		getDriver().findElement(searchResultMaterial).click();
+		PageHelpers.waitForSeconds(1500);
+		return new MaterialPage();
+
+	}
+	
+	public MaterialPage clickToSelectMaterial() {
+		PageHelpers.waitForSeconds(2500);
+		Actions builder = new Actions(getDriver());
+		WebElement selectMaterialElement = getDriver().findElement(materialBox);
+		builder.moveToElement(selectMaterialElement).perform();
+		getDriver().findElement(selectMaterial1).click();
+		return this;
+	}
 
 	public boolean showMoreButtonIsDisplayed() {
 		PageHelpers.waitForSeconds(1500);
@@ -57,16 +103,6 @@ public class MaterialPage extends Page {
 
 	}
 	
-	public boolean starIsSelected() {
-		PageHelpers.waitForVisibility(selectedStar);
-		return getDriver().findElement(selectedStar).isDisplayed();
-
-	}
-	
-	public boolean starIsUnselected() {
-		return getDriver().findElement(unselectedStar).isDisplayed();
-
-	}
 	
 	public MaterialPage checkShowButton() {
 		PageHelpers.waitForVisibility(showMoreButton);
@@ -125,11 +161,6 @@ public class MaterialPage extends Page {
 		return this;
 	}
 	
-	public MaterialPage unselectStar() {
-		PageHelpers.waitForVisibility(selectedStar);
-		getDriver().findElement(selectedStar).click();
-		return this;
-	}
 
 	public EditMaterialMainPart clickEditMaterial() {
 		getDriver().findElement(editMaterial).sendKeys(Keys.ENTER);

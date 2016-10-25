@@ -84,7 +84,7 @@ public class LandingPageSearchTests {
 				.moveCursorToAddPortfolio()
 				.moveCursorToAddMaterial()
 				.clickAddMaterial()
-				.uploadFile()
+				//.uploadFile()
 				.setMaterialTitleInRussian()
 				.clickToSelectMaterialLanguage() 
 				.addDescriptionInRussian()
