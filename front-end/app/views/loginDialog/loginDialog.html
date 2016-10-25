@@ -2,10 +2,11 @@
   <md-toolbar class="md-hue-2">
     <div layout-align="center start" layout="row" layout-sm="column">
       <div class="md-toolbar-tools">
-        <h2 data-ng-show="$root.sidenavLogin === '/'" data-translate="SIGN_IN_TO_SEE_PORTFOLIOS"></h2>
+        <h2 data-ng-show="$root.sidenavLogin === '/portfolios'" data-translate="SIGN_IN_TO_SEE_PORTFOLIOS"></h2>
         <h2 data-ng-show="$root.sidenavLogin === '/materials'" data-translate="SIGN_IN_TO_SEE_MATERIALS"></h2>
         <h2 data-ng-show="$root.sidenavLogin === '/favorites'" data-translate="SIGN_IN_TO_SEE_FAVORITES"></h2>
-        <h2 data-ng-show="!$root.sidenavLogin" data-translate="LOGIN_CHOOSE_LOGIN_METHOD"></h2>
+        <h2 data-ng-show="!$root.sidenavLogin || (['/portfolios','/materials','/favorites'].indexOf($root.sidenavLogin) === -1)"
+            data-translate="LOGIN_CHOOSE_LOGIN_METHOD"></h2>
         <span flex></span>
         <md-button ng-click="hideLogin()" class="md-icon-button" aria-label="Sulge sisselogimise modaalaken">
           <md-icon>close</md-icon>

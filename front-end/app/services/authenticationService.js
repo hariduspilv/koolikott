@@ -44,9 +44,10 @@ define([
             function finishLogin(authenticatedUser) {
                 authenticatedUserService.setAuthenticatedUser(authenticatedUser);
 
-                if (authenticatedUser.firstLogin) {
-                    $location.url('/' + authenticatedUser.user.username +
-                        ($rootScope.afterAuthRedirectURL ? $rootScope.afterAuthRedirectURL : ""));
+                if ($rootScope.afterAuthRedirectURL) {
+                    $location.url('/' + authenticatedUser.user.username + $rootScope.afterAuthRedirectURL);
+                } else if (authenticatedUser.firstLogin) {
+                    $location.url('/' + authenticatedUser.user.username);
                 } else if (isOAuthAuthentication) {
                     var url = localStorage.getItem(LOGIN_ORIGIN);
                     $location.url(authenticatedUser.user.username + url);
@@ -55,12 +56,10 @@ define([
                 enableLogin();
                 localStorage.removeItem(LOGIN_ORIGIN);
                 isOAuthAuthentication = false;
+                $rootScope.afterAuthRedirectURL = null;
                 alertService.setErrorAlert('LOGIN_SUCCESS');
 
                 if (mobileIdLoginSuccessCallback) {
-                    if ($rootScope.afterAuthRedirectURL) {
-                        $location.url('/' + authenticatedUser.user.username + $rootScope.afterAuthRedirectURL);
-                    }
                     mobileIdLoginSuccessCallback();
                 }
             }
