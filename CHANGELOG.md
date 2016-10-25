@@ -1,4 +1,4 @@
-## e-Koolikott 1.3.0 (24.10.2016)
+## e-Koolikott 1.3.0 (arenduses)
 
 ### Lisandunud
 * Olemasoleva materjali kontroll uue lisamisel #2 https://github.com/hariduspilv/koolikott/issues/2
