@@ -3,13 +3,24 @@ md-sidenav {
   min-width: $sidenav-width;
   max-width: $sidenav-width;
   position: fixed;
-  min-height: 100%;
-  background-color: #FAFAFA;
-  overflow-y: auto;
+  background-color: $sidenav-color;
+  box-shadow: $whiteframe-shadow-6dp;
 
   @media (min-width: $layout-breakpoint-md) {
     background-color: transparent;
+    box-shadow: none;
     z-index: 1;
+    md-content {
+      background-color: transparent;
+    }
+  }
+
+  .md-button {
+    font-weight: 400;
+    text-transform: none;
+    &.active {
+      background-color: rgba(158,158,158,0.2);
+    }
   }
 
   .sidenav-menu > li {
@@ -250,4 +261,8 @@ md-sidenav._md-locked-open, md-sidenav._md-locked-open._md-closed, md-sidenav._m
 // Removes faulty backdrop
 .md-sidenav-backdrop {
   opacity: 0 !important;
+}
+
+.top-divider {
+  border-top: 1px solid rgba(0, 0, 0, 0.12);
 }

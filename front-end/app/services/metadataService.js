@@ -6,16 +6,15 @@ define([
 
     var CROSS_CURRICULAR_THEMES;
     var KEY_COMPETENCES;
-    var LANGUGAGES;
+    var LANGUAGES;
     var LICENSE_TYPES;
     var RESOURCE_TYPES;
     var USED_LANGUAGES;
     var EDUCATIONAL_CONTEXT;
-    var REDUCED_EDUCATIONAL_CONTEXT;
 
     var crossCurricularThemesCallbacks = [];
     var keyCompetencesCallbacks = [];
-    var langugagesCallbacks = [];
+    var languagesCallbacks = [];
     var licenseTypesCallbacks = [];
     var resourceTypesCallbacks = [];
     var educationalContextsCallbacks = [];
@@ -34,7 +33,10 @@ define([
                 serverCallService.makeGet("rest/learningMaterialMetadata/licenseType", {}, getLicenseTypeSuccess, getLicenseTypeFail);
                 serverCallService.makeGet("rest/learningMaterialMetadata/resourceType", {}, getResourceTypeSuccess, getResourceTypeFail);
                 serverCallService.makeGet("rest/learningMaterialMetadata/usedLanguages", {}, getUsedLanguagesSuccess, getUsedLanguagesFail);
-                serverCallService.makeGet("rest/learningMaterialMetadata/reducedTaxon", {}, getReducedTaxonSuccess, getReducedTaxonFail);
+
+                if (!localStorage.getItem("reducedTaxon")) {
+                    serverCallService.makeGet("rest/learningMaterialMetadata/reducedTaxon", {}, getReducedTaxonSuccess, getReducedTaxonFail);
+                }
             }
 
             function getUsedLanguagesSuccess(data) {
@@ -95,8 +97,8 @@ define([
                 if (isEmpty(data)) {
                     getLanguagesFail();
                 } else {
-                    LANGUGAGES = data;
-                    langugagesCallbacks.forEach(function (callback) {
+                    LANGUAGES = data;
+                    languagesCallbacks.forEach(function (callback) {
                         callback(data);
                     });
                 }
@@ -135,7 +137,7 @@ define([
             function getEducationalContextSuccess(data) {
                 if (!isEmpty(data)) {
                     EDUCATIONAL_CONTEXT = data;
-                    educationalContextsCallbacks.forEach(function(callback) {
+                    educationalContextsCallbacks.forEach(function (callback) {
                         callback(data);
                     });
                 }
@@ -147,10 +149,11 @@ define([
 
             function getReducedTaxonSuccess(data) {
                 if (!isEmpty(data)) {
-                    REDUCED_EDUCATIONAL_CONTEXT = data;
-                    reducedTaxonCallbacks.forEach(function(callback) {
+                    reducedTaxonCallbacks.forEach(function (callback) {
                         callback(data);
                     });
+                    var taxon = JSOG.stringify(data);
+                    localStorage.setItem("reducedTaxon", taxon);
                 }
             }
 
@@ -179,11 +182,11 @@ define([
                 },
 
                 loadLanguages: function (callback) {
-                    if (LANGUGAGES) {
-                        callback(LANGUGAGES);
+                    if (LANGUAGES) {
+                        callback(LANGUAGES);
                     } else {
                         // Save callback, call it when data arrives
-                        langugagesCallbacks.push(callback);
+                        languagesCallbacks.push(callback);
                     }
                 },
 
@@ -205,7 +208,7 @@ define([
                     }
                 },
 
-                loadEducationalContexts: function(callback) {
+                loadEducationalContexts: function (callback) {
                     if (EDUCATIONAL_CONTEXT) {
                         callback(EDUCATIONAL_CONTEXT);
                     } else {
@@ -214,9 +217,11 @@ define([
                     }
                 },
 
-                loadReducedTaxon: function(callback) {
-                    if (REDUCED_EDUCATIONAL_CONTEXT) {
-                        callback(REDUCED_EDUCATIONAL_CONTEXT);
+                loadReducedTaxon: function (callback) {
+                    var taxon = localStorage.getItem("reducedTaxon");
+                    taxon = JSOG.parse(taxon);
+                    if (taxon) {
+                        callback(taxon);
                     } else {
                         // Save callback, call it when data arrives
                         reducedTaxonCallbacks.push(callback);

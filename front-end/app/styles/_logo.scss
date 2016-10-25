@@ -31,7 +31,6 @@ a.logo {
   }
 }
 
-
 .shadow-primary {
   text-shadow: long-shadow(
   $direction: 42deg,
@@ -66,4 +65,47 @@ a.logo {
   $color: darken($color-accent, 10%),
   $fade: true
   );
+}
+
+
+// Temporary fix for logo color
+.navbar.md-primary {
+  .logo {
+    text-shadow: long-shadow(
+            $direction: 42deg,
+            $length: 60px,
+            $color: darken($color-primary, 5%),
+            $fade: true
+    );
+  }
+}
+.navbar.md-accent {
+  .logo {
+    text-shadow: long-shadow(
+            $direction: 42deg,
+            $length: 60px,
+            $color: darken($color-accent, 10%),
+            $fade: true
+    );
+  }
+}
+.navbar.md-red {
+  .logo {
+    text-shadow: long-shadow(
+            $direction: 42deg,
+            $length: 60px,
+            $color: darken($color-admin, 10%),
+            $fade: true
+    );
+  }
+}
+.navbar.md-gray {
+  .logo {
+    text-shadow: long-shadow(
+            $direction: 42deg,
+            $length: 60px,
+            $color: darken($color-deleted, 10%),
+            $fade: true
+    );
+  }
 }

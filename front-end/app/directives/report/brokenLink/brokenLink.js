@@ -8,7 +8,7 @@ define([
         return {
             scope: false,
             templateUrl: 'directives/report/brokenLink/brokenLink.html',
-            controller: function($scope) {
+            controller: function($scope, $rootScope) {
 
                 $scope.isAdmin = authenticatedUserService.isAdmin();
 

@@ -1,14 +1,9 @@
-<section flex>
-  <div layout-gt-sm>
-    <article flex="100" class="md-padding" role="main" id="main-content">
-      <div ng-if="modUser()" dop-error-message data="portfolio"></div>
-      <div data-dop-portfolio-summary-card comment="newComment" submit-click="addComment()" data-portfolio="portfolio"></div>
-
-      <div id="portfolio-chapters">
-        <div data-ng-repeat="chapter in portfolio.chapters">
-          <div data-dop-chapter data-chapter="chapter" data-index="{{$index}}"></div>
-        </div>
-      </div>
-    </article>
+<article role="main" id="main-content">
+  <div ng-if="modUser()" dop-error-message data="portfolio"></div>
+  <div data-dop-portfolio-summary-card comment="newComment" submit-click="addComment()" data-portfolio="portfolio"></div>
+  <div id="portfolio-chapters">
+    <div data-ng-repeat="chapter in portfolio.chapters">
+      <div data-dop-chapter data-chapter="chapter" data-index="{{$index}}"></div>
+    </div>
   </div>
-</section>
+</article>

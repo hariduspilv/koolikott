@@ -2,29 +2,23 @@ define([
     'angularAMD',
     'services/recursionHelper',
 ], function (angularAMD) {
-    angularAMD.directive('dopSidebarTaxon', ['RecursionHelper', function (RecursionHelper) {
+    angularAMD.directive('dopSidebarTaxon', ['RecursionHelper', '$location', function (RecursionHelper, $location) {
         return {
             scope: {
                 taxon: '=',
-                icon: '=',
-                tree: '='
+                icon: '='
             },
             templateUrl: 'directives/sidebarTaxon/sidebarTaxon.html',
             compile: function(element) {
               return RecursionHelper.compile(element);
             },
             controller: function ($rootScope, $scope, $location) {
-
+                $scope.id;
                 if ($scope.taxon) {
                     if ($scope.taxon.children.length > 0) {
                         $scope.hasChildren = true;
                         $scope.childrenCount = $scope.taxon.children.length;
-                    }
-
-                    if($scope.tree) {
-                        if ($scope.taxon.id == $scope.tree.id) {
-                            $scope.opened = true;
-                        }
+                        $scope.id = $scope.taxon.id;
                     }
 
                 }
@@ -32,11 +26,13 @@ define([
                 $scope.toggleChildren = function(id) {
                     if ($scope.opened == null) {
                         $location.url('search/result?q=&taxon=' + id);
+                        $rootScope.currentlyOpenTaxonId = id;
                         $scope.opened = true;
                     } else if ($scope.opened == true) {
                         $scope.opened = false;
                     } else if ($scope.opened == false) {
                         $location.url('search/result?q=&taxon=' + id);
+                        $rootScope.currentlyOpenTaxonId = id;
                         $scope.opened = true;
                     }
                 }
@@ -49,6 +45,12 @@ define([
                     }
 
                 }
+
+                $scope.$watch(function () {
+                    return $location.url()
+                }, function () {
+                    $scope.isActive = ($location.url() === '/search/result?q=&taxon=' + $scope.taxon.id) ? true : false;
+                });
             }
         }
     }]);

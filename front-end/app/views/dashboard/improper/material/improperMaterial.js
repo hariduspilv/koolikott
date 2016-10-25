@@ -11,7 +11,7 @@ define([
                 $scope: $scope
             });
 
-            serverCallService.makeGet("rest/impropers", {}, sortImpropers, base.getItemsFail);
+            serverCallService.makeGet("rest/impropers/materials", {}, getImproperMaterialsSuccess, base.getItemsFail);
 
             $scope.title = $filter('translate')('DASHBOARD_IMRPOPER_MATERIALS');
 
@@ -25,18 +25,14 @@ define([
 
             $scope.getLearningObjectUrl = function(learningObject) {
             	return "/material?materialId=" + learningObject.id;
-            }
+            };
 
-            function sortImpropers(impropers) {
-                var improperMaterials = [];
-
-                for (var i = 0; i < impropers.length; i++) {
-                    if (impropers[i].learningObject.type === '.Material' && !impropers[i].learningObject.deleted) {
-                        improperMaterials.push(impropers[i]);
-                    }
+            function getImproperMaterialsSuccess(impropers) {
+                if (impropers) {
+                    base.getItemsSuccess(impropers, 'byReportCount', true);
+                } else {
+                    base.getItemsFail();
                 }
-
-                base.getItemsSuccess(improperMaterials, 'byReportCount', true);
             }
         }
     ]);

@@ -1,21 +1,10 @@
 .navbar {
-  position: fixed;
+  position: fixed !important;
+  top:0;
+  left:0;
+  right:0;
   overflow: hidden;
   z-index: 5;
-
-  // Needs redoing after navbar design
-  .md-toolbar-tools {
-    padding: 0;
-  }
-  @media (min-width: 370px) {
-    .md-toolbar-tools {
-      padding: 0 16px;
-    }
-  }
-}
-
-.navbar .md-toolbar-tools {
-  justify-content: space-between;
 }
 
 .navbar.md-red {
@@ -26,20 +15,38 @@
   background-color: #949394;
 }
 
-.navbar-logo-main {
-  padding-left: 10px;
-  padding-right: 30px;
-  margin-top: 5px;
+.navbar-logo-area {
+  // margin-top: 5px;
+  // padding-left: 0;
+  // padding-right: 10px;
+  @media (min-width: $layout-breakpoint-xs) {
+    width: 183px;
   }
+  @media (min-width: $layout-breakpoint-sm) {
+    width: $sidenav-width;
+    min-width: $sidenav-width;
+  }
+  @media (min-width: $layout-breakpoint-lg) {
+    position: absolute;
+    left: $md-padding;
+    top: 11px;
+  }
+  .md-button.md-icon-button {
+    margin-left: 0;
+  }
+}
+
 
 .navbar-search-area {
   width: 100%;
-  max-width: 1280px;
-  padding: 0 16px;
+  max-width: $layout-breakpoint-md;
   display: none;
-
   @media (min-width: $layout-breakpoint-xs) {
     display: inline-block;
+  }
+  @media (min-width: $layout-breakpoint-lg) {
+    margin-left: auto;
+    margin-right: auto;
   }
 }
 
@@ -47,15 +54,27 @@
   @media (min-width: $layout-breakpoint-xs) {
     flex: 0 0 auto;
   }
+  @media (min-width: $layout-breakpoint-lg) {
+    position: absolute;
+    width: $nav-button-area-width;
+    right: $md-padding;
+    top: 11px;
+  }
   .button-container {
     display: inline-block;
+    @media (max-width: 350px) {
+      .md-icon-button {
+        width: 35px;
+      }
+    }
   }
   .mobile-search-button {
     @media (min-width: $layout-breakpoint-xs) {
-    display: none;
+      display: none;
     }
     button {
       margin: 0;
+      padding: 0;
     }
   }
 
@@ -67,12 +86,14 @@
 }
 
 .navbar-search {
-  margin: 0 5px 0 0;
   border-radius: 2px;
   padding: 4px 0;
 
-  @media screen and (min-width: $layout-breakpoint-xs) {
+  @media (min-width: $layout-breakpoint-xs) {
     background: rgba(255,255,255,.15);
+  }
+  @media (min-width: $layout-breakpoint-lg) {
+    margin-left: $button-width;
   }
 
   md-input-container {
@@ -86,7 +107,7 @@
       color: #fff;
 
       &[disabled] {
-      background-image: none;
+        background-image: none;
       }
     }
 
@@ -112,28 +133,6 @@
   width: 100%;
   z-index: 10;
 }
-
-// .logo {
-//   display: block;
-//   background-image: url('../images/logo_white_sm.svg');
-//   height: 30px;
-//   background-size: contain;
-//   background-repeat: no-repeat;
-//   background-position: left center;
-//
-//   @media (min-width: 960px) {
-//     background-image: url('../images/logo_white.svg');
-//     height: 35px;
-//     margin-top: 5px;
-//   }
-// }
-//
-// .logo-lg {
-//   background-image: url('../images/logo_white.svg');
-//   height: 35px;
-//   margin-top: 5px;
-// }
-
 #header-simple-search-input{
   background-color: transparent;
 }
@@ -144,24 +143,6 @@
 
 #header-simple-search-input > md-autocomplete-wrap > button {
   display: none;
-}
-
-// Wide/big screen fix
-@media (min-width: 1800px) {
-  .navbar-logo-area {
-    position: absolute;
-    left: 16px;
-    top: 9px;
-  }
-  .navbar-search-area {
-    margin-left: auto;
-    margin-right: auto;
-  }
-  .navbar-buttons-area {
-    position: absolute;
-    right: 16px;
-    top: 9px;
-  }
 }
 
 // Account circle colors

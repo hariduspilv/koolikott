@@ -1,10 +1,10 @@
 <md-toolbar id="md-toolbar-header" class="navbar md-whiteframe-1dp md-primary"
-            ng-class="{'md-accent': isEditPortfolioMode ,'md-red': (isViewAdminPanelPage || (learningObjectImproper && isViewMaterialPortfolioPage) || (learningObjectBroken && isViewMaterialPortfolioPage)), 'md-gray': (learningObjectDeleted && isViewMaterialPortfolioPage)}"
-            data-click-outside="clickOutside()" outside-if-not="header-show-detailed-search-icon, detailed-search">
-  <div class="md-toolbar-tools" layout="row">
+            ng-class="{'md-accent': isEditPortfolioMode ,'md-red': ((isAdmin() || isModerator())&&(isViewAdminPanelPage || (learningObjectImproper && isViewMaterialPortfolioPage) || (learningObjectBroken && isViewMaterialPortfolioPage))), 'md-gray': ((isAdmin() || isModerator())&&(learningObjectDeleted && isViewMaterialPortfolioPage))}"
+            data-click-outside="clickOutside()" outside-if-not="header-show-detailed-search-icon, detailed-search, suggest-dropdown">
+  <div class="md-toolbar-tools" layout="row" layout-align="start center">
     <!-- logo and menu button -->
     <div class="navbar-logo-area">
-      <div flex layout="row" layout-align="center center">
+      <div flex layout="row" layout-align="start center">
         <!-- toggle menu icon -->
         <md-button class="md-icon-button" data-ng-click="toggleSidenav('left')">
           <md-icon class="md-48">menu</md-icon>
@@ -14,7 +14,7 @@
           <md-tooltip>
             <span data-translate="HEADER_TOOLTIP_GO_TO_LANDING_PAGE"></span>
           </md-tooltip>
-          <a data-ng-href="/" class="logo {{isEditPortfolioMode ? 'shadow-edit' : 'shadow-primary'}}"  ng-class="{'shadow-admin': (isViewAdminPanelPage || (learningObjectImproper && isViewMaterialPortfolioPage) || (learningObjectBroken && isViewMaterialPortfolioPage)), 'shadow-deleted': (learningObjectDeleted && isViewMaterialPortfolioPage)}" id="logo"></a>
+          <a data-ng-href="/" class="logo" id="logo"></a>
         </div>
       </div>
     </div>
@@ -36,6 +36,7 @@
                            md-input-maxlength="100"
                            md-input-minlength="0"
                            id="header-simple-search-input"
+                           md-menu-class="suggest-dropdown"
                            ng-model-options="{debounce: 100}">
             <md-item-template>
               <span md-highlight-text="searchFields.searchQuery">{{ suggestion }}</span>
@@ -43,28 +44,29 @@
           </md-autocomplete>
         </md-input-container>
         <div>
-             <md-button aria-label="Ava detailotsing" class="md-icon-button" id="header-show-detailed-search-icon"
-                       data-ng-click="openDetailedSearch()" data-ng-if="!detailedSearch.isVisible">
-              <md-tooltip><span data-translate="HEADER_TOOLTIP_OPEN_DETAILED_SEARCH"></span></md-tooltip>
-              <md-icon hide show-gt-xs>keyboard_arrow_down</md-icon>
-              <md-icon hide-gt-xs>search</md-icon>
-            </md-button>
-            <md-button aria-label="Sulge detailotsing" class="md-icon-button" id="header-hide-detailed-search-icon"
-                       data-ng-click="closeDetailedSearch()" data-ng-if="detailedSearch.isVisible">
-              <md-tooltip><span data-translate="HEADER_TOOLTIP_CLOSE_DETAILED_SEARCH"></span></md-tooltip>
-              <md-icon>close</md-icon>
-            </md-button>
-          </div>
+          <md-button aria-label="Ava detailotsing" class="md-icon-button" id="header-show-detailed-search-icon"
+                     data-ng-click="openDetailedSearch()" data-ng-if="!detailedSearch.isVisible">
+            <md-tooltip><span data-translate="HEADER_TOOLTIP_OPEN_DETAILED_SEARCH"></span></md-tooltip>
+            <md-icon hide show-gt-xs>filter_list</md-icon>
+            <md-icon hide-gt-xs>search</md-icon>
+          </md-button>
+          <md-button aria-label="Sulge detailotsing" class="md-icon-button" id="header-hide-detailed-search-icon"
+                     data-ng-click="closeDetailedSearch()" data-ng-if="detailedSearch.isVisible">
+            <md-tooltip><span data-translate="HEADER_TOOLTIP_CLOSE_DETAILED_SEARCH"></span></md-tooltip>
+            <md-icon>close</md-icon>
+          </md-button>
+        </div>
       </div>
 
     </div>
+    <span class="flex" hide-gt-lg></span>
     <!-- language menu, login and user menu button -->
     <div class="navbar-buttons-area">
       <div class="button-container mobile-search-button">
         <md-button aria-label="Ava detailotsing" class="md-icon-button" id="header-show-detailed-search-icon"
                    data-ng-click="openDetailedSearch()" data-ng-if="!detailedSearch.isVisible">
           <md-tooltip><span data-translate="HEADER_TOOLTIP_OPEN_DETAILED_SEARCH"></span></md-tooltip>
-          <md-icon hide show-gt-xs>keyboard_arrow_down</md-icon>
+          <md-icon hide show-gt-xs>filter_list</md-icon>
           <md-icon hide-gt-xs>search</md-icon>
         </md-button>
         <md-button aria-label="Sulge detailotsing" class="md-icon-button" id="header-hide-detailed-search-icon"
@@ -117,13 +119,15 @@
                 <span data-translate="ABOUT_PAGE_LINK_TITLE"></span>
               </md-button>
             </md-menu-item>
-            <md-menu-item >
+            <md-menu-item>
               <md-button aria-label="Mine Kuidas e-Koolikotti kasutada leheküljele" data-ng-href="/help" id="help-menu">
                 <span data-translate="HELP_PAGE_LINK_TITLE"></span>
               </md-button>
             </md-menu-item>
             <md-menu-item>
-              <md-button aria-label="Anna tagasisidet e-Koolikoti kohta" data-ng-href="mailto:e-koolikott@hm.ee?subject={{ 'FEEDBACK_ABOUT_EKOOLIKOTT_SUBJECT' | translate }}" id="help-menu-email">
+              <md-button aria-label="Anna tagasisidet e-Koolikoti kohta"
+                         data-ng-href="mailto:e-koolikott@hm.ee?subject={{ 'FEEDBACK_ABOUT_EKOOLIKOTT_SUBJECT' | translate }}"
+                         id="help-menu-email">
                 <span data-translate="GIVE_FEEDBACK_LINK"></span>
               </md-button>
             </md-menu-item>
@@ -147,7 +151,8 @@
           </md-button>
           <md-menu-content width="4">
             <md-menu-item>
-              <md-button ng-disabled="true"   aria-label="{{user.username}}" data-ng-href="/dashboard" id="user-menu-dashboard">
+              <md-button ng-disabled="true" aria-label="{{user.username}}" data-ng-href="/dashboard"
+                         id="user-menu-dashboard">
                 <span>{{user.name}} {{user.surname}}</span>
               </md-button>
             </md-menu-item>
@@ -172,36 +177,49 @@
             <md-menu-item dop-copy-permalink data-url="getShareUrl"></md-menu-item>
             <md-menu-divider></md-menu-divider>
             <md-menu-item>
-              <md-button data-ng-if="savedPortfolio.visibility === 'PUBLIC'" aria-label="{{PORTFOLIO_VISIBILITY_PUBLIC | translate}}">
-                <md-icon>visibility</md-icon> <span data-translate="PORTFOLIO_VISIBILITY_PUBLIC"></span> <span class="md-alt-text"><md-icon>check</md-icon></span>
+              <md-button data-ng-if="savedPortfolio.visibility === 'PUBLIC'"
+                         aria-label="{{PORTFOLIO_VISIBILITY_PUBLIC | translate}}">
+                <md-icon>visibility</md-icon>
+                <span data-translate="PORTFOLIO_VISIBILITY_PUBLIC"></span> <span class="md-alt-text"><md-icon>check</md-icon></span>
               </md-button>
-              <md-button data-ng-if="savedPortfolio.visibility != 'PUBLIC'" aria-label="{{PORTFOLIO_VISIBILITY_MAKE_PUBLIC | translate}}" data-ng-click="makePublic()">
-                <md-icon>visibility</md-icon> <span data-translate="PORTFOLIO_VISIBILITY_MAKE_PUBLIC"></span>
-              </md-button>
-            </md-menu-item>
-            <md-menu-divider></md-menu-divider>
-            <md-menu-item>
-              <md-button data-ng-if="savedPortfolio.visibility === 'NOT_LISTED'" aria-label="{{PORTFOLIO_VISIBILITY_NOT_LISTED | translate}}">
-                <md-icon>link</md-icon> <span data-translate="PORTFOLIO_VISIBILITY_NOT_LISTED"></span> <span class="md-alt-text"><md-icon>check</md-icon></span>
-              </md-button>
-              <md-button data-ng-if="savedPortfolio.visibility != 'NOT_LISTED'" aria-label="{{PORTFOLIO_VISIBILITY_MAKE_NOT_LISTED | translate}}" data-ng-click="makeNotListed()">
-                <md-icon>link</md-icon> <span data-translate="PORTFOLIO_VISIBILITY_MAKE_NOT_LISTED"></span>
+              <md-button data-ng-if="savedPortfolio.visibility != 'PUBLIC'"
+                         aria-label="{{PORTFOLIO_VISIBILITY_MAKE_PUBLIC | translate}}" data-ng-click="makePublic()">
+                <md-icon>visibility</md-icon>
+                <span data-translate="PORTFOLIO_VISIBILITY_MAKE_PUBLIC"></span>
               </md-button>
             </md-menu-item>
             <md-menu-divider></md-menu-divider>
             <md-menu-item>
-              <md-button data-ng-if="savedPortfolio.visibility === 'PRIVATE'" aria-label="{{PORTFOLIO_VISIBILITY_PRIVATE | translate}}">
-                <md-icon>visibility_off</md-icon> <span data-translate="PORTFOLIO_VISIBILITY_PRIVATE"></span> <span class="md-alt-text"><md-icon>check</md-icon></span>
+              <md-button data-ng-if="savedPortfolio.visibility === 'NOT_LISTED'"
+                         aria-label="{{PORTFOLIO_VISIBILITY_NOT_LISTED | translate}}">
+                <md-icon>link</md-icon>
+                <span data-translate="PORTFOLIO_VISIBILITY_NOT_LISTED"></span> <span class="md-alt-text"><md-icon>check</md-icon></span>
               </md-button>
-              <md-button data-ng-if="savedPortfolio.visibility != 'PRIVATE'" aria-label="{{PORTFOLIO_VISIBILITY_MAKE_PRIVATE | translate}}" data-ng-click="makePrivate()">
-                <md-icon>visibility_off</md-icon> <span data-translate="PORTFOLIO_VISIBILITY_MAKE_PRIVATE"></span>
+              <md-button data-ng-if="savedPortfolio.visibility != 'NOT_LISTED'"
+                         aria-label="{{PORTFOLIO_VISIBILITY_MAKE_NOT_LISTED | translate}}"
+                         data-ng-click="makeNotListed()">
+                <md-icon>link</md-icon>
+                <span data-translate="PORTFOLIO_VISIBILITY_MAKE_NOT_LISTED"></span>
+              </md-button>
+            </md-menu-item>
+            <md-menu-divider></md-menu-divider>
+            <md-menu-item>
+              <md-button data-ng-if="savedPortfolio.visibility === 'PRIVATE'"
+                         aria-label="{{PORTFOLIO_VISIBILITY_PRIVATE | translate}}">
+                <md-icon>visibility_off</md-icon>
+                <span data-translate="PORTFOLIO_VISIBILITY_PRIVATE"></span> <span class="md-alt-text"><md-icon>check</md-icon></span>
+              </md-button>
+              <md-button data-ng-if="savedPortfolio.visibility != 'PRIVATE'"
+                         aria-label="{{PORTFOLIO_VISIBILITY_MAKE_PRIVATE | translate}}" data-ng-click="makePrivate()">
+                <md-icon>visibility_off</md-icon>
+                <span data-translate="PORTFOLIO_VISIBILITY_MAKE_PRIVATE"></span>
               </md-button>
             </md-menu-item>
           </md-menu-content>
         </md-menu>
         <md-button data-ng-click="saveAndExitPortfolio()" aria-label="Salvesta ja välju" class="md-icon-button">
           <md-tooltip><span data-translate="HEADER_TOOLTIP_EXIT_PORTFOLIO_MODE"></span></md-tooltip>
-          <md-icon >done</md-icon>
+          <md-icon>done</md-icon>
         </md-button>
       </div>
     </div>
@@ -209,10 +227,9 @@
 </md-toolbar>
 
 <div class="md-toolbar-filter ng-cloak" id="detailedSearch" data-ng-show="detailedSearch.isVisible" ng-cloak>
-  <form layout="row"
-        flex>
-    <div layout="row" layout-xs="column" flex="0" flex-gt-md="15" data-ng-hide="sidenavIsOpen()" ng-cloak></div>
-    <div flex flex-gt-md="{{isViewPortforlioPage ? '75' : '75'}}" class="md-padding filter-wrapper ng-cloak"
+  <form layout="row" flex>
+    <div class="lays-out-left" data-ng-hide="sidenavIsOpen()" ng-cloak></div>
+    <div flex class="filter-wrapper ng-cloak"
          id="detailed-search" data-ng-class="{'nav-open': sidenavIsOpen()}" ng-cloak>
       <div data-dop-detailed-search
            data-is-visible="detailedSearch.isVisible"

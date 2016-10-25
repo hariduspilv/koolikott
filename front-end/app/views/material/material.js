@@ -1,7 +1,6 @@
 define([
     'app',
     'angularAMD',
-    'angular-youtube-mb',
     'angular-screenfull',
     'directives/copyPermalink/copyPermalink',
     'directives/report/improper/improper',
@@ -9,7 +8,6 @@ define([
     'directives/recommend/recommend',
     'directives/rating/rating',
     'directives/commentsCard/commentsCard',
-    'directives/slideshare/slideshare',
     'directives/tags/tags',
     'directives/restrict/restrict',
     'directives/favorite/favorite',
@@ -24,10 +22,10 @@ define([
     'services/toastService',
     'services/storageService',
     'services/targetGroupService',
-    'services/embedService'
+    'directives/embeddedMaterial/embeddedMaterial'
 ], function (app, angularAMD) {
-    return ['$scope', 'serverCallService', '$route', 'translationService', '$rootScope', 'searchService', '$location', 'alertService', 'authenticatedUserService', 'dialogService', 'toastService', 'iconService', '$mdDialog', 'storageService', 'targetGroupService', 'embedService',
-        function ($scope, serverCallService, $route, translationService, $rootScope, searchService, $location, alertService, authenticatedUserService, dialogService, toastService, iconService, $mdDialog, storageService, targetGroupService, embedService) {
+    return ['$scope', 'serverCallService', '$route', 'translationService', '$rootScope', 'searchService', '$location', 'alertService', 'authenticatedUserService', 'dialogService', 'toastService', 'iconService', '$mdDialog', 'storageService', 'targetGroupService',
+        function ($scope, serverCallService, $route, translationService, $rootScope, searchService, $location, alertService, authenticatedUserService, dialogService, toastService, iconService, $mdDialog, storageService, targetGroupService) {
             $scope.showMaterialContent = false;
             $scope.newComment = {};
             $scope.pageUrl = $location.absUrl();
@@ -70,19 +68,6 @@ define([
                 }
             });
 
-            function embedCallback(res) {
-                if (res && res.data.html) {
-                    $scope.embeddedDataIframe = null;
-                    $scope.embeddedData = null;
-
-                    if (res.data.html.contains("<iframe")) {
-                        $scope.embeddedDataIframe = res.data.html.replace("http:", "");
-                    } else {
-                        $scope.embeddedData = res.data.html.replace("http:", "");
-                    }
-                }
-            }
-
             function getMaterial(success, fail) {
                 var materialId = $route.current.params.materialId;
                 var params = {
@@ -113,7 +98,6 @@ define([
 
             function processMaterial() {
                 if ($scope.material) {
-                    embedService.getEmbed(getSource($scope.material), embedCallback);
                     setSourceType();
 
                     if ($scope.material.taxons) {
@@ -140,6 +124,12 @@ define([
                 $rootScope.learningObjectImproper = ($scope.material.improper > 0);
                 $rootScope.learningObjectDeleted = ($scope.material.deleted == true);
 
+                if(authenticatedUserService.isAdmin() || authenticatedUserService.isModerator()) {
+                    if ($scope.material.improper > 0) {
+                        serverCallService.makeGet("rest/impropers", {}, sortImpropers, getItemsFail);
+                    }
+                }
+
                 var viewCountParams = {
                     'type': '.Material',
                     'id': $scope.material.id
@@ -148,6 +138,22 @@ define([
                 serverCallService.makePost("rest/material/increaseViewCount", viewCountParams, function () {
                 }, function () {
                 });
+            }
+
+            function getItemsFail() {
+                console.log("Failed to get data");
+            }
+
+            function sortImpropers(impropers) {
+                var improper;
+
+                for (var i = 0; i < impropers.length; i++) {
+                    if (impropers[i].learningObject.id === $scope.material.id) {
+                        improper = impropers[i];
+                    }
+                }
+
+                $rootScope.setReason(improper.reason);
             }
 
             function preprocessMaterialSubjects() {
@@ -225,32 +231,27 @@ define([
 
             $scope.formatMaterialIssueDate = function (issueDate) {
                 return formatIssueDate(issueDate);
-
-            }
+            };
 
             $scope.formatMaterialUpdatedDate = function (updatedDate) {
                 return formatDateToDayMonthYear(updatedDate);
-            }
+            };
 
             $scope.isNullOrZeroLength = function (arg) {
                 return !arg || !arg.length;
-            }
+            };
 
             $scope.getAuthorSearchURL = function ($event, firstName, surName) {
                 $event.preventDefault();
 
                 searchService.setSearch('author:"' + firstName + " " + surName + '"');
                 $location.url(searchService.getURL());
-            }
-
-            $scope.showSourceFullscreen = function ($event) {
-                $event.preventDefault()
-
-                $scope.fullscreenCtrl.toggleFullscreen();
             };
 
-            $scope.slideshareFail = function () {
-                $scope.sourceType = 'LINK';
+            $scope.showSourceFullscreen = function ($event) {
+                $event.preventDefault();
+
+                $scope.fullscreenCtrl.toggleFullscreen();
             };
 
             $scope.isLoggedIn = function () {
@@ -275,7 +276,7 @@ define([
                 } else {
                     return false;
                 }
-            }
+            };
 
             function getSignedUserData() {
                 serverCallService.makeGet("rest/user/getSignedUserData", {}, getSignedUserDataSuccess, getSignedUserDataFail);

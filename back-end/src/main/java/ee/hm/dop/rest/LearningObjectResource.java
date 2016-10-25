@@ -62,8 +62,6 @@ public class LearningObjectResource extends BaseResource {
     @RolesAllowed({"USER", "ADMIN", "MODERATOR", "RESTRICTED"})
     public UserFavorite hasSetFavorite(@QueryParam("id") Long id) {
         return learningObjectService.hasFavorited(id, getLoggedInUser());
-
-
     }
 
     @GET

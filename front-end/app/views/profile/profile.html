@@ -1,39 +1,24 @@
 <div id="page-profile" flex>
-  <div layout="row" layout-xs="column" flex>
-    <section flex flex-gt-md="100">
-      <div layout-gt-sm>
-        <article flex flex-gt-sm="75" md-cols-gt-xs="3" md-cols-gt-sm="4" flex-gt-lg="80" class="md-padding" role="main"
-                 id="main-content">
-          <h1 data-translate="PROFILE_PAGE_TITLE_PORTFOLIOS"></h1>
+  <article class="md-padding max-width-100" role="main" id="main-content">
+    <h1 data-translate="PROFILE_PAGE_TITLE_PORTFOLIOS"></h1>
+    <h2 class="md-headline">
+      {{user.name}} {{user.surname}}
+    </h2>
 
-          <md-grid-list md-cols="2" md-cols-gt-xs="3" md-cols-gt-sm="4" md-cols-gt-lg="5" md-gutter="10px"
-                        md-row-height="3:4">
-            <md-grid-tile data-ng-repeat="portfolio in portfolios">
-              <figure data-dop-portfolio-box portfolio="portfolio"></figure>
-            </md-grid-tile>
-          </md-grid-list>
-
-          <h1 class="type-block" data-translate="PROFILE_PAGE_TITLE_MATERIALS"></h1>
-
-          <md-grid-list md-cols="2" md-cols-gt-xs="3" md-cols-gt-sm="4" md-cols-gt-lg="5" md-gutter="10px"
-                        md-row-height="3:4">
-            <md-grid-tile data-ng-repeat="material in materials">
-              <figure data-dop-material-box material="material"></figure>
-            </md-grid-tile>
-          </md-grid-list>
-        </article>
-
-        <aside flex flex-gt-sm="25" flex-gt-lg="20" class="md-padding" id="sidebar">
-          <div id="user-data">
-            <h2 class="md-headline">
-              {{user.name}} {{user.surname}}
-            </h2>
-            <md-divider></md-divider>
-          </div>
-
-          <div data-dop-sidebar></div>
-        </aside>
+    <div class="card-container">
+      <div data-ng-repeat="item in portfolios track by item.id" class="card-container__item">
+        <div data-dop-portfolio-box portfolio="item"></div>
       </div>
-    </section>
-  </div>
+      <div data-ng-repeat="i in [1,2,3,4,5,6]" class="card-container__item card-container__item--empty"><div><md-card class="card-sm"></md-card></div></div>
+    </div>
+
+    <h1 class="type-block" data-translate="PROFILE_PAGE_TITLE_MATERIALS"></h1>
+
+    <div class="card-container">
+      <div data-ng-repeat="item in materials track by item.id" class="card-container__item">
+        <div data-dop-material-box material="item"></div>
+      </div>
+      <div data-ng-repeat="i in [1,2,3,4,5,6]" class="card-container__item card-container__item--empty"><div><md-card class="card-sm"></md-card></div></div>
+    </div>
+  </article>
 </div>

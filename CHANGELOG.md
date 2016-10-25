@@ -1,4 +1,4 @@
-## e-Koolikott 1.3.0 (valmimisel)
+## e-Koolikott 1.3.0 (arenduses)
 
 ### Lisandunud
 * Olemasoleva materjali kontroll uue lisamisel #2 https://github.com/hariduspilv/koolikott/issues/2
@@ -16,6 +16,8 @@
 ### Parandatud
 * Kustutamine ei toimi #81 https://github.com/hariduspilv/koolikott/issues/81
 * Tõlked peidus #77 https://github.com/hariduspilv/koolikott/issues/77
+* Sisukorras tohib olla ainult üks valik sinine (aktiivne) #85 https://github.com/hariduspilv/koolikott/issues/85
+
 
 ## e-Koolikott 1.2.0 (15.09.2016)
 

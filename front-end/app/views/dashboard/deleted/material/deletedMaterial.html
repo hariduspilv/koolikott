@@ -8,15 +8,15 @@
     </tr>
   </thead>
   <tbody md-body>
-    <tr md-row ng-repeat="item in data">
-      <td md-cell data-ng-bind="getCorrectLanguageTitle(item)"></td>
-      <td md-cell>{{item.creator.name}} {{item.creator.surname}}</td>
-      <td md-cell>{{formatMaterialUpdatedDate(item.updated)}}</td>
-      <td md-cell>
-        <a ng-href="/material?materialId={{item.id}}">
-          <md-button aria-label="Ava material" class="md-raised md-default" data-translate="BUTTON_OPEN"></md-button>
-        </a>
-      </td>
-    </tr>
+  <tr md-row ng-repeat="item in data">
+    <td md-cell data-ng-bind="getCorrectLanguageTitle(item)"></td>
+    <td md-cell>{{item.creator.name}} {{item.creator.surname}}</td>
+    <td md-cell>{{formatMaterialUpdatedDate(item.updated)}}</td>
+    <td md-cell>
+      <a ng-href="/material?materialId={{item.id}}">
+        <md-button aria-label="Ava material" class="md-raised md-default" data-translate="BUTTON_OPEN"></md-button>
+      </a>
+    </td>
+  </tr>
   </tbody>
 </table>

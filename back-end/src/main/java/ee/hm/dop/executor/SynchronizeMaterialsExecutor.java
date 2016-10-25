@@ -70,10 +70,21 @@ public class SynchronizeMaterialsExecutor {
             return;
         }
 
-        final Runnable executor = () -> {
-            logger.info("Starting new material synchronization process.");
-            synchronizeMaterials();
+        final Runnable executor = new Runnable() {
+
+            @Override
+            public void run() {
+                try {
+                    logger.info("Starting new material synchronization process.");
+                    synchronizeMaterials();
+                } catch (Exception e) {
+                    logger.error("Unexpected error while scheduling sync.", e);
+                }
+
+                logger.info("Finished new material synchronization process.");
+            }
         };
+
 
         long initialDelay = getInitialDelay(hourOfDayToExecute);
         long period = DAYS.toMillis(1);

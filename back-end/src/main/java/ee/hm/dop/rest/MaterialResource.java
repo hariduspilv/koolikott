@@ -124,23 +124,14 @@ public class MaterialResource extends BaseResource {
     @Path("getByCreator")
     @Produces(MediaType.APPLICATION_JSON)
     public List<Material> getByCreator(@QueryParam("username") String username) {
-        if (isBlank(username)) {
-            throwBadRequestException("Username parameter is mandatory");
-        }
-
-        User creator = userService.getUserByUsername(username);
-        if (creator == null) {
-            return null;
-        }
-
-        return materialService.getByCreator(creator);
+        return getMaterialsByUser(username);
     }
 
     @GET
     @Path("getByCreator/count")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getByCreatorCount(@QueryParam("username") String username) {
-        return Response.ok(getByCreator(username).size()).build();
+        return Response.ok(getMaterialsByUser(username).size()).build();
     }
 
     @DELETE
@@ -243,4 +234,16 @@ public class MaterialResource extends BaseResource {
 
     }
 
+    private List<Material> getMaterialsByUser(String username) {
+        if (isBlank(username)) {
+            throwBadRequestException("Username parameter is mandatory");
+        }
+
+        User creator = userService.getUserByUsername(username);
+        if (creator == null) {
+            return null;
+        }
+
+        return materialService.getByCreator(creator);
+    }
 }
