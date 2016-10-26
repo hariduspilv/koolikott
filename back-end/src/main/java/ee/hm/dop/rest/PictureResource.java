@@ -18,6 +18,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import ee.hm.dop.model.OriginalPicture;
 import ee.hm.dop.model.Picture;
 import ee.hm.dop.service.PictureService;
 import org.apache.commons.configuration.Configuration;
@@ -47,6 +48,20 @@ public class PictureResource extends BaseResource {
         return Response.status(HttpURLConnection.HTTP_NOT_FOUND).build();
     }
 
+    @GET
+    @Path("thumbnail/{name}")
+    @Produces("image/png")
+    public Response getThumbnailDataByName(@PathParam("name") String pictureName) {
+        Picture picture = pictureService.getThumbnailByName(pictureName);
+
+        if (picture != null) {
+            byte[] data = picture.getData();
+            return Response.ok(data).header(HttpHeaders.CACHE_CONTROL, "max-age=31536000").build();
+        }
+
+        return Response.status(HttpURLConnection.HTTP_NOT_FOUND).build();
+    }
+
     @POST
     @RolesAllowed({ "USER", "ADMIN", "MODERATOR" })
     @Produces(MediaType.APPLICATION_JSON)
@@ -55,7 +70,7 @@ public class PictureResource extends BaseResource {
         byte[] dataBase64 = read(fileInputStream, configuration.getInt(MAX_FILE_SIZE));
         byte[] data = decodeBase64(dataBase64);
 
-        Picture picture = new Picture();
+        Picture picture = new OriginalPicture();
         picture.setData(data);
         return pictureService.create(picture);
     }

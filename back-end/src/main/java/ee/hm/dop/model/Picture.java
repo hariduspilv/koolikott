@@ -2,17 +2,14 @@ package ee.hm.dop.model;
 
 import static javax.persistence.FetchType.LAZY;
 
-import javax.persistence.Basic;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Lob;
+import javax.persistence.*;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
-@Entity
-public class Picture {
+@MappedSuperclass
+@JsonDeserialize(as=OriginalPicture.class)
+public abstract class Picture {
 
     @Id
     @GeneratedValue

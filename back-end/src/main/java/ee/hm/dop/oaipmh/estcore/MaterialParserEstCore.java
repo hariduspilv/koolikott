@@ -8,13 +8,7 @@ import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpression;
 import javax.xml.xpath.XPathExpressionException;
 
-import ee.hm.dop.model.CrossCurricularTheme;
-import ee.hm.dop.model.KeyCompetence;
-import ee.hm.dop.model.Language;
-import ee.hm.dop.model.LanguageString;
-import ee.hm.dop.model.Material;
-import ee.hm.dop.model.Picture;
-import ee.hm.dop.model.Tag;
+import ee.hm.dop.model.*;
 import ee.hm.dop.model.taxon.Taxon;
 import ee.hm.dop.oaipmh.MaterialParser;
 import ee.hm.dop.oaipmh.ParseException;
@@ -156,7 +150,7 @@ public class MaterialParserEstCore extends MaterialParser {
             byte[] bytes = Base64.decodeBase64(imageNode.getTextContent());
 
             if (bytes.length > 0) {
-                picture = new Picture();
+                picture = new OriginalPicture();
                 picture.setData(bytes);
             }
         }
