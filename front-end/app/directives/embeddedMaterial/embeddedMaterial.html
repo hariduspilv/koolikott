@@ -1,5 +1,6 @@
 <md-card class="md-whiteframe-2dp embed-card">
   <md-card-header class="embed-header" data-ng-if="isEditPortfolioPage">
+    <h1>dfsadasdasdsa</h1>
     <md-card-avatar>
       <md-icon class="icon-kind embeddedMaterial" ng-class="materialType">{{materialType}}</md-icon>
     </md-card-avatar>
@@ -28,6 +29,18 @@
       </div>
     </div>
 
+    <div data-ng-show="sourceType === 'VIDEO' && canPlayVideo" class="embed-responsive-container embed-video">
+        <video controls="true" width="100%">
+          <source src="{{material.source}}">
+        </video>
+    </div>
+
+    <div class="embed-responsive-container embed-audio" data-ng-if="sourceType === 'AUDIO' && canPlayAudio">
+      <audio controls="true">
+        <source src="{{material.source}}">
+      </audio>
+    </div>
+
     <div data-ng-if="sourceType === 'SLIDESHARE'" class="embed-responsive embed-responsive-4by3">
       <div class="embed-responsive-container">
         <div data-dop-slideshare source="material.source" class="embed-responsive-item"></div>
@@ -48,7 +61,8 @@
     </div>
   </md-card-content>
   <md-card-footer class="embeded-material-footer" layout="row" flex
-                  data-ng-if="!sourceType || isEditPortfolioPage">
+                  data-ng-if="!sourceType || isEditPortfolioPage || (sourceType === 'VIDEO' && !canPlayVideo)
+                  || (sourceType === 'AUDIO' && !canPlayAudio)">
     <!--Link as backup - if iframe is internally not working-->
     <a href="{{material.source}}" class="wrapped regular-link md-primary" layout-align="start center" flex>
       <span class="item-link" data-ng-bind="material.source"></span>

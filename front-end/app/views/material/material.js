@@ -116,8 +116,8 @@ define([
             }
 
             function init() {
-                processMaterial();
                 $scope.material.source = getSource($scope.material);
+                processMaterial();
                 storageService.setMaterial(null);
 
                 $rootScope.learningObjectBroken = ($scope.material.broken > 0);
@@ -219,11 +219,25 @@ define([
                 return url && url.match(slideshareUrlRegex);
             }
 
+            function isVideoLink(url) {
+                var extension = url.split('.').pop();
+                return extension == "mp4" || extension == "ogg" || extension == "webm";
+            }
+
+            function isAudioLink(url) {
+                var extension = url.split('.').pop();
+                return extension == "mp3" || extension == "ogg" || extension == "wav";
+            }
+
             function setSourceType() {
                 if (isYoutubeVideo($scope.material.source)) {
                     $scope.sourceType = 'YOUTUBE';
                 } else if (isSlideshareLink($scope.material.source)) {
                     $scope.sourceType = 'SLIDESHARE';
+                } else if (isVideoLink($scope.material.source)) {
+                    $scope.sourceType = 'VIDEO';
+                } else if (isAudioLink($scope.material.source)){
+                    $scope.sourceType = 'AUDIO';
                 } else {
                     $scope.sourceType = 'LINK';
                 }
