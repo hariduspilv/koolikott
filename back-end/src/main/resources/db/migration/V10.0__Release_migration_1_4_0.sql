@@ -7,13 +7,12 @@ UPDATE LanguageTable SET priorityOrder=3 WHERE code='ger';
 UPDATE LanguageTable SET priorityOrder=2 WHERE code='fin';
 UPDATE LanguageTable SET priorityOrder=1 WHERE code='rus';
 
+UPDATE Translation SET translation = 'Saksa' WHERE  translationGroup =1 AND translationKey = 'LANGUAGE_GER';
+UPDATE Translation SET translation = 'German' WHERE  translationGroup =3 AND translationKey = 'LANGUAGE_GER';
+UPDATE Translation SET translation = 'Немецкий' WHERE  translationGroup =2 AND translationKey = 'LANGUAGE_GER';
 
-INSERT INTO Translation(translationGroup, translationKey, translation) VALUES (1,'LANGUAGE_GER','Saksa');
-INSERT INTO Translation(translationGroup, translationKey, translation) VALUES (3,'LANGUAGE_GER','German');
-INSERT INTO Translation(translationGroup, translationKey, translation) VALUES (2,'LANGUAGE_GER','Немецкий');
-
-INSERT INTO Translation(translationGroup, translationKey, translation) VALUES (1,'LANGUAGE_FIN','Soome');
-INSERT INTO Translation(translationGroup, translationKey, translation) VALUES (3,'LANGUAGE_FIN','Finnish');
-INSERT INTO Translation(translationGroup, translationKey, translation) VALUES (2,'LANGUAGE_FIN','Финский');
+UPDATE Translation SET translation = 'Soome' WHERE  translationGroup =1 AND translationKey = 'LANGUAGE_FIN';
+UPDATE Translation SET translation = 'Finnish' WHERE  translationGroup =3 AND translationKey = 'LANGUAGE_FIN';
+UPDATE Translation SET translation = 'Финский' WHERE  translationGroup =2 AND translationKey = 'LANGUAGE_FIN';
 
 SET foreign_key_checks = 1;

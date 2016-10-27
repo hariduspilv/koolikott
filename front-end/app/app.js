@@ -12,7 +12,6 @@ define([
     'angular-route',
     'angular-click-outside',
     'angular-scroll',
-    'angular-drag-and-drop-lists',
     'jsog',
     'utils/commons',
     'ng-file-upload',
@@ -42,8 +41,7 @@ define([
         'ngFileUpload',
         'ui.bootstrap',
         'DOPconstants',
-        'textAngular',
-        'dndLists'
+        'textAngular'
     ]);
 
     var provideProvider = null;
