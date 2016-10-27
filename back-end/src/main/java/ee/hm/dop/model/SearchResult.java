@@ -17,6 +17,12 @@ public class SearchResult {
         totalResults = 0L;
     }
 
+    public SearchResult(List<Searchable> items, long totalResults, long start) {
+        this.items = items;
+        this.totalResults = totalResults;
+        this.start = start;
+    }
+
     public List<Searchable> getItems() {
         return items;
     }

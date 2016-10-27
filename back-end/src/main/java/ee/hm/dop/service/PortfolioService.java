@@ -51,14 +51,11 @@ public class PortfolioService implements LearningObjectHandler {
         return portfolio;
     }
 
-    public List<Portfolio> getByCreator(User creator, User loggedInUser) {
-        List<Portfolio> portfolios = new ArrayList<>();
-        portfolioDAO.findByCreator(creator).stream().forEach(portfolio -> portfolios.add((Portfolio) portfolio));
-
-        List<Portfolio> visiblePortfolios = portfolios.stream().filter(p -> isPortfolioVisibleToUser(p, loggedInUser))
+    public List<LearningObject> getByCreator(User creator, User loggedInUser, int start, int maxResults) {
+        return portfolioDAO.findByCreator(creator, start, maxResults)
+                .stream()
+                .filter(p -> isPortfolioVisibleToUser((Portfolio) p, loggedInUser))
                 .collect(Collectors.toList());
-
-        return visiblePortfolios;
     }
 
     public void incrementViewCount(Portfolio portfolio) {

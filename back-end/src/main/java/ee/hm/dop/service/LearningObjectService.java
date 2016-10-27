@@ -119,13 +119,17 @@ public class LearningObjectService {
         return userFavoriteDAO.findFavoriteByUserAndLearningObject(id, loggedInUser);
     }
 
-    public List<LearningObject> getUserFavorites(User loggedInUser) {
-        return userFavoriteDAO.findUsersFavoritedLearningObjects(loggedInUser);
+    public List<LearningObject> getUserFavorites(User loggedInUser, int start, int maxResult) {
+        return userFavoriteDAO.findUsersFavoritedLearningObjects(loggedInUser, start, maxResult);
     }
 
     private void validateLearningObjectAndIdNotNull(LearningObject learningObject) {
         if (learningObject == null || learningObject.getId() == null) {
             throw new RuntimeException("LearningObject not found");
         }
+    }
+
+    public long getUserFavoritesSize(User loggedInUser) {
+        return userFavoriteDAO.findUsersFavoritedLearningObjectsCount(loggedInUser);
     }
 }

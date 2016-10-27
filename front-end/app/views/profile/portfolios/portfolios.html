@@ -1,24 +1,7 @@
-<div id="page-profile-portfolios" flex>
-  <div layout="row" layout-xs="column" flex>
-    <section flex flex-gt-md="100">
-      <div layout-gt-sm>
-        <article md-cols-gt-xs="3" md-cols-gt-sm="4" class="md-padding max-width-100" role="main" id="main-content">
-          <h1 class="type-block" data-ng-if="myProfile" data-translate="MYPROFILE_PAGE_TITLE_PORTFOLIOS"></h1>
-          <h1 class="type-block" data-ng-if="!myProfile" data-translate="PROFILE_PAGE_TITLE_PORTFOLIOS"></h1>
-
-          <div class="card-container">
-
-            <h3 data-ng-show="portfolios.length === 0" data-translate="TO_ADD_PORTFOLIO_PRESS_ADD_MATERIAL"></h3>
-
-            <div data-ng-repeat="portfolio in portfolios" class="card-container__item">
-              <div data-dop-portfolio-box portfolio="portfolio"></div>
-            </div>
-
-            <div data-ng-repeat="i in [1,2,3,4]" class="card-container__item card-container__item--empty"><div><md-card class="card-sm"></md-card></div></div>
-          </div>
-
-        </article>
-      </div>
-    </section>
-  </div>
+<div id="page-profile-portfolios">
+  <article class="md-padding max-width-100" id="main-content">
+    <h1 class="type-block" data-ng-if="myProfile" data-translate="MYPROFILE_PAGE_TITLE_PORTFOLIOS"></h1>
+    <h1 class="type-block" data-ng-if="!myProfile" data-translate="PROFILE_PAGE_TITLE_PORTFOLIOS"></h1>
+    <span data-dop-infinite-search-result data-params="params" data-url="url"></span>
+  </article>
 </div>

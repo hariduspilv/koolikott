@@ -26,6 +26,7 @@ import ee.hm.dop.model.Language;
 import ee.hm.dop.model.LanguageString;
 import ee.hm.dop.model.Material;
 import ee.hm.dop.model.Recommendation;
+import ee.hm.dop.model.SearchResult;
 import ee.hm.dop.model.TargetGroup;
 import ee.hm.dop.model.User;
 import ee.hm.dop.model.taxon.Subject;
@@ -213,11 +214,13 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
     @Test
     public void getByCreatorNoMaterials() {
         String username = "voldemar.vapustav";
-        List<Material> materials = doGet(format(GET_BY_CREATOR_URL, username))
-                .readEntity(new GenericType<List<Material>>() {
-                });
+        SearchResult materials = doGet(format(GET_BY_CREATOR_URL, username))
+                .readEntity(SearchResult.class);
 
-        assertEquals(0, materials.size());
+        assertEquals(0, materials.getItems().size());
+        assertEquals(0, materials.getTotalResults());
+        assertEquals(0, materials.getStart());
+
     }
 
     @Test

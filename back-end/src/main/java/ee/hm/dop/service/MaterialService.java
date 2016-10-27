@@ -49,7 +49,7 @@ public class MaterialService implements LearningObjectHandler {
     private Logger logger = LoggerFactory.getLogger(getClass());
 
     @Inject
-    private MaterialDAO materialDao;
+    private MaterialDAO materialDAO;
 
     @Inject
     private UserLikeDAO userLikeDAO;
@@ -74,9 +74,9 @@ public class MaterialService implements LearningObjectHandler {
 
     public Material get(long materialId, User loggedInUser) {
         if (isUserAdmin(loggedInUser) || isUserModerator(loggedInUser)) {
-            return materialDao.findById(materialId);
+            return materialDAO.findById(materialId);
         } else {
-            return materialDao.findByIdNotDeleted(materialId);
+            return materialDAO.findByIdNotDeleted(materialId);
         }
     }
 
@@ -95,9 +95,9 @@ public class MaterialService implements LearningObjectHandler {
         material.setSource(cleanURL(material.getSource()));
 
         List<PeerReview> peerReviews = material.getPeerReviews();
-        if(peerReviews != null){
-            for(PeerReview peerReview : peerReviews){
-                if(!peerReview.getUrl().contains(configuration.getString(SERVER_ADDRESS))){
+        if (peerReviews != null) {
+            for (PeerReview peerReview : peerReviews) {
+                if (!peerReview.getUrl().contains(configuration.getString(SERVER_ADDRESS))) {
                     peerReview.setUrl(cleanURL(peerReview.getUrl()));
                 }
             }
@@ -120,26 +120,26 @@ public class MaterialService implements LearningObjectHandler {
     }
 
     public void delete(Long materialID, User loggedInUser) {
-        Material originalMaterial = materialDao.findByIdNotDeleted(materialID);
+        Material originalMaterial = materialDAO.findByIdNotDeleted(materialID);
         validateMaterialNotNull(originalMaterial);
 
         if (!isUserAdmin(loggedInUser)) {
             throw new RuntimeException("Logged in user must be an administrator.");
         }
 
-        materialDao.delete(originalMaterial);
+        materialDAO.delete(originalMaterial);
         solrEngineService.updateIndex();
     }
 
     public void restore(Material material, User loggedInUser) {
-        Material originalMaterial = materialDao.findById(material.getId());
+        Material originalMaterial = materialDAO.findById(material.getId());
         validateMaterialNotNull(originalMaterial);
 
         if (!isUserAdmin(loggedInUser)) {
             throw new RuntimeException("Logged in user must be an administrator.");
         }
 
-        materialDao.restore(originalMaterial);
+        materialDAO.restore(originalMaterial);
         solrEngineService.updateIndex();
     }
 
@@ -189,11 +189,11 @@ public class MaterialService implements LearningObjectHandler {
 
     private void setPeerReviews(Material material) {
         List<PeerReview> peerReviews = material.getPeerReviews();
-        if(peerReviews != null){
+        if (peerReviews != null) {
             for (int i = 0; i < peerReviews.size(); i++) {
                 PeerReview peerReview = peerReviews.get(i);
                 PeerReview returnedPeerReview = peerReviewService.createPeerReview(peerReview.getUrl());
-                if(returnedPeerReview != null){
+                if (returnedPeerReview != null) {
                     peerReviews.set(i, returnedPeerReview);
                 }
             }
@@ -210,17 +210,17 @@ public class MaterialService implements LearningObjectHandler {
             throw new RuntimeException("Comment already exists.");
         }
 
-        Material originalMaterial = materialDao.findByIdNotDeleted(material.getId());
+        Material originalMaterial = materialDAO.findByIdNotDeleted(material.getId());
         validateMaterialNotNull(originalMaterial);
 
         comment.setAdded(DateTime.now());
         originalMaterial.getComments().add(comment);
-        materialDao.update(originalMaterial);
+        materialDAO.update(originalMaterial);
     }
 
     public UserLike addUserLike(Material material, User loggedInUser, boolean isLiked) {
         validateMaterialAndIdNotNull(material);
-        Material originalMaterial = materialDao.findByIdNotDeleted(material.getId());
+        Material originalMaterial = materialDAO.findByIdNotDeleted(material.getId());
         validateMaterialNotNull(originalMaterial);
 
         userLikeDAO.deleteMaterialLike(originalMaterial, loggedInUser);
@@ -239,7 +239,7 @@ public class MaterialService implements LearningObjectHandler {
 
         validateUserIsAdmin(loggedInUser);
 
-        Material originalMaterial = materialDao.findByIdNotDeleted(material.getId());
+        Material originalMaterial = materialDAO.findByIdNotDeleted(material.getId());
 
         validateMaterialNotNull(originalMaterial);
 
@@ -248,7 +248,7 @@ public class MaterialService implements LearningObjectHandler {
         recommendation.setAdded(DateTime.now());
         originalMaterial.setRecommendation(recommendation);
 
-        originalMaterial = (Material) materialDao.update(originalMaterial);
+        originalMaterial = (Material) materialDAO.update(originalMaterial);
 
         solrEngineService.updateIndex();
 
@@ -260,20 +260,20 @@ public class MaterialService implements LearningObjectHandler {
 
         validateUserIsAdmin(loggedInUser);
 
-        Material originalMaterial = materialDao.findByIdNotDeleted(material.getId());
+        Material originalMaterial = materialDAO.findByIdNotDeleted(material.getId());
 
         validateMaterialNotNull(originalMaterial);
 
         originalMaterial.setRecommendation(null);
 
-        materialDao.update(originalMaterial);
+        materialDAO.update(originalMaterial);
 
         solrEngineService.updateIndex();
     }
 
     public void removeUserLike(Material material, User loggedInUser) {
         validateMaterialAndIdNotNull(material);
-        Material originalMaterial = materialDao.findByIdNotDeleted(material.getId());
+        Material originalMaterial = materialDAO.findByIdNotDeleted(material.getId());
         validateMaterialNotNull(originalMaterial);
 
         userLikeDAO.deleteMaterialLike(originalMaterial, loggedInUser);
@@ -286,7 +286,7 @@ public class MaterialService implements LearningObjectHandler {
     }
 
     public void delete(Material material) {
-        materialDao.delete(material);
+        materialDAO.delete(material);
     }
 
     public Material update(Material material, User changer, boolean updateSearchIndex) {
@@ -299,9 +299,9 @@ public class MaterialService implements LearningObjectHandler {
         material.setSource(cleanURL(material.getSource()));
 
         List<PeerReview> peerReviews = material.getPeerReviews();
-        if(peerReviews != null){
-            for(PeerReview peerReview : peerReviews){
-                if(!peerReview.getUrl().contains(configuration.getString(SERVER_ADDRESS))){
+        if (peerReviews != null) {
+            for (PeerReview peerReview : peerReviews) {
+                if (!peerReview.getUrl().contains(configuration.getString(SERVER_ADDRESS))) {
                     peerReview.setUrl(cleanURL(peerReview.getUrl()));
                 }
             }
@@ -314,9 +314,9 @@ public class MaterialService implements LearningObjectHandler {
         Material originalMaterial;
 
         if (isUserAdmin(changer) || isUserModerator(changer)) {
-            originalMaterial = materialDao.findById(material.getId());
+            originalMaterial = materialDAO.findById(material.getId());
         } else {
-            originalMaterial = materialDao.findByIdNotDeleted(material.getId());
+            originalMaterial = materialDAO.findByIdNotDeleted(material.getId());
         }
 
         validateMaterialUpdate(originalMaterial, changer);
@@ -369,10 +369,12 @@ public class MaterialService implements LearningObjectHandler {
         }
     }
 
-    public List<Material> getByCreator(User creator) {
-        List<Material> materials = new ArrayList<>();
-        materialDao.findByCreator(creator).forEach(material -> materials.add((Material) material));
-        return materials;
+    public List<LearningObject> getByCreator(User creator, int start, int maxResults) {
+        return materialDAO.findByCreator(creator, start, maxResults);
+    }
+
+    public long getByCreatorSize(User creator) {
+        return materialDAO.findByCreatorSize(creator);
     }
 
     private Material createOrUpdate(Material material) {
@@ -389,7 +391,7 @@ public class MaterialService implements LearningObjectHandler {
         setPeerReviews(material);
         material = applyRestrictions(material);
 
-        return (Material) materialDao.update(material);
+        return (Material) materialDAO.update(material);
     }
 
     private Material applyRestrictions(Material material) {
@@ -435,7 +437,7 @@ public class MaterialService implements LearningObjectHandler {
         if (material == null || material.getId() == null) {
             throw new RuntimeException("Material not found while adding broken material");
         }
-        Material originalMaterial = materialDao.findByIdNotDeleted(material.getId());
+        Material originalMaterial = materialDAO.findByIdNotDeleted(material.getId());
         if (originalMaterial == null) {
             throw new RuntimeException("Material not found while adding broken material");
         }
@@ -449,7 +451,7 @@ public class MaterialService implements LearningObjectHandler {
 
     public List<Material> getDeletedMaterials() {
         List<Material> materials = new ArrayList<>();
-        materialDao.findDeletedMaterials().forEach(material -> materials.add((Material) material));
+        materialDAO.findDeletedMaterials().forEach(material -> materials.add((Material) material));
         return materials;
     }
 
@@ -461,7 +463,7 @@ public class MaterialService implements LearningObjectHandler {
         if (material == null || material.getId() == null) {
             throw new RuntimeException("Material not found while adding broken material");
         }
-        Material originalMaterial = materialDao.findByIdNotDeleted(material.getId());
+        Material originalMaterial = materialDAO.findByIdNotDeleted(material.getId());
         if (originalMaterial == null) {
             throw new RuntimeException("Material not found while adding broken material");
         }
@@ -480,7 +482,7 @@ public class MaterialService implements LearningObjectHandler {
     }
 
     public List<Language> getLanguagesUsedInMaterials() {
-        return materialDao.findLanguagesUsedInMaterials();
+        return materialDAO.findLanguagesUsedInMaterials();
     }
 
     private void validateMaterialAndIdNotNull(Material material) {
@@ -520,7 +522,7 @@ public class MaterialService implements LearningObjectHandler {
     public List<Material> getBySource(String materialSource, boolean deleted) {
         materialSource = getURLWithoutScheme(cleanURL(materialSource));
         if (materialSource != null) {
-            return materialDao.findBySource(materialSource, deleted);
+            return materialDAO.findBySource(materialSource, deleted);
         } else {
             throw new RuntimeException("No material source link provided");
         }
@@ -574,5 +576,4 @@ public class MaterialService implements LearningObjectHandler {
         Matcher m = p.matcher(url);
         return m.matches();
     }
-
 }

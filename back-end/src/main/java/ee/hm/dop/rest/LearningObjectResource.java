@@ -1,5 +1,6 @@
 package ee.hm.dop.rest;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.security.RolesAllowed;
@@ -17,6 +18,8 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import ee.hm.dop.model.LearningObject;
+import ee.hm.dop.model.SearchResult;
+import ee.hm.dop.model.Searchable;
 import ee.hm.dop.model.Tag;
 import ee.hm.dop.model.UserFavorite;
 import ee.hm.dop.service.LearningObjectService;
@@ -67,16 +70,18 @@ public class LearningObjectResource extends BaseResource {
     @GET
     @Path("usersFavorite")
     @RolesAllowed({"USER", "ADMIN", "MODERATOR", "RESTRICTED"})
-    public List<LearningObject> getUsersFavorites() {
-        return learningObjectService.getUserFavorites(getLoggedInUser());
+    public SearchResult getUsersFavorites(@QueryParam("start") int start, @QueryParam("maxResults") int maxResults) {
+        if (maxResults == 0) maxResults = 12;
+
+        List<Searchable> userFavorites = new ArrayList<>(learningObjectService.getUserFavorites(getLoggedInUser(), start, maxResults));
+        return new SearchResult(userFavorites, learningObjectService.getUserFavoritesSize(getLoggedInUser()), start);
     }
 
     @GET
     @Path("usersFavorite/count")
     @RolesAllowed({"USER", "ADMIN", "MODERATOR", "RESTRICTED"})
-    public Response getUsersFavoritesCount() {
-        return Response.ok(learningObjectService.getUserFavorites(getLoggedInUser()).size()).build();
-
+    public Long getUsersFavoritesCount() {
+        return learningObjectService.getUserFavoritesSize(getLoggedInUser());
     }
 
     @POST

@@ -264,7 +264,7 @@ public class MaterialDAOTest extends DatabaseTestBase {
         User creator = new User();
         creator.setId(1L);
 
-        List<LearningObject> materials = materialDAO.findByCreator(creator);
+        List<LearningObject> materials = materialDAO.findByCreator(creator, 0, Integer.MAX_VALUE);
 
         // Should not return material 11 which is deleted
         assertEquals(3, materials.size());

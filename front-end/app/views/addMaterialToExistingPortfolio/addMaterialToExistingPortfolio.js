@@ -72,7 +72,7 @@ define([
                 if (isEmpty(data)) {
                     getUsersPortfoliosFail();
                 } else {
-                    $scope.portfolios = data;
+                    $scope.portfolios = data.items;
                 }
             }
 

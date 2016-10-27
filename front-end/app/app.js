@@ -26,8 +26,6 @@ define([
     'directives/mainFabButton/mainFabButton',
     'directives/sidebar/sidebar',
     'directives/sidenav/sidenav',
-
-    /* TODO: we could save more request if layout system is built in another way */
     'directives/pageStructure/columnLayout/columnLayout',
 
     'services/authenticatedUserService',
