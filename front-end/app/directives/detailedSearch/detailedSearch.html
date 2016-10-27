@@ -31,7 +31,7 @@
     </div>
 
     <div flex class="md-padding">
-      <div data-dop-taxon-selector data-taxon="detailedSearch.taxon"></div>
+      <div data-dop-taxon-selector data-taxon="taxon"></div>
       <md-input-container class="md-block" data-ng-if="detailedSearch.educationalContext.id === 2 || detailedSearch.educationalContext.id === 3">
         <label data-translate="DETAILED_SEARCH_CROSS_CURRICULAR_THEME"></label>
         <md-select data-ng-model="detailedSearch.crossCurricularTheme">
@@ -53,7 +53,7 @@
       <div data-dop-target-group-selector
            data-target-groups="detailedSearch.targetGroups"
            data-is-required="{trigger: false}"
-           data-taxon="detailedSearch.taxon" data-ng-if="detailedSearch.educationalContext.id != 4">
+           data-taxon="taxon" data-ng-if="detailedSearch.educationalContext.id != 4">
       </div>
       <div layout="column" layout-align="end start">
         <md-checkbox data-ng-if="detailedSearch.educationalContext.id === 2" data-ng-model="detailedSearch.CLIL" aria-label="{{'DETAILED_SEARCH_CLIL' | translate}}" class="md-primary" flex>
