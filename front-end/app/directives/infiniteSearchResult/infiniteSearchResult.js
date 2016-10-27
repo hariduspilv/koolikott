@@ -42,7 +42,6 @@ define([
                     };
 
                     function allResultsLoaded() {
-                        console.log($scope.items.length, $scope.totalResults)
                         return $scope.items.length >= $scope.totalResults;
                     }
 
