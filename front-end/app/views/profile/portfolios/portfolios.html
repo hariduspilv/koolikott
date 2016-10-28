@@ -2,6 +2,7 @@
   <article class="md-padding max-width-100" id="main-content">
     <h1 class="type-block" data-ng-if="myProfile" data-translate="MYPROFILE_PAGE_TITLE_PORTFOLIOS"></h1>
     <h1 class="type-block" data-ng-if="!myProfile" data-translate="PROFILE_PAGE_TITLE_PORTFOLIOS"></h1>
+    <h3 data-ng-show="portfolios.length === 0" data-translate="TO_ADD_PORTFOLIO_PRESS_ADD_MATERIAL"></h3>
     <span data-dop-infinite-search-result data-params="params" data-url="url"></span>
   </article>
 </div>
