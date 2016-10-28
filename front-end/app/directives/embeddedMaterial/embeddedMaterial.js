@@ -119,11 +119,13 @@ define([
                     }
 
                     function isVideoLink(url) {
+                        if(!url) return;
                         var extension = url.split('.').pop();
                         return extension == "mp4" || extension == "ogg" || extension == "webm";
                     }
 
                     function isAudioLink(url) {
+                        if(!url) return;
                         var extension = url.split('.').pop();
                         return extension == "mp3" || extension == "ogg" || extension == "wav";
                     }
