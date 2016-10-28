@@ -10,12 +10,15 @@ define([
             return {
                 scope: {
                     params: '=',
-                    url: '='
+                    url: '=',
+                    items: '=',
+                    accessor: '='
                 },
                 templateUrl: 'directives/infiniteSearchResult/infiniteSearchResult.html',
                 controller: function ($scope, serverCallService) {
                     $scope.start = 0;
                     $scope.searching = false;
+                    $scope.accessor = {};
                     var hasInitated = false;
                     var searchCount = 0;
 
@@ -61,7 +64,7 @@ define([
 
 
                     function searchSuccess(data) {
-                        if (isEmpty(data)) {
+                        if (!data || !data.items || data.items.length === 0) {
                             searchFail();
                         } else {
                             $scope.items.push.apply($scope.items, data.items);
@@ -71,11 +74,13 @@ define([
                         }
 
                         $scope.searching = false;
+                        $scope.accessor.ready = true;
                     }
 
                     function searchFail() {
                         console.log('Search failed.');
                         $scope.searching = false;
+                        $scope.accessor.ready = true;
                     }
 
                     init();
