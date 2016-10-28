@@ -69,10 +69,12 @@ define([
 
                     $scope.$watch(function () {
                         return $scope.material.source;
-                    }, function () {
-                        getSourceType();
-                        canPlayVideoFormat();
-                        canPlayAudioFormat();
+                    }, function (newValue, oldValue) {
+                        if(newValue) {
+                            getSourceType();
+                            canPlayVideoFormat();
+                            canPlayAudioFormat();
+                        }
                     });
 
                     function canPlayVideoFormat() {
