@@ -70,7 +70,7 @@ define([
                     $scope.$watch(function () {
                         return $scope.material.source;
                     }, function (newValue, oldValue) {
-                        if(newValue) {
+                        if($scope.material && $scope.material.source) {
                             getSourceType();
                             canPlayVideoFormat();
                             canPlayAudioFormat();
