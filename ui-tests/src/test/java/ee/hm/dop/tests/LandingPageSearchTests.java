@@ -81,10 +81,11 @@ public class LandingPageSearchTests {
 
 		String materialLanguage = goToLandingPage()
 				.chooseUserType("User")
+				.getFabButton()
 				.moveCursorToAddPortfolio()
 				.moveCursorToAddMaterial()
 				.clickAddMaterial()
-				//.uploadFile()
+				.uploadFile()
 				.setMaterialTitleInRussian()
 				.clickToSelectMaterialLanguage() 
 				.addDescriptionInRussian()

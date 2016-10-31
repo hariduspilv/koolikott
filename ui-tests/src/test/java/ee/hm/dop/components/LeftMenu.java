@@ -2,7 +2,7 @@ package ee.hm.dop.components;
 
 import org.openqa.selenium.By;
 import ee.hm.dop.helpers.PageHelpers;
-import ee.hm.dop.page.MaterialPage;
+import ee.hm.dop.page.MyMaterialsPage;
 
 
 
@@ -34,9 +34,9 @@ public class LeftMenu extends PageComponent {
 		return this;
 	}
 	
-	public MaterialPage clickMyMaterials() {
+	public MyMaterialsPage clickMyMaterials() {
 		getDriver().findElement(myMaterials).click();
-		return new MaterialPage();
+		return new MyMaterialsPage();
 	}
 	
 	public LeftMenu clickMyMaterialsWhenNotLoggedIn() {

@@ -21,7 +21,7 @@ public class AddMaterialMainPart extends PageComponent {
 	private By uploadFile = By.xpath("//span[@data-ng-show='!material.uploadedFile']");
 	private By languageSelection = By.id("add-material-language-select");
 	private By existingMaterialValidationError = By.cssSelector("div.md-input-message-animation > span");
-	private By russianLanguage = By.xpath("/html/body/div[5]/md-select-menu/md-content/md-option[2]/div[1]/span");
+	private By russianLanguage = By.xpath("/html/body/div[5]/md-select-menu/md-content/md-option[5]");
 
 	
 	public String getValidationError() {

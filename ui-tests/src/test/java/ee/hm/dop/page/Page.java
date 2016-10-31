@@ -1,6 +1,7 @@
 package ee.hm.dop.page;
 
 import ee.hm.dop.components.AdvancedSearch;
+import ee.hm.dop.components.FabButton;
 import ee.hm.dop.components.Header;
 import ee.hm.dop.components.LeftMenu;
 import ee.hm.dop.components.Logo;
@@ -26,6 +27,12 @@ public abstract class Page extends SeleniumUser {
 
 	public SimpleSearch getSimpleSearch() {
 		return simpleSearch;
+	}
+	
+	private static final FabButton fabButton = new FabButton();
+
+	public FabButton getFabButton() {
+		return fabButton;
 	}
 	
 	private static final Logo logo = new Logo();

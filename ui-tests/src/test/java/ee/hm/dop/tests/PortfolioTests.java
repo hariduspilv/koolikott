@@ -19,6 +19,7 @@ public class PortfolioTests {
 
 		String tagText = goToLandingPage()
 				.chooseUserType("SmallPublisher")
+				.getFabButton()
 				.clickAddPortfolio()
 				.insertPortfolioTitle()
 				//.uploadPhoto()
@@ -39,6 +40,7 @@ public class PortfolioTests {
 
 		boolean portfolioCopyWasMade = goToLandingPage()
 				.chooseUserType("User")
+				.getFabButton()
 				.clickAddPortfolio()
 				.insertPortfolioTitle()
 				.addDescription()
@@ -67,6 +69,8 @@ public class PortfolioTests {
 
 		String visibility = goToLandingPage()
 				.chooseUserType("User")
+				.getLeftMenu()
+				.getMyPortfoliosPage()
 				.openPortfolio()
 				.clickActionsMenu()
 				.clickEditPortfolio()
@@ -119,7 +123,7 @@ public class PortfolioTests {
 				.getLeftMenu()
 				.clickMyThings()
 				.clickMyPortfolios()
-				.getMyProfilePage()
+				.getMyPortfoliosPage()
 				.isPortfolioDeletedToastVisible();
 
 		Assert.assertEquals("Kogumik kustutatud", deletedPortfolioToast);
@@ -127,23 +131,29 @@ public class PortfolioTests {
 	}
 	
 	@Test
-	public void addMaterialToFavoritesAndRemoveFromFavorites() {
+	public void editChapterDescription() {
 
-		boolean starIsSelected = goToLandingPage()
+		boolean preTag = goToLandingPage()
 				.chooseUserType("Moderator")
-				.clickToSelectStar()
+				.getLeftMenu()
+				.getMyPortfoliosPage()
 				.openPortfolio()
-				.starIsSelected();
+				.clickActionsMenu()
+				.clickEditPortfolio()
+				.addDescription()
+				.clickExitAndSave()
+				.clickActionsMenu()
+				.clickEditPortfolio()
+				.clickToSelectDescription()
+				.clickToSelectBold()
+				.clickToSelectItalic()
+				.clickToSelectUl()
+				.clickToSelectOl()
+				.clickToSelectPre()
+				.clickExitAndSave()
+				.getPreTag();
 
-		assertTrue(starIsSelected);
-		
-		boolean starIsUnselected = goToLandingPage()
-				.chooseUserType("Moderator")
-				.openPortfolio()
-				.unselectStar()
-				.starIsUnselected();
-
-		assertTrue(starIsUnselected);
+				assertTrue(preTag);
 
 	}
 	
@@ -153,6 +163,7 @@ public class PortfolioTests {
 
 		boolean removeFromRecommendationListIsDisplayed = goToLandingPage()
 				.chooseUserType("SmallPublisher")
+				.getFabButton()
 				.clickAddPortfolio()
 				.insertPortfolioTitle()
 				.addDescription()

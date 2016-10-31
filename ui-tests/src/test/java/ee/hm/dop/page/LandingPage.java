@@ -12,23 +12,28 @@ public class LandingPage extends Page {
     private By recommendationsList = By.xpath("//h4[@data-ng-bind='item.title']");
     private By sortDropdown = By.xpath("//md-select[@ng-model='sortDropdown']");
     private By newFirst = By.xpath("//md-option/div[text()='Uusimad eespool']");
+    private By userName = By.xpath("//strong");
     
     
-	public MyProfilePage chooseUserType(String userType) {
+	public MyPortfoliosPage chooseUserType(String userType) {
 
 		if (userType == "Admin")
 			getDriver().get("oxygen.netgroupdigital.com/#/dev/login/89898989898");
+		    PageHelpers.waitForSeconds(1500);
 
 		if (userType == "SmallPublisher")
 			getDriver().get("oxygen.netgroupdigital.com/#/dev/login/12345678900");
+		    PageHelpers.waitForSeconds(1500);
 
 		if (userType == "User")
 			getDriver().get("oxygen.netgroupdigital.com/#/dev/login/38202020234");
+		    PageHelpers.waitForSeconds(1500);
 		
 		if (userType == "Moderator")
 			getDriver().get("oxygen.netgroupdigital.com/dev/login/35012025932");
+		    PageHelpers.waitForSeconds(1500);
 
-		return new MyProfilePage();
+		return new MyPortfoliosPage();
 
 	}
 
@@ -45,17 +50,17 @@ public class LandingPage extends Page {
 		return this;
 	}
 	
-	public PortfolioPage openSearchResultPortfolio() {
+	public PortfolioViewPage openSearchResultPortfolio() {
 		getDriver().findElement(searchResultPortfolio).click();
 		PageHelpers.waitForSeconds(1500);
-		return new PortfolioPage();
+		return new PortfolioViewPage();
 
 	}
 	
-	public PortfolioPage openRecommendedPortfolio() {
+	public PortfolioViewPage openRecommendedPortfolio() {
 		getDriver().findElement(recommendationsList).click();
 		PageHelpers.waitForSeconds(1500);
-		return new PortfolioPage();
+		return new PortfolioViewPage();
 
 	}
 	
@@ -68,6 +73,9 @@ public class LandingPage extends Page {
 
 	}
 	
+	public String getUserName() {
+		return getDriver().findElement(userName).getText();
+	}
 
 }
 	

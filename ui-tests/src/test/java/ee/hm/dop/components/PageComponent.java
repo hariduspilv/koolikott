@@ -2,7 +2,8 @@ package ee.hm.dop.components;
 
 import ee.hm.dop.page.ImproperPortfoliosDashboardPage;
 import ee.hm.dop.page.LandingPage;
-import ee.hm.dop.page.MyProfilePage;
+import ee.hm.dop.page.MyMaterialsPage;
+import ee.hm.dop.page.MyPortfoliosPage;
 import ee.hm.dop.tests.SeleniumUser;
 
 public abstract class PageComponent extends SeleniumUser {
@@ -31,10 +32,16 @@ public abstract class PageComponent extends SeleniumUser {
 		return improperPortfoliosDashboardPage;
 	}
 	
-	private static final MyProfilePage myProfilePage = new MyProfilePage();
+	private static final MyPortfoliosPage myPortfoliosPage = new MyPortfoliosPage();
 
-	public MyProfilePage getMyProfilePage() {
-		return myProfilePage;
+	public MyPortfoliosPage getMyPortfoliosPage() {
+		return myPortfoliosPage;
+	}
+	
+	private static final MyMaterialsPage myMaterialsPage = new MyMaterialsPage();
+
+	public MyMaterialsPage getMyMaterialsPage() {
+		return myMaterialsPage;
 	}
 	
 	private static final Header header = new Header();

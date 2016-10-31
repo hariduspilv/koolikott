@@ -19,6 +19,7 @@ public class MaterialTests {
 
 		String creatorName = goToLandingPage()
 				.chooseUserType("SmallPublisher")
+				.getFabButton()
 				.moveCursorToAddPortfolio()
 				.moveCursorToAddMaterial()
 				.clickAddMaterial()
@@ -40,6 +41,7 @@ public class MaterialTests {
 
 		String validationError = goToLandingPage()
 				.chooseUserType("SmallPublisher")
+				.getFabButton()
 				.moveCursorToAddPortfolio()
 				.moveCursorToAddMaterial()
 				.clickAddMaterial()
@@ -55,6 +57,7 @@ public class MaterialTests {
 
 		String existingMaterial = goToLandingPage()
 				.chooseUserType("SmallPublisher")
+				.getFabButton()
 				.moveCursorToAddPortfolio()
 				.moveCursorToAddMaterial()
 				.clickAddMaterial()
@@ -70,6 +73,7 @@ public class MaterialTests {
 
 		boolean isMaterialBoxIsDisplayed = goToLandingPage()
 				.chooseUserType("Admin")
+				.getFabButton()
 				.clickAddPortfolio()
 				.insertPortfolioTitle()
 				.addDescription()
@@ -109,6 +113,7 @@ public class MaterialTests {
 				.getLeftMenu()
 				.clickMyMaterials()
 				.clickToSelectMaterial()
+				.getFabButton()
 				.clickAddPortfolio()
 				.insertPortfolioTitle()
 				//.uploadPhoto()
@@ -132,6 +137,7 @@ public class MaterialTests {
 				.getLeftMenu()
 				.clickMyMaterials()
 				.clickToSelectMaterial()
+				.getFabButton()
 				.moveCursorToAddMaterialToExistingPortfolio()
 				.clickToAddMaterialToExistingPortfolio()
 				.choosePortfolio()
@@ -149,7 +155,7 @@ public class MaterialTests {
 				.chooseUserType("SmallPublisher")
 				.getLeftMenu()
 				.clickMyMaterials()
-				.openSearchResultMaterial()
+				.openMaterial()
 				.likeMaterial()
 				.getLikesNumber();
 
@@ -164,7 +170,7 @@ public class MaterialTests {
 				.chooseUserType("SmallPublisher")
 				.getLeftMenu()
 				.clickMyMaterials()
-				.openSearchResultMaterial()
+				.openMaterial()
 				.selectActionFromMenu()
 				.clickEditMaterial()
 				.clickNextStep()
@@ -176,29 +182,30 @@ public class MaterialTests {
 
 	}
 	
-	/*@Test
-	public void editMaterialDescription() {
+	@Test
+	public void addMaterialToFavoritesAndRemoveFromFavorites() {
 
-		String tagText = goToLandingPage()
-				.chooseUserType("SmallPublisher")
+		boolean starIsSelected = goToLandingPage()
+				.chooseUserType("Moderator")
 				.getLeftMenu()
 				.clickMyMaterials()
-				.openSearchResultMaterial()
-				.selectActionFromMenu()
-				.clickEditMaterial()
-				.clickToSelectDescription()
-				//.clickToSelectBold()
-				.clickToSelectItalic()
-				.clickToSelectUl()
-				.clickToSelectUl()
-				.clickToSelectPre()
-				.clickToInsertLink()
-				.clickToRefreshMaterial()
-				.getTagText();
+				.clickToSelectStar()
+				.openMaterial()
+				.starIsSelected();
 
-		Assert.assertEquals("1", tagText);
+		assertTrue(starIsSelected);
+		
+		boolean starIsUnselected = goToLandingPage()
+				.chooseUserType("Moderator")
+				.getLeftMenu()
+				.clickMyMaterials()
+				.openMaterial()
+				.unselectStar()
+				.starIsUnselected();
 
-	}*/
+		assertTrue(starIsUnselected);
+
+	}
 	
 	@Test
 	public void showMoreButtonIsDisplayed() {
@@ -207,7 +214,7 @@ public class MaterialTests {
 				.chooseUserType("SmallPublisher")
 				.getLeftMenu()
 				.clickMyMaterials()
-				.openSearchResultMaterial()
+				.openMaterial()
 				.insertTags()
 				.showMoreButtonIsDisplayed();
 				

@@ -18,10 +18,10 @@ public class ImproperPortfoliosDashboardPage extends Page {
 	}
 	
 	
-	public PortfolioPage clickOpenPortfolioFromDashboard() {
+	public PortfolioViewPage clickOpenPortfolioFromDashboard() {
 		PageHelpers.waitForSeconds(1500);
 		getDriver().findElement(openPortfolioButton).click();
-		return new PortfolioPage();
+		return new PortfolioViewPage();
 	}
 
 }

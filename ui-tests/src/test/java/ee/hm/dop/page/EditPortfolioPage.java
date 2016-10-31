@@ -3,6 +3,7 @@ package ee.hm.dop.page;
 import java.util.Random;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.Keys;
 import ee.hm.dop.components.AddMaterialMainPart;
 import ee.hm.dop.helpers.PageHelpers;
 
@@ -19,8 +20,74 @@ public class EditPortfolioPage extends Page {
 	private By materialMessage = By.cssSelector("div.md-toast-content");
 	private By arrowRight = By.cssSelector("#chapter-0 .chapter-arrow md-icon");
 	private By addFileButton = By.xpath("//button[@data-ng-click='addMaterialFromFile()']");
+	private By actionsMenu = By.id("material-menu");
+	private By boldButton = By.name("bold");
+	private By italicButton = By.name("italics");
+	private By ulButton = By.name("ul");
+	private By olButton = By.name("ol");
+	private By preButton = By.name("pre");
+	private By quoteButton = By.name("quote");
+	private By insertLink = By.name("insertLink");
+	private By updateMaterial = By.id("add-portfolio-edit-button");
+	private By descriptionField = By.xpath("(//div[starts-with(@id, 'taTextElement')])");
 
+	public EditPortfolioPage clickToSelectDescription() {
+		PageHelpers.waitForSeconds(1500);
+		PageHelpers.waitForVisibility(descriptionField);
+		getDriver().findElement(descriptionField).sendKeys(Keys.CONTROL + "a");
+		return this;
+
+	}
 	
+	public EditPortfolioPage clickToSelectBold() {
+		PageHelpers.waitForVisibility(boldButton);
+		getDriver().findElement(boldButton).click();
+		return this;
+
+	}
+	
+	public EditPortfolioPage clickToRefreshMaterial() {
+		getDriver().findElement(updateMaterial).click();
+		return new EditPortfolioPage();
+
+	}
+	
+	public EditPortfolioPage clickToSelectItalic() {
+		getDriver().findElement(italicButton).click();
+		return this;
+
+	}
+	
+	public EditPortfolioPage clickToInsertLink() {
+		getDriver().findElement(insertLink).click();
+		PageHelpers.uploadFile1("https://test.ee");
+		return this;
+
+	}
+	
+	public EditPortfolioPage clickToSelectUl() {
+		getDriver().findElement(ulButton).click();
+		return this;
+
+	}
+	
+	public EditPortfolioPage clickToSelectQuote() {
+		getDriver().findElement(quoteButton).click();
+		return this;
+
+	}
+	
+	public EditPortfolioPage clickToSelectPre() {
+		getDriver().findElement(preButton).click();
+		return this;
+
+	}
+	
+	public EditPortfolioPage clickToSelectOl() {
+		getDriver().findElement(olButton).click();
+		return this;
+
+	}
 	
 	public boolean materialMessageIsDisplayedInPortfolio() {
 		PageHelpers.waitForSeconds(1500);
@@ -28,16 +95,60 @@ public class EditPortfolioPage extends Page {
 
 	}
 	
+	public EditPortfolioPage clickActionsMenu() {
+		getDriver().findElement(actionsMenu).click();
+		return this;
+	}
+	
+	
 	
 	public String getTagText() {
 		return getDriver().findElement(addedTag).getText();
 		
 	}
 	
-	public PortfolioPage clickExitAndSave() {
+	public EditPortfolioPage addDescription() {
+		String[] descriptionArray = {"The road to feminism is simple: it’s about awareness.",
+				"You know, fear is a funny thing on an investigation. There seems to be a difference between imagination running away from you, what you call “true fear”, and what I think could be the change in the environment from a spirit presence.",
+				"Her stories touch a raw nerve every woman will resonate with—about how hard it is for us to be taken seriously.",
+				"You learn to be inspired by challenges, not afraid of them.",
+				"When you get an adrenaline rush from cleaning your apartment.",
+				"The greatest gift is getting to be yourself day in and day out.", "More information within.",
+				"What matters now is who you are in this moment and what you’re doing right now.",
+				"Whenever I follow this rule, my life gets exponentially better very quickly.",
+				"Remind yourself that Churchill lead a country while battling depression.",
+				"A record number of murders have occurred in Anchorage this year, with over half of them unsolved.",
+				"When all else fails, just breathe. You are surviving. And sometimes, that is all you can do. And that’s ok.",
+				"In a Romeo and Juliet-esque situation, there was some kind of apparent feud between the family of the bride and groom.",
+				"When you have a lot to juggle, the most valuable thing in the world is energy.",
+				"Dreams are an aspiration of who we truly are. ", "It’s the least I can do. Keep the conversation going.",
+				"Perfection, the ultimate goal. We all want it. We chase it. And we’re disappointed when we don’t get there. ",
+				"This is not a political post. Or a revolutionary one. Or a socialist one. Or a whatever. It’s just facts. ",
+				"I am Bipolar, and I am capable – but this does not mean I want to be Bipolar. My disorder isn’t a means to an end, a method of manipulation, or a way to demand the attention of those around me.",
+				"School starts tomorrow, which means it’s time to say goodbye",
+				"The quality of your rest. This is the main determinant of your long-term productivity and efficiency of your work. Good rest is a concrete foundation and prerequisite for exceptional performance.",
+				"Here’s an unpopular truth: people who post less are actually those who lead amazing lives. And guess what? They don’t need to prove it.",
+				"Entry Level means years of experience. When you read the title “entry level” for a position, you automatically assume that this may be an option for you.",
+				"Music note: You know how to play at least one instrument, and you always have your earbuds in.",
+				"Nothing is worth it if you aren’t happy", "I woke up to the sound of knocking on glass. I assumed it was the window, but as I checked, I heard it again, from the mirror.",
+				"I think you should stop worrying about reasons why it won’t work and only focus on the reasons why it will.",
+				"New iPhones. Each new model is basically the same as the previous one", "Delete your time-wasting apps. The ones you always get stuck playing when you should be working.",
+				"New York City isn’t a magical place where you instantaneously find yourself.",
+				"Class of 2020, no matter where you are, stay focused and enjoy every moment. This isn’t just a phase. It’s your future, your dreams and your life.",
+				"How can you be sure that your red isn’t someone else’s blue?",
+				"There are plenty of fish in the sea, and as long as you keep focusing on you and your own growth, the right ones will come to you.",
+				"It’s okay to be scared. Being scared means we’re concerned enough to realize that there might be something wrong, that there might be something worth fixing.",
+				"Most people are not strategic. They are reactive."};
+		String randomDescription = descriptionArray[new Random().nextInt(descriptionArray.length)];
+		getDriver().findElement(descriptionField).clear();
+		getDriver().findElement(descriptionField).sendKeys(randomDescription);
+		return this;
+	}
+	
+	public PortfolioViewPage clickExitAndSave() {
 		getDriver().findElement(exitAndSave).click();
 		PageHelpers.waitForSeconds(1500);
-		return new PortfolioPage();
+		return new PortfolioViewPage();
 
 	}
 
