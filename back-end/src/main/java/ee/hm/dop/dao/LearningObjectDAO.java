@@ -41,8 +41,7 @@ public class LearningObjectDAO extends BaseDAO<LearningObject> {
      * finds all LearningObjects contained in the idList. There is no guarantee
      * about in which order the LearningObjects will be in the result list.
      *
-     * @param idList
-     *            the list with LearningObject ids
+     * @param idList the list with LearningObject ids
      * @return a list of LearningObject specified by idList
      */
     public List<LearningObject> findAllById(List<Long> idList) {
@@ -79,14 +78,13 @@ public class LearningObjectDAO extends BaseDAO<LearningObject> {
      * Find all LearningObjects with the specified creator. LearningObjects are
      * ordered by added date with newest first.
      *
-     * @param creator
-     *            User who created the LearningObjects
+     * @param creator User who created the LearningObjects
      * @return A list of LearningObject
      */
-    public List<LearningObject> findByCreator(User creator) {
+    public List<LearningObject> findByCreator(User creator, int start, int maxResults) {
         String query = "SELECT lo FROM LearningObject lo WHERE lo.creator.id = :creatorId AND lo.deleted = false order by added desc";
         TypedQuery<LearningObject> findAllByCreator = createQuery(query, LearningObject.class);
-        return findAllByCreator.setParameter("creatorId", creator.getId()).getResultList();
+        return findAllByCreator.setParameter("creatorId", creator.getId()).setFirstResult(start).setMaxResults(maxResults).getResultList();
     }
 
     protected <T> void removeNot(Class<T> clazz, List<LearningObject> learningObjects) {

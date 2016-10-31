@@ -19,6 +19,8 @@ define([
                     init();
 
                     function init() {
+                        $scope.canPlayVideo = false;
+                        $scope.canPlayAudio = false;
                         $scope.isEditPortfolioPage = $rootScope.isEditPortfolioPage;
                         $scope.isEditPortfolioMode = $rootScope.isEditPortfolioMode;
 
@@ -54,7 +56,6 @@ define([
 
                     $scope.listItemDown = function (itemIndex) {
                         $scope.moveItem(itemIndex, itemIndex + 1);
-
                     };
 
                     $scope.navigateToMaterial = function (material, $event) {
@@ -66,11 +67,41 @@ define([
                         });
                     };
 
+                    $scope.$watch(function () {
+                        return $scope.material.source;
+                    }, function (newValue, oldValue) {
+                        if($scope.material && $scope.material.source) {
+                            getSourceType();
+                            canPlayVideoFormat();
+                            canPlayAudioFormat();
+                        }
+                    });
+
+                    function canPlayVideoFormat() {
+                        var extension = $scope.material.source.split('.').pop();
+                        var v = document.createElement('video');
+                        if(v.canPlayType && v.canPlayType('video/' + extension)) {
+                            $scope.canPlayVideo = true;
+                        }
+                    }
+
+                    function canPlayAudioFormat() {
+                        var extension = $scope.material.source.split('.').pop();
+                        var v = document.createElement('audio');
+                        if(v.canPlayType && v.canPlayType('audio/' + extension)) {
+                            $scope.canPlayAudio = true;
+                        }
+                    }
+
                     function getSourceType() {
                         if (isYoutubeVideo($scope.material.source)) {
                             $scope.sourceType = 'YOUTUBE';
                         } else if (isSlideshareLink($scope.material.source)) {
                             $scope.sourceType = 'SLIDESHARE';
+                        } else if (isVideoLink($scope.material.source)) {
+                            $scope.sourceType = 'VIDEO';
+                        } else if (isAudioLink($scope.material.source)){
+                            $scope.sourceType = 'AUDIO';
                         } else {
                             embedService.getEmbed(getSource($scope.material), embedCallback);
                         }
@@ -85,6 +116,18 @@ define([
                     function isSlideshareLink(url) {
                         var slideshareUrlRegex = /^https?\:\/\/www\.slideshare\.net\/[a-zA-Z0-9\-]+\/[a-zA-Z0-9\-]+$/;
                         return url && url.match(slideshareUrlRegex);
+                    }
+
+                    function isVideoLink(url) {
+                        if(!url) return;
+                        var extension = url.split('.').pop();
+                        return extension == "mp4" || extension == "ogg" || extension == "webm";
+                    }
+
+                    function isAudioLink(url) {
+                        if(!url) return;
+                        var extension = url.split('.').pop();
+                        return extension == "mp3" || extension == "ogg" || extension == "wav";
                     }
 
                     function getType() {

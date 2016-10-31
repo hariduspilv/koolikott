@@ -1,7 +1,11 @@
 package ee.hm.dop.dao;
 
+import java.math.BigInteger;
 import java.util.List;
 
+import javax.inject.Inject;
+import javax.persistence.EntityManager;
+import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 
 import ee.hm.dop.model.Language;
@@ -11,6 +15,8 @@ import ee.hm.dop.model.Repository;
 import ee.hm.dop.model.User;
 
 public class MaterialDAO extends LearningObjectDAO {
+    @Inject
+    private EntityManager entityManager;
 
     @Override
     public Material findByIdNotDeleted(long materialId) {
@@ -32,8 +38,7 @@ public class MaterialDAO extends LearningObjectDAO {
      * finds all materials contained in the idList. There is no guarantee about
      * in which order the materials will be in the result list.
      *
-     * @param idList
-     *            the list with materials id
+     * @param idList the list with materials id
      * @return a list of materials specified by idList
      */
     @Override
@@ -58,13 +63,12 @@ public class MaterialDAO extends LearningObjectDAO {
      * Find all materials with the specified creator. Materials are ordered by
      * added date with newest first.
      *
-     * @param creator
-     *            User who created the materials
+     * @param creator User who created the materials
      * @return A list of materials
      */
     @Override
-    public List<LearningObject> findByCreator(User creator) {
-        List<LearningObject> learningObjects = super.findByCreator(creator);
+    public List<LearningObject> findByCreator(User creator, int start, int maxResults) {
+        List<LearningObject> learningObjects = super.findByCreator(creator, start, maxResults);
         removeNot(Material.class, learningObjects);
         return learningObjects;
     }
@@ -73,15 +77,21 @@ public class MaterialDAO extends LearningObjectDAO {
         String queryStart = deleted ? "FROM Material m WHERE " : "FROM Material m WHERE m.deleted = false AND ";
 
         return createQuery(queryStart +
-                "m.source='http://www." + materialSource + "' " +
+                        "m.source='http://www." + materialSource + "' " +
                         "OR m.source ='https://www." + materialSource + "' " +
                         "OR m.source='http://" + materialSource + "' " +
-                        "OR m.source='https://" +materialSource + "'",
+                        "OR m.source='https://" + materialSource + "'",
                 Material.class).getResultList();
     }
 
     public List<Language> findLanguagesUsedInMaterials() {
         return createQuery("SELECT DISTINCT m.language FROM Material m WHERE m.deleted = false", Language.class)
                 .getResultList();
+    }
+
+    public long findByCreatorSize(User creator) {
+        String queryString = "SELECT Count(lo.id) FROM LearningObject lo INNER JOIN Material m ON lo.id=m.id WHERE lo.creator = :creator AND lo.deleted = FALSE";
+        Query query = entityManager.createNativeQuery(queryString);
+        return ((BigInteger) query.setParameter("creator", creator).getSingleResult()).longValue();
     }
 }

@@ -106,7 +106,7 @@ public class PortfolioDAOTest extends DatabaseTestBase {
         User creator = new User();
         creator.setId(6L);
 
-        List<LearningObject> portfolios = portfolioDAO.findByCreator(creator);
+        List<LearningObject> portfolios = portfolioDAO.findByCreator(creator, 0, Integer.MAX_VALUE);
         assertEquals(3, portfolios.size());
         DateTime previous = null;
 

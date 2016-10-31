@@ -47,7 +47,7 @@ import org.owasp.html.PolicyFactory;
         defaultImpl = NoClass.class)
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
-public abstract class LearningObject {
+public abstract class LearningObject implements Searchable {
 
     static PolicyFactory ALLOWED_HTML_TAGS_POLICY = new HtmlPolicyBuilder().allowStandardUrlProtocols()
             .allowElements("p", "b", "br", "i", "ul", "li", "div", "ol", "pre", "blockquote", "a").allowAttributes("href", "target").onElements("a")

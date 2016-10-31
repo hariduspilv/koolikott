@@ -49,6 +49,9 @@ public class Language {
     @Column(name = "code")
     List<String> codes;
 
+    @Column
+    private Long priorityOrder;
+
     public Long getId() {
         return id;
     }
@@ -79,6 +82,10 @@ public class Language {
 
     public void setCodes(List<String> codes) {
         this.codes = codes;
+    }
+
+    public Long getPriorityOrder() {
+        return priorityOrder;
     }
 
     @Override

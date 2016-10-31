@@ -25,6 +25,7 @@ import ee.hm.dop.model.Chapter;
 import ee.hm.dop.model.Material;
 import ee.hm.dop.model.Portfolio;
 import ee.hm.dop.model.Recommendation;
+import ee.hm.dop.model.SearchResult;
 import ee.hm.dop.model.TargetGroup;
 import ee.hm.dop.model.User;
 import ee.hm.dop.model.Visibility;
@@ -172,17 +173,18 @@ public class PortfolioResourceTest extends ResourceIntegrationTestBase {
         String username = "notexisting.user";
         Response response = doGet(format(GET_BY_CREATOR_URL, username));
         assertEquals(Response.Status.BAD_REQUEST.getStatusCode(), response.getStatus());
-        assertEquals("Invalid request", response.readEntity(String.class));
+        assertEquals("User does not exist with this username parameter", response.readEntity(String.class));
     }
 
     @Test
     public void getByCreatorNoMaterials() {
         String username = "voldemar.vapustav";
-        List<Portfolio> portfolios = doGet(format(GET_BY_CREATOR_URL, username)).readEntity(
-                new GenericType<List<Portfolio>>() {
-                });
+        SearchResult portfolios = doGet(format(GET_BY_CREATOR_URL, username)).readEntity(
+                SearchResult.class);
 
-        assertEquals(0, portfolios.size());
+        assertEquals(0, portfolios.getItems().size());
+        assertEquals(0, portfolios.getStart());
+        assertEquals(0, portfolios.getTotalResults());
     }
 
     @Test

@@ -1,38 +1,22 @@
 define([
-    'app',
-    'directives/materialBox/materialBox',
-    'services/serverCallService'
-], function (app) {
-    return ['$scope', '$route', 'authenticatedUserService', 'serverCallService',
-        function ($scope, $route, authenticatedUserService, serverCallService) {
+    'directives/infiniteSearchResult/infiniteSearchResult'
+], function () {
+    return ['$scope', '$route', 'authenticatedUserService',
+        function ($scope, $route, authenticatedUserService) {
             function init() {
-                getUserMaterials();
-                isMyProfilePage()
-            }
-
-            function getUserMaterials() {
-                var params = {
+                $scope.url = "rest/material/getByCreator";
+                $scope.params = {
+                    'maxResults': 15,
                     'username': authenticatedUserService.getUser().username
                 };
-                serverCallService.makeGet("rest/material/getByCreator", params, getMaterialsSuccess, getDataFailed)
-            }
 
-            function getMaterialsSuccess(data) {
-                if (data) {
-                    $scope.materials = data
-                }
-            }
-
-            function getDataFailed() {
-                console.log("Failed to get data")
+                isMyProfilePage();
             }
 
             function isMyProfilePage() {
-                if (authenticatedUserService.isAuthenticated()) {
-                    var user = authenticatedUserService.getUser()
-                    if (user && $route.current.params.username === user.username) {
-                        $scope.myProfile = true;
-                    }
+                var user = authenticatedUserService.getUser();
+                if (user && $route.current.params.username === user.username) {
+                    $scope.myProfile = true;
                 }
             }
 

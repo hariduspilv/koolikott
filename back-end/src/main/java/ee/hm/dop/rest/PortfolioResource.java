@@ -2,6 +2,7 @@ package ee.hm.dop.rest;
 
 import static org.apache.commons.lang3.StringUtils.isBlank;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.security.RolesAllowed;
@@ -17,6 +18,8 @@ import javax.ws.rs.core.Response;
 
 import ee.hm.dop.model.Portfolio;
 import ee.hm.dop.model.Recommendation;
+import ee.hm.dop.model.SearchResult;
+import ee.hm.dop.model.Searchable;
 import ee.hm.dop.model.User;
 import ee.hm.dop.model.UserLike;
 import ee.hm.dop.service.PortfolioService;
@@ -41,15 +44,33 @@ public class PortfolioResource extends BaseResource {
     @GET
     @Path("getByCreator")
     @Produces(MediaType.APPLICATION_JSON)
-    public List<Portfolio> getByCreator(@QueryParam("username") String username) {
-        return getPortfoliosByUser(username);
+    public SearchResult getByCreator(@QueryParam("username") String username, @QueryParam("start") int start, @QueryParam("maxResults") int maxResults) {
+        if (maxResults == 0) maxResults = 12;
+        if (isBlank(username)) throwBadRequestException("Username parameter is mandatory");
+
+        User creator = userService.getUserByUsername(username);
+        if (creator == null) throwBadRequestException("User does not exist with this username parameter");
+
+        User loggedInUser = getLoggedInUser();
+
+        List<Searchable> userFavorites = new ArrayList<>(portfolioService.getByCreator(creator, loggedInUser, start, maxResults));
+        int size = portfolioService.getByCreator(creator, loggedInUser, 0, 10000).size();
+        return new SearchResult(userFavorites, size, start);
+
     }
 
     @GET
     @Path("getByCreator/count")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getByCreatorCount(@QueryParam("username") String username) {
-        return Response.ok(getPortfoliosByUser(username).size()).build();
+        if (isBlank(username)) throwBadRequestException("Username parameter is mandatory");
+
+        User creator = userService.getUserByUsername(username);
+        if (creator == null) throwBadRequestException("User does not exist with this username parameter");
+
+        User loggedInUser = getLoggedInUser();
+
+        return Response.ok(portfolioService.getByCreator(creator, loggedInUser, 0, 10000).size()).build();
     }
 
     @POST
@@ -155,20 +176,5 @@ public class PortfolioResource extends BaseResource {
     @RolesAllowed({"ADMIN", "MODERATOR"})
     public Response getDeletedPortfoliosCount() {
         return Response.ok(portfolioService.getDeletedPortfolios().size()).build();
-    }
-
-    private List<Portfolio> getPortfoliosByUser(String username) {
-        if (isBlank(username)) {
-            throwBadRequestException("Username parameter is mandatory");
-        }
-
-        User creator = userService.getUserByUsername(username);
-        if (creator == null) {
-            throwBadRequestException("Invalid request");
-        }
-
-        User loggedInUser = getLoggedInUser();
-
-        return portfolioService.getByCreator(creator, loggedInUser);
     }
 }

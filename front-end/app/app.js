@@ -12,7 +12,6 @@ define([
     'angular-route',
     'angular-click-outside',
     'angular-scroll',
-    'angular-drag-and-drop-lists',
     'jsog',
     'utils/commons',
     'ng-file-upload',
@@ -26,8 +25,6 @@ define([
     'directives/mainFabButton/mainFabButton',
     'directives/sidebar/sidebar',
     'directives/sidenav/sidenav',
-
-    /* TODO: we could save more request if layout system is built in another way */
     'directives/pageStructure/columnLayout/columnLayout',
 
     'services/authenticatedUserService',
@@ -44,8 +41,7 @@ define([
         'ngFileUpload',
         'ui.bootstrap',
         'DOPconstants',
-        'textAngular',
-        'dndLists'
+        'textAngular'
     ]);
 
     var provideProvider = null;

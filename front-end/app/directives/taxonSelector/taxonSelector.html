@@ -10,7 +10,7 @@
       <md-option data-translate="SELECT_EDUCATIONAL_CONTEXT" ng-value="{}" ng-click="ctrl.reset({})"></md-option>
       <md-option ng-value="educationalContext" ng-repeat="educationalContext in ctrl.educationalContexts"
                  data-translate="{{educationalContext.name.toUpperCase()}}"
-                 data-ng-click="ctrl.selectEducationalContext()" ng-touch="ctrl.touchEducationalContext()"></md-option>
+                 data-ng-click="ctrl.selectEducationalContext()"></md-option>
     </md-select>
   </md-input-container>
 
@@ -136,5 +136,3 @@
     </md-select>
   </md-input-container>
 </form>
-
-

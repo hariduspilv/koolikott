@@ -26,6 +26,8 @@ import javax.ws.rs.core.Response;
 import ee.hm.dop.model.BrokenContent;
 import ee.hm.dop.model.Material;
 import ee.hm.dop.model.Recommendation;
+import ee.hm.dop.model.SearchResult;
+import ee.hm.dop.model.Searchable;
 import ee.hm.dop.model.User;
 import ee.hm.dop.model.UserLike;
 import ee.hm.dop.service.MaterialService;
@@ -123,15 +125,30 @@ public class MaterialResource extends BaseResource {
     @GET
     @Path("getByCreator")
     @Produces(MediaType.APPLICATION_JSON)
-    public List<Material> getByCreator(@QueryParam("username") String username) {
-        return getMaterialsByUser(username);
+        public SearchResult getByCreator(@QueryParam("username") String username, @QueryParam("start") int start, @QueryParam("maxResults") int maxResults) {
+        if (maxResults == 0) maxResults = 12;
+        if (isBlank(username)) throwBadRequestException("Username parameter is mandatory");
+
+        User creator = userService.getUserByUsername(username);
+        if (creator == null) {
+            return null;
+        }
+
+        List<Searchable> userFavorites = new ArrayList<>(materialService.getByCreator(creator, start, maxResults));
+        return new SearchResult(userFavorites, materialService.getByCreatorSize(creator), start);
+
     }
 
     @GET
     @Path("getByCreator/count")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getByCreatorCount(@QueryParam("username") String username) {
-        return Response.ok(getMaterialsByUser(username).size()).build();
+    public Long getByCreatorCount(@QueryParam("username") String username) {
+        if (isBlank(username)) throwBadRequestException("Username parameter is mandatory");
+        User creator = userService.getUserByUsername(username);
+        if (creator == null) return null;
+
+        return materialService.getByCreatorSize(creator);
+
     }
 
     @DELETE
@@ -232,18 +249,5 @@ public class MaterialResource extends BaseResource {
     public Response getDeletedMaterialsCount() {
         return Response.ok(materialService.getDeletedMaterials().size()).build();
 
-    }
-
-    private List<Material> getMaterialsByUser(String username) {
-        if (isBlank(username)) {
-            throwBadRequestException("Username parameter is mandatory");
-        }
-
-        User creator = userService.getUserByUsername(username);
-        if (creator == null) {
-            return null;
-        }
-
-        return materialService.getByCreator(creator);
     }
 }

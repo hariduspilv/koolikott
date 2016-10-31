@@ -6,7 +6,7 @@
 // Scaffolding
 html, body {
   background: $bg-gray;
-  color: rgba(0,0,0,0.77);
+  color: rgba(0, 0, 0, 0.77);
   line-height: 1.2;
 }
 
@@ -32,23 +32,21 @@ md-content.md-default-theme, md-content {
   background-color: transparent;
 }
 
-
 //
 // TO SORT
 //
 
 ul {
-    -webkit-padding-start: 0em;
-    list-style: none;
+  -webkit-padding-start: 0em;
+  list-style: none;
 }
 
 // material bugfixes
 @media (min-width: 960px) {
-.layout-column > .flex-gt-sm-25 {
+  .layout-column > .flex-gt-sm-25 {
     max-width: 25%;
   }
 }
-
 
 a {
   text-decoration: none;
@@ -65,7 +63,6 @@ a {
 .md-errors-spacer {
   display: none;
 }
-
 
 /* fixes select overflow */
 .md-select-value *:first-child {
@@ -109,4 +106,8 @@ body.md-toast-animating {
 .max-width-100 {
   max-width: 100%;
   width: 100%;
+}
+
+.min-height-500 {
+  min-height: 500px;
 }

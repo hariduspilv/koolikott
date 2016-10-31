@@ -9,13 +9,13 @@ import javax.persistence.TypedQuery;
 
 import ee.hm.dop.model.Language;
 
-public class LanguageDAO {
+public class LanguageDAO extends BaseDAO<Language> {
 
     @Inject
     private EntityManager entityManager;
 
     public Language findByCode(String code) {
-        TypedQuery<Language> findByCode = entityManager.createQuery(
+        TypedQuery<Language> findByCode = createQuery(
                 "select l from LanguageTable l left join l.codes c where l.code = :code or c = :code", Language.class);
 
         Language language = null;
@@ -29,7 +29,7 @@ public class LanguageDAO {
     }
 
     public List<Language> findAll() {
-        TypedQuery<Language> findAll = entityManager.createQuery("select l from LanguageTable l", Language.class);
+        TypedQuery<Language> findAll = createQuery("FROM LanguageTable l ORDER BY priorityOrder DESC, id DESC", Language.class);
         return findAll.getResultList();
     }
 }

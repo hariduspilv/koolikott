@@ -1,0 +1,14 @@
+<div data-infinite-scroll="nextPage()" class="card-container">
+  <div data-ng-repeat="item in items track by item.id" class="card-container__item">
+    <div data-ng-if="item.type === '.Material'" data-dop-material-box material="item"></div>
+    <div data-ng-if="item.type === '.Portfolio'" data-dop-portfolio-box portfolio="item"></div>
+  </div>
+</div>
+
+<div data-ng-show="!allResultsLoaded() && searching">
+  <p data-ng-show="start !== 0" class="md-body-2 md-button md-primary" layout="row" layout-align="center center"
+     data-translate="SEARCH_LOADING"></p>
+  <div data-ng-show="start === 0" layout="column" layout-align="center center" class="min-height-500">
+    <md-progress-circular></md-progress-circular>
+  </div>
+</div>

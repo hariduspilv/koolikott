@@ -1,5 +1,6 @@
 define([
     'app',
+    'angular-drag-and-drop-lists',
     'services/translationService',
     'services/dialogService',
     'directives/chapter/addChapterMaterial/addChapterMaterial',

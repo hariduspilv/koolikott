@@ -1,19 +1,2 @@
 <h1 data-translate="LANDING_PAGE_TITLE_NEWEST" md-padding></h1>
-
-<div class="card-container">
-  <div data-ng-repeat="item in newestItems track by item.id" class="card-container__item">
-    <div data-ng-if="item.type === '.Material'" data-dop-material-box material="item"></div>
-    <div data-ng-if="item.type === '.Portfolio'" data-dop-portfolio-box portfolio="item"></div>
-  </div>
-  <div data-ng-repeat="i in [1,2,3,4,5,6]" class="card-container__item card-container__item--empty"><div><md-card class="card-sm"></md-card></div></div>
-</div>
-
-<h1 data-translate="LANDING_PAGE_TITLE_POPULAR" md-padding></h1>
-
-<div class="card-container">
-  <div data-ng-repeat="item in popularItems track by item.id" class="card-container__item">
-    <div data-ng-if="item.type === '.Material'" data-dop-material-box material="item"></div>
-    <div data-ng-if="item.type === '.Portfolio'" data-dop-portfolio-box portfolio="item"></div>
-  </div>
-  <div data-ng-repeat="i in [1,2,3,4,5,6]" class="card-container__item card-container__item--empty"><div><md-card class="card-sm"></md-card></div></div>
-</div>
+<span data-dop-infinite-search-result data-params="params"></span>

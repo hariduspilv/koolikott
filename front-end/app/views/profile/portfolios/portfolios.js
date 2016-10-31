@@ -1,38 +1,22 @@
 define([
-    'app',
-    'directives/portfolioBox/portfolioBox',
-    'services/serverCallService'
-], function (app) {
-    return ['$scope', '$route', 'authenticatedUserService', 'serverCallService',
-        function ($scope, $route, authenticatedUserService, serverCallService) {
+    'directives/infiniteSearchResult/infiniteSearchResult'
+], function () {
+    return ['$scope', '$route', 'authenticatedUserService',
+        function ($scope, $route, authenticatedUserService) {
             function init() {
-                getUserPortfolios();
+                $scope.url = "rest/portfolio/getByCreator";
+                $scope.params = {
+                    'maxResults': 15,
+                    'username': authenticatedUserService.getUser().username
+                };
+
                 isMyProfilePage();
             }
 
-            function getUserPortfolios() {
-                var params = {
-                    'username': authenticatedUserService.getUser().username
-                };
-                serverCallService.makeGet("rest/portfolio/getByCreator", params, getPortfoliosSuccess, getDataFailed)
-            }
-
-            function getPortfoliosSuccess(data) {
-                if (data) {
-                    $scope.portfolios = data
-                }
-            }
-
-            function getDataFailed() {
-                console.log("Failed to get data")
-            }
-
             function isMyProfilePage() {
-                if (authenticatedUserService.isAuthenticated()) {
-                    var user = authenticatedUserService.getUser()
-                    if (user && $route.current.params.username === user.username) {
-                        $scope.myProfile = true;
-                    }
+                var user = authenticatedUserService.getUser();
+                if (user && $route.current.params.username === user.username) {
+                    $scope.myProfile = true;
                 }
             }
 

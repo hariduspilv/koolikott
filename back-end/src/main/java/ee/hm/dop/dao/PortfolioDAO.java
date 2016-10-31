@@ -42,8 +42,7 @@ public class PortfolioDAO extends LearningObjectDAO {
      * Finds all portfolios contained in the idList. There is no guarantee about
      * in which order the portfolios will be in the result list.
      *
-     * @param idList
-     *            the list with portfolio identifiers
+     * @param idList the list with portfolio identifiers
      * @return a list of portfolios specified by idList
      */
     @Override
@@ -54,8 +53,8 @@ public class PortfolioDAO extends LearningObjectDAO {
     }
 
     @Override
-    public List<LearningObject> findByCreator(User creator) {
-        List<LearningObject> learningObjects = super.findByCreator(creator);
+    public List<LearningObject> findByCreator(User creator, int start, int maxResults) {
+        List<LearningObject> learningObjects = super.findByCreator(creator, start, maxResults);
         removeNot(Portfolio.class, learningObjects);
         return learningObjects;
     }

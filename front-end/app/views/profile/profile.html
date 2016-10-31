@@ -1,15 +1,13 @@
 <div id="page-profile" flex>
   <article class="md-padding max-width-100" role="main" id="main-content">
+    <h1>{{user.name}} {{user.surname}}</h1>
     <h1 data-translate="PROFILE_PAGE_TITLE_PORTFOLIOS"></h1>
-    <h2 class="md-headline">
-      {{user.name}} {{user.surname}}
-    </h2>
 
     <div class="card-container">
       <div data-ng-repeat="item in portfolios track by item.id" class="card-container__item">
         <div data-dop-portfolio-box portfolio="item"></div>
       </div>
-      <div data-ng-repeat="i in [1,2,3,4,5,6]" class="card-container__item card-container__item--empty"><div><md-card class="card-sm"></md-card></div></div>
+      <div data-ng-repeat="i in [1,2,3,4,5,6,7,8,9,10]" class="card-container__item card-container__item--empty"><div><md-card class="card-sm"></md-card></div></div>
     </div>
 
     <h1 class="type-block" data-translate="PROFILE_PAGE_TITLE_MATERIALS"></h1>
