@@ -22,7 +22,8 @@ define([
                     $scope.params = {
                         'taxon': taxons,
                         'sort': 'added',
-                        'sortDirection': 'desc'
+                        'sortDirection': 'desc',
+                        'limit': 15
                     };
                 }
             }

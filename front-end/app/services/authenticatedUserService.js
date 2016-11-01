@@ -10,7 +10,7 @@ define(['angularAMD'], function (angularAMD) {
                 },
 
                 getAuthenticatedUser: function () {
-                    return JSON.parse(localStorage.getItem("authenticatedUser"));
+                    return JSOG.parse(localStorage.getItem("authenticatedUser"));
                 },
 
                 removeAuthenticatedUser: function () {

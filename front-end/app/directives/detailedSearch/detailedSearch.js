@@ -100,7 +100,9 @@ define([
                 }
 
                 function setTaxonMap(taxonMap) {
-                    $scope.taxon = Object.create(taxonMap['t' + searchService.getTaxon()]);
+                    for (var i = 0; i < searchService.getTaxon().length; i++) {
+                        $scope.taxon = Object.create(taxonMap['t' + searchService.getTaxon()[i]]);
+                    }
                 }
 
                 $scope.search = function () {
