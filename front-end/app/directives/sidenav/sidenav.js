@@ -13,6 +13,7 @@ define([
             controller: function ($rootScope, $scope, $location, serverCallService, searchService, $timeout, metadataService, authenticatedUserService, $sce, $mdDialog, userDataService) {
 
                 $scope.oneAtATime = true;
+                $scope.dashboardOpen = false;
 
                 // List of taxon icons
                 $scope.taxonIcons = [
@@ -153,6 +154,17 @@ define([
                     $scope.updateImproperMaterialsCount();
                     $scope.updateImproperPortfoliosCount();
                 };
+
+                $scope.dashboardSearch = function () {
+                    if ($scope.dashboardOpen === false) {
+                        $location.url("/dashboard");
+                        $scope.dashboardOpen = true;
+                    } else {
+                        $scope.dashboardOpen = false;
+                    }
+                };
+
+
             }
         }
     }]);

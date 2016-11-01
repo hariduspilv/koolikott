@@ -49,7 +49,7 @@ define([
                 $scope.$watch(function () {
                     return $location.url()
                 }, function () {
-                    $scope.isActive = ($location.url() === '/search/result?q=&taxon=' + $scope.taxon.id) ? true : false;
+                    $scope.isActive = ($location.url() === '/search/result?q=&taxon=' + $scope.taxon.id);
                 });
             }
         }

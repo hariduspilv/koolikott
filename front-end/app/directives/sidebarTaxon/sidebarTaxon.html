@@ -5,7 +5,7 @@
       <span class="taxon__name text-truncate" data-translate="{{getTaxonTranslation(taxon)}}"></span>
     </div>
     <!--<span class="taxon__count">{{childrenCount}}</span>-->
-    <md-icon class="material-icons taxon__arrow"">keyboard_arrow_right</md-icon>{{root.currentlyOpenTaxonId}}
+    <md-icon class="material-icons taxon__arrow">keyboard_arrow_right</md-icon>{{root.currentlyOpenTaxonId}}
   </a>
 
   <div ng-if="opened" ng-repeat="data in taxon.children">

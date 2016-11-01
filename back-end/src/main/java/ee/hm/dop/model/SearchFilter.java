@@ -6,7 +6,7 @@ import ee.hm.dop.model.taxon.Taxon;
 
 public class SearchFilter {
 
-    private Taxon taxon;
+    private List<Taxon> taxon;
 
     private boolean paid = true;
 
@@ -34,11 +34,11 @@ public class SearchFilter {
 
     private SortDirection sortDirection;
 
-    public Taxon getTaxon() {
+    public List<Taxon> getTaxons() {
         return taxon;
     }
 
-    public void setTaxon(Taxon taxon) {
+    public void setTaxons(List<Taxon> taxon) {
         this.taxon = taxon;
     }
 

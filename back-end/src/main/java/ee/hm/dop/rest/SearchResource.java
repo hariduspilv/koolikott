@@ -1,6 +1,8 @@
 package ee.hm.dop.rest;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 import javax.ws.rs.GET;
@@ -18,6 +20,7 @@ import ee.hm.dop.model.SearchResult;
 import ee.hm.dop.model.Searchable;
 import ee.hm.dop.model.TargetGroup;
 import ee.hm.dop.model.taxon.Taxon;
+import ee.hm.dop.model.taxon.TaxonDTO;
 import ee.hm.dop.service.CrossCurricularThemeService;
 import ee.hm.dop.service.KeyCompetenceService;
 import ee.hm.dop.service.LanguageService;
@@ -52,23 +55,28 @@ public class SearchResource extends BaseResource {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public SearchResult search(@QueryParam("q") String query, @QueryParam("start") Long start, //
-            @QueryParam("taxon") Long taxonId, //
-            @QueryParam("paid") Boolean paid, //
-            @QueryParam("type") String type, //
-            @QueryParam("language") String languageCode, //
-            @QueryParam("targetGroup") List<TargetGroup> targetGroups, //
-            @QueryParam("resourceType") String resourceTypeName, //
-            @QueryParam("specialEducation") Boolean isSpecialEducation, //
-            @QueryParam("issuedFrom") Integer issuedFrom, //
-            @QueryParam("crossCurricularTheme") Long crossCurricularThemeId, //
-            @QueryParam("keyCompetence") Long keyCompetenceId, //
-            @QueryParam("curriculumLiterature") Boolean isCurriculumLiterature, //
-            @QueryParam("sort") String sort, //
-            @QueryParam("sortDirection") String sortDirection, //
-            @QueryParam("limit") Long limit) {
+    public SearchResult search(@QueryParam("q") String query,
+                               @QueryParam("start") Long start,
+                               @QueryParam("taxon") List<Long> taxonIds,
+                               @QueryParam("paid") Boolean paid,
+                               @QueryParam("type") String type,
+                               @QueryParam("language") String languageCode,
+                               @QueryParam("targetGroup") List<TargetGroup> targetGroups,
+                               @QueryParam("resourceType") String resourceTypeName,
+                               @QueryParam("specialEducation") Boolean isSpecialEducation,
+                               @QueryParam("issuedFrom") Integer issuedFrom,
+                               @QueryParam("crossCurricularTheme") Long crossCurricularThemeId,
+                               @QueryParam("keyCompetence") Long keyCompetenceId,
+                               @QueryParam("curriculumLiterature") Boolean isCurriculumLiterature,
+                               @QueryParam("sort") String sort,
+                               @QueryParam("sortDirection") String sortDirection,
+                               @QueryParam("limit") Long limit) {
 
-        Taxon taxon = taxonService.getTaxonById(taxonId);
+        List<Taxon> taxons = taxonIds
+                .stream()
+                .map(taxonId -> taxonService.getTaxonById(taxonId))
+                .collect(Collectors.toList());
+
         Language language = languageService.getLanguage(languageCode);
         ResourceType resourceType = resourceTypeService.getResourceTypeByName(resourceTypeName);
         CrossCurricularTheme crossCurricularTheme = crossCurricularThemeService
@@ -88,7 +96,7 @@ public class SearchResource extends BaseResource {
         }
 
         SearchFilter searchFilter = new SearchFilter();
-        searchFilter.setTaxon(taxon);
+        searchFilter.setTaxons(taxons);
         searchFilter.setPaid(paid);
         searchFilter.setType(type);
         searchFilter.setLanguage(language);

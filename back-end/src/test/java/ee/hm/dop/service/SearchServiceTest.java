@@ -10,6 +10,7 @@ import static org.junit.Assert.fail;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import ee.hm.dop.dao.LearningObjectDAO;
@@ -95,7 +96,7 @@ public class SearchServiceTest {
         EducationalContext educationalContext = new EducationalContext();
         educationalContext.setId(1L);
         educationalContext.setName("PRESCHOOL");
-        searchFilter.setTaxon(educationalContext);
+        searchFilter.setTaxons(Collections.singletonList(educationalContext));
         String tokenizedQuery = "educational_context:\"preschool\" AND (visibility:\"public\" OR type:\"material\")";
         long start = 0;
 
@@ -144,7 +145,7 @@ public class SearchServiceTest {
         EducationalContext educationalContext = new EducationalContext();
         educationalContext.setId(2L);
         educationalContext.setName("context");
-        searchFilter.setTaxon(educationalContext);
+        searchFilter.setTaxons(Collections.singletonList(educationalContext));
         String tokenizedQuery = "educational_context:\"context\" AND (visibility:\"public\" OR type:\"material\")";
         long start = 0;
 
@@ -172,7 +173,7 @@ public class SearchServiceTest {
         EducationalContext educationalContext = new EducationalContext();
         educationalContext.setId(2L);
         educationalContext.setName("PRESCHOOL");
-        searchFilter.setTaxon(educationalContext);
+        searchFilter.setTaxons(Collections.singletonList(educationalContext));
         String tokenizedQuery = "(pythagoras) AND educational_context:\"preschool\""
                 + " AND (visibility:\"public\" OR type:\"material\")";
         long start = 0;
@@ -196,7 +197,7 @@ public class SearchServiceTest {
         domain.setName("COOL_DOMAIN");
         domain.setEducationalContext(educationalContext);
 
-        searchFilter.setTaxon(domain);
+        searchFilter.setTaxons(Collections.singletonList(domain));
         String tokenizedQuery = "(pythagoras) AND domain:\"cool_domain\" AND educational_context:\"preschool\""
                 + " AND (visibility:\"public\" OR type:\"material\")";
         long start = 0;
@@ -225,7 +226,7 @@ public class SearchServiceTest {
         subject.setName("COOL_SUBJECT");
         subject.setDomain(domain);
 
-        searchFilter.setTaxon(subject);
+        searchFilter.setTaxons(Collections.singletonList(subject));
 
         String tokenizedQuery = "(pythagoras) AND subject:\"cool_subject\" AND domain:\"cool_domain\""
                 + " AND educational_context:\"preschool\" AND (visibility:\"public\" OR type:\"material\")";
@@ -255,7 +256,7 @@ public class SearchServiceTest {
         specialization.setName("COOL_SPECIALIZATION");
         specialization.setDomain(domain);
 
-        searchFilter.setTaxon(specialization);
+        searchFilter.setTaxons(Collections.singletonList(specialization));
 
         String tokenizedQuery = "(pythagoras) AND specialization:\"cool_specialization\" AND domain:\"cool_domain\""
                 + " AND educational_context:\"preschool\" AND (visibility:\"public\" OR type:\"material\")";
@@ -290,7 +291,7 @@ public class SearchServiceTest {
         module.setName("COOL_MODULE");
         module.setSpecialization(specialization);
 
-        searchFilter.setTaxon(module);
+        searchFilter.setTaxons(Collections.singletonList(module));
 
         String tokenizedQuery = "(pythagoras) AND module:\"cool_module\" AND specialization:\"cool_specialization\""
                 + " AND domain:\"cool_domain\" AND educational_context:\"preschool\" AND (visibility:\"public\" OR type:\"material\")";
@@ -320,7 +321,7 @@ public class SearchServiceTest {
         topic.setName("COOL_TOPIC");
         topic.setDomain(domain);
 
-        searchFilter.setTaxon(topic);
+        searchFilter.setTaxons(Collections.singletonList(topic));
         String tokenizedQuery = "(pythagoras) AND topic:\"cool_topic\" AND domain:\"cool_domain\""
                 + " AND educational_context:\"preschool\" AND (visibility:\"public\" OR type:\"material\")";
         long start = 0;
@@ -354,7 +355,7 @@ public class SearchServiceTest {
         topic.setName("COOL_TOPIC");
         topic.setSubject(subject);
 
-        searchFilter.setTaxon(topic);
+        searchFilter.setTaxons(Collections.singletonList(topic));
         String tokenizedQuery = "(pythagoras) AND topic:\"cool_topic\" AND subject:\"cool_subject\""
                 + " AND domain:\"cool_domain\" AND educational_context:\"preschool\" AND (visibility:\"public\" OR type:\"material\")";
         long start = 0;
@@ -393,7 +394,7 @@ public class SearchServiceTest {
         topic.setName("COOL_TOPIC");
         topic.setModule(module);
 
-        searchFilter.setTaxon(topic);
+        searchFilter.setTaxons(Collections.singletonList(topic));
 
         String tokenizedQuery = "(pythagoras) AND topic:\"cool_topic\" AND module:\"cool_module\""
                 + " AND specialization:\"cool_specialization\" AND domain:\"cool_domain\""
@@ -429,7 +430,7 @@ public class SearchServiceTest {
         subtopic.setName("COOL_SUBTOPIC");
         subtopic.setTopic(topic);
 
-        searchFilter.setTaxon(subtopic);
+        searchFilter.setTaxons(Collections.singletonList(subtopic));
         String tokenizedQuery = "(pythagoras) AND subtopic:\"cool_subtopic\" AND topic:\"cool_topic\""
                 + " AND domain:\"cool_domain\" AND educational_context:\"preschool\" AND (visibility:\"public\" OR type:\"material\")";
         long start = 0;
@@ -468,7 +469,7 @@ public class SearchServiceTest {
         subtopic.setName("COOL_SUBTOPIC");
         subtopic.setTopic(topic);
 
-        searchFilter.setTaxon(subtopic);
+        searchFilter.setTaxons(Collections.singletonList(subtopic));
         String tokenizedQuery = "(pythagoras) AND subtopic:\"cool_subtopic\" AND topic:\"cool_topic\""
                 + " AND subject:\"cool_subject\" AND domain:\"cool_domain\" AND educational_context:\"preschool\""
                 + " AND (visibility:\"public\" OR type:\"material\")";
@@ -513,7 +514,7 @@ public class SearchServiceTest {
         subtopic.setName("COOL_SUBTOPIC");
         subtopic.setTopic(topic);
 
-        searchFilter.setTaxon(subtopic);
+        searchFilter.setTaxons(Collections.singletonList(subtopic));
 
         String tokenizedQuery = "(pythagoras) AND subtopic:\"cool_subtopic\" AND topic:\"cool_topic\""
                 + " AND module:\"cool_module\" AND specialization:\"cool_specialization\" AND domain:\"cool_domain\""
@@ -585,7 +586,7 @@ public class SearchServiceTest {
         EducationalContext educationalContext = new EducationalContext();
         educationalContext.setId(2L);
         educationalContext.setName("PRESCHOOL");
-        searchFilter.setTaxon(educationalContext);
+        searchFilter.setTaxons(Collections.singletonList(educationalContext));
         searchFilter.setPaid(false);
         String tokenizedQuery = "(pythagoras) AND educational_context:\"preschool\" AND (paid:\"false\" OR type:\"portfolio\")"
                 + " AND (visibility:\"public\" OR type:\"material\")";
@@ -603,7 +604,7 @@ public class SearchServiceTest {
         EducationalContext educationalContext = new EducationalContext();
         educationalContext.setId(2L);
         educationalContext.setName("PRESCHOOL");
-        searchFilter.setTaxon(educationalContext);
+        searchFilter.setTaxons(Collections.singletonList(educationalContext));
         searchFilter.setType("portfolio");
         String tokenizedQuery = "(pythagoras) AND educational_context:\"preschool\" AND type:\"portfolio\""
                 + " AND (visibility:\"public\" OR type:\"material\")";
@@ -654,7 +655,7 @@ public class SearchServiceTest {
         topic.setName("COOL_TOPIC");
         topic.setSubject(subject);
 
-        searchFilter.setTaxon(topic);
+        searchFilter.setTaxons(Collections.singletonList(topic));
 
         searchFilter.setPaid(false);
         searchFilter.setType("material");
@@ -984,7 +985,7 @@ public class SearchServiceTest {
     private void testSearch(String query, String tokenizedQuery, String expectedSort, List<Searchable> searchables,
             long start, Long limit, SearchFilter searchFilter) {
         if (limit == null) {
-            testSearch(query, tokenizedQuery, expectedSort, searchables, start, limit, searchables.size(),
+            testSearch(query, tokenizedQuery, expectedSort, searchables, start, null, searchables.size(),
                     searchFilter, null);
         } else {
             testSearch(query, tokenizedQuery, expectedSort, searchables, start, limit, limit, searchFilter, null);
@@ -993,7 +994,7 @@ public class SearchServiceTest {
 
     private List<Long> getIdentifiers(List<Searchable> searchables) {
         List<Long> identifiers = new ArrayList<>();
-        searchables.stream().forEach(s -> identifiers.add(s.getId()));
+        searchables.forEach(s -> identifiers.add(s.getId()));
         return identifiers;
     }
 
