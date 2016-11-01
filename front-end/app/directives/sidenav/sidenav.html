@@ -120,31 +120,31 @@
     <div uib-accordion-group class="panel-default" ng-if="isViewPortforlioPage || isEditPortfolioMode" is-open="isViewPortfolioAndEdit">
       <div data-dop-table-of-contents data-portfolio="portfolio" data-readonly="!isEditPortfolioMode"></div>
     </div>
-    <div uib-accordion-group class="panel-default" is-open="isTaxonomyOpen" ng-if="!isViewPortforlioPage && !isEditPortfolioMode">
-      <uib-accordion-heading>
-        <md-button id="sidebarTaxon" class="md-hue-1 md-primary-menu" ng-click="changeTaxonomyDataAndVisibility('sidebar', 'primary')">
-          <div flex layout="row">
-            <span class="panel-title__text" data-translate="TABLE_OF_CONTENTS"></span>
-            <span flex></span>
-            <md-icon class="md-primary material-icons arrow panel-title__arrow">keyboard_arrow_right</md-icon>
-          </div>
-        </md-button>
-      </uib-accordion-heading>
+  </uib-accordion>
+  <div class="menu-nested-list">
+    <div class="panel-default" data-ng-class="{'panel-open': isTaxonomyOpen}" data-ng-if="!isViewPortforlioPage && !isEditPortfolioMode">
+      <md-button id="sidebarTaxon" class="md-hue-1 md-primary-menu" data-ng-click="isTaxonomyOpen = !isTaxonomyOpen">
+        <div flex layout="row">
+          <span class="panel-title__text" data-translate="TABLE_OF_CONTENTS"></span>
+          <span flex></span>
+          <md-icon class="md-primary material-icons arrow panel-title__arrow">keyboard_arrow_right</md-icon>
+        </div>
+      </md-button>
       <!-- Subitems -->
-      <ul class="taxon-list">
+      <ul class="taxon-list" uib-collapse="!isTaxonomyOpen">
         <li ng-repeat="(key, item) in reducedTaxon">
           <div class="taxon-item" icon="taxonIcons[key]" tree="taxonTree" dop-sidebar-taxon data-taxon="item"></div>
         </li>
       </ul>
     </div>
-  </uib-accordion>
+  </div>
   <span class="flex"></span>
   <md-divider></md-divider>
   <md-content layout-margin>
     <div class="version-number" hide-xs hide-sm hide-md>
       <a target="_blank" href="https://github.com/e-koolikott/DOP/blob/master/CHANGELOG.md"><span
         data-translate="APP_VERSION"></span> <span ng-bind="APP_VERSION"></span></a>
-    </div>
-  </md-content>
+      </div>
+    </md-content>
 
-</md-sidenav>
+  </md-sidenav>

@@ -91,6 +91,10 @@ md-sidenav {
   .panel-title__text, md-icon.panel-title__arrow {
     color: $color-muted;
   }
+
+  .taxon-list {
+    margin: 0;
+  }
 }
 
 .portfolio-container {
