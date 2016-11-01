@@ -3,7 +3,7 @@ define([
     'services/serverCallService',
     'ngInfiniteScroll',
     'directives/materialBox/materialBox',
-    'directives/portfolioBox/portfolioBox',
+    'directives/portfolioBox/portfolioBox'
 ], function (app) {
     app.directive('dopInfiniteSearchResult', ['serverCallService',
         function () {

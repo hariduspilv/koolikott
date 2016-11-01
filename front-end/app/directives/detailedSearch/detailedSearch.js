@@ -93,7 +93,7 @@ define([
                         setEditModePrefill();
                     } else {
                         // Taxon
-                        if (searchService.getTaxon()) {
+                        if (searchService.getTaxon().length > 0) {
                             $rootScope.taxonParser.loadTaxonMap(setTaxonMap);
                         }
                     }
@@ -135,7 +135,7 @@ define([
 
                 function addTaxonToSearch() {
                     if ($scope.taxon) {
-                        searchService.setTaxon($scope.taxon.id);
+                        searchService.setTaxon([$scope.taxon.id]);
                     } else {
                         searchService.setTaxon(null);
                     }

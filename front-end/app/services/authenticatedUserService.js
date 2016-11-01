@@ -6,7 +6,7 @@ define(['angularAMD'], function (angularAMD) {
 
             instance = {
                 setAuthenticatedUser: function (authenticatedUser) {
-                    localStorage.setItem("authenticatedUser", JSON.stringify(authenticatedUser));
+                    localStorage.setItem("authenticatedUser", JSOG.stringify(authenticatedUser));
                 },
 
                 getAuthenticatedUser: function () {
