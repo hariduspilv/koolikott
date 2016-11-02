@@ -62,12 +62,8 @@ define([
                             $scope.start = 0;
                         } else {
                             // because first search is 20 items
-                            // start value has exception
-                            if (searchCount === 1) {
-                                $scope.start = 20;
-                            } else {
-                                $scope.start = searchCount * maxResults;
-                            }
+                            // +5 has to be added to every search
+                            $scope.start = searchCount * maxResults + 5;
                         }
 
                         if (isFirstLoad) {
