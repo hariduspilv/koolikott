@@ -280,8 +280,9 @@ md-sidenav._md-locked-open, md-sidenav._md-locked-open._md-closed, md-sidenav._m
 }
 
 .dashboard-icon {
-  left: initial !important;
+  left: auto !important;
   right: 23px;
+  top: 10px;
 
   .is-active & {
     color: $color-selected-menu;
