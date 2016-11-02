@@ -73,6 +73,10 @@ define([
                     return $filter('translate')(taxon.level.toUpperCase().substr(1) + "_" + taxon.name.toUpperCase());
                 };
 
+                $rootScope.clearTaxons = function () {
+                    self.taxon = null;
+                };
+
                 function addTaxonPathListeners() {
                     /*
                      * The order of the watchers is important and should be the same as the tree.
