@@ -61,15 +61,23 @@ define([
                         if ($scope.items.length === 0) {
                             $scope.start = 0;
                         } else {
-                            $scope.start = searchCount * maxResults;
+                            // because first search is 20 items
+                            // start value has exception
+                            if (searchCount === 1) {
+                                $scope.start = 20;
+                            } else {
+                                $scope.start = searchCount * maxResults;
+                            }
                         }
-                        $scope.params.start = $scope.start;
 
                         if (isFirstLoad) {
                             $scope.params.limit = 20;
                         } else {
                             $scope.params.limit = 15;
                         }
+
+                        $scope.params.start = $scope.start;
+
                         serverCallService.makeGet($scope.url, $scope.params, searchSuccess, searchFail);
                     }
 
