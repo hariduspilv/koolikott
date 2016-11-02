@@ -60,8 +60,8 @@
     </div>
   </md-card-content>
   <md-card-footer class="embeded-material-footer" layout="row" flex
-                  data-ng-if="!sourceType || isEditPortfolioPage || (sourceType === 'VIDEO' && !canPlayVideo)
-                  || (sourceType === 'AUDIO' && !canPlayAudio)">
+                  data-ng-if="(!sourceType || isEditPortfolioPage || (sourceType === 'VIDEO' && !canPlayVideo && !material.picture)
+                  || (sourceType === 'AUDIO' && !canPlayAudio && !material.picture))">
     <!--Link as backup - if iframe is internally not working-->
     <a href="{{material.source}}" class="wrapped regular-link md-primary" layout-align="start center" flex target="_blank">
       <span class="item-link" data-ng-bind="material.source"></span>
@@ -79,3 +79,7 @@
     </div>
   </md-card-footer>
 </md-card>
+
+  <a class="embed-link" href="{{material.source}}" data-ng-if="material.picture && ((sourceType === 'VIDEO' && !canPlayVideo) || (sourceType === 'AUDIO' && !canPlayAudio))" target="_blank">
+    <img src="rest/picture/{{material.picture.name}}"/>
+  </a>
