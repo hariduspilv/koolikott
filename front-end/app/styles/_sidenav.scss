@@ -282,5 +282,8 @@ md-sidenav._md-locked-open, md-sidenav._md-locked-open._md-closed, md-sidenav._m
 .dashboard-icon {
   left: initial !important;
   right: 23px;
-}
 
+  .is-active & {
+    color: $color-selected-menu;
+  }
+}

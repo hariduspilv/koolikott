@@ -271,7 +271,7 @@ define([
                 $rootScope.isViewMaterialPortfolioPage = false;
             }
 
-            if ($rootScope.isViewAdminPanelPage || (user && $location.path().indexOf('/' + user.username) != -1)) {
+            if ($rootScope.isViewAdminPanelPage || (user && path.indexOf('/' + user.username) != -1) || path === '/material') {
                 $rootScope.isUserTabOpen = true;
             } else {
                 $rootScope.isUserTabOpen = false;

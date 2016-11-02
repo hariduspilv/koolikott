@@ -12,7 +12,6 @@ define([
             templateUrl: 'directives/sidenav/sidenav.html',
             controller: function ($rootScope, $scope, $location, serverCallService, searchService, $timeout, metadataService, authenticatedUserService, $sce, $mdDialog, userDataService) {
 
-                $scope.oneAtATime = true;
                 $scope.dashboardOpen = false;
 
                 // List of taxon icons
@@ -163,7 +162,6 @@ define([
                         $scope.dashboardOpen = false;
                     }
                 };
-
 
             }
         }

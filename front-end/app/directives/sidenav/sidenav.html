@@ -15,12 +15,12 @@
 
 
   <uib-accordion close-others="false" class="menu-nested-list">
-    <div uib-accordion-group class="panel-default" is-open="isUserTabOpen">
+    <div uib-accordion-group class="panel-default" is-open="$root.isUserTabOpen">
       <uib-accordion-heading>
         <md-button class="md-hue-1 md-primary-menu md-button md-ink-ripple" id="myProfile"
                    ng-click="updateUserCounts()">
-          <div flex layout="row">
-            <span class="panel-title__text" data-translate="MY_PROFILE"></span>
+          <div layout="row">
+            <span class="panel-title__text text-truncate" data-translate="MY_PROFILE"></span>
             <span flex></span>
             <md-icon class="md-primary material-icons arrow panel-title__arrow">keyboard_arrow_right</md-icon>
           </div>
@@ -29,114 +29,110 @@
       <!-- Subitems -->
       <ul>
         <li>
-          <a data-ng-click="checkUser($event, '/portfolios'); updateUserPortfoliosCount()">
             <md-button id="myPortfolios" class="md-hue-1 md-secondary-menu"
-                       data-ng-class="{'selected': isLocation('/' + user.username + '/portfolios')}">
-              <div flex layout="row">
+                       data-ng-class="{'selected': isLocation('/' + user.username + '/portfolios')}"
+                       data-ng-click="checkUser($event, '/portfolios'); updateUserPortfoliosCount()">
+              <div layout="row">
                 <md-icon class="material-icons">book</md-icon>
                 <span data-translate="MY_PORTFOLIOS" class="text-truncate md-padding-right"></span>
                 <span data-ng-if="isAuthenticated()" class="count" ng-bind="portfolios"></span>
               </div>
             </md-button>
-          </a>
         </li>
         <li>
-          <a data-ng-click="checkUser($event, '/materials'); updateUserMaterialsCount()">
             <md-button id="myMaterials" class="md-hue-1 md-secondary-menu"
-                       data-ng-class="{'selected': isLocation('/' + user.username + '/materials')}">
-              <div flex layout="row">
+                       data-ng-class="{'selected': isLocation('/' + user.username + '/materials')}"
+                       data-ng-click="checkUser($event, '/materials'); updateUserMaterialsCount()">
+              <div layout="row">
                 <md-icon class="material-icons">description</md-icon>
                 <span data-translate="MY_MATERIALS" class="text-truncate md-padding-right"></span>
                 <span data-ng-if="isAuthenticated()" class="count" ng-bind="materials"></span>
               </div>
             </md-button>
-          </a>
         </li>
         <li>
-          <a data-ng-click="checkUser($event, '/favorites'); updateUserFavoritesCount()">
             <md-button id="myFavorites" class="md-hue-1 md-secondary-menu"
-                       data-ng-class="{'selected': isLocation('/' + user.username + '/favorites')}">
-              <div flex layout="row">
+                       data-ng-class="{'selected': isLocation('/' + user.username + '/favorites')}"
+                       data-ng-click="checkUser($event, '/favorites'); updateUserFavoritesCount()">
+              <div layout="row">
                 <md-icon class="material-icons">star</md-icon>
                 <span data-translate="MY_FAVORITES" class="text-truncate md-padding-right"></span>
                 <span data-ng-if="isAuthenticated()" class="count" ng-bind="favorites"></span>
               </div>
             </md-button>
-          </a>
         </li>
 
         <li data-ng-show="modUser()" class="menu-nested-list">
-          <a data-ng-click="dashboardSearch()">
             <md-button id="dashboard" class="md-hue-1 md-secondary-menu"
-                       data-ng-class="{'sub-item--header': dashboardOpen, 'is-active': isLocation('/dashboard')}">
-              <div flex layout="row" data-ng-class="{'panel-open': dashboardOpen}">
+                       data-ng-class="{'sub-item--header': dashboardOpen, 'is-active': dashboardOpen && isLocation('/dashboard')}"
+                       data-ng-click="dashboardSearch()">
+              <div layout="row" data-ng-class="{'panel-open': dashboardOpen}">
                 <span data-translate="DASHBOARD" class="text-truncate md-padding-right"></span>
                 <!--<md-icon class="material-icons arrow">keyboard_arrow_right</md-icon>-->
                 <md-icon class="dashboard-icon" data-ng-class="{'arrow': dashboardOpen}">keyboard_arrow_right</md-icon>
               </div>
             </md-button>
-          </a>
 
           <ul data-ng-show="dashboardOpen">
             <li class="sub-item">
-              <a href="/dashboard/improperMaterials" ng-click=updateImproperMaterialsCount()>
                 <md-button id="improperMaterials" class="md-hue-1 md-secondary-menu"
-                           data-ng-class="{'selected': isLocation('/dashboard/improperMaterials')}">
-                  <div flex layout="row">
+                           data-ng-class="{'selected': isLocation('/dashboard/improperMaterials')}"
+                           data-ng-href="/dashboard/improperMaterials"
+                           data-ng-click=updateImproperMaterialsCount()>
+                  <div layout="row">
                     <md-icon class="material-icons">report</md-icon>
                     <span data-translate="IMPROPER_MATERIALS" class="text-truncate md-padding-right"></span>
                     <span class="count" ng-bind="improperMaterialsCount"></span>
                   </div>
                 </md-button>
-              </a>
             </li>
             <li ng-if="modUser()" class="sub-item">
-              <a href="/dashboard/improperPortfolios" ng-click="updateImproperPortfoliosCount()">
                 <md-button id="improperPortfolios" class="md-hue-1 md-secondary-menu"
-                           data-ng-class="{'selected': isLocation('/dashboard/improperPortfolios')}">
-                  <div flex layout="row">
+                           data-ng-class="{'selected': isLocation('/dashboard/improperPortfolios')}"
+                           data-ng-href="/dashboard/improperPortfolios"
+                           data-ng-click="updateImproperPortfoliosCount()">
+                  <div layout="row">
                     <md-icon class="material-icons">report</md-icon>
                     <span data-translate="IMPROPER_PORTFOLIOS" class="text-truncate md-padding-right"></span>
                     <span class="count" ng-bind="improperPortfoliosCount"></span>
                   </div>
                 </md-button>
-              </a>
             </li>
             <li ng-if="modUser()" class="sub-item">
-              <a href="/dashboard/brokenMaterials" ng-click="updateBrokenMaterialsCount()">
                 <md-button id="brokenMaterials" class="md-hue-1 md-secondary-menu"
-                           data-ng-class="{'selected': isLocation('/dashboard/brokenMaterials')}">
-                  <div flex layout="row">
+                           data-ng-class="{'selected': isLocation('/dashboard/brokenMaterials')}"
+                           data-ng-href="/dashboard/brokenMaterials"
+                           data-ng-click="updateBrokenMaterialsCount()">
+                  <div layout="row">
                     <md-icon class="material-icons">content_cut</md-icon>
                     <span data-translate="BROKEN_MATERIALS" class="text-truncate md-padding-right"></span>
                     <span class="count" ng-bind="brokenMaterialsCount"></span>
                   </div>
                 </md-button>
-              </a>
             </li>
             <li ng-if="modUser()" class="sub-item">
-              <a href="/dashboard/deletedMaterials" ng-click="updateDeletedMaterialsCount()">
                 <md-button id="deletedMaterials" class="md-hue-1 md-secondary-menu"
-                           data-ng-class="{'selected': isLocation('/dashboard/deletedMaterials')}">
-                  <div flex layout="row">
+                           data-ng-class="{'selected': isLocation('/dashboard/deletedMaterials')}"
+                           data-ng-href="/dashboard/deletedMaterials"
+                           data-ng-click="updateDeletedMaterialsCount()">
+                  <div layout="row">
                     <md-icon class="material-icons">delete</md-icon>
                     <span data-translate="DELETED_MATERIALS" class="text-truncate md-padding-right"></span>
                     <span class="count" ng-bind="deletedMaterialsCount"></span>
                   </div>
                 </md-button>
-              </a>
             </li>
             <li ng-if="modUser()" class="sub-item">
-              <a href="/dashboard/deletedPortfolios" ng-click="updateDeletedPortfoliosCount()">
                 <md-button id="deletedPortfolios" class="md-hue-1 md-secondary-menu"
-                           data-ng-class="{'selected': isLocation('/dashboard/deletedPortfolios')}">
-                  <div flex layout="row">
+                           data-ng-class="{'selected': isLocation('/dashboard/deletedPortfolios')}"
+                           data-ng-href="/dashboard/deletedPortfolios"
+                           data-ng-click="updateDeletedPortfoliosCount()">
+                  <div layout="row">
                     <md-icon class="material-icons">delete</md-icon>
                     <span data-translate="DELETED_PORTFOLIOS" class="text-truncate md-padding-right"></span>
                     <span class="count" ng-bind="deletedPortfoliosCount"></span>
                   </div>
                 </md-button>
-              </a>
             </li>
           </ul>
         </li>
@@ -152,8 +148,8 @@
       <uib-accordion-heading>
         <md-button id="sidebarTaxon" class="md-hue-1 md-primary-menu"
                    ng-click="changeTaxonomyDataAndVisibility('sidebar', 'primary')">
-          <div flex layout="row">
-            <span class="panel-title__text" data-translate="TABLE_OF_CONTENTS"></span>
+          <div layout="row">
+            <span class="panel-title__text text-truncate" data-translate="TABLE_OF_CONTENTS"></span>
             <span flex></span>
             <md-icon class="md-primary material-icons arrow panel-title__arrow">keyboard_arrow_right</md-icon>
           </div>
