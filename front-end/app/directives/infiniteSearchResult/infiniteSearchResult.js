@@ -19,8 +19,11 @@ define([
                     $scope.start = 0;
                     $scope.searching = false;
                     $scope.accessor = {};
+
+                    var isFirstLoad = true;
                     var hasInitated = false;
                     var searchCount = 0;
+                    var expectedItemCount = 15; // on first load 15 items should be loaded
 
                     // Pagination variables
                     var maxResults = $scope.params.maxResults || $scope.params.limit;
@@ -36,7 +39,9 @@ define([
                     }
 
                     $scope.nextPage = function () {
-                        if (hasInitated) search();
+                        if (hasInitated) {
+                            search();
+                        }
                         hasInitated = true;
                     };
 
@@ -59,6 +64,12 @@ define([
                             $scope.start = searchCount * maxResults;
                         }
                         $scope.params.start = $scope.start;
+
+                        if (isFirstLoad) {
+                            $scope.params.limit = 20;
+                        } else {
+                            $scope.params.limit = 15;
+                        }
                         serverCallService.makeGet($scope.url, $scope.params, searchSuccess, searchFail);
                     }
 
@@ -70,11 +81,18 @@ define([
                             $scope.items.push.apply($scope.items, data.items);
                             searchCount++;
                             $scope.totalResults = data.totalResults;
-                            //if less results then queried and less then received max then ask for more?
-                        }
 
-                        $scope.searching = false;
-                        $scope.accessor.ready = true;
+                            $scope.searching = false;
+                            $scope.accessor.ready = true;
+
+                            isFirstLoad = false;
+
+                            if ($scope.items.length < expectedItemCount) {
+                                search();
+                            } else {
+                                expectedItemCount += maxResults;
+                            }
+                        }
                     }
 
                     function searchFail() {
