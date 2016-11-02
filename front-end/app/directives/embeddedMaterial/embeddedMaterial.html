@@ -30,13 +30,13 @@
 
     <div data-ng-show="sourceType === 'VIDEO' && canPlayVideo" class="embed-responsive-container embed-video">
         <video controls="true" width="100%">
-          <source src="{{material.source}}">
+          <source src="{{material.source}}" type="video/{{videoType}}">
         </video>
     </div>
 
     <div class="embed-responsive-container embed-audio" data-ng-if="sourceType === 'AUDIO' && canPlayAudio">
       <audio controls="true">
-        <source src="{{material.source}}">
+        <source src="{{material.source}}" type="audio/{{audioType}}">
       </audio>
     </div>
 
