@@ -29,7 +29,7 @@ public class LanguageDAO extends BaseDAO<Language> {
     }
 
     public List<Language> findAll() {
-        TypedQuery<Language> findAll = createQuery("FROM LanguageTable l ORDER BY priorityOrder DESC, id DESC", Language.class);
+        TypedQuery<Language> findAll = createQuery("FROM LanguageTable l ORDER BY priorityOrder DESC, id ASC", Language.class);
         return findAll.getResultList();
     }
 }

@@ -451,3 +451,19 @@ md-card .card-menu {
     color: transparent;
   }
 }
+
+a.embed-link{
+  line-height: 0px;
+  display: inline-block;
+  background-color: rgba(0, 0, 0, 1);
+}
+
+.embed-link img{
+  max-width: 300px;
+}
+
+.embed-link:hover img{
+  opacity: .8;
+  transition: ease all 0.5s;
+}
+

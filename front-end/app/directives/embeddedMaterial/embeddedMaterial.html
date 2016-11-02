@@ -28,15 +28,15 @@
       </div>
     </div>
 
-    <div data-ng-show="sourceType === 'VIDEO' && canPlayVideo" class="embed-responsive-container embed-video">
+    <div data-ng-show="sourceType === 'VIDEO' && canPlayVideo && !$root.isViewPortforlioPage" class="embed-responsive-container embed-video">
         <video controls="true" width="100%">
-          <source src="{{material.source}}">
+          <source src="{{material.source}}" type="video/{{videoType}}">
         </video>
     </div>
 
-    <div class="embed-responsive-container embed-audio" data-ng-if="sourceType === 'AUDIO' && canPlayAudio">
+    <div class="embed-responsive-container embed-audio" data-ng-if="sourceType === 'AUDIO' && canPlayAudio && !$root.isViewPortforlioPage">
       <audio controls="true">
-        <source src="{{material.source}}">
+        <source src="{{material.source}}" type="audio/{{audioType}}">
       </audio>
     </div>
 
@@ -60,8 +60,8 @@
     </div>
   </md-card-content>
   <md-card-footer class="embeded-material-footer" layout="row" flex
-                  data-ng-if="!sourceType || isEditPortfolioPage || (sourceType === 'VIDEO' && !canPlayVideo)
-                  || (sourceType === 'AUDIO' && !canPlayAudio)">
+                  data-ng-if="(!sourceType || isEditPortfolioPage || (sourceType === 'VIDEO' && !canPlayVideo && !material.picture)
+                  || (sourceType === 'AUDIO' && !canPlayAudio && !material.picture)) || $root.isViewPortforlioPage">
     <!--Link as backup - if iframe is internally not working-->
     <a href="{{material.source}}" class="wrapped regular-link md-primary" layout-align="start center" flex target="_blank">
       <span class="item-link" data-ng-bind="material.source"></span>
@@ -79,3 +79,7 @@
     </div>
   </md-card-footer>
 </md-card>
+
+  <a class="embed-link" href="{{material.source}}" data-ng-if="!$root.isViewPortforlioPage && material.picture && ((sourceType === 'VIDEO' && !canPlayVideo) || (sourceType === 'AUDIO' && !canPlayAudio))" target="_blank">
+    <img src="rest/picture/{{material.picture.name}}"/>
+  </a>

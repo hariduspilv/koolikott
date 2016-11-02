@@ -10,7 +10,7 @@ define([
         function ($scope, authenticatedUserService) {
 
             function init() {
-                user = authenticatedUserService.getUser();
+                var user = authenticatedUserService.getUser();
                 if (user && user.userTaxons) {
                     $scope.url = "rest/search";
 

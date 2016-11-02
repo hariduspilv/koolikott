@@ -96,6 +96,13 @@ define([
                 $rootScope.savedPortfolio = portfolio;
 
                 if($scope.portfolio) {
+
+                    $scope.portfolio.chapters.forEach(function(chapter) {
+                        chapter.materials.forEach(function(material){
+                            material.source = getSource(material);
+                        })
+                    });
+
                     $rootScope.learningObjectBroken = ($scope.portfolio.broken > 0) ? true : false;
                     $rootScope.learningObjectImproper = ($scope.portfolio.improper > 0) ? true : false;
                     $rootScope.learningObjectDeleted = ($scope.portfolio.deleted == true) ? true : false;

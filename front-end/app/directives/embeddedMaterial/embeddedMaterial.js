@@ -21,6 +21,8 @@ define([
                     function init() {
                         $scope.canPlayVideo = false;
                         $scope.canPlayAudio = false;
+                        $scope.videoType = "";
+                        $scope.audioType = "";
                         $scope.isEditPortfolioPage = $rootScope.isEditPortfolioPage;
                         $scope.isEditPortfolioMode = $rootScope.isEditPortfolioMode;
 
@@ -80,7 +82,10 @@ define([
                     function canPlayVideoFormat() {
                         var extension = $scope.material.source.split('.').pop();
                         var v = document.createElement('video');
+                        /* ogv is a subtype of ogg therefore if ogg is supported ogv is also */
+                        if(extension == "ogv"){extension = "ogg"}
                         if(v.canPlayType && v.canPlayType('video/' + extension)) {
+                            $scope.videoType = extension;
                             $scope.canPlayVideo = true;
                         }
                     }
@@ -89,6 +94,7 @@ define([
                         var extension = $scope.material.source.split('.').pop();
                         var v = document.createElement('audio');
                         if(v.canPlayType && v.canPlayType('audio/' + extension)) {
+                            $scope.audioType = extension;
                             $scope.canPlayAudio = true;
                         }
                     }
@@ -121,7 +127,7 @@ define([
                     function isVideoLink(url) {
                         if(!url) return;
                         var extension = url.split('.').pop();
-                        return extension == "mp4" || extension == "ogg" || extension == "webm";
+                        return extension == "mp4" || extension == "ogv" || extension == "webm";
                     }
 
                     function isAudioLink(url) {
