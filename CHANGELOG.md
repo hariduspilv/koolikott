@@ -1,4 +1,17 @@
-## e-Koolikott 1.3.0 (arenduses)
+## e-Koolikott 1.4.0 (arenduses)
+
+### Lisandunud
+* Töölauale viimati lisatud õppevara modereerimiseks #94 https://github.com/hariduspilv/koolikott/issues/94
+* Esilehel jäävad alles ainult uusimad materjalid + infinite scroll #53 https://github.com/hariduspilv/koolikott/issues/53
+* Lisada preloader #96 https://github.com/hariduspilv/koolikott/issues/96
+* Õppevara lisamisel õppevara keele valik #60 https://github.com/hariduspilv/koolikott/issues/60
+* Meediafailide kuvamine #72 https://github.com/hariduspilv/koolikott/issues/72
+
+### Parandatud
+* Vasakmenüü teine punkt ei sulgu #87 https://github.com/hariduspilv/koolikott/issues/87
+
+
+## e-Koolikott 1.3.0 (13.10.16)
 
 ### Lisandunud
 * Olemasoleva materjali kontroll uue lisamisel #2 https://github.com/hariduspilv/koolikott/issues/2
