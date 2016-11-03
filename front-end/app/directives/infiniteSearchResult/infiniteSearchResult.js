@@ -68,8 +68,10 @@ define([
 
                         if (isFirstLoad) {
                             $scope.params.limit = 20;
+                            $scope.params.maxResults = 20;
                         } else {
                             $scope.params.limit = 15;
+                            $scope.params.maxResults = 15;
                         }
 
                         $scope.params.start = $scope.start;

@@ -32,6 +32,7 @@ define([
                     return authenticatedUserService.getUser();
                 }, function (user) {
                     $scope.user = user;
+                    $scope.updateUserCounts();
                 }, true);
 
                 $scope.isAdmin = function () {
