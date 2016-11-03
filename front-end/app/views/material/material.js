@@ -229,6 +229,12 @@ define([
                 return extension == "mp3" || extension == "ogg" || extension == "wav";
             }
 
+            function isPictureLink(url) {
+                if (!url) return;
+                var extension = url.split('.').pop();
+                return extension == "jpg" || extension == "jpeg" || extension == "png" || extension == "gif";
+            }
+
             function setSourceType() {
                 if (isYoutubeVideo($scope.material.source)) {
                     $scope.sourceType = 'YOUTUBE';
@@ -238,6 +244,8 @@ define([
                     $scope.sourceType = 'VIDEO';
                 } else if (isAudioLink($scope.material.source)){
                     $scope.sourceType = 'AUDIO';
+                } else if (isPictureLink($scope.material.source)) {
+                    $scope.sourceType = 'PICTURE';
                 } else {
                     $scope.sourceType = 'LINK';
                 }

@@ -459,11 +459,21 @@ a.embed-link{
 }
 
 .embed-link img{
-  max-width: 300px;
+  max-width: 500px;
+  max-height: 500px;
 }
 
 .embed-link:hover img{
   opacity: .8;
   transition: ease all 0.5s;
+}
+
+.embed-card-picture{
+  line-height: 0;
+  display: inline-block;
+}
+
+a.embed-image-padded{
+  margin: 25px;
 }
 
