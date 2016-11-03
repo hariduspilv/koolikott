@@ -220,18 +220,18 @@ define([
             }
 
             function isVideoLink(url) {
-                var extension = url.split('.').pop();
+                var extension = url.split('.').pop().toLowerCase();
                 return extension == "mp4" || extension == "ogg" || extension == "webm";
             }
 
             function isAudioLink(url) {
-                var extension = url.split('.').pop();
+                var extension = url.split('.').pop().toLowerCase();
                 return extension == "mp3" || extension == "ogg" || extension == "wav";
             }
 
             function isPictureLink(url) {
                 if (!url) return;
-                var extension = url.split('.').pop();
+                var extension = url.split('.').pop().toLowerCase();
                 return extension == "jpg" || extension == "jpeg" || extension == "png" || extension == "gif";
             }
 

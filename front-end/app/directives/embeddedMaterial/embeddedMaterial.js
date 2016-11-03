@@ -130,19 +130,19 @@ define([
 
                     function isVideoLink(url) {
                         if (!url) return;
-                        var extension = url.split('.').pop();
+                        var extension = url.split('.').pop().toLowerCase();
                         return extension == "mp4" || extension == "ogv" || extension == "webm";
                     }
 
                     function isAudioLink(url) {
                         if (!url) return;
-                        var extension = url.split('.').pop();
+                        var extension = url.split('.').pop().toLowerCase();
                         return extension == "mp3" || extension == "ogg" || extension == "wav";
                     }
 
                     function isPictureLink(url) {
                         if (!url) return;
-                        var extension = url.split('.').pop();
+                        var extension = url.split('.').pop().toLowerCase();
                         return extension == "jpg" || extension == "jpeg" || extension == "png" || extension == "gif";
                     }
 
