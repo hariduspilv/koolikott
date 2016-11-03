@@ -39,3 +39,8 @@ $desktop-navbar-height: $md-toolbar-height;
 $sidenav-width: 259px;
 $nav-button-area-width: 178px;
 $button-width: 40px;
+
+@mixin pattern-color($color) {
+  background-image: linear-gradient(45deg, lighten($color, 5%), darken($color, 5%));
+  background-color: lighten($color, 5%);
+}

@@ -1,5 +1,21 @@
 <div data-infinite-scroll="nextPage()" class="card-container">
   <div data-ng-repeat="item in items track by item.id" class="card-container__item">
+    <md-card class="card-sm">
+      <a class="card-cover assessment"
+         layout="row" layout-align="center center">
+         <div class="pattern">
+           <div class="sheet up-left"></div>
+           <div class="sheet low-right"></div>
+           <div class="sheet low-left"></div>
+         </div>
+        <md-icon class="icon-kind">book</md-icon>
+
+        <div class="card-hover assessment" layout="row">
+          <div  data-dop-favorite data-learning-object="portfolio" layout-align="start start"></div>
+          <md-icon class="icon-kind">book</md-icon>
+        </div>
+      </a>
+  </md-card>
     <div data-ng-if="item.type === '.Material'" data-dop-material-box material="item"></div>
     <div data-ng-if="item.type === '.Portfolio'" data-dop-portfolio-box portfolio="item"></div>
   </div>
