@@ -73,9 +73,9 @@ define([
                     return $filter('translate')(taxon.level.toUpperCase().substr(1) + "_" + taxon.name.toUpperCase());
                 };
 
-                $rootScope.clearTaxons = function () {
-                    self.taxon = null;
-                };
+                $scope.$on('taxonSelector:clear', function(e, value) {
+                   self.taxon = value;
+                });
 
                 function addTaxonPathListeners() {
                     /*
