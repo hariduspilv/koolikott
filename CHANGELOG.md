@@ -1,4 +1,4 @@
-## e-Koolikott 1.4.0 (arenduses)
+## e-Koolikott 1.4.0 (03.11.2016)
 
 ### Lisandunud
 * Töölauale viimati lisatud õppevara modereerimiseks #94 https://github.com/hariduspilv/koolikott/issues/94
@@ -11,7 +11,7 @@
 * Vasakmenüü teine punkt ei sulgu #87 https://github.com/hariduspilv/koolikott/issues/87
 
 
-## e-Koolikott 1.3.0 (13.10.16)
+## e-Koolikott 1.3.0 (13.10.2016)
 
 ### Lisandunud
 * Olemasoleva materjali kontroll uue lisamisel #2 https://github.com/hariduspilv/koolikott/issues/2
