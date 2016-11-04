@@ -44,6 +44,8 @@
 	}
 
 	&.md-secondary-menu {
+    display: flex;
+    align-items: center;
 		margin: 0;
 		padding: 0 44px 0 70px;
 		width: 100%;

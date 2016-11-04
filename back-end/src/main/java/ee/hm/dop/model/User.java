@@ -1,18 +1,14 @@
 package ee.hm.dop.model;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+import javax.persistence.*;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import ee.hm.dop.model.taxon.Taxon;
 import ee.hm.dop.rest.jackson.map.RoleSerializer;
+
+import java.util.List;
 
 @Entity
 public class User {
@@ -40,6 +36,14 @@ public class User {
     @ManyToOne
     @JoinColumn(name = "publisher")
     private Publisher publisher;
+
+    @OneToMany
+    @JoinTable(
+            name = "User_Taxon",
+            joinColumns = {@JoinColumn(name = "user")},
+            inverseJoinColumns = {@JoinColumn(name = "taxon")},
+            uniqueConstraints = @UniqueConstraint(columnNames = {"user", "taxon"}))
+    private List<Taxon> userTaxons;
 
     public Long getId() {
         return id;
@@ -98,5 +102,13 @@ public class User {
 
     public void setPublisher(Publisher publisher) {
         this.publisher = publisher;
+    }
+
+    public List<Taxon> getUserTaxons() {
+        return userTaxons;
+    }
+
+    public void setUserTaxons(List<Taxon> userTaxons) {
+        this.userTaxons = userTaxons;
     }
 }

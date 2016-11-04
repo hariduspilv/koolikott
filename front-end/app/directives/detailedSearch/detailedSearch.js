@@ -93,14 +93,16 @@ define([
                         setEditModePrefill();
                     } else {
                         // Taxon
-                        if (searchService.getTaxon()) {
+                        if (searchService.getTaxon().length > 0) {
                             $rootScope.taxonParser.loadTaxonMap(setTaxonMap);
                         }
                     }
                 }
 
                 function setTaxonMap(taxonMap) {
-                    $scope.taxon = Object.create(taxonMap['t' + searchService.getTaxon()]);
+                    for (var i = 0; i < searchService.getTaxon().length; i++) {
+                        $scope.taxon = Object.create(taxonMap['t' + searchService.getTaxon()[i]]);
+                    }
                 }
 
                 $scope.search = function () {
@@ -135,7 +137,7 @@ define([
 
                 function addTaxonToSearch() {
                     if ($scope.taxon) {
-                        searchService.setTaxon($scope.taxon.id);
+                        searchService.setTaxon([$scope.taxon.id]);
                     } else {
                         searchService.setTaxon(null);
                     }

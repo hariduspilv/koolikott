@@ -73,6 +73,10 @@ define([
                     return $filter('translate')(taxon.level.toUpperCase().substr(1) + "_" + taxon.name.toUpperCase());
                 };
 
+                $scope.$on('taxonSelector:clear', function(e, value) {
+                   self.taxon = value;
+                });
+
                 function addTaxonPathListeners() {
                     /*
                      * The order of the watchers is important and should be the same as the tree.

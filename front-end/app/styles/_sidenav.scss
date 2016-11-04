@@ -91,6 +91,10 @@ md-sidenav {
   .panel-title__text, md-icon.panel-title__arrow {
     color: $color-muted;
   }
+
+  .taxon-list {
+    margin: 0;
+  }
 }
 
 .portfolio-container {
@@ -265,4 +269,22 @@ md-sidenav._md-locked-open, md-sidenav._md-locked-open._md-closed, md-sidenav._m
 
 .top-divider {
   border-top: 1px solid rgba(0, 0, 0, 0.12);
+}
+
+.sub-item--header {
+  background-color: rgba(0, 0, 0, 0.1);
+}
+
+.sub-item {
+  background-color: rgba(0, 0, 0, 0.05);
+}
+
+.dashboard-icon {
+  left: auto !important;
+  right: 23px;
+  top: 10px;
+
+  .is-active & {
+    color: $color-selected-menu;
+  }
 }

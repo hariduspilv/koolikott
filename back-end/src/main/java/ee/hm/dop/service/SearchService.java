@@ -2,6 +2,7 @@ package ee.hm.dop.service;
 
 import static ee.hm.dop.service.SolrService.getTokenizedQueryString;
 import static java.lang.String.format;
+import static java.lang.String.join;
 import static org.apache.commons.lang3.StringUtils.isBlank;
 
 import java.util.ArrayList;
@@ -230,55 +231,69 @@ public class SearchService {
     }
 
     private String getTaxonsAsQuery(SearchFilter searchFilter) {
-        Taxon taxon = searchFilter.getTaxon();
+        List<Taxon> taxonList = searchFilter.getTaxons();
         List<String> taxons = new LinkedList<>();
+        List<String> joinedTaxons = new ArrayList<>();
 
-        if (taxon instanceof Subtopic) {
-            addTaxonToQuery(taxon, taxons);
-            taxon = ((Subtopic) taxon).getTopic();
+        if (taxonList == null) {
+            return "";
         }
 
-        if (taxon instanceof Topic) {
-            addTaxonToQuery(taxon, taxons);
-
-            Subject subject = ((Topic) taxon).getSubject();
-            Domain domain = ((Topic) taxon).getDomain();
-            Module module = ((Topic) taxon).getModule();
-
-            if (subject != null) {
-                taxon = subject;
-            } else if (domain != null) {
-                taxon = domain;
-            } else if (module != null) {
-                taxon = module;
+        for (Taxon taxon : taxonList) {
+            if (taxon instanceof Subtopic) {
+                addTaxonToQuery(taxon, taxons);
+                taxon = ((Subtopic) taxon).getTopic();
             }
+
+            if (taxon instanceof Topic) {
+                addTaxonToQuery(taxon, taxons);
+
+                Subject subject = ((Topic) taxon).getSubject();
+                Domain domain = ((Topic) taxon).getDomain();
+                Module module = ((Topic) taxon).getModule();
+
+                if (subject != null) {
+                    taxon = subject;
+                } else if (domain != null) {
+                    taxon = domain;
+                } else if (module != null) {
+                    taxon = module;
+                }
+            }
+
+            if (taxon instanceof Subject) {
+                addTaxonToQuery(taxon, taxons);
+                taxon = ((Subject) taxon).getDomain();
+            }
+
+            if (taxon instanceof Module) {
+                addTaxonToQuery(taxon, taxons);
+                taxon = ((Module) taxon).getSpecialization();
+            }
+
+            if (taxon instanceof Specialization) {
+                addTaxonToQuery(taxon, taxons);
+                taxon = ((Specialization) taxon).getDomain();
+            }
+
+            if (taxon instanceof Domain) {
+                addTaxonToQuery(taxon, taxons);
+                taxon = ((Domain) taxon).getEducationalContext();
+            }
+
+            if (taxon instanceof EducationalContext) {
+                addTaxonToQuery(taxon, taxons);
+            }
+
+            if (taxonList.size() == 1) {
+                return StringUtils.join(taxons, " AND ");
+            }
+
+            joinedTaxons.add("(" + StringUtils.join(taxons, " AND ") + ")");
+            taxons.clear();
         }
 
-        if (taxon instanceof Subject) {
-            addTaxonToQuery(taxon, taxons);
-            taxon = ((Subject) taxon).getDomain();
-        }
-
-        if (taxon instanceof Module) {
-            addTaxonToQuery(taxon, taxons);
-            taxon = ((Module) taxon).getSpecialization();
-        }
-
-        if (taxon instanceof Specialization) {
-            addTaxonToQuery(taxon, taxons);
-            taxon = ((Specialization) taxon).getDomain();
-        }
-
-        if (taxon instanceof Domain) {
-            addTaxonToQuery(taxon, taxons);
-            taxon = ((Domain) taxon).getEducationalContext();
-        }
-
-        if (taxon instanceof EducationalContext) {
-            addTaxonToQuery(taxon, taxons);
-        }
-
-        return StringUtils.join(taxons, " AND ");
+        return !joinedTaxons.isEmpty() ? "(" + StringUtils.join(joinedTaxons, " OR ") + ")" : "";
     }
 
     private void addTaxonToQuery(Taxon taxon, List<String> taxons) {

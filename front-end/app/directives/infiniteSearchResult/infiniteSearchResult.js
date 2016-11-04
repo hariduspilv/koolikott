@@ -3,7 +3,7 @@ define([
     'services/serverCallService',
     'ngInfiniteScroll',
     'directives/materialBox/materialBox',
-    'directives/portfolioBox/portfolioBox',
+    'directives/portfolioBox/portfolioBox'
 ], function (app) {
     app.directive('dopInfiniteSearchResult', ['serverCallService',
         function () {
@@ -19,8 +19,11 @@ define([
                     $scope.start = 0;
                     $scope.searching = false;
                     $scope.accessor = {};
+
+                    var isFirstLoad = true;
                     var hasInitated = false;
                     var searchCount = 0;
+                    var expectedItemCount = 15; // on first load 15 items should be loaded
 
                     // Pagination variables
                     var maxResults = $scope.params.maxResults || $scope.params.limit;
@@ -36,7 +39,9 @@ define([
                     }
 
                     $scope.nextPage = function () {
-                        if (hasInitated) search();
+                        if (hasInitated) {
+                            search();
+                        }
                         hasInitated = true;
                     };
 
@@ -56,9 +61,21 @@ define([
                         if ($scope.items.length === 0) {
                             $scope.start = 0;
                         } else {
-                            $scope.start = searchCount * maxResults;
+                            // because first search is 20 items
+                            // +5 has to be added to every search
+                            $scope.start = searchCount * maxResults + 5;
                         }
+
+                        if (isFirstLoad) {
+                            $scope.params.limit = 20;
+                            $scope.params.maxResults = 20;
+                        } else {
+                            $scope.params.limit = 15;
+                            $scope.params.maxResults = 15;
+                        }
+
                         $scope.params.start = $scope.start;
+
                         serverCallService.makeGet($scope.url, $scope.params, searchSuccess, searchFail);
                     }
 
@@ -70,11 +87,18 @@ define([
                             $scope.items.push.apply($scope.items, data.items);
                             searchCount++;
                             $scope.totalResults = data.totalResults;
-                            //if less results then queried and less then received max then ask for more?
-                        }
 
-                        $scope.searching = false;
-                        $scope.accessor.ready = true;
+                            $scope.searching = false;
+                            $scope.accessor.ready = true;
+
+                            isFirstLoad = false;
+
+                            if ($scope.items.length < expectedItemCount) {
+                                search();
+                            } else {
+                                expectedItemCount += maxResults;
+                            }
+                        }
                     }
 
                     function searchFail() {

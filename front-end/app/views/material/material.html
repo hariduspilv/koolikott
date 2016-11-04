@@ -147,7 +147,9 @@
                  data-ng-bind-html="getCorrectLanguageString(material.descriptions)"></div>
 
             <!--Embedded Material-->
-            <div data-ng-if="sourceType !== 'LINK' || !material.embeddable" data-dop-embedded-material data-material="material" data-flex></div>
+            <div data-ng-if="(sourceType !== 'LINK' || !material.embeddable)"
+                 ng-class="{'embed-card-picture': sourceType === 'PICTURE' && !$root.isViewPortforlioPage && !isEditPortfolioPage}"
+                 data-dop-embedded-material data-material="material" data-flex></div>
 
             <!--Fullscreen material-->
             <div data-ng-if="sourceType === 'LINK' && material.embeddable">

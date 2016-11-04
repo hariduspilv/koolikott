@@ -239,19 +239,11 @@ define([
 
             var path = $location.path();
 
-            if (path === '/dashboard') {
-                $location.path('/dashboard/improperMaterials');
-            }
-
-
             if (user && path === '/' + user.username && authenticatedUserService.isAuthenticated()) {
                 $location.path('/' + user.username + '/portfolios');
             }
 
-
-
             var editModeAllowed = ["/portfolio/edit", "/search/result", "/material"];
-
 
             $rootScope.isViewPortforlioPage = path === '/portfolio';
             $rootScope.isEditPortfolioPage = path === '/portfolio/edit';
@@ -264,7 +256,10 @@ define([
                 $rootScope.isViewUserPage = false;
             }
 
-            if (path === '/dashboard/improperMaterials' || path === '/dashboard/improperPortfolios' || path === '/dashboard/brokenMaterials' || path === '/dashboard/deletedMaterials' || path === '/dashboard/brokenPortfolios' || path === '/dashboard/deletedPortfolios') {
+            if (path === '/dashboard/improperMaterials' || path === '/dashboard/improperPortfolios'
+                || path === '/dashboard/brokenMaterials' || path === '/dashboard/deletedMaterials'
+                || path === '/dashboard/brokenPortfolios' || path === '/dashboard/deletedPortfolios'
+                || path === '/dashboard') {
                 $rootScope.isViewAdminPanelPage = true;
             } else {
                 $rootScope.isViewAdminPanelPage = false;
@@ -276,12 +271,11 @@ define([
                 $rootScope.isViewMaterialPortfolioPage = false;
             }
 
-            if ($rootScope.isViewAdminPanelPage || (user && $location.path().indexOf('/' + user.username) != -1)) {
+            if ($rootScope.isViewAdminPanelPage || (user && path.indexOf('/' + user.username) != -1) || path === '/material') {
                 $rootScope.isUserTabOpen = true;
             } else {
                 $rootScope.isUserTabOpen = false;
             }
-
 
             if((path === '/material' || path === '/' || ($location.url().indexOf("/search") != -1)) && (!$rootScope.isEditPortfolioPage || !$rootScope.isViewPortforlioPage)) {
                 $rootScope.isTaxonomyOpen = true;

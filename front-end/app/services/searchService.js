@@ -18,7 +18,7 @@ define(['angularAMD'], function(angularAMD) {
 
         var search = {
             query: '',
-            taxon: '',
+            taxons: [],
             paid: '',
             type: '',
             language: '',
@@ -38,7 +38,9 @@ define(['angularAMD'], function(angularAMD) {
             for (var property in searchObject) {
                 if (searchObject.hasOwnProperty(property) && searchObject[property] != null) {
                     if (property === 'targetGroup') {
-                        search['targetGroups'] = arrayToLowerCase(asArray(searchObject[property]));
+                        search['targetGroups'] = asArray(searchObject[property]);
+                    } else if (property === 'taxon') {
+                        search['taxons'] = asArray(searchObject[property]);
                     } else {
                         search[property] = searchObject[property];
                     }
@@ -96,7 +98,7 @@ define(['angularAMD'], function(angularAMD) {
             },
 
             setTaxon: function(taxon) {
-                search.taxon = taxon;
+                search.taxons = taxon;
             },
 
             setPaid: function(paid) {
@@ -147,8 +149,8 @@ define(['angularAMD'], function(angularAMD) {
                 search.sortDirection = sortDirection;
             },
 
-            getURL: function() {
-                return searchURLbase + this.getQueryURL();;
+            getURL: function(isBackendQuery) {
+                return searchURLbase + this.getQueryURL(isBackendQuery);
             },
 
             getQueryURL: function(isBackendQuery) {
@@ -157,8 +159,12 @@ define(['angularAMD'], function(angularAMD) {
                     searchURL += escapeQuery(search.query)
                 }
 
-                if (search.taxon) {
-                    searchURL += taxonURL + search.taxon;
+                if (search.taxons) {
+                    for (var i = 0; i < search.taxons.length; i++) {
+                        if (search.taxons[i]) {
+                            searchURL += taxonURL + search.taxons[i];
+                        }
+                    }
                 }
                 if (search.paid === false) {
                     searchURL += paidURL + search.paid;
@@ -228,14 +234,14 @@ define(['angularAMD'], function(angularAMD) {
             },
 
             getTaxon: function() {
-                if (search.taxon === "") {
+                if (!search.taxons || search.taxons.length === 0) {
                     var searchObject = $location.search();
                     if (searchObject.taxon) {
-                        return searchObject.taxon;
+                        return asArray(searchObject.taxon);
                     }
                 }
 
-                return search.taxon;
+                return search.taxons;
             },
 
             isPaid: function() {
@@ -371,7 +377,7 @@ define(['angularAMD'], function(angularAMD) {
             },
 
             clearFieldsNotInSimpleSearch: function() {
-                search.taxon = '';
+                search.taxons = '';
                 search.paid = '';
                 search.type = '';
                 search.language = '';

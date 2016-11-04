@@ -27,6 +27,7 @@ define([
                     $scope.suggest.suggestions = null;
                     $scope.suggest.selectedItem = null;
                     var dontSearch = false;
+
                     $scope.detailedSearch.accessor = {
                         clearSimpleSearch: function () {
                             $scope.searchFields.searchQuery = '';
@@ -63,6 +64,7 @@ define([
 
                     $scope.closeDetailedSearch = function () {
                         $timeout(function () {
+                            clearTaxonSelector();
                             $scope.detailedSearch.accessor.clear();
                         }, 500);
                         dontSearch = true;
@@ -146,7 +148,7 @@ define([
                     function buildShareUrl() {
                         var protocol = $location.protocol();
                         var host = $location.host();
-                        var path = '/portfolio'
+                        var path = '/portfolio';
                         var params = $location.search();
 
                         return protocol + '://' + host + path + '?id=' + params.id;
@@ -168,6 +170,10 @@ define([
                         $rootScope.savedPortfolio.visibility = 'PRIVATE';
                         updatePortfolio();
                     };
+
+                    function clearTaxonSelector() {
+                        $rootScope.$broadcast('taxonSelector:clear', null);
+                    }
 
                     function updatePortfolio() {
                         var url = "rest/portfolio/update";

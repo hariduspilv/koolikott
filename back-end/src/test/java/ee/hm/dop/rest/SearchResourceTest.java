@@ -7,6 +7,8 @@ import static org.junit.Assert.fail;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import ee.hm.dop.common.test.ResourceIntegrationTestBase;
@@ -20,6 +22,7 @@ import ee.hm.dop.model.Searchable;
 import ee.hm.dop.model.taxon.Domain;
 import ee.hm.dop.model.taxon.EducationalContext;
 import ee.hm.dop.model.taxon.Subject;
+import ee.hm.dop.model.taxon.Taxon;
 import org.junit.Test;
 
 public class SearchResourceTest extends ResourceIntegrationTestBase {
@@ -69,13 +72,12 @@ public class SearchResourceTest extends ResourceIntegrationTestBase {
 
     @Test
     public void searchWithNullQueryAndEducationalContextFilter() {
-        String query = null;
         SearchFilter searchFilter = new SearchFilter();
         EducationalContext educationalContext = new EducationalContext();
         educationalContext.setId(1L);
         educationalContext.setName("PRESCHOOLEDUCATION");
-        searchFilter.setTaxon(educationalContext);
-        SearchResult searchResult = doGet(buildQueryURL(query, 0, null, searchFilter), SearchResult.class);
+        searchFilter.setTaxons(Collections.singletonList(educationalContext));
+        SearchResult searchResult = doGet(buildQueryURL(null, 0, null, searchFilter), SearchResult.class);
 
         assertMaterialIdentifiers(searchResult.getItems(), 2L);
         assertEquals(1, searchResult.getTotalResults());
@@ -89,7 +91,7 @@ public class SearchResourceTest extends ResourceIntegrationTestBase {
         Domain domain = new Domain();
         domain.setId(10L);
         domain.setName("Mathematics");
-        searchFilter.setTaxon(domain);
+        searchFilter.setTaxons(Collections.singletonList(domain));
         String queryURL = buildQueryURL(query, 0, null, searchFilter);
         SearchResult searchResult = doGet(queryURL, SearchResult.class);
 
@@ -155,7 +157,7 @@ public class SearchResourceTest extends ResourceIntegrationTestBase {
         Subject subject = new Subject();
         subject.setId(20L);
         subject.setName("Biology");
-        searchFilter.setTaxon(subject);
+        searchFilter.setTaxons(Collections.singletonList(subject));
         searchFilter.setPaid(false);
         SearchResult searchResult = doGet(buildQueryURL(query, 0, null, searchFilter), SearchResult.class);
 
@@ -171,7 +173,7 @@ public class SearchResourceTest extends ResourceIntegrationTestBase {
         Subject subject = new Subject();
         subject.setId(21L);
         subject.setName("Mathematics");
-        searchFilter.setTaxon(subject);
+        searchFilter.setTaxons(Collections.singletonList(subject));
         searchFilter.setType("material");
         String queryURL = buildQueryURL(query, 0, null, searchFilter);
         SearchResult searchResult = doGet(queryURL, SearchResult.class);
@@ -213,7 +215,7 @@ public class SearchResourceTest extends ResourceIntegrationTestBase {
         EducationalContext educationalContext = new EducationalContext();
         educationalContext.setId(2L);
         educationalContext.setName("BASICEDUCATION");
-        searchFilter.setTaxon(educationalContext);
+        searchFilter.setTaxons(Collections.singletonList(educationalContext));
         searchFilter.setPaid(false);
         searchFilter.setType("portfolio");
         searchFilter.setIssuedFrom(2011);
@@ -324,10 +326,12 @@ public class SearchResourceTest extends ResourceIntegrationTestBase {
         if (limit != null) {
             queryURL += "&limit=" + limit;
         }
-        if (searchFilter.getTaxon() != null) {
-            queryURL += "&taxon=" + searchFilter.getTaxon().getId();
+        if (searchFilter.getTaxons() != null) {
+            for (Taxon taxon : searchFilter.getTaxons()) {
+                queryURL += "&taxon=" + taxon.getId();
+            }
         }
-        if (searchFilter.isPaid() == false) {
+        if (!searchFilter.isPaid()) {
             queryURL += "&paid=false";
         }
         if (searchFilter.getType() != null) {

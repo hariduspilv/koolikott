@@ -35,9 +35,10 @@
 .taxon__header {
   cursor: pointer;
   transition: background 0.2s;
-  height: 46px;
+  min-height: 46px;
   font-size: 13px;
   padding: 0 22px;
+  width: 100%;
 
   &:hover {
     background-color: rgba(158,158,158,0.2);

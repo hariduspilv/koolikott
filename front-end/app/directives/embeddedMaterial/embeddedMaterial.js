@@ -21,6 +21,8 @@ define([
                     function init() {
                         $scope.canPlayVideo = false;
                         $scope.canPlayAudio = false;
+                        $scope.videoType = "";
+                        $scope.audioType = "";
                         $scope.isEditPortfolioPage = $rootScope.isEditPortfolioPage;
                         $scope.isEditPortfolioMode = $rootScope.isEditPortfolioMode;
 
@@ -70,7 +72,7 @@ define([
                     $scope.$watch(function () {
                         return $scope.material.source;
                     }, function (newValue, oldValue) {
-                        if($scope.material && $scope.material.source) {
+                        if ($scope.material && $scope.material.source) {
                             getSourceType();
                             canPlayVideoFormat();
                             canPlayAudioFormat();
@@ -80,7 +82,12 @@ define([
                     function canPlayVideoFormat() {
                         var extension = $scope.material.source.split('.').pop();
                         var v = document.createElement('video');
-                        if(v.canPlayType && v.canPlayType('video/' + extension)) {
+                        /* ogv is a subtype of ogg therefore if ogg is supported ogv is also */
+                        if (extension == "ogv") {
+                            extension = "ogg"
+                        }
+                        if (v.canPlayType && v.canPlayType('video/' + extension)) {
+                            $scope.videoType = extension;
                             $scope.canPlayVideo = true;
                         }
                     }
@@ -88,7 +95,8 @@ define([
                     function canPlayAudioFormat() {
                         var extension = $scope.material.source.split('.').pop();
                         var v = document.createElement('audio');
-                        if(v.canPlayType && v.canPlayType('audio/' + extension)) {
+                        if (v.canPlayType && v.canPlayType('audio/' + extension)) {
+                            $scope.audioType = extension;
                             $scope.canPlayAudio = true;
                         }
                     }
@@ -100,8 +108,10 @@ define([
                             $scope.sourceType = 'SLIDESHARE';
                         } else if (isVideoLink($scope.material.source)) {
                             $scope.sourceType = 'VIDEO';
-                        } else if (isAudioLink($scope.material.source)){
+                        } else if (isAudioLink($scope.material.source)) {
                             $scope.sourceType = 'AUDIO';
+                        } else if (isPictureLink($scope.material.source)) {
+                            $scope.sourceType = 'PICTURE';
                         } else {
                             embedService.getEmbed(getSource($scope.material), embedCallback);
                         }
@@ -119,15 +129,21 @@ define([
                     }
 
                     function isVideoLink(url) {
-                        if(!url) return;
-                        var extension = url.split('.').pop();
-                        return extension == "mp4" || extension == "ogg" || extension == "webm";
+                        if (!url) return;
+                        var extension = url.split('.').pop().toLowerCase();
+                        return extension == "mp4" || extension == "ogv" || extension == "webm";
                     }
 
                     function isAudioLink(url) {
-                        if(!url) return;
-                        var extension = url.split('.').pop();
+                        if (!url) return;
+                        var extension = url.split('.').pop().toLowerCase();
                         return extension == "mp3" || extension == "ogg" || extension == "wav";
+                    }
+
+                    function isPictureLink(url) {
+                        if (!url) return;
+                        var extension = url.split('.').pop().toLowerCase();
+                        return extension == "jpg" || extension == "jpeg" || extension == "png" || extension == "gif";
                     }
 
                     function getType() {

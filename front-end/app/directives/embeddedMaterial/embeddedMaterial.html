@@ -1,5 +1,5 @@
 <md-card class="md-whiteframe-2dp embed-card">
-  <md-card-header class="embed-header" data-ng-if="isEditPortfolioPage">
+  <md-card-header class="embed-header" data-ng-if="isEditPortfolioPage || $root.isViewPortforlioPage">
     <md-card-avatar>
       <md-icon class="icon-kind embeddedMaterial" ng-class="materialType">{{materialType}}</md-icon>
     </md-card-avatar>
@@ -28,15 +28,21 @@
       </div>
     </div>
 
-    <div data-ng-show="sourceType === 'VIDEO' && canPlayVideo" class="embed-responsive-container embed-video">
-        <video controls="true" width="100%">
-          <source src="{{material.source}}">
-        </video>
+    <div data-ng-show="sourceType === 'VIDEO' && canPlayVideo"
+         class="embed-responsive-container embed-video">
+      <video controls="true" width="100%">
+        <source src="{{material.source}}" type="video/{{videoType}}">
+      </video>
     </div>
 
-    <div class="embed-responsive-container embed-audio" data-ng-if="sourceType === 'AUDIO' && canPlayAudio">
+    <a class="embed-link" href="{{material.source}}" ng-if="sourceType === 'PICTURE'" target="_blank" ng-class="{'embed-image-padded': isEditPortfolioMode || $root.isViewPortforlioPage}">
+      <img src="{{material.source}}"/>
+    </a>
+
+    <div class="embed-responsive-container embed-audio"
+         data-ng-if="sourceType === 'AUDIO' && canPlayAudio">
       <audio controls="true">
-        <source src="{{material.source}}">
+        <source src="{{material.source}}" type="audio/{{audioType}}">
       </audio>
     </div>
 
@@ -59,15 +65,15 @@
       </div>
     </div>
   </md-card-content>
-  <md-card-footer class="embeded-material-footer" layout="row" flex
-                  data-ng-if="!sourceType || isEditPortfolioPage || (sourceType === 'VIDEO' && !canPlayVideo)
-                  || (sourceType === 'AUDIO' && !canPlayAudio)">
+  <md-card-footer class="embeded-material-footer" layout="row" flex data-ng-if="isEditPortfolioMode || !sourceType">
     <!--Link as backup - if iframe is internally not working-->
-    <a href="{{material.source}}" class="wrapped regular-link md-primary" layout-align="start center" flex target="_blank">
+    <a href="{{material.source}}" class="wrapped regular-link md-primary" layout-align="start center" flex
+       target="_blank" data-ng-if="(!sourceType || (sourceType === 'VIDEO' && !canPlayVideo)
+                  || (sourceType === 'AUDIO' && !canPlayAudio))">
       <span class="item-link" data-ng-bind="material.source"></span>
     </a>
     <!--Up and down-->
-    <div data-ng-if="isEditPortfolioMode && isEditPortfolioPage" layout-align="end center">
+    <div data-ng-if="isEditPortfolioMode && isEditPortfolioPage" layout-align="end center" layout="row" flex>
       <md-button ng-disabled="index === 0" class="md-icon-button" aria-label="Liiguta materjali üles"
                  ng-click="listItemUp(index)">
         <md-icon class="material-icons">arrow_upward</md-icon>
@@ -79,3 +85,4 @@
     </div>
   </md-card-footer>
 </md-card>
+
