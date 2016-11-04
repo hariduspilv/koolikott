@@ -3,11 +3,14 @@
   <div data-ng-if="isAuthenticated()" class="card__favorite" data-dop-favorite data-learning-object="material" layout-align="start start"></div>
   <!-- noimage -->
   <a data-ng-href="{{'/material?materialId=' + material.id}}" data-ng-if="!material.picture"
-     class="card-cover {{materialType}}" layout="row" layout-align="center center">
-    <div>
-      <md-icon class="icon-kind">{{ materialType }}</md-icon>
-    </div>
-    <div class="card-hover {{materialType}}" layout="row">
+     class="card-cover {{materialType}}">
+     <div class="pattern">
+       <div class="sheet up-left"></div>
+       <div class="sheet low-right"></div>
+       <div class="sheet low-left"></div>
+     </div>
+    <md-icon class="icon-kind">{{ materialType }}</md-icon>
+    <div class="card-hover {{materialType}}">
 
       <div data-ng-if="isAuthenticated()" data-dop-favorite data-learning-object="material" layout-align="start start"></div>
 

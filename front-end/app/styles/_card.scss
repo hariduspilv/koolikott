@@ -1,5 +1,5 @@
 .pattern {
-  position: relative;
+  position: absolute;
   width: 100%;
   height: 100%;
   .sheet {
@@ -208,10 +208,13 @@ md-card {
 
 
     md-icon.icon-kind {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%,-50%);
       font-size: 48px;
       color: rgba(255, 255, 255, .7);
       z-index: 1;
-      position: absolute;
       text-shadow: 1px 1px 1px rgba(0, 0,0, .2);
     }
     &:hover {
@@ -281,12 +284,6 @@ md-card {
         }
       }
       md-icon.icon-kind {
-        position: absolute;
-        top: 0;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        font-size: 48px;
         color: rgba(255, 255, 255, 0.6);
       }
     }
@@ -472,8 +469,11 @@ md-card .card-menu {
 }
 
 .favorite {
-  margin-top: -15px!important;
+  margin-top: 6px;
+  text-shadow: 1px 1px 1px rgba(0, 0,0, .2);
+  color: red;
 }
+
 .gold {
   color: gold!important;
 }
