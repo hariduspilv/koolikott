@@ -30,6 +30,7 @@ public class FabButton extends PageComponent {
 	}
 	
 	public FabButton moveCursorToAddMaterial() {
+		PageHelpers.waitForVisibility(addMaterialButton);
 		Actions builder = new Actions(getDriver());
 		WebElement addMaterial = getDriver().findElement(addMaterialButton);
 		builder.moveToElement(addMaterial).perform();

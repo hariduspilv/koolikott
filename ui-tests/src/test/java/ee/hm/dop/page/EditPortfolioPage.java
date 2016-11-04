@@ -142,6 +142,7 @@ public class EditPortfolioPage extends Page {
 		String randomDescription = descriptionArray[new Random().nextInt(descriptionArray.length)];
 		getDriver().findElement(descriptionField).clear();
 		getDriver().findElement(descriptionField).sendKeys(randomDescription);
+		PageHelpers.waitForSeconds(1500);
 		return this;
 	}
 	

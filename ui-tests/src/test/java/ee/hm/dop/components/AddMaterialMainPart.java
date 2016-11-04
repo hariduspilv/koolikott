@@ -227,7 +227,7 @@ public class AddMaterialMainPart extends PageComponent {
 				"c:\\Images\\monochrome.jpg", "c:\\Images\\winter1.jpg", "c:\\Images\\art.jpg", "c:\\Images\\urban.jpg",
 				"c:\\Images\\moon.jpg", "c:\\Images\\spring.jpg", "c:\\Images\\piers.jpg", "c:\\Images\\mirror.jpg",
 				"c:\\Images\\jar.jpg", "c:\\Images\\cats.jpg", "c:\\Images\\dance.jpg", "c:\\Images\\phones1.jpg",
-				"c:\\Images\\ocean.jpg", "c:\\Images\\winter_sun.jpg", "c:\\Images\\cityscape.jpg",
+				"c:\\Images\\ocean.jpg", "c:\\Images\\winter_sun.jpg",
 				"c:\\Images\\sheep.jpg", "c:\\Images\\snow_lake.jpg", "c:\\Images\\liberty.jpg" };
 		String randomFile = picsArray[new Random().nextInt(picsArray.length)];
 		PageHelpers.uploadFile(randomFile);

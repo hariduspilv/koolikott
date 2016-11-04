@@ -23,7 +23,7 @@ public class LandingPage extends Page {
 
 		if (userType == "SmallPublisher")
 			getDriver().get("oxygen.netgroupdigital.com/#/dev/login/12345678900");
-		    PageHelpers.waitForSeconds(1500);
+		    PageHelpers.waitForSeconds(2500);
 
 		if (userType == "User")
 			getDriver().get("oxygen.netgroupdigital.com/#/dev/login/38202020234");

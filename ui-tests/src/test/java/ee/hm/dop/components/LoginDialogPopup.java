@@ -16,7 +16,8 @@ public class LoginDialogPopup extends PageComponent {
     
     
     public LoginDialogPopup insertMobileIDCode(String mobileIDCode) {
-        getDriver().findElement(mobileIdCodeField).sendKeys(mobileIDCode);
+        PageHelpers.waitForVisibility(mobileIdCodeField);
+    	getDriver().findElement(mobileIdCodeField).sendKeys(mobileIDCode);
         return this;
     }
     

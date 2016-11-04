@@ -11,6 +11,7 @@ public class SimpleSearch extends PageComponent {
 	
 	private By simpleSearch = By.id("header-simple-search-input");
 	private By autocompleteSelecton = By.cssSelector("span.highlight");
+
 	
 	
 	public LandingPage insertSearchCriteriaAndSearch(String criteria) {

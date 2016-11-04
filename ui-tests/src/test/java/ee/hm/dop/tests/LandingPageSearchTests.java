@@ -15,8 +15,8 @@ public class LandingPageSearchTests {
 
 		String tagText = goToLandingPage()
 				.chooseUserType("Admin")
-				.getLogo()
-				.clickLogo()
+				.getLeftMenu()
+				.clickMyPortfolios()
 				.getSimpleSearch()
 				.insertSearchCriteriaAndSearch("tag:epic")
 				.openSearchResultPortfolio()
@@ -31,8 +31,8 @@ public class LandingPageSearchTests {
 
 		String publisherName = goToLandingPage()
 				.chooseUserType("Admin")
-				.getLogo()
-				.clickLogo()
+				.getLeftMenu()
+				.clickMyPortfolios()
 				.getSimpleSearch()
 				.insertSearchCriteriaAndSearch("publisher:Pegasus")
 				.openSearchResultMaterial()

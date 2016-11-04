@@ -18,7 +18,6 @@ public class LeftMenu extends PageComponent {
 	
 	
 	public LeftMenu clickDashboard() {
-		PageHelpers.waitForSeconds(1500);
 		PageHelpers.waitForVisibility(dashboardButton);
 		getDriver().findElement(dashboardButton).click();
 		return this;
