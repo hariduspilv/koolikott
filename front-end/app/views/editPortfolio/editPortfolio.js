@@ -101,11 +101,13 @@ define([
             function setPortfolio(portfolio) {
                 $scope.portfolio = portfolio;
 
-                $scope.portfolio.chapters.forEach(function(chapter) {
-                    chapter.materials.forEach(function(material){
-                        material.source = getSource(material);
-                    })
-                });
+                if ($scope.portfolio.chapters) {
+                    $scope.portfolio.chapters.forEach(function (chapter) {
+                        chapter.materials.forEach(function (material) {
+                            material.source = getSource(material);
+                        })
+                    });
+                }
 
                 $rootScope.savedPortfolio = portfolio;
             }
