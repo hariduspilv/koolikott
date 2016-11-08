@@ -24,13 +24,15 @@
                                     <span data-translate="PORTFOLIO_EDIT_METADATA"></span>
                                 </md-button>
                             </md-menu-item>
-                            <md-menu-item data-ng-if="(isEditPortfolioMode || canEdit() || isAdmin()) && !portfolio.deleted">
+
+                            <md-menu-item data-ng-if="(isEditPortfolioMode || canEdit() || (!isAdminButtonsShowing() && isAdmin())) && !portfolio.deleted">
                                 <md-button data-ng-click="confirmPortfolioDeletion()">
                                     <md-icon md-menu-align-target>delete</md-icon>
                                     <span data-translate="PORTFOLIO_DELETE"></span>
                                 </md-button>
                             </md-menu-item>
-                            <md-menu-item data-ng-if="isAdmin() && portfolio.deleted">
+
+                            <md-menu-item data-ng-if="isAdmin() && portfolio.deleted && !isAdminButtonsShowing()">
                                 <md-button data-ng-click="restorePortfolio()">
                                     <md-icon md-menu-align-target>undo</md-icon>
                                     <span data-translate="BUTTON_RESTORE"></span>
@@ -38,9 +40,11 @@
                             </md-menu-item>
                             <md-menu-item data-ng-if="isViewPortforlioPage" dop-copy-permalink data-url="pageUrl"></md-menu-item>
                             <md-menu-divider data-ng-if="isAdmin()"></md-menu-divider>
+
                             <md-menu-item data-ng-if="isAdmin()" dop-recommend data-portfolio="portfolio"></md-menu-item>
-                            <md-menu-divider data-ng-if="isViewPortforlioPage && isLoggedIn()"></md-menu-divider>
-                            <md-menu-item data-ng-if="isViewPortforlioPage && isLoggedIn()  && !isRestricted()" dop-report-improper data-learning-object="portfolio"></md-menu-item>
+
+                            <md-menu-divider data-ng-if="isViewPortforlioPage && isLoggedIn() && !isAdmin()"></md-menu-divider>
+                            <md-menu-item data-ng-if="isViewPortforlioPage && isLoggedIn()  && !isRestricted() && !isAdmin()" dop-report-improper data-learning-object="portfolio"></md-menu-item>
                         </md-menu-content>
                     </md-menu>
                 </div>

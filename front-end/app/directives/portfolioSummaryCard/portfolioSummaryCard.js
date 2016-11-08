@@ -153,6 +153,19 @@ define([
                         }
                     };
 
+                    $scope.isAdminButtonsShowing = function () {
+                        return ($rootScope.learningObjectDeleted == false
+                            && $rootScope.learningObjectImproper == false
+                            && $rootScope.learningObjectBroken == true)
+                            || ($rootScope.learningObjectDeleted == false
+                            && $rootScope.learningObjectBroken == false
+                            && $rootScope.learningObjectImproper == true)
+                            || ($rootScope.learningObjectDeleted == false
+                            && $rootScope.learningObjectBroken == true
+                            && $rootScope.learningObjectImproper == true)
+                            || ($rootScope.learningObjectDeleted == true);
+                    };
+
                     $scope.$watch('portfolio.taxon.id', function (newValue, oldValue) {
                         if (newValue !== oldValue && $scope.portfolio) {
                             $scope.portfolioSubject = getSubject($scope.portfolio.taxon);

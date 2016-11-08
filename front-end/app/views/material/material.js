@@ -300,6 +300,20 @@ define([
                 }
             };
 
+            $scope.isAdminButtonsShowing = function () {
+                return ($rootScope.learningObjectDeleted == false
+                    && $rootScope.learningObjectImproper == false
+                    && $rootScope.learningObjectBroken == true)
+                    || ($rootScope.learningObjectDeleted == false
+                    && $rootScope.learningObjectBroken == false
+                    && $rootScope.learningObjectImproper == true)
+                    || ($rootScope.learningObjectDeleted == false
+                    && $rootScope.learningObjectBroken == true
+                    && $rootScope.learningObjectImproper == true)
+                    || ($rootScope.learningObjectDeleted == true);
+            };
+
+
             function getSignedUserData() {
                 serverCallService.makeGet("rest/user/getSignedUserData", {}, getSignedUserDataSuccess, getSignedUserDataFail);
             }

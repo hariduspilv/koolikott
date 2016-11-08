@@ -42,14 +42,14 @@
                   </md-button>
                 </md-menu-item>
 
-                <md-menu-item data-ng-if="isAdmin() && material.deleted">
+                <md-menu-item data-ng-if="isAdmin() && material.deleted && !isAdminButtonsShowing()">
                   <md-button data-ng-click="restoreMaterial()">
                     <md-icon md-menu-align-target>undo</md-icon>
                     <span data-translate="BUTTON_RESTORE"></span>
                   </md-button>
                 </md-menu-item>
 
-                <md-menu-item data-ng-if="isAdmin() && !material.deleted">
+                <md-menu-item data-ng-if="isAdmin() && !material.deleted && !isAdminButtonsShowing()">
                   <md-button data-ng-click="confirmMaterialDeletion()">
                     <md-icon md-menu-align-target>delete</md-icon>
                     <span data-translate="MATERIAL_DELETE"></span>
@@ -60,10 +60,12 @@
                 <md-menu-divider data-ng-if="isAdmin()"></md-menu-divider>
                 <md-menu-item data-ng-if="isAdmin()" dop-recommend data-material="material"></md-menu-item>
 
-                <md-menu-divider data-ng-if="isLoggedIn() && !isRestricted()"></md-menu-divider>
-                <md-menu-item data-ng-if="isLoggedIn() && !isRestricted()" dop-report-improper
+                <md-menu-divider data-ng-if="isLoggedIn() && !isRestricted() && !isAdmin()"></md-menu-divider>
+
+                <md-menu-item data-ng-if="isLoggedIn() && !isRestricted() && !isAdmin()" dop-report-improper
                               data-learning-object="material"></md-menu-item>
-                <md-menu-item data-ng-if="isLoggedIn() && !isRestricted()"
+
+                <md-menu-item data-ng-if="isLoggedIn() && !isRestricted() && !isAdmin()"
                               dop-report-broken-link></md-menu-item>
 
                 <md-menu-item data-ng-if="material.creator && (isAdmin() || isModerator())" dop-restrict
