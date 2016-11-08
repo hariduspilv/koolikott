@@ -103,9 +103,9 @@ define([
                         })
                     });
 
-                    $rootScope.learningObjectBroken = ($scope.portfolio.broken > 0) ? true : false;
-                    $rootScope.learningObjectImproper = ($scope.portfolio.improper > 0) ? true : false;
-                    $rootScope.learningObjectDeleted = ($scope.portfolio.deleted == true) ? true : false;
+                    $rootScope.learningObjectBroken = $scope.portfolio.broken > 0;
+                    $rootScope.learningObjectImproper = $scope.portfolio.improper > 0;
+                    $rootScope.learningObjectDeleted = $scope.portfolio.deleted == true;
 
                     if(authenticatedUserService.isAdmin() || authenticatedUserService.isModerator()) {
                         if($scope.portfolio.improper > 0) {
@@ -137,7 +137,7 @@ define([
                 } else {
                     return false;
                 }
-            }
+            };
 
             $scope.$watch(function () {
                 return $location.url().replace(window.location.hash, '');
@@ -157,6 +157,22 @@ define([
                 if (increaseViewCountPromise) {
                     $timeout.cancel(increaseViewCountPromise);
                 }
+            });
+
+            /*
+             * Admin dashboard listeners
+             * Events are sent from errorMessage
+             */
+            $scope.$on("restore:learningObject", function() {
+                $scope.$broadcast("restore:portfolio");
+            });
+
+            $scope.$on("delete:learningObject", function() {
+                $scope.$broadcast("delete:portfolio");
+            });
+
+            $scope.$on("setNotImproper:learningObject", function() {
+                $scope.$broadcast("setNotImproper:");
             });
 
             $scope.isAdmin = function () {

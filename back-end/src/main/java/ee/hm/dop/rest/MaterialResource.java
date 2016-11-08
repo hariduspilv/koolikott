@@ -207,7 +207,7 @@ public class MaterialResource extends BaseResource {
     @RolesAllowed({"ADMIN", "MODERATOR"})
     @Produces(MediaType.APPLICATION_JSON)
     public Response getBrokenMaterialCount() {
-        return Response.ok(materialService.getBrokenMaterials().size()).build();
+        return Response.ok(materialService.getBrokenMaterialCount()).build();
     }
 
     @POST

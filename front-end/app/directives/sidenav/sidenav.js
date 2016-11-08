@@ -12,7 +12,7 @@ define([
             templateUrl: 'directives/sidenav/sidenav.html',
             controller: function ($rootScope, $scope, $location, serverCallService, searchService, $timeout, metadataService, authenticatedUserService, $sce, $mdDialog, userDataService) {
 
-                $scope.dashboardOpen = false;
+                $scope.dashboardOpen = $location.path().startsWith("/dashboard");
 
                 // List of taxon icons
                 $scope.taxonIcons = [
@@ -34,6 +34,10 @@ define([
                     $scope.user = user;
                     $scope.updateUserCounts();
                 }, true);
+
+                $scope.$on('dashboard:adminCountsUpdated', function() {
+                   $scope.updateAdminCounts();
+                });
 
                 $scope.isAdmin = function () {
                     return authenticatedUserService.isAdmin();
@@ -59,8 +63,7 @@ define([
 
                 //Checks the location
                 $scope.isLocation = function (location) {
-                    var isLocation = location === $location.path();
-                    return isLocation;
+                    return location === $location.path();
                 };
 
                 metadataService.loadReducedTaxon(function (callback) {

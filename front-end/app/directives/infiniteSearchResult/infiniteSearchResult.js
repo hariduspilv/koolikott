@@ -20,13 +20,15 @@ define([
                     $scope.searching = false;
                     $scope.accessor = {};
 
+                    const FIRST_SEARCH_AMOUNT = 20; // on first load 20 items should be loaded
+
                     var isFirstLoad = true;
                     var hasInitated = false;
                     var searchCount = 0;
-                    var expectedItemCount = 15; // on first load 15 items should be loaded
+                    var expectedItemCount = FIRST_SEARCH_AMOUNT;
 
                     // Pagination variables
-                    var maxResults = $scope.params.maxResults || $scope.params.limit;
+                    var maxResults = $scope.params ? $scope.params.maxResults || $scope.params.limit : null;
                     $scope.items = [];
 
                     function init() {
@@ -67,8 +69,8 @@ define([
                         }
 
                         if (isFirstLoad) {
-                            $scope.params.limit = 20;
-                            $scope.params.maxResults = 20;
+                            $scope.params.limit = FIRST_SEARCH_AMOUNT;
+                            $scope.params.maxResults = FIRST_SEARCH_AMOUNT;
                         } else {
                             $scope.params.limit = 15;
                             $scope.params.maxResults = 15;

@@ -92,6 +92,21 @@ public class ImproperContentService {
                 .collect(Collectors.toList());
     }
 
+    public long getImproperMaterialSize(User user) {
+        List<ImproperContent> impropers = getAll(user);
+        return impropers
+                .stream()
+                .filter(imp -> "Material".equals(imp.getLearningObject().getClass().getSimpleName()) && !imp.getLearningObject().isDeleted())
+                .collect(Collectors.toList()).size();
+    }
+    public long getImproperPortfolioSize(User user) {
+        List<ImproperContent> impropers = getAll(user);
+        return impropers
+                .stream()
+                .filter(imp -> "Portfolio".equals(imp.getLearningObject().getClass().getSimpleName()) && !imp.getLearningObject().isDeleted())
+                .collect(Collectors.toList()).size();
+    }
+
     /**
      * 
      * @param learningObject

@@ -22,6 +22,10 @@ define([
                     }
                 }, false);
 
+                $scope.$on("markCorrect:material", function() {
+                    $scope.markMaterialCorrect();
+                });
+
                 $scope.showConfirmationDialog = function() {
                     var confirm = $mdDialog.confirm()
                         .title($translate.instant('REPORT_BROKEN_LINK_TITLE'))
@@ -34,11 +38,11 @@ define([
                         serverCallService.makePost(url, $scope.material, setBrokenSuccessful, queryFailed);
 
                     });
-                }
+                };
 
                 $scope.markMaterialCorrect = function() {
                     serverCallService.makePost("rest/material/setNotBroken", $scope.material, markCorrectSuccess, queryFailed);
-                }
+                };
 
                 function isBrokenSuccess(data) {
                     $scope.isBroken = data;
@@ -57,6 +61,7 @@ define([
                     $scope.isBroken = false;
                     $scope.isBrokenReportedByUser = false;
                     $rootScope.learningObjectBroken = false;
+                    $rootScope.$broadcast('dashboard:adminCountsUpdated');
                 }
 
                 function queryFailed() {

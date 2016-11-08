@@ -29,7 +29,7 @@ define([
 
             function getImproperMaterialsSuccess(impropers) {
                 if (impropers) {
-                    base.getItemsSuccess(impropers, 'byReportCount', true);
+                    base.getItemsSuccess(base.removeDeletedFromImpropers(impropers), 'byReportCount', true);
                 } else {
                     base.getItemsFail();
                 }

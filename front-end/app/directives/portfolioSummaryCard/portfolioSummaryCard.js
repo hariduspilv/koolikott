@@ -101,7 +101,7 @@ define([
 
                     function getSubject(taxon) {
                         return $rootScope.taxonUtils.getSubject(taxon)
-                    };
+                    }
 
                     function deletePortfolio() {
                         var url = "rest/portfolio/delete";
@@ -112,6 +112,7 @@ define([
                         toastService.show('PORTFOLIO_DELETED');
                         $scope.portfolio.deleted = true;
                         $rootScope.learningObjectDeleted = true;
+                        $rootScope.$broadcast('dashboard:adminCountsUpdated');
                     }
 
                     function deletePortfolioFailed() {
@@ -122,10 +123,19 @@ define([
                         serverCallService.makePost("rest/portfolio/restore", $scope.portfolio, restoreSuccess, restoreFail);
                     };
 
+                    $scope.$on("restore:portfolio", function () {
+                       $scope.restorePortfolio();
+                    });
+
+                    $scope.$on("delete:portfolio", function() {
+                        deletePortfolio();
+                    });
+
                     function restoreSuccess() {
                         toastService.show('PORTFOLIO_RESTORED');
                         $scope.portfolio.deleted = false;
                         $rootScope.learningObjectDeleted = false;
+                        $rootScope.$broadcast('dashboard:adminCountsUpdated');
                     }
 
                     function restoreFail() {

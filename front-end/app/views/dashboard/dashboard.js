@@ -11,7 +11,7 @@ define([
 
             function init() {
                 var user = authenticatedUserService.getUser();
-                if (user && user.userTaxons) {
+                if (user && user.userTaxons && user.userTaxons.length > 0) {
                     $scope.url = "rest/search";
 
                     var taxons = [];

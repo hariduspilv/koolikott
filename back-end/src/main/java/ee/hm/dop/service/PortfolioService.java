@@ -7,6 +7,7 @@ import static org.joda.time.DateTime.now;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 import javax.inject.Inject;
@@ -232,7 +233,7 @@ public class PortfolioService implements LearningObjectHandler {
             throw new RuntimeException("Portfolio not found");
         }
 
-        if (originalPortfolio.getCreator().getId() != loggedInUser.getId()) {
+        if (!originalPortfolio.getCreator().getId().equals(loggedInUser.getId())) {
             throw new RuntimeException("Logged in user must be the creator of this portfolio.");
         }
 
@@ -269,7 +270,7 @@ public class PortfolioService implements LearningObjectHandler {
             throw new RuntimeException("Portfolio not found");
         }
 
-        if (originalPortfolio.getCreator().getId() != loggedInUser.getId() && !isUserAdmin(loggedInUser)) {
+        if (!originalPortfolio.getCreator().getId().equals(loggedInUser.getId()) && !isUserAdmin(loggedInUser)) {
             throw new RuntimeException("Logged in user must be the creator of this portfolio or administrator.");
         }
 
@@ -291,7 +292,7 @@ public class PortfolioService implements LearningObjectHandler {
         solrEngineService.updateIndex();
     }
 
-    public boolean isPortfolioAccessibleToUser(Portfolio portfolio, User loggedInUser) {
+    private boolean isPortfolioAccessibleToUser(Portfolio portfolio, User loggedInUser) {
         return (portfolio.getVisibility() != Visibility.PRIVATE || isUserPortfolioCreator(portfolio, loggedInUser)
                 && !portfolio.isDeleted())
                 || isUserAdmin(loggedInUser);
@@ -346,7 +347,7 @@ public class PortfolioService implements LearningObjectHandler {
     }
 
     private boolean isUserPortfolioCreator(Portfolio portfolio, User loggedInUser) {
-        return loggedInUser != null && portfolio.getCreator().getId() == loggedInUser.getId();
+        return loggedInUser != null && portfolio.getCreator().getId().equals(loggedInUser.getId());
     }
 
     private boolean isUserAdmin(User loggedInUser) {
@@ -359,7 +360,7 @@ public class PortfolioService implements LearningObjectHandler {
 
     public List<Portfolio> getDeletedPortfolios() {
         List<Portfolio> portfolios = new ArrayList<>();
-        portfolioDAO.findDeletedPortfolios().stream().forEach(portfolio -> portfolios.add((Portfolio) portfolio));
+        portfolioDAO.findDeletedPortfolios().forEach(portfolio -> portfolios.add((Portfolio) portfolio));
         return portfolios;
     }
 

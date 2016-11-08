@@ -382,6 +382,7 @@ define([
                 toastService.showOnRouteChange('MATERIAL_DELETED');
                 $scope.material.deleted = true;
                 $rootScope.learningObjectDeleted = true;
+                $rootScope.$broadcast('dashboard:adminCountsUpdated');
             }
 
             function deleteMaterialFailed() {
@@ -401,10 +402,27 @@ define([
                 serverCallService.makePost("rest/material/restore", $scope.material, restoreSuccess, restoreFail);
             };
 
+            $scope.$on("restore:learningObject", function() {
+               $scope.restoreMaterial();
+            });
+
+            $scope.$on("delete:learningObject", function() {
+               deleteMaterial();
+            });
+
+            $scope.$on("setNotImproper:learningObject", function() {
+                $scope.$broadcast("setNotImproper:");
+            });
+
+            $scope.$on("markCorrect:learningObject", function() {
+               $scope.$broadcast("markCorrect:material");
+            });
+
             function restoreSuccess() {
                 toastService.show('MATERIAL_RESTORED');
                 $scope.material.deleted = false;
                 $rootScope.learningObjectDeleted = false;
+                $rootScope.$broadcast('dashboard:adminCountsUpdated');
             }
 
             function restoreFail() {

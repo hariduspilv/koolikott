@@ -1,12 +1,73 @@
-<div class="error-message-container md-whiteframe-4dp" flex layout="row" ng-show="$root.learningObjectDeleted == true">
+<!-- DELETED -->
+<div class="error-message-container md-whiteframe-4dp" flex layout="row" ng-show="showDeleted()">
   <md-icon>delete</md-icon>
   <p data-translate="ERROR_MSG_DELETED"></p>
+  <span data-flex></span>
+  <button class="md-button error-message-button" data-ng-click="restoreLearningObject()">
+    <md-icon class="button-icon">restore_page</md-icon>
+    <md-tooltip>
+      <span data-translate="BUTTON_RESTORE"></span>
+    </md-tooltip></button>
+  </button>
 </div>
-<div class="error-message-container md-whiteframe-4dp" flex layout="row" ng-show="$root.learningObjectBroken == true" >
+
+<!-- BROKEN -->
+<div class="error-message-container md-whiteframe-4dp" flex layout="row" ng-show="showBroken()" >
   <md-icon>report</md-icon>
   <p><span data-translate="ERROR_MSG_BROKEN"></span><span class="reason"></span></p>
+  <span data-flex></span>
+  <button class="md-button error-message-button" data-ng-click="$parent.confirmMaterialDeletion()">
+    <md-icon class="button-icon">delete</md-icon>
+    <md-tooltip>
+      <span data-translate="BUTTON_REMOVE"></span>
+    </md-tooltip></button>
+  <button class="md-button error-message-button" data-ng-click="markCorrectMaterial()">
+    <md-icon class="button-icon">done</md-icon>
+    <md-tooltip>
+      <span data-translate="REPORT_BROKEN_LINK_CORRECT"></span>
+    </md-tooltip></button>
+  </button>
 </div>
-<div class="error-message-container md-whiteframe-4dp" flex layout="row" ng-show="$root.learningObjectImproper == true">
+
+<!-- IMPROPER -->
+<div class="error-message-container md-whiteframe-4dp" flex layout="row" ng-show="showImproper()">
   <md-icon>report</md-icon>
   <p><span data-translate="ERROR_MSG_IMPROPER"></span><span class="reason"><span data-translate="ERROR_MSG_REASON"></span>: <span>{{reason}}</span></span></p>
+  <span data-flex></span>
+  <button class="md-button error-message-button" data-ng-click="deleteLearningObject()">
+    <md-icon class="button-icon">delete</md-icon>
+    <md-tooltip>
+      <span data-translate="BUTTON_REMOVE"></span>
+  </md-tooltip></button>
+  <button class="md-button error-message-button" data-ng-click="setNotImproperLearningObject()">
+    <md-icon class="button-icon">done</md-icon>
+    <md-tooltip>
+      <span data-translate="REPORT_NOT_IMPROPER"></span>
+    </md-tooltip></button>
+  </button>
 </div>
+
+<!-- IMPROPER AND BROKEN -->
+<div class="error-message-container md-whiteframe-4dp" flex layout="row" ng-show="showImproperAndBroken()">
+  <md-icon>report</md-icon>
+  <p><span data-translate="ERROR_MSG_IMPROPER_AND_BROKEN"></span><span class="reason"><span data-translate="ERROR_MSG_REASON"></span>: <span>{{reason}}</span></span></p>
+  <span data-flex></span>
+  <button class="md-button error-message-button" data-ng-click="deleteLearningObject()">
+    <md-icon class="button-icon">delete</md-icon>
+    <md-tooltip>
+      <span data-translate="BUTTON_REMOVE"></span>
+    </md-tooltip></button>
+  <button class="md-button error-message-button" data-ng-click="markCorrectMaterial()">
+    <md-icon class="button-icon">done</md-icon>
+    <md-tooltip>
+      <span data-translate="REPORT_BROKEN_LINK_CORRECT"></span>
+    </md-tooltip></button>
+  </button>
+  <button class="md-button error-message-button" data-ng-click="setNotImproperLearningObject()">
+    <md-icon class="button-icon">done</md-icon>
+    <md-tooltip>
+      <span data-translate="REPORT_NOT_IMPROPER"></span>
+    </md-tooltip></button>
+  </button>
+</div>
+

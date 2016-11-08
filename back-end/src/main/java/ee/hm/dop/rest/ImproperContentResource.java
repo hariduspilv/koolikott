@@ -101,7 +101,7 @@ public class ImproperContentResource extends BaseResource {
     @RolesAllowed({"USER", "ADMIN", "RESTRICTED", "MODERATOR"})
     public Response getImproperMaterialsCount() {
         User loggedInUser = getLoggedInUser();
-        return Response.ok(improperContentService.getImproperMaterials(loggedInUser).size()).build();
+        return Response.ok(improperContentService.getImproperMaterialSize(loggedInUser)).build();
     }
 
     @GET
@@ -110,7 +110,7 @@ public class ImproperContentResource extends BaseResource {
     @RolesAllowed({"USER", "ADMIN", "RESTRICTED", "MODERATOR"})
     public Response getImproperPortfoliosCount() {
         User loggedInUser = getLoggedInUser();
-        return Response.ok(improperContentService.getImproperPortfolios(loggedInUser).size()).build();
+        return Response.ok(improperContentService.getImproperPortfolioSize(loggedInUser)).build();
     }
 
     @DELETE

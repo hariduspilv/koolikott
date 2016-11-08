@@ -459,6 +459,10 @@ public class MaterialService implements LearningObjectHandler {
         return brokenContentDAO.getBrokenMaterials();
     }
 
+    public Long getBrokenMaterialCount() {
+        return brokenContentDAO.getCount();
+    }
+
     public void setMaterialNotBroken(Material material) {
         if (material == null || material.getId() == null) {
             throw new RuntimeException("Material not found while adding broken material");
