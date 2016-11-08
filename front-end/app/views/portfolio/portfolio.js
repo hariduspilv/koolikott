@@ -172,7 +172,7 @@ define([
             });
 
             $scope.$on("setNotImproper:learningObject", function() {
-                $scope.$broadcast("setNotImproper:");
+                $scope.$broadcast("setNotImproper:portfolio");
             });
 
             $scope.isAdmin = function () {

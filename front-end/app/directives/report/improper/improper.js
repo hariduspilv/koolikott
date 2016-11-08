@@ -19,10 +19,6 @@ define([
                     }
                 }, false);
 
-                $scope.$on("setNotImproper:", function() {
-                   $scope.setNotImproper();
-                });
-
                 function getHasReported() {
                     var url;
 
@@ -43,23 +39,6 @@ define([
 
                 function requestFailed() {
                     console.log("Failed checking if already reported the resource")
-                }
-
-                $scope.setNotImproper = function () {
-                    if($scope.isAdmin && $scope.learningObject) {
-                        url = "rest/impropers?learningObject=" + $scope.learningObject.id;
-                        serverCallService.makeDelete(url, {}, setNotImproperSuccessful, setNotImproperFailed);
-                    }
-                };
-
-                function setNotImproperSuccessful() {
-                    $scope.isReported = false;
-                    $rootScope.learningObjectImproper = false;
-                    $rootScope.$broadcast('dashboard:adminCountsUpdated');
-                }
-
-                function setNotImproperFailed() {
-                    console.log("Setting not improper failed.")
                 }
 
                 $scope.showConfirmationDialog = function () {

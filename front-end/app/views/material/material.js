@@ -412,9 +412,41 @@ define([
                 }
             };
 
+            $scope.setNotImproper = function () {
+                if($scope.isAdmin() && $scope.material) {
+                    url = "rest/impropers?learningObject=" + $scope.material.id;
+                    serverCallService.makeDelete(url, {}, setNotImproperSuccessful, setNotImproperFailed);
+                }
+            };
+
+            function setNotImproperSuccessful() {
+                $scope.isReported = false;
+                $rootScope.learningObjectImproper = false;
+                $rootScope.$broadcast('dashboard:adminCountsUpdated');
+            }
+
+            function setNotImproperFailed() {
+                console.log("Setting not improper failed.")
+            }
+
             $scope.restoreMaterial = function () {
                 serverCallService.makePost("rest/material/restore", $scope.material, restoreSuccess, restoreFail);
             };
+
+            $scope.markMaterialCorrect = function() {
+                serverCallService.makePost("rest/material/setNotBroken", $scope.material, markCorrectSuccess, queryFailed);
+            };
+
+            function markCorrectSuccess() {
+                $scope.isBroken = false;
+                $scope.isBrokenReportedByUser = false;
+                $rootScope.learningObjectBroken = false;
+                $rootScope.$broadcast('dashboard:adminCountsUpdated');
+            }
+
+            function queryFailed() {
+                log("Request failed");
+            }
 
             $scope.$on("restore:learningObject", function() {
                $scope.restoreMaterial();
@@ -425,11 +457,11 @@ define([
             });
 
             $scope.$on("setNotImproper:learningObject", function() {
-                $scope.$broadcast("setNotImproper:");
+                $scope.setNotImproper();
             });
 
             $scope.$on("markCorrect:learningObject", function() {
-               $scope.$broadcast("markCorrect:material");
+               $scope.markMaterialCorrect();
             });
 
             function restoreSuccess() {

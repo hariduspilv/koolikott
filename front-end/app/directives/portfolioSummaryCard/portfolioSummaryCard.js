@@ -123,12 +123,33 @@ define([
                         serverCallService.makePost("rest/portfolio/restore", $scope.portfolio, restoreSuccess, restoreFail);
                     };
 
+                    $scope.setNotImproper = function () {
+                        if($scope.isAdmin() && $scope.portfolio) {
+                            url = "rest/impropers?learningObject=" + $scope.portfolio.id;
+                            serverCallService.makeDelete(url, {}, setNotImproperSuccessful, setNotImproperFailed);
+                        }
+                    };
+
+                    function setNotImproperSuccessful() {
+                        $scope.isReported = false;
+                        $rootScope.learningObjectImproper = false;
+                        $rootScope.$broadcast('dashboard:adminCountsUpdated');
+                    }
+
+                    function setNotImproperFailed() {
+                        console.log("Setting not improper failed.")
+                    }
+
                     $scope.$on("restore:portfolio", function () {
                        $scope.restorePortfolio();
                     });
 
                     $scope.$on("delete:portfolio", function() {
                         deletePortfolio();
+                    });
+
+                    $scope.$on("setNotImproper:portfolio", function() {
+                        $scope.setNotImproper();
                     });
 
                     function restoreSuccess() {
