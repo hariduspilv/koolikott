@@ -409,6 +409,7 @@ define([
                         $scope.detailedSearch.type = "material";
                     }
 
+                    $scope.$parent.clearTaxonSelector();
                     $scope.accessor.clearSimpleSearch();
                 };
 

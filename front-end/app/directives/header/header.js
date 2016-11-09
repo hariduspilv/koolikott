@@ -64,7 +64,7 @@ define([
 
                     $scope.closeDetailedSearch = function () {
                         $timeout(function () {
-                            clearTaxonSelector();
+                            $scope.clearTaxonSelector();
                             $scope.detailedSearch.accessor.clear();
                         }, 500);
                         dontSearch = true;
@@ -171,9 +171,9 @@ define([
                         updatePortfolio();
                     };
 
-                    function clearTaxonSelector() {
+                    $scope.clearTaxonSelector = function () {
                         $rootScope.$broadcast('taxonSelector:clear', null);
-                    }
+                    };
 
                     function updatePortfolio() {
                         var url = "rest/portfolio/update";
