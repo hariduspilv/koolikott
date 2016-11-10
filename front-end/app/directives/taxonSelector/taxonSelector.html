@@ -105,7 +105,7 @@
       <span data-translate="TAXON_PATH_MODULE"></span>
     </label>
     <md-select data-ng-model="ctrl.taxonPath.module" id="taxonModuleSelect" name="module" aria-label="Moodul">
-      <md-option data-translate="SELECT_MODULE" ng-click="ctrl.reset(taxonPath.specialization)"></md-option>
+      <md-option data-translate="SELECT_MODULE" ng-click="ctrl.reset(ctrl.taxonPath.specialization)"></md-option>
       <md-option ng-value="module" ng-repeat="module in ctrl.taxonPath.specialization.modules | orderBy: ctrl.translateTaxon"
                  data-translate="MODULE_{{module.name.toUpperCase()}}"></md-option>
     </md-select>
