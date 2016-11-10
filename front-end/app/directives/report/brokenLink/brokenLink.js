@@ -49,6 +49,10 @@ define([
                 function setBrokenSuccessful() {
                     $scope.isBrokenReportedByUser = true;
                 }
+
+                function queryFailed() {
+                    log("Request failed");
+                }
             }
         };
     }]);
