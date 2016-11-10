@@ -79,6 +79,12 @@ define([
                         $scope.params.start = $scope.start;
 
                         serverCallService.makeGet($scope.url, $scope.params, searchSuccess, searchFail);
+
+                        if ($scope.items.length < expectedItemCount && !allResultsLoaded()) {
+                            search();
+                        } else {
+                            expectedItemCount += maxResults;
+                        }
                     }
 
 
@@ -94,12 +100,6 @@ define([
                             $scope.accessor.ready = true;
 
                             isFirstLoad = false;
-
-                            if ($scope.items.length < expectedItemCount) {
-                                search();
-                            } else {
-                                expectedItemCount += maxResults;
-                            }
                         }
                     }
 
