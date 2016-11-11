@@ -405,6 +405,7 @@ define([
                 }
 
                 $scope.clear = $scope.accessor.clear = function () {
+                    $scope.taxon = null;
                     $scope.detailedSearch = {
                         'mainField': '',
                         'paid': false,
