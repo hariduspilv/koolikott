@@ -143,6 +143,7 @@ md-sidenav._md-locked-open, md-sidenav._md-locked-open._md-closed, md-sidenav._m
 
   &.is-active {
     color: $color-selected-menu;
+    background: rgba(0, 0, 0, 0.1);
 
     .sidenav__icon {
       color: $color-selected-menu;
