@@ -14,7 +14,7 @@ define([
             return {
                 scope: true,
                 templateUrl: 'directives/header/header.html',
-                controller: function ($scope, $location, authenticationService, authenticatedUserService, $rootScope) {
+                controller: function ($scope, $location, authenticationService, authenticatedUserService, $rootScope, $anchorScroll) {
 
                     $scope.detailedSearch = {};
                     $scope.detailedSearch.isVisible = false;
@@ -60,6 +60,7 @@ define([
 
                     $scope.openDetailedSearch = function () {
                         $scope.detailedSearch.isVisible = true;
+                        $anchorScroll();
                     };
 
                     $scope.closeDetailedSearch = function () {
