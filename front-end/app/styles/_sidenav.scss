@@ -118,6 +118,7 @@ md-sidenav._md-locked-open, md-sidenav._md-locked-open._md-closed, md-sidenav._m
 }
 
 .sidenav__header {
+  position: relative;
   cursor: pointer;
   transition: background 0.2s;
   min-height: 46px;
