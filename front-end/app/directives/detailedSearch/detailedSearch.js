@@ -329,7 +329,7 @@ define([
                         }
                     }, false);
 
-                    $scope.$watch('detailedSearch', function (newValue, oldValue) {
+                    $scope.$watch(watchComplexNode, function (newValue, oldValue) {
                         if ($scope.isVisible && hasSearchChanged(newValue, oldValue)) {
                             $scope.search();
                         }
@@ -340,6 +340,19 @@ define([
                             setEditModePrefill();
                         }
                     }, false);
+                }
+
+                function watchComplexNode() {
+                    return without($scope.detailedSearch, ['educationalContext']);
+                }
+
+                function without(obj, keys) {
+                    return Object.keys(obj).filter(function (key) {
+                        return keys.indexOf(key) === -1;
+                    }).reduce(function (result, key) {
+                        result[key] = obj[key];
+                        return result;
+                    }, {});
                 }
 
                 $scope.getLanguageTranslationKey = function (languageCode) {
@@ -392,6 +405,7 @@ define([
                 }
 
                 $scope.clear = $scope.accessor.clear = function () {
+                    $scope.taxon = null;
                     $scope.detailedSearch = {
                         'mainField': '',
                         'paid': false,
