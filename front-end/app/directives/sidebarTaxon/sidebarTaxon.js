@@ -26,13 +26,11 @@ define([
                 $scope.toggleChildren = function(id) {
                     if ($scope.opened == null) {
                         $location.url('search/result?q=&taxon=' + id);
-                        $rootScope.currentlyOpenTaxonId = id;
                         $scope.opened = true;
                     } else if ($scope.opened == true) {
                         $scope.opened = false;
                     } else if ($scope.opened == false) {
                         $location.url('search/result?q=&taxon=' + id);
-                        $rootScope.currentlyOpenTaxonId = id;
                         $scope.opened = true;
                     }
                 }

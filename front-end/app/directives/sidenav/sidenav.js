@@ -25,7 +25,7 @@ define([
                 $scope.$watch(function () {
                     return $location.url();
                 }, function () {
-                    $scope.isViewPortfolioAndEdit = $location.url().indexOf('/portfolio') != -1;
+                    $rootScope.isViewPortfolioAndEdit = $location.url().indexOf('/portfolio') != -1;
                 }, true);
 
                 $scope.$watch(function () {

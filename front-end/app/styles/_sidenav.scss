@@ -10,189 +10,11 @@ md-sidenav {
     background-color: transparent;
     box-shadow: none;
     z-index: 1;
-    md-content {
-      background-color: transparent;
-    }
   }
-
-  .md-button {
-    font-weight: 400;
-    text-transform: none;
-    &.active {
-      background-color: rgba(158,158,158,0.2);
-    }
-  }
-
-  .sidenav-menu > li {
-    > .md-button {
-      font-weight: 400;
-      text-transform: none;
-
-      &.active {
-        background-color: rgba(158,158,158,0.2);
-      }
-    }
-
-    > .sidenav-menu-toggle-list a.md-button {
-      font-weight: 500;
-      text-transform: none;
-      font-size: 12px;
-
-      &:before {
-        content: "-  ";
-      }
-
-      &.active {
-        background-color: rgba(158,158,158,0.2);
-      }
-    }
-  }
-}
-
-.menu-nested-list {
-  padding: 0;
-  margin: 0;
-  md-icon {
-    transition: 0.2s;
-  }
-  h4 {
-    margin: 0;
-  }
-  .panel {
-    border-bottom: 1px solid $border-color;
-  }
-  .panel-heading {
-    button:hover {
-      .panel-title__text {
-        color: black;
-      }
-    }
-  }
-  .panel-body ul {
-    margin: 0;
-    padding: 0;
-    .count {
-      font-size: $font-small;
-    }
-  }
-  .panel-open {
-    .arrow {
-      transform: rotate(90deg);
-    }
-    .panel-title__text, md-icon.panel-title__arrow {
-      color: rgba(0,0,0,1);
-      font-weight: 500;
-    }
-  }
-  ul li a {
-    text-decoration: none;
-    color: inherit;
-  }
-  .panel-title__text, md-icon.panel-title__arrow {
-    color: $color-muted;
-  }
-
-  .taxon-list {
-    margin: 0;
-  }
-}
-
-.portfolio-container {
-  min-height: 100%;
 }
 
 .md-toolbar-tools {
   font-size: 18px;
-}
-
-@media (min-width: $layout-breakpoint-md) {
-  .md-sidenav-backdrop {
-    display: none;
-  }
-}
-
-.sidenav-menu,
-.sidenav-menu ul {
-  list-style: none;
-  padding: 0;
-  max-width: 100%;
-  overflow-x: hidden;
-}
-
-.sidenav-menu {
-  .md-button {
-    border-radius: 0;
-    cursor: pointer;
-    display: flex;
-    align-items: inherit;
-    line-height: 40px;
-    margin: 0;
-    max-height: 40px;
-    overflow: hidden;
-    padding: 0px 16px;
-    text-align: left;
-    text-decoration: none;
-    white-space: normal;
-    width: 100%;
-
-    .md-toggle-icon {
-      transition: transform 0.3s ease-in-out;
-
-      &.toggled {
-        transform: rotate(180deg);
-      }
-    }
-  }
-  .md-button.with-icon {
-    padding: 0px 48px 0px 16px;
-  }
-}
-
-.sidenav-menu-toggle-list {
-  overflow: hidden;
-  position: relative;
-  z-index: 1;
-  max-height: 999px;
-
-  transition: 0.75s cubic-bezier(0.35, 0, 0.25, 1);
-  transition-property: max-height;
-
-
-  &.collapsed {
-    max-height: 0;
-  }
-
-  li {
-    padding: 0;
-    margin-top: 3px;
-    list-style-position: inside;
-
-    &:hover {
-      .menu-item-actions {
-        display: block;
-      }
-    }
-
-    .menu-item-actions {
-      display: none;
-    }
-  }
-
-  a.md-button {
-    display: flex;
-    padding: 0 16px 0 32px;
-    text-transform: none;
-    text-rendering: optimizeLegibility;
-    font-weight: 500;
-  }
-
-  a.md-button.with-icon {
-    padding: 0 48px;
-  }
-}
-
-.md-toolbar-filter .md-whiteframe-1dp {
-  background: #fff;
 }
 
 md-sidenav {
@@ -222,69 +44,159 @@ md-sidenav._md-locked-open, md-sidenav._md-locked-open._md-closed, md-sidenav._m
   position: fixed;
 }
 
-.edit-btn-area {
-  width: 100px;
-  button.md-icon-button{
-    margin: 0;
-  }
-}
-
-.toc {
-  .md-button,
-  a {
-    &:hover .add-materials-to-chapter {
-
-    }
-  }
-
-  .add-materials-to-chapter {
-    position: absolute;
-    right: 16px;
-
-    md-icon {
-      z-index: 2;
-    }
-  }
-
-  .md-button.one-row {
-    white-space: nowrap;
-  }
-  li {
-
-  }
-}
-
-.transform-none {
-  text-transform: none;
-}
-
-.sidenav-menu .md-button.one-row {
-  display: block;
-}
-
 // Removes faulty backdrop
 .md-sidenav-backdrop {
   opacity: 0 !important;
-}
 
-.top-divider {
-  border-top: 1px solid rgba(0, 0, 0, 0.12);
-}
-
-.sub-item--header {
-  background-color: rgba(0, 0, 0, 0.1);
-}
-
-.sub-item {
-  background-color: rgba(0, 0, 0, 0.05);
-}
-
-.dashboard-icon {
-  left: auto !important;
-  right: 23px;
-  top: 10px;
-
-  .is-active & {
-    color: $color-selected-menu;
+  @media (min-width: $layout-breakpoint-md) {
+    display: none;
   }
+}
+
+/*
+** Sidenav
+*/
+.sidenav {
+  .panel {
+    border-bottom: 1px solid rgba(0,0,0,.12);
+  }
+
+  .panel-title {
+    margin: 0;
+    font-weight: normal;
+  }
+
+  .accordion-toggle {
+    &:hover {
+      text-decoration: none;
+    }
+
+    > span {
+      display: flex
+    }
+  }
+}
+
+.sidenav__list {
+  margin: 0;
+  padding: 0;
+
+  .sidenav__list {
+    .sidenav__item {
+      background-color: rgba(0,0,0,.05);
+    }
+
+    &--sub {
+      .sidenav__item {
+        background-color: transparent;
+      }
+    }
+  }
+
+  &--sub {
+    .sidenav__header {
+      padding-left: 40px;
+      font-size: 12px;
+      font-weight: 500;
+      min-height: 40px;
+
+      &:before {
+        content: '- ';
+        z-index: -1;
+      }
+    }
+
+    .sidenav__name {
+      padding-left: 10px;
+    }
+  }
+}
+
+.sidenav__item {
+  position: relative;
+  width: 100%;
+}
+
+.sidenav__header {
+  cursor: pointer;
+  transition: background 0.2s;
+  min-height: 46px;
+  font-size: 13px;
+  padding: 0 22px;
+  width: 100%;
+  color: rgba(0,0,0,.77);
+
+  &:hover,
+  &:focus {
+    background-color: rgba(158,158,158,0.2);
+    text-decoration: none;
+  }
+
+  &.is-opened {
+    background-color: rgba(0,0,0,0.1);
+
+    .sidenav__icon--animate {
+      transform: rotate(90deg) scale(0.9);
+    }
+  }
+
+  &.is-active {
+    color: $color-selected-menu;
+
+    .sidenav__icon {
+      color: $color-selected-menu;
+    }
+  }
+
+  &--main {
+    font-size: 1em;
+    min-height: 52px;
+
+    &.is-opened {
+      color: #000;
+      font-weight: 500;
+      background: transparent;
+
+      &:hover {
+        background-color: rgba(158,158,158,0.2);
+      }
+
+      .sidenav__icon--animate {
+        color: #000;
+        font-weight: 500;
+      }
+    }
+  }
+}
+
+.sidenav__name {
+  margin-right: 10px;
+  text-overflow: ellipsis;
+  overflow: hidden;
+
+  .material-icons + & {
+    margin-left: 10px;
+  }
+}
+
+.sidenav__icon {
+  margin: 0;
+  transform: rotate(0deg) scale(0.9);
+  transition: transform .25s;
+
+  &--hidden {
+    display: none;
+
+    .has-children & {
+      display: block;
+    }
+  }
+}
+
+.sidenav__background {
+  background-color: rgba(0,0,0,.05);
+}
+
+.sidenav__count {
+  font-size: 12px;
 }
