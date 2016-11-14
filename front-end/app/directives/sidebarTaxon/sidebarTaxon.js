@@ -16,6 +16,7 @@ define([
                 $scope.id;
 
                 if ($scope.taxon) {
+                    console.log($scope.taxon);
                     $scope.id = $scope.taxon.id;
 
                     if (($scope.taxon.domains !== undefined && $scope.taxon.domains !== null) && $scope.taxon.domains.length > 0) {
