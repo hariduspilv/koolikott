@@ -263,16 +263,20 @@
               <div data-ng-show="isBasicOrSecondaryEducation()">
                 <!--Key competences-->
                 <div layout="row" flex layout-align="center center">
-                  <md-chips ng-model="material.keyCompetences" md-autocomplete-snap="" md-require-match="true" flex
+                  <md-chips ng-model="material.keyCompetences" md-autocomplete-snap md-require-match="true" flex
                             name="keyCompetencesInput"
-                            data-ng-click="addMaterialForm.keyCompetencesInput.$setTouched()">
-                    <md-autocomplete md-no-cache="true"
+                            data-ng-click="addMaterialForm.keyCompetencesInput.$setTouched()"
+                            md-on-remove="removeCallback($chip, $index, 'keyCompetences')">
+                    <md-autocomplete id="key-competence-auto"
+                                     md-input-id="key-competence-auto-input"
+                                     md-no-cache="true"
                                      md-selected-item="selectedKeyCompetence"
                                      md-search-text="competenceSearchText"
                                      md-items="keyCompetence in searchKeyCompetences(competenceSearchText)"
                                      md-item-text="translate(keyCompetence.name, 'KEY_COMPETENCE_')"
                                      placeholder="{{ 'MATERIAL_KEY_COMPETENCES' | translate }}*"
                                      md-min-length="0"
+                                     md-selected-item-change="autocompleteItemSelected(keyCompetence, 'keyCompetences', 'key-competence-auto-input')"
                                      md-autoselect>
                     <span md-highlight-text="competenceSearchText" md-highlight-flags="^i">
                       {{translate(keyCompetence.name, 'KEY_COMPETENCE_')}}
@@ -288,17 +292,21 @@
                 </div>
 
                 <!--Cross-curricular themes-->
-
                 <div layout="row" flex layout-align="center center">
-                  <md-chips ng-model="material.crossCurricularThemes" md-autocomplete-snap="" md-require-match="true"
+                  <md-chips ng-model="material.crossCurricularThemes" md-autocomplete-snap md-require-match="true"
                             flex name="crossCurricularThemesInput"
-                            data-ng-click="addMaterialForm.crossCurricularThemesInput.$setTouched()">
-                    <md-autocomplete md-selected-item="selectedCrossCurricularTheme"
+                            data-ng-click="addMaterialForm.crossCurricularThemesInput.$setTouched()"
+                            md-on-remove="removeCallback($chip, $index, 'crossCurricularThemes')">
+                    <md-autocomplete id="cross-curricular-auto"
+                                     md-input-id="cross-curricular-auto-input"
+                                     md-no-cache="true"
+                                     md-selected-item="selectedCrossCurricularTheme"
                                      md-search-text="crossCurricularSearchText"
                                      md-items="crossCurricularTheme in searchCrossCurricularThemes(crossCurricularSearchText)"
                                      md-item-text="translate(crossCurricularTheme.name, 'CROSS_CURRICULAR_THEME_')"
                                      placeholder="{{ 'MATERIAL_CROSS_CURRICULAR_THEMES' | translate }}*"
                                      md-min-length="0"
+                                     md-selected-item-change="autocompleteItemSelected(crossCurricularTheme, 'crossCurricularThemes', 'cross-curricular-auto-input')"
                                      md-autoselect>
                     <span md-highlight-text="crossCurricularSearchText" md-highlight-flags="^i">
                       {{translate(crossCurricularTheme.name, 'CROSS_CURRICULAR_THEME_')}}

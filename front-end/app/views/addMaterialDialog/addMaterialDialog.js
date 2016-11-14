@@ -131,20 +131,6 @@ define([
                         $scope.material.publishers[0] = null;
                     }
 
-                    if ($scope.material.crossCurricularThemes) {
-                        $scope.material.crossCurricularThemes = $scope.material.crossCurricularThemes
-                            .filter(function (theme) {
-                                return theme.name !== "NOT_RELEVANT";
-                            });
-                    }
-
-                    if ($scope.material.keyCompetences) {
-                        $scope.material.keyCompetences = $scope.material.keyCompetences
-                            .filter(function (competence) {
-                                return competence.name !== "NOT_RELEVANT";
-                            });
-                    }
-
                     $scope.material.peerReviews.forEach(function (peerReview, i) {
                         if (!peerReview || !peerReview.url) {
                             $scope.material.peerReviews.splice(i, 1);
@@ -264,6 +250,38 @@ define([
             };
 
             /**
+             * Check if list of objects contains element
+             * @param list
+             * @param field
+             * @param value
+             * @returns {boolean}
+             */
+            function listContains(list, field, value) {
+                return list.filter(function (e) {
+                        return e[field] === value;
+                    }).length > 0
+            }
+
+            /**
+             * If at least one is selected, remove 'NOT_RELEVANT' from suggestions
+             * else add it back
+             * @param listName
+             */
+            function addOrRemoveNotRelevant(listName) {
+                if ($scope.material[listName].length > 0 && listContains($scope[listName], "name", "NOT_RELEVANT")) {
+                    $scope[listName] = $scope[listName].filter(function (e) {
+                        return e.name !== "NOT_RELEVANT";
+                    });
+                } else if ($scope.material[listName].length === 0 && !listContains($scope[listName], "name", "NOT_RELEVANT")) {
+                    $scope[listName].push({name: 'NOT_RELEVANT'});
+                }
+            }
+
+            $scope.removeCallback = function(chip, index, listName) {
+                addOrRemoveNotRelevant(listName);
+            };
+
+            /**
              * Search for keyCompetences.
              */
             $scope.searchKeyCompetences = function (query) {
@@ -278,6 +296,35 @@ define([
                 return query ? $scope.crossCurricularThemes
                     .filter(searchFilter(query, "CROSS_CURRICULAR_THEME_")) : $scope.crossCurricularThemes;
             };
+
+            /**
+             * If autocomplete selection is made add or remove 'NOT_RELEVANT'
+             * and hide suggestions.
+             * If 'NOT_RELEVANT' is selected, replace it with new selection
+             * @param item
+             * @param listName
+             * @param elementId
+             */
+            $scope.autocompleteItemSelected = function(item, listName, elementId) {
+                if (!item) {
+                    addOrRemoveNotRelevant(listName);
+
+                    // Hide suggestions and blur input to avoid triggering new search
+                    angular.element(document.querySelector('#' + elementId)).controller('mdAutocomplete').hidden = true;
+                    document.getElementById(elementId).blur();
+                } else {
+                    // If 'NOT_RELEVANT' chip exists and new item is selected, replace it
+                    if (listContains($scope.material[listName], 'name', 'NOT_RELEVANT') && item.name !== 'NOT_RELEVANT') {
+                        $scope.material[listName] = $scope.material[listName].filter(function (e) {
+                            return e.name !== "NOT_RELEVANT";
+                        });
+
+                        $scope.material[listName].push(item);
+                    }
+                }
+            };
+
+            /**
 
             /**
              * Create filter function for a query string
@@ -429,7 +476,7 @@ define([
                 }
 
                 if (newValue && $scope.addMaterialForm.source && ($scope.addMaterialForm.source.$error.url !== true)) {
-                    var encodedUrl   = encodeURIComponent(newValue);
+                    var encodedUrl = encodeURIComponent(newValue);
                     serverCallService.makeGet("rest/material/getAllBySource?source=" + encodedUrl, {},
                         getByUrlSuccess, getByUrlFail);
                 }
@@ -437,7 +484,7 @@ define([
             }, true);
 
             function getByUrlSuccess(materials) {
-                if((materials && materials[0]) && (materials[0].id !== $scope.material.id)) {
+                if ((materials && materials[0]) && (materials[0].id !== $scope.material.id)) {
 
                     if (materials[0].deleted) {
                         $scope.addMaterialForm.source.$setValidity("deleted", false);
@@ -597,26 +644,55 @@ define([
                 $scope.allRightsReserved = array[0];
             }
 
+            /**
+             * Move element in list from old_index to new_index
+             * @param old_index
+             * @param new_index
+             */
+            Array.prototype.move = function (old_index, new_index) {
+                while (old_index < 0) {
+                    old_index += this.length;
+                }
+                while (new_index < 0) {
+                    new_index += this.length;
+                }
+                if (new_index >= this.length) {
+                    var k = new_index - this.length;
+                    while ((k--) + 1) {
+                        this.push(undefined);
+                    }
+                }
+                this.splice(new_index, 0, this.splice(old_index, 1)[0]);
+            };
+
+            /**
+             * If 'NOT_RELEVANT' is not last item in list
+             * then move it
+             * @param list
+             */
+            function moveNotRelevantIfNecessary(list) {
+                if (list[list.length - 1].name !== "NOT_RELEVANT") {
+                    var notRelevantIndex = list.map(function(e) {return e.name; }).indexOf("NOT_RELEVANT");
+                    list.move(notRelevantIndex, list.length - 1);
+                }
+            }
+
             function setCrossCurricularThemes(data) {
                 if (!isEmpty(data)) {
                     $scope.crossCurricularThemes = data;
-                    if ($scope.crossCurricularThemes[0].name !== "NOT_RELEVANT") {
-                        $scope.crossCurricularThemes.unshift({name: "NOT_RELEVANT"})
-                    }
+                    moveNotRelevantIfNecessary($scope.crossCurricularThemes);
                 }
             }
 
             function setKeyCompetences(data) {
                 if (!isEmpty(data)) {
                     $scope.keyCompetences = data;
-                    if ($scope.keyCompetences[0].name !== "NOT_RELEVANT") {
-                        $scope.keyCompetences.unshift({name: "NOT_RELEVANT"})
-                    }
+                    moveNotRelevantIfNecessary($scope.keyCompetences);
                 }
             }
 
             function saveMaterialSuccess(material) {
-                if(!material) {
+                if (!material) {
                     saveMaterialFail();
                 } else {
                     //Pass saved material back to material view
