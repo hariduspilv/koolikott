@@ -1,0 +1,29 @@
+.favorite {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 1;
+
+  &:hover {
+    color: rgba(255, 255, 255, 1);
+  }
+
+  .card-lg & {
+    top: -20px;
+    text-shadow: 1px 1px 1px rgba(0, 0, 0, .2);
+
+    .favorite__icon {
+      color: #fff;
+    }
+  }
+
+  &.has-favorited {
+    .favorite__icon {
+      color: $gold;
+    }
+  }
+}
+
+.favorite__icon {
+  color: transparent;
+}

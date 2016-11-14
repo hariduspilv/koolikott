@@ -339,6 +339,7 @@ md-card {
       padding-right: $card-lg-padding;
     }
     .divider-left {
+      position: relative;
       display: block;
       border-left: none;
       padding-left: 0;
@@ -433,6 +434,11 @@ md-card {
   height: 60px;
   width: 60px;
   z-index: 1;
+
+  .card-lg & {
+    top: -25px;
+    right: -25px;
+  }
 }
 
 md-card .card-menu {
@@ -468,16 +474,6 @@ md-card .card-menu {
   }
 }
 
-.favorite {
-  margin-top: 6px;
-  text-shadow: 1px 1px 1px rgba(0, 0,0, .2);
-  color: red;
-}
-
-.gold {
-  color: gold!important;
-}
-
 .card-container__item {
   margin: 0 15px 15px 0;
 
@@ -487,19 +483,6 @@ md-card .card-menu {
     md-card.card-sm {
       height: 100%;
     }
-  }
-}
-
-.card__favorite {
-  position: absolute;
-  top: 0;
-  left: 0;
-  z-index: 1;
-  &:hover {
-    color: rgba(255, 255, 255, 1);
-  }
-  md-icon {
-    color: transparent;
   }
 }
 

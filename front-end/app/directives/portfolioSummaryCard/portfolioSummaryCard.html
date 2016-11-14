@@ -6,7 +6,7 @@
               <!-- left headline -->
                 <div layout="row">
                     <h1 flex data-ng-bind="portfolio.title"></h1>
-                  <div data-dop-favorite data-learning-object="portfolio" class="favorite"></div>
+
                   <md-menu>
                         <md-button class="md-icon-button" ng-click="$mdOpenMenu()" id="material-menu">
                             <md-icon md-menu-origin>more_vert</md-icon>
@@ -116,6 +116,7 @@
 
             <!-- right small side  -->
             <div layout="column" flex flex-gt-xs="25" class="divider-left" layout-align="start start">
+              <div data-dop-favorite data-learning-object="portfolio"></div>
               <div class="corner"></div>
               <!-- imaged -->
                 <div data-ng-if="portfolio.picture" class="card-cover imaged">
