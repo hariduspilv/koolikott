@@ -250,19 +250,6 @@ define([
             };
 
             /**
-             * Check if list of objects contains element
-             * @param list
-             * @param field
-             * @param value
-             * @returns {boolean}
-             */
-            function listContains(list, field, value) {
-                return list.filter(function (e) {
-                        return e[field] === value;
-                    }).length > 0
-            }
-
-            /**
              * If at least one is selected, remove 'NOT_RELEVANT' from suggestions
              * else add it back
              * @param listName

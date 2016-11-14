@@ -330,4 +330,17 @@ function getSource(material) {
     return null;
 }
 
+/**
+ * Check if list of objects contains element
+ * @param list
+ * @param field
+ * @param value
+ * @returns {boolean}
+ */
+function listContains(list, field, value) {
+    return list.filter(function (e) {
+            return e[field] === value;
+        }).length > 0
+}
+
 

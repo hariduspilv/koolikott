@@ -9,6 +9,7 @@ define([
     var LANGUAGES;
     var LICENSE_TYPES;
     var RESOURCE_TYPES;
+    var USED_RESOURCE_TYPES;
     var USED_LANGUAGES;
     var EDUCATIONAL_CONTEXT;
 
@@ -17,6 +18,7 @@ define([
     var languagesCallbacks = [];
     var licenseTypesCallbacks = [];
     var resourceTypesCallbacks = [];
+    var usedResourceTypesCallbacks = [];
     var educationalContextsCallbacks = [];
     var usedLanguagesContextsCallbacks = [];
 
@@ -31,6 +33,7 @@ define([
                 serverCallService.makeGet("rest/learningMaterialMetadata/language", {}, getLanguagesSuccess, getLanguagesFail);
                 serverCallService.makeGet("rest/learningMaterialMetadata/licenseType", {}, getLicenseTypeSuccess, getLicenseTypeFail);
                 serverCallService.makeGet("rest/learningMaterialMetadata/resourceType", {}, getResourceTypeSuccess, getResourceTypeFail);
+                serverCallService.makeGet("rest/learningMaterialMetadata/resourceType/used", {}, getUsedResourceTypeSuccess, getResourceTypeFail);
                 serverCallService.makeGet("rest/learningMaterialMetadata/usedLanguages", {}, getUsedLanguagesSuccess, getUsedLanguagesFail);
             }
 
@@ -125,6 +128,15 @@ define([
                 }
             }
 
+            function getUsedResourceTypeSuccess(data) {
+                if (!isEmpty(data)) {
+                    USED_RESOURCE_TYPES = data;
+                    usedResourceTypesCallbacks.forEach(function (callback) {
+                        callback(data);
+                    });
+                }
+            }
+
             function getResourceTypeFail() {
                 console.log('Failed to get resource types.');
             }
@@ -189,6 +201,14 @@ define([
                     }
                 },
 
+                loadUsedResourceTypes: function (callback) {
+                    if (USED_RESOURCE_TYPES) {
+                        callback(USED_RESOURCE_TYPES);
+                    } else {
+                        usedResourceTypesCallbacks.push(callback);
+                    }
+                },
+
                 loadEducationalContexts: function (callback) {
                     if (EDUCATIONAL_CONTEXT) {
                         callback(EDUCATIONAL_CONTEXT);
@@ -205,6 +225,12 @@ define([
                         // Save callback, call it when data arrives
                         usedLanguagesContextsCallbacks.push(callback);
                     }
+                },
+
+                updateUsedResourceTypes: function(callback) {
+                    serverCallService.makeGet("rest/learningMaterialMetadata/resourceType/used", {}, getUsedResourceTypeSuccess, getResourceTypeFail);
+                    USED_RESOURCE_TYPES = null;
+                    this.loadUsedResourceTypes(callback);
                 }
             };
 
