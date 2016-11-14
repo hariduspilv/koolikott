@@ -135,9 +135,7 @@ define([
                         $scope.updateUserFavoritesCount();
                         $scope.updateUserMaterialsCount();
                         $scope.updateUserPortfoliosCount();
-                    }
 
-                    if ($scope.isAdmin() || $scope.isModerator()) {
                         $scope.updateAdminCounts();
                     }
                 };
@@ -147,11 +145,13 @@ define([
                 };
 
                 $scope.updateAdminCounts = function () {
-                    $scope.updateBrokenMaterialsCount();
-                    $scope.updateDeletedMaterialsCount();
-                    $scope.updateDeletedPortfoliosCount();
-                    $scope.updateImproperMaterialsCount();
-                    $scope.updateImproperPortfoliosCount();
+                    if ($scope.isAdmin() || $scope.isModerator()) {
+                        $scope.updateBrokenMaterialsCount();
+                        $scope.updateDeletedMaterialsCount();
+                        $scope.updateDeletedPortfoliosCount();
+                        $scope.updateImproperMaterialsCount();
+                        $scope.updateImproperPortfoliosCount();
+                    }
                 };
 
                 $scope.dashboardSearch = function () {

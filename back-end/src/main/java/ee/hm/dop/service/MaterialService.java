@@ -19,21 +19,11 @@ import javax.inject.Inject;
 import ee.hm.dop.dao.BrokenContentDAO;
 import ee.hm.dop.dao.MaterialDAO;
 import ee.hm.dop.dao.UserLikeDAO;
-import ee.hm.dop.model.Author;
-import ee.hm.dop.model.BrokenContent;
-import ee.hm.dop.model.Comment;
-import ee.hm.dop.model.Language;
-import ee.hm.dop.model.LearningObject;
-import ee.hm.dop.model.Material;
-import ee.hm.dop.model.PeerReview;
-import ee.hm.dop.model.Publisher;
-import ee.hm.dop.model.Recommendation;
-import ee.hm.dop.model.Role;
-import ee.hm.dop.model.User;
-import ee.hm.dop.model.UserLike;
+import ee.hm.dop.model.*;
 import ee.hm.dop.model.taxon.EducationalContext;
 import ee.hm.dop.service.learningObject.LearningObjectHandler;
 import ee.hm.dop.utils.TaxonUtils;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.configuration.Configuration;
 import org.apache.http.client.utils.URIBuilder;
 import org.apache.http.util.TextUtils;
@@ -68,6 +58,12 @@ public class MaterialService implements LearningObjectHandler {
 
     @Inject
     private PeerReviewService peerReviewService;
+
+    @Inject
+    private KeyCompetenceService keyCompetenceService;
+
+    @Inject
+    private CrossCurricularThemeService crossCurricularThemeService;
 
     @Inject
     private Configuration configuration;
@@ -105,6 +101,9 @@ public class MaterialService implements LearningObjectHandler {
 
         material.setCreator(creator);
 
+        checkKeyCompetences(material);
+        checkCrossCurricularThemes(material);
+
         if (creator != null && isUserPublisher(creator)) {
             material.setEmbeddable(true);
         }
@@ -117,6 +116,36 @@ public class MaterialService implements LearningObjectHandler {
         }
 
         return createdMaterial;
+    }
+
+    private void checkKeyCompetences(Material material) {
+        if (!CollectionUtils.isEmpty(material.getKeyCompetences())) {
+            for (KeyCompetence keyCompetence : material.getKeyCompetences()) {
+                if (keyCompetence.getId() == null) {
+                    KeyCompetence keyCompetenceByName = keyCompetenceService.findKeyCompetenceByName(keyCompetence.getName());
+                    if (keyCompetenceByName != null) {
+                        keyCompetence.setId(keyCompetenceByName.getId());
+                    } else {
+                        throw new IllegalArgumentException();
+                    }
+                }
+            }
+        }
+    }
+
+    private void checkCrossCurricularThemes(Material material) {
+        if (!CollectionUtils.isEmpty(material.getCrossCurricularThemes())) {
+            for (CrossCurricularTheme crossCurricularTheme : material.getCrossCurricularThemes()) {
+                if (crossCurricularTheme.getId() == null) {
+                    CrossCurricularTheme crossCurricularThemeByName = crossCurricularThemeService.getThemeByName(crossCurricularTheme.getName());
+                    if (crossCurricularThemeByName != null) {
+                        crossCurricularTheme.setId(crossCurricularThemeByName.getId());
+                    } else {
+                        throw new IllegalArgumentException();
+                    }
+                }
+            }
+        }
     }
 
     public void delete(Long materialID, User loggedInUser) {
