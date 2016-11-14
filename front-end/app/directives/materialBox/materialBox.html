@@ -12,7 +12,7 @@
     <md-icon class="icon-kind">{{ materialType }}</md-icon>
     <div class="card-hover {{materialType}}">
 
-      <div data-ng-if="isAuthenticated()" data-dop-favorite data-learning-object="material" layout-align="start start"></div>
+      <div data-ng-if="isAuthenticated()" class="card__favorite" data-dop-favorite data-learning-object="material" layout-align="start start"></div>
 
       <div class="pick" data-ng-if="isAuthenticated()" layout-align="end start">
         <md-icon class="unchecked">radio_button_unchecked</md-icon>
