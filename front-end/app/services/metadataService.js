@@ -19,7 +19,6 @@ define([
     var resourceTypesCallbacks = [];
     var educationalContextsCallbacks = [];
     var usedLanguagesContextsCallbacks = [];
-    var reducedTaxonCallbacks = [];
 
     angularAMD.factory('metadataService', ['serverCallService', '$filter',
         function (serverCallService, $filter) {
@@ -33,10 +32,6 @@ define([
                 serverCallService.makeGet("rest/learningMaterialMetadata/licenseType", {}, getLicenseTypeSuccess, getLicenseTypeFail);
                 serverCallService.makeGet("rest/learningMaterialMetadata/resourceType", {}, getResourceTypeSuccess, getResourceTypeFail);
                 serverCallService.makeGet("rest/learningMaterialMetadata/usedLanguages", {}, getUsedLanguagesSuccess, getUsedLanguagesFail);
-
-                if (!localStorage.getItem("reducedTaxon")) {
-                    serverCallService.makeGet("rest/learningMaterialMetadata/reducedTaxon", {}, getReducedTaxonSuccess, getReducedTaxonFail);
-                }
             }
 
             function getUsedLanguagesSuccess(data) {
@@ -147,20 +142,6 @@ define([
                 console.log('Failed to get educational contexts.');
             }
 
-            function getReducedTaxonSuccess(data) {
-                if (!isEmpty(data)) {
-                    reducedTaxonCallbacks.forEach(function (callback) {
-                        callback(data);
-                    });
-                    var taxon = JSOG.stringify(data);
-                    localStorage.setItem("reducedTaxon", taxon);
-                }
-            }
-
-            function getReducedTaxonFail() {
-                console.log('Failed to get reduced taxon.');
-            }
-
             instance = {
 
                 loadCrossCurricularThemes: function (callback) {
@@ -214,17 +195,6 @@ define([
                     } else {
                         // Save callback, call it when data arrives
                         educationalContextsCallbacks.push(callback);
-                    }
-                },
-
-                loadReducedTaxon: function (callback) {
-                    var taxon = localStorage.getItem("reducedTaxon");
-                    taxon = JSOG.parse(taxon);
-                    if (taxon) {
-                        callback(taxon);
-                    } else {
-                        // Save callback, call it when data arrives
-                        reducedTaxonCallbacks.push(callback);
                     }
                 },
 

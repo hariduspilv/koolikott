@@ -128,8 +128,8 @@
       </uib-accordion-heading>
       <!-- Taxon subitems -->
       <ul class="sidenav__list">
-        <li data-ng-repeat="(key, item) in reducedTaxon">
-          <div class="sidenav__item" layout="column" icon="taxonIcons[key]" tree="taxonTree" dop-sidebar-taxon data-taxon="item"></div>
+        <li data-ng-repeat="(key, item) in taxon">
+          <div class="sidenav__item" layout="column" icon="taxonIcons[key]" dop-sidebar-taxon data-taxon="item"></div>
         </li>
       </ul>
     </div>

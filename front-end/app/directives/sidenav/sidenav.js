@@ -66,10 +66,6 @@ define([
                     return location === $location.path();
                 };
 
-                metadataService.loadReducedTaxon(function (callback) {
-                    $scope.reducedTaxon = callback;
-                });
-
                 if (window.innerWidth > 1280) {
                     $scope.sideNavOpen = true;
                 }

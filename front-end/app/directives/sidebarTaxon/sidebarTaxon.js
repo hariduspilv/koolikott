@@ -14,13 +14,53 @@ define([
             },
             controller: function ($rootScope, $scope, $location) {
                 $scope.id;
+
                 if ($scope.taxon) {
-                    if ($scope.taxon.children.length > 0) {
+                    $scope.id = $scope.taxon.id;
+
+                    if (($scope.taxon.domains !== undefined && $scope.taxon.domains !== null) && $scope.taxon.domains.length > 0) {
+                        $scope.taxonChildren = $scope.taxon.domains;
+                        $scope.childrenCount = $scope.taxon.domains.length;
                         $scope.hasChildren = true;
-                        $scope.childrenCount = $scope.taxon.children.length;
-                        $scope.id = $scope.taxon.id;
                     }
 
+                    if ($scope.taxon.educationalContext !== undefined && $scope.taxon.educationalContext !== null) {
+                        if ($scope.taxon.educationalContext.name === 'PRESCHOOLEDUCATION') {
+                            checkTaxonLevelAndAssignValues('.Domain', $scope.taxon.topics);
+                        }
+
+                        if ($scope.taxon.educationalContext.name === 'BASICEDUCATION' || $scope.taxon.educationalContext.name === 'SECONDARYEDUCATION') {
+                            checkTaxonLevelAndAssignValues('.Domain', $scope.taxon.subjects);
+                        }
+
+                        if ($scope.taxon.educationalContext.name === 'VOCATIONALEDUCATION') {
+                            checkTaxonLevelAndAssignValues('.Domain', $scope.taxon.specializations);
+                        }
+
+                    } else if (($scope.taxon.domain !== undefined && $scope.taxon.domain !== null) && ($scope.taxon.domain.educationalContext !== undefined && $scope.taxon.domain.educationalContext !== null)) {
+                        if ($scope.taxon.domain.educationalContext.name === 'BASICEDUCATION' || $scope.taxon.domain.educationalContext.name === 'SECONDARYEDUCATION') {
+                            checkTaxonLevelAndAssignValues('.Subject', $scope.taxon.topics);
+                        }
+
+                        if ($scope.taxon.domain.educationalContext.name === 'VOCATIONALEDUCATION') {
+                            checkTaxonLevelAndAssignValues('.Specialization', $scope.taxon.modules);
+                        }
+                    }
+
+                    // used under PRESCHOOLEDUCATION, BASICEDUCATION and SECONDARYEDUCATION
+                    checkTaxonLevelAndAssignValues('.Topic', $scope.taxon.subtopics);
+                    // only used under VOCATIONALEDUCATION
+                    checkTaxonLevelAndAssignValues('.Module', $scope.taxon.topics);
+                }
+
+                function checkTaxonLevelAndAssignValues (level, children) {
+                    if ($scope.taxon.level === level) {
+                        if (children.length > 0) {
+                            $scope.taxonChildren = children;
+                            $scope.childrenCount = children.length;
+                            $scope.hasChildren = true;
+                        }
+                    }
                 }
 
                 $scope.toggleChildren = function(id) {
