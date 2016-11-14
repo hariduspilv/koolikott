@@ -1,10 +1,11 @@
-<a class="sidenav__header" md-ink-ripple layout="row" layout-align="space-between center" data-ng-click="toggleChildren(taxon.id)" data-ng-class="{'has-children': hasChildren, 'is-opened': opened && hasChildren, 'is-active': isActive}">
+<a class="sidenav__header" md-ink-ripple layout="row" layout-align="space-between center"
+   data-ng-click="toggleChildren(taxon.id)"
+   data-ng-class="{'has-children': hasChildren, 'is-opened': opened && hasChildren, 'is-active': isActive}">
   <div layout="row" layout-align="center center">
     <md-icon class="material-icons sidenav__icon">{{icon}}</md-icon>
     <span data-translate="{{getTaxonTranslation(taxon)}}" class="sidenav__name"></span>
   </div>
-  <md-icon class="material-icons sidenav__icon sidenav__icon--animate sidenav__icon--hidden">keyboard_arrow_right</md-icon>
-  <!--<span>{{childrenCount}}</span>-->
+  <span data-ng-show="materialCount > 0" data-ng-bind="materialCount" class="sidenav__count"></span>
 </a>
 
 <div class="sidenav__background" data-ng-if="opened" data-ng-repeat="data in taxonChildren | orderBy: 'name'">
