@@ -6,7 +6,8 @@ define([
     'services/translationService',
     'services/metadataService'
 ], function (angularAMD) {
-    angularAMD.directive('dopDetailedSearch', ['$location', 'searchService', 'translationService', '$filter', 'serverCallService', 'metadataService', '$rootScope', function ($location, searchService, translationService, $filter, serverCallService, metadataService, $rootScope) {
+    angularAMD.directive('dopDetailedSearch', ['$location', 'searchService', 'translationService', '$filter', 'serverCallService', 'metadataService', '$rootScope',
+        function ($location, searchService, translationService, $filter, serverCallService, metadataService, $rootScope) {
         return {
             scope: {
                 queryIn: '=',
@@ -36,6 +37,8 @@ define([
 
                     // ResourceTypes
                     metadataService.loadResourceTypes(setResourceTypes);
+
+                    metadataService.loadUsedResourceTypes(setUsedResourceTypes);
 
                     // Target groups
                     $scope.detailedSearch.targetGroups = searchService.getTargetGroups();
@@ -308,6 +311,10 @@ define([
                     }
                 }, true);
 
+                $scope.$on('detailedSearch:open', function() {
+                    metadataService.updateUsedResourceTypes(setUsedResourceTypes)
+                });
+
                 function initWatches() {
                     $scope.$watch('queryIn', function (queryIn, oldQueryIn) {
                         if (queryIn !== oldQueryIn && $scope.isVisible) {
@@ -331,6 +338,7 @@ define([
 
                     $scope.$watch(watchComplexNode, function (newValue, oldValue) {
                         if ($scope.isVisible && hasSearchChanged(newValue, oldValue)) {
+                            filterTypeSearch();
                             $scope.search();
                         }
                     }, true);
@@ -340,6 +348,16 @@ define([
                             setEditModePrefill();
                         }
                     }, false);
+                }
+
+                function filterTypeSearch() {
+                    if ($scope.detailedSearch.resourceType === 'all') {
+                        $scope.detailedSearch.type = 'all';
+                    } else if ($scope.detailedSearch.resourceType === 'PORTFOLIO_RESOURCE') {
+                        $scope.detailedSearch.type = 'portfolio';
+                    } else {
+                        $scope.detailedSearch.type = null;
+                    }
                 }
 
                 function watchComplexNode() {
@@ -435,6 +453,13 @@ define([
 
                 function setLanguages(languages) {
                     $scope.languages = languages;
+                }
+
+                function setUsedResourceTypes(resourceTypes) {
+                    $scope.usedResourceTypes = resourceTypes;
+                    if (!listContains($scope.usedResourceTypes, 'name', 'PORTFOLIO_RESOURCE')) {
+                        $scope.usedResourceTypes.push({name: 'PORTFOLIO_RESOURCE'})
+                    }
                 }
 
                 function setResourceTypes(resourceTypes) {

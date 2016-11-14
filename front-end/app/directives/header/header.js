@@ -60,8 +60,13 @@ define([
 
                     $scope.openDetailedSearch = function () {
                         $scope.detailedSearch.isVisible = true;
+                        broadcastSearchOpen();
                         $anchorScroll();
                     };
+
+                    function broadcastSearchOpen() {
+                        $scope.$broadcast("detailedSearch:open");
+                    }
 
                     $scope.closeDetailedSearch = function () {
                         $timeout(function () {

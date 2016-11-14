@@ -127,6 +127,34 @@ define([
         }
     );
 
+    /**
+     * orderByTranslated Filter
+     * Sort ng-options or ng-repeat by translated values
+     * @example
+     *   ng-repeat="scheme in data.schemes | orderByTranslated:'storage__':'collectionName'"
+     * @param  {Array|Object} array or hash
+     * @param  {String} i18nKeyPrefix
+     * @param  {String} objKey (needed if hash)
+     * @return {Array}
+     */
+    app.filter('orderByTranslated', ['$translate', '$filter', function($translate, $filter) {
+        return function (array, i18nKeyPrefix, objKey) {
+            var result = [];
+            var translated = [];
+            angular.forEach(array, function(value) {
+                var i18nKeySuffix = objKey ? value[objKey] : value;
+                translated.push({
+                    key: value,
+                    label: $translate.instant(i18nKeyPrefix + i18nKeySuffix)
+                });
+            });
+            angular.forEach($filter('orderBy')(translated, 'label'), function(sortedObject) {
+                result.push(sortedObject.key);
+            });
+            return result;
+        };
+    }]);
+
     function serializeRequest(data, headersGetter) {
         if (data && headersGetter()['content-type'].contains('application/json')) {
             data = clone(data);

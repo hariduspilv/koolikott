@@ -93,6 +93,13 @@ public class LearningMaterialMetadataResource {
     }
 
     @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("resourceType/used")
+    public List<ResourceType> getUsedResourceTypes() {
+        return resourceTypeService.getUsedResourceTypes();
+    }
+
+    @GET
     @Path("licenseType")
     @Produces(MediaType.APPLICATION_JSON)
     public List<LicenseType> getAllLicenseTypes() {
