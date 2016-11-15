@@ -14,6 +14,9 @@ define([
                 return RecursionHelper.compile(element);
             },
             controller: function ($rootScope, $scope, $location, serverCallService, $timeout) {
+                $scope.opened = null;
+                $scope.hasChildren = false;
+
                 if ($scope.taxon) {
                     if ($scope.taxon.domains && $scope.taxon.domains.length > 0) {
                         $scope.taxonChildren = $scope.taxon.domains;
@@ -55,8 +58,7 @@ define([
                         getTaxonMaterialsCount($scope.taxon);
                     }
 
-                    if ($scope.taxon.children.length > 0) {
-
+                    if ($scope.taxon.children && $scope.taxon.children[0]) {
                         if (!localStorage.getItem($scope.taxon.children[0].name.toUpperCase() + "_COUNT")) {
                             refreshMaterialsCounts();
                         }
