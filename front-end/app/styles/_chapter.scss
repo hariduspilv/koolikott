@@ -34,6 +34,8 @@
 
 
 .portfolio-chapter {
+  margin-bottom: 20px;
+
   .md-body-1  {
     font-size: 15px;
     line-height: 22px;
@@ -41,8 +43,6 @@
 }
 
 .portfolio-chapter-subchapter {
-  margin-bottom: 20px;
-
   .md-body-1  {
     font-size: 14px;
     line-height: 22px;
@@ -55,6 +55,7 @@
 .portfolio-chapter-chapter-materials,
 .portfolio-chapter-subchapter-materials {
   margin-top: 0px;
+  margin-bottom: 0;
 }
 
 /**
@@ -71,7 +72,7 @@ ul[dnd-list] > li {
  * otherwise you can't drop to it once it's empty
  */
 ul[dnd-list] {
-  min-height: 152px;
+  min-height: 126px;
   padding-left: 0px;
 }
 

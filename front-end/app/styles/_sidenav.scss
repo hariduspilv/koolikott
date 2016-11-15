@@ -169,6 +169,10 @@ md-sidenav._md-locked-open, md-sidenav._md-locked-open._md-closed, md-sidenav._m
       }
     }
   }
+
+  &--link {
+    color: $color-selected-menu;
+  }
 }
 
 .sidenav__name {
