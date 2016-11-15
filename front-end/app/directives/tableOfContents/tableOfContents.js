@@ -41,7 +41,6 @@ define([
 
                 function goToElement(elementID) {
                     var $chapter = angular.element(document.getElementById(elementID));
-                    var $context = angular.element(document.getElementById('scrollable-content'));
 
                     if (!$rootScope.isViewPortforlioPage && !$rootScope.isEditPortfolioPage) {
                         $location.path('/portfolio/edit').search({
@@ -53,14 +52,13 @@ define([
                             if (newValue != null) {
                                 $timeout(function() {
                                     $chapter = angular.element(document.getElementById(elementID));
-                                    $context = angular.element(document.getElementById('scrollable-content'));
-                                    $context.scrollToElement($chapter, 60, 0);
+                                    $document.scrollToElement($chapter, 60, 0);
                                     watchPage();
                                 }, 0);
                             }
                         });
                     } else {
-                        $context.scrollToElement($chapter, 60, 200);
+                        $document.scrollToElement($chapter, 60, 200);
                     }
                 }
 
