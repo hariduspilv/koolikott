@@ -58,8 +58,8 @@ define([
                         getTaxonMaterialsCount($scope.taxon);
                     }
 
-                    if ($scope.taxon.children && $scope.taxon.children[0]) {
-                        if (!localStorage.getItem($scope.taxon.children[0].name.toUpperCase() + "_COUNT")) {
+                    if ($scope.taxonChildren && $scope.taxonChildren[0]) {
+                        if (!localStorage.getItem($scope.taxonChildren[0].name.toUpperCase() + "_COUNT")) {
                             refreshMaterialsCounts();
                         }
 
@@ -119,7 +119,7 @@ define([
                 });
 
                 function refreshMaterialsCounts() {
-                    $scope.taxon.children.forEach(function (child) {
+                    $scope.taxonChildren.forEach(function (child) {
                         if (child) getTaxonMaterialsCount(child);
                     })
                 }
