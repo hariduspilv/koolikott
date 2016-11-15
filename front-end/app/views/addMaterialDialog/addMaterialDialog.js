@@ -15,6 +15,11 @@ define([
             $scope.showHints = true;
             $scope.creatorIsPublisher = false;
 
+            // fix for https://github.com/angular/material/issues/6905
+            $timeout(function () {
+                angular.element('html').css('overflow-y', '');
+            });
+
             var preferredLanguage;
             var TABS_COUNT = 2;
             var uploadingPicture = false;
