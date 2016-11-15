@@ -13,12 +13,13 @@ define(['angularAMD'], function(angularAMD) {
 
         instance = {
             setLanguage: function(language) {
-                $translate.use(language);
-                localStorage.setItem("userPreferredLanguage", language);
+                if(language) {
+                    $translate.use(language);
+                    localStorage.setItem("userPreferredLanguage", language);
+                }
             },
 
             getLanguage: function() {
-                var language = localStorage.getItem("userPreferredLanguage");
                 return $translate.proposedLanguage() || $translate.use() || $translate.preferredLanguage();
             },
 

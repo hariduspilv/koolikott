@@ -120,14 +120,14 @@ public class MaterialService implements LearningObjectHandler {
 
     private void checkKeyCompetences(Material material) {
         if (!CollectionUtils.isEmpty(material.getKeyCompetences())) {
-            for (KeyCompetence keyCompetence : material.getKeyCompetences()) {
-                if (keyCompetence.getId() == null) {
-                    KeyCompetence keyCompetenceByName = keyCompetenceService.findKeyCompetenceByName(keyCompetence.getName());
-                    if (keyCompetenceByName != null) {
-                        keyCompetence.setId(keyCompetenceByName.getId());
-                    } else {
+            for (int i = 0; i < material.getKeyCompetences().size(); i++) {
+                if (material.getKeyCompetences().get(i).getId() == null) {
+                    KeyCompetence keyCompetenceByName = keyCompetenceService.findKeyCompetenceByName(material.getKeyCompetences().get(i).getName());
+                    if (keyCompetenceByName == null) {
                         throw new IllegalArgumentException();
                     }
+
+                    material.getKeyCompetences().set(i, keyCompetenceByName);
                 }
             }
         }
@@ -135,14 +135,14 @@ public class MaterialService implements LearningObjectHandler {
 
     private void checkCrossCurricularThemes(Material material) {
         if (!CollectionUtils.isEmpty(material.getCrossCurricularThemes())) {
-            for (CrossCurricularTheme crossCurricularTheme : material.getCrossCurricularThemes()) {
-                if (crossCurricularTheme.getId() == null) {
-                    CrossCurricularTheme crossCurricularThemeByName = crossCurricularThemeService.getThemeByName(crossCurricularTheme.getName());
-                    if (crossCurricularThemeByName != null) {
-                        crossCurricularTheme.setId(crossCurricularThemeByName.getId());
-                    } else {
+            for (int i = 0; i < material.getCrossCurricularThemes().size(); i++) {
+                if (material.getCrossCurricularThemes().get(i).getId() == null) {
+                    CrossCurricularTheme crossCurricularTheme = crossCurricularThemeService.getThemeByName(material.getCrossCurricularThemes().get(i).getName());
+                    if (crossCurricularTheme == null) {
                         throw new IllegalArgumentException();
                     }
+
+                    material.getCrossCurricularThemes().set(i, crossCurricularTheme);
                 }
             }
         }

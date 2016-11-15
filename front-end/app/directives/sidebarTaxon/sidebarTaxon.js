@@ -1,23 +1,23 @@
 define([
     'angularAMD',
+    'services/serverCallService',
     'services/recursionHelper',
 ], function (angularAMD) {
-    angularAMD.directive('dopSidebarTaxon', ['RecursionHelper', '$location', function (RecursionHelper, $location) {
+    angularAMD.directive('dopSidebarTaxon', ['RecursionHelper', '$location', 'serverCallService', function (RecursionHelper, $location, serverCallService) {
         return {
             scope: {
                 taxon: '=',
                 icon: '='
             },
             templateUrl: 'directives/sidebarTaxon/sidebarTaxon.html',
-            compile: function(element) {
-              return RecursionHelper.compile(element);
+            compile: function (element) {
+                return RecursionHelper.compile(element);
             },
-            controller: function ($rootScope, $scope, $location) {
-                $scope.id;
+            controller: function ($rootScope, $scope, $location, serverCallService, $timeout) {
+                $scope.opened = null;
+                $scope.hasChildren = false;
 
                 if ($scope.taxon) {
-                    $scope.id = $scope.taxon.id;
-
                     if ($scope.taxon.domains && $scope.taxon.domains.length > 0) {
                         $scope.taxonChildren = $scope.taxon.domains;
                         $scope.childrenCount = $scope.taxon.domains.length;
@@ -51,6 +51,24 @@ define([
                     checkTaxonLevelAndAssignValues('.Topic', $scope.taxon.subtopics);
                     // only used under VOCATIONALEDUCATION
                     checkTaxonLevelAndAssignValues('.Module', $scope.taxon.topics);
+
+
+                    $scope.materialCount = localStorage.getItem($scope.taxon.name.toUpperCase() + "_COUNT");
+                    if (!$scope.materialCount) {
+                        getTaxonMaterialsCount($scope.taxon);
+                    }
+
+                    if ($scope.taxon.children && $scope.taxon.children[0]) {
+                        if (!localStorage.getItem($scope.taxon.children[0].name.toUpperCase() + "_COUNT")) {
+                            refreshMaterialsCounts();
+                        }
+
+                        //Refresh the counts asynchronously after init
+                        $timeout(function () {
+                                refreshMaterialsCounts()
+                            }, 3000
+                        );
+                    }
                 }
 
                 function checkTaxonLevelAndAssignValues (level, children) {
@@ -63,7 +81,15 @@ define([
                     }
                 }
 
-                $scope.toggleChildren = function(id) {
+                $scope.$watch(function () {
+                    return localStorage.getItem($scope.taxon.name.toUpperCase() + "_COUNT");
+                }, function (newCount, oldCount) {
+                    if (newCount && newCount !== oldCount) {
+                        $scope.materialCount = localStorage.getItem($scope.taxon.name.toUpperCase() + "_COUNT");
+                    }
+                });
+
+                $scope.toggleChildren = function (id) {
                     if ($scope.opened == null) {
                         $location.url('search/result?q=&taxon=' + id);
                         $scope.opened = true;
@@ -73,22 +99,36 @@ define([
                         $location.url('search/result?q=&taxon=' + id);
                         $scope.opened = true;
                     }
-                }
+                };
 
-                $scope.getTaxonTranslation = function(data) {
-                    if(data.level !== '.EducationalContext') {
+                $scope.getTaxonTranslation = function (data) {
+                    if (data.level !== '.EducationalContext') {
                         return data.level.toUpperCase().substr(1) + "_" + data.name.toUpperCase();
                     } else {
                         return data.name.toUpperCase();
                     }
 
-                }
+                };
 
                 $scope.$watch(function () {
                     return $location.url()
                 }, function () {
                     $scope.isActive = ($location.url() === '/search/result?q=&taxon=' + $scope.taxon.id);
                 });
+
+                function refreshMaterialsCounts() {
+                    $scope.taxon.children.forEach(function (child) {
+                        if (child) getTaxonMaterialsCount(child);
+                    })
+                }
+
+                function getTaxonMaterialsCount(child) {
+                    serverCallService.makeGet('rest/search?q=&start=0&limit=0&taxon=' + child.id, {}, function (data) {
+                        localStorage.setItem(child.name.toUpperCase() + "_COUNT", data.totalResults);
+                    }, function () {
+                        console.log("Failed to get " + child.name + " count");
+                    })
+                }
             }
         }
     }]);

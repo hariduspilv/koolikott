@@ -72,7 +72,12 @@ public class SearchService {
             searchResult.setStart(response.getStart());
             // "- documents.size() + sortedSearchable.size()" needed in case
             // SearchEngine and DB are not sync because of re-indexing time.
-            searchResult.setTotalResults(response.getTotalResults() - documents.size() + sortedSearchable.size());
+            if(limit == null || limit > 0) {
+                searchResult.setTotalResults(response.getTotalResults() - documents.size() + sortedSearchable.size());
+            } else if (limit == 0) {
+                //When limit is 0 - only getting metainfo
+                searchResult.setTotalResults(response.getTotalResults());
+            }
         }
 
         return searchResult;
@@ -98,7 +103,7 @@ public class SearchService {
         List<Searchable> unsortedSearchable = new ArrayList<>();
 
         if (!learningObjectIds.isEmpty()) {
-            learningObjectDAO.findAllById(learningObjectIds).forEach(learningObject -> unsortedSearchable.add((Searchable) learningObject));
+            learningObjectDAO.findAllById(learningObjectIds).forEach(unsortedSearchable::add);
         }
 
         return unsortedSearchable;
