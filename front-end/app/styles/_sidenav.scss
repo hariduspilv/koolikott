@@ -131,6 +131,10 @@ md-sidenav._md-locked-open, md-sidenav._md-locked-open._md-closed, md-sidenav._m
   &:focus {
     background-color: rgba(158,158,158,0.2);
     text-decoration: none;
+
+    .sidenav__count {
+      color: $color-selected-menu;
+    }
   }
 
   &.is-opened {
@@ -147,6 +151,17 @@ md-sidenav._md-locked-open, md-sidenav._md-locked-open._md-closed, md-sidenav._m
 
     .sidenav__icon {
       color: $color-selected-menu;
+    }
+  }
+
+  &.is-disabled {
+    cursor: default;
+
+    &:hover,
+    &:focus {
+      .sidenav__count {
+        color: inherit;
+      }
     }
   }
 

@@ -90,7 +90,9 @@ define([
                 });
 
                 $scope.toggleChildren = function (id) {
-                    if ($scope.opened == null) {
+                    if ($scope.materialCount == 0) {
+                        return;
+                    } else if ($scope.opened == null) {
                         $location.url('search/result?q=&taxon=' + id);
                         $scope.opened = true;
                     } else if ($scope.opened == true) {
