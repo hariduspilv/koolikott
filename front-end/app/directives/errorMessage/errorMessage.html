@@ -57,13 +57,8 @@
     <md-tooltip>
       <span data-translate="BUTTON_REMOVE"></span>
     </md-tooltip></button>
-  <button class="md-button error-message-button" data-ng-click="markCorrectMaterial()" data-ng-show="$parent.isAdmin()">
-    <md-icon class="button-icon">done</md-icon>
-    <md-tooltip>
-      <span data-translate="REPORT_BROKEN_LINK_CORRECT"></span>
-    </md-tooltip></button>
-  </button>
-  <button class="md-button error-message-button" data-ng-click="setNotImproperLearningObject()" data-ng-show="$parent.isAdmin()">
+
+  <button class="md-button error-message-button" data-ng-click="setNotImproperLearningObject(); markCorrectMaterial()" data-ng-show="$parent.isAdmin()">
     <md-icon class="button-icon">done</md-icon>
     <md-tooltip>
       <span data-translate="REPORT_NOT_IMPROPER"></span>
