@@ -60,7 +60,7 @@ define([
                         if ($scope.searching || allResultsLoaded()) return;
                         $scope.searching = true;
 
-                        if ($scope.items.length === 0) {
+                        if ($scope.items.length === 0 && searchCount === 0) {
                             $scope.start = 0;
                         } else {
                             // because first search is 20 items
@@ -79,27 +79,21 @@ define([
                         $scope.params.start = $scope.start;
 
                         serverCallService.makeGet($scope.url, $scope.params, searchSuccess, searchFail);
-
-                        if ($scope.items.length < expectedItemCount && !allResultsLoaded()) {
-                            search();
-                        } else {
-                            expectedItemCount += maxResults;
-                        }
                     }
 
-
                     function searchSuccess(data) {
-                        if (!data || !data.items || data.items.length === 0) {
+                        if (!data || !data.items) {
                             searchFail();
                         } else {
                             $scope.items.push.apply($scope.items, data.items);
-                            searchCount++;
                             $scope.totalResults = data.totalResults;
 
                             $scope.searching = false;
                             $scope.accessor.ready = true;
 
                             isFirstLoad = false;
+
+                            searchMoreIfNecessary();
                         }
                     }
 
@@ -107,6 +101,15 @@ define([
                         console.log('Search failed.');
                         $scope.searching = false;
                         $scope.accessor.ready = true;
+                    }
+
+                    function searchMoreIfNecessary() {
+                        searchCount++;
+                        if ($scope.items.length < expectedItemCount && !allResultsLoaded()) {
+                            search();
+                        } else {
+                            expectedItemCount += maxResults;
+                        }
                     }
 
                     init();
