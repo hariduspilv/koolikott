@@ -256,8 +256,8 @@ define([
              */
             function addOrRemoveNotRelevant(listName) {
                 if ($scope.material[listName].length > 0 && listContains($scope[listName], "name", "NOT_RELEVANT")) {
-                    $scope[listName] = $scope[listName].filter(function (e) {
-                        return e.name !== "NOT_RELEVANT";
+                    $scope[listName] = $scope[listName].filter(function (listElement) {
+                        return listElement.name !== "NOT_RELEVANT";
                     });
                 } else if ($scope.material[listName].length === 0 && !listContains($scope[listName], "name", "NOT_RELEVANT")) {
                     $scope[listName].push({name: 'NOT_RELEVANT'});
@@ -630,27 +630,6 @@ define([
                 $scope.licenceTypes = data;
                 $scope.allRightsReserved = array[0];
             }
-
-            /**
-             * Move element in list from old_index to new_index
-             * @param old_index
-             * @param new_index
-             */
-            Array.prototype.move = function (old_index, new_index) {
-                while (old_index < 0) {
-                    old_index += this.length;
-                }
-                while (new_index < 0) {
-                    new_index += this.length;
-                }
-                if (new_index >= this.length) {
-                    var k = new_index - this.length;
-                    while ((k--) + 1) {
-                        this.push(undefined);
-                    }
-                }
-                this.splice(new_index, 0, this.splice(old_index, 1)[0]);
-            };
 
             /**
              * If 'NOT_RELEVANT' is not last item in list

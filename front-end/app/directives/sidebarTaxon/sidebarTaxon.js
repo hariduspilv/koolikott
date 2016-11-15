@@ -1,6 +1,6 @@
 define([
     'angularAMD',
-    'services/recursionHelper',
+    'services/recursionHelper'
 ], function (angularAMD) {
     angularAMD.directive('dopSidebarTaxon', ['RecursionHelper', '$location', function (RecursionHelper, $location) {
         return {
@@ -73,16 +73,16 @@ define([
                         $location.url('search/result?q=&taxon=' + id);
                         $scope.opened = true;
                     }
-                }
+                };
 
                 $scope.getTaxonTranslation = function(data) {
-                    if(data.level !== '.EducationalContext') {
+                    if (data.level !== '.EducationalContext') {
                         return data.level.toUpperCase().substr(1) + "_" + data.name.toUpperCase();
                     } else {
                         return data.name.toUpperCase();
                     }
 
-                }
+                };
 
                 $scope.$watch(function () {
                     return $location.url()
