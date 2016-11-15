@@ -18,13 +18,13 @@ define([
                 if ($scope.taxon) {
                     $scope.id = $scope.taxon.id;
 
-                    if (($scope.taxon.domains !== undefined && $scope.taxon.domains !== null) && $scope.taxon.domains.length > 0) {
+                    if ($scope.taxon.domains && $scope.taxon.domains.length > 0) {
                         $scope.taxonChildren = $scope.taxon.domains;
                         $scope.childrenCount = $scope.taxon.domains.length;
                         $scope.hasChildren = true;
                     }
 
-                    if ($scope.taxon.educationalContext !== undefined && $scope.taxon.educationalContext !== null) {
+                    if ($scope.taxon.educationalContext) {
                         if ($scope.taxon.educationalContext.name === 'PRESCHOOLEDUCATION') {
                             checkTaxonLevelAndAssignValues('.Domain', $scope.taxon.topics);
                         }
@@ -37,7 +37,7 @@ define([
                             checkTaxonLevelAndAssignValues('.Domain', $scope.taxon.specializations);
                         }
 
-                    } else if (($scope.taxon.domain !== undefined && $scope.taxon.domain !== null) && ($scope.taxon.domain.educationalContext !== undefined && $scope.taxon.domain.educationalContext !== null)) {
+                    } else if ($scope.taxon.domain && $scope.taxon.domain.educationalContext) {
                         if ($scope.taxon.domain.educationalContext.name === 'BASICEDUCATION' || $scope.taxon.domain.educationalContext.name === 'SECONDARYEDUCATION') {
                             checkTaxonLevelAndAssignValues('.Subject', $scope.taxon.topics);
                         }
