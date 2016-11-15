@@ -173,6 +173,10 @@ md-sidenav._md-locked-open, md-sidenav._md-locked-open._md-closed, md-sidenav._m
   &--link {
     color: $color-selected-menu;
   }
+
+  .md-ripple-container {
+    order: 2;
+  }
 }
 
 .sidenav__name {
@@ -197,6 +201,10 @@ md-sidenav._md-locked-open, md-sidenav._md-locked-open._md-closed, md-sidenav._m
       display: block;
     }
   }
+
+  &--animate {
+    order: 3;
+  }
 }
 
 .sidenav__background {
@@ -205,4 +213,5 @@ md-sidenav._md-locked-open, md-sidenav._md-locked-open._md-closed, md-sidenav._m
 
 .sidenav__count {
   font-size: 12px;
+  order: 3;
 }
