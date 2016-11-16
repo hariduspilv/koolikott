@@ -17,7 +17,7 @@ define([
                 isVisible: '='
             },
             templateUrl: 'detailedSearch.html',
-            controller: function ($scope, $rootScope) {
+            controller: function ($scope, $rootScope, $timeout) {
 
                 var BASIC_EDUCATION_ID = 2;
                 var SECONDARY_EDUCATION_ID = 3;
@@ -34,9 +34,6 @@ define([
                     // Languages
                     metadataService.loadUsedLanguages(setLanguages);
                     $scope.detailedSearch.language = searchService.getLanguage();
-
-                    // ResourceTypes
-                    metadataService.loadResourceTypes(setResourceTypes);
 
                     metadataService.loadUsedResourceTypes(setUsedResourceTypes);
 
@@ -312,7 +309,9 @@ define([
                 }, true);
 
                 $scope.$on('detailedSearch:open', function() {
-                    metadataService.updateUsedResourceTypes(setUsedResourceTypes)
+                    $timeout(function () {
+                        metadataService.updateUsedResourceTypes(setUsedResourceTypes);
+                    });
                 });
 
                 function initWatches() {
@@ -460,10 +459,6 @@ define([
                     if (!listContains($scope.usedResourceTypes, 'name', 'PORTFOLIO_RESOURCE')) {
                         $scope.usedResourceTypes.push({name: 'PORTFOLIO_RESOURCE'})
                     }
-                }
-
-                function setResourceTypes(resourceTypes) {
-                    $scope.resourceTypes = resourceTypes;
                 }
 
                 function setCrossCurricularThemes(crossCurricularThemes) {
