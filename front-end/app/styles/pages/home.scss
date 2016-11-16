@@ -55,18 +55,25 @@
 }
 
 .version-number {
-  padding: 5px 7px;
-  background-color: #ddd;
-  transition: all 0.5s ease;
+  padding: 0 4px;
+  background-color: transparent;
 
   a {
-    color: #fff;
+    color: $gray;
     font-size: 14px;
-    font-weight: 500;
     text-decoration: none;
+    display: flex;
+    align-items: center;
+    transition: color .2s ease;
+    cursor: pointer;
   }
 
-  &:hover {
-    background-color: #03A9F4;
+  &:hover a {
+    color: #03A9F4;
+  }
+
+  .icon-github-circled {
+    font-size: 22px;
+    margin-right: 3px;
   }
 }
