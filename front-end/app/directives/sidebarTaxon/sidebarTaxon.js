@@ -18,6 +18,8 @@ define([
                 $scope.hasChildren = false;
 
                 if ($scope.taxon) {
+                    $scope.taxonName = getTaxonTranslation($scope.taxon);
+
                     if ($scope.taxon.domains && $scope.taxon.domains.length > 0) {
                         $scope.taxonChildren = $scope.taxon.domains;
                         $scope.childrenCount = $scope.taxon.domains.length;
@@ -52,23 +54,8 @@ define([
                     // only used under VOCATIONALEDUCATION
                     checkTaxonLevelAndAssignValues('.Module', $scope.taxon.topics);
 
-
-                    $scope.materialCount = localStorage.getItem($scope.taxon.name.toUpperCase() + "_COUNT");
-                    if (!$scope.materialCount) {
-                        getTaxonMaterialsCount($scope.taxon);
-                    }
-
-                    if ($scope.taxonChildren && $scope.taxonChildren[0]) {
-                        if (!localStorage.getItem($scope.taxonChildren[0].name.toUpperCase() + "_COUNT")) {
-                            refreshMaterialsCounts();
-                        }
-
-                        //Refresh the counts asynchronously after init
-                        $timeout(function () {
-                                refreshMaterialsCounts()
-                            }, 3000
-                        );
-                    }
+                    refreshThisTaxonCount();
+                    refreshChildrenCounts();
                 }
 
                 function checkTaxonLevelAndAssignValues (level, children) {
@@ -103,11 +90,11 @@ define([
                     }
                 };
 
-                $scope.getTaxonTranslation = function (data) {
-                    if (data.level !== '.EducationalContext') {
-                        return data.level.toUpperCase().substr(1) + "_" + data.name.toUpperCase();
+                 function getTaxonTranslation () {
+                    if ($scope.taxon.level !== '.EducationalContext') {
+                        return $scope.taxon.level.toUpperCase().substr(1) + "_" + $scope.taxon.name.toUpperCase();
                     } else {
-                        return data.name.toUpperCase();
+                        return $scope.taxon.name.toUpperCase();
                     }
 
                 };
@@ -117,6 +104,27 @@ define([
                 }, function () {
                     $scope.isActive = ($location.url() === '/search/result?q=&taxon=' + $scope.taxon.id);
                 });
+
+                function refreshThisTaxonCount() {
+                    $scope.materialCount = localStorage.getItem($scope.taxon.name.toUpperCase() + "_COUNT");
+                    if (!$scope.materialCount) {
+                        getTaxonMaterialsCount($scope.taxon);
+                    }
+                }
+
+                function refreshChildrenCounts() {
+                    if ($scope.taxonChildren && $scope.taxonChildren[0]) {
+                        if (!localStorage.getItem($scope.taxonChildren[0].name.toUpperCase() + "_COUNT")) {
+                            refreshMaterialsCounts();
+                        }
+
+                        //Refresh the counts asynchronously after init
+                        $timeout(function () {
+                                refreshMaterialsCounts()
+                            }, 3000
+                        );
+                    }
+                }
 
                 function refreshMaterialsCounts() {
                     $scope.taxonChildren.forEach(function (child) {

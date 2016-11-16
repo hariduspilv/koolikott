@@ -138,9 +138,13 @@ define([
      * @return {Array}
      */
     app.filter('orderByTranslated', ['$translate', '$filter', function($translate, $filter) {
-        return function (array, i18nKeyPrefix, objKey) {
+        return function (array, objKey, i18nKeyPrefix) {
             var result = [];
             var translated = [];
+            if (!i18nKeyPrefix) {
+                i18nKeyPrefix = '';
+            }
+
             angular.forEach(array, function(value) {
                 var i18nKeySuffix = objKey ? value[objKey] : value;
                 translated.push({

@@ -55,6 +55,7 @@ define([
                     $scope.search = function () {
                         searchService.setSearch($scope.searchFields.searchQuery);
                         searchService.clearFieldsNotInSimpleSearch();
+                        searchService.setType('all');
                         $location.url(searchService.getURL());
                     };
 

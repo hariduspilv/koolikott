@@ -27,7 +27,7 @@
           <md-option value="all">
             <span data-translate="ALL_RESOURCES"></span>
           </md-option>
-          <md-option data-ng-repeat="resourceType in usedResourceTypes | orderByTranslated:'':'name'" value="{{resourceType.name}}">
+          <md-option data-ng-repeat="resourceType in usedResourceTypes | orderByTranslated:'name'" value="{{resourceType.name}}">
             <span data-translate="{{resourceType.name}}"></span>
           </md-option>
         </md-select>

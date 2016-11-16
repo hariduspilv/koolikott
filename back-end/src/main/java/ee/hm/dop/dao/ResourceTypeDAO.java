@@ -4,12 +4,9 @@ import java.util.List;
 
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
-import javax.persistence.Query;
+
 import javax.persistence.TypedQuery;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Root;
-import javax.persistence.criteria.Subquery;
+
 
 import ee.hm.dop.model.ResourceType;
 
@@ -33,18 +30,11 @@ public class ResourceTypeDAO {
     }
 
     public List<ResourceType> findAllResourceTypes() {
-        List<ResourceType> resultList = entityManager.createQuery("select r FROM ResourceType r", ResourceType.class)
+        return entityManager.createQuery("select r FROM ResourceType r", ResourceType.class)
                 .getResultList();
-
-        return resultList;
     }
 
     public List<ResourceType> findUsedResourceTypes() {
-        Query q = entityManager.createNativeQuery("SELECT * FROM ResourceType r " +
-                "WHERE r.id IN " +
-                "(SELECT DISTINCT resourceType FROM Material_ResourceType as rt " +
-                "INNER JOIN LearningObject as lo where lo.id=rt.material AND lo.deleted=false)", ResourceType.class);
-
-        return q.getResultList();
+        return (List<ResourceType>) entityManager.createQuery("SELECT DISTINCT mr.resourceTypes FROM Material mr where mr.deleted = false").getResultList();
     }
 }

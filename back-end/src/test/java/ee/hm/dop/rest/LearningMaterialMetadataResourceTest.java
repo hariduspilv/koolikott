@@ -135,9 +135,7 @@ public class LearningMaterialMetadataResourceTest extends ResourceIntegrationTes
         });
 
         assertEquals(3, licenseTypes.size());
-        for (int i = 0; i < licenseTypes.size(); i++) {
-            assertValidLicenseType(licenseTypes.get(i));
-        }
+        licenseTypes.forEach(this::assertValidLicenseType);
     }
 
     @Test
@@ -150,7 +148,7 @@ public class LearningMaterialMetadataResourceTest extends ResourceIntegrationTes
 
         List<String> expected = Arrays.asList("Lifelong_learning_and_career_planning",
                 "Environment_and_sustainable_development");
-        List<String> actual = result.stream().map(r -> r.getName()).collect(Collectors.toList());
+        List<String> actual = result.stream().map(CrossCurricularTheme::getName).collect(Collectors.toList());
 
         assertTrue(actual.containsAll(expected));
     }
@@ -163,7 +161,7 @@ public class LearningMaterialMetadataResourceTest extends ResourceIntegrationTes
         assertEquals(2, result.size());
 
         List<String> expected = Arrays.asList("Cultural_and_value_competence", "Social_and_citizenship_competence");
-        List<String> actual = result.stream().map(r -> r.getName()).collect(Collectors.toList());
+        List<String> actual = result.stream().map(KeyCompetence::getName).collect(Collectors.toList());
 
         assertTrue(actual.containsAll(expected));
     }

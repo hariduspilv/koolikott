@@ -7,14 +7,18 @@
   }
 }
 
-.md-select-menu-container::after{
+md-select-menu[multiple] {
+  overflow-y: visible;
+}
+
+md-select-menu[multiple]::after {
   content: "close";
   font-family: 'Material Icons';
   font-size: 1.8em;
   position: absolute;
   top: -40px;
   right: 0px;
-  background: rgb(238,238,238);
+  background: rgb(238, 238, 238);
   border-radius: 50%;
   width: 1.2em;
   height: 1.2em;
