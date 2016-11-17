@@ -49,13 +49,18 @@ public class ResourceTypeDAOTest extends DatabaseTestBase {
         resourceType.setName("COURSE");
         material.setResourceTypes(Collections.singletonList(resourceType));
 
+        List<ResourceType> before = resourceTypeDAO.findUsedResourceTypes();
+        assertEquals(5, before.size());
+
         LearningObject newMaterial = materialDAO.update(material);
 
         List<ResourceType> result = resourceTypeDAO.findUsedResourceTypes();
-
         assertEquals(6, result.size());
 
         materialDAO.remove(newMaterial);
+
+        List<ResourceType> finalList = resourceTypeDAO.findUsedResourceTypes();
+        assertEquals(5, finalList.size());
     }
 
 }
