@@ -132,10 +132,10 @@
                   <span data-translate="DETAIL_VIEW_TARGET_GROUP"></span>
                 </small>
                 <br>
-                <span class="hide-overflow" data-ng-repeat="targetGroup in getTargetGroups()">
+                <span class="hide-overflow" data-ng-repeat="targetGroup in targetGroups">
                   {{'TARGET_GROUP_' + targetGroup | translate}}{{$last ? '' : ', '}}
                 </span>
-                <span class="hide-overflow" data-ng-if="isNullOrZeroLength(material.targetGroups)"
+                <span class="hide-overflow" data-ng-if="isNullOrZeroLength(targetGroups)"
                       data-translate="UNKNOWN">Unknown</span>
               </p>
             </div>

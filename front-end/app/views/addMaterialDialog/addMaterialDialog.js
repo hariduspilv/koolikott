@@ -4,7 +4,6 @@ define([
     'services/translationService',
     'services/metadataService',
     'services/authenticatedUserService',
-    'services/storageService',
     'services/pictureUploadService',
     'services/fileUploadService',
     'directives/validate/validateUrl'
@@ -151,11 +150,15 @@ define([
             };
 
             $scope.showCompetencesWarning = function (element) {
-                if ($scope.isTouchedOrSubmitted(element)) return $scope.material.keyCompetences.length === 0;
+                if ($scope.isTouchedOrSubmitted(element) && $scope.material.keyCompetences) {
+                    return $scope.material.keyCompetences.length === 0;
+                }
             };
 
             $scope.showThemesWarning = function (element) {
-                if ($scope.isTouchedOrSubmitted(element)) return $scope.material.crossCurricularThemes.length === 0;
+                if ($scope.isTouchedOrSubmitted(element) &&$scope.material.crossCurricularThemes) {
+                    return $scope.material.crossCurricularThemes.length === 0;
+                }
             };
 
             $scope.isAuthorOrPublisherSet = function () {

@@ -99,6 +99,7 @@ define([
             function processMaterial() {
                 if ($scope.material) {
                     setSourceType();
+                    $scope.targetGroups = getTargetGroups();
 
                     if ($scope.material.taxons) {
                         preprocessMaterialSubjects();
@@ -124,7 +125,7 @@ define([
                 $rootScope.learningObjectImproper = ($scope.material.improper > 0);
                 $rootScope.learningObjectDeleted = ($scope.material.deleted == true);
 
-                if(authenticatedUserService.isAdmin() || authenticatedUserService.isModerator()) {
+                if (authenticatedUserService.isAdmin() || authenticatedUserService.isModerator()) {
                     if ($scope.material.improper > 0) {
                         serverCallService.makeGet("rest/impropers", {}, sortImpropers, getItemsFail);
                     }
@@ -242,7 +243,7 @@ define([
                     $scope.sourceType = 'SLIDESHARE';
                 } else if (isVideoLink($scope.material.source)) {
                     $scope.sourceType = 'VIDEO';
-                } else if (isAudioLink($scope.material.source)){
+                } else if (isAudioLink($scope.material.source)) {
                     $scope.sourceType = 'AUDIO';
                 } else if (isPictureLink($scope.material.source)) {
                     $scope.sourceType = 'PICTURE';
@@ -292,7 +293,7 @@ define([
                 return authenticatedUserService.isRestricted();
             };
 
-            $scope.modUser = function() {
+            $scope.modUser = function () {
                 if (authenticatedUserService.isModerator() || authenticatedUserService.isAdmin()) {
                     return true;
                 } else {
@@ -413,7 +414,7 @@ define([
             };
 
             $scope.setNotImproper = function () {
-                if($scope.isAdmin() && $scope.material) {
+                if ($scope.isAdmin() && $scope.material) {
                     url = "rest/impropers?learningObject=" + $scope.material.id;
                     serverCallService.makeDelete(url, {}, setNotImproperSuccessful, setNotImproperFailed);
                 }
@@ -433,7 +434,7 @@ define([
                 serverCallService.makePost("rest/material/restore", $scope.material, restoreSuccess, restoreFail);
             };
 
-            $scope.markMaterialCorrect = function() {
+            $scope.markMaterialCorrect = function () {
                 serverCallService.makePost("rest/material/setNotBroken", $scope.material, markCorrectSuccess, queryFailed);
             };
 
@@ -448,20 +449,20 @@ define([
                 log("Request failed");
             }
 
-            $scope.$on("restore:learningObject", function() {
-               $scope.restoreMaterial();
+            $scope.$on("restore:learningObject", function () {
+                $scope.restoreMaterial();
             });
 
-            $scope.$on("delete:learningObject", function() {
-               deleteMaterial();
+            $scope.$on("delete:learningObject", function () {
+                deleteMaterial();
             });
 
-            $scope.$on("setNotImproper:learningObject", function() {
+            $scope.$on("setNotImproper:learningObject", function () {
                 $scope.setNotImproper();
             });
 
-            $scope.$on("markCorrect:learningObject", function() {
-               $scope.markMaterialCorrect();
+            $scope.$on("markCorrect:learningObject", function () {
+                $scope.markMaterialCorrect();
             });
 
             function restoreSuccess() {
@@ -475,10 +476,10 @@ define([
                 log("Restoring material failed");
             }
 
-            $scope.getTargetGroups = function () {
-                if ($scope.material) {
+            function getTargetGroups() {
+                if ($scope.material.targetGroups[0]) {
                     return targetGroupService.getLabelByTargetGroupsOrAll($scope.material.targetGroups);
                 }
-            };
+            }
         }];
 });
