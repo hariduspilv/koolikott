@@ -9,8 +9,14 @@
   }
 
   .card-lg & {
-    top: -20px;
+    top: 0;
+    left: -25px;
     text-shadow: 1px 1px 1px rgba(0, 0, 0, .2);
+
+    @media (min-width: $layout-breakpoint-xs) {
+      top: -16px;
+      left: 0;
+    }
 
     .favorite__icon {
       color: #fff;

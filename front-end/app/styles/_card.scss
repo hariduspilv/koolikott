@@ -439,8 +439,12 @@ md-card {
   z-index: 1;
 
   .card-lg & {
-    top: -25px;
+    top: 0;
     right: -25px;
+
+    @media (min-width: $layout-breakpoint-xs) {
+      top: -25px;
+    }
   }
 }
 
