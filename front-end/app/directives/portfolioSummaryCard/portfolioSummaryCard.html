@@ -116,7 +116,7 @@
 
             <!-- right small side  -->
             <div layout="column" flex flex-gt-xs="25" class="divider-left" layout-align="start start">
-              <div data-dop-favorite data-learning-object="portfolio"></div>
+              <div data-ng-if="isLoggedIn() && !isRestricted()" data-dop-favorite data-learning-object="portfolio"></div>
               <div class="corner"></div>
               <!-- imaged -->
                 <div data-ng-if="portfolio.picture" class="card-cover imaged">
