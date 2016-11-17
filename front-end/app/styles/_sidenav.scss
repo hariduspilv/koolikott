@@ -185,6 +185,21 @@ md-sidenav._md-locked-open, md-sidenav._md-locked-open._md-closed, md-sidenav._m
     }
   }
 
+  &--version-number {
+    justify-content: flex-start;
+    color: $gray;
+    font-size: 14px;
+
+    &:hover {
+      color: #03A9F4;
+    }
+
+    .icon-github-circled {
+      font-size: 22px;
+      margin-right: 3px;
+    }
+  }
+
   &--link {
     color: $color-selected-menu;
   }

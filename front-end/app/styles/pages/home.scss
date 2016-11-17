@@ -49,31 +49,3 @@
     }
   }
 }
-
-.version-number-wrapper {
-  background: transparent;
-}
-
-.version-number {
-  padding: 0 4px;
-  background-color: transparent;
-
-  a {
-    color: $gray;
-    font-size: 14px;
-    text-decoration: none;
-    display: flex;
-    align-items: center;
-    transition: color .2s ease;
-    cursor: pointer;
-  }
-
-  &:hover a {
-    color: #03A9F4;
-  }
-
-  .icon-github-circled {
-    font-size: 22px;
-    margin-right: 3px;
-  }
-}
