@@ -42,7 +42,7 @@
   <!-- content -->
 
   <md-card-content layout="column" class="minContentHeight">
-    <a data-ng-href="{{'/portfolio?id=' + portfolio.id}}" class="no-link materialbox-content">
+    <a data-ng-href="{{'/portfolio?id=' + portfolio.id}}" class="no-link">
       <h4 class="md-headline two-rows" data-ng-bind="portfolio.title"></h4>
       <p class="md-caption one-row">
         <span class="authors">
@@ -50,6 +50,11 @@
           <span data-ng-bind="formatSurname(portfolio.creator.surname)"></span>
           <span data-ng-if="portfolio.added">{{ formatDate(portfolio.added) }}</span>
         </span>
+      </p>
+      <p class="md-caption" layout="row">
+        <span>II-III kooliaste</span>
+        <span class="flex"></span>
+        <span>Ühiskonnaõpetus</span>
       </p>
     </a>
   </md-card-content>
@@ -61,6 +66,9 @@
     <span>{{ portfolio.likes }}</span>
     <md-icon>thumb_down</md-icon>
     <span>{{ portfolio.dislikes }}</span>
+    <span flex></span>
+    <md-icon>comment</md-icon>
+    <span data-ng-bind="portfolio.comments.length"></span>
     <span flex></span>
     <md-icon>visibility</md-icon>
     <span data-ng-bind="portfolio.views"></span>

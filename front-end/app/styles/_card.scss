@@ -58,9 +58,9 @@ md-card {
     color: inherit;
   }
 
-  .minContentHeight {
-    min-height: 45%;
-  }
+  // .minContentHeight {
+  //   min-height: 45%;
+  // }
 
   md-card-actions {
     padding-top: 10px;
@@ -212,7 +212,7 @@ md-card {
       left: 50%;
       top: 50%;
       transform: translate(-50%,-50%);
-      font-size: 48px;
+      font-size: 40px;
       color: rgba(255, 255, 255, .7);
       z-index: 1;
       text-shadow: 1px 1px 1px rgba(0, 0,0, .2);
@@ -244,11 +244,11 @@ md-card {
       }
     }
 
-    md-card-content {
-      padding: 0;
-      max-height: 50%;
-      min-height: 35%;
-    }
+    // md-card-content {
+    //   padding: 0;
+    //   max-height: 50%;
+    //   min-height: 35%;
+    // }
     .card-cover {
       height: 50%;
       border-radius: 2px 2px 0 0;
@@ -288,13 +288,18 @@ md-card {
       }
     }
     md-card-actions {
+      margin-right: 16px;
+      margin-left: 16px;
       height: 10%;
       color: rgba(0, 0, 0, 0.4);
       font-weight: 600;
       md-icon {
-        margin: 0 3px 0 8px;
+        margin: 0 2px 0 5px;
         font-size: $caption-font-size-base;
         color: rgba(0, 0, 0, 0.3);
+        &:first-of-type {
+          margin: 0 3px 0 0px;
+        }
       }
     }
   }
@@ -365,10 +370,9 @@ md-card {
       text-align: center;
       md-icon {
         position: absolute;
-        top: 0;
-        bottom: 0;
-        left: 0;
-        right: 0;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%,-50%);
         font-size: 48px;
         color: rgba(255, 255, 255, 0.8);
       }
@@ -436,13 +440,9 @@ md-card {
 
 .corner {
   background-image: url('../images/detail/corner.png');
-  background-repeat: no-repeat;
-  background-position: right top;
   position: absolute;
   right: -2px;
   top: -1px;
-  height: 60px;
-  width: 60px;
   z-index: 1;
 
   .card-lg & {
