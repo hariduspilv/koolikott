@@ -16,16 +16,11 @@ import static org.junit.Assert.fail;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import ee.hm.dop.dao.MaterialDAO;
-import ee.hm.dop.model.Material;
-import ee.hm.dop.model.PeerReview;
-import ee.hm.dop.model.Publisher;
-import ee.hm.dop.model.Recommendation;
-import ee.hm.dop.model.Repository;
-import ee.hm.dop.model.Role;
-import ee.hm.dop.model.User;
+import ee.hm.dop.model.*;
 import ee.hm.dop.model.taxon.EducationalContext;
 import org.easymock.Capture;
 import org.easymock.EasyMock;
@@ -141,6 +136,14 @@ public class MaterialServiceTest {
         educationalContext.setName(MaterialService.BASICEDUCATION);
         expect(material.getTaxons()).andReturn(Arrays.asList(educationalContext)).times(3);
 
+        KeyCompetence keyCompetence = new KeyCompetence();
+        keyCompetence.setId(1004L);
+        CrossCurricularTheme crossCurricularTheme = new CrossCurricularTheme();
+        crossCurricularTheme.setId(1004L);
+
+        expect(material.getKeyCompetences()).andReturn(Collections.singletonList(keyCompetence)).anyTimes();
+        expect(material.getCrossCurricularThemes()).andReturn(Collections.singletonList(crossCurricularTheme)).anyTimes();
+
         expect(materialDAO.findByIdNotDeleted(materialId)).andReturn(original);
         expect(materialDAO.update(material)).andReturn(material);
         expect(materialDAO.findBySource("creatematerial.example.com", true)).andReturn(null);
@@ -207,6 +210,14 @@ public class MaterialServiceTest {
         expect(materialDAO.findBySource("creatematerial.example.com", true)).andReturn(null);
         material.setKeyCompetences(null);
         material.setCrossCurricularThemes(null);
+
+        KeyCompetence keyCompetence = new KeyCompetence();
+        keyCompetence.setId(1004L);
+        CrossCurricularTheme crossCurricularTheme = new CrossCurricularTheme();
+        crossCurricularTheme.setId(1004L);
+
+        expect(material.getKeyCompetences()).andReturn(Collections.singletonList(keyCompetence)).anyTimes();
+        expect(material.getCrossCurricularThemes()).andReturn(Collections.singletonList(crossCurricularTheme)).anyTimes();
 
         replay(materialDAO, material);
 

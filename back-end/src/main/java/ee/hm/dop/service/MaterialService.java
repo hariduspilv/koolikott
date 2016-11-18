@@ -101,9 +101,6 @@ public class MaterialService implements LearningObjectHandler {
 
         material.setCreator(creator);
 
-        checkKeyCompetences(material);
-        checkCrossCurricularThemes(material);
-
         if (creator != null && isUserPublisher(creator)) {
             material.setEmbeddable(true);
         }
@@ -414,6 +411,9 @@ public class MaterialService implements LearningObjectHandler {
         } else {
             logger.info("Updating material");
         }
+
+        checkKeyCompetences(material);
+        checkCrossCurricularThemes(material);
 
         setAuthors(material);
         setPublishers(material);
