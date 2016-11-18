@@ -12,20 +12,15 @@ md-select-menu[multiple] {
 }
 
 md-select-menu[multiple]::after {
-  content: "close";
-  font-family: 'Material Icons';
-  font-size: 1.8em;
+  content: "X";
+  font-size: 1.4em;
   position: absolute;
-  top: -40px;
+  top: -30px;
   right: 0px;
   background: rgb(238, 238, 238);
   border-radius: 50%;
   width: 1.2em;
-  height: 1.2em;
-  display: block;
   text-align: center;
-  line-height: 1.2em;
-  vertical-align: middle;
   pointer-events: none;
 }
 
