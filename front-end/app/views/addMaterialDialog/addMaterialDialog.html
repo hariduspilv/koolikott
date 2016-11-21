@@ -216,10 +216,10 @@
           </md-tab-label>
           <md-tab-body>
             <md-content class="md-padding">
-              <div data-ng-repeat="taxon in material.taxons track by $index">
+              <div layout="row" data-ng-repeat="taxon in material.taxons track by $index">
                 <div data-dop-taxon-selector
                      data-taxon="material.taxons[$index]"
-                     data-is-add-material-view="true"></div>
+                     data-is-add-material-view="true" flex></div>
                 <md-button class="md-icon-button md-primary" data-ng-show="$index+1 === material.taxons.length"
                            data-ng-click="addNewTaxon()" data-ng-disabled="material.taxon">
                   <md-icon>add_circle</md-icon>
@@ -263,8 +263,7 @@
                 <div layout="row" flex layout-align="center center">
                   <md-chips ng-model="material.keyCompetences" md-autocomplete-snap md-require-match="true" flex
                             name="keyCompetencesInput"
-                            data-ng-click="addMaterialForm.keyCompetencesInput.$setTouched()"
-                            md-on-remove="removeCallback($chip, $index, 'keyCompetences')">
+                            data-ng-click="addMaterialForm.keyCompetencesInput.$setTouched()">
                     <md-autocomplete id="key-competence-auto"
                                      md-input-id="key-competence-auto-input"
                                      md-no-cache="true"
@@ -293,8 +292,7 @@
                 <div layout="row" flex layout-align="center center">
                   <md-chips ng-model="material.crossCurricularThemes" md-autocomplete-snap md-require-match="true"
                             flex name="crossCurricularThemesInput"
-                            data-ng-click="addMaterialForm.crossCurricularThemesInput.$setTouched()"
-                            md-on-remove="removeCallback($chip, $index, 'crossCurricularThemes')">
+                            data-ng-click="addMaterialForm.crossCurricularThemesInput.$setTouched()">
                     <md-autocomplete id="cross-curricular-auto"
                                      md-input-id="cross-curricular-auto-input"
                                      md-no-cache="true"

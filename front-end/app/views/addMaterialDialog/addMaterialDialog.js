@@ -156,7 +156,7 @@ define([
             };
 
             $scope.showThemesWarning = function (element) {
-                if ($scope.isTouchedOrSubmitted(element) &&$scope.material.crossCurricularThemes) {
+                if ($scope.isTouchedOrSubmitted(element) && $scope.material.crossCurricularThemes) {
                     return $scope.material.crossCurricularThemes.length === 0;
                 }
             };
@@ -258,25 +258,6 @@ define([
             };
 
             /**
-             * If at least one is selected, remove 'NOT_RELEVANT' from suggestions
-             * else add it back
-             * @param listName
-             */
-            function addOrRemoveNotRelevant(listName) {
-                if ($scope.material[listName].length > 0 && listContains($scope[listName], "name", "NOT_RELEVANT")) {
-                    $scope[listName] = $scope[listName].filter(function (listElement) {
-                        return listElement.name !== "NOT_RELEVANT";
-                    });
-                } else if ($scope.material[listName].length === 0 && !listContains($scope[listName], "name", "NOT_RELEVANT")) {
-                    $scope[listName].push({name: 'NOT_RELEVANT'});
-                }
-            }
-
-            $scope.removeCallback = function(chip, index, listName) {
-                addOrRemoveNotRelevant(listName);
-            };
-
-            /**
              * Search for keyCompetences.
              */
             $scope.searchKeyCompetences = function (query) {
@@ -292,21 +273,14 @@ define([
                     .filter(searchFilter(query, "CROSS_CURRICULAR_THEME_")) : $scope.crossCurricularThemes;
             };
 
-            /**
-             * If autocomplete selection is made add or remove 'NOT_RELEVANT'
-             * and hide suggestions.
-             * If 'NOT_RELEVANT' is selected, replace it with new selection
-             * @param item
-             * @param listName
-             * @param elementId
-             */
-            $scope.autocompleteItemSelected = function(item, listName, elementId) {
-                if (!item) {
-                    addOrRemoveNotRelevant(listName);
+            $scope.autocompleteItemSelected = function (item, listName, elementId) {
 
-                    // Hide suggestions and blur input to avoid triggering new search
-                    angular.element(document.querySelector('#' + elementId)).controller('mdAutocomplete').hidden = true;
-                    document.getElementById(elementId).blur();
+                if (shouldRemoveNotRelevantFromList(listName)) {
+                    $scope.material[listName] = removeLastElement(listName)
+                }
+
+                if (!item) {
+                    closeAutocomplete(elementId);
                 } else {
                     // If 'NOT_RELEVANT' chip exists and new item is selected, replace it
                     if (listContains($scope.material[listName], 'name', 'NOT_RELEVANT') && item.name !== 'NOT_RELEVANT') {
@@ -319,9 +293,23 @@ define([
                 }
             };
 
-            /**
+            function shouldRemoveNotRelevantFromList(listName) {
+                return $scope.material[listName].length > 1 && $scope.material[listName][$scope.material[listName].length - 1].name === 'NOT_RELEVANT';
+            }
 
-            /**
+            function removeLastElement(listName) {
+                return $scope.material[listName].splice(0, $scope.material[listName].length - 1);
+            }
+
+            function closeAutocomplete(elementId) {
+                // Hide suggestions and blur input to avoid triggering new search
+                angular.element(document.querySelector('#' + elementId)).controller('mdAutocomplete').hidden = true;
+                document.getElementById(elementId).blur();
+            }
+
+
+
+             /**
              * Create filter function for a query string
              */
             function searchFilter(query, translationPrefix) {
@@ -646,7 +634,9 @@ define([
              */
             function moveNotRelevantIfNecessary(list) {
                 if (list[list.length - 1].name !== "NOT_RELEVANT") {
-                    var notRelevantIndex = list.map(function(e) {return e.name; }).indexOf("NOT_RELEVANT");
+                    var notRelevantIndex = list.map(function (e) {
+                        return e.name;
+                    }).indexOf("NOT_RELEVANT");
                     list.move(notRelevantIndex, list.length - 1);
                 }
             }
