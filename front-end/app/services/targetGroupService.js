@@ -1,9 +1,9 @@
 define([
     'angularAMD'
-], function(angularAMD) {
+], function (angularAMD) {
 
     angularAMD.factory('targetGroupService', [
-        function() {
+        function () {
 
             var preschoolGroups = ['PRESCHOOL', 'ZERO_FIVE', 'SIX_SEVEN'];
             var level1Groups = ['LEVEL1', 'GRADE1', 'GRADE2', 'GRADE3'];
@@ -11,8 +11,27 @@ define([
             var level3Groups = ['LEVEL3', 'GRADE7', 'GRADE8', 'GRADE9'];
             var secondaryGroups = ['GYMNASIUM'];
 
+            var groups = [
+                {
+                    label: 'PRESCHOOL',
+                    children: ['ZERO_FIVE', 'SIX_SEVEN']
+                }, {
+                    label: 'LEVEL1',
+                    children: ['GRADE1', 'GRADE2', 'GRADE3']
+                }, {
+                    label: 'LEVEL2',
+                    children: ['GRADE4', 'GRADE5', 'GRADE6']
+                }, {
+                    label: 'LEVEL3',
+                    children: ['GRADE7', 'GRADE8', 'GRADE9']
+                }, {
+                    label: 'GYMNASIUM',
+                    children: ['asd']
+                },
+            ]
+
             function map(group) {
-                return group.map(function(item, index) {
+                return group.map(function (item, index) {
                     return {
                         name: item,
                         parent: index === 0
@@ -25,14 +44,14 @@ define([
                 /**
                  * Get all target groups.
                  */
-                getAll : function() {
-                    return map(preschoolGroups).concat(map(level1Groups), map(level2Groups), map(level3Groups), map(secondaryGroups));
+                getAll: function () {
+                    return groups;
                 },
 
                 /**
                  * Get all target groups that can be selected under the specified educational context.
                  */
-                getByEducationalContext : function(educationalContext) {
+                getByEducationalContext: function (educationalContext) {
                     if (educationalContext.name === 'PRESCHOOLEDUCATION') {
                         return map(preschoolGroups);
                     } else if (educationalContext.name === 'BASICEDUCATION') {
@@ -47,7 +66,7 @@ define([
                  * If selectedTargetGroup is a single target group and not a label, an array consisting
                  * of only that target group is returned.
                  */
-                getByLabel : function(selectedTargetGroup) {
+                getByLabel: function (selectedTargetGroup) {
                     var targetGroups = [];
 
                     switch (selectedTargetGroup) {
@@ -81,8 +100,10 @@ define([
                  * If targetGroups contains only one target group, that target group is returned.
                  * @param targetGroups  array of target groups
                  */
-                getLabelByTargetGroups : function(targetGroups) {
+                getLabelByTargetGroups: function (targetGroups) {
                     var selectedTargetGroup = null;
+
+                    // Refactor
 
                     if (targetGroups) {
                         if (targetGroups.length === 1) {
@@ -123,7 +144,7 @@ define([
                  * Get the label that represents all the selected target groups.
                  * If there is no such label, return all target groups.
                  */
-                getLabelByTargetGroupsOrAll : function(targetGroups) {
+                getLabelByTargetGroupsOrAll: function (targetGroups) {
                     if (!targetGroups) {
                         return [];
                     }
@@ -135,8 +156,51 @@ define([
                     } else {
                         return targetGroups;
                     }
-                }
+                },
 
+                areGroupElementsInArray: function (array, list) {
+                    var i = 0;
+                    var j = 0;
+
+                    for (i; i < list.length; i++) {
+                        if (array.indexOf(list[i]) != -1) {
+                            j++;
+                        }
+                    }
+
+                    if (i == j) {
+                        return true;
+                    } else {
+                        return false;
+                    }
+                },
+
+                getGroups: function () {
+                    return groups;
+                },
+
+                isParent: function (item) {
+                    if (item !== null) {
+                        for(var i = 0; i < groups.length; i++) {
+                            if (item == groups[i].label) {
+                                return true;
+                            }
+                        }
+                    }
+
+                    return false;
+                },
+
+                getAllChildren: function(data) {
+                    debugger;
+                    for (i = 0; i < groups.length; i++) {
+                        var index = data.indexOf(groups[i].label);
+                        if(index != -1) {
+                            data.splice(index, 1);
+                        }
+                    }
+                    return data;
+                }
             };
 
             return instance;

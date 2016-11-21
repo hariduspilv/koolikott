@@ -114,7 +114,7 @@ define(['angularAMD'], function(angularAMD) {
             },
 
             setTargetGroups: function(targetGroups) {
-                search.targetGroups = arrayToLowerCase(asArray(targetGroups));
+                search.targetGroups = arrayToLowerCase(asArray(targetGroups[0]));
             },
 
             setResourceType: function(resourceType) {

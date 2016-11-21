@@ -141,6 +141,10 @@ define([
                         }
                     });
 
+                    if($scope.material.targetGroups) {
+                        $scope.material.targetGroups = $scope.material.targetGroups[0];
+                    }
+
                     serverCallService.makePut('rest/material', $scope.material, saveMaterialSuccess, saveMaterialFail, saveMaterialFinally);
                 }
             };

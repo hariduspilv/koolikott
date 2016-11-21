@@ -27,7 +27,12 @@ define([
                 function addListeners() {
                     $scope.$watch('selectedTargetGroup', function (newGroup, oldGroup) {
                         if (newGroup !== oldGroup) {
-                            parseSelectedTargetGroup();
+                            var diff = getDifference(newGroup, oldGroup);
+                            var isParent = targetGroupService.isParent(diff.item);
+                            if (!isParent) {
+                                updateParents();
+                                parseSelectedTargetGroup();
+                            }
                         }
                     }, false);
 
@@ -56,6 +61,41 @@ define([
                             }
                         }
                     });
+                }
+
+                function getDifference(newArray, oldArray) {
+                    var i = {};
+
+                    if(newArray != null) {
+                        newArray.forEach(function (item) {
+
+                            if(oldArray != null) {
+                                if (oldArray.indexOf(item) === -1) {
+                                    i.removed = false;
+                                    i.item = item;
+                                }
+                            } else {
+                                i.removed = false;
+                                i.item = item;
+                            }
+                        });
+                    }
+                    if(oldArray != null) {
+                        oldArray.forEach(function (item) {
+                            if(newArray != null) {
+                                if (newArray.indexOf(item) === -1) {
+                                    i.removed = true;
+                                    i.item = item;
+                                }
+                            } else {
+                                i.removed = true;
+                                i.item = item;
+                            }
+
+                        });
+                    }
+
+                    return i;
                 }
 
                 function fill() {
@@ -93,6 +133,93 @@ define([
                         if ($scope.groups && $scope.groups.length === 1) {
                             $scope.selectedTargetGroup =  $scope.groups[0].name;
                         }
+                    }
+                }
+
+                $scope.parentClick = function(e) {
+                    if($scope.selectedTargetGroup) {
+                        if($scope.selectedTargetGroup.indexOf(e.$parent.group.label) == -1) {
+                            added = true;
+                        } else {
+                            added = false;
+                        }
+                    } else {
+                        added = true;
+                    }
+
+                    if(added) {
+                        addMissingGrades(e.$parent.group.children);
+                    } else {
+                        removeGrades(e.$parent.group.children);
+                    }
+                    parseSelectedTargetGroup();
+                };
+
+                $scope.getSelectedText = function() {
+                    if ($scope.targetGroups && $scope.targetGroups.length > 0) {
+                        return "you might have selected: " + $scope.targetGroups;
+                    } else {
+                        return "Translation";
+                    }
+                };
+
+                function getMissingGrades(array, items) {
+                    var result = [];
+                    for (var i = 0; i < items.length; i++) {
+                        if (array.indexOf(items[i]) == -1) {
+                            result.push(items[i]);
+                        }
+                    }
+                    return result;
+                }
+
+                function addMissingGrades(items) {
+                    if(!$scope.selectedTargetGroup) {
+                        $scope.selectedTargetGroup = [];
+                    }
+                    var grades = getMissingGrades($scope.selectedTargetGroup,items);
+                    for (var i = 0; i < grades.length; i++) {
+                        $scope.selectedTargetGroup.push(grades[i]);
+                    }
+                }
+
+                function removeGrades(items) {
+                    for (var i = 0; i < items.length; i++) {
+                        var index = $scope.selectedTargetGroup.indexOf(items[i]);
+                        $scope.selectedTargetGroup.splice(index, 1);
+                    }
+                }
+
+                function hasAllChildren(group) {
+                    var i = 0;
+                    var j = 0;
+                    for (i; i < group.children.length; i++) {
+                        if($scope.selectedTargetGroup.indexOf(group.children[i]) != -1) {
+                            j++;
+                        }
+                    }
+                    if (i == j) {
+                        return true;
+                    } else {
+                        return false;
+                    }
+                }
+
+                function updateParents() {
+                    for(var i = 0; i < $scope.groups.length; i++) {
+                        var hasChildren = hasAllChildren($scope.groups[i]);
+
+                        if(hasChildren) {
+                            if($scope.selectedTargetGroup.indexOf($scope.groups[i].label) == -1) {
+                                $scope.selectedTargetGroup.push($scope.groups[i].label);
+                            }
+                        } else {
+                            var index = $scope.selectedTargetGroup.indexOf($scope.groups[i].label);
+                            if(index != -1) {
+                                $scope.selectedTargetGroup.splice(index, 1);
+                            }
+                        }
+
                     }
                 }
 
