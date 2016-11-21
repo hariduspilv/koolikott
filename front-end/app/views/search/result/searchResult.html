@@ -31,12 +31,14 @@
 
             <md-input-container flex-gt-xs="20">
               <md-select ng-model="sortDropdown" placeholder="{{'SORT_PLACEHOLDER' | translate}}">
+                <md-option ng-click="sort('','')" data-translate="RESET_SORT"></md-option>
+
                 <md-option ng-value="sortOption.option" ng-repeat="sortOption in sortOptions">{{ sortOption.option | translate }}</md-option>
               </md-select>
             </md-input-container>
           </div>
 
-          <div data-infinite-scroll="nextPage()" data-infinite-scroll-disabled="searching" data-infinite-scroll-container="scrollContainer">
+          <div data-infinite-scroll="nextPage()" data-infinite-scroll-disabled="searching">
             <div class="card-container">
               <div data-ng-repeat="item in items" class="card-container__item">
                 <div data-ng-if="item.type === '.Material'" data-dop-material-box material="item"></div>

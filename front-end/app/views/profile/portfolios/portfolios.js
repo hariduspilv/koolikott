@@ -6,17 +6,19 @@ define([
             function init() {
                 $scope.url = "rest/portfolio/getByCreator";
                 $scope.params = {
-                    'maxResults': 15,
+                    'maxResults': 20,
                     'username': authenticatedUserService.getUser().username
                 };
 
-                isMyProfilePage();
+                setTitle();
             }
 
-            function isMyProfilePage() {
+            function setTitle() {
                 var user = authenticatedUserService.getUser();
                 if (user && $route.current.params.username === user.username) {
-                    $scope.myProfile = true;
+                    $scope.title = 'MYPROFILE_PAGE_TITLE_PORTFOLIOS';
+                } else {
+                    $scope.title = 'PROFILE_PAGE_TITLE_PORTFOLIOS';
                 }
             }
 

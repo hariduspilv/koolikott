@@ -1,3 +1,18 @@
+<div layout="row" layout-xs="column">
+  <h2 data-ng-if="title" class="md-headline" data-translate="{{title}}" flex></h2>
+
+  <md-input-container data-ng-if="filter" flex-gt-xs="20">
+    <md-select ng-model="sortDropdown" placeholder="{{'SORT_PLACEHOLDER' | translate}}">
+      <md-option ng-click="sort()" data-translate="RESET_SORT"></md-option>
+
+      <md-option ng-value="sortOption.option" ng-click="sort(sortOption.field, sortOption.direction)" ng-repeat="sortOption in sortOptions">
+        {{ sortOption.option | translate}}
+      </md-option>
+    </md-select>
+  </md-input-container>
+</div>
+<h3 data-ng-show="!searching && items.length === 0" data-translate="{{subtitle}}"></h3>
+
 <div data-infinite-scroll="nextPage()" class="card-container">
   <div data-ng-repeat="item in items track by item.id" class="card-container__item">
     <div data-ng-if="item.type === '.Material'" data-dop-material-box material="item"></div>
@@ -7,7 +22,7 @@
 
 <div data-ng-show="!allResultsLoaded() && searching">
   <p data-ng-show="start !== 0" class="md-body-2 md-button md-primary" layout="row" layout-align="center center"
-  data-translate="SEARCH_LOADING"></p>
+     data-translate="SEARCH_LOADING"></p>
   <div data-ng-show="start === 0" layout="column" layout-align="center center" class="min-height-500">
     <md-progress-circular></md-progress-circular>
   </div>

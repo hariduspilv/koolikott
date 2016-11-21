@@ -151,7 +151,7 @@ public class SearchFilter {
 
         private String direction;
 
-        private SortDirection(String direction) {
+        SortDirection(String direction) {
             this.direction = direction;
         }
 

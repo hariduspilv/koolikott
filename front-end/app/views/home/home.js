@@ -8,7 +8,7 @@ define([
             $scope.params = {
                 'sort': 'added',
                 'sortDirection': 'desc',
-                'limit': 15,
+                'limit': 20,
                 'type': 'all'
             };
         }];

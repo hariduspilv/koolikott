@@ -17,20 +17,16 @@ define([
             $scope.paging.thisPage = 0;
 
             $scope.sortOptions = [{
-                option: 'VIEW_COUNT_ASC',
-                field: 'views',
-                direction: 'asc'
-            }, {
-                option: 'VIEW_COUNT_DESC',
-                field: 'views',
+                option: 'MOST_LIKED',
+                field: 'like_score',
                 direction: 'desc'
-            }, {
-                option: 'ADDED_DATE_ASC',
-                field: 'added',
-                direction: 'asc'
             }, {
                 option: 'ADDED_DATE_DESC',
                 field: 'added',
+                direction: 'desc'
+            }, {
+                option: 'VIEW_COUNT_DESC',
+                field: 'views',
                 direction: 'desc'
             }];
 
@@ -70,7 +66,8 @@ define([
                     'start': start
                 };
 
-                if (searchService.getTaxon()) {
+                var taxonsList = searchService.getTaxon()
+                if (taxonsList && taxonsList[0]) {
                     params.taxon = searchService.getTaxon();
                 }
 
@@ -161,24 +158,22 @@ define([
                 $scope.canLoadMore = true;
             };
 
-            $scope.scrollContainer = $rootScope.isEditPortfolioMode ? '#scrollable-content' : '';
-
             $scope.$watch('sortDropdown', function (newValue) {
                 if (!newValue)
                     return;
 
                 for (var i = 0; i < $scope.sortOptions.length; i++) {
                     if ($scope.sortOptions[i].option === newValue) {
-                        sort($scope.sortOptions[i].field, $scope.sortOptions[i].direction);
+                        $scope.sort($scope.sortOptions[i].field, $scope.sortOptions[i].direction);
                     }
                 }
             }, false);
 
-            function sort(field, direction) {
+            $scope.sort = function (field, direction) {
                 searchService.setSort(field);
                 searchService.setSortDirection(direction);
                 $location.url(searchService.getURL());
-            }
+            };
 
             function resetAndSearch(newValue) {
                 $scope.items = null;

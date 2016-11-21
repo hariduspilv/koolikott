@@ -29,7 +29,7 @@
 
             <entity name="TagUpVote" query="select concat(t.name, '_', count(*)) as tag_up_vote from TagUpVote tuv, Tag t where tuv.tag = t.id AND tuv.learningObject = '${LearningObject.id}' AND tuv.deleted = false GROUP BY name" />
 
-            <entity name="LearningObject_Score" query="select 2 * SUM(ul.isLiked) - COUNT(*) as like_score from UserLike ul where ul.learningObject='${LearningObject.id}'" />
+            <entity name="LearningObject_Score" query="select IFNULL(2 * SUM(ul.isLiked) - COUNT(*), 0) as like_score from UserLike ul where ul.learningObject='${LearningObject.id}'" />
 
             <entity name="LearningObject_Recommended" query="select r.added as recommendation_timestamp, if (lo.recommendation is not null, 1, 0) as recommended from Recommendation r right join LearningObject lo on r.id = lo.recommendation where lo.id = '${LearningObject.id}'" />
             

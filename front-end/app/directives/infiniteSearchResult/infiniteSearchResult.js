@@ -2,118 +2,131 @@ define([
     'app',
     'services/serverCallService',
     'ngInfiniteScroll',
+    'services/searchService',
     'directives/materialBox/materialBox',
     'directives/portfolioBox/portfolioBox'
 ], function (app) {
-    app.directive('dopInfiniteSearchResult', ['serverCallService',
-        function () {
-            return {
-                scope: {
-                    params: '=',
-                    url: '=',
-                    items: '=',
-                    accessor: '='
-                },
-                templateUrl: 'directives/infiniteSearchResult/infiniteSearchResult.html',
-                controller: function ($scope, serverCallService) {
-                    $scope.start = 0;
-                    $scope.searching = false;
-                    $scope.accessor = {};
+    app.directive('dopInfiniteSearchResult', ['serverCallService', function () {
+        return {
+            scope: {
+                params: '=',
+                url: '=',
+                title: '=',
+                subtitle: '=',
+                filter: '='
+            },
+            templateUrl: 'directives/infiniteSearchResult/infiniteSearchResult.html',
+            controller: function ($scope, $location, serverCallService, searchService) {
+                $scope.searching = false;
+                $scope.accessor = {};
+                var hasInitated = false;
+                var searchCount = 0;
 
-                    const FIRST_SEARCH_AMOUNT = 20; // on first load 20 items should be loaded
+                $scope.sortOptions = [{
+                    option: 'MOST_LIKED',
+                    field: 'like_score',
+                    direction: 'desc'
+                }, {
+                    option: 'ADDED_DATE_DESC',
+                    field: 'added',
+                    direction: 'desc'
+                }, {
+                    option: 'VIEW_COUNT_DESC',
+                    field: 'views',
+                    direction: 'desc'
+                }];
 
-                    var isFirstLoad = true;
-                    var hasInitated = false;
-                    var searchCount = 0;
-                    var expectedItemCount = FIRST_SEARCH_AMOUNT;
+                // Pagination variables
+                var maxResults = $scope.params ? $scope.params.maxResults || $scope.params.limit : null;
+                var expectedItemCount = maxResults;
+                var initialParams = clone($scope.params);
 
-                    // Pagination variables
-                    var maxResults = $scope.params ? $scope.params.maxResults || $scope.params.limit : null;
-                    $scope.items = [];
+                $scope.items = [];
 
-                    function init() {
-                        if (isEmpty($scope.url)) $scope.url = "rest/search";
-                        if (!$scope.params) {
-                            $scope.params = {};
-                        }
+                function init() {
+                    if (isEmpty($scope.url)) $scope.url = "rest/search";
+                    if (!$scope.params) {
+                        $scope.params = {};
+                    }
 
+                    search();
+                }
+
+                $scope.nextPage = function () {
+                    if (hasInitated) {
                         search();
                     }
+                    hasInitated = true;
+                };
 
-                    $scope.nextPage = function () {
-                        if (hasInitated) {
-                            search();
-                        }
-                        hasInitated = true;
-                    };
+                $scope.allResultsLoaded = function () {
+                    return allResultsLoaded();
+                };
 
-                    $scope.allResultsLoaded = function () {
-                        return allResultsLoaded();
-                    };
-
-                    function allResultsLoaded() {
-                        return $scope.items.length >= $scope.totalResults;
-                    }
-
-
-                    function search() {
-                        if ($scope.searching || allResultsLoaded()) return;
-                        $scope.searching = true;
-
-                        if ($scope.items.length === 0 && searchCount === 0) {
-                            $scope.start = 0;
-                        } else {
-                            // because first search is 20 items
-                            // +5 has to be added to every search
-                            $scope.start = searchCount * maxResults + 5;
-                        }
-
-                        if (isFirstLoad) {
-                            $scope.params.limit = FIRST_SEARCH_AMOUNT;
-                            $scope.params.maxResults = FIRST_SEARCH_AMOUNT;
-                        } else {
-                            $scope.params.limit = 15;
-                            $scope.params.maxResults = 15;
-                        }
-
-                        $scope.params.start = $scope.start;
-
-                        serverCallService.makeGet($scope.url, $scope.params, searchSuccess, searchFail);
-                    }
-
-                    function searchSuccess(data) {
-                        if (!data || !data.items) {
-                            searchFail();
-                        } else {
-                            $scope.items.push.apply($scope.items, data.items);
-                            $scope.totalResults = data.totalResults;
-
-                            $scope.searching = false;
-                            $scope.accessor.ready = true;
-
-                            isFirstLoad = false;
-
-                            searchMoreIfNecessary();
-                        }
-                    }
-
-                    function searchFail() {
-                        console.log('Search failed.');
-                        $scope.searching = false;
-                        $scope.accessor.ready = true;
-                    }
-
-                    function searchMoreIfNecessary() {
-                        searchCount++;
-                        if ($scope.items.length < expectedItemCount && !allResultsLoaded()) {
-                            search();
-                        } else {
-                            expectedItemCount += maxResults;
-                        }
-                    }
-
-                    init();
+                function allResultsLoaded() {
+                    return $scope.items.length >= $scope.totalResults;
                 }
-            };
-        }]);
+
+
+                function search(newSearch) {
+                    if ($scope.searching) return;
+                    if (allResultsLoaded() && !newSearch) return;
+                    $scope.searching = true;
+
+                    if (searchCount === 0) {
+                        $scope.start = 0;
+                    } else {
+                        $scope.start = searchCount * maxResults;
+                    }
+                    $scope.params.limit = maxResults;
+                    $scope.params.maxResults = maxResults;
+                    $scope.params.start = $scope.start;
+
+                    serverCallService.makeGet($scope.url, $scope.params, searchSuccess, searchFail);
+                }
+
+                function searchSuccess(data) {
+                    if (!data || !data.items) {
+                        searchFail();
+                        return;
+                    }
+                    if (data.start === 0) {
+                        $scope.items = data.items;
+                    } else {
+                        $scope.items.push.apply($scope.items, data.items);
+                    }
+                    $scope.totalResults = data.totalResults;
+
+                    $scope.searching = false;
+                    searchCount++;
+
+                    searchMoreIfNecessary();
+                }
+
+                function searchFail() {
+                    console.log('Search failed.');
+                    $scope.searching = false;
+                }
+
+                function searchMoreIfNecessary() {
+                    if ($scope.items.length < expectedItemCount && !allResultsLoaded()) {
+                        search();
+                    } else {
+                        expectedItemCount += maxResults;
+                    }
+                }
+
+                $scope.sort = function (field, direction) {
+                    field ? $scope.params.sort = field : $scope.params.sort = initialParams.sort;
+                    direction ? $scope.params.sortDirection = direction : $scope.params.sortDirection = initialParams.sortDirection;
+                    searchCount = 0;
+                    expectedItemCount = maxResults;
+
+                    search(true);
+                };
+
+                init();
+            }
+        };
+    }]);
 });
