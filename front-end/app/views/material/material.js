@@ -22,7 +22,8 @@ define([
     'services/toastService',
     'services/storageService',
     'services/targetGroupService',
-    'directives/embeddedMaterial/embeddedMaterial'
+    'directives/embeddedMaterial/embeddedMaterial',
+    'directives/share/share'
 ], function (app, angularAMD) {
     return ['$scope', 'serverCallService', '$route', 'translationService', '$rootScope', 'searchService', '$location', 'alertService', 'authenticatedUserService', 'dialogService', 'toastService', 'iconService', '$mdDialog', 'storageService', 'targetGroupService',
         function ($scope, serverCallService, $route, translationService, $rootScope, searchService, $location, alertService, authenticatedUserService, dialogService, toastService, iconService, $mdDialog, storageService, targetGroupService) {

@@ -253,6 +253,13 @@ define([
         }]);
     }
 
+    function setDefaultShareParams ($rootScope, $location) {
+        $rootScope.shareTitle = 'e-Koolikott';
+        $rootScope.shareUrl = $location.absUrl();
+        $rootScope.shareDescription = 'e-Koolikott is a single web environment comprising digital learning material arranged by keywords on the basis of the curriculum. The portal allows finding educational materials located in different digital tool collections. The primary purpose of e-Koolikott is to allow accessing digital learning materials from a single point - the user no longer needs to search for materials in different portals.'
+        $rootScope.shareImage = '';
+    }
+
     app.run(function ($rootScope, metadataService, APP_VERSION) {
         $rootScope.APP_VERSION = APP_VERSION;
         $rootScope.hasAppInitated = false;
@@ -281,6 +288,10 @@ define([
             $rootScope.isEditPortfolioPage = path === '/portfolio/edit';
             $rootScope.isViewHomePage = path === '/';
             $rootScope.isViewMaterialPage = path === '/material';
+
+            if (!$rootScope.isViewPortforlioPage || !$rootScope.isViewMaterialPage) {
+                setDefaultShareParams($rootScope, $location);
+            }
 
             if (user && $location.path().indexOf('/' + user.username) != -1) {
                 $rootScope.isViewUserPage = true;

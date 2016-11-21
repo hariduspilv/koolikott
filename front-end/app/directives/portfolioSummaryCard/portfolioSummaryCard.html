@@ -2,10 +2,15 @@
     <md-card-content>
         <div layout="column" layout-gt-xs="row" >
           <!-- left large side  -->
-            <div flex flex-gt-xs="75" layout="column">
+            <div flex flex-gt-xs="75" layout="column"  class="layout-relative">
               <!-- left headline -->
                 <div layout="row">
                     <h1 flex data-ng-bind="portfolio.title"></h1>
+
+                    <div dop-share
+                    data-title="portfolio.title"
+                    data-description="portfolio.summary"
+                    data-object="portfolio"></div>
 
                   <md-menu>
                         <md-button class="md-icon-button" ng-click="$mdOpenMenu()" id="material-menu">
