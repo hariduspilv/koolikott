@@ -36,6 +36,7 @@ public abstract class Taxon {
     @Column(nullable = false, insertable = false)
     private String name;
 
+    @JsonIgnore
     @Transient
     private Set<? extends Taxon> children;
 
