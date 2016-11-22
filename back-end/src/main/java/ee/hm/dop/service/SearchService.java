@@ -62,7 +62,7 @@ public class SearchService {
 
         searchFilter.setVisibility(getSearchVisibility(loggedInUser));
         Long resultCount;
-        if (limit == 0) resultCount = null;
+        if (limit != null && limit == 0) resultCount = null;
         else resultCount = limit;
 
         SearchResponse searchResponse = doSearch(query, start, resultCount, searchFilter);
