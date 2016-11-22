@@ -6,7 +6,9 @@
     </label>
     <md-select multiple data-ng-model="selectedTargetGroup" name="targetGroup" md-selected-text="getSelectedText()" md-on-open="update()" md-no-asterisk ng-required="isRequired.trigger" aria-label="Vanuse valiku menüü">
       <div data-ng-repeat="group in groups">
-        <md-option value="{{group.label}}" data-translate="TARGET_GROUP_{{group.label}}" data-ng-click="parentClick(this)" class="select__parent"></md-option>
+        <md-option value="{{group.label}}" data-ng-click="parentClick(this)" class="select__parent">
+          <span data-translate="TARGET_GROUP_{{group.label}}"></span>
+        </md-option>
         <md-option class="stepped-select select__child" data-ng-repeat="child in group.children" value="{{child}}">
           <span data-translate="TARGET_GROUP_{{child.toUpperCase()}}"/>
         </md-option>

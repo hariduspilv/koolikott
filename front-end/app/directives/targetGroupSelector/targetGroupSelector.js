@@ -121,7 +121,7 @@ define([
                         $scope.selectedTargetGroup = [];
                     }
 
-                    if($scope.selectedTargetGroup.indexOf(e.$parent.group.label) == -1) {
+                    if(e.group && $scope.selectedTargetGroup.indexOf(e.group.label) == -1) {
                         added = true;
                     } else if ($scope.selectedTargetGroup === []){
                         added = true;
@@ -130,9 +130,9 @@ define([
                     }
 
                     if(added) {
-                        addMissingGrades(e.$parent.group.children);
+                        addMissingGrades(e.group.children);
                     } else {
-                        removeGrades(e.$parent.group.children);
+                        removeGrades(e.group.children);
                     }
 
                     parseSelectedTargetGroup();

@@ -4,69 +4,30 @@
 
 .select__child {
   font-weight: normal;
-  padding-left: 40px;
+  padding-left: 70px !important;
+}
 
-  .md-container {
-    display: none !important;
-  }
+md-select-menu[multiple] md-option.select__child .md-container {
+  margin-left: 40px;
 }
 
 .select__parent {
   font-weight: bold;
-  padding-left: 20px !important;
 }
 
 md-select-menu[multiple] {
   overflow-y: visible;
-}
 
-md-select-menu[multiple]::after {
-  content: "X";
-  font-size: 1.4em;
-  position: absolute;
-  top: -30px;
-  right: 0px;
-  background: rgb(238, 238, 238);
-  border-radius: 50%;
-  width: 1.2em;
-  text-align: center;
-  pointer-events: none;
-}
-
-md-select-menu[multiple] md-option[selected=selected]::after {
-  content: "check_box";
-  font-family: 'Material Icons';
-  font-weight: normal;
-  font-style: normal;
-
-  position: absolute;
-  right: 16px;
-  top: 16px;
-  display: block;
-  width: 1em;
-  height: 1em;
-  line-height: 1;
-  text-transform: none;
-  letter-spacing: normal;
-  -webkit-font-smoothing: antialiased;
-  text-rendering: optimizeLegibility;
-}
-
-md-select-menu[multiple] md-option::after {
-  content: "check_box_outline_blank";
-  font-family: 'Material Icons';
-  font-weight: normal;
-  font-style: normal;
-
-  position: absolute;
-  right: 16px;
-  top: 16px;
-  display: block;
-  width: 1em;
-  height: 1em;
-  line-height: 1;
-  text-transform: none;
-  letter-spacing: normal;
-  -webkit-font-smoothing: antialiased;
-  text-rendering: optimizeLegibility;
+  &:after {
+    content: "";
+    font-size: 1.4em;
+    position: absolute;
+    top: -30px;
+    right: 0;
+    background: rgb(238, 238, 238) url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxOCIgaGVpZ2h0PSIxOCIgdmlld0JveD0iMCAwIDE4IDE4Ij48cGF0aCBkPSJNMTQuNTMgNC41M2wtMS4wNi0xLjA2TDkgNy45NCA0LjUzIDMuNDcgMy40NyA0LjUzIDcuOTQgOWwtNC40NyA0LjQ3IDEuMDYgMS4wNkw5IDEwLjA2bDQuNDcgNC40NyAxLjA2LTEuMDZMMTAuMDYgOXoiLz48L3N2Zz4=) no-repeat center center;
+    width: 1.2em;
+    height: 1.2em;
+    border-radius: 99em;
+    pointer-events: none;
+  }
 }
