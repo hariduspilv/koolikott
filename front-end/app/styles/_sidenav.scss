@@ -19,13 +19,7 @@ md-sidenav {
 
 md-sidenav {
   md-toolbar {
-    padding: 13px 16px 5px;
-    min-height: 48px;
-  }
-  @media (min-width: $layout-breakpoint-sm) {
-    md-toolbar {
-      min-height: auto;
-    }
+    padding: 0 22px;
   }
   @media (min-width: $layout-breakpoint-md) {
     md-toolbar {
