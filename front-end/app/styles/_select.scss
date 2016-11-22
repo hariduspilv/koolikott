@@ -1,10 +1,19 @@
 .stepped-select {
   font-weight: bold;
+}
 
-  &.child {
-    font-weight: normal;
-    padding-left: 40px;
+.select__child {
+  font-weight: normal;
+  padding-left: 40px;
+
+  .md-container {
+    display: none !important;
   }
+}
+
+.select__parent {
+  font-weight: bold;
+  padding-left: 20px !important;
 }
 
 md-select-menu[multiple] {

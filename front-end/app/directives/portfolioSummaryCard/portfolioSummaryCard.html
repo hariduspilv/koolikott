@@ -100,7 +100,7 @@
                       </small>
                       <br/>
                             <span class="hide-overflow" data-ng-repeat="targetGroup in getTargetGroups()">
-                                {{'TARGET_GROUP_' + targetGroup | translate}}{{$last ? '' : ', '}}
+                                <span data-ng-if="$index == 0">{{'TARGET_GROUP_' + targetGroup | translate}}</span>
                             </span>
                             <span class="hide-overflow" data-ng-if="!portfolio.targetGroups || !portfolio.targetGroups.length"
                                   data-translate="UNKNOWN">Unknown</span>

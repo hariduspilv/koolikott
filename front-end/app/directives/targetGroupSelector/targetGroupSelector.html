@@ -1,32 +1,13 @@
-<!--<form name="targetGroupForm">
-    <md-input-container class="md-block">
-        <label>
-          <span data-translate="DETAILED_SEARCH_TARGET_GROUP"></span>
-          <span data-ng-if="isRequired.trigger">*</span>
-        </label>
-        <md-select multiple data-ng-model="selectedTargetGroup" name="targetGroup" md-no-asterisk ng-required="isRequired.trigger" aria-label="Vanuse valiku menüü">
-            <md-option class="stepped-select" data-ng-class="{ 'child' : !group.parent }"
-                       data-ng-repeat="group in groups" value="{{group.name}}">
-                <span data-translate="TARGET_GROUP_{{group.name.toUpperCase()}}"/>
-            </md-option>
-        </md-select>
-        <div ng-messages="targetGroupForm.targetGroup.$error"
-             data-ng-show="isRequired.trigger && (targetGroupForm.targetGroup.$touched || markRequired) && !selectedTargetGroup">
-            <div ng-message="required" data-ng-if="isReady" class="validation-messages" data-translate="PORTFOLIO_AGE_GROUP_REQUIRED"></div>
-        </div>
-    </md-input-container>
-</form>-->
-
 <form name="targetGroupForm">
   <md-input-container class="md-block">
     <label>
       <span data-translate="DETAILED_SEARCH_TARGET_GROUP"></span>
       <span data-ng-if="isRequired.trigger">*</span>
     </label>
-    <md-select multiple data-ng-model="selectedTargetGroup" name="targetGroup" md-no-asterisk ng-required="isRequired.trigger" aria-label="Vanuse valiku menüü">
+    <md-select multiple data-ng-model="selectedTargetGroup" name="targetGroup" md-selected-text="getSelectedText()" md-on-open="update()" md-no-asterisk ng-required="isRequired.trigger" aria-label="Vanuse valiku menüü">
       <div data-ng-repeat="group in groups">
-        <md-option value="{{group.label}}" data-translate="TARGET_GROUP_{{group.label}}" data-ng-click="parentClick(this)"></md-option>
-        <md-option class="stepped-select" class="child" data-ng-repeat="child in group.children" value="{{child}}">
+        <md-option value="{{group.label}}" data-translate="TARGET_GROUP_{{group.label}}" data-ng-click="parentClick(this)" class="select__parent"></md-option>
+        <md-option class="stepped-select select__child" data-ng-repeat="child in group.children" value="{{child}}">
           <span data-translate="TARGET_GROUP_{{child.toUpperCase()}}"/>
         </md-option>
       </div>
@@ -37,28 +18,3 @@
     </div>
   </md-input-container>
 </form>
-
-<!--
-<form name="targetGroupForm">
-  <md-input-container class="md-block">
-    <label>
-      <span data-translate="DETAILED_SEARCH_TARGET_GROUP"></span>
-      <span data-ng-if="isRequired.trigger">*</span>
-    </label>
-    <md-select multiple="true" data-ng-model="selectedTargetGroup" name="targetGroup" md-no-asterisk
-               ng-required="isRequired.trigger" aria-label="Vanuse valiku menüü" md-selected-text="getSelectedText()">
-      <md-optgroup ng-repeat="item in groops">
-        <md-checkbox aria-label="Select All" ng-model="item.checked" ng-change="call(this)"><span data-translate="TARGET_GROUP_{{item.label}}"></span></md-checkbox>
-        <md-option class="stepped-select" data-ng-class="{ 'child' : !group.parent }"
-                   data-ng-repeat="group in item.ages" value="{{group}}">
-          <span data-translate="TARGET_GROUP_{{group.toUpperCase()}}"/>
-        </md-option>
-      </md-optgroup>
-    </md-select>
-    <div ng-messages="targetGroupForm.targetGroup.$error"
-         data-ng-show="isRequired.trigger && (targetGroupForm.targetGroup.$touched || markRequired) && !selectedTargetGroup">
-      <div ng-message="required" data-ng-if="isReady" class="validation-messages"
-           data-translate="PORTFOLIO_AGE_GROUP_REQUIRED"></div>
-    </div>
-  </md-input-container>
-</form>-->

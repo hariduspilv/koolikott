@@ -11,7 +11,7 @@ define([
                 markRequired: '='
             },
             templateUrl: 'directives/targetGroupSelector/targetGroupSelector.html',
-            controller: function ($scope, $rootScope, $timeout, targetGroupService) {
+            controller: function ($scope, $rootScope, $timeout, targetGroupService, $translate) {
                 init();
 
                 function init() {
@@ -33,20 +33,6 @@ define([
                                 updateParents();
                                 parseSelectedTargetGroup();
                             }
-                        }
-                    }, false);
-
-                    $scope.$watch('targetGroups', function (newGroups, oldGroups) {
-                        if (newGroups !== oldGroups) {
-                            // Check that input is an array
-                            if (!Array.isArray(newGroups)) {
-                                $scope.targetGroups = [];
-                                if (newGroups) {
-                                    $scope.targetGroups = newGroups;
-                                }
-                            }
-
-                            //selectValue();
                         }
                     }, false);
 
@@ -99,13 +85,7 @@ define([
                 }
 
                 function fill() {
-                    var educationalContext = $rootScope.taxonUtils.getEducationalContext($scope.taxon);
-
-                    if (educationalContext) {
-                        $scope.groups = targetGroupService.getByEducationalContext(educationalContext);
-                    } else {
-                        $scope.groups = targetGroupService.getAll();
-                    }
+                    $scope.groups = targetGroupService.getAll();
                 }
 
                 function parseSelectedTargetGroup() {
@@ -121,8 +101,8 @@ define([
 
                     if ($scope.groups) {
                         $scope.groups.forEach(function (group) {
-                            if (group && group.name) {
-                                groupNames.push(group.name);
+                            if (group) {
+                                groupNames.push(group);
                             }
                         });
                     }
@@ -131,12 +111,15 @@ define([
                         $scope.selectedTargetGroup = null;
                         $scope.targetGroups = [];
                         if ($scope.groups && $scope.groups.length === 1) {
-                            $scope.selectedTargetGroup =  $scope.groups[0].name;
+                            $scope.selectedTargetGroup =  $scope.groups;
                         }
                     }
                 }
 
                 $scope.parentClick = function(e) {
+                    if(!$scope.selectedTargetGroup) {
+                        $scope.selectedTargetGroup = [];
+                    }
 
                     if($scope.selectedTargetGroup.indexOf(e.$parent.group.label) == -1) {
                         added = true;
@@ -151,14 +134,16 @@ define([
                     } else {
                         removeGrades(e.$parent.group.children);
                     }
+
                     parseSelectedTargetGroup();
                 };
 
+                // Reduced text for select label
                 $scope.getSelectedText = function() {
                     if ($scope.targetGroups && $scope.targetGroups.length > 0) {
-                        return "you might have selected: " + $scope.targetGroups;
+                        return targetGroupService.getSelectedText($scope.targetGroups);
                     } else {
-                        return "Translation";
+                        return $translate.instant('DETAILED_SEARCH_TARGET_GROUP');
                     }
                 };
 
@@ -198,15 +183,22 @@ define([
                                 $scope.selectedTargetGroup.push($scope.groups[i].label);
                             }
                         } else {
-                            var index = $scope.selectedTargetGroup.indexOf($scope.groups[i].label);
-                            if(index != -1) {
-                                $scope.selectedTargetGroup.splice(index, 1);
+                            if($scope.selectedTargetGroup) {
+                                var index = $scope.selectedTargetGroup.indexOf($scope.groups[i].label);
+                                if(index != -1) {
+                                    $scope.selectedTargetGroup.splice(index, 1);
+                                }
                             }
                         }
 
                     }
                 }
 
+                $scope.update = function() {
+                    if(!$scope.selectedTargetGroup) {
+                        $scope.selectedTargetGroup = targetGroupService.getLabelByTargetGroups($scope.targetGroups);
+                    }
+                }
             }
         };
     });
