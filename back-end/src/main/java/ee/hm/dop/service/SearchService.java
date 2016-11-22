@@ -2,8 +2,6 @@ package ee.hm.dop.service;
 
 import static ee.hm.dop.service.SolrService.getTokenizedQueryString;
 import static java.lang.String.format;
-import static java.lang.String.join;
-import static org.apache.commons.lang3.StringUtils.isBlank;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -15,6 +13,7 @@ import javax.inject.Inject;
 
 import com.google.common.collect.ImmutableSet;
 import ee.hm.dop.dao.LearningObjectDAO;
+import ee.hm.dop.dao.UserFavoriteDAO;
 import ee.hm.dop.model.CrossCurricularTheme;
 import ee.hm.dop.model.KeyCompetence;
 import ee.hm.dop.model.Language;
@@ -25,6 +24,7 @@ import ee.hm.dop.model.SearchResult;
 import ee.hm.dop.model.Searchable;
 import ee.hm.dop.model.TargetGroup;
 import ee.hm.dop.model.User;
+import ee.hm.dop.model.UserFavorite;
 import ee.hm.dop.model.Visibility;
 import ee.hm.dop.model.solr.Document;
 import ee.hm.dop.model.solr.Response;
@@ -37,7 +37,6 @@ import ee.hm.dop.model.taxon.Subject;
 import ee.hm.dop.model.taxon.Subtopic;
 import ee.hm.dop.model.taxon.Taxon;
 import ee.hm.dop.model.taxon.Topic;
-import ee.hm.dop.tokenizer.DOPSearchStringTokenizer;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.solr.client.solrj.util.ClientUtils;
 
@@ -55,6 +54,9 @@ public class SearchService {
     @Inject
     private LearningObjectDAO learningObjectDAO;
 
+    @Inject
+    private UserFavoriteDAO userFavoriteDAO;
+
     public SearchResult search(String query, long start, Long limit, SearchFilter searchFilter, User loggedInUser) {
         SearchResult searchResult = new SearchResult();
 
@@ -65,14 +67,14 @@ public class SearchService {
 
         if (response != null) {
             List<Document> documents = response.getDocuments();
-            List<Searchable> unsortedSearchable = retrieveSearchedItems(documents);
+            List<Searchable> unsortedSearchable = retrieveSearchedItems(documents, loggedInUser);
             List<Searchable> sortedSearchable = sortSearchable(documents, unsortedSearchable);
 
             searchResult.setItems(sortedSearchable);
             searchResult.setStart(response.getStart());
             // "- documents.size() + sortedSearchable.size()" needed in case
             // SearchEngine and DB are not sync because of re-indexing time.
-            if(limit == null || limit > 0) {
+            if (limit == null || limit > 0) {
                 searchResult.setTotalResults(response.getTotalResults() - documents.size() + sortedSearchable.size());
             } else if (limit == 0) {
                 //When limit is 0 - only getting metainfo
@@ -94,7 +96,7 @@ public class SearchService {
         return visibility;
     }
 
-    private List<Searchable> retrieveSearchedItems(List<Document> documents) {
+    private List<Searchable> retrieveSearchedItems(List<Document> documents, User loggedInUser) {
         List<Long> learningObjectIds = new ArrayList<>();
         for (Document document : documents) {
             learningObjectIds.add(document.getId());
@@ -103,7 +105,13 @@ public class SearchService {
         List<Searchable> unsortedSearchable = new ArrayList<>();
 
         if (!learningObjectIds.isEmpty()) {
-            learningObjectDAO.findAllById(learningObjectIds).forEach(unsortedSearchable::add);
+            learningObjectDAO.findAllById(learningObjectIds).forEach(searchable -> {
+                UserFavorite userFavorite = userFavoriteDAO.findFavoriteByUserAndLearningObject(searchable.getId(), loggedInUser);
+                if (userFavorite != null && userFavorite.getId() != null) searchable.setFavorite(true);
+                else searchable.setFavorite(false);
+
+                unsortedSearchable.add(searchable);
+            });
         }
 
         return unsortedSearchable;

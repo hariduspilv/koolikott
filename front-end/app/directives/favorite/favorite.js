@@ -11,10 +11,12 @@ define([
             },
             templateUrl: 'directives/favorite/favorite.html',
             controller: function ($scope, serverCallService, authenticatedUserService) {
-                $scope.hasFavorited = false;
-
-                if(isLoggedIn() && $scope.learningObject) {
-                    serverCallService.makeGet("rest/learningObject/favorite", {'id': $scope.learningObject.id}, getFavoriteSuccess, getFavoriteFail);
+                if ($scope.learningObject && isLoggedIn()) {
+                    if ($scope.learningObject.favorite) {
+                        $scope.hasFavorited = true;
+                    } else if ($scope.learningObject.favorite == null) {
+                        serverCallService.makeGet("rest/learningObject/favorite", {'id': $scope.learningObject.id}, getFavoriteSuccess, getFavoriteFail);
+                    }
                 }
 
                 function getFavoriteSuccess(data) {

@@ -14,6 +14,7 @@ import java.util.Collections;
 import java.util.List;
 
 import ee.hm.dop.dao.LearningObjectDAO;
+import ee.hm.dop.dao.UserFavoriteDAO;
 import ee.hm.dop.model.CrossCurricularTheme;
 import ee.hm.dop.model.KeyCompetence;
 import ee.hm.dop.model.Language;
@@ -37,8 +38,6 @@ import ee.hm.dop.model.taxon.Specialization;
 import ee.hm.dop.model.taxon.Subject;
 import ee.hm.dop.model.taxon.Subtopic;
 import ee.hm.dop.model.taxon.Topic;
-import org.apache.solr.client.solrj.SolrClient;
-import org.apache.solr.client.solrj.response.QueryResponse;
 import org.easymock.EasyMockRunner;
 import org.easymock.Mock;
 import org.easymock.TestSubject;
@@ -53,6 +52,9 @@ public class SearchServiceTest {
 
     @Mock
     private LearningObjectDAO learningObjectDAO;
+
+    @Mock
+    private UserFavoriteDAO userFavoriteDAO;
 
     @TestSubject
     private SearchService searchService = new SearchService();
@@ -952,7 +954,7 @@ public class SearchServiceTest {
     }
 
     private void testSearch(String query, String tokenizedQuery, String expectedSort, List<Searchable> searchables,
-            long start, Long limit, long totalResults, SearchFilter searchFilter, User loggedInUser) {
+                            long start, Long limit, long totalResults, SearchFilter searchFilter, User loggedInUser) {
         SearchResponse searchResponse = createSearchResponseWithDocuments(searchables, start, totalResults);
 
         List<LearningObject> learningObjects = new ArrayList<>();
@@ -970,6 +972,9 @@ public class SearchServiceTest {
         }
 
         expect(learningObjectDAO.findAllById(learningObjectIdentifiers)).andReturn(learningObjects);
+        for (Long id : learningObjectIdentifiers) {
+            expect(userFavoriteDAO.findFavoriteByUserAndLearningObject(id, loggedInUser)).andReturn(null);
+        }
 
         replayAll();
 
@@ -983,7 +988,7 @@ public class SearchServiceTest {
     }
 
     private void testSearch(String query, String tokenizedQuery, String expectedSort, List<Searchable> searchables,
-            long start, Long limit, SearchFilter searchFilter) {
+                            long start, Long limit, SearchFilter searchFilter) {
         if (limit == null) {
             testSearch(query, tokenizedQuery, expectedSort, searchables, start, null, searchables.size(),
                     searchFilter, null);
@@ -1049,11 +1054,11 @@ public class SearchServiceTest {
     }
 
     private void replayAll() {
-        replay(solrEngineService, learningObjectDAO);
+        replay(solrEngineService, learningObjectDAO, userFavoriteDAO);
     }
 
     private void verifyAll() {
-        verify(solrEngineService, learningObjectDAO);
+        verify(solrEngineService, learningObjectDAO, userFavoriteDAO);
     }
 
     private Material createMaterial(Long id) {

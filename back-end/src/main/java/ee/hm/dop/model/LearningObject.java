@@ -23,6 +23,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.OrderBy;
+import javax.persistence.Transient;
 import javax.persistence.UniqueConstraint;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -147,6 +148,9 @@ public abstract class LearningObject implements Searchable {
     @Column
     @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
     private DateTime lastInteraction;
+
+    @Transient
+    private Boolean favorite;
 
     public Long getId() {
         return id;
@@ -283,5 +287,13 @@ public abstract class LearningObject implements Searchable {
 
     public int getImproper() {
         return improper;
+    }
+
+    public Boolean getFavorite() {
+        return favorite;
+    }
+
+    public void setFavorite(Boolean favorite) {
+        this.favorite = favorite;
     }
 }

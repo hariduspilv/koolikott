@@ -20,8 +20,4 @@ INSERT INTO Translation(translationGroup, translationKey, translation) VALUES (1
 INSERT INTO Translation(translationGroup, translationKey, translation) VALUES (3,'BUTTON_SHARE','Share');
 INSERT INTO Translation(translationGroup, translationKey, translation) VALUES (2,'BUTTON_SHARE','Джагана');
 
-INSERT INTO Translation(translationGroup, translationKey, translation) VALUES (1,'BUTTON_CANCEL','Katkesta');
-INSERT INTO Translation(translationGroup, translationKey, translation) VALUES (3,'BUTTON_CANCEL','Cancel');
-INSERT INTO Translation(translationGroup, translationKey, translation) VALUES (2,'BUTTON_CANCEL','Oтключать');
-
 SET foreign_key_checks = 1;
