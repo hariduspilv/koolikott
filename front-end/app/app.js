@@ -344,7 +344,7 @@ define([
                 $rootScope.selectedMaterials = null;
             }
 
-            if ($rootScope.isViewPortforlioPage || $rootScope.isEditPortfolioPage) {
+            if (window.innerWidth > 1280 && ($rootScope.isViewPortforlioPage || $rootScope.isEditPortfolioPage)) {
                 $rootScope.sideNavOpen = true;
             }
 
