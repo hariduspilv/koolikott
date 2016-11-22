@@ -344,6 +344,10 @@ define([
                 $rootScope.selectedMaterials = null;
             }
 
+            if ($rootScope.isViewPortforlioPage || $rootScope.isEditPortfolioPage) {
+                $rootScope.sideNavOpen = true;
+            }
+
             $rootScope.hasAppInitated = true;
         });
     });

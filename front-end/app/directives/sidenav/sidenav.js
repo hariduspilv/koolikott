@@ -67,7 +67,7 @@ define([
                 };
 
                 if (window.innerWidth > 1280) {
-                    $scope.sideNavOpen = true;
+                    $rootScope.sideNavOpen = true;
                 }
 
                 $scope.status = true;
