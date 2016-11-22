@@ -37,9 +37,14 @@ public class PictureServiceTest {
         Picture picture = new OriginalPicture();
         picture.setData(image1);
 
+        Thumbnail thumbnail = new Thumbnail();
+        thumbnail.setData(image1);
+
         expect(pictureDAO.findByName(IMAGE1_SHA1_HASH)).andReturn(null);
+        expect(thumbnailDAO.update(EasyMock.anyObject(Thumbnail.class))).andReturn(new Thumbnail()).times(4);
         expect(pictureDAO.update((OriginalPicture) picture)).andReturn((OriginalPicture) picture);
 
+        replay(thumbnailDAO);
         replay(pictureDAO);
 
         Picture createdPicture = pictureService.create(picture);
@@ -50,28 +55,6 @@ public class PictureServiceTest {
         assertArrayEquals(picture.getData(), createdPicture.getData());
     }
 
-
-    @Test
-    public void createThumbnail() {
-        byte[] image1 = read(getFileAsStream("images/image1.jpg"), 1);
-
-        Picture picture = new OriginalPicture();
-        picture.setName(IMAGE1_SHA1_HASH);
-        picture.setData(image1);
-        Thumbnail thumbnail = (Thumbnail) pictureService.getThumbnailFromPicture(picture);
-
-        expect(thumbnailDAO.findByName(IMAGE1_SHA1_HASH)).andReturn(null);
-        expect(thumbnailDAO.update(EasyMock.anyObject(Thumbnail.class))).andReturn(new Thumbnail());
-
-        replay(pictureDAO);
-
-        Picture createdPicture = pictureService.createThumbnail(picture);
-
-        verify(pictureDAO);
-
-        assertNotNull(createdPicture.getName());
-        assertArrayEquals(thumbnail.getData(), createdPicture.getData());
-    }
 
     @Test
     public void createWhenHashMatches() {
@@ -85,10 +68,8 @@ public class PictureServiceTest {
         picture.setData(image1);
 
         expect(pictureDAO.findByName(IMAGE1_SHA1_HASH)).andReturn(existingPicture).anyTimes();
-        expect(thumbnailDAO.findByName(IMAGE1_SHA1_HASH)).andReturn(existingPicture);
 
         replay(pictureDAO);
-        replay(thumbnailDAO);
 
         Picture createdPicture = pictureService.create(picture);
 

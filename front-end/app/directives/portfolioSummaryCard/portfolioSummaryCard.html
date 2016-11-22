@@ -120,23 +120,27 @@
 
       </div>
 
-      <!-- right small side  -->
-      <div layout="column" flex flex-gt-xs="25" class="divider-left" layout-align="start start">
-        <div data-ng-if="isLoggedIn() && !isRestricted()" data-dop-favorite data-learning-object="portfolio"></div>
-        <div class="corner"></div>
-        <!-- imaged -->
-        <div data-ng-if="portfolio.picture" class="card-cover imaged">
-          <img data-ng-src="rest/picture/{{portfolio.picture.name}}"/>
-        </div>
-        <!-- noimage -->
-        <div data-ng-if="!portfolio.picture" class="card-cover portfolio">
-          <div class="pattern">
-            <div class="sheet up-left"></div>
-            <div class="sheet low-right"></div>
-            <div class="sheet low-left"></div>
-          </div>
-          <md-icon>book</md-icon>
-        </div>
+            <!-- right small side  -->
+            <div layout="column" flex flex-gt-xs="25" class="divider-left" layout-align="start start">
+              <div data-ng-if="isLoggedIn() && !isRestricted()" data-dop-favorite data-learning-object="portfolio"></div>
+              <div class="corner"></div>
+              <!-- imaged -->
+                <div data-ng-if="portfolio.picture" class="card-cover imaged">
+                  <img data-ng-src="rest/picture/thumbnail/lg/{{portfolio.picture.name}}"
+                    sizes="(max-width: 600) 600px,
+                     300px"
+                    data-ng-srcset="rest/picture/thumbnail/lg/{{portfolio.picture.name}} 300w,
+                              rest/picture/thumbnail/lg_xs/{{portfolio.picture.name}} 600w"/>
+                </div>
+                <!-- noimage -->
+                <div data-ng-if="!portfolio.picture" class="card-cover portfolio">
+                  <div class="pattern">
+                    <div class="sheet up-left"></div>
+                    <div class="sheet low-right"></div>
+                    <div class="sheet low-left"></div>
+                  </div>
+                  <md-icon>book</md-icon>
+                </div>
 
         <md-content>
           <p class="md-body-2 meta">

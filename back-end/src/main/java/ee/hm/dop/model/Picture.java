@@ -15,7 +15,7 @@ public abstract class Picture {
     @GeneratedValue
     private Long id;
 
-    @Column(unique = true, nullable = false, updatable = false)
+    @Column(nullable = false, updatable = false)
     private String name;
 
     @Basic(fetch = LAZY, optional = false)
