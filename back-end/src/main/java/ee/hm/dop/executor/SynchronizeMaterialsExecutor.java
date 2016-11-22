@@ -55,6 +55,7 @@ public class SynchronizeMaterialsExecutor {
             logger.error("Unexpected error while synchronizing materials.");
             e.printStackTrace();
         } finally {
+            logger.info("Updating Solr index after synchronizing all materials");
             updateSolrIndex();
         }
     }

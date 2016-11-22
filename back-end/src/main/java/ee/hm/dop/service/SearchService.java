@@ -61,8 +61,11 @@ public class SearchService {
         SearchResult searchResult = new SearchResult();
 
         searchFilter.setVisibility(getSearchVisibility(loggedInUser));
+        Long resultCount;
+        if (limit != null && limit == 0) resultCount = null;
+        else resultCount = limit;
 
-        SearchResponse searchResponse = doSearch(query, start, limit, searchFilter);
+        SearchResponse searchResponse = doSearch(query, start, resultCount, searchFilter);
         Response response = searchResponse.getResponse();
 
         if (response != null) {
@@ -70,15 +73,15 @@ public class SearchService {
             List<Searchable> unsortedSearchable = retrieveSearchedItems(documents, loggedInUser);
             List<Searchable> sortedSearchable = sortSearchable(documents, unsortedSearchable);
 
-            searchResult.setItems(sortedSearchable);
             searchResult.setStart(response.getStart());
             // "- documents.size() + sortedSearchable.size()" needed in case
             // SearchEngine and DB are not sync because of re-indexing time.
             if (limit == null || limit > 0) {
                 searchResult.setTotalResults(response.getTotalResults() - documents.size() + sortedSearchable.size());
+                searchResult.setItems(sortedSearchable);
             } else if (limit == 0) {
                 //When limit is 0 - only getting metainfo
-                searchResult.setTotalResults(response.getTotalResults());
+                searchResult.setTotalResults(response.getTotalResults() - documents.size() + sortedSearchable.size());
             }
         }
 

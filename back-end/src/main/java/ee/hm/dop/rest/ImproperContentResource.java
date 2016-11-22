@@ -36,7 +36,6 @@ public class ImproperContentResource extends BaseResource {
     @PUT
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    @RolesAllowed({"USER", "ADMIN", "MODERATOR"})
     public ImproperContent setImproper(ImproperContent improperContent) {
         ImproperContent improper = null;
 
@@ -51,7 +50,6 @@ public class ImproperContentResource extends BaseResource {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    @RolesAllowed({"USER", "ADMIN", "RESTRICTED", "MODERATOR"})
     public List<ImproperContent> getImpropers(@QueryParam("learningObject") Long learningObjectId) {
         List<ImproperContent> result = new ArrayList<>();
         User loggedInUser = getLoggedInUser();

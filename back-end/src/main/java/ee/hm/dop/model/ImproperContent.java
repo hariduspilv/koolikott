@@ -25,7 +25,7 @@ public class ImproperContent {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "creator", nullable = false)
+    @JoinColumn(name = "creator")
     private User creator;
 
     @ManyToOne
