@@ -42,11 +42,11 @@ define([
                             if (!Array.isArray(newGroups)) {
                                 $scope.targetGroups = [];
                                 if (newGroups) {
-                                    $scope.targetGroups.push(newGroups);
+                                    $scope.targetGroups = newGroups;
                                 }
                             }
 
-                            selectValue();
+                            //selectValue();
                         }
                     }, false);
 
@@ -137,14 +137,13 @@ define([
                 }
 
                 $scope.parentClick = function(e) {
-                    if($scope.selectedTargetGroup) {
-                        if($scope.selectedTargetGroup.indexOf(e.$parent.group.label) == -1) {
-                            added = true;
-                        } else {
-                            added = false;
-                        }
-                    } else {
+
+                    if($scope.selectedTargetGroup.indexOf(e.$parent.group.label) == -1) {
                         added = true;
+                    } else if ($scope.selectedTargetGroup === []){
+                        added = true;
+                    } else {
+                        added = false;
                     }
 
                     if(added) {
@@ -190,24 +189,9 @@ define([
                     }
                 }
 
-                function hasAllChildren(group) {
-                    var i = 0;
-                    var j = 0;
-                    for (i; i < group.children.length; i++) {
-                        if($scope.selectedTargetGroup.indexOf(group.children[i]) != -1) {
-                            j++;
-                        }
-                    }
-                    if (i == j) {
-                        return true;
-                    } else {
-                        return false;
-                    }
-                }
-
                 function updateParents() {
                     for(var i = 0; i < $scope.groups.length; i++) {
-                        var hasChildren = hasAllChildren($scope.groups[i]);
+                        var hasChildren = targetGroupService.hasAllChildren($scope.groups[i], $scope.selectedTargetGroup);
 
                         if(hasChildren) {
                             if($scope.selectedTargetGroup.indexOf($scope.groups[i].label) == -1) {

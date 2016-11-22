@@ -25,8 +25,8 @@ define([
                     label: 'LEVEL3',
                     children: ['GRADE7', 'GRADE8', 'GRADE9']
                 }, {
-                    label: 'GYMNASIUM',
-                    children: ['asd']
+                    label: 'LEVEL_GYMNASIUM',
+                    children: ['GYMNASIUM']
                 },
             ]
 
@@ -53,11 +53,11 @@ define([
                  */
                 getByEducationalContext: function (educationalContext) {
                     if (educationalContext.name === 'PRESCHOOLEDUCATION') {
-                        return map(preschoolGroups);
+                        return [groups[0]]
                     } else if (educationalContext.name === 'BASICEDUCATION') {
-                        return map(level1Groups).concat(map(level2Groups), map(level3Groups));
+                        return [groups[1], groups[2], groups[3]];
                     } else if (educationalContext.name === 'SECONDARYEDUCATION') {
-                        return map(secondaryGroups);
+                        return [groups[4]];
                     }
                 },
 
@@ -67,29 +67,13 @@ define([
                  * of only that target group is returned.
                  */
                 getByLabel: function (selectedTargetGroup) {
-                    var targetGroups = [];
+                    var targetGroups = selectedTargetGroup.slice();
 
-                    switch (selectedTargetGroup) {
-                        case 'PRESCHOOL':
-                            targetGroups = preschoolGroups.slice();
-                            targetGroups.splice(0, 1); // Remove PRESCHOOL label
-                            break;
-                        case 'LEVEL1':
-                            targetGroups = level1Groups.slice();
-                            targetGroups.splice(0, 1);
-                            break;
-                        case 'LEVEL2':
-                            targetGroups = level2Groups.slice();
-                            targetGroups.splice(0, 1);
-                            break;
-                        case 'LEVEL3':
-                            targetGroups = level3Groups.slice();
-                            targetGroups.splice(0, 1);
-                            break;
-                        default:
-                            targetGroups = [];
-                            targetGroups.push(selectedTargetGroup);
-                            break;
+                    for(var i = 0; i < groups.length; i++) {
+                        var index = targetGroups.indexOf(groups[i].label);
+                        if(index != -1) {
+                            targetGroups.splice(index, 1);
+                        }
                     }
 
                     return targetGroups;
@@ -101,61 +85,78 @@ define([
                  * @param targetGroups  array of target groups
                  */
                 getLabelByTargetGroups: function (targetGroups) {
-                    var selectedTargetGroup = null;
+                    var selectedTargetGroup = [];
+                    /*if(targetGroups[0]) {
+                        selectedTargetGroup = targetGroups[0].slice();
+                    }*/
 
                     // Refactor
 
                     if (targetGroups) {
-                        if (targetGroups.length === 1) {
-                            selectedTargetGroup = targetGroups[0];
-                        } else if (targetGroups.length === 2) {
-                            if (targetGroups.indexOf('ZERO_FIVE') > -1 &&
-                                targetGroups.indexOf('SIX_SEVEN') > -1) {
-                                selectedTargetGroup = 'PRESCHOOL';
-                            }
-                        } else if (targetGroups.length === 3) {
-                            if (targetGroups.indexOf('GRADE1') > -1 &&
-                                targetGroups.indexOf('GRADE2') > -1 &&
-                                targetGroups.indexOf('GRADE3') > -1) {
-                                selectedTargetGroup = 'LEVEL1';
+                        selectedTargetGroup = targetGroups;
+
+                        for(var i = 0; i < groups.length; i++) {
+                            var hasChildren = this.hasAllChildren(groups[i], selectedTargetGroup);
+
+                            if(hasChildren) {
+                                if(selectedTargetGroup.indexOf(groups[i].label) == -1) {
+                                    selectedTargetGroup.push(groups[i].label);
+                                }
+                            } else {
+                                var index = selectedTargetGroup.indexOf(groups[i].label);
+                                if(index != -1) {
+                                    selectedTargetGroup.splice(index, 1);
+                                }
                             }
 
-                            if (targetGroups.indexOf('GRADE4') > -1 &&
-                                targetGroups.indexOf('GRADE5') > -1 &&
-                                targetGroups.indexOf('GRADE6') > -1) {
-                                selectedTargetGroup = 'LEVEL2';
-                            }
-
-                            if (targetGroups.indexOf('GRADE7') > -1 &&
-                                targetGroups.indexOf('GRADE8') > -1 &&
-                                targetGroups.indexOf('GRADE9') > -1) {
-                                selectedTargetGroup = 'LEVEL3';
-                            }
-                        } else if (targetGroups.length > 3) {
-                            //TODO: If more than one target group show multiple selected groups
-                            selectedTargetGroup = 'LEVEL2';
                         }
                     }
 
+
+
                     return selectedTargetGroup;
+                },
+
+                getMinimalGroups: function(targetGroups) {
+                    //if group has all, remove children and add parent
+                    var list = [];
+
+                    if(targetGroups) {
+                        for (var i = 0; i < groups.length; i++) {
+                            var buffer = [];
+                            var j;
+
+                            for (j = 0; j < groups[i].children.length; j++) {
+
+                                if(targetGroups.indexOf(groups[i].children[j]) != -1) {
+                                    buffer.push(groups[i].children[j]);
+                                }
+                            }
+
+                            if(buffer.length == j) {
+                                list.push(groups[i].label);
+                            } else if (buffer.length >= 1){
+                                for (var x = 0; x < buffer.length; x++) {
+                                    list.push(buffer[x]);
+                                }
+                            }
+                        }
+                    }
+
+                    return list;
                 },
 
                 /**
                  * Get the label that represents all the selected target groups.
                  * If there is no such label, return all target groups.
                  */
+                // TODO: new comment because the logic has changed
                 getLabelByTargetGroupsOrAll: function (targetGroups) {
                     if (!targetGroups) {
                         return [];
                     }
 
-                    var label = this.getLabelByTargetGroups(targetGroups);
-
-                    if (label) {
-                        return [label];
-                    } else {
-                        return targetGroups;
-                    }
+                    return this.getMinimalGroups(targetGroups);
                 },
 
                 areGroupElementsInArray: function (array, list) {
@@ -192,7 +193,6 @@ define([
                 },
 
                 getAllChildren: function(data) {
-                    debugger;
                     for (i = 0; i < groups.length; i++) {
                         var index = data.indexOf(groups[i].label);
                         if(index != -1) {
@@ -200,7 +200,22 @@ define([
                         }
                     }
                     return data;
+                },
+
+                hasAllChildren: function(group, selectedTargetGroup) {
+                var i = 0;
+                var j = 0;
+                for (i; i < group.children.length; i++) {
+                    if(selectedTargetGroup.indexOf(group.children[i]) != -1) {
+                        j++;
+                    }
                 }
+                if (i == j) {
+                    return true;
+                } else {
+                    return false;
+                }
+            }
             };
 
             return instance;

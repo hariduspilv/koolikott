@@ -39,7 +39,6 @@ define([
 
                     // Target groups
                     $scope.detailedSearch.targetGroups = searchService.getTargetGroups();
-
                     // Paid
                     var isPaid = searchService.isPaid();
                     if (isPaid === true || isPaid === false) {
