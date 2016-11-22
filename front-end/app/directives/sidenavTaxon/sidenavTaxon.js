@@ -55,7 +55,6 @@ define([
                     checkTaxonLevelAndAssignValues('.Module', $scope.taxon.topics);
 
                     refreshThisTaxonCount();
-                    refreshChildrenCounts();
                 }
 
                 function checkTaxonLevelAndAssignValues(level, children) {
@@ -97,7 +96,7 @@ define([
                         return $scope.taxon.name.toUpperCase();
                     }
 
-                };
+                }
 
                 $scope.$watch(function () {
                     return $location.url()
@@ -107,28 +106,8 @@ define([
 
                 function refreshThisTaxonCount() {
                     $scope.materialCount = localStorage.getItem($scope.taxon.name.toUpperCase() + "_COUNT");
-                    if (!$scope.materialCount) {
-                        getTaxonMaterialsCount($scope.taxon);
-                    }
-                }
+                    $timeout(getTaxonMaterialsCount($scope.taxon));
 
-                function refreshChildrenCounts() {
-                    if ($scope.taxonChildren && $scope.taxonChildren[0]) {
-                        if (!localStorage.getItem($scope.taxonChildren[0].name.toUpperCase() + "_COUNT")) {
-                            refreshMaterialsCounts();
-                        }
-
-                        //Refresh the counts asynchronously after init
-                        $timeout(function () {
-                            refreshMaterialsCounts()
-                        });
-                    }
-                }
-
-                function refreshMaterialsCounts() {
-                    $scope.taxonChildren.forEach(function (child) {
-                        if (child) getTaxonMaterialsCount(child);
-                    })
                 }
 
                 function getTaxonMaterialsCount(child) {
