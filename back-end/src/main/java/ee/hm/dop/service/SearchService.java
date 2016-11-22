@@ -61,8 +61,11 @@ public class SearchService {
         SearchResult searchResult = new SearchResult();
 
         searchFilter.setVisibility(getSearchVisibility(loggedInUser));
+        Long resultCount;
+        if (limit == 0) resultCount = null;
+        else resultCount = limit;
 
-        SearchResponse searchResponse = doSearch(query, start, limit, searchFilter);
+        SearchResponse searchResponse = doSearch(query, start, resultCount, searchFilter);
         Response response = searchResponse.getResponse();
 
         if (response != null) {
@@ -78,7 +81,7 @@ public class SearchService {
                 searchResult.setItems(sortedSearchable);
             } else if (limit == 0) {
                 //When limit is 0 - only getting metainfo
-                searchResult.setTotalResults(response.getTotalResults());
+                searchResult.setTotalResults(response.getTotalResults() - documents.size() + sortedSearchable.size());
             }
         }
 

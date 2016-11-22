@@ -58,7 +58,7 @@ define([
                     refreshChildrenCounts();
                 }
 
-                function checkTaxonLevelAndAssignValues (level, children) {
+                function checkTaxonLevelAndAssignValues(level, children) {
                     if ($scope.taxon.level === level) {
                         if (children.length > 0) {
                             $scope.taxonChildren = children;
@@ -90,7 +90,7 @@ define([
                     }
                 };
 
-                 function getTaxonTranslation () {
+                function getTaxonTranslation() {
                     if ($scope.taxon.level !== '.EducationalContext') {
                         return $scope.taxon.level.toUpperCase().substr(1) + "_" + $scope.taxon.name.toUpperCase();
                     } else {
@@ -120,9 +120,8 @@ define([
 
                         //Refresh the counts asynchronously after init
                         $timeout(function () {
-                                refreshMaterialsCounts()
-                            }, 3000
-                        );
+                            refreshMaterialsCounts()
+                        });
                     }
                 }
 
@@ -133,7 +132,7 @@ define([
                 }
 
                 function getTaxonMaterialsCount(child) {
-                    serverCallService.makeGet('rest/search?q=&start=0&taxon=' + child.id, {}, function (data) {
+                    serverCallService.makeGet('rest/search?q=&start=0&limit=0&taxon=' + child.id, {}, function (data) {
                         localStorage.setItem(child.name.toUpperCase() + "_COUNT", data.totalResults);
                     }, function () {
                         console.log("Failed to get " + child.name + " count");
