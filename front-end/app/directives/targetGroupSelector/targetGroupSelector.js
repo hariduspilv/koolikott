@@ -51,19 +51,19 @@ define([
                 }
 
                 function getDifference(newArray, oldArray) {
-                    var i = {};
+                    var result = {};
 
                     if(newArray != null) {
                         newArray.forEach(function (item) {
 
                             if(oldArray != null) {
                                 if (oldArray.indexOf(item) === -1) {
-                                    i.removed = false;
-                                    i.item = item;
+                                    result.removed = false;
+                                    result.item = item;
                                 }
                             } else {
-                                i.removed = false;
-                                i.item = item;
+                                result.removed = false;
+                                result.item = item;
                             }
                         });
                     }
@@ -71,18 +71,18 @@ define([
                         oldArray.forEach(function (item) {
                             if(newArray != null) {
                                 if (newArray.indexOf(item) === -1) {
-                                    i.removed = true;
-                                    i.item = item;
+                                    result.removed = true;
+                                    result.item = item;
                                 }
                             } else {
-                                i.removed = true;
-                                i.item = item;
+                                result.removed = true;
+                                result.item = item;
                             }
 
                         });
                     }
 
-                    return i;
+                    return result;
                 }
 
                 function fill() {
@@ -124,10 +124,8 @@ define([
 
                     if(e.group && $scope.selectedTargetGroup.indexOf(e.group.label) == -1) {
                         added = true;
-                    } else if ($scope.selectedTargetGroup === []){
-                        added = true;
                     } else {
-                        added = false;
+                        added = $scope.selectedTargetGroup === [];
                     }
 
                     if(added) {
@@ -148,21 +146,21 @@ define([
                     }
                 };
 
-                function getMissingGrades(array, items) {
+                function getMissingGrades(selectedTargetGroup, targetGroups) {
                     var result = [];
-                    for (var i = 0; i < items.length; i++) {
-                        if (array.indexOf(items[i]) == -1) {
-                            result.push(items[i]);
+                    for (var i = 0; i < targetGroups.length; i++) {
+                        if (selectedTargetGroup.indexOf(targetGroups[i]) == -1) {
+                            result.push(targetGroups[i]);
                         }
                     }
                     return result;
                 }
 
-                function addMissingGrades(items) {
+                function addMissingGrades(targetGroups) {
                     if(!$scope.selectedTargetGroup) {
                         $scope.selectedTargetGroup = [];
                     }
-                    var grades = getMissingGrades($scope.selectedTargetGroup,items);
+                    var grades = getMissingGrades($scope.selectedTargetGroup,targetGroups);
                     for (var i = 0; i < grades.length; i++) {
                         $scope.selectedTargetGroup.push(grades[i]);
                     }

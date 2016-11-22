@@ -58,11 +58,6 @@ define([
                  */
                 getLabelByTargetGroups: function (targetGroups) {
                     var selectedTargetGroup = [];
-                    /*if(targetGroups[0]) {
-                     selectedTargetGroup = targetGroups[0].slice();
-                     }*/
-
-                    // Refactor
 
                     if (targetGroups) {
                         selectedTargetGroup = targetGroups;
@@ -151,11 +146,9 @@ define([
                 },
 
                 isParent: function (item) {
-                    if (item !== null) {
-                        for (var i = 0; i < groups.length; i++) {
-                            if (item == groups[i].label) {
-                                return true;
-                            }
+                    for (var i = 0; i < groups.length; i++) {
+                        if (item == groups[i].label) {
+                            return true;
                         }
                     }
 
@@ -170,11 +163,8 @@ define([
                             j++;
                         }
                     }
-                    if (i == j) {
-                        return true;
-                    } else {
-                        return false;
-                    }
+
+                    return i==j;
                 }
             };
 
