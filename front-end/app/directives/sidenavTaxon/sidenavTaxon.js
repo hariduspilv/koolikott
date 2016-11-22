@@ -133,7 +133,7 @@ define([
                 }
 
                 function getTaxonMaterialsCount(child) {
-                    serverCallService.makeGet('rest/search?q=&start=0&limit=0&taxon=' + child.id, {}, function (data) {
+                    serverCallService.makeGet('rest/search?q=&start=0&taxon=' + child.id, {}, function (data) {
                         localStorage.setItem(child.name.toUpperCase() + "_COUNT", data.totalResults);
                     }, function () {
                         console.log("Failed to get " + child.name + " count");

@@ -48,8 +48,8 @@
 
                             <md-menu-item data-ng-if="isAdmin()" dop-recommend data-portfolio="portfolio"></md-menu-item>
 
-                            <md-menu-divider data-ng-if="isViewPortforlioPage && isLoggedIn() && !isAdmin()"></md-menu-divider>
-                            <md-menu-item data-ng-if="isViewPortforlioPage && isLoggedIn()  && !isRestricted() && !isAdmin()" dop-report-improper data-learning-object="portfolio"></md-menu-item>
+                            <md-menu-divider data-ng-if="!isAdmin()"></md-menu-divider>
+                            <md-menu-item data-ng-if="!isAdmin()" dop-report-improper data-learning-object="portfolio"></md-menu-item>
                         </md-menu-content>
                     </md-menu>
                 </div>
