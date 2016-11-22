@@ -4,7 +4,7 @@ define([
     'services/searchService',
     'services/userDataService',
     'directives/learningObjectRow/learningObjectRow',
-    'directives/sidebarTaxon/sidebarTaxon'
+    'directives/sidenavTaxon/sidenavTaxon'
 ], function (angularAMD) {
     angularAMD.directive('dopSidenav', ['serverCallService', '$location', '$sce', 'searchService', 'authenticatedUserService', '$mdDialog', 'userDataService', function () {
         return {

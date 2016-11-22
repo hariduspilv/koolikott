@@ -3,13 +3,13 @@ define([
     'services/serverCallService',
     'services/recursionHelper',
 ], function (angularAMD) {
-    angularAMD.directive('dopSidebarTaxon', ['RecursionHelper', '$location', 'serverCallService', function (RecursionHelper, $location, serverCallService) {
+    angularAMD.directive('dopSidenavTaxon', ['RecursionHelper', '$location', 'serverCallService', function (RecursionHelper, $location, serverCallService) {
         return {
             scope: {
                 taxon: '=',
                 icon: '='
             },
-            templateUrl: 'directives/sidebarTaxon/sidebarTaxon.html',
+            templateUrl: 'directives/sidenavTaxon/sidenavTaxon.html',
             compile: function (element) {
                 return RecursionHelper.compile(element);
             },

@@ -119,7 +119,7 @@
 
     <div uib-accordion-group class="panel-default" is-open="isTaxonomyOpen" data-ng-if="!isViewPortforlioPage && !isEditPortfolioMode">
       <uib-accordion-heading>
-        <a id="sidebarTaxon" class="sidenav__header sidenav__header--main" md-ink-ripple layout="row" layout-align="space-between center" data-ng-class="{'is-opened': isTaxonomyOpen}" data-ng-click="changeTaxonomyDataAndVisibility('sidebar', 'primary')">
+        <a id="sidenavTaxon" class="sidenav__header sidenav__header--main" md-ink-ripple layout="row" layout-align="space-between center" data-ng-class="{'is-opened': isTaxonomyOpen}" data-ng-click="changeTaxonomyDataAndVisibility('sidebar', 'primary')">
           <div layout="row" layout-align="center center">
             <span data-translate="TABLE_OF_CONTENTS" class="sidenav__name"></span>
           </div>
@@ -129,7 +129,7 @@
       <!-- Taxon subitems -->
       <ul class="sidenav__list">
         <li data-ng-repeat="(key, item) in taxon">
-          <div class="sidenav__item" layout="column" icon="taxonIcons[key]" dop-sidebar-taxon data-taxon="item"></div>
+          <div class="sidenav__item" layout="column" icon="taxonIcons[key]" dop-sidenav-taxon data-taxon="item"></div>
         </li>
       </ul>
     </div>
