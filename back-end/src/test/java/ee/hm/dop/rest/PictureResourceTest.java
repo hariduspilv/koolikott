@@ -25,6 +25,7 @@ import org.apache.commons.codec.binary.Hex;
 import org.apache.commons.collections.Buffer;
 import org.apache.http.HttpHeaders;
 import org.glassfish.jersey.media.multipart.FormDataMultiPart;
+import org.glassfish.jersey.media.multipart.file.FileDataBodyPart;
 import org.glassfish.jersey.media.multipart.file.StreamDataBodyPart;
 import org.junit.Test;
 
@@ -175,10 +176,9 @@ public class PictureResourceTest extends ResourceIntegrationTestBase {
     @Test
     public void addPicture() throws IOException {
         login("39011220013");
+
         File f = DOPFileUtils.getFile(TEST_IMAGE_NAME);
-
         final StreamDataBodyPart filePart = new StreamDataBodyPart("picture", new ByteArrayInputStream(Base64.getEncoder().encode(Files.readAllBytes(f.toPath()))));
-
 
         @SuppressWarnings("resource")
         FormDataMultiPart formDataMultiPart = (FormDataMultiPart) new FormDataMultiPart().bodyPart(filePart);
