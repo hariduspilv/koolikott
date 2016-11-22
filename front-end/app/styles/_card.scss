@@ -307,11 +307,13 @@ md-card {
       margin: 0 0 10px 0;
       font-weight: 300;
       line-height: 28px;
+      padding: 25px 0 0 0;
     }
-    @media (min-width: 600px) {
+    @media (min-width: $layout-breakpoint-xs) {
       h1 {
         font-size: 30px;
         line-height: 35px;
+        padding: 0 25px 0 0;
       }
     }
     h2 {
@@ -330,6 +332,11 @@ md-card {
 
     .md-menu {
       margin-top: -15px;
+      margin-right: -15px;
+
+      @media (min-width: $layout-breakpoint-xs) {
+        margin-right: 0;
+      }
     }
     md-card-content:not(.noPadding) {
       padding: $card-lg-padding;
