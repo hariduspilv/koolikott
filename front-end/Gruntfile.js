@@ -39,7 +39,8 @@ module.exports = function (grunt) {
                 files: [
                     '<%= yeoman.app %>/directives/**/**/*.js',
                     '<%= yeoman.app %>/services/**/**/*.js',
-                    '<%= yeoman.app %>/views/**/**/*.js'
+                    '<%= yeoman.app %>/views/**/**/*.js',
+                    '<%= yeoman.app %>/utils/**/**/*.js'
                 ],
                 tasks: ['newer:jshint:all'],
                 options: {
@@ -60,6 +61,7 @@ module.exports = function (grunt) {
                 files: [
                     '<%= yeoman.app %>/views/**/**/*.html',
                     '<%= yeoman.app %>/directives/**/**/*.html',
+                    '<%= yeoman.app %>/utils/**/**/*.html',
                     '.tmp/styles/{,*/}*.css',
                     '<%= yeoman.app %>/images/{,*/}*.{png,jpg,jpeg,gif,webp,svg}'
                 ]
@@ -321,7 +323,8 @@ module.exports = function (grunt) {
                         'views/**/**/*.html',
                         'images/{,*/}*.{webp}',
                         'fonts/{,*/}*.*',
-                        'directives/**/**/*.html'
+                        'directives/**/**/*.html',
+                        'utils/**/**/*.html'
                     ]
                 }, {
                     expand: true,

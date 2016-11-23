@@ -43,7 +43,7 @@ public class UploadedFileResource extends BaseResource {
 
     @GET
     @Produces(MediaType.APPLICATION_OCTET_STREAM)
-    @Path("{id}/{filename}")
+    @Path("{id}/{filename:.*}")
     public Response getFile(@PathParam("id") Long fileId, @PathParam("filename") String filename) {
         return uploadedFileService.getFile(fileId, filename);
     }

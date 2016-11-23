@@ -35,7 +35,8 @@
       </video>
     </div>
 
-    <a class="embed-link" href="{{material.source}}" ng-if="sourceType === 'PICTURE'" target="_blank" ng-class="{'embed-image-padded': isEditPortfolioMode || $root.isViewPortforlioPage}">
+    <a class="embed-link" href="{{material.source}}" ng-if="sourceType === 'PICTURE'" target="_blank"
+       ng-class="{'embed-image-padded': isEditPortfolioMode || $root.isViewPortforlioPage}">
       <img src="{{material.source}}"/>
     </a>
 
@@ -50,6 +51,18 @@
       <div class="embed-responsive-container">
         <div data-dop-slideshare source="material.source" class="embed-responsive-item"></div>
       </div>
+    </div>
+
+    <div data-ng-show="sourceType === 'EBOOK'"
+         class="embed-responsive-container">
+      <iframe src="{{ebookLink}}" width="100%" height="500px"></iframe>
+    </div>
+
+    <div data-ng-show="sourceType === 'PDF'"
+         class="embed-responsive-container">
+      <object data="{{material.source}}" type="application/pdf" width="100%" height="500px">
+        <embed src="{{material.source}}" type='application/pdf' width="100%" height="500px"></embed>
+      </object>
     </div>
 
     <!--Embed iframe-->
