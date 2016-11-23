@@ -1,6 +1,7 @@
 define([
     'angularAMD',
-    'services/targetGroupService'
+    'services/targetGroupService',
+    'directives/selectClose/selectClose'
 ], function (angularAMD) {
     angularAMD.directive('dopTargetGroupSelector', function () {
         return {

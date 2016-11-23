@@ -53,10 +53,10 @@
       <span data-ng-if="ctrl.isAddPortfolioView">*</span>
     </label>
     <md-select data-ng-model="ctrl.taxonPath.domainSubject" id="taxonDomainSubjectsSelect"
-               name="domainAndSubject" aria-label="Ainevaldkond ja teema">
+               name="domainAndSubject" aria-label="Ainevaldkond ja teema" class="select">
       <md-option data-translate="SELECT_DOMAIN_AND_SUBJECT"
                  ng-click="ctrl.reset(ctrl.taxonPath.educationalContext)"></md-option>
-      <md-option ng-repeat="domainSubject in ctrl.basicEducationDomainSubjects" class="stepped-select"
+      <md-option ng-repeat="domainSubject in ctrl.basicEducationDomainSubjects" class="select__parent"
                  data-ng-class="{ 'child' : domainSubject.level === '.Subject'}"
                  data-ng-disabled="domainSubject.level !== '.Subject' && ctrl.isAddMaterialView"
                  ng-value="domainSubject"
@@ -74,10 +74,10 @@
       <span data-ng-if="ctrl.isAddPortfolioView">*</span>
     </label>
     <md-select data-ng-model="ctrl.taxonPath.domainSubject" id="taxonSecondaryEducationDomainSubjectsSelect"
-               name="secondaryEducationDomainAndSubject" aria-label="Ainevaldkond ja teema">
+               name="secondaryEducationDomainAndSubject" aria-label="Ainevaldkond ja teema" class="select">
       <md-option data-translate="SELECT_DOMAIN_AND_SUBJECT"
                  ng-click="ctrl.reset(ctrl.taxonPath.educationalContext)"></md-option>
-      <md-option class="stepped-select" data-ng-class="{ 'child' : domainSubject.level === '.Subject'}"
+      <md-option class="select_parent" data-ng-class="{ 'child' : domainSubject.level === '.Subject'}"
                  data-ng-disabled="domainSubject.level !== '.Subject' && isAddMaterialView"
                  ng-value="domainSubject" ng-repeat="domainSubject in ctrl.secondaryEducationDomainSubjects"
                  data-translate="{{(domainSubject.level === '.Domain' ? 'DOMAIN_' : 'SUBJECT_') + domainSubject.name.toUpperCase()}}"></md-option>

@@ -1,4 +1,4 @@
-.stepped-select {
+.select__parent {
   font-weight: bold;
 }
 
@@ -11,23 +11,12 @@ md-select-menu[multiple] md-option.select__child .md-container {
   margin-left: 40px;
 }
 
-.select__parent {
-  font-weight: bold;
-}
-
 md-select-menu[multiple] {
   overflow-y: visible;
+}
 
-  &:after {
-    content: "";
-    font-size: 1.4em;
-    position: absolute;
-    top: -30px;
-    right: 0;
-    background: rgb(238, 238, 238) url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxOCIgaGVpZ2h0PSIxOCIgdmlld0JveD0iMCAwIDE4IDE4Ij48cGF0aCBkPSJNMTQuNTMgNC41M2wtMS4wNi0xLjA2TDkgNy45NCA0LjUzIDMuNDcgMy40NyA0LjUzIDcuOTQgOWwtNC40NyA0LjQ3IDEuMDYgMS4wNkw5IDEwLjA2bDQuNDcgNC40NyAxLjA2LTEuMDZMMTAuMDYgOXoiLz48L3N2Zz4=) no-repeat center center;
-    width: 1.2em;
-    height: 1.2em;
-    border-radius: 99em;
-    pointer-events: none;
-  }
+.select__close {
+  position: fixed;
+  top: -26px;
+  right: -26px;
 }
