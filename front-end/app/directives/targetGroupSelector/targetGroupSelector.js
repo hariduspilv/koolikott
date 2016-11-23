@@ -28,7 +28,6 @@ define([
                 function addListeners() {
                     $scope.$watch('selectedTargetGroup', function (newGroup, oldGroup) {
                         if (newGroup !== oldGroup) {
-                            debugger;
                             var diff = getDifference(newGroup, oldGroup);
                             var isParent = targetGroupService.isParent(diff.item);
                             if (!isParent) {
