@@ -13,8 +13,10 @@ define([
             templateUrl: 'directives/share/share.html',
             controller: function($scope) {
                 $scope.isVisible = function () {
-                    if ($rootScope.learningObjectDeleted || $rootScope.learningObjectImproper || $rootScope.learningObjectBroken) {
-                        return false;
+                    if ($scope.object) {
+                        if ($scope.object.deleted || $scope.object.improper > 0 || $scope.object.broken > 0) {
+                            return false;
+                        }
                     }
 
                     if ($rootScope.isEditPortfolioPage) {

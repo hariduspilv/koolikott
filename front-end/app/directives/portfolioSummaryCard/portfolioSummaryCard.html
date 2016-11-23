@@ -122,7 +122,7 @@
 
       <!-- right small side  -->
       <div layout="column" flex flex-gt-xs="25" class="divider-left" layout-align="start start">
-        <div data-ng-if="isLoggedIn() && !isRestricted() && !$root.learningObjectDeleted && !$root.learningObjectBroken && !root.learningObjectImproper" data-dop-favorite data-learning-object="portfolio"></div>
+        <div data-ng-if="isLoggedIn() && !isRestricted() && !portfolio.deleted && portfolio.improper == 0 && portfolio.broken == 0" data-dop-favorite data-learning-object="portfolio"></div>
         <div class="corner"></div>
         <!-- imaged -->
         <div data-ng-if="portfolio.picture" class="card-cover imaged">
