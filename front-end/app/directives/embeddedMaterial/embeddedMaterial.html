@@ -78,9 +78,9 @@
       </div>
     </div>
   </md-card-content>
-  <md-card-footer class="embeded-material-footer" layout="row" flex data-ng-if="isEditPortfolioMode || !sourceType">
+  <md-card-footer class="embeded-material-footer" layout="row" layout-align="space-between center" data-ng-if="isEditPortfolioMode || !sourceType">
     <!--Link as backup - if iframe is internally not working-->
-    <a href="{{material.source}}" class="wrapped regular-link md-primary" layout-align="start center" flex
+    <a href="{{material.source}}" class="wrapped regular-link md-primary"
        target="_blank" data-ng-if="(!sourceType || (sourceType === 'VIDEO' && !canPlayVideo)
                   || (sourceType === 'AUDIO' && !canPlayAudio))">
       <span class="item-link" data-ng-bind="material.source"></span>
