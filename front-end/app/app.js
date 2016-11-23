@@ -308,7 +308,7 @@ define([
                 $rootScope.isViewAdminPanelPage = false;
             }
 
-            if(path === '/material' || path === '/portfolio') {
+            if (path === '/material' || path === '/portfolio') {
                 $rootScope.isViewMaterialPortfolioPage = true;
             } else {
                 $rootScope.isViewMaterialPortfolioPage = false;
@@ -320,7 +320,7 @@ define([
                 $rootScope.isUserTabOpen = false;
             }
 
-            if((path === '/material' || path === '/' || ($location.url().indexOf("/search") != -1)) && (!$rootScope.isEditPortfolioPage || !$rootScope.isViewPortforlioPage)) {
+            if ((path === '/material' || path === '/' || ($location.url().indexOf("/search") != -1)) && (!$rootScope.isEditPortfolioPage || !$rootScope.isViewPortforlioPage)) {
                 $rootScope.isTaxonomyOpen = true;
             } else {
                 $rootScope.isTaxonomyOpen = false;

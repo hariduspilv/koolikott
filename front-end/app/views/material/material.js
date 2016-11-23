@@ -237,6 +237,18 @@ define([
                 return extension == "jpg" || extension == "jpeg" || extension == "png" || extension == "gif";
             }
 
+            function isEbookLink(url){
+                if (!url) return;
+                var extension = url.split('.').pop().toLowerCase();
+                return extension == "epub";
+            }
+
+            function isPDFLink(url){
+                if (!url) return;
+                var extension = url.split('.').pop().toLowerCase();
+                return extension == "pdf";
+            }
+
             function setSourceType() {
                 if (isYoutubeVideo($scope.material.source)) {
                     $scope.sourceType = 'YOUTUBE';
@@ -248,6 +260,11 @@ define([
                     $scope.sourceType = 'AUDIO';
                 } else if (isPictureLink($scope.material.source)) {
                     $scope.sourceType = 'PICTURE';
+                } else if (isEbookLink($scope.material.source)) {
+                    $scope.sourceType = 'EBOOK';
+                    $scope.ebookLink = "/libs/bibi/bib/i/?book=" + $scope.material.uploadedFile.id + "/" + $scope.material.uploadedFile.name;
+                } else if (isPDFLink($scope.material.source)) {
+                    $scope.sourceType = 'PDF';
                 } else {
                     $scope.sourceType = 'LINK';
                 }

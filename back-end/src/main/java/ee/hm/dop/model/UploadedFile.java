@@ -19,6 +19,7 @@ public class UploadedFile {
     @Column
     private String name;
 
+    // Path variable is not used, it is built in function instead
     @Column
     private String path;
 
