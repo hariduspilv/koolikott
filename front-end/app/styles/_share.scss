@@ -4,6 +4,7 @@
   right: 40px;
   margin-top: -15px;
   margin-right: -15px;
+  z-index: 1;
 
   @media (min-width: $layout-breakpoint-xs) {
     margin-right: 0;
