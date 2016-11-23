@@ -144,3 +144,9 @@ md-slider.md-default-theme.md-min[md-discrete] .md-thumb:after, md-slider.md-min
 .login-modal-container{
   overflow: hidden;
 }
+
+@media (max-width: $layout-breakpoint-md) {
+  h2.sidenav-login-title {
+    font-size: 10pt;
+  }
+}
