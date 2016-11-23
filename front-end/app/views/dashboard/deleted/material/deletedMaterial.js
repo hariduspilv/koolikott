@@ -14,13 +14,12 @@ define([
 
           $scope.formatMaterialUpdatedDate = function (updatedDate) {
               return formatDateToDayMonthYear(updatedDate);
-          }
+          };
 
           $scope.bindTable = function() {
               base.buildTable('#deleted-materials-table', 'views/dashboard/deleted/material/deletedMaterial.html');
-          }
+          };
 
-          serverCallService.makeGet("rest/material/getDeleted", {}, base.getItemsSuccess, base.getItemsFail);
-
+          serverCallService.makeGet("rest/material/getDeleted", {}, base.getDeletedItemsSuccess, base.getItemsFail);
     }]);
 });

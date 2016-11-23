@@ -14,13 +14,13 @@ define([
 
             $scope.formatMaterialUpdatedDate = function (updatedDate) {
                 return formatDateToDayMonthYear(updatedDate);
-            }
+            };
 
             $scope.bindTable = function() {
               base.buildTable('#deleted-portfolios-table', 'views/dashboard/deleted/portfolio/deletedPortfolio.html');
-            }
+            };
 
-            serverCallService.makeGet("rest/portfolio/getDeleted", {}, base.getItemsSuccess, base.getItemsFail);
+            serverCallService.makeGet("rest/portfolio/getDeleted", {}, base.getDeletedItemsSuccess, base.getItemsFail);
         }
     ]);
 });

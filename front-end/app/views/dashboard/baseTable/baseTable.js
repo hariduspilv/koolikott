@@ -24,6 +24,10 @@ define([
                 page: 1
             };
 
+            function getDeletedItemsSuccess(data) {
+                getItemsSuccess(data, 'byUpdatedAt');
+            }
+
             function getItemsSuccess(data, order, merge) {
                 if (isEmpty(data)) {
                     log('Getting data failed.');
@@ -242,6 +246,7 @@ define([
             }
 
             return {
+                getDeletedItemsSuccess: getDeletedItemsSuccess,
                 getItemsSuccess: getItemsSuccess,
                 getItemsFail: getItemsFail,
                 buildTable: buildTable,
