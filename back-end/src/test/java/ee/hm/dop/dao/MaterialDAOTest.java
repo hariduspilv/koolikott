@@ -15,16 +15,7 @@ import javax.inject.Inject;
 import javax.persistence.RollbackException;
 
 import ee.hm.dop.common.test.DatabaseTestBase;
-import ee.hm.dop.model.Language;
-import ee.hm.dop.model.LearningObject;
-import ee.hm.dop.model.LicenseType;
-import ee.hm.dop.model.Material;
-import ee.hm.dop.model.Picture;
-import ee.hm.dop.model.Recommendation;
-import ee.hm.dop.model.Repository;
-import ee.hm.dop.model.ResourceType;
-import ee.hm.dop.model.TargetGroup;
-import ee.hm.dop.model.User;
+import ee.hm.dop.model.*;
 import ee.hm.dop.model.taxon.Subject;
 import ee.hm.dop.model.taxon.Taxon;
 import ee.hm.dop.utils.DbUtils;
@@ -176,7 +167,7 @@ public class MaterialDAOTest extends DatabaseTestBase {
         material.setAdded(new DateTime());
         material.setViews((long) 123);
 
-        Picture picture = new Picture();
+        Picture picture = new OriginalPicture();
         picture.setId(1);
         material.setPicture(picture);
 

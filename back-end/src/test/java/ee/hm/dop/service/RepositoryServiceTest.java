@@ -19,11 +19,7 @@ import java.util.List;
 
 import ee.hm.dop.dao.MaterialDAO;
 import ee.hm.dop.dao.RepositoryDAO;
-import ee.hm.dop.model.LanguageString;
-import ee.hm.dop.model.Material;
-import ee.hm.dop.model.Picture;
-import ee.hm.dop.model.Repository;
-import ee.hm.dop.model.RepositoryURL;
+import ee.hm.dop.model.*;
 import ee.hm.dop.oaipmh.MaterialIterator;
 import ee.hm.dop.oaipmh.RepositoryManager;
 import ee.hm.dop.oaipmh.SynchronizationAudit;
@@ -398,7 +394,7 @@ public class RepositoryServiceTest {
         Material existentMaterial = new Material();
         Material newMaterial = new Material();
 
-        existentMaterial.setPicture(new Picture());
+        existentMaterial.setPicture(new OriginalPicture());
         newMaterial.setPicture(null);
 
         expect(materialService.update(existentMaterial, null, false)).andReturn(existentMaterial);
@@ -416,7 +412,7 @@ public class RepositoryServiceTest {
     public void updateNonRepoMaterialWithPicture() {
         Material existentMaterial = new Material();
         Material newMaterial = new Material();
-        Picture picture = new Picture();
+        Picture picture = new OriginalPicture();
         picture.setId(1);
 
         existentMaterial.setPicture(picture);
@@ -437,9 +433,9 @@ public class RepositoryServiceTest {
     public void updateMaterialPicture() {
         Material existentMaterial = new Material();
         Material newMaterial = new Material();
-        Picture picture1 = new Picture();
+        Picture picture1 = new OriginalPicture();
         picture1.setId(1);
-        Picture picture2 = new Picture();
+        Picture picture2 = new OriginalPicture();
         picture2.setId(2);
 
         existentMaterial.setPicture(picture1);

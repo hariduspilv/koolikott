@@ -93,7 +93,7 @@ public abstract class LearningObject implements Searchable {
 
     @ManyToOne
     @JoinColumn(name = "picture")
-    private Picture picture;
+    private OriginalPicture picture;
 
     @OneToOne(cascade = {PERSIST, MERGE})
     @JoinColumn(name = "recommendation")
@@ -197,7 +197,7 @@ public abstract class LearningObject implements Searchable {
     }
 
     public void setPicture(Picture picture) {
-        this.picture = picture;
+        this.picture = (OriginalPicture) picture;
     }
 
     public Recommendation getRecommendation() {

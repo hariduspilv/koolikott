@@ -28,7 +28,13 @@
   <!-- image -->
   <a data-ng-href="{{'/material?materialId=' + material.id}}" data-ng-if="material.picture"
      class="card-cover imaged {{materialType}}" layout="row" layout-align="start start">
-    <img data-ng-src="rest/picture/{{material.picture.name}}" class="md-card-image"/>
+    <img data-ng-src="rest/picture/thumbnail/sm_xs_xl/{{material.picture.name}}"
+      sizes="(max-width: 600px) 300px,
+             (min-width: 1921px) 300px,
+             200px"
+      data-ng-srcset="rest/picture/thumbnail/sm_xs_xl/{{material.picture.name}} 300w,
+                      rest/picture/thumbnail/sm/{{material.picture.name}} 200w"
+      class="md-card-image"/>
     <div class="card-hover {{materialType}}" layout="row">
       <div data-ng-if="isAuthenticated()" data-dop-favorite data-learning-object="material"></div>
 

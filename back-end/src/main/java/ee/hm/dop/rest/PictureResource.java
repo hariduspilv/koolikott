@@ -18,7 +18,9 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import ee.hm.dop.model.OriginalPicture;
 import ee.hm.dop.model.Picture;
+import ee.hm.dop.model.Thumbnail;
 import ee.hm.dop.service.PictureService;
 import org.apache.commons.configuration.Configuration;
 import org.apache.http.HttpHeaders;
@@ -47,6 +49,62 @@ public class PictureResource extends BaseResource {
         return Response.status(HttpURLConnection.HTTP_NOT_FOUND).build();
     }
 
+    @GET
+    @Path("thumbnail/sm/{name}")
+    @Produces("image/png")
+    public Response getSMThumbnailDataByName(@PathParam("name") String pictureName) {
+        Thumbnail thumbnail = pictureService.getSMThumbnailByName(pictureName);
+
+        if (thumbnail != null) {
+            byte[] data = thumbnail.getData();
+            return Response.ok(data).header(HttpHeaders.CACHE_CONTROL, "max-age=31536000").build();
+        }
+
+        return Response.status(HttpURLConnection.HTTP_NOT_FOUND).build();
+    }
+
+    @GET
+    @Path("thumbnail/sm_xs_xl/{name}")
+    @Produces("image/png")
+    public Response getSMLargeThumbnailDataByName(@PathParam("name") String pictureName) {
+        Thumbnail thumbnail = pictureService.getSMLargeThumbnailByName(pictureName);
+
+        if (thumbnail != null) {
+            byte[] data = thumbnail.getData();
+            return Response.ok(data).header(HttpHeaders.CACHE_CONTROL, "max-age=31536000").build();
+        }
+
+        return Response.status(HttpURLConnection.HTTP_NOT_FOUND).build();
+    }
+
+    @GET
+    @Path("thumbnail/lg/{name}")
+    @Produces("image/png")
+    public Response getLGThumbnailDataByName(@PathParam("name") String pictureName) {
+        Thumbnail thumbnail = pictureService.getLGThumbnailByName(pictureName);
+
+        if (thumbnail != null) {
+            byte[] data = thumbnail.getData();
+            return Response.ok(data).header(HttpHeaders.CACHE_CONTROL, "max-age=31536000").build();
+        }
+
+        return Response.status(HttpURLConnection.HTTP_NOT_FOUND).build();
+    }
+
+    @GET
+    @Path("thumbnail/lg_xs/{name}")
+    @Produces("image/png")
+    public Response getLGLargeThumbnailDataByName(@PathParam("name") String pictureName) {
+        Thumbnail thumbnail = pictureService.getLGLargeThumbnailByName(pictureName);
+
+        if (thumbnail != null) {
+            byte[] data = thumbnail.getData();
+            return Response.ok(data).header(HttpHeaders.CACHE_CONTROL, "max-age=31536000").build();
+        }
+
+        return Response.status(HttpURLConnection.HTTP_NOT_FOUND).build();
+    }
+
     @POST
     @RolesAllowed({ "USER", "ADMIN", "MODERATOR" })
     @Produces(MediaType.APPLICATION_JSON)
@@ -55,7 +113,7 @@ public class PictureResource extends BaseResource {
         byte[] dataBase64 = read(fileInputStream, configuration.getInt(MAX_FILE_SIZE));
         byte[] data = decodeBase64(dataBase64);
 
-        Picture picture = new Picture();
+        Picture picture = new OriginalPicture();
         picture.setData(data);
         return pictureService.create(picture);
     }

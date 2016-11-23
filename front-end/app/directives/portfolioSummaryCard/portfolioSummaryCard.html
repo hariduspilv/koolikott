@@ -126,7 +126,9 @@
         <div class="corner"></div>
         <!-- imaged -->
         <div data-ng-if="portfolio.picture" class="card-cover imaged">
-          <img data-ng-src="rest/picture/{{portfolio.picture.name}}"/>
+          <img data-ng-src="rest/picture/thumbnail/lg/{{portfolio.picture.name}}"sizes="(max-width: 600) 600px, 300px"
+                         data-ng-srcset="rest/picture/thumbnail/lg/{{portfolio.picture.name}} 300w,
+                                         rest/picture/thumbnail/lg_xs/{{portfolio.picture.name}} 600w"/>
         </div>
         <!-- noimage -->
         <div data-ng-if="!portfolio.picture" class="card-cover portfolio">
