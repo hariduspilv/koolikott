@@ -1,6 +1,6 @@
 <div class="md-whiteframe-1dp filter-content">
   <div layout="row" layout-sm="column" layout-xs="column" >
-    <div flex class="md-padding">
+    <div flex-gt-sm class="md-padding">
       <md-input-container class="hide-gt-xs md-block">
         <label data-translate="DETAILED_SEARCH_DESCRIPTION"></label>
         <input data-ng-model="detailedSearch.combinedDescription" data-ng-model-options="{debounce: 300}"/>
@@ -34,7 +34,7 @@
       </md-input-container>
     </div>
 
-    <div flex class="md-padding">
+    <div flex-gt-sm class="md-padding">
       <div data-dop-taxon-selector data-taxon="taxon"></div>
       <md-input-container class="md-block" data-ng-if="detailedSearch.educationalContext.id === 2 || detailedSearch.educationalContext.id === 3">
         <label data-translate="DETAILED_SEARCH_CROSS_CURRICULAR_THEME"></label>
@@ -53,7 +53,7 @@
       </md-input-container>
     </div>
 
-    <div flex class="md-padding">
+    <div flex-gt-sm class="md-padding">
       <div data-dop-target-group-selector
            data-target-groups="detailedSearch.targetGroups"
            data-is-required="{trigger: false}"
