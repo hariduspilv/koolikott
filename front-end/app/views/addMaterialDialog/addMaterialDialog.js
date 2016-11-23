@@ -212,7 +212,7 @@ define([
             };
 
             $scope.isTabTwoValid = function () {
-                return $scope.material.targetGroups && $scope.material.targetGroups.length > 0
+                return $scope.educationalContextId === 4 || ($scope.material.targetGroups && $scope.material.targetGroups.length > 0)
                     && ($scope.isBasicOrSecondaryEducation() ? $scope.material.keyCompetences.length > 0 && $scope.material.crossCurricularThemes.length > 0 : true);
             };
 
