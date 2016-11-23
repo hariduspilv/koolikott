@@ -141,7 +141,9 @@
 
   <md-divider hide-xs hide-sm hide-md></md-divider>
 
-  <a hide-xs hide-sm hide-md class="sidenav__header sidenav__header--version-number" md-ink-ripple layout="row" layout-align="start center" target="_blank" href="https://github.com/e-koolikott/DOP/blob/master/CHANGELOG.md">
-    <span class="material-icons icon-github-circled"></span><div class="sidenav__name"><span data-translate="APP_VERSION"></span> <span ng-bind="APP_VERSION"></span></div>
-  </a>
+  <div class="sidenav__item" layout="column" hide-xs hide-sm hide-md>
+    <a class="sidenav__header sidenav__header--version-number" md-ink-ripple layout="row" layout-align="start center" target="_blank" href="https://github.com/e-koolikott/DOP/blob/master/CHANGELOG.md">
+      <span class="material-icons icon-github-circled"></span><div class="sidenav__name"><span data-translate="APP_VERSION"></span> <span ng-bind="APP_VERSION"></span></div>
+    </a>
+  </div>
 </md-sidenav>
