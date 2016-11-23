@@ -208,19 +208,18 @@
             </span>
           </div>
 
-  <div data-ng-if="material.picture" class="card-cover imaged">
-    <img data-ng-src="rest/picture/thumbnail/lg/{{material.picture.name}}"
-      sizes="(max-width: 600px) 600px, 300px"
-      data-ng-srcset="rest/picture/thumbnail/lg_xs/{{material.picture.name}} 600w,
-                      rest/picture/thumbnail/lg/{{material.picture.name}} 300w"/>
-    <span data-ng-if="sourceType === 'LINK' && !material.embeddable">
-      <a class="card-hover" data-ng-href="{{material.source}}" target="_blank">
-        <md-icon>send</md-icon>
-        <md-tooltip md-direction="bottom">
-          <span data-translate="MATERIAL_VIEW_LINK_TO_MATERIAL">Open material</span>
-        </md-tooltip>
-      </a>
-    </span>
+          <div data-ng-if="material.picture" class="card-cover imaged">
+            <img data-ng-src="rest/picture/thumbnail/lg/{{material.picture.name}}"sizes="(max-width: 600px) 600px, 300px"
+                 data-ng-srcset="rest/picture/thumbnail/lg_xs/{{material.picture.name}} 600w,
+                                 rest/picture/thumbnail/lg/{{material.picture.name}} 300w"/>
+            <span data-ng-if="sourceType === 'LINK' && !material.embeddable">
+              <a class="card-hover" data-ng-href="{{material.source}}" target="_blank">
+                <md-icon>send</md-icon>
+                <md-tooltip md-direction="bottom">
+                  <span data-translate="MATERIAL_VIEW_LINK_TO_MATERIAL">Open material</span>
+                </md-tooltip>
+              </a>
+            </span>
 
             <span data-ng-if="sourceType === 'LINK' && material.embeddable">
               <a class="card-hover" data-ng-href="#" ng-click="showSourceFullscreen($event)">
