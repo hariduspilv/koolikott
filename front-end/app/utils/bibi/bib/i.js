@@ -103,6 +103,6 @@
             console.log("BiB/i: Loaded. - " + e.detail.Bibis.length + " Bibi(s).")
         }, !1), document.addEventListener("bibi:timed-out", function (e) {
             console.log("BiB/i: Timed Out.")
-        }, !1), document.addEventListener("DOMContentLoaded", e.embed, !1),
+        }, !1), document.addEventListener("DOMContentLoaded", e.embed, !1)
     }
 }();
