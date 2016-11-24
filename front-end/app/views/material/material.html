@@ -174,7 +174,7 @@
 
         <!-- right small side  -->
         <div layout="column" flex flex-gt-xs="25" class="divider-left" layout-align="start start">
-          <div data-ng-if="isLoggedIn() && !isRestricted() && !material.deleted && material.improper == 0 && material.broken == 0" data-dop-favorite data-learning-object="material"></div>
+          <div data-ng-if="isLoggedIn() && !isRestricted() && !material.deleted" data-dop-favorite data-learning-object="material"></div>
           <div data-ng-if="!material.picture" class="card-cover  {{getType()}}">
           <span>
             <md-icon class="icon-kind" data-ng-bind="getType()"></md-icon>

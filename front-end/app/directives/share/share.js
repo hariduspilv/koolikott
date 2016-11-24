@@ -14,7 +14,7 @@ define([
             controller: function($scope) {
                 $scope.isVisible = function () {
                     if ($scope.object) {
-                        if ($scope.object.deleted || $scope.object.improper > 0 || $scope.object.broken > 0) {
+                        if ($scope.object.deleted) {
                             return false;
                         }
                     }
