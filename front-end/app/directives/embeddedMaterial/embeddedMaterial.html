@@ -35,6 +35,15 @@
       </video>
     </div>
 
+    <div data-ng-show="sourceType === 'VIDEO' && !canPlayVideo"
+         class="embed-responsive-container embed-video">
+      <md-toolbar class="md-warn md-tall" layout-align="center center">
+        <div class="md-toolbar-tools" layout-align="center center">
+          <span data-translate="NO_VIDEO_SUPPORT_FOR_BROWSER" class="line-height--normal"></span>
+        </div>
+      </md-toolbar>
+    </div>
+
     <a class="embed-link" href="{{material.source}}" ng-if="sourceType === 'PICTURE'" target="_blank"
        ng-class="{'embed-image-padded': isEditPortfolioMode || $root.isViewPortforlioPage}">
       <img src="{{material.source}}"/>
