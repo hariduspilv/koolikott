@@ -13,7 +13,8 @@
       <td md-cell data-ng-bind="getCorrectLanguageTitle(item.material)"></td>
       <td md-cell data-ng-bind="formatDate(item.added)"></td>
       <td md-cell>{{item.reportCount}}</td>
-      <td md-cell data-ng-if="item.reportCount === 1">{{item.creator.name}} {{item.creator.surname}}
+      <td md-cell data-ng-if="item.reportCount === 1 && !item.creator" data-translate="UNKNOWN"></td>
+      <td md-cell data-ng-if="item.reportCount === 1 && item.creator">{{item.creator.name}} {{item.creator.surname}}</td>
       <td md-cell data-ng-if="item.reportCount > 1"><span data-translate="REPORTED_BY_MULTIPLE_USERS"></span></td>
       <td md-cell>
         <a ng-href="/material?materialId={{item.material.id}}">
