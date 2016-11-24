@@ -276,7 +276,8 @@
                                      md-min-length="0"
                                      md-selected-item-change="autocompleteItemSelected(keyCompetence, 'keyCompetences', 'key-competence-auto-input')"
                                      md-autoselect>
-                    <span md-highlight-text="competenceSearchText" md-highlight-flags="^i">
+                    <span md-highlight-text="competenceSearchText" md-highlight-flags="^i"
+                          data-ng-class="{'disabled-option': keyCompetence.name==='NOT_RELEVANT' && material.keyCompetences.length > 0}">
                       {{translate(keyCompetence.name, 'KEY_COMPETENCE_')}}
                     </span>
                     </md-autocomplete>
@@ -305,7 +306,8 @@
                                      md-min-length="0"
                                      md-selected-item-change="autocompleteItemSelected(crossCurricularTheme, 'crossCurricularThemes', 'cross-curricular-auto-input')"
                                      md-autoselect>
-                    <span md-highlight-text="crossCurricularSearchText" md-highlight-flags="^i">
+                    <span md-highlight-text="crossCurricularSearchText" md-highlight-flags="^i"
+                          data-ng-class="{'disabled-option': crossCurricularTheme.name==='NOT_RELEVANT' && material.crossCurricularThemes.length > 0}">
                       {{translate(crossCurricularTheme.name, 'CROSS_CURRICULAR_THEME_')}}
                     </span>
                     </md-autocomplete>
