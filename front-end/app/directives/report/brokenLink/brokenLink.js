@@ -4,7 +4,8 @@ define([
     'services/authenticatedUserService',
     'services/serverCallService'
 ], function(app) {
-    app.directive('dopReportBrokenLink', ['translationService', '$mdDialog', '$translate', 'authenticatedUserService', 'serverCallService', function(translationService, $mdDialog, $translate, authenticatedUserService, serverCallService) {
+    app.directive('dopReportBrokenLink', ['translationService', '$mdDialog', '$translate', 'authenticatedUserService', 'serverCallService', 'toastService',
+        function(translationService, $mdDialog, $translate, authenticatedUserService, serverCallService, toastService) {
         return {
             scope: false,
             templateUrl: 'directives/report/brokenLink/brokenLink.html',
@@ -48,6 +49,7 @@ define([
 
                 function setBrokenSuccessful() {
                     $scope.isBrokenReportedByUser = true;
+                    toastService.show('TOAST_NOTIFICATION_SENT_TO_ADMIN');
                 }
 
                 function queryFailed() {
