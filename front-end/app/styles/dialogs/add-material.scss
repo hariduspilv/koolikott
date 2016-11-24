@@ -83,3 +83,17 @@
   margin-top: 23px;
   margin-left: 12px;
 }
+
+@media screen and (max-width: $layout-breakpoint-xs){
+
+  .fullscreen-dialog {
+    height:100%;
+    width:100%;
+    max-height:100%;
+    max-width: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    border-radius: 0;
+  }
+}
