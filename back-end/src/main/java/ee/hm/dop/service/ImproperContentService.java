@@ -49,7 +49,7 @@ public class ImproperContentService {
     public ImproperContent get(long improperContentId, User user) {
         ImproperContent improperContent = improperContentDAO.findById(improperContentId);
 
-        if (improperContent != null && !learningObjectService.hasAccess(user, improperContent.getLearningObject())) {
+        if (improperContent != null && !learningObjectService.hasPermissionsToAccess(user, improperContent.getLearningObject())) {
             improperContent = null;
         }
 
@@ -120,7 +120,7 @@ public class ImproperContentService {
     public ImproperContent getByLearningObjectAndCreator(LearningObject learningObject, User creator, User user) {
         ImproperContent improperContent = improperContentDAO.findByLearningObjectAndCreator(learningObject, creator);
 
-        if (improperContent != null && !learningObjectService.hasAccess(user, improperContent.getLearningObject())) {
+        if (improperContent != null && !learningObjectService.hasPermissionsToAccess(user, improperContent.getLearningObject())) {
             improperContent = null;
         }
 
@@ -152,6 +152,6 @@ public class ImproperContentService {
     }
 
     private void removeIfHasNoAccess(User user, List<ImproperContent> impropers) {
-        impropers.removeIf(improper -> !learningObjectService.hasAccess(user, improper.getLearningObject()));
+        impropers.removeIf(improper -> !learningObjectService.hasPermissionsToAccess(user, improper.getLearningObject()));
     }
 }

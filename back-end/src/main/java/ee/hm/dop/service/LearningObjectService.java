@@ -16,7 +16,7 @@ import ee.hm.dop.service.learningObject.LearningObjectHandler;
 import ee.hm.dop.service.learningObject.LearningObjectHandlerFactory;
 import org.joda.time.DateTime;
 
-public class LearningObjectService {
+public class LearningObjectService extends BaseService {
 
     @Inject
     private LearningObjectDAO learningObjectDAO;
@@ -30,25 +30,25 @@ public class LearningObjectService {
     public LearningObject get(long learningObjectId, User user) {
         LearningObject learningObject = getLearningObjectDAO().findById(learningObjectId);
 
-        if (!hasAccess(user, learningObject)) {
+        if (!hasPermissionsToAccess(user, learningObject)) {
             learningObject = null;
         }
 
         return learningObject;
     }
 
-    public boolean hasAccess(User user, LearningObject learningObject) {
+    protected boolean hasPermissionsToAccess(User user, LearningObject learningObject) {
         if (learningObject == null) {
             return false;
         }
 
         LearningObjectHandler learningObjectHandler = getLearningObjectHandler(learningObject);
-        return learningObjectHandler.hasAccess(user, learningObject);
+        return learningObjectHandler.hasPermissionsToAccess(user, learningObject);
     }
 
     public LearningObject addTag(LearningObject learningObject, Tag tag, User user) {
         LearningObject updatedLearningObject;
-        if (!hasAccess(user, learningObject)) {
+        if (!hasPermissionsToAccess(user, learningObject)) {
             throw new RuntimeException("Access denied");
         }
 

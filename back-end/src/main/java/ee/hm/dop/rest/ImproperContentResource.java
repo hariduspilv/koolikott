@@ -1,7 +1,5 @@
 package ee.hm.dop.rest;
 
-import static ee.hm.dop.utils.UserUtils.isAdmin;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,6 +18,7 @@ import javax.ws.rs.core.Response;
 
 import ee.hm.dop.model.ImproperContent;
 import ee.hm.dop.model.LearningObject;
+import ee.hm.dop.model.Role;
 import ee.hm.dop.model.User;
 import ee.hm.dop.service.ImproperContentService;
 import ee.hm.dop.service.LearningObjectService;
@@ -57,7 +56,7 @@ public class ImproperContentResource extends BaseResource {
         if (learningObjectId != null) {
             LearningObject learningObject = learningObjectService.get(learningObjectId, loggedInUser);
 
-            if (isAdmin(loggedInUser)) {
+            if (isUserAdmin(loggedInUser)) {
                 result.addAll(improperContentService.getByLearningObject(learningObject, loggedInUser));
             } else {
                 ImproperContent improper = improperContentService.getByLearningObjectAndCreator(learningObject,
@@ -141,5 +140,9 @@ public class ImproperContentResource extends BaseResource {
         List<ImproperContent> impropers = new ArrayList<>();
         impropers.add(improper);
         improperContentService.deleteAll(impropers, getLoggedInUser());
+    }
+
+    protected boolean isUserAdmin(User loggedInUser) {
+        return loggedInUser != null && loggedInUser.getRole() == Role.ADMIN;
     }
 }

@@ -15,6 +15,7 @@ public class UserLikeService {
     private UserLikeDAO userLikeDAO;
 
     public List<Searchable> getMostLiked(int maxResults) {
+        // TODO: return only objects that user is allowed to see ex if private portfolio then, don't return
         return userLikeDAO.findMostLikedSince(now().minusYears(1), maxResults);
     }
 }

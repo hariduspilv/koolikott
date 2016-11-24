@@ -134,6 +134,7 @@
     <field name="recommended" type="boolean" indexed="true" stored="false" multiValued="false"/>
     <field name="recommendation_timestamp" type="tdate" indexed="true" stored="false" multiValued="false"/>
     <field name="views" type="int" indexed="true" stored="false" multiValued="false"/>
+    <field name="creator" type="string" indexed="true" stored="false" multiValued="false"/>
 
     <!-- Material & Portfolio -->
     <field name="title" type="text_general" indexed="true" stored="false" multiValued="true"/>

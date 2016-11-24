@@ -54,7 +54,7 @@ public class PortfolioResourceTest extends ResourceIntegrationTestBase {
     @Test
     public void getNotExistingPortfolio() {
         Response response = doGet(format(GET_PORTFOLIO_URL, 2000));
-        assertEquals(Status.NO_CONTENT.getStatusCode(), response.getStatus());
+        assertEquals(Status.INTERNAL_SERVER_ERROR.getStatusCode(), response.getStatus());
     }
 
     @Test
@@ -74,7 +74,7 @@ public class PortfolioResourceTest extends ResourceIntegrationTestBase {
         Long id = 7L;
 
         Response response = doGet(format(GET_PORTFOLIO_URL, id));
-        assertEquals(Status.NO_CONTENT.getStatusCode(), response.getStatus());
+        assertEquals(Status.INTERNAL_SERVER_ERROR.getStatusCode(), response.getStatus());
     }
 
     @Test
@@ -243,7 +243,7 @@ public class PortfolioResourceTest extends ResourceIntegrationTestBase {
 
     @Test
     public void updateSomeoneElsesPortfolio() {
-        login("38011550077");
+        User user = login("38011550077");
 
         Portfolio portfolio = getPortfolio(105);
         portfolio.setTitle("This is not my portfolio.");

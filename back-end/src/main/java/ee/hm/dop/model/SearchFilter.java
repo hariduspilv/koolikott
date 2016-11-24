@@ -26,13 +26,19 @@ public class SearchFilter {
 
     private KeyCompetence keyCompetence;
 
-    private Visibility visibility;
+    private List<Visibility> visibility;
 
     private Boolean isCurriculumLiterature;
 
     private String sort;
 
     private SortDirection sortDirection;
+
+    private boolean myPrivates = false;
+
+    private Long creator;
+
+    private User requestingUser;
 
     public List<Taxon> getTaxons() {
         return taxon;
@@ -114,11 +120,11 @@ public class SearchFilter {
         this.keyCompetence = keyCompetence;
     }
 
-    public Visibility getVisibility() {
+    public List<Visibility> getVisibility() {
         return visibility;
     }
 
-    public void setVisibility(Visibility visibility) {
+    public void setVisibility(List<Visibility> visibility) {
         this.visibility = visibility;
     }
 
@@ -144,6 +150,30 @@ public class SearchFilter {
 
     public void setSortDirection(SortDirection sortDirection) {
         this.sortDirection = sortDirection;
+    }
+
+    public boolean getMyPrivates() {
+        return myPrivates;
+    }
+
+    public void setMyPrivates(boolean myPrivates) {
+        this.myPrivates = myPrivates;
+    }
+
+    public Long getCreator() {
+        return creator;
+    }
+
+    public void setCreator(Long creator) {
+        this.creator = creator;
+    }
+
+    public User getRequestingUser() {
+        return requestingUser;
+    }
+
+    public void setRequestingUser(User requestingUser) {
+        this.requestingUser = requestingUser;
     }
 
     public enum SortDirection {

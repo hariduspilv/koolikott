@@ -4,6 +4,7 @@ import static ee.hm.dop.service.SolrService.getTokenizedQueryString;
 import static java.lang.String.format;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
@@ -57,10 +58,10 @@ public class SearchService {
     @Inject
     private UserFavoriteDAO userFavoriteDAO;
 
-    public SearchResult search(String query, long start, Long limit, SearchFilter searchFilter, User loggedInUser) {
+    public SearchResult search(String query, long start, Long limit, SearchFilter searchFilter) {
         SearchResult searchResult = new SearchResult();
 
-        searchFilter.setVisibility(getSearchVisibility(loggedInUser));
+        searchFilter.setVisibility(getSearchVisibility(searchFilter.getRequestingUser()));
         Long resultCount;
         if (limit != null && limit == 0) resultCount = null;
         else resultCount = limit;
@@ -70,7 +71,7 @@ public class SearchService {
 
         if (response != null) {
             List<Document> documents = response.getDocuments();
-            List<Searchable> unsortedSearchable = retrieveSearchedItems(documents, loggedInUser);
+            List<Searchable> unsortedSearchable = retrieveSearchedItems(documents, searchFilter.getRequestingUser());
             List<Searchable> sortedSearchable = sortSearchable(documents, unsortedSearchable);
 
             searchResult.setStart(response.getStart());
@@ -88,15 +89,22 @@ public class SearchService {
         return searchResult;
     }
 
-    private Visibility getSearchVisibility(User loggedInUser) {
-        Visibility visibility = Visibility.PUBLIC;
+    private List<Visibility> getSearchVisibility(User loggedInUser) {
+        List<Visibility> visibilities = new ArrayList<Visibility>() {{
+            add(Visibility.PUBLIC);
+        }};
 
-        if (loggedInUser != null && loggedInUser.getRole() == Role.ADMIN) {
-            // No visibility filter is applied, so admin can see all searchables
-            visibility = null;
+        if (loggedInUser != null) {
+            if (loggedInUser.getRole() == Role.ADMIN) {
+                // Add private and not listed, so admin can see all searchables
+                visibilities.add(Visibility.NOT_LISTED);
+                visibilities.add(Visibility.PRIVATE);
+            } else if (loggedInUser.getRole() == Role.MODERATOR) {
+                visibilities.add(Visibility.NOT_LISTED);
+            }
         }
 
-        return visibility;
+        return visibilities;
     }
 
     private List<Searchable> retrieveSearchedItems(List<Document> documents, User loggedInUser) {
@@ -109,9 +117,11 @@ public class SearchService {
 
         if (!learningObjectIds.isEmpty()) {
             learningObjectDAO.findAllById(learningObjectIds).forEach(searchable -> {
-                UserFavorite userFavorite = userFavoriteDAO.findFavoriteByUserAndLearningObject(searchable.getId(), loggedInUser);
-                if (userFavorite != null && userFavorite.getId() != null) searchable.setFavorite(true);
-                else searchable.setFavorite(false);
+                if(loggedInUser != null) {
+                    UserFavorite userFavorite = userFavoriteDAO.findFavoriteByUserAndLearningObject(searchable.getId(), loggedInUser);
+                    if (userFavorite != null && userFavorite.getId() != null) searchable.setFavorite(true);
+                    else searchable.setFavorite(false);
+                }
 
                 unsortedSearchable.add(searchable);
             });
@@ -187,6 +197,7 @@ public class SearchService {
         filters.add(getKeyCompetenceAsQuery(searchFilter));
         filters.add(isCurriculumLiteratureAsQuery(searchFilter));
         filters.add(getVisibilityAsQuery(searchFilter));
+        filters.add(getCreatorAsQuery(searchFilter));
 
         // Remove empty elements
         filters = filters.stream().filter(f -> !f.isEmpty()).collect(Collectors.toList());
@@ -386,18 +397,32 @@ public class SearchService {
         Boolean isCurriculumLiterature = searchFilter.isCurriculumLiterature();
         if (Boolean.TRUE.equals(isCurriculumLiterature)) {
             return "peerReview:[* TO *]";
-        } else if (Boolean.FALSE.equals(isCurriculumLiterature)) {
-            return "";
         }
+
         return "";
     }
 
     private String getVisibilityAsQuery(SearchFilter searchFilter) {
-        Visibility visibility = searchFilter.getVisibility();
-        if (visibility != null) {
-            return format("(visibility:\"%s\" OR type:\"material\")", visibility.toString().toLowerCase());
+        List<Visibility> visibilities = searchFilter.getVisibility();
+        List<String> filter = visibilities
+                .stream()
+                .map(visibility -> format("visibility:\"%s\"", visibility.toString().toLowerCase()))
+                .collect(Collectors.toList());
+
+        //Visible to user according to their role or is a material or is the creator
+        String query = "((" + StringUtils.join(filter, " OR ") + ") OR type:\"material\")";
+        if (searchFilter.getRequestingUser() != null && searchFilter.getMyPrivates()) {
+            query = query + " OR creator:" + searchFilter.getRequestingUser().getId();
         }
-        return "";
+
+        return query;
     }
 
+    private String getCreatorAsQuery(SearchFilter searchFilter) {
+        if (searchFilter.getCreator() != null) {
+            return "creator:" + searchFilter.getCreator();
+        }
+
+        return "";
+    }
 }

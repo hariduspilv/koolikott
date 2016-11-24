@@ -128,11 +128,14 @@ define([
 
             function checkAuthorized(portfolio) {
                 var user = authenticatedUserService.getUser();
-                if (user.id != portfolio.creator.id || user.role === 'RESTRICTED') {
-                    $location.url("/");
-                    return false;
+
+                if (user.id == portfolio.creator.id || authenticatedUserService.isAdmin() || authenticatedUserService.isModerator()) {
+                    return true
                 }
-                return true;
+
+                console.log("You don't have permission to edit this portfolio");
+                $location.url("/");
+                return false;
             }
 
             function startAutosave() {

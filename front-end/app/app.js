@@ -137,7 +137,7 @@ define([
      * @param  {String} objKey (needed if hash)
      * @return {Array}
      */
-    app.filter('orderByTranslated', ['$translate', '$filter', function($translate, $filter) {
+    app.filter('orderByTranslated', ['$translate', '$filter', function ($translate, $filter) {
         return function (array, objKey, i18nKeyPrefix) {
             var result = [];
             var translated = [];
@@ -145,14 +145,14 @@ define([
                 i18nKeyPrefix = '';
             }
 
-            angular.forEach(array, function(value) {
+            angular.forEach(array, function (value) {
                 var i18nKeySuffix = objKey ? value[objKey] : value;
                 translated.push({
                     key: value,
                     label: $translate.instant(i18nKeyPrefix + i18nKeySuffix)
                 });
             });
-            angular.forEach($filter('orderBy')(translated, 'label'), function(sortedObject) {
+            angular.forEach($filter('orderBy')(translated, 'label'), function (sortedObject) {
                 result.push(sortedObject.key);
             });
             return result;
@@ -253,7 +253,7 @@ define([
         }]);
     }
 
-    function setDefaultShareParams ($rootScope, $location) {
+    function setDefaultShareParams($rootScope, $location) {
         $rootScope.shareTitle = 'e-Koolikott';
         $rootScope.shareUrl = $location.absUrl();
         $rootScope.shareDescription = 'e-Koolikott is a single web environment comprising digital learning material arranged by keywords on the basis of the curriculum. The portal allows finding educational materials located in different digital tool collections. The primary purpose of e-Koolikott is to allow accessing digital learning materials from a single point - the user no longer needs to search for materials in different portals.'
@@ -272,69 +272,63 @@ define([
         }
     });
 
+    function isViewMyProfilePage($location, user) {
+        return user && $location.path().indexOf('/' + user.username) != -1
+    }
+
+    function isDashboardPage(path) {
+        return path.indexOf("/dashboard") !== -1;
+    }
+
+    function isViewMaterialPage(path) {
+        return path === '/material';
+    }
+
+    function isViewPortfolioPage(path) {
+        return path === '/portfolio';
+    }
+
+    function isEditPortfolioPage(path) {
+        return path === '/portfolio/edit';
+    }
+
+    function isSearchPage($location) {
+        return $location.url().indexOf("/search") != -1
+    }
+
+    function isHomePage(path) {
+        return path === '/';
+    }
+
     app.run(function ($rootScope, $location, authenticatedUserService) {
         $rootScope.$on('$routeChangeSuccess', function () {
-            var user = authenticatedUserService.getUser();
+            const editModeAllowed = ["/portfolio/edit", "/search/result", "/material"];
 
             var path = $location.path();
+            var user = authenticatedUserService.getUser();
+            var isViewHomePage = isHomePage(path);
+            var isViewMyProfile = isViewMyProfilePage($location, user);
 
-            if (user && path === '/' + user.username && authenticatedUserService.isAuthenticated()) {
-                $location.path('/' + user.username + '/portfolios');
-            }
+            $rootScope.isViewPortforlioPage = isViewPortfolioPage(path);
+            $rootScope.isEditPortfolioPage = isEditPortfolioPage(path);
+            $rootScope.isViewMaterialPage = isViewMaterialPage(path);
+            $rootScope.isViewAdminPanelPage = isDashboardPage(path);
+            $rootScope.isViewMaterialOrPortfolioPage = !!($rootScope.isViewMaterialPage || $rootScope.isViewPortforlioPage);
 
-            var editModeAllowed = ["/portfolio/edit", "/search/result", "/material"];
+            if (isViewMyProfile) $location.path('/' + user.username + '/portfolios');
+            if (!$rootScope.isViewPortforlioPage || !$rootScope.isViewMaterialPage) setDefaultShareParams($rootScope, $location);
 
-            $rootScope.isViewPortforlioPage = path === '/portfolio';
-            $rootScope.isEditPortfolioPage = path === '/portfolio/edit';
-            $rootScope.isViewHomePage = path === '/';
-            $rootScope.isViewMaterialPage = path === '/material';
+            $rootScope.isUserTabOpen = !!($rootScope.isViewAdminPanelPage || isViewMyProfile || $rootScope.isViewMaterialPage);
+            $rootScope.isTaxonomyOpen = !!($rootScope.isViewMaterialPage || isViewHomePage || isSearchPage($location));
 
-            if (!$rootScope.isViewPortforlioPage || !$rootScope.isViewMaterialPage) {
-                setDefaultShareParams($rootScope, $location);
-            }
-
-            if (user && $location.path().indexOf('/' + user.username) != -1) {
-                $rootScope.isViewUserPage = true;
-            } else {
-                $rootScope.isViewUserPage = false;
-            }
-
-            if (path === '/dashboard/improperMaterials' || path === '/dashboard/improperPortfolios'
-                || path === '/dashboard/brokenMaterials' || path === '/dashboard/deletedMaterials'
-                || path === '/dashboard/brokenPortfolios' || path === '/dashboard/deletedPortfolios'
-                || path === '/dashboard') {
-                $rootScope.isViewAdminPanelPage = true;
-            } else {
-                $rootScope.isViewAdminPanelPage = false;
-            }
-
-            if (path === '/material' || path === '/portfolio') {
-                $rootScope.isViewMaterialPortfolioPage = true;
-            } else {
-                $rootScope.isViewMaterialPortfolioPage = false;
-            }
-
-            if ($rootScope.isViewAdminPanelPage || (user && path.indexOf('/' + user.username) != -1) || path === '/material') {
-                $rootScope.isUserTabOpen = true;
-            } else {
-                $rootScope.isUserTabOpen = false;
-            }
-
-            if ((path === '/material' || path === '/' || ($location.url().indexOf("/search") != -1)) && (!$rootScope.isEditPortfolioPage || !$rootScope.isViewPortforlioPage)) {
-                $rootScope.isTaxonomyOpen = true;
-            } else {
-                $rootScope.isTaxonomyOpen = false;
-            }
-            if (path == "/portfolio/edit") {
+            if ($rootScope.isEditPortfolioPage) {
                 $rootScope.isEditPortfolioMode = true;
                 $rootScope.selectedMaterials = [];
                 $rootScope.selectedSingleMaterial = null;
-            } else if (editModeAllowed.indexOf(path) != -1) {
-                if (path != "/material") {
-                    $rootScope.selectedSingleMaterial = null;
-                    $rootScope.selectedMaterials = [];
-                }
-            } else if (authenticatedUserService.isAuthenticated() && path != "/material") {
+            } else if (editModeAllowed.indexOf(path) != -1 && !$rootScope.isViewMaterialPage) {
+                $rootScope.selectedSingleMaterial = null;
+                $rootScope.selectedMaterials = [];
+            } else if (authenticatedUserService.isAuthenticated() && !$rootScope.isViewMaterialPage) {
                 $rootScope.isEditPortfolioMode = false;
                 $rootScope.selectedSingleMaterial = null;
                 $rootScope.selectedMaterials = [];
@@ -344,7 +338,7 @@ define([
                 $rootScope.selectedMaterials = null;
             }
 
-            if (window.innerWidth > 1280 && ($rootScope.isViewPortforlioPage || $rootScope.isEditPortfolioPage)) {
+            if (window.innerWidth > 1280 && ($rootScope.isViewPortforlioPage || $rootScope.isEditPortfolioPage)) {
                 $rootScope.sideNavOpen = true;
             }
 
@@ -365,12 +359,12 @@ define([
         };
     });
 
-    app.run(function ($rootScope, $location, $timeout, $document) {
+    app.run(function ($rootScope, $location, $timeout) {
         if (!window.history || !history.replaceState) {
             return;
         }
 
-        $rootScope.$on('duScrollspy:becameActive', function ($event, $element, $target) {
+        $rootScope.$on('duScrollspy:becameActive', function ($event, $element) {
             //Automatically update location
             var hash = $element.prop('hash');
             if (hash) {
@@ -384,7 +378,7 @@ define([
     });
 
     app.run(['$rootScope', 'authenticatedUserService', function ($rootScope, authenticatedUserService) {
-        $rootScope.$on('$locationChangeStart', function (event, next, current) {
+        $rootScope.$on('$locationChangeStart', function (event, next) {
             for (var i in config.routes) {
                 if (next.indexOf(i) != -1) {
                     var permissions = config.routes[i].permissions;
@@ -433,4 +427,5 @@ define([
     });
 
     return angularAMD.bootstrap(app);
-});
+})
+;

@@ -1,7 +1,6 @@
 package ee.hm.dop.service;
 
 import static ee.hm.dop.utils.ConfigurationProperties.SERVER_ADDRESS;
-import static ee.hm.dop.utils.UserUtils.isAdmin;
 import static org.apache.commons.lang3.StringUtils.isEmpty;
 import static org.joda.time.DateTime.now;
 
@@ -31,7 +30,7 @@ import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class MaterialService implements LearningObjectHandler {
+public class MaterialService extends BaseService implements LearningObjectHandler {
 
     public static final String BASICEDUCATION = "BASICEDUCATION";
     public static final String SECONDARYEDUCATION = "SECONDARYEDUCATION";
@@ -446,14 +445,6 @@ public class MaterialService implements LearningObjectHandler {
         return material;
     }
 
-    private boolean isUserAdmin(User loggedInUser) {
-        return loggedInUser != null && loggedInUser.getRole() == Role.ADMIN;
-    }
-
-    private boolean isUserModerator(User loggedInUser) {
-        return loggedInUser != null && loggedInUser.getRole() == Role.MODERATOR;
-    }
-
     private boolean isUserPublisher(User loggedInUser) {
         return loggedInUser != null && loggedInUser.getPublisher() != null;
     }
@@ -537,14 +528,29 @@ public class MaterialService implements LearningObjectHandler {
     }
 
     @Override
-    public boolean hasAccess(User user, LearningObject learningObject) {
+    public boolean hasPermissionsToAccess(User user, LearningObject learningObject) {
         if (!(learningObject instanceof Material)) {
             return false;
         }
 
         Material material = (Material) learningObject;
 
-        return !material.isDeleted() || isAdmin(user);
+        return !material.isDeleted() || isUserAdmin(user);
+    }
+
+    @Override
+    public boolean hasPermissionsToUpdate(User user, LearningObject learningObject) {
+        if (!(learningObject instanceof Material)) {
+            return false;
+        }
+
+        Material material = (Material) learningObject;
+
+        if(isUserAdminOrPublisher(user) || isUserCreator(material, user)){
+            return true;
+        }
+
+        return !material.isDeleted() || isUserAdmin(user);
     }
 
     @Override

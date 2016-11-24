@@ -157,7 +157,7 @@ public class PortfolioResource extends BaseResource {
     @POST
     @Path("restore")
     @Consumes(MediaType.APPLICATION_JSON)
-    @RolesAllowed({"ADMIN"})
+    @RolesAllowed({"ADMIN", "MODERATOR"})
     public void restore(Portfolio portfolio) {
         portfolioService.restore(portfolio, getLoggedInUser());
     }

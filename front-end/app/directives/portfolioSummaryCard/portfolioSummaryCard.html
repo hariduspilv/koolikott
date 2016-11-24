@@ -30,15 +30,14 @@
                 </md-button>
               </md-menu-item>
 
-              <md-menu-item
-                data-ng-if="(isEditPortfolioMode || canEdit() || (!isAdminButtonsShowing() && isAdmin())) && !portfolio.deleted">
+              <md-menu-item data-ng-if="canEdit() && !isAdminButtonsShowing() && !portfolio.deleted">
                 <md-button data-ng-click="confirmPortfolioDeletion()">
                   <md-icon md-menu-align-target>delete</md-icon>
                   <span data-translate="PORTFOLIO_DELETE"></span>
                 </md-button>
               </md-menu-item>
 
-              <md-menu-item data-ng-if="isAdmin() && portfolio.deleted && !isAdminButtonsShowing()">
+              <md-menu-item data-ng-if="isAdminOrModerator() && portfolio.deleted && !isAdminButtonsShowing()">
                 <md-button data-ng-click="restorePortfolio()">
                   <md-icon md-menu-align-target>undo</md-icon>
                   <span data-translate="BUTTON_RESTORE"></span>
@@ -49,8 +48,8 @@
 
               <md-menu-item data-ng-if="isAdmin()" dop-recommend data-portfolio="portfolio"></md-menu-item>
 
-              <md-menu-divider data-ng-if="!isAdmin()"></md-menu-divider>
-              <md-menu-item data-ng-if="!isAdmin()" dop-report-improper data-learning-object="portfolio"></md-menu-item>
+              <md-menu-divider data-ng-if="!isAdminOrModerator()"></md-menu-divider>
+              <md-menu-item data-ng-if="!isAdminOrModerator()" dop-report-improper data-learning-object="portfolio"></md-menu-item>
             </md-menu-content>
           </md-menu>
         </div>

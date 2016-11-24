@@ -63,14 +63,16 @@ public class SearchResource extends BaseResource {
                                @QueryParam("language") String languageCode,
                                @QueryParam("targetGroup") List<TargetGroup> targetGroups,
                                @QueryParam("resourceType") String resourceTypeName,
-                               @QueryParam("specialEducation") Boolean isSpecialEducation,
+                               @QueryParam("specialEducation") boolean isSpecialEducation,
                                @QueryParam("issuedFrom") Integer issuedFrom,
                                @QueryParam("crossCurricularTheme") Long crossCurricularThemeId,
                                @QueryParam("keyCompetence") Long keyCompetenceId,
                                @QueryParam("curriculumLiterature") Boolean isCurriculumLiterature,
                                @QueryParam("sort") String sort,
                                @QueryParam("sortDirection") String sortDirection,
-                               @QueryParam("limit") Long limit) {
+                               @QueryParam("limit") Long limit,
+                               @QueryParam("creator") Long creator,
+                               @QueryParam("private") boolean myPrivates) {
 
         List<Taxon> taxons = taxonIds
                 .stream()
@@ -85,10 +87,6 @@ public class SearchResource extends BaseResource {
 
         if (paid == null) {
             paid = true;
-        }
-
-        if (isSpecialEducation == null) {
-            isSpecialEducation = false;
         }
 
         if (start == null) {
@@ -109,8 +107,11 @@ public class SearchResource extends BaseResource {
         searchFilter.setCurriculumLiterature(isCurriculumLiterature);
         searchFilter.setSort(sort);
         searchFilter.setSortDirection(SearchFilter.SortDirection.getByValue(sortDirection));
+        searchFilter.setCreator(creator);
+        searchFilter.setRequestingUser(getLoggedInUser());
+        searchFilter.setMyPrivates(myPrivates);
 
-        return searchService.search(query, start, limit, searchFilter, getLoggedInUser());
+        return searchService.search(query, start, limit, searchFilter);
     }
 
     @GET
@@ -119,5 +120,4 @@ public class SearchResource extends BaseResource {
     public List<Searchable> getMostLiked(@QueryParam("maxResults") int maxResults) {
         return userLikeService.getMostLiked(maxResults);
     }
-
 }

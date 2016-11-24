@@ -44,6 +44,7 @@ public class PortfolioServiceTest {
         Portfolio portfolio = createMock(Portfolio.class);
         expect(portfolioDAO.findByIdNotDeleted(portfolioId)).andReturn(portfolio);
         expect(portfolio.getVisibility()).andReturn(Visibility.PUBLIC);
+        expect(portfolio.isDeleted()).andReturn(false);
 
         replayAll(portfolio);
 

@@ -58,11 +58,20 @@ define([
                     };
 
                     $scope.canEdit = function () {
-                        return $scope.isOwner() && !authenticatedUserService.isRestricted();
+                        return ($scope.isOwner() || authenticatedUserService.isAdmin() || authenticatedUserService.isModerator())
+                            && !authenticatedUserService.isRestricted();
                     };
 
                     $scope.isAdmin = function () {
                         return authenticatedUserService.isAdmin();
+                    };
+
+                    $scope.isModerator = function () {
+                        return authenticatedUserService.isModerator();
+                    };
+
+                    $scope.isAdminOrModerator = function() {
+                        return authenticatedUserService.isAdmin() || authenticatedUserService.isModerator();
                     };
 
                     $scope.isLoggedIn = function () {
@@ -126,7 +135,7 @@ define([
                     };
 
                     $scope.setNotImproper = function () {
-                        if($scope.isAdmin() && $scope.portfolio) {
+                        if ($scope.isAdmin() && $scope.portfolio) {
                             url = "rest/impropers?learningObject=" + $scope.portfolio.id;
                             serverCallService.makeDelete(url, {}, setNotImproperSuccessful, setNotImproperFailed);
                         }
@@ -143,14 +152,14 @@ define([
                     }
 
                     $scope.$on("restore:portfolio", function () {
-                       $scope.restorePortfolio();
+                        $scope.restorePortfolio();
                     });
 
-                    $scope.$on("delete:portfolio", function() {
+                    $scope.$on("delete:portfolio", function () {
                         deletePortfolio();
                     });
 
-                    $scope.$on("setNotImproper:portfolio", function() {
+                    $scope.$on("setNotImproper:portfolio", function () {
                         $scope.setNotImproper();
                     });
 
@@ -177,7 +186,7 @@ define([
                     };
 
                     $scope.isAdminButtonsShowing = function () {
-                        return ($rootScope.learningObjectDeleted == false
+                        return $scope.isAdmin() && (($rootScope.learningObjectDeleted == false
                             && $rootScope.learningObjectImproper == false
                             && $rootScope.learningObjectBroken == true)
                             || ($rootScope.learningObjectDeleted == false
@@ -186,7 +195,7 @@ define([
                             || ($rootScope.learningObjectDeleted == false
                             && $rootScope.learningObjectBroken == true
                             && $rootScope.learningObjectImproper == true)
-                            || ($rootScope.learningObjectDeleted == true);
+                            || ($rootScope.learningObjectDeleted == true));
                     };
 
                     $scope.$watch('portfolio.taxon.id', function (newValue, oldValue) {
