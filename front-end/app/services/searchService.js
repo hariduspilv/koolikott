@@ -212,14 +212,10 @@ define(['angularAMD'], function(angularAMD) {
 
             queryExists: function() {
                 var searchObject = $location.search();
-                if (searchObject.q || searchObject.taxon || searchObject.paid === false ||
-                    (searchObject.type && this.isValidType(searchObject.type)) || searchObject.language || searchObject.targetGroup ||
-                    searchObject.resourceType || searchObject.specialEducation || searchObject.issuedFrom || searchObject.crossCurricularTheme ||
-                    searchObject.keyCompetence || searchObject.curriculumLiterature || (searchObject.sort && searchObject.sortDirection)) {
-                    return true;
-                } else {
-                    return false;
-                }
+                return !!(searchObject.q || searchObject.taxon || searchObject.paid === "false" ||
+                (searchObject.type && this.isValidType(searchObject.type)) || searchObject.language || searchObject.targetGroup ||
+                searchObject.resourceType || searchObject.specialEducation || searchObject.issuedFrom || searchObject.crossCurricularTheme ||
+                searchObject.keyCompetence || searchObject.curriculumLiterature || (searchObject.sort && searchObject.sortDirection));
             },
 
             getQuery: function() {

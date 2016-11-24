@@ -66,7 +66,7 @@ define([
                     'start': start
                 };
 
-                var taxonsList = searchService.getTaxon()
+                var taxonsList = searchService.getTaxon();
                 if (taxonsList && taxonsList[0]) {
                     params.taxon = searchService.getTaxon();
                 }
