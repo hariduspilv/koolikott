@@ -264,7 +264,8 @@
                 <div layout="row" flex layout-align="center center">
                   <md-chips ng-model="material.keyCompetences" md-autocomplete-snap md-require-match="true" flex
                             name="keyCompetencesInput"
-                            data-ng-click="addMaterialForm.keyCompetencesInput.$setTouched()">
+                            data-ng-click="addMaterialForm.keyCompetencesInput.$setTouched()"
+                            md-on-remove="removeFocus('key-competence-auto-input')">
                     <md-autocomplete id="key-competence-auto"
                                      md-input-id="key-competence-auto-input"
                                      md-no-cache="true"
@@ -294,7 +295,8 @@
                 <div layout="row" flex layout-align="center center">
                   <md-chips ng-model="material.crossCurricularThemes" md-autocomplete-snap md-require-match="true"
                             flex name="crossCurricularThemesInput"
-                            data-ng-click="addMaterialForm.crossCurricularThemesInput.$setTouched()">
+                            data-ng-click="addMaterialForm.crossCurricularThemesInput.$setTouched()"
+                            md-on-remove="removeFocus('cross-curricular-auto-input')">
                     <md-autocomplete id="cross-curricular-auto"
                                      md-input-id="cross-curricular-auto-input"
                                      md-no-cache="true"

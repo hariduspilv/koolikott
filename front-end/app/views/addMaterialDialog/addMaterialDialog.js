@@ -273,6 +273,10 @@ define([
                     .filter(searchFilter(query, "CROSS_CURRICULAR_THEME_")) : $scope.crossCurricularThemes;
             };
 
+            $scope.removeFocus = function (elementId) {
+                document.getElementById(elementId).blur();
+            };
+
             $scope.autocompleteItemSelected = function (item, listName, elementId) {
 
                 if (shouldRemoveNotRelevantFromList(listName)) {
