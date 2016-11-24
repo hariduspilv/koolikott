@@ -56,8 +56,9 @@
                name="domainAndSubject" aria-label="Ainevaldkond ja teema" class="select">
       <md-option data-translate="SELECT_DOMAIN_AND_SUBJECT"
                  ng-click="ctrl.reset(ctrl.taxonPath.educationalContext)"></md-option>
-      <md-option ng-repeat="domainSubject in ctrl.basicEducationDomainSubjects" class="select__parent"
-                 data-ng-class="{ 'child' : domainSubject.level === '.Subject'}"
+      <md-option ng-repeat="domainSubject in ctrl.basicEducationDomainSubjects"
+                 data-ng-class="{ 'child' : domainSubject.level === '.Subject',
+                 'select__parent' : domainSubject.level === '.Domain'}"
                  data-ng-disabled="domainSubject.level !== '.Subject' && ctrl.isAddMaterialView"
                  ng-value="domainSubject"
                  data-translate="{{(domainSubject.level === '.Domain' ? 'DOMAIN_' : 'SUBJECT_') + domainSubject.name.toUpperCase()}}">

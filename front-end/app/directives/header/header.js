@@ -96,9 +96,7 @@ define([
                     };
 
                     $scope.clickOutside = function () {
-                        if ($scope.detailedSearch.isVisible && !$rootScope.dontCloseSearch) {
-
-                        } else if ($rootScope.dontCloseSearch) {
+                        if ($rootScope.dontCloseSearch) {
                             $rootScope.dontCloseSearch = false;
                         }
                     };
