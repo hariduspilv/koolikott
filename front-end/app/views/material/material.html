@@ -124,7 +124,7 @@
                   <span data-translate="MATERIAL_VIEW_RESOURCE_TYPE"></span>
                 </small>
                 <br>
-                <span class="hide-overflow" data-ng-repeat="resourceType in material.resourceTypes">
+                <span class="hide-overflow" data-ng-repeat="resourceType in material.resourceTypes" data-ng-if="!isNullOrZeroLength(material.resourceTypes)">
                   {{resourceType.name.toUpperCase() | translate}}{{$last ? '' : ', '}}
                 </span>
                 <span class="hide-overflow" data-ng-if="isNullOrZeroLength(material.resourceTypes)"
@@ -137,8 +137,8 @@
                   <span data-translate="DETAIL_VIEW_TARGET_GROUP"></span>
                 </small>
                 <br>
-                <span class="hide-overflow" data-ng-repeat="targetGroup in targetGroups">
-                  <span data-ng-if="$index == 0">{{'TARGET_GROUP_' + targetGroup | translate}}</span>
+                <span class="hide-overflow one-row">
+                  <span data-ng-repeat="targetGroup in targetGroups">{{'TARGET_GROUP_' + targetGroup | translate}}{{$last ? '' : ', '}}</span>
                 </span>
                 <span class="hide-overflow" data-ng-if="isNullOrZeroLength(targetGroups)"
                       data-translate="UNKNOWN">Unknown</span>
