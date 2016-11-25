@@ -64,12 +64,9 @@ public class UploadedFileService {
             mediaType = MediaType.APPLICATION_OCTET_STREAM;
         }
 
-        String encodedFileName;
-        try {
-            encodedFileName = URLEncoder.encode(filename, UTF_8.name());
-        } catch (UnsupportedEncodingException e) {
-            logger.info("Unsupported encoding, not encoding", e.toString());
-            encodedFileName = filename;
+        String encodedFileName = file.getName();
+        if(filename.contains("/")){
+            encodedFileName = file.getName() + filename.substring(filename.indexOf("/"), filename.length());
         }
 
         final String directoryConstant = isReview ? FILE_REVIEW_DIRECTORY : FILE_UPLOAD_DIRECTORY;
@@ -93,7 +90,8 @@ public class UploadedFileService {
         LimitedSizeInputStream limitedSizeInputStream = new LimitedSizeInputStream(configuration.getInt(DOCUMENT_MAX_FILE_SIZE), fileInputStream);
 
         UploadedFile uploadedFile = new UploadedFile();
-        String filename = URLEncoder.encode(fileDetail.getFileName(), UTF_8.name());
+        String filenameCleaned = fileDetail.getFileName().replaceAll(" ", "+");
+        String filename = URLEncoder.encode(filenameCleaned, UTF_8.name());
         uploadedFile.setName(filename);
         uploadedFile = create(uploadedFile);
 
