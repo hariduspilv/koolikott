@@ -51,7 +51,7 @@ public class UploadedFileService {
         return uploadedFileDAO.update(uploadedFile);
     }
 
-    public Response getFile(Long fileId, String filename, boolean isReview) {
+    public Response getFile(Long fileId, String filename, final boolean isReview) {
         UploadedFile file = getUploadedFileById(fileId);
         if (file == null) {
             return Response.status(Response.Status.NOT_FOUND).build();
@@ -72,7 +72,8 @@ public class UploadedFileService {
             encodedFileName = filename;
         }
 
-        String path = configuration.getString(isReview ? FILE_REVIEW_DIRECTORY : FILE_UPLOAD_DIRECTORY) + file.getId() + File.separator + encodedFileName;
+        final String directoryConstant = isReview ? FILE_REVIEW_DIRECTORY : FILE_UPLOAD_DIRECTORY;
+        String path = configuration.getString(directoryConstant) + file.getId() + File.separator + encodedFileName;
 
         if (new File(path).isDirectory()) {
             return Response.status(Response.Status.NO_CONTENT).build();
