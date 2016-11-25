@@ -71,7 +71,7 @@ define([
                     params.taxon = searchService.getTaxon();
                 }
 
-                if (searchService.isPaid() === false) {
+                if (searchService.isPaid().toString() === "false") {
                     params.paid = searchService.isPaid();
                 }
 
@@ -95,7 +95,7 @@ define([
                     params.curriculumLiterature = searchService.isCurriculumLiterature();
                 }
 
-                if (searchService.isSpecialEducation() === true) {
+                if (searchService.isSpecialEducation().toString() === "true") {
                     params.specialEducation = searchService.isSpecialEducation();
                 }
 
