@@ -27,10 +27,13 @@ import org.apache.commons.configuration.Configuration;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class UploadedFileService {
 
     private static final String EBOOK_EXTENSION = "epub";
+    private Logger logger = LoggerFactory.getLogger(getClass());
 
     @Inject
     private UploadedFileDAO uploadedFileDAO;
@@ -63,13 +66,20 @@ public class UploadedFileService {
             mediaType = MediaType.APPLICATION_OCTET_STREAM;
         }
 
-        String path = configuration.getString(FILE_UPLOAD_DIRECTORY) + file.getId() + File.separator + filename;
+        String encodedFileName;
+        try {
+            encodedFileName = URLEncoder.encode(filename, UTF_8.name());
+        } catch (UnsupportedEncodingException e) {
+            logger.info("Unsupported encoding, not encoding", e.toString());
+            encodedFileName = filename;
+        }
+        String path = configuration.getString(FILE_UPLOAD_DIRECTORY) + file.getId() + File.separator + encodedFileName;
 
-        if (new File(path).isDirectory()){
+        if (new File(path).isDirectory()) {
             return Response.status(Response.Status.NO_CONTENT).build();
         }
 
-        if(!new File(path).exists()){
+        if (!new File(path).exists()) {
             return Response.status(Response.Status.NOT_FOUND).build();
         }
 
@@ -93,9 +103,9 @@ public class UploadedFileService {
         uploadedFile.setPath(path);
         uploadedFile.setUrl(url);
 
-        if(Objects.equals(extension, EBOOK_EXTENSION)){
+        if (Objects.equals(extension, EBOOK_EXTENSION)) {
             unpackArchive(limitedSizeInputStream, path);
-        }else{
+        } else {
             writeToFile(limitedSizeInputStream, path);
         }
 
