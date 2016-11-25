@@ -67,10 +67,10 @@ define([
                 }
 
                 $scope.$watch(function () {
-                    return localStorage.getItem($scope.taxon.name.toUpperCase() + "_COUNT");
+                    return localStorage.getItem(getTaxonCountKey($scope.taxon));
                 }, function (newCount, oldCount) {
                     if (newCount && newCount !== oldCount) {
-                        $scope.materialCount = localStorage.getItem($scope.taxon.name.toUpperCase() + "_COUNT");
+                        $scope.materialCount = localStorage.getItem(getTaxonCountKey($scope.taxon));
                     }
                 });
 
@@ -106,17 +106,23 @@ define([
                 });
 
                 function refreshThisTaxonCount() {
-                    $scope.materialCount = localStorage.getItem($scope.taxon.name.toUpperCase() + "_COUNT");
-                    $timeout(getTaxonMaterialsCount($scope.taxon));
-
+                    $scope.materialCount = localStorage.getItem(getTaxonCountKey($scope.taxon));
+                    $timeout(function () {
+                        getTaxonMaterialsCount($scope.taxon)
+                    }, 100);
                 }
 
-                function getTaxonMaterialsCount(child) {
-                    serverCallService.makeGet('rest/search?q=&start=0&limit=0&taxon=' + child.id, {}, function (data) {
-                        localStorage.setItem(child.name.toUpperCase() + "_COUNT", data.totalResults);
+                function getTaxonMaterialsCount(taxon) {
+                    serverCallService.makeGet('rest/search?q=&start=0&limit=0&taxon=' + taxon.id, {}, function (data) {
+                        localStorage.setItem(getTaxonCountKey(taxon), data.totalResults);
                     }, function () {
-                        console.log("Failed to get " + child.name + " count");
+                        console.log("Failed to get " + taxon.name + " count");
                     })
+                }
+
+                function getTaxonCountKey(taxon) {
+                    return taxon.level.toUpperCase() + "_" + taxon.name.toUpperCase() + "_COUNT"
+
                 }
             }
         }
