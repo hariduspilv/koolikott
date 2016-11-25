@@ -4,9 +4,10 @@ import static ee.hm.dop.service.SolrService.getTokenizedQueryString;
 import static java.lang.String.format;
 
 import java.util.ArrayList;
-import java.util.Iterator;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -162,21 +163,15 @@ public class SearchService {
     }
 
     private List<Searchable> sortSearchable(List<Document> indexList, List<Searchable> unsortedSearchable) {
-        List<Searchable> sortedSearchable = new ArrayList<>();
+        Map<Long, Searchable> idToSearchable = new HashMap<>();
 
-        for (Document document : indexList) {
-            for (int i = 0; i < unsortedSearchable.size(); i++) {
-                Searchable searchable = unsortedSearchable.get(i);
+        for (Searchable searchable : unsortedSearchable)
+            idToSearchable.put(searchable.getId(), searchable);
 
-                if (document.getId() == searchable.getId() && document.getType().equals(searchable.getType())) {
-                    sortedSearchable.add(searchable);
-                    unsortedSearchable.remove(i);
-                    break;
-                }
-            }
-        }
-
-        return sortedSearchable;
+        return indexList.stream()
+                .filter(document -> idToSearchable.containsKey(document.getId()))
+                .map(document -> idToSearchable.get(document.getId()))
+                .collect(Collectors.toList());
     }
 
     /*

@@ -321,7 +321,7 @@ public class PortfolioService extends BaseService implements LearningObjectHandl
         Portfolio portfolio = (Portfolio) learningObject;
 
         return isPublic(learningObject) || isUserAdminOrModerator(user) ||
-                portfolio.getVisibility() == PRIVATE && isUserCreator(portfolio, user);
+                portfolio.getVisibility() == Visibility.PRIVATE && isUserCreator(portfolio, user);
     }
 
     @Override

@@ -4,9 +4,7 @@ import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertSame;
-import static org.junit.Assert.fail;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -110,7 +108,7 @@ public class SearchServiceTest {
         String tokenizedQuery = "(type:\"material\" OR type:\"portfolio\") AND ((visibility:\"public\") OR type:\"material\")";
         long start = 0;
 
-        List<Searchable> searchables = Arrays.asList(createMaterial(9L), createMaterial(2L), createPortfolio(2L));
+        List<Searchable> searchables = Arrays.asList(createMaterial(9L), createMaterial(2L), createPortfolio(1L));
 
         testSearch(query, tokenizedQuery, null, searchables, start, null, searchFilter, null);
     }
@@ -156,7 +154,7 @@ public class SearchServiceTest {
         String tokenizedQuery = "(airplane) AND ((visibility:\"public\") OR type:\"material\")";
         long start = 0;
 
-        List<Searchable> searchables = Arrays.asList(createMaterial(9L), createMaterial(2L), createPortfolio(2L));
+        List<Searchable> searchables = Arrays.asList(createMaterial(9L), createMaterial(2L), createPortfolio(1L));
 
         testSearch(query, tokenizedQuery, null, searchables, start, null, searchFilter, null);
     }
@@ -173,7 +171,7 @@ public class SearchServiceTest {
                 + " AND ((visibility:\"public\") OR type:\"material\")";
         long start = 0;
 
-        List<Searchable> searchables = Arrays.asList(createMaterial(9L), createMaterial(2L), createPortfolio(2L));
+        List<Searchable> searchables = Arrays.asList(createMaterial(9L), createMaterial(2L), createPortfolio(1L));
 
         testSearch(query, tokenizedQuery, null, searchables, start, null, searchFilter, null);
     }
@@ -197,7 +195,7 @@ public class SearchServiceTest {
                 + " AND ((visibility:\"public\") OR type:\"material\")";
         long start = 0;
 
-        List<Searchable> searchables = Arrays.asList(createMaterial(9L), createMaterial(2L), createPortfolio(2L));
+        List<Searchable> searchables = Arrays.asList(createMaterial(9L), createMaterial(2L), createPortfolio(1L));
 
         testSearch(query, tokenizedQuery, null, searchables, start, null, searchFilter, null);
     }
@@ -227,7 +225,7 @@ public class SearchServiceTest {
                 + " AND educational_context:\"preschool\" AND ((visibility:\"public\") OR type:\"material\")";
         long start = 0;
 
-        List<Searchable> searchables = Arrays.asList(createMaterial(9L), createMaterial(2L), createPortfolio(2L));
+        List<Searchable> searchables = Arrays.asList(createMaterial(9L), createMaterial(2L), createPortfolio(1L));
 
         testSearch(query, tokenizedQuery, null, searchables, start, null, searchFilter, null);
     }
@@ -257,7 +255,7 @@ public class SearchServiceTest {
                 + " AND educational_context:\"preschool\" AND ((visibility:\"public\") OR type:\"material\")";
         long start = 0;
 
-        List<Searchable> searchables = Arrays.asList(createMaterial(9L), createMaterial(2L), createPortfolio(2L));
+        List<Searchable> searchables = Arrays.asList(createMaterial(9L), createMaterial(2L), createPortfolio(1L));
 
         testSearch(query, tokenizedQuery, null, searchables, start, null, searchFilter, null);
     }
@@ -292,7 +290,7 @@ public class SearchServiceTest {
                 + " AND domain:\"cool_domain\" AND educational_context:\"preschool\" AND ((visibility:\"public\") OR type:\"material\")";
         long start = 0;
 
-        List<Searchable> searchables = Arrays.asList(createMaterial(9L), createMaterial(2L), createPortfolio(2L));
+        List<Searchable> searchables = Arrays.asList(createMaterial(9L), createMaterial(2L), createPortfolio(1L));
 
         testSearch(query, tokenizedQuery, null, searchables, start, null, searchFilter, null);
     }
@@ -321,7 +319,7 @@ public class SearchServiceTest {
                 + " AND educational_context:\"preschool\" AND ((visibility:\"public\") OR type:\"material\")";
         long start = 0;
 
-        List<Searchable> searchables = Arrays.asList(createMaterial(9L), createMaterial(2L), createPortfolio(2L));
+        List<Searchable> searchables = Arrays.asList(createMaterial(9L), createMaterial(2L), createPortfolio(1L));
 
         testSearch(query, tokenizedQuery, null, searchables, start, null, searchFilter, null);
     }
@@ -355,7 +353,7 @@ public class SearchServiceTest {
                 + " AND domain:\"cool_domain\" AND educational_context:\"preschool\" AND ((visibility:\"public\") OR type:\"material\")";
         long start = 0;
 
-        List<Searchable> searchables = Arrays.asList(createMaterial(9L), createMaterial(2L), createPortfolio(2L));
+        List<Searchable> searchables = Arrays.asList(createMaterial(9L), createMaterial(2L), createPortfolio(1L));
 
         testSearch(query, tokenizedQuery, null, searchables, start, null, searchFilter, null);
     }
@@ -396,7 +394,7 @@ public class SearchServiceTest {
                 + " AND educational_context:\"preschool\" AND ((visibility:\"public\") OR type:\"material\")";
         long start = 0;
 
-        List<Searchable> searchables = Arrays.asList(createMaterial(9L), createMaterial(2L), createPortfolio(2L));
+        List<Searchable> searchables = Arrays.asList(createMaterial(9L), createMaterial(2L), createPortfolio(1L));
 
         testSearch(query, tokenizedQuery, null, searchables, start, null, searchFilter, null);
     }
@@ -430,7 +428,7 @@ public class SearchServiceTest {
                 + " AND domain:\"cool_domain\" AND educational_context:\"preschool\" AND ((visibility:\"public\") OR type:\"material\")";
         long start = 0;
 
-        List<Searchable> searchables = Arrays.asList(createMaterial(9L), createMaterial(2L), createPortfolio(2L));
+        List<Searchable> searchables = Arrays.asList(createMaterial(9L), createMaterial(2L), createPortfolio(1L));
 
         testSearch(query, tokenizedQuery, null, searchables, start, null, searchFilter, null);
     }
@@ -470,7 +468,7 @@ public class SearchServiceTest {
                 + " AND ((visibility:\"public\") OR type:\"material\")";
         long start = 0;
 
-        List<Searchable> searchables = Arrays.asList(createMaterial(9L), createMaterial(2L), createPortfolio(2L));
+        List<Searchable> searchables = Arrays.asList(createMaterial(9L), createMaterial(2L), createPortfolio(1L));
 
         testSearch(query, tokenizedQuery, null, searchables, start, null, searchFilter, null);
     }
@@ -516,7 +514,7 @@ public class SearchServiceTest {
                 + " AND educational_context:\"preschool\" AND ((visibility:\"public\") OR type:\"material\")";
         long start = 0;
 
-        List<Searchable> searchables = Arrays.asList(createMaterial(9L), createMaterial(2L), createPortfolio(2L));
+        List<Searchable> searchables = Arrays.asList(createMaterial(9L), createMaterial(2L), createPortfolio(1L));
 
         testSearch(query, tokenizedQuery, null, searchables, start, null, searchFilter, null);
     }
@@ -530,7 +528,7 @@ public class SearchServiceTest {
                 + " AND ((visibility:\"public\") OR type:\"material\")";
         long start = 0;
 
-        List<Searchable> searchables = Arrays.asList(createMaterial(9L), createMaterial(2L), createPortfolio(2L));
+        List<Searchable> searchables = Arrays.asList(createMaterial(9L), createMaterial(2L), createPortfolio(1L));
 
         testSearch(query, tokenizedQuery, null, searchables, start, null, searchFilter, null);
     }
@@ -543,7 +541,7 @@ public class SearchServiceTest {
         String tokenizedQuery = "(textbooks) AND ((visibility:\"public\") OR type:\"material\")";
         long start = 0;
 
-        List<Searchable> searchables = Arrays.asList(createMaterial(9L), createMaterial(2L), createPortfolio(2L));
+        List<Searchable> searchables = Arrays.asList(createMaterial(9L), createMaterial(2L), createPortfolio(1L));
 
         testSearch(query, tokenizedQuery, null, searchables, start, null, searchFilter, null);
     }
@@ -556,7 +554,7 @@ public class SearchServiceTest {
         String tokenizedQuery = "(sky) AND type:\"material\" AND ((visibility:\"public\") OR type:\"material\")";
         long start = 0;
 
-        List<Searchable> searchables = Arrays.asList(createMaterial(9L), createMaterial(2L), createPortfolio(2L));
+        List<Searchable> searchables = Arrays.asList(createMaterial(9L), createMaterial(2L), createPortfolio(1L));
 
         testSearch(query, tokenizedQuery, null, searchables, start, null, searchFilter, null);
     }
@@ -569,7 +567,7 @@ public class SearchServiceTest {
         String tokenizedQuery = "(sky) AND (type:\"material\" OR type:\"portfolio\") AND ((visibility:\"public\") OR type:\"material\")";
         long start = 0;
 
-        List<Searchable> searchables = Arrays.asList(createMaterial(9L), createMaterial(2L), createPortfolio(2L));
+        List<Searchable> searchables = Arrays.asList(createMaterial(9L), createMaterial(2L), createPortfolio(1L));
 
         testSearch(query, tokenizedQuery, null, searchables, start, null, searchFilter, null);
     }
@@ -587,7 +585,7 @@ public class SearchServiceTest {
                 + " AND ((visibility:\"public\") OR type:\"material\")";
         long start = 0;
 
-        List<Searchable> searchables = Arrays.asList(createMaterial(9L), createMaterial(2L), createPortfolio(2L));
+        List<Searchable> searchables = Arrays.asList(createMaterial(9L), createMaterial(2L), createPortfolio(1L));
 
         testSearch(query, tokenizedQuery, null, searchables, start, null, searchFilter, null);
     }
@@ -605,7 +603,7 @@ public class SearchServiceTest {
                 + " AND ((visibility:\"public\") OR type:\"material\")";
         long start = 0;
 
-        List<Searchable> searchables = Arrays.asList(createMaterial(9L), createMaterial(2L), createPortfolio(2L));
+        List<Searchable> searchables = Arrays.asList(createMaterial(9L), createMaterial(2L), createPortfolio(1L));
 
         testSearch(query, tokenizedQuery, null, searchables, start, null, searchFilter, null);
     }
@@ -620,7 +618,7 @@ public class SearchServiceTest {
                 + " AND ((visibility:\"public\") OR type:\"material\")";
         long start = 0;
 
-        List<Searchable> searchables = Arrays.asList(createMaterial(9L), createMaterial(2L), createPortfolio(2L));
+        List<Searchable> searchables = Arrays.asList(createMaterial(9L), createMaterial(2L), createPortfolio(1L));
 
         testSearch(query, tokenizedQuery, null, searchables, start, null, searchFilter, null);
     }
@@ -683,7 +681,7 @@ public class SearchServiceTest {
                 + " AND key_competence:\"test_competence\" AND ((visibility:\"public\") OR type:\"material\")";
         long start = 0;
 
-        List<Searchable> searchables = Arrays.asList(createMaterial(9L), createMaterial(2L), createPortfolio(2L));
+        List<Searchable> searchables = Arrays.asList(createMaterial(9L), createMaterial(2L), createPortfolio(1L));
 
         testSearch(query, tokenizedQuery, null, searchables, start, null, searchFilter, null);
     }
@@ -699,7 +697,7 @@ public class SearchServiceTest {
                 + " AND ((visibility:\"public\") OR type:\"material\")";
         long start = 0;
 
-        List<Searchable> searchables = Arrays.asList(createMaterial(9L), createMaterial(2L), createPortfolio(2L));
+        List<Searchable> searchables = Arrays.asList(createMaterial(9L), createMaterial(2L), createPortfolio(1L));
 
         testSearch(query, tokenizedQuery, null, searchables, start, null, searchFilter, null);
     }
@@ -712,7 +710,7 @@ public class SearchServiceTest {
         String tokenizedQuery = "(umm) AND target_group:\"six_seven\" AND ((visibility:\"public\") OR type:\"material\")";
         long start = 0;
 
-        List<Searchable> searchables = Arrays.asList(createMaterial(9L), createMaterial(2L), createPortfolio(2L));
+        List<Searchable> searchables = Arrays.asList(createMaterial(9L), createMaterial(2L), createPortfolio(1L));
 
         testSearch(query, tokenizedQuery, null, searchables, start, null, searchFilter, null);
     }
@@ -726,7 +724,7 @@ public class SearchServiceTest {
                 + " AND ((visibility:\"public\") OR type:\"material\")";
         long start = 0;
 
-        List<Searchable> searchables = Arrays.asList(createMaterial(9L), createMaterial(2L), createPortfolio(2L));
+        List<Searchable> searchables = Arrays.asList(createMaterial(9L), createMaterial(2L), createPortfolio(1L));
 
         testSearch(query, tokenizedQuery, null, searchables, start, null, searchFilter, null);
     }
@@ -742,7 +740,7 @@ public class SearchServiceTest {
         String tokenizedQuery = "(test) AND resource_type:\"extrabook\" AND ((visibility:\"public\") OR type:\"material\")";
         long start = 0;
 
-        List<Searchable> searchables = Arrays.asList(createMaterial(9L), createMaterial(2L), createPortfolio(2L));
+        List<Searchable> searchables = Arrays.asList(createMaterial(9L), createMaterial(2L), createPortfolio(1L));
 
         testSearch(query, tokenizedQuery, null, searchables, start, null, searchFilter, null);
     }
@@ -755,7 +753,7 @@ public class SearchServiceTest {
         String tokenizedQuery = "(test) AND special_education:\"true\" AND ((visibility:\"public\") OR type:\"material\")";
         long start = 0;
 
-        List<Searchable> searchables = Arrays.asList(createMaterial(9L), createMaterial(2L), createPortfolio(2L));
+        List<Searchable> searchables = Arrays.asList(createMaterial(9L), createMaterial(2L), createPortfolio(1L));
 
         testSearch(query, tokenizedQuery, null, searchables, start, null, searchFilter, null);
     }
@@ -771,7 +769,7 @@ public class SearchServiceTest {
         String tokenizedQuery = "(test) AND cross_curricular_theme:\"test_theme\" AND ((visibility:\"public\") OR type:\"material\")";
         long start = 0;
 
-        List<Searchable> searchables = Arrays.asList(createMaterial(9L), createMaterial(2L), createPortfolio(2L));
+        List<Searchable> searchables = Arrays.asList(createMaterial(9L), createMaterial(2L), createPortfolio(1L));
 
         testSearch(query, tokenizedQuery, null, searchables, start, null, searchFilter, null);
     }
@@ -787,7 +785,7 @@ public class SearchServiceTest {
         String tokenizedQuery = "(test) AND key_competence:\"test_competence\" AND ((visibility:\"public\") OR type:\"material\")";
         long start = 0;
 
-        List<Searchable> searchables = Arrays.asList(createMaterial(9L), createMaterial(2L), createPortfolio(2L));
+        List<Searchable> searchables = Arrays.asList(createMaterial(9L), createMaterial(2L), createPortfolio(1L));
 
         testSearch(query, tokenizedQuery, null, searchables, start, null, searchFilter, null);
     }
@@ -824,7 +822,7 @@ public class SearchServiceTest {
                 + " AND ((visibility:\"public\") OR type:\"material\")";
         long start = 0;
 
-        List<Searchable> searchables = Arrays.asList(createMaterial(9L), createMaterial(2L), createPortfolio(2L));
+        List<Searchable> searchables = Arrays.asList(createMaterial(9L), createMaterial(2L), createPortfolio(1L));
 
         testSearch(query, tokenizedQuery, null, searchables, start, null, searchFilter, null);
     }
@@ -839,7 +837,7 @@ public class SearchServiceTest {
         String expectedSort = "somefield desc";
         long start = 0;
 
-        List<Searchable> searchables = Arrays.asList(createMaterial(9L), createMaterial(2L), createPortfolio(2L));
+        List<Searchable> searchables = Arrays.asList(createMaterial(9L), createMaterial(2L), createPortfolio(1L));
 
         testSearch(query, tokenizedQuery, expectedSort, searchables, start, null, searchFilter, null);
     }
@@ -853,7 +851,7 @@ public class SearchServiceTest {
                 + " AND ((visibility:\"public\") OR type:\"material\")";
         long start = 0;
 
-        List<Searchable> searchables = Arrays.asList(createMaterial(9L), createMaterial(2L), createPortfolio(2L));
+        List<Searchable> searchables = Arrays.asList(createMaterial(9L), createMaterial(2L), createPortfolio(1L));
 
         testSearch(query, tokenizedQuery, null, searchables, start, null, searchFilter, null);
     }
@@ -867,7 +865,7 @@ public class SearchServiceTest {
                 + " AND ((visibility:\"public\") OR type:\"material\")";
         long start = 0;
 
-        List<Searchable> searchables = Arrays.asList(createMaterial(9L), createMaterial(2L), createPortfolio(2L));
+        List<Searchable> searchables = Arrays.asList(createMaterial(9L), createMaterial(2L), createPortfolio(1L));
 
         testSearch(query, tokenizedQuery, null, searchables, start, null, searchFilter, null);
     }
@@ -882,7 +880,7 @@ public class SearchServiceTest {
         long start = 0;
         Long limit = 3L;
 
-        List<Searchable> searchables = Arrays.asList(createMaterial(9L), createMaterial(2L), createPortfolio(2L));
+        List<Searchable> searchables = Arrays.asList(createMaterial(9L), createMaterial(2L), createPortfolio(1L));
 
         testSearch(query, tokenizedQuery, null, searchables, start, limit, searchFilter, null);
     }
@@ -894,7 +892,7 @@ public class SearchServiceTest {
         SearchFilter searchFilter = new SearchFilter();
         long start = 50;
 
-        List<Searchable> searchables = Arrays.asList(createMaterial(9L), createMaterial(2L), createPortfolio(2L));
+        List<Searchable> searchables = Arrays.asList(createMaterial(9L), createMaterial(2L), createPortfolio(1L));
 
         testSearch(query, tokenizedQuery, null, searchables, start, null, searchFilter, null);
     }
@@ -907,7 +905,7 @@ public class SearchServiceTest {
         long start = 0;
         long totalResults = 1450;
 
-        List<Searchable> searchables = Arrays.asList(createMaterial(9L), createMaterial(2L), createPortfolio(2L));
+        List<Searchable> searchables = Arrays.asList(createMaterial(9L), createMaterial(2L), createPortfolio(1L));
 
         testSearch(query, tokenizedQuery, null, searchables, start, null, totalResults, searchFilter, null);
     }
@@ -936,17 +934,6 @@ public class SearchServiceTest {
         testSearch(query, tokenizedQuery, null, searchables, start, null, searchFilter, null);
     }
 
-    @Test
-    public void searchReturnsMaterialAndPortfoliosWithSameIds() {
-        String query = "people";
-        String tokenizedQuery = "(people) AND ((visibility:\"public\") OR type:\"material\")";
-        SearchFilter searchFilter = new SearchFilter();
-        long start = 0;
-
-        List<Searchable> searchables = Arrays.asList(createPortfolio(9L), createMaterial(9L));
-
-        testSearch(query, tokenizedQuery, null, searchables, start, null, searchFilter, null);
-    }
 
     private void testSearch(String query, String tokenizedQuery, String expectedSort, List<Searchable> searchables,
                             long start, Long limit, long totalResults, SearchFilter searchFilter, User loggedInUser) {

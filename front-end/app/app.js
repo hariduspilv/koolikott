@@ -274,7 +274,6 @@ define([
 
     function isViewMyProfilePage($location, user) {
         return user && $location.path().startsWith('/' + user.username);
-        // return user && $location.path().indexOf('/' + user.username) != -1
     }
 
     function isDashboardPage(path) {
