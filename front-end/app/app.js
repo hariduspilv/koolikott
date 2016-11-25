@@ -273,7 +273,8 @@ define([
     });
 
     function isViewMyProfilePage($location, user) {
-        return user && $location.path().indexOf('/' + user.username) != -1
+        return user && $location.path().startsWith('/' + user.username);
+        // return user && $location.path().indexOf('/' + user.username) != -1
     }
 
     function isDashboardPage(path) {
@@ -315,7 +316,9 @@ define([
             $rootScope.isViewAdminPanelPage = isDashboardPage(path);
             $rootScope.isViewMaterialOrPortfolioPage = !!($rootScope.isViewMaterialPage || $rootScope.isViewPortforlioPage);
 
-            if (isViewMyProfile) $location.path('/' + user.username + '/portfolios');
+            if (isViewMyProfile && $location.path() === '/' + authenticatedUserService.getUser().username) {
+                $location.path('/' + user.username + '/portfolios');
+            }
             if (!$rootScope.isViewPortforlioPage || !$rootScope.isViewMaterialPage) setDefaultShareParams($rootScope, $location);
 
             $rootScope.isUserTabOpen = !!($rootScope.isViewAdminPanelPage || isViewMyProfile || $rootScope.isViewMaterialPage);
