@@ -57,7 +57,7 @@
       <md-option data-translate="SELECT_DOMAIN_AND_SUBJECT"
                  ng-click="ctrl.reset(ctrl.taxonPath.educationalContext)"></md-option>
       <md-option ng-repeat="domainSubject in ctrl.basicEducationDomainSubjects"
-                 data-ng-class="{ 'child' : domainSubject.level === '.Subject',
+                 data-ng-class="{ 'select__child' : domainSubject.level === '.Subject',
                  'select__parent' : domainSubject.level === '.Domain'}"
                  data-ng-disabled="domainSubject.level !== '.Subject' && ctrl.isAddMaterialView"
                  ng-value="domainSubject"
