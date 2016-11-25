@@ -10,9 +10,52 @@
 
   <md-fab-actions>
     <div data-ng-repeat="item in shareMediaPlaces">
-      <md-button class="md-fab md-raised md-mini share__btn share__btn--{{item.name}}" target="{{item.target}}" aria-label="{{item.name}}" data-ng-href="{{item.url}}" data-ng-click="checkOwnerAndShowDialog($event, item)">
+      <md-button class="md-fab md-raised md-mini share__btn share__btn--{{item.name}}" target="{{item.target}}"
+                 aria-label="{{item.name}}" data-ng-href="{{item.url}}"
+                 data-ng-click="checkOwnerAndShowDialog($event, item)">
         <span class="share__icon {{item.icon}}"></span>
       </md-button>
     </div>
   </md-fab-actions>
 </md-fab-speed-dial>
+
+<!--<md-dialog-content class="md-dialog-content" role="document" tabindex="-1" id="dialogContent_280">
+  <h2 class="md-title">See kogumik on registriväline.</h2>
+  <div ng-if="::!dialog.mdHtmlContent" class="md-dialog-content-body">
+    <p>Enne jagamist mõelge, kas autor soovib selle
+    jagamist.</p>
+  </div>
+</md-dialog-content
+>
+<md-dialog-actions>&lt;!&ndash; ngIf: dialog.$type === 'confirm' || dialog.$type === 'prompt' &ndash;&gt;
+  <button class="md-primary md-cancel-button md-button md-default-theme md-ink-ripple" type="button" ng-transclude=""
+          ng-if="dialog.$type === 'confirm' || dialog.$type === 'prompt'" ng-click="dialog.abort()" style=""><span>Katkesta</span>
+  </button>&lt;!&ndash; end ngIf: dialog.$type === 'confirm' || dialog.$type === 'prompt' &ndash;&gt;
+  <button class="md-primary md-confirm-button md-button md-default-theme md-ink-ripple" type="button" ng-transclude=""
+          ng-click="dialog.hide()" md-autofocus="dialog.$type==='alert'"><span>Jagan</span></button>
+</md-dialog-actions>-->
+
+<script type="text/ng-template" id="sharedialog.tmpl.html">
+  <md-dialog aria-label="{{ariaLabel}}" class="md-dialog-content">
+    <form ng-cloak>
+      <md-dialog-content>
+        <div class="md-dialog-content">
+          <h2 class="md-title share__title">{{title}}</h2>
+          <div class="md-dialog-content-body">
+            <p>{{context}}</p>
+          </div>
+        </div>
+      </md-dialog-content>
+
+      <md-dialog-actions layout="row">
+        <span flex></span>
+        <md-button class="md-primary md-cancel-button" ng-click="close()">
+          {{cancel}}
+        </md-button>
+        <md-button class="md-primary md-confirm-button" href="{{url}}" target="{{target}}" ng-click="close()">
+          {{ok}}
+        </md-button>
+      </md-dialog-actions>
+    </form>
+  </md-dialog>
+</script>

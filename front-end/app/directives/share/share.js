@@ -81,26 +81,21 @@ define([
                 };
 
                 $scope.checkOwnerAndShowDialog = function ($event, item) {
-                    if (!isOwner()) {
+                    if (!isOwner() && $rootScope.savedPortfolio.visibility !== 'PUBLIC') {
                         $event.preventDefault();
-
                         showWarningDialog($event, item);
                     }
                 }
 
                 function showWarningDialog (ev, item) {
-                    var confirm = $mdDialog.confirm()
-                        .title($translate.instant('THIS_IS_UNLISTED'))
-                        .textContent($translate.instant('THINK_AND_SHARE'))
-                        .ariaLabel($translate.instant('THIS_IS_UNLISTED'))
-                        .targetEvent(ev)
-                        .ok($translate.instant('BUTTON_SHARE'))
-                        .cancel($translate.instant('BUTTON_CANCEL'));
-
-                    $mdDialog.show(confirm).then(function() {
-                        $window.open(item.url, item.target);
-                    }, function() {
-                        console.log('Cancelled');
+                    $scope.dialogItem = item;
+                    $mdDialog.show({
+                        templateUrl: 'sharedialog.tmpl.html',
+                        controller: DialogController,
+                        targetEvent: ev,
+                        locals: {
+                            item: item
+                        }
                     });
                 }
 
@@ -111,6 +106,20 @@ define([
                     if ($scope.pictureName) {
                         $rootScope.shareImage = $location.protocol() + '://' + $location.host() + ':' +  $location.port() + '/rest/picture/' + $scope.pictureName;
                     }
+                }
+
+                function DialogController($scope, $mdDialog, locals) {
+                    $scope.title = $translate.instant('THIS_IS_UNLISTED');
+                    $scope.context = $translate.instant('THINK_AND_SHARE');
+                    $scope.ariaLabel = $translate.instant('THIS_IS_UNLISTED');
+                    $scope.ok = $translate.instant('BUTTON_SHARE');
+                    $scope.cancel = $translate.instant('BUTTON_CANCEL');
+                    $scope.url = locals.item.url;
+                    $scope.target = locals.item.target;
+
+                    $scope.close = function() {
+                        $mdDialog.cancel();
+                    };
                 }
 
                 setShareParams();
