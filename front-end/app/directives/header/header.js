@@ -211,6 +211,12 @@ define([
                     function updatePortfolioFailed() {
                         log('Updating portfolio failed.');
                     }
+
+                    $scope.$watch(function(){ return $location.path() }, function(params){
+                        if(params.indexOf("/portfolio") !== -1 || params.indexOf("/material") !== -1) {
+                            $scope.detailedSearch.isVisible = false;
+                        }
+                    });
                 }
             };
         }
