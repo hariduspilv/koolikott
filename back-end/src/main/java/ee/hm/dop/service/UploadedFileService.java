@@ -1,8 +1,6 @@
 package ee.hm.dop.service;
 
-import static ee.hm.dop.utils.ConfigurationProperties.DOCUMENT_MAX_FILE_SIZE;
-import static ee.hm.dop.utils.ConfigurationProperties.FILE_UPLOAD_DIRECTORY;
-import static ee.hm.dop.utils.ConfigurationProperties.SERVER_ADDRESS;
+import static ee.hm.dop.utils.ConfigurationProperties.*;
 import static ee.hm.dop.utils.DOPFileUtils.unpackArchive;
 import static ee.hm.dop.utils.DOPFileUtils.writeToFile;
 import static java.nio.charset.StandardCharsets.UTF_8;
@@ -53,7 +51,7 @@ public class UploadedFileService {
         return uploadedFileDAO.update(uploadedFile);
     }
 
-    public Response getFile(Long fileId, String filename) {
+    public Response getFile(Long fileId, String filename, boolean isReview) {
         UploadedFile file = getUploadedFileById(fileId);
         if (file == null) {
             return Response.status(Response.Status.NOT_FOUND).build();
@@ -73,7 +71,8 @@ public class UploadedFileService {
             logger.info("Unsupported encoding, not encoding", e.toString());
             encodedFileName = filename;
         }
-        String path = configuration.getString(FILE_UPLOAD_DIRECTORY) + file.getId() + File.separator + encodedFileName;
+
+        String path = configuration.getString(isReview ? FILE_REVIEW_DIRECTORY : FILE_UPLOAD_DIRECTORY) + file.getId() + File.separator + encodedFileName;
 
         if (new File(path).isDirectory()) {
             return Response.status(Response.Status.NO_CONTENT).build();
