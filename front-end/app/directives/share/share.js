@@ -36,7 +36,7 @@ define([
                     }
 
                     return false;
-                }
+                };
 
                 $scope.isOpen = false;
                 $scope.pageUrl = $location.absUrl();
@@ -78,14 +78,14 @@ define([
                         var userId = authenticatedUserService.getUser().id;
                         return creatorId === userId;
                     }
-                };
+                }
 
                 $scope.checkOwnerAndShowDialog = function ($event, item) {
                     if (!isOwner() && $rootScope.savedPortfolio.visibility !== 'PUBLIC') {
                         $event.preventDefault();
                         showWarningDialog($event, item);
                     }
-                }
+                };
 
                 function showWarningDialog (ev, item) {
                     $scope.dialogItem = item;

@@ -166,7 +166,7 @@ define(['angularAMD'], function(angularAMD) {
                         }
                     }
                 }
-                if (search.paid === false) {
+                if (search.paid.toString() === "false") {
                     searchURL += paidURL + search.paid;
                 }
                 if (search.type && this.isValidType(search.type)) {
@@ -188,7 +188,7 @@ define(['angularAMD'], function(angularAMD) {
                 if (search.resourceType) {
                     searchURL += resourceTypeURL + search.resourceType;
                 }
-                if (search.isSpecialEducation === true) {
+                if (search.isSpecialEducation.toString() === "true") {
                     searchURL += isSpecialEducationURL + search.isSpecialEducation;
                 }
                 if (search.issuedFrom) {
