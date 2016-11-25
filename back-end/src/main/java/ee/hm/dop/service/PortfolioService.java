@@ -314,7 +314,6 @@ public class PortfolioService extends BaseService implements LearningObjectHandl
         return originalPortfolio;
     }
 
-
     @Override
     public boolean hasPermissionsToAccess(User user, LearningObject learningObject) {
         if (learningObject == null || !(learningObject instanceof Portfolio)) return false;

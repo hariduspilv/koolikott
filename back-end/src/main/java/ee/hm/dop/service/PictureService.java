@@ -57,7 +57,11 @@ public class PictureService {
             Picture existingPicture = getByName(name);
 
             if (existingPicture != null) {
-                thumbnail = createSMThumbnail(existingPicture);
+                try {
+                    thumbnail = createSMThumbnail(existingPicture);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
         }
 
@@ -71,7 +75,11 @@ public class PictureService {
             Picture existingPicture = getByName(name);
 
             if (existingPicture != null) {
-                thumbnail = createSMLargeThumbnail(existingPicture);
+                try {
+                    thumbnail = createSMLargeThumbnail(existingPicture);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
         }
 
@@ -85,7 +93,11 @@ public class PictureService {
             Picture existingPicture = getByName(name);
 
             if (existingPicture != null) {
-                thumbnail = createLGLargeThumbnail(existingPicture);
+                try {
+                    thumbnail = createLGLargeThumbnail(existingPicture);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
         }
 
@@ -99,7 +111,11 @@ public class PictureService {
             Picture existingPicture = getByName(name);
 
             if (existingPicture != null) {
-                thumbnail = createLGThumbnail(existingPicture);
+                try {
+                    thumbnail = createLGThumbnail(existingPicture);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
         }
 
@@ -131,13 +147,17 @@ public class PictureService {
     }
 
     private void createThumbnails(Picture picture) {
-        createSMThumbnail(picture);
-        createSMLargeThumbnail(picture);
-        createLGThumbnail(picture);
-        createLGLargeThumbnail(picture);
+        try {
+            createSMThumbnail(picture);
+            createSMLargeThumbnail(picture);
+            createLGThumbnail(picture);
+            createLGLargeThumbnail(picture);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
-    private Thumbnail createSMThumbnail(Picture picture) {
+    private Thumbnail createSMThumbnail(Picture picture) throws IOException {
         Thumbnail thumbnail = getThumbnailFromPicture(picture, SM_THUMBNAIL_WIDTH, SM_THUMBNAIL_HEIGHT);
         thumbnail.setSize(Size.SM);
         thumbnailDAO.update(thumbnail);
@@ -145,7 +165,7 @@ public class PictureService {
         return thumbnail;
     }
 
-    private Thumbnail createSMLargeThumbnail(Picture picture) {
+    private Thumbnail createSMLargeThumbnail(Picture picture) throws IOException {
         Thumbnail thumbnail = getThumbnailFromPicture(picture, SM_XS_XL_THUMBNAIL_WIDTH, SM_XS_XL_THUMBNAIL_HEIGHT);
         thumbnail.setSize(Size.SM_XS_XL);
         thumbnailDAO.update(thumbnail);
@@ -153,7 +173,7 @@ public class PictureService {
         return thumbnail;
     }
 
-    private Thumbnail createLGLargeThumbnail(Picture picture) {
+    private Thumbnail createLGLargeThumbnail(Picture picture) throws IOException {
         Thumbnail thumbnail = getThumbnailFromPicture(picture, LG_XS_THUMBNAIL_WIDTH);
         thumbnail.setSize(Size.LG_XS);
         thumbnailDAO.update(thumbnail);
@@ -161,7 +181,7 @@ public class PictureService {
         return thumbnail;
     }
 
-    private Thumbnail createLGThumbnail(Picture picture) {
+    private Thumbnail createLGThumbnail(Picture picture) throws IOException {
         Thumbnail thumbnail = getThumbnailFromPicture(picture, LG_THUMBNAIL_WIDTH);
         thumbnail.setSize(Size.LG);
         thumbnailDAO.update(thumbnail);
@@ -169,34 +189,20 @@ public class PictureService {
         return thumbnail;
     }
 
-    private String getPictureFormat(Picture picture) {
-
+    private String getPictureFormat(ImageInputStream imageStream) throws IOException {
         String format = DEFAULT_PICTURE_FORMAT;
 
-        try {
-            ImageInputStream iis = ImageIO.createImageInputStream(new ByteArrayInputStream(picture.getData()));
-
-            Iterator<ImageReader> readers = ImageIO.getImageReaders(iis);
-            while (readers.hasNext()) {
-                ImageReader read = readers.next();
-                format = read.getFormatName().toLowerCase();
-            }
-
-        } catch (IOException e) {
-            e.printStackTrace();
+        Iterator<ImageReader> readers = ImageIO.getImageReaders(imageStream);
+        while (readers.hasNext()) {
+            ImageReader read = readers.next();
+            format = read.getFormatName().toLowerCase();
         }
 
         return format;
     }
 
-    private BufferedImage resizeImage(byte[] data, final int width) {
-        BufferedImage img = null;
-
-        try {
-            img = ImageIO.read(new ByteArrayInputStream(data));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    private BufferedImage resizeImage(ImageInputStream imageInputStream, final int width) throws IOException {
+        BufferedImage img = ImageIO.read(imageInputStream);
 
         // Uploaded file is not an image
         if (img == null) {
@@ -218,7 +224,6 @@ public class PictureService {
         }
 
         return Scalr.resize(img, widthToScale, heightToScale);
-
     }
 
     private BufferedImage cropThumbnailFromImage(BufferedImage image, final int width, final int height) {
@@ -232,42 +237,44 @@ public class PictureService {
         return Scalr.crop(image, x, y, width, height);
     }
 
-    private Thumbnail createThumbnail(BufferedImage image, String name, String format) {
-        Thumbnail result = null;
-
+    private Thumbnail createThumbnail(BufferedImage image, String name, String format) throws IOException {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        try {
-            ImageIO.write(image, format, baos);
 
-            baos.flush();
+        ImageIO.write(image, format, baos);
 
-            result = new Thumbnail();
-            result.setData(baos.toByteArray());
-            result.setName(name);
+        baos.flush();
 
-            baos.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        Thumbnail result = new Thumbnail();
+        result.setData(baos.toByteArray());
+        result.setName(name);
+
+        baos.close();
 
         logger.info("Thumbnail created");
         return result;
     }
 
-    private Thumbnail getThumbnailFromPicture(Picture picture, final int finalWidth) {
+    private ImageInputStream getImageInputStreamFromPicture(byte[] imageData) throws IOException {
+        return ImageIO.createImageInputStream(new ByteArrayInputStream(imageData));
+    }
+
+    private Thumbnail getThumbnailFromPicture(Picture picture, final int finalWidth) throws IOException {
         logger.info("Start creating thumbnail [name=" + picture.getName() + "]");
-        String format = getPictureFormat(picture);
-        BufferedImage resizedImage = resizeImage(picture.getData(), finalWidth);
+
+        ImageInputStream imageStream = getImageInputStreamFromPicture(picture.getData());
+        String format = getPictureFormat(imageStream);
+        BufferedImage resizedImage = resizeImage(imageStream, finalWidth);
 
         return createThumbnail(resizedImage, picture.getName(), format);
     }
 
 
-    private Thumbnail getThumbnailFromPicture(Picture picture, final int finalWidth, final int finalHeight) {
+    private Thumbnail getThumbnailFromPicture(Picture picture, final int finalWidth, final int finalHeight) throws IOException {
         logger.info("Start creating thumbnail [name=" + picture.getName() + "]");
-        String format = getPictureFormat(picture);
 
-        BufferedImage resizedImage = resizeImage(picture.getData(), finalWidth);
+        ImageInputStream imageStream = getImageInputStreamFromPicture(picture.getData());
+        String format = getPictureFormat(imageStream);
+        BufferedImage resizedImage = resizeImage(imageStream, finalWidth);
         BufferedImage thumbnailBufferedImage = cropThumbnailFromImage(resizedImage, finalWidth, finalHeight);
 
         return createThumbnail(thumbnailBufferedImage, picture.getName(), format);
