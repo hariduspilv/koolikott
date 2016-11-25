@@ -1,9 +1,8 @@
 define([
     'angularAMD',
-    'services/serverCallService',
     'services/recursionHelper',
 ], function (angularAMD) {
-    angularAMD.directive('dopSidenavTaxon', ['RecursionHelper', '$location', 'serverCallService', function (RecursionHelper, $location, serverCallService) {
+    angularAMD.directive('dopSidenavTaxon', ['RecursionHelper', 'searchService', function (RecursionHelper, searchService) {
         return {
             scope: {
                 taxon: '=',
@@ -79,12 +78,14 @@ define([
                     if ($scope.materialCount == 0) {
                         return;
                     } else if ($scope.opened == null) {
-                        $location.url('search/result?q=&taxon=' + id);
+                        searchService.setTaxon([id]);
+                        $location.url(searchService.getURL());
                         $scope.opened = true;
                     } else if ($scope.opened == true) {
                         $scope.opened = false;
                     } else if ($scope.opened == false) {
-                        $location.url('search/result?q=&taxon=' + id);
+                        searchService.setTaxon([id]);
+                        $location.url(searchService.getURL());
                         $scope.opened = true;
                     }
                 };
