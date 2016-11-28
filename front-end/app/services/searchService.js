@@ -11,7 +11,7 @@ define(['angularAMD'], function(angularAMD) {
         var isSpecialEducationURL = "&specialEducation=";
         var issuedFromURL = "&issuedFrom=";
         var crossCurricularThemeURL = "&crossCurricularTheme=";
-        var keyCompetenceURL = "&keyCompetence="
+        var keyCompetenceURL = "&keyCompetence=";
         var isCurriculumLiteratureURL = "&curriculumLiterature=";
         var sortURL = "&sort=";
         var sortDirectionURL = "&sortDirection=";

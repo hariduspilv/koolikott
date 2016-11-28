@@ -1,5 +1,5 @@
 define([
-    'directives/infiniteSearchResult/infiniteSearchResult',
+    'directives/infiniteSearchResult/infiniteSearchResult'
 ], function (serverCallService) {
     return ['$scope', 'serverCallService', '$rootScope',
         function ($scope, serverCallService, $rootScope) {

@@ -17,22 +17,6 @@ define([
 
     angularAMD.factory('userDataService', ['serverCallService', 'authenticatedUserService',
         function (serverCallService, authenticatedUserService) {
-            init();
-
-            function init() {
-                if (authenticatedUserService.isAdmin() || authenticatedUserService.isModerator()) {
-                    serverCallService.makeGet("rest/material/getBroken/count", {}, getBrokenMaterialsCountSuccess, getItemsFail);
-                    serverCallService.makeGet("rest/material/getDeleted/count", {}, getDeletedMaterialsCountSuccess, getItemsFail);
-                    serverCallService.makeGet("rest/portfolio/getDeleted/count", {}, getDeletedPortfoliosCountSuccess, getItemsFail);
-                    serverCallService.makeGet("rest/impropers/materials/count", {}, getImproperMaterialsCountSuccess, getItemsFail);
-                    serverCallService.makeGet("rest/impropers/portfolios/count", {}, getImproperPortfoliosCountSuccess, getItemsFail);
-                }
-                if (authenticatedUserService.isAuthenticated()) {
-                    serverCallService.makeGet("rest/learningObject/usersFavorite/count", {}, getFavoritesCountSuccess, getItemsFail);
-                    serverCallService.makeGet("rest/material/getByCreator/count", getUsername(), getUsersMaterialsCountSuccess, getItemsFail);
-                    serverCallService.makeGet("rest/portfolio/getByCreator/count", getUsername(), getUsersPortfoliosCountSuccess, getItemsFail);
-                }
-            }
 
             function getUsername() {
                 if (authenticatedUserService.isAuthenticated()) return {'username': authenticatedUserService.getUser().username};
@@ -41,7 +25,6 @@ define([
             function getItemsFail() {
                 console.log("Failed to get data");
             }
-
 
             function getBrokenMaterialsCountSuccess(data) {
                 if (!isEmpty(data)) {
