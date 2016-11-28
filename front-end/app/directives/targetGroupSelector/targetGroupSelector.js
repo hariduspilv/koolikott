@@ -145,7 +145,11 @@ define([
                     if ($scope.targetGroups && $scope.targetGroups.length > 0) {
                         return targetGroupService.getSelectedText($scope.targetGroups);
                     } else {
-                        return $translate.instant('DETAILED_SEARCH_TARGET_GROUP');
+                        if ($scope.isRequired.trigger === true) {
+                            return $translate.instant('DETAILED_SEARCH_TARGET_GROUP') + " *";
+                        } else {
+                            return $translate.instant('DETAILED_SEARCH_TARGET_GROUP');
+                        }
                     }
                 };
 
