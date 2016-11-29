@@ -353,8 +353,10 @@ define([
         if (!savedVersion || savedVersion !== APP_VERSION) {
             var userData = localStorage.getItem('authenticatedUser');
             localStorage.clear();
-            localStorage.setItem('authenticatedUser', userData);
             localStorage.setItem('version', APP_VERSION);
+            if (userData) {
+                localStorage.setItem('authenticatedUser', userData);
+            }
         }
     });
 
