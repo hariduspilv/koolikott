@@ -7,7 +7,7 @@ define(['app',], function (app) {
                 $scope = $scope.$parent;
 
                 function init() {
-                    $scope.title = $filter('translate')('MODERATORS');
+                    $scope.title = $filter('translate')('MODERATORS_TAB');
                     serverCallService.makeGet("rest/user/moderator", {}, success, fail);
                 }
 

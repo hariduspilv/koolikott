@@ -7,7 +7,7 @@ define(['app',], function (app) {
                 $scope = $scope.$parent;
 
                 function init() {
-                    $scope.title = $filter('translate')('RESTRICTED_USERS');
+                    $scope.title = $filter('translate')('RESTRICTED_USERS_TAB');
                     serverCallService.makeGet("rest/user/restrictedUser", {}, success, fail)
                 }
 
