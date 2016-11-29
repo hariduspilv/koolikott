@@ -348,6 +348,16 @@ define([
         });
     });
 
+    app.run(function (APP_VERSION) {
+        var savedVersion = localStorage.getItem('version');
+        if (!savedVersion || savedVersion !== APP_VERSION) {
+            var userData = localStorage.getItem('authenticatedUser');
+            localStorage.clear();
+            localStorage.setItem('authenticatedUser', userData);
+            localStorage.setItem('version', APP_VERSION);
+        }
+    });
+
     app.run(function ($rootScope, $location) {
         var history = [];
 
