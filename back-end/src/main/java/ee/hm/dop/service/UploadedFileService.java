@@ -64,13 +64,13 @@ public class UploadedFileService {
             mediaType = MediaType.APPLICATION_OCTET_STREAM;
         }
 
-        String encodedFileName = file.getName();
+        String fileName = file.getName();
         if(filename.contains("/")){
-            encodedFileName = file.getName() + filename.substring(filename.indexOf("/"), filename.length());
+            fileName = file.getName() + filename.substring(filename.indexOf("/"), filename.length());
         }
 
         final String directoryConstant = isReview ? FILE_REVIEW_DIRECTORY : FILE_UPLOAD_DIRECTORY;
-        String path = configuration.getString(directoryConstant) + file.getId() + File.separator + encodedFileName;
+        String path = configuration.getString(directoryConstant) + file.getId() + File.separator + fileName;
 
         if (new File(path).isDirectory()) {
             return Response.status(Response.Status.NO_CONTENT).build();
