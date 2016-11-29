@@ -21,7 +21,7 @@ define([
                 }, {
                     label: 'LEVEL_GYMNASIUM',
                     children: ['GYMNASIUM']
-                },
+                }
             ];
 
             var instance = {
