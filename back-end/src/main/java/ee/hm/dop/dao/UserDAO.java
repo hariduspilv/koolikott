@@ -6,6 +6,7 @@ import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 
+import ee.hm.dop.model.Role;
 import ee.hm.dop.model.User;
 
 public class UserDAO {
@@ -70,5 +71,19 @@ public class UserDAO {
 
     public void delete(User user) {
         entityManager.remove(user);
+    }
+
+    public List<User> getUsersByRole(Role role) {
+        TypedQuery<User> findByRole = entityManager.createQuery(
+                "SELECT u FROM User u WHERE u.role = :role", User.class);
+
+        List<User> users = null;
+        try {
+            users = findByRole.setParameter("role", role).getResultList();
+        } catch (Exception e) {
+            // ignore
+        }
+
+        return users;
     }
 }

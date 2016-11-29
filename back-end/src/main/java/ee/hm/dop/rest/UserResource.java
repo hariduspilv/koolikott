@@ -2,6 +2,8 @@ package ee.hm.dop.rest;
 
 import static org.apache.commons.lang3.StringUtils.isBlank;
 
+import java.util.List;
+
 import javax.annotation.security.RolesAllowed;
 import javax.inject.Inject;
 import javax.ws.rs.Consumes;
@@ -72,5 +74,21 @@ public class UserResource extends BaseResource {
     public User removeRestriction(User user) {
         if (user == null) throwBadRequestException("No user received!");
         return userService.removeRestriction(user);
+    }
+
+    @GET
+    @Path("moderator")
+    @RolesAllowed("ADMIN")
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<User> getModerators() {
+        return userService.getModerators(getLoggedInUser());
+    }
+
+    @GET
+    @Path("restrictedUser")
+    @RolesAllowed("ADMIN")
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<User> getRestrictedUsers() {
+        return userService.getRestrictedUsers(getLoggedInUser());
     }
 }

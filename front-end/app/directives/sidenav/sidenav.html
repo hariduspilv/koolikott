@@ -110,6 +110,24 @@
                 <span class="sidenav__count" data-ng-bind="deletedPortfoliosCount"></span>
               </a>
             </li>
+            <li class="sidenav__item" layout="column" ng-if="isAdmin()">
+              <a id="moderators" class="sidenav__header" md-ink-ripple layout="row" layout-align="space-between center" data-ng-class="{'is-active': isLocation('/dashboard/moderators')}" data-ng-href="/dashboard/moderators" data-ng-click="updateModeratorsCount()">
+                <div layout="row" layout-align="center center">
+                  <md-icon class="material-icons sidenav__icon">people</md-icon>
+                  <span data-translate="MODERATORS_TAB" class="sidenav__name"></span>
+                </div>
+                <span class="sidenav__count" data-ng-bind="moderatorsCount"></span>
+              </a>
+            </li>
+            <li class="sidenav__item" layout="column" ng-if="isAdmin()">
+              <a id="restrictedUsers" class="sidenav__header" md-ink-ripple layout="row" layout-align="space-between center" data-ng-class="{'is-active': isLocation('/dashboard/restrictedUsers')}" data-ng-href="/dashboard/restrictedUsers" data-ng-click="updateRestrictedUsersCount()">
+                <div layout="row" layout-align="center center">
+                  <md-icon class="material-icons sidenav__icon">lock</md-icon>
+                  <span data-translate="RESTRICTED_USERS_TAB" class="sidenav__name"></span>
+                </div>
+                <span class="sidenav__count" data-ng-bind="restrictedUsersCount"></span>
+              </a>
+            </li>
           </ul>
         </li>
       </ul>

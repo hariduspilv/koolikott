@@ -3,6 +3,7 @@ package ee.hm.dop.service;
 import static java.lang.String.format;
 
 import java.text.Normalizer;
+import java.util.List;
 
 import javax.inject.Inject;
 
@@ -13,7 +14,7 @@ import org.apache.commons.lang3.text.WordUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class UserService {
+public class UserService extends BaseService{
 
     private static final Logger logger = LoggerFactory.getLogger(UserService.class);
 
@@ -50,6 +51,45 @@ public class UserService {
         return userDAO.update(user);
     }
 
+    public Role getUserRole(String userName) {
+        User user = userDAO.findUserByUsername(userName);
+        return user.getRole();
+    }
+
+    // Only users with role 'USER' can be restricted
+    public User restrictUser(User user) {
+        user = getUserByUsername(user.getUsername());
+        if (user.getRole().equals(Role.USER)) {
+            return setUserRole(user, Role.RESTRICTED);
+        }
+
+        return null;
+    }
+
+    //Only users with role 'RESTRICTED' can be set to role 'USER'
+    public User removeRestriction(User user) {
+        user = getUserByUsername(user.getUsername());
+        if (user.getRole().equals(Role.RESTRICTED)) {
+            return setUserRole(user, Role.USER);
+        }
+
+        return null;
+    }
+
+    public List<User> getModerators (User loggedInUser) {
+        if(isUserAdmin(loggedInUser)) {
+            return userDAO.getUsersByRole(Role.MODERATOR);
+        }
+        return null;
+    }
+
+    public List<User> getRestrictedUsers (User loggedInUser) {
+        if(isUserAdmin(loggedInUser)) {
+            return userDAO.getUsersByRole(Role.RESTRICTED);
+        }
+        return null;
+    }
+
     protected String generateUsername(String name, String surname) {
         String username = name.trim().toLowerCase() + "." + surname.trim().toLowerCase();
         username = username.replaceAll("\\s+", ".");
@@ -66,34 +106,9 @@ public class UserService {
         return username;
     }
 
-    public Role getUserRole(String userName) {
-        User user = userDAO.findUserByUsername(userName);
-        return user.getRole();
-    }
-
-    // Only users with role 'USER' can be restricted
-    public User restrictUser(User user) {
-        user = getUserByUsername(user.getUsername());
-        if (user.getRole().equals(Role.USER)) {
-            return setUserRole(user, Role.RESTRICTED);
-        }
-
-        return null;
-    }
-
     private User setUserRole(User user, Role newRole) {
         user.setRole(newRole);
         logger.info(format("Setting user %s, with id code %s role to: %s", user.getUsername(), user.getIdCode(), newRole.toString()));
         return userDAO.update(user);
-    }
-
-    //Only users with role 'RESTRICTED' can be set to role 'USER'
-    public User removeRestriction(User user) {
-        user = getUserByUsername(user.getUsername());
-        if (user.getRole().equals(Role.RESTRICTED)) {
-            return setUserRole(user, Role.USER);
-        }
-
-        return null;
     }
 }

@@ -1,11 +1,6 @@
 define([
-    'directives/infiniteSearchResult/infiniteSearchResult',
-    'views/dashboard/improper/material/improperMaterial',
-    'views/dashboard/improper/portfolio/improperPortfolio',
-    'views/dashboard/broken/material/brokenMaterial',
-    'views/dashboard/deleted/material/deletedMaterial',
-    'views/dashboard/deleted/portfolio/deletedPortfolio'
-], function() {
+    'directives/infiniteSearchResult/infiniteSearchResult'
+], function () {
     return ['$scope', 'authenticatedUserService',
         function ($scope, authenticatedUserService) {
 
@@ -15,7 +10,7 @@ define([
                     $scope.url = "rest/search";
 
                     var taxons = [];
-                    user.userTaxons.forEach(function(entry) {
+                    user.userTaxons.forEach(function (entry) {
                         taxons.push(entry.id);
                     });
 

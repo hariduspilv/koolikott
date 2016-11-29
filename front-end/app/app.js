@@ -15,15 +15,14 @@ define([
     'jsog',
     'utils/commons',
     'ng-file-upload',
-
     'angular-bootstrap',
     'textAngular',
+    'angular-material-data-table',
 
     /* app wide modules */
     'directives/header/header',
     'directives/detailedSearch/detailedSearch',
     'directives/mainFabButton/mainFabButton',
-    'directives/sidebar/sidebar',
     'directives/sidenav/sidenav',
     'directives/pageStructure/columnLayout/columnLayout',
 
@@ -41,7 +40,8 @@ define([
         'ngFileUpload',
         'ui.bootstrap',
         'DOPconstants',
-        'textAngular'
+        'textAngular',
+        'md.data.table'
     ]);
 
     var provideProvider = null;

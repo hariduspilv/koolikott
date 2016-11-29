@@ -1,11 +1,18 @@
 define([
     'app',
     'jquery',
-    'services/translationService'
-], function (app, $) {
-    app.controller('baseTableController', ['$scope', '$location', '$sce', '$templateRequest', '$compile', 'translationService',
-        function ($scope, $location, $sce, $templateRequest, $compile, translationService) {
-
+    'services/translationService',
+    'directives/dashboard/userManagement/moderatorsTable',
+    'directives/dashboard/userManagement/restrictedUsersTable',
+    'directives/dashboard/deletedPortfolio/deletedPortfolio',
+    'directives/dashboard/deletedMaterial/deletedMaterial',
+    'directives/dashboard/improper/improperMaterial',
+    'directives/dashboard/improper/improperPortfolio',
+    'directives/dashboard/broken/brokenMaterial',
+], function (app) {
+    return ['$scope', '$location', 'translationService',
+        function ($scope, $location, translationService) {
+            $scope.viewPath = $location.path();
             var collection = null;
             var filtredCollection = null;
 
@@ -24,11 +31,7 @@ define([
                 page: 1
             };
 
-            function getDeletedItemsSuccess(data) {
-                getItemsSuccess(data, 'byUpdatedAt');
-            }
-
-            function getItemsSuccess(data, order, merge) {
+            $scope.getItemsSuccess = function (data, order, merge) {
                 if (isEmpty(data)) {
                     log('Getting data failed.');
                 } else {
@@ -43,14 +46,34 @@ define([
                     $scope.itemsCount = data.length;
 
                     orderItems(data, $scope.query.order);
-
                     $scope.data = data.slice(0, $scope.query.limit);
                 }
-            }
+            };
 
-            function getItemsFail() {
-                console.log('Getting data failed.')
-            }
+            $scope.formatMaterialUpdatedDate = function (updatedDate) {
+                return formatDateToDayMonthYear(updatedDate);
+            };
+
+            $scope.getLearningObjectTitle = function (learningObject) {
+                if (!learningObject) return;
+
+                if (learningObject.title) {
+                    return learningObject.title;
+                }
+                else {
+                    return $scope.getCorrectLanguageTitle(learningObject);
+                }
+            };
+
+            $scope.getLearningObjectUrl = function (learningObject) {
+                if (!learningObject) return;
+
+                if (learningObject.type === ".Portfolio") {
+                    return "/portfolio?id=" + learningObject.id;
+                } else {
+                    return "/material?materialId=" + learningObject.id;
+                }
+            };
 
             function orderItems(data, order) {
                 data = data.sort(function (a, b) {
@@ -115,27 +138,6 @@ define([
 
                 $scope.itemsCount = filtredCollection.length;
                 $scope.data = filtredCollection;
-            }
-
-            function removeDeletedFromImpropers(impropers) {
-                var notDeletedImpropers = [];
-                impropers.forEach(function (item) {
-                    if (!item.learningObject.deleted) {
-                        notDeletedImpropers.push(item);
-                    }
-                });
-
-
-                return notDeletedImpropers;
-            }
-
-            function buildTable(tableId, templateUrl) {
-                var url = $sce.getTrustedResourceUrl(templateUrl);
-                var $container = $(tableId).find('.table-container');
-
-                $templateRequest(url).then(function (template) {
-                    $container.html($compile(template)($scope));
-                });
             }
 
             $scope.getCorrectLanguageTitle = function (item) {
@@ -244,14 +246,5 @@ define([
 
                 return id1 === id2;
             }
-
-            return {
-                getDeletedItemsSuccess: getDeletedItemsSuccess,
-                getItemsSuccess: getItemsSuccess,
-                getItemsFail: getItemsFail,
-                buildTable: buildTable,
-                removeDeletedFromImpropers: removeDeletedFromImpropers,
-                getCorrectLanguageTitle: $scope.getCorrectLanguageTitle
-            };
-        }]);
+        }];
 });
