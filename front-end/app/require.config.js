@@ -31,10 +31,11 @@ require.config({
         'textAngular-sanitize': 'libs/textAngular/dist/textAngular-sanitize.min',
         'textAngularSetup': 'libs/textAngular/dist/textAngularSetup',
         'textAngular': 'utils/koolikottTextAngular',
-        'angular-drag-and-drop-lists': 'libs/angular-drag-and-drop-lists/angular-drag-and-drop-lists.min'
+        'angular-drag-and-drop-lists': 'libs/angular-drag-and-drop-lists/angular-drag-and-drop-lists.min',
+        'cssua': 'libs/cssua.js/cssua.min'
     },
     shim: {
-        'angular': ['jquery'],
+        'angular': ['jquery', 'cssua'],
         'angularAMD': ['angular'],
         'ngload': ['angularAMD'],
         'angular-animate': ['angular'],

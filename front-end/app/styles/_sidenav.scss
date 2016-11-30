@@ -51,6 +51,10 @@ md-sidenav._md-locked-open, md-sidenav._md-locked-open._md-closed, md-sidenav._m
 ** Sidenav
 */
 .sidenav {
+  .ua-ie & {
+    overflow-y: scroll;
+  }
+
   .panel {
     border-bottom: 1px solid rgba(0,0,0,.12);
   }
