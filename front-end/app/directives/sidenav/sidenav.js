@@ -11,7 +11,7 @@ define([
             scope: true,
             templateUrl: 'directives/sidenav/sidenav.html',
             controller: function ($rootScope, $scope, $location, serverCallService, searchService, $timeout, metadataService, authenticatedUserService, $sce, $mdDialog, userDataService) {
-
+                $scope.isTaxonomyOpen = true;
                 $scope.dashboardOpen = $location.path().startsWith("/dashboard");
 
                 // List of taxon icons

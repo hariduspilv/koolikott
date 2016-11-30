@@ -321,7 +321,6 @@ define([
             if (!$rootScope.isViewPortforlioPage || !$rootScope.isViewMaterialPage) setDefaultShareParams($rootScope, $location);
 
             $rootScope.isUserTabOpen = !!($rootScope.isViewAdminPanelPage || isViewMyProfile || $rootScope.isViewMaterialPage);
-            $rootScope.isTaxonomyOpen = !!($rootScope.isViewMaterialPage || isViewHomePage || isSearchPage($location));
 
             if ($rootScope.isEditPortfolioPage) {
                 $rootScope.isEditPortfolioMode = true;
