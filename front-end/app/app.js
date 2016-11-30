@@ -302,7 +302,7 @@ define([
 
     app.run(function ($rootScope, $location, authenticatedUserService) {
         $rootScope.$on('$routeChangeSuccess', function () {
-            const editModeAllowed = ["/portfolio/edit", "/search/result", "/material"];
+            var editModeAllowed = ["/portfolio/edit", "/search/result", "/material"];
 
             var path = $location.path();
             var user = authenticatedUserService.getUser();
