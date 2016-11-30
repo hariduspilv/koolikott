@@ -10,7 +10,7 @@ define([
         return {
             scope: {
                 params: '=',
-                url: '=',
+                url: '=?',
                 title: '=',
                 subtitle: '=',
                 filter: '='

@@ -1,8 +1,8 @@
 define([
-  'angularAMD',
-  'directives/tableOfContents/tableOfContents',
-  'directives/alert/alert'
- ], function(angularAMD) {
+    'angularAMD',
+    'directives/tableOfContents/tableOfContents',
+    'directives/alert/alert'
+], function(angularAMD) {
     angularAMD.directive('dopColumnLayout', function() {
         return {
             scope: true,
@@ -13,7 +13,9 @@ define([
                 };
 
                 $scope.sidenavIsOpen = function() {
-                  return $mdSidenav('left').isOpen();
+                    setTimeout(function() {
+                        return $mdSidenav('left').isOpen();
+                    }, 100);
                 };
 
                 $scope.$watch(function() {
