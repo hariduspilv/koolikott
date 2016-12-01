@@ -32,7 +32,7 @@ define([
 
             function getPortfolio(success, fail) {
                 var portfolioId = $route.current.params.id;
-                serverCallService.makeGet("rest/portfolio?id=" + portfolioId, {}, success, fail);
+                serverCallService.makeGet("rest/portfolio?id=" + portfolioId, {}, getPortfolioSuccess, getPortfolioFail);
             }
 
             function getPortfolioSuccess(portfolio) {
@@ -41,7 +41,6 @@ define([
                 } else {
                     setPortfolio(portfolio);
                     increaseViewCount();
-
                 }
             }
 

@@ -4,24 +4,26 @@ define([
     'services/authenticatedUserService',
     'services/toastService'
 ], function (angularAMD) {
-    angularAMD.directive('dopFavorite', ['serverCallService', 'authenticatedUserService', 'toastService', '$rootScope', function (serverCallService, authenticatedUserService, toastService, $rootScope) {
+    angularAMD.directive('dopFavorite', ['serverCallService', 'authenticatedUserService', 'toastService', '$timeout', function (serverCallService, authenticatedUserService, toastService, $timeout) {
         return {
             scope: {
                 learningObject: '='
             },
             templateUrl: 'directives/favorite/favorite.html',
             controller: function ($scope, serverCallService, authenticatedUserService) {
-                if ($scope.learningObject) {
-                    $scope.isPrivateOrNotListed = $scope.learningObject.visibility === 'NOT_LISTED' || $scope.learningObject.visibility === 'PRIVATE';
-                }
-
-                if ($scope.learningObject && isLoggedIn()) {
-                    if ($scope.learningObject.favorite) {
-                        $scope.hasFavorited = true;
-                    } else if ($scope.learningObject.favorite == null) {
-                        serverCallService.makeGet("rest/learningObject/favorite", {'id': $scope.learningObject.id}, getFavoriteSuccess, getFavoriteFail);
+                $timeout(function () {
+                    if ($scope.learningObject) {
+                        $scope.isPrivateOrNotListed = $scope.learningObject.visibility === 'NOT_LISTED' || $scope.learningObject.visibility === 'PRIVATE';
                     }
-                }
+
+                    if ($scope.learningObject && isLoggedIn()) {
+                        if ($scope.learningObject.favorite) {
+                            $scope.hasFavorited = true;
+                        } else if ($scope.learningObject.favorite == null) {
+                            serverCallService.makeGet("rest/learningObject/favorite", {'id': $scope.learningObject.id}, getFavoriteSuccess, getFavoriteFail);
+                        }
+                    }
+                }, 0);
 
                 function getFavoriteSuccess(data) {
                     if (data && data.id) {
