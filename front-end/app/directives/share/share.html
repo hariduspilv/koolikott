@@ -27,16 +27,20 @@
           <h2 class="md-title share__title">{{title}}</h2>
           <div class="md-dialog-content-body">
             <p>{{context}}</p>
+            <md-radio-group data-ng-show="showRadio" ng-model="modalRadio" ng-change="updatePortfolio()">
+              <md-radio-button value="PUBLIC" class="md-primary">{{visibilityPublic}}</md-radio-button>
+              <md-radio-button value="NOT_LISTED" class="md-primary">{{visibilityLinkOnly}}</md-radio-button>
+            </md-radio-group>
           </div>
         </div>
       </md-dialog-content>
 
       <md-dialog-actions layout="row">
         <span flex></span>
-        <md-button class="md-primary md-cancel-button" ng-click="close()">
+        <md-button class="md-primary md-cancel-button" ng-click="back()">
           {{cancel}}
         </md-button>
-        <md-button class="md-primary md-confirm-button" href="{{url}}" target="{{target}}" ng-click="close()">
+        <md-button class="md-primary md-confirm-button" href="{{url}}" target="{{target}}" ng-disabled="buttonDisabled" ng-click="success()">
           {{ok}}
         </md-button>
       </md-dialog-actions>

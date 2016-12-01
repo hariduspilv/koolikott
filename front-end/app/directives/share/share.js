@@ -3,7 +3,7 @@ define([
     'services/translationService',
     'services/authenticatedUserService'
 ], function (angularAMD) {
-    angularAMD.directive('dopShare', ['$rootScope', '$location', '$window', 'translationService', '$translate', 'authenticatedUserService', '$mdDialog', function($rootScope, $location, $window, translationService, $translate, authenticatedUserService, $mdDialog) {
+    angularAMD.directive('dopShare', ['$rootScope', '$location', '$window', 'translationService', '$translate', 'authenticatedUserService', '$mdDialog', 'serverCallService', function($rootScope, $location, $window, translationService, $translate, authenticatedUserService, $mdDialog, serverCallService) {
         return {
             scope: {
                 title: '=',
@@ -12,6 +12,7 @@ define([
             },
             templateUrl: 'directives/share/share.html',
             controller: function($scope) {
+
                 $scope.isVisible = function () {
                     if ($scope.object) {
                         if ($scope.object.deleted) {
@@ -28,7 +29,7 @@ define([
                     }
 
                     if ($rootScope.savedPortfolio) {
-                        if ($rootScope.savedPortfolio.visibility === 'PUBLIC' || $rootScope.savedPortfolio.visibility === 'NOT_LISTED') {
+                        if ($rootScope.savedPortfolio.visibility === 'PUBLIC' || $rootScope.savedPortfolio.visibility === 'NOT_LISTED' || isOwner() || authenticatedUserService.isAdmin() || authenticatedUserService.isModerator()) {
                             return true;
                         } else if ($rootScope.savedPortfolio.visibility === 'PRIVATE') {
                             return false;
@@ -81,7 +82,7 @@ define([
                 }
 
                 $scope.checkOwnerAndShowDialog = function ($event, item) {
-                    if (!isOwner() && $rootScope.savedPortfolio.visibility !== 'PUBLIC') {
+                    if ((!isOwner() && $rootScope.savedPortfolio.visibility !== 'PUBLIC') || (isOwner() && $rootScope.savedPortfolio.visibility === 'PRIVATE')) {
                         $event.preventDefault();
                         showWarningDialog($event, item);
                     }
@@ -109,17 +110,60 @@ define([
                 }
 
                 function DialogController($scope, $mdDialog, locals) {
-                    $scope.title = $translate.instant('THIS_IS_UNLISTED');
-                    $scope.context = $translate.instant('THINK_AND_SHARE');
-                    $scope.ariaLabel = $translate.instant('THIS_IS_UNLISTED');
+                    if((isOwner() || authenticatedUserService.isAdmin() || authenticatedUserService.isModerator()) && $rootScope.savedPortfolio.visibility === 'PRIVATE') {
+                        $scope.buttonDisabled = true;
+                        $scope.showRadio = true;
+
+                        $scope.title = $translate.instant('THIS_IS_PRIVATE');
+                        $scope.context = $translate.instant('SHARE_PRIVATE_PORTFOLIO');
+                        $scope.ariaLabel = $translate.instant('THIS_IS_PRIVATE');
+
+                        $scope.visibilityLinkOnly = $translate.instant('PORTFOLIO_VISIBILITY_NOT_LISTED');
+                        $scope.visibilityPublic = $translate.instant('PORTFOLIO_VISIBILITY_PUBLIC');
+                        $scope.ariaLabel = $translate.instant('THIS_IS_UNLISTED');
+                    } else {
+                        $scope.title = $translate.instant('THIS_IS_UNLISTED');
+                        $scope.context = $translate.instant('THINK_AND_SHARE');
+                        $scope.ariaLabel = $translate.instant('THIS_IS_UNLISTED');
+                    }
                     $scope.ok = $translate.instant('BUTTON_SHARE');
                     $scope.cancel = $translate.instant('BUTTON_CANCEL');
                     $scope.url = locals.item.url;
                     $scope.target = locals.item.target;
 
-                    $scope.close = function() {
+                    $scope.updatePortfolio = function () {
+                        if ($scope.modalRadio && $scope.showRadio) {
+                            $rootScope.savedPortfolio.visibility = $scope.modalRadio;
+                            serverCallService.makePost("rest/portfolio/update", $rootScope.savedPortfolio, updateSuccess, updateFail);
+                        }
+
+                        function updateSuccess() {
+                            $scope.buttonDisabled = false;
+                        }
+
+                        function updateFail() {
+                            $scope.buttonDisabled = true;
+                            $scope.modalRadio = "";
+                        }
+                    }
+
+                    $scope.back = function() {
                         $mdDialog.cancel();
-                    };
+
+                        if($scope.showRadio && $rootScope.savedPortfolio.visibility !== "PRIVATE") {
+                            serverCallService.makePost("rest/portfolio/update", $rootScope.savedPortfolio, postSuccess, function() {});
+                        }
+                    }
+
+                    $scope.success = function() {
+                        if(!$scope.buttonDisabled) {
+                            $mdDialog.cancel();
+                        }
+                    }
+
+                    function postSuccess() {
+                        $rootScope.savedPortfolio.visibility = "PRIVATE";
+                    }
                 }
 
                 setShareParams();
