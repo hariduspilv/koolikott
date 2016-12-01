@@ -88,6 +88,8 @@ module.exports = function (grunt) {
                         // Setup the proxy
                         var middlewares = [require('grunt-connect-proxy/lib/utils').proxyRequest];
 
+                        middlewares.push(require('connect-modrewrite')(['!(\\..+)$ / [L]']));
+
                         middlewares.push(connect.static('.tmp'));
 
                         middlewares.push(connect().use(

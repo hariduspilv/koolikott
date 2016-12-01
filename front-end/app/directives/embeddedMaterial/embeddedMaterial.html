@@ -69,9 +69,7 @@
 
     <div data-ng-show="sourceType === 'PDF'"
          class="embed-responsive-container">
-      <object data="{{material.source}}" type="application/pdf" width="100%" height="500px">
-        <embed src="{{material.source}}" type='application/pdf' width="100%" height="500px"></embed>
-      </object>
+      <iframe src="{{material.source}}" width="100%" height="500px"></iframe>
     </div>
 
     <!--Embed iframe-->
