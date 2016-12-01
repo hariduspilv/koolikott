@@ -19,6 +19,7 @@ define([
                     'extension',
                     'accessibility',
                     'school',
+                    'build',
                     'palette'
                 ];
 
