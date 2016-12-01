@@ -5,8 +5,8 @@ define([
     'services/storageService',
     'services/pictureUploadService'
 ], function (app) {
-    return ['$scope', '$mdDialog', '$location', 'serverCallService', '$rootScope', 'storageService', '$timeout', 'pictureUploadService',
-        function ($scope, $mdDialog, $location, serverCallService, $rootScope, storageService, $timeout, pictureUploadService) {
+    return ['$scope', '$mdDialog', '$location', 'serverCallService', '$rootScope', 'storageService', '$timeout', 'pictureUploadService', '$filter', 'translationService',
+        function ($scope, $mdDialog, $location, serverCallService, $rootScope, storageService, $timeout, pictureUploadService, $filter, translationService) {
             $scope.isSaving = false;
             $scope.showHints = true;
             $scope.isTouched = {};
@@ -77,6 +77,13 @@ define([
                 if (isEmpty(portfolio)) {
                     createPortfolioFailed();
                 } else {
+                    portfolio.chapters = [];
+                    portfolio.chapters.push({
+                        title: $filter('translate')('PORTFOLIO_DEFAULT_NEW_CHAPTER_TITLE'),
+                        subchapters: [],
+                        materials: [],
+                        openCloseChapter: true
+                    });
                     $rootScope.savedPortfolio = portfolio;
                     $mdDialog.hide();
                     $location.url('/portfolio/edit?id=' + $rootScope.savedPortfolio.id);

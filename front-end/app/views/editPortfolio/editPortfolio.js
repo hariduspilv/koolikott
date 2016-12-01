@@ -11,10 +11,6 @@ define([
     'directives/materialBox/materialBox',
     'directives/tableOfContents/tableOfContents'
 ], function (app) {
-    app.run(['$anchorScroll', function ($anchorScroll) {
-        $anchorScroll.yOffset = 50;
-    }]);
-
     return ['$scope', 'translationService', 'serverCallService', '$route', '$location', 'alertService', '$rootScope', 'authenticatedUserService', 'dialogService', 'toastService', '$mdDialog', '$interval',
         function ($scope, translationService, serverCallService, $route, $location, alertService, $rootScope, authenticatedUserService, dialogService, toastService, $mdDialog, $interval) {
             var isAutoSaving = false;
@@ -22,6 +18,7 @@ define([
 
             function init() {
                 if ($rootScope.savedPortfolio) {
+                    $scope.showFirstMessage = true;
                     if (checkAuthorized($rootScope.savedPortfolio)) {
                         setPortfolio($rootScope.savedPortfolio);
                         checkPortfolioVisibility($rootScope.savedPortfolio);

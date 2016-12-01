@@ -1,17 +1,19 @@
 define([
-    'app',
+    'angularAMD',
     'services/serverCallService',
     'services/authenticatedUserService',
     'services/toastService'
-], function (app) {
-    app.directive('dopFavorite', function (serverCallService, authenticatedUserService, toastService) {
+], function (angularAMD) {
+    angularAMD.directive('dopFavorite', ['serverCallService', 'authenticatedUserService', 'toastService', '$rootScope', function (serverCallService, authenticatedUserService, toastService, $rootScope) {
         return {
             scope: {
                 learningObject: '='
             },
             templateUrl: 'directives/favorite/favorite.html',
             controller: function ($scope, serverCallService, authenticatedUserService) {
-                $scope.isPrivateOrNotListed = $scope.learningObject.visibility === 'NOT_LISTED' || $scope.learningObject.visibility === 'PRIVATE';
+                if ($scope.learningObject) {
+                    $scope.isPrivateOrNotListed = $scope.learningObject.visibility === 'NOT_LISTED' || $scope.learningObject.visibility === 'PRIVATE';
+                }
 
                 if ($scope.learningObject && isLoggedIn()) {
                     if ($scope.learningObject.favorite) {
@@ -72,5 +74,5 @@ define([
                 }
             }
         };
-    });
+    }]);
 });
