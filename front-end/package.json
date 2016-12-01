@@ -8,6 +8,7 @@
   "devDependencies": {
     "autoprefixer": "^6.5.0",
     "compression": "^1.6.1",
+    "connect-modrewrite": "^0.9.0",
     "grunt": "^0.4.5",
     "grunt-autoprefixer": "^2.0.0",
     "grunt-bower-requirejs": "^2.0.0",
