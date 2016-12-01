@@ -1,6 +1,14 @@
 <md-card class="card-sm" id="portfolio-card-{{portfolio.id}}"
          data-ng-click="navigateTo(portfolio, $event)">
-  <div data-ng-if="isAuthenticated()" data-dop-favorite data-learning-object="portfolio"></div>
+         <div class="card__icon-holder" data-ng-if="isAuthenticated()">
+           <md-icon data-ng-if="portfolio.visibility === 'PRIVATE'">lock</md-icon>
+           <md-icon data-ng-if="portfolio.visibility === 'NOT_LISTED'">link</md-icon>
+           <md-tooltip md-direction="bottom">
+             <span data-ng-if="portfolio.visibility === 'PRIVATE'" data-translate="PORTFOLIO_VISIBILITY_PRIVATE"></span>
+             <span data-ng-if="portfolio.visibility === 'NOT_LISTED'" data-translate="PORTFOLIO_VISIBILITY_NOT_LISTED"></span>
+         	</md-tooltip>
+         </div>
+         <div data-ng-if="isAuthenticated()" data-dop-favorite data-learning-object="portfolio"></div>
   <div class="corner"></div>
   <!-- noimage -->
   <a data-ng-href="{{'/portfolio?id=' + portfolio.id}}" data-ng-if="!portfolio.picture" class="card-cover portfolio">
@@ -11,8 +19,8 @@
      </div>
     <md-icon class="icon-kind">book</md-icon>
 
-    <div class="card-hover portfolio" layout="row">
-      <div data-ng-if="isAuthenticated()" data-dop-favorite data-learning-object="portfolio"></div>
+    <div class="card-hover portfolio">
+        <div data-ng-if="isAuthenticated()" data-dop-favorite data-learning-object="portfolio"></div>
       <md-icon class="icon-kind">book</md-icon>
     </div>
   </a>

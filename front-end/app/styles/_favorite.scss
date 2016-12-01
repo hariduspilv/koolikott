@@ -28,6 +28,10 @@
       color: $gold;
     }
   }
+
+  &--push-right.md-button {
+    margin-left: 44px;
+  }
 }
 
 .favorite__icon {
