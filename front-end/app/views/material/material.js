@@ -100,10 +100,10 @@ define([
             function processMaterial() {
                 if ($scope.material) {
                     $scope.sourceType = setSourceType($scope.material.source);
-                    if($scope.sourceType == "EBOOK"){
+                    if ($scope.sourceType == "EBOOK") {
                         $scope.ebookLink = "/libs/bibi/bib/i/?book=" +
-                        $scope.material.uploadedFile.id + "/" +
-                        $scope.material.uploadedFile.name;
+                            $scope.material.uploadedFile.id + "/" +
+                            $scope.material.uploadedFile.name;
                     }
                     $scope.targetGroups = getTargetGroups();
 
@@ -168,7 +168,7 @@ define([
 
                 for (var i = 0; i < $scope.material.taxons.length; i++) {
                     var taxon = $scope.material.taxons[i];
-                    var subject = $rootScope.taxonUtils.getSubject(taxon);
+                    var subject = $rootScope.taxonService.getSubject(taxon);
 
                     if (subject && !containsObject(subject, $scope.material.subjects)) {
                         $scope.material.subjects.push(subject);
@@ -182,7 +182,7 @@ define([
 
                 for (var i = 0, j = 0; i < material.taxons.length; i++) {
                     var taxon = material.taxons[i];
-                    var educationalContext = $rootScope.taxonUtils.getEducationalContext(taxon);
+                    var educationalContext = $rootScope.taxonService.getEducationalContext(taxon);
 
                     if (educationalContext && !containsObject(educationalContext, material.educationalContexts)) {
                         material.educationalContexts[j++] = educationalContext;
@@ -199,7 +199,7 @@ define([
 
                 for (var i = 0, j = 0; i < $scope.material.taxons.length; i++) {
                     var taxon = $scope.material.taxons[i];
-                    var domain = $rootScope.taxonUtils.getDomain(taxon);
+                    var domain = $rootScope.taxonService.getDomain(taxon);
 
                     if (domain) {
                         domains[j++] = domain;
@@ -308,7 +308,7 @@ define([
 
             $scope.edit = function () {
                 var editMaterialScope = $scope.$new(true);
-                editMaterialScope.material = clone($scope.material);
+                editMaterialScope.material = $scope.material;
 
                 $mdDialog.show(angularAMD.route({
                     templateUrl: 'addMaterialDialog.html',

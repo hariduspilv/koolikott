@@ -4,6 +4,8 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 
+import java.util.List;
+
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.MediaType;
@@ -163,6 +165,17 @@ public class UserResourceTest extends ResourceIntegrationTestBase {
         assertEquals(Role.USER, nonRestrictedUser.getRole());
     }
 
+
+    @Test
+    public void getAll() {
+        String adminIdCode = "89898989898";
+        login(adminIdCode);
+
+        Response response = doGet("user/all");
+        List<User> allUsers = response.readEntity(new GenericType<List<User>>() {
+        });
+        assertEquals(15, allUsers.size());
+    }
 
     private User getUser(String username) {
         Response response = doGet("user?username=" + username);

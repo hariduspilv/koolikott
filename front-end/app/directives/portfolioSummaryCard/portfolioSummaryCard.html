@@ -73,10 +73,10 @@
                 <span data-translate="DETAIL_VIEW_DOMAIN"></span>
               </small>
               <br/>
-              <span class="hide-overflow" data-ng-if="$root.taxonUtils.getDomain(portfolio.taxon)"
-                    data-translate="{{'DOMAIN_' + $root.taxonUtils.getDomain(portfolio.taxon).name.toUpperCase()}}">
+              <span class="hide-overflow" data-ng-if="$root.taxonService.getDomain(portfolio.taxon)"
+                    data-translate="{{'DOMAIN_' + $root.taxonService.getDomain(portfolio.taxon).name.toUpperCase()}}">
                             </span>
-              <span class="hide-overflow" data-ng-if="!$root.taxonUtils.getDomain(portfolio.taxon)"
+              <span class="hide-overflow" data-ng-if="!$root.taxonService.getDomain(portfolio.taxon)"
                     data-translate="UNKNOWN">Unknown</span>
             </p>
           </div>

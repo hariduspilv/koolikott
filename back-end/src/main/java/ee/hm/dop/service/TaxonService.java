@@ -5,12 +5,9 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import ee.hm.dop.dao.TaxonDAO;
 import ee.hm.dop.model.taxon.EducationalContext;
 import ee.hm.dop.model.taxon.Taxon;
-import ee.hm.dop.model.taxon.TaxonDTO;
 
 public class TaxonService {
 
@@ -30,17 +27,4 @@ public class TaxonService {
     public Taxon getTaxonByEstCoreName(String name, Class level) {
         return taxonDAO.findTaxonByRepoName(name, EST_CORE_TAXON_MAPPING, level);
     }
-
-    public List<TaxonDTO> getReducedTaxon() {
-        List<Taxon> taxons = taxonDAO.findReducedTaxon();
-        List<TaxonDTO> result = new ArrayList<>();
-
-        for (Taxon taxon : taxons){
-            TaxonDTO taxonDTO = new TaxonDTO(taxon);
-            result.add(taxonDTO);
-        }
-
-        return result;
-    }
-
 }

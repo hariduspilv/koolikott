@@ -19,14 +19,17 @@ public class Topic extends Taxon {
     @OneToMany(mappedBy = "topic")
     private Set<Subtopic> subtopics;
 
+    @JsonIgnore
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "subject")
     private Subject subject;
 
+    @JsonIgnore
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "domain")
     private Domain domain;
 
+    @JsonIgnore
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "module")
     private Module module;
@@ -66,6 +69,9 @@ public class Topic extends Taxon {
     @JsonIgnore
     @Override
     public Taxon getParent() {
-        return subject != null ? subject : domain;
+        if(subject != null) return subject;
+        if(domain != null) return  domain;
+        if(module != null) return module;
+        return null;
     }
 }

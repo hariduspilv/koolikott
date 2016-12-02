@@ -39,7 +39,7 @@ define([
                     }
 
                     $scope.getEducationalContext = function () {
-                        var educationalContext = $rootScope.taxonUtils.getEducationalContext($scope.portfolio.taxon);
+                        var educationalContext = $rootScope.taxonService.getEducationalContext($scope.portfolio.taxon);
                         if (educationalContext) {
                             return educationalContext.name.toUpperCase();
                         }
@@ -110,7 +110,7 @@ define([
                     };
 
                     function getSubject(taxon) {
-                        return $rootScope.taxonUtils.getSubject(taxon)
+                        return $rootScope.taxonService.getSubject(taxon)
                     }
 
                     function deletePortfolio() {

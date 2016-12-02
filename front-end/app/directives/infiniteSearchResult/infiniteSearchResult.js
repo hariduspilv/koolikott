@@ -39,7 +39,7 @@ define([
                 // Pagination variables
                 var maxResults = $scope.params ? $scope.params.maxResults || $scope.params.limit : null;
                 var expectedItemCount = maxResults;
-                var initialParams = $scope.params ? clone($scope.params) : $scope.params;
+                var initialParams = $scope.params;
 
                 $scope.items = [];
 

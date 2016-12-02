@@ -2,8 +2,7 @@ define([
     'angularAMD',
 
     'app.routes',
-    'utils/taxonUtils',
-    'utils/taxonParser',
+    'utils/taxonService',
     'moment',
 
     'angular-translate',
@@ -28,7 +27,7 @@ define([
 
     'services/authenticatedUserService',
     'DOPconstants'
-], function (angularAMD, config, taxonUtils, taxonParser, moment) {
+], function (angularAMD, config, taxonService, moment) {
     'use strict';
 
     var app = angular.module('app', [
@@ -109,9 +108,6 @@ define([
                 return taOptions; // whatever you return will be the taOptions
             }]);
 
-            $httpProvider.defaults.transformResponse.splice(0, 0, parseJSONResponse);
-            $httpProvider.defaults.transformRequest = serializeRequest;
-
             var isIE = (navigator.userAgent.match(/Trident/) || navigator.userAgent.match(/MSIE/));
 
             if (isIE) {
@@ -158,26 +154,6 @@ define([
             return result;
         };
     }]);
-
-    function serializeRequest(data, headersGetter) {
-        if (data && headersGetter()['content-type'].contains('application/json')) {
-            data = clone(data);
-            taxonParser.serialize(data);
-            return JSOG.stringify(data);
-        }
-
-        return data;
-    }
-
-    function parseJSONResponse(data, headersGetter) {
-        if (data && (headersGetter()['content-type'] === 'application/json')) {
-            data = JSOG.parse(data);
-            taxonParser.parse(data);
-            return data;
-        }
-
-        return data;
-    }
 
     function configureTranslationService($translateProvider) {
         $translateProvider.useUrlLoader('rest/translation');
@@ -263,12 +239,12 @@ define([
     app.run(function ($rootScope, metadataService, APP_VERSION) {
         $rootScope.APP_VERSION = APP_VERSION;
         $rootScope.hasAppInitated = false;
-        $rootScope.taxonParser = taxonParser;
+        $rootScope.taxonService = taxonService;
         metadataService.loadEducationalContexts(setTaxons);
 
         function setTaxons(taxon) {
             $rootScope.taxon = taxon;
-            taxonParser.setTaxons(taxon);
+            taxonService.setTaxons(taxon);
         }
     });
 
@@ -410,8 +386,6 @@ define([
     }]);
 
     app.run(['$rootScope', 'authenticatedUserService', function ($rootScope, authenticatedUserService) {
-        $rootScope.taxonUtils = taxonUtils;
-
         $rootScope.$watch(function () {
             return authenticatedUserService.isAuthenticated();
         }, function (isAuthenticated) {

@@ -1,0 +1,69 @@
+<md-dialog aria-label="Kasutaja uuendamise modaalaken" id="dialog-add-material-to-portfolio"
+           flex-gt-sm="75" flex>
+  <md-toolbar class="md-accent">
+    <div class="md-toolbar-tools" flex>
+      <h2>
+        <span data-translate="UPDATE_USER_DATA_TITLE"></span>
+      </h2>
+      <span flex></span>
+      <md-button ng-click="cancel()" class="md-icon-button" aria-label="Sulge modaalaken">
+        <md-icon>close</md-icon>
+      </md-button>
+    </div>
+  </md-toolbar>
+  <md-dialog-content layout="column">
+
+    <div class="md-padding" layout="row">
+      <md-input-container class="md-block" flex-gt-xs>
+        <label data-translate="USERNAME"></label>
+        <input placeholder="{{user.username}}" disabled>
+      </md-input-container>
+      <md-input-container class="md-block" flex-gt-xs>
+        <label data-translate="FULL_NAME"></label>
+        <input placeholder="{{user.name + ' ' + user.surname}}" disabled>
+      </md-input-container>
+
+    </div>
+    <div class="md-padding" layout="row">
+      <md-input-container flex>
+        <label data-translate="ROLE"></label>
+        <md-select ng-model="selectedRole" required>
+          <md-option ng-value="roleValue" data-ng-repeat="roleValue in roles" data-ng-click="setRole(roleValue)">
+            {{roleValue}}
+          </md-option>
+        </md-select>
+      </md-input-container>
+    </div>
+
+    <div layout="row" class="md-padding" data-ng-repeat="taxon in user.userTaxons track by $index">
+      <div data-dop-taxon-selector data-taxon="user.userTaxons[$index]" flex></div>
+
+      <md-button class="md-icon-button md-primary" data-ng-show="$index+1 === user.userTaxons.length"
+                 data-ng-click="addNewTaxon()" data-ng-disabled="material.taxon">
+        <md-icon>add_circle</md-icon>
+        <md-tooltip md-direction="top"><span data-translate="MATERIAL_TAB_ADD_TAXON"></span></md-tooltip>
+      </md-button>
+      <md-button class="md-icon-button md-accent-2" data-ng-show="user.userTaxons.length > 1"
+                 data-ng-click="deleteTaxon($index)">
+        <md-icon>remove_circle</md-icon>
+        <md-tooltip md-direction="top"><span data-translate="MATERIAL_TAB_REMOVE_TAXON"></span></md-tooltip>
+      </md-button>
+    </div>
+
+  </md-dialog-content>
+
+  <md-dialog-actions>
+
+    <span flex></span>
+    <md-button aria-label="Tühista kasutaja muutmine" id="add-edit-user-button" data-ng-click="cancel()">
+      <span data-translate="BUTTON_CANCEL"></span>
+    </md-button>
+    <md-button aria-label="Salvesta" id="update-user-button" data-ng-click="update()">
+      <span data-translate="BUTTON_SAVE"></span>
+    </md-button>
+
+
+    <md-progress-circular class="md-accent ng-hide" md-mode="indeterminate" md-diameter="40"
+                          data-ng-show="isSaving"></md-progress-circular>
+  </md-dialog-actions>
+</md-dialog>

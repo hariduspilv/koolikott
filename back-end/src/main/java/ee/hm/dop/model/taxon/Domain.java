@@ -25,6 +25,7 @@ public class Domain extends Taxon {
     @OneToMany(mappedBy = "domain")
     private Set<Specialization> specializations;
 
+    @JsonIgnore
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "educationalContext", nullable = false)
     private EducationalContext educationalContext;

@@ -42,8 +42,8 @@ define([
 
                     $scope.$watch('taxon', function (newTaxon, oldTaxon) {
                         if (newTaxon !== oldTaxon) {
-                            var newEdCtx = $rootScope.taxonUtils.getEducationalContext(newTaxon);
-                            var oldEdCtx = $rootScope.taxonUtils.getEducationalContext(oldTaxon);
+                            var newEdCtx = $rootScope.taxonService.getEducationalContext(newTaxon);
+                            var oldEdCtx = $rootScope.taxonService.getEducationalContext(oldTaxon);
 
                             if (!oldEdCtx || (newEdCtx && newEdCtx.name !== oldEdCtx.name) || !newEdCtx) {
                                 fill();
