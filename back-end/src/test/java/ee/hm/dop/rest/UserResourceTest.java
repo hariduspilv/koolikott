@@ -3,6 +3,7 @@ package ee.hm.dop.rest;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 import java.util.List;
 
@@ -174,7 +175,7 @@ public class UserResourceTest extends ResourceIntegrationTestBase {
         Response response = doGet("user/all");
         List<User> allUsers = response.readEntity(new GenericType<List<User>>() {
         });
-        assertEquals(15, allUsers.size());
+        assertTrue(allUsers.size() > 14);
     }
 
     private User getUser(String username) {
