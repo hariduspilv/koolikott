@@ -28,26 +28,17 @@
     to   { opacity: 1; }
 }
 
-/* Firefox < 16 */
-@-moz-keyframes fadein {
-    from { opacity: 0; }
-    to   { opacity: 1; }
+.animate-if.ng-enter,
+.animate-if.ng-leave {
+   transition: all .5s cubic-bezier(0.55, 0, 0.55, 0.2);
 }
 
-/* Safari, Chrome and Opera > 12.1 */
-@-webkit-keyframes fadein {
-    from { opacity: 0; }
-    to   { opacity: 1; }
+.animate-if.ng-leave,
+.animate-if.ng-enter.ng-enter-active {
+   max-height: 999px;
 }
 
-/* Internet Explorer */
-@-ms-keyframes fadein {
-    from { opacity: 0; }
-    to   { opacity: 1; }
-}
-
-/* Opera < 12.1 */
-@-o-keyframes fadein {
-    from { opacity: 0; }
-    to   { opacity: 1; }
+.animate-if.ng-enter,
+.animate-if.ng-leave.ng-leave-active {
+   max-height: 0;
 }
