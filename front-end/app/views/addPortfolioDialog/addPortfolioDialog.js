@@ -86,6 +86,7 @@ define([
                         openCloseChapter: true
                     });
                     $rootScope.savedPortfolio = portfolio;
+                    $rootScope.newPortfolioCreated = true;
                     $mdDialog.hide();
                     $location.url('/portfolio/edit?id=' + $rootScope.savedPortfolio.id);
                 }

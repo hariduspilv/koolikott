@@ -18,13 +18,17 @@ define([
 
             function init() {
                 if ($rootScope.savedPortfolio) {
-                    $scope.showFirstMessage = true;
                     if (checkAuthorized($rootScope.savedPortfolio)) {
                         setPortfolio($rootScope.savedPortfolio);
                         checkPortfolioVisibility($rootScope.savedPortfolio);
                     }
                 } else {
                     getPortfolio(getPortfolioSuccess, getPortfolioFail);
+                }
+
+                if ($rootScope.newPortfolioCreated) {
+                    $scope.showFirstMessage = true;
+                    $rootScope.newPortfolioCreated = false;
                 }
 
                 startAutosave();
