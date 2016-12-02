@@ -11,7 +11,6 @@ define([
     'angular-route',
     'angular-click-outside',
     'angular-scroll',
-    'jsog',
     'utils/commons',
     'ng-file-upload',
     'angular-bootstrap',

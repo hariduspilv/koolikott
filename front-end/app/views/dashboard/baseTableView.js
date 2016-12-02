@@ -49,6 +49,7 @@ define([
             }
 
             $scope.editUser = function (user) {
+                if(!user) return;
                 var editUserScope = $scope.$new(true);
                 editUserScope.user = user;
 

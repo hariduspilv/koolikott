@@ -9,7 +9,7 @@ define(['angularAMD'], function (angularAMD) {
                     // HACK: Handling stack overflow caused by taxons
                     authenticatedUser.user.userTaxons = instance.getFirstLevelTaxons(authenticatedUser.user.userTaxons);
 
-                    localStorage.setItem("authenticatedUser", JSOG.stringify(authenticatedUser));
+                    localStorage.setItem("authenticatedUser", JSON.stringify(authenticatedUser));
                 },
 
                 getAuthenticatedUser: function () {

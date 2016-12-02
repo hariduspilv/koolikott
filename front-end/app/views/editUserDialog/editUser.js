@@ -7,6 +7,7 @@ define([
     return ['$scope', '$mdDialog', 'serverCallService', 'translationService', 'toastService', '$rootScope',
         function ($scope, $mdDialog, serverCallService, translationService, toastService, $rootScope) {
             function init() {
+                if(!$scope.user) return;
                 $scope.selectedRole = $scope.user.role;
                 if ($scope.user.userTaxons.length === 0) {
                     $scope.user.userTaxons = [{}];
