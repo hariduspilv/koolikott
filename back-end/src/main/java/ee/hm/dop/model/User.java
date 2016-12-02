@@ -3,14 +3,18 @@ package ee.hm.dop.model;
 import javax.persistence.*;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import ee.hm.dop.model.taxon.Taxon;
+import ee.hm.dop.rest.jackson.map.RoleDeserializer;
 import ee.hm.dop.rest.jackson.map.RoleSerializer;
 
 import java.util.List;
 
 @Entity
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class User {
 
     @Id
@@ -43,6 +47,7 @@ public class User {
             joinColumns = {@JoinColumn(name = "user")},
             inverseJoinColumns = {@JoinColumn(name = "taxon")},
             uniqueConstraints = @UniqueConstraint(columnNames = {"user", "taxon"}))
+    @JsonIgnoreProperties(ignoreUnknown = true)
     private List<Taxon> userTaxons;
 
     public Long getId() {
@@ -91,7 +96,7 @@ public class User {
         return role;
     }
 
-    @JsonIgnore
+    @JsonDeserialize(contentUsing = RoleDeserializer.class)
     public void setRole(Role role) {
         this.role = role;
     }

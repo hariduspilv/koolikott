@@ -90,17 +90,6 @@ define([
 
                     if ($rootScope.isEditPortfolioMode && $rootScope.savedPortfolio) {
                         setEditModePrefill();
-                    } else {
-                        // Taxon
-                        if (searchService.getTaxon().length > 0) {
-                            $rootScope.taxonParser.loadTaxonMap(setTaxonMap);
-                        }
-                    }
-                }
-
-                function setTaxonMap(taxonMap) {
-                    for (var i = 0; i < searchService.getTaxon().length; i++) {
-                        $scope.taxon = Object.create(taxonMap['t' + searchService.getTaxon()[i]]);
                     }
                 }
 
@@ -326,7 +315,7 @@ define([
                         }
 
                         if (newTaxon !== oldTaxon && $scope.taxon && !prefilling) {
-                            $scope.detailedSearch.educationalContext = $rootScope.taxonUtils.getEducationalContext($scope.taxon);
+                            $scope.detailedSearch.educationalContext = $rootScope.taxonService.getEducationalContext($scope.taxon);
                             clearHiddenFields();
                             $scope.search();
                         } else if (prefilling) {
@@ -334,7 +323,7 @@ define([
                         }
                     }, false);
 
-                    $scope.$watch(watchComplexNode, function (newValue, oldValue) {
+                    $scope.$watch($scope.detailedSearch, function (newValue, oldValue) {
                         if ($scope.isVisible && hasSearchChanged(newValue, oldValue)) {
                             filterTypeSearch();
                             $scope.search();
@@ -356,19 +345,6 @@ define([
                     } else {
                         $scope.detailedSearch.type = null;
                     }
-                }
-
-                function watchComplexNode() {
-                    return without($scope.detailedSearch, ['educationalContext']);
-                }
-
-                function without(obj, keys) {
-                    return Object.keys(obj).filter(function (key) {
-                        return keys.indexOf(key) === -1;
-                    }).reduce(function (result, key) {
-                        result[key] = obj[key];
-                        return result;
-                    }, {});
                 }
 
                 $scope.getLanguageTranslationKey = function (languageCode) {

@@ -314,12 +314,6 @@ function isObjectEmpty(obj) {
     return Object.keys(obj).length === 0 && JSON.stringify(obj) === JSON.stringify({});
 }
 
-// This is a workaround for angular circular reference problem. It is not efficient.
-function clone(object) {
-    var json = JSOG.stringify(object);
-    return JSOG.parse(json)
-}
-
 function getSource(material) {
     if (material.source && (material.source !== null && material.source !== undefined && material.source !== "")) {
         return material.source;

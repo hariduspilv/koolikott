@@ -13,6 +13,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 @DiscriminatorValue("SUBTOPIC")
 public class Subtopic extends Taxon {
 
+    @JsonIgnore
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "topic", nullable = false)
     private Topic topic;

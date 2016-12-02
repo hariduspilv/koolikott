@@ -29,6 +29,23 @@ public class UserResource extends BaseResource {
     private AuthenticatedUserService authenticatedUserService;
 
     @GET
+    @Path("all")
+    @RolesAllowed("ADMIN")
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<User> getAll() {
+        return userService.getAllUsers(getLoggedInUser());
+    }
+
+    @POST
+    @RolesAllowed("ADMIN")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public User updateUser(User user) {
+        if (user == null) throwBadRequestException("No user received!");
+        return userService.update(user, getLoggedInUser());
+    }
+
+    @GET
     @Produces(MediaType.APPLICATION_JSON)
     public User get(@QueryParam("username") String username) {
         if (isBlank(username)) {

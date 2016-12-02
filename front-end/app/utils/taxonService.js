@@ -2,7 +2,15 @@ define(function () {
 
     var CHILD_TAXON_KEYS = ['domains', 'subjects', 'topics', 'subtopics', 'modules', 'specializations'];
     var TAXON_LEVELS = ['.EducationalContext', '.Domain', '.Subject', '.Topic', 'Subtopic', '.Module', '.Specialization'];
-
+    var constants = {
+        EDUCATIONAL_CONTEXT: '.EducationalContext',
+        DOMAIN: '.Domain',
+        SUBJECT: '.Subject',
+        TOPIC: '.Topic',
+        SUBTOPIC: '.Subtopic',
+        SPECIALIZATION: '.Specialization',
+        MODULE: '.Module'
+    };
     var taxonMap;
     var taxonMapCallbacks = [];
 
@@ -13,7 +21,7 @@ define(function () {
 
         var children = getTaxonChildren(taxon);
 
-        children.forEach(function(child) {
+        children.forEach(function (child) {
             mapTaxon(child);
         });
     }
@@ -27,12 +35,6 @@ define(function () {
         }
 
         return [];
-    }
-
-    function getObjectsWithTaxons(obj) {
-        var analyzedObjects = [];
-
-        return getObjectsWithTaxonsFrom(obj, analyzedObjects);
     }
 
     function getObjectsWithTaxonsFrom(obj, analyzedObjects) {
@@ -71,29 +73,9 @@ define(function () {
         }
     }
 
-    function getMinimalTaxon(taxon) {
-        if (taxon && taxon.level && taxon.id) {
-            return [taxon.level, 'id', taxon.id];
-        }
-    }
-
-    function parse(learningObject) {
-        if (taxonMap) {
-            replaceTaxons(learningObject, getFullTaxon);
-        } else {
-            learningObjectsToParse.push(learningObject);
-        }
-    }
-
-    function serialize(learningObject) {
-        if (taxonMap) {
-            replaceTaxons(learningObject, getMinimalTaxon);
-        }
-    }
-
     function replaceTaxons(learningObject, replacementFunction) {
         if (learningObject.taxons) {
-            learningObject.taxons.forEach(function(taxon, taxonIndex) {
+            learningObject.taxons.forEach(function (taxon, taxonIndex) {
                 var replacementTaxon = replacementFunction(taxon);
                 if (replacementTaxon) {
                     learningObject.taxons[taxonIndex] = replacementTaxon;
@@ -115,48 +97,94 @@ define(function () {
         }
     }
 
-    function transform(objects, transformFunction) {
-        if (Array.isArray(objects)) {
-            objects.forEach(function(obj, index) {
-                objects[index] = transformFunction(obj);
-            });
-        } else {
-            objects = transformFunction(objects);
-        }
-    }
-
     return {
-        parse: function(objects) {
-            var objectsWithTaxons = getObjectsWithTaxons(objects);
-            transform(objectsWithTaxons, parse);
-        },
+        constants: constants,
 
-        serialize: function(objects) {
-            var objectsWithTaxons = getObjectsWithTaxons(objects);
-            transform(objectsWithTaxons, serialize);
-        },
-
-        setTaxons: function(educationalContexts) {
+        setTaxons: function (educationalContexts) {
             taxonMap = Object.create(null);
-            educationalContexts.forEach(function(educationalContext) {
+            educationalContexts.forEach(function (educationalContext) {
                 mapTaxon(educationalContext);
             });
 
-            learningObjectsToParse.forEach(function(learningObject) {
+            learningObjectsToParse.forEach(function (learningObject) {
                 replaceTaxons(learningObject, getFullTaxon);
             });
 
-            taxonMapCallbacks.forEach(function(callback) {
+            taxonMapCallbacks.forEach(function (callback) {
                 callback(taxonMap);
             });
         },
 
-        loadTaxonMap: function(callback) {
-            if (taxonMap) {
-                callback(taxonMap);
-            } else {
-                // Save callback, call it when data is available
-                taxonMapCallbacks.push(callback);
+        getEducationalContext: function (taxon) {
+            return this.getTaxon(taxon, constants.EDUCATIONAL_CONTEXT);
+        },
+
+        getDomain: function (taxon) {
+            return this.getTaxon(taxon, constants.DOMAIN);
+        },
+
+        getSubject: function (taxon) {
+            return this.getTaxon(taxon, constants.SUBJECT);
+        },
+
+        getTopic: function (taxon) {
+            return this.getTaxon(taxon, constants.TOPIC);
+        },
+
+        getSubtopic: function (taxon) {
+            return this.getTaxon(taxon, constants.SUBTOPIC);
+        },
+
+        getSpecialization: function (taxon) {
+            return this.getTaxon(taxon, constants.SPECIALIZATION);
+        },
+
+        getModule: function (taxon) {
+            return this.getTaxon(taxon, constants.MODULE);
+        },
+
+        getTaxon: function (taxon, level) {
+            if (!taxon) {
+                return;
+            }
+
+            if (taxon.level === constants.EDUCATIONAL_CONTEXT) {
+                return taxon.level === level ? taxon : null;
+            }
+
+            if (taxon.level === constants.DOMAIN) {
+                return taxon.level === level ? taxon : this.getTaxon(taxonMap['t' + taxon.parentId], level);
+            }
+
+            if (taxon.level === constants.SUBJECT) {
+                return taxon.level === level ? taxon : this.getTaxon(taxonMap['t' + taxon.parentId], level);
+            }
+
+            if (taxon.level === constants.TOPIC) {
+                if (taxon.level === level) return taxon;
+
+                var parent = taxonMap['t' + taxon.parentId];
+                if (!parent || angular.equals(parent, {})) {
+                    parent = taxonMap['t' + taxon.parentId];
+
+                    if (!parent || angular.equals(parent, {})) {
+                        parent = taxonMap['t' + taxon.parentId];
+                    }
+                }
+
+                return this.getTaxon(parent, level);
+            }
+
+            if (taxon.level === constants.SUBTOPIC) {
+                return taxon.level === level ? taxon : this.getTaxon(taxonMap['t' + taxon.parentId], level);
+            }
+
+            if (taxon.level === constants.SPECIALIZATION) {
+                return taxon.level === level ? taxon : this.getTaxon(taxonMap['t' + taxon.parentId], level);
+            }
+
+            if (taxon.level === constants.MODULE) {
+                return taxon.level === level ? taxon : this.getTaxon(taxonMap['t' + taxon.parentId], level);
             }
         }
     }

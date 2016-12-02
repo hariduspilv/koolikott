@@ -145,6 +145,12 @@ public class UserDAOTest extends DatabaseTestBase {
         assertEquals(1, moderators.size());
     }
 
+    @Test
+    public void getAllUsers() {
+        List<User> allUsers = userDAO.getAll();
+        assertEquals(15, allUsers.size());
+    }
+
     private User getUser() {
         User user = new User();
         user.setName("Mati2");

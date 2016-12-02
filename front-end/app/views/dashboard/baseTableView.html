@@ -1,53 +1,78 @@
-<div id="page-dashboard" flex>
-  <div layout layout-align="center start" flex>
-    <section layout="row" layout-sm="column" flex flex-gt-md="100">
-      <article class="md-padding" role="main" flex>
-        <div layout="row" class="type-block">
-          <h1 data-translate="DASHBOARD"></h1>
+<div layout="row" layout-sm="column" id="page-dashboard">
+  <article class="md-padding" role="main" flex>
+    <div class="type-block">
+      <h1 data-translate="DASHBOARD"></h1>
+    </div>
+    <div data-ng-if="isView('/dashboard/moderators') || isView('/dashboard/restrictedUsers')">
+      <md-card id="user-search">
+        <md-toolbar class="md-table-toolbar md-default">
+          <div layout-margin>
+            <h2 class="md-title">{{searchUsersTitle}}</h2>
+          </div>
+          <div class="md-toolbar-tools">
+            <md-autocomplete flex
+                             md-min-length="0"
+                             md-input-name="autocompleteField"
+                             md-selected-item="selectedUser"
+                             md-search-text="searchText"
+                             md-items="user in querySearch(searchText)"
+                             md-item-text="user.username"
+                             placeholder="{{getUsernamePlaceholder()}}">
+              <md-item-template>
+                <span md-highlight-text="searchText">{{user.username}}</span>
+              </md-item-template>
+            </md-autocomplete>
+            <md-button aria-label="Ava kasutaja" class="md-raised md-default" data-ng-click="editUser(selectedUser)"
+                       data-translate="BUTTON_OPEN"></md-button>
+          </div>
+        </md-toolbar>
+      </md-card>
+      <md-divider></md-divider>
+    </div>
+
+    <md-card class="md-data-table" id="moderators-table">
+
+      <md-toolbar class="md-table-toolbar md-default" ng-hide="filter.show">
+        <div class="md-toolbar-tools">
+          <h2 class="md-title">{{title}}</h2>
+          <div flex></div>
+          <md-button class="md-icon-button" ng-click="filter.show = true">
+            <md-icon>filter_list</md-icon>
+          </md-button>
         </div>
+      </md-toolbar>
+
+      <md-toolbar class="md-table-toolbar md-default" ng-show="filter.show">
+        <div class="md-toolbar-tools">
+          <md-icon>search</md-icon>
+          <form flex name="filter.form">
+            <input type="text" ng-model="query.filter" ng-model-options="filter.options" placeholder="search">
+          </form>
+          <md-button class="md-icon-button" ng-click="removeFilter()">
+            <md-icon>close</md-icon>
+          </md-button>
+        </div>
+      </md-toolbar>
+
+      <md-table-container class="table-container">
         <md-card class="md-data-table" id="moderators-table">
 
-          <md-toolbar class="md-table-toolbar md-default" ng-hide="filter.show">
-            <div class="md-toolbar-tools">
-              <h2 class="md-title">{{title}}</h2>
-              <div flex></div>
-              <md-button class="md-icon-button" ng-click="filter.show = true">
-                <md-icon>filter_list</md-icon>
-              </md-button>
-            </div>
-          </md-toolbar>
-
-          <md-toolbar class="md-table-toolbar md-default" ng-show="filter.show">
-            <div class="md-toolbar-tools">
-              <md-icon>search</md-icon>
-              <form flex name="filter.form">
-                <input type="text" ng-model="query.filter" ng-model-options="filter.options" placeholder="search">
-              </form>
-              <md-button class="md-icon-button" ng-click="removeFilter()">
-                <md-icon>close</md-icon>
-              </md-button>
-            </div>
-          </md-toolbar>
-
-          <md-table-container class="table-container">
-            <md-card class="md-data-table" id="moderators-table">
-
-              <!--Directives for different views-->
-              <div data-ng-if="viewPath === '/dashboard/moderators'" data-dop-moderators-table></div>
-              <div data-ng-if="viewPath === '/dashboard/restrictedUsers'" data-dop-restricted-users-table></div>
-              <div data-ng-if="viewPath === '/dashboard/deletedPortfolios'" data-dop-deleted-portfolio></div>
-              <div data-ng-if="viewPath === '/dashboard/deletedMaterials'" data-dop-deleted-material></div>
-              <div data-ng-if="viewPath === '/dashboard/improperMaterials'" data-dop-improper-material></div>
-              <div data-ng-if="viewPath === '/dashboard/improperPortfolios'" data-dop-improper-portfolio></div>
-              <div data-ng-if="viewPath === '/dashboard/brokenMaterials'" data-dop-broken-material></div>
-
-            </md-card>
-          </md-table-container>
-
-          <md-table-pagination md-limit="query.limit" md-page="query.page" md-total="{{itemsCount}}"
-                               md-on-paginate="onPaginate" md-page-select></md-table-pagination>
+          <!--Directives for different views-->
+          <div data-ng-if="isView('/dashboard/moderators')" data-dop-moderators-table></div>
+          <div data-ng-if="isView('/dashboard/restrictedUsers')" data-dop-restricted-users-table></div>
+          <div data-ng-if="isView('/dashboard/deletedPortfolios')" data-dop-deleted-portfolio></div>
+          <div data-ng-if="isView('/dashboard/deletedMaterials')" data-dop-deleted-material></div>
+          <div data-ng-if="isView('/dashboard/improperMaterials')" data-dop-improper-material></div>
+          <div data-ng-if="isView('/dashboard/improperPortfolios')" data-dop-improper-portfolio></div>
+          <div data-ng-if="isView('/dashboard/brokenMaterials')" data-dop-broken-material></div>
         </md-card>
-      </article>
-    </section>
-  </div>
+      </md-table-container>
+      <md-table-pagination md-limit="query.limit"
+                           md-page="query.page"
+                           md-total="{{itemsCount}}"
+                           md-on-paginate="onPaginate"
+                           md-page-select>
+      </md-table-pagination>
+    </md-card>
+  </article>
 </div>

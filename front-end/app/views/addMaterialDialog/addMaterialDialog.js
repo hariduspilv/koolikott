@@ -88,7 +88,7 @@ define([
             };
 
             $scope.addNewTaxon = function () {
-                var educationalContext = $rootScope.taxonUtils.getEducationalContext($scope.material.taxons[0]);
+                var educationalContext = $rootScope.taxonService.getEducationalContext($scope.material.taxons[0]);
 
                 $scope.material.taxons.push(educationalContext);
             };
@@ -312,8 +312,7 @@ define([
             }
 
 
-
-             /**
+            /**
              * Create filter function for a query string
              */
             function searchFilter(query, translationPrefix) {
@@ -435,7 +434,7 @@ define([
                 });
 
                 $scope.$watch('material.taxons[0]', function (newValue, oldValue) {
-                    if (newValue && newValue.level === $rootScope.taxonUtils.constants.EDUCATIONAL_CONTEXT && newValue !== oldValue) {
+                    if (newValue && newValue.level === $rootScope.taxonService.constants.EDUCATIONAL_CONTEXT && newValue !== oldValue) {
                         $scope.educationalContextId = newValue.id;
                     }
                 }, false);
@@ -573,7 +572,7 @@ define([
                     $scope.material.peerReviews = [{}];
                 }
 
-                var educationalContext = $rootScope.taxonUtils.getEducationalContext($scope.material.taxons[0]);
+                var educationalContext = $rootScope.taxonService.getEducationalContext($scope.material.taxons[0]);
 
                 if (educationalContext) {
                     $scope.educationalContextId = educationalContext.id;
@@ -588,7 +587,7 @@ define([
                     if ($rootScope.savedPortfolio.taxon) {
                         var taxon = Object.create($rootScope.savedPortfolio.taxon);
                         $scope.material.taxons = [taxon];
-                        var educationalContext = $rootScope.taxonUtils.getEducationalContext(taxon);
+                        var educationalContext = $rootScope.taxonService.getEducationalContext(taxon);
 
                         if (educationalContext) {
                             $scope.educationalContextId = educationalContext.id;
