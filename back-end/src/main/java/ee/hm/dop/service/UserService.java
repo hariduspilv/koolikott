@@ -4,6 +4,7 @@ import static java.lang.String.format;
 
 import java.text.Normalizer;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -128,12 +129,16 @@ public class UserService extends BaseService {
 
     public User update(User user, User loggedInUser) {
         if (isUserAdmin(loggedInUser)) {
+            List<Taxon> taxons = new ArrayList<>();
 
             //Currently allowed to update only role and taxons
             User existingUser = getUserByUsername(user.getUsername());
             existingUser.setRole(Role.getEnumByString(user.getRole().toString()));
-            List<Taxon> taxons = new ArrayList<>();
-            if (user.getUserTaxons().size() > 0) {
+
+            List<Taxon> newTaxons = user.getUserTaxons();
+            newTaxons.removeAll(Collections.singleton(null));
+
+            if (newTaxons.size() > 0) {
                 taxons = user.getUserTaxons()
                         .stream()
                         .map(taxon -> taxonService.getTaxonById(taxon.getId()))

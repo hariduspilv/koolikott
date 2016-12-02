@@ -4,8 +4,8 @@ define([
     'services/translationService',
     'services/authenticatedUserService'
 ], function (app) {
-    return ['$scope', '$mdDialog', 'serverCallService', 'translationService', 'toastService', '$rootScope',
-        function ($scope, $mdDialog, serverCallService, translationService, toastService, $rootScope) {
+    return ['$scope', '$mdDialog', 'serverCallService', 'translationService', 'toastService', '$rootScope', '$filter',
+        function ($scope, $mdDialog, serverCallService, translationService, toastService, $rootScope, $filter) {
             function init() {
                 if(!$scope.user) return;
                 $scope.selectedRole = $scope.user.role;
@@ -26,6 +26,10 @@ define([
 
             $scope.setRole = function (role) {
                 $scope.user.role = role;
+            };
+
+            $scope.getTranslation = function (key) {
+                return $scope.searchUsersTitle = $filter('translate')(key);
             };
 
             $scope.addNewTaxon = function () {

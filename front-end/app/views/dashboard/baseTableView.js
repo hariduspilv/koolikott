@@ -48,6 +48,10 @@ define([
                 console.log("Failed to get users list");
             }
 
+            $scope.getTranslation = function (key) {
+                return $scope.searchUsersTitle = $filter('translate')(key);
+            };
+
             $scope.editUser = function (user) {
                 if(!user) return;
                 var editUserScope = $scope.$new(true);

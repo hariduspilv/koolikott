@@ -29,7 +29,7 @@
         <label data-translate="ROLE"></label>
         <md-select ng-model="selectedRole" required>
           <md-option ng-value="roleValue" data-ng-repeat="roleValue in roles" data-ng-click="setRole(roleValue)">
-            {{roleValue}}
+            {{getTranslation(roleValue)}}
           </md-option>
         </md-select>
       </md-input-container>
