@@ -6,6 +6,8 @@ define([
 ], function (app) {
     return ['$scope', '$mdDialog', 'serverCallService', 'translationService', 'toastService', '$rootScope', '$filter',
         function ($scope, $mdDialog, serverCallService, translationService, toastService, $rootScope, $filter) {
+            var ROLE_MODERATOR = "MODERATOR";
+
             function init() {
                 if(!$scope.user) return;
                 $scope.selectedRole = $scope.user.role;
@@ -41,6 +43,13 @@ define([
             $scope.deleteTaxon = function (index) {
                 $scope.user.userTaxons.splice(index, 1);
             };
+
+            $scope.$watch('user.userTaxons', function (newTaxons, oldTaxons) {
+                if (newTaxons !== oldTaxons && newTaxons.length > 0) {
+                    $scope.selectedRole = ROLE_MODERATOR;
+                    $scope.user.role = ROLE_MODERATOR;
+                }
+            }, true);
 
             function updateUserSuccess(user) {
                 if (isEmpty(user)) {
