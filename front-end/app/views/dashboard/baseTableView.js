@@ -5,8 +5,8 @@ define([
     'services/translationService',
     'directives/dashboard/userManagement/moderatorsTable',
     'directives/dashboard/userManagement/restrictedUsersTable',
-    'directives/dashboard/deletedPortfolio/deletedPortfolio',
-    'directives/dashboard/deletedMaterial/deletedMaterial',
+    'directives/dashboard/deleted/deletedPortfolio',
+    'directives/dashboard/deleted/deletedMaterial',
     'directives/dashboard/improper/improperMaterial',
     'directives/dashboard/improper/improperPortfolio',
     'directives/dashboard/broken/brokenMaterial',
@@ -197,12 +197,14 @@ define([
             }
 
             $scope.getCorrectLanguageTitle = function (item) {
-                if (item) {
+                if (item.titles) {
                     var result = getUserDefinedLanguageString(item.titles, translationService.getLanguage(), item.language);
                     if (!result) {
                         return "";
                     }
                     return result;
+                } else {
+                    return item.title
                 }
             };
 
