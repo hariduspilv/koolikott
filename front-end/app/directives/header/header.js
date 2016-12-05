@@ -61,6 +61,7 @@ define([
 
                     $scope.openDetailedSearch = function () {
                         $scope.detailedSearch.isVisible = true;
+                        $scope.detailedSearch.queryIn = $scope.searchFields.searchQuery;
                         broadcastSearchOpen();
                         $anchorScroll();
                     };
@@ -77,12 +78,6 @@ define([
                         dontSearch = true;
                         $scope.detailedSearch.isVisible = false;
                         $scope.detailedSearch.queryIn = null;
-                    };
-
-                    $scope.detailedSearch.doSearch = function () {
-                        var query = ($scope.searchFields.searchQuery || "") + " " + $scope.detailedSearch.queryOut;
-                        searchService.setSearch(query.trim());
-                        $location.url(searchService.getURL());
                     };
 
                     $scope.suggest.doSuggest = function (query) {
