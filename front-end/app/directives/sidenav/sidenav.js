@@ -36,8 +36,8 @@ define([
                     $scope.updateUserCounts();
                 }, true);
 
-                $scope.$on('dashboard:adminCountsUpdated', function() {
-                   $scope.updateAdminCounts();
+                $scope.$on('dashboard:adminCountsUpdated', function () {
+                    $scope.updateAdminCounts();
                 });
 
                 $scope.isAdmin = function () {
@@ -130,6 +130,16 @@ define([
                         });
                     }
                 };
+                $scope.updateModeratorsCount = function () {
+                    userDataService.loadModeratorsCount(function (data) {
+                        $scope.moderatorsCount = data;
+                    });
+                };
+                $scope.updateRestrictedUsersCount = function () {
+                    userDataService.loadRestrictedUsersCount(function (data) {
+                        $scope.restrictedUsersCount = data;
+                    });
+                };
 
                 $scope.updateUserCounts = function () {
                     if (authenticatedUserService.isAuthenticated()) {
@@ -152,6 +162,8 @@ define([
                         $scope.updateDeletedPortfoliosCount();
                         $scope.updateImproperMaterialsCount();
                         $scope.updateImproperPortfoliosCount();
+                        $scope.updateModeratorsCount();
+                        $scope.updateRestrictedUsersCount();
                     }
                 };
 
