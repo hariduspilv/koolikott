@@ -21,6 +21,8 @@ import org.easymock.TestSubject;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import javax.ws.rs.core.Response;
+
 /**
  * Created by joonas on 1.09.16.
  */
@@ -36,9 +38,16 @@ public class SuggestServiceTest extends ResourceIntegrationTestBase {
 
     @Test
     public void suggestEmpty() throws IOException, SolrServerException {
-        expect(solrService.suggest("")).andReturn(null);
+        expect(solrService.suggest("", false)).andReturn(null);
         replay(solrService);
-        assertEquals(suggestService.suggest("").getStatus(), 400);
+        assertEquals(suggestService.suggest("", false).getStatus(), 400);
+    }
+
+    @Test
+    public void suggestTag() throws IOException, SolrServerException {
+        expect(solrService.suggest("matem", true)).andReturn(null);
+        replay(solrService);
+        assertEquals(suggestService.suggest("matem", true).getStatus(), 200);
     }
 
 }

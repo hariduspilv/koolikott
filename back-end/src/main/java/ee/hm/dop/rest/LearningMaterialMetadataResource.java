@@ -11,21 +11,10 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import ee.hm.dop.model.CrossCurricularTheme;
-import ee.hm.dop.model.KeyCompetence;
-import ee.hm.dop.model.Language;
-import ee.hm.dop.model.LicenseType;
-import ee.hm.dop.model.ResourceType;
-import ee.hm.dop.model.TargetGroup;
+import ee.hm.dop.model.*;
 import ee.hm.dop.model.taxon.EducationalContext;
 import ee.hm.dop.model.taxon.Taxon;
-import ee.hm.dop.service.CrossCurricularThemeService;
-import ee.hm.dop.service.KeyCompetenceService;
-import ee.hm.dop.service.LanguageService;
-import ee.hm.dop.service.LicenseTypeService;
-import ee.hm.dop.service.MaterialService;
-import ee.hm.dop.service.ResourceTypeService;
-import ee.hm.dop.service.TaxonService;
+import ee.hm.dop.service.*;
 import org.apache.http.HttpHeaders;
 
 @Path("learningMaterialMetadata")
@@ -51,6 +40,9 @@ public class LearningMaterialMetadataResource {
 
     @Inject
     private MaterialService materialservice;
+
+    @Inject
+    private TargetGroupService targetGroupService;
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
@@ -81,8 +73,8 @@ public class LearningMaterialMetadataResource {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Path("targetGroup")
-    public TargetGroup[] getTargetGroups() {
-        return TargetGroup.values();
+    public List<TargetGroup> getTargetGroups() {
+        return targetGroupService.getValues();
     }
 
     @GET

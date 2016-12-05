@@ -1326,6 +1326,31 @@
             <str>suggest</str>
         </arr>
     </requestHandler>
+
+    <searchComponent name="suggest_tag" class="solr.SpellCheckComponent">
+        <str name="queryAnalyzerFieldType">suggest_tag</str>
+        <lst name="spellchecker">
+            <str name="name">dopSuggester</str>
+            <str name="suggestAnalyzerFieldType">suggest_analyzer</str>
+            <str name="classname">org.apache.solr.spelling.suggest.Suggester</str>
+            <str name="lookupImpl">FSTLookupFactory</str>
+            <str name="field">suggest_tag</str>
+            <str name="fieldType">suggest_phrase</str>
+            <str name="buildOnCommit">true</str>
+        </lst>
+    </searchComponent>
+
+    <requestHandler name="/suggest_tag" class="solr.SearchHandler" startup="lazy">
+        <lst name="defaults">
+            <str name="spellcheck">true</str>
+            <str name="spellcheck.dictionary">dopSuggester</str>
+            <str name="spellcheck.count">5</str>
+            <str name="spellcheck.onlyMorePopular">true</str>
+        </lst>
+        <arr name="components">
+            <str>suggest_tag</str>
+        </arr>
+    </requestHandler>
     <!-- Term Vector Component
 
          http://wiki.apache.org/solr/TermVectorComponent

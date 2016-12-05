@@ -5,9 +5,10 @@
 
 define(['angularAMD'], function (angularAMD) {
 
-    angularAMD.factory('suggestService', function () {
+    angularAMD.factory('suggestService', ['$http', function ($http) {
 
         var suggestURLbase = "rest/suggest/";
+        var suggestSystemTagURLbase = "rest/suggest/tag";
         var suggest = {
             query: '',
             data: '',
@@ -16,17 +17,36 @@ define(['angularAMD'], function (angularAMD) {
         };
 
         return {
-
             getSuggestURLbase: function() {
                 return suggestURLbase;
             },
 
+            getSuggestSystemTagURLbase: function() {
+                return suggestSystemTagURLbase;
+            },
+
             getURL: function(query) {
                 return this.getSuggestURLbase() + "?q=" + query;
+            },
+
+            getTagURL: function(query) {
+                return this.getSuggestSystemTagURLbase() + "?q=" + query;
+            },
+
+            suggestTags: function(query) {
+                if (query == null) {
+                    return [];
+                }
+
+                return $http
+                    .get(this.getTagURL(query), {cache: true})
+                    .then(function (response) {
+                        return response.data.alternatives || [];
+                    });
             }
         }
 
-    })
+    }])
 
 
 });

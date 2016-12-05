@@ -1,10 +1,5 @@
 package ee.hm.dop.rest;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
-
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -14,18 +9,15 @@ import java.util.stream.Collectors;
 import javax.ws.rs.core.GenericType;
 
 import ee.hm.dop.common.test.ResourceIntegrationTestBase;
-import ee.hm.dop.model.CrossCurricularTheme;
-import ee.hm.dop.model.KeyCompetence;
-import ee.hm.dop.model.Language;
-import ee.hm.dop.model.LicenseType;
-import ee.hm.dop.model.ResourceType;
-import ee.hm.dop.model.TargetGroup;
+import ee.hm.dop.model.*;
 import ee.hm.dop.model.taxon.Domain;
 import ee.hm.dop.model.taxon.EducationalContext;
 import ee.hm.dop.model.taxon.Subject;
 import ee.hm.dop.model.taxon.Taxon;
 import ee.hm.dop.model.taxon.Topic;
 import org.junit.Test;
+
+import static org.junit.Assert.*;
 
 public class LearningMaterialMetadataResourceTest extends ResourceIntegrationTestBase {
 
@@ -97,15 +89,23 @@ public class LearningMaterialMetadataResourceTest extends ResourceIntegrationTes
 
     @Test
     public void getTargetGroups() {
-        TargetGroup[] result = doGet(GET_TARGET_GROUPS_URL, new GenericType<TargetGroup[]>() {
+        List<TargetGroup> result = doGet(GET_TARGET_GROUPS_URL, new GenericType<List<TargetGroup>>() {
         });
 
-        assertEquals(12, result.length);
+        assertEquals(12, result.size());
 
-        List<TargetGroup> expectedTargetGroups = Arrays.asList(TargetGroup.values());
-        List<TargetGroup> actualTargetGroups = Arrays.asList(result);
+        checkIfAllTargetGroups(result);
+    }
 
-        assertTrue(actualTargetGroups.containsAll(expectedTargetGroups));
+    private void checkIfAllTargetGroups(List<TargetGroup> targetGroups) {
+        if (targetGroups.size() != TargetGroupEnum.values().length) {
+            fail();
+        }
+
+        for (TargetGroup targetGroup : targetGroups) {
+            TargetGroupEnum.valueOf(targetGroup.getName());
+        }
+
     }
 
     @Test

@@ -13,19 +13,7 @@ import java.util.List;
 
 import ee.hm.dop.dao.LearningObjectDAO;
 import ee.hm.dop.dao.UserFavoriteDAO;
-import ee.hm.dop.model.CrossCurricularTheme;
-import ee.hm.dop.model.KeyCompetence;
-import ee.hm.dop.model.Language;
-import ee.hm.dop.model.LearningObject;
-import ee.hm.dop.model.Material;
-import ee.hm.dop.model.Portfolio;
-import ee.hm.dop.model.ResourceType;
-import ee.hm.dop.model.Role;
-import ee.hm.dop.model.SearchFilter;
-import ee.hm.dop.model.SearchResult;
-import ee.hm.dop.model.Searchable;
-import ee.hm.dop.model.TargetGroup;
-import ee.hm.dop.model.User;
+import ee.hm.dop.model.*;
 import ee.hm.dop.model.solr.Document;
 import ee.hm.dop.model.solr.Response;
 import ee.hm.dop.model.solr.SearchResponse;
@@ -53,6 +41,9 @@ public class SearchServiceTest {
 
     @Mock
     private UserFavoriteDAO userFavoriteDAO;
+
+    @Mock
+    private TargetGroupService targetGroupService;
 
     @TestSubject
     private SearchService searchService = new SearchService();
@@ -706,7 +697,19 @@ public class SearchServiceTest {
     public void searchWithTargetGroupFilter() {
         String query = "umm";
         SearchFilter searchFilter = new SearchFilter();
-        searchFilter.setTargetGroups(Arrays.asList(TargetGroup.SIX_SEVEN));
+
+        TargetGroup targetGroupSixSeven = new TargetGroup();
+        targetGroupSixSeven.setName(TargetGroupEnum.SIX_SEVEN.name());
+        expect(targetGroupService.getByName(TargetGroupEnum.SIX_SEVEN.name())).andReturn(targetGroupSixSeven);
+
+        replay(targetGroupService);
+
+        searchFilter
+                .setTargetGroups(Collections.singletonList(targetGroupService
+                        .getByName(TargetGroupEnum.SIX_SEVEN.name())));
+
+        verify(targetGroupService);
+
         String tokenizedQuery = "(umm) AND target_group:\"six_seven\" AND ((visibility:\"public\") OR type:\"material\")";
         long start = 0;
 
@@ -719,7 +722,22 @@ public class SearchServiceTest {
     public void searchWithMultipleTargetGroupsFilter() {
         String query = "umm";
         SearchFilter searchFilter = new SearchFilter();
-        searchFilter.setTargetGroups(Arrays.asList(TargetGroup.SIX_SEVEN, TargetGroup.ZERO_FIVE));
+
+        TargetGroup targetGroupSixSeven = new TargetGroup();
+        targetGroupSixSeven.setName(TargetGroupEnum.SIX_SEVEN.name());
+        TargetGroup targetGroupZeroFive = new TargetGroup();
+        targetGroupZeroFive.setName(TargetGroupEnum.ZERO_FIVE.name());
+
+        expect(targetGroupService.getByName(TargetGroupEnum.SIX_SEVEN.name())).andReturn(targetGroupSixSeven);
+        expect(targetGroupService.getByName(TargetGroupEnum.ZERO_FIVE.name())).andReturn(targetGroupZeroFive);
+
+        replay(targetGroupService);
+
+        searchFilter.setTargetGroups(Arrays.asList(targetGroupService.getByName(TargetGroupEnum.SIX_SEVEN.name()),
+                targetGroupService.getByName(TargetGroupEnum.ZERO_FIVE.name())));
+
+        verify(targetGroupService);
+
         String tokenizedQuery = "(umm) AND (target_group:\"six_seven\" OR target_group:\"zero_five\")"
                 + " AND ((visibility:\"public\") OR type:\"material\")";
         long start = 0;

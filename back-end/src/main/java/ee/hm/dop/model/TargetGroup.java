@@ -1,30 +1,55 @@
 package ee.hm.dop.model;
 
-import java.util.HashSet;
-import java.util.Set;
 
-import org.apache.commons.lang3.Range;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import ee.hm.dop.rest.jackson.map.TargetGroupDeserializer;
+import ee.hm.dop.rest.jackson.map.TargetGroupSerializer;
+import org.apache.commons.lang3.EnumUtils;
 
-public enum TargetGroup {
-    ZERO_FIVE(0, 5), SIX_SEVEN(6, 7), GRADE1(7, 8), GRADE2(8, 9), GRADE3(9, 10), GRADE4(10, 11), GRADE5(11, 12), GRADE6(
-            12, 13), GRADE7(13, 14), GRADE8(14, 15), GRADE9(15, 16), GYMNASIUM(16, 19);
+import javax.persistence.*;
 
-    private final Range<Integer> range;
+@Entity
+@JsonDeserialize(using = TargetGroupDeserializer.class)
+@JsonSerialize(using = TargetGroupSerializer.class)
+public class TargetGroup {
 
-    TargetGroup(int from, int to) {
-        this.range = Range.between(from, to);
+    @Id
+    @GeneratedValue
+    private Long id;
+
+    @Column(nullable = false, unique = true)
+    private String name;
+
+    @Column(nullable = false)
+    private String label;
+
+
+    public Long getId() {
+        return id;
     }
 
-    public static Set<TargetGroup> getTargetGroupsByAge(int from, int to) {
-        Set<TargetGroup> targetGroups = new HashSet<>();
-        Range<Integer> range = Range.between(from, to);
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-        for (TargetGroup targetGroup : TargetGroup.values()) {
-            if (targetGroup.range.isOverlappedBy(range)) {
-                targetGroups.add(targetGroup);
-            }
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        if (EnumUtils.isValidEnum(TargetGroupEnum.class, name)) {
+            this.name = name;
+        } else {
+            throw new IllegalArgumentException();
         }
+    }
 
-        return targetGroups;
+    public String getLabel() {
+        return label;
+    }
+
+    public void setLabel(String label) {
+        this.label = label;
     }
 }

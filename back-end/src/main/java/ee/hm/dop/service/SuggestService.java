@@ -15,21 +15,21 @@ public class SuggestService {
     @Inject
     SolrEngineService solrEngineService;
 
-    public Response suggest(String query){
+    public Response suggest(String query, boolean suggestTags){
 
         if(query.isEmpty()){
             return Response.status(Response.Status.BAD_REQUEST).build();
         }
 
-        SpellCheckResponse.Suggestion suggestResponse = doSuggest(query);
+        SpellCheckResponse.Suggestion suggestResponse = doSuggest(query, suggestTags);
 
         return Response.ok(suggestResponse).build();
     }
 
-    private SpellCheckResponse.Suggestion doSuggest(String query){
+    private SpellCheckResponse.Suggestion doSuggest(String query, boolean suggestTags){
         String queryString = getTokenizedQueryString(query);
 
-        return solrEngineService.suggest(queryString);
+        return solrEngineService.suggest(queryString, suggestTags);
     }
 
 }

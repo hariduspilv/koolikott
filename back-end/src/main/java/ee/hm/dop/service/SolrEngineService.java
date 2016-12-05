@@ -9,7 +9,7 @@ public interface SolrEngineService {
 
     public SearchResponse search(String query, long start, long limit, String sort);
 
-    public SpellCheckResponse.Suggestion suggest(String query);
+    public SpellCheckResponse.Suggestion suggest(String query, boolean suggestTags);
 
     public void updateIndex();
 

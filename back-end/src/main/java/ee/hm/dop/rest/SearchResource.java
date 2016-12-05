@@ -10,22 +10,9 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
-import ee.hm.dop.model.CrossCurricularTheme;
-import ee.hm.dop.model.KeyCompetence;
-import ee.hm.dop.model.Language;
-import ee.hm.dop.model.ResourceType;
-import ee.hm.dop.model.SearchFilter;
-import ee.hm.dop.model.SearchResult;
-import ee.hm.dop.model.Searchable;
-import ee.hm.dop.model.TargetGroup;
+import ee.hm.dop.model.*;
 import ee.hm.dop.model.taxon.Taxon;
-import ee.hm.dop.service.CrossCurricularThemeService;
-import ee.hm.dop.service.KeyCompetenceService;
-import ee.hm.dop.service.LanguageService;
-import ee.hm.dop.service.ResourceTypeService;
-import ee.hm.dop.service.SearchService;
-import ee.hm.dop.service.TaxonService;
-import ee.hm.dop.service.UserLikeService;
+import ee.hm.dop.service.*;
 
 @Path("search")
 public class SearchResource extends BaseResource {
@@ -51,6 +38,9 @@ public class SearchResource extends BaseResource {
     @Inject
     private UserLikeService userLikeService;
 
+    @Inject
+    private TargetGroupService targetGroupService;
+
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public SearchResult search(@QueryParam("q") String query,
@@ -59,7 +49,7 @@ public class SearchResource extends BaseResource {
                                @QueryParam("paid") Boolean paid,
                                @QueryParam("type") String type,
                                @QueryParam("language") String languageCode,
-                               @QueryParam("targetGroup") List<TargetGroup> targetGroups,
+                               @QueryParam("targetGroup") List<String> targetGroupNames,
                                @QueryParam("resourceType") String resourceTypeName,
                                @QueryParam("specialEducation") boolean isSpecialEducation,
                                @QueryParam("issuedFrom") Integer issuedFrom,
@@ -75,6 +65,11 @@ public class SearchResource extends BaseResource {
         List<Taxon> taxons = taxonIds
                 .stream()
                 .map(taxonId -> taxonService.getTaxonById(taxonId))
+                .collect(Collectors.toList());
+
+        List<TargetGroup> targetGroups = targetGroupNames
+                .stream()
+                .map(name -> targetGroupService.getByName(name))
                 .collect(Collectors.toList());
 
         Language language = languageService.getLanguage(languageCode);

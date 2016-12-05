@@ -16,18 +16,7 @@ import javax.inject.Inject;
 import com.google.common.collect.ImmutableSet;
 import ee.hm.dop.dao.LearningObjectDAO;
 import ee.hm.dop.dao.UserFavoriteDAO;
-import ee.hm.dop.model.CrossCurricularTheme;
-import ee.hm.dop.model.KeyCompetence;
-import ee.hm.dop.model.Language;
-import ee.hm.dop.model.ResourceType;
-import ee.hm.dop.model.Role;
-import ee.hm.dop.model.SearchFilter;
-import ee.hm.dop.model.SearchResult;
-import ee.hm.dop.model.Searchable;
-import ee.hm.dop.model.TargetGroup;
-import ee.hm.dop.model.User;
-import ee.hm.dop.model.UserFavorite;
-import ee.hm.dop.model.Visibility;
+import ee.hm.dop.model.*;
 import ee.hm.dop.model.solr.Document;
 import ee.hm.dop.model.solr.Response;
 import ee.hm.dop.model.solr.SearchResponse;
@@ -239,7 +228,7 @@ public class SearchService {
             List<String> filters = new ArrayList<>();
 
             for (TargetGroup targetGroup : targetGroups) {
-                filters.add(format("target_group:\"%s\"", targetGroup.toString().toLowerCase()));
+                filters.add(format("target_group:\"%s\"", targetGroup.getName().toLowerCase()));
             }
 
             if (filters.size() == 1) {
