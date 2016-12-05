@@ -140,8 +140,12 @@ define([
                         }
 
                         function updateSuccess(data) {
-                            locals.portfolio.visibility = data.visibility;
-                            $scope.buttonDisabled = false;
+                            if (isEmpty(data)) {
+                                updateFail();
+                            } else {
+                                locals.portfolio.visibility = data.visibility;
+                                $scope.buttonDisabled = false;
+                            }
                         }
 
                         function updateFail() {
