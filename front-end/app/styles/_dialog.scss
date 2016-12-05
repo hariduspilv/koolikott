@@ -1,4 +1,7 @@
 md-dialog .md-actions,
 md-dialog md-dialog-actions {
   padding: 0 16px 8px;
+  .md-button.md-raised {
+    padding: 0 $md-padding;
+  }
 }

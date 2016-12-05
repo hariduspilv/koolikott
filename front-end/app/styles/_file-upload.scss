@@ -1,18 +1,22 @@
 .drop-box {
-  border: 1px dashed rgba(0,0,0,.38);
-  //height: 240px;
-  //width: 240px;
+  position: relative;
+  border: 1px dashed rgba(0,0,0,.25);
+  margin-left: $md-padding;
   text-align: center;
   cursor: pointer;
   border-radius: 2px;
   transition: all .25s;
-  background: rgba(0,0,0, .15);
+  background: rgba(0,0,0, .1);
 
 	&.dragover,
   &:hover {
     border-color: rgba(0,0,0,.15);
-    background: rgba(0,0,0, .1);
+    background: rgba(0,0,0, .15);
 	}
+
+  span {
+    background: rgba(0,0,0, 0);
+  }
 
 	&.dragover-err {
     border-color: $error;
@@ -51,8 +55,14 @@
 }
 
 .drop-box__icon {
-  font-size: 3.5em;
-  color: rgba(200,200,200,0.54);
+  font-size: 4.6em;
+  color: rgba(255, 255, 255, 1);
+  @media (min-width: $layout-breakpoint-xs) {
+    font-size: 2.6em;
+  }
+  @media (min-width: $layout-breakpoint-sm) {
+    font-size: 3.6em;
+  }
 }
 
 .error-overlay {

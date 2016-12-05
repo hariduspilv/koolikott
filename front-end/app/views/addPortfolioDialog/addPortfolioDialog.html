@@ -21,7 +21,7 @@
           </div>
         </md-input-container>
       </form>
-      <div flex-sm="25" flex-md="20" flex-gt-md="15" class="">
+      <div flex-sm="30" flex-md="20" flex-gt-md="15">
         <div data-ngf-drop ngf-select ng-model="newPicture" class="drop-box"
         data-ngf-drag-over-class="'dragover'"
         data-ngf-multiple="false"
@@ -81,8 +81,8 @@
     <span data-translate="BUTTON_CANCEL"></span>
   </md-button>
   <md-button aria-label="Loo kogumik" data-ng-if="!isEditPortfolio" id="add-portfolio-create-button" data-ng-disabled="!isValid()" data-ng-click="create()" data-ng-hide="isSaving" class="md-primary md-raised">
-    <md-icon>arrow_forward</md-icon>
     <span data-translate="BUTTON_CREATE_PORTFOLIO"></span>
+    <md-icon>arrow_forward</md-icon>
   </md-button>
   <md-button aria-label="Muuda kogumikku" data-ng-if="isEditPortfolio" id="add-portfolio-edit-button" data-ng-disabled="!isValid()" data-ng-click="update()" data-ng-hide="isSaving" class="md-primary md-raised">
     <md-icon>arrow_forward</md-icon>
