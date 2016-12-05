@@ -112,7 +112,6 @@ define([
                 }
 
                 function DialogController($scope, $mdDialog, locals) {
-                    console.log(locals.portfolio);
                     if((isOwner() || authenticatedUserService.isAdmin() || authenticatedUserService.isModerator()) && locals.portfolio.visibility === 'PRIVATE') {
                         $scope.buttonDisabled = true;
                         $scope.showRadio = true;
@@ -136,7 +135,9 @@ define([
 
                     $scope.updatePortfolio = function () {
                         if ($scope.modalRadio && $scope.showRadio) {
-                            serverCallService.makePost("rest/portfolio/update", locals.portfolio, updateSuccess, updateFail);
+                            var portfolioClone = JSON.parse(JSON.stringify(locals.portfolio));
+                            portfolioClone.visibility = $scope.modalRadio;
+                            serverCallService.makePost("rest/portfolio/update", portfolioClone, updateSuccess, updateFail);
                         }
 
                         function updateSuccess(data) {
