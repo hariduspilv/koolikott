@@ -7,7 +7,6 @@ import ee.hm.dop.helpers.PageHelpers;
 public class MyPortfoliosPage extends Page {
 
 	private By addedPortfolio = By.xpath("//h4[@data-ng-bind='portfolio.title']");
-	private By deletedPortfolioToast = By.cssSelector("span.md-toast-text");
 	private By addPortfolioMessage = By.cssSelector("h3");
 
 	public PortfolioViewPage openPortfolio() {
@@ -22,8 +21,5 @@ public class MyPortfoliosPage extends Page {
 
 	}
 	
-	public String isPortfolioDeletedToastVisible() {
-		return getDriver().findElement(deletedPortfolioToast).getText();
-	}
 
 }

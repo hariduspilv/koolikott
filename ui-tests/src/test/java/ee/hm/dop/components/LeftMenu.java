@@ -3,6 +3,7 @@ package ee.hm.dop.components;
 import org.openqa.selenium.By;
 import ee.hm.dop.helpers.PageHelpers;
 import ee.hm.dop.page.MyMaterialsPage;
+import ee.hm.dop.page.PreschoolEducationResultsPage;
 
 
 
@@ -15,6 +16,9 @@ public class LeftMenu extends PageComponent {
 	private By myPortfolios = By.id("myPortfolios");
 	private By myMaterials = By.id("myMaterials");
 	private By myFavorites = By.id("myFavorites");
+	private By tableOfContents = By.id("sidenavTaxon");
+	private By preschoolEducation = By.xpath("//div/span[text()='Alusharidus']");
+	private By estonianLanguageTaxon = By.xpath("//div/span[text()='Eesti keel']");
 	
 	
 	public LeftMenu clickDashboard() {
@@ -25,6 +29,22 @@ public class LeftMenu extends PageComponent {
 	
 	public LeftMenu clickMyThings() {
 		getDriver().findElement(myThings).click();
+		return this;
+	}
+	
+	public PreschoolEducationResultsPage clickToFilterPreschoolEducation() {
+		getDriver().findElement(preschoolEducation).click();
+		return new PreschoolEducationResultsPage();
+	}
+	
+	public PreschoolEducationResultsPage clickToFilterPreschoolEducationEstonianLanguage() {
+		getDriver().findElement(estonianLanguageTaxon).click();
+		return new PreschoolEducationResultsPage();
+	}
+	
+	public LeftMenu clickTableOfContents() {
+		PageHelpers.waitForVisibility(tableOfContents);
+		getDriver().findElement(tableOfContents).click();
 		return this;
 	}
 	

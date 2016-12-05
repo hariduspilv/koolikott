@@ -12,7 +12,7 @@ public class EditPortfolioPage extends Page {
 	private By addedTag = By.xpath("//a[@data-ng-click='getTagSearchURL($event, $chip.tag)']");
 	private By visibilityButton = By.xpath("//button[@ng-click='$mdOpenMenu($event)']");
 	private By makePublik = By.xpath("//button/span[text()='Tee avalikuks']");
-	private By newChapter = By.xpath("//button[@data-ng-click='addNewChapter()']");
+	private By newChapter = By.partialLinkText("Lisa peatükk");
 	private By chapterTitle = By.xpath("//input[@placeholder='Sisesta peatüki pealkiri']");
 	private By urlLink = By.xpath("//input[@data-ng-model='chapter.resourcePermalink']");
 	private By addMaterial = By.xpath("//button[text()='Lisa materjal']");

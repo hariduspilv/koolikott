@@ -20,6 +20,7 @@ public class AddPortfolioBasic extends PageComponent {
 	private By age = By.xpath("(//md-option[contains(@value, 'ZERO_FIVE')])[2]");
 	private By savePortfolioButton = By.id("add-portfolio-edit-button");
 	private By descriptionField = By.xpath("(//div[starts-with(@id, 'taTextElement')])");
+	private By closeButton = By.xpath("//button[@data-ng-click='closeSelect()']");
 	
 	
 
@@ -98,7 +99,7 @@ public class AddPortfolioBasic extends PageComponent {
 	
 	public AddPortfolioBasic insertTags() {
 		for (int i = 0; i < 3; i++) {
-			String[] tagsArray = { "life", "school", "followback", "art", "fashion", "sky", "beauty", "noir", "ink",
+			String[] tagsArray = { "life", "zombie", "reflection", "choice", "yoga", "school", "followback", "art", "fashion", "sky", "beauty", "noir", "ink",
 					"design", "craft", "best", "antique", "monoart", "architect", "linedesign", "style", "classical",
 					"vintage", "vector", "focus", "exposure", "usa", "sport", "brand", "fancy", "france", "bag",
 					"freerun", "musthave", "look", "foundation", "lookbook", "december", "every", "can", "people",
@@ -149,6 +150,7 @@ public class AddPortfolioBasic extends PageComponent {
 		PageHelpers.waitForSeconds(1500);
 		getDriver().findElement(age).click();
 		PageHelpers.waitForSeconds(1500);
+		getDriver().findElements(closeButton).get(1).click();
 		return this;
 	}
 
@@ -165,7 +167,7 @@ public class AddPortfolioBasic extends PageComponent {
 				"c:\\Images\\pug1.jpg", "c:\\Images\\dali.jpg", "c:\\Images\\cats.jpg", "c:\\Images\\zombie.jpg",
 				"c:\\Images\\sun.jpg", "c:\\Images\\stars.jpg", "c:\\Images\\cup.jpg", "c:\\Images\\fog.jpg",
 				"c:\\Images\\dragons.jpg", "c:\\Images\\jump.jpg", "c:\\Images\\beard.jpg", "c:\\Images\\yellow.jpg",
-				"c:\\Images\\dragons.jpg", "c:\\Images\\land.jpg", "c:\\Images\\legend.jpg", "c:\\Images\\pug.jpg",
+				"c:\\Images\\dragons.jpg", "c:\\Images\\legend.jpg", "c:\\Images\\pug.jpg",
 				"c:\\Images\\radars.jpg", "c:\\Images\\roses.jpg", "c:\\Images\\sand.jpg", "c:\\Images\\sea.jpg",
 				"c:\\Images\\skyscrapers.jpg", "c:\\Images\\snowflake.jpg", "c:\\Images\\space.jpg",
 				"c:\\Images\\umbrella.jpg", "c:\\Images\\woo.jpg", "c:\\Images\\evening.jpg", "c:\\Images\\aika.jpg",
@@ -204,7 +206,7 @@ public class AddPortfolioBasic extends PageComponent {
 				"c:\\Images\\pug1.jpg", "c:\\Images\\dali.jpg", "c:\\Images\\cats.jpg", "c:\\Images\\zombie.jpg",
 				"c:\\Images\\sun.jpg", "c:\\Images\\stars.jpg", "c:\\Images\\cup.jpg", "c:\\Images\\fog.jpg",
 				"c:\\Images\\dragons.jpg", "c:\\Images\\jump.jpg", "c:\\Images\\beard.jpg", "c:\\Images\\yellow.jpg",
-				"c:\\Images\\dragons.jpg", "c:\\Images\\land.jpg", "c:\\Images\\legend.jpg", "c:\\Images\\pug.jpg",
+				"c:\\Images\\dragons.jpg", "c:\\Images\\legend.jpg", "c:\\Images\\pug.jpg",
 				"c:\\Images\\radars.jpg", "c:\\Images\\roses.jpg", "c:\\Images\\sand.jpg", "c:\\Images\\sea.jpg",
 				"c:\\Images\\skyscrapers.jpg", "c:\\Images\\snowflake.jpg", "c:\\Images\\space.jpg",
 				"c:\\Images\\umbrella.jpg", "c:\\Images\\woo.jpg", "c:\\Images\\evening.jpg", "c:\\Images\\aika.jpg",

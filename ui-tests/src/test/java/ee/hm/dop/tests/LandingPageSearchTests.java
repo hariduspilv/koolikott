@@ -27,6 +27,23 @@ public class LandingPageSearchTests {
 	}
 	
 	@Test
+	public void tableOfContentsFilterPreschoolEducationTest() {
+
+		String educationTaxon = goToLandingPage()
+				.chooseUserType("User")
+				.getLeftMenu()
+				//.clickTableOfContents()
+				.clickToFilterPreschoolEducation()
+				.getLeftMenu()
+				.clickToFilterPreschoolEducationEstonianLanguage()
+				.openSearchResult()
+				.getEducationalTaxonText();
+
+		Assert.assertEquals("Alusharidus", educationTaxon );
+
+	}
+	
+	@Test
 	public void searchByPublisher() {
 
 		String publisherName = goToLandingPage()
