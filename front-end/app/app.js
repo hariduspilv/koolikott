@@ -295,7 +295,8 @@ define([
             }
             if (!$rootScope.isViewPortforlioPage || !$rootScope.isViewMaterialPage) setDefaultShareParams($rootScope, $location);
 
-            $rootScope.isUserTabOpen = !!($rootScope.isViewAdminPanelPage || isViewMyProfile || $rootScope.isViewMaterialPage);
+            $rootScope.isUserTabOpen = !!($rootScope.isViewAdminPanelPage || isViewMyProfile || $rootScope.isViewMaterialPage || $rootScope.isAuthenticated);
+            $rootScope.isAuthenticated = false;
 
             if ($rootScope.isEditPortfolioPage) {
                 $rootScope.isEditPortfolioMode = true;

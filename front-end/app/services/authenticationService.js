@@ -43,6 +43,7 @@ define([
 
             function finishLogin(authenticatedUser) {
                 authenticatedUserService.setAuthenticatedUser(authenticatedUser);
+                $rootScope.isAuthenticated = true;
 
                 if ($rootScope.afterAuthRedirectURL) {
                     $location.url('/' + authenticatedUser.user.username + $rootScope.afterAuthRedirectURL);
@@ -98,6 +99,7 @@ define([
             }
 
             function loginWithOAuth(path) {
+                $rootScope.isAuthenticated = true;
                 localStorage.removeItem(LOGIN_ORIGIN);
                 localStorage.setItem(LOGIN_ORIGIN,
                     $rootScope.afterAuthRedirectURL ? $rootScope.afterAuthRedirectURL : $location.url);
