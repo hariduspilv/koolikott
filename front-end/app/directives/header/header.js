@@ -14,7 +14,7 @@ define([
             return {
                 scope: true,
                 templateUrl: 'directives/header/header.html',
-                controller: function ($scope, $location, authenticationService, authenticatedUserService, $rootScope) {
+                controller: function ($scope, $location, authenticationService, authenticatedUserService, $rootScope, $anchorScroll) {
 
                     $scope.detailedSearch = {};
                     $scope.detailedSearch.isVisible = false;
@@ -55,16 +55,23 @@ define([
                     $scope.search = function () {
                         searchService.setSearch($scope.searchFields.searchQuery);
                         searchService.clearFieldsNotInSimpleSearch();
+                        searchService.setType('all');
                         $location.url(searchService.getURL());
                     };
 
                     $scope.openDetailedSearch = function () {
                         $scope.detailedSearch.isVisible = true;
+                        broadcastSearchOpen();
+                        $anchorScroll();
                     };
+
+                    function broadcastSearchOpen() {
+                        $scope.$broadcast("detailedSearch:open");
+                    }
 
                     $scope.closeDetailedSearch = function () {
                         $timeout(function () {
-                            clearTaxonSelector();
+                            $scope.clearTaxonSelector();
                             $scope.detailedSearch.accessor.clear();
                         }, 500);
                         dontSearch = true;
@@ -89,9 +96,7 @@ define([
                     };
 
                     $scope.clickOutside = function () {
-                        if ($scope.detailedSearch.isVisible && !$rootScope.dontCloseSearch) {
-                            $scope.closeDetailedSearch();
-                        } else if ($rootScope.dontCloseSearch) {
+                        if ($rootScope.dontCloseSearch) {
                             $rootScope.dontCloseSearch = false;
                         }
                     };
@@ -171,9 +176,9 @@ define([
                         updatePortfolio();
                     };
 
-                    function clearTaxonSelector() {
+                    $scope.clearTaxonSelector = function () {
                         $rootScope.$broadcast('taxonSelector:clear', null);
-                    }
+                    };
 
                     function updatePortfolio() {
                         var url = "rest/portfolio/update";
@@ -206,6 +211,12 @@ define([
                     function updatePortfolioFailed() {
                         log('Updating portfolio failed.');
                     }
+
+                    $scope.$watch(function(){ return $location.path() }, function(params){
+                        if(params.indexOf("/portfolio") !== -1 || params.indexOf("/material") !== -1) {
+                            $scope.detailedSearch.isVisible = false;
+                        }
+                    });
                 }
             };
         }

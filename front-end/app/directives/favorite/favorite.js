@@ -1,21 +1,29 @@
 define([
-    'app',
+    'angularAMD',
     'services/serverCallService',
     'services/authenticatedUserService',
     'services/toastService'
-], function (app) {
-    app.directive('dopFavorite', function (serverCallService, authenticatedUserService, toastService) {
+], function (angularAMD) {
+    angularAMD.directive('dopFavorite', ['serverCallService', 'authenticatedUserService', 'toastService', '$timeout', function (serverCallService, authenticatedUserService, toastService, $timeout) {
         return {
             scope: {
                 learningObject: '='
             },
             templateUrl: 'directives/favorite/favorite.html',
             controller: function ($scope, serverCallService, authenticatedUserService) {
-                $scope.hasFavorited = false;
+                $timeout(function () {
+                    if ($scope.learningObject) {
+                        $scope.isPrivateOrNotListed = $scope.learningObject.visibility === 'NOT_LISTED' || $scope.learningObject.visibility === 'PRIVATE';
+                    }
 
-                if(isLoggedIn() && $scope.learningObject) {
-                    serverCallService.makeGet("rest/learningObject/favorite", {'id': $scope.learningObject.id}, getFavoriteSuccess, getFavoriteFail);
-                }
+                    if ($scope.learningObject && isLoggedIn()) {
+                        if ($scope.learningObject.favorite) {
+                            $scope.hasFavorited = true;
+                        } else if ($scope.learningObject.favorite == null) {
+                            serverCallService.makeGet("rest/learningObject/favorite", {'id': $scope.learningObject.id}, getFavoriteSuccess, getFavoriteFail);
+                        }
+                    }
+                }, 0);
 
                 function getFavoriteSuccess(data) {
                     if (data && data.id) {
@@ -68,5 +76,5 @@ define([
                 }
             }
         };
-    });
+    }]);
 });

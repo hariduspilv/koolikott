@@ -23,11 +23,7 @@
     border: 1px solid #ccc;
     border-radius: 4px;
     margin: 0 0 16px 0;
-    white-space: pre-wrap;      /* CSS3 */
-    white-space: -moz-pre-wrap; /* Firefox */
-    white-space: -pre-wrap;     /* Opera <7 */
-    white-space: -o-pre-wrap;   /* Opera 7 */
-    word-wrap: break-word;      /* IE */
+    word-wrap: break-word;
   }
   blockquote {
     padding: 0 1em;
@@ -66,24 +62,16 @@
 //
 
 .textangular-editor {
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
-  -webkit-box-orient: vertical;
-  -webkit-box-direction: normal;
-  -ms-flex-direction: column;
-          flex-direction: column;
-  @media (min-width: 600px){
-    -webkit-box-orient: horizontal;
-    -webkit-box-direction: reverse;
-        -ms-flex-direction: row-reverse;
-            flex-direction: row-reverse;
-  }
-
+  flex-direction: column;
   width: 100%;
-  margin: 30px 0;
   background: white;
   overflow: hidden;
+  padding: 7px 0;
+
+  @media (min-width: 600px){
+    flex-direction: row-reverse;
+  }
 
   // Button style
   .btn-textangular {
@@ -104,21 +92,12 @@
 
   // Button group style
   .btn-group {
-    display: -webkit-box;
-    display: -ms-flexbox;
     display: flex;
-    -webkit-box-orient: horizontal;
-    -webkit-box-direction: normal;
-    -ms-flex-direction: row;
-            flex-direction: row;
-    -ms-flex-wrap: wrap;
-        flex-wrap: wrap;
+    flex-direction: row;
+    flex-wrap: wrap;
 
     @media (min-width: 600px) {
-       -webkit-box-orient: vertical;
-       -webkit-box-direction: normal;
-           -ms-flex-direction: column;
-               flex-direction: column;
+      flex-direction: column;
      }
   }
 
@@ -156,7 +135,6 @@
     border-bottom: 1px solid #ddd;
     padding-bottom: 1px;
     outline: none;
-    margin: 10px 10px 10px 10px;
     flex-grow: 2;
   }
   &.focussed {

@@ -62,6 +62,8 @@ define([
                 if (mobileIdLoginSuccessCallback) {
                     mobileIdLoginSuccessCallback();
                 }
+
+                $rootScope.isUserTabOpen = true;
             }
 
             function logoutSuccess(data) {

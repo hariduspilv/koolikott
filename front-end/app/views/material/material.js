@@ -22,7 +22,8 @@ define([
     'services/toastService',
     'services/storageService',
     'services/targetGroupService',
-    'directives/embeddedMaterial/embeddedMaterial'
+    'directives/embeddedMaterial/embeddedMaterial',
+    'directives/share/share'
 ], function (app, angularAMD) {
     return ['$scope', 'serverCallService', '$route', 'translationService', '$rootScope', 'searchService', '$location', 'alertService', 'authenticatedUserService', 'dialogService', 'toastService', 'iconService', '$mdDialog', 'storageService', 'targetGroupService',
         function ($scope, serverCallService, $route, translationService, $rootScope, searchService, $location, alertService, authenticatedUserService, dialogService, toastService, iconService, $mdDialog, storageService, targetGroupService) {
@@ -98,7 +99,13 @@ define([
 
             function processMaterial() {
                 if ($scope.material) {
-                    setSourceType();
+                    $scope.sourceType = setSourceType($scope.material.source);
+                    if ($scope.sourceType == "EBOOK") {
+                        $scope.ebookLink = "/libs/bibi/bib/i/?book=" +
+                            $scope.material.uploadedFile.id + "/" +
+                            $scope.material.uploadedFile.name;
+                    }
+                    $scope.targetGroups = getTargetGroups();
 
                     if ($scope.material.taxons) {
                         preprocessMaterialSubjects();
@@ -124,7 +131,7 @@ define([
                 $rootScope.learningObjectImproper = ($scope.material.improper > 0);
                 $rootScope.learningObjectDeleted = ($scope.material.deleted == true);
 
-                if(authenticatedUserService.isAdmin() || authenticatedUserService.isModerator()) {
+                if (authenticatedUserService.isAdmin() || authenticatedUserService.isModerator()) {
                     if ($scope.material.improper > 0) {
                         serverCallService.makeGet("rest/impropers", {}, sortImpropers, getItemsFail);
                     }
@@ -161,7 +168,7 @@ define([
 
                 for (var i = 0; i < $scope.material.taxons.length; i++) {
                     var taxon = $scope.material.taxons[i];
-                    var subject = $rootScope.taxonUtils.getSubject(taxon);
+                    var subject = $rootScope.taxonService.getSubject(taxon);
 
                     if (subject && !containsObject(subject, $scope.material.subjects)) {
                         $scope.material.subjects.push(subject);
@@ -175,7 +182,7 @@ define([
 
                 for (var i = 0, j = 0; i < material.taxons.length; i++) {
                     var taxon = material.taxons[i];
-                    var educationalContext = $rootScope.taxonUtils.getEducationalContext(taxon);
+                    var educationalContext = $rootScope.taxonService.getEducationalContext(taxon);
 
                     if (educationalContext && !containsObject(educationalContext, material.educationalContexts)) {
                         material.educationalContexts[j++] = educationalContext;
@@ -192,7 +199,7 @@ define([
 
                 for (var i = 0, j = 0; i < $scope.material.taxons.length; i++) {
                     var taxon = $scope.material.taxons[i];
-                    var domain = $rootScope.taxonUtils.getDomain(taxon);
+                    var domain = $rootScope.taxonService.getDomain(taxon);
 
                     if (domain) {
                         domains[j++] = domain;
@@ -207,49 +214,6 @@ define([
                     return getUserDefinedLanguageString(languageStringList, translationService.getLanguage(), $scope.material.language);
                 }
             };
-
-            function isYoutubeVideo(url) {
-                // regex taken from http://stackoverflow.com/questions/2964678/jquery-youtube-url-validation-with-regex #ULTIMATE YOUTUBE REGEX
-                var youtubeUrlRegex = /^(?:https?:\/\/)?(?:www\.)?(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))((\w|-){11})(?:\S+)?$/;
-                return url && url.match(youtubeUrlRegex);
-            }
-
-            function isSlideshareLink(url) {
-                var slideshareUrlRegex = /^https?\:\/\/www\.slideshare\.net\/[a-zA-Z0-9\-]+\/[a-zA-Z0-9\-]+$/;
-                return url && url.match(slideshareUrlRegex);
-            }
-
-            function isVideoLink(url) {
-                var extension = url.split('.').pop().toLowerCase();
-                return extension == "mp4" || extension == "ogg" || extension == "webm";
-            }
-
-            function isAudioLink(url) {
-                var extension = url.split('.').pop().toLowerCase();
-                return extension == "mp3" || extension == "ogg" || extension == "wav";
-            }
-
-            function isPictureLink(url) {
-                if (!url) return;
-                var extension = url.split('.').pop().toLowerCase();
-                return extension == "jpg" || extension == "jpeg" || extension == "png" || extension == "gif";
-            }
-
-            function setSourceType() {
-                if (isYoutubeVideo($scope.material.source)) {
-                    $scope.sourceType = 'YOUTUBE';
-                } else if (isSlideshareLink($scope.material.source)) {
-                    $scope.sourceType = 'SLIDESHARE';
-                } else if (isVideoLink($scope.material.source)) {
-                    $scope.sourceType = 'VIDEO';
-                } else if (isAudioLink($scope.material.source)){
-                    $scope.sourceType = 'AUDIO';
-                } else if (isPictureLink($scope.material.source)) {
-                    $scope.sourceType = 'PICTURE';
-                } else {
-                    $scope.sourceType = 'LINK';
-                }
-            }
 
             $scope.formatMaterialIssueDate = function (issueDate) {
                 return formatIssueDate(issueDate);
@@ -292,13 +256,27 @@ define([
                 return authenticatedUserService.isRestricted();
             };
 
-            $scope.modUser = function() {
+            $scope.modUser = function () {
                 if (authenticatedUserService.isModerator() || authenticatedUserService.isAdmin()) {
                     return true;
                 } else {
                     return false;
                 }
             };
+
+            $scope.isAdminButtonsShowing = function () {
+                return ($rootScope.learningObjectDeleted == false
+                    && $rootScope.learningObjectImproper == false
+                    && $rootScope.learningObjectBroken == true)
+                    || ($rootScope.learningObjectDeleted == false
+                    && $rootScope.learningObjectBroken == false
+                    && $rootScope.learningObjectImproper == true)
+                    || ($rootScope.learningObjectDeleted == false
+                    && $rootScope.learningObjectBroken == true
+                    && $rootScope.learningObjectImproper == true)
+                    || ($rootScope.learningObjectDeleted == true);
+            };
+
 
             function getSignedUserData() {
                 serverCallService.makeGet("rest/user/getSignedUserData", {}, getSignedUserDataSuccess, getSignedUserDataFail);
@@ -330,7 +308,7 @@ define([
 
             $scope.edit = function () {
                 var editMaterialScope = $scope.$new(true);
-                editMaterialScope.material = clone($scope.material);
+                editMaterialScope.material = $scope.material;
 
                 $mdDialog.show(angularAMD.route({
                     templateUrl: 'addMaterialDialog.html',
@@ -382,6 +360,7 @@ define([
                 toastService.showOnRouteChange('MATERIAL_DELETED');
                 $scope.material.deleted = true;
                 $rootScope.learningObjectDeleted = true;
+                $rootScope.$broadcast('dashboard:adminCountsUpdated');
             }
 
             function deleteMaterialFailed() {
@@ -397,24 +376,73 @@ define([
                 }
             };
 
+            $scope.setNotImproper = function () {
+                if ($scope.isAdmin() && $scope.material) {
+                    url = "rest/impropers?learningObject=" + $scope.material.id;
+                    serverCallService.makeDelete(url, {}, setNotImproperSuccessful, setNotImproperFailed);
+                }
+            };
+
+            function setNotImproperSuccessful() {
+                $scope.isReported = false;
+                $rootScope.learningObjectImproper = false;
+                $rootScope.$broadcast('dashboard:adminCountsUpdated');
+            }
+
+            function setNotImproperFailed() {
+                console.log("Setting not improper failed.")
+            }
+
             $scope.restoreMaterial = function () {
                 serverCallService.makePost("rest/material/restore", $scope.material, restoreSuccess, restoreFail);
             };
+
+            $scope.markMaterialCorrect = function () {
+                serverCallService.makePost("rest/material/setNotBroken", $scope.material, markCorrectSuccess, queryFailed);
+            };
+
+            function markCorrectSuccess() {
+                $scope.isBroken = false;
+                $scope.isBrokenReportedByUser = false;
+                $rootScope.learningObjectBroken = false;
+                $rootScope.$broadcast('dashboard:adminCountsUpdated');
+            }
+
+            function queryFailed() {
+                log("Request failed");
+            }
+
+            $scope.$on("restore:learningObject", function () {
+                $scope.restoreMaterial();
+            });
+
+            $scope.$on("delete:learningObject", function () {
+                deleteMaterial();
+            });
+
+            $scope.$on("setNotImproper:learningObject", function () {
+                $scope.setNotImproper();
+            });
+
+            $scope.$on("markCorrect:learningObject", function () {
+                $scope.markMaterialCorrect();
+            });
 
             function restoreSuccess() {
                 toastService.show('MATERIAL_RESTORED');
                 $scope.material.deleted = false;
                 $rootScope.learningObjectDeleted = false;
+                $rootScope.$broadcast('dashboard:adminCountsUpdated');
             }
 
             function restoreFail() {
                 log("Restoring material failed");
             }
 
-            $scope.getTargetGroups = function () {
-                if ($scope.material) {
+            function getTargetGroups() {
+                if ($scope.material.targetGroups[0]) {
                     return targetGroupService.getLabelByTargetGroupsOrAll($scope.material.targetGroups);
                 }
-            };
+            }
         }];
 });

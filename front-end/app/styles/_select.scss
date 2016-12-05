@@ -1,46 +1,22 @@
-.stepped-select {
+.select__parent {
   font-weight: bold;
-
-  &.child {
-    font-weight: normal;
-    padding-left: 40px;
-  }
 }
 
-md-select-menu[multiple] md-option[selected=selected]::after {
-  content: "check_box";
-  font-family: 'Material Icons';
+.select__child {
   font-weight: normal;
-  font-style: normal;
-
-  position: absolute;
-  right: 16px;
-  top: 16px;
-  display: block;
-  width: 1em;
-  height: 1em;
-  line-height: 1;
-  text-transform: none;
-  letter-spacing: normal;
-  -webkit-font-smoothing: antialiased;
-  text-rendering: optimizeLegibility;
+  padding-left: 70px !important;
 }
 
-md-select-menu[multiple] md-option::after {
-  content: "check_box_outline_blank";
-  font-family: 'Material Icons';
-  font-weight: normal;
-  font-style: normal;
+md-select-menu[multiple] md-option.select__child .md-container {
+  margin-left: 40px;
+}
 
+md-select-menu[multiple] {
+  overflow-y: visible;
+}
+
+.select__close {
   position: absolute;
-  right: 16px;
-  top: 16px;
-  display: block;
-  width: 1em;
-  height: 1em;
-  line-height: 1;
-  text-transform: none;
-  letter-spacing: normal;
-  -webkit-font-smoothing: antialiased;
-  text-rendering: optimizeLegibility;
+  top: -26px;
+  right: -26px;
 }

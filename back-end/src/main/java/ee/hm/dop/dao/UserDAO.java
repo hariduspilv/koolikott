@@ -6,9 +6,10 @@ import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 
+import ee.hm.dop.model.Role;
 import ee.hm.dop.model.User;
 
-public class UserDAO {
+public class UserDAO extends BaseDAO {
 
     @Inject
     private EntityManager entityManager;
@@ -45,9 +46,8 @@ public class UserDAO {
      * Counts the amount of users who have the same username, excluding the
      * number at the end. For example, users <i>john.smith</i> and
      * <i>john.smith2</i> are considered to have the same username.
-     * 
-     * @param username
-     *            the username to search for
+     *
+     * @param username the username to search for
      * @return the count of users with the same username, excluding the number
      */
     public Long countUsersWithSameUsername(String username) {
@@ -70,5 +70,24 @@ public class UserDAO {
 
     public void delete(User user) {
         entityManager.remove(user);
+    }
+
+    public List<User> getUsersByRole(Role role) {
+        TypedQuery<User> findByRole = entityManager.createQuery(
+                "SELECT u FROM User u WHERE u.role = :role", User.class);
+
+        List<User> users = null;
+        try {
+            users = findByRole.setParameter("role", role).getResultList();
+        } catch (Exception e) {
+            // ignore
+        }
+
+        return users;
+    }
+
+    public List<User> getAll() {
+        return (List<User>) createQuery("FROM User", User.class)
+                .getResultList();
     }
 }

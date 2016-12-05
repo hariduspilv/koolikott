@@ -1,7 +1,5 @@
 package ee.hm.dop.rest;
 
-import static ee.hm.dop.utils.UserUtils.isAdmin;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,6 +18,7 @@ import javax.ws.rs.core.Response;
 
 import ee.hm.dop.model.ImproperContent;
 import ee.hm.dop.model.LearningObject;
+import ee.hm.dop.model.Role;
 import ee.hm.dop.model.User;
 import ee.hm.dop.service.ImproperContentService;
 import ee.hm.dop.service.LearningObjectService;
@@ -36,7 +35,6 @@ public class ImproperContentResource extends BaseResource {
     @PUT
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    @RolesAllowed({"USER", "ADMIN", "MODERATOR"})
     public ImproperContent setImproper(ImproperContent improperContent) {
         ImproperContent improper = null;
 
@@ -51,7 +49,6 @@ public class ImproperContentResource extends BaseResource {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    @RolesAllowed({"USER", "ADMIN", "RESTRICTED", "MODERATOR"})
     public List<ImproperContent> getImpropers(@QueryParam("learningObject") Long learningObjectId) {
         List<ImproperContent> result = new ArrayList<>();
         User loggedInUser = getLoggedInUser();
@@ -59,7 +56,7 @@ public class ImproperContentResource extends BaseResource {
         if (learningObjectId != null) {
             LearningObject learningObject = learningObjectService.get(learningObjectId, loggedInUser);
 
-            if (isAdmin(loggedInUser)) {
+            if (isUserAdmin(loggedInUser)) {
                 result.addAll(improperContentService.getByLearningObject(learningObject, loggedInUser));
             } else {
                 ImproperContent improper = improperContentService.getByLearningObjectAndCreator(learningObject,
@@ -101,7 +98,7 @@ public class ImproperContentResource extends BaseResource {
     @RolesAllowed({"USER", "ADMIN", "RESTRICTED", "MODERATOR"})
     public Response getImproperMaterialsCount() {
         User loggedInUser = getLoggedInUser();
-        return Response.ok(improperContentService.getImproperMaterials(loggedInUser).size()).build();
+        return Response.ok(improperContentService.getImproperMaterialSize(loggedInUser)).build();
     }
 
     @GET
@@ -110,7 +107,7 @@ public class ImproperContentResource extends BaseResource {
     @RolesAllowed({"USER", "ADMIN", "RESTRICTED", "MODERATOR"})
     public Response getImproperPortfoliosCount() {
         User loggedInUser = getLoggedInUser();
-        return Response.ok(improperContentService.getImproperPortfolios(loggedInUser).size()).build();
+        return Response.ok(improperContentService.getImproperPortfolioSize(loggedInUser)).build();
     }
 
     @DELETE
@@ -143,5 +140,9 @@ public class ImproperContentResource extends BaseResource {
         List<ImproperContent> impropers = new ArrayList<>();
         impropers.add(improper);
         improperContentService.deleteAll(impropers, getLoggedInUser());
+    }
+
+    protected boolean isUserAdmin(User loggedInUser) {
+        return loggedInUser != null && loggedInUser.getRole() == Role.ADMIN;
     }
 }

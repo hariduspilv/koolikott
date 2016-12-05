@@ -2,8 +2,7 @@ define([
     'angularAMD',
 
     'app.routes',
-    'utils/taxonUtils',
-    'utils/taxonParser',
+    'utils/taxonService',
     'moment',
 
     'angular-translate',
@@ -12,24 +11,22 @@ define([
     'angular-route',
     'angular-click-outside',
     'angular-scroll',
-    'jsog',
     'utils/commons',
     'ng-file-upload',
-
     'angular-bootstrap',
     'textAngular',
+    'angular-material-data-table',
 
     /* app wide modules */
     'directives/header/header',
     'directives/detailedSearch/detailedSearch',
     'directives/mainFabButton/mainFabButton',
-    'directives/sidebar/sidebar',
     'directives/sidenav/sidenav',
     'directives/pageStructure/columnLayout/columnLayout',
 
     'services/authenticatedUserService',
     'DOPconstants'
-], function (angularAMD, config, taxonUtils, taxonParser, moment) {
+], function (angularAMD, config, taxonService, moment) {
     'use strict';
 
     var app = angular.module('app', [
@@ -41,7 +38,8 @@ define([
         'ngFileUpload',
         'ui.bootstrap',
         'DOPconstants',
-        'textAngular'
+        'textAngular',
+        'md.data.table'
     ]);
 
     var provideProvider = null;
@@ -109,9 +107,6 @@ define([
                 return taOptions; // whatever you return will be the taOptions
             }]);
 
-            $httpProvider.defaults.transformResponse.splice(0, 0, parseJSONResponse);
-            $httpProvider.defaults.transformRequest = serializeRequest;
-
             var isIE = (navigator.userAgent.match(/Trident/) || navigator.userAgent.match(/MSIE/));
 
             if (isIE) {
@@ -127,25 +122,37 @@ define([
         }
     );
 
-    function serializeRequest(data, headersGetter) {
-        if (data && headersGetter()['content-type'].contains('application/json')) {
-            data = clone(data);
-            taxonParser.serialize(data);
-            return JSOG.stringify(data);
-        }
+    /**
+     * orderByTranslated Filter
+     * Sort ng-options or ng-repeat by translated values
+     * @example
+     *   ng-repeat="scheme in data.schemes | orderByTranslated:'storage__':'collectionName'"
+     * @param  {Array|Object} array or hash
+     * @param  {String} i18nKeyPrefix
+     * @param  {String} objKey (needed if hash)
+     * @return {Array}
+     */
+    app.filter('orderByTranslated', ['$translate', '$filter', function ($translate, $filter) {
+        return function (array, objKey, i18nKeyPrefix) {
+            var result = [];
+            var translated = [];
+            if (!i18nKeyPrefix) {
+                i18nKeyPrefix = '';
+            }
 
-        return data;
-    }
-
-    function parseJSONResponse(data, headersGetter) {
-        if (data && (headersGetter()['content-type'] === 'application/json')) {
-            data = JSOG.parse(data);
-            taxonParser.parse(data);
-            return data;
-        }
-
-        return data;
-    }
+            angular.forEach(array, function (value) {
+                var i18nKeySuffix = objKey ? value[objKey] : value;
+                translated.push({
+                    key: value,
+                    label: $translate.instant(i18nKeyPrefix + i18nKeySuffix)
+                });
+            });
+            angular.forEach($filter('orderBy')(translated, 'label'), function (sortedObject) {
+                result.push(sortedObject.key);
+            });
+            return result;
+        };
+    }]);
 
     function configureTranslationService($translateProvider) {
         $translateProvider.useUrlLoader('rest/translation');
@@ -221,77 +228,83 @@ define([
         }]);
     }
 
+    function setDefaultShareParams($rootScope, $location) {
+        $rootScope.shareTitle = 'e-Koolikott';
+        $rootScope.shareUrl = $location.absUrl();
+        $rootScope.shareDescription = 'e-Koolikott is a single web environment comprising digital learning material arranged by keywords on the basis of the curriculum. The portal allows finding educational materials located in different digital tool collections. The primary purpose of e-Koolikott is to allow accessing digital learning materials from a single point - the user no longer needs to search for materials in different portals.'
+        $rootScope.shareImage = '';
+    }
+
     app.run(function ($rootScope, metadataService, APP_VERSION) {
         $rootScope.APP_VERSION = APP_VERSION;
         $rootScope.hasAppInitated = false;
-        $rootScope.taxonParser = taxonParser;
+        $rootScope.taxonService = taxonService;
         metadataService.loadEducationalContexts(setTaxons);
 
         function setTaxons(taxon) {
             $rootScope.taxon = taxon;
-            taxonParser.setTaxons(taxon);
+            taxonService.setTaxons(taxon);
         }
     });
 
+    function isViewMyProfilePage($location, user) {
+        return user && $location.path().startsWith('/' + user.username);
+    }
+
+    function isDashboardPage(path) {
+        return path.indexOf("/dashboard") !== -1;
+    }
+
+    function isViewMaterialPage(path) {
+        return path === '/material';
+    }
+
+    function isViewPortfolioPage(path) {
+        return path === '/portfolio';
+    }
+
+    function isEditPortfolioPage(path) {
+        return path === '/portfolio/edit';
+    }
+
+    function isSearchPage($location) {
+        return $location.url().indexOf("/search") != -1
+    }
+
+    function isHomePage(path) {
+        return path === '/';
+    }
+
     app.run(function ($rootScope, $location, authenticatedUserService) {
         $rootScope.$on('$routeChangeSuccess', function () {
-            var user = authenticatedUserService.getUser();
-
-            var path = $location.path();
-
-            if (user && path === '/' + user.username && authenticatedUserService.isAuthenticated()) {
-                $location.path('/' + user.username + '/portfolios');
-            }
-
             var editModeAllowed = ["/portfolio/edit", "/search/result", "/material"];
 
-            $rootScope.isViewPortforlioPage = path === '/portfolio';
-            $rootScope.isEditPortfolioPage = path === '/portfolio/edit';
-            $rootScope.isViewHomePage = path === '/';
-            $rootScope.isViewMaterialPage = path === '/material';
+            var path = $location.path();
+            var user = authenticatedUserService.getUser();
+            var isViewHomePage = isHomePage(path);
+            var isViewMyProfile = isViewMyProfilePage($location, user);
 
-            if (user && $location.path().indexOf('/' + user.username) != -1) {
-                $rootScope.isViewUserPage = true;
-            } else {
-                $rootScope.isViewUserPage = false;
-            }
+            $rootScope.isViewPortforlioPage = isViewPortfolioPage(path);
+            $rootScope.isEditPortfolioPage = isEditPortfolioPage(path);
+            $rootScope.isViewMaterialPage = isViewMaterialPage(path);
+            $rootScope.isViewAdminPanelPage = isDashboardPage(path);
+            $rootScope.isViewMaterialOrPortfolioPage = !!($rootScope.isViewMaterialPage || $rootScope.isViewPortforlioPage);
 
-            if (path === '/dashboard/improperMaterials' || path === '/dashboard/improperPortfolios'
-                || path === '/dashboard/brokenMaterials' || path === '/dashboard/deletedMaterials'
-                || path === '/dashboard/brokenPortfolios' || path === '/dashboard/deletedPortfolios'
-                || path === '/dashboard') {
-                $rootScope.isViewAdminPanelPage = true;
-            } else {
-                $rootScope.isViewAdminPanelPage = false;
+            if (isViewMyProfile && $location.path() === '/' + authenticatedUserService.getUser().username) {
+                $location.path('/' + user.username + '/portfolios');
             }
+            if (!$rootScope.isViewPortforlioPage || !$rootScope.isViewMaterialPage) setDefaultShareParams($rootScope, $location);
 
-            if(path === '/material' || path === '/portfolio') {
-                $rootScope.isViewMaterialPortfolioPage = true;
-            } else {
-                $rootScope.isViewMaterialPortfolioPage = false;
-            }
+            $rootScope.isUserTabOpen = !!($rootScope.isViewAdminPanelPage || isViewMyProfile || $rootScope.isViewMaterialPage);
 
-            if ($rootScope.isViewAdminPanelPage || (user && path.indexOf('/' + user.username) != -1) || path === '/material') {
-                $rootScope.isUserTabOpen = true;
-            } else {
-                $rootScope.isUserTabOpen = false;
-            }
-
-            if((path === '/material' || path === '/' || ($location.url().indexOf("/search") != -1)) && (!$rootScope.isEditPortfolioPage || !$rootScope.isViewPortforlioPage)) {
-                $rootScope.isTaxonomyOpen = true;
-            } else {
-                $rootScope.isTaxonomyOpen = false;
-            }
-            if (path == "/portfolio/edit") {
+            if ($rootScope.isEditPortfolioPage) {
                 $rootScope.isEditPortfolioMode = true;
                 $rootScope.selectedMaterials = [];
                 $rootScope.selectedSingleMaterial = null;
-            } else if (editModeAllowed.indexOf(path) != -1) {
-                if (path != "/material") {
-                    $rootScope.selectedSingleMaterial = null;
-                    $rootScope.selectedMaterials = [];
-                }
-            } else if (authenticatedUserService.isAuthenticated() && path != "/material") {
+            } else if (editModeAllowed.indexOf(path) != -1 && !$rootScope.isViewMaterialPage) {
+                $rootScope.selectedSingleMaterial = null;
+                $rootScope.selectedMaterials = [];
+            } else if (authenticatedUserService.isAuthenticated() && !$rootScope.isViewMaterialPage) {
                 $rootScope.isEditPortfolioMode = false;
                 $rootScope.selectedSingleMaterial = null;
                 $rootScope.selectedMaterials = [];
@@ -301,8 +314,24 @@ define([
                 $rootScope.selectedMaterials = null;
             }
 
+            if (window.innerWidth > 1280 && ($rootScope.isViewPortforlioPage || $rootScope.isEditPortfolioPage)) {
+                $rootScope.sideNavOpen = true;
+            }
+
             $rootScope.hasAppInitated = true;
         });
+    });
+
+    app.run(function (APP_VERSION) {
+        var savedVersion = localStorage.getItem('version');
+        if (!savedVersion || savedVersion !== APP_VERSION) {
+            var userData = localStorage.getItem('authenticatedUser');
+            localStorage.clear();
+            localStorage.setItem('version', APP_VERSION);
+            if (userData) {
+                localStorage.setItem('authenticatedUser', userData);
+            }
+        }
     });
 
     app.run(function ($rootScope, $location) {
@@ -318,12 +347,12 @@ define([
         };
     });
 
-    app.run(function ($rootScope, $location, $timeout, $document) {
+    app.run(function ($rootScope, $location, $timeout) {
         if (!window.history || !history.replaceState) {
             return;
         }
 
-        $rootScope.$on('duScrollspy:becameActive', function ($event, $element, $target) {
+        $rootScope.$on('duScrollspy:becameActive', function ($event, $element) {
             //Automatically update location
             var hash = $element.prop('hash');
             if (hash) {
@@ -337,7 +366,7 @@ define([
     });
 
     app.run(['$rootScope', 'authenticatedUserService', function ($rootScope, authenticatedUserService) {
-        $rootScope.$on('$locationChangeStart', function (event, next, current) {
+        $rootScope.$on('$locationChangeStart', function (event, next) {
             for (var i in config.routes) {
                 if (next.indexOf(i) != -1) {
                     var permissions = config.routes[i].permissions;
@@ -356,8 +385,6 @@ define([
     }]);
 
     app.run(['$rootScope', 'authenticatedUserService', function ($rootScope, authenticatedUserService) {
-        $rootScope.taxonUtils = taxonUtils;
-
         $rootScope.$watch(function () {
             return authenticatedUserService.isAuthenticated();
         }, function (isAuthenticated) {
@@ -386,4 +413,5 @@ define([
     });
 
     return angularAMD.bootstrap(app);
-});
+})
+;

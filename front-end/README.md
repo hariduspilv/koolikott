@@ -10,11 +10,6 @@ To build the project you need to have installed on your machine NodeJS, NPM, Bow
 
         npm install -g grunt-cli
 
-## Compass installation (depends on ruby)
-
-        sudo apt-get install ruby-full
-        sudo gem install compass
-
 # Build
 
 Run commands from project root directory.
@@ -31,7 +26,7 @@ In this case you can do an easy symlink.
 
 ## Compile sass files to css
 
-    grunt compass
+    grunt sass
 
 ## Building
 

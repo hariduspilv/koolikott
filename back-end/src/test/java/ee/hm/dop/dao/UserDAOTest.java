@@ -5,10 +5,13 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.fail;
 
+import java.util.List;
+
 import javax.inject.Inject;
 import javax.persistence.PersistenceException;
 
 import ee.hm.dop.common.test.DatabaseTestBase;
+import ee.hm.dop.model.Role;
 import ee.hm.dop.model.User;
 import org.junit.Test;
 
@@ -126,6 +129,26 @@ public class UserDAOTest extends DatabaseTestBase {
         userDAO.delete(returnedUser);
 
         assertNull(userDAO.findUserByIdCode(user.getIdCode()));
+    }
+
+    @Test
+    public void getRestrictedUsers() {
+        List<User> restrictedUsers = userDAO.getUsersByRole(Role.RESTRICTED);
+
+        assertEquals(2, restrictedUsers.size());
+    }
+
+    @Test
+    public void getModerators() {
+        List<User> moderators = userDAO.getUsersByRole(Role.MODERATOR);
+
+        assertEquals(1, moderators.size());
+    }
+
+    @Test
+    public void getAllUsers() {
+        List<User> allUsers = userDAO.getAll();
+        assertEquals(15, allUsers.size());
     }
 
     private User getUser() {

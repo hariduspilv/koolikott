@@ -31,6 +31,7 @@ public class ObjectMapperProvider implements ContextResolver<ObjectMapper> {
 
         Hibernate4Module hibernate4Module = new Hibernate4Module();
         hibernate4Module.enable(Hibernate4Module.Feature.FORCE_LAZY_LOADING);
+        hibernate4Module.disable(Hibernate4Module.Feature.USE_TRANSIENT_ANNOTATION);
         mapper.registerModule(hibernate4Module);
     }
 

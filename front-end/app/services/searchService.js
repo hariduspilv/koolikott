@@ -11,7 +11,7 @@ define(['angularAMD'], function(angularAMD) {
         var isSpecialEducationURL = "&specialEducation=";
         var issuedFromURL = "&issuedFrom=";
         var crossCurricularThemeURL = "&crossCurricularTheme=";
-        var keyCompetenceURL = "&keyCompetence="
+        var keyCompetenceURL = "&keyCompetence=";
         var isCurriculumLiteratureURL = "&curriculumLiterature=";
         var sortURL = "&sort=";
         var sortDirectionURL = "&sortDirection=";
@@ -166,7 +166,7 @@ define(['angularAMD'], function(angularAMD) {
                         }
                     }
                 }
-                if (search.paid === false) {
+                if (search.paid.toString() === "false") {
                     searchURL += paidURL + search.paid;
                 }
                 if (search.type && this.isValidType(search.type)) {
@@ -188,7 +188,7 @@ define(['angularAMD'], function(angularAMD) {
                 if (search.resourceType) {
                     searchURL += resourceTypeURL + search.resourceType;
                 }
-                if (search.isSpecialEducation === true) {
+                if (search.isSpecialEducation.toString() === "true") {
                     searchURL += isSpecialEducationURL + search.isSpecialEducation;
                 }
                 if (search.issuedFrom) {
@@ -212,14 +212,10 @@ define(['angularAMD'], function(angularAMD) {
 
             queryExists: function() {
                 var searchObject = $location.search();
-                if (searchObject.q || searchObject.taxon || searchObject.paid === false ||
-                    (searchObject.type && this.isValidType(searchObject.type)) || searchObject.language || searchObject.targetGroup ||
-                    searchObject.resourceType || searchObject.specialEducation || searchObject.issuedFrom || searchObject.crossCurricularTheme ||
-                    searchObject.keyCompetence || searchObject.curriculumLiterature || (searchObject.sort && searchObject.sortDirection)) {
-                    return true;
-                } else {
-                    return false;
-                }
+                return !!(searchObject.q || searchObject.taxon || searchObject.paid === "false" ||
+                (searchObject.type && this.isValidType(searchObject.type)) || searchObject.language || searchObject.targetGroup ||
+                searchObject.resourceType || searchObject.specialEducation || searchObject.issuedFrom || searchObject.crossCurricularTheme ||
+                searchObject.keyCompetence || searchObject.curriculumLiterature || (searchObject.sort && searchObject.sortDirection));
             },
 
             getQuery: function() {

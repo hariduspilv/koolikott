@@ -1,7 +1,6 @@
 package ee.hm.dop.service;
 
 import static ee.hm.dop.utils.ConfigurationProperties.SERVER_ADDRESS;
-import static ee.hm.dop.utils.UserUtils.isAdmin;
 import static org.apache.commons.lang3.StringUtils.isEmpty;
 import static org.joda.time.DateTime.now;
 
@@ -19,21 +18,11 @@ import javax.inject.Inject;
 import ee.hm.dop.dao.BrokenContentDAO;
 import ee.hm.dop.dao.MaterialDAO;
 import ee.hm.dop.dao.UserLikeDAO;
-import ee.hm.dop.model.Author;
-import ee.hm.dop.model.BrokenContent;
-import ee.hm.dop.model.Comment;
-import ee.hm.dop.model.Language;
-import ee.hm.dop.model.LearningObject;
-import ee.hm.dop.model.Material;
-import ee.hm.dop.model.PeerReview;
-import ee.hm.dop.model.Publisher;
-import ee.hm.dop.model.Recommendation;
-import ee.hm.dop.model.Role;
-import ee.hm.dop.model.User;
-import ee.hm.dop.model.UserLike;
+import ee.hm.dop.model.*;
 import ee.hm.dop.model.taxon.EducationalContext;
 import ee.hm.dop.service.learningObject.LearningObjectHandler;
 import ee.hm.dop.utils.TaxonUtils;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.configuration.Configuration;
 import org.apache.http.client.utils.URIBuilder;
 import org.apache.http.util.TextUtils;
@@ -41,7 +30,7 @@ import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class MaterialService implements LearningObjectHandler {
+public class MaterialService extends BaseService implements LearningObjectHandler {
 
     public static final String BASICEDUCATION = "BASICEDUCATION";
     public static final String SECONDARYEDUCATION = "SECONDARYEDUCATION";
@@ -68,6 +57,12 @@ public class MaterialService implements LearningObjectHandler {
 
     @Inject
     private PeerReviewService peerReviewService;
+
+    @Inject
+    private KeyCompetenceService keyCompetenceService;
+
+    @Inject
+    private CrossCurricularThemeService crossCurricularThemeService;
 
     @Inject
     private Configuration configuration;
@@ -117,6 +112,36 @@ public class MaterialService implements LearningObjectHandler {
         }
 
         return createdMaterial;
+    }
+
+    private void checkKeyCompetences(Material material) {
+        if (!CollectionUtils.isEmpty(material.getKeyCompetences())) {
+            for (int i = 0; i < material.getKeyCompetences().size(); i++) {
+                if (material.getKeyCompetences().get(i).getId() == null) {
+                    KeyCompetence keyCompetenceByName = keyCompetenceService.findKeyCompetenceByName(material.getKeyCompetences().get(i).getName());
+                    if (keyCompetenceByName == null) {
+                        throw new IllegalArgumentException();
+                    }
+
+                    material.getKeyCompetences().set(i, keyCompetenceByName);
+                }
+            }
+        }
+    }
+
+    private void checkCrossCurricularThemes(Material material) {
+        if (!CollectionUtils.isEmpty(material.getCrossCurricularThemes())) {
+            for (int i = 0; i < material.getCrossCurricularThemes().size(); i++) {
+                if (material.getCrossCurricularThemes().get(i).getId() == null) {
+                    CrossCurricularTheme crossCurricularTheme = crossCurricularThemeService.getThemeByName(material.getCrossCurricularThemes().get(i).getName());
+                    if (crossCurricularTheme == null) {
+                        throw new IllegalArgumentException();
+                    }
+
+                    material.getCrossCurricularThemes().set(i, crossCurricularTheme);
+                }
+            }
+        }
     }
 
     public void delete(Long materialID, User loggedInUser) {
@@ -386,6 +411,9 @@ public class MaterialService implements LearningObjectHandler {
             logger.info("Updating material");
         }
 
+        checkKeyCompetences(material);
+        checkCrossCurricularThemes(material);
+
         setAuthors(material);
         setPublishers(material);
         setPeerReviews(material);
@@ -415,14 +443,6 @@ public class MaterialService implements LearningObjectHandler {
         }
 
         return material;
-    }
-
-    private boolean isUserAdmin(User loggedInUser) {
-        return loggedInUser != null && loggedInUser.getRole() == Role.ADMIN;
-    }
-
-    private boolean isUserModerator(User loggedInUser) {
-        return loggedInUser != null && loggedInUser.getRole() == Role.MODERATOR;
     }
 
     private boolean isUserPublisher(User loggedInUser) {
@@ -457,6 +477,10 @@ public class MaterialService implements LearningObjectHandler {
 
     public List<BrokenContent> getBrokenMaterials() {
         return brokenContentDAO.getBrokenMaterials();
+    }
+
+    public Long getBrokenMaterialCount() {
+        return brokenContentDAO.getCount();
     }
 
     public void setMaterialNotBroken(Material material) {
@@ -504,14 +528,29 @@ public class MaterialService implements LearningObjectHandler {
     }
 
     @Override
-    public boolean hasAccess(User user, LearningObject learningObject) {
+    public boolean hasPermissionsToAccess(User user, LearningObject learningObject) {
         if (!(learningObject instanceof Material)) {
             return false;
         }
 
         Material material = (Material) learningObject;
 
-        return !material.isDeleted() || isAdmin(user);
+        return !material.isDeleted() || isUserAdmin(user);
+    }
+
+    @Override
+    public boolean hasPermissionsToUpdate(User user, LearningObject learningObject) {
+        if (!(learningObject instanceof Material)) {
+            return false;
+        }
+
+        Material material = (Material) learningObject;
+
+        if(isUserAdminOrPublisher(user) || isUserCreator(material, user)){
+            return true;
+        }
+
+        return !material.isDeleted() || isUserAdmin(user);
     }
 
     @Override

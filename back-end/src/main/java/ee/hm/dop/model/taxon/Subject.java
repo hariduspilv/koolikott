@@ -19,6 +19,7 @@ public class Subject extends Taxon {
     @OneToMany(mappedBy = "subject")
     private Set<Topic> topics;
 
+    @JsonIgnore
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "domain", nullable = false)
     private Domain domain;

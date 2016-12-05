@@ -1,25 +1,40 @@
-<md-card class="card-sm md-whiteframe-2dp" id="portfolio-card-{{portfolio.id}}"
+<md-card class="card-sm" id="portfolio-card-{{portfolio.id}}"
          data-ng-click="navigateTo(portfolio, $event)">
-  <div data-ng-if="isAuthenticated()" class="card__favorite" data-dop-favorite data-learning-object="portfolio" layout-align="start start"></div>
+         <div class="card__icon-holder" data-ng-if="isAuthenticated()">
+           <md-icon data-ng-if="portfolio.visibility === 'PRIVATE'">lock</md-icon>
+           <md-icon data-ng-if="portfolio.visibility === 'NOT_LISTED'">link</md-icon>
+           <md-tooltip md-direction="bottom">
+             <span data-ng-if="portfolio.visibility === 'PRIVATE'" data-translate="PORTFOLIO_VISIBILITY_PRIVATE"></span>
+             <span data-ng-if="portfolio.visibility === 'NOT_LISTED'" data-translate="PORTFOLIO_VISIBILITY_NOT_LISTED"></span>
+         	</md-tooltip>
+         </div>
+         <div data-ng-if="isAuthenticated()" data-dop-favorite data-learning-object="portfolio"></div>
   <div class="corner"></div>
   <!-- noimage -->
-  <a data-ng-href="{{'/portfolio?id=' + portfolio.id}}" data-ng-if="!portfolio.picture" class="card-cover portfolio"
-     layout="row" layout-align="center center">
-    <div>
-      <md-icon class="icon-kind">book</md-icon>
-    </div>
+  <a data-ng-href="{{'/portfolio?id=' + portfolio.id}}" data-ng-if="!portfolio.picture" class="card-cover portfolio">
+     <div class="pattern">
+       <div class="sheet up-left"></div>
+       <div class="sheet low-right"></div>
+       <div class="sheet low-left"></div>
+     </div>
+    <md-icon class="icon-kind">book</md-icon>
 
-    <div class="card-hover portfolio" layout="row">
-      <div data-ng-if="isAuthenticated()" data-dop-favorite data-learning-object="portfolio" layout-align="start start"></div>
+    <div class="card-hover portfolio">
+        <div data-ng-if="isAuthenticated()" data-dop-favorite data-learning-object="portfolio"></div>
       <md-icon class="icon-kind">book</md-icon>
     </div>
   </a>
   <!-- image -->
-  <a data-ng-href="{{'/portfolio?id=' + portfolio.id}}" data-ng-if="portfolio.picture" class="card-cover imaged"
-     layout="row" layout-align="start start">
-    <img data-ng-src="rest/picture/{{portfolio.picture.name}}" class="md-card-image"/>
-    <div class="card-hover portfolio" layout="row">
-      <div data-ng-if="isAuthenticated()" data-dop-favorite data-learning-object="portfolio" layout-align="start start"></div>
+  <a data-ng-href="{{'/portfolio?id=' + portfolio.id}}" data-ng-if="portfolio.picture" class="card-cover imaged">
+    <img data-ng-src="rest/picture/thumbnail/sm_xs_xl/{{portfolio.picture.name}}"
+      sizes="(max-width: 600px) 300px,
+             (min-width: 1920px) 300px,
+             200px"
+      data-ng-srcset="rest/picture/thumbnail/sm_xs_xl/{{portfolio.picture.name}} 300w,
+                      rest/picture/thumbnail/sm/{{portfolio.picture.name}} 200w"
+      class="md-card-image"/>
+    <div class="card-hover portfolio">
+      <div data-ng-if="isAuthenticated()" data-dop-favorite data-learning-object="portfolio"></div>
       <md-icon class="icon-kind">book</md-icon>
     </div>
   </a>

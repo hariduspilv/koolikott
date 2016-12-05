@@ -188,7 +188,6 @@ public class MaterialResource extends BaseResource {
     @Path("setBroken")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    @RolesAllowed({"USER", "ADMIN", "MODERATOR"})
     public BrokenContent setBrokenMaterial(Material material) {
         return materialService.addBrokenMaterial(material, getLoggedInUser());
     }
@@ -207,7 +206,7 @@ public class MaterialResource extends BaseResource {
     @RolesAllowed({"ADMIN", "MODERATOR"})
     @Produces(MediaType.APPLICATION_JSON)
     public Response getBrokenMaterialCount() {
-        return Response.ok(materialService.getBrokenMaterials().size()).build();
+        return Response.ok(materialService.getBrokenMaterialCount()).build();
     }
 
     @POST
@@ -229,9 +228,13 @@ public class MaterialResource extends BaseResource {
     @GET
     @Path("hasSetBroken")
     @Produces(MediaType.APPLICATION_JSON)
-    @RolesAllowed({"USER", "ADMIN", "RESTRICTED", "MODERATOR"})
     public Boolean hasSetBroken(@QueryParam("materialId") long materialId) {
-        return materialService.hasSetBroken(materialId, getLoggedInUser());
+        User user = getLoggedInUser();
+        if(user != null) {
+            return materialService.hasSetBroken(materialId, getLoggedInUser());
+        }
+
+        return false;
     }
 
     @GET

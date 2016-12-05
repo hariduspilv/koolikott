@@ -49,7 +49,7 @@ public class ImproperContentService {
     public ImproperContent get(long improperContentId, User user) {
         ImproperContent improperContent = improperContentDAO.findById(improperContentId);
 
-        if (improperContent != null && !learningObjectService.hasAccess(user, improperContent.getLearningObject())) {
+        if (improperContent != null && !learningObjectService.hasPermissionsToAccess(user, improperContent.getLearningObject())) {
             improperContent = null;
         }
 
@@ -92,6 +92,21 @@ public class ImproperContentService {
                 .collect(Collectors.toList());
     }
 
+    public long getImproperMaterialSize(User user) {
+        List<ImproperContent> impropers = getAll(user);
+        return impropers
+                .stream()
+                .filter(imp -> "Material".equals(imp.getLearningObject().getClass().getSimpleName()) && !imp.getLearningObject().isDeleted())
+                .collect(Collectors.toList()).size();
+    }
+    public long getImproperPortfolioSize(User user) {
+        List<ImproperContent> impropers = getAll(user);
+        return impropers
+                .stream()
+                .filter(imp -> "Portfolio".equals(imp.getLearningObject().getClass().getSimpleName()) && !imp.getLearningObject().isDeleted())
+                .collect(Collectors.toList()).size();
+    }
+
     /**
      * 
      * @param learningObject
@@ -105,7 +120,7 @@ public class ImproperContentService {
     public ImproperContent getByLearningObjectAndCreator(LearningObject learningObject, User creator, User user) {
         ImproperContent improperContent = improperContentDAO.findByLearningObjectAndCreator(learningObject, creator);
 
-        if (improperContent != null && !learningObjectService.hasAccess(user, improperContent.getLearningObject())) {
+        if (improperContent != null && !learningObjectService.hasPermissionsToAccess(user, improperContent.getLearningObject())) {
             improperContent = null;
         }
 
@@ -137,6 +152,6 @@ public class ImproperContentService {
     }
 
     private void removeIfHasNoAccess(User user, List<ImproperContent> impropers) {
-        impropers.removeIf(improper -> !learningObjectService.hasAccess(user, improper.getLearningObject()));
+        impropers.removeIf(improper -> !learningObjectService.hasPermissionsToAccess(user, improper.getLearningObject()));
     }
 }

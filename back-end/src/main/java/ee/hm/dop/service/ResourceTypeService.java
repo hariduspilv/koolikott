@@ -19,4 +19,8 @@ public class ResourceTypeService {
     public List<ResourceType> getAllResourceTypes() {
         return resourceTypeDAO.findAllResourceTypes();
     }
+
+    public List<ResourceType> getUsedResourceTypes() {
+        return resourceTypeDAO.findUsedResourceTypes();
+    }
 }

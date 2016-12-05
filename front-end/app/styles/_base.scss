@@ -94,13 +94,8 @@ md-datepicker {
   margin: 0;
 }
 
-//TODO
 .column-layout-content {
   margin-top: 60px;
-}
-
-body.md-toast-animating {
-  overflow: auto !important;
 }
 
 .max-width-100 {
@@ -112,6 +107,15 @@ body.md-toast-animating {
   min-height: 500px;
 }
 
-.md-padding-right {
-  padding-right: 8px;
+// Hides double ng-view while switching views
+.ng-leave-active, .ng-leave {
+  display: none !important;
+}
+
+.line-height--normal {
+  line-height: normal;
+}
+
+.margin-top-36 {
+  margin-top: 36px;
 }

@@ -32,7 +32,7 @@ define([
 
             function getPortfolio(success, fail) {
                 var portfolioId = $route.current.params.id;
-                serverCallService.makeGet("rest/portfolio?id=" + portfolioId, {}, success, fail);
+                serverCallService.makeGet("rest/portfolio?id=" + portfolioId, {}, getPortfolioSuccess, getPortfolioFail);
             }
 
             function getPortfolioSuccess(portfolio) {
@@ -41,7 +41,6 @@ define([
                 } else {
                     setPortfolio(portfolio);
                     increaseViewCount();
-
                 }
             }
 
@@ -103,9 +102,9 @@ define([
                         })
                     });
 
-                    $rootScope.learningObjectBroken = ($scope.portfolio.broken > 0) ? true : false;
-                    $rootScope.learningObjectImproper = ($scope.portfolio.improper > 0) ? true : false;
-                    $rootScope.learningObjectDeleted = ($scope.portfolio.deleted == true) ? true : false;
+                    $rootScope.learningObjectBroken = $scope.portfolio.broken > 0;
+                    $rootScope.learningObjectImproper = $scope.portfolio.improper > 0;
+                    $rootScope.learningObjectDeleted = $scope.portfolio.deleted == true;
 
                     if(authenticatedUserService.isAdmin() || authenticatedUserService.isModerator()) {
                         if($scope.portfolio.improper > 0) {
@@ -123,7 +122,7 @@ define([
                 var improper;
 
                 for (var i = 0; i < impropers.length; i++) {
-                    if (impropers[i].learningObject.id === $scope.portfolio.id) {
+                    if ($scope.portfolio && impropers[i].learningObject.id === $scope.portfolio.id) {
                         improper = impropers[i];
                     }
                 }
@@ -137,7 +136,7 @@ define([
                 } else {
                     return false;
                 }
-            }
+            };
 
             $scope.$watch(function () {
                 return $location.url().replace(window.location.hash, '');
@@ -157,6 +156,22 @@ define([
                 if (increaseViewCountPromise) {
                     $timeout.cancel(increaseViewCountPromise);
                 }
+            });
+
+            /*
+             * Admin dashboard listeners
+             * Events are sent from errorMessage
+             */
+            $scope.$on("restore:learningObject", function() {
+                $scope.$broadcast("restore:portfolio");
+            });
+
+            $scope.$on("delete:learningObject", function() {
+                $scope.$broadcast("delete:portfolio");
+            });
+
+            $scope.$on("setNotImproper:learningObject", function() {
+                $scope.$broadcast("setNotImproper:portfolio");
             });
 
             $scope.isAdmin = function () {

@@ -4,7 +4,7 @@
 	<groupId>ee.hm</groupId>
 	<artifactId>kott</artifactId>
 	<packaging>jar</packaging>
-	<version>1.4.0</version>
+	<version>1.6.0</version>
 	
 	<properties>
 		<slf4j.version>1.7.12</slf4j.version>
@@ -235,6 +235,14 @@
 		    <version>1.4.187</version>
 		    <scope>test</scope>
 		</dependency>
+
+		<!-- https://mvnrepository.com/artifact/org.imgscalr/imgscalr-lib -->
+		<dependency>
+			<groupId>org.imgscalr</groupId>
+			<artifactId>imgscalr-lib</artifactId>
+			<version>4.2</version>
+		</dependency>
+
 
 	</dependencies>
 	

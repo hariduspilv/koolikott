@@ -27,9 +27,6 @@
       justify-content: left;
     }
   }
-  h1 {
-    padding-left: $md-padding;
-  }
 }
 
 .card-container {
@@ -45,41 +42,48 @@
 }
 
 .lays-out-left {
-  width: 0;
+  min-width: 0;
+
   @media (min-width: $layout-breakpoint-md) {
-    width: $sidenav-width;
+    min-width: $sidenav-width;
   }
+
   @media (min-width: $layout-breakpoint-lg) {
-    width: 0;
+    min-width: 0;
   }
 }
 
 .filter-wrapper {
   width: 100%;
   padding-bottom: $md-padding;
+
   @media (min-width: $layout-breakpoint-md) {
     margin-right: $nav-button-area-width;
     padding-left: $md-padding;
-    max-width: $layout-breakpoint-md;
+    max-width: ($layout-breakpoint-md - 40px);
   }
+
   @media (min-width: $layout-breakpoint-lg) {
     display: block;
     margin-left: auto;
     margin-right: auto;
-    padding-right: $md-padding;
     padding-left: $button-width;
-    padding-right: $nav-button-area-width;
   }
+
   &.nav-open {
     @media (min-width: $layout-breakpoint-md) {
       margin-left: $sidenav-width;
     }
+
     @media (min-width: $layout-breakpoint-lg) {
       display: block;
       margin-left: auto;
       margin-right: auto;
-      max-width: $layout-breakpoint-md;
-      padding-right: 0;
+      max-width: ($layout-breakpoint-md - 40px);
     }
   }
+}
+
+.layout-relative {
+  position: relative;
 }

@@ -3,6 +3,9 @@ package ee.hm.dop.rest;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
+
+import java.util.List;
 
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.GenericType;
@@ -163,6 +166,17 @@ public class UserResourceTest extends ResourceIntegrationTestBase {
         assertEquals(Role.USER, nonRestrictedUser.getRole());
     }
 
+
+    @Test
+    public void getAll() {
+        String adminIdCode = "89898989898";
+        login(adminIdCode);
+
+        Response response = doGet("user/all");
+        List<User> allUsers = response.readEntity(new GenericType<List<User>>() {
+        });
+        assertTrue(allUsers.size() > 14);
+    }
 
     private User getUser(String username) {
         Response response = doGet("user?username=" + username);

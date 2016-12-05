@@ -1,6 +1,7 @@
 <!doctype html>
 <html class="no-js">
 <head>
+  <base href="/">
   <meta charset="utf-8">
   <title>e-Koolikott</title>
   <meta name="description" content="e-Koolikott is a single web environment comprising digital learning material arranged by keywords on the basis of the curriculum.
@@ -15,18 +16,23 @@
   <!-- build:css(.tmp) /styles/main.css -->
   <link rel="stylesheet" href="/styles/main.css">
   <!-- endbuild -->
-  <base href="/">
+
+  <meta property="og:url" content="{{$root.shareUrl}}" />
+  <meta property="og:type" content="article" />
+  <meta property="og:title" content="{{$root.shareTitle}}" />
+  <meta property="og:description" content="{{$root.shareDescription}}" />
+  <meta property="og:image" content="{{$root.shareImage}}" />
 </head>
 <body>
-<!--[if lt IE 11]>
-<p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade
-  your browser</a> to improve your experience.</p>
-<![endif]-->
-<div data-ng-if="hasAppInitated" layout-fill data-dop-column-layout></div>
+  <!--[if lt IE 11]>
+  <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade
+    your browser</a> to improve your experience.</p>
+  <![endif]-->
+  <div data-ng-if="hasAppInitated" layout-fill data-dop-column-layout></div>
 
-<div data-ng-show="showMainFabButton && !isEditPortfolioMode" data-dop-main-fab-button></div>
+  <div data-ng-show="showMainFabButton && !isEditPortfolioMode" data-dop-main-fab-button></div>
 
-<script src="/libs/requirejs/require.js" data-main="require.config.js"></script>
-<script src="https://www.youtube.com/iframe_api"></script>
+  <script src="/libs/requirejs/require.js" data-main="require.config.js"></script>
+  <script src="https://www.youtube.com/iframe_api"></script>
 </body>
 </html>

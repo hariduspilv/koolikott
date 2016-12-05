@@ -6,6 +6,8 @@ import static java.util.concurrent.TimeUnit.MILLISECONDS;
 import static org.joda.time.LocalDateTime.now;
 
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
@@ -55,6 +57,7 @@ public class SynchronizeMaterialsExecutor {
             logger.error("Unexpected error while synchronizing materials.");
             e.printStackTrace();
         } finally {
+            logger.info("Updating Solr index after synchronizing all materials");
             updateSolrIndex();
         }
     }
@@ -64,14 +67,39 @@ public class SynchronizeMaterialsExecutor {
         solrEngineService.updateIndex();
     }
 
-    public synchronized void scheduleExecution(int hourOfDayToExecute) {
-        if (synchronizeMaterialHandle != null) {
-            logger.info("Synchronize Materials Executor already started.");
-            return;
-        }
+//    public synchronized void scheduleExecution(int hourOfDayToExecute) {
+//        if (synchronizeMaterialHandle != null) {
+//            logger.info("Synchronize Materials Executor already started.");
+//            return;
+//        }
+//
+//        final Runnable executor = new Runnable() {
+//
+//            @Override
+//            public void run() {
+//                try {
+//                    logger.info("Starting new material synchronization process.");
+//                    synchronizeMaterials();
+//                } catch (Exception e) {
+//                    logger.error("Unexpected error while scheduling sync.", e);
+//                }
+//
+//                logger.info("Finished new material synchronization process.");
+//            }
+//        };
+//
+//
+//        long initialDelay = getInitialDelay(hourOfDayToExecute);
+//        long period = DAYS.toMillis(1);
+//
+//        logger.info("Scheduling Synchronization repository service first execution to "
+//                + now().plusMillis((int) initialDelay));
+//        synchronizeMaterialHandle = scheduler.scheduleAtFixedRate(executor, 0, 60000, MILLISECONDS);
+//    }
 
-        final Runnable executor = new Runnable() {
-
+    // FIXME: Experimental method for executing synchronization process
+    public void scheduleExecution(int hourOfDayToExecute){
+        TimerTask timerTask = new TimerTask() {
             @Override
             public void run() {
                 try {
@@ -85,13 +113,11 @@ public class SynchronizeMaterialsExecutor {
             }
         };
 
-
+        Timer timer = new Timer();
         long initialDelay = getInitialDelay(hourOfDayToExecute);
         long period = DAYS.toMillis(1);
 
-        logger.info("Scheduling Synchronization repository service first execution to "
-                + now().plusMillis((int) initialDelay));
-        synchronizeMaterialHandle = scheduler.scheduleAtFixedRate(executor, initialDelay, period, MILLISECONDS);
+        timer.scheduleAtFixedRate(timerTask, initialDelay, period);
     }
 
     public synchronized void stop() {

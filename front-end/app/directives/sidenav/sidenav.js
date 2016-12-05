@@ -4,28 +4,29 @@ define([
     'services/searchService',
     'services/userDataService',
     'directives/learningObjectRow/learningObjectRow',
-    'directives/sidebarTaxon/sidebarTaxon'
+    'directives/sidenavTaxon/sidenavTaxon'
 ], function (angularAMD) {
     angularAMD.directive('dopSidenav', ['serverCallService', '$location', '$sce', 'searchService', 'authenticatedUserService', '$mdDialog', 'userDataService', function () {
         return {
             scope: true,
             templateUrl: 'directives/sidenav/sidenav.html',
             controller: function ($rootScope, $scope, $location, serverCallService, searchService, $timeout, metadataService, authenticatedUserService, $sce, $mdDialog, userDataService) {
-
-                $scope.dashboardOpen = false;
+                $scope.isTaxonomyOpen = true;
+                $scope.dashboardOpen = $location.path().startsWith("/dashboard");
 
                 // List of taxon icons
                 $scope.taxonIcons = [
                     'extension',
                     'accessibility',
                     'school',
+                    'build',
                     'palette'
                 ];
 
                 $scope.$watch(function () {
                     return $location.url();
                 }, function () {
-                    $scope.isViewPortfolioAndEdit = $location.url().indexOf('/portfolio') != -1;
+                    $rootScope.isViewPortfolioAndEdit = $location.url().indexOf('/portfolio') != -1;
                 }, true);
 
                 $scope.$watch(function () {
@@ -34,6 +35,10 @@ define([
                     $scope.user = user;
                     $scope.updateUserCounts();
                 }, true);
+
+                $scope.$on('dashboard:adminCountsUpdated', function() {
+                   $scope.updateAdminCounts();
+                });
 
                 $scope.isAdmin = function () {
                     return authenticatedUserService.isAdmin();
@@ -59,16 +64,11 @@ define([
 
                 //Checks the location
                 $scope.isLocation = function (location) {
-                    var isLocation = location === $location.path();
-                    return isLocation;
+                    return location === $location.path();
                 };
 
-                metadataService.loadReducedTaxon(function (callback) {
-                    $scope.reducedTaxon = callback;
-                });
-
                 if (window.innerWidth > 1280) {
-                    $scope.sideNavOpen = true;
+                    $rootScope.sideNavOpen = true;
                 }
 
                 $scope.status = true;
@@ -136,9 +136,7 @@ define([
                         $scope.updateUserFavoritesCount();
                         $scope.updateUserMaterialsCount();
                         $scope.updateUserPortfoliosCount();
-                    }
 
-                    if ($scope.isAdmin() || $scope.isModerator()) {
                         $scope.updateAdminCounts();
                     }
                 };
@@ -148,11 +146,13 @@ define([
                 };
 
                 $scope.updateAdminCounts = function () {
-                    $scope.updateBrokenMaterialsCount();
-                    $scope.updateDeletedMaterialsCount();
-                    $scope.updateDeletedPortfoliosCount();
-                    $scope.updateImproperMaterialsCount();
-                    $scope.updateImproperPortfoliosCount();
+                    if ($scope.isAdmin() || $scope.isModerator()) {
+                        $scope.updateBrokenMaterialsCount();
+                        $scope.updateDeletedMaterialsCount();
+                        $scope.updateDeletedPortfoliosCount();
+                        $scope.updateImproperMaterialsCount();
+                        $scope.updateImproperPortfoliosCount();
+                    }
                 };
 
                 $scope.dashboardSearch = function () {

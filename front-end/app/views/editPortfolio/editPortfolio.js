@@ -11,10 +11,6 @@ define([
     'directives/materialBox/materialBox',
     'directives/tableOfContents/tableOfContents'
 ], function (app) {
-    app.run(['$anchorScroll', function ($anchorScroll) {
-        $anchorScroll.yOffset = 50;
-    }]);
-
     return ['$scope', 'translationService', 'serverCallService', '$route', '$location', 'alertService', '$rootScope', 'authenticatedUserService', 'dialogService', 'toastService', '$mdDialog', '$interval',
         function ($scope, translationService, serverCallService, $route, $location, alertService, $rootScope, authenticatedUserService, dialogService, toastService, $mdDialog, $interval) {
             var isAutoSaving = false;
@@ -28,6 +24,11 @@ define([
                     }
                 } else {
                     getPortfolio(getPortfolioSuccess, getPortfolioFail);
+                }
+
+                if ($rootScope.newPortfolioCreated) {
+                    $scope.showFirstMessage = true;
+                    $rootScope.newPortfolioCreated = false;
                 }
 
                 startAutosave();
@@ -101,11 +102,13 @@ define([
             function setPortfolio(portfolio) {
                 $scope.portfolio = portfolio;
 
-                $scope.portfolio.chapters.forEach(function(chapter) {
-                    chapter.materials.forEach(function(material){
-                        material.source = getSource(material);
-                    })
-                });
+                if ($scope.portfolio.chapters) {
+                    $scope.portfolio.chapters.forEach(function (chapter) {
+                        chapter.materials.forEach(function (material) {
+                            material.source = getSource(material);
+                        })
+                    });
+                }
 
                 $rootScope.savedPortfolio = portfolio;
             }
@@ -126,11 +129,14 @@ define([
 
             function checkAuthorized(portfolio) {
                 var user = authenticatedUserService.getUser();
-                if (user.id != portfolio.creator.id || user.role === 'RESTRICTED') {
-                    $location.url("/");
-                    return false;
+
+                if (user.id == portfolio.creator.id || authenticatedUserService.isAdmin() || authenticatedUserService.isModerator()) {
+                    return true
                 }
-                return true;
+
+                console.log("You don't have permission to edit this portfolio");
+                $location.url("/");
+                return false;
             }
 
             function startAutosave() {

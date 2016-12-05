@@ -4,7 +4,6 @@ define([
     'services/translationService',
     'services/metadataService',
     'services/authenticatedUserService',
-    'services/storageService',
     'services/pictureUploadService',
     'services/fileUploadService',
     'directives/validate/validateUrl'
@@ -14,6 +13,11 @@ define([
             $scope.isSaving = false;
             $scope.showHints = true;
             $scope.creatorIsPublisher = false;
+
+            // fix for https://github.com/angular/material/issues/6905
+            $timeout(function () {
+                angular.element('html').css('overflow-y', '');
+            });
 
             var preferredLanguage;
             var TABS_COUNT = 2;
@@ -84,7 +88,7 @@ define([
             };
 
             $scope.addNewTaxon = function () {
-                var educationalContext = $rootScope.taxonUtils.getEducationalContext($scope.material.taxons[0]);
+                var educationalContext = $rootScope.taxonService.getEducationalContext($scope.material.taxons[0]);
 
                 $scope.material.taxons.push(educationalContext);
             };
@@ -131,20 +135,6 @@ define([
                         $scope.material.publishers[0] = null;
                     }
 
-                    if ($scope.material.crossCurricularThemes) {
-                        $scope.material.crossCurricularThemes = $scope.material.crossCurricularThemes
-                            .filter(function (theme) {
-                                return theme.name !== "NOT_RELEVANT";
-                            });
-                    }
-
-                    if ($scope.material.keyCompetences) {
-                        $scope.material.keyCompetences = $scope.material.keyCompetences
-                            .filter(function (competence) {
-                                return competence.name !== "NOT_RELEVANT";
-                            });
-                    }
-
                     $scope.material.peerReviews.forEach(function (peerReview, i) {
                         if (!peerReview || !peerReview.url) {
                             $scope.material.peerReviews.splice(i, 1);
@@ -160,11 +150,15 @@ define([
             };
 
             $scope.showCompetencesWarning = function (element) {
-                if ($scope.isTouchedOrSubmitted(element)) return $scope.material.keyCompetences.length === 0;
+                if ($scope.isTouchedOrSubmitted(element) && $scope.material.keyCompetences) {
+                    return $scope.material.keyCompetences.length === 0;
+                }
             };
 
             $scope.showThemesWarning = function (element) {
-                if ($scope.isTouchedOrSubmitted(element)) return $scope.material.crossCurricularThemes.length === 0;
+                if ($scope.isTouchedOrSubmitted(element) && $scope.material.crossCurricularThemes) {
+                    return $scope.material.crossCurricularThemes.length === 0;
+                }
             };
 
             $scope.isAuthorOrPublisherSet = function () {
@@ -218,7 +212,7 @@ define([
             };
 
             $scope.isTabTwoValid = function () {
-                return $scope.material.targetGroups && $scope.material.targetGroups.length > 0
+                return $scope.educationalContextId === 4 || ($scope.material.targetGroups && $scope.material.targetGroups.length > 0)
                     && ($scope.isBasicOrSecondaryEducation() ? $scope.material.keyCompetences.length > 0 && $scope.material.crossCurricularThemes.length > 0 : true);
             };
 
@@ -278,6 +272,45 @@ define([
                 return query ? $scope.crossCurricularThemes
                     .filter(searchFilter(query, "CROSS_CURRICULAR_THEME_")) : $scope.crossCurricularThemes;
             };
+
+            $scope.removeFocus = function (elementId) {
+                document.getElementById(elementId).blur();
+            };
+
+            $scope.autocompleteItemSelected = function (item, listName, elementId) {
+
+                if (shouldRemoveNotRelevantFromList(listName)) {
+                    $scope.material[listName] = removeLastElement(listName)
+                }
+
+                if (!item) {
+                    closeAutocomplete(elementId);
+                } else {
+                    // If 'NOT_RELEVANT' chip exists and new item is selected, replace it
+                    if (listContains($scope.material[listName], 'name', 'NOT_RELEVANT') && item.name !== 'NOT_RELEVANT') {
+                        $scope.material[listName] = $scope.material[listName].filter(function (e) {
+                            return e.name !== "NOT_RELEVANT";
+                        });
+
+                        $scope.material[listName].push(item);
+                    }
+                }
+            };
+
+            function shouldRemoveNotRelevantFromList(listName) {
+                return $scope.material[listName].length > 1 && $scope.material[listName][$scope.material[listName].length - 1].name === 'NOT_RELEVANT';
+            }
+
+            function removeLastElement(listName) {
+                return $scope.material[listName].splice(0, $scope.material[listName].length - 1);
+            }
+
+            function closeAutocomplete(elementId) {
+                // Hide suggestions and blur input to avoid triggering new search
+                angular.element(document.querySelector('#' + elementId)).controller('mdAutocomplete').hidden = true;
+                document.getElementById(elementId).blur();
+            }
+
 
             /**
              * Create filter function for a query string
@@ -401,7 +434,7 @@ define([
                 });
 
                 $scope.$watch('material.taxons[0]', function (newValue, oldValue) {
-                    if (newValue && newValue.level === $rootScope.taxonUtils.constants.EDUCATIONAL_CONTEXT && newValue !== oldValue) {
+                    if (newValue && newValue.level === $rootScope.taxonService.constants.EDUCATIONAL_CONTEXT && newValue !== oldValue) {
                         $scope.educationalContextId = newValue.id;
                     }
                 }, false);
@@ -429,7 +462,7 @@ define([
                 }
 
                 if (newValue && $scope.addMaterialForm.source && ($scope.addMaterialForm.source.$error.url !== true)) {
-                    var encodedUrl   = encodeURIComponent(newValue);
+                    var encodedUrl = encodeURIComponent(newValue);
                     serverCallService.makeGet("rest/material/getAllBySource?source=" + encodedUrl, {},
                         getByUrlSuccess, getByUrlFail);
                 }
@@ -437,7 +470,7 @@ define([
             }, true);
 
             function getByUrlSuccess(materials) {
-                if((materials && materials[0]) && (materials[0].id !== $scope.material.id)) {
+                if ((materials && materials[0]) && (materials[0].id !== $scope.material.id)) {
 
                     if (materials[0].deleted) {
                         $scope.addMaterialForm.source.$setValidity("deleted", false);
@@ -539,7 +572,7 @@ define([
                     $scope.material.peerReviews = [{}];
                 }
 
-                var educationalContext = $rootScope.taxonUtils.getEducationalContext($scope.material.taxons[0]);
+                var educationalContext = $rootScope.taxonService.getEducationalContext($scope.material.taxons[0]);
 
                 if (educationalContext) {
                     $scope.educationalContextId = educationalContext.id;
@@ -554,7 +587,7 @@ define([
                     if ($rootScope.savedPortfolio.taxon) {
                         var taxon = Object.create($rootScope.savedPortfolio.taxon);
                         $scope.material.taxons = [taxon];
-                        var educationalContext = $rootScope.taxonUtils.getEducationalContext(taxon);
+                        var educationalContext = $rootScope.taxonService.getEducationalContext(taxon);
 
                         if (educationalContext) {
                             $scope.educationalContextId = educationalContext.id;
@@ -597,26 +630,36 @@ define([
                 $scope.allRightsReserved = array[0];
             }
 
+            /**
+             * If 'NOT_RELEVANT' is not last item in list
+             * then move it
+             * @param list
+             */
+            function moveNotRelevantIfNecessary(list) {
+                if (list[list.length - 1].name !== "NOT_RELEVANT") {
+                    var notRelevantIndex = list.map(function (e) {
+                        return e.name;
+                    }).indexOf("NOT_RELEVANT");
+                    list.move(notRelevantIndex, list.length - 1);
+                }
+            }
+
             function setCrossCurricularThemes(data) {
                 if (!isEmpty(data)) {
                     $scope.crossCurricularThemes = data;
-                    if ($scope.crossCurricularThemes[0].name !== "NOT_RELEVANT") {
-                        $scope.crossCurricularThemes.unshift({name: "NOT_RELEVANT"})
-                    }
+                    moveNotRelevantIfNecessary($scope.crossCurricularThemes);
                 }
             }
 
             function setKeyCompetences(data) {
                 if (!isEmpty(data)) {
                     $scope.keyCompetences = data;
-                    if ($scope.keyCompetences[0].name !== "NOT_RELEVANT") {
-                        $scope.keyCompetences.unshift({name: "NOT_RELEVANT"})
-                    }
+                    moveNotRelevantIfNecessary($scope.keyCompetences);
                 }
             }
 
             function saveMaterialSuccess(material) {
-                if(!material) {
+                if (!material) {
                     saveMaterialFail();
                 } else {
                     //Pass saved material back to material view

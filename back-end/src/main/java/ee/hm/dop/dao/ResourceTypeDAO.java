@@ -4,7 +4,9 @@ import java.util.List;
 
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
+
 import javax.persistence.TypedQuery;
+
 
 import ee.hm.dop.model.ResourceType;
 
@@ -28,10 +30,11 @@ public class ResourceTypeDAO {
     }
 
     public List<ResourceType> findAllResourceTypes() {
-        List<ResourceType> resultList = entityManager.createQuery("select r FROM ResourceType r", ResourceType.class)
+        return entityManager.createQuery("select r FROM ResourceType r", ResourceType.class)
                 .getResultList();
-
-        return resultList;
     }
 
+    public List<ResourceType> findUsedResourceTypes() {
+        return (List<ResourceType>) entityManager.createQuery("SELECT DISTINCT mr.resourceTypes FROM Material mr where mr.deleted = false").getResultList();
+    }
 }

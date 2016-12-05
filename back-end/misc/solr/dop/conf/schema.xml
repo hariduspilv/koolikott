@@ -129,11 +129,12 @@
     <field name="cross_curricular_theme" type="text_general" indexed="true" stored="false" multiValued="true"/>
     <field name="key_competence" type="text_general" indexed="true" stored="false" multiValued="true"/>
     <field name="tag" type="text_general" indexed="true" stored="false" multiValued="true" omitNorms="true"/>
-    <field name="like_score" type="int" indexed="true" stored="true" multiValued="false"/>
+    <field name="like_score" type="int" indexed="true" stored="false" multiValued="false"/>
     <field name="added" type="tdate" indexed="true" stored="false" multiValued="false"/>
     <field name="recommended" type="boolean" indexed="true" stored="false" multiValued="false"/>
     <field name="recommendation_timestamp" type="tdate" indexed="true" stored="false" multiValued="false"/>
     <field name="views" type="int" indexed="true" stored="false" multiValued="false"/>
+    <field name="creator" type="string" indexed="true" stored="false" multiValued="false"/>
 
     <!-- Material & Portfolio -->
     <field name="title" type="text_general" indexed="true" stored="false" multiValued="true"/>

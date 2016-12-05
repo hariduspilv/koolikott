@@ -19,6 +19,7 @@ public class Module extends Taxon {
     @OneToMany(fetch = EAGER, mappedBy = "module")
     private Set<Topic> topics;
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "specialization", nullable = false)
     private Specialization specialization;

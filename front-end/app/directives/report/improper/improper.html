@@ -1,9 +1,5 @@
-<md-button data-ng-click="showConfirmationDialog()" data-ng-disabled="$root.isReportedByUser" data-ng-if="!isAdmin">
+<md-button data-ng-click="showConfirmationDialog()" data-ng-disabled="$root.isReportedByUser">
   <md-icon md-menu-align-target>report</md-icon>
   <span data-translate="REPORT_IMPROPER"></span>
 </md-button>
 
-<md-button data-ng-if="isAdmin" data-ng-click="setNotImproper()" data-ng-disabled="!isReported">
-  <md-icon md-menu-align-target>undo</md-icon>
-  <span data-translate="REPORT_NOT_IMPROPER"></span>
-</md-button>

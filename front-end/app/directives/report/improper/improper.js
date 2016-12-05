@@ -41,22 +41,6 @@ define([
                     console.log("Failed checking if already reported the resource")
                 }
 
-                $scope.setNotImproper = function () {
-                    if($scope.isAdmin && $scope.learningObject) {
-                        url = "rest/impropers?learningObject=" + $scope.learningObject.id;
-                        serverCallService.makeDelete(url, {}, setNotImproperSuccessful, setNotImproperFailed);
-                    }
-                };
-
-                function setNotImproperSuccessful() {
-                    $scope.isReported = false;
-                    $rootScope.learningObjectImproper = false;
-                }
-
-                function setNotImproperFailed() {
-                    console.log("Setting not improper failed.")
-                }
-
                 $scope.showConfirmationDialog = function () {
                     var confirm = $mdDialog.confirm()
                         .title($translate.instant('REPORT_IMPROPER_TITLE'))

@@ -18,7 +18,6 @@ require.config({
         'angular-scroll': 'libs/angular-scroll/angular-scroll',
         'angular-material-data-table': 'libs/angular-material-data-table/dist/md-data-table',
         'screenfull': 'libs/screenfull/dist/screenfull',
-        'jsog': 'libs/jsog/lib/JSOG',
         'ngInfiniteScroll': 'libs/ngInfiniteScroll/build/ng-infinite-scroll.min',
         'jquery': 'libs/jquery/dist/jquery.min',
         'ng-file-upload': 'libs/ng-file-upload/ng-file-upload.min',
@@ -31,10 +30,11 @@ require.config({
         'textAngular-sanitize': 'libs/textAngular/dist/textAngular-sanitize.min',
         'textAngularSetup': 'libs/textAngular/dist/textAngularSetup',
         'textAngular': 'utils/koolikottTextAngular',
-        'angular-drag-and-drop-lists': 'libs/angular-drag-and-drop-lists/angular-drag-and-drop-lists.min'
+        'angular-drag-and-drop-lists': 'libs/angular-drag-and-drop-lists/angular-drag-and-drop-lists.min',
+        'cssua': 'libs/cssua.js/cssua.min'
     },
     shim: {
-        'angular': ['jquery'],
+        'angular': ['jquery', 'cssua'],
         'angularAMD': ['angular'],
         'ngload': ['angularAMD'],
         'angular-animate': ['angular'],

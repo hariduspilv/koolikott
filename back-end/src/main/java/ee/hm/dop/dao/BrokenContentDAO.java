@@ -1,5 +1,6 @@
 package ee.hm.dop.dao;
 
+import java.math.BigInteger;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -37,6 +38,14 @@ public class BrokenContentDAO {
     public List<BrokenContent> getBrokenMaterials() {
         return entityManager.createQuery("FROM BrokenContent b WHERE b.material IS NOT NULL AND b.deleted = false",
                 BrokenContent.class).getResultList();
+    }
+
+    public long getCount() {
+        String queryString = "SELECT Count(b.id) FROM BrokenContent b " +
+                "INNER JOIN LearningObject lo ON b.material=lo.id " +
+                "WHERE lo.deleted = FALSE AND b.deleted = FALSE";
+        Query query = entityManager.createNativeQuery(queryString);
+        return ((BigInteger) query.getSingleResult()).longValue();
     }
 
     public List<BrokenContent> findByMaterialAndUser(long materialId, User loggedInUser) {

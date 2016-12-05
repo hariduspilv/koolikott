@@ -4,7 +4,8 @@ define([
     'services/authenticatedUserService',
     'services/serverCallService'
 ], function(app) {
-    app.directive('dopReportBrokenLink', ['translationService', '$mdDialog', '$translate', 'authenticatedUserService', 'serverCallService', function(translationService, $mdDialog, $translate, authenticatedUserService, serverCallService) {
+    app.directive('dopReportBrokenLink', ['translationService', '$mdDialog', '$translate', 'authenticatedUserService', 'serverCallService', 'toastService',
+        function(translationService, $mdDialog, $translate, authenticatedUserService, serverCallService, toastService) {
         return {
             scope: false,
             templateUrl: 'directives/report/brokenLink/brokenLink.html',
@@ -34,11 +35,8 @@ define([
                         serverCallService.makePost(url, $scope.material, setBrokenSuccessful, queryFailed);
 
                     });
-                }
+                };
 
-                $scope.markMaterialCorrect = function() {
-                    serverCallService.makePost("rest/material/setNotBroken", $scope.material, markCorrectSuccess, queryFailed);
-                }
 
                 function isBrokenSuccess(data) {
                     $scope.isBroken = data;
@@ -51,18 +49,12 @@ define([
 
                 function setBrokenSuccessful() {
                     $scope.isBrokenReportedByUser = true;
-                }
-
-                function markCorrectSuccess() {
-                    $scope.isBroken = false;
-                    $scope.isBrokenReportedByUser = false;
-                    $rootScope.learningObjectBroken = false;
+                    toastService.show('TOAST_NOTIFICATION_SENT_TO_ADMIN');
                 }
 
                 function queryFailed() {
                     log("Request failed");
                 }
-
             }
         };
     }]);

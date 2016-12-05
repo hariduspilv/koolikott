@@ -1,14 +1,16 @@
-<section id="main-content" flex>
-  <div layout-gt-sm>
-    <article flex="100" class="md-padding" role="main">
+<section layout-gt-sm>
+  <article flex="100" role="main">
 
-      <div data-dop-portfolio-summary-card data-portfolio="portfolio"></div>
+    <md-toolbar class="md-hue-2" data-ng-if="showFirstMessage">
+      <p class="md-toolbar-tools" data-translate="NEW_PORTFOLIO_CREATED_MESSAGE"></p>
+    </md-toolbar>
 
-      <div id="portfolio-chapters">
-        <div data-ng-repeat="chapter in portfolio.chapters">
-          <div data-dop-chapter data-on-delete="onDeleteChapter" data-chapter="chapter" data-index="{{$index}}"></div>
-        </div>
+    <div data-dop-portfolio-summary-card data-portfolio="portfolio"></div>
+
+    <div id="portfolio-chapters">
+      <div data-ng-repeat="chapter in portfolio.chapters">
+        <div data-dop-chapter data-on-delete="onDeleteChapter" data-chapter="chapter" data-index="{{$index}}"></div>
       </div>
-    </article>
-  </div>
+    </div>
+  </article>
 </section>

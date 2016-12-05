@@ -15,6 +15,7 @@ $color-muted: rgba(0, 0, 0, 0.5);
 $font-small: 12px;
 $md-padding: 16px;
 $layout-breakpoint-xxs: 370px;
+$gray: #808080;
 
 // Long shadow
 $pi: 3.14159265359;
@@ -31,6 +32,12 @@ $navy: #274156;
 $cyan: #00498E;
 $salad: #36AA7A;
 $royal: #2C47B2;
+$gold: #ffd700;
+
+// Social
+$facebook: #3b5998;
+$twitter: #00aeef;
+$google: #db4437;
 
 $card-lg-padding: 25px;
 
@@ -39,3 +46,8 @@ $desktop-navbar-height: $md-toolbar-height;
 $sidenav-width: 259px;
 $nav-button-area-width: 178px;
 $button-width: 40px;
+
+@mixin pattern-color($color) {
+  background-image: linear-gradient(45deg, lighten($color, 5%), darken($color, 5%));
+  background-color: lighten($color, 5%);
+}

@@ -314,12 +314,6 @@ function isObjectEmpty(obj) {
     return Object.keys(obj).length === 0 && JSON.stringify(obj) === JSON.stringify({});
 }
 
-// This is a workaround for angular circular reference problem. It is not efficient.
-function clone(object) {
-    var json = JSOG.stringify(object);
-    return JSOG.parse(json)
-}
-
 function getSource(material) {
     if (material.source && (material.source !== null && material.source !== undefined && material.source !== "")) {
         return material.source;
@@ -328,6 +322,99 @@ function getSource(material) {
         return material.uploadedFile.url;
     }
     return null;
+}
+
+/**
+ * Check if list of objects contains element
+ * @param list
+ * @param field
+ * @param value
+ * @returns {boolean}
+ */
+function listContains(list, field, value) {
+    return list.filter(function (e) {
+            return e[field] === value;
+        }).length > 0
+}
+
+/**
+ * Move element in list from old_index to new_index
+ * @param old_index
+ * @param new_index
+ */
+Array.prototype.move = function (old_index, new_index) {
+    while (old_index < 0) {
+        old_index += this.length;
+    }
+    while (new_index < 0) {
+        new_index += this.length;
+    }
+    if (new_index >= this.length) {
+        var k = new_index - this.length;
+        while ((k--) + 1) {
+            this.push(undefined);
+        }
+    }
+    this.splice(new_index, 0, this.splice(old_index, 1)[0]);
+};
+
+function isYoutubeVideo(url) {
+    // regex taken from http://stackoverflow.com/questions/2964678/jquery-youtube-url-validation-with-regex #ULTIMATE YOUTUBE REGEX
+    var youtubeUrlRegex = /^(?:https?:\/\/)?(?:www\.)?(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))((\w|-){11})(?:\S+)?$/;
+    return url && url.match(youtubeUrlRegex);
+}
+
+function isSlideshareLink(url) {
+    var slideshareUrlRegex = /^https?\:\/\/www\.slideshare\.net\/[a-zA-Z0-9\-]+\/[a-zA-Z0-9\-]+$/;
+    return url && url.match(slideshareUrlRegex);
+}
+
+function isVideoLink(url) {
+    var extension = url.split('.').pop().toLowerCase();
+    return extension == "mp4" || extension == "ogg" || extension == "webm";
+}
+
+function isAudioLink(url) {
+    var extension = url.split('.').pop().toLowerCase();
+    return extension == "mp3" || extension == "ogg" || extension == "wav";
+}
+
+function isPictureLink(url) {
+    if (!url) return;
+    var extension = url.split('.').pop().toLowerCase();
+    return extension == "jpg" || extension == "jpeg" || extension == "png" || extension == "gif";
+}
+
+function isEbookLink(url){
+    if (!url) return;
+    var extension = url.split('.').pop().toLowerCase();
+    return extension == "epub";
+}
+
+function isPDFLink(url){
+    if (!url) return;
+    var extension = url.split('.').pop().toLowerCase();
+    return extension == "pdf";
+}
+
+function setSourceType(sourceType) {
+    if (isYoutubeVideo(sourceType)) {
+        return 'YOUTUBE';
+    } else if (isSlideshareLink(sourceType)) {
+        return 'SLIDESHARE';
+    } else if (isVideoLink(sourceType)) {
+        return 'VIDEO';
+    } else if (isAudioLink(sourceType)) {
+        return 'AUDIO';
+    } else if (isPictureLink(sourceType)) {
+        return 'PICTURE';
+    } else if (isEbookLink(sourceType)) {
+        return 'EBOOK';
+    } else if (isPDFLink(sourceType)) {
+        return 'PDF';
+    } else {
+        return 'LINK';
+    }
 }
 
 

@@ -48,7 +48,7 @@ public class ReviewFileResource extends BaseResource {
     @GET
     @Produces(MediaType.APPLICATION_OCTET_STREAM)
     @Path("{id}/{filename}")
-    public Response getFile(@PathParam("id") Long fileId, @PathParam("filename") String filename) {
-        return uploadedFileService.getFile(fileId, filename);
+    public Response getFile(@PathParam("id") Long fileId, @PathParam("filename") String filename) throws UnsupportedEncodingException {
+        return uploadedFileService.getFile(fileId, filename, true);
     }
 }

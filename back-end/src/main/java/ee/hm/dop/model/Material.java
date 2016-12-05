@@ -10,7 +10,6 @@ import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
@@ -24,11 +23,8 @@ import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import ee.hm.dop.model.taxon.Taxon;
 import ee.hm.dop.rest.jackson.map.TaxonDeserializer;
-import ee.hm.dop.rest.jackson.map.TaxonSerializer;
-import org.apache.xpath.operations.Bool;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
@@ -99,7 +95,6 @@ public class Material extends LearningObject implements Searchable {
             joinColumns = {@JoinColumn(name = "material")},
             inverseJoinColumns = {@JoinColumn(name = "taxon")},
             uniqueConstraints = @UniqueConstraint(columnNames = {"material", "taxon"}))
-    @JsonSerialize(contentUsing = TaxonSerializer.class)
     @JsonDeserialize(contentUsing = TaxonDeserializer.class)
     private List<Taxon> taxons;
 

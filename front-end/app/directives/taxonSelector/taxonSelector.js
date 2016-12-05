@@ -4,7 +4,7 @@ define([
 ], function (angularAMD) {
     var EDUCATIONAL_CONTEXTS;
 
-    angularAMD.directive('dopTaxonSelector', ['serverCallService', 'metadataService', function () {
+    angularAMD.directive('dopTaxonSelector', function () {
         return {
             scope: {
                 taxon: '=',
@@ -39,7 +39,8 @@ define([
                     self.taxon = parentTaxon;
                 };
 
-                self.selectEducationalContext = function () {
+                self.selectEducationalContext = function (educationalContext) {
+                    self.selectTaxon(educationalContext);
                     if (self.touched) {
                         self.touched.trigger = true;
                     }
@@ -73,101 +74,21 @@ define([
                     return $filter('translate')(taxon.level.toUpperCase().substr(1) + "_" + taxon.name.toUpperCase());
                 };
 
-                $scope.$on('taxonSelector:clear', function(e, value) {
-                   self.taxon = value;
+                $scope.$on('taxonSelector:clear', function (e, value) {
+                    self.taxon = value;
                 });
 
-                function addTaxonPathListeners() {
-                    /*
-                     * The order of the watchers is important and should be the same as the tree.
-                     */
+                self.selectTaxon = function (taxon) {
+                    self.taxon = taxon;
+                };
 
+                function addTaxonPathListeners() {
                     //Triggers on taxon reset
                     $scope.$watch(function () {
                         if (self.taxon) return self.taxon.id;
                     }, function (newTaxon, oldTaxon) {
                         if (oldTaxon && newTaxon !== oldTaxon) {
                             buildTaxonPath();
-                        }
-                    }, false);
-
-                    //EducationalContext
-                    $scope.$watch(function () {
-                        if (self.taxonPath && self.taxonPath.educationalContext)
-                            return self.taxonPath.educationalContext.id;
-                    }, function (newEducationalContext, oldEducationalContext) {
-                        if (newEducationalContext !== undefined && newEducationalContext !== oldEducationalContext) {
-                            self.taxon = Object.create(self.taxonPath.educationalContext);
-                        }
-                    }, false);
-
-                    //Domain
-                    $scope.$watch(function () {
-                        if (self.taxonPath && self.taxonPath.domain)
-                            return self.taxonPath.domain.id;
-                    }, function (newDomain, oldDomain) {
-                        if (newDomain !== undefined && newDomain !== oldDomain) {
-                            self.taxon = Object.create(self.taxonPath.domain);
-                        }
-                    }, false);
-
-                    //subject
-                    $scope.$watch(function () {
-                        if (self.taxonPath && self.taxonPath.subject)
-                            return self.taxonPath.subject.id;
-                    }, function (newSubject, oldSubject) {
-                        if (newSubject !== undefined && newSubject !== oldSubject) {
-                            self.taxon = Object.create(self.taxonPath.subject);
-                        }
-                    }, false);
-
-                    //domainSubject
-                    $scope.$watch(function () {
-                        if (self.taxonPath && self.taxonPath.domainSubject)
-                            return self.taxonPath.domainSubject.id;
-                    }, function (newDomainSubject, oldDomainSubject) {
-                        if (newDomainSubject !== undefined && newDomainSubject !== oldDomainSubject) {
-                            self.taxon = Object.create(self.taxonPath.domainSubject);
-                        }
-                    }, false);
-
-                    // specialization
-                    $scope.$watch(function () {
-                        if (self.taxonPath && self.taxonPath.specialization)
-                            return self.taxonPath.specialization.id;
-                    }, function (newSpecialization, oldSpecialization) {
-                        if (newSpecialization !== undefined && newSpecialization !== oldSpecialization) {
-                            self.taxon = Object.create(self.taxonPath.specialization);
-                        }
-                    }, false);
-
-                    // module
-                    $scope.$watch(function () {
-                        if (self.taxonPath && self.taxonPath.module)
-                            return self.taxonPath.module.id;
-                    }, function (newModule, oldModule) {
-                        if (newModule !== undefined && newModule !== oldModule) {
-                            self.taxon = Object.create(self.taxonPath.module);
-                        }
-                    }, false);
-
-                    // topic
-                    $scope.$watch(function () {
-                        if (self.taxonPath && self.taxonPath.topic)
-                            return self.taxonPath.topic.id;
-                    }, function (newTopic, oldTopic) {
-                        if (newTopic !== undefined && newTopic !== oldTopic) {
-                            self.taxon = Object.create(self.taxonPath.topic);
-                        }
-                    }, false);
-
-                    // subtopic
-                    $scope.$watch(function () {
-                        if (self.taxonPath && self.taxonPath.subtopic)
-                            return self.taxonPath.subtopic.id;
-                    }, function (newSubtopic, oldSubtopic) {
-                        if (newSubtopic !== undefined && newSubtopic !== oldSubtopic) {
-                            self.taxon = Object.create(self.taxonPath.subtopic);
                         }
                     }, false);
                 }
@@ -227,20 +148,20 @@ define([
                 function buildTaxonPath() {
                     self.taxonPath = {};
                     if (self.taxon) {
-                        self.taxonPath.educationalContext = $rootScope.taxonUtils.getEducationalContext(self.taxon);
-                        self.taxonPath.domain = $rootScope.taxonUtils.getDomain(self.taxon);
-                        self.taxonPath.subject = $rootScope.taxonUtils.getSubject(self.taxon);
+                        self.taxonPath.educationalContext = $rootScope.taxonService.getEducationalContext(self.taxon);
+                        self.taxonPath.domain = $rootScope.taxonService.getDomain(self.taxon);
+                        self.taxonPath.subject = $rootScope.taxonService.getSubject(self.taxon);
 
                         if (self.taxonPath.subject) {
-                            self.taxonPath.domainSubject = Object.create(self.taxonPath.subject);
+                            self.taxonPath.domainSubject = self.taxonPath.subject;
                         } else if (self.taxonPath.domain) {
-                            self.taxonPath.domainSubject = Object.create(self.taxonPath.domain);
+                            self.taxonPath.domainSubject = self.taxonPath.domain;
                         }
 
-                        self.taxonPath.specialization = $rootScope.taxonUtils.getSpecialization(self.taxon);
-                        self.taxonPath.module = $rootScope.taxonUtils.getModule(self.taxon);
-                        self.taxonPath.topic = $rootScope.taxonUtils.getTopic(self.taxon);
-                        self.taxonPath.subtopic = $rootScope.taxonUtils.getSubtopic(self.taxon);
+                        self.taxonPath.specialization = $rootScope.taxonService.getSpecialization(self.taxon);
+                        self.taxonPath.module = $rootScope.taxonService.getModule(self.taxon);
+                        self.taxonPath.topic = $rootScope.taxonService.getTopic(self.taxon);
+                        self.taxonPath.subtopic = $rootScope.taxonService.getSubtopic(self.taxon);
                     }
                 }
             },
@@ -248,5 +169,5 @@ define([
             templateUrl: 'directives/taxonSelector/taxonSelector.html'
 
         };
-    }]);
+    });
 });

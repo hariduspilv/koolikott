@@ -1,6 +1,6 @@
 <div class="md-whiteframe-1dp filter-content">
   <div layout="row" layout-sm="column" layout-xs="column" >
-    <div flex class="md-padding">
+    <div flex-gt-sm class="md-padding">
       <md-input-container class="hide-gt-xs md-block">
         <label data-translate="DETAILED_SEARCH_DESCRIPTION"></label>
         <input data-ng-model="detailedSearch.combinedDescription" data-ng-model-options="{debounce: 300}"/>
@@ -21,16 +21,20 @@
           </md-option>
         </md-select>
       </md-input-container>
+
       <md-input-container md-no-float class="md-block">
         <md-select data-ng-model="detailedSearch.resourceType" placeholder="{{ 'DETAILED_SEARCH_RESOURCE_TYPE' | translate }}">
-          <md-option data-ng-repeat="resourceType in resourceTypes" value="{{resourceType.name}}">
+          <md-option value="all">
+            <span data-translate="ALL_RESOURCES"></span>
+          </md-option>
+          <md-option data-ng-repeat="resourceType in usedResourceTypes | orderByTranslated:'name'" value="{{resourceType.name}}">
             <span data-translate="{{resourceType.name}}"></span>
           </md-option>
         </md-select>
       </md-input-container>
     </div>
 
-    <div flex class="md-padding">
+    <div flex-gt-sm class="md-padding">
       <div data-dop-taxon-selector data-taxon="taxon"></div>
       <md-input-container class="md-block" data-ng-if="detailedSearch.educationalContext.id === 2 || detailedSearch.educationalContext.id === 3">
         <label data-translate="DETAILED_SEARCH_CROSS_CURRICULAR_THEME"></label>
@@ -49,39 +53,30 @@
       </md-input-container>
     </div>
 
-    <div flex class="md-padding">
+    <div flex-gt-sm class="md-padding">
       <div data-dop-target-group-selector
            data-target-groups="detailedSearch.targetGroups"
            data-is-required="{trigger: false}"
            data-taxon="taxon" data-ng-if="detailedSearch.educationalContext.id != 4">
       </div>
+
       <div layout="column" layout-align="end start">
-        <md-checkbox data-ng-if="detailedSearch.educationalContext.id === 2" data-ng-model="detailedSearch.CLIL" aria-label="{{'DETAILED_SEARCH_CLIL' | translate}}" class="md-primary" flex>
+        <md-checkbox data-ng-if="detailedSearch.educationalContext.id === 2" data-ng-model="detailedSearch.CLIL" aria-label="{{'DETAILED_SEARCH_CLIL' | translate}}" class="md-primary">
           <span data-translate="DETAILED_SEARCH_CLIL"></span>
         </md-checkbox>
-        <md-checkbox data-ng-if="detailedSearch.educationalContext.id === 2" data-ng-model="detailedSearch.specialEducation" aria-label="{{'DETAILED_SEARCH_SPECIAL_EDUCATION' | translate}}" class="md-primary" flex>
+        <md-checkbox data-ng-if="detailedSearch.educationalContext.id === 2" data-ng-model="detailedSearch.specialEducation" aria-label="{{'DETAILED_SEARCH_SPECIAL_EDUCATION' | translate}}" class="md-primary">
           <span data-translate="DETAILED_SEARCH_SPECIAL_EDUCATION"></span>
         </md-checkbox>
-        <md-checkbox data-ng-if="detailedSearch.educationalContext.id >= 2 && detailedSearch.educationalContext.id <= 4" data-ng-model="detailedSearch.onlyCurriculumLiterature" aria-label="{{'DETAILED_SEARCH_ONLY_BOOKS' | translate}}" class="md-primary" flex>
+        <md-checkbox data-ng-if="detailedSearch.educationalContext.id >= 2 && detailedSearch.educationalContext.id <= 4" data-ng-model="detailedSearch.onlyCurriculumLiterature" aria-label="{{'DETAILED_SEARCH_ONLY_BOOKS' | translate}}" class="md-primary">
           <span data-translate="DETAILED_SEARCH_ONLY_BOOKS"></span>
         </md-checkbox>
-        <md-checkbox data-ng-if="detailedSearch.educationalContext.id == 4" data-ng-model="detailedSearch.specialEducationalNeed" aria-label="{{'DETAILED_SEARCH_SPECIAL_EDUCATIONAL_NEED' | translate}}" class="md-primary" flex>
+        <md-checkbox data-ng-if="detailedSearch.educationalContext.id == 4" data-ng-model="detailedSearch.specialEducationalNeed" aria-label="{{'DETAILED_SEARCH_SPECIAL_EDUCATIONAL_NEED' | translate}}" class="md-primary">
           <span data-translate="DETAILED_SEARCH_SPECIAL_EDUCATIONAL_NEED"></span>
         </md-checkbox>
-        <md-checkbox data-ng-model="detailedSearch.paid" class="md-primary" aria-label="Ainult tasuta õppevara" flex>
+        <md-checkbox data-ng-model="detailedSearch.paid" class="md-primary" aria-label="Ainult tasuta õppevara">
           <span data-translate="DETAILED_SEARCH_ONLY_FREE"></span>
         </md-checkbox>
-        <md-radio-group data-ng-model="detailedSearch.type">
-          <md-radio-button ng-disabled="$root.isEditPortfolioMode" value="all" class="md-primary md-checked" aria-label="Kõik õppematerjalid">
-            <span data-translate="DETAILED_SEARCH_ALL"></span>
-          </md-radio-button>
-          <md-radio-button value="material" class="md-primary" aria-label="Ainult materjalid">
-            <span data-translate="DETAILED_SEARCH_MATERIALS"></span>
-          </md-radio-button>
-          <md-radio-button ng-disabled="$root.isEditPortfolioMode" value="portfolio" class="md-primary" aria-label="Ainult kogumikud">
-            <span data-translate="DETAILED_SEARCH_PORTFOLIOS"></span>
-          </md-radio-button>
-        </md-radio-group>
+
       </div>
       <div layout>
         <div flex="25" layout layout-align="start center">

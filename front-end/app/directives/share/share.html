@@ -1,0 +1,49 @@
+<md-fab-speed-dial md-open="isOpen" md-direction="left" data-ng-show="isVisible()" class="md-scale share">
+  <md-fab-trigger>
+    <md-button class="md-icon-button share__btn share__btn--trigger">
+      <md-tooltip md-direction="bottom">
+        <span data-translate="BUTTON_SHARE"></span>
+      </md-tooltip>
+      <md-icon class="share__icon">share</md-icon>
+    </md-button>
+  </md-fab-trigger>
+
+  <md-fab-actions>
+    <div data-ng-repeat="item in shareMediaPlaces">
+      <md-button class="md-fab md-raised md-mini share__btn share__btn--{{item.name}}" target="{{item.target}}"
+                 aria-label="{{item.name}}" data-ng-href="{{item.url}}"
+                 data-ng-click="checkOwnerAndShowDialog($event, item)">
+        <span class="share__icon {{item.icon}}"></span>
+      </md-button>
+    </div>
+  </md-fab-actions>
+</md-fab-speed-dial>
+
+<script type="text/ng-template" id="sharedialog.tmpl.html">
+  <md-dialog aria-label="{{ariaLabel}}" class="md-dialog-content">
+    <form ng-cloak>
+      <md-dialog-content>
+        <div class="md-dialog-content">
+          <h2 class="md-title share__title">{{title}}</h2>
+          <div class="md-dialog-content-body">
+            <p>{{context}}</p>
+            <md-radio-group data-ng-show="showRadio" ng-model="modalRadio" ng-change="updatePortfolio()">
+              <md-radio-button value="PUBLIC" class="md-primary">{{visibilityPublic}}</md-radio-button>
+              <md-radio-button value="NOT_LISTED" class="md-primary">{{visibilityLinkOnly}}</md-radio-button>
+            </md-radio-group>
+          </div>
+        </div>
+      </md-dialog-content>
+
+      <md-dialog-actions layout="row">
+        <span flex></span>
+        <md-button class="md-primary md-cancel-button" ng-click="back()">
+          {{cancel}}
+        </md-button>
+        <md-button class="md-primary md-confirm-button" href="{{url}}" target="{{target}}" ng-disabled="buttonDisabled" ng-click="success()">
+          {{ok}}
+        </md-button>
+      </md-dialog-actions>
+    </form>
+  </md-dialog>
+</script>

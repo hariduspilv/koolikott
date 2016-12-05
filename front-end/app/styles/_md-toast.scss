@@ -1,3 +1,8 @@
+// Overwrite from angular material to fix scrollbars hiding and showing when toast is animating (do not understand why is it in the code in the first place), possibly makes some other places buggy
+.md-toast-animating {
+  overflow: visible !important;
+}
+
 md-toast {
   position: fixed;
 }

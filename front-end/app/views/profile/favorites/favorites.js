@@ -5,7 +5,7 @@ define([
         function ($scope) {
             $scope.url = "rest/learningObject/usersFavorite";
             $scope.params = {
-                'maxResults': 15
+                'maxResults': 20
             };
         }];
 });

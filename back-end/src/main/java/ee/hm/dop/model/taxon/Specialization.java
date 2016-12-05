@@ -19,6 +19,7 @@ public class Specialization extends Taxon {
     @OneToMany(mappedBy = "specialization")
     private Set<Module> modules;
 
+    @JsonIgnore
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "domain", nullable = false)
     private Domain domain;

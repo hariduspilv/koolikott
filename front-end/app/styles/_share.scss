@@ -1,0 +1,69 @@
+.share {
+  position: absolute;
+  top: 0;
+  right: 40px;
+  margin-top: -15px;
+  margin-right: -15px;
+  z-index: 1;
+
+  @media (min-width: $layout-breakpoint-xs) {
+    margin-right: 0;
+  }
+
+  &.md-is-open {
+    .md-raised.share__btn {
+      box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.26);
+    }
+  }
+}
+
+.md-button.share__btn {
+  margin: 0 4px;
+
+  &.md-raised {
+    box-shadow: none;
+  }
+
+  &--trigger {
+    font-size: .9em;
+    background: #fff;
+
+    &:hover,
+    &:focus {
+      background: #fff !important;
+    }
+
+    .share__icon {
+      font-size: 1.5em;
+      color: rgba(0,0,0,0.45);
+      margin-top: 2px;
+    }
+  }
+
+  &--facebook {
+    .share__icon {
+      color: $facebook;
+    }
+  }
+
+  &--twitter {
+    .share__icon {
+      color: $twitter;
+    }
+  }
+
+  &--google {
+    .share__icon {
+      color: $google;
+    }
+  }
+}
+
+.share__icon {
+  color: rgba(0,0,0,0.54);
+  font-size: 20px;
+}
+
+.share__title {
+  margin-top: 0;
+}

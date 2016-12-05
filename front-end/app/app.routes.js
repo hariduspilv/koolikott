@@ -1,4 +1,4 @@
-define(function() {
+define(function () {
     return {
         defaultRoutePath: '/',
         routes: {
@@ -9,7 +9,7 @@ define(function() {
             '/search/result': {
                 templateUrl: 'views/search/result/searchResult.html',
                 controllerUrl: 'views/search/result/searchResult',
-                reloadOnSearch : false
+                reloadOnSearch: false
             },
             '/material': {
                 templateUrl: 'views/material/material.html',
@@ -39,30 +39,41 @@ define(function() {
                 controllerUrl: 'views/dashboard/dashboard',
                 permissions: ['ADMIN', 'MODERATOR']
             },
+            //TODO: Same template and controller for everything, can this be refactored to js?
             '/dashboard/improperMaterials': {
-                templateUrl: 'views/dashboard/pages/improperMaterials.html',
-                controllerUrl: 'views/dashboard/dashboard',
+                templateUrl: 'views/dashboard/baseTableView.html',
+                controllerUrl: 'views/dashboard/baseTableView',
                 permissions: ['ADMIN', 'MODERATOR']
             },
             '/dashboard/improperPortfolios': {
-                templateUrl: 'views/dashboard/pages/improperPortfolios.html',
-                controllerUrl: 'views/dashboard/dashboard',
+                templateUrl: 'views/dashboard/baseTableView.html',
+                controllerUrl: 'views/dashboard/baseTableView',
                 permissions: ['ADMIN', 'MODERATOR']
             },
             '/dashboard/brokenMaterials': {
-                templateUrl: 'views/dashboard/pages/brokenMaterials.html',
-                controllerUrl: 'views/dashboard/dashboard',
+                templateUrl: 'views/dashboard/baseTableView.html',
+                controllerUrl: 'views/dashboard/baseTableView',
                 permissions: ['ADMIN', 'MODERATOR']
             },
             '/dashboard/deletedMaterials': {
-                templateUrl: 'views/dashboard/pages/deletedMaterials.html',
-                controllerUrl: 'views/dashboard/dashboard',
+                templateUrl: 'views/dashboard/baseTableView.html',
+                controllerUrl: 'views/dashboard/baseTableView',
                 permissions: ['ADMIN', 'MODERATOR']
             },
             '/dashboard/deletedPortfolios': {
-                templateUrl: 'views/dashboard/pages/deletedPortfolios.html',
-                controllerUrl: 'views/dashboard/dashboard',
+                templateUrl: 'views/dashboard/baseTableView.html',
+                controllerUrl: 'views/dashboard/baseTableView',
                 permissions: ['ADMIN', 'MODERATOR']
+            },
+            '/dashboard/moderators': {
+                templateUrl: 'views/dashboard/baseTableView.html',
+                controllerUrl: 'views/dashboard/baseTableView',
+                permissions: ['ADMIN']
+            },
+            '/dashboard/restrictedUsers': {
+                templateUrl: 'views/dashboard/baseTableView.html',
+                controllerUrl: 'views/dashboard/baseTableView',
+                permissions: ['ADMIN']
             },
             '/loginRedirect': {
                 templateUrl: 'views/loginRedirect/loginRedirect.html',

@@ -1,5 +1,5 @@
 define([
-    'directives/infiniteSearchResult/infiniteSearchResult',
+    'directives/infiniteSearchResult/infiniteSearchResult'
 ], function (serverCallService) {
     return ['$scope', 'serverCallService', '$rootScope',
         function ($scope, serverCallService, $rootScope) {
@@ -8,7 +8,7 @@ define([
             $scope.params = {
                 'sort': 'added',
                 'sortDirection': 'desc',
-                'limit': 15,
+                'limit': 20,
                 'type': 'all'
             };
         }];

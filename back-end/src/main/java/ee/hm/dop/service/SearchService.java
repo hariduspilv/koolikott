@@ -2,12 +2,12 @@ package ee.hm.dop.service;
 
 import static ee.hm.dop.service.SolrService.getTokenizedQueryString;
 import static java.lang.String.format;
-import static java.lang.String.join;
-import static org.apache.commons.lang3.StringUtils.isBlank;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -15,6 +15,7 @@ import javax.inject.Inject;
 
 import com.google.common.collect.ImmutableSet;
 import ee.hm.dop.dao.LearningObjectDAO;
+import ee.hm.dop.dao.UserFavoriteDAO;
 import ee.hm.dop.model.CrossCurricularTheme;
 import ee.hm.dop.model.KeyCompetence;
 import ee.hm.dop.model.Language;
@@ -25,6 +26,7 @@ import ee.hm.dop.model.SearchResult;
 import ee.hm.dop.model.Searchable;
 import ee.hm.dop.model.TargetGroup;
 import ee.hm.dop.model.User;
+import ee.hm.dop.model.UserFavorite;
 import ee.hm.dop.model.Visibility;
 import ee.hm.dop.model.solr.Document;
 import ee.hm.dop.model.solr.Response;
@@ -37,7 +39,6 @@ import ee.hm.dop.model.taxon.Subject;
 import ee.hm.dop.model.taxon.Subtopic;
 import ee.hm.dop.model.taxon.Taxon;
 import ee.hm.dop.model.taxon.Topic;
-import ee.hm.dop.tokenizer.DOPSearchStringTokenizer;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.solr.client.solrj.util.ClientUtils;
 
@@ -55,41 +56,59 @@ public class SearchService {
     @Inject
     private LearningObjectDAO learningObjectDAO;
 
-    public SearchResult search(String query, long start, Long limit, SearchFilter searchFilter, User loggedInUser) {
+    @Inject
+    private UserFavoriteDAO userFavoriteDAO;
+
+    public SearchResult search(String query, long start, Long limit, SearchFilter searchFilter) {
         SearchResult searchResult = new SearchResult();
 
-        searchFilter.setVisibility(getSearchVisibility(loggedInUser));
+        searchFilter.setVisibility(getSearchVisibility(searchFilter.getRequestingUser()));
+        Long resultCount;
+        if (limit != null && limit == 0) resultCount = null;
+        else resultCount = limit;
 
-        SearchResponse searchResponse = doSearch(query, start, limit, searchFilter);
+        SearchResponse searchResponse = doSearch(query, start, resultCount, searchFilter);
         Response response = searchResponse.getResponse();
 
         if (response != null) {
             List<Document> documents = response.getDocuments();
-            List<Searchable> unsortedSearchable = retrieveSearchedItems(documents);
+            List<Searchable> unsortedSearchable = retrieveSearchedItems(documents, searchFilter.getRequestingUser());
             List<Searchable> sortedSearchable = sortSearchable(documents, unsortedSearchable);
 
-            searchResult.setItems(sortedSearchable);
             searchResult.setStart(response.getStart());
             // "- documents.size() + sortedSearchable.size()" needed in case
             // SearchEngine and DB are not sync because of re-indexing time.
-            searchResult.setTotalResults(response.getTotalResults() - documents.size() + sortedSearchable.size());
+            if (limit == null || limit > 0) {
+                searchResult.setTotalResults(response.getTotalResults() - documents.size() + sortedSearchable.size());
+                searchResult.setItems(sortedSearchable);
+            } else if (limit == 0) {
+                //When limit is 0 - only getting metainfo
+                searchResult.setTotalResults(response.getTotalResults() - documents.size() + sortedSearchable.size());
+            }
         }
 
         return searchResult;
     }
 
-    private Visibility getSearchVisibility(User loggedInUser) {
-        Visibility visibility = Visibility.PUBLIC;
+    private List<Visibility> getSearchVisibility(User loggedInUser) {
+        List<Visibility> visibilities = new ArrayList<Visibility>() {{
+            add(Visibility.PUBLIC);
+        }};
 
-        if (loggedInUser != null && loggedInUser.getRole() == Role.ADMIN) {
-            // No visibility filter is applied, so admin can see all searchables
-            visibility = null;
+        if (loggedInUser != null) {
+            if (loggedInUser.getRole() == Role.ADMIN) {
+                // Add private and not listed, so admin can see all searchables
+                visibilities.add(Visibility.NOT_LISTED);
+                visibilities.add(Visibility.PRIVATE);
+            } else if (loggedInUser.getRole() == Role.MODERATOR) {
+                visibilities.add(Visibility.NOT_LISTED);
+            }
         }
 
-        return visibility;
+        return visibilities;
     }
 
-    private List<Searchable> retrieveSearchedItems(List<Document> documents) {
+    private List<Searchable> retrieveSearchedItems(List<Document> documents, User loggedInUser) {
         List<Long> learningObjectIds = new ArrayList<>();
         for (Document document : documents) {
             learningObjectIds.add(document.getId());
@@ -98,7 +117,15 @@ public class SearchService {
         List<Searchable> unsortedSearchable = new ArrayList<>();
 
         if (!learningObjectIds.isEmpty()) {
-            learningObjectDAO.findAllById(learningObjectIds).forEach(learningObject -> unsortedSearchable.add((Searchable) learningObject));
+            learningObjectDAO.findAllById(learningObjectIds).forEach(searchable -> {
+                if(loggedInUser != null) {
+                    UserFavorite userFavorite = userFavoriteDAO.findFavoriteByUserAndLearningObject(searchable.getId(), loggedInUser);
+                    if (userFavorite != null && userFavorite.getId() != null) searchable.setFavorite(true);
+                    else searchable.setFavorite(false);
+                }
+
+                unsortedSearchable.add(searchable);
+            });
         }
 
         return unsortedSearchable;
@@ -136,21 +163,15 @@ public class SearchService {
     }
 
     private List<Searchable> sortSearchable(List<Document> indexList, List<Searchable> unsortedSearchable) {
-        List<Searchable> sortedSearchable = new ArrayList<>();
+        Map<Long, Searchable> idToSearchable = new HashMap<>();
 
-        for (Document document : indexList) {
-            for (int i = 0; i < unsortedSearchable.size(); i++) {
-                Searchable searchable = unsortedSearchable.get(i);
+        for (Searchable searchable : unsortedSearchable)
+            idToSearchable.put(searchable.getId(), searchable);
 
-                if (document.getId() == searchable.getId() && document.getType().equals(searchable.getType())) {
-                    sortedSearchable.add(searchable);
-                    unsortedSearchable.remove(i);
-                    break;
-                }
-            }
-        }
-
-        return sortedSearchable;
+        return indexList.stream()
+                .filter(document -> idToSearchable.containsKey(document.getId()))
+                .map(document -> idToSearchable.get(document.getId()))
+                .collect(Collectors.toList());
     }
 
     /*
@@ -171,6 +192,7 @@ public class SearchService {
         filters.add(getKeyCompetenceAsQuery(searchFilter));
         filters.add(isCurriculumLiteratureAsQuery(searchFilter));
         filters.add(getVisibilityAsQuery(searchFilter));
+        filters.add(getCreatorAsQuery(searchFilter));
 
         // Remove empty elements
         filters = filters.stream().filter(f -> !f.isEmpty()).collect(Collectors.toList());
@@ -370,18 +392,32 @@ public class SearchService {
         Boolean isCurriculumLiterature = searchFilter.isCurriculumLiterature();
         if (Boolean.TRUE.equals(isCurriculumLiterature)) {
             return "peerReview:[* TO *]";
-        } else if (Boolean.FALSE.equals(isCurriculumLiterature)) {
-            return "";
         }
+
         return "";
     }
 
     private String getVisibilityAsQuery(SearchFilter searchFilter) {
-        Visibility visibility = searchFilter.getVisibility();
-        if (visibility != null) {
-            return format("(visibility:\"%s\" OR type:\"material\")", visibility.toString().toLowerCase());
+        List<Visibility> visibilities = searchFilter.getVisibility();
+        List<String> filter = visibilities
+                .stream()
+                .map(visibility -> format("visibility:\"%s\"", visibility.toString().toLowerCase()))
+                .collect(Collectors.toList());
+
+        //Visible to user according to their role or is a material or is the creator
+        String query = "((" + StringUtils.join(filter, " OR ") + ") OR type:\"material\")";
+        if (searchFilter.getRequestingUser() != null && searchFilter.getMyPrivates()) {
+            query = query + " OR creator:" + searchFilter.getRequestingUser().getId();
         }
-        return "";
+
+        return query;
     }
 
+    private String getCreatorAsQuery(SearchFilter searchFilter) {
+        if (searchFilter.getCreator() != null) {
+            return "creator:" + searchFilter.getCreator();
+        }
+
+        return "";
+    }
 }

@@ -1,5 +1,5 @@
 <md-toolbar id="md-toolbar-header" class="navbar md-whiteframe-1dp md-primary"
-            ng-class="{'md-accent': isEditPortfolioMode ,'md-red': ((isAdmin() || isModerator())&&(isViewAdminPanelPage || (learningObjectImproper && isViewMaterialPortfolioPage) || (learningObjectBroken && isViewMaterialPortfolioPage))), 'md-gray': ((isAdmin() || isModerator())&&(learningObjectDeleted && isViewMaterialPortfolioPage))}"
+            ng-class="{'md-accent': isEditPortfolioMode ,'md-red': ((isAdmin() || isModerator())&&(isViewAdminPanelPage || (learningObjectImproper && isViewMaterialOrPortfolioPage) || (learningObjectBroken && isViewMaterialOrPortfolioPage))), 'md-gray': ((isAdmin() || isModerator())&&(learningObjectDeleted && isViewMaterialOrPortfolioPage))}"
             data-click-outside="clickOutside()" outside-if-not="header-show-detailed-search-icon, detailed-search, suggest-dropdown">
   <div class="md-toolbar-tools" layout="row" layout-align="start center">
     <!-- logo and menu button -->
@@ -226,10 +226,10 @@
   </div>
 </md-toolbar>
 
-<div class="md-toolbar-filter ng-cloak" id="detailedSearch" data-ng-show="detailedSearch.isVisible" ng-cloak>
-  <form layout="row" flex>
+<div class="md-toolbar-filter" id="detailedSearch" data-ng-show="detailedSearch.isVisible" ng-cloak>
+  <form layout="row">
     <div class="lays-out-left" data-ng-hide="sidenavIsOpen()" ng-cloak></div>
-    <div flex class="filter-wrapper ng-cloak"
+    <div class="filter-wrapper"
          id="detailed-search" data-ng-class="{'nav-open': sidenavIsOpen()}" ng-cloak>
       <div data-dop-detailed-search
            data-is-visible="detailedSearch.isVisible"

@@ -3,9 +3,7 @@
 @import "_variables";
 @import "_mixins";
 @import "_base";
-// @import "fontello-bb1ddced/css/fontello-codes";
-// @import "fontello-bb1ddced/css/fontello-embedded";
-@import "fontello-bb1ddced/css/fontello";
+@import "fontello/css/fontello";
 
 
 // Components
@@ -29,11 +27,12 @@
 @import "_chapter";
 @import "_collapse";
 @import "_textangular";
-@import "_taxonomy";
 @import "_layout";
 @import "_error-message";
 @import "_logo";
 @import "_md-toast";
+@import "_favorite";
+@import "_share";
 
 // Page specific stylesheets
 @import "pages/add";

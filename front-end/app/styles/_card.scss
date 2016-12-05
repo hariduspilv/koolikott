@@ -1,8 +1,32 @@
-
+.pattern {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  .sheet {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    transform: rotate(45deg);
+    filter: drop-shadow(0px 0px 10px rgba(0,0,0,0.2));
+    &.up-left {
+      left: -25%;
+      top: 17%;
+    }
+    &.low-left {
+      left: -60%;
+      top: 45%;
+    }
+    &.low-right {
+      right: -33%;
+      bottom: -45%;
+      height: 150%;
+    }
+  }
+}
 
 md-card {
-  position: relative;
-  margin: 0;
+  position: relative; // to position the corner
+  margin: 0; //to overwrite AM 8px
   width: 100%;
   max-width: 100%;
   min-width: 100%;
@@ -85,27 +109,51 @@ md-card {
     }
     &.description {
       background-color: $green1;
+      .pattern .sheet {
+        @include pattern-color($green1);
+      }
     }
     &.assessment {
       background-color: $green2;
+      .pattern .sheet {
+        @include pattern-color($green2);
+      }
     }
     &.dvr {
       background-color: $greengrass;
+      .pattern .sheet {
+        @include pattern-color($greengrass);
+      }
     }
     &.portfolio {
       background-color: $royal;
+      .pattern .sheet {
+        @include pattern-color($royal);
+      }
     }
     &.casino {
       background-color: $violet;
+      .pattern .sheet {
+        @include pattern-color($violet);
+      }
     }
     &.web_asset {
       background-color: $navy;
+      .pattern .sheet {
+        @include pattern-color($navy);
+      }
     }
     &.audiotrack {
       background-color: $cyan;
+      .pattern .sheet {
+        @include pattern-color($cyan);
+      }
     }
     &.ondemand_video {
       background-color: $salad;
+      .pattern .sheet {
+        @include pattern-color($salad);
+      }
     }
   }
 
@@ -160,8 +208,14 @@ md-card {
 
 
     md-icon.icon-kind {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%,-50%);
       font-size: 48px;
-      color: #fff;
+      color: rgba(255, 255, 255, .7);
+      z-index: 1;
+      text-shadow: 1px 1px 1px rgba(0, 0,0, .2);
     }
     &:hover {
       background-color: #eee;
@@ -179,7 +233,7 @@ md-card {
       .card-hover {
         opacity: 1;
         md-icon {
-          color: rgba(255, 255, 255, 1);
+          color: rgba(255, 255, 255, 8);
           &.unchecked {
             display: none;
           }
@@ -230,12 +284,6 @@ md-card {
         }
       }
       md-icon.icon-kind {
-        position: absolute;
-        top: 0;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        font-size: 48px;
         color: rgba(255, 255, 255, 0.6);
       }
     }
@@ -252,7 +300,6 @@ md-card {
   }
   &.card-lg {
     overflow: hidden;
-    margin-bottom: 20px;
     h1 {
       font-weight: 300;
       color: $heading-color;
@@ -260,11 +307,13 @@ md-card {
       margin: 0 0 10px 0;
       font-weight: 300;
       line-height: 28px;
+      padding: 25px 0 0 0;
     }
-    @media (min-width: 600px) {
+    @media (min-width: $layout-breakpoint-xs) {
       h1 {
         font-size: 30px;
         line-height: 35px;
+        padding: 0 25px 0 0;
       }
     }
     h2 {
@@ -283,6 +332,11 @@ md-card {
 
     .md-menu {
       margin-top: -15px;
+      margin-right: -15px;
+
+      @media (min-width: $layout-breakpoint-xs) {
+        margin-right: 0;
+      }
     }
     md-card-content:not(.noPadding) {
       padding: $card-lg-padding;
@@ -291,6 +345,7 @@ md-card {
       padding-right: $card-lg-padding;
     }
     .divider-left {
+      position: relative;
       display: block;
       border-left: none;
       padding-left: 0;
@@ -370,6 +425,10 @@ md-card {
   }
 }
 
+.card-mb-20 {
+  margin-bottom: 20px;
+}
+
 // TODO: remove this if this bug is closed https://trello.com/c/TB5BRU7G/187-bug-issue-18-vistutatud-materjali-kuvamine-on-paigast-ara
 .embed-responsive-item {
   overflow: hidden;
@@ -385,6 +444,15 @@ md-card {
   height: 60px;
   width: 60px;
   z-index: 1;
+
+  .card-lg & {
+    top: 0;
+    right: -25px;
+
+    @media (min-width: $layout-breakpoint-xs) {
+      top: -25px;
+    }
+  }
 }
 
 md-card .card-menu {
@@ -420,13 +488,6 @@ md-card .card-menu {
   }
 }
 
-.favorite {
-  margin-top: -15px!important;
-}
-.gold {
-  color: gold!important;
-}
-
 .card-container__item {
   margin: 0 15px 15px 0;
 
@@ -436,19 +497,6 @@ md-card .card-menu {
     md-card.card-sm {
       height: 100%;
     }
-  }
-}
-
-.card__favorite {
-  position: absolute;
-  top: 0;
-  left: 0;
-  z-index: 1;
-  &:hover {
-    color: rgba(255, 255, 255, 1);
-  }
-  md-icon {
-    color: transparent;
   }
 }
 
@@ -477,3 +525,27 @@ a.embed-image-padded{
   margin: 25px;
 }
 
+.card__icon-holder {
+  display: flex;
+  flex-direction: row;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 1;
+
+  md-icon {
+    padding: 8px 14px;
+    color: #fff;
+  }
+
+  .card-lg & {
+    top: 0;
+    left: -25px;
+    text-shadow: 1px 1px 1px rgba(0, 0, 0, .2);
+
+    @media (min-width: $layout-breakpoint-xs) {
+      top: -15px;
+      left: 0;
+    }
+  }
+}

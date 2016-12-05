@@ -1,0 +1,35 @@
+<table md-table>
+  <thead md-head md-order="query.order" md-on-reorder="onReorder">
+  <tr md-row>
+    <th md-column md-order-by="byUsername"><span data-translate="USERNAME"></span></th>
+    <th md-column md-order-by="byFullName"><span data-translate="FULL_NAME"></span></th>
+    <th md-column md-order-by="byRole"><span data-translate="ROLE"></span></th>
+    <th data-ng-if="showTaxonColumn" md-column md-order-by="byTaxons"><span
+      data-translate="USER_TAXONS"></span></th>
+  </tr>
+  </thead>
+  <tbody md-body>
+  <tr md-row data-ng-if="!data">
+    <td md-cell></td>
+    <td md-cell></td>
+    <td md-cell>
+      <md-progress-circular></md-progress-circular>
+    </td>
+    <td md-cell></td>
+  </tr>
+  <tr md-row ng-repeat="user in data">
+    <td md-cell data-ng-bind="user.username"></td>
+    <td md-cell data-ng-bind="user.name + ' ' + user.surname"></td>
+    <td md-cell>
+      <span layout="row" layout-align="start center">{{getTranslation(user.role)}}</span>
+    </td>
+    <td md-cell data-ng-if="showTaxonColumn">
+      <span layout="row" layout-align="start center" data-ng-repeat="taxon in user.userTaxons">
+        <span>{{getTaxonTranslation(taxon) | translate}}</span>
+        <span data-ng-if="$index < data.length">, </span>
+      </span>
+    </td>
+  </tr>
+  </tbody>
+</table>
+

@@ -15,7 +15,8 @@ define([
     'directives/rating/rating',
     'directives/tags/tags',
     'directives/commentsCard/commentsCard',
-    'directives/favorite/favorite'
+    'directives/favorite/favorite',
+    'directives/share/share'
 ], function (app, angularAMD) {
     app.directive('dopPortfolioSummaryCard', ['translationService', '$location', '$mdSidenav', '$mdDialog', '$rootScope', 'authenticatedUserService', '$route', 'dialogService', 'serverCallService', 'toastService', 'storageService', 'targetGroupService',
         function (translationService, $location, $mdSidenav, $mdDialog, $rootScope, authenticatedUserService, $route, dialogService, serverCallService, toastService, storageService, targetGroupService) {
@@ -38,7 +39,7 @@ define([
                     }
 
                     $scope.getEducationalContext = function () {
-                        var educationalContext = $rootScope.taxonUtils.getEducationalContext($scope.portfolio.taxon);
+                        var educationalContext = $rootScope.taxonService.getEducationalContext($scope.portfolio.taxon);
                         if (educationalContext) {
                             return educationalContext.name.toUpperCase();
                         }
@@ -57,11 +58,20 @@ define([
                     };
 
                     $scope.canEdit = function () {
-                        return $scope.isOwner() && !authenticatedUserService.isRestricted();
+                        return ($scope.isOwner() || authenticatedUserService.isAdmin() || authenticatedUserService.isModerator())
+                            && !authenticatedUserService.isRestricted();
                     };
 
                     $scope.isAdmin = function () {
                         return authenticatedUserService.isAdmin();
+                    };
+
+                    $scope.isModerator = function () {
+                        return authenticatedUserService.isModerator();
+                    };
+
+                    $scope.isAdminOrModerator = function() {
+                        return authenticatedUserService.isAdmin() || authenticatedUserService.isModerator();
                     };
 
                     $scope.isLoggedIn = function () {
@@ -100,8 +110,8 @@ define([
                     };
 
                     function getSubject(taxon) {
-                        return $rootScope.taxonUtils.getSubject(taxon)
-                    };
+                        return $rootScope.taxonService.getSubject(taxon)
+                    }
 
                     function deletePortfolio() {
                         var url = "rest/portfolio/delete";
@@ -112,6 +122,8 @@ define([
                         toastService.show('PORTFOLIO_DELETED');
                         $scope.portfolio.deleted = true;
                         $rootScope.learningObjectDeleted = true;
+                        $rootScope.$broadcast('dashboard:adminCountsUpdated');
+                        $location.path("/");
                     }
 
                     function deletePortfolioFailed() {
@@ -122,10 +134,40 @@ define([
                         serverCallService.makePost("rest/portfolio/restore", $scope.portfolio, restoreSuccess, restoreFail);
                     };
 
+                    $scope.setNotImproper = function () {
+                        if ($scope.isAdmin() && $scope.portfolio) {
+                            url = "rest/impropers?learningObject=" + $scope.portfolio.id;
+                            serverCallService.makeDelete(url, {}, setNotImproperSuccessful, setNotImproperFailed);
+                        }
+                    };
+
+                    function setNotImproperSuccessful() {
+                        $scope.isReported = false;
+                        $rootScope.learningObjectImproper = false;
+                        $rootScope.$broadcast('dashboard:adminCountsUpdated');
+                    }
+
+                    function setNotImproperFailed() {
+                        console.log("Setting not improper failed.")
+                    }
+
+                    $scope.$on("restore:portfolio", function () {
+                        $scope.restorePortfolio();
+                    });
+
+                    $scope.$on("delete:portfolio", function () {
+                        deletePortfolio();
+                    });
+
+                    $scope.$on("setNotImproper:portfolio", function () {
+                        $scope.setNotImproper();
+                    });
+
                     function restoreSuccess() {
                         toastService.show('PORTFOLIO_RESTORED');
                         $scope.portfolio.deleted = false;
                         $rootScope.learningObjectDeleted = false;
+                        $rootScope.$broadcast('dashboard:adminCountsUpdated');
                     }
 
                     function restoreFail() {
@@ -141,6 +183,19 @@ define([
                         if ($scope.portfolio) {
                             return targetGroupService.getLabelByTargetGroupsOrAll($scope.portfolio.targetGroups);
                         }
+                    };
+
+                    $scope.isAdminButtonsShowing = function () {
+                        return $scope.isAdmin() && (($rootScope.learningObjectDeleted == false
+                            && $rootScope.learningObjectImproper == false
+                            && $rootScope.learningObjectBroken == true)
+                            || ($rootScope.learningObjectDeleted == false
+                            && $rootScope.learningObjectBroken == false
+                            && $rootScope.learningObjectImproper == true)
+                            || ($rootScope.learningObjectDeleted == false
+                            && $rootScope.learningObjectBroken == true
+                            && $rootScope.learningObjectImproper == true)
+                            || ($rootScope.learningObjectDeleted == true));
                     };
 
                     $scope.$watch('portfolio.taxon.id', function (newValue, oldValue) {

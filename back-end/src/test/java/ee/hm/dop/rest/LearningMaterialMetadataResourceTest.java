@@ -34,6 +34,7 @@ public class LearningMaterialMetadataResourceTest extends ResourceIntegrationTes
     private static final String GET_LANGUAGES_URL = "learningMaterialMetadata/language";
     private static final String GET_TARGET_GROUPS_URL = "learningMaterialMetadata/targetGroup";
     private static final String GET_RESOURCE_TYPES_URL = "learningMaterialMetadata/resourceType";
+    private static final String GET_USED_RESOURCE_TYPES_URL = "learningMaterialMetadata/resourceType/used";
     private static final String GET_LICENSE_TYPES_URL = "learningMaterialMetadata/licenseType";
     private static final String GET_CROSS_CURRICULAR_THEMES_URL = "learningMaterialMetadata/crossCurricularTheme";
     private static final String GET_KEY_COMPETENCES_URL = "learningMaterialMetadata/keyCompetence";
@@ -79,7 +80,7 @@ public class LearningMaterialMetadataResourceTest extends ResourceIntegrationTes
         Long id = 10L;
         Domain taxon = (Domain) doGet(String.format(GET_TAXON_URL, id), Taxon.class);
         assertEquals(id, taxon.getId());
-        assertNotNull(taxon.getEducationalContext());
+        assertTrue((taxon.getName().equals("Mathematics")));
     }
 
     @Test
@@ -90,7 +91,7 @@ public class LearningMaterialMetadataResourceTest extends ResourceIntegrationTes
         assertEquals(6, languages.stream().distinct().count());
 
         List<String> expectedNames = Arrays.asList("Estonian", "Russian", "English", "Arabic", "Portuguese", "French");
-        List<String> actualNames = languages.stream().map(l -> l.getName()).collect(Collectors.toList());
+        List<String> actualNames = languages.stream().map(Language::getName).collect(Collectors.toList());
         assertTrue(actualNames.containsAll(expectedNames));
     }
 
@@ -108,6 +109,14 @@ public class LearningMaterialMetadataResourceTest extends ResourceIntegrationTes
     }
 
     @Test
+    public void getUsedResourceTypes() {
+        List<ResourceType> result = doGet(GET_USED_RESOURCE_TYPES_URL, new GenericType<List<ResourceType>>() {
+        });
+
+        assertEquals(5, result.size());
+    }
+
+    @Test
     public void getResourceTypesGroups() {
         List<ResourceType> result = doGet(GET_RESOURCE_TYPES_URL, new GenericType<List<ResourceType>>() {
         });
@@ -115,7 +124,7 @@ public class LearningMaterialMetadataResourceTest extends ResourceIntegrationTes
         assertEquals(7, result.size());
 
         List<String> expected = Arrays.asList("TEXTBOOK1", "EXPERIMENT1", "COURSE");
-        List<String> actual = result.stream().map(r -> r.getName()).collect(Collectors.toList());
+        List<String> actual = result.stream().map(ResourceType::getName).collect(Collectors.toList());
 
         assertTrue(actual.containsAll(expected));
     }
@@ -126,9 +135,7 @@ public class LearningMaterialMetadataResourceTest extends ResourceIntegrationTes
         });
 
         assertEquals(3, licenseTypes.size());
-        for (int i = 0; i < licenseTypes.size(); i++) {
-            assertValidLicenseType(licenseTypes.get(i));
-        }
+        licenseTypes.forEach(this::assertValidLicenseType);
     }
 
     @Test
@@ -141,7 +148,7 @@ public class LearningMaterialMetadataResourceTest extends ResourceIntegrationTes
 
         List<String> expected = Arrays.asList("Lifelong_learning_and_career_planning",
                 "Environment_and_sustainable_development");
-        List<String> actual = result.stream().map(r -> r.getName()).collect(Collectors.toList());
+        List<String> actual = result.stream().map(CrossCurricularTheme::getName).collect(Collectors.toList());
 
         assertTrue(actual.containsAll(expected));
     }
@@ -154,7 +161,7 @@ public class LearningMaterialMetadataResourceTest extends ResourceIntegrationTes
         assertEquals(2, result.size());
 
         List<String> expected = Arrays.asList("Cultural_and_value_competence", "Social_and_citizenship_competence");
-        List<String> actual = result.stream().map(r -> r.getName()).collect(Collectors.toList());
+        List<String> actual = result.stream().map(KeyCompetence::getName).collect(Collectors.toList());
 
         assertTrue(actual.containsAll(expected));
     }

@@ -156,6 +156,10 @@ insert into Picture(id, name, data) values(3, 'picture3', '77b6f6f6c696b65f7474'
 insert into Picture(id, name, data) values(4, 'picture4', '65425284561965bf7474');
 insert into Picture(id, name, data) values(5, 'picture5', '656b6f6f6c6967896215');
 
+-- Thumbnail
+
+insert into Thumbnail(id, name, data) values(1, 'thumbnail1', '65425284561965bf7474');
+
 -- Materials
 
 insert into LearningObject(id, added, updated, views, picture, creator, deleted, recommendation) values(1, '1999-01-01 00:00:01', '2000-03-01 07:00:01', 100, 1, 1, false, 1);

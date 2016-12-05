@@ -53,9 +53,9 @@ public class PortfolioResource extends BaseResource {
 
         User loggedInUser = getLoggedInUser();
 
-        List<Searchable> userFavorites = new ArrayList<>(portfolioService.getByCreator(creator, loggedInUser, start, maxResults));
+        List<Searchable> searchables = new ArrayList<>(portfolioService.getByCreator(creator, loggedInUser, start, maxResults));
         int size = portfolioService.getByCreator(creator, loggedInUser, 0, 10000).size();
-        return new SearchResult(userFavorites, size, start);
+        return new SearchResult(searchables, size, start);
 
     }
 
@@ -157,7 +157,7 @@ public class PortfolioResource extends BaseResource {
     @POST
     @Path("restore")
     @Consumes(MediaType.APPLICATION_JSON)
-    @RolesAllowed({"ADMIN"})
+    @RolesAllowed({"ADMIN", "MODERATOR"})
     public void restore(Portfolio portfolio) {
         portfolioService.restore(portfolio, getLoggedInUser());
     }

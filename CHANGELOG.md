@@ -1,3 +1,30 @@
+## e-Koolikott 1.5.0 (25.11.2016)
+
+### Lisandunud
+* Otsitulemuste sorteerimine #41 https://github.com/hariduspilv/koolikott/issues/41
+* Lisa materjali juures välja "Tüüp" peab olema võimalik x-st kinni panna #44 https://github.com/hariduspilv/koolikott/issues/44
+* Teenuse kirjeldus ja õppekava kaetus vasakmenüüs #71 https://github.com/hariduspilv/koolikott/issues/71
+* Mitteavalike kogumike nägemine #109 https://github.com/hariduspilv/koolikott/issues/109
+* Sotsiaalmeediasse jagamine #111 https://github.com/hariduspilv/koolikott/issues/111
+* Lemmikuks lisamine #110 https://github.com/hariduspilv/koolikott/issues/110
+* Autentimata kasutaja interaktsioonid #99 https://github.com/hariduspilv/koolikott/issues/99
+* Mitme vanuserühma määramine #45 https://github.com/hariduspilv/koolikott/issues/45
+* Numbrid sisukorda #86 https://github.com/hariduspilv/koolikott/issues/86
+* Back-endis kaartide pisipiltide loomine ja automaatne vähendamine #83 https://github.com/hariduspilv/koolikott/issues/83
+* Kuupäevade kuvamine #108 https://github.com/hariduspilv/koolikott/issues/108
+* Vasakmenüüs haridustasemetes vahetavad taksonid ise enda järjekorda #107 https://github.com/hariduspilv/koolikott/issues/107
+* Täpse otsingu tüübivaliku muudatus #68 https://github.com/hariduspilv/koolikott/issues/68
+* Kustutamisel õppevara raporteeritutest ära #100 https://github.com/hariduspilv/koolikott/issues/100
+* Üldpädevust ja läbivate teemade loogika arendamine #56 https://github.com/hariduspilv/koolikott/issues/56
+* Versiooni numbri täiendus #89 https://github.com/hariduspilv/koolikott/issues/89
+* angular materiali sassi kasutuselevõtt #104 https://github.com/hariduspilv/koolikott/issues/104
+* EPUB ja PDF vistutamine #105 https://github.com/hariduspilv/koolikott/issues/105
+
+### Parandatud
+* Taksonoomia muutumisel kuvatakse vasakmenüüs kasutajale vana versiooni #112 https://github.com/hariduspilv/koolikott/issues/112
+* Täpse otsingu avamisel ei näe kasutaja avanenud otsingut #113 https://github.com/hariduspilv/koolikott/issues/113
+* autor materialboxil #66 https://github.com/hariduspilv/koolikott/issues/66
+
 ## e-Koolikott 1.4.0 (03.11.2016)
 
 ### Lisandunud
