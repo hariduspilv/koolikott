@@ -164,14 +164,6 @@ define(function () {
                 if (taxon.level === level) return taxon;
 
                 var parent = taxonMap['t' + taxon.parentId];
-                if (!parent || angular.equals(parent, {})) {
-                    parent = taxonMap['t' + taxon.parentId];
-
-                    if (!parent || angular.equals(parent, {})) {
-                        parent = taxonMap['t' + taxon.parentId];
-                    }
-                }
-
                 return this.getTaxon(parent, level);
             }
 

@@ -31,7 +31,7 @@ define([
             };
 
             $scope.getTranslation = function (key) {
-                return $scope.searchUsersTitle = $filter('translate')(key);
+                return $filter('translate')(key);
             };
 
             $scope.addNewTaxon = function () {

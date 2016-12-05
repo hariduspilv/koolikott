@@ -15,7 +15,7 @@ define([
             },
             bindToController: true,
             controller: function ($scope, serverCallService, $rootScope, $timeout, metadataService, $filter) {
-                var self = this;
+                var ctrl = this;
                 // get educational contexts
                 if (!EDUCATIONAL_CONTEXTS) {
                     metadataService.loadEducationalContexts(getEducationalContextsSuccess)
@@ -28,21 +28,21 @@ define([
                     buildTaxonPath();
                     $timeout(addTaxonPathListeners());
 
-                    self.basicEducationDomainSubjects = EDUCATIONAL_CONTEXTS.basicEducationDomainSubjects;
-                    self.secondaryEducationDomainSubjects = EDUCATIONAL_CONTEXTS.secondaryEducationDomainSubjects;
+                    ctrl.basicEducationDomainSubjects = EDUCATIONAL_CONTEXTS.basicEducationDomainSubjects;
+                    ctrl.secondaryEducationDomainSubjects = EDUCATIONAL_CONTEXTS.secondaryEducationDomainSubjects;
                     $timeout(function () {
-                        self.isReady = true;
+                        ctrl.isReady = true;
                     });
                 }
 
-                self.reset = function (parentTaxon) {
-                    self.taxon = parentTaxon;
+                ctrl.reset = function (parentTaxon) {
+                    ctrl.taxon = parentTaxon;
                 };
 
-                self.selectEducationalContext = function (educationalContext) {
-                    self.selectTaxon(educationalContext);
-                    if (self.touched) {
-                        self.touched.trigger = true;
+                ctrl.selectEducationalContext = function (educationalContext) {
+                    ctrl.selectTaxon(educationalContext);
+                    if (ctrl.touched) {
+                        ctrl.touched.trigger = true;
                     }
 
                     $rootScope.dontCloseSearch = true;
@@ -51,41 +51,41 @@ define([
                     }, 500);
                 };
 
-                self.getTopics = function () {
-                    if (!self.taxonPath) return;
-                    var path = self.taxonPath;
+                ctrl.getTopics = function () {
+                    if (!ctrl.taxonPath) return;
+                    var path = ctrl.taxonPath;
 
                     if (path.subject && path.subject.topics && path.subject.topics.length > 0) return path.subject.topics;
                     if (path.domain && path.domain.topics && path.domain.topics.length > 0) return path.domain.topics;
                     if (path.module && path.module.topics && path.module.topics.length > 0) return path.module.topics;
                 };
 
-                self.isBasicOrSecondaryEducation = function () {
-                    if (self.taxonPath.educationalContext) {
-                        return self.taxonPath.educationalContext.name === 'BASICEDUCATION'
-                            || self.taxonPath.educationalContext.name === 'SECONDARYEDUCATION';
+                ctrl.isBasicOrSecondaryEducation = function () {
+                    if (ctrl.taxonPath.educationalContext) {
+                        return ctrl.taxonPath.educationalContext.name === 'BASICEDUCATION'
+                            || ctrl.taxonPath.educationalContext.name === 'SECONDARYEDUCATION';
                     } else {
                         return false;
                     }
 
                 };
 
-                self.translateTaxon = function (taxon) {
+                ctrl.translateTaxon = function (taxon) {
                     return $filter('translate')(taxon.level.toUpperCase().substr(1) + "_" + taxon.name.toUpperCase());
                 };
 
                 $scope.$on('taxonSelector:clear', function (e, value) {
-                    self.taxon = value;
+                    ctrl.taxon = value;
                 });
 
-                self.selectTaxon = function (taxon) {
-                    self.taxon = taxon;
+                ctrl.selectTaxon = function (taxon) {
+                    ctrl.taxon = taxon;
                 };
 
                 function addTaxonPathListeners() {
                     //Triggers on taxon reset
                     $scope.$watch(function () {
-                        if (self.taxon) return self.taxon.id;
+                        if (ctrl.taxon) return ctrl.taxon.id;
                     }, function (newTaxon, oldTaxon) {
                         if (oldTaxon && newTaxon !== oldTaxon) {
                             buildTaxonPath();
@@ -139,35 +139,34 @@ define([
                 }
 
                 function setEducationalContexts() {
-                    self.educationalContexts = EDUCATIONAL_CONTEXTS;
-                    self.educationalContexts.sort(function (context1, context2) {
+                    ctrl.educationalContexts = EDUCATIONAL_CONTEXTS;
+                    ctrl.educationalContexts.sort(function (context1, context2) {
                         return context1.id - context2.id;
                     });
                 }
 
                 function buildTaxonPath() {
-                    self.taxonPath = {};
-                    if (self.taxon) {
-                        self.taxonPath.educationalContext = $rootScope.taxonService.getEducationalContext(self.taxon);
-                        self.taxonPath.domain = $rootScope.taxonService.getDomain(self.taxon);
-                        self.taxonPath.subject = $rootScope.taxonService.getSubject(self.taxon);
+                    ctrl.taxonPath = {};
+                    if (ctrl.taxon) {
+                        ctrl.taxonPath.educationalContext = $rootScope.taxonService.getEducationalContext(ctrl.taxon);
+                        ctrl.taxonPath.domain = $rootScope.taxonService.getDomain(ctrl.taxon);
+                        ctrl.taxonPath.subject = $rootScope.taxonService.getSubject(ctrl.taxon);
 
-                        if (self.taxonPath.subject) {
-                            self.taxonPath.domainSubject = self.taxonPath.subject;
-                        } else if (self.taxonPath.domain) {
-                            self.taxonPath.domainSubject = self.taxonPath.domain;
+                        if (ctrl.taxonPath.subject) {
+                            ctrl.taxonPath.domainSubject = ctrl.taxonPath.subject;
+                        } else if (ctrl.taxonPath.domain) {
+                            ctrl.taxonPath.domainSubject = ctrl.taxonPath.domain;
                         }
 
-                        self.taxonPath.specialization = $rootScope.taxonService.getSpecialization(self.taxon);
-                        self.taxonPath.module = $rootScope.taxonService.getModule(self.taxon);
-                        self.taxonPath.topic = $rootScope.taxonService.getTopic(self.taxon);
-                        self.taxonPath.subtopic = $rootScope.taxonService.getSubtopic(self.taxon);
+                        ctrl.taxonPath.specialization = $rootScope.taxonService.getSpecialization(ctrl.taxon);
+                        ctrl.taxonPath.module = $rootScope.taxonService.getModule(ctrl.taxon);
+                        ctrl.taxonPath.topic = $rootScope.taxonService.getTopic(ctrl.taxon);
+                        ctrl.taxonPath.subtopic = $rootScope.taxonService.getSubtopic(ctrl.taxon);
                     }
                 }
             },
             controllerAs: 'ctrl',
             templateUrl: 'directives/taxonSelector/taxonSelector.html'
-
         };
     });
 });

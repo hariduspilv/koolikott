@@ -35,7 +35,6 @@ define([
             init();
 
             function init() {
-                $scope.searchUsersTitle = $filter('translate')('SEARCH_USERS');
                 serverCallService.makeGet("rest/user/all", {}, successUsersCall, fail);
             }
 
@@ -49,7 +48,7 @@ define([
             }
 
             $scope.getTranslation = function (key) {
-                return $scope.searchUsersTitle = $filter('translate')(key);
+                return $filter('translate')(key);
             };
 
             $scope.editUser = function (user) {

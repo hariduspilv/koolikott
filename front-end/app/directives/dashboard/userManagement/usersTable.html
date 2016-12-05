@@ -17,7 +17,7 @@
     </td>
     <td md-cell></td>
   </tr>
-  <tr md-row ng-repeat="user in data">
+  <tr md-row ng-repeat="user in data" data-ng-click="editUser(user)" class="pointer">
     <td md-cell data-ng-bind="user.username"></td>
     <td md-cell data-ng-bind="user.name + ' ' + user.surname"></td>
     <td md-cell>
