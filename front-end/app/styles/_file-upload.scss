@@ -1,21 +1,21 @@
 .drop-box {
-  position: relative;
-  border: 1px dashed #dedede;
-  border-radius: 4px;
-  background: #eee;
-  cursor: pointer;
-  margin-left: 16px;
+  border: 1px dashed rgba(0,0,0,.38);
+  //height: 240px;
+  //width: 240px;
   text-align: center;
+  cursor: pointer;
+  border-radius: 2px;
   transition: all .25s;
+  background: rgba(0,0,0, .15);
 
 	&.dragover,
   &:hover {
-    border-style: solid;
-    background: #e0e0e0;
+    border-color: rgba(0,0,0,.15);
+    background: rgba(0,0,0, .1);
 	}
 
 	&.dragover-err {
-    border-color: red;
+    border-color: $error;
 	}
 }
 
