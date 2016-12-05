@@ -1,14 +1,13 @@
 package ee.hm.dop.tests;
 
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 import org.junit.Assert;
 import org.junit.FixMethodOrder;
-
 import static ee.hm.dop.page.LandingPage.goToLandingPage;
-
 import org.junit.Test;
 import org.junit.runners.MethodSorters;
+
 
     @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 
@@ -43,7 +42,7 @@ public class PortfolioTests {
 				.getFabButton()
 				.clickAddPortfolio()
 				.insertPortfolioTitle()
-				.uploadPhoto1()
+				.uploadPhoto()
 				.addDescription()
 				.selectEducationalContext()
 				.selectSubjectArea()
@@ -86,7 +85,7 @@ public class PortfolioTests {
 	@Test
 	public void notifyImproperPortfolio() {
 
-		boolean contentsIsNotImproperIsDisabled = goToLandingPage()
+		boolean improperContentIsDisplayed = goToLandingPage()
 				.chooseUserType("User")
 				.openPortfolio()
 				.clickActionsMenu()
@@ -96,19 +95,15 @@ public class PortfolioTests {
 				.logOff()
 				.chooseUserType("Admin")
 				.getLeftMenu()
-				.checkLeftMenuButtons()
-				.clickMyThings()
 				.clickDashboard()
 				.clickImproperPortfolios()
 				.getDashboardPage()
-				.clickToOrderImproperPortfolios()
+				//.clickToOrderImproperPortfolios()
 				.clickOpenPortfolioFromDashboard()
-				.clickActionsMenu()
 				.setContentIsNotImproper()
-				.clickActionsMenu()
-				.contentsIsNotImproperIsDisabled();
+				.contentsIsNotImproper();
 
-		assertTrue(contentsIsNotImproperIsDisabled);
+		assertFalse(improperContentIsDisplayed);
 
 	}
 	
@@ -121,10 +116,7 @@ public class PortfolioTests {
 				.clickActionsMenu()
 				.clickRemovePortfolio()
 				.confirmImproperContent()
-				.getLeftMenu()
-				.clickMyThings()
-				.clickMyPortfolios()
-				.getMyPortfoliosPage()
+				.getLandingPage()
 				.isPortfolioDeletedToastVisible();
 
 		Assert.assertEquals("Kogumik kustutatud", deletedPortfolioToast);
@@ -135,7 +127,7 @@ public class PortfolioTests {
 	public void editChapterDescription() {
 
 		boolean preTag = goToLandingPage()
-				.chooseUserType("Moderator")
+				.chooseUserType("User")
 				.getLeftMenu()
 				.getMyPortfoliosPage()
 				.openPortfolio()
@@ -174,8 +166,6 @@ public class PortfolioTests {
 				.selectAgeGroup()
 				.insertTagAndEnter1()
 				.clickCreatePortfolioButton()
-				.clickVisibilityButton()
-				.selectMakePublic()
 				.clickExitAndSave()
 				.getUserMenu()
 				.logOff()

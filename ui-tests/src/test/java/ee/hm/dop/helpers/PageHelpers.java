@@ -118,7 +118,7 @@ public class PageHelpers extends SeleniumUser {
 			robot.keyRelease(KeyEvent.VK_V);
 			robot.keyRelease(KeyEvent.VK_CONTROL);
 
-			robot.delay(1000);
+			robot.delay(500);
 
 			robot.keyPress(KeyEvent.VK_ENTER);
 			robot.keyRelease(KeyEvent.VK_ENTER);
@@ -140,7 +140,7 @@ public class PageHelpers extends SeleniumUser {
 				
 				Robot robot = new Robot();
 				
-				robot.delay(50);
+				robot.delay(120);
 
 				robot.keyPress(KeyEvent.VK_CONTROL);
 				robot.keyPress(KeyEvent.VK_V);
@@ -148,7 +148,7 @@ public class PageHelpers extends SeleniumUser {
 				robot.keyRelease(KeyEvent.VK_V);
 				robot.keyRelease(KeyEvent.VK_CONTROL);
 
-				robot.delay(1000);
+				robot.delay(700);
 
 				robot.keyPress(KeyEvent.VK_ENTER);
 				robot.keyRelease(KeyEvent.VK_ENTER);

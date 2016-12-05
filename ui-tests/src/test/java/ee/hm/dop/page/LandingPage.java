@@ -13,6 +13,7 @@ public class LandingPage extends Page {
     private By sortDropdown = By.xpath("//md-select[@ng-model='sortDropdown']");
     private By newFirst = By.xpath("//md-option/div[text()='Uusimad eespool']");
     private By userName = By.xpath("//strong");
+    private By deletedPortfolioToast = By.cssSelector("span.md-toast-text");
     
     
 	public MyPortfoliosPage chooseUserType(String userType) {
@@ -75,6 +76,10 @@ public class LandingPage extends Page {
 	
 	public String getUserName() {
 		return getDriver().findElement(userName).getText();
+	}
+	
+	public String isPortfolioDeletedToastVisible() {
+		return getDriver().findElement(deletedPortfolioToast).getText();
 	}
 
 }

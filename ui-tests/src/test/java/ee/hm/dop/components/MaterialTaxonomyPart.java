@@ -18,11 +18,13 @@ public class MaterialTaxonomyPart extends PageComponent {
 	private By CrossCurricularThemes = By.xpath(
 			"/html/body/div[4]/md-dialog/form/md-dialog-content/md-tabs/md-tabs-content-wrapper/md-tab-content[2]/div/md-content/div[3]/div[3]/md-chips/md-chips-wrap/div/div/md-autocomplete/md-autocomplete-wrap/input");	
 	private By nextStep = By.xpath("//button[@data-ng-click='step.nextStep()']");
+	private By closeButton = By.xpath("//button[@data-ng-click='closeSelect()']");
 
 	
 	public MaterialTaxonomyPart selectTargetGroup() {
 		getDriver().findElement(targerGroup).click();
 		getDriver().findElement(selectedTargetGroup).click();
+		getDriver().findElements(closeButton).get(2).click();
 		return this;
 
 	}

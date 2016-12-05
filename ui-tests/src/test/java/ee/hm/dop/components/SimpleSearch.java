@@ -30,7 +30,7 @@ public class SimpleSearch extends PageComponent {
 	}
 	
 	public LandingPage insertSearchCriteriaInRussian() {
-		getDriver().findElement(simpleSearch).sendKeys("НЛО");
+		getDriver().findElement(simpleSearch).sendKeys("Катарина");
 		getDriver().findElement(simpleSearch).click();
 		PageHelpers.pressEsc();
 		PageHelpers.waitForSeconds(2500);
