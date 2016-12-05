@@ -28,10 +28,11 @@ define([
                         return true;
                     }
 
-                    if ($rootScope.savedPortfolio) {
-                        if ($rootScope.savedPortfolio.visibility === 'PUBLIC' || $rootScope.savedPortfolio.visibility === 'NOT_LISTED' || isOwner() || authenticatedUserService.isAdmin() || authenticatedUserService.isModerator()) {
+
+                    if ($scope.object) {
+                        if ($scope.object.visibility === 'PUBLIC' || $scope.object.visibility === 'NOT_LISTED' || isOwner() || authenticatedUserService.isAdmin() || authenticatedUserService.isModerator()) {
                             return true;
-                        } else if ($rootScope.savedPortfolio.visibility === 'PRIVATE') {
+                        } else if ($scope.object.visibility === 'PRIVATE') {
                             return false;
                         }
                     }
@@ -82,7 +83,7 @@ define([
                 }
 
                 $scope.checkOwnerAndShowDialog = function ($event, item) {
-                    if ((!isOwner() && $rootScope.savedPortfolio.visibility !== 'PUBLIC') || (isOwner() && $rootScope.savedPortfolio.visibility === 'PRIVATE')) {
+                    if ((!isOwner() && $scope.object.visibility !== 'PUBLIC') || (isOwner() && $scope.object.visibility === 'PRIVATE')) {
                         $event.preventDefault();
                         showWarningDialog($event, item);
                     }
@@ -95,7 +96,8 @@ define([
                         controller: DialogController,
                         targetEvent: ev,
                         locals: {
-                            item: item
+                            item: item,
+                            portfolio: $scope.object
                         }
                     });
                 }
@@ -110,7 +112,8 @@ define([
                 }
 
                 function DialogController($scope, $mdDialog, locals) {
-                    if((isOwner() || authenticatedUserService.isAdmin() || authenticatedUserService.isModerator()) && $rootScope.savedPortfolio.visibility === 'PRIVATE') {
+                    console.log(locals.portfolio);
+                    if((isOwner() || authenticatedUserService.isAdmin() || authenticatedUserService.isModerator()) && locals.portfolio.visibility === 'PRIVATE') {
                         $scope.buttonDisabled = true;
                         $scope.showRadio = true;
 
@@ -133,11 +136,11 @@ define([
 
                     $scope.updatePortfolio = function () {
                         if ($scope.modalRadio && $scope.showRadio) {
-                            $rootScope.savedPortfolio.visibility = $scope.modalRadio;
-                            serverCallService.makePost("rest/portfolio/update", $rootScope.savedPortfolio, updateSuccess, updateFail);
+                            serverCallService.makePost("rest/portfolio/update", locals.portfolio, updateSuccess, updateFail);
                         }
 
-                        function updateSuccess() {
+                        function updateSuccess(data) {
+                            locals.portfolio.visibility = data.visibility;
                             $scope.buttonDisabled = false;
                         }
 
@@ -150,8 +153,8 @@ define([
                     $scope.back = function() {
                         $mdDialog.cancel();
 
-                        if($scope.showRadio && $rootScope.savedPortfolio.visibility !== "PRIVATE") {
-                            serverCallService.makePost("rest/portfolio/update", $rootScope.savedPortfolio, postSuccess, function() {});
+                        if($scope.showRadio && locals.portfolio.visibility !== "PRIVATE") {
+                            serverCallService.makePost("rest/portfolio/update", locals.portfolio, postSuccess, function() {});
                         }
                     }
 
@@ -162,7 +165,7 @@ define([
                     }
 
                     function postSuccess() {
-                        $rootScope.savedPortfolio.visibility = "PRIVATE";
+                        locals.portfolio.visibility = "PRIVATE";
                     }
                 }
 
