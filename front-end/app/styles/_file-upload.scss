@@ -1,13 +1,12 @@
 .drop-box {
+  position: relative;
   border: 1px dashed #dedede;
-  //height: 240px;
-  //width: 240px;
-  text-align: center;
-  cursor: pointer;
   border-radius: 4px;
-  transition: all .25s;
-
   background: #eee;
+  cursor: pointer;
+  margin-left: 16px;
+  text-align: center;
+  transition: all .25s;
 
 	&.dragover,
   &:hover {
@@ -18,8 +17,6 @@
 	&.dragover-err {
     border-color: red;
 	}
-
-  position: relative;
 }
 
 .drop-box-preview-container {

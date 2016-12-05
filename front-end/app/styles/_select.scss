@@ -19,4 +19,8 @@ md-select-menu[multiple] {
   position: absolute;
   top: -26px;
   right: -26px;
+
+  &.md-button.md-raised {
+    background-color: #eee;
+  }
 }
