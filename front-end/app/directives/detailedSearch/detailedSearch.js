@@ -323,7 +323,7 @@ define([
                         }
                     }, false);
 
-                    $scope.$watch($scope.detailedSearch, function (newValue, oldValue) {
+                    $scope.$watch('detailedSearch', function (newValue, oldValue) {
                         if ($scope.isVisible && hasSearchChanged(newValue, oldValue)) {
                             filterTypeSearch();
                             $scope.search();
