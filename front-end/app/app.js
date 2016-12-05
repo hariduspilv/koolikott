@@ -295,8 +295,7 @@ define([
             }
             if (!$rootScope.isViewPortforlioPage || !$rootScope.isViewMaterialPage) setDefaultShareParams($rootScope, $location);
 
-            $rootScope.isUserTabOpen = !!($rootScope.isViewAdminPanelPage || isViewMyProfile || $rootScope.isViewMaterialPage || $rootScope.isAuthenticated);
-            $rootScope.isAuthenticated = false;
+            $rootScope.isUserTabOpen = !!($rootScope.isViewAdminPanelPage || isViewMyProfile || $rootScope.isViewMaterialPage);
 
             if ($rootScope.isEditPortfolioPage) {
                 $rootScope.isEditPortfolioMode = true;
@@ -390,6 +389,7 @@ define([
             return authenticatedUserService.isAuthenticated();
         }, function (isAuthenticated) {
             $rootScope.showMainFabButton = isAuthenticated;
+            $rootScope.isUserTabOpen = true;
         }, true);
     }]);
 
