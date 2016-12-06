@@ -159,11 +159,11 @@ define([
             $scope.openSummary = function () {
                 $scope.isSummaryVisible = true;
 
-                $timeout(function(){
+                $timeout(function () {
                     var editorScope = textAngularManager.retrieveEditor('add-portfolio-description-input').scope;
                     editorScope.displayElements.text.trigger('focus');
                 }, 0, false);
-            }
+            };
 
             init();
         }
