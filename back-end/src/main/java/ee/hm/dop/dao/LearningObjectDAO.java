@@ -84,7 +84,14 @@ public class LearningObjectDAO extends BaseDAO<LearningObject> {
     public List<LearningObject> findByCreator(User creator, int start, int maxResults) {
         String query = "SELECT lo FROM LearningObject lo WHERE lo.creator.id = :creatorId AND lo.deleted = false order by added desc";
         TypedQuery<LearningObject> findAllByCreator = createQuery(query, LearningObject.class);
-        return findAllByCreator.setParameter("creatorId", creator.getId()).setFirstResult(start).setMaxResults(maxResults).getResultList();
+
+        TypedQuery<LearningObject> typedQuery = findAllByCreator.setParameter("creatorId", creator.getId()).setFirstResult(start);
+
+        if (maxResults > 0) {
+            return typedQuery.setMaxResults(maxResults).getResultList();
+        } else {
+            return typedQuery.getResultList();
+        }
     }
 
     protected <T> void removeNot(Class<T> clazz, List<LearningObject> learningObjects) {
