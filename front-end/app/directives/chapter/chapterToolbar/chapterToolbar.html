@@ -1,8 +1,11 @@
 <div data-ng-show="isEditable">
-  <md-button class="md-raised" type="button" aria-label="Lisa materjal" data-ng-click="addMaterial()">
-    <span data-translate="ADD_MATERIAL"></span>
-  </md-button>
-  <md-button class="md-raised" aria-label="Lisa alampeatükk" data-ng-click="addNewSubChapter()" data-ng-if="!isSub">
-    <span data-translate="PORTFOLIO_ADD_SUBCHAPTER"></span>
-  </md-button>
+
+<md-button class="md-raised" type="button" aria-label="Lisa materjal" data-ng-click="addMaterial()">
+  <md-icon class="material-icons">add</md-icon>
+  <span data-translate="MATERIAL"></span>
+</md-button >
+<md-button class="md-raised" aria-label="Lisa alampeatükk" data-ng-click="addNewSubChapter()" data-ng-if="!isSub">
+  <md-icon class="material-icons">add</md-icon>
+  <span data-translate="SUBCHAPTER"></span>
+</md-button>
 </div>
