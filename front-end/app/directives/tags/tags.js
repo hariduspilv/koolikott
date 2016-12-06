@@ -5,10 +5,11 @@ define([
     'services/searchService',
     'services/authenticatedUserService',
     'services/storageService',
+    'services/dialogService',
     'services/suggestService'
 ], function (angularAMD) {
-    angularAMD.directive('dopTags',['translationService', '$mdToast', '$translate', 'serverCallService', 'searchService', 'authenticatedUserService', '$location', '$rootScope', '$mdDialog', 'storageService', 'suggestService', '$http',
-        function (translationService, $mdToast, $translate, serverCallService, searchService, authenticatedUserService, $location, $rootScope, $mdDialog, storageService, suggestService, $http) {
+    angularAMD.directive('dopTags',['translationService', '$mdToast', '$translate', 'serverCallService', 'searchService', 'authenticatedUserService', '$location', '$rootScope', '$mdDialog', 'storageService', 'suggestService', '$http', 'dialogService',
+        function (translationService, $mdToast, $translate, serverCallService, searchService, authenticatedUserService, $location, $rootScope, $mdDialog, storageService, suggestService, $http, dialogService) {
         return {
             scope: {
                 learningObject: '='
@@ -170,7 +171,7 @@ define([
 
 
                 $scope.doSuggest = function (query) {
-                    return suggestService.suggestTags(query);
+                    return suggestService.suggest(query, suggestService.getSuggestSystemTagURLbase());
                 };
 
                 $scope.tagSelected = function () {

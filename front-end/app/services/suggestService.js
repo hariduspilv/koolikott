@@ -5,7 +5,7 @@
 
 define(['angularAMD'], function (angularAMD) {
 
-    angularAMD.factory('suggestService', ['$http', function ($http) {
+    angularAMD.factory('suggestService', ['$http', 'serverCallService', function ($http, serverCallService) {
 
         var suggestURLbase = "rest/suggest/";
         var suggestSystemTagURLbase = "rest/suggest/tag";
@@ -29,18 +29,13 @@ define(['angularAMD'], function (angularAMD) {
                 return this.getSuggestURLbase() + "?q=" + query;
             },
 
-            getTagURL: function(query) {
-                return this.getSuggestSystemTagURLbase() + "?q=" + query;
-            },
-
-            suggestTags: function(query) {
+            suggest: function(query, url) {
                 if (query == null) {
                     return [];
                 }
 
-                return $http
-                    .get(this.getTagURL(query), {cache: true})
-                    .then(function (response) {
+                return serverCallService.makeGet(url, {q: query})
+                    .then(function(response) {
                         return response.data.alternatives || [];
                     });
             }

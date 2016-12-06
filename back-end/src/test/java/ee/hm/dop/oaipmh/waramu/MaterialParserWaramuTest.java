@@ -1,24 +1,13 @@
 package ee.hm.dop.oaipmh.waramu;
 
-import static org.easymock.EasyMock.createMock;
-import static org.easymock.EasyMock.expect;
-import static org.easymock.EasyMock.replay;
-import static org.easymock.EasyMock.verify;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.fail;
-
-import java.io.File;
-import java.io.IOException;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.util.*;
-
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
-
-import ee.hm.dop.model.*;
+import ee.hm.dop.model.Author;
+import ee.hm.dop.model.Language;
+import ee.hm.dop.model.LanguageString;
+import ee.hm.dop.model.Material;
+import ee.hm.dop.model.ResourceType;
+import ee.hm.dop.model.Tag;
+import ee.hm.dop.model.TargetGroup;
+import ee.hm.dop.model.TargetGroupEnum;
 import ee.hm.dop.model.taxon.Domain;
 import ee.hm.dop.model.taxon.EducationalContext;
 import ee.hm.dop.model.taxon.Module;
@@ -27,7 +16,12 @@ import ee.hm.dop.model.taxon.Subject;
 import ee.hm.dop.model.taxon.Subtopic;
 import ee.hm.dop.model.taxon.Topic;
 import ee.hm.dop.oaipmh.ParseException;
-import ee.hm.dop.service.*;
+import ee.hm.dop.service.AuthorService;
+import ee.hm.dop.service.LanguageService;
+import ee.hm.dop.service.ResourceTypeService;
+import ee.hm.dop.service.TagService;
+import ee.hm.dop.service.TargetGroupService;
+import ee.hm.dop.service.TaxonService;
 import org.easymock.EasyMockRunner;
 import org.easymock.Mock;
 import org.easymock.TestSubject;
@@ -35,6 +29,22 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import java.io.File;
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
+import static org.easymock.EasyMock.*;
+import static org.junit.Assert.*;
 
 @RunWith(EasyMockRunner.class)
 public class MaterialParserWaramuTest {

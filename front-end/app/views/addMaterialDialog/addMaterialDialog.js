@@ -6,10 +6,11 @@ define([
     'services/authenticatedUserService',
     'services/pictureUploadService',
     'services/fileUploadService',
+    'services/dialogService',
     'directives/validate/validateUrl'
 ], function (app) {
-    return ['$scope', '$mdDialog', '$mdDateLocale', 'serverCallService', 'translationService', 'metadataService', '$filter', '$location', '$rootScope', 'authenticatedUserService', '$timeout', 'pictureUploadService', 'fileUploadService', 'toastService', 'suggestService',
-        function ($scope, $mdDialog, $mdDateLocale, serverCallService, translationService, metadataService, $filter, $location, $rootScope, authenticatedUserService, $timeout, pictureUploadService, fileUploadService, toastService, suggestService) {
+    return ['$scope', '$mdDialog', '$mdDateLocale', 'serverCallService', 'translationService', 'metadataService', '$filter', '$location', '$rootScope', 'authenticatedUserService', '$timeout', 'pictureUploadService', 'fileUploadService', 'toastService', 'suggestService', 'dialogService',
+        function ($scope, $mdDialog, $mdDateLocale, serverCallService, translationService, metadataService, $filter, $location, $rootScope, authenticatedUserService, $timeout, pictureUploadService, fileUploadService, toastService, suggestService, dialogService) {
             $scope.isSaving = false;
             $scope.showHints = true;
             $scope.creatorIsPublisher = false;
@@ -298,7 +299,7 @@ define([
             };
 
             $scope.doSuggest = function (tagName) {
-                return suggestService.suggestTags(tagName);
+                return suggestService.suggest(tagName, suggestService.getSuggestSystemTagURLbase());
             };
 
             function shouldRemoveNotRelevantFromList(listName) {

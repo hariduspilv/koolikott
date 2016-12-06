@@ -1,21 +1,26 @@
 package ee.hm.dop.rest;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
-
-import javax.ws.rs.core.GenericType;
-
 import ee.hm.dop.common.test.ResourceIntegrationTestBase;
-import ee.hm.dop.model.*;
+import ee.hm.dop.model.CrossCurricularTheme;
+import ee.hm.dop.model.KeyCompetence;
+import ee.hm.dop.model.Language;
+import ee.hm.dop.model.LicenseType;
+import ee.hm.dop.model.ResourceType;
+import ee.hm.dop.model.TargetGroup;
+import ee.hm.dop.model.TargetGroupEnum;
 import ee.hm.dop.model.taxon.Domain;
 import ee.hm.dop.model.taxon.EducationalContext;
 import ee.hm.dop.model.taxon.Subject;
 import ee.hm.dop.model.taxon.Taxon;
 import ee.hm.dop.model.taxon.Topic;
 import org.junit.Test;
+
+import javax.ws.rs.core.GenericType;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 import static org.junit.Assert.*;
 

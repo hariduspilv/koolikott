@@ -15,14 +15,8 @@ public class TargetGroupDeserializer extends JsonDeserializer<TargetGroup> {
     public TargetGroup deserialize(JsonParser jp, DeserializationContext ctxt) throws IOException {
         TargetGroupService targetGroupService = GuiceInjector.getInjector().getInstance(TargetGroupService.class);
 
-        String tagName = jp.getText();
-        TargetGroup targetGroup = targetGroupService.getByName(tagName);
+        String targetGroupName = jp.getText();
 
-        if (targetGroup == null) {
-            targetGroup = new TargetGroup();
-            targetGroup.setName(tagName);
-        }
-
-        return targetGroup;
+        return targetGroupService.getByName(targetGroupName);
     }
 }
