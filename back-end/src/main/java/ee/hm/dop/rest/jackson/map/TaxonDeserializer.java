@@ -19,8 +19,11 @@ public class TaxonDeserializer extends JsonDeserializer<Taxon> {
         TaxonService taxonService = getTaxonService();
 
         Taxon taxon = parser.readValueAs(Taxon.class);
+        if(taxon != null) {
+            return taxonService.getTaxonById(taxon.getId());
+        }
 
-        return taxonService.getTaxonById(taxon.getId());
+        return null;
     }
 
     @Override
