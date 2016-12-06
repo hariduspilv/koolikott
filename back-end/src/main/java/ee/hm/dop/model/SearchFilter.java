@@ -1,8 +1,8 @@
 package ee.hm.dop.model;
 
-import java.util.List;
-
 import ee.hm.dop.model.taxon.Taxon;
+
+import java.util.List;
 
 public class SearchFilter {
 
@@ -14,7 +14,7 @@ public class SearchFilter {
 
     private Language language;
 
-    private List<TargetGroup> targetGroups;
+    private List<String> targetGroups;
 
     private ResourceType resourceType;
 
@@ -72,11 +72,11 @@ public class SearchFilter {
         this.language = language;
     }
 
-    public List<TargetGroup> getTargetGroups() {
+    public List<String> getTargetGroups() {
         return targetGroups;
     }
 
-    public void setTargetGroups(List<TargetGroup> targetGroups) {
+    public void setTargetGroups(List<String> targetGroups) {
         this.targetGroups = targetGroups;
     }
 

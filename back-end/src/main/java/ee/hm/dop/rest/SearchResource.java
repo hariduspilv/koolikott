@@ -1,7 +1,21 @@
 package ee.hm.dop.rest;
 
-import java.util.List;
-import java.util.stream.Collectors;
+import ee.hm.dop.model.CrossCurricularTheme;
+import ee.hm.dop.model.KeyCompetence;
+import ee.hm.dop.model.Language;
+import ee.hm.dop.model.ResourceType;
+import ee.hm.dop.model.SearchFilter;
+import ee.hm.dop.model.SearchResult;
+import ee.hm.dop.model.Searchable;
+import ee.hm.dop.model.taxon.Taxon;
+import ee.hm.dop.service.CrossCurricularThemeService;
+import ee.hm.dop.service.KeyCompetenceService;
+import ee.hm.dop.service.LanguageService;
+import ee.hm.dop.service.ResourceTypeService;
+import ee.hm.dop.service.SearchService;
+import ee.hm.dop.service.TargetGroupService;
+import ee.hm.dop.service.TaxonService;
+import ee.hm.dop.service.UserLikeService;
 
 import javax.inject.Inject;
 import javax.ws.rs.GET;
@@ -9,10 +23,8 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
-
-import ee.hm.dop.model.*;
-import ee.hm.dop.model.taxon.Taxon;
-import ee.hm.dop.service.*;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Path("search")
 public class SearchResource extends BaseResource {
@@ -67,11 +79,6 @@ public class SearchResource extends BaseResource {
                 .map(taxonId -> taxonService.getTaxonById(taxonId))
                 .collect(Collectors.toList());
 
-        List<TargetGroup> targetGroups = targetGroupNames
-                .stream()
-                .map(name -> targetGroupService.getByName(name))
-                .collect(Collectors.toList());
-
         Language language = languageService.getLanguage(languageCode);
         ResourceType resourceType = resourceTypeService.getResourceTypeByName(resourceTypeName);
         CrossCurricularTheme crossCurricularTheme = crossCurricularThemeService
@@ -91,7 +98,7 @@ public class SearchResource extends BaseResource {
         searchFilter.setPaid(paid);
         searchFilter.setType(type);
         searchFilter.setLanguage(language);
-        searchFilter.setTargetGroups(targetGroups);
+        searchFilter.setTargetGroups(targetGroupNames);
         searchFilter.setResourceType(resourceType);
         searchFilter.setSpecialEducation(isSpecialEducation);
         searchFilter.setIssuedFrom(issuedFrom);
