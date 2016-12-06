@@ -48,7 +48,10 @@
         <div layout="row" layout-align="space-between center">
           <div dop-chapter-toolbar data-chapter="chapter" data-is-sub="false"></div>
           <md-button class="md-icon-button" data-ng-click="deleteChapter($index)">
-            <md-icon md-menu-align-target>delete</md-icon>
+            <md-icon>delete</md-icon>
+            <md-tooltip md-direction="bottom">
+              <span data-translate="DELETE"></span>
+            </md-tooltip>
           </md-button>
         </div>
       </md-card-content>
@@ -120,7 +123,10 @@
           <div layout="row" layout-align="space-between center">
             <div dop-chapter-toolbar data-chapter="subchapter" data-is-sub="true"></div>
             <md-button class="md-icon-button" data-ng-click="onDeleteSubChapter(subchapter)">
-              <md-icon md-menu-align-target>delete</md-icon>
+              <md-icon>delete</md-icon>
+              <md-tooltip md-direction="bottom">
+                <span data-translate="DELETE"></span>
+              </md-tooltip>
             </md-button>
           </div>
         </md-card-content>

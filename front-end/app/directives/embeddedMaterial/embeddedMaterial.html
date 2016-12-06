@@ -3,7 +3,7 @@
     <md-card-avatar>
       <md-icon class="icon-kind embeddedMaterial" ng-class="materialType">{{materialType}}</md-icon>
     </md-card-avatar>
-    <md-card-header-text flex="85" data-ng-click="navigateToMaterial(material, $event)">
+    <md-card-header-text flex data-ng-click="navigateToMaterial(material, $event)">
       <a data-ng-href="{{'/material?materialId=' + material.id}}" class="md-title no-link ellipsisText"
          data-ng-bind="getCorrectLanguageTitle(material)">
       </a>
@@ -14,9 +14,13 @@
         </span>
       </span>
     </md-card-header-text>
-    <div data-ng-if="isEditPortfolioMode && isEditPortfolioPage" class="pick" layout-align="end start">
-      <md-icon class="unchecked">remove_circle_outline</md-icon>
-      <md-icon data-ng-click="removeMaterial($event, material)" class="checked">remove_circle</md-icon>
+    <div data-ng-if="isEditPortfolioMode && isEditPortfolioPage">
+      <md-button class="md-icon-button" data-ng-click="removeMaterial($event, material)">
+        <md-icon>delete</md-icon>
+        <md-tooltip md-direction="bottom">
+          <span data-translate="DELETE"></span>
+        </md-tooltip>
+      </md-button>
     </div>
   </md-card-header>
   <md-card-content data-ng-if="sourceType" class="embed-card-content" ng-class="{'noPadding' : chapter !== null}">
@@ -85,24 +89,25 @@
       </div>
     </div>
   </md-card-content>
-  <md-card-footer class="embeded-material-footer" layout="row" layout-align="space-between center" data-ng-if="isEditPortfolioMode || !sourceType">
-    <!--Link as backup - if iframe is internally not working-->
-    <a href="{{material.source}}" class="wrapped regular-link md-primary"
-       target="_blank" data-ng-if="(!sourceType || (sourceType === 'VIDEO' && !canPlayVideo)
-                  || (sourceType === 'AUDIO' && !canPlayAudio))">
-      <span class="item-link" data-ng-bind="material.source"></span>
-    </a>
-    <!--Up and down-->
-    <div data-ng-if="isEditPortfolioMode && isEditPortfolioPage" layout-align="end center" layout="row" flex>
-      <md-button ng-disabled="index === 0" class="md-icon-button" aria-label="Liiguta materjali üles"
-                 ng-click="listItemUp(index)">
-        <md-icon class="material-icons">arrow_upward</md-icon>
-      </md-button>
-      <md-button ng-disabled="(chapter.materials.length - 1) == index" class="md-icon-button"
-                 aria-label="Liiguta materjali alla" ng-click="listItemDown(index)">
-        <md-icon class="material-icons">arrow_downward</md-icon>
-      </md-button>
+  <md-card-footer class="embeded-material-footer" data-ng-if="isEditPortfolioMode || !sourceType">
+    <div layout="row" layout-align="space-between center">
+      <!--Link as backup - if iframe is internally not working-->
+      <a href="{{material.source}}" class="wrapped regular-link md-primary"
+         target="_blank" data-ng-if="(!sourceType || (sourceType === 'VIDEO' && !canPlayVideo)
+                    || (sourceType === 'AUDIO' && !canPlayAudio))">
+        <span class="item-link" data-ng-bind="material.source"></span>
+      </a>
+      <!--Up and down-->
+      <div data-ng-if="isEditPortfolioMode && isEditPortfolioPage" layout="row">
+        <md-button ng-disabled="index === 0" class="md-icon-button" aria-label="Liiguta materjali üles"
+                   ng-click="listItemUp(index)">
+          <md-icon class="material-icons">arrow_upward</md-icon>
+        </md-button>
+        <md-button ng-disabled="(chapter.materials.length - 1) == index" class="md-icon-button"
+                   aria-label="Liiguta materjali alla" ng-click="listItemDown(index)">
+          <md-icon class="material-icons">arrow_downward</md-icon>
+        </md-button>
+      </div>
     </div>
   </md-card-footer>
 </md-card>
-
