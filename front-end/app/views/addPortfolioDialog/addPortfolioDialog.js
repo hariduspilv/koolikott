@@ -23,6 +23,7 @@ define([
 
                 if ($scope.portfolio.id != null) {
                     $scope.isEditPortfolio = true;
+                    $scope.isSummaryVisible = true;
 
                     var portfolioClone = angular.copy(portfolio);
 
