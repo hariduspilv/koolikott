@@ -14,7 +14,11 @@
         <div data-dop-chapter data-on-delete="onDeleteChapter" data-chapter="chapter" data-index="{{$index}}"></div>
       </div>
     </div>
+
+    <md-card class="card-mb-20">
+      <md-button aria-label="Lisa uus peatükk" data-ng-click="addNewChapter()">
+        <span data-translate="PORTFOLIO_ADD_CHAPTER"></span>
+      </md-button>
+    </md-card>
   </article>
 </section>
-
-<!-- data-ng-if="showFirstMessage" -->
