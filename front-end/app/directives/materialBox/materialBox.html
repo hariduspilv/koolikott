@@ -1,4 +1,4 @@
-<md-card class="card-sm" ng-class="{ active: selected }" id="material-card-{{material.id}}"
+<md-card class="card-sm" ng-class="{ active: material.selected }" id="material-card-{{material.id}}"
          data-ng-click="navigateTo(material, $event)">
   <div data-ng-if="isAuthenticated()" data-dop-favorite data-learning-object="material"></div>
   <!-- noimage -->

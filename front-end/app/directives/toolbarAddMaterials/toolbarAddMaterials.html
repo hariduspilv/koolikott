@@ -1,0 +1,30 @@
+<md-toolbar class="md-hue-1 toolbar-add-materials md-whiteframe-1dp">
+  <div class="md-toolbar-tools" layout="row" layout-wrap="">
+    <div class="toolbar-add-materials__left" layout="row" layout-align="start center">
+      <md-button class="md-hue-1 toolbar-add-materials__button" ng-click="removeSelection()">
+        <md-icon>arrow_backward</md-icon>
+        <span class="vertical-center toolbar-add-materials__info--hidden">Tagasi</span>
+      </md-button>
+    </div>
+    <div class="toolbar-add-materials__center" layout="row" layout-xs="column" layout-align="center center"  layout-align-gt-md="start center" flex>
+      <p class="md-subhead toolbar-add-materials__info">Valitud: <span class="toolbar-add-materials__count" ng-bind="selectedMaterials.length"></span></p>
+      <div class="toolbar-add-materials__divider"></div>
+      <p class="md-subhead toolbar-add-materials__info toolbar-add-materials__info--hidden">Lisa kogumikku</p>
+      <md-select aria-label="Vali kogumik" md-selected-text="getPortfolioSelectLabel()" ng-model="portfolio" ng-disabled="isPortfolioEdit"
+                 md-on-open="getUsersPortfolios()" class="toolbar-add-materials__select" ng-change="portfolioSelectChange()">
+        <md-option ng-value="portfolio" ng-repeat="portfolio in usersPortfolios">{{portfolio.title}}</md-option>
+      </md-select>
+      <p class="md-subhead toolbar-add-materials__info toolbar-add-materials__info--hidden">ja peatükki</p>
+      <md-select aria-label="Vali peatükk" md-selected-text="getChapterSelectLabel()" ng-disabled="!portfolio" ng-model="chapter" class="toolbar-add-materials__select">
+        <md-option ng-value="chapter" ng-repeat="chapter in portfolio.chapters">{{chapter.title}}</md-option>
+      </md-select>
+    </div>
+    <div class="toolbar-add-materials__right" layout="row" layout-align="end center">
+      <md-button class="md-primary toolbar-add-materials__button" ng-if="!isSaving" ng-disabled="!chapter" ng-click="addMaterialsToChapter(chapter, portfolio)">
+        <md-icon>done</md-icon>
+      </md-button>
+      <md-progress-circular class="md-primary toolbar-add-materials__progress" md-mode="indeterminate" md-diameter="30"
+                            data-ng-show="isSaving"></md-progress-circular>
+    </div>
+  </div>
+</md-toolbar>
