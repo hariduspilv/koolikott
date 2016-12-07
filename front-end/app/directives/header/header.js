@@ -70,6 +70,10 @@ define([
                         $scope.$broadcast("detailedSearch:open");
                     }
 
+                    $scope.$on('detailedSearch:open', function () {
+                        $scope.detailedSearch.isVisible = true;
+                    });
+
                     $scope.closeDetailedSearch = function () {
                         $timeout(function () {
                             $scope.clearTaxonSelector();

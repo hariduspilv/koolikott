@@ -4,8 +4,8 @@ define([
     'services/translationService',
     'directives/validate/validateUrl'
 ], function(app, angularAMD) {
-    app.directive('dopChapterToolbar', ['translationService', '$mdDialog', '$rootScope', 'storageService', 'serverCallService', '$filter',
-        function(translationService, $mdDialog, $rootScope, storageService, serverCallService, $filter) {
+    app.directive('dopChapterToolbar', ['translationService', '$mdDialog', '$rootScope', 'storageService', 'serverCallService', '$filter', '$anchorScroll',
+    function(translationService, $mdDialog, $rootScope, storageService, serverCallService, $filter, $anchorScroll) {
         return {
             scope: {
                 chapter: '=',
@@ -44,6 +44,15 @@ define([
                         materials: [],
                         openCloseChapter: true
                     });
+                };
+
+                $scope.openMenu = function($mdOpenMenu, ev) {
+                    $mdOpenMenu(ev);
+                };
+
+                $scope.openDetailedSearch = function () {
+                    $rootScope.$broadcast("detailedSearch:open");
+                    $anchorScroll();
                 };
             }
         }
