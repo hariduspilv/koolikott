@@ -9,8 +9,8 @@ define([
     'services/toastService',
     'directives/copyPermalink/copyPermalink'
 ], function (angularAMD) {
-    angularAMD.directive('dopToolbarAddMaterials', ['$translate', 'authenticatedUserService', 'serverCallService', 'toastService',
-        function ($translate, authenticatedUserService, serverCallService, toastService) {
+    angularAMD.directive('dopToolbarAddMaterials', ['$translate', 'authenticatedUserService', 'serverCallService', 'toastService', '$q',
+        function ($translate, authenticatedUserService, serverCallService, toastService, $q) {
             return {
                 scope: true,
                 templateUrl: 'directives/toolbarAddMaterials/toolbarAddMaterials.html',
@@ -65,10 +65,13 @@ define([
                             getUsersPortfoliosFail();
                         } else {
                             $scope.usersPortfolios = data.items;
+                            $scope.$broadcast("getUsersPortfolios:done");
                         }
+                        $scope.deferred.resolve();
                     };
 
                     function getUsersPortfoliosFail() {
+                        $scope.deferred.resolve();
                         console.log('Failed to get portfolios.');
                     };
 
@@ -100,12 +103,19 @@ define([
                     };
 
                     $scope.getUsersPortfolios = function () {
+
+                        if(!$scope.usersPortfolios) {
+                            $scope.deferred = $q.defer();
+                        }
+
                         var user = authenticatedUserService.getUser();
                         var params = {
                             'username': user.username
                         };
                         var url = "rest/portfolio/getByCreator";
                         serverCallService.makeGet(url, params, getUsersPortfoliosSuccess, getUsersPortfoliosFail);
+
+                        return $scope.deferred.promise;
 
                     };
 

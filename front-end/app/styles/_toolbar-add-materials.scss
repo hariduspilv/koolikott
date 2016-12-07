@@ -92,6 +92,8 @@
 }
 
 .toolbar-add-materials__center {
+  min-width: 0;
+
   @media (min-width: $layout-breakpoint-lg) {
     width: 100%;
     max-width: $layout-breakpoint-md;
