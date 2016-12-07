@@ -23,8 +23,9 @@
       </div>
     </md-select>
     <div ng-messages="targetGroupForm.targetGroup.$error"
-         data-ng-show="isRequired.trigger && (targetGroupForm.targetGroup.$touched || markRequired) && !selectedTargetGroup">
-      <div ng-message="required" data-ng-if="isReady" class="validation-messages" data-translate="PORTFOLIO_AGE_GROUP_REQUIRED"></div>
+         data-ng-if="isReady">
+      <div ng-message="required" data-ng-show="isRequired.trigger && (selectedTargetGroup.length === 0 || markRequired)"
+           class="validation-messages" data-translate="PORTFOLIO_AGE_GROUP_REQUIRED"></div>
     </div>
   </md-input-container>
 </form>
