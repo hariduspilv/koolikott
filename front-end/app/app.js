@@ -2,7 +2,7 @@ define([
     'angularAMD',
 
     'app.routes',
-    'utils/taxonService',
+    'services/taxonService',
     'moment',
 
     'angular-translate',
@@ -235,10 +235,9 @@ define([
         $rootScope.shareImage = '';
     }
 
-    app.run(function ($rootScope, metadataService, APP_VERSION) {
+    app.run(function ($rootScope, metadataService, APP_VERSION, taxonService) {
         $rootScope.APP_VERSION = APP_VERSION;
         $rootScope.hasAppInitated = false;
-        $rootScope.taxonService = taxonService;
         metadataService.loadEducationalContexts(setTaxons);
 
         function setTaxons(taxon) {

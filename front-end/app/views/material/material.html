@@ -87,14 +87,14 @@
                   <span data-translate="DETAIL_VIEW_EDUCATIONAL_CONTEXT"></span>
                 </small>
                 <br>
-                <span class="hide-overflow" data-ng-repeat="educationalContext in material.educationalContexts">
+                <span class="hide-overflow" data-ng-repeat="educationalContext in getMaterialEducationalContexts()">
                   {{educationalContext.name.toUpperCase() | translate}}{{$last ? '' : ', '}}
                 </span>
-                <span class="hide-overflow" data-ng-if="isNullOrZeroLength(material.educationalContexts)"
+                <span class="hide-overflow" data-ng-if="!getMaterialEducationalContexts().length"
                       data-translate="UNKNOWN">Unknown</span>
               </p>
             </div>
-            <div flex data-ng-if="!material.subjects.length">
+            <div flex data-ng-if="getMaterialSubjects().length === 0">
               <p class="md-body-2 meta">
                 <small class="md-caption">
                   <span data-translate="DETAIL_VIEW_DOMAIN"></span>
@@ -107,13 +107,13 @@
                       data-translate="UNKNOWN">Unknown</span>
               </p>
             </div>
-            <div flex data-ng-if="material.subjects.length">
+            <div flex data-ng-if="getMaterialSubjects().length > 0">
               <p class="md-body-2 meta">
                 <small class="md-caption">
                   <span data-translate="DETAIL_VIEW_SUBJECT"></span>
                 </small>
                 <br/>
-                <span class="hide-overflow" data-ng-repeat="subject in material.subjects">
+                <span class="hide-overflow" data-ng-repeat="subject in getMaterialSubjects()">
                   {{'SUBJECT_' + subject.name.toUpperCase() | translate}}{{$last ? '' : ', '}}
                 </span>
               </p>
@@ -124,7 +124,8 @@
                   <span data-translate="MATERIAL_VIEW_RESOURCE_TYPE"></span>
                 </small>
                 <br>
-                <span class="hide-overflow" data-ng-repeat="resourceType in material.resourceTypes" data-ng-if="!isNullOrZeroLength(material.resourceTypes)">
+                <span class="hide-overflow" data-ng-repeat="resourceType in material.resourceTypes"
+                      data-ng-if="!isNullOrZeroLength(material.resourceTypes)">
                   {{resourceType.name.toUpperCase() | translate}}{{$last ? '' : ', '}}
                 </span>
                 <span class="hide-overflow" data-ng-if="isNullOrZeroLength(material.resourceTypes)"
@@ -138,7 +139,10 @@
                 </small>
                 <br>
                 <span class="hide-overflow one-row">
-                  <span data-ng-repeat="targetGroup in targetGroups">{{'TARGET_GROUP_' + targetGroup | translate}}{{$last ? '' : ', '}}</span>
+                  <span data-ng-repeat="targetGroup in targetGroups">
+                    <span data-translate="{{'TARGET_GROUP_' + targetGroup}}"></span>
+                    <span>{{$last ? '' : ', '}}</span>
+                  </span>
                 </span>
                 <span class="hide-overflow" data-ng-if="isNullOrZeroLength(targetGroups)"
                       data-translate="UNKNOWN">Unknown</span>
@@ -174,7 +178,8 @@
 
         <!-- right small side  -->
         <div layout="column" flex flex-gt-xs="25" class="divider-left" layout-align="start start">
-          <div data-ng-if="isLoggedIn() && !isRestricted() && !material.deleted" data-dop-favorite data-learning-object="material"></div>
+          <div data-ng-if="isLoggedIn() && !isRestricted() && !material.deleted" data-dop-favorite
+               data-learning-object="material"></div>
           <div data-ng-if="!material.picture" class="card-cover  {{getType()}}">
           <span>
             <md-icon class="icon-kind" data-ng-bind="getType()"></md-icon>
@@ -209,7 +214,8 @@
           </div>
 
           <div data-ng-if="material.picture" class="card-cover imaged">
-            <img data-ng-src="rest/picture/thumbnail/lg/{{material.picture.name}}"sizes="(max-width: 600px) 600px, 300px"
+            <img data-ng-src="rest/picture/thumbnail/lg/{{material.picture.name}}"
+                 sizes="(max-width: 600px) 600px, 300px"
                  data-ng-srcset="rest/picture/thumbnail/lg_xs/{{material.picture.name}} 600w,
                                  rest/picture/thumbnail/lg/{{material.picture.name}} 300w"/>
             <span data-ng-if="sourceType === 'LINK' && !material.embeddable">

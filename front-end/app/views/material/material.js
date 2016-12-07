@@ -22,11 +22,12 @@ define([
     'services/toastService',
     'services/storageService',
     'services/targetGroupService',
+    'services/taxonService',
     'directives/embeddedMaterial/embeddedMaterial',
     'directives/share/share'
 ], function (app, angularAMD) {
-    return ['$scope', 'serverCallService', '$route', 'translationService', '$rootScope', 'searchService', '$location', 'alertService', 'authenticatedUserService', 'dialogService', 'toastService', 'iconService', '$mdDialog', 'storageService', 'targetGroupService',
-        function ($scope, serverCallService, $route, translationService, $rootScope, searchService, $location, alertService, authenticatedUserService, dialogService, toastService, iconService, $mdDialog, storageService, targetGroupService) {
+    return ['$scope', 'serverCallService', '$route', 'translationService', '$rootScope', 'searchService', '$location', 'alertService', 'authenticatedUserService', 'dialogService', 'toastService', 'iconService', '$mdDialog', 'storageService', 'targetGroupService', 'taxonService',
+        function ($scope, serverCallService, $route, translationService, $rootScope, searchService, $location, alertService, authenticatedUserService, dialogService, toastService, iconService, $mdDialog, storageService, targetGroupService, taxonService) {
             $scope.showMaterialContent = false;
             $scope.newComment = {};
             $scope.pageUrl = $location.absUrl();
@@ -55,17 +56,6 @@ define([
             }, function (newMaterial, oldMaterial) {
                 if (newMaterial !== oldMaterial) {
                     $scope.material = newMaterial;
-                }
-            });
-
-            // Find educational contexts and subjects in case the material taxons are loaded later
-            $scope.taxonWatcher = $scope.$watchCollection('material.taxons', function (newTaxons, oldTaxons) {
-                if (newTaxons !== oldTaxons) {
-                    preprocessMaterialSubjects();
-                    preprocessMaterialEducationalContexts();
-                    if ($scope.material.educationalContexts.length > 0 || $scope.material.subjects.length > 0) {
-                        $scope.taxonWatcher();
-                    }
                 }
             });
 
@@ -106,11 +96,6 @@ define([
                             $scope.material.uploadedFile.name;
                     }
                     $scope.targetGroups = getTargetGroups();
-
-                    if ($scope.material.taxons) {
-                        preprocessMaterialSubjects();
-                        preprocessMaterialEducationalContexts();
-                    }
 
                     if ($scope.material.embeddable && $scope.sourceType === 'LINK') {
                         if (authenticatedUserService.isAuthenticated()) {
@@ -163,50 +148,40 @@ define([
                 $rootScope.setReason(improper.reason);
             }
 
-            function preprocessMaterialSubjects() {
-                $scope.material.subjects = [];
+            $scope.getMaterialEducationalContexts = function () {
+                var educationalContexts = [];
+                if (!$scope.material || !$scope.material.taxons) return;
 
-                for (var i = 0; i < $scope.material.taxons.length; i++) {
-                    var taxon = $scope.material.taxons[i];
-                    var subject = $rootScope.taxonService.getSubject(taxon);
+                $scope.material.taxons.forEach(function (taxon) {
+                    var edCtx = taxonService.getEducationalContext(taxon);
+                    if (edCtx) educationalContexts.push(edCtx);
+                });
 
-                    if (subject && !containsObject(subject, $scope.material.subjects)) {
-                        $scope.material.subjects.push(subject);
-                    }
-                }
-            }
-
-            function preprocessMaterialEducationalContexts() {
-                var material = $scope.material;
-                material.educationalContexts = [];
-
-                for (var i = 0, j = 0; i < material.taxons.length; i++) {
-                    var taxon = material.taxons[i];
-                    var educationalContext = $rootScope.taxonService.getEducationalContext(taxon);
-
-                    if (educationalContext && !containsObject(educationalContext, material.educationalContexts)) {
-                        material.educationalContexts[j++] = educationalContext;
-                    }
-                }
-            }
+                return educationalContexts;
+            };
 
             $scope.getMaterialDomains = function () {
                 var domains = [];
+                if (!$scope.material || !$scope.material.taxons) return;
 
-                if (!$scope.material || !$scope.material.taxons) {
-                    return [];
-                }
-
-                for (var i = 0, j = 0; i < $scope.material.taxons.length; i++) {
-                    var taxon = $scope.material.taxons[i];
-                    var domain = $rootScope.taxonService.getDomain(taxon);
-
-                    if (domain) {
-                        domains[j++] = domain;
-                    }
-                }
+                $scope.material.taxons.forEach(function (taxon) {
+                    var domain = taxonService.getDomain(taxon);
+                    if (domain) domains.push(domain);
+                });
 
                 return domains;
+            };
+
+            $scope.getMaterialSubjects = function () {
+                var subjects = [];
+                if (!$scope.material || !$scope.material.taxons) return;
+
+                $scope.material.taxons.forEach(function (taxon) {
+                    var subject = taxonService.getSubject(taxon);
+                    if (subject) subjects.push(subject);
+                });
+
+                return subjects;
             };
 
             $scope.getCorrectLanguageString = function (languageStringList) {
@@ -257,11 +232,7 @@ define([
             };
 
             $scope.modUser = function () {
-                if (authenticatedUserService.isModerator() || authenticatedUserService.isAdmin()) {
-                    return true;
-                } else {
-                    return false;
-                }
+                return !!(authenticatedUserService.isModerator() || authenticatedUserService.isAdmin());
             };
 
             $scope.isAdminButtonsShowing = function () {
