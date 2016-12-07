@@ -2,10 +2,11 @@ define([
     'app',
     'services/serverCallService',
     'services/translationService',
-    'services/authenticatedUserService'
+    'services/authenticatedUserService',
+    'services/taxonService'
 ], function (app) {
-    return ['$scope', '$mdDialog', 'serverCallService', 'translationService', 'toastService', '$rootScope', '$filter',
-        function ($scope, $mdDialog, serverCallService, translationService, toastService, $rootScope, $filter) {
+    return ['$scope', '$mdDialog', 'serverCallService', 'translationService', 'toastService', '$rootScope', '$filter', 'taxonService',
+        function ($scope, $mdDialog, serverCallService, translationService, toastService, $rootScope, $filter, taxonService) {
             var ROLE_MODERATOR = "MODERATOR";
 
             function init() {
@@ -35,7 +36,7 @@ define([
             };
 
             $scope.addNewTaxon = function () {
-                var educationalContext = $rootScope.taxonService.getEducationalContext($scope.user.userTaxons[0]);
+                var educationalContext = taxonService.getEducationalContext($scope.user.userTaxons[0]);
 
                 $scope.user.userTaxons.push(educationalContext);
             };

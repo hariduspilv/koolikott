@@ -1,6 +1,7 @@
 define([
     'angularAMD',
-    'services/serverCallService'
+    'services/serverCallService',
+    'services/taxonService'
 ], function (angularAMD) {
     var EDUCATIONAL_CONTEXTS;
 
@@ -14,7 +15,7 @@ define([
                 touched: '='
             },
             bindToController: true,
-            controller: function ($scope, serverCallService, $rootScope, $timeout, metadataService, $filter) {
+            controller: function ($scope, serverCallService, $rootScope, $timeout, metadataService, $filter, taxonService) {
                 var ctrl = this;
                 // get educational contexts
                 if (!EDUCATIONAL_CONTEXTS) {
@@ -148,9 +149,9 @@ define([
                 function buildTaxonPath() {
                     ctrl.taxonPath = {};
                     if (ctrl.taxon) {
-                        ctrl.taxonPath.educationalContext = $rootScope.taxonService.getEducationalContext(ctrl.taxon);
-                        ctrl.taxonPath.domain = $rootScope.taxonService.getDomain(ctrl.taxon);
-                        ctrl.taxonPath.subject = $rootScope.taxonService.getSubject(ctrl.taxon);
+                        ctrl.taxonPath.educationalContext = taxonService.getEducationalContext(ctrl.taxon);
+                        ctrl.taxonPath.domain = taxonService.getDomain(ctrl.taxon);
+                        ctrl.taxonPath.subject = taxonService.getSubject(ctrl.taxon);
 
                         if (ctrl.taxonPath.subject) {
                             ctrl.taxonPath.domainSubject = ctrl.taxonPath.subject;
@@ -158,10 +159,10 @@ define([
                             ctrl.taxonPath.domainSubject = ctrl.taxonPath.domain;
                         }
 
-                        ctrl.taxonPath.specialization = $rootScope.taxonService.getSpecialization(ctrl.taxon);
-                        ctrl.taxonPath.module = $rootScope.taxonService.getModule(ctrl.taxon);
-                        ctrl.taxonPath.topic = $rootScope.taxonService.getTopic(ctrl.taxon);
-                        ctrl.taxonPath.subtopic = $rootScope.taxonService.getSubtopic(ctrl.taxon);
+                        ctrl.taxonPath.specialization = taxonService.getSpecialization(ctrl.taxon);
+                        ctrl.taxonPath.module = taxonService.getModule(ctrl.taxon);
+                        ctrl.taxonPath.topic = taxonService.getTopic(ctrl.taxon);
+                        ctrl.taxonPath.subtopic = taxonService.getSubtopic(ctrl.taxon);
                     }
                 }
             },

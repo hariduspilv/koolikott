@@ -1,6 +1,7 @@
 define([
     'angularAMD',
     'services/targetGroupService',
+    'services/taxonService',
     'directives/selectClose/selectClose'
 ], function (angularAMD) {
     angularAMD.directive('dopTargetGroupSelector', function () {
@@ -12,7 +13,7 @@ define([
                 markRequired: '='
             },
             templateUrl: 'directives/targetGroupSelector/targetGroupSelector.html',
-            controller: function ($scope, $rootScope, $timeout, targetGroupService, $translate) {
+            controller: function ($scope, $rootScope, $timeout, targetGroupService, $translate, taxonService) {
                 $scope.isReady = false;
                 init();
 
@@ -43,8 +44,8 @@ define([
 
                     $scope.$watch('taxon', function (newTaxon, oldTaxon) {
                         if (newTaxon !== oldTaxon) {
-                            var newEdCtx = $rootScope.taxonService.getEducationalContext(newTaxon);
-                            var oldEdCtx = $rootScope.taxonService.getEducationalContext(oldTaxon);
+                            var newEdCtx = taxonService.getEducationalContext(newTaxon);
+                            var oldEdCtx = taxonService.getEducationalContext(oldTaxon);
 
                             if (!oldEdCtx || (newEdCtx && newEdCtx.name !== oldEdCtx.name) || !newEdCtx) {
                                 fill();

@@ -4,10 +4,11 @@ define([
     'directives/targetGroupSelector/targetGroupSelector',
     'services/searchService',
     'services/translationService',
-    'services/metadataService'
+    'services/metadataService',
+    'services/taxonService'
 ], function (angularAMD) {
-    angularAMD.directive('dopDetailedSearch', ['$location', 'searchService', 'translationService', '$filter', 'serverCallService', 'metadataService', '$rootScope',
-        function ($location, searchService, translationService, $filter, serverCallService, metadataService, $rootScope) {
+    angularAMD.directive('dopDetailedSearch', ['$location', 'searchService', 'translationService', '$filter', 'serverCallService', 'metadataService', 'taxonService',
+        function ($location, searchService, translationService, $filter, serverCallService, metadataService, taxonService) {
         return {
             scope: {
                 queryIn: '=',
@@ -315,7 +316,7 @@ define([
                         }
 
                         if (newTaxon !== oldTaxon && $scope.taxon && !prefilling) {
-                            $scope.detailedSearch.educationalContext = $rootScope.taxonService.getEducationalContext($scope.taxon);
+                            $scope.detailedSearch.educationalContext = taxonService.getEducationalContext($scope.taxon);
                             clearHiddenFields();
                             $scope.search();
                         } else if (prefilling) {

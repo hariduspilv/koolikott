@@ -1,8 +1,9 @@
 define([
     'angularAMD',
     'services/recursionHelper',
+    'services/taxonService'
 ], function (angularAMD) {
-    angularAMD.directive('dopSidenavTaxon', ['RecursionHelper', 'searchService', function (RecursionHelper, searchService) {
+    angularAMD.directive('dopSidenavTaxon', ['RecursionHelper', 'searchService', 'taxonService', function (RecursionHelper, searchService, taxonService) {
         return {
             scope: {
                 taxon: '=',
@@ -19,7 +20,7 @@ define([
                 if ($scope.taxon) {
                     $scope.taxonName = getTaxonTranslation($scope.taxon);
                     var parentEdCtx;
-                    if ($scope.taxon.parentId) parentEdCtx = $rootScope.taxonService.getEducationalContext($scope.taxon);
+                    if ($scope.taxon.parentId) parentEdCtx = taxonService.getEducationalContext($scope.taxon);
 
                     //Taxon is EducationalContext
                     if ($scope.taxon.domains) {
