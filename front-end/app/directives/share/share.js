@@ -3,7 +3,8 @@ define([
     'services/translationService',
     'services/authenticatedUserService'
 ], function (angularAMD) {
-    angularAMD.directive('dopShare', ['$rootScope', '$location', '$window', 'translationService', '$translate', 'authenticatedUserService', '$mdDialog', 'serverCallService', function($rootScope, $location, $window, translationService, $translate, authenticatedUserService, $mdDialog, serverCallService) {
+    angularAMD.directive('dopShare', ['$rootScope', '$location', '$window', 'translationService', '$translate', 'authenticatedUserService', '$mdDialog', 'serverCallService', 'toastService',
+        function($rootScope, $location, $window, translationService, $translate, authenticatedUserService, $mdDialog, serverCallService, toastService) {
         return {
             scope: {
                 title: '=',
@@ -113,8 +114,7 @@ define([
 
                 function DialogController($scope, $mdDialog, locals) {
                     if((isOwner() || authenticatedUserService.isAdmin() || authenticatedUserService.isModerator()) && locals.portfolio.visibility === 'PRIVATE') {
-                        $scope.buttonDisabled = true;
-                        $scope.showRadio = true;
+                        $scope.showButtons = true;
 
                         $scope.title = $translate.instant('THIS_IS_PRIVATE');
                         $scope.context = $translate.instant('SHARE_PRIVATE_PORTFOLIO');
@@ -133,34 +133,28 @@ define([
                     $scope.url = locals.item.url;
                     $scope.target = locals.item.target;
 
-                    $scope.updatePortfolio = function () {
-                        if ($scope.modalRadio && $scope.showRadio) {
-                            var portfolioClone = JSON.parse(JSON.stringify(locals.portfolio));
-                            portfolioClone.visibility = $scope.modalRadio;
-                            serverCallService.makePost("rest/portfolio/update", portfolioClone, updateSuccess, updateFail);
-                        }
+                    $scope.updatePortfolio = function (state) {
+                        var portfolioClone = angular.copy(locals.portfolio);
+                        portfolioClone.visibility = state;
+                        serverCallService.makePost("rest/portfolio/update", portfolioClone, updateSuccess, updateFail);
+                        $mdDialog.cancel();
+                    };
 
-                        function updateSuccess(data) {
-                            if (isEmpty(data)) {
-                                updateFail();
-                            } else {
-                                locals.portfolio.visibility = data.visibility;
-                                $scope.buttonDisabled = false;
-                            }
+                    function updateSuccess(data) {
+                        if (isEmpty(data)) {
+                            updateFail();
+                        } else {
+                            locals.portfolio.visibility = data.visibility;
+                            toastService.show('PORTFOLIO_SAVED');
                         }
+                    }
 
-                        function updateFail() {
-                            $scope.buttonDisabled = true;
-                            $scope.modalRadio = "";
-                        }
+                    function updateFail() {
+                        console.log("Updating portfolio failed")
                     }
 
                     $scope.back = function() {
                         $mdDialog.cancel();
-
-                        if($scope.showRadio && locals.portfolio.visibility !== "PRIVATE") {
-                            serverCallService.makePost("rest/portfolio/update", locals.portfolio, postSuccess, function() {});
-                        }
                     }
 
                     $scope.success = function() {
