@@ -6,8 +6,8 @@ define([
     'services/iconService',
     'services/embedService'
 ], function (app) {
-    app.directive('dopEmbeddedMaterial', ['translationService', 'iconService', 'embedService', 'dialogService',
-        function (translationService, iconService, embedService, dialogService) {
+    app.directive('dopEmbeddedMaterial', ['translationService', 'iconService', 'embedService', 'serverCallService', 'dialogService',
+        function (translationService, iconService, embedService, serverCallService, dialogService) {
             return {
                 scope: {
                     material: '=',
@@ -27,9 +27,37 @@ define([
                         $scope.isEditPortfolioMode = $rootScope.isEditPortfolioMode;
 
                         if ($scope.material) {
+                            getContentType();
                             $scope.materialType = getType();
                             getSourceType();
                         }
+                    }
+
+                    function getContentType () {
+                        var baseUrl = document.location.origin;
+                        // If the initial type is a LINK, try to ask the type from our proxy
+                        if(matchType($scope.material.source) === 'LINK'){
+                            $scope.proxyUrl = baseUrl + "/rest/material/externalMaterial?url=" + encodeURIComponent($scope.material.source);
+                            serverCallService.makeHead($scope.proxyUrl, {}, probeContentSuccess, probeContentFail);
+                        }else{
+                            $scope.sourceType = matchType($scope.material.source);
+                        }
+                    }
+
+                    function probeContentSuccess(response) {
+                        if(!response()['content-disposition']){
+                            $scope.sourceType = 'LINK';
+                            return;
+                        }
+                        var filename = response()['content-disposition'].match(/filename="(.+)"/)[1];
+                        $scope.sourceType = matchType(filename);
+                        if($scope.sourceType !== 'LINK'){
+                            $scope.material.source = $scope.proxyUrl;
+                        }
+                    }
+
+                    function probeContentFail() {
+                        console.log("Content probing failed!");
                     }
 
                     $scope.removeMaterial = function ($event, material) {

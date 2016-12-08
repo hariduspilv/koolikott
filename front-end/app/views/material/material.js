@@ -31,6 +31,7 @@ define([
             $scope.showMaterialContent = false;
             $scope.newComment = {};
             $scope.pageUrl = $location.absUrl();
+            $scope.sourceType = "";
 
             if ($rootScope.savedMaterial) {
                 $scope.material = $rootScope.savedMaterial;
@@ -43,6 +44,33 @@ define([
                 init();
             } else {
                 getMaterial(getMaterialSuccess, getMaterialFail);
+            }
+
+            function getContentType () {
+                var baseUrl = document.location.origin;
+                // If the initial type is a LINK, try to ask the type from our proxy
+                if(matchType($scope.material.source) === 'LINK'){
+                    $scope.proxyUrl = baseUrl + "/rest/material/externalMaterial?url=" + encodeURIComponent($scope.material.source);
+                    serverCallService.makeHead($scope.proxyUrl, {}, probeContentSuccess, probeContentFail);
+                }else{
+                    $scope.sourceType = matchType($scope.material.source);
+                }
+            }
+
+            function probeContentSuccess(response) {
+                if(!response()['content-disposition']){
+                    $scope.sourceType = 'LINK';
+                    return;
+                }
+                var filename = response()['content-disposition'].match(/filename="(.+)"/)[1];
+                $scope.sourceType = matchType(filename);
+                if($scope.sourceType !== 'LINK'){
+                    $scope.material.source = $scope.proxyUrl;
+                }
+            }
+
+            function probeContentFail() {
+                console.log("Content probing failed!");
             }
 
             $rootScope.$on('fullscreenchange', function () {
@@ -89,7 +117,7 @@ define([
 
             function processMaterial() {
                 if ($scope.material) {
-                    $scope.sourceType = setSourceType($scope.material.source);
+                    $scope.sourceType = getContentType();
                     if ($scope.sourceType == "EBOOK") {
                         $scope.ebookLink = "/libs/bibi/bib/i/?book=" +
                             $scope.material.uploadedFile.id + "/" +
