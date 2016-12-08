@@ -388,7 +388,6 @@ define([
             return authenticatedUserService.isAuthenticated();
         }, function (isAuthenticated) {
             $rootScope.showMainFabButton = isAuthenticated;
-            $rootScope.isUserTabOpen = true;
         }, true);
     }]);
 
