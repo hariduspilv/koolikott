@@ -16,21 +16,20 @@ public class PortfolioTests {
 	@Test
 	public void createPortfolio() {
 
-		String tagText = goToLandingPage()
+		String domainText = goToLandingPage()
 				.chooseUserType("SmallPublisher")
 				.getFabButton()
 				.clickAddPortfolio()
-				.insertPortfolioTitle()
 				.uploadPhoto()
-				.addDescription()
+				.insertPortfolioTitle()
 				.selectEducationalContext()
 				.selectSubjectArea()
 				.selectAgeGroup()
-				.insertTagAndEnter("epic")
+				.addDescription()
 				.clickCreatePortfolioButton()
-				.getTagText();
+				.getDomainText();
 
-		Assert.assertEquals("epic", tagText);
+		Assert.assertEquals("0-5", domainText);
 
 	}
 	
@@ -41,19 +40,17 @@ public class PortfolioTests {
 				.chooseUserType("User")
 				.getFabButton()
 				.clickAddPortfolio()
-				.insertPortfolioTitle()
 				.uploadPhoto()
-				.addDescription()
+				.insertPortfolioTitle()
 				.selectEducationalContext()
 				.selectSubjectArea()
 				.selectAgeGroup()
-				.insertTagAndEnter("automated")
+				.addDescription()
 				.clickCreatePortfolioButton()
 				.clickExitAndSave()
 				.moveCursorToCopyPortfolio()
 				.clickCopyPortfolio()
 				.insertSpecificPortfolioTitle("(Copy)")
-				.insertTags()
 				.savePortfolioCopy()
 				.clickExitAndSave()
 				.wordCopyIsAddedToPortfolioTitle();
@@ -158,15 +155,15 @@ public class PortfolioTests {
 				.chooseUserType("SmallPublisher")
 				.getFabButton()
 				.clickAddPortfolio()
-				.insertPortfolioTitle()
-				.addDescription()
 				.uploadPhoto()
+				.insertPortfolioTitle()
 				.selectEducationalContext()
 				.selectSubjectArea()
 				.selectAgeGroup()
-				.insertTagAndEnter1()
+				.addDescription()
 				.clickCreatePortfolioButton()
 				.clickExitAndSave()
+				.insertTagAndEnter1()
 				.getUserMenu()
 				.logOff()
 				.chooseUserType("Admin")

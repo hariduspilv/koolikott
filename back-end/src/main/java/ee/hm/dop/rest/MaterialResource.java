@@ -2,6 +2,7 @@ package ee.hm.dop.rest;
 
 import static org.apache.commons.lang3.StringUtils.isBlank;
 
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URLDecoder;
@@ -32,6 +33,8 @@ import ee.hm.dop.model.User;
 import ee.hm.dop.model.UserLike;
 import ee.hm.dop.service.MaterialService;
 import ee.hm.dop.service.UserService;
+import org.apache.commons.httpclient.HttpClient;
+import org.apache.commons.httpclient.methods.GetMethod;
 
 @Path("material")
 public class MaterialResource extends BaseResource {
@@ -252,5 +255,12 @@ public class MaterialResource extends BaseResource {
     public Response getDeletedMaterialsCount() {
         return Response.ok(materialService.getDeletedMaterials().size()).build();
 
+    }
+
+    @GET
+    @Path("externalMaterial/")
+    @Produces(MediaType.APPLICATION_OCTET_STREAM)
+    public Response getProxyUrl(@QueryParam("url") String url_param) throws IOException {
+        return materialService.getProxyUrl(url_param);
     }
 }

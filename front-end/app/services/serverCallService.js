@@ -33,7 +33,11 @@ define(['angularAMD'], function(angularAMD) {
 
                 $http(config)
                     .then(function (response) {
-                        successCallback(response.data);
+                        if(method == "HEAD"){
+                            successCallback(response.headers);
+                        }else{
+                            successCallback(response.data);
+                        }
                     }, function (response) {
                         if (response.status == '419') {
                             authenticatedUserService.removeAuthenticatedUser();
@@ -69,6 +73,9 @@ define(['angularAMD'], function(angularAMD) {
                 },
                 makeDelete: function(url, data, successCallback, errorCallback, finallyCallback) {
                     return makeCall(url, 'DELETE', data, true, successCallback, errorCallback, finallyCallback);
+                },
+                makeHead: function(url, data, successCallback, errorCallback, finallyCallback) {
+                    return makeCall(url, 'HEAD', data, true, successCallback, errorCallback, finallyCallback);
                 },
 
                 makeJsonp: function(url, params, successCallback, errorCallback, finallyCallback) {

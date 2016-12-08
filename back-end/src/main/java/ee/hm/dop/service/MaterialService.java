@@ -4,6 +4,7 @@ import static ee.hm.dop.utils.ConfigurationProperties.SERVER_ADDRESS;
 import static org.apache.commons.lang3.StringUtils.isEmpty;
 import static org.joda.time.DateTime.now;
 
+import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
@@ -14,6 +15,7 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import javax.inject.Inject;
+import javax.ws.rs.core.Response;
 
 import ee.hm.dop.dao.BrokenContentDAO;
 import ee.hm.dop.dao.MaterialDAO;
@@ -24,6 +26,8 @@ import ee.hm.dop.service.learningObject.LearningObjectHandler;
 import ee.hm.dop.utils.TaxonUtils;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.configuration.Configuration;
+import org.apache.commons.httpclient.HttpClient;
+import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.http.client.utils.URIBuilder;
 import org.apache.http.util.TextUtils;
 import org.joda.time.DateTime;
@@ -34,6 +38,9 @@ public class MaterialService extends BaseService implements LearningObjectHandle
 
     public static final String BASICEDUCATION = "BASICEDUCATION";
     public static final String SECONDARYEDUCATION = "SECONDARYEDUCATION";
+    private final String PDF_EXTENSION = ".pdf\"";
+    private final String PDF_MIME_TYPE = "application/pdf";
+    private final String OCTET_STREAM_MIME_TYPE = "application/octet-stream";
 
     private Logger logger = LoggerFactory.getLogger(getClass());
 
@@ -615,4 +622,22 @@ public class MaterialService extends BaseService implements LearningObjectHandle
         Matcher m = p.matcher(url);
         return m.matches();
     }
+
+    public Response getProxyUrl(String url_param) throws IOException {
+        String mediaType = OCTET_STREAM_MIME_TYPE;
+        HttpClient client = new HttpClient();
+        GetMethod get = new GetMethod(url_param);
+        client.executeMethod(get);
+        if(get.getResponseHeaders("Content-Disposition").length == 0){
+            return Response.noContent().build();
+        }
+        String contentDisposition = get.getResponseHeaders("Content-Disposition")[0].getValue();
+        if(contentDisposition.endsWith(PDF_EXTENSION)){
+            mediaType = PDF_MIME_TYPE;
+        }
+        contentDisposition = contentDisposition.replace("attachment", "Inline");
+        return Response.ok(get.getResponseBody(), mediaType).header("Content-Disposition",
+                contentDisposition).build();
+    }
+
 }

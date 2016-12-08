@@ -9,13 +9,12 @@ import ee.hm.dop.helpers.PageHelpers;
 
 public class EditPortfolioPage extends Page {
 	
-	private By addedTag = By.xpath("//a[@data-ng-click='getTagSearchURL($event, $chip.tag)']");
+	private By addedDomain = By.cssSelector("span.hide-overflow.one-row > span > span");
 	private By visibilityButton = By.xpath("//button[@ng-click='$mdOpenMenu($event)']");
 	private By makePublik = By.xpath("//button/span[text()='Tee avalikuks']");
 	private By newChapter = By.partialLinkText("Lisa peatükk");
 	private By chapterTitle = By.xpath("//input[@placeholder='Sisesta peatüki pealkiri']");
 	private By urlLink = By.xpath("//input[@data-ng-model='chapter.resourcePermalink']");
-	private By addMaterial = By.xpath("//button[text()='Lisa materjal']");
 	private By exitAndSave = By.xpath("//button[@data-ng-click='saveAndExitPortfolio()']");
 	private By materialMessage = By.cssSelector("div.md-toast-content");
 	private By arrowRight = By.cssSelector("#chapter-0 .chapter-arrow md-icon");
@@ -30,12 +29,22 @@ public class EditPortfolioPage extends Page {
 	private By insertLink = By.name("insertLink");
 	private By updateMaterial = By.id("add-portfolio-edit-button");
 	private By descriptionField = By.xpath("(//div[starts-with(@id, 'taTextElement')])");
+	private By addNewMaterialButton = By.xpath("//button[@data-ng-click='openMenu($mdOpenMenu, $event)']");
+	private By newMaterialSelection = By.xpath("//button/span[text()='Uus']");
 
 	public EditPortfolioPage clickToSelectDescription() {
 		PageHelpers.waitForSeconds(1500);
 		PageHelpers.waitForVisibility(descriptionField);
 		getDriver().findElement(descriptionField).sendKeys(Keys.CONTROL + "a");
 		return this;
+
+	}
+	
+	public AddMaterialMainPart clickAddMaterial() {
+		getDriver().findElement(addNewMaterialButton).click();
+		PageHelpers.waitForVisibility(newMaterialSelection);
+		getDriver().findElement(newMaterialSelection ).click();
+		return new AddMaterialMainPart();
 
 	}
 	
@@ -102,8 +111,8 @@ public class EditPortfolioPage extends Page {
 	
 	
 	
-	public String getTagText() {
-		return getDriver().findElement(addedTag).getText();
+	public String getDomainText() {
+		return getDriver().findElement(addedDomain).getText();
 		
 	}
 	
@@ -197,13 +206,6 @@ public class EditPortfolioPage extends Page {
 		return this;
 	}
 
-
-	public EditPortfolioPage setUrlLink() {
-		getDriver().findElement(urlLink).clear();
-		getDriver().findElement(urlLink).sendKeys("http://a" + PageHelpers.generateUrl(30));
-		return this;
-	}
-
 	
 	public String isPortfolioChangedToPublic() {
 		return getDriver().findElement(visibilityButton).getText();
@@ -232,11 +234,6 @@ public class EditPortfolioPage extends Page {
 
 	}
 	
-	public AddMaterialMainPart clickAddMaterial() {
-		getDriver().findElement(addMaterial).click();
-		return new AddMaterialMainPart();
-
-	}
 	
 	public EditPortfolioPage setUrlLink(String url) {
 		getDriver().findElement(urlLink).sendKeys(url);

@@ -16,7 +16,7 @@ public class MaterialPage extends Page {
 	private By publisherName = By.xpath("//span[@data-ng-repeat='publisher in material.publishers']");
 	private By likeIcon = By.cssSelector("div.rating-button.md-caption > md-icon.material-icons");
 	private By isLiked = By.cssSelector("div.rating-button.md-caption > span");
-	private By tagRow = By.name("tag");
+	private By tagRow = By.xpath("(//input[starts-with(@id, 'fl-input-')])");
 	private By unselectedStar = By.xpath("//md-icon[@data-ng-if='!hasFavorited']");
 	private By selectedStar = By.xpath("//md-icon[@data-ng-if='hasFavorited']");
 	private By showMoreButton = By.xpath("//button[@ng-click='showMore()']");
