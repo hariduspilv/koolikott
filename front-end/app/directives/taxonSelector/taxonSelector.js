@@ -1,10 +1,11 @@
 define([
     'angularAMD',
-    'services/serverCallService'
+    'services/serverCallService',
+    'services/taxonService'
 ], function (angularAMD) {
     var EDUCATIONAL_CONTEXTS;
 
-    angularAMD.directive('dopTaxonSelector', ['serverCallService', 'metadataService', function () {
+    angularAMD.directive('dopTaxonSelector', function () {
         return {
             scope: {
                 taxon: '=',
@@ -14,8 +15,8 @@ define([
                 touched: '='
             },
             bindToController: true,
-            controller: function ($scope, serverCallService, $rootScope, $timeout, metadataService, $filter) {
-                var self = this;
+            controller: function ($scope, serverCallService, $rootScope, $timeout, metadataService, $filter, taxonService) {
+                var ctrl = this;
                 // get educational contexts
                 if (!EDUCATIONAL_CONTEXTS) {
                     metadataService.loadEducationalContexts(getEducationalContextsSuccess)
@@ -28,20 +29,21 @@ define([
                     buildTaxonPath();
                     $timeout(addTaxonPathListeners());
 
-                    self.basicEducationDomainSubjects = EDUCATIONAL_CONTEXTS.basicEducationDomainSubjects;
-                    self.secondaryEducationDomainSubjects = EDUCATIONAL_CONTEXTS.secondaryEducationDomainSubjects;
+                    ctrl.basicEducationDomainSubjects = EDUCATIONAL_CONTEXTS.basicEducationDomainSubjects;
+                    ctrl.secondaryEducationDomainSubjects = EDUCATIONAL_CONTEXTS.secondaryEducationDomainSubjects;
                     $timeout(function () {
-                        self.isReady = true;
+                        ctrl.isReady = true;
                     });
                 }
 
-                self.reset = function (parentTaxon) {
-                    self.taxon = parentTaxon;
+                ctrl.reset = function (parentTaxon) {
+                    ctrl.taxon = parentTaxon;
                 };
 
-                self.selectEducationalContext = function () {
-                    if (self.touched) {
-                        self.touched.trigger = true;
+                ctrl.selectEducationalContext = function (educationalContext) {
+                    ctrl.selectTaxon(educationalContext);
+                    if (ctrl.touched) {
+                        ctrl.touched.trigger = true;
                     }
 
                     $rootScope.dontCloseSearch = true;
@@ -50,124 +52,44 @@ define([
                     }, 500);
                 };
 
-                self.getTopics = function () {
-                    if (!self.taxonPath) return;
-                    var path = self.taxonPath;
+                ctrl.getTopics = function () {
+                    if (!ctrl.taxonPath) return;
+                    var path = ctrl.taxonPath;
 
                     if (path.subject && path.subject.topics && path.subject.topics.length > 0) return path.subject.topics;
                     if (path.domain && path.domain.topics && path.domain.topics.length > 0) return path.domain.topics;
                     if (path.module && path.module.topics && path.module.topics.length > 0) return path.module.topics;
                 };
 
-                self.isBasicOrSecondaryEducation = function () {
-                    if (self.taxonPath.educationalContext) {
-                        return self.taxonPath.educationalContext.name === 'BASICEDUCATION'
-                            || self.taxonPath.educationalContext.name === 'SECONDARYEDUCATION';
+                ctrl.isBasicOrSecondaryEducation = function () {
+                    if (ctrl.taxonPath.educationalContext) {
+                        return ctrl.taxonPath.educationalContext.name === 'BASICEDUCATION'
+                            || ctrl.taxonPath.educationalContext.name === 'SECONDARYEDUCATION';
                     } else {
                         return false;
                     }
 
                 };
 
-                self.translateTaxon = function (taxon) {
+                ctrl.translateTaxon = function (taxon) {
                     return $filter('translate')(taxon.level.toUpperCase().substr(1) + "_" + taxon.name.toUpperCase());
                 };
 
-                $scope.$on('taxonSelector:clear', function(e, value) {
-                   self.taxon = value;
+                $scope.$on('taxonSelector:clear', function (e, value) {
+                    ctrl.taxon = value;
                 });
 
-                function addTaxonPathListeners() {
-                    /*
-                     * The order of the watchers is important and should be the same as the tree.
-                     */
+                ctrl.selectTaxon = function (taxon) {
+                    ctrl.taxon = taxon;
+                };
 
+                function addTaxonPathListeners() {
                     //Triggers on taxon reset
                     $scope.$watch(function () {
-                        if (self.taxon) return self.taxon.id;
+                        if (ctrl.taxon) return ctrl.taxon.id;
                     }, function (newTaxon, oldTaxon) {
                         if (oldTaxon && newTaxon !== oldTaxon) {
                             buildTaxonPath();
-                        }
-                    }, false);
-
-                    //EducationalContext
-                    $scope.$watch(function () {
-                        if (self.taxonPath && self.taxonPath.educationalContext)
-                            return self.taxonPath.educationalContext.id;
-                    }, function (newEducationalContext, oldEducationalContext) {
-                        if (newEducationalContext !== undefined && newEducationalContext !== oldEducationalContext) {
-                            self.taxon = Object.create(self.taxonPath.educationalContext);
-                        }
-                    }, false);
-
-                    //Domain
-                    $scope.$watch(function () {
-                        if (self.taxonPath && self.taxonPath.domain)
-                            return self.taxonPath.domain.id;
-                    }, function (newDomain, oldDomain) {
-                        if (newDomain !== undefined && newDomain !== oldDomain) {
-                            self.taxon = Object.create(self.taxonPath.domain);
-                        }
-                    }, false);
-
-                    //subject
-                    $scope.$watch(function () {
-                        if (self.taxonPath && self.taxonPath.subject)
-                            return self.taxonPath.subject.id;
-                    }, function (newSubject, oldSubject) {
-                        if (newSubject !== undefined && newSubject !== oldSubject) {
-                            self.taxon = Object.create(self.taxonPath.subject);
-                        }
-                    }, false);
-
-                    //domainSubject
-                    $scope.$watch(function () {
-                        if (self.taxonPath && self.taxonPath.domainSubject)
-                            return self.taxonPath.domainSubject.id;
-                    }, function (newDomainSubject, oldDomainSubject) {
-                        if (newDomainSubject !== undefined && newDomainSubject !== oldDomainSubject) {
-                            self.taxon = Object.create(self.taxonPath.domainSubject);
-                        }
-                    }, false);
-
-                    // specialization
-                    $scope.$watch(function () {
-                        if (self.taxonPath && self.taxonPath.specialization)
-                            return self.taxonPath.specialization.id;
-                    }, function (newSpecialization, oldSpecialization) {
-                        if (newSpecialization !== undefined && newSpecialization !== oldSpecialization) {
-                            self.taxon = Object.create(self.taxonPath.specialization);
-                        }
-                    }, false);
-
-                    // module
-                    $scope.$watch(function () {
-                        if (self.taxonPath && self.taxonPath.module)
-                            return self.taxonPath.module.id;
-                    }, function (newModule, oldModule) {
-                        if (newModule !== undefined && newModule !== oldModule) {
-                            self.taxon = Object.create(self.taxonPath.module);
-                        }
-                    }, false);
-
-                    // topic
-                    $scope.$watch(function () {
-                        if (self.taxonPath && self.taxonPath.topic)
-                            return self.taxonPath.topic.id;
-                    }, function (newTopic, oldTopic) {
-                        if (newTopic !== undefined && newTopic !== oldTopic) {
-                            self.taxon = Object.create(self.taxonPath.topic);
-                        }
-                    }, false);
-
-                    // subtopic
-                    $scope.$watch(function () {
-                        if (self.taxonPath && self.taxonPath.subtopic)
-                            return self.taxonPath.subtopic.id;
-                    }, function (newSubtopic, oldSubtopic) {
-                        if (newSubtopic !== undefined && newSubtopic !== oldSubtopic) {
-                            self.taxon = Object.create(self.taxonPath.subtopic);
                         }
                     }, false);
                 }
@@ -218,35 +140,34 @@ define([
                 }
 
                 function setEducationalContexts() {
-                    self.educationalContexts = EDUCATIONAL_CONTEXTS;
-                    self.educationalContexts.sort(function (context1, context2) {
+                    ctrl.educationalContexts = EDUCATIONAL_CONTEXTS;
+                    ctrl.educationalContexts.sort(function (context1, context2) {
                         return context1.id - context2.id;
                     });
                 }
 
                 function buildTaxonPath() {
-                    self.taxonPath = {};
-                    if (self.taxon) {
-                        self.taxonPath.educationalContext = $rootScope.taxonUtils.getEducationalContext(self.taxon);
-                        self.taxonPath.domain = $rootScope.taxonUtils.getDomain(self.taxon);
-                        self.taxonPath.subject = $rootScope.taxonUtils.getSubject(self.taxon);
+                    ctrl.taxonPath = {};
+                    if (ctrl.taxon) {
+                        ctrl.taxonPath.educationalContext = taxonService.getEducationalContext(ctrl.taxon);
+                        ctrl.taxonPath.domain = taxonService.getDomain(ctrl.taxon);
+                        ctrl.taxonPath.subject = taxonService.getSubject(ctrl.taxon);
 
-                        if (self.taxonPath.subject) {
-                            self.taxonPath.domainSubject = Object.create(self.taxonPath.subject);
-                        } else if (self.taxonPath.domain) {
-                            self.taxonPath.domainSubject = Object.create(self.taxonPath.domain);
+                        if (ctrl.taxonPath.subject) {
+                            ctrl.taxonPath.domainSubject = ctrl.taxonPath.subject;
+                        } else if (ctrl.taxonPath.domain) {
+                            ctrl.taxonPath.domainSubject = ctrl.taxonPath.domain;
                         }
 
-                        self.taxonPath.specialization = $rootScope.taxonUtils.getSpecialization(self.taxon);
-                        self.taxonPath.module = $rootScope.taxonUtils.getModule(self.taxon);
-                        self.taxonPath.topic = $rootScope.taxonUtils.getTopic(self.taxon);
-                        self.taxonPath.subtopic = $rootScope.taxonUtils.getSubtopic(self.taxon);
+                        ctrl.taxonPath.specialization = taxonService.getSpecialization(ctrl.taxon);
+                        ctrl.taxonPath.module = taxonService.getModule(ctrl.taxon);
+                        ctrl.taxonPath.topic = taxonService.getTopic(ctrl.taxon);
+                        ctrl.taxonPath.subtopic = taxonService.getSubtopic(ctrl.taxon);
                     }
                 }
             },
             controllerAs: 'ctrl',
             templateUrl: 'directives/taxonSelector/taxonSelector.html'
-
         };
-    }]);
+    });
 });

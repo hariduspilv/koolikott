@@ -26,7 +26,7 @@ import ee.hm.dop.model.Material;
 import ee.hm.dop.model.Portfolio;
 import ee.hm.dop.model.Recommendation;
 import ee.hm.dop.model.SearchResult;
-import ee.hm.dop.model.TargetGroup;
+import ee.hm.dop.model.TargetGroupEnum;
 import ee.hm.dop.model.User;
 import ee.hm.dop.model.Visibility;
 import org.joda.time.DateTime;
@@ -555,8 +555,8 @@ public class PortfolioResourceTest extends ResourceIntegrationTestBase {
         assertEquals(0, chapter.getSubchapters().size());
 
         assertEquals(2, portfolio.getTargetGroups().size());
-        assertTrue(portfolio.getTargetGroups().contains(TargetGroup.ZERO_FIVE));
-        assertTrue(portfolio.getTargetGroups().contains(TargetGroup.SIX_SEVEN));
+        assertTrue(TargetGroupEnum.containsTargetGroup(portfolio.getTargetGroups(), TargetGroupEnum.ZERO_FIVE));
+        assertTrue(TargetGroupEnum.containsTargetGroup(portfolio.getTargetGroups(), TargetGroupEnum.SIX_SEVEN));
         assertEquals("Lifelong_learning_and_career_planning", portfolio.getCrossCurricularThemes().get(0).getName());
         assertEquals("Cultural_and_value_competence", portfolio.getKeyCompetences().get(0).getName());
         assertEquals(Visibility.PUBLIC, portfolio.getVisibility());

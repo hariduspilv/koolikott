@@ -3,7 +3,8 @@ define([
     'services/translationService',
     'services/authenticatedUserService'
 ], function (angularAMD) {
-    angularAMD.directive('dopShare', ['$rootScope', '$location', '$window', 'translationService', '$translate', 'authenticatedUserService', '$mdDialog', function($rootScope, $location, $window, translationService, $translate, authenticatedUserService, $mdDialog) {
+    angularAMD.directive('dopShare', ['$rootScope', '$location', '$window', 'translationService', '$translate', 'authenticatedUserService', '$mdDialog', 'serverCallService', 'toastService',
+        function($rootScope, $location, $window, translationService, $translate, authenticatedUserService, $mdDialog, serverCallService, toastService) {
         return {
             scope: {
                 title: '=',
@@ -12,6 +13,7 @@ define([
             },
             templateUrl: 'directives/share/share.html',
             controller: function($scope) {
+
                 $scope.isVisible = function () {
                     if ($scope.object) {
                         if ($scope.object.deleted) {
@@ -27,10 +29,11 @@ define([
                         return true;
                     }
 
-                    if ($rootScope.savedPortfolio) {
-                        if ($rootScope.savedPortfolio.visibility === 'PUBLIC' || $rootScope.savedPortfolio.visibility === 'NOT_LISTED') {
+
+                    if ($scope.object) {
+                        if (isPublic() || isNotListed() || isOwner() || authenticatedUserService.isAdmin() || authenticatedUserService.isModerator()) {
                             return true;
-                        } else if ($rootScope.savedPortfolio.visibility === 'PRIVATE') {
+                        } else if (isPrivate()) {
                             return false;
                         }
                     }
@@ -68,6 +71,18 @@ define([
                     }
                 ];
 
+                function isPublic() {
+                    return $scope.object.visibility === 'PUBLIC';
+                }
+
+                function isPrivate() {
+                    return $scope.object.visibility === 'PRIVATE';
+                }
+
+                function isNotListed() {
+                    return $scope.object.visibility === 'NOT_LISTED';
+                }
+
                 function isOwner () {
                     if (!authenticatedUserService.isAuthenticated()) {
                         return false;
@@ -81,7 +96,7 @@ define([
                 }
 
                 $scope.checkOwnerAndShowDialog = function ($event, item) {
-                    if (!isOwner() && $rootScope.savedPortfolio.visibility !== 'PUBLIC') {
+                    if ((!isOwner() && !isPublic()) || (isOwner() && isPrivate())) {
                         $event.preventDefault();
                         showWarningDialog($event, item);
                     }
@@ -94,7 +109,8 @@ define([
                         controller: DialogController,
                         targetEvent: ev,
                         locals: {
-                            item: item
+                            item: item,
+                            portfolio: $scope.object
                         }
                     });
                 }
@@ -109,17 +125,48 @@ define([
                 }
 
                 function DialogController($scope, $mdDialog, locals) {
-                    $scope.title = $translate.instant('THIS_IS_UNLISTED');
-                    $scope.context = $translate.instant('THINK_AND_SHARE');
-                    $scope.ariaLabel = $translate.instant('THIS_IS_UNLISTED');
-                    $scope.ok = $translate.instant('BUTTON_SHARE');
-                    $scope.cancel = $translate.instant('BUTTON_CANCEL');
+                    if((isOwner() || authenticatedUserService.isAdmin() || authenticatedUserService.isModerator()) && isPrivate()) {
+                        $scope.showButtons = true;
+
+                        $scope.title = $translate.instant('THIS_IS_PRIVATE');
+                        $scope.context = $translate.instant('SHARE_PRIVATE_PORTFOLIO');
+                        $scope.ariaLabel = $translate.instant('THIS_IS_PRIVATE');
+                    } else {
+                        $scope.title = $translate.instant('THIS_IS_UNLISTED');
+                        $scope.context = $translate.instant('THINK_AND_SHARE');
+                        $scope.ariaLabel = $translate.instant('THIS_IS_UNLISTED');
+                    }
+
                     $scope.url = locals.item.url;
                     $scope.target = locals.item.target;
 
-                    $scope.close = function() {
+                    $scope.updatePortfolio = function (state) {
+                        var portfolioClone = angular.copy(locals.portfolio);
+                        portfolioClone.visibility = state;
+                        serverCallService.makePost("rest/portfolio/update", portfolioClone, updateSuccess, updateFail);
                         $mdDialog.cancel();
                     };
+
+                    function updateSuccess(data) {
+                        if (isEmpty(data)) {
+                            updateFail();
+                        } else {
+                            locals.portfolio.visibility = data.visibility;
+                            toastService.show('PORTFOLIO_SAVED');
+                        }
+                    }
+
+                    function updateFail() {
+                        console.log("Updating portfolio failed")
+                    }
+
+                    $scope.back = function() {
+                        $mdDialog.cancel();
+                    }
+
+                    $scope.success = function() {
+                        $mdDialog.cancel();
+                    }
                 }
 
                 setShareParams();

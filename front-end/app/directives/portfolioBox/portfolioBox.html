@@ -1,6 +1,7 @@
 <md-card class="card-sm" id="portfolio-card-{{portfolio.id}}"
          data-ng-click="navigateTo(portfolio, $event)">
-         <div class="card__icon-holder" data-ng-if="isAuthenticated()">
+         <!-- Hidden because waiting for correct design-->
+         <div class="card__icon-holder" data-ng-if="isAuthenticated()" hide>
            <md-icon data-ng-if="portfolio.visibility === 'PRIVATE'">lock</md-icon>
            <md-icon data-ng-if="portfolio.visibility === 'NOT_LISTED'">link</md-icon>
            <md-tooltip md-direction="bottom">

@@ -24,6 +24,13 @@ public class SuggestResource extends BaseResource {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Response suggest(@QueryParam("q") String query){
-        return suggestService.suggest(query);
+        return suggestService.suggest(query, false);
+    }
+
+    @GET
+    @Path("tag")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response suggestSystemTag(@QueryParam("q") String query){
+        return suggestService.suggest(query, true);
     }
 }

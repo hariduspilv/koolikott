@@ -8,6 +8,7 @@ define([
     'services/toastService',
     'services/storageService',
     'services/targetGroupService',
+    'services/taxonService',
     'directives/copyPermalink/copyPermalink',
     'directives/report/improper/improper',
     'directives/report/brokenLink/brokenLink',
@@ -18,8 +19,8 @@ define([
     'directives/favorite/favorite',
     'directives/share/share'
 ], function (app, angularAMD) {
-    app.directive('dopPortfolioSummaryCard', ['translationService', '$location', '$mdSidenav', '$mdDialog', '$rootScope', 'authenticatedUserService', '$route', 'dialogService', 'serverCallService', 'toastService', 'storageService', 'targetGroupService',
-        function (translationService, $location, $mdSidenav, $mdDialog, $rootScope, authenticatedUserService, $route, dialogService, serverCallService, toastService, storageService, targetGroupService) {
+    app.directive('dopPortfolioSummaryCard', ['translationService', '$location', '$mdDialog', '$rootScope', 'authenticatedUserService', '$route', 'dialogService', 'serverCallService', 'toastService', 'storageService', 'targetGroupService', 'taxonService',
+        function (translationService, $location, $mdDialog, $rootScope, authenticatedUserService, $route, dialogService, serverCallService, toastService, storageService, targetGroupService, taxonService) {
             return {
                 scope: {
                     portfolio: '=',
@@ -33,15 +34,26 @@ define([
                         $scope.pageUrl = $location.absUrl();
                         $scope.isViewPortforlioPage = $rootScope.isViewPortforlioPage;
                         $scope.isEditPortfolioMode = $rootScope.isEditPortfolioMode;
-                        if ($scope.portfolio) {
-                            $scope.portfolioSubject = getSubject($scope.portfolio.taxon);
-                        }
                     }
 
-                    $scope.getEducationalContext = function () {
-                        var educationalContext = $rootScope.taxonUtils.getEducationalContext($scope.portfolio.taxon);
+                    $scope.getEducationalContext = function (taxon) {
+                        var educationalContext = taxonService.getEducationalContext(taxon);
                         if (educationalContext) {
                             return educationalContext.name.toUpperCase();
+                        }
+                    };
+
+                    $scope.getDomain = function (taxon) {
+                        var domain = taxonService.getDomain(taxon);
+                        if (domain) {
+                            return domain.name.toUpperCase();
+                        }
+                    };
+
+                    $scope.getSubject = function (taxon) {
+                        var subject = taxonService.getSubject(taxon);
+                        if (subject) {
+                            return subject.name.toUpperCase();
                         }
                     };
 
@@ -110,7 +122,7 @@ define([
                     };
 
                     function getSubject(taxon) {
-                        return $rootScope.taxonUtils.getSubject(taxon)
+                        return taxonService.getSubject(taxon)
                     }
 
                     function deletePortfolio() {

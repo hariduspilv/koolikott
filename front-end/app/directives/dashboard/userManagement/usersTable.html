@@ -17,11 +17,11 @@
     </td>
     <td md-cell></td>
   </tr>
-  <tr md-row ng-repeat="user in data">
+  <tr md-row ng-repeat="user in data" data-ng-click="editUser(user)" class="pointer">
     <td md-cell data-ng-bind="user.username"></td>
     <td md-cell data-ng-bind="user.name + ' ' + user.surname"></td>
     <td md-cell>
-      <span layout="row" layout-align="start center" data-ng-bind="user.role"></span>
+      <span layout="row" layout-align="start center">{{getTranslation(user.role)}}</span>
     </td>
     <td md-cell data-ng-if="showTaxonColumn">
       <span layout="row" layout-align="start center" data-ng-repeat="taxon in user.userTaxons">

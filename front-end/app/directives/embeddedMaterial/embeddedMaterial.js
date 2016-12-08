@@ -6,8 +6,8 @@ define([
     'services/iconService',
     'services/embedService'
 ], function (app) {
-    app.directive('dopEmbeddedMaterial', ['translationService', 'iconService', 'embedService',
-        function (translationService, iconService, embedService) {
+    app.directive('dopEmbeddedMaterial', ['translationService', 'iconService', 'embedService', 'serverCallService', 'dialogService',
+        function (translationService, iconService, embedService, serverCallService, dialogService) {
             return {
                 scope: {
                     material: '=',
@@ -27,17 +27,52 @@ define([
                         $scope.isEditPortfolioMode = $rootScope.isEditPortfolioMode;
 
                         if ($scope.material) {
+                            getContentType();
                             $scope.materialType = getType();
                             getSourceType();
                         }
+                    }
+
+                    function getContentType () {
+                        var baseUrl = document.location.origin;
+                        // If the initial type is a LINK, try to ask the type from our proxy
+                        if(matchType($scope.material.source) === 'LINK'){
+                            $scope.proxyUrl = baseUrl + "/rest/material/externalMaterial?url=" + encodeURIComponent($scope.material.source);
+                            serverCallService.makeHead($scope.proxyUrl, {}, probeContentSuccess, probeContentFail);
+                        }else{
+                            $scope.sourceType = matchType($scope.material.source);
+                        }
+                    }
+
+                    function probeContentSuccess(response) {
+                        if(!response()['content-disposition']){
+                            $scope.sourceType = 'LINK';
+                            return;
+                        }
+                        var filename = response()['content-disposition'].match(/filename="(.+)"/)[1];
+                        $scope.sourceType = matchType(filename);
+                        if($scope.sourceType !== 'LINK'){
+                            $scope.material.source = $scope.proxyUrl;
+                        }
+                    }
+
+                    function probeContentFail() {
+                        console.log("Content probing failed!");
                     }
 
                     $scope.removeMaterial = function ($event, material) {
                         $event.preventDefault();
                         $event.stopPropagation();
 
-                        var index = $scope.chapter.materials.indexOf(material);
-                        $scope.chapter.materials.splice(index, 1);
+                        var removeMaterialFromChapter = function () {
+                            var index = $scope.chapter.materials.indexOf(material);
+                            $scope.chapter.materials.splice(index, 1);
+                        };
+
+                        dialogService.showDeleteConfirmationDialog(
+                            'PORTFOLIO_DELETE_MATERIAL_CONFIRM_TITLE',
+                            'PORTFOLIO_DELETE_MATERIAL_CONFIRM_MESSAGE',
+                            removeMaterialFromChapter);
                     };
 
                     $scope.getCorrectLanguageTitle = function (material) {

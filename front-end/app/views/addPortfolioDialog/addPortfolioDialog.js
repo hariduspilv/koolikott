@@ -5,11 +5,12 @@ define([
     'services/storageService',
     'services/pictureUploadService'
 ], function (app) {
-    return ['$scope', '$mdDialog', '$location', 'serverCallService', '$rootScope', 'storageService', '$timeout', 'pictureUploadService', '$filter', 'translationService',
-        function ($scope, $mdDialog, $location, serverCallService, $rootScope, storageService, $timeout, pictureUploadService, $filter, translationService) {
+    return ['$scope', '$mdDialog', '$location', 'serverCallService', '$rootScope', 'storageService', '$timeout', 'pictureUploadService', '$filter', 'translationService', 'textAngularManager',
+        function ($scope, $mdDialog, $location, serverCallService, $rootScope, storageService, $timeout, pictureUploadService, $filter, translationService, textAngularManager) {
             $scope.isSaving = false;
             $scope.showHints = true;
             $scope.isTouched = {};
+            $scope.isSummaryVisible = false;
 
             var uploadingPicture = false;
 
@@ -22,6 +23,7 @@ define([
 
                 if ($scope.portfolio.id != null) {
                     $scope.isEditPortfolio = true;
+                    $scope.isSummaryVisible = true;
 
                     var portfolioClone = angular.copy(portfolio);
 
@@ -85,6 +87,7 @@ define([
                         openCloseChapter: true
                     });
                     $rootScope.savedPortfolio = portfolio;
+                    $rootScope.newPortfolioCreated = true;
                     $mdDialog.hide();
                     $location.url('/portfolio/edit?id=' + $rootScope.savedPortfolio.id);
                 }
@@ -152,6 +155,15 @@ define([
                 $scope.maxPictureSize = 10;
                 console.log('Failed to get max picture size, using 10MB as default.');
             }
+
+            $scope.openSummary = function () {
+                $scope.isSummaryVisible = true;
+
+                $timeout(function () {
+                    var editorScope = textAngularManager.retrieveEditor('add-portfolio-description-input').scope;
+                    editorScope.displayElements.text.trigger('focus');
+                }, 0, false);
+            };
 
             init();
         }

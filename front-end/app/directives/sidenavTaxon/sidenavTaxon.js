@@ -1,8 +1,9 @@
 define([
     'angularAMD',
     'services/recursionHelper',
+    'services/taxonService'
 ], function (angularAMD) {
-    angularAMD.directive('dopSidenavTaxon', ['RecursionHelper', 'searchService', function (RecursionHelper, searchService) {
+    angularAMD.directive('dopSidenavTaxon', ['RecursionHelper', 'searchService', 'taxonService', function (RecursionHelper, searchService, taxonService) {
         return {
             scope: {
                 taxon: '=',
@@ -18,32 +19,33 @@ define([
 
                 if ($scope.taxon) {
                     $scope.taxonName = getTaxonTranslation($scope.taxon);
+                    var parentEdCtx;
+                    if ($scope.taxon.parentId) parentEdCtx = taxonService.getEducationalContext($scope.taxon);
 
-                    if ($scope.taxon.domains && $scope.taxon.domains.length > 0) {
-                        $scope.taxonChildren = $scope.taxon.domains;
-                        $scope.childrenCount = $scope.taxon.domains.length;
-                        $scope.hasChildren = true;
+                    //Taxon is EducationalContext
+                    if ($scope.taxon.domains) {
+                        checkTaxonLevelAndAssignValues(".EducationalContext", $scope.taxon.domains)
                     }
-
-                    if ($scope.taxon.educationalContext) {
-                        if ($scope.taxon.educationalContext.name === 'PRESCHOOLEDUCATION') {
+                    //Taxon is Domain
+                    else if ($scope.taxon.parentLevel === ".EducationalContext") {
+                        if (parentEdCtx.name === 'PRESCHOOLEDUCATION') {
                             checkTaxonLevelAndAssignValues('.Domain', $scope.taxon.topics);
                         }
 
-                        if ($scope.taxon.educationalContext.name === 'BASICEDUCATION' || $scope.taxon.educationalContext.name === 'SECONDARYEDUCATION') {
+                        if (parentEdCtx.name === 'BASICEDUCATION' || parentEdCtx.name === 'SECONDARYEDUCATION') {
                             checkTaxonLevelAndAssignValues('.Domain', $scope.taxon.subjects);
                         }
 
-                        if ($scope.taxon.educationalContext.name === 'VOCATIONALEDUCATION') {
+                        if (parentEdCtx.name === 'VOCATIONALEDUCATION') {
                             checkTaxonLevelAndAssignValues('.Domain', $scope.taxon.specializations);
                         }
-
-                    } else if ($scope.taxon.domain && $scope.taxon.domain.educationalContext) {
-                        if ($scope.taxon.domain.educationalContext.name === 'BASICEDUCATION' || $scope.taxon.domain.educationalContext.name === 'SECONDARYEDUCATION') {
+                        // Taxon is Subject or Specialization
+                    } else if ($scope.taxon.parentLevel === ".Domain") {
+                        if (parentEdCtx.name === 'BASICEDUCATION' || parentEdCtx.name === 'SECONDARYEDUCATION') {
                             checkTaxonLevelAndAssignValues('.Subject', $scope.taxon.topics);
                         }
 
-                        if ($scope.taxon.domain.educationalContext.name === 'VOCATIONALEDUCATION') {
+                        if (parentEdCtx.name === 'VOCATIONALEDUCATION') {
                             checkTaxonLevelAndAssignValues('.Specialization', $scope.taxon.modules);
                         }
                     }
@@ -91,7 +93,7 @@ define([
                 };
 
                 function getTaxonTranslation() {
-                    if ($scope.taxon.level !== '.EducationalContext') {
+                    if ($scope.taxon.level && $scope.taxon.level !== '.EducationalContext') {
                         return $scope.taxon.level.toUpperCase().substr(1) + "_" + $scope.taxon.name.toUpperCase();
                     } else {
                         return $scope.taxon.name.toUpperCase();
@@ -121,7 +123,9 @@ define([
                 }
 
                 function getTaxonCountKey(taxon) {
-                    return taxon.level.toUpperCase() + "_" + taxon.name.toUpperCase() + "_COUNT"
+                    var key = "";
+                    if (taxon.level) key = taxon.level.toUpperCase() + "_";
+                    return key + taxon.name.toUpperCase() + "_COUNT"
 
                 }
             }

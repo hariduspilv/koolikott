@@ -16,7 +16,7 @@ public class MaterialPage extends Page {
 	private By publisherName = By.xpath("//span[@data-ng-repeat='publisher in material.publishers']");
 	private By likeIcon = By.cssSelector("div.rating-button.md-caption > md-icon.material-icons");
 	private By isLiked = By.cssSelector("div.rating-button.md-caption > span");
-	private By tagRow = By.name("tag");
+	private By tagRow = By.xpath("(//input[starts-with(@id, 'fl-input-')])");
 	private By unselectedStar = By.xpath("//md-icon[@data-ng-if='!hasFavorited']");
 	private By selectedStar = By.xpath("//md-icon[@data-ng-if='hasFavorited']");
 	private By showMoreButton = By.xpath("//button[@ng-click='showMore()']");
@@ -24,7 +24,7 @@ public class MaterialPage extends Page {
 	private By materialType = By.xpath("//md-card[@id='material-card']/md-card-content/div/div/div[2]/div[3]/p/span");
 
 	public MaterialPage insertTags() {
-		for (int i = 0; i < 12; i++) {
+		for (int i = 0; i < 13; i++) {
 			String[] tagsArray = { "life", "school", "followback", "art", "fashion", "sky", "beauty", "noir", "ink",
 					"design", "craft", "beatles", "antique", "monoart", "architect", "linedesign", "style", "classical",
 					"vintage", "vector", "focus", "exposure", "usa", "sport", "brand", "fancy", "france", "bag", "free",
@@ -136,6 +136,7 @@ public class MaterialPage extends Page {
 	
 
 	public EditMaterialMainPart clickEditMaterial() {
+		PageHelpers.waitForVisibility(editMaterial);
 		getDriver().findElement(editMaterial).sendKeys(Keys.ENTER);
 		return new EditMaterialMainPart();
 

@@ -29,6 +29,23 @@ public class UserResource extends BaseResource {
     private AuthenticatedUserService authenticatedUserService;
 
     @GET
+    @Path("all")
+    @RolesAllowed("ADMIN")
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<User> getAll() {
+        return userService.getAllUsers(getLoggedInUser());
+    }
+
+    @POST
+    @RolesAllowed("ADMIN")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public User updateUser(User user) {
+        if (user == null) throwBadRequestException("No user received!");
+        return userService.update(user, getLoggedInUser());
+    }
+
+    @GET
     @Produces(MediaType.APPLICATION_JSON)
     public User get(@QueryParam("username") String username) {
         if (isBlank(username)) {
@@ -90,5 +107,21 @@ public class UserResource extends BaseResource {
     @Produces(MediaType.APPLICATION_JSON)
     public List<User> getRestrictedUsers() {
         return userService.getRestrictedUsers(getLoggedInUser());
+    }
+
+    @GET
+    @Path("moderator/count")
+    @RolesAllowed("ADMIN")
+    @Produces(MediaType.APPLICATION_JSON)
+    public int getModeratorsCount() {
+        return userService.getModerators(getLoggedInUser()).size();
+    }
+
+    @GET
+    @Path("restrictedUser/count")
+    @RolesAllowed("ADMIN")
+    @Produces(MediaType.APPLICATION_JSON)
+    public int getRestrictedUsersCount() {
+        return userService.getRestrictedUsers(getLoggedInUser()).size();
     }
 }

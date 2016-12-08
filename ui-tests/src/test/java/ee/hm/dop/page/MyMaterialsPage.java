@@ -12,7 +12,7 @@ public class MyMaterialsPage extends Page {
 	private By materialBox = By.xpath("//div/md-icon[text()='radio_button_unchecked']");
 	private By selectMaterial1 = By.xpath("//div/md-icon[text()='check_circle']");
 	private By searchResultMaterial = By.xpath("//h4[@data-ng-bind='getCorrectLanguageTitle(material)']");
-	private By starIcon = By.xpath("//div[@aria-label='Lisa lemmikuks']");
+	private By starIcon = By.xpath("//md-icon[@data-ng-click='favorite($event)']");
 	private By selectMaterialBox = By.xpath("//md-card[@data-ng-click='navigateTo(material, $event)']");
 	private By materialMessage = By.cssSelector("div.md-toast-content");
 	

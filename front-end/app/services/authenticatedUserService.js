@@ -9,11 +9,11 @@ define(['angularAMD'], function (angularAMD) {
                     // HACK: Handling stack overflow caused by taxons
                     authenticatedUser.user.userTaxons = instance.getFirstLevelTaxons(authenticatedUser.user.userTaxons);
 
-                    localStorage.setItem("authenticatedUser", JSOG.stringify(authenticatedUser));
+                    localStorage.setItem("authenticatedUser", JSON.stringify(authenticatedUser));
                 },
 
                 getAuthenticatedUser: function () {
-                    return JSOG.parse(localStorage.getItem("authenticatedUser"));
+                    return JSON.parse(localStorage.getItem("authenticatedUser"));
                 },
 
                 removeAuthenticatedUser: function () {
@@ -29,17 +29,17 @@ define(['angularAMD'], function (angularAMD) {
                 },
 
                 isAdmin: function () {
-                	var user = instance.getUser();
+                    var user = instance.getUser();
                     return user && user.role === 'ADMIN';
                 },
 
                 isPublisher: function () {
-                	var user = instance.getUser();
+                    var user = instance.getUser();
                     return user && isDefined(user.publisher);
                 },
 
                 isRestricted: function () {
-                	var user = instance.getUser();
+                    var user = instance.getUser();
                     return user && user.role === 'RESTRICTED';
                 },
 
@@ -66,9 +66,9 @@ define(['angularAMD'], function (angularAMD) {
                     return null;
                 },
 
-                getFirstLevelTaxons: function(userTaxons) {
+                getFirstLevelTaxons: function (userTaxons) {
                     var taxonList = [];
-                    userTaxons.forEach(function(entry) {
+                    userTaxons.forEach(function (entry) {
                         var taxon = {'id': entry.id};
                         taxonList.push(taxon);
                     });

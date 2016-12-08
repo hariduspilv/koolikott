@@ -1,6 +1,7 @@
 define([
     'angularAMD',
     'services/targetGroupService',
+    'services/taxonService',
     'directives/selectClose/selectClose'
 ], function (angularAMD) {
     angularAMD.directive('dopTargetGroupSelector', function () {
@@ -12,7 +13,8 @@ define([
                 markRequired: '='
             },
             templateUrl: 'directives/targetGroupSelector/targetGroupSelector.html',
-            controller: function ($scope, $rootScope, $timeout, targetGroupService, $translate) {
+            controller: function ($scope, $rootScope, $timeout, targetGroupService, $translate, taxonService) {
+                $scope.isReady = false;
                 init();
 
                 function init() {
@@ -42,8 +44,8 @@ define([
 
                     $scope.$watch('taxon', function (newTaxon, oldTaxon) {
                         if (newTaxon !== oldTaxon) {
-                            var newEdCtx = $rootScope.taxonUtils.getEducationalContext(newTaxon);
-                            var oldEdCtx = $rootScope.taxonUtils.getEducationalContext(oldTaxon);
+                            var newEdCtx = taxonService.getEducationalContext(newTaxon);
+                            var oldEdCtx = taxonService.getEducationalContext(oldTaxon);
 
                             if (!oldEdCtx || (newEdCtx && newEdCtx.name !== oldEdCtx.name) || !newEdCtx) {
                                 fill();
@@ -56,10 +58,10 @@ define([
                 function getDifference(newArray, oldArray) {
                     var result = {};
 
-                    if(newArray != null) {
+                    if (newArray != null) {
                         newArray.forEach(function (item) {
 
-                            if(oldArray != null) {
+                            if (oldArray != null) {
                                 if (oldArray.indexOf(item) === -1) {
                                     result.removed = false;
                                     result.item = item;
@@ -70,9 +72,9 @@ define([
                             }
                         });
                     }
-                    if(oldArray != null) {
+                    if (oldArray != null) {
                         oldArray.forEach(function (item) {
-                            if(newArray != null) {
+                            if (newArray != null) {
                                 if (newArray.indexOf(item) === -1) {
                                     result.removed = true;
                                     result.item = item;
@@ -115,23 +117,23 @@ define([
                         $scope.selectedTargetGroup = null;
                         $scope.targetGroups = [];
                         if ($scope.groups && $scope.groups.length === 1) {
-                            $scope.selectedTargetGroup =  $scope.groups;
+                            $scope.selectedTargetGroup = $scope.groups;
                         }
                     }
                 }
 
-                $scope.parentClick = function(e) {
-                    if(!$scope.selectedTargetGroup) {
+                $scope.parentClick = function (e) {
+                    if (!$scope.selectedTargetGroup) {
                         $scope.selectedTargetGroup = [];
                     }
 
-                    if(e.group && $scope.selectedTargetGroup.indexOf(e.group.label) == -1) {
+                    if (e.group && $scope.selectedTargetGroup.indexOf(e.group.label) == -1) {
                         added = true;
                     } else {
                         added = $scope.selectedTargetGroup === [];
                     }
 
-                    if(added) {
+                    if (added) {
                         addMissingGrades(e.group.children);
                     } else {
                         removeGrades(e.group.children);
@@ -141,7 +143,7 @@ define([
                 };
 
                 // Reduced text for select label
-                $scope.getSelectedText = function() {
+                $scope.getSelectedText = function () {
                     if ($scope.targetGroups && $scope.targetGroups.length > 0) {
                         return targetGroupService.getSelectedText($scope.targetGroups);
                     } else {
@@ -164,10 +166,10 @@ define([
                 }
 
                 function addMissingGrades(targetGroups) {
-                    if(!$scope.selectedTargetGroup) {
+                    if (!$scope.selectedTargetGroup) {
                         $scope.selectedTargetGroup = [];
                     }
-                    var grades = getMissingGrades($scope.selectedTargetGroup,targetGroups);
+                    var grades = getMissingGrades($scope.selectedTargetGroup, targetGroups);
                     for (var i = 0; i < grades.length; i++) {
                         $scope.selectedTargetGroup.push(grades[i]);
                     }
@@ -181,17 +183,17 @@ define([
                 }
 
                 function updateParents() {
-                    for(var i = 0; i < $scope.groups.length; i++) {
+                    for (var i = 0; i < $scope.groups.length; i++) {
                         var hasChildren = targetGroupService.hasAllChildren($scope.groups[i], $scope.selectedTargetGroup);
 
-                        if(hasChildren) {
-                            if($scope.selectedTargetGroup.indexOf($scope.groups[i].label) == -1) {
+                        if (hasChildren) {
+                            if ($scope.selectedTargetGroup.indexOf($scope.groups[i].label) == -1) {
                                 $scope.selectedTargetGroup.push($scope.groups[i].label);
                             }
                         } else {
-                            if($scope.selectedTargetGroup) {
+                            if ($scope.selectedTargetGroup) {
                                 var index = $scope.selectedTargetGroup.indexOf($scope.groups[i].label);
-                                if(index != -1) {
+                                if (index != -1) {
                                     $scope.selectedTargetGroup.splice(index, 1);
                                 }
                             }
@@ -200,8 +202,8 @@ define([
                     }
                 }
 
-                $scope.update = function() {
-                    if(!$scope.selectedTargetGroup) {
+                $scope.update = function () {
+                    if (!$scope.selectedTargetGroup) {
                         $scope.selectedTargetGroup = targetGroupService.getLabelByTargetGroups($scope.targetGroups);
                     }
                 }

@@ -1,17 +1,18 @@
 define([
     'app',
+    'angularAMD',
     'jquery',
     'services/translationService',
     'directives/dashboard/userManagement/moderatorsTable',
     'directives/dashboard/userManagement/restrictedUsersTable',
-    'directives/dashboard/deletedPortfolio/deletedPortfolio',
-    'directives/dashboard/deletedMaterial/deletedMaterial',
+    'directives/dashboard/deleted/deletedPortfolio',
+    'directives/dashboard/deleted/deletedMaterial',
     'directives/dashboard/improper/improperMaterial',
     'directives/dashboard/improper/improperPortfolio',
     'directives/dashboard/broken/brokenMaterial',
-], function (app) {
-    return ['$scope', '$location', 'translationService',
-        function ($scope, $location, translationService) {
+], function (app, angularAMD) {
+    return ['$scope', '$location', 'translationService', 'serverCallService', '$filter', '$mdDialog', '$route',
+        function ($scope, $location, translationService, serverCallService, $filter, $mdDialog, $route) {
             $scope.viewPath = $location.path();
             var collection = null;
             var filtredCollection = null;
@@ -30,6 +31,60 @@ define([
                 limit: 10,
                 page: 1
             };
+
+            init();
+
+            function init() {
+                serverCallService.makeGet("rest/user/all", {}, successUsersCall, fail);
+            }
+
+            function successUsersCall(data) {
+                if (data) $scope.users = data;
+                else fail();
+            }
+
+            function fail() {
+                console.log("Failed to get users list");
+            }
+
+            $scope.getTranslation = function (key) {
+                return $filter('translate')(key);
+            };
+
+            $scope.editUser = function (user) {
+                if(!user) return;
+                var editUserScope = $scope.$new(true);
+                editUserScope.user = user;
+
+                $mdDialog.show(angularAMD.route({
+                    templateUrl: 'views/editUserDialog/editUser.html',
+                    controllerUrl: 'views/editUserDialog/editUser',
+                    scope: editUserScope
+                })).then(function () {
+                    $route.reload();
+
+                });
+            };
+
+            $scope.querySearch = function (query) {
+                return query ? $scope.users.filter(createFilterFor(query)) : $scope.users;
+            };
+
+            $scope.getUsernamePlaceholder = function () {
+                return $filter('translate')('USERNAME');
+            };
+
+            $scope.isView = function (path) {
+                return $scope.viewPath === path
+            };
+
+            function createFilterFor(query) {
+                var lowercaseQuery = angular.lowercase(query);
+
+                return function filterFn(user) {
+                    return (user.username.indexOf(lowercaseQuery) === 0);
+                };
+            }
 
             $scope.getItemsSuccess = function (data, order, merge) {
                 if (isEmpty(data)) {
@@ -141,12 +196,14 @@ define([
             }
 
             $scope.getCorrectLanguageTitle = function (item) {
-                if (item) {
+                if (item.titles) {
                     var result = getUserDefinedLanguageString(item.titles, translationService.getLanguage(), item.language);
                     if (!result) {
                         return "";
                     }
                     return result;
+                } else {
+                    return item.title
                 }
             };
 

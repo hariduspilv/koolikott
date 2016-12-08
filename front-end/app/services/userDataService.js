@@ -13,7 +13,8 @@ define([
     var userFavoritesCountCallbacks = [];
     var userMaterialsCountCallbacks = [];
     var userPortfoliosCountCallbacks = [];
-
+    var moderatorsCountCallbacks = [];
+    var restrictedUsersCountCallbacks = [];
 
     angularAMD.factory('userDataService', ['serverCallService', 'authenticatedUserService',
         function (serverCallService, authenticatedUserService) {
@@ -103,6 +104,23 @@ define([
 
             }
 
+            function getModeratorsCountSuccess(data) {
+                moderatorsCountCallbacks.forEach(function (callback) {
+                    callback(data);
+                });
+                moderatorsCountCallbacks = [];
+                localStorage.setItem("moderatorsCount", data);
+
+            }
+
+            function getRestrictedUsersCountSuccess(data) {
+                restrictedUsersCountCallbacks.forEach(function (callback) {
+                    callback(data);
+                });
+                restrictedUsersCountCallbacks = [];
+                localStorage.setItem("restrictedUsersCount", data);
+
+            }
 
             instance = {
                 loadBrokenMaterialsCount: function (callback) {
@@ -172,6 +190,22 @@ define([
                     }
                     userPortfoliosCountCallbacks.push(callback);
                     serverCallService.makeGet("rest/portfolio/getByCreator/count", getUsername(), getUsersPortfoliosCountSuccess, getItemsFail);
+                },
+                loadModeratorsCount: function (callback) {
+                    var data = localStorage.getItem("moderatorsCount");
+                    if (data) {
+                        callback(data);
+                    }
+                    moderatorsCountCallbacks.push(callback);
+                    serverCallService.makeGet("rest/user/moderator/count", {}, getModeratorsCountSuccess, getItemsFail);
+                },
+                loadRestrictedUsersCount: function (callback) {
+                    var data = localStorage.getItem("restrictedUsersCount");
+                    if (data) {
+                        callback(data);
+                    }
+                    restrictedUsersCountCallbacks.push(callback);
+                    serverCallService.makeGet("rest/user/restrictedUser/count", {}, getRestrictedUsersCountSuccess, getItemsFail);
                 }
 
             };

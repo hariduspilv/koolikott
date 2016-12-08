@@ -10,7 +10,6 @@ define([
             },
             templateUrl: 'directives/tableOfContents/tableOfContents.html',
             controller: function($scope, $rootScope, $mdSidenav) {
-                $scope.isReadOnly = angular.isDefined($scope.isReadOnly) ? $scope.isReadOnly : false;
 
                 function init() {
                     // Scroll to hash
@@ -61,37 +60,6 @@ define([
                         $document.scrollToElement($chapter, 60, 200);
                     }
                 }
-
-                $scope.addNewSubChapter = function(index) {
-                    var subChapters = $scope.portfolio.chapters[index].subchapters;
-
-                    subChapters.push({
-                        title: $filter('translate')('PORTFOLIO_DEFAULT_NEW_SUBCHAPTER_TITLE'),
-                        materials: [],
-                        openCloseChapter: true
-                    });
-
-                    $timeout(function() {
-                        goToElement('chapter-' + index + '-' + (subChapters.length - 1))
-                    }, 0);
-                };
-
-                $scope.addNewChapter = function(index) {
-                    if (!$scope.portfolio.chapters) {
-                        $scope.portfolio.chapters = [];
-                    }
-
-                    $scope.portfolio.chapters.push({
-                        title: $filter('translate')('PORTFOLIO_DEFAULT_NEW_CHAPTER_TITLE'),
-                        subchapters: [],
-                        materials: [],
-                        openCloseChapter: true
-                    });
-
-                    $timeout(function() {
-                        goToElement('chapter-' + ($scope.portfolio.chapters.length - 1));
-                    }, 0);
-                };
 
                 $scope.addMaterialsToChapter = function($event, chapter) {
                     $event.preventDefault();

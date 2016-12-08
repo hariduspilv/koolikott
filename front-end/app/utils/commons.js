@@ -314,12 +314,6 @@ function isObjectEmpty(obj) {
     return Object.keys(obj).length === 0 && JSON.stringify(obj) === JSON.stringify({});
 }
 
-// This is a workaround for angular circular reference problem. It is not efficient.
-function clone(object) {
-    var json = JSOG.stringify(object);
-    return JSOG.parse(json)
-}
-
 function getSource(material) {
     if (material.source && (material.source !== null && material.source !== undefined && material.source !== "")) {
         return material.source;
@@ -391,36 +385,37 @@ function isPictureLink(url) {
     return extension == "jpg" || extension == "jpeg" || extension == "png" || extension == "gif";
 }
 
-function isEbookLink(url){
+function isEbookLink(url) {
     if (!url) return;
     var extension = url.split('.').pop().toLowerCase();
     return extension == "epub";
 }
 
-function isPDFLink(url){
+function isPDFLink(url) {
     if (!url) return;
     var extension = url.split('.').pop().toLowerCase();
     return extension == "pdf";
 }
 
-function setSourceType(sourceType) {
-    if (isYoutubeVideo(sourceType)) {
+function matchType(type) {
+    if (isYoutubeVideo(type)) {
         return 'YOUTUBE';
-    } else if (isSlideshareLink(sourceType)) {
+    } else if (isSlideshareLink(type)) {
         return 'SLIDESHARE';
-    } else if (isVideoLink(sourceType)) {
+    } else if (isVideoLink(type)) {
         return 'VIDEO';
-    } else if (isAudioLink(sourceType)) {
+    } else if (isAudioLink(type)) {
         return 'AUDIO';
-    } else if (isPictureLink(sourceType)) {
+    } else if (isPictureLink(type)) {
         return 'PICTURE';
-    } else if (isEbookLink(sourceType)) {
+    } else if (isEbookLink(type)) {
         return 'EBOOK';
-    } else if (isPDFLink(sourceType)) {
+    } else if (isPDFLink(type)) {
         return 'PDF';
     } else {
         return 'LINK';
     }
 }
+
 
 

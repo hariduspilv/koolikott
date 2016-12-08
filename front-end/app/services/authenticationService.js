@@ -50,7 +50,7 @@ define([
                     $location.url('/' + authenticatedUser.user.username);
                 } else if (isOAuthAuthentication) {
                     var url = localStorage.getItem(LOGIN_ORIGIN);
-                    $location.url(authenticatedUser.user.username + url);
+                    $location.url(url);
                 }
 
                 enableLogin();
@@ -100,7 +100,7 @@ define([
             function loginWithOAuth(path) {
                 localStorage.removeItem(LOGIN_ORIGIN);
                 localStorage.setItem(LOGIN_ORIGIN,
-                    $rootScope.afterAuthRedirectURL ? $rootScope.afterAuthRedirectURL : $location.url);
+                    $rootScope.afterAuthRedirectURL ? $rootScope.afterAuthRedirectURL : $location.$$url);
                 window.location = path;
             }
 

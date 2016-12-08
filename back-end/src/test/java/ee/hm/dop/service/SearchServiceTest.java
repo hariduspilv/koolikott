@@ -1,16 +1,5 @@
 package ee.hm.dop.service;
 
-import static org.easymock.EasyMock.expect;
-import static org.easymock.EasyMock.replay;
-import static org.easymock.EasyMock.verify;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertSame;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-
 import ee.hm.dop.dao.LearningObjectDAO;
 import ee.hm.dop.dao.UserFavoriteDAO;
 import ee.hm.dop.model.CrossCurricularTheme;
@@ -25,6 +14,7 @@ import ee.hm.dop.model.SearchFilter;
 import ee.hm.dop.model.SearchResult;
 import ee.hm.dop.model.Searchable;
 import ee.hm.dop.model.TargetGroup;
+import ee.hm.dop.model.TargetGroupEnum;
 import ee.hm.dop.model.User;
 import ee.hm.dop.model.solr.Document;
 import ee.hm.dop.model.solr.Response;
@@ -42,6 +32,18 @@ import org.easymock.TestSubject;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+
+
+import static org.easymock.EasyMock.expect;
+import static org.easymock.EasyMock.replay;
+import static org.easymock.EasyMock.verify;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertSame;
+
 @RunWith(EasyMockRunner.class)
 public class SearchServiceTest {
 
@@ -53,6 +55,9 @@ public class SearchServiceTest {
 
     @Mock
     private UserFavoriteDAO userFavoriteDAO;
+
+    @Mock
+    private TargetGroupService targetGroupService;
 
     @TestSubject
     private SearchService searchService = new SearchService();
@@ -706,7 +711,16 @@ public class SearchServiceTest {
     public void searchWithTargetGroupFilter() {
         String query = "umm";
         SearchFilter searchFilter = new SearchFilter();
-        searchFilter.setTargetGroups(Arrays.asList(TargetGroup.SIX_SEVEN));
+
+        TargetGroup targetGroupSixSeven = new TargetGroup();
+        targetGroupSixSeven.setName(TargetGroupEnum.SIX_SEVEN.name());
+
+        replay(targetGroupService);
+
+        searchFilter.setTargetGroups(Collections.singletonList(TargetGroupEnum.SIX_SEVEN.name()));
+
+        verify(targetGroupService);
+
         String tokenizedQuery = "(umm) AND target_group:\"six_seven\" AND ((visibility:\"public\") OR type:\"material\")";
         long start = 0;
 
@@ -719,9 +733,21 @@ public class SearchServiceTest {
     public void searchWithMultipleTargetGroupsFilter() {
         String query = "umm";
         SearchFilter searchFilter = new SearchFilter();
-        searchFilter.setTargetGroups(Arrays.asList(TargetGroup.SIX_SEVEN, TargetGroup.ZERO_FIVE));
+
+        TargetGroup targetGroupSixSeven = new TargetGroup();
+        targetGroupSixSeven.setName(TargetGroupEnum.SIX_SEVEN.name());
+        TargetGroup targetGroupZeroFive = new TargetGroup();
+        targetGroupZeroFive.setName(TargetGroupEnum.ZERO_FIVE.name());
+
+        replay(targetGroupService);
+
+        searchFilter.setTargetGroups(Arrays.asList(TargetGroupEnum.SIX_SEVEN.name(), TargetGroupEnum.ZERO_FIVE.name()));
+
+        verify(targetGroupService);
+
         String tokenizedQuery = "(umm) AND (target_group:\"six_seven\" OR target_group:\"zero_five\")"
                 + " AND ((visibility:\"public\") OR type:\"material\")";
+
         long start = 0;
 
         List<Searchable> searchables = Arrays.asList(createMaterial(9L), createMaterial(2L), createPortfolio(1L));

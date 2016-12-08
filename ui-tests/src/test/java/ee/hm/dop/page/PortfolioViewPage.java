@@ -14,18 +14,19 @@ public class PortfolioViewPage extends Page {
 	private By editPortfolio = By.xpath("//button[@data-ng-click='editPortfolio()']");
 	private By improperContent = By.xpath("//button[@data-ng-click='showConfirmationDialog()']");
 	private By removeButton = By.xpath("//button[@data-ng-click='confirmPortfolioDeletion()']");
-	private By notImproperContent = By.xpath("//button[@data-ng-click='setNotImproper()']");
+	private By notImproperContentButton = By.xpath("//button[@data-ng-click='setNotImproperLearningObject()']");
 	private By addedTag = By.xpath("//a[@data-ng-click='getTagSearchURL($event, $chip.tag)']");
 	private By recommendationList = By.xpath("//button[@data-ng-click='recommend()']");
 	private By removeFromRecommendations = By.xpath("//button[@data-ng-click='removeRecommendation()']");
-	private By fabButton = By.xpath("//md-fab-trigger");
+	private By fabButton = By.id("add-portfolio");
 	private By preTag = By.tagName("pre");
 	private By copyPortfolioButton = By.xpath("//button[@data-ng-click='copyPortfolio()']");
 	private By portfolioTitle = By.xpath("//h1[@data-ng-bind='portfolio.title']");
 	private By creatorName = By.xpath("//p[@data-ng-if='isNullOrZeroLength(material.authors)']");
 	private By materialBox = By.cssSelector("md-card-content.portfolio-noedit-item.layout-row");
-	private By notImproperContentDisabled = By.cssSelector("button[data-ng-click='setNotImproper()'][aria-disabled='true']");
-			//By.xpath("//button[contains(@data-ng-click, 'setNotImproper()')][contains(@aria-disabled,'true')]");
+	private By notImproperContent = By.cssSelector("span.reason > span");
+	private By insertTag = By.xpath("(//input[starts-with(@id, 'fl-input-')])");
+			
 
 
 	public PortfolioViewPage clickActionsMenu() {
@@ -37,6 +38,7 @@ public class PortfolioViewPage extends Page {
 
 	public PortfolioViewPage moveCursorToCopyPortfolio() {
 		Actions builder = new Actions(getDriver());
+		PageHelpers.waitForVisibility(fabButton);
 		WebElement copyPortfolio = getDriver().findElement(fabButton);
 		builder.moveToElement(copyPortfolio).perform();
 		return this;
@@ -82,17 +84,23 @@ public class PortfolioViewPage extends Page {
 	}
 	
 	public PortfolioViewPage setContentIsNotImproper() {
-		PageHelpers.waitForVisibility(notImproperContent);
-		getDriver().findElement(notImproperContent).click();
+		PageHelpers.waitForVisibility(notImproperContentButton);
+		getDriver().findElement(notImproperContentButton).click();
 		PageHelpers.waitForSeconds(1500);
 		return this;
 	}
-
-
-	public boolean contentsIsNotImproperIsDisabled() {
-		PageHelpers.waitForVisibility(notImproperContentDisabled);
-        return getDriver().findElement(notImproperContentDisabled).isDisplayed();
 	
+	public PortfolioViewPage insertTagAndEnter1() {
+		getDriver().findElement(insertTag).sendKeys(PageHelpers.getDate(0, "dd/MM/yyyy"));
+		getDriver().findElement(insertTag).sendKeys(Keys.ENTER);
+		PageHelpers.waitForSeconds(1500);
+		return this;
+
+	}
+
+
+	public boolean contentsIsNotImproper() {
+        return getDriver().findElement(notImproperContent).isDisplayed();
 
 	}
 

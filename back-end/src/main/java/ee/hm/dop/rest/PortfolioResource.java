@@ -45,7 +45,6 @@ public class PortfolioResource extends BaseResource {
     @Path("getByCreator")
     @Produces(MediaType.APPLICATION_JSON)
     public SearchResult getByCreator(@QueryParam("username") String username, @QueryParam("start") int start, @QueryParam("maxResults") int maxResults) {
-        if (maxResults == 0) maxResults = 12;
         if (isBlank(username)) throwBadRequestException("Username parameter is mandatory");
 
         User creator = userService.getUserByUsername(username);

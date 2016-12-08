@@ -6,10 +6,12 @@ define([
     'services/authenticatedUserService',
     'services/pictureUploadService',
     'services/fileUploadService',
+    'services/dialogService',
+    'services/taxonService',
     'directives/validate/validateUrl'
 ], function (app) {
-    return ['$scope', '$mdDialog', '$mdDateLocale', 'serverCallService', 'translationService', 'metadataService', '$filter', '$location', '$rootScope', 'authenticatedUserService', '$timeout', 'pictureUploadService', 'fileUploadService', 'toastService',
-        function ($scope, $mdDialog, $mdDateLocale, serverCallService, translationService, metadataService, $filter, $location, $rootScope, authenticatedUserService, $timeout, pictureUploadService, fileUploadService, toastService) {
+    return ['$scope', '$mdDialog', '$mdDateLocale', 'serverCallService', 'translationService', 'metadataService', '$filter', '$location', '$rootScope', 'authenticatedUserService', '$timeout', 'pictureUploadService', 'fileUploadService', 'toastService', 'suggestService', 'taxonService',
+        function ($scope, $mdDialog, $mdDateLocale, serverCallService, translationService, metadataService, $filter, $location, $rootScope, authenticatedUserService, $timeout, pictureUploadService, fileUploadService, toastService, suggestService, taxonService) {
             $scope.isSaving = false;
             $scope.showHints = true;
             $scope.creatorIsPublisher = false;
@@ -88,7 +90,7 @@ define([
             };
 
             $scope.addNewTaxon = function () {
-                var educationalContext = $rootScope.taxonUtils.getEducationalContext($scope.material.taxons[0]);
+                var educationalContext = taxonService.getEducationalContext($scope.material.taxons[0]);
 
                 $scope.material.taxons.push(educationalContext);
             };
@@ -297,6 +299,10 @@ define([
                 }
             };
 
+            $scope.doSuggest = function (tagName) {
+                return suggestService.suggest(tagName, suggestService.getSuggestSystemTagURLbase());
+            };
+
             function shouldRemoveNotRelevantFromList(listName) {
                 return $scope.material[listName].length > 1 && $scope.material[listName][$scope.material[listName].length - 1].name === 'NOT_RELEVANT';
             }
@@ -312,8 +318,7 @@ define([
             }
 
 
-
-             /**
+            /**
              * Create filter function for a query string
              */
             function searchFilter(query, translationPrefix) {
@@ -435,7 +440,7 @@ define([
                 });
 
                 $scope.$watch('material.taxons[0]', function (newValue, oldValue) {
-                    if (newValue && newValue.level === $rootScope.taxonUtils.constants.EDUCATIONAL_CONTEXT && newValue !== oldValue) {
+                    if (newValue && newValue.level === taxonService.constants.EDUCATIONAL_CONTEXT && newValue !== oldValue) {
                         $scope.educationalContextId = newValue.id;
                     }
                 }, false);
@@ -573,7 +578,7 @@ define([
                     $scope.material.peerReviews = [{}];
                 }
 
-                var educationalContext = $rootScope.taxonUtils.getEducationalContext($scope.material.taxons[0]);
+                var educationalContext = taxonService.getEducationalContext($scope.material.taxons[0]);
 
                 if (educationalContext) {
                     $scope.educationalContextId = educationalContext.id;
@@ -588,7 +593,7 @@ define([
                     if ($rootScope.savedPortfolio.taxon) {
                         var taxon = Object.create($rootScope.savedPortfolio.taxon);
                         $scope.material.taxons = [taxon];
-                        var educationalContext = $rootScope.taxonUtils.getEducationalContext(taxon);
+                        var educationalContext = taxonService.getEducationalContext(taxon);
 
                         if (educationalContext) {
                             $scope.educationalContextId = educationalContext.id;

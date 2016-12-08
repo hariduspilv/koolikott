@@ -1,7 +1,7 @@
 define(['app',], function (app) {
     app.directive('dopDeletedMaterial', function () {
         return {
-            templateUrl: 'directives/dashboard/deletedMaterial/deletedMaterial.html',
+            templateUrl: 'directives/dashboard/deleted/deleted.html',
             controller: function ($scope, $filter, serverCallService) {
                 $scope = $scope.$parent;
 

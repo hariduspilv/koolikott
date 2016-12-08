@@ -7,8 +7,7 @@ import ee.hm.dop.helpers.PageHelpers;
 public class EditMaterialMainPart extends PageComponent {
 	
 	private By nextStep = By.xpath("//button[@data-ng-click='step.nextStep()']");
-	private By selectedLanguage = By.cssSelector("span > div.md-text > span");
-
+	private By selectedLanguage = By.cssSelector("#add-material-language-select md-select-value.md-select-value div.md-text span");
 	
 	public EditMaterialTaxonomyPart clickNextStep() {
 		PageHelpers.waitForSeconds(1500);

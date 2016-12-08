@@ -49,7 +49,8 @@
               <md-menu-item data-ng-if="isAdmin()" dop-recommend data-portfolio="portfolio"></md-menu-item>
 
               <md-menu-divider data-ng-if="!isAdminOrModerator()"></md-menu-divider>
-              <md-menu-item data-ng-if="!isAdminOrModerator()" dop-report-improper data-learning-object="portfolio"></md-menu-item>
+              <md-menu-item data-ng-if="!isAdminOrModerator()" dop-report-improper
+                            data-learning-object="portfolio"></md-menu-item>
             </md-menu-content>
           </md-menu>
         </div>
@@ -61,35 +62,35 @@
                 <span data-translate="DETAIL_VIEW_EDUCATIONAL_CONTEXT"></span>
               </small>
               <br>
-              <span class="hide-overflow" data-ng-if="portfolio.taxon"
-                    data-translate="{{getEducationalContext()}}">
+              <span class="hide-overflow" data-ng-if="getEducationalContext(portfolio.taxon)"
+                    data-translate="{{getEducationalContext(portfolio.taxon)}}">
                                 </span>
-              <span class="hide-overflow" data-ng-if="!portfolio.taxon" data-translate="UNKNOWN">Unknown</span>
+              <span class="hide-overflow" data-ng-if="!getEducationalContext(portfolio.taxon)" data-translate="UNKNOWN">Unknown</span>
             </p>
           </div>
-          <div flex data-ng-if="!portfolioSubject">
+          <div flex data-ng-if="!getSubject(portfolio.taxon)">
             <p class="md-body-2 meta">
               <small class="md-caption">
                 <span data-translate="DETAIL_VIEW_DOMAIN"></span>
               </small>
               <br/>
-              <span class="hide-overflow" data-ng-if="$root.taxonUtils.getDomain(portfolio.taxon)"
-                    data-translate="{{'DOMAIN_' + $root.taxonUtils.getDomain(portfolio.taxon).name.toUpperCase()}}">
+              <span class="hide-overflow" data-ng-if="getDomain(portfolio.taxon)"
+                    data-translate="{{'DOMAIN_' + getDomain(portfolio.taxon)}}">
                             </span>
-              <span class="hide-overflow" data-ng-if="!$root.taxonUtils.getDomain(portfolio.taxon)"
+              <span class="hide-overflow" data-ng-if="!getDomain(portfolio.taxon)"
                     data-translate="UNKNOWN">Unknown</span>
             </p>
           </div>
-          <div flex data-ng-if="portfolioSubject">
+          <div flex data-ng-if="getSubject(portfolio.taxon)">
             <p class="md-body-2 meta">
               <small class="md-caption">
                 <span data-translate="DETAIL_VIEW_SUBJECT"></span>
               </small>
               <br/>
-              <span class="hide-overflow" data-ng-if="portfolioSubject"
-                    data-translate="{{'SUBJECT_' + portfolioSubject.name.toUpperCase()}}">
+              <span class="hide-overflow" data-ng-if="getSubject(portfolio.taxon)"
+                    data-translate="{{'SUBJECT_' + getSubject(portfolio.taxon)}}">
                             </span>
-              <span class="hide-overflow" data-ng-if="!portfolioSubject"
+              <span class="hide-overflow" data-ng-if="!getSubject(portfolio.taxon)"
                     data-translate="UNKNOWN">Unknown</span>
             </p>
           </div>
@@ -100,7 +101,10 @@
               </small>
               <br/>
               <span class="hide-overflow one-row" data-ng-if="portfolio.targetGroups">
-                  <span data-ng-repeat="targetGroup in getTargetGroups()">{{'TARGET_GROUP_' + targetGroup | translate}}{{$last ? '' : ', '}}</span>
+                  <span data-ng-repeat="targetGroup in getTargetGroups()">
+                    <span data-translate="{{'TARGET_GROUP_' + targetGroup}}"></span>
+                    <span>{{$last ? '' : ', '}}</span>
+                  </span>
               </span>
               <span class="hide-overflow" data-ng-if="!portfolio.targetGroups || !portfolio.targetGroups.length"
                     data-translate="UNKNOWN">Unknown</span>
@@ -121,20 +125,23 @@
 
       <!-- right small side  -->
       <div layout="column" flex flex-gt-xs="25" class="divider-left" layout-align="start start">
-        <div class="card__icon-holder">
+        <!-- Hidden because waiting for correct design-->
+        <div class="card__icon-holder" hide>
           <md-icon data-ng-if="portfolio.visibility === 'PRIVATE'">lock</md-icon>
           <md-icon data-ng-if="portfolio.visibility === 'NOT_LISTED'">link</md-icon>
           <md-tooltip md-direction="bottom">
             <span data-ng-if="portfolio.visibility === 'PRIVATE'" data-translate="PORTFOLIO_VISIBILITY_PRIVATE"></span>
-            <span data-ng-if="portfolio.visibility === 'NOT_LISTED'" data-translate="PORTFOLIO_VISIBILITY_NOT_LISTED"></span>
-         </md-tooltip>
+            <span data-ng-if="portfolio.visibility === 'NOT_LISTED'"
+                  data-translate="PORTFOLIO_VISIBILITY_NOT_LISTED"></span>
+          </md-tooltip>
         </div>
-        <div data-ng-if="isLoggedIn() && !isRestricted() && !portfolio.deleted" data-dop-favorite data-learning-object="portfolio"></div>
+        <div data-ng-if="isLoggedIn() && !isRestricted() && !portfolio.deleted" data-dop-favorite
+             data-learning-object="portfolio"></div>
         <div class="corner"></div>
         <!-- imaged -->
         <div data-ng-if="portfolio.picture" class="card-cover imaged">
-          <img data-ng-src="rest/picture/thumbnail/lg/{{portfolio.picture.name}}"sizes="(max-width: 600) 600px, 300px"
-                         data-ng-srcset="rest/picture/thumbnail/lg/{{portfolio.picture.name}} 300w,
+          <img data-ng-src="rest/picture/thumbnail/lg/{{portfolio.picture.name}}" sizes="(max-width: 600) 600px, 300px"
+               data-ng-srcset="rest/picture/thumbnail/lg/{{portfolio.picture.name}} 300w,
                                          rest/picture/thumbnail/lg_xs/{{portfolio.picture.name}} 600w"/>
         </div>
         <!-- noimage -->

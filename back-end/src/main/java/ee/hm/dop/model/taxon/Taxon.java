@@ -15,6 +15,7 @@ import javax.persistence.Transient;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.databind.annotation.NoClass;
 import com.voodoodyne.jackson.jsog.JSOGGenerator;
@@ -25,7 +26,6 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
 @Cacheable
 @DiscriminatorColumn(name = "level")
 @Inheritance(strategy = JOINED)
-@JsonIdentityInfo(generator = JSOGGenerator.class)
 @JsonTypeInfo(use = JsonTypeInfo.Id.MINIMAL_CLASS, include = JsonTypeInfo.As.PROPERTY, property = "level", defaultImpl = NoClass.class)
 public abstract class Taxon {
 
@@ -36,9 +36,14 @@ public abstract class Taxon {
     @Column(nullable = false, insertable = false)
     private String name;
 
-    @JsonIgnore
     @Transient
-    private Set<? extends Taxon> children;
+    private Long parentId;
+
+    @Transient
+    private String parentLevel;
+
+    @Transient
+    private String level;
 
     public Long getId() {
         return id;
@@ -56,6 +61,24 @@ public abstract class Taxon {
         this.name = name;
     }
 
+    public Long getParentId() {
+        if (getParent() != null) {
+            return getParent().getId();
+        }
+        return null;
+    }
+
+    public String getParentLevel() {
+        if (getParent() != null) {
+            return "." + getParent().getClass().getSimpleName();
+        }
+        return null;
+    }
+
+    public String getLevel() {
+        return "." + this.getClass().getSimpleName();
+    }
+
     @JsonIgnore
     public abstract Taxon getParent();
 
@@ -67,30 +90,6 @@ public abstract class Taxon {
         }
 
         return false;
-    }
-
-    public Set<? extends Taxon> getChildren() {
-        if (this instanceof EducationalContext) {
-            return ((EducationalContext) this).getDomains();
-        } else if (this instanceof Domain) {
-            if (!((Domain) this).getSpecializations().isEmpty()) {
-                return ((Domain) this).getSpecializations();
-            } else if (!((Domain) this).getSubjects().isEmpty()) {
-                return ((Domain) this).getSubjects();
-            } else if (!((Domain) this).getTopics().isEmpty()) {
-                return ((Domain) this).getTopics();
-            }
-        } else if (this instanceof Specialization) {
-            return ((Specialization) this).getModules();
-        } else if (this instanceof Module) {
-            return ((Module) this).getTopics();
-        } else if (this instanceof Subject) {
-            return ((Subject) this).getTopics();
-        } else if (this instanceof Topic) {
-            return ((Topic) this).getSubtopics();
-        }
-
-        return null;
     }
 
     @Override

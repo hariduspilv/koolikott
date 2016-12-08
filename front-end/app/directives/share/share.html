@@ -33,11 +33,15 @@
 
       <md-dialog-actions layout="row">
         <span flex></span>
-        <md-button class="md-primary md-cancel-button" ng-click="close()">
-          {{cancel}}
+        <md-button class="md-primary md-cancel-button" ng-click="back()" data-translate="BUTTON_CANCEL"></md-button>
+        <md-button data-ng-hide="showButtons" class="md-primary md-confirm-button" href="{{url}}" target="{{target}}"
+                   ng-click="success()" data-translate="BUTTON_SHARE">
         </md-button>
-        <md-button class="md-primary md-confirm-button" href="{{url}}" target="{{target}}" ng-click="close()">
-          {{ok}}
+        <md-button data-ng-show="showButtons" class="md-primary md-confirm-button" href="{{url}}" target="{{target}}"
+                   ng-click="updatePortfolio('NOT_LISTED')" data-translate="PORTFOLIO_VISIBILITY_NOT_LISTED">
+        </md-button>
+        <md-button data-ng-show="showButtons" class="md-primary md-confirm-button" href="{{url}}" target="{{target}}"
+                   ng-click="updatePortfolio('PUBLIC')" data-translate="PORTFOLIO_VISIBILITY_PUBLIC">
         </md-button>
       </md-dialog-actions>
     </form>

@@ -31,7 +31,6 @@ import org.slf4j.LoggerFactory;
 public class UploadedFileService {
 
     private static final String EBOOK_EXTENSION = "epub";
-    private Logger logger = LoggerFactory.getLogger(getClass());
 
     @Inject
     private UploadedFileDAO uploadedFileDAO;

@@ -38,11 +38,15 @@ public class SolrService implements SolrEngineService {
     private static final int RESULTS_PER_PAGE = 24;
     private static final int SUGGEST_COUNT = 5;
     private static final String SEARCH_PATH = "select?q=%s&sort=%s&wt=json&start=%d&rows=%d";
+    private static final String SUGGEST_URL = "/suggest";
+    private static final String SUGGEST_TAG_URL = "/suggest_tag";
 
-    protected static final String SOLR_IMPORT_PARTIAL = "dataimport?command=delta-import&wt=json";
-    protected static final String SOLR_DATAIMPORT_STATUS = "dataimport?command=status&wt=json";
 
-    protected static final String SOLR_STATUS_BUSY = "busy";
+    static final String SOLR_IMPORT_PARTIAL = "dataimport?command=delta-import&wt=json";
+
+    static final String SOLR_DATAIMPORT_STATUS = "dataimport?command=status&wt=json";
+
+    static final String SOLR_STATUS_BUSY = "busy";
 
     @Inject
     private Client client;
@@ -54,7 +58,7 @@ public class SolrService implements SolrEngineService {
 
     private SolrIndexThread indexThread;
 
-    public SolrService() {
+    SolrService() {
         solrClient = new HttpSolrClient("http://localhost:8983/solr/dop");
         indexThread = new SolrIndexThread();
         indexThread.start();
@@ -72,13 +76,13 @@ public class SolrService implements SolrEngineService {
     }
 
     @Override
-    public SpellCheckResponse.Suggestion suggest(String query) {
+    public SpellCheckResponse.Suggestion suggest(String query, boolean suggestTags) {
         if (query.isEmpty()) {
             return null;
         }
         QueryResponse qr = null;
         SolrQuery solrQuery = new SolrQuery();
-        solrQuery.setRequestHandler("/suggest");
+        solrQuery.setRequestHandler(suggestTags ? SUGGEST_TAG_URL : SUGGEST_URL);
         solrQuery.set("spellcheck.q", query);
         solrQuery.set("suggest.count", SUGGEST_COUNT);
         try {
@@ -88,7 +92,7 @@ public class SolrService implements SolrEngineService {
         }
 
         String queryString = query.replaceAll("\\+", " ").toLowerCase();
-        SpellCheckResponse spellCheckResponse = qr.getSpellCheckResponse();
+        SpellCheckResponse spellCheckResponse = qr != null ? qr.getSpellCheckResponse() : null;
         if (spellCheckResponse != null) {
             return spellCheckResponse.getSuggestion(queryString);
         }
@@ -101,12 +105,12 @@ public class SolrService implements SolrEngineService {
         indexThread.updateIndex();
     }
 
-    public boolean isIndexingInProgress() {
+    private boolean isIndexingInProgress() {
         SearchResponse response = executeCommand(SOLR_DATAIMPORT_STATUS);
         return response.getStatus().equals(SOLR_STATUS_BUSY);
     }
 
-    protected SearchResponse executeCommand(String command) {
+    SearchResponse executeCommand(String command) {
         SearchResponse searchResponse = getTarget(command).request(MediaType.APPLICATION_JSON)
                 .get(SearchResponse.class);
 
@@ -115,7 +119,7 @@ public class SolrService implements SolrEngineService {
         return searchResponse;
     }
 
-    protected void logCommand(String command, SearchResponse searchResponse) {
+    private void logCommand(String command, SearchResponse searchResponse) {
         long responseCode = searchResponse.getResponseHeader().getStatus();
 
         String statusMessages = "";

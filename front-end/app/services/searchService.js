@@ -244,7 +244,7 @@ define(['angularAMD'], function(angularAMD) {
                 if (search.paid === "") {
                     var searchObject = $location.search();
                     if (searchObject.paid) {
-                        return searchObject.paid === 'true';
+                        return searchObject.paid.toString() === 'true';
                     }
                 }
 

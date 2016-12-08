@@ -18,7 +18,6 @@ require.config({
         'angular-scroll': 'libs/angular-scroll/angular-scroll',
         'angular-material-data-table': 'libs/angular-material-data-table/dist/md-data-table',
         'screenfull': 'libs/screenfull/dist/screenfull',
-        'jsog': 'libs/jsog/lib/JSOG',
         'ngInfiniteScroll': 'libs/ngInfiniteScroll/build/ng-infinite-scroll.min',
         'jquery': 'libs/jquery/dist/jquery.min',
         'ng-file-upload': 'libs/ng-file-upload/ng-file-upload.min',

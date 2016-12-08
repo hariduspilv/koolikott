@@ -1,14 +1,13 @@
 package ee.hm.dop.tests;
 
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 import org.junit.Assert;
 import org.junit.FixMethodOrder;
-
 import static ee.hm.dop.page.LandingPage.goToLandingPage;
-
 import org.junit.Test;
 import org.junit.runners.MethodSorters;
+
 
     @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 
@@ -17,21 +16,20 @@ public class PortfolioTests {
 	@Test
 	public void createPortfolio() {
 
-		String tagText = goToLandingPage()
+		String domainText = goToLandingPage()
 				.chooseUserType("SmallPublisher")
 				.getFabButton()
 				.clickAddPortfolio()
-				.insertPortfolioTitle()
 				.uploadPhoto()
-				.addDescription()
+				.insertPortfolioTitle()
 				.selectEducationalContext()
 				.selectSubjectArea()
 				.selectAgeGroup()
-				.insertTagAndEnter("epic")
+				.addDescription()
 				.clickCreatePortfolioButton()
-				.getTagText();
+				.getDomainText();
 
-		Assert.assertEquals("epic", tagText);
+		Assert.assertEquals("0-5", domainText);
 
 	}
 	
@@ -42,19 +40,17 @@ public class PortfolioTests {
 				.chooseUserType("User")
 				.getFabButton()
 				.clickAddPortfolio()
+				.uploadPhoto()
 				.insertPortfolioTitle()
-				.uploadPhoto1()
-				.addDescription()
 				.selectEducationalContext()
 				.selectSubjectArea()
 				.selectAgeGroup()
-				.insertTagAndEnter("automated")
+				.addDescription()
 				.clickCreatePortfolioButton()
 				.clickExitAndSave()
 				.moveCursorToCopyPortfolio()
 				.clickCopyPortfolio()
 				.insertSpecificPortfolioTitle("(Copy)")
-				.insertTags()
 				.savePortfolioCopy()
 				.clickExitAndSave()
 				.wordCopyIsAddedToPortfolioTitle();
@@ -86,7 +82,7 @@ public class PortfolioTests {
 	@Test
 	public void notifyImproperPortfolio() {
 
-		boolean contentsIsNotImproperIsDisabled = goToLandingPage()
+		boolean improperContentIsDisplayed = goToLandingPage()
 				.chooseUserType("User")
 				.openPortfolio()
 				.clickActionsMenu()
@@ -96,19 +92,15 @@ public class PortfolioTests {
 				.logOff()
 				.chooseUserType("Admin")
 				.getLeftMenu()
-				.checkLeftMenuButtons()
-				.clickMyThings()
 				.clickDashboard()
 				.clickImproperPortfolios()
 				.getDashboardPage()
-				.clickToOrderImproperPortfolios()
+				//.clickToOrderImproperPortfolios()
 				.clickOpenPortfolioFromDashboard()
-				.clickActionsMenu()
 				.setContentIsNotImproper()
-				.clickActionsMenu()
-				.contentsIsNotImproperIsDisabled();
+				.contentsIsNotImproper();
 
-		assertTrue(contentsIsNotImproperIsDisabled);
+		assertFalse(improperContentIsDisplayed);
 
 	}
 	
@@ -121,10 +113,7 @@ public class PortfolioTests {
 				.clickActionsMenu()
 				.clickRemovePortfolio()
 				.confirmImproperContent()
-				.getLeftMenu()
-				.clickMyThings()
-				.clickMyPortfolios()
-				.getMyPortfoliosPage()
+				.getLandingPage()
 				.isPortfolioDeletedToastVisible();
 
 		Assert.assertEquals("Kogumik kustutatud", deletedPortfolioToast);
@@ -135,7 +124,7 @@ public class PortfolioTests {
 	public void editChapterDescription() {
 
 		boolean preTag = goToLandingPage()
-				.chooseUserType("Moderator")
+				.chooseUserType("User")
 				.getLeftMenu()
 				.getMyPortfoliosPage()
 				.openPortfolio()
@@ -166,17 +155,15 @@ public class PortfolioTests {
 				.chooseUserType("SmallPublisher")
 				.getFabButton()
 				.clickAddPortfolio()
-				.insertPortfolioTitle()
-				.addDescription()
 				.uploadPhoto()
+				.insertPortfolioTitle()
 				.selectEducationalContext()
 				.selectSubjectArea()
 				.selectAgeGroup()
-				.insertTagAndEnter1()
+				.addDescription()
 				.clickCreatePortfolioButton()
-				.clickVisibilityButton()
-				.selectMakePublic()
 				.clickExitAndSave()
+				.insertTagAndEnter1()
 				.getUserMenu()
 				.logOff()
 				.chooseUserType("Admin")
