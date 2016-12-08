@@ -160,7 +160,7 @@
     <field name="publisher" type="text_general" indexed="true" stored="false" multiValued="true"/>
 
     <!-- Tag suggestion -->
-    <field name="taxon_name" type="text_general" indexed="true" stored="false" multiValued="true"/>
+    <!--<field name="taxon_name" type="text_general" indexed="true" stored="false" multiValued="true"/>-->
     <field name="resource_type_name" type="text_general" indexed="true" stored="false" multiValued="true"/>
     <field name="target_group_name" type="text_general" indexed="true" stored="false" multiValued="true"/>
 
@@ -221,7 +221,7 @@
     <copyField source="language" dest="suggest_phrase"/>
     <copyField source="publisher" dest="suggest_phrase"/>
 
-    <copyField source="taxon_name" dest="suggest_tag"/>
+    <!--<copyField source="taxon_name" dest="suggest_tag"/>-->
     <copyField source="resource_type_name" dest="suggest_tag"/>
     <copyField source="target_group_name" dest="suggest_tag"/>
 

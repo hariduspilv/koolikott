@@ -15,7 +15,7 @@
 
             <entity name="LearningObject_TargetGroup" query="select targetGroup as target_group from LearningObject_TargetGroup where learningObject='${LearningObject.id}'" />
 
-            <entity name="Taxon" query="select concat('taxon-', id) as taxonId, name as taxon_name from Taxon"/>
+            <!--<entity name="Taxon" query="select concat('taxon-', id) as taxonId, name as taxon_name from Taxon"/>-->
             <entity name="ResourceType" query="select concat('resource-', id) as resourceTypeId, name as resource_type_name from ResourceType"/>
             <entity name="TargetGroup" query="select concat('target-', id) as targetGroupId, name as target_group_name from TargetGroup"/>
 
