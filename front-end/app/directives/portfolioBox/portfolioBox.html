@@ -45,18 +45,21 @@
   <md-card-content layout="column" class="minContentHeight">
     <a data-ng-href="{{'/portfolio?id=' + portfolio.id}}" class="no-link">
       <h4 class="md-headline two-rows" data-ng-bind="portfolio.title"></h4>
-      <p class="md-caption one-row">
+      <div layout="row" layout-xs="column">
+      <p class="md-caption" flex>
         <span class="authors">
           <span data-ng-bind="formatName(portfolio.creator.name)"></span>
           <span data-ng-bind="formatSurname(portfolio.creator.surname)"></span>
           <span data-ng-if="portfolio.added">{{ formatDate(portfolio.added) }}</span>
         </span>
       </p>
-      <p class="md-caption" layout="row">
-        <span>II-III kooliaste</span>
+
+      <p class="md-caption" layout="column" flex>
+        <span class="one-row">II-III kooliaste</span>
         <span class="flex"></span>
-        <span>Ühiskonnaõpetus</span>
+        <span class="one-row">Ühiskonnaõpetus</span>
       </p>
+    </div>
     </a>
   </md-card-content>
 
