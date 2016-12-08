@@ -228,7 +228,7 @@ class SolrEngineServiceMock implements SolrEngineService {
     }
 
     @Override
-    public SpellCheckResponse.Suggestion suggest(String query) {
+    public SpellCheckResponse.Suggestion suggest(String query, boolean searchTags) {
         return null;
     }
 

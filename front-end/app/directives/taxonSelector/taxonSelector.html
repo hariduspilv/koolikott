@@ -87,7 +87,8 @@
                ng-model-options="{trackBy: '$value.id'}">
       <md-option data-translate="SELECT_DOMAIN_AND_SUBJECT"
                  ng-click="ctrl.reset(ctrl.taxonPath.educationalContext)"></md-option>
-      <md-option class="select_parent" data-ng-class="{ 'child' : domainSubject.level === '.Subject'}"
+      <md-option data-ng-class="{ 'select__child' : domainSubject.level === '.Subject',
+                 'select__parent' : domainSubject.level === '.Domain'}"
                  data-ng-disabled="domainSubject.level !== '.Subject' && isAddMaterialView"
                  ng-value="domainSubject" ng-repeat="domainSubject in ctrl.secondaryEducationDomainSubjects"
                  data-ng-click="ctrl.selectTaxon(domainSubject)"

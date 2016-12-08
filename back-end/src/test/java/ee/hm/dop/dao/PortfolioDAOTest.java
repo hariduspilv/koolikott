@@ -19,7 +19,7 @@ import ee.hm.dop.model.LearningObject;
 import ee.hm.dop.model.Material;
 import ee.hm.dop.model.Portfolio;
 import ee.hm.dop.model.Recommendation;
-import ee.hm.dop.model.TargetGroup;
+import ee.hm.dop.model.TargetGroupEnum;
 import ee.hm.dop.model.User;
 import ee.hm.dop.model.taxon.Subject;
 import org.joda.time.DateTime;
@@ -50,7 +50,7 @@ public class PortfolioDAOTest extends DatabaseTestBase {
 
     @Test
     public void findByIdOnlyMandatoryFields() {
-        Long id = new Long(102);
+        Long id = 102L;
         Portfolio portfolio = portfolioDAO.findByIdNotDeleted(id);
 
         assertNotNull(portfolio);
@@ -112,7 +112,7 @@ public class PortfolioDAOTest extends DatabaseTestBase {
 
         for (LearningObject portfolio : portfolios) {
             assertEquals("mati.maasikas-vaarikas", portfolio.getCreator().getUsername());
-            if (portfolio.getId().equals(Long.valueOf(101))) {
+            if (portfolio.getId().equals(101L)) {
                 assertPortfolio1((Portfolio) portfolio);
             }
 
@@ -187,8 +187,8 @@ public class PortfolioDAOTest extends DatabaseTestBase {
         assertEquals(0, chapter.getSubchapters().size());
 
         assertEquals(2, portfolio.getTargetGroups().size());
-        assertTrue(portfolio.getTargetGroups().contains(TargetGroup.ZERO_FIVE));
-        assertTrue(portfolio.getTargetGroups().contains(TargetGroup.SIX_SEVEN));
+        assertTrue(TargetGroupEnum.containsTargetGroup(portfolio.getTargetGroups(), TargetGroupEnum.ZERO_FIVE));
+        assertTrue(TargetGroupEnum.containsTargetGroup(portfolio.getTargetGroups(), TargetGroupEnum.SIX_SEVEN));
         assertEquals("Lifelong_learning_and_career_planning", portfolio.getCrossCurricularThemes().get(0).getName());
         assertEquals("Cultural_and_value_competence", portfolio.getKeyCompetences().get(0).getName());
         assertFalse(portfolio.isDeleted());

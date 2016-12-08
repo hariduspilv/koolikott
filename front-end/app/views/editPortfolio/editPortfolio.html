@@ -1,9 +1,11 @@
 <section layout-gt-sm>
   <article flex="100" role="main">
 
-    <md-toolbar class="md-hue-2" data-ng-if="showFirstMessage">
-      <p class="md-toolbar-tools" data-translate="NEW_PORTFOLIO_CREATED_MESSAGE"></p>
-    </md-toolbar>
+    <md-card class="card-mb-20" data-ng-if="showFirstMessage">
+      <md-toolbar>
+        <p class="md-toolbar-tools" data-translate="NEW_PORTFOLIO_CREATED_MESSAGE"></p>
+      </md-toolbar>
+    </md-card>
 
     <div data-dop-portfolio-summary-card data-portfolio="portfolio"></div>
 
@@ -12,5 +14,12 @@
         <div data-dop-chapter data-on-delete="onDeleteChapter" data-chapter="chapter" data-index="{{$index}}"></div>
       </div>
     </div>
+
+    <md-card class="card-mb-20">
+      <md-button aria-label="Lisa uus peatükk" data-ng-click="addNewChapter()">
+        <md-icon class="material-icons">add</md-icon>
+        <span data-translate="CHAPTER"></span>
+      </md-button>
+    </md-card>
   </article>
 </section>

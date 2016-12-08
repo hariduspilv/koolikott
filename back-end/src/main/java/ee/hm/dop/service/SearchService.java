@@ -1,18 +1,5 @@
 package ee.hm.dop.service;
 
-import static ee.hm.dop.service.SolrService.getTokenizedQueryString;
-import static java.lang.String.format;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.stream.Collectors;
-
-import javax.inject.Inject;
-
 import com.google.common.collect.ImmutableSet;
 import ee.hm.dop.dao.LearningObjectDAO;
 import ee.hm.dop.dao.UserFavoriteDAO;
@@ -24,7 +11,6 @@ import ee.hm.dop.model.Role;
 import ee.hm.dop.model.SearchFilter;
 import ee.hm.dop.model.SearchResult;
 import ee.hm.dop.model.Searchable;
-import ee.hm.dop.model.TargetGroup;
 import ee.hm.dop.model.User;
 import ee.hm.dop.model.UserFavorite;
 import ee.hm.dop.model.Visibility;
@@ -41,6 +27,18 @@ import ee.hm.dop.model.taxon.Taxon;
 import ee.hm.dop.model.taxon.Topic;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.solr.client.solrj.util.ClientUtils;
+
+import javax.inject.Inject;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
+
+import static ee.hm.dop.service.SolrService.getTokenizedQueryString;
+import static java.lang.String.format;
 
 public class SearchService {
 
@@ -235,11 +233,10 @@ public class SearchService {
 
     private String getTargetGroupsAsQuery(SearchFilter searchFilter) {
         if (searchFilter.getTargetGroups() != null && !searchFilter.getTargetGroups().isEmpty()) {
-            List<TargetGroup> targetGroups = searchFilter.getTargetGroups();
             List<String> filters = new ArrayList<>();
 
-            for (TargetGroup targetGroup : targetGroups) {
-                filters.add(format("target_group:\"%s\"", targetGroup.toString().toLowerCase()));
+            for (String targetGroup : searchFilter.getTargetGroups()) {
+                filters.add(format("target_group:\"%s\"", targetGroup.toLowerCase()));
             }
 
             if (filters.size() == 1) {

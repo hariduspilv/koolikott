@@ -1,32 +1,13 @@
 package ee.hm.dop.oaipmh.waramu;
 
-import static org.easymock.EasyMock.createMock;
-import static org.easymock.EasyMock.expect;
-import static org.easymock.EasyMock.replay;
-import static org.easymock.EasyMock.verify;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.fail;
-
-import java.io.File;
-import java.io.IOException;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
-
 import ee.hm.dop.model.Author;
 import ee.hm.dop.model.Language;
 import ee.hm.dop.model.LanguageString;
 import ee.hm.dop.model.Material;
 import ee.hm.dop.model.ResourceType;
 import ee.hm.dop.model.Tag;
+import ee.hm.dop.model.TargetGroup;
+import ee.hm.dop.model.TargetGroupEnum;
 import ee.hm.dop.model.taxon.Domain;
 import ee.hm.dop.model.taxon.EducationalContext;
 import ee.hm.dop.model.taxon.Module;
@@ -39,6 +20,7 @@ import ee.hm.dop.service.AuthorService;
 import ee.hm.dop.service.LanguageService;
 import ee.hm.dop.service.ResourceTypeService;
 import ee.hm.dop.service.TagService;
+import ee.hm.dop.service.TargetGroupService;
 import ee.hm.dop.service.TaxonService;
 import org.easymock.EasyMockRunner;
 import org.easymock.Mock;
@@ -47,6 +29,22 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import java.io.File;
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
+import static org.easymock.EasyMock.*;
+import static org.junit.Assert.*;
 
 @RunWith(EasyMockRunner.class)
 public class MaterialParserWaramuTest {
@@ -68,6 +66,9 @@ public class MaterialParserWaramuTest {
 
     @Mock
     private AuthorService authorService;
+
+    @Mock
+    private TargetGroupService targetGroupService;
 
     private Language language = new Language();
 
@@ -345,12 +346,28 @@ public class MaterialParserWaramuTest {
         List<Author> authors = new ArrayList<>();
         authors.add(author);
 
-        replay(languageService, tagService, resourceTypeService, taxonService, authorService);
+        TargetGroup targetGroupGrade6 = new TargetGroup();
+        targetGroupGrade6.setName(TargetGroupEnum.GRADE6.name());
+
+        TargetGroup targetGroupGrade7 = new TargetGroup();
+        targetGroupGrade7.setName(TargetGroupEnum.GRADE7.name());
+
+        TargetGroup targetGroupGrade8 = new TargetGroup();
+        targetGroupGrade8.setName(TargetGroupEnum.GRADE8.name());
+
+        TargetGroup targetGroupGrade9 = new TargetGroup();
+        targetGroupGrade9.setName(TargetGroupEnum.GRADE9.name());
+
+        expect(targetGroupService.getTargetGroupsByAge(13, 15))
+                .andReturn(new HashSet<>(Arrays.asList(targetGroupGrade6, targetGroupGrade7, targetGroupGrade8, targetGroupGrade9)));
+
+
+        replay(languageService, tagService, resourceTypeService, taxonService, authorService, targetGroupService);
 
         Document doc = dBuilder.parse(fXmlFile);
         Material material = materialParser.parse(doc);
 
-        verify(languageService, tagService, resourceTypeService, taxonService, authorService);
+        verify(languageService, tagService, resourceTypeService, taxonService, authorService, targetGroupService);
 
         assertEquals("oai:ait.opetaja.ee:437556e69c7ee410b3ff27ad3eaec360219c3990", material.getRepositoryIdentifier());
         assertEquals(titles, material.getTitles());
@@ -393,12 +410,27 @@ public class MaterialParserWaramuTest {
         List<Author> authors = new ArrayList<>();
         authors.add(author);
 
-        replay(languageService, authorService);
+        TargetGroup targetGroupGrade6 = new TargetGroup();
+        targetGroupGrade6.setName(TargetGroupEnum.GRADE6.name());
+
+        TargetGroup targetGroupGrade7 = new TargetGroup();
+        targetGroupGrade7.setName(TargetGroupEnum.GRADE7.name());
+
+        TargetGroup targetGroupGrade8 = new TargetGroup();
+        targetGroupGrade8.setName(TargetGroupEnum.GRADE8.name());
+
+        TargetGroup targetGroupGrade9 = new TargetGroup();
+        targetGroupGrade9.setName(TargetGroupEnum.GRADE9.name());
+
+        expect(targetGroupService.getTargetGroupsByAge(13, 15))
+                .andReturn(new HashSet<>(Arrays.asList(targetGroupGrade6, targetGroupGrade7, targetGroupGrade8, targetGroupGrade9)));
+
+        replay(languageService, authorService, targetGroupService);
 
         Document doc = dBuilder.parse(fXmlFile);
         Material material = materialParser.parse(doc);
 
-        verify(languageService, authorService);
+        verify(languageService, authorService, targetGroupService);
 
         assertEquals("oai:ait.opetaja.ee:437556e69c7ee410b3ff27ad3eaec360219c3990", material.getRepositoryIdentifier());
         assertEquals(french, material.getLanguage());
@@ -426,12 +458,28 @@ public class MaterialParserWaramuTest {
         expect(languageService.getLanguage("et")).andReturn(estonian).times(2);
         expect(languageService.getLanguage("fren")).andReturn(french);
 
-        replay(languageService, authorService);
+        TargetGroup targetGroupGrade6 = new TargetGroup();
+        targetGroupGrade6.setName(TargetGroupEnum.GRADE6.name());
+
+        TargetGroup targetGroupGrade7 = new TargetGroup();
+        targetGroupGrade7.setName(TargetGroupEnum.GRADE7.name());
+
+        TargetGroup targetGroupGrade8 = new TargetGroup();
+        targetGroupGrade8.setName(TargetGroupEnum.GRADE8.name());
+
+        TargetGroup targetGroupGrade9 = new TargetGroup();
+        targetGroupGrade9.setName(TargetGroupEnum.GRADE9.name());
+
+        expect(targetGroupService.getTargetGroupsByAge(13, 15))
+                .andReturn(new HashSet<>(Arrays.asList(targetGroupGrade6, targetGroupGrade7, targetGroupGrade8, targetGroupGrade9)));
+
+
+        replay(languageService, authorService, targetGroupService);
 
         Document doc = dBuilder.parse(fXmlFile);
         Material material = materialParser.parse(doc);
 
-        verify(languageService, authorService);
+        verify(languageService, authorService, targetGroupService);
 
         assertEquals("oai:ait.opetaja.ee:437556e69c7ee410b3ff27ad3eaec360219c3990", material.getRepositoryIdentifier());
         assertEquals(french, material.getLanguage());

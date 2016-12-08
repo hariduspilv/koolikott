@@ -2,10 +2,13 @@ define([
     'app',
     'services/serverCallService',
     'services/translationService',
-    'services/authenticatedUserService'
+    'services/authenticatedUserService',
+    'services/taxonService'
 ], function (app) {
-    return ['$scope', '$mdDialog', 'serverCallService', 'translationService', 'toastService', '$rootScope', '$filter',
-        function ($scope, $mdDialog, serverCallService, translationService, toastService, $rootScope, $filter) {
+    return ['$scope', '$mdDialog', 'serverCallService', 'translationService', 'toastService', '$rootScope', '$filter', 'taxonService',
+        function ($scope, $mdDialog, serverCallService, translationService, toastService, $rootScope, $filter, taxonService) {
+            var ROLE_MODERATOR = "MODERATOR";
+
             function init() {
                 if(!$scope.user) return;
                 $scope.selectedRole = $scope.user.role;
@@ -29,11 +32,11 @@ define([
             };
 
             $scope.getTranslation = function (key) {
-                return $scope.searchUsersTitle = $filter('translate')(key);
+                return $filter('translate')(key);
             };
 
             $scope.addNewTaxon = function () {
-                var educationalContext = $rootScope.taxonService.getEducationalContext($scope.user.userTaxons[0]);
+                var educationalContext = taxonService.getEducationalContext($scope.user.userTaxons[0]);
 
                 $scope.user.userTaxons.push(educationalContext);
             };
@@ -41,6 +44,13 @@ define([
             $scope.deleteTaxon = function (index) {
                 $scope.user.userTaxons.splice(index, 1);
             };
+
+            $scope.$watch('user.userTaxons', function (newTaxons, oldTaxons) {
+                if (newTaxons !== oldTaxons && newTaxons.length > 0) {
+                    $scope.selectedRole = ROLE_MODERATOR;
+                    $scope.user.role = ROLE_MODERATOR;
+                }
+            }, true);
 
             function updateUserSuccess(user) {
                 if (isEmpty(user)) {

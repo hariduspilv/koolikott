@@ -11,8 +11,8 @@ define([
     'directives/materialBox/materialBox',
     'directives/tableOfContents/tableOfContents'
 ], function (app) {
-    return ['$scope', 'translationService', 'serverCallService', '$route', '$location', 'alertService', '$rootScope', 'authenticatedUserService', 'dialogService', 'toastService', '$mdDialog', '$interval',
-        function ($scope, translationService, serverCallService, $route, $location, alertService, $rootScope, authenticatedUserService, dialogService, toastService, $mdDialog, $interval) {
+    return ['$scope', 'translationService', 'serverCallService', '$route', '$location', 'alertService', '$rootScope', 'authenticatedUserService', 'dialogService', 'toastService', '$mdDialog', '$interval', '$filter', '$timeout', '$document',
+        function ($scope, translationService, serverCallService, $route, $location, alertService, $rootScope, authenticatedUserService, dialogService, toastService, $mdDialog, $interval, $filter, $timeout, $document) {
             var isAutoSaving = false;
             var autoSaveInterval;
 
@@ -130,7 +130,7 @@ define([
             function checkAuthorized(portfolio) {
                 var user = authenticatedUserService.getUser();
 
-                if (user.id == portfolio.creator.id || authenticatedUserService.isAdmin() || authenticatedUserService.isModerator()) {
+                if ((user && user.id == portfolio.creator.id) || authenticatedUserService.isAdmin() || authenticatedUserService.isModerator()) {
                     return true
                 }
 
@@ -145,6 +145,28 @@ define([
 
                     updatePortfolio();
                 }, 20000);
+            }
+
+            $scope.addNewChapter = function () {
+                if (!$scope.portfolio.chapters) {
+                    $scope.portfolio.chapters = [];
+                }
+
+                $scope.portfolio.chapters.push({
+                    title: $filter('translate')('PORTFOLIO_DEFAULT_NEW_CHAPTER_TITLE'),
+                    subchapters: [],
+                    materials: [],
+                    openCloseChapter: true
+                });
+
+                $timeout(function () {
+                    goToElement('chapter-' + ($scope.portfolio.chapters.length - 1));
+                }, 0);
+            };
+
+            function goToElement(elementID) {
+                var $chapter = angular.element(document.getElementById(elementID));
+                $document.scrollToElement($chapter, 60, 200);
             }
 
             $scope.$watch(function () {

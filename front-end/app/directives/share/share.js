@@ -3,7 +3,8 @@ define([
     'services/translationService',
     'services/authenticatedUserService'
 ], function (angularAMD) {
-    angularAMD.directive('dopShare', ['$rootScope', '$location', '$window', 'translationService', '$translate', 'authenticatedUserService', '$mdDialog', 'serverCallService', function($rootScope, $location, $window, translationService, $translate, authenticatedUserService, $mdDialog, serverCallService) {
+    angularAMD.directive('dopShare', ['$rootScope', '$location', '$window', 'translationService', '$translate', 'authenticatedUserService', '$mdDialog', 'serverCallService', 'toastService',
+        function($rootScope, $location, $window, translationService, $translate, authenticatedUserService, $mdDialog, serverCallService, toastService) {
         return {
             scope: {
                 title: '=',
@@ -28,10 +29,11 @@ define([
                         return true;
                     }
 
-                    if ($rootScope.savedPortfolio) {
-                        if ($rootScope.savedPortfolio.visibility === 'PUBLIC' || $rootScope.savedPortfolio.visibility === 'NOT_LISTED' || isOwner() || authenticatedUserService.isAdmin() || authenticatedUserService.isModerator()) {
+
+                    if ($scope.object) {
+                        if (isPublic() || isNotListed() || isOwner() || authenticatedUserService.isAdmin() || authenticatedUserService.isModerator()) {
                             return true;
-                        } else if ($rootScope.savedPortfolio.visibility === 'PRIVATE') {
+                        } else if (isPrivate()) {
                             return false;
                         }
                     }
@@ -69,6 +71,18 @@ define([
                     }
                 ];
 
+                function isPublic() {
+                    return $scope.object.visibility === 'PUBLIC';
+                }
+
+                function isPrivate() {
+                    return $scope.object.visibility === 'PRIVATE';
+                }
+
+                function isNotListed() {
+                    return $scope.object.visibility === 'NOT_LISTED';
+                }
+
                 function isOwner () {
                     if (!authenticatedUserService.isAuthenticated()) {
                         return false;
@@ -82,7 +96,7 @@ define([
                 }
 
                 $scope.checkOwnerAndShowDialog = function ($event, item) {
-                    if ((!isOwner() && $rootScope.savedPortfolio.visibility !== 'PUBLIC') || (isOwner() && $rootScope.savedPortfolio.visibility === 'PRIVATE')) {
+                    if ((!isOwner() && !isPublic()) || (isOwner() && isPrivate())) {
                         $event.preventDefault();
                         showWarningDialog($event, item);
                     }
@@ -95,7 +109,8 @@ define([
                         controller: DialogController,
                         targetEvent: ev,
                         locals: {
-                            item: item
+                            item: item,
+                            portfolio: $scope.object
                         }
                     });
                 }
@@ -110,59 +125,47 @@ define([
                 }
 
                 function DialogController($scope, $mdDialog, locals) {
-                    if((isOwner() || authenticatedUserService.isAdmin() || authenticatedUserService.isModerator()) && $rootScope.savedPortfolio.visibility === 'PRIVATE') {
-                        $scope.buttonDisabled = true;
-                        $scope.showRadio = true;
+                    if((isOwner() || authenticatedUserService.isAdmin() || authenticatedUserService.isModerator()) && isPrivate()) {
+                        $scope.showButtons = true;
 
                         $scope.title = $translate.instant('THIS_IS_PRIVATE');
                         $scope.context = $translate.instant('SHARE_PRIVATE_PORTFOLIO');
                         $scope.ariaLabel = $translate.instant('THIS_IS_PRIVATE');
-
-                        $scope.visibilityLinkOnly = $translate.instant('PORTFOLIO_VISIBILITY_NOT_LISTED');
-                        $scope.visibilityPublic = $translate.instant('PORTFOLIO_VISIBILITY_PUBLIC');
-                        $scope.ariaLabel = $translate.instant('THIS_IS_UNLISTED');
                     } else {
                         $scope.title = $translate.instant('THIS_IS_UNLISTED');
                         $scope.context = $translate.instant('THINK_AND_SHARE');
                         $scope.ariaLabel = $translate.instant('THIS_IS_UNLISTED');
                     }
-                    $scope.ok = $translate.instant('BUTTON_SHARE');
-                    $scope.cancel = $translate.instant('BUTTON_CANCEL');
+
                     $scope.url = locals.item.url;
                     $scope.target = locals.item.target;
 
-                    $scope.updatePortfolio = function () {
-                        if ($scope.modalRadio && $scope.showRadio) {
-                            $rootScope.savedPortfolio.visibility = $scope.modalRadio;
-                            serverCallService.makePost("rest/portfolio/update", $rootScope.savedPortfolio, updateSuccess, updateFail);
-                        }
+                    $scope.updatePortfolio = function (state) {
+                        var portfolioClone = angular.copy(locals.portfolio);
+                        portfolioClone.visibility = state;
+                        serverCallService.makePost("rest/portfolio/update", portfolioClone, updateSuccess, updateFail);
+                        $mdDialog.cancel();
+                    };
 
-                        function updateSuccess() {
-                            $scope.buttonDisabled = false;
+                    function updateSuccess(data) {
+                        if (isEmpty(data)) {
+                            updateFail();
+                        } else {
+                            locals.portfolio.visibility = data.visibility;
+                            toastService.show('PORTFOLIO_SAVED');
                         }
+                    }
 
-                        function updateFail() {
-                            $scope.buttonDisabled = true;
-                            $scope.modalRadio = "";
-                        }
+                    function updateFail() {
+                        console.log("Updating portfolio failed")
                     }
 
                     $scope.back = function() {
                         $mdDialog.cancel();
-
-                        if($scope.showRadio && $rootScope.savedPortfolio.visibility !== "PRIVATE") {
-                            serverCallService.makePost("rest/portfolio/update", $rootScope.savedPortfolio, postSuccess, function() {});
-                        }
                     }
 
                     $scope.success = function() {
-                        if(!$scope.buttonDisabled) {
-                            $mdDialog.cancel();
-                        }
-                    }
-
-                    function postSuccess() {
-                        $rootScope.savedPortfolio.visibility = "PRIVATE";
+                        $mdDialog.cancel();
                     }
                 }
 

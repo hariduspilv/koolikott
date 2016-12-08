@@ -16,12 +16,12 @@
             <span data-translate="PORTFOLIO_TITLE"></span>
           </label>
           <input data-ng-model="newPortfolio.title" id="add-portfolio-title-input" name="title" required>
-          <div data-ng-messages="addPortfolioForm.title.$error" data-ng-show="addPortfolioForm.title.$dirty || addPortfolioForm.title.$touched">
-            <div data-ng-message="required" data-ng-show="addPortfolioForm.title.$error.required" data-translate="PORTFOLIO_TITLE_IS_MANDATORY"></div>
+          <div data-ng-messages="addPortfolioForm.title.$error">
+            <div data-ng-message="required" data-ng-hide="newPortfolio.title.length > 0" data-translate="PORTFOLIO_TITLE_IS_MANDATORY"></div>
           </div>
         </md-input-container>
       </form>
-      <div flex-sm="25" flex-md="20" flex-gt-md="15" class="md-padding">
+      <div flex-sm="30" flex-md="20" flex-gt-md="15">
         <div data-ngf-drop ngf-select ng-model="newPicture" class="drop-box"
         data-ngf-drag-over-class="'dragover'"
         data-ngf-multiple="false"
@@ -77,14 +77,14 @@
 
 <md-dialog-actions>
   <span flex></span>
-  <md-button aria-label="Tühista kogumiku lisamine" class="md-button-disabled-grey" id="add-portfolio-cancel-button" data-ng-disabled="isSaving" data-ng-click="cancel()">
+  <md-button aria-label="Tühista kogumiku lisamine" id="add-portfolio-cancel-button" data-ng-disabled="isSaving" data-ng-click="cancel()">
     <span data-translate="BUTTON_CANCEL"></span>
   </md-button>
-  <md-button aria-label="Loo kogumik" data-ng-if="!isEditPortfolio" id="add-portfolio-create-button" data-ng-disabled="!isValid()" data-ng-click="create()" data-ng-hide="isSaving" class="md-primary">
-    <md-icon>arrow_forward</md-icon>
+  <md-button aria-label="Loo kogumik" data-ng-if="!isEditPortfolio" id="add-portfolio-create-button" data-ng-disabled="!isValid()" data-ng-click="create()" data-ng-hide="isSaving" class="md-primary md-raised">
     <span data-translate="BUTTON_CREATE_PORTFOLIO"></span>
+    <md-icon>arrow_forward</md-icon>
   </md-button>
-  <md-button aria-label="Muuda kogumikku" data-ng-if="isEditPortfolio" id="add-portfolio-edit-button" data-ng-disabled="!isValid()" data-ng-click="update()" data-ng-hide="isSaving" class="md-primary">
+  <md-button aria-label="Muuda kogumikku" data-ng-if="isEditPortfolio" id="add-portfolio-edit-button" data-ng-disabled="!isValid()" data-ng-click="update()" data-ng-hide="isSaving" class="md-primary md-raised">
     <md-icon>arrow_forward</md-icon>
     <span data-translate="BUTTON_EDIT_PORTFOLIO"></span>
   </md-button>

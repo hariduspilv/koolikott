@@ -159,6 +159,11 @@
     <field name="peerReview" type="text_general" indexed="true" stored="false" multiValued="true"/>
     <field name="publisher" type="text_general" indexed="true" stored="false" multiValued="true"/>
 
+    <!-- Tag suggestion -->
+    <field name="taxon_name" type="text_general" indexed="true" stored="false" multiValued="true"/>
+    <field name="resource_type_name" type="text_general" indexed="true" stored="false" multiValued="true"/>
+    <field name="target_group_name" type="text_general" indexed="true" stored="false" multiValued="true"/>
+
     <!-- Portfolio -->
     <field name="summary" type="text_general" indexed="true" stored="false"/>
     <field name="chapterTitle" type="text_general" indexed="true" stored="false" multiValued="true"/>
@@ -169,6 +174,7 @@
          via copyField further on in this schema  -->
     <field name="text" type="text_general" indexed="true" stored="false" multiValued="true"/>
     <field name="suggest_phrase" type="suggest_phrase" indexed="true" stored="false" multiValued="true"/>
+    <field name="suggest_tag" type="suggest_tag_phrase" indexed="true" stored="false" multiValued="true"/>
 
     <!-- catchall text field that indexes tokens both normally and in reverse for efficient
          leading wildcard queries. -->
@@ -215,6 +221,10 @@
     <copyField source="language" dest="suggest_phrase"/>
     <copyField source="publisher" dest="suggest_phrase"/>
 
+    <copyField source="taxon_name" dest="suggest_tag"/>
+    <copyField source="resource_type_name" dest="suggest_tag"/>
+    <copyField source="target_group_name" dest="suggest_tag"/>
+
     <!-- New field type for suggestions. Standard tokenizer is used to get single word results (te -> test)
     however this is not reliable for phrases as each word results in a seperate query ("test port" would result as two
     seperate queries test->test and port->portfolio) but we need responses for the whole string "test port". The
@@ -224,6 +234,14 @@
     <fieldType name="suggest_phrase" class="solr.TextField" positionIncrementGap="100">
         <analyzer>
             <tokenizer class="solr.StandardTokenizerFactory"/>
+            <filter class="solr.ShingleFilterFactory" maxShingleSize="3" outputUnigrams="true"/>
+            <filter class="solr.LowerCaseFilterFactory"/>
+        </analyzer>
+    </fieldType>
+
+    <fieldType name="suggest_tag_phrase" class="solr.TextField" positionIncrementGap="100">
+        <analyzer>
+            <tokenizer class="solr.WhitespaceTokenizerFactory"/>
             <filter class="solr.ShingleFilterFactory" maxShingleSize="3" outputUnigrams="true"/>
             <filter class="solr.LowerCaseFilterFactory"/>
         </analyzer>

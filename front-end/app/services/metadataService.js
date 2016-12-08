@@ -22,17 +22,17 @@ define([
     var educationalContextsCallbacks = [];
     var usedLanguagesContextsCallbacks = [];
 
-    angularAMD.factory('metadataService', ['serverCallService', '$filter',
-        function (serverCallService, $filter) {
-            init();
+    angularAMD.factory('metadataService', ['serverCallService', '$filter', '$timeout',
+        function (serverCallService, $filter, $timeout) {
+            $timeout(function () {
+                init()
+            });
 
             function init() {
                 serverCallService.makeGet("rest/learningMaterialMetadata/educationalContext", {}, getEducationalContextSuccess, getEducationalContextFail);
                 serverCallService.makeGet("rest/learningMaterialMetadata/crossCurricularTheme", {}, getCrossCurricularThemesSuccess, getCrossCurricularThemesFail);
                 serverCallService.makeGet("rest/learningMaterialMetadata/keyCompetence", {}, getKeyCompetencesSuccess, getKeyCompetencesFail);
-                serverCallService.makeGet("rest/learningMaterialMetadata/language", {}, getLanguagesSuccess, getLanguagesFail);
                 serverCallService.makeGet("rest/learningMaterialMetadata/licenseType", {}, getLicenseTypeSuccess, getLicenseTypeFail);
-                serverCallService.makeGet("rest/learningMaterialMetadata/resourceType", {}, getResourceTypeSuccess, getResourceTypeFail);
                 serverCallService.makeGet("rest/learningMaterialMetadata/resourceType/used", {}, getUsedResourceTypeSuccess, getResourceTypeFail);
                 serverCallService.makeGet("rest/learningMaterialMetadata/usedLanguages", {}, getUsedLanguagesSuccess, getUsedLanguagesFail);
             }
@@ -178,6 +178,7 @@ define([
                     if (LANGUAGES) {
                         callback(LANGUAGES);
                     } else {
+                        serverCallService.makeGet("rest/learningMaterialMetadata/language", {}, getLanguagesSuccess, getLanguagesFail);
                         // Save callback, call it when data arrives
                         languagesCallbacks.push(callback);
                     }
@@ -196,6 +197,7 @@ define([
                     if (RESOURCE_TYPES) {
                         callback(RESOURCE_TYPES);
                     } else {
+                        serverCallService.makeGet("rest/learningMaterialMetadata/resourceType", {}, getResourceTypeSuccess, getResourceTypeFail);
                         // Save callback, call it when data arrives
                         resourceTypesCallbacks.push(callback);
                     }

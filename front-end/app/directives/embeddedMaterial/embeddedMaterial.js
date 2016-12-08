@@ -6,8 +6,8 @@ define([
     'services/iconService',
     'services/embedService'
 ], function (app) {
-    app.directive('dopEmbeddedMaterial', ['translationService', 'iconService', 'embedService',
-        function (translationService, iconService, embedService) {
+    app.directive('dopEmbeddedMaterial', ['translationService', 'iconService', 'embedService', 'dialogService',
+        function (translationService, iconService, embedService, dialogService) {
             return {
                 scope: {
                     material: '=',
@@ -36,8 +36,15 @@ define([
                         $event.preventDefault();
                         $event.stopPropagation();
 
-                        var index = $scope.chapter.materials.indexOf(material);
-                        $scope.chapter.materials.splice(index, 1);
+                        var removeMaterialFromChapter = function () {
+                            var index = $scope.chapter.materials.indexOf(material);
+                            $scope.chapter.materials.splice(index, 1);
+                        };
+
+                        dialogService.showDeleteConfirmationDialog(
+                            'PORTFOLIO_DELETE_MATERIAL_CONFIRM_TITLE',
+                            'PORTFOLIO_DELETE_MATERIAL_CONFIRM_MESSAGE',
+                            removeMaterialFromChapter);
                     };
 
                     $scope.getCorrectLanguageTitle = function (material) {

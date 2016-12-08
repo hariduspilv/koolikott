@@ -4,10 +4,12 @@ define([
     'services/serverCallService',
     'services/searchService',
     'services/authenticatedUserService',
-    'services/storageService'
+    'services/storageService',
+    'services/dialogService',
+    'services/suggestService'
 ], function (angularAMD) {
-    angularAMD.directive('dopTags',['translationService', '$mdToast', '$translate', 'serverCallService', 'searchService', 'authenticatedUserService', '$location', '$rootScope', '$mdDialog', 'storageService',
-        function (translationService, $mdToast, $translate, serverCallService, searchService, authenticatedUserService, $location, $rootScope, $mdDialog, storageService) {
+    angularAMD.directive('dopTags',['translationService', '$mdToast', '$translate', 'serverCallService', 'searchService', 'authenticatedUserService', '$location', '$rootScope', '$mdDialog', 'storageService', 'suggestService', '$http', 'dialogService',
+        function (translationService, $mdToast, $translate, serverCallService, searchService, authenticatedUserService, $location, $rootScope, $mdDialog, storageService, suggestService, $http, dialogService) {
         return {
             scope: {
                 learningObject: '='
@@ -90,10 +92,12 @@ define([
                 };
 
                 function removeUpVoteSuccess() {
-                	$scope.removedUpVoteForm.tagUpVote = null;
-                    $scope.removedUpVoteForm.upVoteCount--;
-                    $scope.upVoteForms = sortTags($scope.upVoteForms);
-                    $scope.removedUpVoteForm = null;
+                    if ($scope.removedUpVoteForm) {
+                        $scope.removedUpVoteForm.tagUpVote = null;
+                        $scope.removedUpVoteForm.upVoteCount--;
+                        $scope.upVoteForms = sortTags($scope.upVoteForms);
+                        $scope.removedUpVoteForm = null;
+                    }
                 }
 
                 function removeUpVoteFail() {
@@ -112,8 +116,8 @@ define([
                 $scope.addTag = function () {
                     if ($scope.learningObject && $scope.learningObject.id) {
                         var url = "rest/learningObject/" + $scope.learningObject.id + "/tags";
-                        serverCallService.makePut(url, $scope.newTag, addTagSuccess, addTagFail);
-                        $scope.newTag = null;
+                        serverCallService.makePut(url, JSON.stringify($scope.newTag.tagName), addTagSuccess, addTagFail);
+                        $scope.newTag.tagName = null;
                     }
                 };
 
@@ -163,6 +167,17 @@ define([
                 $scope.showLess = function () {
                     $scope.upVoteForms = allUpVoteForms.slice(0, 10);
                     $scope.showMoreTags = true;
+                };
+
+
+                $scope.doSuggest = function (query) {
+                    return suggestService.suggest(query, suggestService.getSuggestSystemTagURLbase());
+                };
+
+                $scope.tagSelected = function () {
+                    if($scope.newTag && $scope.newTag.tagName) {
+                        $scope.addTag();
+                    }
                 };
 
                 function setImproperSuccessful() {

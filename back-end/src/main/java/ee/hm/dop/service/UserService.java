@@ -133,7 +133,7 @@ public class UserService extends BaseService {
 
             //Currently allowed to update only role and taxons
             User existingUser = getUserByUsername(user.getUsername());
-            existingUser.setRole(Role.getEnumByString(user.getRole().toString()));
+            existingUser.setRole(Role.valueOf(user.getRole().toString()));
 
             List<Taxon> newTaxons = user.getUserTaxons();
             newTaxons.removeAll(Collections.singleton(null));

@@ -7,7 +7,8 @@ define([
     'services/suggestService',
     'services/serverCallService',
     'services/toastService',
-    'directives/copyPermalink/copyPermalink'
+    'directives/copyPermalink/copyPermalink',
+    'directives/toolbarAddMaterials/toolbarAddMaterials'
 ], function (angularAMD, $http) {
     angularAMD.directive('dopHeader', ['translationService', '$location', 'searchService', 'authenticationService', 'authenticatedUserService', '$timeout', '$mdDialog', 'suggestService', 'serverCallService', 'toastService', '$route','$http',
         function (translationService, $location, searchService, authenticationService, authenticatedUserService, $timeout, $mdDialog, suggestService, serverCallService, toastService, $route, $http) {
@@ -61,6 +62,7 @@ define([
 
                     $scope.openDetailedSearch = function () {
                         $scope.detailedSearch.isVisible = true;
+                        $scope.detailedSearch.queryIn = $scope.searchFields.searchQuery;
                         broadcastSearchOpen();
                         $anchorScroll();
                     };
@@ -69,6 +71,10 @@ define([
                         $scope.$broadcast("detailedSearch:open");
                     }
 
+                    $scope.$on('detailedSearch:open', function () {
+                        $scope.detailedSearch.isVisible = true;
+                    });
+
                     $scope.closeDetailedSearch = function () {
                         $timeout(function () {
                             $scope.clearTaxonSelector();
@@ -76,23 +82,11 @@ define([
                         }, 500);
                         dontSearch = true;
                         $scope.detailedSearch.isVisible = false;
-                        $scope.detailedSearch.queryIn = null;
-                    };
-
-                    $scope.detailedSearch.doSearch = function () {
-                        var query = ($scope.searchFields.searchQuery || "") + " " + $scope.detailedSearch.queryOut;
-                        searchService.setSearch(query.trim());
-                        $location.url(searchService.getURL());
+                        $scope.detailedSearch.queryIn = "";
                     };
 
                     $scope.suggest.doSuggest = function (query) {
-                        if (query == null) {
-                            return [];
-                        }
-
-                        return $http.get(suggestService.getURL(query), {cache: true}).then(function (response) {
-                            return response.data.alternatives || [];
-                        });
+                        return suggestService.suggest(query, suggestService.getSuggestURLbase());
                     };
 
                     $scope.clickOutside = function () {

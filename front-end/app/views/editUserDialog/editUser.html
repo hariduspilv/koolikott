@@ -27,7 +27,7 @@
     <div class="md-padding" layout="row">
       <md-input-container flex>
         <label data-translate="ROLE"></label>
-        <md-select ng-model="selectedRole" required>
+        <md-select ng-model="selectedRole">
           <md-option ng-value="roleValue" data-ng-repeat="roleValue in roles" data-ng-click="setRole(roleValue)">
             {{getTranslation(roleValue)}}
           </md-option>

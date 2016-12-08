@@ -27,7 +27,7 @@ import ee.hm.dop.model.LanguageString;
 import ee.hm.dop.model.Material;
 import ee.hm.dop.model.Recommendation;
 import ee.hm.dop.model.SearchResult;
-import ee.hm.dop.model.TargetGroup;
+import ee.hm.dop.model.TargetGroupEnum;
 import ee.hm.dop.model.User;
 import ee.hm.dop.model.taxon.Subject;
 import ee.hm.dop.model.taxon.Taxon;
@@ -529,8 +529,8 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
         assertFalse(material.isEmbeddable());
 
         assertEquals(2, material.getTargetGroups().size());
-        assertTrue(material.getTargetGroups().contains(TargetGroup.ZERO_FIVE));
-        assertTrue(material.getTargetGroups().contains(TargetGroup.SIX_SEVEN));
+        assertTrue(TargetGroupEnum.containsTargetGroup(material.getTargetGroups(), TargetGroupEnum.ZERO_FIVE));
+        assertTrue(TargetGroupEnum.containsTargetGroup(material.getTargetGroups(), TargetGroupEnum.SIX_SEVEN));
         assertTrue(material.isSpecialEducation());
         assertEquals("Lifelong_learning_and_career_planning", material.getCrossCurricularThemes().get(0).getName());
         assertEquals("Cultural_and_value_competence", material.getKeyCompetences().get(0).getName());

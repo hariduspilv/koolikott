@@ -12,6 +12,6 @@ import ee.hm.dop.model.Role;
  */
 public class RoleDeserializer extends JsonDeserializer<Role>{
     public Role deserialize(JsonParser jp, DeserializationContext ctxt) throws IOException {
-        return Role.getEnumByString(jp.getText());
+        return Role.valueOf(jp.getText());
     }
 }

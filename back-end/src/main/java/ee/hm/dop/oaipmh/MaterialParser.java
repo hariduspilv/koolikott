@@ -17,16 +17,7 @@ import javax.xml.xpath.XPathExpression;
 import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
 
-import ee.hm.dop.model.Author;
-import ee.hm.dop.model.IssueDate;
-import ee.hm.dop.model.Language;
-import ee.hm.dop.model.LanguageString;
-import ee.hm.dop.model.Material;
-import ee.hm.dop.model.PeerReview;
-import ee.hm.dop.model.Publisher;
-import ee.hm.dop.model.ResourceType;
-import ee.hm.dop.model.Tag;
-import ee.hm.dop.model.TargetGroup;
+import ee.hm.dop.model.*;
 import ee.hm.dop.model.taxon.Domain;
 import ee.hm.dop.model.taxon.EducationalContext;
 import ee.hm.dop.model.taxon.Module;
@@ -35,12 +26,7 @@ import ee.hm.dop.model.taxon.Subject;
 import ee.hm.dop.model.taxon.Subtopic;
 import ee.hm.dop.model.taxon.Taxon;
 import ee.hm.dop.model.taxon.Topic;
-import ee.hm.dop.service.AuthorService;
-import ee.hm.dop.service.LanguageService;
-import ee.hm.dop.service.PeerReviewService;
-import ee.hm.dop.service.PublisherService;
-import ee.hm.dop.service.ResourceTypeService;
-import ee.hm.dop.service.TagService;
+import ee.hm.dop.service.*;
 import ezvcard.Ezvcard;
 import ezvcard.VCard;
 import org.apache.commons.validator.routines.UrlValidator;
@@ -84,6 +70,9 @@ public abstract class MaterialParser {
 
     @Inject
     private AuthorService authorService;
+
+    @Inject
+    private TargetGroupService targetGroupService;
 
     public Material parse(Document doc) throws ParseException {
         Material material;
@@ -412,7 +401,7 @@ public abstract class MaterialParser {
             if (ranges.length == 2) {
                 int from = Integer.parseInt(ranges[0].trim());
                 int to = Integer.parseInt(ranges[1].trim());
-                targetGroups.addAll(TargetGroup.getTargetGroupsByAge(from, to));
+                targetGroups.addAll(targetGroupService.getTargetGroupsByAge(from, to));
             }
         }
 

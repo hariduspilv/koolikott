@@ -1,0 +1,25 @@
+<div data-ng-show="isEditable">
+  <md-button class="md-raised" aria-label="Lisa alampeatükk" data-ng-click="addNewSubChapter()" data-ng-if="!isSub">
+    <md-icon class="material-icons">add</md-icon>
+    <span data-translate="SUBCHAPTER"></span>
+  </md-button>
+  <md-menu>
+    <md-button aria-label="Lisa materjal" class="md-raised" data-ng-click="openMenu($mdOpenMenu, $event)">
+      <md-icon class="material-icons">add</md-icon>
+      <span data-translate="MATERIAL"></span>
+      <md-icon>expand_more</md-icon>
+    </md-button>
+    <md-menu-content width="4">
+      <md-menu-item>
+        <md-button aria-label="Lisa materjal ekoolikotist" data-ng-click="openDetailedSearch()">
+          <span data-translate="MATERIAL_FROM_BAG"></span>
+        </md-button>
+      </md-menu-item>
+      <md-menu-item>
+        <md-button aria-label="Lisa uus materjal" data-ng-click="addMaterial()">
+          <span data-translate="NEW_MATERIAL"></span>
+        </md-button>
+      </md-menu-item>
+    </md-menu-content>
+  </md-menu>
+</div>

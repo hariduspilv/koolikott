@@ -5,8 +5,8 @@ define([
     'services/translationService',
     'directives/dashboard/userManagement/moderatorsTable',
     'directives/dashboard/userManagement/restrictedUsersTable',
-    'directives/dashboard/deletedPortfolio/deletedPortfolio',
-    'directives/dashboard/deletedMaterial/deletedMaterial',
+    'directives/dashboard/deleted/deletedPortfolio',
+    'directives/dashboard/deleted/deletedMaterial',
     'directives/dashboard/improper/improperMaterial',
     'directives/dashboard/improper/improperPortfolio',
     'directives/dashboard/broken/brokenMaterial',
@@ -35,7 +35,6 @@ define([
             init();
 
             function init() {
-                $scope.searchUsersTitle = $filter('translate')('SEARCH_USERS');
                 serverCallService.makeGet("rest/user/all", {}, successUsersCall, fail);
             }
 
@@ -49,7 +48,7 @@ define([
             }
 
             $scope.getTranslation = function (key) {
-                return $scope.searchUsersTitle = $filter('translate')(key);
+                return $filter('translate')(key);
             };
 
             $scope.editUser = function (user) {
@@ -197,12 +196,14 @@ define([
             }
 
             $scope.getCorrectLanguageTitle = function (item) {
-                if (item) {
+                if (item.titles) {
                     var result = getUserDefinedLanguageString(item.titles, translationService.getLanguage(), item.language);
                     if (!result) {
                         return "";
                     }
                     return result;
+                } else {
+                    return item.title
                 }
             };
 

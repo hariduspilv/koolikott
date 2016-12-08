@@ -346,9 +346,28 @@ insert into LearningObject_Tag(tag, learningObject) values(5, 1);
 insert into LearningObject_Tag(tag, learningObject) values(6, 2);
 insert into LearningObject_Tag(tag, learningObject) values(7, 2);
 
+-- TargetGroups
+insert into TargetGroup(id, name, label) values (1, 'ZERO_FIVE', 'PRESCHOOL');
+insert into TargetGroup(id, name, label) values (2, 'SIX_SEVEN', 'PRESCHOOL');
+
+insert into TargetGroup(id, name, label) values (3, 'GRADE1', 'LEVEL1');
+insert into TargetGroup(id, name, label) values (4, 'GRADE2', 'LEVEL1');
+insert into TargetGroup(id, name, label) values (5, 'GRADE3', 'LEVEL1');
+
+insert into TargetGroup(id, name, label) values (6, 'GRADE4', 'LEVEL2');
+insert into TargetGroup(id, name, label) values (7, 'GRADE5', 'LEVEL2');
+insert into TargetGroup(id, name, label) values (8, 'GRADE6', 'LEVEL2');
+
+insert into TargetGroup(id, name, label) values (9, 'GRADE7', 'LEVEL3');
+insert into TargetGroup(id, name, label) values (10, 'GRADE8', 'LEVEL3');
+insert into TargetGroup(id, name, label) values (11, 'GRADE9', 'LEVEL3');
+
+insert into TargetGroup(id, name, label) values (12, 'GYMNASIUM', 'LEVEL_GYMNASIUM');
+
 -- LearningObject TargetGroups
-insert into LearningObject_TargetGroup(learningObject, targetGroup) values (1, 'ZERO_FIVE');
-insert into LearningObject_TargetGroup(learningObject, targetGroup) values (1, 'SIX_SEVEN');
+
+insert into LearningObject_TargetGroup(learningObject, targetGroup) values (1, 1);
+insert into LearningObject_TargetGroup(learningObject, targetGroup) values (1, 2);
 
 -- TranslationGroup
 
@@ -445,8 +464,8 @@ insert into LearningObject_Tag(tag, learningObject) values(4, 103);
 insert into LearningObject_Tag(tag, learningObject) values(5, 101);
 
 -- Portfolio TargetGroups
-insert into LearningObject_TargetGroup(learningObject, targetGroup) values (101, 'SIX_SEVEN');
-insert into LearningObject_TargetGroup(learningObject, targetGroup) values (101, 'ZERO_FIVE');
+insert into LearningObject_TargetGroup(learningObject, targetGroup) values (101, 1);
+insert into LearningObject_TargetGroup(learningObject, targetGroup) values (101, 2);
 
 -- Portfolio Cross-curricular themes
 insert into LearningObject_CrossCurricularTheme(learningObject, crossCurricularTheme) values (101, 1);

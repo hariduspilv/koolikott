@@ -66,10 +66,10 @@ define([
                         var index = $rootScope.selectedMaterials.indexOf(material);
                         if (index == -1) {
                             $rootScope.selectedMaterials.push(material);
-                            $scope.selected = true;
+                            material.selected = true;
                         } else {
                             $rootScope.selectedMaterials.splice(index, 1);
-                            $scope.selected = false;
+                            material.selected = false;
                         }
                     };
 
@@ -84,7 +84,7 @@ define([
                     $scope.isAuthenticated = function () {
                         var authenticated = authenticatedUserService.getUser() && !authenticatedUserService.isRestricted() && !$rootScope.isEditPortfolioPage;
                         if (!authenticated) {
-                            $scope.selected = false;
+                            $scope.material.selected = false;
                         }
 
                         return authenticated;
@@ -92,7 +92,7 @@ define([
 
                     $rootScope.$watch('selectedMaterials', function (newValue) {
                         if (newValue && newValue.length == 0) {
-                            $scope.selected = false;
+                            $scope.material.selected = false;
                         }
                     });
                 }

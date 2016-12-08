@@ -108,4 +108,20 @@ public class UserResource extends BaseResource {
     public List<User> getRestrictedUsers() {
         return userService.getRestrictedUsers(getLoggedInUser());
     }
+
+    @GET
+    @Path("moderator/count")
+    @RolesAllowed("ADMIN")
+    @Produces(MediaType.APPLICATION_JSON)
+    public int getModeratorsCount() {
+        return userService.getModerators(getLoggedInUser()).size();
+    }
+
+    @GET
+    @Path("restrictedUser/count")
+    @RolesAllowed("ADMIN")
+    @Produces(MediaType.APPLICATION_JSON)
+    public int getRestrictedUsersCount() {
+        return userService.getRestrictedUsers(getLoggedInUser()).size();
+    }
 }

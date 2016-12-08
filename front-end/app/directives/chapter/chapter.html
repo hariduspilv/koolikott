@@ -38,26 +38,21 @@
             <input class="md-headline" placeholder="{{ 'PORTFOLIO_ENTER_CHAPTER_TITLE' | translate }}"
                    data-ng-model="chapter.title">
           </md-input-container>
-          <md-menu>
-            <md-button class="md-icon-button" ng-click="$mdOpenMenu($event)">
-              <md-icon md-menu-origin>more_vert</md-icon>
-            </md-button>
-            <md-menu-content width="4">
-              <md-menu-item>
-                <md-button data-ng-click="deleteChapter($index)">
-                  <md-icon md-menu-align-target>delete</md-icon>
-                  <span data-translate="PORTFOLIO_DELETE_CHAPTER"></span>
-                </md-button>
-              </md-menu-item>
-            </md-menu-content>
-          </md-menu>
         </div>
         <div uib-collapse="isCollapsed">
           <md-input-container class="md-block">
             <div text-angular id="add-material-description-input" class="chapter-content-textarea textangular-editor"
                  placeholder="{{'PORTFOLIO_CHAPTER_CONTENT' | translate}}" data-ng-model="chapter.text"></div>
           </md-input-container>
-          <div dop-add-chapter-material chapter="chapter"></div>
+        </div>
+        <div layout="row" layout-align="space-between center">
+          <div dop-chapter-toolbar data-chapter="chapter" data-is-sub="false"></div>
+          <md-button class="md-icon-button" data-ng-click="deleteChapter($index)">
+            <md-icon>delete</md-icon>
+            <md-tooltip md-direction="bottom">
+              <span data-translate="DELETE_CHAPTER"></span>
+            </md-tooltip>
+          </md-button>
         </div>
       </md-card-content>
     </md-card>
@@ -116,19 +111,6 @@
               <input class="md-title" data-ng-model="subchapter.title"
                      placeholder="{{ 'PORTFOLIO_ENTER_SUB_CHAPTER_TITLE' | translate }}">
             </md-input-container>
-            <md-menu>
-              <md-button class="md-icon-button" ng-click="$mdOpenMenu($event)">
-                <md-icon md-menu-origin>more_vert</md-icon>
-              </md-button>
-              <md-menu-content width="4">
-                <md-menu-item>
-                  <md-button data-ng-click="onDeleteSubChapter(subchapter)">
-                    <md-icon md-menu-align-target>delete</md-icon>
-                    <span data-translate="PORTFOLIO_DELETE_SUB_CHAPTER"></span>
-                  </md-button>
-                </md-menu-item>
-              </md-menu-content>
-            </md-menu>
           </div>
           <div uib-collapse="subisCollapsed[subchapter.$$hashKey]">
             <md-input-container class="md-block">
@@ -137,7 +119,15 @@
                    placeholder="{{'PORTFOLIO_SUB_CHAPTER_CONTENT' | translate}}"
                    data-ng-model="subchapter.text"></div>
             </md-input-container>
-            <div dop-add-chapter-material chapter="subchapter"></div>
+          </div>
+          <div layout="row" layout-align="space-between center">
+            <div dop-chapter-toolbar data-chapter="subchapter" data-is-sub="true"></div>
+            <md-button class="md-icon-button" data-ng-click="onDeleteSubChapter(subchapter)">
+              <md-icon>delete</md-icon>
+              <md-tooltip md-direction="bottom">
+                <span data-translate="DELETE_SUBCHAPTER"></span>
+              </md-tooltip>
+            </md-button>
           </div>
         </md-card-content>
       </md-card>

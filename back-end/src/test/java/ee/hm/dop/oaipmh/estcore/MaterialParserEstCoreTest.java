@@ -1,9 +1,6 @@
 package ee.hm.dop.oaipmh.estcore;
 
-import static org.easymock.EasyMock.createMock;
-import static org.easymock.EasyMock.expect;
-import static org.easymock.EasyMock.replay;
-import static org.easymock.EasyMock.verify;
+import static org.easymock.EasyMock.*;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
@@ -11,24 +8,12 @@ import static org.junit.Assert.assertTrue;
 import java.io.File;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
-import ee.hm.dop.model.Author;
-import ee.hm.dop.model.CrossCurricularTheme;
-import ee.hm.dop.model.KeyCompetence;
-import ee.hm.dop.model.Language;
-import ee.hm.dop.model.LanguageString;
-import ee.hm.dop.model.Material;
-import ee.hm.dop.model.PeerReview;
-import ee.hm.dop.model.Publisher;
-import ee.hm.dop.model.ResourceType;
-import ee.hm.dop.model.Tag;
+import ee.hm.dop.model.*;
 import ee.hm.dop.model.taxon.Domain;
 import ee.hm.dop.model.taxon.EducationalContext;
 import ee.hm.dop.model.taxon.Module;
@@ -37,15 +22,7 @@ import ee.hm.dop.model.taxon.Subject;
 import ee.hm.dop.model.taxon.Subtopic;
 import ee.hm.dop.model.taxon.Topic;
 import ee.hm.dop.oaipmh.ParseException;
-import ee.hm.dop.service.AuthorService;
-import ee.hm.dop.service.CrossCurricularThemeService;
-import ee.hm.dop.service.KeyCompetenceService;
-import ee.hm.dop.service.LanguageService;
-import ee.hm.dop.service.PeerReviewService;
-import ee.hm.dop.service.PublisherService;
-import ee.hm.dop.service.ResourceTypeService;
-import ee.hm.dop.service.TagService;
-import ee.hm.dop.service.TaxonService;
+import ee.hm.dop.service.*;
 import org.easymock.EasyMockRunner;
 import org.easymock.Mock;
 import org.easymock.TestSubject;
@@ -88,6 +65,9 @@ public class MaterialParserEstCoreTest {
 
     @Mock
     private PeerReviewService peerReviewService;
+
+    @Mock
+    private TargetGroupService targetGroupService;
 
     @Test(expected = ee.hm.dop.oaipmh.ParseException.class)
     public void parseXMLisNull() throws ParseException {
@@ -371,6 +351,43 @@ public class MaterialParserEstCoreTest {
         // Peer reviews
         expect(peerReviewService.getPeerReviewByURL(peerReview.getUrl().toUpperCase())).andReturn(peerReview);
 
+        TargetGroup targetGroupSixSeven = new TargetGroup();
+        targetGroupSixSeven.setName(TargetGroupEnum.SIX_SEVEN.name());
+
+        TargetGroup targetGroupGrade1 = new TargetGroup();
+        targetGroupGrade1.setName(TargetGroupEnum.GRADE1.name());
+
+        TargetGroup targetGroupGrade3 = new TargetGroup();
+        targetGroupGrade3.setName(TargetGroupEnum.GRADE3.name());
+
+        TargetGroup targetGroupGrade4 = new TargetGroup();
+        targetGroupGrade4.setName(TargetGroupEnum.GRADE4.name());
+
+        TargetGroup targetGroupGrade5 = new TargetGroup();
+        targetGroupGrade5.setName(TargetGroupEnum.GRADE5.name());
+
+        TargetGroup targetGroupGrade6 = new TargetGroup();
+        targetGroupGrade6.setName(TargetGroupEnum.GRADE6.name());
+
+        TargetGroup targetGroupGrade7 = new TargetGroup();
+        targetGroupGrade7.setName(TargetGroupEnum.GRADE7.name());
+
+        TargetGroup targetGroupGrade8 = new TargetGroup();
+        targetGroupGrade8.setName(TargetGroupEnum.GRADE8.name());
+
+        TargetGroup targetGroupGrade9 = new TargetGroup();
+        targetGroupGrade9.setName(TargetGroupEnum.GRADE9.name());
+
+        TargetGroup targetGroupGymnasiumm = new TargetGroup();
+        targetGroupGymnasiumm.setName(TargetGroupEnum.GYMNASIUM.name());
+
+        expect(targetGroupService.getTargetGroupsByAge(6, 7))
+                .andReturn(new HashSet<>(Arrays.asList(targetGroupSixSeven, targetGroupGrade1)));
+        expect(targetGroupService.getTargetGroupsByAge(10, 13))
+                .andReturn(new HashSet<>(Arrays.asList(targetGroupGrade3, targetGroupGrade4, targetGroupGrade5, targetGroupGrade6, targetGroupGrade7)));
+        expect(targetGroupService.getTargetGroupsByAge(14, 25))
+                .andReturn(new HashSet<>(Arrays.asList(targetGroupGrade7, targetGroupGrade8, targetGroupGrade9, targetGroupGymnasiumm)));
+
         LanguageString title1 = new LanguageString();
         title1.setLanguage(english);
         title1.setText("first title");
@@ -400,13 +417,13 @@ public class MaterialParserEstCoreTest {
         resourceTypes.add(resourceType2);
 
         replay(languageService, authorService, tagService, resourceTypeService, taxonService, publisherService,
-                crossCurricularThemeService, keyCompetenceService, peerReviewService);
+                crossCurricularThemeService, keyCompetenceService, peerReviewService, targetGroupService);
 
         Document doc = dBuilder.parse(fXmlFile);
         Material material = materialParser.parse(doc);
 
         verify(languageService, authorService, tagService, resourceTypeService, taxonService, publisherService,
-                crossCurricularThemeService, keyCompetenceService, peerReviewService);
+                crossCurricularThemeService, keyCompetenceService, peerReviewService, targetGroupService);
 
         assertEquals(titles, material.getTitles());
         assertEquals("https://oxygen.netgroupdigital.com/rest/repoMaterialSource", material.getSource());

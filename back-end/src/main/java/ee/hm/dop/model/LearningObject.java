@@ -51,17 +51,21 @@ import org.owasp.html.PolicyFactory;
 public abstract class LearningObject implements Searchable {
 
     static PolicyFactory ALLOWED_HTML_TAGS_POLICY = new HtmlPolicyBuilder().allowStandardUrlProtocols()
-            .allowElements("p", "b", "br", "i", "ul", "li", "div", "ol", "pre", "blockquote", "a").allowAttributes("href", "target").onElements("a")
+            .allowElements("p", "b", "br", "i", "ul", "li", "div", "ol", "pre", "blockquote", "a")
+            .allowAttributes("href", "target")
+            .onElements("a")
             .toFactory();
     @Id
     @GeneratedValue
     private Long id;
 
-    @Enumerated(EnumType.STRING)
-    @Column(name = "targetGroup")
-    @ElementCollection(fetch = EAGER)
+    @ManyToMany(fetch = EAGER, cascade = {MERGE, PERSIST})
     @Fetch(FetchMode.SELECT)
-    @CollectionTable(name = "LearningObject_TargetGroup", joinColumns = @JoinColumn(name = "learningObject"))
+    @JoinTable(
+            name = "LearningObject_TargetGroup",
+            joinColumns = {@JoinColumn(name = "learningObject")},
+            inverseJoinColumns = {@JoinColumn(name = "targetGroup")},
+            uniqueConstraints = @UniqueConstraint(columnNames = {"learningObject", "targetGroup"}))
     private List<TargetGroup> targetGroups;
 
     @ManyToMany(fetch = EAGER, cascade = {PERSIST, MERGE})
