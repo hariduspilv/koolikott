@@ -3,12 +3,13 @@ package ee.hm.dop.components;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 
+
 import ee.hm.dop.helpers.PageHelpers;
 import ee.hm.dop.page.MaterialPage;
 
 public class EditMaterialTaxonomyPart extends PageComponent {
 	
-	private By insertTag = By.xpath("//input[@ng-keydown='$mdChipsCtrl.inputKeydown($event)']");
+	private By insertTag = By.xpath("(//input[starts-with(@id, 'input-')])[2]");
 	private By updateMaterialButton = By.id("add-material-create-button");
 	
 	public EditMaterialTaxonomyPart insertTagAndEnter(String tag) {

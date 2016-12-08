@@ -25,6 +25,7 @@ public class PortfolioViewPage extends Page {
 	private By creatorName = By.xpath("//p[@data-ng-if='isNullOrZeroLength(material.authors)']");
 	private By materialBox = By.cssSelector("md-card-content.portfolio-noedit-item.layout-row");
 	private By notImproperContent = By.cssSelector("span.reason > span");
+	private By insertTag = By.xpath("(//input[starts-with(@id, 'fl-input-')])");
 			
 
 
@@ -87,6 +88,14 @@ public class PortfolioViewPage extends Page {
 		getDriver().findElement(notImproperContentButton).click();
 		PageHelpers.waitForSeconds(1500);
 		return this;
+	}
+	
+	public PortfolioViewPage insertTagAndEnter1() {
+		getDriver().findElement(insertTag).sendKeys(PageHelpers.getDate(0, "dd/MM/yyyy"));
+		getDriver().findElement(insertTag).sendKeys(Keys.ENTER);
+		PageHelpers.waitForSeconds(1500);
+		return this;
+
 	}
 
 

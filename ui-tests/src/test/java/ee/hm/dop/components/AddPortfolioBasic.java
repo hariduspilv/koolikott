@@ -19,6 +19,7 @@ public class AddPortfolioBasic extends PageComponent {
 	private By ageGroup = By.xpath("//md-select[contains(@data-ng-model, 'selectedTargetGroup')][contains(@aria-invalid,'true')]");
 	private By age = By.xpath("(//md-option[contains(@value, 'ZERO_FIVE')])[2]");
 	private By savePortfolioButton = By.id("add-portfolio-edit-button");
+	private By openSummaryField = By.xpath("//input[@data-ng-click='openSummary()']");
 	private By descriptionField = By.xpath("(//div[starts-with(@id, 'taTextElement')])");
 	private By closeButton = By.xpath("//button[@data-ng-click='closeSelect()']");
 	
@@ -91,6 +92,7 @@ public class AddPortfolioBasic extends PageComponent {
 				"It’s okay to be scared. Being scared means we’re concerned enough to realize that there might be something wrong, that there might be something worth fixing.",
 				"Most people are not strategic. They are reactive."};
 		String randomDescription = descriptionArray[new Random().nextInt(descriptionArray.length)];
+		getDriver().findElement(openSummaryField).click();
 		getDriver().findElement(descriptionField).sendKeys(randomDescription);
 		return this;
 	}
@@ -161,7 +163,7 @@ public class AddPortfolioBasic extends PageComponent {
 				"c:\\Images\\ballet.jpg", "c:\\Images\\coast.jpg", "c:\\Images\\cat1.jpg", "c:\\Images\\coffee.jpg",
 				"c:\\Images\\berry.jpg", "c:\\Images\\art.jpg", "c:\\Images\\girl.jpg", "c:\\Images\\autumn.jpg",
 				"c:\\Images\\bluberries.jpg", "c:\\Images\\sunset.jpg", "c:\\Images\\flowers.jpg",
-				"c:\\Images\\macro.jpg", "c:\\Images\\caravagio.jpg", "c:\\Images\\win.jpg", "c:\\Images\\fyodor.jpg",
+				"c:\\Images\\macro.jpg", "c:\\Images\\caravagio.jpg", "c:\\Images\\fyodor.jpg",
 				"c:\\Images\\planet.jpg", "c:\\Images\\pictorial.jpg", "c:\\Images\\winter.jpg",
 				"c:\\Images\\mask.jpg", "c:\\Images\\legolas.jpg", "c:\\Images\\mushroom.jpg", "c:\\Images\\anime.jpg",
 				"c:\\Images\\pug1.jpg", "c:\\Images\\dali.jpg", "c:\\Images\\cats.jpg", "c:\\Images\\zombie.jpg",

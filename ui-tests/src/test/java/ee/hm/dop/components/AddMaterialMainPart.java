@@ -22,6 +22,7 @@ public class AddMaterialMainPart extends PageComponent {
 	private By languageSelection = By.id("add-material-language-select");
 	private By existingMaterialValidationError = By.cssSelector("div.md-input-message-animation > span");
 	private By russianLanguage = By.xpath("/html/body/div[5]/md-select-menu/md-content/md-option[5]");
+	
 
 	
 	public String getValidationError() {
@@ -84,10 +85,11 @@ public class AddMaterialMainPart extends PageComponent {
 
 	}
 
-	public AddMaterialMainPart checkHyperLink() {
-		PageHelpers.waitForVisibility(linkField);
-		getDriver().findElement(linkField).sendKeys("");
-		return this;
+	public AddMaterialMainPart sendHyperLink() {
+			getDriver().findElement(linkField).clear();
+			getDriver().findElement(linkField).sendKeys("http://a" + PageHelpers.generateUrl(30));
+			return this;
+		
 	}
 
 
