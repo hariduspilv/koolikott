@@ -1,5 +1,5 @@
 <dataConfig>
-    <dataSource driver="com.mysql.jdbc.Driver" url="jdbc:mysql://127.0.0.1/dop" user="root" password="root" readOnly="true" />
+    <dataSource driver="com.mysql.jdbc.Driver" url="jdbc:mysql://127.0.0.1/dop" user="root" password="root" readOnly="true" batchSize="-1" />
     <document>
         <!--
             Primary key (uniqueKey) has to be unique among all entities.
