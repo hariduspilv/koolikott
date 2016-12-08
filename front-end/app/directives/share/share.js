@@ -31,9 +31,9 @@ define([
 
 
                     if ($scope.object) {
-                        if ($scope.object.visibility === 'PUBLIC' || $scope.object.visibility === 'NOT_LISTED' || isOwner() || authenticatedUserService.isAdmin() || authenticatedUserService.isModerator()) {
+                        if (isPublic() || isNotListed() || isOwner() || authenticatedUserService.isAdmin() || authenticatedUserService.isModerator()) {
                             return true;
-                        } else if ($scope.object.visibility === 'PRIVATE') {
+                        } else if (isPrivate()) {
                             return false;
                         }
                     }
@@ -71,6 +71,18 @@ define([
                     }
                 ];
 
+                function isPublic() {
+                    return $scope.object.visibility === 'PUBLIC';
+                }
+
+                function isPrivate() {
+                    return $scope.object.visibility === 'PRIVATE';
+                }
+
+                function isNotListed() {
+                    return $scope.object.visibility === 'NOT_LISTED';
+                }
+
                 function isOwner () {
                     if (!authenticatedUserService.isAuthenticated()) {
                         return false;
@@ -84,7 +96,7 @@ define([
                 }
 
                 $scope.checkOwnerAndShowDialog = function ($event, item) {
-                    if ((!isOwner() && $scope.object.visibility !== 'PUBLIC') || (isOwner() && $scope.object.visibility === 'PRIVATE')) {
+                    if ((!isOwner() && !isPublic()) || (isOwner() && isPrivate())) {
                         $event.preventDefault();
                         showWarningDialog($event, item);
                     }
@@ -113,23 +125,18 @@ define([
                 }
 
                 function DialogController($scope, $mdDialog, locals) {
-                    if((isOwner() || authenticatedUserService.isAdmin() || authenticatedUserService.isModerator()) && locals.portfolio.visibility === 'PRIVATE') {
+                    if((isOwner() || authenticatedUserService.isAdmin() || authenticatedUserService.isModerator()) && isPrivate()) {
                         $scope.showButtons = true;
 
                         $scope.title = $translate.instant('THIS_IS_PRIVATE');
                         $scope.context = $translate.instant('SHARE_PRIVATE_PORTFOLIO');
                         $scope.ariaLabel = $translate.instant('THIS_IS_PRIVATE');
-
-                        $scope.visibilityLinkOnly = $translate.instant('PORTFOLIO_VISIBILITY_NOT_LISTED');
-                        $scope.visibilityPublic = $translate.instant('PORTFOLIO_VISIBILITY_PUBLIC');
-                        $scope.ariaLabel = $translate.instant('THIS_IS_UNLISTED');
                     } else {
                         $scope.title = $translate.instant('THIS_IS_UNLISTED');
                         $scope.context = $translate.instant('THINK_AND_SHARE');
                         $scope.ariaLabel = $translate.instant('THIS_IS_UNLISTED');
                     }
-                    $scope.ok = $translate.instant('BUTTON_SHARE');
-                    $scope.cancel = $translate.instant('BUTTON_CANCEL');
+
                     $scope.url = locals.item.url;
                     $scope.target = locals.item.target;
 
@@ -158,13 +165,7 @@ define([
                     }
 
                     $scope.success = function() {
-                        if(!$scope.buttonDisabled) {
-                            $mdDialog.cancel();
-                        }
-                    }
-
-                    function postSuccess() {
-                        locals.portfolio.visibility = "PRIVATE";
+                        $mdDialog.cancel();
                     }
                 }
 
