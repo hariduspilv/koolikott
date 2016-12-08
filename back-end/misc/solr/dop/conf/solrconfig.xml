@@ -1335,8 +1335,6 @@
             <str name="classname">org.apache.solr.spelling.suggest.Suggester</str>
             <str name="lookupImpl">FSTLookupFactory</str>
             <str name="field">suggest_tag</str>
-            <str name="payloadField">taxon_name</str>
-            <str name="weightField">relevance</str>
             <str name="fieldType">suggest_tag_phrase</str>
             <str name="buildOnOptimize">true</str>
         </lst>
