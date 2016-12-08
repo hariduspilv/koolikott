@@ -130,7 +130,7 @@ define([
             function checkAuthorized(portfolio) {
                 var user = authenticatedUserService.getUser();
 
-                if (user.id == portfolio.creator.id || authenticatedUserService.isAdmin() || authenticatedUserService.isModerator()) {
+                if ((user && user.id == portfolio.creator.id) || authenticatedUserService.isAdmin() || authenticatedUserService.isModerator()) {
                     return true
                 }
 
@@ -147,7 +147,7 @@ define([
                 }, 20000);
             }
 
-            $scope.addNewChapter = function() {
+            $scope.addNewChapter = function () {
                 if (!$scope.portfolio.chapters) {
                     $scope.portfolio.chapters = [];
                 }
@@ -159,7 +159,7 @@ define([
                     openCloseChapter: true
                 });
 
-                $timeout(function() {
+                $timeout(function () {
                     goToElement('chapter-' + ($scope.portfolio.chapters.length - 1));
                 }, 0);
             };

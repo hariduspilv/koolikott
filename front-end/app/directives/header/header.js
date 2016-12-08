@@ -82,7 +82,7 @@ define([
                         }, 500);
                         dontSearch = true;
                         $scope.detailedSearch.isVisible = false;
-                        $scope.detailedSearch.queryIn = null;
+                        $scope.detailedSearch.queryIn = "";
                     };
 
                     $scope.suggest.doSuggest = function (query) {

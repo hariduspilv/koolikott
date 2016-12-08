@@ -19,6 +19,7 @@ define([
             },
             templateUrl: 'detailedSearch.html',
             controller: function ($scope, $rootScope, $timeout) {
+                $scope.queryIn = $scope.queryIn ? $scope.queryIn : "";
 
                 var BASIC_EDUCATION_ID = 2;
                 var SECONDARY_EDUCATION_ID = 3;
@@ -304,38 +305,30 @@ define([
                 });
 
                 function initWatches() {
+
+                    $rootScope.$watch('savedPortfolio', function (newValue, oldValue) {
+                        if (newValue && oldValue && newValue !== oldValue) {
+                            setEditModePrefill();
+                        }
+                    }, true);
+
                     $scope.$watch('queryIn', function (queryIn, oldQueryIn) {
                         if (queryIn !== oldQueryIn && $scope.isVisible) {
                             parseSimpleSearchQuery(queryIn);
                         }
                     }, true);
 
-                    $scope.$watch('taxon.id', function (newTaxon, oldTaxon) {
-                        if (!$scope.taxon) {
-                            $scope.detailedSearch.educationalContext = null;
-                        }
 
-                        if (newTaxon !== oldTaxon && $scope.taxon && !prefilling) {
-                            $scope.detailedSearch.educationalContext = taxonService.getEducationalContext($scope.taxon);
-                            clearHiddenFields();
+                    $scope.$watch('detailedSearch', function (newValue, oldValue) {
+                        if (!$scope.taxon) $scope.detailedSearch.educationalContext = null;
+
+                        if ($scope.isVisible && !prefilling && hasSearchChanged(newValue, oldValue) ) {
+                            filterTypeSearch();
                             $scope.search();
                         } else if (prefilling) {
                             prefilling = false;
                         }
-                    }, false);
-
-                    $scope.$watch('detailedSearch', function (newValue, oldValue) {
-                        if ($scope.isVisible && hasSearchChanged(newValue, oldValue)) {
-                            filterTypeSearch();
-                            $scope.search();
-                        }
                     }, true);
-
-                    $rootScope.$watch('savedPortfolio', function (newValue, oldValue) {
-                        if (newValue && oldValue && newValue !== oldValue) {
-                            setEditModePrefill();
-                        }
-                    }, false);
                 }
 
                 function filterTypeSearch() {
@@ -367,6 +360,11 @@ define([
                     if (newValue.keyCompetence !== oldValue.keyCompetence) return true;
                     if (newValue.specialEducationalNeed !== oldValue.specialEducationalNeed) return true;
                     if (newValue.CLIL !== oldValue.CLIL) return true;
+                    if (newValue.taxon !== oldValue.taxon && $scope.taxon) {
+                        $scope.detailedSearch.educationalContext = taxonService.getEducationalContext($scope.taxon);
+                        clearHiddenFields();
+                        return true;
+                    }
                 }
 
                 function clearHiddenFields() {
@@ -447,12 +445,10 @@ define([
 
                 function setEditModePrefill() {
                     if ($rootScope.isEditPortfolioMode && $rootScope.savedPortfolio) {
-                        try {
-                            $scope.taxon = Object.create($rootScope.savedPortfolio.taxon);
-                            $scope.detailedSearch.targetGroups = Object.create($rootScope.savedPortfolio.targetGroups);
-                            prefilling = true;
-                        } catch (e) {
-                        }
+                        $scope.taxon = $rootScope.savedPortfolio.taxon;
+                        $scope.detailedSearch.targetGroups = $rootScope.savedPortfolio.targetGroups;
+                        prefilling = true;
+
                         $scope.detailedSearch.type = "material";
                     }
                 }
