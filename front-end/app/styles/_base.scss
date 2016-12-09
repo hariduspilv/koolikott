@@ -10,6 +10,12 @@ html, body {
   line-height: 1.2;
 }
 
+// Fix IE background going to black when md-backdrop is in dom
+html.ua-ie,
+.ua-ie body {
+  background: rgba(243, 246, 251, .99);
+}
+
 .pointer {
   cursor: pointer;
 }
