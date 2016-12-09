@@ -53,8 +53,6 @@ define([
                         }
 
                         serverCallService.makePost("rest/portfolio/update", portfolio, addMaterialsToChapterSuccess, addMaterialsToChapterFailed);
-
-                        $rootScope.back();
                     };
 
                     /*
@@ -82,6 +80,10 @@ define([
                         } else {
                             $scope.removeSelection();
                             toastService.show('PORTFOLIO_ADD_MATERIAL_SUCCESS');
+
+                            if ($rootScope.isEditPortfolioMode) {
+                                $rootScope.back();
+                            }
                         }
                     }
 
