@@ -60,7 +60,7 @@ define([
                     if (user.id === authenticatedUser.user.id) {
                         authenticatedUser.user = user;
                         authenticatedUserService.setAuthenticatedUser(authenticatedUser);
-                        $location.url('/dashboard');
+                        $location.url('/');
                     }
                     $mdDialog.hide();
                     toastService.show('USER_UPDATED');
