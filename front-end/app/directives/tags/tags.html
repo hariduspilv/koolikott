@@ -27,25 +27,34 @@
       </md-button>
     </md-chip-template>
   </md-chips>
-  <form name="addTagForm" id="addTagForm" data-ng-show="isAllowed()" ng-submit="addTag()">
-    <md-autocomplete
-      md-selected-item="newTag.selectedItem"
-      md-autofocus
-      md-floating-label="{{'MATERIAL_ADD_TAG' | translate}}"
-      md-item-text="tag"
-      md-items="tag in doSuggest(newTag.tagName)"
-      md-search-text="newTag.tagName"
-      md-input-maxlength="100"
-      md-input-minlength="0"
-      id="suggest-tags-input"
-      md-menu-class="suggest-dropdown"
-      md-selected-item-change="tagSelected(tag)"
-      ng-model-options="{debounce: 100}">
-      <md-item-template>
-        <span md-highlight-text="newTag.tagName">{{ tag }}</span>
-      </md-item-template>
-    </md-autocomplete>
+
+  <form name="addTagForm" data-ng-show="isAllowed()" ng-submit="addTag()">
+    <md-input-container class="tags">
+      <label data-translate="MATERIAL_ADD_TAG"></label>
+      <input name="tag" ng-model="newTag"/>
+    </md-input-container>
   </form>
+
+  <!--TODO:-->
+  <!--<form name="addTagForm" id="addTagForm" data-ng-show="isAllowed()" ng-submit="addTag()">-->
+    <!--<md-autocomplete-->
+      <!--md-selected-item="newTag.selectedItem"-->
+      <!--md-autofocus-->
+      <!--md-floating-label="{{'MATERIAL_ADD_TAG' | translate}}"-->
+      <!--md-item-text="tag"-->
+      <!--md-items="tag in doSuggest(newTag.tagName)"-->
+      <!--md-search-text="newTag.tagName"-->
+      <!--md-input-maxlength="100"-->
+      <!--md-input-minlength="0"-->
+      <!--id="suggest-tags-input"-->
+      <!--md-menu-class="suggest-dropdown"-->
+      <!--md-selected-item-change="tagSelected(tag)"-->
+      <!--ng-model-options="{debounce: 100}">-->
+      <!--<md-item-template>-->
+        <!--<span md-highlight-text="newTag.tagName">{{ tag }}</span>-->
+      <!--</md-item-template>-->
+    <!--</md-autocomplete>-->
+  <!--</form>-->
 </div>
 
 <div layout="row">

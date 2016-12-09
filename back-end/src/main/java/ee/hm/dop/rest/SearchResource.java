@@ -7,6 +7,7 @@ import ee.hm.dop.model.ResourceType;
 import ee.hm.dop.model.SearchFilter;
 import ee.hm.dop.model.SearchResult;
 import ee.hm.dop.model.Searchable;
+import ee.hm.dop.model.TargetGroup;
 import ee.hm.dop.model.taxon.Taxon;
 import ee.hm.dop.service.CrossCurricularThemeService;
 import ee.hm.dop.service.KeyCompetenceService;
@@ -79,6 +80,11 @@ public class SearchResource extends BaseResource {
                 .map(taxonId -> taxonService.getTaxonById(taxonId))
                 .collect(Collectors.toList());
 
+        List<TargetGroup> targetGroups = targetGroupNames
+                .stream()
+                .map(name -> targetGroupService.getByName(name))
+                .collect(Collectors.toList());
+
         Language language = languageService.getLanguage(languageCode);
         ResourceType resourceType = resourceTypeService.getResourceTypeByName(resourceTypeName);
         CrossCurricularTheme crossCurricularTheme = crossCurricularThemeService
@@ -98,7 +104,7 @@ public class SearchResource extends BaseResource {
         searchFilter.setPaid(paid);
         searchFilter.setType(type);
         searchFilter.setLanguage(language);
-        searchFilter.setTargetGroups(targetGroupNames);
+        searchFilter.setTargetGroups(targetGroups);
         searchFilter.setResourceType(resourceType);
         searchFilter.setSpecialEducation(isSpecialEducation);
         searchFilter.setIssuedFrom(issuedFrom);

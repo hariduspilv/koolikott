@@ -90,7 +90,16 @@ define([
                     };
 
                     $scope.suggest.doSuggest = function (query) {
-                        return suggestService.suggest(query, suggestService.getSuggestURLbase());
+                        if (query == null) {
+                            return [];
+                        }
+
+                        return $http.get(suggestService.getURL(query), {cache: true}).then(function (response) {
+                            return response.data.alternatives || [];
+                        });
+
+                        // TODO:
+                        // return suggestService.suggest(query, suggestService.getSuggestURLbase());
                     };
 
                     $scope.clickOutside = function () {

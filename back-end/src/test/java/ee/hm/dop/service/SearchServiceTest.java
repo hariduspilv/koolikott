@@ -713,15 +713,19 @@ public class SearchServiceTest {
         SearchFilter searchFilter = new SearchFilter();
 
         TargetGroup targetGroupSixSeven = new TargetGroup();
+        targetGroupSixSeven.setId(2L);
         targetGroupSixSeven.setName(TargetGroupEnum.SIX_SEVEN.name());
+
+        expect(targetGroupService.getByName(TargetGroupEnum.SIX_SEVEN.name())).andReturn(targetGroupSixSeven);
 
         replay(targetGroupService);
 
-        searchFilter.setTargetGroups(Collections.singletonList(TargetGroupEnum.SIX_SEVEN.name()));
+        searchFilter.setTargetGroups(Collections.singletonList(targetGroupService
+                        .getByName(TargetGroupEnum.SIX_SEVEN.name())));
 
         verify(targetGroupService);
 
-        String tokenizedQuery = "(umm) AND target_group:\"six_seven\" AND ((visibility:\"public\") OR type:\"material\")";
+        String tokenizedQuery = "(umm) AND target_group:\"2\" AND ((visibility:\"public\") OR type:\"material\")";
         long start = 0;
 
         List<Searchable> searchables = Arrays.asList(createMaterial(9L), createMaterial(2L), createPortfolio(1L));
@@ -735,17 +739,23 @@ public class SearchServiceTest {
         SearchFilter searchFilter = new SearchFilter();
 
         TargetGroup targetGroupSixSeven = new TargetGroup();
+        targetGroupSixSeven.setId(2L);
         targetGroupSixSeven.setName(TargetGroupEnum.SIX_SEVEN.name());
         TargetGroup targetGroupZeroFive = new TargetGroup();
+        targetGroupZeroFive.setId(1L);
         targetGroupZeroFive.setName(TargetGroupEnum.ZERO_FIVE.name());
+
+        expect(targetGroupService.getByName(TargetGroupEnum.SIX_SEVEN.name())).andReturn(targetGroupSixSeven);
+        expect(targetGroupService.getByName(TargetGroupEnum.ZERO_FIVE.name())).andReturn(targetGroupZeroFive);
 
         replay(targetGroupService);
 
-        searchFilter.setTargetGroups(Arrays.asList(TargetGroupEnum.SIX_SEVEN.name(), TargetGroupEnum.ZERO_FIVE.name()));
+        searchFilter.setTargetGroups(Arrays.asList(targetGroupService.getByName(TargetGroupEnum.SIX_SEVEN.name()),
+                targetGroupService.getByName(TargetGroupEnum.ZERO_FIVE.name())));
 
         verify(targetGroupService);
 
-        String tokenizedQuery = "(umm) AND (target_group:\"six_seven\" OR target_group:\"zero_five\")"
+        String tokenizedQuery = "(umm) AND (target_group:\"2\" OR target_group:\"1\")"
                 + " AND ((visibility:\"public\") OR type:\"material\")";
 
         long start = 0;
