@@ -126,8 +126,8 @@ define([
                 }
 
                 function addTaxonToSearch() {
-                    if ($scope.taxon) {
-                        searchService.setTaxon([$scope.taxon.id]);
+                    if ($scope.detailedSearch.taxon) {
+                        searchService.setTaxon([$scope.detailedSearch.taxon.id]);
                     } else {
                         searchService.setTaxon(null);
                     }
@@ -320,7 +320,7 @@ define([
 
 
                     $scope.$watch('detailedSearch', function (newValue, oldValue) {
-                        if (!$scope.taxon) $scope.detailedSearch.educationalContext = null;
+                        if (!$scope.detailedSearch.taxon) $scope.detailedSearch.educationalContext = null;
 
                         if ($scope.isVisible && !prefilling && hasSearchChanged(newValue, oldValue) ) {
                             filterTypeSearch();
@@ -445,7 +445,7 @@ define([
 
                 function setEditModePrefill() {
                     if ($rootScope.isEditPortfolioMode && $rootScope.savedPortfolio) {
-                        $scope.taxon = $rootScope.savedPortfolio.taxon;
+                        $scope.detailedSearch.taxon = $rootScope.savedPortfolio.taxon;
                         $scope.detailedSearch.targetGroups = $rootScope.savedPortfolio.targetGroups;
                         prefilling = true;
 
