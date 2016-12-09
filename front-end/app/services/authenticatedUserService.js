@@ -21,11 +21,7 @@ define(['angularAMD'], function (angularAMD) {
                 },
 
                 isAuthenticated: function () {
-                    if (instance.getAuthenticatedUser()) {
-                        return true;
-                    }
-
-                    return false;
+                    return !!instance.getAuthenticatedUser();
                 },
 
                 isAdmin: function () {
