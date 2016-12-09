@@ -29,7 +29,11 @@ define(['angularAMD'], function(angularAMD) {
 
                 $http(config).
                 success(function(data) {
-                    successCallback(data);
+                    if(method == "HEAD"){
+                        successCallback(data.headers);
+                    }else{
+                        successCallback(data.data);
+                    }
                 }).error(function(data, status, headers, config) {
                     if (status == '419') {
                         authenticatedUserService.removeAuthenticatedUser();
