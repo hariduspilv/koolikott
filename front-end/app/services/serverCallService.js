@@ -27,43 +27,46 @@ define(['angularAMD'], function(angularAMD) {
                     config.transformRequest = transformRequest;
                 }
 
-                $http(config).
-                success(function(data) {
-                    successCallback(data);
-                }).error(function(data, status, headers, config) {
-                    if (status == '419') {
-                        authenticatedUserService.removeAuthenticatedUser();
-                        makeCall(url, method, params, false, successCallback, errorCallback, finallyCallback, transformRequest);
-                    } else if (status == '401') {
-                        $location.url('/');
-                    } else if (errorCallback) {
-                        errorCallback(data, status);
-                    }
-                }).finally(finallyCallback);
+                // TODO: Put success callback back
+                // $http(config).
+                // success(function(data, message, headers) {
+                //     if(method == 'HEAD'){
+                //         successCallback(headers);
+                //     }
+                //     successCallback(data);
+                // }).error(function(data, status, headers, config) {
+                //     if (status == '419') {
+                //         authenticatedUserService.removeAuthenticatedUser();
+                //         makeCall(url, method, params, false, successCallback, errorCallback, finallyCallback, transformRequest);
+                //     } else if (status == '401') {
+                //         $location.url('/');
+                //     } else if (errorCallback) {
+                //         errorCallback(data, status);
+                //     }
+                // }).finally(finallyCallback);
+                //
+                // if (!successCallback) {
+                //     return $http(config);
+                // }
 
-                if (!successCallback) {
-                    return $http(config);
-                }
-
-                // TODO:
-                // $http(config)
-                //     .then(function (response) {
-                //         if(method == "HEAD"){
-                //             successCallback(response.headers);
-                //         }else{
-                //             successCallback(response.data);
-                //         }
-                //     }, function (response) {
-                //         if (response.status == '419') {
-                //             authenticatedUserService.removeAuthenticatedUser();
-                //             makeCall(url, method, params, false, successCallback, errorCallback, finallyCallback, transformRequest);
-                //         } else if (response.status == '401') {
-                //             $location.url('/');
-                //         } else if (errorCallback) {
-                //             errorCallback(response.data, response.status);
-                //         }
-                //     })
-                //     .then(finallyCallback);
+                $http(config)
+                    .then(function (response) {
+                        if(method == "HEAD"){
+                            successCallback(response.headers);
+                        }else{
+                            successCallback(response.data);
+                        }
+                    }, function (response) {
+                        if (response.status == '419') {
+                            authenticatedUserService.removeAuthenticatedUser();
+                            makeCall(url, method, params, false, successCallback, errorCallback, finallyCallback, transformRequest);
+                        } else if (response.status == '401') {
+                            $location.url('/');
+                        } else if (errorCallback) {
+                            errorCallback(response.data, response.status);
+                        }
+                    })
+                    .then(finallyCallback);
             }
 
             function setAuthorization(headers) {
