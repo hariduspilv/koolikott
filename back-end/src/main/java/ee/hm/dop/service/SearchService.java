@@ -11,6 +11,7 @@ import ee.hm.dop.model.Role;
 import ee.hm.dop.model.SearchFilter;
 import ee.hm.dop.model.SearchResult;
 import ee.hm.dop.model.Searchable;
+import ee.hm.dop.model.TargetGroup;
 import ee.hm.dop.model.User;
 import ee.hm.dop.model.UserFavorite;
 import ee.hm.dop.model.Visibility;
@@ -235,8 +236,8 @@ public class SearchService {
         if (searchFilter.getTargetGroups() != null && !searchFilter.getTargetGroups().isEmpty()) {
             List<String> filters = new ArrayList<>();
 
-            for (String targetGroup : searchFilter.getTargetGroups()) {
-                filters.add(format("target_group:\"%s\"", targetGroup.toLowerCase()));
+            for (TargetGroup targetGroup : searchFilter.getTargetGroups()) {
+                filters.add(format("target_group:\"%s\"", targetGroup.getId()));
             }
 
             if (filters.size() == 1) {
