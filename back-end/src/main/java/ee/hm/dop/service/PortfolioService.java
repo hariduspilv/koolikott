@@ -1,6 +1,5 @@
 package ee.hm.dop.service;
 
-import static ee.hm.dop.model.Visibility.PRIVATE;
 import static org.apache.commons.lang3.StringUtils.isEmpty;
 import static org.joda.time.DateTime.now;
 
@@ -41,7 +40,7 @@ public class PortfolioService extends BaseService implements LearningObjectHandl
         } else {
             portfolio = portfolioDAO.findByIdNotDeleted(portfolioId);
 
-            if (!hasPermissionsToAccess(loggedInUser, portfolio)) {
+            if (!hasPermissionsToView(loggedInUser, portfolio)) {
                 throw new RuntimeException("Object does not exist or requesting user must be logged in user must be the creator, administrator or moderator.");
             }
         }
@@ -72,7 +71,7 @@ public class PortfolioService extends BaseService implements LearningObjectHandl
 
         Portfolio originalPortfolio = portfolioDAO.findByIdNotDeleted(portfolio.getId());
 
-        if (!hasPermissionsToAccess(loggedInUser, originalPortfolio)) {
+        if (!hasPermissionsToView(loggedInUser, originalPortfolio)) {
             throw new RuntimeException("Object does not exist or requesting user must be logged in user must be the creator, administrator or moderator.");
         }
 
@@ -87,7 +86,7 @@ public class PortfolioService extends BaseService implements LearningObjectHandl
         }
         Portfolio originalPortfolio = portfolioDAO.findByIdNotDeleted(portfolio.getId());
 
-        if (!hasPermissionsToAccess(loggedInUser, originalPortfolio)) {
+        if (!hasPermissionsToView(loggedInUser, originalPortfolio)) {
             throw new RuntimeException("Object does not exist or requesting user must be logged in user must be the creator, administrator or moderator.");
         }
 
@@ -108,7 +107,7 @@ public class PortfolioService extends BaseService implements LearningObjectHandl
         }
         Portfolio originalPortfolio = portfolioDAO.findByIdNotDeleted(portfolio.getId());
 
-        if (!hasPermissionsToAccess(loggedInUser, originalPortfolio)) {
+        if (!hasPermissionsToView(loggedInUser, originalPortfolio)) {
             throw new RuntimeException("Object does not exist or requesting user must be logged in user must be the creator, administrator or moderator.");
         }
 
@@ -122,7 +121,7 @@ public class PortfolioService extends BaseService implements LearningObjectHandl
         }
         Portfolio originalPortfolio = portfolioDAO.findByIdFromAll(portfolio.getId());
 
-        if (!hasPermissionsToAccess(loggedInUser, originalPortfolio)) {
+        if (!hasPermissionsToView(loggedInUser, originalPortfolio)) {
             throw new RuntimeException("Object does not exist or requesting user must be logged in user must be the creator, administrator or moderator.");
         }
 
@@ -195,7 +194,7 @@ public class PortfolioService extends BaseService implements LearningObjectHandl
 
         Portfolio originalPortfolio = portfolioDAO.findByIdNotDeleted(portfolio.getId());
 
-        if (!hasPermissionsToAccess(loggedInUser, originalPortfolio)) {
+        if (!hasPermissionsToView(loggedInUser, originalPortfolio)) {
             throw new RuntimeException("Object does not exist or requesting user must be logged in user must be the creator, administrator or moderator.");
         }
 
@@ -314,6 +313,10 @@ public class PortfolioService extends BaseService implements LearningObjectHandl
         return originalPortfolio;
     }
 
+    private boolean hasPermissionsToView(User loggedInUser, Portfolio portfolio) {
+        return isPublic(portfolio) || isNotListed(portfolio) || isUserAdminOrModerator(loggedInUser) || isUserCreator(portfolio, loggedInUser);
+    }
+
     @Override
     public boolean hasPermissionsToAccess(User user, LearningObject learningObject) {
         if (learningObject == null || !(learningObject instanceof Portfolio)) return false;
@@ -333,5 +336,9 @@ public class PortfolioService extends BaseService implements LearningObjectHandl
     @Override
     public boolean isPublic(LearningObject learningObject) {
         return ((Portfolio) learningObject).getVisibility() == Visibility.PUBLIC && !learningObject.isDeleted();
+    }
+
+    private boolean isNotListed(LearningObject learningObject) {
+        return ((Portfolio) learningObject).getVisibility() == Visibility.NOT_LISTED && !learningObject.isDeleted();
     }
 }
