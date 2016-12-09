@@ -1,3 +1,20 @@
+## e-Koolikott 1.6.0 (09.12.2016)
+
+### Lisandunud
+* Kasutaja õiguste haldamine #49 https://github.com/hariduspilv/koolikott/issues/49
+* Materjali valimisel kogumikku lisamise päis #103 https://github.com/hariduspilv/koolikott/issues/103
+* Kogumiku elementide ühtne kustutamine #125 https://github.com/hariduspilv/koolikott/issues/125
+* Uue kogumiku loomisel esimese pt etteloomine ning teavitustekst #124 https://github.com/hariduspilv/koolikott/issues/124
+* Pop-up privaatse kogumiku nähtavuse muutmiseks jagamise nupul klikkimisel #118 https://github.com/hariduspilv/koolikott/issues/118
+* Kogumiku lisamise modaalakna muudatus #123 https://github.com/hariduspilv/koolikott/issues/123
+* Sisse logimisel avaneb vasakmenüüs Minu asjad, 2 punkt ei sulgu kunagi #122 https://github.com/hariduspilv/koolikott/issues/122
+
+### Parandatud
+* Automaatne OAI-PMH sünkroniseerimine ei tööta #15 https://github.com/hariduspilv/koolikott/issues/15
+* Bower komponentide uuendamine #138 https://github.com/hariduspilv/koolikott/issues/138
+* Ikoonid on mõnes telefonis kadunud #40 https://github.com/hariduspilv/koolikott/issues/40
+* Taksonoomia muutumisel kuvatakse vasakmenüüs kasutajale vana versiooni #112 https://github.com/hariduspilv/koolikott/issues/112
+
 ## e-Koolikott 1.5.0 (25.11.2016)
 
 ### Lisandunud
