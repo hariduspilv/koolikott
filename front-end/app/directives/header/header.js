@@ -224,6 +224,12 @@ define([
                             $scope.detailedSearch.isVisible = false;
                         }
                     });
+
+                    $scope.$watch(function () {
+                        return $location.url();
+                    }, function () {
+                        $scope.isEditModeAndSearch = ($rootScope.isEditPortfolioMode && $location.url().indexOf('/search') !== -1);
+                    }, true);
                 }
             };
         }

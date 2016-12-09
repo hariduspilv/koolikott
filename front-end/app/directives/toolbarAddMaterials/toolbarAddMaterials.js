@@ -54,6 +54,7 @@ define([
 
                         serverCallService.makePost("rest/portfolio/update", portfolio, addMaterialsToChapterSuccess, addMaterialsToChapterFailed);
 
+                        $rootScope.back();
                     };
 
                     /*

@@ -10,8 +10,12 @@
         <md-button class="md-icon-button" data-ng-click="toggleSidenav('left')">
           <md-icon class="md-48">menu</md-icon>
         </md-button>
+        <md-button data-ng-if="isEditModeAndSearch" data-ng-click="$root.back()">
+          <md-icon class="md-48">arrow_backward</md-icon>
+          <span class="vertical-center" hide-xs hide-sm hide-md data-translate="BACK"></span>
+        </md-button>
         <!-- logo -->
-        <div class="navbar-logo-main">
+        <div class="navbar-logo-main" data-ng-if="!isEditModeAndSearch">
           <md-tooltip>
             <span data-translate="HEADER_TOOLTIP_GO_TO_LANDING_PAGE"></span>
           </md-tooltip>
