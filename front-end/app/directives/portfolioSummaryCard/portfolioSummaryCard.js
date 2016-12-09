@@ -113,11 +113,9 @@ define([
                     };
 
                     $scope.confirmPortfolioDeletion = function () {
-                        dialogService.showConfirmationDialog(
+                        dialogService.showDeleteConfirmationDialog(
                             'PORTFOLIO_CONFIRM_DELETE_DIALOG_TITLE',
                             'PORTFOLIO_CONFIRM_DELETE_DIALOG_CONTENT',
-                            'PORTFOLIO_CONFIRM_DELETE_DIALOG_YES',
-                            'PORTFOLIO_CONFIRM_DELETE_DIALOG_NO',
                             deletePortfolio);
                     };
 
