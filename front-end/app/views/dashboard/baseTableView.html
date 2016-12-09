@@ -32,7 +32,7 @@
 
     <md-card class="md-data-table" id="moderators-table">
 
-      <md-toolbar class="md-table-toolbar md-default" ng-hide="filter.show">
+      <md-toolbar class="md-table-toolbar md-default" ng-hide="filter.show" data-ng-hide="isView('/dashboard/moderators') || isView('/dashboard/restrictedUsers')">
         <div class="md-toolbar-tools">
           <h2 class="md-title">{{title}}</h2>
           <div flex></div>
@@ -42,7 +42,7 @@
         </div>
       </md-toolbar>
 
-      <md-toolbar class="md-table-toolbar md-default" ng-show="filter.show">
+      <md-toolbar class="md-table-toolbar md-default" ng-show="filter.show" data-ng-hide="isView('/dashboard/moderators') || isView('/dashboard/restrictedUsers')">
         <div class="md-toolbar-tools">
           <md-icon>search</md-icon>
           <form flex name="filter.form">
