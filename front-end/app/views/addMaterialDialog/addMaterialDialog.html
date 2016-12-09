@@ -74,11 +74,14 @@
                       <label>
                         <span data-translate="MATERIAL_URL_OR_FILE_INVALID"></span>
                       </label>
-                      <input data-ng-model="material.source" name="source" id="add-material-url-input" type="text"
+                      <input data-ng-model="material.source"
+                             name="source"
+                             id="add-material-url-input"
+                             type="text"
                              required dop-validate-url>
-                      <div data-ng-messages="addMaterialForm.source.$error" multiple
+                      <div data-ng-messages="addMaterialForm.source.$error" data-multiple
                            data-ng-show="addMaterialForm.source.$touched || addMaterialForm.$submitted">
-                        <div data-ng-message="url"
+                        <div data-ng-message class="invalid-url-message"
                              data-ng-show="isURLInvalid()"
                              data-translate="MATERIAL_URL_IS_INVALID"></div>
 
