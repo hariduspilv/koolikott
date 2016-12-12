@@ -15,10 +15,9 @@
 
             <entity name="LearningObject_TargetGroup" query="select targetGroup as target_group from LearningObject_TargetGroup where learningObject='${LearningObject.id}'" />
 
-            <!--TODO:-->
-            <!--<entity name="Taxon" query="select concat('taxon-', id) as taxonId, name as taxon_name from Taxon"/>-->
-            <!--<entity name="ResourceType" query="select concat('resource-', id) as resourceTypeId, name as resource_type_name from ResourceType"/>-->
-            <!--<entity name="TargetGroup" query="select concat('target-', id) as targetGroupId, name as target_group_name from TargetGroup"/>-->
+            <entity name="Taxon" query="select concat('taxon-', id) as taxonId, name as taxon_name from Taxon"/>
+            <entity name="ResourceType" query="select concat('resource-', id) as resourceTypeId, name as resource_type_name from ResourceType"/>
+            <entity name="TargetGroup" query="select concat('target-', id) as targetGroupId, name as target_group_name from TargetGroup"/>
 
             <entity name="LearningObject_CrossCurricularTheme" query="select crossCurricularTheme as cross_curricular_theme_id from LearningObject_CrossCurricularTheme where learningObject='${LearningObject.id}'">
                 <entity name="CrossCurricularTheme" query="select name as cross_curricular_theme from CrossCurricularTheme where id = '${LearningObject_CrossCurricularTheme.cross_curricular_theme_id}'" />

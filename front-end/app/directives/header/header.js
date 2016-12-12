@@ -94,12 +94,7 @@ define([
                             return [];
                         }
 
-                        return $http.get(suggestService.getURL(query), {cache: true}).then(function (response) {
-                            return response.data.alternatives || [];
-                        });
-
-                        // TODO:
-                        // return suggestService.suggest(query, suggestService.getSuggestURLbase());
+                        return suggestService.suggest(query, suggestService.getSuggestURLbase());
                     };
 
                     $scope.clickOutside = function () {

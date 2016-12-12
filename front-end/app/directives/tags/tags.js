@@ -116,12 +116,8 @@ define([
                 $scope.addTag = function () {
                     if ($scope.learningObject && $scope.learningObject.id) {
                         var url = "rest/learningObject/" + $scope.learningObject.id + "/tags";
-                        serverCallService.makePut(url, JSON.stringify($scope.newTag), addTagSuccess, addTagFail);
+                        serverCallService.makePut(url, JSON.stringify($scope.newTag.tagName), addTagSuccess, addTagFail);
                         $scope.newTag = null;
-
-                        // TODO:
-                        // serverCallService.makePut(url, JSON.stringify($scope.newTag.tagName), addTagSuccess, addTagFail);
-                        // $scope.newTag.tagName = null;
                     }
                 };
 
