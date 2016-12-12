@@ -40,7 +40,6 @@
       md-input-minlength="0"
       id="suggest-tags-input"
       md-menu-class="suggest-dropdown"
-      md-selected-item-change="tagSelected(tag)"
       ng-model-options="{debounce: 100}">
       <md-item-template>
         <span md-highlight-text="newTag.tagName">{{ tag }}</span>
