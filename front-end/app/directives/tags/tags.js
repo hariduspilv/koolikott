@@ -127,6 +127,9 @@ define([
                 	} else {
                         learningObject.picture = $scope.learningObject.picture;
                 		$scope.learningObject = learningObject;
+                        if (!$scope.learningObject.source && learningObject.uploadedFile) {
+                            $scope.learningObject.source = learningObject.uploadedFile.url;
+                        }
                 		if(learningObject.type === ".Portfolio") {
                 			$rootScope.savedPortfolio = learningObject;
                 		} else if (learningObject.type === ".Material") {
