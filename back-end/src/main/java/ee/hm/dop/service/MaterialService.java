@@ -23,6 +23,7 @@ import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.configuration.Configuration;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.methods.GetMethod;
+import org.apache.commons.httpclient.methods.HeadMethod;
 import org.apache.http.client.utils.URIBuilder;
 import org.apache.http.util.TextUtils;
 import org.joda.time.DateTime;
@@ -51,7 +52,6 @@ public class MaterialService extends BaseService implements LearningObjectHandle
     public static final String SECONDARYEDUCATION = "SECONDARYEDUCATION";
     private final String PDF_EXTENSION = ".pdf\"";
     private final String PDF_MIME_TYPE = "application/pdf";
-    private final String OCTET_STREAM_MIME_TYPE = "application/octet-stream";
 
     private Logger logger = LoggerFactory.getLogger(getClass());
 
@@ -564,7 +564,7 @@ public class MaterialService extends BaseService implements LearningObjectHandle
 
         Material material = (Material) learningObject;
 
-        if(isUserAdminOrPublisher(user) || isUserCreator(material, user)){
+        if (isUserAdminOrPublisher(user) || isUserCreator(material, user)) {
             return true;
         }
 
@@ -644,17 +644,19 @@ public class MaterialService extends BaseService implements LearningObjectHandle
     }
 
     public Response getProxyUrl(String url_param) throws IOException {
-        String mediaType = OCTET_STREAM_MIME_TYPE;
+        String mediaType;
         HttpClient client = new HttpClient();
         GetMethod get = new GetMethod(url_param);
-        client.executeMethod(get);
-        if(get.getResponseHeaders("Content-Disposition").length == 0){
+        HeadMethod head = new HeadMethod(url_param);
+        client.executeMethod(head);
+        // Check attachment first with head, if valid, continue with get request
+        if (head.getResponseHeaders("Content-Disposition").length == 0 || !
+            head.getResponseHeaders("Content-Disposition")[0].getValue().endsWith(PDF_EXTENSION)) {
             return Response.noContent().build();
         }
-        String contentDisposition = get.getResponseHeaders("Content-Disposition")[0].getValue();
-        if(contentDisposition.endsWith(PDF_EXTENSION)){
-            mediaType = PDF_MIME_TYPE;
-        }
+        String contentDisposition = head.getResponseHeaders("Content-Disposition")[0].getValue();
+        mediaType = PDF_MIME_TYPE;
+        client.executeMethod(get);
         contentDisposition = contentDisposition.replace("attachment", "Inline");
         return Response.ok(get.getResponseBody(), mediaType).header("Content-Disposition",
                 contentDisposition).build();
