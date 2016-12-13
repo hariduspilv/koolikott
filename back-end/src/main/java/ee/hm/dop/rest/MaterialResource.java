@@ -1,13 +1,14 @@
 package ee.hm.dop.rest;
 
-import static org.apache.commons.lang3.StringUtils.isBlank;
-
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.net.HttpURLConnection;
-import java.net.URLDecoder;
-import java.util.ArrayList;
-import java.util.List;
+import ee.hm.dop.model.BrokenContent;
+import ee.hm.dop.model.Material;
+import ee.hm.dop.model.Recommendation;
+import ee.hm.dop.model.SearchResult;
+import ee.hm.dop.model.Searchable;
+import ee.hm.dop.model.User;
+import ee.hm.dop.model.UserLike;
+import ee.hm.dop.service.MaterialService;
+import ee.hm.dop.service.UserService;
 
 import javax.annotation.security.RolesAllowed;
 import javax.inject.Inject;
@@ -23,18 +24,14 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.HttpURLConnection;
+import java.net.URLDecoder;
+import java.util.ArrayList;
+import java.util.List;
 
-import ee.hm.dop.model.BrokenContent;
-import ee.hm.dop.model.Material;
-import ee.hm.dop.model.Recommendation;
-import ee.hm.dop.model.SearchResult;
-import ee.hm.dop.model.Searchable;
-import ee.hm.dop.model.User;
-import ee.hm.dop.model.UserLike;
-import ee.hm.dop.service.MaterialService;
-import ee.hm.dop.service.UserService;
-import org.apache.commons.httpclient.HttpClient;
-import org.apache.commons.httpclient.methods.GetMethod;
+import static org.apache.commons.lang3.StringUtils.isBlank;
 
 @Path("material")
 public class MaterialResource extends BaseResource {
@@ -62,13 +59,13 @@ public class MaterialResource extends BaseResource {
     }
 
     @GET
-    @Path("getAllBySource")
+    @Path("getOneBySource")
     @RolesAllowed({"USER", "ADMIN", "MODERATOR"})
     @Produces(MediaType.APPLICATION_JSON)
-    public List<Material> getAllMaterialsByUrl(@QueryParam("source") @Encoded String materialSource)
+    public Material getMaterialByUrl(@QueryParam("source") @Encoded String materialSource)
             throws UnsupportedEncodingException {
         materialSource = URLDecoder.decode(materialSource, "UTF-8");
-        return materialService.getBySource(materialSource, true);
+        return materialService.getOneBySource(materialSource, true);
     }
 
     @POST

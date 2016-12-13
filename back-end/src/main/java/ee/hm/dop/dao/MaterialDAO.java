@@ -1,18 +1,18 @@
 package ee.hm.dop.dao;
 
-import java.math.BigInteger;
-import java.util.List;
-
-import javax.inject.Inject;
-import javax.persistence.EntityManager;
-import javax.persistence.Query;
-import javax.persistence.TypedQuery;
-
 import ee.hm.dop.model.Language;
 import ee.hm.dop.model.LearningObject;
 import ee.hm.dop.model.Material;
 import ee.hm.dop.model.Repository;
 import ee.hm.dop.model.User;
+
+import javax.inject.Inject;
+import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
+import javax.persistence.Query;
+import javax.persistence.TypedQuery;
+import java.math.BigInteger;
+import java.util.List;
 
 public class MaterialDAO extends LearningObjectDAO {
     @Inject
@@ -82,6 +82,20 @@ public class MaterialDAO extends LearningObjectDAO {
                         "OR m.source='http://" + materialSource + "' " +
                         "OR m.source='https://" + materialSource + "'",
                 Material.class).getResultList();
+    }
+
+    public Material findOneBySource(String materialSource, boolean deleted) {
+        String queryStart = deleted ? "FROM Material m WHERE " : "FROM Material m WHERE m.deleted = false AND ";
+        try {
+            return createQuery(queryStart +
+                            "m.source='http://www." + materialSource + "' " +
+                            "OR m.source ='https://www." + materialSource + "' " +
+                            "OR m.source='http://" + materialSource + "' " +
+                            "OR m.source='https://" + materialSource + "'",
+                    Material.class).setMaxResults(1).getSingleResult();
+        } catch (NoResultException e) {
+            return null;
+        }
     }
 
     public List<Language> findLanguagesUsedInMaterials() {

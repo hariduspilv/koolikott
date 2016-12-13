@@ -88,6 +88,11 @@
   color: rgba(0, 0, 0, 0.26);
 }
 
+.invalid-url-message.ng-hide {
+  // In some cases url validation message is visible even when it shouldn't
+  display: none !important;
+}
+
 @media screen and (max-width: $layout-breakpoint-xs){
 
   .fullscreen-dialog {

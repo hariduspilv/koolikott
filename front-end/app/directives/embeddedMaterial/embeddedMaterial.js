@@ -27,16 +27,16 @@ define([
                         $scope.isEditPortfolioMode = $rootScope.isEditPortfolioMode;
 
                         if ($scope.material) {
-                            getContentType();
                             $scope.materialType = getType();
                             getSourceType();
+                            getContentType();
                         }
                     }
 
                     function getContentType () {
                         var baseUrl = document.location.origin;
                         // If the initial type is a LINK, try to ask the type from our proxy
-                        if(matchType($scope.material.source) === 'LINK'){
+                        if(matchType($scope.material.source) === 'LINK' && !$scope.material.source.startsWith(baseUrl) ){
                             $scope.proxyUrl = baseUrl + "/rest/material/externalMaterial?url=" + encodeURIComponent($scope.material.source);
                             serverCallService.makeHead($scope.proxyUrl, {}, probeContentSuccess, probeContentFail);
                         }else{
@@ -148,9 +148,17 @@ define([
                         } else if (isPictureLink($scope.material.source)) {
                             $scope.sourceType = 'PICTURE';
                         } else if (isEbookLink($scope.material.source)) {
+                            if(isIE()){
+                                $scope.sourceType = 'LINK';
+                                return;
+                            }
                             $scope.sourceType = 'EBOOK';
                             $scope.ebookLink = "/utils/bibi/bib/i/?book=" + $scope.material.uploadedFile.id + "/" + $scope.material.uploadedFile.name;
                         } else if (isPDFLink($scope.material.source)) {
+                            if(isIE()){
+                                $scope.sourceType = 'LINK';
+                                return;
+                            }
                             $scope.sourceType = 'PDF';
                         } else {
                             embedService.getEmbed(getSource($scope.material), embedCallback);

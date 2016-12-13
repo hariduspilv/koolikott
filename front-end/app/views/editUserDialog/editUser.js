@@ -5,12 +5,12 @@ define([
     'services/authenticatedUserService',
     'services/taxonService'
 ], function (app) {
-    return ['$scope', '$mdDialog', 'serverCallService', 'translationService', 'toastService', '$rootScope', '$filter', 'taxonService',
-        function ($scope, $mdDialog, serverCallService, translationService, toastService, $rootScope, $filter, taxonService) {
+    return ['$scope', '$mdDialog', 'serverCallService', 'translationService', 'toastService', '$rootScope', '$filter', 'taxonService', 'authenticatedUserService', '$location',
+        function ($scope, $mdDialog, serverCallService, translationService, toastService, $rootScope, $filter, taxonService, authenticatedUserService, $location) {
             var ROLE_MODERATOR = "MODERATOR";
 
             function init() {
-                if(!$scope.user) return;
+                if (!$scope.user) return;
                 $scope.selectedRole = $scope.user.role;
                 if ($scope.user.userTaxons.length === 0) {
                     $scope.user.userTaxons = [{}];
@@ -56,6 +56,12 @@ define([
                 if (isEmpty(user)) {
                     fail();
                 } else {
+                    var authenticatedUser = authenticatedUserService.getAuthenticatedUser();
+                    if (user.id === authenticatedUser.user.id) {
+                        authenticatedUser.user = user;
+                        authenticatedUserService.setAuthenticatedUser(authenticatedUser);
+                        $location.url('/');
+                    }
                     $mdDialog.hide();
                     toastService.show('USER_UPDATED');
                 }

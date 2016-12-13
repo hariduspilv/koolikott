@@ -10,8 +10,8 @@ define([
     'directives/copyPermalink/copyPermalink',
     'directives/toolbarAddMaterials/toolbarAddMaterials'
 ], function (angularAMD, $http) {
-    angularAMD.directive('dopHeader', ['translationService', '$location', 'searchService', 'authenticationService', 'authenticatedUserService', '$timeout', '$mdDialog', 'suggestService', 'serverCallService', 'toastService', '$route','$http',
-        function (translationService, $location, searchService, authenticationService, authenticatedUserService, $timeout, $mdDialog, suggestService, serverCallService, toastService, $route, $http) {
+    angularAMD.directive('dopHeader', ['translationService', '$location', 'searchService', 'authenticationService', 'authenticatedUserService', '$timeout', '$mdDialog', 'suggestService', 'serverCallService', 'toastService', '$route','$http', '$window',
+        function (translationService, $location, searchService, authenticationService, authenticatedUserService, $timeout, $mdDialog, suggestService, serverCallService, toastService, $route, $http, $window) {
             return {
                 scope: true,
                 templateUrl: 'directives/header/header.html',
@@ -36,8 +36,12 @@ define([
                     };
 
                     $scope.setLanguage = function (language) {
+                        var prevLanguage = $scope.selectedLanguage;
                         translationService.setLanguage(language);
                         $scope.selectedLanguage = language;
+                        if (prevLanguage !== language) {
+                            $window.location.reload();
+                        }
                     };
 
                     $scope.logout = function () {
@@ -86,6 +90,10 @@ define([
                     };
 
                     $scope.suggest.doSuggest = function (query) {
+                        if (query == null) {
+                            return [];
+                        }
+
                         return suggestService.suggest(query, suggestService.getSuggestURLbase());
                     };
 
@@ -211,6 +219,12 @@ define([
                             $scope.detailedSearch.isVisible = false;
                         }
                     });
+
+                    $scope.$watch(function () {
+                        return $location.url();
+                    }, function () {
+                        $scope.isEditModeAndSearch = ($rootScope.isEditPortfolioMode && $location.url().indexOf('/search') !== -1);
+                    }, true);
                 }
             };
         }

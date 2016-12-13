@@ -14,7 +14,7 @@ public class SearchFilter {
 
     private Language language;
 
-    private List<String> targetGroups;
+    private List<TargetGroup> targetGroups;
 
     private ResourceType resourceType;
 
@@ -72,11 +72,11 @@ public class SearchFilter {
         this.language = language;
     }
 
-    public List<String> getTargetGroups() {
+    public List<TargetGroup> getTargetGroups() {
         return targetGroups;
     }
 
-    public void setTargetGroups(List<String> targetGroups) {
+    public void setTargetGroups(List<TargetGroup> targetGroups) {
         this.targetGroups = targetGroups;
     }
 

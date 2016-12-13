@@ -372,7 +372,8 @@
              have some sort of hard autoCommit to limit the log size.
           -->
         <autoCommit>
-            <maxTime>${solr.autoCommit.maxTime:15000}</maxTime>
+            <maxTime>${solr.autoCommit.maxTime:30000}</maxTime>
+            <maxDocs>20000</maxDocs> <!-- maximum uncommited docs before autocommit triggered -->
             <openSearcher>false</openSearcher>
         </autoCommit>
 
@@ -1328,15 +1329,13 @@
     </requestHandler>
 
     <searchComponent name="suggest_tag" class="solr.SpellCheckComponent">
-        <str name="queryAnalyzerFieldType">suggest_tag</str>
+        <str name="queryAnalyzerFieldType">suggest_tag_phrase</str>
         <lst name="spellchecker">
-            <str name="name">dopSuggester</str>
+            <str name="name">dopTagSuggester</str>
             <str name="suggestAnalyzerFieldType">suggest_analyzer</str>
             <str name="classname">org.apache.solr.spelling.suggest.Suggester</str>
             <str name="lookupImpl">FSTLookupFactory</str>
             <str name="field">suggest_tag</str>
-            <str name="payloadField">taxon_name</str>
-            <str name="weightField">relevance</str>
             <str name="fieldType">suggest_tag_phrase</str>
             <str name="buildOnOptimize">true</str>
         </lst>
@@ -1346,7 +1345,7 @@
     <requestHandler name="/suggest_tag" class="solr.SearchHandler" startup="lazy">
         <lst name="defaults">
             <str name="spellcheck">true</str>
-            <str name="spellcheck.dictionary">dopSuggester</str>
+            <str name="spellcheck.dictionary">dopTagSuggester</str>
             <str name="spellcheck.count">5</str>
             <str name="spellcheck.onlyMorePopular">true</str>
         </lst>

@@ -39,7 +39,7 @@
       </video>
     </div>
 
-    <div data-ng-show="sourceType === 'VIDEO' && !canPlayVideo"
+    <div data-ng-if="sourceType === 'VIDEO' && !canPlayVideo"
          class="embed-responsive-container embed-video">
       <md-toolbar class="md-warn md-tall" layout-align="center center">
         <div class="md-toolbar-tools" layout-align="center center">
@@ -66,12 +66,12 @@
       </div>
     </div>
 
-    <div data-ng-show="sourceType === 'EBOOK'"
+    <div data-ng-if="sourceType === 'EBOOK'"
          class="embed-responsive-container">
       <iframe src="{{ebookLink}}" width="100%" height="500px"></iframe>
     </div>
 
-    <div data-ng-show="sourceType === 'PDF'"
+    <div data-ng-if="sourceType === 'PDF'"
          class="embed-responsive-container">
       <iframe src="{{material.source}}" width="100%" height="500px"></iframe>
     </div>
@@ -89,12 +89,12 @@
       </div>
     </div>
   </md-card-content>
-  <md-card-footer class="embeded-material-footer" data-ng-if="isEditPortfolioMode || !sourceType">
+  <md-card-footer class="embeded-material-footer" data-ng-if="isEditPortfolioMode || !sourceType || sourceType === 'LINK' ">
     <div layout="row" layout-align="space-between center">
       <!--Link as backup - if iframe is internally not working-->
       <a href="{{material.source}}" class="wrapped regular-link md-primary"
          target="_blank" data-ng-if="(!sourceType || (sourceType === 'VIDEO' && !canPlayVideo)
-                    || (sourceType === 'AUDIO' && !canPlayAudio))">
+                    || (sourceType === 'AUDIO' && !canPlayAudio)) || sourceType === 'LINK'">
         <span class="item-link" data-ng-bind="material.source"></span>
       </a>
       <!--Up and down-->

@@ -12,26 +12,12 @@
   <li class="sidenav__item" layout="column" data-ng-repeat="chapter in portfolio.chapters">
     <a data-ng-href="#chapter-{{$index}}" id="toc-chapter-{{$index}}" class="sidenav__header" md-ink-ripple layout="row" layout-align="start center" data-ng-click="gotoChapter($event, $index); closeSidenav('left');" data-ng-class="{'with-icon': $root.isEditPortfolioMode && showAddMaterialButton}">
       <span class="sidenav__name">{{chapter.title}}</span>
-
-      <span data-ng-if="$root.isEditPortfolioMode && showAddMaterialButton" data-ng-click="addMaterialsToChapter($event, chapter)">
-        <md-tooltip md-direction="right">
-          <span data-translate="PORTFOLIO_ADD_MATERIAL"></span>
-        </md-tooltip>
-        <md-icon>add_circle</md-icon>
-      </span>
     </a>
 
     <ul class="sidenav__list sidenav__list--sub">
       <li class="sidenav__item" layout="column" data-ng-repeat="subchapter in chapter.subchapters">
         <a data-ng-href="#chapter-{{$parent.$index}}-{{$index}}" id="toc-chapter-{{$parent.$index}}-{{$index}}" class="sidenav__header" md-ink-ripple layout="row" layout-align="start center" data-ng-click="gotoChapter($event, $parent.$index, $index); closeSidenav('left');" data-ng-class="{'with-icon': $root.isEditPortfolioMode && showAddMaterialButton}">
           <span class="sidenav__name">{{subchapter.title}}</span>
-
-          <span data-ng-if="$root.isEditPortfolioMode && showAddMaterialButton" data-ng-click="addMaterialsToChapter($event, subchapter)">
-            <md-tooltip md-direction="right">
-              <span data-translate="PORTFOLIO_ADD_MATERIAL" class="sidenav__name"></span>
-            </md-tooltip>
-            <md-icon>add_circle</md-icon>
-          </span>
         </a>
       </li>
     </ul>

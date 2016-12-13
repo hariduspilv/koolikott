@@ -61,33 +61,6 @@ define([
                     }
                 }
 
-                $scope.addMaterialsToChapter = function($event, chapter) {
-                    $event.preventDefault();
-                    $event.stopPropagation();
-
-                    if (chapter && chapter.materials) {
-                        if ($rootScope.selectedSingleMaterial) {
-                            if (!containsMaterial(chapter.materials, $rootScope.selectedSingleMaterial)) {
-                                chapter.materials.push($rootScope.selectedSingleMaterial);
-                                showToast($filter('translate')('PORTFOLIO_ADD_MATERIAL_SUCCESS'));
-                            }
-                        } else {
-                            var pushed = false;
-                            for (var i = 0; i < $rootScope.selectedMaterials.length; i++) {
-                                var selectedMaterial = $rootScope.selectedMaterials[i];
-                                if (!containsMaterial(chapter.materials, selectedMaterial)) {
-                                    chapter.materials.push(selectedMaterial);
-                                    pushed = true;
-                                }
-                            }
-                            if (pushed) {
-                                showToast($filter('translate')('PORTFOLIO_ADD_MATERIAL_SUCCESS'));
-                            }
-                        }
-                    }
-                    $rootScope.selectedMaterials = [];
-                };
-
                 function showToast(message) {
                     $mdToast.show($mdToast.simple().position('right top').content(message));
                 }

@@ -1,9 +1,37 @@
 package ee.hm.dop.service;
 
-import static ee.hm.dop.utils.ConfigurationProperties.SERVER_ADDRESS;
-import static org.apache.commons.lang3.StringUtils.isEmpty;
-import static org.joda.time.DateTime.now;
+import ee.hm.dop.dao.BrokenContentDAO;
+import ee.hm.dop.dao.MaterialDAO;
+import ee.hm.dop.dao.UserLikeDAO;
+import ee.hm.dop.model.Author;
+import ee.hm.dop.model.BrokenContent;
+import ee.hm.dop.model.Comment;
+import ee.hm.dop.model.CrossCurricularTheme;
+import ee.hm.dop.model.KeyCompetence;
+import ee.hm.dop.model.Language;
+import ee.hm.dop.model.LearningObject;
+import ee.hm.dop.model.Material;
+import ee.hm.dop.model.PeerReview;
+import ee.hm.dop.model.Publisher;
+import ee.hm.dop.model.Recommendation;
+import ee.hm.dop.model.User;
+import ee.hm.dop.model.UserLike;
+import ee.hm.dop.model.taxon.EducationalContext;
+import ee.hm.dop.service.learningObject.LearningObjectHandler;
+import ee.hm.dop.utils.TaxonUtils;
+import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.configuration.Configuration;
+import org.apache.commons.httpclient.HttpClient;
+import org.apache.commons.httpclient.methods.GetMethod;
+import org.apache.commons.httpclient.methods.HeadMethod;
+import org.apache.http.client.utils.URIBuilder;
+import org.apache.http.util.TextUtils;
+import org.joda.time.DateTime;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import javax.inject.Inject;
+import javax.ws.rs.core.Response;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -14,25 +42,9 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
-import javax.inject.Inject;
-import javax.ws.rs.core.Response;
-
-import ee.hm.dop.dao.BrokenContentDAO;
-import ee.hm.dop.dao.MaterialDAO;
-import ee.hm.dop.dao.UserLikeDAO;
-import ee.hm.dop.model.*;
-import ee.hm.dop.model.taxon.EducationalContext;
-import ee.hm.dop.service.learningObject.LearningObjectHandler;
-import ee.hm.dop.utils.TaxonUtils;
-import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.configuration.Configuration;
-import org.apache.commons.httpclient.HttpClient;
-import org.apache.commons.httpclient.methods.GetMethod;
-import org.apache.http.client.utils.URIBuilder;
-import org.apache.http.util.TextUtils;
-import org.joda.time.DateTime;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import static ee.hm.dop.utils.ConfigurationProperties.SERVER_ADDRESS;
+import static org.apache.commons.lang3.StringUtils.isEmpty;
+import static org.joda.time.DateTime.now;
 
 public class MaterialService extends BaseService implements LearningObjectHandler {
 
@@ -40,7 +52,6 @@ public class MaterialService extends BaseService implements LearningObjectHandle
     public static final String SECONDARYEDUCATION = "SECONDARYEDUCATION";
     private final String PDF_EXTENSION = ".pdf\"";
     private final String PDF_MIME_TYPE = "application/pdf";
-    private final String OCTET_STREAM_MIME_TYPE = "application/octet-stream";
 
     private Logger logger = LoggerFactory.getLogger(getClass());
 
@@ -553,7 +564,7 @@ public class MaterialService extends BaseService implements LearningObjectHandle
 
         Material material = (Material) learningObject;
 
-        if(isUserAdminOrPublisher(user) || isUserCreator(material, user)){
+        if (isUserAdminOrPublisher(user) || isUserCreator(material, user)) {
             return true;
         }
 
@@ -569,6 +580,15 @@ public class MaterialService extends BaseService implements LearningObjectHandle
         materialSource = getURLWithoutScheme(cleanURL(materialSource));
         if (materialSource != null) {
             return materialDAO.findBySource(materialSource, deleted);
+        } else {
+            throw new RuntimeException("No material source link provided");
+        }
+    }
+
+    public Material getOneBySource(String materialSource, boolean deleted) {
+        materialSource = getURLWithoutScheme(cleanURL(materialSource));
+        if (materialSource != null) {
+            return materialDAO.findOneBySource(materialSource, deleted);
         } else {
             throw new RuntimeException("No material source link provided");
         }
@@ -624,17 +644,19 @@ public class MaterialService extends BaseService implements LearningObjectHandle
     }
 
     public Response getProxyUrl(String url_param) throws IOException {
-        String mediaType = OCTET_STREAM_MIME_TYPE;
+        String mediaType;
         HttpClient client = new HttpClient();
         GetMethod get = new GetMethod(url_param);
-        client.executeMethod(get);
-        if(get.getResponseHeaders("Content-Disposition").length == 0){
+        HeadMethod head = new HeadMethod(url_param);
+        client.executeMethod(head);
+        // Check attachment first with head, if valid, continue with get request
+        if (head.getResponseHeaders("Content-Disposition").length == 0 || !
+            head.getResponseHeaders("Content-Disposition")[0].getValue().endsWith(PDF_EXTENSION)) {
             return Response.noContent().build();
         }
-        String contentDisposition = get.getResponseHeaders("Content-Disposition")[0].getValue();
-        if(contentDisposition.endsWith(PDF_EXTENSION)){
-            mediaType = PDF_MIME_TYPE;
-        }
+        String contentDisposition = head.getResponseHeaders("Content-Disposition")[0].getValue();
+        mediaType = PDF_MIME_TYPE;
+        client.executeMethod(get);
         contentDisposition = contentDisposition.replace("attachment", "Inline");
         return Response.ok(get.getResponseBody(), mediaType).header("Content-Disposition",
                 contentDisposition).build();

@@ -8,7 +8,7 @@
     <md-select data-ng-model="ctrl.taxonPath.educationalContext" id="taxonEducationalSelect"
                data-ng-disabled="ctrl.disableEducationalContext" name="educationalContext" aria-label="Haridustase"
                ng-model-options="{trackBy: '$value.id'}">
-      <md-option data-translate="SELECT_EDUCATIONAL_CONTEXT" ng-value="{}" ng-click="ctrl.reset({})"></md-option>
+      <md-option data-translate="SELECT_EDUCATIONAL_CONTEXT" ng-value="{'id':0}" ng-click="ctrl.reset({'id':0})"></md-option>
       <md-option ng-value="educationalContext" ng-repeat="educationalContext in ctrl.educationalContexts"
                  data-translate="{{educationalContext.name.toUpperCase()}}"
                  data-ng-click="ctrl.selectEducationalContext(educationalContext)"></md-option>

@@ -31,7 +31,6 @@ define([
             $scope.showMaterialContent = false;
             $scope.newComment = {};
             $scope.pageUrl = $location.absUrl();
-            $scope.sourceType = "";
 
             if ($rootScope.savedMaterial) {
                 $scope.material = $rootScope.savedMaterial;
@@ -49,7 +48,7 @@ define([
             function getContentType () {
                 var baseUrl = document.location.origin;
                 // If the initial type is a LINK, try to ask the type from our proxy
-                if(matchType($scope.material.source) === 'LINK'){
+                if(matchType($scope.material.source) === 'LINK' && !$scope.material.source.startsWith(baseUrl)){
                     $scope.proxyUrl = baseUrl + "/rest/material/externalMaterial?url=" + encodeURIComponent($scope.material.source);
                     serverCallService.makeHead($scope.proxyUrl, {}, probeContentSuccess, probeContentFail);
                 }else{
@@ -117,7 +116,6 @@ define([
 
             function processMaterial() {
                 if ($scope.material) {
-                    $scope.sourceType = getContentType();
                     if ($scope.sourceType == "EBOOK") {
                         $scope.ebookLink = "/libs/bibi/bib/i/?book=" +
                             $scope.material.uploadedFile.id + "/" +
@@ -137,6 +135,7 @@ define([
 
             function init() {
                 $scope.material.source = getSource($scope.material);
+                $scope.sourceType = getContentType();
                 processMaterial();
                 storageService.setMaterial(null);
 
@@ -158,6 +157,7 @@ define([
                 serverCallService.makePost("rest/material/increaseViewCount", viewCountParams, function () {
                 }, function () {
                 });
+
             }
 
             function getItemsFail() {
