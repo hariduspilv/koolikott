@@ -1,29 +1,3 @@
-.pattern {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  .sheet {
-    position: absolute;
-    height: 100%;
-    width: 100%;
-    transform: rotate(45deg);
-    filter: drop-shadow(0px 0px 10px rgba(0,0,0,0.2));
-    &.up-left {
-      left: -25%;
-      top: 17%;
-    }
-    &.low-left {
-      left: -60%;
-      top: 45%;
-    }
-    &.low-right {
-      right: -33%;
-      bottom: -45%;
-      height: 150%;
-    }
-  }
-}
-
 md-card {
   position: relative; // to position the corner
   margin: 0; //to overwrite AM 8px
@@ -58,19 +32,9 @@ md-card {
     color: inherit;
   }
 
-  // .minContentHeight {
-  //   min-height: 45%;
-  // }
-
   md-card-actions {
     padding-top: 10px;
     margin-top: 0;
-  }
-  .md-caption {
-    &.one-row {
-      min-height: 14px;
-      margin-top: 8px;
-    }
   }
 
   .md-body-2 {
@@ -100,122 +64,48 @@ md-card {
       }
     }
   }
-
-  &.card-sm .card-cover,
-  &.card-lg .card-cover,
-  .embeddedMaterial {
-    &.imaged {
-      background-color: transparent !important;
-    }
-    &.description {
-      background-color: $green1;
-      .pattern .sheet {
-        @include pattern-color($green1);
-      }
-    }
-    &.assessment {
-      background-color: $green2;
-      .pattern .sheet {
-        @include pattern-color($green2);
-      }
-    }
-    &.dvr {
-      background-color: $greengrass;
-      .pattern .sheet {
-        @include pattern-color($greengrass);
-      }
-    }
-    &.portfolio {
-      background-color: $royal;
-      .pattern .sheet {
-        @include pattern-color($royal);
-      }
-    }
-    &.casino {
-      background-color: $violet;
-      .pattern .sheet {
-        @include pattern-color($violet);
-      }
-    }
-    &.web_asset {
-      background-color: $navy;
-      .pattern .sheet {
-        @include pattern-color($navy);
-      }
-    }
-    &.audiotrack {
-      background-color: $cyan;
-      .pattern .sheet {
-        @include pattern-color($cyan);
-      }
-    }
-    &.ondemand_video {
-      background-color: $salad;
-      .pattern .sheet {
-        @include pattern-color($salad);
-      }
-    }
+  &.card-sm .card-cover {
+    max-width: 300px;
   }
-
-  &.embed-card {
-    transition: all 0.5s;
-    &:hover {
-      background-color: #eee;
-
-    }
-    &.active {
-      background-color: #eee;
-    }
-  }
-
-  .embed-header {
-    .pick {
-      position: absolute;
-      padding: 10px;
-      right: 0;
-      transition: display 1s cubic-bezier(0.25, 0.8, 0.25, 1);
-      .checked {
-        display: none;
-      }
-      &:hover {
-        cursor: pointer;
-        .checked {
-          display: block;
-        }
-        .unchecked {
-          display: none;
-        }
-      }
-    }
-  }
-
-  .embeded-material-footer {
-    padding-top: 0px;
-  }
-
 
   &.card-sm {
-    height: 330px;
-    width: 234px;
+    width: 100%;
     @media (min-width: $layout-breakpoint-xs) {
-      height: 278px;
-      width: 200px;
+      max-height: 280px;
+      width: 201px;
     }
     @media (min-width: $layout-breakpoint-lg) {
-      height: 330px;
+      max-height: 330px;
       width: 234px;
     }
-
+    .card-cover {
+      height: 100%;
+      @media (min-width: $layout-breakpoint-xs) {
+        height: 134px;
+      }
+      @media (min-width: $layout-breakpoint-lg) {
+        height: 220px;
+      }
+    }
+    md-card-content {
+      height: 100%;
+      @media (min-width: $layout-breakpoint-xs) {
+        height: 106px;
+      }
+      @media (min-width: $layout-breakpoint-lg) {
+        height: 106px;
+      }
+    }
 
     md-icon.icon-kind {
       position: absolute;
       left: 50%;
       top: 50%;
       transform: translate(-50%,-50%);
-      font-size: 40px;
-      color: rgba(255, 255, 255, .7);
+      font-size: 3rem;
+      color: rgba(0,0,0, 0.33);
       z-index: 1;
-      text-shadow: 1px 1px 1px rgba(0, 0,0, .2);
+
     }
     &:hover {
       background-color: #eee;
@@ -224,6 +114,7 @@ md-card {
         opacity: .8;
         md-icon {
           color: rgba(255, 255, 255, 1);
+          text-shadow: 1px 1px 1px rgba(0, 0,0, .6);
         }
       }
     }
@@ -244,27 +135,20 @@ md-card {
       }
     }
 
-    // md-card-content {
-    //   padding: 0;
-    //   max-height: 50%;
-    //   min-height: 35%;
-    // }
     .card-cover {
-      height: 50%;
       border-radius: 2px 2px 0 0;
       overflow: hidden;
       position: relative;
       transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
-      background-color: $green1;
     }
 
     .card-hover {
       position: absolute;
-      background-color: rgba(0, 0, 0, 0.7);
       top: 0;
       bottom: 0;
       left: 0;
       right: 0;
+      background-color: rgba(0, 0, 0, 0.7);
       opacity: 0;
       .pick {
         position: absolute;
@@ -287,12 +171,17 @@ md-card {
         color: rgba(255, 255, 255, 0.6);
       }
     }
+    md-card-content {
+      padding-bottom: 0;
+      .md-caption {
+        color: rgba(0, 0, 0, 0.54);
+      }
+    }
     md-card-actions {
-      margin-right: 16px;
-      margin-left: 16px;
-      height: 10%;
-      color: rgba(0, 0, 0, 0.4);
-      font-weight: 600;
+      margin-right: $md-padding;
+      margin-left: $md-padding;
+      color: rgba(0, 0, 0, 0.38);
+      font-weight: 400;
       md-icon {
         margin: 0 2px 0 5px;
         font-size: $caption-font-size-base;
@@ -303,163 +192,27 @@ md-card {
       }
     }
   }
-  &.card-lg {
-    overflow: hidden;
-    h1 {
-      font-weight: 300;
-      color: $heading-color;
-      font-size: 24px;
-      margin: 0 0 10px 0;
-      font-weight: 300;
-      line-height: 28px;
-      padding: 25px 0 0 0;
-    }
-    @media (min-width: $layout-breakpoint-xs) {
-      h1 {
-        font-size: 30px;
-        line-height: 35px;
-        padding: 0 25px 0 0;
-      }
-    }
-    h2 {
-      color: $heading-color;
-      font-size: 20px;
-      font-weight: normal;
-      text-transform: uppercase;
-    }
-
-    h3 {
-      color: $heading-color;
-      font-size: 14px;
-      font-weight: normal;
-      text-transform: uppercase;
-    }
-
-    .md-menu {
-      margin-top: -15px;
-      margin-right: -15px;
-
-      @media (min-width: $layout-breakpoint-xs) {
-        margin-right: 0;
-      }
-    }
-    md-card-content:not(.noPadding) {
-      padding: $card-lg-padding;
-    }
-    .on-left {
-      padding-right: $card-lg-padding;
-    }
-    .divider-left {
-      position: relative;
-      display: block;
-      border-left: none;
-      padding-left: 0;
-      md-content {
-        margin-top: 20px;
-      }
-    }
-    .card-cover {
-      @include aspect-ratio(3,2);
-      max-height: auto;
-      background: $green2;
-      overflow: hidden;
-      position: relative;
-      margin-right: -$card-lg-padding;
-      margin-top: 0;
-      margin-left: -$card-lg-padding;
-      text-align: center;
-      md-icon {
-        position: absolute;
-        left: 50%;
-        top: 50%;
-        transform: translate(-50%,-50%);
-        font-size: 48px;
-        color: rgba(255, 255, 255, 0.8);
-      }
-      .card-hover {
-        transition: all 0.5s;
-        cursor: pointer;
-        position: absolute;
-        background-color: rgba(0, 0, 0, 0);
-        top: 0;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        md-icon {
-          color: rgba(255, 255, 255, 0);
-        }
-        &:hover {
-          background-color: rgba(0, 0, 0, 0.7);
-          md-icon {
-            color: rgba(255, 255, 255, 1);
-          }
-        }
-      }
-      &:hover {
-        .icon-kind {
-          color: rgba(255, 255, 255, 0);
-        }
-      }
-    }
-    @media (min-width: 600px) {
-      .card-cover {
-        max-height: 300px;
-        margin-top: -$card-lg-padding;
-
-      }
-      .divider-left {
-        border-left-width: 1px;
-        border-left-style: solid;
-        padding-left: $card-lg-padding;
-        border-left-color: $border-color;
-      }
-    }
-    .actions {
-      margin-top: 10px;
-      margin-bottom: -10px;
-      .md-button {
-        margin-left: -5px;
-      }
-    }
-  }
-
-  .embed-card-content {
-    padding: 0px;
-    background-color: #fff;
-  }
 }
 
-.card-mb-20 {
-  margin-bottom: 20px;
-}
 
-// TODO: remove this if this bug is closed https://trello.com/c/TB5BRU7G/187-bug-issue-18-vistutatud-materjali-kuvamine-on-paigast-ara
-.embed-responsive-item {
-  overflow: hidden;
-}
 
-.corner {
-  background-image: url('../images/detail/corner.png');
-  position: absolute;
-  right: -2px;
-  top: -1px;
-  z-index: 1;
+// .corner {
+//   background-image: url('../images/detail/corner.png');
+//   position: absolute;
+//   right: -2px;
+//   top: -1px;
+//   z-index: 1;
+//
+//   .card-lg & {
+//     top: 0;
+//     right: -25px;
+//
+//     @media (min-width: $layout-breakpoint-xs) {
+//       top: -25px;
+//     }
+//   }
+// }
 
-  .card-lg & {
-    top: 0;
-    right: -25px;
-
-    @media (min-width: $layout-breakpoint-xs) {
-      top: -25px;
-    }
-  }
-}
-
-md-card .card-menu {
-  position: absolute;
-  top: 8px;
-  right: 8px;
-}
 
 .placeholder-card {
   &:hover {
@@ -489,10 +242,13 @@ md-card .card-menu {
 }
 
 .card-container__item {
-  margin: 0 15px 15px 0;
+  margin: 0 0 $md-padding 0;
+  @media (min-width: $layout-breakpoint-xs) {
+    margin: 0 $md-padding $md-padding 0;
+  }
 
   &--empty {
-    margin: 0 15px 0 0;
+    margin: 0 $md-padding 0 0;
 
     md-card.card-sm {
       height: 100%;
@@ -500,55 +256,7 @@ md-card .card-menu {
   }
 }
 
-a.embed-link{
-  line-height: 0px;
-  display: inline-block;
-  background-color: rgba(0, 0, 0, 1);
-}
 
-.embed-link img{
-  max-width: 500px;
-  max-height: 500px;
-}
-
-.embed-link:hover img{
-  opacity: .8;
-  transition: ease all 0.5s;
-}
-
-.embed-card-picture{
-  line-height: 0;
-  display: inline-block;
-}
-
-a.embed-image-padded{
-  margin: 25px;
-}
-
-.card__icon-holder {
-  display: flex;
-  flex-direction: row;
-  position: absolute;
-  top: 0;
-  left: 0;
-  z-index: 1;
-
-  md-icon {
-    padding: 8px 14px;
-    color: #fff;
-  }
-
-  .card-lg & {
-    top: 0;
-    left: -25px;
-    text-shadow: 1px 1px 1px rgba(0, 0, 0, .2);
-
-    @media (min-width: $layout-breakpoint-xs) {
-      top: -15px;
-      left: 0;
-    }
-  }
-}
 .ribbon {
   background-image: url('../images/detail/corner.png');
   position: absolute;
