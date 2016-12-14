@@ -1,3 +1,14 @@
+@keyframes fa-spin {
+  0% {
+    -webkit-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+  100% {
+    -webkit-transform: rotate(359deg);
+    transform: rotate(359deg);
+  }
+}
+
 .main-fab-button {
   position: fixed !important;
 }
@@ -18,10 +29,14 @@
 
 .fab-closed-icon {
   opacity: 1;
-  transform: scale(1) rotate(0);
+  transform: scale(1) rotate(-359deg);
+  // animation: fa-spin 1.5s infinite ease;
+  // we will use the line when the logic for CTA on profile page is ready
+
   .md-is-open & {
     opacity: 0;
-    transform: scale(0) rotate(225deg);
+    transform: scale(0) rotate(0);
+    animation: fa-spin .3s 1 linear;
   }
 }
 
@@ -34,6 +49,6 @@
 
 .md-button.md-warn.md-fab:not([disabled]):hover,
 .md-button.md-warn.md-fab:not([disabled]):focus {
-  background-color: #9c27b0;
+  background-color: $color-accent;
   box-shadow: $whiteframe-shadow-7dp;
 }
