@@ -336,8 +336,10 @@ define([
                         $scope.detailedSearch.type = 'all';
                     } else if ($scope.detailedSearch.resourceType === 'PORTFOLIO_RESOURCE') {
                         $scope.detailedSearch.type = 'portfolio';
+                    } else if ($rootScope.isEditPortfolioMode){
+                        $scope.detailedSearch.type = 'material';
                     } else {
-                        $scope.detailedSearch.type = null;
+                        $scope.detailedSearch.type = 'all';
                     }
                 }
 

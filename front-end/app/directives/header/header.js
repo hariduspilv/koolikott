@@ -10,7 +10,7 @@ define([
     'directives/copyPermalink/copyPermalink',
     'directives/toolbarAddMaterials/toolbarAddMaterials'
 ], function (angularAMD, $http) {
-    angularAMD.directive('dopHeader', ['translationService', '$location', 'searchService', 'authenticationService', 'authenticatedUserService', '$timeout', '$mdDialog', 'suggestService', 'serverCallService', 'toastService', '$route','$http', '$window',
+    angularAMD.directive('dopHeader', ['translationService', '$location', 'searchService', 'authenticationService', 'authenticatedUserService', '$timeout', '$mdDialog', 'suggestService', 'serverCallService', 'toastService', '$route', '$http', '$window',
         function (translationService, $location, searchService, authenticationService, authenticatedUserService, $timeout, $mdDialog, suggestService, serverCallService, toastService, $route, $http, $window) {
             return {
                 scope: true,
@@ -60,7 +60,11 @@ define([
                     $scope.search = function () {
                         searchService.setSearch($scope.searchFields.searchQuery);
                         searchService.clearFieldsNotInSimpleSearch();
-                        searchService.setType('all');
+                        if($rootScope.isEditPortfolioMode) {
+                            searchService.setType('material');
+                        } else {
+                            searchService.setType('all');
+                        }
                         $location.url(searchService.getURL());
                     };
 
@@ -150,6 +154,10 @@ define([
                         return authenticatedUserService.isModerator();
                     };
 
+                    $scope.isAdminOrModerator = function () {
+                        return $scope.isAdmin() || $scope.isModerator();
+                    };
+
                     $scope.getShareUrl = buildShareUrl();
 
                     function buildShareUrl() {
@@ -214,16 +222,18 @@ define([
                         log('Updating portfolio failed.');
                     }
 
-                    $scope.$watch(function(){ return $location.path() }, function(params){
-                        if(params.indexOf("/portfolio") !== -1 || params.indexOf("/material") !== -1) {
+                    $scope.$watch(function () {
+                        return $location.path()
+                    }, function (params) {
+                        if (params.indexOf("/portfolio") !== -1 || params.indexOf("/material") !== -1) {
                             $scope.detailedSearch.isVisible = false;
                         }
                     });
 
                     $scope.$watch(function () {
-                        return $location.url();
+                        return [$location.url(), $rootScope.isEditPortfolioMode];
                     }, function () {
-                        $scope.isEditModeAndSearch = ($rootScope.isEditPortfolioMode && $location.url().indexOf('/search') !== -1);
+                        $scope.isEditModeAndNotEditView = ($rootScope.isEditPortfolioMode && $location.url().indexOf('/portfolio/edit') !== 0);
                     }, true);
                 }
             };
