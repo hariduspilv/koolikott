@@ -1,21 +1,14 @@
 .main-fab-button {
   position: fixed !important;
-
-  .md-fab-action-item {
-    .md-button md-icon {
-      color: rgba(0,0,0,0.54);
-    }
-  }
 }
 
 .fab-closed-icon,
 .fab-open-icon {
   position: absolute;
-  top: 17px;
-  left: 16px;
-  transition: scale 0.8s ease-in-out, opacity 0.8s ease-in-out;
+  top: $md-padding;
+  left: $md-padding;
+  transition: all 0.3s ease-in-out;
   opacity: 1;
-  transform: scale(1) rotate(0);
 }
 
 .fab-open-icon {
@@ -23,25 +16,24 @@
   transform: scale(0);
 }
 
-.md-is-open .fab-closed-icon {
-  opacity: 0;
-  transform: scale(0) rotate(90deg);
-}
-
-.md-is-open .fab-open-icon {
+.fab-closed-icon {
   opacity: 1;
-  transform: scale(1);
+  transform: scale(1) rotate(0);
+  .md-is-open & {
+    opacity: 0;
+    transform: scale(0) rotate(225deg);
+  }
 }
 
-.md-button.md-warn.md-fab {
-  transition: rotate 0.8s ease-in-out;
+.fab-open-icon {
+  .md-is-open & {
+    opacity: 1;
+    transform: scale(1);
+  }
 }
 
 .md-button.md-warn.md-fab:not([disabled]):hover,
 .md-button.md-warn.md-fab:not([disabled]):focus {
   background-color: #9c27b0;
   box-shadow: $whiteframe-shadow-7dp;
-  .fab-closed-icon {
-    transform: rotate(45deg);
-  }
 }

@@ -3,35 +3,20 @@
   <md-fab-trigger>
     <md-button aria-label="Lisa kogumik" class="md-fab md-warn" data-ng-click="showAddPortfolioDialog($event)" id="add-portfolio">
       <md-tooltip md-direction="left">
-        <span data-ng-show="userHasSelectedMaterials" data-translate="ADD_TO_NEW_PORTFOLIO"></span>
-        <span data-ng-show="!userHasSelectedMaterials" data-translate="ADD_PORTFOLIO"></span>
+        <span data-translate="ADD_PORTFOLIO"></span>
       </md-tooltip>
       <md-icon class="fab-closed-icon">add</md-icon>
-      <!-- <md-icon class="fab-open-icon">class</md-icon> -->
-      <md-icon class="fab-open-icon">mode_edit</md-icon>
+      <md-icon class="fab-open-icon">class</md-icon>
+      <!-- <md-icon class="fab-open-icon">mode_edit</md-icon> -->
     </md-button>
   </md-fab-trigger>
   <md-fab-actions>
-    <md-button aria-label="Lisa material või materjalid olemasolevasse kogumikku" class="md-fab md-raised md-accent md-mini"
-               data-ng-click="showAddMaterialsToPortfolioDialog()" data-ng-if="userHasSelectedMaterials && hasPermission()">
-      <md-tooltip md-direction="left">
-        <span data-translate="ADD_TO_EXISTING_PORTFOLIO"></span>
-      </md-tooltip>
-      <md-icon>class</md-icon>
-    </md-button>
-    <md-button aria-label="Lisa material" class="md-fab md-raised md-mini" data-ng-click="showAddMaterialDialog($event)"
+    <md-button aria-label="Lisa material" class="md-fab  md-mini" data-ng-click="showAddMaterialDialog($event)"
                data-ng-if="hasPermission()" id="add-material">
       <md-tooltip md-direction="left">
         <span data-translate="ADD_MATERIAL"></span>
       </md-tooltip>
-      <md-icon>note_add</md-icon>
-    </md-button>
-    <md-button aria-label="Kopeeri kogumik" class="md-fab md-raised md-mini" data-ng-click="copyPortfolio()"
-               data-ng-if="isViewPortforlioPage">
-      <md-tooltip md-direction="left">
-        <span data-translate="COPY_PORTFOLIO"></span>
-      </md-tooltip>
-      <md-icon>content_copy</md-icon>
+      <md-icon>description</md-icon>
     </md-button>
   </md-fab-actions>
 </md-fab-speed-dial>
