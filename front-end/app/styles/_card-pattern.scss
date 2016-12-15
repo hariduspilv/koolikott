@@ -26,9 +26,7 @@
 
 .card-cover,
 .embeddedMaterial {
-  &.imaged {
-    background-color: transparent !important;
-  }
+
   &.description {
     background-color: $green1;
     .pattern .sheet {

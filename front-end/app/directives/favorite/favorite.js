@@ -12,10 +12,6 @@ define([
             templateUrl: 'directives/favorite/favorite.html',
             controller: function ($scope, serverCallService, authenticatedUserService) {
                 $timeout(function () {
-                    if ($scope.learningObject) {
-                        $scope.isPrivateOrNotListed = $scope.learningObject.visibility === 'NOT_LISTED' || $scope.learningObject.visibility === 'PRIVATE';
-                    }
-
                     if ($scope.learningObject && isLoggedIn()) {
                         if ($scope.learningObject.favorite) {
                             $scope.hasFavorited = true;

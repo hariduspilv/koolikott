@@ -11,6 +11,7 @@ define([
     'directives/errorMessage/errorMessage',
     'directives/portfolioSummaryCard/portfolioSummaryCard',
     'services/serverCallService',
+    'directives/sidebar/sidebar',
     'services/translationService',
     'services/alertService',
     'services/authenticatedUserService'

@@ -21,6 +21,7 @@ define([
     'services/iconService',
     'services/toastService',
     'services/storageService',
+    'directives/sidebar/sidebar',
     'services/targetGroupService',
     'services/taxonService',
     'directives/embeddedMaterial/embeddedMaterial',

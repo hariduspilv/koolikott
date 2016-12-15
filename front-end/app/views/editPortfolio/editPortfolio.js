@@ -8,6 +8,7 @@ define([
     'services/toastService',
     'directives/portfolioSummaryCard/portfolioSummaryCard',
     'directives/chapter/chapter',
+    'directives/sidebar/sidebar',
     'directives/materialBox/materialBox',
     'directives/tableOfContents/tableOfContents'
 ], function (app) {

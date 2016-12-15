@@ -1,8 +1,8 @@
 <md-list class="recommendations" role="list">
   <md-list-item data-ng-repeat="item in learningObjects" ng-href="{{getItemLink(item)}}" role="listitem" aria-label="Ava soovitatud materjal" >
     <div data-ng-if="item.type === '.Material'" layout="column" class="listblock">
-      <h4 class="one-row" data-ng-bind="getCorrectLanguageString(item.titles, item.language)"></h4>
-      <span class="one-row">
+      <h4 class="ellipsis" data-ng-bind="getCorrectLanguageString(item.titles, item.language)"></h4>
+      <span class="ellipsis">
         <span data-ng-repeat="author in item.authors">
           <span data-ng-bind="formatName(author.name)"></span>
           <span data-ng-bind="formatSurname(author.surname)"></span>
@@ -11,8 +11,8 @@
       </span>
     </div>
     <div data-ng-if="item.type === '.Portfolio'" layout="column" class="listblock">
-      <h4 class="one-row" data-ng-bind="item.title"></h4>
-      <span class="one-row">
+      <h4 class="ellipsis" data-ng-bind="item.title"></h4>
+      <span class="ellipsis">
         <span>
           <span data-ng-bind="formatName(item.creator.name)"></span>
           <span data-ng-bind="formatSurname(item.creator.surname)"></span>

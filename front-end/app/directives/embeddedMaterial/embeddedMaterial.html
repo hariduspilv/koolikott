@@ -4,10 +4,10 @@
       <md-icon class="icon-kind embeddedMaterial" ng-class="materialType">{{materialType}}</md-icon>
     </md-card-avatar>
     <md-card-header-text flex data-ng-click="navigateToMaterial(material, $event)">
-      <a data-ng-href="{{'/material?materialId=' + material.id}}" class="md-title no-link ellipsisText"
+      <a data-ng-href="{{'/material?materialId=' + material.id}}" class="md-title no-link ellipsis"
          data-ng-bind="getCorrectLanguageTitle(material)">
       </a>
-      <span class="md-subhead ellipsisText">
+      <span class="md-subhead ellipsis">
         <span data-ng-repeat="author in material.authors">
           <span>{{author.name}} {{author.surname}}</span>
           <span data-ng-bind="$index < material.authors.length - 1 ? ', ' : ''"></span>
