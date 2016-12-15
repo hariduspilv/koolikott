@@ -22,6 +22,7 @@ import ee.hm.dop.service.learningObject.LearningObjectHandler;
 import ee.hm.dop.utils.TaxonUtils;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.configuration.Configuration;
+import org.apache.commons.httpclient.Header;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.httpclient.methods.HeadMethod;
@@ -33,6 +34,7 @@ import org.slf4j.LoggerFactory;
 
 import javax.inject.Inject;
 import javax.ws.rs.core.Response;
+
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -44,6 +46,7 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import static ee.hm.dop.utils.ConfigurationProperties.SERVER_ADDRESS;
+import static java.lang.String.format;
 import static org.apache.commons.lang3.StringUtils.isEmpty;
 import static org.joda.time.DateTime.now;
 
@@ -658,22 +661,42 @@ public class MaterialService extends BaseService implements LearningObjectHandle
     }
 
     public Response getProxyUrl(String url_param) throws IOException {
-        String mediaType;
+        String contentDisposition;
         HttpClient client = new HttpClient();
         GetMethod get = new GetMethod(url_param);
         HeadMethod head = new HeadMethod(url_param);
         client.executeMethod(head);
-        // Check attachment first with head, if valid, continue with get request
-        if (head.getResponseHeaders("Content-Disposition").length == 0 || !
-            head.getResponseHeaders("Content-Disposition")[0].getValue().endsWith(PDF_EXTENSION)) {
+
+        if(Objects.equals(attachmentLocation(head, PDF_EXTENSION, PDF_MIME_TYPE), "Content-Disposition")){
+            contentDisposition = head.getResponseHeaders("Content-Disposition")[0].getValue();
+            client.executeMethod(get);
+            contentDisposition = contentDisposition.replace("attachment", "Inline");
+            return Response.ok(get.getResponseBody(), PDF_MIME_TYPE).header("Content-Disposition",
+                    contentDisposition).build();
+        }
+        if (Objects.equals(attachmentLocation(head, PDF_EXTENSION, PDF_MIME_TYPE), "Content-Type")) {
+            client.executeMethod(get);
+            // Content-Disposition is missing, try to extract the filename from url instead
+            String fileName = url_param.substring(url_param.lastIndexOf("/") + 1, url_param.length());
+            contentDisposition = format("Inline; filename=\"%s\"", fileName);
+        }else{
             return Response.noContent().build();
         }
-        String contentDisposition = head.getResponseHeaders("Content-Disposition")[0].getValue();
-        mediaType = PDF_MIME_TYPE;
-        client.executeMethod(get);
-        contentDisposition = contentDisposition.replace("attachment", "Inline");
-        return Response.ok(get.getResponseBody(), mediaType).header("Content-Disposition",
+
+        return Response.ok(get.getResponseBody(), PDF_MIME_TYPE).header("Content-Disposition",
                 contentDisposition).build();
+    }
+
+    String attachmentLocation(HeadMethod head, String extension, String mime_type){
+        Header[] contentDisposition = head.getResponseHeaders("Content-Disposition");
+        Header[] contentType = head.getResponseHeaders("Content-Type");
+        if (contentDisposition.length > 0 && contentDisposition[0].getValue().endsWith(extension)) {
+            return "Content-Disposition";
+        }
+        if (contentType.length > 0 && contentType[0].getValue().endsWith(mime_type)) {
+            return "Content-Type";
+        }
+        return null;
     }
 
 }
