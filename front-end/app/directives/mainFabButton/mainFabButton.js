@@ -60,10 +60,10 @@ angular.module('koolikottApp')
                 };
 
                 $scope.showAddMaterialDialog = function() {
-                    $mdDialog.show(angularAMD.route({
+                    $mdDialog.show({
                         templateUrl: 'addMaterialDialog.html',
-                        controllerUrl: 'views/addMaterialDialog/addMaterialDialog'
-                    }))
+                        controller: 'addMaterialDialogController'
+                    });
                 };
 
                 $scope.copyPortfolio = function() {
