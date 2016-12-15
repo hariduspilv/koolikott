@@ -1,9 +1,10 @@
-define([
-    'angularAMD',
-    'services/recursionHelper',
-    'services/taxonService'
-], function (angularAMD) {
-    angularAMD.directive('dopSidenavTaxon', ['RecursionHelper', 'searchService', 'taxonService', function (RecursionHelper, searchService, taxonService) {
+'use strict'
+
+angular.module('koolikottApp')
+.directive('dopSidenavTaxon',
+[
+    'RecursionHelper', 'searchService', 'taxonService',
+    function (RecursionHelper, searchService, taxonService) {
         return {
             scope: {
                 taxon: '=',
@@ -130,5 +131,5 @@ define([
                 }
             }
         }
-    }]);
-});
+    }
+]);

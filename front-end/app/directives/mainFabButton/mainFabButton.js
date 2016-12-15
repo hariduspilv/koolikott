@@ -1,15 +1,14 @@
-define([
-    'angularAMD',
-    'services/serverCallService',
-    'services/authenticatedUserService',
-    'services/storageService'
-], function(angularAMD) {
-    angularAMD.directive('dopMainFabButton', ['$rootScope', 'serverCallService', '$route', 'storageService', '$filter',  'toastService',
-        function($rootScope, serverCallService, $route, storageService, $filter, toastService) {
+'use strict'
+
+angular.module('koolikottApp')
+.directive('dopMainFabButton',
+[
+    'serverCallService', 'authenticatedUserService', 'storageService', 'toastService',
+    function(serverCallService, authenticatedUserService, storageService, toastService) {
         return {
             scope: true,
             templateUrl: 'directives/mainFabButton/mainFabButton.html',
-            controller: function($scope, $mdDialog, $location, authenticatedUserService, $rootScope) {
+            controller: function($scope, $location, $rootScope, $route, $filter, $mdDialog, serverCallService, authenticatedUserService, storageService, toastService) {
                 $scope.isOpen = false;
                 $scope.userHasSelectedMaterials = false;
 
@@ -18,7 +17,7 @@ define([
                 },false);
 
                 $rootScope.$watch('selectedSingleMaterial', function (newValue) {
-                        $scope.userHasSelectedMaterials = newValue !== null;
+                    $scope.userHasSelectedMaterials = newValue !== null;
                 },false);
 
                 $scope.showAddPortfolioDialog = function() {
@@ -46,24 +45,24 @@ define([
 
                     storageService.setPortfolio(emptyPortfolio);
 
-                    $mdDialog.show(angularAMD.route({
+                    $mdDialog.show({
                         templateUrl: 'views/addPortfolioDialog/addPortfolioDialog.html',
-                        controllerUrl: 'views/addPortfolioDialog/addPortfolioDialog'
-                    }));
+                        controller: 'addPortfolioDialogController'
+                    });
                 };
 
                 $scope.showAddMaterialsToPortfolioDialog = function() {
-                    $mdDialog.show(angularAMD.route({
+                    $mdDialog.show({
                         templateUrl: 'views/addMaterialToExistingPortfolio/addMaterialToExistingPortfolio.html',
-                        controllerUrl: 'views/addMaterialToExistingPortfolio/addMaterialToExistingPortfolio'
-                    }));
+                        controller: 'addMaterialToExistingPortfolioController'
+                    });
                 };
 
                 $scope.showAddMaterialDialog = function() {
-                    $mdDialog.show(angularAMD.route({
+                    $mdDialog.show({
                         templateUrl: 'addMaterialDialog.html',
-                        controllerUrl: 'views/addMaterialDialog/addMaterialDialog'
-                    }))
+                        controller: 'addMaterialDialogController'
+                    });
                 };
 
                 $scope.copyPortfolio = function() {
@@ -93,4 +92,3 @@ define([
             }
         };
     }]);
-});

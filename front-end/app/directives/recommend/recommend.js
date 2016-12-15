@@ -1,10 +1,10 @@
-define([
-    'app',
-    'services/translationService',
-    'services/authenticatedUserService',
-    'services/serverCallService'
-], function(app) {
-    app.directive('dopRecommend', ['translationService', 'authenticatedUserService', 'serverCallService', function(translationService, authenticatedUserService, serverCallService) {
+'use strict'
+
+angular.module('koolikottApp')
+.directive('dopRecommend',
+[
+    'translationService', 'authenticatedUserService', 'serverCallService',
+    function(translationService, authenticatedUserService, serverCallService) {
         return {
             scope: {
                 material: '=',
@@ -55,5 +55,5 @@ define([
 
             }
         };
-    }]);
-});
+    }
+]);

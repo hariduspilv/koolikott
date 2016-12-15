@@ -1,12 +1,10 @@
-define([
-    'app',
-    'services/serverCallService',
-    'ngInfiniteScroll',
-    'services/searchService',
-    'directives/materialBox/materialBox',
-    'directives/portfolioBox/portfolioBox'
-], function (app) {
-    app.directive('dopInfiniteSearchResult', ['serverCallService', function () {
+'use strict'
+
+angular.module('koolikottApp')
+.directive('dopInfiniteSearchResult',
+[
+    'serverCallService',
+    function (serverCallService) {
         return {
             scope: {
                 params: '=',
@@ -128,5 +126,5 @@ define([
                 init();
             }
         };
-    }]);
-});
+    }
+]);

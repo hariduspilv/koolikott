@@ -1,78 +1,75 @@
-define([
-    'app',
-    'angular-youtube-mb',
-    'directives/slideshare/slideshare',
-    'services/translationService',
-    'services/iconService',
-    'services/embedService'
-], function (app) {
-    app.directive('dopEmbeddedMaterial', ['translationService', 'iconService', 'embedService', 'serverCallService', 'dialogService',
-        function (translationService, iconService, embedService, serverCallService, dialogService) {
-            return {
-                scope: {
-                    material: '=',
-                    chapter: '=',
-                    index: '='
-                },
-                templateUrl: 'directives/embeddedMaterial/embeddedMaterial.html',
-                controller: function ($scope, $rootScope, $location) {
-                    init();
+'use strict'
 
-                    function init() {
-                        $scope.canPlayVideo = false;
-                        $scope.canPlayAudio = false;
-                        $scope.videoType = "";
-                        $scope.audioType = "";
-                        $scope.isEditPortfolioPage = $rootScope.isEditPortfolioPage;
-                        $scope.isEditPortfolioMode = $rootScope.isEditPortfolioMode;
+angular.module('koolikottApp')
+.directive('dopEmbeddedMaterial',
+[
+    'translationService', 'iconService', 'embedService', 'serverCallService', 'dialogService',
+    function (translationService, iconService, embedService, serverCallService, dialogService) {
+        return {
+            scope: {
+                material: '=',
+                chapter: '=',
+                index: '='
+            },
+            templateUrl: 'directives/embeddedMaterial/embeddedMaterial.html',
+            controller: function ($scope, $rootScope, $location) {
+                init();
 
-                        if ($scope.material) {
-                            $scope.materialType = getType();
-                            getSourceType();
-                            getContentType();
-                        }
+                function init() {
+                    $scope.canPlayVideo = false;
+                    $scope.canPlayAudio = false;
+                    $scope.videoType = "";
+                    $scope.audioType = "";
+                    $scope.isEditPortfolioPage = $rootScope.isEditPortfolioPage;
+                    $scope.isEditPortfolioMode = $rootScope.isEditPortfolioMode;
+
+                    if ($scope.material) {
+                        $scope.materialType = getType();
+                        getSourceType();
+                        getContentType();
                     }
+                }
 
-                    function getContentType () {
-                        var baseUrl = document.location.origin;
-                        // If the initial type is a LINK, try to ask the type from our proxy
-                        if(matchType($scope.material.source) === 'LINK' && !$scope.material.source.startsWith(baseUrl) ){
-                            $scope.proxyUrl = baseUrl + "/rest/material/externalMaterial?url=" + encodeURIComponent($scope.material.source);
-                            serverCallService.makeHead($scope.proxyUrl, {}, probeContentSuccess, probeContentFail);
-                        }else{
-                            $scope.sourceType = matchType($scope.material.source);
-                        }
+                function getContentType () {
+                    var baseUrl = document.location.origin;
+                    // If the initial type is a LINK, try to ask the type from our proxy
+                    if(matchType($scope.material.source) === 'LINK' && !$scope.material.source.startsWith(baseUrl) ){
+                        $scope.proxyUrl = baseUrl + "/rest/material/externalMaterial?url=" + encodeURIComponent($scope.material.source);
+                        serverCallService.makeHead($scope.proxyUrl, {}, probeContentSuccess, probeContentFail);
+                    }else{
+                        $scope.sourceType = matchType($scope.material.source);
                     }
+                }
 
-                    function probeContentSuccess(response) {
-                        if(!response()['content-disposition']){
-                            $scope.sourceType = 'LINK';
-                            return;
-                        }
-                        var filename = response()['content-disposition'].match(/filename="(.+)"/)[1];
-                        $scope.sourceType = matchType(filename);
-                        if($scope.sourceType !== 'LINK'){
-                            $scope.material.source = $scope.proxyUrl;
-                        }
+                function probeContentSuccess(response) {
+                    if(!response()['content-disposition']){
+                        $scope.sourceType = 'LINK';
+                        return;
                     }
-
-                    function probeContentFail() {
-                        console.log("Content probing failed!");
+                    var filename = response()['content-disposition'].match(/filename="(.+)"/)[1];
+                    $scope.sourceType = matchType(filename);
+                    if($scope.sourceType !== 'LINK'){
+                        $scope.material.source = $scope.proxyUrl;
                     }
+                }
 
-                    $scope.removeMaterial = function ($event, material) {
-                        $event.preventDefault();
-                        $event.stopPropagation();
+                function probeContentFail() {
+                    console.log("Content probing failed!");
+                }
 
-                        var removeMaterialFromChapter = function () {
-                            var index = $scope.chapter.materials.indexOf(material);
-                            $scope.chapter.materials.splice(index, 1);
-                        };
+                $scope.removeMaterial = function ($event, material) {
+                    $event.preventDefault();
+                    $event.stopPropagation();
 
-                        dialogService.showDeleteConfirmationDialog(
-                            'PORTFOLIO_DELETE_MATERIAL_CONFIRM_TITLE',
-                            'PORTFOLIO_DELETE_MATERIAL_CONFIRM_MESSAGE',
-                            removeMaterialFromChapter);
+                    var removeMaterialFromChapter = function () {
+                        var index = $scope.chapter.materials.indexOf(material);
+                        $scope.chapter.materials.splice(index, 1);
+                    };
+
+                    dialogService.showDeleteConfirmationDialog(
+                        'PORTFOLIO_DELETE_MATERIAL_CONFIRM_TITLE',
+                        'PORTFOLIO_DELETE_MATERIAL_CONFIRM_MESSAGE',
+                        removeMaterialFromChapter);
                     };
 
                     $scope.getCorrectLanguageTitle = function (material) {
@@ -234,5 +231,5 @@ define([
 
                 }
             };
-        }]);
-});
+        }
+    ]);

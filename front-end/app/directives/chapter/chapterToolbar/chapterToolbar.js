@@ -1,10 +1,9 @@
-define([
-    'app',
-    'angularAMD',
-    'services/translationService',
-    'directives/validate/validateUrl'
-], function(app, angularAMD) {
-    app.directive('dopChapterToolbar', ['translationService', '$mdDialog', '$rootScope', 'storageService', 'serverCallService', '$filter', '$anchorScroll',
+'use strict'
+
+angular.module('koolikottApp')
+.directive('dopChapterToolbar',
+[
+    'translationService', '$mdDialog', '$rootScope', 'storageService', 'serverCallService', '$filter', '$anchorScroll',
     function(translationService, $mdDialog, $rootScope, storageService, serverCallService, $filter, $anchorScroll) {
         return {
             scope: {
@@ -23,11 +22,11 @@ define([
                     addMaterialScope.isChapterMaterial = true;
                     storageService.setMaterial(null);
 
-                    $mdDialog.show(angularAMD.route({
+                    $mdDialog.show({
                         templateUrl: 'addMaterialDialog.html',
-                        controllerUrl: 'views/addMaterialDialog/addMaterialDialog',
+                        controller: 'addMaterialDialogController',
                         scope: addMaterialScope
-                    })).then(closeDialog);
+                    }).then(closeDialog);
                 };
 
                 function closeDialog(material) {
@@ -57,4 +56,3 @@ define([
             }
         }
     }]);
-});

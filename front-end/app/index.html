@@ -1,5 +1,5 @@
 <!doctype html>
-<html class="no-js">
+<html class="no-js" data-ng-app="koolikottApp">
 <head>
   <base href="/">
   <meta charset="utf-8">
@@ -28,11 +28,132 @@
   <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade
     your browser</a> to improve your experience.</p>
   <![endif]-->
-  <div data-ng-if="hasAppInitated" layout-fill data-dop-column-layout></div>
+
+  <div layout-fill data-dop-column-layout></div>
 
   <div data-ng-show="showMainFabButton && !isEditPortfolioMode" data-dop-main-fab-button></div>
 
-  <script src="/libs/requirejs/require.js" data-main="require.config.js"></script>
+  <!-- vendor -->
+  <script src="libs/cssua.js/cssua.min.js"></script>
+  <script src="libs/angular/angular.min.js"></script>
+  <script src="libs/angular-animate/angular-animate.min.js"></script>
+  <script src="libs/angular-aria/angular-aria.js"></script>
+  <script src="libs/angular-click-outside/clickoutside.directive.js"></script>
+  <script src="libs/angular-material/angular-material.min.js"></script>
+  <script src="libs/angular-route/angular-route.min.js"></script>
+  <script src="libs/angular-translate/angular-translate.min.js"></script>
+  <script src="libs/angular-translate-loader-url/angular-translate-loader-url.min.js"></script>
+  <script src="libs/angular-youtube-mb/dist/angular-youtube-embed.min.js"></script>
+  <script src="libs/angular-screenfull/dist/angular-screenfull.min.js"></script>
+  <script src="libs/angular-scroll/angular-scroll.js"></script>
+  <script src="libs/angular-material-data-table/dist/md-data-table.js"></script>
+  <script src="libs/screenfull/dist/screenfull.js"></script>
+  <script src="libs/ngInfiniteScroll/build/ng-infinite-scroll.min.js"></script>
+  <script src="libs/ng-file-upload/ng-file-upload.min.js"></script>
+  <script src="libs/clipboard/dist/clipboard.min.js"></script>
+  <script src="libs/moment/min/moment.min.js"></script>
+  <script src="utils/ui-bootstrap-custom-tpls.min.js"></script>
+  <script src="libs/rangy/rangy-core.min.js"></script>
+  <script src="libs/rangy/rangy-selectionsaverestore.min.js"></script>
+  <script src="libs/textAngular/dist/textAngular-sanitize.min.js"></script>
+  <script src="libs/textAngular/dist/textAngularSetup.js"></script>
+  <script src="utils/koolikottTextAngular.js"></script>
+  <script src="libs/angular-drag-and-drop-lists/angular-drag-and-drop-lists.min.js"></script>
   <script src="https://www.youtube.com/iframe_api"></script>
+
+  <!-- config -->
+  <script src="constants.js"></script>
+  <script src="utils/commons.js"></script>
+  <script src="app.js"></script>
+  <script src="app.routes.js"></script>
+
+  <!-- services -->
+  <script src="services/authentication.service.js"></script>
+  <script src="services/authenticatedUser.service.js"></script>
+  <script src="services/alert.service.js"></script>
+  <script src="services/dialog.service.js"></script>
+  <script src="services/embed.service.js"></script>
+  <script src="services/fileUpload.service.js"></script>
+  <script src="services/icon.service.js"></script>
+  <script src="services/metadata.service.js"></script>
+  <script src="services/pictureUpload.service.js"></script>
+  <script src="services/recursionHelper.js"></script>
+  <script src="services/search.service.js"></script>
+  <script src="services/serverCall.service.js"></script>
+  <script src="services/storage.service.js"></script>
+  <script src="services/suggest.service.js"></script>
+  <script src="services/targetGroup.service.js"></script>
+  <script src="services/taxon.service.js"></script>
+  <script src="services/toast.service.js"></script>
+  <script src="services/translation.service.js"></script>
+  <script src="services/userData.service.js"></script>
+
+  <!-- controllers -->
+  <script src="views/addMaterialDialog/addMaterialDialog.js"></script>
+  <script src="views/addMaterialToExistingPortfolio/addMaterialToExistingPortfolio.js"></script>
+  <script src="views/addPortfolioDialog/addPortfolioDialog.js"></script>
+  <script src="views/dashboard/baseTableView.js"></script>
+  <script src="views/dashboard/dashboard.js"></script>
+  <script src="views/dev/login/login.js"></script>
+  <script src="views/editPortfolio/editPortfolio.js"></script>
+  <script src="views/editUserDialog/editUser.js"></script>
+  <script src="views/home/home.js"></script>
+  <script src="views/loginDialog/loginDialog.js"></script>
+  <script src="views/loginRedirect/loginRedirect.js"></script>
+  <script src="views/material/material.js"></script>
+  <script src="views/portfolio/portfolio.js"></script>
+  <script src="views/profile/favorites/favorites.js"></script>
+  <script src="views/profile/materials/materials.js"></script>
+  <script src="views/profile/portfolios/portfolios.js"></script>
+  <script src="views/profile/profile.js"></script>
+  <script src="views/search/result/searchResult.js"></script>
+  <script src="views/static/about/about.js"></script>
+  <script src="views/static/help/help.js"></script>
+  <script src="views/static/abstractStaticPage.js"></script>
+
+  <!-- directives -->
+  <script src="directives/alert/alert.js"></script>
+  <script src="directives/chapter/chapter.js"></script>
+  <script src="directives/chapter/chapterToolbar/chapterToolbar.js"></script>
+  <script src="directives/commentsCard/commentsCard.js"></script>
+  <script src="directives/copyPermalink/copyPermalink.js"></script>
+  <script src="directives/dashboard/broken/brokenMaterial.js"></script>
+  <script src="directives/dashboard/deleted/deletedMaterial.js"></script>
+  <script src="directives/dashboard/deleted/deletedPortfolio.js"></script>
+  <script src="directives/dashboard/improper/improperMaterial.js"></script>
+  <script src="directives/dashboard/improper/improperPortfolio.js"></script>
+  <script src="directives/dashboard/userManagement/moderatorsTable.js"></script>
+  <script src="directives/dashboard/userManagement/restrictedUsersTable.js"></script>
+  <script src="directives/detailedSearch/detailedSearch.js"></script>
+  <script src="directives/embeddedMaterial/embeddedMaterial.js"></script>
+  <script src="directives/errorMessage/errorMessage.js"></script>
+  <script src="directives/favorite/favorite.js"></script>
+  <script src="directives/header/header.js"></script>
+  <script src="directives/infiniteSearchResult/infiniteSearchResult.js"></script>
+  <script src="directives/learningObjectRow/learningObjectRow.js"></script>
+  <script src="directives/mainFabButton/mainFabButton.js"></script>
+  <script src="directives/materialBox/materialBox.js"></script>
+  <script src="directives/pageStructure/columnLayout/columnLayout.js"></script>
+  <script src="directives/portfolioBox/portfolioBox.js"></script>
+  <script src="directives/portfolioSummaryCard/portfolioSummaryCard.js"></script>
+  <script src="directives/preloaderCard/preloaderCard.js"></script>
+  <script src="directives/rating/rating.js"></script>
+  <script src="directives/recommend/recommend.js"></script>
+  <script src="directives/report/brokenLink/brokenLink.js"></script>
+  <script src="directives/report/improper/improper.js"></script>
+  <script src="directives/restrict/restrict.js"></script>
+  <script src="directives/selectClose/selectClose.js"></script>
+  <script src="directives/share/share.js"></script>
+  <script src="directives/sidebar/sidebar.js"></script>
+  <script src="directives/sidenav/sidenav.js"></script>
+  <script src="directives/sidenavTaxon/sidenavTaxon.js"></script>
+  <script src="directives/slideshare/slideshare.js"></script>
+  <script src="directives/tableOfContents/tableOfContents.js"></script>
+  <script src="directives/tags/tags.js"></script>
+  <script src="directives/targetGroupSelector/targetGroupSelector.js"></script>
+  <script src="directives/taxonSelector/taxonSelector.js"></script>
+  <script src="directives/toolbarAddMaterials/toolbarAddMaterials.js"></script>
+  <script src="directives/validate/validateUrl.js"></script>
+
 </body>
 </html>

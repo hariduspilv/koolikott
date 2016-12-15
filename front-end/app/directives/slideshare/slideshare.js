@@ -1,9 +1,10 @@
-define([
-    'app',
-    'angular-screenfull',
-    'services/serverCallService'
-], function(app) {
-    app.directive('dopSlideshare', ['serverCallService', function(serverCallService) {
+'use strict'
+
+angular.module('koolikottApp')
+.directive('dopSlideshare',
+[
+    'serverCallService',
+    function(serverCallService) {
         return {
             scope: {
                 source: '=',
@@ -41,5 +42,5 @@ define([
                 }
             }
         };
-    }]);
-});
+    }
+]);

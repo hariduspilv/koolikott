@@ -1,10 +1,10 @@
-define([
-    'angularAMD',
-    'services/serverCallService',
-    'services/searchService',
-    'directives/learningObjectRow/learningObjectRow'
-], function (angularAMD) {
-    angularAMD.directive('dopSidebar', ['serverCallService', '$location', 'searchService', function () {
+'use strict'
+
+angular.module('koolikottApp')
+.directive('dopSidebar',
+[
+    'serverCallService', '$location', 'searchService',
+    function () {
         return {
             scope: true,
             templateUrl: 'directives/sidebar/sidebar.html',
@@ -114,5 +114,5 @@ define([
                 }, true);
             }
         }
-    }]);
-});
+    }
+]);

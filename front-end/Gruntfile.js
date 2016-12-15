@@ -365,29 +365,6 @@ module.exports = function (grunt) {
             ]
         },
 
-        // r.js compile config
-        requirejs: {
-            dist: {
-                options: {
-                    baseUrl: '.tmp/<%= yeoman.app %>',
-                    mainConfigFile: '.tmp/<%= yeoman.app %>/require.config.js',
-                    dir: '<%= yeoman.dist.app %>',
-                    modules: [{
-                        name: 'require.config'
-                    }],
-                    preserveLicenseComments: false, // remove all comments
-                    removeCombined: true,
-                    keepBuildDir: true,
-                    optimize: 'uglify2',
-                    uglify2: {
-                        mangle: true,
-                        dead_code: true,
-                        drop_debugger: true
-                    }
-                }
-            }
-        },
-
         // Create compressed archive for deployment
         compress: {
             dev: {
@@ -491,7 +468,6 @@ module.exports = function (grunt) {
         'cssmin',
         'filerev',
         'usemin',
-        'requirejs:dist',
         'htmlmin'
     ]);
 

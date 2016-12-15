@@ -1,122 +1,106 @@
-define([
-    'app',
-    'angularAMD',
-    'services/translationService',
-    'services/authenticatedUserService',
-    'services/dialogService',
-    'services/serverCallService',
-    'services/toastService',
-    'services/storageService',
-    'services/targetGroupService',
-    'services/taxonService',
-    'directives/copyPermalink/copyPermalink',
-    'directives/report/improper/improper',
-    'directives/report/brokenLink/brokenLink',
-    'directives/recommend/recommend',
-    'directives/rating/rating',
-    'directives/tags/tags',
-    'directives/commentsCard/commentsCard',
-    'directives/favorite/favorite',
-    'directives/share/share'
-], function (app, angularAMD) {
-    app.directive('dopPortfolioSummaryCard', ['translationService', '$location', '$mdDialog', '$rootScope', 'authenticatedUserService', '$route', 'dialogService', 'serverCallService', 'toastService', 'storageService', 'targetGroupService', 'taxonService',
-        function (translationService, $location, $mdDialog, $rootScope, authenticatedUserService, $route, dialogService, serverCallService, toastService, storageService, targetGroupService, taxonService) {
-            return {
-                scope: {
-                    portfolio: '=',
-                    comment: '=',
-                    submitClick: "&"
-                },
-                templateUrl: 'directives/portfolioSummaryCard/portfolioSummaryCard.html',
-                controller: function ($scope, $location) {
+'use strict'
 
-                    function init() {
-                        $scope.pageUrl = $location.absUrl();
-                        $scope.isViewPortforlioPage = $rootScope.isViewPortforlioPage;
-                        $scope.isEditPortfolioMode = $rootScope.isEditPortfolioMode;
+angular.module('koolikottApp')
+.directive('dopPortfolioSummaryCard',
+[
+    'translationService', '$location', '$mdDialog', '$rootScope', 'authenticatedUserService', '$route', 'dialogService', 'serverCallService', 'toastService', 'storageService', 'targetGroupService', 'taxonService',
+    function (translationService, $location, $mdDialog, $rootScope, authenticatedUserService, $route, dialogService, serverCallService, toastService, storageService, targetGroupService, taxonService) {
+        return {
+            scope: {
+                portfolio: '=',
+                comment: '=',
+                submitClick: "&"
+            },
+            templateUrl: 'directives/portfolioSummaryCard/portfolioSummaryCard.html',
+            controller: function ($scope, $location) {
+
+                function init() {
+                    $scope.pageUrl = $location.absUrl();
+                    $scope.isViewPortforlioPage = $rootScope.isViewPortforlioPage;
+                    $scope.isEditPortfolioMode = $rootScope.isEditPortfolioMode;
+                }
+
+                $scope.getEducationalContext = function (taxon) {
+                    var educationalContext = taxonService.getEducationalContext(taxon);
+                    if (educationalContext) {
+                        return educationalContext.name.toUpperCase();
+                    }
+                };
+
+                $scope.getDomain = function (taxon) {
+                    var domain = taxonService.getDomain(taxon);
+                    if (domain) {
+                        return domain.name.toUpperCase();
+                    }
+                };
+
+                $scope.getSubject = function (taxon) {
+                    var subject = taxonService.getSubject(taxon);
+                    if (subject) {
+                        return subject.name.toUpperCase();
+                    }
+                };
+
+                $scope.isOwner = function () {
+                    if (!authenticatedUserService.isAuthenticated()) {
+                        return false;
                     }
 
-                    $scope.getEducationalContext = function (taxon) {
-                        var educationalContext = taxonService.getEducationalContext(taxon);
-                        if (educationalContext) {
-                            return educationalContext.name.toUpperCase();
-                        }
-                    };
+                    if ($scope.portfolio && $scope.portfolio.creator) {
+                        var creatorId = $scope.portfolio.creator.id;
+                        var userId = authenticatedUserService.getUser().id;
+                        return creatorId === userId;
+                    }
+                };
 
-                    $scope.getDomain = function (taxon) {
-                        var domain = taxonService.getDomain(taxon);
-                        if (domain) {
-                            return domain.name.toUpperCase();
-                        }
-                    };
+                $scope.canEdit = function () {
+                    return ($scope.isOwner() || authenticatedUserService.isAdmin() || authenticatedUserService.isModerator())
+                    && !authenticatedUserService.isRestricted();
+                };
 
-                    $scope.getSubject = function (taxon) {
-                        var subject = taxonService.getSubject(taxon);
-                        if (subject) {
-                            return subject.name.toUpperCase();
-                        }
-                    };
+                $scope.isAdmin = function () {
+                    return authenticatedUserService.isAdmin();
+                };
 
-                    $scope.isOwner = function () {
-                        if (!authenticatedUserService.isAuthenticated()) {
-                            return false;
-                        }
+                $scope.isModerator = function () {
+                    return authenticatedUserService.isModerator();
+                };
 
-                        if ($scope.portfolio && $scope.portfolio.creator) {
-                            var creatorId = $scope.portfolio.creator.id;
-                            var userId = authenticatedUserService.getUser().id;
-                            return creatorId === userId;
-                        }
-                    };
+                $scope.isAdminOrModerator = function() {
+                    return authenticatedUserService.isAdmin() || authenticatedUserService.isModerator();
+                };
 
-                    $scope.canEdit = function () {
-                        return ($scope.isOwner() || authenticatedUserService.isAdmin() || authenticatedUserService.isModerator())
-                            && !authenticatedUserService.isRestricted();
-                    };
+                $scope.isLoggedIn = function () {
+                    return authenticatedUserService.isAuthenticated();
+                };
 
-                    $scope.isAdmin = function () {
-                        return authenticatedUserService.isAdmin();
-                    };
+                $scope.isRestricted = function () {
+                    return authenticatedUserService.isRestricted();
+                };
 
-                    $scope.isModerator = function () {
-                        return authenticatedUserService.isModerator();
-                    };
+                $scope.editPortfolio = function () {
+                    var portfolioId = $route.current.params.id;
+                    $location.url("/portfolio/edit?id=" + portfolioId);
+                };
 
-                    $scope.isAdminOrModerator = function() {
-                        return authenticatedUserService.isAdmin() || authenticatedUserService.isModerator();
-                    };
+                $scope.showEditMetadataDialog = function () {
+                    storageService.setPortfolio($scope.portfolio);
 
-                    $scope.isLoggedIn = function () {
-                        return authenticatedUserService.isAuthenticated();
-                    };
+                    $mdDialog.show({
+                        templateUrl: 'views/addPortfolioDialog/addPortfolioDialog.html',
+                        controller: 'addPortfolioDialogController'
+                    });
+                };
 
-                    $scope.isRestricted = function () {
-                        return authenticatedUserService.isRestricted();
-                    };
+                $scope.addComment = function () {
+                    $scope.submitClick();
+                };
 
-                    $scope.editPortfolio = function () {
-                        var portfolioId = $route.current.params.id;
-                        $location.url("/portfolio/edit?id=" + portfolioId);
-                    };
-
-                    $scope.showEditMetadataDialog = function () {
-                        storageService.setPortfolio($scope.portfolio);
-
-                        $mdDialog.show(angularAMD.route({
-                            templateUrl: 'views/addPortfolioDialog/addPortfolioDialog.html',
-                            controllerUrl: 'views/addPortfolioDialog/addPortfolioDialog'
-                        }));
-                    };
-
-                    $scope.addComment = function () {
-                        $scope.submitClick();
-                    };
-
-                    $scope.confirmPortfolioDeletion = function () {
-                        dialogService.showDeleteConfirmationDialog(
-                            'PORTFOLIO_CONFIRM_DELETE_DIALOG_TITLE',
-                            'PORTFOLIO_CONFIRM_DELETE_DIALOG_CONTENT',
-                            deletePortfolio);
+                $scope.confirmPortfolioDeletion = function () {
+                    dialogService.showDeleteConfirmationDialog(
+                        'PORTFOLIO_CONFIRM_DELETE_DIALOG_TITLE',
+                        'PORTFOLIO_CONFIRM_DELETE_DIALOG_CONTENT',
+                        deletePortfolio);
                     };
 
                     function getSubject(taxon) {
@@ -206,16 +190,16 @@ define([
                             && $rootScope.learningObjectBroken == true
                             && $rootScope.learningObjectImproper == true)
                             || ($rootScope.learningObjectDeleted == true));
-                    };
+                        };
 
-                    $scope.$watch('portfolio.taxon.id', function (newValue, oldValue) {
-                        if (newValue !== oldValue && $scope.portfolio) {
-                            $scope.portfolioSubject = getSubject($scope.portfolio.taxon);
-                        }
-                    }, true);
+                        $scope.$watch('portfolio.taxon.id', function (newValue, oldValue) {
+                            if (newValue !== oldValue && $scope.portfolio) {
+                                $scope.portfolioSubject = getSubject($scope.portfolio.taxon);
+                            }
+                        }, true);
 
-                    init();
-                }
-            };
-        }]);
-});
+                        init();
+                    }
+                };
+            }
+        ]);

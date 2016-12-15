@@ -1,103 +1,99 @@
-define([
-    'app',
-    'services/serverCallService',
-    'services/translationService',
-    'services/iconService',
-    'directives/favorite/favorite',
-], function (app) {
-    app.directive('dopMaterialBox', ['translationService', 'serverCallService', '$rootScope', 'iconService', 'authenticatedUserService',
-        function (translationService, serverCallService, $rootScope, iconService, authenticatedUserService) {
-            return {
-                scope: {
-                    material: '=',
-                    chapter: '='
-                },
-                templateUrl: 'directives/materialBox/materialBox.html',
-                controller: function ($scope, $location) {
+'use strict'
 
-                    $scope.selected = false;
-                    $scope.isEditPortfolioPage = $rootScope.isEditPortfolioPage;
-                    $scope.isEditPortfolioMode = $rootScope.isEditPortfolioMode;
+angular.module('koolikottApp')
+.directive('dopMaterialBox',
+[
+    'translationService', 'serverCallService', '$rootScope', 'iconService', 'authenticatedUserService',
+    function (translationService, serverCallService, $rootScope, iconService, authenticatedUserService) {
+        return {
+            scope: {
+                material: '=',
+                chapter: '='
+            },
+            templateUrl: 'directives/materialBox/materialBox.html',
+            controller: function ($scope, $location) {
 
-                    $scope.navigateTo = function (material, $event) {
-                        $event.preventDefault();
-                        $rootScope.savedMaterial = material;
+                $scope.selected = false;
+                $scope.isEditPortfolioPage = $rootScope.isEditPortfolioPage;
+                $scope.isEditPortfolioMode = $rootScope.isEditPortfolioMode;
 
-                        $location.path('/material').search({
-                            materialId: material.id
-                        });
-                    };
+                $scope.navigateTo = function (material, $event) {
+                    $event.preventDefault();
+                    $rootScope.savedMaterial = material;
 
-                    $scope.getCorrectLanguageTitle = function (material) {
-                        if (material) {
-                            return getCorrectLanguageString(material.titles, material.language);
-                        }
-                    };
+                    $location.path('/material').search({
+                        materialId: material.id
+                    });
+                };
 
-                    function getCorrectLanguageString(languageStringList, materialLanguage) {
-                        if (languageStringList) {
-                            return getUserDefinedLanguageString(languageStringList, translationService.getLanguage(), materialLanguage);
-                        }
+                $scope.getCorrectLanguageTitle = function (material) {
+                    if (material) {
+                        return getCorrectLanguageString(material.titles, material.language);
+                    }
+                };
+
+                function getCorrectLanguageString(languageStringList, materialLanguage) {
+                    if (languageStringList) {
+                        return getUserDefinedLanguageString(languageStringList, translationService.getLanguage(), materialLanguage);
+                    }
+                }
+
+                $scope.formatMaterialIssueDate = function (issueDate) {
+                    return formatIssueDate(issueDate);
+
+                };
+
+                $scope.formatName = function (name) {
+                    if (name) {
+                        return formatNameToInitials(name.trim());
+                    }
+                };
+
+                $scope.formatSurname = function (surname) {
+                    if (surname) {
+                        return formatSurnameToInitialsButLast(surname.trim());
+                    }
+                };
+
+                $scope.materialType = iconService.getMaterialIcon($scope.material.resourceTypes);
+
+                $scope.pickMaterial = function ($event, material) {
+                    $event.preventDefault();
+                    $event.stopPropagation();
+
+                    var index = $rootScope.selectedMaterials.indexOf(material);
+                    if (index == -1) {
+                        $rootScope.selectedMaterials.push(material);
+                        material.selected = true;
+                    } else {
+                        $rootScope.selectedMaterials.splice(index, 1);
+                        material.selected = false;
+                    }
+                };
+
+                $scope.removeMaterial = function ($event, material) {
+                    $event.preventDefault();
+                    $event.stopPropagation();
+
+                    var index = $scope.chapter.materials.indexOf(material);
+                    $scope.chapter.materials.splice(index, 1);
+                };
+
+                $scope.isAuthenticated = function () {
+                    var authenticated = authenticatedUserService.getUser() && !authenticatedUserService.isRestricted() && !$rootScope.isEditPortfolioPage;
+                    if (!authenticated) {
+                        $scope.material.selected = false;
                     }
 
-                    $scope.formatMaterialIssueDate = function (issueDate) {
-                        return formatIssueDate(issueDate);
+                    return authenticated;
+                };
 
-                    };
-
-                    $scope.formatName = function (name) {
-                        if (name) {
-                            return formatNameToInitials(name.trim());
-                        }
-                    };
-
-                    $scope.formatSurname = function (surname) {
-                        if (surname) {
-                            return formatSurnameToInitialsButLast(surname.trim());
-                        }
-                    };
-
-                    $scope.materialType = iconService.getMaterialIcon($scope.material.resourceTypes);
-
-                    $scope.pickMaterial = function ($event, material) {
-                        $event.preventDefault();
-                        $event.stopPropagation();
-
-                        var index = $rootScope.selectedMaterials.indexOf(material);
-                        if (index == -1) {
-                            $rootScope.selectedMaterials.push(material);
-                            material.selected = true;
-                        } else {
-                            $rootScope.selectedMaterials.splice(index, 1);
-                            material.selected = false;
-                        }
-                    };
-
-                    $scope.removeMaterial = function ($event, material) {
-                        $event.preventDefault();
-                        $event.stopPropagation();
-
-                        var index = $scope.chapter.materials.indexOf(material);
-                        $scope.chapter.materials.splice(index, 1);
-                    };
-
-                    $scope.isAuthenticated = function () {
-                        var authenticated = authenticatedUserService.getUser() && !authenticatedUserService.isRestricted() && !$rootScope.isEditPortfolioPage;
-                        if (!authenticated) {
-                            $scope.material.selected = false;
-                        }
-
-                        return authenticated;
-                    };
-
-                    $rootScope.$watch('selectedMaterials', function (newValue) {
-                        if (newValue && newValue.length == 0) {
-                            $scope.material.selected = false;
-                        }
-                    });
-                }
-            };
-        }]);
-
-    return app;
-});
+                $rootScope.$watch('selectedMaterials', function (newValue) {
+                    if (newValue && newValue.length == 0) {
+                        $scope.material.selected = false;
+                    }
+                });
+            }
+        };
+    }
+]);

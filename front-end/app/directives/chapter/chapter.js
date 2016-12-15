@@ -1,12 +1,10 @@
-define([
-    'app',
-    'angular-drag-and-drop-lists',
-    'services/translationService',
-    'services/dialogService',
-    'directives/chapter/chapterToolbar/chapterToolbar',
-    'directives/embeddedMaterial/embeddedMaterial'
-], function (app) {
-    app.directive('dopChapter', ['translationService', '$rootScope', 'dialogService', function (translationService, $rootScope, dialogService) {
+'use strict'
+
+angular.module('koolikottApp')
+.directive('dopChapter',
+[
+    'translationService', '$rootScope', 'dialogService',
+    function (translationService, $rootScope, dialogService) {
         return {
             scope: {
                 chapter: '=',
@@ -56,18 +54,17 @@ define([
                         'PORTFOLIO_DELETE_SUB_CHAPTER_CONFIRM_MESSAGE',
                         deleteSubChapter);
 
-                };
+                    };
 
-                $scope.deleteChapter = function () {
-                    $scope.onDelete()($scope.chapter);
-                };
+                    $scope.deleteChapter = function () {
+                        $scope.onDelete()($scope.chapter);
+                    };
 
-                $scope.getParsedMaterial = function (material) {
-                    delete material['taxons']
-                    return material
+                    $scope.getParsedMaterial = function (material) {
+                        delete material['taxons']
+                        return material
+                    }
+
                 }
-
-            }
-        };
-    }]);
-});
+            };
+        }]);

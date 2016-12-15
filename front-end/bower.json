@@ -15,25 +15,23 @@
     "angular-translate": "2.13.0",
     "angular-translate-loader-url": "2.13.0",
     "angular-youtube-mb": "1.3.1",
-    "angularAMD": "0.2.1",
     "clipboard": "1.5.15",
     "jquery": "3.1.1",
     "material-design-icons": "3.0.1",
     "ng-file-upload": "12.2.13",
     "ngInfiniteScroll": "1.3.0",
-    "requirejs": "2.3.2",
     "screenfull": "3.0.2",
     "moment": "2.17.0",
     "textAngular": "1.5.13",
     "rangy": "1.3.0",
     "angular-embed": "3.0.2",
     "angular-drag-and-drop-lists": "1.4.0",
-    "cssua.js": "cssuseragent#^2.1.31"
+    "cssua.js": "cssuseragent#^2.1.31",
+    "angular-ui-router": "^0.3.2"
   },
   "appPath": "app",
   "moduleName": "ranitsApp",
   "resolutions": {
-    "angular": "1.5.9",
-    "requirejs": "2.3.2"
+    "angular": "1.5.9"
   }
 }

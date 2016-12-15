@@ -1,8 +1,10 @@
-define([
-    'angularAMD',
-    'services/translationService'
-], function(angularAMD) {
-    angularAMD.directive('dopTableOfContents', ['$filter', '$document', '$rootScope', 'translationService', '$mdToast', '$location', '$timeout', function($filter, $document, $rootScope, translationService, $mdToast, $location, $timeout) {
+'use strict'
+
+angular.module('koolikottApp')
+.directive('dopTableOfContents',
+[
+    '$filter', '$document', '$rootScope', 'translationService', '$mdToast', '$location', '$timeout',
+    function($filter, $document, $rootScope, translationService, $mdToast, $location, $timeout) {
         return {
             scope: {
                 portfolio: '=',
@@ -97,7 +99,7 @@ define([
                 $scope.closeSidenav = function(id) {
                     if(window.innerWidth < 1280) {
                         $mdSidenav(id)
-                            .close();
+                        .close();
                     }
                 };
 
@@ -105,5 +107,5 @@ define([
 
             }
         };
-    }]);
-});
+    }
+]);

@@ -1,15 +1,10 @@
-define([
-    'angularAMD',
-    'services/translationService',
-    'services/serverCallService',
-    'services/searchService',
-    'services/authenticatedUserService',
-    'services/storageService',
-    'services/dialogService',
-    'services/suggestService'
-], function (angularAMD) {
-    angularAMD.directive('dopTags',['translationService', '$mdToast', '$translate', 'serverCallService', 'searchService', 'authenticatedUserService', '$location', '$rootScope', '$mdDialog', 'storageService', 'suggestService', '$http', 'dialogService',
-        function (translationService, $mdToast, $translate, serverCallService, searchService, authenticatedUserService, $location, $rootScope, $mdDialog, storageService, suggestService, $http, dialogService) {
+'use strict'
+
+angular.module('koolikottApp')
+.directive('dopTags',
+[
+    'translationService', '$mdToast', '$translate', 'serverCallService', 'searchService', 'authenticatedUserService', '$location', '$rootScope', '$mdDialog', 'storageService', 'suggestService', '$http', 'dialogService',
+    function (translationService, $mdToast, $translate, serverCallService, searchService, authenticatedUserService, $location, $rootScope, $mdDialog, storageService, suggestService, $http, dialogService) {
         return {
             scope: {
                 learningObject: '='
@@ -30,7 +25,7 @@ define([
                     }
 
                     if($scope.isAllowed()) {
-                    	getHasReportedImproper();
+                        getHasReportedImproper();
                     }
                 }
 
@@ -54,7 +49,7 @@ define([
                 $scope.upVote = function (upVoteForm) {
                     $scope.beingUpVotedForm = upVoteForm;
                     var tagUpVote = {
-                    	learningObject: $scope.learningObject,
+                        learningObject: $scope.learningObject,
                         tag: upVoteForm.tag,
                         user: authenticatedUserService.getUser()
                     };
@@ -63,7 +58,7 @@ define([
                 };
 
                 function upVoteSuccess(tagUpVote) {
-                	$scope.beingUpVotedForm.tagUpVote = tagUpVote;
+                    $scope.beingUpVotedForm.tagUpVote = tagUpVote;
                     $scope.beingUpVotedForm.upVoteCount++;
                     $scope.upVoteForms = sortTags($scope.upVoteForms);
                 }
@@ -85,10 +80,10 @@ define([
                 };
 
                 $scope.removeUpVote = function (upVoteForm) {
-                	var removeUpVoteUrl = "rest/tagUpVotes/" + upVoteForm.tagUpVote.id;
-                	serverCallService.makeDelete(removeUpVoteUrl, {}, removeUpVoteSuccess, removeUpVoteFail);
+                    var removeUpVoteUrl = "rest/tagUpVotes/" + upVoteForm.tagUpVote.id;
+                    serverCallService.makeDelete(removeUpVoteUrl, {}, removeUpVoteSuccess, removeUpVoteFail);
 
-                	$scope.removedUpVoteForm = upVoteForm;
+                    $scope.removedUpVoteForm = upVoteForm;
                 };
 
                 function removeUpVoteSuccess() {
@@ -101,7 +96,7 @@ define([
                 }
 
                 function removeUpVoteFail() {
-                	log("Failed to remove upVote.");
+                    log("Failed to remove upVote.");
                     $scope.removedUpVoteForm = null;
                 }
 
@@ -122,22 +117,22 @@ define([
                 };
 
                 function addTagSuccess(learningObject) {
-                	if (!learningObject) {
-                		addTagFail();
-                	} else {
+                    if (!learningObject) {
+                        addTagFail();
+                    } else {
                         learningObject.picture = $scope.learningObject.picture;
-                		$scope.learningObject = learningObject;
+                        $scope.learningObject = learningObject;
                         if (!$scope.learningObject.source && learningObject.uploadedFile) {
                             $scope.learningObject.source = learningObject.uploadedFile.url;
                         }
-                		if(learningObject.type === ".Portfolio") {
-                			$rootScope.savedPortfolio = learningObject;
-                		} else if (learningObject.type === ".Material") {
-                			storageService.setMaterial($scope.learningObject);
-                		}
+                        if(learningObject.type === ".Portfolio") {
+                            $rootScope.savedPortfolio = learningObject;
+                        } else if (learningObject.type === ".Material") {
+                            storageService.setMaterial($scope.learningObject);
+                        }
 
-                		init();
-                	}
+                        init();
+                    }
                 }
 
                 function addTagFail() {
@@ -147,10 +142,10 @@ define([
                 $scope.reportTag = function (tag) {
 
                     var confirm = $mdDialog.confirm()
-                        .title($translate.instant('REPORT_IMPROPER_TITLE'))
-                        .content($translate.instant('REPORT_IMPROPER_CONTENT') + " " + $translate.instant('REASON_IMPROPER_TAG'))
-                        .ok($translate.instant('BUTTON_NOTIFY'))
-                        .cancel($translate.instant('BUTTON_CANCEL'));
+                    .title($translate.instant('REPORT_IMPROPER_TITLE'))
+                    .content($translate.instant('REPORT_IMPROPER_CONTENT') + " " + $translate.instant('REASON_IMPROPER_TAG'))
+                    .ok($translate.instant('BUTTON_NOTIFY'))
+                    .cancel($translate.instant('BUTTON_CANCEL'));
 
                     $mdDialog.show(confirm).then(function () {
                         var entity = {
@@ -189,9 +184,9 @@ define([
 
                 function getHasReportedImproper() {
                     if ($scope.learningObject && $scope.learningObject.id) {
-                    	var improperParams = {
-                    			learningObject: $scope.learningObject.id
-                    	};
+                        var improperParams = {
+                            learningObject: $scope.learningObject.id
+                        };
 
                         serverCallService.makeGet("rest/impropers", improperParams, requestSuccessful, requestFailed);
                     }
@@ -210,5 +205,5 @@ define([
                 init();
             }
         };
-    }]);
-});
+    }
+]);
