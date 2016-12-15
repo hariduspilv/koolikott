@@ -21,7 +21,8 @@ define([
                         $scope.userHasSelectedMaterials = newValue !== null;
                 },false);
 
-                $scope.showAddPortfolioDialog = function() {
+                $scope.showAddPortfolioDialog = function(e) {
+                    e.preventDefault();
                     var emptyPortfolio = createPortfolio();
 
                     if($scope.userHasSelectedMaterials || $rootScope.selectedSingleMaterial) {
@@ -90,6 +91,16 @@ define([
                 $scope.hasPermission = function() {
                     return authenticatedUserService.getUser() && !authenticatedUserService.isRestricted();
                 };
+
+                $scope.setFabState = function(state) {
+                    if(!isTouchDevice()) {
+                       $scope.isOpen = state;
+                    }
+                };
+
+                function isTouchDevice() {
+                    return true == ("ontouchstart" in window || window.DocumentTouch && document instanceof DocumentTouch);
+                }
             }
         };
     }]);

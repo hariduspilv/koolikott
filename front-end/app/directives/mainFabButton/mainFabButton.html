@@ -1,13 +1,12 @@
-<md-fab-speed-dial data-ng-if="hasPermission()" class="md-fab-bottom-right md-scale main-fab-button" md-open="isOpen"
-                   md-direction="up" data-ng-mouseenter="isOpen = true" data-ng-mouseleave="isOpen = false">
+<md-fab-speed-dial data-ng-show="hasPermission()" class="md-fab-bottom-right md-scale main-fab-button" md-open="isOpen"
+                   md-direction="up" ng-mouseenter="setFabState(true)" ng-mouseleave="setFabState(false)">
   <md-fab-trigger>
-    <md-button aria-label="Lisa kogumik" class="md-fab md-warn" data-ng-click="showAddPortfolioDialog($event)" id="add-portfolio">
+    <md-button ng-if="hasPermission()" aria-label="Lisa kogumik" class="md-fab md-warn" data-ng-click="isOpen && showAddPortfolioDialog($event)" id="add-portfolio">
       <md-tooltip md-direction="left">
         <span data-translate="ADD_PORTFOLIO"></span>
       </md-tooltip>
       <md-icon class="fab-closed-icon">add</md-icon>
       <md-icon class="fab-open-icon">class</md-icon>
-      <!-- <md-icon class="fab-open-icon">mode_edit</md-icon> -->
     </md-button>
   </md-fab-trigger>
   <md-fab-actions>
