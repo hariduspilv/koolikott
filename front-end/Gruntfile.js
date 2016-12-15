@@ -322,23 +322,18 @@ module.exports = function (grunt) {
                         '*.{ico,png,txt}',
                         '.htaccess',
                         '*.html',
-                        'views/**/**/*.html',
+                        '*.js',
+                        'views/**/**/*.{html,js}',
                         'images/{,*/}*.{webp}',
                         'fonts/{,*/}*.*',
-                        'directives/**/**/*.html',
-                        'utils/**/**/*.{html,ttf,png,css}'
+                        'directives/**/**/*.{html,js}',
+                        'libs/**/**/*.js',
+                        'utils/**/**/*.{html,ttf,png,css,js}'
                     ]
                 }, {
                     expand: true,
                     cwd: '<%= yeoman.app %>/libs',
                     dest: '.tmp/<%= yeoman.app %>/libs',
-                    src: [
-                        '**/*.js'
-                    ]
-                }, {
-                    expand: true,
-                    cwd: '<%= yeoman.app %>/libs',
-                    dest: '<%= yeoman.dist.app %>/libs',
                     src: [
                         '**/*.js'
                     ]
