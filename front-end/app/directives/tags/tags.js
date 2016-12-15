@@ -204,5 +204,7 @@ angular.module('koolikottApp')
                 }
 
                 init();
-            };
-        }]);
+            }
+        }
+    }
+]);
