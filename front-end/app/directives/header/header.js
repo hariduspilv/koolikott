@@ -3,7 +3,7 @@
 angular.module('koolikottApp')
 .directive('dopHeader',
 [
-    'translationService', '$location', 'searchService', 'authenticationService', 'authenticatedUserService', '$timeout', '$mdDialog', 'suggestService', 'serverCallService', 'toastService', '$route','$http', '$window',
+    'translationService', '$location', 'searchService', 'authenticationService', 'authenticatedUserService', '$timeout', '$mdDialog', 'suggestService', 'serverCallService', 'toastService', '$route', '$http', '$window',
     function (translationService, $location, searchService, authenticationService, authenticatedUserService, $timeout, $mdDialog, suggestService, serverCallService, toastService, $route, $http, $window) {
         return {
             scope: true,
@@ -53,7 +53,11 @@ angular.module('koolikottApp')
                 $scope.search = function () {
                     searchService.setSearch($scope.searchFields.searchQuery);
                     searchService.clearFieldsNotInSimpleSearch();
-                    searchService.setType('all');
+                    if($rootScope.isEditPortfolioMode) {
+                        searchService.setType('material');
+                    } else {
+                        searchService.setType('all');
+                    }
                     $location.url(searchService.getURL());
                 };
 
@@ -143,6 +147,10 @@ angular.module('koolikottApp')
                     return authenticatedUserService.isModerator();
                 };
 
+                $scope.isAdminOrModerator = function () {
+                    return $scope.isAdmin() || $scope.isModerator();
+                };
+
                 $scope.getShareUrl = buildShareUrl();
 
                 function buildShareUrl() {
@@ -193,7 +201,6 @@ angular.module('koolikottApp')
                     serverCallService.makePost(url, $rootScope.savedPortfolio, saveAndExitPortfolioSuccess, updatePortfolioFailed);
                 };
 
-
                 function saveAndExitPortfolioSuccess(portfolio) {
                     if (!isEmpty(portfolio)) {
                         toastService.show('PORTFOLIO_SAVED');
@@ -207,17 +214,20 @@ angular.module('koolikottApp')
                     log('Updating portfolio failed.');
                 }
 
-                $scope.$watch(function(){ return $location.path() }, function(params){
-                    if(params.indexOf("/portfolio") !== -1 || params.indexOf("/material") !== -1) {
+                $scope.$watch(function () {
+                    return $location.path()
+                }, function (params) {
+                    if (params.indexOf("/portfolio") !== -1 || params.indexOf("/material") !== -1) {
                         $scope.detailedSearch.isVisible = false;
                     }
                 });
 
                 $scope.$watch(function () {
-                    return $location.url();
+                    return [$location.url(), $rootScope.isEditPortfolioMode];
                 }, function () {
-                    $scope.isEditModeAndSearch = ($rootScope.isEditPortfolioMode && $location.url().indexOf('/search') !== -1);
+                    $scope.isEditModeAndNotEditView = ($rootScope.isEditPortfolioMode && $location.url().indexOf('/portfolio/edit') !== 0);
                 }, true);
+
             }
         };
     }

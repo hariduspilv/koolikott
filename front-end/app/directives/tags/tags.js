@@ -24,7 +24,7 @@ angular.module('koolikottApp')
                         serverCallService.makeGet("rest/tagUpVotes/report", reportParams, getTagUpVotesReportSuccess)
                     }
 
-                    if($scope.isAllowed()) {
+                    if ($scope.isAllowed()) {
                         getHasReportedImproper();
                     }
                 }
@@ -37,7 +37,7 @@ angular.module('koolikottApp')
 
                 function getTagUpVotesReportSuccess(upVoteForms) {
                     var sortedForms = sortTags(upVoteForms);
-                    if(sortedForms.length > 10) {
+                    if (sortedForms.length > 10) {
                         $scope.upVoteForms = sortedForms.slice(0, 10);
                         $scope.showMoreTags = true;
                         allUpVoteForms = sortedForms;
@@ -125,7 +125,7 @@ angular.module('koolikottApp')
                         if (!$scope.learningObject.source && learningObject.uploadedFile) {
                             $scope.learningObject.source = learningObject.uploadedFile.url;
                         }
-                        if(learningObject.type === ".Portfolio") {
+                        if (learningObject.type === ".Portfolio") {
                             $rootScope.savedPortfolio = learningObject;
                         } else if (learningObject.type === ".Material") {
                             storageService.setMaterial($scope.learningObject);
@@ -153,7 +153,8 @@ angular.module('koolikottApp')
                             reason: "Tag: " + tag
                         };
 
-                        serverCallService.makePut("rest/impropers", entity, setImproperSuccessful, function () {});
+                        serverCallService.makePut("rest/impropers", entity, setImproperSuccessful, function () {
+                        });
                     });
                 };
 
@@ -173,7 +174,7 @@ angular.module('koolikottApp')
                 };
 
                 $scope.tagSelected = function () {
-                    if($scope.newTag && $scope.newTag.tagName) {
+                    if ($scope.newTag && $scope.newTag.tagName) {
                         $scope.addTag();
                     }
                 };
@@ -203,7 +204,5 @@ angular.module('koolikottApp')
                 }
 
                 init();
-            }
-        };
-    }
-]);
+            };
+        }]);

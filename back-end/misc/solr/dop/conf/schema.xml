@@ -161,8 +161,8 @@
 
     <!-- Tag suggestion -->
     <field name="taxon_name" type="suggest_tag_phrase" indexed="true" stored="false" multiValued="true"/>
-    <field name="resource_type_name" type="text_general" indexed="true" stored="false" multiValued="true"/>
-    <field name="target_group_name" type="text_general" indexed="true" stored="false" multiValued="true"/>
+    <field name="resource_type_name" type="suggest_tag_phrase" indexed="true" stored="false" multiValued="true"/>
+    <field name="target_group_name" type="suggest_tag_phrase" indexed="true" stored="false" multiValued="true"/>
 
     <!-- Portfolio -->
     <field name="summary" type="text_general" indexed="true" stored="false"/>
@@ -241,7 +241,7 @@
 
     <fieldType name="suggest_tag_phrase" class="solr.TextField" positionIncrementGap="100">
         <analyzer>
-            <tokenizer class="solr.WhitespaceTokenizerFactory"/>
+            <tokenizer class="solr.KeywordTokenizerFactory"/>
             <filter class="solr.LowerCaseFilterFactory"/>
         </analyzer>
     </fieldType>
