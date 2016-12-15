@@ -219,7 +219,6 @@ app.config(
 
         app.run(['$rootScope', '$location', 'authenticatedUserService', function ($rootScope, $location, authenticatedUserService) {
             $rootScope.$on('$routeChangeSuccess', function () {
-                console.log('routeChangeSuccess');
                 var editModeAllowed = ["/portfolio/edit", "/search/result", "/material"];
 
                 var path = $location.path();

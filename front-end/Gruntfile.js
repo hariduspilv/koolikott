@@ -327,7 +327,7 @@ module.exports = function (grunt) {
                         'images/{,*/}*.{webp}',
                         'fonts/{,*/}*.*',
                         'directives/**/**/*.{html,js}',
-                        'libs/**/**/*.js',
+                        'libs/**/**/*.{js,map}',
                         'services/*.js',
                         'utils/**/**/*.{html,ttf,png,css,js}'
                     ]
