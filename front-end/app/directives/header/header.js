@@ -65,7 +65,6 @@ angular.module('koolikottApp')
                     $scope.detailedSearch.isVisible = true;
                     $scope.detailedSearch.queryIn = $scope.searchFields.searchQuery;
                     broadcastSearchOpen();
-                    $anchorScroll();
                 };
 
                 function broadcastSearchOpen() {
