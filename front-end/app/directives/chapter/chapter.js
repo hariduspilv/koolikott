@@ -34,15 +34,6 @@ angular.module('koolikottApp')
                     $scope.subisCollapsed[subChapter.$$hashKey] = !$scope.subisCollapsed[subChapter.$$hashKey];
                 };
 
-                $scope.toggle = function (e) {
-                    var item = $("div.chapter-arrow");
-                    $(e.currentTarget).find(item).toggleClass('toggled');
-                };
-
-                $scope.editToggle = function (e) {
-                    $(e.currentTarget).toggleClass('toggled');
-                };
-
                 $scope.onDeleteSubChapter = function (subChapter) {
 
                     var deleteSubChapter = function () {
