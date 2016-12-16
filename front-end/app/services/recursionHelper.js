@@ -1,13 +1,17 @@
-define(['angularAMD'], function(angularAMD) {
+'use strict';
 
-    angularAMD.factory('RecursionHelper', ['$compile', function($compile){
+angular.module('koolikottApp')
+.factory('RecursionHelper',
+[
+    '$compile',
+    function($compile){
         return {
             /**
-             * Manually compiles the element, fixing the recursion loop.
-             * @param element
-             * @param [link] A post-link function, or an object with function(s) registered via pre and post properties.
-             * @returns An object containing the linking functions.
-             */
+            * Manually compiles the element, fixing the recursion loop.
+            * @param element
+            * @param [link] A post-link function, or an object with function(s) registered via pre and post properties.
+            * @returns An object containing the linking functions.
+            */
             compile: function(element, link){
                 // Normalize the link parameter
                 if(angular.isFunction(link)){
@@ -20,8 +24,8 @@ define(['angularAMD'], function(angularAMD) {
                 return {
                     pre: (link && link.pre) ? link.pre : null,
                     /**
-                     * Compiles and re-adds the contents
-                     */
+                    * Compiles and re-adds the contents
+                    */
                     post: function(scope, element){
                         // Compile the contents
                         if(!compiledContents){
@@ -40,5 +44,5 @@ define(['angularAMD'], function(angularAMD) {
                 };
             }
         };
-    }]);
-});
+    }
+]);

@@ -1,10 +1,10 @@
-define([
-    'angularAMD',
-    'services/translationService',
-    'services/authenticatedUserService'
-], function (angularAMD) {
-    angularAMD.directive('dopShare', ['$rootScope', '$location', '$window', 'translationService', '$translate', 'authenticatedUserService', '$mdDialog', 'serverCallService', 'toastService',
-        function($rootScope, $location, $window, translationService, $translate, authenticatedUserService, $mdDialog, serverCallService, toastService) {
+'use strict'
+
+angular.module('koolikottApp')
+.directive('dopShare',
+[
+    '$rootScope', '$location', '$window', 'translationService', '$translate', 'authenticatedUserService', '$mdDialog', 'serverCallService', 'toastService',
+    function($rootScope, $location, $window, translationService, $translate, authenticatedUserService, $mdDialog, serverCallService, toastService) {
         return {
             scope: {
                 title: '=',
@@ -172,5 +172,5 @@ define([
                 setShareParams();
             }
         };
-    }]);
-});
+    }
+]);

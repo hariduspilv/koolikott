@@ -1,5 +1,10 @@
-define(['app'], function(app) {
-    app.controller('abstractStaticPageController', ['$scope', "serverCallService", 'translationService', '$sce', function($scope, serverCallService, translationService, $sce) {
+'use strict'
+
+angular.module('koolikottApp')
+.controller('abstractStaticPageController',
+[
+    '$scope', "serverCallService", 'translationService', '$sce',
+    function($scope, serverCallService, translationService, $sce) {
         function getPage(pageLanguage) {
 
             var params = {
@@ -29,5 +34,5 @@ define(['app'], function(app) {
         }, true);
 
         getPage(translationService.getLanguage());
-    }]);
-});
+    }
+]);

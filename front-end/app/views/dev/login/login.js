@@ -1,9 +1,10 @@
-define([
-    'app',
-    'services/serverCallService',
-    'services/authenticatedUserService'
-], function(app) {
-    return ['$scope', 'serverCallService', '$route', 'authenticatedUserService', '$location', function($scope, serverCallService, $route, authenticatedUserService, $location) {
+'use strict'
+
+angular.module('koolikottApp')
+.controller('devLoginController',
+[
+    '$scope', 'serverCallService', '$route', 'authenticatedUserService', '$location',
+    function($scope, serverCallService, $route, authenticatedUserService, $location) {
         var idCode = $route.current.params.idCode;
         var params = {};
         serverCallService.makeGet("rest/dev/login/" + idCode, params, loginSuccess, loginFail);
@@ -45,5 +46,5 @@ define([
                 finishLogin();
             }
         }
-    }];
-});
+    }
+]);

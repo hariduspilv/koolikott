@@ -1,9 +1,10 @@
-define([
-    'angularAMD',
-    'services/serverCallService',
-    'services/userDataService'
-], function (angularAMD) {
-    angularAMD.directive('dopErrorMessage', ['$location', 'serverCallService', 'userDataService', function ($location, serverCallService, userDataService) {
+'use strict'
+
+angular.module('koolikottApp')
+.directive('dopErrorMessage',
+[
+    '$location', 'serverCallService', 'userDataService',
+    function ($location, serverCallService, userDataService) {
         return {
             scope: {
                 data: '='
@@ -17,20 +18,20 @@ define([
 
                 $scope.showBroken = function () {
                     return $rootScope.learningObjectDeleted == false
-                        && $rootScope.learningObjectImproper == false
-                        && $rootScope.learningObjectBroken == true;
+                    && $rootScope.learningObjectImproper == false
+                    && $rootScope.learningObjectBroken == true;
                 };
 
                 $scope.showImproper = function () {
                     return $rootScope.learningObjectDeleted == false
-                        && $rootScope.learningObjectBroken == false
-                        && $rootScope.learningObjectImproper == true;
+                    && $rootScope.learningObjectBroken == false
+                    && $rootScope.learningObjectImproper == true;
                 };
 
                 $scope.showImproperAndBroken = function () {
                     return $rootScope.learningObjectDeleted == false
-                        && $rootScope.learningObjectBroken == true
-                        && $rootScope.learningObjectImproper == true;
+                    && $rootScope.learningObjectBroken == true
+                    && $rootScope.learningObjectImproper == true;
                 };
 
                 $scope.showDeleted = function () {
@@ -54,5 +55,5 @@ define([
                 }
             }
         }
-    }]);
-});
+    }
+]);

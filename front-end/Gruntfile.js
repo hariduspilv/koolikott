@@ -322,11 +322,14 @@ module.exports = function (grunt) {
                         '*.{ico,png,txt}',
                         '.htaccess',
                         '*.html',
-                        'views/**/**/*.html',
+                        '*.js',
+                        'views/**/**/*.{html,js}',
                         'images/{,*/}*.{webp}',
                         'fonts/{,*/}*.*',
-                        'directives/**/**/*.html',
-                        'utils/**/**/*.{html,ttf,png,css}'
+                        'directives/**/**/*.{html,js}',
+                        'libs/**/**/*.{js,map}',
+                        'services/*.js',
+                        'utils/**/**/*.{html,ttf,png,css,js}'
                     ]
                 }, {
                     expand: true,
@@ -363,29 +366,6 @@ module.exports = function (grunt) {
                 'imagemin',
                 'svgmin'
             ]
-        },
-
-        // r.js compile config
-        requirejs: {
-            dist: {
-                options: {
-                    baseUrl: '.tmp/<%= yeoman.app %>',
-                    mainConfigFile: '.tmp/<%= yeoman.app %>/require.config.js',
-                    dir: '<%= yeoman.dist.app %>',
-                    modules: [{
-                        name: 'require.config'
-                    }],
-                    preserveLicenseComments: false, // remove all comments
-                    removeCombined: true,
-                    keepBuildDir: true,
-                    optimize: 'uglify2',
-                    uglify2: {
-                        mangle: true,
-                        dead_code: true,
-                        drop_debugger: true
-                    }
-                }
-            }
         },
 
         // Create compressed archive for deployment
@@ -491,7 +471,6 @@ module.exports = function (grunt) {
         'cssmin',
         'filerev',
         'usemin',
-        'requirejs:dist',
         'htmlmin'
     ]);
 

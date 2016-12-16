@@ -1,8 +1,10 @@
-define([
-    'angularAMD',
-    'services/translationService'
-], function(angularAMD) {
-    angularAMD.directive('dopLearningObjectRow', ['translationService', function(translationService) {
+'use strict'
+
+angular.module('koolikottApp')
+.directive('dopLearningObjectRow',
+[
+    'translationService',
+    function(translationService) {
         return {
             scope: {
             	learningObjects: '='
@@ -12,7 +14,7 @@ define([
             	$scope.formatName = function(name) {
             		return formatNameToInitials(name);
             	}
-            	
+
             	$scope.formatSurname = function(surname) {
             		return formatSurnameToInitialsButLast(surname);
             	}
@@ -34,5 +36,5 @@ define([
                 }
             }
         }
-    }]);
-});
+    }
+]);

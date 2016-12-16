@@ -1,11 +1,10 @@
-define([
-    'app',
-    'services/translationService',
-    'services/serverCallService',
-    'directives/favorite/favorite',
-], function(app) {
-    app.directive('dopPortfolioBox', ['translationService', 'serverCallService', '$rootScope', 'authenticatedUserService',
-        function(translationService, serverCallService, $rootScope, authenticatedUserService) {
+'use strict'
+
+angular.module('koolikottApp')
+.directive('dopPortfolioBox',
+[
+    'translationService', 'serverCallService', '$rootScope', 'authenticatedUserService',
+    function(translationService, serverCallService, $rootScope, authenticatedUserService) {
         return {
             scope: {
                 portfolio: '='
@@ -38,5 +37,5 @@ define([
                 }
             }
         };
-    }]);
-});
+    }
+]);
