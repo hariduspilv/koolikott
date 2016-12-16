@@ -7,7 +7,7 @@ angular.module('koolikottApp')
     function($http, $location, authenticatedUserService, Upload) {
         var instance;
 
-        function makeCall(url, method, params, includeAuthentication, successCallback, errorCallback, finallyCallback, transformRequest) {
+        function makeCall(url, method, params, includeAuthentication, successCallback, errorCallback, finallyCallback, transformRequest, cache) {
             var headers = {};
 
             if (includeAuthentication) {
@@ -17,7 +17,8 @@ angular.module('koolikottApp')
             var config = {
                 method: method,
                 url: url,
-                headers: headers
+                headers: headers,
+                cache: !!cache
             };
 
             if (method === 'POST' || method === 'PUT') {
@@ -67,8 +68,8 @@ angular.module('koolikottApp')
                 return makeCall(url, 'POST', data, true, successCallback, errorCallback, finallyCallback);
             },
 
-            makeGet: function(url, params, successCallback, errorCallback, finallyCallback) {
-                return makeCall(url, 'GET', params, true, successCallback, errorCallback, finallyCallback);
+            makeGet: function(url, params, successCallback, errorCallback, finallyCallback, transformRequest, cache) {
+                return makeCall(url, 'GET', params, true, successCallback, errorCallback, finallyCallback, transformRequest, cache);
             },
 
             makePut: function(url, data, successCallback, errorCallback, finallyCallback) {

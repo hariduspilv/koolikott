@@ -80,7 +80,7 @@ angular.module('koolikottApp')
                     $scope.params.maxResults = maxResults;
                     $scope.params.start = $scope.start;
 
-                    serverCallService.makeGet($scope.url, $scope.params, searchSuccess, searchFail);
+                    serverCallService.makeGet($scope.url, $scope.params, searchSuccess, searchFail, {}, false, true);
                 }
 
                 function searchSuccess(data) {
