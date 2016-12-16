@@ -107,9 +107,9 @@ angular.module('koolikottApp')
                     };
 
                     $scope.$watch(function () {
-                        return $scope.material.source;
+                        return getSource($scope.material);
                     }, function (newValue, oldValue) {
-                        if ($scope.material && $scope.material.source) {
+                        if ($scope.material && getSource($scope.material)) {
                             getSourceType();
                             canPlayVideoFormat();
                             canPlayAudioFormat();
@@ -117,7 +117,7 @@ angular.module('koolikottApp')
                     });
 
                     function canPlayVideoFormat() {
-                        var extension = $scope.material.source.split('.').pop();
+                        var extension = getSource($scope.material).split('.').pop();
                         var v = document.createElement('video');
                         /* ogv is a subtype of ogg therefore if ogg is supported ogv is also */
                         if (extension == "ogv") {
