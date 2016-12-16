@@ -63,18 +63,6 @@ angular.module('koolikottApp')
                     }
                 }
 
-                function showToast(message) {
-                    $mdToast.show($mdToast.simple().position('right top').content(message));
-                }
-
-                $rootScope.$watchCollection('selectedMaterials', function(newCollection) {
-                    handleAddMaterialButton();
-                });
-
-                $rootScope.$watch('selectedSingleMaterial.id', function(newValue, oldValue) {
-                    handleAddMaterialButton();
-                }, true);
-
                 $scope.navigateTo = function(e, portfolio) {
                     e.preventDefault();
                     if ($location.path() == '/portfolio/edit' || $location.path() == '/portfolio') {
@@ -87,14 +75,6 @@ angular.module('koolikottApp')
                         });
                     }
                 };
-
-                function handleAddMaterialButton() {
-                    if ($rootScope.selectedMaterials && $rootScope.selectedMaterials.length > 0 || $rootScope.selectedSingleMaterial) {
-                        $scope.showAddMaterialButton = true;
-                        return;
-                    }
-                    $scope.showAddMaterialButton = false;
-                }
 
                 $scope.closeSidenav = function(id) {
                     if(window.innerWidth < 1280) {
