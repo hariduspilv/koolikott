@@ -104,6 +104,7 @@ angular.module('koolikottApp')
                 }
 
                 $rootScope.savedPortfolio = portfolio;
+                $rootScope.isPlaceholderVisible = false;
             }
 
             function showWarning() {

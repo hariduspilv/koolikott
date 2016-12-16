@@ -53,6 +53,8 @@ angular.module('koolikottApp')
                     $rootScope.savedChapter = $scope.chapter;
                     $rootScope.$broadcast("detailedSearch:open");
                     $anchorScroll();
+                    $rootScope.isPlaceholderVisible = true;
+                    document.getElementById('input-0').focus();
                 };
             }
         }
