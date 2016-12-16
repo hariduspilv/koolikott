@@ -8,7 +8,6 @@
     </md-tooltip>
   </div>
   <div data-ng-if="isAuthenticated()" data-dop-favorite data-learning-object="portfolio"></div>
-  <!-- <div class="corner"></div> -->
   <div class="ribbon"></div>
   <!-- noimage -->
 
@@ -48,21 +47,17 @@
       <md-card-content layout="column" >
         <a data-ng-href="{{'/portfolio?id=' + portfolio.id}}" class="no-link">
           <h3 class="two-rows" data-ng-bind="portfolio.title"></h3>
-          <div layout="row">
-            <p class="md-caption" flex>
-              <span class="authors">
-                <span data-ng-bind="formatName(portfolio.creator.name)"></span>
-                <span data-ng-bind="formatSurname(portfolio.creator.surname)"></span>
-                <!-- <span data-ng-if="portfolio.added">{{ formatDate(portfolio.added) }}</span> -->
-              </span>
-            </p>
-
-            <p class="md-caption" flex>
-              <span class="ellipsis">II-III kooliaste</span>
-              <span class="flex"></span>
-              <span class="ellipsis">Ühiskonnaõpetus</span>
-            </p>
-          </div>
+          <p class="md-caption">
+            <span class="authors">
+              <span data-ng-bind="formatName(portfolio.creator.name)"></span>
+              <span data-ng-bind="formatSurname(portfolio.creator.surname)"></span>
+              <!-- <span data-ng-if="portfolio.added">{{ formatDate(portfolio.added) }}</span> -->
+            </span>
+          </p>
+          <ul class="md-caption text-right">
+            <li class="ellipsis">II-III kooliaste</li>
+            <li class="ellipsis">Ühiskonnaõpetus</li>
+          </ul>
         </a>
       </md-card-content>
 

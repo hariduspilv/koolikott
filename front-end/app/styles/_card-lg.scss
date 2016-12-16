@@ -193,28 +193,3 @@ a.embed-link{
 a.embed-image-padded{
   margin: 25px;
 }
-
-.card__icon-holder {
-  display: flex;
-  flex-direction: row;
-  position: absolute;
-  top: 0;
-  left: 0;
-  z-index: 1;
-
-  md-icon {
-    padding: 8px 14px;
-    color: #fff;
-  }
-
-  .card-lg & {
-    top: 0;
-    left: -25px;
-    text-shadow: 1px 1px 1px rgba(0, 0, 0, .2);
-
-    @media (min-width: $layout-breakpoint-xs) {
-      top: -15px;
-      left: 0;
-    }
-  }
-}

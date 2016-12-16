@@ -1,5 +1,6 @@
 .card-sm {
   width: 100%;
+  overflow: hidden;
   @media (min-width: $layout-breakpoint-xs) {
     max-height: 280px;
     width: 201px;
@@ -10,7 +11,7 @@
   }
 
   &:hover {
-    background-color: $bg-gray;
+    background-color: $selected-gray;
     cursor: pointer;
     .card-hover {
       opacity: .8;
@@ -22,7 +23,7 @@
   }
 
   &.active {
-    background-color: $bg-gray;
+    background-color: $selected-gray;
     cursor: pointer;
     .card-hover {
       opacity: 1;
@@ -62,6 +63,16 @@
     }
     @media (min-width: $layout-breakpoint-lg) {
       height: 156px;
+    }
+    &:after {
+      content: "";
+      box-shadow: inset 0 0 3em rgba(0,0,0, .15);
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 2;
     }
   }
 
@@ -106,6 +117,12 @@
     }
     .md-caption {
       color: rgba(0, 0, 0, 0.54);
+    }
+    p {
+      margin: 2px 0 3px 0;
+    }
+    ul {
+      margin: 0;
     }
   }
 
