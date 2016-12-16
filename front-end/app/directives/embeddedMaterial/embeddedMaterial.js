@@ -130,7 +130,7 @@ angular.module('koolikottApp')
                     }
 
                     function canPlayAudioFormat() {
-                        var extension = $scope.material.source.split('.').pop();
+                        var extension = getSource($scope.material).split('.').pop();
                         var v = document.createElement('audio');
                         if (v.canPlayType && v.canPlayType('audio/' + extension)) {
                             $scope.audioType = extension;
