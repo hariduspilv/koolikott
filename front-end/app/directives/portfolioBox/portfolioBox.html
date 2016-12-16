@@ -13,7 +13,7 @@
   <!-- noimage -->
 
   <div layout="column" layout-xs="row">
-    <a data-ng-href="{{'/portfolio?id=' + portfolio.id}}" data-ng-if="!portfolio.picture" class="card-cover portfolio">
+    <a data-ng-href="{{'/portfolio?id=' + portfolio.id}}" data-ng-if="!portfolio.picture" class="card-cover portfolio" flex flex-order="-1" flex-order-xs="1">
       <div class="pattern">
         <div class="sheet up-left"></div>
         <div class="sheet low-right"></div>
@@ -27,7 +27,7 @@
       </div>
     </a>
     <!-- image -->
-    <a data-ng-href="{{'/portfolio?id=' + portfolio.id}}" data-ng-if="portfolio.picture" class="card-cover imaged">
+    <a data-ng-href="{{'/portfolio?id=' + portfolio.id}}" data-ng-if="portfolio.picture" class="card-cover imaged" flex flex-order="-1" flex-order-xs="1">
       <img data-ng-src="rest/picture/thumbnail/sm_xs_xl/{{portfolio.picture.name}}"
       sizes="(max-width: 600px) 300px,
       (min-width: 1920px) 300px,
@@ -44,8 +44,8 @@
 
     <!-- content -->
 
-    <div layout="column">
-      <md-card-content layout="column">
+    <div layout="column" flex flex-order="1" flex-order-xs="-1">
+      <md-card-content layout="column" >
         <a data-ng-href="{{'/portfolio?id=' + portfolio.id}}" class="no-link">
           <h3 class="two-rows" data-ng-bind="portfolio.title"></h3>
           <div layout="row">
@@ -58,9 +58,9 @@
             </p>
 
             <p class="md-caption" flex>
-              <span class="ellipsisText">II-III kooliaste</span>
+              <span class="ellipsis">II-III kooliaste</span>
               <span class="flex"></span>
-              <span class="ellipsisText">Ühiskonnaõpetus</span>
+              <span class="ellipsis">Ühiskonnaõpetus</span>
             </p>
           </div>
         </a>

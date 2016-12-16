@@ -1,8 +1,9 @@
 .favorite {
   position: absolute;
   top: 0;
-  left: 0;
+  right: 0;
   z-index: 1;
+
 
   &:hover {
     color: rgba(255, 255, 255, 1);
@@ -20,19 +21,16 @@
 
     .favorite__icon {
       color: #fff;
+      text-shadow: 1px 1px 1px rgba(0, 0,0, .6);
     }
   }
 
   &.has-favorited {
     .favorite__icon {
-      color: $gold;
+      color: #fff;
+      text-shadow: 1px 1px 1px rgba(0, 0,0, .6);
     }
   }
-
-  // Commented out beacuse waiting for card refactor and correct design
-  // &--push-right.md-button {
-  //   margin-left: 44px;
-  // }
 }
 
 .favorite__icon {

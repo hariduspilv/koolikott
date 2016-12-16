@@ -10,23 +10,56 @@ h2 {
   font-size: 28px;
 }
 
-// multiline-ellipsis
-$heading-color: #212121;
-
-.one-row {
+.md-body-1 {
+  color: #222;
+  font-size: 16px;
+  font-weight: 300;
+  line-height: 20px;
   overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-  .authors {
-    min-height: 15px;
-    line-height: 15px;
+  text-align: left;
+  line-height: 20px;
+  &.description {
+    line-height: 24px;
   }
 }
 
-.ellipsisText {
+.md-body-2 {
+  &.meta {
+    line-height: 1.2;
+    color: #333;
+    padding-right: 10px;
+    md-icon.material-icons {
+      font-size: inherit;
+      vertical-align: baseline;
+    }
+  }
+  .md-caption {
+    font-weight: 300;
+  }
+  a {
+    font-size: 15px;
+    font-weight: 400;
+    &:hover {
+      text-decoration: none;
+      border-bottom: 1px solid $link-color;
+    }
+    h1 {
+      display: block;
+      text-decoration: none;
+    }
+  }
+}
+
+.no-link, .no-link:hover {
+  text-decoration: none;
+  color: inherit;
+}
+
+// multiline-ellipsis
+.ellipsis {
   display: block;
   width: 100%;
-  overflow: hidden !important;
+  overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
@@ -69,13 +102,6 @@ $lines-to-show2: 2;
   color: $color-body;
 }
 
-.hide-overflow {
-  min-width: 0;
-  display: block;
-  overflow: hidden !important;
-  text-overflow: ellipsis;
-}
-
 .wrapped {
   white-space: pre;
   white-space: pre-wrap;
@@ -89,9 +115,4 @@ $lines-to-show2: 2;
 
 .error-color {
   color: $error;
-}
-
-.text-truncate {
-  text-overflow: ellipsis;
-  overflow: hidden;
 }

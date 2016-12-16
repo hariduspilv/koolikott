@@ -55,7 +55,7 @@
   <md-card-content layout="column" class="minContentHeight">
     <a data-ng-href="{{'/material?materialId=' + material.id}}" class="no-link">
       <h4 class="md-headline two-rows" data-ng-bind="getCorrectLanguageTitle(material)"></h4>
-      <p class="md-caption one-row">
+      <p class="md-caption ellipsis">
       <span data-ng-repeat="author in material.authors" class="authors">
         <span data-ng-bind="formatName(author.name)"></span>
         <span data-ng-bind="formatSurname(author.surname)"></span>

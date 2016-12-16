@@ -62,10 +62,10 @@
                 <span data-translate="DETAIL_VIEW_EDUCATIONAL_CONTEXT"></span>
               </small>
               <br>
-              <span class="hide-overflow" data-ng-if="getEducationalContext(portfolio.taxon)"
+              <span class="ellipsis" data-ng-if="getEducationalContext(portfolio.taxon)"
                     data-translate="{{getEducationalContext(portfolio.taxon)}}">
                                 </span>
-              <span class="hide-overflow" data-ng-if="!getEducationalContext(portfolio.taxon)" data-translate="UNKNOWN">Unknown</span>
+              <span class="ellipsis" data-ng-if="!getEducationalContext(portfolio.taxon)" data-translate="UNKNOWN">Unknown</span>
             </p>
           </div>
           <div flex data-ng-if="!getSubject(portfolio.taxon)">
@@ -74,10 +74,10 @@
                 <span data-translate="DETAIL_VIEW_DOMAIN"></span>
               </small>
               <br/>
-              <span class="hide-overflow" data-ng-if="getDomain(portfolio.taxon)"
+              <span class="ellipsis" data-ng-if="getDomain(portfolio.taxon)"
                     data-translate="{{'DOMAIN_' + getDomain(portfolio.taxon)}}">
                             </span>
-              <span class="hide-overflow" data-ng-if="!getDomain(portfolio.taxon)"
+              <span class="ellipsis" data-ng-if="!getDomain(portfolio.taxon)"
                     data-translate="UNKNOWN">Unknown</span>
             </p>
           </div>
@@ -87,10 +87,10 @@
                 <span data-translate="DETAIL_VIEW_SUBJECT"></span>
               </small>
               <br/>
-              <span class="hide-overflow" data-ng-if="getSubject(portfolio.taxon)"
+              <span class="ellipsis" data-ng-if="getSubject(portfolio.taxon)"
                     data-translate="{{'SUBJECT_' + getSubject(portfolio.taxon)}}">
                             </span>
-              <span class="hide-overflow" data-ng-if="!getSubject(portfolio.taxon)"
+              <span class="ellipsis" data-ng-if="!getSubject(portfolio.taxon)"
                     data-translate="UNKNOWN">Unknown</span>
             </p>
           </div>
@@ -100,13 +100,13 @@
                 <span data-translate="DETAIL_VIEW_TARGET_GROUP"></span>
               </small>
               <br/>
-              <span class="hide-overflow one-row" data-ng-if="portfolio.targetGroups">
+              <span class="ellipsis ellipsis" data-ng-if="portfolio.targetGroups">
                   <span data-ng-repeat="targetGroup in getTargetGroups()">
                     <span data-translate="{{'TARGET_GROUP_' + targetGroup}}"></span>
                     <span>{{$last ? '' : ', '}}</span>
                   </span>
               </span>
-              <span class="hide-overflow" data-ng-if="!portfolio.targetGroups || !portfolio.targetGroups.length"
+              <span class="ellipsis" data-ng-if="!portfolio.targetGroups || !portfolio.targetGroups.length"
                     data-translate="UNKNOWN">Unknown</span>
             </p>
           </div>

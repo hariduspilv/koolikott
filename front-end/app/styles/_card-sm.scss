@@ -1,0 +1,126 @@
+.card-sm {
+  width: 100%;
+  @media (min-width: $layout-breakpoint-xs) {
+    max-height: 280px;
+    width: 201px;
+  }
+  @media (min-width: $layout-breakpoint-lg) {
+    max-height: 330px;
+    width: 234px;
+  }
+
+  &:hover {
+    background-color: $bg-gray;
+    cursor: pointer;
+    .card-hover {
+      opacity: .8;
+      md-icon {
+        color: rgba(255, 255, 255, 1);
+        text-shadow: 1px 1px 1px rgba(0, 0,0, .6);
+      }
+    }
+  }
+
+  &.active {
+    background-color: $bg-gray;
+    cursor: pointer;
+    .card-hover {
+      opacity: 1;
+      md-icon {
+        color: rgba(255, 255, 255, 8);
+        &.unchecked {
+          display: none;
+        }
+        &.checked {
+          display: block;
+        }
+      }
+    }
+  }
+
+  md-icon.icon-kind {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%,-50%);
+    font-size: 3rem;
+    color: rgba(0,0,0, 0.33);
+    z-index: 1;
+  }
+
+  .card-cover {
+    height: 100%;
+    border-radius: $border-radius 0 0 $border-radius;
+    overflow: hidden;
+    position: relative;
+    transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+    width: 100%;
+    max-width: 300px;
+    @media (min-width: $layout-breakpoint-xs) {
+      height: 134px;
+      border-radius: $border-radius $border-radius 0 0;
+    }
+    @media (min-width: $layout-breakpoint-lg) {
+      height: 156px;
+    }
+  }
+
+  .card-hover {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: rgba(0, 0, 0, 0.7);
+    opacity: 0;
+    .pick {
+      position: absolute;
+      padding: 10px;
+      left: 0;
+      transition: display 1s cubic-bezier(0.25, 0.8, 0.25, 1);
+      .checked {
+        display: none;
+      }
+      &:hover {
+        .checked {
+          display: block;
+        }
+        .unchecked {
+          display: none;
+        }
+      }
+    }
+    md-icon.icon-kind {
+      color: rgba(255, 255, 255, 0.6);
+    }
+  }
+
+  md-card-content {
+    height: 100%;
+    padding-bottom: 0;
+    @media (min-width: $layout-breakpoint-xs) {
+      height: 106px;
+    }
+    @media (min-width: $layout-breakpoint-lg) {
+      height: 106px;
+    }
+    .md-caption {
+      color: rgba(0, 0, 0, 0.54);
+    }
+  }
+
+  md-card-actions {
+    margin-right: $md-padding;
+    margin-left: $md-padding;
+    color: rgba(0, 0, 0, 0.38);
+    font-weight: 400;
+    md-icon {
+      margin: 0 $border-radius 0 5px;
+      font-size: $caption-font-size-base;
+      color: rgba(0, 0, 0, 0.3);
+      &:first-of-type {
+        margin: 0 3px 0 0px;
+      }
+    }
+  }
+}
