@@ -50,12 +50,12 @@ md-card {
   position: absolute;
   top: 0;
   left: 0;
-  z-index: 1;
+  z-index: 2;
 
   md-icon {
-    padding: 12px 27px;
+    padding: 9px 23px;
     color: #fff;
-    text-shadow: 1px 1px 1px rgba(0, 0,0, .6);
+    text-shadow: 1px 1px 2px rgba(0, 0,0, .37);
   }
 
   .card-lg & {
@@ -70,18 +70,18 @@ md-card {
 }
 
 .ribbon {
-  background-image: url('../images/bookmark.svg');
-  text-shadow: 1px 1px 2px rgba(0,0,0, 1);
-	filter: "progid:DXImageTransform.Microsoft.Dropshadow(OffX=12, OffY=12,Color='#444')";
-	filter: url(#drop-shadow);
-	-webkit-filter: drop-shadow(6px 6px 4px rgba(0,0,0,0.5));
-	filter: drop-shadow(6px 6px 4px rgba(0,0,0,0.5));
-  background-repeat: no-repeat;
-  opacity: .6;
   position: absolute;
   left: 20px;
-  top: -5px;
+  top: -3px;
+  background-image: url('../images/bookmark.svg');
+  background-size: contain;
+  background-repeat: no-repeat;
+	filter: "progid:DXImageTransform.Microsoft.Dropshadow(OffX=12, OffY=12,Color='#444')";
+	filter: url(#drop-shadow);
+	-webkit-filter: drop-shadow(3px 3px 3px rgba(0,0,0,0.5));
+	filter: drop-shadow(3px 3px 3px rgba(0,0,0,0.5));
+  opacity: .6;
   z-index: 1;
-  width: 37px;
-  height: 60px;
+  width: 33px;
+  height: 53px;
 }

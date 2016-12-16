@@ -30,6 +30,7 @@
 .fab-closed-icon {
   opacity: 1;
   transform: scale(1) rotate(-359deg);
+  text-shadow: 1px 1px 2px rgba(0, 0,0, .37);
   // animation: fa-spin 1.5s infinite ease;
   // we will use the line when the logic for CTA on profile page is ready
 
