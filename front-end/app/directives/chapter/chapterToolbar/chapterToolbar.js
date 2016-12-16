@@ -55,7 +55,10 @@ angular.module('koolikottApp')
                     $rootScope.$broadcast("detailedSearch:open");
                     $anchorScroll();
                     $rootScope.isPlaceholderVisible = true;
-                    document.getElementById('input-0').focus();
+
+                    if($rootScope.isEditPortfolioPage) {
+                        document.getElementById('input-0').focus();
+                    }
                 };
             }
         }
