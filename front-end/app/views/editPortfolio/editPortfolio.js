@@ -23,6 +23,7 @@ angular.module('koolikottApp')
                 $rootScope.newPortfolioCreated = false;
             }
 
+            $rootScope.savedChapter = null;
             startAutosave();
         }
 

@@ -50,6 +50,7 @@ angular.module('koolikottApp')
                 };
 
                 $scope.openDetailedSearch = function () {
+                    $rootScope.savedChapter = $scope.chapter;
                     $rootScope.$broadcast("detailedSearch:open");
                     $anchorScroll();
                 };
