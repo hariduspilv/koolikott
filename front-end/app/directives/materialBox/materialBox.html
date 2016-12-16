@@ -18,10 +18,6 @@
         <md-icon class="unchecked">radio_button_unchecked</md-icon>
         <md-icon data-ng-click="pickMaterial($event, material)" class="checked">check_circle</md-icon>
       </div>
-      <div class="pick" data-ng-if="isEditPortfolioMode && isEditPortfolioPage" layout-align="end start">
-        <md-icon class="unchecked">remove_circle_outline</md-icon>
-        <md-icon data-ng-click="removeMaterial($event, material)" class="checked">remove_circle</md-icon>
-      </div>
       <md-icon class="icon-kind">{{ materialType }}</md-icon>
     </div>
   </a>

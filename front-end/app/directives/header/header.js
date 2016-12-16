@@ -3,8 +3,8 @@
 angular.module('koolikottApp')
 .directive('dopHeader',
 [
-    'translationService', '$location', 'searchService', 'authenticationService', 'authenticatedUserService', '$timeout', '$mdDialog', 'suggestService', 'serverCallService', 'toastService', '$route', '$http', '$window',
-    function (translationService, $location, searchService, authenticationService, authenticatedUserService, $timeout, $mdDialog, suggestService, serverCallService, toastService, $route, $http, $window) {
+    'translationService', '$location', 'searchService', 'authenticationService', 'authenticatedUserService', '$timeout', '$mdDialog', 'suggestService', 'serverCallService', 'toastService', '$route', '$http', '$window', '$translate',
+    function (translationService, $location, searchService, authenticationService, authenticatedUserService, $timeout, $mdDialog, suggestService, serverCallService, toastService, $route, $http, $window, $translate) {
         return {
             scope: true,
             templateUrl: 'directives/header/header.html',
@@ -65,7 +65,6 @@ angular.module('koolikottApp')
                     $scope.detailedSearch.isVisible = true;
                     $scope.detailedSearch.queryIn = $scope.searchFields.searchQuery;
                     broadcastSearchOpen();
-                    $anchorScroll();
                 };
 
                 function broadcastSearchOpen() {
@@ -227,6 +226,10 @@ angular.module('koolikottApp')
                 }, function () {
                     $scope.isEditModeAndNotEditView = ($rootScope.isEditPortfolioMode && $location.url().indexOf('/portfolio/edit') !== 0);
                 }, true);
+
+                $scope.getTranslation = function(string) {
+                    return $translate.instant(string);
+                }
 
             }
         };

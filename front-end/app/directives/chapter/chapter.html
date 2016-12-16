@@ -57,18 +57,44 @@
       </md-card-content>
     </md-card>
 
-    <!--Chapter materials-->
-    <ul ng-show="chapter.materials.length" dnd-list="chapter.materials"
-        class="portfolio-chapter-chapter-materials" uib-collapse="isCollapsed">
-      <li id="chapterMaterial-{{index}}-{{$index}}"
-          ng-repeat="material in chapter.materials"
-          dnd-draggable="getParsedMaterial(material)"
-          dnd-moved="chapter.materials.splice($index, 1)"
-          dnd-effect-allowed="move"
-          dnd-selected="models.selected = item"
-          ng-class="{'selected': models.selected === item}"
-          data-dop-embedded-material
-          material="material" chapter="chapter" index="$index" data-flex></li>
+    <!--Chapter rows-->
+    <ul data-ng-show="chapter.contentRows.length" class="portfolio-chapter-chapter-materials"
+        uib-collapse="isCollapsed">
+      <li data-ng-repeat="(rowIndex, contentRow) in chapter.contentRows" flex>
+
+        <!--LearningObjects in the row-->
+        <ul data-ng-show="contentRow.learningObjects.length" dnd-list="contentRow.learningObjects"
+            data-layout-gt-sm="row">
+          <li data-ng-if="!isEditable"
+              id="chapterMaterial-{{index}}-{{$index}}"
+              data-ng-repeat="(columnIndex, learningObject) in contentRow.learningObjects"
+              data-dop-embedded-material
+              data-material="learningObject"
+              data-chapter="chapter"
+              data-row-index="rowIndex"
+              data-obj-index="columnIndex"
+              data-flex>
+          </li>
+
+          <li data-ng-if="isEditable"
+              data-dnd-draggable="learningObject"
+              data-dnd-moved="contentRow.learningObjects.splice($index, 1)"
+              data-dnd-effect-allowed="move"
+              data-dnd-selected="models.selected = item"
+              data-ng-class="{'selected': models.selected === item}"
+
+              id="chapterMaterial-draggable-{{index}}-{{$index}}"
+              data-ng-repeat="(columnIndex, learningObject) in contentRow.learningObjects"
+              data-dop-embedded-material
+              data-material="learningObject"
+              data-chapter="chapter"
+              data-content-row="contentRow"
+              data-row-index="rowIndex"
+              data-obj-index="columnIndex"
+              data-flex>
+          </li>
+        </ul>
+      </li>
     </ul>
   </div>
 
@@ -132,18 +158,44 @@
         </md-card-content>
       </md-card>
 
-      <!--Subchapter materials-->
-      <ul ng-show="subchapter.materials.length" dnd-list="chapter.materials"
-          class="portfolio-chapter-subchapter-materials" uib-collapse="subisCollapsed[subchapter.$$hashKey]">
-        <li id="subchapterMaterial-{{index}}-{{$index}}"
-            ng-repeat="material in subchapter.materials"
-            dnd-draggable="getParsedMaterial(material)"
-            dnd-moved="chapter.materials.splice($index, 1)"
-            dnd-effect-allowed="move"
-            dnd-selected="models.selected = item"
-            ng-class="{'selected': models.selected === item}"
-            data-dop-embedded-material
-            material="material" chapter="subchapter" index="$index" data-flex></li>
+      <!--Subchapter rows-->
+      <!--Chapter rows-->
+      <ul ng-show="subchapter.contentRows.length" class="portfolio-chapter-subchapter-materials"
+          uib-collapse="subisCollapsed[subchapter.$$hashKey]">
+        <li ng-repeat="(rowIndex, contentRow) in subchapter.contentRows" flex>
+
+          <!--LearningObjects in the row-->
+          <ul data-ng-show="contentRow.learningObjects.length" dnd-list="contentRow.learningObjects"
+              data-layout-gt-sm="row">
+            <li data-ng-if="!isEditable"
+                id="subChapterMaterial-{{index}}-{{$index}}"
+                data-ng-repeat="(columnIndex, learningObject) in contentRow.learningObjects"
+                data-dop-embedded-material
+                data-material="learningObject"
+                data-chapter="subchapter"
+                data-row-index="rowIndex"
+                data-obj-index="columnIndex"
+                data-flex>
+            </li>
+
+            <li data-ng-if="isEditable"
+                data-dnd-draggable="learningObject"
+                data-dnd-moved="contentRow.learningObjects.splice($index, 1)"
+                data-dnd-effect-allowed="move"
+                data-dnd-selected="models.selected = item"
+                data-ng-class="{'selected': models.selected === item}"
+
+                id="subchapterMaterial-editable-{{index}}-{{$index}}"
+                data-ng-repeat="(columnIndex, learningObject) in contentRow.learningObjects"
+                data-dop-embedded-material
+                data-material="learningObject"
+                data-chapter="chapter"
+                data-content-row="contentRow"
+                data-row-index="rowIndex"
+                data-obj-index="columnIndex"
+                data-flex>
+          </ul>
+        </li>
       </ul>
     </div>
   </div>

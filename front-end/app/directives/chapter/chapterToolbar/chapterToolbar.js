@@ -31,7 +31,8 @@ angular.module('koolikottApp')
 
                 function closeDialog(material) {
                     if (material) {
-                        $scope.chapter.materials.push(material);
+                        if(!$scope.chapter.contentRows) $scope.chapter.contentRows = [];
+                        $scope.chapter.contentRows.push({learningObjects: [material]});
                     }
                 }
 
@@ -53,6 +54,11 @@ angular.module('koolikottApp')
                     $rootScope.savedChapter = $scope.chapter;
                     $rootScope.$broadcast("detailedSearch:open");
                     $anchorScroll();
+                    $rootScope.isPlaceholderVisible = true;
+
+                    if($rootScope.isEditPortfolioPage) {
+                        document.getElementById('input-0').focus();
+                    }
                 };
             }
         }

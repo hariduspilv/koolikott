@@ -71,14 +71,6 @@ angular.module('koolikottApp')
                     }
                 };
 
-                $scope.removeMaterial = function ($event, material) {
-                    $event.preventDefault();
-                    $event.stopPropagation();
-
-                    var index = $scope.chapter.materials.indexOf(material);
-                    $scope.chapter.materials.splice(index, 1);
-                };
-
                 $scope.isAuthenticated = function () {
                     var authenticated = authenticatedUserService.getUser() && !authenticatedUserService.isRestricted() && !$rootScope.isEditPortfolioPage;
                     if (!authenticated) {

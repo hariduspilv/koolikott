@@ -73,23 +73,27 @@ angular.module('koolikottApp')
             }
         };
 
-        function createPortfolioSuccess(portfolio) {
-            if (isEmpty(portfolio)) {
-                createPortfolioFailed();
-            } else {
-                portfolio.chapters = [];
-                portfolio.chapters.push({
-                    title: $filter('translate')('PORTFOLIO_DEFAULT_NEW_CHAPTER_TITLE'),
-                    subchapters: [],
-                    materials: [],
-                    openCloseChapter: true
-                });
-                $rootScope.savedPortfolio = portfolio;
-                $rootScope.newPortfolioCreated = true;
-                $mdDialog.hide();
-                $location.url('/portfolio/edit?id=' + $rootScope.savedPortfolio.id);
+            function createPortfolioSuccess(portfolio) {
+                if (isEmpty(portfolio)) {
+                    createPortfolioFailed();
+                } else {
+                    portfolio.chapters = [];
+                    portfolio.chapters.push({
+                        title: $filter('translate')('PORTFOLIO_DEFAULT_NEW_CHAPTER_TITLE'),
+                        subchapters: [],
+                        contentRows: [
+                            {
+                                learningObjects: []
+                            }
+                        ],
+                        openCloseChapter: true
+                    });
+                    $rootScope.savedPortfolio = portfolio;
+                    $rootScope.newPortfolioCreated = true;
+                    $mdDialog.hide();
+                    $location.url('/portfolio/edit?id=' + $rootScope.savedPortfolio.id);
+                }
             }
-        }
 
         function createPortfolioFailed() {
             log('Creating portfolio failed.');

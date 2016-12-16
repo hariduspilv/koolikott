@@ -84,11 +84,13 @@ angular.module('koolikottApp')
 
             if($scope.portfolio) {
 
-                $scope.portfolio.chapters.forEach(function(chapter) {
-                    chapter.materials.forEach(function(material){
-                        material.source = getSource(material);
-                    })
-                });
+                    $scope.portfolio.chapters.forEach(function(chapter) {
+                        chapter.contentRows.forEach(function (contentRow) {
+                            contentRow.learningObjects.forEach(function(learningObject){
+                                learningObject.source = getSource(learningObject);
+                            })
+                        })
+                    });
 
                 $rootScope.learningObjectBroken = $scope.portfolio.broken > 0;
                 $rootScope.learningObjectImproper = $scope.portfolio.improper > 0;

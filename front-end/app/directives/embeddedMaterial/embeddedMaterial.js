@@ -9,7 +9,9 @@ angular.module('koolikottApp')
             scope: {
                 material: '=',
                 chapter: '=',
-                index: '='
+                objIndex: '=',
+                rowIndex: '=',
+                contentRow: '='
             },
             templateUrl: 'directives/embeddedMaterial/embeddedMaterial.html',
             controller: function ($scope, $rootScope, $location) {
@@ -61,10 +63,10 @@ angular.module('koolikottApp')
                     $event.preventDefault();
                     $event.stopPropagation();
 
-                    var removeMaterialFromChapter = function () {
-                        var index = $scope.chapter.materials.indexOf(material);
-                        $scope.chapter.materials.splice(index, 1);
-                    };
+                        var removeMaterialFromChapter = function () {
+                            var index = $scope.contentRow.learningObjects.indexOf(material);
+                            $scope.contentRow.learningObjects.splice(index, 1);
+                        };
 
                     dialogService.showDeleteConfirmationDialog(
                         'PORTFOLIO_DELETE_MATERIAL_CONFIRM_TITLE',
@@ -79,17 +81,20 @@ angular.module('koolikottApp')
                     };
 
                     $scope.moveItem = function (origin, destination) {
-                        var temp = $scope.chapter.materials[destination];
-                        $scope.chapter.materials[destination] = $scope.chapter.materials[origin];
-                        $scope.chapter.materials[origin] = temp;
+
+                        if($scope.chapter.contentRows[origin].learningObjects.length < 2) {
+                            $scope.chapter.contentRows.splice(origin, 1);
+                        }
+
+                        $scope.chapter.contentRows.splice(destination, 0, {learningObjects: [$scope.material]});
                     };
 
-                    $scope.listItemUp = function (itemIndex) {
-                        $scope.moveItem(itemIndex, itemIndex - 1);
+                    $scope.listItemUp = function () {
+                        $scope.moveItem($scope.rowIndex, $scope.rowIndex - 1);
                     };
 
-                    $scope.listItemDown = function (itemIndex) {
-                        $scope.moveItem(itemIndex, itemIndex + 1);
+                    $scope.listItemDown = function () {
+                        $scope.moveItem($scope.rowIndex, $scope.rowIndex + 1);
                     };
 
                     $scope.navigateToMaterial = function (material, $event) {
@@ -145,14 +150,14 @@ angular.module('koolikottApp')
                         } else if (isPictureLink($scope.material.source)) {
                             $scope.sourceType = 'PICTURE';
                         } else if (isEbookLink($scope.material.source)) {
-                            if(isIE()){
+                            if (isIE()) {
                                 $scope.sourceType = 'LINK';
                                 return;
                             }
                             $scope.sourceType = 'EBOOK';
                             $scope.ebookLink = "/utils/bibi/bib/i/?book=" + $scope.material.uploadedFile.id + "/" + $scope.material.uploadedFile.name;
                         } else if (isPDFLink($scope.material.source)) {
-                            if(isIE()){
+                            if (isIE()) {
                                 $scope.sourceType = 'LINK';
                                 return;
                             }
@@ -191,13 +196,13 @@ angular.module('koolikottApp')
                         return extension == "jpg" || extension == "jpeg" || extension == "png" || extension == "gif";
                     }
 
-                    function isEbookLink(url){
+                    function isEbookLink(url) {
                         if (!url) return;
                         var extension = url.split('.').pop().toLowerCase();
                         return extension == "epub";
                     }
 
-                    function isPDFLink(url){
+                    function isPDFLink(url) {
                         if (!url) return;
                         var extension = url.split('.').pop().toLowerCase();
                         return extension == "pdf";

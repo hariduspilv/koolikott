@@ -50,12 +50,6 @@ angular.module('koolikottApp')
                     $scope.deleteChapter = function () {
                         $scope.onDelete()($scope.chapter);
                     };
-
-                    $scope.getParsedMaterial = function (material) {
-                        delete material['taxons']
-                        return material
-                    }
-
                 }
             };
         }]);

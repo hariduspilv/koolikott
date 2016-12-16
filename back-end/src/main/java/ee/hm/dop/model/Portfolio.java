@@ -1,6 +1,6 @@
 package ee.hm.dop.model;
 
-import static javax.persistence.CascadeType.MERGE;
+import static javax.persistence.CascadeType.ALL;
 import static javax.persistence.CascadeType.PERSIST;
 import static javax.persistence.FetchType.EAGER;
 
@@ -35,7 +35,7 @@ public class Portfolio extends LearningObject implements Searchable {
     @Column(columnDefinition = "TEXT")
     private String summary;
 
-    @OneToMany(fetch = EAGER, cascade = { MERGE, PERSIST })
+    @OneToMany(fetch = EAGER, cascade = ALL)
     @Fetch(FetchMode.SELECT)
     @JoinColumn(name = "portfolio")
     @OrderColumn(name = "chapterOrder")

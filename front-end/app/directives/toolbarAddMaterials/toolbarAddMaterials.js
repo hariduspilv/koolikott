@@ -41,14 +41,12 @@ angular.module('koolikottApp')
 
                     $scope.isSaving = true;
 
-                    if (chapter && chapter.materials) {
-                        for (var i = 0; i < $rootScope.selectedMaterials.length; i++) {
-                            var selectedMaterial = $rootScope.selectedMaterials[i];
-                            if (!containsMaterial(chapter.materials, selectedMaterial)) {
-                                chapter.materials.push(selectedMaterial);
+                        if (chapter && chapter.contentRows) {
+                            for (var i = 0; i < $rootScope.selectedMaterials.length; i++) {
+                                var selectedMaterial = $rootScope.selectedMaterials[i];
+                                chapter.contentRows.push({learningObjects: [selectedMaterial]});
                             }
                         }
-                    }
 
                     serverCallService.makePost("rest/portfolio/update", portfolio, addMaterialsToChapterSuccess, addMaterialsToChapterFailed);
                 };

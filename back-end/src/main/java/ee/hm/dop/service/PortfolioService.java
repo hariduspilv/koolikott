@@ -9,9 +9,11 @@ import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 
+import ee.hm.dop.dao.ChapterObjectDAO;
 import ee.hm.dop.dao.PortfolioDAO;
 import ee.hm.dop.dao.UserLikeDAO;
 import ee.hm.dop.model.Chapter;
+import ee.hm.dop.model.ChapterObject;
 import ee.hm.dop.model.Comment;
 import ee.hm.dop.model.LearningObject;
 import ee.hm.dop.model.Portfolio;
@@ -29,6 +31,9 @@ public class PortfolioService extends BaseService implements LearningObjectHandl
 
     @Inject
     private UserLikeDAO userLikeDAO;
+
+    @Inject
+    private ChapterObjectDAO chapterObjectDAO;
 
     @Inject
     private SolrEngineService solrEngineService;
@@ -172,6 +177,8 @@ public class PortfolioService extends BaseService implements LearningObjectHandl
         }
 
         Portfolio safePortfolio = getPortfolioWithAllowedFieldsOnCreate(portfolio);
+        saveNewObjectsInChapters(safePortfolio);
+
         return doCreate(safePortfolio, creator, creator);
     }
 
@@ -179,12 +186,33 @@ public class PortfolioService extends BaseService implements LearningObjectHandl
         Portfolio originalPortfolio = validateUpdate(portfolio, loggedInUser);
 
         originalPortfolio = setPortfolioUpdatableFields(originalPortfolio, portfolio);
+        saveNewObjectsInChapters(originalPortfolio);
         originalPortfolio.setUpdated(now());
 
         Portfolio updatedPortfolio = (Portfolio) portfolioDAO.update(originalPortfolio);
         solrEngineService.updateIndex();
 
         return updatedPortfolio;
+    }
+
+    private void saveNewObjectsInChapters(Portfolio originalPortfolio) {
+        if (originalPortfolio.getChapters() == null) return;
+        originalPortfolio.getChapters().forEach(chapter -> {
+            saveAndUpdateChapterObjects(chapter);
+            if (chapter.getSubchapters() != null) {
+                chapter.getSubchapters().forEach(this::saveAndUpdateChapterObjects);
+            }
+        });
+    }
+
+    private void saveAndUpdateChapterObjects(Chapter chapter) {
+        if (chapter.getContentRows() == null) return;
+        chapter.getContentRows().forEach(chapterRow -> chapterRow.getLearningObjects().replaceAll(learningObject -> {
+            if (learningObject instanceof ChapterObject) {
+                return chapterObjectDAO.update((ChapterObject) learningObject);
+            }
+            else return learningObject;
+        }));
     }
 
     public Portfolio copy(Portfolio portfolio, User loggedInUser) {
@@ -278,7 +306,7 @@ public class PortfolioService extends BaseService implements LearningObjectHandl
                 Chapter copy = new Chapter();
                 copy.setTitle(chapter.getTitle());
                 copy.setText(chapter.getText());
-                copy.setMaterials(chapter.getMaterials());
+                copy.setContentRows(chapter.getContentRows());
                 copy.setSubchapters(copyChapters(chapter.getSubchapters()));
 
                 copyChapters.add(copy);

@@ -21,7 +21,6 @@ import org.junit.Test;
 public class LearningObjectResourceTest extends ResourceIntegrationTestBase {
 
     private static final String ADD_TAG_URL = "learningObject/%s/tags";
-    public static final String LEARNING_OBJECTS_GET_NEWEST = "learningObject/getNewest?maxResults=";
 
     @Test
     public void addTag() {
@@ -45,28 +44,6 @@ public class LearningObjectResourceTest extends ResourceIntegrationTestBase {
 
         Response response = doPut(format(ADD_TAG_URL, id), Entity.entity(tag, MediaType.APPLICATION_JSON_TYPE));
         assertEquals(Status.NOT_FOUND.getStatusCode(), response.getStatus());
-    }
-
-    @Test
-    public void getNewest() {
-        Response response = doGet(LEARNING_OBJECTS_GET_NEWEST + "8");
-        List<LearningObject> learningObjects = response.readEntity(new GenericType<List<LearningObject>>() {
-        });
-
-        assertNotNull(learningObjects);
-        assertEquals(8, learningObjects.size());
-        validateNewestAreFirst(learningObjects);
-    }
-
-    @Test
-    public void getNewest20() {
-        Response response = doGet(LEARNING_OBJECTS_GET_NEWEST + "20");
-        List<LearningObject> learningObjects = response.readEntity(new GenericType<List<LearningObject>>() {
-        });
-
-        assertNotNull(learningObjects);
-        assertEquals(20, learningObjects.size());
-        validateNewestAreFirst(learningObjects);
     }
 
     private void validateNewestAreFirst(List<LearningObject> learningObjects) {

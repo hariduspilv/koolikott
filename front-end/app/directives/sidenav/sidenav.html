@@ -2,15 +2,15 @@
             layout="column" layout-align="space-between strech">
 
   <!-- Portfolio Header and Chapters -->
-  <md-toolbar class="md-hue-1" layout="row" layout-align="space-between center">
+  <md-toolbar class="md-hue-1" layout="row" layout-align="center center">
     <div>
-      <a data-ng-href="/" class="logo logo-bw" id="logo-sidenav"></a>
-      <md-tooltip><span data-translate="HEADER_TOOLTIP_GO_TO_LANDING_PAGE"></span></md-tooltip>
-    </div>
-    <div>
-      <md-icon class="material-icons pointer sidenav__icon" data-ng-click="toggleSidenav('left')">keyboard_arrow_left
+      <md-icon class="material-icons pointer sidenav__icon" data-ng-click="toggleSidenav('left')">arrow_backward
       </md-icon>
       <md-tooltip><span data-translate="HEADER_TOOLTIP_CLOSE_SIDENAV"></span></md-tooltip>
+    </div>
+    <div class="text-center" flex="grow">
+      <a data-ng-href="/" class="logo logo-bw" id="logo-sidenav"></a>
+      <md-tooltip><span data-translate="HEADER_TOOLTIP_GO_TO_LANDING_PAGE"></span></md-tooltip>
     </div>
   </md-toolbar>
 
