@@ -442,16 +442,33 @@ insert into Portfolio(id, title, taxon, originalCreator, summary, visibility) VA
 insert into Chapter(id, title, portfolio, textValue, parentChapter, chapterOrder) values (1, 'The crisis', 101, null, null, 0);
 insert into Chapter(id, title, portfolio, textValue, parentChapter, chapterOrder) values (2, 'Chapter 3', 101, 'This is some text that explains what is the Chapter 3 about.' || char(10) || 'It can have many lines' || char(10) || char(10) || char(10) || 'And can also have    spaces   betwenn    the words on it', null, 2);
 insert into Chapter(id, title, portfolio, textValue, parentChapter, chapterOrder) values (3, 'Chapter 2', 101, 'Paragraph 1' || char(10) || char(10) || 'Paragraph 2' || char(10) || char(10) || 'Paragraph 3' || char(10) || char(10) || 'Paragraph 4', null, 1);
-insert into Chapter(id, title, portfolio, textValue, parentChapter, chapterOrder) values (4, 'Subprime', null, null, 1, 0); -- Subchpater of #1
+insert into Chapter(id, title, portfolio, textValue, parentChapter, chapterOrder) values (4, 'Subprime', null, null, 1, 0); -- Subchapter of #1
 insert into Chapter(id, title, portfolio, textValue, parentChapter, chapterOrder) values (5, 'The big crash', null, 'Bla bla bla' || char(10) || 'Bla bla bla bla bla bla bla', 1, 1); -- Subchpater of #1
 
--- Chapter-Material
+-- Content_Row
 
-insert into Chapter_Material(chapter, material, materialOrder) values(1, 1, 0);
-insert into Chapter_Material(chapter, material, materialOrder) values(4, 5, 0);
-insert into Chapter_Material(chapter, material, materialOrder) values(4, 1, 1);
-insert into Chapter_Material(chapter, material, materialOrder) values(4, 8, 2);
-insert into Chapter_Material(chapter, material, materialOrder) values(5, 3, 0);
+insert into ContentRow(id) values(1);
+insert into ContentRow(id) values(2);
+insert into ContentRow(id) values(3);
+insert into ContentRow(id) values(4);
+insert into ContentRow(id) values(5);
+
+-- Chapter_Row
+
+insert into Chapter_Row(row, chapter, rowOrder) values(1, 1, 0);
+insert into Chapter_Row(row, chapter, rowOrder) values(2, 2, 0);
+insert into Chapter_Row(row, chapter, rowOrder) values(3, 3, 0);
+insert into Chapter_Row(row, chapter, rowOrder) values(4, 4, 0);
+insert into Chapter_Row(row, chapter, rowOrder) values(5, 5, 0);
+
+
+-- Row_Material
+
+insert into Row_Material(row, material, materialOrder) values(1, 1, 0);
+insert into Row_Material(row, material, materialOrder) values(2, 5, 0);
+insert into Row_Material(row, material, materialOrder) values(3, 1, 0);
+insert into Row_Material(row, material, materialOrder) values(4, 8, 0);
+insert into Row_Material(row, material, materialOrder) values(5, 3, 0);
 
 -- Portfolio-Tags
 

@@ -1,5 +1,6 @@
 package ee.hm.dop.model;
 
+import static javax.persistence.CascadeType.ALL;
 import static javax.persistence.CascadeType.MERGE;
 import static javax.persistence.CascadeType.PERSIST;
 import static javax.persistence.FetchType.EAGER;
@@ -17,6 +18,9 @@ import javax.persistence.OneToMany;
 import javax.persistence.OrderColumn;
 import javax.persistence.UniqueConstraint;
 
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
+
 @Entity
 public class Chapter {
 
@@ -30,16 +34,17 @@ public class Chapter {
     @Column(columnDefinition = "TEXT", name = "textValue")
     private String text;
 
-    @ManyToMany(fetch = EAGER)
-    @OrderColumn(name = "materialOrder", nullable = false)
+    @ManyToMany(fetch = EAGER, cascade = ALL)
+    @Fetch(FetchMode.SELECT)
+    @OrderColumn(name = "rowOrder", nullable = false)
     @JoinTable(
-            name = "Chapter_Material",
+            name = "Chapter_Row",
             joinColumns = { @JoinColumn(name = "chapter") },
-            inverseJoinColumns = { @JoinColumn(name = "material") },
-            uniqueConstraints = @UniqueConstraint(columnNames = { "chapter", "material", "materialOrder" }))
-    private List<Material> materials;
+            inverseJoinColumns = { @JoinColumn(name = "row") },
+            uniqueConstraints = @UniqueConstraint(columnNames = { "chapter", "row", "rowOrder" }))
+    private List<ContentRow> contentRows;
 
-    @OneToMany(fetch = EAGER, cascade = { MERGE, PERSIST })
+    @OneToMany(fetch = EAGER, cascade = ALL)
     @JoinColumn(name = "parentChapter")
     private List<Chapter> subchapters;
 
@@ -80,11 +85,11 @@ public class Chapter {
         this.subchapters = subchapters;
     }
 
-    public List<Material> getMaterials() {
-        return materials;
+    public List<ContentRow> getContentRows() {
+        return contentRows;
     }
 
-    public void setMaterials(List<Material> materials) {
-        this.materials = materials;
+    public void setContentRows(List<ContentRow> rows) {
+        this.contentRows = rows;
     }
 }

@@ -83,7 +83,11 @@ define([
                     portfolio.chapters.push({
                         title: $filter('translate')('PORTFOLIO_DEFAULT_NEW_CHAPTER_TITLE'),
                         subchapters: [],
-                        materials: [],
+                        contentRows: [
+                            {
+                                learningObjects: []
+                            }
+                        ],
                         openCloseChapter: true
                     });
                     $rootScope.savedPortfolio = portfolio;

@@ -17,38 +17,36 @@ define([
                 controller: function ($scope, $rootScope) {
 
                     function init() {
-                        if($rootScope.isEditPortfolioMode) {
+                        if ($rootScope.isEditPortfolioMode) {
                             $scope.isPortfolioEdit = true;
                             $scope.portfolio = $rootScope.savedPortfolio;
                         }
                     }
 
-                    $scope.getPortfolioSelectLabel = function() {
-                        if($scope.portfolio && $scope.portfolio.title) {
+                    $scope.getPortfolioSelectLabel = function () {
+                        if ($scope.portfolio && $scope.portfolio.title) {
                             return $scope.portfolio.title;
                         } else {
                             return $translate.instant('CHOOSE_PORTFOLIO');
                         }
                     };
 
-                    $scope.getChapterSelectLabel = function() {
-                        if($scope.chapter && $scope.chapter.title) {
+                    $scope.getChapterSelectLabel = function () {
+                        if ($scope.chapter && $scope.chapter.title) {
                             return $scope.chapter.title;
                         } else {
                             return $translate.instant('CHOOSE_PORTFOLIO_CHAPTER');
                         }
                     };
 
-                    $scope.addMaterialsToChapter = function(chapter, portfolio) {
+                    $scope.addMaterialsToChapter = function (chapter, portfolio) {
 
                         $scope.isSaving = true;
 
-                        if (chapter && chapter.materials) {
+                        if (chapter && chapter.contentRows) {
                             for (var i = 0; i < $rootScope.selectedMaterials.length; i++) {
                                 var selectedMaterial = $rootScope.selectedMaterials[i];
-                                if (!containsMaterial(chapter.materials, selectedMaterial)) {
-                                    chapter.materials.push(selectedMaterial);
-                                }
+                                chapter.contentRows.push({learningObjects: [selectedMaterial]});
                             }
                         }
 
@@ -56,8 +54,8 @@ define([
                     };
 
                     /*
-                    * Callbacks for serverCallService
-                    */
+                     * Callbacks for serverCallService
+                     */
 
                     function getUsersPortfoliosSuccess(data) {
                         if (isEmpty(data)) {
@@ -94,11 +92,11 @@ define([
                     }
 
                     /*
-                    * End of callbacks
-                    */
+                     * End of callbacks
+                     */
 
-                    $scope.removeSelection = function() {
-                        for(var i = 0; i < $rootScope.selectedMaterials.length; i++) {
+                    $scope.removeSelection = function () {
+                        for (var i = 0; i < $rootScope.selectedMaterials.length; i++) {
                             $rootScope.selectedMaterials[i].selected = false;
                         }
 
@@ -107,7 +105,7 @@ define([
 
                     $scope.getUsersPortfolios = function () {
 
-                        if(!$scope.usersPortfolios) {
+                        if (!$scope.usersPortfolios) {
                             $scope.deferred = $q.defer();
                         }
 
@@ -122,7 +120,7 @@ define([
 
                     };
 
-                    $scope.portfolioSelectChange = function() {
+                    $scope.portfolioSelectChange = function () {
                         $scope.chapter = null;
                     };
 

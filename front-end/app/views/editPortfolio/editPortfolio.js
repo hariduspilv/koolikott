@@ -104,9 +104,13 @@ define([
 
                 if ($scope.portfolio.chapters) {
                     $scope.portfolio.chapters.forEach(function (chapter) {
-                        chapter.materials.forEach(function (material) {
-                            material.source = getSource(material);
-                        })
+                        if(chapter.contentRows) {
+                            chapter.contentRows.forEach(function (contentRow) {
+                                contentRow.learningObjects.forEach(function(learningObject){
+                                    learningObject.source = getSource(learningObject);
+                                })
+                            })
+                        }
                     });
                 }
 

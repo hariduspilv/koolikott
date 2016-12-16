@@ -99,12 +99,12 @@
       </a>
       <!--Up and down-->
       <div data-ng-if="isEditPortfolioMode && isEditPortfolioPage" layout="row">
-        <md-button ng-disabled="index === 0" class="md-icon-button" aria-label="Liiguta materjali üles"
-                   ng-click="listItemUp(index)">
+        <md-button ng-disabled="rowIndex === 0" class="md-icon-button" aria-label="Liiguta materjali üles"
+                   ng-click="listItemUp()">
           <md-icon class="material-icons">arrow_upward</md-icon>
         </md-button>
-        <md-button ng-disabled="(chapter.materials.length - 1) == index" class="md-icon-button"
-                   aria-label="Liiguta materjali alla" ng-click="listItemDown(index)">
+        <md-button ng-disabled="rowIndex === chapter.contentRows.length -1 " class="md-icon-button"
+                   aria-label="Liiguta materjali alla" ng-click="listItemDown()">
           <md-icon class="material-icons">arrow_downward</md-icon>
         </md-button>
       </div>

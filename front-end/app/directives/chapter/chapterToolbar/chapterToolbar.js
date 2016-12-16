@@ -32,7 +32,8 @@ define([
 
                 function closeDialog(material) {
                     if (material) {
-                        $scope.chapter.materials.push(material);
+                        if(!$scope.chapter.contentRows) $scope.chapter.contentRows = [];
+                        $scope.chapter.contentRows.push({learningObjects: [material]});
                     }
                 }
 

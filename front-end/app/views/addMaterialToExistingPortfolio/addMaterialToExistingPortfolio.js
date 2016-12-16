@@ -25,18 +25,14 @@ define([
             };
 
             $scope.addMaterialsToChapter = function (chapter, portfolio) {
-                if (chapter && chapter.materials) {
+                if (chapter && chapter.contentRows) {
 
                     if ($rootScope.selectedSingleMaterial) {
-                        if (!containsMaterial(chapter.materials, $rootScope.selectedSingleMaterial)) {
-                            chapter.materials.push($rootScope.selectedSingleMaterial);
-                        }
+                        chapter.contentRows.push({learningObjects: [$rootScope.selectedSingleMaterial]});
                     } else {
                         for (var i = 0; i < $rootScope.selectedMaterials.length; i++) {
                             var selectedMaterial = $rootScope.selectedMaterials[i];
-                            if (!containsMaterial(chapter.materials, selectedMaterial)) {
-                                chapter.materials.push(selectedMaterial);
-                            }
+                            chapter.contentRows.push({learningObjects: [selectedMaterial]});
                         }
 
                     }

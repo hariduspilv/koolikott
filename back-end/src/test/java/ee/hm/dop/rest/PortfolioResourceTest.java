@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -22,6 +23,9 @@ import javax.ws.rs.core.Response.Status;
 
 import ee.hm.dop.common.test.ResourceIntegrationTestBase;
 import ee.hm.dop.model.Chapter;
+import ee.hm.dop.model.ChapterObject;
+import ee.hm.dop.model.ContentRow;
+import ee.hm.dop.model.LearningObject;
 import ee.hm.dop.model.Material;
 import ee.hm.dop.model.Portfolio;
 import ee.hm.dop.model.Recommendation;
@@ -44,6 +48,7 @@ public class PortfolioResourceTest extends ResourceIntegrationTestBase {
     private static final String DELETE_PORTFOLIO_URL = "portfolio/delete";
     private static final String PORTFOLIO_ADD_RECOMMENDATION_URL = "portfolio/recommend";
     private static final String PORTFOLIO_REMOVE_RECOMMENDATION_URL = "portfolio/removeRecommendation";
+    private static final String CREATE_MATERIAL_URL = "material";
 
     @Test
     public void getPortfolio() {
@@ -487,6 +492,45 @@ public class PortfolioResourceTest extends ResourceIntegrationTestBase {
         assertNull(portfolioAfterRemoveRecommend.getRecommendation());
     }
 
+    @Test
+    public void createWithContent() {
+        login("39011220011");
+
+        Portfolio portfolio = new Portfolio();
+        portfolio.setTitle("With chapters");
+
+        List<Chapter> chapters = new ArrayList<>();
+        Chapter firstChapter = new Chapter();
+        firstChapter.setTitle("First chapter");
+        firstChapter.setText("Description text");
+
+        List<LearningObject> learningObjects = new ArrayList<>();
+        ChapterObject chapterObject = new ChapterObject();
+        chapterObject.setText("Random textbox content");
+        learningObjects.add(chapterObject);
+
+        Material material = new Material();
+        material.setSource("http://www.november.juliet.ru");
+
+        Response createMaterialResponse = doPut(CREATE_MATERIAL_URL, Entity.entity(material, MediaType.APPLICATION_JSON_TYPE));
+        Material createdMaterial = createMaterialResponse.readEntity(Material.class);
+        learningObjects.add(createdMaterial);
+
+        List<ContentRow> contentRows = new ArrayList<>();
+        contentRows.add(new ContentRow(learningObjects));
+
+        firstChapter.setContentRows(contentRows);
+        chapters.add(firstChapter);
+        portfolio.setChapters(chapters);
+
+        Portfolio createdPortfolio = doPost(CREATE_PORTFOLIO_URL, portfolio, Portfolio.class);
+
+        assertNotNull(createdPortfolio);
+        assertNotNull(createdPortfolio.getId());
+        assertEquals(((ChapterObject) createdPortfolio.getChapters().get(0).getContentRows().get(0).getLearningObjects().get(0)).getText(), chapterObject.getText());
+        assertEquals(((Material) createdPortfolio.getChapters().get(0).getContentRows().get(0).getLearningObjects().get(1)).getSource(), createdMaterial.getSource());
+    }
+
     private Portfolio createPortfolio() {
         Portfolio portfolio = new Portfolio();
         portfolio.setTitle("Tere");
@@ -518,7 +562,7 @@ public class PortfolioResourceTest extends ResourceIntegrationTestBase {
         assertEquals(new Long(1), chapter.getId());
         assertEquals("The crisis", chapter.getTitle());
         assertNull(chapter.getText());
-        List<Material> materials = chapter.getMaterials();
+        List<LearningObject> materials = chapter.getContentRows().get(0).getLearningObjects();
         assertEquals(1, materials.size());
         assertEquals(new Long(1), materials.get(0).getId());
         assertEquals(2, chapter.getSubchapters().size());
@@ -526,16 +570,14 @@ public class PortfolioResourceTest extends ResourceIntegrationTestBase {
         assertEquals(new Long(4), subchapter1.getId());
         assertEquals("Subprime", subchapter1.getTitle());
         assertNull(subchapter1.getText());
-        materials = subchapter1.getMaterials();
-        assertEquals(3, materials.size());
-        assertEquals(new Long(5), materials.get(0).getId());
-        assertEquals(new Long(1), materials.get(1).getId());
-        assertEquals(new Long(8), materials.get(2).getId());
+        materials = subchapter1.getContentRows().get(0).getLearningObjects();
+        assertEquals(1, materials.size());
+        assertEquals(new Long(8), materials.get(0).getId());
         Chapter subchapter2 = chapter.getSubchapters().get(1);
         assertEquals(new Long(5), subchapter2.getId());
         assertEquals("The big crash", subchapter2.getTitle());
         assertEquals("Bla bla bla\nBla bla bla bla bla bla bla", subchapter2.getText());
-        materials = subchapter2.getMaterials();
+        materials = subchapter2.getContentRows().get(0).getLearningObjects();
         assertEquals(1, materials.size());
         assertEquals(new Long(3), materials.get(0).getId());
 
@@ -543,7 +585,7 @@ public class PortfolioResourceTest extends ResourceIntegrationTestBase {
         assertEquals(new Long(3), chapter.getId());
         assertEquals("Chapter 2", chapter.getTitle());
         assertEquals("Paragraph 1\n\nParagraph 2\n\nParagraph 3\n\nParagraph 4", chapter.getText());
-        assertEquals(0, chapter.getMaterials().size());
+        assertEquals(1, chapter.getContentRows().get(0).getLearningObjects().size());
         assertEquals(0, chapter.getSubchapters().size());
 
         chapter = chapters.get(2);
@@ -551,7 +593,7 @@ public class PortfolioResourceTest extends ResourceIntegrationTestBase {
         assertEquals("Chapter 3", chapter.getTitle());
         assertEquals("This is some text that explains what is the Chapter 3 about.\nIt can have many lines\n\n\n"
                 + "And can also have    spaces   betwenn    the words on it", chapter.getText());
-        assertEquals(0, chapter.getMaterials().size());
+        assertEquals(1, chapter.getContentRows().get(0).getLearningObjects().size());
         assertEquals(0, chapter.getSubchapters().size());
 
         assertEquals(2, portfolio.getTargetGroups().size());

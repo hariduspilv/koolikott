@@ -36,10 +36,10 @@ define([
                         if ($rootScope.selectedMaterials && $rootScope.selectedMaterials.length > 0) {
                             for (var i = 0; i < $rootScope.selectedMaterials.length; i++) {
                                 var selectedMaterial = $rootScope.selectedMaterials[i];
-                                emptyPortfolio.chapters[0].materials.push(selectedMaterial);
+                                emptyPortfolio.chapters[0].contentRows.push({learningObjects: [selectedMaterial]});
                             }
                         } else if($rootScope.selectedSingleMaterial != null) {
-                            emptyPortfolio.chapters[0].materials.push($rootScope.selectedSingleMaterial);
+                            emptyPortfolio.chapters[0].contentRows.push({learningObjects: [$rootScope.selectedSingleMaterial]});
                         }
                         toastService.showOnRouteChange('PORTFOLIO_ADD_MATERIAL_SUCCESS');
                     }

@@ -12,7 +12,9 @@ define([
                 scope: {
                     material: '=',
                     chapter: '=',
-                    index: '='
+                    objIndex: '=',
+                    rowIndex: '=',
+                    contentRow: '='
                 },
                 templateUrl: 'directives/embeddedMaterial/embeddedMaterial.html',
                 controller: function ($scope, $rootScope, $location) {
@@ -33,25 +35,25 @@ define([
                         }
                     }
 
-                    function getContentType () {
+                    function getContentType() {
                         var baseUrl = document.location.origin;
                         // If the initial type is a LINK, try to ask the type from our proxy
-                        if(matchType($scope.material.source) === 'LINK' && !$scope.material.source.startsWith(baseUrl) ){
+                        if (matchType($scope.material.source) === 'LINK' && !$scope.material.source.startsWith(baseUrl)) {
                             $scope.proxyUrl = baseUrl + "/rest/material/externalMaterial?url=" + encodeURIComponent($scope.material.source);
                             serverCallService.makeHead($scope.proxyUrl, {}, probeContentSuccess, probeContentFail);
-                        }else{
+                        } else {
                             $scope.sourceType = matchType($scope.material.source);
                         }
                     }
 
                     function probeContentSuccess(response) {
-                        if(!response()['content-disposition']){
+                        if (!response()['content-disposition']) {
                             $scope.sourceType = 'LINK';
                             return;
                         }
                         var filename = response()['content-disposition'].match(/filename="(.+)"/)[1];
                         $scope.sourceType = matchType(filename);
-                        if($scope.sourceType !== 'LINK'){
+                        if ($scope.sourceType !== 'LINK') {
                             $scope.material.source = $scope.proxyUrl;
                         }
                     }
@@ -65,8 +67,8 @@ define([
                         $event.stopPropagation();
 
                         var removeMaterialFromChapter = function () {
-                            var index = $scope.chapter.materials.indexOf(material);
-                            $scope.chapter.materials.splice(index, 1);
+                            var index = $scope.contentRow.learningObjects.indexOf(material);
+                            $scope.contentRow.learningObjects.splice(index, 1);
                         };
 
                         dialogService.showDeleteConfirmationDialog(
@@ -82,17 +84,20 @@ define([
                     };
 
                     $scope.moveItem = function (origin, destination) {
-                        var temp = $scope.chapter.materials[destination];
-                        $scope.chapter.materials[destination] = $scope.chapter.materials[origin];
-                        $scope.chapter.materials[origin] = temp;
+
+                        if($scope.chapter.contentRows[origin].learningObjects.length < 2) {
+                            $scope.chapter.contentRows.splice(origin, 1);
+                        }
+
+                        $scope.chapter.contentRows.splice(destination, 0, {learningObjects: [$scope.material]});
                     };
 
-                    $scope.listItemUp = function (itemIndex) {
-                        $scope.moveItem(itemIndex, itemIndex - 1);
+                    $scope.listItemUp = function () {
+                        $scope.moveItem($scope.rowIndex, $scope.rowIndex - 1);
                     };
 
-                    $scope.listItemDown = function (itemIndex) {
-                        $scope.moveItem(itemIndex, itemIndex + 1);
+                    $scope.listItemDown = function () {
+                        $scope.moveItem($scope.rowIndex, $scope.rowIndex + 1);
                     };
 
                     $scope.navigateToMaterial = function (material, $event) {
@@ -148,14 +153,14 @@ define([
                         } else if (isPictureLink($scope.material.source)) {
                             $scope.sourceType = 'PICTURE';
                         } else if (isEbookLink($scope.material.source)) {
-                            if(isIE()){
+                            if (isIE()) {
                                 $scope.sourceType = 'LINK';
                                 return;
                             }
                             $scope.sourceType = 'EBOOK';
                             $scope.ebookLink = "/utils/bibi/bib/i/?book=" + $scope.material.uploadedFile.id + "/" + $scope.material.uploadedFile.name;
                         } else if (isPDFLink($scope.material.source)) {
-                            if(isIE()){
+                            if (isIE()) {
                                 $scope.sourceType = 'LINK';
                                 return;
                             }
@@ -194,13 +199,13 @@ define([
                         return extension == "jpg" || extension == "jpeg" || extension == "png" || extension == "gif";
                     }
 
-                    function isEbookLink(url){
+                    function isEbookLink(url) {
                         if (!url) return;
                         var extension = url.split('.').pop().toLowerCase();
                         return extension == "epub";
                     }
 
-                    function isPDFLink(url){
+                    function isPDFLink(url) {
                         if (!url) return;
                         var extension = url.split('.').pop().toLowerCase();
                         return extension == "pdf";

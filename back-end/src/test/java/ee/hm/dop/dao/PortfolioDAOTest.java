@@ -150,7 +150,7 @@ public class PortfolioDAOTest extends DatabaseTestBase {
         assertEquals(new Long(1), chapter.getId());
         assertEquals("The crisis", chapter.getTitle());
         assertNull(chapter.getText());
-        List<Material> materials = chapter.getMaterials();
+        List<LearningObject> materials = chapter.getContentRows().get(0).getLearningObjects();
         assertEquals(1, materials.size());
         assertEquals(new Long(1), materials.get(0).getId());
         assertEquals(2, chapter.getSubchapters().size());
@@ -158,16 +158,14 @@ public class PortfolioDAOTest extends DatabaseTestBase {
         assertEquals(new Long(4), subchapter1.getId());
         assertEquals("Subprime", subchapter1.getTitle());
         assertNull(subchapter1.getText());
-        materials = subchapter1.getMaterials();
-        assertEquals(3, materials.size());
-        assertEquals(new Long(5), materials.get(0).getId());
-        assertEquals(new Long(1), materials.get(1).getId());
-        assertEquals(new Long(8), materials.get(2).getId());
+        materials = subchapter1.getContentRows().get(0).getLearningObjects();
+        assertEquals(1, materials.size());
+        assertEquals(new Long(8), materials.get(0).getId());
         Chapter subchapter2 = chapter.getSubchapters().get(1);
         assertEquals(new Long(5), subchapter2.getId());
         assertEquals("The big crash", subchapter2.getTitle());
         assertEquals("Bla bla bla\nBla bla bla bla bla bla bla", subchapter2.getText());
-        materials = subchapter2.getMaterials();
+        materials = subchapter2.getContentRows().get(0).getLearningObjects();
         assertEquals(1, materials.size());
         assertEquals(new Long(3), materials.get(0).getId());
 
@@ -175,7 +173,7 @@ public class PortfolioDAOTest extends DatabaseTestBase {
         assertEquals(new Long(3), chapter.getId());
         assertEquals("Chapter 2", chapter.getTitle());
         assertEquals("Paragraph 1\n\nParagraph 2\n\nParagraph 3\n\nParagraph 4", chapter.getText());
-        assertEquals(0, chapter.getMaterials().size());
+        assertEquals(1, chapter.getContentRows().get(0).getLearningObjects().size());
         assertEquals(0, chapter.getSubchapters().size());
 
         chapter = chapters.get(2);
@@ -183,7 +181,7 @@ public class PortfolioDAOTest extends DatabaseTestBase {
         assertEquals("Chapter 3", chapter.getTitle());
         assertEquals("This is some text that explains what is the Chapter 3 about.\nIt can have many lines\n\n\n"
                 + "And can also have    spaces   betwenn    the words on it", chapter.getText());
-        assertEquals(0, chapter.getMaterials().size());
+        assertEquals(1, chapter.getContentRows().get(0).getLearningObjects().size());
         assertEquals(0, chapter.getSubchapters().size());
 
         assertEquals(2, portfolio.getTargetGroups().size());

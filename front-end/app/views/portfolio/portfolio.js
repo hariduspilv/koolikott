@@ -97,8 +97,10 @@ define([
                 if($scope.portfolio) {
 
                     $scope.portfolio.chapters.forEach(function(chapter) {
-                        chapter.materials.forEach(function(material){
-                            material.source = getSource(material);
+                        chapter.contentRows.forEach(function (contentRow) {
+                            contentRow.learningObjects.forEach(function(learningObject){
+                                learningObject.source = getSource(learningObject);
+                            })
                         })
                     });
 
