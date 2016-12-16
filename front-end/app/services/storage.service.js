@@ -25,14 +25,6 @@ function () {
         return material;
     };
 
-    storageService.getNewestItems = function () {
-        return newestItems;
-    };
-
-    storageService.setNewestItems = function (data) {
-        newestItems = data;
-    };
-
     storageService.getPopularItems = function () {
         return popularItems;
     };

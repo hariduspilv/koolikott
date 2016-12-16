@@ -54,13 +54,6 @@ public class LearningObjectResource extends BaseResource {
     }
 
     @GET
-    @Path("getNewest")
-    @Produces(MediaType.APPLICATION_JSON)
-    public List<LearningObject> getNewestLearningObjects(@QueryParam("maxResults") int numberOfLearningObjects) {
-        return learningObjectService.getNewestLearningObjects(numberOfLearningObjects);
-    }
-
-    @GET
     @Path("favorite")
     @RolesAllowed({"USER", "ADMIN", "MODERATOR", "RESTRICTED"})
     public UserFavorite hasSetFavorite(@QueryParam("id") Long id) {
