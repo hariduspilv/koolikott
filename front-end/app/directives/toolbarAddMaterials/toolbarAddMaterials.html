@@ -1,26 +1,27 @@
 <md-toolbar class="md-hue-1 toolbar-add-materials md-whiteframe-1dp">
   <div class="md-toolbar-tools" layout="row" layout-nowrap="">
     <div class="toolbar-add-materials__left" layout="row" layout-align="start center">
-      <md-button class="md-hue-1 toolbar-add-materials__button" ng-click="removeSelection()" ng-disabled="isSaving">
+      <md-button class="md-hue-1 toolbar-add-materials__button" data-ng-click="removeSelection()" data-ng-disabled="isSaving">
         <md-icon>arrow_backward</md-icon>
         <span class="vertical-center toolbar-add-materials__info--hidden" translate="TOOLBAR_ADD_BACK"></span>
       </md-button>
     </div>
     <div class="toolbar-add-materials__center" layout="row" layout-xs="column" layout-align="center center"  layout-align-gt-md="start center" flex="grow">
-      <p class="md-subhead toolbar-add-materials__info"><span translate="TOOLBAR_ADD_CHOSEN"></span>: <span class="toolbar-add-materials__count" ng-bind="selectedMaterials.length"></span></p>
+      <p class="md-subhead toolbar-add-materials__info"><span translate="TOOLBAR_ADD_CHOSEN"></span>: <span class="toolbar-add-materials__count" data-ng-bind="selectedMaterials.length"></span></p>
       <div class="toolbar-add-materials__divider"></div>
       <p class="md-subhead toolbar-add-materials__info toolbar-add-materials__info--hidden" translate="TOOLBAR_ADD_PORTFOLIO"></p>
-      <md-select aria-label="Vali kogumik" md-selected-text="getPortfolioSelectLabel()" ng-model="portfolio" ng-disabled="isPortfolioEdit"
-                 md-on-open="getUsersPortfolios()" class="toolbar-add-materials__select" ng-change="portfolioSelectChange()">
-        <md-option ng-value="portfolio" ng-repeat="portfolio in usersPortfolios">{{portfolio.title}}</md-option>
+      <md-select aria-label="Vali kogumik" md-selected-text="getPortfolioSelectLabel()" data-ng-model="portfolio" data-ng-disabled="isPortfolioEdit"
+                 md-on-open="getUsersPortfolios()" class="toolbar-add-materials__select" data-ng-change="portfolioSelectChange()">
+        <md-option data-ng-value="portfolio" data-ng-repeat="portfolio in usersPortfolios">{{portfolio.title}}</md-option>
       </md-select>
       <p class="md-subhead toolbar-add-materials__info toolbar-add-materials__info--hidden" translate="TOOLBAR_ADD_CHAPTER"></p>
-      <md-select aria-label="Vali peatükk" md-selected-text="getChapterSelectLabel()" ng-disabled="!portfolio" ng-model="chapter" class="toolbar-add-materials__select">
-        <md-option ng-value="chapter" ng-repeat="chapter in portfolio.chapters">{{chapter.title}}</md-option>
+      <md-select aria-label="Vali peatükk" md-selected-text="getChapterSelectLabel()" data-ng-disabled="!portfolio" data-ng-model="chapter" class="toolbar-add-materials__select">
+        <md-option data-ng-value="chapter" data-ng-repeat-start="chapter in portfolio.chapters">{{chapter.title}}</md-option>
+        <md-option data-ng-value="subchapter" class="toolbar-add-materials__subchapter" data-ng-repeat-end data-ng-repeat="subchapter in chapter.subchapters">{{subchapter.title}}</md-option>
       </md-select>
     </div>
     <div class="toolbar-add-materials__right" layout="row" layout-align="end center">
-      <md-button class="md-primary toolbar-add-materials__button" ng-if="!isSaving" ng-disabled="!chapter" ng-click="addMaterialsToChapter(chapter, portfolio)">
+      <md-button class="md-primary toolbar-add-materials__button" data-ng-if="!isSaving" data-ng-disabled="!chapter" data-ng-click="addMaterialsToChapter(chapter, portfolio)">
         <md-icon>done</md-icon>
       </md-button>
       <md-progress-circular class="md-primary toolbar-add-materials__progress" md-mode="indeterminate" md-diameter="30"

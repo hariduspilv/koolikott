@@ -14,6 +14,10 @@ angular.module('koolikottApp')
                     if($rootScope.isEditPortfolioMode) {
                         $scope.isPortfolioEdit = true;
                         $scope.portfolio = $rootScope.savedPortfolio;
+
+                        if($rootScope.savedChapter) {
+                            $scope.chapter = $rootScope.savedChapter;
+                        }
                     }
                 }
 

@@ -33,11 +33,11 @@ angular.module('koolikottApp')
                 function getContentType () {
                     var baseUrl = document.location.origin;
                     // If the initial type is a LINK, try to ask the type from our proxy
-                    if(matchType($scope.material.source) === 'LINK' && !$scope.material.source.startsWith(baseUrl) ){
+                    if(matchType(getSource($scope.material)) === 'LINK' && !getSource($scope.material).startsWith(baseUrl) ){
                         $scope.proxyUrl = baseUrl + "/rest/material/externalMaterial?url=" + encodeURIComponent($scope.material.source);
                         serverCallService.makeHead($scope.proxyUrl, {}, probeContentSuccess, probeContentFail);
                     }else{
-                        $scope.sourceType = matchType($scope.material.source);
+                        $scope.sourceType = matchType(getSource($scope.material));
                     }
                 }
 
