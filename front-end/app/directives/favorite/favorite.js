@@ -1,10 +1,10 @@
-define([
-    'angularAMD',
-    'services/serverCallService',
-    'services/authenticatedUserService',
-    'services/toastService'
-], function (angularAMD) {
-    angularAMD.directive('dopFavorite', ['serverCallService', 'authenticatedUserService', 'toastService', '$timeout', function (serverCallService, authenticatedUserService, toastService, $timeout) {
+'use strict'
+
+angular.module('koolikottApp')
+.directive('dopFavorite',
+[
+    'serverCallService', 'authenticatedUserService', 'toastService', '$timeout',
+    function (serverCallService, authenticatedUserService, toastService, $timeout) {
         return {
             scope: {
                 learningObject: '='
@@ -76,5 +76,5 @@ define([
                 }
             }
         };
-    }]);
-});
+    }
+]);

@@ -1,107 +1,111 @@
-define(function () {
-    return {
-        defaultRoutePath: '/',
-        routes: {
-            '/': {
+'use strict';
+
+angular.module('koolikottApp')
+.config(
+    [
+        '$routeProvider',
+        function ($routeProvider) {
+
+            $routeProvider.otherwise('/');
+
+            $routeProvider
+            .when('/', {
                 templateUrl: 'views/home/home.html',
-                controllerUrl: 'views/home/home'
-            },
-            '/search/result': {
+                controller: 'homeController'
+            })
+            .when('/search/result', {
                 templateUrl: 'views/search/result/searchResult.html',
-                controllerUrl: 'views/search/result/searchResult',
+                controller: 'searchResultController',
                 reloadOnSearch: false
-            },
-            '/material': {
+            })
+            .when('/material', {
                 templateUrl: 'views/material/material.html',
-                controllerUrl: 'views/material/material'
-            },
-            '/help': {
+                controller: 'materialController'
+            })
+            .when('/help', {
                 templateUrl: 'views/static/abstractStaticPage.html',
-                controllerUrl: 'views/static/help/help'
-            },
-            '/about': {
+                controller: 'helpController'
+            })
+            .when('/about', {
                 templateUrl: 'views/static/abstractStaticPage.html',
-                controllerUrl: 'views/static/about/about'
-            },
-            '/portfolio': {
+                controller: 'aboutController'
+            })
+            .when('/portfolio', {
                 templateUrl: 'views/portfolio/portfolio.html',
-                controllerUrl: 'views/portfolio/portfolio',
+                controller: 'portfolioController',
                 reloadOnSearch: false
-            },
-            '/portfolio/edit': {
+            })
+            .when('/portfolio/edit', {
                 templateUrl: 'views/editPortfolio/editPortfolio.html',
-                controllerUrl: 'views/editPortfolio/editPortfolio',
+                controller: 'editPortfolioController',
                 reloadOnSearch: false
-            },
-            // Dashboard links
-            '/dashboard': {
+            })
+            .when('/dashboard', {
                 templateUrl: 'views/dashboard/dashboard.html',
-                controllerUrl: 'views/dashboard/dashboard',
+                controller: 'dashboardController',
                 permissions: ['ADMIN', 'MODERATOR']
-            },
-            //TODO: Same template and controller for everything, can this be refactored to js?
-            '/dashboard/improperMaterials': {
+            })
+            .when('/dashboard/improperMaterials', {
                 templateUrl: 'views/dashboard/baseTableView.html',
-                controllerUrl: 'views/dashboard/baseTableView',
+                controller: 'baseTableViewController',
                 permissions: ['ADMIN', 'MODERATOR']
-            },
-            '/dashboard/improperPortfolios': {
+            })
+            .when('/dashboard/improperPortfolios', {
                 templateUrl: 'views/dashboard/baseTableView.html',
-                controllerUrl: 'views/dashboard/baseTableView',
+                controller: 'baseTableViewController',
                 permissions: ['ADMIN', 'MODERATOR']
-            },
-            '/dashboard/brokenMaterials': {
+            })
+            .when('/dashboard/brokenMaterials', {
                 templateUrl: 'views/dashboard/baseTableView.html',
-                controllerUrl: 'views/dashboard/baseTableView',
+                controller: 'baseTableViewController',
                 permissions: ['ADMIN', 'MODERATOR']
-            },
-            '/dashboard/deletedMaterials': {
+            })
+            .when('/dashboard/deletedMaterials', {
                 templateUrl: 'views/dashboard/baseTableView.html',
-                controllerUrl: 'views/dashboard/baseTableView',
+                controller: 'baseTableViewController',
                 permissions: ['ADMIN', 'MODERATOR']
-            },
-            '/dashboard/deletedPortfolios': {
+            })
+            .when('/dashboard/deletedPortfolios', {
                 templateUrl: 'views/dashboard/baseTableView.html',
-                controllerUrl: 'views/dashboard/baseTableView',
+                controller: 'baseTableViewController',
                 permissions: ['ADMIN', 'MODERATOR']
-            },
-            '/dashboard/moderators': {
+            })
+            .when('/dashboard/moderators', {
                 templateUrl: 'views/dashboard/baseTableView.html',
-                controllerUrl: 'views/dashboard/baseTableView',
+                controller: 'baseTableViewController',
                 permissions: ['ADMIN']
-            },
-            '/dashboard/restrictedUsers': {
+            })
+            .when('/dashboard/restrictedUsers', {
                 templateUrl: 'views/dashboard/baseTableView.html',
-                controllerUrl: 'views/dashboard/baseTableView',
+                controller: 'baseTableViewController',
                 permissions: ['ADMIN']
-            },
-            '/loginRedirect': {
+            })
+            .when('/loginRedirect', {
                 templateUrl: 'views/loginRedirect/loginRedirect.html',
-                controllerUrl: 'views/loginRedirect/loginRedirect'
-            },
-            '/:username': {
+                controller: 'loginRedirectController'
+            })
+            .when('/:username', {
                 templateUrl: 'views/profile/profile.html',
-                controllerUrl: 'views/profile/profile'
-            },
-            '/:username/materials': {
+                controller: 'profileController'
+            })
+            .when('/:username/materials', {
                 templateUrl: 'views/profile/materials/materials.html',
-                controllerUrl: 'views/profile/materials/materials',
+                controller: 'userMaterialsController',
                 permissions: ['USER']
-            },
-            '/:username/portfolios': {
+            })
+            .when('/:username/portfolios', {
                 templateUrl: 'views/profile/portfolios/portfolios.html',
-                controllerUrl: 'views/profile/portfolios/portfolios',
+                controller: 'userPortfoliosController',
                 permissions: ['USER']
-            },
-            '/:username/favorites': {
+            })
+            .when('/:username/favorites', {
                 templateUrl: 'views/profile/favorites/favorites.html',
-                controllerUrl: 'views/profile/favorites/favorites',
+                controller: 'userFavoritesController',
                 permissions: ['USER']
-            },
-            '/dev/login/:idCode': {
+            })
+            .when('/dev/login/:idCode', {
                 templateUrl: 'views/dev/login/login.html',
-                controllerUrl: 'views/dev/login/login'
-            }
+                controller: 'devLoginController'
+            });
         }
-    };
-});
+    ]);

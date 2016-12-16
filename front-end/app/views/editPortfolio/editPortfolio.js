@@ -1,82 +1,75 @@
-define([
-    'app',
-    'services/translationService',
-    'services/serverCallService',
-    'services/alertService',
-    'services/authenticatedUserService',
-    'services/dialogService',
-    'services/toastService',
-    'directives/portfolioSummaryCard/portfolioSummaryCard',
-    'directives/chapter/chapter',
-    'directives/materialBox/materialBox',
-    'directives/tableOfContents/tableOfContents'
-], function (app) {
-    return ['$scope', 'translationService', 'serverCallService', '$route', '$location', 'alertService', '$rootScope', 'authenticatedUserService', 'dialogService', 'toastService', '$mdDialog', '$interval', '$filter', '$timeout', '$document',
-        function ($scope, translationService, serverCallService, $route, $location, alertService, $rootScope, authenticatedUserService, dialogService, toastService, $mdDialog, $interval, $filter, $timeout, $document) {
-            var isAutoSaving = false;
-            var autoSaveInterval;
+'use strict'
 
-            function init() {
-                if ($rootScope.savedPortfolio) {
-                    if (checkAuthorized($rootScope.savedPortfolio)) {
-                        setPortfolio($rootScope.savedPortfolio);
-                        checkPortfolioVisibility($rootScope.savedPortfolio);
-                    }
-                } else {
-                    getPortfolio(getPortfolioSuccess, getPortfolioFail);
+angular.module('koolikottApp')
+.controller('editPortfolioController',
+[
+    '$scope', 'translationService', 'serverCallService', '$route', '$location', 'alertService', '$rootScope', 'authenticatedUserService', 'dialogService', 'toastService', '$mdDialog', '$interval', '$filter', '$timeout', '$document',
+    function ($scope, translationService, serverCallService, $route, $location, alertService, $rootScope, authenticatedUserService, dialogService, toastService, $mdDialog, $interval, $filter, $timeout, $document) {
+        var isAutoSaving = false;
+        var autoSaveInterval;
+
+        function init() {
+            if ($rootScope.savedPortfolio) {
+                if (checkAuthorized($rootScope.savedPortfolio)) {
+                    setPortfolio($rootScope.savedPortfolio);
+                    checkPortfolioVisibility($rootScope.savedPortfolio);
                 }
-
-                if ($rootScope.newPortfolioCreated) {
-                    $scope.showFirstMessage = true;
-                    $rootScope.newPortfolioCreated = false;
-                }
-
-                startAutosave();
+            } else {
+                getPortfolio(getPortfolioSuccess, getPortfolioFail);
             }
 
-            function checkPortfolioVisibility(portfolio) {
-                if (portfolio.visibility === 'PRIVATE') return;
-
-                showWarning();
+            if ($rootScope.newPortfolioCreated) {
+                $scope.showFirstMessage = true;
+                $rootScope.newPortfolioCreated = false;
             }
 
-            function getPortfolio(success, fail) {
-                var portfolioId = $route.current.params.id;
-                serverCallService.makeGet("rest/portfolio?id=" + portfolioId, {}, success, fail);
-            }
+            $rootScope.savedChapter = null;
+            startAutosave();
+        }
 
-            function getPortfolioFail() {
-                log('No data returned by getting portfolio.');
-                alertService.setErrorAlert('ERROR_PORTFOLIO_NOT_FOUND');
-                $location.url("/");
-            }
+        function checkPortfolioVisibility(portfolio) {
+            if (portfolio.visibility === 'PRIVATE') return;
 
-            function getPortfolioSuccess(portfolio) {
-                if (isEmpty(portfolio)) {
-                    getPortfolioFail();
-                } else if (checkAuthorized(portfolio)) {
-                    setPortfolio(portfolio);
-                    checkPortfolioVisibility(portfolio);
-                }
-            }
+            showWarning();
+        }
 
-            $scope.toggleSidenav = function (menuId) {
-                $mdSidenav(menuId).toggle();
+        function getPortfolio(success, fail) {
+            var portfolioId = $route.current.params.id;
+            serverCallService.makeGet("rest/portfolio?id=" + portfolioId, {}, success, fail);
+        }
+
+        function getPortfolioFail() {
+            log('No data returned by getting portfolio.');
+            alertService.setErrorAlert('ERROR_PORTFOLIO_NOT_FOUND');
+            $location.url("/");
+        }
+
+        function getPortfolioSuccess(portfolio) {
+            if (isEmpty(portfolio)) {
+                getPortfolioFail();
+            } else if (checkAuthorized(portfolio)) {
+                setPortfolio(portfolio);
+                checkPortfolioVisibility(portfolio);
+            }
+        }
+
+        $scope.toggleSidenav = function (menuId) {
+            $mdSidenav(menuId).toggle();
+        };
+
+        $scope.closeSidenav = function (menuId) {
+            $mdSidenav(menuId).close();
+        };
+
+        $scope.onDeleteChapter = function (chapter) {
+            var deleteChapter = function () {
+                $scope.portfolio.chapters.splice($scope.portfolio.chapters.indexOf(chapter), 1);
             };
 
-            $scope.closeSidenav = function (menuId) {
-                $mdSidenav(menuId).close();
-            };
-
-            $scope.onDeleteChapter = function (chapter) {
-                var deleteChapter = function () {
-                    $scope.portfolio.chapters.splice($scope.portfolio.chapters.indexOf(chapter), 1);
-                };
-
-                dialogService.showDeleteConfirmationDialog(
-                    'PORTFOLIO_DELETE_CHAPTER_CONFIRM_TITLE',
-                    'PORTFOLIO_DELETE_CHAPTER_CONFIRM_MESSAGE',
-                    deleteChapter);
+            dialogService.showDeleteConfirmationDialog(
+                'PORTFOLIO_DELETE_CHAPTER_CONFIRM_TITLE',
+                'PORTFOLIO_DELETE_CHAPTER_CONFIRM_MESSAGE',
+                deleteChapter);
             };
 
             function updatePortfolio() {
@@ -115,6 +108,7 @@ define([
                 }
 
                 $rootScope.savedPortfolio = portfolio;
+                $rootScope.isPlaceholderVisible = false;
             }
 
             function showWarning() {
@@ -129,60 +123,60 @@ define([
                     "{{'PORTFOLIO_YES' | translate}}",
                     "{{'PORTFOLIO_NO' | translate}}",
                     setPrivate);
-            }
-
-            function checkAuthorized(portfolio) {
-                var user = authenticatedUserService.getUser();
-
-                if ((user && user.id == portfolio.creator.id) || authenticatedUserService.isAdmin() || authenticatedUserService.isModerator()) {
-                    return true
                 }
 
-                console.log("You don't have permission to edit this portfolio");
-                $location.url("/");
-                return false;
-            }
+                function checkAuthorized(portfolio) {
+                    var user = authenticatedUserService.getUser();
 
-            function startAutosave() {
-                autoSaveInterval = $interval(function () {
-                    isAutoSaving = true;
+                    if ((user && user.id == portfolio.creator.id) || authenticatedUserService.isAdmin() || authenticatedUserService.isModerator()) {
+                        return true
+                    }
 
-                    updatePortfolio();
-                }, 20000);
-            }
-
-            $scope.addNewChapter = function () {
-                if (!$scope.portfolio.chapters) {
-                    $scope.portfolio.chapters = [];
+                    console.log("You don't have permission to edit this portfolio");
+                    $location.url("/");
+                    return false;
                 }
 
-                $scope.portfolio.chapters.push({
-                    title: $filter('translate')('PORTFOLIO_DEFAULT_NEW_CHAPTER_TITLE'),
-                    subchapters: [],
-                    materials: [],
-                    openCloseChapter: true
+                function startAutosave() {
+                    autoSaveInterval = $interval(function () {
+                        isAutoSaving = true;
+
+                        updatePortfolio();
+                    }, 20000);
+                }
+
+                $scope.addNewChapter = function () {
+                    if (!$scope.portfolio.chapters) {
+                        $scope.portfolio.chapters = [];
+                    }
+
+                    $scope.portfolio.chapters.push({
+                        title: $filter('translate')('PORTFOLIO_DEFAULT_NEW_CHAPTER_TITLE'),
+                        subchapters: [],
+                        materials: [],
+                        openCloseChapter: true
+                    });
+
+                    $timeout(function () {
+                        goToElement('chapter-' + ($scope.portfolio.chapters.length - 1));
+                    }, 0);
+                };
+
+                function goToElement(elementID) {
+                    var $chapter = angular.element(document.getElementById(elementID));
+                    $document.scrollToElement($chapter, 60, 200);
+                }
+
+                $scope.$watch(function () {
+                    return $rootScope.savedPortfolio;
+                }, function (newPortfolio) {
+                    $scope.portfolio = newPortfolio;
                 });
 
-                $timeout(function () {
-                    goToElement('chapter-' + ($scope.portfolio.chapters.length - 1));
-                }, 0);
-            };
+                $scope.$on('$destroy', function () {
+                    $interval.cancel(autoSaveInterval);
+                });
 
-            function goToElement(elementID) {
-                var $chapter = angular.element(document.getElementById(elementID));
-                $document.scrollToElement($chapter, 60, 200);
+                init();
             }
-
-            $scope.$watch(function () {
-                return $rootScope.savedPortfolio;
-            }, function (newPortfolio) {
-                $scope.portfolio = newPortfolio;
-            });
-
-            $scope.$on('$destroy', function () {
-                $interval.cancel(autoSaveInterval);
-            });
-
-            init();
-        }];
-});
+        ]);

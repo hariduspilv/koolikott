@@ -1,8 +1,10 @@
-define([
-    'angularAMD',
-    'services/translationService'
-], function(angularAMD) {
-    angularAMD.directive('dopTableOfContents', ['$filter', '$document', '$rootScope', 'translationService', '$mdToast', '$location', '$timeout', function($filter, $document, $rootScope, translationService, $mdToast, $location, $timeout) {
+'use strict'
+
+angular.module('koolikottApp')
+.directive('dopTableOfContents',
+[
+    '$filter', '$document', '$rootScope', 'translationService', '$mdToast', '$location', '$timeout',
+    function($filter, $document, $rootScope, translationService, $mdToast, $location, $timeout) {
         return {
             scope: {
                 portfolio: '=',
@@ -61,18 +63,6 @@ define([
                     }
                 }
 
-                function showToast(message) {
-                    $mdToast.show($mdToast.simple().position('right top').content(message));
-                }
-
-                $rootScope.$watchCollection('selectedMaterials', function(newCollection) {
-                    handleAddMaterialButton();
-                });
-
-                $rootScope.$watch('selectedSingleMaterial.id', function(newValue, oldValue) {
-                    handleAddMaterialButton();
-                }, true);
-
                 $scope.navigateTo = function(e, portfolio) {
                     e.preventDefault();
                     if ($location.path() == '/portfolio/edit' || $location.path() == '/portfolio') {
@@ -86,18 +76,10 @@ define([
                     }
                 };
 
-                function handleAddMaterialButton() {
-                    if ($rootScope.selectedMaterials && $rootScope.selectedMaterials.length > 0 || $rootScope.selectedSingleMaterial) {
-                        $scope.showAddMaterialButton = true;
-                        return;
-                    }
-                    $scope.showAddMaterialButton = false;
-                }
-
                 $scope.closeSidenav = function(id) {
                     if(window.innerWidth < 1280) {
                         $mdSidenav(id)
-                            .close();
+                        .close();
                     }
                 };
 
@@ -105,5 +87,5 @@ define([
 
             }
         };
-    }]);
-});
+    }
+]);

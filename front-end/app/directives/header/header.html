@@ -35,7 +35,7 @@
           <md-icon>search</md-icon>
         </md-button>
 
-        <md-input-container flex>
+        <md-input-container flex class="nav-search__input-container">
           <label hidden="hidden">&nbsp;</label>
           <md-autocomplete md-autoselect
                            md-selected-item="suggest.selectedItem"
@@ -45,9 +45,11 @@
                            md-search-text="searchFields.searchQuery"
                            md-input-maxlength="100"
                            md-input-minlength="0"
+                           class="nav-search__autocomplete"
                            id="header-simple-search-input"
                            md-menu-class="suggest-dropdown"
-                           ng-model-options="{debounce: 100}">
+                           ng-model-options="{debounce: 100}"
+                           placeholder="{{(isPlaceholderVisible && isEditPortfolioPage) ? getTranslation('HEADER_SEARCH_PLACEHOLDER') : ''}}">
             <md-item-template>
               <span md-highlight-text="searchFields.searchQuery">{{ suggestion }}</span>
             </md-item-template>

@@ -1,10 +1,10 @@
-define([
-    'angularAMD',
-    'services/authenticationService',
-    'services/translationService',
-    'services/authenticatedUserService'
-], function(app) {
-    return ['$scope', '$mdDialog', 'authenticationService', '$location', 'translationService', '$rootScope', 'authenticatedUserService', function($scope, $mdDialog, authenticationService, $location, translationService, $rootScope, authenticatedUserService) {
+'use strict'
+
+angular.module('koolikottApp')
+.controller('loginDialogController',
+[
+    '$scope', '$mdDialog', 'authenticationService', '$location', 'translationService', '$rootScope', 'authenticatedUserService',
+    function($scope, $mdDialog, authenticationService, $location, translationService, $rootScope, authenticatedUserService) {
         $scope.mobileId = {};
         $scope.idCardFlag = false;
         $scope.validation = {
@@ -38,8 +38,8 @@ define([
         };
 
         $scope.ekoolAuth = function() {
-			authenticationService.loginWithEkool();
-		};
+            authenticationService.loginWithEkool();
+        };
 
         $scope.stuudiumAuth = function() {
             authenticationService.loginWithStuudium();
@@ -50,65 +50,65 @@ define([
             var phoneNumberValid = validatePhoneNumber();
 
             if (idCodeValid && phoneNumberValid) {
-                language = translationService.getLanguage();
+                var language = translationService.getLanguage();
                 authenticationService.loginWithMobileId($scope.mobileId.phoneNumber, $scope.mobileId.idCode, language,
                     mobileIdSuccess, mobileIdFail, mobileIdReceiveChallenge);
-            }
-        };
-
-        function mobileIdSuccess() {
-            $scope.mobileIdChallenge = null;
-            $scope.mobileId.idCode = null;
-            $scope.mobileId.phoneNumber = null;
-            $scope.hideLogin();
-        }
-
-        function mobileIdFail() {
-            $scope.mobileIdChallenge = null;
-        }
-
-        function mobileIdReceiveChallenge(challenge) {
-            $scope.mobileIdChallenge = challenge;
-        }
-
-        function validateIdCode() {
-            $scope.validation.error.idCode = null;
-
-            var isValid = false;
-
-            if (isEmpty($scope.mobileId.idCode)) {
-                $scope.validation.error.idCode = "required";
-            } else {
-                isValid = isIdCodeValid($scope.mobileId.idCode);
-
-                if (!isValid) {
-                    $scope.validation.error.idCode = "invalid";
                 }
+            };
+
+            function mobileIdSuccess() {
+                $scope.mobileIdChallenge = null;
+                $scope.mobileId.idCode = null;
+                $scope.mobileId.phoneNumber = null;
+                $scope.hideLogin();
             }
 
-            return isValid;
-        }
+            function mobileIdFail() {
+                $scope.mobileIdChallenge = null;
+            }
 
-        function validatePhoneNumber() {
-            $scope.validation.error.phoneNumber = null;
+            function mobileIdReceiveChallenge(challenge) {
+                $scope.mobileIdChallenge = challenge;
+            }
 
-            var isValid = false;
+            function validateIdCode() {
+                $scope.validation.error.idCode = null;
 
-            if (isEmpty($scope.mobileId.phoneNumber)) {
-                $scope.validation.error.phoneNumber = "required";
-            } else {
-                isValid = isPhoneNumberEstonian($scope.mobileId.phoneNumber);
+                var isValid = false;
 
-                if (!isValid) {
-                    $scope.validation.error.phoneNumber = "notEstonian";
+                if (isEmpty($scope.mobileId.idCode)) {
+                    $scope.validation.error.idCode = "required";
+                } else {
+                    isValid = isIdCodeValid($scope.mobileId.idCode);
+
+                    if (!isValid) {
+                        $scope.validation.error.idCode = "invalid";
+                    }
                 }
+
+                return isValid;
             }
 
-            return isValid;
-        }
+            function validatePhoneNumber() {
+                $scope.validation.error.phoneNumber = null;
 
-        function isPhoneNumberEstonian(phoneNumber) {
-            return !phoneNumber.startsWith("+") || phoneNumber.startsWith("+372");
+                var isValid = false;
+
+                if (isEmpty($scope.mobileId.phoneNumber)) {
+                    $scope.validation.error.phoneNumber = "required";
+                } else {
+                    isValid = isPhoneNumberEstonian($scope.mobileId.phoneNumber);
+
+                    if (!isValid) {
+                        $scope.validation.error.phoneNumber = "notEstonian";
+                    }
+                }
+
+                return isValid;
+            }
+
+            function isPhoneNumberEstonian(phoneNumber) {
+                return !phoneNumber.startsWith("+") || phoneNumber.startsWith("+372");
+            }
         }
-    }];
-});
+    ]);
