@@ -34,7 +34,19 @@ angular.module('koolikottApp')
                     }
                 };
 
-                $scope.getSubject = function (taxon) {
+                $scope.getPortfolioSubjects = function () {
+                        var subjects = [];
+                        if (!$scope.portfolio || !$scope.portfolio.taxons) return;
+
+                        $scope.portfolio.taxons.forEach(function (taxon) {
+                            var subject = taxonService.getSubject(taxon);
+                            if (subject) subjects.push(subject);
+                        });
+
+                        return subjects;
+                    };
+
+                    $scope.getSubject = function (taxon) {
                     var subject = taxonService.getSubject(taxon);
                     if (subject) {
                         return subject.name.toUpperCase();

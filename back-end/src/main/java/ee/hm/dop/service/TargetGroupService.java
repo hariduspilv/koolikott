@@ -1,5 +1,6 @@
 package ee.hm.dop.service;
 
+
 import com.google.inject.Inject;
 import ee.hm.dop.dao.TargetGroupDAO;
 import ee.hm.dop.model.TargetGroup;
@@ -13,6 +14,9 @@ import java.util.Set;
 public class TargetGroupService {
 
     @Inject
+    private TranslationService translationService;
+
+    @Inject
     private TargetGroupDAO targetGroupDAO;
 
     public List<TargetGroup> getValues() {
@@ -21,6 +25,20 @@ public class TargetGroupService {
 
     public TargetGroup getByName(String name) {
         return targetGroupDAO.getByName(name);
+    }
+
+    public TargetGroup getByTranslation(String translation) {
+        String translationKey = translationService.getTranslationKeyByTranslation(translation);
+        if (translationKey == null) {
+            return null;
+        }
+
+        try {
+            TargetGroupEnum targetGroupEnum = TargetGroupEnum.valueOf(translationKey.replaceFirst("^TARGET_GROUP_", ""));
+            return targetGroupDAO.getByName(targetGroupEnum.name());
+        } catch (IllegalArgumentException e) {
+            return null;
+        }
     }
 
     public Set<TargetGroup> getTargetGroupsByAge(int from, int to) {

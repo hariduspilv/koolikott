@@ -56,52 +56,58 @@
         </div>
         <!-- left meta  -->
         <div layout="row" class="on-left">
+
+          <!--TAXON-->
           <div flex>
             <p class="md-body-2 meta">
               <small class="md-caption">
-                <span data-translate="DETAIL_VIEW_EDUCATIONAL_CONTEXT"></span>
+                <span data-translate="DETAIL_VIEW_EDUCATIONAL_CONTEXT" id="taxon-close"></span>
               </small>
               <br>
-              <span class="hide-overflow" data-ng-if="getEducationalContext(portfolio.taxon)"
-                    data-translate="{{getEducationalContext(portfolio.taxon)}}">
-                                </span>
-              <span class="hide-overflow" data-ng-if="!getEducationalContext(portfolio.taxon)" data-translate="UNKNOWN">Unknown</span>
+              <span class="hide-overflow" data-ng-repeat="taxon in portfolio.taxons track by $index">
+                <span class="hide-overflow" data-ng-if="!portfolio.taxons" data-translate="UNKNOWN">Unknown</span>
+                <span class="hide-overflow" data-ng-if="getEducationalContext(taxon)" data-translate="{{getEducationalContext(taxon)}}"></span>
+              </span>
+              <span class="hide-overflow" data-ng-if="!portfolio.taxons" data-translate="UNKNOWN">Unknown</span>
             </p>
           </div>
-          <div flex data-ng-if="!getSubject(portfolio.taxon)">
+
+          <div flex data-ng-if="!getPortfolioSubjects().length === 0">
             <p class="md-body-2 meta">
               <small class="md-caption">
                 <span data-translate="DETAIL_VIEW_DOMAIN"></span>
               </small>
               <br/>
-              <span class="hide-overflow" data-ng-if="getDomain(portfolio.taxon)"
-                    data-translate="{{'DOMAIN_' + getDomain(portfolio.taxon)}}">
-                            </span>
-              <span class="hide-overflow" data-ng-if="!getDomain(portfolio.taxon)"
-                    data-translate="UNKNOWN">Unknown</span>
+              <span class="hide-overflow" data-ng-repeat="taxon in portfolio.taxons track by $index">
+                  <span class="hide-overflow" data-ng-if="getDomain(taxon)" data-translate="{{'DOMAIN_' + getDomain(taxon)}}"></span>
+                  <span class="hide-overflow" data-ng-if="!getDomain(taxon)" data-translate="UNKNOWN">Unknown</span>
+              </span>
+              <span class="hide-overflow" data-ng-if="!portfolio.taxons" data-translate="UNKNOWN">Unknown</span>
             </p>
           </div>
-          <div flex data-ng-if="getSubject(portfolio.taxon)">
+
+          <div flex data-ng-if="getPortfolioSubjects().length > 0">
             <p class="md-body-2 meta">
               <small class="md-caption">
                 <span data-translate="DETAIL_VIEW_SUBJECT"></span>
               </small>
               <br/>
-              <span class="hide-overflow" data-ng-if="getSubject(portfolio.taxon)"
-                    data-translate="{{'SUBJECT_' + getSubject(portfolio.taxon)}}">
-                            </span>
-              <span class="hide-overflow" data-ng-if="!getSubject(portfolio.taxon)"
-                    data-translate="UNKNOWN">Unknown</span>
+              <span class="hide-overflow" data-ng-repeat="taxon in portfolio.taxons track by $index">
+                <span class="hide-overflow" data-ng-if="getSubject(taxon)" data-translate="{{'SUBJECT_' + getSubject(taxon)}}"></span>
+                <span class="hide-overflow" data-ng-if="!getSubject(taxon)" data-translate="UNKNOWN">Unknown</span>
+              </span>
             </p>
           </div>
+          <!--TAXON END-->
+
           <div flex>
             <p class="md-body-2 meta">
               <small class="md-caption">
-                <span data-translate="DETAIL_VIEW_TARGET_GROUP"></span>
+                <span data-translate="DETAIL_VIEW_TARGET_GROUP" id="targetgroup-close"></span>
               </small>
               <br/>
-              <span class="hide-overflow one-row" data-ng-if="portfolio.targetGroups">
-                  <span data-ng-repeat="targetGroup in getTargetGroups()">
+              <span class="hide-overflow" data-ng-if="portfolio.targetGroups">
+                  <span class="hide-overflow" data-ng-repeat="targetGroup in getTargetGroups()">
                     <span data-translate="{{'TARGET_GROUP_' + targetGroup}}"></span>
                     <span>{{$last ? '' : ', '}}</span>
                   </span>

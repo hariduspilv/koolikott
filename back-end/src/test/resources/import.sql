@@ -283,7 +283,6 @@ insert into Material_Taxon(material, taxon) values(4,6); -- CONTINUINGEDUCATION
 insert into Material_Taxon(material, taxon) values(5,4); -- HIGHEREDUCATION
 insert into Material_Taxon(material, taxon) values(7,5); -- VOCATIONALEDUCATION
 
-
 -- ResourceType
 
 insert into ResourceType(id, name) values (1001, 'TEXTBOOK1');
@@ -409,33 +408,33 @@ insert into Page(id, name, content, language) VALUES (6, 'Help', '<h1>Help</h1><
 -- Portfolio
 
 insert into LearningObject(id, added, updated, views, picture, creator, deleted, recommendation) VALUES (101, '2000-12-29 06:00:01', '2004-12-29 06:00:01', 95455215, 3, 6, false, 3);
-insert into Portfolio(id, title, taxon, originalCreator, summary, visibility) VALUES (101, 'The new stock market', 21, 5, 'The changes after 2008.', 'PUBLIC');
+insert into Portfolio(id, title, originalCreator, summary, visibility) VALUES (101, 'The new stock market', 5, 'The changes after 2008.', 'PUBLIC');
 insert into LearningObject(id, added, updated, views, picture, creator, deleted, recommendation) VALUES (102, '2012-12-29 06:00:01', null, 14, null, 4, false, null);
-insert into Portfolio(id, title, taxon, originalCreator, summary, visibility) VALUES (102, 'New ways how to do it', null, 4, null, 'PUBLIC');
+insert into Portfolio(id, title, originalCreator, summary, visibility) VALUES (102, 'New ways how to do it', 4, null, 'PUBLIC');
 insert into LearningObject(id, added, updated, views, picture, creator, deleted, recommendation) VALUES (103, '2002-12-29 06:00:01', '2006-12-29 06:00:01', 14, 4, 6, false, null);
-insert into Portfolio(id, title, taxon, originalCreator, summary, visibility) VALUES (103, 'The newer stock market', 21, 6, 'A marvellous summary.', 'PUBLIC');
+insert into Portfolio(id, title, originalCreator, summary, visibility) VALUES (103, 'The newer stock market', 6, 'A marvellous summary.', 'PUBLIC');
 insert into LearningObject(id, added, updated, views, picture, creator, deleted, recommendation) VALUES (104, '2003-10-10 07:00:11', null, 100, null, 1, false, null);
-insert into Portfolio(id, title, taxon, originalCreator, summary, visibility) VALUES (104, 'The even newer stock market', null, 1, 'Cool summary.', 'PUBLIC');
+insert into Portfolio(id, title, originalCreator, summary, visibility) VALUES (104, 'The even newer stock market', 1, 'Cool summary.', 'PUBLIC');
 insert into LearningObject(id, added, updated, views, picture, creator, deleted, recommendation) VALUES (105, '2003-10-10 07:00:11', null, 100, null, 1, false, null);
-insert into Portfolio(id, title, taxon, originalCreator, summary, visibility) VALUES (105, 'Adding comment to a portfolio', null, 1, 'Cool summary.', 'PUBLIC');
+insert into Portfolio(id, title, originalCreator, summary, visibility) VALUES (105, 'Adding comment to a portfolio', 1, 'Cool summary.', 'PUBLIC');
 insert into LearningObject(id, added, updated, views, picture, creator, deleted, recommendation) VALUES (106, '2003-10-10 07:00:11', null, 100, null, 2, false, null);
-insert into Portfolio(id, title, taxon, originalCreator, summary, visibility) VALUES (106, 'This portfolio will be changed to not listed in the tests. ', null, 2, 'Summary.', 'PUBLIC');
+insert into Portfolio(id, title, originalCreator, summary, visibility) VALUES (106, 'This portfolio will be changed to not listed in the tests. ', 2, 'Summary.', 'PUBLIC');
 insert into LearningObject(id, added, updated, views, picture, creator, deleted, recommendation) VALUES (107, '2003-10-10 07:00:11', null, 100, 5, 2, false, null);
-insert into Portfolio(id, title, taxon, originalCreator, summary, visibility) VALUES (107, 'This portfolio is private. ', null, 2, 'Summary. Sum sum sum.', 'PRIVATE');
+insert into Portfolio(id, title, originalCreator, summary, visibility) VALUES (107, 'This portfolio is private. ', 2, 'Summary. Sum sum sum.', 'PRIVATE');
 insert into LearningObject(id, added, updated, views, picture, creator, deleted, recommendation) VALUES (108, '2003-10-10 07:00:11', null, 100, null, 2, false, null);
-insert into Portfolio(id, title, taxon, originalCreator, summary, visibility) VALUES (108, 'This portfolio is public. ', null, 2, 'Summary. Wow.', 'PUBLIC');
+insert into Portfolio(id, title, originalCreator, summary, visibility) VALUES (108, 'This portfolio is public. ', 2, 'Summary. Wow.', 'PUBLIC');
 insert into LearningObject(id, added, updated, views, picture, creator, deleted, recommendation) VALUES (109, '2011-10-10 07:00:11', null, 100, null, 7, false, null);
-insert into Portfolio(id, title, taxon, originalCreator, summary, visibility) VALUES (109, 'This portfolio2 is public. ', null, 7, 'Alpha.', 'PUBLIC');
+insert into Portfolio(id, title, originalCreator, summary, visibility) VALUES (109, 'This portfolio2 is public. ', 7, 'Alpha.', 'PUBLIC');
 insert into LearningObject(id, added, updated, views, picture, creator, deleted, recommendation) VALUES (110, '2003-10-10 07:00:11', null, 95455216, null, 7, false, 5);
-insert into Portfolio(id, title, taxon, originalCreator, summary, visibility) VALUES (110, 'This portfolio2 is private. ', null, 7, 'Alpha.', 'PRIVATE');
+insert into Portfolio(id, title, originalCreator, summary, visibility) VALUES (110, 'This portfolio2 is private. ', 7, 'Alpha.', 'PRIVATE');
 insert into LearningObject(id, added, updated, views, picture, creator, deleted, recommendation) VALUES (111, '2003-10-10 07:00:11', null, 100, null, 7, false, 6);
-insert into Portfolio(id, title, taxon, originalCreator, summary, visibility) VALUES (111, 'This portfolio2 is not listed. ', null, 7, 'Alpha.', 'NOT_LISTED');
+insert into Portfolio(id, title, originalCreator, summary, visibility) VALUES (111, 'This portfolio2 is not listed. ', 7, 'Alpha.', 'NOT_LISTED');
 insert into LearningObject(id, added, updated, views, picture, creator, deleted, recommendation) VALUES (112, '2003-10-10 07:00:11', null, 100, null, 9, false, null);
-insert into Portfolio(id, title, taxon, originalCreator, summary, visibility) VALUES (112, 'This portfolio will be DELETED in tests.', null, 9, 'Alpha.', 'PUBLIC');
+insert into Portfolio(id, title, originalCreator, summary, visibility) VALUES (112, 'This portfolio will be DELETED in tests.', 9, 'Alpha.', 'PUBLIC');
 insert into LearningObject(id, added, updated, views, picture, creator, deleted, recommendation) VALUES (113, '2003-12-10 06:21:10', null, 100, null, 9, false, null);
-insert into Portfolio(id, title, taxon, originalCreator, summary, visibility) VALUES (113, 'This portfolio will be DELETED in tests by admin.', null, 9, 'Beta.', 'PUBLIC');
+insert into Portfolio(id, title, originalCreator, summary, visibility) VALUES (113, 'This portfolio will be DELETED in tests by admin.', 9, 'Beta.', 'PUBLIC');
 insert into LearningObject(id, added, updated, views, picture, creator, deleted, recommendation) VALUES (114, '2003-10-10 07:00:09', null, 100, null, 6, false, 4);
-insert into Portfolio(id, title, taxon, originalCreator, summary, visibility) VALUES (114, 'Uploading picture to it', null, 6, 'Beta.', 'PUBLIC');
+insert into Portfolio(id, title, originalCreator, summary, visibility) VALUES (114, 'Uploading picture to it', 6, 'Beta.', 'PUBLIC');
 
 -- Chapter
 
@@ -489,6 +488,10 @@ insert into LearningObject_CrossCurricularTheme(learningObject, crossCurricularT
 
 -- Portfolio Key competences
 insert into LearningObject_KeyCompetence(learningObject, keyCompetence) values (101, 1);
+
+-- Portfolio_Taxon
+insert into Portfolio_Taxon(portfolio, taxon) values(101, 21);
+insert into Portfolio_Taxon(portfolio, taxon) values(103, 21);
 
 -- Improper content
 

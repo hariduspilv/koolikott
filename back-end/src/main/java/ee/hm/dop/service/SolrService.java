@@ -1,22 +1,5 @@
 package ee.hm.dop.service;
 
-import static ee.hm.dop.utils.ConfigurationProperties.SEARCH_SERVER;
-import static java.lang.String.format;
-import static java.nio.charset.StandardCharsets.UTF_8;
-import static org.apache.commons.lang3.StringUtils.isBlank;
-
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
-import java.util.Map.Entry;
-import java.util.stream.Collectors;
-
-import javax.inject.Inject;
-import javax.inject.Singleton;
-import javax.ws.rs.client.Client;
-import javax.ws.rs.client.WebTarget;
-import javax.ws.rs.core.MediaType;
-
 import ee.hm.dop.model.solr.SearchResponse;
 import ee.hm.dop.tokenizer.DOPSearchStringTokenizer;
 import org.apache.commons.configuration.Configuration;
@@ -29,6 +12,22 @@ import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.solr.client.solrj.response.SpellCheckResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import javax.inject.Inject;
+import javax.inject.Singleton;
+import javax.ws.rs.client.Client;
+import javax.ws.rs.client.WebTarget;
+import javax.ws.rs.core.MediaType;
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+import java.util.Map.Entry;
+import java.util.stream.Collectors;
+
+import static ee.hm.dop.utils.ConfigurationProperties.SEARCH_SERVER;
+import static java.lang.String.format;
+import static java.nio.charset.StandardCharsets.UTF_8;
+import static org.apache.commons.lang3.StringUtils.isBlank;
 
 @Singleton
 public class SolrService implements SolrEngineService {
@@ -99,6 +98,7 @@ public class SolrService implements SolrEngineService {
 
         return null;
     }
+
 
     @Override
     public void updateIndex() {

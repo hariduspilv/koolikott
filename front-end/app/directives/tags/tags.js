@@ -116,20 +116,20 @@ angular.module('koolikottApp')
                     }
                 };
 
-                function addTagSuccess(learningObject) {
-                    if (!learningObject) {
-                        addTagFail();
-                    } else {
-                        learningObject.picture = $scope.learningObject.picture;
-                        $scope.learningObject = learningObject;
-                        if (!$scope.learningObject.source && learningObject.uploadedFile) {
-                            $scope.learningObject.source = learningObject.uploadedFile.url;
-                        }
-                        if (learningObject.type === ".Portfolio") {
-                            $rootScope.savedPortfolio = learningObject;
-                        } else if (learningObject.type === ".Material") {
-                            storageService.setMaterial($scope.learningObject);
-                        }
+                    function addTagSuccess(learningObject) {
+                        if (!learningObject) {
+                            addTagFail();
+                        } else {
+                            learningObject.picture = $scope.learningObject.picture;
+                            $scope.learningObject = learningObject;
+                            if (!$scope.learningObject.source && learningObject.uploadedFile) {
+                                $scope.learningObject.source = learningObject.uploadedFile.url;
+                            }
+                            if (learningObject.type === ".Portfolio") {
+                                storageService.setPortfolio( learningObject);
+                            } else if (learningObject.type === ".Material") {
+                                storageService.setMaterial(learningObject);
+                            }
 
                         init();
                     }
@@ -178,6 +178,39 @@ angular.module('koolikottApp')
                         $scope.addTag();
                     }
                 };
+                $scope.tagSelected = function () {
+                    if($scope.newTag && $scope.newTag.tagName) {
+                        processSystemTag();
+                    }
+                };
+
+                function processSystemTag() {
+                    addSystemTag($scope.newTag.tagName)
+                        .then(function (response) {
+                            addTagSuccess(response.data.learningObject);
+                            $scope.newTag.tagName = null;
+                            showSystemTagDialog(response.data.tagTypeName);
+                            $rootScope.$broadcast("errorMessage:updateChanged");
+                        });
+                }
+
+                function showSystemTagDialog(tagType) {
+                    if (!tagType) return;
+
+                    $mdDialog.show(
+                        $mdDialog.alert()
+                            .clickOutsideToClose(true)
+                            .title('Süsteemne märksõna valitud')
+                            .textContent('Valisid süsteemse märksõna. Vastav väärtus on lisatud materjali külge!')
+                            .ok('Ok')
+                            .closeTo('#' + tagType + '-close')
+                    )
+                }
+
+                function addSystemTag(tagName) {
+                    var url = "rest/learningObject/" + $scope.learningObject.id + "/system_tags";
+                    return serverCallService.makeGet(url, {'name': tagName, 'type': $scope.learningObject.type});
+                }
 
                 function setImproperSuccessful() {
                     $rootScope.isReportedByUser = true;

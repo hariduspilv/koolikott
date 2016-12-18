@@ -1,17 +1,9 @@
 package ee.hm.dop.service;
 
-import static org.apache.commons.lang3.StringUtils.isEmpty;
-import static org.joda.time.DateTime.now;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
-
-import javax.inject.Inject;
-
 import ee.hm.dop.dao.ChapterObjectDAO;
 import ee.hm.dop.dao.PortfolioDAO;
 import ee.hm.dop.dao.UserLikeDAO;
+import ee.hm.dop.model.ChangedLearningObject;
 import ee.hm.dop.model.Chapter;
 import ee.hm.dop.model.ChapterObject;
 import ee.hm.dop.model.Comment;
@@ -23,6 +15,14 @@ import ee.hm.dop.model.UserLike;
 import ee.hm.dop.model.Visibility;
 import ee.hm.dop.service.learningObject.LearningObjectHandler;
 import org.joda.time.DateTime;
+
+import javax.inject.Inject;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import static org.apache.commons.lang3.StringUtils.isEmpty;
+import static org.joda.time.DateTime.now;
 
 public class PortfolioService extends BaseService implements LearningObjectHandler {
 
@@ -37,6 +37,9 @@ public class PortfolioService extends BaseService implements LearningObjectHandl
 
     @Inject
     private SolrEngineService solrEngineService;
+
+    @Inject
+    private ChangedLearningObjectService changedLearningObjectService;
 
     public Portfolio get(long portfolioId, User loggedInUser) {
         Portfolio portfolio;
@@ -192,6 +195,8 @@ public class PortfolioService extends BaseService implements LearningObjectHandl
         Portfolio updatedPortfolio = (Portfolio) portfolioDAO.update(originalPortfolio);
         solrEngineService.updateIndex();
 
+        processChanges(portfolio);
+
         return updatedPortfolio;
     }
 
@@ -213,6 +218,17 @@ public class PortfolioService extends BaseService implements LearningObjectHandl
             }
             else return learningObject;
         }));
+    }
+
+    private void processChanges(Portfolio portfolio) {
+        List<ChangedLearningObject> changes = changedLearningObjectService.getAllByLearningObject(portfolio.getId());
+        if (changes == null || changes.isEmpty()) return;
+
+        for (ChangedLearningObject change : changes) {
+            if (!changedLearningObjectService.portfolioHasThis(portfolio, change)) {
+                changedLearningObjectService.removeChangeById(change.getId());
+            }
+        }
     }
 
     public Portfolio copy(Portfolio portfolio, User loggedInUser) {
@@ -322,7 +338,7 @@ public class PortfolioService extends BaseService implements LearningObjectHandl
         safePortfolio.setSummary(portfolio.getSummary());
         safePortfolio.setTags(portfolio.getTags());
         safePortfolio.setTargetGroups(portfolio.getTargetGroups());
-        safePortfolio.setTaxon(portfolio.getTaxon());
+        safePortfolio.setTaxons(portfolio.getTaxons());
         safePortfolio.setChapters(portfolio.getChapters());
         safePortfolio.setPicture(portfolio.getPicture());
 
@@ -334,7 +350,7 @@ public class PortfolioService extends BaseService implements LearningObjectHandl
         originalPortfolio.setSummary(portfolio.getSummary());
         originalPortfolio.setTags(portfolio.getTags());
         originalPortfolio.setTargetGroups(portfolio.getTargetGroups());
-        originalPortfolio.setTaxon(portfolio.getTaxon());
+        originalPortfolio.setTaxons(portfolio.getTaxons());
         originalPortfolio.setChapters(portfolio.getChapters());
         originalPortfolio.setVisibility(portfolio.getVisibility());
         originalPortfolio.setPicture(portfolio.getPicture());

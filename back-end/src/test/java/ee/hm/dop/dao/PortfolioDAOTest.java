@@ -1,22 +1,9 @@
 package ee.hm.dop.dao;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertSame;
-import static org.junit.Assert.assertTrue;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.inject.Inject;
-
 import ee.hm.dop.common.test.DatabaseTestBase;
 import ee.hm.dop.model.Chapter;
 import ee.hm.dop.model.Comment;
 import ee.hm.dop.model.LearningObject;
-import ee.hm.dop.model.Material;
 import ee.hm.dop.model.Portfolio;
 import ee.hm.dop.model.Recommendation;
 import ee.hm.dop.model.TargetGroupEnum;
@@ -24,6 +11,12 @@ import ee.hm.dop.model.User;
 import ee.hm.dop.model.taxon.Subject;
 import org.joda.time.DateTime;
 import org.junit.Test;
+
+import javax.inject.Inject;
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.junit.Assert.*;
 
 public class PortfolioDAOTest extends DatabaseTestBase {
 
@@ -57,7 +50,7 @@ public class PortfolioDAOTest extends DatabaseTestBase {
         assertEquals(id, portfolio.getId());
         assertEquals("New ways how to do it", portfolio.getTitle());
         assertEquals(new DateTime("2012-12-29T08:00:01.000+02:00"), portfolio.getAdded());
-        assertNull(portfolio.getTaxon());
+        assertTrue(portfolio.getTaxons().size() == 0);
         assertEquals(new Long(4), portfolio.getCreator().getId());
         assertEquals("voldemar.vapustav2", portfolio.getCreator().getUsername());
         assertNull(portfolio.getSummary());
@@ -131,7 +124,7 @@ public class PortfolioDAOTest extends DatabaseTestBase {
         assertEquals(new DateTime("2000-12-29T08:00:01.000+02:00"), portfolio.getAdded());
         assertEquals(new DateTime("2004-12-29T08:00:01.000+02:00"), portfolio.getUpdated());
 
-        Subject mathematics = (Subject) portfolio.getTaxon();
+        Subject mathematics = (Subject) portfolio.getTaxons().get(0);
         assertEquals("Mathematics", mathematics.getName());
         assertEquals(new Long(21), mathematics.getId());
         assertEquals(2, mathematics.getDomain().getSubjects().size());

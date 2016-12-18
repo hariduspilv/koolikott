@@ -8,6 +8,7 @@ angular.module('koolikottApp')
         $scope.showMaterialContent = false;
         $scope.newComment = {};
         $scope.pageUrl = $location.absUrl();
+        $scope.getMaterialSuccess = getMaterialSuccess;
 
         if ($rootScope.savedMaterial) {
             $scope.material = $rootScope.savedMaterial;
@@ -119,6 +120,7 @@ angular.module('koolikottApp')
             $rootScope.learningObjectBroken = ($scope.material.broken > 0);
             $rootScope.learningObjectImproper = ($scope.material.improper > 0);
             $rootScope.learningObjectDeleted = ($scope.material.deleted == true);
+            $rootScope.learningObjectChanged = ($scope.material.changed > 0);
 
             if (authenticatedUserService.isAdmin() || authenticatedUserService.isModerator()) {
                 if ($scope.material.improper > 0) {

@@ -27,7 +27,7 @@ angular.module('koolikottApp')
 
                 $scope.newPortfolio.title = portfolioClone.title;
                 $scope.newPortfolio.summary = portfolioClone.summary;
-                $scope.newPortfolio.taxon = portfolioClone.taxon;
+                $scope.newPortfolio.taxons = portfolioClone.taxons;
                 $scope.newPortfolio.targetGroups = portfolioClone.targetGroups;
                 $scope.newPortfolio.tags = portfolioClone.tags;
                 $scope.newPortfolio.picture = portfolioClone.picture;
@@ -73,10 +73,15 @@ angular.module('koolikottApp')
             }
         };
 
+            $scope.deleteTaxon = function (index) {
+                $scope.newPortfolio.taxons.splice(index, 1);
+            };
+
             function createPortfolioSuccess(portfolio) {
                 if (isEmpty(portfolio)) {
                     createPortfolioFailed();
                 } else {
+                    $rootScope.$broadcast("errorMessage:updateChanged");
                     portfolio.chapters = [];
                     portfolio.chapters.push({
                         title: $filter('translate')('PORTFOLIO_DEFAULT_NEW_CHAPTER_TITLE'),
@@ -108,7 +113,7 @@ angular.module('koolikottApp')
                 var url = "rest/portfolio/update";
                 $scope.portfolio.title = $scope.newPortfolio.title;
                 $scope.portfolio.summary = $scope.newPortfolio.summary;
-                $scope.portfolio.taxon = $scope.newPortfolio.taxon;
+                $scope.portfolio.taxons = $scope.newPortfolio.taxons;
                 $scope.portfolio.targetGroups = $scope.newPortfolio.targetGroups;
                 $scope.portfolio.tags = $scope.newPortfolio.tags;
 
@@ -122,7 +127,16 @@ angular.module('koolikottApp')
 
         $scope.isValid = function () {
             var portfolio = $scope.newPortfolio;
-            var hasCorrectTaxon = portfolio.taxon && portfolio.taxon.level && portfolio.taxon.level !== ".EducationalContext";
+            var hasCorrectTaxon = false;
+                if (portfolio.taxons) {
+                    portfolio.taxons.forEach(function(taxon) {
+                        if (taxon.level && taxon.level !== ".EducationalContext") {
+                            hasCorrectTaxon = true;
+                        } else {
+                            hasCorrectTaxon = false;
+                        }
+                    });
+                }
             return portfolio.title && portfolio.targetGroups[0] && hasCorrectTaxon;
         };
 
@@ -130,8 +144,8 @@ angular.module('koolikottApp')
             $scope.saving = false;
         }
 
-        $scope.isSet = function () {
-            return $scope.newPortfolio.taxon && $scope.newPortfolio.taxon.level && $scope.newPortfolio.taxon.level !== ".EducationalContext";
+        $scope.isSet = function (index) {
+            return $scope.newPortfolio.taxons[index] && $scope.newPortfolio.taxons[index].level && $scope.newPortfolio[index].taxon.level !== ".EducationalContext";
         };
 
         $scope.$watchCollection('invalidPicture', function (newValue, oldValue) {

@@ -5,6 +5,7 @@ import ee.hm.dop.dao.MaterialDAO;
 import ee.hm.dop.dao.UserLikeDAO;
 import ee.hm.dop.model.Author;
 import ee.hm.dop.model.BrokenContent;
+import ee.hm.dop.model.ChangedLearningObject;
 import ee.hm.dop.model.Comment;
 import ee.hm.dop.model.CrossCurricularTheme;
 import ee.hm.dop.model.KeyCompetence;
@@ -83,6 +84,9 @@ public class MaterialService extends BaseService implements LearningObjectHandle
     private CrossCurricularThemeService crossCurricularThemeService;
 
     @Inject
+    private ChangedLearningObjectService changedLearningObjectService;
+
+    @Inject
     private Configuration configuration;
 
     public Material get(long materialId, User loggedInUser) {
@@ -107,14 +111,7 @@ public class MaterialService extends BaseService implements LearningObjectHandle
 
         material.setSource(cleanURL(material.getSource()));
 
-        List<PeerReview> peerReviews = material.getPeerReviews();
-        if (peerReviews != null) {
-            for (PeerReview peerReview : peerReviews) {
-                if (!peerReview.getUrl().contains(configuration.getString(SERVER_ADDRESS))) {
-                    peerReview.setUrl(cleanURL(peerReview.getUrl()));
-                }
-            }
-        }
+        cleanPeerReviewUrls(material);
 
         material.setCreator(creator);
 
@@ -333,35 +330,19 @@ public class MaterialService extends BaseService implements LearningObjectHandle
     }
 
     public Material update(Material material, User changer, boolean updateSearchIndex) {
-        Material updatedMaterial = null;
-
         if (material == null || material.getId() == null) {
             throw new IllegalArgumentException("Material id parameter is mandatory");
         }
 
         material.setSource(cleanURL(material.getSource()));
 
-        List<PeerReview> peerReviews = material.getPeerReviews();
-        if (peerReviews != null) {
-            for (PeerReview peerReview : peerReviews) {
-                if (!peerReview.getUrl().contains(configuration.getString(SERVER_ADDRESS))) {
-                    peerReview.setUrl(cleanURL(peerReview.getUrl()));
-                }
-            }
-        }
-
         if (materialWithSameSourceExists(material)) {
             throw new IllegalArgumentException("Error updating Material: material with given source already exists");
         }
 
-        Material originalMaterial;
+        cleanPeerReviewUrls(material);
 
-        if (isUserAdmin(changer) || isUserModerator(changer)) {
-            originalMaterial = materialDAO.findById(material.getId());
-        } else {
-            originalMaterial = materialDAO.findByIdNotDeleted(material.getId());
-        }
-
+        Material originalMaterial = getMaterial(material, changer);
         validateMaterialUpdate(originalMaterial, changer);
 
         if (!isUserAdmin(changer)) {
@@ -376,13 +357,46 @@ public class MaterialService extends BaseService implements LearningObjectHandle
         material.setAdded(originalMaterial.getAdded());
         material.setUpdated(now());
 
+        Material updatedMaterial = null;
         //Null changer is the automated updating of materials during synchronization
         if (changer == null || isUserAdmin(changer) || isUserModerator(changer) || isThisUserMaterial(changer, originalMaterial)) {
             updatedMaterial = createOrUpdate(material);
             if (updateSearchIndex) solrEngineService.updateIndex();
         }
 
+        processChanges(updatedMaterial);
+
         return updatedMaterial;
+    }
+
+    private void processChanges(Material material) {
+        List<ChangedLearningObject> changes = changedLearningObjectService.getAllByLearningObject(material.getId());
+        if (changes == null || changes.isEmpty()) return;
+
+        for (ChangedLearningObject change : changes) {
+            if (!changedLearningObjectService.materialHasThis(material, change)) {
+                changedLearningObjectService.removeChangeById(change.getId());
+            }
+        }
+    }
+
+    private Material getMaterial(Material material, User changer) {
+        if (isUserAdmin(changer) || isUserModerator(changer)) {
+            return materialDAO.findById(material.getId());
+        } else {
+            return materialDAO.findByIdNotDeleted(material.getId());
+        }
+    }
+
+    private void cleanPeerReviewUrls(Material material) {
+        List<PeerReview> peerReviews = material.getPeerReviews();
+        if (peerReviews != null) {
+            for (PeerReview peerReview : peerReviews) {
+                if (!peerReview.getUrl().contains(configuration.getString(SERVER_ADDRESS))) {
+                    peerReview.setUrl(cleanURL(peerReview.getUrl()));
+                }
+            }
+        }
     }
 
     private boolean materialWithSameSourceExists(Material material) {

@@ -138,7 +138,11 @@ angular.module('koolikottApp')
                         $scope.restrictedUsersCount = data;
                     });
                 };
-
+                $scope.updateChangedLearningObjectCount = function () {
+                    userDataService.loadChangedLearningObjectCount(function (data) {
+                        $scope.changedLearningObjectCount = data;
+                    });
+                };
                 $scope.updateUserCounts = function () {
                     if (authenticatedUserService.isAuthenticated()) {
                         $scope.updateUserFavoritesCount();
@@ -162,6 +166,7 @@ angular.module('koolikottApp')
                         $scope.updateImproperPortfoliosCount();
                         $scope.updateModeratorsCount();
                         $scope.updateRestrictedUsersCount();
+                        $scope.updateChangedLearningObjectCount();
                     }
                 };
 
