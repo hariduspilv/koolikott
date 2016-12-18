@@ -74,25 +74,25 @@ public class MaterialDAO extends LearningObjectDAO {
     }
 
     public List<Material> findBySource(String materialSource, boolean deleted) {
-        String queryStart = deleted ? "FROM Material m WHERE " : "FROM Material m WHERE m.deleted = false AND ";
+        String queryStart = "FROM Material m WHERE (m.deleted = false OR m.deleted = :deleted) AND ";
 
         return createQuery(queryStart +
                         "m.source='http://www." + materialSource + "' " +
                         "OR m.source ='https://www." + materialSource + "' " +
                         "OR m.source='http://" + materialSource + "' " +
                         "OR m.source='https://" + materialSource + "'",
-                Material.class).getResultList();
+                Material.class).setParameter("deleted", deleted).getResultList();
     }
 
     public Material findOneBySource(String materialSource, boolean deleted) {
-        String queryStart = deleted ? "FROM Material m WHERE " : "FROM Material m WHERE m.deleted = false AND ";
+        String queryStart = "FROM Material m WHERE (m.deleted = false OR m.deleted = :deleted) AND ";
         try {
             return createQuery(queryStart +
                             "m.source='http://www." + materialSource + "' " +
                             "OR m.source ='https://www." + materialSource + "' " +
                             "OR m.source='http://" + materialSource + "' " +
                             "OR m.source='https://" + materialSource + "'",
-                    Material.class).setMaxResults(1).getSingleResult();
+                    Material.class).setParameter("deleted", deleted).setMaxResults(1).getSingleResult();
         } catch (NoResultException e) {
             return null;
         }
