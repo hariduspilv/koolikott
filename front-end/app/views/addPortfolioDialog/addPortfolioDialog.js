@@ -3,8 +3,8 @@
 angular.module('koolikottApp')
 .controller('addPortfolioDialogController',
 [
-    '$scope', '$mdDialog', '$location', 'serverCallService', '$rootScope', 'storageService', '$timeout', 'pictureUploadService', '$filter', 'translationService', 'textAngularManager',
-    function ($scope, $mdDialog, $location, serverCallService, $rootScope, storageService, $timeout, pictureUploadService, $filter, translationService, textAngularManager) {
+    '$scope', '$mdDialog', '$location', 'serverCallService', '$rootScope', 'storageService', '$timeout', 'pictureUploadService', '$filter', 'translationService', 'textAngularManager', 'taxonService',
+    function ($scope, $mdDialog, $location, serverCallService, $rootScope, storageService, $timeout, pictureUploadService, $filter, translationService, textAngularManager, taxonService) {
         $scope.isSaving = false;
         $scope.showHints = true;
         $scope.isTouched = {};
@@ -18,6 +18,7 @@ angular.module('koolikottApp')
             $scope.newPortfolio = createPortfolio();
             $scope.portfolio = portfolio;
             $scope.newPortfolio.chapters = portfolio.chapters;
+            $scope.newPortfolio.taxons = [{}];
 
             if ($scope.portfolio.id != null) {
                 $scope.isEditPortfolio = true;
@@ -127,17 +128,15 @@ angular.module('koolikottApp')
 
         $scope.isValid = function () {
             var portfolio = $scope.newPortfolio;
-            var hasCorrectTaxon = false;
-                if (portfolio.taxons) {
-                    portfolio.taxons.forEach(function(taxon) {
-                        if (taxon.level && taxon.level !== ".EducationalContext") {
-                            hasCorrectTaxon = true;
-                        } else {
-                            hasCorrectTaxon = false;
-                        }
-                    });
-                }
+            var hasCorrectTaxon = portfolio.taxons && portfolio.taxons[0] && portfolio.taxons[0].level && portfolio.taxons[0].level !== ".EducationalContext";
+
             return portfolio.title && portfolio.targetGroups[0] && hasCorrectTaxon;
+        };
+
+        $scope.addNewTaxon = function () {
+            var educationalContext = taxonService.getEducationalContext($scope.newPortfolio.taxons[0]);
+
+            $scope.newPortfolio.taxons.push(educationalContext);
         };
 
         function savePortfolioFinally() {

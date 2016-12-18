@@ -55,21 +55,21 @@
   </div>
 </div>
 
-    <div layout="row" data-ng-repeat="taxon in newPortfolio.taxons track by $index">
-      <div data-dop-taxon-selector
-           data-taxon="newPortfolio.taxons[$index]"
-           data-is-add-material-view="true" flex></div>
-      <md-button class="md-icon-button md-primary" data-ng-show="$index+1 === newPortfolio.taxons.length"
-                 data-ng-click="addNewTaxon()" data-ng-disabled="newPortfolio.taxon">
-        <md-icon>add_circle</md-icon>
-        <md-tooltip md-direction="top"><span data-translate="MATERIAL_TAB_ADD_TAXON"></span></md-tooltip>
-      </md-button>
-      <md-button class="md-icon-button md-accent-2" data-ng-show="newPortfolio.taxons.length > 1"
-                 data-ng-click="deleteTaxon($index)">
-        <md-icon>remove_circle</md-icon>
-        <md-tooltip md-direction="top"><span data-translate="MATERIAL_TAB_REMOVE_TAXON"></span></md-tooltip>
-      </md-button>
-    </div>
+  <div layout="row" data-ng-repeat="taxon in newPortfolio.taxons track by $index">
+    <div data-dop-taxon-selector
+         data-taxon="newPortfolio.taxons[$index]"
+         data-is-add-portfolio-view="true" flex></div>
+    <md-button class="md-icon-button md-primary" data-ng-show="$index+1 === newPortfolio.taxons.length"
+               data-ng-click="addNewTaxon()" data-ng-disabled="newPortfolio.taxon">
+      <md-icon>add_circle</md-icon>
+      <md-tooltip md-direction="top"><span data-translate="MATERIAL_TAB_ADD_TAXON"></span></md-tooltip>
+    </md-button>
+    <md-button class="md-icon-button md-accent-2" data-ng-show="newPortfolio.taxons.length > 1"
+               data-ng-click="deleteTaxon($index)">
+      <md-icon>remove_circle</md-icon>
+      <md-tooltip md-direction="top"><span data-translate="MATERIAL_TAB_REMOVE_TAXON"></span></md-tooltip>
+    </md-button>
+  </div>
 
 <div data-dop-target-group-selector data-target-groups="newPortfolio.targetGroups" data-is-required="{trigger: true}"></div>
 
