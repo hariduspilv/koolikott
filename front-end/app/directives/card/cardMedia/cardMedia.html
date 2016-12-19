@@ -1,15 +1,17 @@
-<div class="card__icon-holder" data-ng-if="isAuthenticated">
-  <md-icon data-ng-if="learningObject.visibility === 'PRIVATE'">lock</md-icon>
-  <md-icon data-ng-if="learningObject.visibility === 'NOT_LISTED'">link</md-icon>
-  <md-tooltip md-direction="bottom">
-    <span data-ng-if="learningObject.visibility === 'PRIVATE'" data-translate="PORTFOLIO_VISIBILITY_PRIVATE"></span>
-    <span data-ng-if="learningObject.visibility === 'NOT_LISTED'" data-translate="learningObject_VISIBILITY_NOT_LISTED"></span>
-  </md-tooltip>
-</div>
-
 <div class="card-image" layout="column" layout-xs="row">
+  <div class="card__icon-holder" data-ng-if="isAuthenticated">
+    <md-icon data-ng-if="learningObject.visibility === 'PRIVATE'">lock</md-icon>
+    <md-icon data-ng-if="learningObject.visibility === 'NOT_LISTED'">link</md-icon>
+    <md-tooltip md-direction="bottom">
+      <span data-ng-if="learningObject.visibility === 'PRIVATE'" data-translate="PORTFOLIO_VISIBILITY_PRIVATE"></span>
+      <span data-ng-if="learningObject.visibility === 'NOT_LISTED'" data-translate="learningObject_VISIBILITY_NOT_LISTED"></span>
+    </md-tooltip>
+  </div>
+
   <div data-ng-if="isAuthenticated" data-dop-favorite data-learning-object="learningObject"></div>
+
   <div class="ribbon" data-ng-if="learningObject.type === '.Portfolio'"></div>
+
   <!-- noimage -->
   <a data-ng-href="{{'/' + learningObjectType + '?id=' + learningObject.id}}" data-ng-if="!learningObject.picture" class="card-cover {{learningObjectType}} {{materialType}}" flex="100" flex-order="-1" flex-order-xs="1">
     <div class="pattern">
