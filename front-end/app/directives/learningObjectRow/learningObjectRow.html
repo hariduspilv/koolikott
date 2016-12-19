@@ -1,5 +1,5 @@
 <div data-ng-repeat="item in learningObjects" ng-href="{{getItemLink(item)}}" role="list" aria-label="Ava soovitatud materjal" >
-  <md-card data-ng-if="item.type === '.Material'" class="card-xs md-padding md-margin">
+  <!-- <md-card data-ng-if="item.type === '.Material'" class="card-xs">
 
     <h6 class="md-caption" data-ng-bind="getCorrectLanguageString(item.titles, item.language)"></h6>
     <span class="ellipsis">
@@ -9,19 +9,21 @@
         <span data-ng-bind="$index < item.authors.length - 1 ? ', ' : ''"></span>
       </span>
     </span>
-  </md-card>
+  </md-card> -->
 
-  <md-card data-ng-if="item.type === '.Portfolio'" class="card-xs md-padding md-margin">
-    <md-card-title-text>
+  <md-card data-ng-if="item.type === '.Portfolio'" class="card-xs" flex layout="row">
+    <md-card-content flex="50">
       <h6 class="md-caption" data-ng-bind="item.title"></h6>
-      <span class="ellipsis">
+      <p class="md-caption ellipsis">
         <span>
           <span data-ng-bind="formatName(item.creator.name)"></span>
           <span data-ng-bind="formatSurname(item.creator.surname)"></span>
         </span>
-      </span>
-    </md-card-title-text>
-    <div data-dop-card-media data-learning-object="portfolio" data-is-authenticated="isAuthenticated()"></div>
+      </p>
+    </md-card-content>
+    <div class="card-media" flex="50">
+      <div data-dop-card-media data-learning-object="item"></div>
+    </div>
   </md-card-title>
 </md-card>
 </div>

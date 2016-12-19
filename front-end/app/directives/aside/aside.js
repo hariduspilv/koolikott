@@ -1,13 +1,13 @@
 'use strict'
 
 angular.module('koolikottApp')
-.directive('dopSidebar',
+.directive('dopAside',
 [
     'serverCallService', '$location', 'searchService',
     function () {
         return {
             scope: true,
-            templateUrl: 'directives/sidebar/sidebar.html',
+            templateUrl: 'directives/aside/aside.html',
             controller: function ($scope, serverCallService, $location, searchService, $timeout) {
                 var SIDE_ITEMS_AMOUNT = 5;
 

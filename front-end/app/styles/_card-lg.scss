@@ -62,6 +62,10 @@
       margin-top: 0;
       margin-left: -$card-lg-padding;
       text-align: center;
+      @media (min-width: $layout-breakpoint-xs) {
+        max-height: 300px;
+        border-radius: 0;
+      }
       md-icon {
         position: absolute;
         left: 50%;
@@ -99,7 +103,9 @@
       .card-cover {
         max-height: 300px;
         margin-top: -$card-lg-padding;
-
+        &.portfolio {
+        height: 150px;
+        }
       }
       .divider-left {
         border-left-width: 1px;

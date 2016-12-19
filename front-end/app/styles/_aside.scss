@@ -1,0 +1,29 @@
+aside {
+  padding-left: $md-padding;
+  h4,
+  h6,
+  p {
+    margin: 0;
+  }
+  p,
+  h6 {
+    font-weight: 400;
+  }
+  p {
+    color: rgba(0,0,0,.54);
+  }
+  md-card {
+    margin: 0 0 $md-padding 0;
+    @media (min-width: $layout-breakpoint-xs) {
+      border-radius: 0 $border-radius $border-radius  0;
+    }
+  }
+    .ribbon {
+      left: 15px;
+      width: 25px;
+    }
+  .card-cover .icon-kind {
+      font-size: 2rem;
+    }
+
+}

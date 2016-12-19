@@ -1,12 +1,14 @@
 md-card {
-  position: relative; // to position the corner
   margin: 0; //to overwrite AM 8px
+  .card-image {
+    height: 100%;
+  }
   .card-cover {
     @include aspect-ratio(3,2);
     img {
-      height: auto;
-      max-height: auto;
+      height: 100%;
       width: 100%;
+      border-radius: 0 $border-radius $border-radius 0;
     }
   }
   &:hover {
@@ -38,21 +40,19 @@ md-card {
   }
 }
 
+.card-media {
+  position: relative;
+  height: 100%;
+}
+
 .card-cover {
   height: 100%;
-  border-radius: $border-radius 0 0 $border-radius;
+  border-radius: 0 $border-radius $border-radius 0;
   overflow: hidden;
   position: relative;
   transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
   width: auto;
   max-width: 300px;
-  @media (min-width: $layout-breakpoint-xs) {
-    height: 134px;
-    border-radius: $border-radius $border-radius 0 0;
-  }
-  @media (min-width: $layout-breakpoint-lg) {
-    height: 156px;
-  }
   &:after {
     content: "";
     box-shadow: inset 0 0 3em rgba(0,0,0, .15);
@@ -63,16 +63,15 @@ md-card {
     height: 100%;
     z-index: 2;
   }
-}
-
-md-icon.icon-kind {
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%,-50%);
-  font-size: 3rem;
-  color: rgba(0,0,0, 0.33);
-  z-index: 1;
+  md-icon.icon-kind {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%,-50%);
+    font-size: 3rem;
+    color: rgba(0,0,0, 0.33);
+    z-index: 1;
+  }
 }
 
 .card__icon-holder {

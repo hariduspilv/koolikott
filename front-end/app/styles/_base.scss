@@ -8,6 +8,7 @@ html, body {
   background: $bg-gray;
   color: rgba(0, 0, 0, 0.77);
   line-height: 1.2;
+  min-width: 320px;
 }
 
 // Fix IE background going to black when md-backdrop is in dom
@@ -104,10 +105,6 @@ md-datepicker {
   margin-top: 60px;
 }
 
-.max-width-100 {
-  max-width: 100%;
-  width: 100%;
-}
 
 .min-height-500 {
   min-height: 500px;
