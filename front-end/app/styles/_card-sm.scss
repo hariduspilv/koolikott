@@ -24,11 +24,11 @@
   width: 100%;
   overflow: hidden;
   @media (min-width: $layout-breakpoint-xs) {
-    max-height: 280px;
+    height: 280px;
     width: 201px;
   }
   @media (min-width: $layout-breakpoint-lg) {
-    max-height: 330px;
+    height: 330px;
     width: 234px;
   }
 
