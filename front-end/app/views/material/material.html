@@ -7,7 +7,7 @@
       <md-card-content>
         <div layout="column" layout-gt-xs="row">
           <!-- left large side  -->
-          <div layout="column" flex flex-gt-xs="75" class="layout-relative">
+          <div layout="column" flex flex-gt-xs="75">
             <!-- left headline  -->
             <div layout="row">
               <a flex data-ng-if="sourceType === 'LINK' && !material.embeddable"
@@ -192,7 +192,7 @@
           </div>
 
           <!-- right small side  -->
-          <div layout="column" flex flex-gt-xs="25" class="divider-left" layout-align="start start">
+          <div layout="column" flex flex-gt-xs="25" class="right-column" layout-align="start start">
             <div data-ng-if="isLoggedIn() && !isRestricted() && !material.deleted" data-dop-favorite
                  data-learning-object="material"></div>
             <div data-ng-if="!material.picture" class="card-cover  {{getType()}}">

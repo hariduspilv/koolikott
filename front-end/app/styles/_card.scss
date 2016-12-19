@@ -1,6 +1,10 @@
 md-card {
   margin: 0; //to overwrite AM 8px
-
+  transition: all 0.3s;
+  .card-image {
+    height: 100%;
+    position: relative;
+  }
   .card-cover {
     @include aspect-ratio(3,2);
 
@@ -128,17 +132,6 @@ md-card {
     padding: 9px 23px;
     color: #fff;
     text-shadow: 1px 1px 2px rgba(0, 0,0, .37);
-  }
-
-  .card-lg & {
-    top: 0;
-    left: -25px;
-    text-shadow: 1px 1px 1px rgba(0, 0, 0, .2);
-
-    @media (min-width: $layout-breakpoint-xs) {
-      top: -15px;
-      left: 0;
-    }
   }
 }
 

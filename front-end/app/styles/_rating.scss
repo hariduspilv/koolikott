@@ -1,0 +1,29 @@
+.rating {
+  padding: $md-padding/2;
+}
+
+.rating-button {
+  display: inline-block;
+  cursor: pointer;
+  color: rgba(0,0,0, .37);
+  md-icon {
+    vertical-align: middle;
+    font-size: 20px;
+    color: rgba(0,0,0, .37);
+    transition: color .3s;
+    &:hover {
+      color: rgba(0,0,0, .54);
+    }
+  }
+
+  span {
+    display: inline-block;
+    line-height: 20px;
+    font-weight: 400;
+    padding: 0 5px;
+  }
+
+  & + .rating-button {
+    margin-left: $md-padding;
+  }
+}

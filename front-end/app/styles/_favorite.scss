@@ -5,24 +5,15 @@
   z-index: 5;
 
   &:hover {
-    color: rgba(255, 255, 255, 1);
-  }
-
-  .card-lg & {
-    top: 0;
-    left: -25px;
-    text-shadow: 1px 1px 1px rgba(0, 0, 0, .2);
-
-    @media (min-width: $layout-breakpoint-xs) {
-      top: -15px;
-      left: 0;
-    }
-
     .favorite__icon {
-      color: #fff;
-      text-shadow: 1px 1px 1px rgba(0, 0,0, .6);
+      color: rgba(255, 255, 255, .8);
     }
   }
+
+  .favorite__icon {
+    color: rgba(255, 255, 255, 0);
+  }
+
 
   &.has-favorited {
     .favorite__icon {
@@ -30,8 +21,4 @@
       text-shadow: 1px 1px 1px rgba(0, 0,0, .6);
     }
   }
-}
-
-.favorite__icon {
-  color: transparent;
 }

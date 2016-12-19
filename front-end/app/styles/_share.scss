@@ -1,9 +1,8 @@
 .share {
   position: absolute;
   top: 0;
-  right: 40px;
-  margin-top: -15px;
-  margin-right: -15px;
+  right: 50px;
+  margin-right: -$md-padding;
   z-index: 1;
 
   @media (min-width: $layout-breakpoint-xs) {
