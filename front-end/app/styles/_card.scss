@@ -16,6 +16,7 @@ md-card {
     cursor: pointer;
     .card-hover {
       opacity: .8;
+      z-index: 3;
       md-icon {
         color: rgba(255, 255, 255, 1);
         text-shadow: 1px 1px 1px rgba(0, 0,0, .6);

@@ -63,6 +63,7 @@
       margin-left: -$card-lg-padding;
       text-align: center;
       @media (min-width: $layout-breakpoint-xs) {
+        height: auto;
         max-height: 300px;
         border-radius: 0;
       }
