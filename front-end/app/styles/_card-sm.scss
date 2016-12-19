@@ -1,3 +1,20 @@
+// card-sm layout
+.card-container__item {
+  margin: 0 0 $md-padding 0;
+  @media (min-width: $layout-breakpoint-xs) {
+    margin: 0 $md-padding $md-padding 0;
+  }
+
+  &--empty {
+    margin: 0 $md-padding 0 0;
+
+    md-card.card-sm {
+      height: 100%;
+    }
+  }
+}
+
+// card-sm specific. bases on card
 .card-sm {
   width: 100%;
   overflow: hidden;
@@ -120,10 +137,7 @@
     .md-caption {
       color: rgba(0, 0, 0, 0.54);
     }
-    p {
-      margin: 2px 0 3px 0;
-    }
-    ul {
+    p, ul {
       margin: 0;
     }
   }
