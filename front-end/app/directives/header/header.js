@@ -90,7 +90,60 @@ angular.module('koolikottApp')
                         return [];
                     }
 
-                    return suggestService.suggest(query, suggestService.getSuggestURLbase());
+                    $scope.suggest.suggestions = suggestService.suggest(query, suggestService.getSuggestURLbase());
+                    if ($scope.doInlineSuggestion) {
+                        suggestInline($scope.suggest.suggestions);
+                    }
+                    return $scope.suggest.suggestions;
+                };
+
+                function suggestInline(suggestions) {
+                    if (!suggestions) return;
+                    suggestions.then(function (data) {
+                        var firstSuggestion = data[0];
+                        if (!firstSuggestion) {
+                            $scope.clearInlineSuggestion();
+                            return;
+                        }
+                        var searchTextLength = $scope.searchFields.searchQuery.length;
+                        $scope.hiddenInline = firstSuggestion.substring(0, searchTextLength);
+                        $scope.inlineSuggestion = firstSuggestion.substring(searchTextLength);
+                    })
+                }
+
+                $scope.clearInlineSuggestion = function () {
+                    $scope.hiddenInline = "";
+                    $scope.inlineSuggestion = "";
+                };
+
+                // This is for cases where esc is pressed,
+                // searchText is selected and then deleted
+                $scope.$watch("searchFields.searchQuery", function(newValue, oldValue) {
+                    if (newValue != oldValue && !newValue) {
+                        $scope.clearInlineSuggestion();
+                    }
+                });
+
+                $scope.keyPressed = function (event) {
+                    if (event.keyCode === 8) { // backspace
+                        if ($scope.inlineSuggestion) {
+                            event.preventDefault();
+                        }
+
+                        $scope.doInlineSuggestion = false;
+                    } else if (event.keyCode === 13) { // enter
+                        if ($scope.inlineSuggestion) {
+                            $scope.searchFields.searchQuery = $scope.searchFields.searchQuery + $scope.inlineSuggestion;
+                        }
+
+                        angular.element(document.querySelector("#header-search-input")).controller('mdAutocomplete').hidden = true;
+                        document.getElementById("header-search-input").blur();
+                        $scope.doInlineSuggestion = false;
+                    } else {
+                        $scope.doInlineSuggestion = true;
+                    }
+
+                    $scope.clearInlineSuggestion();
                 };
 
                 $scope.clickOutside = function () {

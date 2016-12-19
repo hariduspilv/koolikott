@@ -120,7 +120,6 @@ angular.module('koolikottApp')
 
                         $scope.addTag = function () {
                             if ($scope.learningObject && $scope.learningObject.id) {
-                                // TODO
                                 var url = "rest/learningObject/" + $scope.learningObject.id + "/tags";
                                 serverCallService.makePut(url, JSON.stringify($scope.newTag.tagName), addTagSuccess, addTagFail);
                                 $scope.newTag.tagName = null;
