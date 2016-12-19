@@ -61,14 +61,21 @@ angular.module('koolikottApp')
                     $event.preventDefault();
                     $event.stopPropagation();
 
-                    var index = $rootScope.selectedMaterials.indexOf(material);
-                    if (index == -1) {
+                    if ($rootScope.selectedMaterials) {
+                        var index = $rootScope.selectedMaterials.indexOf(material);
+                        if (index == -1) {
+                            $rootScope.selectedMaterials.push(material);
+                            material.selected = true;
+                        } else {
+                            $rootScope.selectedMaterials.splice(index, 1);
+                            material.selected = false;
+                        }
+                    } else {
+                        $rootScope.selectedMaterials = [];
                         $rootScope.selectedMaterials.push(material);
                         material.selected = true;
-                    } else {
-                        $rootScope.selectedMaterials.splice(index, 1);
-                        material.selected = false;
                     }
+
                 };
 
                 $scope.isAuthenticated = function () {
