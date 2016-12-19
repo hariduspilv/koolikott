@@ -1,7 +1,13 @@
 package ee.hm.dop.rest;
 
-import java.util.ArrayList;
-import java.util.List;
+import ee.hm.dop.model.LearningObject;
+import ee.hm.dop.model.SearchResult;
+import ee.hm.dop.model.Searchable;
+import ee.hm.dop.model.Tag;
+import ee.hm.dop.model.TagDTO;
+import ee.hm.dop.model.UserFavorite;
+import ee.hm.dop.service.LearningObjectService;
+import ee.hm.dop.service.TagService;
 
 import javax.annotation.security.RolesAllowed;
 import javax.inject.Inject;
@@ -15,15 +21,8 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
-
-import ee.hm.dop.model.LearningObject;
-import ee.hm.dop.model.SearchResult;
-import ee.hm.dop.model.Searchable;
-import ee.hm.dop.model.Tag;
-import ee.hm.dop.model.UserFavorite;
-import ee.hm.dop.service.LearningObjectService;
-import ee.hm.dop.service.TagService;
+import java.util.ArrayList;
+import java.util.List;
 
 @Path("learningObject")
 public class LearningObjectResource extends BaseResource {
@@ -51,6 +50,15 @@ public class LearningObjectResource extends BaseResource {
         }
 
         return learningObjectService.addTag(learningObject, tag, getLoggedInUser());
+    }
+
+    @GET
+    @Path("{learningObjectId}/system_tags")
+    @RolesAllowed({"USER", "ADMIN", "MODERATOR"})
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public TagDTO addSystemTag(@PathParam("learningObjectId") Long learningObjectId, @QueryParam("type") String type, @QueryParam("name") String tagName) {
+        return learningObjectService.addSystemTag(learningObjectId, type, tagName, getLoggedInUser());
     }
 
     @GET

@@ -244,11 +244,7 @@ app.config(
                     $rootScope.isEditPortfolioMode = true;
                     $rootScope.selectedMaterials = [];
                     $rootScope.selectedSingleMaterial = null;
-                } else if (editModeAllowed.indexOf(path) != -1 && !$rootScope.isViewMaterialPage) {
-                    $rootScope.selectedSingleMaterial = null;
-                    $rootScope.selectedMaterials = [];
-                } else if (authenticatedUserService.isAuthenticated() && !$rootScope.isViewMaterialPage) {
-                    $rootScope.isEditPortfolioMode = false;
+                } else if (editModeAllowed.indexOf(path) != -1) {
                     $rootScope.selectedSingleMaterial = null;
                     $rootScope.selectedMaterials = [];
                 } else {

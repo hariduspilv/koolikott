@@ -3,8 +3,8 @@
 angular.module('koolikottApp')
 .controller('addPortfolioDialogController',
 [
-    '$scope', '$mdDialog', '$location', 'serverCallService', '$rootScope', 'storageService', '$timeout', 'pictureUploadService', '$filter', 'translationService', 'textAngularManager',
-    function ($scope, $mdDialog, $location, serverCallService, $rootScope, storageService, $timeout, pictureUploadService, $filter, translationService, textAngularManager) {
+    '$scope', '$mdDialog', '$location', 'serverCallService', '$rootScope', 'storageService', '$timeout', 'pictureUploadService', '$filter', 'translationService', 'textAngularManager', 'taxonService',
+    function ($scope, $mdDialog, $location, serverCallService, $rootScope, storageService, $timeout, pictureUploadService, $filter, translationService, textAngularManager, taxonService) {
         $scope.isSaving = false;
         $scope.showHints = true;
         $scope.isTouched = {};
@@ -18,6 +18,7 @@ angular.module('koolikottApp')
             $scope.newPortfolio = createPortfolio();
             $scope.portfolio = portfolio;
             $scope.newPortfolio.chapters = portfolio.chapters;
+            $scope.newPortfolio.taxons = [{}];
 
             if ($scope.portfolio.id != null) {
                 $scope.isEditPortfolio = true;
@@ -27,7 +28,7 @@ angular.module('koolikottApp')
 
                 $scope.newPortfolio.title = portfolioClone.title;
                 $scope.newPortfolio.summary = portfolioClone.summary;
-                $scope.newPortfolio.taxon = portfolioClone.taxon;
+                $scope.newPortfolio.taxons = portfolioClone.taxons;
                 $scope.newPortfolio.targetGroups = portfolioClone.targetGroups;
                 $scope.newPortfolio.tags = portfolioClone.tags;
                 $scope.newPortfolio.picture = portfolioClone.picture;
@@ -73,10 +74,15 @@ angular.module('koolikottApp')
             }
         };
 
+            $scope.deleteTaxon = function (index) {
+                $scope.newPortfolio.taxons.splice(index, 1);
+            };
+
             function createPortfolioSuccess(portfolio) {
                 if (isEmpty(portfolio)) {
                     createPortfolioFailed();
                 } else {
+                    $rootScope.$broadcast("errorMessage:updateChanged");
                     portfolio.chapters = [];
                     portfolio.chapters.push({
                         title: $filter('translate')('PORTFOLIO_DEFAULT_NEW_CHAPTER_TITLE'),
@@ -108,7 +114,7 @@ angular.module('koolikottApp')
                 var url = "rest/portfolio/update";
                 $scope.portfolio.title = $scope.newPortfolio.title;
                 $scope.portfolio.summary = $scope.newPortfolio.summary;
-                $scope.portfolio.taxon = $scope.newPortfolio.taxon;
+                $scope.portfolio.taxons = $scope.newPortfolio.taxons;
                 $scope.portfolio.targetGroups = $scope.newPortfolio.targetGroups;
                 $scope.portfolio.tags = $scope.newPortfolio.tags;
 
@@ -122,16 +128,23 @@ angular.module('koolikottApp')
 
         $scope.isValid = function () {
             var portfolio = $scope.newPortfolio;
-            var hasCorrectTaxon = portfolio.taxon && portfolio.taxon.level && portfolio.taxon.level !== ".EducationalContext";
+            var hasCorrectTaxon = portfolio.taxons && portfolio.taxons[0] && portfolio.taxons[0].level && portfolio.taxons[0].level !== ".EducationalContext";
+
             return portfolio.title && portfolio.targetGroups[0] && hasCorrectTaxon;
+        };
+
+        $scope.addNewTaxon = function () {
+            var educationalContext = taxonService.getEducationalContext($scope.newPortfolio.taxons[0]);
+
+            $scope.newPortfolio.taxons.push(educationalContext);
         };
 
         function savePortfolioFinally() {
             $scope.saving = false;
         }
 
-        $scope.isSet = function () {
-            return $scope.newPortfolio.taxon && $scope.newPortfolio.taxon.level && $scope.newPortfolio.taxon.level !== ".EducationalContext";
+        $scope.isSet = function (index) {
+            return $scope.newPortfolio.taxons[index] && $scope.newPortfolio.taxons[index].level && $scope.newPortfolio[index].taxon.level !== ".EducationalContext";
         };
 
         $scope.$watchCollection('invalidPicture', function (newValue, oldValue) {

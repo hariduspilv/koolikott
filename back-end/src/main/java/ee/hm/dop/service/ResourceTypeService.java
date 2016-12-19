@@ -1,13 +1,15 @@
 package ee.hm.dop.service;
 
-import java.util.List;
-
-import javax.inject.Inject;
-
 import ee.hm.dop.dao.ResourceTypeDAO;
 import ee.hm.dop.model.ResourceType;
 
+import javax.inject.Inject;
+import java.util.List;
+
 public class ResourceTypeService {
+
+    @Inject
+    private TranslationService translationService;
 
     @Inject
     private ResourceTypeDAO resourceTypeDAO;
@@ -22,5 +24,14 @@ public class ResourceTypeService {
 
     public List<ResourceType> getUsedResourceTypes() {
         return resourceTypeDAO.findUsedResourceTypes();
+    }
+
+    public ResourceType findResourceByTranslation(String name) {
+        String translationKey = translationService.getTranslationKeyByTranslation(name);
+        if (translationKey == null) {
+            return null;
+        }
+
+        return resourceTypeDAO.findResourceTypeByName(translationKey);
     }
 }

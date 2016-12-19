@@ -4,7 +4,7 @@
   </small>
 </p>
 <div layout="row tags">
-  <md-chips ng-model="upVoteForms" readonly="true">
+  <md-chips ng-model="upVoteForms" readonly="true" md-removable="$parent.isEditPortfolioMode" md-on-remove="removeTag($chip.tag)">
     <md-chip-template>
       <md-button data-ng-if="(isAllowed() && !$root.isReportedByUser) && !isAdmin()" class="md-icon-button"
                  ng-click="reportTag($chip.tag)">

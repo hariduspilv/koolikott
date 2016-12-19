@@ -160,6 +160,18 @@
                 <span class="sidenav__count" data-ng-bind="restrictedUsersCount"></span>
               </a>
             </li>
+            <li class="sidenav__item" layout="column" ng-if="isAdmin()">
+              <a id="changedLearningObjects" class="sidenav__header" md-ink-ripple layout="row"
+                 layout-align="space-between center"
+                 data-ng-class="{'is-active': isLocation('/dashboard/changedLearningObjects')}"
+                 data-ng-href="/dashboard/changedLearningObjects" data-ng-click="updateChangedLearningObjectCount()">
+                <div layout="row" layout-align="center center">
+                  <md-icon class="material-icons sidenav__icon">priority_high</md-icon>
+                  <span data-translate="DASHBOARD_CHANGED_LEARNING_OBJECTS" class="sidenav__name"></span>
+                </div>
+                <span class="sidenav__count" data-ng-bind="changedLearningObjectCount"></span>
+              </a>
+            </li>
           </ul>
         </li>
       </ul>
@@ -201,7 +213,3 @@
          target="_blank" href="https://github.com/e-koolikott/DOP/blob/master/CHANGELOG.md">
         <span class="material-icons icon-github-circled"></span>
         <div class="sidenav__name"><span data-translate="APP_VERSION"></span> <span ng-bind="APP_VERSION"></span></div>
-      </a>
-    </div>
-  </div>
-</md-sidenav>

@@ -1,25 +1,26 @@
 package ee.hm.dop.model;
 
-import static javax.persistence.CascadeType.ALL;
-import static javax.persistence.CascadeType.PERSIST;
-import static javax.persistence.FetchType.EAGER;
-
-import java.util.List;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import ee.hm.dop.model.taxon.Taxon;
+import ee.hm.dop.rest.jackson.map.TaxonDeserializer;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OrderColumn;
+import javax.persistence.UniqueConstraint;
+import java.util.List;
 
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import ee.hm.dop.model.taxon.Taxon;
-import ee.hm.dop.rest.jackson.map.TaxonDeserializer;
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
+import static javax.persistence.CascadeType.ALL;
+import static javax.persistence.FetchType.EAGER;
 
 @Entity
 public class Portfolio extends LearningObject implements Searchable {
@@ -27,10 +28,15 @@ public class Portfolio extends LearningObject implements Searchable {
     @Column(nullable = false)
     private String title;
 
-    @ManyToOne
-    @JoinColumn(name = "taxon")
-    @JsonDeserialize(using = TaxonDeserializer.class)
-    private Taxon taxon;
+    @ManyToMany(fetch = EAGER)
+    @Fetch(FetchMode.SELECT)
+    @JoinTable(
+            name = "Portfolio_Taxon",
+            joinColumns = {@JoinColumn(name = "portfolio")},
+            inverseJoinColumns = {@JoinColumn(name = "taxon")},
+            uniqueConstraints = @UniqueConstraint(columnNames = {"portfolio", "taxon"}))
+    @JsonDeserialize(contentUsing = TaxonDeserializer.class)
+    private List<Taxon> taxons;
 
     @Column(columnDefinition = "TEXT")
     private String summary;
@@ -57,12 +63,12 @@ public class Portfolio extends LearningObject implements Searchable {
         this.title = title;
     }
 
-    public Taxon getTaxon() {
-        return taxon;
+    public List<Taxon> getTaxons() {
+        return taxons;
     }
 
-    public void setTaxon(Taxon taxon) {
-        this.taxon = taxon;
+    public void setTaxons(List<Taxon> taxons) {
+        this.taxons = taxons;
     }
 
     public String getSummary() {

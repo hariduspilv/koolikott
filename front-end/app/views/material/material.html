@@ -1,5 +1,5 @@
 <section layout="row" layout-xs="column" role="main">
-  <article id="page-view-material" flex-gt-xs="75">
+  <article role="main" id="page-view-material">
     <div ng-if="modUser()" dop-error-message></div>
 
     <!-- same as portfolioSummaryCard in directives -->
@@ -80,18 +80,19 @@
                 </md-menu-content>
               </md-menu>
             </div>
+
             <!-- left meta  -->
             <div layout="row" class="on-left">
               <div flex>
                 <p class="md-body-2 meta">
                   <small class="md-caption">
-                    <span data-translate="DETAIL_VIEW_EDUCATIONAL_CONTEXT"></span>
+                    <span data-translate="DETAIL_VIEW_EDUCATIONAL_CONTEXT" id="taxon-close"></span>
                   </small>
                   <br>
-                  <span class="ellipsis" data-ng-repeat="educationalContext in getMaterialEducationalContexts()">
+                  <span class="hide-overflow" data-ng-repeat="educationalContext in getMaterialEducationalContexts() track by $index">
                     {{educationalContext.name.toUpperCase() | translate}}{{$last ? '' : ', '}}
                   </span>
-                  <span class="ellipsis" data-ng-if="!getMaterialEducationalContexts().length"
+                  <span class="hide-overflow" data-ng-if="!getMaterialEducationalContexts().length"
                         data-translate="UNKNOWN">Unknown</span>
                 </p>
               </div>
@@ -101,10 +102,10 @@
                     <span data-translate="DETAIL_VIEW_DOMAIN"></span>
                   </small>
                   <br/>
-                  <span class="ellipsis" data-ng-repeat="domain in getMaterialDomains()">
+                  <span class="hide-overflow" data-ng-repeat="domain in getMaterialDomains() track by $index">
                     {{'DOMAIN_' + domain.name.toUpperCase() | translate}}{{$last ? '' : ', '}}
                   </span>
-                  <span class="ellipsis" data-ng-if="!getMaterialDomains().length"
+                  <span class="hide-overflow" data-ng-if="!getMaterialDomains().length"
                         data-translate="UNKNOWN">Unknown</span>
                 </p>
               </div>
@@ -114,7 +115,7 @@
                     <span data-translate="DETAIL_VIEW_SUBJECT"></span>
                   </small>
                   <br/>
-                  <span class="ellipsis" data-ng-repeat="subject in getMaterialSubjects()">
+                  <span class="hide-overflow" data-ng-repeat="subject in getMaterialSubjects() track by $index">
                     {{'SUBJECT_' + subject.name.toUpperCase() | translate}}{{$last ? '' : ', '}}
                   </span>
                 </p>
@@ -122,30 +123,28 @@
               <div flex>
                 <p class="md-body-2 meta">
                   <small class="md-caption">
-                    <span data-translate="MATERIAL_VIEW_RESOURCE_TYPE"></span>
+                    <span id="resourcetype-close" data-translate="MATERIAL_VIEW_RESOURCE_TYPE"></span>
                   </small>
                   <br>
-                  <span class="ellipsis" data-ng-repeat="resourceType in material.resourceTypes"
+                  <span class="hide-overflow" data-ng-repeat="resourceType in material.resourceTypes"
                         data-ng-if="!isNullOrZeroLength(material.resourceTypes)">
                     {{resourceType.name.toUpperCase() | translate}}{{$last ? '' : ', '}}
                   </span>
-                  <span class="ellipsis" data-ng-if="isNullOrZeroLength(material.resourceTypes)"
+                  <span class="hide-overflow" data-ng-if="isNullOrZeroLength(material.resourceTypes)"
                         data-translate="UNKNOWN">Unknown</span>
                 </p>
               </div>
               <div flex>
                 <p class="md-body-2 meta">
                   <small class="md-caption">
-                    <span data-translate="DETAIL_VIEW_TARGET_GROUP"></span>
+                    <span data-translate="DETAIL_VIEW_TARGET_GROUP" id="targetgroup-close"></span>
                   </small>
                   <br>
-                  <span class="ellipsis ellipsis">
-                    <span data-ng-repeat="targetGroup in targetGroups">
+                    <span class="hide-overflow" data-ng-repeat="targetGroup in material.targetGroups">
                       <span data-translate="{{'TARGET_GROUP_' + targetGroup}}"></span>
                       <span>{{$last ? '' : ', '}}</span>
                     </span>
-                  </span>
-                  <span class="ellipsis" data-ng-if="isNullOrZeroLength(targetGroups)"
+                  <span class="hide-overflow" data-ng-if="isNullOrZeroLength(material.targetGroups)"
                         data-translate="UNKNOWN">Unknown</span>
                 </p>
               </div>

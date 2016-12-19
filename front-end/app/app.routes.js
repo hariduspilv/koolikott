@@ -80,6 +80,11 @@ angular.module('koolikottApp')
                 controller: 'baseTableViewController',
                 permissions: ['ADMIN']
             })
+            .when('/dashboard/changedLearningObjects', {
+                templateUrl: 'views/dashboard/baseTableView.html',
+                controller: 'baseTableViewController',
+                permissions: ['ADMIN', 'MODERATOR']
+            })
             .when('/loginRedirect', {
                 templateUrl: 'views/loginRedirect/loginRedirect.html',
                 controller: 'loginRedirectController'

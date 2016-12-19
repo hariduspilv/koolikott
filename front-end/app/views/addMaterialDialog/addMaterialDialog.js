@@ -235,18 +235,18 @@ angular.module('koolikottApp')
         }
 
 
-        function isStepValid(index) {
-            switch (index) {
-                case 0:
-                return $scope.isTabOneValid();
-                case 1:
-                return $scope.isTabTwoValid();
-                case 2:
-                return $scope.isTabThreeValid();
-                default:
-                return isStepValid(index - 1);
+            function isStepValid(index) {
+                switch (index) {
+                    case 0:
+                        return $scope.isTabOneValid();
+                    case 1:
+                        return $scope.isTabTwoValid();
+                    case 2:
+                        return $scope.isTabThreeValid();
+                    default:
+                        return isStepValid(index - 1);
+                }
             }
-        }
 
         $scope.translate = function (item, prefix) {
             return $filter("translate")(prefix + item.toUpperCase());
@@ -656,18 +656,21 @@ angular.module('koolikottApp')
             }
         }
 
-        function saveMaterialSuccess(material) {
-            if (!material) {
-                saveMaterialFail();
-            } else {
-                //Pass saved material back to material view
-                material.source = getSource(material);
-                $mdDialog.hide(material);
-                if (!$scope.isChapterMaterial) {
-                    $location.url('/material?materialId=' + material.id);
+            function saveMaterialSuccess(material) {
+                if (!material) {
+                    saveMaterialFail();
+                } else {
+                    // Tell errorMessage to update changes
+                    $rootScope.$broadcast("errorMessage:updateChanged");
+
+                    //Pass saved material back to material view
+                    material.source = getSource(material);
+                    $mdDialog.hide(material);
+                    if (!$scope.isChapterMaterial) {
+                        $location.url('/material?materialId=' + material.id);
+                    }
                 }
             }
-        }
 
         function saveMaterialFail() {
             console.log('Failed to add material.');

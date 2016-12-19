@@ -17,6 +17,7 @@ angular.module('koolikottApp')
         var userPortfoliosCountCallbacks = [];
         var moderatorsCountCallbacks = [];
         var restrictedUsersCountCallbacks = [];
+        var changedLearningObjectCountCallbacks = [];
 
         function getUsername() {
             if (authenticatedUserService.isAuthenticated()) return {'username': authenticatedUserService.getUser().username};
@@ -121,6 +122,15 @@ angular.module('koolikottApp')
 
         }
 
+        function getChangedLearningObjectCountSuccess(data) {
+            changedLearningObjectCountCallbacks.forEach(function (callback) {
+                callback(data);
+            });
+            changedLearningObjectCountCallbacks = [];
+            localStorage.setItem("changedLearningObject", data);
+
+        }
+
         instance = {
             loadBrokenMaterialsCount: function (callback) {
                 var data = localStorage.getItem("brokenMaterialsCount");
@@ -205,8 +215,15 @@ angular.module('koolikottApp')
                 }
                 restrictedUsersCountCallbacks.push(callback);
                 serverCallService.makeGet("rest/user/restrictedUser/count", {}, getRestrictedUsersCountSuccess, getItemsFail);
+            },
+            loadChangedLearningObjectCount: function (callback) {
+                var data = localStorage.getItem("changedLearningObject");
+                if (data) {
+                    callback(data);
+                }
+                changedLearningObjectCountCallbacks.push(callback);
+                serverCallService.makeGet("rest/changed/count", {}, getChangedLearningObjectCountSuccess, getItemsFail);
             }
-
         };
 
         return instance;

@@ -35,7 +35,7 @@ angular.module('koolikottApp')
                 function getContentType () {
                     var baseUrl = document.location.origin;
                     // If the initial type is a LINK, try to ask the type from our proxy
-                    if(matchType(getSource($scope.material)) === 'LINK' && !getSource($scope.material).startsWith(baseUrl) ){
+                    if(getSource($scope.material) && matchType(getSource($scope.material)) === 'LINK' && !getSource($scope.material).startsWith(baseUrl) ){
                         $scope.proxyUrl = baseUrl + "/rest/material/externalMaterial?url=" + encodeURIComponent($scope.material.source);
                         serverCallService.makeHead($scope.proxyUrl, {}, probeContentSuccess, probeContentFail);
                     }else{
@@ -107,9 +107,9 @@ angular.module('koolikottApp')
                     };
 
                     $scope.$watch(function () {
-                        return $scope.material.source;
+                        return getSource($scope.material);
                     }, function (newValue, oldValue) {
-                        if ($scope.material && $scope.material.source) {
+                        if ($scope.material && getSource($scope.material)) {
                             getSourceType();
                             canPlayVideoFormat();
                             canPlayAudioFormat();
@@ -117,7 +117,7 @@ angular.module('koolikottApp')
                     });
 
                     function canPlayVideoFormat() {
-                        var extension = $scope.material.source.split('.').pop();
+                        var extension = getSource($scope.material).split('.').pop();
                         var v = document.createElement('video');
                         /* ogv is a subtype of ogg therefore if ogg is supported ogv is also */
                         if (extension == "ogv") {
@@ -130,7 +130,7 @@ angular.module('koolikottApp')
                     }
 
                     function canPlayAudioFormat() {
-                        var extension = $scope.material.source.split('.').pop();
+                        var extension = getSource($scope.material).split('.').pop();
                         var v = document.createElement('audio');
                         if (v.canPlayType && v.canPlayType('audio/' + extension)) {
                             $scope.audioType = extension;

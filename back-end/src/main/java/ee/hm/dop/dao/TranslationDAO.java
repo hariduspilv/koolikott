@@ -1,12 +1,13 @@
 package ee.hm.dop.dao;
 
+import ee.hm.dop.model.Language;
+import ee.hm.dop.model.TranslationGroup;
+
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
+import javax.persistence.Query;
 import javax.persistence.TypedQuery;
-
-import ee.hm.dop.model.Language;
-import ee.hm.dop.model.TranslationGroup;
 
 public class TranslationDAO {
 
@@ -25,5 +26,21 @@ public class TranslationDAO {
         }
 
         return translationGroup;
+    }
+
+    public String getTranslationKeyByTranslation(String translation) {
+        Query query = entityManager.createNativeQuery("SELECT t.translationKey FROM Translation t WHERE lower(t.translation) = :translation");
+
+        String translationKey = null;
+        try {
+            translationKey = (String) query
+                    .setParameter("translation", translation)
+                    .setMaxResults(1)
+                    .getSingleResult();
+        } catch (NoResultException e) {
+            e.printStackTrace();
+        }
+
+        return translationKey;
     }
 }

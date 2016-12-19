@@ -1,13 +1,12 @@
 package ee.hm.dop.service;
 
-import java.util.Map;
-
-import javax.inject.Inject;
-
 import ee.hm.dop.dao.LanguageDAO;
 import ee.hm.dop.dao.TranslationDAO;
 import ee.hm.dop.model.Language;
 import ee.hm.dop.model.TranslationGroup;
+
+import javax.inject.Inject;
+import java.util.Map;
 
 public class TranslationService {
 
@@ -33,6 +32,10 @@ public class TranslationService {
         }
 
         return translationGroupFor.getTranslations();
+    }
+
+    public String getTranslationKeyByTranslation(String translation) {
+        return translationDAO.getTranslationKeyByTranslation(translation);
     }
 
 }

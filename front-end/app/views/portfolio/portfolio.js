@@ -3,8 +3,8 @@
 angular.module('koolikottApp')
 .controller('portfolioController',
 [
-    '$scope', 'translationService', 'serverCallService', '$route', '$location', 'alertService', '$rootScope', 'authenticatedUserService', '$timeout',
-    function ($scope, translationService, serverCallService, $route, $location, alertService, $rootScope, authenticatedUserService, $timeout) {
+    '$scope', 'translationService', 'serverCallService', '$route', '$location', 'alertService', '$rootScope', 'authenticatedUserService', '$timeout', 'storageService',
+    function ($scope, translationService, serverCallService, $route, $location, alertService, $rootScope, authenticatedUserService, $timeout, storageService) {
         var increaseViewCountPromise;
 
         function init() {
@@ -95,6 +95,7 @@ angular.module('koolikottApp')
                 $rootScope.learningObjectBroken = $scope.portfolio.broken > 0;
                 $rootScope.learningObjectImproper = $scope.portfolio.improper > 0;
                 $rootScope.learningObjectDeleted = $scope.portfolio.deleted == true;
+                $rootScope.learningObjectChanged = $scope.portfolio.changed > 0;
 
                 if(authenticatedUserService.isAdmin() || authenticatedUserService.isModerator()) {
                     if($scope.portfolio.improper > 0) {
@@ -120,13 +121,16 @@ angular.module('koolikottApp')
             $rootScope.setReason(improper.reason);
         }
 
-        $scope.modUser = function() {
-            if (authenticatedUserService.isModerator() || authenticatedUserService.isAdmin()) {
-                return true;
-            } else {
-                return false;
-            }
-        };
+            $scope.modUser = function() {
+                return !! (authenticatedUserService.isModerator() || authenticatedUserService.isAdmin()) ;
+                    };
+                $scope.$watch(function () {
+                    return storageService.getPortfolio();
+            }, function (newPortfolio, oldPortfolio) {
+                if (newPortfolio !== oldPortfolio) {
+                    setPortfolio(newPortfolio);
+                }
+            });
 
         $scope.$watch(function () {
             return $location.url().replace(window.location.hash, '');

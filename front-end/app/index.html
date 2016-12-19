@@ -7,7 +7,9 @@
   <meta name="description" content="e-Koolikott is a single web environment comprising digital learning material arranged by keywords on the basis of the curriculum.
   The portal allows finding educational materials located in different digital tool collections.
   The primary purpose of e-Koolikott is to allow accessing digital learning materials from a single point - the user no longer needs to search for materials in different portals.">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!--<meta name="viewport" content="width=device-width, initial-scale=1">-->
+  <meta content='width=device-width, initial-scale=1.0, user-scalable=0' name='viewport' />
+
   <!-- build:css(app) /styles/vendor.css -->
   <link rel="stylesheet" href="/libs/angular-material-data-table/dist/md-data-table.min.css" />
   <!-- endbuild -->
@@ -87,6 +89,7 @@
   <script src="services/toast.service.js"></script>
   <script src="services/translation.service.js"></script>
   <script src="services/userData.service.js"></script>
+  <script src="services/changedLearningObject.service.js"></script>
 
   <!-- controllers -->
   <script src="views/addMaterialDialog/addMaterialDialog.js"></script>
@@ -124,6 +127,7 @@
   <script src="directives/dashboard/improper/improperPortfolio.js"></script>
   <script src="directives/dashboard/userManagement/moderatorsTable.js"></script>
   <script src="directives/dashboard/userManagement/restrictedUsersTable.js"></script>
+  <script src="directives/dashboard/changedLearningObject/changedLearningObject.js"></script>
   <script src="directives/detailedSearch/detailedSearch.js"></script>
   <script src="directives/embeddedMaterial/embeddedMaterial.js"></script>
   <script src="directives/errorMessage/errorMessage.js"></script>
