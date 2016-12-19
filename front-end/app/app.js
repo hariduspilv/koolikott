@@ -11,7 +11,8 @@ var app = angular.module('koolikottApp', [
     'DOPconstants',
     'textAngular',
     'md.data.table',
-    'infinite-scroll'
+    'infinite-scroll',
+    'youtube-embed'
 ]);
 
 var provideProvider = null;

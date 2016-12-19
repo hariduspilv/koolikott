@@ -11,28 +11,15 @@ md-card {
   }
 }
 
-
-// .corner {
-//   background-image: url('../images/detail/corner.png');
-//   position: absolute;
-//   right: -2px;
-//   top: -1px;
-//   z-index: 1;
-//
-//   .card-lg & {
-//     top: 0;
-//     right: -25px;
-//
-//     @media (min-width: $layout-breakpoint-xs) {
-//       top: -25px;
-//     }
-//   }
-// }
+.card-container {
+  margin-left: -$md-padding/2;
+  margin-right: -$md-padding/2;
+}
 
 .card-container__item {
   margin: 0 0 $md-padding 0;
   @media (min-width: $layout-breakpoint-xs) {
-    margin: 0 $md-padding $md-padding 0;
+    margin: 0 $md-padding/2 $md-padding $md-padding/2;
   }
 
   &--empty {
@@ -76,10 +63,9 @@ md-card {
   background-image: url('../images/bookmark.svg');
   background-size: contain;
   background-repeat: no-repeat;
-	filter: "progid:DXImageTransform.Microsoft.Dropshadow(OffX=12, OffY=12,Color='#444')";
-	filter: url(#drop-shadow);
-	-webkit-filter: drop-shadow(3px 3px 3px rgba(0,0,0,0.5));
-	filter: drop-shadow(3px 3px 3px rgba(0,0,0,0.5));
+  filter: "progid:DXImageTransform.Microsoft.Dropshadow(OffX=12, OffY=12,Color='#444')";
+  filter: url(#drop-shadow);
+  filter: drop-shadow(3px 3px 3px rgba(0,0,0,0.5));
   opacity: .6;
   z-index: 1;
   width: 33px;
