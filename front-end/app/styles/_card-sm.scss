@@ -1,8 +1,13 @@
 // card-sm layout
+.card-container {
+  margin-left: -$md-padding/2;
+  margin-right: -$md-padding/2;
+}
+
 .card-container__item {
   margin: 0 0 $md-padding 0;
   @media (min-width: $layout-breakpoint-xs) {
-    margin: 0 $md-padding $md-padding 0;
+    margin: 0 $md-padding/2 $md-padding $md-padding/2;
   }
 
   &--empty {
