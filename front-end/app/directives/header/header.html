@@ -37,15 +37,18 @@
 
         <md-input-container flex class="nav-search__input-container">
           <label hidden="hidden">&nbsp;</label>
-          <md-autocomplete md-autoselect
-                           md-selected-item="suggest.selectedItem"
+          <md-autocomplete md-selected-item="suggest.selectedItem"
                            md-autofocus
+                           md-no-cache="true"
+                           ng-keydown="keyPressed($event)"
+                           md-selected-item-change="clearInlineSuggestion()"
                            md-item-text="suggestion.term"
                            md-items="suggestion in suggest.doSuggest(searchFields.searchQuery)"
                            md-search-text="searchFields.searchQuery"
                            md-input-maxlength="100"
                            md-input-minlength="0"
                            class="nav-search__autocomplete"
+                           md-input-id="header-search-input"
                            id="header-simple-search-input"
                            md-menu-class="suggest-dropdown"
                            ng-model-options="{debounce: 100}"
@@ -54,6 +57,7 @@
               <span md-highlight-text="searchFields.searchQuery">{{ suggestion }}</span>
             </md-item-template>
           </md-autocomplete>
+          <span class="inline-suggestion"><span class="suggestion-hidden">{{hiddenInline}}</span>{{inlineSuggestion}}</span>
         </md-input-container>
         <div>
           <md-button aria-label="Ava detailotsing" class="md-icon-button" id="header-show-detailed-search-icon"
