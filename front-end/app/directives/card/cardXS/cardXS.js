@@ -1,15 +1,15 @@
 'use strict'
 
 angular.module('koolikottApp')
-.directive('dopLearningObjectRow',
+.directive('dopCardXs',
 [
     'translationService',
     function(translationService) {
         return {
             scope: {
-                learningObjects: '='
+                learningObject: '='
             },
-            templateUrl: 'directives/learningObjectRow/learningObjectRow.html',
+            templateUrl: 'directives/card/cardXS/cardXS.html',
             controller: function($scope) {
                 $scope.formatName = function(name) {
                     return formatNameToInitials(name);
@@ -22,16 +22,6 @@ angular.module('koolikottApp')
                 $scope.getCorrectLanguageString = function(languageStringList, language) {
                     if (languageStringList) {
                         return getUserDefinedLanguageString(languageStringList, translationService.getLanguage(), language);
-                    }
-                }
-
-                $scope.getItemLink = function(item) {
-                    if (item && item.type && item.id) {
-                        if (item.type === '.Material') {
-                            return "/material?id=" + item.id;
-                        } else if (item.type === '.Portfolio') {
-                            return "/portfolio?id=" + item.id;
-                        }
                     }
                 }
             }

@@ -104,6 +104,16 @@ angular.module('koolikottApp')
                     serverCallService.makeGet("rest/search?" + searchUrl, params, searchMostLikedSuccess, getMostLikedFail);
                 }
 
+                $scope.getItemLink = function(item) {
+                    if (item && item.type && item.id) {
+                        if (item.type === '.Material') {
+                            return "/material?id=" + item.id;
+                        } else if (item.type === '.Portfolio') {
+                            return "/portfolio?id=" + item.id;
+                        }
+                    }
+                }
+
                 $scope.$watch(function () {
                     return $location.search();
                 }, function (newValue, oldValue) {

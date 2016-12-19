@@ -1,5 +1,9 @@
 <h4 class="md-subhead" data-translate="RECOMMENDATIONS"></h4>
-<div data-dop-learning-object-row data-learning-objects="recommendations"></div>
+
+<div data-ng-repeat="item in recommendations" data-ng-href="{{getItemLink(item)}}" role="list" aria-label="Ava soovitatud materjal">
+  <div data-dop-card-xs learning-object="item"></div>
+</div>
+
 <div layout="row">
   <span flex></span>
   <md-button data-ng-click="showMoreRecommendations()">
@@ -11,7 +15,10 @@
 </div>
 
 <h4 class="md-subhead" data-translate="MOST_LIKED"></h4>
-<div data-dop-learning-object-row data-learning-objects="mostLikedList"></div>
+
+<div data-ng-repeat="item in mostLikedList" data-ng-href="{{getItemLink(item)}}" role="list" aria-label="Ava soovitatud materjal">
+  <div data-dop-card-xs learning-object="item"></div>
+</div>
 
 <md-list role="list">
   <md-list-item

@@ -12,11 +12,14 @@ angular.module('koolikottApp')
             },
             templateUrl: 'directives/card/cardMedia/cardMedia.html',
             controller: function ($scope, $rootScope) {
-                $scope.learningObjectType = $scope.$parent.learningObjectType;
+                $scope.learningObjectType;
 
                 function init () {
                     if ($scope.learningObject.type === '.Material') {
+                        $scope.learningObjectType = 'material';
                         $scope.materialType = iconService.getMaterialIcon($scope.learningObject.resourceTypes);
+                    } else if ($scope.learningObject.type === '.Portfolio') {
+                        $scope.learningObjectType = 'portfolio';
                     }
                 }
 
