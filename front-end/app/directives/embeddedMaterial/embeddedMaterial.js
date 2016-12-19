@@ -102,7 +102,7 @@ angular.module('koolikottApp')
                         $rootScope.savedMaterial = material;
 
                         $location.path('/material').search({
-                            materialId: material.id
+                            id: material.id
                         });
                     };
 

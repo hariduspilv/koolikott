@@ -15,7 +15,7 @@ angular.module('koolikottApp')
                 $scope.$watch('material', function(newValue, oldValue) {
                     if (newValue && newValue.type == ".Material") {
                         if ($scope.isAdmin) {
-                            serverCallService.makeGet("rest/material/isBroken?materialId=" + newValue.id, {}, isBrokenSuccess, queryFailed);
+                            serverCallService.makeGet("rest/material/isBroken?id=" + newValue.id, {}, isBrokenSuccess, queryFailed);
                         } else {
                             serverCallService.makeGet("rest/material/hasSetBroken?materialId=" + newValue.id, {}, hasSetBrokenSuccess, queryFailed);
                         }

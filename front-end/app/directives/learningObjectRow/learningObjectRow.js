@@ -7,20 +7,20 @@ angular.module('koolikottApp')
     function(translationService) {
         return {
             scope: {
-            	learningObjects: '='
+                learningObjects: '='
             },
             templateUrl: 'directives/learningObjectRow/learningObjectRow.html',
             controller: function($scope) {
-            	$scope.formatName = function(name) {
-            		return formatNameToInitials(name);
-            	}
+                $scope.formatName = function(name) {
+                    return formatNameToInitials(name);
+                }
 
-            	$scope.formatSurname = function(surname) {
-            		return formatSurnameToInitialsButLast(surname);
-            	}
+                $scope.formatSurname = function(surname) {
+                    return formatSurnameToInitialsButLast(surname);
+                }
 
                 $scope.getCorrectLanguageString = function(languageStringList, language) {
-                	if (languageStringList) {
+                    if (languageStringList) {
                         return getUserDefinedLanguageString(languageStringList, translationService.getLanguage(), language);
                     }
                 }
@@ -28,7 +28,7 @@ angular.module('koolikottApp')
                 $scope.getItemLink = function(item) {
                     if (item && item.type && item.id) {
                         if (item.type === '.Material') {
-                            return "/material?materialId=" + item.id;
+                            return "/material?id=" + item.id;
                         } else if (item.type === '.Portfolio') {
                             return "/portfolio?id=" + item.id;
                         }

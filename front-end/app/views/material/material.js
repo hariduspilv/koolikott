@@ -65,7 +65,7 @@ angular.module('koolikottApp')
         });
 
         function getMaterial(success, fail) {
-            var materialId = $route.current.params.materialId;
+            var materialId = $route.current.params.id;
             var params = {
                 'materialId': materialId
             };

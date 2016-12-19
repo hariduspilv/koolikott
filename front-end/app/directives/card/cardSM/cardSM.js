@@ -1,29 +1,47 @@
 'use strict'
 
 angular.module('koolikottApp')
-.directive('dopMaterialBox',
+.directive('dopCardSm',
 [
-    'translationService', 'serverCallService', '$rootScope', 'iconService', 'authenticatedUserService',
-    function (translationService, serverCallService, $rootScope, iconService, authenticatedUserService) {
+    'translationService', 'serverCallService', 'iconService', 'authenticatedUserService',
+    function (translationService, serverCallService, iconService, authenticatedUserService) {
         return {
             scope: {
-                material: '=',
-                chapter: '='
+                learningObject: '=',
+                chapter: '=?'
             },
-            templateUrl: 'directives/materialBox/materialBox.html',
-            controller: function ($scope, $location) {
+            templateUrl: 'directives/card/cardSM/cardSM.html',
+            controller: function ($scope, $location, $rootScope) {
 
                 $scope.selected = false;
                 $scope.isEditPortfolioPage = $rootScope.isEditPortfolioPage;
                 $scope.isEditPortfolioMode = $rootScope.isEditPortfolioMode;
+                $scope.learningObjectType;
 
-                $scope.navigateTo = function (material, $event) {
+                if ($scope.learningObject.type === '.Material') {
+                    $scope.learningObjectType = 'material';
+                } else if ($scope.learningObject.type === '.Portfolio') {
+                    $scope.learningObjectType = 'portfolio';
+                }
+
+                $scope.navigateTo = function (learningObject, $event) {
                     $event.preventDefault();
-                    $rootScope.savedMaterial = material;
 
-                    $location.path('/material').search({
-                        materialId: material.id
-                    });
+                    if (learningObject.type == '.Material') {
+                        $rootScope.savedMaterial = learningObject;
+
+                        $location.path('/material').search({
+                            id: learningObject.id
+                        });
+                    }
+
+                    if (learningObject.type == '.Portfolio') {
+                        $rootScope.savedPortfolio = learningObject;
+
+                        $location.path('/portfolio').search({
+                            id: learningObject.id
+                        });
+                    }
                 };
 
                 $scope.getCorrectLanguageTitle = function (material) {
@@ -55,33 +73,14 @@ angular.module('koolikottApp')
                     }
                 };
 
-                $scope.materialType = iconService.getMaterialIcon($scope.material.resourceTypes);
-
-                $scope.pickMaterial = function ($event, material) {
-                    $event.preventDefault();
-                    $event.stopPropagation();
-
-                    if ($rootScope.selectedMaterials) {
-                        var index = $rootScope.selectedMaterials.indexOf(material);
-                        if (index == -1) {
-                            $rootScope.selectedMaterials.push(material);
-                            material.selected = true;
-                        } else {
-                            $rootScope.selectedMaterials.splice(index, 1);
-                            material.selected = false;
-                        }
-                    } else {
-                        $rootScope.selectedMaterials = [];
-                        $rootScope.selectedMaterials.push(material);
-                        material.selected = true;
-                    }
-
+                $scope.formatDate = function(date) {
+                    return formatDateToDayMonthYear(date);
                 };
 
                 $scope.isAuthenticated = function () {
                     var authenticated = authenticatedUserService.getUser() && !authenticatedUserService.isRestricted() && !$rootScope.isEditPortfolioPage;
-                    if (!authenticated) {
-                        $scope.material.selected = false;
+                    if (!authenticated && $scope.learningObject.type == '.Material') {
+                        $scope.learningObject.selected = false;
                     }
 
                     return authenticated;
@@ -89,7 +88,7 @@ angular.module('koolikottApp')
 
                 $rootScope.$watch('selectedMaterials', function (newValue) {
                     if (newValue && newValue.length == 0) {
-                        $scope.material.selected = false;
+                        $scope.learningObject.selected = false;
                     }
                 });
             }

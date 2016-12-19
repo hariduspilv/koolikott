@@ -15,8 +15,7 @@
 
 <div data-infinite-scroll="nextPage()" class="card-container">
   <div data-ng-repeat="item in items track by item.id" class="card-container__item">
-    <div data-ng-if="item.type === '.Material'" data-dop-material-box material="item"></div>
-    <div data-ng-if="item.type === '.Portfolio'" data-dop-portfolio-box portfolio="item"></div>
+    <div data-dop-card-sm learning-object="item"></div>
   </div>
 </div>
 

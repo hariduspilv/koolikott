@@ -117,7 +117,7 @@ angular.module('koolikottApp')
             if (learningObject.type === ".Portfolio") {
                 return "/portfolio?id=" + learningObject.id;
             } else {
-                return "/material?materialId=" + learningObject.id;
+                return "/material?id=" + learningObject.id;
             }
         };
 

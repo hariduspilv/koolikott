@@ -667,7 +667,7 @@ angular.module('koolikottApp')
                     material.source = getSource(material);
                     $mdDialog.hide(material);
                     if (!$scope.isChapterMaterial) {
-                        $location.url('/material?materialId=' + material.id);
+                        $location.url('/material?id=' + material.id);
                     }
                 }
             }
