@@ -2,6 +2,7 @@ md-card {
   margin: 0; //to overwrite AM 8px
   .card-image {
     height: 100%;
+    position: relative;
   }
   .card-cover {
     @include aspect-ratio(3,2);
@@ -38,6 +39,36 @@ md-card {
         }
       }
     }
+  }
+}
+
+.card-hover {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: rgba(0, 0, 0, 0.7);
+  opacity: 0;
+  .pick {
+    position: absolute;
+    padding: 10px;
+    left: 0;
+    transition: display 1s cubic-bezier(0.25, 0.8, 0.25, 1);
+    .checked {
+      display: none;
+    }
+    &:hover {
+      .checked {
+        display: block;
+      }
+      .unchecked {
+        display: none;
+      }
+    }
+  }
+  md-icon.icon-kind {
+    color: rgba(255, 255, 255, 0.6);
   }
 }
 
@@ -97,36 +128,6 @@ md-card {
       top: -15px;
       left: 0;
     }
-  }
-}
-
-.card-hover {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  background-color: rgba(0, 0, 0, 0.7);
-  opacity: 0;
-  .pick {
-    position: absolute;
-    padding: 10px;
-    left: 0;
-    transition: display 1s cubic-bezier(0.25, 0.8, 0.25, 1);
-    .checked {
-      display: none;
-    }
-    &:hover {
-      .checked {
-        display: block;
-      }
-      .unchecked {
-        display: none;
-      }
-    }
-  }
-  md-icon.icon-kind {
-    color: rgba(255, 255, 255, 0.6);
   }
 }
 

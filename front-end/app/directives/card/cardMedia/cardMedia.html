@@ -9,9 +9,10 @@
 
 <div data-ng-if="isAuthenticated" data-dop-favorite data-learning-object="learningObject"></div>
 
-<div class="ribbon" data-ng-if="learningObject.type === '.Portfolio'"></div>
+
 
 <div class="card-image" layout="column" layout-xs="row">
+  <div class="ribbon" data-ng-if="learningObject.type === '.Portfolio'"></div>
   <!-- noimage -->
   <a data-ng-href="{{'/' + learningObjectType + '?id=' + learningObject.id}}" data-ng-if="!learningObject.picture" class="card-cover {{learningObjectType}} {{materialType}}" flex="100" flex-order="-1" flex-order-xs="1">
     <div class="pattern">
