@@ -54,6 +54,11 @@
   box-shadow: $whiteframe-shadow-7dp;
 }
 
+.md-button.md-mini.md-fab:not([disabled]):hover,
+.md-button.md-mini.md-fab:not([disabled]):focus {
+  background-color: lighten($color-accent, 10%);
+}
+
 .md-is-open .md-button.md-warn.md-fab  {
   background-color: $color-accent;
 }
