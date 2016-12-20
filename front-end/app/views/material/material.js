@@ -10,9 +10,9 @@ angular.module('koolikottApp')
         $scope.pageUrl = $location.absUrl();
         $scope.getMaterialSuccess = getMaterialSuccess;
 
-        if ($rootScope.savedMaterial) {
-            $scope.material = $rootScope.savedMaterial;
-            $rootScope.savedMaterial = null;
+        if (storageService.getMaterial()) {
+            $scope.material = storageService.getMaterial();
+            storageService.setMaterial(null);
 
             if ($rootScope.isEditPortfolioMode || authenticatedUserService.isAuthenticated()) {
                 $rootScope.selectedSingleMaterial = $scope.material;

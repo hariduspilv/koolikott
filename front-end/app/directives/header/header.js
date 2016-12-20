@@ -3,8 +3,8 @@
 angular.module('koolikottApp')
     .directive('dopHeader',
         [
-            'translationService', '$location', 'searchService', 'authenticationService', 'authenticatedUserService', '$timeout', '$mdDialog', 'suggestService', 'serverCallService', 'toastService', '$route', '$http', '$window', '$translate',
-            function (translationService, $location, searchService, authenticationService, authenticatedUserService, $timeout, $mdDialog, suggestService, serverCallService, toastService, $route, $http, $window, $translate) {
+            'translationService', '$location', 'searchService', 'authenticationService', 'authenticatedUserService', '$timeout', '$mdDialog', 'suggestService', 'serverCallService', 'toastService', '$route', '$http', '$window', '$translate', 'storageService',
+            function (translationService, $location, searchService, authenticationService, authenticatedUserService, $timeout, $mdDialog, suggestService, serverCallService, toastService, $route, $http, $window, $translate, storageService) {
                 return {
                     scope: true,
                     templateUrl: 'directives/header/header.html',
@@ -215,19 +215,19 @@ angular.module('koolikottApp')
                         }
 
                         $scope.makePublic = function () {
-                            $rootScope.savedPortfolio.visibility = 'PUBLIC';
+                            storageService.getPortfolio().visibility = 'PUBLIC';
                             updatePortfolio();
 
                             toastService.show('PORTFOLIO_HAS_BEEN_MADE_PUBLIC');
                         };
 
                         $scope.makeNotListed = function () {
-                            $rootScope.savedPortfolio.visibility = 'NOT_LISTED';
+                            storageService.getPortfolio().visibility = 'NOT_LISTED';
                             updatePortfolio();
                         };
 
                         $scope.makePrivate = function () {
-                            $rootScope.savedPortfolio.visibility = 'PRIVATE';
+                            storageService.getPortfolio().visibility = 'PRIVATE';
                             updatePortfolio();
                         };
 
@@ -237,7 +237,7 @@ angular.module('koolikottApp')
 
                         function updatePortfolio() {
                             var url = "rest/portfolio/update";
-                            serverCallService.makePost(url, $rootScope.savedPortfolio, updatePortfolioSuccess, updatePortfolioFailed);
+                            serverCallService.makePost(url, storageService.getPortfolio(), updatePortfolioSuccess, updatePortfolioFailed);
                         }
 
                         function updatePortfolioSuccess(portfolio) {
@@ -250,13 +250,13 @@ angular.module('koolikottApp')
 
                         $scope.saveAndExitPortfolio = function () {
                             var url = "rest/portfolio/update";
-                            serverCallService.makePost(url, $rootScope.savedPortfolio, saveAndExitPortfolioSuccess, updatePortfolioFailed);
+                            serverCallService.makePost(url, storageService.getPortfolio(), saveAndExitPortfolioSuccess, updatePortfolioFailed);
                         };
 
                         function saveAndExitPortfolioSuccess(portfolio) {
                             if (!isEmpty(portfolio)) {
                                 toastService.show('PORTFOLIO_SAVED');
-                                $rootScope.savedPortfolio = null;
+                                storageService.setPortfolio(null);
                                 $location.url('/portfolio?id=' + portfolio.id);
                                 $route.reload();
                             }

@@ -581,9 +581,9 @@ angular.module('koolikottApp')
         }
 
         function prefillMetadataFromPortfolio() {
-            if ($rootScope.savedPortfolio) {
-                if ($rootScope.savedPortfolio.taxon) {
-                    var taxon = Object.create($rootScope.savedPortfolio.taxon);
+            if (storageService.getPortfolio()) {
+                if (storageService.getPortfolio().taxon) {
+                    var taxon = Object.create(storageService.getPortfolio().taxon);
                     $scope.material.taxons = [taxon];
                     var educationalContext = taxonService.getEducationalContext(taxon);
 
@@ -592,12 +592,12 @@ angular.module('koolikottApp')
                     }
                 }
 
-                if ($rootScope.savedPortfolio.tags) {
-                    $scope.material.tags = $rootScope.savedPortfolio.tags.slice();
+                if (storageService.getPortfolio().tags) {
+                    $scope.material.tags = storageService.getPortfolio().tags.slice();
                 }
 
-                if ($rootScope.savedPortfolio.targetGroups) {
-                    $scope.material.targetGroups = $rootScope.savedPortfolio.targetGroups.slice();
+                if (storageService.getPortfolio().targetGroups) {
+                    $scope.material.targetGroups = storageService.getPortfolio().targetGroups.slice();
                 }
             }
         }

@@ -3,16 +3,16 @@
 angular.module('koolikottApp')
 .controller('editPortfolioController',
 [
-    '$scope', 'translationService', 'serverCallService', '$route', '$location', 'alertService', '$rootScope', 'authenticatedUserService', 'dialogService', 'toastService', '$mdDialog', '$interval', '$filter', '$timeout', '$document',
-    function ($scope, translationService, serverCallService, $route, $location, alertService, $rootScope, authenticatedUserService, dialogService, toastService, $mdDialog, $interval, $filter, $timeout, $document) {
+    '$scope', 'translationService', 'serverCallService', '$route', '$location', 'alertService', '$rootScope', 'authenticatedUserService', 'dialogService', 'toastService', '$mdDialog', '$interval', '$filter', '$timeout', '$document', 'storageService',
+    function ($scope, translationService, serverCallService, $route, $location, alertService, $rootScope, authenticatedUserService, dialogService, toastService, $mdDialog, $interval, $filter, $timeout, $document, storageService) {
         var isAutoSaving = false;
         var autoSaveInterval;
 
         function init() {
-            if ($rootScope.savedPortfolio) {
-                if (checkAuthorized($rootScope.savedPortfolio)) {
-                    setPortfolio($rootScope.savedPortfolio);
-                    checkPortfolioVisibility($rootScope.savedPortfolio);
+            if (storageService.getPortfolio()) {
+                if (checkAuthorized(storageService.getPortfolio())) {
+                    setPortfolio(storageService.getPortfolio());
+                    checkPortfolioVisibility(storageService.getPortfolio());
                 }
             } else {
                 getPortfolio(getPortfolioSuccess, getPortfolioFail);
@@ -107,7 +107,7 @@ angular.module('koolikottApp')
                     });
                 }
 
-                $rootScope.savedPortfolio = portfolio;
+                storageService.setPortfolio(portfolio);
                 $rootScope.isPlaceholderVisible = false;
             }
 
@@ -168,7 +168,7 @@ angular.module('koolikottApp')
                 }
 
                 $scope.$watch(function () {
-                    return $rootScope.savedPortfolio;
+                    return storageService.getPortfolio();
                 }, function (newPortfolio) {
                     $scope.portfolio = newPortfolio;
                 });

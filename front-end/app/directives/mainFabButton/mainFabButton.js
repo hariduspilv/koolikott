@@ -76,7 +76,7 @@ angular.module('koolikottApp')
                     if (isEmpty(portfolio)) {
                         createPortfolioFailed();
                     } else {
-                        $rootScope.savedPortfolio = portfolio;
+                        storageService.setPortfolio(portfolio);
                         $rootScope.openMetadataDialog = true;
                         $mdDialog.hide();
                         $location.url('/portfolio/edit?id=' + portfolio.id);

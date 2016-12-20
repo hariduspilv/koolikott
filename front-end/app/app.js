@@ -218,7 +218,8 @@ app.config(
             return path === '/';
         }
 
-        app.run(['$rootScope', '$location', 'authenticatedUserService', function ($rootScope, $location, authenticatedUserService) {
+        app.run(['$rootScope', '$location', 'authenticatedUserService', 'storageService',
+            function ($rootScope, $location, authenticatedUserService, storageService) {
             $rootScope.$on('$routeChangeSuccess', function () {
                 var editModeAllowed = ["/portfolio/edit", "/search/result", "/material"];
 
@@ -249,7 +250,7 @@ app.config(
                     $rootScope.selectedMaterials = [];
                 } else {
                     $rootScope.isEditPortfolioMode = false;
-                    $rootScope.savedPortfolio = null;
+                    storageService.setPortfolio(null);
                     $rootScope.selectedMaterials = null;
                 }
 

@@ -6,7 +6,7 @@ function() {
     return {
         scope: true,
         templateUrl: 'directives/pageStructure/columnLayout/columnLayout.html',
-        controller: function($scope, $rootScope, $mdSidenav, $window) {
+        controller: function($scope, $rootScope, $mdSidenav, $window, storageService) {
             $scope.toggleSidenav = function() {
                 $mdSidenav('left').toggle();
             };
@@ -16,12 +16,12 @@ function() {
             };
 
             $scope.$watch(function() {
-                return $rootScope.savedPortfolio;
+                return storageService.getPortfolio();
             }, function(newPortfolio, oldPortfolio) {
                 $scope.portfolio = newPortfolio;
             });
 
-            $scope.portfolio = $rootScope.savedPortfolio;
+            $scope.portfolio = storageService.getPortfolio();
         }
     };
 });

@@ -8,8 +8,8 @@ angular.module('koolikottApp')
                 var increaseViewCountPromise;
 
                 function init() {
-                    if ($rootScope.savedPortfolio) {
-                        setPortfolio($rootScope.savedPortfolio);
+                    if (storageService.getPortfolio()) {
+                        setPortfolio(storageService.getPortfolio());
                         increaseViewCount();
                     } else {
                         getPortfolio(getPortfolioSuccess, getPortfolioFail);
@@ -80,7 +80,7 @@ angular.module('koolikottApp')
 
                 function setPortfolio(portfolio) {
                     $scope.portfolio = portfolio;
-                    $rootScope.savedPortfolio = portfolio;
+                    storageService.setPortfolio(portfolio);
 
                     if ($scope.portfolio) {
 

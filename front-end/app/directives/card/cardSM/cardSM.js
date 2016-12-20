@@ -1,8 +1,8 @@
 'use strict'
 
 angular.module('koolikottApp').directive('dopCardSm', [
-    'translationService', 'serverCallService', 'iconService', 'authenticatedUserService', 'targetGroupService',
-    function (translationService, serverCallService, iconService, authenticatedUserService, targetGroupService) {
+    'translationService', 'serverCallService', 'iconService', 'authenticatedUserService', 'targetGroupService', 'storageService',
+    function (translationService, serverCallService, iconService, authenticatedUserService, targetGroupService, storageService) {
         return {
             scope: {
                 learningObject: '=',
@@ -28,7 +28,7 @@ angular.module('koolikottApp').directive('dopCardSm', [
                     $event.preventDefault();
 
                     if (learningObject.type == '.Material') {
-                        $rootScope.savedMaterial = learningObject;
+                        storageService.setMaterial(learningObject);
 
                         $location.path('/material').search({
                             id: learningObject.id
@@ -36,7 +36,7 @@ angular.module('koolikottApp').directive('dopCardSm', [
                     }
 
                     if (learningObject.type == '.Portfolio') {
-                        $rootScope.savedPortfolio = learningObject;
+                        storageService.setPortfolio(learningObject);
 
                         $location.path('/portfolio').search({
                             id: learningObject.id

@@ -3,8 +3,8 @@
 angular.module('koolikottApp')
 .directive('dopEmbeddedMaterial',
 [
-    'translationService', 'iconService', 'embedService', 'serverCallService', 'dialogService',
-    function (translationService, iconService, embedService, serverCallService, dialogService) {
+    'translationService', 'iconService', 'embedService', 'serverCallService', 'dialogService', 'storageService',
+    function (translationService, iconService, embedService, serverCallService, dialogService, storageService) {
         return {
             scope: {
                 material: '=',
@@ -99,7 +99,8 @@ angular.module('koolikottApp')
 
                     $scope.navigateToMaterial = function (material, $event) {
                         $event.preventDefault();
-                        $rootScope.savedMaterial = material;
+                        storageService.setMaterial(material);
+
 
                         $location.path('/material').search({
                             id: material.id
