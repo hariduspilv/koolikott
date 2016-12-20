@@ -330,7 +330,7 @@ module.exports = function (grunt) {
                         'libs/**/**/*.{js,map}',
                         'services/*.js',
                         'utils/**/**/*.{html,ttf,png,css,js}',
-                        'utlis/preloader/*.{gif}'
+                        'utils/preloader/*.*'
                     ]
                 }, {
                     expand: true,
