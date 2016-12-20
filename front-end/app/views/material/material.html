@@ -140,11 +140,11 @@
                     <span data-translate="DETAIL_VIEW_TARGET_GROUP" id="targetgroup-close"></span>
                   </small>
                   <br>
-                    <span class="hide-overflow" data-ng-repeat="targetGroup in material.targetGroups">
+                    <span class="hide-overflow" data-ng-repeat="targetGroup in targetGroups">
                       <span data-translate="{{'TARGET_GROUP_' + targetGroup}}"></span>
                       <span>{{$last ? '' : ', '}}</span>
                     </span>
-                  <span class="hide-overflow" data-ng-if="isNullOrZeroLength(material.targetGroups)"
+                  <span class="hide-overflow" data-ng-if="isNullOrZeroLength(targetGroups)"
                         data-translate="UNKNOWN">Unknown</span>
                 </p>
               </div>
