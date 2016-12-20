@@ -1,29 +1,29 @@
 'use strict'
 
-angular.module('koolikottApp')
-.directive('dopCardSm',
-[
-    'translationService', 'serverCallService', 'iconService', 'authenticatedUserService',
-    function (translationService, serverCallService, iconService, authenticatedUserService) {
+angular.module('koolikottApp').directive('dopCardSm', [
+    'translationService', 'serverCallService', 'iconService', 'authenticatedUserService', 'targetGroupService',
+    function (translationService, serverCallService, iconService, authenticatedUserService, targetGroupService) {
         return {
             scope: {
                 learningObject: '=',
                 chapter: '=?'
             },
             templateUrl: 'directives/card/cardSM/cardSM.html',
-            controller: function ($scope, $location, $rootScope) {
-
+            controller: function ($scope, $location, $rootScope, targetGroupService) {
                 $scope.selected = false;
                 $scope.isEditPortfolioPage = $rootScope.isEditPortfolioPage;
                 $scope.isEditPortfolioMode = $rootScope.isEditPortfolioMode;
-                $scope.learningObjectType;
 
-                if ($scope.learningObject.type === '.Material') {
-                    $scope.learningObjectType = 'material';
-                } else if ($scope.learningObject.type === '.Portfolio') {
-                    $scope.learningObjectType = 'portfolio';
+                function init() {
+                    if ($scope.learningObject.type === '.Material') {
+                        $scope.learningObjectType = 'material';
+                    } else if ($scope.learningObject.type === '.Portfolio') {
+                        $scope.learningObjectType = 'portfolio';
+                    }
+                    $scope.targetGroups = targetGroupService.getConcentratedLabelByTargetGroups($scope.learningObject.targetGroups);
                 }
 
+                init();
                 $scope.navigateTo = function (learningObject, $event) {
                     $event.preventDefault();
 
@@ -73,7 +73,7 @@ angular.module('koolikottApp')
                     }
                 };
 
-                $scope.formatDate = function(date) {
+                $scope.formatDate = function (date) {
                     return formatDateToDayMonthYear(date);
                 };
 

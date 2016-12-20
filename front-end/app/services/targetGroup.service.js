@@ -127,52 +127,55 @@ angular.module('koolikottApp').factory('targetGroupService', [
                 if (!targetGroups) return [];
                 var result = [];
 
-                //Preschool
-                var preschool = _.intersection(targetGroups, groups[0].children);
-                if (preschool.length === 2) result.push(groups[0].label);
-                else {
-                    result.push(preschool);
+                function addToResult(value) {
+                    if (value) result.push($translate.instant('TARGET_GROUP_' + value));
                 }
 
+                //Preschool
+                var preschool = _.intersection(targetGroups, groups[0].children);
+                if (preschool.length === 2) addToResult(groups[0].label);
+                else {
+                    addToResult(preschool[0]);
+                }
                 //1st level
                 var level1 = _.intersection(targetGroups, groups[1].children);
-                if (level1.length === 3) result.push(groups[1].label);
+                if (level1.length === 3) addToResult(groups[1].label);
                 else if (level1.length === 2) {
                     if (parseInt(level1[0].slice(-1)) === parseInt(level1[1].slice(-1)) - 1) {
                         result.push(level1[0].slice(-1) + ".-" + (level1[1].slice(-1)) + ". " + $translate.instant(GRADE));
                     }
                 } else {
-                    result.push(level1);
+                    addToResult(level1[0]);
                 }
 
                 //2nd level
                 var level2 = _.intersection(targetGroups, groups[2].children);
-                if (level2.length === 3) result.push(groups[2].label);
+                if (level2.length === 3) addToResult(groups[2].label);
                 else if (level2.length === 2) {
                     if (parseInt(level2[0].slice(-1)) === parseInt(level2[1].slice(-1)) - 1) {
                         result.push(level2[0].slice(-1) + ".-" + (level2[1].slice(-1)) + ". " + $translate.instant(GRADE));
                     }
                 } else {
-                    result.push(level2);
+                    addToResult(level2[0]);
                 }
 
                 //3d level
                 var level3 = _.intersection(targetGroups, groups[3].children);
-                if (level3.length === 3) result.push(groups[3].label);
+                if (level3.length === 3) addToResult(groups[3].label);
                 else if (level3.length === 2) {
                     if (parseInt(level3[0].slice(-1)) === parseInt(level3[1].slice(-1)) - 1) {
                         result.push(level3[0].slice(-1) + ".-" + (level3[1].slice(-1)) + ". " + $translate.instant(GRADE));
                     }
                 } else {
-                    result.push(level3);
+                    addToResult(level3[0]);
                 }
 
                 //Gymnasium
                 if (targetGroups.indexOf(groups[4].label) !== -1 || targetGroups.indexOf(groups[4].children[0]) !== -1) {
-                    result.push(groups[4].label);
+                    addToResult(groups[4].label);
                 }
 
-                return _.flattenDeep(result);
+                return result;
             },
 
             /**
