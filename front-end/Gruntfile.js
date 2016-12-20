@@ -62,7 +62,6 @@ module.exports = function (grunt) {
                     '<%= yeoman.app %>/views/**/**/*.html',
                     '<%= yeoman.app %>/directives/**/**/*.html',
                     '<%= yeoman.app %>/utils/**/**/*.html',
-                    '<%= yeoman.app %>/utils/*.gif',
                     '.tmp/styles/{,*/}*.css',
                     '<%= yeoman.app %>/images/{,*/}*.{png,jpg,jpeg,gif,webp,svg}'
                 ]
@@ -330,7 +329,8 @@ module.exports = function (grunt) {
                         'directives/**/**/*.{html,js}',
                         'libs/**/**/*.{js,map}',
                         'services/*.js',
-                        'utils/**/**/*.{html,ttf,png,css,js}'
+                        'utils/**/**/*.{html,ttf,png,css,js}',
+                        'utlis/preloader/*.{gif}'
                     ]
                 }, {
                     expand: true,
