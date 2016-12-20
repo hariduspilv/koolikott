@@ -94,10 +94,10 @@ angular.module('koolikottApp')
                         ],
                         openCloseChapter: true
                     });
-                    $rootScope.savedPortfolio = portfolio;
+                    storageService.setPortfolio(portfolio);
                     $rootScope.newPortfolioCreated = true;
                     $mdDialog.hide();
-                    $location.url('/portfolio/edit?id=' + $rootScope.savedPortfolio.id);
+                    $location.url('/portfolio/edit?id=' + storageService.getPortfolio().id);
                 }
             }
 

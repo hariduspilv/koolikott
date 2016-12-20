@@ -13,6 +13,7 @@ import java.util.Set;
 
 public class TargetGroupService {
 
+    private static final String TARGET_GROUP_TRANSLATION_PREFIX = "TARGET_GROUP_";
     @Inject
     private TranslationService translationService;
 
@@ -27,14 +28,14 @@ public class TargetGroupService {
         return targetGroupDAO.getByName(name);
     }
 
-    public TargetGroup getByTranslation(String translation) {
+    TargetGroup getByTranslation(String translation) {
         String translationKey = translationService.getTranslationKeyByTranslation(translation);
         if (translationKey == null) {
             return null;
         }
 
         try {
-            TargetGroupEnum targetGroupEnum = TargetGroupEnum.valueOf(translationKey.replaceFirst("^TARGET_GROUP_", ""));
+            TargetGroupEnum targetGroupEnum = TargetGroupEnum.valueOf(translationKey.replaceFirst("^" + TARGET_GROUP_TRANSLATION_PREFIX, ""));
             return targetGroupDAO.getByName(targetGroupEnum.name());
         } catch (IllegalArgumentException e) {
             return null;

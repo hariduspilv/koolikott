@@ -7,7 +7,6 @@ import ee.hm.dop.dao.UserFavoriteDAO;
 import ee.hm.dop.model.ChangedLearningObject;
 import ee.hm.dop.model.LearningObject;
 import ee.hm.dop.model.Material;
-import ee.hm.dop.model.Portfolio;
 import ee.hm.dop.model.ResourceType;
 import ee.hm.dop.model.Tag;
 import ee.hm.dop.model.TagDTO;
@@ -121,6 +120,7 @@ public class LearningObjectService extends BaseService {
         ChangedLearningObject changedLearningObject = new ChangedLearningObject();
         changedLearningObject.setLearningObject(learningObject);
         changedLearningObject.setChanger(user);
+        changedLearningObject.setAdded(DateTime.now());
 
         Taxon taxon = getTaxonByTranslation(tagName);
         ResourceType resourceType = resourceTypeService.findResourceByTranslation(tagName);
@@ -158,13 +158,7 @@ public class LearningObjectService extends BaseService {
     }
 
     private void addTaxon(LearningObject learningObject, Taxon taxon) {
-        List<Taxon> learningObjectTaxons = null;
-        if (learningObject instanceof Material) {
-            learningObjectTaxons = ((Material) learningObject).getTaxons();
-        } else if (learningObject instanceof Portfolio) {
-            learningObjectTaxons = ((Portfolio) learningObject).getTaxons();
-        }
-
+        List<Taxon> learningObjectTaxons = learningObject.getTaxons();
         if (learningObjectTaxons != null) {
             learningObjectTaxons.add(taxon);
         }
@@ -207,7 +201,7 @@ public class LearningObjectService extends BaseService {
         return returnableLearningObjects;
     }
 
-    public List<LearningObject> getNewestLearningObjects(int numberOfLearningObjects) {
+    List<LearningObject> getNewestLearningObjects(int numberOfLearningObjects) {
         return getPublicLearningObjects(numberOfLearningObjects, getLearningObjectDAO()::findNewestLearningObjects);
     }
 

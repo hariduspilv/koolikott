@@ -1,27 +1,36 @@
-<md-card class="card-sm" data-ng-class="{ active: learningObject.selected }" id="learningObject-card-{{learningObject.id}}"
-data-ng-click="navigateTo(learningObject, $event)"
-layout="column" layout-xs="row">
-  <div data-dop-card-media data-learning-object="learningObject" data-is-authenticated="isAuthenticated()" flex flex-order="-1" flex-order-xs="1"></div>
+<md-card class="card-sm" data-ng-class="{ active: learningObject.selected }"
+         id="learningObject-card-{{learningObject.id}}"
+         data-ng-click="navigateTo(learningObject, $event)"
+         layout="column" layout-xs="row">
+  <div data-dop-card-media data-learning-object="learningObject" data-is-authenticated="isAuthenticated()" flex
+       flex-order="-1" flex-order-xs="1"></div>
 
   <!-- content -->
   <div layout="column" flex flex-order="1" flex-order-xs="-1">
-    <md-card-content layout="column" >
+    <md-card-content layout="column">
       <a data-ng-href="{{'/' + learningObjectType + '?id=' + learningObject.id}}" class="no-link">
         <h3 class="two-rows" data-ng-if="learningObject.type === '.Portfolio'" data-ng-bind="learningObject.title"></h3>
-        <h3 class="two-rows" data-ng-if="learningObject.type === '.Material'" data-ng-bind="getCorrectLanguageTitle(learningObject)"></h3>
+        <h3 class="two-rows" data-ng-if="learningObject.type === '.Material'"
+            data-ng-bind="getCorrectLanguageTitle(learningObject)"></h3>
         <p class="md-caption ellipsis">
           <span data-ng-if="learningObject.type === '.Portfolio'" class="authors">
             <span data-ng-bind="formatName(learningObject.creator.name)"></span>
             <span data-ng-bind="formatSurname(learningObject.creator.surname)"></span>
           </span>
-          <span data-ng-if="learningObject.type === '.Material'" data-ng-repeat="author in learningObject.authors" class="authors">
+          <span data-ng-if="learningObject.type === '.Material'" data-ng-repeat="author in learningObject.authors"
+                class="authors">
             <span data-ng-bind="formatName(author.name)"></span>
             <span data-ng-bind="formatSurname(author.surname)"></span>
             <span data-ng-bind="$index < material.authors.length - 1 ? ', ' : ''"></span>
           </span>
         </p>
-        <ul class="md-caption text-right" data-ng-if="learningObject.type === '.Portfolio'">
-          <li class="ellipsis">II-III kooliaste</li>
+        <ul class="md-caption text-right">
+          <li class="ellipsis">
+            <span data-ng-repeat="group in targetGroups">
+              <span data-ng-bind="group"></span><span
+              data-ng-bind="$index < targetGroups.length - 1 ? ', ' : ''"></span>
+            </span>
+          </li>
           <li class="ellipsis">Ühiskonnaõpetus</li>
         </ul>
       </a>
@@ -29,7 +38,7 @@ layout="column" layout-xs="row">
 
     <md-divider></md-divider>
 
-    <md-card-actions class="md-caption" layout="row" layout-align="start center" >
+    <md-card-actions class="md-caption" layout="row" layout-align="start center">
       <md-icon>thumb_up</md-icon>
       <span>{{ learningObject.likes }}</span>
       <md-icon>thumb_down</md-icon>

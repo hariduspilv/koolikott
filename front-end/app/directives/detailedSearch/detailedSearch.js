@@ -3,8 +3,8 @@
 angular.module('koolikottApp')
 .directive('dopDetailedSearch',
 [
-    '$location', 'searchService', 'translationService', '$filter', 'serverCallService', 'metadataService', 'taxonService',
-    function ($location, searchService, translationService, $filter, serverCallService, metadataService, taxonService) {
+    '$location', 'searchService', 'translationService', '$filter', 'serverCallService', 'metadataService', 'taxonService', 'storageService',
+    function ($location, searchService, translationService, $filter, serverCallService, metadataService, taxonService, storageService) {
         return {
             scope: {
                 queryIn: '=',
@@ -86,7 +86,7 @@ angular.module('koolikottApp')
                         $scope.detailedSearch.keyCompetence = keyCompetence;
                     }
 
-                    if ($rootScope.isEditPortfolioMode && $rootScope.savedPortfolio) {
+                    if ($rootScope.isEditPortfolioMode && storageService.getPortfolio()) {
                         setEditModePrefill();
                     }
                 }
@@ -442,9 +442,9 @@ angular.module('koolikottApp')
                         }
 
                         function setEditModePrefill() {
-                            if ($rootScope.isEditPortfolioMode && $rootScope.savedPortfolio) {
-                                $scope.detailedSearch.taxon = $rootScope.savedPortfolio.taxon;
-                                $scope.detailedSearch.targetGroups = $rootScope.savedPortfolio.targetGroups;
+                            if ($rootScope.isEditPortfolioMode && storageService.getPortfolio()) {
+                                $scope.detailedSearch.taxon = storageService.getPortfolio().taxon;
+                                $scope.detailedSearch.targetGroups = storageService.getPortfolio().targetGroups;
                                 prefilling = true;
 
                                 $scope.detailedSearch.type = "material";

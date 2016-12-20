@@ -123,9 +123,9 @@ public class ChangedLearningObjectServiceTest {
 
         material.setTaxons(Collections.singletonList(subject));
 
-        assertTrue(changedLearningObjectService.materialHasThis(material, change1));
-        assertFalse(changedLearningObjectService.materialHasThis(material, change2));
-        assertFalse(changedLearningObjectService.materialHasThis(material, change3));
+        assertTrue(changedLearningObjectService.learningObjectHasThis(material, change1));
+        assertFalse(changedLearningObjectService.learningObjectHasThis(material, change2));
+        assertFalse(changedLearningObjectService.learningObjectHasThis(material, change3));
     }
 
     @Test
@@ -146,9 +146,9 @@ public class ChangedLearningObjectServiceTest {
 
         material.setResourceTypes(Collections.singletonList(resourceType));
 
-        assertFalse(changedLearningObjectService.materialHasThis(material, change1));
-        assertFalse(changedLearningObjectService.materialHasThis(material, change2));
-        assertTrue(changedLearningObjectService.materialHasThis(material, change3));
+        assertFalse(changedLearningObjectService.learningObjectHasThis(material, change1));
+        assertFalse(changedLearningObjectService.learningObjectHasThis(material, change2));
+        assertTrue(changedLearningObjectService.learningObjectHasThis(material, change3));
     }
 
     @Test
@@ -169,9 +169,9 @@ public class ChangedLearningObjectServiceTest {
 
         material.setTargetGroups(Collections.singletonList(targetGroup));
 
-        assertFalse(changedLearningObjectService.materialHasThis(material, change1));
-        assertTrue(changedLearningObjectService.materialHasThis(material, change2));
-        assertFalse(changedLearningObjectService.materialHasThis(material, change3));
+        assertFalse(changedLearningObjectService.learningObjectHasThis(material, change1));
+        assertTrue(changedLearningObjectService.learningObjectHasThis(material, change2));
+        assertFalse(changedLearningObjectService.learningObjectHasThis(material, change3));
     }
 
     @Test
@@ -189,7 +189,7 @@ public class ChangedLearningObjectServiceTest {
 
         portfolio.setTargetGroups(Collections.singletonList(targetGroup));
 
-        assertFalse(changedLearningObjectService.portfolioHasThis(portfolio, change1));
-        assertTrue(changedLearningObjectService.portfolioHasThis(portfolio, change2));
+        assertFalse(changedLearningObjectService.learningObjectHasThis(portfolio, change1));
+        assertTrue(changedLearningObjectService.learningObjectHasThis(portfolio, change2));
     }
 }
