@@ -4,9 +4,9 @@
   </small>
 </p>
 <div layout="row tags">
-  <md-chips ng-model="upVoteForms" readonly="true" md-removable="$parent.isEditPortfolioMode" md-on-remove="removeTag($chip.tag)">
+  <md-chips ng-model="upVoteForms" readonly="true" md-removable="isEditPortfolioMode()" md-on-remove="removeTag($chip.tag)">
     <md-chip-template>
-      <md-button data-ng-if="(isAllowed() && !$root.isReportedByUser) && !isAdmin()" class="md-icon-button"
+      <md-button data-ng-if="(isAllowed() && !$root.isReportedByUser) && !isAdmin() && !isEditPortfolioMode()" class="md-icon-button"
                  ng-click="reportTag($chip.tag)">
         <md-icon class="material-icons md-light md-48">error_outline</md-icon>
         <md-tooltip>
@@ -29,7 +29,7 @@
   </md-chips>
 
   <form name="addTagForm" id="addTagForm" data-ng-show="isAllowed()" ng-submit="addTag()">
-    <md-autocomplete
+    <md-autocomplete class="tags"
       md-selected-item="newTag.selectedItem"
       md-floating-label="{{'MATERIAL_ADD_TAG' | translate}}"
       md-item-text="tag"
