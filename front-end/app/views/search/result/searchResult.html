@@ -41,8 +41,7 @@
           <div data-infinite-scroll="nextPage()" data-infinite-scroll-disabled="searching">
             <div class="card-container">
               <div data-ng-repeat="item in items" class="card-container__item">
-                <div data-ng-if="item.type === '.Material'" data-dop-material-box material="item"></div>
-                <div data-ng-if="item.type === '.Portfolio'" data-dop-portfolio-box portfolio="item"></div>
+                <div data-dop-card-sm learningObject="item"></div>
               </div>
               <div data-ng-repeat="i in [1,2,3,4,5,6]" class="card-container__item card-container__item--empty"><div><md-card class="card-sm"></md-card></div></div>
             </div>
