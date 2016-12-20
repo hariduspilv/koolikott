@@ -172,7 +172,7 @@ insert into LearningObject(id, added, updated, views, picture, creator, deleted,
 insert into Material(id, lang, issueDate, licenseType, source, repository, repositoryIdentifier, paid, isSpecialEducation, embeddable) values(4, 3, 4, 1,  'https://en.wikipedia.org/wiki/Power_Architecture', null, null, false, false, false);
 insert into LearningObject(id, added, updated, views, picture, creator, deleted, recommendation) values(5, '2011-09-01 00:00:01', '2012-11-04 09:30:01', 500, null, 2, false, null);
 insert into Material(id, lang, issueDate, licenseType, source, repository, repositoryIdentifier, paid, isSpecialEducation, embeddable) values(5, 3, 5, 2,  'https://en.wikipedia.org/wiki/Power_Architecture', null, null, false, false, false);
-insert into LearningObject(id, added, updated, views, picture, creator, deleted, recommendation) values(6, '1911-09-01 00:00:01', null, 600, null, null, false, null)
+insert into LearningObject(id, added, updated, views, picture, creator, deleted, recommendation) values(6, '1911-09-01 00:00:01', null, 600, null, null, false, null);
 insert into Material(id, lang, issueDate, licenseType, source, repository, repositoryIdentifier, paid, isSpecialEducation, embeddable) values(6, null, null, null, 'http://www.planalto.gov.br/ccivil_03/Constituicao/Constituicao.htm', null, null, false, false, false);
 insert into LearningObject(id, added, updated, views, picture, creator, deleted, recommendation) values(7, '2001-07-01 00:00:01', null, 700, null, null, false, null);
 insert into Material(id, lang, issueDate, licenseType, source, repository, repositoryIdentifier, paid, isSpecialEducation, embeddable) values(7, 4, 6, 3, 'https://president.ee/en/republic-of-estonia/the-constitution/index.html', null, null, false, false, false);
@@ -266,22 +266,22 @@ insert into Material_Title(title, material) values(18, 8);
 
 -- Material_Taxon
 
-insert into Material_Taxon(material, taxon) values(1,20); -- PRESCHOOLEDUCATION/Mathematics/Biology
-insert into Material_Taxon(material, taxon) values(2,21); -- PRESCHOOLEDUCATION/Mathematics/Mathematics
-insert into Material_Taxon(material, taxon) values(3,20); -- PRESCHOOLEDUCATION/Mathematics/Biology
-insert into Material_Taxon(material, taxon) values(4,20); -- PRESCHOOLEDUCATION/Mathematics/Biology
-insert into Material_Taxon(material, taxon) values(5,21); -- PRESCHOOLEDUCATION/Mathematics/Mathematics
-insert into Material_Taxon(material, taxon) values(6,20); -- PRESCHOOLEDUCATION/Mathematics/Biology
-insert into Material_Taxon(material, taxon) values(6,21); -- PRESCHOOLEDUCATION/Mathematics/Mathematics
+insert into LearningObject_Taxon(learningObject, taxon) values(1,20); -- PRESCHOOLEDUCATION/Mathematics/Biology
+insert into LearningObject_Taxon(learningObject, taxon) values(2,21); -- PRESCHOOLEDUCATION/Mathematics/Mathematics
+insert into LearningObject_Taxon(learningObject, taxon) values(3,20); -- PRESCHOOLEDUCATION/Mathematics/Biology
+insert into LearningObject_Taxon(learningObject, taxon) values(4,20); -- PRESCHOOLEDUCATION/Mathematics/Biology
+insert into LearningObject_Taxon(learningObject, taxon) values(5,21); -- PRESCHOOLEDUCATION/Mathematics/Mathematics
+insert into LearningObject_Taxon(learningObject, taxon) values(6,20); -- PRESCHOOLEDUCATION/Mathematics/Biology
+insert into LearningObject_Taxon(learningObject, taxon) values(6,21); -- PRESCHOOLEDUCATION/Mathematics/Mathematics
 
-insert into Material_Taxon(material, taxon) values(7,11); -- PRESCHOOLEDUCATION/ForeignLanguage
+insert into LearningObject_Taxon(learningObject, taxon) values(7,11); -- PRESCHOOLEDUCATION/ForeignLanguage
 
-insert into Material_Taxon(material, taxon) values(1,2); -- BASICEDUCATION
-insert into Material_Taxon(material, taxon) values(2,4); -- HIGHEREDUCATION
-insert into Material_Taxon(material, taxon) values(3,5); -- VOCATIONALEDUCATION
-insert into Material_Taxon(material, taxon) values(4,6); -- CONTINUINGEDUCATION
-insert into Material_Taxon(material, taxon) values(5,4); -- HIGHEREDUCATION
-insert into Material_Taxon(material, taxon) values(7,5); -- VOCATIONALEDUCATION
+insert into LearningObject_Taxon(learningObject, taxon) values(1,2); -- BASICEDUCATION
+insert into LearningObject_Taxon(learningObject, taxon) values(2,4); -- HIGHEREDUCATION
+insert into LearningObject_Taxon(learningObject, taxon) values(3,5); -- VOCATIONALEDUCATION
+insert into LearningObject_Taxon(learningObject, taxon) values(4,6); -- CONTINUINGEDUCATION
+insert into LearningObject_Taxon(learningObject, taxon) values(5,4); -- HIGHEREDUCATION
+insert into LearningObject_Taxon(learningObject, taxon) values(7,5); -- VOCATIONALEDUCATION
 
 -- ResourceType
 
@@ -489,9 +489,9 @@ insert into LearningObject_CrossCurricularTheme(learningObject, crossCurricularT
 -- Portfolio Key competences
 insert into LearningObject_KeyCompetence(learningObject, keyCompetence) values (101, 1);
 
--- Portfolio_Taxon
-insert into Portfolio_Taxon(portfolio, taxon) values(101, 21);
-insert into Portfolio_Taxon(portfolio, taxon) values(103, 21);
+-- Portfolio taxons
+insert into LearningObject_Taxon(learningObject, taxon) values(101, 21);
+insert into LearningObject_Taxon(learningObject, taxon) values(103, 21);
 
 -- Improper content
 

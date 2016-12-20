@@ -13,7 +13,7 @@ public class ChangedLearningObjectDAO extends BaseDAO<ChangedLearningObject> {
     }
 
     public List<ChangedLearningObject> findAll() {
-        return createQuery("FROM ChangedLearningObject clo", ChangedLearningObject.class).getResultList();
+        return createQuery("FROM ChangedLearningObject", ChangedLearningObject.class).getResultList();
     }
 
     public boolean removeById(long id) {

@@ -16,7 +16,7 @@ INSERT INTO dop.LanguageString (id, lang, textValue) VALUES (5001, 1, 'Materjal 
 INSERT INTO dop.LanguageString (id, lang, textValue) VALUES (5002, 1, 'Materjal 1');
 INSERT INTO dop.Material_Description (material, description) VALUES (4245, 5001);
 INSERT INTO dop.Material_Title (material, title) VALUES (4245, 5002);
-INSERT INTO dop.Material_Taxon (material, taxon) VALUES (4245, 30149);
+INSERT INTO dop.LearningObject_Taxon (learningObject, taxon) VALUES (4245, 30149);
 INSERT INTO dop.Material_ResourceType (material, resourceType) VALUES (4245, 1);
 INSERT INTO dop.Portfolio (id, title, taxon, originalCreator, summary, visibility) VALUES (4237, 'Kogumik 1', 1000, 12, 'Kogumik 1', 'PRIVATE');
 INSERT INTO dop.Portfolio (id, title, taxon, originalCreator, summary, visibility) VALUES (4238, 'Kogumik 2', 50022, 12, 'Kogumik 2', 'PRIVATE');

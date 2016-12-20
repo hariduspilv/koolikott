@@ -2,7 +2,7 @@
 <md-toolbar id="md-toolbar-header" class="navbar md-whiteframe-1dp md-primary"
             ng-class="{
             'md-accent': $root.isEditPortfolioMode,
-            'md-red': (isAdminOrModerator() && (isViewAdminPanelPage || ((learningObjectImproper || learningObjectBroken || learningObjectChanged) && isViewMaterialOrPortfolioPage))),
+            'md-red': isHeaderRed(),
             'md-gray': (isAdminOrModerator() && learningObjectDeleted && isViewMaterialOrPortfolioPage)
             }"
             data-click-outside="clickOutside()"

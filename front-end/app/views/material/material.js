@@ -356,7 +356,7 @@ angular.module('koolikottApp')
 
                         $scope.setNotImproper = function () {
                             if ($scope.isAdmin() && $scope.material) {
-                                url = "rest/impropers?learningObject=" + $scope.material.id;
+                                var url = "rest/impropers?learningObject=" + $scope.material.id;
                                 serverCallService.makeDelete(url, {}, setNotImproperSuccessful, setNotImproperFailed);
                             }
                         };

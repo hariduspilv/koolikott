@@ -3,6 +3,7 @@
   <tr md-row>
     <th md-column md-order-by="byTitle"><span data-translate="TITLE"></span></th>
     <th md-column md-order-by="byChanger"><span data-translate="CHANGER"></span></th>
+    <th md-column md-order-by="byUpdatedAt"><span data-translate="UPDATED"></span></th>
     <th md-column></th>
   </tr>
   </thead>
@@ -20,6 +21,7 @@
   <tr md-row data-ng-repeat="item in data">
     <td md-cell>{{getLearningObjectTitle(item.learningObject)}}</td>
     <td md-cell>{{item.changer.name}} {{item.changer.surname}}</td>
+    <td md-cell>{{formatDate(item.added)}}</td>
     <td md-cell>
       <a ng-href="{{getLearningObjectUrl(item.learningObject)}}">
         <md-button aria-label="Ava" class="md-raised md-default" data-translate="BUTTON_OPEN"></md-button>

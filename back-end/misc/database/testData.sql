@@ -311,33 +311,33 @@ insert into Material_Title(title, material) values(10834, 3919);
 
 -- Material_Taxon
 
-insert into Material_Taxon(material, taxon) values(1, 1); -- PRESCHOOLEDUCATION
-insert into Material_Taxon(material, taxon) values(1, 1011); -- BASICEDUCATION - loodusained - bioloogia
-insert into Material_Taxon(material, taxon) values(1, 30001); -- BASICEDUCATION - keel_ja_kirjandus - eesti_keel - kirjutamine (topic)
-insert into Material_Taxon(material, taxon) values(1, 10300); -- VOCATIONALEDUCATION - Computer_science - Computers_and_Networks - Majanduse_alused - Vocational_Education_Topic1
-insert into Material_Taxon(material, taxon) values(2, 1061); -- SECONDARYEDUCATION - loodusained - bioloogia
-insert into Material_Taxon(material, taxon) values(3, 4); -- VOCATIONALEDUCATION
-insert into Material_Taxon(material, taxon) values(4, 1061); -- SECONDARYEDUCATION - loodusained - bioloogia
-insert into Material_Taxon(material, taxon) values(5, 1060); -- SECONDARYEDUCATION - matemaatika - matemaatika
-insert into Material_Taxon(material, taxon) values(6, 1014); -- BASICEDUCATION - Mathematics - Mathematics
-insert into Material_Taxon(material, taxon) values(6, 1061); -- SECONDARYEDUCATION - loodusained - bioloogia
-insert into Material_Taxon(material, taxon) values(10, 103); -- PRESCHOOLEDUCATION - Mathematics
-insert into Material_Taxon(material, taxon) values(11, 103); -- PRESCHOOLEDUCATION - Mathematics
+insert into LearningObject_Taxon(learningObject, taxon) values(1, 1); -- PRESCHOOLEDUCATION
+insert into LearningObject_Taxon(learningObject, taxon) values(1, 1011); -- BASICEDUCATION - loodusained - bioloogia
+insert into LearningObject_Taxon(learningObject, taxon) values(1, 30001); -- BASICEDUCATION - keel_ja_kirjandus - eesti_keel - kirjutamine (topic)
+insert into LearningObject_Taxon(learningObject, taxon) values(1, 10300); -- VOCATIONALEDUCATION - Computer_science - Computers_and_Networks - Majanduse_alused - Vocational_Education_Topic1
+insert into LearningObject_Taxon(learningObject, taxon) values(2, 1061); -- SECONDARYEDUCATION - loodusained - bioloogia
+insert into LearningObject_Taxon(learningObject, taxon) values(3, 4); -- VOCATIONALEDUCATION
+insert into LearningObject_Taxon(learningObject, taxon) values(4, 1061); -- SECONDARYEDUCATION - loodusained - bioloogia
+insert into LearningObject_Taxon(learningObject, taxon) values(5, 1060); -- SECONDARYEDUCATION - matemaatika - matemaatika
+insert into LearningObject_Taxon(learningObject, taxon) values(6, 1014); -- BASICEDUCATION - Mathematics - Mathematics
+insert into LearningObject_Taxon(learningObject, taxon) values(6, 1061); -- SECONDARYEDUCATION - loodusained - bioloogia
+insert into LearningObject_Taxon(learningObject, taxon) values(10, 103); -- PRESCHOOLEDUCATION - Mathematics
+insert into LearningObject_Taxon(learningObject, taxon) values(11, 103); -- PRESCHOOLEDUCATION - Mathematics
 
 
-insert into Material_Taxon(material, taxon) values(12, 15020); -- PRESCHOOLEDUCATION - Me_and_the_environment - Preschool_Topic1 - Subtopic_for_Preschool_Topic1
-insert into Material_Taxon(material, taxon) values(13, 40000); --  BASICEDUCATION -     keel_ja_kirjandus - eesti_keel - keel_ja_ühiskond - eesti_keel_ja_teised_keeled (subtopic)
-insert into Material_Taxon(material, taxon) values(14, 60000); --  SECONDARYEDUCATION - keel_ja_kirjandus - eesti_keel - keel_ja_ühiskond - eesti_keel_ja_teised_keeled (subtopic)
-insert into Material_Taxon(material, taxon) values(15, 15040); -- VOCATIONALEDUCATION - Computer_science - Computers_and_Networks - Majanduse_alused - Vocational_Education_Topic1 - Subtopic_for_Vocational_Education
+insert into LearningObject_Taxon(learningObject, taxon) values(12, 15020); -- PRESCHOOLEDUCATION - Me_and_the_environment - Preschool_Topic1 - Subtopic_for_Preschool_Topic1
+insert into LearningObject_Taxon(learningObject, taxon) values(13, 40000); --  BASICEDUCATION -     keel_ja_kirjandus - eesti_keel - keel_ja_ühiskond - eesti_keel_ja_teised_keeled (subtopic)
+insert into LearningObject_Taxon(learningObject, taxon) values(14, 60000); --  SECONDARYEDUCATION - keel_ja_kirjandus - eesti_keel - keel_ja_ühiskond - eesti_keel_ja_teised_keeled (subtopic)
+insert into LearningObject_Taxon(learningObject, taxon) values(15, 15040); -- VOCATIONALEDUCATION - Computer_science - Computers_and_Networks - Majanduse_alused - Vocational_Education_Topic1 - Subtopic_for_Vocational_Education
 
-insert into Material_Taxon(material, taxon) values(30, 30001); -- BASICEDUCATION - keel_ja_kirjandus - eesti_keel - kirjutamine (topic)
-insert into Material_Taxon(material, taxon) values(31, 20000); -- VOCATIONALEDUCATION - Computer_science - Computers_and_Networks (specialization)
-insert into Material_Taxon(material, taxon) values(32, 20100); -- VOCATIONALEDUCATION - Computer_science - Computers_and_Networks - Majanduse_alused (module)
-insert into Material_Taxon(material, taxon) values(33, 10300); -- VOCATIONALEDUCATION - Computer_science - Computers_and_Networks - Majanduse_alused - Vocational_Education_Topic1
-insert into Material_Taxon(material, taxon) values(36, 1); -- PRESCHOOLEDUCATION
-insert into Material_Taxon(material, taxon) values(36, 1013); -- BASICEDUCATION - loodusained - füüsika
-insert into Material_Taxon(material, taxon) values(37, 103); -- PRESCHOOLEDUCATION - Mathematics
-insert into Material_Taxon(material, taxon) values(3919, 1054); -- SECONDARYEDUCATION - võõrkeeled - eesti_keel_teise_keelena
+insert into LearningObject_Taxon(learningObject, taxon) values(30, 30001); -- BASICEDUCATION - keel_ja_kirjandus - eesti_keel - kirjutamine (topic)
+insert into LearningObject_Taxon(learningObject, taxon) values(31, 20000); -- VOCATIONALEDUCATION - Computer_science - Computers_and_Networks (specialization)
+insert into LearningObject_Taxon(learningObject, taxon) values(32, 20100); -- VOCATIONALEDUCATION - Computer_science - Computers_and_Networks - Majanduse_alused (module)
+insert into LearningObject_Taxon(learningObject, taxon) values(33, 10300); -- VOCATIONALEDUCATION - Computer_science - Computers_and_Networks - Majanduse_alused - Vocational_Education_Topic1
+insert into LearningObject_Taxon(learningObject, taxon) values(36, 1); -- PRESCHOOLEDUCATION
+insert into LearningObject_Taxon(learningObject, taxon) values(36, 1013); -- BASICEDUCATION - loodusained - füüsika
+insert into LearningObject_Taxon(learningObject, taxon) values(37, 103); -- PRESCHOOLEDUCATION - Mathematics
+insert into LearningObject_Taxon(learningObject, taxon) values(3919, 1054); -- SECONDARYEDUCATION - võõrkeeled - eesti_keel_teise_keelena
 
 
 -- Material_ResourceType

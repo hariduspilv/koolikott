@@ -5,7 +5,6 @@ import ee.hm.dop.dao.LearningObjectDAO;
 import ee.hm.dop.model.ChangedLearningObject;
 import ee.hm.dop.model.LearningObject;
 import ee.hm.dop.model.Material;
-import ee.hm.dop.model.Portfolio;
 import ee.hm.dop.model.ResourceType;
 import ee.hm.dop.model.TargetGroup;
 import ee.hm.dop.model.User;
@@ -118,46 +117,26 @@ public class ChangedLearningObjectService {
     }
 
     private void removeTaxonFromLearningObject(LearningObject learningObject, Taxon taxon) {
-        if (learningObject instanceof Portfolio) {
-            Iterator iterator = ((Portfolio) learningObject).getTaxons().iterator();
-            while (iterator.hasNext()) {
-                Taxon t = (Taxon) iterator.next();
-                if (t.getId().equals(taxon.getId())) {
-                    iterator.remove();
-                }
-            }
-        } else if (learningObject instanceof Material) {
-            Iterator iterator = ((Material) learningObject).getTaxons().iterator();
-            while (iterator.hasNext()) {
-                Taxon t = (Taxon) iterator.next();
-                if (t.getId().equals(taxon.getId())) {
-                    iterator.remove();
-                }
+        Iterator iterator = learningObject.getTaxons().iterator();
+        while (iterator.hasNext()) {
+            Taxon t = (Taxon) iterator.next();
+            if (t.getId().equals(taxon.getId())) {
+                iterator.remove();
             }
         }
     }
 
-    public boolean removeChangeById(long id) {
+    boolean removeChangeById(long id) {
         return changedLearningObjectDAO.removeById(id);
     }
 
-    public boolean materialHasThis(Material material, ChangedLearningObject change) {
+    boolean learningObjectHasThis(LearningObject learningObject, ChangedLearningObject change) {
         if (change.getTaxon() != null) {
-            return material.getTaxons() != null && material.getTaxons().contains(change.getTaxon());
-        } else if (change.getResourceType() != null) {
-            return material.getResourceTypes() != null && material.getResourceTypes().contains(change.getResourceType());
-        } else if (change.getTargetGroup() != null) {
-            return material.getTargetGroups() != null && material.getTargetGroups().contains(change.getTargetGroup());
-        }
-
-        return false;
-    }
-
-    public boolean portfolioHasThis(Portfolio portfolio, ChangedLearningObject change) {
-        if (change.getTaxon() != null) {
-            return portfolio.getTaxons() != null && portfolio.getTaxons().contains(change.getTaxon());
+            return learningObject.getTaxons() != null && learningObject.getTaxons().contains(change.getTaxon());
         }  else if (change.getTargetGroup() != null) {
-            return portfolio.getTargetGroups() != null && portfolio.getTargetGroups().contains(change.getTargetGroup());
+            return learningObject.getTargetGroups() != null && learningObject.getTargetGroups().contains(change.getTargetGroup());
+        } else if (change.getResourceType() != null && learningObject instanceof Material) {
+            return ((Material) learningObject).getResourceTypes() != null && ((Material) learningObject).getResourceTypes().contains(change.getResourceType());
         }
 
         return false;

@@ -81,73 +81,87 @@
               </md-menu>
             </div>
 
-            <!-- left meta  -->
-            <div layout="row" class="on-left">
-              <div flex>
-                <p class="md-body-2 meta">
-                  <small class="md-caption">
-                    <span data-translate="DETAIL_VIEW_EDUCATIONAL_CONTEXT" id="taxon-close"></span>
-                  </small>
-                  <br>
-                  <span class="hide-overflow" data-ng-repeat="educationalContext in getMaterialEducationalContexts() track by $index">
-                    {{educationalContext.name.toUpperCase() | translate}}{{$last ? '' : ', '}}
+          <!-- left meta  -->
+          <div layout="row" class="on-left">
+            <div flex>
+              <p class="md-body-2 meta">
+                <small class="md-caption">
+                  <span data-translate="DETAIL_VIEW_EDUCATIONAL_CONTEXT" id="taxon-close"></span>
+                </small>
+                <br>
+                <span class="ellipsis">
+                  <span class="ellipsis" data-ng-repeat="educationalContext in getMaterialEducationalContexts() | limitTo:2 track by $index">
+                  <span class="ellipsis" data-translate="{{educationalContext.name.toUpperCase() }}"></span>
                   </span>
-                  <span class="hide-overflow" data-ng-if="!getMaterialEducationalContexts().length"
-                        data-translate="UNKNOWN">Unknown</span>
-                </p>
-              </div>
-              <div flex data-ng-if="getMaterialSubjects().length === 0">
-                <p class="md-body-2 meta">
-                  <small class="md-caption">
-                    <span data-translate="DETAIL_VIEW_DOMAIN"></span>
-                  </small>
-                  <br/>
-                  <span class="hide-overflow" data-ng-repeat="domain in getMaterialDomains() track by $index">
-                    {{'DOMAIN_' + domain.name.toUpperCase() | translate}}{{$last ? '' : ', '}}
+                </span>
+                <span class="ellipsis" data-ng-if="getMaterialEducationalContexts().length > 2">...</span>
+                <span class="ellipsis" data-ng-if="!getMaterialEducationalContexts().length"
+                      data-translate="UNKNOWN">Unknown</span>
+              </p>
+            </div>
+            <div flex data-ng-if="getMaterialSubjects().length === 0">
+              <p class="md-body-2 meta">
+                <small class="md-caption">
+                  <span data-translate="DETAIL_VIEW_DOMAIN"></span>
+                </small>
+                <br/>
+                <span class="ellipsis">
+                  <span class="ellipsis" data-ng-repeat="domain in getMaterialDomains() | limitTo:2 track by $index">
+                    <span class="ellipsis" data-translate="{{'DOMAIN_' + domain.name.toUpperCase() }}"></span>
                   </span>
-                  <span class="hide-overflow" data-ng-if="!getMaterialDomains().length"
-                        data-translate="UNKNOWN">Unknown</span>
-                </p>
-              </div>
-              <div flex data-ng-if="getMaterialSubjects().length > 0">
-                <p class="md-body-2 meta">
-                  <small class="md-caption">
-                    <span data-translate="DETAIL_VIEW_SUBJECT"></span>
-                  </small>
-                  <br/>
-                  <span class="hide-overflow" data-ng-repeat="subject in getMaterialSubjects() track by $index">
-                    {{'SUBJECT_' + subject.name.toUpperCase() | translate}}{{$last ? '' : ', '}}
+                </span>
+                <span class="ellipsis" data-ng-if="getMaterialDomains().length > 2">...</span>
+                <span class="ellipsis" data-ng-if="!getMaterialDomains().length"
+                      data-translate="UNKNOWN">Unknown</span>
+              </p>
+            </div>
+            <div flex data-ng-if="getMaterialSubjects().length > 0">
+              <p class="md-body-2 meta">
+                <small class="md-caption">
+                  <span data-translate="DETAIL_VIEW_SUBJECT"></span>
+                </small>
+                <br/>
+                <span class="ellipsis">
+                  <span class="ellipsis" data-ng-repeat="subject in getMaterialSubjects() | limitTo:2 track by $index">
+                    <span class="ellipsis" data-translate="{{'SUBJECT_' + subject.name.toUpperCase() }}"></span>
                   </span>
-                </p>
-              </div>
-              <div flex>
-                <p class="md-body-2 meta">
-                  <small class="md-caption">
-                    <span id="resourcetype-close" data-translate="MATERIAL_VIEW_RESOURCE_TYPE"></span>
-                  </small>
-                  <br>
-                  <span class="hide-overflow" data-ng-repeat="resourceType in material.resourceTypes"
-                        data-ng-if="!isNullOrZeroLength(material.resourceTypes)">
-                    {{resourceType.name.toUpperCase() | translate}}{{$last ? '' : ', '}}
+                </span>
+                <span class="ellipsis" data-ng-if="getMaterialSubjects().length > 2">...</span>
+              </p>
+            </div>
+
+            <div flex>
+              <p class="md-body-2 meta">
+                <small class="md-caption">
+                  <span id="resourcetype-close" data-translate="MATERIAL_VIEW_RESOURCE_TYPE"></span>
+                </small>
+                <br>
+                <span class="ellipsis">
+                  <span data-ng-repeat="resourceType in material.resourceTypes | limitTo:2">
+                     <span class="ellipsis" data-translate="{{resourceType.name.toUpperCase() }}"></span>
                   </span>
-                  <span class="hide-overflow" data-ng-if="isNullOrZeroLength(material.resourceTypes)"
-                        data-translate="UNKNOWN">Unknown</span>
-                </p>
-              </div>
-              <div flex>
-                <p class="md-body-2 meta">
-                  <small class="md-caption">
-                    <span data-translate="DETAIL_VIEW_TARGET_GROUP" id="targetgroup-close"></span>
-                  </small>
-                  <br>
-                    <span class="hide-overflow" data-ng-repeat="targetGroup in targetGroups">
-                      <span data-translate="{{'TARGET_GROUP_' + targetGroup}}"></span>
-                      <span>{{$last ? '' : ', '}}</span>
-                    </span>
-                  <span class="hide-overflow" data-ng-if="isNullOrZeroLength(targetGroups)"
-                        data-translate="UNKNOWN">Unknown</span>
-                </p>
-              </div>
+                </span>
+                <span class="ellipsis" data-ng-if="material.resourceTypes.length > 2">...</span>
+                <span class="ellipsis" data-ng-if="isNullOrZeroLength(material.resourceTypes)"
+                      data-translate="UNKNOWN">Unknown</span>
+              </p>
+            </div>
+            <div flex>
+              <p class="md-body-2 meta">
+                <small class="md-caption">
+                  <span data-translate="DETAIL_VIEW_TARGET_GROUP" id="targetgroup-close"></span>
+                </small>
+                <br>
+                  <span class="ellipsis">
+                  <span data-ng-repeat="targetGroup in targetGroups | limitTo:2">
+                    <span class="ellipsis" data-translate="{{'TARGET_GROUP_' + targetGroup}}"></span>
+                  </span>
+                  </span>
+                <span class="ellipsis" data-ng-if="targetGroups.length > 2">...</span>
+                <span class="ellipsis" data-ng-if="isNullOrZeroLength(material.targetGroups)"
+                      data-translate="UNKNOWN">Unknown</span>
+              </p>
+            </div>
 
             </div>
 
