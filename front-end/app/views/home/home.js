@@ -3,9 +3,9 @@
 angular.module('koolikottApp')
 .controller('homeController',
 [
-    '$scope', 'serverCallService', '$rootScope',
-    function ($scope, serverCallService, $rootScope) {
-        $rootScope.savedPortfolio = null;
+    '$scope', 'serverCallService', '$rootScope', 'storageService',
+    function ($scope, serverCallService, $rootScope, storageService) {
+        storageService.setPortfolio(null);
         $scope.url = "rest/search";
         $scope.params = {
             'sort': 'added',

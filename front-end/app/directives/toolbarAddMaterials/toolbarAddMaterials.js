@@ -3,8 +3,8 @@
 angular.module('koolikottApp')
 .directive('dopToolbarAddMaterials',
 [
-    '$translate', 'authenticatedUserService', 'serverCallService', 'toastService', '$q',
-    function ($translate, authenticatedUserService, serverCallService, toastService, $q) {
+    '$translate', 'authenticatedUserService', 'serverCallService', 'toastService', '$q', 'storageService',
+    function ($translate, authenticatedUserService, serverCallService, toastService, $q, storageService) {
         return {
             scope: true,
             templateUrl: 'directives/toolbarAddMaterials/toolbarAddMaterials.html',
@@ -13,7 +13,7 @@ angular.module('koolikottApp')
                 function init() {
                     if($rootScope.isEditPortfolioMode) {
                         $scope.isPortfolioEdit = true;
-                        $scope.portfolio = $rootScope.savedPortfolio;
+                        $scope.portfolio = storageService.getPortfolio();
 
                         if($rootScope.savedChapter) {
                             $scope.chapter = $rootScope.savedChapter;

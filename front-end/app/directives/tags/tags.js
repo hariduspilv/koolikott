@@ -149,6 +149,10 @@ angular.module('koolikottApp')
                             console.log("Adding tag failed")
                         }
 
+                        $scope.isEditPortfolioMode = function () {
+                          return $scope.$parent.isEditPortfolioMode
+                        };
+
                         $scope.reportTag = function (tag) {
 
                             var confirm = $mdDialog.confirm()

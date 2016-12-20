@@ -5,8 +5,10 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.annotation.NoClass;
+import ee.hm.dop.model.taxon.Taxon;
 import ee.hm.dop.rest.jackson.map.DateTimeDeserializer;
 import ee.hm.dop.rest.jackson.map.DateTimeSerializer;
+import ee.hm.dop.rest.jackson.map.TaxonDeserializer;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.Formula;
@@ -126,6 +128,16 @@ public abstract class LearningObject implements Searchable {
 
     @Column(nullable = false)
     private Long views = (long) 0;
+
+    @ManyToMany(fetch = EAGER)
+    @Fetch(FetchMode.SELECT)
+    @JoinTable(
+            name = "LearningObject_Taxon",
+            joinColumns = {@JoinColumn(name = "learningObject")},
+            inverseJoinColumns = {@JoinColumn(name = "taxon")},
+            uniqueConstraints = @UniqueConstraint(columnNames = {"learningObject", "taxon"}))
+    @JsonDeserialize(contentUsing = TaxonDeserializer.class)
+    private List<Taxon> taxons;
 
     @Formula(value = "(SELECT COUNT(*) FROM UserLike ul WHERE ul.learningObject = id AND ul.isLiked = 1)")
     private int likes;
@@ -305,5 +317,13 @@ public abstract class LearningObject implements Searchable {
 
     public void setChanged(int changed) {
         this.changed = changed;
+    }
+
+    public List<Taxon> getTaxons() {
+        return taxons;
+    }
+
+    public void setTaxons(List<Taxon> taxons) {
+        this.taxons = taxons;
     }
 }

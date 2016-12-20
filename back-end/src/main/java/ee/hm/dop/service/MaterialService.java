@@ -377,7 +377,7 @@ public class MaterialService extends BaseService implements LearningObjectHandle
         if (changes == null || changes.isEmpty()) return;
 
         for (ChangedLearningObject change : changes) {
-            if (!changedLearningObjectService.materialHasThis(material, change)) {
+            if (!changedLearningObjectService.learningObjectHasThis(material, change)) {
                 changedLearningObjectService.removeChangeById(change.getId());
             }
         }

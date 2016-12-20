@@ -1,8 +1,5 @@
 package ee.hm.dop.model;
 
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import ee.hm.dop.model.taxon.Taxon;
-import ee.hm.dop.rest.jackson.map.TaxonDeserializer;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
@@ -11,12 +8,9 @@ import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OrderColumn;
-import javax.persistence.UniqueConstraint;
 import java.util.List;
 
 import static javax.persistence.CascadeType.ALL;
@@ -27,16 +21,6 @@ public class Portfolio extends LearningObject implements Searchable {
 
     @Column(nullable = false)
     private String title;
-
-    @ManyToMany(fetch = EAGER)
-    @Fetch(FetchMode.SELECT)
-    @JoinTable(
-            name = "Portfolio_Taxon",
-            joinColumns = {@JoinColumn(name = "portfolio")},
-            inverseJoinColumns = {@JoinColumn(name = "taxon")},
-            uniqueConstraints = @UniqueConstraint(columnNames = {"portfolio", "taxon"}))
-    @JsonDeserialize(contentUsing = TaxonDeserializer.class)
-    private List<Taxon> taxons;
 
     @Column(columnDefinition = "TEXT")
     private String summary;
@@ -61,14 +45,6 @@ public class Portfolio extends LearningObject implements Searchable {
 
     public void setTitle(String title) {
         this.title = title;
-    }
-
-    public List<Taxon> getTaxons() {
-        return taxons;
-    }
-
-    public void setTaxons(List<Taxon> taxons) {
-        this.taxons = taxons;
     }
 
     public String getSummary() {

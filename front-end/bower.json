@@ -27,7 +27,8 @@
     "angular-embed": "3.0.2",
     "angular-drag-and-drop-lists": "1.4.0",
     "cssua.js": "cssuseragent#^2.1.31",
-    "angular-ui-router": "^0.3.2"
+    "angular-ui-router": "^0.3.2",
+    "lodash": "^4.17.2"
   },
   "appPath": "app",
   "moduleName": "ranitsApp",

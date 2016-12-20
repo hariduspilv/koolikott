@@ -10,9 +10,9 @@ angular.module('koolikottApp')
         $scope.pageUrl = $location.absUrl();
         $scope.getMaterialSuccess = getMaterialSuccess;
 
-        if ($rootScope.savedMaterial) {
-            $scope.material = $rootScope.savedMaterial;
-            $rootScope.savedMaterial = null;
+        if (storageService.getMaterial()) {
+            $scope.material = storageService.getMaterial();
+            storageService.setMaterial(null);
 
             if ($rootScope.isEditPortfolioMode || authenticatedUserService.isAuthenticated()) {
                 $rootScope.selectedSingleMaterial = $scope.material;
@@ -356,7 +356,7 @@ angular.module('koolikottApp')
 
                         $scope.setNotImproper = function () {
                             if ($scope.isAdmin() && $scope.material) {
-                                url = "rest/impropers?learningObject=" + $scope.material.id;
+                                var url = "rest/impropers?learningObject=" + $scope.material.id;
                                 serverCallService.makeDelete(url, {}, setNotImproperSuccessful, setNotImproperFailed);
                             }
                         };

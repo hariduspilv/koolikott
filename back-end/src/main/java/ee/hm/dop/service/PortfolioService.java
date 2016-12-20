@@ -225,7 +225,7 @@ public class PortfolioService extends BaseService implements LearningObjectHandl
         if (changes == null || changes.isEmpty()) return;
 
         for (ChangedLearningObject change : changes) {
-            if (!changedLearningObjectService.portfolioHasThis(portfolio, change)) {
+            if (!changedLearningObjectService.learningObjectHasThis(portfolio, change)) {
                 changedLearningObjectService.removeChangeById(change.getId());
             }
         }

@@ -13,6 +13,10 @@
 	md-chips .md-chips {
 		box-shadow: none;
 	}
+
+	md-progress-linear.md-inline {
+		bottom: 0;
+	}
 }
 
 .md-chips md-chip ._md-chip-remove {

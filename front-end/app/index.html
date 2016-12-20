@@ -7,7 +7,6 @@
   <meta name="description" content="e-Koolikott is a single web environment comprising digital learning material arranged by keywords on the basis of the curriculum.
   The portal allows finding educational materials located in different digital tool collections.
   The primary purpose of e-Koolikott is to allow accessing digital learning materials from a single point - the user no longer needs to search for materials in different portals.">
-  <!--<meta name="viewport" content="width=device-width, initial-scale=1">-->
   <meta content='width=device-width, initial-scale=1.0, user-scalable=0' name='viewport' />
 
   <!-- build:css(app) /styles/vendor.css -->
@@ -30,10 +29,13 @@
   <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade
     your browser</a> to improve your experience.</p>
   <![endif]-->
+  <img id="preloader" class="preloader" src="utils/preloader/ring.gif" alt="Loading...">
 
   <div data-ng-if="hasAppInitated" layout-fill data-dop-column-layout></div>
-
   <div data-ng-show="showMainFabButton && !isEditPortfolioMode" data-dop-main-fab-button></div>
+
+  <!--preloader-->
+  <script src="utils/preloader/preloader.js"></script>
 
   <!-- vendor -->
   <script src="libs/cssua.js/cssua.min.js"></script>
@@ -62,6 +64,7 @@
   <script src="utils/koolikottTextAngular.js"></script>
   <script src="libs/angular-drag-and-drop-lists/angular-drag-and-drop-lists.min.js"></script>
   <script src="https://www.youtube.com/iframe_api"></script>
+  <script src="libs/lodash/dist/lodash.min.js"></script>
 
   <!-- config -->
   <script src="constants.js"></script>

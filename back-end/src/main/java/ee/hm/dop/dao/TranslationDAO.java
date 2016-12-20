@@ -34,7 +34,7 @@ public class TranslationDAO {
         String translationKey = null;
         try {
             translationKey = (String) query
-                    .setParameter("translation", translation)
+                    .setParameter("translation", translation.toLowerCase())
                     .setMaxResults(1)
                     .getSingleResult();
         } catch (NoResultException e) {

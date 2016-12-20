@@ -30,7 +30,7 @@ public class TaxonService {
         return taxonDAO.findTaxonByRepoName(name, EST_CORE_TAXON_MAPPING, level);
     }
 
-    public Taxon findTaxonByTranslation(String name) {
+    Taxon findTaxonByTranslation(String name) {
         String translationKey = translationService.getTranslationKeyByTranslation(name);
         if (translationKey == null) {
             return null;
@@ -43,22 +43,19 @@ public class TaxonService {
     private String getTaxonName(String translationKey) {
         List<String> taxonPrefixes = Arrays.asList("MODULE_", "DOMAIN_", "SUBJECT_", "SPECIALIZATION_", "TOPIC_", "SUBTOPIC_");
         List<String> educationalContexts = Arrays.asList("PRESCHOOLEDUCATION", "BASICEDUCATION", "SECONDARYEDUCATION", "VOCATIONALEDUCATION");
-        String taxonName = null;
 
         for (String prefix : taxonPrefixes) {
             if (translationKey.startsWith(prefix)) {
-                taxonName = translationKey.replaceFirst("^" + prefix, "");
-                return taxonName;
+                return translationKey.replaceFirst("^" + prefix, "");
             }
         }
 
         for (String context : educationalContexts) {
             if (context.equalsIgnoreCase(translationKey)) {
-                taxonName = context;
-                break;
+                return context;
             }
         }
 
-        return taxonName;
+        return null;
     }
 }
