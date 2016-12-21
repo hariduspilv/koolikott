@@ -1,14 +1,15 @@
 <!-- CHANGED -->
 <div class="error-message-container md-whiteframe-4dp" flex layout="row" data-ng-show="showChanged() && changes">
+  <md-icon>priority_high</md-icon>
   <p>
-    <md-icon>priority_high</md-icon>
     <span data-translate="MESSAGE_CHANGED_LEARNING_OBJECT"></span>
+  </p>
     <ul class="reason">
       <li data-ng-repeat="item in changes">
         <span>{{getChangeType(item) | translate}}</span>: <span>{{getChangeName(item) | translate}}</span>
       </li>
     </ul>
-  </p>
+
   <span data-flex></span>
   <button class="md-button error-message-button" data-ng-click="revertChanges()">
     <md-icon class="button-icon">undo</md-icon>

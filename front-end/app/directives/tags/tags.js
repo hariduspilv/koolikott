@@ -198,6 +198,12 @@ angular.module('koolikottApp')
                             }
                         };
 
+                        $scope.limitTextLength = function () {
+                          if ($scope.newTag && $scope.newTag.tagName && $scope.newTag.tagName.length > 60) {
+                              $scope.newTag.tagName = $scope.newTag.tagName.slice(0, -1);
+                          }
+                        };
+
                         function processSystemTag() {
                             addSystemTag($scope.newTag.tagName)
                                 .then(function (response) {
@@ -205,6 +211,8 @@ angular.module('koolikottApp')
                                     $scope.newTag.tagName = null;
                                     showSystemTagDialog(response.data.tagTypeName);
                                     $rootScope.$broadcast("errorMessage:updateChanged");
+                                }).catch(function(e) {
+                                    $scope.newTag.tagName = null;
                                 });
                         }
 
