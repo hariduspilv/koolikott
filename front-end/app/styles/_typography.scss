@@ -124,3 +124,15 @@ $lines-to-show2: 2;
 .text-center {
   text-align: center;
 }
+
+.text-small {
+  font-size: $font-small;
+}
+
+.text-light {
+  color: $color-muted;
+}
+
+.text-error {
+  color: $error;
+}
