@@ -58,7 +58,7 @@ public class UploadedFileService {
 
         String mediaType;
         try {
-            mediaType = Files.probeContentType(Paths.get(filename));
+            mediaType = Files.probeContentType(Paths.get(filename.toLowerCase()));
         } catch (IOException e) {
             mediaType = MediaType.APPLICATION_OCTET_STREAM;
         }
