@@ -1,8 +1,6 @@
 'use strict'
 
-angular.module('koolikottApp')
-.directive('dopDetailedSearch',
-[
+angular.module('koolikottApp').directive('dopDetailedSearch', [
     '$location', 'searchService', 'translationService', '$filter', 'serverCallService', 'metadataService', 'taxonService', 'storageService',
     function ($location, searchService, translationService, $filter, serverCallService, metadataService, taxonService, storageService) {
         return {
@@ -32,11 +30,14 @@ angular.module('koolikottApp')
                     // Languages
                     metadataService.loadUsedLanguages(setLanguages);
                     $scope.detailedSearch.language = searchService.getLanguage();
+                    if (!searchService.getLanguage()) $scope.detailedSearch.language = null;
 
+                    //Used resource types
                     metadataService.loadUsedResourceTypes(setUsedResourceTypes);
 
                     // Target groups
                     $scope.detailedSearch.targetGroups = searchService.getTargetGroups();
+
                     // Paid
                     var isPaid = searchService.isPaid();
                     if (isPaid === true || isPaid === false) {
@@ -294,7 +295,7 @@ angular.module('koolikottApp')
                     }
                 }, true);
 
-                $scope.$on('detailedSearch:open', function() {
+                $scope.$on('detailedSearch:open', function () {
                     $timeout(function () {
                         metadataService.updateUsedResourceTypes(setUsedResourceTypes);
                     });
@@ -322,7 +323,7 @@ angular.module('koolikottApp')
                     $scope.$watch('detailedSearch', function (newValue, oldValue) {
                         if (!$scope.detailedSearch.taxon) $scope.detailedSearch.educationalContext = null;
 
-                        if ($scope.isVisible && !prefilling && hasSearchChanged(newValue, oldValue) ) {
+                        if ($scope.isVisible && !prefilling && hasSearchChanged(newValue, oldValue)) {
                             filterTypeSearch();
                             $scope.search();
                         } else if (prefilling) {
@@ -336,7 +337,7 @@ angular.module('koolikottApp')
                         $scope.detailedSearch.type = 'all';
                     } else if ($scope.detailedSearch.resourceType === 'PORTFOLIO_RESOURCE') {
                         $scope.detailedSearch.type = 'portfolio';
-                    } else if ($rootScope.isEditPortfolioMode){
+                    } else if ($rootScope.isEditPortfolioMode) {
                         $scope.detailedSearch.type = 'material';
                     } else {
                         $scope.detailedSearch.type = 'all';
@@ -375,87 +376,87 @@ angular.module('koolikottApp')
                     // Only curriculum literature checkbox
                     if (!educationalContext ||
                         (educationalContext.id != BASIC_EDUCATION_ID &&
-                            educationalContext.id != SECONDARY_EDUCATION_ID &&
-                            educationalContext.id != VOCATIONAL_EDUCATION_ID)) {
-                                $scope.detailedSearch.onlyCurriculumLiterature = false;
-                            }
+                        educationalContext.id != SECONDARY_EDUCATION_ID &&
+                        educationalContext.id != VOCATIONAL_EDUCATION_ID)) {
+                        $scope.detailedSearch.onlyCurriculumLiterature = false;
+                    }
 
-                            // Special education checkbox
-                            if (!educationalContext || educationalContext.id != BASIC_EDUCATION_ID) {
-                                $scope.detailedSearch.specialEducation = false;
-                            }
+                    // Special education checkbox
+                    if (!educationalContext || educationalContext.id != BASIC_EDUCATION_ID) {
+                        $scope.detailedSearch.specialEducation = false;
+                    }
 
-                            // Cross-curricular themes and key competences
-                            if (!educationalContext || (educationalContext.id != BASIC_EDUCATION_ID && educationalContext.id != SECONDARY_EDUCATION_ID)) {
-                                $scope.detailedSearch.crossCurricularTheme = null;
-                                $scope.detailedSearch.keyCompetence = null;
-                            }
+                    // Cross-curricular themes and key competences
+                    if (!educationalContext || (educationalContext.id != BASIC_EDUCATION_ID && educationalContext.id != SECONDARY_EDUCATION_ID)) {
+                        $scope.detailedSearch.crossCurricularTheme = null;
+                        $scope.detailedSearch.keyCompetence = null;
+                    }
 
-                            // Target groups
-                            if (educationalContext && educationalContext.id === VOCATIONAL_EDUCATION_ID) {
-                                $scope.detailedSearch.targetGroups = [];
-                            }
-                        }
+                    // Target groups
+                    if (educationalContext && educationalContext.id === VOCATIONAL_EDUCATION_ID) {
+                        $scope.detailedSearch.targetGroups = [];
+                    }
+                }
 
-                        $scope.clear = $scope.accessor.clear = function () {
-                            $scope.taxon = null;
-                            $scope.detailedSearch = {
-                                'mainField': '',
-                                'paid': false,
-                                'onlyCurriculumLiterature': false,
-                                'CLIL': false,
-                                'targetGroups': [],
-                                'specialEducation': false,
-                                'specialEducationalNeed': false,
-                                'issueDate': $scope.issueDateFirstYear,
-                                'type': 'all',
-                                'taxon': {}
-                            };
+                $scope.clear = $scope.accessor.clear = function () {
+                    $scope.detailedSearch = {
+                        'mainField': '',
+                        'paid': false,
+                        'onlyCurriculumLiterature': false,
+                        'CLIL': false,
+                        'targetGroups': [],
+                        'specialEducation': false,
+                        'specialEducationalNeed': false,
+                        'issueDate': $scope.issueDateFirstYear,
+                        'type': 'all',
+                        'taxon': {},
+                        'language': null
+                    };
 
-                            if ($rootScope.isEditPortfolioMode) {
-                                $scope.detailedSearch.type = "material";
-                            }
+                    if ($rootScope.isEditPortfolioMode) {
+                        $scope.detailedSearch.type = "material";
+                    }
 
-                            $scope.$parent.clearTaxonSelector();
-                            $scope.accessor.clearSimpleSearch();
-                        };
+                    $scope.$parent.clearTaxonSelector();
+                    $scope.accessor.clearSimpleSearch();
+                };
 
-                        $scope.getEffectiveIssueDate = function () {
-                            if ($scope.detailedSearch.issueDate && $scope.detailedSearch.issueDate != $scope.issueDateFirstYear) {
-                                return $scope.detailedSearch.issueDate;
-                            }
-                        };
-
-                        function setLanguages(languages) {
-                            $scope.languages = languages;
-                        }
-
-                        function setUsedResourceTypes(resourceTypes) {
-                            $scope.usedResourceTypes = resourceTypes;
-                            if (!listContains($scope.usedResourceTypes, 'name', 'PORTFOLIO_RESOURCE')) {
-                                $scope.usedResourceTypes.push({name: 'PORTFOLIO_RESOURCE'})
-                            }
-                        }
-
-                        function setCrossCurricularThemes(crossCurricularThemes) {
-                            $scope.crossCurricularThemes = crossCurricularThemes;
-                        }
-
-                        function setKeyCompetences(keyCompetences) {
-                            $scope.keyCompetences = keyCompetences;
-                        }
-
-                        function setEditModePrefill() {
-                            if ($rootScope.isEditPortfolioMode && storageService.getPortfolio()) {
-                                $scope.detailedSearch.taxon = storageService.getPortfolio().taxon;
-                                $scope.detailedSearch.targetGroups = storageService.getPortfolio().targetGroups;
-                                prefilling = true;
-
-                                $scope.detailedSearch.type = "material";
-                            }
-                        }
-
+                $scope.getEffectiveIssueDate = function () {
+                    if ($scope.detailedSearch.issueDate && $scope.detailedSearch.issueDate != $scope.issueDateFirstYear) {
+                        return $scope.detailedSearch.issueDate;
                     }
                 };
+
+                function setLanguages(languages) {
+                    $scope.languages = languages;
+                }
+
+                function setUsedResourceTypes(resourceTypes) {
+                    $scope.usedResourceTypes = resourceTypes;
+                    if (!listContains($scope.usedResourceTypes, 'name', 'PORTFOLIO_RESOURCE')) {
+                        $scope.usedResourceTypes.push({name: 'PORTFOLIO_RESOURCE'})
+                    }
+                }
+
+                function setCrossCurricularThemes(crossCurricularThemes) {
+                    $scope.crossCurricularThemes = crossCurricularThemes;
+                }
+
+                function setKeyCompetences(keyCompetences) {
+                    $scope.keyCompetences = keyCompetences;
+                }
+
+                function setEditModePrefill() {
+                    if ($rootScope.isEditPortfolioMode && storageService.getPortfolio()) {
+                        $scope.detailedSearch.taxon = storageService.getPortfolio().taxon;
+                        $scope.detailedSearch.targetGroups = storageService.getPortfolio().targetGroups;
+                        prefilling = true;
+
+                        $scope.detailedSearch.type = "material";
+                    }
+                }
+
             }
-        ]);
+        };
+    }
+]);
