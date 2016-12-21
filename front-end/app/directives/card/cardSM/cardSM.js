@@ -17,11 +17,6 @@ angular.module('koolikottApp').directive('dopCardSm', [
                 $scope.subjects = [];
 
                 function init() {
-                    if ($scope.learningObject.type === '.Material') {
-                        $scope.learningObjectType = 'material';
-                    } else if ($scope.learningObject.type === '.Portfolio') {
-                        $scope.learningObjectType = 'portfolio';
-                    }
                     $scope.targetGroups = targetGroupService.getConcentratedLabelByTargetGroups($scope.learningObject.targetGroups);
                     loadDomainsAndSubjects();
                 }

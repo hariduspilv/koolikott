@@ -8,43 +8,41 @@
   <!-- content -->
   <div layout="column" flex flex-order="2" flex-order-xs="1">
     <md-card-content>
-      <a data-ng-href="{{'/' + learningObjectType + '?id=' + learningObject.id}}" class="no-link">
-        <h3 class="two-rows" data-ng-if="learningObject.type === '.Portfolio'" data-ng-bind="learningObject.title"></h3>
-        <h3 class="two-rows" data-ng-if="learningObject.type === '.Material'"
-            data-ng-bind="getCorrectLanguageTitle(learningObject)"></h3>
-        <p class="md-caption ellipsis">
-          <span data-ng-if="learningObject.type === '.Portfolio'" class="authors">
-            <span data-ng-bind="formatName(learningObject.creator.name)"></span>
-            <span data-ng-bind="formatSurname(learningObject.creator.surname)"></span>
+      <h3 class="two-rows" data-ng-if="learningObject.type === '.Portfolio'" data-ng-bind="learningObject.title"></h3>
+      <h3 class="two-rows" data-ng-if="learningObject.type === '.Material'"
+          data-ng-bind="getCorrectLanguageTitle(learningObject)"></h3>
+      <p class="md-caption ellipsis">
+        <span data-ng-if="learningObject.type === '.Portfolio'" class="authors">
+          <span data-ng-bind="formatName(learningObject.creator.name)"></span>
+          <span data-ng-bind="formatSurname(learningObject.creator.surname)"></span>
+        </span>
+        <span data-ng-if="learningObject.type === '.Material'" data-ng-repeat="author in learningObject.authors"
+              class="authors">
+          <span data-ng-bind="formatName(author.name)"></span>
+          <span data-ng-bind="formatSurname(author.surname)"></span>
+          <span data-ng-bind="$index < material.authors.length - 1 ? ', ' : ''"></span>
+        </span>
+      </p>
+      <ul class="md-caption text-right">
+        <li class="ellipsis">
+          <span data-ng-repeat="group in targetGroups">
+            <span data-ng-bind="group"></span><span
+            data-ng-bind="$index < targetGroups.length - 1 ? ', ' : ''"></span>
           </span>
-          <span data-ng-if="learningObject.type === '.Material'" data-ng-repeat="author in learningObject.authors"
-                class="authors">
-            <span data-ng-bind="formatName(author.name)"></span>
-            <span data-ng-bind="formatSurname(author.surname)"></span>
-            <span data-ng-bind="$index < material.authors.length - 1 ? ', ' : ''"></span>
+        </li>
+        <li data-ng-if="subjects.length > 0" class="ellipsis">
+          <span data-ng-repeat="subject in subjects track by $index">
+            <span data-translate="{{subject}}"></span><span
+            data-ng-bind="$index < subjects.length - 1 ? ', ' : ''"></span>
           </span>
-        </p>
-        <ul class="md-caption text-right">
-          <li class="ellipsis">
-            <span data-ng-repeat="group in targetGroups">
-              <span data-ng-bind="group"></span><span
-              data-ng-bind="$index < targetGroups.length - 1 ? ', ' : ''"></span>
-            </span>
-          </li>
-          <li data-ng-if="subjects.length > 0" class="ellipsis">
-            <span data-ng-repeat="subject in subjects track by $index">
-              <span data-translate="{{subject}}"></span><span
-              data-ng-bind="$index < subjects.length - 1 ? ', ' : ''"></span>
-            </span>
-          </li>
-          <li data-ng-if="subjects.length === 0" class="ellipsis">
-            <span data-ng-repeat="domain in domains track by $index">
-              <span data-translate="{{domain}}"></span><span
-              data-ng-bind="$index < domains.length - 1 ? ', ' : ''"></span>
-            </span>
-          </li>
-        </ul>
-      </a>
+        </li>
+        <li data-ng-if="subjects.length === 0" class="ellipsis">
+          <span data-ng-repeat="domain in domains track by $index">
+            <span data-translate="{{domain}}"></span><span
+            data-ng-bind="$index < domains.length - 1 ? ', ' : ''"></span>
+          </span>
+        </li>
+      </ul>
     </md-card-content>
 
     <span flex></span>
