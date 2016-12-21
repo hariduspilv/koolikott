@@ -25,7 +25,6 @@ angular.module('koolikottApp').directive('dopEmbeddedMaterial', [
 
                     if ($scope.material) {
                         $scope.materialType = getType();
-                        if($scope.material.id)getContentType();
                     }
                 }
 
@@ -37,7 +36,8 @@ angular.module('koolikottApp').directive('dopEmbeddedMaterial', [
                         $scope.fallbackType = matchType(materialSource);
                         $scope.proxyUrl = baseUrl + "/rest/material/externalMaterial?url=" + encodeURIComponent($scope.material.source);
                         serverCallService.makeHead($scope.proxyUrl, {}, probeContentSuccess, probeContentFail);
-                    } if (materialSource) {
+                    }
+                    if (materialSource) {
                         $scope.sourceType = matchType(getSource($scope.material));
                     }
                 }
