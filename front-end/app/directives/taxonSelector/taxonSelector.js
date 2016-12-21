@@ -84,7 +84,7 @@ function () {
             function addTaxonPathListeners() {
                 //Triggers on taxon reset
                 $scope.$watch(function () {
-                    if (ctrl.taxon) return ctrl.taxon.id;
+                    if (ctrl.taxon) return ctrl.taxon;
                 }, function (newTaxon, oldTaxon) {
                     if (oldTaxon && newTaxon !== oldTaxon) {
                         buildTaxonPath();

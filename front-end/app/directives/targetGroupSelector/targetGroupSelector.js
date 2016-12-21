@@ -1,8 +1,6 @@
 'use strict'
 
-angular.module('koolikottApp')
-.directive('dopTargetGroupSelector',
-function () {
+angular.module('koolikottApp').directive('dopTargetGroupSelector', function () {
     return {
         scope: {
             targetGroups: '=',
@@ -20,6 +18,8 @@ function () {
                 fill();
                 addListeners();
                 selectValue();
+                $scope.selectedTargetGroups = getSelectedText();
+
                 $timeout(function () {
                     $scope.isReady = true;
                 });
@@ -51,6 +51,12 @@ function () {
                         }
                     }
                 });
+
+                $scope.$watch('targetGroups', function (newGroups, oldGroups) {
+                    if (newGroups !== oldGroups) {
+                        $scope.selectedTargetGroups = getSelectedText();
+                    }
+                }, false);
             }
 
             function getDifference(newArray, oldArray) {
@@ -143,7 +149,7 @@ function () {
             };
 
             // Reduced text for select label
-            $scope.getSelectedText = function () {
+            function getSelectedText() {
                 if ($scope.targetGroups && $scope.targetGroups.length > 0) {
                     return targetGroupService.getSelectedText($scope.targetGroups);
                 } else {
@@ -153,7 +159,7 @@ function () {
                         return $translate.instant('DETAILED_SEARCH_TARGET_GROUP');
                     }
                 }
-            };
+            }
 
             function getMissingGrades(selectedTargetGroup, targetGroups) {
                 var result = [];
