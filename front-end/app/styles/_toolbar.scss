@@ -160,6 +160,7 @@ md-slider.md-default-theme.md-min[md-discrete] .md-thumb:after, md-slider.md-min
   position: absolute;
   top: 8px;
   pointer-events: none;
+  opacity: 0.5;
 
   .suggestion-hidden {
     visibility: hidden;
