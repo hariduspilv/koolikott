@@ -152,12 +152,12 @@
         </small>
         <br>
         <span class="ellipsis">
-          <span data-ng-repeat="targetGroup in targetGroups | limitTo:2">
-            <span class="ellipsis" data-translate="{{'TARGET_GROUP_' + targetGroup}}"></span>
+          <span data-ng-repeat="group in targetGroups">
+            <span data-ng-bind="group"></span><span
+            data-ng-bind="$index < targetGroups.length - 1 ? ', ' : ''"></span>
           </span>
         </span>
-        <span class="ellipsis" data-ng-if="targetGroups.length > 2">...</span>
-        <span class="ellipsis" data-ng-if="isNullOrZeroLength(material.targetGroups)"
+        <span class="ellipsis" data-ng-if="isNullOrZeroLength(targetGroups)"
         data-translate="UNKNOWN">Unknown</span>
       </p>
     </div>
@@ -204,7 +204,7 @@
 
       <span data-ng-if="sourceType === 'LINK' && !material.embeddable">
         <a class="card-hover" data-ng-href="{{material.source}}" target="_blank">
-          <md-icon>send</md-icon>
+          <md-icon class="icon-kind">send</md-icon>
           <md-tooltip md-direction="bottom">
             <span data-translate="MATERIAL_VIEW_LINK_TO_MATERIAL">Open material</span>
           </md-tooltip>
@@ -213,7 +213,7 @@
 
       <span data-ng-if="sourceType === 'LINK' && material.embeddable">
         <a class="card-hover" data-ng-href="#" ng-click="showSourceFullscreen($event)">
-          <md-icon>send</md-icon>
+          <md-icon class="icon-kind">send</md-icon>
           <md-tooltip md-direction="bottom">
             <span data-translate="MATERIAL_VIEW_LINK_TO_MATERIAL"></span>
           </md-tooltip>
@@ -222,7 +222,7 @@
 
       <span data-ng-if="sourceType !== 'LINK' && !material.embeddable">
         <a class="card-hover" data-ng-href="{{material.source}}" target="_blank">
-          <md-icon>send</md-icon>
+          <md-icon class="icon-kind">send</md-icon>
           <md-tooltip md-direction="bottom">
             <span data-translate="MATERIAL_VIEW_LINK_TO_MATERIAL"></span>
           </md-tooltip>
