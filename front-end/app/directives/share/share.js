@@ -15,10 +15,8 @@ angular.module('koolikottApp')
             controller: function($scope) {
 
                 $scope.isVisible = function () {
-                    if ($scope.object) {
-                        if ($scope.object.deleted) {
-                            return false;
-                        }
+                    if ($scope.object && $scope.object.deleted) {
+                        return false;
                     }
 
                     if ($rootScope.isEditPortfolioPage) {
@@ -96,6 +94,10 @@ angular.module('koolikottApp')
                 }
 
                 $scope.checkOwnerAndShowDialog = function ($event, item) {
+                    if ($scope.object.type === '.Material') {
+                        return;
+                    }
+
                     if ((!isOwner() && !isPublic()) || (isOwner() && isPrivate())) {
                         $event.preventDefault();
                         showWarningDialog($event, item);
@@ -125,7 +127,7 @@ angular.module('koolikottApp')
                 }
 
                 function DialogController($scope, $mdDialog, locals) {
-                    if((isOwner() || authenticatedUserService.isAdmin() || authenticatedUserService.isModerator()) && isPrivate()) {
+                    if ((isOwner() || authenticatedUserService.isAdmin() || authenticatedUserService.isModerator()) && isPrivate()) {
                         $scope.showButtons = true;
 
                         $scope.title = $translate.instant('THIS_IS_PRIVATE');

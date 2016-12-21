@@ -54,8 +54,8 @@
   box-shadow: $whiteframe-shadow-7dp;
 }
 
-.md-button.md-mini.md-fab:not([disabled]):hover,
-.md-button.md-mini.md-fab:not([disabled]):focus {
+.md-button.md-mini.md-fab:not([disabled]):not(.share__btn):hover,
+.md-button.md-mini.md-fab:not([disabled]):not(.share__btn):focus {
   background-color: lighten($color-accent, 10%);
 }
 
