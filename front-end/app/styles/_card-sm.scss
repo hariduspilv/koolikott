@@ -37,7 +37,6 @@
   .card-cover {
     width: 100%;
     max-width: 300px;
-    height: auto;
 
     @media (min-width: $layout-breakpoint-xs) {
       height: 134px;
@@ -52,14 +51,6 @@
   md-card-content {
     height: 100%;
     padding-bottom: 0;
-
-    @media (min-width: $layout-breakpoint-xs) {
-      height: 106px;
-    }
-
-    @media (min-width: $layout-breakpoint-lg) {
-      height: 106px;
-    }
 
     .md-caption {
       color: rgba(0, 0, 0, 0.54);
@@ -76,6 +67,7 @@
     margin-left: $md-padding;
     color: rgba(0, 0, 0, 0.38);
     font-weight: 400;
+    flex-shrink: 0;
 
     md-icon {
       margin: 0 $border-radius 0 5px;
