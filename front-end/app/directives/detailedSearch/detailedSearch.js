@@ -352,7 +352,7 @@ angular.module('koolikottApp')
                     if (newValue.title !== oldValue.title) return true;
                     if (newValue.language !== oldValue.language) return true;
                     if (newValue.resourceType !== oldValue.resourceType) return true;
-                    if (newValue.targetGroups !== oldValue.targetGroups) return true;
+                    if (!_.isEqual(newValue.targetGroups, oldValue.targetGroups)) return true;
                     if (newValue.onlyCurriculumLiterature !== oldValue.onlyCurriculumLiterature) return true;
                     if (newValue.specialEducation !== oldValue.specialEducation) return true;
                     if (newValue.paid !== oldValue.paid) return true;
@@ -362,8 +362,8 @@ angular.module('koolikottApp')
                     if (newValue.keyCompetence !== oldValue.keyCompetence) return true;
                     if (newValue.specialEducationalNeed !== oldValue.specialEducationalNeed) return true;
                     if (newValue.CLIL !== oldValue.CLIL) return true;
-                    if (newValue.taxon !== oldValue.taxon && $scope.taxon) {
-                        $scope.detailedSearch.educationalContext = taxonService.getEducationalContext($scope.taxon);
+                    if (newValue.taxon !== oldValue.taxon && $scope.detailedSearch.taxon) {
+                        $scope.detailedSearch.educationalContext = taxonService.getEducationalContext($scope.detailedSearch.taxon);
                         clearHiddenFields();
                         return true;
                     }

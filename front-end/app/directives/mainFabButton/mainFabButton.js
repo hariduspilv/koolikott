@@ -39,8 +39,13 @@ angular.module('koolikottApp')
                                 emptyPortfolio.chapters[0].contentRows.push({learningObjects: [selectedMaterial]});
                             }
                         } else if($rootScope.selectedSingleMaterial != null) {
-                            emptyPortfolio.chapters[0].contentRows.push({learningObjects: [$rootScope.selectedSingleMaterial]});
+                            if (emptyPortfolio.chapters[0].contentRows) {
+                                emptyPortfolio.chapters[0].contentRows.push({learningObjects: [$rootScope.selectedSingleMaterial]})
+                            } else {
+                                emptyPortfolio.chapters[0].contentRows = [{learningObjects: [$rootScope.selectedSingleMaterial]}]
+                            }
                         }
+
                         toastService.showOnRouteChange('PORTFOLIO_ADD_MATERIAL_SUCCESS');
                     }
 

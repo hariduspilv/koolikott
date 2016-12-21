@@ -83,14 +83,17 @@ angular.module('koolikottApp')
                     storageService.setPortfolio(portfolio);
 
                     if ($scope.portfolio) {
-
-                        $scope.portfolio.chapters.forEach(function (chapter) {
-                            chapter.contentRows.forEach(function (contentRow) {
-                                contentRow.learningObjects.forEach(function (learningObject) {
-                                    learningObject.source = getSource(learningObject);
-                                })
-                            })
-                        });
+                        if ($scope.portfolio.chapters) {
+                            $scope.portfolio.chapters.forEach(function (chapter) {
+                                if (chapter.contentRows) {
+                                    chapter.contentRows.forEach(function (contentRow) {
+                                        contentRow.learningObjects.forEach(function (learningObject) {
+                                            learningObject.source = getSource(learningObject);
+                                        })
+                                    })
+                                }
+                            });
+                        }
 
                         $rootScope.learningObjectBroken = $scope.portfolio.broken > 0;
                         $rootScope.learningObjectImproper = $scope.portfolio.improper > 0;
