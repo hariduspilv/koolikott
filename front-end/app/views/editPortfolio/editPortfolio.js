@@ -113,7 +113,7 @@ angular.module('koolikottApp')
 
             function showWarning() {
                 var setPrivate = function () {
-                    $scope.savedPortfolio.visibility = 'PRIVATE';
+                    storageService.getPortfolio().visibility = 'PRIVATE';
                     updatePortfolio();
                 };
 

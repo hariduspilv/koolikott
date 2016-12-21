@@ -25,25 +25,31 @@ angular.module('koolikottApp').directive('dopEmbeddedMaterial', [
 
                     if ($scope.material) {
                         $scope.materialType = getType();
-                        getSourceType();
                         getContentType();
+                        getSourceType();
                     }
                 }
 
                 function getContentType() {
                     var baseUrl = document.location.origin;
+                    var materialSource = getSource($scope.material);
                     // If the initial type is a LINK, try to ask the type from our proxy
-                    if(getSource($scope.material) && (matchType(getSource($scope.material)) === 'LINK' || !getSource($scope.material).startsWith(baseUrl)) ){
+                    if(materialSource && (matchType(materialSource) === 'LINK' || !materialSource.startsWith(baseUrl)) ){
+                        $scope.fallbackType = matchType(materialSource);
                         $scope.proxyUrl = baseUrl + "/rest/material/externalMaterial?url=" + encodeURIComponent($scope.material.source);
                         serverCallService.makeHead($scope.proxyUrl, {}, probeContentSuccess, probeContentFail);
                     } else {
-                        $scope.sourceType = matchType(getSource($scope.material));
+                        if(!isEmpty(materialSource)){
+                            $scope.sourceType = matchType(getSource($scope.material));
+                        }else{
+                            $scope.sourceType = "LINK";
+                        }
                     }
                 }
 
                 function probeContentSuccess(response) {
                     if (!response()['content-disposition']) {
-                        $scope.sourceType = 'LINK';
+                        $scope.sourceType = $scope.fallbackType;
                         return;
                     }
                     var filename = response()['content-disposition'].match(/filename="(.+)"/)[1];
