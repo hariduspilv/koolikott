@@ -144,14 +144,6 @@ angular.module('koolikottApp')
                             $scope.inlineSuggestion = "";
                         };
 
-                        // This is for cases where esc is pressed,
-                        // searchText is selected and then deleted
-                        $scope.$watch("searchFields.searchQuery", function (newValue, oldValue) {
-                            if (newValue != oldValue && !newValue) {
-                                $scope.clearInlineSuggestion();
-                            }
-                        });
-
                         $scope.keyPressed = function (event) {
                             if (event.keyCode === 8) { // backspace
                                 if ($scope.inlineSuggestion) {
@@ -160,6 +152,10 @@ angular.module('koolikottApp')
 
                                 $scope.doInlineSuggestion = false;
                             } else if (event.keyCode === 13) { // enter
+                                if (!isSearchResultPage()) {
+                                    processSearchQuery($scope.searchFields.searchQuery);
+                                }
+
                                 angular.element(document.querySelector("#header-search-input")).controller('mdAutocomplete').hidden = true;
                                 document.getElementById("header-search-input").blur();
                                 $scope.doInlineSuggestion = false;
@@ -169,6 +165,10 @@ angular.module('koolikottApp')
 
                             $scope.clearInlineSuggestion();
                         };
+
+                        function isSearchResultPage () {
+                            return $location.url().startsWith('/' + searchService.getSearchURLbase());
+                        }
 
                         $scope.clickOutside = function () {
                             if ($rootScope.dontCloseSearch) {
@@ -183,7 +183,13 @@ angular.module('koolikottApp')
                         }, true);
 
 
-                        $scope.$watch('searchFields.searchQuery', function (newValue, oldValue) {
+                        $scope.$watch('searchFields.searchQuery', processSearchQuery, true);
+
+                        function processSearchQuery(newValue, oldValue) {
+                            if (newValue != oldValue && !newValue) {
+                                $scope.clearInlineSuggestion();
+                            }
+
                             $scope.searchFields.searchQuery = newValue || "";
                             if (newValue !== oldValue && !$scope.detailedSearch.isVisible && !dontSearch) {
                                 $scope.search();
@@ -192,7 +198,7 @@ angular.module('koolikottApp')
                             }
 
                             if (dontSearch) dontSearch = false;
-                        }, true);
+                        }
 
                         $scope.$watch(function () {
                             return authenticatedUserService.getUser();
