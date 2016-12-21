@@ -14,7 +14,7 @@ angular.module('koolikottApp')
                 isVisible: '='
             },
             templateUrl: 'detailedSearch.html',
-            controller: function ($scope, $rootScope, $timeout) {
+            controller: function ($scope, $rootScope, $timeout, $window, $anchorScroll) {
                 $scope.queryIn = $scope.queryIn ? $scope.queryIn : "";
 
                 var BASIC_EDUCATION_ID = 2;
@@ -298,6 +298,10 @@ angular.module('koolikottApp')
                     $timeout(function () {
                         metadataService.updateUsedResourceTypes(setUsedResourceTypes);
                     });
+
+                    if ($window.innerWidth < 600) {
+                        $anchorScroll();
+                    }
                 });
 
                 function initWatches() {

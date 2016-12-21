@@ -53,11 +53,10 @@ angular.module('koolikottApp')
                 $scope.openDetailedSearch = function () {
                     $rootScope.savedChapter = $scope.chapter;
                     $rootScope.$broadcast("detailedSearch:open");
-                    $anchorScroll();
                     $rootScope.isPlaceholderVisible = true;
 
-                    if($rootScope.isEditPortfolioPage) {
-                        document.getElementById('input-0').focus();
+                    if ($rootScope.isEditPortfolioPage) {
+                        document.getElementById('header-search-input').focus();
                     }
                 };
             }

@@ -8,6 +8,25 @@ angular.module('koolikottApp')
                 return {
                     scope: true,
                     templateUrl: 'directives/header/header.html',
+                    link: function () {
+                        var scrollTimer;
+                        var $detailedSearch = document.getElementById('navmenu');
+
+                        angular.element($window).on('scroll', function() {
+                            clearTimeout(scrollTimer);
+                            scrollTimer = setTimeout(function() {
+                                var $backdrop = document.querySelector('.md-menu-backdrop');
+
+                                if (!$backdrop) {
+                                    if (this.pageYOffset >= 100 && $window.innerWidth >= 600) {
+                                        $detailedSearch.style.position = 'fixed';
+                                    } else {
+                                        $detailedSearch.style.position = 'static';
+                                    }
+                                }
+                            }, 200);
+                        });
+                    },
                     controller: function ($scope, $location, authenticationService, authenticatedUserService, $rootScope, $anchorScroll) {
 
                         $scope.detailedSearch = {};
@@ -65,6 +84,10 @@ angular.module('koolikottApp')
                             $scope.detailedSearch.isVisible = true;
                             $scope.detailedSearch.queryIn = $scope.searchFields.searchQuery;
                             broadcastSearchOpen();
+
+                            if ($window.innerWidth < 600) {
+                                $anchorScroll();
+                            }
                         };
 
                         function broadcastSearchOpen() {
