@@ -1,8 +1,6 @@
 'use strict'
 
-angular.module('koolikottApp')
-.controller('materialController',
-[
+angular.module('koolikottApp').controller('materialController', [
     '$scope', 'serverCallService', '$route', 'translationService', '$rootScope', 'searchService', '$location', 'alertService', 'authenticatedUserService', 'dialogService', 'toastService', 'iconService', '$mdDialog', 'storageService', 'targetGroupService', 'taxonService',
     function ($scope, serverCallService, $route, translationService, $rootScope, searchService, $location, alertService, authenticatedUserService, dialogService, toastService, iconService, $mdDialog, storageService, targetGroupService, taxonService) {
         $scope.showMaterialContent = false;
@@ -27,11 +25,12 @@ angular.module('koolikottApp')
             var baseUrl = document.location.origin;
             var materialSource = getSource($scope.material);
             // If the initial type is a LINK, try to ask the type from our proxy
-            if(materialSource && (matchType(materialSource) === 'LINK' || !materialSource.startsWith(baseUrl)) ){
+            if (materialSource && (matchType(materialSource) === 'LINK' || !materialSource.startsWith(baseUrl))) {
                 $scope.fallbackType = matchType(materialSource);
                 $scope.proxyUrl = baseUrl + "/rest/material/externalMaterial?url=" + encodeURIComponent($scope.material.source);
                 serverCallService.makeHead($scope.proxyUrl, {}, probeContentSuccess, probeContentFail);
-            } if (materialSource) {
+            }
+            if (materialSource) {
                 $scope.sourceType = matchType(getSource($scope.material));
             }
         }
@@ -98,8 +97,8 @@ angular.module('koolikottApp')
             if ($scope.material) {
                 if ($scope.sourceType == "EBOOK") {
                     $scope.ebookLink = "/libs/bibi/bib/i/?book=" +
-                    $scope.material.uploadedFile.id + "/" +
-                    $scope.material.uploadedFile.name;
+                        $scope.material.uploadedFile.id + "/" +
+                        $scope.material.uploadedFile.name;
                 }
                 $scope.targetGroups = getTargetGroups();
 
@@ -249,180 +248,180 @@ angular.module('koolikottApp')
                 && $rootScope.learningObjectImproper == false
                 && $rootScope.learningObjectBroken == true)
                 || ($rootScope.learningObjectDeleted == false
-                    && $rootScope.learningObjectBroken == false
-                    && $rootScope.learningObjectImproper == true)
-                    || ($rootScope.learningObjectDeleted == false
-                        && $rootScope.learningObjectBroken == true
-                        && $rootScope.learningObjectImproper == true)
-                        || ($rootScope.learningObjectDeleted == true);
-                    };
+                && $rootScope.learningObjectBroken == false
+                && $rootScope.learningObjectImproper == true)
+                || ($rootScope.learningObjectDeleted == false
+                && $rootScope.learningObjectBroken == true
+                && $rootScope.learningObjectImproper == true)
+                || ($rootScope.learningObjectDeleted == true);
+        };
 
 
-                    function getSignedUserData() {
-                        serverCallService.makeGet("rest/user/getSignedUserData", {}, getSignedUserDataSuccess, getSignedUserDataFail);
-                    }
+        function getSignedUserData() {
+            serverCallService.makeGet("rest/user/getSignedUserData", {}, getSignedUserDataSuccess, getSignedUserDataFail);
+        }
 
-                    function getSignedUserDataSuccess(data) {
-                        var url = $scope.material.source;
-                        var v = encodeURIComponent(data);
-                        url += (url.split('?')[1] ? '&' : '?') + "dop_token=" + v;
+        function getSignedUserDataSuccess(data) {
+            var url = $scope.material.source;
+            var v = encodeURIComponent(data);
+            url += (url.split('?')[1] ? '&' : '?') + "dop_token=" + v;
 
-                        $scope.material.iframeSource = url;
-                    }
+            $scope.material.iframeSource = url;
+        }
 
-                    function getSignedUserDataFail(data, status) {
-                        console.log("Failed to get signed user data.")
-                    }
+        function getSignedUserDataFail(data, status) {
+            console.log("Failed to get signed user data.")
+        }
 
-                    $scope.addComment = function () {
-                        var url = "rest/comment/material";
-                        var params = {
-                            'comment': $scope.newComment,
-                            'material': {
-                                'type': '.Material',
-                                'id': $scope.material.id
-                            }
-                        };
-                        serverCallService.makePost(url, params, addCommentSuccess, addCommentFailed);
-                    };
+        $scope.addComment = function () {
+            var url = "rest/comment/material";
+            var params = {
+                'comment': $scope.newComment,
+                'material': {
+                    'type': '.Material',
+                    'id': $scope.material.id
+                }
+            };
+            serverCallService.makePost(url, params, addCommentSuccess, addCommentFailed);
+        };
 
-                    $scope.edit = function () {
-                        var editMaterialScope = $scope.$new(true);
-                        editMaterialScope.material = $scope.material;
+        $scope.edit = function () {
+            var editMaterialScope = $scope.$new(true);
+            editMaterialScope.material = $scope.material;
 
-                        $mdDialog.show({
-                            templateUrl: 'addMaterialDialog.html',
-                            controller: 'addMaterialDialogController',
-                            scope: editMaterialScope
-                        }).then(function (material) {
-                            if (material) {
-                                $scope.material = material;
-                                processMaterial();
-                            }
-                        });
-                    };
+            $mdDialog.show({
+                templateUrl: 'addMaterialDialog.html',
+                controller: 'addMaterialDialogController',
+                scope: editMaterialScope
+            }).then(function (material) {
+                if (material) {
+                    $scope.material = material;
+                    processMaterial();
+                }
+            });
+        };
 
-                    function addCommentSuccess() {
-                        $scope.newComment.text = "";
+        function addCommentSuccess() {
+            $scope.newComment.text = "";
 
-                        getMaterial(function (material) {
-                            $scope.material = material;
-                        }, function () {
-                            log("Comment success, but failed to reload material.");
-                        });
-                    }
+            getMaterial(function (material) {
+                $scope.material = material;
+            }, function () {
+                log("Comment success, but failed to reload material.");
+            });
+        }
 
-                    function addCommentFailed() {
-                        log('Adding comment failed.');
-                    }
+        function addCommentFailed() {
+            log('Adding comment failed.');
+        }
 
-                    $scope.getType = function () {
-                        if ($scope.material === undefined || $scope.material === null) return '';
+        $scope.getType = function () {
+            if ($scope.material === undefined || $scope.material === null) return '';
 
-                        return iconService.getMaterialIcon($scope.material.resourceTypes);
-                    };
+            return iconService.getMaterialIcon($scope.material.resourceTypes);
+        };
 
-                    $scope.confirmMaterialDeletion = function () {
-                        dialogService.showConfirmationDialog(
-                            'MATERIAL_CONFIRM_DELETE_DIALOG_TITLE',
-                            'MATERIAL_CONFIRM_DELETE_DIALOG_CONTENT',
-                            'ALERT_CONFIRM_POSITIVE',
-                            'ALERT_CONFIRM_NEGATIVE',
-                            deleteMaterial);
-                        };
+        $scope.confirmMaterialDeletion = function () {
+            dialogService.showConfirmationDialog(
+                'MATERIAL_CONFIRM_DELETE_DIALOG_TITLE',
+                'MATERIAL_CONFIRM_DELETE_DIALOG_CONTENT',
+                'ALERT_CONFIRM_POSITIVE',
+                'ALERT_CONFIRM_NEGATIVE',
+                deleteMaterial);
+        };
 
-                        function deleteMaterial() {
-                            var url = "rest/material/" + $scope.material.id;
-                            serverCallService.makeDelete(url, {}, deleteMaterialSuccess, deleteMaterialFailed);
-                        }
+        function deleteMaterial() {
+            var url = "rest/material/" + $scope.material.id;
+            serverCallService.makeDelete(url, {}, deleteMaterialSuccess, deleteMaterialFailed);
+        }
 
-                        function deleteMaterialSuccess() {
-                            toastService.showOnRouteChange('MATERIAL_DELETED');
-                            $scope.material.deleted = true;
-                            $rootScope.learningObjectDeleted = true;
-                            $rootScope.$broadcast('dashboard:adminCountsUpdated');
-                        }
+        function deleteMaterialSuccess() {
+            toastService.showOnRouteChange('MATERIAL_DELETED');
+            $scope.material.deleted = true;
+            $rootScope.learningObjectDeleted = true;
+            $rootScope.$broadcast('dashboard:adminCountsUpdated');
+        }
 
-                        function deleteMaterialFailed() {
-                            log('Deleting material failed.');
-                        }
+        function deleteMaterialFailed() {
+            log('Deleting material failed.');
+        }
 
-                        $scope.isUsersMaterial = function () {
-                            if ($scope.material && authenticatedUserService.isAuthenticated() && !authenticatedUserService.isRestricted()) {
-                                var userID = authenticatedUserService.getUser().id;
-                                var creator = $scope.material.creator;
+        $scope.isUsersMaterial = function () {
+            if ($scope.material && authenticatedUserService.isAuthenticated() && !authenticatedUserService.isRestricted()) {
+                var userID = authenticatedUserService.getUser().id;
+                var creator = $scope.material.creator;
 
-                                return creator && creator.id === userID
-                            }
-                        };
+                return creator && creator.id === userID
+            }
+        };
 
-                        $scope.setNotImproper = function () {
-                            if ($scope.isAdmin() && $scope.material) {
-                                var url = "rest/impropers?learningObject=" + $scope.material.id;
-                                serverCallService.makeDelete(url, {}, setNotImproperSuccessful, setNotImproperFailed);
-                            }
-                        };
+        $scope.setNotImproper = function () {
+            if ($scope.isAdmin() && $scope.material) {
+                var url = "rest/impropers?learningObject=" + $scope.material.id;
+                serverCallService.makeDelete(url, {}, setNotImproperSuccessful, setNotImproperFailed);
+            }
+        };
 
-                        function setNotImproperSuccessful() {
-                            $scope.isReported = false;
-                            $rootScope.learningObjectImproper = false;
-                            $rootScope.$broadcast('dashboard:adminCountsUpdated');
-                        }
+        function setNotImproperSuccessful() {
+            $scope.isReported = false;
+            $rootScope.learningObjectImproper = false;
+            $rootScope.$broadcast('dashboard:adminCountsUpdated');
+        }
 
-                        function setNotImproperFailed() {
-                            console.log("Setting not improper failed.")
-                        }
+        function setNotImproperFailed() {
+            console.log("Setting not improper failed.")
+        }
 
-                        $scope.restoreMaterial = function () {
-                            serverCallService.makePost("rest/material/restore", $scope.material, restoreSuccess, restoreFail);
-                        };
+        $scope.restoreMaterial = function () {
+            serverCallService.makePost("rest/material/restore", $scope.material, restoreSuccess, restoreFail);
+        };
 
-                        $scope.markMaterialCorrect = function () {
-                            serverCallService.makePost("rest/material/setNotBroken", $scope.material, markCorrectSuccess, queryFailed);
-                        };
+        $scope.markMaterialCorrect = function () {
+            serverCallService.makePost("rest/material/setNotBroken", $scope.material, markCorrectSuccess, queryFailed);
+        };
 
-                        function markCorrectSuccess() {
-                            $scope.isBroken = false;
-                            $scope.isBrokenReportedByUser = false;
-                            $rootScope.learningObjectBroken = false;
-                            $rootScope.$broadcast('dashboard:adminCountsUpdated');
-                        }
+        function markCorrectSuccess() {
+            $scope.isBroken = false;
+            $scope.isBrokenReportedByUser = false;
+            $rootScope.learningObjectBroken = false;
+            $rootScope.$broadcast('dashboard:adminCountsUpdated');
+        }
 
-                        function queryFailed() {
-                            log("Request failed");
-                        }
+        function queryFailed() {
+            log("Request failed");
+        }
 
-                        $scope.$on("restore:learningObject", function () {
-                            $scope.restoreMaterial();
-                        });
+        $scope.$on("restore:learningObject", function () {
+            $scope.restoreMaterial();
+        });
 
-                        $scope.$on("delete:learningObject", function () {
-                            deleteMaterial();
-                        });
+        $scope.$on("delete:learningObject", function () {
+            deleteMaterial();
+        });
 
-                        $scope.$on("setNotImproper:learningObject", function () {
-                            $scope.setNotImproper();
-                        });
+        $scope.$on("setNotImproper:learningObject", function () {
+            $scope.setNotImproper();
+        });
 
-                        $scope.$on("markCorrect:learningObject", function () {
-                            $scope.markMaterialCorrect();
-                        });
+        $scope.$on("markCorrect:learningObject", function () {
+            $scope.markMaterialCorrect();
+        });
 
-                        function restoreSuccess() {
-                            toastService.show('MATERIAL_RESTORED');
-                            $scope.material.deleted = false;
-                            $rootScope.learningObjectDeleted = false;
-                            $rootScope.$broadcast('dashboard:adminCountsUpdated');
-                        }
+        function restoreSuccess() {
+            toastService.show('MATERIAL_RESTORED');
+            $scope.material.deleted = false;
+            $rootScope.learningObjectDeleted = false;
+            $rootScope.$broadcast('dashboard:adminCountsUpdated');
+        }
 
-                        function restoreFail() {
-                            log("Restoring material failed");
-                        }
+        function restoreFail() {
+            log("Restoring material failed");
+        }
 
-                        function getTargetGroups() {
-                            if ($scope.material.targetGroups[0]) {
-                                return targetGroupService.getConcentratedLabelByTargetGroups($scope.material.targetGroups);
-                            }
-                        }
-                    }
-                ]);
+        function getTargetGroups() {
+            if ($scope.material.targetGroups[0]) {
+                return targetGroupService.getConcentratedLabelByTargetGroups($scope.material.targetGroups);
+            }
+        }
+    }
+]);

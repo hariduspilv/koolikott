@@ -130,6 +130,8 @@ angular.module('koolikottApp').factory('targetGroupService', [
                 else if (level1.length === 2) {
                     if (parseInt(level1[0].slice(-1)) === parseInt(level1[1].slice(-1)) - 1) {
                         result.push(level1[0].slice(-1) + ".-" + (level1[1].slice(-1)) + ". " + $translate.instant(GRADE));
+                    }else{
+                        result.push(level1[0].slice(-1) + ", " + level1[1].slice(-1) + ". " + $translate.instant(GRADE));
                     }
                 } else {
                     addToResult(level1[0]);
@@ -141,6 +143,8 @@ angular.module('koolikottApp').factory('targetGroupService', [
                 else if (level2.length === 2) {
                     if (parseInt(level2[0].slice(-1)) === parseInt(level2[1].slice(-1)) - 1) {
                         result.push(level2[0].slice(-1) + ".-" + (level2[1].slice(-1)) + ". " + $translate.instant(GRADE));
+                    }else{
+                        result.push(level2[0].slice(-1) + ", " + level2[1].slice(-1) + ". " + $translate.instant(GRADE));
                     }
                 } else {
                     addToResult(level2[0]);
@@ -152,6 +156,8 @@ angular.module('koolikottApp').factory('targetGroupService', [
                 else if (level3.length === 2) {
                     if (parseInt(level3[0].slice(-1)) === parseInt(level3[1].slice(-1)) - 1) {
                         result.push(level3[0].slice(-1) + ".-" + (level3[1].slice(-1)) + ". " + $translate.instant(GRADE));
+                    }else{
+                        result.push(level3[0].slice(-1) + ", " + level3[1].slice(-1) + ". " + $translate.instant(GRADE));
                     }
                 } else {
                     addToResult(level3[0]);
