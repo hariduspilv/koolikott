@@ -30,7 +30,7 @@ angular.module('koolikottApp')
                     .cancel($translate.instant('BUTTON_CANCEL'));
 
                     $mdDialog.show(confirm).then(function() {
-                        url = "rest/material/setBroken";
+                        var url = "rest/material/setBroken";
                         serverCallService.makePost(url, $scope.material, setBrokenSuccessful, queryFailed);
 
                     });
