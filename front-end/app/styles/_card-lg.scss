@@ -125,7 +125,6 @@
 
 }
 
-// embed card by mart laus
 .embed-card {
   transition: all 0.5s;
   &:hover {
@@ -134,6 +133,10 @@
   }
   &.active {
     background-color: #eee;
+  }
+
+  .align-right {
+    margin-left: auto;
   }
 }
 
