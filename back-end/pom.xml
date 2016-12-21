@@ -236,13 +236,17 @@
 		    <scope>test</scope>
 		</dependency>
 
-		<!-- https://mvnrepository.com/artifact/org.imgscalr/imgscalr-lib -->
+		<!--Image processing-->
 		<dependency>
 			<groupId>org.imgscalr</groupId>
 			<artifactId>imgscalr-lib</artifactId>
 			<version>4.2</version>
 		</dependency>
-
+		<dependency>
+			<groupId>com.twelvemonkeys.imageio</groupId>
+			<artifactId>imageio-jpeg</artifactId>
+			<version>3.3.1</version>
+		</dependency>
 
 	</dependencies>
 	

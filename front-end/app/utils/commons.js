@@ -315,13 +315,7 @@ function isObjectEmpty(obj) {
 }
 
 function getSource(material) {
-    if (material.source && (material.source !== null && material.source !== undefined && material.source !== "")) {
-        return material.source;
-    }
-    if (material && material.uploadedFile) {
-        return material.uploadedFile.url;
-    }
-    return null;
+    return material.source ? material.source : material.uploadedFile.url;
 }
 
 /**
@@ -409,12 +403,12 @@ function matchType(type) {
     } else if (isPictureLink(type)) {
         return 'PICTURE';
     } else if (isEbookLink(type)) {
-        if(isIE()){
+        if (isIE()) {
             return 'LINK';
         }
         return 'EBOOK';
     } else if (isPDFLink(type)) {
-        if(isIE()){
+        if (isIE()) {
             return 'LINK';
         }
         return 'PDF';

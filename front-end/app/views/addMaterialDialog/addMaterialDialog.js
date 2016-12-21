@@ -368,6 +368,11 @@ angular.module('koolikottApp')
         }
 
         function init() {
+            // TODO: Decode cyrillic letters
+            // if ($scope.material && $scope.material.uploadedFile) {
+            //     $scope.material.uploadedFile.name = decodeURIComponent(escape(decodeURIComponent($scope.material.uploadedFile.name)));
+            // }
+
             if ($scope.isChapterMaterial) {
                 var addChapterMaterialUrl = $scope.material.source;
             }
@@ -378,12 +383,6 @@ angular.module('koolikottApp')
                 initEmptyMaterial();
                 prefillMetadataFromPortfolio();
                 $scope.material.source = addChapterMaterialUrl;
-            }
-
-            if ($scope.material.uploadedFile) {
-                $scope.material.source = "";
-            } else {
-                $scope.material.source = getSource($scope.material);
             }
 
             if ($scope.material.uploadedFile && $scope.material.uploadedFile.id) $scope.fileUploaded = true;
@@ -556,6 +555,14 @@ angular.module('koolikottApp')
 
             if (material.issueDate) {
                 $scope.issueDate = issueDateToDate(material.issueDate);
+            }
+
+            if ($scope.material.uploadedFile) {
+                $scope.material.source = "";
+            }
+
+            if ($scope.material) {
+                $scope.material.source = getSource($scope.material);
             }
 
             if (!$scope.material.authors[0]) {

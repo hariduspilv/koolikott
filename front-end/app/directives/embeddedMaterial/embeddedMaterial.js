@@ -25,8 +25,7 @@ angular.module('koolikottApp').directive('dopEmbeddedMaterial', [
 
                     if ($scope.material) {
                         $scope.materialType = getType();
-                        getContentType();
-                        getSourceType();
+                        if($scope.material.id)getContentType();
                     }
                 }
 
@@ -34,16 +33,12 @@ angular.module('koolikottApp').directive('dopEmbeddedMaterial', [
                     var baseUrl = document.location.origin;
                     var materialSource = getSource($scope.material);
                     // If the initial type is a LINK, try to ask the type from our proxy
-                    if(materialSource && (matchType(materialSource) === 'LINK' || !materialSource.startsWith(baseUrl)) ){
+                    if (materialSource && (matchType(materialSource) === 'LINK' || !materialSource.startsWith(baseUrl))) {
                         $scope.fallbackType = matchType(materialSource);
                         $scope.proxyUrl = baseUrl + "/rest/material/externalMaterial?url=" + encodeURIComponent($scope.material.source);
                         serverCallService.makeHead($scope.proxyUrl, {}, probeContentSuccess, probeContentFail);
-                    } else {
-                        if(!isEmpty(materialSource)){
-                            $scope.sourceType = matchType(getSource($scope.material));
-                        }else{
-                            $scope.sourceType = "LINK";
-                        }
+                    } if (materialSource) {
+                        $scope.sourceType = matchType(getSource($scope.material));
                     }
                 }
 
@@ -113,7 +108,7 @@ angular.module('koolikottApp').directive('dopEmbeddedMaterial', [
                 $scope.$watch(function () {
                     return getSource($scope.material);
                 }, function (newValue, oldValue) {
-                    if ($scope.material && getSource($scope.material)) {
+                    if ($scope.material && $scope.material.id) {
                         getSourceType();
                         canPlayVideoFormat();
                         canPlayAudioFormat();
