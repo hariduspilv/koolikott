@@ -11,6 +11,7 @@ angular.module('koolikottApp')
                     link: function () {
                         var scrollTimer;
                         var $detailedSearch = document.getElementById('navmenu');
+                        var $header = document.getElementById('md-toolbar-header');
 
                         angular.element($window).on('scroll', function() {
                             clearTimeout(scrollTimer);
@@ -18,7 +19,7 @@ angular.module('koolikottApp')
                                 var $backdrop = document.querySelector('.md-menu-backdrop');
 
                                 if (!$backdrop) {
-                                    if (this.pageYOffset >= 100 && $window.innerWidth >= 600) {
+                                    if (this.pageYOffset >= $header.offsetHeight && $window.innerWidth >= 600) {
                                         $detailedSearch.style.position = 'fixed';
                                     } else {
                                         $detailedSearch.style.position = 'static';
