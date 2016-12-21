@@ -110,19 +110,6 @@ angular.module('koolikottApp').factory('targetGroupService', [
                 return list;
             },
 
-            /**
-             * Returns minimal data, it means that if a parent is found in the array,
-             * then its children will be removed
-             */
-            getLabelByTargetGroupsOrAll: function (targetGroups) {
-                if (!targetGroups) {
-                    return [];
-                }
-
-                return this.getMinimalGroups(targetGroups);
-            },
-
-
             getConcentratedLabelByTargetGroups: function (targetGroups) {
                 if (!targetGroups) return [];
                 var result = [];
@@ -188,13 +175,8 @@ angular.module('koolikottApp').factory('targetGroupService', [
 
                 var list = this.getMinimalGroups(targetGroups);
                 var result = [];
-
                 for (var i = 0; i < list.length; i++) {
-                    if (i != list.length - 1) {
-                        result.push($translate.instant("TARGET_GROUP_" + list[i]) + ", ");
-                    } else {
-                        result.push($translate.instant("TARGET_GROUP_" + list[i]));
-                    }
+                    result.push($translate.instant("TARGET_GROUP_" + list[i]));
                 }
 
                 return result;
