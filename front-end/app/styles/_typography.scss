@@ -1,3 +1,13 @@
+html {
+  font-size: 62.5%;
+  @media (min-width: $layout-breakpoint-xs) {
+    font-size: 100%;
+  }
+  @media (min-width: $layout-breakpoint-lg) {
+    font-size: 120%;
+  }
+}
+
 h1 {
   font-weight: 300;
   font-size: 32px;
@@ -8,6 +18,30 @@ h1 {
 h2 {
   font-weight: 300;
   font-size: 28px;
+}
+
+h1 {
+  font-weight: 300;
+  color: $heading-color;
+  font-size: 2rem;
+  font-weight: 300;
+  line-height: 1.2;
+
+  @media (min-width: $layout-breakpoint-xs) {
+    font-size: 2.5rem;
+  }
+}
+h2 {
+  color: $heading-color;
+  font-size: 1.5rem;
+  font-weight: normal;
+  text-transform: uppercase;
+  margin-top: 0;
+}
+h3 {
+  color: $heading-color;
+  font-size: $font-medium;
+  font-weight: normal;
 }
 
 .md-body-1 {

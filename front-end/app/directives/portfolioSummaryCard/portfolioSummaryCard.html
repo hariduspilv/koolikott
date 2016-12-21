@@ -170,7 +170,7 @@
 
       <md-divider class="md-default-theme"></md-divider>
       <!-- left description  -->
-      <div class="wrapped">
+      <div class="on-left wrapped">
         <div class="md-body-1 description textangular-view" data-ng-bind-html="portfolio.summary"></div>
       </div>
 
@@ -180,7 +180,7 @@
     </div>
 
     <!-- right small side  -->
-    <div layout="column" flex flex-gt-xs="25" class="right-column">
+    <div layout="column" flex flex-gt-xs="25" class="right-side">
       <!-- Hidden because waiting for correct design-->
       <div class="card-media">
         <div class="ribbon"></div>
@@ -259,7 +259,7 @@
 
   <md-divider class="md-default-theme"></md-divider>
 
-  <md-card-actions  layout="column" layout-gt-xs="row" class="actions">
+  <md-card-actions  layout="column" layout-gt-xs="row">
     <div data-ng-if="!isEditPortfolioMode && portfolio.type" flex="50" flex-gt-xs="75" class="ng-cloak" ng-cloak>
       <div data-dop-comments-card comments="portfolio.comments" comment="comment" submit-click="addComment()"
       class="ng-cloak" ng-cloak></div>
