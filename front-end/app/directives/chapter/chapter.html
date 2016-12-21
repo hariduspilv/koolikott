@@ -76,7 +76,9 @@
               data-flex>
           </li>
 
+          <!--Enable drag-n-drop with new ui-->
           <li data-ng-if="isEditable"
+              dnd-disable-if="true"
               data-dnd-draggable="learningObject"
               data-dnd-moved="contentRow.learningObjects.splice($index, 1)"
               data-dnd-effect-allowed="move"
@@ -159,7 +161,6 @@
       </md-card>
 
       <!--Subchapter rows-->
-      <!--Chapter rows-->
       <ul ng-show="subchapter.contentRows.length" class="portfolio-chapter-subchapter-materials"
           uib-collapse="subisCollapsed[subchapter.$$hashKey]">
         <li ng-repeat="(rowIndex, contentRow) in subchapter.contentRows" flex>
@@ -178,7 +179,9 @@
                 data-flex>
             </li>
 
+            <!--Enable drag-n-drop with new ui-->
             <li data-ng-if="isEditable"
+                dnd-disable-if="true"
                 data-dnd-draggable="learningObject"
                 data-dnd-moved="contentRow.learningObjects.splice($index, 1)"
                 data-dnd-effect-allowed="move"
@@ -189,7 +192,7 @@
                 data-ng-repeat="(columnIndex, learningObject) in contentRow.learningObjects"
                 data-dop-embedded-material
                 data-material="learningObject"
-                data-chapter="chapter"
+                data-chapter="subchapter"
                 data-content-row="contentRow"
                 data-row-index="rowIndex"
                 data-obj-index="columnIndex"
