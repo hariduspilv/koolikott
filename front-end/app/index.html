@@ -29,7 +29,7 @@
   <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade
     your browser</a> to improve your experience.</p>
   <![endif]-->
-  <img id="preloader" class="preloader" src="utils/preloader/ring.gif" alt="Loading...">
+  <img data-ng-hide="hasAppInitated" id="preloader" class="preloader" src="utils/preloader/ring.gif" alt="Loading...">
 
   <div data-ng-if="hasAppInitated" layout-fill data-dop-column-layout></div>
   <div data-ng-show="showMainFabButton && !isEditPortfolioMode" data-dop-main-fab-button></div>
