@@ -160,10 +160,6 @@ angular.module('koolikottApp')
 
                                 $scope.doInlineSuggestion = false;
                             } else if (event.keyCode === 13) { // enter
-                                if ($scope.inlineSuggestion) {
-                                    $scope.searchFields.searchQuery = $scope.searchFields.searchQuery + $scope.inlineSuggestion;
-                                }
-
                                 angular.element(document.querySelector("#header-search-input")).controller('mdAutocomplete').hidden = true;
                                 document.getElementById("header-search-input").blur();
                                 $scope.doInlineSuggestion = false;
