@@ -1,136 +1,161 @@
 .card-lg {
-    overflow: hidden;
-    h1 {
-      font-weight: 300;
-      color: $heading-color;
-      font-size: 24px;
-      margin: 0 0 10px 0;
-      font-weight: 300;
-      line-height: 28px;
-      padding: 25px 0 0 0;
-    }
-    @media (min-width: $layout-breakpoint-xs) {
-      h1 {
-        font-size: 30px;
-        line-height: 35px;
-        padding: 0 25px 0 0;
-      }
-    }
-    h2 {
-      color: $heading-color;
-      font-size: 20px;
-      font-weight: normal;
-      text-transform: uppercase;
-      margin-top: 0;
-    }
-    h3 {
-      color: $heading-color;
-      font-size: 14px;
-      font-weight: normal;
-      text-transform: uppercase;
-    }
-    .md-button {
-      font-weight: 400;
-    }
-    .md-menu {
-      margin-top: -15px;
-      margin-right: -15px;
+  overflow: hidden;
 
-      @media (min-width: $layout-breakpoint-xs) {
-        margin-right: 0;
-      }
+  h1 {
+    font-weight: 300;
+    color: $heading-color;
+    font-size: 24px;
+    margin: 0 0 10px 0;
+    font-weight: 300;
+    line-height: 28px;
+    padding: 25px 0 0 0;
+  }
+
+  @media (min-width: $layout-breakpoint-xs) {
+    h1 {
+      font-size: 30px;
+      line-height: 35px;
+      padding: 0 25px 0 0;
     }
-    md-card-content:not(.noPadding) {
-      padding: $card-lg-padding;
+  }
+
+  h2 {
+    color: $heading-color;
+    font-size: 20px;
+    font-weight: normal;
+    text-transform: uppercase;
+    margin-top: 0;
+  }
+
+  h3 {
+    color: $heading-color;
+    font-size: 14px;
+    font-weight: normal;
+    text-transform: uppercase;
+  }
+
+  .md-button {
+    font-weight: 400;
+  }
+
+  .md-menu {
+    margin-top: -15px;
+    margin-right: -15px;
+
+    @media (min-width: $layout-breakpoint-xs) {
+      margin-right: 0;
     }
-    .on-left {
-      padding-right: $card-lg-padding;
+  }
+
+  md-card-content:not(.noPadding) {
+    padding: $card-lg-padding;
+  }
+
+  .on-left {
+    padding-right: $card-lg-padding;
+  }
+
+  .divider-left {
+    position: relative;
+    display: block;
+    border-left: none;
+    padding-left: 0;
+
+    md-content {
+      margin-top: 20px;
     }
-    .divider-left {
-      position: relative;
-      display: block;
-      border-left: none;
-      padding-left: 0;
-      md-content {
-        margin-top: 20px;
-      }
+  }
+
+  .card-cover {
+    overflow: hidden;
+    position: relative;
+    margin-right: -$card-lg-padding;
+    margin-top: 0;
+    margin-left: -$card-lg-padding;
+    text-align: center;
+
+    @media (min-width: $layout-breakpoint-xs) {
+      height: auto;
+      max-height: 300px;
+      border-radius: 0;
     }
-    .card-cover {
-      overflow: hidden;
-      position: relative;
-      margin-right: -$card-lg-padding;
-      margin-top: 0;
-      margin-left: -$card-lg-padding;
-      text-align: center;
-      @media (min-width: $layout-breakpoint-xs) {
-        height: auto;
-        max-height: 300px;
-        border-radius: 0;
-      }
+
+    md-icon {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%,-50%);
+      font-size: 48px;
+      color: rgba(255, 255, 255, 0.8);
+    }
+
+    .card-hover {
+      transition: all 0.5s;
+      cursor: pointer;
+      position: absolute;
+      background-color: rgba(0, 0, 0, 0);
+      top: 0;
+      bottom: 0;
+      left: 0;
+      right: 0;
+
       md-icon {
-        position: absolute;
-        left: 50%;
-        top: 50%;
-        transform: translate(-50%,-50%);
-        font-size: 48px;
-        color: rgba(255, 255, 255, 0.8);
+        color: rgba(255, 255, 255, 0);
       }
-      .card-hover {
-        transition: all 0.5s;
-        cursor: pointer;
-        position: absolute;
-        background-color: rgba(0, 0, 0, 0);
-        top: 0;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        md-icon {
-          color: rgba(255, 255, 255, 0);
-        }
-        &:hover {
-          background-color: rgba(0, 0, 0, 0.7);
-          md-icon {
-            color: rgba(255, 255, 255, 1);
-          }
-        }
-      }
+
       &:hover {
-        .icon-kind {
-          color: rgba(255, 255, 255, 0);
+        background-color: rgba(0, 0, 0, 0.7);
+
+        md-icon {
+          color: rgba(255, 255, 255, 1);
         }
       }
     }
-    @media (min-width: 600px) {
-      .card-cover {
-        max-height: 300px;
-        margin-top: -$card-lg-padding;
-        &.portfolio {
+
+    &:hover {
+      .icon-kind {
+        color: rgba(255, 255, 255, 0);
+      }
+    }
+  }
+
+  @media (min-width: 600px) {
+    .card-cover {
+      max-height: 300px;
+      margin-top: -$card-lg-padding;
+
+      &.portfolio {
         height: 150px;
-        }
-      }
-      .divider-left {
-        border-left-width: 1px;
-        border-left-style: solid;
-        padding-left: $card-lg-padding;
-        border-left-color: $border-color;
       }
     }
-    .actions {
-      margin-top: 10px;
-      margin-bottom: -10px;
-      .md-button {
-        margin-left: -5px;
-      }
+
+    .divider-left {
+      border-left-width: 1px;
+      border-left-style: solid;
+      padding-left: $card-lg-padding;
+      border-left-color: $border-color;
     }
+  }
+
+  .actions {
+    margin-top: 10px;
+    margin-bottom: -10px;
+
+    .md-button {
+      margin-left: -5px;
+    }
+  }
 
 }
 
 .embed-card {
   transition: all 0.5s;
+
   &:hover {
     background-color: #eee;
 
   }
+
   &.active {
     background-color: #eee;
   }
@@ -146,14 +171,18 @@
     padding: 10px;
     right: 0;
     transition: display 1s cubic-bezier(0.25, 0.8, 0.25, 1);
+
     .checked {
       display: none;
     }
+
     &:hover {
       cursor: pointer;
+
       .checked {
         display: block;
       }
+
       .unchecked {
         display: none;
       }

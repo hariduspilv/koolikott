@@ -23,10 +23,12 @@
 .card-sm {
   width: 100%;
   overflow: hidden;
+
   @media (min-width: $layout-breakpoint-xs) {
     height: 280px;
     width: 201px;
   }
+
   @media (min-width: $layout-breakpoint-lg) {
     height: 330px;
     width: 234px;
@@ -35,11 +37,13 @@
   .card-cover {
     width: 100%;
     max-width: 300px;
-    height: 100%;
+    height: auto;
+
     @media (min-width: $layout-breakpoint-xs) {
       height: 134px;
       border-radius: $border-radius $border-radius 0 0;
     }
+
     @media (min-width: $layout-breakpoint-lg) {
       height: 156px;
     }
@@ -48,16 +52,21 @@
   md-card-content {
     height: 100%;
     padding-bottom: 0;
+
     @media (min-width: $layout-breakpoint-xs) {
       height: 106px;
     }
+
     @media (min-width: $layout-breakpoint-lg) {
       height: 106px;
     }
+
     .md-caption {
       color: rgba(0, 0, 0, 0.54);
     }
-    p, ul {
+
+    p,
+    ul {
       margin: 0;
     }
   }
@@ -67,10 +76,12 @@
     margin-left: $md-padding;
     color: rgba(0, 0, 0, 0.38);
     font-weight: 400;
+
     md-icon {
       margin: 0 $border-radius 0 5px;
       font-size: $caption-font-size-base;
       color: rgba(0, 0, 0, 0.3);
+
       &:first-of-type {
         margin: 0 3px 0 0px;
       }

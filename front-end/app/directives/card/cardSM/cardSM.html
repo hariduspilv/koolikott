@@ -3,11 +3,11 @@
          data-ng-click="navigateTo(learningObject, $event)"
          layout="column" layout-xs="row">
   <div data-dop-card-media data-learning-object="learningObject" data-is-authenticated="isAuthenticated()" flex
-       flex-order="-1" flex-order-xs="1"></div>
+       flex-order="1" flex-order-xs="2"></div>
 
   <!-- content -->
-  <div layout="column" flex flex-order="1" flex-order-xs="-1">
-    <md-card-content layout="column">
+  <div layout="column" flex flex-order="2" flex-order-xs="1">
+    <md-card-content>
       <a data-ng-href="{{'/' + learningObjectType + '?id=' + learningObject.id}}" class="no-link">
         <h3 class="two-rows" data-ng-if="learningObject.type === '.Portfolio'" data-ng-bind="learningObject.title"></h3>
         <h3 class="two-rows" data-ng-if="learningObject.type === '.Material'"
@@ -46,6 +46,8 @@
         </ul>
       </a>
     </md-card-content>
+
+    <span flex></span>
 
     <md-divider></md-divider>
 

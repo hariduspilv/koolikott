@@ -11,6 +11,16 @@ angular.module('koolikottApp')
             },
             templateUrl: 'directives/card/cardXS/cardXS.html',
             controller: function($scope) {
+                $scope.learningObjectType;
+
+                function init () {
+                    if ($scope.learningObject.type === '.Material') {
+                        $scope.learningObjectType = 'material';
+                    } else if ($scope.learningObject.type === '.Portfolio') {
+                        $scope.learningObjectType = 'portfolio';
+                    }
+                }
+
                 $scope.formatName = function(name) {
                     return formatNameToInitials(name);
                 }
@@ -19,11 +29,19 @@ angular.module('koolikottApp')
                     return formatSurnameToInitialsButLast(surname);
                 }
 
-                $scope.getCorrectLanguageString = function(languageStringList, language) {
+                $scope.getCorrectLanguageTitle = function (material) {
+                    if (material) {
+                        return getCorrectLanguageString(material.titles, material.language);
+                    }
+                };
+
+                function getCorrectLanguageString(languageStringList, materialLanguage) {
                     if (languageStringList) {
-                        return getUserDefinedLanguageString(languageStringList, translationService.getLanguage(), language);
+                        return getUserDefinedLanguageString(languageStringList, translationService.getLanguage(), materialLanguage);
                     }
                 }
+
+                init();
             }
         }
     }

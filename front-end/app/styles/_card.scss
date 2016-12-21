@@ -1,45 +1,55 @@
 md-card {
   margin: 0; //to overwrite AM 8px
-  .card-image {
-    height: 100%;
-    position: relative;
-  }
+
   .card-cover {
     @include aspect-ratio(3,2);
+
     img {
-      height: 100%;
       width: 100%;
       border-radius: 0 $border-radius $border-radius 0;
     }
   }
+
   &:hover {
     background-color: $selected-gray;
     cursor: pointer;
+
     .card-hover {
       opacity: .8;
       z-index: 3;
+
       md-icon {
         color: rgba(255, 255, 255, 1);
         text-shadow: 1px 1px 1px rgba(0, 0,0, .6);
       }
     }
   }
+
   &.active {
     background-color: $selected-gray;
     cursor: pointer;
+
     .card-hover {
       opacity: 1;
+
       md-icon {
-        color: rgba(255, 255, 255, 8);
+        color: rgba(255, 255, 255, .8);
+
         &.unchecked {
           display: none;
         }
+
         &.checked {
           display: block;
         }
       }
     }
   }
+}
+
+.card-image {
+  height: 100%;
+  position: relative;
 }
 
 .card-hover {
@@ -50,31 +60,31 @@ md-card {
   right: 0;
   background-color: rgba(0, 0, 0, 0.7);
   opacity: 0;
+
   .pick {
     position: absolute;
     padding: 10px;
     left: 0;
     transition: display 1s cubic-bezier(0.25, 0.8, 0.25, 1);
+
     .checked {
       display: none;
     }
+
     &:hover {
       .checked {
         display: block;
       }
+
       .unchecked {
         display: none;
       }
     }
   }
+
   md-icon.icon-kind {
     color: rgba(255, 255, 255, 0.6);
   }
-}
-
-.card-media {
-  position: relative;
-  height: 100%;
 }
 
 .card-cover {
@@ -84,7 +94,7 @@ md-card {
   position: relative;
   transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
   width: auto;
-  max-width: 300px;
+
   &:after {
     content: "";
     box-shadow: inset 0 0 3em rgba(0,0,0, .15);
@@ -95,6 +105,7 @@ md-card {
     height: 100%;
     z-index: 2;
   }
+
   md-icon.icon-kind {
     position: absolute;
     left: 50%;
@@ -124,6 +135,7 @@ md-card {
     top: 0;
     left: -25px;
     text-shadow: 1px 1px 1px rgba(0, 0, 0, .2);
+
     @media (min-width: $layout-breakpoint-xs) {
       top: -15px;
       left: 0;
@@ -152,25 +164,29 @@ md-card {
   transform: rotateY(180deg);
   width: 100%;
   height: 100%;
-  .sheet {
-    position: absolute;
-    height: 100%;
-    width: 100%;
-    transform: rotate(45deg);
-    filter: drop-shadow(0px 0px 10px rgba(0,0,0,0.2));
-    &.up-left {
-      left: -25%;
-      top: 17%;
-    }
-    &.low-left {
-      left: -60%;
-      top: 45%;
-    }
-    &.low-right {
-      right: -33%;
-      bottom: -45%;
-      height: 150%;
-    }
+}
+
+.sheet {
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  transform: rotate(45deg);
+  filter: drop-shadow(0px 0px 10px rgba(0,0,0,0.2));
+
+  &.up-left {
+    left: -25%;
+    top: 17%;
+  }
+
+  &.low-left {
+    left: -60%;
+    top: 45%;
+  }
+
+  &.low-right {
+    right: -33%;
+    bottom: -45%;
+    height: 150%;
   }
 }
 
